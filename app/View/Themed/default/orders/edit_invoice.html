@@ -1,0 +1,143 @@
+<div class="o_write">
+     <h1>发票信息  <a onclick="close_invoice(this)" href="javascript:void(0)">[关闭]</a></h1>
+<form action="{{$this->Html->url('/orders/info_invoice')}}" onsubmit="return ajaxeSubmitForm(this);" method="post">
+
+<div style="padding:10px 0 10px 20px;display:" class="middle" id="invoicePutTypePanel">
+
+<input type="checkbox" onclick="if(this.checked){$('#invoiceFormPanel').show();$('#invoice_InvoicePutType').val('0');}else{$('#invoiceFormPanel').hide();$('#invoice_InvoicePutType').val('3');}" id="chkInvoicePutType"><label style="margin-right:17px;" for="chkInvoicePutType">我要开发票</label>
+
+</div>
+<div style="display:none;" class="middle" id="invoiceFormPanel">
+<div style="" id="invoiceListPanel"><div class="cydz"><b>常用发票</b><ul>
+{{loop $invoices $invoice}}
+<li id="Invoiceli_{{$invoice['OrderInvoice']['id']}}"><table cellspacing="0" cellpadding="0" border="0" style="width:98%"><tbody>
+<tr><td style="width:20px;"><input type="radio" onclick="changeInv(this,'{{$invoice['OrderInvoice']['id']}}');" name="rbtnInv" id="inv_{{$invoice['OrderInvoice']['id']}}"></td>
+<td><label for="inv_{{$invoice['OrderInvoice']['id']}}">发票抬头：<strong>{{$invoice['OrderInvoice']['name']}}</strong>&nbsp;（{{$invoice['OrderInvoice']['content']}}-普通发票）</label></td>
+<td style="width:40px"><a onclick="DelInv(this,'{{$invoice['OrderInvoice']['id']}}');" class="remark" href="#none">[删除]</a></td></tr></tbody></table></li>
+{{/loop}}
+</ul></div></div>
+<div id="part_invoice_form">
+<div style="display:" id="invoiceContentPanel">
+         <table width="100%" cellspacing="0" cellpadding="0" border="0" style="display:" id="tb_invoice" class="txt_12">
+            <tbody><tr>
+               <td valign="top" align="left" colspan="2"><span style="margin-right:8px">发票类型：</span>
+<input type="radio" value="normal" checked="" id="invoince_type" name="data[OrderInvoice][type]"><label for="invoince_type">普通发票</label>
+<!-- 
+<input type="radio" value="vax" onclick="invoince_setType(2)" id="invoince_InvoiceType2" name="data[OrderInvoice][type]"><label for="invoince_InvoiceType2">增值税发票</label>
+ -->
+ <script>
+ $(function(){
+	{{if $this->Session->read('OrderInvoice.customtype')=='company'}}$('#invoice_unitNameTr').show();{{else}}$('#invoice_unitNameTr').hide();{{/if}}
+	
+	$('input[@type=radio][name="data[OrderInvoice][content]"][value="{{$this->Session->read('OrderInvoice.content')}}"]').attr('checked',true);
+ })
+ </script>
+<span id="panel_invoicetypeRemark" class="gray"></span></td>
+            </tr>
+            </tbody><tbody style="" id="invoice_titleTr">
+                <tr>
+                   <td valign="top" align="left" colspan="2"><span style="margin-right:8px">发票抬头：</span>
+<input type="radio" value="personal" {{if $this->Session->read('OrderInvoice.customtype')!='company'}}checked="checked"{{/if}} onclick="$('#invoice_unitNameTr').hide();" id="invoince_ct_personal" name="data[OrderInvoice][customtype]"><label for="invoince_ct_personal">个人 </label>
+
+<input type="radio" value="company" {{if $this->Session->read('OrderInvoice.customtype')=='company'}}checked="checked"{{/if}} onclick="$('#invoice_unitNameTr').show();" id="invoince_ct_company" name="data[OrderInvoice][customtype]"><label for="invoince_ct_company">单位</label>
+</td>
+                </tr>
+                 <tr style="display:none;" id="invoice_unitNameTr" class="txt_color_hui">
+                     <td width="70" valign="top" align="left">单位名称：</td>
+                     <td valign="top" align="left">
+                        <input type="text" onblur="check_invoice_unit()"  name="data[OrderInvoice][name]" value="{{$this->Session->read('OrderInvoice.name')}}" style="width:260px" class="txt" id="invoice_name"><span class="red2">*</span><br><span class="gray">温馨提示：您填写的所有内容都将被系统自动打印到发票上，所以请千万别填写和发票抬头无关的信息。</span>
+                     </td>
+                 </tr>
+             </tbody>
+
+<!-- 
+             <tbody><tr style="display: none;" id="invoice_ivc_Tr" class="txt_color_hui">
+                 <td valign="top" align="left" colspan="2">
+                     <table width="100%" cellspacing="0" cellpadding="0" border="0">
+                      
+                        <tbody><tr>
+                             <td valign="top" align="left" colspan="2">增值税发票专用发票资质填写：</td>
+                        </tr>
+                        
+                        <tr>
+                             <td width="88" valign="top" align="left">单位名称：</td>
+                             <td width="583" valign="top" align="left">
+                                 <input type="text" onblur="check_Ivc_TitName()" value="" style="width:260px" class="txt" id="invoice_Ivc_TitName"><span class="red2">*</span>
+                             <span id="Invoice_TitNameEmpty" class="alertInfo">单位名称不能为空！</span></td>
+                        </tr>
+                        <tr>
+                             <td valign="top" align="left">纳税人识别号：</td>
+                             <td valign="top" align="left">
+                                  <input type="text" onblur="check_NsrCode()" value="" style="width:260px" class="txt" id="invoice_Ivc_NsrCode"><span class="red2">*</span>
+                             <span id="Invoice_NsrCodeEmpty" class="alertInfo">纳税人识别号不能为空！</span></td>
+                        </tr>
+                        <tr>
+                             <td valign="top" align="left">注册地址：</td>
+                             <td valign="top" align="left">
+                                  <input type="text" onblur="check_InvoiceAddress()" value="" style="width:260px" class="txt" id="invoice_Ivc_Address"><span class="red2">*</span>
+                             <span id="Invoice_addressEmpty" class="alertInfo">注册地址不能为空！</span></td>
+                        </tr>
+                        <tr>
+                             <td valign="top" align="left">注册电话：</td>
+                             <td valign="top" align="left">
+                                  <input type="text" onblur="check_InvoicePhone()" value="" style="width:260px" class="txt" id="invoice_Ivc_Phone"><span class="red2">*</span>
+                             <span id="Invoice_PhoneEmpty" class="alertInfo">注册电话不能为空！</span></td>
+                        </tr>
+                        <tr>
+                             <td valign="top" align="left">开户银行：</td>
+                             <td valign="top" align="left">
+                                  <input type="text" onblur="check_InvoiceBank()" value="" style="width:260px" class="txt" id="invoice__Ivc_Bank"><span class="red2">*</span>
+                              <span id="Invoice_bankEmpty" class="alertInfo">开户银行不能为空！</span></td>
+                        </tr>
+                        <tr>
+                             <td valign="top" align="left">银行帐户：</td>
+                             <td valign="top" align="left">
+                                  <input type="text" onblur="check_InvoiceBankCode()" value="" style="width:260px" class="txt" id="invoice_Ivc_BankCode"><span class="red2">*</span>
+                             <span id="Invoice_bankCodeEmpty" class="alertInfo">银行帐户不能为空！</span></td>
+                        </tr>
+                         
+                        <tr>
+                             <td valign="top" align="left">&nbsp;</td>
+                             <td valign="top" align="left" class="gray">
+                                  首次开具增值税专用发票的客户需传真加盖公章的营业执照副本、税务登记证副本、一般纳税人资格证书、银行开户许可证复印件至我司客服：<br>北京：010-58688255-8055<br>上海：021-39915634<br>广州：020-34285500-6503<br>成都：028-65976730<br>增值税专用发票不随货物一起发放（包括自提） 
+                             </td>
+                        </tr>
+               </tbody></table>
+           </td>
+         </tr>
+        
+      </tbody>
+      -->
+      </table>
+<table width="100%" cellspacing="0" cellpadding="0" border="0" class="txt_12">
+<tbody><tr>
+<td width="70px" valign="top" align="left" style="padding-top:4px"></td>
+<td><input type="checkbox" name="data[OrderInvoice][save_invoice]" checked="checked" value="1"  id="save_invoice"><label for="save_invoice">[添加至常用发票信息]</label></td>
+</tr>
+</tbody></table>
+</div>
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0" class="txt_12">
+<tbody><tr>
+    <td width="70px" valign="top" align="left" style="padding-top:4px">发票内容：</td>
+    <td align="left">
+       <table width="100%" cellspacing="0" cellpadding="0" border="0" class="txt_12">
+        <tbody>
+         <tr style="display:">
+            <td><span id="invoince_contentPanel">
+<input type="radio" value="明细" checked="checked" id="invoince_content1" name="data[OrderInvoice][content]"><label for="invoince_content1">明细</label>
+<input type="radio" value="办公用品" id="invoince_content2" name="data[OrderInvoice][content]"><label for="invoince_content2">办公用品</label>
+<input type="radio" value="电脑配件" id="invoince_content3" name="data[OrderInvoice][content]"><label for="invoince_content3">电脑配件</label>
+<input type="radio" value="耗材" id="invoince_content19" name="data[OrderInvoice][content]"><label for="invoince_content19">耗材</label></span></td>
+         </tr>         
+       </tbody></table>
+    </td>
+</tr>
+</tbody></table>
+</div>
+</div>
+    <div class="footer">
+       <input type="submit" onclick="savePart_invoice(this)" value="保存发票信息" class="btn">
+    </div>
+ </form>
+  </div>

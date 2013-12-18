@@ -1,0 +1,40 @@
+<style>
+.form-control{width:80%;float:right;padding-left: 15px;margin-right: 15px;}
+.form-group label{width:15%;text-align:right; margin-top: 0;padding-top: 7px;}
+</style>
+<div class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+    <h3>{{lang('config_database')}}</h3>
+    </div>
+    
+    <?PHP
+    	 echo @$this->Form->create('Install', array('class'=>'form-horizontal', 'role'=>"form",'url' => array('plugin' => 'install', 'controller' => 'install', 'action' => 'database')));
+    ?>
+    
+    <div class="modal-body">
+    	<?php
+	        echo $this->Session->flash();
+	    ?>
+    	<?php	       
+	        echo $this->Form->input('Install.host', array('label' => lang('database_host'),'div'=>'form-group', 'class'=>"form-control",'default' => 'localhost'));
+	        echo $this->Form->input('Install.login', array('label' => lang('database_user'),'div'=>'form-group','class'=>"form-control",'default' => 'root'));
+	        echo $this->Form->input('Install.password', array('label' => lang('database_passwd'),'div'=>'form-group','class'=>"form-control"));
+	        echo $this->Form->input('Install.database', array('label' => lang('database_name'),'div'=>'form-group','class'=>"form-control"));
+	        echo $this->Form->input('Install.prefix', array('label' => lang('table_prefix'),'div'=>'form-group','class'=>"form-control",'default'=>'miao_'));
+	    ?>
+    </div>
+    <div class="modal-footer">
+    	<input class="btn btn-primary" type="button" onclick="history.back(-1);" value="{{lang('last_step')}}">
+    	<input class="btn btn-primary" type="submit" value="{{lang('next_step')}}">
+    </div>
+    {{$this->Form->end();}}
+	</div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+$(document).ready(function(){
+	$('.modal').css('top',($(window).height()-$('.modal').height())/2);
+});
+</script>

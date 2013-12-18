@@ -1,0 +1,50 @@
+/* Subnav */
+.subnav {
+  width: 100%;
+  height: 36px;
+  #gradient > .vertical(lighten(@navbarBackground,25%),lighten(@navbarBackground,20%));
+  border: 1px solid @tableBorder;
+  .border-radius(@inputBorderRadius);
+}
+/* color function darken lighten 标题栏颜色 及兼容jqueryui */
+.ui-portlet-header,.ui-widget-header,.modal-header, .table th, div.dataTables_wrapper{
+	#gradient > .vertical(lighten(@navbarBackground,25%),lighten(@navbarBackground,20%));
+    border-color: @navbarInverseBorder;
+	border: 1px solid @tableBorder;
+	border-bottom: 0;
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+}
+/* default,及内容中标题颜色*/
+.accordion-heading,.nav-header,.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default{
+	#gradient > .vertical(lighten(@navbarBackground,45%),lighten(@navbarBackground,40%));
+	border: 1px solid @tableBorder;
+    text-shadow: none;
+}
+/* active背景颜色
+ */
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active{
+	#gradient > .vertical(lighten(@linkColor,20%),lighten(@linkColor,10%));
+	color:@navbarLinkColorHover;
+}
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited{
+	color:@navbarLinkColorHover;
+}
+.nav-toolbar .navbar-inner{
+	#gradient > .vertical(lighten(@navbarBackground,45%),lighten(@navbarBackground,40%));
+	background-color: @grayLighter;
+	color:@linkColor;
+}
+.nav-toolbar .nav > li > a{
+	color:@linkColor;
+	text-shadow: none;
+}
+.nav-toolbar .nav li.dropdown > .dropdown-toggle .caret {
+	border-top-color: @linkColor;
+	border-bottom-color: @linkColor;
+}
+.ui-portlet-content,.ui-widget-content {
+    border: 1px solid @tableBorder;
+    border-bottom-right-radius: @inputBorderRadius;
+    border-bottom-left-radius: @inputBorderRadius;
+}

@@ -1,0 +1,86 @@
+
+<div id="ware_info">
+                <h1>结算信息</h1>
+                <div class="middle">
+                  <!--订单信息-->
+                  <ul id="part_info">
+	<!-- <li style="padding-bottom:5px" class="info1">
+	    商品金额：887.00元 + 运费：0.00元 - 优惠券：<span id="price_coupon">0.00</span>元 - 礼品卡：<span id="price_coupon">0.00</span>元 - 返现：0.00元
+	<br>
+	</li>-->
+	<li style="width:100%;overflow:hidden;" class="info2">
+	     <table cellspacing="0" cellpadding="0" style="width:100%">
+	        <tbody><tr>
+	           <td>               
+	<div style="display:none;">
+	<a onclick="showTicket();this.blur();" href="javascript:void(0);">(<span id="couponStateShow">+</span>)使用优惠券抵消部分总额</a><font color="red" style="font-size:12px;display:none;margin-left:15px;">提醒：您的优惠券有浪费使用的情况，请检查！</font>
+	 </div>              
+	          </td>
+	          <td style="text-align:right;font-size:15px;"><b>应付总额：<font color="red">￥{{$total_price}}</font> 元</b>
+	          </td>
+	       </tr>
+	     </tbody></table></li>
+	                    </ul>
+	                    <!--订单信息结束-->
+	                    <!--优惠券-->
+	                    <div style="display:none;" id="part_ticket" class="ticket">
+	                    
+	<div style="margin:7px">
+	<div><span style="margin-right:340px">提示：东券每次只能使用一张，京券每次可使用多张，两种不可混合使用</span><a onclick="showTicket();" href="#none">[关闭]</a></div>
+	<div id="CouponRemark"></div>
+	<h2 class="m10"><span style="font-size:13px;font-weight:bold">请选择要使用的优惠券：</span></h2>
+	<div id="jingDiv"></div>
+	<div id="dongDiv"></div>
+	<div style="margin-top:15px;padding-left:3px;">有实体券？<a style="margin-right:10px" onclick="var obj=g('shitiPanel');obj.style.display=(obj.style.display=='none')?'':'none';" href="#none">点此输入实体券密码</a><a href="http://www.360buy.com/help/coupon.aspx" target="_blank">了解京东优惠券规则</a></div>
+	<div style="display:none;" id="shitiPanel">
+	<div style="padding-left:10px;pading-top:5px;">请输入您手中优惠券的密码：<input type="text" class="txt" id="txtInputKey">&nbsp;<input type="button" value="添加" ;="" onclick="addShiTiCoupon(this);" id="btnAddYHQ" class="btn" name="Submit2">
+	</div>
+	<div style="border:#fff 1px solid;padding-left:15px;" id="shitiList">
+	</div>
+	</div>
+	<div class="couponInfo">共使用了 <span id="coupon_count">0</span> 张优惠券　可以优惠 <span id="coupon_discount">0.00</span> 元</div>
+	</div>
+	                    </div>
+	                    <!--优惠券结束-->
+	                     <!--礼品卡-->
+<a style="line-height:25px; float:left; display:none; padding-left:10px; background:url(http://www.360buy.com/purchase/skin/images/point.jpg) left no-repeat; color:#C68600; font-weight:bold" onclick="showLipinka();this.blur();" href="javascript:void(0);">(<span id="lipinkaStateShow">+</span>)使用京东礼品卡</a>
+	                        <div style="clear:both"></div>
+	                        <div style="display:none" id="part_lipinka" class="ticket">
+	<div>
+	<span style="margin-right:310px">提示：京东礼品卡可多张一起使用，也可与东券、京券混合使用。<a target="_blank" href="http://market.360buy.com/giftcard/index.html">什么是礼品卡</a></span><a onclick="showLipinka();" href="#none">[关闭]</a></div>
+	<div id="LiPinKaRemark"></div>
+	<h2><span style="font-size:13px;font-weight:bold">添加礼品卡</span></h2>
+	<div>请输入您手中礼品卡的密码：<input type="text" class="txt" id="txtInputLPKey">&nbsp;<input type="button" value="添加" ;="" onclick="addShiTiLiPinKa(this,'1');" id="btnAddLPK" class="btn" name="Submit2">
+	</div>
+	<h2 class="m10"><span style="font-size:13px;font-weight:bold">已有礼品卡</span></h2>
+	<div style="border:#fff 1px solid" id="LiPin_DianZiItemsPanel">
+	<div class="t_box">
+	<table style="width:100%">
+	<tbody><tr>
+	    <th style="width:200px;">
+	       卡号
+	    </th>
+	    <th style="width:90px;">
+	       面值
+	    </th>
+	    <th style="width:90px;">
+	       本次使用
+	    </th>
+	    <th style="width:80px;">
+	       余额
+	    </th>
+	    <th style="width:200px;">
+	       有效期
+	    </th>
+	    <th style="width:80px;">
+	       类型
+	    </th>    
+	</tr>
+	</tbody></table>
+	</div>
+	</div>
+	<div class="couponInfo">共使用了 <span id="coupon_count">0</span> 张礼品卡　可以优惠 <span id="coupon_discount">0.00</span> 元</div>
+	                        </div>
+	                     <!--礼品卡结束-->
+	                    </div>
+</div>

@@ -1,0 +1,8 @@
+<li><span>
+{{eval 
+echo $this->Html->link(usubstr($item['name'],0,18), 
+		'/articles/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html', 
+		array('title'=>$item['title'],'target'=>'_blank')
+	);
+}}
+</span></li>

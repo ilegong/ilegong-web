@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /app/
+Disallow: /lib/
+Disallow: /admin/
+Disallow: /manage/
+Disallow: /stats
+Disallow: /stats_days/
+Disallow: /js/
+Disallow: /css/
+Disallow: /img/
+Disallow: /fiels/
+Disallow: /errors/
+Disallow: /taobao/

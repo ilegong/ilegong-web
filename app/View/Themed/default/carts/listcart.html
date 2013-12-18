@@ -1,0 +1,25 @@
+<style>
+td {padding:5px 10px;}
+</style>
+
+<div  class="container">
+<form action="{{$this->Html->url('/orders/info')}}" method="post">
+
+<table>
+<tr><td>名称</td><td>图片</td><td>价格</td><td>数量</td><td>合计</td><td>操作</td></tr>
+{{loop $Carts $cart}}
+<tr><td>{{$cart['Cart']['name']}}</td>
+<td>{{$this->Html->image(Router::url($cart['Cart']['coverimg']))}}</td>
+<td>{{$cart['Cart']['price']}}</td>
+<td><input type="text" size="3" name="data[Cart][{{$cart['Cart']['id']}}][num]" value="{{$cart['Cart']['num']}}" /></td>
+<td>{{$cart['Cart']['price']*$cart['Cart']['num']}}</td>
+<td>{{$this->Html->link(__('delete'),Router::url('/carts/delete/'.$cart['Cart']['id']))}}</td>
+</tr>
+{{/loop}}
+
+<tr><td>总价：{{$total_price}}</td><td><input type="submit"  value="结算" /></td></tr>
+
+</table>
+
+</form>
+</div>

@@ -1,0 +1,23 @@
+<div class="navigation-header clearfix">
+<ol class="breadcrumbs">
+	<li>
+		<a href="/"><span class="ui-icon ui-icon-home"></span>Home</a>
+	</li>
+	{{loop $navigations $navi}}
+	<li>
+		<a href="{{$navi['TaobaoCate']['link']}}"><span class="ui-icon ui-icon-carat-1-e"></span>{{$navi['TaobaoCate']['name']}}</a>
+	</li>
+	{{/loop}}	
+</ol>
+<div style="float:right;margin-top:2px" id="srreg">
+	<input class="to-disable" name="q" maxlength="40" size="20" id="maininput" placeholder="搜索商品">
+	<div class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icons">
+	<span class="ui-button-text" style="padding: 2px 2em 2px 2em;"><a  onclick="search_taobaoke($('#maininput').val());" href="#">搜索</a></span>
+	</div>
+	热门搜索：
+	{{$this->Html->link('秋装',array('controller'=>'taobaokes','action'=>'index','plugin'=>'Taobao','Taobaoke.name'=>'秋装'))}}
+	{{$this->Html->link('针织',array('controller'=>'taobaokes','action'=>'index','plugin'=>'Taobao','Taobaoke.name'=>'针织'))}}
+	{{$this->Html->link('羽绒服',array('controller'=>'taobaokes','action'=>'index','plugin'=>'Taobao','Taobaoke.name'=>'羽绒服'))}}
+	{{$this->Html->link('风衣',array('controller'=>'taobaokes','action'=>'index','plugin'=>'Taobao','Taobaoke.name'=>'风衣'))}}
+</div>
+</div>

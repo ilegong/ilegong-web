@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$pageTitle}-{$site[title]}</title>
+<META NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+<meta name="Keywords" content="{if $seokeywords}{$seokeywords}{else}{$site[seokeywords]}{/if}" />
+<meta name="Description" content="{if $seodescription}{$seodescription}{else}{$site[seodescription]}{/if}" />
+{eval echo $this->Html->meta('icon');}
+{eval echo $this->Html->css(array(
+            '960_24_col',
+            '/ui-themes/cupertino/jquery-ui-1.8.4.custom',
+            'base',
+           'ui-customer',
+           'front',
+        ));
+}
+{eval echo $this->Javascript->link(array(			
+            'jquery/jquery-1.4.4.min.js',
+            'jquery/plugins/jquery.tmpl.min.js',
+            'jquery/jquery.cookie.js',
+            'jquery/jquery-ui-1.8.5.custom.min.js',
+            'i18n/language-zh-CN.js',
+            'ui.selectmenu',
+            'front.js',
+            'common.js',
+            'jquery/jquery.pnotify.min.js',
+        ));
+}
+</head>
+<body>
+<style>
+.column { width: 370px; float: left; padding-bottom: 30px; }
+.portlet { margin-top:10px; }
+
+.portlet-header { cursor:move;}
+.portlet-header .ui-icon { float: right; }
+.portlet-content { padding: 0.4em; }
+.ui-contain{min-height:100px;}
+.ui-contain-active {background:#FCFAF1;}
+.ui-icon{cursor:pointer;}
+.ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
+.ui-sortable-placeholder * { visibility: hidden; }
+</style>
+{{literal}}
+<script id="weiboListTemplate" type="text/x-jquery-tmpl"> 
+<div class="ui-helper-clearfix">
+<div class="userhead">
+<img src="${user.profile_image_url}" title="${user.screen_name}" gender="${user.gender}" uid="${user.id}" imgtype="head">
+<div>${user.short_name}</div>
+</div>
+<p class="sms"><a title="${user.screen_name}" href="http://t.sina.com.cn/${user.domain}">${user.screen_name}</a>：${text}</p>
+
+{{if thumbnail_pic}}
+<img src="${thumbnail_pic}">
+{{/if}}
+</div>
+</script>
+{{/literal}}
+
+<script>
+var friends_page = 0;
+function fullscreen()
+{
+	var winwidth = $(window).width()-40;
+	var colunm = $('.container').find('.ui-contain').size();
+	var perwidth = (winwidth-960)/colunm;
+	$('.container').width(winwidth);
+	$('.container').find('.ui-contain').each(function(){
+		$(this).width($(this).width()+perwidth)
+	})
+}
+$(function() {
+	fullscreen();
+	$( ".ui-contain" ).sortable({
+		connectWith: ".ui-contain",
+		handle:'.portlet-header',
+		forceHelpSize:true,
+		helper: 'clone',
+		start: function(event, ui) {$( ".ui-contain" ).addClass('ui-contain-active');},
+		stop: function(event, ui) {$( ".ui-contain" ).removeClass('ui-contain-active');}
+	});
+
+	$( ".ui-icon" ).disableSelection();
+
+	$( ".portlet" ).find( ".portlet-header" ).addClass( "ui-widget-header" )
+			.prepend( " <span class='ui-icon ui-icon-circle-minus tool-min'></span> <span class='ui-icon ui-icon-gear tool-min-setting'></span>")
+			.end()
+		.find( ".portlet-content" ).addClass( "ui-widget-content" );
+	// 头部区域增加最大最小化按钮，内容区域增加css样式
+	
+	$( ".portlet" ).find('.portlet-header:hidden').each(function(){
+		$(this).parent().hover(function(){				
+			$( ".portlet-header",this).show();
+			$( ".portlet-header",this).width($(this).width()-2);
+		},function(){
+			$( ".portlet-header",this).hide();
+		});
+	});
+	//隐藏头部的portlet鼠标移上去后，显示头部
+	
+	//最小化，及还原的折叠按钮
+	$( ".portlet-header:visible .tool-min" ).click(function() {
+		$( this ).toggleClass( "ui-icon-circle-minus" ).toggleClass( "ui-icon-circle-plus" );
+		$( this ).parents( ".portlet:first" ).find( ".portlet-content" ).toggle("fast");
+	});
+
+	$( ".column" ).disableSelection();
+	
+	
+	
+	
+	$( ".portlet").droppable({
+		accept: ".userdraggable",
+		hoverClass: "ui-state-active",
+		drop: function( event, ui ) {
+			var obj = ui.draggable.remove('style').css('left','').css('top','').css('position','').css('cursor','auto');
+			$(this).find('.portlet-content').append(obj);			
+			var portlet_id = $(this).attr('id').replace(/portlet-/,'');
+			//http://www.jieli.com/regions/dataattri/17/1/2
+			var img = $(ui.draggable).find('img:first');
+			var userstr = img.attr('uid')+'-'+img.attr('title')+'-'+img.attr('src');
+			addFriendToPortlet(portlet_id,userstr);
+			if($('#portlet-weibo-user-list').find('.userhead').size()<50)
+			{
+				loadFriends(friends_page);
+			}
+		}
+	});
+	//$('#portlet-weibo-user-list').dialog();
+	//loadFriends(friends_page);
+	loadFriendsWeibo();
+});
+function addFriendToPortlet(portlet_id,userstr)
+{
+	$.ajax({
+		type:'post', 
+		success:function(data) {
+			
+		}, 
+		data:{key:'weibo_users',value:userstr},
+		url:'/regions/dataattri/'+portlet_id+'/append', 
+		dataType:'json'
+	});
+}
+function loadFriends(page)
+{
+	var appendnum = 0;
+	$.ajax({
+		type:'get', 
+		success:function(data) {
+			for(var i in data)
+			{
+				var html = '<div class="userhead userdraggable">	'+
+				'<img src="'+data[i].profile_image_url+'" title="'+data[i].screen_name+'" gender="'+data[i].gender+'" uid="'+data[i].id+'" imgtype="head">' +
+				'<div>'+data[i].screen_name.substr(0,4)+'</div>'+
+				'</div>';
+				if(!includeInPortlet(data[i].id))
+				{
+					appendnum = appendnum+1;
+					$('#portlet-weibo-user-list').append(html);
+					var userstr=data[i].id+'-'+ data[i].screen_name+'-'+data[i].profile_image_url ;
+					addFriendToPortlet(17,userstr);
+				}
+			}
+			$( ".userdraggable" ).draggable({ 
+				revert: "invalid",
+				appendTo: 'body',helper: 'clone'
+					}).css('cursor','move');
+			
+			if(data.length ==100 && appendnum<100)
+			{
+				loadFriends(friends_page);
+			}
+			//
+		}, 
+		url:'/questions/invite/1/friends/'+page+'/json/100', 
+		dataType:'json'
+	}) ;
+	friends_page++;
+	
+	
+}
+function loadFriendsWeibo()
+{
+	$.ajax({
+		type:'get', 
+		success:function(data) {
+			var weibo_html='';
+			var length = $( ".portlet" ).size();
+			for(var i in data)
+			{
+				data[i].user.short_name = data[i].user.screen_name.substr(0,4);
+				for(var j=0;j<length;j++)
+				{
+					var weibos = $( ".portlet" ).eq(j).data('weibo_users');
+					if(typeof(weibos) !='undefined')
+					{
+						if( weibos.indexOf(','+data[i]['user']['id']+'-')>-1)
+						{
+							$( ".portlet" ).eq(j).find('.portlet-content').append($( "#weiboListTemplate" ).tmpl(data[i]));
+						}
+					}
+				}
+			}
+		}, 
+		url:'/users/sina/friends/1/50/json', 
+		dataType:'json'
+	});
+}
+function includeInPortlet(uid)
+{
+	var flag = false;
+	$( ".portlet" ).each(function(){
+		var weibos = $(this).data('weibo_users');
+		if(typeof(weibos) !='undefined')
+		{
+			if( weibos.indexOf(','+uid+'-')>-1)
+			{
+				flag = true;
+			}
+		}
+	});
+	return flag;
+}
+function setlayout(container,grids)
+{
+	var grids_a = grids.split('_');
+	var contains = $(container).find('.ui-contain');
+	contains.each(function(i){
+		if(i>=grids_a.length)
+		{
+			$(this).prev().append($(this).html());			
+			$(this).remove();
+			return ;
+		}
+		var classname = $(this).attr('class');		
+		$(this).attr('class',classname.replace(/grid_\d+/,'grid_'+grids_a[i]));
+	});
+	
+	var containsize = contains.size();
+	if(containsize < grids_a.length)
+	{
+		var i = contains.size();
+		for(;i<grids_a.length;i++)
+		{
+			$('<div class="ui-contain grid_'+grids_a[i]+'"></div>').appendTo(container).append(contains.eq(containsize-1).children(':last'));
+		}
+		
+		$( ".ui-contain" ).sortable({
+			connectWith: ".ui-contain",
+			handle:'.portlet-header',forceHelpSize:true
+		});
+	}
+}
+</script>	
+<a href="#" onclick="publishController.open_dialog('/regions/sinaweibo')">新建</a>
+<a href="#" onclick="publishController.open_html_dialog('page_layout_Setting')">布局</a>
+<style>
+.formsetSetting ul li{
+	float:left;
+}
+</style>
+<div style="display: block;" id="page_layout_Setting" class="formsetSetting ui-helper-clearfix">
+        <p class="readme1">选择一个你喜欢的版式吧~</p>
+        <ul>
+          <li id="formsetting_1">
+            <div class="frame"><a onclick="setlayout('#container-part1','6_18');" href="javascript:;" title="两栏1:3"><img src="http://simg.sinajs.cn/blog7style/images/common/topsetting/formsetclass1_3.png" alt="两栏1:3" class="thumb"></a><img width="18" height="18" class="selectedIco SG_icon SG_icon106" src="http://simg.sinajs.cn/blog7style/images/common/sg_trans.gif" alt=""></div>
+            <p>两栏 <strong>1</strong>:<strong>3</strong></p>
+          </li>
+          <li id="formsetting_2">
+            <div class="frame"><a onclick="setlayout('#container-part1','18_6');" href="javascript:;" title="两栏3:1"><img src="http://simg.sinajs.cn/blog7style/images/common/topsetting/formsetclass3_1.png" alt="两栏3:1" class="thumb"></a><img width="18" height="18" class="selectedIco SG_icon SG_icon106" src="http://simg.sinajs.cn/blog7style/images/common/sg_trans.gif" alt=""></div>
+            <p>两栏 <strong>3</strong>:<strong>1</strong></p>
+          </li>
+          <li id="formsetting_3" class="selected">
+            <div class="frame"><a onclick="setlayout('#container-part1','6_12_6');" href="javascript:;" title="三栏1:2:1"><img src="http://simg.sinajs.cn/blog7style/images/common/topsetting/formsetclass1_2_1.png" alt="三栏1:2:1" class="thumb"></a><img width="18" height="18" class="selectedIco SG_icon SG_icon106" src="http://simg.sinajs.cn/blog7style/images/common/sg_trans.gif" alt=""></div>
+            <p>三栏 <strong>1</strong>:<strong>2</strong>:<strong>1</strong></p>
+          </li>
+          <li id="formsetting_4">
+            <div class="frame"><a onclick="setlayout('#container-part1','12_6_6');" href="javascript:;" title="三栏2:1:1"><img src="http://simg.sinajs.cn/blog7style/images/common/topsetting/formsetclass2_1_1.png" alt="三栏2:1:1" class="thumb"></a><img width="18" height="18" class="selectedIco SG_icon SG_icon106" src="http://simg.sinajs.cn/blog7style/images/common/sg_trans.gif" alt=""></div>
+            <p>三栏 <strong>2</strong>:<strong>1</strong>:<strong>1</strong></p>
+          </li>
+          <li id="formsetting_5">
+            <div class="frame"><a onclick="setlayout('#container-part1','6_6_12');" href="javascript:;" title="三栏1:1:2"><img src="http://simg.sinajs.cn/blog7style/images/common/topsetting/formsetclass1_1_2.png" alt="三栏1:1:2" class="thumb"></a><img width="18" height="18" class="selectedIco SG_icon SG_icon106" src="http://simg.sinajs.cn/blog7style/images/common/sg_trans.gif" alt=""></div>
+            <p>三栏 <strong>1</strong>:<strong>1</strong>:<strong>2</strong></p>
+          </li>
+        </ul>
+        <div class="clearit"></div>
+</div>
+      
+<div class="maincontent  clearfix">
+	{$content_for_layout}
+</div>
+{{template Elements/footer}}
+
+</body>
+</html>

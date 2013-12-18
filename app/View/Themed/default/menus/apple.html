@@ -1,0 +1,43 @@
+<style type="text/css">
+.ui-navi { 
+	background:#CACACA;
+	background:-webkit-gradient(linear, 0 0, 0 100%, from(#cacaca), to(#848484)); 
+	background:-moz-linear-gradient(top, #cacaca, #848484); 
+	-webkit-border-radius:3px;	-moz-border-radius:3px;
+	border-radius:3px;
+	-webkit-box-shadow:0 1px 2px rgba(0,0,0,.3);
+	display:inline-block;
+	list-style:none;overflow:hidden;padding:0;
+}
+.ui-navi li { border-right:1px solid #808080; -webkit-box-shadow:inset 0 0 0 1px rgba(255,255,255,.1); -moz-box-shadow:inset 0 0 0 1px rgba(255,255,255,.1); float:left; }
+.ui-navi li a { color:#262626; display:block; font:13px "Lucida Sans Unicode", "Lucida Grande", sans-serif; height:36px; line-height:34px; padding:0 30px; text-decoration:none; text-shadow:0 1px #cecece; }
+.ui-navi li a:hover { background:-webkit-gradient(linear, 0 0, 0 100%, from(#929292), to(#535353)); background:-moz-linear-gradient(top, #929292, #535353); -webkit-box-shadow:inset 0 -10px 20px rgba(0,0,0,.05), inset 0 0 0 1px rgba(255,255,255,.1); -moz-box-shadow:inset 0 -10px 20px rgba(0,0,0,.05), inset 0 0 0 1px rgba(255,255,255,.1); color:#fff; text-shadow:0 -1px #414141; }
+.ui-navi li a:active { -webkit-box-shadow:inset 0 -10px 20px rgba(0,0,0,.05), inset 0 2px 5px #363636, inset 0 0 0 1px rgba(255,255,255,.1); -moz-box-shadow:inset 0 -10px 20px rgba(0,0,0,.05), inset 0 2px 5px #363636, inset 0 0 0 1px rgba(255,255,255,.1); }
+.ui-navi li .ui-navi-active,
+.ui-navi li .ui-navi-active:hover { background:-webkit-gradient(linear, 0 0, 0 100%, from(#373737), to(#525051)); background:-moz-linear-gradient(top, #373737, #525051); -webkit-box-shadow:inset 0 -10px 20px rgba(0,0,0,.05), inset 0 2px 5px #363636, inset 0 0 0 1px rgba(255,255,255,.1); -moz-box-shadow:inset 0 -10px 20px rgba(0,0,0,.05), inset 0 2px 5px #363636, inset 0 0 0 1px rgba(255,255,255,.1); color:#fff; text-shadow:0 1px #242323; }
+.ui-navi .search_container { border-right:none; padding-right:5px;float:right; }
+.ui-navi .search { background:url(/img/bg/search.png) right -53px no-repeat; padding:7px 20px 8px 5px; }
+.ui-navi .search label { background:url(/img/bg/search.png) 0 0 no-repeat; display:block; height:20px; }
+.ui-navi .search input { border:none; color:#a9a9a9; margin-left:25px;margin-top:2px; height: 14px; -webkit-appearance:none; }
+.ui-navi .search input:focus { border:none; outline:none; }
+.ui-navi .search.focus { background-position:right -83px; padding:3px 20px 2px 5px; }
+.ui-navi .search.focus label { background-position:0 -26px; height:27px; padding-top:4px; }
+.ui-navi .ui-second-navi{display:none;}
+</style>
+<?php 
+	if(empty($top_category_id)) $top_category_id=0;
+	echo $this->Section->getNavMenu('Category',
+		array(
+			'selectedid'=> $top_category_id,
+			'ulAttributes'=>array('class'=>'ui-navi'),
+			'preli'=>'',
+			'sufli'=>'<li class="search_container">
+				<form action="#" method="get" class="search">
+					<label for="search_2">
+						<input type="text" placeholder="Search" id="search_2" style="color: rgb(169, 169, 169);">
+					</label>
+				</form>
+			</li>',
+		)
+	);
+?>

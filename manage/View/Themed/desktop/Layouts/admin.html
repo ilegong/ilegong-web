@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link href="/favicon.ico" type="image/x-icon" rel="icon" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{{$pageTitle}}-{{$site[title]}}</title>
+<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+<?php
+        echo $this->Html->css(array(
+            'reset.css',        
+            'redmond/jquery-ui-1.10.3.custom.css',
+			Router::url('/admin/stylevars/getcss'),
+			//'bootstrap.min.css',
+            'swfupload.css',
+			'jquery.jgrowl.css',
+            'ui-layout.css',			
+			'ui.jqgrid.css',
+			'admin.css',
+			'ui-customer.css',
+        ));
+        echo $this->Html->Script(array(
+			'ckeditor/ckeditor.js',
+        	'jquery/jquery.min.js',
+			'bootstrap.min.js',
+			'jquery/jquery.tools.min.js',
+			'bootstrap-colorpicker.js',
+			'jquery/jquery.cookie.js',   
+            'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js',
+			'jquery/jquery.jgrowl.min.js',
+			
+        
+			'drilldown_menu/fg.menu.js',
+			'jqgrid/i18n/grid.locale-cn.js',
+        	'jqgrid/jquery.jqGrid.min.js',
+			'jqgrid/plugins/grid.setcolumns.js',
+			'i18n/language-zh-CN.js',
+			'editor.js',
+			'common.js',
+            'admin.js',
+        ));
+		
+?>
+{{$this->Combinator->script(array(
+	'swfupload/swfupload.js',
+	'swfupload/swfupload.queue.js',
+	'swfupload/swfupload.cookies.js',
+	'swfupload/fileprogress.js',
+	'swfupload/handlers.js'
+))}}
+<script type="text/javascript">
+var BASEURL  = "{{APP_SUB_DIR}}";
+var ADMIN_BASEURL = "{{ADMIN_SUB_DIR}}";
+$(function(){
+	$("#mainContent").height($(window).height()-5);
+	$(window).resize(function(){
+		$("#mainContent").height($(window).height()-5);
+		if(typeof resize=='function'){
+			resize();
+		}
+	});
+	
+	$(document).on('click','a',function(){
+		if($(this).data('url')){
+			this.href=$(this).data('url');
+			this.target='_blank';
+			//window.location.href=$(this).data('url');
+		}
+	});
+});
+
+</script>
+</head>
+<body style="height:100%;margin:0 5px;">
+<div id="mainContent" class="ui-dialog-content"  style="height:100%;width:100%;">
+	{{$content_for_layout}}
+</div>
+
+</body>
+</html>

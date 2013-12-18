@@ -1,0 +1,102 @@
+<style>
+.modal-body {
+    overflow-y: inherit;
+    position: relative;
+}
+.forceinstall{
+	color:red;
+}
+</style>
+<div class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+    	<h3>{{lang('select_install_models')}}</h3>
+    </div>
+    <?PHP
+    	 echo @$this->Form->create('Install', array('class'=>'form-horizontal','url' => array('plugin' => 'install', 'controller' => 'install', 'action' => 'data')));
+    ?>
+    <div class="modal-body">
+    <?php
+    	$models = array(
+			array(
+    			'model'=> 'articles',
+    			'name'=> '文章',
+    			'discription'=> '标题内容型模块，可用于新闻、文章、博客等'
+    		),
+			array(
+    			'model'=> 'products,brands,carts,orders',
+    			'name'=> '产品',
+    			'discription'=> '包括商品、品牌，可用于产品（商品）展示，'
+    		),	
+			array(
+    			'model'=> 'carts,orders',
+    			'name'=> '商城',
+    			'discription'=> '包括购物车、订单、在线支付等，可用于构建商城。需要安装产品模块才能使用商城功能'
+    		),		
+			array(
+    			'model'=> 'downloads',
+    			'name'=> '下载',
+    			'discription'=> '提供上传文件的下载，支持文件的批量上传'
+    		),
+			array(
+    			'model'=> 'photos',
+    			'name'=> '图片',
+    			'discription'=> '可用于图片墙，图片幻灯展示，相册等'
+    		),
+    		array(
+    			'model'=> 'videos',
+    			'name'=> '视频',
+    			'discription'=> '转载优酷、土豆等视频或上传视频播放'
+    		),
+    		array(
+    			'model'=> 'comments',
+    			'name'=> '评论',
+    			'discription'=> '对文章、产品等数据进行评论'
+    		),
+    		array(
+    			'model'=> 'advertises',
+    			'name'=> '广告',
+    			'discription'=> '添加广告插入到各页面'
+    		),
+    		array(
+    			'model'=> 'crawls,crawlrelease,crawl_release_sites,crawl_title_sites',
+    			'name'=> '采集',
+    			'discription'=> '包括采集规则设置，采集，发布站点，发布规则等。支持将数据发布到支持本接口的其他站点'
+    		),
+    		array(
+    			'model'=> 'stats_days,stats_months,stats_weeks',
+    			'name'=> '访问统计',
+    			'discription'=> '统计各项数据的日、周、月访问量'
+    		),
+    		array(
+    			'model'=> 'appraiselogs,appraiseoptions,appraiseresults,appraises',
+    			'name'=> '问卷调查',
+    			'discription'=> '用于问卷调查，在线答题，投票等。'
+    		),
+    	);
+		echo '<div class="select clearfix">';
+    	foreach($models as $item){
+			$id = 'InstallModels'.str_replace(',','_',$item['model']);
+echo '<div class="checkbox" style="width:90px;"><input type="checkbox" name="data[Install][models][]" value="'.$item['model'].'" id="'.$id.'" />
+<label for="'.$id.'" data-content="'.$item['discription'].'" data-placement="top" data-toggle="popover" data-original-title="'.$item['name'].'">'.$item['name'].'</label></div>';
+		}
+    	echo '</div>';
+		if($has_old_table){
+	    	echo $this->Form->input('Install.force',array('div'=>'checkbox forceinstall clearfix','type'=>'checkbox','value'=>1,'label'=>'已有对应前缀的数据表.删除旧表，全新安装.所有旧数据将丢失。<br/>换用新的表前缀可避免此问题。'));
+		}
+	?>
+    </div>
+    <div class="modal-footer">
+    	<input class="btn btn-primary" type="button" onclick="history.back(-1);" value="{{lang('last_step')}}">
+    	<input class="btn btn-primary" type="submit" value="{{lang('next_step')}}">
+    </div>
+    {{$this->Form->end();}}
+	</div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<script>
+$(document).ready(function(){
+	$('label').popover({trigger:'hover'});
+});
+</script>

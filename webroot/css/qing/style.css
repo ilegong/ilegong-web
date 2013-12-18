@@ -1,0 +1,302 @@
+﻿* { margin:0; padding:0; }
+body { background-color:#f5f5f5; color:#555; font-family:Verdana, Geneva, sans-serif; font-size:12px; }
+ul, li { list-style-type:none }
+img { border:none }
+.t12{ font-size:12px;}
+.t14{ font-size:14px;}
+.t16{ font-size:16px;}
+.t18{ font-size:18px;}
+.t20{ font-size:20px;}
+.clear { clear:both }
+.hei12p { height:12px; }
+.wid55p { width:55px; }
+.wid86p { width:86px; }
+.wid95p { width:95px; }
+.wid110p { width:110px; }
+.wid145p { width:45px; }
+.padd_t10 { padding-top:10px; }
+.center { text-align:center }
+.slogan { font-style:italic; font-size:12px; }
+.flo_left { float:left }
+.flo_right { float:right }
+.black { color:#666; background-color:#fff }
+a:link, a:visited { text-decoration:none; color:#666;  }
+a:hover { text-decoration:underline; cursor:pointer }
+.blue, a.blue:link, a.blue:visited { color: #08c; text-decoration: none; background-color:#fff }
+.blue2, .blue2 a { color:#08c; background-color:#fff }
+a.blue:hover { color:#08c; text-decoration: underline; background-color:#fff }
+.white, a.white:link, a.white:visited { color: #fff; text-decoration:none; background-color:#08c }
+a.white:hover { color:#fff; text-decoration: underline; background-color:#08c }
+.more { text-align:right; padding-right:10px; float:right }
+.more a:link, .more a:visited { color:#38c; text-decoration:none; background:inherit;}
+.more a:hover { color:#38c; text-decoration:underline; background:inherit; }
+.underline { text-decoration:underline }
+#wrapper { width:960px; margin:0 auto; background-color:#ffffff; color:#666 }
+#header, #wra_content, #footer { width:900px; margin:0 auto; }
+/*--头部--*/
+#header { clear:both; }
+#header .header_top { width:900px; height:60px; clear:both; padding-top:20px; padding-bottom:5px; }
+.header_top .logo { width:135px; height:50px; border:none; float:left; margin-left:10px; }
+.header_top_right { width:435px; float:right }
+.header_top_menu { float:left; width:320px; height:25px; line-height:25px; background:url('http://www.neusoft.com/cn/newstyle/images/header_top_menu.gif') no-repeat right; text-align:right; padding-right:30px;}
+.header_top_menu a { margin:0 3px; background:none }
+.language_sel { width:80px; float:right; height:25px; line-height:25px; text-align:center }
+.language_down { position:absolute; top:30px; overflow:hidden; display:none; width:235px; height:150px; left:-158px; border-top:1px #f0f0f0 solid; border-left:1px #f0f0f0 solid; border-right:1px #f0f0f0 solid; border-bottom:5px #38c solid; background-color:#ffffff; color:#555; }
+.language_sel ul li { z-index:999; color: #555; height:30px; background-color:#fff }
+.language_down dl dt { background-color:#f0f0f0; width:100%; text-align:center; color:#555; padding-top:10px; height:35px; }
+.language_down dl dd { text-align:left; text-indent:45px; }
+.language_down dl dt input { vertical-align: middle; margin-right:5px; }
+.language_sel .language_down a:link, .language_sel .language_down a:visited { cursor:pointer; }
+.language_sel .language_down a:hover { color:#38c; background-color:#fff }
+a.button:link, a.button:visited { color:#666; text-decoration: none; display:block; background:inherit; font-family:Verdana, Geneva, sans-serif }
+a.button:hover { color:#08c; border-bottom:5px #38c solid; background-color:#fff }
+#search { float:right; height:15px; width:250px; background:url('http://www.neusoft.com/cn/newstyle/images/search.gif') no-repeat; margin-top:10px; }
+#search_txt { float:left; border-width:0px; padding-left:5px; width:218px; font-size:11px; height:13px; line-height:13px; color:#c0c0c0; margin:1px; font-style:italic; font-family:Verdana, Geneva, sans-serif; background:inherit }
+#search_button { margin:1px; }
+/*--首页--*/
+#home_ad { width:900px; clear:both; height:210px; margin:10px auto }
+#home_ad .home_ad_left { width:600px; height:210px; border:1px #e0e0e0 solid; float:left }
+#home_ad .home_ad_right { width:290px; height:210px; float:right }
+#home_ad .home_ad_right img { border:none }
+/*--导航--*/
+.fen_nav { width:900px; margin:0 auto; height:30px; border-top:1px #e0e0e0 solid; clear:both;background:url('http://www.neusoft.com/cn/newstyle/images/fen_nav.gif') repeat-x;  }
+.fen_nav .nav { width:900px; height:30px; background:url('http://www.neusoft.com/cn/newstyle/images/fen_nav.gif') repeat-x; float:left }
+.fen_nav .nav li { z-index: 999; font: bold 12px/30px Verdana, Geneva, sans-serif; float: left; border-right:1px solid #fff; height:30px;}
+.li_button{ width:110px; text-align:center}
+a.menu_button:link, a.menu_button:visited { color:#666; text-decoration: none; display:block; padding:0px 20px 0 20px; background:inherit }
+a.menu_button:hover, .blue_button { background:url('http://www.neusoft.com/cn/newstyle/images/blue_button.gif') repeat-x; }
+.downmenu { display: none;position:absolute; top:30px; border-left:1px #f0f0f0 solid; border-right:1px #f0f0f0 solid; overflow:hidden; background-color:#fff; color:#555; text-align:left  }
+.dmwidth1 { display: none; LEFT: 0px; width:615px; height:292px; }
+.dmwidth2 { display: none; LEFT: 0px; width:525px; height:265px;  }
+.dmwidth3 { display: none; width:705px; height:245px; left:-150px; }
+.fen_nav .nav li div ul li { font-size:12px; color:#555; font-weight:normal; line-height:17px; height:22px; background-color:#fff }
+.fen_nav .nav li div h2 { background-color:#f0f0f0; width:100%; height:40px; line-height:40px; text-indent:20px; color:#111 }
+.fen_nav .nav li div h2 a:link, .fen_nav .nav li div h2 a:visited { font-weight:normal; color:#111; font-size:12px; background:inherit }
+.fen_nav .nav li div h3 { height:30px; line-height:30px; font-size:11px; color:#38c; text-indent:20px; clear:both; margin:8px auto; background-color:#fff }
+.fen_nav .nav li div h3 a:link, .fen_nav .nav li div h3 a:visited { color:#38c; font-weight:bold; background-color:#fff }
+.solutions li, .service li, .product li { clear:both; width:99%; padding:0; }
+.solutions { width:620px; height:287px; clear:both; border-bottom:5px #0188cc solid; overflow:hidden; border-right:1px #000 solid}
+.solutions_list { clear:both; height:65px; margin-bottom:15px; }
+.solutions_left { width:190px; float:left; border-right:1px #e0e0e0 solid; text-indent:20px; line-height:20px; }
+.solutions_mid { width:195px; float:left; border-right:1px #e0e0e0 solid; text-indent:20px; line-height:20px; }
+.solutions_right { width:205px; float:left; text-indent:5px; line-height:20px; margin-left:15px; }
+.product { width:620px; height:260px; clear:both; border-bottom:5px #0188cc solid; overflow:hidden }
+.product_list { clear:both; line-height:20px; height:240px; margin-top:15px; }
+.product_left { width:250px; float:left; text-indent:20px; line-height:20px;border-right:1px #e0e0e0 solid;  }
+.product_right { width:280px; float:left; text-indent:30px; line-height:20px;}
+.service { width:725px; height:240px; clear:both; border-bottom:5px #0188cc solid; overflow:hidden }
+.service_left { width:180px; height:175px; float:left;border-right:1px #e0e0e0 solid; margin-top:10px;  }
+.service_mid { width:200px; height:175px; float:left; border-right:1px #e0e0e0 solid; margin-top:10px; }
+.service_right { width:180px; height:175px; float:left; border-right:1px #e0e0e0 solid;margin-top:10px;  }
+.service_last { width:160px; height:175px; float:left;margin-top:10px; }
+.service ul li { text-indent:20px; }
+/*--幻灯片--*/
+#carousel { background-color:#eeeeee; position:relative; color:#555 }
+#carousel ul { list-style:none; }
+#carousel #carouselimg { position:relative; overflow:hidden; }
+#carousel #carouselimg #imgcontainer { position:absolute; left:0px; top:0px; }
+#carousel #carouselimg img { float:left; border:0; }
+#carousel #carouseltitle { position:absolute; left:0px; bottom:0px; padding:0 0 18px 20px; z-index:200; }
+#carousel #carouseltitle ul { margin-left:5px; }
+#carousel #carouseltitle li { width:11px; height:11px; line-height:11px; font-size:10px; text-align:center; border:0px solid #fff; background:url('http://www.neusoft.com/cn/newstyle/images/dotb.png') no-repeat; float: left; margin-right:6px; cursor:pointer; }
+#carousel #carouseltitle .active { background:url('http://www.neusoft.com/cn/newstyle/images/dot.png') no-repeat; }
+#ad_in { width:695px; height:175px; border:0px solid #e0e0e0; margin-bottom:10px; clear:both }
+/*--滚动新闻--*/
+#home_news { width:900px; height:27px; line-height:27px; margin:0 auto }
+#home_news .news_left { width:5px; height:27px; overflow:hidden; background:url('http://www.neusoft.com/cn/newstyle/images/home_new_l.gif') no-repeat; float:left }
+#home_news .news_mid { width:890px; float:left; border-bottom:1px #e0e0e0 solid; border-top:1px #e0e0e0 solid; height:25px; overflow:hidden}
+#home_news .news_right { width:5px; height:27px; overflow:hidden; background:url('http://www.neusoft.com/images/home_new_r.gif') no-repeat; float:right; }
+#home_news .news_mid h2 { text-align:center; float:left; width:60px; border-right:1px #ccc solid }
+#home_news .news_right_button { width:45px; float:right; text-align:center; display:block; overflow:hidden; }
+#home_news .news_right_button img { margin-top:5px; }
+#home_news .news_mid .news_control { width:40px; height:25px; text-align:center; background:url('http://www.neusoft.com/cn/newstyle/images/arrow.gif') no-repeat 5px 6px; float:left; }
+#home_news .news_mid .news_control #btn1, #home_news .news_mid .news_control #btn2 { display:block; width:15px; height:25px; cursor:pointer; }
+#home_news .news_mid .news_control #btn1 { float:left }
+#home_news .news_mid .news_control #btn2 { float:right }
+#new_l_title { width:730px; height:27px; overflow:hidden; float:left }
+#new_l_title ul li { line-height:27px; }
+#new_l_title ul li img { float:left; padding-top:5px; }
+/*--首页产品列表--*/
+#home_product { width:900px; margin:10px auto; clear:both; height:82px; }
+#home_product .home_product_con { float:right; clear:both; width:330px; position:relative; left:0!important; left:20px; }
+#home_product .home_product_con img { float:left }
+#home_product .product_left, #home_product .product_right { width:445px; height:80px; }
+#home_product .product_left { float:left; background:url('http://www.neusoft.com/cn/newstyle/images/product_left.jpg') no-repeat; }
+#home_product .product_right { float:right; background:url('http://www.neusoft.com/cn/newstyle/images/product_right.jpg') no-repeat; }
+/*--下拉菜单--*/
+.dropdown_list { background:url('http://www.neusoft.com/cn/newstyle/images/select_bg.jpg') no-repeat; width:280px; height:34px; z-index:1000; float:left; }
+.dropdown_list .select_box { width:280px; background:url('http://www.neusoft.com/cn/newstyle/images/select_box.gif') no-repeat 260px 15px; position:relative; cursor:pointer; }
+.dropdown_list .select_box span { cursor:pointer; display:block; line-height:36px; height:34px; overflow:hidden; text-indent:10px; }
+.dropdown_list .select_box ul li { cursor:pointer; }
+.dropdown_list .son_ul { width:278px; position:absolute; left:0; top:26px; border:1px solid #ccc; background-color:#fff; padding:2px 0 8px 0; z-index:10; color:#555; }
+.dropdown_list .son_ul li { padding-left:10px; text-align:left; text-indent:0px; }
+.dropdown_list .son_ul li a:link, .dropdown_list .son_ul li a:visited { background-color:#fff; text-decoration:none; color:#4b4b4b; display:block; width:92%; height:17px; line-height:17px; margin:2px 0 }
+.dropdown_list .select_box a { text-decoration:none; color:#4b4b4b; background:inherit }
+.dropdown_list .son_ul li a:hover { background-color:#ebebeb; color:#4b4b4b }
+/*--产品下部--*/
+#home_info { width:900px; clear:both; margin:15px auto }
+#home_info .home_info_left { width:442px; float:left; }
+#home_info .home_info_right { width:438px; float:right; border:3px #e0e0e0 solid; font-family:Verdana, Geneva, sans-serif; height:150px; padding-top:7px; }
+#home_info .home_info_right h2 { font-size:12px; width:416px; ; margin:0 auto;  }
+#home_info .home_info_right h2 a:link, #home_info .home_info_right h2 a:visited { color:#6d6d6d; text-decoration:none; background-color:#fff }
+#home_info .home_info_right p { width:416px; margin:0 auto; line-height:20px; }
+.home_info_left .info_left_top { width:444px; height:26px; line-height:26px; z-index:0 }
+.home_info_left .info_left_mid { width:442px; border-left:1px #ddd solid; border-right:1px #ddd solid; height:118px; padding-top:15px; }
+.home_info_left .info_left_mid p { float:left; width:280px; }
+.home_info_left .info_left_bot { width:444px; height:6px; background:url('http://www.neusoft.com/cn/newstyle/images/slide_bottom.gif') no-repeat; display:block; overflow:hidden; }
+.info_left_mid ul { display:none }
+.info_left_mid ul.block { display:block }
+.info_left_mid ul li img { float:left; margin:0 15px 0 15px; }
+.info_left_mid ul li p { line-height:20px; padding-right:15px; }
+/*--面包屑导航--*/
+#crumb { width:900px; clear:both; line-height:40px; margin:0 auto; }
+#crumb ul { width:900px; float:left; }
+#crumb ul li { float:left; text-align:left; padding-right:5px; text-indent:20px; }
+#crumb .arrow { background:url('http://www.neusoft.com/cn/newstyle/images/arw2.jpg') no-repeat -5px 16px; }
+#crumb a { color:#08c; background-color:#fff }
+/*--内容布局--*/
+#wra_content { clear:both }
+#wra_content .lay_left { width:190px; float:left; }
+#wra_content .lay_right { width:696px; float:right; }
+.left_nav, .contact { width:190px; clear:both }
+/*--左侧导航--*/
+.blue_title { width:190px; margin:0 auto; clear:both; background:url('http://www.neusoft.com/cn/newstyle/images/leftnav_t.gif') no-repeat; background-color:#38c; color:#fff }
+.blue_title h2 { font-size:12px; color:#fff; padding:10px 0px 10px 8px; background-color:#0088cc; width:160px; margin:0 auto }
+.blue_title h2 a{ color:#ffffff;  background-color:#0088cc}
+.grey_title { width:190px; margin:0 auto; clear:both; background:url('http://www.neusoft.com/cn/newstyle/images/contact_t.gif') no-repeat; height:40px; }
+.grey_title h2 { font-size:12px; color:#5e5e5e; height:40px; line-height:40px; text-indent:20px; background:inherit }
+.left_nav_list, .contact_con { width:188px; border-left:#e0e0e0 1px solid; border-right:#e0e0e0 1px solid; clear:both; padding:0px 0 10px 0; }
+.left_nav_list ul li { width:165px; border-bottom:1px #e0e0e0 solid; margin:0px auto; line-height:20px; padding:3px 0px }
+.left_nav_b { width:190px; margin:0 auto; clear:both; background:url('http://www.neusoft.com/cn/newstyle/images/leftnav_b.gif') no-repeat; height:10px; }
+/*--联系我们--*/
+.contact { margin-top:15px; }
+.form_box { width:170px; clear:both; padding:10px 0px 0px 0px; margin:0 auto }
+.form_box ul { margin-bottom:10px; clear:both }
+.form_box ul li { line-height:24px; height:24px; border-bottom:1px #e0e0e0 solid; text-indent:8px; }
+.moreinfo { width:143px; height:26px; line-height:26px; padding-left:15px; background:url("http://www.neusoft.com/cn/newstyle/images/icon2.gif") no-repeat 5px 10px; clear:both }
+.moreinfo a:link, .moreinfo a:visited { color:#adadad; text-decoration:none; background-color:#ffffff; background:none }
+.moreinfo a:hover { color:#08c; background-color:#fff }
+.contact_b { width:190px; margin:0 auto; clear:both; background:url('http://www.neusoft.com/cn/newstyle/images/contact_b.gif') no-repeat; height:10px; }
+/*--内容详细页--*/
+.right_title { border-bottom:#e0e0e0 1px solid; padding-bottom:5px; }
+.right_title h2 { font-size:20px; color:#08c; text-align:left; font-weight:bold; background-color:#fff }
+.right_content { width:696px; clear:both; margin:0 auto; line-height:20px; padding-top:10px; }
+.right_content p { margin-bottom:10px; }
+.right_content img, .right_content p, .right_content ul { margin-bottom:10px; }
+.right_content h3 { line-height:16px; color:#08c; font-size:14px; background-color:#fff; margin:20px 0 10px 0; }
+.right_content h4 { line-height:20px; font-size:11px; margin-top:15px; margin-bottom:5px; }
+.right_content .column_list li, .right_content .colume_list li { background:url('http://www.neusoft.com/cn/newstyle/images/dot_big.gif') no-repeat 8px 8px; padding-left:22px; line-height:20px; }
+.right_content .column_list ul li, .right_content .colume_list ul li { background:url('http://www.neusoft.com/cn/newstyle/images/dot_small.gif') no-repeat 10px 8px; padding-left:22px; line-height:20px; }
+.right_content .column_list li a, .right_content .colume_list li a, .right_content .column_list ul li a, .right_content .colume_list ul li a { background-image:none }
+.right_content .dl_list dd { background:url('http://www.neusoft.com/cn/newstyle/images/dot_big.gif') no-repeat 8px 8px; padding-left:22px; line-height:20px; }
+.right_content .dl_list dl dd { background:url('http://www.neusoft.com/cn/newstyle/images/dot_small.gif') no-repeat 10px 8px; padding-left:22px; line-height:20px; }
+.right_content .dl_list dd a, .right_content .dl_list dl dd a { background-image:none }
+.column_two, .column_three { clear:both; margin: 5px auto 0 auto; }
+.column_two_left { width:338px; float:left; }
+.column_two_right { width:339px; float:right; }
+.column_two_small { width:219px; }
+.column_two_big { width:456px; }
+.column_three_left { width:219px; float:left; }
+.column_three_middle { width:219px; float:left; margin-left:20px; }
+.column_three_right { width:219px; float:right; }
+.magnifier { background:url('http://www.neusoft.com/cn/newstyle/images/Magnifier.gif') no-repeat 0px 2px; padding-left:13px; font-weight:bold; color:#b3b3b3; background-color:#ffffff }
+.search{height:18px; line-height:18px; padding-left:20px; margin-bottom:10px;}
+.input1 {border: 1px solid #e1e1e1;	font-size: 11px;color: #aeaeae;height:16px; width:380px; background-color:#fff}
+/*--内容详细页表格--*/
+.news_table { background-color:#dddddd; font-size:11px; color:#555555 }
+.news_table td { padding:0 5px; }
+.news_table tr { height:24px; line-height:24px; }
+.news_table .table_title { height:30px; text-align:center; color:#fff; background-color:#0088cc; font-weight:bold; font-size:12px; }
+.news_table .grey_tr { background-color:#f6f6f6; color:#555555 }
+.news_table .white_tr { background-color:#fff; color:#555555 }
+/*--新闻列表--*/
+.list_page { margin-bottom:10px; width:695px; height:38px; background: #f1eff0; line-height:38px; color:#666; clear:both }
+.list_page_c { float:left; width:670px; padding:9px 0 11px 0; height:18px; line-height:18px; }
+.list_page_l { float:left; width:20px; height:38px; background: url('http://www.neusoft.com/cn/newstyle/images/pag_l.gif') no-repeat; }
+.list_page_r { float:right; width:5px; height:38px; background: url('http://www.neusoft.com/cn/newstyle/images/pag_r.gif') no-repeat; }
+.list_page_search { padding-left:5px; width:150px; height:16px; line-height:13px; color:#555; margin:1px; border: 1px solid #e0e0e0; background-color:#fff }
+.new_list { height:auto; width:665px; margin-top:5px; padding:5px 20px 0 10px; }
+.new_list_tit { line-height:22px; padding-bottom:1px; color:#555; ; background-color:#fff; height:22px; overflow:hidden; width:665px; clear:both; }
+.new_list_tit a { color:#555; background-color:#fff }
+.new_list_tit a:hover { color:#0088cc; text-decoration:underline; background-color:#fff }
+.new_list_abs { color:#555; background-color:#fff; clear:both}
+.new_list_more {height:11px; line-height:11px; padding-bottom:2px; clear:both; text-align:right }
+.new_list_more a:link, .new_list_more a:visited, .new_list_more a:hover { color:#08c; background-color:#fff }
+.search_list_abs { clear:both; line-height:16px; color:#555; background-color:#fff;}
+.search_list_abs a { color:#adadad; background-color:#fff }
+.search_list_abs a:hover { color:#08c; background-color:#fff }
+/*--- 翻页样式---*/
+.manu { padding: 3px; font-size:11px; }
+.manu a { padding:2px 3px; margin: 2px; color: #666; background-color:#f1eff0 }
+.manu a:hover, .manu a:hover { color: #08c; text-decoration: underline; background-color:#f1eff0 }
+.manu .current { padding:1px 5px 3px 5px; margin:2px; color:#fff; background-color:#08c; }
+.manu .disabled { border: #eee 1px solid; padding:2px 3px; margin: 2px; color: #ddd; background-color:#f1eff0 }
+/*--版权区--*/
+#footer { height:60px; margin-bottom:20px; margin-top:15px; border-top:#e0e0e0 1px solid; padding-top:5px; }
+#footer .copyright { width:350px; height:24px; line-height:24px; float:right; text-align:right }
+#footer .footer_top { width:900px; margin:0 auto; height:24px; line-height:24px; }
+#footer .footer_nav { width:500px; float:left; text-align:left }
+#footer .footer_nav a { margin:0 5px; }
+#footer .page_tool { width:900px; height:24px; clear:both; line-height:24px; text-indent:5px; }
+.cnzz { display:none }
+/*--内容区滑动门--*/
+.main1 { clear:both; }
+#tabs1 { text-align:left; width:380px; }
+.menu1box { text-align:left; }
+#menu1 { z-index:1; width:101%; overflow:hidden; top:0px; position:relative }
+#menu1 li { margin:0 1px 0 0; background:#0188cc; float:left; display:block; cursor:pointer; text-align:center; line-height:26px; height:26px; font-weight:bolder; color:#ffffff; border:0px; }
+#menu1 li.hover { background:#fff; color:#0088ce; border-left:1px solid #e6e6e6; border-top:1px solid #e6e6e6; border-right:1px solid #e6e6e6; text-decoration:none;height:25px; }
+#menu1 a:visited { text-decoration:none }
+.main1box { clear:both; margin-top:-1px; border-top:1px solid #e6e6e6; border-left:1px solid #e6e6e6; border-right:1px solid #e6e6e6; height:133px; width:437px; }
+.mainlbox_b { height:3px; width:439px; background:url('http://www.neusoft.com/cn/newstyle/images/angle_l_b.gif') bottom no-repeat; }
+.main2box { clear:both; margin-top:-11px; border:1px solid #e6e6e6; height: auto; width:690px; padding-top:10px; }
+#main1 ul { display: none; }
+#main1 ul.block { display: block; }
+.menu2box { position:relative; overflow:hidden; height:28px; text-align:left; padding-left:5px; padding-right:5px; }
+.right_content #main1 ul li { width:670px; margin:0 auto; }
+/*--网站地图--*/
+#sitemap tr { line-height:24px; background-color:#fff; color:#555 }
+#sitemap td { text-indent:20px; }
+#sitemap .border_right { border-right:1px #e0e0e0 solid }
+
+
+#seeking{width:220px; float:right; margin:0px 5px 10px 10px; border:1px #e0e0e0 solid; font-family:Verdana, Geneva, sans-serif; padding-bottom:10px;}
+#seeking h2{ font-size:12px; color:#4a4a4a; line-height:18px; padding:0 8px; font-weight:bold; margin-top:5px; margin-bottom:10px;}
+#seeking h2 span{ font-size:22px; color:#dc7636; line-height:23px;}
+#seeking p{font-size:11px; color:#4a4a4a; line-height:18px; padding:0 10px;}
+
+
+/*--Page Tools--*/
+.right_title h2{ width:630px; float:left;}
+.page_tool{ width:60px; float:right;height:25px;}
+.email,.print{width:18px; height:14px; float:right;margin:8px 3px 0 8px;}
+.email a,.print a{ display:block;width:18px; height:14px; }
+.email a{ background-image:url('http://www.neusoft.com/cn/newstyle/images/email.gif')}
+.email a:hover{ background-image:url('http://www.neusoft.com/cn/newstyle/images/email_hl.gif')}
+.print a{ background-image:url('http://www.neusoft.com/cn/newstyle/images/print.gif')}
+.print a:hover{ background-image:url('http://www.neusoft.com/cn/newstyle/images/print_hl.gif')}
+
+.news_right_title { border-bottom:#e0e0e0 1px solid; padding-bottom:5px; }
+.news_right_title h2 { font-size:20px; color:#08c; text-align:left; font-weight: bold; background-color:#fff; }
+
+/*--CaseStudy--*/
+.casestudy_comment { border:1px #e0e0e0 solid; width:200px; float:right; background-color:#f5f5f5; margin-left:10px; margin-top:20px}
+.casestudy_comment p { clear:both }
+.casestudy_overview p { margin-bottom:10px; line-height:22px; }
+.comment_info { padding-top:10px; width:85%; margin:0 auto; clear:both }
+.comment_from { text-align:right; width:80%; margin:0 auto; clear:both;font-weight:bold }
+.casestudy_download { clear:both; background:url(http://www.neusoft.com/cn/images/pdf.gif) no-repeat 10px 15px; background-color:#f2f2f2; height:75px; border:5px #ffffff solid; }
+.casestudy_download p { text-align:left; padding-left:60px; clear:both; padding-top:20px; line-height:16px; }
+.casestudy_overview h3 { font-size:14px; color:#38c; font-weight:bold; line-height:22px; margin-bottom:5px; margin-top:15px; }
+.casestudy_overview .list { line-height:22px; margin-bottom:20px; }
+#casestudy { width:220px; float:right; margin:0px 5px 10px 10px; border:1px #e0e0e0 solid }
+#casestudy h2{ height:30px; line-height:30px; font-weight:bold; font-size:12px; text-indent:10px; text-align:left; background-color:#e0e0e0}
+#casestudy  ul{ width:200px; margin:10px auto; }
+#casestudy  ul li{ line-height:22px; padding-left:15px; background:url(http://www.neusoft.com/cn/upload/images/20111103/1320297874567.gif) no-repeat 0px 8px}
+#casestudy p{ text-align:right; padding-right:15px;color:#38c; padding-bottom:10px;}
+
+#casestudy  dl{ width:200px; margin:10px auto; }
+#casestudy  dl dd{ line-height:22px; padding-left:12px; background:url(http://www.neusoft.com/cn/upload/images/20111103/1320297874567.gif) no-repeat 0px 8px}
+.casestudy_nav{ width:190px; margin-bottom:20px;}
+.casestudy_nav h3{ width:170px;font-size:12px; height: auto; line-height:20px;padding-left:17px; padding-right:3px;padding-top:16px; padding-bottom:5px;  }
+.casestudy_nav h3 a{font-size:12px; color:#6d6d6d; background-color:#ffffff;  }

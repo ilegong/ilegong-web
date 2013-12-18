@@ -1,0 +1,75 @@
+{{if preg_match('/MSIE 6.0/i',$_SERVER['HTTP_USER_AGENT'])}}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+{{else}}
+<!DOCTYPE html>
+<html lang="en">
+{{/if}}
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge, chrome=1" />
+<meta name="description" content="JavaScript desktop environment built with jQuery." />
+<title>{{$site[title]}}</title>
+<!-- The styles  -->
+{{$this->Html->css(array(	
+	'charisma/jquery-ui-1.8.21.custom.css',
+	'bootstrap-responsive.min.css',
+	Router::url('/admin/stylevars/getcss'),
+))}}
+{{$this->Combinator->css(array(
+			'charisma/fullcalendar.css',
+			'charisma/fullcalendar.print.css',
+			'charisma/chosen.css',
+			'charisma/uniform.default.css',
+			'charisma/colorbox.css',
+			'charisma/jquery.cleditor.css',
+			'charisma/jquery.noty.css',
+			'charisma/noty_theme_default.css',
+			'charisma/elfinder.min.css',
+			'charisma/elfinder.theme.css',
+			'charisma/jquery.iphone.toggle.css',
+			'charisma/opa-icons.css',
+			'charisma/uploadify.css',
+			'jquery.jgrowl.css',
+			'ui.jqgrid.css',
+			'admin.css',
+			'ui-customer.css',			
+        ))}}
+<style type="text/css">
+.accordion-heading.box-header{cursor: pointer;padding-top: 0px;}
+.accordion-heading.box-header h2{float:none;}
+.accordion-heading .accordion-toggle {display: block;padding: 3px 5px;}	  
+.sidebar-nav {padding: 9px 0;}
+</style>
+	{{$this->Html->script(array(
+			'jquery/jquery.min.js',
+			'jquery/jquery-migrate-1.2.1.min.js',
+        ))}}
+{{$this->Html->script(array(
+		'jquery/jquery.cookie.js',
+		'i18n/language-zh-CN.js',
+		'phpjs.js',
+		'common.js',
+		'admin.js',
+))}}
+{{$this->Combinator->script(array(
+		'jqgrid/i18n/grid.locale-cn.js',
+		'jqgrid/jquery.jqGrid.min.js',
+))}}
+<!--[if lte IE 6]>
+{{$this->Html->css(array(	
+	'bootstrap-ie6.css',
+))}}
+<![endif]-->
+<script type="text/javascript">
+var BASEURL  = "{{APP_SUB_DIR}}";
+var ADMIN_BASEURL = "{{ADMIN_SUB_DIR}}";
+var current_csstheme = '{{$site[csstheme]}}';
+var mainContent_width=0;
+</script>
+</head>
+<body>
+<div class="flash ui-wedget" id="fsUploadProgress" style="position:fixed;width:210px;top:80px;right:30px; z-index: 10000000;">
+			<!-- This is where the file progress gets shown.  SWFUpload doesn\'t update the UI directly.
+						The Handlers (in handlers.js) process the upload events and make the UI updates -->
+</div> 

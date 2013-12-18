@@ -1,0 +1,20 @@
+<div class="nextitem clearfix">		
+
+
+
+<div class="pull-left">« 
+{{eval 
+echo $this->Html->link(usubstr($last_item[$next_item_model]['name'],0,22), 
+		'/'.$next_item_controller.'/'.date('Ym',strtotime($last_item[$next_item_model]['created'])).'/'.$last_item[$next_item_model]['slug'].'.html', 
+		array('title'=>$last_item[$next_item_model]['name'],'target'=>'_self')
+	);
+}}</div>
+
+<div class="pull-right">
+{{eval 
+echo $this->Html->link(usubstr($next_item[$next_item_model]['name'],0,22), 
+		'/'.$next_item_controller.'/'.date('Ym',strtotime($next_item[$next_item_model]['created'])).'/'.$next_item[$next_item_model]['slug'].'.html', 
+		array('title'=>$next_item[$next_item_model]['name'],'target'=>'_self')
+	);
+}}»</div>
+</div>

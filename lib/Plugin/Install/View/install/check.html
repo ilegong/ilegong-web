@@ -1,0 +1,30 @@
+<div class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+    <h3>{{lang('environment_check')}}</h3>
+    </div>   
+    <form id="InstallCheckForm" class="form-horizontal" accept-charset="utf-8" method="post" action="{{Router::url(array('plugin' => 'install', 'controller' => 'install', 'action' => 'database'))}}">
+    <div class="modal-body">
+    	<table class="table">
+    		<tr><td>webroot/cache</td><td>{{if $dirinfo['web_cache']}}<i class="icon-ok"></i>{{else}}<i class="icon-remove"></i>{{/if}}</td></tr>
+    		<tr><td>webroot/files</td><td>{{if $dirinfo['upload']}}<i class="icon-ok"></i>{{else}}<i class="icon-remove"></i>{{/if}}</td></tr>
+    		<tr><td>data</td><td>{{if $dirinfo['data']}}<i class="icon-ok"></i>{{else}}<i class="icon-remove"></i>{{/if}}</td></tr>
+    		<tr><td>app/Config</td><td>{{if $dirinfo['app_config']}}<i class="icon-ok"></i>{{else}}<i class="icon-remove"></i>{{/if}}</td></tr>
+    		<tr><td>manage/Config</td><td>{{if $dirinfo['man_config']}}<i class="icon-ok"></i>{{else}}<i class="icon-remove"></i>{{/if}}</td></tr>
+    		<tr><td colspan="2">{{lang('need_writable')}}</td></tr>
+    	</table>
+    </div>
+    <div class="modal-footer">
+    	<input class="btn btn-primary" type="button" onclick="history.back(-1);" value="{{lang('last_step')}}">
+    	
+    	{{if $allchecked}}
+    		<?php echo $this->Html->link(lang('next_step'), array('action' => 'database'),array('class'=>"btn btn-primary")); ?>
+    	{{else}}
+    		<a href="#" class="btn btn-large btn-primary disabled">{{lang('next_step')}}</a>
+    	{{/if}}
+    </div>
+    </form>
+	</div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

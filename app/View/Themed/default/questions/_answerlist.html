@@ -1,0 +1,19 @@
+<div class="regionlist clearfix">
+	
+	<div class="head_pic userhead">
+		<a href="http://t.sina.com.cn/{{$item['creator_id']}}" target="_blank">
+		<img src="{{$item['user_img']}}" uid="{{$item['creator_id']}}" title="{{$item['creator']}}">
+		</a>
+	</div>	
+	<div class="regionright">
+		<p>
+		<a href="http://t.sina.com.cn/{{$item['creator_id']}}" target="_blank">@{{$item['creator']}}</a>： {{$item['name']}}		
+		</p>
+		<div class="listauthor">
+			发布于{{substr($item['created'],5,-3)}}| 
+			<a href="javasctipt:void(0);" onclick="return addtofavor('Weibo','{{$item['id']}}','{{$item['weibo_id']}}');">收藏<span class="ui-stats-num Stats-Weibo-{{$item['id']}}-favor_nums">{{if $item['favor_nums']}}({{$item['favor_nums']}}){{/if}}</span></a> | 
+<a href="/questions/{{$item_all['Question']['id']}}/{{$item['id']}}.html" target="_blank">查看详情</a>	
+		</div>
+		
+	</div>
+</div>

@@ -1,0 +1,62 @@
+{{$this->Form->create('Question',array('type'=>'file','action' => 'publish','id'=>"form2143016616"));}}
+<div class="ui-corner-bottom ui-question-publish clearfix">
+	<fieldset>
+	<input type="hidden" id="QuestionId_1658089646" name="data[Question][id]">
+	<div class="publish-header clearfix">
+		<label for="QuestionName_1658089646">发布您的问题</label>
+		<div id="publisher_info" class="wordNumBg">你还可以输入<span class="pipsLim">140</span>字</div>
+	</div>
+	<div class="inputextarea ui-corner-all">
+		<textarea oninput="wordLimit(this)"  onpropertychange="wordLimit(this)" style="font-family: Tahoma,宋体; border-style: solid; 
+		border-width: 0px; word-wrap: break-word;
+		 font-size: 14px; line-height: 18px; overflow-x: hidden;" id="QuestionName_1658089646"
+			name="data[Question][name]"></textarea>
+	</div>
+	<div class="toolbar clearfix">
+		<!-- <div style="float:left;">
+			<span id="spanButtonPlaceholder_coverimg">图片</span>(&lt; 1MB)
+			<div id="fileuploadinfo_coverimg" class="fileuploadinfo"></div>
+		</div> -->
+		
+		<div style="float:left;line-height: 30px;">
+			{{$this->Form->input('cate_id',array( 'label' => false,'id'=>'select-subject','title'=>'话题','div'=>false ));}} <span style="cursor:pointer" onclick="publishController.open_dialog('/modelcates/add/Question','添加话题');">其它话题</span>
+		</div>
+		<div style="float:right;" class="submit">
+			<a id="publisher_submit" onclick="submit_question();" href="javascript:void(0);"></a>
+		</div>
+		
+		<div style="float:right;line-height:30px;">
+		<input onclick="showmoreoption();" type="checkbox" value="1" id="moreoptioncheck"/>
+		<label for="moreoptioncheck" style="cursor:pointer;" >更多选项</label>
+		
+		</div>
+		<div style="float:right;line-height:30px;">
+		<a onclick="return publishController.show_invite('questions');" href="javascript:void(0);" >点名邀请好友参与</a>
+		</div>
+	</div>
+	<div id="question-publish-errorinfo" class="line-height:24px;padding:4px;">
+		
+	</div>
+	<div class="moreoptions" id="moreoptions" style="display:none;">
+		<!-- <div>问题描述：</div> -->
+		<div>问题解析：<textarea style="font-family: Tahoma,宋体; border-style: solid; 
+		border-width: 1px; word-wrap: break-word;
+		 font-size: 14px; line-height: 18px; width:500px;height:60px;overflow-x: hidden;" id="QuestionName_1658089646"
+			name="data[Question][explain]"></textarea></div>		
+	</div>
+	
+	</fieldset>
+</div>
+</form>
+<script>
+$(function(){
+	$('#QuestionName_1658089646').get(0).focus();
+	$('#select-subject').selectmenu({style:'dropdown',width:'100px',setdisplay:false});
+	$('#select-subject').next().css('padding','0').width('auto');
+	$('select.dropdown').selectmenu({style:'dropdown',width:'600px',setdisplay:false}); //
+	$('select.dropdown').next().width(150).css('padding','0');
+	$("#user_group_select").selectedIndex=1; 
+	InitInviteUserByGroup();
+
+});
+</script>

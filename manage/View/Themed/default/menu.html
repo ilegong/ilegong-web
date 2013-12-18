@@ -1,0 +1,8 @@
+<div class="ui-widget  clearfix" style="margin-top:26px;">
+		<div class="ui-widget ui-menu ui-widget-header clearfix ">
+		{eval 
+		if(empty($top_category_id)) $top_category_id=0;
+		echo $this->Section->getNavMenu('Category',array('selectedid'=> $top_category_id));
+		}
+		</div>
+</div>

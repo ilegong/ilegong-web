@@ -1,0 +1,47 @@
+<div class="roles form">
+    <?php 
+
+echo $this->MForm->create('ArosAco',array('type' => 'post',
+        'url' => array(
+            'controller' => 'aros_acos',
+            'action' => 'set',$model,$data_id,
+        ),
+    )
+);
+?>
+<?
+
+echo $this->MForm->input('aro_id',array('readonly'=>'true'));//,array('disabled'=>'disabled')
+foreach($flows  as $flowid => $flow)
+{
+	$flowid = $flow['Flow']['id'];
+	$steps = array();
+	foreach($flowsteps[$flowid] as $step)
+	{
+		$steps[$step['Aco']['id']] = $step['Flowstep']['name'];
+	}
+	echo $this->MForm->input('aco_id',
+		array('label'=>$flow['Flow']['name'],'type'=>'select',
+		'multiple'=>'checkbox','options'=> $steps,'hiddenField' => false,
+		));
+	// 选中项勾选值赋值给$this->request->data['ArosAco']['aco_id']
+
+}
+/*
+
+	$steps = array();
+	foreach($flowsteps[0] as $step)
+	{
+		$steps[$step['Aco']['id']] = $step['Flowstep']['name'];
+	}
+	echo $this->MForm->input('aco_id',
+		array('label'=>'Others','name'=>'acos[]','type'=>'select',
+		'multiple'=>'checkbox','options'=>$steps,
+		'hiddenField'=>false,'value'=>$acos,
+		'selected'=>$acos));
+*/
+	
+?>
+<?php echo $this->MForm->end(array('label'=>__('Submit',true),'id'=>'btnsubmit')); ?>
+</form>
+</div>

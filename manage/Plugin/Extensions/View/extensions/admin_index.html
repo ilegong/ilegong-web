@@ -1,0 +1,70 @@
+<div class="extensions-plugins">
+    <h2><?php echo $title_for_layout; ?></h2>
+
+    <table  class="table table-striped">
+    <?php
+        $tableHeaders =  $this->Html->tableHeaders(array(
+            '',
+            __('Alias', true),
+            __('Name', true),
+            __('Description', true),
+            __('Active', true),
+            __('Actions', true),
+        ));
+        echo $tableHeaders;
+
+        $rows = array();
+        foreach ($plugins AS $pluginAlias => $pluginData) {
+            
+            if ($pluginData['active']) {
+                $icon = 'tick.png';
+                $toggleText = __('Deactivate');
+            } else {
+                $icon = 'cross.png';
+                $toggleText = __('Activate');
+            }
+            $iconImage = $this->Html->image('icons/'.$icon);
+
+            $actions  = '';
+			/*        
+            $actions .= ' ' . $this->Html->link(__('Delete'), array(
+                'action' => 'delete',
+                $pluginAlias,
+                'token' => $this->params['_Token']['key'],
+            ), null, __('Are you sure?')); */
+
+			if ($pluginData['active']) {
+			$actions .= $this->Html->link('<i class="icon-arrow-up"></i>',
+				array('action' => 'moveup', $pluginAlias),
+				array('icon' => 'chevron-up','escape'=>false, 'title' => __('Move up'), 'method' => 'post'),
+				__('Are you sure?')
+			);
+
+			$actions .= $this->Html->link('<i class="icon-arrow-down"></i>',
+				array('action' => 'movedown', $pluginAlias),
+				array('icon' => 'chevron-down','escape'=>false, 'title' => __('Move down'), 'method' => 'post'),
+				__('Are you sure?')
+			);
+		}
+
+            $rows[] = array(
+                '',
+                $pluginAlias,
+                $pluginData['name'],
+                $pluginData['description'],
+                $this->Html->link($iconImage, array(
+                    'action' => 'toggle',
+                    $pluginAlias,
+                    'token' => $this->params['_Token']['key'],
+                ), array(
+                    'escape' => false,
+                )),
+                $actions,
+            );
+        }
+
+        echo $this->Html->tableCells($rows);
+        echo $tableHeaders;
+    ?>
+    </table>
+</div>

@@ -1,0 +1,39 @@
+<div class="roles index">
+    <div class="actions">
+        <ul>
+            <li><?php echo $this->Html->link(__('New Menu', true), array('action'=>'add')); ?></li>
+        </ul>
+    </div>
+
+    <table cellpadding="0" cellspacing="0">
+    <?php
+        $tableHeaders =  $this->Html->tableHeaders(array(
+                                              $this->Paginator->sort('id'),
+                                              $this->Paginator->sort('title'),
+                                              $this->Paginator->sort('link'),
+                                              __('Actions', true),
+                                             ));
+        echo $tableHeaders;
+
+        $rows = array();
+        foreach ($menus AS $menu) {
+            $actions  = $this->Html->link(__('Edit', true), array('controller' => 'menus', 'action' => 'edit', $menu['Menu']['id']));
+            $actions .= ' ' . $this->Html->link(__('Delete', true), array('controller' => 'menus', 'action' => 'delete', $menu['menu']['id']), null, __('Are you sure?', true));
+
+            $rows[] = array(
+                       $menu['Menu']['id'],
+                       $menu['Menu']['title'],
+                       $menu['Menu']['link'],
+                       $actions,
+                      );
+        }
+
+        echo $this->Html->tableCells($rows);
+        echo $tableHeaders;
+    ?>
+    </table>
+</div>
+
+<div class="paging"><?php echo $this->Paginator->numbers(); ?></div>
+<div class="counter"><?php echo $this->Paginator->counter(array('format' => 'Page {:page} of {:pages}, showing {:current} records out of
+     {:count} total, starting on record {:start}, ending on {:end}')); ?></div>

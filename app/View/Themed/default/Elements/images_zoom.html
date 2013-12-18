@@ -1,0 +1,66 @@
+{{$this->Html->css(array(
+           'jqzoom',
+        ));
+}}
+{{$this->Html->script(array(			
+            'jquery/jquery.marquee.js',
+            'jquery/jqzoom.pack.1.0.1.js',
+        ));
+}}
+<style>
+#preview { float: left; margin-bottom: 20px; width: 352px;}
+#spec-n1 { border: 1px solid #E4E4E4;width: 350px;height:300px;overflow:hidden; }
+.list-h li, .list-h dl {float: left;}
+#spec-thumb-list img { border: 1px solid #E8E8E8; padding: 2px;}
+#spec-thumb-list {height: 56px;padding: 5px 26px;position: relative;width: 300px;}
+#spec-thumb-list .control {
+    background-image: url("{{$this->Html->image('icon_clubs.gif')}}");
+    background-repeat: no-repeat;
+    cursor: pointer;
+    height: 45px;
+    position: absolute;
+    top: 10px;
+    width: 10px;
+}
+#marquee-left {background-position: -68px -380px;left: 8px;}
+#marquee-right {background-position: -79px -380px;right: 8px;}
+</style>
+<script type="text/javascript">
+<!--
+$(function(){
+    $(".marquee").each(function() {
+		$(this).marquee({btn_pre:'#marquee-left',btn_next:'#marquee-right'});
+	}).height(60);
+	$(".jqzoom").jqzoom({'zoomWidth':400,'zoomHeight':300,'position':"right",'title':false,'preloadImages':false});
+	$("#spec-thumb-list img").bind("mouseover",function(){	
+		var src=$(this).attr("src");
+		$("#spec-n1 img").eq(0).attr({src:src.replace("\/thumb_s\/","\/thumb_m\/")});
+		$("#spec-n1 a").attr('href',src.replace("\/thumb_s\/","\/"));
+		$(this).css({"border":"2px solid #ff6600","padding":"1px"});
+	}).bind("mouseout",function(){
+		$(this).css({"border":"1px solid #ccc","padding":"2px"});
+	});
+	
+});
+//-->
+</script>
+<div id="preview">
+				<div onclick="" id="spec-n1">
+				<a  class="jqzoom" onclick="return false;" href="{{$this->Html->url($Product['Uploadfile'][0]['fspath'])}}" >
+				<img width="350" alt="" src="{{$this->Html->url($Product['Uploadfile'][0]['mid_thumb'])}}" 
+				onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
+				</a>
+				</div>
+				<div id="spec-thumb-list" >
+				    <div id="marquee-left" class="control"></div>
+					<div id="marquee-right" class="control"></div>	
+					<div class="marquee" direction="left" step="1" pause="2000" style="position: relative; overflow: hidden; width: 300px; height: 56px;">
+						<ul class="list-h" style="width: 300px; overflow: hidden; position: absolute; left: 0pt; top: 0pt; ">
+				        {{loop $Product['Uploadfile'] $uploadfile}}
+					    	<li><img width="50" height="50" name="{{$this->Html->url($uploadfile['mid_thumb'])}}" alt="{{$Product['Product']['title']}}" src="{{$this->Html->url($uploadfile['thumb'])}}" onerror="this.src='http://www.360buy.com/images/none/none_50.gif'"></li>
+					    {{/loop}} 
+						</ul>
+					</div>
+				</div>
+                
+</div>

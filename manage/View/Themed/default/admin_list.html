@@ -1,0 +1,513 @@
+<div id="{{$pageID}}">
+	<div class="navbar  navbar-default nav-toolbar" role="navigation" >
+    <div class="collapse navbar-collapse ">
+	        <ul class="nav navbar-nav">
+	        {{if in_array('cate_id',$table_fields)}}
+	        <li class="dropdown">
+	        <a data-toggle="dropdown" class="dropdown-toggle" href="#">{{__('Category Filter')}} <b class="caret"></b></a>
+	        {{eval echo $this->Section->getLeftMenu('Category',
+			array(
+				'conditions'=>array('model'=> $current_model),
+				'parent_id'=>$site_cate_id,
+				'ulAttributes'=> array('class'=>'dropdown-menu'),
+				'selectedid' => $_GET['cate_id'],
+				'subliAttributes2' => array('class'=>'dropdown-submenu'),
+				'url' => 'javascript:goToCate_'.$pageID.'({id})',
+				'sufli'=>'<li class="search_container">
+				<a class="ui-menu-first ui-corner-all" id="link-0" href="javascript:goToCate_'.$pageID.'(0)" tabindex="-1">'.__('View All').'</a>
+			</li>',
+			));}}
+	        </li>
+	        {{/if}}
+	        {{if $allow_add}}
+	            <li>
+<?php echo $this->Html->link(__('Create New ').__d('modelextend','Model_'.$current_model), 
+array(
+	'controller' => $current_controller,
+	'action'=>'add','?'=>$this->request->query
+),array(
+	'date-title'=> __('Create New ').__d('modelextend','Model_'.$current_model),
+	'id' => 'CreateNew'.$current_model,
+	'escape'=>false)
+); ?></li>
+				{{/if}}
+				
+	            {{$this->Hook->call('listToolbar',array(array('model'=>$current_model,'target_model'=>$target_model,'pageid'=>$pageID,'cname'=>$modelCname)))}}
+	            <!-- 
+	            {{if in_array('cate_id',$table_fields)}}
+		             <li><?php echo $this->Html->link($modelCname.__('Categories'), array('controller' => 'categories','action'=>'list','model'=>$current_model),array('escape'=>false)); ?></li>
+		        {{/if}}
+	            <li><?php echo $this->Html->link(__('Search and Statistics'),'#',array('onclick'=>'return open_content_dialog(\'ui-search-form\');')); ?></li>
+	             -->
+	             {{if in_array('published',$table_fields) && $allow_publish}}
+		            <li class="BatchPublish"><?php echo $this->Html->link(__('Batch Publish'),'#',array('onclick'=>"return batchAction_{$pageID}('publish');")); ?></li>
+		         {{/if}}
+	            {{if $is_tree_model}}
+		            {{if $allow_list}}
+		            	<li><?php echo $this->Html->link(__('Normal List'), array('controller' => $current_controller,'action'=>'list','?'=>array('list'=>1)),array('escape'=>false)); ?></li>
+		            {{/if}}
+		            <li><?php echo $this->Html->link(__('Tree Level Sort'), array('controller' => $current_controller,'action'=>'treesort'),array('escape'=>false)); ?></li>
+	            {{else}}
+		            {{if in_array('deleted',$table_fields)}}
+		            	{{if $allow_trash}}
+			        		<li class="BatchTrash"><?php echo $this->Html->link(__('Batch Trash'),'#',array('onclick'=>"return batchAction_{$pageID}('trash');")); ?></li>
+		            	{{/if}}
+		            	{{if $allow_restore}}
+			            	<li style="display:none;" class="BatchRestore"><?php echo $this->Html->link(__('Batch Restore'),'#',array('onclick'=>"return batchAction_{$pageID}('restore');")); ?></li>
+			            {{/if}}
+			            {{if $allow_delete}}
+			            	<li style="display:none;" class="BatchDelete"><?php echo $this->Html->link(__('Batch Delete'),'#',array('onclick'=>"return batchAction_{$pageID}('delete');")); ?></li>
+			            {{/if}}
+		            {{else}}
+		            	<li class="BatchDelete"><?php echo $this->Html->link(__('Batch Delete'),'#',array('onclick'=>"return batchAction_{$pageID}('delete');")); ?></li>
+		            {{/if}}
+		        {{/if}}
+		        
+		        <li class="dropdown">
+                      <a data-toggle="dropdown" class="dropdown-toggle" href="#">回收站<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a id="radio1_{{$pageID}}" onclick="goToDataList_{{$pageID}}();">列表</a></li>
+						{{if in_array('published',$table_fields)}}
+								<li><a id="radio3_{{$pageID}}" onclick="goToUnPublish_{{$pageID}}();" >未发布</a></li>
+						{{/if}}
+						{{if in_array('deleted',$table_fields)}}
+						<li><a  id="radio2_{{$pageID}}" onclick="goToTrash_{{$pageID}}();">已删除</a></li>
+						{{/if}}
+					</ul>
+				</li>
+				{{if $allow_fieldsetting || $allow_setting}}
+				<li class="dropdown">
+                      <a data-toggle="dropdown" class="dropdown-toggle" href="#">设置<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+					{{if $allow_fieldsetting}}
+						<li><a onclick="return open_dialog({title:'{{__('List Fields')}}'},'{{$this->Html->url('/admin/settings/fieldsetting/'.$current_model.'/list_fields');}}',null,null,event);">{{__('List Fields');}}</a></li>
+						<li><a onclick="return open_dialog({title:'{{__('Search Fields')}}'},'{{$this->Html->url('/admin/settings/fieldsetting/'.$current_model.'/search_fields');}}',null,null,event);">{{__('Search Fields');}}</a></li>
+					{{/if}}
+					{{if $allow_setting}}
+						<li><a href="{{Router::url('/admin/settings/prefix/'.$current_model)}}" tabindex="-1" title="{{__('Param Settings')}}">{{__('Param Settings')}}</a></li>
+					{{/if}}
+					</ul>
+				</li>
+				{{/if}}
+	           </ul> 
+	        </div>
+	</div>
+<!-- 
+<div id="ui-search-form" class="dialog" title="{{__('Search and Statistics',true)}}" style="margin:0px 10px">		
+	<div class="ui-search-form-content ui-corner-all">
+	<form method="post" form_type="search"  onsubmit="return false;" action="/manage/webroot/index.php/admin/articles/list">
+	
+	<div id="groupby-info-{{$pageID}}">
+		<fieldset>
+		<div class="model-groupby-field ui-helper-clearfix select"><label for="-button">按组统计</label>
+			<select name="data[][groupby][]"></select>
+			<ul class="model-groupby-field-button groupby-field-{{$pageID}}">
+			<li class="ui-state-default"><span class="ui-icon ui-icon-plus"></span></li>
+			<li class="ui-state-default"><span class="ui-icon ui-icon-minus"></span></li>
+			</ul>
+		</div>
+		</fieldset>
+	</div>
+	
+	<div id="sumfields-info-{{$pageID}}">
+	<fieldset>
+		<div class="model-sum-field ui-helper-clearfix select">
+			<label for="-button">求和统计</label>
+			<select name="data[][sum][]">
+			</select>
+			<ul class="model-sum-field-button sum-field-{{$pageID}}">
+			<li class="ui-state-default"><span class="ui-icon ui-icon-plus"></span></li>
+			<li class="ui-state-default"><span class="ui-icon ui-icon-minus"></span></li>
+			</ul>
+		</div>
+	</fieldset>
+	</div>
+	<div class="submit"><input type="submit" value="提交" class="ui-button ui-widget ui-state-default ui-corner-all"></div>
+	</form>
+	</div>
+</div> -->
+
+<script>
+$(function(){
+
+	
+	$(".ModelCategory",'#{{$pageID}}' ).button({"icons":{"primary":'ui-icon-newwin'}} );
+	$(".NewDocument",'#{{$pageID}}' ).button({"icons":{"primary":'ui-icon-document'}} );
+	$(".SortDocument",'#{{$pageID}}' ).button({"icons":{"primary":'ui-icon-arrowthick-2-n-s'}} );
+	$(".DocumentSearch",'#{{$pageID}}' ).button({"icons":{"primary":'ui-icon-search'}} );
+	$(".BatchPublish",'#{{$pageID}}' ).button({"icons":{"primary":'ui-icon-circle-check'}} );
+	$(".BatchTrash",'#{{$pageID}}' ).button({"icons":{"primary":'ui-icon-trash'}} );
+	$(".BatchRestore",'#{{$pageID}}' ).button({"icons":{"primary":'ui-icon-arrowreturnthick-1-w'}} );
+	$(".BatchDelete",'#{{$pageID}}' ).button({"icons":{"primary":'ui-icon-circle-close'}});
+	
+	$('#radiobuttons_{{$pageID}}').buttonset();
+	$('.ui-button-text').each(function(){		
+		$(this).parents('.ui-button-text').each(function(){
+			$(this).removeClass('ui-button-text'); // 修正两个 '.ui-button-text'嵌套造成变形的问题
+		});
+	});
+	
+	$('.groupby-field-{{$pageID}} .ui-icon-plus').live('click',function(){
+		obj = $(this).parents('.model-groupby-field:first');
+		obj.clone().insertAfter(obj);
+	});
+	$('.groupby-field-{{$pageID}} .ui-icon-minus').live('click',function(){
+		if($('#groupby-info-{{$pageID}} .model-groupby-field').size()>1){
+			obj = $(this).parents('.model-groupby-field:first');
+			obj.remove();
+		}
+	});
+	$('.sum-field-{{$pageID}} .ui-icon-plus').live('click',function(){
+		obj = $(this).parents('.model-sum-field:first');
+		obj.clone().insertAfter(obj);
+	});
+	$('.sum-field-{{$pageID}} .ui-icon-minus').live('click',function(){
+		if($('#sumfields-info-{{$pageID}} .model-sum-field').size()>1){
+			obj = $(this).parents('.model-sum-field:first');
+			obj.remove();
+		}
+	});
+	
+	$('input[type="submit"]','#{{$pageID}} .ui-search-form-content').bind('click',function(){
+		var condition_str = ($('form','#{{$pageID}} .ui-search-form-content').serialize());
+		//alert(condition_str);
+		condition_str = condition_str.replace(/%5B%5D/g,'[]').replace(/data%5B/g,'conditions[').replace(/%5D%5B/g,'.').replace(/%5D/g,']');
+		
+		var hasgroup = false;
+		$('#{{$current_model}}stats-info select').each(function(i){
+				if(this.value!=""){
+					hasgroup = true;
+				}
+			});
+		if(hasgroup){
+			$.get('{{$this->Html->url('/admin/ajaxes/groupby/');}}?{{$requeststr}}&'+condition_str+'&inajax=1',
+					function(data){
+						show_content(data)
+					}
+			);
+		}
+		else{
+			//alert(condition_str);
+			jQuery("#jqgrid_list").jqGrid('setGridParam',{url:'{{$this->Html->url('/admin/'.$current_controller.'/list.json');}}?{{$requeststr}}&'+condition_str,page:1}).trigger('reloadGrid');;
+			$('.ui-search-form-close').trigger('click');
+		}
+		$("#ui-search-form").dialog("close");
+		return false;
+	});
+	//$('.ui-search-form-close').trigger('click');
+});
+
+
+
+</script>
+
+	<div class="clear ui-helper-clearfix"></div>
+	<div id="pgtoolbar2_{{$pageID}}"></div> 
+	<div id="pager2_{{$pageID}}"></div> 
+	<table id="jqgrid_list_{{$pageID}}"></table>
+<script>
+//$.jgrid.no_legacy_api = true;
+$.jgrid.useJSON = true; 
+$.jgrid.search.closeAfterSearch = true; 
+$.jgrid.ajaxOptions.dataType = "json";  // 保存等ajax交互动作返回json数据
+var lastsel2_{{$pageID}};
+var first_load_{{$pageID}} = true;
+var mygrid_{{$pageID}}  = jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid({
+   	"url":'{{Router::url('/admin/'.$current_controller.'/list.json');}}?{{$requeststr}}',
+   	"editurl":'/admin/{{($this->plugin?$this->plugin.'/':'').$current_controller}}/edit',
+   	"datatype":"json",
+	"mtype": "POST", 
+   	"colNames":[{{$col_names}}],//,'actions'
+   	"colModel":[
+   		{{$fieldlist}}	
+   		//,{name:'act',index:'act', width:75,sortable:false} 	
+   	],   	    	
+   	"pager": '#pager2_{{$pageID}}',   	
+   	{{if $is_tree_model}}
+   	"rowNum":1000, // rowNum 要设置的足够大，防止取出的数据多时，在rowNum之后的无法显示。 
+   	"rowList":[300,500,1000],
+   	"treeGrid": true, 
+   	"treeGridModel": 'nested',  // nested | adjacency  	
+   	"ExpandColumn": 'name', 
+   	"autowidth": true,
+   	"ExpandColClick":true, 
+   	'tree_root_level' : 0,
+   	"treeReader" : {"level_field": "level","left_field":"left","right_field": "right","leaf_field": "isLeaf","expanded_field": "expanded","loaded":false},
+   	{{else}}
+   	"rownumbers":true, 
+   	"multiselect":true,
+  //"sortname": 'id',//默认排序字段在php中指定，含sort的字段默认按sort排序，其他为按id 
+   	"sortorder": "desc",
+   	"width":"850","height":"300",
+   	"rowNum":30,
+   	"rowList":[15,30,50,100],
+   	"hoverrows":true,
+   	"viewrecords":true,
+   	"xmlReader":{"repeatitems":false,"subgrid":{"repeatitems":false}},
+   	{{/if}}
+   	
+   	"forceFit" : true, /* 列宽度字动匹配 */ 
+    "jsonReader":{"repeatitems":false,"subgrid":{"repeatitems":false}},
+	
+	"afterInsertRow": function(rowid, aData){ 
+    	
+		switch (aData.published) { 
+		  case true:
+		  case '1': jQuery("#jqgrid_list_{{$pageID}}").jqGrid('setRowData',rowid,false,{color:'green'}); break; 
+		  case false:
+		  case '0': jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid('setRowData',rowid,false,{color:'#999'}); break; 
+		// 未激活数据
+		//case 'Client 3': jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid('setCell',rowid,'total','',{color:'blue'}); break; 
+		} 
+	},
+	"ondblClickRow": function(id){ 
+		if(id && id!==lastsel2_{{$pageID}}){ 			
+			jQuery('#jqgrid_list_{{$pageID}}','#{{$pageID}}').jqGrid('restoreRow',lastsel2_{{$pageID}}); 			
+			lastsel2_{{$pageID}}=id; 
+		} 
+	}, 
+	"loadComplete": function(ts,req){
+		{{if $grid_action=='jqgridtree'}}
+		// line 9683 expandNode =>  $(this).trigger("reloadGrid");
+		// line 2289 bind('reloadGrid', function(e,opts) {
+		// line 1638 populate = function (npage) {
+		// line 7993  刷新grid if (o.refresh) {
+		var ind2,pos;
+		if(first_load_{{$pageID}}){ 
+			$('.cell-wrapper').each(function(){ //cell-wrapper
+				ind2 =$(this).closest("tr.jqgrow")[0].id;
+				var obj = mygrid_{{$pageID}}.getLocalRow(ind2);				
+				//$(obj).find("div.treeclick").trigger('click');
+				mygrid_{{$pageID}}.expandRow(obj);
+				mygrid_{{$pageID}}.expandNode(obj);
+				
+				// 仅在第一次加载，切层级小于3级时，自动展开.触发click事件不会自动加载数据，需要在数据已经加载完成的情况下。
+				//$(this).find(".treeclick").trigger('click');		//.cell-wrapperleaf		
+			})			
+			first_load_{{$pageID}} = false;
+		}
+		{{/if}}
+	}, 
+	"gridComplete": function(){
+		/*onDialogSubmitSucess,在page_loaded中，绑定form提交时间里*/
+		$('#{{$pageID}} .ui-grid-actions a').bind('onDialogSubmitSucess',function(){
+			reloadGrid_{{$pageID}}();
+		});
+		
+		{{if $grid_action!='jqgridtree'}}
+		$(".ui-jqgrid-bdiv",'#{{$pageID}}').scrollTop(jqgrid_scrollOffset); // 触发更新事件时，自动滚动到先前滚动条所在的位置。
+		{{/if}}
+		/*var ids = jQuery("#jqgrid_list_{{$pageID}}").jqGrid('getDataIDs'); 
+		for(var i=0;i < ids.length;i++){ 
+			var cl = ids[i]; 
+			be = "<input style='height:22px;width:20px;' type='button' value='E' onclick=\"jQuery('#jqgrid_list_{{$pageID}}').editRow('"+cl+"');\" />"; 
+			se = "<input style='height:22px;width:20px;' type='button' value='S' onclick=\"jQuery('#jqgrid_list_{{$pageID}}').saveRow('"+cl+"');\" />"; 
+			ce = "<input style='height:22px;width:20px;' type='button' value='C' onclick=\"jQuery('#jqgrid_list_{{$pageID}}').restoreRow('"+cl+"');\" />"; 
+			jQuery("#jqgrid_list_{{$pageID}}").jqGrid('setRowData',ids[i],{act:be+se+ce}); 
+		} */
+	}, 
+    //"viewsortcols":[true,"horizontal",false],
+    "idName":false,
+    "caption":""
+    ,toolbar: [true,"top"]
+    
+});
+jQuery("#jqgrid_list_{{$pageID}}").jqGrid('navGrid','#pager2_{{$pageID}}',{edit:false,add:false,del:false},{},{},{},{multipleSearch:true, multipleGroup:true});
+jQuery("#jqgrid_list_{{$pageID}}").jqGrid('gridResize',{minWidth:350,minHeight:100});
+
+/*
+// 设置显示哪些列 
+jQuery("#jqgrid_list_{{$pageID}}").jqGrid('navButtonAdd','#pager2_{{$pageID}}',{
+	caption:"setColumns",title:"{{__('Set Display Columns')}}", 
+	buttonicon :'ui-icon-extlink', 
+	onClickButton:function(){
+		// /admin/settings/fieldsetting/Article/list_fields 设置页面url，留存备忘  
+		jQuery("#jqgrid_list_{{$pageID}}").jqGrid('setColumns',{columns:4,width:900,afterSubmitForm:function(obj){
+			var postdata = '';
+			obj.find('input[type="checkbox"]:checked').each(function(){
+				postdata +='setting[{{$current_model}}][list_fields][]='+this.id.substr(4)+'&'; // col_id
+			});
+			ajaxAction('{{$this->Html->url("/admin/settings/ajaxesave/")}}',postdata); // ajax提交保存 
+		}});
+		return false;
+	}
+});
+*/
+
+$('.ui-list-toolbar','#{{$pageID}}').appendTo($("#t_jqgrid_list_{{$pageID}}"));
+$("#t_jqgrid_list_{{$pageID}}").height('auto');
+
+
+/*  jqgird 列表进入某一分类   */
+function goToCate_{{$pageID}}(id)
+{
+	$('.BatchTrash','#{{$pageID}}').show();
+	$('.BatchPublish','#{{$pageID}}').show();
+	$('.BatchRestore','#{{$pageID}}').hide();
+	$('.BatchDelete','#{{$pageID}}').hide();
+	if(id>0){
+		jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid('setGridParam',{url:'{{$this->Html->url('/admin/'.$current_controller.'/list.json');}}?{{$requeststr}}&conditions[{{$current_model}}.cate_id]='+id,page:1}).trigger('reloadGrid');;
+	}
+	else{
+		jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid('setGridParam',{url:'{{$this->Html->url('/admin/'.$current_controller.'/list.json');}}?{{$requeststr}}',page:1}).trigger('reloadGrid');;
+	}
+}
+
+/*  jqgird 列表相关操作函数  */
+function goToTrash_{{$pageID}}()
+{
+	$('.BatchTrash','#{{$pageID}}').hide();
+	$('.BatchPublish','#{{$pageID}}').hide();
+	$('.BatchRestore','#{{$pageID}}').show();
+	$('.BatchDelete','#{{$pageID}}').show();
+	jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid('setGridParam',{url:'{{$this->Html->url('/admin/'.$current_controller.'/list.json');}}?{{$requeststr}}&conditions[{{$current_model}}.deleted]=1',page:1}).trigger('reloadGrid');;
+}
+
+
+function goToDataList_{{$pageID}}()
+{
+	$('.BatchTrash','#{{$pageID}}').show();
+	$('.BatchPublish','#{{$pageID}}').show();
+	$('.BatchRestore','#{{$pageID}}').hide();
+	$('.BatchDelete','#{{$pageID}}').hide();
+	jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid('setGridParam',{url: '{{$this->Html->url('/admin/'.$current_controller.'/list.json');}}?{{$requeststr}}',page:1}).trigger('reloadGrid');;
+}
+
+function goToUnPublish_{{$pageID}}()
+{
+	$('.BatchTrash','#{{$pageID}}').show();
+	$('.BatchPublish','#{{$pageID}}').show();
+	$('.BatchRestore','#{{$pageID}}').hide();
+	$('.BatchDelete','#{{$pageID}}').hide();
+	jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid('setGridParam',{url:'{{$this->Html->url('/admin/'.$current_controller.'/list.json');}}?{{$requeststr}}&conditions[{{$current_model}}.published]=0',page:1}).trigger('reloadGrid');;
+}
+function reloadGrid_{{$pageID}}()
+{
+	var page = jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid("getGridParam","page");
+	//scrollOffset = jQuery("#jqgrid_list_{{$pageID}}").jqGrid("getGridParam","scrollOffset");
+	jqgrid_scrollOffset = $(".ui-jqgrid-bdiv",'#{{$pageID}}').scrollTop();	
+	jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid("setGridParam",{page:page}).trigger("reloadGrid");
+}
+function deleteGridRow_{{$pageID}}(rowid)
+{
+	jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid("delRowData",rowid);
+}
+//进行行内编辑 ，若设置了flowstep_id则表示是流程中的授权操作  
+function editGridRow_{{$pageID}}(id,flowstep_id)
+{
+	if(flowstep_id){
+		jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid('setGridParam',{editurl:"{{$this->Html->url('/admin/flowsteps/dataedit/');}}"+flowstep_id+"/"+id});
+	}
+	else{
+		jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid('setGridParam',{editurl:"{{$this->Html->url('/admin/'.($this->plugin?$this->plugin.'/':'').$current_controller.'/edit/');}}"+id});
+	}
+	jQuery('#jqgrid_list_{{$pageID}}','#{{$pageID}}').jqGrid('editRow',id,true); 
+	$('#edit_grid_row_'+id,'#{{$pageID}}').hide();
+	$('#save_grid_row_'+id,'#{{$pageID}}').show();
+	$('#canceledit_grid_row_'+id,'#{{$pageID}}').show();
+}
+//进行行内编辑 ，若设置了flowstep_id则表示是流程中的授权操作  
+function batchAction_{{$pageID}}(action,options)
+{
+	var ids = jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid('getGridParam','selarrrow'); 
+	if(ids == ""){
+		alert($.jslanguage.noSelect);
+		return false;
+	}
+	var appendargus = '?';
+	if(options){
+		for(var i in options){
+			appendargus+= i+'='+options[i]+'&';
+		}
+	}
+	
+	var language='';
+	if($.jslanguage['confirm_'+action]){
+		language = $.jslanguage['confirm_'+action];
+	}
+	if(language!='' && !confirm(language)){
+		return false;
+	}
+	//ids作为post传入，get参数可能造成url太长。url最多1K
+	var postdata = '';
+	for(var i in ids){
+		postdata+='ids[]='+ids[i]+'&'
+	}
+	ajaxAction('{{Router::url('/admin/'.($this->plugin?strtolower($this->plugin).'/':'').$current_controller.'/');}}'+action+'.json'+appendargus,postdata,null,reloadGrid_{{$pageID}})
+	//open_dialog({title:language},'{{Router::url('/admin/'.($this->plugin?strtolower($this->plugin).'/':'').$current_controller.'/');}}'+action+'/'+ids+'.json'+appendargus,reloadGrid_{{$pageID}});
+	return false;
+}
+// 保存行内编辑数据 
+function SaveGridRow_{{$pageID}}(id)
+{
+	jQuery('#jqgrid_list_{{$pageID}}','#{{$pageID}}').jqGrid('saveRow',id,function(res){			
+			try{
+				var obj=eval("("+res.responseText+")");
+				if(obj.success && typeof(obj.success)=='xml'){
+					throw "error";
+				}
+				if(obj.success){
+					show_message(obj.success )
+					return true;
+				}
+				else{
+					var txt = "";  // 显示格式验证错误的信息  
+					for(var i in obj){
+						txt += obj[i]+"<br/>";
+					}
+					show_message(txt)
+					return false;
+				}
+			}
+			catch(err){				
+			}
+			return false;
+		}); 
+	$('#save_grid_row_'+id,'#{{$pageID}}').hide();
+	$('#canceledit_grid_row_'+id,'#{{$pageID}}').hide();
+	$('#edit_grid_row_'+id,'#{{$pageID}}').show();
+}
+// 取消编辑 
+function CancelEditGridRow_{{$pageID}}(id)
+{
+	jQuery('#jqgrid_list_{{$pageID}}','#{{$pageID}}').jqGrid('restoreRow',id); 
+	$('#save_grid_row_'+id,'#{{$pageID}}').hide();
+	$('#canceledit_grid_row_'+id,'#{{$pageID}}').hide();
+	$('#edit_grid_row_'+id,'#{{$pageID}}').show();
+}
+
+function resize_{{$pageID}}(){
+	// 先调整高度，再调整宽度，防止调整高度出现滚动条，造成宽度有误差。（滚动条占一定的宽度）  
+	var areaHeight=0,areaWidth=0;
+	var obj = $('#{{$pageID}}').closest('.ui-dialog-content');
+	if(!obj.size()){  // 
+		obj = $('#{{$pageID}}').closest("#mainContent");
+		areaHeight = obj.height()-170;
+		areaWidth = mainContent_width-10;
+	}
+	else{
+		// 在dialog内部
+		areaHeight = obj.height()-130;
+		areaWidth = obj.width()-10;
+	}
+	if($.browser.msie && $.browser.version < 9){
+		areaHeight = areaHeight - 30;
+	}
+	jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid('setGridHeight',areaHeight);
+	jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid('setGridWidth',areaWidth);
+}
+
+
+$(document).ready(function(){
+	/* 工具栏的提交事件 */
+	$('#{{$pageID}} .nav-toolbar a').bind('onDialogSubmitSucess',function(){
+		reloadGrid_{{$pageID}}();
+	});
+	
+	resize_{{$pageID}}();
+	$('#fg-button-{{$pageID}}').button({"icons":{"primary":'ui-icon-triangle-1-s'}} );
+    //$('#fg-button-{{$pageID}}').unbind().menu({ content: $('#ul_categories_{{$pageID}}').html(), menuSelection:'#menuSelection-{{$pageID}}',flyOut: true });
+});
+</script>
+</div> 
+

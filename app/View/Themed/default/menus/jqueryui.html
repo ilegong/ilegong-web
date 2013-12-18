@@ -1,0 +1,12 @@
+<?php 
+	if(empty($top_category_id)) $top_category_id=0;
+	echo $this->Section->getNavMenu('Category',
+		array(
+			'selectedid'=> $top_category_id,
+			'ulAttributes'=>array('class'=>'ui-navi ui-widget-header'),
+                        'defaultClass'=>'ui-state-default',
+			'preli'=>'',
+			'sufli'=>'',
+		)
+	);
+?>

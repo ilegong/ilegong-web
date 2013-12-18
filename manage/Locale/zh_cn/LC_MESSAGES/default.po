@@ -1,0 +1,301 @@
+
+msgid "Admin pannel"
+msgstr "管理后台"
+msgid "File Manage"
+msgstr "文件管理"
+msgid "Visit website"
+msgstr "前台首页"
+msgid "Traditional Mode"
+msgstr "传统模式"
+msgid "Multi Language"
+msgstr "多语言"
+msgid "Logout"
+msgstr "退出登录"
+msgid "Profile"
+msgstr "个人资料"
+msgid "Manage"
+msgstr "管理"
+msgid "Desktop Mode"
+msgstr "桌面模式"
+msgid "Ajax on menu"
+msgstr "无刷新加载"
+
+
+msgid "Change Theme / Skin"
+msgstr "切换主题风格"
+
+msgid "别名"
+msgstr "Alias"
+
+
+
+msgid "Uploadfile Name"
+msgstr "名称"
+msgid "Sort Order"
+msgstr "排序"
+msgid "File Version"
+msgstr "版本号"
+msgid "Uploadfile Comment"
+msgstr "文件描述"
+
+
+#######表单文字
+msgid "Your need to login."
+msgstr "您需要登录才能访问"
+msgid "Notice Message"
+msgstr "提示消息"
+msgid "Click here to go!"
+msgstr "点击这里返回"
+
+msgid "Basic Info"
+msgstr "基本信息"
+msgid "Advanced Options"
+msgstr "高级选项"
+msgid "SEO"
+msgstr "搜索引擎优化"
+msgid "Remarks"
+msgstr "备注"
+msgid "Content"
+msgstr "内容"
+msgid "Bulk New "
+msgstr "批量新增"
+msgid "Normal List"
+msgstr "普通列表"
+msgid "Misc"
+msgstr "杂项"
+msgid "Param Settings"
+msgstr "参数设置"
+
+msgid "input"
+msgstr "文本框"
+msgid "select"
+msgstr "下拉选择"
+msgid "checkbox"
+msgstr "多选"
+msgid "radio"
+msgstr "单选"
+msgid "textarea"
+msgstr "文本域"
+msgid "datetime"
+msgstr "时间"
+msgid "file"
+msgstr "文件上传"
+
+
+
+
+
+########动作相关
+
+msgid "Create New "
+msgstr "新增"
+
+msgid "Batch Publish"
+msgstr "批量发布"
+msgid "Batch Trash"
+msgstr "批量回收"
+msgid "Batch Restore"
+msgstr "批量恢复"
+msgid "Batch Delete"
+msgstr "批量删除"
+
+msgid "Edit"
+msgstr "编辑"
+msgid "Inline Edit"
+msgstr "行内编辑"
+msgid "Trash"
+msgstr "删除到回收站"
+msgid "Save"
+msgstr "保存"
+msgid "Cancel"
+msgstr "取消编辑"
+msgid "Publish"
+msgstr "发布"
+msgid "Use WYSIWYG Editor."
+msgstr "使用编辑器"
+msgid "Destory WYSIWYG Editor."
+msgstr "注销编辑器"
+
+msgid "Select"
+msgstr "选择"
+msgid "Add"
+msgstr "增加"
+msgid "Add Sub"
+msgstr "增加下级"
+msgid "Insert"
+msgstr "插入"
+msgid "Delete"
+msgstr "删除"
+msgid "Set as home page"
+msgstr "设为首页"
+msgid "Is home page"
+msgstr "已为首页"
+msgid "Preview"
+msgstr "预览"
+msgid "Set as title img"
+msgstr "设为标题图片"
+
+
+msgid "Tree Sort Up"
+msgstr "排序上移"
+msgid "Tree Sort Down"
+msgstr "排序下移"
+msgid "View All"
+msgstr "查看全部"
+msgid "Categories"
+msgstr "栏目"
+msgid "Category Filter"
+msgstr "分类筛选"
+
+
+msgid "Actions"
+msgstr "操作"
+msgid "Search and Statistics"
+msgstr "搜索与统计"
+msgid "Save"
+msgstr "保存"
+
+
+msgid "Settings"
+msgstr "设置"
+
+msgid "List Fields"
+msgstr "列表字段"
+msgid "Search Fields"
+msgstr "搜索字段"
+
+msgid "Add success"
+msgstr "数据已成功添加"
+
+msgid "Edit success"
+msgstr "数据已成功修改"
+
+msgid "Trash success"
+msgstr "数据已成功删除到回收站"
+
+msgid "Delete success"
+msgstr "数据已成功删除"
+msgid "Restore success"
+msgstr "数据已成功恢复"
+msgid "Are you sure to trash"
+msgstr "您确认要删除这条数据到回收站吗？"
+msgid "Are you sure to delete"
+msgstr "删除后将不可恢复，您确认要彻底删除数据吗？"
+
+msgid "Done"
+msgstr "操作已完成"
+
+msgid "Index"
+msgstr "首页"
+msgid "Opration Menu"
+msgstr "操作菜单"
+msgid "Staff Name"
+msgstr "职员姓名"
+
+msgid "Password"
+msgstr "密码"
+
+msgid "Log In"
+msgstr "登录"
+
+msgid "Change To"
+msgstr "切换系统"
+
+msgid "Please Select"
+msgstr "-请选择-"
+msgid "Select All"
+msgstr "全选"
+
+msgid "Associate Select"
+msgstr "级联下拉"
+
+msgid "Basic"
+msgstr "基本信息"
+
+msgid "Select Setting"
+msgstr "选项设置"
+
+msgid "Filter"
+msgstr "筛选"
+
+msgid "Submit"
+msgstr "提交"
+
+msgid "New "
+msgstr "新建"
+
+
+msgid "End at"
+msgstr "结束于："
+msgid "Start at"
+msgstr "开始于："
+msgid " Field"
+msgstr "字段"
+msgid " Field Sort"
+msgstr "字段排序"
+msgid "Tree Level Sort"
+msgstr "层次节点排序"
+
+
+
+######################validate
+
+msgid "The value has already been taken."
+msgstr "这个值已经使用了，请换一个"
+
+msgid "Email address already in use."
+msgstr "邮件地址已经被使用了"
+msgid "This field cannot be left blank."
+msgstr "此项必填，不允许为空。"
+msgid "Please enter a valid email address."
+msgstr "请输入有效的邮箱地址。"
+msgid "Please enter a valid url."
+msgstr "请输入有效的网址。"
+msgid "Please enter a valid numeric."
+msgstr "请输入有效的数字。"
+msgid "Please enter a valid alphaNumeric string."
+msgstr "只能输入数字与字母。"
+msgid "Please enter a valid decimal."
+msgstr "请输入有效的小数。"
+
+########### 修改密码
+msgid "Password is updated success."
+msgstr "密码已成功修改过"
+msgid "Two password is empty or not equare."
+msgstr "密码为空或密码不相等"
+msgid "Your password is not right."
+msgstr "输入的密码不对。"
+msgid "You are not authorized to access that location."
+msgstr "您需要登录才能访问这个地址。"
+msgid "New Password"
+msgstr "新密码"
+msgid "Password Confirm"
+msgstr "确认密码"
+msgid "Edit Your Password"
+msgstr "修改您的密码"
+
+####统计相关
+msgid "Groupby"
+msgstr "按组统计"
+msgid "Sum"
+msgstr "求和统计"
+msgid "groupnum"
+msgstr "出现次数"
+
+
+msgid "Already favored"
+msgstr "已经分享过了，一篇只能分享一次哦！"
+msgid "Already pointed"
+msgstr "已经发表过观点了，一篇每人只能发表一次观点哦！"
+msgid "have no points"
+msgstr "还没有人发表观点,快发布自己观点抢占沙发吧！"
+
+
+########### 微薄错误信息
+
+msgid "40025:Error: repeated weibo text!"
+msgstr "重复的微博内容，不能重复发布！"
+
+msgid "40012:Error: content is null!"
+msgstr "内容不能为空！"
+

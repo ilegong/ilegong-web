@@ -1,0 +1,43 @@
+<script type="text/javascript" src="/stats_days/numlog/{{$current_model}}/{{$current_data_id}}/view"></script>
+<h2 class="Content-title"><?php echo $Museum['Museum']['name']; ?></h2>
+	    <div class="Content-info">
+	   阅读次数：
+	   <span class="ui-stats-num Stats-Museum-{{$Museum['Museum']['id']}}-view_nums"><?php echo $Museum['Museum']['views_count']; ?></span>
+	    </div>
+	    <div  id="museuminfo">
+		    {{template name="Elements/images_zoom" plugin="Museum"}}
+		    <ul style="float:left;margin-left: 10px;display: inline;width:330px;">
+	            <li>票价： {{$Museum['Museum']['price']}}</li>
+	            <li>地址：<span> {{$Museum['Museum']['address']}}</span></li>
+	        </ul>
+	    </div>
+<div class="clear"></div>	    
+<div class="tabs">
+<ul>
+<li><a href="#museum-description">场馆详情</a></li>
+<li><a href="#museum-reviews">场馆图集</a></li>
+<li><a href="#museum-item-reviews">展品图集</a></li>
+</ul>
+<div id="museum-description">
+	    <div class="Content-body">
+        <div class="clear"></div>
+	    <?php echo $Museum['Museum']['content']; ?>
+	    </div>
+</div>
+<div id="museum-reviews">
+<ul class="list-h">
+      {{loop $Museum['Uploadfile'] $uploadfile}}
+   	<li><img width="100" height="100" name="{{$this->Html->url($uploadfile['mid_thumb'])}}" alt="{{$Product['Product']['title']}}" src="{{$this->Html->url($uploadfile['thumb'])}}" onerror="this.src='http://www.360buy.com/images/none/none_50.gif'"></li>
+   {{/loop}} 
+</ul>
+
+</div>
+<div id="museum-item-reviews">
+<ul class="list-h">
+      {{loop $Museum['Uploadfile'] $uploadfile}}
+   	<li><img height="100" name="{{$this->Html->url($uploadfile['mid_thumb'])}}" alt="{{$Product['Product']['title']}}" src="{{$this->Html->url($uploadfile['thumb'])}}" onerror="this.src='http://www.360buy.com/images/none/none_50.gif'"></li>
+   {{/loop}} 
+</ul>
+
+</div>
+</div>

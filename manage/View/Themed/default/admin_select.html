@@ -1,0 +1,67 @@
+<style>
+.selectwords a,.selectwords .btn-group{
+	display:block;float:left;
+	margin:5px;
+}
+</style>
+<div id="{{$pageID}}">
+<div>
+<input type="text" id="{{$pageID}}-searchword" ><button id="{{$pageID}}-search">{{__('Search')}}</button>
+</div>
+	<p>待选词，点击选中</p>
+	<div id="{{$pageID}}-words" class="selectwords clearfix">
+	{{loop $select_items $item}}
+		 <a href="#" rel="{{$item[$current_model]['id']}}" class="btn btn-small" type="button">{{$item[$current_model]['name']}}</a>
+	{{/loop}}
+	</div>
+	{{$page_navi}}
+	<hr/>
+	<p>已选词，点击取消选择</p>
+	<div id="{{$pageID}}-selected" class="selectwords clearfix"></div>
+</div>
+
+<script>
+$(function(){
+	$('#{{$pageID}}-search').on('click',function(){
+		var text = $('#{{$pageID}}-searchword').val();
+		var dialog = $(this).closest('.ui-dialog-content');
+		var url='{{Router::url("/admin/$current_model/list?type=select&m=$relatedmodel&targetid=$targetid")}}';
+		url +='&val='+encodeURIComponent(text);
+		if(dialog.size()>0){
+			dialog.load(url);
+		}
+		else{
+			window.location.href=url;
+		}
+	})
+	//$(document).on('')
+	$('#{{$pageID}}-words').on('click','a',function(){
+		var html = '<div class="btn-group" rel="'+$(this).attr('rel')+'" relword="'+$(this).html()+'"> \
+				<input type="hidden" name="data[{{$current_model}}]['+$(this).attr('rel')+'][{{$associd}}]" value="'+$(this).attr('rel')+'">\
+				<input type="hidden" name="data[{{$current_model}}]['+$(this).attr('rel')+'][relatedmodel]" value="{{$relatedmodel}}">\
+				<button class="btn btn-primary">'+$(this).html()+'</button>\
+				<button class="btn btn-primary btn-remove"><i class="glyphicon glyphicon-remove"></i></button></div>'
+		
+		if('{{$targetid}}'!=''){
+			$(html).appendTo('#{{$targetid}}');
+		}
+		$(html).appendTo('#{{$pageID}}-selected');
+		$(this).remove();
+	});
+	// click绑定到<i></i>无效，绑定到上级的btn
+	$('#{{$pageID}}-selected').on('click','.btn-remove',function(){
+		var obj = $(this).closest('.btn-group');
+		var html = '<a href="#" rel="'+obj.attr('rel')+'" class="btn btn-small btn-info" type="button">'+obj.attr('relword')+'</a>'
+		$(html).appendTo('#{{$pageID}}-words');
+		obj.remove();
+		if('{{$targetid}}'!=''){
+			$('#{{$targetid}}').find('.btn-group').each(function(){
+				if($(this).attr('rel')==obj.attr('rel')){
+					$(this).remove();
+				}
+			});
+		}
+	});
+	
+})
+</script>

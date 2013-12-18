@@ -1,0 +1,4 @@
+.breadcrumb{background-color:transparent;float:left;list-style:none;margin:0;padding:0;line-height:32px;font-size:12px;}
+.breadcrumb li{display:block;float:left;padding:0 2px;}
+.breadcrumb li a{line-height:32px;}
+.breadcrumb li span,.breadcrumb li a span{float:left;line-height:32px;}

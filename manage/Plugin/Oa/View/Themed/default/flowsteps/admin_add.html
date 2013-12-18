@@ -1,0 +1,87 @@
+<div class="users form">
+{{if $current_action=='admin_add'}}
+<?php 
+echo $this->MForm->create($current_model,array(
+	'url' => array('action' => 'add'),
+));
+?>
+{{elseif $current_action=='admin_edit'}}
+ <?php 
+echo $this->MForm->create($current_model,array(
+	'class'=>'form-horizontal',
+    'url' => array('action' => 'edit',$id,$copy),
+));
+?>
+{{/if}}
+<fieldset>
+    	 
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#flowstep-main" data-toggle="tab"><span>{{__('Basic Info')}}</span></a></li>
+                {{$this->Layout->getLanguageTabHead($current_model)}}
+            </ul>
+            <div class="tab-content">
+                <div id="flowstep-main" class="tab-pane active">
+                	 <?php
+                	 	echo $this->MForm->input('id');
+						if($current_action=='admin_add'){
+				        	echo $this->MForm->input('name',array('size'=>'80','required'=>'required','onblur'=>"generateSlug(this,'#flowstepSlug')"));
+						}
+						else{
+							echo $this->MForm->input('name',array('size'=>'80','required'=>'required'));
+						}
+				         echo $this->MForm->input('flow_id',array('type'=> 'select','required'=>'required')); /*,'options'=>$categories */
+				         echo $this->MForm->input('slug',array('default'=>'','required'=>'required','size'=>'80','title'=>'不填时，值为数据的id。'));
+echo $this->MForm->input('flowmodel'); 
+echo $this->MForm->input('allowactions'); 
+echo $this->MForm->input('edit_fields',array('div'=>'model-schema-list'));
+echo $this->MForm->input('view_fields',array('div'=>'model-schema-list')); 					 
+echo $this->MForm->input('list_fields',array('div'=>'model-schema-list')); 
+						echo $this->MForm->keyword();
+						
+				     ?>
+				        <?PHP
+				        echo $this->MForm->ckeditor('content',array('div'=>false,'between' => '<br style="clear:both;"/>','label' => false,'rows'=>6));
+echo $this->MForm->input('keywords',array('size'=>'80'));
+				        ?>
+				        
+                </div>
+                {{$this->Layout->getLanguageTabContent($current_model)}}          	
+       </div>
+ 
+    </fieldset>
+<?php echo $this->MForm->end(array('label'=>__('Submit'),'id'=>'btnsubmit')); ?>
+   
+</div>
+
+<script>
+var selected_cate = [{{$categories}}];
+var currentModelTo = null;
+$(document).ready(function(){
+		currentModelTo = $('#FlowstepFlowmodel').val();
+		//loadModelSchema(currentModelTo);
+});
+
+rs_callbacks.loadschema = function(request){
+	$('.model-schema-list').empty();
+	for(var i  in request){
+    	$('.model-schema-list').append('<option value="'+i+'">'+request[i]+'</option>');
+	}
+}
+rs_callbacks.loadcate = function(request){
+	$('#CrawlCategoryId').empty();
+	for(var i  in request){
+            if(jQuery.inArray(parseInt(i),selected_cate)!=-1){
+                $('#CrawlCategoryId').append('<option value="'+i+'" selected="selected">'+request[i]+'</option>');
+            }
+            else{
+                $('#CrawlCategoryId').append('<option value="'+i+'">'+request[i]+'</option>');
+            }
+	}
+}
+function loadModelSchema(model)
+{
+	ajaxAction(ADMIN_BASEURL+'/admin/ajaxes/loadschema/'+model,'','','loadschema');
+	//ajaxAction(ADMIN_BASEURL+'/admin/ajaxes/loadcate/'+model,'','','loadcate');
+}
+
+</script>

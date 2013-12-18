@@ -1,0 +1,52 @@
+<style>
+.i18nfield-model-list-item{
+	float:left;
+	width:100px;
+margin:5px 5px;padding:10px 10px;
+}
+</style>
+<div id="{{$pageID}}" style="width:100%;height:100%;">
+	<h3>请选择模型</h3>
+	<div>		
+		<ul>
+		<?PHP
+		foreach($tables as $key => $value){
+			$tablenamne = array_pop($value['TABLE_NAMES']);
+			$modelname = Inflector::classify($tablenamne);
+			if(in_array($modelname,array(
+				//'Aro','Aco','ArosAco','Session',
+				'MenuI18n',
+				'StatsDay','StatsMonth','StatsWeek','Stylevar'))){
+				continue;
+			}
+			echo '<li class="i18nfield-model-list-item"><a href="'.Router::url(array('action'=>'list','?'=>array('model'=>$modelname))).'"
+
+ style="display:block;">'.__d('modelextend','Model_'.$modelname).'</a></li>';
+		}
+		?>
+		</ul>		
+	</div>
+	<!-- 
+	<div id="iframe-div" style="margin-left:150px;overflow:hidden;height:100%;">
+	<iframe  class="ui-layout-center" style="width:80%;height:100%;height:100%;" id="i18nfield-mainFrame" name="i18nfield-mainFrame" 
+	 frameborder="0" scrolling="auto" src="{{$this->Html->url(array('action'=>'list','model'=>$current_model))}}" >
+	</iframe>
+	</div> -->
+<script type="text/javascript">	
+	$('#iframe-div','#{{$pageID}}').width($('#{{$pageID}}').width()-150);
+$(function(){
+	$('.i18nfield-model-list-item').click(function(){
+		$('.i18nfield-model-list-item').removeClass('ui-state-active');
+		$(this).addClass('ui-state-active');
+	}).addClass('ui-state-default').hover(function(){
+		$(this).addClass('ui-state-hover');
+	},function(){
+		$(this).removeClass('ui-state-hover');
+	});
+
+	$('#i18nfield-mainFrame','#{{$pageID}}').width($('#{{$pageID}}').width()-150);
+})	
+
+	
+</script>
+</div>

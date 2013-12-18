@@ -1,0 +1,54 @@
+<div class="col-md-12">
+<?php
+
+if (class_exists('ConnectionManager') && Configure::read('debug') > 1) {
+	$sources = ConnectionManager::sourceList();
+	if (!isset($logs)){
+		$logs = array();
+		foreach ($sources as $source){
+			$db =& ConnectionManager::getDataSource($source);
+			if (!method_exists($db, 'getLog')){
+				continue;
+			}
+			$logs[$source] = $db->getLog();
+		}
+	}
+	
+	foreach($logs as $source=> $logInfo){
+		$text = $logInfo['count'] > 1 ? 'queries' : 'query';
+		printf('<caption>(%s) %s %s took %s ms</caption>', $source, $logInfo['count'], $text, $logInfo['time']);
+
+		if(Configure::read('debug')>1){
+	?>
+	<table class="cake-sql-log" summary="Cake SQL Log" cellspacing="0">
+	<thead>
+		<tr><th>Nr</th><th>Query</th><th>Error</th><th>Affected</th><th>Num. rows</th><th>Took (ms)</th></tr>
+	</thead>
+	<tbody>
+	<?php
+		foreach ($logInfo['log'] as $k => $i){
+			$i += array('error' => '');
+			if (!empty($i['params']) && is_array($i['params'])) {
+				$bindParam = $bindType = null;
+				if (preg_match('/.+ :.+/', $i['query'])) {
+					$bindType = true;
+				}
+				foreach ($i['params'] as $bindKey => $bindVal) {
+					if ($bindType === true) {
+						$bindParam .= h($bindKey) ." => " . h($bindVal) . ", ";
+					} else {
+						$bindParam .= h($bindVal) . ", ";
+					}
+				}
+				$i['query'] .= " , params[ " . rtrim($bindParam, ', ') . " ]";
+			}
+			echo "<tr><td>" . ($k + 1) . "</td><td>" . h($i['query']) . "</td><td>{$i['error']}</td><td style = \"text-align: right\">{$i['affected']}</td><td style = \"text-align: right\">{$i['numRows']}</td><td style = \"text-align: right\">{$i['took']}</td></tr>\n";
+		}
+	?>
+	</tbody></table>
+	<?php
+		}
+	}
+}
+?>
+</div>

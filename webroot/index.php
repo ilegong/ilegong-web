@@ -1,0 +1,103 @@
+<?php
+
+if (!defined('DS')) {
+    define('DS', DIRECTORY_SEPARATOR);
+}
+
+if (!defined('ROOT')) {
+    define('ROOT', dirname(dirname(__FILE__)));
+}
+/**
+ * The actual directory name for the "app".
+ *
+ */
+// if (!defined('APP_DIR')) {
+//     define('APP_DIR', 'app');
+// }
+if (!defined('APP_DIR')) {
+	define('APP_DIR', 'app');
+}
+/**
+ * The absolute path to the "cake" directory, WITHOUT a trailing DS.
+ *
+ */
+if (!defined('CAKE_CORE_INCLUDE_PATH')) {
+    define('CAKE_CORE_INCLUDE_PATH', ROOT . DS . 'lib');
+}
+
+/**
+ * Editing below this line should NOT be necessary.
+ * Change at your own risk.
+ *
+ */
+if (!defined('WEBROOT_DIR')) {
+    define('WEBROOT_DIR', 'webroot' );
+}
+if (!defined('WWW_ROOT')) {
+    define('WWW_ROOT', ROOT . DS . 'webroot' . DS);
+}
+if (!defined('CORE_PATH')) {
+    define('APP_PATH', ROOT . DS . APP_DIR . DS);
+    define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
+}
+define('VIEWS', APP_PATH . 'View' . DS);
+$app_sub_dir = dirname($_SERVER['PHP_SELF']);
+if(basename($app_sub_dir)=='webroot'){
+	$app_sub_dir = dirname($app_sub_dir);
+}
+
+if(!empty($app_sub_dir) && strlen($app_sub_dir)>1){ // skip / in linux or \ in windows
+	/**
+	 * APP_SUB_DIR 应用所在的二级目录
+	 * @var APP_SUB_DIR
+	 */
+	define('APP_SUB_DIR', $app_sub_dir);
+	define('IMAGES_URL', $app_sub_dir.'/img/');
+	define('CSS_URL', $app_sub_dir.'/css/');
+	define('JS_URL', $app_sub_dir.'/js/');
+}
+else{
+	define('APP_SUB_DIR', '');
+	define('IMAGES_URL', '/img/');
+	define('CSS_URL', '/css/');
+	define('JS_URL', '/js/');
+}
+
+if (defined('SAE_MYSQL_DB')) {
+    define('TMP', 'saemc://'.$_SERVER['HTTP_APPVERSION'].'/tmp/');
+} else {
+    define('TMP', ROOT . DS . 'data' . DS);
+}
+if (!include(CORE_PATH . 'Cake' . DS . 'bootstrap.php')) {
+    trigger_error("CakePHP core could not be found.  Check the value of CAKE_CORE_INCLUDE_PATH in APP/webroot/index.php.  It should point to the directory containing your " . DS . "cake core directory and your " . DS . "vendors root directory.", E_USER_ERROR);
+}
+
+if (isset($_SERVER['PATH_INFO']) && $_SERVER['PATH_INFO'] == '/favicon.ico') {
+	return;
+}
+
+App::uses('Dispatcher', 'Routing');
+$Dispatcher = new Dispatcher();
+
+//replace '/Taobao' to '/taobao'.
+if(strpos($_SERVER['REQUEST_URI'],'/Taobao')!==false){
+	$_SERVER['REQUEST_URI'] = str_replace('/Taobao','/taobao',$_SERVER['REQUEST_URI'] );
+	header('location:'.$_SERVER['REQUEST_URI']);
+	exit;
+}
+
+if(isset($_GET['url'])){
+	$request = new CakeRequest($_GET['url']);
+}
+else{
+	$request = new CakeRequest();
+}
+unset($request->query['url']);
+
+// print_r($request);exit;
+
+// echo CSS_URL;exit;xyz
+// RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+// $_GET['url'] is passed from rewrite rules. where make request obj ,should unset $request->query['url'].this would make mistakes
+
+$Dispatcher->dispatch($request, new CakeResponse(array('charset' => Configure::read('App.encoding'))));

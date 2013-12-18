@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{{$pageTitle}}-{{$site[title]}}</title>
+<META NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+<meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}" />
+<meta name="Description" content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}" />
+{{$this->Html->meta('icon')}}
+{{$this->Html->css(array(
+            '960_24_col',
+            'cupertino/jquery-ui-1.8.15.custom',
+            '/js/highslide/highslide.css',
+            'base',
+           
+           'ui-customer',   
+            'saecms/jquery-ui-themes.css',       
+        ))}}
+{{$this->Html->script(array(			
+            'jquery/jquery-1.5.2.min.js',
+            'jquery/plugins/jquery.tmpl.min.js',
+            'jquery/jquery.cookie.js',
+            'jquery/jquery-ui-1.8.5.custom.min.js',
+            'i18n/language-zh-CN.js',
+            'highslide/highslide-full.packed.js','jquery/jquery.lazyload.js',
+             'common', 'front','jquery/jquery.pnotify.min.js',
+             'portlet',
+        ))}}
+</head>
+<body>
+<style>
+/*.portlet { margin-top:10px; }*/
+.ui-widget-header .ui-icon ,.ui-portlet-header .ui-icon { float: right; }
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+    float: none;
+    text-align: center;
+}
+</style>
+<script type="text/javascript">
+var viewFileName = "{{$viewfile_for_layout}}";
+var fullscreen_falg = false;
+var portletnum = 3;
+</script>	
+<div id="header" style="height:60px;"></div>
+<a onclick="setlayout('#container-part1','12_12');" href="javascript:;" title="两栏">两栏</a>
+<a onclick="setlayout('#container-part1','8_8_8');" href="javascript:;" title="三栏">三栏</a>
+<a onclick="setlayout('#container-part1','6_6_6_6');" href="javascript:;" title="四栏">四栏</a>
+<style>
+.formsetSetting ul li{
+	float:left;
+}
+</style>
+<div id="maincontent" class="maincontent  clearfix">
+	{{$content_for_layout}}
+</div>
+{{template Elements/footer}}
+</body>
+</html>

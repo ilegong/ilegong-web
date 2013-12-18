@@ -1,0 +1,25 @@
+<div class="accordion">
+<?php  
+foreach($flows as $key => $flow) {
+    ?>
+    
+        <?php 
+        if(isset($acos_list[$flow['Flow']['id']]))
+		{
+		 echo $this->Html->link($flow['Flow']['name'],'#'); ?>
+     
+        <div style="height:auto;">
+        <ul>
+	        <?PHP foreach($acos_list[$flow['Flow']['id']] as $aco) { ?>
+	        <li>        
+	        <?php
+	        echo $this->Html->link($aco['Flowstep']['name'],'/admin/flowsteps/datalist/'.$aco['Flowstep']['id']);
+        	?>
+	        </li>
+         <?php } ?>
+	         </ul>
+        </div>
+		<?php } ?>
+<?php 
+} ?>
+</div>

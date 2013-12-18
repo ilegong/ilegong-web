@@ -1,0 +1,153 @@
+<script type="text/javascript">
+//<![CDATA[
+var submitform = false;
+function submit_weibo(){
+	if(submitform)
+	{
+		return false;//只允许提交一次。
+	}
+	
+	submitform = true;
+	if($('#WeiboName_165869646').val()=='')
+	{
+		$('#weibo-publish-errorinfo').html('');
+		var errorinfo ="<span class='ui-state-error ui-corner-all'><span class='ui-icon ui-icon-alert'></span> 错误：答案不能为空！</span>";
+		$('#weibo-publish-errorinfo').height(24);
+		$('#weibo-publish-errorinfo').html(errorinfo);
+		return false;
+	}
+	
+	$.ajax({
+		async:true, 
+		type:'post', 
+		complete:function(request, json) {}, 
+
+		success:function(request, xhr) {
+				if(request.success)
+				{
+					showSuccessMessage(request.success);					
+				}
+				else
+				{
+					$('#weibo-publish-errorinfo').html('');
+					var errorinfo = '';	
+					for(var i in request)
+					{
+						errorinfo +="<span class='ui-state-error ui-corner-all'><span class='ui-icon ui-icon-alert'></span> 错误： "+request[i]+"</span>";
+					}
+					$('#weibo-publish-errorinfo').height(24);
+					$('#weibo-publish-errorinfo').html(errorinfo);
+				}
+		}, 
+		data:$('#form2143016616').serialize(), 
+		url:'/weibos/publish',
+		dataType:'json'
+	});
+	return false; 
+}
+
+var swfu_titleimg;
+$(function () {
+	swfu_titleimg = new SWFUpload({
+		upload_url: "/uploadfiles/upload",	
+		file_post_name: "titleimg",
+		file_size_limit : "10 MB",
+		file_types : "*.*",
+		file_types_description : "All Files",
+		file_upload_limit : 0,
+		file_queue_limit : 0,
+		post_params : {
+			"PHP_SESSION_ID" : "shvca2fik2iddtckorj4tmggl1",
+			"file_post_name" : "titleimg",
+			"file_model_name":"weibo"
+		},
+		
+		button_image_url : "/img/XPButtonUploadText_61x22.png",
+		button_placeholder_id : "spanButtonPlaceholder_titleimg",
+		button_width: 61,
+		button_height: 22,
+		
+		flash_url : "/js/swfupload/swfupload.swf",
+		flash9_url : "/js/swfupload/swfupload_fp9.swf",
+		
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		
+		swfupload_preload_handler : preLoad,
+		swfupload_load_failed_handler : loadFailed,
+		swfupload_loaded_handler : loadSuccess,
+		
+		upload_start_handler : uploadStart,
+		upload_progress_handler : uploadProgress,
+		upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+		custom_settings : {
+			progress_target : "fsUploadProgress",
+			upload_successful : false,
+			auto_start : true
+		},
+		debug: false
+	});
+	swfu_array[swfu_array.length] = swfu_titleimg;
+
+});
+function showmoreoption(){
+	if($('#moreoptioncheck').attr('checked')==true)
+	{
+		$('.moreoptions').show();
+	}
+	else
+	{
+		$('.moreoptions').hide();
+	}
+}
+//]]>
+</script>
+<form accept-charset="utf-8" action="/weibos/publish" method="post" onsubmit="return false;" id="form2143016616">
+<div class="ui-widget-content ui-corner-bottom ui-question-publish clearfix">
+	<fieldset>
+	<input type="hidden" id="weiboId_165869646" name="data[weibo][id]">
+	<div class="publish-header clearfix">
+		<label for="weiboName_165869646">输入您的答案</label> <br/>
+	</div>
+	<div class="inputextarea ui-corner-all">
+		<textarea style="font-family: Tahoma,宋体; border-style: solid; 
+		border-width: 0px; word-wrap: break-word;
+		 font-size: 14px; line-height: 18px; overflow-x: hidden;overflow-y:auto;
+	padding:0;width:580px;height:70px;line-height:124%;" id="weiboName_165869646"
+			name="data[weibo][name]"></textarea>
+	</div>
+	<div class="toolbar clearfix">
+		<div style="float:left;">
+			<span id="spanButtonPlaceholder_titleimg">图片</span>(&lt; 1MB)
+			<div id="fileuploadinfo_titleimg" class="fileuploadinfo"></div>
+		</div>
+		<div style="float:right;" class="submit">
+			<a id="publisher_submit" onclick="submit_weibo();" href="javascript:void(0);"></a>
+		</div>
+		<div style="float:right;line-height:30px;">
+		<a onclick="return publishController.show_invite('weibos');" href="javascript:void(0);" >点名好友参与</a>
+		</div>
+	</div>
+	<div id="weibo-publish-errorinfo" class="line-height:24px;padding:4px;">
+		
+	</div>
+	<div class="invitelist" id="publish-invite-user-list-weibos" style="display:none;">
+		<div>您选择的好友： 
+			<ul id="invitelist">
+			</ul>
+		</div>
+		<div id="publish-invite-user-listtab-weibos">
+			<ul>
+				<li><a href="/questions/invite/1/comments">评论我的微博</a></li>
+				<li><a href="/questions/invite/1/mentions">提到我的微博</a></li>
+				<li><a href="/questions/invite/1/friends">我关注的微博</a></li>
+				<li><a href="/questions/invite/1/followers">关注我的微博</a></li>
+			</ul>
+		</div>
+	</div>
+	</fieldset>
+</div>
+</form>

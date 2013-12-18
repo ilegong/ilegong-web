@@ -1,0 +1,18 @@
+<div class="accordion">
+    <?php  foreach($menus as $key => $submenu) {
+    ?>
+    <?php echo $this->Html->link($submenu['Menu']['title'],'#'); ?>
+     
+        <div style="height:auto;">
+        <ul>
+        <?php  foreach($submenu['children'] as $menuitem) { ?>
+        <li>        
+        <?php
+        echo $this->Html->link($menuitem['Menu']['title'],$menuitem['Menu']['link']);
+        ?>
+        </li>
+         <?php } ?>
+          </ul>
+        </div>
+    <?php } ?>
+</div>

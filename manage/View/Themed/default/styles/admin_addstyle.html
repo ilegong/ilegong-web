@@ -1,0 +1,28 @@
+<div class="roles form">
+{{$this->Html->script(array('jquery/jquery.form.js'))}}
+<?PHP
+	echo $this->MForm->create('Style',array('type'=>'file','id'=>'StyleAdminAddstyleForm','data-noajax'=>true));
+?>
+        <fieldset>
+        <?php
+        echo $this->MForm->input('parent_id',array('value' => $parent_id));
+        echo $this->MForm->input('name');
+        echo $this->MForm->input('slug');
+		echo $this->MForm->file('variables');
+		echo $this->MForm->hidden('published',array('value'=>1));
+        ?>
+        </fieldset>
+    <?php echo $this->MForm->end(__('Submit',true));?>
+</div>
+<div id="divToUpdate"></div>
+<!-- ajax submit file. see document in.  http://jquery.malsup.com/form/ -->
+<script>
+var options = {
+	    target:     '#divToUpdate', 
+	    success:    function() { 
+	        alert('Add success!'); 
+	    } 
+	}; 
+// pass options to ajaxForm 
+$('#StyleAdminAddstyleForm').ajaxForm(options);
+</script>

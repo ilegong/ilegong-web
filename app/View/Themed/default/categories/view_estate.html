@@ -1,0 +1,156 @@
+<div class="container clearfix">
+  <div class="row">		
+	<div class="ui-contain col-md-9">
+		<!-- 
+    	<div class="ui-helper-clearfix ui-search-category">
+    	<span class="ui-search-label">分 类 ：</span>	{{$this->Section->getNavMenu('Category',
+		array(
+			'url'=>'/{slug}',
+			'conditions'=>array('model'=>'EstateArticle','parent_id'=>'90'),
+			'selectedid'=> $current_cateid,
+			'ulAttributes'=>array('class'=>'ui-search-options nav nav-pills'),
+                        'defaultClass'=>'ui-state-default',
+			'preli'=>'<li><a class=" ui-menu-first" href="'.getSearchLinks($this->request,array(), array('cate_id','area_id','property_type','property_status','enterprise','organization','policy_types','view_party','enterprise_news_type')).'">不限</a></li>',
+			'sufli'=>'',
+		)
+		)}}</div>
+		 -->
+		 
+    	<portlet title="资讯筛选" portlet="default">
+		{{if in_array($current_cateid,array(102,103,105,107))}}
+		<div id="estate_area" class="ui-helper-clearfix ui-search-item">	
+		<span class="ui-search-label">地 区 ：</span>	{{$this->Section->getNavMenu('Misccate',
+			array(
+				'url'=>array('area_id'=>'{id}'),
+				//'conditions'=>array('model'=>'EstateArticle'),
+				'selectedid'=> $this->request->query['area_id'],
+				'ulAttributes'=>array('class'=>'ui-search-options nav nav-pills'),
+	                        'defaultClass'=>'ui-state-default',
+				'preli'=>'<li><a class=" ui-menu-first" href="'.getSearchLinks($this->request,array(), array('area_id')).'">不限</a></li>',
+				'sufli'=>'',
+			),80
+		)}}</div>
+		{{/if}}
+		
+		{{if in_array($current_cateid,array(103,105,107))}}
+		<div id="estate_property_type" class="ui-helper-clearfix ui-search-item">	
+		<span class="ui-search-label">物业类型：</span>	{{$this->Section->getNavMenu('Misccate',
+			array(
+				'url'=>array('property_type'=>'{id}'),
+				'conditions'=>array('model'=>'EstateArticle'),
+				'selectedid'=> $this->request->query['property_type'],
+				'ulAttributes'=>array('class'=>'ui-search-options nav nav-pills'),
+	                        'defaultClass'=>'ui-state-default',
+				'preli'=>'<li><a class=" ui-menu-first" href="'.getSearchLinks($this->request,array(), array('property_type')).'">不限</a></li>',
+				'sufli'=>'',
+			),108
+		)}}</div>
+		{{/if}}
+		
+		{{if in_array($current_cateid,array())}}
+		<div id="estate_property_status" class="ui-helper-clearfix ui-search-item">	
+		<span class="ui-search-label">物业状态：</span>	{{$this->Section->getNavMenu('Misccate',
+			array(
+				'url'=>array('property_status'=>'{id}'),
+				'conditions'=>array('model'=>'EstateArticle'),
+				'selectedid'=> $this->request->query['property_status'],
+				'ulAttributes'=>array('class'=>'ui-search-options nav nav-pills'),
+	                        'defaultClass'=>'ui-state-default',
+				'preli'=>'<li><a class=" ui-menu-first" href="'.getSearchLinks($this->request,array(), array('property_status')).'">不限</a></li>',
+				'sufli'=>'',
+			),121
+		)}}</div>
+		{{/if}}
+		
+		{{if in_array($current_cateid,array(106,107))}}
+		<div id="estate_enterprise" class="ui-helper-clearfix ui-search-item">	
+		<span class="ui-search-label">企业：</span>	{{$this->Section->getNavMenu('Misccate',
+			array(
+				'url'=>array('enterprise'=>'{id}'),
+				'conditions'=>array('model'=>'EstateArticle'),
+				'selectedid'=> $this->request->query['enterprise'],
+				'ulAttributes'=>array('class'=>'ui-search-options nav nav-pills'),
+	                        'defaultClass'=>'ui-state-default',
+				'preli'=>'<li><a class=" ui-menu-first" href="'.getSearchLinks($this->request,array(), array('enterprise')).'">不限</a></li>',
+				'sufli'=>'',
+			),127
+		)}}</div>
+		{{/if}}
+		
+		{{if $current_cateid==105}}
+		<div id="estate_organization" class="ui-helper-clearfix ui-search-item">	
+		<span class="ui-search-label">研究机构：</span>	{{$this->Section->getNavMenu('Misccate',
+			array(
+				'url'=>array('organization'=>'{id}'),
+				'conditions'=>array('model'=>'EstateArticle'),
+				'selectedid'=> $this->request->query['organization'],
+				'ulAttributes'=>array('class'=>'ui-search-options nav nav-pills'),
+	                        'defaultClass'=>'ui-state-default',
+				'preli'=>'<li><a class=" ui-menu-first" href="'.getSearchLinks($this->request,array(), array('organization')).'">不限</a></li>',
+				'sufli'=>'',
+			),128
+		)}}</div>
+		{{/if}}
+		
+		{{if $current_cateid==103}}
+		<div id="estate_policy_types" class="ui-helper-clearfix ui-search-item">	
+		<span class="ui-search-label">政策类型：</span>	{{$this->Section->getNavMenu('Misccate',
+			array(
+				'url'=>array('policy_types'=>'{id}'),
+				'conditions'=>array('model'=>'EstateArticle'),
+				'selectedid'=> $this->request->query['policy_types'],
+				'ulAttributes'=>array('class'=>'ui-search-options nav nav-pills'),
+	                        'defaultClass'=>'ui-state-default',
+				'preli'=>'<li><a class=" ui-menu-first" href="'.getSearchLinks($this->request,array(), array('policy_types')).'">不限</a></li>',
+				'sufli'=>'',
+			),129
+		)}}</div>
+		{{/if}}
+		
+		{{if $current_cateid==108}}
+			<!-- //业界观点（观点方） -->
+			<div id="estate_view_party" class="ui-helper-clearfix ui-search-item">	
+		<span class="ui-search-label">观点方：</span>	{{$this->Section->getNavMenu('Misccate',
+			array(
+				'url'=>array('view_party'=>'{id}'),
+				'conditions'=>array('model'=>'EstateArticle'),
+				'selectedid'=> $this->request->query['view_party'],
+				'ulAttributes'=>array('class'=>'ui-search-options nav nav-pills'),
+	                        'defaultClass'=>'ui-state-default',
+				'preli'=>'<li><a class=" ui-menu-first" href="'.getSearchLinks($this->request,array(), array('view_party')).'">不限</a></li>',
+				'sufli'=>'',
+			),130
+		)}}</div>
+		{{/if}}
+		
+		{{if $current_cateid==106}}
+		<div id="estate_enterprise_news_type" class="ui-helper-clearfix ui-search-item">	
+		<span class="ui-search-label">新闻细分：</span>	{{$this->Section->getNavMenu('Misccate',
+			array(
+				'url'=>array('enterprise_news_type'=>'{id}'),
+				'conditions'=>array('model'=>'EstateArticle'),
+				'selectedid'=> $this->request->query['enterprise_news_type'],
+				'ulAttributes'=>array('class'=>'ui-search-options nav nav-pills'),
+	                        'defaultClass'=>'ui-state-default',
+				'preli'=>'<li><a class=" ui-menu-first" href="'.getSearchLinks($this->request,array(), array('enterprise_news_type')).'">不限</a></li>',
+				'sufli'=>'',
+			),131
+		)}}</div>
+		{{/if}}
+		
+		</portlet>
+		<portlet id="portlet-30"></portlet>
+	</div>
+	<div class="ui-contain col-md-3">
+		<portlet id="portlet-31"></portlet>
+		<portlet id="portlet-37"></portlet>
+	</div>
+  </div>
+</div>
+<script>
+	$(function(){
+		$('.ui-search-options li.active').parents('li').each(function(){
+			$(this).addClass('active')
+		});
+	});
+</script>

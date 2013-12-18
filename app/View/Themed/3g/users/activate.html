@@ -1,0 +1,14 @@
+<?
+  /*$url = Router::url(array(
+        'controller' => 'users',
+        'action' => 'activate',
+        $CurrentUser->username,
+        $CurrentUser->activation_key,
+    ), true);*/
+$url = Router::url(array(
+        'controller' => 'users',
+        'action' => 'forgot',
+    ), true);
+    ?>
+您的用户没有激活. 请接收激活邮件，点击里面的链接激活账户  <a href="{$url}">重新发送邮件</a>
+

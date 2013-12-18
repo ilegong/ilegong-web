@@ -1,0 +1,49 @@
+<div id="current-user" class="clearfix">
+	{{if (!empty($CurrentUser))}}
+		<span class="username">Welcome {{$this->Hook->call('oauthLoggedInfo')}}
+			{{eval echo $this->Html->link($CurrentUser['nickname'].'', '/users/account', array('title' => 'view your account')); }}
+		</span>
+		<span>
+			{{eval echo $this->Html->link('退出登录', '/users/logout', array('title' => 'logout your account')); }}
+		</span>
+		<div class="links">
+			{{if (empty($CurrentUser['status']))}}
+				<span class="activate link">
+					{{eval echo $this->Html->link(__('activate',true), array(
+						'admin' => false, 'plugin' => null,
+						'project' => false, 'fork' => false,
+						'controller' => 'users', 'action' => 'activate'
+						), array('title' => 'activate your account')); }}
+				</span>
+			{{/if}}
+		</div>
+	{{else}}
+			<div class="ui-float-right ui-header-login">
+			{{eval echo $this->Html->link(__('Login',true), array(
+				'admin' => false, 'plugin' => null,
+				'project' => false, 'fork' => false,
+				'controller' => 'users', 'action' => 'login',				
+			),array('onclick'=>"return publishController.open_dialog(this.href,{title:'登录'});",)); }}
+			or
+			{{eval echo $this->Html->link(__('Register',true), array(
+				'admin' => false, 'plugin' => null,
+				'project' => false, 'fork' => false,
+				'controller' => 'users', 'action' => 'register'
+			),array('onclick'=>"return publishController.open_dialog(this.href,{title:'注册'});",)); }}
+			</div>
+			<div class="ui-login-ways ui-float-right">
+				<ul class="ui-oauth-login-list">{{$this->Hook->call('oauthLoginLink')}}</ul>
+			</div>
+			
+			
+	{{/if}}
+</div>
+<script>
+$('.ui-oauth-login-list').hover(function(){
+	$(this).height('auto');
+	$(this).css({'z-index':100,'position':'absolute'});
+},function(){
+	$(this).height(24);
+	$(this).css({'z-index':1,'position':'absolute'});
+});
+</script>

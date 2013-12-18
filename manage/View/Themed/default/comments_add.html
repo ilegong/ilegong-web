@@ -1,0 +1,41 @@
+<div class="comment-form">
+    <div id="comments_result"></div>
+    <?php
+echo $this->MForm->create('Comment',array('type' => 'post',
+        'update'=>'comments_result',
+		'before' => 'if(!sso.check_userlogin({"form":this})) return false',
+        'url' => array(
+            'controller' => 'comments',
+            'action' => 'add'
+        ),
+));
+echo $this->MForm->input('Comment.data_id', array('label' => false,'type'=>'hidden','value'=>$current_data_id));
+echo $this->MForm->input('Comment.type', array('label' => false,'type'=>'hidden','value'=>$current_model));
+           
+	 if ($session->check('Auth.User.id')) {
+                echo $this->MForm->input('Comment.name', array(
+                    'label' => __('Name', true),
+                    'value' => $session->read('Auth.User.name'),
+                    'readonly' => 'readonly',
+                ));
+                echo $this->MForm->input('Comment.email', array(
+                    'label' => __('Email', true),
+                    'value' => $session->read('Auth.User.email'),
+                    'readonly' => 'readonly',
+                ));
+                echo $this->MForm->input('Comment.website', array(
+                    'label' => __('Website', true),
+                    'value' => $session->read('Auth.User.website'),
+                    'readonly' => 'readonly',
+                ));
+                echo $this->MForm->input('Comment.body', array('rows' => '3', 'cols' => '50','label' => false));
+      } else {
+                echo $this->MForm->input('Comment.name', array('label' => __('Name', true)));
+                echo $this->MForm->input('Comment.email', array('label' => __('Email', true)));
+                echo $this->MForm->input('Comment.website', array('label' => __('Website', true)));
+                echo $this->MForm->input('Comment.body', array('rows' => '3', 'cols' => '50','label' => false));
+      }
+            
+        echo $this->MForm->end(__('Post comment', true));
+    ?>
+</div>

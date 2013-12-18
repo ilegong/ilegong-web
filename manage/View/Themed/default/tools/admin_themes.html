@@ -1,0 +1,109 @@
+<script>
+
+$(function(){
+	/* 网站模板 */
+	$('#site_theme_setting').find('button').unbind('click').click(function(){
+		var obj = this;
+		if($(this).hasClass('disabled')){
+			return false;
+		}
+		$.ajax({
+			async:true,
+			type:'post',
+			success:function(request, xhr) {				
+				//showDialogMessage(request);
+				$('#site_theme_setting').find('.btn-success').removeClass('btn-success').removeClass('disabled').addClass('btn-primary').html('启用此风格');
+				$(obj).removeClass('btn-primary').addClass('btn-success').addClass('disabled').html('<i class="icon-ok icon-white"></i>已启用');
+			},
+			url:ADMIN_BASEURL+'/admin/settings/ajaxesave',
+			data:{'setting[Site][theme]':$(this).data('theme')},
+			dataType:'json'
+		}) ;
+		return false;
+	});
+	/* 后台模板 */
+	$('#admin_theme_setting').find('button').unbind('click').click(function(){
+		var obj = this;
+		if($(this).hasClass('disabled')){
+			return false;
+		}
+		$.ajax({
+			async:true,
+			type:'post',
+			success:function(request, xhr) {				
+				//showDialogMessage(request);
+				$('#admin_theme_setting').find('.btn-success').removeClass('btn-success').removeClass('disabled').addClass('btn-primary').html('启用此风格');
+				$(obj).removeClass('btn-primary').addClass('btn-success').addClass('disabled').html('<i class="icon-ok icon-white"></i>已启用');
+			},
+			url:ADMIN_BASEURL+'/admin/settings/ajaxesave',
+			data:{'setting[Admin][theme]':$(this).data('theme')},
+			dataType:'json'
+		}) ;
+		return false;
+	})
+})
+
+</script>
+<div>
+    <h2>网站模板</h2>
+    <table id="site_theme_setting" class="table table-striped">
+    <?php
+        $tableHeaders =  $this->Html->tableHeaders(array(
+            '模板目录名称',
+            '最后修改时间',
+			'是否启用',
+        ),array('class'=>'ui-state-default'));
+
+        echo '<thead>'.$tableHeaders.'</thead>';
+
+        $rows = array();
+        foreach ($sitetpls AS $tpl) {
+            //$actions = ' ' . $this->Html->link(__('Edit', true), array('controller'=>'stylevars','action' => 'edit', $tpl['name']));
+            //$actions .= ' ' . $this->Html->link(__('Delete', true), array('action' => 'delete', $style['Misccate']['id']), null, __('Are you sure?', true));
+			if($site_theme==$tpl['name']){
+				$active = '<button data-theme="'.$tpl['name'].'" type="button" class="btn btn-small btn-success disabled"><i class="icon-ok icon-white"></i>已启用</button>';
+			}
+			else{
+				$active = '<button data-theme="'.$tpl['name'].'" type="button" class="btn btn-small btn-primary">启用此风格</button>';
+			}
+            $rows[] = array(
+                $tpl['name'],
+                $tpl['time'],
+				$active,
+            );
+        }
+        echo $this->Html->tableCells($rows);
+    ?>
+    </table>
+    <hr/>
+    <h2>后台网站模板</h2>
+    <table id="admin_theme_setting" class="table table-striped">
+    <?php
+        $tableHeaders =  $this->Html->tableHeaders(array(
+            '模板目录名称',
+            '最后修改时间',
+			'是否启用',
+        ),array('class'=>'ui-state-default'));
+
+        echo '<thead>'.$tableHeaders.'</thead>';
+
+        $rows = array();
+        foreach ($tpls AS $tpl) {
+            //$actions = ' ' . $this->Html->link(__('Edit', true), array('controller'=>'stylevars','action' => 'edit', $tpl['name']));
+            //$actions .= ' ' . $this->Html->link(__('Delete', true), array('action' => 'delete', $style['Misccate']['id']), null, __('Are you sure?', true));
+			if($site_theme==$tpl['name']){
+				$active = '<button data-theme="'.$tpl['name'].'" type="button" class="btn btn-small btn-success disabled"><i class="icon-ok icon-white"></i>已启用</button>';
+			}
+			else{
+				$active = '<button data-theme="'.$tpl['name'].'" type="button" class="btn btn-small btn-primary">启用此风格</button>';
+			}
+			$rows[] = array(
+                $tpl['name'],
+                $tpl['time'],
+				$active,
+            );
+        }
+        echo $this->Html->tableCells($rows);
+    ?>
+    </table>
+</div>

@@ -1,0 +1,30 @@
+<div  class="container_24">
+
+	
+	
+	<div class="grid_20">
+	    <portlet>
+			title=新闻列表|portlet=notitle|body=
+<?php 
+if(!empty($weibolist))
+{
+	foreach($weibolist as $item) {
+?>
+{{template users/_sinaweibolist}}	
+<?PHP }
+}
+else
+{ ?>
+没有数据
+<?php }?>
+</portlet>
+	</div>
+	
+	<div class="grid_4">
+		<portlet>
+			title=新闻列表|portlet=notitle|body=
+{{template users/account_leftmenu}}
+</portlet>
+		
+	</div>
+</div>

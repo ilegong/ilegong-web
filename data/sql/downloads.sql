@@ -1,0 +1,56 @@
+DROP TABLE IF EXISTS `cake_downloads`;
+CREATE TABLE IF NOT EXISTS `cake_downloads` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) DEFAULT '',
+  `cate_id` int(11) DEFAULT '0',
+  `creator` int(11) DEFAULT '0',
+  `lastupdator` int(11) DEFAULT '0',
+  `remoteurl` varchar(200) DEFAULT '',
+  `status` int(4) DEFAULT '0',
+  `published` tinyint(1) DEFAULT '0',
+  `deleted` tinyint(1) DEFAULT '0',
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `locale` varchar(5) DEFAULT NULL,
+  `coverimg` varchar(200) DEFAULT NULL,
+  `content` text,
+  `download_1` varchar(200) DEFAULT NULL,
+  `download_2` varchar(200) DEFAULT NULL,
+  `slug` varchar(200) DEFAULT NULL,
+  `summary` varchar(500) NOT NULL,
+  `seotitle` varchar(255) DEFAULT NULL,
+  `seodescription` varchar(255) DEFAULT NULL,
+  `seokeywords` varchar(255) DEFAULT NULL,
+  `down_nums` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MYISAM  DEFAULT CHARSET=utf8;
+REPLACE INTO `cake_i18nfields` (`id`, `name`, `savetodb`, `translate`, `type`, `model`, `locale`, `length`, `sort`, `allowadd`, `allowedit`, `selectmodel`, `selectvaluefield`, `selecttxtfield`, `selectparentid`, `selectautoload`, `selectvalues`, `associateflag`, `associateelement`, `associatefield`, `associatetype`, `formtype`, `default`, `allownull`, `validationregular`, `description`, `onchange`, `explodeimplode`, `explain`, `deleted`, `created`, `updated`, `conditions`) VALUES (NULL, 'id', '1', '编号', 'integer', 'Download', 'zh_cn', '11', 19, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', NULL, NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-27 12:51:16', '2012-08-27 12:51:16', NULL),
+(NULL, 'name', '1', '名称', 'string', 'Download', 'zh_cn', '200', 15, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', NULL, NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-27 12:51:16', '2012-08-27 12:51:16', NULL),
+(NULL, 'cate_id', '1', '所属分类', 'integer', 'Download', 'zh_cn', '11', 18, '1', '1', 'Category', 'id', 'name', NULL, '1', '', '0', '', '', 'treenode', 'select', '', '1', '', NULL, '', '', '', 0, '2012-08-27 12:51:16', '2012-08-27 12:51:16', '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<options>\r\n    <conditions>\r\n        <Category.model>Download</Category.model>\r\n    </conditions>\r\n    <order>created desc</order>\r\n</options>'),
+(NULL, 'creator', '1', '编创建者', 'integer', 'Download', 'zh_cn', '11', 17, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', NULL, NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-27 12:51:16', '2012-08-27 12:51:16', NULL),
+(NULL, 'lastupdator', '1', '最后修改人', 'integer', 'Download', 'zh_cn', '11', 16, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', NULL, NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-27 12:51:16', '2012-08-27 12:51:16', NULL),
+(NULL, 'remoteurl', '1', '引用地址', 'string', 'Download', 'zh_cn', '200', 12, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', NULL, NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-27 12:51:16', '2012-08-27 12:51:16', NULL),
+(NULL, 'status', '1', '状态', 'integer', 'Download', 'zh_cn', '11', 2, '1', '1', NULL, NULL, NULL, NULL, '1', '0=>否\n1=>是', '0', NULL, NULL, 'equal', 'select', '0', '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-27 12:51:16', '2012-08-27 12:51:16', NULL),
+(NULL, 'published', '1', '是否发布', 'integer', 'Download', 'zh_cn', '11', 6, '1', '1', NULL, NULL, NULL, NULL, '1', '0=>否\n1=>是', '0', NULL, NULL, 'equal', 'select', '0', '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-27 12:51:16', '2012-08-27 12:51:16', NULL),
+(NULL, 'deleted', '1', '是否删除', 'integer', 'Download', 'zh_cn', '11', 3, '1', '1', NULL, NULL, NULL, NULL, '1', '0=>否\n1=>是', '0', NULL, NULL, 'equal', 'select', '0', '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-27 12:51:16', '2012-08-27 12:51:16', NULL),
+(NULL, 'created', '1', '创建时间', 'datetime', 'Download', 'zh_cn', NULL, 5, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'datetime', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-27 12:51:16', '2012-08-27 12:51:16', NULL),
+(NULL, 'updated', '1', '修改时间', 'datetime', 'Download', 'zh_cn', NULL, 4, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'datetime', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-27 12:51:16', '2012-08-27 12:51:16', NULL),
+(NULL, 'locale', '1', '语言类型', 'char', 'Download', 'zh_cn', '5', 1, '1', '1', 'Language', 'locale', 'native', NULL, '1', '', '0', '', '', '', 'select', '', '1', '', NULL, '', '', '', 0, '2012-08-27 13:35:17', '2012-08-27 13:35:17', '<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<options>\r\n    <conditions>\r\n        <Language.active>1</Language.active>\r\n    </conditions>\r\n    <order>created desc</order>\r\n</options>'),
+(NULL, 'coverimg', '1', '封面图片', 'string', 'Download', 'zh_cn', '200', 13, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', '', 'coverimg', '', '1', '', NULL, '', '', '', 0, '2012-08-27 13:40:42', '2012-08-27 13:40:42', ''),
+(NULL, 'content', '1', '内容', 'content', 'Download', 'zh_cn', '', 7, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'ckeditor', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-29 22:37:34', '2012-08-29 22:37:34', NULL),
+(NULL, 'download_1', '1', '下载地址一', 'string', 'Download', 'zh_cn', '200', 11, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'input', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-29 22:37:35', '2012-08-29 22:37:35', NULL),
+(NULL, 'download_2', '1', '下载地址二', 'string', 'Download', 'zh_cn', '200', 10, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'input', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-29 22:37:35', '2012-08-29 22:37:35', NULL),
+(NULL, 'photo', '0', '界面截图', 'string', 'Download', 'zh_cn', '200', 9, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', '', 'file', '', '1', '', NULL, '', '', '', 0, '2012-08-29 22:41:29', '2012-08-29 22:41:29', ''),
+(NULL, 'files', '0', '下载文件', 'string', 'Download', 'zh_cn', '200', 8, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', '', 'file', '', '1', '', NULL, '', '', '', 0, '2012-08-29 22:42:15', '2012-08-29 22:42:15', ''),
+(NULL, 'slug', '1', '链接文字', 'string', 'Download', 'zh_cn', '200', 14, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'input', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-29 23:17:17', '2012-08-29 23:17:17', NULL),
+(NULL, 'summary', '1', '摘要', 'string', 'Download', 'zh_cn', '500', 0, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', 'equal', 'textarea', '', '1', '', NULL, '', '', '', 0, '2012-08-30 17:48:37', '2012-08-30 17:48:37', ''),
+(NULL, 'seotitle', '1', 'SEO页面标题', 'string', 'Download', 'zh_cn', '255', 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'input', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-30 17:49:21', '2012-08-30 17:49:21', NULL),
+(NULL, 'seodescription', '1', 'SEO页面描述', 'string', 'Download', 'zh_cn', '255', 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'textarea', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-30 17:49:21', '2012-08-30 17:49:21', NULL),
+(NULL, 'seokeywords', '1', 'SEO页面关键字', 'string', 'Download', 'zh_cn', '255', 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'textarea', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-30 17:49:21', '2012-08-30 17:49:21', NULL),
+(NULL, 'down_nums', '1', '下载次数', 'integer', 'Download', 'zh_cn', '11', 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'input', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2012-08-30 17:49:22', '2012-08-30 17:49:22', NULL);
+REPLACE INTO `cake_modelextends` (`id`, `name`, `cname`, `belongtype`, `modeltype`, `idtype`, `status`, `created`, `updated`, `tablename`, `related_model`, `security`, `operatorfields`, `deleted`, `cate_id`, `localetype`) VALUES (NULL, 'Download', '软件下载', '', 'default', '', 27, '2012-08-27 12:51:16', '2012-08-27 12:51:16', 'cake_downloads', '', '', '', '0', 1, 2);
+
+
+
+REPLACE INTO `cake_downloads` (`id`, `name`, `cate_id`, `creator`, `lastupdator`, `remoteurl`, `status`, `published`, `deleted`, `created`, `updated`, `locale`, `coverimg`, `content`, `download_1`, `download_2`, `slug`, `summary`, `seotitle`, `seodescription`, `seokeywords`, `down_nums`) VALUES (1, '格式工厂 Format Factory 2.96', 100, NULL, NULL, '', 0, '1', '0', '2012-08-29 22:42:36', '2012-08-29 23:14:20', 'zh_cn', '', '<p>\r\n	格式工厂是套万能的多媒体格式转换软件。</p>\r\n<p>\r\n	　　<strong>提供以下功能：</strong></p>\r\n<p>\r\n	　　所有类型视频转到MP4/3GP/MPG/AVI/WMV/FLV/SWF。</p>\r\n<p>\r\n	　　所有类型音频转到MP3/WMA/AMR/OGG/AAC/WAV。</p>\r\n<p>\r\n	　　所有类型图片转到JPG/BMP/PNG/TIF/ICO/GIF/TGA。</p>\r\n<p>\r\n	　　抓取DVD到视频文件，抓取音乐CD到音频文件。</p>\r\n<p>\r\n	　　MP4文件支持iPod/iPhone/PSP/黑霉等指定格式。</p>\r\n<p>\r\n	　　支持RMVB,水印，音视频混流。</p>\r\n<p>\r\n	　　<strong>格式工厂的特长：</strong></p>\r\n<p>\r\n	　　1 支持几乎所有类型多媒体格式到常用的几种格式。</p>\r\n<p>\r\n	　　2 转换过程中可以修复某些损坏的视频文件。</p>\r\n<p>\r\n	　　3 多媒体文件减肥。</p>\r\n<p>\r\n	　　4 支持iPhone/iPod/PSP等多媒体指定格式。</p>\r\n<p>\r\n	　　5 转换图片文件支持缩放，旋转，水印等功能。</p>\r\n<p>\r\n	　　6 DVD视频抓取功能，轻松备份DVD到本地硬盘。</p>\r\n<p>\r\n	　　7 支持60种国家语言</p>\r\n<p>\r\n	　　<strong>配置需求：</strong> 所有windows系統</p>\r\n<p>\r\n	　　<strong>2.95版本 更新列表</strong></p>\r\n<p>\r\n	　　1 默认不使用多线程来转换</p>\r\n<p>\r\n	　　2 修正了多线程转换的停止问题</p>\r\n<p>\r\n	　　3 修正了添加大量文件产生的问题</p>\r\n<p>\r\n	　　4 解决了图片GIF转到GIF变成静态图像的问题</p>\r\n<p>\r\n	　　5 加入对迅雷XV文件的支持</p>\r\n<p>\r\n	　　<strong>注意：</strong></p>\r\n<p>\r\n	　　软件包里带有百度搜索工具条，免费软件的赞助商。</p>\r\n<p>\r\n	　　如果您不想安装他们，在安装过程中请取消他们。</p>\r\n<p>\r\n	　　一些杀毒软件可能会误报他们，开发者保证格式工厂的安装包不带有任何恶意的程序。</p>\r\n', 'http://down.tech.sina.com.cn/download/d_load.php?d_id=38883&down_id=1&ip=221.221.190.14', '', 'Format_Factory ', '格式工厂是套万能的多媒体格式转换软件。\r\n\r\n　　提供以下功能：\r\n\r\n　　所有类型视频转到MP4/3GP/MPG/AVI/WMV/FLV/SWF。\r\n\r\n　　所有类型音频转到MP3/WMA/AMR/OGG/AAC/WAV。\r\n\r\n　　所有类型图片转到JPG/BMP/PNG/TIF/ICO/GIF/TGA。\r\n\r\n　　抓取DVD到视频文件，抓取音乐CD到音频文件。\r\n\r\n　　MP4文件支持iPod/iPhone/PSP/黑霉等指定格式。\r\n\r\n　　支持RMVB,水印，音视频混流。', '', '', '', 0),
+(2, '伦巴I will always return', 100, 1, 1, '', 0, '1', '0', '2013-10-16 22:01:46', '2013-10-16 22:01:46', 'zh_cn', '', '', '', '', 'I_will_always_return', '', '', '', '', NULL);

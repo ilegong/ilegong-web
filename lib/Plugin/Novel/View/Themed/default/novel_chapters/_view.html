@@ -1,0 +1,9 @@
+<script type="text/javascript" src="/stats_days/numlog/{{$current_model}}/{{$current_data_id}}/view"></script>
+
+{{loop $taobaokes $item_all}}
+    <?PHP  $item = $item_all['Taobaoke'];
+    $region_control_name =  "taobaokes";
+    $region_model_name =    "Taobaoke";
+    ?>
+    {{template name="taobaokes/_photolist" plugin="Taobao"}}
+{{/loop}}

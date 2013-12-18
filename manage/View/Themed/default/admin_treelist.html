@@ -1,0 +1,130 @@
+<div id="{{$pageID}}">
+<div  class="ui-helper-clearfix" style="margin-bottom: 5px;margin-top:2px;">        
+        <ul class="ui-float-left">
+            <li  class="NewDocument"><?php echo $this->Html->link(__('Create New ').__d('modelextend','Model_'.$current_model), array('controller' => $current_controller,'action'=>'add'),array('onclick'=>'return open_dialog({title:\''.__('Create New ').__d('modelextend','Model_'.$current_model).'\'},this.href,reloadGrid_'.$pageID.');','escape'=>false)); ?></li>
+            <li class="show-as-button"><?php echo $this->Html->link(__('Tree Level Sort'), array('controller' => $current_controller,'action'=>'treesort'),array('onclick'=>'return open_dialog({title:\''.__('Tree Level Sort').'\'},this.href);','escape'=>false)); ?></li>
+        </ul>
+        
+         <div  style="float:right;">
+        	<select title="{{__('Settings');}}" class="dropdown">
+				<option value="list" onclick="return open_dialog({title:'{{__('List Fields')}}'},' {{$this->Html->url('/admin/settings/fieldsetting/'.$current_model.'/list_fields');}}');">{{__('List Fields');}}</option>
+				<option value="search" onclick="return open_dialog({title:'{{__('Search Fields')}}'},' {{$this->Html->url('/admin/settings/fieldsetting/'.$current_model.'/search_fields');}}');">{{__('Search Fields');}}</option>				
+			</select>
+        </div>
+        
+         <div id="radiobuttons_{{$pageID}}" class="radiobuttons" style="float:right;margin-right:10px">
+			<input type="radio" id="radio1_{{$pageID}}" name="radio" onclick="goToDataList_{{$pageID}}();" checked="checked"/><label for="radio1_{{$pageID}}">列表</label>
+			<input type="radio" id="radio2_{{$pageID}}" name="radio"  onclick="goToTrash_{{$pageID}}();" /><label for="radio2_{{$pageID}}">回收站</label>
+		</div>
+</div>
+    
+<div class="clear ui-helper-clearfix"></div>
+<table id="jqgrid_list_{{$pageID}}"></table>
+<div id="pager2_{{$pageID}}"></div> 
+
+<script>
+
+$.jgrid.no_legacy_api = true;
+$.jgrid.useJSON = true; 
+/*  jqgird 列表相关操作函数  */
+function goToTrash_{{$pageID}}()
+{
+	jQuery("#jqgrid_list_{{$pageID}}").jqGrid('setGridParam',{url:' {{$this->Html->url('/admin/ajaxes/jqgrid/');}}?{{$requeststr}}&conditions[deleted]=1',page:1}).trigger('reloadGrid');;
+}
+function goToDataList_{{$pageID}}()
+{
+	jQuery("#jqgrid_list_{{$pageID}}").jqGrid('setGridParam',{url:' {{$this->Html->url('/admin/ajaxes/jqgridtree/');}}?q=tree&{{$requeststr}}',page:1}).trigger('reloadGrid');;
+}
+function reloadGrid_{{$pageID}}()
+{
+	var page = jQuery("#jqgrid_list_{{$pageID}}").jqGrid("getGridParam","page");
+	//jQuery("#jqgrid_list_{{$pageID}}").jqGrid("setGridParam",{page:page}).trigger("reloadGrid");
+}
+function deleteGridRow_{{$pageID}}(rowid)
+{
+	jQuery("#jqgrid_list_{{$pageID}}").jqGrid("delRowData",rowid);
+}
+var first_load = true;
+jQuery("#jqgrid_list_{{$pageID}}").jqGrid({
+   	"url":' {{$this->Html->url('/admin/ajaxes/jqgridtree/');}}?q=tree&{{$requeststr}}',
+   	//"editurl":"/admin/ajaxes/jqgridedit/?q=tree&{$requeststr}",
+   	"datatype":"json",
+	"mtype": "POST", 
+   	"colNames":[{{$col_names}}],
+   	"colModel":[{{$fieldlist}}],   	
+   	"pager": '#pager2_{{$pageID}}',  
+   	"rowNum":3000, 		// rowNum 要设置的足够大，防止取出的数据多时，在rowNum之后的无法显示。 
+   	"treeGrid": true, 
+   	"treeGridModel": 'nested',  // nested | adjacency  	
+   	"ExpandColumn": 'name', 
+   	autowidth: true,
+   	"ExpandColClick":true, 
+   	'tree_root_level' : 0,	
+   	//"hoverrows":true,   	
+    "jsonReader":{"repeatitems":false,"subgrid":{"repeatitems":false}},
+	//"xmlReader":{"repeatitems":false,"subgrid":{"repeatitems":false}},
+	"treeReader" : {"level_field": "level","left_field":"left","right_field": "right","leaf_field": "isLeaf","expanded_field": "expanded","loaded":false},
+	//'treeReader' : {  level_field: "level",parent_id_field: "parent_id", leaf_field: "isLeaf",expanded_field: "expanded"},
+    "caption":"",
+    "loadComplete": function(){
+		if(first_load){
+			$('.tree-wrap-ltr').each(function(){				
+				if($(this).width()<50){ // 仅在第一次加载，切层级小于3级时，自动展开     
+					$(this).find('.tree-plus').trigger('click');	
+				}
+			})
+			first_load = false;
+		}
+	}, 
+    
+});
+
+
+$(document).ready(function(){
+	$(".NewDocument",'#{{$pageID}}' ).button({"icons":{"primary":'ui-icon-document'}} );
+	$('select.dropdown','#{{$pageID}}').selectmenu({style:'dropdown',width:'90px',setdisplay:false});
+	$('#radiobuttons_{{$pageID}}').buttonset();
+	$('.ui-button-text').each(function(){		
+		$(this).parents('.ui-button-text').each(function(){
+			$(this).removeClass('ui-button-text'); // 修正两个 '.ui-button-text'嵌套造成变形的问题
+		});
+	});
+	
+	
+	// 先调整高度，再调整宽度，防止调整高度出现滚动条，造成宽度有误差。（滚动条占一定的宽度）  
+	var areaHeight = $("#mainContent").height()-110-35,areaWidth = $("#mainContent").width()-8;
+	if($.browser.msie){
+		$("#mainContent").height()-110-45;
+	}
+	jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid('setGridHeight',areaHeight);
+	jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid('setGridWidth',areaWidth);
+
+	//jQuery("#jqgrid_list_{{$pageID}}").jqGrid('sortableRows');
+	//$(window).resize(function(){
+	//	jQuery("#jqgrid_list_{{$pageID}}").jqGrid('setGridHeight',$(window).height()-150);
+	//	jQuery("#jqgrid_list_{{$pageID}}").jqGrid('setGridWidth',$(window).width()-2);
+	//});
+	
+	$('.model-groupby-field-button .ui-icon-plus','#{{$pageID}}').live('click',function(){
+		obj = $(this).parents('.model-groupby-field:first');
+		obj.clone().insertAfter(obj);
+	});
+	$('.model-groupby-field-button .ui-icon-minus','#{{$pageID}}').live('click',function(){
+		if($('.model-groupby-field').size()>1){
+			obj = $(this).parents('.model-groupby-field:first');
+			obj.remove();
+		}
+	});
+	$('.model-sum-field-button .ui-icon-plus','#{{$pageID}}').live('click',function(){
+		obj = $(this).parents('.model-sum-field:first');
+		obj.clone().insertAfter(obj);
+	});
+	$('.model-sum-field-button .ui-icon-minus','#{{$pageID}}').live('click',function(){
+		if($('.model-sum-field').size()>1){
+			obj = $(this).parents('.model-sum-field:first');
+			obj.remove();
+		}
+	});
+});
+</script>
+</div>

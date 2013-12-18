@@ -1,0 +1,50 @@
+<div class="container clearfix"><div class="row">
+	
+	<div class="ui-widget col-md-8">
+	<?php $datas= $this->TagRelated->loadTagData('Article',1,5,1); ?>
+	<portlet portlet="notitle">
+		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+			  <!-- Indicators -->
+			  <ol class="carousel-indicators">
+			  {{loop $datas $key $item}}
+			    <li data-target="#carousel-example-generic" data-slide-to="$key" {{if $key==0}}class="active"{{/if}}></li>
+			  {{/loop}}
+			  </ol>
+			
+			  <!-- Wrapper for slides,thumb,mid_thumb,fspath -->
+			  <div class="carousel-inner">
+			  	{{loop $datas $key $item}}
+			    <div class="item{{if $key==0}} active{{/if}}">
+			      <a href="#"><img src="{{Router::url($item['Uploadfile'][0]['fspath'])}}" alt="{{$item['Uploadfile'][0]['name']}}"></a>
+			      <div class="carousel-caption">
+			        {{$item['Article']['name']}}
+			      </div>
+			    </div>
+			    {{/loop}}
+			  </div>
+			
+			  <!-- Controls -->
+			  <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+			    <span class="glyphicon glyphicon-chevron-left"></span>
+			  </a>
+			  <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+			    <span class="glyphicon glyphicon-chevron-right"></span>
+			  </a>
+			</div>
+					
+	</portlet>
+		
+		<portlet info="model=Article&conditions[coverimg %3C%3E]=&portlet=notitle&list_tpl=_photolist&order=id desc">
+			</portlet>
+		
+		
+	</div>
+	<div class="col-md-4">
+		<div class="ui-widget grid_11 alpha omega clearfix">	
+			<portlet title="最新动态" info="model=Article&portlet=default&list_tpl=articles/_titlelist&ulcss=title-list">
+			</portlet>
+		</div>
+	
+	</div>
+</div>	
+</div>

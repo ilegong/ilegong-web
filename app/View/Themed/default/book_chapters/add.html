@@ -1,0 +1,27 @@
+<div  class="container">
+	<div class="row">
+		<div class="span7">
+			<portlet portlet="notitle">{{template users/account_leftmenu}}</portlet>
+		</div>
+		<div class="span17">
+		    <div id="comment_wrapper">
+			<div class="CommentBox">
+			<h2><span class="title">知识专辑</span></h2>
+			{{$this->Form->create('BookChapter',array('action'=>'add'))}}
+				{{$this->Form->input('cate_id')}}
+				{{$this->Form->input('name')}}
+				{{$this->Form->input('coverimg')}}
+				{{$this->Form->input('content',array('type'=>'textarea'))}}
+			{{$this->Form->end(array('label'=>__('Submit')))}}
+			</div>
+			</div>
+		</div>	
+	</div>
+</div>
+{{$this->Html->script(array(
+	            'ckeditor/ckeditor.js', 'editor',
+	        ));
+	}}
+<script>
+	ckeditors['BookChapterContent'] = CKEDITOR.replace('BookChapterContent');
+</script>

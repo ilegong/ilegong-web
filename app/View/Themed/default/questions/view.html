@@ -1,0 +1,173 @@
+<div class="container ui-helper-clearfix">	
+	
+	<div class="ui-widget grid_15">	
+	<div class="ui-widget ui-corner-top plt_default">
+	<div class=" plt_default_body ui-widget-content ui-corner-bottom">
+	<script type="text/javascript">
+	//<![CDATA[
+	var submit_join_view_form = false;
+	function submit_v_weibo(){	
+		if(submit_join_view_form)
+		{
+			return false;//只允许提交一次。
+		}
+		
+		submit_join_view_form = true;
+		
+		if($('#QuestionViewWeiboName').val()=='')
+		{
+			$('#weibo-publish-errorinfo').html('');
+			var errorinfo ="<span class='ui-state-error ui-corner-all'><span class='ui-icon ui-icon-alert'></span> 错误：答案不能为空！</span>";
+			$('#weibo-publish-errorinfo').height(24);
+			$('#weibo-publish-errorinfo').html(errorinfo);
+			submit_join_view_form = false;
+			return false;
+		}
+		
+		$.ajax({
+			async:true, 
+			type:'post', 
+			success:function(request, xhr) {
+				submit_join_view_form = false;
+					if(request.success)
+					{
+						$('#QuestionViewWeiboName').val('')
+						AjaxHelper.invite_join(request.question_id,"已成功回答，您可以点名邀请好友来回答这个问题");	
+					}
+					else
+					{
+						$('#weibo-view-publish-errorinfo').html('');
+						var errorinfo = '';
+						for(var i in request)
+						{
+							errorinfo +="<span class='ui-state-error ui-corner-all'><span class='ui-icon ui-icon-alert'></span> 提示： "+request[i]+"</span>";
+						}
+						$('#weibo-view-publish-errorinfo').height(24);
+						$('#weibo-view-publish-errorinfo').html(errorinfo);
+					}
+			}, 
+			data:$('#join-question-view-form').serialize(), 
+			url:'/weibos/publish',
+			dataType:'json'
+		});
+		return false; 
+	}	
+	//]]>
+	</script>
+	<form accept-charset="utf-8" action="/weibos/publish" method="post" onsubmit="return false;" id="join-question-view-form">
+	<div class="ui-corner-bottom ui-helper-clearfix">
+		<fieldset>
+		<input type="hidden" id="weiboId" name="data[Weibo][id]">
+		<input type="hidden" id="weiboModel" name="data[Weibo][model]" value="Question">
+		<input type="hidden" id="weiboQId" name="data[Weibo][parent_id]" value="{{$parent_id}}">
+		<input type="hidden" id="weiboQId" name="data[Weibo][data_id]" value="{{$data_id}}">
+		<div class="publish-header ui-helper-clearfix">
+			
+			<div class="head_pic regionleft userhead">
+				<a href="http://t.sina.com.cn/{{$question['Question']['creator_id']}}" target="_blank">
+				<img src="{{$question['Question']['user_img']}}" uid="{{$question['Question']['creator_id']}}" title="{{$question['Question']['creator']}}">
+				</a>
+			</div>
+			<p id="join-question-name">{$question['Question']['creator']}： {$question['Question']['name']}</p><br/>
+		</div>
+		<div class="publish-header ui-helper-clearfix" style="line-height:32px;">
+			<label for="weiboName">输入您的答案</label> <br/>
+		</div>
+		<div class="inputextarea ui-corner-all">
+			<textarea style="font-family: Tahoma,宋体; border-style: solid; 
+			border-width: 1px; word-wrap: break-word;
+			 font-size: 14px; line-height: 18px; overflow-x: hidden;overflow-y:auto;
+		padding:0;width:580px;height:70px;line-height:124%;" id="QuestionViewWeiboName"
+				name="data[Weibo][name]"></textarea>
+		</div>
+		<div class="toolbar ui-helper-clearfix">			
+			<div style="float:right;" class="submit">
+				<a id="publisher_submit" onclick="submit_v_weibo();" href="javascript:void(0);"></a>
+			</div>
+		</div>
+		<div id="weibo-view-publish-errorinfo" class="line-height:24px;padding:4px;margin-top:10px;">
+			
+		</div>
+		
+		<div class="weibolist tabs" style="margin-top:10px;">
+			<div id="publish-invite-user-listtab-weibos">
+				<ul>
+					<li><a href="#all_weibo">全部回答</a></li>
+					{if !empty($related_weibo)}
+					<li><a href="#related_weibo">相关回答</a></li>
+					{/if}
+				</ul>
+				<div id="all_weibo">
+<?php 
+if(!empty($weibos_list))
+{
+	foreach($weibos_list as $item) {
+	$item = $item['Weibo'];
+?>
+{{template weibos/_singleweibo}}	
+<?PHP }
+}
+else
+{ ?>
+没有数据
+<?php }?>				
+				</div>
+				
+				{if !empty($related_weibo)}
+				<div id="related_weibo">
+					
+<?php 
+
+	foreach($related_weibo as $item) {
+	$item = $item['Weibo'];
+	if(isset($item['id']))
+	{
+?>
+{{template weibos/_singleweibo}}	
+<?PHP }
+	}
+?>
+				</div>{/if}
+			</div>
+			
+		</div>
+		</fieldset>
+	</div>
+	</form>
+	</div>
+	</div>
+	<portlet>
+			title=参与该问题的人还参与过|portlet=default|body=
+			<?PHP if(empty($same_join_question_list)) {?>
+	    <h3>没有找到</h3>	   
+	    <?php }else{ ?>
+		    <?PHP foreach($same_join_question_list as $item_all) {
+		    	$item = $item_all['Question'];
+		    ?>
+				{{template questions/_questionlist}}				
+			<?php } ?>
+			<div class="clear"></div>
+	    <?php } ?>
+	</portlet>
+	
+	<portlet>
+			title=参与该问题的用户|portlet=default|body=
+			<?PHP if(empty($same_join_user_list)) {?>
+	    <h3>没有找到</h3>	   
+	    <?php }else{ ?>
+		    <?PHP foreach($same_join_user_list as $key=>$item_all) {
+		    	$item = $item_all['User'];
+				if($key>8) break;
+		    ?>
+				{{template users/_userheadlist}}				
+			<?php } ?>
+			<div class="clear"></div>
+	    <?php } ?>
+	</portlet>	
+</div>
+
+	<div class="ui-widget grid_9">
+		<portlet id="portlet_9"></portlet>
+		<portlet id="portlet_1"></portlet>
+	</div>
+</div>

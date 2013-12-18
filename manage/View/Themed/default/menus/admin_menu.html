@@ -1,0 +1,64 @@
+
+{{if empty($parent_info['Menu']['parent_id'])}}
+<!-- 加载一个整个菜单的所有项，顶层节点为菜单分类 -->
+<?php
+
+global $hookvars;
+if(is_array($hookvars['navmenu'])){
+	$menus = array_merge($menus,$hookvars['navmenu']);
+}
+?>
+{{loop $menus $key $submenu}}
+	<?php
+		$this->Hook->call('submenu',array(&$submenu)); 
+	?>	
+	<?PHP if(empty($submenu['Menu']['slug'])){ $submenu['Menu']['slug']=$submenu['Menu']['id']; }?>
+	<div id="leftmenu_{{$submenu['Menu']['slug']}}" {{if $key>0}}style="display:none;"{{/if}} class="leftmenu">
+		{{loop $submenu['children'] $key $subitem}}		
+		{{if !empty($subitem['children'])}}
+	    <ul class="accordion-group">
+		    <li><?php echo $this->Html->link($subitem['Menu']['name'],"#submenu_".$subitem['Menu']['id'],
+			array(
+			'class'=>'foldmenu-item accordion-heading nav-header','data-toggle'=>"collapse",'data-parent'=>"#leftmenu_".$submenu['Menu']['slug'],
+			)); ?>
+				<ul  id="submenu_{{$subitem['Menu']['id']}}" class="nav nav-tabs nav-stacked">
+		        {{loop $subitem['children'] $menuitem}}
+		        <li><?php  echo $this->Html->link($menuitem['Menu']['name'],$menuitem['Menu']['link'],array('rel'=>$menuitem['Menu']['rel'])); ?></li>
+		        {{/loop}}
+		        </ul>
+			</li>
+	    </ul>
+	    {{else}}
+	    	<ul class="nav nav-tabs nav-stacked">
+	        <li><?php  echo $this->Html->link($subitem['Menu']['name'],$subitem['Menu']['link'],array(
+					'class'=>'foldmenu-item accordion-heading nav-header',
+					'rel'=>$subitem['Menu']['rel'])); ?></li>
+	        </ul>
+	    {{/if}}   
+	    {{/loop}}
+	</div>
+{{/loop}}
+{{else}}
+<!-- 非顶层节点时，加载菜单一项的所有子菜单项 -->
+<div id="leftmenu_{{$parent_id}}" class="leftmenu">
+    <?php  foreach($menus as $key => $submenu) { ?>
+    <div class="accordion-group">
+    <div class="accordion-heading">
+    <?php echo $this->Html->link($submenu['Menu']['name'],"#submenu_".$submenu['Menu']['id'],
+array(
+	'class'=>'foldmenu-item',
+	'data-toggle'=>"collapse",
+	'data-parent'=>"#leftmenu_".$parent_id,
+)); ?>
+	</div>
+	<div id="submenu_{{$submenu['Menu']['id']}}" class="accordion-body collapse in">
+		<ul class="nav nav-tabs nav-stacked">
+        <?php  foreach($submenu['children'] as $menuitem) { ?>
+        <li><?php  echo $this->Html->link($menuitem['Menu']['name'],$menuitem['Menu']['link']); ?></li>
+         <?php } ?>
+        </ul>
+	</div>
+    </div>    
+    <?php } ?>
+</div>
+{{/if}}

@@ -1,0 +1,35 @@
+<?php
+	echo $this->MForm->create('DefinedLanguage', array('id' => 'contentform', 'action' => '/admin/DefinedLanguage/defined_languages/edit/'.$defined_key, 'url' => '/admin/DefinedLanguage/defined_languages/edit/'.$defined_key));
+	echo '<table width="100%" cellpadding="0" cellspacing="0">';
+	$tableHeaders = $this->Html->tableHeaders(array(
+		'标志符',
+		'英文','中文',
+		__('Actions'),
+	));
+	echo $tableHeaders;
+
+
+	$rows = array();
+	foreach ($lang_definitions AS $key => $lange) {
+		$actions  = $this->Html->link(__('Delete'), array('action' => 'delete'));
+		$row = 	array();	
+		$row[] = $key;
+		foreach($languages as $l){
+			$item = $lange[$l['Language']['id']];
+			$row[] = $this->MForm->input('DefinedLanguage.'.$key.'.'.$item['DefinedLanguage']['id'].'.value',array(
+   				   		'label' => false,'div'=>false,'type'=>'text',
+   						'value' => $item['DefinedLanguage']['value']
+	               ));
+		}
+		$row[] =$actions;
+		$rows[] = $row;
+	}
+	echo $this->Html->tableCells($rows);
+	
+	echo $tableHeaders;
+	echo '</table>';
+	
+	echo $this->MForm->submit(__('Submit'), array('name' => 'submit'));
+	echo $this->MForm->end();
+?>
+<div class="clear"></div>

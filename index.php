@@ -1,2 +1,3 @@
 <?php
-echo '<strong>Welcome to SAE!</strong>';
+require 'webroot' . DIRECTORY_SEPARATOR . 'index.php';
+exit;

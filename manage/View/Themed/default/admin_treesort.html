@@ -1,0 +1,100 @@
+<div class="form">
+<style type="text/css">
+.sortable { list-style-type: none; margin: 5px 0; padding: 0; margin}
+.sortableli { display:inline-block;margin: 5px 2px 2px 12px; padding: 5px 2px;width:180px;height:20px;overflow:hidden;float:left; text-align: left;}
+.sortableli input {float:left;height: 16px;width: 20px;margin:0;}
+.order-icons li {cursor:pointer;float:left;list-style:none outside none;margin:2px;padding:0;position:relative;}	
+</style>
+<?PHP
+
+
+echo $this->Html->link(__('Root',true), '/admin/'.Inflector::tableize($modelClass).'/treesort/',array('target'=>'_self')).'>>';
+if(!empty($parents)){
+	foreach($parents as $key=> $value){
+		if(isset($value[$modelClass]['name'])){
+			$title=$value[$modelClass]['name'];
+		}
+		else{
+			$title=$value[$modelClass]['title'];
+		}
+		echo $this->Html->link($title, '/admin/'.Inflector::tableize($modelClass).'/treesort/'.$value[$modelClass]['id'],array('target'=>'_self')).'>>';
+	}
+}
+
+?>
+<div class="ui-state-highlight">提示：带链接的可以点进去对下级内容进行排序. 数字为向前后向后移动的步数</div>
+<ul class="sortable ui-widget ui-helper-clearfix" id="{{$modelClass}}-item-treesort">
+<?PHP
+	foreach($datas as $key=> $value)
+	{
+		$title=$value[$modelClass]['name'];
+		echo '<li class="sortableli">
+		<input type="text" title="移动步长" size="1" value="1" id="move-step-'.$modelClass.'-'.$value[$modelClass]['id'].'">
+<ul class="order-icons">
+<li class="ui-state-default ui-corner-all">
+	<span id="up_'.$value[$modelClass]['id'].'" class="ui-icon ui-icon-arrowthick-1-w"></span></li>
+<li class="ui-state-default ui-corner-all">
+	<span id="down_'.$value[$modelClass]['id'].'" class="ui-icon ui-icon-arrowthick-1-e"></span>
+</li></ul>';
+		if($value[$modelClass]['left']+1==$value[$modelClass]['right']){
+			echo '<span title="'.$title.'">'.($key+1).'. '.usubstr($title,0,6);
+		}
+		else{
+			echo $this->Html->link( ($key+1).'. '.usubstr($title,0,6), '/admin/'.Inflector::tableize($modelClass).'/treesort/'.$value[$modelClass]['id'],array('target'=>'_self','title'=>$title.'（点击对其下级节点进行排序）'));
+		}
+		echo '</li>';
+	}
+?>
+</ul>
+</div>
+<script>
+$(document).ready(function() {
+	$("#{{$modelClass}}-item-treesort .ui-icon").click(function(){
+		var id = $(this).attr('id');
+		var ids = id.split('_');
+
+		var obj =  $('#'+id).parents('li').eq(1);
+		//alert(obj.siblings().size());
+		if(ids[0]=='down' && obj.next().size()){
+			var step = $('#move-step-{{$modelClass}}-'+ids[1]).val();
+			var orders = 'id='+ids[1]+'&type='+ids[0]+'&step='+step;
+
+			$.ajax({
+				   type: "POST",
+				   dataType:'json',
+				   timeout : '600000', // 步长大时，时间可能很长，需要多等待 . 600s
+				   url: '{{$this->Html->url('/admin/'.Inflector::tableize($modelClass).'/treesort');}}',
+				   data: orders,
+				   success: function(data){
+						// 后移
+						for(var i=0;i<step;i++){
+							obj.insertAfter(obj.next());
+						}
+				   }					
+			});			
+		}
+		else if(ids[0]=='up' && obj.prev().size()){
+			var step = $('#move-step-{{$modelClass}}-'+ids[1]).val();
+			var orders = 'id='+ids[1]+'&type='+ids[0]+'&step='+step;
+
+			$.ajax({
+				   type: "POST",
+				   dataType:'json',
+				   timeout : '600000', // 步长大时，时间可能很长，需要多等待 . 600s
+				   url: '{{$this->Html->url('/admin/'.Inflector::tableize($modelClass).'/treesort');}}',
+				   data: orders,
+				   success: function(data){
+						// 前移
+						for(var i=0;i<step;i++){
+							obj.insertBefore(obj.prev());
+						}
+				   }					
+			});
+		}
+		
+		return ;
+		
+	});
+	return ;	
+});
+</script>

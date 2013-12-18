@@ -1,0 +1,236 @@
+
+<div  class="container_24">
+	<div  class="grid_16">
+		<portlet>
+	    title=新闻内容展示|portlet=notitle|body=
+	    <h2 class="Article-title"><?php echo $Article['Article']['title']; ?></h2>
+	    <div class="Article-info">
+	来源：{{$Article['Article']['origin']}}    阅读次数： <span class="ui-stats-num Stats-Article-{{$Article['Article']['id']}}-view_nums"><?php echo $Article['Article']['views_count']; ?></span>
+	    </div>
+	    <div class="Article-body">
+		    <div class="ui-share">
+		    	<div class="ui-state-default"><a href="javasctipt:void(0);" onclick="return addtofavor('Article','{{$Article['Article']['id']}}');">分享</a></div>
+		    	<div class="ui-share-num"><span class="ui-stats-num Stats-Article-{{$Article['Article']['id']}}-favor_nums">{if $Article['Article']['favor_nums']}({{$Article['Article']['favor_nums']}}){else}0{/if}</span></div>
+		    </div>
+	    	<?php echo $Article['Article']['content']; ?>
+	    	{if $Article['Article']['remoteurl']}
+	    	<p>原文链接：<a href="{{$Article['Article']['remoteurl']}}" target="_blank">{{$Article['Article']['remoteurl']}}</a></p>
+	    	{/if}
+	    
+	    	
+<div class="mod-view-point"> 
+	<div class="hd"><h3>大家发表的互动观点{if $Article['Article']['point_nums']}({{$Article['Article']['point_nums']}}人发表){/if}</h3> </div>
+	<div class="bd">
+		<div id="viewpoint_list" class="viewpoint_list clearfix">
+			<?php  foreach($Viewpoints as $key=> $item) {
+				$cssflag = 6-$key%2; if($cssflag<1) $cssflag=1;
+			?>
+			<a title="共有{{$item['Viewpoint']['support_nums']}}赞同此观点" agree_num="{{$item['Viewpoint']['support_nums']}}" rel="{{$item['Viewpoint']['name']}}" class="c{{$cssflag}} xy_viewpoint_btn" onclick="return false" href="#">{{$item['Viewpoint']['name']}}</a>
+			<?PHP } ?>
+			{if !empty($Viewpoints)}
+			<a id="viewpoint_more" title="更多" onclick="return false" href="#">...</a>
+			{else}
+			<span class="c1">还没有人发布观点，快发布自己的观点抢占沙发吧~</span>
+			{/if}
+		</div> 
+	</div>
+	<div class="ft">
+		<fieldset>
+			<form onsubmit="return false">
+				<p>发表观点: <input type="input" value="输入互动观点，最多8个字" onfocus="if(this.value=='输入互动观点，最多8个字') this.value='';" 
+				onblur="if(this.value=='') this.value='输入互动观点，最多8个字';" 
+				id="viewpoint_content_input"><button type="submit" id="viewpoint_submit_btn">发表</button></p>
+			</form>
+		</fieldset>
+	</div>
+</div>	
+<script type="text/javascript">
+$(document).ready(function() {
+	function escapeHTML(html)
+	{
+		return html.replace('"','').replace('>','').replace('<','');
+	}
+	function confirmShare(){
+		
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+		$( "#dialog-share" ).dialog({
+			resizable: false,
+			height:150,
+			modal: true,
+			buttons: {
+				"确定": function() {
+			 		addtofavor('Article','{{$Article['Article']['id']}}');
+					$( this ).dialog( "close" );
+				},
+				"取消": function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+	}
+	//confirmShare();
+	function addViewPointRefresh(vpoint) {
+		var is_exsits = false;
+		$('#viewpoint_list span').remove();
+		$('#viewpoint_list > a').each(function() {
+			if(is_exsits) return;
+			
+			var jq = $(this);
+			if(vpoint == jq.attr('rel')) {
+				// 已存在
+				var agree_num = jq.attr('agree_num');
+				agree_num = parseInt(agree_num) + 1;
+				jq.attr('title' , '共有' + agree_num + '赞同此观点');
+				
+				is_exsits = true;
+			}
+		});
+		
+		// 不存在
+		if(!is_exsits) {
+			vpoint = escapeHTML(vpoint);
+			var _t = '<a href="#" onclick="return false" class="c1 xy_viewpoint_btn" rel="' + vpoint + '" agree_num="1" title="共有1赞同此观点">' + vpoint + '</a>';
+			
+			// 判断插入位置
+			if($('#viewpoint_more').size() > 0) {
+				$('#viewpoint_more').before(_t);
+			} else {
+				$('#viewpoint_list').append(_t);
+			}
+			bindListClickEvent();
+		}
+	}
+	
+	function bindListClickEvent() {
+		$('.xy_viewpoint_btn').click(function() {
+			var vpoint = $(this).attr('rel');			
+			submitViewPoint(vpoint,'Article','{{$Article['Article']['id']}}');
+			return false;
+		});
+	}
+	
+	bindListClickEvent();
+
+	function submitViewPoint(vpoint,model,data_id)
+	{
+		$.ajax({
+			type:'post',
+			url:'/viewpoints/publish',
+			data: {'data[Viewpoint][name]':vpoint,'data[Viewpoint][model]':model,'data[Viewpoint][data_id]':data_id},
+			success:function(data){
+				if(data.error)
+				{
+					showErrorMessage(data.error);
+				}
+				else
+				{
+					confirmShare();
+					addViewPointRefresh(vpoint);
+				}
+			},
+			dataType:'json'		
+		});
+		return false;
+	}
+	
+	$('#viewpoint_submit_btn').click(function() {
+		var vpoint = $('#viewpoint_content_input').val();
+		vpoint = $.trim(vpoint);		
+		submitViewPoint(vpoint,'Article','{{$Article['Article']['id']}}');
+		return false;
+	});
+	
+	$('#viewpoint_more').click(function() {
+		if($('#viewpoint_more').size() == 0) return;
+		
+		$('#viewpoint_more').remove();
+		
+		$.ajax({
+			type:'get',
+			url:'/viewpoints/getjson/Article/{{$Article['Article']['id']}}' , 
+			data:{} , 
+			success:function(data) {
+				if(data.error) {
+					return showErrorMessage(data.error);
+				}
+				
+				var _t = [];
+				for(var i = 0 , l = data.length ; i < l ; i++) {
+					var classname = (i >= 12 ? 1 : Math.floor((13 - i) / 2));
+					_t.push('<a href="#" onclick="return false" class="c' + classname + ' xy_viewpoint_btn" rel="' + data[i]['Viewpoint']['name'] + '" agree_num="' + data[i]['Viewpoint']['support_nums'] + '" title="共有' + data[i]['Viewpoint']['support_nums'] + '赞同此观点">' + data[i]['Viewpoint']['name'] + '</a>');
+				}
+				
+				$('#viewpoint_list').html(_t.join(''));
+				
+				// 绑定事件
+				bindListClickEvent();
+			} , 
+			dataType:'json'	
+		});
+		
+		return false;
+	});
+});
+	
+</script>
+    
+	</div>
+	    
+	    </portlet>
+	    <portlet>
+		title=广告区域|portlet=notitle|body=<script type="text/javascript">
+	    <!--
+google_ad_client = "pub-1393746648850099";
+/* 468x60, 创建于 10-4-18 */
+google_ad_slot = "1851151709";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+<script type="text/javascript" src="/stats_days/numlog/{{$current_model}}/{{$current_data_id}}/view">
+</script>
+
+		</portlet>		
+	</div>
+	
+	<div  class="grid_8">
+		<portlet>
+		model=article|cached=900|pagelink=no|title=最新排行|
+options['fields']=array('Article.id','Article.title','Article.created')|
+		portlet=default|list_tpl=scripts|limitnum=8|orderby=id desc|
+		</portlet>
+		
+		<portlet id="portlet_12"></portlet>
+		
+		<portlet id="portlet_13"></portlet>
+		
+		<portlet id="portlet_14"></portlet>	
+			
+		<portlet>
+		title=广告区域|portlet=default|body=<script type="text/javascript">
+		<!--
+google_ad_client = "pub-1393746648850099";
+/* 160x600, 创建于 10-4-18 */
+google_ad_slot = "7338009172";
+google_ad_width = 160;
+google_ad_height = 600;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+		</portlet>
+<script>
+$(function(){
+	//loadComments('{{$current_model}}','{{$current_data_id}}');
+	//loadMoodDigg('{{$current_model}}','{{$current_data_id}}');
+});
+</script>		
+	</div>
+</div>
+<div id="dialog-share" style="display:none;" title="温馨提示">
+	<div class="ui-pop-tips"><span class="ico ico-success" style="float:left;"></span><div class="tips-cnt">发表观点成功，是否也分享给您的好友？</div></div>
+</div>

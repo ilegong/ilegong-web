@@ -1,0 +1,112 @@
+{{template menu}}
+
+<div class="container clearfix">	
+	
+	<div class="ui-widget grid_13">
+	<portlet>
+		model=article|cached=900|pagelink=no|title=flash列表|
+		options['joins']=array(array('table' => 'category_articles',
+'alias' => 'CategoryArticle','type' => 'LEFT',
+'conditions' => array('CategoryArticle.article_id = Article.id',)
+))|options['conditions']=array('CategoryArticle.category_id' => 2)|
+options['fields']=array('Article.id','Article.title','Article.coverimg','Article.slug','Article.created')|
+		portlet=default|list_tpl=bcastr|limitnum=5|orderby=id desc|
+		</portlet>
+		
+		
+		<portlet>
+		model=article|cached=900|pagelink=no|title=图片新闻列表|
+		options['joins']=array(array('table' => 'category_articles',
+'alias' => 'CategoryArticle','type' => 'LEFT',
+'conditions' => array('CategoryArticle.article_id = Article.id',)
+))|options['conditions']=array('CategoryArticle.category_id' => 2)|
+options['fields']=array('Article.id','Article.title','Article.coverimg','Article.slug','Article.created')|
+		portlet=default|list_tpl=_photolist|limitnum=5|orderby=id desc|
+		</portlet>
+		
+		<portlet>
+		model=Product|cached=900|pagelink=no|title=产品列表|
+options['fields']=array('Product.id','Product.title','Product.coverimg','Product.slug','Product.created')|
+		portlet=default|list_tpl=_photolist|limitnum=5|orderby=id desc|
+		</portlet>
+		
+		<portlet>
+			title=新闻列表|portlet=notitle|body=
+			<?PHP if($total_article==1) {?>
+	    <h2><?php echo $Category['Article']['title']; ?></h2>
+	    <div class="Channel-body">
+	    <?php  echo $Category['Article']['content']; ?>
+	    </div>
+	    <?php }elseif($total_article>1){ ?>
+		    <?PHP foreach($Category['Article'] as $item) {
+		    
+		    ?>					
+				{{template articles/_photolist}}				
+			<?php } ?>
+			<div class="clear"></div>
+			{$page_navi}
+	    <?php } ?>
+		</portlet>
+	
+	</div>
+	<div class="grid_11">
+		<div class="ui-widget grid_11 alpha omega clearfix">	
+			<portlet>
+		title=广告区域|portlet=notitle|body={{template slide}}
+			</portlet>
+		</div>
+	<div class="ui-widget grid_6 alpha">	
+		<div class="tabs ui-tabs plt_default">
+			<ul class="ui-tabs-nav ui-helper-clearfix">
+                    <li><a href="#latest-news"><span>最新排行</span></a></li>
+                    <li><a href="#hot-news"><span>热门排行</span></a></li>
+             </ul>
+		<portlet>
+		model=article|id=latest-news|cached=900|pagelink=no|title=最新排行|
+		options['joins']=array(array('table' => 'category_articles',
+'alias' => 'CategoryArticle','type' => 'LEFT',
+'conditions' => array('CategoryArticle.article_id = Article.id',)
+))|options['conditions']=array('CategoryArticle.category_id' => 2)|
+options['fields']=array('Article.id','Article.title','Article.slug','Article.created')|
+		portlet=tab|list_tpl=_list|limitnum=5|orderby=Article.id desc|
+		</portlet>
+		
+		<portlet>
+		model=article|id=hot-news|display=none|cached=900|pagelink=no|title=热门排行|
+options['fields']=array('Article.id','Article.title','Article.slug','Article.created')|
+		portlet=tab|list_tpl=_list|limitnum=5|orderby=Article.views_count desc|
+		</portlet>
+		</div>
+		<portlet>
+		title=广告区域|portlet=default|body=<script type="text/javascript">
+google_ad_client = "pub-1393746648850099";
+/* 250x250, 仅图片 */
+google_ad_slot = "8668539340";
+google_ad_width = 250;
+google_ad_height = 250;
+</script>
+<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+		</portlet>
+		
+	</div>
+	
+	<div class="ui-widget grid_5 omega">
+		
+		<portlet>
+		title=广告区域|portlet=default|body=<script type="text/javascript">
+		<!--
+google_ad_client = "pub-1393746648850099";
+/* 160x600, 创建于 10-4-18 */
+google_ad_slot = "7338009172";
+google_ad_width = 170;
+google_ad_height = 600;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+		</portlet>		
+	</div>
+	</div>
+</div>

@@ -1,0 +1,30 @@
+<div class="roles form">
+    <?php 
+if ($current_action=='admin_edit')
+{
+	echo $this->MForm->create('Keyword',array(
+	        'url' => array(
+	            'controller' => 'keywords',
+	            'action' => 'edit',
+	            $id,
+	        ),
+	));
+}
+else
+{
+	echo $this->MForm->create('Keyword',array(
+	        'url' => array(
+	            'controller' => 'keywords',
+	            'action' => 'add'
+	        ),
+	));
+}
+?>
+        <fieldset>
+        <?php
+        echo $this->MForm->input('cateid');
+        echo $this->MForm->input('value',array('rows' => '5', 'cols' => '50','div'=>'wide'));		
+        ?>
+        </fieldset>
+    <?php echo $this->MForm->end(__('Submit',true));?>
+</div>

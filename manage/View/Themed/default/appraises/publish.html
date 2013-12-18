@@ -1,0 +1,186 @@
+<div style="margin:0 auto;">
+<form id="form703583739" onsubmit="return false;" update="settings_result" method="post" action="/appraises/publish.html" accept-charset="utf-8"><div style="display:none;"><input type="hidden" name="_method" value="POST" /></div><script type="text/javascript">
+//<![CDATA[
+$('#form703583739').bind('submit', function(){
+
+	if($('#AppraiseName').val()=='')
+	{
+		var errorinfo ="<span class='ui-state-error ui-corner-all'><span class='ui-icon ui-icon-alert'></span> 错误： 内容不能为空！</span>";
+		showErrorMessage(errorinfo);
+		return false;
+	}
+	
+	$.ajax({
+		async:true, 
+		type:'post', 
+		complete:function(request, json) {}, 
+
+		success:function(request, xhr) {
+				if(request.success)
+				{
+					showSuccessMessage(request.success);					
+				}
+				else
+				{
+					var errorinfo = '';	
+					for(var i in request)
+					{
+						errorinfo +="<span class='ui-state-error ui-corner-all'><span class='ui-icon ui-icon-alert'></span> 错误： "+request[i]+"</span>";
+					}
+					showErrorMessage(errorinfo);					
+				}
+		}, 
+		data:$('#form703583739').serialize(), 
+		url:'/Appraises/publish.html', 
+		dataType:'json'
+	}) ;
+	return false; 
+})
+//]]>
+</script>
+  	<div >
+  	<div class="publish-header ui-helper-clearfix">
+		<label for="AppraiseName">您的投票标题</label> <br/>
+		<div id="publisher_info" style="float:right" class="wordNumBg">你还可以输入<span class="pipsLim">140</span>字</div>
+	</div>
+  		<textarea oninput="wordLimit(this)"  onpropertychange="wordLimit(this)" style="font-family: Tahoma,宋体; border-style: solid; 
+		border-width: 1px; word-wrap: break-word;
+		 font-size: 14px; line-height: 18px; width:100%;height:72px; margin:0 auto;overflow-x: hidden;" id="AppraiseName"
+			name="data[Appraise][name]"></textarea>			
+  	</div>
+  	
+  <div style="line-height:32px;">  
+      	<span class="input select">
+      	<label for="AppraiseQuestiontype">投票问题类型</label>
+      	<select id="AppraiseQuestiontype" name="data[Appraise][questiontype]">
+			<option value="checkbox">多选</option><option value="radio">单选</option>
+		</select>
+	   </span>
+          <span id="select-panel-set-check" style="display:none;">
+          	最少选择项数：<input name="data[Appraise][minselect]" type="text" value="1" size="3" maxlength="2" id="AppraiseMinselect" />
+          	最多选择项数：<input name="data[Appraise][maxselect]" type="text" value="0" size="3" maxlength="2" id="AppraiseMaxselect" /> （0为不限制）
+          </span>
+  </div>
+      <div id="select-options-manage" >
+      		<ul id="select-option-list" class="select-option-list">
+				<li>
+					<table align="center" width="99%"><tbody>
+						<tr align="center">
+					<td><?PHP echo $this->MForm->input('Appraiseoption.1.name',array('value'=>'[空白选项]','div'=>false,'size'=>60,'label'=>false)); ?></td>
+					<td><?PHP echo $this->MForm->input('Appraiseoption.1.withinput',array('type'=>'checkbox','value'=>'1','label'=>'带文本框','div'=>false)); ?>
+					</td>
+					<td><?PHP echo $this->MForm->input('Appraiseoption.1.optiontype',array('type'=>'select','options'=>array('x'=>'x','y'=>'y','z'=>'z'),'div'=>false,'label'=>false)); ?></td>
+				<td width="62">
+				<button class="ui-state-default ui-corner-all" onclick="deleteselectoption(this,'add');" type="button">删除</button>
+				</td></tr></tbody></table>
+				</li>
+				<li>
+					<table align="center" width="99%"><tbody>
+						<tr align="center">
+					<td><?PHP echo $this->MForm->input('Appraiseoption.2.name',array('value'=>'[空白选项]','div'=>false,'size'=>60,'label'=>false)); ?></td>
+					<td><?PHP echo $this->MForm->input('Appraiseoption.2.withinput',array('type'=>'checkbox','value'=>'1','label'=>'带文本框','div'=>false)); ?></td>
+					<td><?PHP echo $this->MForm->input('Appraiseoption.2.optiontype',array('type'=>'select','options'=>array('x'=>'x','y'=>'y','z'=>'z'),'div'=>false,'label'=>false)); ?></td>
+				<td width="62">
+				<button class="ui-state-default ui-corner-all" onclick="deleteselectoption(this,'add');" type="button">删除</button>
+				</td></tr></tbody></table>
+				</li>
+		</ul>
+	</div> 
+	<div style="margin-top:10px;">
+		<input type="button" value="增加选项"  class="ui-button ui-state-default ui-corner-all" style="padding:10px 20px;" onclick="addoptionlist('add');">
+		<input type="submit" value="提交" class="ui-button ui-widget ui-state-default ui-corner-all" style="padding:10px 20px;">
+	</div>
+   <?PHP echo $this->MForm->end(); ?>
+   <div class="clear"></div> 
+	</form>
+<script>
+function addoptionlist(type)
+{
+	var i = $('#select-option-list li').size();
+	var str='<li><table align="center" width="99%"><tbody><tr align="center">'+
+	'<td><input type="text" size="60" id="AppraiseoptionSelectiName" value="[空白选项]" name="data[Appraiseoption][Selecti][name]"></td>'+
+	'<td><input type="checkbox" id="AppraiseoptionSelectiWithinput" value="1" name="data[Appraiseoption][Selecti][withinput]">'+
+	'<label for="AppraiseoptionSelectiWithinput">带文本框</label></td>'+	
+	'<td><select id="AppraiseoptionSelectiOptiontype" name="data[Appraiseoption][Selecti][optiontype]"><option value="x">x</option><option value="y">y</option><option value="z">z</option></select></td>'+
+	'<td width="62"><button class="ui-state-default ui-corner-all" onclick="deleteselectoption(this);" type="button">删除</button></td>'+
+	'</tr></tbody></table></li>';	
+	i++;	
+	str = str.replace(/Selecti/g,i);
+	if(type=='add')
+	{
+		$('#select-option-list').append($(str));
+		$("button",'#select-option-list').button();
+	}
+	else
+	{
+		$('#select-option-edit-list').append($(str));
+		$("button",'#select-option-edit-list').button();
+	}
+	
+}
+function deleteselectoption(obj,type)
+{
+	var thisli = $(obj).parents('li')[0];
+	$(thisli).remove();
+}
+function questiontype_change(value)
+{
+	if(value=='checkbox' || value=='radio')
+	{
+		$('#select-options-manage').show();
+	}
+	else
+	{
+		$('#select-options-manage').hide();
+	}
+	if(value=='checkbox')
+	{
+		$('#select-panel-set-check').show();
+	}
+	else
+	{
+		$('#select-panel-set-check').hide();
+	}	
+}
+
+$(function(){
+	$('#AppraiseQuestiontype').bind('change',function(){questiontype_change(this.value);});
+	$('#AppraiseQuestiontype').trigger('change');
+	$( "button" ).button();$( "input:submit" ).button();
+
+	 if($.browser.msie)        // IE浏览器
+	    {
+	            $("#AppraiseName").get(0).onpropertychange = wordLimit;
+	    }
+	    else        // 其他浏览器
+	    {
+	            var intervalName;        // 定时器句柄
+	            $("#AppraiseName").get(0).addEventListener("input",wordLimit,false);
+	            // 获得焦点时，启动定时器
+	            $("#AppraiseName").focus(function(){
+	                    intervalName = setInterval(handle,1000);
+	            });
+
+	            // 失去焦点时，清除定时器
+	            $("#AppraiseName").blur(function()
+	            {
+	                    clearInterval(intervalName);
+	            });
+	    }
+	    function wordLimit()
+	    {
+	    	var obj = $("#AppraiseName").get(0);
+	    	if(140 - obj.value.length>=0)
+	    	{
+	    		$('.pipsLim').html(140 - obj.value.length);
+	    	}
+	    	else
+	    	{
+	    		obj.value=obj.value.substring(0,140);
+	    	}
+	    }
+});
+</script>
+
+</div>
+

@@ -1,0 +1,16 @@
+<footer class="footbox">
+<p>
+<a href="#">联系我们</a> | <a href="#">站点地图</a> | <a style="color:#333;" target="_blank" href="#">沪ICP备08023636号</a>
+</p>
+<p>Copyright © 2011 SaeCMS, All Rights Reserved.</p>
+<p>Powered By SaeCMS V1.0. </p>
+</footer>
+{{$this->Html->script(array(
+          'jquery/jquery.lazyload.js',
+    ));
+}}
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("img.lazy").lazyload({placeholder : "{{Router::url('/img/grey.gif')}}",effect: "fadeIn",threshold : 200});
+	});
+</script>

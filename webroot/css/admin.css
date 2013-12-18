@@ -1,0 +1,204 @@
+/**
+ * Basic
+ */
+body {overflow-x:hidden; font: 12px "Lucida Grande", Verdana, Arial, "Bitstream Vera Sans", sans-serif; background-color: #f9f9f9; line-height:1.5; }
+h1 { font-family: Arial, sans-serif; color: #464646; font-size: 24px; font-weight: bold;margin: 0px;  }
+h2 { font-family: Arial, sans-serif; color: #464646; font-size: 24px; font-weight: bold; border-bottom: 1px dashed #ccc; margin: 0px 0px 10px 0px;  }
+h3 { font-family: Arial, sans-serif; color: #464646; font-size: 16px; font-weight: bold; }
+ul,ol{list-style-type:none;}
+select,input,img,select,label{vertical-align:middle;}
+.dialog {display:none;}
+.ui-tabs-nav li .ui-icon-close { float: left;cursor: pointer; }
+.ui-layout-north{
+	background-color: #563D7C;
+	border-radius:0;
+	 box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+border-color: #463265;
+}
+.ui-layout-west{
+	margin: 0;
+    top: 0;left: 0;
+    display: block;
+    overflow-y: auto;
+    position: absolute;
+    z-index: 2;
+}
+.ui-layout-main{
+	margin: 0;display: block;
+    top: 0;right: 0;    
+	overflow-y: auto;
+    overflow-x: hidden;
+    position: absolute;
+    z-index: 2;
+}
+/**
+ * Footer
+ */
+#footer {position: absolute;font-size:12px;text-align:right;bottom:0;top: auto;width: 100%;z-index:100;color: #ccc;height: 15px; }
+#footer a { color: #ccc; text-decoration: none; }
+#footer a:hover { text-decoration: underline; }
+
+/* custom bootstrap css, or css Conflict*/
+.navbar{margin-bottom:5px;}
+.navbar-inner{min-height: 10px;padding:0 0;border-radius: 0 0;}
+.affix,.affix-bottom,.affix-top{top:0px;position:fixed;width:auto;}
+/*.affix-bottom {bottom:0px;position: fixed;top: auto;}*/
+div.jGrowl.top-right {right: 0;top: 40px;}
+.modal-dialog{width:960px}
+
+.accordion-heading{background:#DDD;}
+/*权限管理*/
+.controller-row {font-weight: bold; }
+.controller-row a { color: #efefef; }
+.controller:hover { cursor: pointer; }
+.collapserow { background: url('../img/icons/bullet_arrow_down.png') no-repeat; padding-left: 15px; }
+.expandrow { background: url('../img/icons/bullet_arrow_right.png') no-repeat; padding-left: 15px; }
+/*chosen
+.chzn-container .chzn-drop,.chzn-container-single .chzn-single,.chzn-container-single .chzn-drop {min-width: 140px;}
+*/
+/*leftmenu,后台左侧折叠菜单，menu/admin_menu.html */
+.leftmenu div{height:auto;overflow:hidden;}
+.leftmenu li a{padding-left:24px;display:block;font-size:12px;}
+.leftmenu .nav {margin-bottom: 0;}
+.leftmenu a,.nav-tabs > li > a {padding-bottom: 4px;line-height:28px;padding-top: 4px;text-decoration: none;}
+
+.form_div,form div.control-group,form div.swfupload-control {margin:5px;vertical-align:middle;zoom:1;line-height: 24px;border-bottom: 1px solid #C2D5E3;}	
+div.input span.description { margin-left: 1px; }
+form .submit  {font-wight:bold;}
+.checkbox {margin-left:3px;width:auto;overflow:hidden;float:left;}
+.checkbox label,form .checkbox input {width:auto;margin-left:0;float:left;}
+.control-group {margin-bottom: 2px;}
+form .datetime select{
+	display:inline-block;width:auto;
+}
+textarea,select { width: auto;}
+select{height:auto;}
+form input[type="radio"], form input[type="checkbox"] {float: none;margin-left: 5px;}
+.radio input[type="radio"], .radio-inline input[type="radio"], .checkbox input[type="checkbox"], .checkbox-inline input[type="checkbox"]{
+	float: none;width:auto;display:inline-block;margin-left:10px;
+}
+/**
+ * Navigation
+ */
+#navigation ul { margin: 0px; padding: 0px; list-style: none; }
+#navigation ul li { padding: 5px; margin-left: 3px; margin-bottom: 10px; background-color: #eee; }
+#navigation ul li a { margin-bottom: 3px; display: block; font-size: 18px; text-decoration: none; color: #464646; }
+
+#navigation ul li ul { margin-left: 0px; background-color: #fff; }
+#navigation ul li ul li { margin-bottom: 2px; background-color: #fff; }
+#navigation ul li ul li a { margin: 1px 3px 1px 3px; display: block; font-size: 14px; font-weight: bold; text-decoration: none; color: #21759B; }
+#navigation ul li ul li a:hover, #navigation ul li ul li a.current { color: #D54E21; }
+
+/**
+ * Themes
+ */
+div.extensions-themes h3 { font-size: 16px; margin: 10px 0px 10px 0px; }
+div.extensions-themes .current-theme .screenshot { float: left; margin: 0px 70px 0px 0px; }
+div.extensions-themes .available-themes { border-top: 1px dashed #ccc; margin: 50px 0px 0px 0px; }
+div.extensions-themes .available-themes ul li { float: left; margin: 0px 70px 0px 0px; display: block; }
+div.extensions-themes .available-themes .actions a { margin-right: 10px; }
+
+/**
+ * File Manager
+ */
+.directory-content ul li { padding-left: 18px; }
+.directory-content ul li.directory { background: url(../img/icons/folder.png) no-repeat; }
+.directory-content ul li.file { background: url(../img/icons/page_white.png) no-repeat; }
+.directory-content ul li.file span.actions { margin-left: 20px; display: none; }
+.directory-content ul li.file span.actions a { text-decoration: none; font-size: 12px; }
+.directory-content ul li.file-extension-php { background: url(../img/icons/page_white_php.png) no-repeat; }
+.directory-content ul li.file-extension-css { background: url(../img/icons/css.png) no-repeat; }
+.directory-content ul li.file-extension-html { background: url(../img/icons/html.png) no-repeat; }
+textarea.file-content { width: 100%; height: 350px; }
+
+.positionHelper {z-index:10000;}
+
+/**
+ * Tooltip
+ */
+.tipsy { padding: 5px; font-size: 10px; opacity: 0.8; filter: alpha(opacity=80); background-repeat: no-repeat; }
+.tipsy-inner { padding: 4px 5px; background-color: black; color: white; max-width: 200px; text-align: center; }
+.tipsy-north { background-image: url(../img/icons/tipsy-north.gif); background-position: top center; }
+.tipsy-south { background-image: url(../img/icons/tipsy-south.gif); background-position: bottom center; }
+.tipsy-east { background-image: url(../img/icons/tipsy-east.gif); background-position: right center; }
+.tipsy-west { background-image: url(../img/icons/tipsy-west.gif); background-position: left center; }
+.ui-menu li {list-style: none; display:inline;float: left;}
+/**
+ * Others
+ */
+
+div.actions {margin:10px; padding:0;}
+div.actions ul {float:left;}
+div.actions ul li { margin: 0px;margin:0 5px 0 0; padding: 0; list-style: none; display:inline;float: left;}
+div.actions ul li a {display:block;text-decoration:none;}
+
+div.bulk-actions .input { float: left; padding: 4px; }
+
+div.breadcrumb { margin: 0px 0px 20px 0px; }
+
+#loading { margin: 0 auto; width: 20px; text-align: center; }
+#loading p { background-color: #FFF1A8; font-weight: bold; padding: 5px; margin: 0px; }
+
+.round { -moz-border-radius: 5px; -webkit-border-radius: 5px; }
+.hidden { visibility: hidden;} /*display属性可能为inline-block等，使用visibility不会对display属性的值产生影响 */
+
+.ui-search-form-titlebar { height:32px;cursor:pointer;}
+.ui-search-form-title {float:left;}
+.ui-search-form-close {	float:left;margin:5px;}
+.ui-search-form-content{position:relative;padding:0px;}
+.ui-upload-filelist {float:left;}
+.ui-upload-filelist input[type="text"] {width:100px;}
+
+.upload-fileitem{
+	border:1px solid #ccc;
+	padding:5px;margin:5px;
+}
+.upload-fileitem img{
+	float:left;width:100px;height:100px;
+}
+.upload-fileitem input {
+	height: 28px;padding:2px 5px;
+	font-size: 12px;
+	width:320px;
+}
+	
+/* 搜索表单中，按字段统计
+ */
+.model-groupby-field-button {float:left;display:inline;}
+.model-groupby-field-button li {
+	cursor:pointer;	float:left;display:inline;
+	list-style:none outside none;margin:3px;	padding:3px;width:16px;height:16px;	position:relative;
+}
+.model-sum-field-button {float:left;display:inline;}
+.model-sum-field-button li {
+	cursor:pointer;	float:left;display:inline;
+	list-style:none outside none;
+	margin:3px;	padding:3px;
+	width:16px;height:16px;	position:relative;
+}
+.ui-jqgrid {font-size: 13px;border: 1px solid #D3D3D3;}
+.ui-jqgrid .ui-pg-input {width: 15px;}
+.ui-jqgrid .ui-jqgrid-htable th div{height: auto;}
+.ui-state-default{border: 1px solid #D3D3D3;}
+.ui-jqgrid .ui-pg-selbox {
+    display: block;
+    font-size: 0.8em;
+    height: 24px;
+    line-height: 24px;
+	padding:4px 0 4px 5px;
+	width: 50px;
+}
+.ui-grid-actions {display:inline;}
+.ui-grid-actions li {cursor:pointer;float:left;display:inline;list-style:none outside none;margin:3px;padding:3px;height:16px;position:relative;}
+.ui-jqgrid-labels,.jqgrow {height:32px;}
+.ui-th-column div {padding:5px 2px;}
+.ui-jqgrid .ui-jqgrid-bdiv {overflow-x:hidden;}
+.ui-jqgrid .ui-pg-selbox {height: auto;}
+
+.context-menu-item.icon {
+	width:auto;
+	display:block;
+    background-position: 4px 2px;
+    background-repeat: no-repeat;
+    min-height: 18px;
+}

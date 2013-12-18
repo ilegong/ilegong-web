@@ -1,0 +1,179 @@
+<style>
+ 
+.textarea #CommentBody   {
+    height: 90px;
+    width: 400px;
+}
+
+#CommentAddForm div {
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 0px;
+}
+
+#comment_list .comment_item {
+	padding:10px 19px 4px;
+	border-top:1px dotted #ccc;
+	_border-top:none;
+}
+.comment_item .comment_selected {
+	background-color:#F5F8FD;
+}
+#comment_list .comment_more {
+	padding:0;
+	border-bottom:1px solid #C8D8F2;
+}
+#comment_list .comment_more div {
+	margin:0 10px;
+	padding:10px;
+	font-size:14px;
+	text-align:center;	
+}
+.comment_item .t_info {
+	color:#666666;
+	line-height:20px;
+	float:left;
+	font-size:12px;
+}
+.comment_item .t_info .t_username {
+	color:#25343b;
+	padding-left:15px;
+	background:transparent url(http://i3.sinaimg.cn/dy/2010/0610/2010610122226.gif) no-repeat scroll -150px -56px;
+}
+
+.comment_item .t_info .t_area {
+	color:#999;
+	padding-left:15px;
+	display:block;
+	width:96px;
+}
+.comment_item .t_info .t_mobile {
+	background:transparent url(http://i3.sinaimg.cn/dy/2010/0610/2010610122226.gif) no-repeat scroll 0px -56px;
+}
+.comment_item .t_txt {
+	line-height:24px;
+	margin-left:124px;
+	font-size:14px;
+	color:#414159;
+}
+.comment_item .t_others {
+	margin-left:124px;
+}
+.comment_item .t_others .datetime {
+	color: #d0d0d0;
+	font-size:12px;
+	margin-top:10px;
+}
+.comment_item .comment_selected .t_others .datetime {
+	color: #999;
+}
+.comment_item .t_others .reply {
+	float:right;
+	display:none;
+}
+#CommentAddForm label {margin-right:3px;}
+#CommentAddForm .submit{
+	text-align:right;
+}
+
+.CommentBox h2 {
+	height:28px;
+	line-height:26px;
+	padding:10px 20px 0;
+	background-color:#F5F8FD;
+}
+.CommentBox h2 .title {
+	float:left;
+	font-size:18px;
+	line-height:18px;
+	_line-height:24px;
+	font-weight:bold;
+	font-family:微软雅黑,黑体;
+	_font-weight:normal;
+	padding-left:24px;
+	color:#464646;
+}
+</style>
+<div id="comment_wrapper">
+<div id="comment_list">
+	<div id="comment_items">
+	</div>
+	<div class="comment_item comment_more">
+		<div>
+		<a href="#">查看所有<span style="color:red">1545</span>条评论&nbsp;&gt;&gt;</a>
+		</div>
+	</div>
+</div>
+<div class="CommentBox">
+<h2><span class="title">我要评论</span></h2>
+<!-- 'class'=>'form-horizontal' -->
+{{$this->Form->create('Comment',array('action'=>'add','onsubmit'=>'return submitaddcomment(this);','class'=>'form-horizontal'))}}
+	{{if empty($CurrentUser['id'])}}
+	{{$this->Form->input('username',array('label'=>__('用户名'),'after'=>'&nbsp;&nbsp;<a href="http://login.sina.com.cn/cgi/register/reg_sso_comment.php?entry=comment">快速注册新用户</a>'))}}
+	{{$this->Form->input('password',array('type'=>"password",'label'=>__('密&#12288;码'),'after'=>'&nbsp;&nbsp;<a href="https://login.sina.com.cn/getpass.html">忘记密码？</a>'))}}
+	{{/if}}
+	{{$this->Form->input('data_id',array('type'=>'hidden','value'=>$current_data_id))}}
+	{{$this->Form->input('type',array('type'=>'hidden','value'=>$current_model))}}
+	{{$this->Form->input('body',array('label'=>false,'type'=>'textarea','rows'=>4))}}
+{{$this->Form->end(array('label'=>__('Submit Comment'),'class'=>'btn btn-primary'))}}
+</div>
+</div>
+<script type="text/javascript">
+
+function loadCommentData(){
+	$.ajax({
+		async:true,
+		type:'get',
+		success:function(request, xhr) {
+			for(var i in request){
+				addCommintItem(request[i]['Comment']);
+			}
+		},
+		url:"{{$this->Html->url(array('controller'=>'comments','action'=>'getlist',$current_model,$current_data_id,'ext'=>'json'))}}",		
+		dataType:'json'
+	});
+}
+loadCommentData();
+
+function addCommintItem(item){
+	var str = '<div newsid="27-1-699265" channel="jc" class="comment_item">'
++'<div class="t_info">'
++'<span class="t_username">'+item['username']+'</span><br><span class="t_area"></span>'
++'</div>'
++'<div class="t_txt">'+item['body']+'</div>'
++'<div class="t_others">'
++'<span class="reply" style="display: none;">'
++'<a onclick="return false;" style="margin-right:18px;" href="#">回复</a>'
++'<a onclick="return false;" style="margin-right:0px;" href="#">支持</a>'
++'</span>'
++'<span class="datetime">'+item['created']+'</span>'
++'</div>'
++'<div style="clear:both"></div>'
++'</div>';
+	$('#comment_items').append(str);
+}
+
+function submitaddcomment(form){
+	$.ajax({
+		async:true,
+		type:'post',
+		success:function(request, xhr) {
+			if(request.success){
+				showSuccessMessage(request.success);
+				if(request['Comment']){
+					addCommintItem(request['Comment']);
+				}
+			}
+			else{
+				showErrorMessage(errorinfo);				
+			}
+		},
+		url:"{{$this->Html->url(array('controller'=>'comments','action'=>'add'))}}",
+		data:$(form).serialize(),
+		dataType:'json'
+	}) ;
+	return false;
+}
+//]]>
+</script>

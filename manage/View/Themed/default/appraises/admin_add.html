@@ -1,0 +1,118 @@
+<div id="{{$pageID}}">
+<?php 
+echo $this->MForm->form($current_model);
+?>
+  	<div >
+  		<?PHP echo $this->MForm->input('id');echo $this->MForm->input('name'); ?>
+  		<?PHP echo $this->MForm->input('columns',array('value'=>1)); ?>
+  	</div>
+      <div>
+          <?PHP echo $this->MForm->input('is_require'); ?>
+          <input name="edit-intro" type="checkbox" id="show_content"/>
+          <label for="show_content">说明</label>
+          <?PHP echo $this->MForm->input('questiontype'); ?>
+          
+          <span id="select-panel-set-check" style="display:none;">
+          	<?PHP echo $this->MForm->input('minselect',array('value'=>1)); ?>
+          	<?PHP echo $this->MForm->input('maxselect',array('value'=>0)); ?>
+          </span>
+  </div>
+      <div id="select-options-manage" >
+      		<button class="ui-state-default ui-corner-all" type="button" style="margin:5px" id="addoptionlist">增加选项</button>
+      		<ul id="select-option-list" class="select-option-list">
+      			
+      			<?PHP foreach($options_list as $key => $options) { 
+      				$options = $options['Appraiseoption'];
+      			?>
+				<li>
+					<table align="center" width="99%"><tbody>
+						<tr align="center">
+					<td><?PHP echo $this->MForm->input('Appraiseoption.'.$key.'.id',array('value'=> $options['id'])); echo $this->MForm->input('Appraiseoption.'.$key.'.name',array('value'=>$options['name'],'div'=>false,'label'=>false)); ?></td>
+					<td><?PHP echo $this->MForm->input('Appraiseoption.'.$key.'.withinput',array('type'=>'checkbox','value'=> $options['withinput'],'label'=>'带文本框','div'=>false)); ?>
+					</td>
+					<td><?PHP echo $this->MForm->input('Appraiseoption.'.$key.'.optiontype',array('type'=>'select','value' => $options['optiontype'],'options'=>array('x'=>'x','y'=>'y','z'=>'z'),'div'=>false,'label'=>false)); ?></td>
+				<td width="62">
+				<button class="btn deleteoption" data-id="{{$options['id']}}" type="button">删除</button>
+				</td></tr></tbody></table>
+				</li>
+				<?PHP } ?>
+		</ul>
+	</div>
+    <div class="intro-panel" style="display:none;">
+      <div>简介文字</div>
+          <div>
+            <textarea name="content" cols="80" rows="5"></textarea>
+          </div>
+   </div>
+   <div class="clear"></div>
+  <div class="clear"></div>
+   <?PHP echo $this->MForm->end('submit'); ?>
+</div>
+<script>
+
+
+function deleteselectoption(obj,id)
+{
+	
+}
+
+$(function(){
+	$('#addoptionlist','#{{$pageID}}').click(function(){
+		var i = $('#select-option-list li','#{{$pageID}}').size();
+		var str='<li><table align="center" width="99%"><tbody><tr align="center">'+
+		'<td><input type="text" id="AppraiseoptionSelectiName" value="[空白选项]" name="data[Appraiseoption][Selecti][name]"></td>'+
+		'<td><input type="checkbox" id="AppraiseoptionSelectiWithinput" value="1" name="data[Appraiseoption][Selecti][withinput]">'+
+		'<label for="AppraiseoptionSelectiWithinput">带文本框</label></td>'+	
+		'<td><select id="AppraiseoptionSelectiOptiontype" name="data[Appraiseoption][Selecti][optiontype]"><option value="x">x</option><option value="y">y</option><option value="z">z</option></select></td>'+
+		'<td width="62"><button class="btn deleteoption" type="button">删除</button></td>'+
+		'</tr></tbody></table></li>';	
+		i++;	
+		str = str.replace(/Selecti/g,i);
+		$('#select-option-list','#{{$pageID}}').append($(str));
+		
+	});
+	$('.deleteoption','#{{$pageID}}').on('click',function(){
+		var obj = this;
+		var id = $(this).data('id');
+		if(id > 0){
+			if(confirm('确定要从服务器删除这个选项？')){
+				$.ajax({
+					url:' {{Router::url('/admin/appraiseoptions/trash/');}}'+id,
+					data:{},
+					success:function(result,textStatus){
+						if(result.success && result.success!=""){
+							var thisli = $(obj).parents('li')[0];
+							$(thisli).remove();
+						}
+						else{
+							alert('删除失败');	
+						}
+					},
+					dataType:"json",
+				    cache:false
+				});
+			}
+		}
+		else{
+			var thisli = $(obj).parents('li')[0];
+			$(thisli).remove();
+		}
+	});
+	
+	$('#AppraiseQuestiontype','#{{$pageID}}').bind('change',function(){
+		var value = this.value;
+		if(value=='checkbox' || value=='radio' || value=='select'){
+			$('#select-options-manage','#{{$pageID}}').show();
+		}
+		else{
+			$('#select-options-manage','#{{$pageID}}').hide();
+		}
+		if(value=='checkbox'){
+			$('#select-panel-set-check','#{{$pageID}}').show();
+		}
+		else{
+			$('#select-panel-set-check','#{{$pageID}}').hide();
+		}
+	}).trigger('change');
+});
+</script>

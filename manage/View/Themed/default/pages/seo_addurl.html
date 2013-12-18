@@ -1,0 +1,65 @@
+<style>
+#seo_addurl iframe {
+	width:100%;height:500px;
+}
+#seo_addurl .tab-pane a {color:red;}
+</style>
+<div id="seo_addurl" class="tabbable tabs-left">
+              <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#baidu">Baidu</a></li>
+                <li class=""><a data-toggle="tab" href="#google">Google</a></li>
+                <li class=""><a data-toggle="tab" href="#bing">Bing</a></li>
+                <li class=""><a data-toggle="tab" href="#sogou">搜狗</a></li>
+                <li class=""><a data-toggle="tab" href="#360">360</a></li>
+                <li class=""><a data-toggle="tab" href="#soso">搜搜</a></li>
+                <li class=""><a data-toggle="tab" href="#youdao">有道</a></li>
+                 <li class=""><a data-toggle="tab" href="#tom">Tom</a></li>
+              </ul>
+              <div class="tab-content">
+              	若没有自动打开网址提交页面，请点击链接打开。
+                <div id="baidu" class="tab-pane active">
+                	<a target="_blank" href="http://www.baidu.com/search/url_submit.html">http://www.baidu.com/search/url_submit.html</a>
+                  <iframe src="http://www.baidu.com/search/url_submit.html"></iframe>
+                </div>
+                <div id="google" class="tab-pane">
+                	<a target="_blank" href="https://www.google.com/webmasters/tools/submit-url?hl=zh-CN">https://www.google.com/webmasters/tools/submit-url?hl=zh-CN</a>
+                	<iframe src="about:blank" data-src="https://www.google.com/webmasters/tools/submit-url?hl=zh-CN"></iframe>
+                </div>
+                <div id="bing" class="tab-pane">
+                	<a target="_blank" href="http://www.bing.com/toolbox/submiturl?cc=cn">http://www.bing.com/toolbox/submiturl?cc=cn</a>
+                	<iframe src="about:blank" data-src="http://www.bing.com/toolbox/submiturl?cc=cn"></iframe>
+                </div>
+                <div id="sogou" class="tab-pane">
+                	<a target="_blank" href="http://www.sogou.com/feedback/urlfeedback.php">http://www.sogou.com/feedback/urlfeedback.php</a>
+                	<iframe src="about:blank" data-src="http://www.sogou.com/feedback/urlfeedback.php"></iframe>
+                </div>
+                <div id="360" class="tab-pane">
+                	<a target="_blank" href="http://hao.360.cn/url.html">http://hao.360.cn/url.html</a>
+                	<iframe src="about:blank" data-src="http://hao.360.cn/url.html"></iframe>
+                </div>
+                <div id="soso" class="tab-pane">
+                	<a target="_blank" href="http://www.soso.com/help/usb/urlsubmit.shtml">http://www.soso.com/help/usb/urlsubmit.shtml</a>
+                	<iframe src="about:blank" data-src="http://www.soso.com/help/usb/urlsubmit.shtml"></iframe>
+                </div>
+                <div id="youdao" class="tab-pane">
+                	<a target="_blank" href="http://tellbot.yodao.com/report">http://tellbot.yodao.com/report</a>
+                	<iframe src="about:blank" data-src="http://tellbot.yodao.com/report"></iframe>
+                </div>
+                <div id="tom" class="tab-pane">
+                	<a target="_blank" href="http://search.tom.com/tools/weblog/log.php">http://search.tom.com/tools/weblog/log.php</a>
+                	<iframe src="about:blank" data-src="http://search.tom.com/tools/weblog/log.php"></iframe>
+                </div>
+                
+                
+              </div>
+</div>
+<script>
+$(function(){
+	$('#seo_addurl .nav-tabs').find('a').click(function(){
+		var ifr = $($(this).attr('href')).find('iframe');
+		if(ifr.attr('src')=='about:blank'){
+			ifr.attr('src',ifr.data('src'));
+		}
+	})
+});
+</script>

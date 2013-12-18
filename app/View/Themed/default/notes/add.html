@@ -1,0 +1,11 @@
+
+<div id="comment_wrapper">
+<div class="CommentBox">
+<h2><span class="title">我的记事</span></h2>
+{{$this->Form->create('Note',array('action'=>'add'))}}
+	{{$this->Form->input('cate_id')}}
+	{{$this->Form->input('name')}}
+	{{$this->Form->input('content',array('label'=>false,'type'=>'textarea','rows'=>4))}}
+{{$this->Form->end(array('label'=>__('Submit')))}}
+</div>
+</div>

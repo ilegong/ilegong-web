@@ -1,0 +1,14 @@
+<div class="users form">
+<?php 
+echo $this->MForm->create('Tool',array('type'=>'get'));
+?>
+<fieldset>
+       <div id="article-main" class="tab-pane">
+       	 <?php
+    echo $this->MForm->input('uplang',array('div'=>'wide','label'=>'更新语言缓存','options'=>$selectlans));
+		 ?>
+       </div> 
+ </fieldset>
+<?php echo $this->MForm->end(array('label'=>__('Submit'))); ?>
+   
+</div> 

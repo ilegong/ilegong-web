@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link href="/favicon.ico" type="image/x-icon" rel="icon" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>System error</title>
+<?php
+        echo $this->Html->css(array(
+            '/css/reset', 
+			'/css/admin',
+        ));
+       
+?>
+<script type="text/javascript">
+var BASEURL = "{{APP_SUB_DIR}}";
+</script>
+</head>
+
+<body>
+
+<div id="remote-dialog" title="add Menu" class="dialog"></div>
+
+{{$content_for_layout}}
+
+</body>
+
+</html>

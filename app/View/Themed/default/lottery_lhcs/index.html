@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>{{$pageTitle}}-{{$site[title]}}</title>
+<META NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+<meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}" />
+<meta name="Description" content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}" />
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+	{{$this->Html->script(array('html5.js'))}}
+<![endif]-->
+{{$this->Html->meta('icon')}}
+{{if $this->request->is('mobile')}}
+	{{$this->Combinator->less('bootstrap');}}
+	{{$this->Combinator->less('responsive');}}
+{{else}}
+	{{$this->Combinator->less('bootstrap');}}
+{{/if}}	
+
+{{$this->Html->css(array('ui-customer',))}}
+{{$this->Html->script(array(
+            'jquery/jquery.min.js',
+            'bootstrap.min.js',
+        ));
+}}
+
+<script type="text/javascript">
+var BASEURL = "{{APP_SUB_DIR}}";
+var ADMIN_BASEURL = BASEURL+"/manage";
+</script>
+<style>
+.rules li{float:left;width:320px;}
+.alert {
+padding: 2px 2px;
+}
+</style>
+</head>
+<body>
+<div class="container clearfix">
+<div class="row-fluid">
+	<div class="ui-contain col-md-12">
+		<div class="ui-portlet">
+			<div class="clearfix ui-portlet-header" >
+			     <span class="title"><h3>特码</h3></span>            
+			</div>
+			<div class="ui-portlet-content">
+				{{loop $temas $tema}} {{$tema}}({{if $tema%12==0}}{{$all_shengxiaos[11]}} {{else}}{{$all_shengxiaos[$tema%12-1]}}{{/if}})&nbsp;&nbsp;&nbsp; {{/loop}}
+			</div>
+			<div class="ui-corner-bottom ui-portlet-content">
+			
+				<?php echo implode(',',$exclude_temas); ?>
+				<span class="title"><h3>近期开出特码</h3></span>
+				<p>
+				{{loop $lotteries $k $lottery}} <?php if($k>50) break; ?> {{$lottery['shengxiao']}}({{$lottery['tema']}})&nbsp;&nbsp;{{/loop}}
+				</p>
+			</div>
+		</div>
+	</div>
+</div>	
+<div class="row-fluid">
+	<div class="ui-contain col-md-12">
+		<div class="ui-portlet">
+			<div class="clearfix ui-portlet-header" >
+			     <span class="title"><h3>生肖</h3></span>            
+			</div>
+			<div class="ui-portlet-content">
+				{{loop $shengxiaos $shengxiao}} {{$shengxiao}}&nbsp;&nbsp;&nbsp; {{/loop}}
+			</div>
+			<div class="ui-corner-bottom ui-portlet-content">
+				<?php echo implode(',',$exclude_shengxiaos); ?>
+			</div>
+		</div>
+	</div>
+</div>	
+<div class="row-fluid">	
+	<div class="ui-contain col-md-12">
+		<div class="ui-portlet ">
+		<form method="post">
+			<div class="clearfix ui-portlet-header" >
+			   <span class="title"><h3>筛选规则</h3></span>            
+			</div>
+			
+			<ul class="nav nav-tabs" id="myTab" data-toggle="tabs">
+			  <li class="active"><a href="#blue-ball">特码</a></li>
+			  <li><a href="#red-ball">生肖</a></li>
+			</ul>			
+			<div class="tab-content">
+				<button type="submit" class="btn">提交</button>
+			  <div class="tab-pane active" id="blue-ball">
+				<fieldset>
+				  排除特码最低频率 <input type="text" name="explode_rate" value="{{$explode_rate}}">
+				  
+				    <div style="clear:both;"><hr></div>
+				    <ul class="rules">
+				    <?php for($i=1;$i<=200;$i++){ ?>
+				    <li><label class="checkbox">
+						<?php
+						$lottery_histories = '';
+						$total = 0;
+						$checked_occur_sum = $explode_rate;
+						$t_rate = $rates['param'.(100+$i)];
+						foreach($lotteries as $k => $item){
+							if($k>=90) break;
+							if($k==30 || $k==60) $lottery_histories .= '<br>';
+							$total += $item['param'.(100+$i)];
+							$lottery_histories .= $item['param'.(100+$i)]?'<font color="blue">1</font>':'0';
+						 }
+
+						 $checked = false;
+						 if($total<=$checked_occur_sum || !empty($_REQUEST['tema_tema_'.$i])){
+							$checked = true;
+						 }
+						 
+						 ?><br/>
+						 <input type="checkbox" name="tema_tema_<?php echo $i;?>" value="1" {{if $checked }}checked="checked"{{/if}}>
+						 <?php if($checked){ echo '<font color="red">';} ?>
+						 排除前第<?PHP echo $i; ?>期特码  <?PHP echo $total;?><span class="alert alert-info">({{$lotteries[($i-1)]['tema']}})</span>
+						<?php if($checked){ echo '</font>'; } ?>
+						<br/>
+						 <?php echo $lottery_histories; ?> 
+				    </label></li>
+				    <?PHP } ?>
+				    
+				    </ul>
+				     <div style="clear:both;"><hr></div>
+				   
+				  </fieldset>
+			  </div>
+			  <div class="tab-pane" id="red-ball">
+			  <!-- 生肖的概率 -->
+			   <ul class="rules">
+				    <?php for($i=1;$i<=200;$i++){ ?>
+				    <li><label class="checkbox">
+					<?php
+						$lottery_histories = '';
+						$total = 0;
+						$checked_occur_sum = 2;
+						$t_rate = $rates['param'.(500+$i)];
+						foreach($lotteries as $k => $item){
+							if($k>=90) break;
+							if($k==30 || $k==60) $lottery_histories .= '<br>';
+							$total += $item['param'.(500+$i)];
+							$lottery_histories .= $item['param'.(500+$i)]?'<font color="blue">'.$item['param'.(500+$i)].'</font>':'0';
+						 }
+						 $checked = false;
+						 if($total<=$checked_occur_sum || !empty($_REQUEST['shengxiao_shengxiao_'.$i])){
+							$checked = true;
+						 }
+						 ?><br/>
+						 <input type="checkbox" name="shengxiao_shengxiao_<?php echo $i;?>" value="1" {{if $checked }}checked="checked"{{/if}}>
+						 <?php if($checked){ echo '<font color="red">';} ?>
+						 与前第<?PHP echo $i; ?>期生肖相同  <?PHP echo $total;?><span class="alert alert-info">({{$lotteries[($i-1)]['shengxiao']}})</span>
+						<?php if($checked){ echo '</font>'; } ?>
+						<br/>
+						 <?php echo $lottery_histories; ?> 
+				    </label></li>
+				    <?PHP } ?>
+
+
+			  </div>
+			  
+			  <button type="submit" class="btn">提交</button>
+			</div>
+
+		</form>
+		</div>
+	</div>
+</div>
+</div>
+<script>
+$('#myTab a').click(function (e) {
+	  e.preventDefault();
+	  $(this).tab('show');
+	})
+	
+</script>

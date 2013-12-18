@@ -1,0 +1,52 @@
+<ul class="ui-side-menu">
+		<li>
+			<h3 ><a href="#">信息发布</a></h3>
+		<!-- <ul>		
+		<li {{if $action=='myquestion'}}class="ui-state-active"{{/if}}><a href="/users/myquestion">我的提问</a></li>
+		<li {{if $action=='myweibo'}}class="ui-state-active"{{/if}}><a href="/users/myweibo">我的回答</a></li>
+		<li {{if $action=='myvote'}}class="ui-state-active"{{/if}}><a href="/users/myvote">我的投票</a></li>
+		</ul>
+		 -->
+		</li>
+		
+		<li>
+			<h3 ><a href="#">个人信息</a></h3>
+			<ul>
+			<li {{if $action=='edit'}}class="ui-state-active"{{/if}}><?php echo $this->Html->link(__('Edit Profile', true), array('controller' => 'users','action'=>'edit','plugin' => null ,)); ?></li>
+	        <li {{if $action=='editpassword'}}class="ui-state-active"{{/if}}><?php echo $this->Html->link(__('Edit Password', true), array('controller' => 'users','action'=>'editpassword','plugin' => null ,)); ?></li>
+			</ul>
+		</li>
+		{{$this->Hook->call('userLeftmenu',array($type))}}
+</ul>
+
+<script>
+
+$(function(){
+
+	var menu_level = 0;
+	//$('.ui-side-menu')
+	function build_menu(menuobj,level){
+		level++;
+		menuobj.children('li').each(function(i){
+			var inner_obj = $( "ul", this );
+			if(inner_obj.size())
+			{
+				$( "h3", this ).addClass('ui-widget-header');
+				//$( "h3", this ).append('<ul class="ui-widget ui-float-right"><li class=""> <span class="ui-icon ui-icon-close" > </span></li></ul>')
+				//inner_obj.children('li').css('paddingLeft',(15*level)+'px');
+				build_menu(inner_obj,level);
+			}
+			else
+			{
+				$(this).addClass('ui-state-default');
+				$(this).hover(function(){
+					$(this).addClass('ui-state-hover');
+				},function(){
+					$(this).removeClass('ui-state-hover');
+				});
+			}
+		});
+	}
+	build_menu($('.ui-side-menu'),menu_level);
+});
+</script>

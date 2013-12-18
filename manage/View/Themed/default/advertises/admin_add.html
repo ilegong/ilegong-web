@@ -1,0 +1,16 @@
+<div class="roles form">
+<?PHP
+	echo $this->MForm->create('Advertise',array('type'=>'file','id'=>'AdvertiseAddForm'));
+?>
+        <fieldset>
+        <?php
+        echo $this->MForm->input('cate_id');
+        echo $this->MForm->input('name');
+		echo $this->MForm->input('advertise_url');
+		echo $this->MForm->input('published'); 
+		echo $this->MForm->swfupload('photo');
+		//echo $this->MForm->ckeditor('content',array('label'=>false));
+        ?>
+        </fieldset>
+    <?php echo $this->MForm->end(__('Submit',true));?>
+</div>

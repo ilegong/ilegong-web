@@ -1,0 +1,119 @@
+<script>
+var setAmount={
+		min:1,
+		max:999,
+		reg:function(x){
+		return new RegExp("^[1-9]\\d*$").test(x);
+		},
+		amount:function(obj,mode){
+		var x=$(obj).val();
+		if (this.reg(x)){
+		if (mode){
+		x++;
+		}else{
+		x--;
+		}
+		}else{
+		alert("请输入正确的数量！");
+		$(obj).val(1);
+		$(obj).focus();
+		}
+		return x;
+		},
+		reduce:function(obj){
+		var x=this.amount(obj,false);
+		if (x>=this.min){
+		$(obj).val(x);
+		}else{
+		alert("商品数量最少为"+this.min);
+		$(obj).val(1);
+		$(obj).focus();
+		}
+		},
+		add:function(obj){
+		var x=this.amount(obj,true);
+		if (x<=this.max){
+		$(obj).val(x);
+		}else{
+		alert("商品数量最多为"+this.max);
+		$(obj).val(999);
+		$(obj).focus();
+		}
+		},
+		modify:function(obj){
+		var x=$(obj).val();
+		if (x<this.min||x>this.max||!this.reg(x)){
+		alert("请输入正确的数量！");
+		$(obj).val(1);
+		$(obj).focus();
+		}
+		}
+}
+
+</script>
+
+<h2 class="Content-title"><?php echo $Product['Product']['name']; ?></h2>
+	    <div class="Content-info">
+	   阅读次数： 
+	   <span class="ui-stats-num Stats-Product-{{$Product['Product']['id']}}-view_nums"><?php echo $Product['Product']['views_count']; ?></span>
+	    </div>
+	    <div  id="productinfo">
+	    {{template Elements/images_zoom}}
+	    <ul style="float:left;margin-left: 10px;display: inline;">
+            <li>价格： {{$Product['Product']['price']}}</li>
+            <li>库存： 123</li>
+            <li>促销信息： 优惠100元</li>
+            <li>我要买：<a class="reduce" onclick="setAmount.reduce('#pamount')" href="javascript:void(0)">-</a>
+              <input id="pamount" value="1" type="text" size="3" name="shoppingnum">
+              <a class="add" onclick="setAmount.add('#pamount')" href="javascript:void(0)">+</a> </li>
+            <li style="line-height:32px;padding: 10px;"><a aria-disabled="false" class="show-as-button ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
+ onclick="return addtoCart({{$Product['Product']['id']}},1);" href="javascript:void(0);"><span class="ui-button-text">添加到购物车</span></a></li>
+        </ul>
+	    </div>
+<div style="clear:both;"></div>
+<div class="tabs">
+<ul>
+<li><a href="#product-description">产品介绍</a></li>
+<li><a href="#product-params">产品参数</a></li>
+<li><a href="#product-reviews">评价详情</a></li>
+<li><a href="#product-deal-record">交易记录</a></li>
+</ul>
+<div id="product-description">
+	    <div class="Content-body">
+        <div class="clear"></div>
+	    <?php echo $Product['Product']['content']; ?>
+	    </div>
+</div>
+<div id="product-params">
+<style>
+#param-tb {
+    border: 1px solid #C5D7ED;
+    border-collapse: collapse;
+    color: #333333;
+    margin: 0 -1px;
+}
+#param-tb th, #param-tb td {
+    border: 1px solid #C5D7ED;
+    line-height: 28px;
+    padding: 0 15px;
+}
+#param-tb .val{
+	width:390px;
+}
+#param-tb .val span {
+    display: block;
+    line-height: 28px;
+}
+</style>
+<table  cellspacing="0" cellpadding="0" border="1" id="param-tb" style="border-color:#c5d7ed">
+	{{loop $Product['ModelSplitInfo'] $key $value}}	
+		<?PHP if(in_array($key,array('id','deleted'))) continue; ?>		
+		<tr><td nowrap="nowrap">{{$ProductSplitSchema[$key]}}</td>
+            <td class="val"><span>{{if is_numeric($value)&& isset($ProductSplitOptions[$value])}} {{$ProductSplitOptions[$value]}} {{else}} {{$value}}{{/if}}</span></td>
+        </tr>
+	{{/loop}}
+</table>
+</div>
+<div id="product-reviews"></div>
+<div id="product-deal-record"></div>
+</div>

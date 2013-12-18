@@ -1,0 +1,38 @@
+<div id="editor" style="width: 824px; height: 436px;">
+	{{htmlspecialchars($filecontent)}}
+</div>
+
+<link rel="stylesheet" href="/saecms/trunk/js/ace/demo/kitchen-sink/styles.css" type="text/css" media="screen" charset="utf-8">
+<script>
+
+var require = {
+        baseUrl: 'http://localhost/saecms/trunk/js/ace/',
+        paths: {
+            ace: "lib/ace"
+        }
+    };
+var currentdoc = {name:'PHP',path:'docs/css.css',desc:'PHP'};
+</script>
+<script src="/saecms/trunk/js/ace/demo/kitchen-sink/require.js" data-main="demo/kitchen-sink/demo" type="text/javascript"></script>
+<script>
+/*
+define(function(require, exports, module) {
+"use strict";
+	alert(123);
+});
+
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/twilight");
+    editor.session.setMode("ace/mode/javascript");
+    var EditSession = require("ace/edit_session").EditSession
+    var js = new EditSession("some js code")
+    var css = new EditSession(["some", "css", "code here"])
+    // and then to load document into editor just call
+    editor.setSession(js)
+    editor.getSession().setTabSize(4);
+    editor.getSession().setUseSoftTabs(true);
+    document.getElementById('editor').style.fontSize='12px';
+    editor.getSession().setUseWrapMode(true);
+    editor.resize();
+    */
+</script>

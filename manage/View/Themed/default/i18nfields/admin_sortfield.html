@@ -1,0 +1,39 @@
+<div class="form">
+<style type="text/css">
+.sortable { list-style-type: none; margin: 20px 0; padding: 0; margin}
+{if count($fields)>10}
+.sortable li { margin: 5px 2px 2px 12px;padding:5px; padding: 5px 10px;float: left;text-align: left;}
+{else}
+.sortable li { margin: 5px 2px 2px 12px;padding:5px; padding: 5px 10px;width:300px;text-align: left;}
+{/if}
+.sortable li span { position: absolute; margin-left: -1.3em; }
+
+	
+</style>
+
+<ul class="sortable">
+<?PHP
+	foreach($fields as $key=> $value)
+	{
+		echo '<li id="'.$modelClass.'_'.$value['I18nfield']['id'].'" class="ui-state-default">'.$value['I18nfield']['translate'].'-'.$value['I18nfield']['name'].'</li>';
+	}
+?>
+</ul>
+</div>
+
+<script>
+$(document).ready(function() {	
+	$(".sortable").sortable({
+		update: function(event, ui) {
+			var orders = $(this).sortable('serialize');
+//			alert(orders);
+			$.post(
+					' {{$this->Html->url(array_merge(array('controller' => 'ajaxes','action'=>'sortfield',),$this->request->params['named']));}}',
+					orders
+			);
+		},
+		placeholder: 'ui-state-highlight'
+	});
+	$(".sortable").disableSelection();
+});
+</script>

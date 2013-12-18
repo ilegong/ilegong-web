@@ -1,0 +1,88 @@
+{{$this->Html->css(array(
+           '/css/jqzoom',
+        ));
+}}
+{{$this->Javascript->link(array(			
+            '/js/jquery/jquery.marquee.js',
+            '/js/jquery/jqzoom.pack.1.0.1.js',
+        ));
+}}
+<style>
+#preview { float: left; margin-bottom: 20px; width: 312px;}
+#spec-n1 { border: 1px solid #E4E4E4;width: 310px;}
+.list-h li, .list-h dl {float: left;}
+#spec-thumb-list img { border: 1px solid #E8E8E8; padding: 2px;}
+#spec-thumb-list {height: 56px;padding: 0;position: relative;width: 312px;}
+#spec-thumb-list .control {
+    background-image: url("/img/icon_clubs.gif");
+    background-repeat: no-repeat;
+    cursor: pointer;
+    height: 45px;
+    position: absolute;
+    top: 10px;
+    width: 10px;
+}
+#marquee-left {background-position: -68px -380px;left: 0px;}
+#marquee-right {background-position: -79px -380px;right: 0px;}
+</style>
+<script type="text/javascript">
+<!--
+$(function(){
+        $(".marquee").each(function() {
+		$(this).marquee({btn_pre:'#marquee-left',btn_next:'#marquee-right'});
+	});
+	$(".jqzoom").jqzoom({'zoomWidth':400,'zoomHeight':300,'position':"right",'title':false,'preloadImages':false});
+	$("#spec-thumb-list img").bind("mouseover",function(){	
+		var src=$(this).attr("src");
+		$("#spec-n1 img").eq(0).attr({src:src.replace("_40x40.jpg","_310x310.jpg")});
+		$("#spec-n1 a").attr('href',src.replace("_40x40.jpg",""));
+		$(this).css({"border":"2px solid #ff6600","padding":"1px"});
+	}).bind("mouseout",function(){
+		$(this).css({"border":"1px solid #ccc","padding":"2px"});
+	});
+	
+});
+//-->
+</script>
+
+{{if !empty($Taobaoke['Taobaoke']['item_imgs'])}}
+<div id="preview">
+				<div onclick="" id="spec-n1">
+				<a  class="jqzoom" onclick="return false;" href="{{$Taobaoke['Taobaoke']['item_imgs'][0]['url']}}" >
+				<img width="310" alt="" src="{{$Taobaoke['Taobaoke']['item_imgs'][0]['url']}}_310x310.jpg" 
+				onerror="this.src='{{$this->Html->webroot('/img/nophoto.gif')}}'">
+				</a>
+				</div>
+				<div id="spec-thumb-list" >
+				    <div id="marquee-left" class="control"></div>
+					<div id="marquee-right" class="control"></div>	
+					<div class="marquee" direction="left" step="1" pause="2000" style="position: relative; overflow: hidden; margin-left: 12px;width: 290px; height: 56px;">
+						<ul class="list-h" style="width: 280px; overflow: hidden; position: absolute; left: 0pt; top: 0pt; ">
+				        {{loop $Taobaoke['Taobaoke']['item_imgs'] $item_img}}
+					    	<li><img width="50" height="50" name="{{$item_img['url']}}" alt="{{$Taobaoke['Taobaoke']['name']}}" src="{{$item_img['url']}}_40x40.jpg" onerror="this.src='http://www.360buy.com/images/none/none_50.gif'"></li>
+					    {{/loop}} 
+						</ul>
+					</div>
+				</div>
+                
+</div>
+{{else}}
+<div id="preview">
+				<div onclick="" id="spec-n1">
+				<a  class="jqzoom" onclick="return false;" href="{{$Taobaoke['Taobaoke']['pic_url']}}" >
+				<img width="310" alt="" src="{{$Taobaoke['Taobaoke']['pic_url']}}_310x310.jpg" 
+				onerror="this.src='{{$this->Html->webroot('/img/nophoto.gif')}}'">
+				</a>
+				</div>
+				<div id="spec-thumb-list" >
+				    <div id="marquee-left" class="control"></div>
+					<div id="marquee-right" class="control"></div>	
+					<div class="marquee" direction="left" step="1" pause="2000" style="position: relative; overflow: hidden; margin-left: 12px;width: 290px; height: 56px;">
+						<ul class="list-h" style="width: 280px; overflow: hidden; position: absolute; left: 0pt; top: 0pt; ">
+					    	<li><img width="50" height="50" name="{{$Taobaoke['Taobaoke']['pic_url']}}" alt="{{$Taobaoke['Taobaoke']['name']}}" src="{{$Taobaoke['Taobaoke']['pic_url']}}_40x40.jpg" onerror="this.src='http://www.360buy.com/images/none/none_50.gif'"></li>
+						</ul>
+					</div>
+				</div>
+                
+</div>
+{{/if}}

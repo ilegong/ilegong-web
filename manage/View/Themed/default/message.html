@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>{{$pageTitle}}-{{$site[title]}}</title>
+<META NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+<meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}" />
+<meta name="Description" content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}" />
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+{{$this->Html->meta('icon')}}
+{{$this->Html->css(array(
+            'bootstrap.min.css',
+           'ui-customer',
+        ));
+}}
+{{$this->Html->script(array(
+            'jquery/jquery.min.js',
+            'bootstrap.min.js',
+        ));
+}}
+</head>
+
+<body>
+<div id="wrapper" class="install">
+    <div class="modal fade in" style="width:500px;">
+    <div class="modal-header">
+    <h3>{{__('Notice Message')}}</h3>
+    </div>
+    <?PHP
+    	 echo $this->Form->create('Install', array('class'=>'form-horizontal','url' => array('plugin' => 'install', 'controller' => 'install', 'action' => 'check')));
+    ?>
+    <div class="modal-body">
+    	{{$message}}
+    </div>
+    <div class="modal-footer">
+    	{{if $url}}
+		<a href="{{eval echo $this->Html->url($url,array('class'=>"btn btn-primary"));}}">{{__('Click here to go!')}}</a>
+		<meta http-equiv="refresh" content="{{$seconds}}; url={{$this->Html->url($url);}}" />
+		{{/if}}
+    </div>
+    {{$this->Form->end();}}
+    </div>
+    
+<script>
+$(document).ready(function(){
+	$('.modal').css('margin-top',-$('.modal').height()/2);
+	$('.modal').css('margin-left',-$('.modal').width()/2);
+});
+</script>
+</div>
+    </body>
+</html>
+	

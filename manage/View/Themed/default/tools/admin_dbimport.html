@@ -1,0 +1,55 @@
+<script>
+
+$(function(){
+	$('#style_setting').find('button').unbind('click').click(function(){
+		var obj = this;
+		if($(this).hasClass('disabled')){
+			return false;
+		}
+		$.ajax({
+			async:true,
+			type:'post',
+			success:function(request, xhr) {				
+				//showDialogMessage(request);
+				$('#style_setting').find('.btn-success').removeClass('btn-success').removeClass('disabled').addClass('btn-primary').html('启用此风格');
+				$(obj).removeClass('btn-primary').addClass('btn-success').addClass('disabled').html('<i class="icon-ok icon-white"></i>已启用');
+			},
+			url:ADMIN_BASEURL+'/admin/settings/ajaxesave',
+			data:{'setting[Site][style]':$(this).data('styleid')},
+			dataType:'json'
+		}) ;
+		return false;
+	})
+})
+
+</script>
+<div id="style_setting" class="languages index">    
+    <pre class="prettyprint well">导入时，自动从第一个分卷开始导入，直至最后一个分卷导入完成。</pre>
+
+    <table class="table table-striped table-hover">
+    <?php
+        $tableHeaders =  $this->Html->tableHeaders(array(
+            '文件名',
+            '文件大小',
+			'分卷数',
+            __('Actions'),
+        ),array('class'=>'ui-state-default'));
+
+        echo '<thead>'.$tableHeaders.'</thead>';
+		
+		if(is_array($exportlog)){
+        	$rows = array();
+        	foreach ($exportlog AS $key => $export) {
+            	$actions = ' ' . $this->Html->link(__('Import'), array('controller'=>'tools','action' => 'dbimport',$key),array('class'=>'btn'));			
+				$rows[] = array(
+                	$key,
+                	format_filesize($exportsize[$key]),
+                	$exportvolume[$key],
+                	$actions,
+            	);
+        	}
+        	echo $this->Html->tableCells($rows);
+		}
+    ?>
+    </table>
+</div>

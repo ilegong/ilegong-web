@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{{$pageTitle}}-{{$site[title]}}</title>
+<META NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+<meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}" />
+<meta name="Description" content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}" />
+{{$this->Html->meta('icon')}}
+{{$this->Html->css(array(
+            '960_24_col',
+            '/ui-themes/flick/jquery-ui-1.8.15.custom',
+             '/ui-themes/saecms/jquery-ui-themes.css',
+            'base',
+            'taobao/css',
+           'ui-customer',
+        ));
+}}
+{{$this->Javascript->link(array(
+            'http://lib.sinaapp.com/js/jquery/1.5.2/jquery.min.js',
+            //'jquery/jquery-1.5.2.min.js',
+            'jquery/jquery.cookie.js',        
+            'i18n/language-zh-CN.js',
+            'front.js',
+            'common.js',
+            'taobao/taobaoke.js','jquery/jquery.masonry.min.js','jquery/jquery.infinitescroll.min.js',
+            'jquery/jquery.lazyload.js',
+            'jquery/jquery.pnotify.min.js',
+        ));
+}}
+{{if !empty($_SESSION['Auth']['Staff']) }}
+<!-- 当为后台登陆后，才加载jquery ui，与模板编辑的js -->
+{{$this->Javascript->link(array(
+            'jquery/jquery-ui-1.8.11.custom.min.js',           
+            'portlet.js',            
+            '/ckeditor/ckeditor.js',
+            '/js/swfupload/swfupload.js',
+            '/js/swfupload/swfupload.queue.js',
+			'/js/swfupload/swfupload.cookies.js',
+            '/js/swfupload/fileprogress.js',
+            '/js/swfupload/handlers.js',       
+        ));
+}}
+<script type="text/javascript">
+var viewFileName = "{{$viewfile_for_layout}}";
+var current_controller = "{{$current_controller}}";
+var current_model = "{{$current_model}}";
+var current_action = "{{$current_action}}";
+var current_pass = "{{implode('/',$current_pass)}}";
+</script>
+{{else}}
+	{{$this->Javascript->link(array(
+	            'jquery/jquery-ui-1.8.12.front.min.js', 
+	        ));
+	}}
+{{/if}}
+</head>
+<body>
+{{if !empty($_SESSION['Auth']['Staff']) }}
+<div class="flash ui-wedget" id="fsUploadProgress" style="position:absolute;width:210px;top:80px;right:30px; z-index: 10000000;">
+			<!-- This is where the file progress gets shown.  SWFUpload doesn\'t update the UI directly.
+						The Handlers (in handlers.js) process the upload events and make the UI updates -->
+</div> 
+{{/if}}
+<div id="header" >
+<div class="container_24 clearfix">
+	<!-- 
+  <div class="grid_7"> 
+  <a style="FLOAT: left" href="{{$this->Html->url('/')}}">{{$this->Html->image('/ui-themes/saecms/images/logo.png', array('height'=>45,'title' => $site[title],'alt' => $site[title]))}}</A>
+  </div>
+  
+  <div class="grid_17" style="text-align:right;">
+  
+  {{$this->Html->link('简体','/zh-cn'.$currentUrl)}}, {{$this->Html->link('繁体','/zh-tw'.$currentUrl)}}，{{$this->Html->link('英文版','/en-us'.$currentUrl)}}
+		<div>
+		{{$this->Html->link('Cart','/carts/listcart.html')}}
+		</div>	
+		{{template users/current_user}}
+	
+  </div>
+   -->
+</div>
+	<div class="container_24 clearfix" >			
+		{{template name="menus/apple"}}
+		<div  class="grid_24">
+		{{template name="Elements/navigation_header" plugin="Taobao"}}	
+		</div>
+	</div>	
+	<div  class="clear"></div>
+</div>
+
+<div id="maincontent" class="maincontent  clearfix">
+	{{$content_for_layout}}
+</div>
+
+{{template Elements/footer}}
+
+<div id="ajax_doing_help" title="提示" style="display:none;"></div>
+</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>{{__('Select File')}}</title>
+{{$this->Html->css(array(
+			'reset',
+			//Router::url('/admin/stylevars/getcss'),
+			'bootstrap.min.css',
+			'ui-customer',
+			'jquery.jgrowl.css',
+            'admin/filemanager.css',
+            'desktop/contextmenu/jquery.contextMenu.css',
+        ))}}
+<script type="text/javascript">
+var BASEURL  = "{{APP_SUB_DIR}}";
+var ADMIN_BASEURL = "{{ADMIN_SUB_DIR}}";
+</script>
+</head>
+<body>
+<div>
+<div id="uploader" method="post">
+<h1></h1>
+	<div class="alert alert-error">
+      <button data-dismiss="alert" class="close" type="button">×</button>
+      <strong>提示：</strong> 双击可选择插入文件.
+    </div>
+<div id="uploadresponse"></div>
+<input id="mode" name="mode" type="hidden" value="add" /> 
+<input id="currentpath" name="currentpath" type="hidden" /> 
+	
+</div>
+<div id="splitter">
+	<div id="filetree"></div>
+	<div>
+		<div class="navbar"><div class="navbar-inner">
+			<ul class="nav nav-pills nav-inverse" style="margin-bottom: 2px;">
+				<li><a id="home" href="#"><i class="icon-home"></i></a></li>
+				<li class="active"><a id="grid" href="#"><i class="icon-th"></i></a></li>
+				<li><a id="list" href="#"><i class="icon-list"></i></a></li>
+				<li><a id="newfolder" href="#" ><i class="icon-folder-open"></i></a></li>
+				<li><a id="uploadfile" href="#" style="padding:6px 5px 0" >
+					<span id="spanButtonPlaceholder_ckeditor"></span>
+				</a></li>
+				
+			</ul>
+		</div></div>
+		<div id="fileinfo">
+		<h1></h1>
+		</div>
+	</div>
+</div>
+
+</div>
+
+<!-- 后面为隐藏的div，创建文件夹，右键菜单，文件上传进度 -->
+
+<div id="modal-create-folder" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">{{__('Create Folder')}}</h3>
+	</div>
+	<div class="modal-body">
+		<p>请输入文件名<input id="fname" name="fname" type="text" value="new folder" /></p>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		<button class="btn btn-primary">{{__('Create Folder')}}</button>
+	</div>
+</div>
+
+
+
+<ul id="itemOptions" class="contextMenu">
+	<li class="select"><a href="#select"></a></li>
+	<li class="download"><a href="#download"></a></li>
+	<li class="rename"><a href="#rename"></a></li>
+	<li class="delete separator"><a href="#delete"></a></li>
+</ul>
+
+<div class="flash ui-wedget" id="fsUploadProgress" style="position:absolute;width:210px;top:80px;right:30px; z-index: 10000000;">
+			<!-- This is where the file progress gets shown.  SWFUpload doesn\'t update the UI directly.
+						The Handlers (in handlers.js) process the upload events and make the UI updates -->
+</div> 
+{{$this->Html->script(array(			
+        	'jquery/jquery.min.js',
+        	'jquery/jquery-migrate-1.2.1.min',
+			'bootstrap.min.js',
+            'swfupload/swfupload.js',
+            'swfupload/swfupload.queue.js',
+			'swfupload/swfupload.cookies.js',
+            'swfupload/fileprogress.js',
+            'swfupload/handlers.js',
+			'jquery/jquery.jgrowl.min.js',
+            'jquery/jquery.form.js',
+            'jquery/jquery.splitter.js',
+            'jquery/jquery.contextMenu.min.js',
+            'jquery/jquery.fileTree.js',
+            'jquery/jquery.tablesorter.min.js',
+            'filemanage/filemanager.config.js',
+            'filemanage/filemanager.js',
+        ))}}
+<script>
+
+/**
+覆盖重写swfupload的上传回调函数。
+选择好了文件，判断是否开始上传. 将当前文件夹传入到post参数  */
+function fileDialogComplete(numFilesSelected, numFilesQueued) {
+	this.addPostParam('save_folder',$('#currentpath').val());
+	try {
+		// 是否自动开始上传
+		if(this.customSettings.auto_start){			
+			this.startUpload();
+		}
+	} catch (ex)  {
+        this.debug(ex);
+	}
+}
+/**
+ * @Todo. 考虑是在单个文件上传后就刷新内容，还是在所有文件都上传完成后，再刷新当前路径的文件显示。
+ */
+/* 单文件上传完成  */
+function uploadSuccess(file, serverData) {
+	try {
+		var progress = progress_list[file.id] ;
+		progress.setComplete();
+		if (serverData === " ") {
+			this.customSettings.upload_successful = false;
+		} else {
+			var data=eval('(' + serverData + ')'); 
+			if(data.status==1){
+				this.customSettings.upload_successful = true;
+				getFolderInfo($('#currentpath').val()); // 上传完成后，刷新当前文件夹的内容。
+			}
+		}
+	} catch (e) {
+		alert(serverData);
+	}
+}
+
+$(function(){
+	$('#fileinfo').on('dblclick','#contents li',function(){
+		var path = $(this).find('img').attr('alt');
+		var win = window.opener || window;
+		win.parent.CKEDITOR.tools.callFunction(2,path,'');
+		window.close();
+	});
+	
+	$('#fileinfo').on('dblclick','tbody tr',function(){		
+		var path = $('td:first-child',this).attr('title');
+		var win = window.opener || window;
+		win.parent.CKEDITOR.tools.callFunction(2,path,'');
+		window.close();
+	});
+	
+	var swfu_ckeditor = new SWFUpload({
+		upload_url: ADMIN_BASEURL+"/admin/uploadfiles/upload",	
+		file_post_name: "ckeditor",
+		file_size_limit : "10 MB",
+		file_types : "*.*",
+		file_types_description : "All Files",
+		file_upload_limit : 0,
+		file_queue_limit : 0,
+		post_params : {
+			"PHP_SESSION_ID" : "{{session_id()}}",
+			"file_post_name" : "ckeditor",
+			"no_db" : 1, //不保存到数据库，即仅保存到对应目录但不保存到uploadfiles表中
+			//"return" : 'ckeditor',
+			"no_thumb" : 1, // 不生成缩略图，
+			"save_folder":'/', //传入要保存的目标文件夹，相对于webroot目录
+			"file_model_name":""
+		},
+		
+		button_image_url : BASEURL+"/img/uploadbutton.png",
+		button_placeholder_id : "spanButtonPlaceholder_ckeditor",
+		button_width: 100,
+		button_height: 24,
+		
+		flash_url : BASEURL+"/js/swfupload/swfupload.swf",
+		flash9_url : BASEURL+"/js/swfupload/swfupload_fp9.swf",
+		
+		file_queued_handler : fileQueued,
+		file_queue_error_handler : fileQueueError,
+		file_dialog_complete_handler : fileDialogComplete,
+		
+		swfupload_preload_handler : preLoad,
+		swfupload_load_failed_handler : loadFailed,
+		swfupload_loaded_handler : loadSuccess,
+		
+		upload_start_handler : uploadStart,upload_progress_handler : uploadProgress,upload_error_handler : uploadError,
+		upload_success_handler : uploadSuccess,
+		upload_complete_handler : uploadComplete,
+		custom_settings : {
+			progress_target : "fsUploadProgress",
+			upload_successful : false,			
+			auto_start : true
+		},
+		debug: false
+	});
+});
+</script>
+{{$this->fetch('bottomscript')}}  
+</body>
+</html>

@@ -1,0 +1,78 @@
+<div id="container-part1" class="container clearfix">
+{{$this->Form->create('User',array('id'=>'loginform','method'=>"post",'onsubmit'=>$isajax ? "return ajaxeSubmitForm(this,'loginSucess');" : "",'escape' => false))}}
+<div class="c cl">
+<input type="hidden" value="319a8865" name="formhash">
+<input type="hidden" value="http://www.p.com/dzx/forum.php?mod=viewthread&amp;tid=1&amp;extra=page%3D1" name="referer">
+<div class="lgfm nlf">
+<div id="account" class="ftid sipt" fwin="login">
+<select selecti="0" fwin="login" name="loginfield" style="float: left; display: none;" width="45" id="loginfield">
+
+
+
+<option value="username"></option></select><a tabindex="1" style="width: 45px;" id="loginfield_ctrl" href="javascript:;">用户名</a>
+{{$this->Form->input('username',array('div'=>false,'label' => false,'class'=>'txt','onblur'=>"checkusername()",'tabindex'=>"1",'size'=>"25"))}}
+</div>
+<p class="sipt lpsw">
+<label for="UserPassword">密　码　：</label>
+{{$this->Form->input('password',array('div'=>false,'label' => false,'class'=>'txt','onkeypress'=>"detectCapsLock(event, this)",'onfocus'=>"clearpwd()",'type'=>'password','maxlength'=>"15",'size'=>"36"))}}
+{{$this->Form->input('referer',array('type'=>'hidden'))}}
+</p>
+
+<div class="ftid sltp">
+<select selecti="0" fwin="login" id="loginquestionid" width="213" name="questionid" change="if($('loginquestionid').value &gt; 0) {$('loginanswer').style.display='';} else {$('loginanswer').style.display='none';}">
+<option value="0">安全提问(未设置请忽略)</option>
+<option>母亲的名字</option>
+<option>爷爷的名字</option>
+<option>父亲出生的城市</option>
+<option>你其中一位老师的名字</option>
+<option>你个人计算机的型号</option>
+<option>你最喜欢的餐馆名称</option>
+<option>驾驶执照最后四位数字</option>
+</select>
+</div>
+<p><input type="text" tabindex="1" class="sipt" size="36" autocomplete="off" style="display: none;" id="loginanswer" name="answer" fwin="login"></p>
+
+<div id="seccodelayer" fwin="login">
+</div>
+<div id="login_errorinfo" class="ui-state-error ui-corner-all" style="display: none;"></div>
+</div>
+<div class="lgf minf">
+<h4>没有帐号？<a title="注册帐号" onclick="return publishController.open_dialog(this.href,{title:'注册'});" href="{{$this->Html->url('/users/register.html')}}">注册</a></h4>
+<p><a title="找回密码" onclick="" href="{{$this->Html->url('/users/forgot')}}">找回密码</a></p>
+<p><a title="清除痕迹" onclick="ajaxget('member.php?mod=clearcookies&amp;formhash=319a8865', 'returnmessage', 'returnmessage');return false;" href="javascript:;">清除痕迹</a></p>
+
+<div style="padding-top: 5px;">
+{{$this->Hook->call('oauthLoginLink')}}
+</div>
+</div>
+</div>
+<p class="fsb pns cl">
+<button tabindex="1" value="true"  name="loginsubmit" type="submit" class="pn pnc"><span>登录</span></button>
+<label for="cookietime"><input type="checkbox" value="2592000" tabindex="1" id="cookietime" name="cookietime" class="pc" fwin="login"> 记住我的登录状态</label>
+</p>
+</form>
+</div>
+<div style="display: none;" id="layer_lostpw" fwin="login">
+<h3 class="flb">
+<em id="returnmessage3" fwin="login">找回密码</em>
+<span><a title="关闭" onclick="remove_layer('#fwin_login');" class="flbc" href="javascript:;">关闭</a></span>
+</h3>
+<form action="member.php?mod=lostpasswd&amp;lostpwsubmit=yes&amp;infloat=yes" onsubmit="ajaxpost('lostpwform', 'returnmessage3', 'returnmessage3', 'onerror');return false;" class="cl" id="lostpwform" autocomplete="off" method="post" fwin="login">
+<div class="c cl">
+<input type="hidden" value="319a8865" name="formhash">
+<input type="hidden" value="lostpwform" name="handlekey">
+<div class="lgfm">
+<label><em>用户名:</em>{{$this->Form->input('username',array('div'=>false,'label' => false,'class'=>'txt','onblur'=>"checkusername()",'tabindex'=>"1",'size'=>"25"))}}</label>
+<label><em>Email:</em>{{$this->Form->input('email',array('div'=>false,'label' => false,'class'=>'txt','onblur'=>"checkusername()",'tabindex'=>"1",'size'=>"25"))}}</label>
+</div>
+<div class="lgf minf">
+<h4>没有帐号？<a title="注册帐号" onclick="hideWindow('login');showWindow('register', this.href);return false;" href="member.php?mod=register">注册</a></h4>
+<p><a onclick="display('layer_login');display('layer_lostpw');" href="javascript:;">返回登录</a></p>
+</div>
+</div>
+<p class="fsb pns cl">
+<em>&nbsp;</em>
+<button tabindex="100" value="true" name="lostpwsubmit" type="submit" class="pn pnc"><span>提交</span></button>
+</p>
+</form>
+</div>

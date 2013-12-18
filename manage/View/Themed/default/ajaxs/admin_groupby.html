@@ -1,0 +1,24 @@
+
+<?php
+echo $javascript->link(array('jqgrid/i18n/grid.locale-cn','jqgrid/jquery.jqGrid.min', ));
+?>
+<table id="model-groupby-table"></table> 
+<script>
+
+jQuery("#model-groupby-table").jqGrid({
+	datatype: "local",
+	height: 300,
+	width: 500,
+   	colNames:[{{$col_names}}],
+   	colModel:[{{$col_models}}],
+   	caption: ""
+});
+var mydata = {{$jsonrows}};
+var i=0;
+for(var idx in mydata)
+{
+	i++;
+	jQuery("#model-groupby-table").jqGrid('addRowData',i+1,mydata[idx]);
+}
+jQuery("#model-groupby-table").jqGrid('gridResize',{minWidth:350,minHeight:100});
+</script>

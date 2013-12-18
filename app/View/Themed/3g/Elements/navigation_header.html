@@ -1,0 +1,10 @@
+<div class="navigation-header clearfix">
+	<a href="{{$this->Html->url('/')}}"><span class="ui-icon ui-icon-home"></span>Home</a> >
+	{{loop $navigations $navi}}
+	{{if $navi['Category']['link']}}
+	<a href="{{$this->Html->url($navi['Category']['link'])}}"><span class="ui-icon ui-icon-carat-1-e"></span>{{$navi['Category']['name']}}</a>
+	{{else}}
+	<a href="{{$this->Html->url('/'.$navi['Category']['slug'])}}"><span class="ui-icon ui-icon-carat-1-e"></span>{{$navi['Category']['name']}}</a>
+	{{/if}}
+	{{/loop}}
+</div>

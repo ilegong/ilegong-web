@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$pageTitle}-{$site[title]}</title>
+<META NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+<meta name="Keywords" content="{if $seokeywords}{$seokeywords}{else}{$site[seokeywords]}{/if}" />
+<meta name="Description" content="{if $seodescription}{$seodescription}{else}{$site[seodescription]}{/if}" />
+{eval echo $this->Html->meta('icon');}
+{eval echo $this->Html->css(array(
+            '960_24_col',
+            'cupertino/jquery-ui-1.8.15.custom',
+            'base',
+           'ui-customer',
+           'front',
+        ));
+}
+{eval echo $this->Html->script(array(			
+            'jquery/jquery-1.4.2.min.js',
+            'jquery/jquery.cookie.js',
+            'jquery/jquery-ui-1.8.5.custom.min.js',
+            'i18n/language-zh-CN.js',
+            'ui.selectmenu',
+            'front.js',
+            'common.js',
+            'jquery/jquery.pnotify.min.js',
+        ));
+}
+</head>
+<body>
+
+<div class="maincontent  clearfix">
+	<?php //echo $session->flash(); ?>
+	{$content_for_layout}
+</div>
+</body>
+</html>

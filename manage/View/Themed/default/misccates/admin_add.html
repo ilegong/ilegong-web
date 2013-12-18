@@ -1,0 +1,28 @@
+<div class="roles form">
+{{if $current_action=='admin_add'}}
+<?php
+echo $this->MForm->create($current_model,array(    
+	'url' => array('action' => 'add'),
+));
+?>
+{{elseif $current_action=='admin_edit'}}
+<?php 
+echo $this->MForm->create($current_model,array(
+    'url' => array('action' => 'edit',$id,$copy),
+));
+?>
+{{/if}}
+        <fieldset>
+        <?php
+        echo $this->MForm->input('id');
+        echo $this->MForm->input('parent_id');
+        echo $this->MForm->input('name',array('rows' => '5', 'cols' => '50',));
+		echo $this->MForm->input('slug');
+		echo $this->MForm->input('link');
+		echo $this->MForm->input('target');
+		echo $this->MForm->input('sort');
+		echo $this->MForm->input('model');
+        ?>
+        </fieldset>
+    <?php echo $this->MForm->end(__('Submit',true));?>
+</div>

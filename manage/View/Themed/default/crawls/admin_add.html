@@ -1,0 +1,144 @@
+<div class="users form">
+{{if $copy}}
+<div class="ui-state-highlight">
+复制数据，保存时，创建一条新的纪录。修改不影响原纪录。
+</div>
+{{/if}}
+    {{if $copy}}
+<?php echo $this->MForm->create('Crawl',
+    array(
+    'url' => array('action' => 'edit',$id,$copy,),)
+    );?>
+{{else}}
+<?php echo $this->MForm->create('Crawl',array('url' => array('action' => 'add'),));?>
+{{/if}}
+    <fieldset>
+    	 
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#crawl-basic" data-toggle="tab"><span>{{__('Basic Info')}}</span></a></li>
+                    <li><a href="#crawl-other" data-toggle="tab"><span>{{__('Others')}}</span></a></li>
+                </ul>
+          <div class="tab-content">
+                <div id="crawl-basic" class="tab-pane active">
+  <?php
+echo $this->MForm->input('id');                		
+echo $this->MForm->input('title',array('size'=>"60"));
+echo $this->MForm->input('cate_id');
+echo $this->MForm->input('origin');
+echo $this->MForm->input('targeturl',array('cols'=>"90",'rows'=>"12",'after'=>'页码的数字用{page}代替。url与分页直接用“<<”隔开，形如：url<<10~7,4,多个地址时，每行一个地址。'));
+echo $this->MForm->input('pages');
+echo $this->MForm->input('datatype');
+echo $this->MForm->input('urlcontains',array('after'=>'链接包含内容的匹配中，链接文字为end($matches)；链接要保证为$matches[1]'));
+echo $this->MForm->input('urlnotcontains');
+echo $this->MForm->input('urltextcontains');
+echo $this->MForm->input('urltextnotcontains');
+echo $this->MForm->input('urlcontent_regexp',array('after'=>'
+	<br/>默认即为带问号的非贪婪匹配，非贪婪时无需带问号。如(.+).	
+'));
+echo $this->MForm->input('contentreplace',array('cols'=>"90",'rows'=>"4",'after'=>'
+	形如 "key"=>"$value";
+	替换选择器替换，前面加上"[selector]"，如：[selector]#cpop=>'));
+
+echo $this->MForm->input('targetcharset',array('type'=>'radio','class'=>'inline','default'=>'GBK','options' => array(
+ 'UTF-8'=>'UTF-8',
+ 'GBK'=>'GBK/GB2312',
+ 'BIG5'=>'BIG5')));
+
+echo $this->MForm->input('model_to',array('type'=>'select','onchange'=>'changeLoadModelSchema(this.value)',));
+
+echo '<br/>默认即为带问号的非贪婪匹配，非贪婪时无需带问号。如(.+).	';
+//echo $this->MForm->input('category_id',array('multiple' => true, ));
+foreach($regexp_list as $key => $val)
+{
+	echo $this->MForm->input($key,array('label'=>__d('i18nfield','Field_'.$this->data['Crawl']['model_to'].'_'.str_replace('regexp_','',$key)),'rows' => '2','value'=>$val, 'cols' => '80','div'=>'regexp-add')); 
+}
+	?>
+	<div  class="model-schema-area"><select class="model-schema-list"></select> 
+<input type="button" value="{{  __('add new field regular'); }}" onclick="addNewCrawlRegular();"/>
+</div>
+                </div>
+                
+                 <div id="crawl-other"  class="tab-pane">
+	                 	<?php
+		       
+					    
+echo $this->MForm->input('saveimg',array('type'=>'select','options' => array(
+ '0'=>'否',
+'1'=>'是',
+ )));
+echo $this->MForm->input('imgprefix');
+echo $this->MForm->input('autopublished');
+					    	?>
+                 </div> 
+                
+       </div>
+                
+	    
+    </fieldset>
+    <?php echo $this->MForm->end(__('Submit')); ?>
+   
+</div>
+<div id="dialog-confirm" class="dialog" title="Change Model?">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+	Change Model will lose all regulars have added. Are you sure ?</p>
+</div>
+
+
+<script>
+var selected_cate = [{{$categories}}];
+var currentModelTo = null;
+$(document).ready(
+	function()
+	{
+		currentModelTo = $('#CrawlModelTo').val();
+		loadModelSchema(currentModelTo);
+	}
+);
+
+rs_callbacks.loadschema = function(request){
+	$('.model-schema-list').empty();
+	for(var i  in request){
+                    $('.model-schema-list').append('<option value="'+i+'">'+request[i]+'</option>');
+	}
+}
+rs_callbacks.loadcate = function(request){
+	$('#CrawlCategoryId').empty();
+	for(var i  in request){
+            if(jQuery.inArray(parseInt(i),selected_cate)!=-1){
+                $('#CrawlCategoryId').append('<option value="'+i+'" selected="selected">'+request[i]+'</option>');
+            }
+            else{
+                $('#CrawlCategoryId').append('<option value="'+i+'">'+request[i]+'</option>');
+            }
+	}
+}
+function loadModelSchema(model)
+{
+	ajaxAction(ADMIN_BASEURL+'/admin/ajaxes/loadschema/'+model,'','','loadschema');
+	//ajaxAction(ADMIN_BASEURL+'/admin/ajaxes/loadcate/'+model,'','','loadcate');
+}
+function changeLoadModelSchema(model){
+	//alert(model);
+	$("#dialog-confirm").dialog("destroy");
+	$("#dialog-confirm").dialog({
+		resizable: true,
+		height:200,
+		width:400,
+		modal: true,
+		buttons: {
+			'Change any way': function() {
+				currentModelTo = $('#CrawlModelTo').val();
+				loadModelSchema(model);
+				$('.regexp-add').remove();
+				$(this).dialog('close');
+			},
+			Cancel: function() {
+				$('#CrawlModelTo').val(currentModelTo);
+				$(this).dialog('close');
+			}
+		}
+	});	
+}
+
+
+</script>

@@ -1,0 +1,15 @@
+<div class="item-list" style="width:150px;height:150px;">
+<div>
+{eval echo $this->Html->image($item['coverimg'], 
+	array(
+	'alt' => $item['title'],'title' => $item['title'],
+	'width'=>'150px','height'=>'130px',
+	'url'=> '/'.$control_name.'/'.date('Ym',strtotime($item['created'])).'/'.$item['slug'].'.html' 
+	)); }
+</div>
+<span  style="line-height:24px;">
+	{eval echo $this->Html->link(usubstr($item['title'],0,10), 
+	'/'.$control_name.'/'.date('Ym',strtotime($item['created'])).'/'.$item['slug'].'.html',
+	array('title'=>$item['title'])); }
+</span>
+</div>

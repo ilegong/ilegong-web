@@ -1,0 +1,30 @@
+<div class="regionlist clearfix">
+	
+	<div class="ui-share">
+    	<div class="ui-state-default"><a href="javasctipt:void(0);" onclick="return addtofavor('Article','{{$item['id']}}');">分享</a></div>
+    	<div class="ui-share-num"><span class="ui-stats-num Stats-Article-{{$item['id']}}-favor_nums">{if $item['favor_nums']}({{$item['favor_nums']}}){else}0{/if}</span></div>
+    </div>
+	
+	<div class="regionleft">
+		<h3>
+		{eval 
+		echo $this->Html->link(usubstr($item['title'],0,35), 
+				'/articles/'.date('Ymd',strtotime($item['created'])).'/'.$item['id'].'.html', 
+				array('title'=>$item['title'],'target'=>'_blank')
+			);
+		}
+		</h3> 
+		<div style="float:right;">
+			<?PHP 
+if($item['coverimg']){
+	echo $this->Html->image("/img/grey.gif", array('title'=>$item['title'],'original'=>$item['coverimg'],));
+}
+?>
+		</div>
+		<div class="listauthor"><span>发布于{{$item['created']}} {if $item['origin']}|来源：<a href="{{$item['remoteurl']}}" target="_blank">{{strip_tags($item['origin'])}}</a>{/if}|  <span class="ui-stats-num Stats-Article-{{$item['id']}}-view_nums">{{$item['views_count']}}</span> 次阅读</span></div>
+		<div class="listsummary" >
+			<div>{{$item['summary']}}</div>
+		</div>
+		
+	</div>
+</div>

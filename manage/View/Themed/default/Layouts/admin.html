@@ -1,0 +1,17 @@
+{{template Elements/header}}
+<script type="text/javascript">
+$(function(){
+	$("#mainContent").height($(window).height());
+	$(window).resize(function(){
+		$("#mainContent").height($(window).height());
+		if(typeof resize=='function'){
+			resize();
+		}
+	});
+});
+
+</script>
+<div id="mainContent"  style="height:100%;">
+	{{$content_for_layout}}
+</div>
+{{template Elements/footer}}

@@ -1,0 +1,22 @@
+<div {{$portletid}}{{$data_attribute}} class="ui-widget ui-portlet">
+	<div class="clearfix ui-corner-top ui-widget-header ui-portlet-header">
+	      <span class="title"><h3>{{$title}}</h3></span> 
+	</div>
+	
+	<div class="tabs ui-corner-bottom ui-portlet-content">
+		<div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+			<ul class="ui-tabs-nav ui-helper-reset clearfix ui-widget-header ui-corner-all">
+				<li><a href="#tab-{{$id1}}"><span>{{$title1}}</span></a></li>
+				<li><a href="#tab-{{$id2}}"><span>{{$title2}}</span></a></li>
+				<li><a href="#tab-{{$id3}}"><span>{{$title3}}</span></a></li>
+			</ul>
+			<div class="clear"></div>
+			<div class="ui-tab-panes">
+				<div id="tab-{{$id1}}">{{$body1}}</div>
+				<div id="tab-{{$id2}}">{{$body2}}</div>
+				<div id="tab-{{$id3}}">{{$body3}}</div>
+			</div>
+		</div>
+	</div>
+	<div class="ui-portlet-footer"></div>
+</div>

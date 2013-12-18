@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{{$pageTitle}}-{{$site[title]}}</title>
+<META NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+<meta name="Keywords" content="{if $seokeywords}{$seokeywords}{else}{$site[seokeywords]}{/if}" />
+<meta name="Description" content="{if $seodescription}{$seodescription}{else}{$site[seodescription]}{/if}" />
+{{eval echo $this->Html->meta('icon');}}
+{{eval echo $this->Html->css(array(
+            Router::url('/stylevars/getcss'),
+           'ui-customer',
+        ));
+}}
+{{eval echo $this->Html->script(array(			
+            'jquery/jquery.min.js',
+            'jquery/jquery.cookie.js',
+            'jquery/jquery-ui-1.8.23.custom.min.js',
+            'i18n/language-zh-CN.js',
+            'ui.selectmenu',
+            'common.js',
+            'front.js',
+            'portlet.js',   
+            'jquery/jquery.lazyload.js',
+            'jquery/jquery.pnotify.min.js',
+            'jquery/fg.menu.js',
+        ));
+}}
+<script type="text/javascript">
+var BASEURL = "{{APP_SUB_DIR}}";
+var ADMIN_BASEURL = BASEURL+"/manage";
+</script>
+{{if !empty($_SESSION['Auth']['Staff']) }}
+<!-- 当为后台登陆后，才加载jquery ui，与模板编辑的js -->
+<!-- 当为后台登陆后，才加载jquery ui，与模板编辑的js -->
+{{$this->Html->script(array(
+            'jquery/jquery-ui-1.8.23.custom.min.js',           
+            'portlet.js',   
+            'ckeditor/ckeditor.js',
+            'swfupload/swfupload.js',
+            'swfupload/swfupload.queue.js',
+			'swfupload/swfupload.cookies.js',
+            'swfupload/fileprogress.js',
+            'swfupload/handlers.js',       
+        ));
+}}
+<script type="text/javascript">
+var viewFileName = "{{$viewfile_for_layout}}";
+</script>
+{{else}}
+{{$this->Html->script(array(
+            'jquery/jquery-ui-1.8.23.custom.min.js', 
+        ));
+}}
+{{/if}}
+</head>
+<body>
+
+<div>
+	<div class="container clearfix" >
+		<div  class="span15">
+			<a  style="float:left;" href="/"><?php echo $this->Html->image('logo.png', array('alt' => '微博点名','width'=>'60px'))?></a>
+			<div style="float:left;">
+			<h3 class="site-name">点名问答</h3>
+			<span class="site-desc"><i>~~在问与答中交流，知人识己！</i></span>
+			</div>
+		</div>	
+		<div  class="span9">
+			{{template menus/apple}}
+		</div>		
+	</div>	
+	<div  class="clear"></div>
+</div>
+
+<div class="maincontent  clearfix">
+	<div class="container clearfix">	
+	
+		<div class="ui-widget span15">	
+		{{$content_for_layout}}
+		</div>
+		<div class="span9">
+		</div>
+	</div>
+</div>
+
+
+<div class="footer" class="clearfix">
+	
+	<div class="container clearfix">
+		<div class="ui-widget">
+		<p> Powered By SaeCMS V0.1. Copyright &copy; 2010 SaeCMS, All Rights Reserved. </p>
+		</div>	
+	</div>	
+</div>
+
+{{eval 
+echo $this->Html->script(array(
+            'superfish/hoverIntent',
+            'superfish/superfish',
+        ));
+     }}
+<script type="text/javascript"> 
+$(document).ready(function() {
+	var tab_img_lazy = {};
+	var tabs = $(".tabs").tabs()
+	/* .each(function(i){
+		var li = $(this).find('ul:first').find('> li'),
+		total = li.length,
+		count = 1;
+		tab_img_lazy[i] = {}
+		var pause = false; // 是否暂停  tabs初始化，不用mouseover事件，冲突 {event: 'mouseover'}
+		$(this).hover(function(){
+			//alert('over');
+			pause = true;
+		},function(){
+			pause = false;
+		});
+		setInterval(function(){
+			//alert(pause);
+			if(!pause && count<=total){
+				tabs.eq(i).tabs('select',count);
+				if(!tab_img_lazy[i][count])
+				{
+					// tab仅第一次自动切换过来时，才对图片进行lazyload处理，手动点击切换不处理。   
+					$("img",tabs.eq(i)).lazyload({
+				        placeholder : "/img/grey.gif",
+				        effect      : "fadeIn"                  
+				    });
+					tab_img_lazy[i][count] = true;
+				}
+				count++;
+				if(count==total){
+					count = 0;
+				}
+			}
+		},4000);
+
+	});*/
+
+	$(".plt_default_head").addClass("ui-widget-header");
+	$(".plt_default_body").addClass("ui-widget-content");
+	 
+	$(".ui-tabs-nav").removeClass('ui-widget-header');
+	$(".ui-tabs").removeClass("ui-widget-content");
+	//$('.ui-tabs-panel').css('padding','0px');
+	//滑动到顶部
+	$('#to-top').click(function() { $('html,body').animate({ scrollTop: 0 }, 1000); });
+
+	$("img").lazyload({
+        placeholder : "{{Router::url('/img/grey.gif')}}",
+        effect      : "fadeIn"                  
+    });
+	//$('a[href^="http://tongji.baidu.com/hm-web/welcome/ico"]').hide(); // 隐藏百度统计的图片 
+});
+
+</script>
+<div class="ui-statusbar ui-state-default">
+	<div class="ui-statusbar-content">
+		<!-- <div style="line-height:32px;float:left;margin-top:6px;">
+			<input type="text" size="80" id="new_weibo_content" ></input><input type="button" value="发送微博"></input>
+		</div> -->
+	<ul class="ui-widget ui-float-right ui-helper-clearfix">	
+	<li title="回到页首" id="to-top" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-eject"></span></li>
+	</ul>
+	<a href="http://sae.sina.com.cn" target="_blank" style="float:right;line-height:32px;margin-top:10px;">
+		<img src="http://sae.sina.com.cn/static/image/poweredby/117X12px.gif" title="Powered by Sina App Engine" />
+	</a>
+	<div style="display:none;">
+	<script type="text/javascript">
+	var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+	document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F7bbe52004bfe05221b6200c695f85b7c' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	</div>
+	</div>
+	
+</div>
+{{template Elements/join_dialog}}
+{{template Elements/sql_dump}}
+</body>
+</html>

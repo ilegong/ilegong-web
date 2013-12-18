@@ -1,0 +1,50 @@
+{if $key==0}
+<script type="text/javascript">
+var linkarr = new Array();
+var picarr = new Array();
+var textarr = new Array();
+var focus_width = 225;
+var focus_height = 160;
+var text_height = 24;
+var pics = "";
+var links = "";
+var texts = "";
+var swf_height = focus_height+text_height;
+var defJpeg = "http://articles.csdn.net/static/coding/images/index_37.jpg";
+//可编辑内容结束
+{/if}
+picarr[{{($key+1)}}]="{$item['coverimg']}";
+linkarr[{{($key+1)}}]="<?php echo '/articles/'.date('Ym',strtotime($item['created'])).'/'.$item['slug'].'.html'; ?>";
+textarr[{{($key+1)}}]="{$item['title']}";
+
+{if $key==$count-1}
+
+for(i=1;i<picarr.length;i++){
+//if(picarr[i].indexOf("jpg")==-1 && picarr[i].indexOf("JPG")==-1) picarr[i] = defJpeg;
+if(pics=="") pics = picarr[i];
+else pics += "|"+picarr[i];
+}
+
+for(i=1;i<linkarr.length;i++){
+if(links=="") links = linkarr[i];
+ else links += "|"+linkarr[i];
+}
+
+for(i=1;i<textarr.length;i++){
+  if(texts=="") texts = textarr[i];
+  else texts += "|"+textarr[i];
+}
+
+
+document.write('<object type="application/x-shockwave-flash" data="/js/photoflash/slide.swf" width="' + focus_width + '" height="' + swf_height + '">');
+document.write('<param name="movie" value="/js/photoflash/slide.swf" />');
+document.write('<param name="allowScriptAcess" value="sameDomain" />');
+document.write('<param name="quality" value="best" />');
+document.write('<param name="bgcolor" value="#e8e8e8" />');
+document.write('<param name="scale" value="noScale" />');
+document.write('<param name="menu" value="false">');
+document.write('<param name="wmode" value="opaque" />');
+document.write('<param name="FlashVars" value="playerMode=embedded&pics='+pics+'&links='+links+'&texts='+texts.replace(/(&)/g," ")+'&borderwidth='+focus_width+'&borderheight='+focus_height+'&textheight='+text_height+'" />');
+document.write('</object>');
+</script>
+{/if}

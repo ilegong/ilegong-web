@@ -1,0 +1,100 @@
+<style>
+.ui-login-menu {
+	list-style:none outside none;
+	margin:0;
+	padding:0;
+	width:100px;
+	line-height:24px;
+}
+.ui-login-menu li{
+	font-size:11px;
+	margin:3px 0;
+	padding:0 0 0 10px;
+	cursor:pointer;
+}
+.ui-login-menu .menu-on{
+	background:#F9A836;
+}
+</style>
+<script>
+$(function(){
+	$('.ui-login-menu li a').click(function(){
+		$('.ui-login-menu li a').each(function(i){
+			var target = $(this).attr('href');
+			$(this).parent().removeClass('menu-on');
+			$(target).hide();
+		});
+		var target = $(this).attr('href');
+		
+		if($(target).css('display')=='none'){
+			$(target).css('display','block');
+			$(this).parent().addClass('menu-on');
+		}
+		return false;
+	});
+	
+});
+function user_login_callback(request)
+{
+	if(request.success){
+		$("#"+sso.dialogid).dialog("close");
+		sso.usercookie=$.cookie("SAECMS[User]");
+	}
+	if(sso.form){
+		$(sso.form).trigger("submit");
+		sso.form=null;
+	}
+	if(sso.callback){
+		sso.callback.apply(sso.callback,sso.callback_args);
+		sso.callback=null;
+		sso.callback_args=null;
+	}
+	if(sso.success){
+		sso.success.function(sso.success.arguments[0],sso.success.arguments[1],sso.success.arguments[2],sso.success.arguments[3],sso.success.arguments[4],sso.success.arguments[5]);
+	}
+}
+</script>
+<ul class="ui-login-menu" style="float:right">
+	<li class="menu-on" ><a href="#loginform">{eval  __('Login'); }</a></li>
+	<li><a href="#registerform">{eval  __('Register'); }</a></li>
+</ul>
+<div style="float:left">
+	<div id="loginform">
+		    <h2> {eval  __('Login'); } </h2>
+{eval 
+	echo $this->Ajax->form(array('type' => 'post',
+    'options' => array(
+        'model'=> 'User',
+        'update'=>'settings_result',
+        'success'=> 'user_login_callback(request);',
+        'url' => array(
+            'controller' => 'users',
+            'action' => 'login'
+        ),
+    ),
+));
+}
+		        <fieldset>
+		        {eval 
+		            echo $this->Form->input('username');
+		            echo $this->Form->input('password');
+		        }
+		        </fieldset>
+		    {eval  echo $this->Form->end('Submit');}
+	</div>
+
+	<div id="registerform" style="display:none;">
+		     <h2>{eval  __('Register'); }</h2>
+	    {eval  echo $this->Form->create('User');}
+	        <fieldset>
+	        {eval 
+	            echo $this->Form->input('username',array('div'=>'span'));
+	            echo $this->Form->input('password', array('value' => ''));
+	            echo $this->Form->input('password_confirm', array('value' => ''));
+	            echo $this->Form->input('name');
+	            echo $this->Form->input('email');
+	        }
+	        </fieldset>
+	    {eval  echo $this->Form->end('Submit');}
+	</div>
+</div>

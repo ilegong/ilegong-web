@@ -1,0 +1,12 @@
+{
+	"name" : "Oa",
+	"description" : "办公管理系统插件",
+	"author" : "arlonzou",
+	"authorEmail" : "arlonzou@sina.com",
+	"authorUrl" : "http://web.ideamuster.com",
+	"dependencies": {
+		"plugins": [
+			""
+		]
+	}
+} 

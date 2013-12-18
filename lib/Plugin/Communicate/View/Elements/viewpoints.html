@@ -1,0 +1,157 @@
+	    
+	    	
+<div class="mod-view-point"> 
+	<div class="hd"><h3>大家发表的互动观点{{if ${$points_model}[$points_model]['point_nums']}}({{${$points_model}[$points_model]['point_nums']}}人发表){{/if}}</h3> </div>
+	<div class="bd">
+		<div id="viewpoint_list" class="viewpoint_list clearfix">			
+			{{if !empty($Viewpoints)}}
+			<?php  foreach($Viewpoints as $key=> $item) {
+				$cssflag = 6-$key%2; if($cssflag<1) $cssflag=1;
+			?>
+			<a title="共有{{$item['Viewpoint']['support_nums']}}赞同此观点" agree_num="{{$item['Viewpoint']['support_nums']}}" rel="{{$item['Viewpoint']['name']}}" class="c{{$cssflag}} xy_viewpoint_btn" onclick="return false" href="#">{{$item['Viewpoint']['name']}}</a>
+			<?PHP } ?>
+			<a id="viewpoint_more" title="更多" onclick="return false" href="#">...</a>
+			{{else}}
+			<span class="c1">还没有人发布观点，快发布自己的观点抢占沙发吧~</span>
+			{{/if}}
+		</div> 
+	</div>
+	<div class="ft">
+		<fieldset>
+			<form onsubmit="return false">
+				<p>发表观点: <input type="input" value="输入互动观点，最多8个字" onfocus="if(this.value=='输入互动观点，最多8个字') this.value='';" 
+				onblur="if(this.value=='') this.value='输入互动观点，最多8个字';" 
+				id="viewpoint_content_input"><button type="submit" id="viewpoint_submit_btn">发表</button></p>
+			</form>
+		</fieldset>
+	</div>
+</div>	
+<script type="text/javascript">
+$(document).ready(function() {
+	function escapeHTML(html)
+	{
+		return html.replace('"','').replace('>','').replace('<','');
+	}
+	function confirmShare(model,dataid){
+		
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+		$( "#dialog-share" ).dialog({
+			resizable: false,
+			height:150,
+			modal: true,
+			buttons: {
+				"确定": function() {
+			 		addtofavor(model,dataid);
+					$( this ).dialog( "close" );
+				},
+				"取消": function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+	}
+	//confirmShare();
+	function addViewPointRefresh(vpoint) {
+		var is_exsits = false;
+		$('#viewpoint_list span').remove();
+		$('#viewpoint_list > a').each(function() {
+			if(is_exsits) return;
+			
+			var jq = $(this);
+			if(vpoint == jq.attr('rel')) {
+				// 已存在
+				var agree_num = jq.attr('agree_num');
+				agree_num = parseInt(agree_num) + 1;
+				jq.attr('title' , '共有' + agree_num + '赞同此观点');
+				
+				is_exsits = true;
+			}
+		});
+		
+		// 不存在
+		if(!is_exsits) {
+			vpoint = escapeHTML(vpoint);
+			var _t = '<a href="#" onclick="return false" class="c1 xy_viewpoint_btn" rel="' + vpoint + '" agree_num="1" title="共有1赞同此观点">' + vpoint + '</a>';
+			
+			// 判断插入位置
+			if($('#viewpoint_more').size() > 0) {
+				$('#viewpoint_more').before(_t);
+			} else {
+				$('#viewpoint_list').append(_t);
+			}
+			bindListClickEvent();
+		}
+	}
+	
+	function bindListClickEvent() {
+		$('.xy_viewpoint_btn').click(function() {
+			var vpoint = $(this).attr('rel');			
+			submitViewPoint(vpoint,'{{$points_model}}','{{$points_dataid}}');
+			return false;
+		});
+	}
+	
+	bindListClickEvent();
+
+	function submitViewPoint(vpoint,model,data_id)
+	{
+		$.ajax({
+			type:'post',
+			url:'{{$this->Html->url(array("controller"=>"viewpoints","action"=>"publish","plugin"=>"communicate"))}}',
+			data: {'data[Viewpoint][name]':vpoint,'data[Viewpoint][model]':model,'data[Viewpoint][data_id]':data_id},
+			success:function(data){
+				if(data.error)
+				{
+					showErrorMessage(data.error);
+				}
+				else
+				{
+					confirmShare(model,data_id);
+					addViewPointRefresh(vpoint);
+				}
+			},
+			dataType:'json'		
+		});
+		return false;
+	}
+	
+	$('#viewpoint_submit_btn').click(function() {
+		var vpoint = $('#viewpoint_content_input').val();
+		vpoint = $.trim(vpoint);		
+		submitViewPoint(vpoint,'{{$points_model}}','{{$points_dataid}}');
+		return false;
+	});
+	
+	$('#viewpoint_more').click(function() {
+		if($('#viewpoint_more').size() == 0) return;
+		
+		$('#viewpoint_more').remove();
+		
+		$.ajax({
+			type:'get',
+			url:'{{$this->Html->url(array("controller"=>"viewpoints","action"=>"publish","plugin"=>"communicate",$points_model,$points_dataid))}}' , 
+			data:{} , 
+			success:function(data) {
+				if(data.error) {
+					return showErrorMessage(data.error);
+				}
+				
+				var _t = [];
+				for(var i = 0 , l = data.length ; i < l ; i++) {
+					var classname = (i >= 12 ? 1 : Math.floor((13 - i) / 2));
+					_t.push('<a href="#" onclick="return false" class="c' + classname + ' xy_viewpoint_btn" rel="' + data[i]['Viewpoint']['name'] + '" agree_num="' + data[i]['Viewpoint']['support_nums'] + '" title="共有' + data[i]['Viewpoint']['support_nums'] + '赞同此观点">' + data[i]['Viewpoint']['name'] + '</a>');
+				}
+				
+				$('#viewpoint_list').html(_t.join(''));
+				
+				// 绑定事件
+				bindListClickEvent();
+			} , 
+			dataType:'json'	
+		});
+		
+		return false;
+	});
+});
+	
+</script>

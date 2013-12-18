@@ -1,0 +1,19 @@
+<div class="users form">
+    <?php echo $this->MForm->create('User', array('url' => array('controller' => 'users', 'action' => 'login')));?>
+        <fieldset>
+        <?php
+            echo $this->MForm->input('username');
+            echo $this->MForm->input('password');
+        ?>
+        </fieldset>
+    <?php
+        echo $this->Html->link(__('Forgot password?', true), array(
+            'admin' => false,
+            'controller' => 'users',
+            'action' => 'forgot',
+        ), array(
+            'class' => 'forgot',
+        ));
+        echo $this->MForm->end('Log In');
+    ?>
+</div>

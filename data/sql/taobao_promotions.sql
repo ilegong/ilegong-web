@@ -1,0 +1,36 @@
+DROP TABLE IF EXISTS `cake_taobao_promotions`;
+CREATE TABLE IF NOT EXISTS `cake_taobao_promotions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) DEFAULT '',
+  `promType` bigint(11) DEFAULT '0',
+  `promId` bigint(11) DEFAULT '0',
+  `iconFile` varchar(200) DEFAULT NULL,
+  `num_iid` varchar(20) DEFAULT NULL,
+  `showPoint` tinyint(1) DEFAULT '0',
+  `showPrice` tinyint(1) DEFAULT '0',
+  `showIcon` tinyint(1) DEFAULT '0',
+  `policyId` bigint(11) DEFAULT '0',
+  `groupName` varchar(20) DEFAULT NULL,
+  `discountType` int(3) DEFAULT '0',
+  `discountValue` float(10,2) DEFAULT '0.00',
+  `promPrice` float(10,2) DEFAULT '0.00',
+  `promName` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `num_iid` (`num_iid`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
+REPLACE INTO `cake_i18nfields` (`id`, `name`, `savetodb`, `translate`, `type`, `model`, `locale`, `length`, `sort`, `allowadd`, `allowedit`, `selectmodel`, `selectvaluefield`, `selecttxtfield`, `selectparentid`, `selectautoload`, `selectvalues`, `associateflag`, `associateelement`, `associatefield`, `associatetype`, `formtype`, `default`, `allownull`, `validationregular`, `description`, `onchange`, `explodeimplode`, `explain`, `deleted`, `created`, `updated`, `conditions`) VALUES (NULL, 'id', '1', '编号', 'integer', 'TaobaoPromotion', 'zh_cn', '11', 6, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', NULL, NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2011-09-27 20:25:06', '2011-09-27 20:25:06', NULL),
+(NULL, 'name', '1', '名称', 'string', 'TaobaoPromotion', 'zh_cn', '200', 5, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', NULL, NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2011-09-27 20:25:06', '2011-09-27 20:25:06', NULL),
+(NULL, 'promType', '1', 'promType', 'integer', 'TaobaoPromotion', 'zh_cn', '11', 6, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', 'equal', '', '', '1', '', NULL, '', '', '', 0, '2011-09-27 20:25:06', '2011-09-27 20:25:06', ''),
+(NULL, 'promId', '1', 'promId', 'integer', 'TaobaoPromotion', 'zh_cn', '11', 6, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', 'equal', '', '', '1', '', NULL, '', '', '', 0, '2011-09-27 20:25:06', '2011-09-27 20:25:06', ''),
+(NULL, 'iconFile', '1', 'iconFile', 'string', 'TaobaoPromotion', 'zh_cn', '200', 6, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', 'equal', '', '', '1', '', NULL, '', '', '', 0, '2011-09-27 20:25:06', '2011-09-27 20:25:06', ''),
+(NULL, 'num_iid', '1', 'num_iid', 'string', 'TaobaoPromotion', 'zh_cn', '20', 5, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', 'equal', '', '', '1', '', NULL, '', '', '', 0, '2011-09-27 20:25:06', '2011-09-27 20:25:06', ''),
+(NULL, 'showPoint', '1', 'showPoint', 'integer', 'TaobaoPromotion', 'zh_cn', '1', 3, '1', '1', '', NULL, NULL, NULL, '1', '0=>否\r\n1=>是', '0', '', '', 'equal', 'select', '0', '1', '', NULL, '', '', '', 0, '2011-09-27 20:25:06', '2011-09-27 20:25:06', ''),
+(NULL, 'showPrice', '1', 'showPrice', 'integer', 'TaobaoPromotion', 'zh_cn', '1', 3, '1', '1', '', NULL, NULL, NULL, '1', '0=>否\r\n1=>是', '0', '', '', 'equal', 'select', '0', '1', '', NULL, '', '', '', 0, '2011-09-27 20:25:06', '2011-09-27 20:25:06', ''),
+(NULL, 'showIcon', '1', 'showIcon', 'integer', 'TaobaoPromotion', 'zh_cn', '1', 3, '1', '1', '', NULL, NULL, NULL, '1', '0=>否\r\n1=>是', '0', '', '', 'equal', 'select', '0', '1', '', NULL, '', '', '', 0, '2011-09-27 20:25:06', '2011-09-27 20:25:06', ''),
+(NULL, 'policyId', '1', 'policyId', 'integer', 'TaobaoPromotion', 'zh_cn', '11', 2, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', 'equal', 'input', '', '1', '', NULL, '', '', '', 0, '2011-09-27 20:25:06', '2011-09-27 20:25:06', ''),
+(NULL, 'groupName', '1', 'groupName', 'string', 'TaobaoPromotion', 'zh_cn', '20', 1, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', 'equal', 'input', '', '1', '', NULL, '', '', '', 0, '2011-09-27 20:25:06', '2011-09-27 20:25:06', ''),
+(NULL, 'discountType', '1', 'discountType', 'integer', 'TaobaoPromotion', 'zh_cn', '3', 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'input', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2011-09-27 20:35:48', '2011-09-27 20:35:48', NULL),
+(NULL, 'discountValue', '1', 'discountValue', 'float', 'TaobaoPromotion', 'zh_cn', '10,2', 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'input', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2011-09-27 20:35:48', '2011-09-27 20:35:48', NULL),
+(NULL, 'promPrice', '1', 'promPrice', 'float', 'TaobaoPromotion', 'zh_cn', '10,2', 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'input', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2011-09-27 20:35:48', '2011-09-27 20:35:48', NULL),
+(NULL, 'promName', '1', 'promName', 'string', 'TaobaoPromotion', 'zh_cn', '20', 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'input', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2011-09-27 20:35:48', '2011-09-27 20:35:48', NULL);
+REPLACE INTO `cake_modelextends` (`id`, `name`, `cname`, `belongtype`, `modeltype`, `idtype`, `status`, `created`, `updated`, `tablename`, `related_model`, `security`, `operatorfields`, `deleted`, `cate_id`, `localetype`) VALUES (NULL, 'TaobaoPromotion', '淘宝优惠', '', 'default', '', 27, '2011-09-27 20:25:06', '2011-09-27 20:25:06', 'cake_taobao_promotions', '', '', '', '0', 0, 0);

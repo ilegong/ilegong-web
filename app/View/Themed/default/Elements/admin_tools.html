@@ -1,0 +1,100 @@
+{{if !empty($_SESSION['Auth']['Staff']) }}
+ <footer class="navbar  navbar-fixed-bottom navbar-inverse bs-docs-nav" style="margin-bottom:0px;">
+ <div class="container">
+ 	<div class="navbar-header">
+      <button data-target=".bs-admin-navbar-collapse" data-toggle="collapse" type="button" class="navbar-toggle">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="../">MiaoCMS</a>
+    </div>
+	<nav class="collapse navbar-collapse bs-admin-navbar-collapse" role="navigation">
+	<ul class="nav navbar-nav" id="main-menu-left">
+	<li class="dropdown">
+		<a class="dropdown-toggle" data-toggle="dropdown" href="#">模版工具<b class="caret"></b></a>
+		<ul class="dropdown-menu" id="swatch-menu">
+			<li><a href="#" onclick="publishController.open_dialog('{{Router::url("/manage/admin/regions/add")}}',{title:'新增区域 ',width:960})">新建区域</a></li>
+			<li class="divider"></li>
+			<li><a href="#ui-edit-point-modal" id="ui-edit-point" data-toggle="modal">编辑提示</a></li>
+			<li><a href="#" id="ui-edit-layout">编辑布局</a></li>
+			<li><a href="#" onclick="saveTemplate();">保存模板</a></li>
+			
+		</ul>
+	</li>
+	<li><a id="cms-admin-controls-toggle" href="#" rel="on">编辑风格</a></li>
+	
+	<li><div id="ajaxestatus" style="line-height:32px;display:none;margin-top: 6px;width:120px;height:20px; background:url({{$this->Html->url('/img/pbar-ani.gif')}}) repeat-x 0 0;float:left;margin-left:15px;"></div></li>
+	<li><a rel="tooltip" target="_blank" href="{{Router::url('/manage/admin/tools/clearcache')}}" >{{lang('clear_cache')}}<i class="icon-share-alt"></i></a></li>
+	<li><a rel="tooltip" target="_blank" href="{{Router::url('/manage/admin')}}" >{{lang('admin_pannel')}} <i class="icon-share-alt"></i></a></li>
+	
+	</ul>
+	</nav>
+</div>
+</footer>
+	
+<script type="text/javascript"> 
+$(document).ready(function() {
+	$('body').css('margin-bottom','50px');
+	$('#ui-edit-layout').click(function(){
+		if($(this).hasClass('IsEditing')){			
+			resetPortletLayout(); // 结束编辑
+			$(this).removeClass('IsEditing');
+			$(this).html('编辑布局');
+			return false;
+		}
+		else{
+			triggerPortletLayout(); // 开始编辑
+			$(this).addClass('IsEditing');
+			$(this).html('结束编辑布局');
+			return false;
+		}
+	});
+});
+</script>
+
+<div id="ui-edit-point-modal" class="modal hide fade" >
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+<h3 id="myModalLabel">编辑提示</h3>
+</div>
+<div class="modal-body">
+<p>内部区域的内容(一般指插入的列表或者内容)可以跨内部区域移动</p>
+<p>内部区域不能跨外部区域移动，只能在同一外部区域内互换位置</p>
+</div>
+<div class="modal-footer">
+<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+</div>
+</div>
+
+<div id="contain-24-edit-form" title="Create new Layout" style="display:none;">
+	<p class="validateTips">设置内容的比例，和为24.</p>
+	<form>
+	<span id="text-width-total"></span>-<span id="text-width-sub"></span>
+	<fieldset>
+		<div><label for="layout-first-width">第一列的宽度</label>
+		<input type="text" id="layout-first-width" value="18" class="text ui-widget-content ui-corner-all" />
+		</div><div><label for="layout-second-width">第二列的宽度</label>
+		<input type="text" id="layout-second-width" value="6" class="text ui-widget-content ui-corner-all" />
+		</div><div><label for="layout-third-width">第三列的宽度</label>
+		<input type="text" id="layout-third-width" value="0" class="text ui-widget-content ui-corner-all" />
+		</div><div><label for="layout-fourth-width">第四列的宽度</label>
+		<input type="text" id="layout-fourth-width" value="0" class="text ui-widget-content ui-corner-all" />
+		</div>
+	</fieldset>
+	</form>
+</div>
+
+	{{$this->Html->script(array('jquery/jquery.uitr.js',))}}
+	<!-- /themeroller/themeroller.htm -->
+	<script type="text/javascript">
+	$(function(){
+		$('#cms-admin-controls-toggle').click(function(){
+			jquitr.addThemeRoller('{{Router::url("/manage/admin/stylevars/themeroller")}}');
+			//jquitr.closeThemeRoller();
+		});
+	});
+	</script>
+	
+{{/if}}

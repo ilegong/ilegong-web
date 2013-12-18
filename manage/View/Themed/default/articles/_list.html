@@ -1,0 +1,8 @@
+<div  style="line-height:24px;"><span>
+{eval 
+echo $this->Html->link(usubstr($item['title'],0,18), 
+		'/articles/'.date('Ym',strtotime($item['created'])).'/'.$item['slug'].'.html', 
+		array('title'=>$item['title'],'target'=>'_blank')
+	);
+}
+</span> </div>

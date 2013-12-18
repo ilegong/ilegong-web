@@ -1,0 +1,32 @@
+<div  class="container">
+
+	
+	
+	<div class="col-md-10">
+	    <portlet>
+			title=新闻列表|portlet=notitle|body=
+<?php 
+if(!empty($questionlist))
+{
+	$item_all['User']=$CurrentUser['User'];
+	foreach($questionlist as $item) {
+$item=$item['Question'];
+?>
+{{template questions/_questionlist}}	
+<?PHP }
+}
+else
+{ ?>
+没有数据
+<?php }?>
+</portlet>
+	</div>
+	
+	<div class="col-md-2">
+		<portlet>
+			title=新闻列表|portlet=notitle|body=
+{{template users/account_leftmenu}}
+</portlet>
+		
+	</div>
+</div>

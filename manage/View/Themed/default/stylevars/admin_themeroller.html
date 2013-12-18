@@ -1,0 +1,763 @@
+<style>
+#bootswatchr {
+	display: block;
+	position: absolute;
+	height: auto;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	margin: 40px 0 0 0;
+	background-color: #fafafa;
+}
+
+#bootswatchr #main {
+	display: block;
+	position: absolute;
+	height: auto;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	margin: 0 0 0 300px;
+	border-left: solid 2px #bbb;
+	background-color: #fff
+}
+
+#bootswatchr #editor {
+	width: 300px;
+	padding: 2px 0 0 0;
+}
+
+#bootswatchr #editor .tab-content {
+	width: 300px;
+	display: block;
+	position: absolute;
+	height: auto;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	margin: 40px 0 0 0;
+	background: #fff;
+	overflow-y: auto;
+}
+
+#bootswatchr #editor .tab-content .accordion-body {
+	background: #e8e8e8
+}
+
+#pallette-colors {
+	margin: 0;
+	padding: 8px;
+}
+
+#pallette-colors .cpal {
+	cursor: pointer;
+	font-size: 0;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	height: 16px;
+	width: 16px;
+	float: left;
+	background: #000;
+	border: solid 2px #fff;
+	margin: 0 2px 2px 0;
+	-webkit-box-shadow: 0 0 2px #666;
+	box-shadow: 0 0 2px #666
+}
+
+#preview-page-selector {
+	margin-top: 0
+}
+
+#main-preview {
+	display: block;
+	position: absolute;
+	height: auto;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	margin: 40px 0 0 0;
+	overflow-y: auto;
+}
+
+#main-preview #preview-target {
+	overflow-x: hidden
+}
+
+#editor .inner {
+	padding: 8px
+}
+
+#prependLess-wrapper,#appendLess-wrapper {
+	display: block;
+	position: absolute;
+	height: auto;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	margin: 0 0 50% 0;
+}
+
+#prependLess-wrapper h6,#appendLess-wrapper h6 {
+	padding-left: 8px
+}
+
+#prependLess-wrapper textarea,#appendLess-wrapper textarea {
+	display: block;
+	position: absolute;
+	height: auto;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	margin: 30px 8px 8px 8px;
+	width: 269px;
+	resize: none
+}
+
+#appendLess-wrapper {
+	margin: 50% 0 0 0
+}
+
+#bootswatchr-tool-accordion .collapse {
+	position: relative;
+	overflow: hidden
+}
+</style>
+<div id="bootswatchr-tool-accordion" style="width:450px;" class="accordion-group">
+	<div class="accordion-heading">
+		<a class="accordion-toggle collapsed" data-toggle="collapse"
+			href="#pallette-tools">调色板</a>
+	</div>
+	<div id="pallette-tools" class="accordion-body collapse"
+		style="height: auto;">
+		<div id="pallette-colors">
+			<h6>灰度</h6>
+			<input type="text" class="cpal" value="{{$black}}" name="black"
+				data-placement="top" style="background: {{$black}};"
+				title="black"> 
+			<input type="text" class="cpal" value="{{$gray}}" name="gray" data-placement="top"
+				style="background: {{$gray}};" title="gray">
+
+			<input type="text" class="cpal" value="{{$grayDark}}" name="grayDark"
+				data-placement="top" style="background: {{$grayDark}};"
+				title="grayDark"> 
+			<input type="text"	class="cpal" value="{{$grayDarker}}" name="grayDarker" data-placement="top"
+				style="background: {{$grayDarker}};"
+				title="grayDarker"> 
+			<input type="text"	class="cpal" value="{{$grayLight}}" name="grayLight" data-placement="top"
+				style="background: {{$grayLight}};"
+				title="grayLight"> 
+			<input type="text"	class="cpal" value="{{$grayLighter}}" name="grayLighter" data-placement="top"
+				style="background: {{$grayLighter}};"
+				title="grayLighter"> 
+			<input type="text"	class="cpal" value="{{$white}}" name="white" data-placement="top"
+				style="background: {{$white}};" title="white">
+
+			<div class="clearfix"></div>
+			<h6>标准色</h6>
+
+			<input type="text" class="cpal" value="{{$blue}}" name="blue"
+				data-placement="right" style="background: {{$blue}};"
+				title="blue"> <input type="text" class="cpal"
+				value="{{$blueDark}}" name="blueDark" data-placement="right"
+				style="background: {{$blueDark}};"
+				title="blueDark"> <input type="text"
+				class="cpal" value="{{$green}}" name="green" data-placement="right"
+				style="background:{{$green}};"
+				title="green"> <input type="text" class="cpal"
+				value="{{$red}}" name="red" data-placement="right"
+				style="background: {{$red}};"
+				title="red"> <input type="text" class="cpal"
+				value="{{$yellow}}" name="yellow" data-placement="right"
+				style="background: {{$yellow}};"
+				title="yellow"> <input type="text"
+				class="cpal" value="{{$orange}}" name="orange" data-placement="right"
+				style="background: {{$orange}};"
+				title="orange"> <input type="text"
+				class="cpal" value="{{$pink}}" name="pink" data-placement="right"
+				style="background:{{$pink}};"
+				title="pink"> <input type="text" class="cpal"
+				value="{{$purple}}" name="purple" data-placement="right"
+				style="background:{{$purple}};"
+				title="purple">
+
+			<div class="clear"></div>
+		</div>
+	</div>
+
+	<div class="accordion-heading">
+		<a class="accordion-toggle collapsed" data-toggle="collapse"
+			href="#typography-tools"> 基本 </a>
+	</div>
+	<div id="typography-tools" class="accordion-body collapse"
+		style="height: auto;">
+
+		<div class="inner">
+		<table class="table">
+			<tr><td>
+			<div class="input-append">
+				<input class="input-small" value="{{$bodyBackground}}" size="8" type="text"
+					name="bodyBackground" title="bodyBackground"><span class="add-on">页面背景</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="{{$textColor}}" size="8" type="text"
+					name="textColor"><span class="add-on">文字颜色</span>
+			</div>
+				<div class="input-append">
+					<input class="input-small" value="14px" size="8" type="text"
+						name="baseFontSize"><span class="add-on">字体大小</span>
+				</div>
+
+				<div class="input-append">
+					<input class="input-small" value="20px" size="8" type="text"
+						name="baseLineHeight"><span class="add-on">行高</span>
+				</div></td><td>
+				<h6>H1~H6</h6>
+				<div class="input-append">
+					<input class="input-small" value="inherit" size="8" type="text"
+						name="headingsColor"><span class="add-on">headingsColor</span>
+				</div>
+
+				<div class="input-append">
+					<input class="input-small" value="inherit" size="8" type="text"
+						name="headingsFontFamily"><span class="add-on">headingsFontFamily</span>
+				</div>
+
+				<div class="input-append">
+					<input class="input-small" value="bold" size="8" type="text"
+						name="headingsFontWeight"><span class="add-on">headingsFontWeight</span>
+				</div></td></tr>
+			<tr><td><div class="input-append">
+				<input class="input-small" value="{{$linkColor}}" size="8" type="text"
+					name="linkColor"><span class="add-on">链接颜色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="{{$linkColorHover}}" size="8"
+					type="text" name="linkColorHover"><span class="add-on">链接高亮颜色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="{{$hrBorder}}" size="8"
+					type="text" name="hrBorder"><span class="add-on">hr边框色</span>
+			</div></td><td></td></tr>
+			<tr><td>
+			<h6>Font Families</h6>
+			<div class="input-append">
+					<input class="input-small"
+						value="'Helvetica Neue', Helvetica, Arial, sans-serif" size="8"
+						type="text" name="sansFontFamily"><span class="add-on">sansFontFamily</span>
+				</div>
+
+				<div class="input-append">
+					<input class="input-small"
+						value="Georgia, 'Times New Roman', Times, serif" size="8"
+						type="text" name="serifFontFamily"><span class="add-on">serifFontFamily</span>
+				</div>
+
+				<div class="input-append">
+					<input class="input-small"
+						value="Monaco, Menlo, Consolas, 'Courier New', monospace"
+						size="16" type="text" name="monoFontFamily"><span
+						class="add-on">monoFontFamily</span>
+				</div></td><td>
+				<h6>Family Assignments</h6>
+				<div class="input-append">
+					<input class="input-small" value="@sansFontFamily" size="8"
+						type="text" name="baseFontFamily"><span class="add-on">baseFontFamily</span>
+				</div>
+
+				<div class="input-append">
+					<input class="input-small" value="@serifFontFamily" size="8"
+						type="text" name="altFontFamily"><span class="add-on">altFontFamily</span>
+				</div></td></tr>
+		</table>
+		</div>
+	</div>
+
+	<div class="accordion-heading">
+		<a class="accordion-toggle collapsed" data-toggle="collapse"
+			href="#table-tools"> 表格 </a>
+	</div>
+	<div id="table-tools" class="accordion-body collapse"
+		style="height: auto;">
+
+		<div class="inner">
+		<table class="table">
+			<tr><td><div class="input-append">
+				<input class="input-small" value="transparent" size="8" type="text"
+					name="tableBackground"><span class="add-on">背景色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="#f9f9f9" size="8" type="text"
+					name="tableBackgroundAccent"><span title="表格单双行颜色变换" class="add-on">突出颜色</span>
+			</div></td><td><div class="input-append">
+				<input class="input-small" value="{{$tableBackgroundHover}}" size="8" type="text"
+					name="tableBackgroundHover"><span title="鼠标移上的背景色" class="add-on">Hover背景色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="{{$tableBorder}}" size="8" type="text"
+					name="tableBorder"><span class="add-on">边框颜色</span>
+			</div></td></tr>
+		</table>
+		</div>
+	</div>
+
+	<div class="accordion-heading">
+		<a class="accordion-toggle collapsed" data-toggle="collapse"
+			href="#button-tools"> 按钮 </a>
+	</div>
+	<div id="button-tools" class="accordion-body collapse"
+		style="height: auto;">
+
+		<div class="inner">
+		<table class="table">
+			<tr><td colspan="3"><div class="input-append">
+				<input class="input-small" value="#bbb" size="8" type="text"
+					name="btnBorder"><span class="add-on">边框色</span>
+			</div></td></tr>
+			<tr><td></td><td>背景色</td><td>背景亮色</td></tr>
+			<tr><td><button class="btn" type="button">default</button></td><td>
+				<input class="input-small" value="@white" size="8" type="text"
+					name="btnBackground"></td>
+			<td>
+				<input class="input-small" value="darken(@white, 10%)" size="8"
+					type="text" name="btnBackgroundHighlight"></td></tr>
+			<tr><td><button class="btn btn-danger" type="button">Danger</button></td><td>
+				<input class="input-small" value="#ee5f5b" size="8" type="text"
+					name="btnDangerBackground"></td><td>
+				<input class="input-small" value="#bd362f" size="8" type="text"
+					name="btnDangerBackgroundHighlight"></td></tr>
+			<tr><td><button class="btn btn-info" type="button">Info</button></td><td>
+				<input class="input-small" value="#5bc0de" size="8" type="text"
+					name="btnInfoBackground"></td><td>
+				<input class="input-small" value="#2f96b4" size="8" type="text"
+					name="btnInfoBackgroundHighlight"></td></tr>
+			<tr><td><button class="btn btn-inverse" type="button">inverse</button></td><td>
+				<input class="input-small" value="#444" size="8" type="text"
+					name="btnInverseBackground"></td><td>
+				<input class="input-small" value="@grayDarker" size="8" type="text"
+					name="btnInverseBackgroundHighlight"></td></tr>
+			<tr><td><button class="btn btn-primary" type="button">强调Primary</button></td><td>
+				<input class="input-small" value="@linkColor" size="8" type="text"
+					name="btnPrimaryBackground"></td><td>
+				<input class="input-small" value="spin(@btnPrimaryBackground, 15%)"
+					size="16" type="text" name="btnPrimaryBackgroundHighlight"></td></tr>
+			<tr><td><button class="btn btn-success" type="button">Success</button></td><td>
+				<input class="input-small" value="#62c462" size="8" type="text"
+					name="btnSuccessBackground"></td><td>
+				<input class="input-small" value="#51a351" size="8" type="text"
+					name="btnSuccessBackgroundHighlight"></td></tr>
+			
+			<tr><td><button class="btn btn-warning" type="button">Warning</button></td><td>
+				<input class="input-small" value="lighten(@orange, 15%)" size="8"
+					type="text" name="btnWarningBackground"></td><td>
+				<input class="input-small" value="@orange" size="8" type="text"
+					name="btnWarningBackgroundHighlight"></td></tr>
+		</table>
+		</div>
+	</div>
+
+	<div class="accordion-heading">
+		<a class="accordion-toggle collapsed" data-toggle="collapse" href="#form-tools">
+			表单输入框</a>
+	</div>
+	<div id="form-tools" class="accordion-body collapse"
+		style="height: auto;">
+
+		<div class="inner">
+		<table class="table">
+			<tr><td>			
+			<div class="input-append">
+				<input class="input-small" value="@white" size="8" type="text"
+					name="inputBackground"><span class="add-on">背景色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="#ccc" size="8" type="text"
+					name="inputBorder"><span class="add-on">边框色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="3px" size="8" type="text"
+					name="inputBorderRadius"><span class="add-on">边框圆角</span>
+			</div></td><td><div class="input-append">
+				<input class="input-small" value="@grayLighter" size="8"
+					type="text" name="inputDisabledBackground"><span
+					class="add-on">Disabled背景</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="#f5f5f5" size="8" type="text"
+					name="formActionsBackground"><span class="add-on">formActionsBackground</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@grayLight" size="8" type="text"
+					name="placeholderText"><span class="add-on">提示文字颜色</span>
+			</div></td></tr>
+		</table>
+
+			
+
+			
+
+		</div>
+	</div>
+
+	<div class="accordion-heading">
+		<a class="accordion-toggle collapsed" data-toggle="collapse"
+			href="#dropdown-tools">下拉菜单 </a>
+	</div>
+	<div id="dropdown-tools" class="accordion-body collapse"
+		style="height: auto;">
+
+		<div class="inner">
+		<table class="table">
+			<tr><td><div class="input-append">
+				<input class="input-small" value="@white" size="8" type="text"
+					name="dropdownBackground"><span class="add-on">背景色</span>
+			</div>
+			<div class="input-append">
+				<input class="input-small" value="@linkColor" size="8" type="text"
+					name="dropdownLinkBackgroundActive"><span class="add-on">激活背景色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@dropdownLinkBackgroundActive"
+					size="16" type="text" name="dropdownLinkBackgroundHover"><span
+					class="add-on">悬浮背景色</span>
+			</div></td><td><div class="input-append">
+				<input class="input-small" value="@grayDark" size="8" type="text"
+					name="dropdownLinkColor"><span class="add-on">链接色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@white" size="8" type="text"
+					name="dropdownLinkColorHover"><span class="add-on">链接悬浮色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@dropdownLinkColor" size="8"
+					type="text" name="dropdownLinkColorActive"><span
+					class="add-on">链接激活色</span>
+			</div></td></tr>
+			<tr><td><div class="input-append">
+				<input class="input-small"  data-color-format="rgba" value="rgba(0,0,0,.2)" size="8"
+					type="text" name="dropdownBorder"><span class="add-on">边框色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@white" size="8" type="text"
+					name="dropdownDividerBottom"><span class="add-on">分隔符底部边框色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="#e5e5e5" size="8" type="text"
+					name="dropdownDividerTop"><span class="add-on">分隔符顶部边框色</span>
+			</div></td><td></td></tr>
+		</table>
+		</div>
+	</div>
+
+	<div class="accordion-heading">
+		<a class="accordion-toggle collapsed" data-toggle="collapse"
+			href="#navbar-tools"> 导航条 </a>
+	</div>
+	<div id="navbar-tools" class="accordion-body in collapse"
+		style="height: auto;">
+
+		<div class="inner">
+			<table class="table"><tr><td><div class="input-append">
+				<input class="input-small"
+					value="darken(@navbarBackgroundHighlight, 5%)" size="8"
+					type="text" name="navbarBackground" title="navbarBackground"><span
+					class="add-on">背景色</span>
+				</div>
+
+				<div class="input-append">
+				<input class="input-small" value="#fff" size="8" type="text"
+					name="navbarBackgroundHighlight" title="navbarBackgroundHighlight"><span
+					class="add-on">背景亮色</span>
+				</div></td><div class="input-append">
+				<input class="input-small"  data-color-format="rgba" value="rgba(0,0,0,.2)" size="8"
+					type="text" name="dropdownBorder"><span class="add-on">边框色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@white" size="8" type="text"
+					name="dropdownDividerBottom"><span class="add-on">分隔符底部边框色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="#e5e5e5" size="8" type="text"
+					name="dropdownDividerTop"><span class="add-on">分隔符顶部边框色</span>
+			</div>
+				
+				<td>
+				<div class="input-append">
+				<input class="input-small" value="darken(@navbarBackground, 12%)"
+					size="16" type="text" name="navbarBorder"><span
+					class="add-on">边框颜色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@navbarLinkColor" size="8"
+					type="text" name="navbarBrandColor"><span class="add-on">商标颜色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="40px" size="8" type="text"
+					name="navbarHeight"><span class="add-on">高度</span>
+			</div>
+			</td></tr>
+			<tr><td><div class="input-append">
+				<input class="input-small" value="darken(@navbarBackground, 5%)"
+					size="16" type="text" name="navbarLinkBackgroundActive"><span
+					class="add-on">激活背景色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="transparent" size="8" type="text"
+					name="navbarLinkBackgroundHover"><span class="add-on">悬浮背景色</span>
+			</div></td><td><div class="input-append">
+				<input class="input-small" value="@grayLight" size="8" type="text"
+					name="navbarLinkColor"><span class="add-on">链接色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@gray" size="8" type="text"
+					name="navbarLinkColorActive"><span class="add-on">激活链接色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@grayDark" size="8" type="text"
+					name="navbarLinkColorHover"><span class="add-on">悬浮链接色</span>
+			</div></td></tr>
+			<tr><td><div class="input-append">
+				<input class="input-small" value="lighten(@navbarBackground, 25%)"
+					size="16" type="text" name="navbarSearchBackground"><span
+					class="add-on">搜索背景色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@white" size="8" type="text"
+					name="navbarSearchBackgroundFocus"><span class="add-on">搜索焦点色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small"
+					value="darken(@navbarSearchBackground, 30%)" size="8" type="text"
+					name="navbarSearchBorder"><span class="add-on">搜索边框色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="#ccc" size="8" type="text"
+					name="navbarSearchPlaceholderColor"><span class="add-on">搜索提示字颜色</span>
+			</div></td><td><div class="input-append">
+				<input class="input-small" value="@grayLight" size="8" type="text"
+					name="navbarText"><span class="add-on">文字颜色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="979px" size="8" type="text"
+					name="navbarCollapseWidth"><span class="add-on">宽度</span>
+			</div></td></tr>
+			
+			</table>
+
+			
+
+			
+
+			
+
+			
+
+			
+			<!-- 
+			<div class="input-append">
+				<input class="input-small" value="#111111" size="8" type="text"
+					name="navbarInverseBackground"><span class="add-on">反转背景色</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="#222222" size="8" type="text"
+					name="navbarInverseBackgroundHighlight"><span
+					class="add-on">navbarInverseBackgroundHighlight</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="#252525" size="8" type="text"
+					name="navbarInverseBorder"><span class="add-on">navbarInverseBorder</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@grayLight" size="8" type="text"
+					name="navbarInverseText"><span class="add-on">navbarInverseText</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@grayLight" size="8" type="text"
+					name="navbarInverseLinkColor"><span class="add-on">navbarInverseLinkColor</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@white" size="8" type="text"
+					name="navbarInverseLinkColorHover"><span class="add-on">navbarInverseLinkColorHover</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@navbarInverseLinkColorHover"
+					size="16" type="text" name="navbarInverseLinkColorActive"><span
+					class="add-on">navbarInverseLinkColorActive</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="transparent" size="8" type="text"
+					name="navbarInverseLinkBackgroundHover"><span
+					class="add-on">navbarInverseLinkBackgroundHover</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@navbarInverseBackground"
+					size="16" type="text" name="navbarInverseLinkBackgroundActive"><span
+					class="add-on">navbarInverseLinkBackgroundActive</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small"
+					value="lighten(@navbarInverseBackground, 25%)" size="8"
+					type="text" name="navbarInverseSearchBackground"><span
+					class="add-on">navbarInverseSearchBackground</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@white" size="8" type="text"
+					name="navbarInverseSearchBackgroundFocus"><span
+					class="add-on">navbarInverseSearchBackgroundFocus</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@navbarInverseBackground"
+					size="16" type="text" name="navbarInverseSearchBorder"><span
+					class="add-on">navbarInverseSearchBorder</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="#ccc" size="8" type="text"
+					name="navbarInverseSearchPlaceholderColor"><span
+					class="add-on">navbarInverseSearchPlaceholderColor</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="@navbarInverseLinkColor" size="8"
+					type="text" name="navbarInverseBrandColor"><span
+					class="add-on">navbarInverseBrandColor</span>
+			</div>
+			-->
+
+		</div>
+	</div>
+
+	<div class="accordion-heading">
+		<a class="accordion-toggle collapsed" data-toggle="collapse" href="#hero-tools">
+			Hero Units </a>
+	</div>
+	<div id="hero-tools" class="accordion-body collapse">
+
+		<div class="inner">
+
+			<div class="input-append">
+				<input class="input-small" value="@grayLighter" size="8"
+					type="text" name="heroUnitBackground"><span class="add-on">heroUnitBackground</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="inherit" size="8" type="text"
+					name="heroUnitHeadingColor"><span class="add-on">heroUnitHeadingColor</span>
+			</div>
+
+			<div class="input-append">
+				<input class="input-small" value="inherit" size="8" type="text"
+					name="heroUnitLeadColor"><span class="add-on">heroUnitLeadColor</span>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="accordion-heading">
+		<a class="accordion-toggle collapsed" data-toggle="collapse" href="#alert-tools">
+			Alerts </a>
+	</div>
+	<div id="alert-tools" class="accordion-body in collapse"
+		style="height: auto;">		
+		<div class="inner">
+		<table class="table">
+		<tr><th></th><th>Background</th><th>Border</th><th>Text</th></tr>
+		<tr><td><div class="alert alert-warning">Warning</div></td><td><input class="input-small" value="{{$warningBackground}}" size="8" type="text"
+					name="warningBackground" style="background:{{$warningBackground}}"></td>
+					<td><input class="input-small"
+					value="{{$warningBorder}}" size="8"
+					type="text" name="warningBorder"></td>
+					<td><input class="input-small" value="{{$warningText}}" size="8" type="text"
+					name="warningText" style="background:{{$warningText}}"></td></tr>
+					
+		<tr><td><div class="alert alert-error">Error</div></td><td><input class="input-small" value="{{$errorBackground}}" size="8" type="text"
+					name="errorBackground" style="background:{{$errorBackground}}"></td>
+			<td><input class="input-small"
+					value="{{$errorBorder}}" size="8"
+					type="text" name="errorBorder"></td>
+			<td><input class="input-small" value="{{$errorText}}" size="8" type="text"
+					name="errorText" style="background:{{$errorText}}"></td></tr>
+					
+		<tr><td><div class="alert alert-success">Success</div></td>
+		<td><input class="input-small" value="{{$successBackground}}" size="8" type="text"
+					name="successBackground" style="background:{{$successBackground}}"></td>
+		<td><input class="input-small"
+					value="{{$successBorder}}" size="8"
+					type="text" name="successBorder"></td>
+		<td><input class="input-small" value="{{$successText}}" size="8" type="text"
+					name="successText" style="background:{{$successText}}"></td></tr>
+					
+		<tr><td><div class="alert alert-info">info</div></td>
+		<td><input class="input-small" value="{{$infoBackground}}" size="8" type="text"
+					name="infoBackground" style="background:{{$infoBackground}}"></td>
+		<td><input class="input-small"
+					value="{{$infoBorder}}" size="8"
+					type="text" name="infoBorder"></td>
+		<td><input class="input-small" value="{{$infoText}}" size="8" type="text"
+					name="infoText" style="background:{{$infoText}}"></td></tr>
+		</table>
+
+		</div>
+	</div>
+
+</div>
+<script>
+$(function(){
+	//$('#pallette-tools input').tooltip();
+	$('input').each(function(){
+		var str = $(this).val();
+		// var re = /@|\(/;//（含函数括号或者@变量的） if(!re.test(str)){ 
+		var re = /#/;
+		if(re.test(str)){ // 含#的输入框，绑定颜色选择器
+			$(this).colorpicker().on('changeColor', function(ev){
+				  this.value = ev.color.toHex();
+				  $(this).css('background-color',ev.color.toHex());
+			});
+		}		
+	})
+	$('.colorpicker').colorpicker();
+	
+})
+</script>

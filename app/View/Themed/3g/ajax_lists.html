@@ -1,0 +1,8 @@
+<ul class="portlet-region-list  clearfix portlet-content-list">
+	<?PHP  $region_control_name= $current_controller; ?>
+	{{loop $datalist $key $item_all}}	
+	<?PHP  $item = $item_all[$current_model]; ?>
+		{{template products/_photolist}}
+	{{/loop}}
+</ul>
+{{$list_page_navi}}

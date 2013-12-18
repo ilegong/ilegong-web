@@ -1,0 +1,69 @@
+<div class="container clearfix">
+<div class="row">
+	<div class="ui-contain col-md-9">
+		<portlet>
+			    <h2 class="Content-title"><?php echo $Download['Download']['name']; ?></h2>
+	    <div class="Content-info">
+	来源：{{$Download['Download']['origin']}}    阅读次数： <span class="ui-stats-num Stats-Download-{{$Download['Download']['id']}}-view_nums"><?php echo $Download['Download']['views_count']; ?></span>
+	    </div>
+	    <div class="Content-body">
+	    	<ul class="playlist">
+			{{loop  $Download['Uploadfile'] $file}}
+				<li><a class="uploadfiles" onclick="return false;" data-type="{{$file['Uploadfile']['type']}}" href="{{Router::url($file['Uploadfile']['fspath'])}}" data-url="{{Router::url($file['Uploadfile']['fspath'])}}"><span class="glyphicon glyphicon-play"></span>{{$file['Uploadfile']['name']}}</a></li>
+			{{/loop}}
+			</ul>
+		    <div class="ui-share">
+		    	<div class="ui-state-default"><a href="javasctipt:void(0);" onclick="return addtofavor('Download','{{$Download['Download']['id']}}');">分享</a></div>
+		    	<div class="ui-widget-content ui-share-num"><span class="ui-stats-num Stats-Download-{{$Download['Download']['id']}}-favor_nums">{{if $Download['Download']['favor_nums']}}({{$Download['Download']['favor_nums']}}){{else}}0{{/if}}</span></div>
+		    </div>
+	    	<?php echo $Download['Download']['content']; ?>
+	    	{{if $Download['Download']['remoteurl']}}
+	    	<p>原文链接：<a href="{{$Download['Download']['remoteurl']}}" style="font-size: 12px;" target="_blank">{{$Download['Download']['remoteurl']}}</a></p>
+	    	{{/if}}
+	    
+        {{$this->Hook->call("affterContent",array('Download',$Download['Download']['id']))}}
+       
+	</div>
+{{$this->Html->css(array('page-player'))}}	
+{{$this->Html->script(array('soundmanager/script/soundmanager2'))}}
+<script>
+soundManager.setup({
+  url: '{{Router::url('/js/soundmanager/swf/')}}',
+  // optional: use 100% HTML5 mode where available
+  // preferFlash: false,
+  onready: function() {
+	  /*$('.uploadfiles').click(function(){
+		  if($(this).data('type')=='audio/mpeg'){
+			  var mySound = soundManager.createSound({
+			      id: 'aSound',
+			      url: $(this).data('url')
+			  });
+			  mySound.play();
+		  }
+	  })*/
+    
+  },
+  ontimeout: function() {
+    // Hrmm, SM2 could not start. Missing SWF? Flash blocked? Show an error, etc.?
+  }
+});
+var PP_CONFIG = {
+	    usePeakData: true,     // [Flash 9 only] whether or not to show peak data (no notable CPU cost)
+	    useWaveformData: true  // [Flash 9 only] show raw waveform data. WARNING: Experimental, likely CPU-heavy
+	  }
+</script>	
+{{$this->Html->script(array('soundmanager/script/page-player'))}}	
+		</portlet>
+		<portlet>
+		{{template comments/add}}
+		</portlet>
+	</div>
+	
+	<div class="ui-contain col-md-3">
+		<portlet id="portlet-31"></portlet>	
+	</div>
+</div>
+</div>
+<div id="dialog-share" style="display:none;" title="温馨提示">
+	<div class="ui-pop-tips"><span class="ico ico-success" style="float:left;"></span><div class="tips-cnt">发表观点成功，是否也分享给您的好友？</div></div>
+</div>

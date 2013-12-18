@@ -1,0 +1,7 @@
+<ul class="portlet-region-list  clearfix portlet-content-list">
+	{{loop $datas $key $item_all}}
+		<?PHP  $item = $item_all[$modelname];?>
+		{{include name="$tplname" plugin="$region_plugin"}}
+	{{/loop}}
+</ul>
+{{$page_navi}}

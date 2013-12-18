@@ -1,0 +1,264 @@
+<div class="actions clearfix">
+		{if in_array('add',$allowactions)}
+        <ul class="clearfix">
+            <li class="NewDocument"><?php echo $this->Html->link(__('New ').$modelinfo['cname'], array('controller' => 'flowsteps','action'=>'dataadd',$step_id),array('onclick'=>'return open_dialog({title:"'.__('New ').$modelinfo['cname'].'"},this.href,reloadGrid);')); ?></li>
+            <li class="DocumentSearch"><?php echo $this->Html->link(__('Search and Statistics'),'#',array('onclick'=>'return open_content_dialog(\'ui-search-form\');')); ?></li>
+        </ul>
+        {else}
+        <ul class="clearfix">
+            <li class="DocumentSearch"><?php echo $this->Html->link(__('Search and Statistics', true),'#',array('onclick'=>'return open_content_dialog(\'ui-search-form\');')); ?></li>
+        </ul>
+        {/if}
+
+        <div class="radiobuttons" style="float:right;">
+			<input type="radio" id="radio1" name="radio" onclick="goToDataList();" checked="checked"/><label for="radio1">列表</label>
+			<input type="radio" id="radio2" name="radio"  onclick="goToTrash();" /><label for="radio2">回收站</label>
+		</div>
+</div>
+
+<script>
+$(function(){
+
+	$('input[type="submit"]','.ui-search-form-content').bind('click',function(){
+		var condition_str = ($('form','.ui-search-form-content').serialize());
+		//alert(condition_str);
+		condition_str = condition_str.replace(/%5B%5D/g,'[]').replace(/data%5B/g,'conditions[').replace(/%5D%5B/g,'.').replace(/%5D/g,']');
+
+		
+		var hasgroup = false;
+		$('#{{$current_model}}stats-info select').each(function(i){
+				if(this.value!="")
+				{
+					hasgroup = true;
+				}
+			});
+		if(hasgroup)
+		{
+			$.get(' {{$this->Html->url('/admin/ajaxes/groupby/');}}?{$requeststr}&'+condition_str+'&inajax=1',
+					function(data)
+					{
+						show_content(data)
+					}
+			);
+		}
+		else
+		{
+			//alert(condition_str);
+			jQuery("#jqgrid_list").jqGrid('setGridParam',{url:' {{$this->Html->url('/admin/ajaxes/jqgrid/');}}?{$requeststr}&'+condition_str,page:1}).trigger('reloadGrid');;
+			$('.ui-search-form-close').trigger('click');
+		}
+		$("#ui-search-form").dialog("close");
+		return false;
+	});
+
+	//$('.ui-search-form-close').trigger('click');
+});
+</script>
+<div id="ui-search-form" class="dialog" title="{{__('Search and Statistics',true)}}" style="margin:0px 10px">
+		
+	<div class="ui-search-form-content ui-widget-content ui-corner-all">
+
+	<?php 
+	echo $this->MForm->form(array('type' => 'post',
+        'model'=> $current_model,
+        'update'=>'settings_result',
+        'url' => array(
+            'controller' => $current_controller,
+            'action' => 'searchstatis'
+        ),
+	'auto_form' => 1,
+	'form_type' => 'search',
+));
+	?>
+	</div>
+</div>
+ 
+<div class="clear ui-helper-clearfix"></div>
+
+<table id="jqgrid_list"></table>
+<div id="pgtoolbar2"></div> 
+<div id="pager2"></div> 
+<?php
+
+echo $javascript->link(array(
+				'jqgrid/i18n/grid.locale-cn',
+        		'jqgrid/jquery.jqGrid.min',
+        ));
+?>
+<script>
+$.jgrid.no_legacy_api = true;
+$.jgrid.useJSON = true; 
+var lastsel2;
+/*  jqgird 列表相关操作函数  */
+function goToTrash()
+{
+	jQuery("#jqgrid_list").jqGrid('setGridParam',{url:' {{$this->Html->url('/admin/ajaxes/jqgrid/');}}?{$requeststr}&conditions[{{$current_model}}.deleted]=1',page:1}).trigger('reloadGrid');;
+}
+function goToDataList()
+{
+	jQuery("#jqgrid_list").jqGrid('setGridParam',{url:' {{$this->Html->url('/admin/ajaxes/jqgrid/');}}?{$requeststr}',page:1}).trigger('reloadGrid');;
+}
+
+function reloadGrid()
+{
+	var page = jQuery("#jqgrid_list").jqGrid("getGridParam","page");
+	//scrollOffset = jQuery("#jqgrid_list").jqGrid("getGridParam","scrollOffset");
+	jqgrid_scrollOffset = $(".ui-jqgrid-bdiv").scrollTop();
+	//alert($(".ui-jqgrid-bdiv").attr("scrollHeight"));
+	
+	//alert(scrollOffset);
+	jQuery("#jqgrid_list").jqGrid("setGridParam",{page:page}).trigger("reloadGrid");
+}
+jQuery("#jqgrid_list").jqGrid({
+   	"url":' {{$this->Html->url('/admin/ajaxes/jqgrid/');}}?{$requeststr}',
+   	"editurl":'/admin/{{$current_controller}}/edit',
+   	"datatype":"json",
+	"mtype": "POST", 
+   	"colNames":[{$col_names}],//,'actions'
+   	"colModel":[
+   		{$fieldlist}	
+   		//,{name:'act',index:'act', width:75,sortable:false} 	
+   	],
+   	"rownumbers":true,
+   	"rowNum":30,
+   	"rowList":[15,30,50,100],
+   	"pager": '#pager2',
+   	"multiselect":true,
+   	"sortname": 'id',
+   	"sortorder": "desc",
+   	"width":"750",
+   	"height":"300",
+   	//"hoverrows":true,
+   	"viewrecords":true,
+   	"forceFit" : true, /* 列宽度字动匹配 */ 
+    "jsonReader":{"repeatitems":false,"subgrid":{"repeatitems":false}},
+	"xmlReader":{"repeatitems":false,"subgrid":{"repeatitems":false}},
+	"afterInsertRow": function(rowid, aData){ 
+		switch (aData.status) { 
+		//case '1': jQuery("#jqgrid_list").jqGrid('setRowData',rowid,false,{color:'green'}); break; 
+		case '0': jQuery("#jqgrid_list").jqGrid('setRowData',rowid,false,{color:'#CCC'}); break; 
+		// 未激活数据
+		case 'Client 3': jQuery("#jqgrid_list").jqGrid('setCell',rowid,'total','',{color:'blue'}); break; 
+		} 
+	},
+	"ondblClickRow": function(id){ 
+		if(id && id!==lastsel2){ 
+			
+			jQuery('#jqgrid_list').jqGrid('restoreRow',lastsel2); 
+			
+			lastsel2=id; 
+		} 
+	}, 
+	
+	"gridComplete": function(){ 
+		$(".ui-jqgrid-bdiv").scrollTop(jqgrid_scrollOffset); // 触发更新事件时，自动滚动到先前滚动条所在的位置。
+		$('.ui-grid-actions').each(function(i){
+			$(this).parents('td:first').removeAttr('title'); // 去掉表格中，操作按钮外层td的title属性 
+		});
+		/*var ids = jQuery("#jqgrid_list").jqGrid('getDataIDs'); 
+		for(var i=0;i < ids.length;i++){ 
+			var cl = ids[i]; 
+			be = "<input style='height:22px;width:20px;' type='button' value='E' onclick=\"jQuery('#jqgrid_list').editRow('"+cl+"');\" />"; 
+			se = "<input style='height:22px;width:20px;' type='button' value='S' onclick=\"jQuery('#jqgrid_list').saveRow('"+cl+"');\" />"; 
+			ce = "<input style='height:22px;width:20px;' type='button' value='C' onclick=\"jQuery('#jqgrid_list').restoreRow('"+cl+"');\" />"; 
+			jQuery("#jqgrid_list").jqGrid('setRowData',ids[i],{act:be+se+ce}); 
+		} */
+	}, 
+    //"viewsortcols":[true,"horizontal",false],
+    "idName":false,
+    "caption":"",
+    //toolbar: [true,"top"]
+    
+});
+// 进行行内编辑 ，若设置了flowstep_id则表示是流程中的授权操作  
+function editGridRow(id,flowstep_id)
+{
+	if(flowstep_id)
+	{
+		jQuery("#jqgrid_list").jqGrid('setGridParam',{editurl:" {{$this->Html->url('/admin/flowsteps/dataedit/');}}"+flowstep_id+"/"+id});
+	}
+	else
+	{
+		jQuery("#jqgrid_list").jqGrid('setGridParam',{editurl:" {{$this->Html->url('/admin/'.$current_controller.'/edit/');}}"+id});
+	}
+	jQuery('#jqgrid_list').jqGrid('editRow',id,true); 
+	$('#edit_grid_row_'+id).hide();
+	$('#save_grid_row_'+id).show();
+	$('#canceledit_grid_row_'+id).show();
+	
+	
+}
+// 保存行内编辑数据 
+function SaveGridRow(id)
+{
+	jQuery('#jqgrid_list').jqGrid('saveRow',id,function(res){
+			
+			try
+			{
+				var obj=eval("("+res.responseText+")");
+				if(obj.success && typeof(obj.success)=='xml')
+				{
+					throw "error";
+				}
+				if(obj.success)
+				{
+					show_message(obj.success )
+					return true;
+				}
+				else
+				{
+					var txt = "";  // 显示格式验证错误的信息  
+					for(var i in obj)
+					{
+						txt += obj[i]+"<br/>";
+					}
+					show_message(txt)
+					return false;
+				}
+			}
+			catch(err)
+			{
+				
+			}
+			return false;
+		}); 
+	$('#save_grid_row_'+id).hide();
+	$('#canceledit_grid_row_'+id).hide();
+	$('#edit_grid_row_'+id).show();
+}
+// 取消编辑 
+function CancelEditGridRow(id)
+{
+	jQuery('#jqgrid_list').jqGrid('restoreRow',id); 
+	$('#save_grid_row_'+id).hide();
+	$('#canceledit_grid_row_'+id).hide();
+	$('#edit_grid_row_'+id).show();
+}
+jQuery("#jqgrid_list").jqGrid('navGrid','#pager2',{edit:false,add:false,del:false},{},{},{},{multipleSearch:true});
+jQuery("#jqgrid_list").jqGrid('gridResize',{minWidth:350,minHeight:180});
+
+$(document).ready(function(){
+	jQuery("#jqgrid_list").jqGrid('setGridHeight',$(window).height()-150);
+	jQuery("#jqgrid_list").jqGrid('setGridWidth',$(window).width()-20);
+	
+	$(window).resize(function(){
+		jQuery("#jqgrid_list").jqGrid('setGridHeight',$(window).height()-150);
+		jQuery("#jqgrid_list").jqGrid('setGridWidth',$(window).width()-20);
+		
+	});
+	
+	//jQuery("#jqgrid_list").jqGrid('sortableRows');
+	
+	$('.model-groupby-field-button .ui-icon-plus').live('click',function(){
+		obj = $(this).parents('.model-groupby-field:first');
+		obj.clone().insertAfter(obj);
+	});
+	$('.model-groupby-field-button .ui-icon-minus').live('click',function(){
+		if($('.model-groupby-field').size()>1)
+		{
+			obj = $(this).parents('.model-groupby-field:first');
+			obj.remove();
+		}
+	});
+});
+</script>

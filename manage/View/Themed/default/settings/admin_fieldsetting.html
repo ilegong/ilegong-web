@@ -1,0 +1,29 @@
+<style>
+div.checkbox{width:160px;float:left;height:28px;overflow:hidden;}
+</style>
+<div  style="margin:10px">
+<div id="settings_result"></div>
+<?php
+echo $this->MForm->create($current_model,array(
+        'url' => array(
+            'controller' => 'settings',
+            'action' => 'ajaxesave'
+        ),
+));
+
+foreach ($_extschema as $field => $fieldinfo) {
+	if(in_array($field,$checked_fields))
+	{
+		$checked = ' checked="true" ';
+	}
+	else
+	{
+		$checked = '';
+	}
+    echo '<div class="checkbox"><input type="checkbox" '.$checked .' name="setting['.$modelClass.']['.$setting_key.'][]" id="fields_'.$field.'" value="'.$field.'"><label for="fields_'.$field.'">'.$fieldinfo['translate'].'</label></div>';
+}
+echo '<div class="clearfix"></div>';
+echo $this->MForm->end(__('Save', true));
+
+?>
+</div>

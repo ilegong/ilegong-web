@@ -1,0 +1,90 @@
+<div class="form">
+{{if $current_action=='admin_add'}}
+<?php
+echo $this->MForm->create($current_model);
+?>
+{{elseif $current_action=='admin_edit'}}
+<?php 
+echo $this->MForm->create($current_model,array(
+    'url' => array('action' => 'edit',$id,$copy),
+));
+?>
+
+{{/if}}
+
+    <fieldset>
+    	 
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#article-main" data-toggle="tab"><span>{{__('Basic Info')}}</span></a></li>
+                    <li><a href="#article-seo" data-toggle="tab"><span>{{ __('SEO')}}</span></a></li>
+                    <li><a href="#article-publishing" data-toggle="tab"><span>{{__('Advanced Options')}}</span></a></li>
+                </ul>
+            <div class="tab-content">
+                <div id="article-main" class="tab-pane active">
+                	 
+						 {{$this->MForm->input('id')}}
+						 {{$this->MForm->titleImage('coverimg')}}
+						 <?php
+						 if($current_action=='admin_add'){
+				        	echo $this->MForm->input('name',array('size'=>'80','required'=>'required','onblur'=>"generateSlug(this,'#ProductSlug')"));
+						}
+						else{
+							echo $this->MForm->input('name',array('size'=>'80','required'=>'required'));
+						}
+						?>
+				         {{$this->MForm->input('cate_id',array('required'=>'required'))}} 
+<!-- 				         
+{{$this->MForm->input('Modelcate.id',array('type'=> 'select','label'=>__('产品类型'),'options'=>$modelcates,'selected'=>$selected_modelcates,))}}
+-->
+<div id="ProductTypeFields" style="background: #CCC;"></div>
+				<?php				         				         
+						echo $this->MForm->input('slug',array('required'=>'required'));
+						echo $this->MForm->input('published');						
+						echo $this->MForm->input('brand_id');
+				        echo $this->MForm->input('price');
+				        echo $this->MForm->input('material');
+						echo $this->MForm->keyword();
+				?>
+				<?php   echo $this->MForm->swfupload('photo','Product'); ?>
+				<?PHP
+				        echo $this->MForm->ckeditor('content',array('div'=>'wygiswys','label' => false));
+				?>
+				        
+                </div>
+                
+                 <div id="article-seo"  class="tab-pane">
+	                 	<?php
+		       
+					        echo $this->MForm->input('seotitle',array('rows' => '2', 'cols' => '100')); 
+					        echo $this->MForm->input('seodescription',array('rows' => '5', 'cols' => '100'));
+					        echo $this->MForm->input('seokeywords',array('rows' => '5', 'cols' => '100'));
+					    	?>
+                 </div>
+                 <div id="article-publishing"  class="tab-pane">
+                 	<?php             
+                    echo $this->MForm->input('created');
+                	?>
+                 </div>                 	
+       </div>
+ 
+    </fieldset>
+    <?php echo $this->MForm->end(array('label'=>__('Submit',true),'id'=>'btnsubmit')); ?>
+   
+</div>
+<script>
+$(function(){
+	$('#ModelcateId').change(function(){
+		{{if $current_action=='admin_add'}}
+		var url = ADMIN_BASEURL+'/admin/modelcates/loadSplitForm/product/'+this.value+' #ProductSplit'+this.value+'basic-info';
+		{{elseif $current_action=='admin_edit'}}
+		var url = ADMIN_BASEURL+'/admin/modelcates/loadSplitForm/product/'+this.value+'/{{$id}}.html #ProductSplit'+this.value+'basic-info';
+		{{/if}}
+		$('#ProductTypeFields').load(url,function(){
+
+		});
+	}).trigger('change');
+	
+});
+</script>
+
+

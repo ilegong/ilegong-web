@@ -1,0 +1,46 @@
+
+<div class="alert alert-success">
+  <strong>提示：</strong>点击图片即可选中
+</div>
+
+<?php echo $this->MForm->swfupload('ckeditor',$uploadmodel); ?>
+<?php 
+echo $this->MForm->create('Uploadfile',array('type' => 'post',
+        'url' => array(
+            'controller' => 'uploadfiles',
+            'action' => 'update'
+        ),
+));
+
+?>
+<style>
+.upload-filelist img{cursor:pointer;}
+</style>
+{{loop $uploadfiles $fk $file}}
+<div class="upload-filelist clearfix">
+    {{if 'image' == substr($file['Uploadfile']['type'],0,5)}}
+	<img src="{{$this->Html->webroot(APP_SUB_DIR.$file['Uploadfile']['thumb'])}}" width="100px"/><br/>{{/if}}
+     <input type="hidden" name="data[Uploadfile][{{$file['Uploadfile']['id']}}][id]" value="{{$file['Uploadfile']['id']}}">
+     <span><input class="ui-upload-filename" type="text" name="data[Uploadfile][{{$file['Uploadfile']['id']}}][name]" value="{{urldecode($file['Uploadfile']['name'])}}"/></span>
+     <br/><a href="{{Router::url($file['Uploadfile']['fspath'])}}" target="_blank">Preview</a>
+     <a href="javascript:void(0);" onclick="setImagUrl('{{$this->Html->webroot(APP_SUB_DIR.$file['Uploadfile']['mid_thumb'])}}',this)">{{__('Select')}}</a>
+     		
+     <a href="{{Router::url('/admin/uploadfiles/delete/'.$file['Uploadfile']['id'])}}">Delete</a><br/> 	        		
+</div>
+{{/loop}}
+{{$page_navi}}
+<?php echo $this->MForm->end(array('label'=>__('Update'),'id'=>'btnsubmit')); ?>
+<script>
+function setImagUrl(url,obj){
+	var alt = $(obj).parents('.upload-filelist:first').find('.ui-upload-filename:first').val();
+	window.returnValue={txtUrl:url,txtAlt:alt};
+	window.close();
+}
+$(function(){
+	$('.upload-filelist').on('click','img',function(){
+		window.returnValue={txtUrl:$(this).attr('src'),txtAlt:$(this).attr('title')};
+		window.close();
+	})
+})
+</script>
+

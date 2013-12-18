@@ -1,0 +1,11 @@
+<?PHP
+if(empty($item['slug']))
+{
+	$item['slug'] = $item['id'];
+}
+?>
+<div  style="line-height:24px;"><span>
+{{eval 
+	echo $this->Html->link($item['title'], '/articles/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',array('title'=>$item['title']) );
+}}
+</span> </div>

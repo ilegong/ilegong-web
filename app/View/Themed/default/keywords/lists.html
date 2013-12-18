@@ -1,0 +1,37 @@
+
+<div class="row">	
+	
+	<div class="ui-contain span17">
+		<portlet title="{{$keyword['value']}}">
+		<?PHP if($total>0){ ?> 
+			<ul class="clearfix portlet-content-list">
+			<?PHP
+			 foreach($datalist as $item) {
+				$item = $item[$target_model];
+			?>	 		
+					<li>
+						<div>
+					{{$this->Html->image($item['coverimg'], 
+						array(
+						'alt' => $item['title'],'title' => $item['title'],
+						'width'=>'170px',
+						'url'=> '/'.$target_controller.'/'.$item['slug'].'.html' 
+						))}}
+					</div>
+					<strong style="margin-top:2px;text-align:center;">
+						{{$this->Html->link(usubstr($item['name'],0,10), 
+						'/'.$target_controller.'/'.$item['slug'].'.html',
+						array('title'=>$item['title']))}}
+					</strong>
+					</li>
+			<?php } ?>
+			</ul> 	
+			{{$page_navi}}
+		
+		<?php } ?>
+		</portlet>
+	</div>
+	<div class="ui-contain span7">
+		
+	</div>
+</div>

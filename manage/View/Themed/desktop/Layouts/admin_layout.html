@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge, chrome=1" />
+<meta name="description" content="JavaScript desktop environment built with jQuery." />
+<title>{{$site[title]}}</title>
+
+{{$this->Html->css('bootstrap.min.css')}}
+{{$this->Combinator->css(array(
+			'reset.css',
+			'redmond/jquery-ui-1.8.23.custom.css',
+			'ui-customer.css',
+			'ui.jqgrid.css',
+			'jquery.jgrowl.css',
+			'swfupload.css',
+			'admin.css',
+			'desktop/desktop.css',
+			'desktop/contextmenu/jquery.contextMenu.css',
+        ))}}
+        
+<!--[if lt IE 9]>
+<link rel="stylesheet" href="assets/css/ie.css" />
+<![endif]-->
+<script type="text/javascript">
+var BASEURL  = "{{APP_SUB_DIR}}";
+var ADMIN_BASEURL = "{{ADMIN_SUB_DIR}}";
+</script>
+</head>
+<body>
+<div class="abs" id="wrapper">
+  <div class="abs" id="desktop">
+    <a class="abs icon shortcut" title="系统探针" style="left:20px;top:10px;" href="#" data-type="iframe" data-url="{{Router::url('/admin/tools/tz')}}">
+      <img src="{{$this->Html->url('/img/desktop/icons/icon_32_computer.png')}}" />
+      <label>我的系统</label>
+    </a>
+    <a class="abs icon shortcut" style="left:20px;top:80px;" href="#" data-url="{{Router::url('/admin/categories/list.html')}}">
+      <img src="{{$this->Html->url('/img/desktop/icons/categories.png')}}" />
+      <label>栏目管理</label>
+    </a>
+    <a class="abs icon shortcut" style="left:20px;top:150px;" href="#" data-url="{{Router::url('/admin/articles/list.html')}}">
+      <img src="{{$this->Html->url('/img/desktop/icons/articles.png')}}" />
+      <label>文章管理</label>
+    </a>
+    <a class="abs icon shortcut" style="left:20px;top:220px;" href="#" data-url="{{Router::url('/admin/products/list.html')}}">
+      <img src="{{$this->Html->url('/img/desktop/icons/products.png')}}" />
+      <label>产品管理</label>
+    </a>
+    {{if ModelExists('Taobaoke')}}
+    <a class="abs icon shortcut" style="left:20px;top:290px;" href="#" data-url="{{Router::url('/admin/taobao/taobao_cates/list.html')}}">
+      <img src="{{$this->Html->url('/img/desktop/icons/taobao_cates.png')}}" />
+      <label>淘宝分类</label>
+    </a>
+    <a class="abs icon shortcut" style="left:20px;top:360px;" href="#" data-url="{{Router::url('/admin/taobao/taobaokes/list.html')}}">
+      <img src="{{$this->Html->url('/img/desktop/icons/taobaokes.png')}}" />
+      <label>淘宝产品</label>
+    </a>
+    {{/if}}
+    
+    
+  </div>
+  <div class="abs" id="bar_top">
+  	<span class="float_right" id="clock"></span>
+  	<ul class="float_right">
+  	<li>{{$this->Html->link(__("File Manage"), '/admin/ace/editors/index')}}</li>
+  	<li>{{$this->Html->link(__('Traditional Mode'), '/?theme=default')}}</li>
+  	<li>
+  	{{if defined('APPEND_LOCALE_BASE')}}
+        {{$this->Html->link(__('Visit website'), '/../../',array('target'=>'_blank'))}}
+    {{else}}
+        {{$this->Html->link(__('Visit website'), '/../',array('target'=>'_blank'))}}
+    {{/if}}
+  	</li>
+  	<li>
+        <a class="menu_trigger" href="#">{{__('Multi Language')}}</a>
+        <ul class="menu">
+        	{{loop $selectlans $lan $native}}        	 
+          <li>
+          {{if defined('APPEND_LOCALE_BASE')}}
+          	{{if $lan=='zh-cn'}}
+          	<a href="{{Router::url('/../')}}">{{$native}}</a>
+          	{{else}}
+          	<a href="{{Router::url('/../'.$lan)}}">{{$native}}</a>
+          	{{/if}}
+          {{else}}
+            {{if $lan=='zh-cn'}}
+          	<a href="{{Router::url('/')}}">{{$native}}</a>
+          	{{else}}
+          	<a href="{{Router::url('/'.$lan)}}">{{$native}}</a>
+          	{{/if}}
+          {{/if}}
+          </li>
+          {{/loop}}
+        </ul>
+    </li>
+  	<li>
+       <a href="{{Router::url('/admin/staffs/logout')}}">{{__('Logout')}}</a>
+    </li>
+    </ul>
+    
+    <ul>
+      <li>
+        <a id="top-menu" href="#">{{$site[title]}}</a>
+        <div style="display:none;">
+        {{$this->Section->getNavMenu('Menu',array(
+			'selectedid'=> $top_category_id,
+			'tagAttributes'=>array('class'=>'startmenu'),
+			'hyperSelectedClass' => 'blue',
+			'maxdepth'=>5,
+			'preli'=>'',
+			'sufli'=>'',
+		),1,true)}}
+		</div>
+      </li> 
+    </ul>
+  </div>
+  <div id="startmenu" class="startmenu tabbable tabs-left">
+        <ul id="programs"  class="nav nav-tabs">
+          	
+          	<li class="active"><a  data-toggle="tab" href="#contents"><img src="{{$this->Html->url('/img/desktop/icons/contents.png');}}"/>内容管理</a></li>
+          	<li><a  data-toggle="tab" href="#crawls"><img src="{{$this->Html->url('/img/desktop/icons/crawls.png');}}"/>采集管理</a></li>
+          	<li><a  data-toggle="tab" href="#users"><img src="{{$this->Html->url('/img/desktop/icons/users.png');}}"/>用户管理</a></li>
+          	<li><a  data-toggle="tab" href="#themes"><img src="{{$this->Html->url('/img/desktop/icons/themes.png');}}"/>模版风格</a></li>
+          	<li><a  data-toggle="tab" href="#spread"><img src="{{$this->Html->url('/img/desktop/icons/tools.png');}}"/>站长工具</a></li>
+          	<li><a  data-toggle="tab" href="#maintain"><img src="{{$this->Html->url('/img/desktop/icons/maintain.png');}}"/>系统维护</a></li>
+          	<li><a  data-toggle="tab" href="#extends"><img src="{{$this->Html->url('/img/desktop/icons/extends.png');}}"/>功能扩展</a></li>
+          	<li><a  data-toggle="tab" href="#settings"><img src="{{$this->Html->url('/img/desktop/icons/settings.png');}}"/>系统设置</a></li>
+          	<li><a  data-toggle="tab" href="#developer"><img src="{{$this->Html->url('/img/desktop/icons/tools.png');}}"/>开发工具</a></li>
+          	
+        </ul>
+        <div id="links" class="tab-content">
+        	<ul><li><li class="user_icon"><img src="{{$this->Html->url('/img/desktop/icons/windows.png');}}"/></li></ul>
+        	
+	        <div  id="contents" class="tab-pane active">
+	        <ul>
+	        {{loop $contentmodels $model}}
+          	<li><a href="#"  data-url="{{Router::url(array('controller'=>Inflector::tableize($model['Modelextend']['name']),'action'=>'list','admin'=>true))}}"><span><img src="{{$this->Html->url('/img/desktop/icons/'.Inflector::tableize($model['Modelextend']['name']).'.png');}}" onerror="this.src='{{$this->Html->url('/img/desktop/icons/chrome.png');}}'" alt="" />{{$model['Modelextend']['cname']}}管理</a></span></li>
+          	{{/loop}}
+          	</ul>
+	        </div>
+	        <div  id="crawls" class="tab-pane">
+	        <ul>
+	            <li><a href="#" data-url="{{Router::url('/admin/modelcates/list/model:Crawl.html')}}"><span>采集分类管理</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/crawls/list.html')}}"><span>采集规则设置</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/crawl_release_sites/list.html')}}"><span>采集发布站点</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/crawl_releases/list.html')}}"><span>采集发布规则</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/crawl_title_lists/publishlist.html')}}"><span>采集数据发布</span></a></li>
+	        </ul>
+	        </div>
+	        
+	        <div  id="users" class="tab-pane">
+	        <ul>
+	            <li><a href="#" data-url="{{Router::url('/admin/users/list')}}"><span>用户管理</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/roles/list')}}"><span>用户组管理</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/acl/acl_permissions.html')}}"><span>权限管理</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/staffs/list.html')}}"><span>后台用户</span></a></li>
+	        </ul>
+	        </div>
+	        <div  id="themes" class="tab-pane">
+	        <ul>
+	            <li><a href="#" data-url="{{Router::url('/admin/tools/styles')}}"><span>风格管理</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/tools/themes')}}"><span>模版套系</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/regions/list')}}"><span>页面列表</span></a></li>
+	        </ul>
+	        </div>
+	        
+	        <div  id="maintain" class="tab-pane">
+	        <ul>
+	        	<li><a href="#" onclick="ajaxAction('{{Router::url('/admin/tools/clearcache.html')}}');"><span>清除缓存</span></a></li>
+	            <li><a href="#" data-width="350" data-height="200" data-resizable="false" data-url="{{Router::url('/admin/tools/dbexport')}}"><span>数据库备份</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/tools/dbimport')}}"><span>数据库恢复</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/tools/filebackup')}}"><span>文件备份</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/tools/filerecover')}}"><span>文件恢复</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/tools/updateLanCache')}}"><span>更新语言包缓存</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/DefinedLanguage/defined_languages/index.html')}}"><span>自定义语言包</span></a></li>
+	        </ul>
+	        </div>
+	        <div  id="spread" class="tab-pane">
+	        <ul>
+	            <li><a href="#" data-url="{{Router::url('/admin/pages/display/seo_addurl')}}"><span>网站提交</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/tools/styles')}}"><span>Sitemaps</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/tools/styles')}}"><span>网站收录查询</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/tools/styles')}}"><span>关键字排名跟踪</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/keywords/list.html')}}"><span>关键字管理</span></a></li>
+	            
+	            
+	        </ul>
+	        </div>
+	        <div  id="extends" class="tab-pane">
+	        <ul>
+	            <li><a href="#" data-url="{{Router::url('/admin/extensions/extensions/index.html')}}"><span>插件管理</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/modelextends/list.html')}}"><span>模块扩展</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/i18nfields/index.html')}}"><span>字段扩展</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/tools/styles')}}"><span>杂项分类</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/menus/styles')}}"><span>菜单管理</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/appraises/list')}}"><span>问卷管理</span></a></li>
+	        </ul>
+	        </div>
+	        
+	        <div  id="settings" class="tab-pane">
+	        <ul>
+	            <li><a href="#" data-url="{{Router::url('/admin/settings/prefix/Site')}}"><span>站点设置</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/settings/prefix/User')}}"><span>用户设置</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/settings/languages/list')}}"><span>语言管理</span></a></li>
+	            <li><a href="#" data-url="{{Router::url('/admin/settings/list')}}"><span>设置管理</span></a></li>
+	        </ul>
+	        </div>
+	        <div  id="developer" class="tab-pane">
+	        <ul>
+	        <li><a href="#" data-url="{{Router::url('/admin/tools/dbsync.html')}}"><span>数据库升级sql生成</span></a></li>
+	        <li><a href="#" data-url="{{Router::url('/admin/settings/add.html')}}"><span>增加设置</span></a></li>
+	        <li><a href="#" data-url="{{Router::url('/admin/tools/dbsync.html')}}"><span>数据库升级sql生成</span></a></li>
+	        </ul>
+	        </div>
+        </div>
+  </div> 
+  
+  <div class="abs" id="bar_bottom"> 
+  	<div id="Start-Menu-Button" style="float: left;" class=""> </div>   
+    <ul id="dock">      
+    </ul>
+    <div id="show_desktop" title="Show Desktop" class="float_right"></div>
+  </div>
+  
+</div>
+{{if defined('IN_LOCALHOST')}}
+	{{$this->Html->script(array(
+			'jquery/jquery.min.js',
+			'jquery/jquery-ui-1.10.3.custom.min.js',
+        ))}}
+{{else}}
+	<script src="http://lib.sinaapp.com/js/jquery/1.7.2/jquery.min.js"></script>
+	<script src="http://lib.sinaapp.com/js/jquery-ui/1.8.11/jquery-ui.min.js"></script>
+	<!--  jquery ui only use these model. remove others(84K).http://jqueryui.com/download
+	core/widget/mouse/position
+	draggable/resizable/sortable
+	dialog、datepicker
+	 -->
+	<script>
+	  !window.jQuery && document.write(unescape('%3Cscript src="{{$this->Html->url('/js/jquery/jquery.min.js')}}"%3E%3C/script%3E'));
+	  !window.jQuery.ui && document.write(unescape('%3Cscript src="{{$this->Html->url('/js/jquery/jquery-ui-1.8.23.custom.min.js')}}"%3E%3C/script%3E'));
+	</script>
+{{/if}}
+{{$this->Combinator->script(array(
+			'jquery/validator.js',
+			'bootstrap.min.js',			
+			'jquery/jquery.contextMenu.min.js',
+			'jquery/jquery.desktop.js',
+			'jquery/jquery.jgrowl.min.js',
+			'drilldown_menu/fg.menu.js',
+			'jquery/jquery.cookie.js',
+			'i18n/language-zh-CN.js',
+			'common.js',
+			'admin.js',
+))}}
+
+{{$this->Combinator->script(array(
+		'jqgrid/i18n/grid.locale-cn.js',
+		'jqgrid/jquery.jqGrid.min.js',
+))}}
+
+{{$this->Combinator->script(array(
+	'swfupload/swfupload.js',
+	'swfupload/swfupload.queue.js',
+	'swfupload/swfupload.cookies.js',
+	'swfupload/fileprogress.js',
+	'swfupload/handlers.js'
+))}}
+
+{{$this->Html->script(array(
+			'ckeditor/ckeditor.js',
+			'editor.js',
+        ))}}
+
+<script>
+
+jQuery(function(){
+	//$('#top-menu').menu({
+	//	content: $('#top-menu').next().html(), flyOut: true
+	//});
+	//jQuery.getScript('{{Router::url("/js/ckeditor/ckeditor.js")}}')
+})
+</script>
+
+</body>
+</html>

@@ -1,0 +1,133 @@
+{{$this->Form->create('User',array('id'=>'registerform','method'=>"post"))}}
+<div class="c cl" id="layer_reg" fwin="register">
+	<input type="hidden" value="yes" name="regsubmit"> <input
+		type="hidden" value="319a8865" name="formhash">
+	<input type="hidden" value="register" name="handlekey"><input
+		type="hidden" value="" name="activationauth">
+	<div class="lgfm">
+		<div id="reginfo_a" fwin="register">
+			<span id="activation_hidden" fwin="register"> <label><em>{{__('User
+						Name')}}:</em>{{$this->Form->input('username',array('div'=>false,'label'
+					=>
+					false,'class'=>'txt','onblur'=>"checkusername()",'maxlength'=>"15",'size'=>"25"))}}
+					*</label> <label><em>{{__('Password')}}:</em>{{$this->Form->input('password',array('div'=>false,'label'
+					=> false,'class'=>'txt','onkeypress'=>"detectCapsLock(event,
+					this)",'type'=>'password','maxlength'=>"15",'size'=>"25"))}} *</label> <label><em>{{__('Confirm
+						Password')}}:</em>{{$this->Form->input('password_confirm',array('div'=>false,'label'
+					=> false,'class'=>'txt','onkeypress'=>"detectCapsLock(event,
+					this)",'type'=>'password','maxlength'=>"15",'size'=>"25"))}} *</label> <label><em>{{__('Email')}}:</em><input
+					type="text" class="txt" tabindex="1" onblur="checkemail()"
+					id="email" size="25" autocomplete="off" name="email"
+					fwin="register"> *</label>
+			</span>
+		</div>
+		<div style="display: none;" id="reginfo_b" fwin="register"></div>
+	</div>
+	<div class="lgf">
+		<h4>{{__('Have account?')}} &nbsp; {{$this->Html->link(__('Login
+			right now',true), array( 'admin' => false, 'plugin' => null,
+			'project' => false, 'fork' => false, 'controller' => 'users',
+			'action' => 'login' ),array('onclick'=>"return
+			publishController.open_dialog(this.href);",))}}</h4>
+		<div>{{$this->Hook->call('oauthLoginLink')}}</div>
+	</div>
+</div>
+<p class="fsb pns cl" id="layer_reginfo_b" fwin="register">
+	<span id="reginfo_a_btn" fwin="register"> <em>&nbsp;</em>
+	<button tabindex="1" value="true" name="regsubmit" type="submit"
+			id="registerformsubmit" class="pn pnc" fwin="register">
+			<span>提交</span>
+		</button>
+	</span>
+</p>
+</form>
+
+<script reload="1" type="text/javascript">
+hideWindow('login');
+function initinput_register() {
+$('registerform').username.focus();
+}
+if(BROWSER.ie &amp;&amp; BROWSER.ie &lt; 7) {
+setTimeout('initinput_register()', 500);
+} else {
+initinput_register();
+}
+
+var profile_username_toolong = '用户名超过 15 个字符';
+var profile_username_tooshort = '用户名小于3个字符';
+var doublee = parseInt('1');
+var lastusername = lastpassword = lastemail = lastinvitecode = '';
+
+function errorhandle_register(msg, values) {
+$('returnmessage4').className = msg == '注册' ? '' : 'onerror';
+$('returnmessage4').innerHTML = msg;
+}
+
+function checkusername() {
+var username = trim($('username').value);
+if(username == '' || username == lastusername) {
+return;
+} else {
+lastusername = username;
+}
+var unlen = username.replace(/[^\x00-\xff]/g, "**").length;
+if(unlen &lt; 3 || unlen &gt; 15) {
+errorhandle_register(unlen &lt; 3 ? profile_username_tooshort : profile_username_toolong, {'key':1});
+return;
+}
+ajaxget('forum.php?mod=ajax&amp;infloat=register&amp;handlekey=register&amp;action=checkusername&amp;username=' + (BROWSER.ie &amp;&amp; document.charset == 'utf-8' ? encodeURIComponent(username) : username), 'returnmessage4');
+}
+
+function checkemail() {
+var email = trim($('email').value);
+if(email == '' || email == lastemail) {
+return;
+} else {
+lastemail = email;
+}
+ajaxget('forum.php?mod=ajax&amp;infloat=register&amp;handlekey=register&amp;action=checkemail&amp;email=' + email, 'returnmessage4');
+}
+
+function checkinvite() {
+var invitecode = trim($('invitecode').value);
+if(invitecode == '' || invitecode == lastinvitecode) {
+return;
+} else {
+lastinvitecode = invitecode;
+}
+ajaxget('forum.php?mod=ajax&amp;infloat=register&amp;handlekey=register&amp;action=checkinvitecode&amp;invitecode=' + invitecode, 'returnmessage4');	
+}
+
+function trim(str) {
+return str.replace(/^\s*(.*?)[\s\n]*$/g, '$1');
+}
+//note 填写生日
+function showbirthday(){
+var el = $('birthday');
+var birthday = el.value;
+el.length=0;
+el.options.add(new Option('日', ''));
+for(var i=0;i&lt;28;i++){
+el.options.add(new Option(i+1, i+1));
+}
+if($('birthmonth').value!="2"){
+el.options.add(new Option(29, 29));
+el.options.add(new Option(30, 30));
+switch($('birthmonth').value){
+case "1":
+case "3":
+case "5":
+case "7":
+case "8":
+case "10":
+case "12":{
+el.options.add(new Option(31, 31));
+}
+}
+} else if($('birthyear').value!="") {
+var nbirthyear=$('birthyear').value;
+if(nbirthyear%400==0 || (nbirthyear%4==0 &amp;&amp; nbirthyear%100!=0)) el.options.add(new Option(29, 29));
+}
+el.value = birthday;
+}
+</script>

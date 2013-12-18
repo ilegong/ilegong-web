@@ -1,0 +1,17 @@
+<li class="list-item-photo">
+	<div>
+	<a href="{{$this->Html->url('/'.$control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}" title="{{$item['name']}}" target="_blank">
+	{{$this->Html->image($item['coverimg'], 
+		array(
+		'alt' => $item['name'],'title' => $item['name'],
+		'width'=>'150px','height'=>'130px',
+		)); }}
+		</a>
+	</div>
+	<p  style="line-height:24px;">
+		{{$this->Html->link(usubstr($item['name'],0,10), 
+		'/'.$control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
+		array('title'=>$item['name'],'target'=>'_blank',)); }}
+		
+	</p>
+</li>

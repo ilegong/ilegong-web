@@ -1,0 +1,112 @@
+<div class="container clearfix">
+	<div class="ui-contain col-md-9">		
+		<portlet>
+			    <h2 class="Content-title"><?php echo $Photo['Photo']['name']; ?></h2>
+	    <div class="Content-info">
+	来源：{{$Photo['Photo']['origin']}}    阅读次数： <span class="ui-stats-num Stats-Photo-{{$Photo['Photo']['id']}}-view_nums"><?php echo $Photo['Photo']['views_count']; ?></span>
+	    </div>
+	    <div class="Content-body">
+<style>
+.Content-body .ad-gallery img{margin:0 0;}
+.ad-gallery .ad-thumbs img {
+    max-height: 100px;
+}
+
+</style>
+{{if !empty($Photo['Uploadfile'])}}
+<div id="gallery" class="ad-gallery">
+      <div class="ad-image-wrapper"></div>
+      <!-- <div class="ad-controls"></div> -->
+      <div class="ad-nav">
+        <div class="ad-thumbs">
+          <ul class="ad-thumb-list">
+			{{loop  $Photo['Uploadfile'] $file}}
+			<!-- thumb,mid_thumb,fspath -->
+			<?php //print_r($file);?>
+				 <li><a href="{{Router::url($file['Uploadfile']['fspath'])}}">
+					{{$this->Html->image(Router::url($file['Uploadfile']['thumb']))}}
+				</a></li>
+			{{/loop}}
+		  </ul>
+		</div>
+      </div>
+</div>
+{{/if}}
+{{$this->Html->css(array(APP_SUB_DIR.'/js/ad_gallery/jquery.ad-gallery.css',))}}
+{{$this->Html->script(array('ad_gallery/jquery.ad-gallery.min.js'));}}
+<script type="text/javascript">
+$(function() {
+    var galleries = $('.ad-gallery').adGallery({
+    	  loader_image: 'loader.gif',
+    	  // Width of the image, set to false and it will 
+    	  // read the CSS width
+    	  width: 640, 
+    	  // Height of the image, set to false and it 
+    	  // will read the CSS height
+    	  height: 480, 
+    	  // Opacity that the thumbs fades to/from, (1 removes fade effect)
+    	  // Note that this effect combined with other effects might be 
+    	  // resource intensive and make animations lag
+    	  thumb_opacity: 0.7,
+    	  // Which image should be displayed at first? 0 is the first image  
+    	  start_at_index: 0, 
+    	  // Whether or not the url hash should be updated to the current image
+    	  update_window_hash: true, 
+    	  // Either false or a jQuery object, if you want the image descriptions
+    	  // to be placed somewhere else than on top of the image
+    	  description_wrapper: $('#descriptions'), 
+    	  // Should first image just be displayed, or animated in?
+    	  animate_first_image: false,
+    	  // Which ever effect is used to switch images, how long should it take?  
+    	  animation_speed: 400, 
+    	  // Can you navigate by clicking on the left/right on the image?
+    	  display_next_and_prev: true, 
+    	  // Are you allowed to scroll the thumb list?
+    	  display_back_and_forward: true, 
+    	  // If 0, it jumps the width of the container
+    	  scroll_jump: 0, 
+    	  slideshow: {
+    	    enable: true,
+    	    autostart: true,
+    	    speed: 5000,
+    	    //start_label: 'Start',
+    	    //stop_label: 'Stop',
+    	    // Should the slideshow stop if the user scrolls the thumb list?
+    	    stop_on_scroll: true, 
+    	    // Wrap around the countdown
+    	    //countdown_prefix: '(', 
+    	    //countdown_sufix: ')',
+    	    onStart: function() {
+    	      // Do something wild when the slideshow starts
+    	    },
+    	    onStop: function() {
+    	      // Do something wild when the slideshow stops
+    	    }
+    	  },
+    	  // or 'slide-vert', 'resize', 'fade', 'none' or false
+    	  effect: 'slide-hori', 
+    	  // Move to next/previous image with keyboard arrows?
+    	  enable_keyboard_move: true, 
+    	  // If set to false, you can't go from the last image to the first, and vice versa
+    	  cycle: true
+    	  
+    	});
+});
+</script>   
+	    <?php echo $Photo['Photo']['content']; ?>
+	    	
+        {{$this->Hook->call("affterContent",array('Photo',$Photo['Photo']['id']))}}
+
+        </div>
+<div id="dialog-share" style="display:none;" title="温馨提示">
+	<div class="ui-pop-tips"><span class="ico ico-success" style="float:left;"></span><div class="tips-cnt">发表观点成功，是否也分享给您的好友？</div></div>
+</div>
+
+		</portlet>
+		
+	</div>
+	
+	<div class="ui-contain col-md-3">
+		<portlet id="portlet-31"></portlet>	
+	</div>
+</div>

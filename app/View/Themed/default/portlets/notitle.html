@@ -1,0 +1,12 @@
+<div {{if $this->Session->read('Auth.Staff.id')>0 }} {{$data_attribute}} {{/if}}
+class="ui-widget ui-portlet {{$custom_class}}" style="position:relative;">
+	<div style="display:none;position:absolute;" class="clearfix ui-corner-top ui-widget-header ui-portlet-header">
+	      <span class="title"><h3>{{$title}}</h3></span>            
+	      <span class="edit"></span>
+	</div>
+	<div class="ui-corner-all ui-widget-content ui-portlet-content clearfix">
+		<ul class="portlet-region-list  clearfix {{$params['ulcss']}}">
+		{{$body}}
+		</ul>
+	</div>
+</div>

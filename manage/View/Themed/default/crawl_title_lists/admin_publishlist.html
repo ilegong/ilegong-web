@@ -1,0 +1,128 @@
+<style>
+.ui-ul-list li {width:400px;float:left;line-height:24px;padding:3px 10px;}
+.ui-ul-list li label{ cursor: pointer;}
+.ui-grid-actions {float:right;}
+.ui-grid-actions li {width:16px;padding:0 0;}
+td {vertical-align: top;}
+</style>
+<div id="{{$pageID}}">
+<div class="navbar">
+    <div class="navbar-inner">
+    <div style="width: auto;" class="container">
+    	 <ul role="navigation" class="nav">
+	<li class="dropdown">
+                      <a data-toggle="dropdown" class="dropdown-toggle" href="#">分类发布 <b class="caret"></b></a>
+		 {{eval echo $this->Section->getLeftMenu('Modelcate',
+			array(
+				'conditions'=>array('model'=>'Crawl'),
+				'selectedid' => $_GET['cate_id'],
+				'ulAttributes'=> array('class'=>'dropdown-menu'),
+				'subliAttributes2' => array('class'=>'dropdown-submenu'),
+				'url' => '/admin/crawl_title_lists/publishlist?cate_id={id}',
+				'linkAttributes'=> array('target'=>'_self'),
+			),
+			0,true);}}
+	</li>
+	<li class="dropdown">
+                      <a data-toggle="dropdown" class="dropdown-toggle" href="#">{{$current_crawl['Crawl']['title']|default:"采集来源"}} <b class="caret"></b></a>
+	
+			<ul class="dropdown-menu">
+			{{loop $crawls $item}}
+				<li {{if $item['Crawl']['id']==$_GET['crawl_id']}}class="ui-state-hover"{{/if}}><a target="_self" href="{{Router::url('/admin/crawl_title_lists/publishlist?cate_id='.$_GET['cate_id'].'&crawl_id='.$item['Crawl']['id'])}}">{{$item['Crawl']['title']}}</a></li>
+			{{/loop}}
+			</ul>
+	</li>
+	<li><?php echo $this->Html->link(__('普通列表视图'),array('action'=>'list')); ?></li>
+	<li><input type="checkbox" id="checkall" onclick="checkall(this);"></li>
+		         
+	<li><?php echo $this->Html->link(__('Batch Publish'),'#',array('onclick'=>"return batchAction_{$pageID}('publish');")); ?></li>
+	<!-- <li><?php echo $this->Html->link(__('Batch Trash'),'#',array('onclick'=>"return batchAction_{$pageID}('trash');")); ?></li>
+	
+	<li class="dropdown">
+         <a data-toggle="dropdown" class="dropdown-toggle" href="#">回收站<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a id="radio1_{{$pageID}}" name="radio" onclick="goToDataList_{{$pageID}}();" checked="checked"/><label for="radio1_{{$pageID}}">列表</label></a></li>
+						<li><a id="radio3_{{$pageID}}" name="radio" onclick="goToUnPublish_{{$pageID}}();" /><label for="radio3_{{$pageID}}">未发布</label></a></li>
+						<li><a  id="radio2_{{$pageID}}" name="radio"  onclick="goToTrash_{{$pageID}}();"><label for="radio2_{{$pageID}}">已删除</label></a></li>
+					</ul>
+	</li>
+	 -->            
+	</ul>
+	</div>
+	</div>
+		{{$page_navi}}
+		<ul class="ui-ul-list ui-helper-clearfix">
+		{{loop $crawl_title_lists $item}}
+			<li class="ui-state-default" rel="{{$item['CrawlTitleList']['id']}}">
+				<ul class="ui-grid-actions">
+					<li title="删除到回收站" data-action_url="{{$this->Html->url('/admin/crawl_title_lists/trash/'.$item['CrawlTitleList']['id'])}}" class="ui-state-default grid-row-trash"><span class="ui-icon ui-icon-trash"></span></li>
+					<li title="View" data-action_url="{{$this->Html->url('/admin/crawl_title_lists/view/'.$item['CrawlTitleList']['id'])}}" class="ui-state-default grid-row-view"><span class="ui-icon ui-icon-image"></span></li>
+				</ul>
+			<input type="checkbox" id="crawl-title-{{$item['CrawlTitleList']['id']}}" name="ids[]" value="{{$item['CrawlTitleList']['id']}}">
+			<label for="crawl-title-{{$item['CrawlTitleList']['id']}}" title="{{$item['CrawlTitleList']['name']}}">{{usubstr($item['CrawlTitleList']['name'],0,22)}}</label>
+			</li>
+		{{/loop}}
+		</ul>
+		{{$page_navi}}
+	
+</div> 
+<script>
+function checkall(obj){
+	if($(obj).attr('checked')){
+		$('.ui-ul-list input:checkbox').attr('checked',true);
+	}
+	else{
+		$('.ui-ul-list input:checkbox').attr('checked',false);
+	}
+}
+
+function deleteGridRow_{{$pageID}}(rowid)
+{
+	jQuery('.ui-ul-list','#{{$pageID}}').find('li[rel='+rowid+']').remove();
+}
+
+$('#{{$pageID}}').find('.grid-row-trash').unbind().bind('click',function(){
+	var current_rowid = $(this).parents('li:first').attr('rel');
+	if(confirm('{{__('Are you sure to trash')}}')){			 	
+		open_dialog({title:$(this).attr('title')},$(this).data('action_url'),deleteGridRow_{{$pageID}},current_rowid);
+	}
+	return false;
+});
+
+$('#{{$pageID}}').find('.grid-row-view').unbind().bind('click',function(){
+	open_dialog({title:$(this).attr('title')},$(this).data('action_url'));
+	return false;
+});
+
+//进行行内编辑 ，若设置了flowstep_id则表示是流程中的授权操作  
+function batchAction_{{$pageID}}(action,options)
+{
+	var ids = ''; 
+	$('.ui-ul-list input:checkbox').each(function(){
+		if($(this).attr('checked') && $(this).attr('checked')!='undefined' && $(this).attr('checked')!=false){
+			ids += $(this).val()+',';
+		}
+	})	
+	if(ids == ""){
+		alert($.jslanguage.noSelect);
+		return false;
+	}
+	var appendargus = '';
+	if(options){
+		for(var i in options){
+			appendargus+= '/'+i+':'+options[i];
+		}
+	}
+	
+	var language='';
+	if($.jslanguage['confirm_'+action]){
+		language = $.jslanguage['confirm_'+action];
+	}
+	if(language!='' && !confirm(language)){
+		return false;
+	}
+	open_dialog({title:language},'{{Router::url('/admin/'.($this->plugin?$this->plugin.'/':'').$current_controller.'/');}}'+action+'/'+ids+appendargus);
+	return false;
+}
+</script>
+

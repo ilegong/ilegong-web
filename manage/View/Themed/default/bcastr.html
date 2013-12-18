@@ -1,0 +1,53 @@
+<?php
+if($key==0)
+{
+	$flashitems='';
+	$configstr ='<config><roundCorner>0</roundCorner><autoPlayTime>3</autoPlayTime>
+					<isHeightQuality>false</isHeightQuality>
+					<blendMode>normal</blendMode>
+					<transDuration>1</transDuration>
+					<windowOpen>_blank</windowOpen>
+					<btnSetMargin>auto 5 5 auto</btnSetMargin>
+					<btnDistance>20</btnDistance>
+					<titleBgColor>0xCCCCCC</titleBgColor>
+					<titleTextColor>0x000000</titleTextColor>
+					<titleBgAlpha>.30</titleBgAlpha>
+					<titleMoveDuration>1</titleMoveDuration>
+					<btnAlpha>.7</btnAlpha>	
+					<btnTextColor>0xCCCCCC</btnTextColor>	
+					<btnDefaultColor>0x1B3433</btnDefaultColor>
+					<btnHoverColor>0xddeeff</btnHoverColor>
+					<btnFocusColor>0xff6600</btnFocusColor>
+					<changImageMode>click</changImageMode>
+					<isShowBtn>true</isShowBtn>
+					<isShowTitle>true</isShowTitle>
+					<scaleMode>noBorder</scaleMode>
+					<transform>breatheBlur</transform>
+					<isShowAbout>false</isShowAbout>
+					<titleFont>微软雅黑</titleFont>
+				</config>';
+}
+
+// 循环中连接多条新闻的标题、图片、链接
+$flashitems .='<item>
+<link>/articles/'.date('Ym',strtotime($item['created'])).'/'.$item['slug'].'.html</link>
+<image>'.$item['coverimg'].'</image>
+<title>'.trim($item['title']).'</title>
+</item>';
+?>				
+<?	
+if($key==($count-1))
+{
+	$xmlcontent = '<data><channel>'.$flashitems.'</channel>'.$configstr.'</data>';
+	$xmlcontent = preg_replace('/>\s+</','><',$xmlcontent); // 去掉空行
+?>
+
+<script src="/js/photoflash/swfobject.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+	swfobject.embedSWF("/js/photoflash/bcastr4.swf", "photonewsflash", "320", "256", "9.0.0", "/js/photoflash/expressInstall.swf", {xml: "{$xmlcontent}"}, {wmode: "window", menu: "true", quality: "high", bgcolor: "null", allowFullScreen: "true"}, {});
+</script>
+
+<div id="photonewsflash"></div>
+
+<?}?>

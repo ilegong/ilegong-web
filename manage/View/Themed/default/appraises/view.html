@@ -1,0 +1,192 @@
+<div class="container_24 ui-helper-clearfix">	
+	
+	<div class="ui-widget grid_16">	
+	<div class="ui-widget ui-corner-top plt_default">
+	<div class=" plt_default_body ui-corner-bottom">
+	<script type="text/javascript">
+	//<![CDATA[
+	function submit_vote(){	
+		
+		$.ajax({
+			async:true, 
+			type:'post', 
+			success:function(request, xhr) {
+					if(request.success)
+					{
+						showSuccessMessage(request.success);
+						render_vote_result(request);
+						$('#join-question-dialog').dialog('close');		
+					}
+					else
+					{
+						$('#weibo-publish-errorinfo').html('');
+						var errorinfo = '';
+						for(var i in request)
+						{
+							errorinfo +="<span class='ui-state-error ui-corner-all'><span class='ui-icon ui-icon-alert'></span> 错误： "+request[i]+"</span>";
+						}
+						showErrorMessage(errorinfo);
+					}
+			}, 
+			data:$('#join-vote-form').serialize(), 
+			url:'/appraiseresults/singlesubmit/multi',
+			dataType:'json'
+		});
+		return false; 
+	}
+
+	function render_vote_result(request)
+	{
+		for(var i in request)
+		{
+			if(request[i]['Appraiseresult'])
+			{
+				var option_id = '#options_'+request[i]['Appraiseresult']['question_id']+'_'+request[i]['Appraiseresult']['option_id'];
+				var id_length = option_id.split('_').length;
+				var div_width = 200;
+				if(id_length>3)
+				{
+					div_width = 100;
+				}
+				
+				var percent = parseInt(request[i]['Appraiseresult']['value'])*100/parseInt(request['total_join']);
+				$(option_id).parent('td').append('<div class="poll_result" style="float:right;position:relative;width:'+div_width+'px;height: 20px;"><div class="percent ui-state-active" style="width:'+percent+'%;height: 20px;"></div><span style="line-height:20px;position:absolute;left:5px;top:0;">'+percent+'% ('+request[i]['Appraiseresult']['value']+')</span></div>');
+			}
+		}
+	}
+
+	function  load_vote_result(model,data_id,qid)
+	{
+		if($('.poll_result').size() > 0)
+		{
+			showErrorMessage('已经加载了投票结果，勿重复加载');
+			return false;
+		}
+		
+		$.ajax({
+			async:true, 
+			type:'get', 
+			success:function(request, xhr) {
+					if(request.success)
+					{
+						render_vote_result(request);
+					}
+			}, 
+			data:{}, 
+			url:'/appraiseresults/load_vote_result/'+model+'/'+data_id+'/'+qid,
+			dataType:'json'
+		});
+		return false; 
+	}
+
+	$(function(){
+		$('.3d-tab-question').tabs();
+	});
+	//]]>
+	</script>
+	<form accept-charset="utf-8" method="post" onsubmit="return false;" id="join-vote-form">
+	<div class="ui-corner-bottom ui-question-publish ui-helper-clearfix">
+		 <img class="userhead" src="{{$question['user_img']}}" uid="{{$question['creator_id']}}" title="{{$question['creator']}}" />
+		{{$question['creator']}}: {{$question['created']}}
+		<h3>{$question['name']}</h3>
+		
+		{{$option_table}}
+		<fieldset>
+		<input type="hidden" id="weiboQId" name="data[Weibo][parent_id]" value="{{$parent_id}}">
+		<input type="hidden" name="model" value="Appraise">
+		<input type="hidden" name="data_id" value="{$question['id']}">
+		<div class="toolbar ui-helper-clearfix">			
+			<div style="float:right;" class="submit">
+				<a id="publisher_submit" onclick="submit_vote();" href="javascript:void(0);"></a>
+			</div>
+			<div style="float:right;line-height:30px;">
+			<a onclick="return publishController.show_invite('weibos');" href="javascript:void(0);" >点名邀请好友参与</a>
+			</div>
+			<div style="float:right;line-height:30px;">
+			<a onclick="return load_vote_result('Appraise','{$question['id']}','{$question['id']}');" href="javascript:void(0);" >查看投票结果</a>
+			</div>
+		</div>
+		<div id="weibo-publish-errorinfo" class="line-height:24px;padding:4px;margin-top:10px;">
+			
+		</div>
+		<div class="invitelist" id="publish-invite-user-list-weibos" style="display:none;margin-top:10px;">
+			<div style="line-height:24px;" class="ui-helper-clearfix">
+				<div>您选择的好友： </div>
+				<ul class="ui-widget invite-user-list"  style="list-style:none;">
+				</ul>
+			</div>
+			<div class="publish-invite-user-listtab-weibos">
+				<ul>
+					<li><a href="/questions/invite/1/comments">评论我的<span> </span></a></li>
+				<li><a href="/questions/invite/1/mentions">提到我的<span> </span></a></li>
+				<li><a href="/questions/invite/1/friends">我关注的<span> </span></a></li>
+				<li><a href="/questions/invite/1/followers">关注我的<span> </span></a></li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="weibolist tabs" style="margin-top:10px;">
+			<div id="publish-invite-user-listtab-weibos">
+				<ul>
+					<li><a href="#related_weibo">相关回答</a></li>
+					<li><a href="#all_weibo">全部回答</a></li>
+				</ul>
+				<div id="related_weibo">
+					
+<?php 
+if(!empty($related_weibo))
+{
+	foreach($related_weibo as $question) {
+	$question = $question['Weibo'];
+?>
+{{template weibos/_singleweibo}}	
+<?PHP }
+}
+else
+{ ?>
+没有数据
+<?php }?>
+				</div>
+				<div id="all_weibo">
+<?php 
+if(!empty($weibos_list))
+{
+	foreach($weibos_list as $question) {
+	$question = $question['Weibo'];
+?>
+{{template weibos/_singleweibo}}	
+<?PHP }
+}
+else
+{ ?>
+没有数据
+<?php }?>				
+				</div>
+			</div>
+			
+		</div>
+		</fieldset>
+	</div>
+	</form>
+	</div>
+	</div>
+</div>
+
+	<div class="ui-widget grid_8">
+	
+	<portlet>
+			title=参与该投票的人还参与过|portlet=default|body=
+			<?PHP if(empty($same_join_question_list)) {?>
+	    <h3>没有找到</h3>	   
+	    <?php }else{ ?>
+		    <?PHP foreach($same_join_question_list as $question_all) {
+		    	$question = $question_all['Question'];
+		    ?>
+				{{template questions/_questionlist}}				
+			<?php } ?>
+			<div class="clear"></div>
+	    <?php } ?>
+	</portlet>
+			
+	</div>
+</div>

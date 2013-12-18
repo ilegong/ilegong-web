@@ -1,0 +1,47 @@
+<div class="form">
+<style>
+.i18nfields-bulk-add input {width:100px;}
+</style>
+<?php 
+echo $this->MForm->create('I18nfield',array(
+		'class'=>'form-horizontal',
+        'url' => array('?'=>array('model'=>$target_model,)),
+    ));
+?>
+<div>                
+       
+        <fieldset>
+        <table style="width:80%" class="table  table-striped table-hover table-bordered">
+        <tr><td>字段名</td><td>字段描述</td><td>字段类型</td><td>字段长度</td><td>字段表单类型</td><td>操作</td></tr>
+        <tr class="i18nfields-bulk-add">
+<td>{{$this->MForm->input('I18nfield.0.name',array('div'=>false,'label'=>false));}}</td>
+<td>{{$this->MForm->input('I18nfield.0.translate',array('div'=>false,'label'=>false));}}
+{{$this->MForm->hidden('I18nfield.0.model',array('type'=>"hidden",'value'=>$target_model));}}</td>
+<td>{{$this->MForm->input('I18nfield.0.type',array('div'=>false,'label'=>false));}}</td>
+<td>{{$this->MForm->input('I18nfield.0.length',array('div'=>false,'label'=>false,'size'=>'10'));}}</td>
+<td>{{$this->MForm->input('I18nfield.0.formtype',array('div'=>false,'label'=>false));}}</td>
+<td><ul><li><span class="ui-icon ui-icon-plus bulk-add-new"></span></li><li><span class="ui-icon ui-icon-close bulk-add-delete"></span></li></ul></td></tr>
+      </table>
+        </fieldset>
+          
+    <?php echo $this->MForm->end(__('Submit',true));?>
+</div>
+<script>
+$(function(){
+	$('.bulk-add-new').live('click',function(){
+		var obj = $(this).parents('.i18nfields-bulk-add:first');
+		obj.clone().insertAfter(obj);
+		
+		$('.i18nfields-bulk-add').each(function(i){
+			$(this).find(':input').each(function(){
+				var name = $(this).attr('name');
+				//alert(name.replace(/\[\d*\]/,'[10]'));
+				$(this).attr('name',name.replace(/\[\d*\]/,'['+i+']'));
+			});
+		});		
+	})
+	$('.bulk-add-delete').live('click',function(){
+		var obj = $(this).parents('.i18nfields-bulk-add').remove();		
+	})
+})
+</script>

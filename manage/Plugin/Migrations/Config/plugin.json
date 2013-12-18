@@ -1,0 +1,12 @@
+{
+	"name" : "Migrations",
+	"description" : "开发辅助工具，数据库结构差异比对,生成sql语句。主要用于系统升级时比较版本差异。缺点：不能比对表内容差异。",
+	"author" : "arlonzou",
+	"authorEmail" : "arlonzou@sina.com",
+	"authorUrl" : "http://web.ideamuster.com",
+	"dependencies": {
+		"plugins": [
+			""
+		]
+	}
+} 

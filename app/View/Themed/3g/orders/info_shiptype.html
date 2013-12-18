@@ -1,0 +1,155 @@
+	<div class="o_show">
+	    <h1>
+	        支付及配送方式&nbsp;<a style="display:" onclick="showForm_payTypeAndShipType(this);" href="javascript:void(0)" id="linkPayTypeShipType">[修改]</a></h1><div id="updateInfo_payType"></div>
+	     <div class="middle">
+	            <table style="width:100%;">
+	                  <tbody><tr>
+	                      <td style="text-align:right;width:80px">支付方式：</td>
+	                      <td>货到付款</td>
+	                  </tr>
+	                  <tr style="display:">
+	                      <td style="text-align:right;">配送方式：</td>
+	                      <td>京东快递</td>
+	                  </tr>
+	                  <tr style="display:">
+	                      <td style="text-align:right;">运　　费：</td>
+	                      <td>0.00元<span style="color:red">(免运费)</span></td>
+	                  </tr>
+	                  <tr style="display:none">
+	                      <td style="text-align:right;">送货日期：</td>
+	                      <td style="color:red">{CodTime}</td>
+	                  </tr>
+	                  <tr style="display:none">
+	                      <td style="text-align:right;">自提时间：</td>
+	                      <td style="color:red">{PickTime}</td>
+	                  </tr>
+	            </tbody></table>
+	       </div>
+	       <div class="footer"></div>
+	</div>
+	
+	<div class="o_write">
+     <div id="updateInfo_payType"></div>
+     <h1>支付及配送方式&nbsp;<a onclick="close_payTypeAndShipType(this);" href="javascript:void(0)" id="linkPayTypeShipType">[关闭]</a></h1>
+     <div id="part_payType" class="middle">
+         <table width="100%" cellspacing="0" cellpadding="0" border="0">
+             <tbody><tr>
+                <td style="width:240px"><div class="grouptitle">支付方式</div></td>
+                <td style="border-bottom:#eee 1px solid;">备注</td>
+             </tr>
+         </tbody></table>
+         
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr>
+   <td valign="top" align="left" style="width:240px">
+        <input type="radio" value="2" onclick="changePayType(2);" id="IdPaymentType2" name="IdPaymentType"><label for="IdPaymentType2" style="margin-left:2px;">邮局汇款</label>
+    </td>
+    <td valign="top" class="gray"></td>
+</tr>
+</tbody></table>
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr>
+   <td valign="top" align="left" style="width:240px">
+        <input type="radio" value="4" onclick="changePayType(4);" id="IdPaymentType4" name="IdPaymentType"><label for="IdPaymentType4" style="margin-left:2px;">在线支付</label>
+    </td>
+    <td valign="top" class="gray"></td>
+</tr>
+</tbody></table>
+
+<div style="width: 600px; padding-left: 20px; padding-bottom: 10px; margin-left: 50px; display: none;" class="tsbox" id="payRemark_4">
+       <div style="padding:2px 0 2px 0">支持以下银行在线支付：</div>
+       <table cellspacing="0" cellpadding="0" border="0">
+                            <tbody><tr>
+                            <td style="height:45px;width:24%"><img alt="中国工商银行" src="http://www.360buy.com/help/images/banklogo/logo_zggsyh.gif"></td>
+                            <td style="width:24%"><img alt="中国建设银行" src="http://www.360buy.com/help/images/banklogo/logo_zgjsyh.gif"></td>
+                            <td style="width:24%"><img alt="招商银行" src="http://www.360buy.com/help/images/banklogo/logo_zsyh.gif"></td>
+                            <td><img alt="交通银行" src="http://www.360buy.com/help/images/banklogo/logo_jtyh.gif"></td>
+                            </tr>
+                            <tr>
+                            <td style="height:45px;"><img alt="中国农业银行" src="http://www.360buy.com/help/images/banklogo/logo_zgnyyh.gif"></td>
+                            <td><img alt="广东发展银行" src="http://www.360buy.com/help/images/banklogo/logo_gdfzyh.gif"></td>
+                            <td><img alt="兴业银行" src="http://www.360buy.com/help/images/banklogo/logo_xyyh.gif"></td>
+                            <td><img alt="中国光大银行" src="http://www.360buy.com/help/images/banklogo/logo_zggdyh.gif"></td>
+                            </tr>
+                            <tr>
+                            <td style="height:45px;"><img alt="中信银行" src="http://www.360buy.com/help/images/banklogo/logo_zxyh.gif"></td>
+                            <td><img alt="浦发银行" src="http://www.360buy.com/help/images/banklogo/logo_pfyh.gif"></td>
+                            <td><img alt="中国银行" src="http://www.360buy.com/help/images/banklogo/logo_zgyh.gif"></td>
+                            <td><img alt="深圳发展银行" src="http://www.360buy.com/help/images/banklogo/logo_szfzyh.gif"></td>
+                            </tr>
+                            <tr>
+                            <td style="height:45px;"><img alt="民生银行" src="http://www.360buy.com/help/images/banklogo/logo_msyh.gif"></td>
+                            <td><img alt="北京银行" src="http://www.360buy.com/help/images/banklogo/logo_bjyh.gif"></td>
+                            <td cospan="2"></td>
+                            </tr>
+
+
+<!--<tr><td colspan='4'><div style='text-align:center'><a href='#none' onclick="var a=g('payInof_online');if(a.style.display==''){this.innerHTML='(+)查看全部';a.style.display='none';}else{this.innerHTML='(-)查看全部';a.style.display='';}">(+)查看全部</a></div></td></tr>-->
+                            <tr><td style="height:18px;padding:0px;" colspan="4"><div style="text-align:left;">支持以下支付平台：</div></td></tr>
+                            <tr style="display:" id="payInof_online">
+                            <td><img align="middle" src="http://www.360buy.com/help/images/banklogo/y_cft.gif"></td>
+                           
+                            <td><img src="http://www.360buy.com/help/images/banklogo/y_kq.gif"></td>
+                           
+                            <td><img src="http://www.360buy.com/help/images/banklogo/y_zfb.gif"></td>
+                            <td><img src="http://payment.360buy.com/bank/img/payment/mobile.gif"></td>
+                            </tr>
+                        </tbody></table>
+
+
+</div>
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
+<tbody><tr>
+   <td valign="top" align="left" style="width:240px">
+        <input type="radio" value="5" onclick="changePayType(5);" id="IdPaymentType5" name="IdPaymentType"><label for="IdPaymentType5" style="margin-left:2px;">公司转账</label>
+    </td>
+    <td valign="top" class="gray"></td>
+</tr>
+</tbody></table>
+
+      </div>
+        
+      <div style="margin-top:8px;display:" id="part_shipType" class="middle">
+<table width="100%" cellspacing="0" cellpadding="0" border="0" align="enter" id="ShipMentTab">
+   <tbody><tr>
+        <td height="24" width="130px" valign="top" align="left" style="border-bottom:#eee 1px solid;">
+            <div class="grouptitle">配送方式</div>
+        </td>
+        <td width="155px" valign="top" align="left" style="border-bottom:#eee 1px solid;">运费</td>
+
+        <td width="105px" valign="top" align="left" style="border-bottom:#eee 1px solid;">货物在途时间</td>
+        <td valign="top" align="left" style="border-bottom:#eee 1px solid;">备注</td>
+   </tr>
+</tbody></table>
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0" align="enter" id="ShipMentTab">
+   <tbody><tr>
+        <td height="24" width="130px" valign="top" align="left">
+        <input type="radio" value="70" checked="" onclick="changeShipType(70);" id="IdShipmentType70" name="IdShipmentType">
+          <label for="IdShipmentType70" style="margin-left:2px;">快递运输</label>
+        </td>
+        <td width="155px" valign="top" align="left">0.00元<span style="color:red">(免运费)</span></td>
+        <td width="105px" valign="top" align="left">2--3天</td>
+        <td valign="top" align="left" class="gray"></td>
+   </tr>
+</tbody></table>
+</div>
+      
+
+      <div style="display:none">
+        <input type="text" value="1" id="payType_IdPaymentType">
+        <input type="text" value="70" id="payType_IdShipmentType">
+        <input type="text" value="0" id="payType_IdPickSite">
+        <input type="text" value="0" id="payType_CODTime">
+        <input type="text" value="0" id="payType_PaymentWay">
+        <input type="text" value="" id="payType_IdAgent">
+        <input type="text" value="{IsCodInform}" id="payType_IsCodInform">
+        <input type="text" value="0" id="payType_ShipTime">
+      </div>
+
+      <div class="footer">
+          <input type="button" onclick="savePayTypeAndShipType(this)" value="保存支付方式及配送方式" class="btn">
+      </div>
+</div>

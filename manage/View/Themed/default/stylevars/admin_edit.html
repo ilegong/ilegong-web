@@ -1,0 +1,41 @@
+<div class="Singleform">
+<div class="tabs">
+<div class="alert alert-info">
+  上传变量文件，替换所有变量。
+</div>
+<?php 
+echo $this->MForm->create($current_model,array('enctype'=>"multipart/form-data",'data-noajax'=>true));
+echo $this->MForm->file('variables');
+echo $this->MForm->hidden("styleid",array('value'=>$styleid));
+	
+echo $this->MForm->submit('submit',array('name'=>'EditByFile'));
+echo $this->MForm->end();
+?>
+
+<hr/>
+<div class="alert alert-info">
+	逐个编辑变量。
+</div>
+<?php 
+echo $this->MForm->create($current_model);
+?>
+<table class="table table-striped table-hover">
+<thead><tr>
+	<th>描述</th><th>变量名</th><th>变量值</th>
+</tr>
+</thead>
+{{loop $styles $key $style}}
+	<tr>
+	<td>
+	{{lang($style['Stylevar']['skey'])}}<br/>
+	{{$this->MForm->hidden("$current_model.$key.id",array('value'=>$style['Stylevar']['id']))}}
+	</td>
+	<td>{{$this->MForm->input("$current_model.$key.skey",array('div'=>false,'label'=>false,'value'=>$style['Stylevar']['skey']))}}</td>
+	<td>{{$this->MForm->input("$current_model.$key.sval",array('div'=>false,'label'=>false,'value'=>$style['Stylevar']['sval']))}}</td>
+	</tr>
+{{/loop}}
+</table>
+{{$this->MForm->submit('submit')}}
+{{$this->MForm->end()}}
+</div>
+</div>

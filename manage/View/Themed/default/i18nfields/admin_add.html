@@ -1,0 +1,293 @@
+<div class="form">
+    <?php 
+if($current_action=='admin_add'){
+	echo $this->MForm->create('I18nfield',array(
+        'url' => array(
+            'controller' => 'i18nfields',
+            'action' => 'add',
+			'?'=>array('model'=> $modelClass),
+        ),
+		'id'=>'Region-publish-form',
+	));
+}
+elseif($current_action=='admin_edit'){
+	echo $this->MForm->create('I18nfield',array(
+        'url' => array(
+            'controller' => 'i18nfields',
+            'action' => 'edit',
+			$id,
+        ),
+		'id'=>'Region-publish-form',
+	));
+}
+?>
+
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#i18nfield-basic-info" data-toggle="tab"><span>{{__('Basic Info')}}</span></a></li>
+                    <li><a href="#i18nfield-select-setting" data-toggle="tab"><span>{{__('Select Setting')}}</span></a></li>
+                    <li><a href="#i18nfield-associate-select" data-toggle="tab"><span>{{__('Associate Select')}}</span></a></li>
+                    <li><a href="#i18nfield-advanced-info" data-toggle="tab"><span>{{__('Advanced Options')}}</span></a></li>
+                    {{$this->Layout->getLanguageTabHead($current_model)}}
+                    <li><a href="#remarks" data-toggle="tab"><span>{{__('Remarks')}}</span></a></li>
+                </ul>
+ <div class="tab-content">
+        <div id="i18nfield-basic-info" class="tab-pane active">
+        <fieldset>
+        <?php
+ echo $this->MForm->input('id');
+echo $this->MForm->input('name');
+echo $this->MForm->input('translate');		
+echo $this->MForm->input('model',array('type'=>"hidden"));
+echo $this->MForm->input('type');
+echo $this->MForm->input('length');
+echo $this->MForm->input('formtype',array('after'=>'<br/>当为文件上传类型，且勾选了保存到db时，上传文件地址会保存到这个字段里，只能上传一个文件。<BR/>当文件上传类型且没有勾选保存到db时，文件地址会保存到UploadFIle表中，允许上传多个文件'));
+echo $this->MForm->input('explodeimplode');
+echo $this->MForm->input('default');
+echo $this->MForm->input('savetodb',array('default'=>'1','after'=>'勾选时在数据表中建立此字段；不勾选时不会建立字段，作为一个辅助项'));
+echo $this->MForm->input('explain',array('rows' => '5', 'cols' => '50','div'=>'wide'));
+        ?>
+        </fieldset>
+        </div>
+         <div id="i18nfield-select-setting" class="tab-pane">
+         <table width="99%">
+         <tr><td  style="vertical-align: top;">         	
+				<ul  class="nav nav-tabs" style="height:32px;">
+				<li class="active"><a data-toggle="tab" href="#i18nfield-region-conditions-basic">基本条件</a></li>
+				<li><a data-toggle="tab" href="#i18nfield-region-conditions-condition">筛选条件</a></li>	
+				<li><a data-toggle="tab" href="#i18nfield-region-conditions-join">表连接</a></li>
+				</ul>
+			<div class="tab-content">
+				<div id="i18nfield-region-conditions-basic" class="tab-pane active">
+	         <?php
+	         
+echo $this->MForm->input('selectvalues',array('rows' => '5', 'cols' => '50','div'=>'wide'));
+echo $this->MForm->input('selectmodel');
+echo $this->MForm->input('selectvaluefield',array('type'=>'select','class'=>'model-schema-list'));
+echo $this->MForm->input('selecttxtfield',array('type'=>'select','class'=>'model-schema-list',));
+
+echo $this->MForm->input('selectparentid');
+echo $this->MForm->input('selectautoload',array('default'=>'1','checked'=>'checked'));
+		?>
+			</div>
+			<div id="i18nfield-region-conditions-condition" class="tab-pane">	
+		 		<div>取值条件：</div>
+		 		<div id="model-conditions-list"> 
+		 		{{loop $this->data['options']['conditions'] $key $val}}
+		 			{{eval $c_id = end(explode('.',$key)); }}
+		 			<div class="condition-item"><label for="conditions-{{$c_id}}">{{$c_id}}</label>
+		 				<input type="text" name="data[options][conditions][{{$key}}]" value="{{$val}}" id="conditions-{{$c_id}}">
+		 			</div>
+		 		{{/loop}}	
+		 		<select class="model-schema-list"></select> 
+		 		<input type="button" value="{{__('Add new condition');}}" onclick="addNewRegionCondition();"/>
+		 		</div>
+		 		<div>排序方式：<input type="text" name="data[options][order]" value="created desc"/></div> 	
+	 		</div>
+	 		<div id="i18nfield-region-conditions-join" class="tab-pane">	
+		 		<div>
+		 			<div>连接表 {{$this->MForm->input('join.table',array('div'=>false,'label'=>false))}}</div>
+		 			<div>别名  {{$this->MForm->input('join.alias',array('div'=>false,'label'=>false))}}</div>
+		 			<div>连接方式 {{$this->MForm->input('join.type',array('div'=>false,'label'=>false,'options'=>array('left'=>__('Left Join'),'right'=>__('Right Join'),'inner'=>__('Inner Join'))))}}</div>
+		 			<div>条件：</div>
+		 			<div>{{$this->MForm->input('join.conditionskey',array('div'=>false,'label'=>false))}} = {{$this->MForm->input('join.conditionsval',array('div'=>false,'label'=>false))}}</div>
+		 		</div>
+	 		</div>
+	 		</div>
+	 		<input type="button" value="生成查询条件xml" onclick="generateRegionOptions();">
+	 		</td>
+	 		<td style="width:240px;vertical-align: top;">
+	 		<div class="ui-float-right">
+				<div>
+				查询条件： <br/>
+				{{$this->MForm->input('conditions',array('div'=>false,'id'=>'RegionConditions','label'=>false,'rows'=>10,'style'=>'height:200px;'))}}
+				<div class="ui-helper-clearfix"></div>
+				</div>
+			</div>
+			</td></tr></table>
+         </div>
+        <div id="i18nfield-associate-select" class="tab-pane">
+        <?php
+         echo $this->MForm->input('associateflag');
+         echo $this->MForm->input('associateelement');
+		echo $this->MForm->input('associatefield');
+		echo $this->MForm->input('associatetype');
+echo $this->MForm->input('onchange',array('rows' => '5', 'cols' => '50','div'=>'wide'));	
+?>
+         </div>
+         <div id="i18nfield-advanced-info" class="tab-pane">
+         <?php
+         echo $this->MForm->input('allownull',array('default'=>'1','checked'=>'checked'));
+         echo $this->MForm->input('validationregular',array('after'=>'<select><option value="email">邮箱</option>
+			<option value="url">网址</option><option value="required">必填</option>
+			<option value="number">数字</option>
+			<select>'));
+         echo $this->MForm->input('sort');
+		echo $this->MForm->input('allowadd',array('value'=>'1','checked'=>'checked'));
+		echo $this->MForm->input('allowedit',array('default'=>'1','checked'=>'checked'));	
+		?>
+         </div>
+    {{$this->Layout->getLanguageTabContent($current_model)}}
+    	<div id="remarks" class="tab-pane">
+	        <p>所有标题与名称的字段，字段名都用"name"</p>
+         </div>
+    <?php echo $this->MForm->end(__('Submit',true));?>
+</div>
+<div id="i18nfield-dialog-confirm" class="dialog" title="Change Model?">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+	Change Model will lose all regulars have added. Are you sure ?</p>
+</div>
+
+<!--  以下js内容与Region下的 admin_add.html保持一致 
+RegionModel =>替换成   I18nfieldSelectmodel
+  -->
+<script> 
+var currentModelTo = null;
+{{if $this->data['options']['conditions']}}
+var modelfields = {{json_encode($this->data['options']['conditions']);}};
+{{else}}
+var modelfields = {}
+{{/if}}
+
+$(document).ready(
+	function(){
+		currentModelTo = $('#I18nfieldSelectmodel').val();
+		$('#I18nfieldSelectmodel').change(function(){
+			changeLoadModelSchema(this.value);
+		});
+		loadModelSchema(currentModelTo);		
+	}
+);
+rs_callbacks.getRegionOptions = function(request){
+	$('#RegionConditions').val(formatXml(request.data));
+}
+
+function generateRegionOptions()
+{
+	ajaxAction(ADMIN_BASEURL+'/admin/regions/generateoptions',$('#Region-publish-form').serialize(),'','getRegionOptions');
+}
+function addNewRegionCondition()
+{
+	currentModelTo = $('#I18nfieldSelectmodel').val();	
+	var field = $('.model-schema-list').val();
+	if(modelfields[currentModelTo+'.'+field]){
+		alert('此项已添加'); return false;
+	}
+	else{
+		modelfields[currentModelTo+'.'+field] = 1;
+	}
+	$('.model-schema-list').before($('<div class="condition-item"><label for="conditions-'+field+'">'+field+'</label><input type="text" id="conditions-'+field+'" name="data[options][conditions]['+currentModelTo+'.'+field+']" /></div>'));
+}
+rs_callbacks.regionLoadSchema = function(request){
+	currentModelTo = $('#I18nfieldSelectmodel').val();
+	$('.model-schema-list').empty();
+	//$('#options-fields-list').empty();
+	var ignore_fields = ['seotitle','seodescription','seokeywords','deleted','published'];
+	var html = "";
+	for(var i in request){
+		if($.inArray(i,ignore_fields) != -1){
+			continue;
+		}
+		html+='<option value="'+i+'">'+request[i]+'</option>';
+		//$('.model-schema-list').append('<option value="'+i+'">'+request[i]+'</option>');
+		//$('#options-fields-list').append('<div class="ui-float-left" style="height:28px;overflow:hidden;"><input type="checkbox" id="options-fields-'+i+'" name="data[options][fields][]" value="'+currentModelTo+'.'+i+'"><label for="options-fields-'+i+'" title="'+request[i]+'">'+request[i]+'</label></div>');
+	}
+	$('.model-schema-list').append(html);
+	if($('#I18nfieldSelectmodel').val()=="{{$this->data['I18nfield']['selectmodel']}}"){
+		$('#I18nfieldSelecttxtfield').val("{{$this->data['I18nfield']['selecttxtfield']}}");
+		$('#I18nfieldSelectvaluefield').val("{{$this->data['I18nfield']['selectvaluefield']}}");
+	}
+}
+function loadModelSchema(model)
+{
+	if(model !=''){
+		ajaxAction(ADMIN_BASEURL+'/admin/ajaxes/loadschema/'+model,'',null,'regionLoadSchema');
+	}
+}
+function changeLoadModelSchema(model){
+	$("#i18nfield-dialog-confirm").dialog({
+		resizable: true,
+		height:200,
+		width:400,
+		modal: true,
+		buttons: {
+			'Change any way': function() {
+				currentModelTo = $('#I18nfieldSelectmodel').val();
+				modelfields = {};
+				loadModelSchema(model);
+				$('#options-fields-list').empty();
+				$('.condition-item').remove();
+				$(this).dialog('close');
+			},
+			Cancel: function() {
+				$('#I18nfieldSelectmodel').val(currentModelTo);
+				$(this).dialog('close');
+			}
+		}
+	});	
+}
+/** xml格式化函数  **/
+function getPrefix(prefixIndex)
+{
+    var span = '    ';
+    var output = [];
+    for(var i = 0 ; i < prefixIndex; ++i){
+        output.push(span);
+    }
+    return output.join('');
+}      
+function formatXml(text)
+{
+    //去掉多余的空格
+    text = '\n' + text.replace(/(<\w+)(\s.*?>)/g,function($0, name, props){
+        return name + ' ' + props.replace(/\s+(\w+=)/g," $1");
+    }).replace(/>\s*?</g,">\n<");
+   
+    //把注释编码
+    text = text.replace(/\n/g,'\r').replace(/<!--(.+?)-->/g,function($0, text){
+        var ret = '<!--' + escape(text) + '-->';
+        return ret;
+    }).replace(/\r/g,'\n');
+   
+    //调整格式
+    var rgx = /\n(<(([^\?]).+?)(?:\s|\s*?>|\s*?(\/)>)(?:.*?(?:(?:(\/)>)|(?:<(\/)\2>)))?)/mg;
+    var nodeStack = [];
+    var output = text.replace(rgx,function($0,all,name,isBegin,isCloseFull1,isCloseFull2 ,isFull1,isFull2){
+        var isClosed = (isCloseFull1 == '/') || (isCloseFull2 == '/' ) || (isFull1 == '/') || (isFull2 == '/');
+        //alert([all,isClosed].join('='));
+        var prefix = '';
+        if(isBegin == '!'){
+            prefix = getPrefix(nodeStack.length);
+        }
+        else{
+            if(isBegin != '/'){
+                prefix = getPrefix(nodeStack.length);
+                if(!isClosed){
+                    nodeStack.push(name);
+                }
+            }
+            else{
+                nodeStack.pop();
+                prefix = getPrefix(nodeStack.length);
+            }
+        }
+        var ret =  '\n' + prefix + all;
+        return ret;
+    });
+   
+    var prefixSpace = -1;
+    var outputText = output.substring(1);   
+    //把注释还原并解码，调格式
+    outputText = outputText.replace(/\n/g,'\r').replace(/(\s*)<!--(.+?)-->/g,function($0, prefix,  text){
+        //alert(['[',prefix,']=',prefix.length].join(''));
+        if(prefix.charAt(0) == '\r')
+            prefix = prefix.substring(1);
+        text = unescape(text).replace(/\r/g,'\n');
+        var ret = '\n' + prefix + '<!--' + text.replace(/^\s*/mg, prefix ) + '-->';
+        //alert(ret);
+        return ret;
+    });
+   
+    return outputText.replace(/\s+$/g,'').replace(/\r/g,'\r\n');
+
+}
+</script>

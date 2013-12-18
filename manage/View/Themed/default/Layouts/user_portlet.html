@@ -1,0 +1,445 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$pageTitle}-{$site[title]}</title>
+<META NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+<meta name="Keywords" content="{if $seokeywords}{$seokeywords}{else}{$site[seokeywords]}{/if}" />
+<meta name="Description" content="{if $seodescription}{$seodescription}{else}{$site[seodescription]}{/if}" />
+{eval echo $this->Html->meta('icon');}
+{eval echo $this->Html->css(array(
+            '960_24_col',
+            'cupertino/jquery-ui-1.8.4.custom',
+            '/js/highslide/highslide.css',
+            'base',
+           'ui-customer',
+           'front',
+        ));
+}
+{eval echo $javascript->link(array(			
+            'jquery/jquery-1.4.4.min.js',
+            'jquery/plugins/jquery.tmpl.min.js',
+            'jquery/jquery.cookie.js',
+            'jquery/jquery-ui-1.8.5.custom.min.js',
+            'i18n/language-zh-CN.js',
+            'highslide/highslide-full.packed.js',
+        ));
+}
+</head>
+<body>
+<style>
+.column { width: 370px; float: left; padding-bottom: 30px; }
+.portlet { margin-top:10px; }
+
+.portlet-header { cursor:move;}
+.portlet-header .ui-icon { float: right; }
+.portlet-content { padding: 0.4em; }
+.ui-contain{min-height:100px;}
+.ui-contain-active {background:#FCFAF1;}
+.ui-icon{cursor:pointer;}
+.ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
+.ui-sortable-placeholder * { visibility: hidden; }
+.portlet-content a,.weiboauthor {color:#BD007D;}
+.single-weibo{ margin-top: 5px; padding-bottom: 5px;}
+.PY_textarea {
+    background-color: #F9FBF0;
+    border-color: #999999 #C9C9C9 #C9C9C9 #999999;
+    border-style: solid;
+    border-width: 1px;
+    color: #999999;
+    font-family: tahoama,"宋体";
+    height: 45px;
+    padding: 5px;
+}
+.ui-dialog .ui-dialog-buttonpane .ui-dialog-buttonset {
+    float: none;
+    text-align: center;
+}
+</style>
+<div class="dialog" id="ajax_doing_help" style="display:none;" title="转发到我的微博">
+<form id="form_retweetweibo">
+	<div id="sharecontent" class="turnToTxt">
+	转:Hello Weibo!
+	</div>
+	<div style="background-color: #B5B5B5;padding: 2px;margin-top:10px;" class="ui-corner-all">
+	<input type="hidden" name="weiboid" />
+	<textarea name="weibocontent" class="PY_textarea" style="width:450px;overflow: hidden; word-wrap: break-word; font-size: 12px; line-height: 18px;">顺便说点什么吧...</textarea>
+	</div>	
+</form>
+</div>
+{{literal}}
+<script id="weiboListTemplate" type="text/x-jquery-tmpl"> 
+<div class="regionlist ui-helper-clearfix single-weibo">
+	<div class="userhead">
+		<img src="${user.profile_image_url}" title="${user.screen_name}" gender="${user.gender}" uid="${user.id}" imgtype="head">
+		<div>${user.short_name}</div>
+	</div>
+	<div class="regionright ui-helper-clearfix ">
+		<p class="sms"><a class="weiboauthor" target="_blank" title="${user.screen_name}" href="http://t.sina.com.cn/${user.domain}">@${user.screen_name}</a>：
+			<span class="weibo-short-text">${short_text}</span>
+			<div class="weibocontent_${id}" style="display:none;">${text}</div>
+		</p>
+		{{if thumbnail_pic}}
+		<a href="${bmiddle_pic}" class="highslide" onclick="return hs.expand (this, { wrapperClassName: 'wide-border'})">
+		<img src="${thumbnail_pic}" style="max-height:120px;">
+		</a>
+		{{/if}}
+		{{if retweeted_status}}
+		<div style="margin: 5px 20px;">
+			<div class="related-question ui-helper-clearfix">
+				<p id="question-content-108">${retweeted_status.user.screen_name}：
+					<span class="weibo-short-text">${retweeted_status.short_text}</span>
+					<div class="weibocontent_${retweeted_status.id}" style="display:none;">${retweeted_status.text}</div>
+				</p>
+				<div style="float: right;">
+				<a onclick="return open_dialog('#ajax_doing_help','${retweeted_status.id}');" href="javasctipt:void(0);">原文转发</a> | 				
+				<a onclick="" href="javasctipt:void(0);">原文评论</a>	
+				</div>
+				{{if retweeted_status.thumbnail_pic}}
+				<a href="${retweeted_status.bmiddle_pic}" class="highslide" onclick="return hs.expand (this, { wrapperClassName: 'wide-border'})">
+				<img src="${retweeted_status.thumbnail_pic}" style="max-height:120px;">
+				</a>
+				{{/if}}
+			</div>
+		</div>
+		{{/if}}
+		<div style="float: right;">
+				<a onclick="return open_dialog('#ajax_doing_help','${id}');" href="javasctipt:void(0);">转发</a> | 		
+				<a onclick="" href="javasctipt:void(0);">收藏</a> | 			
+				<a onclick="" href="javasctipt:void(0);">评论</a>	
+		</div>
+	</div>
+</div>
+</script>
+{{/literal}}
+
+<script type="text/javascript">
+//<![CDATA[
+// thumbnail_pic,bmiddle_pic,original_pic
+hs.registerOverlay({
+	html: '<div class="closebutton" onclick="return hs.close(this)" title="Close"></div>',
+	position: 'top right',
+	fade: 2 // fading the semi-transparent overlay looks bad in IE
+});
+
+hs.lang.creditsText = '';
+hs.graphicsDir = '/js/highslide/graphics/';
+hs.wrapperClassName = 'borderless';
+//]]>
+</script>
+<script>
+var friends_page = 0;
+var fullscreen_falg = false;
+var bigest_weiboid = 0;
+var smallest_weiboid = 0;
+var word_limitnum = {
+		'n2':90,
+		'n3':60,
+		'n4':35
+};
+var portletnum = 3;
+function fullscreen()
+{
+	var winwidth = $(window).width()-30;
+	var colunm = $('.container_24').find('.ui-contain').size();
+	var perwidth = (winwidth-10*colunm)/colunm;
+	$('.container_24').width(winwidth);
+	$('.container_24').find('.ui-contain').each(function(){
+		$(this).width(perwidth)
+	});
+	fullscreen_falg = true;
+}
+function setlayout(container,grids)
+{
+	var grids_a = grids.split('_');
+	portletnum = grids_a.length;
+	var contains = $(container).find('.ui-contain');
+	contains.each(function(i){
+		if(i>=grids_a.length)
+		{
+			$(this).prev().append($(this).html());			
+			$(this).remove();
+			return ;
+		}
+		var classname = $(this).attr('class');		
+		$(this).attr('class',classname.replace(/grid_\d+/,'grid_'+grids_a[i]));
+	});
+	
+	var containsize = contains.size();
+	if(containsize < grids_a.length)
+	{
+		var i = contains.size();
+		for(;i<grids_a.length;i++)
+		{
+			$('<div class="ui-contain grid_'+grids_a[i]+'"></div>').appendTo(container).append(contains.eq(containsize-1).children(':last'));
+		}
+		
+		$( ".ui-contain" ).sortable({
+			connectWith: ".ui-contain",
+			handle:'.portlet-header',forceHelpSize:true
+		});
+	}
+	if(fullscreen_falg == true)
+	{
+		fullscreen();
+	}
+}
+function open_dialog(dialogid,weibo_id)
+{
+	if(weibo_id)
+	{
+		var weibo_content = $('.weibocontent_'+weibo_id).html();
+		$(dialogid).find('#sharecontent').html('转：'+weibo_content);
+		$(dialogid).find('input[name="weiboid"]').val(weibo_id);
+		$(dialogid).find('textarea[name="weibocontent"]').val('顺便说点什么吧...');
+	}
+	
+	$(dialogid).dialog({width: 490,resizable: false,modal: true,
+		 buttons: { 
+		 	"转发":function() {
+	 			var $this =this;
+				$.ajax({
+					type:'post', 
+					success:function(data) {						
+						if (data['error_code'] && data['error']){
+							alert ('Error_code: '+data['error_code']+';  Error: '+data['error'] );
+							return false;
+						}
+						
+						$($this).dialog("close"); 
+					}, 
+					data:$('#form_retweetweibo').serialize(),
+					url:'/sinaweibos/repost', 
+					dataType:'json'
+				});
+	 		},
+		 	"取消":function() { $(this).dialog("close"); }
+		  }
+	});
+	
+	return false;
+}
+
+
+$(function() {
+	fullscreen();
+	$( ".ui-contain" ).sortable({
+		connectWith: ".ui-contain",
+		handle:'.portlet-header',
+		forceHelpSize:true,
+		helper: 'clone',
+		start: function(event, ui) {$( ".ui-contain" ).addClass('ui-contain-active');},
+		stop: function(event, ui) {$( ".ui-contain" ).removeClass('ui-contain-active');}
+	});
+
+	$( ".ui-icon" ).disableSelection();
+
+	$( ".portlet" ).find( ".portlet-header" ).addClass( "ui-widget-header" )
+			.prepend( " <span class='ui-icon ui-icon-circle-minus tool-min'></span> <span class='ui-icon ui-icon-gear tool-min-setting'></span>")
+			.end()
+	// 头部区域增加最大最小化按钮，内容区域增加css样式
+	
+	$( ".portlet" ).find('.portlet-header:hidden').each(function(){
+		$(this).parent().hover(function(){				
+			$( ".portlet-header",this).show();
+			$( ".portlet-header",this).width($(this).width()-2);
+		},function(){
+			$( ".portlet-header",this).hide();
+		});
+	});
+	//隐藏头部的portlet鼠标移上去后，显示头部
+	
+	//最小化，及还原的折叠按钮
+	$( ".portlet-header:visible .tool-min" ).click(function() {
+		$( this ).toggleClass( "ui-icon-circle-minus" ).toggleClass( "ui-icon-circle-plus" );
+		$( this ).parents( ".portlet:first" ).find( ".portlet-content" ).toggle("fast");
+	});
+
+	$( ".column" ).disableSelection();
+	
+	
+	
+	
+	$( ".portlet").droppable({
+		accept: ".userdraggable",
+		hoverClass: "ui-state-active",
+		drop: function( event, ui ) {
+			var obj = ui.draggable.remove('style').css('left','').css('top','').css('position','').css('cursor','auto');
+			$(this).find('.portlet-content').append(obj);			
+			var portlet_id = $(this).attr('id').replace(/portlet-/,'');
+			//http://www.jieli.com/regions/dataattri/17/1/2
+			var img = $(ui.draggable).find('img:first');
+			var userstr = img.attr('uid')+'-'+img.attr('title')+'-'+img.attr('src');
+			addFriendToPortlet(portlet_id,userstr);
+			if($('#portlet-weibo-user-list').find('.userhead').size()<50)
+			{
+				loadFriends(friends_page);
+			}
+		}
+	});
+	//$('#portlet-weibo-user-list').dialog();
+	//loadFriends(friends_page);
+	loadFriendsWeibo();
+});
+function addFriendToPortlet(portlet_id,userstr)
+{
+	$.ajax({
+		type:'post', 
+		success:function(data) {
+			
+		}, 
+		data:{key:'weibo_users',value:userstr},
+		url:'/regions/dataattri/'+portlet_id+'/append', 
+		dataType:'json'
+	});
+}
+function loadFriends(page)
+{
+	var appendnum = 0;
+	$.ajax({
+		type:'get', 
+		success:function(data) {
+			for(var i in data)
+			{
+				var html = '<div class="userhead userdraggable">	'+
+				'<img src="'+data[i].profile_image_url+'" title="'+data[i].screen_name+'" gender="'+data[i].gender+'" uid="'+data[i].id+'" imgtype="head">' +
+				'<div>'+data[i].screen_name.substr(0,4)+'</div>'+
+				'</div>';
+				if(!includeInPortlet(data[i].id))
+				{
+					appendnum = appendnum+1;
+					$('#portlet-weibo-user-list').append(html);
+					var userstr=data[i].id+'-'+ data[i].screen_name+'-'+data[i].profile_image_url ;
+					addFriendToPortlet(17,userstr);
+				}
+			}
+			$( ".userdraggable" ).draggable({ 
+				revert: "invalid",
+				appendTo: 'body',helper: 'clone'
+					}).css('cursor','move');
+			
+			if(data.length ==100 && appendnum<100)
+			{
+				loadFriends(friends_page);
+			}
+			//
+		}, 
+		url:'/questions/invite/1/friends/'+page+'/json/100', 
+		dataType:'json'
+	}) ;
+	friends_page++;
+}
+function weibo_substr(content,length)
+{
+	content =  content.substr(0,length);
+	if(content.length>length)
+	{
+		content +='...';
+	}
+	return content;
+}
+function loadFriendsWeibo(page,bigid)
+{
+	if(!page) page=1;
+	var postdata = {};
+	if(bigest_weiboid)
+		postdata.bigest_weiboid = bigest_weiboid;
+	$.ajax({
+		type:'post', 
+		data:postdata,
+		success:function(data) {
+			var weibo_html='';
+			var length = $( ".portlet" ).size();
+			for(var i in data)
+			{
+				data[i].user.short_name =  data[i].user.screen_name.substr(0,4);
+				
+				data[i].short_text = weibo_substr(data[i].text,word_limitnum['n'+portletnum]);
+				if(data[i].retweeted_status)
+				{
+					data[i].retweeted_status.short_text = weibo_substr(data[i].retweeted_status.text,word_limitnum['n'+portletnum]);
+				}
+				var prepend_flag =false;
+				if(bigest_weiboid == 0|| bigest_weiboid < data[i].id)
+				{
+					prepend_flag =true;
+					bigest_weiboid = data[i].id;
+				}
+				if(smallest_weiboid == 0||smallest_weiboid>data[i].id)
+				{
+					smallest_weiboid =  data[i].id;
+				}
+				
+				for(var j=0;j<length;j++)
+				{
+					var weibos = $( ".portlet" ).eq(j).data('weibo_users');
+					if(typeof(weibos) !='undefined')
+					{
+						if( weibos.indexOf(','+data[i]['user']['id']+'-')>-1)
+						{
+							var weiboarea = $( ".portlet" ).eq(j).find('.portlet-content');
+							if(prepend_flag)
+							{
+								weiboarea.prepend($( "#weiboListTemplate" ).tmpl(data[i]));
+							}
+							else
+							{
+								if(weiboarea.find('.single-weibo').size()>=4)
+								{
+									weiboarea.append($( "#weiboListTemplate" ).tmpl(data[i]).hide());
+								}
+								else
+								{
+									weiboarea.append($( "#weiboListTemplate" ).tmpl(data[i]));
+								}
+							}
+						}
+					}
+				}
+			}
+		}, 
+		url:'/users/sina/friends/1/50/json', 
+		dataType:'json'
+	});
+	if(page==1)
+	{
+		setTimeout("loadFriendsWeibo(1,"+bigest_weiboid+")",30000)
+	}
+	
+}
+
+
+function includeInPortlet(uid)
+{
+	var flag = false;
+	$( ".portlet" ).each(function(){
+		var weibos = $(this).data('weibo_users');
+		if(typeof(weibos) !='undefined')
+		{
+			if( weibos.indexOf(','+uid+'-')>-1)
+			{
+				flag = true;
+			}
+		}
+	});
+	return flag;
+}
+
+</script>	
+<a href="#" onclick="publishController.open_dialog('/regions/sinaweibo')">新建</a>
+<a href="#" onclick="fullscreen();">全屏</a>
+<a onclick="setlayout('#container-part1','12_12');" href="javascript:;" title="两栏">两栏</a>
+<a onclick="setlayout('#container-part1','8_8_8');" href="javascript:;" title="三栏">三栏</a>
+<a onclick="setlayout('#container-part1','6_6_6_6');" href="javascript:;" title="四栏">四栏</a>
+<style>
+.formsetSetting ul li{
+	float:left;
+}
+</style>
+<div class="maincontent  clearfix">
+	{$content_for_layout}
+</div>
+{{template Elements/footer}}
+
+</body>
+</html>

@@ -1,0 +1,15 @@
+<div class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+    <h3>{{lang('system_install','install')}}</h3>
+    </div>
+    <div class="modal-body">
+    	{{lang('welcome_to_use_this_system','install')}}
+    </div>
+    <div class="modal-footer">
+    	<?php echo $this->Html->link(lang('start_install','install'), array('action' => 'check'),array('class'=>"btn btn-primary")); ?>
+	</div>
+	</div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

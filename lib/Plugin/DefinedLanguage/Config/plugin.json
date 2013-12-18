@@ -1,0 +1,12 @@
+{
+	"name" : "DefinedLanguage",
+	"description" : "自定义语言管理插件",
+	"author" : "arlonzou",
+	"authorEmail" : "arlonzou@sina.com",
+	"authorUrl" : "http://web.ideamuster.com",
+	"dependencies": {
+		"plugins": [
+			""
+		]
+	}
+} 

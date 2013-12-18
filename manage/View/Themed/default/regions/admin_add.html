@@ -1,0 +1,354 @@
+<div id="{{$pageID}}" class="form">
+{{if $current_action=='admin_edit'}}
+{{$this->MForm->create('Region',array('type'=>'file','id'=>'Region-publish-form','class'=>'form-horizontal','onsubmit'=>"return ajaxeSubmitForm(this,'updatePortlet');",'escape' => false))}}
+{{else}}
+{{$this->MForm->create('Region',array('type'=>'file','id'=>'Region-publish-form','class'=>'form-horizontal','onsubmit'=>"return ajaxeSubmitForm(this,'createAPortlet');",'escape' => false))}}
+{{/if}}
+<fieldset>
+
+	{{if $current_action=='admin_edit'}}
+	{{$this->MForm->input('id',array('type'=>'text','readonly'=>'readonly'))}}
+	{{/if}}
+	<ul class="nav nav-tabs">
+	<li class="active"><a href="#region-basic" data-toggle="tab">基本信息</a></li>
+	<li><a href="#region-conditions" data-toggle="tab">筛选条件</a></li>
+	<li><a href="#region-css" data-toggle="tab">样式</a></li>	
+	<li><a href="#region-extend" data-toggle="tab">扩展字段</a></li>	
+	</ul>
+	<div class="tab-content">
+	<div id="region-basic" class="tab-pane active">
+		{{$this->MForm->input('name',array('label'=>'标题栏','rows'=>2,'style'=>'width:600px','use_editor'=>false))}}	
+		{{$this->MForm->input('description',array('label'=>'描述：','after'=>'（备注，不用于显示）'))}}
+		{{$this->MForm->input('portlet_tpl',array('label'=>'外框模板','default'=>'portlets/default.html'))}}
+		{{$this->MForm->input('content_url',array())}}
+		{{$this->MForm->input('content',array('rows'=>4,'div'=>'margin-zore'))}}
+	</div>
+	<div id="region-conditions" class="tab-pane">
+		{{$this->MForm->hidden('conditions')}}
+		<ul class="nav nav-tabs">
+			<li class="active"><a href="#region-conditions-basic" data-toggle="tab">基本条件</a></li>
+			<li><a href="#region-conditions-fields" data-toggle="tab">选取字段</a></li>
+			<li><a href="#region-conditions-condition" data-toggle="tab">筛选条件</a></li>	
+			<li><a href="#region-conditions-join" data-toggle="tab">表连接</a></li>
+			<li><a href="#region-conditions-params" data-toggle="tab">默认参数</a></li>
+		</ul>
+		<div class="tab-content">
+		<div id="region-conditions-basic" class="tab-pane active">	
+					<div>所在数据模块： {{$this->MForm->input('model',array('div'=>false,'label'=>false,'type'=>'select','options' => array(
+			'Article'=>'Article',
+			'EstateArticle'=>'EstateArticle',
+			 'Product'=>'Product',
+			 'Advertise'=>'Advertise',
+			  'Museum'=>'Museum',
+			   'Category'=>'Category',
+			   'Taobao.Taobaoke'=>'Taobao.Taobaoke',
+			 )))}}</div>
+			 		<div>显示条数： {{$this->MForm->input('rows',array('div'=>false,'label'=>false,'default'=>'8'))}}</div>
+					<div>显示列数： {{$this->MForm->input('columns',array('div'=>false,'label'=>false,'default'=>'1'))}}</div>
+					<div>列表项模板： {{$this->MForm->input('template',array('div'=>false,'label'=>false,'default'=>'regions/_list'))}}</div>
+			 		<div><input type="checkbox" id="options-recursive" name="data[options][recursive]" checked="checked" value="-1"><label for="options-recursive">不选取关联数据</label></div>
+			 		<div>是否显示分页：{{$this->MForm->input('showpages',array('div'=>false,'label'=>false))}}
+			 			分页类型： {{$this->MForm->input('pagelink_type',array('div'=>false,'label'=>false,'type'=>'select','options' =>$pagelink_types))}}
+			 		</div>
+ 		</div>
+ 		<div id="region-conditions-fields" class="tab-pane">	
+	 		<div>显示的字段项：</div>
+	 		<div id="options-fields-list" class="clearfix"></div>
+ 		</div>
+ 		<div id="region-conditions-condition" class="tab-pane">	
+	 		<div>取值条件：</div>
+	 		<div id="model-conditions-list">
+		 		{{if !empty($this->data['options']['conditions'])}}
+			 		{{loop $this->data['options']['conditions']['conditionskey'] $ck $cv}}<div class="options-conditions-add ui-helper-clearfix">{{$this->MForm->input('options.conditions.conditionskey.'.$ck,array('div'=>false,'label'=>false))}} = {{$this->MForm->input('options.conditions.conditionsval.'.$ck,array('div'=>false,'label'=>false))}}{{$this->MForm->input('options.conditions.valid.'.$ck,array('div'=>false,'label'=>false,'options'=>array('always'=>__('Always'),'notempty'=>__('Valid When val is not empty'))))}}<ul style="float:left;width:16px;"><li><span class="ui-icon ui-icon-plus options-conditions-add-new"></span></li><li><span class="ui-icon ui-icon-close options-conditions-add-delete"></span></li></ul></div>{{/loop}}
+		 		{{else}}
+		 			<div class="options-conditions-add ui-helper-clearfix">{{$this->MForm->input('options.conditions.conditionskey.0',array('div'=>false,'label'=>false))}} = {{$this->MForm->input('options.conditions.conditionsval.0',array('div'=>false,'label'=>false))}}
+		 			{{$this->MForm->input('options.conditions.valid.0',array('div'=>false,'label'=>false,'options'=>array('always'=>__('Always'),'notempty'=>__('Valid When val is not empty'))))}}<ul style="float:left;width:32px;"><li style="float:left;"><i class="icon-plus-sign  options-conditions-add-new"></i></li><li><i class="icon-minus-sign options-conditions-add-delete"></i></li></ul>
+		 			</div>{{/if}}
+	 			<!-- 
+	 			<select class="model-schema-list"></select> 
+	 			<input type="button" value="{{__('Add new condition');}}" onclick="addNewRegionCondition();"/>
+	 			 -->
+	 		</div>
+	 		<div>排序方式：{{$this->MForm->input('options.order',array('div'=>false,'label'=>false,'size'=>'60'))}}
+	 		</div> 	
+ 		</div>
+ 		<div id="region-conditions-join" class="tab-pane">	
+ 			<input type="button" value="增加新的连接" id="add_new_join_button"/>
+ 			
+ 				<ul class="nav nav-tabs" style="height:32px;">	
+                                        {{eval $i = 0; }}
+ 					{{loop $this->data['options']['joins'] $key $val}}
+                                        {{eval $i++; }}
+					<li><a href="#region-conditions-join-tab{{$key}}" data-toggle="tab">连接{{($i)}}</a> <span title="删除" class="ui-tabs-close ui-icon ui-icon-close"></span></li>
+					{{/loop}}
+				</ul>
+				
+				<div class="tab-content" id="join-tabs"> 		
+		 		{{eval $i = 0; }}
+		 		{{loop $this->data['options']['joins'] $key $val}}
+		 			<div class="tab-pane" id="region-conditions-join-tab{{$key}}">
+		 			<div>连接表 {{$this->MForm->input('options.joins.join'.$i.'.table',array('div'=>false,'label'=>false))}}</div>
+		 			<div>别名  {{$this->MForm->input('options.joins.join'.$i.'.alias',array('div'=>false,'label'=>false))}}</div>
+		 			<div>连接方式 {{$this->MForm->input('options.joins.join'.$i.'.type',array('div'=>false,'label'=>false,'options'=>array('left'=>__('Left Join'),'right'=>__('Right Join'),'inner'=>__('Inner Join'))))}}</div>
+		 			<div>条件 ：
+                                            <p>字段=字段（字段名不含空格），“Modle1.field1”=> “Model2.field2”</p>
+                                            <p>字段=值，若为值，需要自己加单引号。 “Modle.field1” => “'value'”</p>
+                                            <p>当前面的值为数字或空时，后面的要求为sql条件表达式。如 ‘1’=> ”Modle.field1='value'“</p>
+                                            <p>当字段名含空格时，可以为表达式. 大于，小于，not， like等 如，"Modle.field1 >" => "0"</p>
+                                        </div>
+		 			{{if !empty($val['conditions']['conditionskey'])}}
+				 		{{loop $val['conditions']['conditionskey'] $ck $cv}}<div class="join-conditions-add ui-helper-clearfix">{{$this->MForm->input('options.joins.join'.$i.'.conditions.conditionskey.'.$ck,array('div'=>false,'label'=>false))}} = {{$this->MForm->input('options.joins.join'.$i.'.conditions.conditionsval.'.$ck,array('div'=>false,'label'=>false))}}{{$this->MForm->input('options.joins.join'.$i.'.conditions.valid.'.$ck,array('div'=>false,'label'=>false,'options'=>array('always'=>__('Always'),'notempty'=>__('Valid When val is not empty'))))}}<ul style="float:left;width:16px;"><li><span class="ui-icon ui-icon-plus join-conditions-add-new"></span></li><li><span class="ui-icon ui-icon-close join-conditions-add-delete"></span></li></ul></div>{{/loop}}
+			 		{{else}}
+			 			<div class="join-conditions-add ui-helper-clearfix">{{$this->MForm->input('options.joins.join'.$i.'.conditions.conditionskey.0',array('div'=>false,'label'=>false))}} = {{$this->MForm->input('options.joins.join'.$i.'.conditions.conditionsval.0',array('div'=>false,'label'=>false))}}
+			 			{{$this->MForm->input('options.joins.join'.$i.'.conditions.valid.0',array('div'=>false,'label'=>false,'options'=>array('always'=>__('Always'),'notempty'=>__('Valid When val is not empty'))))}}<ul style="float:left;width:16px;"><li><span class="ui-icon ui-icon-plus join-conditions-add-new"></span></li><li><span class="ui-icon ui-icon-close join-conditions-add-delete"></span></li></ul>
+			 			</div>{{/if}}	 			
+		 			{{eval $i++; }}
+		 			</div>
+		 		{{/loop}}
+	 			</div>
+ 		</div>
+ 		<div id="region-conditions-params" class="tab-pane">
+ 			<div id="region-params">
+ 			
+ 			{{$this->MForm->input('auto_receive_param')}}
+ 				
+				<div>无默认值的参数在没有传入值时，该项参数会被忽略。默认有的named方式的3个参数：page(分页),order（排序）,conditions（条件） 	</div>
+				<div><table style="width:99%">
+				<tr><th>参数方式（如named,get,post,query等）</th><th>参数名称（如page）</th><th>操作</th></tr>
+				<tr><td>{{$this->MForm->input('options.params.0.type',array('div'=>false,'label'=>false))}}</td><td>{{$this->MForm->input('options.params.0.name',array('div'=>false,'label'=>false))}}</td><td><ul><li>新增</li><li>删除</li></ul></td></tr>
+				</table>
+				</div>
+			</div>
+ 		</div>
+ 		</div>
+ 		<input type="button" value="生成查询条件xml" onclick="generateRegionOptions();">
+	</div>
+	<div id="region-css" class="tab-pane">
+		<div>追加class样式：{{$this->MForm->input('custom_class',array('div'=>false,'label'=>false))}}</div>
+		<div>style css：{{$this->MForm->input('custom_style',array('div'=>false,'label'=>false,'rows'=>6))}}</div>
+	</div>
+	
+	<div id="region-extend" class="tab-pane">
+		<div>扩展属性1：{{$this->MForm->input('ext_field1',array('div'=>false,'label'=>false))}}</div>
+		<div>扩展属性2：{{$this->MForm->input('ext_field2',array('div'=>false,'label'=>false))}}</div>
+		<div>扩展属性3：{{$this->MForm->input('ext_field3',array('div'=>false,'label'=>false))}}</div>
+		<div>扩展属性4：{{$this->MForm->input('ext_field4',array('div'=>false,'label'=>false))}}</div>
+		{{$this->MForm->swfupload('photo','Region');}}
+		<div title="记录下各扩展字段添加后的用途，别时间一长都忘了是做什么用的了">扩展描述：{{$this->MForm->input('ext_description',array('div'=>false,'label'=>false,'rows'=>3,))}}</div>
+	</div>
+	
+</div>
+</fieldset>
+{{$this->MForm->end(array('label'=>__('Submit',true),'id'=>'btnsubmit'))}}
+</div>
+<div id="dialog-confirm" class="dialog" title="Change Model?">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+	Change Model will lose all regulars have added. Are you sure ?</p>
+</div>
+<script>
+/** 连接条件的新增  **/
+$(function(){
+	$('.join-conditions-add-new').die('click').live('click',function(){
+		var obj = $(this).parents('.join-conditions-add:first');
+		var new_obj = obj.clone();
+		new_obj.find(':input').each(function(){
+			$(this).val('');
+		});
+		
+		$('.join-conditions-add').each(function(i){
+			$(this).find(':input').each(function(){
+				var name = $(this).attr('name');
+				//alert(name.replace(/\[\d*\]/,'[10]'));
+				$(this).attr('name',name.replace(/\[\d*\]/,'['+i+']'));
+			});
+		});		
+	})
+	$('.join-conditions-add-delete').die('click').live('click',function(){
+                if($('.join-conditions-add').size()>1){
+                    var obj = $(this).parents('.join-conditions-add').remove();
+                }
+		else{
+			alert('必须保留一项。');	
+		}
+	})
+
+	$('.options-conditions-add-new').die('click').live('click',function(){
+		var obj = $(this).parents('.options-conditions-add:first');
+		var new_obj = obj.clone();
+		new_obj.find(':input').each(function(){
+			$(this).val('');
+		});
+		new_obj.insertAfter(obj);
+		
+		$('.options-conditions-add').each(function(i){
+			$(this).find(':input').each(function(){
+				var name = $(this).attr('name');
+				//alert(name.replace(/\[\d*\]/,'[10]'));
+				$(this).attr('name',name.replace(/\[\d*\]/,'['+i+']'));
+			});
+		});		
+	})
+	$('.options-conditions-add-delete').die('click').live('click',function(){
+		if($('.options-conditions-add').size()>1){
+			var obj = $(this).parents('.options-conditions-add').remove();		
+		}
+		else{
+			alert('必须保留一项。');	
+		}
+	})
+
+	$('#add_new_join_button').click(function(){
+		var length = $('#join-tabs').tabs('length');
+		var panel =$($('#join-tabs').find('.ui-tabs-panel:first').html().replace(RegExp('join'+(length-1),"g"),'join'+length));
+		panel.find(':input').val('');
+		$( "#join-tabs" ).unbind('tabsadd').bind( "tabsadd", function(event, ui) {
+			//var tab_content = $tab_content_input.val() || "Tab " + tab_counter + " content.";
+			$( ui.panel ).append(panel);
+		});
+		$( "#join-tabs" ).tabs( "add", "#join-tabs-" + length, '连接'+(length+1) ).tabs( "select" , length );
+		
+	});
+
+        $('.ui-tabs-nav span.ui-icon-close').live('click', function() {
+            var index = $('li','#join-tabs').index($(this).parent());
+            $('#join-tabs').tabs('remove', index);
+        });
+})
+
+var currentModelTo = null;
+var modelfields = {{json_encode($this->data['options']['conditions']);}};
+var selected_fields = {{json_encode($this->data['options']['fields'])}};
+
+$(document).ready(function(){
+    currentModelTo = $('#RegionModel').val();
+    $('#RegionModel').change(function(){
+            changeLoadModelSchema(this.value);
+    });
+    loadModelSchema(currentModelTo);
+
+   
+});
+
+rs_callbacks.getRegionOptions = function(request){
+	$('#RegionConditions').val(formatXml(request.data));
+}
+
+function generateRegionOptions()
+{
+	ajaxAction(ADMIN_BASEURL+'/admin/regions/generateoptions',$('#Region-publish-form').serialize(),'','getRegionOptions');
+}
+function addNewRegionCondition()
+{
+	currentModelTo = $('#RegionModel').val();	
+	var field = $('.model-schema-list').val();
+	if(modelfields && modelfields[currentModelTo+'.'+field]){
+		alert('此项已添加'); return false;
+	}
+	else if(modelfields){
+		modelfields[currentModelTo+'.'+field] = 1;
+	}
+	$('.model-schema-list').before($('<div class="condition-item"><label for="conditions-'+field+'">'+field+'</label><input type="text" id="conditions-'+field+'" name="data[options][conditions]['+currentModelTo+'.'+field+']" /></div>'));
+}
+rs_callbacks.regionLoadSchema = function(request){
+	currentModelTo = $('#RegionModel').val();
+	var modelname = currentModelTo.split('.'); // 当为插件的模块时，带点。 需要得出模块名   
+	if(modelname.length==2){
+		modelname = modelname[1];
+	}
+	else{
+		modelname = modelname[0];
+	}
+	$('.model-schema-list').empty();
+	$('#options-fields-list').empty();
+	var ignore_fields = ['seotitle','seodescription','seokeywords','deleted','published'];
+	for(var i in request){
+		if($.inArray(i,ignore_fields) != -1){
+			continue;
+		}
+		var check_filed = '';
+		for(var j in selected_fields){
+			if(selected_fields[j]==modelname+'.'+i){
+				check_filed = ' checked="checked" '; break;
+			}
+		}
+		$('.model-schema-list').append('<option value="'+i+'">'+request[i]+'</option>');
+		$('#options-fields-list').append('<div class="ui-float-left" style="height:28px;overflow:hidden;"><input type="checkbox" id="options-fields-'+i+'" '+check_filed+' name="data[options][fields][]" value="'+modelname+'.'+i+'"><label for="options-fields-'+i+'" title="'+request[i]+'">'+request[i]+'</label></div>');
+	}
+}
+function loadModelSchema(model)
+{
+	ajaxAction(ADMIN_BASEURL+'/admin/ajaxes/loadschema/'+model,'',null,'regionLoadSchema');
+}
+function changeLoadModelSchema(model){
+	currentModelTo = $('#RegionModel').val();
+	modelfields = {};
+	loadModelSchema(model);
+	$('#options-fields-list').empty();
+	$('.condition-item').remove();
+}
+/** xml格式化函数  **/
+function getPrefix(prefixIndex)
+{
+    var span = '    ';
+    var output = [];
+    for(var i = 0 ; i < prefixIndex; ++i){
+        output.push(span);
+    }
+    return output.join('');
+}      
+function formatXml(text)
+{
+    //去掉多余的空格
+    text = '\n' + text.replace(/(<\w+)(\s.*?>)/g,function($0, name, props){
+        return name + ' ' + props.replace(/\s+(\w+=)/g," $1");
+    }).replace(/>\s*?</g,">\n<");
+   
+    //把注释编码
+    text = text.replace(/\n/g,'\r').replace(/<!--(.+?)-->/g,function($0, text){
+        var ret = '<!--' + escape(text) + '-->';
+        return ret;
+    }).replace(/\r/g,'\n');
+   
+    //调整格式
+    var rgx = /\n(<(([^\?]).+?)(?:\s|\s*?>|\s*?(\/)>)(?:.*?(?:(?:(\/)>)|(?:<(\/)\2>)))?)/mg;
+    var nodeStack = [];
+    var output = text.replace(rgx,function($0,all,name,isBegin,isCloseFull1,isCloseFull2 ,isFull1,isFull2){
+        var isClosed = (isCloseFull1 == '/') || (isCloseFull2 == '/' ) || (isFull1 == '/') || (isFull2 == '/');
+        //alert([all,isClosed].join('='));
+        var prefix = '';
+        if(isBegin == '!'){
+            prefix = getPrefix(nodeStack.length);
+        }
+        else{
+            if(isBegin != '/'){
+                prefix = getPrefix(nodeStack.length);
+                if(!isClosed){
+                    nodeStack.push(name);
+                }
+            }
+            else{
+                nodeStack.pop();
+                prefix = getPrefix(nodeStack.length);
+            }
+        }
+        var ret =  '\n' + prefix + all;
+        return ret;
+    });
+   
+    var prefixSpace = -1;
+    var outputText = output.substring(1);   
+    //把注释还原并解码，调格式
+    outputText = outputText.replace(/\n/g,'\r').replace(/(\s*)<!--(.+?)-->/g,function($0, prefix,  text){
+        //alert(['[',prefix,']=',prefix.length].join(''));
+        if(prefix.charAt(0) == '\r')
+            prefix = prefix.substring(1);
+        text = unescape(text).replace(/\r/g,'\n');
+        var ret = '\n' + prefix + '<!--' + text.replace(/^\s*/mg, prefix ) + '-->';
+        //alert(ret);
+        return ret;
+    });
+   
+    return outputText.replace(/\s+$/g,'').replace(/\r/g,'\r\n');
+
+}
+</script>

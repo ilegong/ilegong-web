@@ -1,0 +1,182 @@
+<div class="Singleform">
+<script>
+var current_module = '{{$current_model}}';
+var current_id = '{{$id}}';
+var current_data = null;
+{{if $current_data}}
+current_data = {{$current_data}};
+{{/if}}
+</script>
+{{if $copy}}
+<div class="ui-state-highlight">
+复制数据，保存时，创建一条新的数据记录。修改不影响原记录内容。
+</div>
+{{/if}}
+
+
+{{if $current_action=='admin_add'}}
+<?php 
+echo $this->MForm->create($current_model,array(    
+	'url' => array('action' => 'add'),
+));
+?>
+{{elseif $current_action=='admin_edit'}}
+ <?php 
+echo $this->MForm->create($current_model,array(
+    'url' => array('action' => 'edit',$id,$copy),
+));
+?>
+{{/if}}
+
+
+
+
+<ul class="nav nav-tabs">
+	<li class="active"><a href="#CrawlReleasebasic-info" data-toggle="tab"><span>基本信息</span></a></li>
+	<li><a href="#CrawlReleaseadvanced-info" data-toggle="tab"><span>高级选项</span></a></li>
+</ul>
+<div class="tab-content">
+<div id="CrawlReleasebasic-info" class="tab-pane active">
+<?php
+	echo $this->MForm->input('id');
+     echo $this->MForm->input('name');
+     echo $this->MForm->input('crawl_id');
+     echo $this->MForm->input('siteid',array('type'=>'select'));
+	 echo $this->MForm->input('model_to',array('type'=>'select'));
+	 echo $this->MForm->input('cid',array('type'=>'select'));
+ ?>
+<div> 发布条件值设置：由内容中的值来判断发布到哪一个分类项，或属于哪一个类型。满足的条件使用正则表达式来表示。</div>
+<div id="model-conditions-list">
+	
+	{{if !empty($this->data['CrawlRelease']['serialize_info']['conditions'])}}
+ 		{{loop $this->data['CrawlRelease']['serialize_info']['conditions'] $ck $cv}}
+ 		<div class="options-conditions-add ui-helper-clearfix">
+			<div style="float:left;">
+ 			当crawl_title_list字段{{$this->MForm->input('CrawlRelease.serialize_info.conditions.'.$ck.'.source_field',array('div'=>false,'label'=>false,'value'=>$cv['source_field'],'size'=>10))}}的值，
+ 			满足条件{{$this->MForm->input('CrawlRelease.serialize_info.conditions.'.$ck.'.field_preg',array('div'=>false,'label'=>false,'value'=>$cv['field_preg']))}}时，
+ 			发布模块字段{{$this->MForm->input('CrawlRelease.serialize_info.conditions.'.$ck.'.target_field',array('div'=>false,'label'=>false,'value'=>$cv['target_field'],'size'=>10))}}的值为
+ 			{{$this->MForm->input('CrawlRelease.serialize_info.conditions.'.$ck.'.target_value',array('div'=>false,'label'=>false,'value'=>$cv['target_value']))}}
+ 			</div>
+ 			<ul id="icons" style="float:left;padding:2px 5px;">
+ 				<li class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-plus options-conditions-add-new" title="新增"></span></li>
+ 				<li class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-close options-conditions-add-delete" title="删除"></span></li>
+ 			</ul>
+		</div>
+ 		{{/loop}}
+	{{else}}
+		<div class="options-conditions-add ui-helper-clearfix">
+			<div style="float:left;">
+ 			当crawl_title_list字段{{$this->MForm->input('CrawlRelease.serialize_info.conditions.0.source_field',array('div'=>false,'label'=>false,'size'=>10))}}的值，
+ 			满足条件{{$this->MForm->input('CrawlRelease.serialize_info.conditions.0.field_preg',array('div'=>false,'label'=>false))}}时，
+ 			发布模块字段{{$this->MForm->input('CrawlRelease.serialize_info.conditions.0.target_field',array('div'=>false,'label'=>false,'size'=>10))}}的值为
+ 			{{$this->MForm->input('CrawlRelease.serialize_info.conditions.0.target_value',array('div'=>false,'label'=>false))}}
+ 			</div>
+ 			<ul id="icons" style="float:left;padding:2px 5px;">
+ 				<li class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-plus options-conditions-add-new" title="新增"></span></li>
+ 				<li class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-close options-conditions-add-delete" title="删除"></span></li>
+ 			</ul>
+		</div>
+	{{/if}}
+</div>
+ 
+ 
+</div>
+<div id="CrawlReleaseadvanced-info" class="tab-pane">
+	 <?php
+ 	echo $this->MForm->input('deleted');
+     echo $this->MForm->input('created');
+     echo $this->MForm->input('updated');
+     echo $this->MForm->input('creator');
+	 echo $this->MForm->input('lastupdator');
+    ?>
+</div>
+</div>
+<?php echo $this->MForm->end(array('label'=>__('Submit',true),'id'=>'btnsubmit')); ?>
+
+<script>
+$(function(){
+	$("#CrawlReleaseSiteid").change(function(){
+		if(this.value!=''){
+			$.ajax({
+				type:"post", 
+				dataType: "json",
+				data:{},
+				url:ADMIN_BASEURL+"/admin/crawl_release_sites/getSiteCate/"+this.value,
+				success: function(modules){			
+					$('#CrawlReleaseModelTo').html('');
+					$('#CrawlReleaseCid').html('');
+					for(var module in modules){
+			        	var opt=document.createElement("OPTION"); 
+						$("#CrawlReleaseModelTo").get(0).options.add(opt); 
+						opt.value = module; 
+						opt.text = module;
+					};
+					
+					if(current_data && current_data.CrawlRelease){
+						$("#CrawlReleaseModelTo").val(current_data.CrawlRelease.model_to);
+					}
+					
+					$('#CrawlReleaseModelTo').unbind().change(function(){
+						$('#CrawlReleaseCid').html('');
+						var module = this.value;
+						if(module!=''){
+							if($.isArray(modules[module])){
+								for(var j in modules[module]){
+									$('#CrawlReleaseCid').append('<option value="'+modules[module][j].cate_id+'">'+modules[module][j].cate_name+'</option>');
+								}
+							}
+							else{
+								$.ajax({
+									type:"get", 
+									dataType: "json",
+									data:{},
+									url:ADMIN_BASEURL+"/admin/crawl_release_sites/loadcate/"+$('#CrawlReleaseSiteid').val()+'/'+this.value,
+									success: function(cates){
+										for(var c in cates){
+											$('#CrawlReleaseCid').append('<option value="'+c+'">'+cates[c]+'</option>');
+										}
+									}
+								});
+							}
+							if(current_data && current_data.CrawlRelease){
+								$("#CrawlReleaseCid").val(current_data.CrawlRelease.cid);
+							}
+						}
+					}).trigger('change');
+				}
+			});
+		}
+		else{
+			$('#CrawlReleaseModelTo').html('');
+			$('#CrawlReleaseCid').html('');
+		}
+	}).trigger('change');
+	
+	
+	$('.options-conditions-add-new').die('click').live('click',function(){
+		var obj = $(this).parents('.options-conditions-add:first');
+		var new_obj = obj.clone();
+		new_obj.find(':input').each(function(){
+			$(this).val('');
+		});
+		new_obj.insertAfter(obj);
+		
+		$('.options-conditions-add').each(function(i){
+			$(this).find(':input').each(function(){
+				var name = $(this).attr('name');
+				//alert(name.replace(/\[\d*\]/,'[10]'));
+				$(this).attr('name',name.replace(/\[\d*\]/,'['+i+']'));
+			});
+		});		
+	})
+	$('.options-conditions-add-delete').die('click').live('click',function(){
+		if($('.options-conditions-add').size()>1){
+			var obj = $(this).parents('.options-conditions-add').remove();		
+		}
+		else{
+			alert('必须保留一项。');	
+		}
+	})
+});
+</script>
+</div>

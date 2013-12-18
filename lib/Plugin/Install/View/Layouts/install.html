@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+<title>{{$pageTitle}}-{{lang('system_name','install')}}</title>
+<META NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+<meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}" />
+<meta name="Description" content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}" />
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+{{$this->Html->meta('icon')}}
+{{$this->Html->css(array(
+            '/css/bootstrap.min.css',
+           '/css/ui-customer',
+        ));
+}}
+{{$this->Html->script(array(
+            '/js/jquery/jquery.min.js',
+            '/js/bootstrap.min.js',
+        ));
+}}
+<style>
+.show-modal .modal {
+    bottom: auto;
+    display: block;
+    left: auto;
+    position: relative;
+    right: auto;
+    top: auto;
+    z-index: 1;
+	overflow: hidden;
+}
+</style>
+</head>
+
+<body>
+	<header class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+	      	<div class="navbar-header">
+		      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+		        <span class="sr-only">Toggle navigation</span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="{{$this->Html->url('/install')}}">{{$this->Html->image('/img/logo.png', array('style'=>'height:30px;','title' => $site[title],'alt' => $site[title]))}}</A>
+		    </div>
+          
+          <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav  pull-right"> 
+      {{if defined('APPEND_LOCALE_BASE')}}
+            	<li>
+                <a href="{{Router::url('/../install')}}">中文</a>
+              </li>
+              <li>
+                <a href="{{Router::url('/../zh-tw/install')}}">繁體</a>
+              </li>
+              <li>
+                <a href="{{Router::url('/../en-us/install')}}">English</a>
+              </li>
+      {{else}}
+      		  <li>
+                <a href="{{Router::url('/install')}}">中文</a>
+              </li>
+              <li>
+                <a href="{{Router::url('/zh-tw/install')}}">繁體</a>
+              </li>
+              <li>
+                <a href="{{Router::url('/en-us/install')}}">English</a>
+              </li>
+	  {{/if}}
+            </ul>
+          </nav>
+      </div>
+    </header>
+    <div id="wrapper" class="install" style="margin-top:45px;">
+        <div class="container clearfix">
+            <div class="row  show-modal">
+            {{$content_for_layout}}
+            </div>
+        </div>
+    </div>
+    </body>
+</html>

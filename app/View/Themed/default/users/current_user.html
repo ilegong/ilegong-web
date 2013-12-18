@@ -1,0 +1,50 @@
+<div id="current-user" class="clearfix">
+	{{if (!empty($CurrentUser))}}
+		<span class="username">Welcome {{$this->Hook->call('oauthLoggedInfo')}}
+			<span class="dropdown">
+				{{$this->Html->link($CurrentUser['nickname'].'<b class="caret"></b>', '/users/account', array('title' => 'view your account',"class"=>"dropdown-toggle","data-toggle"=>"dropdown",'escape'=>false)); }}
+				 <ul class="dropdown-menu">
+					<li><?php echo $this->Html->link(__('个人首页'), '/users/account'); ?></li>
+					<li><?php echo $this->Html->link(__('Edit Profile'), array('controller' => 'users','action'=>'edit','plugin' => null ,)); ?></li>
+					<li><?php echo $this->Html->link(__('Edit Password'), array('controller' => 'users','action'=>'editpassword','plugin' => null ,)); ?></li>
+				</ul>
+			</span>
+		</span>
+		<span>
+			{{eval echo $this->Html->link('退出登录', '/users/logout', array('title' => 'logout your account')); }}
+		</span>
+		<div class="links">
+			{{if (empty($CurrentUser['status']))}}
+				<span class="activate link">
+					{{eval echo $this->Html->link(__('activate',true), array(
+						'controller' => 'users', 'action' => 'activate'
+						), array('title' => 'activate your account')); }}
+				</span>
+			{{/if}}
+		</div>
+	{{else}}
+			<div class="ui-float-right ui-header-login">
+			{{eval echo $this->Html->link(__('Login',true), array(				
+				'controller' => 'users', 'action' => 'login','ext'=>false				
+			),array('onclick'=>"return publishController.open_dialog(this.href,{title:'登录'});",)); }}
+			or
+			{{eval echo $this->Html->link(__('Register',true), array(
+				'controller' => 'users', 'action' => 'register'
+			),array('onclick'=>"return publishController.open_dialog(this.href,{title:'注册',width:650});")); }}
+			</div>
+			<div class="ui-login-ways ui-float-right">
+				{{$this->Hook->call('oauthLoginLink')}}				
+			</div>
+			
+			
+	{{/if}}
+</div>
+<script>
+$(function(){
+	$('#auth-login-group').hover(function(){
+		$(this).addClass('open');
+	},function(){
+		$(this).removeClass('open');
+	})
+})
+</script>

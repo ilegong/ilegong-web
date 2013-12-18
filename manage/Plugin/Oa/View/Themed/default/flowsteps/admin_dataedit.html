@@ -1,0 +1,17 @@
+<div class="form">
+<div class="tabs">
+    <?php 
+echo $this->MForm->form(array('type' => 'post',
+        'model'=> $current_model,
+        'update'=>'settings_result',
+        'url' => array(
+            'controller' => 'flowsteps',
+            'action' => 'dataedit',
+			$step_id,$data_id
+        ),
+	'auto_form' => 1,
+	'form_type' => 'edit',
+));
+?>
+</div>
+</div>

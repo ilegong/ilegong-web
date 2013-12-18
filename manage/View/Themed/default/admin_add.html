@@ -1,0 +1,39 @@
+<div class="Singleform">
+<script>
+var current_module = '{{$current_model}}';
+var current_id = '{{$id}}';
+var current_data = null;
+{{if $current_data}}
+current_data = {{$current_data}};
+{{/if}}
+</script>
+{{if $copy}}
+<div class="ui-state-highlight">
+复制数据，保存时，创建一条新的数据记录。修改不影响原记录内容。
+</div>
+{{/if}}
+<div class="tabs">
+{{if $current_action=='admin_add'}}
+<?php
+echo $this->MForm->form(array(    
+	'model'=> $current_model,
+	'auto_form' => 1,
+	'class'=>'form-horizontal',
+	'form_type' => 'add',
+	'url' => array('action' => 'add'),
+));
+?>
+{{elseif $current_action=='admin_edit'}}
+<?php 
+echo $this->MForm->form(array(
+     'model'=> $current_model,  
+	'class'=>'form-horizontal',  
+    'auto_form' => 1,
+    'form_type' => 'edit',
+    'url' => array('action' => 'edit',$id,$copy),
+));
+?>
+
+{{/if}}
+</div>
+</div>

@@ -1,0 +1,30 @@
+<div class="comments form">
+    <?php echo $this->MForm->create('Comment');?>
+        <fieldset>
+            <div class="tabs">
+                <ul>
+                    <li><a href="#comment-main"><?php __('Comment'); ?></a></li>
+                    <li><a href="#comment-contact"><?php __('Contact Info'); ?></a></li>
+                </ul>
+
+                <div id="comment-main">
+                <?php
+                    echo $this->MForm->input('id');
+                    echo $this->MForm->input('title');
+                    echo $this->MForm->input('body');
+                    echo $this->MForm->input('status', array('label' => __('Published', true)));
+                ?>
+                </div>
+
+                <div id="comment-contact">
+                <?php
+                    echo $this->MForm->input('name');
+                    echo $this->MForm->input('email');
+                    echo $this->MForm->input('website');
+                    echo $this->MForm->input('ip', array('disabled' => 'disabled'));
+                ?>
+                </div>
+            </div>
+        </fieldset>
+    <?php echo $this->MForm->end(__('Submit',true));?>
+</div>

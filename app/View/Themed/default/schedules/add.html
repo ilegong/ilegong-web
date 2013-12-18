@@ -1,0 +1,158 @@
+<div  class="container">
+<div  class="grid_18">
+{{$this->Html->css(array(
+            'jquery.ui.spinner.css',
+        ));
+}}
+{{$this->Javascript->link(array(			
+            'jquery/jquery.ui.spinner.js',
+        ));
+}}
+<script>
+$('#form81771538').bind('submit', function(){
+	$.ajax({
+		async:true, 
+		type:'post', 
+		success:function(request, xhr) {
+			$('[id^="error_Region"]').remove(); // 删除错误提示信息 
+			if(request.success){	showSuccessMessage(request.success);	}
+			else
+			{
+				showValidateErrors(request,'Region','');					
+			}
+		}, 
+		data:$('#form81771538').serialize(), 
+		url:'/schedules/add.html', 
+		dataType:'json'
+	}) ;
+	return false; 
+})
+function monthRecuurChange(type){
+	//$('#month_recurr_day').hide();
+	//$('#month_recurr_week').hide();
+	//$('#month_recurr_'+type).show();
+	$('#month_recurr_day').find(':input').attr('disabled','true');
+	$('#month_recurr_week').find(':input').attr('disabled','true');
+	$('#month_recurr_'+type).find(':input').removeAttr('disabled');
+}
+function RecuurTypeChange(type){
+	$('#schedule-day').hide();
+	$('#schedule-week').hide();
+	$('#schedule-month').hide();
+	$('#schedule-year').hide();
+	$('#schedule-'+type).show();
+}
+function yearRecuurChange(type){
+	//$('#year_recurr_day').hide();
+	//$('#year_recurr_week').hide();
+	//$('#year_recurr_'+type).show();
+	$('#year_recurr_day').find(':input').attr('disabled','true');
+	$('#year_recurr_week').find(':input').attr('disabled','true');
+	$('#year_recurr_'+type).find(':input').removeAttr('disabled');
+	
+}
+function toggleRecurrInfo(checked){
+	if(checked){
+		$("#schedule-recurr-info").show();
+	}
+	else{
+		$("#schedule-recurr-info").hide();
+	}
+}
+$(function(){
+	$("#ScheduleRecurrable").trigger('change');
+	
+	$("input:radio[name='data[Schedule][recurrence_type]'][value='{{$recurrence_type}}']").attr("checked", 'checked');	
+	$("input:radio[name='data[Schedule][year_recurr_type]'][value='{{$year_recurr_type}}']").attr("checked", 'checked');	
+	$("input:radio[name='data[Schedule][month_recurr_type]'][value='{{$month_recurr_type}}']").attr("checked", 'checked');	
+	yearRecuurChange('{{$year_recurr_type}}');
+	monthRecuurChange('{{$month_recurr_type}}');
+	RecuurTypeChange('{{$recurrence_type}}');
+	
+	//$("input:radio[name='data[Schedule][recurrence_type]']").button( "option" , 'data[Schedule][recurrence_type]', '{{$recurrence_type}}' )
+	
+	//$("#ScheduleRecurrable").trigger('change');
+	//$("#ScheduleRecurrable").trigger('change');
+
+	//$("#ScheduleDayTimes").spinner({step:1});
+});
+</script>
+<div class="form">
+{{$this->Form->create('Schedule',array('type'=>'file','id'=>'form81771538'))}}
+<fieldset>
+{{$this->Form->input('begintime',array('div'=>'wide','class'=>'datepicker'))}}
+{{$this->Form->input('endtime',array('div'=>'wide','class'=>'datepicker'))}}
+
+{{$this->Form->input('name',array('div'=>'wide'))}}
+{{$this->Form->input('message',array('rows'=>3))}}
+{{$this->Form->input('recurrable',array('onchange'=>'toggleRecurrInfo(this.checked);'))}}
+<div id="schedule-recurr-info" class="container" style="display:none;">     
+     <div class="grid_5">
+     	<div class="ui-widget-content show-as-buttonset">
+     	 {{$this->Form->input('recurrence_type', array('type'=>'radio','separator'=>'<br/>','onchange'=>'RecuurTypeChange(this.value);','options'=>array('day'=>__('Day Repeat'),'week'=>__('Week Repeat'),'month'=>__('Month Repeat'),'year'=>__('Year Repeat'))))}}
+     	</div>
+     </div>
+     <div class="grid_19">
+     	<div class="ui-widget-content">
+	     <div id="schedule-day" class="tab-pane"  style="display:none;">
+	     	 <span>{{$this->Form->input('day_times',array('div'=>false,'label'=>false)) }}</span> {{__('Days once')}}
+	     </div>
+	     <div id="schedule-week" class="innertabs ui-helper-clearfix" style="display:none;">
+	     	 {{$this->Form->input('week_mon',array('div'=>'left')) }} 
+	     	 {{$this->Form->input('week_tues',array('div'=>'left')) }} 
+	     	 {{$this->Form->input('week_wen',array('div'=>'left')) }} 
+	     	 {{$this->Form->input('week_thur',array('div'=>'left')) }} 
+	     	 {{$this->Form->input('week_fri',array('div'=>'left')) }} 
+	     	 {{$this->Form->input('week_sat',array('div'=>'left')) }} 
+	     	 {{$this->Form->input('week_sun',array('div'=>'left')) }} 
+	     </div>
+	     <div id="schedule-month" class="tab-pane" style="display:none;">
+	     	
+	     	<div class="ui-helper-clearfix">
+	     		<div class="left">
+	     		{{$this->Form->radio('month_recurr_type',array('day'=>__('recurr by day')),array('onchange'=>'monthRecuurChange(this.value);'))}}
+	     		<!-- <input type="radio" name="data[Schedule][month_recurr_type]" id="ScheduleMonthRecurrTypeDay" onchange="monthRecuurChange(this.value);" value="day" checked="checked">
+<label for="ScheduleMonthRecurrTypeDay">recurr by day</label>-->
+	     		</div>
+		     	 <div id="month_recurr_day">
+		     	 {{$this->Form->input('month_calendric',array('div'=>'left','options'=>array('Solar'=>__('Solar'),'Lunar'=>__('Lunar'))))}}
+		     	 {{$this->Form->input('month_day',array('div'=>'left','options'=>array('1'=>1,'2'=>2,'3'=>3,'4'=>4,'5'=>5,'6'=>6,'7'=>7,'8'=>8,'9'=>9,'10'=>10,'11'=>11,'12'=>12,'13'=>13,'14'=>14,'15'=>15,'16'=>16,'17'=>17,'18'=>18,'19'=>19,'20'=>20,'21'=>21,'22'=>22,'23'=>23,'24'=>24,'25'=>25,'26'=>26,'27'=>27,'28'=>28,'29'=>29,'30'=>30,'31'=>31)))}}
+		     	 </div>
+	        </div>
+	        <div class="ui-helper-clearfix">
+	     		<div class="left">
+	     		{{$this->Form->radio('month_recurr_type',array('week'=>__('recurr by week')),array('onchange'=>'monthRecuurChange(this.value);'))}}
+	     		<!-- <input type="radio" name="data[Schedule][month_recurr_type]" id="ScheduleMonthRecurrTypeWeek" onchange="monthRecuurChange(this.value);" value="week">
+<label for="ScheduleMonthRecurrTypeWeek">recurr by week</label> -->
+	     		</div>
+		     	 <div id="month_recurr_week">
+		     	  {{$this->Form->input('month_weeknum',array('div'=>'left','options'=>array('1'=>__('First'),'2'=>__('Second'),'3'=>__('Thirt'),'4'=>__('Fouth'),'5'=>__('Fifth'))))}}
+		     	  {{$this->Form->input('month_week',array('div'=>'left','options'=>array(__('Sunday'),__('Monday'),__('Tuesday'),__('Wednesday'),__('Thursday'),__('Friday'),__('Saturday'))))}}
+		     	 </div>
+	        </div>
+	     </div>
+	     <div id="schedule-year" class="tab-pane" style="display:none;">
+	     	 <div class="show-as-buttonset">
+	     	 {{$this->Form->radio('year_recurr_type',array('day'=>__('recurr by day'),'week'=>__('recurr by week')),array('onchange'=>'yearRecuurChange(this.value);'))}}
+	     	 </div>
+	     	 <div id="year_recurr_day">
+	     	 {{$this->Form->input('year_calendric',array('options'=>array('Solar'=>__('Solar'),'Lunar'=>__('Lunar'))))}}
+	     	 {{$this->Form->input('year_month',array('options'=>array('1'=>1,'2'=>2,'3'=>3,'4'=>4,'5'=>5,'6'=>6,'7'=>7,'8'=>8,'9'=>9,'10'=>10,'11'=>11,'12'=>12)))}}
+	     	 {{$this->Form->input('year_day',array('options'=>array('1'=>1,'2'=>2,'3'=>3,'4'=>4,'5'=>5,'6'=>6,'7'=>7,'8'=>8,'9'=>9,'10'=>10,'11'=>11,'12'=>12,'13'=>13,'14'=>14,'15'=>15,'16'=>16,'17'=>17,'18'=>18,'19'=>19,'20'=>20,'21'=>21,'22'=>22,'23'=>23,'24'=>24,'25'=>25,'26'=>26,'27'=>27,'28'=>28,'29'=>29,'30'=>30,'31'=>31)))}}
+	     	 </div>
+	     	 <div id="year_recurr_week">
+	     	 {{$this->Form->input('year_week',array('options'=>array(__('Sunday'),__('Monday'),__('Tuesday'),__('Wednesday'),__('Thursday'),__('Friday'),__('Saturday'))))}}
+	     	 {{$this->Form->input('year_weeknum',array('options'=>array('1'=>__('First'),'2'=>__('Second'),'3'=>__('Thirt'),'4'=>__('Fouth'),'5'=>__('Fifth'))))}}
+	     	 {{$this->Form->input('year_weekmonth',array('options'=>array('1'=>1,'2'=>2,'3'=>3,'4'=>4,'5'=>5,'6'=>6,'7'=>7,'8'=>8,'9'=>9,'10'=>10,'11'=>11,'12'=>12)))}}
+	     	 </div>
+	     </div>
+	    </div>
+     </div>
+</div>
+</fieldset>
+{{$this->Form->end(array('label'=>__('Submit',true),'id'=>'btnsubmit'))}}
+</div>
+</div>
+<div  class="grid_6">
+</div>
+</div>

@@ -1,0 +1,70 @@
+<div class="container clearfix">	
+	<div class="ui-contain">
+		<portlet portlet="onlycontent">
+		<div class="Content-body">{{$Category['Category']['content']}} </div>
+		<?PHP if($total>0){ ?>
+		<ul class="clearfix portlet-content-list">
+		    <?PHP foreach($Category['datalist'] as $item) {
+    		?>	
+				{{include $Category['Category']['template']}}			
+			<?php } ?>
+		</ul>
+			{{$page_navi}}
+		<?php } ?>
+		</portlet>
+	</div>	
+</div>
+{{if strpos($Category['Category']['template'],'_masonry_photo')!==false}}
+
+{{$this->Html->script(array(
+            'jquery/jquery.masonry.min.js','jquery/jquery.infinitescroll.min.js',
+            'jquery/jquery.lazyload.js',            
+        ));
+}}
+<script>
+
+$(function(){
+	 
+	    var $container = $('#portlet-30 .portlet-content-list');  
+	    $container.imagesLoaded( function(){
+	      $container.masonry({
+	        itemSelector: '.list-item-photo',
+	        animate: true,       
+	        animationOptions: {
+	            duration: 400,
+	            easing: 'linear',
+	            queue: false
+	        }
+	      });
+	    });
+	
+	  $container.infinitescroll({
+	        bufferPx     : 200, //离分页底部还有bufferPx像素时就开始加载下一页的内容 ，设置大一些体验效果会好一些
+		    loading : {img:"{{$this->Html->url('/img/ajax/loading.gif')}}",msgText:"正在加载新的图片...",finishedMsg:"亲，没有更多的啦。。。"},
+		    animate: true,extraScrollPx:-200, // 回退一段，图片加载补上的缺位需要上移才能看到。
+		    navSelector  : "div.pagelink", // selector for the paged navigation (it will be hidden)
+		    nextSelector : "div.pagelink a:first",  // selector for the NEXT link (to page 2)
+		    itemSelector : "#portlet-30 .list-item-photo"  // selector for all items you'll retrieve
+	  	},
+	    function(newElements) { // call masonry as a callback.
+	        var $newElems = $(newElements);
+//	        $newElems.find('img.lazy').lazyload({
+//			            placeholder : BASEURL+"/img/grey.gif",
+//			            effect      : "fadeIn"                  
+//			        });
+	        // ensure that images load before adding to masonry layout
+	        // 每一个加载完后，即调用masonry；而不是等所有的都加载完后再调（时间长，影响体验，特别是在网速不够快的时候）
+	        $newElems.css({ opacity: 0 }).each(function(){
+	        	var $item = $(this);
+	        	$item.imagesLoaded(function() {
+	        		$item.animate({ opacity: 1 });
+	                $container.masonry('appended', $item, true);
+	                
+	            });
+	        });
+	    });
+	  
+});
+
+</script>
+{{/if}}

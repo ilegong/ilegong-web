@@ -1,0 +1,29 @@
+<style>
+.foldmenu li a{padding-left:10px;line-height:28px;display:block;font-size:12px;}
+.foldmenu a{text-decoration: none;}
+.foldmenu-item{display:block;line-height:24px;font-size:14px;}
+.foldmenu-item .ui-icon,.foldmenu li .ui-icon{float:left;margin-top:5px;}
+</style>
+<div class="foldmenu ui-wedget-content ui-helper-clearfix">
+    <ul>
+    <?php  foreach($contentmodels as $model) { ?>
+        <li>        
+        <?php  echo $this->Html->link($model['Modelextend']['cname'].__('Manage'),array('controller'=>Inflector::tableize($model['Modelextend']['name']),'action'=>'list','admin'=>true)); ?>
+        </li>
+    <?php } ?>
+    </ul>
+</div>
+<div class="clear"></div>
+<script>
+$(function(){
+	$('.foldmenu').find('li').hover(function(){
+			$(this).addClass('ui-state-hover');
+		},function(){
+			$(this).removeClass('ui-state-hover');
+		}).click(function(){
+			$('.foldmenu').find('.ui-state-highlight').removeClass('ui-state-highlight');
+			$(this).addClass('ui-state-highlight');
+		}).find('a').prepend('<span class="ui-icon ui-icon-document-b"></span>');
+
+});
+</script>

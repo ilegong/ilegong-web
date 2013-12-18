@@ -1,0 +1,12 @@
+{
+	"name" : "Ace",
+	"description" : "Ace代码编辑插件，用于在线编辑程序代码文件",
+	"author" : "arlonzou",
+	"authorEmail" : "arlonzou@sina.com",
+	"authorUrl" : "http://web.ideamuster.com",
+	"dependencies": {
+		"plugins": [
+			""
+		]
+	}
+} 

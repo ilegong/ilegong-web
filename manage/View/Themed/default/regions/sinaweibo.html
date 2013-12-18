@@ -1,0 +1,32 @@
+<script>
+$('#form81771538').bind('submit', function(){
+	$.ajax({
+		async:true, 
+		type:'post', 
+		success:function(request, xhr) {
+			$('[id^="error_Region"]').remove(); // 删除错误提示信息 
+			if(request.success){	showSuccessMessage(request.success);	}
+			else
+			{
+				showValidateErrors(request,'Region','');					
+			}
+		}, 
+		data:$('#form81771538').serialize(), 
+		url:'/regions/sinaweibo.html', 
+		dataType:'json'
+	}) ;
+	return false; 
+});
+$(function(){
+	$('.publish-invite-user-listtab-weibos').tabs();
+});
+</script>
+<div class="users form">
+{{$form->create('Region',array('type'=>'file','id'=>'form81771538'))}}
+<fieldset>
+<div>标题：{{$form->input('title',array('div'=>false,'label'=>false))}}</div>
+<div id="invite-user-html">
+</div>
+</fieldset>
+{{$form->end(array('label'=>__('Submit',true),'id'=>'btnsubmit'))}}
+</div>

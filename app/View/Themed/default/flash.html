@@ -1,0 +1,27 @@
+{{if $key==0}}
+<SCRIPT src="/js/photoflash/flashobj.js" type=text/javascript></SCRIPT>
+<script>
+var photolist="";
+var titlelist="";
+var urllist="";
+{{/if}}
+titlelist+="{$item['name']}|";
+urllist+="<?php echo '/articles/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'; ?>|";
+photolist+="{$item['coverimg']}|";
+{{if $key==$count-1}}
+</script>
+<DIV class=focusFlash>
+<DIV id=sasFlashFocus27></DIV>
+<SCRIPT>
+var newsFlash = new sohuFlash("/js/photoflash/photo.swf", "27", 522, 245, "7");
+newsFlash.addParam("quality", "high");
+newsFlash.addParam("wmode", "opaque");
+newsFlash.addParam("scale", "noBorder");
+newsFlash.addVariable("image",photolist);
+newsFlash.addVariable("url",urllist);
+newsFlash.addVariable("info", titlelist);
+newsFlash.addVariable("stopTime","5000");
+newsFlash.write("sasFlashFocus27");
+</SCRIPT>
+</DIV>
+{{/if}}

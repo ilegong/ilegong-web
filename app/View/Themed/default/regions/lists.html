@@ -1,0 +1,38 @@
+<!-- region的列表模板，分页显示region。 前端编辑模板可直接选择插入  -->
+
+<div>
+	<ul>
+		<li class="ui-float-left">分类1</li>
+		<li class="ui-float-left">分类2</li>
+		<li class="ui-float-left">分类3</li>
+	</ul>
+	<ul class="clearfix">
+	<?php $models=explode(',',Configure::read('Site.contentmodels'));  ?>
+	{{loop $models $model}}
+		<li class="ui-float-left" style="margin:2px 10px;">{{$this->Html->link($model,array('model'=>$model))}}</li>
+	{{/loop}}
+	</ul>
+	<div><a id="search-region-link" href="{{$this->Html->url('/regions/lists/named:search')}}"></a><input type="text" id="search-region-text" name="name" size="5"><input id="search-region-button" type="button" value="搜索"></div>
+</div>
+<table width="100%" class="table table-hover table-striped">
+{{loop $regions $region}}
+
+<tr><td> {{$region['Region']['id']}}. {{$region['Region']['name']}} <br/><font color="#CCC">{{$region['Region']['description']}}</font></td>
+<td width="40px"> <a href="javascript:void(0);" onclick="return insertPortlet('{{$region['Region']['id']}}');"><span>插入</span></a></td>
+<td width="40px">  <a href="javascript:void(0);" onclick="return editPortlet('{{$region['Region']['id']}}');"><span>编辑</span></a></td>
+<td width="40px">  <a href="javascript:void(0);" onclick="return copyPortlet('{{$region['Region']['id']}}');"><span>复制</span></a></td>
+
+ <td width="40px">  <a href="javascript:void(0);" onclick="return deletePortlet('{{$region['Region']['id']}}');"><span>删除</span></a></td>
+ </tr>
+{{/loop}}
+</table>
+{{$page_navi}}
+<script>
+$(function(){	
+	$('#search-region-button').click(function(){
+		$('#search-region-link').attr('href','{{$this->Html->url('/regions/lists/')}}name:'+$('#search-region-text').val());
+		alert($('#search-region-link').attr('href'));
+		$('#search-region-link').trigger('click');
+	})
+})
+</script>

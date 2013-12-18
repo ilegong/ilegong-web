@@ -1,0 +1,27 @@
+<div class="regionlist summarylist clearfix">
+	
+	<div class="head_pic regionleft">
+		<a href="http://t.sina.com.cn/{{$item['user']['domain']}}" target="_blank">
+		<img class="userhead lazy" data-original="{{$item['user']['profile_image_url']}}" uid="{{$item['user']['id']}}" title="{{$item['user']['screen_name']}}" src="/img/grey.gif">
+		</a>
+	</div>
+	<div class="regionright">
+		<p>
+		 <span id="question-content-{{$item['id']}}"><a class="ui-weibo-name" title="{{$item['user']['screen_name']}}" href="/users/{{$item['user']['domain']}}">{{$item['user']['screen_name']}}</a>：{{$item['text']}}</span> 
+		</p>
+		{{if !empty($item['retweeted_status'])}}
+		<div style="padding:10px;" class="ui-widget-content">
+				<a href="http://t.sina.com.cn/{{$item['retweeted_status']['user']['domain']}}" target="_blank">{{$item['retweeted_status']['user']['screen_name']}}</a>:{{$item['retweeted_status']['text']}}
+		</div>	
+		{{if !empty($item['retweeted_status']['thumbnail_pic'])}}
+			<a href="{{$item['retweeted_status']['bmiddle_pic']}}" target="_blank" class="highslide" onclick="return hs.expand (this, { wrapperClassName: 'wide-border'})">
+			<img src="{{$item['retweeted_status']['thumbnail_pic']}}">
+			</a>
+		{{/if}}
+		{{/if}}
+		<div class="listauthor">
+		<span>发布于{{$item['created_at']}} |</span> {{if !empty($item['source'])}}<span style="font-size:12px;">	来源于：{{$item['source']}} </span>{{/if}}
+		<div style="float:right"><input type="checkbox" name="delweibo[]" value="{{$item['id']}}"> <a href="#">删除</a></div>
+		</div>		
+	</div>
+</div>

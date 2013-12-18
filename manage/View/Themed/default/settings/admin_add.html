@@ -1,0 +1,28 @@
+<div class="settings form">
+<?php echo $this->MForm->create('Setting');?>
+	<fieldset>
+        
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#setting-basic" data-toggle="tab"><span>{{__('Settings')}}</span></a></li>
+            </ul>
+		<div class="tab-content">
+            <div id="setting-basic" class="tab-pane active">
+                <?php
+                	echo $this->MForm->input('id');
+                    echo $this->MForm->input('key', array('rel' => __("e.g., 'Site.title'", true)));
+echo $this->MForm->input('title');                    
+echo $this->MForm->input('value',array('rows'=>2));
+					
+					echo $this->MForm->input('scope');
+echo $this->MForm->input('editable', array('type' => 'checkbox','default'=>1));
+					
+                    echo $this->MForm->input('input_type', array('rel' => __("e.g., 'text' or 'textarea'", true),'options' => array('text'=>__('input'),'select'=>__('select'),'checkbox'=>__('checkbox'),'radio'=>__('radio'),'textarea'=>__('textarea'),'ckeditor'=>__('ckeditor'),'datetime'=>__('datetime'),'file'=>__('file'))));
+                    echo $this->MForm->input('description');
+                    echo $this->MForm->input('params',array('rows'=>2,'after'=>'形如“key=>value”,一行一个，下拉类型的时候作为选项使用'));
+                ?>
+            </div>
+
+        </div>
+	</fieldset>
+<?php echo $this->MForm->end(__('Submit',true));?>
+</div>

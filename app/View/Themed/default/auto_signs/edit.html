@@ -1,0 +1,45 @@
+{{$this->Combinator->script(array(
+	'swfupload/swfupload.js',
+	'swfupload/swfupload.queue.js',
+	'swfupload/swfupload.cookies.js',
+	'swfupload/fileprogress.js',
+	'swfupload/handlers.js'
+))}}
+<script>
+/* 单文件上传完成  */
+function uploadSuccess(file, serverData) {
+	try {
+		var progress = progress_list[file.id] ;
+		progress.setComplete();
+		if (serverData === " ") {
+			this.customSettings.upload_successful = false;
+		} else {
+			var data=eval('(' + serverData + ')'); 
+			if(data.status==1){
+				this.customSettings.upload_successful = true;
+				var html = $("#fileuploadinfo_"+data.fieldname).html();
+				$("#fileuploadinfo_"+data.fieldname).html(html+data.message);
+				$('#AutoSignSslpem').val(data.fspath);
+			}
+		}	
+	} catch (e) {
+		alert(serverData);
+	}
+}	
+</script>
+<div id="comment_wrapper">
+<div class="CommentBox">
+<h2><span class="title">新增签到</span></h2>
+{{$this->Form->create('AutoSign',array('action'=>'edit'))}}
+	{{$this->Form->hidden('id')}}
+	{{$this->Form->input('name')}}
+	{{$this->Form->input('password')}}
+	{{$this->Form->input('signsite')}}
+	{{$this->Form->hidden('sslpem')}}
+	{{$this->Swfupload->load('sslpem',array(
+		'modelClass'=>'AutoSign',
+		'isadmin'=>false));}}
+		<div id="fsUploadProgress"></div>
+{{$this->Form->end(array('label'=>__('Submit')))}}
+</div>
+</div>

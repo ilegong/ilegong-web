@@ -1,0 +1,59 @@
+/* 商品列表 */
+.taobao-list-item{
+	padding: 4px;
+	margin:6px;
+        float:left;
+	width: 160px;
+        height:295px;
+	border:1px solid #CCC;
+        position: relative;
+}
+.taobao-list-item .shangchengflag {position: absolute;right:0;top: 0;opacity: 0.7;}
+.itemimg {position: relative;width:160px;height: 160px;}
+.itemtitle {
+    background-color: #6F6F6F;bottom: 0;
+    color: #FFFFFF;line-height: 18px;
+    position: absolute;
+    opacity: 0.7;padding: 2px 5px;
+    display:none;
+}
+.itemimg img{
+	max-width: 160px;
+	max-height:160px;
+}
+.promo_num {color: #FF5500;font-family: tahoma,arial,"宋体";font-size: 14px;}
+
+.itemcomment li {
+    background-color: #FFFFFF;
+    border-top: 1px solid #EAE9E8;color: #76838B;overflow: hidden;padding: 2px 2px;
+    text-align: left;word-wrap: break-word;height: 34px;
+}
+
+
+/* 左侧分类显示 */
+#sortlist .ui-state-active ul {display: block;}
+#sortlist li {float: left;height: 18px;line-height: 18px;overflow: hidden;padding: 3px 1px 3px 0;width: 80px;}
+#sortlist h3{height:16px;font-size:14px;padding:3px 6px;line-height:16px;cursor:pointer;}
+#sortlist h3 a{display:block;}
+#sortlist{position:relative;}
+#sortlist .hoverul {display: block; left: 170px;top:0;  position: absolute; width: 200px;z-index: 100;}
+
+/* 搜索框及搜索条件选择 */
+#search-select dt{float:left;width:100px;font-weight:bold;text-align:right;line-height:25px;}
+#search-select dd{float:left;position:relative;overflow:hidden;text-align:left;line-height:25px;}
+#search-select dd span {margin-right:15px;}
+
+#srreg #maininput {vertical-align: middle;}
+#srreg #maininput {
+    -moz-border-bottom-colors: none;-moz-border-image: none;-moz-border-left-colors: none;-moz-border-right-colors: none; -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-color: #C0C0C0 #D9D9D9 #D9D9D9; border-radius: 1px 1px 1px 1px; border-right: 1px solid #D9D9D9; border-style: solid;border-width: 1px; height: 26px;
+    padding: 0 0 0 8px;
+}
+#srreg #maininput:hover,#searchAddCal:hover{border:1px solid #b9b9b9;border-top:1px solid #a0a0a0;box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);-moz-box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);-webkit-box-shadow:inset 0 1px 2px rgba(0,0,0,0.1)}
+#srreg #maininput:focus,#searchAddCal:focus{border:1px solid #4d90fe;box-shadow:inset 0 1px 2px rgba(0,0,0,0.3);outline:none;-moz-box-shadow:inset 0 1px 2px rgba(0,0,0,0.3);-webkit-box-shadow:inset 0 1px 2px rgba(0,0,0,0.3)}
+#maininput{border:1px solid;border-color:#ccc;font-size:14px;height:18px;padding-top:3px}
+input, textarea, select {font-size: 100%;font-family: arial,sans-serif;}
+
+/* 自动加载分页商品提示  */
+#infscr-loading {bottom: 60px;left: 40%; position: fixed; z-index: 50000;}

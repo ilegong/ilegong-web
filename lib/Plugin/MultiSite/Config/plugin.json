@@ -1,0 +1,14 @@
+{
+	"name" : "MultiSite",
+	"description" : "使系统支持多站点的功能",
+
+	"author" : "arlonzou",
+	"authorEmail" : "arlonzou@sina.com",
+	"authorUrl" : "http://web.ideamuster.com",
+
+	"dependencies": {
+		"plugins": [
+			""
+		]
+	}
+} 

@@ -1,0 +1,14 @@
+<div class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+	<div class="modal-header">
+    <h3>{{lang('install_finish')}}</h3>
+    </div>
+
+    <div class="modal-footer">
+    	<?php echo $this->Html->link(lang('admin_pannel'), Router::url('/manage/admin', true)); ?>
+    	<?php echo $this->Html->link(lang('visit_website'), Router::url('/', true)); ?>
+    </div>
+	</div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->

@@ -1,0 +1,75 @@
+<div class="users index">
+    <div class="actions">
+        <ul>
+            <li><?php echo $this->Html->link(__('New Category', true), array('action'=>'add')); ?></li>
+             <li><?php echo $this->Html->link(__('New Article', true), array('controller'=>'articles','action'=>'add','cate_id' => $parent_id)); ?></li>
+        </ul>
+    </div>
+	<div> 下级频道</div>
+    <table cellpadding="0" cellspacing="0">
+    <?php
+        $tableHeaders =  $this->Html->tableHeaders(array(
+                                              'id',
+                                              __('title', true),
+                                              'parent_id',
+                                              'sub',
+                                              'updated',
+                                              __('Actions', true),
+                                             ));
+        echo $tableHeaders;
+
+        $rows = array();
+        foreach ($Categories AS $channel) {
+            $actions  = $this->Html->link(__('Edit', true), array('controller' => 'Categories', 'action' => 'edit', $channel['Category']['id']));
+            $actions .= ' ' . $this->Html->link(__('Delete', true), array('controller' => 'Categories', 'action' => 'delete', $channel['Category']['id']), null, __('Are you sure?', true));
+
+            $rows[] = array(
+                       $channel['Category']['id'],
+                       $channel['Category']['title'],
+                       $channel['Category']['parent_id'],
+                       $this->Html->link(__('Sub', true), array('controller' => 'Categories', 'action' => 'index', $channel['Category']['id'])),
+                       $channel['Category']['updated'],
+                       $actions,
+                      );
+        }
+
+        echo $this->Html->tableCells($rows);
+        echo $tableHeaders;
+        
+       
+    ?>
+    </table>
+    <hr/>
+    <table cellpadding="0" cellspacing="0">
+    <?php
+    if($currentdata)
+    {
+     	$tableHeaders =  $this->Html->tableHeaders(array(
+                                              'id',
+                                              __('title', true),
+                                              'updated',
+                                              __('Actions', true),
+                                             ));
+        echo $tableHeaders;
+
+        $rows = array();
+        
+        foreach ($currentdata['Article'] AS $item) {
+            $actions  = $this->Html->link(__('Edit', true), array('controller' => 'articles', 'action' => 'edit', $item['id']));
+            $actions .= ' ' . $this->Html->link(__('Delete', true), array('controller' => 'articles', 'action' => 'delete', $item['id']), null, __('Are you sure?', true));
+
+            $rows[] = array(
+                       $item['id'],
+                       $this->Html->link(__($item['title'], true), array('controller' => 'articles','admin'=> false, 'action' => 'view', 'id'=>$item['id'])),
+                       $item['updated'],
+                       $actions,
+                      );
+        }
+
+        echo $this->Html->tableCells($rows);
+        echo $tableHeaders;
+     }
+        ?>
+        </table>
+</div>
+

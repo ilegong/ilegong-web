@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{{$pageTitle}}-{{$site[title]}}</title>
+<META NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+<meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}" />
+<meta name="Description" content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}" />
+{{$this->Html->meta('icon')}}
+{{$this->Html->css(array(
+            Router::url('/stylevars/getcss'),
+           'ui-customer',
+        ));
+}}
+{{$this->Html->script(array(			
+            'jquery/jquery.min.js',
+            'bootstrap.min.js',
+            'jquery/jquery.cookie.js',        
+            'i18n/language-zh-CN.js',
+            'common.js',
+            'front.js',
+            'portlet.js',   
+            'taobao/taobaoke.js','jquery/jquery.masonry.min.js','jquery/jquery.infinitescroll.min.js',
+            'jquery/jquery.lazyload.js',
+            'jquery/jquery.pnotify.min.js',
+        ));
+}}
+<script type="text/javascript">
+var BASEURL = "{{APP_SUB_DIR}}";
+var ADMIN_BASEURL = BASEURL+"/manage";
+</script>
+{{if !empty($_SESSION['Auth']['Staff']) }}
+<!-- 当为后台登陆后，才加载jquery ui，与模板编辑的js -->
+<!-- 当为后台登陆后，才加载jquery ui，与模板编辑的js -->
+{{$this->Html->script(array(
+            'jquery/jquery-ui-1.8.23.custom.min.js',           
+            'ckeditor/ckeditor.js',
+            'swfupload/swfupload.js',
+            'swfupload/swfupload.queue.js',
+			'swfupload/swfupload.cookies.js',
+            'swfupload/fileprogress.js',
+            'swfupload/handlers.js',       
+        ));
+}}
+<script type="text/javascript">
+var viewFileName = "{{$viewfile_for_layout}}";
+</script>
+{{else}}
+{{$this->Html->script(array(
+            'jquery/jquery-ui-1.8.23.custom.min.js', 
+        ));
+}}
+{{/if}}
+</head>
+<body>
+<div id="header" >
+<div class="container clearfix">
+ <div class="row-fluid">
+  <div class="span7"> 
+  <a style="FLOAT: left" href="{{$this->Html->url('/')}}">{{$this->Html->image('logo.png', array('height'=>45,'title' => $site[title],'alt' => $site[title]))}}</A>
+ 
+  </div>
+  <div class="span17" style="text-align:right;">
+      {{if defined('APPEND_LOCALE_BASE')}}
+      {{$this->Html->link('简体','/../')}}, {{$this->Html->link('繁体','/../zh-tw/')}}，{{$this->Html->link('英文版','/../en-us/')}}
+      {{else}}
+  {{$this->Html->link('简体','/')}}, {{$this->Html->link('繁体','/zh-tw/')}}，{{$this->Html->link('英文版','/en-us/')}}
+	  {{/if}}
+		<div>
+		{{$this->Html->link('Cart','/carts/listcart.html')}}
+		</div>
+   {{template users/current_user}}
+  </div>
+ </div>
+</div>
+	<div class="container clearfix" >			
+		{{template menus/bootstrap}}
+		<div  class="col-md-12">
+		{{template Elements/navigation_header}}
+		</div>
+	</div>	
+	<div  class="clear"></div>
+</div>
+
+<div id="maincontent" class="maincontent  clearfix">
+	<div  class="container">
+	{{$content_for_layout}}
+	</div>
+</div>
+
+{{template Elements/footer}}
+
+<div id="ajax_doing_help" title="提示" style="display:none;"></div>
+</body>
+</html>

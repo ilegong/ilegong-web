@@ -1,0 +1,45 @@
+<div class="regionlist clearfix">
+	
+	<div class="head_pic regionleft">
+		<a href="http://t.sina.com.cn/sportschannel">
+		<img class="userhead" src="{{$item['user_img']}}" uid="{{$item['creator_id']}}" title="{{$item['creator']}}">
+		</a>
+	</div>	
+	<div class="regionright">
+		<p>
+		{{$item['creator']}}： {{$item['name']}}
+		
+		</p> 
+		<div style="margin:5px 20px;">
+			<div class="ui-widget-content related-question clearfix">
+				<p  id="question-content-{{$item_all['Question']['id']}}">{{$item_all['Question']['creator']}}：{{$item_all['Question']['name']}}</p>
+				<div  style="float:right;">
+				<a href="javasctipt:void(0);" onclick="return singleSubmitDigg('Question','{{$item_all['Question']['id']}}',2,4,setDiggNum);">推荐<span id="Digg-Question-{{$item_all['Question']['id']}}-2-4" class="ui-dig-num">  </span></a> | 
+				<!-- <a href="javasctipt:void(0);" onclick="return addtofavor('Question','{{$item_all['Question']['id']}}','{{$item_all['Question']['weibo_id']}}');">收藏<span class="ui-stats-num Stats-Question-{{$item_all['Question']['id']}}-favor_nums">{if $item_all['Question']['favor_nums']}({{$item_all['Question']['favor_nums']}}){else}&nbsp;{/if}</span></a> | 
+				 -->
+				<a href="javasctipt:void(0);" onclick="return publishController.join_question('{{$item_all['Question']['id']}}','{{$item['id']}}');">我来回答<span class="ui-stats-num Stats-Question-{{$item_all['Question']['id']}}-comment_nums">{{if $item_all['Question']['comment_nums']}}({{$item_all['Question']['comment_nums']}}){{else}}&nbsp;{{/if}}</span></a> | 
+				<a href="/questions/{{$item_all['Question']['id']}}/{{$item['id']}}.html" target="_blank">查看详情</a>	
+				</div>
+			</div>
+		</div>
+		<div class="clearfix" >
+			<div style="float:right;">
+			<?PHP 
+if($item['coverimg']){
+	echo $this->Html->image("grey.gif", array('alt'=>$item['name'],'height'=>70,
+			'data-original'=>$item['coverimg'],
+			));
+}
+?>
+			</div>			
+		</div>
+		<div class="listauthor">
+			发布于{{substr($item['created'],5,-3)}}| 
+			<a href="javasctipt:void(0);" onclick="return addtofavor('Weibo','{{$item['id']}}','{{$item['weibo_id']}}');">收藏<span class="ui-stats-num Stats-Weibo-{{$item['id']}}-favor_nums">{{if $item['favor_nums']}}({{$item['favor_nums']}}){{/if}}</span></a> | 
+<a href="javasctipt:void(0);" onclick="return publishController.join_question('{{$item_all['Question']['id']}}','{{$item['id']}}');">我来回答<span class="ui-stats-num Stats-Question-{{$item_all['Question']['id']}}-comment_nums">{{if $item_all['Question']['comment_nums']}}({{$item_all['Question']['comment_nums']}}){{/if}}</span></a>
+| <a href="/questions/{{$item_all['Question']['id']}}/{{$item['id']}}.html" target="_blank">查看详情</a>	
+		
+		</div>
+		
+	</div>
+</div>

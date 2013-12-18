@@ -1,0 +1,41 @@
+	<style>
+	.ui-icon{cursor:pointer;}
+	.ui-contain {min-height:100px;}
+	.ui-contain .ui-widget-content{min-height:100px;margin-top:10px;}
+	</style>
+	<script>
+	$(function() {
+		$('.ui-contain').each(function(){
+			if($.trim($(this).html())=='')
+			{
+				$(this).append('<div class="ui-widget-content"></div>');
+			}
+		})
+	});
+	</script>
+
+<div class="container clearfix">	
+
+<div class="ui-contain">
+	<div class="ui-contain span12 alpha">
+	</div>
+	<div class="ui-contain span12 omega">
+	</div>
+</div>
+
+<div class="ui-contain span9">
+	<div class="ui-contain span4 alpha">
+	</div>
+	<div class="ui-contain span5 omega">
+	</div>
+</div>
+
+<div class="ui-contain span9">
+
+</div>
+
+<div class="ui-contain span6">
+
+</div>
+
+</div>

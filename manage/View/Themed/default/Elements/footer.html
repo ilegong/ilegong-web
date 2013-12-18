@@ -1,0 +1,42 @@
+<script>
+mainContent_width = $("#mainContent").width();
+/*
+ * Chosen.prototype.register_observers 注册相关的各事件
+ * 搜索框相关事件：
+ 	this.search_field.blur(function(evt) {
+     _this.input_blur(evt);
+   });
+   this.search_field.keyup(function(evt) {
+     _this.keyup_checker(evt);
+   });
+   this.search_field.keydown(function(evt) {
+     _this.keydown_checker(evt);
+   });
+   this.search_field.focus(function(evt) {
+     _this.input_focus(evt);
+   });
+ * 修改chosen.jquery.js中的Chosen.prototype.winnow_results函数，实现搜索的定制个性化
+ * 可在Chosen.prototype.winnow_results中，增加ajax搜索功能
+ * 
+ */
+$(".chzn-select").chosen({search_contains:true,width:'200px'});
+</script>
+{{$this->Html->script(array(
+	'bootstrap.min.js','bootstrap-affix.js',
+ ))}}
+
+{{$this->Html->script(array(
+			'ckeditor/ckeditor.js',
+			'editor.js',
+        ))}}
+{{$this->Combinator->script(array(
+	'swfupload/swfupload.js',
+	'swfupload/swfupload.queue.js',
+	'swfupload/swfupload.cookies.js',
+	'swfupload/fileprogress.js',
+	'swfupload/handlers.js'
+))}}        
+<!-- helper中追加的底部脚本 $this->_View->append('bottomscript',$script);-->
+{{$this->fetch('bottomscript')}}
+</body>
+</html>

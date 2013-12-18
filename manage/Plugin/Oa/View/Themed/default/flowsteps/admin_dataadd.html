@@ -1,0 +1,21 @@
+<div class="Singleform">
+
+<div class="tabs">
+                <ul>
+                    <li><a href="#{{$current_model}}basic-info"><span><?php __('Basic'); ?></span></a></li>
+                </ul>
+<?php 
+echo $this->MForm->form(array('type' => 'post',
+        'model'=> $current_model,
+        'update'=>'settings_result',
+        'url' => array(
+            'controller' => 'flowsteps',
+            'action' => 'dataadd',
+			$step_id
+        ),
+	'auto_form' => 1,
+	'form_type' => 'add',
+));
+?>
+</div>
+</div>

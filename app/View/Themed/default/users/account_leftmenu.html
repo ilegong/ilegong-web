@@ -1,0 +1,13 @@
+<ul class="nav nav-list">
+<li class="nav-header">信息发布</li>
+<li {{if $action=='note'}}class="ui-state-active"{{/if}}><a href="{{Router::url('/notes/lists')}}">我的记事</a></li>
+<li {{if $action=='book'}}class="ui-state-active"{{/if}}><a href="{{Router::url('/books/lists')}}">我的知识</a></li>
+<li {{if $action=='bookchapter'}}class="ui-state-active"{{/if}}><a href="{{Router::url('/book_chapters/lists')}}">知识章节</a></li>
+
+<!-- 	
+<li {{if $action=='myquestion'}}class="ui-state-active"{{/if}}><a href="/users/myquestion">我的提问</a></li>
+<li {{if $action=='myweibo'}}class="ui-state-active"{{/if}}><a href="/users/myweibo">我的回答</a></li>
+<li {{if $action=='myvote'}}class="ui-state-active"{{/if}}><a href="/users/myvote">我的投票</a></li>
+ -->
+{{$this->Hook->call('userLeftmenu',array($type))}}
+</ul>

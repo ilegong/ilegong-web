@@ -1,0 +1,76 @@
+<div class="users form">
+{{if $current_action=='admin_add'}}
+<?php
+echo $this->MForm->create($current_model,array(    
+	'url' => array('action' => 'add'),
+));
+?>
+{{elseif $current_action=='admin_edit'}}
+<?php 
+echo $this->MForm->create($current_model,array(
+    'url' => array('action' => 'edit',$id,$copy),
+));
+?>
+
+{{/if}}
+    
+
+	<ul class="nav nav-tabs">
+	    <li class="active"><a href="#basic-info" data-toggle="tab"><span>{{__('Basic')}}</span></a></li>
+	    <li><a href="#category-advanced" data-toggle="tab"><span>{{__('Advanced Options')}}</span></a></li>
+	    <li><a href="#category-content" data-toggle="tab"><span>{{__('Content')}}</span></a></li>
+	    <li><a href="#category-seo" data-toggle="tab"><span>{{__('SEO')}}</span></a></li>
+	    {{$this->Layout->getLanguageTabHead($current_model)}}
+	</ul>
+	<div class="tab-content">
+		<div id="basic-info"  class="tab-pane active" >
+	    <fieldset>
+	    <?php
+echo $this->MForm->input('model');
+echo $this->MForm->input('id');        
+echo $this->MForm->input('parent_id');
+echo $this->MForm->input('name',array('required'=>'required',));
+echo $this->MForm->input('slug',array('required'=>'required',));
+echo $this->MForm->input('visible',array('value' => 1,'type'=>'checkbox','default'=>1)); 
+echo $this->MForm->input('link');
+echo $this->MForm->input('template',array('default'=>'categories/_list'));
+    ?>
+	    </fieldset>
+	    </div>
+	    <div id="category-advanced" class="tab-pane">
+	    	<?php
+	    	echo $this->MForm->swfupload('logo');
+		echo $this->MForm->input('domain');
+		echo $this->MForm->input('theme'); 
+		echo $this->MForm->input('view_template'); 
+		?>
+	    	{{$this->MForm->swfupload('banner');}}
+	    	{{$this->MForm->input('submenu',array('rows'=>3,'cols'=>100))}}
+	    </div>
+	    <div id="category-content" class="tab-pane">
+		    {{$this->MForm->input('description')}}
+		    {{$this->MForm->ckeditor('content',array('label' => false))}}
+	    </div>
+	    <div id="category-seo" class="tab-pane">
+		    {{$this->MForm->input('seotitle')}}
+		    {{$this->MForm->input('seokeywords',array('rows'=>3,'cols'=>100))}}
+		    {{$this->MForm->input('seodescription',array('rows'=>3,'cols'=>100))}}
+	    </div>    
+	    {{$this->Layout->getLanguageTabContent($current_model)}}
+	    
+	</div>
+	<?php echo $this->MForm->end(__('Submit',true)); ?>
+	</div>
+<script>
+/**
+ * 模型改变时，设置link的默认值
+ */
+function selectModel(){
+	if(this.value!=""){
+		$('#CategoryLink').value = '/controller:{model}/{slug}';
+	}
+	else{
+		$('#CategoryLink').value = '';
+	}
+}
+</script>

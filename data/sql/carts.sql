@@ -1,0 +1,37 @@
+DROP TABLE IF EXISTS `cake_carts`;
+CREATE TABLE IF NOT EXISTS `cake_carts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) DEFAULT '',
+  `order_id` varchar(44) DEFAULT NULL,
+  `creator` int(13) DEFAULT '0',
+  `lastupdator` int(13) DEFAULT '0',
+  `remoteurl` varchar(200) DEFAULT '',
+  `status` int(11) DEFAULT '0',
+  `published` tinyint(1) DEFAULT '0',
+  `deleted` tinyint(1) DEFAULT '0',
+  `created` datetime DEFAULT NULL,
+  `updated` datetime DEFAULT NULL,
+  `product_id` int(11) DEFAULT '0',
+  `num` int(11) DEFAULT '0',
+  `price` float DEFAULT '0',
+  `session_id` varchar(44) DEFAULT NULL,
+  `coverimg` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MYISAM DEFAULT CHARSET=utf8;
+REPLACE INTO `cake_i18nfields` (`id`, `name`, `savetodb`, `translate`, `type`, `model`, `locale`, `length`, `sort`, `allowadd`, `allowedit`, `selectmodel`, `selectvaluefield`, `selecttxtfield`, `selectparentid`, `selectautoload`, `selectvalues`, `associateflag`, `associateelement`, `associatefield`, `associatetype`, `formtype`, `default`, `allownull`, `validationregular`, `description`, `onchange`, `explodeimplode`, `explain`, `deleted`, `created`, `updated`, `conditions`) VALUES (NULL, 'id', '1', '编号', 'integer', 'Cart', 'zh_cn', '11', 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', NULL, NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2011-03-27 23:24:58', '2011-03-27 23:24:58', NULL),
+(NULL, 'name', '1', 'name', 'string', 'Cart', 'zh_cn', '200', 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', NULL, '', '1', NULL, NULL, NULL, NULL, NULL, 0, '2011-03-27 23:24:58', '2011-03-27 23:24:58', NULL),
+(NULL, 'order_id', '1', '订单编号', 'string', 'Cart', 'zh_cn', '44', 0, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', 'equal', '', '0', '1', '', NULL, '', '', '', 0, '2011-03-27 23:24:58', '2011-03-27 23:24:58', NULL),
+(NULL, 'creator', '1', 'creator', 'integer', 'Cart', 'zh_cn', '13', 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', NULL, '0', '1', NULL, NULL, NULL, NULL, NULL, 0, '2011-03-27 23:24:58', '2011-03-27 23:24:58', NULL),
+(NULL, 'lastupdator', '1', 'lastupdator', 'integer', 'Cart', 'zh_cn', '13', 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', NULL, '0', '1', NULL, NULL, NULL, NULL, NULL, 0, '2011-03-27 23:24:58', '2011-03-27 23:24:58', NULL),
+(NULL, 'remoteurl', '1', 'remoteurl', 'string', 'Cart', 'zh_cn', '200', 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', NULL, '', '1', NULL, NULL, NULL, NULL, NULL, 1, '2011-03-27 23:24:58', '2011-04-14 20:06:15', NULL),
+(NULL, 'status', '1', 'status', 'integer', 'Cart', 'zh_cn', '11', 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', NULL, '0', '1', NULL, NULL, NULL, NULL, NULL, 0, '2011-03-27 23:24:58', '2011-03-27 23:24:58', NULL),
+(NULL, 'published', '1', '是否发布', 'boolean', 'Cart', 'zh_cn', '1', 0, '1', '1', NULL, NULL, NULL, NULL, '1', '0=>否\n1=>是', '0', NULL, NULL, 'equal', 'select', '0', '1', NULL, NULL, NULL, NULL, NULL, 0, '2011-03-27 23:24:58', '2011-03-27 23:24:58', NULL),
+(NULL, 'deleted', '1', '是否删除', 'boolean', 'Cart', 'zh_cn', '1', 0, '1', '1', NULL, NULL, NULL, NULL, '1', '0=>否\n1=>是', '0', NULL, NULL, 'equal', 'select', '0', '1', NULL, NULL, NULL, NULL, NULL, 0, '2011-03-27 23:24:58', '2011-03-27 23:24:58', NULL),
+(NULL, 'created', '1', '创建时间', 'datetime', 'Cart', 'zh_cn', NULL, 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'datetime', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2011-03-27 23:24:58', '2011-03-27 23:24:58', NULL),
+(NULL, 'updated', '1', '修改时间', 'datetime', 'Cart', 'zh_cn', NULL, 0, '1', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', 'datetime', NULL, '1', NULL, NULL, NULL, NULL, NULL, 0, '2011-03-27 23:24:58', '2011-03-27 23:24:58', NULL),
+(NULL, 'product_id', '1', 'product_id', 'integer', 'Cart', 'zh_cn', '11', NULL, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', '', '', '', '1', '', NULL, '', '', '', 0, '2011-04-14 20:13:29', '2011-04-14 20:13:29', NULL),
+(NULL, 'num', '1', '定购数量', 'integer', 'Cart', 'zh_cn', NULL, NULL, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', '', '', '', '1', '', NULL, '', '', '', 0, '2011-04-14 20:14:09', '2011-04-14 20:14:09', NULL),
+(NULL, 'price', '1', '购买单价', 'float', 'Cart', 'zh_cn', '10', NULL, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', '', '', '', '1', '', NULL, '', '', '', 0, '2011-04-23 10:44:42', '2011-04-23 10:44:42', NULL),
+(NULL, 'session_id', '1', 'sessionid标识', 'string', 'Cart', 'zh_cn', '44', NULL, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', '', '', '', '1', '', NULL, '', '', '', 0, '2011-04-23 10:45:16', '2011-04-23 10:45:16', NULL),
+(NULL, 'coverimg', '1', '标题图片', 'string', 'Cart', 'zh_cn', '255', NULL, '1', '1', '', NULL, NULL, NULL, '1', '', '0', '', '', '', 'coverimg', '', '1', '', NULL, '', '', '', 0, '2011-04-23 11:00:10', '2011-04-23 11:00:10', '');
+REPLACE INTO `cake_modelextends` (`id`, `name`, `cname`, `belongtype`, `modeltype`, `idtype`, `status`, `created`, `updated`, `tablename`, `related_model`, `security`, `operatorfields`, `deleted`, `cate_id`, `localetype`) VALUES (NULL, 'Cart', '购物车', '', 'default', '', 27, '2011-03-27 23:01:51', '2011-03-27 23:01:51', 'cake_carts', '', '', '', '0', 0, 0);

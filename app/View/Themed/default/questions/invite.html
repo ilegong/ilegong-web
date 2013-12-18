@@ -1,0 +1,32 @@
+<div class="ui-corner-bottom ui-question-publish clearfix">
+	<?php
+if(!empty($friends))
+{
+foreach($friends as $key => $friend)
+{
+	?>
+	<div  class="userhead"  style="float:left;width:75px;margin:0 5px;text-align:center;">	
+		<img imgtype="head" uid="{{$friend['id']}}" gender="{{$friend['gender']}}"
+		 title="{{$friend['name']}}" src="{{$friend['profile_image_url']}}">
+		<div>
+			<input id="invite-check-{{$friend['name']}}-{{$type}}" class="invite-check-{{$friend['id']}}-{{$type}}" type="checkbox" name="inviteusers[{{$friend['id']}}]" value="{{$friend['name']}}"></input>
+			<label title="{{$friend['name']}}">{{usubstr($friend['name'],0,3)}}</label>
+		</div>
+	</div>
+	<?PHP
+}
+}
+else
+{
+	?>
+	没有更多了
+<?php 
+} 
+	?>
+	
+	<div class="clear"></div>
+	<div class="pagelink" style="margin:0">
+	{if $lastpage<0}<span>上一页</span>{else}<a href="/questions/invite/{{$weibo_id}}/{{$type}}/{{$lastpage}}">上一页</a>{/if}
+	{if $nextpage<1}<span>下一页</span>{else}<a href="/questions/invite/{{$weibo_id}}/{{$type}}/{{$nextpage}}">下一页</a>{/if}
+	</div>
+</div>

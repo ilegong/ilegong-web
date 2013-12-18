@@ -1,0 +1,6 @@
+{if strip_tags($item['name'])}
+<div class="regiontitlelist clearfix">	
+	<span style="float:left;" id="question-content-{{$item['id']}}"><a target="_blank" title="{{strip_tags($item['name'])}}" href="/questions/{{$item['id']}}.html">{{usubstr(strip_tags($item['name']),0,20)}}</a></span> 
+	<span style="float:right;margin-right:5px;">{{$item_all['Stats']['view_nums']}}</span>	
+</div>
+{/if}

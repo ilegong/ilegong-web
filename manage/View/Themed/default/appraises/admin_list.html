@@ -1,0 +1,58 @@
+<div class="edit_toolbar" id="edit_toolbar" class="ui-widget ui-helper-clearfix">      	
+        <button type="button" class="ui-state-default ui-corner-all" id="add-select-radio" onclick="addselect('radio');">
+        单选题
+        </button>
+        <button type="button" class="ui-state-default ui-corner-all"  id="add-select-checkbox" onclick="addselect('checkbox');">
+        多选题
+        </button>
+        <button type="button" class="ui-state-default ui-corner-all"  id="add-text-input" onclick="addselect('input');">
+       填空题</button>
+        <button type="button" class="ui-state-default ui-corner-all"  id="add-text-textarea" onclick="addselect('textarea');">
+        问答题</button>
+        <button type="button" class="ui-state-default ui-corner-all"  id="add-matrix">组合选择题</button>        
+</div>
+<div class="actions clearfix">
+        <ul class="clearfix">
+            <li  class="NewDocument"><?php echo $this->Html->link(__('单选题'), array('controller' => $current_controller,'action'=>'add'),array('onclick'=>'return open_dialog({title:"'.__('单选题').'"},this.href);')); ?></li>
+            <li  class="DocumentSearch"><?php echo $this->Html->link(__('Search and Statistics'),'#',array('onclick'=>'return open_content_dialog(\'ui-search-form\');')); ?></li>
+           
+            <li class="BatchTrash"><?php echo $this->Html->link(__('Batch Trash', true),'#',array('onclick'=>"return batchAction('trash');")); ?></li>
+            <li class="BatchRestore" style="display:none;"><?php echo $this->Html->link(__('Batch Restore'),'#',array('onclick'=>"return batchAction('restore');")); ?></li>
+            <li class="BatchDelete" style="display:none;"><?php echo $this->Html->link(__('Batch Delete'),'#',array('onclick'=>"return batchAction('delete');")); ?></li>
+        </ul>
+        
+</div>
+<STYLE type=text/css>
+.select-option-list { list-style-type: none; margin: 0; padding: 0;}
+.select-option-list li { margin: 0 3px 3px 3px; padding: 0px; padding-left: 1.5em; font-size: 1.4em;border:1px; }
+.select-option-list li span { position: absolute; margin-left: -1.3em; }
+button {margin:3px;}
+table {width:auto;}
+thead {background:#D7EBF9;line-height:24px}
+.question-options {padding-left:10px;padding-top:5px;}
+.question-options td,.question-options th {border:#ccc solid 1px;padding:5px 10px;}
+#select-options-manage ,.ui-dialog .ui-dialog-content{height:auto;overflow:visible;}
+</STYLE>
+<script>
+
+function deletequestion(obj)
+{
+	$('#question_'+obj.id).remove();
+}
+$(function(){
+	$('[id^="tab-question-"]').tabs();
+});
+</script>
+
+
+
+<div id="survey_question_list">
+	{{$question_list}}
+</div>
+
+<div id="select_panel_add" class="clearfix" title="增加问卷题"  style="display:none;"></div>
+
+
+<div id="select_panel_edit" title="修改问卷题" style="display:none;">
+	<!--修改题的内容，通过ajax来加载 -->
+</div>

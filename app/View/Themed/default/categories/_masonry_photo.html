@@ -1,0 +1,17 @@
+<li class="list-item-photo">
+	<div class="photoArea">
+	{{eval echo $this->Html->image($item['coverimg'], 
+		array(
+		'alt' => $item['title'],'title' => $item['title'],
+		'width'=>'203px',
+		//'onerror'=>'this.src="'.Router::url('/img/products_nophoto.jpg').'";',
+		'url'=> '/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html' 
+		)); }}
+	</div>
+	<p class="describe">
+		{{eval echo $this->Html->link(usubstr($item['name'],0,10), 
+		'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
+		array('title'=>$item['title'])); }}
+	</p>
+</li>
+

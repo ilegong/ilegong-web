@@ -1,0 +1,37 @@
+<div class="regionlist summarylist clearfix">
+	
+	<div class="head_pic userhead">
+		<a href="http://t.sina.com.cn/{{$item_all['User']['sina_domain']}}" target="_blank">
+		<img src="{{$item_all['User']['image']}}" uid="{{$item_all['User']['sina_uid']}}" title="{{$item_all['User']['nickname']}}">
+		</a>
+	</div>
+	<div class="regionright">
+		<p>
+		 <span id="question-content-{{$item['id']}}"><a class="ui-weibo-name" title="{{$item_all['User']['nickname']}}" href="/users/{{$item_all['User']['sina_domain']}}">@{{$item_all['User']['nickname']}}</a>：{{$item['name']}}</span> 
+		 
+		
+		</p>			
+		<div class="listauthor">
+		<span>发布于{{substr($item['created'],5,-3)}} </span>
+		<div style="float:right;">
+		<!--<a href="javascript:void(0);" onclick="return singleSubmitDigg('Question','{{$item['id']}}',2,4,setDiggNum);">推荐<span id="Digg-Question-{{$item['id']}}-2-4" class="ui-dig-num"></span></a> |
+		<a href="javascript:void(0);" onclick="return addtofavor('Question','{{$item['id']}}','{{$item['weibo_id']}}');">收藏<span class="ui-stats-num Stats-Question-{{$item['id']}}-favor_nums">{{if $item['favor_nums']}}({{$item['favor_nums']}}){{/if}}</span></a> |
+		-->
+		<a href="javascript:void(0);" title="点名邀请好友参与" onclick="return AjaxHelper.invite_join('{{$item['id']}}','点名邀请好友参与');">我要点名</a> |	
+		<a href="javascript:void(0);" onclick="return publishController.join_question('{{$item['id']}}');">回答/评论<span class="ui-stats-num Stats-Question-{{$item['id']}}-comment_nums">{{if $item['comment_nums']}}({{$item['comment_nums']}}){{/if}}</span></a> |
+		<a target="_blank" href="/questions/{{$item['id']}}.html"><span>查看详情</span></a>
+		</div>
+		</div>
+		<div class="listsummary clearfix" >
+			<div style="float:right;">
+			<?PHP 
+if($item['coverimg']){
+	echo $this->Html->image("grey.gif", array('alt'=>$item['name'],'height'=>70,
+			'data-original'=>$item['coverimg'],
+			));
+}
+?>
+			</div>			
+		</div>
+	</div>
+</div>

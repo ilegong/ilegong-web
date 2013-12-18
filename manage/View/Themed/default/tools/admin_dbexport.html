@@ -1,0 +1,10 @@
+<pre class="well">
+<p>默认采用分卷备份的方式，</p>
+<p>完成一个分卷后，自动进入下一个分卷，</p>
+<p>在备份没有完成前，请不要关闭页面，等待页面备份完成</p>
+</pre>
+<?php
+echo $this->MForm->create('Tool',array('data-noajax'=>true));
+
+echo $this->MForm->end('开始备份');
+?>

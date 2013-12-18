@@ -1,0 +1,99 @@
+{{$this->MForm->create('Setting',array('url'=>array('controller' => 'settings', 'action' => 'prefix', $prefix)))}}
+        <fieldset>
+<div class="settings-sortable">
+
+        <?php
+            //$i = 0;
+            foreach ($settings AS $setting) {
+                $key = $setting['Setting']['key'];
+				$i = $setting['Setting']['id'];
+                $keyE = explode('.', $key);
+				if(in_array($keyE['1'],array('list_fields','search_fields'))){
+					continue;
+				}
+                $keyTitle = Inflector::humanize($keyE['1']);
+
+                $label = $keyTitle;
+                if ($setting['Setting']['title'] != null) {
+                    $label = $setting['Setting']['title'];
+                }
+
+                $inputType = 'text';
+                if ($setting['Setting']['input_type'] != null) {
+                    $inputType = $setting['Setting']['input_type'];
+                }
+				$options = array();
+				if($inputType=='select')
+				{
+					$options = optionstr_to_array($setting['Setting']['params']);
+				}
+				/**
+				 * 使用$(".settings-sortable").sortable( "serialize" )获得id，并ajax提交修改排序参数
+				 */
+                echo '<div class="setting" id="settings-'.$setting['Setting']['id'].'">';
+                    echo $this->MForm->input("Setting.$i.id", array('value' => $setting['Setting']['id']));
+                    echo $this->MForm->input("Setting.$i.key", array('type' => 'hidden', 'value' => $key));
+                    if ($setting['Setting']['input_type'] == 'checkbox') {
+                        if ($setting['Setting']['value'] == 1) {
+                            echo $this->MForm->input("Setting.$i.value", array(
+                                'label' => $label,
+                                'type' => $setting['Setting']['input_type'],
+                                'checked' => 'checked',
+                                'after' => $setting['Setting']['description'],
+                            ));
+                        } else {
+                            echo $this->MForm->input("Setting.$i.value", array(
+                                'label' => $label,
+                                'type' => $setting['Setting']['input_type'],
+                                'after' => $setting['Setting']['description'],
+                            ));
+                        }
+                    }
+					elseif(in_array($setting['Setting']['input_type'],array('select','checkbox','radio')))
+					{
+						echo $this->MForm->input("Setting.$i.value", array(
+                            'label' => $label,
+                            'type' => $inputType,
+							'options' => $options,
+                            'value' => $setting['Setting']['value'],
+                            'after' => $setting['Setting']['description'],
+                        ));
+					}
+					elseif($setting['Setting']['input_type'] == 'file'){
+						echo $this->MForm->swfupload("Setting.$i.value", array(
+                            
+							'modelClass' => 'Setting',
+							'label' => $label,
+                            'no_db' => 1,
+                            'upload_limit' => 1,
+							'value' => $setting['Setting']['value'],
+                            'after' => $setting['Setting']['description'],
+                        ));
+					}
+					elseif($setting['Setting']['input_type'] == 'ckeditor'){
+						echo $this->MForm->ckeditor("Setting.$i.value", array(
+                            
+							'modelClass' => 'Setting',
+							'label' => $label,
+                            'no_db' => 1,
+                            'upload_limit' => 1,
+							'value' => $setting['Setting']['value'],
+                            'after' => $setting['Setting']['description'],
+                        ));
+					}
+					else {
+                        echo $this->MForm->input("Setting.$i.value", array(
+                            'label' => $label,
+                            'type' => $inputType,
+                            'value' => $setting['Setting']['value'],
+                            'after' => $setting['Setting']['description'],
+                        ));
+                    }
+                echo "</div>";
+                $i++;
+            }
+        ?>
+</div>
+
+        </fieldset>
+    <?php echo $this->MForm->end("Submit"); ?>

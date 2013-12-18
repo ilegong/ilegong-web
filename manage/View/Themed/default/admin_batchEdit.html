@@ -1,0 +1,23 @@
+<div class="users form">
+<?php 
+echo $this->MForm->create($current_model,array(
+	'url' => array(
+         'action' => 'batchEdit',
+		 $ids,
+     ),));
+?>
+ 
+<fieldset>    	
+                <div id="article-main" class="tab-pane">
+                	 <?php
+                	 	foreach($editfields as $field){
+				        	echo $this->MForm->input($field);
+				        }
+				    ?>
+				
+                </div>
+
+</fieldset>
+<?php echo $this->MForm->end(array('label'=>__('Submit',true),'id'=>'btnsubmit')); ?>
+   
+</div>

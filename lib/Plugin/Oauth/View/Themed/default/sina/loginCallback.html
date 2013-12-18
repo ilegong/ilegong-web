@@ -1,0 +1,53 @@
+<div class="row clearfix">
+	<div class="ui-contain span12">
+		<div class="ui-corner-top ui-widget-header ui-portlet-header">
+		      <span class="title"><h3>无本站用户，注册本站用户</h3></span>
+		</div>
+		{{$this->Form->create('User',array('id'=>'registerform','method'=>"post",'url'=>array('action'=>'register','controller'=>'sina','plugin'=>'oauth')))}}
+		<ul><li>
+		{{$this->Form->input('username',array('div'=>false,'class'=>'txt','onblur'=>"checkusername()",'maxlength'=>"15",'size'=>"25"))}}
+			</li><li>
+			{{$this->Form->input('email',array('div'=>false,'class'=>'txt', 'autocomplete'=>"off",'tabindex'=>"1",
+				'onkeypress'=>"detectCapsLock(event,this)",'maxlength'=>"15",'size'=>"25"))}}
+			</li>
+			<li>
+			<input type="checkbox" id="set-password"><label for="set-password">设置本站登录密码</label>
+			<div id="set-password-panel" style="display:none;">
+			<p>如果您不设置密码，每次使用第三方认证登录</p>
+			<p>设置了密码，可以使用本站设置的用户名、密码登录</p>
+				<ul><li>			
+			{{$this->Form->input('password',array('div'=>false,'class'=>'txt','onkeypress'=>"detectCapsLock(event,
+					this)",'type'=>'password','maxlength'=>"15",'size'=>"25"))}}
+			</li><li>			
+			{{$this->Form->input('password_confirm',array('div'=>false,'class'=>'txt','onkeypress'=>"detectCapsLock(event,
+					this)",'type'=>'password','maxlength'=>"15",'size'=>"25"))}} 
+			</li></ul>
+			</div>
+			</li>
+			</ul>
+			{{$this->Form->submit(__('Register'))}}
+		{{$this->Form->end()}}
+	</div>
+	
+	<div class="ui-contain span12">
+		<div class="ui-corner-top ui-widget-header ui-portlet-header">
+		      <span class="title"><h3>已有本站用户，绑定本站用户</h3></span>
+		</div>
+		{{$this->Form->create('User',array('id'=>'registerform','method'=>"post",'url'=>array('action'=>'bind','controller'=>'sina','plugin'=>'oauth')))}}
+		{{$this->Form->input('username',array('div'=>false,'class'=>'txt','onblur'=>"checkusername()",'maxlength'=>"15",'size'=>"25"))}}
+		{{$this->Form->input('password',array('div'=>false,'class'=>'txt','onkeypress'=>"detectCapsLock(event,
+					this)",'type'=>'password','maxlength'=>"15",'size'=>"25"))}}
+		{{$this->Form->submit(__('Bind'))}}
+		{{$this->Form->end()}}
+	</div>
+</div>
+<script>
+$('#set-password').click(function(){
+	if($(this).attr('checked')==true){
+		$('#set-password-panel').show();
+	}
+	else{
+		$('#set-password-panel').hide();
+	}
+})
+</script>

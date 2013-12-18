@@ -1,0 +1,117 @@
+<script>
+$(function(){
+	$('.ui-search-form-close').toggle(function(){
+		$('.ui-search-form-content').hide();
+		$('.ui-icon','.ui-search-form-titlebar').addClass('ui-icon-circle-triangle-e');
+	},function(){
+		$('.ui-search-form-content').show();
+		$('.ui-icon','.ui-search-form-titlebar').removeClass('ui-icon-circle-triangle-e');
+	});
+	$('input[type="submit"]','.ui-search-form-content').bind('click',function(){
+		var condition_str = ($('form','.ui-search-form-content').serialize());
+		//alert(condition_str);
+		condition_str = condition_str.replace(/data%5B/g,'conditions[').replace(/%5D%5B/g,'.').replace(/%5D=/g,']=');
+
+		alert(condition_str);
+		jQuery("#jqgrid_list").jqGrid('setGridParam',{url:' {{$this->Html->url('/admin/ajaxes/jqgrid/');}}?{$requeststr}&'+condition_str,page:1}).trigger('reloadGrid');;
+		$('.ui-search-form-close').trigger('click');
+		return false;
+	});
+});
+</script>
+
+
+<div style="margin:5px 10px">
+	<div class="ui-search-form-titlebar ui-widget-header ui-corner-top ui-helper-clearfix">
+	<a href="javascript:void(0)" role="link" class="ui-search-form-close" style="right: 0px;">
+	<span class="ui-icon ui-icon-circle-triangle-s"></span>
+	</a>
+	<span class="ui-search-form-title">Search</span>
+	</div>
+	
+	<div class="ui-search-form-content">
+
+	<?php 
+	echo $this->MForm->create($current_model,array('type' => 'post',
+        'update'=>'settings_result',
+        'url' => array(
+            'controller' => $current_controller,
+            'action' => 'searchstatis'
+        ),
+));
+	?>
+	</div>
+</div>
+
+<div class="clear ui-helper-clearfix"></div>
+
+<div>
+	<table id="jqgrid_list"></table>
+	<div id="pgtoolbar2"></div> 
+	<div id="pager2"></div> 
+</div>
+<?php
+
+echo $javascript->link(array(
+				'jqgrid/i18n/grid.locale-cn',
+        		'jqgrid/jquery.jqGrid.min',
+        ));
+?>
+<script>
+$.jgrid.no_legacy_api = true;
+$.jgrid.useJSON = true; 
+var lastsel2;
+/*  jqgird 列表相关操作函数  */
+function goToTrash()
+{
+	jQuery("#jqgrid_list").jqGrid('setGridParam',{url:' {{$this->Html->url('/admin/ajaxes/jqgrid/');}}?{$requeststr}&conditions[{{$current_model}}.deleted]=1',page:1}).trigger('reloadGrid');;
+}
+function goToDataList()
+{
+	jQuery("#jqgrid_list").jqGrid('setGridParam',{url:' {{$this->Html->url('/admin/ajaxes/jqgrid/');}}?{$requeststr}',page:1}).trigger('reloadGrid');;
+}
+
+function reloadGrid()
+{
+	var page = jQuery("#jqgrid_list").jqGrid("getGridParam","page");	
+	jqgrid_scrollOffset = $(".ui-jqgrid-bdiv").scrollTop();	
+	jQuery("#jqgrid_list").jqGrid("setGridParam",{page:page}).trigger("reloadGrid");
+}
+
+jQuery("#jqgrid_list").jqGrid({
+   	"url":' {{$this->Html->url('/admin/ajaxes/jqgrid/');}}?{$requeststr}',
+   	"datatype":"json",
+	"mtype": "POST", 
+   	"colNames":[{$col_names}],
+   	"colModel":[
+   		{$fieldlist}	
+   	],
+   	"autowidth": true, 
+   	"rownumbers":true,
+   	"rowNum":30,
+   	"rowList":[15,30,50,100],
+   	"pager": '#pager2',
+   	"multiselect":true,
+   	"sortname": 'id',
+   	"sortorder": "desc",
+   	"hoverrows":true,
+   	"viewrecords":true,
+   	"forceFit" : true, /* 列宽度字动匹配 */ 
+    "jsonReader":{"repeatitems":false,"subgrid":{"repeatitems":false}},
+	"xmlReader":{"repeatitems":false,"subgrid":{"repeatitems":false}},	
+	
+    "idName":false,
+    "caption":"",
+    //toolbar: [true,"top"]
+    
+});
+
+jQuery("#jqgrid_list").jqGrid('navGrid','#pager2',{edit:false,add:false,del:false},{},{},{},{multipleSearch:true});
+jQuery("#jqgrid_list").jqGrid('gridResize',{minWidth:350,minHeight:180});
+//$("#t_jqgrid_list").append("<input id='editcell' type='button' value='Edit' style='height:20px;font-size:-3'/>");
+
+$(document).ready(function(){
+	jQuery("#jqgrid_list").jqGrid('setGridWidth',$(window).width()-30);
+	//jQuery("#jqgrid_list").jqGrid('setGridHeight',$(window).height()-140);
+});
+</script>

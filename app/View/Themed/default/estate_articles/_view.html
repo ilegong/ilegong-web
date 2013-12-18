@@ -1,0 +1,19 @@
+	    <h2 class="Content-title"><?php echo $EstateArticle['EstateArticle']['name']; ?></h2>
+	    <div class="Content-info">
+	来源：{{$EstateArticle['EstateArticle']['origin']}}    阅读次数： <span class="ui-stats-num Stats-EstateArticle-{{$EstateArticle['EstateArticle']['id']}}-view_nums"><?php echo $EstateArticle['EstateArticle']['views_count']; ?></span>
+	    </div>
+	    <div class="Content-body">
+		    <div class="ui-share">
+		    	<div class="ui-state-default"><a href="javasctipt:void(0);" onclick="return addtofavor('EstateArticle','{{$EstateArticle['EstateArticle']['id']}}');">分享</a></div>
+		    	<div class="ui-widget-content ui-share-num"><span class="ui-stats-num Stats-EstateArticle-{{$EstateArticle['EstateArticle']['id']}}-favor_nums">{{if $EstateArticle['EstateArticle']['favor_nums']}}({{$EstateArticle['EstateArticle']['favor_nums']}}){{else}}0{{/if}}</span></div>
+		    </div>
+	    	<?php echo $EstateArticle['EstateArticle']['content']; ?>
+	    	{{if $EstateArticle['EstateArticle']['remoteurl']}}
+	    	<p>原文链接：<a href="{{$EstateArticle['EstateArticle']['remoteurl']}}" style="font-size: 12px;" target="_blank">{{$EstateArticle['EstateArticle']['remoteurl']}}</a></p>
+	    	{{/if}}
+		
+        {{$this->Hook->call("affterContent",array('EstateArticle',$EstateArticle['EstateArticle']['id']))}}
+	</div>
+<div id="dialog-share" style="display:none;" title="温馨提示">
+	<div class="ui-pop-tips"><span class="ico ico-success" style="float:left;"></span><div class="tips-cnt">发表观点成功，是否也分享给您的好友？</div></div>
+</div>

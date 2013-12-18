@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{{$pageTitle}}</title>
+{{$this->Html->meta('icon')}}
+{{$this->Combinator->less();}}
+{{$this->Html->css(array('ui-customer',))}}
+</head>
+<body>
+<!-- 站点维护中，所有页面均不可访问 -->
+<div id="header">
+	<div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" style="FLOAT: left" href="{{$this->Html->url(Configure::read('Site.logo_url'))}}">{{$this->Html->image($this->Html->url(Configure::read('Site.logo')), array('style'=>'height:30px;','title' => $site[title],'alt' => $site[title]))}}</A>
+          <div class="nav-collapse collapse">
+            <ul class="nav  pull-right"> 
+              
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="modal fade in" style="width:500px;">
+    <div class="modal-header">
+    <h3>站点维护中</h3>
+    </div>
+    <div class="modal-body">
+    	站点维护中，请稍候访问。如果给您带来了不便请见谅!
+    </div>
+    <div class="modal-footer">
+	</div>
+</div>
+</body>
+</html>

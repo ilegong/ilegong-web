@@ -1,0 +1,26 @@
+<style>
+.view-key {
+	width:100px;
+	float:left;
+	text-align:right;
+}
+.view-value {
+	float:left;
+	margin-left:10px;
+}
+</style>
+<div class="ui-widget-content ui-corner-all" style="margin:10px;padding-left:10px">
+<?PHP
+foreach($_extschema as $key => $value)
+{
+	if(in_array($key,$view_fields))
+	{
+	echo '<div style="clear:both;">
+<div class="view-key"><B>'.$_extschema[$key]['translate'].':</B></div><div class="view-value">'.$item[$key].'</div>
+</div>';
+	}
+
+}
+
+?>
+</div>

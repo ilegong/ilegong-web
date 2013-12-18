@@ -1,0 +1,28 @@
+<div  class="container">
+	<div class="row">
+		<div class="span7">
+			<portlet portlet="notitle">{{template users/account_leftmenu}}</portlet>
+		</div>
+<div class="ui-contain span17">
+{{$this->Html->link(__('New Cate'),array('controller'=>'user_cates','action'=>'add'),
+array('class'=>'btn btn-primary','onclick'=>'return publishController.open_dialog(this.href,{title:"'.__('New Cate').'",width:650});'))}}
+
+
+{{$this->Html->link(__('New Note'),array('controller'=>'notes','action'=>'add','?'=>array('cate_id'=>$active_cateid)),
+array('class'=>'btn btn-primary','onclick'=>'return publishController.open_dialog(this.href,{title:"'.__('New Note').'",width:650});'))}}
+	<ul class="nav nav-tabs">
+{{loop $user_cates $cate}}
+	<li {{if $active_cateid==$cate['UserCate']['id']}}class="active"{{/if}}>{{$this->Html->link($cate['UserCate']['name'],array('controller'=>'notes','action'=>'lists',$cate['UserCate']['id']))}}</li>
+{{/loop}}
+	</ul>
+	{{loop $datalist $item}}
+		<div>
+			{{$item['Note']['name']}}
+		</div>
+		<div>
+			{{$item['Note']['content']}}
+		</div>
+	{{/loop}}
+</div>
+</div>
+</div>

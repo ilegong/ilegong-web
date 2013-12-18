@@ -1,0 +1,28 @@
+<header class="navbar navbar-inverse bs-docs-nav" role="banner">
+<div class="container">
+	<div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="sr-only">显示折叠导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="{{$this->Html->url(Configure::read('Site.logo_url'))}}" style="padding:5px 15px;" class="navbar-brand">{{$this->Html->image($this->Html->url(Configure::read('Site.logo')), array('style'=>'height:35px;','title' => $site[title],'alt' => $site[title]))}}</a>
+    </div>
+	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+	<?php 
+		if(empty($top_category_id)) $top_category_id=0;
+	echo $this->Section->getNavMenu('Category',
+		array(
+			'selectedid'=> $top_category_id,
+			'ulAttributes'=>array('class'=>'nav navbar-nav'),
+                        'defaultClass'=>'ui-state-default',
+			'preli'=>'',
+			'sufli'=>'',
+			'maxdepth' => 2,
+		),$site_cate_id
+	);
+	?>
+	</nav>
+</div>
+</header>

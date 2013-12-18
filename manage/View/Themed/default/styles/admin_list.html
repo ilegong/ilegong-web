@@ -1,0 +1,70 @@
+<script>
+
+$(function(){
+	$('#style_setting').find('button').unbind('click').click(function(){
+		var obj = this;
+		if($(this).hasClass('disabled')){
+			return false;
+		}
+		$.ajax({
+			async:true,
+			type:'post',
+			success:function(request, xhr) {				
+				//showDialogMessage(request);
+				$('#style_setting').find('.btn-success').removeClass('btn-success').removeClass('disabled').addClass('btn-primary').html('启用此风格');
+				$(obj).removeClass('btn-primary').addClass('btn-success').addClass('disabled').html('<i class="icon-ok icon-white"></i>已启用');
+			},
+			url:ADMIN_BASEURL+'/admin/settings/ajaxesave',
+			data:{'setting[Site][style]':$(this).data('styleid')},
+			dataType:'json'
+		}) ;
+		return false;
+	})
+})
+
+</script>
+<div id="style_setting" class="languages index">
+    <div class="actions clearfix">
+        <ul>
+            <li><?php echo $this->Html->link(lang('New Style'), array('controller'=>'styles','action'=>'addstyle'),array('class'=>'btn btn-primary')); ?></li>
+        </ul>
+    </div>
+    
+    <pre class="prettyprint">
+    	只能启用一个风格，不支持同时启用多种风格。
+    	启用新风格时，旧风格将失效。
+    </pre>
+
+    <table class="table table-striped table-hover">
+    <?php
+        $tableHeaders =  $this->Html->tableHeaders(array(
+            '风格',
+            '标识符',
+			'是否启用',
+            __('Actions'),
+        ),array('class'=>'ui-state-default'));
+
+        echo '<thead>'.$tableHeaders.'</thead>';
+
+        $rows = array();
+        foreach ($styles AS $style) {
+            $actions = ' ' . $this->Html->link(__('Edit'), array('controller'=>'stylevars','action' => 'edit', $style['Style']['id']));
+			$actions .= ' ' . $this->Html->link(__('Preview'), '/../?styleid='.$style['Style']['id'],array('target'=>'_blank'));
+            $actions .= ' ' . $this->Html->link(__('Delete'), array('controller'=>'misccates','action' => 'delete', $style['Style']['id']), null, __('Are you sure?', true));
+			if($current_style==$style['Style']['id']){
+				$active = '<button data-styleid="'.$style['Style']['id'].'" type="button" class="btn btn-small btn-success disabled"><i class="icon-ok icon-white"></i>已启用</button>';
+			}
+			else{
+				$active = '<button data-styleid="'.$style['Style']['id'].'" type="button" class="btn btn-small btn-primary">启用此风格</button>';
+			}
+            $rows[] = array(
+                $style['Style']['name'],
+                $style['Style']['slug'],
+				$active,
+                $actions,
+            );
+        }
+        echo $this->Html->tableCells($rows);
+    ?>
+    </table>
+</div>

@@ -1,0 +1,20 @@
+<div id="login-form" class="users form clearfix">
+<?php 
+$this->Layout->sessionFlash();
+echo $this->MForm->create('Staff', array(
+	'url' => array('controller' => 'staffs', 'action' => 'login')));
+?>
+        <fieldset>
+        <?php
+            echo $this->MForm->input('name',array('label'=>__('用户名')));
+            echo $this->MForm->input('password',array('label'=>'密&nbsp;&nbsp;&nbsp;码','after'=>''));
+        ?>
+        </fieldset>
+    <?php
+       
+        echo $this->MForm->end(array('label'=>__('Log In'),'class'=>'pull-right btn btn-warning btn-large'));
+    ?>
+</div>
+<div id="login-extra">
+<p>请使用谷歌浏览器或360、猎豹流量器的极速模式访问</p>
+</div>

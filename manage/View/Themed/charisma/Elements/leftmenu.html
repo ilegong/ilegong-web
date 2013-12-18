@@ -1,0 +1,123 @@
+<!-- left menu starts -->
+
+				<div class="nav-collapse sidebar-nav">
+					<div class="accordion" id="leftmenucontent">
+						{{$left_menus}}
+						<!-- 
+						<div class="accordion-group">
+							<div class="accordion-heading box-header">
+							<a class="accordion-toggle hidden-tablet" data-toggle="collapse" data-parent="#leftmenucontent" href="#collapse-content">
+							<h2>内容管理</h2>
+							</a>
+							</div>
+							<div id="collapse-content" class="accordion-body collapse in">
+								<ul class="nav nav-tabs nav-stacked main-menu">
+								{{loop $contentmodels $model}}
+					          	<li><a class="ajax-link" href="{{Router::url(array('controller'=>Inflector::tableize($model['Modelextend']['name']),'action'=>'list','admin'=>true,'ext'=>'html'))}}">
+					          		<i class="icon-home"></i><span class="hidden-tablet">{{$model['Modelextend']['cname']}}管理</span></a></li>
+					        	{{/loop}}
+					        	</ul>
+							</div>
+						</div>
+						<div class="accordion-group">
+							<div class="accordion-heading box-header"><a class="accordion-toggle" data-toggle="collapse" data-parent="#leftmenucontent" href="#collapse-crawls"><h2>采集管理</h2></a></div>
+							<div id="collapse-crawls" class="accordion-body collapse" style="height: 0px;">
+								<ul class="nav nav-tabs nav-stacked main-menu">
+						            <li><a class="ajax-link" href="{{Router::url('/admin/modelcates/list/model:Crawl.html')}}"><span>采集分类管理</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/crawls/list.html')}}"><span>采集规则设置</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/crawl_release_sites/list.html')}}"><span>采集发布站点</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/crawl_releases/list.html')}}"><span>采集发布规则</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/crawl_title_lists/publishlist.html')}}"><span>采集数据发布</span></a></li>
+						        </ul>
+							</div>
+						</div>
+						<div class="accordion-group">
+							<div class="accordion-heading box-header"><a class="accordion-toggle" data-toggle="collapse" data-parent="#leftmenucontent" href="#collapse-user"><h2>用户管理</h2></a></div>
+							<div id="collapse-user" class="accordion-body collapse" style="height: 0px;">
+								 <ul class="nav nav-tabs nav-stacked main-menu">
+						            <li><a class="ajax-link" href="{{Router::url('/admin/users/list')}}"><span>用户管理</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/roles/list')}}"><span>用户组管理</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/acl/acl_permissions.html')}}"><span>权限管理</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/staffs/list.html')}}"><span>后台用户</span></a></li>
+						        </ul>
+							</div>
+						</div>
+						<div class="accordion-group">
+							<div class="accordion-heading box-header"><a class="accordion-toggle" data-toggle="collapse" data-parent="#leftmenucontent" href="#collapse-theme"><h2>模版风格</h2></a></div>
+							<div id="collapse-theme" class="accordion-body collapse" style="height: 0px;">
+								 <ul class="nav nav-tabs nav-stacked main-menu">
+						            <li><a class="ajax-link" href="{{Router::url('/admin/tools/styles')}}"><span>风格管理</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/tools/themes')}}"><span>模版套系</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/regions/list')}}"><span>页面列表</span></a></li>
+						        </ul>
+							</div>
+						</div>
+						<div class="accordion-group">
+							<div class="accordion-heading box-header"><a class="accordion-toggle" data-toggle="collapse" data-parent="#leftmenucontent" href="#collapse-spread"><h2>站长工具</h2></a></div>
+							<div id="collapse-spread" class="accordion-body collapse" style="height: 0px;">
+								<ul class="nav nav-tabs nav-stacked main-menu">
+						            <li><a class="ajax-link" href="{{Router::url('/admin/pages/display/seo_addurl')}}"><span>网站提交</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/tools/styles')}}"><span>Sitemaps</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/tools/styles')}}"><span>网站收录查询</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/tools/styles')}}"><span>关键字排名跟踪</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/keywords/list.html')}}"><span>关键字管理</span></a></li>
+						        </ul>
+							</div>
+						</div>
+						<div class="accordion-group">
+							<div class="accordion-heading box-header"><a class="accordion-toggle" data-toggle="collapse" data-parent="#leftmenucontent" href="#collapse-maintain"><h2>系统维护</h2></a></div>
+							<div id="collapse-maintain" class="accordion-body collapse" style="height: 0px;">
+								<ul class="nav nav-tabs nav-stacked main-menu">
+						        	<li><a href="#" onclick="ajaxAction('{{Router::url('/admin/tools/clearcache.html')}}');"><span>清除缓存</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/tools/dbexport')}}"><span>数据库备份</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/tools/dbimport')}}"><span>数据库恢复</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/tools/filebackup')}}"><span>文件备份</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/tools/filerecover')}}"><span>文件恢复</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/defined_language/defined_languages/list.html')}}"><span>自定义语言包</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/tools/updateLanCache')}}"><span>更新语言包缓存</span></a></li>
+						            
+						        </ul>
+							</div>
+						</div>
+						<div class="accordion-group">
+							<div class="accordion-heading box-header"><a class="accordion-toggle" data-toggle="collapse" data-parent="#leftmenucontent" href="#collapse-extends"><h2>功能扩展</h2></a></div>
+							<div id="collapse-extends" class="accordion-body collapse" style="height: 0px;">
+						         <ul class="nav nav-tabs nav-stacked main-menu">
+						             <li><a class="ajax-link" href="{{Router::url('/admin/extensions/extensions/index.html')}}"><span>插件管理</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/tools/styles')}}"><span>杂项分类</span></a></li> 
+						             <li><a class="ajax-link" href="{{Router::url('/admin/menus/list')}}"><span>菜单管理</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/appraises/list')}}"><span>问卷管理</span></a></li>
+						        </ul>
+							</div>
+						</div>
+						<div class="accordion-group">
+							<div class="accordion-heading box-header"><a class="accordion-toggle" data-toggle="collapse" data-parent="#leftmenucontent" href="#collapse-setting"><h2>系统设置</h2></a></div>
+							<div id="collapse-setting" class="accordion-body collapse" style="height: 0px;">
+								 <ul class="nav nav-tabs nav-stacked main-menu">
+						            <li><a class="ajax-link" href="{{Router::url('/admin/settings/prefix/Site')}}"><span>站点设置</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/settings/prefix/Page')}}"><span>页面变量设置</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/settings/prefix/Advertise')}}"><span>广告设置</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/languages/list')}}"><span>语言管理</span></a></li>
+						        </ul>
+							</div>
+						</div>
+						<div class="accordion-group">
+							<div class="accordion-heading box-header"><a class="accordion-toggle" data-toggle="collapse" data-parent="#leftmenucontent" href="#collapse-tools"><h2>开发工具</h2></a></div>
+							<div id="collapse-tools" class="accordion-body collapse" style="height: 0px;">
+								<ul class="nav nav-tabs nav-stacked main-menu">
+							        <li><a class="ajax-link" href="{{Router::url('/admin/devtools/dbsync.html')}}"><span>数据库升级sql生成</span></a></li>
+							        <li><a target="_blank" href="{{Router::url('/admin/devtools/exportModelSql.html')}}"><span>安装包sql生成</span></a></li>
+							        <li><a class="ajax-link" href="{{Router::url('/admin/devtools/build_acl.html')}}"><span>初始化ACL权限数据</span></a></li>
+							        
+							        <li><a class="ajax-link" href="{{Router::url('/admin/modelextends/list.html')}}"><span>模块扩展</span></a></li>
+						            <li><a class="ajax-link" href="{{Router::url('/admin/i18nfields/index.html')}}"><span>字段扩展</span></a></li>
+							        <li><a class="ajax-link" href="{{Router::url('/admin/settings/add.html')}}"><span>增加设置</span></a></li>
+						        </ul>
+							</div>
+						</div> -->
+					</div>
+					<div>
+					<label id="for-is-ajax" class="hidden-tablet" for="is-ajax"><input id="is-ajax" checked="checked" type="checkbox">{{__('Ajax on menu')}}</label>
+					</div>
+				</div><!--/.well -->
+<!-- left menu ends -->

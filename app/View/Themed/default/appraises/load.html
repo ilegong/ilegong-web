@@ -1,0 +1,36 @@
+<style>
+.mood{ list-style:none;text-align:center;}
+.mood li {
+list-style:none;
+display:inline;list-style:none outside none;float:left;
+padding:3px 5px;*width:50px;
+background: #DBEDF9;margin:0 5px;
+}
+.pingfen {position:relative;border:#E5A6B0 solid 1px;height:102px;width:12px;margin:0 auto;background:#FFEEEC;}
+.pingfen img{vertical-align:bottom;border-top:1px solid #C15F55;
+bottom:0;
+left:0;
+position:absolute;}
+</style>
+<span style="line-height:32px;font-weight:bold;">选择您看过这篇文章时的心情</span>
+<ul class="mood">
+<?php 
+
+foreach($options as $option)
+{
+	echo '<li style="float:left;">
+<div  class="pingfen"><img id="Diggbar-'.$model.'-'.$data_id.'-'.$qid.'-'.$option['Appraiseoption']['id'].'"  width="13" height="0" src="/img/percent-processbar.gif" id="x_img"></div>
+<span id="Digg-'.$model.'-'.$data_id.'-'.$qid.'-'.$option['Appraiseoption']['id'].'" class="ui-dig-num">0</span><br/>
+<input onclick="singleSubmitDigg(\'Article\',\''.$data_id.'\','.$qid.','.$option['Appraiseoption']['id'].',setDiggNum);" type="button" value="'.$option['Appraiseoption']['name'].'"/>
+</li>';
+	
+}
+
+?>
+</ul>
+<script>
+$(function(){
+	loadModelDataMood('{{$model}}','{{$data_id}}');
+
+});
+</script>

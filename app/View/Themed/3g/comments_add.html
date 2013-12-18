@@ -1,0 +1,44 @@
+<div class="comment-form">
+    <div id="comments_result"></div>
+    <?php
+echo $this->Ajax->form(array('type' => 'post',
+    'options' => array(
+        'model'=>'Comment',
+        'update'=>'comments_result',
+		'before' => 'if(!sso.check_userlogin({"form":this})) return false',
+        'url' => array(
+            'controller' => 'comments',
+            'action' => 'add'
+        ),
+    )
+));
+echo $this->Form->input('Comment.data_id', array('label' => false,'type'=>'hidden','value'=>$current_data_id));
+echo $this->Form->input('Comment.type', array('label' => false,'type'=>'hidden','value'=>$current_model));
+           
+	 if ($this->Session->check('Auth.User.id')) {
+                echo $this->Form->input('Comment.name', array(
+                    'label' => __('Name', true),
+                    'value' => $CurrentUser['User']['username'],
+                    'readonly' => 'readonly',
+                ));
+                echo $this->Form->input('Comment.email', array(
+                    'label' => __('Email', true),
+                    'value' => $CurrentUser['User']['email'],
+                    'readonly' => 'readonly',
+                ));
+                echo $this->Form->input('Comment.website', array(
+                    'label' => __('Website', true),
+                    'value' => $CurrentUser['User']['website'],
+                    'readonly' => 'readonly',
+                ));
+                echo $this->Form->input('Comment.body', array('rows' => '3', 'cols' => '50','label' => false));
+      } else {
+                echo $this->Form->input('Comment.name', array('label' => __('Name', true)));
+                echo $this->Form->input('Comment.email', array('label' => __('Email', true)));
+                echo $this->Form->input('Comment.website', array('label' => __('Website', true)));
+                echo $this->Form->input('Comment.body', array('rows' => '3', 'cols' => '50','label' => false));
+      }
+            
+      echo $this->Form->end(__('Post comment', true));
+    ?>
+</div>

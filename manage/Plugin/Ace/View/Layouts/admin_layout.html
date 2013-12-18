@@ -1,0 +1,384 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head>
+<link href="/favicon.ico" type="image/x-icon" rel="icon" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>{{$site[title]}}</title>
+
+{{$this->Html->css('bootstrap.min.css')}}
+{{$this->Combinator->css(array(
+			'reset.css',
+			'redmond/jquery-ui-1.10.0.custom.css',
+			'ui-customer.css',
+			'ui.jqgrid.css',
+			'jquery.jgrowl.css',
+			'swfupload.css',
+			'admin.css',
+			'desktop/contextmenu/jquery.contextMenu.css',
+        ))}}
+
+	{{$this->Html->script(array(
+			'jquery/jquery.min.js',
+			'jquery/jquery-migrate-1.2.1.min.js',
+			'jquery/jquery-ui-1.10.3.custom.min.js',
+			'phpjs.js',
+        ))}}
+
+{{$this->Combinator->script(array(
+			'bootstrap.min.js',			
+			'jquery/jquery.contextMenu.min.js',
+			'jquery/jquery.jgrowl.min.js',
+			'jquery/jquery.cookie.js',
+			
+			'ckeditor/ckeditor.js',
+			'editor.js',
+			
+			'i18n/language-zh-CN.js',
+			'common.js',
+			'admin.js',
+))}}
+
+<?PHP
+echo $this->Html->css(array(           
+			$this->Html->url('/js/dynatree/src/skin-vista/ui.dynatree.css'),
+			$this->Html->url('/js/dynatree/doc/contextmenu/jquery.contextMenu.css'),
+        ));
+        echo $this->Html->script(array(
+			'dynatree/src/jquery.dynatree.js',
+			'dynatree/doc/contextmenu/jquery.contextMenu-custom.js',
+        ));
+?>
+
+ <!-- jquery.contextmenu,  A Beautiful Site (http://abeautifulsite.net/) -->
+
+<style>
+header{
+	height:80px;width:100%;
+}
+.ui-layout-west{overflow:auto;}
+#leftmenucontent {padding:2px 2px;}
+#ace_editor_area {
+    position: absolute;
+    top:  0px;left: 0px;bottom: 0px;right: 0px;
+    background: white;
+	font-family: Consolas,Arial, Helvetica, sans-serif, Tahoma, Verdana, sans-serif;
+}
+
+#controls {
+    padding: 5px;
+}
+
+#controls td {
+    text-align: right;
+}
+
+#controls td + td {
+    text-align: left;
+}
+</style>
+<script type="text/javascript">
+var ADMIN_BASEURL = "{{ADMIN_SUB_DIR}}";
+</script>
+</head>
+
+<body>
+<div class="flash ui-wedget" id="fsUploadProgress" style="position:absolute;width:210px;top:80px;right:30px; z-index: 10000000;">
+			<!-- This is where the file progress gets shown.  SWFUpload doesn\'t update the UI directly.
+						The Handlers (in handlers.js) process the upload events and make the UI updates -->
+</div>
+<div id="header" class="ui-layout-north ui-widget"style="visibility: visible; display: block; position: absolute; margin: 0px; z-index: 2; top: 0px; bottom: auto; left: 0px; right: 0px; width: auto; height: 32px;">
+    <div  class="ui-widget-content ui-state-default">
+    	<div class="ui-page-head ui-helper-clearfix">
+            <div id="logo"  style="float:left;"></div>
+            
+            <div id="quick">            	
+            	<div class="ui-widget ui-menu ui-float-left" style="position: relative;display: block;height: 34px;">
+		         <!-- {{$this->Section->getNavMenu('Menu',array(),30,false)}} -->
+		        </div>
+		        
+				<div style="text-align:right;margin-right:10px; height: 20px;">
+				{{$this->Html->link(__("Setting"), "#",array('onclick'=>'ace_setting();'))}}
+				|	 {{$this->Html->link(__('Admin pannel'), '/')}}
+				
+                {{if defined('APPEND_LOCALE_BASE')}}
+                 {{$this->Html->link(__('Visit website'), '/../../',array('target'=>'_blank'))}}
+                 {{else}}
+                 {{$this->Html->link(__('Visit website'), '/../',array('target'=>'_blank'))}}
+                 {{/if}}
+					<?php
+					if( $this->Session->read('Auth.Staff.name') != null) { 
+			echo '['.__("You are logged in as ", true) . $this->Session->read('Auth.Staff.name').']'; 
+			echo " | " . $this->Html->link(__("Logout", true), array('plugin' => 0, 'controller' => 'staffs', 'action' => 'logout'));
+					}
+				?>
+	            </div> 
+	            <div class="clear"></div>
+	            
+            </div>
+         </div>
+    </div>       
+</div>
+<div id="ui-layout-left" class="ui-layout-west ui-widget-content" style="overflow-y: auto; width: 198px; visibility: visible; display: block; position: absolute; margin: 0px; z-index: 2; left: 0px; right: auto; top: 49px; bottom: 5px; height: 422px;">
+
+	<div class="ui-widget-header">{{__('Opration Menu')}}</div>
+	<div id="leftmenucontent" class="ui-helper-clearfix">
+
+	</div>
+</div>
+
+<div id="mainContent" style="overflow: hidden; visibility: visible; display: block; position: absolute; margin: 0px; z-index: 2; margin-left: 206px; right: 0px; top: 49px; bottom: 5px; height: 422px; width: 1064px;">
+	<UL>
+		<LI style="display:inline;"><A href="#tabs-center-1"><span>{{__('HELP')}}</span></A><span class="ui-tabs-close ui-icon ui-icon-close" title="Remove Tab"></span></LI>
+	</UL>
+	<DIV id="tabs-center-1" class="ui-layout-content ui-corner-bottom" style="position:relative;">
+             {{$content_for_layout}}
+              <div id="tpl-editor" class="tabs-bottom">
+              	<ul>
+              		<li><a href="#tab-ace-editor">Source code</a></li>
+					<li><a href="#ck_editor_area">Preview</a></li>
+              	</ul>
+              	<div id="tab-ace-editor" class="tab-editor-content" style="position: relative;">
+              		<!--ace_editor_area 为postition:absolute;其上层设为 position: relative; -->
+              		<div id="ace_editor_area">loading file content...</div>
+              	</div>
+              	<div id="ck_editor_area" contenteditable="true" class="tab-editor-content">
+              		wait for content.
+              	</div>
+              </div>
+    </DIV>
+</div>
+ 
+<div class="ui-layout-south ui-widget-content" style="visibility: visible; display: block; position: absolute; margin: 0px; z-index: 2; top: auto; bottom: 0px; left: 0px; right: 0px; width: auto; height: 0px;">
+	<!--
+	
+	<div class="footer">
+	<span style="float:left;">广告展位</span><span style="float:right;">Powered by <?php echo $this->Html->link('SAECMS', 'http://www.saecms.net',array('target'=>'_blank')); ?></span>
+	</div>
+ 	-->
+</div>
+
+<div class="dialog" id="change-to" title="Change To">
+	<p>{{$this->Section->getSystemsMenu('Menu')}}
+	</p>
+</div>
+
+<script type="text/javascript">
+
+var outerLayout;
+function ace_setting(){
+	$("#ace-setting").dialog({autoOpen: false,width: 240,minHeight: 80});
+	
+	$("#ace-setting").dialog("option",{width: 240,resizable: false,modal: false});
+	$('#ace-setting').dialog('open');
+}
+function changeto()
+{
+	$("#change-to").dialog({autoOpen: false,width: 240,minHeight: 80});
+	var left = $(document).width()-350;
+	$("#change-to").dialog("option",{position: [left,30],width: 240,resizable: false,modal: false});
+	$('#change-to').dialog('open');
+}
+var fileCache = {};
+var maintab;
+ $(document).ready( function() {
+	
+	
+	maintab = $("#mainContent").tabs();
+	maintab.delegate('.ui-tabs-nav span.ui-icon-close','click', function() {
+		/**
+		* 防止关闭时，将#tpl-editor也一起删除了。 打开的文件共用一个#tpl-editor区域编辑文件.
+		*/
+		var index = $('.ui-tabs-nav li',maintab).index($(this).parent());
+		var size = $('.ui-tabs-nav li',maintab).size();
+		
+		var st = $(this).parent().find('a:first').attr('href');
+		var name = st.replace(/#maintab_/g,'');
+		if(fileCache[name]){
+			fileCache[name] = undefined; //删除即将关闭的文件对应的缓存
+		}
+		// ace/editor.js中绑定了tabsselect事件 maintab.bind( "tabsselect",function(){});
+		// 切换tab时，#tpl-editor会加入到激活的tab中
+		var active = maintab.tabs( "option", "active" );
+		if(active!=index){ // 关闭其它选项，当前编辑的文件保持不变。
+			// 当前的关闭的选项卡是非激活状态，保留当前激活状态的选项不变。
+			//if(active>index){
+				//maintab.tabs('select', active-1);
+				//maintab.tabs( "option", "active", active-1 );
+			//}
+			//else{
+				//maintab.tabs('select', active);
+				//maintab.tabs( "option", "active", active);
+			//}
+		}
+		else{
+			$('#tpl-editor').hide().appendTo('body'); // 防止editor对象随tab被一起删除了，将#tpl-editor先加入body尾部。
+			//if(size>index+1){
+				//maintab.tabs('select', index+1);
+			//}
+			//else{
+				//maintab.tabs('select', index-1);
+			//}
+		}
+		var panelId = $( this ).closest( "li" ).remove().attr( "aria-controls" );
+	    $( "#" + panelId ).remove();
+	    tabs.tabs( "refresh" );
+		
+		
+	});
+
+		//.find(".ui-tabs-nav").sortable({ axis: 'x', zIndex: 2 });
+	
+	CKEDITOR.on( 'instanceCreated', function( event ) {
+		var editor = event.editor,
+			element = editor.element;
+
+		editor.on( 'configLoaded', function() {
+			// Remove unnecessary plugins to make the editor simpler.
+			editor.config.removePlugins = 'autogrow,safesave,' +
+				'forms,iframe,ajax,' +
+				'smiley,specialchar';
+
+				
+		});
+	});
+
+	CKEDITOR.disableAutoInline = true;
+	CKEDITOR.inline(document.getElementById( 'ck_editor_area' ));
+	
+	var editor_tab = $("#tpl-editor").tabs();
+	editor_tab.on( "tabsactivate", function( event, ui ) {
+		if(ui.newTab.find('a:first').attr('href')=='#ck_editor_area'){
+			//从ace editor切换到ckeditor
+			// escape,encodeURI,encodeURIComponent
+			var html = window.env.editor.getValue();
+			html = html.replace(/<\?/g, '&lt;?');
+			html = html.replace(/\?>/g, '?&gt;');
+			ui.newPanel.html(html);
+		}
+		else{
+			//从ckeditor切换到ace editor
+		}
+	});
+	$( ".tabs-bottom .ui-tabs-nav, .tabs-bottom .ui-tabs-nav > *" )
+	 .removeClass( "ui-corner-all ui-corner-top" )
+	 .addClass( "ui-corner-bottom" );
+	$( ".tabs-bottom .ui-tabs-nav" ).appendTo( ".tabs-bottom" );
+});
+	
+ $(window).resize(function(){
+		var m_height = $(window).height()-$('#header').height()-25;
+		var m_width = $(window).width()-$('#ui-layout-left').width()-25;
+		$('#ui-layout-left').height(m_height);
+		$("#mainContent").height(m_height-10);
+		$("#mainContent").width(m_width);
+				
+		$(".ui-tabs-panel[id^='maintab_']").each(function(){
+			if($.browser.msie){
+				$(this).height(m_height-60);
+			}
+			else{
+				$(this).height(m_height-40);
+			}
+		});
+		$('.tab-editor-content').height(m_height-120);
+		//mainContent_width = $("#mainContent").width();         
+	}).trigger('resize');
+
+</script>
+<style type="text/css" media="screen">
+    #tpl-editor {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+</style>
+{{$this->Html->script(array(
+			'ace/build/ace.js',
+			'ace/build/keybinding-vim.js',
+			'ace/build/keybinding-emacs.js',
+			'ace/editor.js',
+        ))}}
+<?PHP
+echo $this->Combinator->script(array(
+            'swfupload/swfupload.js',
+            'swfupload/swfupload.queue.js',
+			'swfupload/swfupload.cookies.js',
+            'swfupload/fileprogress.js',
+            'swfupload/handlers.js',
+        ));
+		
+?>
+
+<div class="dialog" id="ace-setting" title="ace-setting">
+	 <table> 
+	 <tr>
+      <td>
+        <label for="fontsize">字体大小</label>
+      </td><td>
+        <select id="fontsize" size="1">
+          <option value="10px">10px</option>
+          <option value="11px">11px</option>
+          <option value="12px" selected="selected">12px</option>
+          <option value="14px">14px</option>
+          <option value="16px">16px</option>
+          <option value="20px">20px</option>
+          <option value="24px">24px</option>
+          <option value="32px">32px</option>
+          <option value="48px">48px</option>
+        </select>
+      </td>
+    </tr>
+	 <tr>
+      <td>
+        <label for="folding">代码折叠</label>
+      </td><td>
+        <select id="folding" size="1">
+          <option value="manual">manual</option>
+          <option value="markbegin" selected="selected">mark begin</option>
+          <option value="markbeginend">mark begin and end</option>
+        </select>
+      </td>
+    </tr>
+	  <tr>
+      <td >
+        <label for="keybinding">Key Binding</label>
+      </td><td>
+        <select id="keybinding" size="1">
+          <option value="ace">Ace</option>
+          <option value="vim">Vim</option>
+          <option value="emacs">Emacs</option>
+          <option value="custom">Custom</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td >
+        <label for="soft_wrap">自动换行</label>
+      </td><td>
+        <select id="soft_wrap" size="1">
+          <option value="off">关</option>
+          <option value="120">120字符一行 Chars</option>
+          <option value="80">80字符一行</option>
+          <option value="free">开</option>
+        </select>
+      </td>
+    </tr>
+    </table>
+</div>
+
+ <!-- Definition of context menu -->
+  <ul id="myMenu" class="contextMenu">
+    <li class="edit"><a href="#edit">Edit</a></li>
+    <li class="upload"><a href="#upload">Upload</a></li>
+    <li class="cut separator"><a href="#cut">Cut</a></li>
+    <li class="copy"><a href="#copy">Copy</a></li>
+    <li class="paste"><a href="#paste">Paste</a></li>
+    <li class="delete"><a href="#delete">Delete</a></li>
+    <li class="quit separator"><a href="#quit">Quit</a></li>
+  </ul>
+
+
+    </body>
+</html>

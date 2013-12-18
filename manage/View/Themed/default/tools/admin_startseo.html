@@ -1,0 +1,15 @@
+<div>
+	<pre class="well">SEO关键字优化，根据设置的关键字，批量匹配并生成新闻等模块数据的关键字</pre>
+<?php 
+echo $this->MForm->create('Tool',array('type'=>'post','action' => 'autoseo','target'=>'_blank'));
+?>
+<fieldset>
+    	
+       <div id="article-main" class="tab-pane">
+       	 <?php
+    echo $this->MForm->input('modelname',array('label'=>'选择模块','options' => $content_model_options));
+		 ?>
+       </div>    	
+ </fieldset>
+<?php echo $this->MForm->end(array('label'=>__('Submit',true),'id'=>'btnsubmit')); ?>
+</div> 

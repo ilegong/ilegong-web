@@ -1,0 +1,55 @@
+<?php
+
+class DATABASE_CONFIG {
+	var $default = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => SAE_MYSQL_HOST_S,
+		'login' => SAE_MYSQL_USER,
+		'password' => SAE_MYSQL_PASS,		
+		'database' => SAE_MYSQL_DB,
+		'prefix' => 'miao_',
+		'encoding'=>'utf8', 
+	);		
+	var $master = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => SAE_MYSQL_HOST_M,
+		'login' => SAE_MYSQL_USER,
+		'password' => SAE_MYSQL_PASS,
+		'database' => SAE_MYSQL_DB,
+		'prefix' => 'miao_',
+		'encoding'=>'utf8', 
+	);
+	
+	function __construct() { 
+		if(defined('SAE_MYSQL_DB')){ // on sae.sina.com.cn
+			// 变量成员定义时不能写 链接语句，放在类初始化中
+			$this->master['host'] = SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT;
+			$this->default['host'] = SAE_MYSQL_HOST_S.':'.SAE_MYSQL_PORT;
+		}
+		else{
+			$this->default = array(
+				'datasource' => 'Database/Mysql',
+				'persistent' => false,
+				'host' => '{default_host}',
+				'login' => '{default_login}',
+				'password' => '{default_password}',
+				'database' => '{default_database}',
+				'prefix' => '{default_prefix}',
+				'encoding'=>'utf8', 
+			);		
+			$this->master = array(
+				'datasource' => 'Database/Mysql',
+				'persistent' => false,
+				'host' => '{default_host}',
+				'login' => '{default_login}',
+				'password' => '{default_password}',
+				'database' => '{default_database}',
+				'prefix' => '{default_prefix}',
+				'encoding'=>'utf8', 
+			);
+		}
+	}
+}
+

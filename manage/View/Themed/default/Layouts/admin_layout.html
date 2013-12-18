@@ -1,0 +1,158 @@
+{{template Elements/header}}
+{{template Elements/topbar}}
+<div class="row">
+	<div class="col-xs-2" style="position: absolute; z-index: 2; left: 0px;overflow:hidden; right: auto; top: 49px; bottom: 5px;" >
+		<div class="panel panel-info">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">{{__('Opration Menu')}}</h3>
+		  </div>
+		  <div class="panel-body" id="ui-layout-left"  style="overflow-y: auto; visibility: visible; display: block; margin:0px;padding:0px;height: 382px;">
+		  	<div id="leftmenucontent">
+		    	{{$left_menus}}
+		    </div>
+		  </div>
+		</div>
+	</div>
+	
+	<div id="mainContent" class=" col-xs-10" style="overflow: hidden; visibility: visible; display: block; position: absolute; margin: 0px; z-index: 2; right: 0px; top: 49px; bottom: 5px; height: 422px;">
+		<ul class="nav nav-tabs alert-info" id="main-tab-ul">
+			<li class="active"><a href="#tabs-center-1" data-toggle="tab"><span>{{__('Index')}}</span> <span class="glyphicon glyphicon-remove"></span></a></li>
+		</ul>
+		<div class="tab-content" id="main-tab-content" style="overflow-y: hidden;overflow-x: hidden;padding:5px;">
+			<DIV id="tabs-center-1" class="ui-corner-bottom tab-pane active" >
+		             {{$content_for_layout}}
+		    </DIV>
+	    </div>
+	</div>
+</div>
+<div class="ui-layout-south" style="visibility: visible; display: block; position: absolute; margin: 0px; z-index: 2; top: auto; bottom: 0px; left: 0px; right: 0px; width: auto; height: 0px;"></div>
+
+<div class="dialog" id="change-to" title="Change To">
+	<p>{{$this->Section->getSystemsMenu('Menu')}}
+	</p>
+</div>
+
+<script type="text/javascript">
+mainContent_width = $("#mainContent").width();
+var outerLayout;
+$(document).ready( function() {
+	$('#main-tab-ul').delegate( "span.glyphicon-remove", "click",function() {
+		var tab_content = $( this ).closest( "a" ).attr('href');
+		if($('#main-tab-ul li').size()<2){
+			alert('不能小于一个哦');
+			return false;
+		}
+		var obj = $( this ).closest( "li" ).next();
+		if(obj.size()){
+			obj.find('a:first').tab('show');
+		}
+		else{
+			$( this ).closest( "li" ).prev().find('a:first').tab('show');
+		}
+		// 切换到最近的一个tab，然后删除本tab
+		$( this ).closest( "li" ).remove();
+	    $(tab_content).remove();
+	});
+	
+	var lastmenu ='';
+	$(document).on('click', '#mainContent a', function(ev) {
+        var url = null;
+		if($(this).data('url')){
+			url = $(this).data('url');
+		}
+		if(this.href.match(/#/) || typeof($(this).attr('onclick'))!='undefined' || (typeof($(this).attr('target'))!='undefined' && $(this).attr('target')!='_self')){ 
+			return true;
+		}
+		if(!this.href.match(/#/) && typeof($(this).attr('onclick'))=='undefined' && (typeof($(this).attr('target'))=='undefined' || $(this).attr('target')=='_self')){ 
+			url = this.href;
+		}
+		
+		if(url){
+			var params;
+			var options = {};
+			if($(this).data('width')){
+				options.width = $(this).data('width');
+			}
+			if($(this).data('height')){
+				options.height = $(this).data('height');
+			}
+			eval( "params= "+$(this).data('callbackargs')+";");
+			open_dialog(options,url,$(this).data('callback'),params,ev);
+			//open_window(url,this);
+			return false;
+		}
+      });
+		$('#leftmenucontent').find('a').addClass('ajax-link');
+		$('#leftmenucontent').find('a').click(function(){
+			if($(this).attr('rel')=='ajaxAction'){
+				ajaxAction($(this).attr('href'));
+				return false;
+			}
+			if(this.href.match(/#/) || typeof($(this).attr('onclick'))!='undefined' || (typeof($(this).attr('target'))!='undefined' && $(this).attr('target')!='_self')){ 
+				return true;
+			}
+			var url = $(this).attr('href');
+			var tab_title = $(this).html().replace(/<.+?>/,'');
+			//alert();
+			$("#leftmenucontent li").find('.ui-state-highlight').removeClass('ui-state-highlight');
+			$(this).addClass('ui-state-highlight');
+
+			var st = "#maintab_"+url.replace(/\.html/g,'').replace(/http:/g,'').replace(/\/|\.|:/g,'_');
+			
+			if($(st).html() != null ) {
+				$('#main-tab-ul').find("li").each(function(i){
+					var obja = $(this).find('a:first');
+					var href = obja.attr('href');
+					if(href.substring(0,1)!='#'){ //ie7,等href包含了当前的网站，去除#前面的项
+						var strs = href.split("#");
+						href = '#'+strs[1];
+					}
+					if(href==st){
+						obja.tab('show');
+					}
+				})
+			} else {
+				//maintab.tabs('add',st,tab_title);
+				var  tabTemplate = "<li><a href='#{href}' data-toggle='tab'><span class=\"pull-right\"><span class=\"glyphicon glyphicon-remove\"></span></span> #{label}</a></li>";
+			    var  li = $( tabTemplate.replace( /#\{href\}/g,st).replace( /#\{label\}/g, tab_title ) );
+			    $( "#main-tab-ul" ).append( li );
+			    $('#main-tab-content').append( "<div class='tab-pane'  id='" + st.substring(1) + "'>正在加载内容...</div>" );
+			    $('#main-tab-ul').find("a:last").tab('show');
+				//$(st,"#mainContent").append('<iframe width="100%" border="0" height="100%" src="'+url+'"></iframe>');
+				$.ajax({
+					url: url,
+					type: "GET",
+					dataType: "html",
+					complete : function (req, err) {									
+						$(st,"#main-tab-content").html(req.responseText);
+						page_loaded();
+						$(st,"#main-tab-content").css({'overflow-x':'hidden','overflow-y':'auto'});
+						$(st,"#main-tab-content").height($('#main-tab-content').height());
+					}
+				});
+			}
+			return false;
+		});
+		
+	$(window).resize(function(){
+		var m_height = $(window).height()-$('#header').height()- 25 ;
+		var m_width = $(window).width()-$('#ui-layout-left').width()-18 ;
+		$('#ui-layout-left').height(m_height-60);
+		$("#mainContent").height(m_height);
+		//$("#mainContent").width(m_width);
+		$('#main-tab-content').height($("#mainContent").height()-$("#main-tab-ul").height());
+		
+		$(".ui-tabs-panel[id^='maintab_']").each(function(){			
+			$(this).height(m_height-40);
+			$(this).find(".ui-jqgrid-btable[id^='jqgrid_list_']").each(function(){
+				$(this).jqGrid('setGridHeight',m_height-160);
+				$(this).jqGrid('setGridWidth',m_width-8);
+			});
+		});
+		mainContent_width = $("#mainContent").width();         
+	}).trigger('resize');
+
+	
+});
+</script>
+{{template Elements/footer}}
