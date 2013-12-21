@@ -57,9 +57,7 @@ class CategoriesController extends AppController {
         if(!empty($Category['Category']['view_template'])){
         	$this->__viewFileName[] = $Category['Category']['view_template'];
         }
-        if($conditions['id'] == Configure::read('Site.index_page')){
-        	$this->__viewFileName[] = 'view_index';
-        }
+        
         $this->__viewFileName = array_reverse($this->__viewFileName);
         // 设置顶级栏目，与栏目名称。
         $top_cate = current($navigations);
