@@ -64,7 +64,7 @@ class TplParseHelper  extends AppHelper {
 
         $this->objfile = $this->objdir . $this->objfile . '.tpl.php';
         //tplfile 为模板文件，objfile为缓存文件
-        if (Configure::read('debug')>1 || $force || @filemtime($this->objfile) < @filemtime($this->tplfile)) {
+        if (Configure::read('debug')>0 || $force || @filemtime($this->objfile) < @filemtime($this->tplfile)) {
             $this->complie();
         }
         return $this->objfile;
