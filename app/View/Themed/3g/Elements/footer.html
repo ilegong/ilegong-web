@@ -24,7 +24,7 @@
 		var cart = {};	
 		readFromCookie();
 
-		$("a.shopping").on('click', function(){
+		$("a.shopping").click(function(){
 			var $item = $(this);
 			var itemId = $item.attr('item-id');
 
@@ -34,18 +34,45 @@
 			}else { //not added
 				
 				$item.find('div.select-item').show();
-				cart[itemId] = itemId;
+				cart[itemId] = 1;
 			}
-			updateCart(cart);
+			updateCart();
 		});
 
-		function updateCart(cart){
+		$('#card-btn').click(function(){
+			createCart();
+			$('#cart-modal').modal(); 
+		});
+
+		$('#cart-modal').on('click', 'span.minus', function(){
+			var itemId = $(this).attr('data-id');
+			cart[itemId] = (parseInt(cart[itemId]) || 0) - 1;
+			if(cart[itemId] <= 0){
+				$('#item-' + itemId).find('div.select-item').hide();
+				delete cart[itemId];
+			}
+			updateCart();
+			createCart();
+		}).on('click', 'span.add', function(){
+			var itemId = $(this).attr('data-id');
+			cart[itemId] = (parseInt(cart[itemId]) || 0) + 1;
+			updateCart();
+			createCart();
+		}).on('click', 'a.delete-btn', function(){
+			var itemId = $(this).attr('data-id');
+			$('#item-' + itemId).find('div.select-item').hide();
+			delete cart[itemId];
+			updateCart();
+			createCart();
+		});
+
+		function updateCart(){
 			var itemNum = 0, cost = 0;
 			var itemStr = '';
 			for(var itemId in cart){
 				itemStr += itemId + ',';
-				itemNum += 1;
-				cost += (parseInt($('#item-' + itemId).attr('item-price')) || 0 );
+				itemNum += cart[itemId];
+				cost += (parseInt($('#item-' + itemId).attr('item-price')) || 0 ) * cart[itemId];
 			}
 			var $cartBtn = $('#card-btn');
 			if(itemNum > 0){
@@ -65,12 +92,45 @@
 				var itemId = items[i];
 				if(itemId){
 					$('#item-' + itemId).find('div.select-item').show();
-					cart[itemId] = itemId;
+					cart[itemId] = 1;
 				}
 			}
 
-			updateCart(cart);
+			updateCart();
 
+		}
+
+		function createCart(){
+			var itemNum = 0, cost = 0;
+			var itemStr = '';
+			var food_html = '';
+			for(var itemId in cart){
+				itemNum += cart[itemId];
+				var $item = $('#item-' + itemId);
+				var price = (parseInt(.attr('item-price')) || 0 );
+				var name = $item.attr('item-name');
+				cost += (price * cart[itemId]);
+				food_html +='<div class="row food-row"><div class="col-xs-5">'
+ 					+'<span class="item-name" title="'+name+'">'+name+' <br></span>'
+ 					+'<span class="item-price-info"><span><span class="item-total-price">￥'+ (price * cart[itemId])+'</span>(<span class="item-single-price">'+price+'</span>×<span class="item-amount">'+cart[itemId]+'</span>)'
+ 					+'</span></span></div>'
+ 					+'<div class="col-xs-5 select-box">'
+ 					+'<span data-id="'+itemId+'" class="minus '+(parseInt(cart[itemId])==1?'disabled':'')+'">—</span>'
+ 					+'<input class="amount" type="text" name="amount" value="'+cart[itemId]+'" autocomplete="off" disabled>'
+ 					+'<span data-id="'+itemId+'" class="add">+</span>'
+ 					+'</div>'
+ 					+'<div class="col-xs-2">'
+ 					+'<a class="delete-btn" data-id="'+itemId+'"  href="javascript:void(0);">'
+ 					+'<span class="glyphicon glyphicon-remove-circle"></span></a>'
+ 					+'</div>'
+ 					+'</div><div class="divider"></div>';
+
+			}
+
+			$('#cart-modal').find('.modal-body').html(food_html);
+			if(cost > 0){
+				$('#cart-modal').find('.modal-body').append('<div class="row total-info food-total-info"><div class="col-xs-12">共<span id="food-total-price">'+cost+'</span>元</div></div>');
+			}
 		}
 
 	});
