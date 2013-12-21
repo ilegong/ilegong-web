@@ -24,6 +24,7 @@
 	);
 	?>
 	
+	<!--
 	<ul class="nav navbar-nav pull-right">                        
                     <li class="dropdown">
                         <a id="item-count" href="{{$this->Html->url(array('controller'=>'carts','action'=>'listcart'))}}"><i class="icon-shopping-cart"></i>&nbsp;购物车&nbsp;<span class="label label-danger">2</span></a>                                
@@ -42,7 +43,7 @@
 								</li>
 							{{/if}}
 							<li><?php echo $this->Html->link(__('我的地址'), array('controller' => 'users','action'=>'address','plugin' => null ,)); ?></li>
-                            <!-- 
+                            
       {{if defined('APPEND_LOCALE_BASE')}}
       	{{$this->Html->link('简体','/../')}}, {{$this->Html->link('繁體','/../zh-tw/')}}
       {{else}}
@@ -51,12 +52,12 @@
 		<div>
 		{{$this->Html->link('购物车','/carts/listcart.html')}}
 		</div>
-	-->
+	
                             <li>{{$this->Html->link('退出登录', '/users/logout', array('title' => 'logout your account','escape'=>false))}}</li> 
                         </ul>                                                            
                     </li>
                                                         
-    </ul>
+    </ul> -->
     </nav>
 </div>
 </header>

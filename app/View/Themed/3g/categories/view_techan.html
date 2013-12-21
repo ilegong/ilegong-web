@@ -1,42 +1,9 @@
 <div class="container clearfix">
-	app/View/Themed/3g/cagegories/view_techan
 	<div class="row">
 	
-	<div class="ui-widget col-md-8">
-	<portlet portlet="notitle">
-		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-			  <!-- Indicators -->
-			  <ol class="carousel-indicators">
-			  {{loop $datas $key $item}}
-			    <li data-target="#carousel-example-generic" data-slide-to="$key" {{if $key==0}}class="active"{{/if}}></li>
-			  {{/loop}}
-			  </ol>
-			
-			  <!-- Wrapper for slides,thumb,mid_thumb,fspath -->
-			  <div class="carousel-inner">
-			  	{{loop $datas $key $item}}
-			    <div class="item{{if $key==0}} active{{/if}}">
-			      <a href="#"><img src="{{Router::url($item['Uploadfile'][0]['fspath'])}}" alt="{{$item['Uploadfile'][0]['name']}}"></a>
-			      <div class="carousel-caption">
-			        {{$item['Article']['name']}}
-			      </div>
-			    </div>
-			    {{/loop}}
-			  </div>
-			
-			  <!-- Controls -->
-			  <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
-			    <span class="glyphicon glyphicon-chevron-left"></span>
-			  </a>
-			  <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
-			    <span class="glyphicon glyphicon-chevron-right"></span>
-			  </a>
-			</div>
-					
-	</portlet>
-		
+	<div class="ui-widget col-md-8">	
 	
-			<portlet title="{{$Category['Category']['name']}}"><div class="Content-body">{{$Category['Category']['content']}} </div>
+	<portlet title="{{$Category['Category']['name']}}"><div class="Content-body">{{$Category['Category']['content']}} </div>
 <?PHP if($total>0){ ?>
 <ul class="clearfix portlet-content-list">
     <?PHP foreach($Category['datalist'] as $item) {
@@ -49,9 +16,5 @@
 		
 		
 	</div>
-	<div class="ui-contain col-md-4">
-			<portlet title="{{$top_category_name}}" list_tpl="regions/_list">{{$this->Section->getLeftMenu('Category',array('parent_id'=> $top_category_id,'selectedid'=>$current_cateid))}}</portlet>
-			<portlet  title="新闻热门排行" list_tpl="regions/_titlelist" limit="8" custom_class="portlet-title-list" model="Article" recursive="-1" order="views_count desc" portlet="default" info="recursive=-1&amp;fields%5B0%5D=Article.name&amp;fields%5B1%5D=Article.slug&amp;fields%5B2%5D=Article.created&amp;order=views_count+desc"></portlet>
 	</div>	
-</div>	
 </div>
