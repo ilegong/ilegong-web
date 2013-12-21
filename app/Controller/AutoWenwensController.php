@@ -30,6 +30,7 @@ class AutoWenwensController extends AppController {
 		
 		$this->qq = $this->Session->read('qq');
 		$this->qqnick  = $this->Session->read('qqnick');
+		$this->login_sig = $this->Session->read('login_sig');
 		
 		if(empty($this->qq)) $this->qq = '270308933';
 		
@@ -40,6 +41,7 @@ class AutoWenwensController extends AppController {
 		}
 		
 		$this->layout = false;
+		$this->theme = 'default';
 	}
 	
 	public function beforeRender(){
@@ -52,14 +54,14 @@ class AutoWenwensController extends AppController {
 		$url = 'http://wenwen.soso.com/';
 		$request = $this->request_arr;
 		$response = RequestFacade::get($url, array(),$request);
-		if(!empty($response->cookies['uin']) && !empty($response->cookies['skey'])){
-			if(empty($this->qqnick)){
-				if(!empty($response->cookies['ww_nick']['value'])){
-					$this->qqnick = $response->cookies['ww_nick']['value'];
-				}
-				else{
-					$this->qqnick = $response->cookies['uin']['value'];
-				}
+		if(!empty($this->login_sig)){
+			if(!empty($response->cookies['uin']) && !empty($response->cookies['skey'])){				
+					if(!empty($response->cookies['ww_nick']['value'])){
+						$this->qqnick = $response->cookies['ww_nick']['value'];
+					}
+					else{
+						$this->qqnick = $response->cookies['uin']['value'];
+					}
 			}
 			return true;
 		}
@@ -194,7 +196,7 @@ class AutoWenwensController extends AppController {
 			$url = 'http://wenwen.soso.com/z/api/answer/submit?format=json';
 			unset($params['teamid'],$params['teamcooperate'],$params['origtablename'],$params['param'],$params['editorstats']);
 			//anonymous,content,orig,quanziId,questionId,userId,userName
-			$circle_ids = array(4709); //4303,801,,1202 ,1300
+			$circle_ids = array(4503,4419,1202,5677,1200); //4303,801,,1202 ,1300
 			$index = array_rand($circle_ids);
 			$quanziId = $circle_ids[$index];
 			$params['quanziId'] = $quanziId;
@@ -277,10 +279,12 @@ class AutoWenwensController extends AppController {
 	 */
 	public function getans(){
 		$word = Charset::utf8_gbk(strip_tags($_REQUEST['word']));
-		$url = 'http://zhidao.baidu.com/search?word='.urlencode($word).'&lm=0&oa=0&site=0&sites=0&date=0&ie=gbk';
+		$url = 'http://zhidao.baidu.com/search?word='.urlencode(strip_tags($word)).'&lm=0&oa=0&fr=search&date=0&ie=gbk';
 		$response = RequestFacade::get($url, array(), $this->request_arr);
 		$content = Charset::gbk_utf8($response->body);
-		preg_match_all('/<dt class="dt" alog-alias="result-title-\d+">(.+?)<\/dt><dd class="dd answer">(.+?)<\/dd>.+?(<span class="mr-10 em">(\d+)<\/span>)?/is',$content,$matches);
+		//print_r($content);
+		preg_match_all('/<dt class="dt mb-4" alog-alias="result-title-\d+">(.+?)<\/dt>\s+<dd class="dd answer">(.+?)<\/dd>/is',$content,$matches);
+		//print_r($matches);
 		$answers = $diggs = array();
 		foreach($matches[1] as $key => &$value){
 			preg_match('/<a href="(.+?(\d+)\.html)"/is',$value,$inner_matches);

@@ -1,34 +1,18 @@
 <?php
 
 class CommentsController extends AppController {
-/**
- * Controller name
- *
- * @var string
- * @access public
- */
+
     var $name = 'Comments';
-/**
- * Components
- *
- * @var array
- * @access public
- */
+
     var $components = array(
         'Email',
     );
-/**
- * Models used by the Controller
- *
- * @var array
- * @access public
- */
     var $uses = array('Comment');
     function add() {
     	$this->autoRender = false;
     	$this->layout = 'ajax';
         if (!isset($this->data['Comment']['data_id'])) {
-            $this->Session->setFlash(__('Invalid Node', true));
+            $this->Session->setFlash(__('Invalid Params', true));
             $this->redirect('/');
         } 
         if($this->Session->check('Auth.User.id') && !empty($this->data)) {
@@ -41,12 +25,12 @@ class CommentsController extends AppController {
             //comment_type: 评论，补充完善，扩展阅读等等
 
             if ($this->Comment->save($this->data)) {
-                if ($data['status']) {
+                if ($this->data['status']) {
                 	$successinfo = array('success'=> __('Your comment has been added successfully.', true));
-                    $this->Session->setFlash(__('Your comment has been added successfully.', true));
-                } else {
+                    //$this->Session->setFlash(__('Your comment has been added successfully.', true));
+                }else {
                 	$successinfo = array('success'=> __('Your comment will appear after moderation.', true));
-                    $this->Session->setFlash(__('Your comment will appear after moderation.', true));
+                    //$this->Session->setFlash(__('Your comment will appear after moderation.', true));
                 }
                 $successinfo['Comment'] = $this->data['Comment'];
             }
@@ -55,7 +39,11 @@ class CommentsController extends AppController {
             	return;
             }
             echo json_encode($successinfo);
-        }
+       }
+       else{
+	       	echo json_encode(array('error'=>'please_login'));
+            return;
+       }
        return;
     }
     

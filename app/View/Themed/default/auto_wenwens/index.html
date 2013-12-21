@@ -118,7 +118,7 @@ $(function(){
 				for(var i in data){
 					if(data[i]==null) break;
 					html += '<li>'
-					+'<a class="btn answer-question" data-qid="'+qid+'" data-bqid="'+data[i].bqid+'" style="float:right;" title="用这个答案来回答问题">回答</a>'
+					+'<a class="btn btn-primary answer-question" data-qid="'+qid+'" data-bqid="'+data[i].bqid+'" style="float:right;" title="用这个答案来回答问题">回答</a>'
 					+'<h4><a href="'+data[i].url+'" target="_blank">'+data[i].title+(data[i].digg>0?'(<i class="icon-thumbs-up">'+data[i].digg+')':'')+'</i></a></h4><div class="content">'+data[i].content+'</div></li>';
 				}
 				html +='</ul>';
@@ -160,7 +160,7 @@ $(function(){
 						+ '<textarea name="answer_content" style="width:95%;height:90px;">'+content+"\n"+'</textarea><br/>'
 						+ '<input name="teamcooperate" checked="checked" type="checkbox" id="teamCooperate_'+qid+'"><label for="teamCooperate_'+qid+'" style="display: inline;">以团队名义回答</label>'
 						+ verifyhtml
-						+ '<input type="submit" class="btn" onclick="return submit_question_form(this.form)" value="提交" />'
+						+ '<input type="submit" class="btn btn-primary" onclick="return submit_question_form(this.form)" value="提交" />'
 						+ '</form>'
 				);//希望对你有帮助。
 			}

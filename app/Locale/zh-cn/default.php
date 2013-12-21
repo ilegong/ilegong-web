@@ -41,7 +41,7 @@ return array(
 	'have_no_points'=>'还没有人发表观点,快发布自己观点抢占第一位吧！',
 	'admin_pannel'=>'管理后台',
 	'clear_cache'=>'清除缓存',
-	''=>'',
+	'submit_comment'=>'提交评论',
 	''=>'',
 	''=>'',
 	''=>'',

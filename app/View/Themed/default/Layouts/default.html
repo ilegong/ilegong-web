@@ -23,6 +23,7 @@
             'bootstrap.min.js',
             'front.js',
             'common.js',
+            //'jquery/jquery-migrate-1.2.1.min.js',
              //'taobao/taobaoke.js','jquery/jquery.masonry.min.js','jquery/jquery.infinitescroll.min.js',
             //'jquery/jquery.jgrowl.min.js'
         ));
@@ -70,27 +71,6 @@ var ADMIN_BASEURL = BASEURL+"/manage";
 {{/if}}
 {{template menus/bootstrap}}
 <div id="header" >
- <!-- 
-<div class="container clearfix">
- <div class="row">
-  <div class="col-md-4">
-  <a style="FLOAT: left" href="{{$this->Html->url(Configure::read('Site.logo_url'))}}">{{$this->Html->image($this->Html->url(Configure::read('Site.logo')), array('style'=>'height:45px;margin-top: 30px;','title' => $site[title],'alt' => $site[title]))}}</A>
-  </div>
-  <div class="col-md-8" style="text-align:right;">
-  
-      {{if defined('APPEND_LOCALE_BASE')}}
-      	{{$this->Html->link('简体','/../')}}, {{$this->Html->link('繁體','/../zh-tw/')}}
-      {{else}}
-  		{{$this->Html->link('简体','/')}}, {{$this->Html->link('繁體','/zh-tw/')}}
-	  {{/if}}
-		<div>
-		{{$this->Html->link('购物车','/carts/listcart.html')}}
-		</div>
-	
-   {{template users/current_user}}
-  </div>
- </div>
-</div>-->
 	<div class="container clearfix" >
 		{{template Elements/navigation_header}}
 	</div>

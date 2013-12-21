@@ -124,7 +124,7 @@ var rs_callbacks = {
 		}
 	},
 	addtoCart:function(request){
-		// alert('success 123');
+		showSuccessMessage(request.success);
 	},
 	deleteFromCart:function(request){
 		// alert('success 123');
@@ -296,7 +296,7 @@ var publishController = {
 			$dialog.dialogid = url.replace(/\/|\.|:|,|\?|=|&/g,'_')+'-ajax—action';	
 			
 			if($('#'+$dialog.dialogid).size()<1){
-				$('<div  class="modal hide fade" id="'+$dialog.dialogid+'"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3 id="myModalLabel">'+options.title+'</h3></div><div class="modal-body"></div></div>').appendTo('body');
+				$('<div  class="modal fade" id="'+$dialog.dialogid+'"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3 id="myModalLabel">'+options.title+'</h3></div><div class="modal-body"></div></div></div></div>').appendTo('body');
 				
 				var obj = $('#'+$dialog.dialogid).find('.modal-body').load(url,{},function(){
 					$('.nav-tabs a','#'+$dialog.dialogid).click(function (e) {
@@ -383,7 +383,6 @@ function addtoCart(id,num)
 	var postdata = {'data[Cart][num]':num,'data[Cart][product_id]':id};
 	if(!sso.check_userlogin({"callback":addtoCart,"callback_args":arguments}))
 		return false;
-	
 	ajaxAction(url,postdata,null,'addtoCart');
 	return false;
 }
@@ -702,27 +701,23 @@ $(function(){
         $(this).hide();
     });
 	
-	loadDiggData();
-	loadStatsData();	
-	page_hash.init();
+	//loadDiggData();
+	//loadStatsData();	
+	//page_hash.init();
 });
 
 var stack_custom = {"dir1": "right", "dir2": "down"};
 // 显示表单提交成功的信息
 function showSuccessMessage(text)
 {
-	$.jGrowl(text, { 
-		theme: 'success'
-	});
+	alert(text);
 	return true;
 }
 // 显示错误信息
 
 function showErrorMessage(text)
 {
-	$.jGrowl(text, { 
-		theme: 'error' // danger
-	});
+	alert(text);
 	return true;
 }
 /* ================form validate====================== */

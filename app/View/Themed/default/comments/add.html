@@ -100,23 +100,17 @@
 	<div id="comment_items">
 	</div>
 	<div class="comment_item comment_more">
-		<div>
-		<a href="#">查看所有<span style="color:red">1545</span>条评论&nbsp;&gt;&gt;</a>
-		</div>
+		
 	</div>
 </div>
 <div class="CommentBox">
-<h2><span class="title">我要评论</span></h2>
+<h2><span class="title">网友评论</span></h2>
 <!-- 'class'=>'form-horizontal' -->
 {{$this->Form->create('Comment',array('action'=>'add','onsubmit'=>'return submitaddcomment(this);','class'=>'form-horizontal'))}}
-	{{if empty($CurrentUser['id'])}}
-	{{$this->Form->input('username',array('label'=>__('用户名'),'after'=>'&nbsp;&nbsp;<a href="http://login.sina.com.cn/cgi/register/reg_sso_comment.php?entry=comment">快速注册新用户</a>'))}}
-	{{$this->Form->input('password',array('type'=>"password",'label'=>__('密&#12288;码'),'after'=>'&nbsp;&nbsp;<a href="https://login.sina.com.cn/getpass.html">忘记密码？</a>'))}}
-	{{/if}}
 	{{$this->Form->input('data_id',array('type'=>'hidden','value'=>$current_data_id))}}
 	{{$this->Form->input('type',array('type'=>'hidden','value'=>$current_model))}}
 	{{$this->Form->input('body',array('label'=>false,'type'=>'textarea','rows'=>4))}}
-{{$this->Form->end(array('label'=>__('Submit Comment'),'class'=>'btn btn-primary'))}}
+{{$this->Form->end(array('label'=> lang('submit_comment'),'class'=>'btn btn-primary'))}}
 </div>
 </div>
 <script type="text/javascript">
@@ -155,6 +149,9 @@ function addCommintItem(item){
 }
 
 function submitaddcomment(form){
+	if(!sso.check_userlogin({"callback":submitaddcomment,"callback_args":arguments}))
+		return false;
+		
 	$.ajax({
 		async:true,
 		type:'post',

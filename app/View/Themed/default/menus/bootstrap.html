@@ -23,6 +23,40 @@
 		),$site_cate_id
 	);
 	?>
-	</nav>
+	
+	<ul class="nav navbar-nav pull-right">                        
+                    <li class="dropdown">
+                        <a id="item-count" href="{{$this->Html->url(array('controller'=>'carts','action'=>'listcart'))}}"><i class="icon-shopping-cart"></i>&nbsp;购物车&nbsp;<span class="label label-danger">2</span></a>                                
+                    </li>
+                    <li class="dropdown">
+                    	{{$this->Hook->call('oauthLoggedInfo')}}
+                        {{$this->Html->link($CurrentUser['nickname'].'<b class="caret"></b>', '/users/account', array('title' => 'view your account',"class"=>"dropdown-toggle","data-toggle"=>"dropdown",'escape'=>false)); }}
+                        <ul class="dropdown-menu">
+							<li><?php echo $this->Html->link(__('Edit Profile'), array('controller' => 'users','action'=>'edit','plugin' => null ,)); ?></li>
+							<li><?php echo $this->Html->link(__('Edit Password'), array('controller' => 'users','action'=>'editpassword','plugin' => null ,)); ?></li>
+                            {{if (empty($CurrentUser['status']))}}
+								<li class="activate link">
+									{{eval echo $this->Html->link(__('activate',true), array(
+										'controller' => 'users', 'action' => 'activate'
+										), array('title' => 'activate your account')); }}
+								</li>
+							{{/if}}
+							<li><?php echo $this->Html->link(__('我的地址'), array('controller' => 'users','action'=>'address','plugin' => null ,)); ?></li>
+                            <!-- 
+      {{if defined('APPEND_LOCALE_BASE')}}
+      	{{$this->Html->link('简体','/../')}}, {{$this->Html->link('繁體','/../zh-tw/')}}
+      {{else}}
+  		{{$this->Html->link('简体','/')}}, {{$this->Html->link('繁體','/zh-tw/')}}
+	  {{/if}}
+		<div>
+		{{$this->Html->link('购物车','/carts/listcart.html')}}
+		</div>
+	-->
+                            <li>{{$this->Html->link('退出登录', '/users/logout', array('title' => 'logout your account','escape'=>false))}}</li> 
+                        </ul>                                                            
+                    </li>
+                                                        
+    </ul>
+    </nav>
 </div>
 </header>
