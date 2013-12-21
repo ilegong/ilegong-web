@@ -26,10 +26,11 @@
 			var itemId = $item.attr('item-id');
 
 			if( itemId in cart){ // already added, remove it
-				$item.find('div.select-shadow').hide();
-				delete cart['itemId'];
+				$item.find('div.select-item').hide();
+				delete cart[itemId];
 			}else { //not added
-				$item.find('div.select-shadow').show();
+				var height = $item.find('img').height();
+				$item.find('div.select-item').css({'height': height + 'px' ,'width': width + 'px' , 'margin-top' : (-1 * height ) + 'px', 'padding-top' :  (0.5 * height ) + 'px' }).show();
 				cart[itemId] = itemId;
 			}
 			updateCart(cart);
