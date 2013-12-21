@@ -494,7 +494,7 @@ class Folder {
  * @link http://book.cakephp.org/2.0/en/core-utility-libraries/file-folder.html#Folder::create
  */
 	public function create($pathname, $mode = false) {
-		if (is_dir($pathname) || empty($pathname)) {
+		if (defined('IN_SAE') ||is_dir($pathname) || empty($pathname)) {
 			return true;
 		}
 
@@ -509,7 +509,7 @@ class Folder {
 		$pathname = rtrim($pathname, DS);
 		$nextPathname = substr($pathname, 0, strrpos($pathname, DS));
 
-		if ($this->create($nextPathname, $mode)) {
+		if (!defined('IN_SAE') && $this->create($nextPathname, $mode)) {
 			if (!file_exists($pathname)) {
 				$old = umask(0);
 				if (mkdir($pathname, $mode)) {
