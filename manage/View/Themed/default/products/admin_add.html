@@ -45,6 +45,7 @@ echo $this->MForm->create($current_model,array(
 				        echo $this->MForm->input('material');
 						echo $this->MForm->keyword();
 				?>
+				<div class="clearfix"></div>
 				<?php   echo $this->MForm->swfupload('photo','Product'); ?>
 				<?PHP
 				        echo $this->MForm->ckeditor('content',array('div'=>'wygiswys','label' => false));

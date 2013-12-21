@@ -718,10 +718,11 @@ class MFormHelper extends FormHelper {
 		if(!empty($this->data[$param['modelClass']][$fieldname]) || !empty($param['value'])){
 			// 上传文件的地址保存到本模块对应的字段中，而非保存在Uploadfile里
 			if($param['value']){
-				$file_url = str_replace('//','/',UPLOAD_FILE_URL.$param['value']);
+				$file_url = UPLOAD_FILE_URL.$param['value'];
+				//$file_url = str_replace('//','/',UPLOAD_FILE_URL.$param['value']);
 			}
 			else{
-				$file_url = str_replace('//','/',UPLOAD_FILE_URL.($this->data[$param['modelClass']][$fieldname]));
+				$file_url = UPLOAD_FILE_URL.($this->data[$param['modelClass']][$fieldname]);
 			}
 			if(is_image($file_url)){
 				$listfile = '<a href="'.$file_url.'" title="'.__( 'Preview').'" target="_blank"><img src="'.$file_url.'" style="max-height:120px"/></a>';
