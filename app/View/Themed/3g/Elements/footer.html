@@ -17,4 +17,41 @@
 	$(document).ready(function() {
 		$("img.lazy").lazyload({placeholder : "{{Router::url('/img/grey.gif')}}",effect: "fadeIn",threshold : 200});
 	});
+
+
+	$(function(){
+		var cart = {};	
+		$("a.shopping").live('click', function(){
+			var $item = $(this);
+			var itemId = $item.attr('id');
+
+			if( itemId in cart){ // already added, remove it
+				$('#item-' + itemId).find('div.select-shadow').hide();
+				delete cart['itemId'];
+			}else { //not added
+				cart['itemId'] = itemId;
+			}
+			updateCart();
+		});
+
+		function updateCart(cart){
+			var itemNum = 0, cost = 0;
+			var itemStr = '';
+			for(var itemId in cart){
+				itemStr += itemId + ',';
+				itemNum += 1;
+				cost += (parseInt($('#item-' + itemId).attr('price')) || 0 );
+			}
+			var $cartBtn = $('#card-btn');
+			if(itemNum > 1){
+				$cartBtn.removeClass('btn-warning').addClass('btn-success').find('span').html('已选择' + itemNum + '份，总共'+ cost +'元，点击下单');
+			}else {
+				$cartBtn.addClass('btn-warning').removeClass('btn-success').find('span').html('请先下单');
+			}
+
+			$.cookie('food', itemStr , { 'path' : '/'});
+		}
+	
+
+	});
 </script>

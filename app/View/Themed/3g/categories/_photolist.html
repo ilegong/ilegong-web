@@ -1,8 +1,8 @@
 <div class="col-md-3 col-sm-4 col-xs-6">
-     <a href="#" class="thumbnail" id="item-{{$item['id']}}" item-id="{{$item['id']}}" data-name="{{$item['title']}}" data-price="{{$item['price']}}">
+     <a href="#" class="thumbnail shopping" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
          {{eval echo $this->Html->image($item['coverimg'], 
 			array(
-			'alt' => $item['title'],'title' => $item['title'],
+			'alt' => $item['title'],'title' => $item['name'],
 			'style'=>'width: 100%; display: block;',
 			'onerror'=>'this.src="/img/products_nophoto.jpg";',
 			)); }}
