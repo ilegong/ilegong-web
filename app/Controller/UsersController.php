@@ -340,13 +340,10 @@ class UsersController extends AppController {
                 
                 $content = json_encode($successinfo);
                 if($_GET['jsoncallback']){
-                	echo $_GET['jsoncallback'] . '(' . $content . ');';
+                	$content = $_GET['jsoncallback'] . '(' . $content . ');';
                 }
-                else{
-                	echo $content;
-                }
-                
-                //$this->response->send(); exit;// exit退出时，cookie信息未发出，cookie创建失败。
+                $this->response->body($content);
+                $this->response->send(); exit;// exit退出时，cookie信息未发出，cookie创建失败。
             } else {
                 $this->redirect($redirect);
             }
