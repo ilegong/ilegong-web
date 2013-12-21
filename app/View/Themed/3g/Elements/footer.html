@@ -64,7 +64,7 @@
 			for(var i = 0, len = items.length; i < len ; ++ i){
 				var itemId = items[i];
 				if(itemId){
-					$item.find('div.select-item').show();
+					$('#item-' + itemId).find('div.select-item').show();
 					cart[itemId] = itemId;
 				}
 			}
