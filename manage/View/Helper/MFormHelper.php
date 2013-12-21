@@ -736,14 +736,14 @@ class MFormHelper extends FormHelper {
 				if($uploadfile['fieldname']==$fieldname){
 					$listfile.='<li class="upload-fileitem clearfix" id="upload-file-'.$uploadfile['id'].'">';
 					if(substr($uploadfile['fspath'],0,7) != 'http://'){
-						$file_url = str_replace('//','/',UPLOAD_FILE_URL.($uploadfile['fspath']));
+						$file_url = UPLOAD_FILE_URL.($uploadfile['fspath']);
 					}
 					else{
 						$file_url = $uploadfile['fspath'];
 					}
 					if('image' == substr($uploadfile['type'],0,5)){
 						if(substr($uploadfile['thumb'],0,7) != 'http://'){
-							$thumb_url = str_replace('//','/',UPLOAD_FILE_URL.($uploadfile['thumb']));
+							$thumb_url = UPLOAD_FILE_URL.($uploadfile['thumb']);
 						}
 						else{
 							$thumb_url = $uploadfile['thumb'];
