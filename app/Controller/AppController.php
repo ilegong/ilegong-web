@@ -95,6 +95,7 @@ class AppController extends Controller {
     	if($_GET['theme']){
     		$this->theme=$_GET['theme'];
     	}
+    	$this->theme= '3g';
     
     	if ($this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
     		// ajax 操作
