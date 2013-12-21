@@ -22,7 +22,7 @@ if (defined('SAE_MYSQL_DB')) {
 	
 	// sae上禁止放在二级目录
     define('IN_SAE',true);
-    define('SAE_STORAGE_UPLOAD_DOMAIN_NAME','upload');
+    define('SAE_STORAGE_UPLOAD_DOMAIN_NAME','images');
     define('SAE_STORAGE_UPLOAD_DOMAIN_URL','http://'.$_SERVER['HTTP_APPNAME'].'-'.SAE_STORAGE_UPLOAD_DOMAIN_NAME.'.stor.sinaapp.com/');
     define('UPLOAD_FILE_URL', 'http://'.$_SERVER['HTTP_APPNAME'].'-'.SAE_STORAGE_UPLOAD_DOMAIN_NAME.'.stor.sinaapp.com/');
     // SAE上传地址，S3,Storage等. 带 saestor://，可直接用于fwrite,copy,等函数读写文件
