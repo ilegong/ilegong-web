@@ -1,5 +1,5 @@
 <div class="col-md-3 col-sm-4 col-xs-6">
-     <a href="#" class="thumbnail" id="food-92" data-type="food" data-id="92" data-name="{{$item['title']}}" data-price="{{$item['price']}}">
+     <a href="#" class="thumbnail" id="item-{{$item['id']}}" item-id="{{$item['id']}}" data-name="{{$item['title']}}" data-price="{{$item['price']}}">
          {{eval echo $this->Html->image($item['coverimg'], 
 			array(
 			'alt' => $item['title'],'title' => $item['title'],
@@ -19,7 +19,7 @@
 			array('title'=>$item['title'])); 
 		}}
      	<div class="food-info pull-right">
-             <label class="food-price">¥{{$item['price']}}</label>                                     
+             <strong>¥{{$item['price']}}</strong>                                     
      	</div>
      </div>
      
