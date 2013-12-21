@@ -20,7 +20,10 @@
 
 
 	$(document).ready(function(){
+		
 		var cart = {};	
+		readFromCookie();
+
 		$("a.shopping").on('click', function(){
 			var $item = $(this);
 			var itemId = $item.attr('item-id');
@@ -52,6 +55,24 @@
 			}
 
 			$.cookie('food', itemStr , { 'path' : '/'});
+		}
+
+		function readFromCookie(){
+			var food = $.cookie('food');
+			var items = food.split(',');
+
+			for(var i = 0, len = items.length; i < len ; ++ i){
+				var itemId = items[i];
+				if(itemId){
+					var $item = $('#item-' + itemId);
+					var height = $item.find('img').height(), width = $item.find('img').width();
+					$item.find('div.select-item').css({'height': height + 'px' ,'width': width + 'px' , 'margin-top' : (-1 * height ) + 'px', 'padding-top' :  (0.5 * height ) + 'px' }).show();
+					cart[itemId] = itemId;
+				}
+			}
+
+			updateCart(cart);
+
 		}
 
 	});
