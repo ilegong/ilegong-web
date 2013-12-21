@@ -32,8 +32,8 @@
 				$item.find('div.select-item').hide();
 				delete cart[itemId];
 			}else { //not added
-				var height = $item.find('img').height(), width = $item.find('img').width();
-				$item.find('div.select-item').css({'height': height + 'px' ,'width': width + 'px' , 'margin-top' : (-1 * height ) + 'px', 'padding-top' :  (0.5 * height ) + 'px' }).show();
+				
+				$item.find('div.select-item').show();
 				cart[itemId] = itemId;
 			}
 			updateCart(cart);
@@ -64,9 +64,7 @@
 			for(var i = 0, len = items.length; i < len ; ++ i){
 				var itemId = items[i];
 				if(itemId){
-					var $item = $('#item-' + itemId);
-					var height = $item.find('img').height(), width = $item.find('img').width();
-					$item.find('div.select-item').css({'height': height + 'px' ,'width': width + 'px' , 'margin-top' : (-1 * height ) + 'px', 'padding-top' :  (0.5 * height ) + 'px' }).show();
+					$item.find('div.select-item').show();
 					cart[itemId] = itemId;
 				}
 			}
