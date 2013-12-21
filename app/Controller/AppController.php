@@ -270,8 +270,6 @@ class AppController extends Controller {
         			),
         		));
     	
-    	print_r(${$modelClass}['Uploadfile']);
-        
         if(Configure::read($modelClass.'.view_nums')){// 记录访问次数
         	$this->{$modelClass}->updateAll(
         			array('views_count' => 'views_count+1'), 
