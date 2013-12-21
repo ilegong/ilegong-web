@@ -23,15 +23,16 @@
 		var cart = {};	
 		$("a.shopping").on('click', function(){
 			var $item = $(this);
-			var itemId = $item.attr('id');
+			var itemId = $item.attr('item-id');
 
 			if( itemId in cart){ // already added, remove it
-				$('#item-' + itemId).find('div.select-shadow').hide();
+				$item.find('div.select-shadow').hide();
 				delete cart['itemId'];
 			}else { //not added
-				cart['itemId'] = itemId;
+				$item.find('div.select-shadow').show();
+				cart[itemId] = itemId;
 			}
-			updateCart();
+			updateCart(cart);
 		});
 
 		function updateCart(cart){
@@ -40,10 +41,10 @@
 			for(var itemId in cart){
 				itemStr += itemId + ',';
 				itemNum += 1;
-				cost += (parseInt($('#item-' + itemId).attr('price')) || 0 );
+				cost += (parseInt($('#item-' + itemId).attr('item-price')) || 0 );
 			}
 			var $cartBtn = $('#card-btn');
-			if(itemNum > 1){
+			if(itemNum > 0){
 				$cartBtn.removeClass('btn-warning').addClass('btn-success').find('span').html('已选择' + itemNum + '份，总共'+ cost +'元，点击下单');
 			}else {
 				$cartBtn.addClass('btn-warning').removeClass('btn-success').find('span').html('请先下单');
@@ -51,7 +52,6 @@
 
 			$.cookie('food', itemStr , { 'path' : '/'});
 		}
-	
 
 	});
 </script>
