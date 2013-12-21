@@ -1,7 +1,7 @@
 <div class="o_write">
-<h1>收货人信息&nbsp;<a onclick="close_consignee(this)" href="javascript:void(0)" id="lbtnConsigneeWrite">[关闭]</a>
+<h2>收货人信息&nbsp;<a onclick="close_consignee(this)" href="javascript:void(0)" id="lbtnConsigneeWrite">[关闭]</a>
    <span style="display:none"><a style="color:#FF6600;display:{addAddr_Show};" onclick="addNewAddress(this);" href="javascript:void(0)">[创建一个新地址]</a></span>
-</h1>
+</h2>
 <form action="{{$this->Html->url('/orders/info_consignee')}}" onsubmit="return ajaxeSubmitForm(this);" method="post">
 <div class="middle">
 	<div id="addressListPanel"><div class="cydz"><b>常用地址</b>
@@ -62,7 +62,7 @@
 </div>
 <div style="padding:10px 0 10px 45px;"><input type="checkbox" {{if $this->Session->read('OrderConsignee.save_address')}}checked="checked"{{/if}} name="data[OrderConsignee][save_address]" value="1" id="save_address"><label for="save_address">[添加到常用地址]</label></div>
 <div class="footer">
-    <input type="submit" value="保存收货人信息" class="btn">
+    <input type="submit" value="保存收货人信息" class="btn btn-primary">
 </div>
 </form>
 </div>

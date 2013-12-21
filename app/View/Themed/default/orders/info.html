@@ -2,7 +2,7 @@
 td {padding:5px 10px;}
 
 </style>
-{{$this->Javascript->link(array(
+{{$this->Html->script(array(
             'front_orders.js',
         ));
 }}
@@ -11,10 +11,10 @@ td {padding:5px 10px;}
 		<div id="part_consignee">{{template Elements/order_consignee}}</div>
 		
 		
-		<div id="part_payTypeAndShipType">{{template orders/info_shiptype}}</div>
+		<div id="part_payTypeAndShipType"><!-- template orders/info_shiptype--></div>
 		
-		<div id="part_invoice">{{template Elements/order_invoice}}</div>
-				
+		<div id="part_invoice"><!-- template Elements/order_invoice--></div>
+		  	
 		<div id="part_remark">
 			<div class="o_show">
 			 <h2>订单备注&nbsp;<a onclick="showForm_remark(this)" href="javascript:void(0)">[修改]</a></h2>
@@ -30,12 +30,12 @@ td {padding:5px 10px;}
 			   <div class="footer"></div>
 			</div>
 			<div class="o_write" style="display:none;">
-			    <h1>订单备注 <a onclick="close_remark()" href="javascript:void(0)">[关闭]</a> <span class="f12 fw100">声明：备注中有关收货人信息、支付方式、配送方式、发票信息等购买要求一律以上面的选择为准，备注无效。</span></h1>
+			    <h2>订单备注 <a onclick="close_remark()" href="javascript:void(0)">[关闭]</a> <span class="f12 fw100">声明：备注中有关收货人信息、支付方式、配送方式、发票信息等购买要求一律以上面的选择为准，备注无效。</span></h2>
 			    <div class="middle">
 			        <input type="text" maxlength="200" value="" class="txt" style="width:300px;" id="order_remark">   &nbsp;&nbsp;&nbsp;
 			    </div>
 			    <div class="footer">
-			        <input type="button" onclick="saveOrder_remark($('#order_remark').val())" value="保存订单备注" class="btn">
+			        <input type="button" onclick="saveOrder_remark($('#order_remark').val())" value="保存订单备注" class="btn btn-default">
 			    </div>
 			</div>
 		</div>
@@ -57,7 +57,7 @@ td {padding:5px 10px;}
 			</tbody>
 			</table>
 		</div></div>		
-		{{template orders/info_wave}}		
-		<div><a href="{{$this->Html->url('/orders/balance')}}">结算</a></div>	
+		<!-- template orders/info_wave  -->		
+		<div class="pull-right"><a class="btn btn-primary" href="{{$this->Html->url('/orders/balance')}}">结算</a></div>	
 	</div>
 </div>

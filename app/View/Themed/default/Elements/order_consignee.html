@@ -4,9 +4,9 @@
 		收货人信息&nbsp;<a onclick="showForm_consignee(this)" href="javascript:void(0)" id="lbtnConsigneeWrite">[修改]</a>
 		</h2>
 		<div class="middle">
-			<table>
+			<table class="table table-bordered">
 			<tbody><tr>
-			<td align="right" style="width:80px;">收货人姓名：</td><td>{{$this->Session->read('OrderConsignee.name')}}</td>
+			<td align="right" style="width:120px;">收货人姓名：</td><td>{{$this->Session->read('OrderConsignee.name')}}</td>
 			</tr>
 			<tr>
 			<td align="right">省　　份：</td><td>{{$this->Session->read('OrderConsignee.area')}}</td>
