@@ -44,7 +44,7 @@
 			$('#cart-modal').modal(); 
 		});
 
-		$('#cart-modal').on('click', 'span.minus', function(){
+		$('#cart-modal').on('click', 'span.reduce', function(){
 			var itemId = $(this).attr('data-id');
 			cart[itemId] = (parseInt(cart[itemId]) || 0) - 1;
 			if(cart[itemId] <= 0){
@@ -85,7 +85,7 @@
 		}
 
 		function readFromCookie(){
-			var food = $.cookie('food');
+			var food = $.cookie('food') || '';
 			var items = food.split(',');
 
 			for(var i = 0, len = items.length; i < len ; ++ i){
@@ -107,17 +107,17 @@
 			for(var itemId in cart){
 				itemNum += cart[itemId];
 				var $item = $('#item-' + itemId);
-				var price = (parseInt(.attr('item-price')) || 0 );
+				var price = (parseInt($item.attr('item-price')) || 0 );
 				var name = $item.attr('item-name');
 				cost += (price * cart[itemId]);
 				food_html +='<div class="row food-row"><div class="col-xs-5">'
  					+'<span class="item-name" title="'+name+'">'+name+' <br></span>'
  					+'<span class="item-price-info"><span><span class="item-total-price">￥'+ (price * cart[itemId])+'</span>(<span class="item-single-price">'+price+'</span>×<span class="item-amount">'+cart[itemId]+'</span>)'
  					+'</span></span></div>'
- 					+'<div class="col-xs-5 select-box">'
- 					+'<span data-id="'+itemId+'" class="minus '+(parseInt(cart[itemId])==1?'disabled':'')+'">—</span>'
- 					+'<input class="amount" type="text" name="amount" value="'+cart[itemId]+'" autocomplete="off" disabled>'
- 					+'<span data-id="'+itemId+'" class="add">+</span>'
+ 					+'<div class="col-xs-5 input-group">'
+ 					+'<span data-id="'+itemId+'" class="reduce input-group-addon '+(parseInt(cart[itemId])==1?'disabled':'')+'">—</span>'
+ 					+'<input class="form-control" type="text" name="amount" value="'+cart[itemId]+'" autocomplete="off" disabled>'
+ 					+'<span data-id="'+itemId+'" class="add input-group-addon">+</span>'
  					+'</div>'
  					+'<div class="col-xs-2">'
  					+'<a class="delete-btn" data-id="'+itemId+'"  href="javascript:void(0);">'
