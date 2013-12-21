@@ -1,20 +1,19 @@
 <div class="container clearfix">
+	
+	
+	<portlet title="{{$Category['Category']['name']}}">
+	<div class="Content-body">{{$Category['Category']['content']}} </div>
+	
+	<?PHP if($total>0){ ?>
+
 	<div class="row">
-	
-	<div class="ui-widget col-md-8">	
-	
-	<portlet title="{{$Category['Category']['name']}}"><div class="Content-body">{{$Category['Category']['content']}} </div>
-<?PHP if($total>0){ ?>
-<ul class="clearfix portlet-content-list">
-    <?PHP foreach($Category['datalist'] as $item) {
-    ?>	
-		{{include $Category['Category']['template']}}			
-	<?php } ?>
-</ul>
-	{{$page_navi}}
-<?php } ?></portlet>
-		
-		
+	    <?PHP foreach($Category['datalist'] as $item) {
+	    ?>	
+			{{include $Category['Category']['template']}}			
+		<?php } ?>
 	</div>
-	</div>	
+		{{$page_navi}}
+	<?php } ?>
+	</portlet>
+		
 </div>

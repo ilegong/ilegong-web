@@ -1,0 +1,26 @@
+<div class="col-md-3 col-sm-4 col-xs-6">
+     <a href="#" class="thumbnail" id="food-92" data-type="food" data-id="92" data-name="{{$item['title']}}" data-price="{{$item['price']}}">
+         {{eval echo $this->Html->image($item['coverimg'], 
+			array(
+			'alt' => $item['title'],'title' => $item['title'],
+			'style'=>'width: 100%; display: block;',
+			'onerror'=>'this.src="/img/products_nophoto.jpg";',
+			)); }}
+         <div class="select-shadow" style="display: none;">
+			<div>
+				<img src="/Public/Index/img/check.png" alt="selected">
+				<span>已选</span>
+			</div>
+	 	 </div> 
+     </a>
+     <div class="text-left">
+     	{{eval echo $this->Html->link(usubstr($item['name'],0,10), 
+	'/'.$region_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
+	array('title'=>$item['title'])); }}
+     	<div class="food-info pull-right">
+             <label class="food-price">¥{{$item['price']}}</label>                                     
+     	</div>
+     </div>
+     
+
+ </div>
