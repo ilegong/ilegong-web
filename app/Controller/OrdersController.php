@@ -47,6 +47,7 @@ class OrdersController extends AppController{
 					$Carts[] = $Cart;
 				}
 			}
+			print_r($Carts);exit;
 		}
 		else{
 			$Carts = $this->Cart->find('all',array(
