@@ -1,16 +1,13 @@
 //显示地址信息表单
 var label_consignee = null;
-function showForm_consignee(obj)
-{
+function showForm_consignee(obj){
    selAddressId=0;
    label_consignee=$("#part_consignee").html();
    showWaitInfo('正在读取收货人信息，请等待！',obj);
    ajaxActionHtml(BASEURL+"/orders/edit_consignee","#part_consignee","");
 }
-function close_consignee(obj)
-{
-  if(label_consignee==null)
-  {
+function close_consignee(obj){
+  if(label_consignee==null){
      showWaitInfo('正在关闭收货人信息，请等待！',obj);
      ajaxActionHtml(BASEURL+"/orders/info_consignee","#part_consignee","");
   }
@@ -22,25 +19,61 @@ rs_callbacks.deleteConsignee = function(request){
 	$('#consignee_'+request.id).remove();
 }
 //取消常用地址
-function DelAddress(obj,id)
-{
+function DelAddress(obj,id){
 	if(confirm('确认要删除吗？')){
 		ajaxAction(BASEURL+"/orders/delete_consignee/"+id,null,null,'deleteConsignee');
 	}
 }
-rs_callbacks.changeConsignee = function(request){
+rs_callbacks.defaultConsignee = function(request){
+	$('.consignee_row').removeClass('danger');
+	$('#consignee_'+request.id).addClass('danger');
+}
+//设为常用地址
+function SetDefaultAddress(obj,id){
+	ajaxAction(BASEURL+"/orders/default_consignee/"+id,null,null,'defaultConsignee');
+	return true;
+}
+rs_callbacks.editConsignee = function(request){
+	$('#consignee_addr').show();
 	for(var i in request){
 		$('#consignee_'+i).val(request[i])
-	}
+	}	
 }
-//选择常用地址
-function changeConsignee(obj,addIndex)
-{
-	ajaxAction(BASEURL+"/orders/load_consignee/"+addIndex,null,null,'changeConsignee');
-	$(obj).parents('li:first').siblings().removeClass('xz');
-	$(obj).parents('li:first').addClass('xz');
-    //setAjax_getRes("action=load_consignee"+addIndex,"consignee_addr");
+
+
+//选择地址进行编辑
+function editConsignee(obj,id){
+	//$('#addr_'+id).attr("checked","checked"); 
+	//var lastid = $("input[name='data[OrderConsignee][id]']:checked").val();
+	//$('#addr_'+lastid).attr("checked",false);
+	//$("input[name='data[OrderConsignee][id]']").each(function(){
+	//	$(this).attr("checked",false).removeAttr("checked");
+	//});
+	alert($('#addr_'+id).val());
+	$('#addr_'+id).get(0).checked = true;
+	//$('#addr_'+id).attr("checked",true);
+	$('#edit_type').val('edit');
+	ajaxAction(BASEURL+"/orders/load_consignee/"+id,null,null,'editConsignee');	
+	return false;
 }
+//选择地址
+function chose_Consignee(id) {
+	$('#edit_type').val('select');
+	$("#consignee_addr").hide();
+}
+//新增地址
+function use_NewConsignee(){
+	$('#edit_type').val('new');
+	$('#consignee_addr').show();
+	$('#consignee_name').val('');
+	$('#consignee_area').val('');
+	$('#consignee_address').val('');
+	$('#consignee_mobilephone').val('');
+	$('#consignee_telephone').val('');
+	$('#consignee_email').val('');
+	$('#consignee_postcode').val('');
+}
+/**********************************************************************/
 
 //选择发票地址
 rs_callbacks.changeInvoice = function(request){	
@@ -53,39 +86,33 @@ rs_callbacks.changeInvoice = function(request){
 	$('#invoice_name').val(request.name);
 	$('input[@type=radio][name="data[OrderInvoice][content]"][value="'+request.content+'"]').attr('checked',true);
 }
-function changeInv(obj,addIndex)
-{
+function changeInv(obj,addIndex){
 	ajaxAction(BASEURL+"/orders/load_invoice/"+addIndex,null,null,'changeInvoice');
 	$(obj).parents('li:first').siblings().removeClass('xz');
 	$(obj).parents('li:first').addClass('xz');	
 }
 //----------------------------发票--start-------------------------
 var label_invoice;
-function showForm_invoice(obj)
-{
+function showForm_invoice(obj){
   label_invoice=$("#part_invoice").html();
   showWaitInfo('正在读取发票信息，请等待！',obj);
   ajaxActionHtml(BASEURL+"/orders/edit_invoice","#part_invoice");
   //setAjax_getResAndRunCode("action=showForm_invoice","part_invoice","GetInvoiceList();isInvoiceOpen=true;"+radioList);
- 
 }
 rs_callbacks.deleteInvoice = function(request){
 	$('#Invoiceli_'+request.id).remove();
 }
-function DelInv(obj,id)
-{
+function DelInv(obj,id){
 	if(confirm('确认要删除吗？')){
 		ajaxAction(BASEURL+"/orders/delete_invoice/"+id,null,null,'deleteInvoice');
 	}
 }
-function close_invoice(obj)
-{
+function close_invoice(obj){
 	$("#part_invoice").html(label_invoice);
 }
 //----------------------------发票--end-------------------------
 //显示支付方式和配送方式表单
-function showForm_payTypeAndShipType(obj)
-{
+function showForm_payTypeAndShipType(obj){
    //showWaitInfo('正在读取支付方式及配送方式信息，请等待！',obj);
    var runCode="isPayTypeAndShipTypeOpen=true;";
    runCode+="setPayShipRadioDefault();";
@@ -101,8 +128,7 @@ function showForm_payTypeAndShipType(obj)
 }
 
 //关闭支配方式
-function close_payTypeAndShipType(obj)
-{
+function close_payTypeAndShipType(obj){
 	$('#part_payTypeAndShipType .o_show').show();
 	$('#part_payTypeAndShipType .o_write').hide();
 //  showWaitInfo('正在关闭表单，请等待！',obj);
@@ -110,8 +136,7 @@ function close_payTypeAndShipType(obj)
 //  showLabel_payTypeAndShipType();
 }
 //选择支付方式
-function changePayType(payType)
-{
+function changePayType(payType){
    $('#payType_IdPaymentType').val(payType);
    showWaitInfoOnInner('正在加载配送方式信息，请等待。。。',g('part_shipType'));
    
@@ -131,8 +156,7 @@ rs_callbacks.saveOrderRemark = function(request){
 function saveOrder_remark(content){
 	ajaxAction(BASEURL+"/orders/edit_remark/",{'data[Order][remark]':content},null,'saveOrderRemark');
 }
-function showForm_remark(obj)
-{
+function showForm_remark(obj){
 	$('#part_remark .o_show').hide();
 	$('#part_remark .o_write').show();
 //   label_remark=g('part_remark').innerHTML;
@@ -140,8 +164,7 @@ function showForm_remark(obj)
 //   setAjax_getResAndRunCode("action=showForm_remark","part_remark","isRemarkOpen=true");
 }
 
-function close_remark()
-{
+function close_remark(){
    $('#part_remark .o_show').show();
    $('#part_remark .o_write').hide();
 }
