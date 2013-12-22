@@ -1,6 +1,7 @@
 <div class="container clearfix"><div class="row">
 	
 	<div class="ui-widget col-md-8">
+	<?php $datas= $this->TagRelated->loadTagData('Article',1,5,1); ?>
 	<portlet portlet="notitle">
 		<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
 			  <!-- Indicators -->
@@ -33,23 +34,17 @@
 					
 	</portlet>
 		
-	
-			<portlet title="{{$Category['Category']['name']}}"><div class="Content-body">{{$Category['Category']['content']}} </div>
-<?PHP if($total>0){ ?>
-<ul class="clearfix portlet-content-list">
-    <?PHP foreach($Category['datalist'] as $item) {
-    ?>	
-		{{include $Category['Category']['template']}}			
-	<?php } ?>
-</ul>
-	{{$page_navi}}
-<?php } ?></portlet>
+		<portlet info="model=Article&conditions[coverimg %3C%3E]=&portlet=notitle&list_tpl=_photolist&order=id desc">
+			</portlet>
 		
 		
 	</div>
-	<div class="ui-contain col-md-4">
-			<portlet title="{{$top_category_name}}" list_tpl="regions/_list">{{$this->Section->getLeftMenu('Category',array('parent_id'=> $top_category_id,'selectedid'=>$current_cateid))}}</portlet>
-			<portlet  title="新闻热门排行" list_tpl="regions/_titlelist" limit="8" custom_class="portlet-title-list" model="Article" recursive="-1" order="views_count desc" portlet="default" info="recursive=-1&amp;fields%5B0%5D=Article.name&amp;fields%5B1%5D=Article.slug&amp;fields%5B2%5D=Article.created&amp;order=views_count+desc"></portlet>
-	</div>	
+	<div class="col-md-4">
+		<div class="ui-widget grid_11 alpha omega clearfix">	
+			<portlet title="最新动态" info="model=Article&portlet=default&list_tpl=articles/_titlelist&ulcss=title-list">
+			</portlet>
+		</div>
+	
+	</div>
 </div>	
 </div>

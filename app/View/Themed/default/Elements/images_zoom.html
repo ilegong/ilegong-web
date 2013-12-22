@@ -46,8 +46,8 @@ $(function(){
 </script>
 <div id="preview">
 				<div onclick="" id="spec-n1">
-				<a  class="jqzoom" onclick="return false;" href="{{$this->Html->url(UPLOAD_FILE_URL.$Product['Uploadfile'][0]['Uploadfile']['fspath'])}}" >
-				<img width="350" alt="" src="{{$this->Html->url(UPLOAD_FILE_URL.$Product['Uploadfile'][0]['Uploadfile']['mid_thumb'])}}" 
+				<a  class="jqzoom" onclick="return false;" href="{{$this->Html->url($Product['Uploadfile'][0]['fspath'])}}" >
+				<img width="350" alt="" src="{{$this->Html->url($Product['Uploadfile'][0]['mid_thumb'])}}" 
 				onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
 				</a>
 				</div>
@@ -56,8 +56,8 @@ $(function(){
 					<div id="marquee-right" class="control"></div>	
 					<div class="marquee" direction="left" step="1" pause="2000" style="position: relative; overflow: hidden; width: 300px; height: 56px;">
 						<ul class="list-h" style="width: 300px; overflow: hidden; position: absolute; left: 0pt; top: 0pt; ">
-				        {{loop $Product['Uploadfile'] $file}}
-					    	<li><img width="50" height="50" name="{{$this->Html->url($file['Uploadfile']['mid_thumb'])}}" alt="{{$Product['Product']['title']}}" src="{{$this->Html->url(UPLOAD_FILE_URL.$file['Uploadfile']['thumb'])}}" onerror="this.src='http://www.360buy.com/images/none/none_50.gif'"></li>
+				        {{loop $Product['Uploadfile'] $uploadfile}}
+					    	<li><img width="50" height="50" name="{{$this->Html->url($uploadfile['mid_thumb'])}}" alt="{{$Product['Product']['title']}}" src="{{$this->Html->url($uploadfile['thumb'])}}" onerror="this.src='http://www.360buy.com/images/none/none_50.gif'"></li>
 					    {{/loop}} 
 						</ul>
 					</div>

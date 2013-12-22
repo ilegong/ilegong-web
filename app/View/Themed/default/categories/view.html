@@ -1,4 +1,4 @@
-<div class="container">
+
 	<div class="row">
 			<div class="col-md-12">
 				<portlet portlet="notitle" custom_class="nopadding">{{if !empty($Category['Uploadfile'])}}
@@ -40,7 +40,7 @@
 			<portlet  title="新闻热门排行" list_tpl="regions/_titlelist" limit="8" custom_class="portlet-title-list" model="Article" recursive="-1" order="views_count desc" portlet="default" info="recursive=-1&amp;fields%5B0%5D=Article.name&amp;fields%5B1%5D=Article.slug&amp;fields%5B2%5D=Article.created&amp;order=views_count+desc"></portlet>
 		</div>
 	</div>
-</div>
+
 {{if strpos($Category['Category']['template'],'_masonry_photo')!==false}}
 	{{$this->Html->script(array(
 	            'jquery/jquery.masonry.min.js','jquery/jquery.infinitescroll.min.js',

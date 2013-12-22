@@ -1,9 +1,9 @@
 <div  class="container">
 	<div class="row">
-		<div class="span7">
+		<div class="col-sm-3">
 			<portlet portlet="notitle">{{template users/account_leftmenu}}</portlet>
 		</div>
-<div class="ui-contain span17">
+<div class="col-sm-9">
 {{$this->Html->link(__('New Cate'),array('controller'=>'user_cates','action'=>'add'),
 array('class'=>'btn btn-primary','onclick'=>'return publishController.open_dialog(this.href,{title:"'.__('New Cate').'",width:650});'))}}
 
