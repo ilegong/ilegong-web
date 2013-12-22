@@ -34,12 +34,17 @@ class OrdersController extends AppController{
 	function info($order_id=''){
 		$this->loadModel('Cart');
 		if(empty($order_id)){
-			$Carts = $this->Cart->find('all',array(
-				'conditions'=>array(
-					'status'=> 0,
-					'order_id' => null,
-					'OR'=> $this->user_condition
-			)));
+			if(!empty($_COOKIE['cart_products'])){
+				print_r($_COOKIE['cart_products']);
+			}
+			else{
+				$Carts = $this->Cart->find('all',array(
+					'conditions'=>array(
+						'status'=> 0,
+						'order_id' => null,
+						'OR'=> $this->user_condition
+				)));
+			}
 		}
 		else{
 			$orderinfo = $this->Order->findById($order_id);			
