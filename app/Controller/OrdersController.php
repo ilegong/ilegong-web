@@ -36,6 +36,20 @@ class OrdersController extends AppController{
 		if(empty($order_id)){
 			if(!empty($_COOKIE['cart_products'])){
 				print_r($_COOKIE['cart_products']);
+				$product_ids = explode(',',$_COOKIE['cart_products']);
+				$product_ids = array_delete_value($product_ids,'');
+				$this->loadModel('Product');
+				$products = $this->Product->find('all',array('conditions'=>array('id'=>$product_ids)));
+				$Carts = array();
+				foreach($products as $p){
+					$Carts[] = array(
+							'product_id'=>$p['id'],
+							'name'=>$p['name'],
+							'coverimg'=>$p['coverimg'],
+							'num'=> 1,
+							'price'=>$p['price'],
+					);
+				}
 			}
 			else{
 				$Carts = $this->Cart->find('all',array(
