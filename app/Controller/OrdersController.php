@@ -26,6 +26,7 @@ class OrdersController extends AppController{
 		$this->loadModel('Cart');
 		/* 保存无线端cookie购物车的商品 */
 		if(!empty($_COOKIE['cart_products'])){
+			$this->loadModel('Product');
 			$products = $this->Product->find('all',array('conditions'=>array(
 					'id' => $product_ids
 			)));
