@@ -17,7 +17,7 @@ td {padding:5px 10px;}
 		  	
 		<div id="part_remark">
 			<div class="o_show">
-			 <h2>订单备注&nbsp;<a onclick="showForm_remark(this)" href="javascript:void(0)">[修改]</a></h2>
+			 <h2>订单备注&nbsp;{{if !$order_id}}<a onclick="showForm_remark(this)" href="javascript:void(0)">[修改]</a>{{/if}}</h2>
 			 <div class="middle">
 			            <table style="width:100%">
 			                <tbody><tr>
@@ -41,7 +41,7 @@ td {padding:5px 10px;}
 		</div>
 		
 		<div class="o_show">
-		<h2>商品清单	<a style="color:#0070D7" href="javascript:void(0);" id="edit-cart-btn" id="backToCartBtn">返回修改购物数量</a></h2>
+		<h2>商品清单	{{if !$order_id}}<a style="color:#0070D7" href="{{$this->Html->url('/carts/listcart')}}" id="backToCartBtn">返回修改购物数量</a>{{/if}}</h2>
 		
 		<div class="p-list">
 			<table  class="table table-bordered">
@@ -57,15 +57,9 @@ td {padding:5px 10px;}
 			</tbody>
 			</table>
 		</div></div>		
-		<!-- template orders/info_wave  -->		
-		<div class="pull-right"><a class="btn btn-primary" href="{{$this->Html->url('/orders/balance')}}">结算</a></div>	
+		<!-- template orders/info_wave  -->
+		{{if !$order_id}}	
+		<div class="pull-right"><a class="btn btn-primary" href="{{$this->Html->url('/orders/balance')}}">结算</a></div>
+		{{/if}}	
 	</div>
 </div>
-<script>
-$(document).ready(function(){
-	$('#edit-cart-btn').click(function(){
-			createCart();
-			$('#cart-modal').modal(); 
-	});
-});
-</script>

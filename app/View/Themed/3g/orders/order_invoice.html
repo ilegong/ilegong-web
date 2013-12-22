@@ -1,0 +1,22 @@
+	<div class="o_show">
+	     <h2>发票信息&nbsp;<a onclick="showForm_invoice(this)" href="javascript:void(0)">[修改]</a></h2>
+	      <div class="middle">	            
+	            <table  class="table table-bordered">
+	                <tbody><tr>
+	                    <td style="text-align:right;width:120px;">发票类型：</td>
+	                    <td>普通发票</td>
+	                </tr>
+	                <tr>
+	                    <td style="text-align:right;">发票抬头：</td>
+	                    <td> {{if $this->Session->read('OrderInvoice.customtype')=='personal'}}个人 {{else}}{{$this->Session->read('OrderInvoice.name')}}{{/if}}</td>
+	                </tr>
+	                 <tr>
+	                   <td style="text-align:right;">发票内容：</td>
+	                   <td>
+	                         <div><span style="display:;">{{$this->Session->read('OrderInvoice.content')}}</span></div>
+	                   </td>
+	                </tr>
+	            </tbody></table>	             
+	       </div>
+	       <div class="footer"></div>
+	 </div>
