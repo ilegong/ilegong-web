@@ -52,7 +52,6 @@ class OrdersController extends AppController{
 							'price'=> $p['Product']['price'],
 					));
 				}
-				print_r($Carts);
 			}
 			else{
 				$Carts = $this->Cart->find('all',array(
