@@ -24,6 +24,7 @@
 		var cart = {};	
 		readFromCookie();
 
+		//items with shopping class
 		$("a.shopping").click(function(){
 			var $item = $(this);
 			var itemId = $item.attr('item-id');
@@ -39,11 +40,13 @@
 			updateCart();
 		});
 
+		//show cart button
 		$('#card-btn').click(function(){
 			createCart();
 			$('#cart-modal').modal(); 
 		});
 
+		//cart dialog
 		$('#cart-modal').on('click', 'span.reduce', function(){
 			var itemId = $(this).attr('data-id');
 			cart[itemId]['num'] =  (parseInt(cart[itemId]['num']) || 0) - 1;
@@ -80,6 +83,8 @@
 			}else {
 				$cartBtn.addClass('btn-warning').removeClass('btn-success').find('span').html('请先下单');
 			}
+
+			saveCartToCookie();
 		}
 
 		function saveCartToCookie(){
