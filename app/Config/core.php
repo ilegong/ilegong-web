@@ -116,38 +116,20 @@ Cache::config('default', array(
             'serialize' => true,
         ));
 // UCenter config
-/*
-if(defined('SAE_MYSQL_DB')){ // in sae
-	define('UC_CONNECT', 'mysql');
-	define('UC_DBHOST', 'w.rdc.sae.sina.com.cn:3307');
-	define('UC_DBUSER', 'w1yyo2lx31');
-	define('UC_DBPW', 'j0i2ljiz4w3z4h42m115k0h21i4hw5lwwhkjz4m0');
-	define('UC_DBNAME', 'app_discuzx');
-	define('UC_DBCHARSET', 'utf8');
-	define('UC_DBTABLEPRE', '`app_discuzx`.sae_ucenter_');
-	define('UC_DBCONNECT', '0');
-	define('UC_KEY', '9d5dj/1W72UJixnEUkqtR9t2KSY7QxAswfaH0UQ');
-	define('UC_API', 'http://discuzx.sinaapp.com/uc_server');
-	define('UC_CHARSET', 'utf-8');
-	define('UC_IP', '');
-	define('UC_APPID', '4');
-	define('UC_PPP', '20');
 
-}
-elseif($_SERVER['SERVER_ADDR'] == '127.0.0.1'){ // localhost
-	define('UC_CONNECT', 'mysql');
-	define('UC_DBHOST', 'localhost');
-	define('UC_DBUSER', 'root');
-	define('UC_DBPW', 'xsdfuh232sdw!3S#sd');
-	define('UC_DBNAME', 'ultrax');
-	define('UC_DBCHARSET', 'utf8');
-	define('UC_DBTABLEPRE', '`ultrax`.pre_ucenter_');
-	define('UC_DBCONNECT', '0');
-	define('UC_KEY', 'fcbe360P7xsz45nhpq4awu1BjeMqZzoaNvctV+o');
-	define('UC_API', 'http://www.a.com/uc_server');
+if(defined('SAE_MYSQL_DB')){ // in sae
+	define('UC_CONNECT', 'POST');
+// 	define('UC_DBHOST', 'w.rdc.sae.sina.com.cn:3307');
+// 	define('UC_DBUSER', '');
+// 	define('UC_DBPW', '');
+// 	define('UC_DBNAME', '');
+// 	define('UC_DBCHARSET', 'utf8');
+// 	define('UC_DBTABLEPRE', 'pre_ucenter_');
+// 	define('UC_DBCONNECT', '0');
+	define('UC_KEY', '1W72UJixUISdjknEUkqtR9t2KSY7QxAswfaH0UQsU23OQ');
+	define('UC_API', 'http://discuzx.sinaapp.com/uc_server');
 	define('UC_CHARSET', 'utf-8');
 	define('UC_IP', '');
 	define('UC_APPID', '2');
 	define('UC_PPP', '20');
 }
-*/
