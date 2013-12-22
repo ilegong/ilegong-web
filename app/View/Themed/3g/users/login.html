@@ -15,17 +15,21 @@
 	</div>
 	{{$this->Form->input('referer',array('type'=>'hidden'))}}
 	<div id="login_errorinfo" class="ui-state-error ui-corner-all" style="display: none;"></div>
+	<div class="form-group">
+	    <label for="inputEmail3" class="col-sm-2 control-label"></label>
+	    <div class="col-sm-10">
+	      <button tabindex="1" value="true"  name="loginsubmit" type="submit" class="btn btn-primary"><span>登录</span></button>
+		  <a title="注册帐号" class="btn btn-default" href="{{$this->Html->url('/users/register.html')}}">注册</a>
+			
+	    </div>
+	</div>
 </div>
 
-<button tabindex="1" value="true"  name="loginsubmit" type="submit" class="btn btn-primary"><span>登录</span></button>
 <p class="fsb pns cl">
 <label for="cookietime"><input type="checkbox" value="2592000" tabindex="1" id="cookietime" name="cookietime" class="pc" fwin="login"> 记住我的登录状态</label>
 </p>
 </form>
-
-<h4>没有帐号？<a title="注册帐号" class="btn" href="{{$this->Html->url('/users/register.html')}}">注册</a></h4>
 <p><a title="找回密码" onclick="" href="{{$this->Html->url('/users/forgot')}}">找回密码</a></p>
-
 <div style="padding-top: 5px;">
 	{{$this->Hook->call('oauthLoginLink')}}
 </div>
