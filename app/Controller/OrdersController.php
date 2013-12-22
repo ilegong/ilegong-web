@@ -44,13 +44,13 @@ class OrdersController extends AppController{
 				$Carts = array();
 				foreach($products as $p){
 					$Carts[] = array(
-						'Cart'=>array(
-							'product_id'=> $p['Product']['id'],
-							'name'=> $p['Product']['name'],
-							'coverimg'=> $p['Product']['coverimg'],
-							'num'=> 1,
-							'price'=> $p['Product']['price'],
-					));
+							'Cart'=>array(
+									'product_id'=> $p['Product']['id'],
+									'name'=> $p['Product']['name'],
+									'coverimg'=> $p['Product']['coverimg'],
+									'num'=> 1,
+									'price'=> $p['Product']['price'],
+							));
 				}
 			}
 			else{
@@ -71,6 +71,7 @@ class OrdersController extends AppController{
 					'OR'=> $this->user_condition
 			)));
 		}
+		
 		$current_consignee = $this->Session->read('OrderConsignee');
 		if(empty($current_consignee)){
 			$this->loadModel('OrderConsignee');
@@ -170,8 +171,22 @@ class OrdersController extends AppController{
 		}
 	}
 	/**
+	 * 设为默认地址
+	 * @param int $id
+	 */
+	function default_consignee($id){
+		$this->autoRender = false;
+		$this->loadModel('OrderConsignee');
+		$consignees = $this->OrderConsignee->updateAll(array('status'=>0),array('creator'=>$this->currentUser['id']));
+		
+		$consignees = $this->OrderConsignee->updateAll(array('status'=>1),array('creator'=>$this->currentUser['id'],'id'=> $id));
+		$successinfo = array('id' => $id);
+		echo json_encode($successinfo);
+		return;
+	}
+	/**
 	 * 删除常用地址
-	 * @param unknown_type $id
+	 * @param int $id
 	 */
 	function delete_consignee($id){
 		$this->autoRender = false;
