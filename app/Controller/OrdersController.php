@@ -27,6 +27,8 @@ class OrdersController extends AppController{
 		/* 保存无线端cookie购物车的商品 */
 		if(!empty($_COOKIE['cart_products'])){
 			$this->loadModel('Product');
+			$product_ids = explode(',',$_COOKIE['cart_products']);
+			$product_ids = array_delete_value($product_ids,'');
 			$products = $this->Product->find('all',array('conditions'=>array(
 					'id' => $product_ids
 			)));
@@ -47,6 +49,7 @@ class OrdersController extends AppController{
 					$Carts[] = $Cart;
 				}
 			}
+			print_r($products);
 			print_r($Carts);exit;
 		}
 		else{
