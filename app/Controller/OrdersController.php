@@ -27,8 +27,17 @@ class OrdersController extends AppController{
 		/* 保存无线端cookie购物车的商品 */
 		if(!empty($_COOKIE['cart_products'])){
 			$this->loadModel('Product');
-			$product_ids = explode(',',$_COOKIE['cart_products']);
-			$product_ids = array_delete_value($product_ids,'');
+			$product_ids = array();
+			$nums = array();
+			$info = explode(',',$_COOKIE['cart_products']);
+			foreach($info as $item){
+				list($id,$num) = explode(':',$item);
+				if($id){
+					$product_ids[] = $id;
+					$nums[$id] = $num;
+				}
+			}
+			
 			$products = $this->Product->find('all',array('conditions'=>array(
 					'id' => $product_ids
 			)));
@@ -45,7 +54,7 @@ class OrdersController extends AppController{
 						'product_id'=> $p['Product']['id'],
 						'name'=> $p['Product']['name'],
 						'coverimg'=> $p['Product']['coverimg'],
-						'num'=> 1,
+						'num'=> $nums[$p['Product']['id']]?$nums[$p['Product']['id']]:1,
 						'creator'=> $this->currentUser['id'],
 						'price'=> $p['Product']['price'],
 				));
@@ -105,8 +114,16 @@ class OrdersController extends AppController{
 		$this->loadModel('Cart');
 		if(empty($order_id)){
 			if(!empty($_COOKIE['cart_products'])){
-				$product_ids = explode(',',$_COOKIE['cart_products']);
-				$product_ids = array_delete_value($product_ids,'');
+				$product_ids = array();
+				$nums = array();
+				$info = explode(',',$_COOKIE['cart_products']);
+				foreach($info as $item){
+					list($id,$num) = explode(':',$item);
+					if($id){
+						$product_ids[] = $id;
+						$nums[$id] = $num;
+					}
+				}
 				$this->loadModel('Product');
 				$products = $this->Product->find('all',array('conditions'=>array(
 						'id' => $product_ids
@@ -118,7 +135,7 @@ class OrdersController extends AppController{
 									'product_id'=> $p['Product']['id'],
 									'name'=> $p['Product']['name'],
 									'coverimg'=> $p['Product']['coverimg'],
-									'num'=> 1,
+									'num'=> $nums[$p['Product']['id']]?$nums[$p['Product']['id']]:1,
 									'price'=> $p['Product']['price'],
 					));
 				}
