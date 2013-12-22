@@ -153,17 +153,21 @@ function ajaxAction(url,postdata,form,callback_func_name,moreags){
 		url+='?inajax=1';
 	}
 	if(form){
-		$(':submit',form).val('Doing...').attr('disabled','disabled'); // 将按钮置为不可提交
+		var html = $(':submit',form).val();
+		$(':submit',form).data('html',html).val('Doing...').attr('disabled','disabled'); // 将按钮置为不可提交
 	}
 	$.ajax({
 		// async:true,
 		type:'post',
 		url: url,
 		data: postdata,
-		success: function(request){
+		complete:function (XMLHttpRequest, textStatus) {
 			if(form){
-				$(':submit',form).removeAttr('disabled'); // 将按钮置为可提交
+				var html = $(':submit',form).data('html');
+				$(':submit',form).val(html).removeAttr('disabled'); // 将按钮置为可提交
 			}
+		},
+		success: function(request){
 			if(typeof(callback_func_name)=='function'){
 				callback_func_name();
 			}
@@ -710,14 +714,14 @@ var stack_custom = {"dir1": "right", "dir2": "down"};
 // 显示表单提交成功的信息
 function showSuccessMessage(text)
 {
-	alert(text);
+	//alert(text);
 	return true;
 }
 // 显示错误信息
 
 function showErrorMessage(text)
 {
-	alert(text);
+	//alert(text);
 	return true;
 }
 /* ================form validate====================== */
