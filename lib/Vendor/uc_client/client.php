@@ -176,6 +176,25 @@ function uc_fopen2($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE
 }
 
 function uc_fopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE) {
+	if(function_exists('curl_init') && function_exists('curl_exec'))
+	{
+		$ch = curl_init();
+		// set URL and other appropriate options
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		
+		if($post) {
+			curl_setopt($ch, CURLOPT_POST, true);
+			curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+		}
+		curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+		//var_dump($cookie);
+		curl_setopt($ch, CURLOPT_COOKIE, $cookie);
+		
+		$return = curl_exec($ch);
+		curl_close($ch);
+		return $return;
+	}
 	$return = '';
 	$matches = parse_url($url);
 	!isset($matches['host']) && $matches['host'] = '';
