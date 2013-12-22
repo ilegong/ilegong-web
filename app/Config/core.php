@@ -127,7 +127,7 @@ if(defined('SAE_MYSQL_DB')){ // in sae
 // 	define('UC_DBTABLEPRE', 'pre_ucenter_');
 // 	define('UC_DBCONNECT', '0');
 	define('UC_KEY', '1W72UJixUISdjknEUkqtR9t2KSY7QxAswfaH0UQsU23OQ');
-	define('UC_API', 'http://discuzx.sinaapp.com/uc_server');
+	define('UC_API', 'http://www.51daifan.com/uc_server');
 	define('UC_CHARSET', 'utf-8');
 	define('UC_IP', '');
 	define('UC_APPID', '2');
