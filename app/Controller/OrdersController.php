@@ -39,17 +39,22 @@ class OrdersController extends AppController{
 				$product_ids = explode(',',$_COOKIE['cart_products']);
 				$product_ids = array_delete_value($product_ids,'');
 				$this->loadModel('Product');
-				$products = $this->Product->find('all',array('conditions'=>array('id'=>$product_ids)));
+				$products = $this->Product->find('all',array('conditions'=>array(
+						'id' => $product_ids
+				)));
+				print_r($products);
 				$Carts = array();
 				foreach($products as $p){
 					$Carts[] = array(
+						'Cart'=>array(
 							'product_id'=>$p['id'],
 							'name'=>$p['name'],
 							'coverimg'=>$p['coverimg'],
 							'num'=> 1,
 							'price'=>$p['price'],
-					);
+					));
 				}
+				print_r($Carts);
 			}
 			else{
 				$Carts = $this->Cart->find('all',array(
