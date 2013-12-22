@@ -107,47 +107,57 @@ class OrdersController extends AppController{
 	 * 编辑表单的保存，获取收件人信息文本内容（非表单形式）
 	 */
 	function info_consignee(){
-		$this->autoRender = false;
+		//$this->autoRender = false;
 		if(!empty($this->data)){
-			//print_r($this->data);	exit;
-			$this->loadModel('OrderConsignee');
-			$this->data['OrderConsignee']['creator'] = $this->currentUser['User']['id'];
-			$this->Session->write('OrderConsignee',$this->data['OrderConsignee']);
-			if($this->data['OrderConsignee']['save_address']){
-				
+			$this->loadModel('OrderConsignee');			
+			$this->data['OrderConsignee']['creator'] = $this->currentUser['id'];
+			$consignee = $this->OrderConsignee->find('first',array(
+				'conditions'=>array(
+					'creator' => $this->currentUser['id'],
+					'name'=>$this->data['OrderConsignee']['name'],
+					'address'=>$this->data['OrderConsignee']['address'],
+					'area'=>$this->data['OrderConsignee']['area'],
+				))
+			);
+			if($this->data['OrderConsignee']['edit_type']=='select'){
 				$consignee = $this->OrderConsignee->find('first',array(
 					'conditions'=>array(
-						'creator' => $this->currentUser['User']['id'],
-						'name'=>$this->data['OrderConsignee']['name'],
-						'address'=>$this->data['OrderConsignee']['address'],
-						'area'=>$this->data['OrderConsignee']['area'],
+						'id' => $this->data['OrderConsignee']['id'],
 					))
 				);
-				if(empty($consignee)){
-					if(!$this->OrderConsignee->save($this->data)){
-						echo json_encode($this->{$this->modelClass}->validationErrors);
-		                return;
-					}
-				}
-				else{
-					echo json_encode(array('error' => __('Already have this address. If your still want to update this to Commonly used address,please delete it in Commonly used address at first.')));
+				$this->Session->write('OrderConsignee',$consignee['OrderConsignee']);
+			}
+			elseif(empty($consignee)){				
+				if(!$this->OrderConsignee->save($this->data)){
+					echo json_encode($this->{$this->modelClass}->validationErrors);
 	                return;
 				}
-			
-				
+				if(empty($this->data['OrderConsignee']['id'])){
+					$this->data['OrderConsignee']['id'] = $this->OrderConsignee->getLastInsertID();
+				}
+				$this->Session->write('OrderConsignee',$this->data['OrderConsignee']);
 			}
-			$successinfo = array('success' => __('Add success'), 
+			else{
+				$this->Session->write('OrderConsignee',$consignee['OrderConsignee']);
+				//echo json_encode(array('error' => __('Already have this address. If your still want to update this to Commonly used address,please delete it in Commonly used address at first.')));
+                //return;
+			}
+						
+			$successinfo = array(
+				'success' => __('Add success'), 
 				'tasks'=>array(array(
-					'dotype'=>'html',
-					'selector'=>'#part_consignee',
+					'dotype'=> 'html',
+					'selector'=> '#part_consignee',
 					'content'=> $this->renderElement('order_consignee')
-					))
+				))
 			);
 			echo json_encode($successinfo);
-            return;
+            exit;
 		}
-		echo $this->renderElement('order_consignee');
-		return;
+		else{
+			echo $this->renderElement('order_consignee');
+			exit;
+		}
 	}
 	
 	function edit_consignee(){
