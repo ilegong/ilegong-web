@@ -75,6 +75,7 @@ App::uses('Debugger', 'Utility');
 App::uses('CakeEvent', 'Event');
 App::uses('CakeEventManager', 'Event');
 App::uses('CakeEventListener', 'Event');
+App::uses('AppController', 'Controller');
 App::uses('UsersController', 'Controller');
 if(isset($_GET['url'])){
 	$request = new CakeRequest($_GET['url']);
