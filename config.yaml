@@ -14,42 +14,6 @@ handle:
   - compress: if(out_header["Content-Type"] ~ "(text|javascript|json)") compress
 cron:
 #	- description: crawl datas
-#	  url: /manage/admin/crawls/cronCrawlAll?cron_secret=dsfrefcv233445SDFEww32sdsdserqoklm
+#	  url: /manage/admin/crawls/cronCrawlAll?cron_secret=
 #      schedule: 5 6 * * *
 #      timezone: Beijing
-	- description: crawl guandian.cn
-	  url: /manage/admin/crawls/crawl/29?cron_secret=dsfrefcv233445SDFEww32sdsdserqoklm
-      schedule: 30 * * * *
-      timezone: Beijing
-    - description: crawl soufun.com
-	  url: /manage/admin/crawls/crawl/31?cron_secret=dsfrefcv233445SDFEww32sdsdserqoklm
-      schedule: 30 * * * *
-      timezone: Beijing
-	- description: autopublish crawl
-	  url: /manage/admin/crawl_title_lists/autopublish?cron_secret=dsfrefcv233445SDFEww32sdsdserqoklm
-      schedule: 5 */1 * * *
-      timezone: Beijing
-#    - description: get taobao promotion
-#      url: /manage/admin/taobao/taobao_promotions/saecron_get?cron_secret=dsfrefcv233445SDFEww32sdsdserqoklm
-#      schedule: every day of month 05:30 
-#      timezone: Beijing
-#    - description: get taobao rate
-#      url: /manage/admin/taobao/taobao_trade_rates/saecron_getAllTradeRate?cron_secret=dsfrefcv233445SDFEww32sdsdserqoklm
-#      schedule: 5 3 * * 2
-#      timezone: Beijing
-#    - description: get taobaoke productinfo
-#      url: /manage/admin/taobao/taobaokes/saecron_updateProductInfo?cron_secret=dsfrefcv233445SDFEww32sdsdserqoklm
-#      schedule: 5 3 * * 1
-#      timezone: Beijing
-    - description: AutoSign kuaipan
-      url: /auto_signs/signall?cron_secret=dsfrefcv233445SDFEww32sdsdserqoklm
-      schedule: 10 3 * * *
-      timezone: Beijing
-    - description: Auto Login WenWen
-      url: /auto_wenwens/login
-      schedule: */3 * * * *
-      timezone: Beijing
-    - description: Auto open task.
-      url: /auto_wenwens/open_task
-      schedule: 0 */1 * * *
-      timezone: Beijing

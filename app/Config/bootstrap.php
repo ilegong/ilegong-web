@@ -1,5 +1,7 @@
 <?php
-define('COMMON_PATH', ROOT . DS . 'lib' . DS);
+if (!defined('COMMON_PATH')) {
+	define('COMMON_PATH', ROOT . DS . 'lib' . DS);
+}
 include_once COMMON_PATH.'bootstrap.php';
 
 global $page_style;
