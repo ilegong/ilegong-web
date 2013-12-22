@@ -45,11 +45,10 @@ class OrdersController extends AppController{
 				
 				$this->Cart->create();
 				if($this->Cart->save($Cart)){
-					$Cart['id'] = $this->Cart->getLastInsertID();
+					$Cart['Cart']['id'] = $this->Cart->getLastInsertID();
 					$Carts[] = $Cart;
 				}
 			}
-			print_r($products);
 			print_r($Carts);exit;
 		}
 		else{
