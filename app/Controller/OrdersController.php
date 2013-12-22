@@ -23,8 +23,61 @@ class OrdersController extends AppController{
 	 * @param $order_id
 	 */
 	function balance($order_id=''){
-		
-		print_r($_SESSION);
+		$this->loadModel('Cart');
+		/* 保存无线端cookie购物车的商品 */
+		if(!empty($_COOKIE['cart_products'])){
+			$products = $this->Product->find('all',array('conditions'=>array(
+					'id' => $product_ids
+			)));
+			$Carts = array();
+			foreach($products as $p){
+				$Cart = array('Cart'=>array(
+						'product_id'=> $p['Product']['id'],
+						'name'=> $p['Product']['name'],
+						'coverimg'=> $p['Product']['coverimg'],
+						'num'=> 1,
+						'creator'=> $this->currentUser['id'],
+						'price'=> $p['Product']['price'],
+				));
+				
+				$this->Cart->create();
+				if($this->Cart->save($Cart)){
+					$Cart['id'] = $this->Cart->getLastInsertID();
+					$Carts[] = $Cart;
+				}
+			}
+		}
+		else{
+			$Carts = $this->Cart->find('all',array(
+					'conditions'=>array(
+							'status'=> 0,
+							'order_id' => null,
+							'OR'=> $this->user_condition
+					)));
+		}
+		$total_price = $this->_calculateTotalPrice($Carts);
+		$data = array();
+		$data['total_price'] = $total_price;
+		$data['creator'] = $this->currentUser['id'];
+		$data['remark'] = $this->Session->read('Order.remark');
+		$data['consignee_id'] = $this->Session->read('OrderConsignee.id');
+		$data['consignee_name'] = $this->Session->read('OrderConsignee.name');
+		$data['consignee_area'] = $this->Session->read('OrderConsignee.area');
+		$data['consignee_address'] = $this->Session->read('OrderConsignee.address');
+		$data['consignee_mobilephone'] = $this->Session->read('OrderConsignee.mobilephone');
+		$data['consignee_telephone'] = $this->Session->read('OrderConsignee.telephone');
+		$data['consignee_email'] = $this->Session->read('OrderConsignee.email');
+		$data['consignee_postcode'] = $this->Session->read('OrderConsignee.postcode');
+		if($this->Order->save($data)){
+			$order_id = $this->Order->getLastInsertID();
+			foreach($Carts as $cart){
+				$this->Cart->updateAll(array('order_id'=>$order_id,'status'=>1),array('id'=>$cart['Cart']['id'],'creator'=>$this->currentUser['id']));
+			}
+			$this->__message('订单已生成','/orders/info/'.$order_id);
+		}
+		else{
+			$this->__message('订单保存失败，请稍候重新提交','/order/info/');
+		}		
 	}
 	
 	/**
@@ -50,7 +103,7 @@ class OrdersController extends AppController{
 									'coverimg'=> $p['Product']['coverimg'],
 									'num'=> 1,
 									'price'=> $p['Product']['price'],
-							));
+					));
 				}
 			}
 			else{
@@ -65,10 +118,9 @@ class OrdersController extends AppController{
 		else{
 			$orderinfo = $this->Order->findById($order_id);			
 			$Carts = $this->Cart->find('all',array(
-				'conditions'=>array(
-					'status'=> 0,
+				'conditions'=>array(					
 					'order_id' => $order_id,
-					'OR'=> $this->user_condition
+					'creator'=> $this->currentUser['id']
 			)));
 		}
 		
@@ -92,6 +144,7 @@ class OrdersController extends AppController{
 			$this->Session->write('OrderConsignee',$current_consignee);
 		}
 		$total_price = $this->_calculateTotalPrice($Carts);
+		$this->set('order_id',$order_id);
 		$this->set('total_price',$total_price);
 		$this->set('Carts',$Carts);
 	}
@@ -182,7 +235,7 @@ class OrdersController extends AppController{
 		$consignees = $this->OrderConsignee->updateAll(array('status'=>1),array('creator'=>$this->currentUser['id'],'id'=> $id));
 		$successinfo = array('id' => $id);
 		echo json_encode($successinfo);
-		return;
+		exit;
 	}
 	/**
 	 * 删除常用地址
@@ -194,7 +247,7 @@ class OrdersController extends AppController{
 		$consignees = $this->OrderConsignee->deleteAll(array('creator'=>$this->currentUser['id'],'id'=> $id));
 		$successinfo = array('id' => $id);
 		echo json_encode($successinfo);
-        return;
+        exit;
 	}
 	/**
 	 * 加载常用地址信息
@@ -208,7 +261,7 @@ class OrdersController extends AppController{
 			'conditions'=>array('id'=>$id,'creator'=>$this->currentUser['id']),
 		));
 		echo json_encode($consignee['OrderConsignee']);
-        return;
+        exit;
 	}
 	/*××××××××××××××××××收件人信息结束××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××*/
 	
@@ -229,7 +282,7 @@ class OrdersController extends AppController{
 			'conditions'=>array('id'=>$id,'creator'=>$this->currentUser['id']),
 		));
 		echo json_encode($consignee['OrderInvoice']);
-        return;
+        exit;
 	}
 	
 /**
@@ -265,10 +318,10 @@ class OrdersController extends AppController{
 					))
 			);
 			echo json_encode($successinfo);
-            return;
+            exit;
 		}
 		echo $this->renderElement('order_invoice');
-		return;
+		exit;
 	}
 	function delete_invoice($id){
 		$this->autoRender = false;
@@ -277,13 +330,13 @@ class OrdersController extends AppController{
 		'creator'=>$this->currentUser['id'],'id'=> $id));
 		$successinfo = array('id' => $id);
 		echo json_encode($successinfo);
-        return;
+        exit;
 	}
 	/***** 备注信息 ***********/
 	function edit_remark(){
 		$this->Session->write('Order.remark',$this->data['Order']['remark']);
 		echo json_encode($this->data);
-        return;
+        exit;
 	}
 	
        

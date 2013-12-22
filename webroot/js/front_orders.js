@@ -49,7 +49,6 @@ function editConsignee(obj,id){
 	//$("input[name='data[OrderConsignee][id]']").each(function(){
 	//	$(this).attr("checked",false).removeAttr("checked");
 	//});
-	alert($('#addr_'+id).val());
 	$('#addr_'+id).get(0).checked = true;
 	//$('#addr_'+id).attr("checked",true);
 	$('#edit_type').val('edit');

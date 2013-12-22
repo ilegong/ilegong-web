@@ -14,6 +14,28 @@ class CartsController extends AppController{
 			$this->user_condition['creator']=$this->currentUser['id'];
 		}
 	}
+	
+	function saveCookieCart(){
+		$product_ids = array();$product_nums = array();
+		$products = $this->Product->find('all',array(
+				'conditions'=>array(
+					'id' => $product_ids,
+			)));
+		foreach($products as $productinfo){
+			$data = array();
+			$data['Cart']['product_id'] = $productinfo['id'];
+			$data['Cart']['num'] = $product_nums[$productinfo['id']];
+			$data['Cart']['num'] = $productinfo['id'];
+			$data['Cart']['session_id'] = $this->Session->id();
+			$data['Cart']['coverimg'] = $productinfo['Product']['coverimg'];
+			$data['Cart']['name'] = $productinfo['Product']['name'];
+			$data['Cart']['price'] = $productinfo['Product']['price'];
+			$data['Cart']['creator'] = $this->currentUser['id'];
+			$this->Cart->save($data);
+		}
+		
+	}
+	
 	function add(){
 		
 		$carts = array();
@@ -22,6 +44,7 @@ class CartsController extends AppController{
 			$Carts = $this->Cart->find('first',array(
 				'conditions'=>array(
 					'product_id' => $this->data['Cart']['product_id'],
+					'order_id' => null,
 					'OR'=> $this->user_condition
 			)));
 			if(!empty($Carts)){
@@ -48,6 +71,18 @@ class CartsController extends AppController{
 		$errorinfo = array('save_error' => __('Operation failed'));
         echo json_encode($errorinfo);
         exit;
+	}
+	
+	function editCartNum($id,$num){
+		if($num<=0){
+			$op_flag = $this->Cart->deleteAll(array('id' => $id,'status' => 0,'order_id' => NULL,'OR'=> $this->user_condition), true, true);
+		}
+		else{
+			$op_flag = $this->Cart->updateAll(array('num'=>$num), array('id' => $id,'status' => 0,'order_id' => NULL,'OR'=> $this->user_condition));
+		}
+		$successinfo = array('success' => __('Success edit nums.'));
+		echo json_encode($successinfo);
+		exit;
 	}
 	
 	function listcart(){
