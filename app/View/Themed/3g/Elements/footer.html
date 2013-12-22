@@ -81,12 +81,12 @@
 				$cartBtn.addClass('btn-warning').removeClass('btn-success').find('span').html('请先下单');
 			}
 
-			$.cookie('food', itemStr , { 'path' : '/'});
+			$.cookie('cart_products', itemStr , { 'path' : '/'});
 		}
 
 		function readFromCookie(){
-			var food = $.cookie('food') || '';
-			var items = food.split(',');
+			var cart_products = $.cookie('cart_products') || '';
+			var items = cart_products.split(',');
 
 			for(var i = 0, len = items.length; i < len ; ++ i){
 				var itemId = items[i];
@@ -103,14 +103,14 @@
 		function createCart(){
 			var itemNum = 0, cost = 0;
 			var itemStr = '';
-			var food_html = '';
+			var cart_products_html = '';
 			for(var itemId in cart){
 				itemNum += cart[itemId];
 				var $item = $('#item-' + itemId);
 				var price = (parseInt($item.attr('item-price')) || 0 );
 				var name = $item.attr('item-name');
 				cost += (price * cart[itemId]);
-				food_html +='<div class="row food-row"><div class="col-xs-5">'
+				cart_products_html +='<div class="row cart_products-row"><div class="col-xs-5">'
  					+'<span class="item-name" title="'+name+'">'+name+' <br></span>'
  					+'<span class="item-price-info"><span><span class="item-total-price">￥'+ (price * cart[itemId])+'</span>(<span class="item-single-price">'+price+'</span>×<span class="item-amount">'+cart[itemId]+'</span>)'
  					+'</span></span></div>'
@@ -127,9 +127,9 @@
 
 			}
 
-			$('#cart-modal').find('.modal-body').html(food_html);
+			$('#cart-modal').find('.modal-body').html(cart_products_html);
 			if(cost > 0){
-				$('#cart-modal').find('.modal-body').append('<div class="row total-info food-total-info"><div class="col-xs-12">共<span id="food-total-price">'+cost+'</span>元</div></div>');
+				$('#cart-modal').find('.modal-body').append('<div class="row total-info cart_products-total-info"><div class="col-xs-12">共<span id="cart_products-total-price">'+cost+'</span>元</div></div>');
 			}
 		}
 
