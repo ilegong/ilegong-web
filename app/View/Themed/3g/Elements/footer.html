@@ -34,7 +34,7 @@
 			}else { //not added
 				
 				$item.find('div.select-item').show();
-				cart[itemId] = 1;
+				cart[itemId] = {'num' : 1, 'price' : (parseFloat($item.attr('item-price')) || 0 ) , 'name' : $item.attr('item-name') };
 			}
 			updateCart();
 		});
@@ -46,8 +46,8 @@
 
 		$('#cart-modal').on('click', 'span.reduce', function(){
 			var itemId = $(this).attr('data-id');
-			cart[itemId] = (parseInt(cart[itemId]) || 0) - 1;
-			if(cart[itemId] <= 0){
+			cart[itemId]['num'] =  (parseInt(cart[itemId]['num']) || 0) - 1;
+			if(cart[itemId]['num'] <= 0){
 				$('#item-' + itemId).find('div.select-item').hide();
 				delete cart[itemId];
 			}
@@ -55,7 +55,7 @@
 			createCart();
 		}).on('click', 'span.add', function(){
 			var itemId = $(this).attr('data-id');
-			cart[itemId] = (parseInt(cart[itemId]) || 0) + 1;
+			cart[itemId]['num'] = (parseInt(cart[itemId]['num']) || 0) + 1;
 			updateCart();
 			createCart();
 		}).on('click', 'a.delete-btn', function(){
@@ -68,11 +68,11 @@
 
 		function updateCart(){
 			var itemNum = 0, cost = 0;
-			var itemStr = '';
+			
 			for(var itemId in cart){
-				itemStr += itemId + ',';
-				itemNum += cart[itemId];
-				cost += (parseInt($('#item-' + itemId).attr('item-price')) || 0 ) * cart[itemId];
+				
+				itemNum += parseInt(cart[itemId]['num']);
+				cost +=  parseInt(cart[itemId]['num'])  * parseFloat(cart[itemId]['price']);
 			}
 			var $cartBtn = $('#card-btn');
 			if(itemNum > 0){
@@ -80,8 +80,15 @@
 			}else {
 				$cartBtn.addClass('btn-warning').removeClass('btn-success').find('span').html('请先下单');
 			}
+		}
 
-			$.cookie('cart_products', itemStr , { 'path' : '/'});
+		function saveCartToCookie(){
+			var cartStr = '';
+			for(var itemId in cart){
+				cartStr += [itemId, cart[itemId]['num'], cart[itemId]['price'], cart[itemId]['name']].join(':');
+				cartStr += ',';
+			}
+			$.cookie('cart_products', cartStr, {'path' : '/'});
 		}
 
 		function readFromCookie(){
@@ -89,11 +96,18 @@
 			var items = cart_products.split(',');
 
 			for(var i = 0, len = items.length; i < len ; ++ i){
-				var itemId = items[i];
-				if(itemId){
-					$('#item-' + itemId).find('div.select-item').show();
-					cart[itemId] = 1;
+				var itemStr = items[i];
+				if(itemStr){
+					var itemDetails = itemStr.split(':');
+					var itemId = parseInt(itemDetails[0]) ;
+					var itemNum = parseInt(itemDetails[1]) ;
+					if( itemId && itemNum){
+						$('#item-' + itemId).find('div.select-item').hide();
+						cart[itemId] = {'num' : itemNum, 'price' : (parseFloat(itemDetails[2]) || 0 ) , 'name' : itemDetails[3] };
+					}
 				}
+
+				
 			}
 
 			updateCart();
@@ -105,18 +119,20 @@
 			var itemStr = '';
 			var cart_products_html = '';
 			for(var itemId in cart){
-				itemNum += cart[itemId];
+				
 				var $item = $('#item-' + itemId);
-				var price = (parseInt($item.attr('item-price')) || 0 );
-				var name = $item.attr('item-name');
-				cost += (price * cart[itemId]);
+				var price = parseFloat(cart[itemId]['price']);
+				var name = cart[itemId]['name'];
+				var num = parseInt(cart[itemId]['num']);
+				itemNum += num;
+				cost += (price * num);
 				cart_products_html +='<div class="row cart_products-row"><div class="col-xs-5">'
  					+'<span class="item-name" title="'+name+'">'+name+' <br></span>'
- 					+'<span class="item-price-info"><span><span class="item-total-price">￥'+ (price * cart[itemId])+'</span>(<span class="item-single-price">'+price+'</span>×<span class="item-amount">'+cart[itemId]+'</span>)'
+ 					+'<span class="item-price-info"><span><span class="item-total-price">￥'+ (price * num)+'</span>(<span class="item-single-price">'+price+'</span>×<span class="item-amount">'+num+'</span>)'
  					+'</span></span></div>'
  					+'<div class="col-xs-5 input-group">'
- 					+'<span data-id="'+itemId+'" class="reduce input-group-addon '+(parseInt(cart[itemId])==1?'disabled':'')+'">—</span>'
- 					+'<input class="form-control" type="text" name="amount" value="'+cart[itemId]+'" autocomplete="off" disabled>'
+ 					+'<span data-id="'+itemId+'" class="reduce input-group-addon '+(num==1?'disabled':'')+'">—</span>'
+ 					+'<input class="form-control" type="text" name="amount" value="'+num+'" autocomplete="off" disabled>'
  					+'<span data-id="'+itemId+'" class="add input-group-addon">+</span>'
  					+'</div>'
  					+'<div class="col-xs-2">'
@@ -127,10 +143,12 @@
 
 			}
 
-			$('#cart-modal').find('.modal-body').html(cart_products_html);
 			if(cost > 0){
-				$('#cart-modal').find('.modal-body').append('<div class="row total-info cart_products-total-info"><div class="col-xs-12">共<span id="cart_products-total-price">'+cost+'</span>元</div></div>');
+				cart_products_html += '<div class="row total-info cart_products-total-info"><div class="col-xs-12">共<span id="cart_products-total-price">'+cost+'</span>元</div></div>';
 			}
+
+			$('#cart-modal').find('.modal-body').html(cart_products_html);
+			
 		}
 
 	});
