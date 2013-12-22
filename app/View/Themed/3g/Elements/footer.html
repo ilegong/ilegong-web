@@ -107,7 +107,7 @@
 					var itemId = parseInt(itemDetails[0]) ;
 					var itemNum = parseInt(itemDetails[1]) ;
 					if( itemId && itemNum){
-						$('#item-' + itemId).find('div.select-item').hide();
+						$('#item-' + itemId).find('div.select-item').show();
 						cart[itemId] = {'num' : itemNum, 'price' : (parseFloat(itemDetails[2]) || 0 ) , 'name' : itemDetails[3] };
 					}
 				}
