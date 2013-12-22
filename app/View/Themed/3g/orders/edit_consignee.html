@@ -1,68 +1,77 @@
+{{$this->Html->script(array(
+            'front_orders.js',
+        ));
+}}
 <div class="o_write">
-<h1>收货人信息&nbsp;<a onclick="close_consignee(this)" href="javascript:void(0)" id="lbtnConsigneeWrite">[关闭]</a>
-   <span style="display:none"><a style="color:#FF6600;display:{addAddr_Show};" onclick="addNewAddress(this);" href="javascript:void(0)">[创建一个新地址]</a></span>
-</h1>
+<h2>收货人信息&nbsp;<a onclick="close_consignee(this)" href="javascript:void(0)" id="lbtnConsigneeWrite">[关闭]</a>
+</h2>
 <form action="{{$this->Html->url('/orders/info_consignee')}}" onsubmit="return ajaxeSubmitForm(this);" method="post">
-<div class="middle">
-	<div id="addressListPanel"><div class="cydz"><b>常用地址</b>
-	<ul>
-	{{loop $consignees  $consignee}}
-	<li id="consignee_{{$consignee['OrderConsignee']['id']}}"><table cellspacing="0" cellpadding="0" border="0" style="width:98%"><tbody><tr>
-	<td style="width:20px;"><input type="radio" onclick="changeConsignee(this,'{{$consignee['OrderConsignee']['id']}}');" name="rbtnAddr" id="addr_{{$consignee['OrderConsignee']['id']}}"></td>
-	<td><label for="addr_{{$consignee['OrderConsignee']['id']}}"><strong>{{$consignee['OrderConsignee']['name']}}</strong>&nbsp;{{$consignee['OrderConsignee']['area']}} {{$consignee['OrderConsignee']['address']}}</label></td>
-	<td style="width:40px"><a onclick="DelAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none">[删除]</a></td>
-	</tr></tbody></table>
-	</li>
-	{{/loop}}
-	</ul></div>
+	<div class="middle">
+		<div id="addressListPanel"><div class="cydz"><b>常用地址</b></div>
+			<table  class="table table-bordered"><tbody>
+				{{loop $consignees  $consignee}}
+				<tr class="consignee_row {{if $consignee['OrderConsignee']['status']}}danger{{/if}}" id="consignee_{{$consignee['OrderConsignee']['id']}}">
+				<td style="width:40px;"><input type="radio"  {{if $consignee['OrderConsignee']['status']}}checked="checked"{{/if}} onclick="chose_Consignee({{$consignee['OrderConsignee']['id']}})" name="data[OrderConsignee][id]" value="{{$consignee['OrderConsignee']['id']}}" id="addr_{{$consignee['OrderConsignee']['id']}}"></td>
+				<td><label for="addr_{{$consignee['OrderConsignee']['id']}}"><strong>{{$consignee['OrderConsignee']['name']}}</strong>&nbsp;{{$consignee['OrderConsignee']['area']}}&nbsp;{{$consignee['OrderConsignee']['address']}}</label></td>
+				<td style="width:220px">
+					<a onclick="editConsignee(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none">[编辑]</a>
+					<a onclick="SetDefaultAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none"><label style="cursor:pointer;" for="addr_{{$consignee['OrderConsignee']['id']}}">[设为默认]</label></a>
+					<a onclick="DelAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none">[删除]</a>
+				</td>
+				</tr>
+				{{/loop}}
+				<tr>
+					<td><input type="radio" id="consignee_radio_new" name="data[OrderConsignee][id]" class="hookbox" onclick="use_NewConsignee()"></td>
+					<td><label for="consignee_radio_new">使用新地址 </label><span style="display:none" class="status error" id="addNumLimitNote">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 当前地址数量已达上限，若要继续添加新地址，请先删除部分收货地址。</span></td>
+				</tr>
+			</tbody></table>
+		</div>
+		
+		<div id="consignee_addr" style="display:none;">
+			<table class="table table-bordered">
+			<tbody><tr>
+			    <td width="125" valign="middle" align="right"><font color="red">*</font>收货人姓名：</td>
+			    <td valign="middle" align="left">
+			        <input type="text" onblur="check_addressName()" name="data[OrderConsignee][name]" value="{{$this->Session->read('OrderConsignee.name')}}" maxlength="20" class="txt" id="consignee_name">&nbsp;
+			    </td>
+			</tr>
+			<tr>
+			    <td valign="middle" align="right"><font color="red">*</font>省　　份：</td>
+			    <td valign="middle" align="left">
+			    	<input type="text" onblur="check_address()" name="data[OrderConsignee][area]"  value="{{$this->Session->read('OrderConsignee.area')}}" style="margin-left:2px;width:327px" maxlength="50" class="txt" id="consignee_area">&nbsp;
+			    	
+			    </td>
+			</tr>
+			<tr>
+			    <td valign="middle" align="right"><font color="red">*</font>地　　址：</td>
+			    <td valign="middle" align="left">
+			        <input type="text" onblur="check_address()" name="data[OrderConsignee][address]"  value="{{$this->Session->read('OrderConsignee.address')}}" style="margin-left:2px;width:327px" maxlength="50" class="txt" id="consignee_address">&nbsp;
+			    </td>
+			</tr>
+			<tr>
+			    <td valign="middle" align="right"><font color="red">*</font>手机号码：</td>
+			    <td valign="middle" align="left">
+			        <input type="text" onblur="check_mobile();"  name="data[OrderConsignee][mobilephone]"  value="{{$this->Session->read('OrderConsignee.mobilephone')}}" class="txt" id="consignee_mobilephone"> &nbsp;或者 固定电话： <input type="text"  name="data[OrderConsignee][telephone]"  onblur="check_telephone()" value="{{$this->Session->read('OrderConsignee.telephone')}}" class="txt" id="consignee_telephone">&nbsp;<font color="#000000">用于接收发货通知短信及送货前确认</font>
+			    </td>
+			</tr>
+			<tr>
+			    <td valign="middle" align="right">电子邮件：</td>
+			    <td valign="middle" align="left">
+			        <input type="text" onblur="check_email()"  name="data[OrderConsignee][email]"  value="{{$this->Session->read('OrderConsignee.email')}}" class="txt" id="consignee_email"> &nbsp;<font color="#000000">用来接收订单提醒邮件，便于您及时了解订单状态</font>
+			    </td>
+			</tr>
+			<tr>
+			    <td valign="middle" align="right">邮政编码：</td>
+			    <td valign="middle" align="left">
+			         <input type="text" onblur="check_postcode()"  name="data[OrderConsignee][postcode]"  value="{{$this->Session->read('OrderConsignee.postcode')}}" style="width:77px" class="txt" id="consignee_postcode">&nbsp;<font color="#000000" style="margin-left:53px">有助于快速确定送货地址</font>
+			     </td>
+			</tr>
+			</tbody></table>
+		</div>
 	</div>
-<div id="consignee_addr">
-<table width="100%" cellspacing="0" border="0">
-<tbody><tr>
-    <td width="85" valign="middle" align="right"><font color="red">*</font>收货人姓名：</td>
-    <td valign="middle" align="left">
-        <input type="text" onblur="check_addressName()" name="data[OrderConsignee][name]" value="{{$this->Session->read('OrderConsignee.name')}}" maxlength="20" class="txt" id="consignee_name">&nbsp;
-    </td>
-</tr>
-<tr>
-    <td valign="middle" align="right"><font color="red">*</font>省　　份：</td>
-    <td valign="middle" align="left">
-    	<input type="text" onblur="check_address()" name="data[OrderConsignee][area]"  value="{{$this->Session->read('OrderConsignee.area')}}" style="margin-left:2px;width:327px" maxlength="50" class="txt" id="consignee_area">&nbsp;
-    	<!-- 
-        <span id="consignee_arae"><select onchange="changeProvince(this)" id="consignee_province"><option value="-22">请选择</option><option value="1">北京</option><option value="2">上海</option><option value="3">天津</option><option selected="" value="4">重庆</option><option value="5">河北</option><option value="6">山西</option><option value="7">河南</option><option value="8">辽宁</option><option value="9">吉林</option><option value="10">黑龙江</option><option value="11">内蒙古</option><option value="12">江苏</option><option value="13">山东</option><option value="14">安徽</option><option value="15">浙江</option><option value="16">福建</option><option value="17">湖北</option><option value="18">湖南</option><option value="19">广东</option><option value="20">广西</option><option value="21">江西</option><option value="22">四川</option><option value="23">海南</option><option value="24">贵州</option><option value="25">云南</option><option value="26">西藏</option><option value="27">陕西</option><option value="28">甘肃</option><option value="29">青海</option><option value="30">宁夏</option><option value="31">新疆</option><option value="32">台湾</option><option value="42">香港</option><option value="43">澳门</option><option value="84">钓鱼岛</option></select><select onchange="changeCity(this)" id="consignee_city"><option value="-22">请选择</option><option selected="" value="87">重庆市*</option></select><select onchange="check_con_area();changeCounty(this)" id="consignee_county"><option value="-22">请选择</option><option selected="" value="103">渝中区*</option><option value="88">江北区(内环高速以里)*</option><option value="106">九龙坡区(内环高速以里)*</option><option value="107">沙坪坝区(内环高速以里及虎溪大学城)*</option><option value="3076">高新区(内环高速以里)*</option><option value="111">大渡口区(内环高速以里)*</option><option value="104">巴南区(岔路口往市区以里)*</option><option value="4298">南岸区(内环以内及邮电大学)*</option><option value="105">万盛区</option><option value="3131">合川区</option><option value="4164">城口县</option><option value="108">渝北区</option><option value="109">北碚区</option><option value="112">双桥区</option><option value="113">万州区</option><option value="114">涪陵区</option><option value="115">梁平县</option><option value="116">永川区</option><option value="118">江津区</option><option value="119">南川市</option><option value="120">铜梁县</option><option value="121">长寿区</option><option value="123">潼南县</option><option value="124">荣昌县</option><option value="125">璧山县</option><option value="126">大足县</option><option value="128">黔江区</option><option value="129">武隆县</option><option value="130">丰都县</option><option value="131">奉节县</option><option value="132">开县</option><option value="133">云阳县</option><option value="134">忠县</option><option value="135">巫溪县</option><option value="136">巫山县</option><option value="137">石柱土家族</option><option value="138">彭水苗族土家</option><option value="139">垫江县</option><option value="140">酉阳土家族苗族</option><option value="141">秀山土家族苗族</option><option value="357">綦江县</option><option value="4264">江北区(内环高速以外)</option><option value="4303">高新区(内环高速以外)*</option><option value="4304">南岸区(内环以外)</option><option value="4299">巴南区(岔路口往市区以外)</option><option value="4265">九龙坡区(内环高速以外)</option><option value="4266">大渡口区(内环高速以外)</option><option value="4267">沙坪坝区(内环高速以外)</option></select></span>&nbsp;&nbsp;注:标“*”的为支持货到付款的地区，<a class="link_005AA0" target="_blank" href="http://www.360buy.com/help/cod.aspx">查看货到付款地区</a>
-         -->
-    </td>
-</tr>
-<tr>
-    <td valign="middle" align="right"><font color="red">*</font>地　　址：</td>
-    <td valign="middle" align="left">
-        <input type="text" onblur="check_address()" name="data[OrderConsignee][address]"  value="{{$this->Session->read('OrderConsignee.address')}}" style="margin-left:2px;width:327px" maxlength="50" class="txt" id="consignee_address">&nbsp;
-    </td>
-</tr>
-<tr>
-    <td valign="middle" align="right"><font color="red">*</font>手机号码：</td>
-    <td valign="middle" align="left">
-        <input type="text" onblur="check_mobile();"  name="data[OrderConsignee][mobilephone]"  value="{{$this->Session->read('OrderConsignee.mobilephone')}}" class="txt" id="consignee_mobilephone"> &nbsp;或者 固定电话： <input type="text"  name="data[OrderConsignee][telephone]"  onblur="check_telephone()" value="{{$this->Session->read('OrderConsignee.telephone')}}" class="txt" id="consignee_telephone">&nbsp;<font color="#000000">用于接收发货通知短信及送货前确认</font>
-    </td>
-</tr>
-<tr>
-    <td valign="middle" align="right">电子邮件：</td>
-    <td valign="middle" align="left">
-        <input type="text" onblur="check_email()"  name="data[OrderConsignee][email]"  value="{{$this->Session->read('OrderConsignee.email')}}" class="txt" id="consignee_email"> &nbsp;<font color="#000000">用来接收订单提醒邮件，便于您及时了解订单状态</font>
-    </td>
-</tr>
-<tr>
-    <td valign="middle" align="right">邮政编码：</td>
-    <td valign="middle" align="left">
-         <input type="text" onblur="check_postcode()"  name="data[OrderConsignee][postcode]"  value="{{$this->Session->read('OrderConsignee.postcode')}}" style="width:77px" class="txt" id="consignee_postcode">&nbsp;<font color="#000000" style="margin-left:53px">有助于快速确定送货地址</font>
-     </td>
-</tr>
-</tbody></table>
-</div>
-</div>
-<div style="padding:10px 0 10px 45px;"><input type="checkbox" {{if $this->Session->read('OrderConsignee.save_address')}}checked="checked"{{/if}} name="data[OrderConsignee][save_address]" value="1" id="save_address"><label for="save_address">[添加到常用地址]</label></div>
-<div class="footer">
-    <input type="submit" value="保存收货人信息" class="btn">
-</div>
+	<div class="footer">
+		<input type="hidden" name="data[OrderConsignee][edit_type]" id="edit_type" value="select">
+	    <input type="submit" value="保存收货人信息" class="btn btn-primary">
+	</div>
 </form>
 </div>
