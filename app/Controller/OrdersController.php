@@ -32,6 +32,13 @@ class OrdersController extends AppController{
 			$products = $this->Product->find('all',array('conditions'=>array(
 					'id' => $product_ids
 			)));
+			/*清空购物车中的商品，将cookie信息中的商品重新加入购物车*/
+			$this->Cart->deleteAll(array(
+					'status'=> 0,
+					'order_id' => null,
+					'OR'=> $this->user_condition
+			));
+			
 			$Carts = array();
 			foreach($products as $p){
 				$Cart = array('Cart'=>array(
@@ -59,6 +66,12 @@ class OrdersController extends AppController{
 					)));
 		}
 		$total_price = $this->_calculateTotalPrice($Carts);
+		if(empty($Carts)){
+			$this->__message('订单金额错误，请返回购物车查看','/');
+		}
+		if($total_price <= 0){
+			$this->__message('订单金额错误，请返回购物车查看','/carts/listcart');
+		}
 		$data = array();
 		$data['total_price'] = $total_price;
 		$data['creator'] = $this->currentUser['id'];
@@ -76,6 +89,7 @@ class OrdersController extends AppController{
 			foreach($Carts as $cart){
 				$this->Cart->updateAll(array('order_id'=>$order_id,'status'=>1),array('id'=>$cart['Cart']['id'],'creator'=>$this->currentUser['id']));
 			}
+			setcookie("cart_products", '',time()-3600,'/');
 			$this->__message('订单已生成','/orders/info/'.$order_id);
 		}
 		else{
