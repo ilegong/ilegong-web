@@ -178,7 +178,7 @@ function uc_fopen2($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE
 function uc_fopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE, $ip = '', $timeout = 15, $block = TRUE) {
 	if(function_exists('curl_init') && function_exists('curl_exec'))
 	{
-		echo "$url===$post=";
+		echo "$url $post";
 		$ch = curl_init();
 		// set URL and other appropriate options
 		curl_setopt($ch, CURLOPT_URL, $url);
@@ -194,6 +194,7 @@ function uc_fopen($url, $limit = 0, $post = '', $cookie = '', $bysocket = FALSE,
 		
 		$return = curl_exec($ch);
 		curl_close($ch);
+		echo $return;
 		return $return;
 	}
 	$return = '';
