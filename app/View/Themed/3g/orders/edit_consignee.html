@@ -27,7 +27,7 @@
 			</tbody></table>
 		</div>
 		
-		<div id="consignee_addr" style="display:none;">
+		<div id="consignee_addr" {{if count($consignees)}}style="display:none;"{{/if}}>
 			<table class="table table-bordered">
 			<tbody><tr>
 			    <td width="125" valign="middle" align="right"><font color="red">*</font>收货人姓名：</td>
@@ -70,7 +70,7 @@
 		</div>
 	</div>
 	<div class="footer">
-		<input type="hidden" name="data[OrderConsignee][edit_type]" id="edit_type" value="select">
+		<input type="hidden" name="data[OrderConsignee][edit_type]" id="edit_type" value="{{if count($consignees)}}select{{else}}new{{/if}}">
 	    <input type="submit" value="保存收货人信息" class="btn btn-primary">
 	</div>
 </form>
