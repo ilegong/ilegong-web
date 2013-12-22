@@ -161,6 +161,8 @@
 			
 			if(itemNum <= 0){
 				$('#checkout-btn' ).removeClass('btn-primary').addClass('btn-warning');
+			}else{
+				$('#checkout-btn' ).removeClass('btn-warning').addClass('btn-primary');
 			}
 
 			$('#cart-modal').find('.modal-body').html(cart_products_html);
