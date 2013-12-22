@@ -15,9 +15,10 @@ class UCenterAuthenticate extends BaseAuthenticate {
         if (empty($request->data[$model][$fields['username']]) || empty($request->data[$model][$fields['password']])) {
             return false;
         }
+        print_r($request->data);
         App::import('Vendor', '', array('file' => 'uc_client' . DS . 'client.php'));
         list($uid, $username, $password, $email) = $user = uc_user_login($request->data[$model][$fields['username']], $request->data[$model][$fields['password']]);
-        
+        echo "========$uid, $username, $password, $email=============";
         if ($uid > 0) {
             $_model = ClassRegistry::init($model);
             $result = $_model->find('first', array(
