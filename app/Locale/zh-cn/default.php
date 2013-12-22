@@ -42,11 +42,12 @@ return array(
 	'admin_pannel'=>'管理后台',
 	'clear_cache'=>'清除缓存',
 	'submit_comment'=>'提交评论',
-	''=>'',
-	''=>'',
-	''=>'',
-	''=>'',
-	''=>'',
+		
+	'edit_profile' => '个人资料',
+	'edit_password' => '修改密码',
+	'activate_user' => '激活用户',
+	'user_orders' => '个人订单',
+	'login_success' => '成功登录',
 );
 
 /**

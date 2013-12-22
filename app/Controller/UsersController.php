@@ -309,7 +309,7 @@ class UsersController extends AppController {
                     'last_login' => "'".date('Y-m-d H:i:s')."'",
                 ),array('id' => $this->User->id,));
                 
-                $this->Session->setFlash(__('Login Success', true).$this->Session->read('Auth.User.session_flash'));
+                $this->Session->setFlash(lang('login_success').$this->Session->read('Auth.User.session_flash'));
                 $success = true;
             }
         }
