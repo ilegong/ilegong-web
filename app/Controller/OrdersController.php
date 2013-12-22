@@ -74,7 +74,7 @@ class OrdersController extends AppController{
 		$current_consignee = $this->Session->read('OrderConsignee');
 		if(empty($current_consignee)){
 			$this->loadModel('OrderConsignee');
-			$consignees = $this->OrderConsignee->find('first',array('conditions'=>array('creator'=>$this->currentUser['User']['id'])));
+			$consignees = $this->OrderConsignee->find('first',array('conditions'=>array('creator'=>$this->currentUser['id'])));
 			$current_consignee = array();
 			// empty 不能检测函数，只能检测变量
 			if(!empty($consignees)){
@@ -163,7 +163,7 @@ class OrdersController extends AppController{
 	function edit_consignee(){
 		// 常用地址列表，及收件人信息编辑表单
 		$this->loadModel('OrderConsignee');
-		$consignees = $this->OrderConsignee->find('all',array('conditions'=>array('creator'=>$this->currentUser['User']['id'])));
+		$consignees = $this->OrderConsignee->find('all',array('conditions'=>array('creator'=>$this->currentUser['id'])));
 		$this->set('consignees',$consignees);	
 		if(count($consignees)<10){
 			$this->Session->write('OrderConsignee.save_address',1);
@@ -176,7 +176,7 @@ class OrdersController extends AppController{
 	function delete_consignee($id){
 		$this->autoRender = false;
 		$this->loadModel('OrderConsignee');
-		$consignees = $this->OrderConsignee->deleteAll(array('creator'=>$this->currentUser['User']['id'],'id'=> $id));
+		$consignees = $this->OrderConsignee->deleteAll(array('creator'=>$this->currentUser['id'],'id'=> $id));
 		$successinfo = array('id' => $id);
 		echo json_encode($successinfo);
         return;
@@ -190,7 +190,7 @@ class OrdersController extends AppController{
 		$this->loadModel('OrderConsignee');
 		$consignee = $this->OrderConsignee->find('first',
 		array(
-			'conditions'=>array('id'=>$id,'creator'=>$this->currentUser['User']['id']),
+			'conditions'=>array('id'=>$id,'creator'=>$this->currentUser['id']),
 		));
 		echo json_encode($consignee['OrderConsignee']);
         return;
@@ -202,7 +202,7 @@ class OrdersController extends AppController{
 	function edit_invoice(){
 		// 常用地址列表，及收件人信息编辑表单
 		$this->loadModel('OrderInvoice');
-		$invoices = $this->OrderInvoice->find('all',array('conditions'=>array('creator'=>$this->currentUser['User']['id'])));
+		$invoices = $this->OrderInvoice->find('all',array('conditions'=>array('creator'=>$this->currentUser['id'])));
 		$this->set('invoices',$invoices);	
 	}
 	
@@ -211,7 +211,7 @@ class OrdersController extends AppController{
 		$this->loadModel('OrderInvoice');
 		$consignee = $this->OrderInvoice->find('first',
 		array(
-			'conditions'=>array('id'=>$id,'creator'=>$this->currentUser['User']['id']),
+			'conditions'=>array('id'=>$id,'creator'=>$this->currentUser['id']),
 		));
 		echo json_encode($consignee['OrderInvoice']);
         return;
