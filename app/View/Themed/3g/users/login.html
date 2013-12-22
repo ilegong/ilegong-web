@@ -2,28 +2,28 @@
 {{$this->Form->create('User',array('id'=>'loginform','method'=>"post",'class'=>'form-horizontal','onsubmit'=>$isajax ? "return ajaxeSubmitForm(this,'loginSucess');" : "",'escape' => false))}}
 <div class="lgfm nlf">
 	<div class="form-group">
-	    <label for="inputEmail3" class="col-sm-2 control-label">用户名　：</label>
-	    <div class="col-sm-10">
+	    <label for="inputEmail3" class="col-xs-2 control-label">用户名　：</label>
+	    <div class="col-xs-10">
 	      <input type="text" name="data[User][username]" class="form-control" placeholder="用户名">
 	    </div>
 	</div>
 	<div class="form-group">
-	    <label for="inputEmail3" class="col-sm-2 control-label">密　码　：</label>
-	    <div class="col-sm-10">
+	    <label for="inputEmail3" class="col-xs-2 control-label">密　码　：</label>
+	    <div class="col-xs-10">
 	      <input type="password" name="data[User][password]" class="form-control" placeholder="用户名">
 	    </div>
 	</div>
 	{{$this->Form->input('referer',array('type'=>'hidden'))}}
 	<div id="login_errorinfo" class="ui-state-error ui-corner-all" style="display: none;"></div>
 	<div class="form-group">
-	    <label for="inputEmail3" class="col-sm-2 control-label"></label>
-	    <div class="col-sm-10">
+	    <label for="inputEmail3" class="col-xs-2 control-label"></label>
+	    <div class="col-xs-10">
 	      <label for="cookietime"><input type="checkbox" value="2592000" tabindex="1" id="cookietime" name="cookietime" class="pc" fwin="login"> 记住我的登录状态</label>
 	    </div>
 	</div>
 	<div class="form-group">
-	    <label for="inputEmail3" class="col-sm-2 control-label"></label>
-	    <div class="col-sm-10">
+	    <label for="inputEmail3" class="col-xs-2 control-label"></label>
+	    <div class="col-xs-10">
 	      <button tabindex="1" value="true"  name="loginsubmit" type="submit" class="btn btn-primary"><span>登录</span></button>
 		  <a title="注册帐号" class="btn btn-default" href="{{$this->Html->url('/users/register.html')}}">注册</a>
 		  <a title="找回密码" onclick="" href="{{$this->Html->url('/users/forgot')}}">找回密码</a>
