@@ -430,18 +430,14 @@ class AppController extends Controller {
     }
 
     function renderElement($element) {
-    	return $this->render($element,false);
-        $this->beforeRender();
-        $this->Components->trigger('beforeRender', array(&$this));
-
-        $viewClass = $this->viewClass;
-        if ($this->viewClass != 'View') {
-            list($plugin, $viewClass) = pluginSplit($viewClass);
-            $viewClass = $viewClass . 'View';
-            App::uses($viewClass, 'View');
-        }
-        $View = new $viewClass($this);
-        return $View->element($element);
+    	$this->viewClass='Miao'; //可能会被改成Json，需要强制指定
+    	$this->View = $this->_getViewObject();
+    	$response =  $this->render($element,false);
+//     	var_dump($response);
+    	if($response instanceof CakeResponse){
+    		return $response->body();
+    	}
+    	return $response;
     }
 
     function _lazyloadimg($content) {
