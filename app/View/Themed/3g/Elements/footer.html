@@ -42,8 +42,16 @@
 
 		//show cart button
 		$('#card-btn').click(function(){
-			createCart();
-			$('#cart-modal').modal(); 
+			if($(this).hasClass('btn-success')){ //has item
+				createCart();
+				$('#cart-modal').modal(); 
+			}
+		});
+
+		$('#checkout-btn').click(function(){
+			if($(this).hasClass('btn-warning')){
+				return false;
+			}
 		});
 
 		//cart dialog
@@ -135,21 +143,24 @@
  					+'<span class="item-name" title="'+name+'">'+name+' <br></span>'
  					+'<span class="item-price-info"><span><span class="item-total-price">￥'+ (price * num)+'</span>(<span class="item-single-price">'+price+'</span>×<span class="item-amount">'+num+'</span>)'
  					+'</span></span></div>'
- 					+'<div class="col-xs-5 input-group">'
+ 					+'<div class="col-xs-5 input-group input-group-sm">'
  					+'<span data-id="'+itemId+'" class="reduce input-group-addon '+(num==1?'disabled':'')+'">—</span>'
  					+'<input class="form-control" type="text" name="amount" value="'+num+'" autocomplete="off" disabled>'
  					+'<span data-id="'+itemId+'" class="add input-group-addon">+</span>'
  					+'</div>'
  					+'<div class="col-xs-2">'
  					+'<a class="delete-btn" data-id="'+itemId+'"  href="javascript:void(0);">'
- 					+'<span class="glyphicon glyphicon-remove-circle"></span></a>'
+ 					+'<span class="glyphicon glyphicon-remove-circle" style="font-size:18px;color:red;"></span></a>'
  					+'</div>'
  					+'</div><div class="divider"></div>';
 
 			}
 
-			if(cost > 0){
-				cart_products_html += '<div class="row total-info cart_products-total-info"><div class="col-xs-12">共<span id="cart_products-total-price">'+cost+'</span>元</div></div>';
+			
+			$('#cart_products-total-price').text(cost);
+			
+			if(itemNum <= 0){
+				$('#checkout-btn' ).removeClass('btn-primary').addClass('btn-warning');
 			}
 
 			$('#cart-modal').find('.modal-body').html(cart_products_html);

@@ -1,4 +1,4 @@
-<div class="modal fade" id="cart-modal">
+<div class="modal fade" id="cart-modal" style="overflow-y:auto;">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -9,8 +9,9 @@
         <p>没有选定要购买的特产</p>
       </div>
       <div class="modal-footer">
+        <div class="pull-left" >共<strong><span id="cart_products-total-price">7150</span></strong>元</div>
         <button type="button" class="btn btn-default" data-dismiss="modal">继续购物</button>
-        <a class="btn btn-primary" href="/orders/info">结算购物车</a>
+        <a class="btn btn-primary" href="/orders/info" id="checkout-btn">结算购物车</a>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
