@@ -50,7 +50,9 @@ if (!defined('CORE_PATH')) {
     define('APP_PATH', ROOT . DS . APP_DIR . DS);
     define('CORE_PATH', CAKE_CORE_INCLUDE_PATH . DS);
 }
-define('COMMON_PATH', ROOT . DS . 'lib' . DS);
+if (!defined('COMMON_PATH')) {
+	define('COMMON_PATH', ROOT . DS . 'lib' . DS);
+}
 define('VIEWS', APP_PATH . 'View' . DS);
 
 
