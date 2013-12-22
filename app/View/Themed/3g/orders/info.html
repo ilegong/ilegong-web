@@ -1,0 +1,71 @@
+<style>
+td {padding:5px 10px;}
+
+</style>
+{{$this->Html->script(array(
+            'front_orders.js',
+        ));
+}}
+<div  class="container">
+	<div class="orderinfo">
+		<div id="part_consignee">{{template orders/order_consignee}}</div>
+		
+		
+		<div id="part_payTypeAndShipType"><!-- template orders/info_shiptype--></div>
+		
+		<div id="part_invoice"><!-- template orders/order_invoice--></div>
+		  	
+		<div id="part_remark">
+			<div class="o_show">
+			 <h2>订单备注&nbsp;<a onclick="showForm_remark(this)" href="javascript:void(0)">[修改]</a></h2>
+			 <div class="middle">
+			            <table style="width:100%">
+			                <tbody><tr>
+			                    <td id="order_remark_show" style="text-align:left;padding-left:20px;">
+			                    {{if $this->Session->read('Order.remark')}}{{$this->Session->read('Order.remark')}}
+			                    {{else}}暂无备注{{/if}}</td>			                    
+			                </tr>
+			            </tbody></table>
+			</div>
+			   <div class="footer"></div>
+			</div>
+			<div class="o_write" style="display:none;">
+			    <h2>订单备注 <a onclick="close_remark()" href="javascript:void(0)">[关闭]</a> <span class="f12 fw100">声明：备注中有关收货人信息、支付方式、配送方式、发票信息等购买要求一律以上面的选择为准，备注无效。</span></h2>
+			    <div class="middle">
+			        <input type="text" maxlength="200" value="" class="txt" style="width:300px;" id="order_remark">   &nbsp;&nbsp;&nbsp;
+			    </div>
+			    <div class="footer">
+			        <input type="button" onclick="saveOrder_remark($('#order_remark').val())" value="保存订单备注" class="btn btn-default">
+			    </div>
+			</div>
+		</div>
+		
+		<div class="o_show">
+		<h2>商品清单	<a style="color:#0070D7" href="javascript:void(0);" id="edit-cart-btn" id="backToCartBtn">返回修改购物数量</a></h2>
+		
+		<div class="p-list">
+			<table  class="table table-bordered">
+			<tr><th width="50%">商品名称</th><th>购买价格</th><th>商品数量</th><th>合计</th></tr>
+			<tbody>
+			{{loop $Carts $cart}}
+			<tr><td>{{$cart['Cart']['name']}}</td>
+			<td>{{$cart['Cart']['price']}}</td>
+			<td>{{$cart['Cart']['num']}}</td>
+			<td>{{$cart['Cart']['price']*$cart['Cart']['num']}}</td>		
+			</tr>
+			{{/loop}}
+			</tbody>
+			</table>
+		</div></div>		
+		<!-- template orders/info_wave  -->		
+		<div class="pull-right"><a class="btn btn-primary" href="{{$this->Html->url('/orders/balance')}}">结算</a></div>	
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+	$('#edit-cart-btn').click(function(){
+			createCart();
+			$('#cart-modal').modal(); 
+	});
+});
+</script>
