@@ -315,6 +315,28 @@ class UsersController extends AppController {
         }
         
         if ($success) {
+        	$wx_openid = $this->Session->read('wx_openid');
+        	if($wx_openid){        		
+        		$this->loadModel('Oauthbinds');
+        		$oauth = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $wx_openid,'source'=>'weixin',)));
+        		if(!empty($oauth) && !empty($oauth['Oauthbinds']['user_id'])){
+        			if($this->User->id != $oauth['Oauthbinds']['user_id']){
+        				$this->Oauthbinds->updateAll(array('user_id'=>	$this->User->id),
+        					array('oauth_openid' => $wx_openid,'source'=>'weixin')
+        				);
+        			}
+        		}
+        		else{
+        			$this->Oauthbinds->save(array(
+        				'source'=>'weixin',
+        				'user_id'=>	$this->User->id,
+        				'oauth_openid' => $wx_openid,
+        				'created'=>date('Y-m-d H:i:s'),
+        				'updated'=>date('Y-m-d H:i:s'),
+        			));
+        		}
+        	}
+        	
             $this->Hook->call('loginSuccess');            
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
                 // ajax 操作

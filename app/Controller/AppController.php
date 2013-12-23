@@ -78,6 +78,17 @@ class AppController extends Controller {
     			$this->Cookie->delete('Auth.User');//删除解密错误的cookie信息
     		}
     	}
+    	/* 微信链接打开登录 */
+    	if($_GET['wx_openid']){
+    		$this->Session->write('wx_openid',$_GET['wx_openid']);
+    		$this->loadModel('Oauthbinds');
+    		$oauth = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $_GET['wx_openid'])));
+    		if(!empty($oauth) && !empty($oauth['Oauthbinds']['user_id'])){
+    			$uid = $oauth['Oauthbinds']['user_id'];
+    			$data = $this->User->find('first', array('conditions' => array('id' => $user['id'])));
+    			$this->Session->write('Auth.User',$data['User']);
+    		}
+    	}
     
     	if(!Configure::read('Site.status')){
     		$this->layout = 'maintain';
