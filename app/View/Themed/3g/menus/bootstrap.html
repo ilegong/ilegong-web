@@ -41,12 +41,12 @@
 				 <li>
 				 {{eval echo $this->Html->link(__('Login',true), array(				
 				'controller' => 'users', 'action' => 'login','ext'=>false				
-			),array('onclick'=>"return publishController.open_dialog(this.href,{title:'µÇÂ¼'});",)); }}
+			)); }}
 				 </li>
 				  <li>
 				 {{eval echo $this->Html->link(__('Register',true), array(
 				'controller' => 'users', 'action' => 'register'
-			),array('onclick'=>"return publishController.open_dialog(this.href,{title:'×¢²á',width:650});")); }}
+			)); }}
 				 </li>
 		{{/if}}
                                                         
