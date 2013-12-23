@@ -131,7 +131,7 @@ class UsersController extends AppController {
         }
 
         // 加载选项，默认值等
-        $this->__loadFormValues('User');
+        //$this->__loadFormValues('User');
     }
 
     function activate($username = null, $key = null) {
