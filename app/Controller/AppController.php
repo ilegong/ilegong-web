@@ -85,7 +85,8 @@ class AppController extends Controller {
     		$oauth = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $_GET['wx_openid'])));
     		if(!empty($oauth) && !empty($oauth['Oauthbinds']['user_id'])){
     			$uid = $oauth['Oauthbinds']['user_id'];
-    			$data = $this->User->find('first', array('conditions' => array('id' => $user['id'])));
+    			$this->loadModel('User');
+    			$data = $this->User->find('first', array('conditions' => array('id' => $uid)));
     			$this->Session->write('Auth.User',$data['User']);
     		}
     	}
