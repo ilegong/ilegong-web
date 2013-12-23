@@ -140,7 +140,7 @@ class WeixinController extends AppController {
         $timestamp = $_GET["timestamp"];
         $nonce = $_GET["nonce"];	
 	        		
-		$token = TOKEN;
+		$token = WEIXIN_TOKEN;
 		$tmpArr = array($token, $timestamp, $nonce);
 		sort($tmpArr);
 		$tmpStr = implode( $tmpArr );
