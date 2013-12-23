@@ -30,7 +30,7 @@
 		<div id="consignee_addr" {{if $total_consignee}}style="display:none;"{{/if}}>
 			<table class="table table-bordered">
 			<tbody><tr>
-			    <td width="125" valign="middle" align="right"><font color="red">*</font>收货人姓名：</td>
+			    <td width="125" valign="middle" align="right"><font color="red">*</font>收货人：</td>
 			    <td valign="middle" align="left">
 			        <input type="text" onblur="check_addressName()" name="data[OrderConsignee][name]" value="{{$this->Session->read('OrderConsignee.name')}}" maxlength="20" class="txt" id="consignee_name">&nbsp;
 			    </td>
@@ -49,7 +49,7 @@
 			    </td>
 			</tr>
 			<tr>
-			    <td valign="middle" align="right"><font color="red">*</font>手机号码：</td>
+			    <td valign="middle" align="right"><font color="red">*</font>手机：</td>
 			    <td valign="middle" align="left">
 			        <input type="text" onblur="check_mobile();"  name="data[OrderConsignee][mobilephone]"  value="{{$this->Session->read('OrderConsignee.mobilephone')}}" class="txt" id="consignee_mobilephone"> &nbsp;或者 固定电话： <input type="text"  name="data[OrderConsignee][telephone]"  onblur="check_telephone()" value="{{$this->Session->read('OrderConsignee.telephone')}}" class="txt" id="consignee_telephone">&nbsp;<font color="#000000">用于接收发货通知短信及送货前确认</font>
 			    </td>
