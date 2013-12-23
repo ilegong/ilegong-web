@@ -3,19 +3,7 @@
       <a href="{{$this->Html->url(Configure::read('Site.logo_url'))}}" style="padding:5px 15px;" >{{$this->Html->image($this->Html->url(Configure::read('Site.logo')), array('style'=>'height:35px;','title' => $site[title],'alt' => $site[title]))}}</a>
     </div>
 	<nav  role="navigation">
-	<?php 
-		if(empty($top_category_id)) $top_category_id=0;
-	echo $this->Section->getNavMenu('Category',
-		array(
-			'selectedid'=> $top_category_id,
-			'ulAttributes'=>array('class'=>'nav nav-pills'),
-                        'defaultClass'=>'ui-state-default',
-			'preli'=>'',
-			'sufli'=>'',
-			'maxdepth' => 2,
-		),$site_cate_id
-	);
-	?>
+
 	<ul class="nav navbar-nav pull-right">
 		{{if (!empty($CurrentUser))}}
                     <li class="dropdown">
@@ -51,5 +39,20 @@
 		{{/if}}
                                                         
     </ul>
+
+	<?php 
+		if(empty($top_category_id)) $top_category_id=0;
+	echo $this->Section->getNavMenu('Category',
+		array(
+			'selectedid'=> $top_category_id,
+			'ulAttributes'=>array('class'=>'nav nav-pills'),
+                        'defaultClass'=>'ui-state-default',
+			'preli'=>'',
+			'sufli'=>'',
+			'maxdepth' => 2,
+		),$site_cate_id
+	);
+	?>
+	
     </nav>
 </header>
