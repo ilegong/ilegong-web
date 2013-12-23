@@ -105,7 +105,8 @@ class WeixinController extends AppController {
 				."<FromUserName><![CDATA[$sender]]></FromUserName>"
 				."<CreateTime>$time</CreateTime>"
 				."<MsgType><![CDATA[text]]></MsgType>"
-				."<Content><![CDATA[$cont]]></Content>";
+				."<Content><![CDATA[$cont]]></Content>"
+				."</xml>";
     }
 
     // array = title => '', description => '', picUrl => '', url => ''
