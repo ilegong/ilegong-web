@@ -111,6 +111,14 @@ class OrdersController extends AppController{
 	 * @param unknown_type $order_id
 	 */
 	function info($order_id=''){
+		$has_chosen_consignee = false;
+		$this->loadModel('OrderConsignee');
+		$consignees = $this->OrderConsignee->find('all',array(
+			'conditions'=>array('creator'=>$this->currentUser['id']),
+			'order' => 'status desc',
+		));
+		$total_consignee = count($consignees);
+		
 		$this->loadModel('Cart');
 		if(empty($order_id)){
 			if(!empty($_COOKIE['cart_products'])){
@@ -148,42 +156,52 @@ class OrdersController extends AppController{
 						'OR'=> $this->user_condition
 				)));
 			}
+			$current_consignee = $this->Session->read('OrderConsignee');
+			if(empty($current_consignee)){			
+				$first_consignees = current($consignees);
+				$current_consignee = array();
+				// empty 不能检测函数，只能检测变量
+				if(!empty($first_consignees)){
+					$current_consignee = $first_consignees['OrderConsignee'];
+					$has_chosen_consignee = true;
+				}
+				else{				
+					$current_consignee['name'] = $this->Session->read('Auth.User.nickname');
+					$current_consignee['email'] = $this->Session->read('Auth.User.email');
+					$current_consignee['mobilephone'] = $this->Session->read('Auth.User.mobilephone');
+					$current_consignee['telephone'] = $this->Session->read('Auth.User.telephone');
+					$current_consignee['postcode'] = $this->Session->read('Auth.User.postcode');
+					$current_consignee['address'] = $this->Session->read('Auth.User.address');
+				}
+				$this->Session->write('OrderConsignee',$current_consignee);
+			}
 		}
 		else{
-			$orderinfo = $this->Order->findById($order_id);			
+			$has_chosen_consignee = true;
+			$orderinfo = $this->Order->find('first',array(
+				'conditions'=> array('id'=>$order_id,'creator'=>$this->currentUser['id']),
+			));	
+			if(empty($orderinfo)){
+				$this->__message('订单不存在，或无权查看','/');
+			}
+			$current_consignee = array(
+				'id' => $orderinfo['Order']['consignee_id'],
+				'name' => $orderinfo['Order']['consignee_name'],
+				'address' => $orderinfo['Order']['consignee_address'],
+				'email'  => $orderinfo['Order']['consignee_email'],
+				'mobilephone'  => $orderinfo['Order']['consignee_mobilephone'],
+				'telephone'  => $orderinfo['Order']['consignee_telephone'],
+				'postcode'  => $orderinfo['Order']['consignee_postcode'],
+			);	
 			$Carts = $this->Cart->find('all',array(
 				'conditions'=>array(					
 					'order_id' => $order_id,
 					'creator'=> $this->currentUser['id']
 			)));
-		}
-		
-		$current_consignee = $this->Session->read('OrderConsignee');
-		$this->loadModel('OrderConsignee');
-		$consignees = $this->OrderConsignee->find('all',array(
-			'conditions'=>array('creator'=>$this->currentUser['id']),
-			'order' => 'status desc',
-		));
-		$total_consignee = count($consignees);
-		$has_chosen_consignee = false;
-		if(empty($current_consignee)){			
-			$first_consignees = current($consignees);
-			$current_consignee = array();
-			// empty 不能检测函数，只能检测变量
-			if(!empty($first_consignees)){
-				$current_consignee = $first_consignees['OrderConsignee'];
-				$has_chosen_consignee = true;
-			}
-			else{				
-				$current_consignee['name'] = $this->Session->read('Auth.User.nickname');
-				$current_consignee['email'] = $this->Session->read('Auth.User.email');
-				$current_consignee['mobilephone'] = $this->Session->read('Auth.User.mobilephone');
-				$current_consignee['telephone'] = $this->Session->read('Auth.User.telephone');
-				$current_consignee['postcode'] = $this->Session->read('Auth.User.postcode');
-				$current_consignee['address'] = $this->Session->read('Auth.User.address');
-			}
 			$this->Session->write('OrderConsignee',$current_consignee);
 		}
+		
+		
 		$total_price = $this->_calculateTotalPrice($Carts);
 		$this->set('has_chosen_consignee',$has_chosen_consignee);
 		$this->set('total_consignee',$total_consignee);
