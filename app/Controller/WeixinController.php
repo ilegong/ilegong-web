@@ -92,7 +92,7 @@ class WeixinController extends AppController {
 					echo $this->newTextMsg($user, $me, "正在开发中，敬请期待");
 					break;
 				default :
-					echo $this->newTextMsg($user, $me, "抱歉无法识别您的输入：${msg}。<br/>回复1进入订单页<br/>回复2查看当前热门特产<br/>回复3查看我的订阅");
+					echo $this->newTextMsg($user, $me, "抱歉无法识别您的输入：${msg}。\n回复1进入订单页\n回复2查看当前热门特产\n回复3查看我的订阅");
 			}
 		}
 	}
