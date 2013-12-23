@@ -80,6 +80,7 @@ class WeixinController extends AppController {
 				$msg = $msg."*语音信息：{$req['Recognition']}*";
 			}
 
+			//判断输入内容
 			switch($input)
 			{
 				case "1":
