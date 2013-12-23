@@ -16,6 +16,40 @@
 		),$site_cate_id
 	);
 	?>
-	
+	<ul class="nav navbar-nav pull-right">
+		{{if (!empty($CurrentUser))}}
+                    <li class="dropdown">
+                    	{{$this->Hook->call('oauthLoggedInfo')}}
+                        {{$this->Html->link($CurrentUser['nickname'].'<b class="caret"></b>', '/users/account', array('title' => 'view your account',"class"=>"dropdown-toggle","data-toggle"=>"dropdown",'escape'=>false)); }}
+                        <ul class="dropdown-menu">
+							<li><?php echo $this->Html->link(lang('edit_profile'), array('controller' => 'users','action'=>'edit','plugin' => null ,)); ?></li>
+							<li><?php echo $this->Html->link(lang('edit_password'), array('controller' => 'users','action'=>'editpassword','plugin' => null ,)); ?></li>
+                            <li><?php echo $this->Html->link(lang('user_orders'), array('controller' => 'users','action'=>'orders','plugin' => null ,)); ?></li>
+                            
+                            {{if (empty($CurrentUser['status']))}}
+								<li class="activate link">
+									{{eval echo $this->Html->link(lang('activate_user'), array(
+										'controller' => 'users', 'action' => 'activate'
+										), array('title' => 'activate your account')); }}
+								</li>
+							{{/if}}
+							<li><?php echo $this->Html->link(__('ÎÒµÄµØÖ·'), array('controller' => 'orders','action'=>'edit_consignee','plugin' => null ,)); ?></li> 
+                            <li>{{$this->Html->link('ÍË³öµÇÂ¼', '/users/logout', array('title' => 'logout your account','escape'=>false))}}</li> 
+                        </ul>                                                            
+                    </li>
+		{{else}}
+				 <li>
+				 {{eval echo $this->Html->link(__('Login',true), array(				
+				'controller' => 'users', 'action' => 'login','ext'=>false				
+			),array('onclick'=>"return publishController.open_dialog(this.href,{title:'µÇÂ¼'});",)); }}
+				 </li>
+				  <li>
+				 {{eval echo $this->Html->link(__('Register',true), array(
+				'controller' => 'users', 'action' => 'register'
+			),array('onclick'=>"return publishController.open_dialog(this.href,{title:'×¢²á',width:650});")); }}
+				 </li>
+		{{/if}}
+                                                        
+    </ul>
     </nav>
 </header>
