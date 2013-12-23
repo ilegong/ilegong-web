@@ -40,10 +40,13 @@ class WeixinController extends AppController {
 		
 		
 		$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
-		$req = xml_to_array($postStr);
+
 		
 		if (!empty($postStr))
 		{
+			$ret = xml_to_array($postStr);
+			$req = $ret["xml"];
+
 			$me = $req["ToUserName"];
 			$user = $req["FromUserName"];
 			//$type = $req["MsgType"];
