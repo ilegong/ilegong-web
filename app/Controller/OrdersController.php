@@ -159,15 +159,22 @@ class OrdersController extends AppController{
 		}
 		
 		$current_consignee = $this->Session->read('OrderConsignee');
-		if(empty($current_consignee)){
-			$this->loadModel('OrderConsignee');
-			$consignees = $this->OrderConsignee->find('first',array('conditions'=>array('creator'=>$this->currentUser['id'])));
+		$this->loadModel('OrderConsignee');
+		$consignees = $this->OrderConsignee->find('all',array(
+			'conditions'=>array('creator'=>$this->currentUser['id']),
+			'order' => 'status desc',
+		));
+		$total_consignee = count($consignees);
+		$has_chosen_consignee = false;
+		if(empty($current_consignee)){			
+			$first_consignees = current($consignees);
 			$current_consignee = array();
 			// empty 不能检测函数，只能检测变量
-			if(!empty($consignees)){
-				$current_consignee = $consignees['OrderConsignee'];
+			if(!empty($first_consignees)){
+				$current_consignee = $first_consignees['OrderConsignee'];
+				$has_chosen_consignee = true;
 			}
-			else{
+			else{				
 				$current_consignee['name'] = $this->Session->read('Auth.User.nickname');
 				$current_consignee['email'] = $this->Session->read('Auth.User.email');
 				$current_consignee['mobilephone'] = $this->Session->read('Auth.User.mobilephone');
@@ -178,6 +185,9 @@ class OrdersController extends AppController{
 			$this->Session->write('OrderConsignee',$current_consignee);
 		}
 		$total_price = $this->_calculateTotalPrice($Carts);
+		$this->set('has_chosen_consignee',$has_chosen_consignee);
+		$this->set('total_consignee',$total_consignee);
+		$this->set('consignees',$consignees);	
 		$this->set('order_id',$order_id);
 		$this->set('total_price',$total_price);
 		$this->set('Carts',$Carts);
@@ -251,7 +261,11 @@ class OrdersController extends AppController{
 	function edit_consignee(){
 		// 常用地址列表，及收件人信息编辑表单
 		$this->loadModel('OrderConsignee');
-		$consignees = $this->OrderConsignee->find('all',array('conditions'=>array('creator'=>$this->currentUser['id'])));
+		$consignees = $this->OrderConsignee->find('all',array(
+			'conditions'=>array('creator'=>$this->currentUser['id']),'order' => 'status desc',
+		));
+		$total_consignee = count($consignees);
+		$this->set('total_consignee',$total_consignee);
 		$this->set('consignees',$consignees);	
 		if(count($consignees)<10){
 			$this->Session->write('OrderConsignee.save_address',1);

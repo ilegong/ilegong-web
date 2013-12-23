@@ -8,7 +8,13 @@ td {padding:5px 10px;}
 }}
 <div  class="container">
 	<div class="orderinfo">
-		<div id="part_consignee">{{template orders/order_consignee}}</div>
+		<div id="part_consignee">
+			{{if $has_chosen_consignee}}
+				{{template orders/order_consignee}}
+			{{else}}
+				{{template orders/edit_consignee}}
+			{{/if}}
+		</div>
 		
 		
 		<div id="part_payTypeAndShipType"><!-- template orders/info_shiptype--></div>
