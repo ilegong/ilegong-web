@@ -4,7 +4,7 @@
 }}
 <div id="edit_consignee" class="o_write">
 <h2>收货人信息&nbsp;</h2>
-<form action="{{$this->Html->url('/orders/info_consignee')}}" onsubmit="return ajaxeSubmitForm(this);" method="post">
+<form action="{{$this->Html->url('/orders/info_consignee')}}" class="form-horizontal"  onsubmit="return ajaxeSubmitForm(this);" method="post">
 	<div class="middle">
 		<div id="addressListPanel"><div class="cydz"><b>常用地址</b></div>
 			<table  class="table table-bordered"><tbody>
@@ -13,8 +13,9 @@
 				<td style="width:40px;"><input type="radio"  {{if $consignee['OrderConsignee']['status']}}checked="checked"{{/if}} onclick="chose_Consignee({{$consignee['OrderConsignee']['id']}})" name="data[OrderConsignee][id]" value="{{$consignee['OrderConsignee']['id']}}" id="addr_{{$consignee['OrderConsignee']['id']}}"></td>
 				<td><label for="addr_{{$consignee['OrderConsignee']['id']}}"><strong>{{$consignee['OrderConsignee']['name']}}</strong>&nbsp;{{$consignee['OrderConsignee']['address']}}</label></td>
 				<td style="width:220px">
-					<a onclick="editConsignee(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none">[编辑]</a>
 					<a onclick="SetDefaultAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none"><label style="cursor:pointer;" for="addr_{{$consignee['OrderConsignee']['id']}}">[设为默认]</label></a>
+					<br/>
+					<a onclick="editConsignee(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none">[编辑]</a>
 					<a onclick="DelAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none">[删除]</a>
 				</td>
 				</tr>
@@ -27,31 +28,32 @@
 		</div>
 		
 		<div id="consignee_addr" {{if $total_consignee}}style="display:none;"{{/if}}>
-			<table class="table table-bordered">
-			<tbody><tr>
-			    <td width="125" valign="middle" align="right"><font color="red">*</font>收货人：</td>
-			    <td valign="middle" align="left">
-			        <input type="text" onblur="check_addressName()" name="data[OrderConsignee][name]" value="{{$this->Session->read('OrderConsignee.name')}}" maxlength="20" class="txt" id="consignee_name">&nbsp;
-			    </td>
-			</tr>
-			<tr>
-			    <td valign="middle" align="right"><font color="red">*</font>地　　址：</td>
-			    <td valign="middle" align="left">
-			        <input type="text" onblur="check_address()" name="data[OrderConsignee][address]"  value="{{$this->Session->read('OrderConsignee.address')}}" style="margin-left:2px;width:327px" maxlength="50" class="txt" id="consignee_address">&nbsp;
-			    </td>
-			</tr>
-			<tr>
-			    <td valign="middle" align="right"><font color="red">*</font>手机：</td>
-			    <td valign="middle" align="left">
-			        <input type="text" onblur="check_mobile();"  name="data[OrderConsignee][mobilephone]"  value="{{$this->Session->read('OrderConsignee.mobilephone')}}" class="txt" id="consignee_mobilephone">
-			    </td>
-			</tr>
-			</tbody></table>
+			<div class="form-group">
+			    <label for="consignee_name" class="col-xs-2 control-label">收货人</label>
+			    <div class="col-xs-10">
+			      <input type="text" class="form-control" id="consignee_name" name="data[OrderConsignee][name]" value="{{$this->Session->read('OrderConsignee.name')}}">
+			    </div>
+			</div>
+			<div class="form-group">
+			    <label for="consignee_address" class="col-xs-2 control-label">地　　址</label>
+			    <div class="col-xs-10">
+			      <input type="text" class="form-control" id="consignee_address" name="data[OrderConsignee][address]" value="{{$this->Session->read('OrderConsignee.address')}}" >
+			    </div>
+			</div>
+			<div class="form-group">
+			    <label for="consignee_mobilephone" class="col-xs-2 control-label">手　　机</label>
+			    <div class="col-xs-10">
+			      <input type="text" class="form-control" id="consignee_mobilephone" name="data[OrderConsignee][mobilephone]" value="{{$this->Session->read('OrderConsignee.mobilephone')}}" >
+			    </div>
+			</div>
+			<div class="footer">
+				<label class="col-xs-2 control-label"></label>
+				<div class="col-xs-10">
+				<input type="hidden" name="data[OrderConsignee][edit_type]" id="edit_type" value="{{if $total_consignee}}select{{else}}new{{/if}}">
+			    <input type="submit" value="保存收货人信息" class="btn btn-primary">
+			    </div>
+			</div>
 		</div>
-	</div>
-	<div class="footer">
-		<input type="hidden" name="data[OrderConsignee][edit_type]" id="edit_type" value="{{if $total_consignee}}select{{else}}new{{/if}}">
-	    <input type="submit" value="保存收货人信息" class="btn btn-primary">
 	</div>
 </form>
 </div>
