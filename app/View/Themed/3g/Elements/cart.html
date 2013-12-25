@@ -9,14 +9,15 @@
         <p>没有选定要购买的特产</p>
       </div>
       <div class="modal-footer">
-        <div class="pull-left" >共<strong><span id="cart_products-total-price">7150</span></strong>元</div>
+        <div class="pull-left" >共<strong><span id="cart_products-total-price">0</span></strong>元</div>
         <button type="button" class="btn btn-default" data-dismiss="modal">继续购物</button>
         <a class="btn btn-primary" href="/orders/info" id="checkout-btn">结算购物车</a>
       </div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
+{{$current_controller}}
+{{if $current_controller=='Categories' || $current_controller=='Products'}}
 <div class="navbar navbar-fixed-bottom navbar-default" style="margin-bottom:0px;height:40px;">
  <div class="container">
 	<div class="text-center">
@@ -24,3 +25,4 @@
 	</div>
 </div>
 </div>
+{{/if}}
