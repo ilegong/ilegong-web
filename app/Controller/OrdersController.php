@@ -108,7 +108,7 @@ class OrdersController extends AppController{
 	
 	/**
 	 * 订单信息页，确认各项订单信息
-	 * @param unknown_type $order_id
+	 * @param int $order_id
 	 */
 	function info($order_id=''){
 		$has_chosen_consignee = false;
@@ -174,6 +174,9 @@ class OrdersController extends AppController{
 					$current_consignee['address'] = $this->Session->read('Auth.User.address');
 				}
 				$this->Session->write('OrderConsignee',$current_consignee);
+			}
+			elseif(!empty($current_consignee['id'])){
+				$has_chosen_consignee = true;
 			}
 		}
 		else{
