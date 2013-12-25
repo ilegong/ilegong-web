@@ -24,4 +24,10 @@
 	</div>
 </div>
 </div>
+<script type="text/javascript">
+//hide footer bar
+document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+  WeixinJSBridge.call('hideToolbar');
+});
+</script>
 {{/if}}
