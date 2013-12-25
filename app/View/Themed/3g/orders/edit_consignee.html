@@ -7,10 +7,9 @@
 				{{loop $consignees  $consignee}}
 				<tr class="consignee_row {{if $consignee['OrderConsignee']['status']}}danger{{/if}}" id="consignee_{{$consignee['OrderConsignee']['id']}}">
 				<td style="width:40px;"><input type="radio"  {{if $consignee['OrderConsignee']['status']}}checked="checked"{{/if}} onclick="chose_Consignee({{$consignee['OrderConsignee']['id']}})" name="data[OrderConsignee][id]" value="{{$consignee['OrderConsignee']['id']}}" id="addr_{{$consignee['OrderConsignee']['id']}}"></td>
-				<td><label for="addr_{{$consignee['OrderConsignee']['id']}}"><strong>{{$consignee['OrderConsignee']['name']}}</strong>&nbsp;{{$consignee['OrderConsignee']['address']}}</label></td>
-				<td>
-					<a onclick="SetDefaultAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none"><label style="cursor:pointer;" for="addr_{{$consignee['OrderConsignee']['id']}}">[设为默认]</label></a>
+				<td><label for="addr_{{$consignee['OrderConsignee']['id']}}"><strong>{{$consignee['OrderConsignee']['name']}}</strong>&nbsp;<br/>{{$consignee['OrderConsignee']['address']}}</label>
 					<br/>
+					<a onclick="SetDefaultAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none"><label style="cursor:pointer;" for="addr_{{$consignee['OrderConsignee']['id']}}">[设为默认]</label></a>
 					<a onclick="editConsignee(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none">[编辑]</a>
 					<a onclick="DelAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none">[删除]</a>
 				</td>
