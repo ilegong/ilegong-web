@@ -78,7 +78,10 @@ var setAmount={
 	   <span class="ui-stats-num Stats-Product-{{$Product['Product']['id']}}-view_nums"><?php echo $Product['Product']['views_count']; ?></span>
 	    </div>
 	    <div  id="productinfo">
-	    {{template Elements/images_zoom}}
+	    <a onclick="return false;" href="#" >
+				<img src="{{$this->Html->url($Product['Uploadfile'][0]['thumb'])}}" 
+				onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
+		</a>
 	    <ul style="float:left;margin-left: 10px;display: inline;">
             <li>价格： {{$Product['Product']['price']}}</li>
             <li>库存： 123</li>
