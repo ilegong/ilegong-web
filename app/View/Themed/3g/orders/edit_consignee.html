@@ -11,7 +11,7 @@
 				{{loop $consignees  $consignee}}
 				<tr class="consignee_row {{if $consignee['OrderConsignee']['status']}}danger{{/if}}" id="consignee_{{$consignee['OrderConsignee']['id']}}">
 				<td style="width:40px;"><input type="radio"  {{if $consignee['OrderConsignee']['status']}}checked="checked"{{/if}} onclick="chose_Consignee({{$consignee['OrderConsignee']['id']}})" name="data[OrderConsignee][id]" value="{{$consignee['OrderConsignee']['id']}}" id="addr_{{$consignee['OrderConsignee']['id']}}"></td>
-				<td><label for="addr_{{$consignee['OrderConsignee']['id']}}"><strong>{{$consignee['OrderConsignee']['name']}}</strong>&nbsp;{{$consignee['OrderConsignee']['area']}}&nbsp;{{$consignee['OrderConsignee']['address']}}</label></td>
+				<td><label for="addr_{{$consignee['OrderConsignee']['id']}}"><strong>{{$consignee['OrderConsignee']['name']}}</strong>&nbsp;{{$consignee['OrderConsignee']['address']}}</label></td>
 				<td style="width:220px">
 					<a onclick="editConsignee(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none">[编辑]</a>
 					<a onclick="SetDefaultAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none"><label style="cursor:pointer;" for="addr_{{$consignee['OrderConsignee']['id']}}">[设为默认]</label></a>
@@ -35,13 +35,6 @@
 			    </td>
 			</tr>
 			<tr>
-			    <td valign="middle" align="right"><font color="red">*</font>省　　份：</td>
-			    <td valign="middle" align="left">
-			    	<input type="text" onblur="check_address()" name="data[OrderConsignee][area]"  value="{{$this->Session->read('OrderConsignee.area')}}" style="margin-left:2px;width:327px" maxlength="50" class="txt" id="consignee_area">&nbsp;
-			    	
-			    </td>
-			</tr>
-			<tr>
 			    <td valign="middle" align="right"><font color="red">*</font>地　　址：</td>
 			    <td valign="middle" align="left">
 			        <input type="text" onblur="check_address()" name="data[OrderConsignee][address]"  value="{{$this->Session->read('OrderConsignee.address')}}" style="margin-left:2px;width:327px" maxlength="50" class="txt" id="consignee_address">&nbsp;
@@ -50,20 +43,8 @@
 			<tr>
 			    <td valign="middle" align="right"><font color="red">*</font>手机：</td>
 			    <td valign="middle" align="left">
-			        <input type="text" onblur="check_mobile();"  name="data[OrderConsignee][mobilephone]"  value="{{$this->Session->read('OrderConsignee.mobilephone')}}" class="txt" id="consignee_mobilephone"> &nbsp;或者 固定电话： <input type="text"  name="data[OrderConsignee][telephone]"  onblur="check_telephone()" value="{{$this->Session->read('OrderConsignee.telephone')}}" class="txt" id="consignee_telephone">&nbsp;<font color="#000000">用于接收发货通知短信及送货前确认</font>
+			        <input type="text" onblur="check_mobile();"  name="data[OrderConsignee][mobilephone]"  value="{{$this->Session->read('OrderConsignee.mobilephone')}}" class="txt" id="consignee_mobilephone">
 			    </td>
-			</tr>
-			<tr>
-			    <td valign="middle" align="right">电子邮件：</td>
-			    <td valign="middle" align="left">
-			        <input type="text" onblur="check_email()"  name="data[OrderConsignee][email]"  value="{{$this->Session->read('OrderConsignee.email')}}" class="txt" id="consignee_email"> &nbsp;<font color="#000000">用来接收订单提醒邮件，便于您及时了解订单状态</font>
-			    </td>
-			</tr>
-			<tr>
-			    <td valign="middle" align="right">邮政编码：</td>
-			    <td valign="middle" align="left">
-			         <input type="text" onblur="check_postcode()"  name="data[OrderConsignee][postcode]"  value="{{$this->Session->read('OrderConsignee.postcode')}}" style="width:77px" class="txt" id="consignee_postcode">&nbsp;<font color="#000000" style="margin-left:53px">有助于快速确定送货地址</font>
-			     </td>
 			</tr>
 			</tbody></table>
 		</div>
