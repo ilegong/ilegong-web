@@ -29,26 +29,26 @@
 		
 		<div id="consignee_addr" {{if $total_consignee}}style="display:none;"{{/if}}>
 			<div class="form-group">
-			    <label for="consignee_name" class="col-xs-2 control-label">收货人</label>
-			    <div class="col-xs-10">
+			    <label for="consignee_name" class="col-xs-3 control-label">收货人</label>
+			    <div class="col-xs-9">
 			      <input type="text" class="form-control" id="consignee_name" name="data[OrderConsignee][name]" value="{{$this->Session->read('OrderConsignee.name')}}">
 			    </div>
 			</div>
 			<div class="form-group">
-			    <label for="consignee_address" class="col-xs-2 control-label">地　　址</label>
-			    <div class="col-xs-10">
+			    <label for="consignee_address" class="col-xs-3 control-label">地　　址</label>
+			    <div class="col-xs-9">
 			      <input type="text" class="form-control" id="consignee_address" name="data[OrderConsignee][address]" value="{{$this->Session->read('OrderConsignee.address')}}" >
 			    </div>
 			</div>
 			<div class="form-group">
-			    <label for="consignee_mobilephone" class="col-xs-2 control-label">手　　机</label>
-			    <div class="col-xs-10">
+			    <label for="consignee_mobilephone" class="col-xs-3 control-label">手　　机</label>
+			    <div class="col-xs-9">
 			      <input type="text" class="form-control" id="consignee_mobilephone" name="data[OrderConsignee][mobilephone]" value="{{$this->Session->read('OrderConsignee.mobilephone')}}" >
 			    </div>
 			</div>
 			<div class="footer">
-				<label class="col-xs-2 control-label"></label>
-				<div class="col-xs-10">
+				<label class="col-xs-3 control-label"></label>
+				<div class="col-xs-9">
 				<input type="hidden" name="data[OrderConsignee][edit_type]" id="edit_type" value="{{if $total_consignee}}select{{else}}new{{/if}}">
 			    <input type="submit" value="保存收货人信息" class="btn btn-primary">
 			    </div>
