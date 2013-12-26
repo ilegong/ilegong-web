@@ -83,17 +83,17 @@ class WeixinController extends AppController {
 			//判断输入内容
 			switch($input)
 			{
-				case "1":
-					echo $this->newTextMsg($user, $me, "点击<a href=\"http://51daifan.sinaapp.com/techan.html?wx_openid=$user\" >51带饭订单页</a>立即预定");
+				case "下单":
+				case "预订":
+				case "预定":
+					echo $this->newTextMsg($user, $me, "点击<a href=\"http://51daifan.sinaapp.com/techan.html?wx_openid=$user\" >51带饭预定页</a>立即预定");
 					break;
-				case "2":
-					echo $this->newTextMsg($user, $me, "正在开发中，敬请期待");
-					break;
-				case "3":
-					echo $this->newTextMsg($user, $me, "正在开发中，敬请期待");
-					break;
+				case "查看订单":
+				case "订单":
+					echo $this->newTextMsg($user, $me, "点击<a href=\"http://51daifan.sinaapp.com/orders/mine.html?wx_openid=$user\" >查看我的订单</a>");
+					break;				
 				default :
-					echo $this->newTextMsg($user, $me, "抱歉无法识别您的输入：${msg}。\n回复1进入订单页\n回复2查看当前热门特产\n回复3查看我的订阅");
+					echo $this->newTextMsg($user, $me, "回复“预定”进入预定页\n回复“订单”查看我的订单");
 			}
 		}
 	}
