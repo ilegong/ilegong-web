@@ -1,7 +1,6 @@
 <div class="col-md-3 col-sm-4 col-xs-6">
 	{{if $item['cate_id']==114}}
-     <div class="thumbnail">
-     <a href="javascript:;" class="shopping" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
+     <a href="javascript:;" class="thumbnail shopping" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
          {{eval echo $this->Html->image($item['coverimg'], 
 			array(
 			'alt' => $item['title'],'title' => $item['name'],
@@ -20,9 +19,8 @@
              <strong>¥{{$item['price']}}</strong>                                     
      	</div>
      </div>
- 	</div>
      {{else}}
-     	<a href="<?php echo '/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'; ?>" class="thumbnail-noclick" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
+     	<a href="<?php echo '/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'; ?>" class="thumbnail-noclick" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
          {{eval echo $this->Html->image($item['coverimg'], 
 			array(
 			'alt' => $item['title'],'title' => $item['name'],
