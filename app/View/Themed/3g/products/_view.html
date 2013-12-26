@@ -72,14 +72,10 @@ var setAmount={
 
 </script>
 
-<h2 class="Content-title"><?php echo $Product['Product']['name']; ?></h2>
-	    <div class="Content-info">
-	   阅读次数： 
-	   <span class="ui-stats-num Stats-Product-{{$Product['Product']['id']}}-view_nums"><?php echo $Product['Product']['views_count']; ?></span>
-	    </div>
+<h2 class="Content-title"><?php echo $Product['Product']['name']; ?></h2>	    
 	    <div  id="productinfo">
 	    <a onclick="return false;" href="#" >
-				<img src="{{$this->Html->url($Product['Uploadfile'][0]['thumb'])}}" 
+			<img src="{{$this->Html->url($Product['Uploadfile'][0]['thumb'])}}" 
 				onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
 		</a>	    
             <div class="input-group" style="float:left;width:120px;">
