@@ -1,28 +1,29 @@
 <h2 class="Content-title"><?php echo $Product['Product']['name']; ?></h2>
-	    <div class="row">
-			<div class="col-xs-12 col-md-6">	
-				<img src="{{$this->Html->url($Product['Product']['coverimg'])}}" style="width:100%;"
-				onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
-			</div>
-		</div>
-	    <p>单价：<strong> ￥<?php echo $Product['Product']['price']; ?></strong></p>
-	    <div  id="productinfo">	    
-            <div class="input-group" style="float:left;width:120px;">
-			  <span class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}" >-</span>
-			  <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text" readonly="readonly">
-			  <span class="add input-group-addon"  item-id="{{$Product['Product']['id']}}">+</span>
-			</div>
-			<a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-primary shopping" id="single-item-{{$Product['Product']['id']}}" item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
-  href="javascript:void(0);">添加到购物车 </a>
-	    </div>
-<div class="clearfix"><p><br/></p></div>
+{{if $Product['Product']['cat_id'] =='114'}}
+<p>单价：<strong> ￥<?php echo $Product['Product']['price']; ?></strong></p>
+<div  id="productinfo" class="clearfix" style="padding-bottom:10px;">	    
+    <div class="input-group" style="float:left;width:120px;">
+	  <span class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}" >-</span>
+	  <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text" readonly="readonly">
+	  <span class="add input-group-addon"  item-id="{{$Product['Product']['id']}}">+</span>
+	</div>
+	<a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-primary shopping" id="single-item-{{$Product['Product']['id']}}" item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
+href="javascript:void(0);">添加到购物车 </a>
+</div>
+{{/if}}
+<div class="row">
+	<div class="col-xs-12 col-md-6">	
+		<img src="{{$this->Html->url($Product['Product']['coverimg'])}}" style="width:100%;"
+		onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
+	</div>
+</div>
 <div class="tabs">
-<div  class="tab-content">
-	<div class="tab-pane active" id="product-description">
+	<div  class="tab-content">
+		<div class="tab-pane active" id="product-description">
 		    <div class="Content-body">
 	        <div class="clear"></div>
 		    <?php echo $Product['Product']['content']; ?>
 		    </div>
+		</div>
 	</div>
-</div>
 </div>
