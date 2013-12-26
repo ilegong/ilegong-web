@@ -1,9 +1,9 @@
 <div class="col-md-3 col-sm-4 col-xs-6">
+	{{if $item['cate_id']==114}}
      <a href="javascript:;" class="thumbnail shopping" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
          {{eval echo $this->Html->image($item['coverimg'], 
 			array(
 			'alt' => $item['title'],'title' => $item['name'],
-			'style'=>'width: 100%; display: block;',
 			'onerror'=>'this.src="/img/products_nophoto.jpg";',
 			)); }}
          <div class="select-item" style="display: none;">
@@ -19,6 +19,19 @@
              <strong>¥{{$item['price']}}</strong>                                     
      	</div>
      </div>
-     
-
+     {{else}}
+     	<a href="javascript:;" class="thumbnail-noclick shopping" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
+         {{eval echo $this->Html->image($item['coverimg'], 
+			array(
+			'alt' => $item['title'],'title' => $item['name'],
+			'onerror'=>'this.src="/img/products_nophoto.jpg";',
+			)); }}
+	     </a>
+	     <div class="text-left">
+	     	{{eval echo $this->Html->link(usubstr($item['name'],0,10), 
+				'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
+				array('title'=>$item['title'])); 
+			}}
+	     </div>
+     {{/if}}
  </div>
