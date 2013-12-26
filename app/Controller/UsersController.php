@@ -101,6 +101,7 @@ class UsersController extends AppController {
             } else {
                 $this->data['User']['status'] = 0;
             }
+            print_r($_POST);
             if ($this->data['User']['password'] != Security::hash($this->data['User']['password_confirm'], null, true)) {
                 $this->Session->setFlash(lang('two_password_is_not_equare.'));
             } else {
