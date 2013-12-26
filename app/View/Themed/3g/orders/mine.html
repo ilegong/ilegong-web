@@ -8,7 +8,7 @@ td {padding:5px 10px;}
 		<table  class="table table-bordered">
 		{{loop $orders $order}}		
 		<tr>
-			<td>{{$order['Order']['consignee_name']}}</td><td>{{$order['Order']['consignee_address']}}</td><td>{{$order['Order']['consignee_mobilephone']}}</td><td>{{$order['Order']['total_price']}}</td>			
+			<td>{{$order['Order']['consignee_name']}}</td><td>{{$order['Order']['consignee_address']}}</td><td>{{$order['Order']['consignee_mobilephone']}}</td><td>￥{{$order['Order']['total_price']}}</td><td>{{$order['Order']['created']}}</td>			
 		</tr>
 		{{if !empty($order_carts[$order['Order']['id']])}}
 		<tr><td colspan="4">
@@ -17,9 +17,9 @@ td {padding:5px 10px;}
 				<tbody>
 				{{loop $order_carts[$order['Order']['id']] $cart}}
 				<tr><td>{{$cart['Cart']['name']}}</td>
-				<td>{{$cart['Cart']['price']}}</td>
+				<td>￥{{$cart['Cart']['price']}}</td>
 				<td>{{$cart['Cart']['num']}}</td>
-				<td>{{$cart['Cart']['price']*$cart['Cart']['num']}}</td>		
+				<td>￥{{$cart['Cart']['price']*$cart['Cart']['num']}}</td>		
 				</tr>
 				{{/loop}}
 				</tbody>
