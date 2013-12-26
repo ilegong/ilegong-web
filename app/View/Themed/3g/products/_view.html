@@ -72,10 +72,11 @@ var setAmount={
 
 </script>
 
-<h2 class="Content-title"><?php echo $Product['Product']['name']; ?></h2>	    
+<h2 class="Content-title"><?php echo $Product['Product']['name']; ?></h2>
+	    <p>单价：   <?php echo $Product['Product']['price']; ?></p>
 	    <div  id="productinfo">
 	    <a onclick="return false;" href="#" >
-			<img src="{{$this->Html->url($Product['Uploadfile'][0]['thumb'])}}" 
+				<img src="{{$this->Html->url($Product['Uploadfile'][0]['thumb'])}}" 
 				onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
 		</a>	    
             <div class="input-group" style="float:left;width:120px;">
