@@ -76,10 +76,12 @@ class OrdersController extends AppController{
 		}
 		$total_price = $this->_calculateTotalPrice($Carts);
 		if(empty($Carts)){
-			$this->__message('订单金额错误，请返回购物车查看','/');
+			$this->Session->setFlash('订单金额错误，请返回购物车查看');
+			$this->redirect('/');
 		}
 		if($total_price <= 0){
-			$this->__message('订单金额错误，请返回购物车查看','/carts/listcart');
+			$this->Session->setFlash('订单金额错误，请返回购物车查看');
+			$this->redirect('/carts/listcart');
 		}
 		
 		
