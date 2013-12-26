@@ -1,31 +1,10 @@
-<style>
-	#param-tb {
-	    border: 1px solid #C5D7ED;
-	    border-collapse: collapse;
-	    color: #333333;
-	    margin: 0 -1px;
-	}
-	#param-tb th, #param-tb td {
-	    border: 1px solid #C5D7ED;
-	    line-height: 28px;
-	    padding: 0 15px;
-	}
-	#param-tb .val{
-		width:390px;
-	}
-	#param-tb .val span {
-	    display: block;
-	    line-height: 28px;
-	}
-	</style>
-
 <h2 class="Content-title"><?php echo $Product['Product']['name']; ?></h2>
-	    <p>单价：   ￥<?php echo $Product['Product']['price']; ?></p>
-	    <div  id="productinfo">
-	    <a onclick="return false;" href="#" >
-				<img src="{{$this->Html->url($Product['Uploadfile'][0]['thumb'])}}" 
+	    <p>
+				<img src="{{$this->Html->url($Product['Product']['coverimg'])}}" 
 				onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
-		</a>	    
+		</p>
+	    <p>单价：<strong> ￥<?php echo $Product['Product']['price']; ?></strong></p>
+	    <div  id="productinfo">	    
             <div class="input-group" style="float:left;width:120px;">
 			  <span class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}" >-</span>
 			  <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text" readonly="readonly">
@@ -33,14 +12,9 @@
 			</div>
 			<a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-primary shopping" id="single-item-{{$Product['Product']['id']}}" item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
   href="javascript:void(0);">添加到购物车 </a>
-			
 	    </div>
-<div style="clear:both;"></div>
+<div class="clearfix"></div>
 <div class="tabs">
-<ul class="nav nav-tabs">
-<li class="active"><a data-toggle="tab" href="#product-description">特产介绍</a></li>
-
-</ul>
 <div  class="tab-content">
 	<div class="tab-pane active" id="product-description">
 		    <div class="Content-body">
