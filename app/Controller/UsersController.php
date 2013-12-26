@@ -101,12 +101,11 @@ class UsersController extends AppController {
             } else {
                 $this->data['User']['status'] = 0;
             }
-           
+           /*对密码加密*/
             if(defined('UC_APPID') && !empty($this->data['User']['password'])){
             	$this->data['User']['password'] = Security::hash($this->data['User']['password'], null, true);
             }
-            print_r(Security::hash($this->data['User']['password_confirm'], null, true));
-            print_r($this->data);
+           
             if ($this->data['User']['password'] != Security::hash($this->data['User']['password_confirm'], null, true)) {
                 $this->Session->setFlash(lang('two_password_is_not_equare.'));
             } else {
@@ -153,7 +152,7 @@ class UsersController extends AppController {
                     } elseif ($useractivate == 'hand') {
                         $this->Session->setFlash(__('Please wait administrator to activate your account.', true));
                     }
-//	                $this->redirect(array('action' => 'login'));
+	                $this->redirect(array('action' => 'login'));
                 } else {
                     $this->Session->setFlash(__('Registe error.Username or email exists.', true));
                 }
