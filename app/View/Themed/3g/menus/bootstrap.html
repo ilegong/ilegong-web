@@ -2,29 +2,14 @@
 	<div class="pull-left">      
       <a href="{{$this->Html->url(Configure::read('Site.logo_url'))}}" style="padding:5px 15px;" >{{$this->Html->image($this->Html->url(Configure::read('Site.logo')), array('style'=>'height:35px;','title' => $site[title],'alt' => $site[title]))}}</a>
     </div>
+    <div class="pull-right" style="padding:13px 15px;">      
+     {{if (!empty($CurrentUser))}} <?php echo $this->Html->link($CurrentUser['username'], array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?>
+     {{else}}
+     	{{eval echo $this->Html->link('登录', array('controller' => 'users', 'action' => 'login','ext'=>false)); }}
+     {{/if}}
+    </div>
+
 	<nav  role="navigation">
-
-	<ul class="nav navbar-nav pull-right">
-		{{if (!empty($CurrentUser))}}
-                <li class="dropdown">
-                    {{$this->Html->link($CurrentUser['username'].'<b class="caret"></b>', '#', array("class"=>"dropdown-toggle","data-toggle"=>"dropdown",'escape'=>false)); }}
-                    <ul class="dropdown-menu">
-                        <li><?php echo $this->Html->link(lang('user_orders'), array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?></li>
-						<li><?php echo $this->Html->link(__('我的地址'), array('controller' => 'orders','action'=>'edit_consignee','plugin' => null ,)); ?></li>
-                    </ul>                                                            
-                </li>
-		{{else}}
-				<li class="dropdown">
-                        {{$this->Html->link('账户<b class="caret"></b>', '#', array("class"=>"dropdown-toggle","data-toggle"=>"dropdown",'escape'=>false)); }}
-                        <ul class="dropdown-menu">
-                            <li>{{eval echo $this->Html->link('登录', array('controller' => 'users', 'action' => 'login','ext'=>false)); }}</li>
-							<!-- <li>{{eval echo $this->Html->link('注册', array('controller' => 'users', 'action' => 'register')); }}</li> --> 
-                        </ul>                                                            
-                 </li>
-		{{/if}}
-                                                        
-    </ul>
-
 	<?php 
 		if(empty($top_category_id)) $top_category_id=0;
 	echo $this->Section->getNavMenu('Category',

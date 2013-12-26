@@ -154,9 +154,11 @@ class UsersController extends AppController {
                         $this->Session->setFlash(__('Please wait administrator to activate your account.', true));
                     }
 					else{
-						$this->Session->setFlash('注册成功，请登录');
+						$this->Session->setFlash('注册成功!');
 					}
-	                $this->redirect(array('action' => 'login'));
+                    $data = $this->User->find('first', array('conditions' => array('email' =>  $this->data['User']['email']) ));
+                    $this->Session->write('Auth.User', $data['User']);
+	                $this->redirect(array('action' => 'index'));
                 } else {
                     $this->Session->setFlash(__('Registe error.Username or email exists.', true));
                 }
