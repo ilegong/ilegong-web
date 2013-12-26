@@ -1,4 +1,4 @@
-<h2 class="Content-title"><?php echo $Product['Product']['name']; ?></h2>
+<h2 class="Content-title" id="item-detail-title"><?php echo $Product['Product']['name']; ?></h2>
 {{if $Product['Product']['cate_id'] ==114}}
 <p>单价：<strong> ￥<?php echo $Product['Product']['price']; ?></strong></p>
 <div  id="productinfo" class="clearfix" style="padding-bottom:10px;">	    
@@ -27,6 +27,3 @@ href="javascript:void(0);">添加到购物车 </a>
 		</div>
 	</div>
 </div>
-<script type="text/javascript">
-$(function(){ $('#go-back-div').show();});
-</script>
