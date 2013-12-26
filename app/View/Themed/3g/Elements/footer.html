@@ -181,7 +181,8 @@
 			if(cart[itemId]){
 				var num =  (parseInt(cart[itemId]['num']) || 1);
 				if(num > 1){
-					cart[itemId]['num'] = num - 1;
+					num = num -1;
+					cart[itemId]['num'] = num;
 					updateCart();
 					createCart();
 				}
@@ -195,8 +196,9 @@
 				$amount.val( parseInt($amount.val()) +  1);
 			} 
 			if(cart[itemId]){
-				cart[itemId]['num'] = (parseInt(cart[itemId]['num']) || 0) + 1;
-				$amount.val((parseInt(cart[itemId]['num']) || 0) + 1);
+				var num = (parseInt(cart[itemId]['num']) || 0) + 1;
+				cart[itemId]['num'] = num;
+				$amount.val(num);
 				updateCart();
 				createCart();
 			}
@@ -204,7 +206,9 @@
 		}).on('click', 'a.delete-btn', function(){
 			var itemId = $(this).attr('item-id');
 			deleteFromCart(itemId);
+			createCart();
 		});
+
 
 
 
