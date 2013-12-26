@@ -101,8 +101,9 @@ class UsersController extends AppController {
             } else {
                 $this->data['User']['status'] = 0;
             }
-           /*对密码加密*/
-            if(defined('UC_APPID') && !empty($this->data['User']['password'])){
+            /*对密码加密*/
+		    $src_password = $this->data['User']['password'];
+            if(defined('UC_APPID') && !empty($this->data['User']['password'])){				
             	$this->data['User']['password'] = Security::hash($this->data['User']['password'], null, true);
             }
            
@@ -112,7 +113,7 @@ class UsersController extends AppController {
             	$has_error = false;
             	if(defined('UC_APPID')){
             		App::import('Vendor', '',array('file' => 'uc_client'.DS.'client.php'));
-            		$uid = uc_user_register( $this->data['User']['username'], $this->data['User']['password'], $this->data['User']['email'],'','', $this->request->clientIp());
+            		$uid = uc_user_register( $this->data['User']['username'],$src_password, $this->data['User']['email'],'','', $this->request->clientIp());
             		if($uid<=0){
             			if($uid == -1) {
             				$error_msg = '用户名不合法';
