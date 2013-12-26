@@ -215,7 +215,7 @@ class OrdersController extends AppController{
 	}
 	
 	function mine(){
-		$orders = $this->Order->find('first',array(
+		$orders = $this->Order->find('all',array(
 				'conditions'=> array('creator'=>$this->currentUser['id']),
 		));
 		$ids = array();
