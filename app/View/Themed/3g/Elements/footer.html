@@ -34,7 +34,7 @@
 	}
 
 	function deleteFromCart(itemId){
-		$item.find('div.select-item').hide();
+		$('#item-' + itemId).find('div.select-item').hide();
 		//产品介绍页面处理
 		$('#single-item-' + itemId).removeClass('btn-success').addClass('btn-primary').text('添加到购物车');
 		$('#pamount-' + itemId).val(1);
@@ -153,7 +153,7 @@
 				deleteFromCart(itemId);
 			}else { //not added
 				
-				addToCart(id, parseInt($('#pamount-' + itemId).val()) || 1, (parseFloat($item.attr('item-price')) || 0 ), $item.attr('item-name'));
+				addToCart(itemId, parseInt($('#pamount-' + itemId).val()) || 1, (parseFloat($item.attr('item-price')) || 0 ), $item.attr('item-name'));
 				
 			}
 			
