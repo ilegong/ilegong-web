@@ -230,10 +230,11 @@ class OrdersController extends AppController{
 		)));
 		$order_carts = array();
 		foreach($Carts as $c){
-			$order_id = $c['Carts']['order_id'];
+			$order_id = $c['Cart']['order_id'];
 			if(!isset($order_carts[$order_id])) $order_carts[$order_id] = array();
 			$order_carts[$order_id][] = $c;
 		}
+		print_r($orders);print_r($order_carts);
 		$this->set('orders',$orders);
 		$this->set('order_carts',$order_carts);
 	}
