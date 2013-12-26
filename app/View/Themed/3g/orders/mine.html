@@ -1,0 +1,31 @@
+<style>
+td {padding:5px 10px;}
+</style>
+<div  class="container">
+	<div class="orderinfo">
+		<div class="o_show">
+		<h2>我的订单</h2>
+		<table >
+		{{loop $orders $order}}
+		<tr>
+			<td>{{$orders['consignee_name']}}</td><td>{{$orders['consignee_address']}}</td><td>{{$orders['consignee_mobilephone']}}</td><td>{{$orders['total_price']}}</td>			
+		</tr>
+		<tr><td>
+			<table  class="table table-bordered">
+				<tr><th width="50%">商品名称</th><th>购买价格</th><th>商品数量</th><th>合计</th></tr>
+				<tbody>
+				{{loop $order_carts $cart}}
+				<tr><td>{{$cart['Cart']['name']}}</td>
+				<td>{{$cart['Cart']['price']}}</td>
+				<td>{{$cart['Cart']['num']}}</td>
+				<td>{{$cart['Cart']['price']*$cart['Cart']['num']}}</td>		
+				</tr>
+				{{/loop}}
+				</tbody>
+			</table>
+		</td></tr>
+		{{/loop}}
+		</table>
+		</div>			
+	</div>
+</div>
