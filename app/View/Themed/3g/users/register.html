@@ -1,4 +1,4 @@
-{{$this->Form->create('User',array('id'=>'registerform','method'=>"post"))}}
+{{$this->Form->create('User',array('id'=>'registerform','class'=>'form-horizontal','method'=>"post"))}}
 <div class="c cl" id="layer_reg" fwin="register">
 	<input type="hidden" value="yes" name="regsubmit"> <input
 		type="hidden" value="319a8865" name="formhash">
@@ -6,16 +6,43 @@
 		type="hidden" value="" name="activationauth">
 	<div class="lgfm">
 		<div id="reginfo_a" fwin="register">
+			
+			<div class="form-group">
+			    <label for="username" class="col-xs-3 control-label">用户名</label>
+			    <div class="col-xs-9">
+			      <input type="text" id="username" onblur="checkusername();" name="data[User][username]" class="form-control" placeholder="用户名">
+			    </div>
+			</div>
+			<div class="form-group">
+			    <label for="email" class="col-xs-3 control-label">邮箱</label>
+			    <div class="col-xs-9">
+			      <input type="email" id="email" name="data[User][email]" class="form-control" placeholder="邮箱">
+			    </div>
+			</div>
+			<div class="form-group">
+			    <label for="user_password" class="col-xs-3 control-label">密码</label>
+			    <div class="col-xs-9">
+			      <input type="password" id="user_password" name="data[User][username]" class="form-control">
+			    </div>
+			</div>
 			<span id="activation_hidden" fwin="register"> <label><em>{{__('User
 						Name')}}:</em>{{$this->Form->input('username',array('div'=>false,'label'
 					=>
 					false,'class'=>'txt','onblur'=>"checkusername()",'maxlength'=>"15",'size'=>"25"))}}
-					*</label> <label><em>{{__('Password')}}:</em>{{$this->Form->input('password',array('div'=>false,'label'
+					*</label> 
+					
+					
+					<label><em>{{__('Password')}}:</em>{{$this->Form->input('password',array('div'=>false,'label'
 					=> false,'class'=>'txt','onkeypress'=>"detectCapsLock(event,
-					this)",'type'=>'password','maxlength'=>"15",'size'=>"25"))}} *</label> <label><em>{{__('Confirm
+					this)",'type'=>'password','maxlength'=>"15",'size'=>"25"))}} *</label> 
+					
+					
+					<label><em>{{__('Confirm
 						Password')}}:</em>{{$this->Form->input('password_confirm',array('div'=>false,'label'
 					=> false,'class'=>'txt','onkeypress'=>"detectCapsLock(event,
-					this)",'type'=>'password','maxlength'=>"15",'size'=>"25"))}} *</label> <label><em>{{__('Email')}}:</em><input
+					this)",'type'=>'password','maxlength'=>"15",'size'=>"25"))}} *</label> 
+					
+					<label><em>{{__('Email')}}:</em><input
 					type="text" class="txt" tabindex="1" onblur="checkemail()"
 					id="email" size="25" autocomplete="off" name="email"
 					fwin="register"> *</label>

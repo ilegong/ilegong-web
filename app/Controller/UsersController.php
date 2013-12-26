@@ -92,7 +92,9 @@ class UsersController extends AppController {
     function register() {
         $this->pageTitle = __('Register', true);
         if (!empty($this->data)) {
-            $this->User->create();
+        	$this->User->create();        	
+        	
+            
             $this->data['User']['role_id'] = Configure::read('User.defaultroler'); // Registered defaultroler
             $this->data['User']['activation_key'] = md5(uniqid());
             $useractivate = Configure::read('User.activate');
@@ -104,7 +106,33 @@ class UsersController extends AppController {
             if ($this->data['User']['password'] != Security::hash($this->data['User']['password_confirm'], null, true)) {
                 $this->Session->setFlash(__('Two password is empty or not equare.', true));
             } else {
-                if ($this->User->save($this->data)) {
+            	$has_error = false;
+            	if(defined('UC_APPID')){
+            		App::import('Vendor', '',array('file' => 'uc_client'.DS.'client.php'));
+            		$uid = uc_user_register($username, $password, $email, $questionid = '', $answer = '', $regip = '');
+            		if($uid<=0){
+            			if($uid == -1) {
+            				$error_msg = '用户名不合法';
+            			} elseif($uid == -2) {
+            				$error_msg = '包含不允许注册的词语';
+            			} elseif($uid == -3) {
+            				$error_msg = '用户名已经存在';
+            			} elseif($uid == -4) {
+            				$error_msg = 'Email 格式有误';
+            			} elseif($uid == -5) {
+            				$error_msg = 'Email 不允许注册';
+            			} elseif($uid == -6) {
+            				$error_msg = '该 Email 已经被注册';
+            			} else{
+            				$error_msg = '未知错误';
+            			}
+            			$has_error = true;
+            		}
+            		else if($uid>0){
+            			$this->data['User']['id'] = $uid;
+            		}
+            	}
+                if ($has_error==false && $this->User->save($this->data)) {                	
 //	                $this->autoRender = false;
                     if ($useractivate == 'email') {
                         $this->Email->from = Configure::read('Site.title') . ' '
