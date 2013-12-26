@@ -101,14 +101,10 @@ class UsersController extends AppController {
             } else {
                 $this->data['User']['status'] = 0;
             }
-            if(!empty($this->data['User']['password'])){
-            	$this->data['User']['password'] = Security::hash($this->data['User']['password'], null, true);
-            }
+           
             print_r($this->data);
-            if(!empty($this->data['User']['password'])){
-            	$this->data['User']['password'] = Security::hash($this->data['User']['password'], null, true);
-            }
-            print_r($this->data);
+            print_r(Security::hash($this->data['User']['password_confirm'], null, true));
+
             if ($this->data['User']['password'] != Security::hash($this->data['User']['password_confirm'], null, true)) {
                 $this->Session->setFlash(lang('two_password_is_not_equare.'));
             } else {
