@@ -81,12 +81,7 @@ var setAmount={
 	    <a onclick="return false;" href="#" >
 				<img src="{{$this->Html->url($Product['Uploadfile'][0]['thumb'])}}" 
 				onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
-		</a>
-	    <ul style="float:left;margin-left: 10px;display: inline;">
-            <li>价格： {{$Product['Product']['price']}}</li>
-            <li>库存： 123</li>
-            <li>促销信息： 优惠100元</li>
-            <li>
+		</a>	    
             <div class="input-group" style="float:left;width:120px;">
 			  <span class="reduce input-group-addon" onclick="setAmount.reduce('#pamount')">-</span>
 			  <input id="pamount" size="3" value="1" class="form-control" name="shoppingnum" type="text">
@@ -94,17 +89,13 @@ var setAmount={
 			</div>
 			<a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-primary"
  onclick="return addtoCart({{$Product['Product']['id']}},1);" href="javascript:void(0);">添加到购物车 </a>
-			</li>
-        </ul>
+			
 	    </div>
 <div style="clear:both;"></div>
 <div class="tabs">
 <ul class="nav nav-tabs">
-<li class="active"><a data-toggle="tab" href="#product-description">产品介绍</a></li>
-{{if $Product['ModelSplitInfo']}}
-<li><a data-toggle="tab" href="#product-params">产品参数</a></li>
-{{/if}}
-<li><a data-toggle="tab" href="#product-reviews">评价详情</a></li>
+<li class="active"><a data-toggle="tab" href="#product-description">特产介绍</a></li>
+
 </ul>
 <div  class="tab-content">
 	<div class="tab-pane active" id="product-description">
@@ -112,21 +103,6 @@ var setAmount={
 	        <div class="clear"></div>
 		    <?php echo $Product['Product']['content']; ?>
 		    </div>
-	</div>
-	{{if $Product['ModelSplitInfo']}}
-	<div class="tab-pane" id="product-params">
-	<table  cellspacing="0" cellpadding="0" border="1" id="param-tb" style="border-color:#c5d7ed">
-		{{loop $Product['ModelSplitInfo'] $key $value}}	
-			<?PHP if(in_array($key,array('id','deleted'))) continue; ?>		
-			<tr><td nowrap="nowrap">{{$ProductSplitSchema[$key]}}</td>
-	            <td class="val"><span>{{if is_numeric($value)&& isset($ProductSplitOptions[$value])}} {{$ProductSplitOptions[$value]}} {{else}} {{$value}}{{/if}}</span></td>
-	        </tr>
-		{{/loop}}
-	</table>
-	</div>
-	{{/if}}
-	<div class="tab-pane" id="product-reviews">
-		{{template comments/add}}
 	</div>
 </div>
 </div>
