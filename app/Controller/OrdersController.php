@@ -222,7 +222,7 @@ class OrdersController extends AppController{
 		foreach($orders as $o){
 			$ids[] = $o['Order']['id'];
 		}
-		
+		$this->loadModel('Cart');
 		$Carts = $this->Cart->find('all',array(
 				'conditions'=>array(
 						'order_id' => $ids,
