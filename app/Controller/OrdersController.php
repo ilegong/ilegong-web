@@ -214,6 +214,30 @@ class OrdersController extends AppController{
 		$this->set('Carts',$Carts);
 	}
 	
+	function mine(){
+		$orders = $this->Order->find('first',array(
+				'conditions'=> array('creator'=>$this->currentUser['id']),
+		));
+		$ids = array();
+		foreach($orders as $o){
+			$ids[] = $o['Order']['id'];
+		}
+		
+		$Carts = $this->Cart->find('all',array(
+				'conditions'=>array(
+						'order_id' => $ids,
+						'creator'=> $this->currentUser['id']
+		)));
+		$order_carts = array();
+		foreach($Carts as $c){
+			$order_id = $c['Carts']['order_id'];
+			if(!isset($order_carts[$order_id])) $order_carts[$order_id] = array();
+			$order_carts[$order_id][] = $c;
+		}
+		$this->set('orders',$orders);
+		$this->set('order_carts',$order_carts);
+	}
+	
 	function _calculateTotalPrice($carts = array()){
 		$total_price = 0.0;
 		foreach($carts as $cart){

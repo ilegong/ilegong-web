@@ -9,7 +9,7 @@
                 <li class="dropdown">
                     {{$this->Html->link('账户<b class="caret"></b>', '#', array("class"=>"dropdown-toggle","data-toggle"=>"dropdown",'escape'=>false)); }}
                     <ul class="dropdown-menu">
-                        <li><?php echo $this->Html->link(lang('user_orders'), array('controller' => 'users','action'=>'orders','plugin' => null ,)); ?></li>
+                        <li><?php echo $this->Html->link(lang('user_orders'), array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?></li>
 						<li><?php echo $this->Html->link(__('我的地址'), array('controller' => 'orders','action'=>'edit_consignee','plugin' => null ,)); ?></li> 
                         <li>{{$this->Html->link('退出登录', '/users/logout', array('title' => 'logout your account','escape'=>false))}}</li> 
                     </ul>                                                            
