@@ -12,13 +12,18 @@
 
 {{$this->Html->script(array(
             'jquery/jquery.min.js',
-            'jquery/jquery.cookie.js',           
+            'jquery/jquery.cookie.js', 'jquery/jquery.lazyload.min.js',
             'bootstrap.min.js','common.js','front.js','front_orders.js'
         ));
 }}
 <script type="text/javascript">
 	
 	$(document).ready(function(){
+		$("img.lazy").lazyload({
+			placeholder : "/Public/Index/img/grey.gif",
+			effect: "fadeIn",
+			threshold : 100
+		});
 		
 		var cart = {};	
 		readFromCookie();
