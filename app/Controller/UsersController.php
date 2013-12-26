@@ -312,7 +312,11 @@ class UsersController extends AppController {
                 $this->Session->setFlash(lang('login_success').$this->Session->read('Auth.User.session_flash'));
                 $success = true;
             }
+            else{
+            	echo "===============";
+            }
         }
+        print_r($this->data);
         
         if ($success) {
         	$wx_openid = $this->Session->read('wx_openid');
