@@ -381,9 +381,10 @@ class UsersController extends AppController {
                 else{
                 	echo $content;
                 }
-            } else {
-            	$this->Session->setFlash(__('user not exists or password not right'));
             }
+            //else {
+            //	$this->Session->setFlash(__('user not exists or password not right'));
+            //}
             //$this->redirect(array('action' => 'forgot'), 401);
         } else {
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
@@ -391,7 +392,7 @@ class UsersController extends AppController {
                 $this->set('isajax', true);
             }
         }
-        $this->data['User']['referer'] = $redirect;
+        //$this->data['User']['referer'] = $redirect;
     }
 
     function logout() {        
