@@ -158,7 +158,7 @@ class UsersController extends AppController {
 					}
                     $data = $this->User->find('first', array('conditions' => array('email' =>  $this->data['User']['email']) ));
                     $this->Session->write('Auth.User', $data['User']);
-	                $this->redirect(array('action' => 'index'));
+	                $this->redirect('/');
                 } else {
                     $this->Session->setFlash(__('Registe error.Username or email exists.', true));
                 }
