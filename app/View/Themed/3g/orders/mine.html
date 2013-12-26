@@ -8,13 +8,14 @@ td {padding:5px 10px;}
 		<table >
 		{{loop $orders $order}}
 		<tr>
-			<td>{{$orders['consignee_name']}}</td><td>{{$orders['consignee_address']}}</td><td>{{$orders['consignee_mobilephone']}}</td><td>{{$orders['total_price']}}</td>			
+			<td>{{$order['Order']['consignee_name']}}</td><td>{{$order['Order']['consignee_address']}}</td><td>{{$order['Order']['consignee_mobilephone']}}</td><td>{{$order['Order']['total_price']}}</td>			
 		</tr>
+		{{if !empty($order_carts[$order['Order']['id']])}}
 		<tr><td>
 			<table  class="table table-bordered">
 				<tr><th width="50%">商品名称</th><th>购买价格</th><th>商品数量</th><th>合计</th></tr>
 				<tbody>
-				{{loop $order_carts $cart}}
+				{{loop $order_carts[$order['Order']['id']] $cart}}
 				<tr><td>{{$cart['Cart']['name']}}</td>
 				<td>{{$cart['Cart']['price']}}</td>
 				<td>{{$cart['Cart']['num']}}</td>
@@ -24,6 +25,7 @@ td {padding:5px 10px;}
 				</tbody>
 			</table>
 		</td></tr>
+		{{/if}}
 		{{/loop}}
 		</table>
 		</div>			
