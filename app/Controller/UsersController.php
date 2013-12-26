@@ -312,11 +312,7 @@ class UsersController extends AppController {
                 $this->Session->setFlash(lang('login_success').$this->Session->read('Auth.User.session_flash'));
                 $success = true;
             }
-            else{
-            	echo "===============";
-            }
         }
-        print_r($this->data);
         
         if ($success) {
         	$wx_openid = $this->Session->read('wx_openid');
@@ -386,9 +382,9 @@ class UsersController extends AppController {
                 	echo $content;
                 }
             }
-            //else {
-            //	$this->Session->setFlash(__('user not exists or password not right'));
-            //}
+            else {
+            	$this->Session->setFlash(__('user not exists or password not right'));
+            }
             //$this->redirect(array('action' => 'forgot'), 401);
         } else {
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
@@ -396,7 +392,7 @@ class UsersController extends AppController {
                 $this->set('isajax', true);
             }
         }
-        //$this->data['User']['referer'] = $redirect;
+        $this->data['User']['referer'] = $redirect;
     }
 
     function logout() {        
