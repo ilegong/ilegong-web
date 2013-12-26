@@ -36,7 +36,7 @@ class UCenterAuthenticate extends BaseAuthenticate {
             		'username'=> $username,
             		'nickname'=> $username,
             		'email' => $email,
-            		'password' => $password,
+            		'password' => Security::hash($password, null, true),
             		'activation_key' => md5(uniqid()),
             		'status'=> 1,
             		'last_login'=> date('Y-m-d H:i:s'),

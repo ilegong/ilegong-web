@@ -90,11 +90,9 @@ class UsersController extends AppController {
     }
 
     function register() {
-        $this->pageTitle = __('Register', true);
+        $this->pageTitle = lang('user_register');
         if (!empty($this->data)) {
-        	$this->User->create();        	
-        	
-            
+        	$this->User->create();            
             $this->data['User']['role_id'] = Configure::read('User.defaultroler'); // Registered defaultroler
             $this->data['User']['activation_key'] = md5(uniqid());
             $useractivate = Configure::read('User.activate');
@@ -104,12 +102,12 @@ class UsersController extends AppController {
                 $this->data['User']['status'] = 0;
             }
             if ($this->data['User']['password'] != Security::hash($this->data['User']['password_confirm'], null, true)) {
-                $this->Session->setFlash(__('Two password is empty or not equare.', true));
+                $this->Session->setFlash(lang('two_password_is_not_equare.'));
             } else {
             	$has_error = false;
             	if(defined('UC_APPID')){
             		App::import('Vendor', '',array('file' => 'uc_client'.DS.'client.php'));
-            		$uid = uc_user_register($username, $password, $email, $questionid = '', $answer = '', $regip = '');
+            		$uid = uc_user_register( $this->data['User']['username'], $this->data['User']['password'], $this->data['User']['email'],'','', $this->request->clientIp());
             		if($uid<=0){
             			if($uid == -1) {
             				$error_msg = '用户名不合法';
