@@ -82,9 +82,7 @@ class OrdersController extends AppController{
 			$this->__message('订单金额错误，请返回购物车查看','/carts/listcart');
 		}
 		
-		if(empty($data['consignee_name']) || empty($data['consignee_address']) || empty($data['consignee_mobilephone']) ){
-			$this->__message('请填写收货人信息','/orders/info');
-		}
+		
 		
 		$data = array();
 		$data['total_price'] = $total_price;
@@ -98,6 +96,11 @@ class OrdersController extends AppController{
 		$data['consignee_telephone'] = $this->Session->read('OrderConsignee.telephone');
 		$data['consignee_email'] = $this->Session->read('OrderConsignee.email');
 		$data['consignee_postcode'] = $this->Session->read('OrderConsignee.postcode');
+		
+		if(empty($data['consignee_name']) || empty($data['consignee_address']) || empty($data['consignee_mobilephone']) ){
+			$this->__message('请填写收货人信息','/orders/info');
+		}
+		
 		if($this->Order->save($data)){
 			$order_id = $this->Order->getLastInsertID();
 			foreach($Carts as $cart){
