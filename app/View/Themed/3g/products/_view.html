@@ -1,8 +1,10 @@
 <h2 class="Content-title"><?php echo $Product['Product']['name']; ?></h2>
-	    <p>
-				<img src="{{$this->Html->url($Product['Product']['coverimg'])}}" 
+	    <div class="row">
+			<div class="col-xs-12 col-md-6">	
+				<img src="{{$this->Html->url($Product['Product']['coverimg'])}}" style="width:100%;"
 				onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
-		</p>
+			</div>
+		</div>
 	    <p>单价：<strong> ￥<?php echo $Product['Product']['price']; ?></strong></p>
 	    <div  id="productinfo">	    
             <div class="input-group" style="float:left;width:120px;">
@@ -13,7 +15,7 @@
 			<a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-primary shopping" id="single-item-{{$Product['Product']['id']}}" item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
   href="javascript:void(0);">添加到购物车 </a>
 	    </div>
-<div class="clearfix"></div>
+<div class="clearfix"><p><br/></p></div>
 <div class="tabs">
 <div  class="tab-content">
 	<div class="tab-pane active" id="product-description">
