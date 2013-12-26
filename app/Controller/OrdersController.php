@@ -109,10 +109,14 @@ class OrdersController extends AppController{
 				$this->Cart->updateAll(array('order_id'=>$order_id,'status'=>1),array('id'=>$cart['Cart']['id'],'creator'=>$this->currentUser['id']));
 			}
 			setcookie("cart_products", '',time()-3600,'/');
-			$this->__message('订单已生成','/orders/info/'.$order_id);
+			$this->Session->setFlash('订单已生成');
+			$this->redirect('/orders/info/'.$order_id);
+			//$this->__message('订单已生成','/orders/info/'.$order_id);
 		}
 		else{
-			$this->__message('订单保存失败，请稍候重新提交','/order/info/');
+			$this->Session->setFlash('订单保存失败，请稍候重新提交');
+			$this->redirect('/order/info');
+			//$this->__message('订单保存失败，请稍候重新提交','/order/info/');
 		}		
 	}
 	
