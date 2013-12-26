@@ -24,6 +24,9 @@ class UCenterAuthenticate extends BaseAuthenticate {
                         'recursive' => -1
                     ));
         }
+        else{
+        	return false;
+        }
         $lastLoginIp = $request->clientIp();
         if (empty($result)) {
         	$_model->create();
