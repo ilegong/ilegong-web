@@ -86,14 +86,16 @@ class WeixinController extends AppController {
 				case "下单":
 				case "预订":
 				case "预定":
-					echo $this->newTextMsg($user, $me, "点击<a href=\"http://51daifan.sinaapp.com/techan.html?wx_openid=$user\" >51带饭预定页</a>立即预定");
+				case "1":
+					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/techan.html?wx_openid=$user\" >51带饭预定页</a>");
 					break;
 				case "查看订单":
 				case "订单":
-					echo $this->newTextMsg($user, $me, "点击<a href=\"http://51daifan.sinaapp.com/orders/mine.html?wx_openid=$user\" >查看我的订单</a>");
+				case "2":
+					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/orders/mine.html?wx_openid=$user\" >查看我的订单</a>");
 					break;				
-				default :
-					echo $this->newTextMsg($user, $me, "回复“预定”进入预定页\n回复“订单”查看我的订单");
+				//default :
+				//	echo $this->newTextMsg($user, $me, "回复“预定”进入预定页\n回复“订单”查看我的订单");
 			}
 		}
 	}
