@@ -139,7 +139,12 @@
 		});
 		
 		if( $('#item-detail-title').size() > 0) { //detail page
-			$('#go-back-div').show();
+			if( $('#productinfo').size() > 0){//for booking, must refresh
+				$('#go-back-div').find('a').attr('href', '/').end().show();
+			}else{
+				$('#go-back-div').show();
+			}
+			
 		}
 		
 		readFromCookie();
