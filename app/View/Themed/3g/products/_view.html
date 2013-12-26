@@ -80,12 +80,12 @@ var setAmount={
 				onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
 		</a>	    
             <div class="input-group" style="float:left;width:120px;">
-			  <span class="reduce input-group-addon" onclick="setAmount.reduce('#pamount')">-</span>
-			  <input id="pamount" size="3" value="1" class="form-control" name="shoppingnum" type="text">
-			  <span class="add input-group-addon" onclick="setAmount.add('#pamount')">+</span>
+			  <span class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}" >-</span>
+			  <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text" readonly="readonly">
+			  <span class="add input-group-addon"  item-id="{{$Product['Product']['id']}}">+</span>
 			</div>
-			<a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-primary"
- onclick="return addtoCart({{$Product['Product']['id']}},1);" href="javascript:void(0);">添加到购物车 </a>
+			<a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-primary shopping" id="single-item-{{$Product['Product']['id']}}" item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
+  href="javascript:void(0);">添加到购物车 </a>
 			
 	    </div>
 <div style="clear:both;"></div>

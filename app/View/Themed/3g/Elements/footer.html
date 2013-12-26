@@ -19,6 +19,120 @@
 }}
 <script type="text/javascript">
 	
+	var cart = {};	
+
+	function addToCart(itemId, itemNum, price, name){
+		
+		cart[itemId] = {'num' : itemNum, 'price' : price , 'name' : name };
+		$('#item-' + itemId).find('div.select-item').show();
+					
+		//产品介绍页面处理
+		$('#single-item-' + itemId).removeClass('btn-primary').addClass('btn-success').text('从购物车删除');
+		$('#pamount-' + itemId).val(itemNum);
+		
+		updateCart();
+	}
+
+	function deleteFromCart(itemId){
+		$item.find('div.select-item').hide();
+		//产品介绍页面处理
+		$('#single-item-' + itemId).removeClass('btn-success').addClass('btn-primary').text('添加到购物车');
+		$('#pamount-' + itemId).val(1);
+		delete cart[itemId];
+		updateCart();
+	}
+
+	function updateCart(){
+		var itemNum = 0, cost = 0;
+		
+		for(var itemId in cart){
+			
+			itemNum += parseInt(cart[itemId]['num']);
+			cost +=  parseInt(cart[itemId]['num'])  * parseFloat(cart[itemId]['price']);
+		}
+		var $cartBtn = $('#card-btn');
+		if(itemNum > 0){
+			$cartBtn.removeClass('btn-warning').addClass('btn-success').find('span').html('已选择' + itemNum + '份，总共'+ cost +'元，点击下单');
+		}else {
+			$cartBtn.addClass('btn-warning').removeClass('btn-success').find('span').html('请先下单');
+		}
+
+		saveCartToCookie();
+	}
+
+	function saveCartToCookie(){
+		var cartStr = '';
+		for(var itemId in cart){
+			cartStr += [itemId, cart[itemId]['num'], cart[itemId]['price'], cart[itemId]['name']].join(':');
+			cartStr += ',';
+		}
+		$.cookie('cart_products', cartStr, {'path' : '/'});
+	}
+
+	function readFromCookie(){
+		var cart_products = $.cookie('cart_products') || '';
+		var items = cart_products.split(',');
+
+		for(var i = 0, len = items.length; i < len ; ++ i){
+			var itemStr = items[i];
+			if(itemStr){
+				var itemDetails = itemStr.split(':');
+				var itemId = parseInt(itemDetails[0]) ;
+				var itemNum = parseInt(itemDetails[1]) ;
+				if( itemId && itemNum){
+					addToCart(itemId, itemNum, parseFloat(itemDetails[2]) || 0, itemDetails[3] )
+				}
+			}
+
+			
+		}
+
+		updateCart();
+
+	}
+
+	function createCart(){
+		var itemNum = 0, cost = 0;
+		var itemStr = '';
+		var cart_products_html = '';
+		for(var itemId in cart){
+			
+			var $item = $('#item-' + itemId);
+			var price = parseFloat(cart[itemId]['price']);
+			var name = cart[itemId]['name'];
+			var num = parseInt(cart[itemId]['num']);
+			itemNum += num;
+			cost += (price * num);
+			cart_products_html +='<div class="row cart_products-row"><div class="col-xs-5">'
+					+'<span class="item-name" title="'+name+'">'+name+' <br></span>'
+					+'<span class="item-price-info"><span><span class="item-total-price">￥'+ (price * num)+'</span>(<span class="item-single-price">'+price+'</span>×<span class="item-amount">'+num+'</span>)'
+					+'</span></span></div>'
+					+'<div class="col-xs-5 input-group input-group-sm">'
+					+'<span data-id="'+itemId+'" class="reduce input-group-addon '+(num==1?'disabled':'')+'">—</span>'
+					+'<input class="form-control" type="text" name="amount" size="3" value="'+num+'" autocomplete="off" readonly="readonly">'
+					+'<span data-id="'+itemId+'" class="add input-group-addon">+</span>'
+					+'</div>'
+					+'<div class="col-xs-2">'
+					+'<a class="delete-btn" data-id="'+itemId+'"  href="javascript:void(0);">'
+					+'<span class="glyphicon glyphicon-remove-circle" style="font-size:18px;color:red;"></span></a>'
+					+'</div>'
+					+'</div><div class="divider"></div>';
+
+		}
+
+		
+		$('#cart_products-total-price').text(cost);
+		
+		if(itemNum <= 0){
+			$('#checkout-btn' ).removeClass('btn-primary').addClass('btn-warning');
+		}else{
+			$('#checkout-btn' ).removeClass('btn-warning').addClass('btn-primary');
+		}
+
+		$('#cart-modal').find('.modal-body').html(cart_products_html);
+		
+	}
+
 	$(document).ready(function(){
 		$("img.lazy").lazyload({
 			placeholder : "/Public/Index/img/grey.gif",
@@ -26,7 +140,7 @@
 			threshold : 100
 		});
 		
-		var cart = {};	
+		
 		readFromCookie();
 
 		//items with shopping class
@@ -35,14 +149,14 @@
 			var itemId = $item.attr('item-id');
 
 			if( itemId in cart){ // already added, remove it
-				$item.find('div.select-item').hide();
-				delete cart[itemId];
+				
+				deleteFromCart(itemId);
 			}else { //not added
 				
-				$item.find('div.select-item').show();
-				cart[itemId] = {'num' : 1, 'price' : (parseFloat($item.attr('item-price')) || 0 ) , 'name' : $item.attr('item-name') };
+				addToCart(id, parseInt($('#pamount-' + itemId).val()) || 1, (parseFloat($item.attr('item-price')) || 0 ), $item.attr('item-name'));
+				
 			}
-			updateCart();
+			
 		});
 
 		//show cart button
@@ -60,20 +174,26 @@
 		});
 
 		//cart dialog
-		$('#cart-modal').on('click', 'span.reduce', function(){
+		$('#cart-modal, #productinfo').on('click', 'span.reduce', function(){
 			var itemId = $(this).attr('data-id');
-			cart[itemId]['num'] =  (parseInt(cart[itemId]['num']) || 0) - 1;
-			if(cart[itemId]['num'] <= 0){
-				$('#item-' + itemId).find('div.select-item').hide();
-				delete cart[itemId];
+			if(cart[itemId]){
+				var num =  (parseInt(cart[itemId]['num']) || 0);
+				if(num > 1){
+					cart[itemId]['num'] = num - 1;
+					$('#pamount-' + itemId).val(num -1);
+					updateCart();
+					createCart();
+				}
+				
 			}
-			updateCart();
-			createCart();
 		}).on('click', 'span.add', function(){
 			var itemId = $(this).attr('data-id');
-			cart[itemId]['num'] = (parseInt(cart[itemId]['num']) || 0) + 1;
-			updateCart();
-			createCart();
+			if(cart[itemId]){
+				cart[itemId]['num'] = (parseInt(cart[itemId]['num']) || 0) + 1;
+				$('#pamount-' + itemId).val(cart[itemId]['num']);
+				updateCart();
+				createCart();
+			}
 		}).on('click', 'a.delete-btn', function(){
 			var itemId = $(this).attr('data-id');
 			$('#item-' + itemId).find('div.select-item').hide();
@@ -82,97 +202,8 @@
 			createCart();
 		});
 
-		function updateCart(){
-			var itemNum = 0, cost = 0;
-			
-			for(var itemId in cart){
-				
-				itemNum += parseInt(cart[itemId]['num']);
-				cost +=  parseInt(cart[itemId]['num'])  * parseFloat(cart[itemId]['price']);
-			}
-			var $cartBtn = $('#card-btn');
-			if(itemNum > 0){
-				$cartBtn.removeClass('btn-warning').addClass('btn-success').find('span').html('已选择' + itemNum + '份，总共'+ cost +'元，点击下单');
-			}else {
-				$cartBtn.addClass('btn-warning').removeClass('btn-success').find('span').html('请先下单');
-			}
 
-			saveCartToCookie();
-		}
 
-		function saveCartToCookie(){
-			var cartStr = '';
-			for(var itemId in cart){
-				cartStr += [itemId, cart[itemId]['num'], cart[itemId]['price'], cart[itemId]['name']].join(':');
-				cartStr += ',';
-			}
-			$.cookie('cart_products', cartStr, {'path' : '/'});
-		}
-
-		function readFromCookie(){
-			var cart_products = $.cookie('cart_products') || '';
-			var items = cart_products.split(',');
-
-			for(var i = 0, len = items.length; i < len ; ++ i){
-				var itemStr = items[i];
-				if(itemStr){
-					var itemDetails = itemStr.split(':');
-					var itemId = parseInt(itemDetails[0]) ;
-					var itemNum = parseInt(itemDetails[1]) ;
-					if( itemId && itemNum){
-						$('#item-' + itemId).find('div.select-item').show();
-						cart[itemId] = {'num' : itemNum, 'price' : (parseFloat(itemDetails[2]) || 0 ) , 'name' : itemDetails[3] };
-					}
-				}
-
-				
-			}
-
-			updateCart();
-
-		}
-
-		function createCart(){
-			var itemNum = 0, cost = 0;
-			var itemStr = '';
-			var cart_products_html = '';
-			for(var itemId in cart){
-				
-				var $item = $('#item-' + itemId);
-				var price = parseFloat(cart[itemId]['price']);
-				var name = cart[itemId]['name'];
-				var num = parseInt(cart[itemId]['num']);
-				itemNum += num;
-				cost += (price * num);
-				cart_products_html +='<div class="row cart_products-row"><div class="col-xs-5">'
- 					+'<span class="item-name" title="'+name+'">'+name+' <br></span>'
- 					+'<span class="item-price-info"><span><span class="item-total-price">￥'+ (price * num)+'</span>(<span class="item-single-price">'+price+'</span>×<span class="item-amount">'+num+'</span>)'
- 					+'</span></span></div>'
- 					+'<div class="col-xs-5 input-group input-group-sm">'
- 					+'<span data-id="'+itemId+'" class="reduce input-group-addon '+(num==1?'disabled':'')+'">—</span>'
- 					+'<input class="form-control" type="text" name="amount" value="'+num+'" autocomplete="off" disabled>'
- 					+'<span data-id="'+itemId+'" class="add input-group-addon">+</span>'
- 					+'</div>'
- 					+'<div class="col-xs-2">'
- 					+'<a class="delete-btn" data-id="'+itemId+'"  href="javascript:void(0);">'
- 					+'<span class="glyphicon glyphicon-remove-circle" style="font-size:18px;color:red;"></span></a>'
- 					+'</div>'
- 					+'</div><div class="divider"></div>';
-
-			}
-
-			
-			$('#cart_products-total-price').text(cost);
-			
-			if(itemNum <= 0){
-				$('#checkout-btn' ).removeClass('btn-primary').addClass('btn-warning');
-			}else{
-				$('#checkout-btn' ).removeClass('btn-warning').addClass('btn-primary');
-			}
-
-			$('#cart-modal').find('.modal-body').html(cart_products_html);
-			
-		}
 
 	});
 </script>
