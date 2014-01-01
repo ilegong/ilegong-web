@@ -19,7 +19,7 @@ class UCenterAuthenticate extends BaseAuthenticate {
         App::uses('Charset', 'Lib');
         $username =  $request->data[$model][$fields['username']];
         $username = Charset::utf8_gbk($username);
-        list($uid, $username, $password, $email) = $user = uc_user_login($username, $request->data[$model][$fields['password']]);
+        list($uid, $ret_username, $password, $email) = $user = uc_user_login($username, $request->data[$model][$fields['password']]);
         if ($uid > 0) {
             $_model = ClassRegistry::init($model);
             $result = $_model->find('first', array(
