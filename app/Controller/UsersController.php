@@ -113,7 +113,10 @@ class UsersController extends AppController {
             	$has_error = false;
             	if(defined('UC_APPID')){
             		App::import('Vendor', '',array('file' => 'uc_client'.DS.'client.php'));
-            		$uid = uc_user_register( $this->data['User']['username'],$src_password, $this->data['User']['email'],'','', $this->request->clientIp());
+            		App::uses('Charset', 'Lib');
+            		$username =  $this->data['User']['username'];
+            		$username = Charset::utf8_gbk($username);
+            		$uid = uc_user_register($username,$src_password, $this->data['User']['email'],'','', $this->request->clientIp());
             		if($uid<=0){
             			if($uid == -1) {
             				$error_msg = '用户名不合法';
