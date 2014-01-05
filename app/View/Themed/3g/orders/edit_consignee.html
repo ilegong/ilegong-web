@@ -59,7 +59,7 @@
 </div>
 <script>
 $('#save_consignee_sbt').click(function(e){
-	var val = $("input[name='data[OrderConsignee][id]'][@checked]").val();
+	var val = $("input[name='data[OrderConsignee][id]']:checked").val();
 	alert(val);
 	if(val==""){
 		if($('#consignee_name').val()==""){
