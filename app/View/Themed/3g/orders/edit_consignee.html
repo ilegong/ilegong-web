@@ -52,12 +52,37 @@
 		</div>
 		<div class="footer">
 			<input type="hidden" name="data[OrderConsignee][edit_type]" id="edit_type" value="{{if $total_consignee}}select{{else}}new{{/if}}">
-			<input type="submit" value="保存收货人信息" class="btn btn-primary">
+			<input type="submit" id="save_consignee_sbt" value="保存收货人信息" class="btn btn-primary">
 		</div>
 	</div>
 </form>
 </div>
 <script>
+$('#save_consignee_sbt').click(function(){
+	var val = $("input[name='data[OrderConsignee][id]']:radio").val();
+	alert(val);
+	if(val==""){
+		if($('#consignee_name').val()==""){
+			$('#consignee_name').focus();
+			alert("请输入收获人姓名");
+			e.preventDefault();
+			return false;
+		}
+		if($('#consignee_address').val()==""){
+			$('#consignee_address').focus();
+			alert("请输入收获地址");
+			e.preventDefault();
+			return false;
+		}
+		if($('#consignee_mobilephone').val()==""){
+			$('#consignee_mobilephone').focus();
+			alert("请输入联系电话");
+			e.preventDefault();
+			return false;
+		}
+	}
+})
+
 	$('#address-chose').change(function(){
 		$('#consignee_address').hide().val(this.value);
 		if(this.value==""){
