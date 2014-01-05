@@ -60,20 +60,20 @@ class DATABASE_CONFIG {
 			$this->default = array(
 				'datasource' => 'Database/Mysql',
 				'persistent' => false,
-				'host' => '127.0.0.1',
-				'login' => 'root',	// jieli
-				'password' => 'xsdfuh2&32sdw!3S#sd',	//zFY8smWUKcaLrUs5	
-				'database' => 'saecms',
+				'host' => 'localhost',
+				'login' => '51daifan',	// jieli
+				'password' => 'PGdvFePBenE4TtBb',	//zFY8smWUKcaLrUs5	
+				'database' => '51daifan',
 				'prefix' => 'cake_',
 				'encoding'=>'utf8', 
 			);		
 			$this->master = array(
 				'datasource' => 'Database/Mysql',
 				'persistent' => false,
-				'host' => '127.0.0.1',
-				'login' => 'root',
-				'password' => 'xsdfuh2&32sdw!3S#sd',
-				'database' => 'saecms',
+				'host' => 'localhost',
+				'login' => '51daifan',
+				'password' => 'PGdvFePBenE4TtBb',
+				'database' => '51daifan',
 				'prefix' => 'cake_',
 				'encoding'=>'utf8', 
 			);
@@ -81,9 +81,9 @@ class DATABASE_CONFIG {
 			$this->olddb = array(
 				'datasource' => 'Database/Mysql',
 				'persistent' => false,
-				'host' => '127.0.0.1',
-				'login' => 'root',
-				'password' => 'xsdfuh2&32sdw!3S#sd',
+				'host' => 'localhost',
+				'login' => '51daifan',
+				'password' => 'PGdvFePBenE4TtBb',
 				'database' => 'old_saecms',
 				'prefix' => 'cake_',
 				'encoding'=>'utf8', 

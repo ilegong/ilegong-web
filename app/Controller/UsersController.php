@@ -141,6 +141,7 @@ class UsersController extends AppController {
             	}
                 if ($has_error==false && $this->User->save($this->data)) {                	
 //	                $this->autoRender = false;
+                	$this->data['User']['id'] = $this->User->getLastInsertID();
                     if ($useractivate == 'email') {
                         $this->Email->from = Configure::read('Site.title') . ' '
                                 . '<SaeCMS@' . preg_replace('#^www\.#', '', strtolower($_SERVER['SERVER_NAME'])) . '>';
