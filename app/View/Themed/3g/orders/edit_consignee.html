@@ -59,7 +59,7 @@
 </div>
 <script>
 	$('#address-chose').change(function(){
-		$('#consignee_address').val(this.value);
+		$('#consignee_address').hide().val(this.value);
 		if(this.value==""){
 			$('#consignee_address').show();
 		}
