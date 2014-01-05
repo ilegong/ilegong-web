@@ -68,7 +68,7 @@ function use_NewConsignee(){
 	$('#consignee_addr').show();
 	
 	$('#address-chose').show();
-	$('#consignee_address').hide();
+	$('#consignee_address').val($('#address-chose').val()).hide();
 	
 	$('#consignee_name').val('');
 	$('#consignee_area').val('');
