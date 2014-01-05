@@ -11,7 +11,7 @@
 	<div class="form-group">
 	    <label for="user_password" class="col-xs-3 control-label">密　码</label>
 	    <div class="col-xs-9">
-	      <input type="password" id="user_password" name="data[User][password]" class="form-control" placeholder="用户名">
+	      <input type="password" id="user_password" name="data[User][password]" class="form-control" placeholder="密　码">
 	    </div>
 	</div>
 	{{$this->Form->input('referer',array('type'=>'hidden'))}}
@@ -27,7 +27,7 @@
 	    <div class="col-xs-9">
 	      <button tabindex="1" value="true"  name="loginsubmit" type="submit" class="btn btn-primary"><span>登录</span></button>
 		  <a title="注册帐号" class="btn btn-default" href="{{$this->Html->url('/users/register.html')}}">注册</a>
-		  <a title="找回密码" onclick="" href="{{$this->Html->url('/users/forgot')}}">找回密码</a>
+		  <!-- <a title="找回密码" onclick="" href="{{$this->Html->url('/users/forgot')}}">找回密码</a> -->
 	    </div>
 	</div>
 </div>
