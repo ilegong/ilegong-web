@@ -35,6 +35,8 @@ function SetDefaultAddress(obj,id){
 }
 rs_callbacks.editConsignee = function(request){
 	$('#consignee_addr').show();
+	$('#address-chose').hide();
+	$('#consignee_address').show();
 	for(var i in request){
 		$('#consignee_'+i).val(request[i])
 	}	
@@ -64,6 +66,10 @@ function chose_Consignee(id) {
 function use_NewConsignee(){
 	$('#edit_type').val('new');
 	$('#consignee_addr').show();
+	
+	$('#address-chose').show();
+	$('#consignee_address').hide();
+	
 	$('#consignee_name').val('');
 	$('#consignee_area').val('');
 	$('#consignee_address').val('');
