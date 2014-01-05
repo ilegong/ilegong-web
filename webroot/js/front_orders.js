@@ -67,17 +67,18 @@ function use_NewConsignee(){
 	$('#edit_type').val('new');
 	$('#consignee_addr').show();
 	
-	$('#address-chose').show();
-	alert($('#address-chose').val());
-	$('#consignee_address').val($('#address-chose').val()).hide();
-	
-	$('#consignee_name').val('');
-	$('#consignee_area').val('');
 	$('#consignee_address').val('');
+	$('#consignee_name').val('');
+	$('#consignee_area').val('');	
 	$('#consignee_mobilephone').val('');
 	$('#consignee_telephone').val('');
 	$('#consignee_email').val('');
-	$('#consignee_postcode').val('');
+	$('#consignee_postcode').val('');	
+	
+	$('#address-chose').show();
+	$('#consignee_address').val($('#address-chose').val()).hide();
+	
+	
 }
 /**********************************************************************/
 
