@@ -46,12 +46,12 @@ $(document).ready(function(){
 		$('.login-box').find('.input-large').removeClass('span10');
 		
 	}
-	$(window).resize(function(){
+	/*$(window).resize(function(){
 		var content_height = $(window).height()-80;
 		$('#ui-layout-west').addClass('ui-layout-west').height(content_height);
 		$('#mainContent').addClass('ui-layout-main').height(content_height);
 		
-	}).trigger('resize');
+	}).trigger('resize');*/
 	
 	//highlight current / active link
 	$('ul.main-menu li a').each(function(){

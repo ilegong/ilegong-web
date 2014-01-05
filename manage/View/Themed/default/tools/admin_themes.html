@@ -91,7 +91,7 @@ $(function(){
         foreach ($tpls AS $tpl) {
             //$actions = ' ' . $this->Html->link(__('Edit', true), array('controller'=>'stylevars','action' => 'edit', $tpl['name']));
             //$actions .= ' ' . $this->Html->link(__('Delete', true), array('action' => 'delete', $style['Misccate']['id']), null, __('Are you sure?', true));
-			if($site_theme==$tpl['name']){
+			if($admin_theme==$tpl['name']){
 				$active = '<button data-theme="'.$tpl['name'].'" type="button" class="btn btn-small btn-success disabled"><i class="icon-ok icon-white"></i>已启用</button>';
 			}
 			else{

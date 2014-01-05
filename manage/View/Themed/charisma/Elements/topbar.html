@@ -1,20 +1,18 @@
 <!-- topbar starts -->
-	<div id="header" class="navbar">
-		<div class="navbar-inner">
-			<div class="container-fluid">
-				<a class="btn btn-navbar" data-toggle="collapse" data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-					<span class="icon-bar"></span>
-				</a>
-				<a class="brand" href="{{Router::url('/')}}"> <span>Miao CMS</span></a>
-    							
-				<!-- user dropdown starts -->
+<header  role="banner" id="header" class="navbar  navbar-inverse ui-layout-north" style="visibility: visible; display: block; height: 42px;">
+	<div class="col-lg-12">
+   		<div class="navbar-header">
+			<a class="navbar-brand" style="padding:10px 40px;" href="{{Router::url('/')}}">Miao CMS</a>
+   		</div>
+		<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+					<!-- user dropdown starts -->
 				<div class="btn-group pull-right" >
+				
 					<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="icon icon-color icon-user"></span><span class="hidden-phone">{{$this->Session->read('Auth.Staff.name')}}</span>
 						<span class="caret"></span>
 					</a>
+				
 					<ul class="dropdown-menu">
 						<li><a href="#">{{__('Profile')}}</a></li>
 						<li class="divider"></li>
@@ -22,62 +20,52 @@
 						<li>{{$this->Html->link(__('Desktop Mode'), '/?theme=desktop')}}</li>
 						<li>{{$this->Html->link(__("File Manage"), '/admin/ace/editors/index')}}</li>
 						<li class="divider"></li>
-						{{loop $selectlans $lan $native}}        	 
-          <li>
-          {{if defined('APPEND_LOCALE_BASE')}}
-          	{{if $lan=='zh-cn'}}<a href="{{Router::url('/../')}}">{{$native}}</a> {{else}}	<a href="{{Router::url('/../'.$lan)}}">{{$native}}</a>{{/if}}
-          {{else}}
-            {{if $lan=='zh-cn'}}<a href="{{Router::url('/')}}">{{$native}}</a>{{else}}<a href="{{Router::url('/'.$lan)}}">{{$native}}</a>{{/if}}
-          {{/if}}
-          </li>
-          {{/loop}}
+						  {{loop $selectlans $lan $native}}        	 
+				          <li>
+				          {{if defined('APPEND_LOCALE_BASE')}}
+				          	{{if $lan=='zh-cn'}}<a href="{{Router::url('/../')}}">{{$native}}</a> {{else}}	<a href="{{Router::url('/../'.$lan)}}">{{$native}}</a>{{/if}}
+				          {{else}}
+				            {{if $lan=='zh-cn'}}<a href="{{Router::url('/')}}">{{$native}}</a>{{else}}<a href="{{Router::url('/'.$lan)}}">{{$native}}</a>{{/if}}
+				          {{/if}}
+				          </li>
+				          {{/loop}}
 						<li class="divider"></li>
 						<li><a href="{{Router::url('/admin/staffs/logout')}}">{{__('Logout')}}</a></li>
 					</ul>
 				</div>
 				<!-- user dropdown ends -->
-				
-				<div class="top-nav nav-collapse">
-					
-					{{$this->Section->getNavMenu('Menu',array(
-						'selectedid'=> $top_category_id,
-						'preli'=>'',
-						'maxdepth' => 1,
-						'sufli'=>'',
-					),1,false)}}
-					<ul class="nav">
-						<li>
+				<ul class="nav navbar-nav navbar-right">
+					<li>
 				  	{{if defined('APPEND_LOCALE_BASE')}}
 				  		{{$this->Html->link(__('Visit website'), '/../../',array('target'=>'_blank'))}}
 				    {{else}}
 				        {{$this->Html->link(__('Visit website'), '/../',array('target'=>'_blank'))}}
 				    {{/if}}
 				  	</li>
-						<li>
-							<form class="navbar-search pull-left">
-								<input placeholder="Search" class="search-query span2" name="query" type="text">
-							</form>
-						</li>
-					</ul>
-				</div><!--/.nav-collapse -->
-			</div>
-		</div>
+				</ul>
+				<?php if(!isset($menuid)) $menuid=1; ?>
+				{{$this->Section->getNavMenu('Menu',array(
+					'selectedid'=> $top_category_id,
+					'preli'=>'', 'ulAttributes'=>array('id'=>'top-navbar','class'=>'nav navbar-nav'),
+					'maxdepth' => 1,
+					'sufli'=>'',
+				),$menuid,false)}}
+		</nav>
 	</div>
-	<!-- topbar ends -->
+</header>
+<!-- topbar ends -->
 	<script>
 	$(function(){
 		
 		$('#leftmenucontent').find('a').addClass('ajax-link');
 		
-		$("#header .nav-pills a").bind('click',function(e){
-			/*切换菜单*/
+		$("#top-navbar a").on('click',function(e){
 			var ref = $(this).attr('ref');
-			$('#header .nav-pills').find('.active').removeClass('active');
+			$('#top-navbar').find('.active').removeClass('active');
 			$(this).blur().parent('li:first').addClass('active');
 			$('#leftmenucontent').find('.leftmenu').hide();
 			$('#leftmenucontent').find('#leftmenu_'+ref).show();
 			e.preventDefault();
-			
 			/*点击时，打开子菜单的第一项对应的页面*/
 			var obj = $('#leftmenucontent').find('#leftmenu_'+ref).find('.nav a').eq(0);
 			if(obj.attr('href').substr(0,1)=='#'){

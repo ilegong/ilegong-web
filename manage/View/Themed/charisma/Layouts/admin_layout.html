@@ -1,11 +1,11 @@
 {{template Elements/header}}
 {{template Elements/topbar}}	
-<div class="container-fluid" style="position:relative;">
-<div class="row-fluid">
-	<div id="ui-layout-west" class="span5 main-menu-span">
+<div class="container" style="position:relative;">
+<div class="row">
+	<div class="col-xs-2">
 		{{template Elements/leftmenu}}
 	</div>	
-	<div id="mainContent" class="span19">
+	<div id="mainContent" class="col-xs-10">
 		{{$content_for_layout}}
 	</div>
 </div>

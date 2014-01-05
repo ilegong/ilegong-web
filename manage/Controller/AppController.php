@@ -98,7 +98,7 @@ class AppController extends Controller {
         else{
         	$this->layout = 'admin';
         }
-        
+        $this->theme = Configure::read('Admin.theme');
         if($_GET['theme']){
         	$this->theme=$_GET['theme'];
         	$this->Session->write('theme',$this->theme);
@@ -112,7 +112,8 @@ class AppController extends Controller {
 			'controller' => 'staffs',
 			'action' => 'login',
 			'plugin' => null
-		);        
+		);
+            
         
         if (defined('IN_CLI')) {
         	$methods = get_class_methods($this);
