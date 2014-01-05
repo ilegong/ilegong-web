@@ -2,6 +2,13 @@
 	<div class="pull-left" style="padding:5px 5px 5px 10px;" >      
       <a href="{{$this->Html->url(Configure::read('Site.logo_url'))}}" >{{$this->Html->image($this->Html->url(Configure::read('Site.logo')), array('style'=>'height:35px;','title' => $site[title],'alt' => $site[title]))}}</a>
     </div>
+    <div class="pull-right" style="padding:13px 15px;">      
+     {{if (!empty($CurrentUser))}} 
+     	<?php echo $this->Html->link($CurrentUser['username'], array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?>
+     {{else}}
+     	{{eval echo $this->Html->link('µÇÂ¼', array('controller' => 'users', 'action' => 'login','ext'=>false)); }}
+     {{/if}}
+    </div>
     
 	<nav  role="navigation">
 	<?php 
