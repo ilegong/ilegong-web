@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule    ^((img|js|css|files|cache).*) ../$1    [L]
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>

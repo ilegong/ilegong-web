@@ -1,0 +1,55 @@
+<style>
+.view-key {
+	width:100px;
+	float:left;
+	text-align:right;
+}
+.view-value {
+	margin-left:110px;
+}
+</style>
+<?PHP
+$basicinfo = $otherinfo = $seoinfo = $interactioninfo = $origininfo = '';
+foreach($_extschema as $key => $value)
+{
+$tmp = '';
+$tmp .= '<div style="clear:both;"><div class="view-key"><B>'.$_extschema[$key]['translate'].':</B></div><div class="view-value">';
+
+if($key=='remoteurl'){
+	$tmp .= '<a href="'.$item[$key].'" onclick="return true;" target="_blank">'.$item[$key].'</a>';
+	// 使用onclick="return true;"，来忽略dialog中链接的绑定事件
+}
+else{
+	$tmp .= $item[$key];
+}
+
+$tmp .= '</div></div>';
+if(in_array($key,array('deleted','creator','lastupdator','created','updated','published','status'))){
+	$otherinfo .= $tmp;
+}
+elseif(in_array($key,array('seodescription','seokeywords','seotitle','keywords','summary'))){
+	$seoinfo .= $tmp;
+}
+elseif(in_array($key,array('point_nums','favor_nums','comment_status','comment_count','views_count'))){
+	$interactioninfo .= $tmp;
+}
+else{
+	$basicinfo .= $tmp;
+}
+
+}
+?>
+<div class="ui-corner-all" style="margin:10px;">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#view-basic" data-toggle="tab"><span>{{__('Basic Info')}}</span></a></li>
+        <li><a href="#view-other" data-toggle="tab"><span>{{__('Others')}}</span></a></li>
+        {{if $seoinfo}}<li><a href="#view-seo" data-toggle="tab"><span>{{__('SEO')}}</span></a></li>{{/if}}
+        {{if $interactioninfo}}<li><a href="#view-interaction" data-toggle="tab"><span>{{__('Interaction data')}}</span></a></li>{{/if}}
+    </ul>
+    <div class="tab-content">
+    	<div id="view-basic" class="tab-pane active">{{$basicinfo}}</div>
+    	<div id="view-other" class="tab-pane">{{$otherinfo}}</div>
+    	{{if $seoinfo}}<div id="view-seo" class="tab-pane">{{$seoinfo}}</div>{{/if}}
+    	{{if $interactioninfo}}<div id="view-interaction" class="tab-pane">{{$interactioninfo}}</div>{{/if}}
+    </div>
+</div>
