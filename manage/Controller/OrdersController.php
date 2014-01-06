@@ -10,8 +10,7 @@ class OrdersController extends AppController{
 			'conditions' => array( 'order_id' => $id ),		
 		));
 		$this->set('carts',$carts);
-		parent::admin_view($id);
-		print_r($carts);		
+		parent::admin_view($id);				
 	}
 	
 }
