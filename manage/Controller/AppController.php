@@ -797,7 +797,6 @@ class AppController extends Controller {
     			unset($options[$key]); // 传入空的值注销，用默认的$_options中的值
     		}
     	}
-    	$extSchema = $this->{$modelClass}->getExtSchema();
     	$_schema_keys = array_keys($this->{$modelClass}->schema());
     	if (in_array('sort', $_schema_keys)) {
     		$_options['sidx'] = 'sort';
@@ -1006,12 +1005,10 @@ class AppController extends Controller {
     	);
     	$joinmodel_fields = array();
     	$alias = 0;
-    	
+    	$extSchema = $this->{$modelClass}->getExtSchema();
     	$ext_options = array();
-    	print_r($extSchema);
     	if (!in_array($modelClass, array('I18nfield', 'Modelextend'))) {
     		foreach ($extSchema as $k => $fieldinfo) {
-    			print_r($fieldinfo);
     			// 加入判断selectmodel是否存在，不存在时不会加入到joins条件
     			if (in_array($k, $fields) && $fieldinfo['selectmodel'] && ModelExists($fieldinfo['selectmodel']) && $fieldinfo['selectvaluefield'] && $fieldinfo['selecttxtfield'] && in_array($fieldinfo['formtype'], array('select', 'checkbox', 'radio'))) {
     				$alias++;
@@ -1061,7 +1058,6 @@ class AppController extends Controller {
     			$searchoptions['order'] = $modelClass . '.lft asc';
     		}
     	}
-    	print_r($searchoptions);print_r($fields);exit;
     	$datas = $this->{$modelClass}->find('all', $searchoptions);
     	if ($has_step_conditions) {
     		foreach ($datas as $key => $value) {
