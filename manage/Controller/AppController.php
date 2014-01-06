@@ -1008,8 +1008,10 @@ class AppController extends Controller {
     	$alias = 0;
     	
     	$ext_options = array();
+    	print_r($extSchema);
     	if (!in_array($modelClass, array('I18nfield', 'Modelextend'))) {
     		foreach ($extSchema as $k => $fieldinfo) {
+    			print_r($fieldinfo);
     			// 加入判断selectmodel是否存在，不存在时不会加入到joins条件
     			if (in_array($k, $fields) && $fieldinfo['selectmodel'] && ModelExists($fieldinfo['selectmodel']) && $fieldinfo['selectvaluefield'] && $fieldinfo['selecttxtfield'] && in_array($fieldinfo['formtype'], array('select', 'checkbox', 'radio'))) {
     				$alias++;
