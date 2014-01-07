@@ -334,6 +334,24 @@ jQuery("#jqgrid_list_{{$pageID}}").jqGrid('navButtonAdd','#pager2_{{$pageID}}',{
 });
 */
 
+$.fn.export2Excel= function(pager) {    
+    $(this).navButtonAdd(pager,{id:"export_gridTable",caption:"",buttonicon:"ui-icon-arrowthickstop-1-s"});
+}
+$("#jqgrid_list_{{$pageID}}").export2Excel('#pager2_{{$pageID}}');  //添加导出按钮
+$("#export_gridTable").attr("title","export");//设置标题
+
+$("#export_gridTable").click(function() {
+    //直接打开另一个页面导出
+    var url = jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid("getGridParam","url");
+    //alert(url);
+    //var soptions = jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid("getGridParam","postData");
+    //for(var i in soptions){
+    	//alert(i+' '+soptions[i])
+    //}
+    url +='&export=true';
+    window.open(url); 
+});
+
 $('.ui-list-toolbar','#{{$pageID}}').appendTo($("#t_jqgrid_list_{{$pageID}}"));
 $("#t_jqgrid_list_{{$pageID}}").height('auto');
 
