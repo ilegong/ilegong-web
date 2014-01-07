@@ -1716,6 +1716,135 @@ class AppController extends Controller {
 //    	echo $content;exit;
         return $content;
     }
+    
+    /**
+     * 占用较小的内存，更适合网站空间php占用内存限制小的情况。
+     * @param unknown_type $modelClass
+     * @param unknown_type $searchoptions
+     */
+    private function _downloadxml($modelClass,$searchoptions){
+    	@set_time_limit(0);
+    	App::import('Vendor', 'Excel_XML', array('file' => 'phpexcel'.DS.'excel_xml.class.php'));
+    	$xls = new Excel_XML('UTF-8', false, 'My Test Sheet');
+    
+    	$extschema = $this->{$modelClass}->getExtSchema();
+    	unset($extschema['creator'],$extschema['lastupdator'],
+    			$extschema['updated'],$extschema['locale'],
+    			$extschema['published'],$extschema['deleted'],
+    			$extschema['favor_nums'],$extschema['point_nums'],$extschema['views_count'],
+    			$extschema['seotitle'],$extschema['seodescription'],$extschema['seokeywords']);
+    	$header = array();
+    	foreach($extschema as $item){
+    		$header[] = $item['translate'];
+    	}
+    	$xls->addRow($header);
+    	unset($searchoptions['limit'],$searchoptions['page'],$searchoptions['fields']);
+    
+    	$fields = array_keys($extschema);
+    	$page = 1;
+    	$pagesize = 500;
+    	do{
+    		$searchoptions['limit'] = $pagesize;
+    		$searchoptions['page']=$page;
+    		$datas = $this->{$modelClass}->find('all', $searchoptions);
+    		$rows = count($datas);
+    		foreach($datas as $item){
+    			$row = array();
+    			foreach($fields as $fieldname){
+    				$row[] = $item[$modelClass][$fieldname];
+    			}
+    			$xls->addRow($row);
+    		}
+    		unset($datas);// 主动注销防止变量占用太多内存
+    		++$page;
+    	}while($rows==$pagesize);
+    
+    	$xls->generateXML($modelClass.'_'.date('Y-m-d'));
+    }
+    
+    /**
+     * PHPExcel examples
+     * https://github.com/PHPOffice/PHPExcel/tree/develop/Examples
+     * @param unknown_type $conditions
+     */
+    private function _downloadPHPExcel($modelClass,$searchoptions){
+    	@set_time_limit(0);
+    	App::import('Vendor', 'PHPExcel', array('file' => 'phpexcel'.DS.'PHPExcel.php'));
+    	/** PHPExcel_Writer_Excel2007 */
+    	$objPHPExcel = new PHPExcel();
+    
+    	$objPHPExcel->getProperties()->setCreator("MiaoMiaoXuan");
+    	$objPHPExcel->getProperties()->setTitle($modelClass.'_'.date('H:i:s'));
+    	$objPHPExcel->setActiveSheetIndex(0);
+    
+    	$extschema = $this->{$modelClass}->getExtSchema();
+    	$cells = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N',
+    			'O','P','Q','R','S','T','U','V','W','X','Y','Z',
+    			'AA','AB','AC','AD','AE','AF','AG','AH','AI','AJ','AK','AL','AM','AN',
+    			'AO','AP','AQ','AR','AS','AT','AU','AV','AW','AX','AY','AZ',
+    			'BA','BB','BC','BD','BE','BF','BG','BH','BI','BJ','BK','BL','BM','BN',
+    			'BO','BP','BQ','BR','BS','BT','BU','BV','BW','BX','BY','BZ',
+    	);
+    	$tcols = count($cells);
+    	unset($extschema['creator'],$extschema['lastupdator'],
+    			$extschema['updated'],$extschema['locale'],
+    			$extschema['published'],$extschema['deleted'],
+    			$extschema['favor_nums'],$extschema['point_nums'],$extschema['views_count'],
+    			$extschema['seotitle'],$extschema['seodescription'],$extschema['seokeywords']);
+    	$i=0;
+    	foreach($extschema as $item){
+    		$objPHPExcel->getActiveSheet()->SetCellValue($cells[$i].'1',$item['translate']);
+    		$i++;
+    		if($i>=$tcols){
+    			break;
+    		}
+    	}
+    
+    	unset($searchoptions['limit'],$searchoptions['page'],$searchoptions['fields']);
+    
+    	$fields = array_keys($extschema);
+    	$page = 1;
+    	$pagesize = 500;
+    	$line = 2;//表头为第一行，内容从第二行开始。
+    	do{
+    		$searchoptions['limit'] = $pagesize;
+    		$searchoptions['page']=$page;
+    		$datas = $this->{$modelClass}->find('all', $searchoptions);
+    		$rows = count($datas);
+    		foreach($datas as $item){
+    			$i = 0;
+    			foreach($fields as $fieldname){
+    				$objPHPExcel->getActiveSheet()->SetCellValue($cells[$i].$line,$item[$modelClass][$fieldname]);
+    				$i++;
+    				if($i>=$tcols){
+    					break;
+    				}
+    			}
+    			++$line;
+    		}
+    		unset($datas);// 主动注销防止变量占用太多内存
+    		++$page;
+    	}while($rows==$pagesize);
+    	//$objPHPExcel->getActiveSheet()->SetCellValue('B2', 'world!');
+    	//$objPHPExcel->getActiveSheet()->SetCellValue('C1', 'Hello');
+    	//$objPHPExcel->getActiveSheet()->SetCellValue('D2', 'world!');
+    	// Rename sheet
+    	$objPHPExcel->getActiveSheet()->setTitle('Sheet1');
+    
+    	// Save Excel 2007 file
+    	//echo date('H:i:s') . " Write to Excel2007 format\n";
+    	//App::import('Vendor', 'PHPExcel_Writer_Excel2007', array('file' => 'phpexcel/PHPExcel/Writer/Excel2007.php'));
+    	//include 'PHPExcel/Writer/Excel2007.php';
+    	//$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+    	//$objWriter->save(str_replace('.php', '.xlsx', __FILE__));
+    
+    	header('Content-Type: application/vnd.ms-excel');
+    	header('Content-Disposition: attachment;filename="'.$modelClass.'_'.date('Y-m-d').'.xls"');
+    	header('Cache-Control: max-age=0');
+    
+    	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5'); //'Excel2007'
+    	$objWriter->save('php://output');
+    }
 
 }
 
