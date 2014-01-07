@@ -22,6 +22,7 @@ class ApiController extends AppController {
 		$userinfo = $this->User->find('first',array('conditions'=>array('id'=>$uid,'username'=>$username)));
 		if(empty($uid) || empty($userinfo)){
 			$ret = array('code'=>0,$msg=>'code error. no user exists.');
+			//用户不存在时，通过UCenter接口获取用户。
 		}
 		else{
 			$ret = array();
