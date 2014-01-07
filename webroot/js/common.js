@@ -715,6 +715,9 @@ var stack_custom = {"dir1": "right", "dir2": "down"};
 function showSuccessMessage(text)
 {
 	//alert(text);
+	$.jGrowl(text, { 
+		theme: 'success'
+	});
 	return true;
 }
 // 显示错误信息
@@ -722,6 +725,9 @@ function showSuccessMessage(text)
 function showErrorMessage(text)
 {
 	//alert(text);
+	$.jGrowl(text, { 
+		theme: 'error' // danger
+	});
 	return true;
 }
 /* ================form validate====================== */
