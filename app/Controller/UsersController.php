@@ -76,6 +76,12 @@ class UsersController extends AppController {
         $this->pageTitle = __('Users', true);
         $this->layout = 'user_portlet';
     }
+    
+    function goTage(){
+    	print_r($this->currentUser['id']);
+    	echo $code = authcode($this->currentUser['id'].','.$this->currentUser['username'],'ENCODE');
+    	$this->layout = false;
+    }
 
     function layout() {
         $this->pageTitle = __('Users', true);
