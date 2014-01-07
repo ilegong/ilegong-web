@@ -47,16 +47,16 @@ var ADMIN_BASEURL = BASEURL+"/manage";
 </head>
 <body>
 <iframe id="tage-iframe" src="http://m.tage365.com?code={{$code}}" style="width:100%;height:200px;"></iframe>
-<div id="navbar-fixed" class="navbar-fixed-bottom navbar-default clearfix" style="margin-bottom:0px;">
+<div id="navbar-fixed" class="navbar-fixed-bottom navbar-default clearfix" style="margin-bottom:0px;height:40px;">
  <div class="pull-left" id="go-back-div"><a href="javascript:history.go(-1);"  class="btn btn-success" style="color:#fff;"><span class="glyphicon glyphicon-chevron-left"></span> 返回51daifan</a></div>
  <div class="container">
 	<div class="text-center">51daifan</div>
 </div>
 </div>
 <script type="text/javascript">
-	$(function(){
-		$('#tage-iframe').height($(window).height()-$('#navbar-fixed').height());
-	})
+	
+	$('#tage-iframe').height($(window).height()-40);
+	
 	
 //hide footer bar
 document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
