@@ -55,14 +55,13 @@ var ADMIN_BASEURL = BASEURL+"/manage";
 </div>
 {{$this->Html->script(array('jquery/jquery.min.js',))}}
 <script type="text/javascript">
-	
+	//hide footer bar
+	document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+	  WeixinJSBridge.call('hideToolbar');
+	});
+
 	$('#tage-iframe').height($(window).height()-40);
-	
-	
-//hide footer bar
-document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-  WeixinJSBridge.call('hideToolbar');
-});
+
 </script>
 </body>
 </html> 
