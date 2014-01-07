@@ -13,8 +13,7 @@ class OrdersController extends AppController{
 		parent::admin_view($id);				
 	}
 	
-	public function admin_trash($ids){
-		$this->loadModel('Cart');
+	public function admin_trash($ids){		
 		if(is_array($_POST['ids'])&& !empty($_POST['ids'])){
 			$ids = $_POST['ids'];
 		}
@@ -25,6 +24,7 @@ class OrdersController extends AppController{
 			$ids = explode(',', $ids);
 		}
 		$error_flag = false;
+		$this->loadModel('Cart');
 		foreach ($ids as $id) {
 			if (!intval($id))
 				continue;		
@@ -32,7 +32,7 @@ class OrdersController extends AppController{
 			$data['deleted'] = 1;		
 			$this->Order->updateAll($data, array('id' => $id));
 			//同时标记删除订单的商品
-			$this->Cart->updateAll(array('delete'=>1),array('order_id'=>$id));
+			$this->Cart->updateAll(array('deleted'=>1),array('order_id'=>$id));
 		}
 		
 		$successinfo = array('success' => __('Trash success'));
@@ -85,4 +85,36 @@ class OrdersController extends AppController{
 		}
 	}
 	
+	/**
+	 * 恢复删除标记
+	 * @param $id
+	 */
+	function admin_restore($ids = null) {
+		if(is_array($_POST['ids'])&& !empty($_POST['ids'])){
+			$ids = $_POST['ids'];
+		}
+		else{
+			if (!$ids) {
+				$this->redirect(array('action' => 'index'));
+			}
+			$ids = explode(',', $ids);
+		}
+		$this->loadModel('Cart');
+		foreach ($ids as $id) {
+			if (!intval($id))
+				continue;
+			$data = array();
+			$data['id'] = $id;
+			$data['deleted'] = 0;
+	
+			if ($this->Order->save($data)) {
+				$this->Cart->updateAll(array('deleted'=>0),array('order_id'=>$id));
+				$successinfo = array('success' => __('Restore success'));
+			} else {
+				$successinfo = array('error' => __('Restore error'));
+			}
+		}
+		$this->set('successinfo', $successinfo);
+		$this->set('_serialize', 'successinfo');
+	}
 }
