@@ -11,7 +11,7 @@ class ApiController extends AppController {
 	
 	public function beforeFilter(){
 		parent::beforeFilter();
-		$this->layout = false;
+		$this->autoRender = false;
 	}
 	
 	public function getUserInfo(){
