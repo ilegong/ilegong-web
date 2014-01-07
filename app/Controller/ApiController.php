@@ -15,7 +15,7 @@ class ApiController extends AppController {
 	}
 	
 	public function getUserInfo(){
-		echo authocode('34,arlonzou');
+		echo authocode('34,arlonzou');exit;
 		$code = $_GET['code'];
 		list($uid,$username) = explode(',',authcode($code, 'DECODE'));
 		$this->loadModel('User');
