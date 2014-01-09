@@ -1038,7 +1038,6 @@ class AppController extends Controller {
     			}
     		}
     	}
-    	print_r(get_class_methods($this));
     	
     	if(method_exists($this,'_custom_list_option')){
     		$searchoptions = $this->_custom_list_option($searchoptions);
@@ -1752,6 +1751,8 @@ class AppController extends Controller {
     		$searchoptions['limit'] = $pagesize;
     		$searchoptions['page']=$page;
     		$datas = $this->{$modelClass}->find('all', $searchoptions);
+    		print_r($datas);
+    		exit;
     		$rows = count($datas);
     		foreach($datas as $item){
     			$row = array();
