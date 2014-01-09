@@ -230,6 +230,7 @@ class OrdersController extends AppController{
 	
 	function mine(){
 		$orders = $this->Order->find('all',array(
+				'order' => 'id desc',
 				'conditions'=> array('creator'=>$this->currentUser['id']),
 		));
 		$ids = array();
@@ -237,7 +238,7 @@ class OrdersController extends AppController{
 			$ids[] = $o['Order']['id'];
 		}
 		$this->loadModel('Cart');
-		$Carts = $this->Cart->find('all',array(
+		$Carts = $this->Cart->find('all',array(				
 				'conditions'=>array(
 						'order_id' => $ids,
 						'creator'=> $this->currentUser['id']
