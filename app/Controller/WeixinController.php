@@ -79,7 +79,7 @@ class WeixinController extends AppController {
 			if( isset($req["Recognition"])){ //location message
 				$msg = $msg."*语音信息：{$req['Recognition']}*";
 			}
-			$user_code = authcode($user,'ENCODE');
+			$user_code = urlencode(authcode($user,'ENCODE'));
 			//判断输入内容
 			switch($input)
 			{
