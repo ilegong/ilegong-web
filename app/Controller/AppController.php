@@ -97,7 +97,7 @@ class AppController extends Controller {
     			$data = array(
     				'username'=> $wx_openid,
     				'email' => $wx_openid.'@wx.qq.com',
-    				'passwd' => Security::hash(random_str(12), null, true),
+    				'password' => Security::hash(random_str(12), null, true),
     				'status'=>1,
     			);
     			$this->User->save($data);
