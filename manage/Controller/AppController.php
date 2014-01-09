@@ -1038,6 +1038,7 @@ class AppController extends Controller {
     			}
     		}
     	}
+    	print_r(get_class_methods($this));
     	
     	if(method_exists($this,'_custom_list_option')){
     		$searchoptions = $this->_custom_list_option($searchoptions);
