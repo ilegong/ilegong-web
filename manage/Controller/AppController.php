@@ -1739,7 +1739,6 @@ class AppController extends Controller {
     			$extschema['favor_nums'],$extschema['point_nums'],$extschema['views_count'],
     			$extschema['seotitle'],$extschema['seodescription'],$extschema['seokeywords']);
     	
-    	
     	unset($searchoptions['limit'],$searchoptions['page']);
     	
     	$alias = array();
@@ -1761,8 +1760,8 @@ class AppController extends Controller {
     		foreach($datas as $item){    			
     			if($add_header_flag==false){
     				$header = array();
-			    	foreach($extschema as $item){
-			    		$header[] = $item['translate'];
+			    	foreach($extschema as $ext_item){
+			    		$header[] = $ext_item['translate'];
 			    	}
 			    	// 相关连表的相关字段
     				foreach($alias as $alia){
