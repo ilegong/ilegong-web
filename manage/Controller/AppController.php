@@ -1063,7 +1063,7 @@ class AppController extends Controller {
     		}
     	}
     	$datas = $this->{$modelClass}->find('all', $searchoptions);
-    	print_r($datas);
+    	
     	if ($has_step_conditions) {
     		foreach ($datas as $key => $value) {
     			if (!isset($datas[$key][$modelClass])) {
@@ -1743,7 +1743,7 @@ class AppController extends Controller {
     		$header[] = $item['translate'];
     	}
     	$xls->addRow($header);
-    	unset($searchoptions['limit'],$searchoptions['page'],$searchoptions['fields']);
+    	unset($searchoptions['limit'],$searchoptions['page']);
     
     	$fields = array_keys($extschema);
     	$page = 1;
