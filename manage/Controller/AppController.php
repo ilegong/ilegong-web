@@ -1730,7 +1730,7 @@ class AppController extends Controller {
     private function _downloadxml($modelClass,$searchoptions){
     	@set_time_limit(0);
     	App::import('Vendor', 'Excel_XML', array('file' => 'phpexcel'.DS.'excel_xml.class.php'));
-    	$xls = new Excel_XML('UTF-8', false, 'My Test Sheet');
+    	$xls = new Excel_XML('UTF-8', true, 'Sheet '.$modelClass);
     
     	$extschema = $this->{$modelClass}->getExtSchema();
     	unset($extschema['creator'],$extschema['lastupdator'],
