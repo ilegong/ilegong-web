@@ -1779,7 +1779,7 @@ class AppController extends Controller {
     			}
     			foreach($alias as $alia){
     				foreach($item[$alia] as $val){
-    					$row[] = $item[$modelClass][$fieldname];
+    					$row[] = $val;
     				}
     			}
     			$xls->addRow($row);
