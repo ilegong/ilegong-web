@@ -4,7 +4,9 @@
     </div>
     <div class="pull-right" style="padding:13px 15px;">      
      {{if (!empty($CurrentUser))}} 
-     	<?php echo $this->Html->link($CurrentUser['username'], array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?>
+     	<?php 
+			if(strlen($CurrentUser['username'])>18){ $CurrentUser['username'] = substr($CurrentUser['username'],10,8); }
+			echo $this->Html->link($CurrentUser['username'], array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?>
      {{/if}}
     </div>
     
