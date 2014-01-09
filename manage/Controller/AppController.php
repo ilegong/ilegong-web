@@ -1751,6 +1751,7 @@ class AppController extends Controller {
     		$searchoptions['limit'] = $pagesize;
     		$searchoptions['page']=$page;
     		$datas = $this->{$modelClass}->find('all', $searchoptions);
+    		print_r($searchoptions);
     		print_r($datas);
     		exit;
     		$rows = count($datas);
