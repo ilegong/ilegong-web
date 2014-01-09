@@ -1063,6 +1063,7 @@ class AppController extends Controller {
     		}
     	}
     	$datas = $this->{$modelClass}->find('all', $searchoptions);
+    	print_r($datas);
     	if ($has_step_conditions) {
     		foreach ($datas as $key => $value) {
     			if (!isset($datas[$key][$modelClass])) {
