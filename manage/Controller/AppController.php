@@ -1039,6 +1039,10 @@ class AppController extends Controller {
     		}
     	}
     	
+    	if(method_exists($this,'_custom_list_option')){
+    		$searchoptions = $this->_custom_list_option($searchoptions);
+    	}
+    	
     	if($_REQUEST['export']=='true'){
     		$this->autoRender = false;
     		$this->_downloadxml($modelClass, $searchoptions);

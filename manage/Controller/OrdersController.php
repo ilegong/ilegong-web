@@ -117,4 +117,6 @@ class OrdersController extends AppController{
 		$this->set('successinfo', $successinfo);
 		$this->set('_serialize', 'successinfo');
 	}
+	
+	
 }
