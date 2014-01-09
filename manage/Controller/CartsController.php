@@ -13,7 +13,7 @@ class CartsController extends AppController{
 			'type'=> 'left',
 			'conditions'=>array('Cart.order_id=Order.id'),		
 		);
-		//print_r($searchoptions);
+		print_r($searchoptions);
 		return $searchoptions;
 	}	
 	
