@@ -776,7 +776,7 @@ class AppController extends Controller {
      * 形如：
      * 	{"records":1,"page":1,"limit":30,"total":1,"rows":[{id:1,…},{…},{…},{…}]}
      */
-    private function _list() {
+    protected function _list() {
     	$modelClass = $this->modelClass;
     	$this->loadModel($modelClass);
     	$this->name = Inflector::pluralize($this->modelClass);
