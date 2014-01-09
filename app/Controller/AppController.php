@@ -78,16 +78,39 @@ class AppController extends Controller {
     			$this->Cookie->delete('Auth.User');//删除解密错误的cookie信息
     		}
     	}
-    	/* 微信链接打开登录 */
+    	$wx_openid = '';
     	if($_GET['wx_openid']){
-    		$this->Session->write('wx_openid',$_GET['wx_openid']);
+    		$wx_openid = authcode($_GET['wx_openid'],'DECODE');
+    	}
+    	/* 微信链接打开登录 */
+    	if($wx_openid){
+    		$this->Session->write('wx_openid',$wx_openid);
     		$this->loadModel('Oauthbinds');
-    		$oauth = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $_GET['wx_openid'])));
+    		$this->loadModel('User');
+    		$oauth = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $wx_openid)));
     		if(!empty($oauth) && !empty($oauth['Oauthbinds']['user_id'])){
     			$uid = $oauth['Oauthbinds']['user_id'];
-    			$this->loadModel('User');
     			$data = $this->User->find('first', array('conditions' => array('id' => $uid)));
     			$this->Session->write('Auth.User',$data['User']);
+    		}
+    		else{ /* 不存在用户时，直接创建用户。 */
+    			$data = array(
+    				'username'=> $wx_openid,
+    				'email' => $wx_openid.'@wx.qq.com',
+    				'passwd' => Security::hash(random_str(12), null, true),
+    				'status'=>1,
+    			);
+    			$this->User->save($data);
+    			$uid = $data['id'] = $this->User->getLastInsertID();
+    			$this->Session->write('Auth.User',$data);
+    			
+    			$this->Oauthbinds->save(array(
+        				'source' => 'weixin',
+        				'user_id' =>	$uid,
+        				'oauth_openid' => $wx_openid,
+        				'created' => date('Y-m-d H:i:s'),
+        				'updated' => date('Y-m-d H:i:s'),
+        		));
     		}
     	}
     

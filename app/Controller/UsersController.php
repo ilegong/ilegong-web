@@ -142,7 +142,7 @@ class UsersController extends AppController {
             			$has_error = true;
             		}
             		else if($uid>0){
-            			$this->data['User']['id'] = $uid;
+            			$this->data['User']['uc_id'] = $uid;
             		}
             	}
                 if ($has_error==false && $this->User->save($this->data)) {                	

@@ -23,7 +23,7 @@ class UCenterAuthenticate extends BaseAuthenticate {
         if ($uid > 0) {
             $_model = ClassRegistry::init($model);
             $result = $_model->find('first', array(
-                        'conditions' => array($model . '.id' => $uid, $model . '.username' => $username),
+                        'conditions' => array($model . '.uc_id' => $uid, $model . '.username' => $username),
                         'recursive' => -1
                     ));
         }
@@ -35,7 +35,7 @@ class UCenterAuthenticate extends BaseAuthenticate {
         	$_model->create();
         	$result = array();
             $result[$model] = array(
-            		'id'=>$uid,
+            		'uc_id'=>$uid,
             		'username'=> $username,
             		'nickname'=> $username,
             		'email' => $email,

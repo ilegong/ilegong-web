@@ -79,7 +79,7 @@ class WeixinController extends AppController {
 			if( isset($req["Recognition"])){ //location message
 				$msg = $msg."*语音信息：{$req['Recognition']}*";
 			}
-
+			$user_code = authcode($user,'ENCODE');
 			//判断输入内容
 			switch($input)
 			{
@@ -87,12 +87,12 @@ class WeixinController extends AppController {
 				case "预订":
 				case "预定":
 				case "1":
-					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/techan.html?wx_openid=$user\" >51带饭预定页</a>");
+					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/techan.html?wx_openid=$user_code\" >51带饭预定页</a>");
 					break;
 				case "查看订单":
 				case "订单":
 				case "2":
-					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/orders/mine.html?wx_openid=$user\" >查看我的订单</a>");
+					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/orders/mine.html?wx_openid=$user_code\" >查看我的订单</a>");
 					break;				
 				//default :
 				//	echo $this->newTextMsg($user, $me, "回复“预定”进入预定页\n回复“订单”查看我的订单");
