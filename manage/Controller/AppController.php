@@ -1738,12 +1738,17 @@ class AppController extends Controller {
     			$extschema['published'],$extschema['deleted'],
     			$extschema['favor_nums'],$extschema['point_nums'],$extschema['views_count'],
     			$extschema['seotitle'],$extschema['seodescription'],$extschema['seokeywords']);
-    	$header = array();
-    	foreach($extschema as $item){
-    		$header[] = $item['translate'];
-    	}
-    	$xls->addRow($header);
+    	
+    	
     	unset($searchoptions['limit'],$searchoptions['page']);
+    	
+    	$alias = array();
+    	if(!empty($searchoptions['joins'])){
+    		foreach($searchoptions['joins'] as $join){
+    			$alias[] = $join['alias'];
+    		}
+    	}
+    	$add_header_flag = false;
     
     	$fields = array_keys($extschema);
     	$page = 1;
@@ -1751,15 +1756,31 @@ class AppController extends Controller {
     	do{
     		$searchoptions['limit'] = $pagesize;
     		$searchoptions['page']=$page;
-    		$datas = $this->{$modelClass}->find('all', $searchoptions);
-    		print_r($searchoptions);
-    		print_r($datas);
-    		exit;
+    		$datas = $this->{$modelClass}->find('all', $searchoptions);    		
     		$rows = count($datas);
-    		foreach($datas as $item){
+    		foreach($datas as $item){    			
+    			if($add_header_flag==false){
+    				$header = array();
+			    	foreach($extschema as $item){
+			    		$header[] = $item['translate'];
+			    	}
+			    	// 相关连表的相关字段
+    				foreach($alias as $alia){
+    					foreach($item[$alia] as $key=>$val){
+    						$header[] = $alia.'-'.$key;
+    					}
+    				}
+    				$xls->addRow($header);
+    				$add_header_flag = true;    				
+    			}
     			$row = array();
     			foreach($fields as $fieldname){
     				$row[] = $item[$modelClass][$fieldname];
+    			}
+    			foreach($alias as $alia){
+    				foreach($item[$alia] as $val){
+    					$row[] = $item[$modelClass][$fieldname];
+    				}
     			}
     			$xls->addRow($row);
     		}
