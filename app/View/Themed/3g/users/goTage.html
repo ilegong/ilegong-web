@@ -59,6 +59,8 @@ var ADMIN_BASEURL = BASEURL+"/manage";
 	//hide footer bar
 	document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
 		WeixinJSBridge.call('hideToolbar');
+		alert($(window).height());
+		$('#tage-iframe').height($(window).height()-40);
 	});
 	alert($(window).height());
 	$('#tage-iframe').height($(window).height()-40);
