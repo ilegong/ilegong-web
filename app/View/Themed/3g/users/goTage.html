@@ -48,13 +48,18 @@ var ADMIN_BASEURL = BASEURL+"/manage";
 <body>
 <div id="navbar-fixed" class="navbar-fixed-top navbar-default clearfix" style="margin-bottom:0px;height:40px;">
  <div class="pull-left" id="go-back-div"><a href="/"  class="btn btn-success" style="color:#fff;"><span class="glyphicon glyphicon-chevron-left"></span> 返回51daifan</a></div>
+ <div class="pull-right" style="padding:13px 15px;">      
+     {{if (!empty($CurrentUser))}} 
+     	<?php 
+			if(strlen($CurrentUser['username'])>18){ $CurrentUser['username'] = substr($CurrentUser['username'],10,8); }
+			echo $this->Html->link($CurrentUser['username'], array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?>
+     {{/if}}
+    </div>
  <div class="container">
 	<div class="text-center"></div>
 </div>
 </div>
 <iframe id="tage-iframe" src="http://m.tage365.com?code={{$code}}" style="width:100%;height:600px;margin-top:40px;"></iframe>
-
-{{$this->Html->script(array('jquery/jquery.min.js',))}}
 <script type="text/javascript">
 	//hide footer bar
 	document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
