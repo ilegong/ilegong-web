@@ -48,13 +48,12 @@ var ADMIN_BASEURL = BASEURL+"/manage";
 <body>
 <div id="navbar-fixed" class="navbar-fixed-top navbar-default clearfix" style="margin-bottom:0px;height:40px;">
  <div class="pull-left" id="go-back-div"><a href="/"  class="btn btn-success" style="color:#fff;"><span class="glyphicon glyphicon-chevron-left"></span> 返回51daifan</a></div>
- <div class="pull-right" style="padding:13px 15px;">      
-     {{if (!empty($CurrentUser))}} 
+ <div class="pull-right" style="padding:13px 15px;">
      	<?php 
 			if(strlen($CurrentUser['username'])>18){ $CurrentUser['username'] = substr($CurrentUser['username'],10,8); }
-			echo $this->Html->link($CurrentUser['username'], array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?>
-     {{/if}}
-    </div>
+			echo $this->Html->link($CurrentUser['username'], array('controller' => 'orders','action'=>'mine','plugin' => null ,));
+		 ?>
+ </div>
  <div class="container">
 	<div class="text-center"></div>
 </div>
