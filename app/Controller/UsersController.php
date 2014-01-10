@@ -79,7 +79,7 @@ class UsersController extends AppController {
     
     function goTage(){
     	$code = authcode($this->currentUser['id'].','.$this->currentUser['username'],'ENCODE');
-    	$this->set('code',$code);
+    	$this->set('code',urlencode($code));
     	$this->layout = false;
     }
 
