@@ -55,6 +55,9 @@ class ApiController extends AppController {
 				$ret['mobilephone'] = $consignee['OrderConsignee']['mobilephone'];
 				$ret['name'] = $consignee['OrderConsignee']['name'];
 			}
+			if(empty($ret['name'])){
+				$ret['name'] = $ret['username'];
+			}
 		}
 		echo json_encode($ret);
 		exit;
