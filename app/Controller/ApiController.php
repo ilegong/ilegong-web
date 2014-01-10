@@ -22,7 +22,7 @@ class ApiController extends AppController {
 		//echo '<br/>'.time();
 		$code = $_GET['code'];
 		$appkey = 'Mb7a5WQuryf9TXKH'; //踏歌的appkey
-		$timestamp = $_GET['timestamp'];
+		$timestamp = $_GET['t'];
 		//echo '<br/>'.md5($appkey.$timestamp);
 		if( abs(time()-$timestamp) > 3600 ){
 			$ret = array('code' => 1,$msg => 'timestamp error.');
