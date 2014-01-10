@@ -1,0 +1,12 @@
+<script type="text/javascript">
+        var main_iframe = parent.parent.document.getElementById("main_iframe");  //获取外层iframe
+        var hash_url = window.location.hash;                               //获取url
+        var hash_height = hash_url.split("#")[1] + "px";                    //分割获取高度（有页面拼接传过来）
+        main_iframe.height = hash_height; 
+</script>
+<!--
+    $(function(){  
+        var h = $(document.body).outerHeight(true);  
+        $("body").append('<iframe style="display:none;" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://51daifan.sinaapp.com/iheight.html?t='+ new Date().getTime()+'#height=' + h + '" ></iframe>');  
+    });
+-->
