@@ -1,26 +1,37 @@
-<div class="col-md-3 col-sm-4 col-xs-6">
-     <a href="#" class="thumbnail" id="food-{{$item['id']}}" data-type="food" data-id="{{$item['id']}}" data-name="{{$item['title']}}" data-price="{{$item['price']}}">
-         {{$this->Html->image($item['coverimg'], 
+<div class="col-md-3 col-sm-4 col-xs-6" style="height:160px;">
+	{{if $item['cate_id']==114}}
+     <a href="javascript:;" class="thumbnail {{if date('Y-m-d H:i:s')>$item['end_time'] && $item['end_time']>0}}no-shopping{{else}}shopping{{/if}}" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
+         {{eval echo $this->Html->image($item['coverimg'], 
 			array(
-			'alt' => $item['title'],'title' => $item['title'],
-			'style'=>'width: 100%; display: block;',
+			'alt' => $item['title'],'title' => $item['name'],
 			'onerror'=>'this.src="/img/products_nophoto.jpg";',
-			))}}
-         <div class="select-shadow" style="display: none;">
-			<div>
-				<img src="/Public/Index/img/check.png" alt="selected">
-				<span>已选</span>
-			</div>
+			)); }}
+         <div class="select-item" style="display: none;">
+			<p><span class="glyphicon glyphicon-ok" style="color:#5e8a2f; font-size:22px;"></span>已选</p>
 	 	 </div> 
      </a>
      <div class="text-left">
-     	{{$this->Html->link(usubstr($item['name'],0,10), 
-	'/'.$region_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
-	array('title'=>$item['title']))}}
+     	{{eval echo $this->Html->link(usubstr($item['name'],0,6), 
+			'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
+			array('title'=>$item['title'])); 
+		}}
      	<div class="food-info pull-right">
-             <label class="food-price">¥{{$item['price']}}</label>                                     
+             <strong>¥{{$item['price']}}</strong>                                     
      	</div>
      </div>
-     
-
+     {{else}}
+     	<a href="<?php echo '/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'; ?>" class="thumbnail-noclick" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
+         {{eval echo $this->Html->image($item['coverimg'], 
+			array(
+			'alt' => $item['title'],'title' => $item['name'],
+			'onerror'=>'this.src="/img/products_nophoto.jpg";',
+			)); }}
+	     </a>
+	     <div class="text-left">
+	     	{{eval echo $this->Html->link(usubstr($item['name'],0,10), 
+				'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
+				array('title'=>$item['title'])); 
+			}}
+	     </div>
+     {{/if}}
  </div>
