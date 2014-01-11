@@ -1,4 +1,5 @@
-<div class="col-md-3 col-sm-4 col-xs-6" style="height:172px;">
+<div class="col-md-3 col-sm-4 col-xs-6" style="height:180px;">
+	<div style="border: 1px solid #DDDDDD;">
 	{{if $top_category_id==114}}
      <a href="javascript:;" class="thumbnail {{if date('Y-m-d H:i:s')>$item['end_time'] && $item['end_time']>0}}no-shopping{{else}}shopping{{/if}}" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
          {{eval echo $this->Html->image($item['coverimg'], 
@@ -35,4 +36,5 @@
 			}}
 	     </div>
      {{/if}}
+   </div>
  </div>
