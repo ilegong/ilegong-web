@@ -1,4 +1,4 @@
-<div class="col-md-3 col-sm-4 col-xs-6" style="height:160px;">
+<div class="col-md-3 col-sm-4 col-xs-6" style="height:172px;">
 	{{if $top_category_id==114}}
      <a href="javascript:;" class="thumbnail {{if date('Y-m-d H:i:s')>$item['end_time'] && $item['end_time']>0}}no-shopping{{else}}shopping{{/if}}" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
          {{eval echo $this->Html->image($item['coverimg'], 
@@ -18,6 +18,7 @@
      	<div class="food-info pull-right">
              <strong>¥{{$item['price']}}</strong>                                     
      	</div>
+     	<p><a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">{{if $item['promote_name']}}{{$item['promote_name']}}{{else}}查看详情{{/if}}</a></p>
      </div>
      {{else}}
      	<a href="<?php echo '/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'; ?>" class="thumbnail-noclick" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
