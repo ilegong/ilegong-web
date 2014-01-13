@@ -12,7 +12,7 @@
 	 	 </div> 
      </a>
      <div class="text-left">
-     	{{eval echo $this->Html->link(usubstr($item['name'],0,7,''), 
+     	{{eval echo $this->Html->link(usubstr($item['name'],0,10,''), 
 			'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
 			array('title'=>$item['title'])); 
 		}}
