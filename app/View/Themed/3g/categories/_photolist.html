@@ -16,10 +16,13 @@
 			'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
 			array('title'=>$item['title'])); 
 		}}
-     	<div class="food-info pull-right">
+     	
+     	<div>
+     		<div class="food-info pull-right">
              <strong>¥{{$item['price']}}</strong>                                     
+     		</div>
+     		<a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">{{if $item['promote_name']}}{{$item['promote_name']}}{{else}}查看详情{{/if}}</a>
      	</div>
-     	<p><a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">{{if $item['promote_name']}}{{$item['promote_name']}}{{else}}查看详情{{/if}}</a></p>
      </div>
      {{else}}
      	<a href="<?php echo '/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'; ?>" class="thumbnail-noclick" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
