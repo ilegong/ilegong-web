@@ -51,6 +51,13 @@ class WeixinController extends AppController {
 			$user = $req["FromUserName"];
 			//$type = $req["MsgType"];
 			
+			if(!empty($req['Event'])){
+				if($req['Event']=='subscribe'){ //订阅
+					echo $this->newTextMsg($user, $me, "欢迎关注51daifan，51daifan是同事间互相分享自己家特产的公益平台，评论回复1即可查看同事最热分享。51daifan，让一部分人先安全起来！");
+					exit;
+				}
+			}
+			
 			$input = "";
 
 			$url = "http://www.51daifan.com";
