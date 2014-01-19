@@ -714,20 +714,20 @@ var stack_custom = {"dir1": "right", "dir2": "down"};
 // 显示表单提交成功的信息
 function showSuccessMessage(text)
 {
-	//alert(text);
-	$.jGrowl(text, { 
-		theme: 'success'
-	});
+	alert(text);
+//	$.jGrowl(text, { 
+//		theme: 'success'
+//	});
 	return true;
 }
 // 显示错误信息
 
 function showErrorMessage(text)
 {
-	//alert(text);
-	$.jGrowl(text, { 
-		theme: 'error' // danger
-	});
+	alert(text);
+//	$.jGrowl(text, { 
+//		theme: 'error' // danger
+//	});
 	return true;
 }
 /* ================form validate====================== */
