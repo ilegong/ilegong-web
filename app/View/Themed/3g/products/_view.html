@@ -19,11 +19,15 @@ href="javascript:void(0);">添加到购物车 </a>
 </div>
 <div class="tabs">
 	<div  class="tab-content">
-		<div class="tab-pane active" id="product-description">
+		<div id="product-description">
 		    <div class="Content-body">
 	        <div class="clear"></div>
 		    <?php echo $Product['Product']['content']; ?>
 		    </div>
 		</div>
+		<div id="product-reviews">
+			{{template comments/add}}
+		</div>
 	</div>
+	
 </div>
