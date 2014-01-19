@@ -26,10 +26,10 @@ class CommentsController extends AppController {
 
             if ($this->Comment->save($this->data)) {
                 if ($this->data['status']) {
-                	$successinfo = array('success'=> __('Your comment has been added successfully.', true));
+                	$successinfo = array('success'=> '您的评论已成功提交');
                     //$this->Session->setFlash(__('Your comment has been added successfully.', true));
                 }else {
-                	$successinfo = array('success'=> __('Your comment will appear after moderation.', true));
+                	$successinfo = array('success'=> '您的评论已成功提交');
                     //$this->Session->setFlash(__('Your comment will appear after moderation.', true));
                 }
                 $successinfo['Comment'] = $this->data['Comment'];
