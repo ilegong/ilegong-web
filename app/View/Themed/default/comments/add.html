@@ -107,7 +107,7 @@
 	 <div class="form-group">
     	<div class="col-sm-8">
 			<label class="radio-inline">
-			  <input type="radio" name="data[Comment][rating]" id="inlineRadio1" value="5"> 好评
+			  <input type="radio" checked="checked" name="data[Comment][rating]" id="inlineRadio1" value="5"> 好评
 			</label>
 			<label class="radio-inline">
 			  <input type="radio" name="data[Comment][rating]" id="inlineRadio2" value="3"> 中评
@@ -143,7 +143,9 @@ function addCommintItem(item){
 +'<div class="t_info">'
 +'<span class="t_username">'+item['username']+'</span><br><span class="t_area"></span>'
 +'</div>'
-+'<div class="t_txt">'+item['body']+'</div>'
++'<div class="t_txt">'
++ item['rating']==5 ? '<span class="label label-success">好评</span>':(item['rating']==3 ? '<span class="label label-default">中评</span>':'<span class="label label-warning">差评</span>')
++ item['body']+'</div>'
 +'<div class="t_others">'
 +'<span class="reply" style="display: none;">'
 +'<a onclick="return false;" style="margin-right:18px;" href="#">回复</a>'
