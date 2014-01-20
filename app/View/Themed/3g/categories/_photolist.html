@@ -21,7 +21,7 @@
      		<div class="food-info pull-right">
              <strong>¥{{$item['price']}}</strong>                                     
      		</div>
-     		<a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">{{if $item['promote_name']}}{{$item['promote_name']}}{{else}}查看详情{{/if}}</a>
+     		<a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">{{if $item['promote_name']}}{{$item['promote_name']}}{{else}}查看详情与评论{{/if}}</a>
      	</div>
      </div>
      {{else}}
