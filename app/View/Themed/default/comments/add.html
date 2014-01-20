@@ -104,6 +104,19 @@
 {{$this->Form->create('Comment',array('action'=>'add','onsubmit'=>'return submitaddcomment(this);','class'=>'form-horizontal'))}}
 	{{$this->Form->input('data_id',array('type'=>'hidden','value'=>$current_data_id))}}
 	{{$this->Form->input('type',array('type'=>'hidden','value'=>$current_model))}}
+	 <div class="form-group">
+    	<div class="col-sm-8">
+			<label class="radio-inline">
+			  <input type="radio" name="data[Comment][rating]" id="inlineRadio1" value="5"> 好评
+			</label>
+			<label class="radio-inline">
+			  <input type="radio" name="data[Comment][rating]" id="inlineRadio2" value="3"> 中评
+			</label>
+			<label class="radio-inline">
+			  <input type="radio" name="data[Comment][rating]" id="inlineRadio3" value="1"> 差评
+			</label>
+		</div>
+	</div>
 	{{$this->Form->input('body',array('label'=>false,'type'=>'textarea','rows'=>3,'class'=>"form-control"))}}
 {{$this->Form->end(array('label'=> lang('submit_comment'),'class'=>'btn btn-primary'))}}
 </div>
