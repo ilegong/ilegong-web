@@ -1,9 +1,4 @@
 <style>
- 
-.textarea #CommentBody   {
-    height: 90px;
-    width: 400px;
-}
 
 #CommentAddForm div {
     padding-bottom: 5px;
@@ -109,7 +104,7 @@
 {{$this->Form->create('Comment',array('action'=>'add','onsubmit'=>'return submitaddcomment(this);','class'=>'form-horizontal'))}}
 	{{$this->Form->input('data_id',array('type'=>'hidden','value'=>$current_data_id))}}
 	{{$this->Form->input('type',array('type'=>'hidden','value'=>$current_model))}}
-	{{$this->Form->input('body',array('label'=>false,'type'=>'textarea','rows'=>4))}}
+	{{$this->Form->input('body',array('label'=>false,'type'=>'textarea','rows'=>3,'class'=>"form-control"))}}
 {{$this->Form->end(array('label'=> lang('submit_comment'),'class'=>'btn btn-primary'))}}
 </div>
 </div>
