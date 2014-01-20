@@ -144,7 +144,7 @@ function addCommintItem(item){
 +'<span class="t_username">'+item['username']+'</span><br><span class="t_area"></span>'
 +'</div>'
 +'<div class="t_txt">'
-+ item['rating']==5 ? '<span class="label label-success">好评</span>':(item['rating']==3 ? '<span class="label label-default">中评</span>':'<span class="label label-warning">差评</span>')
++ (parseInt(item['rating'])==5 ? '<span class="label label-success">好评</span>':(parseInt(item['rating'])==3 ? '<span class="label label-default">中评</span>':'<span class="label label-warning">差评</span>'))
 + item['body']+'</div>'
 +'<div class="t_others">'
 +'<span class="reply" style="display: none;">'
