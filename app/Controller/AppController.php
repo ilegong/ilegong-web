@@ -84,6 +84,8 @@ class AppController extends Controller {
     	}
     	/* 微信链接打开登录 */
     	if($wx_openid){
+    		$this->Cookie = $this->Components->load('Cookie',array('name' => 'SAECMS', 'time' => '+2 weeks'));
+    		
     		$this->Session->write('wx_openid',$wx_openid);
     		$this->loadModel('Oauthbinds');
     		$this->loadModel('User');
@@ -92,6 +94,7 @@ class AppController extends Controller {
     			$uid = $oauth['Oauthbinds']['user_id'];
     			$data = $this->User->find('first', array('conditions' => array('id' => $uid)));
     			$this->Session->write('Auth.User',$data['User']);
+    			$this->Cookie->write('Auth.User',$data['User'], true, 86400);
     		}
     		else{ /* 不存在用户时，直接创建用户。 */
     			$data = array(
@@ -103,7 +106,7 @@ class AppController extends Controller {
     			$this->User->save($data);
     			$uid = $data['id'] = $this->User->getLastInsertID();
     			$this->Session->write('Auth.User',$data);
-    			
+    			$this->Cookie->write('Auth.User',$data, true, 86400);
     			$this->Oauthbinds->save(array(
         				'source' => 'weixin',
         				'user_id' =>	$uid,
@@ -111,7 +114,7 @@ class AppController extends Controller {
         				'created' => date('Y-m-d H:i:s'),
         				'updated' => date('Y-m-d H:i:s'),
         		));
-    		}
+    		}    		
     	}
     
     	if(!Configure::read('Site.status')){
