@@ -154,7 +154,7 @@ function ajaxAction(url,postdata,form,callback_func_name,moreags){
 	}
 	if(form){
 		var html = $(':submit',form).val();
-		$(':submit',form).data('html',html).val('Doing...').attr('disabled','disabled'); // 将按钮置为不可提交
+		$(':submit',form).data('html',html).val('正在处理...').attr('disabled','disabled'); // 将按钮置为不可提交
 	}
 	$.ajax({
 		// async:true,
@@ -163,13 +163,15 @@ function ajaxAction(url,postdata,form,callback_func_name,moreags){
 		data: postdata,
 		complete:function (XMLHttpRequest, textStatus) {
 			if(form){
-				var html = $(':submit',form).data('html');
-				$(':submit',form).val(html).removeAttr('disabled'); // 将按钮置为可提交
+				//var html = $(':submit',form).data('html');
+				//$(':submit',form).val(html).removeAttr('disabled'); // 将按钮置为可提交
+				$(':submit',form).val('已成功提交');
 			}
 		},
 		success: function(request){
 			if(typeof(callback_func_name)=='function'){
 				callback_func_name();
+				return;
 			}
 			else if(callback_func_name && rs_callbacks[callback_func_name]){
 				var func = rs_callbacks[callback_func_name];
@@ -179,20 +181,12 @@ function ajaxAction(url,postdata,form,callback_func_name,moreags){
 				else{
 					func(request);
 				}
+				return;
 			}
 		// tasks is a json object
 		// tasks[i] is a json object that convert from a php array .
 		// array('dotype','selector','content');
-			if(request.success){
-				showSuccessMessage(request.success);
-			}
-			else if(request.error){
-				var errorinfo='';
-				for(var i in request){
-					errorinfo +="<span class='ui-state-error ui-corner-all'><span class='ui-icon ui-icon-alert'></span>"+request[i]+"</span>";
-				}
-				showErrorMessage(errorinfo);
-			}
+			
 			// callback.apply(callback,callback_args);
 			// //回调函数,callback_func_name为回调函数的函数名。如rs_callbacks.addtofavor()
 					
@@ -228,6 +222,19 @@ function ajaxAction(url,postdata,form,callback_func_name,moreags){
 		                		}
 		                	}
 				});
+				return;
+			}
+			else{
+				if(request.success){
+					showSuccessMessage(request.success);
+				}
+				else if(request.error){
+					var errorinfo='';
+					for(var i in request){
+						errorinfo +="<span class='ui-state-error ui-corner-all'><span class='ui-icon ui-icon-alert'></span>"+request[i]+"</span>";
+					}
+					showErrorMessage(errorinfo);
+				}
 			}
 			
 		},
