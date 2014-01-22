@@ -118,7 +118,7 @@
 		</div>
 	</div>
 	{{$this->Form->input('body',array('label'=>false,'type'=>'textarea','rows'=>3,'class'=>"form-control"))}}
-{{$this->Form->end(array('label'=> lang('submit_comment'),'class'=>'btn btn-primary'))}}
+{{$this->Form->end(array('label'=> lang('submit_comment'),'id'=>'btnSubmitComment','class'=>'btn btn-primary'))}}
 </div>
 </div>
 <script type="text/javascript">
@@ -161,16 +161,17 @@ function addCommintItem(item){
 function submitaddcomment(form){
 	if(!sso.check_userlogin({"callback":submitaddcomment,"callback_args":arguments}))
 		return false;
-		
+	$('#btnSubmitComment').val('正在提交').attr('disabled','disabled');
 	$.ajax({
 		async:true,
 		type:'post',
 		success:function(request, xhr) {
 			if(request.success){
-				showSuccessMessage(request.success);
 				if(request['Comment']){
 					addCommintItem(request['Comment']);
 				}
+				showSuccessMessage(request.success);				
+				$('#btnSubmitComment').val('提交评论').removeAttr('disabled');
 			}
 			else{
 				showErrorMessage(errorinfo);				
