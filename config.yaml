@@ -1,4 +1,4 @@
-name: ideacms
+name: 51daifan
 version: 3
 
 handle:
@@ -10,7 +10,7 @@ handle:
   - rewrite: if (!is_file() && !is_dir() && path ~ "(.*)") goto "index.php?%{QUERY_STRING}"
   - expire: if(path ~ "\.(js|css|png|gif|jpg|jpeg|bmp|ico)") time 31536000
 #  - compress: if(path ~ "\.(css|js|html)$") compress
-#Ê¹ÓÃcontent-typeµÄ·½Ê½Ö§³Öjs£¬css£¬¼°phpÊä³ö·µ»ØµÄÄÚÈÝ
+#Ê¹ï¿½ï¿½content-typeï¿½Ä·ï¿½Ê½Ö§ï¿½ï¿½jsï¿½ï¿½cssï¿½ï¿½ï¿½ï¿½phpï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½
   - compress: if(out_header["Content-Type"] ~ "(text|javascript|json)") compress
 cron:
 #	- description: crawl datas
