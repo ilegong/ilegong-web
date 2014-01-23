@@ -1,0 +1,11 @@
+<div class="container clearfix">
+	<div class="ui-contain col-md-9">
+		<portlet>
+			<h2 class="Content-title"><?php echo $Brand['Brand']['name']; ?></h2>	   
+		    <div class="Content-body">		    
+		    <?php echo $Brand['Brand']['content']; ?> 
+	        {{$this->Hook->call("affterContent",array('Brand',$Brand['Brand']['id']))}}
+			</div>
+		</portlet>
+	</div>
+</div>
