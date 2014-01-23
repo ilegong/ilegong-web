@@ -1,6 +1,7 @@
-<li><span>{{eval 
+<li><span><?php
+		$item['slug'] = $item['slug']? $item['slug']: $item['id'];
 		echo $this->Html->link(usubstr($item['name'],0,24), 
 				'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html', 
 				array('title'=>$item['title'],'target'=>'_blank')
-			);
-		}}</span></li>
+		);
+		?></span></li>
