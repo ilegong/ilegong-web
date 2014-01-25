@@ -33,8 +33,24 @@ echo $this->MForm->input('name',array('required'=>'required',));
 echo $this->MForm->input('slug',array('required'=>'required',));
 echo $this->MForm->input('visible',array('value' => 1,'type'=>'select','default'=>1)); 
 echo $this->MForm->input('link');
-echo $this->MForm->input('template',array('default'=>'categories/_list'));
+
     ?>
+    <div class="form-group success">
+    	<label class="col-sm-2 control-label" for="CategoryTemplate">内容样式</label>
+    	<div class="col-sm-10 controls select">
+    		<select id="CategoryTemplateChoose" class="form-control">
+<option selected="selected" value="categories/_list">标题摘要</option>
+<option value="categories/_titlelist">标题</option>
+<option value="regions/_singlecontent">内容</option>
+<option value="categories/_photolist">标题图片（固定宽高）</option>
+<option value="categories/_masonry_photo">图片墙（定宽变高）</option>
+<option value="">其他</option>
+</select>
+    		<?php 
+			echo $this->MForm->input('template',array('label'=>false,'div'=>false,'style'=>'display:none;','type'=>'text'));
+			?>
+		</div>
+	</div>
 	    </fieldset>
 	    </div>
 	    <div id="category-advanced" class="tab-pane">
@@ -62,6 +78,15 @@ echo $this->MForm->input('template',array('default'=>'categories/_list'));
 	<?php echo $this->MForm->end(__('Submit',true)); ?>
 	</div>
 <script>
+$('#CategoryTemplateChoose').change(function(){
+	
+	if(this.value==""){
+		$('#CategoryTemplate').show();
+	}
+	else{
+		$('#CategoryTemplate').hide().val(this.value);
+	}
+});
 /**
  * 模型改变时，设置link的默认值
  */
