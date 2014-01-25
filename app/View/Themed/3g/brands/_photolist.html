@@ -1,4 +1,4 @@
-<div class="col-md-3 col-sm-4 col-xs-6" style="height:180px;overflow:hidden;">
+<div class="col-md-3 col-sm-3 col-xs-4" style="height:140px;overflow:hidden;">
 	<div style="border: 1px solid #DDDDDD;">
 		<?php $item['slug'] = $item['slug']? $item['slug']: $item['id'];?>	
      	<a href="<?php echo '/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'; ?>" class="thumbnail-noclick" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
