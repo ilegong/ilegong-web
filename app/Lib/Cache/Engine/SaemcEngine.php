@@ -35,7 +35,7 @@ class SaemcEngine extends CacheEngine {
 		}
 // 		echo 'read cache'.$key.' in page '.$_SERVER['REQUEST_URI'].'<br/>';
 // 		file_put_contents('saemc://cache/mc.log', 'read cache'.$key."\r\n".var_export($_SERVER,true),FILE_APPEND );
-		return $this->_Memcache->get($key);
+		return @$this->_Memcache->get($key);
 	}
 
 	function delete($key) {
