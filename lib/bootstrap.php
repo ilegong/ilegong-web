@@ -32,7 +32,7 @@ if (defined('SAE_MYSQL_DB')) {
     define('WEB_VISIT_CACHE','saemc://cache/');
     define('WEB_VISIT_CACHE_URL','/cache/');
     
-    define('DATA_PATH', 'saekv://data/'); //data目录使用kvdb，其余stor的均使用upload_file_path
+    define('DATA_PATH', 'saemc://data/'); //data目录使用kvdb，其余stor的均使用upload_file_path
 }
 else{
 	/**
