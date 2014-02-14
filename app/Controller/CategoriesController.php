@@ -80,7 +80,7 @@ class CategoriesController extends AppController {
 				$conditions[$data_model.'.cate_id'] = $current_cateid;
 				$datalist = $this->{$data_model}->find('all', array(
 						'conditions' => $conditions,
-						'order' => $data_model.'.id desc',
+						'order' => $data_model.'.updated desc',
 						'limit' => $pagesize,
 						'page' => $page,));
 				if ($page == 1 && count($datalist) < $pagesize) {
@@ -108,7 +108,7 @@ class CategoriesController extends AppController {
 		        $datalist = $this->{$data_model}->find('all', array(
 			                    'conditions' => $conditions,
 			                    'joins' => $join_conditions,
-			                    'order' => $data_model.'.id desc',
+			                    'order' => $data_model.'.updated desc',
 			                    'fields' => array($data_model.'.*', 'Category.*'),
 			                    'limit' => $pagesize,
 			                    'page' => $page,)
