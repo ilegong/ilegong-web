@@ -25,12 +25,12 @@ class CommentsController extends AppController {
             //comment_type: 评论，补充完善，扩展阅读等等
 
             if ($this->Comment->save($this->data)) {
-            	$comment_id = $this->Comment->getLastInsertID();
+            	//$comment_id = $this->Comment->getLastInsertID();
             	$type_model = $this->data['Comment']['type'];
             	$this->loadModel($type_model);
             	$this->{$type_model}->updateAll(
             			array('comment_nums' => 'comment_nums+1'),
-            			array('id'=> $comment_id)
+            			array('id'=> $this->data['Comment']['data_id'])
             	);
             	
                 if ($this->data['status']) {
