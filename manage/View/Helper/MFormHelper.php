@@ -161,6 +161,9 @@ class MFormHelper extends FormHelper {
 			}
 			
 			foreach ($_extschema as $key => $value ) {
+				if(in_array($key,array('created','updated','creator','lastupdator','deleted'))){
+					continue;//跳过不允许修改的字段
+				}
 				$field_html = $this->autoFormElement ( $modelClass, $key, $value, $options);
 				if (in_array ( $key, $advancedfields ))
 					$advancedhtml .= $field_html."\n";
