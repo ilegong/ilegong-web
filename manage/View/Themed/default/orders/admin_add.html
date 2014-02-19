@@ -25,7 +25,9 @@ echo $this->MForm->create($current_model,array(
              	echo $this->MForm->input('consignee_address');
 			    echo $this->MForm->input('consignee_mobilephone');	
 			    echo $this->MForm->input('total_price'); 
-			    echo $this->MForm->input('status');                   
+			    echo $this->MForm->input('status');
+			    echo $this->MForm->input('remark',array('rows' => '2', 'cols' => '80'));  
+			                     
             	?>
              </div>            
        </div> 
