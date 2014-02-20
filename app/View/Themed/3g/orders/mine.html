@@ -12,6 +12,7 @@ td {padding:5px 10px;}
 			{{$order['Order']['consignee_address']}}<br/>
 			{{$order['Order']['consignee_mobilephone']}}<br/>
 			￥{{$order['Order']['total_price']}}<br/>
+			{{$order['Order']['created']}}<br/>
 			{{if $order['Order']['status']==0}}订单已生成
 			{{elseif $order['Order']['status']==1}}订单已支付
 			{{elseif $order['Order']['status']==2}}订单已发货
@@ -19,7 +20,7 @@ td {padding:5px 10px;}
 			{{elseif $order['Order']['status']==9}}订单已完成
 			{{elseif $order['Order']['status']==10}}订单已作废
 			{{/if}}
-			{{$order['Order']['created']}}</td>			
+			</td>			
 		</tr>
 		{{if !empty($order_carts[$order['Order']['id']])}}
 		<tr><td>
