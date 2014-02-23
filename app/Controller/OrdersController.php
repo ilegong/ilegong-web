@@ -97,6 +97,10 @@ class OrdersController extends AppController{
 				$business[$p['Product']['brand_id']] = array($p['Product']['id']);
 			}
 		}
+		
+
+		print_r($Carts);
+		
 		$hasfalse = false;
 		foreach($business as $brand_id => $busi){
 			$bs_carts = array();
@@ -127,11 +131,13 @@ class OrdersController extends AppController{
 			if(empty($data['consignee_name']) || empty($data['consignee_address']) || empty($data['consignee_mobilephone']) ){
 				$this->__message('请填写收货人信息','/orders/info');
 			}
+			$this->Order->create();
 			
 			if($this->Order->save($data)){
 				$order_id = $this->Order->getLastInsertID();				
 				foreach($busi as $pid){
 					$cart = $Carts[$pid];
+// 					echo "==$order_id=====$pid======$total_price====\n";
 					$this->Cart->updateAll(array('order_id'=>$order_id,'status'=>1),array('id'=>$cart['Cart']['id'],'creator'=>$this->currentUser['id']));
 				}
 			}
@@ -141,7 +147,7 @@ class OrdersController extends AppController{
 		}
 		setcookie("cart_products", '',time()-3600,'/');
 		if($hasfalse == false){
-			$this->Session->setFlash('订单已生成');
+			$this->Session->setFlash('订单已生成,不同商家的商品会拆分到不同的订单，请您知悉。');
 			$this->redirect('/orders/mine');
 		}
 		else{
