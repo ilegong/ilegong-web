@@ -182,10 +182,10 @@ rs_callbacks.confirm_order_status = function(request){
 }
 //设置订单的快递类型与快递单号
 function ship_order(order_id){
-	if($('#ship-type-'+order_id).val()=="" || $('#ship-code-'+order_id).val()==""){
-		alert("请选择快递类型与快递单号！");
-		return false;
-	}
+	//if($('#ship-type-'+order_id).val()=="" || $('#ship-code-'+order_id).val()==""){
+	//	alert("请选择快递类型与快递单号！");
+	//	return false;
+	//}
 	return ajaxAction(BASEURL+"/orders/set_status/",{'order_id':order_id,'status':2,'ship_code':$('#ship-code-'+order_id).val(),'ship_type':$('#ship-type-'+order_id).val()},null,'confirm_order_status');
 }
 //用户确认收货
