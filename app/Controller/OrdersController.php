@@ -306,7 +306,7 @@ class OrdersController extends AppController{
 		else{
 			$this->__message('只有合作商家才能查看合作订单，正在为您转向个人订单','/orders/mine');
 		}
-		
+		/*
 		$this->loadModel('Product');
 		$bu_pros = $this->Product->find('all',array(
 			'fields'=> 'id,name,brand_id',
@@ -319,10 +319,11 @@ class OrdersController extends AppController{
 		}
 		$cart_conditions = array(
 			'product_id' => $product_ids,
-		);
+		);*/
 		$orders = $this->Order->find('all',array(
 				'order' => 'id desc',
-				'group' => 'Cart.order_id',
+				'conditions' => array('brand_id' => $brand_ids),
+				/*'group' => 'Cart.order_id',
 				'joins'=>array(
 						array(
 							'table' => 'carts',
@@ -333,7 +334,7 @@ class OrdersController extends AppController{
 									'Cart.product_id' => $product_ids,
 							),
 						)
-				),
+				),*/
 		));
 		$ids = array();
 		foreach($orders as $o){
