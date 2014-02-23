@@ -1,0 +1,60 @@
+<style>
+td {padding:5px 10px;}
+</style>
+<div  class="container">
+	<div class="orderinfo">
+		<div class="o_show">
+		<p>
+		     您好，{{$CurrentUser['username']}}! 您的用户编号是:{{$CurrentUser['id']}}
+		</p>
+		{{if $is_business}}
+		<ul class="ui-side-menu ui-navi">
+			<li {{if $action=='mine'}}class="ui-state-active"{{/if}}><?php echo $this->Html->link(__('Edit Profile', true), array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?></li>
+	        <li {{if $action=='business'}}class="ui-state-active"{{/if}}><?php echo $this->Html->link(__('Edit Password', true), array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>
+		</ul>
+		{{/if}}
+		<h2>我的订单</h2>
+		<table  class="table table-bordered">
+		{{loop $orders $order}}		
+		<tr>
+			<td>{{$order['Order']['consignee_name']}}<br/>
+			{{$order['Order']['consignee_address']}}<br/>
+			{{$order['Order']['consignee_mobilephone']}}<br/>
+			￥{{$order['Order']['total_price']}}<br/>
+			{{$order['Order']['created']}}<br/>
+			{{if $order['Order']['status']==0}}订单已生成
+			{{elseif $order['Order']['status']==1}}订单已支付
+			{{elseif $order['Order']['status']==2}}订单已发货
+			{{elseif $order['Order']['status']==3}}订单已收货
+			
+			{{elseif $order['Order']['status']==4}}订单已退款
+			
+			{{elseif $order['Order']['status']==9}}订单已完成
+			{{elseif $order['Order']['status']==10}}订单已作废
+			{{elseif $order['Order']['status']==11}}订单已确认有效
+			{{elseif $order['Order']['status']==12}}订单已投诉
+			
+			{{/if}}
+			</td>			
+		</tr>
+		{{if !empty($order_carts[$order['Order']['id']])}}
+		<tr><td>
+			<table  class="table table-bordered">
+				<tr><th width="50%">商品名称</th><th>价格</th><th>数量</th><th>合计</th></tr>
+				<tbody>
+				{{loop $order_carts[$order['Order']['id']] $cart}}
+				<tr><td>{{$cart['Cart']['name']}}</td>
+				<td>￥{{$cart['Cart']['price']}}</td>
+				<td>{{$cart['Cart']['num']}}</td>
+				<td>￥{{$cart['Cart']['price']*$cart['Cart']['num']}}</td>		
+				</tr>
+				{{/loop}}
+				</tbody>
+			</table>
+		</td></tr>
+		{{/if}}
+		{{/loop}}
+		</table>
+		</div>			
+	</div>
+</div>

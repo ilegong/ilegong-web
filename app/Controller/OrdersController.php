@@ -25,9 +25,10 @@ class OrdersController extends AppController{
 	function balance($order_id=''){
 		$this->loadModel('Cart');
 		/* 保存无线端cookie购物车的商品 */
+		$this->loadModel('Product');
+		$product_ids = array();
 		if(!empty($_COOKIE['cart_products'])){
-			$this->loadModel('Product');
-			$product_ids = array();
+			
 			$nums = array();
 			$info = explode(',',$_COOKIE['cart_products']);
 			foreach($info as $item){
@@ -62,62 +63,91 @@ class OrdersController extends AppController{
 				$this->Cart->create();
 				if($this->Cart->save($Cart)){
 					$Cart['Cart']['id'] = $this->Cart->getLastInsertID();
-					$Carts[] = $Cart;
+					$Carts[$p['Product']['id']] = $Cart;
 				}
 			}
 		}
 		else{
-			$Carts = $this->Cart->find('all',array(
+			$Carts = array();
+			$Carts_tmp = $this->Cart->find('all',array(
 					'conditions'=>array(
 							'status'=> 0,
 							'order_id' => null,
 							'OR'=> $this->user_condition
 					)));
+			foreach($Carts_tmp as $c){
+				$product_ids[]=$c['Cart']['product_id'];
+				$Carts[$c['Cart']['product_id']] = $c;
+			}
+			$products = $this->Product->find('all',array('conditions'=>array(
+					'id' => $product_ids
+			)));
 		}
-		$total_price = $this->_calculateTotalPrice($Carts);
 		if(empty($Carts)){
 			$this->Session->setFlash('订单金额错误，请返回购物车查看');
 			$this->redirect('/');
 		}
-		if($total_price <= 0){
-			$this->Session->setFlash('订单金额错误，请返回购物车查看');
-			$this->redirect('/carts/listcart');
-		}
 		
-		
-		
-		$data = array();
-		$data['total_price'] = $total_price;
-		$data['creator'] = $this->currentUser['id'];
-		$data['remark'] = $this->Session->read('Order.remark');
-		$data['consignee_id'] = $this->Session->read('OrderConsignee.id');
-		$data['consignee_name'] = $this->Session->read('OrderConsignee.name');
-		$data['consignee_area'] = $this->Session->read('OrderConsignee.area');
-		$data['consignee_address'] = $this->Session->read('OrderConsignee.address');
-		$data['consignee_mobilephone'] = $this->Session->read('OrderConsignee.mobilephone');
-		$data['consignee_telephone'] = $this->Session->read('OrderConsignee.telephone');
-		$data['consignee_email'] = $this->Session->read('OrderConsignee.email');
-		$data['consignee_postcode'] = $this->Session->read('OrderConsignee.postcode');
-		
-		if(empty($data['consignee_name']) || empty($data['consignee_address']) || empty($data['consignee_mobilephone']) ){
-			$this->__message('请填写收货人信息','/orders/info');
-		}
-		
-		if($this->Order->save($data)){
-			$order_id = $this->Order->getLastInsertID();
-			foreach($Carts as $cart){
-				$this->Cart->updateAll(array('order_id'=>$order_id,'status'=>1),array('id'=>$cart['Cart']['id'],'creator'=>$this->currentUser['id']));
+		$business = array();
+		foreach($products as $p){
+			if(isset($business[$p['Product']['brand_id']])){
+				$business[$p['Product']['brand_id']][] = $p['Product']['id'];
 			}
-			setcookie("cart_products", '',time()-3600,'/');
+			else{
+				$business[$p['Product']['brand_id']] = array($p['Product']['id']);
+			}
+		}
+		$hasfalse = false;
+		foreach($business as $brand_id => $busi){
+			$bs_carts = array();
+			$total_price = 0.0;
+			foreach($busi as $pid){
+				$total_price+= $Carts[$pid]['Cart']['price']*$Carts[$pid]['Cart']['num'];
+			}
+			
+			if($total_price <= 0){
+				$this->Session->setFlash('订单金额错误，请返回购物车查看');
+				$this->redirect('/carts/listcart');
+			}
+			
+			$data = array();
+			$data['total_price'] = $total_price;
+			$data['brand_id'] = $brand_id;
+			$data['creator'] = $this->currentUser['id'];
+			$data['remark'] = $this->Session->read('Order.remark');
+			$data['consignee_id'] = $this->Session->read('OrderConsignee.id');
+			$data['consignee_name'] = $this->Session->read('OrderConsignee.name');
+			$data['consignee_area'] = $this->Session->read('OrderConsignee.area');
+			$data['consignee_address'] = $this->Session->read('OrderConsignee.address');
+			$data['consignee_mobilephone'] = $this->Session->read('OrderConsignee.mobilephone');
+			$data['consignee_telephone'] = $this->Session->read('OrderConsignee.telephone');
+			$data['consignee_email'] = $this->Session->read('OrderConsignee.email');
+			$data['consignee_postcode'] = $this->Session->read('OrderConsignee.postcode');
+			
+			if(empty($data['consignee_name']) || empty($data['consignee_address']) || empty($data['consignee_mobilephone']) ){
+				$this->__message('请填写收货人信息','/orders/info');
+			}
+			
+			if($this->Order->save($data)){
+				$order_id = $this->Order->getLastInsertID();				
+				foreach($busi as $pid){
+					$cart = $Carts[$pid];
+					$this->Cart->updateAll(array('order_id'=>$order_id,'status'=>1),array('id'=>$cart['Cart']['id'],'creator'=>$this->currentUser['id']));
+				}
+			}
+			else{
+				$hasfalse = true;
+			}
+		}
+		setcookie("cart_products", '',time()-3600,'/');
+		if($hasfalse == false){
 			$this->Session->setFlash('订单已生成');
-			$this->redirect('/orders/info/'.$order_id);
-			//$this->__message('订单已生成','/orders/info/'.$order_id);
+			$this->redirect('/orders/mine');
 		}
 		else{
-			$this->Session->setFlash('订单保存失败，请稍候重新提交');
+			$this->Session->setFlash('订单生成失败，请稍候重试或联系管理员');
 			$this->redirect('/order/info');
-			//$this->__message('订单保存失败，请稍候重新提交','/order/info/');
-		}		
+		}
 	}
 	
 	/**
@@ -229,6 +259,12 @@ class OrdersController extends AppController{
 	}
 	
 	function mine(){
+		$this->loadModel('Brand');
+		$brands = $this->Brand->find('list',array('creator'=>$this->currentUser['id']));
+		if(!empty($brands)){
+			$this->set('is_business',true);
+		}
+		
 		$orders = $this->Order->find('all',array(
 				'order' => 'id desc',
 				'conditions'=> array('creator'=>$this->currentUser['id']),
@@ -243,6 +279,64 @@ class OrdersController extends AppController{
 						'order_id' => $ids,
 						'creator'=> $this->currentUser['id']
 		)));
+		$order_carts = array();
+		foreach($Carts as $c){
+			$order_id = $c['Cart']['order_id'];
+			if(!isset($order_carts[$order_id])) $order_carts[$order_id] = array();
+			$order_carts[$order_id][] = $c;
+		}
+		
+		$this->set('orders',$orders);
+		$this->set('order_carts',$order_carts);
+	}
+	function business(){
+		$this->loadModel('Brand');
+		$brands = $this->Brand->find('list',array('conditions'=>array(
+				'creator'=>$this->currentUser['id'],
+		)));
+		if(!empty($brands)){
+			$this->set('is_business',true);
+		}
+		else{
+			$this->__message('只有合作商家才能查看合作订单，正在为您转向个人订单','/orders/mine');
+		}
+		
+		$this->loadModel('Product');
+		$bu_pros = $this->Product->find('all',array('conditions'=>array(
+				'creator'=>$this->currentUser['id'],
+		)));
+		$product_ids = array();
+		foreach($bu_pros as $p){
+			$product_ids[] = $p['Product']['id'];
+		}
+		$cart_conditions = array(
+			'product_id' => $product_ids,
+		);
+		$orders = $this->Order->find('all',array(
+				'order' => 'id desc',
+				'group' => 'Cart.order_id',
+				'join'=>array(
+						array(
+							'table' => 'carts',
+							'alias' => 'Cart',
+							'type' => 'inner',
+							'conditions' => array(
+									'Cart.order_id=Order.id',
+									'Cart.product_id' => $product_ids,
+							),
+						)
+				),
+		));
+		$ids = array();
+		foreach($orders as $o){
+			$ids[] = $o['Order']['id'];
+		}
+		$this->loadModel('Cart');
+		$Carts = $this->Cart->find('all',array(
+				'conditions'=>array(
+						'order_id' => $ids,
+						//'creator'=> $this->currentUser['id']
+				)));
 		$order_carts = array();
 		foreach($Carts as $c){
 			$order_id = $c['Cart']['order_id'];
