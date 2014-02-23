@@ -37,9 +37,11 @@ class UsersController extends AppController {
     
     public function beforeFilter(){
     	parent::beforeFilter();
-    	if(defined('UC_APPID')){
-    		$this->Auth->authenticate = array('UCenter');
-    	}
+    	if(!defined('IS_LOCALHOST')){
+    		if(defined('UC_APPID')){
+    			$this->Auth->authenticate = array('UCenter');
+    		}
+    	}    	
     	$this->Auth->allowedActions = array('register','login','forgot','captcha','reset');
     }
 

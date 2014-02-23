@@ -260,7 +260,8 @@ class OrdersController extends AppController{
 	
 	function mine(){
 		$this->loadModel('Brand');
-		$brands = $this->Brand->find('list',array('creator'=>$this->currentUser['id']));
+		$brands = $this->Brand->find('first',array(
+				'conditions' => array('creator'=> $this->currentUser['id'])));
 		if(!empty($brands)){
 			$this->set('is_business',true);
 		}
@@ -303,7 +304,7 @@ class OrdersController extends AppController{
 		
 		$this->loadModel('Product');
 		$bu_pros = $this->Product->find('all',array('conditions'=>array(
-				'creator'=>$this->currentUser['id'],
+				'brand_id'=>$this->currentUser['id'],
 		)));
 		$product_ids = array();
 		foreach($bu_pros as $p){
@@ -315,7 +316,7 @@ class OrdersController extends AppController{
 		$orders = $this->Order->find('all',array(
 				'order' => 'id desc',
 				'group' => 'Cart.order_id',
-				'join'=>array(
+				'joins'=>array(
 						array(
 							'table' => 'carts',
 							'alias' => 'Cart',
