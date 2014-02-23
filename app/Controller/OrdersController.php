@@ -5,6 +5,18 @@ class OrdersController extends AppController{
 	
 	var $user_condition = array();
 	
+	var $ship_type = array(
+		101=>'申通',
+		102=>'圆通',
+		103=>'韵达',
+		104=>'顺丰',
+		105=>'EMS',
+		106=>'邮政包裹',
+		107=>'天天',
+		108=>'汇通',
+		109=>'中通',
+	);
+	
 	function beforeFilter(){
 		parent::beforeFilter();
 		if(empty($this->currentUser['id'])){
@@ -292,6 +304,7 @@ class OrdersController extends AppController{
 		
 		$this->set('orders',$orders);
 		$this->set('order_carts',$order_carts);
+		$this->set('ship_type',$this->ship_type);
 	}
 	function business(){
 		$this->loadModel('Brand');
@@ -304,7 +317,7 @@ class OrdersController extends AppController{
 			$this->set('is_business',true);
 		}
 		else{
-			$this->__message('只有合作商家才能查看合作订单，正在为您转向个人订单','/orders/mine');
+			$this->__message('只有合作商家才能查看商家订单，正在为您转向个人订单','/orders/mine');
 		}
 		/*
 		$this->loadModel('Product');
@@ -355,6 +368,96 @@ class OrdersController extends AppController{
 		
 		$this->set('orders',$orders);
 		$this->set('order_carts',$order_carts);
+		$this->set('ship_type',$this->ship_type);
+	}
+	function confirm_receive(){
+		$order_id = $_REQUEST['order_id'];
+		
+		if(empty($order_id)){
+			echo json_encode(array('order_id'=>$order_id,'msg'=>'参数错误'));
+			exit;
+		}
+		
+		$order_info = $this->Order->find('first',array(
+				'conditions'=> array('id'=>$order_id,'creator'=>$this->currentUser['id']),
+		));
+		
+		if(empty($order_info)){
+			echo json_encode(array('order_id'=>$order_id,'msg'=>'您不具备此订单的修改权限。'));
+			exit;
+		}
+		$orig_status = $order_info['Order']['status'];
+		if($orig_status==2){
+			//确认已发货的订单为已收货
+			$this->Order->updateAll(array('status'=>3),array('id'=>$order_id));
+			echo json_encode(array('order_id'=>$order_id,'msg'=>'订单已收货'));
+			exit;
+		}
+		else{
+			echo json_encode(array('order_id'=>$order_id,'msg'=>'不能修改订单状态了。'));
+			exit;
+		}
+	}
+	/**
+	 * 商家设置订单的状态
+	 */
+	function set_status(){
+		$order_id = $_REQUEST['order_id'];
+		$status = $_REQUEST['status'];
+		
+		if(empty($order_id) || empty($status)){
+			echo json_encode(array('order_id'=>$order_id,'msg'=>'参数错误'));
+			exit;
+		}
+		$this->loadModel('Brand');
+		$brands = $this->Brand->find('list',array(
+			'conditions'=>array(
+				'creator'=>$this->currentUser['id'],
+		)));
+		$brand_ids = array_keys($brands);
+		
+		$order_info = $this->Order->find('first',array(
+				'conditions'=> array('id'=>$order_id,'brand_id'=>$brand_ids),
+		));
+		//'or'=>array('brand_id'=>$brand_ids,'creator' => $this->currentUser['id'])
+		
+		if(empty($order_info)){
+			echo json_encode(array('order_id'=>$order_id,'msg'=>'您不具备此订单的修改权限，请联系管理员。'));
+			exit;
+		}
+		$orig_status = $order_info['Order']['status'];
+		if($orig_status==0){
+			//待确认订单只能修改为订单已确认与订单已作废
+			if(!in_array($status,array(10,11))){
+				echo json_encode(array('order_id'=>$order_id,'msg'=>'您只能确认订单与作废订单。'));
+				exit;
+			}
+			else{
+				$this->Order->updateAll(array('status'=>$status),array('id'=>$order_id));
+				if($status==11)  $msg = '订单已确认';
+				elseif($status==10)  $msg = '订单已作废';
+				echo json_encode(array('order_id'=>$order_id,'msg'=>$msg));
+				exit;
+			}
+		}
+		elseif($orig_status==1){
+			//已支付订单，修改状态为已发货
+			if(!in_array($status,array(2))){
+				echo json_encode(array('order_id'=>$order_id,'msg'=>'您只能将此订单设为已发货。'));
+				exit;
+			}
+			else{
+				$ship_code = $_REQUEST['ship_code'];
+				$ship_type = $_REQUEST['ship_type'];
+				$this->Order->updateAll(array('status'=>$status,'ship_code'=>$ship_code,'ship_type'=>$ship_type),array('id'=>$order_id));				
+				echo json_encode(array('order_id'=>$order_id,'msg'=>'订单状态已更新为“已发货”'));
+				exit;
+			}
+		}
+		else{
+			echo json_encode(array('order_id'=>$order_id,'msg'=>'不能修改订单状态了。'));
+			exit;
+		}
 	}
 	
 	function _calculateTotalPrice($carts = array()){

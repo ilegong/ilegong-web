@@ -14,27 +14,57 @@ td {padding:5px 10px;}
 		</ul>
 		{{/if}}
 		<h2>商家订单</h2>
+		<div class="alert alert-warning">
+		  <p>待确认订单需要联系用户，确认用户是否真实需要此订单商品，并提醒用户付款到51daifan支付宝。</p>
+		  <p>如果未达到免邮要求，需要沟通支付快递费用。快递费用未包含在订单金额中。</p>
+		  <p>用户不需要此订单时，请进行“作废订单”的操作，其余进行“确认订单”的操作。</p>
+		  <p>如果您使用快递公司不在选项中，可联系管理员添加。</p>
+		</div>
+		
+		{{loop $orders $order}}
 		<table  class="table table-bordered">
-		{{loop $orders $order}}		
 		<tr>
-			<td>{{$order['Order']['consignee_name']}}<br/>
-			{{$order['Order']['consignee_address']}}<br/>
-			{{$order['Order']['consignee_mobilephone']}}<br/>
-			￥{{$order['Order']['total_price']}}<br/>
-			{{$order['Order']['created']}}<br/>
-			{{if $order['Order']['status']==0}}订单已生成
-			{{elseif $order['Order']['status']==1}}订单已支付
-			{{elseif $order['Order']['status']==2}}订单已发货
-			{{elseif $order['Order']['status']==3}}订单已收货
+			<td>
+			订单号：{{$order['Order']['id']}}<br/>
+			收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
+			总价：￥{{$order['Order']['total_price']}}<br/>
+			下单时间：{{$order['Order']['created']}}<br/>
+			{{if $order['Order']['ship_type']}}	
+			快递公司: {{$ship_type[$order['Order']['ship_type']]}} ,&nbsp;&nbsp; 快递单号：{{$order['Order']['ship_code']}}
+				{{/if}}<br/>
+			<div id="order-status-{{$order['Order']['id']}}">
+				
+				
+			{{if $order['Order']['status']==0}}			
+				<font color="red">订单待确认</font>
+				<div class="well">
+					<button type="button" onclick="confirm_order({{$order['Order']['id']}},11);" class="btn btn-primary">确认订单</button>
+					<button type="button" onclick="confirm_order({{$order['Order']['id']}},10);" class="btn btn-danger">作废订单</button>
+				</div>
+			{{elseif $order['Order']['status']==1}}
+				<font color="red">订单已支付</font>
+				<div class="well">
+					<select id="ship-type-{{$order['Order']['id']}}">
+						<option value="">快递类型</option>
+						{{loop $ship_type $id $type}}
+						<option value="{{$id}}">{{$type}}</option>
+						{{/loop}}
+					</select>
+					<input type="text" width="80px;" id="ship-code-{{$order['Order']['id']}}" placeholder="快递单号">
+					<button type="button"  onclick="ship_order({{$order['Order']['id']}});" class="btn btn-primary">订单已发货</button>
+				</div>
+			{{elseif $order['Order']['status']==2}}<font color="red">订单已发货</font>
+			{{elseif $order['Order']['status']==3}}<font color="red">订单已收货</font>
 			
-			{{elseif $order['Order']['status']==4}}订单已退款
+			{{elseif $order['Order']['status']==4}}<font color="red">订单已退款</font>
 			
-			{{elseif $order['Order']['status']==9}}订单已完成
-			{{elseif $order['Order']['status']==10}}订单已作废
-			{{elseif $order['Order']['status']==11}}订单已确认有效
-			{{elseif $order['Order']['status']==12}}订单已投诉
+			{{elseif $order['Order']['status']==9}}<font color="red">订单已完成</font>
+			{{elseif $order['Order']['status']==10}}<font color="red">订单已作废</font>
+			{{elseif $order['Order']['status']==11}}<font color="red">订单已确认</font>
+			{{elseif $order['Order']['status']==12}}<font color="red">订单已投诉</font>
 			
 			{{/if}}
+			</div>
 			</td>			
 		</tr>
 		{{if !empty($order_carts[$order['Order']['id']])}}
@@ -53,8 +83,12 @@ td {padding:5px 10px;}
 			</table>
 		</td></tr>
 		{{/if}}
-		{{/loop}}
 		</table>
+		{{/loop}}
+		
 		</div>			
 	</div>
 </div>
+<script>
+
+</script>

@@ -169,6 +169,7 @@ function ajaxAction(url,postdata,form,callback_func_name,moreags){
 			}
 		},
 		success: function(request){
+			
 			if(typeof(callback_func_name)=='function'){
 				callback_func_name();
 				return;

@@ -22,10 +22,18 @@ td {padding:5px 10px;}
 			收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
 			总价：￥{{$order['Order']['total_price']}}<br/>
 			下单时间：{{$order['Order']['created']}}<br/>
+			{{if $order['Order']['ship_type']}}	
+			快递公司: {{$ship_type[$order['Order']['ship_type']]}} ,&nbsp;&nbsp; 快递单号：{{$order['Order']['ship_code']}}
+			{{/if}}<br/>
+			<div id="order-status-{{$order['Order']['id']}}">
 			<font color="red">
 			{{if $order['Order']['status']==0}}订单已生成,等待付款
 			{{elseif $order['Order']['status']==1}}订单已支付
-			{{elseif $order['Order']['status']==2}}订单已发货
+			{{elseif $order['Order']['status']==2}}
+				<font color="red">订单已发货</font>
+				<div class="well">
+					<button type="button" onclick="confirm_receive({{$order['Order']['id']}});" class="btn btn-primary">确认已收货</button>
+				</div>
 			{{elseif $order['Order']['status']==3}}订单已收货
 			
 			{{elseif $order['Order']['status']==4}}订单已退款
@@ -36,6 +44,7 @@ td {padding:5px 10px;}
 			{{elseif $order['Order']['status']==12}}订单已投诉			
 			{{/if}}
 			</font>
+			</div>
 			</td>			
 		</tr>
 		{{if !empty($order_carts[$order['Order']['id']])}}

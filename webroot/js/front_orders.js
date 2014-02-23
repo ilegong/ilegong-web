@@ -176,6 +176,26 @@ function close_remark(){
    $('#part_remark .o_write').hide();
 }
 
+//选择发票地址
+rs_callbacks.confirm_order_status = function(request){
+	$('#order-status-'+request.order_id).html('<font color="red">'+request.msg+"</font>");
+}
+//设置订单的快递类型与快递单号
+function ship_order(order_id){
+	if($('#ship-type-'+order_id).val()=="" || $('#ship-code-'+order_id).val()==""){
+		alert("请选择快递类型与快递单号！");
+		return false;
+	}
+	return ajaxAction(BASEURL+"/orders/set_status/",{'order_id':order_id,'status':2,'ship_code':$('#ship-code-'+order_id).val(),'ship_type':$('#ship-type-'+order_id).val()},null,'confirm_order_status');
+}
+//用户确认收货
+function confirm_receive(order_id){
+	return ajaxAction(BASEURL+"/orders/confirm_receive/",{'order_id':order_id},null,'confirm_order_status');
+}
+//商家确认订单
+function confirm_order(order_id,status){
+	return ajaxAction(BASEURL+"/orders/set_status/",{'order_id':order_id,'status':status},null,'confirm_order_status');
+}
 
 
 
