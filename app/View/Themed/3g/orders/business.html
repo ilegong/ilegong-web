@@ -13,7 +13,7 @@ td {padding:5px 10px;}
 	        <li {{if $current_action=='business'}}class="active"{{/if}}><?php echo $this->Html->link('商家订单', array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>
 		</ul>
 		{{/if}}
-		<h2>我的订单</h2>
+		<h2>商家订单</h2>
 		<table  class="table table-bordered">
 		{{loop $orders $order}}		
 		<tr>
