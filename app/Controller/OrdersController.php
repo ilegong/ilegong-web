@@ -98,9 +98,6 @@ class OrdersController extends AppController{
 			}
 		}
 		
-
-		print_r($Carts);
-		
 		$hasfalse = false;
 		foreach($business as $brand_id => $busi){
 			$bs_carts = array();
