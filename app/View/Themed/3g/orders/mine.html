@@ -4,6 +4,15 @@ td {padding:5px 10px;}
 <div  class="container">
 	<div class="orderinfo">
 		<div class="o_show">
+		<p>
+		     您好，{{$CurrentUser['username']}}! 您的用户编号是:{{$CurrentUser['id']}}
+		</p>
+		{{if $is_business}}
+		<ul class="ui-side-menu ui-navi">
+			<li {{if $action=='mine'}}class="ui-state-active"{{/if}}><?php echo $this->Html->link(__('Edit Profile', true), array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?></li>
+	        <li {{if $action=='business'}}class="ui-state-active"{{/if}}><?php echo $this->Html->link(__('Edit Password', true), array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>
+		</ul>
+		{{/if}}
 		<h2>我的订单</h2>
 		<table  class="table table-bordered">
 		{{loop $orders $order}}		
@@ -17,8 +26,14 @@ td {padding:5px 10px;}
 			{{elseif $order['Order']['status']==1}}订单已支付
 			{{elseif $order['Order']['status']==2}}订单已发货
 			{{elseif $order['Order']['status']==3}}订单已收货
+			
+			{{elseif $order['Order']['status']==4}}订单已退款
+			
 			{{elseif $order['Order']['status']==9}}订单已完成
 			{{elseif $order['Order']['status']==10}}订单已作废
+			{{elseif $order['Order']['status']==11}}订单已确认有效
+			{{elseif $order['Order']['status']==12}}订单已投诉
+			
 			{{/if}}
 			</td>			
 		</tr>
