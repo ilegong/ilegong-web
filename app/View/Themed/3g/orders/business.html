@@ -14,18 +14,10 @@ td {padding:5px 10px;}
 		</ul>
 		{{/if}}
 		<h2>商家订单</h2>
-		<div class="alert alert-warning">
-		  <p>待确认订单需要联系用户，确认用户是否真实需要此订单商品，并提醒用户付款到51daifan支付宝。</p>
-		  <p>如果未达到免邮要求，需要沟通支付快递费用。快递费用未包含在订单金额中。</p>
-		  <p>用户不需要此订单时，请进行“作废订单”的操作，其余进行“确认订单”的操作。</p>
-		  <p>如果您使用快递公司不在选项中，可联系管理员添加。</p>
-		</div>
-		
 		{{loop $orders $order}}
 		<table  class="table table-bordered">
 		<tr>
 			<td>
-			订单号：{{$order['Order']['id']}}<br/>
 			收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
 			总价：￥{{$order['Order']['total_price']}}<br/>
 			下单时间：{{$order['Order']['created']}}<br/>
@@ -84,9 +76,16 @@ td {padding:5px 10px;}
 		</td></tr>
 		{{/if}}
 		</table>
-		{{/loop}}
-		
-		</div>			
+		{{/loop}}	
+			<div class="alert alert-warning">
+			  <p>待确认订单需要联系用户，确认用户是否真实需要此订单商品，并提醒用户付款到51daifan支付宝。</p>
+			  <p>如果未达到免邮要求，需要沟通支付快递费用。快递费用未包含在订单金额中。</p>
+			  <p>用户不需要此订单时，请进行“作废订单”的操作，其余进行“确认订单”的操作。</p>
+			  <p>如果您使用快递公司不在选项中，可联系管理员添加。</p>
+			</div>		
+		</div>
+			
+			
 	</div>
 </div>
 <script>
