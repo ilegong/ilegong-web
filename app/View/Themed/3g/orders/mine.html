@@ -8,7 +8,7 @@ td {padding:5px 10px;}
 		     您好，{{$CurrentUser['username']}}! 您的用户编号是:{{$CurrentUser['id']}}
 		</p>
 		{{if $is_business}}
-		<ul class="ui-side-menu ui-navi">
+		<ul class="nav nav-tabs">
 			<li {{if $action=='mine'}}class="active"{{/if}}><?php echo $this->Html->link('我的订单', array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?></li>
 	        <li {{if $action=='business'}}class="active"{{/if}}><?php echo $this->Html->link('商家订单', array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>
 		</ul>

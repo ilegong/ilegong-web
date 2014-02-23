@@ -295,7 +295,9 @@ class OrdersController extends AppController{
 		$brands = $this->Brand->find('list',array('conditions'=>array(
 				'creator'=>$this->currentUser['id'],
 		)));
+		
 		if(!empty($brands)){
+			$brand_ids = array_keys($brands);
 			$this->set('is_business',true);
 		}
 		else{
@@ -303,8 +305,10 @@ class OrdersController extends AppController{
 		}
 		
 		$this->loadModel('Product');
-		$bu_pros = $this->Product->find('all',array('conditions'=>array(
-				'brand_id'=>$this->currentUser['id'],
+		$bu_pros = $this->Product->find('all',array(
+			'fields'=> 'id,name,brand_id',
+			'conditions'=>array(
+				'brand_id' => $brand_ids,
 		)));
 		$product_ids = array();
 		foreach($bu_pros as $p){
