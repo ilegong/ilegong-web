@@ -14,15 +14,16 @@ td {padding:5px 10px;}
 		</ul>
 		{{/if}}
 		<h2>我的订单</h2>
+		<font color="red">51daifan收款方式支付宝：v51daifan@163.com,收款人：张佩龙</font>
+		{{loop $orders $order}}
 		<table  class="table table-bordered">
-		{{loop $orders $order}}		
 		<tr>
-			<td>{{$order['Order']['consignee_name']}}<br/>
-			{{$order['Order']['consignee_address']}}<br/>
-			{{$order['Order']['consignee_mobilephone']}}<br/>
-			￥{{$order['Order']['total_price']}}<br/>
-			{{$order['Order']['created']}}<br/>
-			{{if $order['Order']['status']==0}}订单已生成
+			<td>
+			收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
+			总价：￥{{$order['Order']['total_price']}}<br/>
+			下单时间：{{$order['Order']['created']}}<br/>
+			<font color="red">
+			{{if $order['Order']['status']==0}}订单已生成,等待付款
 			{{elseif $order['Order']['status']==1}}订单已支付
 			{{elseif $order['Order']['status']==2}}订单已发货
 			{{elseif $order['Order']['status']==3}}订单已收货
@@ -32,9 +33,9 @@ td {padding:5px 10px;}
 			{{elseif $order['Order']['status']==9}}订单已完成
 			{{elseif $order['Order']['status']==10}}订单已作废
 			{{elseif $order['Order']['status']==11}}订单已确认有效
-			{{elseif $order['Order']['status']==12}}订单已投诉
-			
+			{{elseif $order['Order']['status']==12}}订单已投诉			
 			{{/if}}
+			</font>
 			</td>			
 		</tr>
 		{{if !empty($order_carts[$order['Order']['id']])}}
@@ -53,8 +54,9 @@ td {padding:5px 10px;}
 			</table>
 		</td></tr>
 		{{/if}}
-		{{/loop}}
 		</table>
+		{{/loop}}
+		
 		</div>			
 	</div>
 </div>
