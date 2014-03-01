@@ -7,7 +7,7 @@ class CommentsController extends AppController {
     var $components = array(
         'Email',
     );
-    var $uses = array('Comment');
+    var $uses = array('Comment', 'User');
     function add() {
     	$this->autoRender = false;
     	$this->layout = 'ajax';
@@ -67,7 +67,27 @@ class CommentsController extends AppController {
 		    'limit' => $pagesize, //整型
 		    'page' => $page, //整型    	
     	));
-    	echo json_encode($comments);
+
+        $result = array();
+        foreach ($comments as $comt){
+            $item = $comt['Comment'];
+            if(empty($item['username']) && !empty($item['user_id']) ){
+                $data = $this->User->find('first', array('conditions' => array('id' => $item['user_id'])));
+                if(isset($data['User']['id']) ){
+                    $item['username'] = $data['User']['nickname'];
+                }  
+            }
+            if( empty($item['username']) ){
+                $item['username'] = '微信用户';
+            }
+            unset($item['ip']);
+            unset($item['lft']);
+            unset($item['rght']);
+
+            array_push($result,array('Comment' => $item));
+        }
+
+    	echo json_encode($result);
     	
     } 
 
