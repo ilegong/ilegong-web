@@ -1,11 +1,54 @@
 <div class="container clearfix">
 	<div class="ui-contain col-md-9">
 		<portlet>
-			<h2 class="Content-title"><?php echo $Brand['Brand']['name']; ?></h2>	   
-		    <div class="Content-body">		    
-		    <?php echo $Brand['Brand']['content']; ?> 
-	        {{$this->Hook->call("affterContent",array('Brand',$Brand['Brand']['id']))}}
+			<h2 class="Content-title"><?php echo $Brand['Brand']['name']; ?></h2>	
+			
+			<ul class="nav nav-tabs">
+			  <li class="active"><a href="#products" data-toggle="tab">商品</a></li>
+			  <li><a href="#intro" data-toggle="tab">介绍</a></li>
+			</ul>
+			
+			<!-- Tab panes -->
+			<div class="tab-content">
+			  <div class="tab-pane active" id="products">
+					{{loop $products $p}}
+						<?php $item = $p['Product'];?>
+						<div class="col-sm-3">
+						<a href="{{$this->Html->url('/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}" class="thumbnail {{if date('Y-m-d H:i:s')>$item['end_time'] && $item['end_time']>0}}no-shopping{{else}}no-shopping{{/if}}" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
+					         {{eval echo $this->Html->image($item['coverimg'], 
+								array(
+								'alt' => $item['title'],'title' => $item['name'],
+								)); }}
+					         <!-- <div class="select-item" style="display: none;">
+								<p><span class="glyphicon glyphicon-ok" style="color:#5e8a2f; font-size:22px;"></span>已选</p>
+						 	 </div>  -->
+					     </a>
+					     <div class="text-left">
+					     	{{eval echo $this->Html->link(usubstr($item['name'],0,10,''), 
+								'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
+								array('title'=>$item['title'])); 
+							}}
+					     	
+					     	<div>
+					     		<div class="food-info pull-right">
+					             <strong>¥{{$item['price']}}</strong>                                     
+					     		</div>
+					     		<a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">{{if $item['promote_name']}}{{$item['promote_name']}}{{else}}已售({{$item['saled']}})、评论({{$item['comment_nums']}}){{/if}}</a>
+					     	</div>
+					     </div>
+					     </div>
+					{{/loop}}
+			  </div>
+			  <div class="tab-pane" id="intro">
+			  		   
+				    <div class="Content-body">		    
+				    <?php echo $Brand['Brand']['content']; ?> 
+			        {{$this->Hook->call("affterContent",array('Brand',$Brand['Brand']['id']))}}
+					</div>
+
+			  </div>
 			</div>
+			
 		</portlet>
 	</div>
 </div>

@@ -30,6 +30,7 @@ class AppController extends Controller {
     var $current_data_id;
 
     public $firephp_vars = array();
+    public $viewdata = null;
 
     // 自定义构造函数
     public function __construct($request = null, $response = null) {
@@ -292,6 +293,7 @@ class AppController extends Controller {
         } else {
             $this->redirect(array('action' => 'lists'));
         }
+        $this->viewdata = ${$modelClass};
         
         if (empty(${$modelClass})) {
             $url = $this->referer();
