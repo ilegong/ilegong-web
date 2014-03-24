@@ -363,6 +363,7 @@ class AppController extends Controller {
         $this->set('navigations', $navigations);
 //		print_r( ${$modelClass});
         $this->set($modelClass, ${$modelClass});
+//         print_r(${$modelClass});
         
         $params = array($modelClass, ${$modelClass}[$modelClass]['id']);
         $this->Hook->call('viewItem', $params);

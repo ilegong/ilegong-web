@@ -5,6 +5,13 @@ class Product extends AppModel {
        var $actsAs = array(
 	    	'ModelSplit',
 		);
+       var $belongsTo = array(
+       		'Brand' => array(
+       				'className'     => 'Brand',
+       				'foreignKey'    => 'brand_id',
+       				//'conditions'    => array('Brand.brand_id' => 'Product','Uploadfile.trash' => '0'),
+       		)
+       );
 		
        var $hasMany = array(
 	       'Uploadfile' => array(

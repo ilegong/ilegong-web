@@ -9,6 +9,10 @@
 	</div>
 	<a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-primary shopping" id="single-item-{{$Product['Product']['id']}}" item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
 href="javascript:void(0);">添加到购物车 </a>
+	
+</div>
+<div>
+	<a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($Product['Brand']['created'])).'/'.$Product['Product']['brand_id'])}}">查看商家更多商品 </a>
 </div>
 {{/if}}
 <div class="row">
