@@ -13,7 +13,7 @@
 			  <div class="tab-pane active" id="products">
 					{{loop $products $p}}
 						<?php $item = $p['Product'];?>
-						<div class="col-sm-3">
+						<div class="col-xs-6 col-sm-3">
 						<a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}" class="thumbnail {{if date('Y-m-d H:i:s')>$item['end_time'] && $item['end_time']>0}}no-shopping{{else}}no-shopping{{/if}}" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
 					         {{eval echo $this->Html->image($item['coverimg'], 
 								array(

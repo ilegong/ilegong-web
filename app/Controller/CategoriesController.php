@@ -73,6 +73,9 @@ class CategoriesController extends AppController {
 			}
 			$this->{$data_model}->recursive = -1;
 			$conditions = array($data_model.'.deleted'=>0,$data_model.'.published'=>1);
+			if($data_model=='Product'){
+				$conditions[$data_model.'.recommend >'] = 0;
+			}
 			if(!empty($this->request->query)){
 				$conditions = getSearchOptions($this->request->query,$data_model);
 			}
