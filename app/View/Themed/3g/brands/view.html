@@ -11,15 +11,13 @@
 			
 			<!-- Tab panes -->
 			<div class="tab-content">
-			  <div class="tab-pane" id="intro">
-			  		   
+			  <div class="tab-pane active" id="intro">
 				    <div class="Content-body">		    
 				    <?php echo $Brand['Brand']['content']; ?> 
 			        {{$this->Hook->call("affterContent",array('Brand',$Brand['Brand']['id']))}}
 					</div>
-
 			  </div>
-			  <div class="tab-pane active" id="products">
+			  <div class="tab-pane" id="products">
 					{{loop $products $p}}
 						<?php $item = $p['Product'];?>
 						<div class="col-xs-6 col-sm-3">
