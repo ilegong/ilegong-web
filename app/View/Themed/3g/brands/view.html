@@ -4,12 +4,21 @@
 			<h2 class="Content-title"><?php echo $Brand['Brand']['name']; ?></h2>	
 			
 			<ul class="nav nav-tabs">
-			  <li class="active"><a href="#products" data-toggle="tab">商品</a></li>
-			  <li><a href="#intro" data-toggle="tab">介绍</a></li>
+			  <li class="active"><a href="#intro" data-toggle="tab">同事介绍</a></li>
+			  <li><a href="#products" data-toggle="tab">分享商品</a></li>
+			  
 			</ul>
 			
 			<!-- Tab panes -->
 			<div class="tab-content">
+			  <div class="tab-pane" id="intro">
+			  		   
+				    <div class="Content-body">		    
+				    <?php echo $Brand['Brand']['content']; ?> 
+			        {{$this->Hook->call("affterContent",array('Brand',$Brand['Brand']['id']))}}
+					</div>
+
+			  </div>
 			  <div class="tab-pane active" id="products">
 					{{loop $products $p}}
 						<?php $item = $p['Product'];?>
@@ -39,14 +48,7 @@
 					     </div>
 					{{/loop}}
 			  </div>
-			  <div class="tab-pane" id="intro">
-			  		   
-				    <div class="Content-body">		    
-				    <?php echo $Brand['Brand']['content']; ?> 
-			        {{$this->Hook->call("affterContent",array('Brand',$Brand['Brand']['id']))}}
-					</div>
-
-			  </div>
+			  
 			</div>
 			
 		</portlet>
