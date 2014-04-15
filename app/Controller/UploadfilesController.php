@@ -38,7 +38,7 @@ class UploadfilesController extends AppController {
 	
 	function upload() {
 		
-		$file_post_name = $_POST ['file_post_name'];
+		$file_post_name = $_POST['file_post_name']?$_POST['file_post_name']:'upload';
 		$file_model_name = $_POST ['file_model_name'];
 		$info = array (); // return json data
 		$info ['status'] = '0';
@@ -46,59 +46,72 @@ class UploadfilesController extends AppController {
 		if (isset ( $this->params ['form'] [$file_post_name] )) {
 			// upload the file
 			$this->SwfUpload->file_post_name = $file_post_name;
-			if ($this->SwfUpload->upload ()) {
-				$modelname = Inflector::classify ( $this->name );
-				// save the file to the db, or do whateve ryou want to do with
-				// the data
-				$this->data [$modelname] ['modelclass'] = $file_model_name;
-				$this->data [$modelname] ['fieldname'] = $file_post_name;
-				$this->data [$modelname] ['name'] = $this->SwfUpload->filename;
-				$this->data [$modelname] ['size'] = $this->params ['form'] [$file_post_name] ['size'];
-				// $this->params['form'][$file_post_name]['path'] =
-				// $this->SwfUpload->webpath;
-				// fspath，thumb，mid_thumb 为相对路径
-				$this->data [$modelname] ['fspath'] = str_replace ( '\\', '/', $this->SwfUpload->relativeUrl . $this->SwfUpload->savename );
-				// $file_type =
-				$this->data [$modelname] ['type'] = $this->SwfUpload->file_type;
-				if ('image' == substr ( $this->data [$modelname] ['type'], 0, 5 )) {
-					$this->data [$modelname] ['thumb'] = str_replace ( '\\', '/', $this->SwfUpload->relativeUrl . 'thumb_s' . DS . $this->SwfUpload->savename );
-					$this->data [$modelname] ['mid_thumb'] = str_replace ( '\\', '/', $this->SwfUpload->relativeUrl . 'thumb_m' . DS . $this->SwfUpload->savename );
-				}
-				if (! ($file = $this->Uploadfile->save ( $this->data ))) {
-					$this->Session->setFlash ( 'Database save failed' );
-					$info ['message'] = $this->SwfUpload->filename . ' Database save failed'; // 保存记录时失败
-				} else {
-					
+			if ($fileifo = $this->SwfUpload->upload ()) {
+				if($_REQUEST['no_db']){// 不保存到数据库，在ckeditor中上传文件的场景
 					$info ['status'] = '1';
-					$file_id = $this->Uploadfile->getLastInsertId ();
-					$info ['fspath'] = $this->data [$modelname] ['fspath'];
-					$info ['file_id'] = $file_id;
-					$info ['message'] = '<div class="ui-upload-filelist" style="float:left;">';
-					
-					if (substr ( $this->data [$modelname] ['thumb'], 0, 7 ) != 'http://') {
-						$file_url = Router::url(str_replace ( '//', '/', $this->request->webroot . ($this->data [$modelname] ['thumb']) ));
-					} else {
-						$file_url = $this->data [$modelname] ['thumb'];
-					}
-					
-					if ('image' == substr ( $this->data [$modelname] ['type'], 0, 5 )) {
-						$info ['message'] .= '<img src="' . $file_url . '" width="100px" height="100px"/><br/>';
+					$info =array_merge($info,$fileifo);
+					$file_url = str_replace('//','/',UPLOAD_FILE_URL.$fileifo['fspath']);
+					if(is_image($file_url)){
+						$info['message'] = '<a href="'.$file_url.'" title="'.__( 'Preview').'" target="_blank"><img src="'.$file_url.'" style="max-height:120px"/></a>';
 					}
 					else{
-						$info ['message'] .='<a href="' . $file_url . '" target="_blank">'.$this->data [$modelname] ['name'].'</a>';
+						$info['message'] = '<a href="'.$file_url.'" target="_blank">'.__( 'Preview').'</a>';
 					}
-					$info ['message'] .= '<input type="hidden" name="data[Uploadfile][' . $file_id . '][id]" value="' . $file_id . '">';
-					
+				}
+				else{
+					$modelname = Inflector::classify ( $this->name );
+					// save the file to the db, or do whateve ryou want to do with
+					// the data
+					$this->data [$modelname] ['modelclass'] = $file_model_name;
+					$this->data [$modelname] ['fieldname'] = $file_post_name;
+					$this->data [$modelname] ['name'] = $this->SwfUpload->filename;
+					$this->data [$modelname] ['size'] = $this->params ['form'] [$file_post_name] ['size'];
+					// $this->params['form'][$file_post_name]['path'] =
+					// $this->SwfUpload->webpath;
+					// fspath，thumb，mid_thumb 为相对路径
+					$this->data [$modelname] ['fspath'] = str_replace ( '\\', '/', $this->SwfUpload->relativeUrl . $this->SwfUpload->savename );
+					// $file_type =
+					$this->data [$modelname] ['type'] = $this->SwfUpload->file_type;
 					if ('image' == substr ( $this->data [$modelname] ['type'], 0, 5 )) {
-						$mid_thumb_url = str_replace ( '\\', '/', $this->request->webroot . $this->data [$modelname] ['mid_thumb'] );
-						
-						if (substr ( $this->data [$modelname] ['fspath'], 0, 7 ) != 'http://') {
-							$src_url = Router::url (str_replace ( '//', '/', $this->request->webroot . ($this->data [$modelname] ['fspath']) ));
-						} else {
-							$src_url = $this->data [$modelname] ['fspath'];
-						}
+						$this->data [$modelname] ['thumb'] = str_replace ( '\\', '/', $this->SwfUpload->relativeUrl . 'thumb_s' . DS . $this->SwfUpload->savename );
+						$this->data [$modelname] ['mid_thumb'] = str_replace ( '\\', '/', $this->SwfUpload->relativeUrl . 'thumb_m' . DS . $this->SwfUpload->savename );
 					}
-					$info ['message'] .= '</div>';
+					if (! ($file = $this->Uploadfile->save ( $this->data ))) {
+						$this->Session->setFlash ( 'Database save failed' );
+						$info ['message'] = $this->SwfUpload->filename . ' Database save failed'; // 保存记录时失败
+					} else {
+						
+						$info ['status'] = '1';
+						$file_id = $this->Uploadfile->getLastInsertId ();
+						$info ['fspath'] = $this->data [$modelname] ['fspath'];
+						$info ['file_id'] = $file_id;
+						$info ['message'] = '<div class="ui-upload-filelist" style="float:left;">';
+						
+						if (substr ( $this->data [$modelname] ['thumb'], 0, 7 ) != 'http://') {
+							$file_url = Router::url(str_replace ( '//', '/', $this->request->webroot . ($this->data [$modelname] ['thumb']) ));
+						} else {
+							$file_url = $this->data [$modelname] ['thumb'];
+						}
+						
+						if ('image' == substr ( $this->data [$modelname] ['type'], 0, 5 )) {
+							$info ['message'] .= '<img src="' . $file_url . '" width="100px" height="100px"/><br/>';
+						}
+						else{
+							$info ['message'] .='<a href="' . $file_url . '" target="_blank">'.$this->data [$modelname] ['name'].'</a>';
+						}
+						$info ['message'] .= '<input type="hidden" name="data[Uploadfile][' . $file_id . '][id]" value="' . $file_id . '">';
+						
+						if ('image' == substr ( $this->data [$modelname] ['type'], 0, 5 )) {
+							$mid_thumb_url = str_replace ( '\\', '/', $this->request->webroot . $this->data [$modelname] ['mid_thumb'] );
+							
+							if (substr ( $this->data [$modelname] ['fspath'], 0, 7 ) != 'http://') {
+								$src_url = Router::url (str_replace ( '//', '/', $this->request->webroot . ($this->data [$modelname] ['fspath']) ));
+							} else {
+								$src_url = $this->data [$modelname] ['fspath'];
+							}
+						}
+						$info ['message'] .= '</div>';
+					}
 				}
 			} else {
 				$info ['message'] = $this->SwfUpload->errorMessage;
@@ -107,8 +120,18 @@ class UploadfilesController extends AppController {
 		} else {
 			$info ['message'] = 'empty field name';
 		}
-		$result = json_encode ( $info );
-		echo $result;
+		if($_REQUEST['return']=='ckeditor'){
+			if($info ['status']){
+				echo '<script type="text/javascript">window.parent.CKEDITOR.tools.callFunction(2, "'.(UPLOAD_FILE_URL.$fileifo['fspath']).'", "");</script>';
+			}
+			else{
+				echo '<script type="text/javascript">window.parent.CKEDITOR.tools.callFunction(2, "", "'.$info ['message'].'");</script>';
+			}
+		}
+		else{
+			$result = json_encode ( $info );
+			echo $result;
+		}
 		exit ();
 	}
 }

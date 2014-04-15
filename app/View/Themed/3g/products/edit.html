@@ -1,0 +1,82 @@
+<div class="container">
+<style>
+body{
+	overflow-x:hidden;
+}
+</style>
+<h2><span class="title">编辑商品</span></h2>
+
+{{$this->Form->create('Product',array('action'=>'edit',$id),array('class'=>'form-horizontal','role'=>'form'))}}
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="ProductName">商品名称</label>
+		<div class="col-sm-9 controls">
+			{{$this->Form->hidden('id')}}
+			{{$this->Form->input('name',array('class'=>'form-control','div'=>false,'label'=>false))}}
+		</div>
+	</div>
+	<div class="form-group">
+		{{$this->Swfupload->load('coverimg',array('label'=>'封面图片','isadmin'=>false,'no_db'=>1,'upload_limit'=>1))}}
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="ProductPublished">是否上架</label>
+		<div class="col-sm-9 controls select">
+			{{$this->Form->input('published',array('class'=>'form-control','type'=>'select','options'=>array('0'=>'否','1'=>'是',),'div'=>false,'label'=>false))}}
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="ProductPrice">价格</label>
+		<div class="col-sm-9 controls number">
+			{{$this->Form->input('price',array('class'=>'form-control','div'=>false,'label'=>false))}}
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="ProductName">商品描述</label>
+		<div class="col-sm-9">
+			{{$this->Form->input('content',array('class'=>'form-control','div'=>false,'label'=>false,'type'=>'textarea'))}}
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="ProductName"></label>
+		<div class="col-sm-9"><input class="btn btn-primary" type="submit" value="提交"></div>
+	</div>
+{{$this->Form->end()}}
+
+{{$this->Html->script(array(
+	'ckeditor/ckeditor.js',
+	'swfupload/swfupload.js',
+	'swfupload/swfupload.queue.js',
+	'swfupload/swfupload.cookies.js',
+	'swfupload/fileprogress.js',
+	'swfupload/handlers.js',
+))}}
+<script>
+$(function(){
+	CKEDITOR.editorConfig = function( config ){
+		config.toolbar = 'FRONT';
+	}
+	ckeditors['ProductContent'] = CKEDITOR.replace( 'ProductContent',
+		    {
+		        customConfig : '{{$this->Html->url("/js/ckeditor/front-config.js")}}'
+		    });
+	ckeditors['ProductContent'].on('focus',function(e){
+		current_ckeditor_instance = e.editor;
+	});
+	
+
+	CKEDITOR.on( 'instanceReady', function( e ){
+		e.editor.document.appendStyleSheet( '{{$this->Html->url("/stylevars/getcss.css")}}' );
+		e.editor.document.appendStyleSheet( '{{$this->Html->url("/css/ui-customer.css")}}' );
+		//e.editor.setMode( 'source' );
+		e.editor.on( 'mode', function( e ){
+			if(e.editor.mode == 'wysiwyg'){
+				e.editor.document.appendStyleSheet( '{{$this->Html->url("/stylevars/getcss.css")}}' );
+				e.editor.document.appendStyleSheet( '{{$this->Html->url("/css/ui-customer.css")}}' );
+			}
+		});
+	});
+})
+</script>
+</div>

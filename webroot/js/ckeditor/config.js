@@ -10,7 +10,7 @@ CKEDITOR.editorConfig = function( config )
 	config.autoUpdateElement = true;
 	config.autoGrow_onStartup = false;
 	config.resize_enabled = false;
-	config.extraPlugins = 'safesave,flvPlayer,portlet,ajax'; //autogrow,
+	config.extraPlugins = 'flvPlayer,portlet,ajax'; //autogrow,safesave,
 	//removePlugins : 'resize';
 	
 	config.filebrowserBrowseUrl = ADMIN_BASEURL+'/admin/uploadfiles/filemanage';  
@@ -49,7 +49,7 @@ CKEDITOR.editorConfig = function( config )
 	
 	config.toolbar_CMS =
 	[
-	    ['Source','-','SafeSave','Bold','Italic','Underline','Strike','Font','-','TextColor','BGColor','-','Subscript','Superscript'],
+	    ['Source','-','Bold','Italic','Underline','Strike','Font','-','TextColor','BGColor','-','Subscript','Superscript'],
 	    ['NumberedList','BulletedList','-'],
 	    ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'], 
 	    ['Undo','Redo','-','Find','Replace','-','Maximize','SelectAll','RemoveFormat'],
@@ -59,6 +59,21 @@ CKEDITOR.editorConfig = function( config )
 	    ['Cut','Copy','Paste','PasteText','PasteFromWord'],
 	    ['Link','Unlink','Anchor'],
 	    ['Image','Flash','Portlet','flvPlayer','Table','HorizontalRule','SpecialChar','PageBreak'],	    
+	    ['-','SpellChecker', 'Scayt','-', 'ShowBlocks','Preview','About']	    
+	];
+	
+	config.toolbar_FRONT =
+	[
+	    ['Source','-','Bold','Italic','Underline','Strike','Font','-','TextColor','BGColor','-','Subscript','Superscript'],
+	    ['NumberedList','BulletedList','-'],
+	    ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'], 
+	    ['Undo','Redo','-','Find','Replace','-','Maximize','SelectAll','RemoveFormat'],
+	    [],
+	    '/',
+	    ['Styles','Format','FontSize'],
+	    ['Cut','Copy','Paste','PasteText','PasteFromWord'],
+	    ['Link','Unlink','Anchor'],
+	    ['Image','Table','HorizontalRule','SpecialChar','PageBreak'],	    
 	    ['-','SpellChecker', 'Scayt','-', 'ShowBlocks','Preview','About']	    
 	];
 	

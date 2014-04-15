@@ -9,8 +9,9 @@ td {padding:5px 10px;}
 		</p>
 		{{if $is_business}}
 		<ul class="nav nav-tabs">
-			<li {{if $current_action=='mine'}}class="active"{{/if}}><?php echo $this->Html->link('我的订单', array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?></li>
+			<li {{if $current_controller=='orders' && $current_action=='mine'}}class="active"{{/if}}><?php echo $this->Html->link('我的订单', array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?></li>
 	        <li {{if $current_action=='business'}}class="active"{{/if}}><?php echo $this->Html->link('商家订单', array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>
+	        <li {{if $current_controller=='products' && $current_action=='mine'}}class="active"{{/if}}><?php echo $this->Html->link('我的商品', array('controller' => 'products','action'=>'mine','plugin' => null ,)); ?></li>
 		</ul>
 		{{/if}}
 		<h2>商家订单</h2>

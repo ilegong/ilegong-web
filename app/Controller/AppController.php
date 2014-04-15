@@ -378,7 +378,9 @@ class AppController extends Controller {
         			$item = implode(',',$item); // 若提交的内容为数组，则使用逗号连接各项值保存到一个字段里
         		}
         	}
-            $this->data[$modelClass]['published'] = 1;
+        	if(!isset($this->data[$modelClass]['published'])){
+            	$this->data[$modelClass]['published'] = 1;
+        	}
             $this->data[$modelClass]['deleted'] = 0;
             $this->data[$modelClass]['creator'] = $this->currentUser['id'];
             
@@ -387,7 +389,7 @@ class AppController extends Controller {
             $this->{$modelClass}->create();
             if ($this->{$modelClass}->save($this->data)) {
                 $this->Session->setFlash(__('The Data has been saved'));
-                $this->redirect(array('action' => 'lists'));
+                $this->redirect(array('action' => 'mine'));
             } else {
                 $this->Session->setFlash(__('The Data could not be saved. Please, try again.'));
             }
@@ -424,6 +426,7 @@ class AppController extends Controller {
         }
         if (empty($this->data)) {
             $this->data = $datainfo;
+            $this->set('id',$id);
         }
     }
 

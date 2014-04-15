@@ -13,10 +13,13 @@ App::uses('CustomRouter', 'Lib');
 	CustomRouter::connect('/products/lists',
 			array('controller'=>'products','action' => 'lists')
 	);
-	CustomRouter::connect('/products/:slug',
-			array('controller'=>'products','action' => 'view'),
-			array('pass' => array('slug'))
+	CustomRouter::connect('/products/add',
+		array('controller'=>'products','action' => 'add')
 	);
+// 	CustomRouter::connect('/products/:slug',
+// 			array('controller'=>'products','action' => 'view'),
+// 			array('pass' => array('slug'))
+// 	);
 	CustomRouter::connect('/tag/:model/:id',
 			array('controller'=>'keywords','action' => 'lists'),
 			array('pass' => array('model','id'))
