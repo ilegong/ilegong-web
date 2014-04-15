@@ -84,10 +84,21 @@ class SwfuploadHelper extends FormHelper {
         elseif((isset($this->data[$param['modelClass']][$fieldname]) && !empty($this->data[$param['modelClass']][$file_post_name])) || !empty($param['value'])){
         	// 上传文件的地址保存到本模块对应的字段中，而非保存在Uploadfile里
         	if($param['value']){
-        		$file_url = str_replace('//','/',UPLOAD_FILE_URL.$param['value']);
+        		if(substr($param['value'],0,7) != 'http://'){
+        			$file_url = UPLOAD_FILE_URL.($param['value']);
+        		}
+        		else{
+        			$file_url = ($param['value']);
+        		}
+        		//$file_url = str_replace('//','/',UPLOAD_FILE_URL.$param['value']);
         	}
         	else{
-        		$file_url = str_replace('//','/',UPLOAD_FILE_URL.($this->data[$param['modelClass']][$file_post_name]));
+        		if(substr($this->data[$param['modelClass']][$file_post_name],0,7) != 'http://'){
+        			$file_url = UPLOAD_FILE_URL.($this->data[$param['modelClass']][$file_post_name]);
+        		}
+        		else{
+        			$file_url = $this->data[$param['modelClass']][$file_post_name];
+        		}
         	}
         	if(is_image($file_url)){
         		$listfile = '<a href="'.$file_url.'" title="'.__( 'Preview').'" target="_blank"><img src="'.$file_url.'" style="max-height:120px"/></a>';

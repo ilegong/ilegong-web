@@ -15,7 +15,7 @@ body{
 		</div>
 	</div>
 	<div class="form-group">
-		{{$this->Swfupload->load('coverimg',array('label'=>'封面图片','isadmin'=>false,'no_db'=>1,'upload_limit'=>1))}}
+		{{$this->Swfupload->load('coverimg',array('modelClass'=>'Product','label'=>'封面图片','isadmin'=>false,'no_db'=>1,'upload_limit'=>1))}}
 	</div>
 	<div class="form-group">
 		<label class="col-sm-2 control-label" for="ProductPublished">是否上架</label>
