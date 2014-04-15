@@ -69,7 +69,7 @@ class CategoriesController extends AppController {
 			$this->loadModel($data_model);
 			$pagesize = intval(Configure::read($data_model.'.pagesize'));
 			if(!$pagesize){
-				$pagesize = 15;
+				$pagesize = 30;
 			}
 			$this->{$data_model}->recursive = -1;
 			$conditions = array($data_model.'.deleted'=>0,$data_model.'.published'=>1);
