@@ -16,14 +16,14 @@ echo $this->MForm->create($current_model,array(
 <fieldset>
     	 
             <ul class="nav nav-tabs">
-                <li class="active"><a href="#article-main" data-toggle="tab"><span>{{__('Basic Info')}}</span></a></li>
+                <li class="active"><a href="#brand-main" data-toggle="tab"><span>{{__('Basic Info')}}</span></a></li>
             </ul>
             <div class="tab-content">
-                <div id="article-main" class="tab-pane active">
+                <div id="brand-main" class="tab-pane active">
                 	 <?php
                 	 	echo $this->MForm->input('id');
 						if($current_action=='admin_add'){
-				        	echo $this->MForm->input('name',array('size'=>'80','required'=>'required','onblur'=>"generateSlug(this,'#ArticleSlug')"));
+				        	echo $this->MForm->input('name',array('size'=>'80','required'=>'required','onblur'=>"generateSlug(this,'#BrandSlug')"));
 						}
 						else{
 							echo $this->MForm->input('name',array('size'=>'80','required'=>'required'));
@@ -36,34 +36,13 @@ echo $this->MForm->create($current_model,array(
 						echo $this->MForm->input('summary',array('rows' => '2', 'cols' => '80')); 
 					        
 				     ?>
-				     <div class="clearfix"></div>
 				  <?php
-					echo $this->MForm->titleImage('Article.coverimg'); 
-					echo $this->MForm->swfupload('photo','Article');
+					echo $this->MForm->titleImage('Brand.coverimg'); 
+					echo $this->MForm->swfupload('photo','Brand');
 					echo $this->MForm->selectAssoc('Tag');
 					echo $this->MForm->ckeditor('content',array('div'=>false,'label' => false));
 				  ?>
                 </div>
-                
-                 <div id="article-seo"  class="tab-pane">
-	                 	<?php
-					        echo $this->MForm->input('seotitle',array('rows' => '2', 'cols' => '80')); 
-					        echo $this->MForm->input('seodescription',array('rows' => '5', 'cols' => '80'));
-					        echo $this->MForm->input('seokeywords',array('rows' => '5', 'cols' => '80'));
-					    	?>
-                 </div>
-                 <div id="article-publishing"  class="tab-pane">
-                 	<?php
-                 	echo $this->MForm->input('subtitle');
-                 	echo $this->MForm->input('authorname');
-				    echo $this->MForm->input('origin');	
-                   
-                    //echo $this->MForm->input('promote', array('label' => __('Promoted to front page', true)));                   
-                    echo $this->MForm->input('created');
-                	?>
-                	<?php echo $this->MForm->swfupload('video','Article'); ?>
-                 </div> 
-                 {{$this->Layout->getLanguageTabContent($current_model)}}          	
        </div>
  
     </fieldset>
@@ -74,9 +53,9 @@ echo $this->MForm->create($current_model,array(
 <script>
 	$(document).ready(function(){		 
 		$('#btnsubmit').click(function(){		
-			var oEditor = CKEDITOR.instances.ArticleContent;
+			var oEditor = CKEDITOR.instances.BrandContent;
 			var content = oEditor.getData();
-			$('#ArticleContent').val(content);
+			$('#BrandContent').val(content);
 			if(typeof(before_submit)=="function"){
 				if(before_submit()==false)
 					return false;

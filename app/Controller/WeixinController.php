@@ -25,23 +25,20 @@ class WeixinController extends AppController {
 		exit;
 	}
 	
-	private function valid()
+	public function valid()
 	{
 		$echoStr = $_GET["echostr"];
 		if($this->checkSignature()){
 			echo $echoStr;
 		}else{
 			echo "invalid request: echo=$echostr";
+			CakeLog::error("invalid request: echo=$echostr");
 		}
 	}
 
 	private function responseMsg()
 	{
-		
-		
 		$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
-
-		
 		if (!empty($postStr))
 		{
 			$ret = xml_to_array($postStr);
