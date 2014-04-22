@@ -1,4 +1,4 @@
-<header class="navbar navbar-inverse bs-docs-nav" role="banner">
+<header class="navbar navbar-default" role="banner">
 <div class="container">
 	<div class="navbar-header">
       <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
@@ -26,25 +26,55 @@
 	
 	<ul class="nav navbar-nav pull-right">                        
                     <li class="dropdown">
-                        <a id="item-count" href="{{$this->Html->url(array('controller'=>'carts','action'=>'listcart'))}}"><i class="icon-shopping-cart"></i>&nbsp;购物车&nbsp;<span class="label label-danger">2</span></a>                                
+                        <a id="item-count" href="{{$this->Html->url(array('controller'=>'carts','action'=>'listcart'))}}"><i class="glyphicon glyphicon-shopping-cart"></i>&nbsp;购物车&nbsp;<span class="label label-danger"></span></a>                                
                     </li>
-                    <li class="dropdown">
-                    	{{$this->Hook->call('oauthLoggedInfo')}}
-                        {{$this->Html->link($CurrentUser['nickname'].'<b class="caret"></b>', '/users/account', array('title' => 'view your account',"class"=>"dropdown-toggle","data-toggle"=>"dropdown",'escape'=>false)); }}
-                        <ul class="dropdown-menu">
-							<li><?php echo $this->Html->link(lang('edit_profile'), array('controller' => 'users','action'=>'edit','plugin' => null ,)); ?></li>
-							<li><?php echo $this->Html->link(lang('edit_password'), array('controller' => 'users','action'=>'editpassword','plugin' => null ,)); ?></li>
-                            <li><?php echo $this->Html->link(lang('user_orders'), array('controller' => 'users','action'=>'orders','plugin' => null ,)); ?></li>
-                            
-                            {{if (empty($CurrentUser['status']))}}
-								<li class="activate link">
-									{{eval echo $this->Html->link(lang('activate_user'), array(
-										'controller' => 'users', 'action' => 'activate'
-										), array('title' => 'activate your account')); }}
-								</li>
-							{{/if}}
-							<li><?php echo $this->Html->link(__('我的地址'), array('controller' => 'orders','action'=>'edit_consignee','plugin' => null ,)); ?></li>
-                            <!-- 
+                    
+                    	{{if (!empty($CurrentUser))}}
+			<li class="dropdown">
+				 {{$this->Html->link($CurrentUser['nickname'].'<b class="caret"></b>', '#', array('title' => 'view your account',"class"=>"dropdown-toggle","data-toggle"=>"dropdown",'escape'=>false)); }}
+				 <ul class="dropdown-menu">
+				 	<li><?php echo $this->Html->link('<i class="glyphicon glyphicon-user"></i>'.lang('edit_profile'), array('controller' => 'users','action'=>'edit','plugin' => null ,),array('escape'=>false)); ?></li>
+					<li><?php echo $this->Html->link('<i class="fa fa-lock"></i>'.lang('edit_password'), array('controller' => 'users','action'=>'editpassword','plugin' => null ,),array('escape'=>false)); ?></li>
+                    <li><?php echo $this->Html->link('<i class="glyphicon glyphicon-folder-close"></i>'.lang('user_orders'), array('controller' => 'users','action'=>'orders','plugin' => null ,),array('escape'=>false)); ?></li>
+                          
+                          {{if (empty($CurrentUser['status']))}}
+					<li class="activate link">
+							{{eval echo $this->Html->link(lang('activate_user'), array(
+								'controller' => 'users', 'action' => 'activate'
+								), array('title' => 'activate your account')); }}
+					</li>
+					{{/if}}
+					<li><?php echo $this->Html->link(__('<i class="glyphicon glyphicon-map-marker"></i>我的地址'), array('controller' => 'orders','action'=>'edit_consignee','plugin' => null ),array('escape'=>false)); ?></li>
+                       
+                    <li>{{$this->Html->link('<i class="glyphicon glyphicon-log-out"></i>退出登录', '/users/logout', array('title' => 'logout your account','escape'=>false))}}</li> 
+				</ul>
+			</li>
+	{{else}}
+			<?php $oauthlogin = $this->Hook->call('oauthLoginLink'); ?>
+			{{if $oauthlogin}}
+			<li>
+			{{eval echo $this->Html->link(lang('login').'<b class="caret"></b>', array(				
+				'controller' => 'users', 'action' => 'login','ext'=>false				
+			),array('onclick'=>"return publishController.open_dialog(this.href,{title:'登录'});","class"=>"dropdown-toggle","data-toggle"=>"dropdown")); }}
+				<ul class="dropdown-menu">
+					{{$oauthlogin}}	
+				</ul>
+			</li>
+			{{else}}
+				<li>
+				{{eval echo $this->Html->link(lang('login'), array(				
+					'controller' => 'users', 'action' => 'login','ext'=>false				
+				),array('onclick'=>"return publishController.open_dialog(this.href,{title:'登录'});")); }}
+				</li>
+			{{/if}}
+			<li>
+			{{eval echo $this->Html->link(lang('register'), array(
+				'controller' => 'users', 'action' => 'register'
+			),array('onclick'=>"return publishController.open_dialog(this.href,{title:'注册',width:650});")); }}
+			</li>		
+			
+	{{/if}}
+	   <!-- 
       {{if defined('APPEND_LOCALE_BASE')}}
       	{{$this->Html->link('简体','/../')}}, {{$this->Html->link('繁體','/../zh-tw/')}}
       {{else}}
@@ -53,11 +83,7 @@
 		<div>
 		{{$this->Html->link('购物车','/carts/listcart.html')}}
 		</div>
-	-->
-                            <li>{{$this->Html->link('退出登录', '/users/logout', array('title' => 'logout your account','escape'=>false))}}</li> 
-                        </ul>                                                            
-                    </li>
-                                                        
+	-->                     
     </ul>
     </nav>
 </div>

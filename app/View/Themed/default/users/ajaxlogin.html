@@ -38,7 +38,7 @@ function user_login_callback(request)
 {
 	if(request.success){
 		$("#"+sso.dialogid).dialog("close");
-		sso.usercookie=$.cookie("SAECMS[User]");
+		sso.usercookie=$.cookie("MIAOCMS[User]");
 	}
 	if(sso.form){
 		$(sso.form).trigger("submit");

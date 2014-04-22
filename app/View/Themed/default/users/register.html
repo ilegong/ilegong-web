@@ -1,53 +1,49 @@
-{{$this->Form->create('User',array('id'=>'registerform','method'=>"post"))}}
-<div class="c cl" id="layer_reg" fwin="register">
-	<input type="hidden" value="yes" name="regsubmit"> <input
-		type="hidden" value="319a8865" name="formhash">
-	<input type="hidden" value="register" name="handlekey"><input
-		type="hidden" value="" name="activationauth">
-	<div class="lgfm">
-		<div id="reginfo_a" fwin="register">
-			<p>
-			<label><em>{{__('User Name')}}:</em></label>{{$this->Form->input('username',array('div'=>false,'label'=>
-					false,'class'=>'txt','onblur'=>"checkusername()",'maxlength'=>"15",'size'=>"25"))}}
-					*
-			</p>
-			<p>		<label><em>{{__('Password')}}:</em></label>{{$this->Form->input('password',array('div'=>false,'label'
-					=> false,'class'=>'txt','onkeypress'=>"detectCapsLock(event,
-					this)",'type'=>'password','maxlength'=>"15",'size'=>"25"))}} * 
-			</p>
-			<p>
-		<label><em>{{__('Confirm Password')}}:</em></label>{{$this->Form->input('password_confirm',array('div'=>false,'label'
-					=> false,'class'=>'txt','onkeypress'=>"detectCapsLock(event,
-					this)",'type'=>'password','maxlength'=>"15",'size'=>"25"))}} * 
-			</p>
-			<p>	
-		<label><em>{{__('Email')}}:</em></label><input
-					type="text" class="txt" tabindex="1" onblur="checkemail()"
-					id="email" size="25" autocomplete="off" name="email"
-					fwin="register"> *
-			</p>
-		</div>
-		<div style="display: none;" id="reginfo_b" fwin="register"></div>
-	</div>
-	<div class="lgf minf">
-		<h4>{{__('Have account?')}} &nbsp; {{$this->Html->link(__('Login'), array('controller' => 'users','action' => 'login' ),
-			array('onclick'=>"return publishController.open_dialog(this.href,{title:'注册',width:650});"))}}</h4>
-		<div>{{$this->Hook->call('oauthLoginLink')}}</div>
-	</div>
+<div class="sign-form">
+     <div class="sign-inner">
+                <h3 class="first-child">{{lang('Create New Account')}}</h3>
+                <hr>
+                <form role="form" id="registerform">
+                  
+                  <div class="form-group">
+                    <input type="text" data-original-title="Username" data-content="Enter your nickname here." data-trigger="focus" data-placement="left" data-toggle="popover" placeholder="Username" name="data[User][username]" required="required" size="25" maxlength="15" onblur="checkusername()"  id="username" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <input type="email" onblur="checkemail()" data-original-title="Email" data-content="Enter a valid email here." data-trigger="focus" data-placement="left" data-toggle="popover" placeholder="Enter email" name="data[User][email]"  id="email" class="form-control">
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <input type="password" data-original-title="Password" data-content="Enter a good password here." data-trigger="focus" data-placement="left" data-toggle="popover" placeholder="Password" id="password"  class="form-control margin-bottom-xs" maxlength="15" onkeypress="detectCapsLock(event, this)" name="data[User][password]">
+                      </div>
+                      <div class="col-sm-6">
+                        <input type="password" data-original-title="Repeat Password" data-content="Confirm your password here." data-trigger="focus" data-toggle="popover" placeholder="Repeat Password" id="repeat-password" class="form-control" maxlength="15" onkeypress="detectCapsLock(event, this)" name="data[User][password_confirm]">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="checkbox">
+                    <label>
+                      <input type="checkbox"> I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                    </label>
+                  </div>
+                  <button class="btn btn-red" type="submit">{{__('Register')}}</button>
+                </form>
+                <hr>
+            <div class="">
+				<h4>{{__('Have account?')}} &nbsp; {{$this->Html->link(__('Login'), array('controller' => 'users','action' => 'login' ),
+					array('onclick'=>"return publishController.open_dialog(this.href,{title:'注册',width:650});"))}}</h4>
+				<div>{{$this->Hook->call('oauthLoginLink')}}</div>
+			</div>
+            <div>{{$this->Hook->call('oauthLoginLink')}}</div>
+     </div>
+     
 </div>
-<p class="fsb pns cl" id="layer_reginfo_b" fwin="register">
-	<span id="reginfo_a_btn" fwin="register"> <em>&nbsp;</em>
-	<button tabindex="1" value="true" name="regsubmit" type="submit"
-			id="registerformsubmit" class="pn btn-primary btn pnc" fwin="register">
-			<span>{{__('Register')}}</span>
-		</button>
-	</span>
-</p>
-</form>
+            
+
 
 <script  type="text/javascript">
 $(function(){
-	$('#UserUsername').focus();
+	$('#username,#email,#password,#repeat-password').popover();
+	$('#username').focus();
 })
 var profile_username_toolong = '用户名超过 15 个字符';
 var profile_username_tooshort = '用户名小于3个字符';
@@ -59,7 +55,7 @@ function errorhandle_register(msg, values) {
 }
 
 function checkusername() {
-	var username = trim($('username').value);
+	var username = trim($('#username').value);
 	if(username == '' || username == lastusername) {
 		return;
 	} else {
