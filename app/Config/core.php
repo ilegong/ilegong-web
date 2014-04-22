@@ -117,7 +117,7 @@ Cache::config('default', array(
             'serialize' => true,
         ));
 // UCenter config
-
+/*
 if(defined('SAE_MYSQL_DB')){ // in sae
 	define('UC_CONNECT', 'POST');
 // 	define('UC_DBHOST', 'w.rdc.sae.sina.com.cn:3307');
@@ -134,3 +134,4 @@ if(defined('SAE_MYSQL_DB')){ // in sae
 	define('UC_APPID', '2');
 	define('UC_PPP', '20');
 }
+*/
