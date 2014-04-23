@@ -15,7 +15,7 @@
 @charset "utf-8";
 /*css reset*/
 * {margin:0;padding:0; font-family:'Microsoft Yahei','Simsun';}
-body{-webkit-text-size-adjust: none;}
+.container{max-width:350px;margin:0 auto;}
 img {max-witdh:95%;}
 .thumbnail{position:relative;overflow:hidden;height:115px}
 
@@ -34,7 +34,7 @@ img {max-witdh:95%;}
   cursor: pointer;
   opacity: 0.9;
 }
-.nav-pills > li > a { border-radius: 0; color: #fff; padding: 13px 15px;};
+.nav-pills > li > a { border-radius: 0; color: #fff; padding: 13px 8px;};
 </style>
 {{$this->Html->script(array(
             'jquery/jquery.min.js',
@@ -50,6 +50,7 @@ var ADMIN_BASEURL = BASEURL+"/manage";
 </head>
 <body>
 <!--页头信息-->
+
 {{template menus/bootstrap}}
 
 <!--

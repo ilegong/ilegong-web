@@ -35,7 +35,6 @@ function SetDefaultAddress(obj,id){
 }
 rs_callbacks.editConsignee = function(request){
 	$('#consignee_addr').show();
-	$('#address-chose').hide();
 	$('#consignee_address').show();
 	for(var i in request){
 		$('#consignee_'+i).val(request[i])
@@ -57,11 +56,7 @@ function editConsignee(obj,id){
 	ajaxAction(BASEURL+"/orders/load_consignee/"+id,null,null,'editConsignee');	
 	return false;
 }
-//选择地址
-function chose_Consignee(id) {
-	$('#edit_type').val('select');
-	$("#consignee_addr").hide();
-}
+
 //新增地址
 function use_NewConsignee(){
 	$('#edit_type').val('new');
@@ -74,11 +69,6 @@ function use_NewConsignee(){
 	$('#consignee_telephone').val('');
 	$('#consignee_email').val('');
 	$('#consignee_postcode').val('');	
-	
-	$('#address-chose').show();
-	$('#consignee_address').val($('#address-chose').val()).hide();
-	
-	
 }
 /**********************************************************************/
 

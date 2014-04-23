@@ -1,4 +1,5 @@
 <header class="navbar-inverse" role="banner">
+	<div class="container">
 	<div class="pull-left" style="padding:5px 5px 5px 10px;" >      
       <a href="{{$this->Html->url(Configure::read('Site.logo_url'))}}" >{{$this->Html->image($this->Html->url(Configure::read('Site.logo')), array('style'=>'height:35px;','title' => $site[title],'alt' => $site[title]))}}</a>
     </div>
@@ -35,4 +36,5 @@
 	?>
 	
     </nav>
+    </div>
 </header> 
