@@ -245,6 +245,32 @@ class UsersController extends AppController {
             $this->redirect(array('action' => 'login'));
         }
     }
+    
+
+    function editusername() {
+    	$userinfo = $this->Auth->user();
+    	if (!$userinfo['id']) {
+    		$this->Session->setFlash(__('You are not authorized to access that location.', true));
+    		$this->redirect(array('action' => 'login'));
+    	}
+    	if (!empty($this->data) && !empty($this->data['User']['username']) && !empty($this->data['User']['password'])) {    			
+    				$user = array();
+    				$user['User']['id'] = $userinfo['id'];
+    				$user['User']['username'] = $this->data['User']['username'];
+    				$user['User']['password'] = Security::hash($this->data['User']['password'], null, true);
+    				$user['User']['activation_key'] = md5(uniqid());
+    
+    				if ($this->User->save($user['User'])) {
+    					$this->Session->setFlash(__('成功设置用户名与密码'));
+    				}
+    				else {
+    					$this->Session->setFlash(__('设置用户名与密码失败', true));
+    				}
+    	} else {
+    		$this->Session->delete('Message.flash');
+    	}
+    }
+    
 
     function editpassword() {
         $userinfo = $this->Auth->user();
