@@ -327,11 +327,6 @@ var publishController = {
 			//}
 			// modal的left，top距离都是50%，通过设置margin-left,margin-topd的值为modal宽高一半的负数，
 			// 左右居中
-			if(options.width){
-				$('#'+$dialog.dialogid).width(options.width);
-				$('#'+$dialog.dialogid).css('margin-left',-options.width/2);
-			}
-			
 			return false;
 		},
 		load_url:function(url){
