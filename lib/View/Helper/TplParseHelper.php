@@ -535,7 +535,7 @@ class TplParseHelper  extends AppHelper {
 			?>';
 		
 		// 若list_tpl的值为inner，则使用$innertext的内容来作为列表项模板;否则将$innertext内容放在列表之前。
-		$body =($params['list_tpl']=='inner'?'': $innertext).'{{loop $data_array $key $item_all}}<?PHP  $item = $item_all[\'' . $region_model_name . '\']; ?>'.
+		$body =($params['list_tpl']=='inner'?'': $innertext).'{{loop $data_array $key $item_all}}<?PHP  $item = $item_all[\'' . $region_model_name . '\'];$item[\'slug\'] = $item[\'slug\']?$item[\'slug\']:$item[\'id\']; ?>'.
 				($params['list_tpl']=='inner'? $innertext:'{{template name="' . $tempname . '" plugin="' . $plugin . '"}}')
 				.'{{/loop}}'; /* <?php echo $region_page_navi; ?> */
 		
@@ -622,7 +622,7 @@ class TplParseHelper  extends AppHelper {
 			$region_control_name = \'' . $region_control_name . '\';
 			$region_model_name = \'' . $region_model_name . '\';
 			?>';
-            $body = '{{loop $data_array $key $item_all}}<?PHP  $item = $item_all[\'' . $region_model_name . '\']; ?>'
+            $body = '{{loop $data_array $key $item_all}}<?PHP  $item = $item_all[\'' . $region_model_name . '\'];$item[\'slug\'] = $item[\'slug\']?$item[\'slug\']:$item[\'id\']; ?>'
 					.'{{template name="' . $tempname . '" plugin="' . $plugin . '"}}'
 				.'{{/loop}}';/* <?php echo $page_navi; ?> */
         } else {

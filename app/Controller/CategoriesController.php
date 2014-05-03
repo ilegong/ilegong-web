@@ -79,7 +79,7 @@ class CategoriesController extends AppController {
 				$orderby = $data_model.'.recommend desc,id desc';
 			}
 			else{
-				$orderby = $data_model.'created desc';
+				$orderby = $data_model.'.created desc';
 			}
 			if(!empty($this->request->query)){
 				$conditions = getSearchOptions($this->request->query,$data_model);
