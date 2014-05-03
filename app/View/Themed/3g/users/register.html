@@ -1,5 +1,4 @@
 <div class="container clearfix">
-	<div class="well">注册信息会同步到<a href="http://www.51daifan.com/">51带饭</a>论坛</div>
 {{$this->Form->create('User',array('id'=>'registerform','class'=>'form-horizontal','method'=>"post"))}}
 	<div class="c cl" id="layer_reg" fwin="register">
 	<input type="hidden" value="yes" name="regsubmit">
@@ -10,12 +9,6 @@
 			    <label for="username" class="col-xs-3 control-label">用户名</label>
 			    <div class="col-xs-9">
 			      <input type="text" require="true" id="username" name="data[User][username]" class="form-control" placeholder="用户名">
-			    </div>
-			</div>
-			<div class="form-group">
-			    <label for="email" class="col-xs-3 control-label">邮箱</label>
-			    <div class="col-xs-9">
-			      <input type="email" require="true" id="email" name="data[User][email]" class="form-control" placeholder="邮箱">
 			    </div>
 			</div>
 			<div class="form-group">

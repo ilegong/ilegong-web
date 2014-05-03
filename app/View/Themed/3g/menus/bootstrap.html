@@ -4,7 +4,7 @@
       <a href="{{$this->Html->url(Configure::read('Site.logo_url'))}}" >{{$this->Html->image($this->Html->url(Configure::read('Site.logo')), array('style'=>'height:35px;','title' => $site[title],'alt' => $site[title]))}}</a>
     </div>
     <div class="pull-right dropdown" style="padding:13px 15px;">      
-     {{if (!empty($CurrentUser))}} 
+     {{if !empty($CurrentUser)}} 
      	<?php 
 			if(strlen($CurrentUser['username'])>18){ $CurrentUser['username'] = substr($CurrentUser['username'],10,8); }
 
@@ -16,7 +16,7 @@
             <li><a href="{{$this->Html->url('/users/logout')}}">退出登录</a></li>
         </ul>
      {{else}}
-     		
+     	<a href="{{$this->Html->url('/users/register')}}">注册</a>
      {{/if}}
     </div>
     
