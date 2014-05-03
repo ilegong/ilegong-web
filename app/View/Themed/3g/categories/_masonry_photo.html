@@ -8,7 +8,7 @@
 			'onerror'=>'this.src="/img/products_nophoto.jpg";',
 			)); }}
          <!-- <div class="select-item" style="display: none;">
-			<p><span class="glyphicon glyphicon-ok" style="color:#5e8a2f; font-size:22px;"></span>å·²é€‰</p>
+			<p><span class="glyphicon glyphicon-ok" style="color:#5e8a2f; font-size:22px;"></span>ÒÑÑ¡</p>
 	 	 </div>  -->
      </a>
      <div class="text-left">
@@ -19,9 +19,9 @@
      	
      	<div>
      		<div class="food-info pull-right">
-             <strong>Â¥{{$item['price']}}</strong>                                     
+             <strong>£¤{{$item['price']}}</strong>                                     
      		</div>
-     		<a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">{{if $item['promote_name']}}{{$item['promote_name']}}{{else}}å·²å”®({{$item['saled']}})ã€è¯„è®º({{$item['comment_nums']}}){{/if}}</a>
+     		<a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">{{if $item['promote_name']}}{{$item['promote_name']}}{{else}}ÒÑÊÛ({{$item['saled']}})¡¢ÆÀÂÛ({{$item['comment_nums']}}){{/if}}</a>
      	</div>
      </div>
      {{else}}
