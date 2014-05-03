@@ -23,11 +23,12 @@
 	</div>
 	
 	<div class="row">		
-		<div class="ui-contain col-md-8">
+		<div class="ui-contain col-md-9">
 			<portlet title="{{$Category['Category']['name']}}"><div class="Content-body">{{$Category['Category']['content']}} </div>
 <?PHP if($total>0){ ?>
-<ul class="clearfix portlet-content-list">
+<ul class="clearfix categories-item-list">
     <?PHP foreach($Category['datalist'] as $item) {
+		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
     ?>	
 		{{include $Category['Category']['template']}}			
 	<?php } ?>
@@ -35,7 +36,7 @@
 	{{$page_navi}}
 <?php } ?></portlet>
 		</div>
-		<div class="ui-contain col-md-4">
+		<div class="ui-contain col-md-3">
 			<portlet title="{{$top_category_name}}" list_tpl="regions/_list">{{$this->Section->getLeftMenu('Category',array('parent_id'=> $top_category_id,'selectedid'=>$current_cateid))}}</portlet>
 			<portlet  title="新闻热门排行" list_tpl="regions/_titlelist" limit="8" custom_class="portlet-title-list" model="Article" recursive="-1" order="views_count desc" portlet="default" info="recursive=-1&amp;fields%5B0%5D=Article.name&amp;fields%5B1%5D=Article.slug&amp;fields%5B2%5D=Article.created&amp;order=views_count+desc"></portlet>
 		</div>
@@ -50,7 +51,7 @@
 	
 	<script>	
 	$(function(){		 
-		    var $container = $('#portlet-30 .portlet-content-list');  
+		    var $container = $('.categories-item-list');  
 		    $container.imagesLoaded( function(){
 		      $container.masonry({
 		        itemSelector: '.list-item-photo',
@@ -69,7 +70,7 @@
 			    animate: true,extraScrollPx:-200, // 回退一段，图片加载补上的缺位需要上移才能看到。
 			    navSelector  : "div.pagelink", // selector for the paged navigation (it will be hidden)
 			    nextSelector : "div.pagelink a:first",  // selector for the NEXT link (to page 2)
-			    itemSelector : "#portlet-30 .list-item-photo"  // selector for all items you'll retrieve
+			    itemSelector : ".list-item-photo"  // selector for all items you'll retrieve
 		  	},
 		    function(newElements) { // call masonry as a callback.
 		        var $newElems = $(newElements);

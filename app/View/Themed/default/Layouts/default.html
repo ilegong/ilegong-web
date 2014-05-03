@@ -23,7 +23,7 @@
             'front.js',
             'common.js',
             //'jquery/jquery-migrate-1.2.1.min.js',
-             //'taobao/taobaoke.js','jquery/jquery.masonry.min.js','jquery/jquery.infinitescroll.min.js',
+            //'taobao/taobaoke.js','jquery/jquery.masonry.min.js','jquery/jquery.infinitescroll.min.js',
             //'jquery/jquery.jgrowl.min.js'
         ));
 }}
@@ -34,32 +34,6 @@
 {{$this->Html->script(array('jquery/jquery-migrate-1.2.1.min.js'))}}
 <![endif]-->
 
-{{if !empty($_SESSION['Auth']['Staff']) }}
-<!-- 当为后台登陆后，才加载jquery ui，与模板编辑的js -->
-{{$this->Html->css(array(
-	'edit_template',))}}
-	
-{{$this->Html->script(array(
-			'jquery/jquery.jgrowl.min.js',
-            'jquery/jquery-ui-1.10.3.custom.min.js',           
-            'portlet.js', 'bootstrap-colorpicker.min.js',   
-            'ckeditor/ckeditor.js',
-            'swfupload/swfupload.js',
-            'swfupload/swfupload.queue.js',
-			'swfupload/swfupload.cookies.js',
-            'swfupload/fileprogress.js',
-            'swfupload/handlers.js',       
-        ));
-}}
-<script type="text/javascript">
-var viewFileName = "{{$viewfile_for_layout}}";
-var current_controller = "{{$current_controller}}";
-var current_model = "{{$current_model}}";
-var current_url = "{{$current_model}}";
-var current_action = "{{$current_action}}";
-var current_pass = "{{implode('/',$current_pass)}}";
-</script>
-{{/if}}
 <script type="text/javascript">
 var BASEURL = "{{APP_SUB_DIR}}";
 var ADMIN_BASEURL = BASEURL+"/manage";
