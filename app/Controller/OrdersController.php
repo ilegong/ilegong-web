@@ -449,7 +449,7 @@ class OrdersController extends AppController{
 			else{
 				$ship_code = $_REQUEST['ship_code'];
 				$ship_type = $_REQUEST['ship_type'];
-				$this->Order->updateAll(array('status'=>$status,'ship_code'=>$ship_code,'ship_type'=>$ship_type),array('id'=>$order_id));				
+				$this->Order->updateAll(array('status'=>$status,'ship_code'=>"'".addslashes($ship_code)."'",'ship_type'=>$ship_type),array('id'=>$order_id));				
 				echo json_encode(array('order_id'=>$order_id,'msg'=>'订单状态已更新为“已发货”'));
 				exit;
 			}
