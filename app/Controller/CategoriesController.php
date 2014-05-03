@@ -73,8 +73,13 @@ class CategoriesController extends AppController {
 			}
 			$this->{$data_model}->recursive = -1;
 			$conditions = array($data_model.'.deleted'=>0,$data_model.'.published'=>1);
+			$orderby = '';
 			if($data_model=='Product'){
 				$conditions[$data_model.'.recommend >'] = 0;
+				$orderby = $data_model.'.recommend desc,id desc';
+			}
+			else{
+				$orderby = $data_model.'created desc';
 			}
 			if(!empty($this->request->query)){
 				$conditions = getSearchOptions($this->request->query,$data_model);
@@ -83,7 +88,7 @@ class CategoriesController extends AppController {
 				$conditions[$data_model.'.cate_id'] = $current_cateid;
 				$datalist = $this->{$data_model}->find('all', array(
 						'conditions' => $conditions,
-						'order' => $data_model.'.updated desc',
+						'order' => $orderby,
 						'limit' => $pagesize,
 						'page' => $page,));
 				if ($page == 1 && count($datalist) < $pagesize) {
