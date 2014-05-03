@@ -35,7 +35,7 @@
 				 <ul class="dropdown-menu">
 				 	<li><?php echo $this->Html->link('<i class="glyphicon glyphicon-user"></i>'.lang('edit_profile'), array('controller' => 'users','action'=>'edit','plugin' => null ,),array('escape'=>false)); ?></li>
 					<li><?php echo $this->Html->link('<i class="fa fa-lock"></i>'.lang('edit_password'), array('controller' => 'users','action'=>'editpassword','plugin' => null ,),array('escape'=>false)); ?></li>
-                    <li><?php echo $this->Html->link('<i class="glyphicon glyphicon-folder-close"></i>'.lang('user_orders'), array('controller' => 'users','action'=>'orders','plugin' => null ,),array('escape'=>false)); ?></li>
+                    <li><?php echo $this->Html->link('<i class="glyphicon glyphicon-folder-close"></i>'.lang('user_orders'), array('controller' => 'orders','action'=>'mine','plugin' => null ,),array('escape'=>false)); ?></li>
                           
                           {{if (empty($CurrentUser['status']))}}
 					<li class="activate link">
