@@ -1,0 +1,72 @@
+<style>
+td {padding:5px 10px;}
+</style>
+<div  class="container">
+	<div class="orderinfo">
+		<div class="o_show">
+		<p>
+		     您好，{{$CurrentUser['username']}}! 您的用户编号是:{{$CurrentUser['id']}}
+		</p>
+		{{if $is_business}}
+		<ul class="nav nav-tabs">
+			<li {{if $current_controller=='orders' && $current_action=='mine'}}class="active"{{/if}}><?php echo $this->Html->link('我的订单', array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?></li>
+	        <li {{if $current_action=='business'}}class="active"{{/if}}><?php echo $this->Html->link('商家订单', array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>
+	        <li {{if $current_controller=='products' && $current_action=='mine'}}class="active"{{/if}}><?php echo $this->Html->link('我的商品', array('controller' => 'products','action'=>'mine','plugin' => null ,)); ?></li>
+		</ul>
+		{{/if}}
+		<h2>我的订单</h2>
+		<font color="red">51daifan收款方式支付宝：v51daifan@163.com,收款人：张佩龙</font>
+		{{loop $orders $order}}
+		<table  class="table table-bordered">
+		<tr>
+			<td>
+			收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
+			总价：￥{{$order['Order']['total_price']}}<br/>
+			下单时间：{{$order['Order']['created']}}<br/>
+			{{if $order['Order']['ship_type']}}	
+			快递公司: {{$ship_type[$order['Order']['ship_type']]}} ,&nbsp;&nbsp; 快递单号：{{$order['Order']['ship_code']}}
+			{{/if}}<br/>
+			<div id="order-status-{{$order['Order']['id']}}">
+			<font color="red">
+			{{if $order['Order']['status']==0}}订单已生成,等待付款
+			{{elseif $order['Order']['status']==1}}订单已支付
+			{{elseif $order['Order']['status']==2}}
+				<font color="red">订单已发货</font>
+				<div class="well">
+					<button type="button" onclick="confirm_receive({{$order['Order']['id']}});" class="btn btn-primary">确认已收货</button>
+				</div>
+			{{elseif $order['Order']['status']==3}}订单已收货
+			
+			{{elseif $order['Order']['status']==4}}订单已退款
+			
+			{{elseif $order['Order']['status']==9}}订单已完成
+			{{elseif $order['Order']['status']==10}}订单已作废
+			{{elseif $order['Order']['status']==11}}订单已确认有效
+			{{elseif $order['Order']['status']==12}}订单已投诉			
+			{{/if}}
+			</font>
+			</div>
+			</td>			
+		</tr>
+		{{if !empty($order_carts[$order['Order']['id']])}}
+		<tr><td>
+			<table  class="table table-bordered">
+				<tr><th width="50%">商品名称</th><th>价格</th><th>数量</th><th>合计</th></tr>
+				<tbody>
+				{{loop $order_carts[$order['Order']['id']] $cart}}
+				<tr><td>{{$cart['Cart']['name']}}</td>
+				<td>￥{{$cart['Cart']['price']}}</td>
+				<td>{{$cart['Cart']['num']}}</td>
+				<td>￥{{$cart['Cart']['price']*$cart['Cart']['num']}}</td>		
+				</tr>
+				{{/loop}}
+				</tbody>
+			</table>
+		</td></tr>
+		{{/if}}
+		</table>
+		{{/loop}}
+		
+		</div>			
+	</div>
+</div>
