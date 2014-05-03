@@ -185,8 +185,8 @@ $(function () {
 </script>';
         $this->_View->append('bottomscript',$script);
 		return $hidden.'
-        <div class="form-group swfupload-control" >
-				<label class="col-sm-2 control-label">'.$param['label'].'</label>'.
+        <div class="form-group swfupload-control" >'.
+				($param['label']?'<label class="col-sm-2 control-label">'.$param['label'].'</label>':'').
 				'<div class="col-sm-10 controls"><span id="spanButtonPlaceholder_'.$fieldid.'"></span>(10MB max)'.$param['after'].'</div>
 				<div class="clearfix"></div>
 				<ul class="col-sm-12 upload-filelist" id="fileuploadinfo_'.$fieldname.'">'.$listfile.'</ul>
