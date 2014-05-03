@@ -21,9 +21,9 @@ function detectCapsLock(e, obj) {
 	var valueCapsLock = e.keyCode ? e.keyCode : e.which;
 	var valueShift = e.shiftKey ? e.shiftKey : (valueCapsLock == 16 ? true : false);
 	this.clearDetect = function () {
-		obj.className = 'txt';
+		obj.className = 'form-control txt';
 	};	
-	obj.className = (valueCapsLock >= 65 && valueCapsLock <= 90 && !valueShift || valueCapsLock >= 97 && valueCapsLock <= 122 && valueShift) ? 'clck txt' : 'txt';
+	obj.className = (valueCapsLock >= 65 && valueCapsLock <= 90 && !valueShift || valueCapsLock >= 97 && valueCapsLock <= 122 && valueShift) ? 'form-control clck txt' : 'form-control txt';
 	
 	if($.browser.msie) {
 		event.srcElement.onblur = this.clearDetect;
