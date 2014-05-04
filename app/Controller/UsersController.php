@@ -109,15 +109,14 @@ class UsersController extends AppController {
             } else {
                 $this->data['User']['status'] = 0;
             }
+            
             /*对密码加密*/
 		    $src_password = $this->data['User']['password'];
-            if(defined('UC_APPID') && !empty($this->data['User']['password'])){				
-            	$this->data['User']['password'] = Security::hash($this->data['User']['password'], null, true);
-            }
-           
-            if ($this->data['User']['password'] != Security::hash($this->data['User']['password_confirm'], null, true)) {
-                $this->Session->setFlash(lang('two_password_is_not_equare.'));
+            
+            if ($this->data['User']['password'] != $this->data['User']['password_confirm']) {
+                $this->Session->setFlash('两次密码不相等');
             } else {
+            	$this->data['User']['password'] = Security::hash($this->data['User']['password'], null, true);
             	$has_error = false;
             	if(defined('UC_APPID')){
             		App::import('Vendor', '',array('file' => 'uc_client'.DS.'client.php'));
@@ -172,7 +171,7 @@ class UsersController extends AppController {
                     $this->Session->write('Auth.User', $data['User']);
 	                $this->redirect('/');
                 } else {
-                    $this->Session->setFlash(__('Registe error.Username or email exists.', true));
+                    $this->Session->setFlash('注册失败，用户名或已存在');
                 }
             }
         } else {
