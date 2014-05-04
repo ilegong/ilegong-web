@@ -117,6 +117,7 @@ class UsersController extends AppController {
                 $this->Session->setFlash('两次密码不相等');
             } else {
             	$this->data['User']['password'] = Security::hash($this->data['User']['password'], null, true);
+            	$this->data['User']['nickname'] = $this->data['User']['username'] ;
             	$has_error = false;
             	if(defined('UC_APPID')){
             		App::import('Vendor', '',array('file' => 'uc_client'.DS.'client.php'));
