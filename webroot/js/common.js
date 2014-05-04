@@ -121,6 +121,9 @@ var rs_callbacks = {
 			if(request.userinfo && request.userinfo.session_flash){
 				showSuccessMessage(request.success+request.userinfo.session_flash);
 			}
+			else if(request.userinfo){
+				showSuccessMessage(request.success);
+			}
 		}
 	},
 	addtoCart:function(request){
@@ -717,10 +720,12 @@ var stack_custom = {"dir1": "right", "dir2": "down"};
 // 显示表单提交成功的信息
 function showSuccessMessage(text)
 {
-	alert(text);
-//	$.jGrowl(text, { 
-//		theme: 'success'
-//	});
+	if($('#showMessageModel').size()==0){
+		$('<div id="showMessageModel" class="modal fade"><div class="modal-dialog"><div class="modal-content"> <div class="modal-header">   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>   <h4 class="modal-title">消息提醒</h4> </div> <div class="modal-body"></div> <div class="modal-footer">   <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button></div>	</div>  </div></div>').appendTo('body');
+	}
+	$('#showMessageModel').modal('hide');
+	$('#showMessageModel').find('.modal-body').html(text);
+	$('#showMessageModel').modal('show');
 	return true;
 }
 // 显示错误信息

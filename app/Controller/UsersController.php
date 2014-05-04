@@ -384,7 +384,7 @@ class UsersController extends AppController {
                     'last_login' => "'".date('Y-m-d H:i:s')."'",
                 ),array('id' => $this->User->id,));
                 
-                $this->Session->setFlash(lang('login_success').$this->Session->read('Auth.User.session_flash'));
+                $this->Session->setFlash('登录成功'.$this->Session->read('Auth.User.session_flash'));
                 $success = true;
             }
         }
@@ -429,7 +429,7 @@ class UsersController extends AppController {
                 }
                 $this->Cookie->write('Auth.User',$userinfo, true, $cookietime);
                 
-                $successinfo = array('success' => __('Login success'), 
+                $successinfo = array('success' => '登录成功', 
                 		'userinfo' => $userinfo,
                 		'tasks'=>array(array('dotype'=>'reload')));
                 
@@ -447,7 +447,7 @@ class UsersController extends AppController {
         } elseif (isset($this->data['User']['username'])) {
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
                 // ajax 操作
-                $errorinfo = array('error' => __('user not exists or password not right'), 'tasks' => array(array('dotype' => 'html', 'selector' => '#login_errorinfo', 'content' => __('username or password not right'))));
+                $errorinfo = array('error' => '用户名或密码错误', 'tasks' => array(array('dotype' => 'html', 'selector' => '#login_errorinfo', 'content' => __('username or password not right'))));
                 $content = json_encode($errorinfo);
                 $this->autoRender = false; // 不显示模板
                 if($_GET['jsoncallback']){
@@ -458,7 +458,7 @@ class UsersController extends AppController {
                 }
             }
             else {
-            	$this->Session->setFlash(__('user not exists or password not right'));
+            	$this->Session->setFlash('用户名或密码错误');
             }
             //$this->redirect(array('action' => 'forgot'), 401);
         } else {

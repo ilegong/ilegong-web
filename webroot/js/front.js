@@ -18,7 +18,7 @@ $(document).ready(function() {
 });
 
 function detectCapsLock(e, obj) {
-	var valueCapsLock = e.keyCode ? e.keyCode : e.which;
+	/*var valueCapsLock = e.keyCode ? e.keyCode : e.which;
 	var valueShift = e.shiftKey ? e.shiftKey : (valueCapsLock == 16 ? true : false);
 	this.clearDetect = function () {
 		obj.className = 'form-control txt';
@@ -29,7 +29,7 @@ function detectCapsLock(e, obj) {
 		event.srcElement.onblur = this.clearDetect;
 	} else {
 		e.target.onblur = this.clearDetect;
-	}
+	}*/
 }
 
 /**
