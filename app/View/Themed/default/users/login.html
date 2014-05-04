@@ -1,7 +1,6 @@
 <div id="container-part1" class="clearfix">
             <div class="sign-form">
               <div class="sign-inner">
-                <h3 class="first-child">{{lang('Sign In To Your Account')}}</h3>
                 <hr>
                 <form action="{{$this->Html->url('/users/login')}}" id="loginform" accept-charset="utf-8"  method="post" role="form" {{if $isajax}} onsubmit="return ajaxeSubmitForm(this,'loginSucess');" {{/if}}>
                   <div class="input-group">
