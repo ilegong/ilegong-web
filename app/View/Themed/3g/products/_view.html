@@ -1,5 +1,4 @@
 <h2 class="Content-title" id="item-detail-title"><?php echo $Product['Product']['name']; ?></h2>
-{{if $top_category_id ==114}}
 <p>单价：<strong> ￥<?php echo $Product['Product']['price']; ?></strong></p>
 <div  id="productinfo" class="clearfix" style="padding-bottom:10px;">	    
     <div class="input-group" style="float:left;width:120px;">
@@ -14,7 +13,6 @@ href="javascript:void(0);">添加到购物车 </a>
 <div>
 	<a style="color:red;" href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($Product['Brand']['created'])).'/'.$Product['Product']['brand_id'])}}">查看商家更多商品 </a>
 </div>
-{{/if}}
 <div class="row">
 	<div class="col-xs-12 col-md-6">	
 		<img src="{{$this->Html->url($Product['Product']['coverimg'])}}" style="width:100%;"
