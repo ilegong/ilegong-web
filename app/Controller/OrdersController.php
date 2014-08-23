@@ -369,7 +369,54 @@ class OrdersController extends AppController{
 		$this->set('orders',$orders);
 		$this->set('order_carts',$order_carts);
 		$this->set('ship_type',$this->ship_type);
+
+
+        if($_REQUEST['export']=='true'){
+            $this->autoRender = false;
+            $this->_download_excel($orders);
+            exit;
+        }
 	}
+
+
+    /**
+     * 占用较小的内存，更适合网站空间php占用内存限制小的情况。
+     */
+    private function _download_excel($orders){
+        @set_time_limit(0);
+        App::import('Vendor', 'Excel_XML', array('file' => 'phpexcel'.DS.'excel_xml.class.php'));
+        $xls = new Excel_XML('UTF-8', true, 'Sheet Orders');
+
+        $add_header_flag = false;
+        $fields = array('id','consignee_name','created','total_price','status','consignee_mobilephone','consignee_address');
+        $header = array('订单号','客户姓名','下单时间','总价','状态','联系电话','收货地址');
+        $order_status = array('待确认', '已支付','已发货','已收货','已退款','','','','','已完成','已做废', '已确认', '已投诉');
+        $page = 1;
+        $pagesize = 500;
+        do{
+            $rows = count($orders);
+            foreach($orders as $item){
+                if($add_header_flag==false){
+                    $xls->addRow($header);
+                    $add_header_flag = true;
+                }
+                $row = array();
+                foreach($fields as $fieldname){
+                    $value = $item['Order'][$fieldname];
+                    if ($fieldname == 'status') {
+                        $value = $order_status[$value];
+                    }
+                    $row[] = $value;
+                }
+                $xls->addRow($row);
+            }
+            ++$page;
+        }while($rows==$pagesize);
+
+        $xls->generateXML('orders'.'_'.date('Y-m-d'));
+    }
+
+
 	function confirm_receive(){
 		$order_id = $_REQUEST['order_id'];
 		
