@@ -108,7 +108,7 @@ var rs_callbacks = {
 			$(num_selector).html(num);
 		}
 	},
-	loginSucess:function(request){
+	loginSucess:function(request, form){
 		if(request.success){
 			publishController.close_dialog();
 			if(sso.form){
@@ -124,7 +124,12 @@ var rs_callbacks = {
 			else if(request.userinfo){
 				showSuccessMessage(request.success);
 			}
-		}
+		} else {
+            $("#loginMessage").html(request.error).show();
+            if (form) {
+                $(':submit',form).removeAttr('disabled');
+            }
+        }
 	},
 	addtoCart:function(request){
 		showSuccessMessage(request.success);
@@ -269,7 +274,7 @@ function ajaxActionHtml(url,selector,callback){
 function ajaxeSubmitForm(form,callback_func_name)
 {
 	setCKEditorVal();
-	ajaxAction(form.action,$(form).serialize(),form,callback_func_name);	// 发出请求
+	ajaxAction(form.action,$(form).serialize(),form,callback_func_name, form);	// 发出请求
 	return false;
 }
 
