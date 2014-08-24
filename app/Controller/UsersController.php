@@ -38,8 +38,6 @@ class UsersController extends AppController {
     public function beforeFilter(){
     	parent::beforeFilter();
 
-        $this->log("test log in before filter:");
-
     	if(!defined('IS_LOCALHOST')){
     		if(defined('UC_APPID')){
     			$this->Auth->authenticate = array('UCenter');
