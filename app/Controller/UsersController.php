@@ -366,12 +366,16 @@ class UsersController extends AppController {
     function login() {
         $redirect = $this->data['User']['referer'] ? $this->data['User']['referer'] : ($_GET['referer'] ? $_GET['referer'] : $this->Auth->redirect());
         $success = false;
+
+        $log = '$redirect='.$redirect;
         
         if(empty($this->data) && $this->request->query['data']){ //get 方式传入时,phonegap
         	$this->data = $this->request->query['data'];
+            $log .= ', get-data from query:'. $this->data;
         }
         
         if ($id = $this->Auth->user('id')) { //已经登录的
+            $log .= ', already login:'. $id;
             $this->User->id = $id;
             $this->User->updateAll(array(
                 'last_login' => "'".date('Y-m-d H:i:s')."'"
@@ -379,21 +383,27 @@ class UsersController extends AppController {
             $success = true;
         }
         elseif (!empty($this->data['User'])) { // 通过表单登录
+            $log .= ', login by form with:'. var_export($this->data['User'], true);
             if ($this->Auth->login()) {
+
                 $this->User->id = $this->Auth->user('id');
                 $this->User->updateAll(array(
                     'last_login' => "'".date('Y-m-d H:i:s')."'",
                 ),array('id' => $this->User->id,));
-                
+
+                $log .= ', login ok, id='. $this->User->id;
+
                 $this->Session->setFlash('登录成功'.$this->Session->read('Auth.User.session_flash'));
                 $success = true;
             }
         }
         
         if ($success) {
-        	$wx_openid = $this->Session->read('wx_openid');
-        	if($wx_openid){        		
-        		$this->loadModel('Oauthbinds');
+
+            $wx_openid = $this->Session->read('wx_openid');
+            if($wx_openid){
+                $log .= ', login done with wx_openid:'. $wx_openid;
+                $this->loadModel('Oauthbinds');
         		$oauth = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $wx_openid,'source'=>'weixin',)));
         		if(!empty($oauth) && !empty($oauth['Oauthbinds']['user_id'])){
         			if($this->User->id != $oauth['Oauthbinds']['user_id']){
@@ -412,8 +422,17 @@ class UsersController extends AppController {
         			));
         		}
         	}
+
+            $log .= '.done (before Hook), id='. $this->User->id;
         	
-            $this->Hook->call('loginSuccess');            
+            $this->Hook->call('loginSuccess');
+
+            $log .= ', id after hook: '. $this->User->id;
+
+            if ($this->User->id == '118') {
+                $this->log('user logged with user id 118:'. $log);
+            }
+
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
                 // ajax 操作
                 $user = $this->Auth->user();
