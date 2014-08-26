@@ -105,7 +105,7 @@ class WeixinController extends AppController {
 					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/share.html?wx_openid=$user_code\" >分享同事列表页</a>");
 					break;
                 case "5":
-                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://www.domypp.com/index.php/U/url/SThaHRul\" >51带饭试吃团报名</a>");
+                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://www.mikecrm.com/f.php?t=3DGEyQ\" >51带饭试吃团报名</a>");
                     break;
 				case "大米":
 				case "9":
