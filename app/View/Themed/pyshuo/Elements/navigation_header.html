@@ -1,0 +1,24 @@
+<div class="row clearfix" style="height: 280px; background: url({{ $this->Html->url('/img/pyshuo_logo_nav.jpg', true); }}); background-position-x: -230px; ">
+    <a href="/">
+    </a>
+</div>
+<div class="row clearfix">
+	<div  class="col-md-12">
+		<ul class="breadcrumb">
+			<li>
+				<a href="{{$this->Html->url('/')}}"><span class="ui-icon ui-icon-home"></span>{{Configure::read('Site.title')}}</a>
+			</li>
+			{{loop $navigations $navi}}
+			<li>
+			{{if $navi['Category']}}
+				<a href="{{$this->Html->url('/'.$navi['Category']['slug'])}}">{{$navi['Category']['name']}}</a>
+			{{elseif $navi['Modelcate']}}
+				<a href="{{$this->Html->url($this->Section->linkStringToArray($navi['Modelcate']['link'],$navi['Modelcate']))}}">{{$navi['Modelcate']['name']}}</a>
+			{{else}}
+				{{$navi['Modelcate']['name']}}
+			{{/if}}
+			</li>
+			{{/loop}}
+		</ul>
+	</div>
+</div>
