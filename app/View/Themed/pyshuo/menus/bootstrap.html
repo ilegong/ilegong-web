@@ -1,0 +1,90 @@
+<header class="navbar navbar-default" role="banner">
+<div class="container">
+	<div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="sr-only">显示折叠导航</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="{{$this->Html->url(Configure::read('Site.logo_url'))}}" style="padding:5px 15px;" class="navbar-brand">{{$this->Html->image($this->Html->url(Configure::read('Site.logo')), array('style'=>'height:35px;','title' => $site[title],'alt' => $site[title]))}}</a>
+    </div>
+	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+	<?php 
+		if(empty($top_category_id)) $top_category_id=0;
+	echo $this->Section->getNavMenu('Category',
+		array(
+			'selectedid'=> $top_category_id,
+			'ulAttributes'=>array('class'=>'nav navbar-nav'),
+                        'defaultClass'=>'ui-state-default',
+			'preli'=>'',
+			'sufli'=>'',
+			'maxdepth' => 2,
+		),$site_cate_id
+	);
+	?>
+	
+	<ul class="nav navbar-nav pull-right">                        
+                    <li class="dropdown">
+                        <a id="item-count" href="{{$this->Html->url(array('controller'=>'carts','action'=>'listcart'))}}"><i class="glyphicon glyphicon-shopping-cart"></i>&nbsp;购物车&nbsp;<span class="label label-danger"></span></a>                                
+                    </li>
+                    
+                    	{{if (!empty($CurrentUser))}}
+			<li class="dropdown">
+				 {{$this->Html->link($CurrentUser['nickname'].'<b class="caret"></b>', '#', array('title' => 'view your account',"class"=>"dropdown-toggle","data-toggle"=>"dropdown",'escape'=>false)); }}
+				 <ul class="dropdown-menu">
+				 	<li><?php echo $this->Html->link('<i class="glyphicon glyphicon-user"></i>'.lang('edit_profile'), array('controller' => 'users','action'=>'edit','plugin' => null ,),array('escape'=>false)); ?></li>
+					<li><?php echo $this->Html->link('<i class="fa fa-lock"></i>'.lang('edit_password'), array('controller' => 'users','action'=>'editpassword','plugin' => null ,),array('escape'=>false)); ?></li>
+                    <li><?php echo $this->Html->link('<i class="glyphicon glyphicon-folder-close"></i>'.lang('user_orders'), array('controller' => 'orders','action'=>'mine','plugin' => null ,),array('escape'=>false)); ?></li>
+                          
+                          {{if (empty($CurrentUser['status']))}}
+					<li class="activate link">
+							{{eval echo $this->Html->link(lang('activate_user'), array(
+								'controller' => 'users', 'action' => 'activate'
+								), array('title' => 'activate your account')); }}
+					</li>
+					{{/if}}
+					<li><?php echo $this->Html->link(__('<i class="glyphicon glyphicon-map-marker"></i>我的地址'), array('controller' => 'orders','action'=>'edit_consignee','plugin' => null ),array('escape'=>false)); ?></li>
+                       
+                    <li>{{$this->Html->link('<i class="glyphicon glyphicon-log-out"></i>退出登录', '/users/logout', array('title' => 'logout your account','escape'=>false))}}</li> 
+				</ul>
+			</li>
+	{{else}}
+			<?php $oauthlogin = $this->Hook->call('oauthLoginLink'); ?>
+			{{if $oauthlogin}}
+			<li>
+			{{eval echo $this->Html->link(lang('login').'<b class="caret"></b>', array(				
+				'controller' => 'users', 'action' => 'login','ext'=>false				
+			),array('onclick'=>"return publishController.open_dialog(this.href,{title:'登录'});","class"=>"dropdown-toggle","data-toggle"=>"dropdown")); }}
+				<ul class="dropdown-menu">
+					{{$oauthlogin}}	
+				</ul>
+			</li>
+			{{else}}
+				<li>
+				{{eval echo $this->Html->link(lang('login'), array(				
+					'controller' => 'users', 'action' => 'login','ext'=>false				
+				),array('onclick'=>"return publishController.open_dialog(this.href,{title:'登录'});")); }}
+				</li>
+			{{/if}}
+			<li>
+			{{eval echo $this->Html->link(lang('register'), array(
+				'controller' => 'users', 'action' => 'register'
+			),array('onclick'=>"return publishController.open_dialog(this.href,{title:'注册',width:650});")); }}
+			</li>		
+			
+	{{/if}}
+	   <!-- 
+      {{if defined('APPEND_LOCALE_BASE')}}
+      	{{$this->Html->link('简体','/../')}}, {{$this->Html->link('繁體','/../zh-tw/')}}
+      {{else}}
+  		{{$this->Html->link('简体','/')}}, {{$this->Html->link('繁體','/zh-tw/')}}
+	  {{/if}}
+		<div>
+		{{$this->Html->link('购物车','/carts/listcart.html')}}
+		</div>
+	-->                     
+    </ul>
+    </nav>
+</div>
+</header>

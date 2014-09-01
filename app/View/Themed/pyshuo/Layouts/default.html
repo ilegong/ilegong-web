@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{{$pageTitle}}-{{$site[title]}}</title>
+    <META NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}" />
+    <meta name="Description" content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}" />
+    <!--[if lt IE 9]>
+    {{$this->Html->script(array('html5.js'))}}
+    <![endif]-->
+    {{$this->Html->meta('icon')}}
+
+    <?PHP echo $this->Combinator->less(); ?>
+    {{$this->Html->css(array('font-awesome.min.css',
+    'ui-customer',))}}
+    {{$this->Html->script(array(
+    'jquery/jquery.min.js',
+    'jquery/jquery.cookie.js',
+    'i18n/language-zh-CN.js',
+    'bootstrap.min.js',
+    'front.js',
+    'common.js',
+    //'jquery/jquery-migrate-1.2.1.min.js',
+    //'taobao/taobaoke.js','jquery/jquery.masonry.min.js','jquery/jquery.infinitescroll.min.js',
+    //'jquery/jquery.jgrowl.min.js'
+    ));
+    }}
+    <!--[if lte IE 6]>
+    {{$this->Html->css(array(
+    'bootstrap-ie6.css',
+    ))}}
+    {{$this->Html->script(array('jquery/jquery-migrate-1.2.1.min.js'))}}
+    <![endif]-->
+
+    <script type="text/javascript">
+        var BASEURL = "{{APP_SUB_DIR}}";
+        var ADMIN_BASEURL = BASEURL+"/manage";
+    </script>
+</head>
+<body>
+
+{{if !empty($_SESSION['Auth']['Staff']) }}
+<!-- 文件上传进度条 -->
+<div class="flash ui-wedget" id="fsUploadProgress" style="position:absolute;display:none;width:210px;top:80px;right:30px; z-index: 10000000;">
+</div>
+{{/if}}
+{{template menus/bootstrap}}
+<div id="header-breadcrumb" >
+    <div class="container clearfix" >
+        {{template Elements/navigation_header}}
+    </div>
+    <div  class="clear"></div>
+</div>
+
+<?php
+    $flash_msg =  $this->Session->flash();
+if($flash_msg){
+echo "<div class=\"container\">$flash_msg</div>";
+}
+//注意#maincontent中，只包含一个'.container'，否则无法前台编辑模板可能会走样。多行的使用实现使用<div class="row"></div>。
+?>
+
+<div id="maincontent" class="maincontent clearfix">
+    <div class="container">
+        {{$content_for_layout}}
+    </div><!-- //end container -->
+</div><!-- //end maincontent -->
+
+{{template Elements/footer}}
