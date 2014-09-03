@@ -69,7 +69,7 @@ class AppController extends Controller {
     	if(!$this->Session->read('Auth.User.id') && isset($_COOKIE['SAECMS']) && $_COOKIE['SAECMS']['Auth']['User']){
     		$this->Cookie = $this->Components->load('Cookie',array('name' => 'SAECMS', 'time' => '+2 weeks'));
     		$user = $this->Cookie->read('Auth.User');
-    		if(intval($user['id'])>0){
+    		if(is_array($user) && intval($user['id'])>0){
     			$this->loadModel('User');
     			$this->User->recursive = -1;
     			$data = $this->User->find('first', array('conditions' => array('id' => $user['id'])));
