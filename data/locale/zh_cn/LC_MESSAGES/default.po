@@ -1,54 +1,50 @@
 # LANGUAGE translation of CakePHP Application
 # Copyright YEAR NAME <EMAIL@ADDRESS>
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2014-09-04 00:27+0800\n"
-"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
-"Last-Translator: NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2014-09-04 00:34+0800\n"
+"Last-Translator: \n"
+"Language-Team:  <EMAIL@ADDRESS>\n"
+"Language: zh_CN\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.6.9\n"
 
-#: Controller/AppController.php:391;418
-#: Controller/ProductsController.php:71
+#: Controller/AppController.php:391;418 Controller/ProductsController.php:71
 #: Controller/UsersController.php:232
 msgid "The Data has been saved"
 msgstr ""
 
-#: Controller/AppController.php:394;421
-#: Controller/ProductsController.php:74
+#: Controller/AppController.php:394;421 Controller/ProductsController.php:74
 #: Controller/UsersController.php:235
 msgid "The Data could not be saved. Please, try again."
 msgstr ""
 
-#: Controller/AppController.php:410
-#: Controller/ProductsController.php:63
+#: Controller/AppController.php:410 Controller/ProductsController.php:63
 #: Controller/UsersController.php:227
 msgid "You cannot edit this data"
-msgstr ""
+msgstr "您不能编辑"
 
-#: Controller/AppController.php:423
-#: Controller/ProductsController.php:76
+#: Controller/AppController.php:423 Controller/ProductsController.php:76
 #: Controller/UsersController.php:237
 msgid "Edit success"
-msgstr ""
+msgstr "编辑成功"
 
 #: Controller/AppraiseresultsController.php:33
 msgid "You have already vote this."
-msgstr ""
+msgstr "您已经投过了。"
 
 #: Controller/AppraiseresultsController.php:120;149
 #: Controller/AppraisesController.php:94
 #: Controller/ModelcatesController.php:29
-#: Controller/OrdersController.php:559;675
-#: Controller/WeibosController.php:61
+#: Controller/OrdersController.php:559;675 Controller/WeibosController.php:61
 msgid "Add success"
-msgstr ""
+msgstr "增加成功"
 
 #: Controller/AppraisesController.php:22
 msgid "Empty Appraiseoption"
@@ -56,19 +52,19 @@ msgstr ""
 
 #: Controller/AppraisesController.php:177
 msgid "edit"
-msgstr ""
+msgstr "编辑"
 
 #: Controller/AppraisesController.php:178
 msgid "delete"
-msgstr ""
+msgstr "删除"
 
 #: Controller/CartsController.php:67
 msgid "Success add to cart."
-msgstr ""
+msgstr "成功加入购入车"
 
 #: Controller/CartsController.php:71
 msgid "Operation failed"
-msgstr ""
+msgstr "操作失败"
 
 #: Controller/CartsController.php:83
 msgid "Success edit nums."
@@ -76,11 +72,11 @@ msgstr ""
 
 #: Controller/CommentsController.php:15
 msgid "Invalid Params"
-msgstr ""
+msgstr "无效参数"
 
 #: Controller/CommentsController.php:103
 msgid "Sorry, the comment appears to be spam."
-msgstr ""
+msgstr "抱歉，您的评论被系统认为是Spam，请纠正"
 
 #: Controller/CommentsController.php:115
 msgid "Invalid captcha entry"
@@ -88,23 +84,23 @@ msgstr ""
 
 #: Controller/FavoritesController.php:12;18
 msgid "Need_Login"
-msgstr ""
+msgstr "请您先登陆"
 
 #: Controller/FavoritesController.php:34
 msgid "Already favored"
-msgstr ""
+msgstr "您已经收藏"
 
 #: Controller/FavoritesController.php:51
 msgid "Favorite success"
-msgstr ""
+msgstr "已经添加到您的收藏夹"
 
 #: Controller/UploadfilesController.php:34
 msgid "Error url,this url page is not exist."
-msgstr ""
+msgstr "请求的页面不存在"
 
 #: Controller/UploadfilesController.php:55;58
 msgid "Preview"
-msgstr ""
+msgstr "预览"
 
 #: Controller/UsersController.php:75;79;90
 msgid "Users"
@@ -116,15 +112,15 @@ msgstr ""
 
 #: Controller/UsersController.php:165
 msgid "Please receive email and activate your account."
-msgstr ""
+msgstr "请查收邮件然后激活账号。"
 
 #: Controller/UsersController.php:167
 msgid "Please wait administrator to activate your account."
-msgstr ""
+msgstr "请等待管理员激活您的账号。"
 
 #: Controller/UsersController.php:245;254;279
 msgid "You are not authorized to access that location."
-msgstr ""
+msgstr "抱歉，您无权访问。"
 
 #: Controller/UsersController.php:265
 msgid "成功设置用户名与密码"
@@ -136,47 +132,47 @@ msgstr ""
 
 #: Controller/UsersController.php:294
 msgid "Password is updated success."
-msgstr ""
+msgstr "密码修改成功。"
 
 #: Controller/UsersController.php:297
 msgid "Two password is empty or not equare."
-msgstr ""
+msgstr "您两次输入的密码不一样。"
 
 #: Controller/UsersController.php:300
 msgid "Your password is not right."
-msgstr ""
+msgstr "您的密码不正确。"
 
 #: Controller/UsersController.php:308
 msgid "Forgot Password"
-msgstr ""
+msgstr "忘记密码"
 
 #: Controller/UsersController.php:325;338
 msgid "Reset Password"
-msgstr ""
+msgstr "重置密码"
 
 #: Controller/UsersController.php:470
 msgid "username or password not right"
-msgstr ""
+msgstr "用户名或者密码不正确"
 
 #: Controller/UsersController.php:504
 msgid "Logout Success"
-msgstr ""
+msgstr "您已退出登陆"
 
 #: View/Themed/default/Errors/error400.ctp:3
 msgid "404 page not found."
-msgstr ""
+msgstr "页面无法找到。"
 
 #: View/Themed/default/Errors/error400.ctp:5
 msgid "The requested address was not found on this server."
-msgstr ""
+msgstr "请求的地址不存在。"
 
 #: View/Themed/default/Errors/error500.ctp:3
 msgid "Error."
-msgstr ""
+msgstr "错误。"
 
 #: View/Themed/default/Errors/error500.ctp:5
 msgid "An Internal Error Has Occurred."
-msgstr ""
+msgstr "系统发生错误"
 
 #: View/Themed/default/comments/rss/index.ctp:16
 msgid "Comment on"
@@ -185,4 +181,3 @@ msgstr ""
 #: View/Themed/default/comments/rss/index.ctp:16
 msgid "by"
 msgstr ""
-

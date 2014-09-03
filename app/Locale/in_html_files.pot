@@ -1,0 +1,11 @@
+msgid "Not registered?"
+msgstr ""
+
+msgid "Create an Account."
+msgstr ""
+
+msgid "Lost your password?"
+msgstr ""
+
+msgid "Click here to recover."
+msgstr ""

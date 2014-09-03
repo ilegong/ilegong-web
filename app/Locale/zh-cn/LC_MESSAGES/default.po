@@ -1,5 +1,0 @@
-
-msgid "Logout Success"
-msgstr "您已退出"
-
-

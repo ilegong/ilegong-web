@@ -22,18 +22,18 @@
                   <button class="btn btn-red" type="submit">登录</button>
                   <hr>
                 </form>
-                <p>{{lang('Not registered?')}} <a href="{{$this->Html->url('/users/register')}}" onclick="return publishController.open_dialog(this.href,{title:'注册',width:650});" >{{lang('Create an Account.')}}</a></p>
+                <p>{{__('Not registered?')}} <a href="{{$this->Html->url('/users/register')}}" onclick="return publishController.open_dialog(this.href,{title:'注册',width:650});" >{{__('Create an Account.')}}</a></p>
                 {{$this->Hook->call('oauthLoginLink')}}
                 <div class="pwd-lost">
-                  <div class="pwd-lost-q show">Lost your password? <a href="{{$this->Html->url('/users/forgot')}}">Click here to recover.</a></div>
+                  <div class="pwd-lost-q show">{{__('Lost your password?')}} <a href="{{$this->Html->url('/users/forgot')}}">{{__('Click here to recover.')}}</a></div>
                   <div class="pwd-lost-f hidden">
-                    <p class="text-muted">Enter your email address below and we will send you a link to reset your password.</p>
+                    <p class="text-muted">{{__('Enter your email address below and we will send you a link to reset your password.')}}</p>
                     <form role="form" class="form-inline">
                       <div class="form-group">
-                        <label for="email-pwd" class="sr-only">Email address</label>
-                        <input type="email" placeholder="Enter email" id="email-pwd" class="form-control">
+                        <label for="email-pwd" class="sr-only">{{__('Email address')}}</label>
+                        <input type="email" placeholder="{{__('Enter email')}}" id="email-pwd" class="form-control">
                       </div>
-                      <button class="btn btn-blue" type="submit">Send</button>
+                      <button class="btn btn-blue" type="submit">{{__('Send')}}</button>
                     </form>
                   </div>
                 </div> <!-- / .pwd-lost -->
