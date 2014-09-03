@@ -367,6 +367,8 @@ class UsersController extends AppController {
         $redirect = $this->data['User']['referer'] ? $this->data['User']['referer'] : ($_GET['referer'] ? $_GET['referer'] : $this->Auth->redirect());
         $success = false;
 
+        $this->log("start do login:". var_export($this->data['User'], true));
+
         $log = '$redirect='.$redirect;
         
         if(empty($this->data) && $this->request->query['data']){ //get 方式传入时,phonegap
@@ -476,7 +478,7 @@ class UsersController extends AppController {
                 }
             }
             else {
-            	$this->Session->setFlash('用户名或密码错误');
+            	$this->Session->setFlash(__('username or password not right'));
             }
             //$this->redirect(array('action' => 'forgot'), 401);
         } else {

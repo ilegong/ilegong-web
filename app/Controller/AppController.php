@@ -67,8 +67,11 @@ class AppController extends Controller {
     	// 无Session，且有Cookie登录信息时，解析cookie生成信息。否则忽略cookie，防止每次都要消耗性能解密cookie
     	// 其余时间使用session。
     	if(!$this->Session->read('Auth.User.id') && isset($_COOKIE['SAECMS']) && $_COOKIE['SAECMS']['Auth']['User']){
-    		$this->Cookie = $this->Components->load('Cookie',array('name' => 'SAECMS', 'time' => '+2 weeks'));
-    		$user = $this->Cookie->read('Auth.User');
+
+            $this->Cookie = $this->Components->load('Cookie',array('name' => 'SAECMS', 'time' => '+2 weeks'));
+            $user = $this->Cookie->read('Auth.User');
+            $this->log("read user from cookie:". var_export($user, true));
+
     		if(is_array($user) && intval($user['id'])>0){
     			$this->loadModel('User');
     			$this->User->recursive = -1;
