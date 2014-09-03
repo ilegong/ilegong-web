@@ -13,6 +13,15 @@
     {{$this->Html->meta('icon')}}
 
     <?PHP echo $this->Combinator->less(); ?>
+
+    <style>
+        @media (min-width: 1200px) {
+            .container{
+                max-width: 970px;
+            }
+        }
+    </style>
+
     {{$this->Html->css(array('font-awesome.min.css',
     'ui-customer',))}}
     {{$this->Html->script(array(
