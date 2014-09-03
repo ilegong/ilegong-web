@@ -4,15 +4,15 @@
                 <form role="form" id="registerform" method="post" action="{{$this->Html->url('/users/register')}}">
                   
                   <div class="form-group">
-                    <input type="text" data-original-title="Username" data-content="Enter your nickname here." data-trigger="focus" data-placement="left" data-toggle="popover" placeholder="Username" name="data[User][username]" required="required" size="25" maxlength="15" onblur="checkusername()"  id="username" class="form-control">
+                    <input type="text" data-original-title="{{__('Username')}}" data-content="{{__('Enter your nickname here.')}}" data-trigger="focus" data-placement="left" data-toggle="popover" placeholder="{{__('Username')}}" name="data[User][username]" required="required" size="25" maxlength="15" onblur="checkusername()"  id="username" class="form-control">
                   </div>
                   <div class="form-group">
                     <div class="row">
                       <div class="col-sm-6">
-                        <input type="password" data-original-title="Password" data-content="Enter a good password here." data-trigger="focus" data-placement="left" data-toggle="popover" placeholder="Password" id="password"  class="form-control margin-bottom-xs" maxlength="15" onkeypress="detectCapsLock(event, this)" name="data[User][password]">
+                        <input type="password" data-original-title="{{__('Password')}}" data-content="{{__('Enter a good password here.')}}" data-trigger="focus" data-placement="left" data-toggle="popover" placeholder="{{__('Password')}}" id="password"  class="form-control margin-bottom-xs" maxlength="15" onkeypress="detectCapsLock(event, this)" name="data[User][password]">
                       </div>
                       <div class="col-sm-6">
-                        <input type="password" data-original-title="Repeat Password" data-content="Confirm your password here." data-trigger="focus" data-toggle="popover" placeholder="Repeat Password" id="repeat-password" class="form-control" maxlength="15" onkeypress="detectCapsLock(event, this)" name="data[User][password_confirm]">
+                        <input type="password" data-original-title="{{__('Repeat Password')}}" data-content="{{__('Confirm your password here.')}}" data-trigger="focus" data-toggle="popover" placeholder="{{__('Repeat Password')}}" id="repeat-password" class="form-control" maxlength="15" onkeypress="detectCapsLock(event, this)" name="data[User][password_confirm]">
                       </div>
                     </div>
                   </div>

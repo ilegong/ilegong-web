@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2014-09-04 00:27+0800\n"
-"PO-Revision-Date: 2014-09-04 00:34+0800\n"
+"PO-Revision-Date: 2014-09-04 01:18+0800\n"
 "Last-Translator: \n"
 "Language-Team:  <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -181,3 +181,42 @@ msgstr ""
 #: View/Themed/default/comments/rss/index.ctp:16
 msgid "by"
 msgstr ""
+
+msgid "Not registered?"
+msgstr "还没注册？"
+
+msgid "Create an Account."
+msgstr "注册账户"
+
+msgid "Lost your password?"
+msgstr "忘记密码？"
+
+msgid "Click here to recover."
+msgstr "找回密码"
+
+msgid "Register"
+msgstr "注册"
+
+msgid "Confirm your password here."
+msgstr "请再次输入您的密码"
+
+msgid "Repeat Password"
+msgstr "确认密码"
+
+msgid "Enter a good password here."
+msgstr "输入一个足够安全好记的密码"
+
+msgid "Password"
+msgstr "密码"
+
+msgid "Username"
+msgstr "用户名"
+
+msgid "Enter your nickname here."
+msgstr "请输入您的用户名"
+
+msgid "Have account?"
+msgstr "已经注册？"
+
+msgid "Login"
+msgstr "登录"
