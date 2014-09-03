@@ -429,9 +429,7 @@ class UsersController extends AppController {
 
             $log .= ', id after hook: '. $this->User->id;
 
-            if ($this->User->id == '118') {
-                $this->log('user logged with user id 118:'. $log);
-            }
+            $this->log('user logged with user id 118:'. $log);
 
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
                 // ajax 操作
