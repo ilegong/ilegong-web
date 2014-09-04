@@ -113,9 +113,15 @@ class UsersController extends AppController {
             
             /*对密码加密*/
 		    $src_password = $this->data['User']['password'];
+
+            $this->data['User']['username'] = trim($this->data['User']['username']);
             
             if ($this->data['User']['password'] != $this->data['User']['password_confirm']) {
                 $this->Session->setFlash('两次密码不相等');
+            } else if (is_null($this->data['User']['password']) || trim($this->data['User']['password']) == '') {
+                $this->Session->setFlash(__('Password should be longer than 6 characters'));
+            } else if ($this->User->hasAny(array('User.username' => $this->data['User']['username']))){
+                $this->Session->setFlash(__('Username is taken by others.'));
             } else {
             	$this->data['User']['password'] = Security::hash($this->data['User']['password'], null, true);
             	$this->data['User']['nickname'] = $this->data['User']['username'] ;

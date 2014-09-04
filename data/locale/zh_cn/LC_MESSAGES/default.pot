@@ -224,3 +224,9 @@ msgstr ""
 
 msgid "Login"
 msgstr ""
+
+msgid "Username is taken by others."
+msgstr ""
+
+msgid "Password should be longer than 6 characters"
+msgstr ""
