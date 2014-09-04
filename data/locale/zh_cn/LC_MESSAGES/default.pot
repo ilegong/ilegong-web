@@ -230,3 +230,27 @@ msgstr ""
 
 msgid "Password should be longer than 6 characters"
 msgstr ""
+
+msgid "Nickname"
+msgstr ""
+
+msgid "New Password"
+msgstr ""
+
+msgid "Password Confirm"
+msgstr ""
+
+msgid "Submit"
+msgstr ""
+
+msgid "Sex"
+msgstr ""
+
+msgid "Idcard"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Edit Your Profiles"
+msgstr ""
