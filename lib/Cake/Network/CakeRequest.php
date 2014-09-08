@@ -410,6 +410,9 @@ class CakeRequest implements ArrayAccess {
 		if (defined('FULL_BASE_URL')) {
 			$base = FULL_BASE_URL . $this->webroot;
 		}
+
+        CakeLog::write(LOG_ERR, "ref=$ref, forw=$forwarded, base=$base");
+
 		if (!empty($ref) && !empty($base)) {
 			if ($local && strpos($ref, $base) === 0) {
 				$ref = substr($ref, strlen($base));
