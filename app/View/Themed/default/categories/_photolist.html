@@ -3,7 +3,7 @@
 {{eval echo $this->Html->image(Router::url($item['coverimg']), 
 	array(
 	'alt' => $item['title'],'title' => $item['title'],
-	'width'=>'150px','height'=>'150px',
+	'width'=>'200px','height'=>'200px',
 	//'onerror'=>'this.src="'.Router::url('/img/products_nophoto.jpg').'";',
 	'url'=> '/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html' 
 	)); }}
@@ -13,7 +13,7 @@
 	'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
 	array('title'=>$item['title'])); }}
 	<br/>
-	<div>
+	<div style="width:200px; margin-bottom: 20px">
      		<div class="food-info pull-right">
              <strong>¥{{$item['price']}}</strong>                                     
      		</div>
