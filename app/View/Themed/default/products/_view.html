@@ -73,16 +73,10 @@ var setAmount={
 </script>
 
 <h2 class="Content-title"><?php echo $Product['Product']['name']; ?></h2>
-	    <div class="Content-info">
-	   阅读次数： 
-	   <span class="ui-stats-num Stats-Product-{{$Product['Product']['id']}}-view_nums"><?php echo $Product['Product']['views_count']; ?></span>
-	    </div>
 	    <div  id="productinfo">
 	    {{template Elements/images_zoom}}
-	    <ul style="float:left;margin-left: 10px;display: inline;">
-            <li>价格： {{$Product['Product']['price']}}</li>
-            <li>库存： 123</li>
-            <li>促销信息： 优惠100元</li>
+	    <ul style="float:left;margin-left: 10px;display: inline;margin-top: 20px">
+            <li>价格： <span style="font-size:24px; color: rgb(241, 151, 51);">￥{{$Product['Product']['price']}}</span></li>
             <li>
             <div class="input-group" style="float:left;width:120px;">
 			  <span class="reduce input-group-addon" onclick="setAmount.reduce('#pamount')">-</span>
