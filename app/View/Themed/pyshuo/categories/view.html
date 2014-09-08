@@ -1,7 +1,9 @@
+<?PHP if($is_index) { ?>
 <div class="row clearfix" style="height: 280px; background: url({{ $this->Html->url('/img/pyshuo_banner_yanyan.jpg', true); }}); background-position: 2px; background-repeat: no-repeat">
     <a href="/">
     </a>
 </div>
+<?PHP } ?>
 <div class="row">
 		<div class="ui-contain col-md-12">
 			<portlet title="{{$Category['Category']['name']}}"><div class="Content-body">{{$Category['Category']['content']}} </div>

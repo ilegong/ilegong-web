@@ -162,5 +162,6 @@ class CategoriesController extends AppController {
         $this->set('current_cateid', $current_cateid);
         $this->set('navigations', $navigations);
         $this->set('Category', $Category);
+        $this->set('is_index', $slug == 'techan');
     }
 }
