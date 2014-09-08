@@ -1,8 +1,8 @@
 <div{{if $this->Session->read('Auth.Staff.id')>0 }} {{$data_attribute}} {{/if}}
 	class="ui-portlet panel panel-default {{$custom_class}}">
-	<div class="clearfix panel-heading ui-portlet-header">
-	      <span class="title"><h3>{{$title}}</h3></span>            
-	</div>
+	<!--<div class="clearfix panel-heading ui-portlet-header">-->
+	      <!--<span class="title"><h3>{{$title}}</h3></span>            -->
+	<!--</div>-->
 	<div class="ui-corner-bottom ui-portlet-content panel-body">
 		<ul class="portlet-region-list  clearfix {{$params['ulcss']}}">
 		{{$body}}
