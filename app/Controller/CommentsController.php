@@ -58,7 +58,7 @@ class CommentsController extends AppController {
     function getlist($model_name,$id)
     {
     	$page = intval($_GET['page'])?intval($_GET['page']):1;
-    	$pagesize = intval($_GET['pagesize'])?intval($_GET['pagesize']):5;
+    	$pagesize = intval($_GET['pagesize'])?intval($_GET['pagesize']):50;
     	$this->autoRender = false;
     	$model_name = Inflector::classify($model_name);
     	$comments = $this->Comment->find('all',array(
