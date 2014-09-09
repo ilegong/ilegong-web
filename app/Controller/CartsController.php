@@ -91,7 +91,11 @@ class CartsController extends AppController{
         $count = 0;
         if($this->currentUser && $this->currentUser['id']) {
             $count = $this->Cart->find('count', array(
-                'conditions' => array( 'OR' => $this->user_condition )
+                'conditions' => array(
+                    'status' => 0,
+                    'order_id' => NULL,
+                    'OR' => $this->user_condition
+                )
             ));
         }
 		$successinfo = array('count' => $count);
