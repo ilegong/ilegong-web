@@ -1,8 +1,32 @@
 <?PHP if($is_index) { ?>
-<a href="/products/20140809/tai_wan_tu_feng_li_su.html">
-<div class="row clearfix" style="height: 280px; margin-bottom: 20px; background: url({{ $this->Html->url('/img/pyshuo_banner_yanyan.jpg', true); }}); background-position: 5px; background-repeat: no-repeat">
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+        <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        <div class="item active">
+            <a href="/products/20140809/tai_wan_tu_feng_li_su.html"><img src="{{ $this->Html->url('/img/banner/pyshuo_banner_fengli.jpg', true); }}" alt="土凤梨酥"></a>
+        </div>
+        <div class="item">
+            <a href="/products/20140903/qing_hai_hu_hua_fen.html"><img src="{{ $this->Html->url('/img/banner/pyshuo_banner_follower.jpg', true); }}" alt="青海湖花粉预售"></a>
+        </div>
+        <div class="item">
+            <a href="/products/20140901/yan_yan_jia_de_mi.html"><img src="{{ $this->Html->url('/img/banner/pyshuo_banner_yanyan.jpg', true); }}" alt="炎炎家的蜂蜜"></a>
+        </div>
+    </div>
+
+    <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+    </a>
+    <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+    </a>
 </div>
-</a>
 <?PHP } ?>
 <div class="row">
 		<div class="ui-contain col-md-12">
