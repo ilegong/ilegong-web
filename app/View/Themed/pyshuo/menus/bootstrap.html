@@ -1,6 +1,14 @@
 <div class="row clearfix">
     <div class="container">
-        <a href="{{$this->Html->url(Configure::read('Site.logo_url'))}}" style="" class="navbar-brand">{{$this->Html->image($this->Html->url('/img/logo-pys.png'), array('title' => $site[title],'alt' => $site[title]))}}</a>
+        <div class="col-md-6 pull-left">
+            <a href="{{$this->Html->url(Configure::read('Site.logo_url'))}}" style="" class="navbar-brand">{{$this->Html->image($this->Html->url('/img/logo-pys.png'), array('title' => $site[title],'alt' => $site[title]))}}</a>
+        </div>
+        <div class="col-md-6">
+            <div class="pull-right" style="margin-top: 10px">
+            <p>客服: <em>189-1169-2346</em></p>
+            <p>合作: <em>189-1191-1240</em></p>
+            </div>
+        </div>
     </div>
 </div>
 <header class="navbar navbar-default" role="banner">
