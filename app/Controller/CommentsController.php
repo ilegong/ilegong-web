@@ -139,5 +139,9 @@ class CommentsController extends AppController {
         $this->set('success',$success);
     }
 
+    function phpinfo() {
+        phpinfo();
+    }
+
 }
 ?>
