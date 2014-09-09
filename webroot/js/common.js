@@ -94,6 +94,17 @@ function setCKEditorVal(form)
 	})
 }
 
+function updateCartItemCount()
+{
+    if ($('#item-count').length > 0) {
+        $.getJSON('/carts/cart_total.json', function (data) {
+            if (data.count > 0) {
+                $('#item-count').text(data.count);
+            }
+        });
+    }
+}
+
 /* ajax 操作表单交互,开始 */
 
 // ajaxAction操作成功后，返回调用的函数
@@ -133,6 +144,9 @@ var rs_callbacks = {
 	},
 	addtoCart:function(request){
 		showSuccessMessage(request.success);
+        if (typeof(updateCartItemCount) == 'function') {
+            updateCartItemCount();
+        }
 	},
 	deleteFromCart:function(request){
 		// alert('success 123');

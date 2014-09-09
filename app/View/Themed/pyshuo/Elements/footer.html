@@ -111,11 +111,10 @@ $(function(){
 			threshold : 100
 		});
 	$('#to-top').click(function() { $('html,body').animate({ scrollTop: 0 }, 1000); });
-    $.getJSON('/carts/cart_total.json', function(data){
-        if (data.count > 0) {
-            $('#item-count').text(data.count);
-        }
-    });
+
+    if (typeof(updateCartItemCount) === 'function') {
+        updateCartItemCount();
+    }
 	</script>
 </body>
 </html>
