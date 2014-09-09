@@ -72,7 +72,8 @@ class CartsController extends AppController{
         echo json_encode($errorinfo);
         exit;
 	}
-	
+
+    //FIXME: authorized
 	function editCartNum($id,$num){
 		if($num<=0){
 			$op_flag = $this->Cart->deleteAll(array('id' => $id,'status' => 0,'order_id' => NULL,'OR'=> $this->user_condition), true, true);
@@ -81,6 +82,19 @@ class CartsController extends AppController{
 			$op_flag = $this->Cart->updateAll(array('num'=>$num), array('id' => $id,'status' => 0,'order_id' => NULL,'OR'=> $this->user_condition));
 		}
 		$successinfo = array('success' => __('Success edit nums.'));
+		echo json_encode($successinfo);
+		exit;
+	}
+
+    //FIXME: check authorized problem
+	function cart_total(){
+        $count = 0;
+        if($this->currentUser && $this->currentUser['id']) {
+            $count = $this->Cart->find('count', array(
+                'conditions' => array( 'OR' => $this->user_condition )
+            ));
+        }
+		$successinfo = array('count' => $count);
 		echo json_encode($successinfo);
 		exit;
 	}

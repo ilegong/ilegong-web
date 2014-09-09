@@ -38,7 +38,7 @@
 	
 	<ul class="nav navbar-nav pull-right">                        
                     <li class="dropdown">
-                        <a id="item-count" href="{{$this->Html->url(array('controller'=>'carts','action'=>'listcart'))}}"><i class="glyphicon glyphicon-shopping-cart"></i>&nbsp;购物车&nbsp;<span class="label label-danger"></span></a>                                
+                        <a href="{{$this->Html->url(array('controller'=>'carts','action'=>'listcart'))}}"><i class="glyphicon glyphicon-shopping-cart"></i>&nbsp;购物车&nbsp;<span id="item-count" class="badge" style="vertical-align: super; background-color: darkred"></span></a>
                     </li>
                     
                     	{{if (!empty($CurrentUser))}}
