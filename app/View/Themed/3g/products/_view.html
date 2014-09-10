@@ -1,6 +1,9 @@
 <h2 class="Content-title" id="item-detail-title"><?php echo $Product['Product']['name']; ?></h2>
-<p>单价：<strong> ￥<?php echo $Product['Product']['price']; ?></strong></p>
-<div  id="productinfo" class="clearfix" style="padding-bottom:10px;">	    
+<p>单价：<strong> ￥{{$this->Number->precision($Product['Product']['price'], 2)}}</strong></p>
+{{if $Product['Product'][promote_name] }}
+<p><?php echo $Product['Product']['promote_name']; ?></p>
+{{/if}}
+<div  id="productinfo" class="clearfix" style="padding-bottom:10px;">
     <div class="input-group" style="float:left;width:120px;">
 	  <span class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}" >-</span>
 	  <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text" readonly="readonly">
@@ -11,7 +14,7 @@ href="javascript:void(0);">添加到购物车 </a>
 	
 </div>
 <div>
-	<a style="color:red;" href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($Product['Brand']['created'])).'/'.$Product['Product']['brand_id'])}}">查看商家更多商品 </a>
+	<a style="color:red;" href="{{$this->Html->url('/brands/'.date('h Ymd',strtotime($Product['Brand']['created'])).'/'.$Product['Product']['brand_id'])}}">查看商家更多商品 </a>
 </div>
 <div class="row">
 	<div class="col-xs-12 col-md-6">	
