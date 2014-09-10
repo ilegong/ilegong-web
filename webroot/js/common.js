@@ -130,7 +130,9 @@ var rs_callbacks = {
 			}
 			if(sso.callback){
 				sso.callback.apply(sso.callback,sso.callback_args);
-			}
+			} else {
+                window.location.href = window.location.href;
+            }
 			if(request.userinfo && request.userinfo.session_flash){
 				showSuccessMessage(request.success+request.userinfo.session_flash);
 			}
