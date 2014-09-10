@@ -9,7 +9,7 @@
     <meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}" />
     <meta name="Description" content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}" />
     <!--[if lt IE 9]>
-    {{$this->Html->script(array('html5.js'))}}
+    {{$this->Html->script(array('html5.js', 'respond.js/1.4.2/respond.min.js'))}}
     <![endif]-->
     {{$this->Html->meta('icon')}}
 
