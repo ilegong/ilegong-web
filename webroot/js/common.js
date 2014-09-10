@@ -100,6 +100,8 @@ function updateCartItemCount()
         $.getJSON('/carts/cart_total.json', function (data) {
             if (data.count > 0) {
                 $('#item-count').text(data.count);
+            } else {
+                $('#item-count').text('');
             }
         });
     }
