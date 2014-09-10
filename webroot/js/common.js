@@ -130,15 +130,15 @@ var rs_callbacks = {
 			}
 			if(sso.callback){
 				sso.callback.apply(sso.callback,sso.callback_args);
+//                if(request.userinfo && request.userinfo.session_flash){
+//                    showSuccessMessage(request.success+request.userinfo.session_flash);
+//                }
+//                else if(request.userinfo){
+//                    showSuccessMessage(request.success);
+//                }
 			} else {
                 window.location.href = window.location.href;
             }
-			if(request.userinfo && request.userinfo.session_flash){
-				showSuccessMessage(request.success+request.userinfo.session_flash);
-			}
-			else if(request.userinfo){
-				showSuccessMessage(request.success);
-			}
 		} else {
             $("#loginMessage").html(request.error).show();
             if (form) {
@@ -147,7 +147,9 @@ var rs_callbacks = {
         }
 	},
 	addtoCart:function(request){
-		showSuccessMessage(request.success);
+		showSuccessMessage(request.success, function(){
+            window.location.href = window.location.href;
+        });
         if (typeof(updateCartItemCount) == 'function') {
             updateCartItemCount();
         }
@@ -741,12 +743,18 @@ $(function(){
 
 var stack_custom = {"dir1": "right", "dir2": "down"};
 // 显示表单提交成功的信息
-function showSuccessMessage(text)
+function showSuccessMessage(text, close_callback)
 {
 	if($('#showMessageModel').size()==0){
 		$('<div id="showMessageModel" class="modal fade"><div class="modal-dialog"><div class="modal-content"> <div class="modal-header">   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>   <h4 class="modal-title">消息提醒</h4> </div> <div class="modal-body"></div> <div class="modal-footer">   <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button></div>	</div>  </div></div>').appendTo('body');
 	}
-	$('#showMessageModel').modal('hide');
+    var $msgDlg = $('#showMessageModel');
+    if (typeof(close_callback) == 'function') {
+        $msgDlg.on('hidden.bs.modal', function () {
+            close_callback();
+        });
+    }
+    $msgDlg.modal('hide');
 	$('#showMessageModel').find('.modal-body').html(text);
 	$('#showMessageModel').modal('show');
 	return true;

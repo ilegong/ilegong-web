@@ -37,7 +37,10 @@ class CartsController extends AppController{
 	}
 	
 	function add(){
-		
+
+        //清除Flash信息，避免登陆信息显示出来
+        $this->Session->delete('Message.flash');
+
 		$carts = array();
 		if(!empty($this->data)){
 			$this->autoRender = false;
