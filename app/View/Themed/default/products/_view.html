@@ -75,8 +75,11 @@ var setAmount={
 <h2 class="Content-title"><?php echo $Product['Product']['name']; ?></h2>
 	    <div  id="productinfo">
 	    {{template Elements/images_zoom}}
-	    <ul style="float:left;margin-left: 10px;display: inline;margin-top: 20px">
+	    <ul style="float:left;margin-left: 10px;display: inline;margin-top: 20px;">
             <li>价格： <span style="font-size:24px; color: rgb(241, 151, 51);">￥{{$this->Number->precision($Product['Product']['price'], 2)}}</span></li>
+            {{if $Product['Product'][promote_name] }}
+            <li>{{$Product['Product'][promote_name]}}</li>
+            {{/if}}
             <li>
             <div class="input-group" style="float:left;width:120px;">
 			  <span class="reduce input-group-addon" onclick="setAmount.reduce('#pamount')">-</span>

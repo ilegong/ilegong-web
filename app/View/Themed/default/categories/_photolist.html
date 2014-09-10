@@ -17,7 +17,7 @@
      		<div class="food-info pull-right">
              <strong>¥{{$this->Number->precision($item['price'], 2)}}</strong>
      		</div>
-     		<a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">{{if $item['promote_name']}}{{$item['promote_name']}}{{else}}评论({{$item['comment_nums']}}){{/if}}</a>
+     		<a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">评论({{$item['comment_nums']}})</a>
      	</div>
 </p>
 </li>
