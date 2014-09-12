@@ -24,8 +24,9 @@ class BrandsController extends AppController {
 
     public function brands_admin() {
 
+        $toLogin = '/users/login?referer=' . Router::url('/brands/brands_admin');
         if(empty($this->currentUser['id'])){
-            $this->redirect('/users/login?referer='.Router::url('/brands/brands_admin'));
+            $this->redirect($toLogin);
         }
 
         if ($this->is_admin($this->currentUser['id'])) {
@@ -34,7 +35,8 @@ class BrandsController extends AppController {
             ));
             $this->set('brands', $brands);
         } else {
-            echo "You are not authorized to visit this page!";
+            $this->Session->setFlash(__("You are not authorized to visit this page!"));
+            $this->redirect($toLogin);
             exit;
         }
     }
