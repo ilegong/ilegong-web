@@ -480,11 +480,9 @@ class UsersController extends AppController {
         $this->data['User']['referer'] = $redirect;
     }
 
-    function logout() {        
-        
-        $this->Cookie->destroy();
-        $this->Session->destroy();
-        unset($this->currentUser);
+    function logout() {
+
+        $this->logoutCurrUser();
         if(defined('UC_APPID')){
             App::import('Vendor', '',array('file' => 'uc_client'.DS.'client.php'));
             if(function_exists('uc_user_synlogout')){

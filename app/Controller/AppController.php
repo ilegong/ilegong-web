@@ -506,5 +506,12 @@ class AppController extends Controller {
         return $content;
     }
 
+    public function logoutCurrUser()
+    {
+        $this->Cookie->destroy();
+        $this->Session->destroy();
+        unset($this->currentUser);
+    }
+
 }
 ?>
