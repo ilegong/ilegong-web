@@ -21,5 +21,17 @@ class BrandsController extends AppController {
     	));
     	$this->set('products',$products);
     }
+
+    public function brands_admin() {
+        if ($this->is_admin($this->currentUser['id'])) {
+            $brands = $this->Brand->find('all', array(
+                'fields' => array('creator', 'name')
+            ));
+            $this->set('brands', $brands);
+        } else {
+            echo "You are not authorized to visit this page!";
+            exit;
+        }
+    }
 }
 ?>

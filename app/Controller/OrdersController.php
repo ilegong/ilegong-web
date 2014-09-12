@@ -306,10 +306,17 @@ class OrdersController extends AppController{
 		$this->set('order_carts',$order_carts);
 		$this->set('ship_type',$this->ship_type);
 	}
-	function business(){
+
+	function business($creator=0){
+
+        if ($this->is_admin($this->currentUser['id']) && $creator > 0) {
+        } else {
+            $creator = $this->currentUser['id'];
+        }
+
 		$this->loadModel('Brand');
 		$brands = $this->Brand->find('list',array('conditions'=>array(
-				'creator'=>$this->currentUser['id'],
+				'creator'=> $creator,
 		)));
 		
 		if(!empty($brands)){
@@ -362,13 +369,16 @@ class OrdersController extends AppController{
 		$order_carts = array();
 		foreach($Carts as $c){
 			$order_id = $c['Cart']['order_id'];
-			if(!isset($order_carts[$order_id])) $order_carts[$order_id] = array();
+            if (!isset($order_carts[$order_id])) {
+                $order_carts[$order_id] = array();
+            }
 			$order_carts[$order_id][] = $c;
 		}
 		
 		$this->set('orders',$orders);
 		$this->set('order_carts',$order_carts);
 		$this->set('ship_type',$this->ship_type);
+        $this->set('creator', $creator);
 
 
         if($_REQUEST['export']=='true'){
@@ -464,6 +474,16 @@ class OrdersController extends AppController{
 	function set_status(){
 		$order_id = $_REQUEST['order_id'];
 		$status = $_REQUEST['status'];
+
+        $creator = $this->currentUser['id'];
+        if (isset($_REQUEST['creator']) && $_REQUEST['creator'] && $this->is_admin($this->currentUser['id'])) {
+            $creator = $_REQUEST['creator'];
+        }
+
+        if (1 == $status && !$this->is_admin($this->currentUser['id'])) {
+            echo json_encode(array('order_id'=>$order_id,'msg'=>'您不具备此订单的支付确认权限，请联系管理员。'));
+            exit;
+        }
 		
 		if(empty($order_id) || empty($status)){
 			echo json_encode(array('order_id'=>$order_id,'msg'=>'参数错误'));
@@ -472,7 +492,7 @@ class OrdersController extends AppController{
 		$this->loadModel('Brand');
 		$brands = $this->Brand->find('list',array(
 			'conditions'=>array(
-				'creator'=>$this->currentUser['id'],
+				'creator'=> $creator,
 		)));
 		$brand_ids = array_keys($brands);
 		
@@ -493,14 +513,22 @@ class OrdersController extends AppController{
 				exit;
 			}
 			else{
-				$this->Order->updateAll(array('status'=>$status),array('id'=>$order_id));
+				$this->Order->updateAll(array('status'=>$status, 'lastupdator'=>$creator),array('id'=>$order_id));
 				if($status==11)  $msg = '订单已确认';
 				elseif($status==10)  $msg = '订单已作废';
 				echo json_encode(array('order_id'=>$order_id,'msg'=>$msg));
 				exit;
 			}
-		}
-		elseif($orig_status==1){
+		} elseif ($orig_status == 11) {
+            if (1 == $status && $this->is_admin($this->currentUser['id'])) {
+                $this->Order->updateAll(array('status'=>$status, 'lastupdator'=>$creator),array('id'=>$order_id));
+                echo json_encode(array('order_id'=>$order_id,'msg'=>'订单已支付'));
+                exit;
+            } else {
+                echo json_encode(array('order_id'=>$order_id,'msg'=>'您不能变更订单到指定状态，请联系管理员。'));
+                exit;
+            }
+        } elseif($orig_status==1){
 			//已支付订单，修改状态为已发货
 			if(!in_array($status,array(2))){
 				echo json_encode(array('order_id'=>$order_id,'msg'=>'您只能将此订单设为已发货。'));
@@ -509,7 +537,7 @@ class OrdersController extends AppController{
 			else{
 				$ship_code = $_REQUEST['ship_code'];
 				$ship_type = $_REQUEST['ship_type'];
-				$this->Order->updateAll(array('status'=>$status,'ship_code'=>"'".addslashes($ship_code)."'",'ship_type'=>$ship_type),array('id'=>$order_id));				
+				$this->Order->updateAll(array('status'=>$status,'ship_code'=>"'".addslashes($ship_code)."'",'ship_type'=>$ship_type, 'lastupdator'=>$creator),array('id'=>$order_id));
 				echo json_encode(array('order_id'=>$order_id,'msg'=>'订单状态已更新为“已发货”'));
 				exit;
 			}

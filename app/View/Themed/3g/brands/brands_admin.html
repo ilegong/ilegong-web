@@ -1,0 +1,17 @@
+<div  class="container">
+    <div class="orderinfo">
+        <div class="o_show">
+            <p>
+                您好，{{$CurrentUser['username']}}! 您的用户编号是:{{$CurrentUser['id']}}。您现在正在管理商家订单，请谨慎操作！
+            </p>
+            <h2>商家订单</h2>
+            {{loop $brands $brand}}
+            <ul>
+                <li>{{$this->Html->link($brand['Brand']['name'], array('controller' => 'orders','action'=>'business', $brand['Brand']['creator']))}}</li>
+            </ul>
+            {{/loop}}
+        </div>
+
+
+    </div>
+</div>

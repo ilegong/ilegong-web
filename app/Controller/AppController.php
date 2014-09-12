@@ -32,6 +32,8 @@ class AppController extends Controller {
     public $firephp_vars = array();
     public $viewdata = null;
 
+    public $admins = array('632', '8', '141');
+
     // 自定义构造函数
     public function __construct($request = null, $response = null) {
         if ($request instanceof CakeRequest) {
@@ -234,6 +236,7 @@ class AppController extends Controller {
     	$this->set('basedir', $this->request->base);
     	$this->set('site_cate_id',$GLOBALS['site_cate_id']);
         $this->set('CurrentUser', $this->currentUser);
+        $this->set('is_admin', $this->is_admin($this->currentUser['id']));
         $this->set('pageTitle', $this->pageTitle);
         
 		// view时，有current_data_id。
@@ -243,6 +246,10 @@ class AppController extends Controller {
         $this->set('current_action', $this->action);
         $this->set('current_pass', $this->request->params['pass']);
         $this->set('current_named', $this->request->params['named']);
+    }
+
+    protected function is_admin($uid) {
+        return 'false' !== array_search($uid, $this->admins, true);
     }
 
     protected function _getParamVars($name,$default='') {
