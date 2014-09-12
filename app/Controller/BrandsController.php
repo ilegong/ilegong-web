@@ -23,6 +23,11 @@ class BrandsController extends AppController {
     }
 
     public function brands_admin() {
+
+        if(empty($this->currentUser['id'])){
+            $this->redirect('/users/login?referer='.Router::url('/brands/brands_admin'));
+        }
+
         if ($this->is_admin($this->currentUser['id'])) {
             $brands = $this->Brand->find('all', array(
                 'fields' => array('creator', 'name')
