@@ -31,7 +31,8 @@ class BrandsController extends AppController {
 
         if ($this->is_admin($this->currentUser['id'])) {
             $brands = $this->Brand->find('all', array(
-                'fields' => array('creator', 'name')
+                'fields' => array('creator', 'name'),
+                'order' =>  'id desc',
             ));
             $this->set('brands', $brands);
         } else {
