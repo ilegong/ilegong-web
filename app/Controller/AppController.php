@@ -249,7 +249,7 @@ class AppController extends Controller {
     }
 
     protected function is_admin($uid) {
-        return $uid && 'false' !== array_search($uid, $this->admins, true);
+        return $uid && false !== array_search($uid, $this->admins, true);
     }
 
     protected function _getParamVars($name,$default='') {
