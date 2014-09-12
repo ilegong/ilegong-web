@@ -373,7 +373,7 @@ class OrdersController extends AppController{
 
         if($_REQUEST['export']=='true'){
             $this->autoRender = false;
-            $this->_download_excel($orders);
+            $this->_download_excel($orders, $order_carts);
             exit;
         }
 	}
@@ -382,14 +382,14 @@ class OrdersController extends AppController{
     /**
      * 占用较小的内存，更适合网站空间php占用内存限制小的情况。
      */
-    private function _download_excel($orders){
+    private function _download_excel($orders, $order_carts){
         @set_time_limit(0);
         App::import('Vendor', 'Excel_XML', array('file' => 'phpexcel'.DS.'excel_xml.class.php'));
         $xls = new Excel_XML('UTF-8', true, 'Sheet Orders');
 
         $add_header_flag = false;
-        $fields = array('id','consignee_name','created','total_price','status','consignee_mobilephone','consignee_address');
-        $header = array('订单号','客户姓名','下单时间','总价','状态','联系电话','收货地址');
+        $fields = array('id','consignee_name','created','goods', 'total_price','status','consignee_mobilephone','consignee_address');
+        $header = array('订单号','客户姓名','下单时间','商品','总价','状态','联系电话','收货地址');
         $order_status = array('待确认', '已支付','已发货','已收货','已退款','','','','','已完成','已做废', '已确认', '已投诉');
         $page = 1;
         $pagesize = 500;
@@ -401,11 +401,24 @@ class OrdersController extends AppController{
                     $add_header_flag = true;
                 }
                 $row = array();
-                foreach($fields as $fieldname){
-                    $value = $item['Order'][$fieldname];
-                    if ($fieldname == 'status') {
-                        $value = $order_status[$value];
+                foreach($fields as $fieldName){
+                    if ($fieldName == 'goods') {
+                        $orderId = $item['Order']['id'];
+                        $goods = $order_carts[$orderId];
+                        $value = '';
+                        if (is_array($goods)) {
+                            foreach ($goods as $good) {
+                                $value .= $good['Cart']['name'] . '*' . $good['Cart']['num'] . '; ';
+                            }
+                        }
+
+                    } else {
+                        $value = $item['Order'][$fieldName];
+                        if ($fieldName == 'status') {
+                            $value = $order_status[$value];
+                        }
                     }
+
                     $row[] = $value;
                 }
                 $xls->addRow($row);

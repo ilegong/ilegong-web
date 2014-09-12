@@ -121,7 +121,7 @@ class Excel_XML
          * 
          * @param array $array One-dimensional array with row content
          */
-        public function addRow ($array)
+        public function addRow ($array, $formats = [])
         {
         	$cells = "";
                 foreach ($array as $k => $v):
@@ -130,7 +130,12 @@ class Excel_XML
                                 $type = 'Number';
                         endif;
                         $v = htmlentities($v, ENT_COMPAT, $this->sEncoding);
-                        $cells .= "<Cell><Data ss:Type=\"$type\">" . $v . "</Data></Cell>\n"; 
+                        if (array_key_exists($k, $formats) && $formats[$k]) {
+                            $cells .= "<Cell ss:StyleID=\"s62\">";
+                        } else {
+                            $cells .= "<Cell>";
+                        }
+                        $cells .= "<Data ss:Type=\"$type\">" . $v . "</Data></Cell>\n";
                 endforeach;
                 $this->lines[] = "<Row>\n" . $cells . "</Row>\n";
         }
@@ -162,7 +167,8 @@ class Excel_XML
                 // print out document to the browser
                 // need to use stripslashes for the damn ">"
                 echo stripslashes (sprintf($this->header, $this->sEncoding));
-                echo "\n<Worksheet ss:Name=\"" . $this->sWorksheetTitle . "\">\n<Table>\n";
+                echo "\n<Styles><Style ss:ID=\"s62\"> <Alignment ss:Vertical=\"Bottom\" ss:WrapText=\"1\"/> </Style></Styles>\n<Worksheet ss:Name=\"" . $this->sWorksheetTitle . "\">\n<Table>\n";
+                echo '<Column ss:AutoFitWidth="1"/> <Column ss:AutoFitWidth="1"/> <Column ss:AutoFitWidth="1"/> <Column ss:AutoFitWidth="0" ss:Width="300"/> <Column ss:AutoFitWidth="1"/> <Column ss:AutoFitWidth="1"/> <Column ss:AutoFitWidth="1"/> <Column ss:AutoFitWidth="1"/> ';
                 foreach ($this->lines as $line)
                         echo $line;
 
