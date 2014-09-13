@@ -91,12 +91,12 @@ class WeixinController extends AppController {
 				case "预订":
 				case "预定":
 				case "1":
-					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/techan.html?wx_openid=$user_code\" >51带饭预定页</a>");
+					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/techan.html?wx_openid=$user_code\" >朋友说</a>");
 					break;
 				case "查看订单":
 				case "订单":
 				case "2":
-					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/orders/mine.html?wx_openid=$user_code\" >查看我的订单</a>");
+					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/orders/mine.html?wx_openid=$user_code\" >我的订单</a>");
 					break;
                 case "3":
 					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://wx.wsq.qq.com/177650290\" >51daifan微社区</a>");
@@ -105,7 +105,7 @@ class WeixinController extends AppController {
 					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/share.html?wx_openid=$user_code\" >分享同事列表页</a>");
 					break;
                 case "5":
-                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://www.mikecrm.com/f.php?t=3DGEyQ\" >51带饭试吃团报名</a>");
+                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://www.mikecrm.com/f.php?t=3DGEyQ\" >朋友说试吃团报名</a>");
                     break;
 				case "大米":
 				case "9":
