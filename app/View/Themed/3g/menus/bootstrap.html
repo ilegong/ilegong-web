@@ -8,7 +8,7 @@
      	<?php 
 			if(strlen($CurrentUser['username'])>18){ $CurrentUser['username'] = substr($CurrentUser['username'],10,8); }
 
-			echo $this->Html->link($CurrentUser['username'], array('controller' => 'orders','action'=>'mine','plugin' => null ,),array('class'=>"dropdown-toggle",'data-toggle'=>'dropdown')); ?>
+			echo $this->Html->link('我', array('controller' => 'orders','action'=>'mine','plugin' => null ,),array('class'=>"dropdown-toggle",'data-toggle'=>'dropdown')); ?>
 		<ul id="g-account-menu" class="dropdown-menu" style="position: absolute;" role="menu">
 			<li><a href="{{$this->Html->url('/users/editusername')}}">设置用户名</a></li>
 	        <li><a href="{{$this->Html->url('/orders/mine')}}">我的订单</a></li>
@@ -17,6 +17,7 @@
             <li><a href="{{$this->Html->url('/users/logout')}}">退出登录</a></li>
         </ul>
      {{else}}
+     	<a href="{{$this->Html->url('/users/login')}}">登陆</a>
      	<a href="{{$this->Html->url('/users/register')}}">注册</a>
      {{/if}}
     </div>
