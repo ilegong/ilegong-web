@@ -3,7 +3,7 @@ class CategoriesController extends AppController {
 
     var $name = 'Categories';
 
-    public function view($slug='/') {
+    public function view($slug='/', $brand_id='') {
     	$this->__viewFileName = array();
     	
         $page=$_GET['page']?$_GET['page']:($this->request->params['named']['page']?$this->request->params['named']['page']:1);
@@ -77,6 +77,13 @@ class CategoriesController extends AppController {
 			if($data_model=='Product'){
 				$conditions[$data_model.'.recommend >'] = 0;
 				$orderby = $data_model.'.recommend desc,id desc';
+
+                if ($brand_id) {
+                    $conditions[$data_model . '.brand_id ='] = $brand_id;
+                } else {
+                    $conditions[$data_model . '.brand_id !='] = 18;
+                }
+
 			}
 			else{
 				$orderby = $data_model.'.created desc';
@@ -149,6 +156,10 @@ class CategoriesController extends AppController {
         }
         if ($Category['Category']['seokeywords']) {
             $this->set('seokeywords', $Category['Category']['seokeywords']);
+        }
+
+        if ($brand_id == 18) {
+            $this->set('sub_title', '黑猪专栏');
         }
         
         $this->set('category_model_name', $data_model);
