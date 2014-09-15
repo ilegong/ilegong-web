@@ -121,7 +121,7 @@ class Excel_XML
          * 
          * @param array $array One-dimensional array with row content
          */
-        public function addRow ($array, $formats = [])
+        public function addRow ($array, $formats = array())
         {
         	$cells = "";
                 foreach ($array as $k => $v):
