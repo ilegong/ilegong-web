@@ -91,6 +91,7 @@ class WeixinController extends AppController {
 				case "预订":
 				case "预定":
 				case "1":
+                case "１":
 					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/techan.html?wx_openid=$user_code\" >朋友说</a>");
 					break;
 				case "查看订单":
