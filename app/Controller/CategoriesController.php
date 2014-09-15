@@ -88,7 +88,7 @@ class CategoriesController extends AppController {
 			else{
 				$orderby = $data_model.'.created desc';
 			}
-			if(!empty($this->request->query)){
+			if(!empty($this->request->query) && !(count($this->request->query) == 1 && array_key_exists('techan_html?wx_openid', $this->request->query))){
 				$conditions = getSearchOptions($this->request->query,$data_model);
 			}
 			if($left+1==$right){	// 无子类时，直接查询本类的内容
