@@ -3,10 +3,12 @@ App::uses('CustomRouter', 'Lib');
 
 // When making custom routes, a common pitfall is that using named parameters will break your custom routes. In order to solve this
 	//Router::connectNamed(array('page'),array('separator'=>'|')); 	
-	Router::parseExtensions('html', 'rss','json','xml','css');	
-	
+	Router::parseExtensions('html', 'rss','json','xml','css');
 
-	CustomRouter::connect('/:controller/:yearmonth/:slug',
+
+    Router::redirect('/products/19700101/heizhu_tuangou', '/techan/18');
+
+    CustomRouter::connect('/:controller/:yearmonth/:slug',
 	array('action' => 'view'),
 	array('pass' => array('slug'),'controller'=>'[\w_]+','yearmonth'=>"[0-9]{8}")
 	);
@@ -61,9 +63,6 @@ App::uses('CustomRouter', 'Lib');
 	CustomRouter::connect('/:slug', array('controller' => 'categories', 'action' => 'view'), array('pass' => array('slug')) );
 	CustomRouter::connect('/:slug/:brand', array('controller' => 'categories', 'action' => 'view'), array('pass' => array('slug', 'brand')) );
 
-	
-	
-	
 // 	require CAKE . 'Config' . DS . 'routes.php';
 
 	$prefixes = Router::prefixes();

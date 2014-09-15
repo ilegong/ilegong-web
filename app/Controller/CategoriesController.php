@@ -141,6 +141,19 @@ class CategoriesController extends AppController {
             $this->set('page_navi', $page_navi);
 	
 	        $Category['datalist'] = array();
+            if ($data_model=='Product' && !$brand_id) {
+                $Category['datalist'][] = array(
+                    'id' => 100000,
+                    'name' => '北京黑猪肉团购',
+                    'coverimg' => 'http://51daifan-images.stor.sinaapp.com/files/201402/thumb_m/a97f2ff8be6_0223.jpg',
+                    'slug' => 'heizhu_tuangou',
+                    'price' => '待定',
+                    'published' => '1',
+                    'brand_id' => 18,
+                    'cate_id' => 114,
+                    'comment_nums' => 16
+                );
+            }
 	        foreach ($datalist as $val) {
 	            $Category['datalist'][] = $val[$data_model];
 	        }
