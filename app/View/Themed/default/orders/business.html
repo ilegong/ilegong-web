@@ -9,7 +9,7 @@ td {padding:5px 10px;}
 		     您好，{{$CurrentUser['username']}}! 您的用户编号是:{{$CurrentUser['id']}}
 		</p>
 		{{if $is_business}}
-            <?php echo $this->Html->link('导出Excel', array('controller' => 'orders','action'=>'business','plugin' => null , '?' => array('export' => 'true')),array('class'=>'btn btn-info pull-right')); ?>
+            <?php echo $this->Html->link('导出Excel', array('controller' => 'orders','action'=>'business','plugin' => null , $creator, '?' => array('export' => 'true')),array('class'=>'btn btn-info pull-right')); ?>
             <?php echo $this->Html->link('新增商品', array('controller' => 'products','action'=>'add','plugin' => null ,), array('class'=>'btn btn-warning pull-right')); ?>
 		<ul class="nav nav-tabs">
 			<li {{if $current_controller=='orders' && $current_action=='mine'}}class="active"{{/if}}><?php echo $this->Html->link('我的订单', array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?></li>
