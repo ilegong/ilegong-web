@@ -8,7 +8,7 @@
 
             <h2>{{$cate['name']}}</h2>
                 {{loop $item $key $article}}
-                    <div class="" style="margin: 20px 10px 20px 5px">
+                    <div class="clearfix" style="margin: 20px 10px 20px 5px">
                             <div class="col-md-2">
                             <?PHP if ($article['Article']['coverimg'] != 'nophoto.gif') { ?>
                             {{$this->Html->image($article['Article']['coverimg'], array('width'=>100));}}
