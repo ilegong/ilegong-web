@@ -32,12 +32,7 @@ class CategoriesController extends AppController {
         $right = $Category['Category']['right'];
         
         $this->Category->recursive = -1;
-        $path_cachekey = 'category_path_'.$current_cateid;
-        $navigations = Cache::read($path_cachekey);
-        if ($navigations === false) {
-        	$navigations = $this->Category->getPath($current_cateid);
-        	Cache::write($path_cachekey, $navigations);
-        }
+        $navigations = $this->readOrLoadAndCacheNavigations($current_cateid, $this->Category);
         /**
          * 若本栏目没有个性化模版，但上级栏目有个性化的模版时，继承使用上级的个性化模版，否则使用默认模版
          * */

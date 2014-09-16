@@ -513,5 +513,21 @@ class AppController extends Controller {
         unset($this->currentUser);
     }
 
+
+    /**
+     * @param $current_cateid
+     * @return mixed
+     */
+    protected function readOrLoadAndCacheNavigations($current_cateid, $cateModel)
+    {
+        $path_cachekey = 'category_path_' . $current_cateid;
+        $navigations = Cache::read($path_cachekey);
+        if ($navigations === false) {
+            $navigations = $cateModel->getPath($current_cateid);
+            Cache::write($path_cachekey, $navigations);
+            return $navigations;
+        }
+        return $navigations;
+    }
 }
 ?>
