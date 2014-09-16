@@ -112,7 +112,9 @@ class WeixinController extends AppController {
 				case "9":
 						echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/users/goTage?wx_openid=$user_code\" >天天踏歌购买娜娜家的大米</a>");
 						break;
+                case "5151":
                 case "ordersadmin":
+                case "Ordersadmin":
                     echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://www.pyshuo.com/brands/brands_admin\">商家订单管理</a>");
                     break;
 				//default :
