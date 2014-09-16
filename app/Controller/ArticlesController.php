@@ -21,8 +21,6 @@ class ArticlesController extends AppController{
             'fields' => array('id', 'name')
         ));
 
-        var_dump($cates);
-
         foreach($cates as &$cate) {
             $articles = $this->Article->find('all', array('conditions' => array(
                 'cate_id' => $cate['Category']['id'],
@@ -34,8 +32,6 @@ class ArticlesController extends AppController{
 
             $cate['articles'] = $articles;
         }
-
-        var_dump($cates);
 
         // 设置页面SEO标题、关键字、内容描述
         if (!empty($Category['Category']['seotitle'])) {
