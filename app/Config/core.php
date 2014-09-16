@@ -59,6 +59,10 @@ if (function_exists('date_default_timezone_set')) {
 }
 
 if (defined('SAE_MYSQL_DB')) {
+    Configure::write('App.assetsUrl', 'http://51daifan.sinaapp.com');
+}
+
+if (defined('SAE_MYSQL_DB')) {
     $engine = 'Saemc';
 }
 elseif(preg_match('/\.aliapp\.com$/',$_SERVER['HTTP_HOST'])){

@@ -92,5 +92,47 @@ class AppHelper extends Helper {
 		}
 		return $url;
 	}
+
+    /**
+     * Generate url for given asset file. Depending on options passed provides full url with domain name.
+     * Also calls Helper::assetTimestamp() to add timestamp to local files
+     *
+     * @param string|array Path string or url array
+     * @param array $options Options array. Possible keys:
+     *   `fullBase` Return full url with domain name
+     *   `pathPrefix` Path prefix for relative URLs
+     *   `ext` Asset extension to append
+     *   `plugin` False value will prevent parsing path as a plugin
+     * @return string Generated url
+     */
+    public function assetUrl($path, $options = array()) {
+        if (is_array($path)) {
+            return $this->url($path, !empty($options['fullBase']));
+        }
+        if (strpos($path, '://') !== false) {
+            return $path;
+        }
+        if (!array_key_exists('plugin', $options) || $options['plugin'] !== false) {
+            list($plugin, $path) = $this->_View->pluginSplit($path, false);
+        }
+        if (!empty($options['pathPrefix']) && $path[0] !== '/') {
+            $path = $options['pathPrefix'] . $path;
+        }
+        if (
+            !empty($options['ext']) &&
+            strpos($path, '?') === false &&
+            substr($path, -strlen($options['ext'])) !== $options['ext']
+        ) {
+            $path .= $options['ext'];
+        }
+        if (isset($plugin)) {
+            $path = Inflector::underscore($plugin) . '/' . $path;
+        }
+
+        $path = $this->_encodeUrl($this->assetTimestamp($this->webroot($path)));
+        $path = rtrim(Configure::read('App.assetsUrl'), '/') . '/' . ltrim($path, '/');
+
+        return $path;
+    }
 }
 ?>
