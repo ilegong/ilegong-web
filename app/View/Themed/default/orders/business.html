@@ -34,8 +34,8 @@ td {padding:5px 10px;}
 			{{if $order['Order']['status']==0}}			
 				<font color="red">订单待确认</font>
 				<div class="well">
-					<button type="button" onclick="confirm_order({{$order['Order']['id']}},11);" class="btn btn-primary">确认订单</button>
-					<button type="button" onclick="confirm_order({{$order['Order']['id']}},10);" class="btn btn-danger">作废订单</button>
+					<button type="button" onclick="confirm_order({{$order['Order']['id']}},11, {{$creator}});" class="btn btn-primary">确认订单</button>
+					<button type="button" onclick="confirm_order({{$order['Order']['id']}},10, {{$creator}});" class="btn btn-danger">作废订单</button>
 				</div>
 			{{elseif $order['Order']['status']==1}}
 				<font color="red">订单已支付</font>
@@ -47,7 +47,7 @@ td {padding:5px 10px;}
 						{{/loop}}
 					</select>
 					<input type="text" width="80px;" id="ship-code-{{$order['Order']['id']}}" placeholder="快递单号">
-					<button type="button"  onclick="ship_order({{$order['Order']['id']}});" class="btn btn-primary">订单已发货</button>
+					<button type="button"  onclick="ship_order({{$order['Order']['id']}}, {{$creator}});" class="btn btn-primary">订单已发货</button>
 				</div>
 			{{elseif $order['Order']['status']==2}}<font color="red">订单已发货</font>
 			{{elseif $order['Order']['status']==3}}<font color="red">订单已收货</font>

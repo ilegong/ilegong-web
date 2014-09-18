@@ -522,7 +522,7 @@ class OrdersController extends AppController{
                 echo json_encode(array('order_id'=>$order_id,'msg'=>'您不能变更订单到指定状态，请联系管理员。'));
                 exit;
             }
-        } elseif($orig_status==1){
+        } elseif($orig_status==1 || $orig_status == 2){
 			//已支付订单，修改状态为已发货
 			if(!in_array($status,array(2))){
 				echo json_encode(array('order_id'=>$order_id,'msg'=>'您只能将此订单设为已发货。'));
