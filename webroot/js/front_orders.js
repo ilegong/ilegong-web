@@ -176,7 +176,7 @@ function ship_order(order_id, creator){
 	//	return false;
 	//}
     creator = creator || 0;
-	return ajaxAction(BASEURL+"/orders/set_status/",{'order_id':order_id,'status':2, 'creator':creator,'ship_code':$('#ship-code-'+order_id).val(),'ship_type':$('#ship-type-'+order_id).val()},null,'confirm_order_status');
+	return ajaxAction(BASEURL+"/orders/set_status/"+creator,{'order_id':order_id,'status':2,'ship_code':$('#ship-code-'+order_id).val(),'ship_type':$('#ship-type-'+order_id).val()},null,'confirm_order_status');
 }
 //用户确认收货
 function confirm_receive(order_id){
@@ -185,7 +185,7 @@ function confirm_receive(order_id){
 //商家确认订单
 function confirm_order(order_id, status, creator){
     creator = creator || 0;
-	return ajaxAction(BASEURL+"/orders/set_status/",{'order_id':order_id,'status':status, 'creator':creator},null,'confirm_order_status');
+	return ajaxAction(BASEURL+"/orders/set_status/"+creator,{'order_id':order_id,'status':status},null,'confirm_order_status');
 }
 
 
