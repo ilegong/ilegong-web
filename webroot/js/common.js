@@ -743,7 +743,7 @@ $(function(){
 
 var stack_custom = {"dir1": "right", "dir2": "down"};
 // 显示表单提交成功的信息
-function showSuccessMessage(text, close_callback)
+function showSuccessMessage(text, close_callback, timeout)
 {
 	if($('#showMessageModel').size()==0){
 		$('<div id="showMessageModel" class="modal fade"><div class="modal-dialog"><div class="modal-content"> <div class="modal-header">   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>   <h4 class="modal-title">消息提醒</h4> </div> <div class="modal-body"></div> <div class="modal-footer">   <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button></div>	</div>  </div></div>').appendTo('body');
@@ -755,8 +755,17 @@ function showSuccessMessage(text, close_callback)
         });
     }
     $msgDlg.modal('hide');
-	$('#showMessageModel').find('.modal-body').html(text);
-	$('#showMessageModel').modal('show');
+    if (timeout) {
+        $msgDlg.on('shown.bs.modal', function () {
+            clearTimeout($msgDlg.data('hideInteval'))
+            var id = setTimeout(function(){
+                $msgDlg.modal('hide');
+            });
+            $msgDlg.data('hideInteval', id);
+        });
+    }
+	$msgDlg.find('.modal-body').html(text);
+	$msgDlg.modal('show');
 	return true;
 }
 // 显示错误信息

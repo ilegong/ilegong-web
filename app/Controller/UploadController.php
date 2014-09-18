@@ -16,10 +16,10 @@ class UploadController extends AppController {
     );
 
     function upload() {
-
+        $this->autoRender = false;
         App::import('Vendor', 'UploadHandler', array('file' => 'file.upload/UploadHandler.php'));
         $options = array(
-            'upload_dir' => 'Your upload directory',
+            'upload_dir' => '/tmp/',
             'accept_file_types' => '/\.(gif|jpe?g|png)$/i'
         );
 

@@ -254,3 +254,13 @@ msgstr ""
 
 msgid "Edit Your Profiles"
 msgstr ""
+
+msgid "Add Images..."
+msgstr ""
+
+msgid "Upload"
+msgstr ""
+
+msgid "File upload failed."
+msgstr ""
+

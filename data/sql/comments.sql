@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `cake_comments` (
   `created` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MYISAM  DEFAULT CHARSET=utf8;
+--alter table cake_comments add pictures varchar(10000) not null default '';
 REPLACE INTO `cake_i18nfields` (`id`, `name`, `savetodb`, `translate`, `type`, `model`, `locale`, `length`, `sort`, `allowadd`, `allowedit`, `selectmodel`, `selectvaluefield`, `selecttxtfield`, `selectparentid`, `selectautoload`, `selectvalues`, `associateflag`, `associateelement`, `associatefield`, `associatetype`, `formtype`, `default`, `allownull`, `validationregular`, `description`, `onchange`, `explodeimplode`, `explain`, `deleted`, `created`, `updated`, `conditions`) VALUES (NULL, 'id', '1', '编号', 'integer', 'Comment', 'zh_cn', '20', 19, '0', '1', NULL, NULL, NULL, NULL, '1', NULL, '0', NULL, NULL, 'equal', '', NULL, '1', NULL, '', NULL, NULL, NULL, 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL),
 (NULL, 'parent_id', '1', '父级分类', 'integer', 'Comment', 'zh_cn', '11', 18, '1', '1', '', '', '', NULL, '1', '', '0', '', '', '', '', '', '1', '', '', '', '', '', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', ''),
 (NULL, 'data_id', '1', '数据编号', 'integer', 'Comment', 'zh_cn', '11', 17, '1', '1', '', '', '', NULL, '1', '', '0', '', '', '', '', '', '1', '', '', '', '', '', 0, '0000-00-00 00:00:00', '0000-00-00 00:00:00', ''),

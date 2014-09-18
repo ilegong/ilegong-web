@@ -31,7 +31,7 @@ $(function(){
     $(".marquee").each(function() {
 		$(this).marquee({btn_pre:'#marquee-left',btn_next:'#marquee-right'});
 	}).height(60);
-	$(".jqzoom").jqzoom({'zoomWidth':400,'zoomHeight':300,'position':"right",'title':false,'preloadImages':false});
+//	$(".jqzoom").jqzoom({'zoomWidth':400,'zoomHeight':300,'position':"right",'title':false,'preloadImages':false});
 	$("#spec-thumb-list img").bind("mouseover",function(){	
 		var src=$(this).attr("src");
 		$("#spec-n1 img").eq(0).attr({src:src.replace("\/thumb_s\/","\/thumb_m\/")});
