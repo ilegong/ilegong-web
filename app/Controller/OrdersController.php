@@ -309,12 +309,9 @@ class OrdersController extends AppController{
 
 	function business($creator=0){
 
-        if ($this->is_admin($this->currentUser['id']) && $creator > 0) {
-        } else {
-            $creator = $this->currentUser['id'];
-        }
+        $creator = $this->authAndGetCreator($creator);
 
-		$this->loadModel('Brand');
+        $this->loadModel('Brand');
 		$brands = $this->Brand->find('list',array('conditions'=>array(
 				'creator'=> $creator,
 		)));
@@ -471,14 +468,11 @@ class OrdersController extends AppController{
 	/**
 	 * 商家设置订单的状态
 	 */
-	function set_status(){
+	function set_status($creator = 0){
 		$order_id = $_REQUEST['order_id'];
 		$status = $_REQUEST['status'];
 
-        $creator = $this->currentUser['id'];
-        if (isset($_REQUEST['creator']) && $_REQUEST['creator'] && $this->is_admin($this->currentUser['id'])) {
-            $creator = $_REQUEST['creator'];
-        }
+        $creator = $this->authAndGetCreator($creator);
 
         if (1 == $status && !$this->is_admin($this->currentUser['id'])) {
             echo json_encode(array('order_id'=>$order_id,'msg'=>'您不具备此订单的支付确认权限，请联系管理员。'));
@@ -741,6 +735,18 @@ class OrdersController extends AppController{
 		echo json_encode($this->data);
         exit;
 	}
-	
-       
+
+    /**
+     * @param $receivedCreator
+     * @return mixed
+     */
+    public function authAndGetCreator($receivedCreator) {
+        if ($this->is_admin($this->currentUser['id']) && $receivedCreator > 0) {
+            return $receivedCreator;
+        } else {
+            return $this->currentUser['id'];
+        }
+    }
+
+
 }
