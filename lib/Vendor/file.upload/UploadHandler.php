@@ -1055,7 +1055,12 @@ class UploadHandler
                         FILE_APPEND
                     );
                 } else {
-                    move_uploaded_file($uploaded_file, $file_path);
+                    if(defined('SAE_MYSQL_DB')){
+                        $stor = new SaeStorage();
+                        $moved = $stor->upload(SAE_STORAGE_UPLOAD_DOMAIN_NAME , $file->name , $uploaded_file);
+                    } else {
+                        move_uploaded_file($uploaded_file, $file_path);
+                    }
                 }
             } else {
                 // Non-multipart uploads (PUT method support)
