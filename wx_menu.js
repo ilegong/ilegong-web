@@ -1,0 +1,43 @@
+{
+    "button":[
+    {
+        "type":"view",
+        "name":"购买特产",
+        "url":"http://51daifan.sinaapp.com/techan.html"
+    },
+    {
+        "name":"个人中心",
+        "sub_button":[
+            {
+                "type":"view",
+                "name":"我的订单",
+                "url":"http://51daifan.sinaapp.com/orders/mine.html"
+            },
+            {
+                "type":"view",
+                "name":"我要分享",
+                "url":"http://www.mikecrm.com/f.php?t=hyhfVO"
+            },
+            {
+                "type":"view",
+                "name":"售后服务",
+                "url":"http://51daifan.sinaapp.com/articles/view/377"
+            }]
+    },
+    {
+        "name":"试吃团",
+        "sub_button":[
+            {
+                "type":"view",
+                "name":"试吃评价",
+                "url":"http://51daifan.sinaapp.com/shichituan.html"
+            },
+            {
+                "type":"view",
+                "name":"加入试吃",
+                "url":"http://www.mikecrm.com/f.php?t=3DGEyQ"
+            }]
+    },
+
+    ]
+}
