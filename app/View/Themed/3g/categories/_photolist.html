@@ -1,5 +1,5 @@
 <div class="col-xs-6" style="height:180px;overflow:hidden;">
-	<div style="border: 1px solid #DDDDDD;">
+	<div class="photo-item">
 	{{if $top_category_id==114 || $top_category_id==124 }}
      <a href="{{$this->Html->url('/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}" class="thumbnail {{if date('Y-m-d H:i:s')>$item['end_time'] && $item['end_time']>0}}no-shopping{{else}}no-shopping{{/if}}" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
          {{eval echo $this->Html->image($item['coverimg'], 
