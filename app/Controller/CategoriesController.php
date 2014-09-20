@@ -136,22 +136,40 @@ class CategoriesController extends AppController {
             $this->set('page_navi', $page_navi);
 	
 	        $Category['datalist'] = array();
-            if ($data_model=='Product' && !$brand_id) {
-                $Category['datalist'][] = array(
-                    'id' => 100000,
-                    'name' => '北京黑猪肉团购',
-                    'coverimg' => 'http://51daifan-images.stor.sinaapp.com/files/201402/thumb_m/a97f2ff8be6_0223.jpg',
-                    'slug' => 'heizhu_tuangou',
-                    'price' => '待定',
-                    'published' => '1',
-                    'brand_id' => 18,
-                    'cate_id' => 114,
-                    'comment_nums' => 16
-                );
-            }
+//            if ($data_model=='Product' && !$brand_id) {
+//                $Category['datalist'][] = array(
+//                    'id' => 100000,
+//                    'name' => '北京黑猪肉团购',
+//                    'coverimg' => 'http://51daifan-images.stor.sinaapp.com/files/201402/thumb_m/a97f2ff8be6_0223.jpg',
+//                    'slug' => 'heizhu_tuangou',
+//                    'price' => '待定',
+//                    'published' => '1',
+//                    'brand_id' => 18,
+//                    'cate_id' => 114,
+//                    'comment_nums' => 16
+//                );
+//            }
+
+            $brandIds = array();
 	        foreach ($datalist as $val) {
 	            $Category['datalist'][] = $val[$data_model];
+                if ($data_model == 'Product') {
+                    $brandIds[] = $val[$data_model]['brand_id'];
+                }
 	        }
+
+            if ($brandIds) {
+                $this->loadModel('Brand');
+                $brands = $this->Brand->find('all', array(
+                    'conditions' => array('id' => $brandIds),
+                    'fields' => array('id', 'name', 'created', 'slug', 'coverimg')
+                ));
+
+                $mappedBrands = array();
+                foreach($brands as $brand) {
+                    $mappedBrands[$brand['Brand']['id']] = $brand;
+                }
+            }
 		}
         // 设置页面SEO标题、关键字、内容描述
         if (!empty($Category['Category']['seotitle'])) {
@@ -169,7 +187,9 @@ class CategoriesController extends AppController {
         if ($brand_id == 18) {
             $this->set('sub_title', '黑猪专栏');
         }
-        
+
+        $this->set('brands', $mappedBrands);
+
         $this->set('category_model_name', $data_model);
         $this->set('category_data_model', $data_model);
         // 不能使用region_control_name，会在模板中region调用生成的region_control_name覆盖掉

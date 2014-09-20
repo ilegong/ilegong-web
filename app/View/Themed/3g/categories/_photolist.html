@@ -1,4 +1,4 @@
-<div class="col-xs-6" style="height:180px;overflow:hidden;">
+<div class="col-xs-6" style="height:190px;overflow:hidden;">
 	<div class="photo-item">
 	{{if $top_category_id==114 || $top_category_id==124 }}
      <a href="{{$this->Html->url('/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}" class="thumbnail {{if date('Y-m-d H:i:s')>$item['end_time'] && $item['end_time']>0}}no-shopping{{else}}no-shopping{{/if}}" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
@@ -11,18 +11,29 @@
 			<p><span class="glyphicon glyphicon-ok" style="color:#5e8a2f; font-size:22px;"></span>已选</p>
 	 	 </div>  -->
      </a>
-     <div class="text-left">
-     	{{eval echo $this->Html->link(usubstr($item['name'],0,10,''), 
+     <div class="text-left clearfix">
+
+         <div class="pull-left col-xs-3">
+         {{$this->Html->image($brands[$item['brand_id']]['Brand']['coverimg'], array(
+             'class' => 'img-circle',
+             'style' => 'width:36px; height:36px'
+             ));}}
+             </div>
+         <div class="pull-right col-xs-9">
+              	{{eval echo $this->Html->link(usubstr($item['name'],0,10,''),
 			'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
-			array('title'=>$item['title'])); 
-		}}
-     	
-     	<div>
-     		<div class="food-info pull-right">
-             <strong>¥{{$this->Number->precision($item['price'], 2)}}</strong>
-     		</div>
-     		<a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">评论({{$item['comment_nums']}})</a>
-     	</div>
+			array('title'=>$item['title']));
+		}}  <br/>
+         {{$this->Html->link($brands[$item['brand_id']]['Brand']['name'], '/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html');}}
+             <br>
+             <div class="clearfix">
+             <span class="food-info pull-right">
+                 <strong>¥{{$this->Number->precision($item['price'], 2)}}</strong>
+             </span>
+                 <a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">评论({{$item['comment_nums']}})</a>
+             </div>
+         </div>
+
      </div>
      {{else}}
      	<a href="<?php echo '/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'; ?>" class="thumbnail-noclick" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
