@@ -50,7 +50,7 @@ class WeixinController extends AppController {
 			
 			if(!empty($req['Event'])){
 				if($req['Event']=='subscribe'){ //订阅
-					echo $this->newTextMsg($user, $me, "欢迎关注51daifan，51daifan是同事间互相分享自己家特产的公益平台，评论回复1即可查看同事最热分享。51daifan，让一部分人先安全起来！");
+					echo $this->newTextMsg($user, $me, "欢迎关注【朋友说】，【朋友说】是朋友、同事间互相分享推荐自己家特产的平台，欢迎加入我们分享。");
 					exit;
 				}
 			}
