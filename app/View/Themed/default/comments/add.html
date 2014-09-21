@@ -51,6 +51,11 @@
 .comment_item .t_others {
 	margin-left:124px;
 }
+
+.comment_item .t_img img {
+    padding: 2px 0 2px 2px;
+}
+
 .comment_item .t_others .datetime {
 	color: #d0d0d0;
 	font-size:12px;
@@ -185,7 +190,7 @@ function addCommintItem(item){
 +'<div style="clear:both"></div>'
 +'</div>');
     if (item.images && item.images.length > 0) {
-        var $images = $('<div class="t_img"/>').insertAfter($comment.find('.t_txt'));
+        var $images = $('<div class="t_img t_others"/>').insertAfter($comment.find('.t_txt'));
         $.each(item.images, function(idx, val){
            $('<img/>').attr('src', val).appendTo($images);
         });
