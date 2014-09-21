@@ -1081,8 +1081,8 @@ class UploadHandler extends Object
                 } else {
                     if(defined('SAE_MYSQL_DB')){
                         $stor = new SaeStorage();
-                        $file_path = $stor->upload(SAE_STORAGE_UPLOAD_DOMAIN_NAME , $file->name , $uploaded_file);
-                        $this->log('handle_file_upload: final file='. $file_path .', $file->name='. $file->name .', $uploaded_file='. $uploaded_file);
+                        $download_url = $stor->upload(SAE_STORAGE_UPLOAD_DOMAIN_NAME , $file_path , $uploaded_file);
+                        $this->log('handle_file_upload: final file='. $download_url .', $file-path='. $file_path .', $uploaded_file='. $uploaded_file);
                     } else {
                         move_uploaded_file($uploaded_file, $file_path);
                     }
@@ -1097,7 +1097,11 @@ class UploadHandler extends Object
             }
             $file_size = $this->get_file_size($file_path, $append_file);
             if ($file_size === $file->size) {
-                $file->url = $this->get_download_url($file->name);
+                if (isset($download_url) && $download_url) {
+                    $file->url = $download_url;
+                } else {
+                    $file->url = $this->get_download_url($file->name);
+                }
                 if ($this->is_valid_image_file($file_path)) {
                     $this->handle_image_file($file_path, $file);
                 }
