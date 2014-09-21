@@ -47,6 +47,7 @@
 	font-size:14px;
 	color:#414159;
 }
+
 .comment_item .t_others {
 	margin-left:124px;
 }
@@ -184,9 +185,9 @@ function addCommintItem(item){
 +'<div style="clear:both"></div>'
 +'</div>');
     if (item.images && item.images.length > 0) {
-        var $txt = $comment.find('.t_txt');
+        var $images = $('<div class="t_img"/>').insertAfter($comment.find('.t_txt'));
         $.each(item.images, function(idx, val){
-           $('<img/>').attr('src', val).appendTo($txt);
+           $('<img/>').attr('src', val).appendTo($images);
         });
     }
     $comment.appendTo($('#comment_items'));
