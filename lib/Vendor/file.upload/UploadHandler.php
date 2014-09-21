@@ -10,7 +10,7 @@
  * http://www.opensource.org/licenses/MIT
  */
 
-class UploadHandler
+class UploadHandler extends Object
 {
 
     protected $options;
@@ -218,8 +218,10 @@ class UploadHandler
             }
             $version_path = $version.'/';
         }
-        return $this->options['upload_dir'].$this->get_user_path()
-            .$version_path.$file_name;
+        $path = $this->options['upload_dir'] . $this->get_user_path()
+            . $version_path . $file_name;
+        $this->log('get_upload_path: ='. $path .', $file_name='. $file_name .', $version='. $version);
+        return $path;
     }
 
     protected function get_query_separator($url) {
@@ -281,7 +283,18 @@ class UploadHandler
                 clearstatcache();
             }
         }
-        return $this->fix_integer_overflow(filesize($file_path));
+
+        if(defined('SAE_MYSQL_DB')) {
+            $stor = new SaeStorage();
+            $return = $stor->getAttr(SAE_STORAGE_UPLOAD_DOMAIN_NAME , $file_path , array('length'));
+            $size = (is_array($return) && $return['length']) ? $return['length'] : 0;
+        } else {
+            $size = filesize($file_path);
+        }
+
+        $this->log('get_file_size '. $size . ' for path: '.$file_path);
+
+        return $this->fix_integer_overflow($size);
     }
 
     protected function is_valid_file_object($file_name) {
@@ -437,6 +450,17 @@ class UploadHandler
 
     protected function get_unique_filename($file_path, $name, $size, $type, $error,
             $index, $content_range) {
+
+        if(defined('SAE_MYSQL_DB')) {
+            $fileparts = explode('.', $name);
+            $fileext = strtolower(array_pop($fileparts));
+            $filebase = urlencode(implode('.', $fileparts));
+            if (in_array($fileext, array('php', 'asp', 'exe', 'cgi'))) {
+                $fileext = '_' . $fileext;
+            }
+            return substr(md5($filebase . time()), 0, 11) . '_' . date('md') . '.' . $fileext;
+        }
+
         while(is_dir($this->get_upload_path($name))) {
             $name = $this->upcount_name($name);
         }
@@ -1057,7 +1081,8 @@ class UploadHandler
                 } else {
                     if(defined('SAE_MYSQL_DB')){
                         $stor = new SaeStorage();
-                        $moved = $stor->upload(SAE_STORAGE_UPLOAD_DOMAIN_NAME , $file->name , $uploaded_file);
+                        $file_path = $stor->upload(SAE_STORAGE_UPLOAD_DOMAIN_NAME , $file->name , $uploaded_file);
+                        $this->log('handle_file_upload: final file='. $file_path .', $file->name='. $file->name .', $uploaded_file='. $uploaded_file);
                     } else {
                         move_uploaded_file($uploaded_file, $file_path);
                     }

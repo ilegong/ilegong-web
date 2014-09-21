@@ -264,3 +264,8 @@ msgstr ""
 msgid "File upload failed."
 msgstr ""
 
+msgid "File upload aborted"
+msgstr ""
+
+
+
