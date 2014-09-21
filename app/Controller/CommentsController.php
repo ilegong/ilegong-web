@@ -84,6 +84,21 @@ class CommentsController extends AppController {
             unset($item['lft']);
             unset($item['rght']);
 
+            if ($item['pictures']) {
+                $images = array();
+                $pics = mbsplit("\\|", $item['pictures']);
+                foreach($pics as $pic) {
+                    if($pic && strpos($pic, "http://") === 0) {
+                        $images[] = $pic;
+                    }
+                }
+                if (count($pics) > 0) {
+                    $item['images'] = $images;
+                }
+            }
+
+            unset($item['pictures']);
+
             array_push($result,array('Comment' => $item));
         }
 
