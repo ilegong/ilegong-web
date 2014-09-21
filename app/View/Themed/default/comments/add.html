@@ -54,6 +54,7 @@
 
 .comment_item .t_img img {
     padding: 2px 0 2px 2px;
+    max-width: 100%;
 }
 
 .comment_item .t_others .datetime {
@@ -184,7 +185,7 @@ function addCommintItem(item){
 +'<div class="t_others">'
 +'<span class="reply" style="display: none;">'
 +'<a onclick="return false;" style="margin-right:18px;" href="#">回复</a>'
-+'<a onclick="return false;" style="margin-right:0px;" href="#">支持</a>'
++'<a onclick="return false;" style="margin-right:0;" href="#">支持</a>'
 +'</span>'
 +'<span class="datetime">'+item['created']+'</span>'
 +'</div>'
