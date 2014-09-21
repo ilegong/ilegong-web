@@ -167,7 +167,7 @@ function loadCommentData(){
 loadCommentData();
 
 function addCommintItem(item){
-	var str = '<div newsid="27-1-699265" channel="jc" class="comment_item">'
+	var $comment = $('<div newsid="27-1-699265" channel="jc" class="comment_item">'
 +'<div class="t_info">'
 +'<span class="t_username">'+item['username']+'</span><br><span class="t_area"></span>'
 +'</div>'
@@ -182,8 +182,14 @@ function addCommintItem(item){
 +'<span class="datetime">'+item['created']+'</span>'
 +'</div>'
 +'<div style="clear:both"></div>'
-+'</div>';
-	$('#comment_items').append(str);
++'</div>');
+    if (item.images && item.images.length > 0) {
+        var $txt = $comment.find('.t_txt');
+        $.each(item.images, function(idx, val){
+           $('<img/>').attr('src', val).appendTo($txt);
+        });
+    }
+    $comment.appendTo($('#comment_items'));
 }
 
 function submitaddcomment(form){
