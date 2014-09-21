@@ -151,6 +151,7 @@
         <div class="progress-bar progress-bar-success"></div>
     </div>
     <div id="files" class="files clearfix"></div>
+       <p id="commentTips" class="bg_danger hide"></p>
     <div class="submit"><input  id="btnSubmitComment" onclick="return submitaddcomment($('#CommentAddForm'));" class="btn btn-primary pull-right" type="submit" value="提交评论"/></div>
     </div>
 </div>
@@ -199,6 +200,7 @@ function addCommintItem(item){
 }
 
 function submitaddcomment(form){
+
 	if(!sso.check_userlogin({"callback":submitaddcomment,"callback_args":arguments}))
 		return false;
 	$('#btnSubmitComment').val('正在提交').attr('disabled','disabled');
