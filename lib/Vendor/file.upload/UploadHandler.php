@@ -284,7 +284,7 @@ class UploadHandler extends Object
             }
         }
 
-        if(false/*defined('SAE_MYSQL_DB')*/) {
+        if (!file_exists($file_path) && defined('SAE_MYSQL_DB')) {
             $stor = new SaeStorage();
             $return = $stor->getAttr(SAE_STORAGE_UPLOAD_DOMAIN_NAME , $file_path , array('length'));
             $size = (is_array($return) && $return['length']) ? $return['length'] : 0;
