@@ -3,7 +3,7 @@
     {
         "type":"click",
         "name":"购买特产",
-        "url":"CLICK_URL_TECHAN"
+        "key":"CLICK_URL_TECHAN"
     },
     {
         "name":"个人中心",
@@ -11,7 +11,7 @@
             {
                 "type":"click",
                 "name":"我的订单",
-                "url":"CLICK_URL_MINE"
+                "key":"CLICK_URL_MINE"
             },
             {
                 "type":"view",
@@ -21,7 +21,7 @@
             {
                 "type":"click",
                 "name":"售后服务",
-                "url":"CLICK_URL_SALE_AFTER_SAIL"
+                "key":"CLICK_URL_SALE_AFTER_SAIL"
             }]
     },
     {
@@ -30,7 +30,7 @@
             {
                 "type":"click",
                 "name":"试吃评价",
-                "url":"CLICK_URL_SHICHITUAN"
+                "key":"CLICK_URL_SHICHITUAN"
             },
             {
                 "type":"view",
