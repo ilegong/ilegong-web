@@ -1,0 +1,43 @@
+{
+    "button":[
+    {
+        "type":"click",
+        "name":"购买特产",
+        "url":"CLICK_URL_TECHAN"
+    },
+    {
+        "name":"个人中心",
+        "sub_button":[
+            {
+                "type":"click",
+                "name":"我的订单",
+                "url":"CLICK_URL_MINE"
+            },
+            {
+                "type":"view",
+                "name":"我要分享",
+                "url":"http://www.mikecrm.com/f.php?t=hyhfVO"
+            },
+            {
+                "type":"click",
+                "name":"售后服务",
+                "url":"CLICK_URL_SALE_AFTER_SAIL"
+            }]
+    },
+    {
+        "name":"试吃团",
+        "sub_button":[
+            {
+                "type":"click",
+                "name":"试吃评价",
+                "url":"CLICK_URL_SHICHITUAN"
+            },
+            {
+                "type":"view",
+                "name":"加入试吃",
+                "url":"http://www.mikecrm.com/f.php?t=3DGEyQ"
+            }]
+    },
+
+    ]
+}

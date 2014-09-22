@@ -47,15 +47,19 @@ class WeixinController extends AppController {
 			$me = $req["ToUserName"];
 			$user = $req["FromUserName"];
 			//$type = $req["MsgType"];
-			
+
+            $this->log($req);
+
+			$input = "";
 			if(!empty($req['Event'])){
 				if($req['Event']=='subscribe'){ //订阅
 					echo $this->newTextMsg($user, $me, "欢迎关注【朋友说】，【朋友说】是朋友、同事间互相分享推荐自己家特产的平台，欢迎加入我们分享。");
 					exit;
-				}
+				} else if ($req['Event'] == 'CLICK') {
+                    $input = $req['EventKey'];
+                }
 			}
-			
-			$input = "";
+
 
 			$url = "http://www.51daifan.com";
 			$msg = "";
@@ -92,10 +96,12 @@ class WeixinController extends AppController {
 				case "预定":
 				case "1":
                 case "１":
+                case "CLICK_URL_TECHAN":
 					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/techan.html?wx_openid=$user_code\" >预定</a>");
 					break;
 				case "查看订单":
 				case "订单":
+                case "CLICK_URL_MINE":
 				case "2":
 					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/orders/mine.html?wx_openid=$user_code\" >我的订单</a>");
 					break;
@@ -108,14 +114,20 @@ class WeixinController extends AppController {
                 case "5":
                     echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://www.mikecrm.com/f.php?t=3DGEyQ\" >朋友说试吃团报名</a>");
                     break;
+                case "CLICK_URL_SALE_AFTER_SAIL":
+                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/articles/view/377?wx_openid=$user_code\" >售后服务</a>");
+                    break;
 				case "大米":
 				case "9":
-						echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/users/goTage?wx_openid=$user_code\" >天天踏歌购买娜娜家的大米</a>");
-						break;
+                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/users/goTage?wx_openid=$user_code\" >天天踏歌购买娜娜家的大米</a>");
+                    break;
+                case "CLICK_URL_SHICHITUAN":
+                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/shichituan.html?wx_openid=$user_code\">试吃评价</a>");
+                    break;
                 case "5151":
                 case "ordersadmin":
                 case "Ordersadmin":
-                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://www.pyshuo.com/brands/brands_admin\">商家订单管理</a>");
+                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://51daifan.sinaapp.com/brands/brands_admin?wx_openid=$user_code\">商家订单管理</a>");
                     break;
 				//default :
 				//	echo $this->newTextMsg($user, $me, "回复“预定”进入预定页\n回复“订单”查看我的订单");
