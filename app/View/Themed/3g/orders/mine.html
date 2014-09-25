@@ -27,7 +27,7 @@ td {padding:5px 10px;}
 			{{/if}}<br/>
 			<div id="order-status-{{$order['Order']['id']}}">
 			<font color="red">
-			{{if $order['Order']['status']==0}}订单已生成,等待付款
+			{{if $order['Order']['status']==0}}订单已生成,等待付款 (￥{{$this->Number->precision($order['Order']['ship_fee'] + $order['Order']['total_price'], 2)}})
 			{{elseif $order['Order']['status']==1}}订单已支付
 			{{elseif $order['Order']['status']==2}}
 				<font color="red">订单已发货</font>
