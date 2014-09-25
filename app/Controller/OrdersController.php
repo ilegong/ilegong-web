@@ -99,7 +99,8 @@ class OrdersController extends AppController{
 			$this->Session->setFlash('订单金额错误，请返回购物车查看');
 			$this->redirect('/');
 		}
-		
+
+        $shipFee = 0.0;
 		$business = array();
 		foreach($products as $p){
 			if(isset($business[$p['Product']['brand_id']])){
@@ -108,14 +109,22 @@ class OrdersController extends AppController{
 			else{
 				$business[$p['Product']['brand_id']] = array($p['Product']['id']);
 			}
+            //TODO: TMP fix
+            if ($p['Product']['id'] == 164) {
+                $shipFee = 10.00;
+            }
 		}
 		
 		$hasfalse = false;
 		foreach($business as $brand_id => $busi){
 			$bs_carts = array();
 			$total_price = 0.0;
+            $ship_fee = 0.0;
 			foreach($busi as $pid){
 				$total_price+= $Carts[$pid]['Cart']['price']*$Carts[$pid]['Cart']['num'];
+                if ($pid == 164) {
+                    $ship_fee += 10.0;
+                }
 			}
 			
 			if($total_price <= 0){
@@ -125,6 +134,7 @@ class OrdersController extends AppController{
 			
 			$data = array();
 			$data['total_price'] = $total_price;
+            $data['ship_fee'] = $ship_fee;
 			$data['brand_id'] = $brand_id;
 			$data['creator'] = $this->currentUser['id'];
 			$data['remark'] = $this->Session->read('Order.remark');
@@ -154,6 +164,7 @@ class OrdersController extends AppController{
 				$hasfalse = true;
 			}
 		}
+
 		setcookie("cart_products", '',time()-3600,'/');
 		if($hasfalse == false){
 			$this->Session->setFlash('订单已生成,不同商家的商品会拆分到不同的订单，请您知悉。');
@@ -177,7 +188,8 @@ class OrdersController extends AppController{
 			'order' => 'status desc',
 		));
 		$total_consignee = count($consignees);
-		
+
+        $shipFee = 0.0;
 		$this->loadModel('Cart');
 		if(empty($order_id)){
 			if(!empty($_COOKIE['cart_products'])){
@@ -205,6 +217,10 @@ class OrdersController extends AppController{
 									'num'=> $nums[$p['Product']['id']]?$nums[$p['Product']['id']]:1,
 									'price'=> $p['Product']['price'],
 					));
+                    //TODO: TMP fix
+                    if ($p['Product']['id'] == 164) {
+                        $shipFee = 10.00;
+                    }
 				}
 			}
 			else{
@@ -214,6 +230,13 @@ class OrdersController extends AppController{
 						'order_id' => null,
 						'OR'=> $this->user_condition
 				)));
+
+                foreach($Carts as $c) {
+                    //TODO: TMP fix
+                    if ($c['Cart']['product_id'] == 164) {
+                        $shipFee = 10.00;
+                    }
+                }
 			}
 			$current_consignee = $this->Session->read('OrderConsignee');
 			if(empty($current_consignee)){			
@@ -262,7 +285,13 @@ class OrdersController extends AppController{
 			)));
 			$this->Session->write('OrderConsignee',$current_consignee);
 		}
-		
+
+        foreach($Carts as $c) {
+            //TODO: TMP fix
+            if ($c['Cart']['product_id'] == 164) {
+                $shipFee = 10.00;
+            }
+        }
 		
 		$total_price = $this->_calculateTotalPrice($Carts);
 		$this->set('has_chosen_consignee',$has_chosen_consignee);
@@ -270,6 +299,7 @@ class OrdersController extends AppController{
 		$this->set('consignees',$consignees);	
 		$this->set('order_id',$order_id);
 		$this->set('total_price',$total_price);
+        $this->set('shipFee', $shipFee);
 		$this->set('Carts',$Carts);
 	}
 	
