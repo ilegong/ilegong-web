@@ -32,7 +32,7 @@ echo $this->MForm->create($current_model,array(
 				         echo $this->MForm->input('slug',array('default'=>'','required'=>'required','size'=>'80','title'=>'不填时，值为数据的id。'));
 						 echo $this->MForm->input('published',array('default'=>1)); 
 						
-						
+						echo $this->MForm->input('creator', array('default'=>0, label=>'绑定商家'));
 						echo $this->MForm->input('summary',array('rows' => '2', 'cols' => '80')); 
 					        
 				     ?>
