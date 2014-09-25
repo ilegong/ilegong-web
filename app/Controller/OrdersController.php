@@ -110,7 +110,7 @@ class OrdersController extends AppController{
 				$business[$p['Product']['brand_id']] = array($p['Product']['id']);
 			}
             //TODO: TMP fix
-            if ($p['Product']['id'] == 164) {
+            if ($p['Product']['id'] == 161) {
                 $shipFee = 10.00;
             }
 		}
@@ -122,7 +122,7 @@ class OrdersController extends AppController{
             $ship_fee = 0.0;
 			foreach($busi as $pid){
 				$total_price+= $Carts[$pid]['Cart']['price']*$Carts[$pid]['Cart']['num'];
-                if ($pid == 164) {
+                if ($pid == 161) {
                     $ship_fee += 10.0;
                 }
 			}
@@ -218,7 +218,7 @@ class OrdersController extends AppController{
 									'price'=> $p['Product']['price'],
 					));
                     //TODO: TMP fix
-                    if ($p['Product']['id'] == 164) {
+                    if ($p['Product']['id'] == 161) {
                         $shipFee = 10.00;
                     }
 				}
@@ -233,7 +233,7 @@ class OrdersController extends AppController{
 
                 foreach($Carts as $c) {
                     //TODO: TMP fix
-                    if ($c['Cart']['product_id'] == 164) {
+                    if ($c['Cart']['product_id'] == 161) {
                         $shipFee = 10.00;
                     }
                 }
@@ -288,7 +288,7 @@ class OrdersController extends AppController{
 
         foreach($Carts as $c) {
             //TODO: TMP fix
-            if ($c['Cart']['product_id'] == 164) {
+            if ($c['Cart']['product_id'] == 161) {
                 $shipFee = 10.00;
             }
         }
