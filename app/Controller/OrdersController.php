@@ -100,7 +100,7 @@ class OrdersController extends AppController{
 			$this->redirect('/');
 		}
 
-        $shipFee = 0.0;
+        $ship_fees = array();
 		$business = array();
 		foreach($products as $p){
 			if(isset($business[$p['Product']['brand_id']])){
@@ -109,10 +109,7 @@ class OrdersController extends AppController{
 			else{
 				$business[$p['Product']['brand_id']] = array($p['Product']['id']);
 			}
-            //TODO: TMP fix
-            if ($p['Product']['id'] == 161) {
-                $shipFee = 10.00;
-            }
+            $ship_fees[$p['Product']['id']] = $p['Product']['ship_fee'];
 		}
 		
 		$hasfalse = false;
@@ -122,9 +119,7 @@ class OrdersController extends AppController{
             $ship_fee = 0.0;
 			foreach($busi as $pid){
 				$total_price+= $Carts[$pid]['Cart']['price']*$Carts[$pid]['Cart']['num'];
-                if ($pid == 161) {
-                    $ship_fee += 10.0;
-                }
+                $ship_fee += $ship_fees[$pid];
 			}
 			
 			if($total_price <= 0){
@@ -230,14 +225,8 @@ class OrdersController extends AppController{
 						'order_id' => null,
 						'OR'=> $this->user_condition
 				)));
-
-                foreach($Carts as $c) {
-                    //TODO: TMP fix
-                    if ($c['Cart']['product_id'] == 161) {
-                        $shipFee = 10.00;
-                    }
-                }
 			}
+
 			$current_consignee = $this->Session->read('OrderConsignee');
 			if(empty($current_consignee)){			
 				$first_consignees = current($consignees);
