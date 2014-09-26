@@ -219,6 +219,11 @@ class SectionHelper extends AppHelper {
         $this->Html->tags['link'] = '<a href="%s.html"%s><span>%s</span></a>';
         $link_length = count($links);
         foreach ($links AS $key => $link) {
+
+            if ((strpos($_SERVER['HTTP_HOST'], 'www.pengyoushuo.com.cn') !== false) && ($link[$modelName]['id'] != 124 && $link[$modelName]['id'] != 121)) {
+                continue;
+            }
+
         	if(!empty($options['liAttributes'.$depth])){
         		$liAttr = array_merge($liAttr,$options['liAttributes'.$depth]);
         	}
