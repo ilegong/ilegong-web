@@ -31,8 +31,8 @@ var BASEURL = "{{APP_SUB_DIR}}";
 var ADMIN_BASEURL = BASEURL+"/manage";
 </script>
 {{if !empty($_SESSION['Auth']['Staff']) }}
-<!-- 当为后台登陆后，才加载jquery ui，与模板编辑的js -->
-<!-- 当为后台登陆后，才加载jquery ui，与模板编辑的js -->
+<!-- 当为后台登录后，才加载jquery ui，与模板编辑的js -->
+<!-- 当为后台登录后，才加载jquery ui，与模板编辑的js -->
 {{$this->Html->script(array(
             'jquery/jquery-ui-1.8.23.custom.min.js',           
             'portlet.js',   

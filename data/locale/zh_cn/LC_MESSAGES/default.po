@@ -84,7 +84,7 @@ msgstr ""
 
 #: Controller/FavoritesController.php:12;18
 msgid "Need_Login"
-msgstr "请您先登陆"
+msgstr "请您先登录"
 
 #: Controller/FavoritesController.php:34
 msgid "Already favored"
@@ -156,7 +156,7 @@ msgstr "用户名或者密码不正确"
 
 #: Controller/UsersController.php:504
 msgid "Logout Success"
-msgstr "您已退出登陆"
+msgstr "您已退出登录"
 
 #: View/Themed/default/Errors/error400.ctp:3
 msgid "404 page not found."

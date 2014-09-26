@@ -29,7 +29,7 @@
         ));
 }}
 {{if !empty($_SESSION['Auth']['Staff']) }}
-<!-- 当为后台登陆后，才加载jquery ui，与模板编辑的js -->
+<!-- 当为后台登录后，才加载jquery ui，与模板编辑的js -->
 {{$this->Javascript->link(array(
             'jquery/jquery-ui-1.8.11.custom.min.js',           
             'portlet.js',            
