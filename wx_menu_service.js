@@ -2,7 +2,7 @@
     "button":[
     {
         "type":"view",
-        "name":"购买特产",
+        "name":"购买特卖",
         "url":"http://www.pengyoushuo.com.cn/techan.html"
     },
     {
@@ -15,29 +15,9 @@
             },
             {
                 "type":"view",
-                "name":"我要分享",
-                "url":"http://www.mikecrm.com/f.php?t=hyhfVO"
-            },
-            {
-                "type":"view",
                 "name":"售后服务",
                 "url":"http://www.pengyoushuo.com.cn/articles/view/377"
             }]
-    },
-    {
-        "name":"试吃团",
-        "sub_button":[
-            {
-                "type":"view",
-                "name":"试吃评价",
-                "url":"http://www.pengyoushuo.com.cn/shichituan.html"
-            },
-            {
-                "type":"view",
-                "name":"加入试吃",
-                "url":"http://www.mikecrm.com/f.php?t=3DGEyQ"
-            }]
-    },
-
+    }
     ]
 }
