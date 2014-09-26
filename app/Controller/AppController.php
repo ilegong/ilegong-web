@@ -252,6 +252,10 @@ class AppController extends Controller {
         return $uid && false !== array_search($uid, $this->admins, true);
     }
 
+    protected function is_weixin(){
+        return (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false );
+    }
+
     protected function _getParamVars($name,$default='') {
         $val = '';
     	if (isset($this->request->query[$name])) {
