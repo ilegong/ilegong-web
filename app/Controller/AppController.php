@@ -256,6 +256,10 @@ class AppController extends Controller {
         return (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false );
     }
 
+    protected function is_pengyoushuo_com_cn() {
+        return (strpos($_SERVER['HTTP_HOST'], 'www.pengyoushuo.com.cn') !== false);
+    }
+
     protected function _getParamVars($name,$default='') {
         $val = '';
     	if (isset($this->request->query[$name])) {

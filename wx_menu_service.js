@@ -3,7 +3,7 @@
     {
         "type":"view",
         "name":"购买特产",
-        "url":"http://51daifan.sinaapp.com/techan.html"
+        "url":"http://www.pengyoushuo.com.cn/techan.html"
     },
     {
         "name":"个人中心",
@@ -11,7 +11,7 @@
             {
                 "type":"view",
                 "name":"我的订单",
-                "url":"http://51daifan.sinaapp.com/orders/mine.html"
+                "url":"http://www.pengyoushuo.com.cn/orders/mine.html"
             },
             {
                 "type":"view",
@@ -21,7 +21,7 @@
             {
                 "type":"view",
                 "name":"售后服务",
-                "url":"http://51daifan.sinaapp.com/articles/view/377"
+                "url":"http://www.pengyoushuo.com.cn/articles/view/377"
             }]
     },
     {
@@ -30,7 +30,7 @@
             {
                 "type":"view",
                 "name":"试吃评价",
-                "url":"http://51daifan.sinaapp.com/shichituan.html"
+                "url":"http://www.pengyoushuo.com.cn/shichituan.html"
             },
             {
                 "type":"view",
