@@ -220,7 +220,7 @@ class SectionHelper extends AppHelper {
         $link_length = count($links);
         foreach ($links AS $key => $link) {
 
-            if ((strpos($_SERVER['HTTP_HOST'], 'www.pengyoushuo.com.cn') !== false) && ($link[$modelName]['id'] != 114)) {
+            if ((strpos($_SERVER['HTTP_HOST'], 'www.pengyoushuo.com.cn') !== false) && ($link[$modelName]['id'] != 114 && $link[$modelName]['id'] != 121)) {
                 continue;
             }
 
