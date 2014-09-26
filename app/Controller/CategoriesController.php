@@ -89,7 +89,7 @@ class CategoriesController extends AppController {
 
             if ($this->is_pengyoushuo_com_cn()){
 
-                $conditions = array('id' => array(122, 123));
+                $conditions = array('id' => array(168));
                 $datalist = $this->{$data_model}->find('all', array(
                     'conditions' => $conditions
                 ));
