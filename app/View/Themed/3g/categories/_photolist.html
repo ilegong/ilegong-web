@@ -13,12 +13,12 @@
      </a>
      <div class="text-left clearfix">
 
-         <div class="pull-left col-xs-3">
+         <div class="pull-left col-xs-3"><a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html')}}">
          {{$this->Html->image($brands[$item['brand_id']]['Brand']['coverimg'], array(
              'class' => 'img-circle',
              'style' => 'width:36px; height:36px'
              ));}}
-             </div>
+         </a></div>
          <div class="pull-right col-xs-9">
               	{{eval echo $this->Html->link(usubstr($item['name'],0,10,''),
 			'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
