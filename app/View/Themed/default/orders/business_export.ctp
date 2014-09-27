@@ -57,4 +57,4 @@ do {
 } while ($rows == $pagesize);
 // close table and output
 $this->PhpExcel->addTableFooter()
-    ->output('Pyshuo.com-export-'.$this->Time->format(time(), '%Y%m%d%H%M').'.xlsx');
+    ->output('Pyshuo.com-export-'.$this->Time->format(time(), '%Y%m%d%H%M').'.xls', 'Excel5');
