@@ -1,8 +1,8 @@
 <?php
 class OrdersController extends AppController{
 	
-	var $name = 'Orders';	
-	
+	var $name = 'Orders';
+
 	var $user_condition = array();
 	
 	var $ship_type = array(
@@ -16,6 +16,11 @@ class OrdersController extends AppController{
 		108=>'汇通',
 		109=>'中通',
 	);
+
+    public function __construct($request = null, $response = null) {
+        $this->helpers[] = 'PhpExcel';
+        parent::__construct($request, $response);
+    }
 	
 	function beforeFilter(){
 		parent::beforeFilter();
@@ -404,6 +409,10 @@ class OrdersController extends AppController{
         }
 	}
 
+
+    function business_export($creator=0) {
+        $this->business($creator);
+    }
 
     /**
      * 占用较小的内存，更适合网站空间php占用内存限制小的情况。
