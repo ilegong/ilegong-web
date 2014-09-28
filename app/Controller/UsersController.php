@@ -33,17 +33,19 @@ class UsersController extends AppController {
      * @var array
      * @access public
      */
-    var $uses = array('User', 'Oauthbind');
+    var $uses = array('User', 'Oauthbinds', 'WxOauth');
     
     public function beforeFilter(){
     	parent::beforeFilter();
 
+        $this->Auth->authenticate = array('WeinxinOAuth');
+
     	if(!defined('IS_LOCALHOST')){
     		if(defined('UC_APPID')){
-    			$this->Auth->authenticate = array('UCenter');
+    			$this->Auth->authenticate[] = 'UCenter';
     		}
     	}    	
-    	$this->Auth->allowedActions = array('register','login','forgot','captcha','reset');
+    	$this->Auth->allowedActions = array('register','login','forgot','captcha','reset', 'wx_login', 'wx_auth');
     }
 
     function captcha() {
@@ -93,8 +95,7 @@ class UsersController extends AppController {
 
     function checkusername() {
         print_r($this->data);
-        $user = $this->User->findByUsername($username);
-        print_r($user);
+//        $user = $this->User->findByUsername($username);
         exit;
     }
 
@@ -376,21 +377,23 @@ class UsersController extends AppController {
         if(empty($this->data) && $this->request->query['data']){ //get 方式传入时,phonegap
         	$this->data = $this->request->query['data'];
         }
-        
+
         if ($id = $this->Auth->user('id')) { //已经登录的
             $this->User->id = $id;
             $this->User->updateAll(array(
-                'last_login' => "'".date('Y-m-d H:i:s')."'"
-            ),array('id' => $id,));
+                'last_login' => "'" . date('Y-m-d H:i:s') . "'",
+                'last_ip' => $this->request->clientIp()
+            ), array('id' => $id,));
             $success = true;
         }
-        elseif (!empty($this->data['User'])) { // 通过表单登录
+        else { // 通过表单登录
             if ($this->Auth->login()) {
 
                 $this->User->id = $this->Auth->user('id');
                 $this->User->updateAll(array(
-                    'last_login' => "'".date('Y-m-d H:i:s')."'",
-                ),array('id' => $this->User->id,));
+                    'last_login' => "'" . date('Y-m-d H:i:s') . "'",
+                    'last_ip' => $this->request->clientIp()
+                ), array('id' => $this->User->id,));
 
                 $this->Session->setFlash('登录成功'.$this->Session->read('Auth.User.session_flash'));
                 $success = true;
@@ -398,7 +401,6 @@ class UsersController extends AppController {
         }
         
         if ($success) {
-
             $wx_openid = $this->Session->read('wx_openid');
             if($wx_openid){
                 $this->loadModel('Oauthbinds');
@@ -509,6 +511,7 @@ class UsersController extends AppController {
      * 
      */
     function sinalist() {
+        $username = '';
         $user = $this->User->findByUsername($username);
         if (!isset($user['User']['id'])) {
             $this->redirect('/');
@@ -550,6 +553,60 @@ class UsersController extends AppController {
                 ));
         $this->set('weibolist', $weibolist);
         $this->set('action', 'myweibo');
+    }
+
+    function wx_login() {
+        $return_uri = urlencode('http://www.pengyoushuo.com.cn/users/wx_auth');
+        $this->redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid='.WX_APPID.'&redirect_uri='.$return_uri.'&response_type=code&scope=snsapi_base&state=0#wechat_redirect');
+    }
+
+    function wx_auth() {
+        global $oauth_wx_source;
+        if (!empty($_REQUEST['code'])) {
+            $this->loadModel('WxOauth');
+            $rtn = $this->WxOauth->find('all', array(
+                'method' => 'get_access_token',
+                'code' => $_REQUEST['code']
+            ));
+
+
+            if (!empty($rtn) && $rtn['WxOauth']['errcode'] == 0) {
+                $res = $rtn['WxOauth'];
+                if (!empty($res['access_token']) && !empty($res['openid']) && is_string($res['access_token']) && is_string('openid')) {
+                    $oauth = $this->Oauthbinds->find('first', array('source' => $oauth_wx_source,
+                        'oauth_openid' => $res['openid']
+                    ));
+                    if (empty($oauth)) {
+                        $oauth['oauth_openid'] = $res['openid'];
+                        $oauth['created'] = date('Y-m-d H:i:s');
+                        $oauth['source'] = $oauth_wx_source;
+                    }
+                    $oauth['oauth_token'] = $res['access_token'];
+                    $oauth['oauth_token_secret'] = $res['refresh_token'];
+                    $oauth['updated'] = date('Y-m-d H:i:s');
+                    $this->Oauthbinds->save($oauth);
+
+                    if ($oauth['user_id'] > 0) {
+                        $this->User->save(array(
+                            'username' =>  $oauth['oauth_openid'],
+                            'nickname' =>  '微信用户'. $oauth['oauth_openid'],
+                            'password' =>  md5(uniqid())
+                        ));
+                    } else {
+                    }
+                        $this->redirect('/users/login?source=' . $oauth['source'] . '&openid=' . $oauth['oauth_openid']);
+
+                }
+            } else {
+                $this->log("error to get_access_token: code=" . $_REQUEST['code'] . ", return:" . var_export($rtn, true));
+                //用户授权了，但是读取过程中失败
+            }
+        } else {
+            //show error msgs
+            //用户没有授权
+            echo "canot get code:" . $_SERVER['QUERY_STRING'];
+            exit;
+        }
     }
 
 }

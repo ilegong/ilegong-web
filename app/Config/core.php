@@ -24,6 +24,10 @@ Configure::write('App.encoding', 'UTF-8');
 define('DEFAULT_LANGUAGE', 'zh-cn');
 Configure::write('Config.language', 'zh-cn');
 
+define('WX_APPID', 'wxca7838dcade4709c');
+define('WX_SECRET', '79b787ec8f463eeb769540464c9277b2');
+$oauth_wx_source = 'wx-'.WX_APPID;
+
 // Configure::write('App.baseUrl', env('SCRIPT_NAME'));
 define('LOG_ERROR', 2);
 // Configure::write('Session', array(

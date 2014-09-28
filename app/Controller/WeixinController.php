@@ -224,8 +224,6 @@ class WeixinController extends AppController {
         return($responce);
     }
 
-
-
     public function login() {
         $this->log("got weixin login code=".$_REQUEST['code'].", state=".$_REQUEST['code']);
 
@@ -233,7 +231,7 @@ class WeixinController extends AppController {
         $adb_option_defaults = array(
             CURLOPT_HEADER => false,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 2
+            CURLOPT_TIMEOUT => 30
         );
 
         $curl = curl_init();
@@ -245,6 +243,9 @@ class WeixinController extends AppController {
         curl_setopt_array($curl,($options + $adb_option_defaults));
         // send request and wait for responce
         $responce =  json_decode(curl_exec($curl),true);
+        if ($responce['access_token'] && $responce['openid']) {
+
+        }
         print_r($responce);
         echo $_SERVER['QUERY_STRING'];
         exit;
