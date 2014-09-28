@@ -38,7 +38,7 @@ class UsersController extends AppController {
     public function beforeFilter(){
     	parent::beforeFilter();
 
-        $this->Auth->authenticate = array('WeinxinOAuth');
+        $this->Auth->authenticate = array('WeinxinOAuth', 'Form');
 
     	if(!defined('IS_LOCALHOST')){
     		if(defined('UC_APPID')){
