@@ -382,7 +382,7 @@ class UsersController extends AppController {
             $this->User->id = $id;
             $this->User->updateAll(array(
                 'last_login' => "'" . date('Y-m-d H:i:s') . "'",
-                'last_ip' => $this->request->clientIp()
+                'last_ip' => "'". $this->request->clientIp() . "'"
             ), array('id' => $id,));
             $success = true;
         }
