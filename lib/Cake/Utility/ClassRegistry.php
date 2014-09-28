@@ -142,8 +142,7 @@ class ClassRegistry {
 				App::uses($plugin . 'AppModel', $pluginPath . 'Model');
 				App::uses($class, $pluginPath . 'Model');
 
-                var_dump($settings);
-
+                echo "$class ". class_exists($class);
 
 				if (class_exists($class) || interface_exists($class)) {
 					$reflection = new ReflectionClass($class);
