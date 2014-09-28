@@ -28,6 +28,15 @@ class DATABASE_CONFIG {
         'api_wx_url' => 'https://api.weixin.qq.com'
     );
 
+    public $test = array(
+        'datasource' => 'Database/Mysql',
+        'persistent' => false,
+        'host'       => 'dbhost',
+        'login'      => 'dblogin',
+        'password'   => 'dbpassword',
+        'database'   => 'test_database'
+    );
+
 	function __construct() {
 		if(defined('SAE_MYSQL_DB')){ // on sae.sina.com.cn
 			// 变量成员定义时不能写字符串点号连接语句，放在类初始化中
