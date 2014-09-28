@@ -729,9 +729,16 @@ class Controller extends Object implements CakeEventListener {
 
 		list($plugin, $modelClass) = pluginSplit($modelClass, true);
 
+        if($modelClass == 'WxOauth') {
+            $this->log('loadModel:'. $modelClass.', id='. $id);
+        }
+
 		$this->{$modelClass} = ClassRegistry::init(array(
 			'class' => $plugin . $modelClass, 'alias' => $modelClass, 'id' => $id
 		));
+
+
+
 		if (!$this->{$modelClass}) {
 			throw new MissingModelException($modelClass);
 		}
