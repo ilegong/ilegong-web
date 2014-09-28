@@ -177,6 +177,9 @@ class ClassRegistry {
 					}
 				}
 				if (!isset($instance)) {
+
+                    echo "init - with app model:".$class;
+
 					$appModel = 'AppModel';
 					if ($strict) {
 						return false;
