@@ -392,7 +392,7 @@ class UsersController extends AppController {
                 $this->User->id = $this->Auth->user('id');
                 $this->User->updateAll(array(
                     'last_login' => "'" . date('Y-m-d H:i:s') . "'",
-                    'last_ip' => $this->request->clientIp()
+                    'last_ip' => "'". $this->request->clientIp() ."'"
                 ), array('id' => $this->User->id,));
 
                 $this->Session->setFlash('登录成功'.$this->Session->read('Auth.User.session_flash'));
