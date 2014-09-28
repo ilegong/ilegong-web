@@ -6,7 +6,7 @@
  * Time: 6:06 PM
  */
 
-class WxOauth extends Model {
+class WxOauth1 extends Model {
     public $useDbConfig = 'WxOauth';
     public $useTable = false;
 
