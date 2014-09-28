@@ -737,6 +737,9 @@ class Controller extends Object implements CakeEventListener {
 			'class' => $plugin . $modelClass, 'alias' => $modelClass, 'id' => $id
 		));
 
+        if($modelClass == 'WxOauth') {
+            $this->log('loadModel done: dbconfig'. $this->{modelClass}->useDbConfig);
+        }
 
 
 		if (!$this->{$modelClass}) {
