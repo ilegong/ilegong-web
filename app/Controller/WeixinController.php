@@ -194,5 +194,12 @@ class WeixinController extends AppController {
 			return false;
 		}
 	}
+
+
+    public function login() {
+        $this->log("got weixin login code=".$_REQUEST['code'].", state=".$_REQUEST['code']);
+        echo $_SERVER['QUERY_STRING'];
+        exit;
+    }
 }
 ?>

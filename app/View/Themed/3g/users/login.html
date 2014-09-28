@@ -1,4 +1,13 @@
 <div id="container-part1" class="container clearfix">
+
+    {{if $this->is_pengyoushuo_com_cn() }}
+    <div>
+        <a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxca7838dcade4709c&redirect_uri={{urlencode('http://www.pengyoushuo.com/weixin/login')}}&response_type=code&scope=snsapi_userinfo&state=345#wechat_redirect">
+           使用微信登陆
+        </a>
+    </div>
+    {{/if}}
+
 {{$this->Form->create('User',array('id'=>'loginform','method'=>"post",'class'=>'form-horizontal','onsubmit'=>$isajax ? "return ajaxeSubmitForm(this,'loginSucess');" : "",'escape' => false))}}
 <div class="lgfm nlf">
 	<div class="form-group">
