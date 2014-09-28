@@ -196,8 +196,56 @@ class WeixinController extends AppController {
 	}
 
 
+
+// ArangoDB REST function.
+// Connection are created demand and closed by PHP on exit.
+    function adb_rest($method,$uri,$querry=NULL,$json=NULL,$options=NULL){
+        global $adb_url,$adb_handle,$adb_option_defaults;
+
+        // Connect
+        if(!isset($adb_handle)) $adb_handle = curl_init();
+
+        echo "DB operation: $method $uri $querry $json\n";
+
+        // Compose querry
+        $options = array(
+            CURLOPT_URL => $adb_url.$uri."?".$querry,
+            CURLOPT_CUSTOMREQUEST => $method, // GET POST PUT PATCH DELETE HEAD OPTIONS
+            CURLOPT_POSTFIELDS => $json,
+        );
+        curl_setopt_array($adb_handle,($options + $adb_option_defaults));
+
+        // send request and wait for responce
+        $responce =  json_decode(curl_exec($adb_handle),true);
+
+        echo "Responce from DB: \n";
+        print_r($responce);
+
+        return($responce);
+    }
+
+
+
     public function login() {
         $this->log("got weixin login code=".$_REQUEST['code'].", state=".$_REQUEST['code']);
+
+        $adb_url="https://api.weixin.qq.com";
+        $adb_option_defaults = array(
+            CURLOPT_HEADER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 2
+        );
+
+        $curl = curl_init();
+        $options = array(
+            CURLOPT_URL => $adb_url.'/sns/oauth2/access_token?appid=wxca7838dcade4709c&secret=79b787ec8f463eeb769540464c9277b2&code='.$_REQUEST['code'].'&grant_type=authorization_code',
+            CURLOPT_CUSTOMREQUEST => 'POST', // GET POST PUT PATCH DELETE HEAD OPTIONS
+            CURLOPT_POSTFIELDS => '',
+        );
+        curl_setopt_array($curl,($options + $adb_option_defaults));
+        // send request and wait for responce
+        $responce =  json_decode(curl_exec($curl),true);
+        print_r($responce);
         echo $_SERVER['QUERY_STRING'];
         exit;
     }
