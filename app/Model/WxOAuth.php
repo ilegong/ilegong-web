@@ -1,4 +1,5 @@
 <?php
+App::uses('Model', 'Model');
 /**
  * Created by IntelliJ IDEA.
  * User: liuzhr
