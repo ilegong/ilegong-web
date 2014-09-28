@@ -711,6 +711,7 @@ class Model extends Object implements CakeEventListener {
 		}
 
 		if ($ds !== null) {
+            $this->log("set use dbconfig:".$ds);
 			$this->useDbConfig = $ds;
 		}
 
