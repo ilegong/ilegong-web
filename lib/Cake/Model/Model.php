@@ -711,7 +711,6 @@ class Model extends Object implements CakeEventListener {
 		}
 
 		if ($ds !== null) {
-            $this->log("set use dbconfig:".$ds.', '.$id.', '.$table.", olddb=".$this->useDbConfig);
 			$this->useDbConfig = $ds;
 		}
 
@@ -3216,14 +3215,9 @@ class Model extends Object implements CakeEventListener {
 	public function setDataSource($dataSource = null) {
 		$oldConfig = $this->useDbConfig;
 
-        if ($oldConfig == 'WxOauth') {
-            throw new CakeException("cannot!!!");
-        }
-
 		if ($dataSource) {
 			$this->useDbConfig = $dataSource;
 		}
-
 		$db = ConnectionManager::getDataSource($this->useDbConfig);
 		if (!empty($oldConfig) && isset($db->config['prefix'])) {
 			$oldDb = ConnectionManager::getDataSource($oldConfig);
@@ -3244,9 +3238,6 @@ class Model extends Object implements CakeEventListener {
  * @return DataSource A DataSource object
  */
 	public function getDataSource() {
-        if ($this->name == 'WxOauth') {
-            $this->log('WxOauth get Datasource, dbConfig:'. $this->useDbConfig .', useTable=>'.$this->useTable);
-        }
 		if (!$this->_sourceConfigured && $this->useTable !== false) {
 			$this->_sourceConfigured = true;
 			$this->setSource($this->useTable);
