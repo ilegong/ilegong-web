@@ -3243,13 +3243,13 @@ class Model extends Object implements CakeEventListener {
  * @return DataSource A DataSource object
  */
 	public function getDataSource() {
+        if ($this->name == 'WxOauth') {
+            $this->log('WxOauth get Datasource, dbConfig:'. $this->useDbConfig .', useTable=>'.$this->useTable);
+        }
 		if (!$this->_sourceConfigured && $this->useTable !== false) {
 			$this->_sourceConfigured = true;
 			$this->setSource($this->useTable);
 		}
-        if ($this->name == 'WxOauth') {
-            $this->log('WxOauth get Datasource, dbConfig:'. $this->useDbConfig);
-        }
 		return ConnectionManager::getDataSource($this->useDbConfig);
 	}
 
