@@ -163,7 +163,7 @@ class WxOauthSource extends DataSource {
 
         $curl = curl_init();
         $options = array(
-            CURLOPT_URL => $this->config['api_wx_url'].'/sns/oauth2/auth?access_token='.$conditions['token'].'&openid='.$conditions['openid'],
+            CURLOPT_URL => $this->config['api_wx_url'].'/sns/auth?access_token='.$conditions['token'].'&openid='.$conditions['openid'],
             CURLOPT_CUSTOMREQUEST => 'POST', // GET POST PUT PATCH DELETE HEAD OPTIONS
             CURLOPT_POSTFIELDS => '',
         );

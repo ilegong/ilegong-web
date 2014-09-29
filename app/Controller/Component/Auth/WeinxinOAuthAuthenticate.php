@@ -20,7 +20,7 @@ class WeinxinOAuthAuthenticate extends BaseAuthenticate {
         if ($oauth['user_id'] > 0) {
             $wxOauth = ClassRegistry::init('WxOauth');
             $token = $wxOauth->find('all',
-                array('method' => 'auth_token', 'token' => $oauth['oauth_token'], 'openid' => $oauth['auth_openid'])
+                array('method' => 'auth_token', 'token' => $oauth['oauth_token'], 'openid' => $oauth['oauth_openid'])
             );
 
             if (!empty($token)) {
