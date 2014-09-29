@@ -563,12 +563,19 @@ class UsersController extends AppController {
     function wx_auth() {
         global $oauth_wx_source;
         if (!empty($_REQUEST['code'])) {
-            $this->loadModel('WxOauth');
             $rtn = $this->WxOauth->find('all', array(
                 'method' => 'get_access_token',
                 'code' => $_REQUEST['code']
             ));
 
+
+            $rtn = array(
+                'WxOauth' => array(
+                    'errcode' => 0,
+                    'access_token' => '2422232',
+                    'openid' => '43242343243243242343'
+                )
+            );
 
             if (!empty($rtn) && $rtn['WxOauth']['errcode'] == 0) {
                 $res = $rtn['WxOauth'];
@@ -581,14 +588,11 @@ class UsersController extends AppController {
                         $oauth['Oauthbinds']['oauth_openid'] = $res['openid'];
                         $oauth['Oauthbinds']['created'] = date('Y-m-d H:i:s');
                         $oauth['Oauthbinds']['source'] = $oauth_wx_source;
+                        $oauth['Oauthbinds']['domain'] = $oauth_wx_source;
                     }
                     $oauth['Oauthbinds']['oauth_token'] = $res['access_token'];
                     $oauth['Oauthbinds']['oauth_token_secret'] = $res['refresh_token'];
                     $oauth['Oauthbinds']['updated'] = date('Y-m-d H:i:s');
-
-                    $this->log("Oauthbinds  :". var_export($oauth, true));
-
-                    $this->Oauthbinds->save($oauth['Oauthbinds']);
 
                     if ($oauth['Oauthbinds']['user_id'] > 0) {
                     } else {
@@ -599,6 +603,7 @@ class UsersController extends AppController {
                         ));
                         $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
                     }
+                    $this->Oauthbinds->save($oauth['Oauthbinds']);
 
                     echo "after save/update";
                     var_dump($oauth);
