@@ -577,32 +577,29 @@ class UsersController extends AppController {
                         'oauth_openid' => $res['openid']
                     ));
 
-                    echo "find result:";
-                    var_dump($oauth);
-
                     if (empty($oauth)) {
-                        $oauth['oauth_openid'] = $res['openid'];
-                        $oauth['created'] = date('Y-m-d H:i:s');
-                        $oauth['source'] = $oauth_wx_source;
+                        $oauth['Oauthbinds']['oauth_openid'] = $res['openid'];
+                        $oauth['Oauthbinds']['created'] = date('Y-m-d H:i:s');
+                        $oauth['Oauthbinds']['source'] = $oauth_wx_source;
                     }
-                    $oauth['oauth_token'] = $res['access_token'];
-                    $oauth['oauth_token_secret'] = $res['refresh_token'];
-                    $oauth['updated'] = date('Y-m-d H:i:s');
+                    $oauth['Oauthbinds']['oauth_token'] = $res['access_token'];
+                    $oauth['Oauthbinds']['oauth_token_secret'] = $res['refresh_token'];
+                    $oauth['Oauthbinds']['updated'] = date('Y-m-d H:i:s');
                     $this->Oauthbinds->save($oauth);
 
-                    if ($oauth['user_id'] > 0) {
-                        $this->User->save(array(
-                            'username' =>  $oauth['oauth_openid'],
-                            'nickname' =>  '微信用户'. $oauth['oauth_openid'],
+                    if ($oauth['Oauthbinds']['user_id'] > 0) {
+                    } else {
+                        $this->User->create(array(
+                            'username' =>  $oauth['Oauthbinds']['oauth_openid'],
+                            'nickname' =>  '微信用户'. $oauth['Oauthbinds']['oauth_openid'],
                             'password' =>  md5(uniqid())
                         ));
-                    } else {
+                        $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
                     }
 
                     echo "after save/update";
                     var_dump($oauth);
-                        $this->redirect('/users/login?source=' . $oauth['source'] . '&openid=' . $oauth['oauth_openid']);
-
+                    $this->redirect('/users/login?source=' . $oauth['Oauthbinds']['source'] . '&openid=' . $oauth['Oauthbinds']['oauth_openid']);
                 }
             } else {
                 $this->log("error to get_access_token: code=" . $_REQUEST['code'] . ", return:" . var_export($rtn, true));
