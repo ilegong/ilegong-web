@@ -102,7 +102,7 @@ class UsersController extends AppController {
     function register() {
         $this->pageTitle = lang('user_register');
         if (!empty($this->data)) {
-        	$this->User->create();            
+        	$this->User->create();
             $this->data['User']['role_id'] = Configure::read('User.defaultroler'); // Registered defaultroler
             $this->data['User']['activation_key'] = md5(uniqid());
             $useractivate = Configure::read('User.activate');
@@ -561,7 +561,7 @@ class UsersController extends AppController {
     }
 
     function wx_auth() {
-        global $oauth_wx_source;
+        $oauth_wx_source = oauth_wx_source();
         if (!empty($_REQUEST['code'])) {
             $rtn = $this->WxOauth->find('all', array(
                 'method' => 'get_access_token',
@@ -591,17 +591,19 @@ class UsersController extends AppController {
                         $oauth['Oauthbinds']['domain'] = $oauth_wx_source;
                     }
                     $oauth['Oauthbinds']['oauth_token'] = $res['access_token'];
-                    $oauth['Oauthbinds']['oauth_token_secret'] = $res['refresh_token'];
+                    $oauth['Oauthbinds']['oauth_token_secret'] = empty($res['refresh_token']) ? '' : $res['refresh_token'];
                     $oauth['Oauthbinds']['updated'] = date('Y-m-d H:i:s');
 
                     if ($oauth['Oauthbinds']['user_id'] > 0) {
                     } else {
-                        $this->User->create(array(
+                        if ($this->User->save(array(
                             'username' =>  $oauth['Oauthbinds']['oauth_openid'],
                             'nickname' =>  '微信用户'. $oauth['Oauthbinds']['oauth_openid'],
-                            'password' =>  md5(uniqid())
-                        ));
-                        $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
+                            'password' =>  md5(uniqid()),
+                            'uc_id' => 0
+                        ))) {
+                            $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
+                        }
                     }
                     $this->Oauthbinds->save($oauth['Oauthbinds']);
 

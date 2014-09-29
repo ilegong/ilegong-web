@@ -21,3 +21,11 @@ $pages_tpl = array(
 	'next_page' => '下一页',
 	'template' => '{total} {pages} {current_page}'
 );
+
+$source_appid_map = array(
+
+);
+
+function oauth_wx_source() {
+    return 'wx-'.WX_APPID_SOURCE;
+}

@@ -9,7 +9,7 @@ class Oauthbind extends AppModel {
      * @return user_id or 0
      */
     public function findUidByWx($openid) {
-        global $oauth_wx_source;
+        $oauth_wx_source = oauth_wx_source();
         $oauth_record = $this->find('first', array(
             'conditions' => array('source' => $oauth_wx_source,
                 'oauth_openid' => $openid
