@@ -570,29 +570,33 @@ class UsersController extends AppController {
 
             if (!empty($rtn) && $rtn['WxOauth']['errcode'] == 0) {
                 $res = $rtn['WxOauth'];
-                if (!empty($res['access_token']) && !empty($res['openid']) && is_string($res['access_token']) && is_string('openid')) {
-                    $oauth = $this->Oauthbinds->find('first', array('conditions'=> array('source' => $oauth_wx_source,
+                $access_token = $res['access_token'];
+                $openid = $res['openid'];
+                $refresh_token = $res['refresh_token'];
+                if (!empty($access_token) && !empty($res['openid']) && is_string($access_token) && is_string($openid)) {
+                    $oauth = $this->Oauthbinds->find('first', array('conditions' => array('source' => $oauth_wx_source,
                         'oauth_openid' => $res['openid']
                     )));
 
                     if (empty($oauth)) {
-                        $oauth['Oauthbinds']['oauth_openid'] = $res['openid'];
+                        $oauth['Oauthbinds']['oauth_openid'] = $openid;
                         $oauth['Oauthbinds']['created'] = date('Y-m-d H:i:s');
                         $oauth['Oauthbinds']['source'] = $oauth_wx_source;
                         $oauth['Oauthbinds']['domain'] = $oauth_wx_source;
                     }
-                    $oauth['Oauthbinds']['oauth_token'] = $res['access_token'];
-                    $oauth['Oauthbinds']['oauth_token_secret'] = empty($res['refresh_token']) ? '' : $res['refresh_token'];
+                    $oauth['Oauthbinds']['oauth_token'] = $access_token;
+                    $oauth['Oauthbinds']['oauth_token_secret'] = empty($refresh_token) ? '' : $refresh_token;
                     $oauth['Oauthbinds']['updated'] = date('Y-m-d H:i:s');
 
                     if ($oauth['Oauthbinds']['user_id'] > 0) {
                     } else {
                         if ($this->User->save(array(
-                            'username' =>  $oauth['Oauthbinds']['oauth_openid'],
-                            'nickname' =>  '微信用户'. $oauth['Oauthbinds']['oauth_openid'],
-                            'password' =>  md5(uniqid()),
+                            'username' => $oauth['Oauthbinds']['oauth_openid'],
+                            'nickname' => '微信用户' . $oauth['Oauthbinds']['oauth_openid'],
+                            'password' => md5(uniqid()),
                             'uc_id' => 0
-                        ))) {
+                        ))
+                        ) {
                             $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
                         }
                     }

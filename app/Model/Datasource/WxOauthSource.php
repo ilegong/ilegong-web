@@ -90,6 +90,7 @@ class WxOauthSource extends DataSource {
         } else {
             throw new CakeException("not supported query type(" . $queryData['method'] . ")");
         }
+        $this->log("json:". $json);
         $res = json_decode($json, true);
         if (is_null($res)) {
             $error = json_last_error();
