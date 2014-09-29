@@ -577,8 +577,6 @@ class UsersController extends AppController {
                         'oauth_openid' => $res['openid']
                     )));
 
-                    print_r($oauth);
-
                     if (empty($oauth)) {
                         $oauth['Oauthbinds']['oauth_openid'] = $res['openid'];
                         $oauth['Oauthbinds']['created'] = date('Y-m-d H:i:s');
