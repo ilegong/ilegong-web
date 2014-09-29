@@ -14,14 +14,20 @@ class WeinxinOAuthAuthenticate extends BaseAuthenticate {
 
         $oauth = ClassRegistry::init('Oauthbind')->find('first', array('conditions' => array('source' => $source,
             'oauth_openid' => $openid)));
-
-        if (!empty($oauth) && $oauth['user_id'] > 0) {
+        if (!empty($oauth)) {
+            $oauth = $oauth['Oauthbind'];
+        }
+        if ($oauth['user_id'] > 0) {
             $wxOauth = ClassRegistry::init('WxOauth');
-            $token = $wxOauth->find('first', array(
-                'conditions' => array('method' => 'auth_token', 'token' => $oauth['oauth_token'], 'openid' => $oauth['auth_openid']),
-            ));
-            if (!empty($token) && $token['errcode'] == 0) {
-                return $this->_findUser(array('id' => $oauth['user_id']));
+            $token = $wxOauth->find('all',
+                array('method' => 'auth_token', 'token' => $oauth['oauth_token'], 'openid' => $oauth['auth_openid'])
+            );
+
+            if (!empty($token)) {
+                $token = $token['WxOauth'];
+                if ($token['errcode'] == 0) {
+                    return $this->_findUser(array('id' => $oauth['user_id']));
+                }
             }
         }
 

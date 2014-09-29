@@ -568,15 +568,6 @@ class UsersController extends AppController {
                 'code' => $_REQUEST['code']
             ));
 
-
-            $rtn = array(
-                'WxOauth' => array(
-                    'errcode' => 0,
-                    'access_token' => '2422232',
-                    'openid' => '43242343243243242343'
-                )
-            );
-
             if (!empty($rtn) && $rtn['WxOauth']['errcode'] == 0) {
                 $res = $rtn['WxOauth'];
                 if (!empty($res['access_token']) && !empty($res['openid']) && is_string($res['access_token']) && is_string('openid')) {
@@ -606,9 +597,6 @@ class UsersController extends AppController {
                         }
                     }
                     $this->Oauthbinds->save($oauth['Oauthbinds']);
-
-                    echo "after save/update";
-                    var_dump($oauth);
                     $this->redirect('/users/login?source=' . $oauth['Oauthbinds']['source'] . '&openid=' . $oauth['Oauthbinds']['oauth_openid']);
                 }
             } else {
