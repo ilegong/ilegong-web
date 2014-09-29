@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2014-09-04 00:27+0800\n"
-"PO-Revision-Date: 2014-09-18 22:12+0800\n"
+"PO-Revision-Date: 2014-09-30 01:49+0800\n"
 "Last-Translator: \n"
 "Language-Team:  <EMAIL@ADDRESS>\n"
 "Language: zh_CN\n"
@@ -259,3 +259,9 @@ msgstr "开始上传"
 
 msgid "File upload failed."
 msgstr "上传失败！"
+
+msgid "By WeChat"
+msgstr "微信登录"
+
+msgid "By Username/Password"
+msgstr "账号密码登录"

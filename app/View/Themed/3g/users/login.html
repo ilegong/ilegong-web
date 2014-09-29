@@ -1,49 +1,60 @@
 <div id="container-part1" class="container clearfix">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#wechatLogin" role="tab" data-toggle="tab">{{__('By WeChat')}}</a></li>
+        <li><a href="#formLogin" role="tab" data-toggle="tab">{{__('By Username/Password')}}</a></li>
+    </ul>
 
-    {{if is_pengyoushuo_com_cn }}
-    <div>
-        <a href="https://open.weixin.qq.com/connect/oauth2/authorize?appid={{WX_APPID}}&redirect_uri={{urlencode('http://www.pengyoushuo.com.cn/users/wx_auth')}}&response_type=code&scope=snsapi_base&state=0#wechat_redirect">
-           使用微信登陆
-        </a>
+    <!-- Tab panes -->
+    <div class="tab-content voffset2" style="padding-left: 20px;">
+        <div class="tab-pane fade in active" id="wechatLogin">
+                <p>
+                    授权我们使用您的微信账号登陆朋友说。我们只能获得一个数字Id绑定登陆，不会获取您的其他信息。
+                </p>
+                <a href="{{$this->Html->url('/users/wx_login.html')}}" style="vertical-align: bottom">
+                    <img src="{{$this->Html->url('/img/Wechat-logo-315_315.png');}}" width="90px" height="90px">
+                </a>
+                <a href="{{$this->Html->url('/users/wx_login.html')}}" class="btn btn-success" style="vertical-align: bottom">使用微信登陆</a>
+        </div>
+        <div class="tab-pane fade" id="formLogin">
+            {{$this->Form->create('User',array('id'=>'loginform','method'=>"post",'class'=>'form-horizontal','onsubmit'=>$isajax ? "return ajaxeSubmitForm(this,'loginSucess');" : "",'escape' => false))}}
+            <div class="lgfm nlf">
+                <div class="form-group">
+                    <label for="username" class="col-xs-3 control-label">用户名</label>
+                    <div class="col-xs-9">
+                        <input type="text" id="username" name="data[User][username]" class="form-control" placeholder="用户名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="user_password" class="col-xs-3 control-label">密　码</label>
+                    <div class="col-xs-9">
+                        <input type="password" id="user_password" name="data[User][password]" class="form-control" placeholder="密　码">
+                    </div>
+                </div>
+                {{$this->Form->input('referer',array('type'=>'hidden'))}}
+                <div id="login_errorinfo" class="ui-state-error ui-corner-all" style="display: none;"></div>
+                <!--
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-xs-3 control-label"></label>
+                    <div class="col-xs-9">
+                      <label for="cookietime"><input type="checkbox" value="2592000" tabindex="1" id="cookietime" name="cookietime" class="pc" fwin="login"> 记住我的登录状态</label>
+                    </div>
+                </div>-->
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-xs-3 control-label"></label>
+                    <div class="col-xs-9">
+                        <button tabindex="1" value="true"  name="loginsubmit" type="submit" class="btn btn-primary"><span>登录</span></button>
+                        <a title="注册帐号" class="btn btn-default" href="{{$this->Html->url('/users/register.html')}}">注册</a>
+                        <!-- <a title="找回密码" onclick="" href="{{$this->Html->url('/users/forgot')}}">找回密码</a> -->
+                    </div>
+                </div>
+            </div>
+
+            </form>
+            <div style="padding-top: 5px;">
+                {{$this->Hook->call('oauthLoginLink')}}
+            </div>
+        </div>
     </div>
-    {{/if}}
-
-{{$this->Form->create('User',array('id'=>'loginform','method'=>"post",'class'=>'form-horizontal','onsubmit'=>$isajax ? "return ajaxeSubmitForm(this,'loginSucess');" : "",'escape' => false))}}
-<div class="lgfm nlf">
-	<div class="form-group">
-	    <label for="username" class="col-xs-3 control-label">用户名</label>
-	    <div class="col-xs-9">
-	      <input type="text" id="username" name="data[User][username]" class="form-control" placeholder="用户名">
-	    </div>
-	</div>
-	<div class="form-group">
-	    <label for="user_password" class="col-xs-3 control-label">密　码</label>
-	    <div class="col-xs-9">
-	      <input type="password" id="user_password" name="data[User][password]" class="form-control" placeholder="密　码">
-	    </div>
-	</div>
-	{{$this->Form->input('referer',array('type'=>'hidden'))}}
-	<div id="login_errorinfo" class="ui-state-error ui-corner-all" style="display: none;"></div>
-	<!-- 
-	<div class="form-group">
-	    <label for="inputEmail3" class="col-xs-3 control-label"></label>
-	    <div class="col-xs-9">
-	      <label for="cookietime"><input type="checkbox" value="2592000" tabindex="1" id="cookietime" name="cookietime" class="pc" fwin="login"> 记住我的登录状态</label>
-	    </div>
-	</div>-->
-	<div class="form-group">
-	    <label for="inputEmail3" class="col-xs-3 control-label"></label>
-	    <div class="col-xs-9">
-	      <button tabindex="1" value="true"  name="loginsubmit" type="submit" class="btn btn-primary"><span>登录</span></button>
-		  <a title="注册帐号" class="btn btn-default" href="{{$this->Html->url('/users/register.html')}}">注册</a>
-		  <!-- <a title="找回密码" onclick="" href="{{$this->Html->url('/users/forgot')}}">找回密码</a> -->
-	    </div>
-	</div>
-</div>
-
-</form>
-<div style="padding-top: 5px;">
-	{{$this->Hook->call('oauthLoginLink')}}
-</div>
 </div>
 
