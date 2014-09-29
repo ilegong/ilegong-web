@@ -587,6 +587,9 @@ class UsersController extends AppController {
                     $oauth['Oauthbinds']['oauth_token'] = $res['access_token'];
                     $oauth['Oauthbinds']['oauth_token_secret'] = $res['refresh_token'];
                     $oauth['Oauthbinds']['updated'] = date('Y-m-d H:i:s');
+
+                    $this->log("Oauthbinds  :". var_export($oauth, true));
+
                     $this->Oauthbinds->save($oauth['Oauthbinds']);
 
                     if ($oauth['Oauthbinds']['user_id'] > 0) {
