@@ -134,6 +134,7 @@ class OrdersController extends AppController{
 			
 			$data = array();
 			$data['total_price'] = $total_price;
+			$data['total_all_price'] = $total_price + $ship_fee;
             $data['ship_fee'] = $ship_fee;
 			$data['brand_id'] = $brand_id;
 			$data['creator'] = $this->currentUser['id'];
@@ -423,7 +424,7 @@ class OrdersController extends AppController{
         $xls = new Excel_XML('UTF-8', true, 'Sheet Orders');
 
         $add_header_flag = false;
-        $fields = array('id','consignee_name','created','goods', 'total_price','status','consignee_mobilephone','consignee_address');
+        $fields = array('id','consignee_name','created','goods', 'total_all_price','status','consignee_mobilephone','consignee_address');
         $header = array('订单号','客户姓名','下单时间','商品','总价','状态','联系电话','收货地址');
         $order_status = array('待确认', '已支付','已发货','已收货','已退款','','','','','已完成','已做废', '已确认', '已投诉');
         $page = 1;
