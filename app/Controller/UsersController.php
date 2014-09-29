@@ -573,9 +573,11 @@ class UsersController extends AppController {
             if (!empty($rtn) && $rtn['WxOauth']['errcode'] == 0) {
                 $res = $rtn['WxOauth'];
                 if (!empty($res['access_token']) && !empty($res['openid']) && is_string($res['access_token']) && is_string('openid')) {
-                    $oauth = $this->Oauthbinds->find('first', array('source' => $oauth_wx_source,
+                    $oauth = $this->Oauthbinds->find('first', array('conditions'=> array('source' => $oauth_wx_source,
                         'oauth_openid' => $res['openid']
-                    ));
+                    )));
+
+                    print_r($oauth);
 
                     if (empty($oauth)) {
                         $oauth['Oauthbinds']['oauth_openid'] = $res['openid'];
