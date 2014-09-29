@@ -576,6 +576,10 @@ class UsersController extends AppController {
                     $oauth = $this->Oauthbinds->find('first', array('source' => $oauth_wx_source,
                         'oauth_openid' => $res['openid']
                     ));
+
+                    echo "find result:";
+                    var_dump($oauth);
+
                     if (empty($oauth)) {
                         $oauth['oauth_openid'] = $res['openid'];
                         $oauth['created'] = date('Y-m-d H:i:s');
@@ -594,6 +598,9 @@ class UsersController extends AppController {
                         ));
                     } else {
                     }
+
+                    echo "after save/update";
+                    var_dump($oauth);
                         $this->redirect('/users/login?source=' . $oauth['source'] . '&openid=' . $oauth['oauth_openid']);
 
                 }
