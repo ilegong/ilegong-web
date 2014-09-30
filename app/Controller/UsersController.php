@@ -479,6 +479,7 @@ class UsersController extends AppController {
                 $this->set('isajax', true);
             }
         }
+        $this->set('supportWeixin', $this->is_pengyoushuo_com_cn() && $this->is_weixin());
         $this->data['User']['referer'] = $redirect;
     }
 
