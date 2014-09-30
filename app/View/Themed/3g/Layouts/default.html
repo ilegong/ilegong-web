@@ -58,10 +58,19 @@ div.photo-item {
     vertical-align: bottom
 }
 
-    .text-price {
-        color: #c71673; font-size: 24px;
-    }
-
+.text-price {
+    color: #c71673; font-size: 24px;
+}
+#top-link-block.affix-top {
+    position: absolute; /* allows it to "slide" up into view */
+    bottom: -82px;
+    left: 10px;
+}
+#top-link-block.affix {
+    position: fixed; /* keeps it on the bottom once in view */
+    bottom: 18px;
+    right: 10px;
+}
 </style>
 {{$this->Html->script(array(
             'http://libs.baidu.com/jquery/1.9.1/jquery.min.js',
