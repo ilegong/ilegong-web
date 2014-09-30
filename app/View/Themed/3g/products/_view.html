@@ -14,7 +14,7 @@ href="javascript:void(0);">添加到购物车 </a>
 	
 </div>
 <div>
-	<a style="color:red;" href="{{$this->Html->url('/brands/'.date('h Ymd',strtotime($Product['Brand']['created'])).'/'.$Product['Product']['brand_id'])}}">查看商家更多商品 </a>
+	<a style="color:red;" href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($Product['Brand']['created'])).'/'.$Product['Product']['brand_id'])}}">查看商家更多商品 </a>
 </div>
 <div class="row">
 	<div class="col-xs-12 col-md-6">	
