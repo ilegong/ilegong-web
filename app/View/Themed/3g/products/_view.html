@@ -1,38 +1,51 @@
-<h2 class="Content-title" id="item-detail-title"><?php echo $Product['Product']['name']; ?></h2>
-<p>单价：<strong> ￥{{$this->Number->precision($Product['Product']['price'], 2)}}</strong></p>
-{{if $Product['Product'][promote_name] }}
-<p><?php echo $Product['Product']['promote_name']; ?></p>
-{{/if}}
-<div  id="productinfo" class="clearfix" style="padding-bottom:10px;">
-    <div class="input-group" style="float:left;width:120px;">
-	  <span class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}" >-</span>
-	  <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text" readonly="readonly">
-	  <span class="add input-group-addon"  item-id="{{$Product['Product']['id']}}">+</span>
-	</div>
-	<a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-primary shopping" id="single-item-{{$Product['Product']['id']}}" item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
-href="javascript:void(0);">添加到购物车 </a>
-	
-</div>
-<div>
-	<a style="color:red;" href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($Product['Brand']['created'])).'/'.$Product['Product']['brand_id'])}}">查看商家更多商品 </a>
-</div>
 <div class="row">
-	<div class="col-xs-12 col-md-6">	
-		<img src="{{$this->Html->url($Product['Product']['coverimg'])}}" style="width:100%;"
-		onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
-	</div>
+    <div class="col-xs-12 col-md-6">
+        {{if !empty($Product['Product']['coverimg'])}}
+        <img src="{{$this->Html->url($Product['Product']['coverimg'])}}" style="width:100%;"
+             onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
+        {{/if}}
+        <h2 class="Content-title" id="item-detail-title"><?php echo $Product['Product']['name']; ?></h2>
+        {{if $Product['Product'][promote_name] }}
+        <p><?php echo $Product['Product']['promote_name']; ?></p>
+        {{/if}}
+        <div class="clearfix" style="position: relative">
+            <strong class="vertical-align text-price"> ￥{{$this->Number->precision($Product['Product']['price'], 2)}}</strong>
+            <span class="vertical-align" style="position: absolute; right: 0; bottom: 0;">快递：{{if $Product['Product']['ship_fee']}} 邮费：￥{{$Product['Product']['ship_fee']}} {{else}}包邮{{/if}}</span>
+        </div>
+        <div  id="productinfo" class="clearfix voffset2" style="padding-bottom:10px;">
+            <div class="input-group" style="float:left;width:120px;">
+                <span class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}" >-</span>
+                <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text" readonly="readonly">
+                <span class="add input-group-addon"  item-id="{{$Product['Product']['id']}}">+</span>
+            </div>
+            <a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-primary shopping" id="single-item-{{$Product['Product']['id']}}" item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
+               href="javascript:void(0);">添加到购物车</a>
+
+        </div>
+        <div>
+            <a style="color:red;" href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($Product['Brand']['created'])).'/'.$Product['Product']['brand_id'])}}">查看商家更多商品</a>
+        </div>
+    </div>
 </div>
-<div class="tabs">
-	<div  class="tab-content">
-		<div id="product-description">
-		    <div class="Content-body">
-	        <div class="clear"></div>
-		    <?php echo $Product['Product']['content']; ?>
-		    </div>
-		</div>
-		<div id="product-reviews">
-			{{template comments/add}}
-		</div>
-	</div>
-	
+
+
+<div id="container-part1" class="container clearfix voffset1">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#product-description" role="tab" data-toggle="tab">{{__('ProductIntroduction')}}</a></li>
+        <li><a href="#product-reviews" role="tab" data-toggle="tab">{{__('ProductReviews')}}</a></li>
+    </ul>
+
+    <div class="tab-content voffset2" style="padding-left: 2px;">
+        <div class="tab-pane fade in active" id="product-description">
+            <div class="Content-body">
+                <div class="clear"></div>
+                <?php echo $Product['Product']['content']; ?>
+            </div>
+        </div>
+        <div class="tab-pane fade in active" id="product-reviews">
+            <div class="Content-body">
+                {{template comments/add}}
+            </div>
+        </div>
+    </div>
 </div>

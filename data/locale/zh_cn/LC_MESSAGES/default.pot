@@ -267,5 +267,13 @@ msgstr ""
 msgid "File upload aborted"
 msgstr ""
 
+msgid "ProductIntroduction"
+msgstr ""
+
+msgid "ProductReviews"
+msgstr ""
+
+
+
 
 
