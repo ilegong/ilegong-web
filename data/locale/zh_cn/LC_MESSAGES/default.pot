@@ -273,6 +273,12 @@ msgstr ""
 msgid "ProductReviews"
 msgstr ""
 
+msgid "By WeChat"
+msgstr ""
+
+msgid "By Username/Password"
+msgstr ""
+
 
 
 
