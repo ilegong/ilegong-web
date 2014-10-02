@@ -2,7 +2,19 @@
 td {padding:5px 10px;}
 </style>
 <div  class="container">
-	<div class="orderinfo">
+	<div class="orderinfo voffset3">
+
+        {{if $action == 'pay'}}
+        <div class="panel panel-warning">
+            <div class="panel-heading">请您任选如下两种方式付款</div>
+            <div class="panel-body">
+                <ul class="list-unstyled">
+                    <li><strong>支付宝</strong>：<strong>yxg@ilegong.com</strong>, 收款人：北京爱乐供科技有限公司；</li>
+                    <li><strong>微信转账</strong>：<strong>荣浩</strong> (如果他还不是您的好友，请加微信号 Michael-haohao)</li>
+                </ul>
+            </div>
+        </div>
+        {{/if}}
 
 		<div id="part_consignee">
 			{{if $has_chosen_consignee}}
@@ -11,18 +23,6 @@ td {padding:5px 10px;}
 				{{template orders/edit_consignee}}
 			{{/if}}
 		</div>
-
-        {{if $action == 'pay'}}
-        <div class="panel panel-warning">
-            <div class="panel-heading">请您按照如下方式付款</div>
-            <div class="panel-body">
-                <ul class="list-unstyled">
-                    <li><strong>支付宝</strong>：yxg@ilegong.com,收款人：北京爱乐供科技有限公司；</li>
-                    <li><strong>微信转账</strong>：荣浩 (如果他还不是您的好友，请加微信号 Michael-haohao)</li>
-                </ul>
-            </div>
-        </div>
-        {{/if}}
 
 		<div id="part_payTypeAndShipType"><!-- template orders/info_shiptype--></div>
 		
