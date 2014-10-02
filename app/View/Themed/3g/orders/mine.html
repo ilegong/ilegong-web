@@ -1,7 +1,33 @@
 <style>
 td {padding:5px 10px;}
+
+.orderitem {
+    border-top: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
+    padding: 1px 7px 1px 10px;
+}
+
+.orderitem_top {
+    border-bottom: 1px solid #DDDDDD;
+    padding: 5px 0 5px 0;
+}
+
+.orderitem_item {
+    border-bottom: 1px solid #dddddd;
+    padding: 5px 0 5px 0;
+}
+
+.orderitem_price {
+    border-bottom: 1px solid #dddddd;
+    padding: 5px 0 5px 0;
+}
+
+.orderitem_actions {
+    padding: 5px 0 5px 0;
+}
+
 </style>
-<div  class="container">
+<div class="container">
 	<div class="orderinfo">
 		<div class="o_show">
 		<p>
@@ -14,54 +40,73 @@ td {padding:5px 10px;}
 	        <li {{if $current_controller=='products' && $current_action=='mine'}}class="active"{{/if}}><?php echo $this->Html->link('我的商品', array('controller' => 'products','action'=>'mine','plugin' => null ,)); ?></li>
 		</ul>
 		{{/if}}
-		<h2>我的订单</h2>
 		<font color="red">51daifan收款方式支付宝：yxg@ilegong.com,收款人：北京爱乐供科技有限公司； 或微信转账：荣浩 (如果他还不是您的好友，请加微信号 Michael-haohao) </font>
+        </div>
+    </div>
+
 		{{loop $orders $order}}
-		<table  class="table table-bordered">
+        <?php $brand = $brands[$order['Order']['brand_id']]; ?>
+    <div class="row voffset3" style="background-color: #f1eff0">
+    <div class="orderitem" style="background-color: #ffffff">
+    <div class="orderitem_top">
+        <div style="position: relative">
+            <span class="vertical-align"><a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brand['Brand']['created'])).'/'.$brand['Brand']['slug'].'.html')}}">{{$brand['Brand']['name']}}</a></span>
+            <span id="order-status-{{$order['Order']['id']}}" class="vrtical-align" style="position: absolute; right: 0; bottom: 0; color: darkred">
+                    {{if $order['Order']['status']==0}}等待付款
+                    {{elseif $order['Order']['status']==1}}已支付
+                    {{elseif $order['Order']['status']==2}}已发货
+                    {{elseif $order['Order']['status']==3}}已收货
+                    {{elseif $order['Order']['status']==4}}已退款
+                    {{elseif $order['Order']['status']==9}}已完成
+                    {{elseif $order['Order']['status']==10}}已取消
+                    {{elseif $order['Order']['status']==11}}已确认有效
+                    {{elseif $order['Order']['status']==12}}已投诉
+                    {{/if}}
+            </span>
+        </div>
+    </div>
+            <?php  /**
 		<tr>
 			<td>
 			收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
 			下单时间：{{$order['Order']['created']}}<br/>
-			{{if $order['Order']['ship_type']}}	
+			{{if $order['Order']['ship_type']}}
 			快递公司: {{$ship_type[$order['Order']['ship_type']]}} ,&nbsp;&nbsp; 快递单号：{{$order['Order']['ship_code']}}
 			{{/if}}<br/>
-			<div id="order-status-{{$order['Order']['id']}}">
-			<font color="red">
-			{{if $order['Order']['status']==0}}订单已生成,等待付款 (￥{{$this->Number->precision($order['Order']['ship_fee'] + $order['Order']['total_price'], 2)}})
-			{{elseif $order['Order']['status']==1}}订单已支付
-			{{elseif $order['Order']['status']==2}}
-				<font color="red">订单已发货</font>
-				<div class="well">
-					<button type="button" onclick="confirm_receive({{$order['Order']['id']}});" class="btn btn-primary">确认已收货</button>
-				</div>
-			{{elseif $order['Order']['status']==3}}订单已收货
-			
-			{{elseif $order['Order']['status']==4}}订单已退款
-			
-			{{elseif $order['Order']['status']==9}}订单已完成
-			{{elseif $order['Order']['status']==10}}订单已作废
-			{{elseif $order['Order']['status']==11}}订单已确认有效
-			{{elseif $order['Order']['status']==12}}订单已投诉			
-			{{/if}}
-			</font>
-			</div>
-			</td>			
+			</td>
 		</tr>
+           */ ?>
+
 		{{if !empty($order_carts[$order['Order']['id']])}}
-		<tr><td>
-			<table  class="table table-bordered">
-				<tr><th width="50%">商品名称</th><th>价格</th><th>数量</th><th>合计</th></tr>
-				<tbody>
 				{{loop $order_carts[$order['Order']['id']] $cart}}
-				<tr><td>{{$cart['Cart']['name']}}</td>
-				<td>￥{{$cart['Cart']['price']}}</td>
-				<td>{{$cart['Cart']['num']}}</td>
-				<td>￥{{$cart['Cart']['price']*$cart['Cart']['num']}}</td>		
-				</tr>
+            <div class="clearfix orderitem_item">
+            {{$this->Html->image($cart['Cart']['coverimg'], array(
+            'class' => 'col-xs-3',
+            'style' => 'max-height:60px'
+            ));}}
+                <p class="col-xs-6">{{$cart['Cart']['name']}}</p>
+                <div class="col-xs-3 pull-right">
+				<p style="margin-bottom: 0;" class="pull-right">￥{{$this->Number->precision($cart['Cart']['price'], 2)}}</p>
+                    <br/>
+				<small style="margin-bottom: 0" class="pull-right">×{{$cart['Cart']['num']}}</small>
+                    </div>
+            </div>
 				{{/loop}}
-				</tbody>
-			</table>
-		</td></tr>
+                <div class="orderitem_price clearfix">
+                    <span class="pull-left"> 订单号:{{$order['Order']['id']}} </span>
+                    <span class="pull-right" style="text-align: right;">共{{$counts[$order['Order']['id']]}}件商品 实付：{{$this->Number->precision($order['Order']['total_price'], 2)}}</span>
+                </div>
+                <div class="orderitem_actions clearfix pull-right">
+                    {{if $order['Order']['status']==2}}
+                    <button type="button" class="btn-sm btn-default">查看物流</button>
+                    <button type="button" onclick="confirm_receive({{$order['Order']['id']}});" class="btn-sm btn-warning">确认收货</button>
+                    {{elseif $order['Order']['status']==0}}
+                    <button type="button" class="btn-sm btn-warning">去支付</button>
+                    <button type="button" class="btn-sm btn-default">取消订单</button>
+                    {{/if}}
+                </div>
+        <div class="clearfix"></div>
+            <?php /**
             <tr>
                 <td>  <p class="pull-right">
                     商品总价：￥{{$this->Number->precision($order['Order']['total_price'], 2)}}<br/>
@@ -70,10 +115,9 @@ td {padding:5px 10px;}
                     </p>
                 </td>
             </tr>
+            */ ?>
 		{{/if}}
-		</table>
+    </div>
 		{{/loop}}
-		
-		</div>			
-	</div>
+    </div>
 </div>

@@ -311,25 +311,45 @@ class OrdersController extends AppController{
 				'conditions'=> array('creator'=>$this->currentUser['id']),
 		));
 		$ids = array();
+        $brandIds = array();
 		foreach($orders as $o){
 			$ids[] = $o['Order']['id'];
+            $brandIds[] = $o['Order']['brand_id'];
 		}
+
 		$this->loadModel('Cart');
-		$Carts = $this->Cart->find('all',array(				
+		$Carts = $this->Cart->find('all',array(
 				'conditions'=>array(
 						'order_id' => $ids,
 						'creator'=> $this->currentUser['id']
 		)));
+
+        $counts = array();
 		$order_carts = array();
 		foreach($Carts as $c){
 			$order_id = $c['Cart']['order_id'];
 			if(!isset($order_carts[$order_id])) $order_carts[$order_id] = array();
 			$order_carts[$order_id][] = $c;
+            $counts[$order_id] = $c['Cart']['num'];
 		}
-		
+
+        $mappedBrands = array();
+        if ($brandIds) {
+            $brands = $this->Brand->find('all', array(
+                'conditions' => array('id' => $brandIds),
+                'fields' => array('id', 'name', 'created', 'slug', 'coverimg')
+            ));
+
+            foreach($brands as $brand) {
+                $mappedBrands[$brand['Brand']['id']] = $brand;
+            }
+        }
+
+        $this->set('brands', $mappedBrands);
 		$this->set('orders',$orders);
 		$this->set('order_carts',$order_carts);
 		$this->set('ship_type',$this->ship_type);
+        $this->set('counts', $counts);
 	}
 
 	function business($creator=0){
