@@ -85,9 +85,9 @@ class FileLog extends BaseLog {
 		}
         if (defined('SAE_MYSQL_DB')) {
             $output = ucfirst($type) . ': ' . $message ;
-            if (true /*Configure::read('debug') > 0*/){sae_set_display_errors(false);}
+            if (Configure::read('debug') > 0){sae_set_display_errors(false);}
             sae_debug($output);
-            if (true /*Configure::read('debug') > 0*/){sae_set_display_errors(true);}
+            if (Configure::read('debug') > 0){sae_set_display_errors(true);}
             return true;
         }  else {
             $output = date('Y-m-d H:i:s') . ' ' . ucfirst($type) . ': ' . $message . "\n";
