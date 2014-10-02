@@ -181,7 +181,7 @@ class OrdersController extends AppController{
 	 * 订单信息页，确认各项订单信息
 	 * @param int $order_id
 	 */
-	function info($order_id=''){
+	function info($order_id='', $action = ''){
 		$has_chosen_consignee = false;
 		$this->loadModel('OrderConsignee');
 		$consignees = $this->OrderConsignee->find('all',array(
@@ -296,6 +296,7 @@ class OrdersController extends AppController{
 		$this->set('total_price',$total_price);
         $this->set('shipFee', $shipFee);
 		$this->set('Carts',$Carts);
+        $this->set('action', $action);
 	}
 	
 	function mine(){
