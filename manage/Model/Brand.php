@@ -17,5 +17,14 @@ class Brand extends AppModel {
             'message' => 'This field cannot be left blank.',
         ),
     );
+
+    function afterSave($created) {
+        $creator = $this->data['Brand']['creator'];
+        if(!empty($creator) && $creator > 0 && is_numeric($creator)) {
+            $user = ClassRegistry::init('User');
+            $user->updateAll(array('is_business'=>1), array('`User`.id' => $creator));
+        }
+        parent::afterSave($created);
+    }
     
 }
