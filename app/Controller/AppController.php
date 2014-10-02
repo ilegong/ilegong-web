@@ -72,7 +72,6 @@ class AppController extends Controller {
 
             $this->Cookie = $this->Components->load('Cookie',array('name' => 'SAECMS', 'time' => '+2 weeks'));
             $user = $this->Cookie->read('Auth.User');
-            $this->log("read user from cookie:". var_export($user, true));
 
     		if(is_array($user) && intval($user['id'])>0){
     			$this->loadModel('User');

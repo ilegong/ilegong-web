@@ -11,7 +11,6 @@ td {padding:5px 10px;}
 		{{if $is_business}}
             <?php echo $this->Html->link('导出', array('controller' => 'orders','action'=>'business_export','plugin' => null , $creator),array('class'=>'btn btn-info pull-right')); ?>
 		<ul class="nav nav-tabs">
-			<li {{if $current_controller=='orders' && $current_action=='mine'}}class="active"{{/if}}><?php echo $this->Html->link('我的订单', array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?></li>
 	        <li {{if $current_action=='business'}}class="active"{{/if}}><?php echo $this->Html->link('商家订单', array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>
 	        <li {{if $current_controller=='products' && $current_action=='mine'}}class="active"{{/if}}><?php echo $this->Html->link('商品', array('controller' => 'products','action'=>'mine','plugin' => null ,)); ?></li>
 		</ul>

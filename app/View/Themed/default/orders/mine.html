@@ -9,11 +9,6 @@ td {padding:5px 10px;}
 		</p>
 		{{if $is_business}}
 		<?php echo $this->Html->link('新增商品', array('controller' => 'products','action'=>'add','plugin' => null ,),array('class'=>'btn btn-warning pull-right')); ?>
-		<ul class="nav nav-tabs">
-			<li {{if $current_controller=='orders' && $current_action=='mine'}}class="active"{{/if}}><?php echo $this->Html->link('我的订单', array('controller' => 'orders','action'=>'mine','plugin' => null ,)); ?></li>
-	        <li {{if $current_action=='business'}}class="active"{{/if}}><?php echo $this->Html->link('商家订单', array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>
-	        <li {{if $current_controller=='products' && $current_action=='mine'}}class="active"{{/if}}><?php echo $this->Html->link('我的商品', array('controller' => 'products','action'=>'mine','plugin' => null ,)); ?></li>
-		</ul>
 		{{/if}}
 		<h2>我的订单</h2>
 		<font color="red">51daifan收款方式支付宝：yxg@ilegong.com,收款人：北京爱乐供科技有限公司；或微信转账：荣浩 (如果他还不是您的好友，请加微信号 Michael-haohao)</font>
