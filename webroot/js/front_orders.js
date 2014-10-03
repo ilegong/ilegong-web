@@ -195,7 +195,7 @@ function orders_undo(order_id) {
             $('.order_item_action_'+order_id).html('<a class="btn-sm btn-primary" href="/orders/detail/'+order_id+'">详细</a>');
             $('.order-status-'+order_id).html('已取消');
             $('#orders-wait_payment').find('.order_item_'+order_id).remove();
-        }, 2);
+        }, 2000);
     });
 }
 
@@ -203,7 +203,7 @@ function orders_remove(order_id) {
     return ajaxAction(BASEURL+"/orders/confirm_remove/",{'order_id':order_id}, null, function(){
         showSuccessMessage('订单已删除', function(){
             $('.order_item_'+order_id).remove();
-    }, 2);
+    }, 2000);
     });
 }
 

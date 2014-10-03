@@ -18,9 +18,14 @@
 
 {{$this->Html->script(array(
 			'jquery/jquery.lazyload.min.js',
-            'bootstrap.min.js','common.js','front.js','front_orders.js'
+            'bootstrap.min.js','bootbox/bootbox.min.js', 'common.js','front.js','front_orders.js'
         ));
 }}
+<script>
+    bootbox.setDefaults({
+        locale: "zh_CN"
+    });
+</script>
 <!-- helper中追加的底部脚本 $this->_View->append('bottomscript',$script);-->
 {{$this->fetch('bottomscript')}}
 <script type="text/javascript">

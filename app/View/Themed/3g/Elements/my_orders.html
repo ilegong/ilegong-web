@@ -49,9 +49,9 @@ $brand = $brands[$order['Order']['brand_id']];
             <a href="javascript:return false;" onclick="confirm_receive({{$order['Order']['id']}});" class="btn-sm btn-warning">确认收货</a>
             {{elseif $order['Order']['status']==0}}
             <a class="btn-sm btn-warning" href="/orders/detail/{{$order['Order']['id']}}/pay">去支付</a>
-            <a class="btn-sm btn-primary" href="javascript:return false;" onclick="orders_undo({{$order['Order']['id']}});">取消订单</a>
+            <a class="btn-sm btn-primary" href="javascript:return false;" onclick="bootbox.confirm('您确认要取消吗？', function(result) {if(result){orders_undo({{$order['Order']['id']}})} })">取消订单</a>
             {{elseif $order['Order']['status'] == 10}}
-            <a class="btn-sm btn-warning" href="javascript:return false;" onclick="orders_remove({{$order['Order']['id']}});">删除订单</a>
+            <a class="btn-sm btn-warning" href="javascript:return false;" onclick="bootbox.confirm('您确认要删除吗？', function(result) {if(result){orders_remove({{$order['Order']['id']}})} })">删除订单</a>
             {{/if}}
             <a class="btn-sm btn-primary" href="/orders/detail/{{$order['Order']['id']}}">详细</a>
         </div>
