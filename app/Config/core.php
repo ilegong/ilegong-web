@@ -49,7 +49,7 @@ Configure::write('Session', array(
 Configure::write('Session.cookie', 'cake');
 Configure::write('Security.level', 'medium');
 
-// Configure::write('Asset.timestamp', true);
+Configure::write('Asset.timestamp', true);
 // Configure::write('Asset.compress', true);
 // Configure::write('Asset.filter.css', 'asset_filter.php');
 // Configure::write('Asset.filter.js', 'asset_filter.php');
