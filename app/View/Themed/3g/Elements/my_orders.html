@@ -5,12 +5,12 @@ if ($status != -1 && $status != $order['Order']['status']) {continue;}
 $found ++;
 $brand = $brands[$order['Order']['brand_id']];
 ?>
-<div class="row voffset3" style="background-color: #f1eff0">
+<div class="voffset3">
     <div class="orderitem" style="background-color: #ffffff">
         <div class="orderitem_top">
             <div style="position: relative">
                 <span class="vertical-align"><a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brand['Brand']['created'])).'/'.$brand['Brand']['slug'].'.html')}}">{{$brand['Brand']['name']}}</a></span>
-            <span id="order-status-{{$order['Order']['id']}}" class="vrtical-align" style="position: absolute; right: 0; bottom: 0; color: darkred">
+            <span id="order-status-{{$order['Order']['id']}}" class="vrtical-align order_status_text" style="position: absolute; right: 0; bottom: 0;">
                     {{if $order['Order']['status']==0}}等待付款
                     {{elseif $order['Order']['status']==1}}已支付
                     {{elseif $order['Order']['status']==2}}已发货
@@ -24,18 +24,6 @@ $brand = $brands[$order['Order']['brand_id']];
             </span>
             </div>
         </div>
-        <?php  /**
-		<tr>
-        <td>
-            收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
-            下单时间：{{$order['Order']['created']}}<br/>
-            {{if $order['Order']['ship_type']}}
-            快递公司: {{$ship_type[$order['Order']['ship_type']]}} ,&nbsp;&nbsp; 快递单号：{{$order['Order']['ship_code']}}
-            {{/if}}<br/>
-        </td>
-        </tr>
-        */ ?>
-
         {{if !empty($order_carts[$order['Order']['id']])}}
         {{loop $order_carts[$order['Order']['id']] $cart}}
         <div class="clearfix orderitem_item">
@@ -56,28 +44,18 @@ $brand = $brands[$order['Order']['brand_id']];
             <span class="pull-right" style="text-align: right;">共{{$counts[$order['Order']['id']]}}件商品 实付：{{$this->Number->precision($order['Order']['total_price'], 2)}}</span>
         </div>
         <div class="orderitem_actions clearfix pull-right">
-            <a class="btn-sm btn-primary" href="/orders/info/{{$order['Order']['id']}}">详细</a>
             {{if $order['Order']['status']==2}}
             <button type="button" class="btn-sm btn-default">查看物流</button>
             <button type="button" onclick="confirm_receive({{$order['Order']['id']}});" class="btn-sm btn-warning">确认收货</button>
             {{elseif $order['Order']['status']==0}}
-            <a class="btn-sm btn-warning" href="/orders/info/{{$order['Order']['id']}}/pay">去支付</a>
+            <a class="btn-sm btn-warning" href="/orders/detail/{{$order['Order']['id']}}/pay">去支付</a>
             <a class="btn-sm btn-primary">取消订单</a>
             {{elseif $order['Order']['status'] == 10}}
             <a class="btn-sm btn-warning" href="javascript:return false;" onclick="orders_remove({{$order['Order']['id']}});">删除订单</a>
             {{/if}}
+            <a class="btn-sm btn-primary" href="/orders/detail/{{$order['Order']['id']}}">详细</a>
         </div>
         <div class="clearfix"></div>
-        <?php /**
-            <tr>
-        <td>  <p class="pull-right">
-            商品总价：￥{{$this->Number->precision($order['Order']['total_price'], 2)}}<br/>
-            运费：￥{{$this->Number->precision($order['Order']['ship_fee'], 2)}}<br/>
-            总价：￥{{$this->Number->precision($order['Order']['ship_fee'] + $order['Order']['total_price'], 2)}}<br/>
-        </p>
-        </td>
-        </tr>
-        */ ?>
         {{/if}}
     </div>
 </div>

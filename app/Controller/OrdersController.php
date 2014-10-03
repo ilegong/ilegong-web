@@ -218,10 +218,8 @@ class OrdersController extends AppController{
 									'num'=> $nums[$p['Product']['id']]?$nums[$p['Product']['id']]:1,
 									'price'=> $p['Product']['price'],
 					));
-                    //TODO: TMP fix
-                    if ($p['Product']['id'] == 161) {
-                        $shipFee = 10.00;
-                    }
+
+                    $shipFee += $p['Product']['ship_fee'];
 				}
 			}
 			else{
@@ -279,25 +277,63 @@ class OrdersController extends AppController{
 					'creator'=> $this->currentUser['id']
 			)));
 			$this->Session->write('OrderConsignee',$current_consignee);
+            $shipFee = $orderinfo['Order']['ship_fee'];
 		}
 
-        foreach($Carts as $c) {
-            //TODO: TMP fix
-            if ($c['Cart']['product_id'] == 161) {
-                $shipFee = 10.00;
-            }
-        }
-		
 		$total_price = $this->_calculateTotalPrice($Carts);
 		$this->set('has_chosen_consignee',$has_chosen_consignee);
 		$this->set('total_consignee',$total_consignee);
 		$this->set('consignees',$consignees);	
-		$this->set('order_id',$order_id);
+		$this->set('order_id', $order_id);
 		$this->set('total_price',$total_price);
         $this->set('shipFee', $shipFee);
 		$this->set('Carts',$Carts);
         $this->set('action', $action);
 	}
+
+    /**
+     * Display and options for already submitted order
+     * @Param int $order_id
+     * @Param string action
+     */
+    function detail($order_id='', $action = '') {
+        $orderinfo = $this->Order->find('first',array(
+            'conditions'=> array('id'=>$order_id,'creator'=>$this->currentUser['id']),
+        ));
+        if(empty($orderinfo)){
+            $this->__message('订单不存在，或无权查看','/');
+        }
+
+        $this->loadModel('Cart');
+        $Carts = $this->Cart->find('all',array(
+            'conditions'=>array(
+                'order_id' => $order_id,
+                'creator'=> $this->currentUser['id']
+            )));
+        $product_ids = array();
+        foreach($Carts as $cart) {
+            $product_ids[] = $cart['Cart']['product_id'];
+        }
+        $this->loadModel('Product');
+        $products = $this->Product->find('all', array(
+            'fields' => array('id', 'created', 'slug'),
+            'conditions'=>array(
+            'id' => $product_ids
+        )));
+
+        $product_new = array();
+        foreach($products as &$p) {
+            $product_new[$p['Product']['id']] = $p;
+        }
+        $products = $product_new;
+        unset($product_new);
+
+        $this->set('order_id',$order_id);
+        $this->set('order', $orderinfo);
+        $this->set('Carts',$Carts);
+        $this->set('action', $action);
+        $this->set('products', $products);
+    }
 	
 	function mine(){
 		$this->loadModel('Brand');
