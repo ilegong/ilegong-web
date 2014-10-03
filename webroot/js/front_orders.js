@@ -195,6 +195,7 @@ function orders_receive_3g(order_id){
         showSuccessMessage('您已确认收货', function(){
             $('.order_item_action_'+order_id).html('<a class="btn-sm btn-primary" href="/orders/detail/'+order_id+'">详细</a>');
             $('.order-status-'+order_id).html('已收货');
+            $('#orders-wait_receive').find('.order_item_'+order_id).remove();
         }, 2000);
     });
 }
