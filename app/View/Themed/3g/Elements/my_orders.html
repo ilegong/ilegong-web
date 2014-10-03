@@ -56,6 +56,7 @@ $brand = $brands[$order['Order']['brand_id']];
             <span class="pull-right" style="text-align: right;">共{{$counts[$order['Order']['id']]}}件商品 实付：{{$this->Number->precision($order['Order']['total_price'], 2)}}</span>
         </div>
         <div class="orderitem_actions clearfix pull-right">
+            <a class="btn-sm btn-primary" href="/orders/info/{{$order['Order']['id']}}">详细</a>
             {{if $order['Order']['status']==2}}
             <button type="button" class="btn-sm btn-default">查看物流</button>
             <button type="button" onclick="confirm_receive({{$order['Order']['id']}});" class="btn-sm btn-warning">确认收货</button>
