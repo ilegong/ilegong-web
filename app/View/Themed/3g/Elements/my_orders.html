@@ -45,8 +45,8 @@ $brand = $brands[$order['Order']['brand_id']];
         </div>
         <div class="orderitem_actions clearfix pull-right order_item_action_{{$order['Order']['id']}}">
             {{if $order['Order']['status']==2}}
+            <a href="javascript:return false;" onclick="bootbox.confirm('您要确认收货吗？', function(result) {if(result){orders_receive_3g({{$order['Order']['id']}})} })" class="btn-sm btn-warning">确认收货</a>
             <a class="btn-sm btn-primary" href="/orders/detail/{{$order['Order']['id']}}#ship">查看物流</a>
-            <a href="javascript:return false;" onclick="confirm_receive({{$order['Order']['id']}});" class="btn-sm btn-warning">确认收货</a>
             {{elseif $order['Order']['status']==0}}
             <a class="btn-sm btn-warning" href="/orders/detail/{{$order['Order']['id']}}/pay">去支付</a>
             <a class="btn-sm btn-primary" href="javascript:return false;" onclick="bootbox.confirm('您确认要取消吗？', function(result) {if(result){orders_undo({{$order['Order']['id']}})} })">取消订单</a>

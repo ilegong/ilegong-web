@@ -189,6 +189,16 @@ function confirm_order(order_id, status, creator){
 	return ajaxAction(BASEURL+"/orders/set_status/"+creator,{'order_id':order_id,'status':status},null,'confirm_order_status');
 }
 
+//用户确认收货
+function confirm_receive_3g(order_id){
+    return ajaxAction(BASEURL+"/orders/confirm_receive/",{'order_id':order_id},null, function(){
+        showSuccessMessage('订单已取消', function(){
+            $('.order_item_action_'+order_id).html('<a class="btn-sm btn-primary" href="/orders/detail/'+order_id+'">详细</a>');
+            $('.order-status-'+order_id).html('已收货');
+        }, 2000);
+    });
+}
+
 function orders_undo(order_id) {
     return ajaxAction(BASEURL+"/orders/confirm_undo/",{'order_id':order_id},null, function(){
         showSuccessMessage('订单已取消', function(){
