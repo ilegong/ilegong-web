@@ -167,8 +167,9 @@ function close_remark(){
 
 //选择发票地址
 rs_callbacks.confirm_order_status = function(request){
-	$('#order-status-'+request.order_id).html('<font color="red">'+request.msg+"</font>");
+	$('.order-status-'+request.order_id, '#order-status-'+request.order_id).html('<font color="red">'+request.msg+"</font>");
 }
+
 //设置订单的快递类型与快递单号
 function ship_order(order_id, creator){
 	//if($('#ship-type-'+order_id).val()=="" || $('#ship-code-'+order_id).val()==""){
@@ -188,17 +189,23 @@ function confirm_order(order_id, status, creator){
 	return ajaxAction(BASEURL+"/orders/set_status/"+creator,{'order_id':order_id,'status':status},null,'confirm_order_status');
 }
 
+function orders_undo(order_id) {
+    return ajaxAction(BASEURL+"/orders/confirm_undo/",{'order_id':order_id},null, function(){
+        showSuccessMessage('订单已取消', function(){
+            $('.order_item_action_'+order_id).html('<a class="btn-sm btn-primary" href="/orders/detail/'+order_id+'">详细</a>');
+            $('.order-status-'+order_id).html('已取消');
+            $('#orders-wait_payment').find('.order_item_'+order_id).remove();
+        }, 2);
+    });
+}
 
-
-
-
-
-
-
-
-
-
-
+function orders_remove(order_id) {
+    return ajaxAction(BASEURL+"/orders/confirm_remove/",{'order_id':order_id}, null, function(){
+        showSuccessMessage('订单已删除', function(){
+            $('.order_item_'+order_id).remove();
+    }, 2);
+    });
+}
 
 
 //检查联系电话

@@ -4,6 +4,13 @@ if (!defined('COMMON_PATH')) {
 }
 include_once COMMON_PATH.'bootstrap.php';
 
+define('ORDER_STATUS_CANCEL', 10);
+define('ORDER_STATUS_SHIPPED', 2);
+define('ORDER_STATUS_RECEIVED', 3);
+define('ORDER_STATUS_PAID', 1);
+define('ORDER_STATUS_WAITING_PAY', 0);
+
+
 global $page_style;
 global $pages_tpl;
 /*  分页样式    */

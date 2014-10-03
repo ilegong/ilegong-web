@@ -5,12 +5,12 @@ if ($status != -1 && $status != $order['Order']['status']) {continue;}
 $found ++;
 $brand = $brands[$order['Order']['brand_id']];
 ?>
-<div class="voffset3">
+<div class="voffset3 order_item_{{$order['Order']['id']}}">
     <div class="orderitem" style="background-color: #ffffff">
         <div class="orderitem_top">
             <div style="position: relative">
                 <span class="vertical-align"><a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brand['Brand']['created'])).'/'.$brand['Brand']['slug'].'.html')}}">{{$brand['Brand']['name']}}</a></span>
-            <span id="order-status-{{$order['Order']['id']}}" class="vrtical-align order_status_text" style="position: absolute; right: 0; bottom: 0;">
+            <span class="vrtical-align order_status_text order-status-{{$order['Order']['id']}}" style="position: absolute; right: 0; bottom: 0;">
                     {{if $order['Order']['status']==0}}等待付款
                     {{elseif $order['Order']['status']==1}}已支付
                     {{elseif $order['Order']['status']==2}}已发货
@@ -43,13 +43,13 @@ $brand = $brands[$order['Order']['brand_id']];
             <span class="pull-left"> 订单号:{{$order['Order']['id']}} </span>
             <span class="pull-right" style="text-align: right;">共{{$counts[$order['Order']['id']]}}件商品 实付：{{$this->Number->precision($order['Order']['total_price'], 2)}}</span>
         </div>
-        <div class="orderitem_actions clearfix pull-right">
+        <div class="orderitem_actions clearfix pull-right order_item_action_{{$order['Order']['id']}}">
             {{if $order['Order']['status']==2}}
-            <button type="button" class="btn-sm btn-default">查看物流</button>
-            <button type="button" onclick="confirm_receive({{$order['Order']['id']}});" class="btn-sm btn-warning">确认收货</button>
+            <a class="btn-sm btn-primary" href="/orders/detail/{{$order['Order']['id']}}#ship">查看物流</a>
+            <a href="javascript:return false;" onclick="confirm_receive({{$order['Order']['id']}});" class="btn-sm btn-warning">确认收货</a>
             {{elseif $order['Order']['status']==0}}
             <a class="btn-sm btn-warning" href="/orders/detail/{{$order['Order']['id']}}/pay">去支付</a>
-            <a class="btn-sm btn-primary">取消订单</a>
+            <a class="btn-sm btn-primary" href="javascript:return false;" onclick="orders_undo({{$order['Order']['id']}});">取消订单</a>
             {{elseif $order['Order']['status'] == 10}}
             <a class="btn-sm btn-warning" href="javascript:return false;" onclick="orders_remove({{$order['Order']['id']}});">删除订单</a>
             {{/if}}

@@ -345,7 +345,7 @@ class OrdersController extends AppController{
 		
 		$orders = $this->Order->find('all',array(
 				'order' => 'id desc',
-				'conditions'=> array('creator'=>$this->currentUser['id']),
+				'conditions'=> array('creator'=>$this->currentUser['id'], 'published' => 1),
 		));
 		$ids = array();
         $brandIds = array();
@@ -524,33 +524,61 @@ class OrdersController extends AppController{
 
 
 	function confirm_receive(){
+        $this->edit_status_by_owner_ajax(ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, '已收货');
+	}
+
+	function confirm_undo(){
+        $this->edit_status_by_owner_ajax(ORDER_STATUS_WAITING_PAY, ORDER_STATUS_CANCEL);
+	}
+
+	function confirm_remove(){
+        $this->edit_order_by_owner_ajax(function($orderModel, $curr_status, $order_id){
+            if ($curr_status == ORDER_STATUS_CANCEL) {
+                $orderModel->updateAll(array('published' => 0), array('id' => $order_id));
+                echo json_encode(array('order_id' => $order_id, 'ok' => 1));
+            } else {
+                echo json_encode(array('order_id' => $order_id, 'ok' => 0));
+            }
+            exit;
+        });
+	}
+
+	private function edit_status_by_owner_ajax($origStatus, $toStatus, $okMsg = ''){
+		$this->edit_order_by_owner_ajax(function($orderModel, $curr_status, $order_id) use ($origStatus, $toStatus,$okMsg) {
+            if ($curr_status == $origStatus) {
+                $orderModel->updateAll(array('status' => $toStatus), array('id' => $order_id));
+                echo json_encode(array('order_id' => $order_id, 'ok' => 1, 'msg' => $okMsg));
+                exit;
+            } else {
+                echo json_encode(array('order_id' => $order_id, 'ok' => 0, 'msg' => '不能修改订单状态了。'));
+                exit;
+            }
+        });
+	}
+
+    /**
+     * @param $fun callback:  a callback with parameters: OrderModel, curr_status, and order_id
+     */
+    private function edit_order_by_owner_ajax($fun){
 		$order_id = $_REQUEST['order_id'];
-		
+
 		if(empty($order_id)){
 			echo json_encode(array('order_id'=>$order_id,'msg'=>'参数错误'));
 			exit;
 		}
-		
+
 		$order_info = $this->Order->find('first',array(
 				'conditions'=> array('id'=>$order_id,'creator'=>$this->currentUser['id']),
 		));
-		
+
 		if(empty($order_info)){
 			echo json_encode(array('order_id'=>$order_id,'msg'=>'您不具备此订单的修改权限。'));
 			exit;
 		}
 		$orig_status = $order_info['Order']['status'];
-		if($orig_status==2){
-			//确认已发货的订单为已收货
-			$this->Order->updateAll(array('status'=>3),array('id'=>$order_id));
-			echo json_encode(array('order_id'=>$order_id,'msg'=>'订单已收货'));
-			exit;
-		}
-		else{
-			echo json_encode(array('order_id'=>$order_id,'msg'=>'不能修改订单状态了。'));
-			exit;
-		}
+		$fun($this->Order, $orig_status, $order_id);
 	}
+
 	/**
 	 * 商家设置订单的状态
 	 */
