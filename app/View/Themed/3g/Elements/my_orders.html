@@ -1,6 +1,6 @@
+<?php $found = 0; ?>
 {{loop $orders $order}}
 <?php
-$found = 0;
 if ($status != -1 && $status != $order['Order']['status']) {continue;}
 $found ++;
 $brand = $brands[$order['Order']['brand_id']];
