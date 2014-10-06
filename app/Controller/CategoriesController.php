@@ -79,6 +79,11 @@ class CategoriesController extends AppController {
 
     public function productsHome() {
 
+        if ($this->is_pengyoushuo_com_cn()){
+            $this->view();
+            return;
+        }
+
         $current_cateid = CATEGORY_ID_TECHAN;
         $page = 1;
         $pagesize = 60;
