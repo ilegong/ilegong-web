@@ -479,7 +479,7 @@ class UsersController extends AppController {
                 $this->set('isajax', true);
             }
         }
-        $this->set('supportWeixin', $this->is_pengyoushuo_com_cn() && $this->is_weixin());
+        $this->set('supportWeixin', !$this->is_pengyoushuo_com_cn() && $this->is_weixin());
         $this->data['User']['referer'] = $redirect;
     }
 
@@ -557,7 +557,7 @@ class UsersController extends AppController {
     }
 
     function wx_login() {
-        $return_uri = urlencode('http://www.pengyoushuo.com.cn/users/wx_auth');
+        $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth');
         $this->redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid='.WX_APPID.'&redirect_uri='.$return_uri.'&response_type=code&scope=snsapi_base&state=0#wechat_redirect');
     }
 
@@ -602,7 +602,15 @@ class UsersController extends AppController {
                         }
                     }
                     $this->Oauthbinds->save($oauth['Oauthbinds']);
-                    $this->redirect('/users/login?source=' . $oauth['Oauthbinds']['source'] . '&openid=' . $oauth['Oauthbinds']['oauth_openid']);
+                    $redirectUrl = '/users/login?source=' . $oauth['Oauthbinds']['source'] . '&openid=' . $oauth['Oauthbinds']['oauth_openid'];
+
+                    if (!empty($_REQUEST['state']) && strpos($_REQUEST['state'], 'redirect_url_') === 0) {
+                        $str = substr($_REQUEST['state'], strlen('redirect_url_'));
+                        $url = base64_decode($str);
+                        $this->redirect($redirectUrl.'&referer='.urlencode($url));
+                    } else {
+                        $this->redirect($redirectUrl);
+                    }
                 }
             } else {
                 $this->log("error to get_access_token: code=" . $_REQUEST['code'] . ", return:" . var_export($rtn, true));

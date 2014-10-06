@@ -5,10 +5,14 @@
  * @2012-11-2下午3:30:18
  */
 define("WEIXIN_TOKEN", "sUrjPDH8xus2d4JT");
+define('FROM_WX_SERVICE', 1);
+define('FROM_WX_SUB', 2);
 
 class WeixinController extends AppController {
 
 	var $name = 'Weixin';
+
+    var $uses = array('Oauthbinds');
 	
 	public function beforeFilter(){
 		parent::beforeFilter();
@@ -20,7 +24,17 @@ class WeixinController extends AppController {
 			$this->valid();
 		}
 		else{
-			$this->responseMsg();
+			$this->responseMsg(FROM_WX_SUB);
+		}
+		exit;
+	}
+
+	public function msg_service(){
+		if(!empty($_GET["echostr"])){
+			$this->valid();
+		}
+		else{
+			$this->responseMsg(FROM_WX_SERVICE);
 		}
 		exit;
 	}
@@ -31,12 +45,12 @@ class WeixinController extends AppController {
 		if($this->checkSignature()){
 			echo $echoStr;
 		}else{
-			echo "invalid request: echo=$echostr";
-			CakeLog::error("invalid request: echo=$echostr");
+			echo "invalid request: echo=$echoStr";
+			CakeLog::error("invalid request: echo=$echoStr");
 		}
 	}
 
-	private function responseMsg()
+	private function responseMsg($from = '')
 	{
 		$postStr = $GLOBALS["HTTP_RAW_POST_DATA"];
 		if (!empty($postStr))
@@ -61,7 +75,6 @@ class WeixinController extends AppController {
 			}
 
 
-			$url = "http://www.51daifan.com";
 			$msg = "";
 
 
@@ -88,7 +101,7 @@ class WeixinController extends AppController {
 				$msg = $msg."*语音信息：{$req['Recognition']}*";
 			}
 
-            $host3g = 'www.pyshuo.com';
+            $host3g = ($from == FROM_WX_SERVICE? 'www.pengyoushuo.com.cn' : 'www.pyshuo.com');
 
 			$user_code = urlencode(authcode($user,'ENCODE'));
 			//判断输入内容
@@ -100,37 +113,37 @@ class WeixinController extends AppController {
 				case "1":
                 case "１":
                 case "CLICK_URL_TECHAN":
-					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://$host3g/techan.html?wx_openid=$user_code\" >预定</a>");
+					echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/techan.html?wx_openid=$user_code").'">预定</a>');
 					break;
 				case "查看订单":
 				case "订单":
                 case "CLICK_URL_MINE":
 				case "2":
-					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://$host3g/orders/mine.html?wx_openid=$user_code\" >我的订单</a>");
+					echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/orders/mine.html?wx_openid=$user_code").'">我的订单</a>');
 					break;
                 case "3":
 					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://wx.wsq.qq.com/177650290\" >51daifan微社区</a>");
 					break;
 				case "4":
-					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://$host3g/share.html?wx_openid=$user_code\" >分享同事列表页</a>");
+					echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/share.html?wx_openid=$user_code").'">分享同事列表页</a>');
 					break;
                 case "5":
-                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://www.mikecrm.com/f.php?t=3DGEyQ\" >朋友说试吃团报名</a>");
+                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://www.mikecrm.com/f.php?t=3DGEyQ\">朋友说试吃团报名</a>");
                     break;
                 case "CLICK_URL_SALE_AFTER_SAIL":
-                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://$host3g/articles/view/377?wx_openid=$user_code\" >售后服务</a>");
+                    echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/articles/view/377?wx_openid=$user_code").'">售后服务</a>');
                     break;
 				case "大米":
 				case "9":
-                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://$host3g/users/goTage?wx_openid=$user_code\" >天天踏歌购买娜娜家的大米</a>");
+                    echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/users/goTage?wx_openid=$user_code").'" >天天踏歌购买娜娜家的大米</a>');
                     break;
                 case "CLICK_URL_SHICHITUAN":
-                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://$host3g/shichituan.html?wx_openid=$user_code\">试吃评价</a>");
+                    echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/shichituan.html?wx_openid=$user_code").'">试吃评价</a>');
                     break;
                 case "5151":
                 case "ordersadmin":
                 case "Ordersadmin":
-                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://$host3g/brands/brands_admin?wx_openid=$user_code\">商家订单管理</a>");
+                    echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/brands/brands_admin?wx_openid=$user_code").'">商家订单管理</a>');
                     break;
 				//default :
 				//	echo $this->newTextMsg($user, $me, "回复“预定”进入预定页\n回复“订单”查看我的订单");
@@ -138,6 +151,22 @@ class WeixinController extends AppController {
 		}
 	}
 
+    private function loginServiceIfNeed($from, $subOpenId, $url) {
+
+        if ($from == FROM_WX_SUB ) {
+            $oauth = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $subOpenId, 'source' => 'weixin',)));
+            if (!empty($oauth) && !empty($oauth['Oauthbinds']['user_id'])) {
+                $r = $this->Oauthbinds->find('first', array('conditions' => array('user_id' => $oauth['Oauthbinds']['user_id'], 'source' => oauth_wx_source(),)));
+                if(!empty($r)){
+                    return $url;
+                }
+            }
+        }
+
+        $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth');
+        $state = "redirect_url_".base64_encode($url);
+        return 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='.WX_APPID.'&redirect_uri='.$return_uri.'&response_type=code&scope=snsapi_base&state='.$state.'#wechat_redirect';
+    }
 
 	private function newTextMsg($toUser, $sender, $cont){
     	$time = time();
@@ -197,61 +226,5 @@ class WeixinController extends AppController {
 			return false;
 		}
 	}
-
-
-
-// ArangoDB REST function.
-// Connection are created demand and closed by PHP on exit.
-    function adb_rest($method,$uri,$querry=NULL,$json=NULL,$options=NULL){
-        global $adb_url,$adb_handle,$adb_option_defaults;
-
-        // Connect
-        if(!isset($adb_handle)) $adb_handle = curl_init();
-
-        echo "DB operation: $method $uri $querry $json\n";
-
-        // Compose querry
-        $options = array(
-            CURLOPT_URL => $adb_url.$uri."?".$querry,
-            CURLOPT_CUSTOMREQUEST => $method, // GET POST PUT PATCH DELETE HEAD OPTIONS
-            CURLOPT_POSTFIELDS => $json,
-        );
-        curl_setopt_array($adb_handle,($options + $adb_option_defaults));
-
-        // send request and wait for responce
-        $responce =  json_decode(curl_exec($adb_handle),true);
-
-        echo "Responce from DB: \n";
-        print_r($responce);
-
-        return($responce);
-    }
-
-    public function login() {
-        $this->log("got weixin login code=".$_REQUEST['code'].", state=".$_REQUEST['code']);
-
-        $adb_url="https://api.weixin.qq.com";
-        $adb_option_defaults = array(
-            CURLOPT_HEADER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 30
-        );
-
-        $curl = curl_init();
-        $options = array(
-            CURLOPT_URL => $adb_url.'/sns/oauth2/access_token?appid=wxca7838dcade4709c&secret=79b787ec8f463eeb769540464c9277b2&code='.$_REQUEST['code'].'&grant_type=authorization_code',
-            CURLOPT_CUSTOMREQUEST => 'POST', // GET POST PUT PATCH DELETE HEAD OPTIONS
-            CURLOPT_POSTFIELDS => '',
-        );
-        curl_setopt_array($curl,($options + $adb_option_defaults));
-        // send request and wait for responce
-        $responce =  json_decode(curl_exec($curl),true);
-        if ($responce['access_token'] && $responce['openid']) {
-
-        }
-        print_r($responce);
-        echo $_SERVER['QUERY_STRING'];
-        exit;
-    }
 }
 ?>
