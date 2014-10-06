@@ -61,6 +61,8 @@ App::uses('CustomRouter', 'Lib');
 
 	CustomRouter::connect('/shichituan', array('controller' => 'articles', 'action' => 'shi_chi_tuan'));
 
+	CustomRouter::connect('/pt/:tag', array('controller' => 'categories', 'action' => 'tag'), array('pass' => array('tag')));
+
 	/*'/:slug' 这条放在插件之后，容易对其它路由产生冲突 */
 	CustomRouter::connect('/:slug', array('controller' => 'categories', 'action' => 'view'), array('pass' => array('slug')) );
 	CustomRouter::connect('/:slug/:brand', array('controller' => 'categories', 'action' => 'view'), array('pass' => array('slug', 'brand'), 'slug' => 'techan',  'brand'=>"[0-9]+") );

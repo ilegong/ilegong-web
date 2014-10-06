@@ -3,6 +3,77 @@ class CategoriesController extends AppController {
 
     var $name = 'Categories';
 
+    public function tag($tagSlug = '') {
+
+        if ($tagSlug == '') {
+            $this->view();
+            return;
+        }
+
+        $current_cateid = -1;
+        $page = 1;
+        $pagesize = 60;
+        $this->loadModel('ProductTag');
+        $productTag = $this->ProductTag->find('first', array('conditions' => array(
+            'slug' => $tagSlug
+        )));
+        if (empty($productTag)) {
+            $this->view();
+            return;
+        }
+
+        $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1);
+        $conditions['Product' . '.recommend >'] = 0;
+
+        $join_conditions = array(
+            array(
+                'table' => 'product_productTags',
+                'alias' => 'Tag',
+                'conditions' => array(
+                    'Tag.product_id = Product.id',
+                    'Tag.tag_id' => $productTag['ProductTag']['id']
+                ),
+                'type' => 'RIGHT',
+            )
+        );
+        $orderBy = 'Tag.recommend desc, Product.recommend desc';
+
+        $this->loadModel('Product');
+        $list = $this->Product->find('all', array(
+                'conditions' => $conditions,
+                'joins' => $join_conditions,
+                'order' => $orderBy,
+                'fields' => array('Product.*'),
+                'limit' => $pagesize,
+                'page' => $page)
+        );
+        if ($page == 1 && count($list) < $pagesize) {
+            $total = count($list);
+        } else {
+            $total = $this->{$data_model}->find('count', array(
+                'conditions' => $conditions,
+                'joins' => $join_conditions
+            ));
+        }
+
+        $productList = array();
+        $brandIds = array();
+        foreach ($list as $val) {
+            $productList[] = $val['Product'];
+            $brandIds[] = $val['Product']['brand_id'];
+        }
+
+        $navigation = $this->readOrLoadAndCacheNavigations($current_cateid, $this->Category);
+        $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
+        $this->set('sub_title', $productTag['ProductTag']['name']);
+        $this->set('brands', $mappedBrands);
+        $this->set('total', $total);
+        $this->set('current_cateid', $current_cateid);
+        $this->set('navigations', $navigation);
+        $this->set('data_list', $productList);
+        $this->set('withBrandInfo', true);
+    }
+
     public function view($slug='/', $brand_id='') {
     	$this->__viewFileName = array();
     	
@@ -167,19 +238,8 @@ class CategoriesController extends AppController {
                 }
 	        }
 
-            if ($brandIds) {
-                $this->loadModel('Brand');
-                $brands = $this->Brand->find('all', array(
-                    'conditions' => array('id' => $brandIds),
-                    'fields' => array('id', 'name', 'created', 'slug', 'coverimg')
-                ));
-
-                $mappedBrands = array();
-                foreach($brands as $brand) {
-                    $mappedBrands[$brand['Brand']['id']] = $brand;
-                }
-            }
-		}
+            $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
+        }
         // 设置页面SEO标题、关键字、内容描述
         if (!empty($Category['Category']['seotitle'])) {
             $this->pageTitle = $Category['Category']['seotitle'];
@@ -211,5 +271,26 @@ class CategoriesController extends AppController {
         $this->set('navigations', $navigations);
         $this->set('Category', $Category);
         $this->set('is_index', !($this->is_pengyoushuo_com_cn()) && ($slug == 'techan' || $slug == '/'));
+    }
+
+    /**
+     * @param $brandIds
+     * @param $mappedBrands
+     * @return array
+     */
+    protected function &findBrandsKeyedId($brandIds, &$mappedBrands) {
+        $mappedBrands = array();
+        if ($brandIds) {
+            $this->loadModel('Brand');
+            $brands = $this->Brand->find('all', array(
+                'conditions' => array('id' => $brandIds),
+                'fields' => array('id', 'name', 'created', 'slug', 'coverimg')
+            ));
+
+            foreach ($brands as $brand) {
+                $mappedBrands[$brand['Brand']['id']] = $brand;
+            }
+        }
+        return $mappedBrands;
     }
 }

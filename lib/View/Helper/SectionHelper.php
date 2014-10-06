@@ -214,7 +214,7 @@ class SectionHelper extends AppHelper {
         $_options = array();
         $options = array_merge($_options, $options);
         $modelName = $options['modelclass'];
-        $output = '';
+        $output = ''.$options['first_li'];
         // 修改链接的格式，默认是不带有span的
         $this->Html->tags['link'] = '<a href="%s.html"%s><span>%s</span></a>';
         $link_length = count($links);
@@ -238,7 +238,7 @@ class SectionHelper extends AppHelper {
             }
             $linkAttr['id'] = 'link-' . $link[$modelName]['id'];
             $linkAttr['ref'] = $link[$modelName]['slug']?$link[$modelName]['slug']:$link[$modelName]['id'];
-            if ($key == 0) {
+            if ($key == 0 && empty($options['first_li'])) {
                 $linkAttr['class'].=' ui-menu-first';
             } elseif ($key == $link_length - 1) {
                 $linkAttr['class'].=' ui-menu-last';

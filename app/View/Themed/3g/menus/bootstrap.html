@@ -1,9 +1,6 @@
 <header class="navbar-inverse" role="banner">
 	<div class="container">
-	<div class="pull-left" style="padding:5px 5px 5px 0px;" >
-      <a href="{{$this->Html->url(Configure::read('Site.logo_url'))}}" >{{$this->Html->image($this->Html->url('/img/logo_small.png'), array('style'=>'height:35px;','title' => $site[title],'alt' => $site[title]))}}</a>
-    </div>
-    <div class="pull-right dropdown" style="padding:13px 15px;">      
+    <div class="pull-right dropdown" style="padding:13px 15px;">
      {{if !empty($CurrentUser)}}
      	<?php if(strlen($CurrentUser['username'])>18){ $CurrentUser['username'] = substr($CurrentUser['username'],10,8); }  ?>
 	    <a href="{{$this->Html->url(array('controller' => 'orders','action'=>'mine','plugin' => null ,))}}" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>我</a>
@@ -26,7 +23,11 @@
     
 	<nav  role="navigation">
 	<?php 
-		if(empty($top_category_id)) $top_category_id=0;
+		if(empty($top_category_id)) { $top_category_id=0; }
+
+		$fc = '<li id="menu-toggle"'. ((strpos($_SERVER['REQUEST_URI'], "/categories/tag/") !== false)? ' class="active"':'');
+        $fc .= '><a href="/" class="ui-menu-first"><span class="glyphicon glyphicon-list"></span>分类</a></li><li class="divider-vertical"></li>';
+
 	echo $this->Section->getNavMenu('Category',
 		array(
 			'selectedid'=> $top_category_id,
@@ -35,10 +36,10 @@
 			'preli'=>'',
 			'sufli'=>'',
 			'maxdepth' => 2,
-		),$site_cate_id
+            'first_li' => $fc
+        ),$site_cate_id
 	);
 	?>
-	
     </nav>
     </div>
-</header> 
+</header>

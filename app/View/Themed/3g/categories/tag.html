@@ -1,0 +1,18 @@
+<div class="container clearfix">
+
+    {{if $sub_title }}
+        <h3>{{$sub_title}}</h3>
+    {{/if}}
+
+	<?PHP if($total>0){ ?>
+
+	<div class="row">
+	    <?PHP foreach($data_list as $item) {
+		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
+	    ?>	
+			{{include 'categories/_photolist'}}
+		<?php } ?>
+	</div>
+		
+	<?php } ?>	
+</div>
