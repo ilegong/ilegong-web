@@ -70,6 +70,7 @@ class CategoriesController extends AppController {
         $this->set('brands', $mappedBrands);
         $this->set('total', $total);
         $this->set('current_cateid', $current_cateid);
+        $this->set('category_control_name', 'products');
         $this->set('navigations', $navigation);
         $this->set('data_list', $productList);
         $this->set('withBrandInfo', true);
@@ -143,6 +144,7 @@ class CategoriesController extends AppController {
         $this->set('navigations', $navigation);
         $this->set('tagsWithProducts', $productTags);
         $this->set('withBrandInfo', true);
+        $this->set('category_control_name', 'products');
     }
 
     public function view($slug='/', $brand_id='') {
