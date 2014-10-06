@@ -138,12 +138,15 @@ class AppController extends Controller {
     		echo $this->render('message');
     		exit;
     	}
-    	
+
     	$this->currentUser = $this->Session->read('Auth.User');
     	$this->theme = Configure::read('Site.theme');
-    
+
     	if($this->RequestHandler->isMobile()){
     		$this->theme = '3g';
+            if ($this->is_pengyoushuo_com_cn()) {
+                $this->layout = 'pengyoushuo_com_cn';
+            }
     	}
     	if($_GET['theme']){
     		$this->theme=$_GET['theme'];
