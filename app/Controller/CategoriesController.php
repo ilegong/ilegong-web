@@ -118,7 +118,7 @@ class CategoriesController extends AppController {
                     'joins' => $join_conditions,
                     'order' => $orderBy,
                     'fields' => array('Product.*'),
-                    'limit' => $pagesize,
+                    'limit' => 6,
                     'page' => $page)
             );
 //            if ($page == 1 && count($list) < $pagesize) {
