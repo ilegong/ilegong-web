@@ -20,6 +20,7 @@ class OrdersController extends AppController{
     public function __construct($request = null, $response = null) {
         $this->helpers[] = 'PhpExcel';
         parent::__construct($request, $response);
+        $this->pageTitle = __('订单');
     }
 	
 	function beforeFilter(){
