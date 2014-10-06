@@ -6,30 +6,53 @@ class ProductsController extends AppController{
 
     function admin_add() {
         parent::admin_add();
+
+        $productTag_id = $this->data['Product']['productTag_id'];
+        if (is_array($productTag_id) && !empty($productTag_id)) {
+            $this->loadModel('ProductProductTag');
+            foreach ($productTag_id as $tagId) {
+                $this->ProductProductTag->save(array('ProductProductTag' => array('product_id' => $this->data['Product']['id'], 'tag_id' => $tagId)));
+            }
+        }
+
         $this->loadModel('ProductTag');
         $this->set('productTags', $this->ProductTag->find('list'));
     }
 
     function admin_edit($id = null,$copy = NULL) {
-        $shouldSave = false;
-        $productTag_id = array();
-        if (empty($this->data) && !empty($this->data['Product']['productTag_id'])) {
-            $shouldSave = true;
-            $productTag_id = $this->data['Product']['productTag_id'];
-        }
         parent::admin_edit($id, $copy);
 
-        if ($shouldSave) {
-            sort($this->data['Product']['productTag_id']);
-            sort($productTag_id);
-            if ($this->data['Product']['productTag_id'] != $productTag_id) {
+        $this->loadModel('ProductProductTag');
+        $inDb = $this->ProductProductTag->find('all', array(
+            'conditions' => array('product_id' => $id),
+            'fields' => array('tag_id')
+        ));
 
-//                $this->loadModel('ProductProductTag');
-//                $this->ProductProductTag->save()
-//                foreach($productTag_id as $tagId) {
-//
-//                }
+        $tagIdsInDb = array();
+        foreach($inDb as $i) {
+            $tagIdsInDb[] = $i['ProductProductTag']['tag_id'];
+        }
+        $productTag_id = $this->data['Product']['productTag_id'];
+        if (is_array($productTag_id) && !empty($productTag_id)) {
+            sort($tagIdsInDb);
+            sort($productTag_id);
+            if ($tagIdsInDb != $productTag_id) {
+                foreach ($productTag_id as $tagId) {
+                    if (array_search($tagId, $tagIdsInDb) === false) {
+                        $this->ProductProductTag->save(array('ProductProductTag' => array('product_id' => $id, 'tag_id' => $tagId)));
+                    }
+                }
+
+                foreach($tagIdsInDb as $ppt) {
+                    if (array_search($ppt, $productTag_id) === false) {
+                        $this->ProductProductTag->deleteAll(array('product_id' => $id, 'tag_id' => $ppt));
+                    }
+                }
             }
+
+            $this->set('selectedProductTags', $productTag_id);
+        } else {
+            $this->set('selectedProductTags', $tagIdsInDb);
         }
 
         $this->loadModel('ProductTag');

@@ -6,6 +6,6 @@
  * Time: 12:58 AM
  */
 
-class ProductProductTag {
+class ProductProductTag extends AppModel {
     var $name = 'ProductProductTag';
 } 
