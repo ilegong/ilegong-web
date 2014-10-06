@@ -152,20 +152,24 @@ class WeixinController extends AppController {
 	}
 
     private function loginServiceIfNeed($from, $subOpenId, $url) {
-
-        if ($from == FROM_WX_SUB ) {
+        if ($from == FROM_WX_SUB) {
+            $do_bind = true;
             $oauth = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $subOpenId, 'source' => 'weixin',)));
             if (!empty($oauth) && !empty($oauth['Oauthbinds']['user_id'])) {
                 $r = $this->Oauthbinds->find('first', array('conditions' => array('user_id' => $oauth['Oauthbinds']['user_id'], 'source' => oauth_wx_source(),)));
-                if(!empty($r)){
-                    return $url;
+                if (!empty($r)) {
+                    $do_bind = false;
                 }
+            }
+
+            if ($do_bind) {
+                $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth');
+                $state = base64_encode(authcode($subOpenId, 'ENCODE') . "redirect_url_" . $url);
+                return 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . '&response_type=code&scope=snsapi_base&state=' . $state . '#wechat_redirect';
             }
         }
 
-        $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth');
-        $state = "redirect_url_".base64_encode($url);
-        return 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='.WX_APPID.'&redirect_uri='.$return_uri.'&response_type=code&scope=snsapi_base&state='.$state.'#wechat_redirect';
+        return $url;
     }
 
 	private function newTextMsg($toUser, $sender, $cont){

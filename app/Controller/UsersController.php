@@ -13,6 +13,7 @@
  * @link     http://www.saecms.net
  */
 class UsersController extends AppController {
+    const WX_BIND_REDI_PREFIX = 'redirect_url_';
 
     /**
      * Controller name
@@ -589,27 +590,51 @@ class UsersController extends AppController {
                     $oauth['Oauthbinds']['oauth_token_secret'] = empty($refresh_token) ? '' : $refresh_token;
                     $oauth['Oauthbinds']['updated'] = date('Y-m-d H:i:s');
 
+                    $refer = '';
+                    if (!empty($_REQUEST['state'])) {
+                        $str = base64_decode($_REQUEST['state']);
+                        $this->log("got state(after base64 decode):".$str);
+                        if (($idx = strpos($str, self::WX_BIND_REDI_PREFIX)) !== false) {
+
+                            //TODO: handle decrypt risk
+                            $old_openid = authcode(substr($str, 0, $idx), 'DECODE');
+                            if (!empty($old_openid)) {
+                                $r = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $old_openid, 'source' => 'weixin',)));
+                                if (!empty($r) && !empty($r['Oauthbinds']['user_id'])) {
+                                    $oauth['Oauthbinds']['user_id'] = $r['Oauthbinds']['user_id'];
+                                }
+                            }
+                            $url = substr($str, $idx + strlen(self::WX_BIND_REDI_PREFIX));
+                            //TODO: handle risk for external links!!!
+                            if (
+                                strpos($url, 'http://www.pyshuo.com/') === 0 ||
+                                strpos($url, 'http://www.pengyoushuo.com.cn/') === 0 ||
+                                strpos($url, 'http://www.tongshijia.com/') === 0
+                            ) {
+                                $refer = $url;
+                            }
+                        }
+                    }
+
                     if ($oauth['Oauthbinds']['user_id'] > 0) {
                     } else {
-                        if ($this->User->save(array(
+                        $savedUser = $this->User->save(array(
                             'username' => $oauth['Oauthbinds']['oauth_openid'],
                             'nickname' => '微信用户' . $oauth['Oauthbinds']['oauth_openid'],
                             'password' => md5(uniqid()),
                             'uc_id' => 0
-                        ))
-                        ) {
+                        ));
+                        if ($savedUser) {
                             $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
                         }
                     }
                     $this->Oauthbinds->save($oauth['Oauthbinds']);
                     $redirectUrl = '/users/login?source=' . $oauth['Oauthbinds']['source'] . '&openid=' . $oauth['Oauthbinds']['oauth_openid'];
 
-                    if (!empty($_REQUEST['state']) && strpos($_REQUEST['state'], 'redirect_url_') === 0) {
-                        $str = substr($_REQUEST['state'], strlen('redirect_url_'));
-                        $url = base64_decode($str);
-                        $this->redirect($redirectUrl.'&referer='.urlencode($url));
-                    } else {
+                    if (empty($refer)) {
                         $this->redirect($redirectUrl);
+                    } else {
+                        $this->redirect($redirectUrl . '&referer=' . urlencode($refer));
                     }
                 }
             } else {
