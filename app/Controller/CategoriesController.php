@@ -15,7 +15,8 @@ class CategoriesController extends AppController {
         $pagesize = 60;
         $this->loadModel('ProductTag');
         $productTag = $this->ProductTag->find('first', array('conditions' => array(
-            'slug' => $tagSlug
+            'slug' => $tagSlug,
+            'published' => 1
         )));
         if (empty($productTag)) {
             $this->view();
@@ -81,8 +82,11 @@ class CategoriesController extends AppController {
         $pagesize = 60;
         $this->loadModel('ProductTag');
         $productTags = $this->ProductTag->find('all', array('conditions' => array(
-            'show_in_home' => 1
-        )));
+            'show_in_home' => 1,
+            'published' => 1
+            ),
+            'order' => 'priority desc'
+        ));
         if (empty($productTags)) {
             $this->view();
             return;
@@ -135,6 +139,7 @@ class CategoriesController extends AppController {
         $this->set('sub_title', $productTags['ProductTag']['name']);
         $this->set('brands', $mappedBrands);
         $this->set('current_cateid', $current_cateid);
+        $this->set('top_category_id', $current_cateid);
         $this->set('navigations', $navigation);
         $this->set('tagsWithProducts', $productTags);
         $this->set('withBrandInfo', true);
