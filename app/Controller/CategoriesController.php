@@ -64,6 +64,7 @@ class CategoriesController extends AppController {
             $brandIds[] = $val['Product']['brand_id'];
         }
 
+        $this->pageTitle = $productTag['ProductTag']['name'];
         $navigation = $this->readOrLoadAndCacheNavigations($current_cateid, $this->Category);
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
         $this->set('sub_title', $productTag['ProductTag']['name']);
@@ -135,6 +136,7 @@ class CategoriesController extends AppController {
             }
         }
 
+        $this->pageTitle =  __('分类首页');
         $navigation = $this->readOrLoadAndCacheNavigations($current_cateid, $this->Category);
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
         $this->set('sub_title', $productTags['ProductTag']['name']);
