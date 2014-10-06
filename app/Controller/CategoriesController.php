@@ -74,6 +74,72 @@ class CategoriesController extends AppController {
         $this->set('withBrandInfo', true);
     }
 
+    public function productsHome() {
+
+        $current_cateid = CATEGORY_ID_TECHAN;
+        $page = 1;
+        $pagesize = 60;
+        $this->loadModel('ProductTag');
+        $productTags = $this->ProductTag->find('all', array('conditions' => array(
+            'show_in_home' => 1
+        )));
+        if (empty($productTags)) {
+            $this->view();
+            return;
+        }
+
+        $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1);
+        $conditions['Product' . '.recommend >'] = 0;
+
+        $orderBy = 'Tag.recommend desc, Product.recommend desc';
+
+        $brandIds = array();
+        $this->loadModel('Product');
+        foreach($productTags as &$tag) {
+            $join_conditions = array(
+                array(
+                    'table' => 'product_productTags',
+                    'alias' => 'Tag',
+                    'conditions' => array(
+                        'Tag.product_id = Product.id',
+                        'Tag.tag_id' => $tag['ProductTag']['id']
+                    ),
+                    'type' => 'RIGHT',
+                )
+            );
+            $tag['Products'] = array();
+            $products = $this->Product->find('all', array(
+                    'conditions' => $conditions,
+                    'joins' => $join_conditions,
+                    'order' => $orderBy,
+                    'fields' => array('Product.*'),
+                    'limit' => $pagesize,
+                    'page' => $page)
+            );
+//            if ($page == 1 && count($list) < $pagesize) {
+//                $total = count($list);
+//            } else {
+//                $total = $this->{$data_model}->find('count', array(
+//                    'conditions' => $conditions,
+//                    'joins' => $join_conditions
+//                ));
+//            }
+            foreach($products as $p){
+                $brandIds[] = $p['Product']['brand_id'];
+                $tag['Products'][] = $p['Product'];
+            }
+        }
+
+        $navigation = $this->readOrLoadAndCacheNavigations($current_cateid, $this->Category);
+        $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
+        $this->set('sub_title', $productTags['ProductTag']['name']);
+        $this->set('brands', $mappedBrands);
+        $this->set('current_cateid', $current_cateid);
+        $this->set('navigations', $navigation);
+        $this->set('tagsWithProducts', $productTags);
+        $this->set('withBrandInfo', true);
+    }
+
     public function view($slug='/', $brand_id='') {
     	$this->__viewFileName = array();
     	
@@ -91,6 +157,14 @@ class CategoriesController extends AppController {
         } elseif (intval($slug)) {
             $conditions['id']=intval($slug);
         }
+
+        if ($this->RequestHandler->isMobile()) {
+            if ($slug == 'techan' || $conditions['id'] == CATEGORY_ID_TECHAN) {
+                $this->redirect('/categories/productsHome.html');
+                return;
+            }
+        }
+
         $Category = $this->Category->find('first',array(
         		'conditions' => $conditions,
         	));
@@ -283,7 +357,7 @@ class CategoriesController extends AppController {
         if ($brandIds) {
             $this->loadModel('Brand');
             $brands = $this->Brand->find('all', array(
-                'conditions' => array('id' => $brandIds),
+                'conditions' => array('id' => array_unique($brandIds)),
                 'fields' => array('id', 'name', 'created', 'slug', 'coverimg')
             ));
 

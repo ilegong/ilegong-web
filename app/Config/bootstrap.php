@@ -10,6 +10,8 @@ define('ORDER_STATUS_RECEIVED', 3);
 define('ORDER_STATUS_PAID', 1);
 define('ORDER_STATUS_WAITING_PAY', 0);
 
+define('CATEGORY_ID_TECHAN', 114);
+
 
 global $page_style;
 global $pages_tpl;

@@ -238,7 +238,7 @@ var ADMIN_BASEURL = BASEURL+"/manage";
         <li class="sidebar-brand">
             <a href="{{$this->Html->url(Configure::read('Site.logo_url'))}}" >{{$this->Html->image($this->Html->url('/img/logo_small.png'), array('style'=>'height:35px;','title' => $site[title],'alt' => $site[title]))}}</a>
         </li>
-        <li><a href="/techan.html" id="link-114" ref="techan">全部</a></li>
+        <li><a href="/categories/productsHome.html" id="link-114" ref="techan">全部</a></li>
         {{loop $productTags $tag}}
         <li><a href="/categories/tag/{{$tag['ProductTag']['slug']}}">{{$tag['ProductTag']['name']}}</a></li>
         {{/loop}}

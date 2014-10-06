@@ -1,0 +1,18 @@
+<div class="container clearfix">
+
+    <?PHP foreach($tagsWithProducts as $tagWithProduct) {
+    if(count($tagWithProduct['Products'])>0){ ?>
+        <h3>{{$tagWithProduct['ProductTag']['name']}}</h3>
+
+	<div class="row">
+	    <?PHP foreach($tagWithProduct['Products'] as $item) {
+		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
+	    ?>	
+			{{include 'categories/_photolist'}}
+		<?php } ?>
+	</div>
+
+    <?php } ?>
+
+	<?php } ?>
+</div>
