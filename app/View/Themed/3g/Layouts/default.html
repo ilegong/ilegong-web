@@ -212,6 +212,18 @@ ul.tags_menu {
     }
 }
 
+
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 990;
+    background-color: #000;
+    opacity: .5;
+}
+
 #menu-toggle > a:hover, #toggle-menu > a:focus {
     text-decoration: none;
     background-color: transparent;
@@ -246,17 +258,8 @@ var ADMIN_BASEURL = BASEURL+"/manage";
 </div>
 
     <div id="page-content-wrapper">
-<!--页头信息-->
 
 {{template menus/bootstrap}}
-
-<!--
-<header class="headnav">
-<div class="container clearfix" >			
-		{{template Elements/navigation_header}}
-</div>
-</header>
--->
 
 <div id="maincontent" class="maincontent  clearfix">
    <div class="container">
@@ -274,7 +277,18 @@ var ADMIN_BASEURL = BASEURL+"/manage";
 <script>
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
-        $("#wrapper").toggleClass("toggled");
+        var $w = $("#wrapper");
+        if (!$w.hasClass("toggled")) {
+            $('<div class="sidebar-backdrop"/>').insertAfter($('#wrapper'))
+                    .on('click', function(){
+                $(".sidebar-backdrop").remove();
+                $w.removeClass("toggled");
+            });
+        } else {
+            $(".sidebar-backdrop").remove();
+        }
+
+        $w.toggleClass("toggled");
     });
 </script>
 </body>
