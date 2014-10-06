@@ -28,7 +28,7 @@ class CategoriesController extends AppController {
 
         $join_conditions = array(
             array(
-                'table' => 'product_productTags',
+                'table' => 'product_product_tags',
                 'alias' => 'Tag',
                 'conditions' => array(
                     'Tag.product_id = Product.id',
@@ -102,7 +102,7 @@ class CategoriesController extends AppController {
         foreach($productTags as &$tag) {
             $join_conditions = array(
                 array(
-                    'table' => 'product_productTags',
+                    'table' => 'product_product_tags',
                     'alias' => 'Tag',
                     'conditions' => array(
                         'Tag.product_id = Product.id',
