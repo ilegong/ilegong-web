@@ -124,7 +124,7 @@ class CategoriesController extends AppController {
                     'joins' => $join_conditions,
                     'order' => $orderBy,
                     'fields' => array('Product.*'),
-                    'limit' => 6,
+                    'limit' => ($tag['ProductTag']['size_in_home']>0?$tag['ProductTag']['size_in_home']:6),
                     'page' => $page)
             );
 //            if ($page == 1 && count($list) < $pagesize) {
