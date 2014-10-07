@@ -2,7 +2,7 @@
 
     <?PHP foreach($tagsWithProducts as $tagWithProduct) {
     if(count($tagWithProduct['Products'])>0){ ?>
-        <h3>{{$tagWithProduct['ProductTag']['name']}} &gt;</h3>
+        <h3><a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}">{{$tagWithProduct['ProductTag']['name']}} &gt;</a></h3>
 
 	<div class="row">
 	    <?PHP foreach($tagWithProduct['Products'] as $item) {

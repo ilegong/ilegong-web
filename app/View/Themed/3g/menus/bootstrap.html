@@ -1,6 +1,6 @@
 <header class="navbar-inverse" role="banner">
 	<div class="container">
-    <div class="pull-right dropdown" style="padding:13px 15px;">
+    <div class="pull-right dropdown" style="padding:13px 2px;">
      {{if !empty($CurrentUser)}}
      	<?php if(strlen($CurrentUser['username'])>18){ $CurrentUser['username'] = substr($CurrentUser['username'],10,8); }  ?>
 	    <a href="{{$this->Html->url(array('controller' => 'orders','action'=>'mine','plugin' => null ,))}}" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>我</a>
