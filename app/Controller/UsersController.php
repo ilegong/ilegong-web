@@ -482,6 +482,7 @@ class UsersController extends AppController {
         }
         $this->set('supportWeixin', !$this->is_pengyoushuo_com_cn() && $this->is_weixin());
         $this->data['User']['referer'] = $redirect;
+        $this->set('referer', $redirect);
     }
 
     function logout() {
@@ -558,11 +559,11 @@ class UsersController extends AppController {
     }
 
     function wx_login() {
-        $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth');
+        $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth/'.$_GET['referer']);
         $this->redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid='.WX_APPID.'&redirect_uri='.$return_uri.'&response_type=code&scope=snsapi_base&state=0#wechat_redirect');
     }
 
-    function wx_auth() {
+    function wx_auth($param_referer) {
         $oauth_wx_source = oauth_wx_source();
         if (!empty($_REQUEST['code'])) {
             $rtn = $this->WxOauth->find('all', array(
@@ -590,7 +591,7 @@ class UsersController extends AppController {
                     $oauth['Oauthbinds']['oauth_token_secret'] = empty($refresh_token) ? '' : $refresh_token;
                     $oauth['Oauthbinds']['updated'] = date('Y-m-d H:i:s');
 
-                    $refer = '';
+                    $refer_by_state = '';
                     if (!empty($_REQUEST['state'])) {
                         $str = base64_decode($_REQUEST['state']);
                         $this->log("got state(after base64 decode):".$str);
@@ -611,7 +612,7 @@ class UsersController extends AppController {
                                 strpos($url, 'http://www.pengyoushuo.com.cn/') === 0 ||
                                 strpos($url, 'http://www.tongshijia.com/') === 0
                             ) {
-                                $refer = $url;
+                                $refer_by_state = $url;
                             }
                         }
                     }
@@ -631,10 +632,12 @@ class UsersController extends AppController {
                     $this->Oauthbinds->save($oauth['Oauthbinds']);
                     $redirectUrl = '/users/login?source=' . $oauth['Oauthbinds']['source'] . '&openid=' . $oauth['Oauthbinds']['oauth_openid'];
 
-                    if (empty($refer)) {
+                    if(!empty($refer_by_state)) {
+                        $this->redirect($redirectUrl . '&referer=' . urlencode($refer_by_state));
+                    } else if (!empty($param_referer)) {
+                        $this->redirect($redirectUrl . '&referer=' . urlencode($param_referer));
+                    }   else {
                         $this->redirect($redirectUrl);
-                    } else {
-                        $this->redirect($redirectUrl . '&referer=' . urlencode($refer));
                     }
                 }
             } else {
