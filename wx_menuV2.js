@@ -16,7 +16,7 @@
             {
                 "type":"view",
                 "name":"我要分享",
-                "url":"http://www.mikecrm.com/f.php?t=hyhfVO"
+                "url":"http://wsq.qq.com/reflow/177650290"
             },
             {
                 "type":"click",
@@ -25,11 +25,16 @@
             }]
     },
     {
-        "name":"试吃团",
+        "name":"分享社区",
         "sub_button":[
             {
+                "type":"view",
+                "name":"分享社区",
+                "url":"http://wsq.qq.com/reflow/177650290"
+            },
+            {
                 "type":"click",
-                "name":"试吃评价",
+                "name":"试吃团",
                 "key":"CLICK_URL_SHICHITUAN"
             },
             {
