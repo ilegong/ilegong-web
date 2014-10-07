@@ -13,7 +13,7 @@
 	        <li><a href="{{$this->Html->url('/orders/mine')}}">我的订单</a></li>
 	        <li><a href="{{$this->Html->url('/orders/edit_consignee')}}">我的地址</a></li>
        		<li><hr style="margin:5px 0;"></li>
-            <li><a href="{{$this->Html->url('/users/logout')}}">退出登录</a></li>
+            <li><a href="{{$this->Html->url(array('controller' => 'users', 'action' => 'logout', '?' => array('referer' => '/') ))}}">退出登录</a></li>
         </ul>
      {{else}}
      	<a href="{{$this->Html->url('/users/login')}}">登录</a>
