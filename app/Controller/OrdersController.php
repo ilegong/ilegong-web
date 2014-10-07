@@ -329,6 +329,7 @@ class OrdersController extends AppController{
         $products = $product_new;
         unset($product_new);
 
+        $this->set('ship_type',$this->ship_type);
         $this->set('order_id',$order_id);
         $this->set('order', $orderinfo);
         $this->set('Carts',$Carts);
