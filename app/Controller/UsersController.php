@@ -194,6 +194,8 @@ class UsersController extends AppController {
 
     function activate($username = null, $key = null) {
 
+        $this->pageTitle = __('激活');
+
         if ($username == null || $key == null) {
             $user = $this->Auth->user();
             if (!empty($user['User']) && $user['User']['status'] == 0) {
@@ -372,6 +374,9 @@ class UsersController extends AppController {
     }
 
     function login() {
+
+        $this->pageTitle = __('登录');
+
         $redirect = $this->data['User']['referer'] ? $this->data['User']['referer'] : ($_GET['referer'] ? $_GET['referer'] : $this->Auth->redirect());
         $success = false;
 

@@ -22,10 +22,10 @@
                     $referer_link = '&referer='.$referer;
                 }
                 ?>
-                <a href="{{$this->Html->url('/users/wx_login.html')}}{{$referer_link}}" style="vertical-align: bottom">
+                <a href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" style="vertical-align: bottom">
                     <img src="{{$this->Html->url('/img/Wechat-logo-315_315.png');}}" width="90px" height="90px">
                 </a>
-                <a href="{{$this->Html->url('/users/wx_login.html')}}{{$referer_link}}" class="btn btn-success" style="vertical-align: bottom">使用微信登陆</a>
+                <a href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" class="btn btn-success" style="vertical-align: bottom">使用微信登陆</a>
         </div>
         {{/if}}
         <div class="tab-pane fade {{if !$supportWeixin}} in active{{/if}}" id="formLogin">
