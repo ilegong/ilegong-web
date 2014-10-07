@@ -564,11 +564,12 @@ class UsersController extends AppController {
     }
 
     function wx_login() {
-        $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth/'.$_GET['referer']);
+        $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth?referer='.$_GET['referer']);
         $this->redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid='.WX_APPID.'&redirect_uri='.$return_uri.'&response_type=code&scope=snsapi_base&state=0#wechat_redirect');
     }
 
-    function wx_auth($param_referer) {
+    function wx_auth() {
+        $param_referer = $_GET['referer'];
         $oauth_wx_source = oauth_wx_source();
         if (!empty($_REQUEST['code'])) {
             $rtn = $this->WxOauth->find('all', array(
