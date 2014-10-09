@@ -75,6 +75,9 @@ array(
 						{{/if}}
 					</ul>
 				</li>
+		        <li class="dropdown">
+                    <a id="radio3_{{$pageID}}" onclick="goToFilter_{{$pageID}}();">自定义过滤</a>
+				</li>
 				{{if $allow_fieldsetting || $allow_setting}}
 				<li class="dropdown">
                       <a data-toggle="dropdown" class="dropdown-toggle" href="#">设置<b class="caret"></b></a>
@@ -398,6 +401,18 @@ function goToUnPublish_{{$pageID}}()
 	$('.BatchRestore','#{{$pageID}}').hide();
 	$('.BatchDelete','#{{$pageID}}').hide();
 	jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}').jqGrid('setGridParam',{url:'{{$this->Html->url('/admin/'.$current_controller.'/list.json');}}?{{$requeststr}}&conditions[{{$current_model}}.published]=0',page:1}).trigger('reloadGrid');;
+}
+
+function goToFilter_{{$pageID}}()
+{
+    bootbox.prompt("请输入您的自定义查询条件：", function(result) {
+        if (result !== null) {
+	        jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}')
+                    .jqGrid('setGridParam',{url:'{{$this->Html->url('/admin/'.$current_controller.'/list.json');}}?{{$requeststr}}&filter='+result , page:1})
+                    .trigger('reloadGrid');
+        }
+    });
+
 }
 function reloadGrid_{{$pageID}}()
 {

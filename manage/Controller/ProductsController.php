@@ -59,4 +59,27 @@ class ProductsController extends AppController{
         $this->set('productTags', $this->ProductTag->find('list'));
         $this->__viewFileName = 'admin_add';
     }
+
+    protected function _custom_list_option(&$searchoptions) {
+
+        $tagId = intval($_REQUEST['filter']);
+        if ($tagId) {
+            /*连接Order表，获取收获人信息。 */
+            if ($searchoptions['conditions']){
+                $searchoptions['conditions']['Tag.tag_id'] = $tagId;
+            } else {
+                $searchoptions['conditions'] = array(
+                    'Tag.tag_id' => $tagId
+                );
+            }
+            $searchoptions['joins'][] = array(
+                'table' => 'product_product_tags',
+                'alias' => 'Tag',
+                'type' => 'left',
+                'conditions' => array('Product.id=Tag.product_id'),
+            );
+        }
+        //print_r($searchoptions);
+        return $searchoptions;
+    }
 }
