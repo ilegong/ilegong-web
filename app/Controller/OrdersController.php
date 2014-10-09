@@ -423,7 +423,9 @@ class OrdersController extends AppController{
 		);*/
 		$orders = $this->Order->find('all',array(
 				'order' => 'id desc',
-				'conditions' => array('brand_id' => $brand_ids),
+				'conditions' => array('brand_id' => $brand_ids, 'NOT' => array(
+                    'status' => array(ORDER_STATUS_CANCEL, ORDER_STATUS_WAITING_PAY)
+                ) ),
 				/*'group' => 'Cart.order_id',
 				'joins'=>array(
 						array(
