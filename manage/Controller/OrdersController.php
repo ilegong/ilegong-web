@@ -117,6 +117,52 @@ class OrdersController extends AppController{
 		$this->set('successinfo', $successinfo);
 		$this->set('_serialize', 'successinfo');
 	}
-	
-	
+
+
+    protected function _custom_list_option(&$searchoptions) {
+        $filterType = $_REQUEST['filterType'];
+        $filter = $_REQUEST['filter'];
+        if ($filterType) {
+            switch ($filterType) {
+                case 'tag_id':
+                    $tagId = intval($filter);
+                    if ($tagId) {
+                        if ($searchoptions['conditions']) {
+                            $searchoptions['conditions']['Tag.tag_id'] = $tagId;
+                        } else {
+                            $searchoptions['conditions'] = array(
+                                'Tag.tag_id' => $tagId
+                            );
+                        }
+                        $searchoptions['joins'][] = array(
+                            'table' => 'product_product_tags',
+                            'alias' => 'Tag',
+                            'type' => 'left',
+                            'conditions' => array('Product.id=Tag.product_id'),
+                        );
+                        $this->set('filter_string', "Product.Tagid=" . $tagId);
+                    }
+                    break;
+                case 'brand_id':
+                    $brand_id = intval($filter);
+                    if ($brand_id > 0) {
+                        if ($searchoptions['conditions']) {
+                            $searchoptions['conditions']['Order.brand_id'] = $brand_id;
+                        } else {
+                            $searchoptions['conditions'] = array(
+                                'Order.brand_id' => $brand_id
+                            );
+                        }
+//                        $searchoptions['joins'][] = array(
+//                            'table' => 'products',
+//                            'alias' => 'Product',
+//                            'type' => 'left',
+//                            'conditions' => array('Product.id=Order.brand_id'),
+//                        );
+                        $this->set('filter_string', "Product.BrandId=" . $brand_id);
+                    }
+            }
+        }
+        return $searchoptions;
+    }
 }

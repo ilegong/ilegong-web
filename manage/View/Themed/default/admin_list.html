@@ -428,9 +428,9 @@ function goToFilter_{{$pageID}}()
                 className: "btn-primary",
                 callback: function() {
                     var $query = getQuery();
-                    if ($query.length > 0) {
+                    if ($query['type']) {
                         jQuery("#jqgrid_list_{{$pageID}}", '#{{$pageID}}')
-                                .jqGrid('setGridParam', {url: '{{$this->Html->url(' / admin / '.$current_controller.' / list.json');}}?{{$requeststr}}&filter='+$query.value + '&filterType=' + $query.type, page: 1})
+                                .jqGrid('setGridParam', {url: '{{$this->Html->url('/admin/'.$current_controller.'/list.json');}}?{{$requeststr}}&filter='+$query.value + '&filterType=' + $query.type, page: 1})
                                 .trigger('reloadGrid');
                     }
                 }
