@@ -15,6 +15,7 @@ class OrdersController extends AppController{
 		107=>'天天',
 		108=>'汇通',
 		109=>'中通',
+		110=>'全一',
 	);
 
     public function __construct($request = null, $response = null) {
