@@ -75,9 +75,6 @@ array(
 						{{/if}}
 					</ul>
 				</li>
-		        <li class="dropdown">
-                    <a id="radio3_{{$pageID}}" onclick="goToFilter_{{$pageID}}();">自定义过滤</a>
-				</li>
 				{{if $allow_fieldsetting || $allow_setting}}
 				<li class="dropdown">
                       <a data-toggle="dropdown" class="dropdown-toggle" href="#">设置<b class="caret"></b></a>
@@ -92,6 +89,9 @@ array(
 					</ul>
 				</li>
 				{{/if}}
+                <li class="dropdown">
+                    <a id="radio3_{{$pageID}}" onclick="goToFilter_{{$pageID}}();">自定义过滤</a>{{if $filter_string}}({{$filter_string}}){{/if}}
+                </li>
 	           </ul> 
 	        </div>
 	</div>
@@ -405,14 +405,38 @@ function goToUnPublish_{{$pageID}}()
 
 function goToFilter_{{$pageID}}()
 {
-    bootbox.prompt("请输入您的自定义查询条件：", function(result) {
-        if (result !== null) {
-	        jQuery("#jqgrid_list_{{$pageID}}",'#{{$pageID}}')
-                    .jqGrid('setGridParam',{url:'{{$this->Html->url('/admin/'.$current_controller.'/list.json');}}?{{$requeststr}}&filter='+result , page:1})
-                    .trigger('reloadGrid');
+
+    function getQuery(){
+        var $filterBrandId = $('#filter_brand_id');
+        if($.trim($filterBrandId.val())) {
+            return {'type': 'brand_id', 'value': $.trim($filterBrandId.val())};
+        }else if ($.trim($('#filter_tag_id').val())) {
+            return {'type': 'tag_id', 'value': $.trim($('#filter_tag_id').val())};
+        }
+        return {};
+    }
+
+    bootbox.dialog({
+        message: '按商家Id:<input id="filter_brand_id" type="text" value=""> OR <br/>按商品分类Id:<input id="filter_tag_id" type="text" value=""/>',
+        buttons: {
+            cancel: {
+                label: "Cancel",
+                className: "btn-default",
+            },
+            danger: {
+                label: "Query",
+                className: "btn-primary",
+                callback: function() {
+                    var $query = getQuery();
+                    if ($query.length > 0) {
+                        jQuery("#jqgrid_list_{{$pageID}}", '#{{$pageID}}')
+                                .jqGrid('setGridParam', {url: '{{$this->Html->url(' / admin / '.$current_controller.' / list.json');}}?{{$requeststr}}&filter='+$query.value + '&filterType=' + $query.type, page: 1})
+                                .trigger('reloadGrid');
+                    }
+                }
+            }
         }
     });
-
 }
 function reloadGrid_{{$pageID}}()
 {

@@ -62,24 +62,43 @@ class ProductsController extends AppController{
 
     protected function _custom_list_option(&$searchoptions) {
 
-        $tagId = intval($_REQUEST['filter']);
-        if ($tagId) {
-            /*连接Order表，获取收获人信息。 */
-            if ($searchoptions['conditions']){
-                $searchoptions['conditions']['Tag.tag_id'] = $tagId;
-            } else {
-                $searchoptions['conditions'] = array(
-                    'Tag.tag_id' => $tagId
-                );
+        $filterType = $_REQUEST['filter_type'];
+        $filter = $_REQUEST['filter'];
+        if ($filterType) {
+            switch ($filterType) {
+                case 'tag_id':
+                    $tagId = intval($filter);
+                    if ($tagId) {
+                        if ($searchoptions['conditions']) {
+                            $searchoptions['conditions']['Tag.tag_id'] = $tagId;
+                        } else {
+                            $searchoptions['conditions'] = array(
+                                'Tag.tag_id' => $tagId
+                            );
+                        }
+                        $searchoptions['joins'][] = array(
+                            'table' => 'product_product_tags',
+                            'alias' => 'Tag',
+                            'type' => 'left',
+                            'conditions' => array('Product.id=Tag.product_id'),
+                        );
+                        $this->set('filter_string', "Product.Tagid=" . $tagId);
+                    }
+                    break;
+                case 'brand_id':
+                    $brand_id = intval($filter);
+                    if ($brand_id > 0) {
+                        if ($searchoptions['conditions']) {
+                            $searchoptions['conditions']['Product.brand_id'] = $brand_id;
+                        } else {
+                            $searchoptions['conditions'] = array(
+                                'Product.brand_id' => $brand_id
+                            );
+                        }
+                        $this->set('filter_string', "Product.BrandId=" . $brand_id);
+                    }
             }
-            $searchoptions['joins'][] = array(
-                'table' => 'product_product_tags',
-                'alias' => 'Tag',
-                'type' => 'left',
-                'conditions' => array('Product.id=Tag.product_id'),
-            );
         }
-        //print_r($searchoptions);
         return $searchoptions;
     }
 }
