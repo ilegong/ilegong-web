@@ -167,15 +167,19 @@ function close_remark(){
 
 //选择发票地址
 rs_callbacks.confirm_order_status = function(request){
-	$('.order-status-'+request.order_id, '#order-status-'+request.order_id).html('<font color="red">'+request.msg+"</font>");
+//	$('.order-status-'+request.order_id, '#order-status-'+request.order_id).html('<font color="red">'+request.msg+"</font>");
+	var element= $('#order-status-'+request.order_id);
+    var element2= $('.order-status-'+request.order_id);
+    element.html('<font color="red">'+request.msg+"</font>");
+    element2.html('<font color="red">'+request.msg+"</font>");
 }
 
 //设置订单的快递类型与快递单号
 function ship_order(order_id, creator){
-	//if($('#ship-type-'+order_id).val()=="" || $('#ship-code-'+order_id).val()==""){
-	//	alert("请选择快递类型与快递单号！");
-	//	return false;
-	//}
+	if($('#ship-type-'+order_id).val()=="" || $('#ship-code-'+order_id).val()==""){
+		alert("请选择快递类型与快递单号！");
+		return false;
+	}
     creator = creator || 0;
 	return ajaxAction(BASEURL+"/orders/set_status/"+creator,{'order_id':order_id,'status':2,'ship_code':$('#ship-code-'+order_id).val(),'ship_type':$('#ship-type-'+order_id).val()},null,'confirm_order_status');
 }
