@@ -14,7 +14,7 @@
         {{if $supportWeixin }}
         <div class="tab-pane fade in active" id="wechatLogin">
                 <p>
-                    授权我们使用您的微信账号登陆朋友说。我们只能获得一个数字Id绑定登陆，不会获取您的其他信息。
+                    授权我们使用您的微信账号登录朋友说。我们只能获得一个数字Id绑定登录，不会获取您的其他信息。
                 </p>
                 <?php
                 $referer_link = '';
@@ -25,7 +25,7 @@
                 <a href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" style="vertical-align: bottom">
                     <img src="{{$this->Html->url('/img/Wechat-logo-315_315.png');}}" width="90px" height="90px">
                 </a>
-                <a href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" class="btn btn-success" style="vertical-align: bottom">使用微信登陆</a>
+                <a href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" class="btn btn-success" style="vertical-align: bottom">使用微信登录</a>
         </div>
         {{/if}}
         <div class="tab-pane fade {{if !$supportWeixin}} in active{{/if}}" id="formLogin">
