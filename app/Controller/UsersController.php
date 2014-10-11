@@ -568,7 +568,7 @@ class UsersController extends AppController {
         $ref = '';
         if (!empty($_GET['referer'])) {
             $ref = $_GET['referer'];
-        } else if (!empty($_GET['referer'])) {
+        } else if (!empty($_GET['referer_key'])) {
             $ref = $_GET['referer_key'];
         }
 
