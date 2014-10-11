@@ -564,7 +564,21 @@ class UsersController extends AppController {
         $this->set('action', 'myweibo');
     }
 
+    function wx_menu_point() {
+        $redirect = '/';
+        if (!empty($_GET['referer_key'])) {
+            $redirect = oauth_wx_goto($_GET['referer_key'], 'www.pyshuo.com');
+        }
+
+        if ($_GET['do_wx_auth_if_not_log_in']) {
+            $this->_goto_wx_oauth($redirect);
+        }  else {
+            $this->redirect($redirect);
+        }
+    }
+
     function wx_login() {
+
         $ref = '';
         if (!empty($_GET['referer'])) {
             $ref = $_GET['referer'];
@@ -572,14 +586,7 @@ class UsersController extends AppController {
             $ref = oauth_wx_goto($_GET['referer_key'], 'www.pyshuo.com');
         }
 
-        $return_uri = 'http://www.pyshuo.com/users/wx_auth?';
-        if (!empty($ref)) {
-            $return_uri .= 'referer=' . $ref;
-        }
-
-        $return_uri = urlencode($return_uri);
-
-        $this->redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid='.WX_APPID.'&redirect_uri='.$return_uri.'&response_type=code&scope=snsapi_base&state=0#wechat_redirect');
+        $this->_goto_wx_oauth($ref);
     }
 
     function wx_auth() {
@@ -699,6 +706,20 @@ class UsersController extends AppController {
         $orderUpdated = $this->Order->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
         $consigneeUpdated = $this->OrderConsignee->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
         $this->log("Merge WX Account from  $old_serviceAccount_bind_uid to " . $new_serviceAccount_bind_uid.": orderUpdated=".$orderUpdated.", consigneeUpdated=". $consigneeUpdated);
+    }
+
+    /**
+     * @param $ref
+     */
+    private function _goto_wx_oauth($ref) {
+        $return_uri = 'http://www.pyshuo.com/users/wx_auth?';
+        if (!empty($ref)) {
+            $return_uri .= 'referer=' . $ref;
+        }
+
+        $return_uri = urlencode($return_uri);
+
+        $this->redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . '&response_type=code&scope=snsapi_base&state=0#wechat_redirect');
     }
 
 }
