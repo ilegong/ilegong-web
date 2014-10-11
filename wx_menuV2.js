@@ -25,7 +25,7 @@
             },
             {
                 "type":"click",
-                "name":"绑定旧版微信账号",
+                "name":"绑定旧版数据",
                 "key":"CLICK_URL_BINDING"
             }
         ]

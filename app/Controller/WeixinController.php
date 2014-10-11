@@ -142,10 +142,12 @@ class WeixinController extends AppController {
                     break;
                 case "CLICK_URL_BINDING":
                     list($oauth, $hasAccountWithSubOpenId) = $this->hasAccountWithSubOpenId($user);
-                    if (!$hasAccountWithSubOpenId || $this->whetherBinded($oauth['Oauthbinds']['user_id'])){
+                    if (!$hasAccountWithSubOpenId){
+                        echo $this->newTextMsg($user, $me, '您没有历史账号信息');
+                    } else if($this->whetherBinded($oauth['Oauthbinds']['user_id'])){
                         echo $this->newTextMsg($user, $me, '您的历史账号信息已经合并');
                     } else {
-                        echo $this->newTextMsg($user, $me, '您有历史账号信息未绑定，点击进入<a href="' . $this->loginServiceIfNeed($from, $user, "http://$host3g/users/bindWxSub.html?wx_openid=$user_code") . '">绑定账号</a>');
+                        echo $this->newTextMsg($user, $me, '您有历史账号信息未绑定，点击<a href="' . $this->loginServiceIfNeed($from, $user, "http://$host3g/users/bindWxSub.html?wx_openid=$user_code") . '">绑定账号</a>');
                     }
                     break;
                 case "5151":
