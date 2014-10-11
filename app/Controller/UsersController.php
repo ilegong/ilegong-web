@@ -46,7 +46,7 @@ class UsersController extends AppController {
     			$this->Auth->authenticate[] = 'UCenter';
     		}
     	}
-    	$this->Auth->allowedActions = array('register','login','forgot','captcha','reset', 'wx_login', 'wx_auth');
+    	$this->Auth->allowedActions = array('register','login','forgot','captcha','reset', 'wx_login', 'wx_auth', 'wx_menu_point');
     }
 
     function captcha() {
