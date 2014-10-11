@@ -141,13 +141,15 @@ class WeixinController extends AppController {
                     echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_SHICHITUAN', $host3g)).'">试吃评价</a>');
                     break;
                 case "CLICK_URL_BINDING":
-                    list($oauth, $hasAccountWithSubOpenId) = $this->hasAccountWithSubOpenId($user);
-                    if (!$hasAccountWithSubOpenId){
-                        echo $this->newTextMsg($user, $me, '您没有历史账号信息');
-                    } else if($this->whetherBinded($oauth['Oauthbinds']['user_id'])){
-                        echo $this->newTextMsg($user, $me, '您的历史账号信息已经合并');
-                    } else {
-                        echo $this->newTextMsg($user, $me, '您有历史账号信息未绑定，点击<a href="' . $this->loginServiceIfNeed($from, $user, "http://$host3g/users/after_bind_relogin.html?wx_openid=$user_code") . '">绑定账号</a>');
+                    if ($from == FROM_WX_SUB) {
+                        list($oauth, $hasAccountWithSubOpenId) = $this->hasAccountWithSubOpenId($user);
+                        if (!$hasAccountWithSubOpenId) {
+                            echo $this->newTextMsg($user, $me, '您没有历史账号信息');
+                        } else if ($this->whetherBinded($oauth['Oauthbinds']['user_id'])) {
+                            echo $this->newTextMsg($user, $me, '您的历史账号信息已经合并');
+                        } else {
+                            echo $this->newTextMsg($user, $me, '您有历史账号信息未绑定，点击<a href="' . $this->loginServiceIfNeed($from, $user, "http://$host3g/users/after_bind_relogin.html?wx_openid=$user_code", true) . '">绑定账号</a>');
+                        }
                     }
                     break;
                 case "5151":
@@ -161,13 +163,15 @@ class WeixinController extends AppController {
 		}
 	}
 
-    private function loginServiceIfNeed($from, $subOpenId, $url) {
-        if ($from == FROM_WX_SUB) {
-            $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth');
-            $state = base64_encode(authcode($subOpenId, 'ENCODE') . "redirect_url_" . $url);
-            return 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . '&response_type=code&scope=snsapi_base&state=' . $state . '#wechat_redirect';
+    private function loginServiceIfNeed($from, $subOpenId, $url, $do_bind = false) {
+
+        if (!empty($this->currentUser) && $this->currentUser['id'] > 0) {
+            return $url;
+        } else {
+                $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth');
+                $state = base64_encode( ($do_bind ? authcode($subOpenId, 'ENCODE') : '') . "redirect_url_" . $url);
+                return 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . '&response_type=code&scope=snsapi_base&state=' . $state . '#wechat_redirect';
         }
-        return $url;
     }
 
 	private function newTextMsg($toUser, $sender, $cont){
