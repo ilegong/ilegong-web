@@ -35,7 +35,7 @@ class UsersController extends AppController {
      * @access public
      */
     var $uses = array('User', 'Oauthbinds', 'WxOauth');
-    
+
     public function beforeFilter(){
     	parent::beforeFilter();
 
@@ -45,7 +45,7 @@ class UsersController extends AppController {
     		if(defined('UC_APPID')){
     			$this->Auth->authenticate[] = 'UCenter';
     		}
-    	}    	
+    	}
     	$this->Auth->allowedActions = array('register','login','forgot','captcha','reset', 'wx_login', 'wx_auth');
     }
 
@@ -56,21 +56,21 @@ class UsersController extends AppController {
             $this->Kcaptcha->render();
         }
 //		else
-//		{ 
+//		{
 //			//Securimage
-//			$this->autoRender = false;  
-//	        //override variables set in the component - look in component for full list 
-////	        $this->captcha->image_height = 75; 
-////	        $this->captcha->image_width = 350; 
-////	        $this->captcha->image_bg_color = '#ffffff'; 
-////	        $this->captcha->line_color = '#cccccc'; 
-////	        $this->captcha->arc_line_colors = '#999999,#cccccc'; 
-////	        $this->captcha->code_length = 5; 
-////	        $this->captcha->font_size = 45; 
-//	        $this->captcha->text_color = '#000000'; 
-//	        $this->captcha->show(); //dynamically creates an image 
-//        
-//		
+//			$this->autoRender = false;
+//	        //override variables set in the component - look in component for full list
+////	        $this->captcha->image_height = 75;
+////	        $this->captcha->image_width = 350;
+////	        $this->captcha->image_bg_color = '#ffffff';
+////	        $this->captcha->line_color = '#cccccc';
+////	        $this->captcha->arc_line_colors = '#999999,#cccccc';
+////	        $this->captcha->code_length = 5;
+////	        $this->captcha->font_size = 45;
+//	        $this->captcha->text_color = '#000000';
+//	        $this->captcha->show(); //dynamically creates an image
+//
+//
 //		}
     }
 
@@ -82,7 +82,7 @@ class UsersController extends AppController {
         $this->pageTitle = __('Users', true);
         $this->layout = 'user_portlet';
     }
-    
+
     function goTage(){
     	$code = authcode($this->currentUser['id'].','.$this->currentUser['username'],'ENCODE');
     	$this->set('code',rawurlencode($code));
@@ -112,12 +112,12 @@ class UsersController extends AppController {
             } else {
                 $this->data['User']['status'] = 0;
             }
-            
+
             /*对密码加密*/
 		    $src_password = $this->data['User']['password'];
 
             $this->data['User']['username'] = trim($this->data['User']['username']);
-            
+
             if ($this->data['User']['password'] != $this->data['User']['password_confirm']) {
                 $this->Session->setFlash('两次密码不相等');
             } else if (is_null($this->data['User']['password']) || trim($this->data['User']['password']) == '') {
@@ -156,7 +156,7 @@ class UsersController extends AppController {
             			$this->data['User']['uc_id'] = $uid;
             		}
             	}
-                if ($has_error==false && $this->User->save($this->data)) {                	
+                if ($has_error==false && $this->User->save($this->data)) {
 //	                $this->autoRender = false;
                 	$this->data['User']['id'] = $this->User->getLastInsertID();
                     if ($useractivate == 'email') {
@@ -270,7 +270,7 @@ class UsersController extends AppController {
             $this->redirect(array('action' => 'login'));
         }
     }
-    
+
 
     function editusername() {
     	$userinfo = $this->Auth->user();
@@ -278,13 +278,13 @@ class UsersController extends AppController {
     		$this->Session->setFlash(__('You are not authorized to access that location.', true));
     		$this->redirect(array('action' => 'login'));
     	}
-    	if (!empty($this->data) && !empty($this->data['User']['username']) && !empty($this->data['User']['password'])) {    			
+    	if (!empty($this->data) && !empty($this->data['User']['username']) && !empty($this->data['User']['password'])) {
     				$user = array();
     				$user['User']['id'] = $userinfo['id'];
     				$user['User']['username'] = $this->data['User']['username'];
     				$user['User']['password'] = Security::hash($this->data['User']['password'], null, true);
     				$user['User']['activation_key'] = md5(uniqid());
-    
+
     				if ($this->User->save($user['User'])) {
     					$this->Session->setFlash(__('成功设置用户名与密码'));
     				}
@@ -295,7 +295,7 @@ class UsersController extends AppController {
     		$this->Session->delete('Message.flash');
     	}
     }
-    
+
 
     function editpassword() {
         $userinfo = $this->Auth->user();
@@ -339,17 +339,17 @@ class UsersController extends AppController {
             $activationKey = md5(uniqid());
             $this->User->saveField('activation_key', $activationKey);
             $this->set(array('user'=>$user, 'activationKey'=>$activationKey));
-			
+
             $this->Email->from = Configure::read('Site.title') . ' '
             . '<' . Configure::read('Site.email') . '>';
-            
+
             //$this->Email->from = Configure::read('Site.title') . ' '
             //        . '<SaeCMS@' . preg_replace('#^www\.#', '', strtolower($_SERVER['SERVER_NAME'])) . '>';
             $this->Email->to = $user['User']['email'];
             $this->Email->subject = '[' . Configure::read('Site.title') . '] ' . __('Reset Password', true);
             $this->Email->template = 'forgot_password';
             $this->autoRender = false;
-            
+
 //             $this->Email->viewRender('Dzstyle');
             if ($this->Email->send()) {
                 $this->redirect(array('action' => 'login'));
@@ -419,7 +419,7 @@ class UsersController extends AppController {
                 $success = true;
             }
         }
-        
+
         if ($success) {
             $this->Hook->call('loginSuccess');
 
@@ -430,7 +430,7 @@ class UsersController extends AppController {
                 	'id' => $user['id'],
                 	'username' => $user['username'],
                 );
-                
+
                 if(!empty($this->data['User']['remember_me'])){
                 	$cookietime = 2592000; // 一月内30*24*60*60
                 }
@@ -438,13 +438,13 @@ class UsersController extends AppController {
                 	$cookietime = 0;
                 }
                 $this->Cookie->write('Auth.User',$userinfo, true, $cookietime);
-                
-                $successinfo = array('success' => '登录成功', 
+
+                $successinfo = array('success' => '登录成功',
                 		'userinfo' => $userinfo,
                 		'tasks'=>array(array('dotype'=>'reload')));
-                
+
                 $this->autoRender = false; // 不显示模板
-                
+
                 $content = json_encode($successinfo);
                 if($_GET['jsoncallback']){
                 	$content = $_GET['jsoncallback'] . '(' . $content . ');';
@@ -508,11 +508,15 @@ class UsersController extends AppController {
     }
 
     function bindWxSub() {
+    }
 
+    function after_bind_relogin() {
+        $this->logoutCurrUser();
+        $this->redirect('/users/wx_login?referer=/users/bindWxSub');
     }
 
     /**
-     * 
+     *
      */
     function sinalist() {
         $username = '';
@@ -596,6 +600,7 @@ class UsersController extends AppController {
                         'oauth_openid' => $res['openid']
                     )));
 
+                    $need_transfer = false;
                     if (empty($oauth)) {
                         $oauth['Oauthbinds']['oauth_openid'] = $openid;
                         $oauth['Oauthbinds']['created'] = date('Y-m-d H:i:s');
@@ -619,6 +624,12 @@ class UsersController extends AppController {
                             if (!empty($old_openid)) {
                                 $r = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $old_openid, 'source' => 'weixin',)));
                                 if (!empty($r) && !empty($r['Oauthbinds']['user_id'])) {
+
+                                    if (isset($old_serviceAccount_binded_uid) && ($old_serviceAccount_binded_uid > 0
+                                        && $old_serviceAccount_binded_uid != $r['Oauthbinds']['user_id'])) {
+                                        $need_transfer = true;
+                                    }
+
                                     $oauth['Oauthbinds']['user_id'] = $r['Oauthbinds']['user_id'];
                                 }
                             }
@@ -637,20 +648,18 @@ class UsersController extends AppController {
                     $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
                     if ($new_serviceAccount_binded_uid > 0) {
                     } else {
-                        $savedUser = $this->User->save(array(
+                        $this->User->save(array(
                             'username' => $oauth['Oauthbinds']['oauth_openid'],
                             'nickname' => '微信用户' . $oauth['Oauthbinds']['oauth_openid'],
                             'password' => md5(uniqid()),
                             'uc_id' => 0
                         ));
-                        if ($savedUser) {
-                            $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
-                            $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
-                        }
+                        $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
+                        $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
                     }
 
                     $this->Oauthbinds->save($oauth['Oauthbinds']);
-                    if (isset($old_serviceAccount_binded_uid) && $old_serviceAccount_binded_uid != $new_serviceAccount_binded_uid) {
+                    if ($need_transfer && isset($old_serviceAccount_binded_uid) && $old_serviceAccount_binded_uid != $new_serviceAccount_binded_uid) {
                         $this->transferUserInfo($old_serviceAccount_binded_uid, $new_serviceAccount_binded_uid);
                     }
 
