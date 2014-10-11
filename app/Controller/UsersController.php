@@ -570,7 +570,7 @@ class UsersController extends AppController {
             $redirect = oauth_wx_goto($_GET['referer_key'], 'www.pyshuo.com');
         }
 
-        if ($_GET['do_wx_auth_if_not_log_in']) {
+        if ($_GET['do_wx_auth_if_not_log_in'] && (empty($this->currentUser) || !$this->currentUser['id'])) {
             $this->_goto_wx_oauth($redirect);
         }  else {
             $this->redirect($redirect);
