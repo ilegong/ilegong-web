@@ -560,7 +560,20 @@ class UsersController extends AppController {
     }
 
     function wx_login() {
-        $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth?referer='.$_GET['referer']);
+        $ref = '';
+        if (!empty($_GET['referer'])) {
+            $ref = $_GET['referer'];
+        } else if (!empty($_GET['referer'])) {
+            $ref = $_GET['referer_key'];
+        }
+
+        $return_uri = 'http://www.pyshuo.com/users/wx_auth?';
+        if (!empty($ref)) {
+            $return_uri .= 'referer=' . $ref;
+        }
+
+        $return_uri = urlencode($return_uri);
+
         $this->redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid='.WX_APPID.'&redirect_uri='.$return_uri.'&response_type=code&scope=snsapi_base&state=0#wechat_redirect');
     }
 

@@ -38,3 +38,18 @@ $source_appid_map = array(
 function oauth_wx_source() {
     return 'wx-'.WX_APPID_SOURCE;
 }
+
+function oauth_wx_goto($refer_key, $host3g) {
+    switch ($refer_key) {
+        case "CLICK_URL_TECHAN":
+            return "http://$host3g/techan.html";
+        case "CLICK_URL_MINE":
+            return "http://$host3g/orders/mine.html";
+        case "CLICK_URL_SALE_AFTER_SAIL":
+            return "http://$host3g/articles/view/377.html";
+        case "CLICK_URL_SHICHITUAN":
+            return "http://$host3g/shichituan.html";
+        default:
+    }
+    return "$host3g";
+}

@@ -113,13 +113,13 @@ class WeixinController extends AppController {
 				case "1":
                 case "１":
                 case "CLICK_URL_TECHAN":
-					echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/techan.html?wx_openid=$user_code").'">预定</a>');
+					echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_TECHAN', $host3g)).'">预定</a>');
 					break;
 				case "查看订单":
 				case "订单":
                 case "CLICK_URL_MINE":
 				case "2":
-					echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/orders/mine.html?wx_openid=$user_code").'">我的订单</a>');
+					echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_MINE', $host3g)).'">我的订单</a>');
 					break;
                 case "3":
 					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://wx.wsq.qq.com/177650290\" >51daifan微社区</a>");
@@ -131,14 +131,14 @@ class WeixinController extends AppController {
                     echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://www.mikecrm.com/f.php?t=3DGEyQ\">朋友说试吃团报名</a>");
                     break;
                 case "CLICK_URL_SALE_AFTER_SAIL":
-                    echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/articles/view/377?wx_openid=$user_code").'">售后服务</a>');
+                    echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_SALE_AFTER_SAIL', $host3g)).'">售后服务</a>');
                     break;
 				case "大米":
 				case "9":
                     echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/users/goTage?wx_openid=$user_code").'" >天天踏歌购买娜娜家的大米</a>');
                     break;
                 case "CLICK_URL_SHICHITUAN":
-                    echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/shichituan.html?wx_openid=$user_code").'">试吃评价</a>');
+                    echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_SHICHITUAN', $host3g)).'">试吃评价</a>');
                     break;
                 case "CLICK_URL_BINDING":
                     list($oauth, $hasAccountWithSubOpenId) = $this->hasAccountWithSubOpenId($user);

@@ -1,17 +1,17 @@
 {
     "button":[
     {
-        "type":"click",
+        "type":"view",
         "name":"购买特产",
-        "key":"CLICK_URL_TECHAN"
+        "url":"http://www.pyshuo.com/users/wx_login?referer_key=CLICK_URL_TECHAN"
     },
     {
         "name":"个人中心",
         "sub_button":[
             {
-                "type":"click",
+                "type":"view",
                 "name":"我的订单",
-                "key":"CLICK_URL_MINE"
+                "url":"http://www.pyshuo.com/users/wx_login?referer_key=CLICK_URL_MINE"
             },
             {
                 "type":"view",
@@ -19,10 +19,16 @@
                 "url":"http://wsq.qq.com/reflow/177650290"
             },
             {
-                "type":"click",
+                "type":"view",
                 "name":"售后服务",
-                "key":"CLICK_URL_SALE_AFTER_SAIL"
-            }]
+                "url":"http://www.pyshuo.com/users/wx_login?referer_key=CLICK_URL_SALE_AFTER_SAIL"
+            },
+            {
+                "type":"click",
+                "name":"绑定旧版微信账号",
+                "key":"CLICK_URL_BINDING"
+            }
+        ]
     },
     {
         "name":"分享社区",
@@ -33,9 +39,9 @@
                 "url":"http://wsq.qq.com/reflow/177650290"
             },
             {
-                "type":"click",
+                "type":"view",
                 "name":"试吃团",
-                "key":"CLICK_URL_SHICHITUAN"
+                "url":"http://www.pyshuo.com/users/wx_login?referer_key=CLICK_URL_SHICHITUAN"
             },
             {
                 "type":"view",
