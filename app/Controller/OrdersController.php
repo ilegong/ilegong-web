@@ -473,9 +473,68 @@ class OrdersController extends AppController{
         }
 	}
 
+    function tobe_shipped_orders($creator=0){
+
+        $creator = $this->authAndGetCreator($creator);
+
+        $this->loadModel('Brand');
+		$brands = $this->Brand->find('list',array('conditions'=>array(
+				'creator'=> $creator,
+		)));
+
+		if(!empty($brands)){
+			$brand_ids = array_keys($brands);
+			$this->set('is_business',true);
+		}
+		else{
+			$this->__message('只有合作商家才能查看商家订单，正在为您转向个人订单','/orders/mine');
+		}
+
+		$orders = $this->Order->find('all',array(
+				'order' => 'id desc',
+				'conditions' => array('brand_id' => $brand_ids, 'status' => ORDER_STATUS_PAID
+                )
+		));
+
+		$ids = array();
+		foreach($orders as $o){
+			$ids[] = $o['Order']['id'];
+		}
+		$this->loadModel('Cart');
+		$Carts = $this->Cart->find('all',array(
+				'conditions'=>array(
+						'order_id' => $ids,
+						//'creator'=> $this->currentUser['id']
+				)));
+		$order_carts = array();
+		foreach($Carts as $c){
+			$order_id = $c['Cart']['order_id'];
+            if (!isset($order_carts[$order_id])) {
+                $order_carts[$order_id] = array();
+            }
+			$order_carts[$order_id][] = $c;
+		}
+
+		$this->set('orders',$orders);
+		$this->set('order_carts',$order_carts);
+		$this->set('ship_type',$this->ship_type);
+        $this->set('creator', $creator);
+
+
+        if($_REQUEST['export']=='true'){
+            $this->autoRender = false;
+            $this->_download_excel($orders, $order_carts);
+            exit;
+        }
+	}
+
 
     function business_export($creator=0) {
         $this->business($creator);
+    }
+
+    function tobe_shipped_export($creator=0) {
+        $this->tobe_shipped_orders($creator);
     }
 
     /**

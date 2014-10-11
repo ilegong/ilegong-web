@@ -48,6 +48,7 @@
 				 	<li><?php echo $this->Html->link('<i class="glyphicon glyphicon-user"></i>'.lang('edit_profile'), array('controller' => 'users','action'=>'edit','plugin' => null ,),array('escape'=>false)); ?></li>
 					<li><?php echo $this->Html->link('<i class="fa fa-lock"></i>'.lang('edit_password'), array('controller' => 'users','action'=>'editpassword','plugin' => null ,),array('escape'=>false)); ?></li>
                      {{if $CurrentUser['is_business']}}
+                     <li><span  style="color: red"><?php echo $this->Html->link('待发货订单', array('controller' => 'orders','action'=>'tobe_shipped_orders','plugin' => null ,)); ?></span></li>
                      <li><?php echo $this->Html->link('商家订单', array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>
                      <li><?php echo $this->Html->link('我的商品', array('controller' => 'products','action'=>'mine','plugin' => null ,)); ?></li>
                      {{/if}}
