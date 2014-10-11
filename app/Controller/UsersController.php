@@ -508,6 +508,7 @@ class UsersController extends AppController {
     }
 
     function bindWxSub() {
+        $this->Session->delete('Message.flash');
     }
 
     function after_bind_relogin() {
