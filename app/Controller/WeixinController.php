@@ -164,13 +164,12 @@ class WeixinController extends AppController {
 	}
 
     private function loginServiceIfNeed($from, $subOpenId, $url, $do_bind = false) {
-
-        if (!empty($this->currentUser) && $this->currentUser['id'] > 0) {
+        if ($do_bind) {
+            $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth');
+            $state = base64_encode((authcode($subOpenId, 'ENCODE') . "redirect_url_" . $url);
+            return 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . '&response_type=code&scope=snsapi_base&state=' . $state . '#wechat_redirect';
+        }  else {
             return $url;
-        } else {
-                $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth');
-                $state = base64_encode( ($do_bind ? authcode($subOpenId, 'ENCODE') : '') . "redirect_url_" . $url);
-                return 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . '&response_type=code&scope=snsapi_base&state=' . $state . '#wechat_redirect';
         }
     }
 
