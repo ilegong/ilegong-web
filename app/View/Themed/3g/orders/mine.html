@@ -35,6 +35,13 @@ td {padding:5px 10px;}
         <li><a href="#orders-wait_receive" role="tab" data-toggle="tab">{{__('待收货')}}</a></li>
     </ul>
 
+    {{if empty($orders)}}
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <strong>重要提示!</strong> 如果您在10月11日之前有订单，但现在找不到了，请关注公众账号『爱乐供-朋友说』，点击菜单中的『个人中心』-> 『绑定旧版数据』绑定历史订单。
+    </div>
+    {{/if}}
+
     <div class="row tab-content" style="padding-left: 2px; background-color: #f1eff0">
         <?php foreach(array( '-1' => 'all', 0 => 'wait_payment', 1 => 'wait_deliver', 2 => 'wait_receive') as $status => $order_type) { ?>
         <div class="tab-pane fade {{if $order_type == 'all'}} in active {{/if}}" id="orders-{{$order_type}}">
