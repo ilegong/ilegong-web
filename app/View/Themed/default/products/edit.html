@@ -14,6 +14,12 @@ body{
 			{{$this->Form->input('name',array('class'=>'form-control','div'=>false,'label'=>false))}}
 		</div>
 	</div>
+    <div class="form-group">
+		<label class="col-sm-2 control-label" for="ProductPromote">商品名称补充（促销信息）</label>
+		<div class="col-sm-9 controls">
+			{{$this->Form->input('promote_name',array('class'=>'form-control','div'=>false,'label'=>false))}}
+		</div>
+	</div>
 	<div class="form-group">
 		{{$this->Swfupload->load('coverimg',array('modelClass'=>'Product','label'=>'封面图片','isadmin'=>false,'no_db'=>1,'upload_limit'=>1))}}
 	</div>
