@@ -140,15 +140,18 @@ class WeixinController extends AppController {
                 case "CLICK_URL_SHICHITUAN":
                     echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/shichituan.html?wx_openid=$user_code").'">试吃评价</a>');
                     break;
+                case "CLICK_URL_BINDING":
+                    list($oauth, $hasAccountWithSubOpenId) = $this->hasAccountWithSubOpenId($user);
+                    if (!$hasAccountWithSubOpenId || $this->whetherBinded($oauth['Oauthbinds']['user_id'])){
+                        echo $this->newTextMsg($user, $me, '您的历史账号信息已经合并');
+                    } else {
+                        echo $this->newTextMsg($user, $me, '您有历史账号信息未绑定，点击进入<a href="' . $this->loginServiceIfNeed($from, $user, "http://$host3g/users/bindWxSub.html?wx_openid=$user_code") . '">绑定账号</a>');
+                    }
+                    break;
                 case "5151":
                 case "ordersadmin":
                 case "Ordersadmin":
                     echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/brands/brands_admin?wx_openid=$user_code").'">商家订单管理</a>');
-                    break;
-                case "CLICK_URL_BINDING":
-                    if ($from == FROM_WX_SUB) {
-                        echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/brands/brands_admin?wx_openid=$user_code").'">商家订单管理</a>');
-                    }
                     break;
 				//default :
 				//	echo $this->newTextMsg($user, $me, "回复“预定”进入预定页\n回复“订单”查看我的订单");
@@ -158,22 +161,10 @@ class WeixinController extends AppController {
 
     private function loginServiceIfNeed($from, $subOpenId, $url) {
         if ($from == FROM_WX_SUB) {
-            $do_bind = true;
-            $oauth = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $subOpenId, 'source' => 'weixin',)));
-            if (!empty($oauth) && !empty($oauth['Oauthbinds']['user_id'])) {
-                $r = $this->Oauthbinds->find('first', array('conditions' => array('user_id' => $oauth['Oauthbinds']['user_id'], 'source' => oauth_wx_source(),)));
-                if (!empty($r)) {
-                    $do_bind = false;
-                }
-            }
-
-            if ($do_bind) {
-                $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth');
-                $state = base64_encode(authcode($subOpenId, 'ENCODE') . "redirect_url_" . $url);
-                return 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . '&response_type=code&scope=snsapi_base&state=' . $state . '#wechat_redirect';
-            }
+            $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth');
+            $state = base64_encode(authcode($subOpenId, 'ENCODE') . "redirect_url_" . $url);
+            return 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . '&response_type=code&scope=snsapi_base&state=' . $state . '#wechat_redirect';
         }
-
         return $url;
     }
 
@@ -235,5 +226,29 @@ class WeixinController extends AppController {
 			return false;
 		}
 	}
+
+    /**
+     * @param $user_id
+     * @return bool  whether is bind (and if user has never been created for the specified openid, return false).
+     */
+    private function whetherBinded($user_id) {
+        if ($user_id) {
+            $r = $this->Oauthbinds->find('first', array('conditions' => array('user_id' => $user_id, 'source' => oauth_wx_source(),)));
+            if (!empty($r)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param $subOpenId
+     * @return array :  list($oauth, $hasAccountWithSubOpenId)
+     */
+    private function hasAccountWithSubOpenId($subOpenId) {
+        $oauth = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $subOpenId, 'source' => 'weixin',)));
+        $hasAccountWithSubOpenId = !empty($oauth) && !empty($oauth['Oauthbinds']['user_id']);
+        return array($oauth, $hasAccountWithSubOpenId);
+    }
 }
 ?>

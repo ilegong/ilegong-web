@@ -93,45 +93,7 @@ class AppController extends Controller {
     			$this->Cookie->delete('Auth.User');//删除解密错误的cookie信息
     		}
     	}
-    	$wx_openid = '';
-    	if($_GET['wx_openid']){
-    		$wx_openid = authcode($_GET['wx_openid'],'DECODE');
-    	}
-    	/* 微信链接打开登录 */
-    	if($wx_openid){
-    		$this->Cookie = $this->Components->load('Cookie',array('name' => 'SAECMS', 'time' => '+2 weeks'));
-    		
-    		$this->Session->write('wx_openid',$wx_openid);
-    		$this->loadModel('Oauthbinds');
-    		$this->loadModel('User');
-    		$oauth = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $wx_openid)));
-    		if(!empty($oauth) && !empty($oauth['Oauthbinds']['user_id'])){
-    			$uid = $oauth['Oauthbinds']['user_id'];
-    			$data = $this->User->find('first', array('conditions' => array('id' => $uid)));
-    			$this->Session->write('Auth.User',$data['User']);
-    			$this->Cookie->write('Auth.User',$data['User'], true, 86400);
-    		}
-    		else{ /* 不存在用户时，直接创建用户。 */
-    			$data = array(
-    				'username'=> $wx_openid,
-    				'email' => $wx_openid.'@wx.qq.com',
-    				'password' => Security::hash(random_str(12), null, true),
-    				'status'=>1,
-    			);
-    			$this->User->save($data);
-    			$uid = $data['id'] = $this->User->getLastInsertID();
-    			$this->Session->write('Auth.User',$data);
-    			$this->Cookie->write('Auth.User',$data, true, 86400);
-    			$this->Oauthbinds->save(array(
-        				'source' => 'weixin',
-        				'user_id' =>	$uid,
-        				'oauth_openid' => $wx_openid,
-        				'created' => date('Y-m-d H:i:s'),
-        				'updated' => date('Y-m-d H:i:s'),
-        		));
-    		}    		
-    	}
-    
+
     	if(!Configure::read('Site.status')){
     		$this->layout = 'maintain';
     		$this->autoRender = false;

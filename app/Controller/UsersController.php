@@ -256,6 +256,20 @@ class UsersController extends AppController {
             $this->redirect(array('action' => 'login'));
         }
     }
+
+    function my_profile() {
+        $userinfo = $this->Auth->user();
+        if ($userinfo['id']) {
+            $datainfo = $this->{$this->modelClass}->find('first', array('recursive' => -1, 'conditions' => array('id' => $userinfo['id'])));
+            if (empty($datainfo)) {
+                throw new ForbiddenException(__('You cannot view this data'));
+            }
+            $this->set('profile', $datainfo);
+        } else {
+            $this->Session->setFlash(__('You are not authorized to access that location.', true));
+            $this->redirect(array('action' => 'login'));
+        }
+    }
     
 
     function editusername() {
@@ -407,28 +421,6 @@ class UsersController extends AppController {
         }
         
         if ($success) {
-            $wx_openid = $this->Session->read('wx_openid');
-            if($wx_openid){
-                $this->loadModel('Oauthbinds');
-        		$oauth = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $wx_openid,'source'=>'weixin',)));
-        		if(!empty($oauth) && !empty($oauth['Oauthbinds']['user_id'])){
-        			if($this->User->id != $oauth['Oauthbinds']['user_id']){
-        				$this->Oauthbinds->updateAll(array('user_id'=>	$this->User->id),
-        					array('oauth_openid' => $wx_openid,'source'=>'weixin')
-        				);
-        			}
-        		}
-        		else{
-        			$this->Oauthbinds->save(array(
-        				'source'=>'weixin',
-        				'user_id'=>	$this->User->id,
-        				'oauth_openid' => $wx_openid,
-        				'created'=>date('Y-m-d H:i:s'),
-        				'updated'=>date('Y-m-d H:i:s'),
-        			));
-        		}
-        	}
-
             $this->Hook->call('loginSuccess');
 
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
@@ -515,6 +507,10 @@ class UsersController extends AppController {
         $this->set('user',$user);
     }
 
+    function bindWxSub() {
+
+    }
+
     /**
      * 
      */
@@ -592,6 +588,8 @@ class UsersController extends AppController {
                         $oauth['Oauthbinds']['created'] = date('Y-m-d H:i:s');
                         $oauth['Oauthbinds']['source'] = $oauth_wx_source;
                         $oauth['Oauthbinds']['domain'] = $oauth_wx_source;
+                    } else {
+                        $old_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
                     }
                     $oauth['Oauthbinds']['oauth_token'] = $access_token;
                     $oauth['Oauthbinds']['oauth_token_secret'] = empty($refresh_token) ? '' : $refresh_token;
@@ -623,7 +621,8 @@ class UsersController extends AppController {
                         }
                     }
 
-                    if ($oauth['Oauthbinds']['user_id'] > 0) {
+                    $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
+                    if ($new_serviceAccount_binded_uid > 0) {
                     } else {
                         $savedUser = $this->User->save(array(
                             'username' => $oauth['Oauthbinds']['oauth_openid'],
@@ -633,9 +632,15 @@ class UsersController extends AppController {
                         ));
                         if ($savedUser) {
                             $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
+                            $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
                         }
                     }
+
                     $this->Oauthbinds->save($oauth['Oauthbinds']);
+                    if (isset($old_serviceAccount_binded_uid) && $old_serviceAccount_binded_uid != $new_serviceAccount_binded_uid) {
+                        $this->transferUserInfo($old_serviceAccount_binded_uid, $new_serviceAccount_binded_uid);
+                    }
+
                     $redirectUrl = '/users/login?source=' . $oauth['Oauthbinds']['source'] . '&openid=' . $oauth['Oauthbinds']['oauth_openid'];
 
                     if(!empty($refer_by_state)) {
@@ -656,6 +661,21 @@ class UsersController extends AppController {
             echo "canot get code:" . $_SERVER['QUERY_STRING'];
             exit;
         }
+    }
+
+    /**
+     * @param $old_serviceAccount_bind_uid
+     * @param $new_serviceAccount_bind_uid
+     */
+    private function transferUserInfo($old_serviceAccount_bind_uid, $new_serviceAccount_bind_uid) {
+        $this->log("Merge WX Account from  $old_serviceAccount_bind_uid to " . $new_serviceAccount_bind_uid);
+        //copy orders && address info
+        $this->loadModel('Order');
+        $this->loadModel('OrderConsignee');
+
+        $orderUpdated = $this->Order->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
+        $consigneeUpdated = $this->OrderConsignee->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
+        $this->log("Merge WX Account from  $old_serviceAccount_bind_uid to " . $new_serviceAccount_bind_uid.": orderUpdated=".$orderUpdated.", consigneeUpdated=". $consigneeUpdated);
     }
 
 }
