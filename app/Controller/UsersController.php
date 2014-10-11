@@ -569,7 +569,7 @@ class UsersController extends AppController {
         if (!empty($_GET['referer'])) {
             $ref = $_GET['referer'];
         } else if (!empty($_GET['referer_key'])) {
-            $ref = oauth_wx_goto($_GET['referer_key'], 'http://www.pyshuo.com');
+            $ref = oauth_wx_goto($_GET['referer_key'], 'www.pyshuo.com');
         }
 
         $return_uri = 'http://www.pyshuo.com/users/wx_auth?';
