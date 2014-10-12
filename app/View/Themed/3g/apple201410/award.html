@@ -4,7 +4,7 @@
     {
         window.addEventListener('shake', shakeEventDidOccur, false);
         function shakeEventDidOccur() {
-            $('#apple_tree').octoberLeaves('start', {'speedC': 50000, 'numberOfLeaves':100, 'cycleSpeed':1});
+            $('#apple_tree').octoberLeaves('start', {'speedC': 1, 'numberOfLeaves':100, 'cycleSpeed':80, 'rotationTrue':0});
             setTimeout(function(){
                 $('#apple_tree').octoberLeaves('stop');
                 $('#apple_got_cnt').text( parseInt($('#apple_got_cnt').text()) + 1);
