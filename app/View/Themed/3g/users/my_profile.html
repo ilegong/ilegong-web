@@ -6,7 +6,7 @@
                 <img class="pull-right" height="46px" src="{{$this->Html->url('/img/default_user_icon.jpg')}}"/></li>
             </li>
             <li class="list-group-item">
-                <span>姓名:</span>
+                <span>昵称:</span>
                 <span class="text-right pull-right">{{$profile['nickname']}}</span>
             </li>
             <li class="list-group-item">
@@ -28,7 +28,12 @@
 
     <!-- 绑定账号和电子邮件 -->
     <div class="row">
-
+        <ul class="list-group">
+            <li class="list-group-item">
+                <span>用户ID:</span>
+                <span class="text-right pull-right">{{$profile['id']}}</span>
+            </li>
+        </ul>
     </div>
 </div>
 {{template footer}}
