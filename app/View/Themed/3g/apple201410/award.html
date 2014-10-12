@@ -1,0 +1,49 @@
+{{$this->Html->script(array('shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js'), array('block' => 'scriptBottom'));}}
+{{$this->Html->scriptStart(array('block' => 'scriptBottom'));}}
+    $.ready()
+    {
+        window.addEventListener('shake', shakeEventDidOccur, false);
+        function shakeEventDidOccur() {
+            $('#apple_tree').octoberLeaves('start', {'speedC': 50000, 'numberOfLeaves':100, 'cycleSpeed':1});
+            setTimeout(function(){
+                $('#apple_tree').octoberLeaves('stop');
+                $('#apple_got_cnt').text( parseInt($('#apple_got_cnt').text()) + 1);
+            },5000);
+            var sound = new Howl({
+                urls: ['/files/glass.wav']
+            }).play();
+        }
+
+        $('#clicktest').click(shakeEventDidOccur);
+        $('.footbox').hide();
+    }
+{{$this->Html->scriptEnd()}}
+<style>
+    /*!
+     * 3D Falling Leaves
+     */
+    .october-leaf {
+        position: absolute;
+        background-color: transparent;
+        background-image: url('http://www.pyshuo.com/img/apple201410/leaves.png');
+        -webkit-transform: translateZ(0);
+        -moz-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+</style>
+
+<div class="container">
+    <div id="apple_tree" class="row">
+      <img src="{{$this->Html->url('/img/apple201410/appletree.jpg')}}"/>
+    </div>
+    <div>
+
+    <!--<a href="javascript:;" id="clicktest">Test</a>-->
+        <ul class="list-group pull-right">
+            <li class="list-group-item">
+                <span id="apple_got_cnt" class="badge">0</span>
+                摇到苹果数
+            </li>
+        </ul>
+    </div>
+</div>

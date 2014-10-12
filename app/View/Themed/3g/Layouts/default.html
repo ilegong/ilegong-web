@@ -8,7 +8,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="format-detection" content="telephone=no">
-<link rel="apple-touch-icon" href="{{$this->Html->url('img/logo_mini.png')}}" />
+<link rel="apple-touch-icon" href="{{$this->Html->url('/img/logo_mini.png')}}" />
 <title>{{$pageTitle}}-{{$site['title']}}</title>
 <?PHP echo $this->Combinator->less(); ?>
 <style>
@@ -273,6 +273,7 @@ var ADMIN_BASEURL = BASEURL+"/manage";
     <!-- /#page-content-wrapper -->
 
 </div>
+{{$this->fetch('scriptBottom')}}
 <script>
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
