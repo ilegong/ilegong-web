@@ -264,7 +264,7 @@ class UsersController extends AppController {
             if (empty($datainfo)) {
                 throw new ForbiddenException(__('You cannot view this data'));
             }
-            $this->set('profile', $datainfo);
+            $this->set('profile', $datainfo['User']);
         } else {
             $this->Session->setFlash(__('You are not authorized to access that location.', true));
             $this->redirect(array('action' => 'login'));
