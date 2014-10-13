@@ -46,7 +46,7 @@ class WxPayController extends AppController {
                 return $val['Cart']['name'];
             }, array_slice($items, 0, 3));
             $productDesc .= implode('、', $cartItemNames);
-            $productDesc .= "等".count($items)."件商品";
+            $productDesc .= " 等".count($items)."件商品";
         } else {
             //display errors
             $this->redirect('/orders/detail/'.$orderId.'/pay?msg=cannot_get_cart_items');
