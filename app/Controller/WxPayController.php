@@ -125,75 +125,71 @@ class WxPayController extends AppController {
 
 
     public function notify() {
-        /**
-         * 通用通知接口demo
-         * ====================================================
-         * 支付完成后，微信会把相关支付和用户信息发送到商户设定的通知URL，
-         * 商户接收回调信息后，根据需要设定相应的处理流程。
-         *
-         * 这里举例使用log文件形式记录回调信息。
-         */
 
-        //使用通用通知接口
-        $notify = $this->WxPayment->createNotify();
-
-        //存储微信的回调
         $xml = $GLOBALS['HTTP_RAW_POST_DATA'];
-        $notify->saveData($xml);
 
-        //验证签名，并回应微信。
-        //对后台通知交互时，如果微信收到商户的应答不是成功或超时，微信认为通知失败，
-        //微信会通过一定的策略（如30分钟共8次）定期重新发起通知，
-        //尽可能提高通知的成功率，但微信不保证通知最终能成功。
-        if ($notify->checkSign() == FALSE) {
+        $notify = $this->WxPayment->createNotify();
+        if(empty($xml)) {
             $notify->setReturnParameter("return_code", "FAIL"); //返回状态码
-            $notify->setReturnParameter("return_msg", "签名失败"); //返回信息
+            $notify->setReturnParameter("return_msg", "内容为空"); //返回信息
         } else {
-            $notify->setReturnParameter("return_code", "SUCCESS"); //设置返回码
 
-            $out_trade_no = $notify->data['out_trade_no'];
-            $notifyExists = $this->PayNotify->find('count', array('out_trade_no' => $out_trade_no));
-            if ($notifyExists)   {
-                $this->log('[WEIXIN_PAY_NOTIFY] duplicated notify:'.$xml);
+            $notify->saveData($xml);
+
+            //验证签名，并回应微信。
+            //对后台通知交互时，如果微信收到商户的应答不是成功或超时，微信认为通知失败，
+            //微信会通过一定的策略（如30分钟共8次）定期重新发起通知，
+            //尽可能提高通知的成功率，但微信不保证通知最终能成功。
+            if ($notify->checkSign() == FALSE) {
+                $notify->setReturnParameter("return_code", "FAIL"); //返回状态码
+                $notify->setReturnParameter("return_msg", "签名失败"); //返回信息
             } else {
-                $this->PayNotify->save(array('PayNotify' => array(
-                    'out_trade_no' => $notify->data['out_trade_no'],
-                    'transaction_id' => $notify->data['transaction_id'],
-                    'trade_type' => $notify->data['trade_type'],
-                    'openid' => $notify->data['openid'],
-                    'coupon_fee' => $notify->data['coupon_fee'],
-                    'total_fee' => $notify->data['total_fee'],
-                    'is_subscribe' => $notify->data['is_subscribe'],
-                    'bank_type' => $notify->data['bank_type'],
-                    'attach' => $notify->data['attach'],
-                    'time_end' => $notify->data['time_end'],
-                    'status' => PAYNOTIFY_STATUS_NEW
-                )));
-                $notifyLogId = $this->PayNotify->getLastInsertId();
-                $payLog = $this->PayLog->find('first', array('conditions' => array('out_trade_no' => $out_trade_no)));
-                if (empty($payLog)) {
-                    $status = PAYNOTIFY_ERR_TRADENO;
-                } else {
-                    $suc = $notify->data['result_code'] == "SUCCESS";
-                    $this->PayLog->updateAll(array('status' => $suc ? PAYLOG_STATUS_FAIL : PAYLOG_STATUS_SUCCESS), array('out_trade_no' => $out_trade_no));
-                    $status = PAYNOTIFY_STATUS_PAYLOG_UPDATED;
+                $notify->setReturnParameter("return_code", "SUCCESS"); //设置返回码
 
-                    $orderId = $payLog['PayLog']['order_id'];
-                    if ($suc) {
-                        $order = $this->Order->find('first', array('conditions' => array('id' => $orderId)));
-                        if (empty($order)) {
-                            $status = PAYNOTIFY_ERR_ORDER_NONE;
-                        } else if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY || $order['Order']['deleted'] == 1) {
-                            $status = PAYNOTIFY_ERR_ORDER_STATUS_ERR;
-                        } else if ($payLog['PayLog']['total_fee'] != $notify->data['total_fee']) {
-                            $status = PAYNOTIFY_ERR_ORDER_FEE;
-                        } else {
-                            $this->Order->updateAll(array('status' => 2), array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY));
-                            $status = PAYNOTIFY_STATUS_ORDER_UPDATED;
+                $out_trade_no = $notify->data['out_trade_no'];
+                $notifyExists = $this->PayNotify->find('count', array('out_trade_no' => $out_trade_no));
+                if ($notifyExists) {
+                    $this->log('[WEIXIN_PAY_NOTIFY] duplicated notify:' . $xml);
+                } else {
+                    $this->PayNotify->save(array('PayNotify' => array(
+                        'out_trade_no' => $notify->data['out_trade_no'],
+                        'transaction_id' => $notify->data['transaction_id'],
+                        'trade_type' => $notify->data['trade_type'],
+                        'openid' => $notify->data['openid'],
+                        'coupon_fee' => $notify->data['coupon_fee'],
+                        'total_fee' => $notify->data['total_fee'],
+                        'is_subscribe' => $notify->data['is_subscribe'],
+                        'bank_type' => $notify->data['bank_type'],
+                        'attach' => $notify->data['attach'],
+                        'time_end' => $notify->data['time_end'],
+                        'status' => PAYNOTIFY_STATUS_NEW
+                    )));
+                    $notifyLogId = $this->PayNotify->getLastInsertId();
+                    $payLog = $this->PayLog->find('first', array('conditions' => array('out_trade_no' => $out_trade_no)));
+                    if (empty($payLog)) {
+                        $status = PAYNOTIFY_ERR_TRADENO;
+                    } else {
+                        $suc = $notify->data['result_code'] == "SUCCESS";
+                        $this->PayLog->updateAll(array('status' => $suc ? PAYLOG_STATUS_FAIL : PAYLOG_STATUS_SUCCESS), array('out_trade_no' => $out_trade_no));
+                        $status = PAYNOTIFY_STATUS_PAYLOG_UPDATED;
+
+                        $orderId = $payLog['PayLog']['order_id'];
+                        if ($suc) {
+                            $order = $this->Order->find('first', array('conditions' => array('id' => $orderId)));
+                            if (empty($order)) {
+                                $status = PAYNOTIFY_ERR_ORDER_NONE;
+                            } else if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY || $order['Order']['deleted'] == 1) {
+                                $status = PAYNOTIFY_ERR_ORDER_STATUS_ERR;
+                            } else if ($payLog['PayLog']['total_fee'] != $notify->data['total_fee']) {
+                                $status = PAYNOTIFY_ERR_ORDER_FEE;
+                            } else {
+                                $this->Order->updateAll(array('status' => 2), array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY));
+                                $status = PAYNOTIFY_STATUS_ORDER_UPDATED;
+                            }
                         }
                     }
+                    $this->PayNotify->updateAll(array('status' => $status), array('id' => $notifyLogId));
                 }
-                $this->PayNotify->updateAll(array('status' => $status), array('id' => $notifyLogId));
             }
         }
 
@@ -222,6 +218,8 @@ class WxPayController extends AppController {
             //例如：数据库操作
             //例如：推送支付完成信息
         }
+
+        $this->autoRender = false;
     }
 
     public function warning() {
