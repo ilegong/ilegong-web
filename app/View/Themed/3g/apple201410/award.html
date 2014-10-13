@@ -19,9 +19,6 @@
     }
 {{$this->Html->scriptEnd()}}
 <style>
-    /*!
-     * 3D Falling Leaves
-     */
     .october-leaf {
         position: absolute;
         background-color: transparent;
@@ -38,6 +35,10 @@
     </div>
     <div>
 
+        <p>
+            {{if !empty($friend)}}您的好友{{$friend['User']['nickname']}}邀请你帮TA摇苹果，攒够10个，TA就可以免费兑换一箱苹果啦。{{/if}}
+        </p>
+
     <!--<a href="javascript:;" id="clicktest">Test</a>-->
         <ul class="list-group pull-right">
             <li class="list-group-item">
@@ -45,5 +46,6 @@
                 摇到苹果数
             </li>
         </ul>
+
     </div>
 </div>
