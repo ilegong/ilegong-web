@@ -159,10 +159,11 @@ class WxPayController extends AppController {
                         'transaction_id' => $notify->data['transaction_id'],
                         'trade_type' => $notify->data['trade_type'],
                         'openid' => $notify->data['openid'],
-                        'coupon_fee' => $notify->data['coupon_fee'],
+                        'coupon_fee' => empty($notify->data['coupon_fee']) ? 0 : $notify->data['coupon_fee'],
                         'total_fee' => $notify->data['total_fee'],
                         'is_subscribe' => $notify->data['is_subscribe'],
                         'bank_type' => $notify->data['bank_type'],
+                        'fee_type' => empty($notify->data['fee_type']) ? 'CNY' : $notify->data['fee_type'],
                         'attach' => $notify->data['attach'],
                         'time_end' => $notify->data['time_end'],
                         'status' => PAYNOTIFY_STATUS_NEW
