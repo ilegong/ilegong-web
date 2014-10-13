@@ -14,10 +14,10 @@ class WxPayController extends AppController {
 
     function beforeFilter(){
         parent::beforeFilter();
-        if(empty($this->currentUser['id'])){
+        if(empty($this->currentUser['id']) && !$this->_is_action_by_wx_callback()){
             $this->redirect('/users/login?referer='.Router::url('/orders/mine'));
         }
-        if (!$this->is_weixin() && array_search($this->request->params['action'], array('notify', 'warning')) === false) {
+        if (!$this->_is_action_by_wx_callback() && !$this->is_weixin()) {
             throw new CakeException('/?wx_pay_only_in_WX');
         }
     }
@@ -35,24 +35,19 @@ class WxPayController extends AppController {
             throw new CakeException('/?wx_pay_order_status_incorrect='.$order['Order']['creator'].'__uid='.$this->currentUser['id']);
         }
 
-        $this->loadModel('Brand');
         $this->loadModel('Cart');
         $productDesc = '';
-        $brand = $this->Brand->find('first', array('conditions' => array('id' => $order['Order']['brand_id'])));
         if (!empty($brand)) {
-            $productDesc .= '商家:『'.$brand['Brand']['name']."』";
             $items = $this->Cart->find('all', array(
                     'fields' => array('name'),
-                'conditions' => array('order_id' => $orderId),
-                'limit' => 3)
+                'conditions' => array('order_id' => $orderId))
             );
             if (!empty($items)) {
                 $cartItemNames = array_map(function ($val) {
                     return $val['Cart']['name'];
-                }, $items);
-                $productDesc .= "的";
+                }, array_slice($items, 0, 3));
                 $productDesc .= implode('、', $cartItemNames);
-                $productDesc .= "等商品";
+                $productDesc .= "等".count($items)."件商品";
             }
         }
         //使用jsapi接口
@@ -227,6 +222,13 @@ class WxPayController extends AppController {
 
     public function warning() {
         $this->log('WARNING FROM WEIXIN at '. time());
+    }
+
+    /**
+     * @return bool
+     */
+    private function _is_action_by_wx_callback() {
+        return array_search($this->request->params['action'], array('notify', 'warning')) !== false;
     }
 
 } 
