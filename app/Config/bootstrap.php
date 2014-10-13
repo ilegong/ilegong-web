@@ -12,6 +12,19 @@ define('ORDER_STATUS_WAITING_PAY', 0);
 
 define('CATEGORY_ID_TECHAN', 114);
 
+define('PAYLOG_STATUS_NEW', 0);
+define('PAYLOG_STATUS_SUCCESS', 1);
+define('PAYLOG_STATUS_FAIL', 2);
+
+define('PAYNOTIFY_STATUS_NEW', 0);
+define('PAYNOTIFY_ERR_TRADENO', 1);
+define('PAYNOTIFY_STATUS_PAYLOG_UPDATED', 2);
+define('PAYNOTIFY_ERR_ORDER_NONE', 3);
+define('PAYNOTIFY_ERR_ORDER_STATUS_ERR', 4);
+define('PAYNOTIFY_ERR_ORDER_FEE', 5);
+define('PAYNOTIFY_STATUS_ORDER_UPDATED', 6);
+define('PAYNOTIFY_STATUS_CLOSED', 7);
+
 
 global $page_style;
 global $pages_tpl;
