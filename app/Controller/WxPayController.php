@@ -117,6 +117,10 @@ class WxPayController extends AppController {
         //=========步骤3：使用jsapi调起支付============
         $jsApi->setPrepayId($prepay_id);
         $this->set('jsApiParameters', $jsApi->getParameters());
+        $this->set('totalFee', $order['Order']['total_all_price']);
+        $this->set('tradeNo', $out_trade_no);
+        $this->set('productDesc', $productDesc);
+        $this->set('orderId', $orderId);
     }
 
 

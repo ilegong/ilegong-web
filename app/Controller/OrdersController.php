@@ -298,9 +298,9 @@ class OrdersController extends AppController{
      * @Param int $order_id
      * @Param string action
      */
-    function detail($order_id='', $action = '') {
+    function detail($orderId='', $action = '') {
         $orderinfo = $this->Order->find('first',array(
-            'conditions'=> array('id'=>$order_id,'creator'=>$this->currentUser['id']),
+            'conditions'=> array('id'=>$orderId,'creator'=>$this->currentUser['id']),
         ));
         if(empty($orderinfo)){
             $this->__message('订单不存在，或无权查看','/');
@@ -309,7 +309,7 @@ class OrdersController extends AppController{
         $this->loadModel('Cart');
         $Carts = $this->Cart->find('all',array(
             'conditions'=>array(
-                'order_id' => $order_id,
+                'order_id' => $orderId,
                 'creator'=> $this->currentUser['id']
             )));
         $product_ids = array();
@@ -330,8 +330,12 @@ class OrdersController extends AppController{
         $products = $product_new;
         unset($product_new);
 
+        if ($action == 'paid') {
+            $this->log("paid done: $orderId, msg:". $_GET['msg']);
+        }
+
         $this->set('ship_type',$this->ship_type);
-        $this->set('order_id',$order_id);
+        $this->set('order_id',$orderId);
         $this->set('order', $orderinfo);
         $this->set('Carts',$Carts);
         $this->set('action', $action);
