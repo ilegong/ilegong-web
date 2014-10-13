@@ -340,7 +340,6 @@ class OrdersController extends AppController{
         $this->set('Carts',$Carts);
         $this->set('action', $action);
         $this->set('products', $products);
-        $this->set('wxPayTest', $this->is_admin($this->currentUser['id']));
     }
 	
 	function mine(){
