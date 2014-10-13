@@ -37,19 +37,21 @@ class WxPayController extends AppController {
 
         $this->loadModel('Cart');
         $productDesc = '';
-        if (!empty($brand)) {
-            $items = $this->Cart->find('all', array(
-                    'fields' => array('name'),
-                'conditions' => array('order_id' => $orderId))
-            );
-            if (!empty($items)) {
-                $cartItemNames = array_map(function ($val) {
-                    return $val['Cart']['name'];
-                }, array_slice($items, 0, 3));
-                $productDesc .= implode('、', $cartItemNames);
-                $productDesc .= "等".count($items)."件商品";
-            }
+        $items = $this->Cart->find('all', array(
+                'fields' => array('name'),
+            'conditions' => array('order_id' => $orderId))
+        );
+        if (!empty($items)) {
+            $cartItemNames = array_map(function ($val) {
+                return $val['Cart']['name'];
+            }, array_slice($items, 0, 3));
+            $productDesc .= implode('、', $cartItemNames);
+            $productDesc .= "等".count($items)."件商品";
+        } else {
+            //display errors
+            $this->redirect('/orders/detail/'.$orderId.'/pay?msg=cannot_get_cart_items');
         }
+
         //使用jsapi接口
         $jsApi = $this->WxPayment->createJsApi();
 
