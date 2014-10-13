@@ -164,7 +164,7 @@ class WxPayController extends AppController {
                         'is_subscribe' => $notify->data['is_subscribe'],
                         'bank_type' => $notify->data['bank_type'],
                         'fee_type' => empty($notify->data['fee_type']) ? 'CNY' : $notify->data['fee_type'],
-                        'attach' => $notify->data['attach'],
+                        'attach' => empty($notify->data['attach']) ? '' : $notify->data['attach'],
                         'time_end' => $notify->data['time_end'],
                         'status' => PAYNOTIFY_STATUS_NEW
                     )));
