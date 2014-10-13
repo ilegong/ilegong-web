@@ -2,8 +2,8 @@
     "button":[
     {
         "type":"view",
-        "name":"购买特卖",
-        "url":"http://www.pengyoushuo.com.cn/techan.html"
+        "name":"购买特产",
+        "url":"http://pys.b-wmobile.com/users/wx_menu_point?referer_key=CLICK_URL_TECHAN&from=service"
     },
     {
         "name":"个人中心",
@@ -11,13 +11,38 @@
             {
                 "type":"view",
                 "name":"我的订单",
-                "url":"http://www.pengyoushuo.com.cn/orders/mine.html"
+                "url":"http://pys.b-wmobile.com/users/wx_menu_point?referer_key=CLICK_URL_MINE&do_wx_auth_if_not_log_in=1&from=service"
+            },
+            {
+                "type":"view",
+                "name":"我要分享",
+                "url":"http://wsq.qq.com/reflow/177650290"
             },
             {
                 "type":"view",
                 "name":"售后服务",
-                "url":"http://www.pengyoushuo.com.cn/articles/view/377"
+                "url":"http://pys.b-wmobile.com/users/wx_menu_point?referer_key=CLICK_URL_SALE_AFTER_SAIL&from=service"
+            }
+        ]
+    },
+    {
+        "name":"分享社区",
+        "sub_button":[
+            {
+                "type":"view",
+                "name":"分享社区",
+                "url":"http://wsq.qq.com/reflow/177650290"
+            },
+            {
+                "type":"view",
+                "name":"试吃团",
+                "url":"http://pys.b-wmobile.com/users/wx_menu_point?referer_key=CLICK_URL_SHICHITUAN&from=service"
+            },
+            {
+                "type":"view",
+                "name":"加入试吃",
+                "url":"http://www.mikecrm.com/f.php?t=3DGEyQ"
             }]
     }
-    ]
+]
 }

@@ -3,7 +3,7 @@
     {
         "type":"view",
         "name":"购买特产",
-        "url":"http://www.pyshuo.com/users/wx_menu_point?referer_key=CLICK_URL_TECHAN"
+        "url":"http://pys.b-wmobile.com/users/wx_menu_point?referer_key=CLICK_URL_TECHAN&from=sub"
     },
     {
         "name":"个人中心",
@@ -11,7 +11,7 @@
             {
                 "type":"view",
                 "name":"我的订单",
-                "url":"http://www.pyshuo.com/users/wx_menu_point?referer_key=CLICK_URL_MINE&do_wx_auth_if_not_log_in=1"
+                "url":"http://pys.b-wmobile.com/users/wx_menu_point?referer_key=CLICK_URL_MINE&do_wx_auth_if_not_log_in=1&from=sub"
             },
             {
                 "type":"view",
@@ -21,7 +21,7 @@
             {
                 "type":"view",
                 "name":"售后服务",
-                "url":"http://www.pyshuo.com/users/wx_menu_point?referer_key=CLICK_URL_SALE_AFTER_SAIL"
+                "url":"http://pys.b-wmobile.com/users/wx_menu_point?referer_key=CLICK_URL_SALE_AFTER_SAIL&from=sub"
             },
             {
                 "type":"click",
@@ -41,14 +41,13 @@
             {
                 "type":"view",
                 "name":"试吃团",
-                "url":"http://www.pyshuo.com/users/wx_menu_point?referer_key=CLICK_URL_SHICHITUAN"
+                "url":"http://pys.b-wmobile.com/users/wx_menu_point?referer_key=CLICK_URL_SHICHITUAN&from=sub"
             },
             {
                 "type":"view",
                 "name":"加入试吃",
                 "url":"http://www.mikecrm.com/f.php?t=3DGEyQ"
             }]
-    },
-
+    }
     ]
 }

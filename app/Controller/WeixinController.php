@@ -101,7 +101,7 @@ class WeixinController extends AppController {
 				$msg = $msg."*语音信息：{$req['Recognition']}*";
 			}
 
-            $host3g = ($from == FROM_WX_SERVICE? 'www.pengyoushuo.com.cn' : 'www.pyshuo.com');
+            $host3g = (WX_HOST);
 
 			$user_code = urlencode(authcode($user,'ENCODE'));
 			//判断输入内容
@@ -165,7 +165,7 @@ class WeixinController extends AppController {
 
     private function loginServiceIfNeed($from, $subOpenId, $url, $do_bind = false) {
         if ($do_bind) {
-            $return_uri = urlencode('http://www.pyshuo.com/users/wx_auth');
+            $return_uri = urlencode('http://'.WX_HOST.'/users/wx_auth');
             $state = base64_encode(authcode($subOpenId, 'ENCODE') . "redirect_url_" . $url);
             return 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . '&response_type=code&scope=snsapi_base&state=' . $state . '#wechat_redirect';
         }  else {

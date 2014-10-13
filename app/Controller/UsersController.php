@@ -567,7 +567,7 @@ class UsersController extends AppController {
     function wx_menu_point() {
         $redirect = '/';
         if (!empty($_GET['referer_key'])) {
-            $redirect = oauth_wx_goto($_GET['referer_key'], 'www.pyshuo.com');
+            $redirect = oauth_wx_goto($_GET['referer_key'], WX_HOST);
         }
 
         if ($_GET['do_wx_auth_if_not_log_in'] && (empty($this->currentUser) || !$this->currentUser['id'])) {
@@ -583,7 +583,7 @@ class UsersController extends AppController {
         if (!empty($_GET['referer'])) {
             $ref = $_GET['referer'];
         } else if (!empty($_GET['referer_key'])) {
-            $ref = oauth_wx_goto($_GET['referer_key'], 'www.pyshuo.com');
+            $ref = oauth_wx_goto($_GET['referer_key'], WX_HOST);
         }
 
         $this->_goto_wx_oauth($ref);
@@ -644,6 +644,7 @@ class UsersController extends AppController {
                             $url = substr($str, $idx + strlen(self::WX_BIND_REDI_PREFIX));
                             //TODO: handle risk for external links!!!
                             if (
+                                strpos($url, "http://".WX_HOST."/") === 0 ||
                                 strpos($url, 'http://www.pyshuo.com/') === 0 ||
                                 strpos($url, 'http://www.pengyoushuo.com.cn/') === 0 ||
                                 strpos($url, 'http://www.tongshijia.com/') === 0
@@ -712,7 +713,7 @@ class UsersController extends AppController {
      * @param $ref
      */
     private function _goto_wx_oauth($ref) {
-        $return_uri = 'http://www.pyshuo.com/users/wx_auth?';
+        $return_uri = 'http://'.WX_HOST.'/users/wx_auth?';
         if (!empty($ref)) {
             $return_uri .= 'referer=' . $ref;
         }

@@ -4,6 +4,11 @@ if (!defined('COMMON_PATH')) {
 }
 include_once COMMON_PATH.'bootstrap.php';
 
+//define('WX_HOST', 'pys.b-wmobile.com');
+const WX_HOST = 'pys.b-wmobile.com';
+const WX_JS_API_CALL_URL = 'http://pys.b-wmobile.com/wxPay/jsApiPay';
+const WX_NOTIFY_URL = 'http://pys.b-wmobile.com/wxPay/notify.html';
+
 define('ORDER_STATUS_CANCEL', 10);
 define('ORDER_STATUS_SHIPPED', 2);
 define('ORDER_STATUS_RECEIVED', 3);
