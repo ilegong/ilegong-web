@@ -186,7 +186,7 @@ class WxPayController extends AppController {
                             } else if ($payLog['PayLog']['total_fee'] != $notify->data['total_fee']) {
                                 $status = PAYNOTIFY_ERR_ORDER_FEE;
                             } else {
-                                $this->Order->updateAll(array('status' => 2), array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY));
+                                $this->Order->updateAll(array('status' => ORDER_STATUS_PAID), array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY));
                                 $status = PAYNOTIFY_STATUS_ORDER_UPDATED;
                             }
                         }
