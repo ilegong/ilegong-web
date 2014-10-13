@@ -12,7 +12,6 @@
                 window.location.href = doneUrlPrefix+'ok';
             } else {
                 WeixinJSBridge.log(res.err_msg);
-                alert("支付失败：\n" + res.err_code+res.err_desc+res.err_msg);
                 window.location.href = doneUrlPrefix + encodeURIComponent(res.err_code+res.err_desc+res.err_msg);
             }
         }
