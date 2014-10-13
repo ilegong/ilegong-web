@@ -60,7 +60,7 @@ class WxPayController extends AppController {
         if (!isset($_GET['code']))
         {
             //触发微信返回code码
-            $url = $jsApi->createOauthUrlForCode(WxPayConf_pub::JS_API_CALL_URL.'/'.$orderId);
+            $url = $jsApi->createOauthUrlForCode(WxPayConf_pub::JS_API_CALL_URL.'/'.$orderId.'?showwxpaytitle=1');
             Header("Location: $url");
         }else
         {
@@ -123,6 +123,7 @@ class WxPayController extends AppController {
         $this->set('tradeNo', $out_trade_no);
         $this->set('productDesc', $productDesc);
         $this->set('orderId', $orderId);
+        $this->pageTitle = '微信支付';
     }
 
 
