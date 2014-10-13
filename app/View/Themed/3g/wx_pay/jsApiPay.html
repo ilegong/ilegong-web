@@ -44,7 +44,7 @@
                 </li>
                 <li class="list-group-item">
                     <span>应付总额:</span>
-                    <span class="text-price fontsize14 pull-right">{{$totalFee}}</span>
+                    <span class="text-price fontsize14 pull-right">¥{{$this->Number->precision($totalFee, 2)}}</span>
                 </li>
             </ul>
         </div>
