@@ -269,6 +269,7 @@ class UsersController extends AppController {
             $this->Session->setFlash(__('You are not authorized to access that location.', true));
             $this->redirect(array('action' => 'login'));
         }
+        $this->pageTitle = __('个人信息');
     }
 
 
