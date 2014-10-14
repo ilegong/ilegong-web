@@ -297,10 +297,14 @@ class UploadfilesController extends AppController {
 	}
 	function admin_delete($id) {
 		$file = $this->Uploadfile->findById ( $id );
+
+        $this->log("prevent trying to delete a Upload file $id, values:".var_export($file, true));
+
+
 		// 删除文件
-		$this->SwfUpload->deletefile ( $file ['Uploadfile'] ['fspath'] );
+		//$this->SwfUpload->deletefile ( $file ['Uploadfile'] ['fspath'] );
 		// 从数据库删除
-		parent::admin_delete($id);
+		//parent::admin_delete($id);
 	}
 	
 	function get($id) {
