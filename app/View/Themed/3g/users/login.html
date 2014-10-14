@@ -22,10 +22,10 @@
                     $referer_link = '&referer='.$referer;
                 }
                 ?>
-                <a href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" style="vertical-align: bottom">
+                <a id="wx_login_a1" href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" style="vertical-align: bottom">
                     <img src="{{$this->Html->url('/img/Wechat-logo-315_315.png');}}" width="90px" height="90px">
                 </a>
-                <a href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" class="btn btn-success" style="vertical-align: bottom">使用微信登录</a>
+                <a id="wx_login_a2" href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" class="btn btn-success" style="vertical-align: bottom">使用微信登录</a>
         </div>
         {{/if}}
         <div class="tab-pane fade {{if !$supportWeixin}} in active{{/if}}" id="formLogin">
@@ -69,4 +69,25 @@
         </div>
     </div>
 </div>
+        <script>
+            $(document).ready(function(){
+
+                $("body").on("show.bs.modal", ".modal", function() {
+                    $(this).css({
+                        'top': '50%',
+                        'margin-top': function () {
+                            return -($(this).height() / 2);
+                        }
+                    });
+                });
+
+                $('#wx_login_a1, #wx_login_a2').click(function(e){
+                    bootbox.dialog({
+                        'closeButton': false,
+                        'size': 'small',
+                        message: '<img src="/img/progress_notify.gif"/><br/> 正在登陆，请稍候...'
+                    });
+                });
+            });
+        </script>
 
