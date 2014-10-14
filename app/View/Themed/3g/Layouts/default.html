@@ -286,6 +286,11 @@ var ADMIN_BASEURL = BASEURL+"/manage";
 </div>
 {{$this->fetch('scriptBottom')}}
 <script>
+    $.fn.preload = function() {
+        this.each(function(){
+            $('<img/>')[0].src = this;
+        });
+    }
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
         var $w = $("#wrapper");

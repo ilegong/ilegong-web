@@ -72,6 +72,8 @@
         <script>
             $(document).ready(function(){
 
+                $(['{{$this->Html->url("/img/progress_notify.gif")}}']).preload();
+
                 $("body").on("show.bs.modal", ".modal", function() {
                     $(this).css({
                         'top': '50%',
@@ -85,9 +87,9 @@
                     bootbox.dialog({
                         'closeButton': false,
                         'size': 'small',
-                        message: '{{$this->Html->image("/img/progress_notify.gif")}}<br/> 正在登录，请稍候...'
+                        message: '<img src="{{$this->Html->url("/img/progress_notify.gif")}}"/><br/> 正在登录，请稍候...'
                     });
-                    e.preventDefault();
+                    layoue.preventDefault();
                 });
 
             });
