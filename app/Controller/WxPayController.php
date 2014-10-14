@@ -150,8 +150,8 @@ class WxPayController extends AppController {
                 $notify->setReturnParameter("return_code", "SUCCESS"); //设置返回码
 
                 $out_trade_no = $notify->data['out_trade_no'];
-                $notifyExists = $this->PayNotify->find('count', array('out_trade_no' => $out_trade_no));
-                if ($notifyExists) {
+                $notifyExists = $this->PayNotify->find('count', array('conditions' => array('out_trade_no' => $out_trade_no)));
+                if ($notifyExists > 0) {
                     $this->log('[WEIXIN_PAY_NOTIFY] duplicated notify:' . $xml);
                 } else {
                     $this->PayNotify->save(array('PayNotify' => array(
@@ -216,11 +216,6 @@ class WxPayController extends AppController {
                 //此处应该更新一下订单状态，商户自行增删操作
                 $this->log("【支付成功】:\n" . $xml . "\n");
             }
-
-            //商户自行增加处理流程,
-            //例如：更新订单状态
-            //例如：数据库操作
-            //例如：推送支付完成信息
         }
 
         $this->autoRender = false;
