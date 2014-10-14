@@ -75,7 +75,7 @@ class WxPayController extends AppController {
         $out_trade_no = WX_APPID_SOURCE."-$orderId-$timeStamp";
         $trade_type = "JSAPI";
         $body = mb_strlen($productDesc, 'UTF-8') > 127 ? mb_substr($productDesc, 0, 127, 'UTF-8') : $productDesc;
-        $totalFee = intval($order['Order']['total_all_price'] * 100);
+        $totalFee = intval(intval($order['Order']['total_all_price'] * 1000)/10);
 
         //=========步骤2：使用统一支付接口，获取prepay_id============
         //使用统一支付接口
