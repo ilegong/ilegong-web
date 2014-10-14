@@ -26,19 +26,19 @@
 			<div class="form-group">
 			    <label for="consignee_name" class="col-xs-3 control-label">收货人</label>
 			    <div class="col-xs-9">
-			      <input type="text" class="form-control" placeholder="请输入收货人姓名" id="consignee_name" name="data[OrderConsignee][name]" value="{{$this->Session->read('OrderConsignee.name')}}">
+			      <input type="text" class="form-control" placeholder="请输入收货人姓名" id="consignee_name" name="data[OrderConsignee][name]" value="">
 			    </div>
 			</div>
 			<div class="form-group">
 			    <label for="consignee_address" class="col-xs-3 control-label">地　　址</label>
 			    <div class="col-xs-9">
-			      <input type="text" placeholder="请输入地址" class="form-control" id="consignee_address" name="data[OrderConsignee][address]" value="{{$this->Session->read('OrderConsignee.address')}}" >
+			      <input type="text" placeholder="请输入地址" class="form-control" id="consignee_address" name="data[OrderConsignee][address]" value="" >
 			    </div>
 			</div>
 			<div class="form-group">
 			    <label for="consignee_mobilephone" class="col-xs-3 control-label">手　　机</label>
 			    <div class="col-xs-9">
-			      <input type="text" class="form-control" placeholder="请输入手机号" id="consignee_mobilephone" name="data[OrderConsignee][mobilephone]" value="{{$this->Session->read('OrderConsignee.mobilephone')}}" >
+			      <input type="text" class="form-control" placeholder="请输入手机号" id="consignee_mobilephone" name="data[OrderConsignee][mobilephone]" value="" >
 			    </div>
 			</div>
 			
@@ -56,13 +56,13 @@ $('#save_consignee_sbt').click(function(e){
 	if(val==""){
 		if($('#consignee_name').val()==""){
 			$('#consignee_name').focus();
-			alert("请输入收获人姓名");
+			alert("请输入收货人姓名");
 			e.preventDefault();
 			return false;
 		}
 		if($('#consignee_address').val()==""){
 			$('#consignee_address').focus();
-			alert("请输入收获地址");
+			alert("请输入收货地址");
 			e.preventDefault();
 			return false;
 		}

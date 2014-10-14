@@ -60,7 +60,7 @@ function editConsignee(obj,id){
 //新增地址
 function use_NewConsignee(){
 	$('#edit_type').val('new');
-	$('#consignee_addr').show();
+	$('#consignee_addr').val('').show();
 	
 	$('#consignee_name').val('');
 	$('#consignee_area').val('');	
