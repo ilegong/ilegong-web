@@ -85,9 +85,11 @@
                     bootbox.dialog({
                         'closeButton': false,
                         'size': 'small',
-                        message: '{{$this->Html->image("/img/progress_notify.gif")}}<br/> 正在登陆，请稍候...'
+                        message: '{{$this->Html->image("/img/progress_notify.gif")}}<br/> 正在登录，请稍候...'
                     });
+                    e.preventDefault();
                 });
+
             });
         </script>
 
