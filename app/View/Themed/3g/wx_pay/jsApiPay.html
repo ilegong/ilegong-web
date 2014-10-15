@@ -19,7 +19,7 @@
                 $msg = 'denied';
                 utils.alert('<span class="glyphicon glyphicon-exclamation-sign" style="margin-right: 5px"></span>订阅号内微信不支持支付! ' +
                         '<div class="alert-warning">请进入我们的服务号『{{WX_SERVICE_ID_NAME}}』-『我的订单』完成支付。' +
-                        '回复6立即关注服务号！</div>', function(){
+                        '点击<a href="{{WX_SERVICE_ID_GOTO}}">这里</a>立即进入服务号！</div>', function(){
                     window.location.href = doneUrlPrefix + encodeURIComponent($msg);
                 });
                 not_redirect = true;
