@@ -140,6 +140,9 @@ class WeixinController extends AppController {
                 case "CLICK_URL_SHICHITUAN":
                     echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_SHICHITUAN', $host3g)).'">试吃评价</a>');
                     break;
+                case 'guanzhufuwuhao':
+                    echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "weixin://contacts/profile/gh_b860367e62a5").'" >关注我们</a>');
+                    break;
                 case "CLICK_URL_BINDING":
                     if ($from == FROM_WX_SUB) {
                         list($oauth, $hasAccountWithSubOpenId) = $this->hasAccountWithSubOpenId($user);
