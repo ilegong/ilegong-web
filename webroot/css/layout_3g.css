@@ -1,0 +1,287 @@
+@charset "utf-8";
+/*css reset*/
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Microsoft Yahei', 'Simsun';
+}
+
+.container {
+    max-width: 350px;
+    margin: 0 auto;
+}
+
+img {
+    max-width: 95%;
+}
+
+.thumbnail {
+    position: relative;
+    max-height: 115px;
+    overflow: hidden;
+    border: 0 none;
+    box-shadow: none;
+}
+
+div.photo-item {
+    border: 1px solid #DDDDDD;
+    border-radius: 5px;
+    font-size: 11px;
+}
+
+.thumbnail-noclick img, .thumbnail img {
+    max-width: 100%;
+    max-height: 115px;
+    display: block;
+}
+
+.select-item {
+    position: absolute;
+    z-index: 0;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    padding-top: 25px;
+    background: rgba(0, 0, 0, 0.5);
+    text-align: center;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.9;
+}
+
+.nav-pills > li > a {
+    border-radius: 0;
+    color: #fff;
+    padding: 13px 8px;
+}
+
+.voffset {
+    margin-top: 2px;
+}
+
+.voffset1 {
+    margin-top: 5px;
+}
+
+.voffset2 {
+    margin-top: 10px;
+}
+
+.voffset3 {
+    margin-top: 15px;
+}
+
+.voffset4 {
+    margin-top: 30px;
+}
+
+.voffset5 {
+    margin-top: 40px;
+}
+
+.voffset6 {
+    margin-top: 60px;
+}
+
+.voffset7 {
+    margin-top: 80px;
+}
+
+.voffset8 {
+    margin-top: 100px;
+}
+
+.voffset9 {
+    margin-top: 150px;
+}
+
+.vertical-align {
+    vertical-align: bottom
+}
+
+.text-price {
+    color: #c71673;
+    font-size: 24px;
+}
+
+.fontsize14 {
+    font-size: 14px
+}
+
+#top-link-block.affix-top {
+    position: absolute; /* allows it to "slide" up into view */
+    bottom: -82px;
+    left: 10px;
+}
+
+#top-link-block.affix {
+    position: fixed; /* keeps it on the bottom once in view */
+    bottom: 18px;
+    right: 10px;
+}
+
+.order_status_text {
+    color: darkred
+}
+
+.bootbox-alert {
+    top: 100px;
+}
+
+.bootbox-confirm {
+    text-align: center;
+    top: 100px;
+}
+
+.bootbox-confirm .modal-footer {
+    text-align: center;
+}
+
+.bootbox-alert .modal-footer {
+    text-align: center;
+}
+
+ul.tags_menu {
+    min-width: 100px;
+}
+
+/*!
+ * Start Bootstrap - Simple Sidebar HTML Template (http://startbootstrap.com)
+ * Code licensed under the Apache License v2.0.
+ * For details, see http://www.apache.org/licenses/LICENSE-2.0.
+ */
+
+/* Toggle Styles */
+
+#wrapper {
+    padding-left: 0;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled {
+    padding-left: 100px;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    /*left: 100px;*/
+    width: 0;
+    height: 100%;
+    margin-left: -100px;
+    overflow-y: auto;
+    background: #04477c;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+#wrapper.toggled #sidebar-wrapper {
+    width: 100px;
+}
+
+#page-content-wrapper {
+    width: 100%;
+    /*padding: 15px;*/
+}
+
+#wrapper.toggled #page-content-wrapper {
+    position: absolute;
+    margin-right: -100px;
+}
+
+/* Sidebar Styles */
+
+.sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 100px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sidebar-nav li {
+    text-indent: 20px;
+    line-height: 40px;
+}
+
+.sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    color: #999999;
+}
+
+.sidebar-nav li a:hover {
+    text-decoration: none;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.sidebar-nav li a:active,
+.sidebar-nav li a:focus {
+    text-decoration: none;
+}
+
+.sidebar-nav > .sidebar-brand {
+    height: 65px;
+    font-size: 18px;
+    line-height: 60px;
+}
+
+.sidebar-nav > .sidebar-brand a {
+    color: #999999;
+}
+
+.sidebar-nav > .sidebar-brand a:hover {
+    color: #fff;
+    background: none;
+}
+
+@media (min-width: 768px) {
+    #wrapper {
+        padding-left: 100px;
+    }
+
+    #wrapper.toggled {
+        padding-left: 0;
+    }
+
+    #sidebar-wrapper {
+        width: 100px;
+    }
+
+    #wrapper.toggled #sidebar-wrapper {
+        width: 0;
+    }
+
+    #page-content-wrapper {
+        /*padding: 20px;*/
+    }
+
+    #wrapper.toggled #page-content-wrapper {
+        position: relative;
+        margin-right: 0;
+    }
+}
+
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 990;
+    background-color: #000;
+    opacity: .5;
+}
+
+#menu-toggle > a:hover, #toggle-menu > a:focus {
+    text-decoration: none;
+    background-color: transparent;
+}
