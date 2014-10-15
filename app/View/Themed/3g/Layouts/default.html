@@ -290,7 +290,24 @@ var ADMIN_BASEURL = BASEURL+"/manage";
         this.each(function(){
             $('<img/>')[0].src = this;
         });
+    };
+
+    $(['{{$this->Html->url("/img/progress_notify.gif")}}']).preload();
+
+    var utils = {
+        progress_notify: function(msg) {
+            bootbox.dialog({
+                'closeButton': false,
+                message: '<img src="{{$this->Html->url("/img/progress_notify.gif")}}"/><br/> ' + msg
+            }).css({
+                'top': '50%',
+                'margin-top': function () {
+                    return -($(this).height() / 2);
+                }
+            });
+        }
     }
+
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
         var $w = $("#wrapper");
