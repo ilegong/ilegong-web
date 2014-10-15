@@ -25,6 +25,11 @@
             },
             {
                 "type":"click",
+                "name":"关注服务号",
+                "key":"CLICK_GUANZHU_FUWUHAO"
+            },
+            {
+                "type":"click",
                 "name":"绑定旧版数据",
                 "key":"CLICK_URL_BINDING"
             }
