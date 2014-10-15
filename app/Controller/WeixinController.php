@@ -146,7 +146,7 @@ class WeixinController extends AppController {
                         echo "您正在使用我们的服务号！谢谢！(::)";
                     } else {
                         echo $this->newTextMsg($user, $me, '安卓系统请点击关注<a href="' . $this->loginServiceIfNeed($from, $user, "weixin://contacts/profile/gh_b860367e62a5")
-                            . '">朋友说服务号</a>；苹果系统请点击<a href="http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=202181981&idx=1&sn=918e2bcfb9999d3ec89d3f71fb3e8c16#rd">查看如何关注</a>。');
+                            . '">朋友说服务号</a>；苹果系统请点击<a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200757804&idx=1&sn=90b121983525298a4ac26ee8d6c0bc1c#rd">查看如何关注</a>。');
                     }
                     break;
                 case "CLICK_URL_BINDING":
