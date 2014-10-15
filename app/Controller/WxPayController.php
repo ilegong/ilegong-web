@@ -55,19 +55,22 @@ class WxPayController extends AppController {
         //使用jsapi接口
         $jsApi = $this->WxPayment->createJsApi();
 
-        //=========步骤1：网页授权获取用户openid============
-        //通过code获得openid
-        if (!isset($_GET['code']))
-        {
-            //触发微信返回code码
-            $url = $jsApi->createOauthUrlForCode(WxPayConf_pub::JS_API_CALL_URL.'/'.$orderId.'?showwxpaytitle=1');
-            Header("Location: $url");
-        }else
-        {
-            //获取code码，以获取openid
-            $code = $_GET['code'];
-            $jsApi->setCode($code);
-            $openid = $jsApi->getOpenId();
+        $oauth = ClassRegistry::init('Oauthbind')->findWxServiceBindByUid($this->currentUser['id']);
+
+        if ($oauth) {
+            $openid = $oauth['oauth_openid'];
+        }  else {
+            //通过code获得openid
+            if (!isset($_GET['code'])) {
+                //触发微信返回code码
+                $url = $jsApi->createOauthUrlForCode(WxPayConf_pub::JS_API_CALL_URL . '/' . $orderId . '?showwxpaytitle=1');
+                Header("Location: $url");
+            } else {
+                //获取code码，以获取openid
+                $code = $_GET['code'];
+                $jsApi->setCode($code);
+                $openid = $jsApi->getOpenId();
+            }
         }
 
         //自定义订单号，此处仅作举例

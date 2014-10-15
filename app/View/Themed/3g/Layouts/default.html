@@ -305,8 +305,20 @@ var ADMIN_BASEURL = BASEURL+"/manage";
                     return -($(this).height() / 2);
                 }
             });
+        },
+
+        alert:function(msg, callback) {
+
+            if (!callback) callback = function(){};
+
+            bootbox.alert(msg).css({
+                'top': '50%',
+                'margin-top': function () {
+                    return -($(this).height() / 2);
+                }
+            }, callback);
         }
-    }
+    };
 
     $("#menu-toggle").click(function(e) {
         e.preventDefault();

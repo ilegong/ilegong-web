@@ -28,4 +28,5 @@ class OauthbindComponent extends Component {
     function beforeRender(&$controller) {
         $this->controller =& $controller;
     }
+
 }

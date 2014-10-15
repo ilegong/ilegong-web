@@ -3,16 +3,31 @@
     //调用微信JS api 支付
     function jsApiCall()
     {
-        var doneUrlPrefix = '/orders/detail/' + {{$orderId}} + '/paid?msg=';
+        var doneUrlPrefix = '/orders/detail/' + {{$orderId}} + '/paid?tradeNo={{urlencode($tradeNo)}}&msg=';
         WeixinJSBridge.invoke(
                 'getBrandWCPayRequest',
                 {{$jsApiParameters}},
         function(res){
+            var $msg, not_redirect;
             if(res.err_msg == "get_brand_wcpay_request:ok" ) {
-                window.location.href = doneUrlPrefix+'ok';
+                $msg = 'ok';
+            } else if(res.err_msg == "get_brand_wcpay_request:cancel") {
+                $msg = 'cancel';
+            } else if(res.err_msg == "get_brand_wcpay_request:fail") {
+                $msg = 'fail';
+            } else if(res.err_msg == "system:access_denied" || res.err_msg == "access_control:not_allow"){
+                $msg = 'denied';
+                utils.alert('<span class="glyphicon glyphicon-exclamation-sign"></span> 由于在订阅号内微信不支持支付，请关注我们的服务号『{{WX_SERVICE_ID_NAME}}』，进入『我的订单』完成支付。', function(){
+                    window.location.href = doneUrlPrefix + encodeURIComponent($msg);
+                });
+                not_redirect = true;
             } else {
                 WeixinJSBridge.log(res.err_msg);
-                window.location.href = doneUrlPrefix + encodeURIComponent(res.err_code+res.err_desc+res.err_msg);
+                $msg = res.err_msg;
+            }
+
+            if (!not_redirect) {
+                window.location.href = doneUrlPrefix + encodeURIComponent($msg);
             }
         }
     );

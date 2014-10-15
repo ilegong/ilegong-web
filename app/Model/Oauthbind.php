@@ -19,4 +19,14 @@ class Oauthbind extends AppModel {
         return ($oauth_record && $oauth_record['user_id'] > 0) ? $oauth_record['user_id'] : 0;
     }
 
+
+    public function findWxServiceBindByUid($uid) {
+        $r = $this->find('first', array('conditions' => array('user_id' => $uid, 'source' => oauth_wx_source(),)));
+        if (!empty($r)) {
+            return $r['Oauthbind'];
+        } else {
+            return false;
+        }
+    }
+
 } 
