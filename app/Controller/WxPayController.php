@@ -17,12 +17,15 @@ class WxPayController extends AppController {
         if(empty($this->currentUser['id']) && !$this->_is_action_by_wx_callback()){
             $this->redirect('/users/login?referer='.Router::url('/orders/mine'));
         }
-        if (!$this->_is_action_by_wx_callback() && !$this->is_weixin()) {
-            throw new CakeException('/?wx_pay_only_in_WX');
-        }
     }
 
     public function jsApiPay($orderId) {
+
+        if (!$this->is_weixin()) {
+//            $this->set('__error', __('微信支付只能在微信客户端中'));
+            throw new CakeException("您只能在微信中使用微信支付。");
+            return;
+        }
 
         $order = $this->Order->find('first', array('conditions' => array('id' => $orderId)));
         if (empty($order)) {
