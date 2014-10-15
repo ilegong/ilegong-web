@@ -140,8 +140,14 @@ class WeixinController extends AppController {
                 case "CLICK_URL_SHICHITUAN":
                     echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_SHICHITUAN', $host3g)).'">试吃评价</a>');
                     break;
-                case 'guanzhufuwuhao':
-                    echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "weixin://contacts/profile/gh_b860367e62a5").'" >关注我们</a>');
+                case '6':
+                case 'CLICK_GUANZHU_FUWUHAO':
+                    if($from == FROM_WX_SERVICE) {
+                        echo "您正在使用我们的服务号！谢谢！(::)";
+                    } else {
+                        echo $this->newTextMsg($user, $me, '安卓系统请点击关注<a href="' . $this->loginServiceIfNeed($from, $user, "weixin://contacts/profile/gh_b860367e62a") . '">朋友说服务号</a>；
+                        苹果系统请点击<a href="http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=202181981&idx=1&sn=918e2bcfb9999d3ec89d3f71fb3e8c16#rd">查看如何关注</a>。');
+                    }
                     break;
                 case "CLICK_URL_BINDING":
                     if ($from == FROM_WX_SUB) {
