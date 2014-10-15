@@ -51,5 +51,15 @@ class ArticlesController extends AppController{
         $this->set('Category', $Category);
         $this->set('cates', $cates);
     }
+
+    public function log_js_error() {
+        $msg = $_GET['msg'];
+        $url = $_GET['url'];
+        $ln = $_GET['ln'];
+        $uid = $this->currentUser['id']?$this->currentUser['id'] : 0;
+
+        $this->log("$uid : $url : $ln msg=$msg");
+        $this->autoRender = false;
+    }
     
 }
