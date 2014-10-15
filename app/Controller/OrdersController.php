@@ -243,12 +243,12 @@ class OrdersController extends AppController{
 					$has_chosen_consignee = true;
 				}
 				else{				
-					$current_consignee['name'] = $this->Session->read('Auth.User.nickname');
-					$current_consignee['email'] = $this->Session->read('Auth.User.email');
-					$current_consignee['mobilephone'] = $this->Session->read('Auth.User.mobilephone');
-					$current_consignee['telephone'] = $this->Session->read('Auth.User.telephone');
-					$current_consignee['postcode'] = $this->Session->read('Auth.User.postcode');
-					$current_consignee['address'] = $this->Session->read('Auth.User.address');
+//					$current_consignee['name'] = $this->Session->read('Auth.User.nickname');
+//					$current_consignee['email'] = $this->Session->read('Auth.User.email');
+//					$current_consignee['mobilephone'] = $this->Session->read('Auth.User.mobilephone');
+//					$current_consignee['telephone'] = $this->Session->read('Auth.User.telephone');
+//					$current_consignee['postcode'] = $this->Session->read('Auth.User.postcode');
+//					$current_consignee['address'] = $this->Session->read('Auth.User.address');
 				}
 				$this->Session->write('OrderConsignee',$current_consignee);
 			}
