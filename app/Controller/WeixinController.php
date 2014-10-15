@@ -141,6 +141,7 @@ class WeixinController extends AppController {
                     echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_SHICHITUAN', $host3g)).'">试吃评价</a>');
                     break;
                 case '6':
+                case '６':
                 case 'CLICK_GUANZHU_FUWUHAO':
                     if($from == FROM_WX_SERVICE) {
                         echo "您正在使用我们的服务号！谢谢！(::)";
