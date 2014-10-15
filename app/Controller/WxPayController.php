@@ -58,7 +58,7 @@ class WxPayController extends AppController {
         //使用jsapi接口
         $jsApi = $this->WxPayment->createJsApi();
 
-        $oauth = false;// ClassRegistry::init('Oauthbind')->findWxServiceBindByUid($this->currentUser['id']);
+        $oauth = ClassRegistry::init('Oauthbind')->findWxServiceBindByUid($this->currentUser['id']);
 
         if ($oauth) {
             $openid = $oauth['oauth_openid'];
