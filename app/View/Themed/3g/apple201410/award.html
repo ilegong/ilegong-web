@@ -1,22 +1,5 @@
 {{$this->Html->script(array('shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js'), array('block' => 'scriptBottom'));}}
 {{$this->Html->scriptStart(array('block' => 'scriptBottom'));}}
-    $.ready()
-    {
-        window.addEventListener('shake', shakeEventDidOccur, false);
-        function shakeEventDidOccur() {
-            $('#apple_tree').octoberLeaves('start', {'speedC': 1, 'numberOfLeaves':100, 'cycleSpeed':80, 'rotationTrue':0});
-            setTimeout(function(){
-                $('#apple_tree').octoberLeaves('stop');
-                $('#apple_got_cnt').text( parseInt($('#apple_got_cnt').text()) + 1);
-            },5000);
-            var sound = new Howl({
-                urls: ['/files/glass.wav']
-            }).play();
-        }
-
-        $('#clicktest').click(shakeEventDidOccur);
-        $('.footbox').hide();
-    }
 {{$this->Html->scriptEnd()}}
 <style>
     .october-leaf {
@@ -30,6 +13,10 @@
 </style>
 
 <div class="container">
+    <div class="row">
+        <div class="col-xs-8">您还有{{$total_times}}次抽奖机会！</div>
+        <div class="col-xs-4">您已经获得<span id="apple_got_cnt">{{$total_got}}</span>个苹果</div>
+    </div>
     <div id="apple_tree" class="row">
       <img src="{{$this->Html->url('/img/apple201410/appletree.jpg')}}"/>
     </div>
@@ -40,12 +27,36 @@
         </p>
 
     <!--<a href="javascript:;" id="clicktest">Test</a>-->
-        <ul class="list-group pull-right">
-            <li class="list-group-item">
-                <span id="apple_got_cnt" class="badge">0</span>
-                摇到苹果数
-            </li>
-        </ul>
+
 
     </div>
 </div>
+
+<script>
+    $(document).ready( function(){
+        window.addEventListener('shake', shakeEventDidOccur, false);
+        function shakeEventDidOccur() {
+            $('#apple_tree').octoberLeaves('start', {'speedC': 1, 'numberOfLeaves':100, 'cycleSpeed':80, 'rotationTrue':0});
+            setTimeout(function(){
+                $('#apple_tree').octoberLeaves('stop');
+
+                $.post('/apple_201410/shake/', function(data){
+                    if (data) {
+                        var $appleGotCnt = $('#apple_got_cnt');
+                        $appleGotCnt.text(parseInt($appleGotCnt.text()) + 1);
+                    }
+                });
+
+            },5000);
+            var sound = new Howl({
+                urls: ['/files/glass.wav']
+            }).play();
+        }
+
+        $('#clicktest').click(shakeEventDidOccur);
+        {{if $addedNotify}}utils.alert("您为朋友获得了一次摇苹果的机会！");{{/if}}
+    });
+
+    $('.footbox').hide();
+
+</script>

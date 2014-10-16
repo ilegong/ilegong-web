@@ -31,6 +31,8 @@ define('PAYNOTIFY_ERR_ORDER_FEE', 5);
 define('PAYNOTIFY_STATUS_ORDER_UPDATED', 6);
 define('PAYNOTIFY_STATUS_CLOSED', 7);
 
+define('KEY_APPLE_201410',  'apple201410');
+
 
 global $page_style;
 global $pages_tpl;

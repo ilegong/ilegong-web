@@ -1,0 +1,21 @@
+<?php
+/**
+ * Created by IntelliJ IDEA.
+ * User: liuzhr
+ * Date: 10/16/14
+ * Time: 7:10 PM
+ */
+
+class AwardInfo extends AppModel {
+
+    /**
+     * @return mixed
+     */
+    public function getAwardInfoByUidAndType($uid, $type) {
+        $awardTimes = $this->AwardInfo->find('first', array(
+            'conditions' => array('uid' => $uid, 'type' => $type),
+            'fields' => array('times', 'got', 'id'),
+        ));
+        return $awardTimes ? $awardTimes['AwardInfo'] : false;
+    }
+} 

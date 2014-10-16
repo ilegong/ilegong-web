@@ -8,11 +8,9 @@
  */
 class Apple201410Controller extends AppController {
 
-    const TRACK_KEY_APPLE = 'apple:';
-
     var $name = "Apple201410";
 
-    var $uses = array('User', 'AppleAward');
+    var $uses = array('User', 'AppleAward', 'AwardInfo', 'TrackLog');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -22,47 +20,96 @@ class Apple201410Controller extends AppController {
         $this->set('pageTitle', __('摇一摇免费得红富士苹果'));
     }
 
-    public function award($tr_id) {
-        list($uid, $isSelf) = $this->check_tr_id($tr_id, 'award');
+    public function award() {
+        $tr_id = $_GET['trid'];
+        list($friendUid, $isSelf) = $this->check_tr_id($tr_id, 'award');
         if (!$isSelf) {
-            $friend = $this->User->get($uid);
+
+            $friend = $this->User->get($friendUid);
             if (!empty($friend)) {
                 $this->set('friend', $friend);
+
+                $trackLogs = $this->TrackLog->find('first', array(
+                    'conditions' => array('type' => KEY_APPLE_201410, 'from' => $this->currentUser['id'], 'to' => $friendUid),
+                    'fields' => array('id',)
+                ));
+                if (!$trackLogs) {
+                    $this->AwardInfo->updateAll(array('times = times + 1',), array('uid' => $friendUid));
+                    $this->set('addedNotify', true);
+                }
             } else {
                 //treat as self
                 $this->redirect_for_append_tr_id('award');
             }
+
         } else {
-            $friendsHelpMe = $this->AppleAward->find('all', array(
-                'conditions' => array('award_to' => $uid),
-                'fields' => array('award_to', 'sum(apple_got) as apple_got'),
-                'order' => ' award_time desc',
-                'limit' => 500
-            ));
-            $friendsIHelped = $this->AppleAward->find('all', array(
-                'conditions' => array('award_from' => $uid),
-                'fields' => array('award_from', 'sum(apple_got) as apple_got'),
-                'group' => ' award_time ',
-                'limit' => 500
-            ));
 
-            $allUids = array_map(function($val){
-                return $val['award_from'];
-            }, $friendsHelpMe);
+            $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($this->currentUser['id'], KEY_APPLE_201410);
+            if (!$awardInfo) {
+                $awardInfo = array('AwardInfo' => array('uid' => $this->currentUser['id'], 'type' => KEY_APPLE_201410, 'times' => 3, 'got' => 0));
+                $this->AwardInfo->save($awardInfo);
+            }
+            $this->setTotalVariables($awardInfo);
+//
+//            $friendsHelpMe = $this->AppleAward->find('all', array(
+//                'conditions' => array('award_to' => $friendUid),
+//                'fields' => array('award_to', 'sum(apple_got) as apple_got'),
+//                'order' => ' award_time desc',
+//                'limit' => 500
+//            ));
+//            $friendsIHelped = $this->AppleAward->find('all', array(
+//                'conditions' => array('award_from' => $friendUid),
+//                'fields' => array('award_from', 'sum(apple_got) as apple_got'),
+//                'group' => ' award_time ',
+//                'limit' => 500
+//            ));
+//
+//            $allUids = array_map(function($val){
+//                return $val['award_from'];
+//            }, $friendsHelpMe);
+//
+//            $allUids += array_map(function($val){
+//                return $val['award_to'];
+//            }, $friendsIHelped);
 
-            $allUids += array_map(function($val){
-                return $val['award_to'];
-            }, $friendsIHelped);
 
+//            $allUids = array_unique($allUids);
 
-            $allUids = array_unique($allUids);
+//            $users = $this->User->find('list', array('conditions' => array('id' => $allUids), 'field' => array('id', 'nickname')));
 
-            $users = $this->User->find('list', array('conditions' => array('id' => $allUids), 'field' => array('id', 'nickname')));
+//            $this->set('helpMe', $friendsHelpMe);
+//            $this->set('iHelp', $friendsIHelped);
+//            $this->set('userIdNames', $users);
 
-            $this->set('helpMe', $friendsHelpMe);
-            $this->set('iHelp', $friendsIHelped);
-            $this->set('userIdNames', $users);
+            $this->set('got_apple', 0);
         }
+    }
+
+    public function shake() {
+        $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($this->currentUser['id'], KEY_APPLE_201410);
+        $apple = $this->guessAwardAndUpdate($awardInfo);
+        $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
+        $total_apple = $awardInfo && $awardInfo['got'] ? $awardInfo['got'] : 0;
+        $this->autoRender = false;
+        $content = json_encode(array('got_apple' => $apple, 'total_apple' => $total_apple, 'total_times' => $totalAwardTimes));
+        $this->response->body($content);
+        $this->response->send();
+    }
+
+    private function guessAwardAndUpdate($awardInfo) {
+
+        if ($awardInfo['times'] <= 0) { return 0; };
+
+        $got = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] : 0;
+        $apple = 0;
+        for($i = 0; $i < 5; $i++) {
+            $apple += (5 == mt_rand(0, intval(20 * (1 + $got))) ? 1 : 0);
+        }
+        $apple = ($got == 0 && $apple == 0 ? 3 : $apple);
+
+        $this->AwardInfo->updateAll(array('times = times - 1', 'got = got + '. $apple, ), array('id' => $awardInfo['id']));
+
+        return $apple;
     }
 
     /**
@@ -91,16 +138,31 @@ class Apple201410Controller extends AppController {
      * @param $action
      */
     private function redirect_for_append_tr_id($action) {
-        $this->redirect("/apple_201410/$action/" . urlencode($this->encode_apple_tr_id($this->currentUser['id'])).'.html');
+        $encodedTrid = $this->encode_apple_tr_id($this->currentUser['id']);
+        $this->redirect("/apple_201410/$action.html?trid=".$encodedTrid);
     }
 
     private function encode_apple_tr_id($id) {
-        $code = authcode($id, 'ENCODE', Apple201410Controller::TRACK_KEY_APPLE);
+        $code = authcode($id, 'ENCODE', $this->getTrackKey());
         return $code;
     }
 
     private function decode_apple_tr_id($tr_id) {
-        return authcode($tr_id, 'DECODE', Apple201410Controller::TRACK_KEY_APPLE);
+        return authcode($tr_id, 'DECODE', $this->getTrackKey());
     }
 
-} 
+    private function getTrackKey() {
+        return KEY_APPLE_201410 . ':';
+    }
+
+    /**
+     * @param $awardInfo
+     */
+    private function setTotalVariables($awardInfo) {
+        $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
+        $total_apple = $awardInfo && $awardInfo['got'] ? $awardInfo['got'] : 0;
+        $this->set('total_apple', $total_apple);
+        $this->set('total_times', $totalAwardTimes);
+    }
+
+}
