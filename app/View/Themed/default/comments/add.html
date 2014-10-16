@@ -175,7 +175,7 @@ function loadCommentData(){
 var _pys_comment_cookie = {
     auto_load : function() {
         var body = $('#CommentBody');
-        if ($.trim(body.val())) {
+        if (!$.trim(body.val())) {
             body.val($.cookie('__comments_text'));
         }
     },
