@@ -660,7 +660,7 @@ class UsersController extends AppController {
                     } else {
                         $this->User->save(array(
                             'username' => $oauth['Oauthbinds']['oauth_openid'],
-                            'nickname' => '微信用户' . $oauth['Oauthbinds']['oauth_openid'],
+                            'nickname' => '微信用户' . mb_substr($oauth['Oauthbinds']['oauth_openid'], 0, 10, 'UTF-8'),
                             'password' => md5(uniqid()),
                             'uc_id' => 0
                         ));
