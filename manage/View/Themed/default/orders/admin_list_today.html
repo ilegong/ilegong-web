@@ -1,0 +1,66 @@
+
+<table  class="table table-bordered">
+    <tr>
+        <th>订单号</th>
+        <th>用户ID</th>
+        <th>订单状态</th>
+        <th>商家名称</th>
+        <th>商品</th>
+        <th>单价</th>
+        <th>运费</th>
+        <th>总价</th>
+        <th>创建时间</th>
+        <th>收件人</th>
+        <th>电话</th>
+        <th>收件地址</th>
+        <th>快递公司</th>
+        <th>快递单号</th>
+    </tr>
+    <tbody>
+    {{loop $orders $order}}
+    <tr>
+        <td>{{$order['Order']['id']}}</td>
+        <td>{{$order['Order']['creator']}}</td>
+        <td>
+            {{if $order['Order']['status']==0}}
+            <font color="red">待支付</font>
+             {{elseif $order['Order']['status']==1}}
+            <font color="red">待发货</font>
+            {{elseif $order['Order']['status']==2}}<font color="red">已发货</font>
+            {{elseif $order['Order']['status']==3}}<font color="red">已收货</font>
+            {{elseif $order['Order']['status']==4}}<font color="red">已退款</font>
+            {{elseif $order['Order']['status']==10}}<font color="red">已作废</font>
+            {{elseif $order['Order']['status']==11}}<font color="red">待支付</font>
+            {{elseif $order['Order']['status']==12}}<font color="red">投诉</font>
+
+            {{/if}}
+        </td>
+        <td>
+            {{loop $brands $brand}}
+                {{if $brand['Brand']['id'] == $order['Order']['brand_id']}}
+                    {{$brand['Brand']['name']}}
+                {{/if}}
+            {{/loop}}
+        </td>
+        <td>
+            {{loop $order_carts[$order['Order']['id']] $cart}}
+                {{$cart['Cart']['name']}}*{{$cart['Cart']['num']}};
+            {{/loop}}
+        </td>
+        <td>{{$order['Order']['total_price']}}</td>
+        <td>{{$order['Order']['ship_fee']}}</td>
+        <td>{{$order['Order']['total_all_price']}}</td>
+        <td>{{$order['Order']['created']}}</td>
+        <td>{{$order['Order']['consignee_name']}}</td>
+        <td>{{$order['Order']['consignee_mobilephone']}}</td>
+        <td>{{$order['Order']['consignee_address']}}</td>
+        <td>
+            {{if $order['Order']['ship_type']}}
+                {{$ship_type[$order['Order']['ship_type']]}}
+            {{/if}}
+        </td>
+        <td>{{$order['Order']['ship_code']}}</td>
+    </tr>
+    {{/loop}}
+    </tbody>
+</table>

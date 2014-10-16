@@ -165,4 +165,75 @@ class OrdersController extends AppController{
         }
         return $searchoptions;
     }
+
+
+    public function admin_list_today() {
+        $start_date= $this->get_current_day_start();
+        $end_date = $this->get_current_day_end();
+
+        $this->loadModel('Brand');
+        $brands = $this->Brand->find('all');
+
+        $this->loadModel('Order');
+        $orders = $this->Order->find('all',array(
+            'order' => 'id desc',
+            'conditions'=>array(
+                'created >"'.$start_date.'"',
+                'created <"'.$end_date.'"'
+            )));
+
+        $ids = array();
+        foreach($orders as $o){
+            $ids[] = $o['Order']['id'];
+        }
+        $this->loadModel('Cart');
+        $carts = $this->Cart->find('all',array(
+            'conditions'=>array(
+                'order_id' => $ids,
+            )));
+
+        $order_carts = array();
+        foreach($carts as $c){
+            $order_id = $c['Cart']['order_id'];
+            if (!isset($order_carts[$order_id])) {
+                $order_carts[$order_id] = array();
+            }
+            $order_carts[$order_id][] = $c;
+        }
+
+        $this->set('orders',$orders);
+        $this->set('order_carts',$order_carts);
+        $this->set('ship_type',$this->ship_type);
+        $this->set('brands',$brands);
+
+    }
+
+    private function get_current_day_start(){
+        $y=date("Y");
+        $m=date("m");
+        $d=date("d");
+        $day_start=mktime(0,0,0,$m,$d,$y);
+        return date("Y-m-d\TH:i:s",$day_start);
+    }
+
+    private function get_current_day_end(){
+        $y=date("Y");
+        $m=date("m");
+        $d=date("d");
+        $day_end=mktime(23,59,59,$m,$d,$y);
+        return date("Y-m-d\TH:i:s",$day_end);
+    }
+
+    var $ship_type = array(
+        101=>'申通',
+        102=>'圆通',
+        103=>'韵达',
+        104=>'顺丰',
+        105=>'EMS',
+        106=>'邮政包裹',
+        107=>'天天',
+        108=>'汇通',
+        109=>'中通',
+        110=>'全一',
+    );
 }
