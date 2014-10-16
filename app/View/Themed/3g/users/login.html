@@ -19,7 +19,7 @@
                 <?php
                 $referer_link = '';
                 if (!empty($referer)) {
-                    $referer_link = '&referer='.$referer;
+                    $referer_link = '&referer='.urlencode($referer);
                 }
                 ?>
                 <a id="wx_login_a1" href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" style="vertical-align: bottom">

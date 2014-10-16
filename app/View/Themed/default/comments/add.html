@@ -171,7 +171,34 @@ function loadCommentData(){
 		dataType:'json'
 	});
 }
-loadCommentData();
+
+var _pys_comment_cookie = {
+    auto_load : function() {
+        var body = $('#CommentBody');
+        if ($.trim(body.val())) {
+            body.val($.cookie('__comments_text'));
+        }
+    },
+
+    save : function() {
+        var body = $('#CommentBody');
+        if ($.trim(body.val())) {
+            $.cookie('__comments_text', body.val());
+        }
+    } ,
+
+    clear : function() {
+        $.removeCookie('__comments_text');
+    }
+};
+
+$(document).ready(function(){
+    loadCommentData();
+    _pys_comment_cookie.auto_load();
+    if (window.location.href.indexOf('_pys_add_comment=1') > 0) {
+        $('#CommentBody').focus();
+    }
+});
 
 function addCommintItem(item){
 	var $comment = $('<div newsid="27-1-699265" channel="jc" class="comment_item">'
@@ -201,8 +228,18 @@ function addCommintItem(item){
 
 function submitaddcomment(form){
 
-	if(!sso.check_userlogin({"callback":submitaddcomment,"callback_args":arguments}))
-		return false;
+    var referer = window.location.href;
+    if (referer.indexOf('?') == -1) {
+        referer = referer + '?';
+    }
+
+    //used for pages auto located to add comment box
+    referer = referer+'&_pys_add_comment=1';
+
+	if(!sso.check_userlogin({"callback":submitaddcomment,"callback_args":arguments, 'referer': referer})) {
+        _pys_comment_cookie.save();
+        return false;
+    }
 	$('#btnSubmitComment').val('正在提交').attr('disabled','disabled');
 	$.ajax({
 		async:true,
@@ -212,11 +249,12 @@ function submitaddcomment(form){
 				if(request['Comment']){
 					addCommintItem(request['Comment']);
 				}
+                _pys_comment_cookie.clear();
 				showSuccessMessage(request.success, '', 2);
 				$('#btnSubmitComment').val('提交成功');
 			}
 			else{
-				showErrorMessage(errorinfo);				
+				showErrorMessage('您的评论提交失败，请稍候再试');
 			}
 		},
 		url:"{{$this->Html->url(array('controller'=>'comments','action'=>'add'))}}",
@@ -229,8 +267,8 @@ function submitaddcomment(form){
 </script>
 {{$this->Html->script(array(
 'vendor/jquery.ui.widget.js',
-'//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js',
-'//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js',
+'http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js',
+'http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js',
 'jquery.iframe-transport.js',
 'jquery.fileupload.js',
 'jquery.fileupload-process.js',

@@ -220,12 +220,15 @@ class AppController extends Controller {
         $this->set('current_action', $this->action);
         $this->set('current_pass', $this->request->params['pass']);
         $this->set('current_named', $this->request->params['named']);
+
+        $this->set('in_weixin', $this->is_weixin());
     }
 
     protected function is_admin($uid) {
         return $uid && false !== array_search($uid, $this->admins, true);
     }
 
+    /** Also used in view files as a global javascript variable */
     protected function is_weixin(){
         return (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false );
     }

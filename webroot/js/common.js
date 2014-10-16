@@ -307,15 +307,24 @@ var sso = {
 	form : null, // 登录成功后触发sso.form的提交，提交后置form为null，防止多次调用。登录的各种回调均在users/login模板中
 	// callback:'',
 	callback:null,   // 在登录成功后，自动调用 sso.callback(callback_args);
-	callback_args:null,	
+	callback_args:null,
+    is_login : function(){
+        this.usercookie = $.cookie('SAECMS[Auth][User]');
+        return !(this.usercookie == null || this.usercookie =="" || typeof(this.usercookie) =='undefined');
+    },
 	check_userlogin:function(params){
-		this.usercookie = $.cookie('SAECMS[Auth][User]');		
-		if(this.usercookie == null || this.usercookie =="" || typeof(this.usercookie) =='undefined'){
+
+		if(!this.is_login()){
 			if(params && params.callback){ this.callback = params.callback; }else{ this.callback = ''; }
 			if(params && params.form){ this.form = params.form; }else{ this.form = null; }
 			if(params && params.callback_args){ this.callback_args = params.callback_args; }else{ this.callback_args = '';}
+
+            var baseUrl = BASEURL+'/users/login';
+            if(params && params.referer) {
+                baseUrl += '?referer=' + encodeURIComponent(params.referer);
+            }
 			
-			publishController.open_dialog(BASEURL+'/users/login',{'title':$.jslanguage.needlogin});  // 打开登录窗体
+			publishController.open_dialog(baseUrl,{'title':$.jslanguage.needlogin});  // 打开登录窗体
 			return false;
 		}
 		return true;
@@ -333,11 +342,11 @@ var publishController = {
 			if($dialog.dialogid){
 				$('#'+$dialog.dialogid).modal('hide')
 			}
-			$dialog.dialogid = url.replace(/\/|\.|:|,|\?|=|&/g,'_')+'-ajax—action';	
+			$dialog.dialogid = url.replace(/\/|\.|:|,|\?|=|&|%/g,'_')+'-ajax—action';
 			
 			if($('#'+$dialog.dialogid).size()<1){
 				$('<div  class="modal fade" id="'+$dialog.dialogid+'"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3 id="myModalLabel">'+options.title+'</h3></div><div class="modal-body"></div></div></div></div>').appendTo('body');
-				
+
 				var obj = $('#'+$dialog.dialogid).find('.modal-body').load(url,{},function(){
 					$('.nav-tabs a','#'+$dialog.dialogid).click(function (e) {
 				        e.preventDefault();
@@ -805,3 +814,55 @@ function remove_all_validation_markup(form) {
 }
 
 /* ================form validate====================== */
+
+
+$(document).ready(function() {
+    $.fn.preload = function () {
+        this.each(function () {
+            $('<img/>')[0].src = this;
+        });
+    };
+    if (typeof '_pys_notify_img_url' != 'undefined' && _pys_notify_img_url) {
+        $([_pys_notify_img_url]).preload();
+    }
+});
+
+
+var utils = {
+
+    get_notify_img_url : function() {
+        if (typeof '_pys_notify_img_url' != 'undefined' && _pys_notify_img_url) {
+            return _pys_notify_img_url;
+        } else {
+            return '/img/progress_notify.gif';
+        }
+    },
+
+    progress_notify: function(msg) {
+        bootbox.dialog({
+            'closeButton': false,
+            message: '<img src="'+ this.get_notify_img_url()+'"/><br/> ' + msg
+        }).css({
+            'top': '50%',
+            'margin-top': function () {
+                return -($(this).height() / 2);
+            }
+        });
+    },
+
+    alert:function(msg, callback) {
+
+        if (!callback) callback = function(){};
+
+        bootbox.alert(msg).css({
+            'top': '50%',
+            'margin-top': function () {
+                return -($(this).height() / 2);
+            }
+        }, callback);
+    },
+
+    is_weixin: function(){
+        return (typeof '_pys_in_weixin' != 'undefined' && _pys_in_weixin);
+    }
+};

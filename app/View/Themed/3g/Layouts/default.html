@@ -18,6 +18,8 @@
 <script type="text/javascript">
 var BASEURL = "{{APP_SUB_DIR}}";
 var ADMIN_BASEURL = BASEURL+"/manage";
+var _pys_in_weixin = "{{$in_weixin}}";
+var _pys_notify_img_url = '{{$this->Html->url("/img/progress_notify.gif")}}';
 </script>
 <script type="text/javascript">
     //<![CDATA[
@@ -90,40 +92,6 @@ var ADMIN_BASEURL = BASEURL+"/manage";
 </div>
 {{$this->fetch('scriptBottom')}}
 <script>
-    $.fn.preload = function() {
-        this.each(function(){
-            $('<img/>')[0].src = this;
-        });
-    };
-
-    $(['{{$this->Html->url("/img/progress_notify.gif")}}']).preload();
-
-    var utils = {
-        progress_notify: function(msg) {
-            bootbox.dialog({
-                'closeButton': false,
-                message: '<img src="{{$this->Html->url("/img/progress_notify.gif")}}"/><br/> ' + msg
-            }).css({
-                'top': '50%',
-                'margin-top': function () {
-                    return -($(this).height() / 2);
-                }
-            });
-        },
-
-        alert:function(msg, callback) {
-
-            if (!callback) callback = function(){};
-
-            bootbox.alert(msg).css({
-                'top': '50%',
-                'margin-top': function () {
-                    return -($(this).height() / 2);
-                }
-            }, callback);
-        }
-    };
-
     $("#menu-toggle").click(function(e) {
         e.preventDefault();
         var $w = $("#wrapper");

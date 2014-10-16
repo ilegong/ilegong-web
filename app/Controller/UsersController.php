@@ -716,7 +716,7 @@ class UsersController extends AppController {
     private function _goto_wx_oauth($ref) {
         $return_uri = 'http://'.WX_HOST.'/users/wx_auth?';
         if (!empty($ref)) {
-            $return_uri .= 'referer=' . $ref;
+            $return_uri .= 'referer=' . urlencode($ref);
         }
 
         $return_uri = urlencode($return_uri);
