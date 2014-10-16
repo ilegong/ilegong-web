@@ -170,7 +170,7 @@ class Common_util_pub extends Object
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
 		//运行curl
         $data = curl_exec($ch);
-		curl_close($ch);
+//		curl_close($ch);  Avoid close warning  (curl_close(): 101 is not a valid cURL handle resource in)
 		//返回结果
 		if($data)
 		{
