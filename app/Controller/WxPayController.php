@@ -130,6 +130,8 @@ class WxPayController extends AppController {
         $this->set('productDesc', $productDesc);
         $this->set('orderId', $orderId);
         $this->pageTitle = '微信支付';
+
+        $this->log("wxpay:". $jsApi->getParameters());
     }
 
 
