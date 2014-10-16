@@ -14,8 +14,8 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-xs-8">您还有{{$total_times}}次抽奖机会！</div>
-        <div class="col-xs-4">您已经获得<span id="apple_got_cnt">{{$total_got}}</span>个苹果</div>
+        <div class="col-xs-8">您还有<span  id="apple_times_left">{{$total_times}}</span>次抽奖机会！</div>
+        <div class="col-xs-4">您已经获得<span id="apple_got_cnt">{{$total_apple}}</span>个苹果</div>
     </div>
     <div id="apple_tree" class="row">
       <img src="{{$this->Html->url('/img/apple201410/appletree.jpg')}}"/>
@@ -34,6 +34,19 @@
 
 <script>
     $(document).ready( function(){
+
+        function showAfterGot($got) {
+            if ($got > 0) {
+                utils.alert('恭喜您，您要到了<span style="color:darkred">' + $got + '</span>个苹果！');
+            } else {
+                utils.alert('恭喜您，您还差一点点就要到一个苹果啦！');
+            }
+        }
+
+        function showNoMoreTimes($times) {
+            utils.alert('您的机会都已经用完了，将链接分享给你的朋友们，每个点击过来的朋友您都可以获得3次机会！');
+        }
+
         window.addEventListener('shake', shakeEventDidOccur, false);
         function shakeEventDidOccur() {
             $('#apple_tree').octoberLeaves('start', {'speedC': 1, 'numberOfLeaves':100, 'cycleSpeed':80, 'rotationTrue':0});
@@ -41,16 +54,18 @@
                 $('#apple_tree').octoberLeaves('stop');
 
                 $.post('/apple_201410/shake/', function(data){
+                    var $curr_got = 0;
                     if (data) {
-                        var $appleGotCnt = $('#apple_got_cnt');
-                        $appleGotCnt.text(parseInt($appleGotCnt.text()) + 1);
+                        $('#apple_got_cnt').text(data['total_apple']);
+                        $('#apple_times_left').text(data['apple_times']);
+                        $curr_got = data['got_apple']? 0 : data['got_apple'];
+                        showAfterGot($curr_got);
                     }
                 });
-
-            },5000);
-            var sound = new Howl({
-                urls: ['/files/glass.wav']
-            }).play();
+                var sound = new Howl({
+                    urls: ['/files/glass.wav']
+                }).play();
+            },2000);
         }
 
         $('#clicktest').click(shakeEventDidOccur);

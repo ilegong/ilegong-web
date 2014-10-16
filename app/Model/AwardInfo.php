@@ -12,7 +12,7 @@ class AwardInfo extends AppModel {
      * @return mixed
      */
     public function getAwardInfoByUidAndType($uid, $type) {
-        $awardTimes = $this->AwardInfo->find('first', array(
+        $awardTimes = $this->find('first', array(
             'conditions' => array('uid' => $uid, 'type' => $type),
             'fields' => array('times', 'got', 'id'),
         ));

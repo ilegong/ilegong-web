@@ -17,7 +17,7 @@ class Apple201410Controller extends AppController {
         if(empty($this->currentUser['id'])){
             $this->redirect('/users/login?referer='.Router::url($_SERVER['REQUEST_URI']));
         }
-        $this->set('pageTitle', __('摇一摇免费得红富士苹果'));
+        $this->pageTitle = __('摇一摇免费得红富士苹果');
     }
 
     public function award() {
@@ -25,7 +25,7 @@ class Apple201410Controller extends AppController {
         list($friendUid, $isSelf) = $this->check_tr_id($tr_id, 'award');
         if (!$isSelf) {
 
-            $friend = $this->User->get($friendUid);
+            $friend = $this->User->findById($friendUid);
             if (!empty($friend)) {
                 $this->set('friend', $friend);
 
@@ -34,7 +34,7 @@ class Apple201410Controller extends AppController {
                     'fields' => array('id',)
                 ));
                 if (!$trackLogs) {
-                    $this->AwardInfo->updateAll(array('times = times + 1',), array('uid' => $friendUid));
+                    $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friendUid));
                     $this->set('addedNotify', true);
                 }
             } else {
@@ -86,11 +86,11 @@ class Apple201410Controller extends AppController {
     }
 
     public function shake() {
+        $this->autoRender = false;
         $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($this->currentUser['id'], KEY_APPLE_201410);
         $apple = $this->guessAwardAndUpdate($awardInfo);
         $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
         $total_apple = $awardInfo && $awardInfo['got'] ? $awardInfo['got'] : 0;
-        $this->autoRender = false;
         $content = json_encode(array('got_apple' => $apple, 'total_apple' => $total_apple, 'total_times' => $totalAwardTimes));
         $this->response->body($content);
         $this->response->send();
@@ -107,7 +107,7 @@ class Apple201410Controller extends AppController {
         }
         $apple = ($got == 0 && $apple == 0 ? 3 : $apple);
 
-        $this->AwardInfo->updateAll(array('times = times - 1', 'got = got + '. $apple, ), array('id' => $awardInfo['id']));
+        $this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + '. $apple, ), array('id' => $awardInfo['id']));
 
         return $apple;
     }
@@ -129,7 +129,7 @@ class Apple201410Controller extends AppController {
             if ($uid && is_numeric($uid)) {
                 return array($uid, $uid === $this->currentUser['id']);
             } else {
-                throw new CacheException("invalid track id");
+                return array(false, false);
             }
         }
     }
