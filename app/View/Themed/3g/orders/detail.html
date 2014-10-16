@@ -24,7 +24,9 @@
                     {{/if}}</span>
          </p>
         <span class="col-xs-12">下单时间：{{$order['Order']['created']}}</span>
-        <br>
+        <br> {{if $order['Order']['pay_time']}}
+            <span class="col-xs-12">支付时间：{{$order['Order']['pay_time']}}</span>
+        <br>{{/if}}
         <span class="col-xs-12">订单号:{{$order['Order']['id']}}</span>
         <div class="clearfix"></div>
         </div>
