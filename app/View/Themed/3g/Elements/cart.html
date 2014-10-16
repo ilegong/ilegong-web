@@ -30,7 +30,9 @@
 <script type="text/javascript">
 //hide footer bar
 document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-  WeixinJSBridge.call('hideToolbar');
+    if (typeof WeixinJSBridge != 'undefined') {
+        WeixinJSBridge.call('hideToolbar');
+    }
 });
 </script>
 {{/if}}
