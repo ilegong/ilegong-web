@@ -308,23 +308,36 @@ var sso = {
 	// callback:'',
 	callback:null,   // 在登录成功后，自动调用 sso.callback(callback_args);
 	callback_args:null,
+    login_check : false, //just check result
     is_login : function(){
+        if (this.login_check) { return true;}
         this.usercookie = $.cookie('SAECMS[Auth][User]');
         return !(this.usercookie == null || this.usercookie =="" || typeof(this.usercookie) =='undefined');
     },
 	check_userlogin:function(params){
 
 		if(!this.is_login()){
+
 			if(params && params.callback){ this.callback = params.callback; }else{ this.callback = ''; }
 			if(params && params.form){ this.form = params.form; }else{ this.form = null; }
 			if(params && params.callback_args){ this.callback_args = params.callback_args; }else{ this.callback_args = '';}
 
-            var baseUrl = BASEURL+'/users/login';
-            if(params && params.referer) {
-                baseUrl += '?referer=' + encodeURIComponent(params.referer);
-            }
-			
-			publishController.open_dialog(baseUrl,{'title':$.jslanguage.needlogin});  // 打开登录窗体
+            $.getJSON('/users/login_state', function(data){
+                if (data.login == true) {
+                    sso.login_check = true;
+                    if(params.callback){
+                        params.callback.apply(params.callback, params.callback_args);
+                    }
+                }  else {
+                    var baseUrl = BASEURL+'/users/login?';
+                    if(params && params.referer) {
+                        baseUrl += '&referer=' + encodeURIComponent(params.referer);
+                    }
+
+                    publishController.open_dialog(baseUrl,{'title':$.jslanguage.needlogin});  // 打开登录窗体
+                }
+            });
+
 			return false;
 		}
 		return true;
@@ -343,7 +356,7 @@ var publishController = {
 				$('#'+$dialog.dialogid).modal('hide')
 			}
 			$dialog.dialogid = url.replace(/\/|\.|:|,|\?|=|&|%/g,'_')+'-ajax—action';
-			
+
 			if($('#'+$dialog.dialogid).size()<1){
 				$('<div  class="modal fade" id="'+$dialog.dialogid+'"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3 id="myModalLabel">'+options.title+'</h3></div><div class="modal-body"></div></div></div></div>').appendTo('body');
 

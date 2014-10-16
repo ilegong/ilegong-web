@@ -3,22 +3,26 @@
         <ul class="list-group">
             <li class="list-group-item" style="height: 66px">
                 <span>头像:</span>
-                <img class="pull-right" height="46px" src="{{$this->Html->url('/img/default_user_icon.jpg')}}"/></li>
+                <img class="pull-right" height="46px" src="{{$this->Html->url('/img/default_user_icon.jpg')}}"/>
             </li>
-            <li class="list-group-item">
+            <li id="p_nick" class="list-group-item">
                 <span>昵称:</span>
-                <span class="text-right pull-right">{{$profile['nickname']}}</span>
+                <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+                <span class="text-right pull-right">{{if mb_strlen($profile['nickname'], 'UTF-8')> PROFILE_NICK_LEN}} {{mb_substr($profile['nickname'], 0, PROFILE_NICK_LEN, 'UTF-8')}} {{else}} {{$profile['nickname']}} {{/if}}</span>
             </li>
-            <li class="list-group-item">
+            <li id="p_sex" class="list-group-item">
                 <span>性别:</span>
-                <span class="text-right pull-right"><?php  if ($profile['sex'] === 0 ){ echo '男';} else if ($profile['sex'] === 1){ echo '女';} else { echo '-';} ?></span>
+                <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+                <span class="text-right pull-right"><?php if ($profile['sex'] === 0 ){ echo '男';} else if ($profile['sex'] === 1){ echo '女';} else { echo '-';} ?></span>
             </li>
-            <li class="list-group-item">
+            <li id="p_companies" class="list-group-item">
                 <span>单位:</span>
+                <span class="glyphicon glyphicon-chevron-right pull-right"></span>
                 <span class="text-right pull-right">{{if $profile['companies']}}{{$profile['companies']}}{{else}}暂无{{/if}}</span>
             </li>
-            <li class="list-group-item">
+            <li id="p_bio" class="list-group-item">
                 <span>个性签名:</span>
+                <span class="glyphicon glyphicon-chevron-right pull-right"></span>
                 <span class="text-right pull-right">
                     {{if $profile['bio']}}$profile['bio']{{else}}暂无{{/if}}
                 </span>
@@ -29,11 +33,58 @@
     <!-- 绑定账号和电子邮件 -->
     <div class="row">
         <ul class="list-group">
+            <li id="p_mobilephone" class="list-group-item">
+                <span>手机号</span>
+                <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+                <span class="text-right pull-right">{{if $profile['mobilephone']}}{{$profile['mobilephone']}}{{else}}未设置{{/if}}</span>
+            </li>
+            <li id="p_email" class="list-group-item">
+                <span>邮箱</span>
+                <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+                <span class="text-right pull-right">{{if $profile['email']}}{{$profile['email']}}{{else}}未设置{{/if}}</span>
+            </li>
+            {{if $profile['username']}}
+            <li id="p_username" class="list-group-item">
+                <span>用户名:</span>
+                <span class="text-right pull-right">{{$profile['username']}}</span>
+            </li>
+            {{/if}}
+            <li id="p_password" class="list-group-item">
+                <span>密码<small>(设置密码便于在电脑上登录)</small></span>
+                <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+                <span class="pull-right list-group-item-danger">{{if $profile['password']}}******{{else}}未设置{{/if}}</span>
+            </li>
             <li class="list-group-item">
-                <span>用户ID:</span>
+                <span>用户ID</span>
                 <span class="text-right pull-right">{{$profile['id']}}</span>
             </li>
         </ul>
     </div>
 </div>
-{{template footer}}
+
+<script>
+    $.ready(function(){
+
+        function edit_dialog(body, title, callback) {
+            return bootbox.dialog({
+                message: title,
+                title: body,
+                buttons: {
+                    save: {
+                        label: "保存",
+                        className: "btn-primary",
+                        callback: function () {
+                            callback()
+                        }
+                    },
+                    cancel: {
+                        label: "取消",
+                        className: "btn-default"
+                    }
+                }
+            });
+        }
+
+        $('#p_email').click(function(){ bootbox.prompt('设置您的邮箱<small></small>'); });
+    });
+</script>

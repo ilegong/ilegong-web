@@ -46,7 +46,7 @@ class UsersController extends AppController {
     			$this->Auth->authenticate[] = 'UCenter';
     		}
     	}
-    	$this->Auth->allowedActions = array('register','login','forgot','captcha','reset', 'wx_login', 'wx_auth', 'wx_menu_point');
+    	$this->Auth->allowedActions = array('register','login','forgot','captcha','reset', 'wx_login', 'wx_auth', 'wx_menu_point', 'login_state');
     }
 
     function captcha() {
@@ -118,7 +118,9 @@ class UsersController extends AppController {
 
             $this->data['User']['username'] = trim($this->data['User']['username']);
 
-            if ($this->data['User']['password'] != $this->data['User']['password_confirm']) {
+            if (mb_strlen($this->data['User']['username'], 'UTF-8') < 4) {
+                $this->Session->setFlash('用户名长度不能小于4个字符');
+            } else if ($this->data['User']['password'] != $this->data['User']['password_confirm']) {
                 $this->Session->setFlash('两次密码不相等');
             } else if (is_null($this->data['User']['password']) || trim($this->data['User']['password']) == '') {
                 $this->Session->setFlash(__('Password should be longer than 6 characters'));
@@ -279,22 +281,54 @@ class UsersController extends AppController {
     		$this->Session->setFlash(__('You are not authorized to access that location.', true));
     		$this->redirect(array('action' => 'login'));
     	}
-    	if (!empty($this->data) && !empty($this->data['User']['username']) && !empty($this->data['User']['password'])) {
-    				$user = array();
-    				$user['User']['id'] = $userinfo['id'];
-    				$user['User']['username'] = $this->data['User']['username'];
-    				$user['User']['password'] = Security::hash($this->data['User']['password'], null, true);
-    				$user['User']['activation_key'] = md5(uniqid());
 
-    				if ($this->User->save($user['User'])) {
-    					$this->Session->setFlash(__('成功设置用户名与密码'));
-    				}
-    				else {
-    					$this->Session->setFlash(__('设置用户名与密码失败', true));
-    				}
+        $this->data['User']['username'] = trim($this->data['User']['username']);
+    	if (!empty($this->data) && !empty($this->data['User']['username']) && !empty($this->data['User']['password'])) {
+
+            if ($this->User->hasAny(array('User.username' => $this->data['User']['username']))){
+                $this->Session->setFlash(__('Username is taken by others.'));
+            }
+
+            $user = array();
+            $user['User']['id'] = $userinfo['id'];
+            $user['User']['username'] = $this->data['User']['username'];
+            $user['User']['password'] = Security::hash(trim($this->data['User']['password']), null, true);
+            $user['User']['activation_key'] = md5(uniqid());
+
+            if ($this->User->save($user['User'])) {
+                $this->Session->setFlash(__('成功设置用户名与密码'));
+            }
+            else {
+                $this->Session->setFlash(__('设置用户名与密码失败', true));
+            }
     	} else {
     		$this->Session->delete('Message.flash');
     	}
+    }
+
+    function edit_nick_name() {
+        $userinfo = $this->Auth->user();
+        if (!$userinfo['id']) {
+            $err = __('You are not authorized to access that location.', true);
+        }  else {
+            $newNickname = htmlspecialchars(trim($_POST['nickname']));
+            if (mb_strlen($newNickname) < PROFILE_NICK_MIN_LEN) {
+                $err = '昵称至少需要' . PROFILE_NICK_MIN_LEN . '个字符！';
+            } else if ($this->nick_should_edited($newNickname)) {
+                $err = '昵称不能使用微信用户XXX!';
+            } else if ($this->User->hasAny(array('User.nickname' => "$newNickname"))) {
+                $err = __('Username is taken by others.');
+            } else if (!$this->User->updateAll(array('User.nickname' => "'$newNickname'"), array('User.id' => $userinfo['id']))) {
+                $err = __('系统提交保存时失败，请重试');
+            } else {
+                $this->Session->write('Auth.User.nickname', $newNickname);
+                $err = 'ok';
+            }
+        }
+
+        echo $err;
+        $this->autoRender = false;
+        return;
     }
 
 
@@ -366,6 +400,10 @@ class UsersController extends AppController {
             $this->redirect(array('action' => 'login'));
         }
 
+        if ($username == '') {
+            $this->Session->setFlash(__('您没有设置用户名，找回密码请联系技术客服。'));
+        }
+
         $user = $this->User->find('first', array(
                     'conditions' => array(
                         'User.username' => $username,
@@ -386,6 +424,17 @@ class UsersController extends AppController {
         }
 
         $this->set(array('user'=>$user, 'username'=>$username, 'key'=>$key));
+    }
+
+    function login_state() {
+        $login = true;
+        if (!$this->currentUser['id']) {
+            if (!$this->Auth->login()) {
+                $login = false;
+            }
+        }
+        echo json_encode(array('login'=>$login));
+        $this->autoRender = false;
     }
 
     function login() {
@@ -660,8 +709,8 @@ class UsersController extends AppController {
                     } else {
                         $this->User->save(array(
                             'username' => $oauth['Oauthbinds']['oauth_openid'],
-                            'nickname' => '微信用户' . mb_substr($oauth['Oauthbinds']['oauth_openid'], 0, 10, 'UTF-8'),
-                            'password' => md5(uniqid()),
+                            'nickname' => '微信用户' . mb_substr($oauth['Oauthbinds']['oauth_openid'], 0, PROFILE_NICK_LEN - 4, 'UTF-8'),
+                            'password' => '',
                             'uc_id' => 0
                         ));
                         $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();

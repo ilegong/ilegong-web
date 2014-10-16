@@ -14,8 +14,14 @@ class CommentsController extends AppController {
         if (!isset($this->data['Comment']['data_id'])) {
             $this->Session->setFlash(__('Invalid Params', true));
             $this->redirect('/');
-        } 
+        }
         if($this->Session->check('Auth.User.id') && !empty($this->data)) {
+
+            if ($this->nick_should_edited($this->Session->read('Auth.User.nickname'))) {
+                echo json_encode(array('error'=>'edit_nick_name'));
+                return;
+            }
+
             $this->data['Comment']['user_id'] = $this->Session->read('Auth.User.id');
             $this->data['Comment']['username'] = $this->Session->read('Auth.User.nickname');
             $this->data['Comment']['body'] = htmlspecialchars($this->data['Comment']['body']);

@@ -233,6 +233,11 @@ class AppController extends Controller {
         return (strpos($_SERVER['HTTP_USER_AGENT'], 'MicroMessenger') !== false );
     }
 
+    protected function nick_should_edited($nick) {
+        $nick = trim($nick);
+        return (!$nick || strpos($nick, '微信用户') === 0);
+    }
+
     protected function is_pengyoushuo_com_cn() {
         return (strpos($_SERVER['HTTP_HOST'], 'www.pengyoushuo.com.cn') !== false);
     }
