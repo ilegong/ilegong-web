@@ -34,7 +34,7 @@ if (!defined(CURLOPT_TIMEOUT)) define('CURLOPT_TIMEOUT', 13);
 /**
  * 所有接口的基类
  */
-class Common_util_pub
+class Common_util_pub extends Object
 {
 	function __construct() {
 	}
@@ -149,7 +149,8 @@ class Common_util_pub
 	 * 	作用：以post方式提交xml到对应的接口url
 	 */
 	public function postXmlCurl($xml,$url,$second=30)
-	{		
+	{
+        $this->log("try to post:$url  $xml");
         //初始化curl        
        	$ch = curl_init();
 		//设置超时
@@ -174,14 +175,18 @@ class Common_util_pub
 		if($data)
 		{
 			curl_close($ch);
+            $this->log("curl post result:". $data);
 			return $data;
 		}
 		else 
 		{ 
 			$error = curl_errno($ch);
-			echo "curl出错，错误码:$error"."<br>"; 
-			echo "<a href='http://curl.haxx.se/libcurl/c/libcurl-errors.html'>错误原因查询</a></br>";
+			//echo "curl出错，错误码:$error"."<br>";
+			//echo "<a href='http://curl.haxx.se/libcurl/c/libcurl-errors.html'>错误原因查询</a></br>";
 			curl_close($ch);
+
+            $this->log("curl post result: error=". $error .", query here: http://curl.haxx.se/libcurl/c/libcurl-errors.html");
+
 			return false;
 		}
 	}
