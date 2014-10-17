@@ -168,19 +168,29 @@ class OrdersController extends AppController{
 
 
     public function admin_list_today() {
-        $start_date= $this->get_current_day_start();
-        $end_date = $this->get_current_day_end();
+        $start_date= $this->get_day_start($_REQUEST['start_date']);
+        $end_date = $this->get_day_end($_REQUEST['end_date']);
+        $brand_id=empty($_REQUEST['brand_id'])?0:$_REQUEST['brand_id'];
+        $order_status=!isset($_REQUEST['order_status'])?-1:$_REQUEST['order_status'];
 
         $this->loadModel('Brand');
-        $brands = $this->Brand->find('all');
+        $brands = $this->Brand->find('all',array('order' => 'id desc'));
 
         $this->loadModel('Order');
+        $conditions = array(
+            'created >"' . date("Y-m-d\TH:i:s", $start_date) . '"',
+            'created <"' . date("Y-m-d\TH:i:s", $end_date) . '"'
+        );
+        if($brand_id !=0){
+            array_push($conditions,'brand_id = '.$brand_id);
+        }
+        if($order_status!=-1){
+            array_push($conditions,'status = '.$order_status);
+        }
+
         $orders = $this->Order->find('all',array(
             'order' => 'id desc',
-            'conditions'=>array(
-                'created >"'.$start_date.'"',
-                'created <"'.$end_date.'"'
-            )));
+            'conditions'=> $conditions));
 
         $ids = array();
         foreach($orders as $o){
@@ -206,22 +216,33 @@ class OrdersController extends AppController{
         $this->set('ship_type',$this->ship_type);
         $this->set('brands',$brands);
 
+        $this->set('start_date',date("Y-m-d",$start_date));
+        $this->set('end_date',date("Y-m-d",$end_date));
+        $this->set('brand_id',$brand_id);
+        $this->set('order_status',$order_status);
+
     }
 
-    private function get_current_day_start(){
-        $y=date("Y");
-        $m=date("m");
-        $d=date("d");
-        $day_start=mktime(0,0,0,$m,$d,$y);
-        return date("Y-m-d\TH:i:s",$day_start);
+    private function get_day_start($start_day = ''){
+        return $this->get_day_time($start_day);
     }
 
-    private function get_current_day_end(){
-        $y=date("Y");
-        $m=date("m");
-        $d=date("d");
-        $day_end=mktime(23,59,59,$m,$d,$y);
-        return date("Y-m-d\TH:i:s",$day_end);
+    private function get_day_end($end_day = ''){
+        return $this->get_day_time($end_day,23,59,59);
+    }
+
+    private function get_day_time($day = '',$hour=0,$minute=0,$second =0){
+        if(!empty($day)){
+            $start_date=date_parse_from_format("Y-m-d",$day);
+            $y=$start_date["year"];
+            $m=$start_date["month"];
+            $d=$start_date["day"];
+        }else{
+            $y=date("Y");
+            $m=date("m");
+            $d=date("d");
+        }
+        return mktime($hour,$minute,$second,$m,$d,$y);
     }
 
     var $ship_type = array(

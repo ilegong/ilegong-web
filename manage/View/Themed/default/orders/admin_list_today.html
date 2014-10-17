@@ -1,4 +1,38 @@
 
+<div>
+    <form action="{{$this->Html->url('/admin/orders/list_today')}}"  method="get">
+
+    起止日期:
+    <input name="start_date" type="text" id="datepicker_start" value="{{$start_date}}">
+    <input name="end_date" type="text" id="datepicker_end" value="{{$end_date}}">
+    商家名称：
+    <select name="brand_id">
+        <option value="0">全部</option>
+        {{loop $brands $brand}}
+            {{if $brand['Brand']['id'] == $brand_id}}
+                <option value="{{$brand['Brand']['id']}}" selected="selected">{{$brand['Brand']['name']}}</option>
+            {{else}}
+                <option value="{{$brand['Brand']['id']}}">{{$brand['Brand']['name']}}</option>
+            {{/if}}
+        {{/loop}}
+    </select>
+    订单状态：
+    <select name="order_status" value="{{$order_status}}">
+        <option value="-1" {{if $order_status == -1}}selected="selected" {{/if}}>全部</option>
+        <option value="0" {{if $order_status == 0}}selected="selected" {{/if}}>待支付</option>
+        <option value="1" {{if $order_status == 1}}selected="selected" {{/if}}>待发货</option>
+        <option value="2" {{if $order_status == 2}}selected="selected" {{/if}}>已发货</option>
+        <option value="10" {{if $order_status == 10}}selected="selected" {{/if}}>已作废</option>
+    </select>
+
+    <input type="submit" value="查询" class="btn">
+
+    </form>
+</div>
+<div>
+    <h1>订单总计<span style="color: red">{{count($orders)}}</span>个</h1>
+</div>
+<br/>
 <table  class="table table-bordered">
     <tr>
         <th>订单号</th>
@@ -64,3 +98,13 @@
     {{/loop}}
     </tbody>
 </table>
+
+<script>
+    $(function() {
+        var start_date=$( "#datepicker_start" ).datepicker({dateFormat: "yy-m-d"});
+//        start_date.datepicker("setDate","2013-10-8");
+
+        var end_date=$( "#datepicker_end" ).datepicker({dateFormat: "yy-m-d"});
+//        end_date.datepicker("setDate","2013-10-8");
+    });
+</script>
