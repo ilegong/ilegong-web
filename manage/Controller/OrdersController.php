@@ -172,6 +172,9 @@ class OrdersController extends AppController{
         $end_date = $this->get_day_end($_REQUEST['end_date']);
         $brand_id=empty($_REQUEST['brand_id'])?0:$_REQUEST['brand_id'];
         $order_status=!isset($_REQUEST['order_status'])?-1:$_REQUEST['order_status'];
+        $order_id=!isset($_REQUEST['order_id'])?"":$_REQUEST['order_id'];
+        $consignee_name=!isset($_REQUEST['consignee_name'])?"":$_REQUEST['consignee_name'];
+        $consignee_mobilephone=!isset($_REQUEST['consignee_mobilephone'])?"":$_REQUEST['consignee_mobilephone'];
 
         $this->loadModel('Brand');
         $brands = $this->Brand->find('all',array('order' => 'id desc'));
@@ -186,6 +189,15 @@ class OrdersController extends AppController{
         }
         if($order_status!=-1){
             array_push($conditions,'status = '.$order_status);
+        }
+        if(!empty($order_id)){
+            array_push($conditions,'id = '.$order_id);
+        }
+        if(!empty($consignee_name)){
+            array_push($conditions,'consignee_name like "%'.$consignee_name.'%"');
+        }
+        if(!empty($consignee_mobilephone)){
+            array_push($conditions,'consignee_mobilephone = '.$consignee_mobilephone);
         }
 
         $orders = $this->Order->find('all',array(
@@ -204,11 +216,11 @@ class OrdersController extends AppController{
 
         $order_carts = array();
         foreach($carts as $c){
-            $order_id = $c['Cart']['order_id'];
-            if (!isset($order_carts[$order_id])) {
-                $order_carts[$order_id] = array();
+            $c_order_id = $c['Cart']['order_id'];
+            if (!isset($order_carts[$c_order_id])) {
+                $order_carts[$c_order_id] = array();
             }
-            $order_carts[$order_id][] = $c;
+            $order_carts[$c_order_id][] = $c;
         }
 
         $this->set('orders',$orders);
@@ -220,6 +232,9 @@ class OrdersController extends AppController{
         $this->set('end_date',date("Y-m-d",$end_date));
         $this->set('brand_id',$brand_id);
         $this->set('order_status',$order_status);
+        $this->set('order_id',$order_id);
+        $this->set('consignee_name',$consignee_name);
+        $this->set('consignee_mobilephone',$consignee_mobilephone);
 
     }
 
