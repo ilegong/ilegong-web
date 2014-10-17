@@ -835,7 +835,7 @@ $(document).ready(function() {
             $('<img/>')[0].src = this;
         });
     };
-    if (typeof '_pys_notify_img_url' != 'undefined' && _pys_notify_img_url) {
+    if (typeof _pys_notify_img_url != 'undefined' && _pys_notify_img_url) {
         $([_pys_notify_img_url]).preload();
     }
 });
