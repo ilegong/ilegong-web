@@ -26,8 +26,10 @@ echo $this->MForm->create($current_model,array(
 			    echo $this->MForm->input('consignee_mobilephone');	
 			    echo $this->MForm->input('total_price'); 
 			    echo $this->MForm->input('status');
-			    echo $this->MForm->input('remark',array('rows' => '2', 'cols' => '80'));  
-			                     
+			    echo $this->MForm->input('remark',array('rows' => '2', 'cols' => '80'));
+                echo $this->MForm->input('ship_type');
+                echo $this->MForm->input('ship_code');
+
             	?>
              </div>            
        </div> 
