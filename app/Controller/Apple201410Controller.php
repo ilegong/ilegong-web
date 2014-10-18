@@ -24,9 +24,23 @@ class Apple201410Controller extends AppController {
 
     public function rules() {}
 
+    public function notifiedToMe($friendId) {
+        $key = 'award-notified-' . $friendId;
+        $r = $this->Session->read($key);
+        if ($r && $r === true) {
+            $notified = true;
+        } else {
+            $notified = false;
+            $this->Session->write($key, true);
+        }
+        echo json_encode(array("notified" => $notified));
+        $this->autoRender = false;
+    }
+
     public function award() {
         $tr_id = $_GET['trid'];
         list($friendUid, $isSelf) = $this->check_tr_id($tr_id, 'award');
+        $this->set('notifyFriendId', 1101);
         if (!$isSelf) {
 
             $friend = $this->User->findById($friendUid);
@@ -40,7 +54,7 @@ class Apple201410Controller extends AppController {
                 if (empty($trackLogs)) {
                     $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friendUid));
                     $this->TrackLog->save(array('TrackLog' => array('type' => KEY_APPLE_201410, 'from' => $this->currentUser['id'], 'to' => $friendUid, 'award_time' => date('Y-m-d H:i:s') )));
-                    $this->set('addedNotify', true);
+                    $this->set('notifyFriendId', $friendUid);
                 }
             } else {
                 //treat as self

@@ -32,6 +32,7 @@
 
     #wrapper {
         background-color: #ffeabc;
+        min-height: 2000px;
     }
 </style>
 
@@ -160,7 +161,13 @@
         }
 
         $('#shake_btn').click(shakeEventDidOccur);
-        {{if $addedNotify}}utils.alert('您为朋友获得了<span class="apple_numbers">1</span>次摇苹果的机会！');{{/if}}
+        {{if $notifyFriendId}}
+        $.getJSON("{{$this->Html->url(array('action' => 'notifiedToMe', $notifyFriendId))}}?r="+Math.random(), function(data){
+            if (data.notified === false) {
+                utils.alert('您为朋友获得了<span class="apple_numbers">1</span>次摇苹果的机会！');
+            }
+        });
+        {{/if}}
     });
 
 </script>
