@@ -81,17 +81,17 @@
             $share_div.show();
         });
 
-        function showAfterGot($got) {
+        function showAfterGot($got, timeout) {
             if ($got > 0) {
-                utils.alert('恭喜您，您摇到了<span style="color:darkred">' + $got + '</span>个苹果！');
+                utils.alert('恭喜您，您摇到了<span class="apple_numbers">' + $got + '</span>个苹果！', function(){}, timeout);
             } else {
-                utils.alert('恭喜您，您还差一点点就要到一个苹果啦！');
+                utils.alert('恭喜您，您还差一点点就要到一个苹果啦！', function(){}, timeout);
             }
         }
 
         function showNoMoreTimes() {
             bootbox.dialog({
-                message: "机会已用完，分享给你的朋友们，每个朋友点击过来就增加1次机会！",
+                message: '机会已用完，分享给你的朋友们，每个朋友点击过来就增加<span class="apple_numbers">1</span>次机会！',
                 buttons: {
                     main: {
                         label: "取消",
@@ -137,7 +137,7 @@
                         $appleGotCnt.text(data['total_apple']);
                         $appleTimesLeft.text(data['total_times'] < 0 ? 0 : data['total_times']);
                         $curr_got = data['got_apple'];
-                        showAfterGot($curr_got);
+                        showAfterGot($curr_got, 2000);
                     }
                     $appleTree.attr('src', apple_tree_url);
                     shaking = false;
@@ -146,7 +146,7 @@
         }
 
         $('#shake_btn').click(shakeEventDidOccur);
-        {{if $addedNotify}}utils.alert("您为朋友获得了一次摇苹果的机会！");{{/if}}
+        {{if $addedNotify}}utils.alert('您为朋友获得了<span class="apple_numbers">1</span>次摇苹果的机会！');{{/if}}
     });
 
     $('.footbox').hide();

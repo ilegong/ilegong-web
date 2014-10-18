@@ -782,7 +782,7 @@ function showSuccessMessage(text, close_callback, timeout)
             clearTimeout($msgDlg.data('hideInteval'))
             var id = setTimeout(function(){
                 $msgDlg.modal('hide');
-            });
+            }, timeout);
             $msgDlg.data('hideInteval', id);
         });
     }
@@ -861,16 +861,26 @@ var utils = {
         });
     },
 
-    alert:function(msg, callback) {
+    alert:function(msg, callback, timeout) {
 
         if (!callback) callback = function(){};
 
-        bootbox.alert(msg, callback).css({
+        var $dlg = bootbox.alert(msg, callback).css({
             'top': '50%',
             'margin-top': function () {
                 return -($(this).height() / 2);
             }
         });
+
+        if (timeout && timeout > 0) {
+            $dlg.on('shown.bs.modal', function () {
+                clearTimeout($dlg.data('hideInteval'))
+                var id = setTimeout(function(){
+                    $dlg.modal('hide');
+                }, timeout);
+                $dlg.data('hideInteval', id);
+            });
+        }
     },
 
     is_weixin: function(){

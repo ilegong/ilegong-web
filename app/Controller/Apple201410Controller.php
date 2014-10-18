@@ -37,23 +37,14 @@ class Apple201410Controller extends AppController {
                 ));
                 if (empty($trackLogs)) {
                     $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friendUid));
+                    $this->TrackLog->save(array('TrackLog' => array('type' => KEY_APPLE_201410, 'from' => $this->currentUser['id'], 'to' => $friendUid, 'award_time' => date('Y-m-d H:i:s') )));
                     $this->set('addedNotify', true);
                 }
             } else {
                 //treat as self
                 $this->redirect_for_append_tr_id('award');
             }
-
-        } else {
-
-            $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($this->currentUser['id'], KEY_APPLE_201410);
-            if (empty($awardInfo)) {
-                $awardInfo = array('AwardInfo' => array('uid' => $this->currentUser['id'], 'type' => KEY_APPLE_201410, 'times' => 99, 'got' => 0));
-                $this->AwardInfo->save($awardInfo);
-                $awardInfo = $awardInfo['AwardInfo'];
-            }
-            $this->setTotalVariables($awardInfo);
-//
+        }
 //            $friendsHelpMe = $this->AppleAward->find('all', array(
 //                'conditions' => array('award_to' => $friendUid),
 //                'fields' => array('award_to', 'sum(apple_got) as apple_got'),
@@ -83,9 +74,14 @@ class Apple201410Controller extends AppController {
 //            $this->set('helpMe', $friendsHelpMe);
 //            $this->set('iHelp', $friendsIHelped);
 //            $this->set('userIdNames', $users);
-
+            $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($this->currentUser['id'], KEY_APPLE_201410);
+            if (empty($awardInfo)) {
+                $awardInfo = array('AwardInfo' => array('uid' => $this->currentUser['id'], 'type' => KEY_APPLE_201410, 'times' => 99, 'got' => 0));
+                $this->AwardInfo->save($awardInfo);
+                $awardInfo = $awardInfo['AwardInfo'];
+            }
+            $this->setTotalVariables($awardInfo);
             $this->set('got_apple', 0);
-        }
     }
 
     public function shake() {
