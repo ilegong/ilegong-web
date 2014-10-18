@@ -35,7 +35,7 @@ class Apple201410Controller extends AppController {
                     'conditions' => array('type' => KEY_APPLE_201410, 'from' => $this->currentUser['id'], 'to' => $friendUid),
                     'fields' => array('id',)
                 ));
-                if (!$trackLogs) {
+                if (empty($trackLogs)) {
                     $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friendUid));
                     $this->set('addedNotify', true);
                 }
