@@ -37,10 +37,8 @@
 
 <div class="container">
     <div class="row">
-        <h1 style="color: red; text-align: center">摇一摇得红富士</h1>
-        <div class="col-xs-4 text-right"><a href="#" style="text-decoration: underline; line-height: 28px">活动规则</a></div>
-        <div class="col-xs-4">抽奖机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次</div>
-        <div class="col-xs-4">已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个</div>
+        <div class="col-xs-12 text-center">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp; 已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个</div>
+        <div class="col-xs-12 text-center"><small>活动时间：10月21日-10月30日</small> <a href="#" style="text-decoration: underline; line-height: 28px"><small>活动规则</small></a></div>
     </div>
     <div id="apple_tree" class="row voffset3">
       <img src="{{$this->Html->url('/img/apple201410/apple_tree.gif')}}"/>
@@ -53,8 +51,14 @@
         </div>
     </div>
 
-    <div>
-
+    <div class="row voffset3">
+      <p id="game_text_no_more" style="{{if $total_times>0}}display:none{{/if}}">
+          你目前没有摇一摇的机会喔~ 赶紧摇起来~~ 只要攒够100个苹果马上换免费苹果一箱！谁怕谁，你又不是没有朋友！分享到朋友圈，分享连接被朋友点击还能够赢得再摇一次的机会喔~
+      </p>
+        <p id="game_text_has_more" style="{{if $total_times<=0}}display:none{{/if}}">
+            你目前有<span class="apple_numbers" id="apple_times_left_bottom">{{$total_times}}</span>次 摇一摇的机会喔~赶紧摇起来~~
+            只要攒够100个苹果马上换免费苹果一箱！谁怕谁，你又不是没有朋友！分享到朋友圈，分享连接被朋友点击还能够赢得再摇一次的机会喔~
+        </p>
     </div>
 </div>
 
@@ -66,9 +70,12 @@
             urls: ['http://51daifan-images.stor.sinaapp.com/tree_shake.mp3']
         });
         var $appleGotCnt = $('#apple_got_cnt');
-        var $appleTimesLeft = $('#apple_times_left');
+        var $appleTimesLeft = $('#apple_times_left, #apple_times_left_bottom');
         var $appleTree = $('#apple_tree > img');
         var apple_tree_url = $('#apple_tree').attr('src');
+
+        var $game_text_has_more = $('#game_text_has_more');
+        var $game_text_no_more = $('#game_text_no_more');
 
         $share_div = $('<div class="apple_share fade in"><img src="{{$this->Html->url('/img/apple201410/share.png')}}"></div>')
             .hide()
@@ -81,11 +88,19 @@
             $share_div.show();
         });
 
-        function showAfterGot($got, timeout) {
+        function showAfterGot($got,times, timeout) {
             if ($got > 0) {
-                utils.alert('恭喜您，您摇到了<span class="apple_numbers">' + $got + '</span>个苹果！', function(){}, timeout);
+                utils.alert('恭喜你！你摇掉了<span class="apple_numbers">' + $got + '</span>个苹果！', function(){}, timeout);
             } else {
-                utils.alert('恭喜您，您还差一点点就要到一个苹果啦！', function(){}, timeout);
+                utils.alert('你力气太小啦！只晃掉了几片树叶！', function(){}, timeout);
+            }
+
+            if (times > 0) {
+                $game_text_has_more.show();
+                $game_text_no_more.hide();
+            } else {
+                $game_text_no_more.show();
+                $game_text_has_more.hide();
             }
         }
 
@@ -137,7 +152,7 @@
                         $appleGotCnt.text(data['total_apple']);
                         $appleTimesLeft.text(data['total_times'] < 0 ? 0 : data['total_times']);
                         $curr_got = data['got_apple'];
-                        showAfterGot($curr_got, 2000);
+                        showAfterGot($curr_got, data['total_times'],  2000);
                     }
                     $appleTree.attr('src', apple_tree_url);
                     shaking = false;
@@ -148,7 +163,5 @@
         $('#shake_btn').click(shakeEventDidOccur);
         {{if $addedNotify}}utils.alert('您为朋友获得了<span class="apple_numbers">1</span>次摇苹果的机会！');{{/if}}
     });
-
-    $('.footbox').hide();
 
 </script>
