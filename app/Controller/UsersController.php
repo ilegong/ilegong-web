@@ -473,22 +473,20 @@ class UsersController extends AppController {
         if ($success) {
             $this->Hook->call('loginSuccess');
 
+            $user = $this->Auth->user();
+            $userinfo = array(
+                'id' => $user['id'],
+                'username' => $user['username'],
+            );
+
+            if(!empty($this->data['User']['remember_me'])){
+                $cookietime = 2592000; // 一月内30*24*60*60
+            } else {
+                $cookietime = 3600 * 24 * 7;
+            }
+            $this->Cookie->write('Auth.User',$userinfo, true, $cookietime);
+
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
-                // ajax 操作
-                $user = $this->Auth->user();
-                $userinfo = array(
-                	'id' => $user['id'],
-                	'username' => $user['username'],
-                );
-
-                if(!empty($this->data['User']['remember_me'])){
-                	$cookietime = 2592000; // 一月内30*24*60*60
-                }
-                else{
-                	$cookietime = 0;
-                }
-                $this->Cookie->write('Auth.User',$userinfo, true, $cookietime);
-
                 $successinfo = array('success' => '登录成功',
                 		'userinfo' => $userinfo,
                 		'tasks'=>array(array('dotype'=>'reload')));
