@@ -40,7 +40,6 @@ class Apple201410Controller extends AppController {
     public function award() {
         $tr_id = $_GET['trid'];
         list($friendUid, $isSelf) = $this->check_tr_id($tr_id, 'award');
-        $this->set('notifyFriendId', 1101);
         if (!$isSelf) {
 
             $friend = $this->User->findById($friendUid);
