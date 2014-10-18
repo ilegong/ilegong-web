@@ -18,6 +18,7 @@ class Apple201410Controller extends AppController {
             $this->redirect('/users/login?referer='.Router::url($_SERVER['REQUEST_URI']));
         }
         $this->pageTitle = __('摇一摇免费得红富士苹果');
+        $this->set('hideNav', true);
     }
 
     public function award() {

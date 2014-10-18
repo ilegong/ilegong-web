@@ -79,8 +79,9 @@ var _pys_notify_img_url = '{{$this->Html->url("/img/progress_notify.gif")}}';
 </div>
 
     <div id="page-content-wrapper">
-
+{{if !$hideNav }}
 {{template menus/bootstrap}}
+{{/if}}
 
 <div id="maincontent" class="maincontent  clearfix">
    <div class="container">
