@@ -90,9 +90,9 @@
 
         function showAfterGot($got,times, timeout) {
             if ($got > 0) {
-                utils.alert('恭喜你！你摇掉了<span class="apple_numbers">' + $got + '</span>个苹果！', function(){}, timeout);
+                utils.alert('恭喜你！你摇掉了<span class="apple_numbers">' + $got + '</span>个苹果！<br/><small>(2秒后自动消失)</small>', function(){}, timeout);
             } else {
-                utils.alert('你力气太小啦！只晃掉了几片树叶！', function(){}, timeout);
+                utils.alert('你力气太小啦！只晃掉了几片树叶！<br/><small>(2秒后自动消失)</small>', function(){}, timeout);
             }
 
             if (times > 0) {
