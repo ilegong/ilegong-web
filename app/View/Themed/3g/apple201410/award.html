@@ -38,13 +38,12 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-12 text-center">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp; 已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个</div>
-        <div class="col-xs-12 text-center"><small>活动时间：10月21日-10月30日</small> <a href="#" style="text-decoration: underline; line-height: 28px"><small>活动规则</small></a></div>
+        <div class="col-xs-12 text-center"><small>活动时间：10月21日-10月30日</small> <a href="{{$this->Html->url(array('action'=>'rules'))}}" style="text-decoration: underline; line-height: 28px"><small>活动规则</small></a></div>
     </div>
     <div id="apple_tree" class="row voffset3">
       <img src="{{$this->Html->url('/img/apple201410/apple_tree.gif')}}"/>
     </div>
     <div class="row voffset3">
-    <!--<a href="javascript:;" id="clicktest">Test</a>-->
         <div class="text-center">
         <button id="shake_btn" class="btn btn-danger" type="button">手机摇一摇</button>
         <button id="share_btn" class="btn btn-danger" type="button">邀请朋友来</button>

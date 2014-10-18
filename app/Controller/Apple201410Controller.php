@@ -22,6 +22,8 @@ class Apple201410Controller extends AppController {
         $this->set('noFlash', true);
     }
 
+    public function rules() {}
+
     public function award() {
         $tr_id = $_GET['trid'];
         list($friendUid, $isSelf) = $this->check_tr_id($tr_id, 'award');
