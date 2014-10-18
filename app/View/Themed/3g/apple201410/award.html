@@ -38,7 +38,7 @@
 <div class="container">
     <div class="row">
         <h1 style="color: red; text-align: center">摇一摇得红富士</h1>
-        <div class="col-xs-4"><a href="#" style="text-decoration: underline; line-height: 28px">活动规则</a></div>
+        <div class="col-xs-4 text-right"><a href="#" style="text-decoration: underline; line-height: 28px">活动规则</a></div>
         <div class="col-xs-4">抽奖机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次</div>
         <div class="col-xs-4">已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个</div>
     </div>
@@ -46,9 +46,11 @@
       <img src="{{$this->Html->url('/img/apple201410/apple_tree.gif')}}"/>
     </div>
     <div class="row voffset3">
-    <a href="javascript:;" id="clicktest">Test</a>
+    <!--<a href="javascript:;" id="clicktest">Test</a>-->
+        <div class="text-center">
         <button class="btn btn-danger" type="button">手机摇一摇</button>
         <button id="share_btn" class="btn btn-danger" type="button">邀请朋友来</button>
+        </div>
     </div>
 
     <div>

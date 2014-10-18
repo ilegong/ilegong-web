@@ -46,7 +46,7 @@ class Apple201410Controller extends AppController {
 
             $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($this->currentUser['id'], KEY_APPLE_201410);
             if (!$awardInfo) {
-                $awardInfo = array('AwardInfo' => array('uid' => $this->currentUser['id'], 'type' => KEY_APPLE_201410, 'times' => 100, 'got' => 0));
+                $awardInfo = array('AwardInfo' => array('uid' => $this->currentUser['id'], 'type' => KEY_APPLE_201410, 'times' => 99, 'got' => 0));
                 $this->AwardInfo->save($awardInfo);
                 $awardInfo = $awardInfo['AwardInfo'];
             }
