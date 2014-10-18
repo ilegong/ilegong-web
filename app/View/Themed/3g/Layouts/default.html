@@ -12,6 +12,11 @@
 <title>{{$pageTitle}}-{{$site['title']}}</title>
 <?PHP echo $this->Combinator->less(); ?>
 {{$this->Html->css(array('layout_3g.css',));}}
+<style>
+    body.modal-open {
+        margin-right: 0;
+    }
+</style>
 {{$this->Html->script(array(
             'http://libs.baidu.com/jquery/1.9.1/jquery.min.js',
             'jquery/jquery.cookie.js','i18n/language-zh-CN.js'));}}

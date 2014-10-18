@@ -46,8 +46,9 @@ class Apple201410Controller extends AppController {
 
             $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($this->currentUser['id'], KEY_APPLE_201410);
             if (!$awardInfo) {
-                $awardInfo = array('AwardInfo' => array('uid' => $this->currentUser['id'], 'type' => KEY_APPLE_201410, 'times' => 3, 'got' => 0));
+                $awardInfo = array('AwardInfo' => array('uid' => $this->currentUser['id'], 'type' => KEY_APPLE_201410, 'times' => 100, 'got' => 0));
                 $this->AwardInfo->save($awardInfo);
+                $awardInfo = $awardInfo['AwardInfo'];
             }
             $this->setTotalVariables($awardInfo);
 //
@@ -91,25 +92,27 @@ class Apple201410Controller extends AppController {
         $apple = $this->guessAwardAndUpdate($awardInfo);
         $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
         $total_apple = $awardInfo && $awardInfo['got'] ? $awardInfo['got'] : 0;
-        $content = json_encode(array('got_apple' => $apple, 'total_apple' => $total_apple, 'total_times' => $totalAwardTimes));
-        $this->response->body($content);
-        $this->response->send();
+        echo json_encode(array('got_apple' => $apple, 'total_apple' => $total_apple, 'total_times' => $totalAwardTimes));
     }
 
-    private function guessAwardAndUpdate($awardInfo) {
+    private function guessAwardAndUpdate(&$awardInfo) {
 
         if ($awardInfo['times'] <= 0) { return 0; };
 
-        $got = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] : 0;
-        $apple = 0;
-        for($i = 0; $i < 5; $i++) {
-            $apple += (5 == mt_rand(0, intval(20 * (1 + $got))) ? 1 : 0);
+        $total_got = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] : 0;
+        $curr_got = 0;
+        for($i = 0; $i < 10; $i++) {
+            $mt_rand = mt_rand(0, intval(10 * (1 + $this->_actualApple($total_got))));
+            $curr_got += ($mt_rand >=1 && $mt_rand <=3  ? 1 : 0);
         }
-        $apple = ($got == 0 && $apple == 0 ? 3 : $apple);
+        $curr_got = ($total_got == 0 && $curr_got == 0 ? 3 : $curr_got);
 
-        $this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + '. $apple, ), array('id' => $awardInfo['id']));
+        $this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + '. $curr_got, ), array('id' => $awardInfo['id']));
 
-        return $apple;
+        $awardInfo['times'] -= 1;
+        $awardInfo['got'] += $curr_got;
+
+        return $curr_got;
     }
 
     /**
@@ -163,6 +166,14 @@ class Apple201410Controller extends AppController {
         $total_apple = $awardInfo && $awardInfo['got'] ? $awardInfo['got'] : 0;
         $this->set('total_apple', $total_apple);
         $this->set('total_times', $totalAwardTimes);
+    }
+
+    /**
+     * @param $got
+     * @return float
+     */
+    private function _actualApple($got) {
+        return (int)($got / 10);
     }
 
 }

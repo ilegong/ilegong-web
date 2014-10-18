@@ -829,12 +829,12 @@ function remove_all_validation_markup(form) {
 /* ================form validate====================== */
 
 
+$.fn.preload = function () {
+    this.each(function () {
+        $('<img/>')[0].src = this;
+    });
+};
 $(document).ready(function() {
-    $.fn.preload = function () {
-        this.each(function () {
-            $('<img/>')[0].src = this;
-        });
-    };
     if (typeof _pys_notify_img_url != 'undefined' && _pys_notify_img_url) {
         $([_pys_notify_img_url]).preload();
     }
@@ -867,12 +867,12 @@ var utils = {
 
         if (!callback) callback = function(){};
 
-        bootbox.alert(msg).css({
+        bootbox.alert(msg, callback).css({
             'top': '50%',
             'margin-top': function () {
                 return -($(this).height() / 2);
             }
-        }, callback);
+        });
     },
 
     is_weixin: function(){
