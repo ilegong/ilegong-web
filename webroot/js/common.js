@@ -827,8 +827,6 @@ function remove_all_validation_markup(form) {
 }
 
 /* ================form validate====================== */
-
-
 $.fn.preload = function () {
     this.each(function () {
         $('<img/>')[0].src = this;

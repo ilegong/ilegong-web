@@ -19,6 +19,7 @@ class Apple201410Controller extends AppController {
         }
         $this->pageTitle = __('摇一摇免费得红富士苹果');
         $this->set('hideNav', true);
+        $this->set('noFlash', true);
     }
 
     public function award() {
