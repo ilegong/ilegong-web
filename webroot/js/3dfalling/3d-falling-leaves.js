@@ -67,7 +67,7 @@
                 width[i] = height[i];
 
             // Starting y position of leaves
-            Ypos[i] = /*-Math.random() * 500  + */ 100;
+            Ypos[i] = /*-Math.random() * 500  + */ 120;
 
             // Randomization of x position of leaves
             Xpos[i] = Math.round(Math.random() * (this.winWidth) - width[i] * 3);
@@ -138,7 +138,7 @@
 
             // When leaves reach certain browser height they are transported back to the begining
             if (Ypos[i] > this.winHeight - (width[i] + height[i]/2)){
-                Ypos[i] = 400 ;
+                Ypos[i] = 420 ;
                 Xpos[i] = Math.round(Math.random() * this.winWidth-width[i] * 4);
                 Speed[i] = Math.random() * this.options.speedC + 2;
             }
