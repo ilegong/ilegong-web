@@ -137,11 +137,7 @@
                         $appleGotCnt.text(data['total_apple']);
                         $appleTimesLeft.text(data['total_times'] < 0 ? 0 : data['total_times']);
                         $curr_got = data['got_apple'];
-                        if (data['total_times'] <= 0) {
-                            showNoMoreTimes();
-                        } else {
-                            showAfterGot($curr_got);
-                        }
+                        showAfterGot($curr_got);
                     }
                     $appleTree.attr('src', apple_tree_url);
                     shaking = false;
