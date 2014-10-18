@@ -48,7 +48,7 @@
     <div class="row voffset3">
     <!--<a href="javascript:;" id="clicktest">Test</a>-->
         <div class="text-center">
-        <button class="btn btn-danger" type="button">手机摇一摇</button>
+        <button id="shake_btn" class="btn btn-danger" type="button">手机摇一摇</button>
         <button id="share_btn" class="btn btn-danger" type="button">邀请朋友来</button>
         </div>
     </div>
@@ -149,7 +149,7 @@
             },2000);
         }
 
-        $('#clicktest').click(shakeEventDidOccur);
+        $('#shake_btn').click(shakeEventDidOccur);
         {{if $addedNotify}}utils.alert("您为朋友获得了一次摇苹果的机会！");{{/if}}
     });
 
