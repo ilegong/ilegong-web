@@ -97,6 +97,7 @@ class Apple201410Controller extends AppController {
             }
             $this->setTotalVariables($awardInfo);
             $this->set('got_apple', 0);
+        $this->pageTitle = "摇一摇免费得红富士苹果, 我已经摇到了".$awardInfo['got']."个苹果 -- 城市里的乡下人电科院QA小娟分享家乡的苹果";
     }
 
     public function shake() {

@@ -20,6 +20,10 @@
         background-color: #000;
     }
 
+    #apple_tree {
+        text-align: center;
+    }
+
     .apple_share.in {
         opacity: .9;
     }
@@ -32,7 +36,7 @@
 
     #wrapper {
         background-color: #ffeabc;
-        min-height: 2000px;
+        min-height: 1000px;
     }
 </style>
 
@@ -51,7 +55,7 @@
         </div>
     </div>
 
-    <div class="row voffset3">
+    <div class="row voffset3 hoz_padding10">
       <p id="game_text_no_more" style="{{if $total_times>0}}display:none{{/if}}">
           你目前没有摇一摇的机会喔~ 赶紧摇起来~~ 只要攒够100个苹果马上换免费苹果一箱！谁怕谁，你又不是没有朋友！分享到朋友圈，分享连接被朋友点击还能够赢得再摇一次的机会喔~
       </p>
@@ -59,6 +63,9 @@
             你目前有<span class="apple_numbers" id="apple_times_left_bottom">{{$total_times}}</span>次 摇一摇的机会喔~赶紧摇起来~~
             只要攒够100个苹果马上换免费苹果一箱！谁怕谁，你又不是没有朋友！分享到朋友圈，分享链接被朋友点击还能够赢得再摇一次的机会喔~
         </p>
+        <p/>
+        <p>[朋友说] 同事间互相分享家乡特产的创业网站，我们都是城市里的乡下人。</p>
+        <p><a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">点击关注【朋友说】</a></p>
     </div>
 </div>
 
@@ -85,10 +92,19 @@
         $('body').append($share_div);
 
         $('#share_btn').click(function(){
-            $share_div.show();
+            showShareAndChangeTitle();
         });
 
-        function showAfterGot($got,times, timeout) {
+        function changeTitle(total) {
+            document.title = '摇一摇免费得红富士苹果, 我已经摇到了'+total+'个苹果 -- 城市里的乡下人电科院QA小娟分享家乡的苹果-朋友说';
+        }
+
+        function showShareAndChangeTitle() {
+            changeTitle($appleGotCnt.text());
+            $share_div.show();
+        }
+
+        function showAfterGot($got,times, total,  timeout) {
             if ($got > 0) {
                 utils.alert('恭喜你！你摇掉了<span class="apple_numbers">' + $got + '</span>个苹果！<br/><small>(2秒后自动消失)</small>', function(){}, timeout);
             } else {
@@ -101,6 +117,10 @@
             } else {
                 $game_text_no_more.show();
                 $game_text_has_more.hide();
+            }
+
+            if (total > 0) {
+                changeTitle(total);
             }
         }
 
@@ -152,12 +172,12 @@
                         $appleGotCnt.text(data['total_apple']);
                         $appleTimesLeft.text(data['total_times'] < 0 ? 0 : data['total_times']);
                         $curr_got = data['got_apple'];
-                        showAfterGot($curr_got, data['total_times'],  2000);
+                        showAfterGot($curr_got, data['total_times'], data['total_apple'], 2000);
                     }
                     $appleTree.attr('src', apple_tree_url);
                     shaking = false;
                 });
-            },2000);
+            },1000);
         }
 
         $('#shake_btn').click(shakeEventDidOccur);

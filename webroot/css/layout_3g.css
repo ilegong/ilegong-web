@@ -285,3 +285,10 @@ ul.tags_menu {
     text-decoration: none;
     background-color: transparent;
 }
+
+.hoz_padding20 {
+    padding-left: 20px; padding-right: 20px;
+}
+.hoz_padding10 {
+    padding-left: 10px; padding-right: 10px;
+}
