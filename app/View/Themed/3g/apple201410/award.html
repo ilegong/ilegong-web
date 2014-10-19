@@ -41,9 +41,9 @@
 </style>
 
 <div class="container">
-    <div class="row">
-        <div class="col-xs-12 text-center">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp; 已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个</div>
-        <div class="col-xs-12 text-center"><small>活动时间：10月21日-10月30日</small> <a href="{{$this->Html->url(array('action'=>'rules'))}}" style="text-decoration: underline; line-height: 28px"><small>活动规则</small></a></div>
+    <div class="row text-center">
+        <h2>摇下100个，小娟家苹果免费领</h2>
+        <div class="col-xs-12">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp; 已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个 <a href="{{$this->Html->url(array('action'=>'rules'))}}" style="text-decoration: underline; line-height: 28px"><small>活动规则</small></a></div>
     </div>
     <div id="apple_tree" class="row voffset3">
       <img src="{{$this->Html->url('/img/apple201410/apple_tree.gif')}}"/>
