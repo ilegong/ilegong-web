@@ -185,8 +185,6 @@
                 });
             },1000);
         }
-        utils.alert('您为朋友获得了<span class="apple_numbers">1</span>次摇苹果的机会！');
-
         $('#shake_btn').click(shakeEventDidOccur);
         {{if $notifyFriendId}}
         $.getJSON("{{$this->Html->url(array('action' => 'notifiedToMe', $notifyFriendId))}}?r="+Math.random(), function(data){
