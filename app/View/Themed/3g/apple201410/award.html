@@ -132,6 +132,7 @@
 
         var showNoMoreTimesDialog = false;
         function showNoMoreTimes() {
+            if (showNoMoreTimesDialog == true) { return; }
             showNoMoreTimesDialog = true;
             bootbox.dialog({
                 message: '机会已用完，分享给你的朋友们，每个朋友点击过来就增加<span class="apple_numbers">1</span>次机会！',
