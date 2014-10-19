@@ -4,6 +4,8 @@ class OrdersController extends AppController{
 	var $name = 'Orders';
 
 	var $user_condition = array();
+
+    public $components = array('Weixin');
 	
 	var $ship_type = array(
 		101=>'申通',
@@ -714,6 +716,9 @@ class OrdersController extends AppController{
 				$ship_code = $_REQUEST['ship_code'];
 				$ship_type = $_REQUEST['ship_type'];
 				$this->Order->updateAll(array('status'=>$status,'ship_code'=>"'".addslashes($ship_code)."'",'ship_type'=>$ship_type, 'lastupdator'=>$creator),array('id'=>$order_id));
+                //todo add weixin message
+                $this->Weixin->send_order_shipped_message("orKydjn-VDouoLz3XjG4cWEb7Tu4",$order_id,$ship_type,$ship_code);
+
 				echo json_encode(array('order_id'=>$order_id,'msg'=>'订单状态已更新为“已发货”'));
 				exit;
 			}
