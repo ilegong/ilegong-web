@@ -67,7 +67,7 @@
                 width[i] = height[i];
 
             // Starting y position of leaves
-            Ypos[i] = /*-Math.random() * 500  + */ 120;
+            Ypos[i] = /*-Math.random() * 500  + */ 150;
 
             // Randomization of x position of leaves
             Xpos[i] = Math.round(Math.random() * (this.winWidth) - width[i] * 3);
