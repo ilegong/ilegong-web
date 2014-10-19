@@ -10,7 +10,7 @@
         {{/if}}
         <div class="clearfix" style="position: relative">
             <strong class="vertical-align text-price"> ￥{{$this->Number->precision($Product['Product']['price'], 2)}}</strong>
-            <span class="vertical-align" style="position: absolute; right: 0; bottom: 0;">快递：{{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'])}} {{else}}包邮{{/if}}</span>
+            <span class="vertical-align" style="position: absolute; right: 0; bottom: 0;">快递：{{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</span>
         </div>
         <div  id="productinfo" class="clearfix voffset2" style="padding-bottom:10px;">
             <div class="input-group" style="float:left;width:120px;">
