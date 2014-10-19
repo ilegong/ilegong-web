@@ -130,19 +130,23 @@
             }
         }
 
+        var showNoMoreTimesDialog = false;
         function showNoMoreTimes() {
+            showNoMoreTimesDialog = true;
             bootbox.dialog({
                 message: '机会已用完，分享给你的朋友们，每个朋友点击过来就增加<span class="apple_numbers">1</span>次机会！',
                 buttons: {
                     main: {
                         label: "取消",
-                        className: "btn-default"
+                        className: "btn-default",
+                        callback: function(){showNoMoreTimesDialog = false}
                     },
                     danger: {
                         label: "立即分享",
                         className: "btn-danger",
                         callback: function() {
-                            $share_div.show();
+                            showShareAndChangeTitle();
+                            showNoMoreTimesDialog = false;
                         }
                     }
                 }
