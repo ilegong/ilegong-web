@@ -262,7 +262,7 @@ function submitaddcomment(form){
                     }
                     var $name = $.trim(result);
                     if ($name.length < {{PROFILE_NICK_MIN_LEN}}) {
-                        showEditNick("亲，昵称不能小于4个字符：", {'value': $name});
+                        showEditNick("亲，昵称不能小于{{PROFILE_NICK_MIN_LEN}}个字符：", {'value': $name});
                     } else {
                         $.post('/users/edit_nick_name',
                                 {'nickname': $name},
