@@ -865,7 +865,7 @@ var utils = {
 
         if (!callback) callback = function(){};
 
-        var $dlg = bootbox.alert(msg, callback).css({
+        var $dlg = bootbox.alert({'message':msg, 'callback':callback, 'closeButton':false}).css({
             'top': '50%',
             'margin-top': function () {
                 return -($(this).height() / 2);
