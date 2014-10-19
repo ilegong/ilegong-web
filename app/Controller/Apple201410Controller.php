@@ -38,6 +38,31 @@ class Apple201410Controller extends AppController {
         $this->autoRender = false;
     }
 
+    var $time_last_query_key = 'award-new-times-last';
+    public function hasNewTimes() {
+        $this->autoRender = false;
+        $r = $this->Session->read($this->time_last_query_key);
+        if ($r && $r > 1413724118 /*2014-10-19 21:00*/) {
+            if (time() - $r < 5) {
+                return json_encode(array('success' => false));
+            }
+        }
+
+        $curr = time();
+        $this->_updateLastQueryTime($curr);
+
+        $c = $this->TrackLog->find('count', array('conditions' => array(
+            'type' => KEY_APPLE_201410,
+            'to' => $this->currentUser['id'],
+            'award_time > \''.date('Y-m-d H:i:s', $r).'\''
+        )));
+        return json_encode(array('success' => true, 'new_times' => $c));
+    }
+
+    private function _updateLastQueryTime($curr) {
+        $this->Session->write($this->time_last_query_key, $curr);
+    }
+
     public function award() {
         $tr_id = $_GET['trid'];
         list($friendUid, $isSelf) = $this->check_tr_id($tr_id, 'award');
@@ -98,6 +123,7 @@ class Apple201410Controller extends AppController {
             }
             $this->setTotalVariables($awardInfo);
             $this->set('got_apple', 0);
+        $this->_updateLastQueryTime(time());
         $this->pageTitle = "摇一摇免费得红富士苹果, 我已经摇到了".$awardInfo['got']."个苹果 -- 城市里的乡下人电科院QA小娟分享家乡的苹果";
     }
 
@@ -107,6 +133,7 @@ class Apple201410Controller extends AppController {
         $apple = $this->guessAwardAndUpdate($awardInfo);
         $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
         $total_apple = $awardInfo && $awardInfo['got'] ? $awardInfo['got'] : 0;
+        $this->_updateLastQueryTime(time());
         echo json_encode(array('got_apple' => $apple, 'total_apple' => $total_apple, 'total_times' => $totalAwardTimes));
     }
 
