@@ -634,7 +634,11 @@ class UsersController extends AppController {
             $ref = oauth_wx_goto($_GET['referer_key'], WX_HOST);
         }
 
-        $this->_goto_wx_oauth($ref);
+        if ($_GET['scope'] == 'userinfo') {
+            $this->_goto_wx_oauth($ref, WX_OAUTH_USERINFO);
+        } else {
+            $this->_goto_wx_oauth($ref);
+        }
     }
 
     function wx_auth() {
@@ -659,7 +663,7 @@ class UsersController extends AppController {
                     $need_transfer = false;
                     if (empty($oauth)) {
                         $oauth['Oauthbinds']['oauth_openid'] = $openid;
-                        $oauth['Oauthbinds']['created'] = date('Y-m-d H:i:s');
+                        $oauth['Oauthbinds']['created'] = date(FORMAT_DATETIME);
                         $oauth['Oauthbinds']['source'] = $oauth_wx_source;
                         $oauth['Oauthbinds']['domain'] = $oauth_wx_source;
                     } else {
@@ -667,8 +671,8 @@ class UsersController extends AppController {
                     }
                     $oauth['Oauthbinds']['oauth_token'] = $access_token;
                     $oauth['Oauthbinds']['oauth_token_secret'] = empty($refresh_token) ? '' : $refresh_token;
-                    $oauth['Oauthbinds']['updated'] = date('Y-m-d H:i:s');
-
+                    $oauth['Oauthbinds']['updated'] = date(FORMAT_DATETIME);
+                    $oauth['Oauthbinds']['extra_param'] = json_encode(array('scope' => $res['scope'], 'expires_in' => $res['expires_in']));
                     $refer_by_state = '';
                     if (!empty($_REQUEST['state'])) {
                         $str = base64_decode($_REQUEST['state']);
@@ -702,16 +706,26 @@ class UsersController extends AppController {
                         }
                     }
 
+                    $userInfo = $res['scope'] == WX_OAUTH_USERINFO ? $this->getWxUserInfo($openid, $access_token) : array();
+                    if (!empty($userInfo['unionid'])) {
+                        $oauth['Oauthbinds']['unionId'] = $userInfo['unionid'];
+                    }
+
                     $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
                     if ($new_serviceAccount_binded_uid > 0) {
+                        $this->updateUserProfileByWeixin($new_serviceAccount_binded_uid, $userInfo);
                     } else {
-                        $this->User->save(array(
-                            'username' => $oauth['Oauthbinds']['oauth_openid'],
-                            'nickname' => '微信用户' . mb_substr($oauth['Oauthbinds']['oauth_openid'], 0, PROFILE_NICK_LEN - 4, 'UTF-8'),
-                            'password' => '',
-                            'uc_id' => 0
-                        ));
-                        $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
+                        if (!empty($userInfo)) {
+                            $oauth['Oauthbinds']['user_id'] = $this->createNewUserByWeixin($userInfo);
+                        } else {
+                            $this->User->save(array(
+                                'username' => $oauth['Oauthbinds']['oauth_openid'],
+                                'nickname' => '微信用户' . mb_substr($oauth['Oauthbinds']['oauth_openid'], 0, PROFILE_NICK_LEN - 4, 'UTF-8'),
+                                'password' => '',
+                                'uc_id' => 0
+                            ));
+                            $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
+                        }
                         $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
                     }
 
@@ -720,6 +734,8 @@ class UsersController extends AppController {
                         $this->transferUserInfo($old_serviceAccount_binded_uid, $new_serviceAccount_binded_uid);
                     }
 
+
+                    //TODO: fix risk
                     $redirectUrl = '/users/login?source=' . $oauth['Oauthbinds']['source'] . '&openid=' . $oauth['Oauthbinds']['oauth_openid'];
 
                     if(!empty($refer_by_state)) {
@@ -760,7 +776,7 @@ class UsersController extends AppController {
     /**
      * @param $ref
      */
-    private function _goto_wx_oauth($ref) {
+    private function _goto_wx_oauth($ref, $scope='snsapi_base') {
         $return_uri = 'http://'.WX_HOST.'/users/wx_auth?';
         if (!empty($ref)) {
             $return_uri .= 'referer=' . urlencode($ref);
@@ -768,7 +784,84 @@ class UsersController extends AppController {
 
         $return_uri = urlencode($return_uri);
 
-        $this->redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . '&response_type=code&scope=snsapi_base&state=0#wechat_redirect');
+        $this->redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . "&response_type=code&scope=$scope&state=0#wechat_redirect");
+    }
+
+    /**
+     * @param $new_serviceAccount_binded_uid
+     * @param $userInfo
+     */
+    protected function updateUserProfileByWeixin($new_serviceAccount_binded_uid, $userInfo) {
+        if (empty($userInfo)) { return; }
+        $user = $this->User->findById($new_serviceAccount_binded_uid);
+        if (!empty($user)) {
+            $changed = false;
+            $user = $user['User'];
+            if (!$user['nickname']) {
+                $user['nickname'] = $userInfo['nickname'];
+                $changed = true;
+            }
+            if ($user['sex'] !== 0 && $user['sex'] != 1) {
+                $user['sex'] = $userInfo['sex'];
+                $changed = true;
+            }
+            if (!$user['image']) {
+                $user['image'] = $userInfo['headimgurl'];
+                $changed = true;
+            }
+            if (!$user['city']) {
+                $user['city'] = $userInfo['city'];
+                $changed = true;
+            }
+            if (!$user['province']) {
+                $user['province'] = $userInfo['province'];
+                $changed = true;
+            }
+            if (!$user['country']) {
+                $user['country'] = $userInfo['country'];
+                $changed = true;
+            }
+            if (!$user['language']) {
+                $user['language'] = $userInfo['language'];
+                $changed = true;
+            }
+            if ($changed) {
+                $this->User->save($user);
+            }
+        }
+    }
+
+    /**
+     * @param $userInfo
+     */
+    protected function createNewUserByWeixin($userInfo) {
+        $this->User->save(array(
+            'nickname' => $userInfo['nickname'],
+            'sex' => $userInfo['sex'] == 1 ? 0 : ($userInfo['sex'] == 2 ? 1 : null),
+            'image' => $userInfo['headimgurl'],
+            'province' => $userInfo['province'],
+            'city' => $userInfo['city'],
+            'country' => $userInfo['country'],
+            'language' => $userInfo['language'],
+            'username' => $userInfo['openid'],
+            'password' => '',
+            'uc_id' => 0
+        ));
+        return $this->User->getLastInsertID();
+    }
+
+    /**
+     * @param $openid
+     * @param $access_token
+     * @return mixed
+     */
+    protected function getWxUserInfo($openid, $access_token) {
+        $userInfo = $this->WxOauth->getUserInfo($openid, $access_token);
+        if (!empty($userInfo)) {
+            $userInfo = $userInfo['WxOauth'];
+            return $userInfo;
+        }
+        return $userInfo;
     }
 
 }

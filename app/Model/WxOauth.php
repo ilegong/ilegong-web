@@ -9,4 +9,14 @@ App::uses('Model', 'Model');
 class WxOauth extends Model {
     public $useDbConfig = 'WxOauth';
     public $useTable = false;
+
+
+    public function getUserInfo($openid, $token, $lang = 'zh_CN') {
+        return $this->find('all', array(
+            'method' => 'get_user_info',
+            'token' => $token,
+            'openid' => $openid,
+            'lang' => $lang
+        ));
+    }
 }

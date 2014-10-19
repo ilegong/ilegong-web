@@ -87,10 +87,12 @@ class WxOauthSource extends DataSource {
             $json = $this->auth_token($queryData);
         } else if ($queryData['method'] == 'get_access_token') {
             $json = $this->get_access_token($queryData);
+        } else if ($queryData['method'] == 'get_user_info') {
+            $json = $this->get_user_info($queryData);
         } else {
             throw new CakeException("not supported query type(" . $queryData['method'] . ")");
         }
-        $this->log("method:".$queryData['method'].", args: ".var_export($queryData, true).", json:". $json);
+        $this->log("method:".$queryData['method'].", json:". $json);
         $res = json_decode($json, true);
         if (is_null($res)) {
             $error = json_last_error();
@@ -147,14 +149,8 @@ class WxOauthSource extends DataSource {
             return null;
         }
 
-        $curl = curl_init();
-        $options = array(
-            CURLOPT_URL => $this->config['api_wx_url'].'/sns/oauth2/access_token?appid='.WX_APPID.'&secret='.WX_SECRET.'&code='. $conditions['code'] .'&grant_type=authorization_code',
-            CURLOPT_CUSTOMREQUEST => 'POST', // GET POST PUT PATCH DELETE HEAD OPTIONS
-            CURLOPT_POSTFIELDS => '',
-        );
-        curl_setopt_array($curl,($options + $this->wx_curl_option_defaults));
-        return curl_exec($curl);
+        $url = $this->config['api_wx_url'] . '/sns/oauth2/access_token?appid=' . WX_APPID . '&secret=' . WX_SECRET . '&code=' . $conditions['code'] . '&grant_type=authorization_code';
+        return $this->do_curl($url);
     }
 
     protected function auth_token($conditions) {
@@ -162,13 +158,34 @@ class WxOauthSource extends DataSource {
             return null;
         }
 
+        $url = $this->config['api_wx_url'] . '/sns/auth?access_token=' . $conditions['token'] . '&openid=' . $conditions['openid'];
+        return $this->do_curl($url);
+    }
+
+    protected function get_user_info($conditions) {
+        if (empty($conditions) || empty($conditions['token']) || empty($conditions['openid'])) {
+            return null;
+        }
+
+        $lang = $conditions['lang'] ? $conditions['lang'] : 'zh_CN';
+        $token = urlencode($conditions['token']);
+        $url = $this->config['api_wx_url'] . '/sns/userinfo?access_token=' . $token . '&openid=' . $conditions['openid'] ."&lang=". $lang;
+        return $this->do_curl($url);
+    }
+
+    /**
+     * @param $url
+     * @return mixed
+     */
+    protected function do_curl($url) {
         $curl = curl_init();
         $options = array(
-            CURLOPT_URL => $this->config['api_wx_url'].'/sns/auth?access_token='.$conditions['token'].'&openid='.$conditions['openid'],
+            CURLOPT_URL => $url,
             CURLOPT_CUSTOMREQUEST => 'POST', // GET POST PUT PATCH DELETE HEAD OPTIONS
             CURLOPT_POSTFIELDS => '',
         );
-        curl_setopt_array($curl,($options + $this->wx_curl_option_defaults));
+        curl_setopt_array($curl, ($options + $this->wx_curl_option_defaults));
+        $this->log("WXOauth-curl:".$url);
         return curl_exec($curl);
     }
 }

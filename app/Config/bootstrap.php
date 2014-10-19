@@ -10,6 +10,12 @@ const WX_JS_API_CALL_URL = 'http://pys.b-wmobile.com/wxPay/jsApiPay';
 const WX_NOTIFY_URL = 'http://pys.b-wmobile.com/wxPay/notify.html';
 const WX_SERVICE_ID_GOTO = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200757804&idx=1&sn=90b121983525298a4ac26ee8d6c0bc1c#rd';
 
+const WX_OAUTH_USERINFO = 'snsapi_userinfo';
+const WX_OAUTH_BASE = 'snsapi_base';
+
+
+define('FORMAT_DATETIME', 'Y-m-d H:i:s');
+
 define('ORDER_STATUS_CANCEL', 10);
 define('ORDER_STATUS_SHIPPED', 2);
 define('ORDER_STATUS_RECEIVED', 3);

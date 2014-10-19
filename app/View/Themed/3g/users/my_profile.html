@@ -3,7 +3,7 @@
         <ul class="list-group">
             <li class="list-group-item" style="height: 66px">
                 <span>头像:</span>
-                <img class="pull-right" height="46px" src="{{$this->Html->url('/img/default_user_icon.jpg')}}"/>
+                <img class="pull-right" height="46px" src="{{$this->Html->url( $profile['image'] ? $profile['image'] : '/img/default_user_icon.jpg')}}"/>
             </li>
             <li id="p_nick" class="list-group-item">
                 <span>昵称:</span>
@@ -13,7 +13,7 @@
             <li id="p_sex" class="list-group-item">
                 <span>性别:</span>
                 <span class="glyphicon glyphicon-chevron-right pull-right"></span>
-                <span class="text-right pull-right"><?php if ($profile['sex'] === 0 ){ echo '男';} else if ($profile['sex'] === 1){ echo '女';} else { echo '-';} ?></span>
+                <span class="text-right pull-right"><?php if ($profile['sex'] == 0 ){ echo '男';} else if ($profile['sex'] == 1){ echo '女';} else { echo '-';} ?></span>
             </li>
             <li id="p_companies" class="list-group-item">
                 <span>单位:</span>
