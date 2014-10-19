@@ -23,6 +23,7 @@ class Apple201410Controller extends AppController {
     }
 
     public function rules() {}
+    public function index() {}
 
     public function notifiedToMe($friendId) {
         $key = 'award-notified-' . $friendId;
