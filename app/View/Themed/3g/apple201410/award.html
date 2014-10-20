@@ -59,8 +59,8 @@
     </div>
     <div class="row voffset3">
         <div class="text-center">
-        <button id="shake_btn" class="btn btn-danger" type="button" {{$total_times > 0 ? 'style="display:none"' : ''}}>手机摇一摇</button>
-        <button id="share_btn" class="btn btn-warning" type="button" {{$total_times <= 0 ? 'style="display: none"' : ''">朋友帮我摇</button>
+        <button id="shake_btn" class="btn btn-warning" type="button" style="display:{{$total_times <= 0 ? 'none' : ''}}">手机摇一摇</button>
+        <button id="share_btn" class="btn btn-warning" type="button" style="display:{{$total_times > 0 ? 'none' : ''}}">朋友帮我摇</button>
         <a class="btn btn-danger" href="/products/20141009/xiao_juan_jia_xian_yang_hong_fu_shi_yu_shou_20xiang.html">马上预订</a>
         </div>
     </div>
@@ -115,30 +115,6 @@
             $share_div.show();
         }
 
-        function showAfterGot($got,times, total, timeout) {
-            if ($got > 0) {
-                utils.alert('恭喜你！你摇掉了<span class="apple_numbers">' + $got + '</span>个苹果！<br/><small>(2秒后自动消失)</small>', function(){}, timeout);
-            } else {
-                utils.alert('你力气太小啦！只晃掉了几片树叶！<br/><small>(2秒后自动消失)</small>', function(){}, timeout);
-            }
-
-            if (times > 0) {
-                $game_text_has_more.show();
-                $game_text_no_more.hide();
-                $shakeBtn.show();
-                $shareBtn.hide();
-            } else {
-                $game_text_no_more.show();
-                $game_text_has_more.hide();
-                $shakeBtn.hide();
-                $shareBtn.show();
-            }
-
-            if (total > 0) {
-                changeTitle(total);
-            }
-        }
-
         var showNoMoreTimesDialog = false;
         function showNoMoreTimes() {
             if (showNoMoreTimesDialog == true) { return; }
@@ -166,6 +142,31 @@
                     return -($(this).height() / 2);
                 }
             }).find('div.modal-footer').css({'text-align':'center'});
+        }
+
+        function showAfterGot($got,times, total, timeout) {
+            var close_callback = times > 0 ? null : showNoMoreTimes;
+            if ($got > 0) {
+                utils.alert('恭喜你！你摇掉了<span class="apple_numbers">' + $got + '</span>个苹果！<br/><small>(2秒后自动消失)</small>', function(){}, timeout, close_callback);
+            } else {
+                utils.alert('你力气太小啦！只晃掉了几片树叶！<br/><small>(2秒后自动消失)</small>', function(){}, timeout, close_callback);
+            }
+
+            if (times > 0) {
+                $game_text_has_more.show();
+                $game_text_no_more.hide();
+                $shakeBtn.show();
+                $shareBtn.hide();
+            } else {
+                $game_text_no_more.show();
+                $game_text_has_more.hide();
+                $shakeBtn.hide();
+                $shareBtn.show();
+            }
+
+            if (total > 0) {
+                changeTitle(total);
+            }
         }
 
         window.addEventListener('shake', shakeEventDidOccur, false);
@@ -201,13 +202,12 @@
         }
 
         $shakeBtn.click(shakeEventDidOccur);
-        {{if $notifyFriendId}}
-        $.getJSON("{{$this->Html->url(array('action' => 'notifiedToMe', $notifyFriendId))}}?r="+Math.random(), function(data){
+        $.getJSON("{{$this->Html->url(array('action' => 'notifiedToMe'))}}?r="+Math.random(), function(data){
             if (data.notified === false) {
-                utils.alert('您为朋友获得了<span class="apple_numbers">1</span>次摇苹果的机会！');
+                var msg = data.got ? '您为<span style="color:red">'+data.name+'</span>获得了<span class="apple_numbers">1</span>次摇苹果的机会！' : '您已经帮这个朋友点过啦！';
+                utils.alert(msg);
             }
         });
-        {{/if}}
 
         var query_interval = 5000;
         function new_times_query() {

@@ -25,19 +25,20 @@ class Apple201410Controller extends AppController {
     public function rules() {}
     public function index() {}
 
-    public function notifiedToMe($friendId) {
-        $key = 'award-notified-' . $friendId;
+    public function notifiedToMe() {
+        $key = $this->sess_award_notified;
         $r = $this->Session->read($key);
-        if ($r && $r === true) {
-            $notified = true;
+        if (!empty($r)) {
+            $r['notified'] = false;
+            echo json_encode($r);
         } else {
             $notified = false;
-            $this->Session->write($key, true);
+            $this->Session->write($key, 0);
+            echo json_encode(array("notified" => $notified));
         }
-        echo json_encode(array("notified" => $notified));
         $this->autoRender = false;
     }
-
+    var $sess_award_notified = "award-notified";
     var $time_last_query_key = 'award-new-times-last';
     public function hasNewTimes() {
         $this->autoRender = false;
@@ -63,6 +64,10 @@ class Apple201410Controller extends AppController {
         $this->Session->write($this->time_last_query_key, $curr);
     }
 
+    private function _addNotify($uname, $added) {
+        $this->Session->write($this->sess_award_notified, array('name' => $uname, 'got' => $added));
+    }
+
     public function award() {
         $tr_id = $_GET['trid'];
         list($friendUid, $isSelf) = $this->check_tr_id($tr_id, 'award');
@@ -70,21 +75,19 @@ class Apple201410Controller extends AppController {
 
             $friend = $this->User->findById($friendUid);
             if (!empty($friend)) {
-                $this->set('friend', $friend);
-
                 $trackLogs = $this->TrackLog->find('first', array(
                     'conditions' => array('type' => KEY_APPLE_201410, 'from' => $this->currentUser['id'], 'to' => $friendUid),
                     'fields' => array('id',)
                 ));
-                if (empty($trackLogs)) {
+                $shouldAdd = empty($trackLogs);
+                if ($shouldAdd) {
                     $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friendUid));
                     $this->TrackLog->save(array('TrackLog' => array('type' => KEY_APPLE_201410, 'from' => $this->currentUser['id'], 'to' => $friendUid, 'award_time' => date('Y-m-d H:i:s') )));
-                    $this->set('notifyFriendId', $friendUid);
                 }
-            } else {
-                //treat as self
-                $this->redirect_for_append_tr_id('award');
+                $this->_addNotify($friend['User']['nickname'], $shouldAdd);
             }
+            //treat as self
+            $this->redirect_for_append_tr_id('award');
         }
 //            $friendsHelpMe = $this->AppleAward->find('all', array(
 //                'conditions' => array('award_to' => $friendUid),
@@ -115,14 +118,14 @@ class Apple201410Controller extends AppController {
 //            $this->set('helpMe', $friendsHelpMe);
 //            $this->set('iHelp', $friendsIHelped);
 //            $this->set('userIdNames', $users);
-            $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($this->currentUser['id'], KEY_APPLE_201410);
-            if (empty($awardInfo)) {
-                $awardInfo = array('AwardInfo' => array('uid' => $this->currentUser['id'], 'type' => KEY_APPLE_201410, 'times' => 10, 'got' => 0));
-                $this->AwardInfo->save($awardInfo);
-                $awardInfo = $awardInfo['AwardInfo'];
-            }
-            $this->setTotalVariables($awardInfo);
-            $this->set('got_apple', 0);
+        $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($this->currentUser['id'], KEY_APPLE_201410);
+        if (empty($awardInfo)) {
+            $awardInfo = array('AwardInfo' => array('uid' => $this->currentUser['id'], 'type' => KEY_APPLE_201410, 'times' => 10, 'got' => 0));
+            $this->AwardInfo->save($awardInfo);
+            $awardInfo = $awardInfo['AwardInfo'];
+        }
+        $this->setTotalVariables($awardInfo);
+        $this->set('got_apple', 0);
         $this->_updateLastQueryTime(time());
         $this->pageTitle = "摇一摇免费得红富士苹果, 我已经摇到了".$awardInfo['got']."个苹果 -- 城市里的乡下人电科院QA小娟分享家乡的苹果";
     }

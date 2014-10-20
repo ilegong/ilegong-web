@@ -861,7 +861,7 @@ var utils = {
         });
     },
 
-    alert:function(msg, callback, timeout) {
+    alert:function(msg, callback, timeout, close_callback) {
 
         if (!callback) callback = function(){};
 
@@ -880,6 +880,12 @@ var utils = {
                 }, timeout);
                 $dlg.data('hideInteval', id);
             });
+
+            if (typeof close_callback == 'function') {
+                $dlg.on('hidden.bs.modal', function () {
+                    close_callback();
+                });
+            }
         }
     },
 
