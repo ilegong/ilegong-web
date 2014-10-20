@@ -31,9 +31,9 @@ class Apple201410Controller extends AppController {
         if (!empty($r)) {
             $r['notified'] = false;
             echo json_encode($r);
+            $this->Session->write($key, 0);
         } else {
             $notified = true;
-            $this->Session->write($key, 0);
             echo json_encode(array("notified" => $notified));
         }
         $this->autoRender = false;
