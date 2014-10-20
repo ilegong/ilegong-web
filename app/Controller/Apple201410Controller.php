@@ -32,7 +32,7 @@ class Apple201410Controller extends AppController {
             $r['notified'] = false;
             echo json_encode($r);
         } else {
-            $notified = false;
+            $notified = true;
             $this->Session->write($key, 0);
             echo json_encode(array("notified" => $notified));
         }
