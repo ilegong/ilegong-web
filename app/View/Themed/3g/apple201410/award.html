@@ -169,14 +169,7 @@
             }).find('div.modal-footer').css({'text-align':'center'});
         }
 
-        function showAfterGot($got,times, total, timeout) {
-            var close_callback = times > 0 ? null : showNoMoreTimes;
-            if ($got > 0) {
-                utils.alert('恭喜你！你摇掉了<span class="apple_numbers">' + $got + '</span>个苹果！<br/><small>(2秒后自动消失)</small>', function(){}, timeout, close_callback);
-            } else {
-                utils.alert('你力气太小啦！只晃掉了几片树叶！<br/><small>(2秒后自动消失)</small>', function(){}, timeout, close_callback);
-            }
-
+        function updateViewState(times) {
             if (times > 0) {
                 $game_text_has_more.show();
                 $game_text_no_more.hide();
@@ -188,10 +181,19 @@
                 $shakeBtn.hide();
                 $shareBtn.show();
             }
-
             if (total > 0) {
                 changeTitle(total);
             }
+        }
+
+        function showAfterGot($got,times, total, timeout) {
+            var close_callback = times > 0 ? null : showNoMoreTimes;
+            if ($got > 0) {
+                utils.alert('恭喜你！你摇掉了<span class="apple_numbers">' + $got + '</span>个苹果！<br/><small>(2秒后自动消失)</small>', function(){}, timeout, close_callback);
+            } else {
+                utils.alert('你力气太小啦！只晃掉了几片树叶！<br/><small>(2秒后自动消失)</small>', function(){}, timeout, close_callback);
+            }
+            updateViewState(times);
         }
 
         window.addEventListener('shake', shakeEventDidOccur, false);
@@ -226,7 +228,7 @@
             },1000);
         }
 
-        $shakeBtn.click(shakeEventDidOccur);
+//        $shakeBtn.click(shakeEventDidOccur);
         $.getJSON("{{$this->Html->url(array('action' => 'notifiedToMe'))}}?r="+Math.random(), function(data){
             if (data.notified === false) {
                 var msg = data.got ? '您为<span style="color:red">'+data.name+'</span>获得了<span class="apple_numbers">1</span>次摇苹果的机会！' : '您已经帮这个朋友点过啦！';
@@ -238,7 +240,9 @@
         function new_times_query() {
             $.getJSON('{{$this->Html->url(array("action"=>"hasNewTimes"))}}', function (data) {
                 if (data.success && data.new_times > 0) {
-                    $appleTimesLeft.text(parseInt($appleTimesLeft.first().text()) + data.new_times);
+                    var times = parseInt($appleTimesLeft.first().text()) + data.new_times;
+                    $appleTimesLeft.text(times);
+                    updateViewState(times);
                     utils.alert('您的朋友<span style="color:red">'+data.nicknames+'</span>为您获得了<span class="apple_numbers">' + data.new_times + '</span>次摇苹果的机会！', function () {
                         setTimeout(new_times_query, query_interval);
                     });
