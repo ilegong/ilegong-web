@@ -19,7 +19,6 @@
                 <?php
                 $referer_link = '';
                 if (!empty($referer)) {
-                    if (strpos($referer, 'apple_201410') !== false){$referer_link .= '&scope=userinfo';}
                     $referer_link .= '&referer='.urlencode($referer);
                 }
                 ?>

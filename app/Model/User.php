@@ -56,6 +56,15 @@ class User extends AppModel {
         return $userlist;
     }
 
+    /**
+     * @param $uid
+     * @return string  null if not found
+     */
+    function findNicknamesOfUid($uid) {
+        $m = $this->findNicknamesMap(array($uid,));
+        return !empty($m) ? $m[$uid] : null;
+    }
+
     function findNicknamesMap($uids) {
         $names = $this->find('all', array('conditions' => array('id' => $uids), 'fields' => array('nickname', 'id')));
         $map = array();

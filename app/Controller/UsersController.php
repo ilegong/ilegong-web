@@ -660,7 +660,7 @@ class UsersController extends AppController {
                         'oauth_openid' => $res['openid']
                     )));
 
-                    $need_transfer = false;
+                    $not_bind_yet = empty($oauth);
                     if (empty($oauth)) {
                         $oauth['Oauthbinds']['oauth_openid'] = $openid;
                         $oauth['Oauthbinds']['created'] = date(FORMAT_DATETIME);
@@ -673,12 +673,15 @@ class UsersController extends AppController {
                     $oauth['Oauthbinds']['oauth_token_secret'] = empty($refresh_token) ? '' : $refresh_token;
                     $oauth['Oauthbinds']['updated'] = date(FORMAT_DATETIME);
                     $oauth['Oauthbinds']['extra_param'] = json_encode(array('scope' => $res['scope'], 'expires_in' => $res['expires_in']));
+
+                    $need_transfer = false;
+                    $should_require_user_info = true;
                     $refer_by_state = '';
                     if (!empty($_REQUEST['state'])) {
                         $str = base64_decode($_REQUEST['state']);
                         $this->log("got state(after base64 decode):".$str);
                         if (($idx = strpos($str, self::WX_BIND_REDI_PREFIX)) !== false) {
-
+                            $should_require_user_info = false;
                             //TODO: handle decrypt risk
                             $old_openid = authcode(substr($str, 0, $idx), 'DECODE');
                             if (!empty($old_openid)) {
@@ -706,17 +709,42 @@ class UsersController extends AppController {
                         }
                     }
 
-                    $userInfo = $res['scope'] == WX_OAUTH_USERINFO ? $this->getWxUserInfo($openid, $access_token) : array();
-                    if (!empty($userInfo['unionid'])) {
-                        $oauth['Oauthbinds']['unionId'] = $userInfo['unionid'];
+                    $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
+
+                    //Do check Require user's authorization to get profile
+                    if ($should_require_user_info && $res['scope'] == WX_OAUTH_BASE) {
+                        $redi = false;
+                        if ($not_bind_yet) {
+                            $redi = true;
+                        } else {
+                            $name = $this->User->findNicknamesOfUid($new_serviceAccount_binded_uid);
+                            if ($name == null || $name == '') {
+                                $redi = true;
+                            }
+                        }
+                        if ($redi) {
+                            $ref = '';
+                            if(!empty($refer_by_state)) {
+                                $ref = $refer_by_state;
+                            } else if (!empty($param_referer)) {
+                                $ref = $param_referer;
+                            }
+                            $this->_goto_wx_oauth($ref, WX_OAUTH_USERINFO);
+                        }
                     }
 
-                    $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
+
+                    //Update User profile with WX profile
+                    $wxUserInfo = $res['scope'] == WX_OAUTH_USERINFO ? $this->getWxUserInfo($openid, $access_token) : array();
+                    if (!empty($wxUserInfo['unionid'])) {
+                        $oauth['Oauthbinds']['unionId'] = $wxUserInfo['unionid'];
+                    }
+
                     if ($new_serviceAccount_binded_uid > 0) {
-                        $this->updateUserProfileByWeixin($new_serviceAccount_binded_uid, $userInfo);
+                        $this->updateUserProfileByWeixin($new_serviceAccount_binded_uid, $wxUserInfo);
                     } else {
-                        if (!empty($userInfo)) {
-                            $oauth['Oauthbinds']['user_id'] = $this->createNewUserByWeixin($userInfo);
+                        if (!empty($wxUserInfo)) {
+                            $oauth['Oauthbinds']['user_id'] = $this->createNewUserByWeixin($wxUserInfo);
                         } else {
                             $this->User->save(array(
                                 'username' => $oauth['Oauthbinds']['oauth_openid'],
