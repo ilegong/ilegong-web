@@ -56,5 +56,14 @@ class User extends AppModel {
         return $userlist;
     }
 
+    function findNicknamesMap($uids) {
+        $names = $this->find('all', array('conditions' => array('id' => $uids), 'fields' => array('nickname', 'id')));
+        $map = array();
+        foreach($names as $name_id) {
+            $map[$name_id['User']['id']] = $name_id['User']['nickname'];
+        }
+        return $map;
+    }
+
 }
 ?>

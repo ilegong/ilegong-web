@@ -214,7 +214,7 @@
             $.getJSON('{{$this->Html->url(array("action"=>"hasNewTimes"))}}', function (data) {
                 if (data.success && data.new_times > 0) {
                     $appleTimesLeft.text(parseInt($appleTimesLeft.first().text()) + data.new_times);
-                    utils.alert('您的朋友们为您获得了<span class="apple_numbers">' + data.new_times + '</span>次摇苹果的机会！', function () {
+                    utils.alert('您的朋友<span style="color:red">'+data.nicknames+'</span>为您获得了<span class="apple_numbers">' + data.new_times + '</span>次摇苹果的机会！', function () {
                         setTimeout(new_times_query, query_interval);
                     });
                 } else {

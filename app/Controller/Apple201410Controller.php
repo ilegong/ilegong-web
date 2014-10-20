@@ -43,21 +43,62 @@ class Apple201410Controller extends AppController {
     public function hasNewTimes() {
         $this->autoRender = false;
         $r = $this->Session->read($this->time_last_query_key);
+//        if (!$r) {
+//            $notifyHis = $this->UserNotifyLog->find('first', array('conditions' => array(
+//                'uid' => $this->currentUser['id'],
+//                'type' => KEY_APPLE_201410
+//            )));
+
+            /**
+             * create table cake_user_notify_logs (
+            `id` bigint(20) NOT NULL AUTO_INCREMENT,
+            `type` char(12) NOT NULL,
+            `uid` bigint(20) NOT NULL,
+            `last_notify` timestamp NOT NULL,
+            primary key(`id`),
+            key(`uid`, `type`)
+            );
+             */
+//            if (!empty($notifyHis)) {
+//                $r = $notifyHis['UserNotifyLog']['last_notify'];
+//            }
+//        }
         if ($r && $r > 1413724118 /*2014-10-19 21:00*/) {
             if (time() - $r < 5) {
                 return json_encode(array('success' => false));
             }
+            $logsToMe = $this->TrackLog->find('all', array('conditions' => array(
+                'type' => KEY_APPLE_201410,
+                'to' => $this->currentUser['id'],
+                'award_time > \''.date(FORMAT_DATETIME, $r).'\''
+            ), 'fields' => array('from')
+            ));
+
+            $nicknames = '';
+            if (!empty($logsToMe)) {
+
+                $uids = array_map(function ($log) {
+                    return $log['TrackLog']['from'];
+                }, $logsToMe);
+                $maxShow = 3;
+                $nicknames = implode("、", $this->User->findNicknamesMap(array_slice($uids, 0, $maxShow)));
+                if (count($logsToMe) > $maxShow) {
+                    $nicknames .= __('等');
+                }
+            }
+//        if (count($logsToMe) > 0) {
+//            $this->UserNotifyLog->updateAll(array('last_notify' => time()), array(
+//                'uid' => $this->currentUser['id'],
+//                'type' => KEY_APPLE_201410
+//            ));
+//        }
+            $this->_updateLastQueryTime(time());
+            return json_encode(array('success' => true, 'new_times' => count($logsToMe), 'nicknames' => $nicknames));
+        } else {
+            $this->_updateLastQueryTime(time());
+            return json_encode(array('success' => false));
         }
 
-        $curr = time();
-        $this->_updateLastQueryTime($curr);
-
-        $c = $this->TrackLog->find('count', array('conditions' => array(
-            'type' => KEY_APPLE_201410,
-            'to' => $this->currentUser['id'],
-            'award_time > \''.date('Y-m-d H:i:s', $r).'\''
-        )));
-        return json_encode(array('success' => true, 'new_times' => $c));
     }
 
     private function _updateLastQueryTime($curr) {
