@@ -123,19 +123,20 @@ class Apple201410Controller extends AppController {
                 $shouldAdd = empty($trackLogs);
                 if ($shouldAdd) {
                     $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friendUid));
-                    $this->TrackLog->save(array('TrackLog' => array('type' => KEY_APPLE_201410, 'from' => $this->currentUser['id'], 'to' => $friendUid, 'award_time' => date('Y-m-d H:i:s') )));
+                    $this->TrackLog->save(array('TrackLog' => array('type' => KEY_APPLE_201410, 'from' => $this->currentUser['id'], 'to' => $friendUid, 'award_time' => date(FORMAT_DATETIME) )));
                 }
                 $this->_addNotify($friend['User']['nickname'], $shouldAdd);
             }
             //treat as self
             $this->redirect_for_append_tr_id('award');
         }
-//            $friendsHelpMe = $this->AppleAward->find('all', array(
-//                'conditions' => array('award_to' => $friendUid),
-//                'fields' => array('award_to', 'sum(apple_got) as apple_got'),
-//                'order' => ' award_time desc',
-//                'limit' => 500
-//            ));
+
+        $friendsHelpMe = $this->TrackLog->find('all', array(
+            'conditions' => array('to' => $this->currentUser['id']),
+            'fields' => array('from'),
+            'order' => ' award_time desc',
+            'limit' => 500
+        ));
 //            $friendsIHelped = $this->AppleAward->find('all', array(
 //                'conditions' => array('award_from' => $friendUid),
 //                'fields' => array('award_from', 'sum(apple_got) as apple_got'),
@@ -143,20 +144,30 @@ class Apple201410Controller extends AppController {
 //                'limit' => 500
 //            ));
 //
-//            $allUids = array_map(function($val){
-//                return $val['award_from'];
-//            }, $friendsHelpMe);
+            $allUids = array_map(function($val){
+                return $val['TrackLog']['from'];
+            }, $friendsHelpMe);
 //
 //            $allUids += array_map(function($val){
 //                return $val['award_to'];
 //            }, $friendsIHelped);
 
 
-//            $allUids = array_unique($allUids);
+            $allUids = array_unique($allUids);
+            $nameIdMap = $this->User->findNicknamesMap($allUids);
 
-//            $users = $this->User->find('list', array('conditions' => array('id' => $allUids), 'field' => array('id', 'nickname')));
+        $friends = $this->AwardInfo->find('list', array(
+            'conditions' => array('uid' => $allUids),
+            'fields' => array('uid', 'got')
+        ));
 
-//            $this->set('helpMe', $friendsHelpMe);
+        $helpItems = array();
+        foreach($friendsHelpMe as $item) {
+            $uid = $item['TrackLog']['from'];
+            $helpItems[] = array('nickname' => $nameIdMap[$uid], 'got' => $friends[$uid]);
+        }
+
+            $this->set('helpMe', $helpItems);
 //            $this->set('iHelp', $friendsIHelped);
 //            $this->set('userIdNames', $users);
         $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($this->currentUser['id'], KEY_APPLE_201410);
