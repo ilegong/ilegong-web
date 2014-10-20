@@ -62,7 +62,7 @@ class WeixinComponent extends Component
                 "url" => $this->get_kuaidi_query_url($ship_type,$ship_code),
                 "topcolor" => "#FF0000",
                 "data" => array(
-                    "first" => array("value" => "亲爱的用户，您的特产已经从家乡启程了。"),
+                    "first" => array("value" => "亲，您的特产已经从家乡启程啦。"),
                     "keyword1" => array("value" => $ship_company),
                     "keyword2" => array("value" => $ship_code),
                     "keyword3" => array("value" => $good_info),
