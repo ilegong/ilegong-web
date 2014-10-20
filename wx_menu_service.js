@@ -6,6 +6,11 @@
         "url":"http://pys.b-wmobile.com/users/wx_menu_point?referer_key=CLICK_URL_TECHAN&from=service"
     },
     {
+        "type":"view",
+        "name":"小娟苹果",
+        "url":"http://pys.b-wmobile.com/apple_201410/index.html"
+    },
+    {
         "name":"个人中心",
         "sub_button":[
             {
@@ -20,29 +25,15 @@
             },
             {
                 "type":"view",
+                "name":"加入试吃",
+                "url":"http://www.mikecrm.com/f.php?t=3DGEyQ"
+            },
+            {
+                "type":"view",
                 "name":"售后服务",
                 "url":"http://pys.b-wmobile.com/users/wx_menu_point?referer_key=CLICK_URL_SALE_AFTER_SAIL&from=service"
             }
         ]
-    },
-    {
-        "name":"分享社区",
-        "sub_button":[
-            {
-                "type":"view",
-                "name":"分享社区",
-                "url":"http://wsq.qq.com/reflow/177650290"
-            },
-            {
-                "type":"view",
-                "name":"试吃团",
-                "url":"http://pys.b-wmobile.com/users/wx_menu_point?referer_key=CLICK_URL_SHICHITUAN&from=service"
-            },
-            {
-                "type":"view",
-                "name":"加入试吃",
-                "url":"http://www.mikecrm.com/f.php?t=3DGEyQ"
-            }]
     }
 ]
 }
