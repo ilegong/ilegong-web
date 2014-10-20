@@ -193,7 +193,7 @@
             } else {
                 utils.alert('你力气太小啦！只晃掉了几片树叶！<br/><small>(2秒后自动消失)</small>', function(){}, timeout, close_callback);
             }
-            updateViewState(times);
+            updateViewState(times, total);
         }
 
         window.addEventListener('shake', shakeEventDidOccur, false);
