@@ -9,8 +9,28 @@ class WeixinComponent extends Component
     );
 
     public $wx_message_template_ids = array(
-        "ORDER_SHIPPED" => "gKc-mT_ck7NPt6yZEYs_N419Op8wf7n-ytewzqjRXDY"
+        "ORDER_SHIPPED" => "87uu4CmlZT-xlZGO45T_XTHiFYAWHQaLv94iGuH-Ke4"
     );
+
+    public $kuaidi100_ship_type = array(
+        101=>'shentong',
+        102=>'yuantong',
+        103=>'yunda',
+        104=>'shunfeng',
+        105=>'ems',
+        106=>'youzhengguonei',
+        107=>'tiantian',
+        108=>'huitongkuaidi',
+        109=>'zhongtong',
+        110=>'quanyikuaidi'
+    );
+
+    public $kuaidi100_url = "http://m.kuaidi100.com/index_all.html";
+
+    public function get_kuaidi_query_url($ship_type,$ship_code)
+    {
+        return $this->kuaidi100_url.'?type='.$this->kuaidi100_ship_type[$ship_type].'&postid='.$ship_code;
+    }
 
     public function get_access_token()
     {
@@ -30,7 +50,7 @@ class WeixinComponent extends Component
         return "";
     }
 
-    public function send_order_shipped_message($open_id, $order_no, $ship_company, $ship_code)
+    public function send_order_shipped_message($open_id, $ship_type, $ship_company, $ship_code, $good_info, $good_number)
     {
         $access_token = $this->get_access_token();
         $this->log("get weixin api access token: ".$access_token,LOG_DEBUG);
@@ -39,14 +59,15 @@ class WeixinComponent extends Component
             $post_data = array(
                 "touser" => $open_id,
                 "template_id" => $this->wx_message_template_ids["ORDER_SHIPPED"],
-                "url" => "http://weixin.qq.com/download",
+                "url" => $this->get_kuaidi_query_url($ship_type,$ship_code),
                 "topcolor" => "#FF0000",
                 "data" => array(
-                    "first" => array("value" => "亲，您的特产已经从家乡启程了，好想快点来到你身边", "color" => "#CCCCCC"),
-                    "keyword1" => array("value" => $order_no, "color" => "#CCCCCC"),
-                    "keyword2" => array("value" => $ship_company, "color" => "#CCCCCC"),
-                    "keyword3" => array("value" => $ship_code, "color" => "#CCCCCC"),
-                    "remark" => array("value" => "如有问题请致电18911692346", "color" => "#CCCCCC")
+                    "first" => array("value" => "亲爱的用户，您的特产已经从家乡启程了。"),
+                    "keyword1" => array("value" => $ship_company),
+                    "keyword2" => array("value" => $ship_code),
+                    "keyword3" => array("value" => $good_info),
+                    "keyword4" => array("value" => $good_number),
+                    "remark" => array("value" => "点击详情，查询快递状态。", "color" => "#FF8800")
                 )
             );
             $options = array(

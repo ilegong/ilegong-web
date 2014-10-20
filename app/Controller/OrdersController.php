@@ -717,7 +717,9 @@ class OrdersController extends AppController{
 				$ship_type = $_REQUEST['ship_type'];
 				$this->Order->updateAll(array('status'=>$status,'ship_code'=>"'".addslashes($ship_code)."'",'ship_type'=>$ship_type, 'lastupdator'=>$creator),array('id'=>$order_id));
                 //todo add weixin message
-                $this->Weixin->send_order_shipped_message("orKydjn-VDouoLz3XjG4cWEb7Tu4",$order_id,$ship_type,$ship_code);
+                $good = $this->get_order_good_info($order_id);
+                $this->log("good info:".$good['good_info'].$good['good_number'],LOG_DEBUG);
+                $this->Weixin->send_order_shipped_message("orKydjn-VDouoLz3XjG4cWEb7Tu4",$ship_type, $this->ship_type[$ship_type], $ship_code, $good['good_info'], $good['good_number']);
 
 				echo json_encode(array('order_id'=>$order_id,'msg'=>'订单状态已更新为“已发货”'));
 				exit;
@@ -728,6 +730,19 @@ class OrdersController extends AppController{
 			exit;
 		}
 	}
+
+    function get_order_good_info($order_id){
+        $info ='';
+        $number =0;
+        $this->loadModel('Cart');
+        $carts = $this->Cart->find('all',array(
+            'conditions'=>array('order_id' => $order_id)));
+        foreach($carts as $cart){
+            $info = $info.$cart['Cart']['name'].' x '.$cart['Cart']['num'].';';
+            $number +=$cart['Cart']['num'];
+        }
+        return array("good_info"=>$info,"good_number"=>$number);
+    }
 	
 	function _calculateTotalPrice($carts = array()){
 		$total_price = 0.0;
