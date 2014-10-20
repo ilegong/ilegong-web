@@ -176,7 +176,23 @@ class Apple201410Controller extends AppController {
             $this->AwardInfo->save($awardInfo);
             $awardInfo = $awardInfo['AwardInfo'];
         }
-        $this->set('awarded', array());
+
+
+        //TODO: need cache
+        $awardUids = array('1358');
+        $awardItems = array();
+        if (!empty($awardUids)) {
+            $nicknamesMap = $this->User->findNicknamesMap($awardUids);
+            $awardInfos = $this->AwardInfo->find('list', array(
+                'conditions' => array('uid' => $awardUids),
+                'fields' => array('uid', 'got')
+            ));
+            foreach ($awardUids as $uid) {
+                $awardItems[] = array('nickname' => $this->filter_invalid_name($nicknamesMap[$uid]), 'got' => $awardInfos[$uid]);
+            }
+        }
+
+        $this->set('awarded', $awardItems);
         $this->setTotalVariables($awardInfo);
         $this->set('got_apple', 0);
         $this->_updateLastQueryTime(time());
