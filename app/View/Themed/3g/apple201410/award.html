@@ -53,9 +53,6 @@
 
     .shaking_tips_pic {
         opacity: .4;
-        position: fixed;
-        top: 100px;
-        left: 0;
         z-index: 1031;
         background-color: #000;
     }
@@ -70,6 +67,7 @@
     </div>
     <div id="apple_tree" class="row voffset3">
       <img src="{{$this->Html->url('/img/apple201410/apple_tree.gif')}}"/>
+      <!--<img id="shaking_tips_pic" class="shaking_tips_pic" src="{{$this->Html->url('/img/apple201410/rock.png')}}"/>-->
     </div>
     <div class="row voffset3 text-center">
         <div>
@@ -142,9 +140,9 @@
                     $share_div.hide();
                 });
 
-        $shaking_tips_png = $('<div class="fade shaking_tips_pic"><img src="{{$this->Html->url('/img/apple201410/rock.png')}}"></div>');
+        $shaking_tips_png = $('#shaking_tips_pic1').hide();;
 
-        $('body').append($share_div).append($shaking_tips_png);
+        $('body').append($share_div);
 
         $shareBtn.click(function(){
             showShareAndChangeTitle();
