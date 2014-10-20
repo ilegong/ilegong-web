@@ -56,6 +56,10 @@
         z-index: 1031;
         background-color: #000;
     }
+
+    h3 {
+        color:#0060c7;
+    }
 </style>
 
 <div class="container">
@@ -75,10 +79,11 @@
         <button id="share_btn" class="btn btn-warning" type="button" style="display:{{$total_times > 0 ? 'none' : ''}}">朋友帮我摇</button>
         <a class="btn btn-danger" href="/products/20141009/xiao_juan_jia_xian_yang_hong_fu_shi_yu_shou_20xiang.html">马上预订</a>
         </div>
-        <!--<div>-->
-            <!--<a href="#award_names" class="apple_nav_links"><small>获奖名单</small></a>-->
-            <!--<a href="#friends" class="apple_nav_links"><small>谁帮我了</small></a>-->
-        <!--</div>-->
+        <div>
+            <a href="#about_us" class="apple_nav_links"><small>关于我们</small></a>
+            <a href="#award_names" class="apple_nav_links"><small>获奖名单</small></a>
+            <a href="#friends" class="apple_nav_links"><small>谁帮我了</small></a>
+        </div>
     </div>
 
     <div class="row voffset3 hoz_padding10">
@@ -88,11 +93,16 @@
         <p id="game_text_has_more" style="{{if $total_times<=0}}display:none{{/if}}">
             攒够100个苹果，马上免费领取小娟家苹果一箱！谁怕谁，你又不是没有朋友！
         </p>
-        <p/>
+
+        <h3 id="about_us">关于我们</h3>
+        <div class="col-xs-3">
+            {{$this->Html->image($this->Html->url('/img/logo_small.png'), array('style'=>'height:35px;','title' => $site[title],'alt' => $site[title]))}}
+        </div><div class="col-xs-9">
         <p>[朋友说] 同事间互相分享家乡特产的创业网站，我们都是城市里的乡下人。</p>
         <p><a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">点击关注【朋友说】</a></p>
+        </div>
 
-        <h3 style="color:#0060c7">获奖名单</h3>
+        <h3 id="award_names">获奖名单</h3>
         <ul class="list-unstyled">
             {{if $awarded}}
             {{loop $awarded $key $item}}
@@ -104,7 +114,7 @@
         </ul>
 
 
-        <h3 style="color:#0060c7">谁帮了我</h3>
+        <h3 id="friends">谁帮我了</h3>
         <ul class="list-unstyled">
             {{if $helpMe}}
             {{loop $helpMe $key $item}}
