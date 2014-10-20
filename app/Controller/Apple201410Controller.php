@@ -176,6 +176,7 @@ class Apple201410Controller extends AppController {
             $this->AwardInfo->save($awardInfo);
             $awardInfo = $awardInfo['AwardInfo'];
         }
+        $this->set('awarded', array());
         $this->setTotalVariables($awardInfo);
         $this->set('got_apple', 0);
         $this->_updateLastQueryTime(time());
