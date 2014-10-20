@@ -12,6 +12,8 @@ class Apple201410Controller extends AppController {
 
     var $uses = array('User', 'AppleAward', 'AwardInfo', 'TrackLog');
 
+    var $AWARD_APPLE_LEVEL = 100;
+
     public function beforeFilter() {
         parent::beforeFilter();
         if(empty($this->currentUser['id'])){
@@ -179,16 +181,15 @@ class Apple201410Controller extends AppController {
 
 
         //TODO: need cache
-        $awardUids = array('1488');
         $awardItems = array();
-        if (!empty($awardUids)) {
-            $nicknamesMap = $this->User->findNicknamesMap($awardUids);
-            $awardInfos = $this->AwardInfo->find('list', array(
-                'conditions' => array('uid' => $awardUids),
-                'fields' => array('uid', 'got')
-            ));
-            foreach ($awardUids as $uid) {
-                $awardItems[] = array('nickname' => $this->filter_invalid_name($nicknamesMap[$uid]), 'got' => $awardInfos[$uid]);
+        $awardInfos = $this->AwardInfo->find('list', array(
+            'conditions' => array('got >=' => $this->AWARD_APPLE_LEVEL),
+            'fields' => array('uid', 'got')
+        ));
+        if (!empty($awardInfos)) {
+            $nicknamesMap = $this->User->findNicknamesMap(array_keys($awardInfos));
+            foreach ($awardInfos as $uid => $got) {
+                $awardItems[] = array('nickname' => $this->filter_invalid_name($nicknamesMap[$uid]), 'got' => $got);
             }
         }
 

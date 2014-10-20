@@ -89,7 +89,7 @@
         <ul class="list-unstyled">
             {{if $awarded}}
             {{loop $awarded $key $item}}
-            <li>{{$item['nickname']}} 获得小娟家红富士苹果一箱，TA已经摇到了 {{$item['got']}} 个苹果！</li>
+            <li>{{$item['nickname']}} 赢得小娟家红富士一箱，TA已摇到{{$item['got']}} 个苹果啦！</li>
             {{/loop}}
             {{else}}
             <li>活动刚刚启动，暂无人获奖。</li>
