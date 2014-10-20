@@ -169,7 +169,7 @@
             }).find('div.modal-footer').css({'text-align':'center'});
         }
 
-        function updateViewState(times) {
+        function updateViewState(times, total) {
             if (times > 0) {
                 $game_text_has_more.show();
                 $game_text_no_more.hide();
@@ -181,7 +181,7 @@
                 $shakeBtn.hide();
                 $shareBtn.show();
             }
-            if (total > 0) {
+            if (total && total > 0) {
                 changeTitle(total);
             }
         }
