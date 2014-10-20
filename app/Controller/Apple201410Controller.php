@@ -125,7 +125,7 @@ class Apple201410Controller extends AppController {
                     $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friendUid));
                     $this->TrackLog->save(array('TrackLog' => array('type' => KEY_APPLE_201410, 'from' => $this->currentUser['id'], 'to' => $friendUid, 'award_time' => date(FORMAT_DATETIME) )));
                 }
-                $this->_addNotify($friend['User']['nickname'], $shouldAdd);
+                $this->_addNotify($this->filter_invalid_name($friend['User']['nickname']), $shouldAdd);
             }
             //treat as self
             $this->redirect_for_append_tr_id('award');
