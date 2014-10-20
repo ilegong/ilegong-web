@@ -50,6 +50,15 @@
     .apple_nav_links {
         text-decoration: underline; line-height: 28px
     }
+
+    .shaking_tips_pic {
+        opacity: .4;
+        position: fixed;
+        top: 100px;
+        left: 0;
+        z-index: 1031;
+        background-color: #000;
+    }
 </style>
 
 <div class="container">
@@ -129,11 +138,13 @@
         var $shareBtn = $('#share_btn');
 
         $share_div = $('<div class="apple_share fade in"><img src="{{$this->Html->url('/img/apple201410/share.png')}}"></div>')
-            .hide()
-                .click(function(){
+            .hide().click(function(){
                     $share_div.hide();
                 });
-        $('body').append($share_div);
+
+        $shaking_tips_png = $('<div class="fade shaking_tips_pic"><img src="{{$this->Html->url('/img/apple201410/rock.png')}}"></div>');
+
+        $('body').append($share_div).append($shaking_tips_png);
 
         $shareBtn.click(function(){
             showShareAndChangeTitle();
@@ -216,6 +227,7 @@
                 return;
             }
             shaking = true;
+            $shaking_tips_png.hide();
             $('#apple_tree').octoberLeaves('start', {'speedC': 1, 'numberOfLeaves':100, 'cycleSpeed':80, 'rotationTrue':0});
             sound.play();
             $appleTree.attr('src', shake_pic_url);
@@ -232,8 +244,9 @@
                     }
                     $appleTree.attr('src', apple_tree_url);
                     shaking = false;
+                    $shaking_tips_png.show();
                 });
-            },1000);
+            },1400);
         }
 
         $shakeBtn.click(function(){
