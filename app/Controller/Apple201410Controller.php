@@ -81,7 +81,7 @@ class Apple201410Controller extends AppController {
                     return $log['TrackLog']['from'];
                 }, $logsToMe);
                 $maxShow = 3;
-                $nicknames = implode("、", array_map(function($n){ return $this->filter_invalid_name($n); }, $this->User->findNicknamesMap(array_slice($uids, 0, $maxShow)));
+                $nicknames = implode("、", array_map(function($n){ return $this->filter_invalid_name($n); }, $this->User->findNicknamesMap(array_slice($uids, 0, $maxShow))));
                 if (count($logsToMe) > $maxShow) {
                     $nicknames .= __('等');
                 }
