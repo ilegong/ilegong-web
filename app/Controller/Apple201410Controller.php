@@ -216,9 +216,12 @@ class Apple201410Controller extends AppController {
 
         $total_got = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] : 0;
         $curr_got = 0;
-        for($i = 0; $i < 10; $i++) {
-            $mt_rand = mt_rand(0, intval(10 * (1 + $this->_actualApple($total_got))));
-            $curr_got += ($mt_rand >=1 && $mt_rand <=5 ? 1 : 0);
+
+        if ($total_got < 100) {
+            for ($i = 0; $i < 10; $i++) {
+                $mt_rand = mt_rand(0, intval(10 * (1 + $this->_actualApple($total_got))));
+                $curr_got += ($mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
+            }
         }
         $curr_got = ($total_got == 0 && $curr_got == 0 ? 3 : $curr_got);
 
