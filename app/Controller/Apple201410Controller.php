@@ -225,7 +225,7 @@ class Apple201410Controller extends AppController {
         }
         $curr_got = ($total_got == 0 && $curr_got == 0 ? 3 : $curr_got);
 
-        $this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + '. $curr_got, ), array('id' => $awardInfo['id']));
+        $this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + '. $curr_got, 'updated' => '\''.date(FORMAT_DATETIME).'\'' ), array('id' => $awardInfo['id']));
 
         $awardInfo['times'] -= 1;
         $awardInfo['got'] += $curr_got;
