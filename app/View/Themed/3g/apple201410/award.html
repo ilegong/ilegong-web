@@ -228,7 +228,9 @@
             },1000);
         }
 
-//        $shakeBtn.click(shakeEventDidOccur);
+        $shakeBtn.click(function(){
+            utils.alert('摇动手机！没有声音请开声音！');
+        });
         $.getJSON("{{$this->Html->url(array('action' => 'notifiedToMe'))}}?r="+Math.random(), function(data){
             if (data.notified === false) {
                 var msg = data.got ? '您为<span style="color:red">'+data.name+'</span>获得了<span class="apple_numbers">1</span>次摇苹果的机会！' : '您已经帮这个朋友点过啦！';
