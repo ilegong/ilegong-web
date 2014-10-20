@@ -179,7 +179,7 @@ class Apple201410Controller extends AppController {
 
 
         //TODO: need cache
-        $awardUids = array('1358');
+        $awardUids = array('1488');
         $awardItems = array();
         if (!empty($awardUids)) {
             $nicknamesMap = $this->User->findNicknamesMap($awardUids);
