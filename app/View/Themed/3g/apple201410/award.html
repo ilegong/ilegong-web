@@ -59,8 +59,8 @@
     </div>
     <div class="row voffset3">
         <div class="text-center">
-        <!--<button id="shake_btn" class="btn btn-danger" type="button">手机摇一摇</button>-->
-        <button id="share_btn" class="btn btn-warning" type="button">朋友帮我摇</button>
+        <button id="shake_btn" class="btn btn-danger" type="button" {{$total_times > 0 ? 'style="display:none"' : ''}}>手机摇一摇</button>
+        <button id="share_btn" class="btn btn-warning" type="button" {{$total_times <= 0 ? 'style="display: none"' : ''">朋友帮我摇</button>
         <a class="btn btn-danger" href="/products/20141009/xiao_juan_jia_xian_yang_hong_fu_shi_yu_shou_20xiang.html">马上预订</a>
         </div>
     </div>
@@ -92,6 +92,8 @@
 
         var $game_text_has_more = $('#game_text_has_more');
         var $game_text_no_more = $('#game_text_no_more');
+        var $shakeBtn = $('#shake_btn');
+        var $shareBtn = $('#share_btn');
 
         $share_div = $('<div class="apple_share fade in"><img src="{{$this->Html->url('/img/apple201410/share.png')}}"></div>')
             .hide()
@@ -100,7 +102,7 @@
                 });
         $('body').append($share_div);
 
-        $('#share_btn').click(function(){
+        $shareBtn.click(function(){
             showShareAndChangeTitle();
         });
 
@@ -123,9 +125,13 @@
             if (times > 0) {
                 $game_text_has_more.show();
                 $game_text_no_more.hide();
+                $shakeBtn.show();
+                $shareBtn.hide();
             } else {
                 $game_text_no_more.show();
                 $game_text_has_more.hide();
+                $shakeBtn.hide();
+                $shareBtn.show();
             }
 
             if (total > 0) {
@@ -193,7 +199,8 @@
                 });
             },1000);
         }
-        $('#shake_btn').click(shakeEventDidOccur);
+
+        $shakeBtn.click(shakeEventDidOccur);
         {{if $notifyFriendId}}
         $.getJSON("{{$this->Html->url(array('action' => 'notifiedToMe', $notifyFriendId))}}?r="+Math.random(), function(data){
             if (data.notified === false) {
