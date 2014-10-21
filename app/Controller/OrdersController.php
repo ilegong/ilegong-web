@@ -48,6 +48,8 @@ class OrdersController extends AppController{
 		/* 保存无线端cookie购物车的商品 */
 		$this->loadModel('Product');
 		$product_ids = array();
+        $shipPromotionId = intval($_REQUEST['ship_promotion']);
+        $this->loadModel('ShipPromotion');
 		if(!empty($_COOKIE['cart_products'])){
 			
 			$nums = array();
@@ -72,15 +74,16 @@ class OrdersController extends AppController{
 			
 			$Carts = array();
 			foreach($products as $p){
+                $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($p['Product']['id'], $shipPromotionId) : array();
 				$Cart = array('Cart'=>array(
 						'product_id'=> $p['Product']['id'],
 						'name'=> $p['Product']['name'],
 						'coverimg'=> $p['Product']['coverimg'],
 						'num'=> $nums[$p['Product']['id']]?$nums[$p['Product']['id']]:1,
 						'creator'=> $this->currentUser['id'],
-						'price'=> $p['Product']['price'],
-				));
-				
+                        'price'=> empty($pp)? $p['Product']['price'] : $pp['price'],
+                ));
+
 				$this->Cart->create();
 				if($this->Cart->save($Cart)){
 					$Cart['Cart']['id'] = $this->Cart->getLastInsertID();
@@ -118,7 +121,8 @@ class OrdersController extends AppController{
 			else{
 				$business[$p['Product']['brand_id']] = array($p['Product']['id']);
 			}
-            $ship_fees[$p['Product']['id']] = $p['Product']['ship_fee'];
+            $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($p['Product']['id'], $shipPromotionId) : array();
+            $ship_fees[$p['Product']['id']] = empty($pp) ? $p['Product']['ship_fee'] : $pp['ship_price'];
 		}
 		
 		$hasfalse = false;
@@ -193,12 +197,13 @@ class OrdersController extends AppController{
 			'order' => 'status desc',
 		));
 		$total_consignee = count($consignees);
-
+        $shipPromotionId = intval($_REQUEST['ship_promotion']);
         $shipFee = 0.0;
 		$this->loadModel('Cart');
+	    $product_ids = array();
 		if(empty($order_id)){
+            $this->loadModel('ShipPromotion');
 			if(!empty($_COOKIE['cart_products'])){
-				$product_ids = array();
 				$nums = array();
 				$info = explode(',',$_COOKIE['cart_products']);
 				foreach($info as $item){
@@ -214,25 +219,38 @@ class OrdersController extends AppController{
 				)));
 				$Carts = array();
 				foreach($products as $p){
+                    $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($p['Product']['id'], $shipPromotionId) : array();
+                    if ($_REQUEST['action'] == 'savePromo' && !empty($pp)) {
+                        $consignee = array();
+                        $consignee['name'] = trim($_REQUEST['consignee_name']);
+                        $consignee['mobilephone'] = trim($_REQUEST['consignee_mobilephone']);
+                        $consignee['address'] = trim($pp['address']);
+                        $this->Session->write('OrderConsignee', $consignee);
+                        $has_chosen_consignee = true;
+                    }
+
 					$Carts[] = array(
 							'Cart'=>array(
 									'product_id'=> $p['Product']['id'],
 									'name'=> $p['Product']['name'],
 									'coverimg'=> $p['Product']['coverimg'],
 									'num'=> $nums[$p['Product']['id']]?$nums[$p['Product']['id']]:1,
-									'price'=> $p['Product']['price'],
+									'price'=> empty($pp)? $p['Product']['price'] : $pp['price'],
 					));
 
-                    $shipFee += $p['Product']['ship_fee'];
+                    $shipFee += empty($pp)? $p['Product']['ship_fee'] : $pp['ship_price'];
 				}
 			}
 			else{
+
+                //TODO: adjust to PC version
 				$Carts = $this->Cart->find('all',array(
 					'conditions'=>array(
 						'status'=> 0,
 						'order_id' => null,
 						'OR'=> $this->user_condition
 				)));
+                $product_ids = array_map(function($val){ return $val['Cart']['product_id']; }, $Carts);
 			}
 
 			$current_consignee = $this->Session->read('OrderConsignee');
@@ -293,6 +311,10 @@ class OrdersController extends AppController{
         $this->set('shipFee', $shipFee);
 		$this->set('Carts',$Carts);
         $this->set('action', $action);
+
+        $shipPromotions = $this->ShipPromotion->findShipPromotions($product_ids);
+        $this->set('specialShipPromotionId', $shipPromotionId);
+        $this->set('specialShipPromotion', $shipPromotions);
 	}
 
     /**
