@@ -69,7 +69,7 @@ class WeixinController extends AppController {
 				if($req['Event']=='subscribe'){ //订阅
                     $content = array(
                         array(title => '朋友说 | 城市里的乡下人，我们为什么离职做家乡特产。', description => '',
-                            picUrl => 'https://mp.weixin.qq.com/cgi-bin/getimgdata?mode=large&source=file&fileId=200777661&token=2134261374&lang=zh_CN',
+                            picUrl => 'http://mmbiz.qpic.cn/mmbiz/qpxHrxLKdR0uibCrGiacHPg9F1xIicXRYZndaIZuXoUKicAeaicQadpbxyjIyED0kIomnCyXCcektOjsKSapmb5zcHQ/640',
                             url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200777756&idx=1&sn=65992423b055c450b1c57e31287d3615#rd'),
                         array(title => '朋友说 | 城市里的乡下人，电科院QA小娟分享家乡红富士苹果！', description => '',
                             picUrl => 'https://mp.weixin.qq.com/cgi-bin/getimgdata?mode=small&source=file&fileId=200777752&token=2134261374&lang=zh_CN',
