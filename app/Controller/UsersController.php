@@ -884,7 +884,7 @@ class UsersController extends AppController {
             'password' => '',
             'uc_id' => 0
         ))) {
-            $this->log("error to save createNewUserByWeixin: with ". $userInfo);
+            $this->log("error to save createNewUserByWeixin: with ". json_encode($userInfo));
         }
         return $this->User->getLastInsertID();
     }
