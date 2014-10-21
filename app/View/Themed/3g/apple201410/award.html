@@ -53,7 +53,7 @@
     }
 
     .shaking_tips_pic {
-        opacity: .4;
+        opacity: .7;
         z-index: 1031;
         background-color: #000;
     }
@@ -71,8 +71,10 @@
         </div>
     </div>
     <div id="apple_tree" class="row voffset3">
-      <img src="{{$this->Html->url('/img/apple201410/apple_tree.gif')}}"/>
-      <!--<img id="shaking_tips_pic" class="shaking_tips_pic" src="{{$this->Html->url('/img/apple201410/rock.png')}}"/>-->
+        <div style="position: relative; left: 0; top: 0;">
+      <img id="apple_tree_img" src="{{$this->Html->url('/img/apple201410/apple_tree.gif')}}" style="position: relative; top: 0; left: 0;"/>
+      <img id="shaking_tips_pic" class="shaking_tips_pic" src="{{$this->Html->url('/img/apple201410/rock.png')}}" style="position: absolute; top: 0; left: 0; display:none"/>
+        </div>
     </div>
     <div class="row voffset3 text-center">
         <div>
@@ -138,7 +140,7 @@
         });
         var $appleGotCnt = $('#apple_got_cnt');
         var $appleTimesLeft = $('#apple_times_left, #apple_times_left_bottom');
-        var $appleTree = $('#apple_tree > img');
+        var $appleTree = $('img#apple_tree_img');
         var apple_tree_url = $('#apple_tree').attr('src');
 
         var $game_text_has_more = $('#game_text_has_more');
@@ -151,7 +153,7 @@
                     $share_div.hide();
                 });
 
-        $shaking_tips_png = $('#shaking_tips_pic1').hide();;
+        $shaking_tips_png = $('#shaking_tips_pic');
 
         $('body').append($share_div);
 
@@ -224,6 +226,18 @@
             updateViewState(times, total);
         }
 
+
+        function currTimes() {
+            return parseInt($appleTimesLeft.first().text());
+        }
+
+        if (currTimes()>0 && $.trim($appleGotCnt.text()) == '0' ) {
+//            $shaking_tips_png.css({
+//                'width':$('body').innerWidth()
+//            });
+            $shaking_tips_png.show();
+        }
+
         window.addEventListener('shake', shakeEventDidOccur, false);
         var shaking = false;
         function shakeEventDidOccur() {
@@ -253,7 +267,9 @@
                     }
                     $appleTree.attr('src', apple_tree_url);
                     shaking = false;
-                    $shaking_tips_png.show();
+//                    if (currTimes() > 0) {
+//                        $shaking_tips_png.show();
+//                    }
                 });
             },1400);
         }
@@ -272,7 +288,7 @@
         function new_times_query() {
             $.getJSON('{{$this->Html->url(array("action"=>"hasNewTimes"))}}', function (data) {
                 if (data.success && data.new_times > 0) {
-                    var times = parseInt($appleTimesLeft.first().text()) + data.new_times;
+                    var times = currTimes() + data.new_times;
                     $appleTimesLeft.text(times);
                     updateViewState(times);
                     utils.alert('您的朋友<span style="color:red">'+data.nicknames+'</span>为您获得了<span class="apple_numbers">' + data.new_times + '</span>次摇苹果的机会！', function () {
