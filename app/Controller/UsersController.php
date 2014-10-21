@@ -760,7 +760,7 @@ class UsersController extends AppController {
                         $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
 
                         if (!$new_serviceAccount_binded_uid){
-                            $this->log("login failed for cannot got create new user with the current WX info: res=".$res.", wxUserInfo=".$wxUserInfo);
+                            $this->log("login failed for cannot got create new user with the current WX info: res=".json_encode($res).", wxUserInfo=".json_encode($wxUserInfo));
                             $this->wxFailAndGotoLogin();
                             return;
                         }
