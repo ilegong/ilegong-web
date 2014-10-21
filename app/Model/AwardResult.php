@@ -61,7 +61,8 @@ class AwardResult extends AppModel {
 
     protected function clearCache() {
         Cache::delete($this->key_user_is_awarded($this->data['AwardResult']['id']));
-        $day = (new DateTime($this->data['AwardResult']['finish_time']))->format(FORMAT_DATE);
+        $datetime = new DateTime($this->data['AwardResult']['finish_time']);
+        $day = $datetime->format(FORMAT_DATE);
         Cache::delete($this->key_day_awarded($day));
     }
 }
