@@ -72,10 +72,10 @@ class WeixinController extends AppController {
                             picUrl => 'http://mmbiz.qpic.cn/mmbiz/qpxHrxLKdR0uibCrGiacHPg9F1xIicXRYZndaIZuXoUKicAeaicQadpbxyjIyED0kIomnCyXCcektOjsKSapmb5zcHQ/640',
                             url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200777756&idx=1&sn=65992423b055c450b1c57e31287d3615#rd'),
                         array(title => '朋友说 | 城市里的乡下人，电科院QA小娟分享家乡红富士苹果！', description => '',
-                            picUrl => 'https://mp.weixin.qq.com/cgi-bin/getimgdata?mode=small&source=file&fileId=200777752&token=2134261374&lang=zh_CN',
+                            picUrl => 'http://mmbiz.qpic.cn/mmbiz/UuGM2hE8WNGdeI7vcTWSyyZE0InV2l5Ln6s9Bw2l74mnoUfLcbyRBm1vwsWVyaGcG47DSZ4Cf4kjKYUACgdxGA/640',
                             url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200777756&idx=2&sn=6cb7a56def46a7701d01935ed33110e7#rd'),
                         array(title => '朋友说 | 蜂蜜、茶、梨、干果多种商品大促！总有一款适合您！', description => '',
-                            picUrl => 'https://mp.weixin.qq.com/cgi-bin/getimgdata?mode=small&source=file&fileId=200778076&token=2134261374&lang=zh_CN',
+                            picUrl => 'http://mmbiz.qpic.cn/mmbiz/UuGM2hE8WNGVK9XmibDYxxqcDWibmgoTbn26FYJC7Daics1uoFjjmpt8NhMZG3z7WKUxTeH9CpTbI67sP2kDnOvSA/640',
                             url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200777756&idx=3&sn=c85369b9199153d9315de2deb45b5cf8#rd')
                     );
 					echo $this->newArticleMsg($user, $me, $content);
