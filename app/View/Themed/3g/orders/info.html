@@ -137,11 +137,11 @@ td {padding:5px 10px;}
         $('#specialShipPromotion_btn').click(function () {
             $specialShipPromotion.toggle();
             if ($specialShipPromotion.is(":visible")) {
-                $('#part_consignee').hide();
+                $(this).hide();
                 $linkUsePromotion.text("[不使用特惠]");
             } else {
                 $('#part_consignee').show();
-                $linkUsePromotion.text("[使用特惠]");
+                $(this).text("[使用特惠]");
             }
         });
     });
