@@ -7,7 +7,7 @@
  */
 
 class ShipPromotion extends AppModel {
-    const PID = 180;
+    const PID = 192;
     public $useTable = false;
     var $specialShipPromotion = array('lowest' => 49.90,
         'items' => array(
