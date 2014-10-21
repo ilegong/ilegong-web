@@ -105,6 +105,11 @@ div.photo-item {
     font-size: 24px;
 }
 
+.text-price-small {
+    color: #c71673;
+    font-size: 14px;
+}
+
 .fontsize14 {
     font-size: 14px
 }
