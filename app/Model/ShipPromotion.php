@@ -25,7 +25,10 @@ class ShipPromotion extends AppModel {
             $promotion = array_filter($this->specialShipPromotion['items'], function ($item) use ($promotionId) {
                     return ($item['id'] == $promotionId);
                 });
-            if(!empty($promotion)){ return (array_values($promotion)[0]);};
+            if(!empty($promotion)){
+                $values = array_values($promotion);
+                return ($values[0]);
+            };
         }
         return null;
     }
