@@ -227,7 +227,7 @@ class Apple201410Controller extends AppController {
             $ext = 100000;
         }
 
-        for ($i = 0; $i < 20; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             $mt_rand = mt_rand(0, intval($ext + $total_got));
             $curr_got += ($mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
         }
