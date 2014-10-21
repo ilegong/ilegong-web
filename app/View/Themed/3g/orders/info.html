@@ -137,8 +137,8 @@ td {padding:5px 10px;}
         $('#specialShipPromotion_btn').click(function () {
             $specialShipPromotion.toggle();
             if ($specialShipPromotion.is(":visible")) {
-                $(this).hide();
-                $linkUsePromotion.text("[不使用特惠]");
+                $('#part_consignee').hide();
+                $(this).text("[不使用特惠]");
             } else {
                 $('#part_consignee').show();
                 $(this).text("[使用特惠]");
