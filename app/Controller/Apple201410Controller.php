@@ -223,8 +223,15 @@ class Apple201410Controller extends AppController {
         $iAwarded =  $model->userIsAwarded($this->currentUser['id']);
 
         $ext = 10;
-        if ($todayAwarded > $this->DAY_LIMIT &&  $this->AWARD_LIMIT - $total_got < 10) {
-            $ext = 100000;
+        if ($todayAwarded > $this->DAY_LIMIT) {
+            $left = $this->AWARD_LIMIT - $total_got;
+            if ($left > 0) {
+                if ($left <= 10) {
+                    $ext = 100000;
+                } else if ($left <= 20) {
+                    $ext = 100;
+                }
+            }
         }
 
         for ($i = 0; $i < 10; $i++) {
@@ -245,10 +252,13 @@ class Apple201410Controller extends AppController {
             };
         }
 
-        $this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + '. $curr_got, 'updated' => '\''.date(FORMAT_DATETIME).'\'' ), array('id' => $awardInfo['id']));
+        if($this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + '. $curr_got, 'updated' => '\''.date(FORMAT_DATETIME).'\'' ), array('id' => $awardInfo['id'], 'times>0'))){
+            $awardInfo['times'] -= 1;
+            $awardInfo['got'] += $curr_got;
+        } else {
+            $curr_got = 0;
+        }
 
-        $awardInfo['times'] -= 1;
-        $awardInfo['got'] += $curr_got;
 
         return $curr_got;
     }
