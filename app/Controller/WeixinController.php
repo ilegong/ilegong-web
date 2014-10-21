@@ -67,7 +67,18 @@ class WeixinController extends AppController {
 			$input = "";
 			if(!empty($req['Event'])){
 				if($req['Event']=='subscribe'){ //订阅
-					echo $this->newTextMsg($user, $me, "欢迎关注【朋友说】，【朋友说】是朋友、同事间互相分享推荐自己家特产的平台，欢迎加入我们分享。");
+                    $content = array(
+                        array(title => '朋友说 | 城市里的乡下人，我们为什么离职做家乡特产。', description => '',
+                            picUrl => 'https://mp.weixin.qq.com/cgi-bin/getimgdata?mode=small&source=file&fileId=200777661&token=2134261374&lang=zh_CN',
+                            url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200777756&idx=1&sn=65992423b055c450b1c57e31287d3615#rd'),
+                        array(title => '朋友说 | 城市里的乡下人，电科院QA小娟分享家乡红富士苹果！', description => '',
+                            picUrl => 'https://mp.weixin.qq.com/cgi-bin/getimgdata?mode=small&source=file&fileId=200777752&token=2134261374&lang=zh_CN',
+                            url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200777756&idx=2&sn=6cb7a56def46a7701d01935ed33110e7#rd'),
+                        array(title => '朋友说 | 蜂蜜、茶、梨、干果多种商品大促！总有一款适合您！', description => '',
+                            picUrl => 'https://mp.weixin.qq.com/cgi-bin/getimgdata?mode=small&source=file&fileId=200778076&token=2134261374&lang=zh_CN',
+                            url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200777756&idx=3&sn=c85369b9199153d9315de2deb45b5cf8#rd')
+                    );
+					echo $this->newArticleMsg($user, $me, $content);
 					exit;
 				} else if ($req['Event'] == 'CLICK') {
                     $input = $req['EventKey'];
