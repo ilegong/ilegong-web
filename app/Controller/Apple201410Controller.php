@@ -12,7 +12,8 @@ class Apple201410Controller extends AppController {
 
     var $uses = array('User', 'AppleAward', 'AwardInfo', 'TrackLog');
 
-    var $AWARD_APPLE_LEVEL = 100;
+    var $DAY_LIMIT = 10;
+    var $AWARD_LIMIT = 100;
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -171,7 +172,6 @@ class Apple201410Controller extends AppController {
 
             $this->set('helpMe', $helpItems);
 //            $this->set('iHelp', $friendsIHelped);
-//            $this->set('userIdNames', $users);
         $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($this->currentUser['id'], KEY_APPLE_201410);
         if (empty($awardInfo)) {
             $awardInfo = array('AwardInfo' => array('uid' => $this->currentUser['id'], 'type' => KEY_APPLE_201410, 'times' => 10, 'got' => 0));
@@ -217,13 +217,33 @@ class Apple201410Controller extends AppController {
         $total_got = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] : 0;
         $curr_got = 0;
 
-        if ($total_got < 100) {
-            for ($i = 0; $i < 10; $i++) {
-                $mt_rand = mt_rand(0, intval(10 * (1 + $this->_actualApple($total_got))));
-                $curr_got += ($mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
-            }
+        $this->loadModel('AwardResult');
+        $model = $this->AwardResult;
+        $todayAwarded =  $model->todayAwarded(date(FORMAT_DATE));
+        $iAwarded =  $model->userIsAwarded($this->currentUser['id']);
+
+        $ext = 10;
+        if ($todayAwarded > $this->DAY_LIMIT &&  $this->AWARD_LIMIT - $total_got < 10) {
+            $ext = 100000;
         }
+
+        for ($i = 0; $i < 10; $i++) {
+            $mt_rand = mt_rand(0, intval($ext + $total_got));
+            $curr_got += ($mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
+        }
+
         $curr_got = ($total_got == 0 && $curr_got == 0 ? 3 : $curr_got);
+
+        if (is_array($iAwarded) && empty($iAwarded) && $total_got + $curr_got >= $this->AWARD_LIMIT) {
+            $awardResult = array(
+                'uid' => $this->currentUser['id'],
+                'type' => KEY_APPLE_201410,
+                'finish_time' => date(FORMAT_DATETIME)
+            );
+            if(!$model->save($awardResult)){
+                $this->log("update AwardResult failed:". json_encode($awardResult));
+            };
+        }
 
         $this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + '. $curr_got, 'updated' => '\''.date(FORMAT_DATETIME).'\'' ), array('id' => $awardInfo['id']));
 
@@ -284,14 +304,6 @@ class Apple201410Controller extends AppController {
         $total_apple = $awardInfo && $awardInfo['got'] ? $awardInfo['got'] : 0;
         $this->set('total_apple', $total_apple);
         $this->set('total_times', $totalAwardTimes);
-    }
-
-    /**
-     * @param $got
-     * @return float
-     */
-    private function _actualApple($got) {
-        return (int)($got / 10);
     }
 
     private function filter_invalid_name($name) {

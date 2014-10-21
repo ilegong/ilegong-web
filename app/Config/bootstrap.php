@@ -15,6 +15,7 @@ const WX_OAUTH_BASE = 'snsapi_base';
 
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
+define('FORMAT_DATE', 'Y-m-d');
 
 define('ORDER_STATUS_CANCEL', 10);
 define('ORDER_STATUS_SHIPPED', 2);
