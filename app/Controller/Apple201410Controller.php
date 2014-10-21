@@ -223,7 +223,9 @@ class Apple201410Controller extends AppController {
         $iAwarded =  $model->userIsAwarded($this->currentUser['id']);
 
         $ext = 10;
-        if ($todayAwarded > $this->DAY_LIMIT) {
+        if (!$this->is_weixin()){
+            $ext = 1000000;
+        } else if ($todayAwarded > $this->DAY_LIMIT) {
             $left = $this->AWARD_LIMIT - $total_got;
             if ($left > 0) {
                 if ($left <= 10) {
