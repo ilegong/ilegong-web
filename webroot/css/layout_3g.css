@@ -110,6 +110,11 @@ div.photo-item {
     font-size: 14px;
 }
 
+.text-original-price-small {
+    text-decoration: line-through;
+    color: #888;
+}
+
 .fontsize14 {
     font-size: 14px
 }

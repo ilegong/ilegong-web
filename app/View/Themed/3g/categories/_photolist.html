@@ -27,10 +27,14 @@
          {{$this->Html->link($brands[$item['brand_id']]['Brand']['name'], '/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html');}}
              <br>
              <div class="clearfix">
-             <span class="food-info pull-right">
+             <span class="food-info pull-left text-price-small">
                  <strong>¥{{$this->Number->precision($item['price'], 2)}}</strong>
              </span>
-                 <a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">评论({{$item['comment_nums']}})</a>
+              {{if !empty($item['original_price'])}}
+              <span class="pull-right text-original-price-small">
+                    ¥{{$this->Number->precision($item['original_price'], 2)}}
+              </span>
+              {{/if}}
              </div>
          </div>
 
