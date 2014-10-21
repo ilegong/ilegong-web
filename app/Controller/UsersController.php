@@ -746,22 +746,30 @@ class UsersController extends AppController {
                         if (!empty($wxUserInfo)) {
                             $oauth['Oauthbinds']['user_id'] = $this->createNewUserByWeixin($wxUserInfo);
                         } else {
-                            $this->User->save(array(
+                            $uu = array(
                                 'username' => $oauth['Oauthbinds']['oauth_openid'],
                                 'nickname' => '微信用户' . mb_substr($oauth['Oauthbinds']['oauth_openid'], 0, PROFILE_NICK_LEN - 4, 'UTF-8'),
                                 'password' => '',
                                 'uc_id' => 0
-                            ));
+                            );
+                            if (!$this->User->save($uu)){
+                                $this->log('errot to save new user:'.$uu);
+                            }
                             $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
                         }
                         $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
+
+                        if (!$new_serviceAccount_binded_uid){
+                            $this->log("login failed for cannot got create new user with the current WX info: res=".$res.", wxUserInfo=".$wxUserInfo);
+                            $this->wxFailAndGotoLogin();
+                            return;
+                        }
                     }
 
                     $this->Oauthbinds->save($oauth['Oauthbinds']);
                     if ($need_transfer && isset($old_serviceAccount_binded_uid) && $old_serviceAccount_binded_uid != $new_serviceAccount_binded_uid) {
                         $this->transferUserInfo($old_serviceAccount_binded_uid, $new_serviceAccount_binded_uid);
                     }
-
 
                     //TODO: fix risk
                     $redirectUrl = '/users/login?source=' . $oauth['Oauthbinds']['source'] . '&openid=' . $oauth['Oauthbinds']['oauth_openid'];
@@ -777,12 +785,13 @@ class UsersController extends AppController {
             } else {
                 $this->log("error to get_access_token: code=" . $_REQUEST['code'] . ", return:" . var_export($rtn, true));
                 //用户授权了，但是读取过程中失败
+                $this->wxFailAndGotoLogin();
             }
         } else {
             //show error msgs
             //用户没有授权
-            echo "canot get code:" . $_SERVER['QUERY_STRING'];
-            exit;
+            $this->log("cannot get auth code:" . $_SERVER['QUERY_STRING']);
+            $this->wxFailAndGotoLogin();
         }
     }
 
@@ -863,7 +872,7 @@ class UsersController extends AppController {
      * @param $userInfo
      */
     protected function createNewUserByWeixin($userInfo) {
-        $this->User->save(array(
+        if (!$this->User->save(array(
             'nickname' => $userInfo['nickname'],
             'sex' => $userInfo['sex'] == 1 ? 0 : ($userInfo['sex'] == 2 ? 1 : null),
             'image' => $userInfo['headimgurl'],
@@ -874,7 +883,9 @@ class UsersController extends AppController {
             'username' => $userInfo['openid'],
             'password' => '',
             'uc_id' => 0
-        ));
+        ))) {
+            $this->log("error to save createNewUserByWeixin: with ". $userInfo);
+        }
         return $this->User->getLastInsertID();
     }
 
@@ -890,6 +901,11 @@ class UsersController extends AppController {
             return $userInfo;
         }
         return $userInfo;
+    }
+
+    protected function wxFailAndGotoLogin() {
+        $this->Session->setFlash(__('获取微信授权信息失败，请您重试，或者在本站注册一个用户'));
+        $this->redirect(array('action' => 'login'));
     }
 
 }
