@@ -183,7 +183,7 @@ class Apple201410Controller extends AppController {
         //TODO: need cache
         $awardItems = array();
         $awardInfos = $this->AwardInfo->find('list', array(
-            'conditions' => array('got >=' => $this->AWARD_APPLE_LEVEL),
+            'conditions' => array('got >=' => $this->AWARD_LIMIT),
             'fields' => array('uid', 'got')
         ));
         if (!empty($awardInfos)) {
