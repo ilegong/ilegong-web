@@ -4,7 +4,7 @@ td {padding:5px 10px;}
 <div  class="container">
 	<div class="orderinfo voffset3">
         {{if $specialShipPromotionId}}
-        <h2>收货人信息</h2><a href="{{$this->Html->url('/orders/info?ship_promotion=0')}}">[不使用特惠]</a>
+        <h2>收货人信息</h2><a id="link_use_promotion" href="{{$this->Html->url('/orders/info?ship_promotion=0')}}">[不使用特惠]</a>
         <ul>
             <li>收货人：<span>{{$this->Session->read('OrderConsignee.name')}}</span></li>
             <li>地址：<span>{{$this->Session->read('OrderConsignee.address')}}</span></li>
@@ -102,6 +102,7 @@ td {padding:5px 10px;}
     $(document).ready(function () {
         var $specialShipPromotion = $('#specialShipPromotion');
         var $btnSubmit = $('#specialShipPromotion_submit');
+        var $linkUsePromotion = $('#link_use_promotion');
         var lists = $specialShipPromotion.find('li');
         lists.click(function (e) {
             lists.filter('.active').removeClass('active');
@@ -137,8 +138,10 @@ td {padding:5px 10px;}
             $specialShipPromotion.toggle();
             if ($specialShipPromotion.is(":visible")) {
                 $('#part_consignee').hide();
+                $linkUsePromotion.text("[不使用特惠]");
             } else {
                 $('#part_consignee').show();
+                $linkUsePromotion.text("[使用特惠]");
             }
         });
     });
