@@ -709,6 +709,12 @@ class UsersController extends AppController {
                         }
                     }
 
+                    $ref = '';
+                    if(!empty($refer_by_state)) {
+                        $ref = $refer_by_state;
+                    } else if (!empty($param_referer)) {
+                        $ref = $param_referer;
+                    }
                     $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
 
                     //Do check Require user's authorization to get profile
@@ -723,12 +729,6 @@ class UsersController extends AppController {
                             }
                         }
                         if ($redi) {
-                            $ref = '';
-                            if(!empty($refer_by_state)) {
-                                $ref = $refer_by_state;
-                            } else if (!empty($param_referer)) {
-                                $ref = $param_referer;
-                            }
                             $this->_goto_wx_oauth($ref, WX_OAUTH_USERINFO);
                         }
                     }
@@ -761,7 +761,7 @@ class UsersController extends AppController {
 
                         if (!$new_serviceAccount_binded_uid){
                             $this->log("login failed for cannot got create new user with the current WX info: res=".json_encode($res).", wxUserInfo=".json_encode($wxUserInfo));
-                            $this->wxFailAndGotoLogin();
+                            $this->wxFailAndGotoLogin($ref);
                             return;
                         }
                     }
@@ -903,9 +903,18 @@ class UsersController extends AppController {
         return $userInfo;
     }
 
-    protected function wxFailAndGotoLogin() {
-        $this->Session->setFlash(__('获取微信授权信息失败，请您重试，或者在本站注册一个用户'));
-        $this->redirect(array('action' => 'login'));
+    protected function wxFailAndGotoLogin($ref = '') {
+        $loginError = __('获取微信授权信息失败，请您重试！');
+        $redirect = array('action' => 'login');
+        $params = array();
+        if (!empty($ref)) {
+            $params['referer'] = $ref;
+        }
+        if ($loginError) {
+            $params['login_error'] = $loginError;
+        }
+        $redirect['?'] = $params;
+        $this->redirect($redirect);
     }
 
 }

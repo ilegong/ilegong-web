@@ -13,9 +13,11 @@
     <div class="tab-content voffset2" style="padding-left: 20px;">
         {{if $supportWeixin }}
         <div class="tab-pane fade in active" id="wechatLogin">
-                <p>
-                    授权我们使用您的微信账号登录朋友说。我们只能获得一个数字Id绑定登录，不会获取您的其他信息。
-                </p>
+                {{if $_GET['login_error']}}
+                    <p class="bg-warning" style="color: orangered">{{$_GET['login_error']}}</p>
+                {{else}}
+                <p>授权我们使用您的微信账号登录朋友说。</p>
+                {{/if}}
                 <?php
                 $referer_link = '';
                 if (!empty($referer)) {
