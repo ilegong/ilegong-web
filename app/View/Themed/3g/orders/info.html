@@ -21,7 +21,7 @@ td {padding:5px 10px;}
                 {{loop $specialShipPromotion $key $item}}
                     <li item-id="{{$item['id']}}" class="list-group-item {{$specialShipPromotionId == $item['id']? 'active':''}}">
                         <span class="text-price-small pull-right">{{$this->Number->precision($item['price'])}}</span>
-                        {{$item['time']}} 日派送到 {{$item['address']}}</li>
+                        <small>{{$item['time']}}派送到{{$item['address']}}</small></li>
                 {{/loop}}
             </ul>
                 <input type="text" class="form-control" placeholder="收货人姓名" id="p_consignee_name" name="consignee_name" value="{{$this->Session->read('OrderConsignee.name')}}">

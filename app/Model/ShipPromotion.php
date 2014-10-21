@@ -7,7 +7,7 @@
  */
 
 class ShipPromotion extends AppModel {
-    const PID = 192;
+    const PID = 180;
     public $useTable = false;
     var $specialShipPromotion = array('lowest' => 49.90,
         'items' => array(
@@ -25,7 +25,7 @@ class ShipPromotion extends AppModel {
             $promotion = array_filter($this->specialShipPromotion['items'], function ($item) use ($promotionId) {
                     return ($item['id'] == $promotionId);
                 });
-            if(!empty($promotion)){ return $promotion[0];};
+            if(!empty($promotion)){ return (array_values($promotion)[0]);};
         }
         return null;
     }
