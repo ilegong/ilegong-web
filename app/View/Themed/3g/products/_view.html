@@ -15,19 +15,26 @@
                     ¥{{$this->Number->precision($Product['Product']['original_price'], 2)}}
               </span>
             {{/if}}
-            <span class="vertical-align" style="position: absolute; right: 0; bottom: 0;">快递：{{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</span>
+            <span class="vertical-align" style="position: absolute; right: 10px; bottom: 0;">快递：{{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</span>
         </div>
+
+        {{if $Product['Product']['id'] == 192}}
+        <div class="clearfix voffset2">
+            <span class="col-xs-3">促销：</span>
+            <p class="col-xs-9">收货地址选择11月5日送到腾讯、搜狐/搜狗，包邮价<span class="text-price" style="font-size: 20px">49.90</span>元</p>
+        </div>
+        {{/if}}
+
         <div  id="productinfo" class="clearfix voffset2" style="padding-bottom:10px;">
             <div class="input-group" style="float:left;width:120px;">
                 <span class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}" >-</span>
                 <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text" readonly="readonly">
                 <span class="add input-group-addon"  item-id="{{$Product['Product']['id']}}">+</span>
             </div>
-            <a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-primary shopping" id="single-item-{{$Product['Product']['id']}}" item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
+            <a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-warning shopping" id="single-item-{{$Product['Product']['id']}}" item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
                href="javascript:void(0);">添加到购物车</a>
-
         </div>
-        <div>
+        <div class="voffset3">
             <a style="color:red;" href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($Product['Brand']['created'])).'/'.$Product['Product']['brand_id'])}}">查看商家更多商品</a>
         </div>
     </div>
