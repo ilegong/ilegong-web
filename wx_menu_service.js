@@ -7,7 +7,7 @@
     },
     {
         "type":"view",
-        "name":"小娟苹果",
+        "name":"苹果游戏",
         "url":"http://pys.b-wmobile.com/apple_201410/index.html"
     },
     {
