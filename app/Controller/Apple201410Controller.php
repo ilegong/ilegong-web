@@ -41,6 +41,27 @@ class Apple201410Controller extends AppController {
         }
         $this->autoRender = false;
     }
+
+    var $companies = array(
+        1156 => '搜狗',
+        1914 => '搜狗',
+
+        1308 => '北京联合大学',
+
+        8 => '朋友说',
+        578 => '朋友说',
+
+        1608 => '去哪儿',
+        1968 => '去哪儿',
+        3468 => '凤凰网',
+
+        4639 => '去哪儿',
+
+        2073 => '',
+        926 => '去哪儿',
+        2727 => '去哪儿',
+    );
+    
     var $sess_award_notified = "award-notified";
     var $time_last_query_key = 'award-new-times-last';
     public function hasNewTimes() {
@@ -192,7 +213,7 @@ class Apple201410Controller extends AppController {
         if (!empty($awardInfos)) {
             $nicknamesMap = $this->User->findNicknamesMap(array_keys($awardInfos));
             foreach ($awardInfos as $uid => $got) {
-                $awardItems[] = array('nickname' => $this->filter_invalid_name($nicknamesMap[$uid]), 'got' => $got);
+                $awardItems[] = array('nickname' => $this->filter_invalid_name($nicknamesMap[$uid]), 'got' => $got, 'company' => $this->companies[$uid]);
             }
         }
 
