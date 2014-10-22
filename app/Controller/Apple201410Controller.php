@@ -155,13 +155,13 @@ class Apple201410Controller extends AppController {
         $helpMeItems = array();
         foreach($friendsHelpMe as $item) {
             $uid = $item['TrackLog']['from'];
-            $helpMeItems[] = array('nickname' => $this->filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid]);
+            $helpMeItems[] = array('nickname' => $this->filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid]? $gots[$uid] : 0);
         }
 
         $meHelpItems = array();
         foreach($friendsIHelped as $item) {
             $uid = $item['TrackLog']['to'];
-            $meHelpItems[] = array('nickname' => $this->filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid]);
+            $meHelpItems[] = array('nickname' => $this->filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid]? $gots[$uid] : 0);
         }
 
 
