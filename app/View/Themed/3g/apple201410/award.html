@@ -131,7 +131,7 @@
         <ul class="list-unstyled">
             {{if $awarded}}
             {{loop $awarded $key $item}}
-            <li>{{$item['nickname']}}{{$item['company']?'<small>('.$item['company'].')</small>':''}}，摇到<span class="apple_numbers_normal">{{$item['got']}}</span>个苹果, 赢得红富士一箱！</li>
+            <li>{{$item['nickname']}}{{$item['company']?'<small>('.$item['company'].')</small>':''}}，<span class="apple_numbers_normal">{{$item['got']}}</span>个苹果, 得红富士一箱！</li>
             {{/loop}}
             {{else}}
             <li>活动刚刚启动，暂无人获奖。</li>
