@@ -8,7 +8,7 @@
     {
         "type":"view",
         "name":"苹果游戏",
-        "url":"http://pys.b-wmobile.com/apple_201410/index.html"
+        "url":"http://pys.b-wmobile.com/apple_201410/award.html"
     },
     {
         "name":"个人中心",
