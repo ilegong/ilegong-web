@@ -52,6 +52,7 @@ class Apple201410Controller extends AppController {
         578 => '朋友说',
 
         1608 => '去哪儿',
+        1488 => '去哪儿',
         1968 => '去哪儿',
         3468 => '凤凰网',
 
