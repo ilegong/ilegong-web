@@ -91,6 +91,8 @@ class WxOauthSource extends DataSource {
             $json = $this->get_user_info($queryData);
         } else if ($queryData['method'] == 'get_base_access_token') {
             $json = $this->get_base_access_token();
+        } else if ($queryData['method'] == 'get_user_info_by_base_token'){
+            $json = $this->get_user_info_by_base_token($queryData);
         } else {
             throw new CakeException("not supported query type(" . $queryData['method'] . ")");
         }
@@ -178,6 +180,16 @@ class WxOauthSource extends DataSource {
     protected function get_base_access_token()
     {
         return $this->do_curl($this->config['api_wx_url'] . '/cgi-bin/token?grant_type=client_credential&appid=' . WX_APPID . '&secret=' . WX_SECRET);
+    }
+
+    protected function get_user_info_by_base_token($conditions)
+    {
+        $openId = $conditions['openid'];
+        $accessToken = $conditions['base_token'];
+        if (!$openId || !$accessToken) {
+            return null;
+        }
+        return $this->do_curl($this->config['api_wx_url'] . "/cgi-bin/user/info?access_token=$accessToken&openid=$openId&lang=zh_CN");
     }
 
     /**
