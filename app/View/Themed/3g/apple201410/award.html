@@ -55,7 +55,12 @@
 
     .apple_nav_links {
         text-decoration: underline; line-height: 28px;
-        margin:10px 5px 5px 5px;
+        margin:20px 2px 5px 2px;
+    }
+
+    .top_links {
+        text-decoration: underline; font-size: 12px;
+        margin:20px 2px 5px 2px;
     }
 
     .shaking_tips_pic {
@@ -72,11 +77,16 @@
         color:#df1a00;
         background-color: gold;
     }
+
+    .price {
+        color:#df1a00;
+        background-color: gold;
+    }
 </style>
 
 <div class="container">
     <div class="row text-center">
-        <h2>摇下100个，小娟家苹果免费领</h2>
+        <h2>摇下100个，小娟家苹果免费领</h2> <a name="top"></a>
         <div class="col-xs-12">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp; 已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个
             <a id="link_rules" href="{{$this->Html->url(array('action'=>'rules'))}}" class="apple_nav_links"><small>活动规则</small></a>
         </div>
@@ -89,15 +99,15 @@
     </div>
     <div class="row voffset3 text-center">
         <div>
-        <button id="shake_btn" class="btn btn-danger" type="button" style="display:{{$total_times <= 0 ? 'none' : ''}}">手机摇一摇</button>
-        <button id="share_btn" class="btn btn-danger" type="button" style="display:{{$total_times > 0 ? 'none' : ''}}">朋友帮我摇</button>
-        <a class="btn btn-warning" href="/products/20141009/xiao_juan_jia_xian_yang_hong_fu_shi_yu_shou_20xiang.html">马上预订</a>
+        <button id="shake_btn" class="btn btn-warning" type="button" style="display:{{$total_times <= 0 ? 'none' : ''}}">手机摇一摇<small><em>(iPhone请调大音量)</em></small></button>
+        <button id="share_btn" class="btn btn-warning" type="button" style="display:{{$total_times > 0 ? 'none' : ''}}">朋友帮我摇</button>
         </div>
         <div>
             <a href="#award_names" class="apple_nav_links"><small>获奖名单</small></a>
             <a href="#friends" class="apple_nav_links"><small>谁帮我了</small></a>
             <a href="#friendsIhelped" class="apple_nav_links"><small>我帮过谁</small></a>
             <a href="#about_us" class="apple_nav_links"><small>关于我们</small></a>
+            <a href="#about_apple" class="apple_nav_links"><small>QA妹子分享红富士</small></a>
         </div>
     </div>
 
@@ -117,7 +127,7 @@
         <p><a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">点击关注【朋友说】</a></p>
         </div>
 
-        <h3 id="award_names">获奖名单 <span class="badge">{{count($awarded)}}</span></h3>
+        <h3 id="award_names">获奖名单 <span class="badge">{{count($awarded)}}</span><a href="#top" class="top_links">top&uarr;</a></h3>
         <ul class="list-unstyled">
             {{if $awarded}}
             {{loop $awarded $key $item}}
@@ -129,7 +139,7 @@
         </ul>
 
 
-        <h3 id="friends">谁帮我了<span class="badge">{{count($helpMe)}}</span></h3>
+        <h3 id="friends">谁帮我了<span class="badge">{{count($helpMe)}}</span><a href="#top" class="top_links">top&uarr;</a></h3>
         <ul class="list-unstyled">
             {{if $helpMe}}
             {{loop $helpMe $key $item}}
@@ -140,7 +150,7 @@
             {{/if}}
         </ul>
 
-        <h3 id="friendsIhelped">我帮过谁<span class="badge">{{count($meHelp)}}</span></h3>
+        <h3 id="friendsIhelped">我帮过谁<span class="badge">{{count($meHelp)}}</span><a href="#top" class="top_links">top&uarr;</a></h3>
         <ul class="list-unstyled">
             {{if $meHelp}}
             {{loop $meHelp $key $item}}
@@ -151,6 +161,26 @@
             {{/if}}
         </ul>
 
+        <h3 id="about_apple">QA妹子分享的家乡红富士 <a href="#top" class="top_links">top&uarr;</a></h3>
+        <div>
+            <img src="{{$this->Html->url('/img/apple201410/slogan.jpg')}}" style="width: 80px; margin-left: 5px" class="pull-right">
+            <p>
+                &nbsp;&nbsp;这么多年过去，在这座充满雾霾的城市，自己还在不停的奔跑，但，已经是匆匆过客的故乡，却一遍又一遍出现自己的梦里。原来，不管走到哪里，自己都是城市里的乡下人。
+            </p>
+            <p>
+                &nbsp;&nbsp;我的家乡在咸阳乾县山坳村，<span style="color:#df1a00">家乡的红富士，皮薄肉脆、香甜可口，今年由于干旱导致红富士个头偏小，但不影响口感</span>，小娟想帮家乡销售苹果。感谢您品尝我家乡的苹果。 （-- 电科院QA妹子小娟分享）
+            </p>
+            <img src="{{$this->Html->url('/img/apple201410/head.png')}}" width="120px" class="pull-right" style="margin-right: 50px">
+
+            <div class="clearfix"></div>
+            <div class="voffset1 text-center">
+                <span class="badge text-price" style="vertical-align: middle; font-size:20px">49.90元/10斤</span>   <a class="btn btn-sm btn-warning" href="/products/20141009/xiao_juan_jia_xian_yang_hong_fu_shi_yu_shou_20xiang.html">立即预定</a>
+            </div>
+        </div>
+
+        <p>
+
+        </p>
     </div>
 </div>
 
