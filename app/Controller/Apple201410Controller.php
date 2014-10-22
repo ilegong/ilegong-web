@@ -61,6 +61,8 @@ class Apple201410Controller extends AppController {
         926 => '去哪儿',
         2727 => '去哪儿',
     );
+
+    var $in_pys = array(8, 578, 818);
     
     var $sess_award_notified = "award-notified";
     var $time_last_query_key = 'award-new-times-last';
@@ -213,7 +215,9 @@ class Apple201410Controller extends AppController {
         if (!empty($awardInfos)) {
             $nicknamesMap = $this->User->findNicknamesMap(array_keys($awardInfos));
             foreach ($awardInfos as $uid => $got) {
-                $awardItems[] = array('nickname' => $this->filter_invalid_name($nicknamesMap[$uid]), 'got' => $got, 'company' => $this->companies[$uid]);
+                if (array_search($uid, $this->in_pys) === false) {
+                    $awardItems[] = array('nickname' => $this->filter_invalid_name($nicknamesMap[$uid]), 'got' => $got, 'company' => $this->companies[$uid]);
+                }
             }
         }
 
