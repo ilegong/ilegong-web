@@ -34,6 +34,12 @@
         font-family: "Droid Sans", Arial, Helvetica, sans-serif;
     }
 
+    .apple_numbers_normal {
+        color: #df1a00;
+        padding-left: 3px;
+        padding-right: 3px;
+    }
+
     #wrapper {
         background-color: #ffeabc;
         min-height: 720px;
@@ -60,6 +66,11 @@
 
     h3 {
         color:#333333;
+    }
+
+    .badge {
+        color:#df1a00;
+        background-color: gold;
     }
 </style>
 
@@ -105,11 +116,11 @@
         <p><a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">点击关注【朋友说】</a></p>
         </div>
 
-        <h3 id="award_names">获奖名单</h3>
+        <h3 id="award_names">获奖名单 <span class="badge">{{count($awarded)}}</span></h3>
         <ul class="list-unstyled">
             {{if $awarded}}
             {{loop $awarded $key $item}}
-            <li>{{$item['nickname']}}，赢得小娟家红富士一箱，TA已摇到{{$item['got']}} 个苹果啦！</li>
+            <li>{{$item['nickname']}}，摇到<span class="apple_numbers_normal">{{$item['got']}}</span>个苹果, 赢得红富士一箱！</li>
             {{/loop}}
             {{else}}
             <li>活动刚刚启动，暂无人获奖。</li>
@@ -117,14 +128,25 @@
         </ul>
 
 
-        <h3 id="friends">谁帮我了</h3>
+        <h3 id="friends">谁帮我了<span class="badge">{{count($helpMe)}}</span></h3>
         <ul class="list-unstyled">
             {{if $helpMe}}
             {{loop $helpMe $key $item}}
-            <li>{{$item['nickname']}}，TA已经摇到了 {{$item['got']}}个苹果</li>
+            <li>{{$item['nickname']}}，摇到了<span class="apple_numbers_normal">{{$item['got']}}</span>个苹果</li>
             {{/loop}}
             {{else}}
             <li>还没有朋友帮过你啊，马上分享给朋友们吧！</li>
+            {{/if}}
+        </ul>
+
+        <h3 id="friendsIhelped">我帮过谁<span class="badge">{{count($meHelp)}}</span></h3>
+        <ul class="list-unstyled">
+            {{if $meHelp}}
+            {{loop $meHelp $key $item}}
+            <li>{{$item['nickname']}}，摇到了<span class="apple_numbers_normal">{{$item['got']}}</span>个苹果</li>
+            {{/loop}}
+            {{else}}
+            <li>你竟然还没有帮过朋友！</li>
             {{/if}}
         </ul>
 
@@ -271,7 +293,7 @@
 //                        $shaking_tips_png.show();
 //                    }
                 });
-            },1400);
+            }, 2000);
         }
 
         $shakeBtn.click(function(){

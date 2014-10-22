@@ -116,7 +116,6 @@ class Apple201410Controller extends AppController {
         $tr_id = $_GET['trid'];
         list($friendUid, $isSelf) = $this->check_tr_id($tr_id, 'award');
         if (!$isSelf) {
-
             $friend = $this->User->findById($friendUid);
             if (!empty($friend)) {
                 $trackLogs = $this->TrackLog->find('first', array(
@@ -137,41 +136,37 @@ class Apple201410Controller extends AppController {
         $friendsHelpMe = $this->TrackLog->find('all', array(
             'conditions' => array('to' => $this->currentUser['id']),
             'fields' => array('from'),
-            'order' => ' award_time desc',
             'limit' => 500
         ));
-//            $friendsIHelped = $this->AppleAward->find('all', array(
-//                'conditions' => array('award_from' => $friendUid),
-//                'fields' => array('award_from', 'sum(apple_got) as apple_got'),
-//                'group' => ' award_time ',
-//                'limit' => 500
-//            ));
-//
-            $allUids = array_map(function($val){
-                return $val['TrackLog']['from'];
-            }, $friendsHelpMe);
-//
-//            $allUids += array_map(function($val){
-//                return $val['award_to'];
-//            }, $friendsIHelped);
 
+        $friendsIHelped = $this->TrackLog->find('all', array(
+            'conditions' => array('from' => $this->currentUser['id']),
+            'fields' => array('to'),
+            'limit' => 500
+        ));
 
-            $allUids = array_unique($allUids);
-            $nameIdMap = $this->User->findNicknamesMap($allUids);
+        list($allUids, $nameIdMap) = $this->findNicknames($friendsHelpMe, $friendsIHelped);
 
-        $friends = $this->AwardInfo->find('list', array(
+        $gots = $this->AwardInfo->find('list', array(
             'conditions' => array('uid' => $allUids),
             'fields' => array('uid', 'got')
         ));
 
-        $helpItems = array();
+        $helpMeItems = array();
         foreach($friendsHelpMe as $item) {
             $uid = $item['TrackLog']['from'];
-            $helpItems[] = array('nickname' => $this->filter_invalid_name($nameIdMap[$uid]), 'got' => $friends[$uid]);
+            $helpMeItems[] = array('nickname' => $this->filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid]);
         }
 
-            $this->set('helpMe', $helpItems);
-//            $this->set('iHelp', $friendsIHelped);
+        $meHelpItems = array();
+        foreach($friendsIHelped as $item) {
+            $uid = $item['TrackLog']['to'];
+            $meHelpItems[] = array('nickname' => $this->filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid]);
+        }
+
+        $this->set('helpMe', $helpMeItems);
+        $this->set('meHelp', $meHelpItems);
+
         $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($this->currentUser['id'], KEY_APPLE_201410);
         if (empty($awardInfo)) {
             $awardInfo = array('AwardInfo' => array('uid' => $this->currentUser['id'], 'type' => KEY_APPLE_201410, 'times' => 10, 'got' => 0));
@@ -325,6 +320,25 @@ class Apple201410Controller extends AppController {
             $name = mb_substr($name, 0, 8, 'UTF-8');
         }
         return $name;
+    }
+
+    /**
+     * @param $friendsHelpMe
+     * @param $friendsIHelped
+     * @return array
+     */
+    protected function findNicknames($friendsHelpMe, $friendsIHelped) {
+        $allUids = array_map(function ($val) {
+            return $val['TrackLog']['from'];
+        }, $friendsHelpMe);
+
+        $allUids += array_map(function ($val) {
+            return $val['TrackLog']['to'];
+        }, $friendsIHelped);
+
+        $allUids = array_unique($allUids);
+        $nameIdMap = $this->User->findNicknamesMap($allUids);
+        return array($allUids, $nameIdMap);
     }
 
 }
