@@ -164,6 +164,14 @@ class Apple201410Controller extends AppController {
             $meHelpItems[] = array('nickname' => $this->filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid]);
         }
 
+
+        function cmp($a, $b) {
+            $sortby = 'got'; //define here the field by which you want to sort
+            return $a[$sortby] < $b[$sortby];
+        }
+        uasort($helpMeItems, 'cmp');
+        uasort($meHelpItems, 'cmp');
+
         $this->set('helpMe', $helpMeItems);
         $this->set('meHelp', $meHelpItems);
 
