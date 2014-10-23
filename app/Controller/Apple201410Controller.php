@@ -12,7 +12,7 @@ class Apple201410Controller extends AppController {
 
     var $uses = array('User', 'AppleAward', 'AwardInfo', 'TrackLog');
 
-    var $DAY_LIMIT = 10;
+    var $DAY_LIMIT = 8;
     var $AWARD_LIMIT = 100;
 
     public function beforeFilter() {
