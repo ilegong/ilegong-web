@@ -48,7 +48,7 @@ class Apple201410Controller extends AppController {
 
         1308 => '北京联合大学',
         940 => '爱大厨',
-        988 => '育苗基金会',
+        988 => '原道智业',
 
 
         8 => '朋友说',
