@@ -45,6 +45,7 @@ class Apple201410Controller extends AppController {
     var $companies = array(
         1156 => '搜狗',
         1914 => '搜狗',
+        1334 => '搜狗',
 
         1308 => '北京联合大学',
         940 => '爱大厨',
@@ -64,9 +65,10 @@ class Apple201410Controller extends AppController {
         2073 => '',
         926 => '去哪儿',
         2727 => '去哪儿',
+        1290 => '对外经贸大学',
     );
 
-    var $in_pys = array(8, 578, 818);
+    var $in_pys = array(8, 578, 818, 819);
     
     var $sess_award_notified = "award-notified";
     var $time_last_query_key = 'award-new-times-last';
