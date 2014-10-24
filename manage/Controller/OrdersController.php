@@ -177,7 +177,10 @@ class OrdersController extends AppController{
         $consignee_mobilephone=!isset($_REQUEST['consignee_mobilephone'])?"":$_REQUEST['consignee_mobilephone'];
 
         $this->loadModel('Brand');
-        $brands = $this->Brand->find('all',array('order' => 'id desc'));
+        $brands = $this->Brand->find('all',array(
+            'deleted !=1',
+            'order' => 'id desc'
+        ));
 
         $this->loadModel('Order');
         $conditions = array(
