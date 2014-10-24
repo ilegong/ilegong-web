@@ -18,7 +18,8 @@ class OrdersController extends AppController{
 		108=>'汇通',
 		109=>'中通',
 		110=>'全一',
-	);
+        111=>'宅急送'
+    );
 
     public function __construct($request = null, $response = null) {
         $this->helpers[] = 'PhpExcel';

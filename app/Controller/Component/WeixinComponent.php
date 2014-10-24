@@ -22,7 +22,8 @@ class WeixinComponent extends Component
         107=>'tiantian',
         108=>'huitongkuaidi',
         109=>'zhongtong',
-        110=>'quanyikuaidi'
+        110=>'quanyikuaidi',
+        111=>'zhaijisong'
     );
 
     public $kuaidi100_url = "http://m.kuaidi100.com/index_all.html";
