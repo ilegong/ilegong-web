@@ -365,7 +365,7 @@
                     utils.alert("已于"+data.got_time+"领取过啦，请明天再来领取。");
 //                    disable_wx_times(data.got_time);
                 } else if (data.result == 'just-got') {
-                    utils.alert("领取成功！");
+                    utils.alert("领取成功！您现在有<span class='apple_numbers'>"+data['total_times']+"</span>次机会" );
                     $appleTimesLeft.text(data['total_times'] < 0 ? 0 : data['total_times']);
 //                    disable_wx_times();
                 } else if (data.result == 'retry') {
