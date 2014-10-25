@@ -8,13 +8,13 @@
  */
 class Apple201410Controller extends AppController {
 
-    const DAILY_TIMES_SUB = 8;
+    const DAILY_TIMES_SUB = 5;
 
     var $name = "Apple201410";
 
     var $uses = array('User', 'AppleAward', 'AwardInfo', 'TrackLog');
 
-    var $DAY_LIMIT = 5;
+    var $DAY_LIMIT = 8;
     var $AWARD_LIMIT = 100;
 
 
