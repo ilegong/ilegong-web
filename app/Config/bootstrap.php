@@ -10,8 +10,13 @@ const WX_JS_API_CALL_URL = 'http://pys.b-wmobile.com/wxPay/jsApiPay';
 const WX_NOTIFY_URL = 'http://pys.b-wmobile.com/wxPay/notify.html';
 const WX_SERVICE_ID_GOTO = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200757804&idx=1&sn=90b121983525298a4ac26ee8d6c0bc1c#rd';
 
+const WX_API_PREFIX  = 'https://api.weixin.qq.com';
+
 const WX_OAUTH_USERINFO = 'snsapi_userinfo';
 const WX_OAUTH_BASE = 'snsapi_base';
+const WX_STATUS_SUBSCRIBED = 1;
+const WX_STATUS_UNSUBSCRIBED = 3;
+const WX_STATUS_UNKNOWN = 0;
 
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
@@ -41,7 +46,6 @@ define('PAYNOTIFY_STATUS_CLOSED', 7);
 define('KEY_APPLE_201410',  'apple201410');
 define('PROFILE_NICK_LEN', 16);
 define('PROFILE_NICK_MIN_LEN', 2);
-
 
 global $page_style;
 global $pages_tpl;
@@ -82,4 +86,13 @@ function oauth_wx_goto($refer_key, $host3g) {
         default:
     }
     return "$host3g";
+}
+
+function same_day($time1, $time2) {
+    $dt = new DateTime;
+    $dt->setTimestamp($time1);
+    $day1 = $dt->format(FORMAT_DATE);
+    $dt->setTimestamp($time2);
+    $day2 = $dt->format(FORMAT_DATE);
+    return ($day1 == $day2);
 }

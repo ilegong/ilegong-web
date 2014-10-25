@@ -106,8 +106,10 @@
             <a href="#award_names" class="apple_nav_links"><small>获奖名单</small></a>
             <a href="#friends" class="apple_nav_links"><small>谁帮我了</small></a>
             <a href="#friendsIhelped" class="apple_nav_links"><small>我帮过谁</small></a>
-            <a href="#about_apple" class="apple_nav_links"><small>QA妹子分享富士</small></a>
             <a href="/?from=game_home" class="apple_nav_links"><small>美食特产</small></a>
+            <br>
+            <a class="apple_nav_links" href="#more_chances"><small>如何获得更多机会</small></a>
+            <a href="#about_apple" class="apple_nav_links"><small>QA妹子分享富士</small></a>
         </div>
     </div>
 
@@ -126,8 +128,16 @@
                 </a>
         </div><div class="col-xs-9">
         <p><a href="/?from=index">[朋友说]</a> 同事间互相分享家乡特产的创业网站，我们都是城市里的乡下人。</p>
-        <p><a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">点击关注【朋友说】</a></p>
+        <!-- 为了看更多机会时能看到关注按钮，所以id放在这里-->
+        <p id="more_chances"><a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">点击关注【朋友说】</a></p>
         </div>
+
+        <h3>如何获得更多机会</h3>
+        <ul class="list-unstyled">
+            <li>1. 关注我们的服务号，<span class="apple_numbers_normal">每天</span>都可以领取<span class="apple_numbers">{{Apple201410Controller::DAILY_TIMES_SUB}}</span>次机会。
+                <button id="assignWXSubscribeTimes" type="button" class="btn-xs btn-warning">领取</button> </li>
+            <li>2. 分享给你的朋友们，每个朋友点击过来就增加<span class="apple_numbers">1</span>次机会。<button id="share_btn_2" class="btn-xs btn-warning" type="button">立即分享</button></li>
+        </ul>
 
         <h3 id="award_names">获奖名单 <span class="badge">{{count($awarded)}}</span><a href="#top" class="top_links">top&uarr;</a></h3>
         <ul class="list-unstyled">
@@ -176,7 +186,7 @@
 
             <div class="clearfix"></div>
             <div class="voffset1 text-center">
-                <span class="badge text-price" style="vertical-align: middle; font-size:20px">49.90元/10斤</span>   <a class="btn btn-sm btn-warning" href="/products/20141009/xiao_juan_jia_xian_yang_hong_fu_shi_yu_shou_20xiang.html">立即预定</a>
+                <span class="badge text-price" style="vertical-align: middle; font-size:20px">49.90元/10斤</span>   <a class="btn btn-sm btn-warning" href="/products/20141009/xiao_juan_jia_xian_yang_hong_fu_shi_yu_shou_20xiang.html?from=game_home">立即预定</a>
             </div>
         </div>
 
@@ -212,7 +222,7 @@
 
         $('body').append($share_div);
 
-        $shareBtn.click(function(){
+        $($shareBtn, '#share_btn_2').click(function(){
             showShareAndChangeTitle();
         });
 
@@ -337,6 +347,26 @@
                 var msg = data.got ? '您为<span style="color:red">'+data.name+'</span>获得了<span class="apple_numbers">1</span>次摇苹果的机会！' : '您已经帮这个朋友点过啦！';
                 utils.alert(msg);
             }
+        });
+
+        var $assignWXSubscribeTimes = $('#assignWXSubscribeTimes');
+        $assignWXSubscribeTimes.click(function(){
+            $.getJSON("{{$this->Html->url(array('action' => 'assignWXSubscribeTimes'))}}?r="+Math.random(), function(data){
+                if (data.result == "not-sub") {
+                    utils.alert("您还没有关注我们的服务号，按<a href=\"http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd\">关注指南</a>关注【朋友说】，就可以来领取啦");
+                }  else if (data.result == 'got') {
+                    utils.alert("已于"+data.got_time+"领取过啦，请明天再来领取。");
+//                    disable_wx_times(data.got_time);
+                } else if (data.result == 'just-got') {
+                    utils.alert("领取成功！");
+                    $appleTimesLeft.text(data['total_times'] < 0 ? 0 : data['total_times']);
+//                    disable_wx_times();
+                } else if (data.result == 'retry') {
+                    utils.alert("领取失败，可能是网络状态不好，请稍候重试！");
+                } else {
+                    utils.alert('可能是网络状态不好，请稍候重新领取！');
+                }
+            });
         });
 
         var query_interval = 5000;

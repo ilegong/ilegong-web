@@ -35,24 +35,13 @@ class WeixinComponent extends Component
 
     public function get_access_token()
     {
-        $curl = curl_init();
-        $options = array(
-            CURLOPT_URL => 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=' . WX_APPID . '&secret=' . WX_SECRET ,
-            CURLOPT_CUSTOMREQUEST => 'GET' // GET POST PUT PATCH DELETE HEAD OPTIONS
-        );
-        curl_setopt_array($curl, ($options + $this->wx_curl_option_defaults));
-        $json = curl_exec($curl);
-        curl_close($curl);
-        $output = json_decode($json, true);
-        $this->log("get weixin api access token output: ".$output,LOG_DEBUG);
-        if (!empty($output['access_token'])) {
-            return $output['access_token'];
-        }
-        return "";
+       return ClassRegistry::init('WxOauth')->get_base_access_token();
     }
 
     public function send_order_shipped_message($open_id, $ship_type, $ship_company, $ship_code, $good_info, $good_number)
     {
+        $tries = 1;
+        while($tries -- > 0) {
         $access_token = $this->get_access_token();
         $this->log("get weixin api access token: ".$access_token,LOG_DEBUG);
         if (!empty($access_token)) {
@@ -60,7 +49,7 @@ class WeixinComponent extends Component
             $post_data = array(
                 "touser" => $open_id,
                 "template_id" => $this->wx_message_template_ids["ORDER_SHIPPED"],
-                "url" => $this->get_kuaidi_query_url($ship_type,$ship_code),
+                "url" => $this->get_kuaidi_query_url($ship_type, $ship_code),
                 "topcolor" => "#FF0000",
                 "data" => array(
                     "first" => array("value" => "亲，您的特产已经从家乡启程啦。"),
@@ -81,11 +70,16 @@ class WeixinComponent extends Component
             $json = curl_exec($curl);
             curl_close($curl);
             $output = json_decode($json, true);
-            $this->log("post weixin api send template message output: ".$output,LOG_DEBUG);
+            $this->log("post weixin api send template message output: " . $output, LOG_DEBUG);
             if ($output['errcode'] == 0) {
                 return true;
+            } else {
+                if (!ClassRegistry::init('WxOauth')->should_retry_for_failed_token($output)) {
+                    return false;
+                };
             }
             return false;
+        }
         }
         return false;
     }

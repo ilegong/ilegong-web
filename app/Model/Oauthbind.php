@@ -28,5 +28,4 @@ class Oauthbind extends AppModel {
             return false;
         }
     }
-
-} 
+}

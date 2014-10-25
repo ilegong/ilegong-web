@@ -8,12 +8,15 @@
  */
 class Apple201410Controller extends AppController {
 
+    const DAILY_TIMES_SUB = 8;
+
     var $name = "Apple201410";
 
     var $uses = array('User', 'AppleAward', 'AwardInfo', 'TrackLog');
 
     var $DAY_LIMIT = 8;
     var $AWARD_LIMIT = 100;
+
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -131,6 +134,57 @@ class Apple201410Controller extends AppController {
             return json_encode(array('success' => false));
         }
 
+    }
+
+    const WX_TIMES_ASSIGN_NOT_SUB = "not-sub";
+    const WX_TIMES_ASSIGN_RETRY = "retry";
+    const WX_TIMES_ASSIGN_GOT = "got";
+    const WX_TIMES_ASSIGN_JUST_GOT = "just-got";
+    public function assignWXSubscribeTimes() {
+        $this->autoRender = false;
+        $subscribe_status = $this->currentUser['wx_subscribe_status'];
+
+        $id = $this->currentUser['id'];
+        $res = array();
+        if ($subscribe_status == WX_STATUS_UNKNOWN) {
+            $this->loadModel('Oauthbind');
+            $oauth = $this->Oauthbind->findWxServiceBindByUid($id);
+            if (!empty($oauth)) {
+                $this->loadModel('WxOauth');
+                $uinfo = $this->WxOauth->get_user_info_by_base_token($oauth['oauth_openid']);
+                if (!empty($uinfo)) {
+                    $subscribe_status = ($uinfo['subscribe'] != 0 ? WX_STATUS_SUBSCRIBED : WX_STATUS_UNSUBSCRIBED);
+                    $this->loadModel('User');
+                    $this->User->updateAll(array('wx_subscribe_status' => $subscribe_status), array('id' => $id));
+                }
+            }
+        }
+
+        if (WX_STATUS_SUBSCRIBED == $subscribe_status) {
+            $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
+            $weixinTimesLog = $wxTimesLogModel->findById($id);
+            $now = mktime();
+            if (!empty($weixinTimesLog) && same_day($weixinTimesLog['AwardWeixinTimeLog']['last_got_time'], $now)) {
+                $result = self::WX_TIMES_ASSIGN_GOT;
+                $res['got_time'] = date('H时i分s秒', $weixinTimesLog['AwardWeixinTimeLog']['last_got_time']);
+            }else {
+                $log = array();
+                $log['id'] = $id;
+                $log['last_got_time'] = $now;
+                if ($wxTimesLogModel->save($log) !== false){
+                    $this->AwardInfo->updateAll(array('times' => 'times + '.self::DAILY_TIMES_SUB,), array('uid' => $id, ''));
+                    $awardInfo = $this->AwardInfo->findByUid($id);
+                    $res['total_times'] = $awardInfo['AwardInfo']['times'];
+                    $result = self::WX_TIMES_ASSIGN_JUST_GOT;
+                } else {
+                    $result = self::WX_TIMES_ASSIGN_RETRY;
+                }
+            }
+        }  else {
+            $result = $subscribe_status == WX_STATUS_UNSUBSCRIBED ? self::WX_TIMES_ASSIGN_NOT_SUB : self::WX_TIMES_ASSIGN_RETRY;
+        }
+        $res['result'] = $result;
+        echo json_encode($res);
     }
 
     private function _updateLastQueryTime($curr) {
