@@ -8,7 +8,7 @@
  */
 class WxPayController extends AppController {
 
-    public $components = array('WxPayment');
+    public $components = array('WxPayment','Weixin');
 
     var $uses = array('Order', 'PayLog', 'PayNotify');
 
@@ -197,6 +197,16 @@ class WxPayController extends AppController {
                             } else {
                                 $this->Order->updateAll(array('status' => ORDER_STATUS_PAID, 'pay_time' => "'".date('Y-m-d H:i:s')."'"), array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY));
                                 $status = PAYNOTIFY_STATUS_ORDER_UPDATED;
+
+                                //todo send weixin paid success message
+                                $this->loadModel('Oauthbind');
+                                $user_weixin = $this->Oauthbind->findWxServiceBindByUid($order['Order']['creator']);
+                                if($user_weixin!=false){
+                                    $good = $this->get_order_good_info($order);
+                                    $this->log("good info:".$good['good_info']." ship info:".$good['ship_info'],LOG_DEBUG);
+                                    $this->Weixin->send_order_paid_message($user_weixin['oauth_openid'],$order['Order']['total_all_price'],
+                                        $good['good_info'], $good['ship_info'], $orderId);
+                                }
                             }
                         }
                     }
@@ -238,6 +248,18 @@ class WxPayController extends AppController {
      */
     private function _is_action_by_wx_callback() {
         return array_search($this->request->params['action'], array('notify', 'warning')) !== false;
+    }
+
+    function get_order_good_info($order_info){
+        $good_info ='';
+        $ship_info = $order_info['Order']['consignee_name'].','.$order_info['Order']['consignee_address'].','.$order_info['Order']['consignee_mobilephone'];
+        $this->loadModel('Cart');
+        $carts = $this->Cart->find('all',array(
+            'conditions'=>array('order_id' => $order_info['Order']['id'])));
+        foreach($carts as $cart){
+            $good_info = $good_info.$cart['Cart']['name'].' x '.$cart['Cart']['num'].';';
+        }
+        return array("good_info"=>$good_info,"ship_info"=>$ship_info);
     }
 
 } 
