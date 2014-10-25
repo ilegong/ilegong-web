@@ -166,7 +166,7 @@ class Apple201410Controller extends AppController {
             $now = mktime();
             if (!empty($weixinTimesLog) && same_day($weixinTimesLog['AwardWeixinTimeLog']['last_got_time'], $now)) {
                 $result = self::WX_TIMES_ASSIGN_GOT;
-                $res['got_time'] = date('H时i分s秒', $weixinTimesLog['AwardWeixinTimeLog']['last_got_time']);
+                $res['got_time'] = date('H点i分', $weixinTimesLog['AwardWeixinTimeLog']['last_got_time']);
             }else {
                 $log = array();
                 $log['id'] = $id;
@@ -285,6 +285,7 @@ class Apple201410Controller extends AppController {
         $this->setTotalVariables($awardInfo);
         $this->set('got_apple', 0);
         $this->_updateLastQueryTime(time());
+//        $this->set('subscribe_status', $this->currentUser['wx_subscribe_status'] != WX_STATUS_SUBSCRIBED);
         $this->pageTitle = "摇一摇免费得红富士苹果, 我已经摇到了".$awardInfo['got']."个苹果 -- 城市里的乡下人电科院QA小娟分享家乡的苹果";
     }
 

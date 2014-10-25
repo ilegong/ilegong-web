@@ -132,7 +132,7 @@
         <p id="more_chances"><a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">点击关注【朋友说】</a></p>
         </div>
 
-        <h3>如何获得更多机会</h3>
+        <h3>如何获得更多摇一摇机会</h3>
         <ul class="list-unstyled">
             <li>1. 关注我们的服务号，<span class="apple_numbers_normal">每天</span>都可以领取<span class="apple_numbers">{{Apple201410Controller::DAILY_TIMES_SUB}}</span>次机会。
                 <button id="assignWXSubscribeTimes" type="button" class="btn-xs btn-warning">领取</button> </li>
@@ -212,6 +212,8 @@
         var $game_text_no_more = $('#game_text_no_more');
         var $shakeBtn = $('#shake_btn');
         var $shareBtn = $('#share_btn');
+
+        var $subscribe_status = "{{$wx_subscribe_status}}";
 
         $share_div = $('<div class="apple_share fade in"><img src="{{$this->Html->url('/img/apple201410/share.png')}}"></div>')
             .hide().click(function(){
