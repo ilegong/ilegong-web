@@ -164,7 +164,7 @@ class Apple201410Controller extends AppController {
             $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
             $weixinTimesLog = $wxTimesLogModel->findById($id);
             $now = mktime();
-            if (!empty($weixinTimesLog) && same_day($weixinTimesLog['AwardWeixinTimeLog']['last_got_time'], $now)) {
+            if ($this->gotWxTimesToday($weixinTimesLog, $now)) {
                 $result = self::WX_TIMES_ASSIGN_GOT;
                 $res['got_time'] = date('H点i分', $weixinTimesLog['AwardWeixinTimeLog']['last_got_time']);
             }else {
@@ -285,7 +285,11 @@ class Apple201410Controller extends AppController {
         $this->setTotalVariables($awardInfo);
         $this->set('got_apple', 0);
         $this->_updateLastQueryTime(time());
-//        $this->set('subscribe_status', $this->currentUser['wx_subscribe_status'] != WX_STATUS_SUBSCRIBED);
+
+        $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
+        $weixinTimesLog = $wxTimesLogModel->findById($this->currentUser['id']);
+        $this->set('got_wx_sub_times', $this->gotWxTimesToday($weixinTimesLog, mktime()));
+
         $this->pageTitle = "摇一摇免费得红富士苹果, 我已经摇到了".$awardInfo['got']."个苹果 -- 城市里的乡下人电科院QA小娟分享家乡的苹果";
     }
 
@@ -433,6 +437,15 @@ class Apple201410Controller extends AppController {
         $allUids = array_unique($allUids);
         $nameIdMap = $this->User->findNicknamesMap($allUids);
         return array($allUids, $nameIdMap);
+    }
+
+    /**
+     * @param $weixinTimesLog
+     * @param $now
+     * @return bool
+     */
+    protected function gotWxTimesToday($weixinTimesLog, $now) {
+        return !empty($weixinTimesLog) && same_day($weixinTimesLog['AwardWeixinTimeLog']['last_got_time'], $now);
     }
 
 }

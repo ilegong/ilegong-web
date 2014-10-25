@@ -101,6 +101,7 @@
         <div>
         <button id="shake_btn" class="btn btn-warning" type="button" style="display:{{$total_times <= 0 ? 'none' : ''}}">手机摇一摇<small><em>(iPhone请调大音量)</em></small></button>
         <button id="share_btn" class="btn btn-warning" type="button" style="display:{{$total_times > 0 ? 'none' : ''}}">朋友帮我摇</button>
+        <button id="assignWXSubscribeTimes_2" type="button" class="btn btn-warning" style="display:{{$total_times > 0 ? 'none' : ''}}">关注加机会</button>
         </div>
         <div class="voffset3">
             <a href="#award_names" class="apple_nav_links"><small>获奖名单</small></a>
@@ -213,7 +214,7 @@
         var $shakeBtn = $('#shake_btn');
         var $shareBtn = $('#share_btn');
 
-        var $subscribe_status = "{{$wx_subscribe_status}}";
+        var $got_wx_sub_times = "{{$got_wx_sub_times}}";
 
         $share_div = $('<div class="apple_share fade in"><img src="{{$this->Html->url('/img/apple201410/share.png')}}"></div>')
             .hide().click(function(){
@@ -272,11 +273,15 @@
                 $game_text_no_more.hide();
                 $shakeBtn.show();
                 $shareBtn.hide();
+                $('#assignWXSubscribeTimes_2').hide();
             } else {
                 $game_text_no_more.show();
                 $game_text_has_more.hide();
                 $shakeBtn.hide();
                 $shareBtn.show();
+                if (!$got_wx_sub_times) {
+                    $('#assignWXSubscribeTimes_2').show();
+                }
             }
             if (total && total > 0) {
                 changeTitle(total);
@@ -351,7 +356,7 @@
             }
         });
 
-        var $assignWXSubscribeTimes = $('#assignWXSubscribeTimes');
+        var $assignWXSubscribeTimes = $('#assignWXSubscribeTimes, #assignWXSubscribeTimes_2');
         $assignWXSubscribeTimes.click(function(){
             $.getJSON("{{$this->Html->url(array('action' => 'assignWXSubscribeTimes'))}}?r="+Math.random(), function(data){
                 if (data.result == "not-sub") {
