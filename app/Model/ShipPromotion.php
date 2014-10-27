@@ -8,6 +8,10 @@
 
 class ShipPromotion extends AppModel {
     const PID = 192;
+
+    const QUNAR_PROMOTE_BRAND_ID = 7;
+    const QUNAR_PROMOTE_ID = 222;
+
     public $useTable = false;
 
     var $specialPromotions = array(
@@ -33,16 +37,23 @@ class ShipPromotion extends AppModel {
         )
     ),
     '222' => array('limit_ship' => true,
+        'limit_per_user' => 1,
         'items' => array(
             array('id' => 1, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '维亚大厦'),
-            array('id' => 2, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '神州数码'),
-            array('id' => 3, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '西海国际'),
-            array('id' => 4, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '电子大厦'),
+            array('id' => 2, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '东升科技园'),
+            array('id' => 3, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '神州数码'),
+            array('id' => 4, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '西海国际'),
+            array('id' => 5, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '电子大厦'),
         )
     )
     );
 
     public function find_ship_promotion($productId, $promotionId) {
+        list($limit_ship, $promotion) = $this->find_ship_promotion_limit($productId, $promotionId);
+        return $promotion;
+    }
+
+    public function find_ship_promotion_limit($productId, $promotionId) {
         $promotions = $this->specialPromotions[$productId];
         if ($promotions && !empty($promotions)) {
             $promotion = array_filter($promotions['items'], function ($item) use ($promotionId) {
@@ -50,7 +61,7 @@ class ShipPromotion extends AppModel {
                 });
             if(!empty($promotion)){
                 $values = array_values($promotion);
-                return ($values[0]);
+                return array($promotions['limit_per_user'], $values[0]);
             };
         }
         return null;

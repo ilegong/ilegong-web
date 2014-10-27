@@ -16,6 +16,9 @@ td {padding:5px 10px;}
         {{/if}}
 
         {{if $specialShipPromotion }}
+
+        {{if (!$specialShipPromotionId)}}<h2>收货人信息</h2>{{/if}}
+
         <div id="specialShipPromotion" style="{{if !$limit_ship || $specialShipPromotionId }}display: none{{/if}}">
             <form method="post" action="{{$this->Html->url(array('action' => 'info', '?' => array('action' => 'savePromo')))}}">
             <ul id="ul_special_promotion" class="list-group">

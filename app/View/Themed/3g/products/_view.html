@@ -25,7 +25,8 @@
         </div>
         {{/if}}
 
-        <div  id="productinfo" class="clearfix voffset2" style="padding-bottom:10px;">
+        {{if $afford_for_curr_user }}
+        <div id="productinfo" class="clearfix voffset2" style="padding-bottom:10px;">
             <div class="input-group" style="float:left;width:120px;">
                 <span class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}" >-</span>
                 <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text" readonly="readonly">
@@ -34,6 +35,15 @@
             <a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-warning shopping" id="single-item-{{$Product['Product']['id']}}" item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
                href="javascript:void(0);">添加到购物车</a>
         </div>
+        {{else}}
+
+            <div class="voffset3">
+                <p>您已经买过啦！</p>
+            </div>
+
+        {{/if}}
+
+
         <div class="voffset3">
             <a style="color:red;" href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($Product['Brand']['created'])).'/'.$Product['Product']['brand_id'])}}">查看商家更多商品</a>
         </div>
