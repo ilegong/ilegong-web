@@ -15,7 +15,7 @@ td {padding:5px 10px;}
         {{/if}}
 
         {{if $specialShipPromotion }}
-        <div id="specialShipPromotion" style="{{if !$limit_ship}}display: none{{/if}}">
+        <div id="specialShipPromotion" style="{{if !$limit_ship && !$specialShipPromotionId }}display: none{{/if}}">
             <form method="post" action="{{$this->Html->url(array('action' => 'info', '?' => array('action' => 'savePromo')))}}">
             <ul id="ul_special_promotion" class="list-group">
                 {{loop $specialShipPromotion $key $item}}
