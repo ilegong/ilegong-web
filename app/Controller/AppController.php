@@ -378,11 +378,13 @@ class AppController extends Controller {
                     'conditions' => array('brand_id' => ShipPromotion::QUNAR_PROMOTE_BRAND_ID, 'deleted' => 0),
                     'fields' => array('id', 'id')
                 ));
+                $this->log('$order_ids='.json_encode($order_ids));
                 if (!empty($order_ids)) {
                     $cartModel = ClassRegistry::init('Cart');
                     $c = $cartModel->find('count', array(
                         'conditions' => array('order_id' => $order_ids, 'product_id' => $this->current_data_id, 'deleted' => 0)
                     ));
+                    $this->log('count:'.$c);
                     if ($c > 0) {
                         $afford_for_curr_user = false;
                     }
