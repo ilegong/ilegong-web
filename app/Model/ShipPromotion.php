@@ -9,7 +9,7 @@
 class ShipPromotion extends AppModel {
     const PID = 192;
 
-    const QUNAR_PROMOTE_BRAND_ID = 7;
+    const QUNAR_PROMOTE_BRAND_ID = 61;
     const QUNAR_PROMOTE_ID = 222;
 
     public $useTable = false;
