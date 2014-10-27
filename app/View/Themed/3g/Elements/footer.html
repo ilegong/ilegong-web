@@ -62,7 +62,7 @@
 		}
 		var $cartBtn = $('#card-btn');
 		if(itemNum > 0){
-			$cartBtn.removeClass('btn-warning').addClass('btn-success').find('span').html('已选' + itemNum + '份，共'+ utils.toFixed(cost) +'元，点击下单');
+			$cartBtn.removeClass('btn-warning').addClass('btn-success').find('span').html('已选' + itemNum + '份，共'+ utils.toFixed(cost, 2) +'元，点击下单');
 		}else {
 			$cartBtn.addClass('btn-warning').removeClass('btn-success').find('span').html('请先下单');
 		}
@@ -113,7 +113,7 @@
 			cost += (price * num);
 			cart_products_html +='<div class="row cart_products-row"><div class="col-xs-5">'
 					+'<span class="item-name" title="'+name+'">'+name+' <br></span>'
-					+'<span class="item-price-info"><span><span class="item-total-price">￥'+ utils.toFixed(price * num)+'</span>(<span class="item-single-price">'+price+'</span>×<span class="item-amount">'+num+'</span>)'
+					+'<span class="item-price-info"><span><span class="item-total-price">￥'+ utils.toFixed(price * num, 2)+'</span>(<span class="item-single-price">'+price+'</span>×<span class="item-amount">'+num+'</span>)'
 					+'</span></span></div>'
 					+'<div class="col-xs-5 input-group input-group-sm">'
 					+'<span item-id="'+itemId+'" class="reduce input-group-addon '+(num==1?'disabled':'')+'">—</span>'
