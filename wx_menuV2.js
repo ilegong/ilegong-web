@@ -14,7 +14,7 @@
             },            {
                 "type":"view",
                 "name":"购买苹果",
-                "url":"http://pys.b-wmobile.com/products/20141009/xiao_juan_jia_xian_yang_hong_fu_shi_yu_shou_20xiang.html?from=game_home"
+                "url":"http://pys.b-wmobile.com/products/20141027/xiao_juan_jia_ping_guo_yu_shou.html?promo-src=360"
             }
         ]
     },
