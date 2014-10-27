@@ -24,8 +24,8 @@ class ProductsController extends AppController{
 		
 	}
 
-    public function view() {
-        parent::view();
+//    public function view() {
+//        parent::view();
 //
 //        $afford_for_curr_user = true;
 //        if ($this->current_data_id == ShipPromotion::QUNAR_PROMOTE_ID) {
@@ -45,7 +45,7 @@ class ProductsController extends AppController{
 //            }
 //        }
 //        $this->set('afford_for_curr_user', $afford_for_curr_user);
-    }
+//    }
 
 	
 	public function add(){
