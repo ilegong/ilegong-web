@@ -9,7 +9,10 @@
 class ShipPromotion extends AppModel {
     const PID = 192;
     public $useTable = false;
-    var $specialShipPromotion = array('lowest' => 49.90,
+
+    var $specialPromotions = array(
+    '192' => array('lowest' => 49.90,
+        'limit_ship' => false,
         'items' => array(
             array('id' => 1, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '北京市 海淀区 搜狐网络大厦'),
             array('id' => 2, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '北京市 海淀区 搜狐媒体大厦'),
@@ -18,11 +21,31 @@ class ShipPromotion extends AppModel {
             array('id' => 5, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '北京市 海淀区 中国技术交易大厦'),
             array('id' => 6, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '北京市 海淀区 希格玛大厦'),
         )
+    ),
+    '221' => array('limit_ship' => true,
+        'items' => array(
+            array('id' => 1, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '北京市 海淀区 搜狐网络大厦'),
+            array('id' => 2, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '北京市 海淀区 搜狐媒体大厦'),
+            array('id' => 3, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '北京市 海淀区 同方大厦'),
+            array('id' => 4, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '北京市 海淀区 银科大厦'),
+            array('id' => 5, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '北京市 海淀区 中国技术交易大厦'),
+            array('id' => 6, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '北京市 海淀区 希格玛大厦'),
+        )
+    ),
+    '222' => array('limit_ship' => true,
+        'items' => array(
+            array('id' => 1, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '维亚大厦'),
+            array('id' => 2, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '神州数码'),
+            array('id' => 3, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '西海国际'),
+            array('id' => 4, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '电子大厦'),
+        )
+    )
     );
 
     public function find_ship_promotion($productId, $promotionId) {
-        if ($productId == self::PID) {
-            $promotion = array_filter($this->specialShipPromotion['items'], function ($item) use ($promotionId) {
+        $promotions = $this->specialPromotions[$productId];
+        if ($promotions && !empty($promotions)) {
+            $promotion = array_filter($promotions['items'], function ($item) use ($promotionId) {
                     return ($item['id'] == $promotionId);
                 });
             if(!empty($promotion)){
@@ -34,8 +57,11 @@ class ShipPromotion extends AppModel {
     }
 
     public function findShipPromotions($product_ids) {
-        if (array_search(self::PID, $product_ids) !== false) {
-            return $this->specialShipPromotion['items'];
+        foreach($product_ids as $pid) {
+            $promotions = $this->specialPromotions[$pid];
+            if ($promotions && !empty($promotions)) {
+                return $promotions;
+            }
         }
         return array();
     }

@@ -4,18 +4,18 @@ td {padding:5px 10px;}
 <div  class="container">
 	<div class="orderinfo voffset3">
         {{if $specialShipPromotionId}}
-        <h2>收货人信息</h2><a id="link_use_promotion" href="{{$this->Html->url('/orders/info?ship_promotion=0')}}">[不使用特惠]</a>
+        <h2>收货人信息</h2>{{if !$limit_ship}}<a id="link_use_promotion" href="{{$this->Html->url('/orders/info?ship_promotion=0')}}">[不使用特惠]</a>{{/if}}
         <ul>
             <li>收货人：<span>{{$this->Session->read('OrderConsignee.name')}}</span></li>
             <li>地址：<span>{{$this->Session->read('OrderConsignee.address')}}</span></li>
             <li>手机号码：<span>{{$this->Session->read('OrderConsignee.mobilephone')}}</span></li>
         </ul>
-        {{elseif $specialShipPromotion}}
+        {{elseif $specialShipPromotion && !$limit_ship}}
         您购买的商品中有可以运送到特定地址的优惠。 <button id="specialShipPromotion_btn" class="btn-small btn-warning">使用优惠</button>
         {{/if}}
 
         {{if $specialShipPromotion }}
-        <div id="specialShipPromotion" style="display: none">
+        <div id="specialShipPromotion" style="{{if !$limit_ship}}display: none{{/if}}">
             <form method="post" action="{{$this->Html->url(array('action' => 'info', '?' => array('action' => 'savePromo')))}}">
             <ul id="ul_special_promotion" class="list-group">
                 {{loop $specialShipPromotion $key $item}}
@@ -33,6 +33,7 @@ td {padding:5px 10px;}
         </div>
         {{/if}}
 
+        {{if !$limit_ship}}
 		<div id="part_consignee" style="display:{{$specialShipPromotionId ? 'none':''}}">
 			{{if $has_chosen_consignee}}
 				{{template orders/order_consignee}}
@@ -40,6 +41,7 @@ td {padding:5px 10px;}
 				{{template orders/edit_consignee}}
 			{{/if}}
 		</div>
+        {{/if}}
 
 		<div id="part_payTypeAndShipType"><!-- template orders/info_shiptype--></div>
 		

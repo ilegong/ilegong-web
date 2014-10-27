@@ -314,8 +314,11 @@ class OrdersController extends AppController{
         $this->set('action', $action);
 
         $shipPromotions = $this->ShipPromotion->findShipPromotions($product_ids);
-        $this->set('specialShipPromotionId', $shipPromotionId);
-        $this->set('specialShipPromotion', $shipPromotions);
+        if ($shipPromotions && !empty($shipPromotions)) {
+            $this->set('specialShipPromotionId', $shipPromotionId);
+            $this->set('specialShipPromotion', $shipPromotions['items']);
+            $this->set('limit_ship', $shipPromotions['limit_ship']);
+        }
 	}
 
     /**
