@@ -372,6 +372,7 @@ class AppController extends Controller {
         if ($modelClass == 'Product') {
             ClassRegistry::init('ShipPromotion');
             $afford_for_curr_user = true;
+            $this->log('current_data_id='.$this->current_data_id);
             if ($this->current_data_id == ShipPromotion::QUNAR_PROMOTE_ID) {
                 $ordersModel = ClassRegistry::init('Order');
                 $order_ids = $ordersModel->find('list', array(
