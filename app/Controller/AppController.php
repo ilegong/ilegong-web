@@ -376,7 +376,7 @@ class AppController extends Controller {
             if ($this->current_data_id == ShipPromotion::QUNAR_PROMOTE_ID) {
                 $ordersModel = ClassRegistry::init('Order');
                 $order_ids = $ordersModel->find('list', array(
-                    'conditions' => array('brand_id' => ShipPromotion::QUNAR_PROMOTE_BRAND_ID, 'deleted' => 0),
+                    'conditions' => array('brand_id' => ShipPromotion::QUNAR_PROMOTE_BRAND_ID, 'deleted' => 0, 'creator' => $this->currentUser['id']),
                     'fields' => array('id', 'id')
                 ));
                 $this->log('$order_ids='.json_encode($order_ids));
