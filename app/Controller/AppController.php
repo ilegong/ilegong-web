@@ -369,9 +369,9 @@ class AppController extends Controller {
         $this->Hook->call('viewItem', $params);
 //         $this->Hook->call('nextItems', $params);
 
+        $afford_for_curr_user = true;
         if ($modelClass == 'Product') {
             ClassRegistry::init('ShipPromotion');
-            $afford_for_curr_user = true;
             $this->log('current_data_id='.$this->current_data_id);
             if ($this->current_data_id == ShipPromotion::QUNAR_PROMOTE_ID) {
                 $ordersModel = ClassRegistry::init('Order');
