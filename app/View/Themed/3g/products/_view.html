@@ -27,11 +27,16 @@
 
         {{if $afford_for_curr_user }}
         <div id="productinfo" class="clearfix voffset2" style="padding-bottom:10px;">
+
+            {{if $limit_per_user == 1}}
+                <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="hidden" readonly="readonly">
+            {{else}}
             <div class="input-group" style="float:left;width:120px;">
                 <span class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}" >-</span>
                 <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text" readonly="readonly">
                 <span class="add input-group-addon"  item-id="{{$Product['Product']['id']}}">+</span>
             </div>
+            {{/if}}
             <a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-warning shopping" id="single-item-{{$Product['Product']['id']}}" item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
                href="javascript:void(0);">添加到购物车</a>
         </div>

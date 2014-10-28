@@ -376,7 +376,7 @@ class AppController extends Controller {
             if ($this->current_data_id == ShipPromotion::QUNAR_PROMOTE_ID) {
                 $ordersModel = ClassRegistry::init('Order');
                 $order_ids = $ordersModel->find('list', array(
-                    'conditions' => array('brand_id' => ShipPromotion::QUNAR_PROMOTE_BRAND_ID, 'deleted' => 0, 'creator' => $this->currentUser['id']),
+                    'conditions' => array('brand_id' => ShipPromotion::QUNAR_PROMOTE_BRAND_ID, 'deleted' => 0, 'published' => 1, 'creator' => $this->currentUser['id']),
                     'fields' => array('id', 'id')
                 ));
                 $this->log('$order_ids='.json_encode($order_ids));
@@ -390,6 +390,7 @@ class AppController extends Controller {
                         $afford_for_curr_user = false;
                     }
                 }
+                $this->set('limit_per_user', 1);
             }
             $this->set('afford_for_curr_user', $afford_for_curr_user);
         }
