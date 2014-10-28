@@ -43,14 +43,14 @@ class WxPaymentComponent extends Component {
     public function verify_notify() {
         App::import('Vendor', 'ali_direct_pay/AliPay');
         $ali = new AliPay();
-        return $ali->verifyNotify();
+        return $ali->verify_notify();
     }
 
 
     public function verify_return() {
         App::import('Vendor', 'ali_direct_pay/AliPay');
         $ali = new AliPay();
-        return $ali->verifyReturn();
+        return $ali->verify_return();
     }
 
     /**
