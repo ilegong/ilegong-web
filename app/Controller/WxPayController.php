@@ -27,40 +27,15 @@ class WxPayController extends AppController {
             return;
         }
 
-        $order = $this->Order->find('first', array('conditions' => array('id' => $orderId)));
-        if (empty($order)) {
-            throw new CakeException('wx_pay_order_not_found:'. $orderId);
-        } else if ($order['Order']['creator'] !== $this->currentUser['id']) {
-            throw new CakeException('/?wx_pay_order_id_now_owned='.$order['Order']['creator'].'__uid='.$this->currentUser['id']);
-        }
-
-        if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY || $order['Order']['deleted'] == 1) {
-            throw new CakeException('/?wx_pay_order_status_incorrect='.$order['Order']['creator'].'__uid='.$this->currentUser['id']);
-        }
-
-        $this->loadModel('Cart');
-        $productDesc = '';
-        $items = $this->Cart->find('all', array(
-                'fields' => array('name'),
-            'conditions' => array('order_id' => $orderId))
-        );
-        if (!empty($items)) {
-            $cartItemNames = array_map(function ($val) {
-                return $val['Cart']['name'];
-            }, array_slice($items, 0, 3));
-            $productDesc .= implode('、', $cartItemNames);
-            $productDesc .= " 等".count($items)."件商品";
-        } else {
-            //display errors
-            $this->redirect('/orders/detail/'.$orderId.'/pay?msg=cannot_get_cart_items');
-        }
+        $id = $this->currentUser['id'];
+        $order = $this->WxPayment->findOrderAndCheckStatus($orderId, $id);
 
         //使用jsapi接口
         $jsApi = $this->WxPayment->createJsApi();
 
-        $oauth = ClassRegistry::init('Oauthbind')->findWxServiceBindByUid($this->currentUser['id']);
+        $oauth = ClassRegistry::init('Oauthbind')->findWxServiceBindByUid($id);
 
-        if ($oauth) {
+        if ($oauth && $oauth['oauth_openid']) {
             $openid = $oauth['oauth_openid'];
         }  else {
             //通过code获得openid
@@ -76,11 +51,9 @@ class WxPayController extends AppController {
             }
         }
 
-        //自定义订单号，此处仅作举例
-        $timeStamp = time();
-        $out_trade_no = WX_APPID_SOURCE."-$orderId-$timeStamp";
-        $trade_type = "JSAPI";
-        $body = mb_strlen($productDesc, 'UTF-8') > 127 ? mb_substr($productDesc, 0, 127, 'UTF-8') : $productDesc;
+        list($productDesc, $body) = $this->WxPayment->getProductDesc($orderId);
+        $out_trade_no = $this->WxPayment->out_trade_no(WX_APPID_SOURCE, $orderId);
+        $trade_type = TRADE_WX_API_TYPE;
         $totalFee = intval(intval($order['Order']['total_all_price'] * 1000)/10);
 
         //=========步骤2：使用统一支付接口，获取prepay_id============
@@ -95,7 +68,7 @@ class WxPayController extends AppController {
         //spbill_create_ip已填,商户无需重复填写
         //sign已填,商户无需重复填写
         $unifiedOrder->setParameter("openid","$openid");//商品描述
-        $unifiedOrder->setParameter("body", $productDesc);//商品描述
+        $unifiedOrder->setParameter("body", $body);//商品描述
         $unifiedOrder->setParameter("out_trade_no","$out_trade_no");//商户订单号
         $unifiedOrder->setParameter("total_fee", $totalFee);//总金额
         $unifiedOrder->setParameter("notify_url",WxPayConf_pub::NOTIFY_URL);//通知地址
@@ -107,20 +80,11 @@ class WxPayController extends AppController {
         //$unifiedOrder->setParameter("time_start","XXXX");//交易起始时间
         //$unifiedOrder->setParameter("time_expire","XXXX");//交易结束时间
         //$unifiedOrder->setParameter("goods_tag","XXXX");//商品标记
-        //$unifiedOrder->setParameter("openid","XXXX");//用户标识
         //$unifiedOrder->setParameter("product_id","XXXX");//商品ID
 
         $prepay_id = $unifiedOrder->getPrepayId();
 
-        $this->PayLog->save(array('PayLog' => array(
-            'out_trade_no'=> $out_trade_no,
-            'body'=> $body,
-            'trade_type' => $trade_type,
-            'total_fee' => $totalFee,
-            'prepay_id' => $prepay_id,
-            'openid' => $openid,
-            'order_id' => $orderId
-        )));
+        $this->WxPayment->savePayLog($orderId, $out_trade_no, $body, $trade_type, $totalFee, $prepay_id, $openid);
 
         //=========步骤3：使用jsapi调起支付============
         $jsApi->setPrepayId($prepay_id);
@@ -158,59 +122,39 @@ class WxPayController extends AppController {
                 $notify->setReturnParameter("return_code", "SUCCESS"); //设置返回码
 
                 $out_trade_no = $notify->data['out_trade_no'];
-                $notifyExists = $this->PayNotify->find('count', array('conditions' => array('out_trade_no' => $out_trade_no)));
-                if ($notifyExists > 0) {
+                if ($this->WxPayment->notifyCounted($out_trade_no) > 0) {
                     $this->log('[WEIXIN_PAY_NOTIFY] duplicated notify:' . $xml);
                 } else {
-                    $this->PayNotify->save(array('PayNotify' => array(
-                        'out_trade_no' => $notify->data['out_trade_no'],
-                        'transaction_id' => $notify->data['transaction_id'],
-                        'trade_type' => $notify->data['trade_type'],
-                        'openid' => $notify->data['openid'],
-                        'coupon_fee' => empty($notify->data['coupon_fee']) ? 0 : $notify->data['coupon_fee'],
-                        'total_fee' => $notify->data['total_fee'],
-                        'is_subscribe' => $notify->data['is_subscribe'],
-                        'bank_type' => $notify->data['bank_type'],
-                        'fee_type' => empty($notify->data['fee_type']) ? 'CNY' : $notify->data['fee_type'],
-                        'attach' => empty($notify->data['attach']) ? '' : $notify->data['attach'],
-                        'time_end' => $notify->data['time_end'],
-                        'status' => PAYNOTIFY_STATUS_NEW
-                    )));
-                    $notifyLogId = $this->PayNotify->getLastInsertId();
-                    $payLog = $this->PayLog->find('first', array('conditions' => array('out_trade_no' => $out_trade_no)));
-                    if (empty($payLog)) {
-                        $status = PAYNOTIFY_ERR_TRADENO;
-                    } else {
-                        $suc = $notify->data['result_code'] == "SUCCESS";
-                        $this->PayLog->updateAll(array('status' => $suc ? PAYLOG_STATUS_FAIL : PAYLOG_STATUS_SUCCESS), array('out_trade_no' => $out_trade_no));
-                        $status = PAYNOTIFY_STATUS_PAYLOG_UPDATED;
 
-                        $orderId = $payLog['PayLog']['order_id'];
-                        if ($suc) {
-                            $order = $this->Order->find('first', array('conditions' => array('id' => $orderId)));
-                            if (empty($order)) {
-                                $status = PAYNOTIFY_ERR_ORDER_NONE;
-                            } else if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY || $order['Order']['deleted'] == 1) {
-                                $status = PAYNOTIFY_ERR_ORDER_STATUS_ERR;
-                            } else if ($payLog['PayLog']['total_fee'] != $notify->data['total_fee']) {
-                                $status = PAYNOTIFY_ERR_ORDER_FEE;
-                            } else {
-                                $this->Order->updateAll(array('status' => ORDER_STATUS_PAID, 'pay_time' => "'".date('Y-m-d H:i:s')."'"), array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY));
-                                $status = PAYNOTIFY_STATUS_ORDER_UPDATED;
+                    $trade_type = $notify->data['trade_type'];
+                    $transaction_id = $notify->data['transaction_id'];
+                    $openid = $notify->data['openid'];
+                    $coupon_fee = $notify->data['coupon_fee'];
 
-                                //todo send weixin paid success message
-                                $this->loadModel('Oauthbind');
-                                $user_weixin = $this->Oauthbind->findWxServiceBindByUid($order['Order']['creator']);
-                                if($user_weixin!=false){
-                                    $good = $this->get_order_good_info($order);
-                                    $this->log("good info:".$good['good_info']." ship info:".$good['ship_info'],LOG_DEBUG);
-                                    $this->Weixin->send_order_paid_message($user_weixin['oauth_openid'],$order['Order']['total_all_price'],
-                                        $good['good_info'], $good['ship_info'], $orderId);
-                                }
-                            }
+                    $total_fee = $notify->data['total_fee'];
+                    $is_subscribe = $notify->data['is_subscribe'];
+                    $bank_type = $notify->data['bank_type'];
+                    $fee_type = $notify->data['fee_type'];
+
+                    $attach = $notify->data['attach'];
+                    $time_end = $notify->data['time_end'];
+                    $result_code = $notify->data['result_code'];
+
+                    $suc = $result_code == "SUCCESS";
+                    list($status, $order) = $this->WxPayment->saveNotifyAndUpdateStatus($out_trade_no, $transaction_id, $trade_type, $suc, $openid, $coupon_fee,
+                        $total_fee, $is_subscribe, $bank_type, $fee_type, $attach, $time_end);
+
+                    if ($status == PAYNOTIFY_STATUS_ORDER_UPDATED) {
+                        //todo send weixin paid success message
+                        $this->loadModel('Oauthbind');
+                        $user_weixin = $this->Oauthbind->findWxServiceBindByUid($order['Order']['creator']);
+                        if ($user_weixin != false) {
+                            $good = $this->get_order_good_info($order);
+                            $this->log("good info:" . $good['good_info'] . " ship info:" . $good['ship_info'], LOG_DEBUG);
+                            $this->Weixin->send_order_paid_message($user_weixin['oauth_openid'], $order['Order']['total_all_price'],
+                                $good['good_info'], $good['ship_info'], $order['Order']['id']);
                         }
                     }
-                    $this->PayNotify->updateAll(array('status' => $status), array('id' => $notifyLogId));
                 }
             }
         }
@@ -225,13 +169,10 @@ class WxPayController extends AppController {
 
         if ($notify->checkSign() == TRUE) {
             if ($notify->data["return_code"] == "FAIL") {
-                //此处应该更新一下订单状态，商户自行增删操作
                 $this->log("【通信出错】:\n" . $xml . "\n");
             } elseif ($notify->data["result_code"] == "FAIL") {
-                //此处应该更新一下订单状态，商户自行增删操作
                 $this->log("【业务出错】:\n" . $xml . "\n");
             } else {
-                //此处应该更新一下订单状态，商户自行增删操作
                 $this->log("【支付成功】:\n" . $xml . "\n");
             }
         }
@@ -261,5 +202,4 @@ class WxPayController extends AppController {
         }
         return array("good_info"=>$good_info,"ship_info"=>$ship_info);
     }
-
-} 
+}

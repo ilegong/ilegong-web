@@ -1,11 +1,19 @@
 <div  class="container">
 	<div class="orderinfo voffset3">
-
+<script>
+    function go_to_pay_zhifubao() {
+        if (location.href.indexOf('{{ALI_HOST}}') == -1) {
+            bootbox.alert('我们的账号信息：<br>账户：<span>yxg@ilegong.com</span> <br/> 收款人：北京爱乐供科技有限公司');
+        } else {
+            location.href  = "/ali_pay/goto_to_alipay/{{$order['Order']['id']}}";
+        }
+    }
+</script>
         {{if $action == 'pay' || $order['Order']['status']==0 }}
         <div class="panel panel-warning">
             <div class="panel-body">
                 <a class="btn btn-warning" href="/wxPay/jsApiPay/{{$order['Order']['id']}}.html?showwxpaytitle=1">微信支付</a>
-                <a class="btn btn-warning" href="javascript:;" onclick="bootbox.alert('我们的账号信息：<br>账户：<span>yxg@ilegong.com</span> <br/> 收款人：北京爱乐供科技有限公司')">支付宝转账</a>
+                <a class="btn btn-warning" href="javascript:;" onclick="go_to_pay_zhifubao()">支付宝转账</a>
             </div>
         </div>
         {{/if}}
