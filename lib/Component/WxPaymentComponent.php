@@ -113,8 +113,8 @@ class WxPaymentComponent extends Component {
 
                                                  $attach = '',
                                                  $time_end = '') {
-        $payNotifyModel = $this->PayNotify;
-        $payLogModel = $this->PayLog;
+        $payNotifyModel = ClassRegistry::init('PayNotify');
+        $payLogModel = ClassRegistry::init('PayLog');
         $payNotifyModel->save(array('PayNotify' => array(
             'out_trade_no' => $out_trade_no,
             'transaction_id' => $transaction_id,
@@ -139,7 +139,7 @@ class WxPaymentComponent extends Component {
 
             $orderId = $payLog['PayLog']['order_id'];
             if ($suc) {
-                $orderModel = $this->Order;
+                $orderModel = ClassRegistry::init('Order');
                 $order = $orderModel->find('first', array('conditions' => array('id' => $orderId)));
                 if (empty($order)) {
                     $status = PAYNOTIFY_ERR_ORDER_NONE;
