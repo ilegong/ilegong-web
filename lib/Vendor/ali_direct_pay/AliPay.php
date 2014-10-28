@@ -83,7 +83,7 @@ class AliPay extends Object {
         );
 
         $alipaySubmit = new AlipaySubmit($this->alipay_config);
-        return $alipaySubmit->buildRequestForm($parameter, "get", "确认");
+        return $alipaySubmit->buildRequestForm($parameter, "get", "正在跳转支付宝支付...");
     }
 
 } 

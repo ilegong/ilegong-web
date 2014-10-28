@@ -16,6 +16,7 @@ class AliPayController extends AppController {
     }
 
     public function notify() {
+        $this->autoRender = false;
         if($this->WxPayment->verify_notify()) {
             //获取支付宝的通知返回参数，可参考技术文档中服务器异步通知参数列表
             //商户订单号
@@ -65,7 +66,7 @@ class AliPayController extends AppController {
                 }
 
             }  else {
-                $this->log("verify notify failed: for $out_trade_no, $trade_status");
+                $this->log("verify notify not handling: for $out_trade_no, $trade_status");
             }
 
             if (isset($status) && $status == PAYNOTIFY_STATUS_ORDER_UPDATED) {
@@ -96,22 +97,33 @@ class AliPayController extends AppController {
                 //如果有做过处理，不执行商户的业务程序
                 if ($this->WxPayment->notifyCounted($out_trade_no) > 0) {
                     $this->log("Zhifubao: Aready done, so skipped");
+
+                    //TODO: 需要显示信息。
+                    echo "您的订单支付在处理中，立即将要返回我的订单列表查看状态";
+
+                    //TODO: 拿到订单，给出订单支付完成界面
+
+                    $this->redirect('/orders/mine');
+
                 } else {
                     list($status, $order) = $this->WxPayment->saveNotifyAndUpdateStatus($out_trade_no, $trade_no, TRADE_ALI_TYPE, true);
                     if (isset($status) && $status == PAYNOTIFY_STATUS_ORDER_UPDATED) {
                         //TODO: send notify to Weixin user(if any)
+                    }
+
+                    if(!empty($order)) {
+                        $this->redirect('/orders/detail/'.$order['Order']['id']);
                     }
                 }
             }
             else {
                 $this->log("verify notify failed: for $out_trade_no, $trade_status");
             }
-
-            echo "验证成功<br />";
         }
         else {
-            echo "验证失败";
             $this->log("Zhifubao: fail to verify(return_back): request:".json_encode($_REQUEST));
+            //TODO: handling error
+            $this->redirect('/orders/mine');
         }
     }
 
