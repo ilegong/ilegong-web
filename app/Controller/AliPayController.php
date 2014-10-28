@@ -16,7 +16,7 @@ class AliPayController extends AppController {
     }
 
     public function notify() {
-        if($this->WxPayment->verifyNotify()) {
+        if($this->WxPayment->verify_notify()) {
             //获取支付宝的通知返回参数，可参考技术文档中服务器异步通知参数列表
             //商户订单号
             $out_trade_no = $_POST['out_trade_no'];
@@ -81,7 +81,7 @@ class AliPayController extends AppController {
     }
 
     public function return_back() {
-        if($this->WxPayment->verifyNotify()) {
+        if($this->WxPayment->verify_return()) {
 
             //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表
 
