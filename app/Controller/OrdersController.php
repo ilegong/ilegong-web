@@ -80,7 +80,7 @@ class OrdersController extends AppController{
 						'product_id'=> $p['Product']['id'],
 						'name'=> $p['Product']['name'],
 						'coverimg'=> $p['Product']['coverimg'],
-						'num'=> $nums[$p['Product']['id']]?$nums[$p['Product']['id']]:1,
+                         'num' => ($p['Product']['id'] != ShipPromotion::QUNAR_PROMOTE_ID && $nums[$p['Product']['id']]) ? $nums[$p['Product']['id']] : 1,
 						'creator'=> $this->currentUser['id'],
                         'price'=> empty($pp)? $p['Product']['price'] : $pp['price'],
                 ));
@@ -235,7 +235,7 @@ class OrdersController extends AppController{
 									'product_id'=> $p['Product']['id'],
 									'name'=> $p['Product']['name'],
 									'coverimg'=> $p['Product']['coverimg'],
-									'num'=> $nums[$p['Product']['id']]?$nums[$p['Product']['id']]:1,
+									'num'=> ($p['Product']['id'] != ShipPromotion::QUNAR_PROMOTE_ID && $nums[$p['Product']['id']])?$nums[$p['Product']['id']]:1,
 									'price'=> empty($pp)? $p['Product']['price'] : $pp['price'],
 					));
 
