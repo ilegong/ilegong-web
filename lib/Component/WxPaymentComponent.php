@@ -31,7 +31,7 @@ class WxPaymentComponent extends Component {
 
         $order = $this->findOrderAndCheckStatus($order_id, $uid);
 
-        $totalFee = $order['Order']['total_all_price'];
+        $totalFee = $order['Order']['total_all_price'] * 100;
         list($subject, $body) = $this->getProductDesc($order_id);
 
         $out_trade_no = $this->out_trade_no(TRADE_ALI_TYPE, $order_id);
