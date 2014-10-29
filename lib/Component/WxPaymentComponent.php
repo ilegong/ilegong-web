@@ -78,11 +78,11 @@ class WxPaymentComponent extends Component {
 
     /**
      * @param $out_trade_no
-     * @return mixed total accepted pay notify for the specified out_trade_no
+     * @return mixed pay notify the specified out_trade_no
      */
-    public function notifyCounted($out_trade_no) {
+    public function findOneNotify($out_trade_no) {
         $payNotify = ClassRegistry::init('PayNotify');
-        return $payNotify->find('count', array('conditions' => array('out_trade_no' => $out_trade_no)));
+        return $payNotify->find('first', array('conditions' => array('out_trade_no' => $out_trade_no)));
     }
 
     /**
@@ -125,7 +125,7 @@ class WxPaymentComponent extends Component {
             'is_subscribe' => $is_subscribe,
             'bank_type' => $bank_type,
             'fee_type' => empty($fee_type) ? 'CNY' : $fee_type,
-            'attach' => empty($attach) ? '' : $attach,
+            'attach' => empty($attach) ? '' : substr($attach, 0, 511),
             'time_end' => $time_end,
             'status' => PAYNOTIFY_STATUS_NEW
         )));

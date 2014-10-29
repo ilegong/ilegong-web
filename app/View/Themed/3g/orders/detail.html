@@ -9,7 +9,10 @@
         }
     }
 </script>
-        {{if $action == 'pay' || $order['Order']['status']==0 }}
+        {{if $display_status}}
+        {{template Elements/paid_msg}}
+        {{/if}}
+        {{if $show_pay}}
         <div class="panel panel-warning">
             <div class="panel-body">
                 <a class="btn btn-warning" href="/wxPay/jsApiPay/{{$order['Order']['id']}}.html?showwxpaytitle=1">微信支付</a>

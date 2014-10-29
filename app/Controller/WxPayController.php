@@ -122,10 +122,10 @@ class WxPayController extends AppController {
                 $notify->setReturnParameter("return_code", "SUCCESS"); //设置返回码
 
                 $out_trade_no = $notify->data['out_trade_no'];
-                if ($this->WxPayment->notifyCounted($out_trade_no) > 0) {
+                $notifyRecord = $this->WxPayment->findOneNotify($out_trade_no);
+                if (!empty($notifyRecord)) {
                     $this->log('[WEIXIN_PAY_NOTIFY] duplicated notify:' . $xml);
                 } else {
-
                     $trade_type = $notify->data['trade_type'];
                     $transaction_id = $notify->data['transaction_id'];
                     $openid = $notify->data['openid'];

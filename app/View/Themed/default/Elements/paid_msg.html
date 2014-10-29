@@ -1,0 +1,12 @@
+<div class="panel {{if $display_status == 'success'}}panel-success{{elseif $display_status == 'pending'}}panel-warning{{else}}panel-danger{{/if}}">
+    <div class="panel-heading">{{if $display_status == 'success'}}
+        {{__('支付成功!')}}
+        {{elseif $display_status == 'pending'}}
+        {{__('正在同步支付信息')}}
+        {{else}}
+        {{__('支付失败')}}
+        {{/if}}</div>
+    <div class="panel-body">
+        {{__($paid_msg)}}
+    </div>
+</div>

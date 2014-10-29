@@ -49,6 +49,9 @@ define('PAYNOTIFY_STATUS_ORDER_UPDATED', 6);
 define('PAYNOTIFY_STATUS_CLOSED', 7);
 define('PAYNOTIFY_STATUS_SKIPPED', 8);
 
+define('PAID_DISPLAY_SUCCESS', 'success');
+define('PAID_DISPLAY_PENDING', 'pending');
+
 define('KEY_APPLE_201410',  'apple201410');
 define('PROFILE_NICK_LEN', 16);
 define('PROFILE_NICK_MIN_LEN', 2);

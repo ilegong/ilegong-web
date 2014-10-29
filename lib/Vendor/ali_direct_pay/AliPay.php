@@ -46,7 +46,7 @@ class AliPay extends Object {
         //必填
 
         //商品展示地址
-        $show_url = ALI_HOST."/orders/detail_n/$order_id.html";
+        $show_url = $this->alipay_config['transport'].'://'. ALI_HOST."/orders/detail/$order_id/pay.html?from=zhifubaopay";
         //需以http://开头的完整路径，例如：http://www.xxx.com/myorder.html
 
         //FIXIME: todo 怎么做？ 需要处理

@@ -334,6 +334,14 @@ class OrdersController extends AppController{
             $this->__message('订单不存在，或无权查看','/');
         }
 
+        if ($action == 'pay') {
+            $this->set('paid_msg', htmlspecialchars($_GET['paid_msg']));
+            $display_status = $_GET['display_status'];
+            $this->set('show_pay', $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
+                && ($display_status != PAID_DISPLAY_PENDING && $display_status != PAID_DISPLAY_SUCCESS));
+            $this->set('display_status', $display_status);
+        }
+
         $this->loadModel('Cart');
         $Carts = $this->Cart->find('all',array(
             'conditions'=>array(
