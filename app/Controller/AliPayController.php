@@ -44,13 +44,7 @@ class AliPayController extends AppController {
 
                 //调试用，写文本函数记录程序运行情况是否正常
                 //logResult("这里写入想要调试的代码变量值，或其他运行的结果记录");
-
-                if ($this->WxPayment->notifyCounted($out_trade_no) > 0) {
-                    $this->log("Zhifubao: Aready done, so skipped");
-                } else {
-                    list($status, $order) = $this->WxPayment->saveNotifyAndUpdateStatus($out_trade_no, $trade_no, TRADE_ALI_TYPE, true);
-                }
-
+                $status = $this->saveNotifyIfNotSaved($out_trade_no, $trade_no);
             }
             else if ($trade_status == 'TRADE_SUCCESS') {
                 //判断该笔订单是否在商户网站中已经做过处理
@@ -62,12 +56,7 @@ class AliPayController extends AppController {
 
                 //调试用，写文本函数记录程序运行情况是否正常
                 //logResult("这里写入想要调试的代码变量值，或其他运行的结果记录");
-
-                if ($this->WxPayment->notifyCounted($out_trade_no) > 0) {
-                    $this->log("Zhifubao: Aready done");
-                } else {
-                    list($status, $order) = $this->WxPayment->saveNotifyAndUpdateStatus($out_trade_no, $trade_no, TRADE_ALI_TYPE, true);
-                }
+                $status = $this->saveNotifyIfNotSaved($out_trade_no, $trade_no);
 
             }  else {
                 $this->log("verify notify not handling: for $out_trade_no, $trade_status");
@@ -89,7 +78,6 @@ class AliPayController extends AppController {
         if($this->WxPayment->verify_return()) {
 
             //获取支付宝的通知返回参数，可参考技术文档中页面跳转同步通知参数列表
-
             $this->log("Zhifubao: return_back: request:".json_encode($_REQUEST));
 
             $out_trade_no = $_GET['out_trade_no'];
@@ -126,6 +114,28 @@ class AliPayController extends AppController {
             $this->log("Zhifubao: fail to verify(return_back): request:".json_encode($_REQUEST));
             //TODO: handling error
             $this->redirect('/orders/mine');
+        }
+    }
+
+    /**
+     * @param $out_trade_no
+     * @param $trade_no
+     * @return int status
+     */
+    protected function saveNotifyIfNotSaved($out_trade_no, $trade_no) {
+        $buyer_id = $_POST['buyer_id'];
+        $total_fee = $_POST['total_fee'] * 100;
+        $buyer_email = $_POST['buyer_email'];
+        $arr = array("buyer_id" => $buyer_id, "exterface" => $_POST['exterface'], "is_success" => $_POST["is_success"], "payment_type" => $_POST['payment_type'], "trade_status" => $_POST['trade_status']);
+        $attach = json_encode($arr);
+
+        if ($this->WxPayment->notifyCounted($out_trade_no) > 0) {
+            $this->log("Zhifubao: Aready done, so skipped");
+            return PAYNOTIFY_STATUS_SKIPPED;
+        } else {
+            list($status, $order) = $this->WxPayment->saveNotifyAndUpdateStatus($out_trade_no, $trade_no, TRADE_ALI_TYPE, true, $buyer_email, 0,
+                $total_fee, false, '', '', $attach, '');
+            return $status;
         }
     }
 
