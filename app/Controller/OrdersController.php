@@ -342,6 +342,13 @@ class OrdersController extends AppController{
             $this->set('display_status', $display_status);
         }
 
+        if ($action == 'paid') {
+            $this->log("paid done: $orderId, msg:". $_GET['msg']);
+            //:orders/detail/1118/paid?tradeNo=wxca78-1118-1414580077&msg=ok
+            //TODO: check status, if status is not paid, tell user to checking; notify administrators to check
+        }
+
+
         $this->loadModel('Cart');
         $Carts = $this->Cart->find('all',array(
             'conditions'=>array(
@@ -366,9 +373,6 @@ class OrdersController extends AppController{
         $products = $product_new;
         unset($product_new);
 
-        if ($action == 'paid') {
-            $this->log("paid done: $orderId, msg:". $_GET['msg']);
-        }
 
         $this->set('ship_type',$this->ship_type);
         $this->set('order_id',$orderId);

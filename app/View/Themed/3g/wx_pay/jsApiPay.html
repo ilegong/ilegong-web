@@ -37,6 +37,11 @@
 
     function callpay()
     {
+        var $this = $(this);
+        if ($this.attr('disabled') == 'disabled') {
+            return;
+        }
+        $this.attr('disabled', 'disabled').addClass('disabled');
         if (typeof WeixinJSBridge == "undefined"){
             if( document.addEventListener ){
                 document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
@@ -48,6 +53,10 @@
             jsApiCall();
         }
     }
+
+    $(document).ready(function(){
+        callpay();
+    });
 </script>
 
 <div class="row">
@@ -55,8 +64,7 @@
         <div class="panel-body">
             <ul class="list-group">
                 <li class="list-group-item">
-                    <span>产品:</span>
-                    <span class="text-right pull-right">{{$productDesc}}</span>
+                    <span>{{$productDesc}}</span>
                 </li>
                 <li class="list-group-item">
                     <span>应付总额:</span>
@@ -66,7 +74,7 @@
         </div>
     </div>
     <div align="center">
-        <button type="button" class="btn btn-warning" onclick="callpay()">确认支付</button>
+        <button type="button" class="btn btn-warning" onclick="callpay()">正在跳转微信支付...</button>
     </div>
 </div>
 
