@@ -145,7 +145,6 @@ class WxPayController extends AppController {
                         $total_fee, $is_subscribe, $bank_type, $fee_type, $attach, $time_end);
 
                     if ($status == PAYNOTIFY_STATUS_ORDER_UPDATED) {
-                        //todo send weixin paid success message
                         $this->loadModel('Oauthbind');
                         $user_weixin = $this->Oauthbind->findWxServiceBindByUid($order['Order']['creator']);
                         if ($user_weixin != false) {

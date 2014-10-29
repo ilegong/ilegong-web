@@ -8,7 +8,7 @@
 
 class AliPayController extends AppController {
 
-    public $components = array('WxPayment');
+    public $components = array('WxPayment', 'Weixin');
 
     public function goto_to_alipay($order_id) {
         if(empty($this->currentUser['id'])){
@@ -44,7 +44,7 @@ class AliPayController extends AppController {
 
                 //调试用，写文本函数记录程序运行情况是否正常
                 //logResult("这里写入想要调试的代码变量值，或其他运行的结果记录");
-                $status = $this->saveNotifyIfNotSaved($out_trade_no, $trade_no);
+                $this->saveNotifyIfNotSaved($out_trade_no, $trade_no, $_POST);
             }
             else if ($trade_status == 'TRADE_SUCCESS') {
                 //判断该笔订单是否在商户网站中已经做过处理
@@ -56,16 +56,11 @@ class AliPayController extends AppController {
 
                 //调试用，写文本函数记录程序运行情况是否正常
                 //logResult("这里写入想要调试的代码变量值，或其他运行的结果记录");
-                $status = $this->saveNotifyIfNotSaved($out_trade_no, $trade_no);
+                $this->saveNotifyIfNotSaved($out_trade_no, $trade_no, $_GET);
 
             }  else {
                 $this->log("verify notify not handling: for $out_trade_no, $trade_status");
             }
-
-            if (isset($status) && $status == PAYNOTIFY_STATUS_ORDER_UPDATED) {
-                //TODO: send notify to Weixin user(if any)
-            }
-
             echo "success";
         } else {
             echo "fail";
@@ -97,10 +92,6 @@ class AliPayController extends AppController {
 
                 } else {
                     list($status, $order) = $this->WxPayment->saveNotifyAndUpdateStatus($out_trade_no, $trade_no, TRADE_ALI_TYPE, true);
-                    if (isset($status) && $status == PAYNOTIFY_STATUS_ORDER_UPDATED) {
-                        //TODO: send notify to Weixin user(if any)
-                    }
-
                     if(!empty($order)) {
                         $this->redirect('/orders/detail/'.$order['Order']['id']);
                     }
@@ -120,13 +111,14 @@ class AliPayController extends AppController {
     /**
      * @param $out_trade_no
      * @param $trade_no
-     * @return int status
+     * @param $paras array parameters array
+     * @return array status and Order object
      */
-    protected function saveNotifyIfNotSaved($out_trade_no, $trade_no) {
-        $buyer_id = $_POST['buyer_id'];
-        $total_fee = $_POST['total_fee'] * 100;
-        $buyer_email = $_POST['buyer_email'];
-        $arr = array("buyer_id" => $buyer_id, "exterface" => $_POST['exterface'], "is_success" => $_POST["is_success"], "payment_type" => $_POST['payment_type'], "trade_status" => $_POST['trade_status']);
+    protected function saveNotifyIfNotSaved($out_trade_no, $trade_no, &$paras) {
+        $buyer_id = $paras['buyer_id'];
+        $total_fee = $paras['total_fee'] * 100;
+        $buyer_email = $paras['buyer_email'];
+        $arr = array("buyer_id" => $buyer_id, "exterface" => $paras['exterface'], "is_success" => $paras["is_success"], "payment_type" => $paras['payment_type'], "trade_status" => $paras['trade_status']);
         $attach = json_encode($arr);
 
         if ($this->WxPayment->notifyCounted($out_trade_no) > 0) {
@@ -135,8 +127,32 @@ class AliPayController extends AppController {
         } else {
             list($status, $order) = $this->WxPayment->saveNotifyAndUpdateStatus($out_trade_no, $trade_no, TRADE_ALI_TYPE, true, $buyer_email, 0,
                 $total_fee, false, '', '', $attach, '');
-            return $status;
+
+            if ($status == PAYNOTIFY_STATUS_ORDER_UPDATED) {
+                $this->loadModel('Oauthbind');
+                $user_weixin = $this->Oauthbind->findWxServiceBindByUid($order['Order']['creator']);
+                if ($user_weixin != false) {
+                    $good = $this->get_order_good_info($order);
+                    $this->log("good info:" . $good['good_info'] . " ship info:" . $good['ship_info'], LOG_DEBUG);
+                    $this->Weixin->send_order_paid_message($user_weixin['oauth_openid'], $order['Order']['total_all_price'],
+                        $good['good_info'], $good['ship_info'], $order['Order']['id']);
+                }
+            }
+
+            return array($status, $order);
         }
+    }
+
+    function get_order_good_info($order_info){
+        $good_info ='';
+        $ship_info = $order_info['Order']['consignee_name'].','.$order_info['Order']['consignee_address'].','.$order_info['Order']['consignee_mobilephone'];
+        $this->loadModel('Cart');
+        $carts = $this->Cart->find('all',array(
+            'conditions'=>array('order_id' => $order_info['Order']['id'])));
+        foreach($carts as $cart){
+            $good_info = $good_info.$cart['Cart']['name'].' x '.$cart['Cart']['num'].';';
+        }
+        return array("good_info"=>$good_info,"ship_info"=>$ship_info);
     }
 
 } 
