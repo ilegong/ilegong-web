@@ -21,7 +21,7 @@
         </ul>
      {{else}}
      	<a href="{{$this->Html->url('/users/login')}}">登录</a>
-     	<a href="{{$this->Html->url('/users/register')}}">注册</a>
+        {{if !$in_weixin}}<a href="{{$this->Html->url('/users/register')}}">注册</a>{{/if}}
      {{/if}}
     </div>
     
