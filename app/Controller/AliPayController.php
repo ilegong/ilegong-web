@@ -11,8 +11,11 @@ class AliPayController extends AppController {
     public $components = array('WxPayment');
 
     public function goto_to_alipay($order_id) {
-        $this->autoRender = false;
-        echo $this->WxPayment->goToAliPayForm($order_id, $this->currentUser['id']);
+        if(empty($this->currentUser['id'])){
+            $this->redirect('/users/login?referer='.Router::url('/orders/mine/'.$order_id));
+        }
+        $form = $this->WxPayment->goToAliPayForm($order_id, $this->currentUser['id']);
+        $this->set('form', $form);
     }
 
     public function notify() {

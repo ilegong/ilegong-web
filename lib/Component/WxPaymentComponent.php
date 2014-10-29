@@ -145,8 +145,8 @@ class WxPaymentComponent extends Component {
                     $status = PAYNOTIFY_ERR_ORDER_NONE;
                 } else if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY || $order['Order']['deleted'] == 1) {
                     $status = PAYNOTIFY_ERR_ORDER_STATUS_ERR;
-                } else if ($payLog['PayLog']['total_fee'] != $total_fee) {
-                    $status = PAYNOTIFY_ERR_ORDER_FEE;
+                //} else if ($payLog['PayLog']['total_fee'] != $total_fee) {
+                //    $status = PAYNOTIFY_ERR_ORDER_FEE;
                 } else {
                     $orderModel->updateAll(array('status' => ORDER_STATUS_PAID, 'pay_time' => "'" . date(FORMAT_DATETIME) . "'"), array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY));
                     $status = PAYNOTIFY_STATUS_ORDER_UPDATED;
@@ -195,7 +195,7 @@ class WxPaymentComponent extends Component {
         if (empty($order)) {
             throw new CakeException('wx_pay_order_not_found:'. $orderId);
         } else if ($order['Order']['creator'] !== $uid) {
-            throw new CakeException('/?wx_pay_order_id_now_owned='.$order['Order']['creator'].'__uid='. $uid);
+            throw new CakeException('/?wx_pay_order_id_not_owned='.$order['Order']['creator'].'__uid='. $uid);
         }
 
         if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY || $order['Order']['deleted'] == 1) {
