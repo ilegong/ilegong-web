@@ -125,7 +125,8 @@ class OrdersController extends AppController{
             $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($p['Product']['id'], $shipPromotionId) : array();
             $ship_fees[$p['Product']['id']] = empty($pp) ? $p['Product']['ship_fee'] : $pp['ship_price'];
 		}
-		
+
+        $new_order_ids = array();
 		$hasfalse = false;
 		foreach($business as $brand_id => $busi){
 			$bs_carts = array();
@@ -163,7 +164,10 @@ class OrdersController extends AppController{
 			$this->Order->create();
 			
 			if($this->Order->save($data)){
-				$order_id = $this->Order->getLastInsertID();				
+				$order_id = $this->Order->getLastInsertID();
+                if ($order_id) {
+                    array_push($new_order_ids, $order_id);
+                }
 				foreach($busi as $pid){
 					$cart = $Carts[$pid];
 // 					echo "==$order_id=====$pid======$total_price====\n";
@@ -178,7 +182,11 @@ class OrdersController extends AppController{
 		setcookie("cart_products", '',time()-3600,'/');
 		if($hasfalse == false){
 			$this->Session->setFlash('订单已生成,不同商家的商品会拆分到不同的订单，请您知悉。');
-			$this->redirect('/orders/mine');
+            if (count($new_order_ids) == 1) {
+                $this->redirect(array('action' => 'detail', $new_order_ids[0], 'pay'));
+            }  else {
+                $this->redirect('/orders/mine');
+            }
 		}
 		else{
 			$this->Session->setFlash('订单生成失败，请稍候重试或联系管理员');
@@ -337,10 +345,10 @@ class OrdersController extends AppController{
         if ($action == 'pay') {
             $this->set('paid_msg', htmlspecialchars($_GET['paid_msg']));
             $display_status = $_GET['display_status'];
-            $this->set('show_pay', $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
-                && ($display_status != PAID_DISPLAY_PENDING && $display_status != PAID_DISPLAY_SUCCESS));
             $this->set('display_status', $display_status);
         }
+        $this->set('show_pay', $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
+            && ($display_status != PAID_DISPLAY_PENDING && $display_status != PAID_DISPLAY_SUCCESS));
 
         if ($action == 'paid') {
             $this->log("paid done: $orderId, msg:". $_GET['msg']);
