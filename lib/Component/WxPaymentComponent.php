@@ -119,7 +119,7 @@ class WxPaymentComponent extends Component {
             'out_trade_no' => $out_trade_no,
             'transaction_id' => $transaction_id,
             'trade_type' => $trade_type,
-            'openid' => $openid,
+            'openid' => empty($openid) ? 'unknown' : $openid,
             'coupon_fee' => empty($coupon_fee) ? 0 : $coupon_fee,
             'total_fee' => $total_fee,
             'is_subscribe' => $is_subscribe,
