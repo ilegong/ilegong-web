@@ -31,11 +31,11 @@ class WxPaymentComponent extends Component {
 
         $order = $this->findOrderAndCheckStatus($order_id, $uid);
 
-        $totalFee = $order['Order']['total_all_price'] * 100;
+        $totalFee = $order['Order']['total_all_price'];
         list($subject, $body) = $this->getProductDesc($order_id);
 
         $out_trade_no = $this->out_trade_no(TRADE_ALI_TYPE, $order_id);
-        $this->savePayLog($order_id, $out_trade_no, $body, TRADE_ALI_TYPE, $totalFee, '', '');
+        $this->savePayLog($order_id, $out_trade_no, $body, TRADE_ALI_TYPE, $totalFee  * 100, '', '');
         $ali = new AliPay();
         return $ali->api_form($out_trade_no, $order_id, $subject, $totalFee, $body);
     }
