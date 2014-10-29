@@ -74,11 +74,7 @@ function argSort($para) {
  * @param $word 要写入日志里的文本内容 默认值：空值
  */
 function logResult($word='') {
-	$fp = fopen("log.txt","a");
-	flock($fp, LOCK_EX) ;
-	fwrite($fp,"执行日期：".strftime("%Y%m%d%H%M%S",time())."\n".$word."\n");
-	flock($fp, LOCK_UN);
-	fclose($fp);
+	//
 }
 
 /**
