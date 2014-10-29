@@ -116,7 +116,7 @@ class Apple201410Controller extends AppController {
                     return $log['TrackLog']['from'];
                 }, $logsToMe);
                 $maxShow = 3;
-                $nicknames = implode("、", array_map(function($n){ return $this->filter_invalid_name($n); }, $this->User->findNicknamesMap(array_slice($uids, 0, $maxShow))));
+                $nicknames = implode("、", array_map(function($n){ return filter_invalid_name($n); }, $this->User->findNicknamesMap(array_slice($uids, 0, $maxShow))));
                 if (count($logsToMe) > $maxShow) {
                     $nicknames .= __('等');
                 }
@@ -210,7 +210,7 @@ class Apple201410Controller extends AppController {
                     $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friendUid));
                     $this->TrackLog->save(array('TrackLog' => array('type' => KEY_APPLE_201410, 'from' => $this->currentUser['id'], 'to' => $friendUid, 'award_time' => date(FORMAT_DATETIME) )));
                 }
-                $this->_addNotify($this->filter_invalid_name($friend['User']['nickname']), $shouldAdd);
+                $this->_addNotify(filter_invalid_name($friend['User']['nickname']), $shouldAdd);
             }
             //treat as self
             $this->redirect_for_append_tr_id('award');
@@ -238,13 +238,13 @@ class Apple201410Controller extends AppController {
         $helpMeItems = array();
         foreach($friendsHelpMe as $item) {
             $uid = $item['TrackLog']['from'];
-            $helpMeItems[] = array('nickname' => $this->filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid]? $gots[$uid] : 0);
+            $helpMeItems[] = array('nickname' => filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid]? $gots[$uid] : 0);
         }
 
         $meHelpItems = array();
         foreach($friendsIHelped as $item) {
             $uid = $item['TrackLog']['to'];
-            $meHelpItems[] = array('nickname' => $this->filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid]? $gots[$uid] : 0);
+            $meHelpItems[] = array('nickname' => filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid]? $gots[$uid] : 0);
         }
 
 
@@ -276,7 +276,7 @@ class Apple201410Controller extends AppController {
             $nicknamesMap = $this->User->findNicknamesMap(array_keys($awardInfos));
             foreach ($awardInfos as $uid => $got) {
                 if (array_search($uid, $this->in_pys) === false) {
-                    $awardItems[] = array('nickname' => $this->filter_invalid_name($nicknamesMap[$uid]), 'got' => $got, 'company' => $this->companies[$uid]);
+                    $awardItems[] = array('nickname' => filter_invalid_name($nicknamesMap[$uid]), 'got' => $got, 'company' => $this->companies[$uid]);
                 }
             }
         }
@@ -409,15 +409,6 @@ class Apple201410Controller extends AppController {
         $total_apple = $awardInfo && $awardInfo['got'] ? $awardInfo['got'] : 0;
         $this->set('total_apple', $total_apple);
         $this->set('total_times', $totalAwardTimes);
-    }
-
-    private function filter_invalid_name($name) {
-        if (!$name || $name == 'null') {
-            $name = '神秘人';
-        } else if (strpos($name, '微信用户') === 0) {
-            $name = mb_substr($name, 0, 8, 'UTF-8');
-        }
-        return $name;
     }
 
     /**

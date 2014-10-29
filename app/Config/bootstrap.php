@@ -102,3 +102,13 @@ function same_day($time1, $time2) {
     $day2 = $dt->format(FORMAT_DATE);
     return ($day1 == $day2);
 }
+
+
+function filter_invalid_name($name) {
+    if (!$name || $name == 'null') {
+        $name = '神秘人';
+    } else if (strpos($name, '微信用户') === 0) {
+        $name = mb_substr($name, 0, 8, 'UTF-8');
+    }
+    return $name;
+}
