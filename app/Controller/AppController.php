@@ -372,25 +372,26 @@ class AppController extends Controller {
         $afford_for_curr_user = true;
         if ($modelClass == 'Product') {
             ClassRegistry::init('ShipPromotion');
-            $this->log('current_data_id='.$this->current_data_id);
             if ($this->current_data_id == ShipPromotion::QUNAR_PROMOTE_ID) {
-                $ordersModel = ClassRegistry::init('Order');
-                $order_ids = $ordersModel->find('list', array(
-                    'conditions' => array('brand_id' => ShipPromotion::QUNAR_PROMOTE_BRAND_ID, 'deleted' => 0, 'published' => 1, 'creator' => $this->currentUser['id']),
-                    'fields' => array('id', 'id')
-                ));
-                $this->log('$order_ids='.json_encode($order_ids));
-                if (!empty($order_ids)) {
-                    $cartModel = ClassRegistry::init('Cart');
-                    $c = $cartModel->find('count', array(
-                        'conditions' => array('order_id' => $order_ids, 'product_id' => $this->current_data_id, 'deleted' => 0)
-                    ));
-                    $this->log('count:'.$c);
-                    if ($c > 0) {
-                        $afford_for_curr_user = false;
-                    }
-                }
-                $this->set('limit_per_user', 1);
+//                $ordersModel = ClassRegistry::init('Order');
+//                $order_ids = $ordersModel->find('list', array(
+//                    'conditions' => array('brand_id' => ShipPromotion::QUNAR_PROMOTE_BRAND_ID, 'deleted' => 0, 'published' => 1, 'creator' => $this->currentUser['id']),
+//                    'fields' => array('id', 'id')
+//                ));
+//                $this->log('$order_ids='.json_encode($order_ids));
+//                if (!empty($order_ids)) {
+//                    $cartModel = ClassRegistry::init('Cart');
+//                    $c = $cartModel->find('count', array(
+//                        'conditions' => array('order_id' => $order_ids, 'product_id' => $this->current_data_id, 'deleted' => 0)
+//                    ));
+//                    $this->log('count:'.$c);
+//                    if ($c > 0) {
+//                        $afford_for_curr_user = false;
+//                    }
+//                }
+//                $this->set('limit_per_user', 1);
+                $afford_for_curr_user = false;
+
             }
             $this->set('afford_for_curr_user', $afford_for_curr_user);
         }
