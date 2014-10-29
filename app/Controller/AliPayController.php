@@ -16,6 +16,7 @@ class AliPayController extends AppController {
         }
         $form = $this->WxPayment->goToAliPayForm($order_id, $this->currentUser['id']);
         $this->set('form', $form);
+        $this->pageTitle = '支付宝支付';
     }
 
     public function notify() {
