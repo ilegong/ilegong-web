@@ -91,19 +91,17 @@ class AliPayController extends AppController {
             $out_trade_no = $_GET['out_trade_no'];
             $trade_no = $_GET['trade_no'];
             $trade_status = $_GET['trade_status'];
-            if($_GET['trade_status'] == 'TRADE_FINISHED' || $_GET['trade_status'] == 'TRADE_SUCCESS') {
+            if($trade_status == 'TRADE_FINISHED' || $trade_status == 'TRADE_SUCCESS') {
                 //判断该笔订单是否在商户网站中已经做过处理
                 //如果没有做过处理，根据订单号（out_trade_no）在商户网站的订单系统中查到该笔订单的详细，并执行商户的业务程序
                 //如果有做过处理，不执行商户的业务程序
                 if ($this->WxPayment->notifyCounted($out_trade_no) > 0) {
                     $this->log("Zhifubao: Aready done, so skipped");
 
+                    $this->redirect('/orders/mine');
                     //TODO: 需要显示信息。
                     echo "您的订单支付在处理中，立即将要返回我的订单列表查看状态";
-
                     //TODO: 拿到订单，给出订单支付完成界面
-
-                    $this->redirect('/orders/mine');
 
                 } else {
                     list($status, $order) = $this->WxPayment->saveNotifyAndUpdateStatus($out_trade_no, $trade_no, TRADE_ALI_TYPE, true);
@@ -117,7 +115,7 @@ class AliPayController extends AppController {
                 }
             }
             else {
-                $this->log("verify notify failed: for $out_trade_no, $trade_status");
+                $this->log("return back failed for incorrect trade_status: for $out_trade_no, $trade_status");
             }
         }
         else {
