@@ -91,3 +91,15 @@ echo "<div class=\"container\">$flash_msg</div>";
 </div><!-- //end maincontent -->
 
 {{template Elements/footer}}
+
+{{$this->Html->script(array('bootstrap.min.js','bootbox/bootbox.min.js', 'common.js?v4','front.js','front_orders.js?v1'));
+}}
+{{$this->Html->scriptStart(array('block' => 'scriptBottom'));}}
+if (bootbox) {
+bootbox.setDefaults({
+locale: "zh_CN"
+});
+}
+{{$this->Html->scriptEnd()}}
+<!-- helper中追加的底部脚本 $this->_View->append('bottomscript',$script);-->
+{{$this->fetch('bottomscript')}}
