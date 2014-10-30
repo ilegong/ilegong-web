@@ -25,11 +25,15 @@
         </div>
         {{/if}}
 
-        {{if $afford_for_curr_user }}
-        <div id="productinfo" class="clearfix voffset2" style="padding-bottom:10px;">
+        {{if $total_left > 0 && $afford_for_curr_user }}
 
+        <div class="voffset3">
+            <p>剩余<span class="text-danger">{{$total_left}}</span>件！</p>
+        </div>
+
+        <div id="productinfo" class="clearfix voffset2" style="padding-bottom:10px;">
             {{if $limit_per_user == 1}}
-            <span>每人限购一份</span>
+            <p>每人限购一份</p>
                 <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="hidden" readonly="readonly">
             {{else}}
             <div class="input-group" style="float:left;width:120px;">
@@ -40,6 +44,10 @@
             {{/if}}
             <a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-warning shopping" id="single-item-{{$Product['Product']['id']}}" item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
                href="javascript:void(0);">添加到购物车</a>
+        </div>
+        {{elseif $total_left == 0}}
+        <div class="voffset3">
+            <p class="text-warning">已经全部抢完啦！</p>
         </div>
         {{else}}
 

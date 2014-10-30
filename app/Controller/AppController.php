@@ -372,9 +372,12 @@ class AppController extends Controller {
         if ($modelClass == 'Product') {
             $pid = $this->current_data_id;
             $currUid = $this->currentUser['id'];
-            list($afford_for_curr_user, $limit_per_user) = self::affordToUser($pid, $currUid);
+            list($afford_for_curr_user, $limit_per_user, $total_left) = self::affordToUser($pid, $currUid);
             if ($limit_per_user) {
                 $this->set('limit_per_user', $limit_per_user);
+            }
+            if ($total_left >= 0) {
+                $this->set('total_left', $total_left);
             }
             $this->set('afford_for_curr_user', $afford_for_curr_user);
         }
@@ -538,6 +541,7 @@ class AppController extends Controller {
     public static function affordToUser($pid, $currUid) {
         $afford_for_curr_user = true;
         $limit_per_user = 0;
+        $total_left = -1;
         $cartModel = ClassRegistry::init('Cart');
         ClassRegistry::init('ShipPromotion');
         if ($pid == ShipPromotion::QUNAR_PROMOTE_ID) {
@@ -564,9 +568,10 @@ class AppController extends Controller {
                 }
                 $limit_per_user = 1;
             }
+            $total_left =  ShipPromotion::QUNAR_MI_299_TOTAL_LIMIT - $soldCnt;
         }
 
-        return array($afford_for_curr_user, $limit_per_user);
+        return array($afford_for_curr_user, $limit_per_user, $total_left);
     }
 }
 ?>
