@@ -675,7 +675,7 @@ class UsersController extends AppController {
                     $oauth['Oauthbinds']['extra_param'] = json_encode(array('scope' => $res['scope'], 'expires_in' => $res['expires_in']));
 
                     $need_transfer = false;
-                    $should_require_user_info = $_GET['nru'] != 'true';
+                    $should_require_user_info = !$_GET['nru'];
                     $refer_by_state = '';
                     if (!empty($_REQUEST['state'])) {
                         $str = base64_decode($_REQUEST['state']);
