@@ -172,11 +172,9 @@ class CategoriesController extends AppController {
             $conditions['id']=intval($slug);
         }
 
-        if ($this->RequestHandler->isMobile()) {
-            if (!$this->is_pengyoushuo_com_cn() && ($slug == 'techan' || $conditions['id'] == CATEGORY_ID_TECHAN)) {
-                $this->redirect('/categories/productsHome.html');
-                return;
-            }
+        if ($slug == 'techan' || $conditions['id'] == CATEGORY_ID_TECHAN) {
+            $this->redirect('/categories/productsHome.html');
+            return;
         }
 
         $Category = $this->Category->find('first',array(
