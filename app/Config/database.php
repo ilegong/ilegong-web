@@ -41,7 +41,7 @@ class DATABASE_CONFIG {
 		if(defined('SAE_MYSQL_DB')){ // on sae.sina.com.cn
 			// 变量成员定义时不能写字符串点号连接语句，放在类初始化中
 			$this->master['host'] = SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT;
-			$this->default['host'] = SAE_MYSQL_HOST_S.':'.SAE_MYSQL_PORT;
+			$this->default['host'] = SAE_MYSQL_HOST_M.':'.SAE_MYSQL_PORT;
 			$this->master['login'] = $this->default['login'] = SAE_MYSQL_USER;
 			$this->master['password'] = $this->default['password'] = SAE_MYSQL_PASS;
 			$this->master['database'] = $this->default['database'] = SAE_MYSQL_DB;
