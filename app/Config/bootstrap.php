@@ -97,6 +97,26 @@ function oauth_wx_goto($refer_key, $host3g) {
     return "$host3g";
 }
 
+
+/**
+ * @param $ref
+ * @param string $scope
+ * @param bool $not_require_info
+ */
+function redirect_to_wx_oauth($ref, $scope=WX_OAUTH_BASE, $not_require_info = false) {
+    $return_uri = 'http://'.WX_HOST.'/users/wx_auth?';
+    if (!empty($ref)) {
+        $return_uri .= '&referer=' . urlencode($ref);
+    }
+    if ($not_require_info) {
+        $return_uri .= '&nru='. $not_require_info;
+    }
+
+    $return_uri = urlencode($return_uri);
+    return 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . "&response_type=code&scope=$scope&state=0#wechat_redirect";
+}
+
+
 function same_day($time1, $time2) {
     $dt = new DateTime;
     $dt->setTimestamp($time1);

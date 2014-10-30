@@ -21,7 +21,7 @@ class Apple201410Controller extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
         if(empty($this->currentUser['id'])){
-            $this->redirect('/users/login?referer='.Router::url($_SERVER['REQUEST_URI']));
+            $this->redirect(redirect_to_wx_oauth(Router::url($_SERVER['REQUEST_URI']), WX_OAUTH_USERINFO, true));
         }
         $this->pageTitle = __('摇一摇免费得红富士苹果');
         $this->set('hideNav', true);

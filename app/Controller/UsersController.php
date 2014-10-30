@@ -619,7 +619,7 @@ class UsersController extends AppController {
         }
 
         if ($_GET['do_wx_auth_if_not_log_in'] && (empty($this->currentUser) || !$this->currentUser['id'])) {
-            $this->_goto_wx_oauth($redirect);
+            $this->redirect(redirect_to_wx_oauth($redirect));
         }  else {
             $this->redirect($redirect);
         }
@@ -635,9 +635,9 @@ class UsersController extends AppController {
         }
 
         if ($_GET['scope'] == 'userinfo') {
-            $this->_goto_wx_oauth($ref, WX_OAUTH_USERINFO);
+            $this->redirect(redirect_to_wx_oauth($ref, WX_OAUTH_USERINFO));
         } else {
-            $this->_goto_wx_oauth($ref);
+            $this->redirect(redirect_to_wx_oauth($ref));
         }
     }
 
@@ -675,7 +675,7 @@ class UsersController extends AppController {
                     $oauth['Oauthbinds']['extra_param'] = json_encode(array('scope' => $res['scope'], 'expires_in' => $res['expires_in']));
 
                     $need_transfer = false;
-                    $should_require_user_info = true;
+                    $should_require_user_info = $_GET['nru'] != 'true';
                     $refer_by_state = '';
                     if (!empty($_REQUEST['state'])) {
                         $str = base64_decode($_REQUEST['state']);
@@ -729,7 +729,7 @@ class UsersController extends AppController {
                             }
                         }
                         if ($redi) {
-                            $this->_goto_wx_oauth($ref, WX_OAUTH_USERINFO);
+                            $this->redirect(redirect_to_wx_oauth($ref, WX_OAUTH_USERINFO));
                         }
                     }
 
@@ -808,20 +808,6 @@ class UsersController extends AppController {
         $orderUpdated = $this->Order->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
         $consigneeUpdated = $this->OrderConsignee->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
         $this->log("Merge WX Account from  $old_serviceAccount_bind_uid to " . $new_serviceAccount_bind_uid.": orderUpdated=".$orderUpdated.", consigneeUpdated=". $consigneeUpdated);
-    }
-
-    /**
-     * @param $ref
-     */
-    private function _goto_wx_oauth($ref, $scope='snsapi_base') {
-        $return_uri = 'http://'.WX_HOST.'/users/wx_auth?';
-        if (!empty($ref)) {
-            $return_uri .= 'referer=' . urlencode($ref);
-        }
-
-        $return_uri = urlencode($return_uri);
-
-        $this->redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' . WX_APPID . '&redirect_uri=' . $return_uri . "&response_type=code&scope=$scope&state=0#wechat_redirect");
     }
 
     /**
