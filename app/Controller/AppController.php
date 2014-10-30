@@ -369,29 +369,12 @@ class AppController extends Controller {
         $this->Hook->call('viewItem', $params);
 //         $this->Hook->call('nextItems', $params);
 
-        $afford_for_curr_user = true;
         if ($modelClass == 'Product') {
-            ClassRegistry::init('ShipPromotion');
-            if ($this->current_data_id == ShipPromotion::QUNAR_PROMOTE_ID) {
-//                $ordersModel = ClassRegistry::init('Order');
-//                $order_ids = $ordersModel->find('list', array(
-//                    'conditions' => array('brand_id' => ShipPromotion::QUNAR_PROMOTE_BRAND_ID, 'deleted' => 0, 'published' => 1, 'creator' => $this->currentUser['id']),
-//                    'fields' => array('id', 'id')
-//                ));
-//                $this->log('$order_ids='.json_encode($order_ids));
-//                if (!empty($order_ids)) {
-//                    $cartModel = ClassRegistry::init('Cart');
-//                    $c = $cartModel->find('count', array(
-//                        'conditions' => array('order_id' => $order_ids, 'product_id' => $this->current_data_id, 'deleted' => 0)
-//                    ));
-//                    $this->log('count:'.$c);
-//                    if ($c > 0) {
-//                        $afford_for_curr_user = false;
-//                    }
-//                }
-//                $this->set('limit_per_user', 1);
-                $afford_for_curr_user = false;
-
+            $pid = $this->current_data_id;
+            $currUid = $this->currentUser['id'];
+            list($afford_for_curr_user, $limit_per_user) = self::affordToUser($pid, $currUid);
+            if ($limit_per_user) {
+                $this->set('limit_per_user', $limit_per_user);
             }
             $this->set('afford_for_curr_user', $afford_for_curr_user);
         }
@@ -545,6 +528,45 @@ class AppController extends Controller {
             return $navigations;
         }
         return $navigations;
+    }
+
+    /**
+     * @param $pid
+     * @param $currUid
+     * @return array
+     */
+    public static function affordToUser($pid, $currUid) {
+        $afford_for_curr_user = true;
+        $limit_per_user = 0;
+        $cartModel = ClassRegistry::init('Cart');
+        ClassRegistry::init('ShipPromotion');
+        if ($pid == ShipPromotion::QUNAR_PROMOTE_ID) {
+            $afford_for_curr_user = false;
+            return array($afford_for_curr_user, 0);
+        } else if ($pid == ShipPromotion::QUNAR_MI_299_ID) {
+            $soldCnt = $cartModel->find('count', array('conditions' => array('order_id > 0', 'product_id' => $pid, 'deleted' => 0)));
+            if ($soldCnt > ShipPromotion::QUNAR_MI_299_TOTAL_LIMIT) {
+                $afford_for_curr_user = false;
+            } else {
+
+                $ordersModel = ClassRegistry::init('Order');
+                $order_ids = $ordersModel->find('list', array(
+                    'conditions' => array('brand_id' => ShipPromotion::QUNAR_MI_299_BRAND_ID, 'deleted' => 0, 'published' => 1, 'creator' => $currUid),
+                    'fields' => array('id', 'id')
+                ));
+                if (!empty($order_ids)) {
+                    $c = $cartModel->find('count', array(
+                        'conditions' => array('order_id' => $order_ids, 'product_id' => $pid, 'deleted' => 0)
+                    ));
+                    if ($c > 0) {
+                        $afford_for_curr_user = false;
+                    }
+                }
+                $limit_per_user = 1;
+            }
+        }
+
+        return array($afford_for_curr_user, $limit_per_user);
     }
 }
 ?>

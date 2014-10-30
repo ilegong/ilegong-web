@@ -135,6 +135,13 @@ class OrdersController extends AppController{
 			foreach($busi as $pid){
 				$total_price+= $Carts[$pid]['Cart']['price']*$Carts[$pid]['Cart']['num'];
                 $ship_fee += $ship_fees[$pid];
+
+                list($afford_for_curr_user, $limit_per_user) = AppController::affordToUser($pid, $this->currentUser['id']);
+                if (!$afford_for_curr_user) {
+                    $this->__message(__($Carts[$pid]['name'].'已售罄或您已经购超限，请从购物车中删除后再结账'), '/orders/info', 5);
+                    return;
+                }
+
 			}
 			
 			if($total_price <= 0){
@@ -190,14 +197,15 @@ class OrdersController extends AppController{
 		}
 		else{
 			$this->Session->setFlash('订单生成失败，请稍候重试或联系管理员');
-			$this->redirect('/order/info');
+			$this->redirect('/orders/info');
 		}
 	}
-	
-	/**
-	 * 订单信息页，确认各项订单信息
-	 * @param int $order_id
-	 */
+
+    /**
+     * 订单信息页，确认各项订单信息
+     * @param int|string $order_id
+     * @param string $action
+     */
 	function info($order_id='', $action = ''){
 		$has_chosen_consignee = false;
 		$this->loadModel('OrderConsignee');

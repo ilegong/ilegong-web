@@ -11,6 +11,9 @@ class ShipPromotion extends AppModel {
 
     const QUNAR_PROMOTE_BRAND_ID = 61;
     const QUNAR_PROMOTE_ID = 222;
+    const QUNAR_MI_299_ID = 228;
+    const QUNAR_MI_299_BRAND_ID = 13;
+    const QUNAR_MI_299_TOTAL_LIMIT = 100;
 
     public $useTable = false;
 
