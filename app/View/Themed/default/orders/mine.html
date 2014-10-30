@@ -1,68 +1,59 @@
 <style>
 td {padding:5px 10px;}
+
+.orderitem {
+    border-top: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
+    padding: 1px 7px 1px 10px;
+}
+
+.orderitem_top {
+    border-bottom: 1px solid #DDDDDD;
+    padding: 5px 0 5px 0;
+}
+
+.orderitem_item {
+    border-bottom: 1px solid #dddddd;
+    padding: 5px 0 5px 0;
+}
+
+.orderitem_price {
+    border-bottom: 1px solid #dddddd;
+    padding: 5px 0 5px 0;
+}
+
+.orderitem_actions {
+    padding: 5px 0 5px 0;
+}
+
 </style>
-<div  class="container">
-	<div class="orderinfo">
-		<div class="o_show">
-		<p>
-		     您好，{{$CurrentUser['username']}}! 您的用户编号是:{{$CurrentUser['id']}}
-		</p>
-		{{if $is_business}}
-		<?php echo $this->Html->link('新增商品', array('controller' => 'products','action'=>'add','plugin' => null ,),array('class'=>'btn btn-warning pull-right')); ?>
-		{{/if}}
-		<h2>我的订单</h2>
-		<font color="red">51daifan收款方式支付宝：yxg@ilegong.com,收款人：北京爱乐供科技有限公司；或微信转账：荣浩 (如果他还不是您的好友，请加微信号 Michael-haohao)</font>
-		{{loop $orders $order}}
-		<table  class="table table-bordered">
-		<tr>
-			<td>
-			收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
-			总价：￥{{$order['Order']['total_price']}}<br/>
-			下单时间：{{$order['Order']['created']}}<br/>
-			{{if $order['Order']['ship_type']}}	
-			快递公司: {{$ship_type[$order['Order']['ship_type']]}} ,&nbsp;&nbsp; 快递单号：{{$order['Order']['ship_code']}}
-			{{/if}}<br/>
-			<div id="order-status-{{$order['Order']['id']}}">
-			<font color="red">
-			{{if $order['Order']['status']==0}}订单已生成,等待付款 <a class="btn-sm btn-primary" href="/orders/detail/{{$order['Order']['id']}}/pay">付款</a>
-			{{elseif $order['Order']['status']==1}}订单已支付
-			{{elseif $order['Order']['status']==2}}
-				<font color="red">订单已发货</font>
-				<div class="well">
-					<button type="button" onclick="confirm_receive({{$order['Order']['id']}});" class="btn btn-primary">确认已收货</button>
-				</div>
-			{{elseif $order['Order']['status']==3}}订单已收货
-			
-			{{elseif $order['Order']['status']==4}}订单已退款
-			
-			{{elseif $order['Order']['status']==9}}订单已完成
-			{{elseif $order['Order']['status']==10}}订单已作废
-			{{elseif $order['Order']['status']==11}}订单已确认有效
-			{{elseif $order['Order']['status']==12}}订单已投诉			
-			{{/if}}
-			</font>
-			</div>
-			</td>			
-		</tr>
-		{{if !empty($order_carts[$order['Order']['id']])}}
-		<tr><td>
-			<table  class="table table-bordered">
-				<tr><th width="50%">商品名称</th><th>价格</th><th>数量</th><th>合计</th></tr>
-				<tbody>
-				{{loop $order_carts[$order['Order']['id']] $cart}}
-				<tr><td>{{$cart['Cart']['name']}}</td>
-				<td>￥{{$cart['Cart']['price']}}</td>
-				<td>{{$cart['Cart']['num']}}</td>
-				<td>￥{{$cart['Cart']['price']*$cart['Cart']['num']}}</td>		
-				</tr>
-				{{/loop}}
-				</tbody>
-			</table>
-		</td></tr>
-		{{/if}}
-		</table>
-		{{/loop}}
-		
-		</div>			
-	</div>
+<div class="container">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#orders-all" role="tab" data-toggle="tab">{{__('全部')}}</a></li>
+        <li><a href="#orders-wait_payment" role="tab" data-toggle="tab">{{__('待支付')}}</a></li>
+        <li><a href="#orders-wait_deliver" role="tab" data-toggle="tab">{{__('待发货')}}</a></li>
+        <li><a href="#orders-wait_receive" role="tab" data-toggle="tab">{{__('待收货')}}</a></li>
+    </ul>
+
+    {{if empty($orders)}}
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <strong>重要提示!</strong> 如果您在10月11日之前有订单，但现在找不到了，请关注公众账号『爱乐供-朋友说』，点击菜单中的『个人中心』-> 『绑定旧版数据』绑定历史订单。
+    </div>
+    {{/if}}
+
+    <div class="row tab-content" style="padding-left: 2px; background-color: #f1eff0">
+        <?php foreach(array( '-1' => 'all', 0 => 'wait_payment', 1 => 'wait_deliver', 2 => 'wait_receive') as $status => $order_type) { ?>
+        <div class="tab-pane fade {{if $order_type == 'all'}} in active {{/if}}" id="orders-{{$order_type}}">
+            <div class="Content-body">
+            {{ $this->element('my_orders', array(
+                    'orders' => $orders,
+                    'brands' => $brands,
+                    'counts' => $counts,
+                    'status' => $status
+                )); }}
+            </div>
+        </div>
+        <?php } ?>
+    </div>
 </div>
