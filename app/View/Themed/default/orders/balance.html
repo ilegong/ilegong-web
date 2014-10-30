@@ -1,7 +1,6 @@
 <div  class="container">
 	
 	订单提交已成功
-	<span style="text-align:right;font-size:15px;"><b>应付总额：<font color="red">￥{{$total_price}}</font> 元</b>
+	<span style="text-align:right;font-size:15px;"><b>应付总额：<font color="red">￥{{$this->Number->precision($total_price, 2)}}</font> 元</b>
 	          </span>
-	          
 </div>

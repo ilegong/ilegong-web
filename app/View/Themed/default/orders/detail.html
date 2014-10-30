@@ -15,6 +15,7 @@
         {{if $show_pay}}
         <div class="panel panel-warning">
             <div class="panel-body">
+                {{if $in_weixin}}<a class="btn btn-warning" href="/wxPay/jsApiPay/{{$order['Order']['id']}}.html?showwxpaytitle=1">微信支付</a>{{/if}}
                 <a class="btn btn-warning" href="javascript:;" onclick="go_to_pay_zhifubao()">支付宝转账</a>
             </div>
         </div>
