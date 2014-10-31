@@ -547,13 +547,13 @@ class AppController extends Controller {
             return array($afford_for_curr_user, 0);
         } else if ($pid == ShipPromotion::QUNAR_MI_299_ID) {
             $soldCnt = $cartModel->find('count', array(
-//                'joins' => array(
-//                    'table' => 'orders',
-//                    'alias' => 'Order',
-//                    'type' => 'left',
-//                    'conditions' => array('Order.id=Cart.order_id', 'Order.status != '.ORDER_STATUS_CANCEL),
-//                ),
-                'conditions' => array('Cart.order_id > 0', 'Cart.product_id' => $pid, 'Cart.deleted' => 0)));
+                'joins' => array(
+                    'table' => 'orders',
+                    'alias' => 'Order',
+                    'type' => 'left',
+                    'conditions' => array('Order.id=Cart.order_id'),
+                ),
+                'conditions' => array('Cart.order_id > 0', 'Cart.product_id' => $pid, 'Cart.deleted' => 0, 'Order.status != '.ORDER_STATUS_CANCEL)));
             if ($soldCnt > ShipPromotion::QUNAR_MI_299_TOTAL_LIMIT) {
                 $afford_for_curr_user = false;
             } else {
