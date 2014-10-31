@@ -140,6 +140,8 @@ class OrdersController extends AppController{
                 if (!$afford_for_curr_user) {
                     $this->__message(__($Carts[$pid]['name'].'已售罄或您已经购超限，请从购物车中删除后再结账'), '/orders/info', 5);
                     return;
+                } else if ($limit_per_user > 0 && $Carts[$pid]['Cart']['num'] > $limit_per_user) {
+                    $Carts[$pid]['Cart']['num'] = $limit_per_user;
                 }
 
 			}
