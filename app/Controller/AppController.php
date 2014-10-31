@@ -550,7 +550,7 @@ class AppController extends Controller {
                 'joins' => array(array(
                     'table' => 'orders',
                     'alias' => 'Order',
-                    'type' => 'left',
+                    'type' => 'inner',
                     'conditions' => array('Order.id=Cart.order_id', 'Order.status != '.ORDER_STATUS_CANCEL),
                 )),
                 'conditions' => array('Cart.order_id > 0', 'Cart.product_id' => $pid, 'Cart.deleted' => 0)));
