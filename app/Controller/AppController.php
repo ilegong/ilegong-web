@@ -376,9 +376,7 @@ class AppController extends Controller {
             if ($limit_per_user) {
                 $this->set('limit_per_user', $limit_per_user);
             }
-            if ($total_left >= 0) {
-                $this->set('total_left', $total_left);
-            }
+            $this->set('total_left', $total_left);
             $this->set('afford_for_curr_user', $afford_for_curr_user);
         }
     }
