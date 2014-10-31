@@ -25,11 +25,12 @@
         </div>
         {{/if}}
 
-        {{if $total_left > 0 && $afford_for_curr_user }}
+        {{if ($total_left > 0 || $total_left == -1) && $afford_for_curr_user }}
 
+        {{if $total_left > 0}}
         <div class="voffset3">
             <p>剩余<span class="text-danger">{{$total_left}}</span>件！</p>
-        </div>
+        </div> {{/if}}
 
         <div id="productinfo" class="clearfix voffset2" style="padding-bottom:10px;">
             {{if $limit_per_user == 1}}
