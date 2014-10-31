@@ -553,11 +553,22 @@ class AppController extends Controller {
 
                 $ordersModel = ClassRegistry::init('Order');
                 $order_ids = $ordersModel->find('list', array(
-                    'conditions' => array('brand_id' => ShipPromotion::QUNAR_MI_299_BRAND_ID, 'deleted' => 0, 'published' => 1, 'creator' => $currUid),
+                    'conditions' => array('brand_id' => ShipPromotion::QUNAR_MI_299_BRAND_ID,
+                        'deleted' => 0,
+                        'published' => 1,
+                        'creator' => $currUid,
+                        'not' => array('status' => array(ORDER_STATUS_CANCEL))
+                    ),
                     'fields' => array('id', 'id')
                 ));
                 if (!empty($order_ids)) {
                     $c = $cartModel->find('count', array(
+//                        'joins' => array(
+//                            'table' => 'orders',
+//                            'alias' => 'Order',
+//                            'type' => 'inner',
+//                            'conditions' => array('Order.id=Cart.order_id'),
+//                        ),
                         'conditions' => array('order_id' => $order_ids, 'product_id' => $pid, 'deleted' => 0)
                     ));
                     if ($c > 0) {
