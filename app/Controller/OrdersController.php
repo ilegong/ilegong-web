@@ -76,14 +76,23 @@ class OrdersController extends AppController{
 			$Carts = array();
 			foreach($products as $p){
                 $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($p['Product']['id'], $shipPromotionId) : array();
+                $pid = $p['Product']['id'];
+                list($afford_for_curr_user, $limit_per_user) = AppController::affordToUser($pid, $this->currentUser['id']);
+                if (!$afford_for_curr_user) {
+                    $this->__message(__($Carts[$pid]['name'].'已售罄或您已经购超限，请从购物车中删除后再结账'), '/orders/info', 5);
+                    return;
+                } else if ($limit_per_user > 0 && $nums[$p['Product']['id']] > $limit_per_user) {
+                    $nums[$p['Product']['id']] = $limit_per_user;
+                }
 				$Cart = array('Cart'=>array(
 						'product_id'=> $p['Product']['id'],
 						'name'=> $p['Product']['name'],
 						'coverimg'=> $p['Product']['coverimg'],
-                         'num' => ($p['Product']['id'] != ShipPromotion::QUNAR_PROMOTE_ID && $nums[$p['Product']['id']]) ? $nums[$p['Product']['id']] : 1,
+                         'num' =>  $nums[$p['Product']['id']],
 						'creator'=> $this->currentUser['id'],
                         'price'=> empty($pp)? $p['Product']['price'] : $pp['price'],
                 ));
+
 
 				$this->Cart->create();
 				if($this->Cart->save($Cart)){
@@ -141,7 +150,7 @@ class OrdersController extends AppController{
                     $this->__message(__($Carts[$pid]['name'].'已售罄或您已经购超限，请从购物车中删除后再结账'), '/orders/info', 5);
                     return;
                 } else if ($limit_per_user > 0 && $Carts[$pid]['Cart']['num'] > $limit_per_user) {
-                    $Carts[$pid]['Cart']['num'] = $limit_per_user;
+                    $this->__message(__($Carts[$pid]['name'].'购买超限，请从购物车中删除后再结账'), '/orders/info', 5);
                 }
 
 			}
