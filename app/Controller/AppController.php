@@ -578,6 +578,9 @@ class AppController extends Controller {
                 $limit_per_user = 1;
             }
             $total_left =  ShipPromotion::QUNAR_MI_299_TOTAL_LIMIT - $soldCnt;
+            if ($total_left < 0 ) {
+                $total_left = 0;
+            }
         }
 
         return array($afford_for_curr_user, $limit_per_user, $total_left);
