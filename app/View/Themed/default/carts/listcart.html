@@ -58,12 +58,12 @@ rs_callbacks.editCartNum = function(request,moreags){
 	//alert(moreags.id);
 }
 function editCartNum(id,num){
-	$('#price-'+id).html( $('#pamount-'+id).data('price')*num );
+	$('#price-'+id).html(utils.toFixed($('#pamount-'+id).data('price')*num, 2));
 	var total_price =0 ;
 	$('.item-price').each(function(){
-		total_price += parseInt($(this).html());
+		total_price += parseFloat($(this).html());
 	});
-	$('#total-price').html(total_price);
+	$('#total-price').html(utils.toFixed(total_price, 2));
 	var url=BASEURL+'/carts/editCartNum/'+id+'/'+num;	
 	// var postdata = {'data[Cart][num]':num,'data[Cart][product_id]':id};
 	if(!sso.check_userlogin({"callback":editCartNum,"callback_args":arguments}))
@@ -81,7 +81,7 @@ function editCartNum(id,num){
 {{loop $Carts $cart}}
 <tr><td>{{$cart['Cart']['name']}}</td>
 <td>{{$this->Html->image(Router::url($cart['Cart']['coverimg']))}}</td>
-<td>{{$cart['Cart']['price']}}</td>
+<td>{{$this->Number->precision($cart['Cart']['price'], 2)}}</td>
 <td>
 <div class="input-group" style="float:left;width:120px;">
 <span class="reduce input-group-addon" onclick="setAmount.reduce('#pamount-{{$cart['Cart']['id']}}')">-</span>
@@ -89,12 +89,12 @@ function editCartNum(id,num){
 <span class="add input-group-addon" onclick="setAmount.add('#pamount-{{$cart['Cart']['id']}}')">+</span>
 </div>
 </td>
-<td><span class="item-price" id="price-{{$cart['Cart']['id']}}">{{$cart['Cart']['price']*$cart['Cart']['num']}}</span></td>
+<td><span class="item-price" id="price-{{$cart['Cart']['id']}}">{{$this->Number->precision($cart['Cart']['price']*$cart['Cart']['num'], 2)}}</span></td>
 <td>{{$this->Html->link(__('delete'),Router::url('/carts/delete/'.$cart['Cart']['id']))}}</td>
 </tr>
 {{/loop}}
 <thead>
-<tr><td colspan="6">总价：<span id="total-price">{{$total_price}}</span> <input class="btn btn-primary" type="submit"  value="结算" /></td></tr>
+<tr><td colspan="6">总价：<span id="total-price">{{$this->Number->precision($total_price, 2)}}</span> <input class="btn btn-primary" type="submit"  value="结算" /></td></tr>
 </thead>
 </table>
 

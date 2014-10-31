@@ -32,17 +32,26 @@
         .voffset8 { margin-top: 100px; }
         .voffset9 { margin-top: 150px; }
 
+        .text-price {
+            color: #c71673;
+            font-size: 24px;
+        }
+
+        .text-price-small {
+            color: #c71673;
+            font-size: 14px;
+        }
+
+        .text-original-price-small {
+            text-decoration: line-through;
+            color: #888;
+        }
+
     </style>
 
-    {{$this->Html->css(array('font-awesome.min.css',
-    'ui-customer',))}}
+    {{$this->Html->css(array('font-awesome.min.css','ui-customer',))}}
     {{$this->Html->script(array(
     'http://libs.baidu.com/jquery/1.9.1/jquery.min.js',
-    'jquery/jquery.cookie.js',
-    'i18n/language-zh-CN.js',
-    'bootstrap.min.js',
-    'front.js',
-    'common.js',
     //'jquery/jquery-migrate-1.2.1.min.js',
     //'taobao/taobaoke.js','jquery/jquery.masonry.min.js','jquery/jquery.infinitescroll.min.js',
     //'jquery/jquery.jgrowl.min.js'
@@ -54,12 +63,48 @@
     ))}}
     {{$this->Html->script(array('jquery/jquery-migrate-1.2.1.min.js'))}}
     <![endif]-->
-
     <script type="text/javascript">
         var BASEURL = "{{APP_SUB_DIR}}";
         var ADMIN_BASEURL = BASEURL+"/manage";
+        var _pys_in_weixin = "{{$in_weixin}}";
         var _pys_notify_img_url = '{{$this->Html->url("/img/progress_notify.gif")}}';
     </script>
+    <script type="text/javascript">
+        //<![CDATA[
+        // for debugging javascript!
+        (function (window) {
+            window.onerror = function (msg, url, ln) {
+                //transform errors
+                if (typeof(msg) === 'object' && msg.srcElement && msg.target) {
+                    if (msg.srcElement == '[object HTMLScriptElement]' && msg.target == '[object HTMLScriptElement]') {
+                        msg = 'Error loading script';
+                    } else {
+                        msg = 'Event Error - target:' + msg.target + ' srcElement:' + msg.srcElement;
+                    }
+                }
+
+                msg = msg.toString();
+
+                //ignore errors
+                if (msg.indexOf("Location.toString") > -1) {
+                    return;
+                }
+                if (msg.indexOf("Error loading script") > -1) {
+                    return;
+                }
+
+                //report errors
+                window.onerror = function () {
+                };
+                (new Image()).src = "/jserror?msg=" + encodeURIComponent(msg) + "&url=" + encodeURIComponent(url || document.location.toString().replace(/#.*$/, "")) + "&ln=" + parseInt(ln || 0) + "&r=" + (+new Date());
+            };
+        })(window);
+        //]]>
+    </script>
+    <noscript>
+        {{$this->Html->css(array('3g.css',));}}
+        请开启您浏览器的JavaScript选项
+    </noscript>
 </head>
 <body>
 
@@ -92,14 +137,26 @@ echo "<div class=\"container\">$flash_msg</div>";
 
 {{template Elements/footer}}
 
-{{$this->Html->script(array('bootstrap.min.js','bootbox/bootbox.min.js', 'common.js?v4','front.js','front_orders.js?v1'));
-}}
-{{$this->Html->scriptStart(array('block' => 'scriptBottom'));}}
-if (bootbox) {
-bootbox.setDefaults({
-locale: "zh_CN"
-});
-}
-{{$this->Html->scriptEnd()}}
-<!-- helper中追加的底部脚本 $this->_View->append('bottomscript',$script);-->
+{{$this->Html->script(array('jquery/jquery.cookie.js', 'jquery/jquery.lazyload.min.js', 'i18n/language-zh-CN.js','bootstrap.min.js','bootbox/bootbox.min.js', 'common.js?v4','front.js','front_orders.js?v1'));}}
+<script>
+    if (bootbox) {
+        bootbox.setDefaults({
+            locale: "zh_CN"
+        });
+    }
+</script>
 {{$this->fetch('bottomscript')}}
+<script type="text/javascript">
+    $("img.lazy").lazyload({
+        placeholder : "/img/grey.gif",
+        effect: "fadeIn",
+        threshold : 100
+    });
+    $('#to-top').click(function() { $('html,body').animate({ scrollTop: 0 }, 1000); });
+
+    if (typeof(updateCartItemCount) === 'function') {
+        updateCartItemCount();
+    }
+</script>
+</body>
+</html>

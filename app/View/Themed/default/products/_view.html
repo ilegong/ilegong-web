@@ -76,10 +76,20 @@ var setAmount={
 	    <div  id="productinfo">
 	    {{template Elements/images_zoom}}
 	    <ul style="float:left;margin-left: 10px;display: inline;margin-top: 20px;">
-            <li>价格： <span style="font-size:24px; color: rgb(241, 151, 51);">￥{{$this->Number->precision($Product['Product']['price'], 2)}}</span></li>
             {{if $Product['Product'][promote_name] }}
             <li>{{$Product['Product'][promote_name]}}</li>
             {{/if}}
+
+            <li class="voffset2">价格： <span style="font-size:24px; color: rgb(241, 151, 51);">￥{{$this->Number->precision($Product['Product']['price'], 2)}}</span>
+                {{if !empty($Product['Product']['original_price'])}}
+                <span class="text-original-price-small">¥{{$this->Number->precision($Product['Product']['original_price'], 2)}}</span>
+                {{/if}}
+            </li>
+
+            <li>
+               <span class="vertical-align">快递：{{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</span>
+            </li>
+
             <li>
             <div class="input-group" style="float:left;width:120px;">
 			  <span class="reduce input-group-addon" onclick="setAmount.reduce('#pamount')">-</span>

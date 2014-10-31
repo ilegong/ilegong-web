@@ -51,9 +51,10 @@ class OrdersController extends AppController{
 		$product_ids = array();
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
         $this->loadModel('ShipPromotion');
+
+        $nums = array();
 		if(!empty($_COOKIE['cart_products'])){
-			
-			$nums = array();
+
 			$info = explode(',',$_COOKIE['cart_products']);
 			foreach($info as $item){
 				list($id,$num) = explode(':',$item);
@@ -112,11 +113,13 @@ class OrdersController extends AppController{
 			foreach($Carts_tmp as $c){
 				$product_ids[]=$c['Cart']['product_id'];
 				$Carts[$c['Cart']['product_id']] = $c;
+                $nums[$c['Cart']['product_id']] = $c['Cart']['num'];
 			}
 			$products = $this->Product->find('all',array('conditions'=>array(
 					'id' => $product_ids
 			)));
 		}
+
 		if(empty($Carts)){
 			$this->Session->setFlash('订单金额错误，请返回购物车查看');
 			$this->redirect('/');
@@ -125,14 +128,15 @@ class OrdersController extends AppController{
         $ship_fees = array();
 		$business = array();
 		foreach($products as $p){
+            $pid = $p['Product']['id'];
 			if(isset($business[$p['Product']['brand_id']])){
-				$business[$p['Product']['brand_id']][] = $p['Product']['id'];
+                $business[$p['Product']['brand_id']][] = $pid;
 			}
 			else{
-				$business[$p['Product']['brand_id']] = array($p['Product']['id']);
+				$business[$p['Product']['brand_id']] = array($pid);
 			}
             $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($p['Product']['id'], $shipPromotionId) : array();
-            $ship_fees[$p['Product']['id']] = empty($pp) ? $p['Product']['ship_fee'] : $pp['ship_price'];
+            $ship_fees[$pid] = (empty($pp) ? $p['Product']['ship_fee'] : $pp['ship_price']);
 		}
 
         $new_order_ids = array();
@@ -229,10 +233,10 @@ class OrdersController extends AppController{
         $shipFee = 0.0;
 		$this->loadModel('Cart');
 	    $product_ids = array();
+        $nums = array();
 		if(empty($order_id)){
             $this->loadModel('ShipPromotion');
 			if(!empty($_COOKIE['cart_products'])){
-				$nums = array();
 				$info = explode(',',$_COOKIE['cart_products']);
 				foreach($info as $item){
 					list($id,$num) = explode(':',$item);
@@ -247,7 +251,8 @@ class OrdersController extends AppController{
 				)));
 				$Carts = array();
 				foreach($products as $p){
-                    $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($p['Product']['id'], $shipPromotionId) : array();
+                    $pid = $p['Product']['id'];
+                    $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
                     if ($_REQUEST['action'] == 'savePromo' && !empty($pp)) {
                         $consignee = array();
                         $consignee['name'] = trim($_REQUEST['consignee_name']);
@@ -257,16 +262,17 @@ class OrdersController extends AppController{
                         $has_chosen_consignee = true;
                     }
 
-					$Carts[] = array(
+                    $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $nums[$pid]) ? $nums[$pid] : 1;
+                    $Carts[] = array(
 							'Cart'=>array(
-									'product_id'=> $p['Product']['id'],
+									'product_id'=> $pid,
 									'name'=> $p['Product']['name'],
 									'coverimg'=> $p['Product']['coverimg'],
-									'num'=> ($p['Product']['id'] != ShipPromotion::QUNAR_PROMOTE_ID && $nums[$p['Product']['id']])?$nums[$p['Product']['id']]:1,
+									'num'=> $num,
 									'price'=> empty($pp)? $p['Product']['price'] : $pp['price'],
 					));
 
-                    $shipFee += empty($pp)? $p['Product']['ship_fee'] : $pp['ship_price'];
+                    $shipFee += (empty($pp)? $p['Product']['ship_fee'] : $pp['ship_price']);
 				}
 			}
 			else{
@@ -278,7 +284,23 @@ class OrdersController extends AppController{
 						'order_id' => null,
 						'OR'=> $this->user_condition
 				)));
+
+                foreach($Carts as $cart) {
+                    $nums[$cart['Cart']['product_id']] = $cart['Cart']['num'];
+                }
+
                 $product_ids = array_map(function($val){ return $val['Cart']['product_id']; }, $Carts);
+
+                $this->loadModel('Product');
+                $products = $this->Product->find('all',array('conditions'=>array(
+                    'id' => $product_ids
+                )));
+                foreach($products as $p){
+                    $pid = $p['Product']['id'];
+                    $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
+                    $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $nums[$pid]) ? $nums[$pid] : 1;
+                    $shipFee += (empty($pp)? $p['Product']['ship_fee'] : $pp['ship_price']);
+                }
 			}
 
 			$current_consignee = $this->Session->read('OrderConsignee');
