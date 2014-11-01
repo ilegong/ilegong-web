@@ -33,7 +33,9 @@
     $full = $tagWithProduct['ProductTag']['id'] == 1;
     if(count($tagWithProduct['Products'])>0){ ?>
 
+           {{if !full}}
         <h3 class="items-tag"><a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}">{{$tagWithProduct['ProductTag']['name']}} &gt;</a></h3>
+            {{/if}}
 	    <?PHP foreach($tagWithProduct['Products'] as $item) {
 		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
 	    ?>	
