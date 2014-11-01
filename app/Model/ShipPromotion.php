@@ -11,9 +11,6 @@ class ShipPromotion extends AppModel {
 
     const QUNAR_PROMOTE_BRAND_ID = 61;
     const QUNAR_PROMOTE_ID = 222;
-    const QUNAR_MI_299_ID = 228;
-    const QUNAR_MI_299_BRAND_ID = 13;
-    const QUNAR_MI_299_TOTAL_LIMIT = 100;
 
     public $useTable = false;
 
@@ -52,6 +49,15 @@ class ShipPromotion extends AppModel {
         )
     )
     );
+
+    private  $pro_num_limit = array(
+        //total_limit(0 means none), brand_id, per_user_limit (0 means none)
+        '228' => array(100, 13, 1),
+        '229' => array(70, 13, 1)
+    );
+    public function findNumberLimitedPromo($pid) {
+        return $this->pro_num_limit[$pid];
+    }
 
     public function find_ship_promotion($productId, $promotionId) {
         list($limit_ship, $promotion) = $this->find_ship_promotion_limit($productId, $promotionId);

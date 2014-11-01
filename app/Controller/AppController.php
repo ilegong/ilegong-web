@@ -538,49 +538,52 @@ class AppController extends Controller {
      */
     public static function affordToUser($pid, $currUid) {
         $afford_for_curr_user = true;
-        $limit_per_user = 0;
         $total_left = -1;
         $cartModel = ClassRegistry::init('Cart');
         ClassRegistry::init('ShipPromotion');
         if ($pid == ShipPromotion::QUNAR_PROMOTE_ID) {
             $afford_for_curr_user = false;
             return array($afford_for_curr_user, 0);
-        } else if ($pid == ShipPromotion::QUNAR_MI_299_ID) {
-            $soldCnt = $cartModel->find('count', array(
-                'joins' => array(array(
-                    'table' => 'orders',
-                    'alias' => 'Order',
-                    'type' => 'inner',
-                    'conditions' => array('Order.id=Cart.order_id', 'Order.status != '.ORDER_STATUS_CANCEL),
-                )),
-                'conditions' => array('Cart.order_id > 0', 'Cart.product_id' => $pid, 'Cart.deleted' => 0)));
-            if ($soldCnt > ShipPromotion::QUNAR_MI_299_TOTAL_LIMIT) {
-                $afford_for_curr_user = false;
-            } else {
+        } else {
 
-                $ordersModel = ClassRegistry::init('Order');
-                $order_ids = $ordersModel->find('list', array(
-                    'conditions' => array('brand_id' => ShipPromotion::QUNAR_MI_299_BRAND_ID,
-                        'deleted' => 0,
-                        'published' => 1,
-                        'creator' => $currUid,
-                        'not' => array('status' => array(ORDER_STATUS_CANCEL))
-                    ),
-                    'fields' => array('id', 'id')
-                ));
-                if (!empty($order_ids)) {
-                    $c = $cartModel->find('count', array(
-                        'conditions' => array('order_id' => $order_ids, 'product_id' => $pid, 'deleted' => 0)
+            list($total_limit, $brand_id, $limit_per_user) = ClassRegistry::init('ShipPromotion')->findNumberLimitedPromo($pid);
+            if ($total_limit != 0  || $limit_per_user != 0) {
+                $soldCnt = $cartModel->find('count', array(
+                    'joins' => array(array(
+                        'table' => 'orders',
+                        'alias' => 'Order',
+                        'type' => 'inner',
+                        'conditions' => array('Order.id=Cart.order_id', 'Order.status != '.ORDER_STATUS_CANCEL),
+                    )),
+                    'conditions' => array('Cart.order_id > 0', 'Cart.product_id' => $pid, 'Cart.deleted' => 0)));
+                if ($soldCnt > $total_limit) {
+                    $afford_for_curr_user = false;
+                } else {
+
+                    $ordersModel = ClassRegistry::init('Order');
+                    $order_ids = $ordersModel->find('list', array(
+                        'conditions' => array('brand_id' => $brand_id,
+                            'deleted' => 0,
+                            'published' => 1,
+                            'creator' => $currUid,
+                            'not' => array('status' => array(ORDER_STATUS_CANCEL))
+                        ),
+                        'fields' => array('id', 'id')
                     ));
-                    if ($c > 0) {
-                        $afford_for_curr_user = false;
+                    if (!empty($order_ids)) {
+                        $c = $cartModel->find('count', array(
+                            'conditions' => array('order_id' => $order_ids, 'product_id' => $pid, 'deleted' => 0)
+                        ));
+                        if ($c > 0) {
+                            $afford_for_curr_user = false;
+                        }
                     }
+                    $limit_per_user = 1;
                 }
-                $limit_per_user = 1;
-            }
-            $total_left =  ShipPromotion::QUNAR_MI_299_TOTAL_LIMIT - $soldCnt;
-            if ($total_left < 0 ) {
-                $total_left = 0;
+                $total_left =  $total_limit - $soldCnt;
+                if ($total_left < 0 ) {
+                    $total_left = 0;
+                }
             }
         }
 
