@@ -1,44 +1,55 @@
-<div class="col-xs-6" style="height:190px;overflow:hidden;">
-	<div class="photo-item">
+	<div class="{{if $full }}photo-item-rec{{else}}photo-item{{/if}}">
 	{{if $top_category_id==114 || $top_category_id==124 || $withBrandInfo }}
-     <a href="{{$this->Html->url('/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}" class="thumbnail {{if date('Y-m-d H:i:s')>$item['end_time'] && $item['end_time']>0}}no-shopping{{else}}no-shopping{{/if}}" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
+     <a href="{{$this->Html->url('/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}" class="thumbnail {{if date('Y-m-d H:i:s')>$item['end_time'] && $item['end_time']>0}}no-shopping{{else}}no-shopping{{/if}}" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
          {{eval echo $this->Html->image($item['coverimg'], 
 			array(
 			'alt' => $item['title'],'title' => $item['name'],
 			'onerror'=>'this.src="/img/products_nophoto.jpg";',
 			)); }}
-         <!-- <div class="select-item" style="display: none;">
-			<p><span class="glyphicon glyphicon-ok" style="color:#5e8a2f; font-size:22px;"></span>已选</p>
-	 	 </div>  -->
      </a>
-     <div class="text-left clearfix">
 
-         <div class="pull-left col-xs-3"><a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html')}}">
-         {{$this->Html->image($brands[$item['brand_id']]['Brand']['coverimg'], array(
-             'class' => 'img-circle',
-             'style' => 'width:36px; height:36px'
-             ));}}
-         </a></div>
-         <div class="pull-right col-xs-9">
-              	{{eval echo $this->Html->link(usubstr($item['name'],0,10,''),
-			'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
-			array('title'=>$item['title']));
-		}}  <br/>
-         {{$this->Html->link($brands[$item['brand_id']]['Brand']['name'], '/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html');}}
-             <br>
-             <div class="clearfix">
-             <span class="food-info pull-left text-price-small">
-                 <strong>¥{{$this->Number->precision($item['price'], 2)}}</strong>
-             </span>
-              {{if !empty($item['original_price'])}}
-              <span class="pull-right text-original-price-small">
-                    ¥{{$this->Number->precision($item['original_price'], 2)}}
-              </span>
-              {{/if}}
-             </div>
-         </div>
-
+        {{if $full }}
+     <div class="item-banner">
+         <a class="col-xs-2" href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html')}}">
+             {{$this->Html->image($brands[$item['brand_id']]['Brand']['coverimg'], array('class' => 'img-rounded'));}}
+         </a>
+         <a href="{{'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'}}">
+             <span class="item-name">{{usubstr($item['name'],0, 12,'')}}</span>
+             <span class="item-brand-name">{{$brands[$item['brand_id']]['Brand']['name']}}</span>
+         </a>
+        <span style="display: inline-block">
+         <span class="item-price">
+             <strong>¥{{$this->Number->precision($item['price'], 2)}}</strong>
+         </span>
+        {{if !empty($item['original_price'])}}
+        <span class="item-price-original">¥{{$this->Number->precision($item['original_price'], 2)}}</span>
+        {{/if}}
+        </span>
      </div>
+        {{else}}
+
+    <div class="item-banner-small">
+        <a href="{{'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'}}" class="item-name">{{usubstr($item['name'],0,10,'')}}</a>
+
+        <a class="col-xs-3" href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html')}}">
+            {{$this->Html->image($brands[$item['brand_id']]['Brand']['coverimg'], array('class' =>
+            'img-rounded'));}}
+        </a>
+
+
+    <span style="display: inline-block">
+     <span class="item-brand-name">{{usubstr($brands[$item['brand_id']]['Brand']['name'], 0, 8, '')}}</span>
+     <span class="item-price">
+         <strong>¥{{$this->Number->precision($item['price'], 2)}}</strong>
+     </span>
+    {{if !empty($item['original_price'])}}
+    <span class="item-price-original">¥{{$this->Number->precision($item['original_price'], 2)}}</span>
+    {{/if}}
+    </span>
+    </div>
+    {{/if}}
+
+
      {{else}}
      	<a href="<?php echo '/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'; ?>" class="thumbnail-noclick" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
          {{eval echo $this->Html->image($item['coverimg'], 
@@ -55,4 +66,3 @@
 	     </div>
      {{/if}}
    </div>
- </div>

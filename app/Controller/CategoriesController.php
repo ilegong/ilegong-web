@@ -75,14 +75,15 @@ class CategoriesController extends AppController {
         $this->set('navigations', $navigation);
         $this->set('data_list', $productList);
         $this->set('withBrandInfo', true);
+
+        if ($this->RequestHandler->isMobile()) {
+            $this->layout = 'newv1';
+        }
+
+        $this->set('op_cate', 'categories');
     }
 
     public function productsHome() {
-
-        if ($this->is_pengyoushuo_com_cn()){
-            $this->view();
-            return;
-        }
 
         $current_cateid = CATEGORY_ID_TECHAN;
         $page = 1;
@@ -152,6 +153,11 @@ class CategoriesController extends AppController {
         $this->set('tagsWithProducts', $productTags);
         $this->set('withBrandInfo', true);
         $this->set('category_control_name', 'products');
+
+        if ($this->RequestHandler->isMobile()) {
+            $this->layout = 'newv1';
+        }
+        $this->set('op_cate', 'home');
     }
 
     public function view($slug='/', $brand_id='') {

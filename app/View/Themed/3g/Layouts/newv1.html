@@ -1,0 +1,284 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="apple-touch-icon" href="{{$this->Html->url('/img/logo_mini.png')}}" />
+    <title>{{$pageTitle}}-{{$site['title']}}</title>
+    <?PHP echo $this->Combinator->less(); ?>
+    {{$this->Html->css(array('layout_3g.css?ver1',));}}
+    <style>
+        body.modal-open {
+            margin-right: 0;
+        }
+    </style>
+    {{$this->Html->script(array(
+    'http://libs.baidu.com/jquery/1.9.1/jquery.min.js',
+    'jquery/jquery.cookie.js','i18n/language-zh-CN.js'));}}
+    <script type="text/javascript">
+        var BASEURL = "{{APP_SUB_DIR}}";
+        var ADMIN_BASEURL = BASEURL+"/manage";
+        var _pys_in_weixin = "{{$in_weixin}}";
+        var _pys_notify_img_url = '{{$this->Html->url("/img/progress_notify.gif")}}';
+    </script>
+    <script type="text/javascript">
+        //<![CDATA[
+        // for debugging javascript!
+        (function (window) {
+            window.onerror = function (msg, url, ln) {
+                //transform errors
+                if (typeof(msg) === 'object' && msg.srcElement && msg.target) {
+                    if (msg.srcElement == '[object HTMLScriptElement]' && msg.target == '[object HTMLScriptElement]') {
+                        msg = 'Error loading script';
+                    } else {
+                        msg = 'Event Error - target:' + msg.target + ' srcElement:' + msg.srcElement;
+                    }
+                }
+
+                msg = msg.toString();
+
+                //ignore errors
+                if (msg.indexOf("Location.toString") > -1) {
+                    return;
+                }
+                if (msg.indexOf("Error loading script") > -1) {
+                    return;
+                }
+
+                //report errors
+                window.onerror = function () {
+                };
+                (new Image()).src = "/jserror?msg=" + encodeURIComponent(msg) + "&url=" + encodeURIComponent(url || document.location.toString().replace(/#.*$/, "")) + "&ln=" + parseInt(ln || 0) + "&r=" + (+new Date());
+            };
+        })(window);
+        //]]>
+    </script>
+    <noscript>
+        {{$this->Html->css(array('3g.css',));}}
+        请开启您浏览器的JavaScript选项
+    </noscript>
+</head>
+<body>
+
+        {{if !noFlash }}
+        <div class="container">
+            {{$this->Session->flash()}}
+        </div>
+        {{/if}}
+        {{$content_for_layout}}
+
+        {{template Elements/footer}}
+
+        <style>
+            .navbar-v1 {
+                font-size: 1em;
+                color: #666666;
+                background-color: #f1f1f1;
+                border-top: 1px #dddddd solid;
+                height: 4.0417em;
+                padding-top: 0.4em;
+            }
+
+            .navbar-v1 a .op-icon {
+                background: url('/img/mobilev1/pyshuo_icon.png') 0 0 no-repeat;
+                width:1.9167em;
+                height:1.5em;
+                background-size:25em 25em;
+                display: inline-block;
+                vertical-align: text-bottom;
+            }
+
+            .navbar-v1 ul {
+                text-align: center;
+            }
+
+            .navbar-v1 li {
+                width: 18.0%;
+            }
+
+            .navbar-v1 a span {
+                display: block;
+            }
+
+            .navbar-v1 .active {
+                color: #29ac0e;
+            }
+
+            .navbar-v1 .home .op-icon {
+                background-position: 0 -2.083em;
+            }
+
+            .navbar-v1 .home .op-icon-active {
+                background-position: 0 0;
+            }
+
+            .navbar-v1 .categories .op-icon {
+                background-position: -2.083em  -2.083em;
+            }
+
+            .navbar-v1 .categories .op-icon-active {
+                background-position: -2.083em 0;
+            }
+
+            .navbar-v1 .share .op-icon {
+                background-position: -4.167em  -2.083em;
+            }
+            .navbar-v1 .share .op-icon-active {
+                background-position: -4.167em  0;
+            }
+
+            .navbar-v1 .shichituan .op-icon {
+                background-position: -6.25em  -2.083em;
+            }
+            .navbar-v1 .shichituan .op-icon-active {
+                background-position: -6.25em  0;
+            }
+
+            .navbar-v1 .me .op-icon {
+                background-position: -8.333em  -2.083em;
+            }
+
+            .navbar-v1 .me .op-icon-active {
+                background-position: -8.333em 0;
+            }
+
+            h3.items-tag {
+                margin:0 0.833em 0.625em 0.833em;
+            }
+
+            h3.items-tag a {
+                font-size: 1.417em;
+                color: #29ac0e;
+            }
+
+            .photo-item {
+                width: 49.0%;
+            }
+
+            div.photo-item {
+                display: inline-block;
+                /*margin:0 0.433em 1.75em 0.433em;*/
+                padding:0 0.433em 1.75em 0.433em;
+                border:none;
+            }
+
+            .photo-item-rec {
+                margin:0 0.833em 1em 0.833em;
+            }
+
+            .photo-item .thumbnail, .photo-item .thumbnail img, .photo-item-rec .thumbnail, .photo-item-rec .thumbnail img, .photo-item-rec .thumbnail-noclick img {
+                max-height: 100%;
+                margin-bottom: 0;
+                padding: 0;
+            }
+
+            .item-banner {
+                padding: 0.833em 0.833em;
+                background-color: #eeeeee;
+            }
+
+            .item-banner a {
+                /*display: inline-block;*/
+            }
+
+            .item-banner span {
+                display: block;
+            }
+
+            .item-banner img, .item-banner-small img {
+                width: 2.708em;
+                height: 2.708em;
+            }
+
+            .item-banner .item-name {
+                font-size: 1.25em;
+                color: #333333;
+            }
+
+            .item-banner .item-brand-name {
+                font-size: 1em;
+                color: #999999;
+            }
+
+            .item-banner .item-price {
+                font-size: 1.25em;
+                color: #ffa200;
+                display: inline;
+            }
+
+            .item-banner .item-price-original {
+                font-size: 1em;
+                color: #999999;
+                display: inline;
+            }
+
+            /*
+
+             商品名称:          字号1em(24px)     颜色#333333
+分享人名称:        字号0.833em(20px)     颜色#999999
+价格:              字号 1.25em(30px)    颜色#ffa200
+市场价:            字号0.833em(20px)     颜色#999999
+
+
+            */
+
+            .item-banner-small {
+
+            }
+
+            .item-banner-small .item-name {
+                display: block;
+                font-size: 1em;
+                color: #333333;
+            }
+
+            .item-banner-small .item-brand-name {
+                display: block;
+                font-size: 0.833em;
+                color: #999999;
+            }
+
+            .item-banner-small .item-price {
+                display: inline-block;
+                font-size: 1.25em;
+                color: #ffa200;
+            }
+
+            .item-banner-small .item-price-original {
+                display: inline-block;
+                font-size: 0.833em;
+                color: #999999;
+            }
+
+            /*.btn-buy {*/
+                /*width: 6.875em;*/
+                /*height: 2.5em;*/
+                /*background-color: #ffa531;*/
+            /*}*/
+
+            /*.btn-buy a:hover {*/
+                /*background-color:#dd3c0a*/
+            /*}*/
+
+            /*预售:          字号: 1.25em(30px)    颜色#ffffff*/
+        </style>
+
+        <div class="navbar-fixed-bottom navbar-v1" style="margin-bottom:0;">
+            <div class="container">
+                <ul class="list-inline">
+                    <li><a class="home {{if $op_cate == 'home'}}active{{/if}}" href="/techan.html"><span class="op-icon {{if $op_cate == 'home'}}op-icon-active{{/if}}"></span><span>热卖</span></a></li>
+                    <li><a class="categories {{if $op_cate == 'categories'}}active{{/if}}" href="javascript:;"><span class="op-icon {{if $op_cate == 'categories'}}op-icon-active{{/if}}"></span><span>分类</span></a></li>
+                    <li><a class="share" href="/share.html"><span class="op-icon"></span><span>分享圈</span></a></li>
+                    <li><a class="shichituan" href="/shichituan.html"><span class="op-icon"></span><span>试吃团</span></a></li>
+                    <li><a class="me {{if $op_cate == 'me'}}active{{/if}}" href="/users/me.html"><span class="op-icon {{if $op_cate == 'me'}}op-icon-active{{/if}}"></span><span>我的</span></a></li>
+                </ul>
+            </div>
+        </div>
+{{$this->fetch('scriptBottom')}}
+</body>
+</html>

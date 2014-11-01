@@ -47,6 +47,7 @@ class UsersController extends AppController {
     		}
     	}
     	$this->Auth->allowedActions = array('register','login','forgot','captcha','reset', 'wx_login', 'wx_auth', 'wx_menu_point', 'login_state');
+        $this->set('op_cate', 'me');
     }
 
     function captcha() {
@@ -562,6 +563,12 @@ class UsersController extends AppController {
     function after_bind_relogin() {
         $this->logoutCurrUser();
         $this->redirect('/users/wx_login?referer=/users/bindWxSub');
+    }
+
+    function me() {
+        if ($this->RequestHandler->isMobile()) {
+            $this->layout = 'newv1';
+        }
     }
 
     /**
