@@ -55,6 +55,21 @@ class ShipPromotion extends AppModel {
         '228' => array(100, 13, 1),
         '229' => array(70, 13, 1)
     );
+
+    /**
+     * @param $pid
+     * @param $singleShipFee
+     * @param $num
+     * @param $area
+     * @return mixed
+     */
+    public static function calculateShipFee($pid, $singleShipFee, $num, $area) {
+        if ($pid == 231 && $num >= 2) {
+            return 0.0;
+        }
+        return $singleShipFee;
+    }
+
     public function findNumberLimitedPromo($pid) {
         return $this->pro_num_limit[$pid];
     }

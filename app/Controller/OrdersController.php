@@ -136,7 +136,8 @@ class OrdersController extends AppController{
 				$business[$p['Product']['brand_id']] = array($pid);
 			}
             $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($p['Product']['id'], $shipPromotionId) : array();
-            $ship_fees[$pid] = (empty($pp) ? $p['Product']['ship_fee'] : $pp['ship_price']);
+            $singleShipFee = empty($pp) ? $p['Product']['ship_fee'] : $pp['ship_price'];
+            $ship_fees[$pid] = ShipPromotion::calculateShipFee($pid, $singleShipFee, $nums[$pid], null);
 		}
 
         $new_order_ids = array();
@@ -272,8 +273,10 @@ class OrdersController extends AppController{
 									'price'=> empty($pp)? $p['Product']['price'] : $pp['price'],
 					));
 
-                    $shipFee += (empty($pp)? $p['Product']['ship_fee'] : $pp['ship_price']);
+                    $singleShipFee = (empty($pp)? $p['Product']['ship_fee'] : $pp['ship_price']);
+                    $shipFee += ShipPromotion::calculateShipFee($pid, $singleShipFee, $num, null);
 				}
+
 			}
 			else{
 
@@ -299,7 +302,8 @@ class OrdersController extends AppController{
                     $pid = $p['Product']['id'];
                     $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
                     $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $nums[$pid]) ? $nums[$pid] : 1;
-                    $shipFee += (empty($pp)? $p['Product']['ship_fee'] : $pp['ship_price']);
+                    $singleShipFee = (empty($pp)? $p['Product']['ship_fee'] : $pp['ship_price']);
+                    $shipFee += ShipPromotion::calculateShipFee($pid, $singleShipFee, $num, null);
                 }
 			}
 
