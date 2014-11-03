@@ -39,12 +39,11 @@ class OrdersController extends AppController{
 			$this->user_condition['creator']=$this->currentUser['id'];
 		}
 	}
-	
-	/**
-	 * 结算提交订单，进入支付页面。
-	 * @param $order_id
-	 */
-	function balance($order_id=''){
+
+    /**
+     * 结算提交订单，进入支付页面。
+     */
+	function balance(){
 		$this->loadModel('Cart');
 		/* 保存无线端cookie购物车的商品 */
 		$this->loadModel('Product');
@@ -53,71 +52,21 @@ class OrdersController extends AppController{
         $this->loadModel('ShipPromotion');
 
         $nums = array();
-		if(!empty($_COOKIE['cart_products'])){
-
-			$info = explode(',',$_COOKIE['cart_products']);
-			foreach($info as $item){
-				list($id,$num) = explode(':',$item);
-				if($id){
-					$product_ids[] = $id;
-					$nums[$id] = $num;
-				}
-			}
-			
-			$products = $this->Product->find('all',array('conditions'=>array(
-					'id' => $product_ids
-			)));
-			/*清空购物车中的商品，将cookie信息中的商品重新加入购物车*/
-			$this->Cart->deleteAll(array(
-					'status'=> 0,
-					'order_id' => null,
-					'OR'=> $this->user_condition
-			));
-			
-			$Carts = array();
-			foreach($products as $p){
-                $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($p['Product']['id'], $shipPromotionId) : array();
-                $pid = $p['Product']['id'];
-                list($afford_for_curr_user, $limit_per_user) = AppController::affordToUser($pid, $this->currentUser['id']);
-                if (!$afford_for_curr_user) {
-                    $this->__message(__($Carts[$pid]['name'].'已售罄或您已经购超限，请从购物车中删除后再结账'), '/orders/info', 5);
-                    return;
-                } else if ($limit_per_user > 0 && $nums[$p['Product']['id']] > $limit_per_user) {
-                    $nums[$p['Product']['id']] = $limit_per_user;
-                }
-				$Cart = array('Cart'=>array(
-						'product_id'=> $p['Product']['id'],
-						'name'=> $p['Product']['name'],
-						'coverimg'=> $p['Product']['coverimg'],
-                         'num' =>  $nums[$p['Product']['id']],
-						'creator'=> $this->currentUser['id'],
-                        'price'=> empty($pp)? $p['Product']['price'] : $pp['price'],
-                ));
-
-				$this->Cart->create();
-				if($this->Cart->save($Cart)){
-					$Cart['Cart']['id'] = $this->Cart->getLastInsertID();
-					$Carts[$p['Product']['id']] = $Cart;
-				}
-			}
-		}
-		else{
-			$Carts = array();
-			$Carts_tmp = $this->Cart->find('all',array(
-					'conditions'=>array(
-							'status'=> 0,
-							'order_id' => null,
-							'OR'=> $this->user_condition
-					)));
-			foreach($Carts_tmp as $c){
-				$product_ids[]=$c['Cart']['product_id'];
-				$Carts[$c['Cart']['product_id']] = $c;
-                $nums[$c['Cart']['product_id']] = $c['Cart']['num'];
-			}
-			$products = $this->Product->find('all',array('conditions'=>array(
-					'id' => $product_ids
-			)));
-		}
+        $Carts = array();
+        $Carts_tmp = $this->Cart->find('all',array(
+                'conditions'=>array(
+                        'status'=> 0,
+                        'order_id' => null,
+                        'OR'=> $this->user_condition
+                )));
+        foreach($Carts_tmp as $c){
+            $product_ids[]=$c['Cart']['product_id'];
+            $Carts[$c['Cart']['product_id']] = $c;
+            $nums[$c['Cart']['product_id']] = $c['Cart']['num'];
+        }
+        $products = $this->Product->find('all',array('conditions'=>array(
+                'id' => $product_ids
+        )));
 
 		if(empty($Carts)){
 			$this->Session->setFlash('订单金额错误，请返回购物车查看');
@@ -142,7 +91,6 @@ class OrdersController extends AppController{
         $new_order_ids = array();
 		$hasfalse = false;
 		foreach($business as $brand_id => $busi){
-			$bs_carts = array();
 			$total_price = 0.0;
             $ship_fee = 0.0;
 			foreach($busi as $pid){
@@ -156,7 +104,6 @@ class OrdersController extends AppController{
                 } else if ($limit_per_user > 0 && $Carts[$pid]['Cart']['num'] > $limit_per_user) {
                     $this->__message(__($Carts[$pid]['name'].'购买超限，请从购物车中删除后再结账'), '/orders/info', 5);
                 }
-
 			}
 			
 			if($total_price <= 0){
@@ -201,7 +148,6 @@ class OrdersController extends AppController{
 			}
 		}
 
-		setcookie("cart_products", '',time()-3600,'/');
 		if($hasfalse == false){
 			$this->Session->setFlash('订单已生成,不同商家的商品会拆分到不同的订单，请您知悉。');
             if (count($new_order_ids) == 1) {
@@ -284,9 +230,7 @@ class OrdersController extends AppController{
             return;
 		}
 
-
-        $pModel = $this->Product;
-        $products = $pModel->findPublishedProductsByIds(array_keys($cartsByPid));
+        $products = $this->Product->findPublishedProductsByIds(array_keys($cartsByPid));
         $productByIds = Hash::combine($products, '{n}.Product.id', '{n}.Product');
         foreach($cartsByPid as $pid => $cartItem) {
             $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
