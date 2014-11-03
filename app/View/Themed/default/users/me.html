@@ -1,4 +1,9 @@
 <div class="list-group">
+    {{if $CurrentUser['is_business']}}
+    <<?php echo $this->Html->link('待发货订单', array('controller' => 'orders','action'=>'tobe_shipped_orders','plugin' => null ,), array('class' => "list-group-item")); ?>
+    <?php echo $this->Html->link('商家订单', array('controller' => 'orders','action'=>'business','plugin' => null ,), array('class' => "list-group-item")); ?>
+    <?php echo $this->Html->link('我的商品', array('controller' => 'products','action'=>'mine','plugin' => null ,), array('class' => "list-group-item")); ?>
+    {{/if}}
     <a href="{{$this->Html->url('/users/my_profile')}}" class="list-group-item">我的资料</a>
     <a href="{{$this->Html->url('/orders/mine')}}" class="list-group-item">我的订单</a>
     <a href="{{$this->Html->url('/orders/edit_consignee')}}" class="list-group-item">我的地址</a>
