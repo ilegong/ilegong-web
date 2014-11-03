@@ -73,13 +73,8 @@ td {padding:5px 10px;}
 		</td></tr>
 		{{/if}}
 		</table>
-		{{/loop}}	
-			<div class="alert alert-warning">
-			  <p>待确认订单需要联系用户，确认用户是否真实需要此订单商品，并提醒用户付款到51daifan支付宝。</p>
-			  <p>如果未达到免邮要求，需要沟通支付快递费用。快递费用未包含在订单金额中。</p>
-			  <p>用户不需要此订单时，请进行“作废订单”的操作，其余进行“确认订单”的操作。</p>
-			  <p>如果您使用快递公司不在选项中，可联系管理员添加。</p>
-			</div>		
+		{{/loop}}
+            {{template Elements/alert_for_business_user}}
 		</div>
 			
 			
