@@ -50,57 +50,35 @@ td {padding:5px 10px;}
 		<div id="part_payTypeAndShipType"><!-- template orders/info_shiptype--></div>
 		
 		<div id="part_invoice"><!-- template orders/order_invoice--></div>
-		<!-- 	
-		<div id="part_remark">
-			<div class="o_show">
-			 <h2>订单备注&nbsp;{{if !$order_id}}<a onclick="showForm_remark(this)" href="javascript:void(0)">[修改]</a>{{/if}}</h2>
-			 <div class="middle">
-			            <table style="width:100%">
-			                <tbody><tr>
-			                    <td id="order_remark_show" style="text-align:left;padding-left:20px;">
-			                    {{if $this->Session->read('Order.remark')}}{{$this->Session->read('Order.remark')}}
-			                    {{else}}暂无备注{{/if}}</td>			                    
-			                </tr>
-			            </tbody></table>
-			</div>
-			   <div class="footer"></div>
-			</div>
-			<div class="o_write" style="display:none;">
-			    <h2>订单备注 <a onclick="close_remark()" href="javascript:void(0)">[关闭]</a> <span class="f12 fw100">声明：备注中有关收货人信息、支付方式、配送方式、发票信息等购买要求一律以上面的选择为准，备注无效。</span></h2>
-			    <div class="middle">
-			        <input type="text" maxlength="200" value="" class="txt" style="width:300px;" id="order_remark">   &nbsp;&nbsp;&nbsp;
-			    </div>
-			    <div class="footer">
-			        <input type="button" onclick="saveOrder_remark($('#order_remark').val())" value="保存订单备注" class="btn btn-default">
-			    </div>
-			</div>
-		</div> -->
 		<hr/>
 		<div class="o_show">
-		<h2>商品清单</h2>
-		
+            {{loop $cart->brandItems $brandItem}}
+		<h4>分享人：{{$brands[$brandItem->id]}}</h4>
 		<div class="p-list">
 			<table  class="table table-bordered">
-			<tr><th width="50%">商品名称</th><th>购买价格</th><th>商品数量</th><th>合计</th></tr>
 			<tbody>
-			{{loop $Carts $cart}}
-			<tr><td>{{$cart['Cart']['name']}}</td>
-			<td>{{$this->Number->precision($cart['Cart']['price'], 2)}}</td>
-			<td>{{$cart['Cart']['num']}}</td>
-			<td>{{$this->Number->precision($cart['Cart']['price']*$cart['Cart']['num'], 2)}}</td>
+            {{loop $brandItem->items $pid $item}}
+			<tr><td>{{$item->name}}</td>
+			<td style="width: 80px; font-size: 0.8em">单价：{{$this->Number->precision($item->price, 2)}}</td>
+			<td>×{{$item->num}}</td>
+			<td>{{$this->Number->precision($item->price*$item->num, 2)}}</td>
 			</tr>
 			{{/loop}}
 			</tbody>
 			</table>
 		</div>
-        <p class="pull-right">运费：{{$this->Number->precision($shipFee, 2)}}</p>
+        </div>
+        {{/loop}}
+            <div class="clearfix"></div>
+
+        <div>
+		    <div class="pull-right">
+                    <p>运费：{{$this->Number->precision($shipFee, 2)}}</p>
+                    <p>总价<small>(含运费)</small>：{{$this->Number->precision($cart->total_price(), 2)}}</p>
+                <a class="btn btn-primary" onclick="return checkAddress();" href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a>
+            </div>
         </div>
 
-            <div class="clearfix"></div>
-		<!-- template orders/info_wave  -->
-		{{if !$order_id}}	
-		<div class="pull-right"><a class="btn btn-primary" onclick="return checkAddress();" href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a></div>
-		{{/if}}	
 	</div>
 </div>
 <script>

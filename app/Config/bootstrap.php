@@ -135,3 +135,94 @@ function filter_invalid_name($name) {
     }
     return $name;
 }
+
+
+class ProductCartItem extends Object {
+    public $pid;
+    public $num;
+    public $price;
+    public $used_coupons;
+    public $name;
+
+    public function __construct($pid, $itemPrice, $num, $used_coupons, $name) {
+        $this->pid = $pid;
+        $this->price = $itemPrice;
+        $this->num = $num;
+        $this->name = $name;
+        $this->used_coupons = $used_coupons;
+    }
+
+    public function total_price() {
+        return $this->num * $this->price;
+    }
+
+    /**
+     * @param ProductCartItem $other
+     */
+    public function merge($other) {
+        if ($this->pid != $other->pid) {
+            $msg = "not equals product id to merge a ProductCartItem:";
+            $this->log($msg.", src=".json_encode($this).", other=".json_encode($other));
+            throw new CakeException($msg);
+        }
+
+        $this->num += $other->num;
+    }
+}
+
+class BrandCartItem {
+    public $id;
+
+    /**
+     * @var array ProductCartItem
+     */
+    public $items = array();
+
+    public function __construct($brandId) {
+        $this->id = $brandId;
+    }
+
+    public function add_product_item($item) {
+        $proItem = $this->items[$item->pid];
+        if (empty($proItem)) {
+            $this->items[$item->pid] = $item;
+        } else {
+            $proItem->merge($item);
+        }
+    }
+
+    public function total_price() {
+        $total = 0;
+        foreach($this->items as $item) {
+            $total += $item->total_price();
+        }
+        return $total;
+    }
+}
+
+class OrderCartItem {
+    public $order_id;
+    public $user_id;
+
+    /**
+     * @var array BrandCartItem
+     */
+    public $brandItems = array();
+
+    public function add_product_item($brand_id, $pid, $itemPrice, $num, $used_coupons, $name) {
+        $brandItem = $this->brandItems[$brand_id];
+        if (empty($brandItem)) {
+            $brandItem = new BrandCartItem($brand_id);
+            $this->brandItems[$brand_id] = $brandItem;
+        }
+        $brandItem->add_product_item(new ProductCartItem($pid, $itemPrice, $num, $used_coupons, $name));
+    }
+
+    public function total_price() {
+        $total = 0.0;
+        foreach($this->brandItems as $brandItem) {
+            $total += $brandItem->total_price();
+        }
+        return $total;
+    }
+}

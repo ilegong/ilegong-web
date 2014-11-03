@@ -52,5 +52,17 @@ class Product extends AppModel {
 	        ),
         ),
     );
+
+
+    /**
+     * @param $product_ids
+     * @return array
+     */
+    public function findPublishedProductsByIds($product_ids) {
+        return $this->find('all',array('conditions'=>array(
+            'id' => $product_ids,
+            'published' => 1
+        )));
+    }
     
 }

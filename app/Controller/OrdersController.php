@@ -94,7 +94,6 @@ class OrdersController extends AppController{
                         'price'=> empty($pp)? $p['Product']['price'] : $pp['price'],
                 ));
 
-
 				$this->Cart->create();
 				if($this->Cart->save($Cart)){
 					$Cart['Cart']['id'] = $this->Cart->getLastInsertID();
@@ -220,9 +219,8 @@ class OrdersController extends AppController{
     /**
      * 订单信息页，确认各项订单信息
      * @param int|string $order_id
-     * @param string $action
      */
-	function info($order_id='', $action = ''){
+	function info($order_id=''){
 		$has_chosen_consignee = false;
 		$this->loadModel('OrderConsignee');
 		$consignees = $this->OrderConsignee->find('all',array(
@@ -233,138 +231,89 @@ class OrdersController extends AppController{
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
         $shipFee = 0.0;
 		$this->loadModel('Cart');
+        $this->loadModel('Product');
+        $this->loadModel('ShipPromotion');
 	    $product_ids = array();
-        $nums = array();
+        $cart = new OrderCartItem();
+        $cart->order_id = $order_id;
+        $cart->user_id = $this->currentUser['id'];
+
 		if(empty($order_id)){
-            $this->loadModel('ShipPromotion');
+            $dbCartItems = $this->Cart->find('all', array(
+                'conditions' => array(
+                    'status' => 0,
+                    'order_id' => null,
+                    'OR' => $this->user_condition
+                )));
+
+            $cartsByPid = Hash::combine($dbCartItems, '{n}.Cart.product_id', '{n}.Cart');
+
 			if(!empty($_COOKIE['cart_products'])){
-				$info = explode(',',$_COOKIE['cart_products']);
-				foreach($info as $item){
-					list($id,$num) = explode(':',$item);
-					if($id){
-						$product_ids[] = $id;
-						$nums[$id] = $num;
-					}
-				}
-				$this->loadModel('Product');
-				$products = $this->Product->find('all',array('conditions'=>array(
-						'id' => $product_ids
-				)));
-				$Carts = array();
-				foreach($products as $p){
-                    $pid = $p['Product']['id'];
-                    $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
-                    if ($_REQUEST['action'] == 'savePromo' && !empty($pp)) {
-                        $consignee = array();
-                        $consignee['name'] = trim($_REQUEST['consignee_name']);
-                        $consignee['mobilephone'] = trim($_REQUEST['consignee_mobilephone']);
-                        $consignee['address'] = trim($pp['address']);
-                        $this->Session->write('OrderConsignee', $consignee);
+                $info = explode(',', $_COOKIE['cart_products']);
+                $this->mergeCartWithDb($info, $cartsByPid);
+                setcookie("cart_products", '',time()-3600,'/');
+			}
+
+            if ($_REQUEST['action'] == 'savePromo' && !empty($pp)) {
+                $consignee = array();
+                $consignee['name'] = trim($_REQUEST['consignee_name']);
+                $consignee['mobilephone'] = trim($_REQUEST['consignee_mobilephone']);
+                $consignee['address'] = trim($pp['address']);
+                $this->Session->write('OrderConsignee', $consignee);
+                $has_chosen_consignee = true;
+            } else {
+
+                $current_consignee = $this->Session->read('OrderConsignee');
+                if (empty($current_consignee)) {
+                    $first_consignees = current($consignees);
+                    $current_consignee = array();
+                    // empty 不能检测函数，只能检测变量
+                    if (!empty($first_consignees)) {
+                        $current_consignee = $first_consignees['OrderConsignee'];
                         $has_chosen_consignee = true;
                     }
-
-                    $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $nums[$pid]) ? $nums[$pid] : 1;
-                    $Carts[] = array(
-							'Cart'=>array(
-									'product_id'=> $pid,
-									'name'=> $p['Product']['name'],
-									'coverimg'=> $p['Product']['coverimg'],
-									'num'=> $num,
-									'price'=> empty($pp)? $p['Product']['price'] : $pp['price'],
-					));
-
-                    $singleShipFee = (empty($pp)? $p['Product']['ship_fee'] : $pp['ship_price']);
-                    $shipFee += ShipPromotion::calculateShipFee($pid, $singleShipFee, $num, null);
-				}
-
-			}
-			else{
-
-                //TODO: adjust to PC version
-				$Carts = $this->Cart->find('all',array(
-					'conditions'=>array(
-						'status'=> 0,
-						'order_id' => null,
-						'OR'=> $this->user_condition
-				)));
-
-                foreach($Carts as $cart) {
-                    $nums[$cart['Cart']['product_id']] = $cart['Cart']['num'];
+                    $this->Session->write('OrderConsignee', $current_consignee);
+                } elseif (!empty($current_consignee['id'])) {
+                    $has_chosen_consignee = true;
                 }
-
-                $product_ids = array_map(function($val){ return $val['Cart']['product_id']; }, $Carts);
-
-                $this->loadModel('Product');
-                $products = $this->Product->find('all',array('conditions'=>array(
-                    'id' => $product_ids
-                )));
-                foreach($products as $p){
-                    $pid = $p['Product']['id'];
-                    $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
-                    $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $nums[$pid]) ? $nums[$pid] : 1;
-                    $singleShipFee = (empty($pp)? $p['Product']['ship_fee'] : $pp['ship_price']);
-                    $shipFee += ShipPromotion::calculateShipFee($pid, $singleShipFee, $num, null);
-                }
-			}
-
-			$current_consignee = $this->Session->read('OrderConsignee');
-			if(empty($current_consignee)){			
-				$first_consignees = current($consignees);
-				$current_consignee = array();
-				// empty 不能检测函数，只能检测变量
-				if(!empty($first_consignees)){
-					$current_consignee = $first_consignees['OrderConsignee'];
-					$has_chosen_consignee = true;
-				}
-				else{				
-//					$current_consignee['name'] = $this->Session->read('Auth.User.nickname');
-//					$current_consignee['email'] = $this->Session->read('Auth.User.email');
-//					$current_consignee['mobilephone'] = $this->Session->read('Auth.User.mobilephone');
-//					$current_consignee['telephone'] = $this->Session->read('Auth.User.telephone');
-//					$current_consignee['postcode'] = $this->Session->read('Auth.User.postcode');
-//					$current_consignee['address'] = $this->Session->read('Auth.User.address');
-				}
-				$this->Session->write('OrderConsignee',$current_consignee);
-			}
-			elseif(!empty($current_consignee['id'])){
-				$has_chosen_consignee = true;
-			}
+            }
 		}
 		else{
-			$has_chosen_consignee = true;
-			$orderinfo = $this->Order->find('first',array(
-				'conditions'=> array('id'=>$order_id,'creator'=>$this->currentUser['id']),
-			));	
-			if(empty($orderinfo)){
-				$this->__message('订单不存在，或无权查看','/');
-			}
-			$current_consignee = array(
-				'id' => $orderinfo['Order']['consignee_id'],
-				'name' => $orderinfo['Order']['consignee_name'],
-				'address' => $orderinfo['Order']['consignee_address'],
-				'email'  => $orderinfo['Order']['consignee_email'],
-				'mobilephone'  => $orderinfo['Order']['consignee_mobilephone'],
-				'telephone'  => $orderinfo['Order']['consignee_telephone'],
-				'postcode'  => $orderinfo['Order']['consignee_postcode'],
-			);	
-			$Carts = $this->Cart->find('all',array(
-				'conditions'=>array(					
-					'order_id' => $order_id,
-					'creator'=> $this->currentUser['id']
-			)));
-			$this->Session->write('OrderConsignee',$current_consignee);
-            $shipFee = $orderinfo['Order']['ship_fee'];
+            $this->log("/orders/info with a orderid=$order_id");
+            $this->__message('订单已经生成，不能再修改', '/orders/detail/'.$order_id);
+            return;
 		}
 
-		$total_price = $this->_calculateTotalPrice($Carts);
-		$this->set('has_chosen_consignee',$has_chosen_consignee);
-		$this->set('total_consignee',$total_consignee);
-		$this->set('consignees',$consignees);	
-		$this->set('order_id', $order_id);
-		$this->set('total_price',$total_price);
-        $this->set('shipFee', $shipFee);
-		$this->set('Carts',$Carts);
-        $this->set('action', $action);
+
+        $pModel = $this->Product;
+        $products = $pModel->findPublishedProductsByIds(array_keys($cartsByPid));
+        $productByIds = Hash::combine($products, '{n}.Product.id', '{n}.Product');
+        foreach($cartsByPid as $pid => $cartItem) {
+            $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
+            $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
+            $singleShipFee = (empty($pp)? $productByIds[$pid]['ship_fee'] : $pp['ship_price']);
+            $shipFee += ShipPromotion::calculateShipFee($pid, $singleShipFee, $num, null);
+            $itemPrice = empty($pp) ? $productByIds[$pid]['price'] : $pp['price'];
+            $cart->add_product_item($productByIds[$pid]['brand_id'], $pid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name']);
+        }
+
+        $brand_ids = array_keys($cart->brandItems);
+        if (!empty($brand_ids)) {
+            $this->loadModel('Brand');
+            $brands = $this->Brand->find('list', array('conditions' => array('id' => $brand_ids), 'fields' => array('id', 'name')));
+        } else {
+            $brands = array();
+        }
+
+        $couponItem = ClassRegistry::init('CouponItem');
+        $coupons_of_products = $couponItem->find_user_coupons_for_cart($this->currentUser['id'], $cart);
+
+		$total_price = $cart->total_price();
+		$this->set('has_chosen_consignee', $has_chosen_consignee);
+		$this->set('total_consignee', $total_consignee);
+		$this->set('consignees', $consignees);
+
+        $this->set(compact('total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands'));
 
         $shipPromotions = $this->ShipPromotion->findShipPromotions($product_ids);
         if ($shipPromotions && !empty($shipPromotions)) {
@@ -1047,5 +996,54 @@ class OrdersController extends AppController{
         }
     }
 
+    /**
+     * @param $cookieItems
+     * @param $cartsByPid
+     * @return array cartItemsByPid
+     */
+    protected function mergeCartWithDb($cookieItems, &$cartsByPid) {
+        $product_ids = array();
+        $nums = array();
+        foreach ($cookieItems as $item) {
+            list($id, $num) = explode(':', $item);
+            if ($id) {
+                $product_ids[] = $id;
+                $nums[$id] = $num;
+            }
+        }
 
+        if (empty($product_ids)) { return array(); }
+
+        $products = $this->Product->findPublishedProductsByIds($product_ids);
+        foreach ($products as $p) {
+            $pid = $p['Product']['id'];
+
+            $cartItem =& $cartsByPid[$pid];
+            if (empty($cartItem)) {
+                $cartItem = array(
+                    'product_id' => $pid,
+                    'name' => $p['Product']['name'],
+                    'coverimg' => $p['Product']['coverimg'],
+                    'num' => $nums[$pid],
+                    'price' => $p['Product']['price'],
+                );
+                $cartsByPid[$pid] =& $cartItem;
+            } else {
+                $cartItem['num'] += $nums[$pid];
+                $cartItem['price'] = $p['Product']['price'];
+                $cartItemId = $cartItem['id'];
+            }
+            $cartItem['creator'] = $this->currentUser['id'];
+
+            if (isset($cartItemId) && $cartItemId) {
+                $this->Cart->id = $cartItemId;
+            } else {
+                $this->Cart->create();
+            }
+
+            if($this->Cart->save(array('Cart' => $cartItem))){
+                $cartItem['id'] = $this->Cart->id;
+            }
+        }
+    }
 }
