@@ -16,7 +16,7 @@ class CouponItem extends AppModel {
 
     const COUPON_STATUS_VALID = 1;
 
-    const STATUS_TO_USE = 1;
+    const COUPONITEM_STATUS_TO_USE = 1;
     const TYPE_FOR_PID = 1;
 
     /**
@@ -40,7 +40,7 @@ class CouponItem extends AppModel {
                     continue;
                 }
 
-                foreach($brandItem->productItems as $productItem) {
+                foreach($brandItem->items as $productItem) {
                     if (empty($coupon_pids)) {
                         //TODO: continue check  for category_id, least_total_price, least_total_in_brand or least_total_in_product
                         $availCoupons[$productItem->pid][] = $coupon;
@@ -80,7 +80,8 @@ class CouponItem extends AppModel {
 
         $dt = new DateTime();
         $cond = array('CouponItem.bind_user' => $user_id,
-            'CouponItem.status' => self::STATUS_TO_USE,
+            'CouponItem.status' => self::COUPONITEM_STATUS_TO_USE,
+            '(CouponItem.cart_item_id is null or CouponItem.cart_item_id = 0)',
             'Coupon.published' => 1,
             'Coupon.status' => self::COUPON_STATUS_VALID,
             'Coupon.valid_begin <= ' => $dt->format(FORMAT_DATETIME),
