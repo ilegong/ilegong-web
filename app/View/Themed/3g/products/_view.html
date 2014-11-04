@@ -27,7 +27,7 @@
 
         {{if $total_left >= 0}}
         <div class="voffset3">
-            <p>剩余<span class="text-danger">{{$total_left}}</span>件！</p>
+            <h3 class="text-warning">剩余<span class="text-danger">{{$total_left}}</span>件！</h3>
         </div> {{/if}}
 
         {{if ($total_left > 0 || $total_left == -1) && $afford_for_curr_user }}
@@ -48,7 +48,7 @@
         </div>
         {{elseif $total_left == 0}}
         <div class="voffset3">
-            <p class="text-warning">已经全部抢完啦！</p>
+            <h3 class="text-warning">已经全部抢完！请等待下次开卖！</h3>
         </div>
         {{else}}
 
