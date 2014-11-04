@@ -548,14 +548,16 @@ class AppController extends Controller {
 
             list($total_limit, $brand_id, $limit_per_user) = ClassRegistry::init('ShipPromotion')->findNumberLimitedPromo($pid);
             if ($total_limit != 0  || $limit_per_user != 0) {
-                $soldCnt = $cartModel->find('count', array(
+                $rtn = $cartModel->find('first', array(
                     'joins' => array(array(
                         'table' => 'orders',
                         'alias' => 'Order',
                         'type' => 'inner',
                         'conditions' => array('Order.id=Cart.order_id', 'Order.status != '.ORDER_STATUS_CANCEL),
                     )),
+                    'fields' => 'SUM(Cart.num) as total_num',
                     'conditions' => array('Cart.order_id > 0', 'Cart.product_id' => $pid, 'Cart.deleted' => 0)));
+                $soldCnt = empty($rtn) ? 0 : $rtn[0]['total_num'];
                 if ($soldCnt > $total_limit) {
                     $afford_for_curr_user = false;
                 } else {
