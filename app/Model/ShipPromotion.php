@@ -100,7 +100,7 @@ class ShipPromotion extends AppModel {
         foreach($this->specialPromotions as $pid=>$promotions) {
             list($limit_per_user, $addressList) = $this->find_ship_promotion_limit($pid, $promotionId);
             if (!empty($addressList)) {
-                return [$pid, $addressList];
+                return array($pid, $addressList);
             }
         }
         return null;
