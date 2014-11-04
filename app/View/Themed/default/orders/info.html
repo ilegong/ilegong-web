@@ -81,6 +81,9 @@ td {padding:5px 10px;}
             <div class="clearfix"></div>
 
         <div>
+            <div class="pull-left">
+                <a href="/carts/listcart.html">返回购物车</a>
+            </div>
 		    <div class="pull-right">
                     <p>运费：{{$this->Number->precision($shipFee, 2)}}</p>
                     <p>总价<small>(含运费)</small>：{{$this->Number->precision($cart->total_price() + $shipFee, 2)}}</p>
