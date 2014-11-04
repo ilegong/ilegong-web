@@ -578,7 +578,6 @@ class AppController extends Controller {
                             $afford_for_curr_user = false;
                         }
                     }
-                    $limit_per_user = 1;
                 }
                 $total_left =  $total_limit - $soldCnt;
                 if ($total_left < 0 ) {
