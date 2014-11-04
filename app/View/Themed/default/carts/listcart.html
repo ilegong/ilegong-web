@@ -68,7 +68,9 @@ function editCartNum(id,num){
 	// var postdata = {'data[Cart][num]':num,'data[Cart][product_id]':id};
 	if(!sso.check_userlogin({"callback":editCartNum,"callback_args":arguments}))
 		return false;
-	ajaxAction(url,null,null,'editCartNum',{'id':id,'num':num});
+	ajaxAction(url,null,null,function(data){
+
+    },{'id':id,'num':num});
 	return false;
 }
 </script>
@@ -77,15 +79,17 @@ function editCartNum(id,num){
 
 <table class="table table-striped table-bordered table-hover">
 <thead>
-<tr><th>名称</th><th>图片</th><th>价格</th><th>数量</th><th>合计</th><th>操作</th></tr></thead>
+<tr><th>名称</th><th>价格</th><th>数量</th><th>合计</th><th>操作</th></tr></thead>
 {{loop $Carts $cart}}
-<tr><td>{{$cart['Cart']['name']}}</td>
-<td>{{$this->Html->image(Router::url($cart['Cart']['coverimg']))}}</td>
+<tr><td>{{$cart['Cart']['name']}}
+    {{$this->Html->image(Router::url($cart['Cart']['coverimg']))}}
+</td>
 <td>{{$this->Number->precision($cart['Cart']['price'], 2)}}</td>
 <td>
-<div class="input-group" style="float:left;width:120px;">
+<div class="input-group">
 <span class="reduce input-group-addon" onclick="setAmount.reduce('#pamount-{{$cart['Cart']['id']}}')">-</span>
-<input type="text" disabled="disabled" size="3" id="pamount-{{$cart['Cart']['id']}}" data-id="{{$cart['Cart']['id']}}" data-price="{{$cart['Cart']['price']}}" class="form-control cart-num-input" name="data[Cart][{{$cart['Cart']['id']}}][num]" value="{{$cart['Cart']['num']}}" />
+<input type="text" disabled="disabled" size="3" id="pamount-{{$cart['Cart']['id']}}" data-id="{{$cart['Cart']['id']}}"
+       data-price="{{$cart['Cart']['price']}}" class="form-control cart-num-input" name="data[Cart][{{$cart['Cart']['id']}}][num]" value="{{$cart['Cart']['num']}}" width="30px" />
 <span class="add input-group-addon" onclick="setAmount.add('#pamount-{{$cart['Cart']['id']}}')">+</span>
 </div>
 </td>
@@ -94,7 +98,7 @@ function editCartNum(id,num){
 </tr>
 {{/loop}}
 <thead>
-<tr><td colspan="6">总价：<span id="total-price">{{$this->Number->precision($total_price, 2)}}</span> <input class="btn btn-primary" type="submit"  value="结算" /></td></tr>
+<tr><td colspan="5" style="text-align: right"><span id="total-price">总价：{{$this->Number->precision($total_price, 2)}}</span> <input class="btn btn-primary" type="submit"  value="结算"/></td></tr>
 </thead>
 </table>
 

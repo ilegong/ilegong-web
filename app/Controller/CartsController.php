@@ -119,6 +119,8 @@ class CartsController extends AppController{
 		}
 		$this->set('total_price',$total_price);
 		$this->set('Carts',$Carts);
+
+        $this->pageTitle = __('购物车');
 	}
 	
 	function delete($id){
