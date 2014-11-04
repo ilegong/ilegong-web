@@ -45,7 +45,6 @@ class OrdersController extends AppController{
      */
 	function balance(){
 		$this->loadModel('Cart');
-		/* 保存无线端cookie购物车的商品 */
 		$this->loadModel('Product');
 		$product_ids = array();
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
@@ -77,13 +76,14 @@ class OrdersController extends AppController{
 		$business = array();
 		foreach($products as $p){
             $pid = $p['Product']['id'];
-			if(isset($business[$p['Product']['brand_id']])){
-                $business[$p['Product']['brand_id']][] = $pid;
+            $pBrandId = $p['Product']['brand_id'];
+            if(isset($business[$pBrandId])){
+                $business[$pBrandId][] = $pid;
 			}
 			else{
-				$business[$p['Product']['brand_id']] = array($pid);
+				$business[$pBrandId] = array($pid);
 			}
-            $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($p['Product']['id'], $shipPromotionId) : array();
+            $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
             $singleShipFee = empty($pp) ? $p['Product']['ship_fee'] : $pp['ship_price'];
             $ship_fees[$pid] = ShipPromotion::calculateShipFee($pid, $singleShipFee, $nums[$pid], null);
 		}
