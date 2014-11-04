@@ -127,7 +127,7 @@ class CartsController extends AppController{
 				'id' =>$id,
 				'OR' => $this->user_condition
 		));
-		$this->redirect($this->referer());
+		$this->redirect('/carts/listcart.html');
 	}
        
 }
