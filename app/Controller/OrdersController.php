@@ -196,7 +196,7 @@ class OrdersController extends AppController{
 
 			if(!empty($_COOKIE['cart_products'])){
                 $info = explode(',', $_COOKIE['cart_products']);
-                $this->mergeCartWithDb($info, $cartsByPid);
+                mergeCartWithDb($this->currentUser['id'], $info, $cartsByPid, $this->Product, $this->Cart);
                 setcookie("cart_products", '',time()-3600,'/');
 			}
 
@@ -938,57 +938,6 @@ class OrdersController extends AppController{
             return $receivedCreator;
         } else {
             return $this->currentUser['id'];
-        }
-    }
-
-    /**
-     * @param $cookieItems
-     * @param $cartsByPid
-     * @return array cartItemsByPid
-     */
-    protected function mergeCartWithDb($cookieItems, &$cartsByPid) {
-        $product_ids = array();
-        $nums = array();
-        foreach ($cookieItems as $item) {
-            list($id, $num) = explode(':', $item);
-            if ($id) {
-                $product_ids[] = $id;
-                $nums[$id] = $num;
-            }
-        }
-
-        if (empty($product_ids)) { return array(); }
-
-        $products = $this->Product->findPublishedProductsByIds($product_ids);
-        foreach ($products as $p) {
-            $pid = $p['Product']['id'];
-
-            $cartItem =& $cartsByPid[$pid];
-            if (empty($cartItem)) {
-                $cartItem = array(
-                    'product_id' => $pid,
-                    'name' => $p['Product']['name'],
-                    'coverimg' => $p['Product']['coverimg'],
-                    'num' => $nums[$pid],
-                    'price' => $p['Product']['price'],
-                );
-                $cartsByPid[$pid] =& $cartItem;
-            } else {
-                $cartItem['num'] += $nums[$pid];
-                $cartItem['price'] = $p['Product']['price'];
-                $cartItemId = $cartItem['id'];
-            }
-            $cartItem['creator'] = $this->currentUser['id'];
-
-            if (isset($cartItemId) && $cartItemId) {
-                $this->Cart->id = $cartItemId;
-            } else {
-                $this->Cart->create();
-            }
-
-            if($this->Cart->save(array('Cart' => $cartItem))){
-                $cartItem['id'] = $this->Cart->id;
-            }
         }
     }
 }

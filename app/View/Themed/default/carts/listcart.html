@@ -1,5 +1,9 @@
 <style>
 td {padding:5px 10px;}
+    .cart-num-input {
+        padding: 4px 4px;
+        width: 30px;
+    }
 </style>
 <script>
 var setAmount={
@@ -89,7 +93,7 @@ function editCartNum(id,num){
 <div class="input-group">
 <span class="reduce input-group-addon" onclick="setAmount.reduce('#pamount-{{$cart['Cart']['id']}}')">-</span>
 <input type="text" disabled="disabled" size="3" id="pamount-{{$cart['Cart']['id']}}" data-id="{{$cart['Cart']['id']}}"
-       data-price="{{$cart['Cart']['price']}}" class="form-control cart-num-input" name="data[Cart][{{$cart['Cart']['id']}}][num]" value="{{$cart['Cart']['num']}}" width="30px" />
+       data-price="{{$cart['Cart']['price']}}" class="cart-num-input" name="data[Cart][{{$cart['Cart']['id']}}][num]" value="{{$cart['Cart']['num']}}" width="30px" />
 <span class="add input-group-addon" onclick="setAmount.add('#pamount-{{$cart['Cart']['id']}}')">+</span>
 </div>
 </td>

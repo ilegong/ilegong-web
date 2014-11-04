@@ -107,12 +107,25 @@ class CartsController extends AppController{
 	}
 	
 	function listcart(){
-		$Carts = $this->Cart->find('all',array(
+        $dbCartItems = $this->Cart->find('all',array(
 				'conditions'=>array(
 					'status' => 0,
 					'order_id' => NULL,
 					'OR'=> $this->user_condition
 			)));
+        $cartsByPid = Hash::combine($dbCartItems, '{n}.Cart.product_id', '{n}.Cart');
+        if(!empty($_COOKIE['cart_products'])){
+            $info = explode(',', $_COOKIE['cart_products']);
+            mergeCartWithDb($this->currentUser['id'], $info, $cartsByPid, ClassRegistry::init('Product'), $this->Cart);
+            setcookie("cart_products", '',time()-3600,'/');
+        }
+
+        $Carts = $this->Cart->find('all',array(
+            'conditions'=>array(
+                'status' => 0,
+                'order_id' => NULL,
+                'OR'=> $this->user_condition
+            )));
 		$total_price = 0;
 		foreach($Carts as $cart){
 			$total_price += $cart['Cart']['price']*$cart['Cart']['num'];

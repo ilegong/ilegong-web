@@ -230,3 +230,57 @@ class OrderCartItem {
         return $total;
     }
 }
+
+/**
+ * @param $uid
+ * @param $cookieItems
+ * @param $cartsByPid
+ * @param $poductModel
+ * @param $cartModel
+ * @return array cartItemsByPid
+ */
+function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartModel) {
+    $product_ids = array();
+    $nums = array();
+    foreach ($cookieItems as $item) {
+        list($id, $num) = explode(':', $item);
+        if ($id) {
+            $product_ids[] = $id;
+            $nums[$id] = $num;
+        }
+    }
+
+    if (empty($product_ids)) { return array(); }
+
+    $products = $poductModel->findPublishedProductsByIds($product_ids);
+    foreach ($products as $p) {
+        $pid = $p['Product']['id'];
+
+        $cartItem =& $cartsByPid[$pid];
+        if (empty($cartItem)) {
+            $cartItem = array(
+                'product_id' => $pid,
+                'name' => $p['Product']['name'],
+                'coverimg' => $p['Product']['coverimg'],
+                'num' => $nums[$pid],
+                'price' => $p['Product']['price'],
+            );
+            $cartsByPid[$pid] =& $cartItem;
+        } else {
+            $cartItem['num'] += $nums[$pid];
+            $cartItem['price'] = $p['Product']['price'];
+            $cartItemId = $cartItem['id'];
+        }
+        $cartItem['creator'] = $uid;
+
+        if (isset($cartItemId) && $cartItemId) {
+            $cartModel->id = $cartItemId;
+        } else {
+            $cartModel->create();
+        }
+
+        if($cartModel->save(array('Cart' => $cartItem))){
+            $cartItem['id'] = $cartModel->id;
+        }
+    }
+}
