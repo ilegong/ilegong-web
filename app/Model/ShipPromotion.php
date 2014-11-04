@@ -52,9 +52,10 @@ class ShipPromotion extends AppModel {
         'items' => array(
             array('id' => 21, 'ship_price' => 0.0, 'time' => '', 'address' => '自提点：海淀大街38号味多美门口， 免费邮'),
             array('id' => 22, 'ship_price' => 0.0, 'time' => '', 'address' => '自提点：北四环盘古大观广场南门， 免邮费'),
+            array('id' => 23, 'ship_price' => 0.0, 'time' => '', 'address' => '自提点：五道口华清嘉园会所底商， 免邮费'),
             array('id' => 25, 'ship_price' => 0.0,  'time' => '', 'least_num' => 10,  'address' => '五环内满10个起送, 免邮费'),
             array('id' => 26, 'ship_price' => 10.0, 'time' => '', 'least_num' => 20,  'address' => '五环外满20个起送, 不免邮'),
-            array('id' => 27, 'ship_price' => 10.0, 'time' => '', 'address' => '市内其他地区或不足个数请先拍下不要付款，人数凑齐后我们再通知您付款'),
+            array('id' => 27, 'ship_price' => 10.0, 'time' => '', 'address' => '市内其他地区或不足件数请先拍下不要付款，人数凑齐后我们再通知您付款'),
         )
     )
     );
