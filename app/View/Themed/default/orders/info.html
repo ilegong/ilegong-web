@@ -2,7 +2,10 @@
 td {padding:5px 10px;}
 </style>
 <div  class="container">
-	<div class="orderinfo voffset3">
+
+    {{if $flash_msg}}<div class="alert alert-danger" role="alert">{{$flash_msg}}</div>{{/if}}
+
+    <div class="orderinfo voffset3">
         {{if $specialShipPromotionId}}
         <h2>收货人信息</h2>
         {{if !$limit_ship}}<a id="link_use_promotion" href="{{$this->Html->url('/orders/info?ship_promotion=0')}}">[不使用特惠]</a>{{/if}}
@@ -17,15 +20,19 @@ td {padding:5px 10px;}
 
         {{if $specialShipPromotion }}
 
-        {{if (!$specialShipPromotionId)}}<h2>收货人信息</h2>{{/if}}
-
+        {{if (!$specialShipPromotionId)}}<h2>收货人信息</h2>
+        {{if $limit_ship}}
+        <p class="text-warning">只支持以下快递方式：</p>
+        {{/if}}
+        {{/if}}
         <div id="specialShipPromotion" style="{{if !$limit_ship || $specialShipPromotionId }}display: none{{/if}}">
             <form method="post" action="{{$this->Html->url(array('action' => 'info', '?' => array('action' => 'savePromo')))}}">
             <ul id="ul_special_promotion" class="list-group">
                 {{loop $specialShipPromotion $key $item}}
                     <li item-id="{{$item['id']}}" class="list-group-item {{$specialShipPromotionId == $item['id']? 'active':''}}">
-                        <span class="text-price-small pull-right">{{$this->Number->precision($item['price'], 2)}}</span>
-                        <small>{{$item['time']}}派送到{{$item['address']}}</small></li>
+                        {{if isset($item['price'])}}
+                        <span class="text-price-small pull-right">{{$this->Number->precision($item['price'], 2)}}</span>{{/if}}
+                        <small>{{if $item['time']}}{{$item['time']}}派送到{{/if}}{{$item['address']}}</small></li>
                 {{/loop}}
             </ul>
                 <input type="text" class="form-control" placeholder="收货人姓名" id="p_consignee_name" name="consignee_name" value="{{$this->Session->read('OrderConsignee.name')}}">

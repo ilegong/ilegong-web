@@ -169,17 +169,12 @@ class OrdersController extends AppController{
 	function info($order_id=''){
 		$has_chosen_consignee = false;
 		$this->loadModel('OrderConsignee');
-		$consignees = $this->OrderConsignee->find('all',array(
-			'conditions'=>array('creator'=>$this->currentUser['id']),
-			'order' => 'status desc',
-		));
-		$total_consignee = count($consignees);
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
         $shipFee = 0.0;
 		$this->loadModel('Cart');
         $this->loadModel('Product');
         $this->loadModel('ShipPromotion');
-	    $product_ids = array();
+
         $cart = new OrderCartItem();
         $cart->order_id = $order_id;
         $cart->user_id = $this->currentUser['id'];
@@ -199,30 +194,6 @@ class OrdersController extends AppController{
                 mergeCartWithDb($this->currentUser['id'], $info, $cartsByPid, $this->Product, $this->Cart);
                 setcookie("cart_products", '',time()-3600,'/');
 			}
-
-            if ($_REQUEST['action'] == 'savePromo' && !empty($pp)) {
-                $consignee = array();
-                $consignee['name'] = trim($_REQUEST['consignee_name']);
-                $consignee['mobilephone'] = trim($_REQUEST['consignee_mobilephone']);
-                $consignee['address'] = trim($pp['address']);
-                $this->Session->write('OrderConsignee', $consignee);
-                $has_chosen_consignee = true;
-            } else {
-
-                $current_consignee = $this->Session->read('OrderConsignee');
-                if (empty($current_consignee)) {
-                    $first_consignees = current($consignees);
-                    $current_consignee = array();
-                    // empty 不能检测函数，只能检测变量
-                    if (!empty($first_consignees)) {
-                        $current_consignee = $first_consignees['OrderConsignee'];
-                        $has_chosen_consignee = true;
-                    }
-                    $this->Session->write('OrderConsignee', $current_consignee);
-                } elseif (!empty($current_consignee['id'])) {
-                    $has_chosen_consignee = true;
-                }
-            }
 		}
 		else{
             $this->log("/orders/info with a orderid=$order_id");
@@ -230,15 +201,59 @@ class OrdersController extends AppController{
             return;
 		}
 
-        $products = $this->Product->findPublishedProductsByIds(array_keys($cartsByPid));
+        $pids = array_keys($cartsByPid);
+        $products = $this->Product->findPublishedProductsByIds($pids);
         $productByIds = Hash::combine($products, '{n}.Product.id', '{n}.Product');
         foreach($cartsByPid as $pid => $cartItem) {
             $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
             $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
-            $singleShipFee = (empty($pp)? $productByIds[$pid]['ship_fee'] : $pp['ship_price']);
+            $singleShipFee = empty($pp) || !isset($pp['ship_price']) ? $productByIds[$pid]['ship_fee'] : $pp['ship_price'];
             $shipFee += ShipPromotion::calculateShipFee($pid, $singleShipFee, $num, null);
-            $itemPrice = empty($pp) ? $productByIds[$pid]['price'] : $pp['price'];
+            $itemPrice = empty($pp) || !isset($pp['price']) ? $productByIds[$pid]['price'] : $pp['price'];
             $cart->add_product_item($productByIds[$pid]['brand_id'], $pid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name']);
+        }
+
+        $consignees = $this->OrderConsignee->find('all',array(
+            'conditions'=>array('creator'=>$this->currentUser['id']),
+            'order' => 'status desc',
+        ));
+        $total_consignee = count($consignees);
+
+        if ($_REQUEST['action'] == 'savePromo') {
+            list($specialPid, $specialAddress) = $this->ShipPromotion->find_special_address_by_id($shipPromotionId);
+            if (!empty($specialAddress)) {
+
+                $productItemInCart = $cart->find_product_item($specialPid);
+                if (isset($specialAddress['least_num']) && (!$productItemInCart || ($specialAddress['least_num'] > $productItemInCart->num))) {
+                    $flash_msg = __('使用您选定的优惠地址需要购买'.$specialAddress['least_num'].'件"'.$productItemInCart->name.'"');
+                    unset($shipPromotionId);
+                } else {
+                    $consignee = array();
+                    $consignee['name'] = trim($_REQUEST['consignee_name']);
+                    $consignee['mobilephone'] = trim($_REQUEST['consignee_mobilephone']);
+                    $consignee['address'] = trim($specialAddress['address']);
+                    $this->Session->write('OrderConsignee', $consignee);
+                    $has_chosen_consignee = true;
+                }
+            } else {
+                //error:
+                unset($shipPromotionId);
+                $flash_msg = __('输入的地址不对');
+            }
+        } else {
+            $current_consignee = $this->Session->read('OrderConsignee');
+            if (empty($current_consignee)) {
+                $first_consignees = current($consignees);
+                $current_consignee = array();
+                // empty 不能检测函数，只能检测变量
+                if (!empty($first_consignees)) {
+                    $current_consignee = $first_consignees['OrderConsignee'];
+                    $has_chosen_consignee = true;
+                }
+                $this->Session->write('OrderConsignee', $current_consignee);
+            } elseif (!empty($current_consignee['id'])) {
+                $has_chosen_consignee = true;
+            }
         }
 
         $brand_ids = array_keys($cart->brandItems);
@@ -253,13 +268,12 @@ class OrdersController extends AppController{
         $coupons_of_products = $couponItem->find_user_coupons_for_cart($this->currentUser['id'], $cart);
 
 		$total_price = $cart->total_price();
+        $this->set(compact('total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'flash_msg'));
 		$this->set('has_chosen_consignee', $has_chosen_consignee);
 		$this->set('total_consignee', $total_consignee);
 		$this->set('consignees', $consignees);
 
-        $this->set(compact('total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands'));
-
-        $shipPromotions = $this->ShipPromotion->findShipPromotions($product_ids);
+        $shipPromotions = $this->ShipPromotion->findShipPromotions($pids);
         if ($shipPromotions && !empty($shipPromotions)) {
             $this->set('specialShipPromotionId', $shipPromotionId);
             $this->set('specialShipPromotion', $shipPromotions['items']);

@@ -29,32 +29,42 @@ class ShipPromotion extends AppModel {
     ),
     '221' => array('limit_ship' => true,
         'items' => array(
-            array('id' => 1, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '搜狐网络大厦'),
-            array('id' => 2, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '搜狐媒体大厦'),
-            array('id' => 3, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '同方大厦'),
-            array('id' => 4, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '银科大厦'),
-            array('id' => 5, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '中国技术交易大厦'),
-            array('id' => 6, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '希格玛大厦'),
-            array('id' => 7, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '360大厦'),
+            array('id' => 8, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '搜狐网络大厦'),
+            array('id' => 9, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '搜狐媒体大厦'),
+            array('id' => 10, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '同方大厦'),
+            array('id' => 11, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '银科大厦'),
+            array('id' => 12, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '中国技术交易大厦'),
+            array('id' => 13, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '希格玛大厦'),
+            array('id' => 14, 'ship_price' => 0.0, 'price' => 49.90, 'time' => '11月5日', 'address' => '360大厦'),
         )
     ),
     '222' => array('limit_ship' => true,
         'limit_per_user' => 1,
         'items' => array(
-            array('id' => 1, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '维亚大厦'),
-            array('id' => 2, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '东升科技园'),
-            array('id' => 3, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '神州数码'),
-            array('id' => 4, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '西海国际'),
-            array('id' => 5, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '电子大厦'),
+            array('id' => 15, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '维亚大厦'),
+            array('id' => 16, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '东升科技园'),
+            array('id' => 17, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '神州数码'),
+            array('id' => 18, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '西海国际'),
+            array('id' => 19, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '电子大厦'),
+        )
+    ),
+    '230' => array('limit_ship' => true,
+        'items' => array(
+            array('id' => 21, 'ship_price' => 0.0, 'time' => '', 'address' => '自提点：海淀大街38号味多美门口， 免费邮'),
+            array('id' => 22, 'ship_price' => 0.0, 'time' => '', 'address' => '自提点：北四环盘古大观广场南门， 免邮费'),
+            array('id' => 25, 'ship_price' => 0.0,  'time' => '', 'least_num' => 10,  'address' => '五环内满10个起送, 免邮费'),
+            array('id' => 26, 'ship_price' => 10.0, 'time' => '', 'least_num' => 20,  'address' => '五环外满20个起送, 不免邮'),
+            array('id' => 27, 'ship_price' => 10.0, 'time' => '', 'address' => '市内其他地区或不足个数请先拍下不要付款，人数凑齐后我们再通知您付款'),
         )
     )
     );
 
+    const PRODUCT_ID_CAKE = 230;
     private  $pro_num_limit = array(
         //total_limit(0 means none), brand_id, per_user_limit (0 means none)
         '228' => array(100, 13, 1),
         '229' => array(70, 13, 1),
-        '230' => array(100, 74, 0),
+        self::PRODUCT_ID_CAKE => array(100, 74, 0),
     );
 
     /**
@@ -67,6 +77,8 @@ class ShipPromotion extends AppModel {
     public static function calculateShipFee($pid, $singleShipFee, $num, $area) {
         if ($pid == 231 && $num >= 2) {
             return 0.0;
+        } else if ($pid == self::PRODUCT_ID_CAKE) {
+            return $singleShipFee * $num;
         }
         return $singleShipFee;
     }
@@ -78,6 +90,20 @@ class ShipPromotion extends AppModel {
     public function find_ship_promotion($productId, $promotionId) {
         list($limit_ship, $promotion) = $this->find_ship_promotion_limit($productId, $promotionId);
         return $promotion;
+    }
+
+    /**
+     * @param $promotionId integer promotion id
+     * @return mixed address and its properties
+     */
+    public function find_special_address_by_id($promotionId) {
+        foreach($this->specialPromotions as $pid=>$promotions) {
+            list($limit_per_user, $addressList) = $this->find_ship_promotion_limit($pid, $promotionId);
+            if (!empty($addressList)) {
+                return [$pid, $addressList];
+            }
+        }
+        return null;
     }
 
     public function find_ship_promotion_limit($productId, $promotionId) {

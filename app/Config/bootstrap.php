@@ -222,6 +222,18 @@ class OrderCartItem {
         $brandItem->add_product_item(new ProductCartItem($pid, $itemPrice, $num, $used_coupons, $name));
     }
 
+    public function find_product_item($pid) {
+        foreach($this->brandItems as $bid=>$brandItem) {
+            foreach($brandItem->items as $productItem) {
+                if($productItem->pid == $pid) {
+                    return $productItem;
+                }
+            }
+        }
+        return null;
+    }
+
+
     public function total_price() {
         $total = 0.0;
         foreach($this->brandItems as $brandItem) {

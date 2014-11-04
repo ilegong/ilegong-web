@@ -517,6 +517,7 @@ class AppController extends Controller {
 
     /**
      * @param $current_cateid
+     * @param $cateModel
      * @return mixed
      */
     protected function readOrLoadAndCacheNavigations($current_cateid, $cateModel)
@@ -534,7 +535,7 @@ class AppController extends Controller {
     /**
      * @param $pid
      * @param $currUid
-     * @return array
+     * @return array whether afford to current user; limit for current user; total left for all users
      */
     public static function affordToUser($pid, $currUid) {
         $afford_for_curr_user = true;
@@ -558,9 +559,10 @@ class AppController extends Controller {
                     'fields' => 'SUM(Cart.num) as total_num',
                     'conditions' => array('Cart.order_id > 0', 'Cart.product_id' => $pid, 'Cart.deleted' => 0)));
                 $soldCnt = empty($rtn) ? 0 : $rtn[0]['total_num'];
+
                 if ($soldCnt > $total_limit) {
                     $afford_for_curr_user = false;
-                } else {
+                } else if ($limit_per_user > 0 ) {
 
                     $ordersModel = ClassRegistry::init('Order');
                     $order_ids = $ordersModel->find('list', array(
@@ -573,12 +575,15 @@ class AppController extends Controller {
                         'fields' => array('id', 'id')
                     ));
                     if (!empty($order_ids)) {
-                        $c = $cartModel->find('count', array(
-                            'conditions' => array('order_id' => $order_ids, 'product_id' => $pid, 'deleted' => 0)
+                        $rr = $cartModel->find('count', array(
+                            'conditions' => array('order_id' => $order_ids, 'product_id' => $pid, 'deleted' => 0),
+                            'fields' => array('sum(num) as total_num')
                         ));
-                        if ($c > 0) {
+                        $bought_by_curr_user = empty($rr) ? 0 : $rr[0]['total_num'];
+                        if ($bought_by_curr_user >= $limit_per_user) {
                             $afford_for_curr_user = false;
                         }
+                        $limit_per_user = $limit_per_user - $bought_by_curr_user;
                     }
                 }
                 $total_left =  $total_limit - $soldCnt;
