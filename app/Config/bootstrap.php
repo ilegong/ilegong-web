@@ -141,7 +141,6 @@ class ProductCartItem extends Object {
     public $pid;
     public $num;
     public $price;
-    public $used_coupons;
     public $name;
 
     public function __construct($pid, $itemPrice, $num, $used_coupons, $name) {
@@ -177,6 +176,7 @@ class BrandCartItem {
      * @var array ProductCartItem
      */
     public $items = array();
+    public $used_coupons;
 
     public function __construct($brandId) {
         $this->id = $brandId;
@@ -197,6 +197,10 @@ class BrandCartItem {
             $total += $item->total_price();
         }
         return $total;
+    }
+
+    public function coupon_applied($couponItemId) {
+        return !empty($this->used_coupons) && array_search($couponItemId, $this->used_coupons) !== false;
     }
 }
 

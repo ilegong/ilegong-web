@@ -36,18 +36,18 @@ class CouponItem extends AppModel {
             $coupon_brandId = Hash::get($coupon, 'Coupon.brand_id');
             $coupon_pids = Hash::get($coupon, 'Coupon.product_ids');
             foreach($cart->brandItems as $brandItem) {
-                if ($coupon_brandId && $coupon_brandId != $brandItem->brandId) {
+                if ($coupon_brandId && $coupon_brandId != $brandItem->id) {
                     continue;
                 }
 
                 foreach($brandItem->items as $productItem) {
                     if (empty($coupon_pids)) {
                         //TODO: continue check  for category_id, least_total_price, least_total_in_brand or least_total_in_product
-                        $availCoupons[$productItem->pid][] = $coupon;
+                        $availCoupons[$brandItem->id][] = $coupon;
                     } else if (array_search($coupon_pids, $productItem->pid) !== false) {
                         $least_price_in_brand = Hash::get($coupon, 'Coupon.least_total_in_brand');
                         if (!$least_price_in_brand || $least_price_in_brand < $productItem->total_price()) {
-                            $availCoupons[$productItem->pid][] = $coupon;
+                            $availCoupons[$brandItem->id][] = $coupon;
                         }
                     }
                 }
@@ -93,7 +93,8 @@ class CouponItem extends AppModel {
 
         $items = $this->find('all', array(
             'conditions' => $cond,
-            'joins' => $joins
+            'joins' => $joins,
+            'fields' => array('Coupon.*', 'CouponItem.*')
         ));
 
         $this->pid_list_to_array($items);
