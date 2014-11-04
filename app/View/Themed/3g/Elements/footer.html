@@ -56,7 +56,7 @@
 		}
 		var $cartBtn = $('#card-btn');
 		if(itemNum > 0){
-			$cartBtn.removeClass('btn-warning').addClass('btn-success').find('span').html('已选' + itemNum + '份，共'+ utils.toFixed(cost, 2) +'元，点击下单');
+			$cartBtn.removeClass('btn-warning').addClass('btn-success').find('span').html('已选' + itemNum + '份，点击下单');
 		}else {
 			$cartBtn.addClass('btn-warning').removeClass('btn-success').find('span').html('请先下单');
 		}
