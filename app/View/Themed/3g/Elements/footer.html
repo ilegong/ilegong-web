@@ -56,9 +56,9 @@
 		}
 		var $cartBtn = $('#card-btn');
 		if(itemNum > 0){
-			$cartBtn.removeClass('btn-warning').addClass('btn-success').find('span').html('已选' + itemNum + '份，点击下单');
+			$cartBtn.removeClass('btn-warning').addClass('btn-success').find('span').html('购物车');
 		}else {
-			$cartBtn.addClass('btn-warning').removeClass('btn-success').find('span').html('请先下单');
+			$cartBtn.addClass('btn-warning').removeClass('btn-success').find('span').html('购物车');
 		}
 
 		saveCartToCookie();
@@ -173,8 +173,8 @@
 		$('#card-btn').click(function(){
 			if($(this).hasClass('btn-success')){ //has item
 				createCart();
-                window.location.href = '/carts/listcart.html';
 			}
+            window.location.href = '/carts/listcart.html';
 		});
 
 		$('#checkout-btn').click(function(){
