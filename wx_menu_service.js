@@ -5,18 +5,10 @@
         "name":"购买特产",
         "url":"http://pys.b-wmobile.com/users/wx_menu_point?referer_key=CLICK_URL_TECHAN&from=service"
     },
-    {  "name" : "苹果游戏",
-        "sub_button" : [
-            {
-                "type":"view",
-                "name":"苹果游戏",
-                "url":"http://pys.b-wmobile.com/apple_201410/award.html"
-            },            {
-                "type":"view",
-                "name":"购买苹果",
-                "url":"http://pys.b-wmobile.com/products/20141027/xiao_juan_jia_ping_guo_yu_shou.html?promo-src=360"
-            }
-        ]
+    {
+        "type":"view",
+        "name":"苹果游戏",
+        "url":"http://pys.b-wmobile.com/apple_201410/award.html"
     },
     {
         "name":"个人中心",
