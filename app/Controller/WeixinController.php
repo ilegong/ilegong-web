@@ -71,15 +71,12 @@ class WeixinController extends AppController {
                         array(title => '朋友说 | 城市里的乡下人，我们为什么离职做家乡特产。', description => '',
                             picUrl => 'http://mmbiz.qpic.cn/mmbiz/qpxHrxLKdR0uibCrGiacHPg9F1xIicXRYZndaIZuXoUKicAeaicQadpbxyjIyED0kIomnCyXCcektOjsKSapmb5zcHQ/640',
                             url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200777756&idx=1&sn=65992423b055c450b1c57e31287d3615#rd'),
-                        array(title => '朋友说 | 城市里的乡下人，电科院QA小娟分享家乡红富士苹果！', description => '',
-                            picUrl => 'http://mmbiz.qpic.cn/mmbiz/UuGM2hE8WNGdeI7vcTWSyyZE0InV2l5Ln6s9Bw2l74mnoUfLcbyRBm1vwsWVyaGcG47DSZ4Cf4kjKYUACgdxGA/640',
-                            url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200777756&idx=2&sn=6cb7a56def46a7701d01935ed33110e7#rd'),
-                        array(title => '朋友说 |4.99元/斤的咸阳红富士！苹果正确下单指南！', description => '',
-                            picUrl => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR2LvZrkiavyicU6ibfz8A2ZPMvII8nZpjWENibCJKqEw4Cs4GKHHjY9OCnmNyI7PLA5YYy2bjU6w2hQ8g/0',
-                            url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200777756&idx=3&sn=c85369b9199153d9315de2deb45b5cf8#rd'),
-                        array(title => '朋友说 |摇一摇，小娟家苹果一箱免费送！', description => '',
-                            picUrl => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR2LvZrkiavyicU6ibfz8A2ZPMv7pibtqYoDaEf00AewOOKKf9wvTtNuU7UMlxjV4Xib4ySwYicKl5Nx3uVw/0',
-                            url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200777756&idx=4&sn=309bdfea90c0b3cff2e18d76a1d10163#rd')
+                        array(title => '朋友说 | 城市里的乡下人，腾讯nana分享父亲种的五常稻花香。', description => '',
+                            picUrl => 'http://mmbiz.qpic.cn/mmbiz/UuGM2hE8WNE0oBpsGonFUEqGctJHVjCQW4BjEgyekF1TFVKM1oXaGZ2hXql3er64XG6zPYYicR5D96qwOSEXgZA/640',
+                            url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200884609&idx=1&sn=1734d46f49186c7354215066143deec5#rd')
+//                        array(title => '朋友说 |摇一摇，小娟家苹果一箱免费送！', description => '',
+//                            picUrl => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR2LvZrkiavyicU6ibfz8A2ZPMv7pibtqYoDaEf00AewOOKKf9wvTtNuU7UMlxjV4Xib4ySwYicKl5Nx3uVw/0',
+//                            url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200777756&idx=4&sn=309bdfea90c0b3cff2e18d76a1d10163#rd')
                     );
 					echo $this->newArticleMsg($user, $me, $content);
 					exit;
