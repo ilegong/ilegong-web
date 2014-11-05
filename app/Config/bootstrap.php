@@ -337,8 +337,8 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
 function find_latest_clicked_from($newUserId, $pid) {
     //CANNOT same with $newUserId
     if($pid == PRODUCT_ID_RICE_10) {
-        $this->loadModel('TrackLog');
-        $tr = $this->TrackLog->find('first', array(
+        $trackLogModel = ClassRegistry::init('TrackLog');
+        $tr = $trackLogModel->find('first', array(
             'conditions' => array('to' => $newUserId, 'type' => 'rebate_' . $pid),
             'order' => 'latest_click_time desc'
         ));
