@@ -8,7 +8,7 @@ App::uses('CustomRouter', 'Lib');
 
     Router::redirect('/products/19700101/heizhu_tuangou', '/techan/18');
 
-    CustomRouter::connect('/t/kuerlexl_tencent',
+    CustomRouter::connect('/t/kuerlexl_ten',
         array('controller'=>'products','action' => 'view', '2yuan_shi_chi_xin_jiang_ku_er_le_xiang_li'));
 
 

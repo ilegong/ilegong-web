@@ -110,10 +110,10 @@ class OrdersController extends AppController{
 
                 list($afford_for_curr_user, $limit_per_user) = AppController::affordToUser($pid, $uid);
                 if (!$afford_for_curr_user) {
-                    $this->__message(__($Carts[$pid]['name'].'已售罄或您已经购买超限，请从购物车中删除后再结账'), '/orders/info', 5);
+                    $this->__message(__($Carts[$pid]['name'].'已售罄或您已经购买超限，请从购物车中删除后再结账'), '/carts/listcart', 5);
                     return;
                 } else if ($limit_per_user > 0 && $Carts[$pid]['Cart']['num'] > $limit_per_user) {
-                    $this->__message(__($Carts[$pid]['name'].'购买超限，请从购物车中删除后再结账'), '/orders/info', 5);
+                    $this->__message(__($Carts[$pid]['name'].'购买超限，请从购物车中删除后再结账'), '/carts/listcart', 5);
                 }
 			}
 			
