@@ -8,6 +8,10 @@ App::uses('CustomRouter', 'Lib');
 
     Router::redirect('/products/19700101/heizhu_tuangou', '/techan/18');
 
+    CustomRouter::connect('/t/kuerlexl_tencent',
+        array('controller'=>'products','action' => 'view', '2yuan_shi_chi_xin_jiang_ku_er_le_xiang_li'));
+
+
     CustomRouter::connect('/:controller/:yearmonth/:slug',
 	array('action' => 'view'),
 	array('pass' => array('slug'),'controller'=>'[\w_]+','yearmonth'=>"[0-9]{8}")
@@ -57,6 +61,7 @@ App::uses('CustomRouter', 'Lib');
 		//try{CakePlugin::load('MultiSite', array('bootstrap'=>true));}catch(Exception $e){}
 	}
 	CakePlugin::routes();
+
 	CustomRouter::connect('/', array('controller' => 'categories', 'action' => 'view','/'));
 	CustomRouter::connect('/users/51daifan.sinaapp.com', array('controller' => 'categories', 'action' => 'view','/'));
 
