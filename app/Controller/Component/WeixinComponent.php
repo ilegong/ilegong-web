@@ -201,20 +201,19 @@ class WeixinComponent extends Component
                 foreach($could_rebate_ids as $pid) {
                     $be_recommend_uid = $order['Order']['creator'];
                     $recUserId = find_latest_clicked_from($be_recommend_uid, $pid);
-                    $this->log("find recUserId=$recUserId, be_recommend_uid=$be_recommend_uid");
                     if ($recUserId) {
                         $uModel = ClassRegistry::init('User');
                         $fromUser = $uModel->findById($recUserId);
-                        $this->log("fromUser=".var_export($fromUser, true));
                         if (!empty($fromUser)) {
                             $toUser = $uModel->findById($be_recommend_uid);
                             if (!empty($toUser)) {
-                                $this->log("toUser=".var_export($toUser, true));
                                 $buyer_name = $toUser['User']['nickname'];
                                 $recOpenId = $oauthBindModel->findWxServiceBindByUid($recUserId);
-                                $this->log("recOpenId=$recOpenId");
-                                if ($recOpenId) {
-                                    $this->send_order_rebate_message($recOpenId, $buyer_name, $order_id);
+                                if (!empty($recOpenId)) {
+                                    $oauth_openid = $recOpenId['oauth_openid'];
+                                    if ($oauth_openid) {
+                                        $this->send_order_rebate_message($oauth_openid, $buyer_name, $order_id);
+                                    }
                                 }
                             }
                             }
