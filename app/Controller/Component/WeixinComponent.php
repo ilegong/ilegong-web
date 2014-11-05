@@ -207,6 +207,15 @@ class WeixinComponent extends Component
                         if (!empty($fromUser)) {
                             $toUser = $uModel->findById($be_recommend_uid);
                             if (!empty($toUser)) {
+
+
+                                try {
+                                    $this->loadModel('CouponItem');
+                                    $this->CouponItem->addCoupon($recUserId);
+                                }catch(Exception $e) {
+                                    $this->log("exception to add coupon:".$recUserId.", for used user:".$be_recommend_uid);
+                                }
+
                                 $buyer_name = $toUser['User']['nickname'];
                                 $recOpenId = $oauthBindModel->findWxServiceBindByUid($recUserId);
                                 if (!empty($recOpenId)) {

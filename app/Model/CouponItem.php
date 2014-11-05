@@ -70,6 +70,14 @@ class CouponItem extends AppModel {
 
     }
 
+    public function addCoupon($recUserId) {
+        $this->save(array('CouponItem' => array(
+              'bind_user' => $recUserId,
+              'coupon_id' => 1,
+              'status' => COUPONITEM_STATUS_TO_USE
+        )));
+    }
+
     public function apply_coupons_to_order($uid, $order_id, $coupons_to_apply){
         if (!empty($coupons_to_apply)) {
             foreach($this->find_my_valid_coupons($uid) as $coupon){
