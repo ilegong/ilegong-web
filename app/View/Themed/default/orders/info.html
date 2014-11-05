@@ -84,7 +84,7 @@ a.coupon_applied .glyphicon {
 			</tbody>
 			</table>
             <ul>
-                给分享人留言：<input type="text" class="remark" name={{"remark_".$brandItem->id}} />
+                给分享人留言：<input type="text" maxlength="50" class="remark" name={{"remark_".$brandItem->id}} />
             </ul>
             <ul>
             <?PHP $coupons = $coupons_of_products[$brandItem->id]; if(!empty($coupons)){ foreach($coupons as $coupon) {
