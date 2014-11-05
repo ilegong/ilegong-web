@@ -575,7 +575,7 @@ class AppController extends Controller {
                         'fields' => array('id', 'id')
                     ));
                     if (!empty($order_ids)) {
-                        $rr = $cartModel->find('count', array(
+                        $rr = $cartModel->find('first', array(
                             'conditions' => array('order_id' => $order_ids, 'product_id' => $pid, 'deleted' => 0),
                             'fields' => array('sum(num) as total_num')
                         ));
