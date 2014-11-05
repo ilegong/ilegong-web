@@ -1,21 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>{{$pageTitle}}</title>
-{{eval echo $this->Html->meta('icon');}}
-{{eval echo $this->Html->css(array(
-            'base',
-        ));
-     }}
+<?PHP echo $this->Combinator->less(); ?>
 </head>
 <body>
 <div id="header">
-	
-	
 </div>
 <div id="content">
-    <div class="well">{{$message}}</div>
+    <div class="panel panel-warning">
+        <div class="panel-heading">系统跳转中...</div>
+        <div class="panel-body">
+            {{$message}}
+        </div>
+    </div>
 	<meta http-equiv="refresh" content="{{$seconds}}; url={{$this->Html->url($url)}}" />
 </div>
 <div id="footer">
