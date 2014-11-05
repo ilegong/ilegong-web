@@ -334,16 +334,16 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
     }
 }
 
-function find_latest_clicked_from($newUserId, $pid) {
+function find_latest_clicked_from($buyerId, $pid) {
     //CANNOT same with $newUserId
     if($pid == PRODUCT_ID_RICE_10) {
         $trackLogModel = ClassRegistry::init('TrackLog');
         $tr = $trackLogModel->find('first', array(
-            'conditions' => array('to' => $newUserId, 'type' => 'rebate_' . $pid),
+            'conditions' => array('from' => $buyerId, 'type' => 'rebate_' . $pid),
             'order' => 'latest_click_time desc'
         ));
         if (!empty($tr)) {
-            return $tr['TrackLog']['from'];
+            return $tr['TrackLog']['to'];
         }
     }
     return 0;
