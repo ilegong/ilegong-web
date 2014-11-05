@@ -107,6 +107,11 @@ class CartsController extends AppController{
 	}
 	
 	function listcart(){
+
+        if (empty($this->currentUser['id'])) {
+            $this->redirect("/users/login?referer=/carts/listcart");
+        }
+
         $dbCartItems = $this->Cart->find('all',array(
 				'conditions'=>array(
 					'status' => 0,

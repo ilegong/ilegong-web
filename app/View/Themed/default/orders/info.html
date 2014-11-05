@@ -196,17 +196,27 @@ a.coupon_applied .glyphicon {
                 }
             }
         }
+
+        if ($('#special_ship_promotion').size() > 0) {
+            var val = $('#special_ship_promotion').val();
+            if (val == '' || val == '0' ) {
+                alert("请先保存收货人信息!");
+                return false;
+            }
+        }
+
         var link = $("#submit-button").attr("href");
-        var prams = (link.indexOf("?")>-1)?"&":"?";
+        var params = (link.indexOf("?")>-1)?"&":"?";
         $(".remark").each(function(){
             var input_name=$(this).attr("name");
             var input_value=$(this).val();
             if(input_value!=""){
-                prams = prams+input_name+"="+input_value+"&";
+                params = params+input_name+"="+input_value+"&";
+                params = params + "ship_promotion=" + $('#special_ship_promotion').val();
             }
         });
-        prams=prams.substring(0,prams.length-1);
-        $("#submit-button").attr("href",link+prams);
+        params=params.substring(0,params.length-1);
+        $("#submit-button").attr("href",link+params);
         return true;
     }
 </script>

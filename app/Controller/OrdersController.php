@@ -37,6 +37,10 @@ class OrdersController extends AppController{
         return "Balance." . $bid . ".coupons";
     }
 
+    public static function key_balanced_ship_promotion_id() {
+        return "Balance.promotion.id";
+    }
+
     function beforeFilter(){
 		parent::beforeFilter();
 		if(empty($this->currentUser['id']) && array_search($this->request->params['action'], $this->customized_not_logged) === false){
@@ -58,6 +62,9 @@ class OrdersController extends AppController{
 		$this->loadModel('Product');
 		$product_ids = array();
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
+        if (!$shipPromotionId) {
+            $shipPromotionId = intval($this->Session->read(self::key_balanced_ship_promotion_id()));
+        }
         $this->loadModel('ShipPromotion');
 
         $nums = array();
@@ -183,6 +190,9 @@ class OrdersController extends AppController{
      * @param int|string $order_id
      */
 	function info($order_id=''){
+
+        $this->Session->write(self::key_balanced_ship_promotion_id(), '');
+
 		$has_chosen_consignee = false;
 		$this->loadModel('OrderConsignee');
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
@@ -228,6 +238,7 @@ class OrdersController extends AppController{
                     $consignee['address'] = trim($specialAddress['address']);
                     $this->Session->write('OrderConsignee', $consignee);
                     $has_chosen_consignee = true;
+                    $this->Session->write(self::key_balanced_ship_promotion_id(), $shipPromotionId);
                 }
             } else {
                 //error:
