@@ -196,34 +196,22 @@ class Apple201410Controller extends AppController {
     }
 
     public function award() {
-        $tr_id = $_GET['trid'];
-        list($friendUid, $isSelf) = $this->check_tr_id($tr_id, 'award');
-        if (!$isSelf) {
-            $friend = $this->User->findById($friendUid);
-            if (!empty($friend)) {
-                $trackLogs = $this->TrackLog->find('first', array(
-                    'conditions' => array('type' => KEY_APPLE_201410, 'from' => $this->currentUser['id'], 'to' => $friendUid),
-                    'fields' => array('id',)
-                ));
-                $shouldAdd = empty($trackLogs);
-                if ($shouldAdd) {
-                    $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friendUid));
-                    $this->TrackLog->save(array('TrackLog' => array('type' => KEY_APPLE_201410, 'from' => $this->currentUser['id'], 'to' => $friendUid, 'award_time' => date(FORMAT_DATETIME) )));
-                }
-                $this->_addNotify(filter_invalid_name($friend['User']['nickname']), $shouldAdd);
-            }
-            //treat as self
-            $this->redirect_for_append_tr_id('award');
+        $uri = "/apple_201410/award.html";
+        $current_uid = $this->currentUser['id'];
+        list($friend, $shouldAdd) = $this->track_or_redirect($uri, $current_uid, KEY_APPLE_201410);
+        if($shouldAdd) {
+            $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id']));
+            $this->_addNotify(filter_invalid_name($friend['User']['nickname']), $shouldAdd);
         }
 
         $friendsHelpMe = $this->TrackLog->find('all', array(
-            'conditions' => array('to' => $this->currentUser['id']),
+            'conditions' => array('to' => $current_uid),
             'fields' => array('from'),
             'limit' => 500
         ));
 
         $friendsIHelped = $this->TrackLog->find('all', array(
-            'conditions' => array('from' => $this->currentUser['id']),
+            'conditions' => array('from' => $current_uid),
             'fields' => array('to'),
             'limit' => 500
         ));
@@ -258,9 +246,9 @@ class Apple201410Controller extends AppController {
         $this->set('helpMe', $helpMeItems);
         $this->set('meHelp', $meHelpItems);
 
-        $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($this->currentUser['id'], KEY_APPLE_201410);
+        $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($current_uid, KEY_APPLE_201410);
         if (empty($awardInfo)) {
-            $awardInfo = array('AwardInfo' => array('uid' => $this->currentUser['id'], 'type' => KEY_APPLE_201410, 'times' => 10, 'got' => 0));
+            $awardInfo = array('AwardInfo' => array('uid' => $current_uid, 'type' => KEY_APPLE_201410, 'times' => 10, 'got' => 0));
             $this->AwardInfo->save($awardInfo);
             $awardInfo = $awardInfo['AwardInfo'];
         }
@@ -287,7 +275,7 @@ class Apple201410Controller extends AppController {
         $this->_updateLastQueryTime(time());
 
         $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
-        $weixinTimesLog = $wxTimesLogModel->findById($this->currentUser['id']);
+        $weixinTimesLog = $wxTimesLogModel->findById($current_uid);
         $this->set('got_wx_sub_times', $this->gotWxTimesToday($weixinTimesLog, mktime()));
 
         $this->pageTitle = "摇一摇免费得红富士苹果, 我已经摇到了".$awardInfo['got']."个苹果 -- 城市里的乡下人电科院QA小娟分享家乡的苹果";
@@ -359,49 +347,6 @@ class Apple201410Controller extends AppController {
     }
 
     /**
-     * if $tr_id is empty, redirect with current user's track id;
-     * else return user id and whether is self.
-     * Throw an exception if the $tr_id cannot be decoded to a valid $uid
-     * @param $tr_id
-     * @param $action
-     * @return array
-     */
-    private function check_tr_id($tr_id, $action) {
-        if (empty($tr_id)) {
-            $this->redirect_for_append_tr_id($action);
-        }
-        if (!empty($tr_id)) {
-            $uid = $this->decode_apple_tr_id($tr_id);
-            if ($uid && is_numeric($uid)) {
-                return array($uid, $uid === $this->currentUser['id']);
-            } else {
-                return array(false, false);
-            }
-        }
-    }
-
-    /**
-     * @param $action
-     */
-    private function redirect_for_append_tr_id($action) {
-        $encodedTrid = $this->encode_apple_tr_id($this->currentUser['id']);
-        $this->redirect("/apple_201410/$action.html?trid=".$encodedTrid);
-    }
-
-    private function encode_apple_tr_id($id) {
-        $code = authcode($id, 'ENCODE', $this->getTrackKey());
-        return $code;
-    }
-
-    private function decode_apple_tr_id($tr_id) {
-        return authcode($tr_id, 'DECODE', $this->getTrackKey());
-    }
-
-    private function getTrackKey() {
-        return KEY_APPLE_201410 . ':';
-    }
-
-    /**
      * @param $awardInfo
      */
     private function setTotalVariables($awardInfo) {
@@ -439,4 +384,7 @@ class Apple201410Controller extends AppController {
         return !empty($weixinTimesLog) && same_day($weixinTimesLog['AwardWeixinTimeLog']['last_got_time'], $now);
     }
 
+    protected function getTrackType() {
+        return KEY_APPLE_201410;
+    }
 }

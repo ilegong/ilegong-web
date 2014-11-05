@@ -370,7 +370,21 @@ class AppController extends Controller {
 //         $this->Hook->call('nextItems', $params);
 
         if ($modelClass == 'Product') {
+
             $pid = $this->current_data_id;
+            if ($pid == PRODUCT_ID_RICE_10) {
+
+                $current_uid = $this->currentUser['id'];
+                if (!$current_uid) {
+                    $this->redirect('/users/login?referer='.$_SERVER['QUERY_STRING']);
+                }
+                $uri = "/products/" . date('Ymd', strtotime(${$modelClass}[$modelClass]['created'])) . "/$slug.html";
+                list($friend, $shouldAdd) = $this->track_or_redirect($uri, $current_uid, 'rebate_'.PRODUCT_ID_RICE_10);
+                if ($shouldAdd) {
+                    //$this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id']));
+                }
+            }
+
             $currUid = $this->currentUser['id'];
             list($afford_for_curr_user, $limit_per_user, $total_left) = self::affordToUser($pid, $currUid);
             if ($limit_per_user) {
@@ -378,6 +392,8 @@ class AppController extends Controller {
             }
             $this->set('total_left', $total_left);
             $this->set('afford_for_curr_user', $afford_for_curr_user);
+
+
         }
     }
 
@@ -594,6 +610,102 @@ class AppController extends Controller {
         }
 
         return array($afford_for_curr_user, $limit_per_user, $total_left);
+    }
+
+
+    /**
+     * if $tr_id is empty, redirect with current user's track id;
+     * else return user id and whether is self.
+     * Throw an exception if the $tr_id cannot be decoded to a valid $uid
+     * @param $tr_id
+     * @param $uri
+     * @param $curr_uid
+     * @param $track_type
+     * @return array
+     */
+    protected function check_tr_id($tr_id, $uri, $curr_uid, $track_type) {
+        if (empty($tr_id)) {
+            $this->redirect_for_append_tr_id($uri, $curr_uid, $track_type);
+        }
+        if (!empty($tr_id)) {
+            $uid = $this->decode_apple_tr_id($tr_id, $track_type);
+            if ($uid && is_numeric($uid)) {
+                return array($uid, $uid === $curr_uid);
+            } else {
+                return array(false, false);
+            }
+        }
+    }
+
+    /**
+     * @param $uri
+     * @param $uid
+     * @param $trackType
+     */
+    protected function redirect_for_append_tr_id($uri, $uid, $trackType) {
+        $encodedTrid = $this->encode_apple_tr_id($uid, $trackType);
+        $this->redirect("$uri?trid=".urlencode($encodedTrid));
+    }
+
+    protected  function encode_apple_tr_id($id, $trackType) {
+        $code = authcode($id, 'ENCODE', $trackType);
+        return $code;
+    }
+
+    protected  function decode_apple_tr_id($tr_id, $trackType) {
+        return authcode($tr_id, 'DECODE', $trackType);
+    }
+
+    protected  function getTrackKey($trackType) {
+        return $trackType . ':';
+    }
+
+    /**
+     * @param $track_type
+     * @param $current_uid
+     * @param $friendUid
+     * @return bool
+     */
+    private function track($track_type, $current_uid, $friendUid) {
+        $trackLogs = $this->TrackLog->find('first', array(
+            'conditions' => array('type' => $track_type, 'from' => $current_uid, 'to' => $friendUid),
+            'fields' => array('id',)
+        ));
+        $shouldAdd = empty($trackLogs);
+        if ($shouldAdd) {
+            $toUpdate = array('TrackLog' => array('type' => $track_type, 'from' => $current_uid, 'to' => $friendUid, 'award_time' => date(FORMAT_DATETIME)));
+            $this->TrackLog->save($toUpdate);
+        } else {
+            $this->TrackLog->updateAll(array('latest_click_time' => date(FORMAT_DATETIME)), array('id' => $trackLogs['TrackLog']['id']));
+        }
+        return $shouldAdd;
+    }
+
+    /**
+     * @param $uri
+     * @param $current_uid
+     * @param $track_type
+     * @return array
+     */
+    protected function track_or_redirect($uri, $current_uid, $track_type) {
+        $tr_id = $_GET['trid'];
+        if (empty($tr_id)) {
+            $this->redirect_for_append_tr_id($uri, $current_uid, $track_type);
+            exit;
+        }
+        $this->loadModel('TrackLog');
+        list($friendUid, $isSelf) = $this->check_tr_id($tr_id, $uri, $current_uid, $track_type);
+        if (!$isSelf) {
+            $this->loadModel('User');
+            $friend = $this->User->findById($friendUid);
+            if (!empty($friend)) {
+                $shouldAdd = $this->track($track_type, $current_uid, $friendUid);
+                return array($friend, $shouldAdd);
+            }
+            //treat as self
+            $this->redirect_for_append_tr_id($uri, $current_uid, $track_type);
+        }
+        return array(null, false);
     }
 }
 ?>
