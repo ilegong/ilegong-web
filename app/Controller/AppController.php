@@ -676,7 +676,7 @@ class AppController extends Controller {
             $toUpdate = array('TrackLog' => array('type' => $track_type, 'from' => $current_uid, 'to' => $friendUid, 'award_time' => date(FORMAT_DATETIME)));
             $this->TrackLog->save($toUpdate);
         } else {
-            $this->TrackLog->updateAll(array('latest_click_time' => date(FORMAT_DATETIME)), array('id' => $trackLogs['TrackLog']['id']));
+            $this->TrackLog->updateAll(array('latest_click_time' => '\''.date(FORMAT_DATETIME).'\''), array('id' => $trackLogs['TrackLog']['id']));
         }
         return $shouldAdd;
     }
