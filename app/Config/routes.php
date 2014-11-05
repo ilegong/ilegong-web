@@ -11,6 +11,9 @@ App::uses('CustomRouter', 'Lib');
     CustomRouter::connect('/t/kuerlexl_ten',
         array('controller'=>'products','action' => 'view', '2yuan_shi_chi_xin_jiang_ku_er_le_xiang_li'));
 
+    CustomRouter::connect('/t/rice_product',
+        array('controller'=>'products','action' => 'view', 'wu_chang_dao_hua_xiang_ti_qian_yu_shou_500jin_zhi_xian_bei_jing'));
+
 
     CustomRouter::connect('/:controller/:yearmonth/:slug',
 	array('action' => 'view'),
