@@ -201,6 +201,7 @@ class WeixinComponent extends Component
                 foreach($could_rebate_ids as $pid) {
                     $be_recommend_uid = $order['Order']['creator'];
                     $recUserId = find_latest_clicked_from($be_recommend_uid, $pid);
+                    $this->log("find_latest_clicked_from: $recUserId, be_recommend_uid $be_recommend_uid ");
                     if ($recUserId) {
                         $uModel = ClassRegistry::init('User');
                         $fromUser = $uModel->findById($recUserId);
