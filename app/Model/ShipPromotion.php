@@ -57,6 +57,12 @@ class ShipPromotion extends AppModel {
             array('id' => 26, 'ship_price' => 10.0, 'time' => '', 'least_num' => 20,  'address' => '五环外满20个起送, 不免邮'),
             array('id' => 27, 'ship_price' => 10.0, 'time' => '', 'address' => '市内其他地区或不足件数请先拍下不要付款，人数凑齐后我们再通知您付款'),
         )
+    ),
+    '240' => array('limit_ship' => true,
+        'limit_per_user' => 1,
+        'items' => array(
+            array('id' => 28, 'ship_price' => 0.0, 'time' => '', 'address' => '腾讯公司希格玛B1交单处'),
+        )
     )
     );
 
