@@ -95,7 +95,7 @@ class WeixinComponent extends Component
         return $this->send_weixin_message($post_data);
     }
 
-    public function send_order_rebate_message($open_id, $buyer_name, $order_no, $price, $paid_time)
+    public function send_order_rebate_message($open_id, $buyer_name, $order_no, $price = 'XX', $paid_time = '刚刚')
     {
         $friend_name = empty($buyer_name) ? "神秘人" : $buyer_name;
         $post_data = array(
@@ -164,6 +164,72 @@ class WeixinComponent extends Component
             }
         }
         return false;
+    }
+
+    public static function get_order_good_info($order_info){
+        $good_info ='';
+        $ship_info = $order_info['Order']['consignee_name'].','.$order_info['Order']['consignee_address'].','.$order_info['Order']['consignee_mobilephone'];
+        $cartModel = ClassRegistry::init('Cart');
+        $carts = $cartModel->find('all',array(
+            'conditions'=>array('order_id' => $order_info['Order']['id'])));
+        foreach($carts as $cart){
+            $good_info = $good_info.$cart['Cart']['name'].' x '.$cart['Cart']['num'].';';
+        }
+        $pids = Hash::extract($carts, '{n}.Cart.product_id');
+        return array("good_info"=>$good_info,"ship_info"=>$ship_info, 'pid_list' => $pids);
+    }
+
+    /**
+     * @param $order
+     */
+    public function notifyPaidDone($order) {
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $user_weixin = $oauthBindModel->findWxServiceBindByUid($order['Order']['creator']);
+        if ($user_weixin != false) {
+            $good = self::get_order_good_info($order);
+            $this->log("good info:" . $good['good_info'] . " ship info:" . $good['ship_info']);
+
+            $open_id = $user_weixin['oauth_openid'];
+            $price = $order['Order']['total_all_price'];
+            $good_info = $good['good_info'];
+            $ship_info = $good['ship_info'];
+            $order_id = $order['Order']['id'];
+            if ($this->hasRebates($good['pid_list'])) {
+                $this->send_rice_paid_message($open_id, $price, $good_info, $ship_info, $order_id);
+
+                $could_rebate_ids = array(PRODUCT_ID_RICE_10);
+                foreach($could_rebate_ids as $pid) {
+                    $recUserId = find_latest_clicked_from($order['Order']['creator'], $pid);
+                    if ($recUserId) {
+                        $uModel = ClassRegistry::init('User');
+                        $fromUser = $uModel->findById($recUserId);
+                        if (!empty($fromUser)) {
+                            $toUser = $uModel->findById($order['Order']['creator']);
+                            if (!empty($toUser)) {
+                                $buyer_name = $toUser['User']['nickname'];
+                                $recOpenId = $oauthBindModel->findWxServiceBindByUid($recUserId);
+                                if ($recOpenId) {
+                                    $this->send_order_rebate_message($recOpenId, $buyer_name, $order_id);
+                                }
+                            }
+                            }
+                    }
+                }
+
+
+            }  else {
+                $this->send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_id);
+            }
+
+        }
+    }
+
+    /**
+     * @param $pidList
+     * @return bool
+     */
+    protected function hasRebates($pidList) {
+        return !empty($pidList) && array_search(PRODUCT_ID_RICE_10, $pidList) !== false;
     }
 
 }

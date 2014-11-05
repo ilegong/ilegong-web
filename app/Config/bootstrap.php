@@ -27,6 +27,10 @@ const COUPON_STATUS_VALID = 1;
 const COUPONITEM_STATUS_TO_USE = 1;
 const COUPONITEM_STATUS_USED = 2;
 
+const PRODUCT_ID_CAKE = 230;
+const PRODUCT_ID_RICE_10 = 231;
+const PRODUCT_ID_RICE_BRAND_10 = 13;
+
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
@@ -131,9 +135,9 @@ function same_day($time1, $time2) {
 }
 
 
-function filter_invalid_name($name) {
+function filter_invalid_name($name, $def = '神秘人') {
     if (!$name || $name == 'null') {
-        $name = '神秘人';
+        $name = $def;
     } else if (strpos($name, '微信用户') === 0) {
         $name = mb_substr($name, 0, 8, 'UTF-8');
     }
@@ -328,4 +332,12 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
             $cartItem['id'] = $cartModel->id;
         }
     }
+}
+
+function find_latest_clicked_from($newUserId, $pid) {
+    //CANNOT same with $newUserId
+    if($pid == PRODUCT_ID_RICE_10) {
+        return 146;
+    }
+    return 0;
 }

@@ -48,7 +48,7 @@ class ShipPromotion extends AppModel {
             array('id' => 19, 'ship_price' => 0.0, 'price' => 0.10, 'time' => '', 'address' => '电子大厦'),
         )
     ),
-    '230' => array('limit_ship' => true,
+    PRODUCT_ID_CAKE => array('limit_ship' => true,
         'items' => array(
             array('id' => 21, 'ship_price' => 0.0, 'time' => '', 'address' => '自提点：海淀大街38号味多美门口， 免费邮'),
             array('id' => 22, 'ship_price' => 0.0, 'time' => '', 'address' => '自提点：北四环盘古大观广场南门， 免邮费'),
@@ -66,12 +66,11 @@ class ShipPromotion extends AppModel {
     )
     );
 
-    const PRODUCT_ID_CAKE = 230;
     private  $pro_num_limit = array(
         //total_limit(0 means none), brand_id, per_user_limit (0 means none)
         '228' => array(100, 13, 1),
         '229' => array(70, 13, 1),
-        self::PRODUCT_ID_CAKE => array(100, 74, 0),
+        PRODUCT_ID_CAKE => array(100, 74, 0),
         '240' => array(300, 78, 1 )
     );
 
@@ -85,7 +84,7 @@ class ShipPromotion extends AppModel {
     public static function calculateShipFee($pid, $singleShipFee, $num, $area) {
         if ($pid == 231 && $num >= 2) {
             return 0.0;
-        } else if ($pid == self::PRODUCT_ID_CAKE) {
+        } else if ($pid == PRODUCT_ID_CAKE) {
             return $singleShipFee * $num;
         }
         return $singleShipFee;

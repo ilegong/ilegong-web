@@ -136,30 +136,10 @@ class AliPayController extends AppController {
                 $total_fee_in_cent, false, '', '', $attach, '');
 
             if ($status == PAYNOTIFY_STATUS_ORDER_UPDATED) {
-                $this->loadModel('Oauthbind');
-                $user_weixin = $this->Oauthbind->findWxServiceBindByUid($order['Order']['creator']);
-                if ($user_weixin != false) {
-                    $good = $this->get_order_good_info($order);
-                    $this->log("good info:" . $good['good_info'] . " ship info:" . $good['ship_info'], LOG_DEBUG);
-                    $this->Weixin->send_order_paid_message($user_weixin['oauth_openid'], $order['Order']['total_all_price'],
-                        $good['good_info'], $good['ship_info'], $order['Order']['id']);
-                }
+                $this->Weixin->notifyPaidDone($order);
             }
 
             return array($status, $order);
         }
     }
-
-    function get_order_good_info($order_info){
-        $good_info ='';
-        $ship_info = $order_info['Order']['consignee_name'].','.$order_info['Order']['consignee_address'].','.$order_info['Order']['consignee_mobilephone'];
-        $this->loadModel('Cart');
-        $carts = $this->Cart->find('all',array(
-            'conditions'=>array('order_id' => $order_info['Order']['id'])));
-        foreach($carts as $cart){
-            $good_info = $good_info.$cart['Cart']['name'].' x '.$cart['Cart']['num'].';';
-        }
-        return array("good_info"=>$good_info,"ship_info"=>$ship_info);
-    }
-
-} 
+}
