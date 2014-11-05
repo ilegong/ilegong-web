@@ -10,7 +10,8 @@ class WeixinComponent extends Component
 
     public $wx_message_template_ids = array(
         "ORDER_PAID" => "UXmiPQNz46zZ2nZfDZVVd9xLIx28t66ZPNBoX1WhE8Q",
-        "ORDER_SHIPPED" => "87uu4CmlZT-xlZGO45T_XTHiFYAWHQaLv94iGuH-Ke4"
+        "ORDER_SHIPPED" => "87uu4CmlZT-xlZGO45T_XTHiFYAWHQaLv94iGuH-Ke4",
+        "ORDER_REBATE" => "DVuV9VC7qYa4H8oP1BaZosOViQ7RrU3v558VrjO7Cv0"
     );
 
     public $kuaidi100_ship_type = array(
@@ -40,6 +41,17 @@ class WeixinComponent extends Component
         return WX_HOST . '/orders/detail/' . $order_no;
     }
 
+    public function get_order_rebate_url()
+    {
+        return WX_HOST . '/users/my_coupons.html';
+    }
+
+    public function get_rice_detail_url()
+    {
+        return WX_HOST . '/t/rice_product';
+    }
+
+
     public function get_access_token()
     {
         return ClassRegistry::init('WxOauth')->get_base_access_token();
@@ -59,6 +71,45 @@ class WeixinComponent extends Component
                 "orderAddress" => array("value" => $ship_info),
                 "orderName" => array("value" => $order_no),
                 "remark" => array("value" => "点击详情，查询订单。", "color" => "#FF8800")
+            )
+        );
+        return $this->send_weixin_message($post_data);
+    }
+
+    public function send_rice_paid_message($open_id, $price, $good_info, $ship_info, $order_no)
+    {
+        $post_data = array(
+            "touser" => $open_id,
+            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "url" => $this->get_rice_detail_url(),
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => "亲，您的稻花香已完成付款，分享稻花香链接到朋友圈，只要朋友通过此链接购买大米成功，您即可得大米1斤喔~。"),
+                "orderProductPrice" => array("value" => $price),
+                "orderProductName" => array("value" => $good_info),
+                "orderAddress" => array("value" => $ship_info),
+                "orderName" => array("value" => $order_no),
+                "remark" => array("value" => "点击马上分享得大米喔~", "color" => "#FF8800")
+            )
+        );
+        return $this->send_weixin_message($post_data);
+    }
+
+    public function send_order_rebate_message($open_id, $buyer_name, $order_no, $price, $paid_time)
+    {
+        $friend_name = empty($buyer_name) ? "神秘人" : $buyer_name;
+        $post_data = array(
+            "touser" => $open_id,
+            "template_id" => $this->wx_message_template_ids["ORDER_REBATE"],
+            "url" => $this->get_order_rebate_url(),
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => "亲，" . $friend_name . "通过您分享的链接购买了稻花香大米，恭喜您获得粮票1张。"),
+                "keyword1" => array("value" => $order_no),
+                "keyword2" => array("value" => $price),
+                "keyword3" => array("value" => $paid_time),
+                "keyword4" => array("value" => "粮票1斤"),
+                "remark" => array("value" => "点击详情，查询我获得的粮票。", "color" => "#FF8800")
             )
         );
         return $this->send_weixin_message($post_data);
