@@ -211,8 +211,8 @@ class WeixinComponent extends Component
 
 
                                 try {
-                                    $this->loadModel('CouponItem');
-                                    $this->CouponItem->addCoupon($recUserId);
+                                    $ciModel = ClassRegistry::init('CouponItem');
+                                    $ciModel->addCoupon($recUserId);
                                 }catch(Exception $e) {
                                     $this->log("exception to add coupon:".$recUserId.", for used user:".$be_recommend_uid);
                                 }
