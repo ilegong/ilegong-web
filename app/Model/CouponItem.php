@@ -14,10 +14,16 @@ class CouponItem extends AppModel {
     );
 
 
-    const COUPON_STATUS_VALID = 1;
-
-    const COUPONITEM_STATUS_TO_USE = 1;
     const TYPE_FOR_PID = 1;
+    private $joins_link = array(
+        array('table' => 'coupons',
+            'alias' => 'Coupon',
+            'type' => 'INNER',
+            'conditions' => array(
+                'Coupon.id = CouponItem.coupon_id',
+            )
+        )
+    );
 
     /**
      * @param $user_id
@@ -64,26 +70,92 @@ class CouponItem extends AppModel {
 
     }
 
+    public function apply_coupons_to_order($uid, $order_id, $coupons_to_apply){
+        if (!empty($coupons_to_apply)) {
+            foreach($this->find_my_valid_coupons($uid) as $coupon){
+                if(array_search($coupon['CouponItem']['id'], $coupons_to_apply) === false) {
+                    array_delete_value($coupons_to_apply);
+                }
+            }
+        }
+        if (!empty($coupons_to_apply)) {
+            return $this->updateAll(array('status' => COUPONITEM_STATUS_USED, 'applied_order' => $order_id, 'applied_time' => '\'' . date(FORMAT_DATETIME) . '\''),
+                array('bind_user' => $uid, 'applied_order = 0 or applied_order is null', 'status' => COUPONITEM_STATUS_TO_USE, 'id' => $coupons_to_apply)
+            );
+        }
+
+        return false;
+    }
+
+    /**
+     * Compute applied coupons for the specified uid, order_id
+     * @param $uid
+     * @param $order_id
+     * @return array|null (applied coupons as an array, reduced as the price in cents)
+     */
+    public function compute_coupons_for_order($uid, $order_id) {
+        $reduced = 0;
+        if ($order_id) {
+            $applied_coupons = array();
+            foreach($this->find('all', array(
+                'joins' => $this->joins_link,
+                'fields' => array('Coupon.*', 'CouponItem.*'),
+                'conditions' => array('CouponItem.bind_user' => $uid, 'CouponItem.applied_order' => $order_id))) as $c) {
+                $reduced += $c['Coupon']['reduced_price'];
+                $applied_coupons[] = $c['CouponItem']['id'];
+            }
+            return array('applied' => $applied_coupons, 'reduced' => $reduced);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * @param $user_id
+     * @param $coupon_ids
+     * @return int total reduced price in cent
+     */
+    public function compute_total_reduced($user_id, $coupon_ids) {
+        $reduced = 0;
+        foreach($this->find_my_valid_coupons($user_id) as $coupon){
+            if(array_search($coupon['CouponItem']['id'], $coupon_ids) !== false) {
+                $reduced += $coupon['Coupon']['reduced_price'];
+            }
+        }
+        return $reduced;
+    }
+
+
+    public function find_coupon($coupon_item_id) {
+        $arr = $this->find('first', array(
+            'conditions' => array('CouponItem.id' => $coupon_item_id, 'CouponItem.deleted = 0'),
+            'joins' => $this->joins_link,
+            'fields' => array('Coupon.*', 'CouponItem.*')
+        ));
+        return empty($arr) ? false : $arr[0];
+    }
+
+    public function find_my_all_coupons($user_id) {
+        return $this->find('all', array(
+            'conditions' => array('CouponItem.bind_user' => $user_id, 'CouponItem.deleted = 0'),
+            'joins' => $this->joins_link,
+            'fields' => array('Coupon.*', 'CouponItem.*'),
+            'order' => 'Coupon.valid_end asc'
+        ));
+    }
+
 
     public function find_my_valid_coupons($user_id, $brandId = null) {
         if (!$user_id) { return false; }
 
-        $joins = array(
-            array('table' => 'coupons',
-                'alias' => 'Coupon',
-                'type' => 'INNER',
-                'conditions' => array(
-                    'Coupon.id = CouponItem.coupon_id',
-                )
-            )
-        );
-
         $dt = new DateTime();
         $cond = array('CouponItem.bind_user' => $user_id,
-            'CouponItem.status' => self::COUPONITEM_STATUS_TO_USE,
+            'CouponItem.status' => COUPONITEM_STATUS_TO_USE,
+            'CouponItem.deleted = 0',
+            'CouponItem.applied_order = 0',
             '(CouponItem.cart_item_id is null or CouponItem.cart_item_id = 0)',
             'Coupon.published' => 1,
-            'Coupon.status' => self::COUPON_STATUS_VALID,
+            'Coupon.status' => COUPON_STATUS_VALID,
             'Coupon.valid_begin <= ' => $dt->format(FORMAT_DATETIME),
             'Coupon.valid_end >= ' => $dt->format(FORMAT_DATETIME)
         );
@@ -93,7 +165,7 @@ class CouponItem extends AppModel {
 
         $items = $this->find('all', array(
             'conditions' => $cond,
-            'joins' => $joins,
+            'joins' => $this->joins_link,
             'fields' => array('Coupon.*', 'CouponItem.*')
         ));
 
@@ -103,6 +175,7 @@ class CouponItem extends AppModel {
     }
 
     /**
+     * Convert the product ids
      * @param $items
      * @internal param $item
      * @return mixed

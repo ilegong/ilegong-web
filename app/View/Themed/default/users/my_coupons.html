@@ -1,0 +1,12 @@
+<h3>我的粮票</h3>
+<div class="list-group">
+    <?php foreach($coupons as $coupon) { ?>
+    <a href="#" class="list-group-item">
+        <h4 class="list-group-item-heading">{{$coupon['Coupon']['name']}}{{if $coupon['CouponItem']['status'] == COUPONITEM_STATUS_TO_USE }} <span class="label label-success">未使用</span>
+            {{elseif $coupon['CouponItem']['status'] == COUPONITEM_STATUS_USED}} <span class="label label-default">已使用</span>{{/if}}</h4>
+        <p class="list-group-item-text">
+            有效期：{{$coupon['Coupon']['valid_begin']}} - {{$coupon['Coupon']['valid_end']}}
+        </p>
+    </a>
+    <?php } ?>
+</div>

@@ -23,6 +23,10 @@ const WX_STATUS_SUBSCRIBED = 1;
 const WX_STATUS_UNSUBSCRIBED = 3;
 const WX_STATUS_UNKNOWN = 0;
 
+const COUPON_STATUS_VALID = 1;
+const COUPONITEM_STATUS_TO_USE = 1;
+const COUPONITEM_STATUS_USED = 2;
+
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
@@ -202,6 +206,12 @@ class BrandCartItem {
     public function coupon_applied($couponItemId) {
         return !empty($this->used_coupons) && array_search($couponItemId, $this->used_coupons) !== false;
     }
+
+    public function apply_coupon($couponItemId, $reduce_price, $applying){
+        foreach($this->items as $brandItem) {
+           //TODO:
+        }
+    }
 }
 
 class OrderCartItem {
@@ -240,6 +250,29 @@ class OrderCartItem {
             $total += $brandItem->total_price();
         }
         return $total;
+    }
+
+    public function apply_coupon($brandId, $coupon) {
+
+        if (empty($coupon)) {
+            return false;
+        }
+
+        $coup_brand_id = $coupon['Coupon']['brand_id'];
+        if ($coup_brand_id && $brandId != $coup_brand_id) {
+            return false;
+        }
+
+        //TODO: validate more, validate used!
+
+        foreach($this->brandItems as $bid=>$brandItem) {
+            if ($bid == $brandId) {
+                $brandItem->apply_coupon($coup_brand_id, $coupon['Coupon']['price']);
+            }
+        }
+
+        return array(true, $this->total_price());
+
     }
 }
 

@@ -1,5 +1,14 @@
 <style>
 td {padding:5px 10px;}
+
+a.coupon .glyphicon {
+    color: #bbbbbb;
+}
+
+a.coupon_applied .glyphicon {
+    !important;
+    color: darkgreen;
+}
 </style>
 <div  class="container">
 
@@ -73,12 +82,11 @@ td {padding:5px 10px;}
 			{{/loop}}
 			</tbody>
 			</table>
-            <ul data-brandId="{{$brandItem->id}}">
+            <ul>
             <?PHP $coupons = $coupons_of_products[$brandItem->id]; if(!empty($coupons)){ foreach($coupons as $coupon) {
                 $applied =$brandItem->coupon_applied($coupon['CouponItem']['id']); ?>
-                <li class="coupon {{if $applied}}coupon_applied{{/if}}"><a data-coupon_item_id="{{$coupon['CouponItem']['id']}}" href="javascript:">
-                    <span class="glyphicon {{ $applied ? 'glyphicon-ok' : 'glyphicon-remove'}}"></span>
-                    {{$coupon['Coupon']['name']}}</a><span class="applied_result"></span>
+                <li><a data-coupon_item_id="{{$coupon['CouponItem']['id']}}" data-brandId="{{$brandItem->id}}" class="coupon {{if $applied}}coupon_applied{{/if}}" href="javascript:">
+                    {{$coupon['Coupon']['name']}}<span class="glyphicon glyphicon-ok"></span></a><span class="applied_result"></span>
                     </li>
             <?PHP } } ?>
             </ul>
@@ -93,7 +101,8 @@ td {padding:5px 10px;}
             </div>
 		    <div class="pull-right">
                     <p>运费：{{$this->Number->precision($shipFee, 2)}}</p>
-                    <p>总价<small>(含运费)</small>：{{$this->Number->precision($cart->total_price() + $shipFee, 2)}}</p>
+                    <p>已优惠：<span id="total_reduced_span">{{$this->Number->precision($total_reduced, 2)}}</span></p>
+                    <p>总价<small>(含运费)</small>：<span id="total_price_span">{{$this->Number->precision($cart->total_price() + $shipFee, 2)}}</span></p>
                 <a class="btn btn-primary" onclick="return checkAddress();" href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a>
             </div>
         </div>
@@ -103,14 +112,28 @@ td {padding:5px 10px;}
 <script>
 
     $(document).ready(function () {
-
-
-        $('li.coupon > a').click(function(){
-            var brandId = $(this).parent('ul[data-brandId]').attr('data-brandId');
-            var coupon_item_id = $(this).attr('data-coupon_item_id');
-            $.post('/orders/toggle_coupon.json', {'brandId': brandId, 'coupon_item_id': coupon_item_id}, function(data){
-
-            });
+        $('li > a.coupon').click(function(){
+            var $this = $(this);
+            var brandId = $this.attr('data-brandId');
+            var coupon_item_id = $this.attr('data-coupon_item_id');
+            var action = $this.hasClass('coupon_applied') ? 'unapply' : 'apply';
+//            var $notifyDlg = utils.progress_notify('');
+            $.post('/orders/apply_coupon.json', {'brand_id': brandId, 'coupon_item_id': coupon_item_id, 'action': action}, function(data){
+//                $notifyDlg.modal('close');
+                if(data) {
+                    if(data.changed) {
+                        $this.toggleClass('coupon_applied');
+                        $('#total_price_span').text(utils.toFixed(data.total_price, 2));
+                        $('#total_reduced_span').text(utils.toFixed(data.total_reduced, 2));
+                    } else {
+                        if (data.reason == 'not_login') {
+                            utils.alert('您长时间未操作，请重新登录', function(){
+                                window.location.href = '/users/login?refer='+ encodeURIComponent('/carts/listcart');
+                            });
+                        }
+                    }
+                }
+            }, 'json');
         });
 
 

@@ -21,15 +21,25 @@ class OrdersController extends AppController{
         111=>'宅急送'
     );
 
+    var $customized_not_logged = array('apply_coupon');
+
     public function __construct($request = null, $response = null) {
         $this->helpers[] = 'PhpExcel';
         parent::__construct($request, $response);
         $this->pageTitle = __('订单');
     }
-	
-	function beforeFilter(){
+
+    /**
+     * @param $bid
+     * @return string
+     */
+    public static function key_balanced_conpons($bid) {
+        return "Balance." . $bid . ".coupons";
+    }
+
+    function beforeFilter(){
 		parent::beforeFilter();
-		if(empty($this->currentUser['id'])){
+		if(empty($this->currentUser['id']) && array_search($this->request->params['action'], $this->customized_not_logged) === false){
 			$this->redirect('/users/login?referer='.Router::url('/orders/info'));
 		}
 		$this->user_condition = array(
@@ -93,11 +103,12 @@ class OrdersController extends AppController{
 		foreach($business as $brand_id => $busi){
 			$total_price = 0.0;
             $ship_fee = 0.0;
-			foreach($busi as $pid){
+            $uid = $this->currentUser['id'];
+            foreach($busi as $pid){
 				$total_price+= $Carts[$pid]['Cart']['price']*$Carts[$pid]['Cart']['num'];
                 $ship_fee += $ship_fees[$pid];
 
-                list($afford_for_curr_user, $limit_per_user) = AppController::affordToUser($pid, $this->currentUser['id']);
+                list($afford_for_curr_user, $limit_per_user) = AppController::affordToUser($pid, $uid);
                 if (!$afford_for_curr_user) {
                     $this->__message(__($Carts[$pid]['name'].'已售罄或您已经购买超限，请从购物车中删除后再结账'), '/orders/info', 5);
                     return;
@@ -110,13 +121,13 @@ class OrdersController extends AppController{
 				$this->Session->setFlash('订单金额错误，请返回购物车查看');
 				$this->redirect('/carts/listcart');
 			}
-			
+
 			$data = array();
 			$data['total_price'] = $total_price;
 			$data['total_all_price'] = $total_price + $ship_fee;
             $data['ship_fee'] = $ship_fee;
 			$data['brand_id'] = $brand_id;
-			$data['creator'] = $this->currentUser['id'];
+			$data['creator'] = $uid;
 			$data['remark'] = $this->Session->read('Order.remark');
 			$data['consignee_id'] = $this->Session->read('OrderConsignee.id');
 			$data['consignee_name'] = $this->Session->read('OrderConsignee.name');
@@ -137,10 +148,12 @@ class OrdersController extends AppController{
                 if ($order_id) {
                     array_push($new_order_ids, $order_id);
                 }
-				foreach($busi as $pid){
+                $this->apply_coupons_to_order($brand_id, $uid, $order_id);
+
+                foreach($busi as $pid){
 					$cart = $Carts[$pid];
 // 					echo "==$order_id=====$pid======$total_price====\n";
-					$this->Cart->updateAll(array('order_id'=>$order_id,'status'=>1),array('id'=>$cart['Cart']['id'],'creator'=>$this->currentUser['id']));
+					$this->Cart->updateAll(array('order_id'=>$order_id,'status'=>1),array('id'=>$cart['Cart']['id'],'creator'=> $uid));
 				}
 			}
 			else{
@@ -170,25 +183,12 @@ class OrdersController extends AppController{
 		$has_chosen_consignee = false;
 		$this->loadModel('OrderConsignee');
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
-        $shipFee = 0.0;
 		$this->loadModel('Cart');
         $this->loadModel('Product');
         $this->loadModel('ShipPromotion');
 
-        $cart = new OrderCartItem();
-        $cart->order_id = $order_id;
-        $cart->user_id = $this->currentUser['id'];
-
 		if(empty($order_id)){
-            $dbCartItems = $this->Cart->find('all', array(
-                'conditions' => array(
-                    'status' => 0,
-                    'order_id' => null,
-                    'OR' => $this->user_condition
-                )));
-
-            $cartsByPid = Hash::combine($dbCartItems, '{n}.Cart.product_id', '{n}.Cart');
-
+            $cartsByPid = $this->cartsByPid();
 			if(!empty($_COOKIE['cart_products'])){
                 $info = explode(',', $_COOKIE['cart_products']);
                 mergeCartWithDb($this->currentUser['id'], $info, $cartsByPid, $this->Product, $this->Cart);
@@ -202,16 +202,7 @@ class OrdersController extends AppController{
 		}
 
         $pids = array_keys($cartsByPid);
-        $products = $this->Product->findPublishedProductsByIds($pids);
-        $productByIds = Hash::combine($products, '{n}.Product.id', '{n}.Product');
-        foreach($cartsByPid as $pid => $cartItem) {
-            $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
-            $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
-            $singleShipFee = empty($pp) || !isset($pp['ship_price']) ? $productByIds[$pid]['ship_fee'] : $pp['ship_price'];
-            $shipFee += ShipPromotion::calculateShipFee($pid, $singleShipFee, $num, null);
-            $itemPrice = empty($pp) || !isset($pp['price']) ? $productByIds[$pid]['price'] : $pp['price'];
-            $cart->add_product_item($productByIds[$pid]['brand_id'], $pid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name']);
-        }
+        list($cart, $shipFee) = $this->applyPromoToCart($pids, $cartsByPid, $shipPromotionId);
 
         $consignees = $this->OrderConsignee->find('all',array(
             'conditions'=>array('creator'=>$this->currentUser['id']),
@@ -263,12 +254,18 @@ class OrdersController extends AppController{
         } else {
             $brands = array();
         }
+        foreach($brand_ids as $bid) {
+            $this->Session->write(self::key_balanced_conpons($bid), '');
+        }
+
+        //TODO: 计算邮费优惠等
+        $total_reduced = 0.0;
 
         $couponItem = ClassRegistry::init('CouponItem');
         $coupons_of_products = $couponItem->find_user_coupons_for_cart($this->currentUser['id'], $cart);
 
 		$total_price = $cart->total_price();
-        $this->set(compact('total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'flash_msg'));
+        $this->set(compact('total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'flash_msg', 'total_reduced'));
 		$this->set('has_chosen_consignee', $has_chosen_consignee);
 		$this->set('total_consignee', $total_consignee);
 		$this->set('consignees', $consignees);
@@ -341,6 +338,61 @@ class OrdersController extends AppController{
         $this->set('Carts',$Carts);
         $this->set('action', $action);
         $this->set('products', $products);
+    }
+
+    public function apply_coupon() {
+
+        $this->autoRender = false;
+
+        if (empty($this->currentUser['id'])) {
+            echo json_encode(array('changed' => false, 'reason' => 'not_login'));
+            return;
+        }
+
+        $shipPromotionId = intval($_REQUEST['ship_promotion']);
+        $coupon_item_id = $_POST['coupon_item_id'];
+        $brand_id = $_POST['brand_id'];
+        $applying = $_POST['action'] == 'apply';
+
+        $cartsByPid = $this->cartsByPid();
+        list($cart, $shipFee) = $this->applyPromoToCart(array_keys($cartsByPid), $cartsByPid, $shipPromotionId);
+
+        $this->loadModel('CouponItem');
+
+        $appliedCoupons = array();
+        $coupon_used_key = self::key_balanced_conpons($brand_id);
+        $coupon_value = $this->Session->read($coupon_used_key);
+        if ($coupon_value) {
+            $appliedCoupons = json_decode($coupon_value);
+        }
+
+        $changed = false;
+        //TODO: 需要考虑各种券的一致性，排他性
+        if ($applying) {
+
+            if (empty($appliedCoupons) || array_search($coupon_item_id, $appliedCoupons) === false) {
+//            if($cart->could_apply($brand_id, $cou)){
+                //TODO: 需要考虑券是否满足可用性等等
+                $appliedCoupons[] = $coupon_item_id;
+                $changed = true;
+//            }
+            }
+        } else {
+            if (!empty($appliedCoupons) && array_search($coupon_item_id, $appliedCoupons) !== false) {
+                array_delete_value($appliedCoupons, $coupon_item_id);
+                $changed = true;
+            }
+        }
+
+        $resp = array('changed' => $changed);
+        if ($changed) {
+            $total_reduced = $this->CouponItem->compute_total_reduced($this->currentUser['id'], $appliedCoupons);
+            $this->Session->write($coupon_used_key, json_encode($appliedCoupons));
+            $resp['total_reduced'] = $total_reduced/100;
+            $resp['total_price'] = $cart->total_price() - $total_reduced/100 + $shipFee;
+        }
+
+        echo json_encode($resp);
     }
 	
 	function mine(){
@@ -952,6 +1004,77 @@ class OrdersController extends AppController{
             return $receivedCreator;
         } else {
             return $this->currentUser['id'];
+        }
+    }
+
+    /**
+     * @param $pids
+     * @param $cartsByPid
+     * @param $shipPromotionId
+     * @return mixed
+     */
+    protected function applyPromoToCart($pids, $cartsByPid, $shipPromotionId) {
+        $cart = new OrderCartItem();
+        $cart->user_id = $this->currentUser['id'];
+
+        $shipFee = 0.0;
+        $this->loadModel('Product');
+        $this->loadModel('ShipPromotion');
+        $productByIds = Hash::combine($this->Product->findPublishedProductsByIds($pids), '{n}.Product.id', '{n}.Product');
+        foreach ($cartsByPid as $pid => $cartItem) {
+            $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
+            $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
+            $singleShipFee = empty($pp) || !isset($pp['ship_price']) ? $productByIds[$pid]['ship_fee'] : $pp['ship_price'];
+            $shipFee += ShipPromotion::calculateShipFee($pid, $singleShipFee, $num, null);
+            $itemPrice = empty($pp) || !isset($pp['price']) ? $productByIds[$pid]['price'] : $pp['price'];
+            $cart->add_product_item($productByIds[$pid]['brand_id'], $pid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name']);
+        }
+        return array($cart, $shipFee);
+    }
+
+    /**
+     * @return array
+     */
+    protected function cartsByPid() {
+        $this->loadModel('Cart');
+        $dbCartItems = $this->Cart->find('all', array(
+            'conditions' => array(
+                'status' => 0,
+                'order_id' => null,
+                'OR' => $this->user_condition
+            )));
+
+        return Hash::combine($dbCartItems, '{n}.Cart.product_id', '{n}.Cart');
+    }
+
+    /**
+     * @param $brand_id
+     * @param $uid
+     * @param $order_id
+     */
+    protected function apply_coupons_to_order($brand_id, $uid, $order_id) {
+        //TODO：检查是否可以应用这些券的合法性
+        $used_coupons_str = $this->Session->read(self::key_balanced_conpons($brand_id));
+        if ($used_coupons_str) {
+            $used_coupons = json_decode($used_coupons_str);
+        }
+        if (!empty($used_coupons) && is_array($used_coupons)) {
+            $this->loadModel('CouponItem');
+            if ($this->CouponItem->apply_coupons_to_order($uid, $order_id, $used_coupons)) {
+                $computed = $this->CouponItem->compute_coupons_for_order($uid, $order_id);
+                $applied_coupons = $computed['applied'];
+                $coupon_total = $computed['reduced'];
+                if (!empty($applied_coupons)) {
+                    $reduced = $coupon_total / 100;
+                    $toUpdate = array('applied_coupons' => '\''.implode(',', $applied_coupons).'\'',
+                        'coupon_total' => $coupon_total,
+                        'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, 0, total_all_price - ' . $reduced . ')');
+                    $this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+                }
+                if (count($used_coupons) != count($applied_coupons) || array_diff($used_coupons, $applied_coupons)) {
+                    $this->log("not expected coupon size: order_id=$order_id, original:" . json_encode($used_coupons) . ", final:" . json_encode($applied_coupons));
+                }
+            }
         }
     }
 }

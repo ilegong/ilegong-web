@@ -850,7 +850,7 @@ var utils = {
     },
 
     progress_notify: function(msg) {
-        bootbox.dialog({
+        return bootbox.dialog({
             'closeButton': false,
             message: '<img src="'+ this.get_notify_img_url()+'"/><br/> ' + msg
         }).css({

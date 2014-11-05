@@ -332,6 +332,11 @@ class UsersController extends AppController {
         return;
     }
 
+    function my_coupons() {
+        $this->loadModel('CouponItem');
+        $coupons = $this->CouponItem->find_my_all_coupons($this->currentUser['id']);
+        $this->set(compact('coupons'));
+    }
 
     function editpassword() {
         $userinfo = $this->Auth->user();
