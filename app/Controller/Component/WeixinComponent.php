@@ -84,12 +84,12 @@ class WeixinComponent extends Component
             "url" => $this->get_rice_detail_url(),
             "topcolor" => "#FF0000",
             "data" => array(
-                "first" => array("value" => "亲，您的稻花香已完成付款，分享稻花香链接到朋友圈，只要朋友通过此链接购买大米成功，您即可得大米1斤喔~。"),
+                "first" => array("value" => "亲，分享稻花香链接到朋友圈，朋友通过此链接购买大米成功，即可得大米1斤喔~"),
                 "orderProductPrice" => array("value" => $price),
                 "orderProductName" => array("value" => $good_info),
                 "orderAddress" => array("value" => $ship_info),
                 "orderName" => array("value" => $order_no),
-                "remark" => array("value" => "点击马上分享得大米喔~", "color" => "#FF8800")
+                "remark" => array("value" => "点击详情马上分享到朋友圈得大米~", "color" => "#FF8800")
             )
         );
         return $this->send_weixin_message($post_data);
@@ -107,7 +107,7 @@ class WeixinComponent extends Component
                 "first" => array("value" => "亲，" . $friend_name . "通过您分享的链接购买了稻花香大米，恭喜您获得粮票1张。"),
                 "keyword1" => array("value" => $order_no),
                 "keyword2" => array("value" => $price),
-                "keyword3" => array("value" => $paid_time),
+                "keyword3" => array("value" => date('Y-m-d H:i:s')),
                 "keyword4" => array("value" => "粮票1斤"),
                 "remark" => array("value" => "点击详情，查询我获得的粮票。", "color" => "#FF8800")
             )
