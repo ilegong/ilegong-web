@@ -128,7 +128,10 @@ class OrdersController extends AppController{
             $data['ship_fee'] = $ship_fee;
 			$data['brand_id'] = $brand_id;
 			$data['creator'] = $uid;
-			$data['remark'] = $this->Session->read('Order.remark');
+
+            $remark = $_REQUEST['remark_' . $brand_id];
+            $data['remark'] = empty($remark)?"":$remark;
+
 			$data['consignee_id'] = $this->Session->read('OrderConsignee.id');
 			$data['consignee_name'] = $this->Session->read('OrderConsignee.name');
 			$data['consignee_area'] = $this->Session->read('OrderConsignee.area');
