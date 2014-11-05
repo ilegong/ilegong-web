@@ -95,7 +95,7 @@ class WeixinComponent extends Component
         return $this->send_weixin_message($post_data);
     }
 
-    public function send_order_rebate_message($open_id, $buyer_name, $order_no, $price = '**', $paid_time = '刚刚')
+    public function send_order_rebate_message($open_id, $buyer_name, $order_no, $price = '******', $paid_time = '刚刚')
     {
         $friend_name = empty($buyer_name) ? "神秘人" : $buyer_name;
         $post_data = array(
