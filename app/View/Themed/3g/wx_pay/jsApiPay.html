@@ -17,9 +17,7 @@
                 $msg = 'fail';
             } else if(res.err_msg == "system:access_denied" || res.err_msg == "access_control:not_allow"){
                 $msg = 'denied';
-                utils.alert('<span class="glyphicon glyphicon-exclamation-sign" style="margin-right: 5px"></span>订阅号内微信不支持支付, ' +
-                        '<div class="alert-warning">请进入我们的服务号『{{WX_SERVICE_ID_NAME}}』-『我的订单』完成支付。' +
-                        '搜索{{WX_SERVICE_ID_NO}}立即关注服务号！</div>', function(){
+                utils.alert('<div class="alert-warning">请搜索{{WX_SERVICE_ID_NO}}立即关注我们的服务号，在『个人中心』->『我的订单』完成支付。</div>', function(){
                     window.location.href = doneUrlPrefix + encodeURIComponent($msg);
                 });
                 not_redirect = true;
