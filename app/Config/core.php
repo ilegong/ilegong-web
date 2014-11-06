@@ -29,6 +29,7 @@ define('WX_APPID', 'wxca7838dcade4709c');
 define('WX_APPID_SOURCE', 'wxca78');
 define('WX_SECRET', '79b787ec8f463eeb769540464c9277b2');
 define('WX_SERVICE_ID_NAME', '朋友说');
+define('WX_SERVICE_ID_NO', 'pyshuo2014');
 
 // Configure::write('App.baseUrl', env('SCRIPT_NAME'));
 define('LOG_ERROR', 2);
