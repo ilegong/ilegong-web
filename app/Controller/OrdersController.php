@@ -702,12 +702,13 @@ class OrdersController extends AppController{
             exit;
         }
 
+        $currUid = $this->currentUser['id'];
         $order_info = $this->Order->find('first', array(
-            'conditions' => array('id' => $order_id, 'creator' => $this->currentUser['id']),
+            'conditions' => array('id' => $order_id, 'creator' => $currUid),
         ));
 
-        if (empty($order_info) || $this->currentUser['id'] != $order_info['Order']['creator']) {
-            $this->log('denied edit_order_by_owner_ajax: order is empty?'.empty($order_info));
+        if (empty($order_info) || $currUid != $order_info['Order']['creator']) {
+            $this->log("denied edit_order_by_owner_ajax: order($order_id) is empty?".empty($order_info).", current-user-id=".$currUid);
             echo json_encode(array('order_id' => $order_id, 'msg' => '您不具备此订单的修改权限。'));
             exit;
         }
