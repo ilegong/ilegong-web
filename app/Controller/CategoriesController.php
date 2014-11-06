@@ -104,6 +104,7 @@ class CategoriesController extends AppController {
         }
         $this->set('productTags', $productTags);
         $this->set('op_cate', 'categories');
+        $this->pageTitle = __('分类');
     }
 
     public function productsHome() {
@@ -159,7 +160,7 @@ class CategoriesController extends AppController {
             }
         }
 
-        $this->pageTitle =  __('分类首页');
+        $this->pageTitle =  __('热卖');
         $navigation = $this->readOrLoadAndCacheNavigations($current_cateid, $this->Category);
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
         $this->set('sub_title', $productTags['ProductTag']['name']);
