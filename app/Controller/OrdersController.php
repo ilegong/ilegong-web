@@ -793,7 +793,6 @@ class OrdersController extends AppController{
             $ship_type = $_REQUEST['ship_type'];
             $this->Order->updateAll(array('status'=>$status,'ship_code'=>"'".addslashes($ship_code)."'",'ship_type'=>$ship_type, 'lastupdator'=>$currentUid),array('id'=>$order_id, 'status' => $orig_status));
             //add weixin message
-            $this->log($order_info['Order']['creator'],LOG_DEBUG);
             $this->loadModel('Oauthbind');
             $user_weixin = $this->Oauthbind->findWxServiceBindByUid($order_info['Order']['creator']);
             if($user_weixin!=false){
