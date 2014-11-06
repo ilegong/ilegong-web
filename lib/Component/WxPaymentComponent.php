@@ -23,7 +23,7 @@ class WxPaymentComponent extends Component {
     }
 
     public function out_trade_no($source, $orderId) {
-        return $source."-$orderId-".mktime();
+        return $source."-$orderId-".mktime().'-'.rand(0, 100);
     }
 
     public function goToAliPayForm($order_id, $uid) {

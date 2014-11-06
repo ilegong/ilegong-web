@@ -52,50 +52,36 @@ class WxPayController extends AppController {
         }
 
         list($productDesc, $body) = $this->WxPayment->getProductDesc($orderId);
-        $out_trade_no = $this->WxPayment->out_trade_no(WX_APPID_SOURCE, $orderId);
         $trade_type = TRADE_WX_API_TYPE;
         $totalFee = intval(intval($order['Order']['total_all_price'] * 1000)/10);
+        $out_trade_no = $this->WxPayment->out_trade_no(WX_APPID_SOURCE, $orderId);
 
         //=========步骤2：使用统一支付接口，获取prepay_id============
-        //使用统一支付接口
-        $unifiedOrder = new UnifiedOrder_pub();
+        $prepay_id = $this->getPrePayIdFromWx($openid, $body, $out_trade_no, $totalFee);
+        if (!$prepay_id) {
+            $this->log("Re generate prepay id for order:".$orderId);
+            $out_trade_no = $this->WxPayment->out_trade_no(WX_APPID_SOURCE, $orderId);
+            $prepay_id = $this->getPrePayIdFromWx($openid, $body, $out_trade_no, $totalFee);
+        }
 
-        //设置统一支付接口参数
-        //设置必填参数
-        //appid已填,商户无需重复填写
-        //mch_id已填,商户无需重复填写
-        //noncestr已填,商户无需重复填写
-        //spbill_create_ip已填,商户无需重复填写
-        //sign已填,商户无需重复填写
-        $unifiedOrder->setParameter("openid","$openid");//商品描述
-        $unifiedOrder->setParameter("body", $body);//商品描述
-        $unifiedOrder->setParameter("out_trade_no","$out_trade_no");//商户订单号
-        $unifiedOrder->setParameter("total_fee", $totalFee);//总金额
-        $unifiedOrder->setParameter("notify_url",WxPayConf_pub::NOTIFY_URL);//通知地址
-        $unifiedOrder->setParameter("trade_type","JSAPI");//交易类型
-        //非必填参数，商户可根据实际情况选填
-        //$unifiedOrder->setParameter("sub_mch_id","XXXX");//子商户号
-        //$unifiedOrder->setParameter("device_info","XXXX");//设备号
-        //$unifiedOrder->setParameter("attach","XXXX");//附加数据
-        //$unifiedOrder->setParameter("time_start","XXXX");//交易起始时间
-        //$unifiedOrder->setParameter("time_expire","XXXX");//交易结束时间
-        //$unifiedOrder->setParameter("goods_tag","XXXX");//商品标记
-        //$unifiedOrder->setParameter("product_id","XXXX");//商品ID
+        if ($prepay_id) {
 
-        $prepay_id = $unifiedOrder->getPrepayId();
+            $this->WxPayment->savePayLog($orderId, $out_trade_no, $body, $trade_type, $totalFee, $prepay_id, $openid);
 
-        $this->WxPayment->savePayLog($orderId, $out_trade_no, $body, $trade_type, $totalFee, $prepay_id, $openid);
+            //=========步骤3：使用jsapi调起支付============
+            $jsApi->setPrepayId($prepay_id);
+            $this->set('jsApiParameters', $jsApi->getParameters());
+            $this->set('totalFee', $order['Order']['total_all_price']);
+            $this->set('tradeNo', $out_trade_no);
+            $this->set('productDesc', $productDesc);
+            $this->set('orderId', $orderId);
+            $this->pageTitle = '微信支付';
 
-        //=========步骤3：使用jsapi调起支付============
-        $jsApi->setPrepayId($prepay_id);
-        $this->set('jsApiParameters', $jsApi->getParameters());
-        $this->set('totalFee', $order['Order']['total_all_price']);
-        $this->set('tradeNo', $out_trade_no);
-        $this->set('productDesc', $productDesc);
-        $this->set('orderId', $orderId);
-        $this->pageTitle = '微信支付';
-
-        $this->log("wxpay:". $jsApi->getParameters());
+            $this->log("wxpay:" . $jsApi->getParameters());
+        }  else {
+            $this->log('wx_prepare_error');
+            $this->__message('支付服务忙死了，请您稍后重试', '/orders/detail/'.$orderId.'/pay', 5);
+        }
     }
 
 
@@ -181,5 +167,42 @@ class WxPayController extends AppController {
      */
     private function _is_action_by_wx_callback() {
         return array_search($this->request->params['action'], array('notify', 'warning')) !== false;
+    }
+
+    /**
+     * @param $openid
+     * @param $body
+     * @param $out_trade_no
+     * @param $totalFee
+     * @return bool
+     */
+    protected function getPrePayIdFromWx($openid, $body, $out_trade_no, $totalFee) {
+        //使用统一支付接口
+        $unifiedOrder = new UnifiedOrder_pub();
+
+        //设置统一支付接口参数
+        //设置必填参数
+        //appid已填,商户无需重复填写
+        //mch_id已填,商户无需重复填写
+        //noncestr已填,商户无需重复填写
+        //spbill_create_ip已填,商户无需重复填写
+        //sign已填,商户无需重复填写
+        $unifiedOrder->setParameter("openid", "$openid"); //商品描述
+        $unifiedOrder->setParameter("body", $body); //商品描述
+        $unifiedOrder->setParameter("out_trade_no", "$out_trade_no"); //商户订单号
+        $unifiedOrder->setParameter("total_fee", $totalFee); //总金额
+        $unifiedOrder->setParameter("notify_url", WxPayConf_pub::NOTIFY_URL); //通知地址
+        $unifiedOrder->setParameter("trade_type", "JSAPI"); //交易类型
+        //非必填参数，商户可根据实际情况选填
+        //$unifiedOrder->setParameter("sub_mch_id","XXXX");//子商户号
+        //$unifiedOrder->setParameter("device_info","XXXX");//设备号
+        //$unifiedOrder->setParameter("attach","XXXX");//附加数据
+        //$unifiedOrder->setParameter("time_start","XXXX");//交易起始时间
+        //$unifiedOrder->setParameter("time_expire","XXXX");//交易结束时间
+        //$unifiedOrder->setParameter("goods_tag","XXXX");//商品标记
+        //$unifiedOrder->setParameter("product_id","XXXX");//商品ID
+
+        $prepay_id = $unifiedOrder->getPrepayId();
+        return $prepay_id;
     }
 }

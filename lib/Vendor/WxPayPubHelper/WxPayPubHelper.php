@@ -145,50 +145,55 @@ class Common_util_pub extends Object
 		return $array_data;
 	}
 
-	/**
-	 * 	作用：以post方式提交xml到对应的接口url
-	 */
-	public function postXmlCurl($xml,$url,$second=30)
+    /**
+     *    作用：以post方式提交xml到对应的接口url
+     * @param $xml
+     * @param $url
+     * @param int $second
+     * @return bool|mixed if error return false, otherwise return the xml data
+     */
+    public function postXmlCurl($xml, $url, $second = 30)
 	{
         $this->log("try to post:$url  $xml");
         //初始化curl        
-       	$ch = curl_init();
-		//设置超时
-		curl_setopt($ch, CURLOPT_TIMEOUT, $second);
+        $ch = curl_init();
+        //设置超时
+        curl_setopt($ch, CURLOPT_TIMEOUT, $second);
         //这里设置代理，如果有的话
         //curl_setopt($ch,CURLOPT_PROXY, '8.8.8.8');
         //curl_setopt($ch,CURLOPT_PROXYPORT, 8080);
-        curl_setopt($ch,CURLOPT_URL, $url);
-        curl_setopt($ch,CURLOPT_SSL_VERIFYPEER,FALSE);
-        curl_setopt($ch,CURLOPT_SSL_VERIFYHOST,FALSE);
-		//设置header
-		curl_setopt($ch, CURLOPT_HEADER, FALSE);
-		//要求结果为字符串且输出到屏幕上
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        //设置header
+        curl_setopt($ch, CURLOPT_HEADER, FALSE);
+        //要求结果为字符串且输出到屏幕上
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-		//post提交方式
-		curl_setopt($ch, CURLOPT_POST, TRUE);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+        //post提交方式
+        curl_setopt($ch, CURLOPT_POST, TRUE);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
 		//运行curl
         $data = curl_exec($ch);
 //		curl_close($ch);  Avoid close warning  (curl_close(): 101 is not a valid cURL handle resource in)
-		//返回结果
-		if($data)
-		{
-			curl_close($ch);
+        if (curl_errno($ch)) {
+            $error = curl_error($ch);
+            $errorNo = curl_errno($ch);
+            //echo "curl出错，错误码:$error"."<br>";
+            //echo "<a href='http://curl.haxx.se/libcurl/c/libcurl-errors.html'>错误原因查询</a></br>";
+            curl_close($ch);
+
+            $this->log("curl post result: error-no=".$errorNo." error=". $error .", query here: http://curl.haxx.se/libcurl/c/libcurl-errors.html");
+
+            return false;
+        } else if ($data) {
+            curl_close($ch);
             $this->log("curl post result:". $data);
-			return $data;
-		}
-		else 
-		{ 
-			$error = curl_errno($ch);
-			//echo "curl出错，错误码:$error"."<br>";
-			//echo "<a href='http://curl.haxx.se/libcurl/c/libcurl-errors.html'>错误原因查询</a></br>";
-			curl_close($ch);
-
-            $this->log("curl post result: error=". $error .", query here: http://curl.haxx.se/libcurl/c/libcurl-errors.html");
-
-			return false;
-		}
+            return $data;
+        } else {
+            curl_close($ch);
+            $this->log("curl post result: no data");
+            return false;
+        }
 	}
 
 	/**
@@ -280,6 +285,8 @@ class Wxpay_client_pub extends Common_util_pub
 	
 	/**
 	 * 	作用：post请求xml
+     *
+     * @return bool|mixed return false if error, otherwise return http response content
 	 */
 	function postXml()
 	{
@@ -304,6 +311,11 @@ class Wxpay_client_pub extends Common_util_pub
 	function getResult() 
 	{		
 		$this->postXml();
+
+        if (!$this->response) {
+            return false;
+        }
+
 		$this->result = $this->xmlToArray($this->response);
 		return $this->result;
 	}
@@ -364,6 +376,11 @@ class UnifiedOrder_pub extends Wxpay_client_pub
 	function getPrepayId()
 	{
 		$this->postXml();
+
+        if ($this->response === false) {
+            return false;
+        }
+
 		$this->result = $this->xmlToArray($this->response);
 		$prepay_id = $this->result["prepay_id"];
 		return $prepay_id;
