@@ -1,0 +1,94 @@
+<div class="row voffset1">
+    <div class="col-xs-12 col-md-6">
+        {{if !empty($Product['Product']['coverimg'])}}
+        <img src="{{$this->Html->url($Product['Product']['coverimg'])}}" style="width:100%;"
+             onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
+        {{/if}}
+        <h2 class="Content-title" id="item-detail-title"><?php echo $Product['Product']['name']; ?></h2>
+        {{if $Product['Product'][promote_name] }}
+        <p><?php echo $Product['Product']['promote_name']; ?></p>
+        {{/if}}
+        <div class="clearfix" style="position: relative">
+            <strong class="vertical-align text-price"> ￥{{$this->Number->precision($Product['Product']['price'], 2)}}</strong>
+            {{if !empty($Product['Product']['original_price'])}}
+              <span class="text-original-price-small">
+                    ¥{{$this->Number->precision($Product['Product']['original_price'], 2)}}
+              </span>
+            {{/if}}
+            <span class="vertical-align" style="position: absolute; right: 10px; bottom: 0;">快递：{{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</span>
+        </div>
+
+        {{if $Product['Product']['id'] == 192}}
+        <div class="clearfix voffset2">
+            <span class="col-xs-3">促销：</span>
+            <p class="col-xs-9">收货地址选择11月5日送到腾讯、搜狐/搜狗，包邮价<span class="text-price" style="font-size: 20px">49.90</span>元</p>
+        </div>
+        {{/if}}
+
+        {{if $total_left > 0}}
+        <div class="voffset3">
+            <p class="text-warning" style="font-size: 1.5em">剩余<span class="text-danger">{{$total_left}}</span>件！</p>
+        </div> {{/if}}
+
+        {{if ($total_left > 0 || $total_left == -1) && $afford_for_curr_user }}
+
+        <div id="productinfo" class="clearfix voffset2" style="padding-bottom:10px;">
+            {{if $limit_per_user == 1}}
+            <p>每人限购一份</p>
+                <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="hidden" readonly="readonly">
+            {{else}}
+            <div class="input-group" style="float:left;width:120px;">
+                <span class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}" >-</span>
+                <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text" readonly="readonly">
+                <span class="add input-group-addon"  item-id="{{$Product['Product']['id']}}">+</span>
+            </div>
+            {{/if}}
+            <a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-warning shopping" id="single-item-{{$Product['Product']['id']}}" item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
+               href="javascript:void(0);">添加到购物车</a>
+        </div>
+        {{elseif $total_left == 0}}
+        <div class="voffset3">
+            <h3 class="text-warning">已经全部抢完！请等待下次开卖！</h3>
+        </div>
+        {{else}}
+
+            <div class="voffset3">
+                <p>您已经买过啦！</p>
+            </div>
+
+        {{/if}}
+
+
+        <div class="voffset3">
+            <a style="color:red;" href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($Product['Brand']['created'])).'/'.$Product['Product']['brand_id'])}}">查看商家更多商品</a>
+        </div>
+    </div>
+</div>
+
+ <?php
+ $defTab = 'product-description';
+ if ($_GET['_pys_add_comment']) {
+    $defTab = 'product-reviews';
+ }
+ ?>
+
+<div id="container-part1" class="container clearfix voffset">
+    <ul class="nav nav-tabs" role="tablist">
+        <li {{if $defTab == 'product-description'}}class="active"{{/if}}><a href="#product-description" role="tab" data-toggle="tab">{{__('ProductIntroduction')}}</a></li>
+        <li {{if $defTab == 'product-reviews'}}class="active"{{/if}}><a href="#product-reviews" role="tab" data-toggle="tab">{{__('ProductReviews')}}</a></li>
+    </ul>
+
+    <div class="tab-content voffset2" style="padding-left: 2px;">
+        <div class="tab-pane fade{{if $defTab == 'product-description'}} in active{{/if}}" id="product-description">
+            <div class="Content-body">
+                <div class="clear"></div>
+                <?php echo $Product['Product']['content']; ?>
+            </div>
+        </div>
+        <div class="tab-pane fade{{if $defTab == 'product-reviews'}} in active{{/if}}" id="product-reviews">
+            <div class="Content-body">
+                {{template comments/add}}
+            </div>
+        </div>
+    </div>
+</div>
