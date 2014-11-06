@@ -726,7 +726,7 @@ class OrdersController extends AppController{
 	/**
 	 * 商家设置订单的状态
 	 */
-	function set_status(){
+	function set_status($creator=0){
 		$order_id = $_REQUEST['order_id'];
 		$status = $_REQUEST['status'];
 
@@ -748,7 +748,7 @@ class OrdersController extends AppController{
 		}
 
 		$this->loadModel('Brand');
-		$brand = $this->Brand->findById($order_info['Order']['product_id']);
+		$brand = $this->Brand->findById($order_info['Order']['brand_id']);
         $is_brand_admin = !empty($brand) && $brand['Brand']['creator'] == $currentUid;
 
 		$orig_status = $order_info['Order']['status'];
