@@ -785,7 +785,7 @@ class OrdersController extends AppController{
                 exit;
             }
 
-            if ($orig_status != ORDER_STATUS_PAID || $orig_status != ORDER_STATUS_SHIPPED) {
+            if ($orig_status != ORDER_STATUS_PAID && $orig_status != ORDER_STATUS_SHIPPED) {
                 echo json_encode(array('order_id' => $order_id, 'msg' => '您只能将此订单设为已发货'));
                 exit;
             }
