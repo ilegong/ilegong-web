@@ -57,10 +57,7 @@ var setAmount={
 				$(obj).focus();
 			}
 		}
-}
-rs_callbacks.editCartNum = function(request,moreags){
-	//alert(moreags.id);
-}
+};
 function editCartNum(id,num){
 	$('#price-'+id).html(utils.toFixed($('#pamount-'+id).data('price')*num, 2));
 	var total_price =0 ;
