@@ -257,6 +257,17 @@
                 text-decoration: line-through;
             }
 
+            /*body{ padding:0; margin:0; font-family:"微软雅黑";}*/
+            .fl{ float:left;}
+            .fr{ float:right;}
+            .clearfix{ zoom:1;}
+            .clearfix:after{ content:".";display:block;height:0;clear:both; visibility:hidden;}
+
+            .radius10{
+                -moz-border-radius: 0.417em;/* Gecko browsers */-webkit-border-radius: 0.417em;/* Webkit browsers */border-radius:0.417em;/* W3C syntax */
+            }
+            .border_b{ border-bottom:1px #dddddd solid;}
+
             /*.btn-buy {*/
                 /*width: 6.875em;*/
                 /*height: 2.5em;*/
@@ -274,7 +285,7 @@
             <div class="container">
                 <ul class="list-inline">
                     <li><a class="home {{if $op_cate == 'home'}}active{{/if}}" href="/techan.html"><span class="op-icon {{if $op_cate == 'home'}}op-icon-active{{/if}}"></span><span>热卖</span></a></li>
-                    <li><a class="categories {{if $op_cate == 'categories'}}active{{/if}}" href="javascript:;"><span class="op-icon {{if $op_cate == 'categories'}}op-icon-active{{/if}}"></span><span>分类</span></a></li>
+                    <li><a class="categories {{if $op_cate == 'categories'}}active{{/if}}" href="/categories/listCategories.html"><span class="op-icon {{if $op_cate == 'categories'}}op-icon-active{{/if}}"></span><span>分类</span></a></li>
                     <li><a class="share" href="/share.html"><span class="op-icon"></span><span>分享圈</span></a></li>
                     <li><a class="shichituan" href="/shichituan.html"><span class="op-icon"></span><span>试吃团</span></a></li>
                     <li><a class="me {{if $op_cate == 'me'}}active{{/if}}" href="/users/me.html"><span class="op-icon {{if $op_cate == 'me'}}op-icon-active{{/if}}"></span><span>我的</span></a></li>

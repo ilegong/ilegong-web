@@ -1,0 +1,23 @@
+<style>
+    .main_class{ padding:1.25em 0.833em;}
+    .main_class span,.main_class a{ display:block;}
+    .class_title{ padding-left:1.25em;}
+    .main_class a span.title{ color:#29ac0e; text-decoration:none; font-size:1.417em; line-height:1.667em;}
+    .main_class a span.explain{ color:#999999; text-decoration:none; font-size:1em; line-height:1.2em;}
+    .main_class a img{ width:3.75em; height:3.75em;}
+    .main_class .more{ background:url(../images/pyshuo_icon.png) -20em 0 no-repeat; background-size:25em 25em; width:0.667em; height:1.333em; margin-top:1.35em;}
+</style>
+{{loop $productTags $tag}}
+        {{if $tag['ProductTag']['id'] != 1}}
+<div class="main_class border_b">
+    <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tag['ProductTag']['slug'] ))}}" class="clearfix">
+        <div class="fl"><img class="radius10" src="{{$this->Html->url('/img/class/class'.$tag['ProductTag']['id'].'.jpg')}}" /></div>
+        <div class="fl class_title">
+            <span class="title">{{$tag['ProductTag']['name']}}</span>
+            <span class="explain">{{$tag['ProductTag']['description']}}</span>
+        </div>
+        <div class="fr more"></div>
+    </a>
+</div>
+        {{/if}}
+{{/loop}}

@@ -83,18 +83,35 @@ class CategoriesController extends AppController {
         $this->set('op_cate', 'categories');
     }
 
+    public function listCategories() {
+        $productTags = $this->findVisibleTags();
+        $descs = array(
+            3 => '苹果/柠檬/橙子/石榴/梨',
+            5 => '枸杞/核桃/葡萄干/无花果/枣/夏威夷果',
+            6 => '白蜜/蜂蜜/花茶/牛奶/酒',
+            8 => '马卡龙/牛轧酥饼/土凤梨酥/曲奇',
+            4 => '散养鸡蛋/散养鸡/猪肉/排骨',
+            9 => '大米/小米/青稞米/姜/木耳/黄粑',
+            10 => '大闸蟹/虾米/海带',
+            7 => '润喉糖/玉米脆片'
+        );
+        foreach($productTags as &$tag) {
+            $tag['ProductTag']['description'] = $descs[$tag['ProductTag']['id']];
+        }
+
+        if ($this->RequestHandler->isMobile()) {
+            $this->layout = 'newv1';
+        }
+        $this->set('productTags', $productTags);
+        $this->set('op_cate', 'categories');
+    }
+
     public function productsHome() {
 
         $current_cateid = CATEGORY_ID_TECHAN;
         $page = 1;
         $pagesize = 60;
-        $this->loadModel('ProductTag');
-        $productTags = $this->ProductTag->find('all', array('conditions' => array(
-            'show_in_home' => 1,
-            'published' => 1
-            ),
-            'order' => 'priority desc'
-        ));
+        $productTags = $this->findVisibleTags();
         if (empty($productTags)) {
             $this->view();
             return;
@@ -384,5 +401,19 @@ class CategoriesController extends AppController {
             }
         }
         return $mappedBrands;
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function findVisibleTags() {
+        $this->loadModel('ProductTag');
+        $productTags = $this->ProductTag->find('all', array('conditions' => array(
+            'show_in_home' => 1,
+            'published' => 1
+        ),
+            'order' => 'priority desc'
+        ));
+        return $productTags;
     }
 }
