@@ -87,7 +87,7 @@ class CategoriesController extends AppController {
         $productTags = $this->findVisibleTags();
         $descs = array(
             3 => '苹果/柠檬/橙子/石榴/梨',
-            5 => '枸杞/核桃/葡萄干/无花果/枣/夏威夷果',
+            5 => '枸杞/核桃/葡萄干/无花果/枣',
             6 => '白蜜/蜂蜜/花茶/牛奶/酒',
             8 => '马卡龙/牛轧酥饼/土凤梨酥/曲奇',
             4 => '散养鸡蛋/散养鸡/猪肉/排骨',
