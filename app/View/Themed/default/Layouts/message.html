@@ -1,22 +1,37 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>{{$pageTitle}}</title>
-<?PHP echo $this->Combinator->less(); ?>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+    <meta http-equiv="refresh" content="{{$seconds}}; url={{$this->Html->url($url)}}" />
+    <title>{{$pageTitle}}</title>
+    <?PHP echo $this->Combinator->less(); ?>
 </head>
 <body>
 <div id="header">
 </div>
-<div id="content">
-    <div class="panel panel-warning">
-        <div class="panel-heading">系统跳转中...</div>
-        <div class="panel-body">
-            {{$message}}
+<div id="content" class="container">
+    <div class="row text-center">
+        <div class="panel panel-warning">
+            <div class="panel-body" style="font-size: 2em">
+                {{$message}}
+            </div>
         </div>
+        <button class="btn btn-warning"><span id="left_seconds">{{$seconds}}</span>秒后自动跳转...</button>
     </div>
-	<meta http-equiv="refresh" content="{{$seconds}}; url={{$this->Html->url($url)}}" />
 </div>
+
+<script>
+    var left = document.getElementById('left_seconds');
+    var cal = function () {
+        var t = parseInt(left.innerHTML);
+        left.innerHTML = t - 1;
+        setTimeout(cal, 1000);
+    };
+    setTimeout(cal,  1000);
+</script>
+
 <div id="footer">
 </div>
 </body>

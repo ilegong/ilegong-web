@@ -61,5 +61,9 @@ class ArticlesController extends AppController{
         $this->log("$uid : $url : $ln msg=$msg");
         $this->autoRender = false;
     }
+
+    public function message_test() {
+        $this->__message("发现错误", '', 1000);
+    }
     
 }
