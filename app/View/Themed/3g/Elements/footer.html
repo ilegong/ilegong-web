@@ -25,9 +25,9 @@
 	
 	var cart = {};	
 
-	function addToCart(itemId, itemNum, price, name){
-		
-		cart[itemId] = {'num' : itemNum, 'price' : price , 'name' : name };
+	function addToCart(itemId, itemNum, price, name, specId){
+
+		cart[itemId] = {'num' : itemNum, 'price' : price , 'name' : name, 'specId': specId };
 		$('#item-' + itemId).find('div.select-item').show();
 					
 		//产品介绍页面处理
@@ -67,7 +67,7 @@
 	function saveCartToCookie(){
 		var cartStr = '';
 		for(var itemId in cart){
-			cartStr += [itemId, cart[itemId]['num'], cart[itemId]['price'], cart[itemId]['name']].join(':');
+			cartStr += [itemId, cart[itemId]['num'], cart[itemId]['specId'], cart[itemId]['price'], cart[itemId]['name']].join(':');
 			cartStr += ',';
 		}
 		$.cookie('cart_products', cartStr, {'path' : '/'});
@@ -84,7 +84,20 @@
 				var itemId = parseInt(itemDetails[0]) ;
 				var itemNum = parseInt(itemDetails[1]) ;
 				if( itemId && itemNum){
-					addToCart(itemId, itemNum, parseFloat(itemDetails[2]) || 0, itemDetails[3] )
+
+                    var price, name;
+                    if (itemDetails.length > 4) {
+                        var specId = parseInt(itemDetails[2]) || 0;
+                        price = parseFloat(itemDetails[3]) || 0;
+                        name = itemDetails[4];
+                    } else {
+                        price = parseFloat(itemDetails[2]) || 0;
+                        name = itemDetails[3];
+                    }
+
+
+
+                    addToCart(itemId, itemNum, specId || 0, price, name)
 				}
 			}
 		}
@@ -162,8 +175,25 @@
 				
 				deleteFromCart(itemId);
 			}else { //not added
-				
-				addToCart(itemId, parseInt($('#pamount-' + itemId).val()) || 1, (parseFloat($item.attr('item-price')) || 0 ), $item.attr('item-name'));
+
+                var specId = '';
+                if(typeof(_p_spec_m) != 'undefined') {
+                    if(_p_spec_m) {
+                        var spec_labels = $('span.spec_label');
+                        if (spec_labels.size() > 0) {
+//                            $.each(spec_labels, function(idx, spanLabel){
+//                            });
+                            if($('span.spec_item_selected').size() == 0) {
+                                utils.alert("请选择蛋糕口味");
+                                return false;
+                            }
+
+                            specId = _p_spec_m[$('span.spec_item_selected').text()];
+                        }
+                    }
+                }
+
+				addToCart(itemId, parseInt($('#pamount-' + itemId).val()) || 1, (parseFloat($item.attr('item-price')) || 0 ), $item.attr('item-name'), specId||0);
 				
 			}
 			

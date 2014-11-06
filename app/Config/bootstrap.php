@@ -285,6 +285,39 @@ class OrderCartItem {
     }
 }
 
+function product_name_with_spec($prodName, $specId, $specs) {
+    if (!$specId || empty($specs)) {
+        return $prodName;
+    }
+
+    $specsMap = product_spec_map($specs);
+    if (!empty($specsMap) && !empty($specsMap['map'])) {
+        $maps = $specsMap['map'][$specId];
+        return sprintf("$prodName (%s)", empty($maps['name']) ? '' : $maps['name']);
+    } else {
+        return $prodName;
+    }
+}
+
+/**
+ * @param $specs
+ * @return bool|mixed
+ */
+function product_spec_map($specs) {
+    try {
+        $specsMap = !empty($specs) ? json_decode($specs, true) : false;
+        //if (!$specsMap) {
+            //$error = ("json error: ".json_last_error_msg().": for $specs");
+        //}
+        return $specsMap;
+    }catch (Exception $e) {
+        return false;
+    }
+}
+
+
+
+
 /**
  * @param $uid
  * @param $cookieItems
@@ -297,10 +330,11 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
     $product_ids = array();
     $nums = array();
     foreach ($cookieItems as $item) {
-        list($id, $num) = explode(':', $item);
+        list($id, $num, $newSpecId) = explode(':', $item);
         if ($id) {
             $product_ids[] = $id;
             $nums[$id] = $num;
+            $specs[$id] = $newSpecId;
         }
     }
 
@@ -310,20 +344,32 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
     foreach ($products as $p) {
         $pid = $p['Product']['id'];
 
+        $newSpecId = empty($specs[$pid]) ? 0 : $specs[$pid];
         $cartItem =& $cartsByPid[$pid];
         if (empty($cartItem)) {
             $cartItem = array(
                 'product_id' => $pid,
-                'name' => $p['Product']['name'],
+                'name' => product_name_with_spec($p['Product']['name'], $newSpecId, $p['Product']['specs']),
                 'coverimg' => $p['Product']['coverimg'],
                 'num' => $nums[$pid],
                 'price' => $p['Product']['price'],
+                'specId' => $newSpecId
             );
             $cartsByPid[$pid] =& $cartItem;
         } else {
-            $cartItem['num'] += $nums[$pid];
-            $cartItem['price'] = $p['Product']['price'];
-            $cartItemId = $cartItem['id'];
+
+            if ($newSpecId == $cartItem['specId']) {
+                $cartItem['num'] += $nums[$pid];
+                $cartItem['price'] = $p['Product']['price'];
+                $cartItemId = $cartItem['id'];
+            } else {
+               //CONSIDER to add a new item in shopping cart!!
+                $cartItem['num'] = $nums[$pid];
+                $cartItem['price'] = $p['Product']['price'];
+                $cartItem['name']  = product_name_with_spec($p['Product']['name'], $newSpecId, $p['Product']['specs']);
+                $cartItemId = $cartItem['id'];
+                $cartItem['specId'] = $newSpecId;
+            }
         }
         $cartItem['creator'] = $uid;
 

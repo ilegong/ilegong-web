@@ -717,11 +717,11 @@ class OrdersController extends AppController{
         $fun($this->Order, $orig_status, $order_id);
 	}
 
-    public function test_notify_paid_done($order_id) {
-        $this->loadModel('Order');
-        $o = $this->Order->findById($order_id);
-        $this->Weixin->notifyPaidDone($o);
-    }
+//    public function test_notify_paid_done($order_id) {
+//        $this->loadModel('Order');
+//        $o = $this->Order->findById($order_id);
+//        $this->Weixin->notifyPaidDone($o);
+//    }
 
 	/**
 	 * 商家设置订单的状态

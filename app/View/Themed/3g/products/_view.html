@@ -30,8 +30,48 @@
             <p class="text-warning" style="font-size: 1.5em">剩余<span class="text-danger">{{$total_left}}</span>件！</p>
         </div> {{/if}}
 
-        {{if ($total_left > 0 || $total_left == -1) && $afford_for_curr_user }}
+        <style>
+                p.product_specs > span {
+                    margin-right: 1em;
+                    border-radius: 0;
+                }
 
+                .spec_item {
+                    padding: 0.5em 0.5em;
+                    display: inline-block;
+                    background-color: wheat;
+                    border: 1px #eee solid;
+                }
+
+                .spec_item_selected {
+                    background-color: yellowgreen;
+                    border: 1px #eee solid;
+                }
+        </style>
+
+        <script>
+
+            $(document).ready(function(){
+            $('span.spec_item').click(function(ev){
+                $(this).toggleClass('spec_item_selected');
+            });
+            });
+        </script>
+
+
+        {{if $product_spec_map }}
+        {{$product_spec_map}}
+        {{/if}}
+
+        {{if $specs_map }}
+        <p class="product_specs">
+            <?php foreach($specs_map['choices'] as $label => $values) { ?>
+            <span class="spec_label">{{$label}}:</span><?php foreach($values as $vaLabel){?><span class="spec_item">{{$vaLabel}}</span><?php } ?></li>
+            <?php } ?>
+        </p>
+        {{/if}}
+
+        {{if ($total_left > 0 || $total_left == -1) && $afford_for_curr_user }}
         <div id="productinfo" class="clearfix voffset2" style="padding-bottom:10px;">
             {{if $limit_per_user == 1}}
             <p>每人限购一份</p>

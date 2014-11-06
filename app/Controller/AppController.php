@@ -393,7 +393,16 @@ class AppController extends Controller {
             $this->set('total_left', $total_left);
             $this->set('afford_for_curr_user', $afford_for_curr_user);
 
-
+             $specs_map = product_spec_map(${$modelClass}[$modelClass]['specs']);
+             if (!empty($specs_map['map'])) {
+                 $str = '<script>var _p_spec_m = {';
+                 foreach($specs_map['map'] as $mid => $mvalue) {
+                     $str .= '"'.$mvalue['name'].'":"'. $mid ."\",";
+                }
+                $str .= '};</script>';
+                $this->set('product_spec_map', $str);
+             }
+             $this->set('specs_map', $specs_map);
         }
     }
 
