@@ -570,7 +570,7 @@ class AppController extends Controller {
                         'table' => 'orders',
                         'alias' => 'Order',
                         'type' => 'inner',
-                        'conditions' => array('Order.id=Cart.order_id', 'Order.status != '.ORDER_STATUS_CANCEL),
+                        'conditions' => array('Order.id=Cart.order_id', 'Order.status != '.ORDER_STATUS_CANCEL, 'Order.status != '.ORDER_STATUS_WAITING_PAY),
                     )),
                     'fields' => 'SUM(Cart.num) as total_num',
                     'conditions' => array('Cart.order_id > 0', 'Cart.product_id' => $pid, 'Cart.deleted' => 0)));
