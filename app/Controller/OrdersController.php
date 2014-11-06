@@ -232,10 +232,11 @@ class OrdersController extends AppController{
                     $flash_msg = __('使用您选定的优惠地址需要购买'.$specialAddress['least_num'].'件"'.$productItemInCart->name.'"');
                     unset($shipPromotionId);
                 } else {
+
                     $consignee = array();
                     $consignee['name'] = trim($_REQUEST['consignee_name']);
                     $consignee['mobilephone'] = trim($_REQUEST['consignee_mobilephone']);
-                    $consignee['address'] = trim($specialAddress['address']);
+                    $consignee['address'] = trim($specialAddress['address']).($specialAddress['need_address_remark']? trim($_REQUEST['consignee_address']):'');
                     $this->Session->write('OrderConsignee', $consignee);
                     $has_chosen_consignee = true;
                     $this->Session->write(self::key_balanced_ship_promotion_id(), $shipPromotionId);

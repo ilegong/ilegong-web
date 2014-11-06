@@ -79,8 +79,10 @@
             <span>订单中没有商品</span>
         {{/if}}
         <hr>
+        <div class="clearfix">
+            订单备注：{{empty($order['Order']['remark'])?'无':$order['Order']['remark']}}
+        </div>
         <p class="col-xs-12 text-right">
-        订单备注：{{$order['Order']['remark']}}<br/>
         商品总价：￥{{$this->Number->precision($order['Order']['total_price'], 2)}}<br/>
         运费：￥{{$this->Number->precision($order['Order']['ship_fee'], 2)}}<br/>
         总价：￥{{$this->Number->precision($order['Order']['ship_fee'] + $order['Order']['total_price'], 2)}}<br/>

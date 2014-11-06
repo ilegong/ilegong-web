@@ -39,7 +39,7 @@ a.coupon_applied .glyphicon {
             <form method="post" action="{{$this->Html->url(array('action' => 'info', '?' => array('action' => 'savePromo')))}}">
             <ul id="ul_special_promotion" class="list-group">
                 {{loop $specialShipPromotion $key $item}}
-                    <li item-id="{{$item['id']}}" class="list-group-item {{$specialShipPromotionId == $item['id']? 'active':''}}">
+                    <li item-id="{{$item['id']}}" item-addr-mark="{{!empty($item['need_address_remark'])}}" class="list-group-item {{$specialShipPromotionId == $item['id']? 'active':''}}">
                         {{if isset($item['price'])}}
                         <span class="text-price-small pull-right">{{$this->Number->precision($item['price'], 2)}}</span>{{/if}}
                         <small>{{if $item['time']}}{{$item['time']}}派送到{{/if}}{{$item['address']}}</small></li>
@@ -47,6 +47,7 @@ a.coupon_applied .glyphicon {
             </ul>
                 <input type="text" class="form-control" placeholder="收货人姓名" id="p_consignee_name" name="consignee_name" value="{{$this->Session->read('OrderConsignee.name')}}">
                 <input type="text" class="form-control" placeholder="手机号" id="p_consignee_mobile" name="consignee_mobilephone" value="{{$this->Session->read('OrderConsignee.mobilephone')}}" >
+                <input type="text" class="form-control" placeholder="详细地址" id="p_consignee_address" style="display: none" name="consignee_address" value="">
                 <input type="hidden" id="special_ship_promotion" name="ship_promotion" value="{{$specialShipPromotionId}}">
 
             <button id="specialShipPromotion_submit" type="submit" class="btn btn-warning">保存</button>
@@ -149,11 +150,28 @@ a.coupon_applied .glyphicon {
             lists.filter('.active').removeClass('active');
             var $this = $(this);
             $this.toggleClass('active');
+            var $pConsigneeAddress = $('#p_consignee_address');
+            if($this.attr('item-addr-mark') == '1') {
+                $pConsigneeAddress.show();
+            }  else {
+                $pConsigneeAddress.hide();
+            }
         });
 
         $btnSubmit.click(function (e) {
             var activeLi = $specialShipPromotion.find('li.active');
             if (activeLi.length == 1) {
+
+                if(activeLi.attr('item-addr-mark') == '1') {
+                    var $pConsigneeAddress = $('#p_consignee_address');
+                    if ($pConsigneeAddress.val() == '') {
+                        utils.alert('请输入详细地址');
+                        $pConsigneeAddress.focus();
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+
                 var $itemId = activeLi.attr('item-id');
                 $('#special_ship_promotion').val($itemId);
             } else {
