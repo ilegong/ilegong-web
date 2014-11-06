@@ -748,7 +748,7 @@ class OrdersController extends AppController{
 		}
 
 		$this->loadModel('Brand');
-		$brand = $this->Brand->findById($order_info['Order']['id']);
+		$brand = $this->Brand->findById($order_info['Order']['product_id']);
         $is_brand_admin = !empty($brand) && $brand['Brand']['creator'] == $currentUid;
 
 		$orig_status = $order_info['Order']['status'];
