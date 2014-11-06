@@ -115,7 +115,7 @@ class OrdersController extends AppController{
 				$total_price+= $Carts[$pid]['Cart']['price']*$Carts[$pid]['Cart']['num'];
                 $ship_fee += $ship_fees[$pid];
 
-                list($afford_for_curr_user, $limit_per_user) = AppController::affordToUser($pid, $uid);
+                list($afford_for_curr_user, $limit_per_user) = AppController::__affordToUser($pid, $uid);
                 if (!$afford_for_curr_user) {
                     $this->__message(__($Carts[$pid]['name'].'已售罄或您已经购买超限，请从购物车中调整后再结算'), '/carts/listcart', 5);
                     return;

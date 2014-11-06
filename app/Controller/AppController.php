@@ -386,7 +386,7 @@ class AppController extends Controller {
             }
 
             $currUid = $this->currentUser['id'];
-            list($afford_for_curr_user, $limit_per_user, $total_left) = self::affordToUser($pid, $currUid);
+            list($afford_for_curr_user, $limit_per_user, $total_left) = self::__affordToUser($pid, $currUid);
             if ($limit_per_user) {
                 $this->set('limit_per_user', $limit_per_user);
             }
@@ -553,7 +553,7 @@ class AppController extends Controller {
      * @param $currUid
      * @return array whether afford to current user; limit for current user; total left for all users
      */
-    public static function affordToUser($pid, $currUid) {
+    public static function __affordToUser($pid, $currUid) {
         $afford_for_curr_user = true;
         $total_left = -1;
         $cartModel = ClassRegistry::init('Cart');
