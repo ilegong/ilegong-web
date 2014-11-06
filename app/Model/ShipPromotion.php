@@ -69,7 +69,7 @@ class ShipPromotion extends AppModel {
     private  $pro_num_limit = array(
         //total_limit(0 means none), brand_id, per_user_limit (0 means none)
         '228' => array(100, 13, 1),
-        '229' => array(70, 13, 1),
+        '229' => array(80, 13, 1),
         PRODUCT_ID_CAKE => array(200, 74, 0),
         '240' => array(300, 78, 1 )
     );
