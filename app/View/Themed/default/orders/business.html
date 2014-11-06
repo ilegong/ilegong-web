@@ -34,10 +34,6 @@ td {padding:5px 10px;}
 				
 			{{if $order['Order']['status']==0}}			
 				<font color="red">订单待确认</font>
-				<div class="well">
-					<button type="button" onclick="confirm_order({{$order['Order']['id']}},11, {{$creator}});" class="btn btn-primary">确认订单</button>
-					<button type="button" onclick="confirm_order({{$order['Order']['id']}},10, {{$creator}});" class="btn btn-danger">作废订单</button>
-				</div>
 			{{elseif $order['Order']['status']==1}}
 				<font color="red">订单已支付</font>
 				<div class="well">

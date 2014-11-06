@@ -695,23 +695,25 @@ class OrdersController extends AppController{
      * @param $fun callback:  a callback with parameters: OrderModel, curr_status, and order_id
      */
     private function edit_order_by_owner_ajax($fun){
-		$order_id = $_REQUEST['order_id'];
+        $order_id = $_REQUEST['order_id'];
 
-		if(empty($order_id)){
-			echo json_encode(array('order_id'=>$order_id,'msg'=>'参数错误'));
-			exit;
-		}
+        if (empty($order_id)) {
+            echo json_encode(array('order_id' => $order_id, 'msg' => '参数错误'));
+            exit;
+        }
 
-		$order_info = $this->Order->find('first',array(
-				'conditions'=> array('id'=>$order_id,'creator'=>$this->currentUser['id']),
-		));
+        $order_info = $this->Order->find('first', array(
+            'conditions' => array('id' => $order_id, 'creator' => $this->currentUser['id']),
+        ));
 
-		if(empty($order_info)){
-			echo json_encode(array('order_id'=>$order_id,'msg'=>'您不具备此订单的修改权限。'));
-			exit;
-		}
-		$orig_status = $order_info['Order']['status'];
-		$fun($this->Order, $orig_status, $order_id);
+        if (empty($order_info) || $this->currentUser['id'] != $order_info['Order']['creator']) {
+            $this->log('denied edit_order_by_owner_ajax: order is empty?'.empty($order_info));
+            echo json_encode(array('order_id' => $order_id, 'msg' => '您不具备此订单的修改权限。'));
+            exit;
+        }
+
+        $orig_status = $order_info['Order']['status'];
+        $fun($this->Order, $orig_status, $order_id);
 	}
 
     public function test_notify_paid_done($order_id) {
@@ -723,89 +725,89 @@ class OrdersController extends AppController{
 	/**
 	 * 商家设置订单的状态
 	 */
-	function set_status($creator = 0){
+	function set_status(){
 		$order_id = $_REQUEST['order_id'];
 		$status = $_REQUEST['status'];
 
-        $creator = $this->authAndGetCreator($creator);
+        $currentUid = $this->currentUser['id'];
+        $is_admin = $this->is_admin($currentUid);
 
-        if (1 == $status && !$this->is_admin($this->currentUser['id'])) {
-            echo json_encode(array('order_id'=>$order_id,'msg'=>'您不具备此订单的支付确认权限，请联系管理员。'));
-            exit;
-        }
-		
 		if(empty($order_id) || empty($status)){
 			echo json_encode(array('order_id'=>$order_id,'msg'=>'参数错误'));
 			exit;
 		}
-		$this->loadModel('Brand');
-		$brands = $this->Brand->find('list',array(
-			'conditions'=>array(
-				'creator'=> $creator,
-		)));
-		$brand_ids = array_keys($brands);
-		
-		$order_info = $this->Order->find('first',array(
-				'conditions'=> array('id'=>$order_id,'brand_id'=>$brand_ids),
-		));
-		//'or'=>array('brand_id'=>$brand_ids,'creator' => $this->currentUser['id'])
-		
+
+        $order_info = $this->Order->find('first', array(
+            'conditions' => array('id' => $order_id),
+        ));
+
 		if(empty($order_info)){
 			echo json_encode(array('order_id'=>$order_id,'msg'=>'您不具备此订单的修改权限，请联系管理员。'));
 			exit;
 		}
+
+		$this->loadModel('Brand');
+		$brand = $this->Brand->findById($order_info['Order']['id']);
+        $is_brand_admin = !empty($brand) && $brand['Brand']['creator'] == $currentUid;
+
 		$orig_status = $order_info['Order']['status'];
-		if($orig_status==0){
-			//待确认订单只能修改为订单已确认与订单已作废
-			if(!in_array($status,array(10,11))){
-				echo json_encode(array('order_id'=>$order_id,'msg'=>'您只能确认订单与作废订单。'));
-				exit;
-			}
-			else{
-				$this->Order->updateAll(array('status'=>$status, 'lastupdator'=>$creator),array('id'=>$order_id));
-				if($status==11)  $msg = '订单已确认';
-				elseif($status==10)  $msg = '订单已作废';
-				echo json_encode(array('order_id'=>$order_id,'msg'=>$msg));
-				exit;
-			}
-		} elseif ($orig_status == 11) {
-            if (1 == $status && $this->is_admin($this->currentUser['id'])) {
-                $this->Order->updateAll(array('status'=>$status, 'lastupdator'=>$creator),array('id'=>$order_id));
-                echo json_encode(array('order_id'=>$order_id,'msg'=>'订单已支付'));
-                exit;
-            } else {
-                echo json_encode(array('order_id'=>$order_id,'msg'=>'您不能变更订单到指定状态，请联系管理员。'));
+        if ($status == ORDER_STATUS_PAID) {
+            if (!$is_admin) {
+                echo json_encode(array('order_id'=>$order_id,'msg'=>'您没有权限确认已支付'));
                 exit;
             }
-        } elseif($orig_status==1 || $orig_status == 2){
-			//已支付订单，修改状态为已发货
-			if(!in_array($status,array(2))){
-				echo json_encode(array('order_id'=>$order_id,'msg'=>'您只能将此订单设为已发货。'));
-				exit;
-			}
-			else{
-				$ship_code = $_REQUEST['ship_code'];
-				$ship_type = $_REQUEST['ship_type'];
-				$this->Order->updateAll(array('status'=>$status,'ship_code'=>"'".addslashes($ship_code)."'",'ship_type'=>$ship_type, 'lastupdator'=>$creator),array('id'=>$order_id));
-                //add weixin message
-                $order = $this->Order->find('first',array('conditions'=> array('id'=>$order_id)));
-                $this->log($order['Order']['creator'],LOG_DEBUG);
-                $this->loadModel('Oauthbind');
-                $user_weixin = $this->Oauthbind->findWxServiceBindByUid($order['Order']['creator']);
-                if($user_weixin!=false){
-                    $good = $this->get_order_good_info($order_id);
-                    $this->log("good info:".$good['good_info'].$good['good_number'],LOG_DEBUG);
-                    $this->Weixin->send_order_shipped_message($user_weixin['oauth_openid'],$ship_type, $this->ship_type[$ship_type], $ship_code, $good['good_info'], $good['good_number']);
-                }
+            if ($orig_status != ORDER_STATUS_WAITING_PAY) {
+                echo json_encode(array('order_id'=>$order_id,'msg'=>'订单状态不对'));
+                exit;
+            }
 
-				echo json_encode(array('order_id'=>$order_id,'msg'=>'订单状态已更新为“已发货”'));
-				exit;
-			}
-		}
-		else{
-			echo json_encode(array('order_id'=>$order_id,'msg'=>'不能修改订单状态了。'));
-			exit;
-		}
+            $this->Order->updateAll(array('status'=>$status, 'lastupdator'=> $currentUid),array('id'=>$order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+            echo json_encode(array('order_id'=>$order_id,'msg'=>'订单已支付'));
+            exit;
+        } else if ($status == ORDER_STATUS_CANCEL) {
+            if ($order_info['Order']['creator'] != $currentUid) {
+                echo json_encode(array('order_id'=>$order_id,'msg'=>'您没有权限取消此订单'));
+                exit;
+            }
+            if ($orig_status != ORDER_STATUS_WAITING_PAY) {
+                echo json_encode(array('order_id'=>$order_id,'msg'=>'该订单状态已不能取消'));
+                exit;
+            }
+
+            $this->Order->updateAll(array('status'=>$status, 'lastupdator'=> $currentUid),array('id'=>$order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+            echo json_encode(array('order_id'=>$order_id,'msg'=>'订单已取消'));
+            exit;
+        } else if ($status == ORDER_STATUS_SHIPPED) {
+
+            if (!$is_brand_admin && !$is_admin) {
+                echo json_encode(array('order_id'=>$order_id,'msg'=>'您没有权限修改此订单'));
+                exit;
+            }
+
+            if ($orig_status != ORDER_STATUS_PAID || $orig_status != ORDER_STATUS_SHIPPED) {
+                echo json_encode(array('order_id' => $order_id, 'msg' => '您只能将此订单设为已发货'));
+                exit;
+            }
+
+            $ship_code = $_REQUEST['ship_code'];
+            $ship_type = $_REQUEST['ship_type'];
+            $this->Order->updateAll(array('status'=>$status,'ship_code'=>"'".addslashes($ship_code)."'",'ship_type'=>$ship_type, 'lastupdator'=>$currentUid),array('id'=>$order_id, 'status' => $orig_status));
+            //add weixin message
+            $this->log($order_info['Order']['creator'],LOG_DEBUG);
+            $this->loadModel('Oauthbind');
+            $user_weixin = $this->Oauthbind->findWxServiceBindByUid($order_info['Order']['creator']);
+            if($user_weixin!=false){
+                $good = $this->get_order_good_info($order_id);
+                $this->log("good info:".$good['good_info'].$good['good_number']);
+                $this->Weixin->send_order_shipped_message($user_weixin['oauth_openid'],$ship_type, $this->ship_type[$ship_type], $ship_code, $good['good_info'], $good['good_number']);
+            }
+
+            echo json_encode(array('order_id'=>$order_id,'msg'=>'订单状态已更新为“已发货”'));
+            exit;
+        } else{
+            echo json_encode(array('order_id'=>$order_id,'msg'=>'不能修改订单状态了'));
+            exit;
+        }
 	}
 
     function get_order_good_info($order_id){

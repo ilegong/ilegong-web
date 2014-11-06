@@ -35,11 +35,16 @@ const PRODUCT_ID_RICE_BRAND_10 = 13;
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 
-define('ORDER_STATUS_CANCEL', 10);
-define('ORDER_STATUS_SHIPPED', 2);
-define('ORDER_STATUS_RECEIVED', 3);
-define('ORDER_STATUS_PAID', 1);
-define('ORDER_STATUS_WAITING_PAY', 0);
+define('ORDER_STATUS_WAITING_PAY', 0);   //待支付
+define('ORDER_STATUS_PAID', 1);         //已支付
+define('ORDER_STATUS_SHIPPED', 2);      //已发货
+define('ORDER_STATUS_RECEIVED', 3);     //已确认收货
+define('ORDER_STATUS_RETURN_MONEY', 4);  //已退款， 不要再用
+define('ORDER_STATUS_DONE', 9);         //已完成
+define('ORDER_STATUS_CANCEL', 10);      //已取消
+define('ORDER_STATUS_CONFIRMED', 11);  //已确认有效，不要再用
+define('ORDER_STATUS_TOUSU', 12);   //已投诉， 不要再用，投诉走其他流程
+
 
 define('CATEGORY_ID_TECHAN', 114);
 
