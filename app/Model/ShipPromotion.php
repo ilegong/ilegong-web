@@ -53,7 +53,7 @@ class ShipPromotion extends AppModel {
             array('id' => 21, 'ship_price' => 0.0, 'time' => '', 'address' => '自提点：海淀大街38号味多美门口， 包邮'),
             array('id' => 22, 'ship_price' => 0.0, 'time' => '', 'address' => '自提点：北四环盘古大观广场南门， 包邮'),
             array('id' => 23, 'ship_price' => 0.0, 'time' => '', 'address' => '自提点：五道口华清嘉园会所果臻棒， 包邮'),
-            array('id' => 27, 'ship_price' => 15.0, 'time' => '', 'address' => '跑腿儿专递（限北京，运送费：每个15元）', 'need_address_remark' => true),
+            array('id' => 27, 'ship_price' => 15.0, 'time' => '', 'address' => '跑腿儿专递（限五环内，运送费：每个15元）', 'need_address_remark' => true),
             array('id' => 25, 'ship_price' => 0.0,  'time' => '', 'least_num' => 10,  'address' => '五环内满10个起送, 包邮', 'need_address_remark' => true),
             array('id' => 26, 'ship_price' => 5.0, 'time' => '', 'least_num' => 20,  'address' => '五环外满20个起送, 运送费：每个5元', 'need_address_remark' => true),
             array('id' => 28, 'ship_price' => 10.0, 'time' => '', 'address' => '昌平专场（超过20个发货), 运送费：每个10元'),
