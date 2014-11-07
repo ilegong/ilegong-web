@@ -28,16 +28,8 @@ class WxPaymentComponent extends Component {
 
     public function goToAliPayForm($order_id, $uid) {
         App::import('Vendor', 'ali_direct_pay/AliPay');
-
-        $order = $this->findOrderAndCheckStatus($order_id, $uid);
-
-        $totalFee = $order['Order']['total_all_price'];
-        list($subject, $body) = $this->getProductDesc($order_id);
-
-        $out_trade_no = $this->out_trade_no(TRADE_ALI_TYPE, $order_id);
-        $this->savePayLog($order_id, $out_trade_no, $body, TRADE_ALI_TYPE, $totalFee  * 100, '', '');
         $ali = new AliPay();
-        return $ali->api_form($out_trade_no, $order_id, $subject, $totalFee, $body);
+        return $this->api_form($order_id, $uid, $ali);
     }
 
     public function verify_notify() {
@@ -50,6 +42,25 @@ class WxPaymentComponent extends Component {
     public function verify_return() {
         App::import('Vendor', 'ali_direct_pay/AliPay');
         $ali = new AliPay();
+        return $ali->verify_return();
+    }
+
+    public function wap_goToAliPayForm($order_id, $uid) {
+        App::import('Vendor', 'ali_wap_pay/AliWapPay');
+        $ali = new AliWapPay();
+        return $this->api_form($order_id, $uid, $ali);
+    }
+
+    public function wap_notify() {
+        App::import('Vendor', 'ali_wap_pay/AliWapPay');
+        $ali = new AliWapPay();
+        return $ali->notify();
+    }
+
+
+    public function wap_verify_return() {
+        App::import('Vendor', 'ali_wap_pay/AliWapPay');
+        $ali = new AliWapPay();
         return $ali->verify_return();
     }
 
@@ -203,6 +214,23 @@ class WxPaymentComponent extends Component {
         }
 
         return $order;
+    }
+
+    /**
+     * @param $order_id
+     * @param $uid
+     * @param $ali
+     * @return mixed
+     */
+    protected function api_form($order_id, $uid, $ali) {
+        $order = $this->findOrderAndCheckStatus($order_id, $uid);
+
+        $totalFee = $order['Order']['total_all_price'];
+        list($subject, $body) = $this->getProductDesc($order_id);
+
+        $out_trade_no = $this->out_trade_no(TRADE_ALI_TYPE, $order_id);
+        $this->savePayLog($order_id, $out_trade_no, $body, TRADE_ALI_TYPE, $totalFee * 100, '', '');
+        return $ali->api_form($out_trade_no, $order_id, $subject, $totalFee, $body);
     }
 
 } 

@@ -333,7 +333,7 @@ class OrdersController extends AppController{
         $products = $product_new;
         unset($product_new);
 
-
+        $this->set('isMobile', $this->RequestHandler->isMobile());
         $this->set('ship_type', ShipAddress::$ship_type);
         $this->set('order_id',$orderId);
         $this->set('order', $orderinfo);

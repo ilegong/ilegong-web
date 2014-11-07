@@ -5,7 +5,7 @@
         if (location.href.indexOf('{{ALI_HOST}}') == -1) {
             bootbox.alert('我们的账号信息：<br>账户：<span>yxg@ilegong.com</span> <br/> 收款人：北京爱乐供科技有限公司');
         } else {
-            location.href  = "/ali_pay/goto_to_alipay/{{$order['Order']['id']}}";
+            location.href  = "/ali_pay/{{$isMobile?'wap_to_alipay':'goto_to_alipay'}}/{{$order['Order']['id']}}";
         }
     }
 </script>
