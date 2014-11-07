@@ -69,6 +69,7 @@ define('KEY_APPLE_201410',  'apple201410');
 define('PROFILE_NICK_LEN', 16);
 define('PROFILE_NICK_MIN_LEN', 2);
 
+
 global $page_style;
 global $pages_tpl;
 /*  分页样式    */
@@ -398,4 +399,21 @@ function find_latest_clicked_from($buyerId, $pid) {
         }
     }
     return 0;
+}
+
+class ShipAddress {
+    public static $ship_type = array(
+        101 => '申通',
+        102 => '圆通',
+        103 => '韵达',
+        104 => '顺丰',
+        105 => 'EMS',
+        106 => '邮政包裹',
+        107 => '天天',
+        108 => '汇通',
+        109 => '中通',
+        110 => '全一',
+        111 => '宅急送',
+        112 => '全峰',
+    );
 }

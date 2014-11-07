@@ -7,26 +7,13 @@ class OrdersController extends AppController{
 
     public $components = array('Weixin');
 	
-	var $ship_type = array(
-		101=>'申通',
-		102=>'圆通',
-		103=>'韵达',
-		104=>'顺丰',
-		105=>'EMS',
-		106=>'邮政包裹',
-		107=>'天天',
-		108=>'汇通',
-		109=>'中通',
-		110=>'全一',
-        111=>'宅急送'
-    );
-
     var $customized_not_logged = array('apply_coupon');
 
     public function __construct($request = null, $response = null) {
         $this->helpers[] = 'PhpExcel';
         parent::__construct($request, $response);
         $this->pageTitle = __('订单');
+
     }
 
     /**
@@ -347,7 +334,7 @@ class OrdersController extends AppController{
         unset($product_new);
 
 
-        $this->set('ship_type',$this->ship_type);
+        $this->set('ship_type', ShipAddress::$ship_type);
         $this->set('order_id',$orderId);
         $this->set('order', $orderinfo);
         $this->set('Carts',$Carts);
@@ -460,7 +447,7 @@ class OrdersController extends AppController{
         $this->set('brands', $mappedBrands);
 		$this->set('orders',$orders);
 		$this->set('order_carts',$order_carts);
-		$this->set('ship_type',$this->ship_type);
+		$this->set('ship_type', ShipAddress::$ship_type);
         $this->set('counts', $counts);
 	}
 
@@ -533,7 +520,7 @@ class OrdersController extends AppController{
 		
 		$this->set('orders',$orders);
 		$this->set('order_carts',$order_carts);
-		$this->set('ship_type',$this->ship_type);
+		$this->set('ship_type', ShipAddress::$ship_type);
         $this->set('creator', $creator);
 
 
@@ -588,7 +575,7 @@ class OrdersController extends AppController{
 
 		$this->set('orders',$orders);
 		$this->set('order_carts',$order_carts);
-		$this->set('ship_type',$this->ship_type);
+		$this->set('ship_type', ShipAddress::$ship_type);
         $this->set('creator', $creator);
 
 
@@ -800,7 +787,7 @@ class OrdersController extends AppController{
             if($user_weixin!=false){
                 $good = $this->get_order_good_info($order_id);
                 $this->log("good info:".$good['good_info'].$good['good_number']);
-                $this->Weixin->send_order_shipped_message($user_weixin['oauth_openid'],$ship_type, $this->ship_type[$ship_type], $ship_code, $good['good_info'], $good['good_number']);
+                $this->Weixin->send_order_shipped_message($user_weixin['oauth_openid'],$ship_type, ShipAddress::$ship_type[$ship_type], $ship_code, $good['good_info'], $good['good_number']);
             }
 
             echo json_encode(array('order_id'=>$order_id,'msg'=>'订单状态已更新为“已发货”'));
