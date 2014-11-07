@@ -252,7 +252,12 @@ class Apple201410Controller extends AppController {
             try {
                 $this->AwardInfo->save($awardInfo);
             }catch(Exception $e) {
-                $this->log("error to save awardInfo:". var_export($awardInfo, true));
+                $this->log("error to save awardInfo:". var_export($awardInfo, true).", message:". $e->getMessage());
+                if ($e && $e->getMessage() && preg_match('/^\d+: Duplicate entry \'(.*)\' for key \d+$/i', $e->getMessage(), $matches))  {
+                    $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($current_uid, KEY_APPLE_201410);
+                } else {
+                    throw $e;
+                }
             }
             $awardInfo = $awardInfo['AwardInfo'];
         }

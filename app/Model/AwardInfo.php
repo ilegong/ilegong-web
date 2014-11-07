@@ -9,6 +9,8 @@
 class AwardInfo extends AppModel {
 
     /**
+     * @param $uid
+     * @param $type
      * @return mixed
      */
     public function getAwardInfoByUidAndType($uid, $type) {
