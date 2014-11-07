@@ -230,7 +230,6 @@ a.coupon_applied .glyphicon {
             var input_value=$(this).val();
             if(input_value!=""){
                 params = params+input_name+"="+input_value+"&";
-                params = params + "ship_promotion=" + $('#special_ship_promotion').val();
             }
         });
         params=params.substring(0,params.length-1);
