@@ -25,11 +25,16 @@ class MiaoView extends View{
 
 	public function __construct(&$controller) {
 		parent::__construct($controller);
-		$this->theme = $controller->theme ? $controller->theme:'default';
-		$this->controller_name = Inflector::underscore($controller->name);
-		$this->__viewFileName = $controller->__viewFileName;
-		$this->convertCode = $controller->convertCode;
-		$this->ext = '.html';
+        $this->theme = $controller->theme ? $controller->theme : 'default';
+        if ($controller->name == 'CakeError') {
+            $this->layoutPath = null;
+            $this->viewPath = 'Errors';
+        } else {
+            $this->controller_name = Inflector::underscore($controller->name);
+            $this->__viewFileName = $controller->__viewFileName;
+            $this->convertCode = $controller->convertCode;
+        }
+        $this->ext = '.html';
 	}
 	
 	private function _getThemePaths($paths,$with_view_path = false){
@@ -206,8 +211,8 @@ class MiaoView extends View{
 		}
 		
 		if(!in_array($this->viewPath,array('Layouts','Elements','Errors'))){
-			$this->viewPath = $this->controller_name; // when not use this. taobao_shops turns to taobaoshops
-			$this->viewPath = strtolower($this->viewPath); // 将$this->viewPath转换成小写，模块对应的模板目录名称都用的小写。
+                $this->viewPath = $this->controller_name; // when not use this. taobao_shops turns to taobaoshops
+                $this->viewPath = strtolower($this->viewPath); // 将$this->viewPath转换成小写，模块对应的模板目录名称都用的小写。
 		}
 		$paths = $this->getThemePaths();
 		foreach($paths as $path) {
