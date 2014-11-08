@@ -70,11 +70,12 @@ class CouponItem extends AppModel {
 
     }
 
-    public function addCoupon($recUserId) {
+    public function addCoupon($recUserId, $source = 'unknown') {
         $this->save(array('CouponItem' => array(
               'bind_user' => $recUserId,
               'coupon_id' => 1,
-              'status' => COUPONITEM_STATUS_TO_USE
+              'status' => COUPONITEM_STATUS_TO_USE,
+              'source' => $source
         )));
     }
 
