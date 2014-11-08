@@ -178,6 +178,10 @@ class OrdersController extends AppController{
      */
 	function info($order_id=''){
 
+        if ($this->RequestHandler->isMobile()) {
+            $this->layout = 'newv1';
+        }
+
         $this->Session->write(self::key_balanced_ship_promotion_id(), '');
 
 		$has_chosen_consignee = false;
@@ -287,6 +291,11 @@ class OrdersController extends AppController{
      * @Param string action
      */
     function detail($orderId='', $action = '') {
+
+        if ($this->RequestHandler->isMobile()) {
+            $this->layout = 'newv1';
+        }
+
         $orderinfo = $this->Order->find('first',array(
             'conditions'=> array('id'=>$orderId,'creator'=>$this->currentUser['id']),
         ));
@@ -398,6 +407,11 @@ class OrdersController extends AppController{
     }
 	
 	function mine(){
+
+        if ($this->RequestHandler->isMobile()) {
+            $this->layout = 'newv1';
+        }
+
 		$this->loadModel('Brand');
 		$brands = $this->Brand->find('first',array(
 				'conditions' => array('creator'=> $this->currentUser['id'])));
