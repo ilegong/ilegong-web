@@ -1,29 +1,29 @@
-        <style>
+<style>
+    .cart_link {
+        position: fixed;
+        right: 0.5em;
+        bottom: 4.5em;
+        border-width: 0 0 1px;
+        margin-bottom: 0;
+    }
 
-            .cart_link {
-                position: fixed;
-                right: 0.5em;
-                bottom: 4.5em;
-                border-width: 0 0 1px;
-                margin-bottom: 0;
-            }
+    .cart_icon {
+        font-size: 1.5em;
+        background-color: #bbb;
+        color: #ffffff;
+        border-radius: 50%;
+        width: 2em;
+        height: 2em;
+        text-align: center;
+        line-height: 2em;
+    }
 
-            .cart_icon {
-                font-size: 1.5em;
-                background-color: #bbb;
-                color: #ffffff;
-                border-radius: 50%;
-                width: 2em;
-                height: 2em;
-                text-align: center;
-                line-height: 2em;
-            }
+    .cart_icon_not_empty .cart_icon {
+        background-color: orangered;
+    }
+</style>
 
-            .cart_icon_not_empty .cart_icon {
-                background-color: orangered;
-            }
-        </style>
-
+{{if $current_controller=='categories' || $current_controller=='products'}}
 <a id="card-btn" class="cart_link" href="javascript:;" rel="on">
     <span class="glyphicon glyphicon-shopping-cart cart_icon" style="width: 2em"></span>
     <!--<span id="item-count" class="badge" style="vertical-align: super; font-size:1em; display: none; height: 2em">1</span>-->
@@ -42,3 +42,4 @@ document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
         }
     });
 </script>
+{{/if}}
