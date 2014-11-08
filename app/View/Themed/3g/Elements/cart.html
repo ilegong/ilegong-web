@@ -1,32 +1,33 @@
-<div class="modal fade" id="cart-modal" style="overflow-y:auto;">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">购物车商品列表</h4>
-      </div>
-      <div class="modal-body">
-        <p>没有选定要购买的特产</p>
-      </div>
-      <div class="modal-footer">
-        <div class="pull-left" >共<strong><span id="cart_products-total-price">0</span></strong>元</div>
-        <button type="button" class="btn btn-default" data-dismiss="modal">继续购物</button>
-        <a class="btn btn-primary" href="{{$this->Html->url('/orders/info')}}" id="checkout-btn">结算购物车</a>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-{{if $current_controller=='categories' || $current_controller=='products'}}
-<div class="navbar-fixed-bottom navbar-default" style="margin-bottom:0px;">
-	<div class="container">
-	 <div class="pull-left" id="go-back-div" style="display:none;"><a href="javascript:history.go(-1);"  class="btn btn-success" style="color:#fff;"><span class="glyphicon glyphicon-chevron-left"></span>返回首页</a></div>
-	 <div>
-		<div class="text-center">
-		<a id="card-btn" class="btn btn-warning" href="javascript:;" rel="on"><i class="glyphicon glyphicon-shopping-cart"></i> <span>请先下单</span></a>
-		</div>
-	</div>
-	</div>
-</div>
+        <style>
+
+            .cart_link {
+                position: fixed;
+                right: 0.5em;
+                bottom: 4.5em;
+                border-width: 0 0 1px;
+                margin-bottom: 0;
+            }
+
+            .cart_icon {
+                font-size: 1.5em;
+                background-color: #bbb;
+                color: #ffffff;
+                border-radius: 50%;
+                width: 2em;
+                height: 2em;
+                text-align: center;
+                line-height: 2em;
+            }
+
+            .cart_icon_not_empty .cart_icon {
+                background-color: orangered;
+            }
+        </style>
+
+<a id="card-btn" class="cart_link" href="javascript:;" rel="on">
+    <span class="glyphicon glyphicon-shopping-cart cart_icon" style="width: 2em"></span>
+    <!--<span id="item-count" class="badge" style="vertical-align: super; font-size:1em; display: none; height: 2em">1</span>-->
+</a>
 <script type="text/javascript">
 //hide footer bar
 document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
@@ -34,5 +35,10 @@ document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
         WeixinJSBridge.call('hideToolbar');
     }
 });
+
+    $(document).ready(function(){
+        if (typeof(updateCartItemCount) === 'function') {
+            updateCartItemCount();
+        }
+    });
 </script>
-{{/if}}

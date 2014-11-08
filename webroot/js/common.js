@@ -96,10 +96,13 @@ function setCKEditorVal(form)
 
 function updateCartItemCount()
 {
-    if ($('#item-count').length > 0) {
+    var itemCount = $('#item-count');
+    var cartBtn = $('#card-btn');
+    if (itemCount.length > 0 || cartBtn.length > 0) {
         $.getJSON('/carts/cart_total.json', function (data) {
             if (data.count > 0) {
                 $('#item-count').text(data.count);
+                cartBtn.addClass('cart_icon_not_empty');
             } else {
                 $('#item-count').text('');
             }

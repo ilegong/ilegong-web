@@ -9,7 +9,7 @@
 
 {{$this->Html->script(array(
 			'jquery/jquery.lazyload.min.js',
-            'bootstrap.min.js','bootbox/bootbox.min.js', 'common.js?v4','front.js','front_orders.js?v1'
+            'bootstrap.min.js','bootbox/bootbox.min.js', 'common.js?v5','front.js','front_orders.js?v1'
         ));
 }}
 {{$this->Html->scriptStart(array('block' => 'scriptBottom'));}}
@@ -56,9 +56,11 @@
 		}
 		var $cartBtn = $('#card-btn');
 		if(itemNum > 0){
-			$cartBtn.removeClass('btn-warning').addClass('btn-success').find('span').html('点击购物车下单');
+			//$cartBtn.removeClass('btn-warning').addClass('btn-success');
+            $cartBtn.addClass('cart_icon_not_empty');
 		}else {
-			$cartBtn.addClass('btn-warning').removeClass('btn-success').find('span').html('点击购物车下单');
+			//$cartBtn.addClass('btn-warning').removeClass('btn-success');
+            $cartBtn.removeClass('cart_icon_not_empty');
 		}
 
 		saveCartToCookie();
@@ -95,15 +97,12 @@
                         name = itemDetails[3];
                     }
 
-
-
                     addToCart(itemId, itemNum, specId || 0, price, name)
 				}
 			}
 		}
 
 		updateCart();
-
 	}
 
 	function createCart(){
@@ -200,11 +199,15 @@
 		});
 
 		//show cart button
-		$('#card-btn').click(function(){
-			if($(this).hasClass('btn-success')){ //has item
+		$('#card-btn').click(function(ev){
+			if($(this).hasClass('cart_icon_not_empty')){ //has item
 				createCart();
-			}
-            window.location.href = '/carts/listcart.html';
+                window.location.href = '/carts/listcart.html';
+			} else {
+                utils.alert('购物车中没有东西');
+                ev.preventDefault();
+                return false;
+            }
 		});
 
 		$('#checkout-btn').click(function(){
@@ -250,11 +253,6 @@
 			deleteFromCart(itemId);
 			createCart();
 		});
-
-
-
-
-
 	});
 </script>
 <script>
