@@ -56,8 +56,8 @@ class ShipPromotion extends AppModel {
             array('id' => 27, 'ship_price' => 0.0, 'time' => '', 'address' => '跑腿儿专递（限五环内，运送费到付：每个15元）', 'need_address_remark' => true),
             array('id' => 25, 'ship_price' => 0.0,  'time' => '', 'least_num' => 10,  'address' => '五环内满10个起送, 包邮', 'need_address_remark' => true),
             array('id' => 26, 'ship_price' => 5.0, 'time' => '', 'least_num' => 20,  'address' => '五环外满20个起送, 运送费：每个5元', 'need_address_remark' => true),
-            array('id' => 28, 'ship_price' => 10.0, 'time' => '', 'address' => '昌平专场（超过20个发货), 运送费：每个10元'),
-            array('id' => 29, 'ship_price' => 10.0, 'time' => '', 'address' => '顺义专场（超过20个发货), 运送费：每个10元'),
+            array('id' => 28, 'ship_price' => 10.0, 'time' => '', 'address' => '昌平专场（超过20个发货), 运送费：每个10元。地址: 昌平区鼓楼南街蒙娜丽莎对面的芭鹰食品提货'),
+            array('id' => 29, 'ship_price' => 10.0, 'time' => '', 'address' => '顺义专场（超过20个发货), 运送费：每个10元。地址: 顺义京汉生活广场A区二层蔓藤咖啡（维拉英语对面）'),
         )
     ),
     '240' => array('limit_ship' => true,
