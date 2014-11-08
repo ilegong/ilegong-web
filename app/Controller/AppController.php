@@ -376,7 +376,7 @@ class AppController extends Controller {
 
                 $current_uid = $this->currentUser['id'];
                 if (!$current_uid) {
-                    $this->redirect('/users/login?referer='.$_SERVER['QUERY_STRING']);
+                    $this->redirect('/users/login?referer='.urlencode($_SERVER['REQUEST_URI'].'?'.$_SERVER['PATH_INFO']));
                 }
                 $uri = "/products/" . date('Ymd', strtotime(${$modelClass}[$modelClass]['created'])) . "/$slug.html";
                 list($friend, $shouldAdd) = $this->track_or_redirect($uri, $current_uid, 'rebate_'.PRODUCT_ID_RICE_10);
