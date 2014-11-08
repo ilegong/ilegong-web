@@ -2,7 +2,10 @@
 td {padding:5px 10px;}
     .cart-num-input {
         padding: 4px 4px;
-        width: 30px;
+    }
+
+    .input-group-addon {
+        width: 0;
     }
 </style>
 <script>
@@ -90,7 +93,7 @@ function editCartNum(id,num){
 <div class="input-group">
 <span class="reduce input-group-addon" onclick="setAmount.reduce('#pamount-{{$cart['Cart']['id']}}')">-</span>
 <input type="text" disabled="disabled" size="3" id="pamount-{{$cart['Cart']['id']}}" data-id="{{$cart['Cart']['id']}}"
-       data-price="{{$cart['Cart']['price']}}" class="cart-num-input" name="data[Cart][{{$cart['Cart']['id']}}][num]" value="{{$cart['Cart']['num']}}" width="30px" />
+       data-price="{{$cart['Cart']['price']}}" class="cart-num-input" name="data[Cart][{{$cart['Cart']['id']}}][num]" value="{{$cart['Cart']['num']}}"/>
 <span class="add input-group-addon" onclick="setAmount.add('#pamount-{{$cart['Cart']['id']}}')">+</span>
 </div>
 </td>
@@ -99,7 +102,7 @@ function editCartNum(id,num){
 </tr>
 {{/loop}}
 <thead>
-<tr><td colspan="5" style="text-align: right"><span id="total-price">总价：{{$this->Number->precision($total_price, 2)}}</span> <input class="btn btn-primary" type="submit"  value="结算"/></td></tr>
+<tr><td colspan="5" style="text-align: right"><span id="total-price">总价：{{$this->Number->precision($total_price, 2)}}</span> <input class="btn btn-warning" type="submit"  value="结算"/></td></tr>
 </thead>
 </table>
 
