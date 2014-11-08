@@ -29,14 +29,14 @@
     <!--<span id="item-count" class="badge" style="vertical-align: super; font-size:1em; display: none; height: 2em">1</span>-->
 </a>
 <script type="text/javascript">
-//hide footer bar
-document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-    if (typeof WeixinJSBridge != 'undefined') {
-        WeixinJSBridge.call('hideToolbar');
-    }
-});
+    //hide footer bar
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+        if (typeof WeixinJSBridge != 'undefined') {
+            WeixinJSBridge.call('hideToolbar');
+        }
+    });
 
-    $(document).ready(function(){
+    $(document).ready(function () {
         if (typeof(updateCartItemCount) === 'function') {
             updateCartItemCount();
         }

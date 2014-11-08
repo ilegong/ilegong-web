@@ -106,9 +106,6 @@ class AppController extends Controller {
 
     	if($this->RequestHandler->isMobile()){
     		$this->theme = '3g';
-            if ($this->is_pengyoushuo_com_cn()) {
-                $this->layout = 'pengyoushuo_com_cn';
-            }
     	}
     	if($_GET['theme']){
     		$this->theme=$_GET['theme'];
