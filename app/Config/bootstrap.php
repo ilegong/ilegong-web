@@ -336,7 +336,9 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
         if ($id) {
             $product_ids[] = $id;
             $nums[$id] = $num;
-            $specs[$id] = $newSpecId;
+            if(is_numeric($newSpecId)) {
+                $specs[$id] = $newSpecId;
+            }
         }
     }
 
