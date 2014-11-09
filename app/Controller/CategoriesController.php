@@ -268,60 +268,52 @@ class CategoriesController extends AppController {
 				$conditions = getSearchOptions($this->request->query,$data_model);
 			}
 
-            if ($this->is_pengyoushuo_com_cn()){
-
-                $conditions = array('id' => array(168));
+            if ($left + 1 == $right) { // 无子类时，直接查询本类的内容
+                $conditions[$data_model . '.cate_id'] = $current_cateid;
                 $datalist = $this->{$data_model}->find('all', array(
-                    'conditions' => $conditions
-                ));
-                $total = count($datalist);
-            } else {
-                if ($left + 1 == $right) { // 无子类时，直接查询本类的内容
-                    $conditions[$data_model . '.cate_id'] = $current_cateid;
-                    $datalist = $this->{$data_model}->find('all', array(
-                        'conditions' => $conditions,
-                        'order' => $orderby,
-                        'limit' => $pagesize,
-                        'page' => $page,));
-                    if ($page == 1 && count($datalist) < $pagesize) {
-                        $total = count($datalist);
-                    } else {
-                        $total = $this->{$data_model}->find('count', array(
-                            'conditions' => $conditions
-                        ));
-                    }
-                } else { // 有子类时，查询本类及所有子类的内容
-                    $join_conditions = array(
-                        array(
-                            'table' => 'categories',
-                            'alias' => 'Category',
-                            'conditions' => array(
-                                'Category.left >=' => $left,
-                                'Category.right <=' => $right,
-                                'Category.id = ' . $data_model . '.cate_id',
-                            ),
-                            'type' => 'inner',
-                        )
-                    );
+                    'conditions' => $conditions,
+                    'order' => $orderby,
+                    'limit' => $pagesize,
+                    'page' => $page,));
+                if ($page == 1 && count($datalist) < $pagesize) {
+                    $total = count($datalist);
+                } else {
+                    $total = $this->{$data_model}->find('count', array(
+                        'conditions' => $conditions
+                    ));
+                }
+            } else { // 有子类时，查询本类及所有子类的内容
+                $join_conditions = array(
+                    array(
+                        'table' => 'categories',
+                        'alias' => 'Category',
+                        'conditions' => array(
+                            'Category.left >=' => $left,
+                            'Category.right <=' => $right,
+                            'Category.id = ' . $data_model . '.cate_id',
+                        ),
+                        'type' => 'inner',
+                    )
+                );
 
-                    $datalist = $this->{$data_model}->find('all', array(
-                            'conditions' => $conditions,
-                            'joins' => $join_conditions,
-                            'order' => $data_model . '.updated desc',
-                            'fields' => array($data_model . '.*', 'Category.*'),
-                            'limit' => $pagesize,
-                            'page' => $page,)
-                    );
-                    if ($page == 1 && count($datalist) < $pagesize) {
-                        $total = count($datalist);
-                    } else {
-                        $total = $this->{$data_model}->find('count', array(
-                            'conditions' => $conditions,
-                            'joins' => $join_conditions
-                        ));
-                    }
+                $datalist = $this->{$data_model}->find('all', array(
+                        'conditions' => $conditions,
+                        'joins' => $join_conditions,
+                        'order' => $data_model . '.updated desc',
+                        'fields' => array($data_model . '.*', 'Category.*'),
+                        'limit' => $pagesize,
+                        'page' => $page,)
+                );
+                if ($page == 1 && count($datalist) < $pagesize) {
+                    $total = count($datalist);
+                } else {
+                    $total = $this->{$data_model}->find('count', array(
+                        'conditions' => $conditions,
+                        'joins' => $join_conditions
+                    ));
                 }
             }
+
             $page_navi = getPageLinks($total, $pagesize, '/'.$Category['Category']['slug'].'.html', $page);
             $this->set('page_navi', $page_navi);
 	
@@ -380,7 +372,7 @@ class CategoriesController extends AppController {
         $this->set('current_cateid', $current_cateid);
         $this->set('navigations', $navigations);
         $this->set('Category', $Category);
-        $this->set('is_index', !($this->is_pengyoushuo_com_cn()) && ($slug == 'techan' || $slug == '/'));
+        $this->set('is_index', ($slug == 'techan' || $slug == '/'));
     }
 
     /**

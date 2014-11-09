@@ -235,10 +235,6 @@ class AppController extends Controller {
         return (!$nick || strpos($nick, '微信用户') === 0);
     }
 
-    protected function is_pengyoushuo_com_cn() {
-        return (strpos($_SERVER['HTTP_HOST'], 'www.pengyoushuo.com.cn') !== false);
-    }
-
     protected function _getParamVars($name,$default='') {
         $val = '';
     	if (isset($this->request->query[$name])) {
