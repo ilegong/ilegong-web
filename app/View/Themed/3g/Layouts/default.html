@@ -74,7 +74,7 @@
 
         {{template Elements/cart}}
         {{template Elements/footer}}
-
+        {{if !$hideNav }}
         <div class="navbar-fixed-bottom navbar-v1" style="margin-bottom:0;">
             <div class="container">
                 <ul class="list-inline">
@@ -86,6 +86,7 @@
                 </ul>
             </div>
         </div>
+        {{/if}}
 {{$this->fetch('scriptBottom')}}
 </body>
 </html>
