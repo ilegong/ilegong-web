@@ -11,7 +11,8 @@ class WeixinComponent extends Component
     public $wx_message_template_ids = array(
         "ORDER_PAID" => "UXmiPQNz46zZ2nZfDZVVd9xLIx28t66ZPNBoX1WhE8Q",
         "ORDER_SHIPPED" => "87uu4CmlZT-xlZGO45T_XTHiFYAWHQaLv94iGuH-Ke4",
-        "ORDER_REBATE" => "DVuV9VC7qYa4H8oP1BaZosOViQ7RrU3v558VrjO7Cv0"
+        "ORDER_REBATE" => "DVuV9VC7qYa4H8oP1BaZosOViQ7RrU3v558VrjO7Cv0",
+        "COUPON_RECEIVED" => "op8f7Ca1izIU1QVfrdrg7GBqa_KTXHlaGFjUO2EGG8I"
     );
 
     public $kuaidi100_ship_type = array(
@@ -52,10 +53,38 @@ class WeixinComponent extends Component
         return WX_HOST . '/t/rice_product';
     }
 
+    public function get_coupon_url()
+    {
+        return WX_HOST . '/users/my_coupons.html';
+    }
+
 
     public function get_access_token()
     {
         return ClassRegistry::init('WxOauth')->get_base_access_token();
+    }
+
+    public function send_coupon_received_message($user_id, $count=1, $store="购买nana家大米时使用", $rule="有效期至2014年11月15日")
+    {
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
+        if ($user_weixin != false) {
+            $open_id = $user_weixin['oauth_openid'];
+            $post_data = array(
+                "touser" => $open_id,
+                "template_id" => $this->wx_message_template_ids["COUPON_RECEIVED"],
+                "url" => $this->get_coupon_url(),
+                "topcolor" => "#FF0000",
+                "data" => array(
+                    "first" => array("value" => "亲，恭喜您获得".$count."张1斤粮票。"),
+                    "orderTicketStore" => array("value" => $store),
+                    "orderTicketRule" => array("value" => $rule),
+                    "remark" => array("value" => "点击详情，查询获得的粮票。", "color" => "#FF8800")
+                )
+            );
+            return $this->send_weixin_message($post_data);
+        }
+        return false;
     }
 
     public function send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_no)
@@ -110,7 +139,7 @@ class WeixinComponent extends Component
                 "keyword2" => array("value" => $price),
                 "keyword3" => array("value" => date('Y-m-d H:i:s')),
                 "keyword4" => array("value" => "粮票1斤"),
-                "remark" => array("value" => "点击详情，查询我获得的粮票。", "color" => "#FF8800")
+                "remark" => array("value" => "点击详情，查询获得的粮票。", "color" => "#FF8800")
             )
         );
         return $this->send_weixin_message($post_data);

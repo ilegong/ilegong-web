@@ -15,6 +15,8 @@ class Apple201410Controller extends AppController
 
     var $uses = array('User', 'AppleAward', 'AwardInfo', 'TrackLog', 'CouponItem', 'ExchangeLog');
 
+    public $components = array('Weixin');
+
     var $DAY_LIMIT = 8;
     var $AWARD_LIMIT = 100;
 
@@ -232,6 +234,8 @@ class Apple201410Controller extends AppController
             $result['exchange_apple_count'] = 50 * $coupon_count;
             $result['coupon_count'] = $coupon_count;
             $result['result'] = "just-got";
+
+            $this->Weixin->send_coupon_received_message($id,$coupon_count);
         }else{
             $result['result'] = "goon";
         }
