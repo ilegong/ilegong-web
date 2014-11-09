@@ -14,7 +14,7 @@
 </style>
 <div class="main_head border_b">
     <a href="#X" class="head clearfix">
-        <span class="fl"><img class="radius10" src="{{$this->Html->url( $CurrentUser['image'] ? $profile['image'] : '/img/default_user_icon.jpg')}}" border="0" /></span>
+        <span class="fl"><img class="radius10" src="{{$this->Html->url( $CurrentUser['image'] ? $CurrentUser['image'] : '/img/default_user_icon.jpg')}}" border="0" /></span>
         <span class="name fl">{{if mb_strlen($CurrentUser['nickname'], 'UTF-8')> PROFILE_NICK_LEN}} {{mb_substr($CurrentUser['nickname'], 0, PROFILE_NICK_LEN, 'UTF-8')}} {{else}} {{$CurrentUser['nickname']}} {{/if}}</span>
         <span class="fr more"></span>
     </a>
