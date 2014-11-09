@@ -572,9 +572,6 @@ class UsersController extends AppController {
     }
 
     function me() {
-        if ($this->RequestHandler->isMobile()) {
-            $this->layout = 'newv1';
-        }
         $this->pageTitle = __('个人中心');
     }
 

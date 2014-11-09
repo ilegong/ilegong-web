@@ -76,10 +76,6 @@ class CategoriesController extends AppController {
         $this->set('data_list', $productList);
         $this->set('withBrandInfo', true);
 
-        if ($this->RequestHandler->isMobile()) {
-            $this->layout = 'newv1';
-        }
-
         $this->set('op_cate', 'categories');
     }
 
@@ -97,10 +93,6 @@ class CategoriesController extends AppController {
         );
         foreach($productTags as &$tag) {
             $tag['ProductTag']['description'] = $descs[$tag['ProductTag']['id']];
-        }
-
-        if ($this->RequestHandler->isMobile()) {
-            $this->layout = 'newv1';
         }
         $this->set('productTags', $productTags);
         $this->set('op_cate', 'categories');
@@ -171,10 +163,6 @@ class CategoriesController extends AppController {
         $this->set('tagsWithProducts', $productTags);
         $this->set('withBrandInfo', true);
         $this->set('category_control_name', 'products');
-
-        if ($this->RequestHandler->isMobile()) {
-            $this->layout = 'newv1';
-        }
         $this->set('op_cate', 'home');
     }
 

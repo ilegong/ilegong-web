@@ -107,11 +107,6 @@ class CartsController extends AppController{
 	}
 	
 	function listcart(){
-
-        if ($this->RequestHandler->isMobile()) {
-            $this->layout = 'newv1';
-        }
-
         if (empty($this->currentUser['id'])) {
             $this->redirect("/users/login?referer=/carts/listcart");
         }
