@@ -466,138 +466,11 @@ class OrdersController extends AppController{
 	}
 
 	function business($creator=0){
-
-        $creator = $this->authAndGetCreator($creator);
-
-        $this->loadModel('Brand');
-		$brands = $this->Brand->find('list',array('conditions'=>array(
-				'creator'=> $creator,
-		)));
-		
-		if(!empty($brands)){
-			$brand_ids = array_keys($brands);
-			$this->set('is_business',true);
-		}
-		else{
-			$this->__message('只有合作商家才能查看商家订单，正在为您转向个人订单','/orders/mine');
-		}
-		/*
-		$this->loadModel('Product');
-		$bu_pros = $this->Product->find('all',array(
-			'fields'=> 'id,name,brand_id',
-			'conditions'=>array(
-				'brand_id' => $brand_ids,
-		)));
-		$product_ids = array();
-		foreach($bu_pros as $p){
-			$product_ids[] = $p['Product']['id'];
-		}
-		$cart_conditions = array(
-			'product_id' => $product_ids,
-		);*/
-		$orders = $this->Order->find('all',array(
-				'order' => 'id desc',
-				'conditions' => array('brand_id' => $brand_ids, 'NOT' => array(
-                    'status' => array(ORDER_STATUS_CANCEL, ORDER_STATUS_WAITING_PAY)
-                ) ),
-				/*'group' => 'Cart.order_id',
-				'joins'=>array(
-						array(
-							'table' => 'carts',
-							'alias' => 'Cart',
-							'type' => 'inner',
-							'conditions' => array(
-									'Cart.order_id=Order.id',
-									'Cart.product_id' => $product_ids,
-							),
-						)
-				),*/
-		));
-		$ids = array();
-		foreach($orders as $o){
-			$ids[] = $o['Order']['id'];
-		}
-		$this->loadModel('Cart');
-		$Carts = $this->Cart->find('all',array(
-				'conditions'=>array(
-						'order_id' => $ids,
-						//'creator'=> $this->currentUser['id']
-				)));
-		$order_carts = array();
-		foreach($Carts as $c){
-			$order_id = $c['Cart']['order_id'];
-            if (!isset($order_carts[$order_id])) {
-                $order_carts[$order_id] = array();
-            }
-			$order_carts[$order_id][] = $c;
-		}
-		
-		$this->set('orders',$orders);
-		$this->set('order_carts',$order_carts);
-		$this->set('ship_type', ShipAddress::$ship_type);
-        $this->set('creator', $creator);
-
-
-        if($_REQUEST['export']=='true'){
-            $this->autoRender = false;
-            $this->_download_excel($orders, $order_carts);
-            exit;
-        }
+        $this->__business_orders($creator);
 	}
 
     function tobe_shipped_orders($creator=0){
-
-        $creator = $this->authAndGetCreator($creator);
-
-        $this->loadModel('Brand');
-		$brands = $this->Brand->find('list',array('conditions'=>array(
-				'creator'=> $creator,
-		)));
-
-		if(!empty($brands)){
-			$brand_ids = array_keys($brands);
-			$this->set('is_business',true);
-		}
-		else{
-			$this->__message('只有合作商家才能查看商家订单，正在为您转向个人订单','/orders/mine');
-		}
-
-		$orders = $this->Order->find('all',array(
-				'order' => 'id desc',
-				'conditions' => array('brand_id' => $brand_ids, 'status' => ORDER_STATUS_PAID
-                )
-		));
-
-		$ids = array();
-		foreach($orders as $o){
-			$ids[] = $o['Order']['id'];
-		}
-		$this->loadModel('Cart');
-		$Carts = $this->Cart->find('all',array(
-				'conditions'=>array(
-						'order_id' => $ids,
-						//'creator'=> $this->currentUser['id']
-				)));
-		$order_carts = array();
-		foreach($Carts as $c){
-			$order_id = $c['Cart']['order_id'];
-            if (!isset($order_carts[$order_id])) {
-                $order_carts[$order_id] = array();
-            }
-			$order_carts[$order_id][] = $c;
-		}
-
-		$this->set('orders',$orders);
-		$this->set('order_carts',$order_carts);
-		$this->set('ship_type', ShipAddress::$ship_type);
-        $this->set('creator', $creator);
-
-
-        if($_REQUEST['export']=='true'){
-            $this->autoRender = false;
-            $this->_download_excel($orders, $order_carts);
-            exit;
-        }
+        $this->__business_orders($creator, array(ORDER_STATUS_PAID));
 	}
 
 
@@ -608,57 +481,6 @@ class OrdersController extends AppController{
     function tobe_shipped_export($creator=0) {
         $this->tobe_shipped_orders($creator);
     }
-
-    /**
-     * 占用较小的内存，更适合网站空间php占用内存限制小的情况。
-     */
-    private function _download_excel($orders, $order_carts){
-        @set_time_limit(0);
-        App::import('Vendor', 'Excel_XML', array('file' => 'phpexcel'.DS.'excel_xml.class.php'));
-        $xls = new Excel_XML('UTF-8', true, 'Sheet Orders');
-
-        $add_header_flag = false;
-        $fields = array('id','consignee_name','created','goods', 'total_all_price','status','consignee_mobilephone','consignee_address');
-        $header = array('订单号','客户姓名','下单时间','商品','总价','状态','联系电话','收货地址');
-        $order_status = array('待确认', '已支付','已发货','已收货','已退款','','','','','已完成','已做废', '已确认', '已投诉');
-        $page = 1;
-        $pagesize = 500;
-        do{
-            $rows = count($orders);
-            foreach($orders as $item){
-                if($add_header_flag==false){
-                    $xls->addRow($header);
-                    $add_header_flag = true;
-                }
-                $row = array();
-                foreach($fields as $fieldName){
-                    if ($fieldName == 'goods') {
-                        $orderId = $item['Order']['id'];
-                        $goods = $order_carts[$orderId];
-                        $value = '';
-                        if (is_array($goods)) {
-                            foreach ($goods as $good) {
-                                $value .= $good['Cart']['name'] . '*' . $good['Cart']['num'] . '; ';
-                            }
-                        }
-
-                    } else {
-                        $value = $item['Order'][$fieldName];
-                        if ($fieldName == 'status') {
-                            $value = $order_status[$value];
-                        }
-                    }
-
-                    $row[] = $value;
-                }
-                $xls->addRow($row);
-            }
-            ++$page;
-        }while($rows==$pagesize);
-
-        $xls->generateXML('orders'.'_'.date('Y-m-d'));
-    }
-
 
 	function confirm_receive(){
         $this->edit_status_by_owner_ajax(ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, '已收货');
@@ -1100,5 +922,61 @@ class OrdersController extends AppController{
                 }
             }
         }
+    }
+
+    /**
+     * @param $creator
+     * @param array $onlyStatus if not empty, only the specified status will be kept
+     */
+    protected function __business_orders($creator, $onlyStatus = array()) {
+        $creator = $this->authAndGetCreator($creator);
+
+        $this->loadModel('Brand');
+        $brands = $this->Brand->find('list', array('conditions' => array(
+            'creator' => $creator,
+        )));
+
+        if (!empty($brands)) {
+            $brand_ids = array_keys($brands);
+            $this->set('is_business', true);
+        } else {
+            $this->__message('只有合作商家才能查看商家订单，正在为您转向个人订单', '/orders/mine');
+            return;
+        }
+
+        $cond = array('brand_id' => $brand_ids, 'NOT' => array(
+            'status' => array(ORDER_STATUS_CANCEL, ORDER_STATUS_WAITING_PAY)
+        ));
+
+        if (!empty($onlyStatus)) {
+            $cond['status'] = $onlyStatus;
+        }
+
+        $orders = $this->Order->find('all', array(
+            'order' => 'id desc',
+            'conditions' => $cond,
+        ));
+        $ids = array();
+        foreach ($orders as $o) {
+            $ids[] = $o['Order']['id'];
+        }
+        $this->loadModel('Cart');
+        $Carts = $this->Cart->find('all', array(
+            'conditions' => array(
+                'order_id' => $ids,
+            )));
+        $order_carts = array();
+        foreach ($Carts as $c) {
+            $order_id = $c['Cart']['order_id'];
+            if (!isset($order_carts[$order_id])) {
+                $order_carts[$order_id] = array();
+            }
+            $order_carts[$order_id][] = $c;
+        }
+
+        $this->set('orders', $orders);
+        $this->set('order_carts', $order_carts);
+        $this->set('ship_type', ShipAddress::$ship_type);
+        $this->set('creator', $creator);
     }
 }
