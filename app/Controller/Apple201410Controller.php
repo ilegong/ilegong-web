@@ -214,7 +214,7 @@ class Apple201410Controller extends AppController
         $result = array();
 
         $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($id, KEY_APPLE_201410);
-        $apple_count_snapshot = $awardInfo['AwardInfo']['got'];
+        $apple_count_snapshot = $awardInfo['got'];
         $can_exchange_apple_count = $apple_count_snapshot;
 
         $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($id, self::EXCHANGE_RICE_SOURCE);
