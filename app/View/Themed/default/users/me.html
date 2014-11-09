@@ -65,15 +65,12 @@
         <span class="fr more"></span>
     </a>
 </div>
-{{if $in_weixin }}
 <div class="main_list border_b">
     <a href="{{$this->Html->url(array('controller' => 'users', 'action' => 'logout', '?' => array('referer' => '/') ))}}" class="clearfix">
         <span class="fl">退出登录</span>
         <span class="fr more"></span>
     </a>
 </div>
-{{/if}}
-
 
 <div class="addr">
     <a href="{{$this->Html->url('/orders/edit_consignee')}}" class="clearfix">
