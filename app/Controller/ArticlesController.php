@@ -50,6 +50,7 @@ class ArticlesController extends AppController{
         $this->set('navigations', $navigations);
         $this->set('Category', $Category);
         $this->set('cates', $cates);
+        $this->set('op_cate', 'shichituan');
     }
 
     public function log_js_error() {

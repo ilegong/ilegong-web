@@ -361,6 +361,9 @@ class CategoriesController extends AppController {
         $this->set('navigations', $navigations);
         $this->set('Category', $Category);
         $this->set('is_index', ($slug == 'techan' || $slug == '/'));
+        if ($slug == 'share') {
+            $this->set('op_cate', 'share');
+        }
     }
 
     /**

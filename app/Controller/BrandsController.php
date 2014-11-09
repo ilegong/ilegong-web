@@ -20,6 +20,7 @@ class BrandsController extends AppController {
     		'limit'=>'20',
     	));
     	$this->set('products',$products);
+        $this->set('op_cate', 'share');
     }
 
     public function brands_admin() {
