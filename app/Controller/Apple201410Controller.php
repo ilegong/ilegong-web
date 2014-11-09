@@ -189,8 +189,9 @@ class Apple201410Controller extends AppController
                 $log['last_got_time'] = $now;
                 $log['type'] = KEY_APPLE_201410;
                 if ($wxTimesLogModel->save(array('AwardWeixinTimeLog' => $log)) !== false) {
-                    $this->AwardInfo->updateAll(array('times' => 'times + ' . self::DAILY_TIMES_SUB,), array('uid' => $id, 'type' => KEY_APPLE_201410));
-                    $awardInfo = $this->AwardInfo->findByUid($id);
+                    $cond = array('uid' => $id, 'type' => KEY_APPLE_201410);
+                    $this->AwardInfo->updateAll(array('times' => 'times + ' . self::DAILY_TIMES_SUB,), $cond);
+                    $awardInfo = $this->AwardInfo->find('first', array('conditions' => array('uid' => $id, 'type' => KEY_APPLE_201410)));
                     $res['total_times'] = $awardInfo['AwardInfo']['times'];
                     $result = self::WX_TIMES_ASSIGN_JUST_GOT;
                 } else {
