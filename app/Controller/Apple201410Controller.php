@@ -178,17 +178,18 @@ class Apple201410Controller extends AppController
 
         if (WX_STATUS_SUBSCRIBED == $subscribe_status) {
             $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
-            $weixinTimesLog = $wxTimesLogModel->findById($id);
+            $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $id, 'type' => KEY_APPLE_201410)));
             $now = mktime();
             if ($this->gotWxTimesToday($weixinTimesLog, $now)) {
                 $result = self::WX_TIMES_ASSIGN_GOT;
                 $res['got_time'] = date('H点i分', $weixinTimesLog['AwardWeixinTimeLog']['last_got_time']);
             } else {
                 $log = array();
-                $log['id'] = $id;
+                $log['uid'] = $id;
                 $log['last_got_time'] = $now;
+                $log['type'] = KEY_APPLE_201410;
                 if ($wxTimesLogModel->save($log) !== false) {
-                    $this->AwardInfo->updateAll(array('times' => 'times + ' . self::DAILY_TIMES_SUB,), array('uid' => $id, ''));
+                    $this->AwardInfo->updateAll(array('times' => 'times + ' . self::DAILY_TIMES_SUB,), array('uid' => $id, 'type' => KEY_APPLE_201410));
                     $awardInfo = $this->AwardInfo->findByUid($id);
                     $res['total_times'] = $awardInfo['AwardInfo']['times'];
                     $result = self::WX_TIMES_ASSIGN_JUST_GOT;
@@ -257,13 +258,13 @@ class Apple201410Controller extends AppController
         }
 
         $friendsHelpMe = $this->TrackLog->find('all', array(
-            'conditions' => array('to' => $current_uid),
+            'conditions' => array('to' => $current_uid, 'type' => KEY_APPLE_201410),
             'fields' => array('from'),
             'limit' => 500
         ));
 
         $friendsIHelped = $this->TrackLog->find('all', array(
-            'conditions' => array('from' => $current_uid),
+            'conditions' => array('from' => $current_uid, 'type' => KEY_APPLE_201410),
             'fields' => array('to'),
             'limit' => 500
         ));
@@ -271,7 +272,7 @@ class Apple201410Controller extends AppController
         list($allUids, $nameIdMap) = $this->findNicknames($friendsHelpMe, $friendsIHelped);
 
         $gots = $this->AwardInfo->find('list', array(
-            'conditions' => array('uid' => $allUids),
+            'conditions' => array('uid' => $allUids, 'type'=> KEY_APPLE_201410),
             'fields' => array('uid', 'got')
         ));
 
@@ -340,7 +341,7 @@ class Apple201410Controller extends AppController
         $this->_updateLastQueryTime(time());
 
         $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
-        $weixinTimesLog = $wxTimesLogModel->findById($current_uid);
+        $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $current_uid, 'type' => KEY_APPLE_201410)));
         $this->set('got_wx_sub_times', $this->gotWxTimesToday($weixinTimesLog, mktime()));
 
         $this->pageTitle = "摇一摇免费兑稻花香大米, 我已经兑到" . $awardInfo['got']*10 . "g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米";
@@ -349,8 +350,9 @@ class Apple201410Controller extends AppController
     public function shake()
     {
         $this->autoRender = false;
-        $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($this->currentUser['id'], KEY_APPLE_201410);
-        $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($this->currentUser['id'], self::EXCHANGE_RICE_SOURCE);
+        $uid = $this->currentUser['id'];
+        $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, KEY_APPLE_201410);
+        $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($uid, self::EXCHANGE_RICE_SOURCE);
 
         $apple = $this->guessAwardAndUpdate($awardInfo);
         $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
@@ -374,8 +376,9 @@ class Apple201410Controller extends AppController
 
         $this->loadModel('AwardResult');
         $model = $this->AwardResult;
-        $todayAwarded = $model->todayAwarded(date(FORMAT_DATE));
-        $iAwarded = $model->userIsAwarded($this->currentUser['id']);
+        $todayAwarded = $model->todayAwarded(date(FORMAT_DATE), KEY_APPLE_201410);
+        $uid = $this->currentUser['id'];
+        $iAwarded = $model->userIsAwarded($uid, KEY_APPLE_201410);
 
         $ext = 10;
         if (!$this->is_weixin()) {
@@ -400,7 +403,7 @@ class Apple201410Controller extends AppController
 
         if (is_array($iAwarded) && empty($iAwarded) && $total_got + $curr_got >= $this->AWARD_LIMIT) {
             $awardResult = array(
-                'uid' => $this->currentUser['id'],
+                'uid' => $uid,
                 'type' => KEY_APPLE_201410,
                 'finish_time' => date(FORMAT_DATETIME)
             );
@@ -409,7 +412,8 @@ class Apple201410Controller extends AppController
             };
         }
 
-        if ($this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + ' . $curr_got, 'updated' => '\'' . date(FORMAT_DATETIME) . '\''), array('id' => $awardInfo['id'], 'times>0'))) {
+        if ($this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + ' . $curr_got, 'updated' => '\'' . date(FORMAT_DATETIME) . '\''),
+            array('id' => $awardInfo['id'], 'times>0', 'type'=>KEY_APPLE_201410))) {
             $awardInfo['times'] -= 1;
             $awardInfo['got'] += $curr_got;
         } else {

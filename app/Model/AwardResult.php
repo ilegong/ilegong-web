@@ -9,26 +9,27 @@ class AwardResult extends AppModel {
 
     /**
      * @param $day string formatted with a date in FORMAT_DATE
+     * @param $type
      * @return mixed
      */
-    public function todayAwarded($day) {
-        $key = $this->key_day_awarded($day);
+    public function todayAwarded($day, $type) {
+        $key = $this->key_day_awarded($day, $type);
         $result = Cache::read($key);
         if (!$result) {
             $result = $this->find('count', array(
-                'conditions' => array('date(finish_time) ' => $day)
+                'conditions' => array('date(finish_time) ' => $day, 'type' => $type)
             ));
             Cache::write($key, $result);
         }
         return $result;
     }
 
-    public function userIsAwarded($uid) {
-        $key = $this->key_user_is_awarded($uid);
+    public function userIsAwarded($uid, $type) {
+        $key = $this->key_user_is_awarded($uid, $type);
         $result = Cache::read($key);
         if (!$result) {
             $result = $this->find('first', array(
-                'conditions' => array('uid ' => $uid)
+                'conditions' => array('uid ' => $uid, 'type' => $type)
             ));
             Cache::write($key, $result);
         }
@@ -45,24 +46,26 @@ class AwardResult extends AppModel {
 
     /**
      * @param $uid
+     * @param $type
      * @return string
      */
-    protected function key_user_is_awarded($uid) {
-        return 'today_awarded_u_' . $uid;
+    protected function key_user_is_awarded($uid, $type) {
+        return 'today_awarded_u_' . $uid . '_'.$type;
     }
 
     /**
      * @param $day
+     * @param $type
      * @return string
      */
-    protected function key_day_awarded($day) {
-        return 'today_awarded_' . $day;
+    protected function key_day_awarded($day, $type) {
+        return 'today_awarded_' . $day.'_'.$type;
     }
 
     protected function clearCache() {
-        Cache::delete($this->key_user_is_awarded($this->data['AwardResult']['id']));
+        Cache::delete($this->key_user_is_awarded($this->data['AwardResult']['id'], $this->data['AwardResult']['type']));
         $datetime = new DateTime($this->data['AwardResult']['finish_time']);
         $day = $datetime->format(FORMAT_DATE);
-        Cache::delete($this->key_day_awarded($day));
+        Cache::delete($this->key_day_awarded($day, $this->data['AwardResult']['type']));
     }
 }
