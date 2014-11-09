@@ -25,7 +25,7 @@ class Apple201410Controller extends AppController
     {
         parent::beforeFilter();
         if (empty($this->currentUser['id'])) {
-            $this->redirect(redirect_to_wx_oauth(Router::url($_SERVER['REQUEST_URI']), WX_OAUTH_USERINFO, true));
+            $this->redirect(redirect_to_wx_oauth(Router::url($_SERVER['REQUEST_URI']), WX_OAUTH_BASE, true));
         }
         $this->pageTitle = __('摇一摇免费兑稻花香大米');
         $this->set('hideNav', true);
