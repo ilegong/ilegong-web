@@ -87,8 +87,9 @@
 <div class="container">
     <div class="row text-center">
         <h2>摇下50个，nana家大米免费兑</h2> <a name="top"></a>
-        <div class="col-xs-12">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp; 已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个
-            <a id="link_rules" href="{{$this->Html->url(array('action'=>'rules'))}}" class="apple_nav_links"><small>活动规则</small></a>
+        <div class="col-xs-16">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp; 已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个
+            = <span class="apple_numbers" id="rice_got_cnt">{{$total_apple*10}}</span>g大米
+            <button id="get_coupons_button" type="button" class="btn btn-warning">兑换</button>
         </div>
     </div>
     <div id="apple_tree" class="row voffset3">
@@ -104,13 +105,14 @@
         <button id="assignWXSubscribeTimes_2" type="button" class="btn btn-warning" style="display:{{$total_times > 0 ? 'none' : ''}}">关注加机会</button>
         </div>
         <div class="voffset3">
-            <a href="#award_names" class="apple_nav_links"><small>获奖名单</small></a>
+            <!--<a href="#award_names" class="apple_nav_links"><small>获奖名单</small></a>-->
+            <a href="/users/my_coupons.html" class="apple_nav_links"><small>我的粮票</small></a>
             <a href="#friends" class="apple_nav_links"><small>谁帮我了</small></a>
             <a href="#friendsIhelped" class="apple_nav_links"><small>我帮过谁</small></a>
             <a href="/?from=game_home" class="apple_nav_links"><small>美食特产</small></a>
             <br>
             <a class="apple_nav_links" href="#more_chances"><small>如何获得更多机会</small></a>
-            <a href="#about_apple" class="apple_nav_links"><small>QA妹子分享富士</small></a>
+            <!--<a href="#about_apple" class="apple_nav_links"><small>QA妹子分享富士</small></a>-->
         </div>
     </div>
 
@@ -119,7 +121,7 @@
           分享到朋友圈，朋友点击就能赢得再摇一次的机会喔~
       </p>
         <p id="game_text_has_more" style="{{if $total_times<=0}}display:none{{/if}}">
-            攒够100个苹果，马上免费领取小娟家苹果一箱！谁怕谁，你又不是没有朋友！
+            攒够50个苹果，马上免费兑换1斤nana家五常稻花香大米！谁怕谁，你又不是没有朋友！
         </p>
 
         <h3 id="about_us">关于我们</h3>
@@ -140,23 +142,23 @@
             <li>2. 分享给你的朋友们，每个朋友点击过来就增加<span class="apple_numbers">1</span>次机会。<button id="share_btn_2" class="btn-xs btn-warning" type="button">立即分享</button></li>
         </ul>
 
-        <h3 id="award_names">获奖名单 <span class="badge">{{count($awarded)}}</span><a href="#top" class="top_links">top&uarr;</a></h3>
-        <ul class="list-unstyled">
-            {{if $awarded}}
-            {{loop $awarded $key $item}}
-            <li>{{$item['nickname']}}{{$item['company']?'<small>('.$item['company'].')</small>':''}}，摇下<span class="apple_numbers_normal">{{$item['got']}}</span>个苹果, 得红富士一箱！</li>
-            {{/loop}}
-            {{else}}
-            <li>活动刚刚启动，暂无人获奖。</li>
-            {{/if}}
-        </ul>
+        <!--<h3 id="award_names">获奖名单 <span class="badge">{{count($awarded)}}</span><a href="#top" class="top_links">top&uarr;</a></h3>-->
+        <!--<ul class="list-unstyled">-->
+            <!--{{if $awarded}}-->
+            <!--{{loop $awarded $key $item}}-->
+            <!--<li>{{$item['nickname']}}{{$item['company']?'<small>('.$item['company'].')</small>':''}}，摇下<span class="apple_numbers_normal">{{$item['got']}}</span>个苹果, 得红富士一箱！</li>-->
+            <!--{{/loop}}-->
+            <!--{{else}}-->
+            <!--<li>活动刚刚启动，暂无人获奖。</li>-->
+            <!--{{/if}}-->
+        <!--</ul>-->
 
 
         <h3 id="friends">谁帮我了<span class="badge">{{count($helpMe)}}</span><a href="#top" class="top_links">top&uarr;</a></h3>
         <ul class="list-unstyled">
             {{if $helpMe}}
             {{loop $helpMe $key $item}}
-            <li>{{$item['nickname']}}，摇到了<span class="apple_numbers_normal">{{$item['got']}}</span>个苹果</li>
+            <li>{{$item['nickname']}}，摇到了<span class="apple_numbers_normal">{{$item['got']*10}}</span>g大米</li>
             {{/loop}}
             {{else}}
             <li>还没有朋友帮过你啊，马上分享给朋友们吧！</li>
@@ -167,34 +169,34 @@
         <ul class="list-unstyled">
             {{if $meHelp}}
             {{loop $meHelp $key $item}}
-            <li>{{$item['nickname']}}，摇到了<span class="apple_numbers_normal">{{$item['got']}}</span>个苹果</li>
+            <li>{{$item['nickname']}}，摇到了<span class="apple_numbers_normal">{{$item['got']*10}}</span>g大米</li>
             {{/loop}}
             {{else}}
             <li>你竟然还没有帮过朋友！</li>
             {{/if}}
         </ul>
 
-        <h3 id="about_apple">QA妹子分享的家乡红富士 <a href="#top" class="top_links">top&uarr;</a></h3>
-        <div>
-            <img src="{{$this->Html->url('/img/apple201410/slogan.jpg')}}" style="width: 80px; margin-left: 5px" class="pull-right">
-            <p>
-                &nbsp;&nbsp;这么多年过去，在这座充满雾霾的城市，自己还在不停的奔跑，但，已经是匆匆过客的故乡，却一遍又一遍出现自己的梦里。原来，不管走到哪里，自己都是城市里的乡下人。
-            </p>
-            <p>
-                &nbsp;&nbsp;我的家乡在咸阳乾县山坳村，<span style="color:#df1a00">家乡的红富士，皮薄肉脆、香甜可口，今年由于干旱导致红富士个头偏小，但不影响口感</span>，小娟想帮家乡销售苹果。感谢您品尝我家乡的苹果。（-- 电科院QA妹子小娟分享）<a href="/apple_201410/award.html" class="top_links">查看详情</a>
-            </p>
-            <img src="{{$this->Html->url('/img/apple201410/head.png')}}" width="120px" class="pull-right" style="margin-right: 50px">
+        <!--<h3 id="about_apple">QA妹子分享的家乡红富士 <a href="#top" class="top_links">top&uarr;</a></h3>-->
+        <!--<div>-->
+            <!--<img src="{{$this->Html->url('/img/apple201410/slogan.jpg')}}" style="width: 80px; margin-left: 5px" class="pull-right">-->
+            <!--<p>-->
+                <!--&nbsp;&nbsp;这么多年过去，在这座充满雾霾的城市，自己还在不停的奔跑，但，已经是匆匆过客的故乡，却一遍又一遍出现自己的梦里。原来，不管走到哪里，自己都是城市里的乡下人。-->
+            <!--</p>-->
+            <!--<p>-->
+                <!--&nbsp;&nbsp;我的家乡在咸阳乾县山坳村，<span style="color:#df1a00">家乡的红富士，皮薄肉脆、香甜可口，今年由于干旱导致红富士个头偏小，但不影响口感</span>，小娟想帮家乡销售苹果。感谢您品尝我家乡的苹果。（-- 电科院QA妹子小娟分享）<a href="/apple_201410/award.html" class="top_links">查看详情</a>-->
+            <!--</p>-->
+            <!--<img src="{{$this->Html->url('/img/apple201410/head.png')}}" width="120px" class="pull-right" style="margin-right: 50px">-->
 
-            <div class="clearfix"></div>
-            <div class="voffset1 text-center">
-                <span class="badge text-price" style="vertical-align: middle; font-size:20px">49.90元/10斤</span>   <a class="btn btn-sm btn-warning" href="/products/20141009/xiao_juan_jia_xian_yang_hong_fu_shi_yu_shou_20xiang.html?from=game_home">立即预定</a>
-            </div>
-        </div>
+            <!--<div class="clearfix"></div>-->
+            <!--<div class="voffset1 text-center">-->
+                <!--<span class="badge text-price" style="vertical-align: middle; font-size:20px">49.90元/10斤</span>   <a class="btn btn-sm btn-warning" href="/products/20141009/xiao_juan_jia_xian_yang_hong_fu_shi_yu_shou_20xiang.html?from=game_home">立即预定</a>-->
+            <!--</div>-->
+        <!--</div>-->
 
-        <p>
+        <!--<p>-->
 
-        </p>
-    </div>
+        <!--</p>-->
+    <!--</div>-->
 </div>
 
 <script>
@@ -205,6 +207,7 @@
             urls: ['http://51daifan-images.stor.sinaapp.com/tree_shake.mp3']
         });
         var $appleGotCnt = $('#apple_got_cnt');
+        var $riceGotCnt = $('#rice_got_cnt');
         var $appleTimesLeft = $('#apple_times_left, #apple_times_left_bottom');
         var $appleTree = $('img#apple_tree_img');
         var apple_tree_url = $('#apple_tree').attr('src');
@@ -230,7 +233,7 @@
         });
 
         function changeTitle(total) {
-            document.title = '摇一摇免费得红富士苹果, 我已经摇到了'+total+'个苹果 -- 城市里的乡下人电科院QA小娟分享家乡的苹果-朋友说';
+            document.title = '摇一摇免费兑稻花香大米, 我已经兑到'+total*10+'g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米-朋友说';
         }
 
         function showShareAndChangeTitle() {
@@ -333,6 +336,7 @@
                     var $curr_got = 0;
                     if (data) {
                         $appleGotCnt.text(data['total_apple']);
+                        $riceGotCnt.text(data['total_apple']*10);
                         $appleTimesLeft.text(data['total_times'] < 0 ? 0 : data['total_times']);
                         $curr_got = data['got_apple'];
                         showAfterGot($curr_got, data['total_times'], data['total_apple'], 2000);
@@ -374,6 +378,28 @@
                     utils.alert('可能是网络状态不好，请稍候重新领取！');
                 }
             });
+        });
+
+        var get_coupons_button =$('#get_coupons_button');
+
+        get_coupons_button.click(function(){
+            var apple_count = $.trim($appleGotCnt.text());
+            if(apple_count<50){
+                utils.alert("加油小主，我们<span class='apple_numbers'>"+50+"</span>个苹果起兑喔，您目前已摇<span class='apple_numbers'>"
+                        +apple_count+"</span>个。加油加油！");
+            }else{
+                $.getJSON("{{$this->Html->url(array('action' => 'exchange_coupon'))}}?r="+Math.random(), function(data){
+                    if (data.result == "just-got") {
+                        var exchange_apple_count = data.exchange_apple_count;
+                        var coupon_count = data.coupon_count;
+                        $appleGotCnt.text(apple_count-exchange_apple_count);
+                        $riceGotCnt.text((apple_count-exchange_apple_count)*10);
+                        utils.alert("恭喜，兑换"+coupon_count+"张粮票成功，快去我们服务号个人中心查看呢。");
+                    }  else {
+                        utils.alert("呜呜，兑换失败，请稍后重试。");
+                    }
+                });
+            }
         });
 
         var query_interval = 5000;

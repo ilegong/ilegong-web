@@ -75,7 +75,7 @@ class CouponItem extends AppModel {
               'bind_user' => $recUserId,
               'coupon_id' => 1,
               'status' => COUPONITEM_STATUS_TO_USE,
-              'source' => $source
+              'source' => $source,
         )));
     }
 

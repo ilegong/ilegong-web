@@ -6,32 +6,42 @@
  * Date: 10/12/14
  * Time: 3:57 PM
  */
-class Apple201410Controller extends AppController {
+class Apple201410Controller extends AppController
+{
 
     const DAILY_TIMES_SUB = 5;
 
     var $name = "Apple201410";
 
-    var $uses = array('User', 'AppleAward', 'AwardInfo', 'TrackLog');
+    var $uses = array('User', 'AppleAward', 'AwardInfo', 'TrackLog', 'CouponItem', 'ExchangeLog');
 
     var $DAY_LIMIT = 8;
     var $AWARD_LIMIT = 100;
 
+    const EXCHANGE_RICE_SOURCE = 'apple_exchange_rice';
 
-    public function beforeFilter() {
+
+    public function beforeFilter()
+    {
         parent::beforeFilter();
-        if(empty($this->currentUser['id'])){
+        if (empty($this->currentUser['id'])) {
             $this->redirect(redirect_to_wx_oauth(Router::url($_SERVER['REQUEST_URI']), WX_OAUTH_USERINFO, true));
         }
-        $this->pageTitle = __('摇一摇免费得红富士苹果');
+        $this->pageTitle = __('摇一摇免费兑稻花香大米');
         $this->set('hideNav', true);
         $this->set('noFlash', true);
     }
 
-    public function rules() {}
-    public function index() {}
+    public function rules()
+    {
+    }
 
-    public function notifiedToMe() {
+    public function index()
+    {
+    }
+
+    public function notifiedToMe()
+    {
         $key = $this->sess_award_notified;
         $r = $this->Session->read($key);
         if (!empty($r)) {
@@ -72,10 +82,12 @@ class Apple201410Controller extends AppController {
     );
 
     var $in_pys = array(8, 578, 818, 819);
-    
+
     var $sess_award_notified = "award-notified";
     var $time_last_query_key = 'award-new-times-last';
-    public function hasNewTimes() {
+
+    public function hasNewTimes()
+    {
         $this->autoRender = false;
         $r = $this->Session->read($this->time_last_query_key);
 //        if (!$r) {
@@ -84,16 +96,16 @@ class Apple201410Controller extends AppController {
 //                'type' => KEY_APPLE_201410
 //            )));
 
-            /**
-             * create table cake_user_notify_logs (
-            `id` bigint(20) NOT NULL AUTO_INCREMENT,
-            `type` char(12) NOT NULL,
-            `uid` bigint(20) NOT NULL,
-            `last_notify` timestamp NOT NULL,
-            primary key(`id`),
-            key(`uid`, `type`)
-            );
-             */
+        /**
+         * create table cake_user_notify_logs (
+        `id` bigint(20) NOT NULL AUTO_INCREMENT,
+        `type` char(12) NOT NULL,
+        `uid` bigint(20) NOT NULL,
+        `last_notify` timestamp NOT NULL,
+        primary key(`id`),
+        key(`uid`, `type`)
+        );
+         */
 //            if (!empty($notifyHis)) {
 //                $r = $notifyHis['UserNotifyLog']['last_notify'];
 //            }
@@ -105,7 +117,7 @@ class Apple201410Controller extends AppController {
             $logsToMe = $this->TrackLog->find('all', array('conditions' => array(
                 'type' => KEY_APPLE_201410,
                 'to' => $this->currentUser['id'],
-                'award_time > \''.date(FORMAT_DATETIME, $r).'\''
+                'award_time > \'' . date(FORMAT_DATETIME, $r) . '\''
             ), 'fields' => array('from')
             ));
 
@@ -116,7 +128,9 @@ class Apple201410Controller extends AppController {
                     return $log['TrackLog']['from'];
                 }, $logsToMe);
                 $maxShow = 3;
-                $nicknames = implode("、", array_map(function($n){ return filter_invalid_name($n); }, $this->User->findNicknamesMap(array_slice($uids, 0, $maxShow))));
+                $nicknames = implode("、", array_map(function ($n) {
+                    return filter_invalid_name($n);
+                }, $this->User->findNicknamesMap(array_slice($uids, 0, $maxShow))));
                 if (count($logsToMe) > $maxShow) {
                     $nicknames .= __('等');
                 }
@@ -140,7 +154,9 @@ class Apple201410Controller extends AppController {
     const WX_TIMES_ASSIGN_RETRY = "retry";
     const WX_TIMES_ASSIGN_GOT = "got";
     const WX_TIMES_ASSIGN_JUST_GOT = "just-got";
-    public function assignWXSubscribeTimes() {
+
+    public function assignWXSubscribeTimes()
+    {
         $this->autoRender = false;
         $subscribe_status = $this->currentUser['wx_subscribe_status'];
 
@@ -167,12 +183,12 @@ class Apple201410Controller extends AppController {
             if ($this->gotWxTimesToday($weixinTimesLog, $now)) {
                 $result = self::WX_TIMES_ASSIGN_GOT;
                 $res['got_time'] = date('H点i分', $weixinTimesLog['AwardWeixinTimeLog']['last_got_time']);
-            }else {
+            } else {
                 $log = array();
                 $log['id'] = $id;
                 $log['last_got_time'] = $now;
-                if ($wxTimesLogModel->save($log) !== false){
-                    $this->AwardInfo->updateAll(array('times' => 'times + '.self::DAILY_TIMES_SUB,), array('uid' => $id, ''));
+                if ($wxTimesLogModel->save($log) !== false) {
+                    $this->AwardInfo->updateAll(array('times' => 'times + ' . self::DAILY_TIMES_SUB,), array('uid' => $id, ''));
                     $awardInfo = $this->AwardInfo->findByUid($id);
                     $res['total_times'] = $awardInfo['AwardInfo']['times'];
                     $result = self::WX_TIMES_ASSIGN_JUST_GOT;
@@ -180,26 +196,62 @@ class Apple201410Controller extends AppController {
                     $result = self::WX_TIMES_ASSIGN_RETRY;
                 }
             }
-        }  else {
+        } else {
             $result = $subscribe_status == WX_STATUS_UNSUBSCRIBED ? self::WX_TIMES_ASSIGN_NOT_SUB : self::WX_TIMES_ASSIGN_RETRY;
         }
         $res['result'] = $result;
         echo json_encode($res);
     }
 
-    private function _updateLastQueryTime($curr) {
+    public function exchange_coupon()
+    {
+        $this->autoRender = false;
+        $id = $this->currentUser['id'];
+        $result = array();
+
+        $awardInfo = $this->AwardInfo->findByUid($id);
+        $apple_count_snapshot = $awardInfo['AwardInfo']['got'];
+        $can_exchange_apple_count = $apple_count_snapshot;
+
+        $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($id, self::EXCHANGE_RICE_SOURCE);
+        if ($exchange_log != false) {
+            $can_exchange_apple_count = $apple_count_snapshot - intval($exchange_log['apple_count_snapshot'] / 50) * 50;
+        }
+
+        if ($can_exchange_apple_count >= 50) {
+            $coupon_count = intval($can_exchange_apple_count / 50);
+            $latest_exchange_log_id = $this->ExchangeLog->addExchangeLog($id, $apple_count_snapshot,
+                50 * $coupon_count, $coupon_count, self::EXCHANGE_RICE_SOURCE);
+
+            for ($i = 1; $i <= $coupon_count; $i++) {
+                $this->CouponItem->addCoupon($id, self::EXCHANGE_RICE_SOURCE . "_" . $latest_exchange_log_id);
+                $this->CouponItem->id = null;
+            }
+            $result['exchange_apple_count'] = 50 * $coupon_count;
+            $result['coupon_count'] = $coupon_count;
+            $result['result'] = "just-got";
+        }else{
+            $result['result'] = "goon";
+        }
+        echo json_encode($result);
+    }
+
+    private function _updateLastQueryTime($curr)
+    {
         $this->Session->write($this->time_last_query_key, $curr);
     }
 
-    private function _addNotify($uname, $added) {
+    private function _addNotify($uname, $added)
+    {
         $this->Session->write($this->sess_award_notified, array('name' => $uname, 'got' => $added));
     }
 
-    public function award() {
+    public function award()
+    {
         $uri = "/apple_201410/award.html";
         $current_uid = $this->currentUser['id'];
         list($friend, $shouldAdd) = $this->track_or_redirect($uri, $current_uid, KEY_APPLE_201410);
-        if($shouldAdd) {
+        if ($shouldAdd) {
             $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id']));
             $this->_addNotify(filter_invalid_name($friend['User']['nickname']), $shouldAdd);
         }
@@ -224,22 +276,24 @@ class Apple201410Controller extends AppController {
         ));
 
         $helpMeItems = array();
-        foreach($friendsHelpMe as $item) {
+        foreach ($friendsHelpMe as $item) {
             $uid = $item['TrackLog']['from'];
-            $helpMeItems[] = array('nickname' => filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid]? $gots[$uid] : 0);
+            $helpMeItems[] = array('nickname' => filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid] ? $gots[$uid] : 0);
         }
 
         $meHelpItems = array();
-        foreach($friendsIHelped as $item) {
+        foreach ($friendsIHelped as $item) {
             $uid = $item['TrackLog']['to'];
-            $meHelpItems[] = array('nickname' => filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid]? $gots[$uid] : 0);
+            $meHelpItems[] = array('nickname' => filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid] ? $gots[$uid] : 0);
         }
 
 
-        function cmp($a, $b) {
+        function cmp($a, $b)
+        {
             $sortby = 'got'; //define here the field by which you want to sort
             return $a[$sortby] < $b[$sortby];
         }
+
         uasort($helpMeItems, 'cmp');
         uasort($meHelpItems, 'cmp');
 
@@ -251,9 +305,9 @@ class Apple201410Controller extends AppController {
             $awardInfo = array('AwardInfo' => array('uid' => $current_uid, 'type' => KEY_APPLE_201410, 'times' => 10, 'got' => 0));
             try {
                 $this->AwardInfo->save($awardInfo);
-            }catch(Exception $e) {
-                $this->log("error to save awardInfo:". var_export($awardInfo, true).", message:". $e->getMessage());
-                if ($e && $e->getMessage() && preg_match('/^\d+: Duplicate entry \'(.*)\' for key \d+$/i', $e->getMessage(), $matches))  {
+            } catch (Exception $e) {
+                $this->log("error to save awardInfo:" . var_export($awardInfo, true) . ", message:" . $e->getMessage());
+                if ($e && $e->getMessage() && preg_match('/^\d+: Duplicate entry \'(.*)\' for key \d+$/i', $e->getMessage(), $matches)) {
                     $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($current_uid, KEY_APPLE_201410);
                 } else {
                     throw $e;
@@ -279,7 +333,9 @@ class Apple201410Controller extends AppController {
         }
 
         $this->set('awarded', $awardItems);
-        $this->setTotalVariables($awardInfo);
+
+        $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($current_uid, self::EXCHANGE_RICE_SOURCE);
+        $this->setTotalVariables($awardInfo, $exchange_log);
         $this->set('got_apple', 0);
         $this->_updateLastQueryTime(time());
 
@@ -287,33 +343,42 @@ class Apple201410Controller extends AppController {
         $weixinTimesLog = $wxTimesLogModel->findById($current_uid);
         $this->set('got_wx_sub_times', $this->gotWxTimesToday($weixinTimesLog, mktime()));
 
-        $this->pageTitle = "摇一摇免费得红富士苹果, 我已经摇到了".$awardInfo['got']."个苹果 -- 城市里的乡下人电科院QA小娟分享家乡的苹果";
+        $this->pageTitle = "摇一摇免费兑稻花香大米, 我已经兑到" . $awardInfo['got']*10 . "g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米";
     }
 
-    public function shake() {
+    public function shake()
+    {
         $this->autoRender = false;
         $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($this->currentUser['id'], KEY_APPLE_201410);
+        $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($this->currentUser['id'], self::EXCHANGE_RICE_SOURCE);
+
         $apple = $this->guessAwardAndUpdate($awardInfo);
         $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
         $total_apple = $awardInfo && $awardInfo['got'] ? $awardInfo['got'] : 0;
+        if($total_apple>0 && $exchange_log!=false){
+            $total_apple = $total_apple - intval($exchange_log['apple_count_snapshot'] / 50) * 50;
+        }
         $this->_updateLastQueryTime(time());
         echo json_encode(array('got_apple' => $apple, 'total_apple' => $total_apple, 'total_times' => $totalAwardTimes));
     }
 
-    private function guessAwardAndUpdate(&$awardInfo) {
+    private function guessAwardAndUpdate(&$awardInfo)
+    {
 
-        if ($awardInfo['times'] <= 0) { return 0; };
+        if ($awardInfo['times'] <= 0) {
+            return 0;
+        };
 
         $total_got = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] : 0;
         $curr_got = 0;
 
         $this->loadModel('AwardResult');
         $model = $this->AwardResult;
-        $todayAwarded =  $model->todayAwarded(date(FORMAT_DATE));
-        $iAwarded =  $model->userIsAwarded($this->currentUser['id']);
+        $todayAwarded = $model->todayAwarded(date(FORMAT_DATE));
+        $iAwarded = $model->userIsAwarded($this->currentUser['id']);
 
         $ext = 10;
-        if (!$this->is_weixin()){
+        if (!$this->is_weixin()) {
             $ext = 1000000;
         } else if ($todayAwarded > $this->DAY_LIMIT) {
             $left = $this->AWARD_LIMIT - $total_got;
@@ -339,12 +404,12 @@ class Apple201410Controller extends AppController {
                 'type' => KEY_APPLE_201410,
                 'finish_time' => date(FORMAT_DATETIME)
             );
-            if(!$model->save($awardResult)){
-                $this->log("update AwardResult failed:". json_encode($awardResult));
+            if (!$model->save($awardResult)) {
+                $this->log("update AwardResult failed:" . json_encode($awardResult));
             };
         }
 
-        if($this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + '. $curr_got, 'updated' => '\''.date(FORMAT_DATETIME).'\'' ), array('id' => $awardInfo['id'], 'times>0'))){
+        if ($this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + ' . $curr_got, 'updated' => '\'' . date(FORMAT_DATETIME) . '\''), array('id' => $awardInfo['id'], 'times>0'))) {
             $awardInfo['times'] -= 1;
             $awardInfo['got'] += $curr_got;
         } else {
@@ -358,9 +423,13 @@ class Apple201410Controller extends AppController {
     /**
      * @param $awardInfo
      */
-    private function setTotalVariables($awardInfo) {
+    private function setTotalVariables($awardInfo, $exchangeLog)
+    {
         $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
         $total_apple = $awardInfo && $awardInfo['got'] ? $awardInfo['got'] : 0;
+        if($total_apple>0 && $exchangeLog!=false){
+            $total_apple = $total_apple - intval($exchangeLog['apple_count_snapshot'] / 50) * 50;
+        }
         $this->set('total_apple', $total_apple);
         $this->set('total_times', $totalAwardTimes);
     }
@@ -370,7 +439,8 @@ class Apple201410Controller extends AppController {
      * @param $friendsIHelped
      * @return array
      */
-    protected function findNicknames($friendsHelpMe, $friendsIHelped) {
+    protected function findNicknames($friendsHelpMe, $friendsIHelped)
+    {
         $allUids = array_map(function ($val) {
             return $val['TrackLog']['from'];
         }, $friendsHelpMe);
@@ -389,11 +459,13 @@ class Apple201410Controller extends AppController {
      * @param $now
      * @return bool
      */
-    protected function gotWxTimesToday($weixinTimesLog, $now) {
+    protected function gotWxTimesToday($weixinTimesLog, $now)
+    {
         return !empty($weixinTimesLog) && same_day($weixinTimesLog['AwardWeixinTimeLog']['last_got_time'], $now);
     }
 
-    protected function getTrackType() {
+    protected function getTrackType()
+    {
         return KEY_APPLE_201410;
     }
 }
