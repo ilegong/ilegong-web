@@ -4,11 +4,5 @@
 		<p>
 			<?php echo __('An Internal Error Has Occurred.'); ?>
 		</p>				
-		<?php
-		echo '<hr/>';
-		if (Configure::read('debug') > 0 ):
-			echo $this->element('exception_stack_trace');
-		endif;
-		?>
 	</div>
 </div></div></div>

@@ -12,11 +12,12 @@ else{
 Configure::write('Error', array(
             'handler' => 'ErrorHandler::handleError',
             'level' => E_ERROR | E_WARNING | E_PARSE,
+            'renderer' => 'CustomExceptionRender',
             'trace' => true
         ));
 Configure::write('Exception', array(
             'handler' => 'ErrorHandler::handleException',
-            'renderer' => 'ExceptionRenderer',
+            'renderer' => 'CustomExceptionRender',
             'log' => true
         ));
 Configure::write('App.encoding', 'UTF-8');
