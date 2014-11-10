@@ -636,7 +636,7 @@ class AppController extends Controller {
         if (!empty($tr_id)) {
             $uid = $this->decode_apple_tr_id($tr_id, $track_type);
             if ($uid && is_numeric($uid)) {
-                return array($uid, $uid === $curr_uid);
+                return array($uid, $uid == $curr_uid);
             } else {
                 return array(false, false);
             }

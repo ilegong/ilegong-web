@@ -262,7 +262,7 @@ class Apple201410Controller extends AppController
         list($friend, $shouldAdd) = $this->track_or_redirect($uri, $current_uid, KEY_APPLE_201410);
         if (!empty($friend)) {
             if ($shouldAdd) {
-                $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id']));
+                $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id'], 'type' => KEY_APPLE_201410));
             }
             $this->_addNotify(filter_invalid_name($friend['User']['nickname']), $shouldAdd);
             $this->redirect_for_append_tr_id($uri, $current_uid, KEY_APPLE_201410);
