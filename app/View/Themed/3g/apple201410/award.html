@@ -82,6 +82,37 @@
         color:#df1a00;
         background-color: gold;
     }
+
+    body{ padding:0; margin:0; font-family:"微软雅黑";}
+    .clearfix{*zoom:1;}
+    .clearfix:after{content: ".";display: block;height: 0;clear: both; visibility: hidden;}
+    .fl{ float:left;}
+    .fr{ float:right;}
+    .radius10{
+        -moz-border-radius: 0.417em;/* Gecko browsers */-webkit-border-radius: 0.417em;/* Webkit browsers */border-radius:0.417em;/* W3C syntax */
+    }
+    .bg_green{ background-color:#c8ffd8;}
+    .bg_orange{ background-color:#ffeabc;}
+    .bg_pink{ background-color:#ffe8e8;}
+    .bg_white{ background-color:#ffffff;}
+    .red{ color:#df1a00;}
+    .pad{ padding:1.5em 1em;}
+    .rock_btn{ padding:0 4.167em 1em 4.167em;}
+    .rock_btn a{ color:#ffffff; text-decoration:none; font-size:1.417em; padding:0.75em; display:block;}
+    .rock_btn a.fl{ background-color:#ff6600;}
+    .rock_btn a.fl:active{ background-color:#db2400; text-decoration:none;}
+    .rock_btn a.fr{ background-color:#08af37;}
+    .rock_btn a.fr:active{ background-color:#008c03; text-decoration:none;}
+    .pad .title{ font-size:1.167em; font-weight:bold; color:#333333; padding-bottom:0.6em; text-align:center;}
+    .pad .con{ font-size:1em; line-height:1.7em; color:#666666;}
+    .pad .con_aboutus{ font-size:1em; line-height:1.7em; color:#666666; text-align:center;}
+    .pad a.attention{ color:#df1a00; text-decoration:none;}
+    .pad a.draw{ color:#ffffff; text-decoration:none; display:block; background-color:#ff6600; padding:0 0.458em; font-size:1em;}
+    .pad a.draw:active{ background-color:#db2400; text-decoration:none;}
+    .name{ width:8.3em;}
+    .top{ position:fixed; right:0.833em; bottom:0.833em;}
+    .top a{ width:2.292em; height:2.292em; background:url(http://www.pyshuo.com/img/top.png) 0 -2.5em; background-size:2.292em 4.792em; display:block;}
+    .top a:active{ background:url(http://www.pyshuo.com/img/top.png) 0 0; background-size:2.292em 4.792em; display:block;}
 </style>
 
 <div class="container">
@@ -116,88 +147,56 @@
         </div>
     </div>
 
-    <div class="row voffset3 hoz_padding10">
-      <p id="game_text_no_more" style="{{if $total_times>0}}display:none{{/if}}">
-          分享到朋友圈，朋友点击就能赢得再摇一次的机会喔~
-      </p>
-        <p id="game_text_has_more" style="{{if $total_times<=0}}display:none{{/if}}">
-            攒够50个苹果，马上免费兑换1斤nana家五常稻花香大米！谁怕谁，你又不是没有朋友！
-        </p>
-
-        <h3 id="about_us">关于我们</h3>
-        <div class="col-xs-3">
-            <a href="/?from=index" >
-                {{$this->Html->image($this->Html->url('/img/logo_small.png'), array('style'=>'height:35px;','title' => $site[title],'alt' => $site[title]))}}
-                </a>
-        </div><div class="col-xs-9">
-        <p><a href="/?from=index">[朋友说]</a> 同事间互相分享家乡特产的创业网站，我们都是城市里的乡下人。</p>
-        <!-- 为了看更多机会时能看到关注按钮，所以id放在这里-->
-        <p id="more_chances"><a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">点击关注【朋友说】</a></p>
+    <div class="bg_green pad">
+        <div class="title">兑换规则</div>
+        <div class="con">1、让小伙伴点击分享的苹果游戏连接获机会, 摇苹果可以换稻花香大米喔~<br />2、500g大米起兑(50个苹果=500g、100个苹果=1000g大米)；<br />3、大米券只能在购买稻花香大米时才能抵现金使用。</div>
+    </div>
+    <div class="bg_white pad">
+        <div class="title"><img src="{{$this->Html->url('/img/logo.png')}}" border="0" /></div>
+        <div class="con_aboutus">[朋友说]同事间互相分享家乡特产的创业网站,<br />我们都是城市里的乡下人。<br /><strong>
+            <a class="attention" href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">点击关注</a></strong>
         </div>
-
-        <h3>如何获得更多摇一摇机会</h3>
-        <ul class="list-unstyled">
-            <li>1. 关注我们的服务号，<span class="apple_numbers_normal">每天</span>都可以领取<span class="apple_numbers">{{Apple201410Controller::DAILY_TIMES_SUB}}</span>次机会。
-                <button id="assignWXSubscribeTimes" type="button" class="btn-xs btn-warning">领取</button> </li>
-            <li>2. 分享给你的朋友们，每个朋友点击过来就增加<span class="apple_numbers">1</span>次机会。<button id="share_btn_2" class="btn-xs btn-warning" type="button">立即分享</button></li>
-        </ul>
-
-        <!--<h3 id="award_names">获奖名单 <span class="badge">{{count($awarded)}}</span><a href="#top" class="top_links">top&uarr;</a></h3>-->
-        <!--<ul class="list-unstyled">-->
-            <!--{{if $awarded}}-->
-            <!--{{loop $awarded $key $item}}-->
-            <!--<li>{{$item['nickname']}}{{$item['company']?'<small>('.$item['company'].')</small>':''}}，摇下<span class="apple_numbers_normal">{{$item['got']}}</span>个苹果, 得红富士一箱！</li>-->
-            <!--{{/loop}}-->
-            <!--{{else}}-->
-            <!--<li>活动刚刚启动，暂无人获奖。</li>-->
-            <!--{{/if}}-->
-        <!--</ul>-->
-
-
-        <h3 id="friends">谁帮我了<span class="badge">{{count($helpMe)}}</span><a href="#top" class="top_links">top&uarr;</a></h3>
-        <ul class="list-unstyled">
+    </div>
+    <div class="bg_orange pad">
+        <div id="more_chances" class="title">如何获得更多摇一摇机会</div>
+        <div class="con clearfix">
+            <div class="fl">1、关注我们的服务号, <strong class="red">每天</strong>都可以领取<strong class="red">5</strong>次机会。</div>
+            <div class="fl"><a id="assignWXSubscribeTimes" href="#X" class="draw radius10">领取</a></div>
+        </div>
+        <div class="con clearfix">
+            <div class="fl">2、分享给你的朋友们,每个朋友点击过来就增加<strong class="red">1</strong>次机会。</div>
+            <div class="fl"><a id="share_btn_2" href="#X" class="draw radius10">立即分享</a></div>
+        </div>
+    </div>
+    <div  id="friends" class="bg_green pad">
+        <div class="title"><strong class="red">{{count($helpMe)}}</strong>个朋友帮了我</div>
             {{if $helpMe}}
             {{loop $helpMe $key $item}}
-            <li>{{$item['nickname']}}，摇到了<span class="apple_numbers_normal">{{$item['got']*10}}</span>g大米</li>
+                <div class="con clearfix">
+                    <div class="fl name">{{$item['nickname']}}</div>，<div class="fl">摇到了<strong class="red">{{$item['got']*10}}</strong>g大米</div>
+                </div>
             {{/loop}}
             {{else}}
-            <li>还没有朋友帮过你啊，马上分享给朋友们吧！</li>
+                <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！</div>
             {{/if}}
-        </ul>
+    </div>
 
-        <h3 id="friendsIhelped">我帮过谁<span class="badge">{{count($meHelp)}}</span><a href="#top" class="top_links">top&uarr;</a></h3>
-        <ul class="list-unstyled">
-            {{if $meHelp}}
-            {{loop $meHelp $key $item}}
-            <li>{{$item['nickname']}}，摇到了<span class="apple_numbers_normal">{{$item['got']*10}}</span>g大米</li>
-            {{/loop}}
-            {{else}}
-            <li>你竟然还没有帮过朋友！</li>
-            {{/if}}
-        </ul>
+    <div id="friendsIhelped" class="bg_orange pad">
+        <div class="title">我帮过<strong class="red">{{count($meHelp)}}</strong>个朋友</div>
+        {{if $meHelp}}
+        {{loop $meHelp $key $item}}
+        <div class="con clearfix">
+            <div class="fl name">{{$item['nickname']}}</div>，<div class="fl">摇到了<strong class="red">{{$item['got']*10}}</strong>g大米</div>
+        </div>
+        {{/loop}}
+        {{else}}
+        <div class="con clearfix">你竟然还没有帮过朋友！</div>
+        {{/if}}
+    </div>
 
-        <!--<h3 id="about_apple">QA妹子分享的家乡红富士 <a href="#top" class="top_links">top&uarr;</a></h3>-->
-        <!--<div>-->
-            <!--<img src="{{$this->Html->url('/img/apple201410/slogan.jpg')}}" style="width: 80px; margin-left: 5px" class="pull-right">-->
-            <!--<p>-->
-                <!--&nbsp;&nbsp;这么多年过去，在这座充满雾霾的城市，自己还在不停的奔跑，但，已经是匆匆过客的故乡，却一遍又一遍出现自己的梦里。原来，不管走到哪里，自己都是城市里的乡下人。-->
-            <!--</p>-->
-            <!--<p>-->
-                <!--&nbsp;&nbsp;我的家乡在咸阳乾县山坳村，<span style="color:#df1a00">家乡的红富士，皮薄肉脆、香甜可口，今年由于干旱导致红富士个头偏小，但不影响口感</span>，小娟想帮家乡销售苹果。感谢您品尝我家乡的苹果。（-- 电科院QA妹子小娟分享）<a href="/apple_201410/award.html" class="top_links">查看详情</a>-->
-            <!--</p>-->
-            <!--<img src="{{$this->Html->url('/img/apple201410/head.png')}}" width="120px" class="pull-right" style="margin-right: 50px">-->
+    <div class="top"><a class="top" href="#"></a></div>
 
-            <!--<div class="clearfix"></div>-->
-            <!--<div class="voffset1 text-center">-->
-                <!--<span class="badge text-price" style="vertical-align: middle; font-size:20px">49.90元/10斤</span>   <a class="btn btn-sm btn-warning" href="/products/20141009/xiao_juan_jia_xian_yang_hong_fu_shi_yu_shou_20xiang.html?from=game_home">立即预定</a>-->
-            <!--</div>-->
-        <!--</div>-->
-
-        <!--<p>-->
-
-        <!--</p>-->
-    <!--</div>-->
-</div>
+    </div>
 
 <script>
     $(document).ready(function(){
@@ -212,8 +211,6 @@
         var $appleTree = $('img#apple_tree_img');
         var apple_tree_url = $('#apple_tree').attr('src');
 
-        var $game_text_has_more = $('#game_text_has_more');
-        var $game_text_no_more = $('#game_text_no_more');
         var $shakeBtn = $('#shake_btn');
         var $shareBtn = $('#share_btn');
 
@@ -272,14 +269,10 @@
 
         function updateViewState(times, total) {
             if (times > 0) {
-                $game_text_has_more.show();
-                $game_text_no_more.hide();
                 $shakeBtn.show();
                 $shareBtn.hide();
                 $('#assignWXSubscribeTimes_2').hide();
             } else {
-                $game_text_no_more.show();
-                $game_text_has_more.hide();
                 $shakeBtn.hide();
                 $shareBtn.show();
                 if (!$got_wx_sub_times) {
