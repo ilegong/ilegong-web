@@ -260,11 +260,11 @@ class Apple201410Controller extends AppController
         $uri = "/apple_201410/award.html";
         $current_uid = $this->currentUser['id'];
         list($friend, $shouldAdd) = $this->track_or_redirect($uri, $current_uid, KEY_APPLE_201410);
-        if ($shouldAdd) {
-            $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id']));
-            $this->_addNotify(filter_invalid_name($friend['User']['nickname']), $shouldAdd);
-        }
         if (!empty($friend)) {
+            if ($shouldAdd) {
+                $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id']));
+            }
+            $this->_addNotify(filter_invalid_name($friend['User']['nickname']), $shouldAdd);
             $this->redirect_for_append_tr_id($uri, $current_uid, KEY_APPLE_201410);
         }
 
