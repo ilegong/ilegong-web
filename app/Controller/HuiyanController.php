@@ -18,7 +18,7 @@ class HuiyanController extends AppController
                 $this->redirect(redirect_to_wx_oauth(Router::url($_SERVER['REQUEST_URI']), WX_OAUTH_BASE, true));
             }
         }
-        $this->pageTitle = __('帮助我们的腾讯同事慧艳，一起帮她带爸爸平安回来');
+        $this->pageTitle = __('帮助我们的腾讯/搜狗同事慧艳，帮她带爸爸平安回来');
         $this->set('hideNav', true);
         $this->set('noFlash', true);
         $this->set('isMobile', $this->RequestHandler->isMobile());
