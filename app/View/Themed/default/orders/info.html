@@ -3,7 +3,6 @@ td {padding:5px 10px;}
 
 a.coupon .glyphicon {
     color: #bbbbbb;
-    display: none;
 }
 
 a.coupon_applied .glyphicon {
@@ -84,9 +83,9 @@ a.coupon_applied .glyphicon {
 			{{/loop}}
 			</tbody>
 			</table>
-            <ul>
-                给分享人留言：<input type="text" maxlength="50" class="remark" name={{"remark_".$brandItem->id}} />
-            </ul>
+            <p>
+                <label>给分享人留言：<input type="text" maxlength="50" class="remark" name={{"remark_".$brandItem->id}} /> </label>
+            </p>
             <ul>
             <?PHP $coupons = $coupons_of_products[$brandItem->id]; if(!empty($coupons)){ foreach($coupons as $coupon) {
                 $applied =$brandItem->coupon_applied($coupon['CouponItem']['id']); ?>

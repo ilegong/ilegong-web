@@ -420,6 +420,7 @@ class Apple201410Controller extends AppController
 
     /**
      * @param $awardInfo
+     * @param $exchangeLog
      */
     private function setTotalVariables($awardInfo, $exchangeLog)
     {
