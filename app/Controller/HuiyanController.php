@@ -24,7 +24,11 @@ class HuiyanController extends AppController
 
     public function index()
     {
-
+        $helpHis = $this->Order->find('all', array('conditions' => array('brand_id' => 71, 'creator' => $this->currentUser['id'])));
+        $total = $this->Order->find('first', array(
+            'conditions' => array('brand_id' => 71, 'status' => ORDER_STATUS_PAID),
+            'fields' => array('total_all_price')
+        ));
     }
 
     public function log_num() {
@@ -44,10 +48,8 @@ class HuiyanController extends AppController
             $data['creator'] = $uid;
             $data['remark'] = '帮慧艳';
             $this->Order->create();
-
             if ($this->Order->save($data)) {
                 $order_id = $this->Order->getLastInsertID();
-
                 $cartItem = array(
                     'product_id' => 220,
                     'name' => '帮助慧艳',
