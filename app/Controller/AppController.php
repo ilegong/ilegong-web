@@ -677,14 +677,16 @@ class AppController extends Controller {
             'conditions' => array('type' => $track_type, 'from' => $current_uid, 'to' => $friendUid),
             'fields' => array('id',)
         ));
-        $shouldAdd = empty($trackLogs);
-        if ($shouldAdd) {
-            $toUpdate = array('TrackLog' => array('type' => $track_type, 'from' => $current_uid, 'to' => $friendUid, 'award_time' => date(FORMAT_DATETIME)));
+
+        $clientIp = $this->request->clientIp();
+        $newUser = empty($trackLogs);
+        if ($newUser) {
+            $toUpdate = array('TrackLog' => array('type' => $track_type, 'last_ip' => $clientIp, 'from' => $current_uid, 'to' => $friendUid, 'award_time' => date(FORMAT_DATETIME)));
             $this->TrackLog->save($toUpdate);
         } else {
-            $this->TrackLog->updateAll(array('latest_click_time' => '\''.date(FORMAT_DATETIME).'\''), array('id' => $trackLogs['TrackLog']['id']));
+            $this->TrackLog->updateAll(array('latest_click_time' => '\''.date(FORMAT_DATETIME).'\'', 'last_ip' => $clientIp), array('id' => $trackLogs['TrackLog']['id']));
         }
-        return $shouldAdd;
+        return $newUser;
     }
 
     /**
