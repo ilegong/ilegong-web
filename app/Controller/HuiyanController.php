@@ -46,6 +46,7 @@ class HuiyanController extends AppController
         if (!empty($_REQUEST['num'])) {
 
             $num = intval(intval($_REQUEST['num']));
+            $remark = trim($_REQUEST['remark']);
 
             $data = array();
             $data['total_price'] = $num;
@@ -53,7 +54,7 @@ class HuiyanController extends AppController
             $data['ship_fee'] = 0;
             $data['brand_id'] = 71;
             $data['creator'] = $uid;
-            $data['remark'] = '帮慧艳';
+            $data['remark'] = empty($remark)? '帮慧艳' : $remark;
             $this->Order->create();
             if ($this->Order->save($data)) {
                 $order_id = $this->Order->getLastInsertID();

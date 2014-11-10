@@ -163,7 +163,8 @@
         <div style="margin-left: 2em">
             <div>
                 <label>捐助金额(元)：<input id="number" type="number" value=""></label>
-                <a id="support_btn" class="btn btn-warning" href="/support_huiyan/index" style="">捐助慧艳</a>
+                <label>留言：<textarea id="notes" value="" style="width: 100%"></textarea></label>
+                <a id="support_btn" class="btn btn-warning" href="/support_huiyan/index" style="">捐助</a>
                 <div id="payment" class="panel panel-warning" style="display: none;">
                     <div class="panel-body">
                         {{if $in_weixin}}<a id="wx_btn" class="btn btn-warning" href="javascript:;">微信支付</a>{{/if}}
@@ -199,7 +200,7 @@
               $('#support_btn').click(function () {
                   var mon = $('#number').val();
                   if (mon && parseFloat(mon) > 0) {
-                      $.getJSON('/huiyan/log_num.json?num=' + mon, function (data) {
+                      $.getJSON('/huiyan/log_num.json?num=' + mon +'&remark='+encodeURIComponent($('#notes').val()), function (data) {
                           if (data.success) {
                               $('#wx_btn').attr('href', '/wxPay/jsApiPay/' + data.orderId + '.html?showwxpaytitle=1');
                               $('#zfb').attr('href', "/ali_pay/{{$isMobile?'wap_to_alipay':'goto_to_alipay'}}/" + data.orderId);
