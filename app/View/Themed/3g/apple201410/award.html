@@ -1,4 +1,4 @@
-{{$this->Html->script(array('shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js'), array('block' => 'scriptBottom'));}}
+{{$this->Html->script(array('trace/tracekit.min.report.js', 'shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js'), array('block' => 'scriptBottom'));}}
 {{$this->Html->scriptStart(array('block' => 'scriptBottom'));}}
 {{$this->Html->scriptEnd()}}
 <style>
@@ -200,6 +200,7 @@
 
 <script>
     $(document).ready(function(){
+    try {
         var shake_pic_url = '{{$this->Html->url("/img/apple201410/apple_shakev1.gif")}}';
         $([shake_pic_url]).preload();
         var sound = new Howl({
@@ -412,6 +413,8 @@
         }
         setTimeout(new_times_query, query_interval);
 
+    } catch (e) {
+        TraceKit.report(e);
+    }
     });
-
 </script>

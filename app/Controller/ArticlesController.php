@@ -63,6 +63,12 @@ class ArticlesController extends AppController{
         $this->autoRender = false;
     }
 
+    public function log_trace() {
+        $this->log('tracekit:'.var_export($_POST, true));
+        echo "logged";
+        $this->autoRender = false;
+    }
+
     public function message_test() {
         $this->__message("发现错误", '', 1000);
     }

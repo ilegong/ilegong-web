@@ -70,6 +70,7 @@ App::uses('CustomRouter', 'Lib');
 
 	CustomRouter::connect('/shichituan', array('controller' => 'articles', 'action' => 'shi_chi_tuan'));
 	CustomRouter::connect('/jserror', array('controller' => 'articles', 'action' => 'log_js_error'));
+	CustomRouter::connect('/tk/log', array('controller' => 'articles', 'action' => 'log_trace'));
 
 	CustomRouter::connect('/pt/:tag', array('controller' => 'categories', 'action' => 'tag'), array('pass' => array('tag')));
 
