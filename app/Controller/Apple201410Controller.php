@@ -392,25 +392,7 @@ class Apple201410Controller extends AppController
         $uid = $this->currentUser['id'];
         $iAwarded = $model->userIsAwarded($uid, KEY_APPLE_201410);
 
-        $ext = 10;
-        if (!$this->is_weixin()) {
-            $ext = 1000000;
-        } else if ($todayAwarded > $this->DAY_LIMIT) {
-            $left = $this->AWARD_LIMIT - $total_got;
-            if ($left > 0) {
-                if ($left <= 10) {
-                    $ext = 100000;
-                } else if ($left <= 20) {
-                    $ext = 100;
-                }
-            }
-        }
-
-        for ($i = 0; $i < 10; $i++) {
-            $mt_rand = mt_rand(0, intval($ext + $total_got));
-            $curr_got += ($mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
-        }
-
+        $curr_got += $this->randGotApple($todayAwarded, $total_got);
         $curr_got = ($total_got == 0 && $curr_got == 0 ? 3 : $curr_got);
 
         if (is_array($iAwarded) && empty($iAwarded) && $total_got + $curr_got >= $this->AWARD_LIMIT) {
@@ -483,5 +465,37 @@ class Apple201410Controller extends AppController
     protected function getTrackType()
     {
         return KEY_APPLE_201410;
+    }
+
+    /**
+     * @param $todayAwarded
+     * @param $total_got
+     * @return int
+     */
+    private function randGotApple($todayAwarded, $total_got) {
+        $this_got = 0;
+        $ext = 10;
+        if (!$this->is_weixin()) {
+            $ext = 1000000;
+        } else if ($todayAwarded > $this->DAY_LIMIT) {
+            $left = $this->AWARD_LIMIT - $total_got;
+            if ($left > 0) {
+                if ($left <= 10) {
+                    $ext = 100000;
+                } else if ($left <= 20) {
+                    $ext = 100;
+                }
+            }
+        }
+
+        if ($total_got > 40) {
+            $total_got -= 30;
+        }
+
+        for ($i = 0; $i < 10; $i++) {
+            $mt_rand = mt_rand(0, intval($ext + $total_got));
+            $this_got += ($mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
+        }
+        return $this_got;
     }
 }
