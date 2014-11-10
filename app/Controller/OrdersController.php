@@ -124,7 +124,7 @@ class OrdersController extends AppController{
 			$data['creator'] = $uid;
 
             $remark = $_REQUEST['remark_' . $brand_id];
-            $data['remark'] = empty($remark)?"":$remark;
+            $data['remark'] = empty($remark) ? "" : $remark;
 
 			$data['consignee_id'] = $this->Session->read('OrderConsignee.id');
 			$data['consignee_name'] = $this->Session->read('OrderConsignee.name');

@@ -88,13 +88,13 @@ class CouponItem extends AppModel {
         if (!empty($coupons_to_apply)) {
             foreach($this->find_my_valid_coupons($uid) as $coupon){
                 if(array_search($coupon['CouponItem']['id'], $coupons_to_apply) === false) {
-                    array_delete_value($coupons_to_apply);
+                    array_delete_value_ref($coupons_to_apply);
                 }
             }
         }
         if (!empty($coupons_to_apply)) {
             return $this->updateAll(array('status' => COUPONITEM_STATUS_USED, 'applied_order' => $order_id, 'applied_time' => '\'' . date(FORMAT_DATETIME) . '\''),
-                array('bind_user' => $uid, 'applied_order = 0 or applied_order is null', 'status' => COUPONITEM_STATUS_TO_USE, 'id' => $coupons_to_apply)
+                array('bind_user' => $uid, '(applied_order = 0 or applied_order is null)', 'status' => COUPONITEM_STATUS_TO_USE, 'id' => $coupons_to_apply)
             );
         }
 
