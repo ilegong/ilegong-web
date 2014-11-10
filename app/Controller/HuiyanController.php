@@ -14,7 +14,9 @@ class HuiyanController extends AppController
     {
         parent::beforeFilter();
         if (empty($this->currentUser['id'])) {
-            $this->redirect(redirect_to_wx_oauth(Router::url($_SERVER['REQUEST_URI']), WX_OAUTH_BASE, true));
+            if ($this->is_weixin()) {
+                $this->redirect(redirect_to_wx_oauth(Router::url($_SERVER['REQUEST_URI']), WX_OAUTH_BASE, true));
+            }
         }
         $this->pageTitle = __('帮助我们的腾讯同事慧艳，一起帮她带爸爸平安回来');
         $this->set('hideNav', true);
@@ -25,7 +27,9 @@ class HuiyanController extends AppController
     public function index()
     {
         $uid = $this->currentUser['id'];
-        $helpHis = $this->Order->find('all', array('conditions' => array('brand_id' => 71, 'creator' => $uid, 'status' => ORDER_STATUS_PAID)));
+        if ($uid) {
+            $helpHis = $this->Order->find('all', array('conditions' => array('brand_id' => 71, 'creator' => $uid, 'status' => ORDER_STATUS_PAID)));
+        }
         $total = $this->Order->find('first', array(
             'conditions' => array('brand_id' => 71, 'status' => ORDER_STATUS_PAID),
             'fields' => array('sum(total_all_price) as total')
