@@ -965,8 +965,31 @@ function object_to_array($object, $is_iconv = '') {
  * 删除数组中为某一值的所有元素,不传value时，删除空值
  * @param $array
  * @param $value
+ * @return array
  */
 function array_delete_value($array, $value=null,$trim = false) {
+    if (!empty($array) && is_array($array)) {
+        foreach ($array as $k => $v) {
+            if($trim && $v == trim($value)){
+            	unset($array[$k]);
+            }
+            elseif ($v == $value) {
+                unset($array[$k]);
+            }
+        }
+    } else {
+        $array = array();
+    }
+    return $array;
+}
+
+/**
+ * @param $array
+ * @param null $value
+ * @param bool $trim
+ * @return array
+ */
+function array_delete_value_ref(&$array, $value=null,$trim = false) {
     if (!empty($array) && is_array($array)) {
         foreach ($array as $k => $v) {
             if($trim && $v == trim($value)){

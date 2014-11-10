@@ -346,7 +346,8 @@ class OrdersController extends AppController{
 
         $this->autoRender = false;
 
-        if (empty($this->currentUser['id'])) {
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
             echo json_encode(array('changed' => false, 'reason' => 'not_login'));
             return;
         }
@@ -381,14 +382,14 @@ class OrdersController extends AppController{
             }
         } else {
             if (!empty($appliedCoupons) && array_search($coupon_item_id, $appliedCoupons) !== false) {
-                array_delete_value($appliedCoupons, $coupon_item_id);
+                array_delete_value_ref($appliedCoupons, $coupon_item_id);
                 $changed = true;
             }
         }
 
         $resp = array('changed' => $changed);
         if ($changed) {
-            $total_reduced = $this->CouponItem->compute_total_reduced($this->currentUser['id'], $appliedCoupons);
+            $total_reduced = $this->CouponItem->compute_total_reduced($uid, $appliedCoupons);
             $this->Session->write($coupon_used_key, json_encode($appliedCoupons));
             $resp['total_reduced'] = $total_reduced/100;
             $resp['total_price'] = $cart->total_price() - $total_reduced/100 + $shipFee;
@@ -399,8 +400,9 @@ class OrdersController extends AppController{
 	
 	function mine(){
 		$this->loadModel('Brand');
-		$brands = $this->Brand->find('first',array(
-				'conditions' => array('creator'=> $this->currentUser['id'])));
+        $uid = $this->currentUser['id'];
+        $brands = $this->Brand->find('first',array(
+				'conditions' => array('creator'=> $uid)));
 		if(!empty($brands)){
 			$this->set('is_business',true);
 		}

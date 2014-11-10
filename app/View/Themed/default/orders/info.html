@@ -86,29 +86,30 @@ a.coupon_applied .glyphicon {
             <p>
                 <label>给分享人留言：<input type="text" maxlength="50" class="remark" name={{"remark_".$brandItem->id}} /> </label>
             </p>
+            <?php $coupons = $coupons_of_products[$brandItem->id]; if(!empty($coupons)){ ?>
+            <h4>可用粮票：</h4>
             <ul>
-            <?PHP $coupons = $coupons_of_products[$brandItem->id]; if(!empty($coupons)){ foreach($coupons as $coupon) {
+            <?PHP foreach($coupons as $coupon) {
                 $applied =$brandItem->coupon_applied($coupon['CouponItem']['id']); ?>
                 <li><a data-coupon_item_id="{{$coupon['CouponItem']['id']}}" data-brandId="{{$brandItem->id}}" class="coupon {{if $applied}}coupon_applied{{/if}}" href="javascript:">
                     {{$coupon['Coupon']['name']}}<span class="glyphicon glyphicon-ok"></span></a><span class="applied_result"></span>
                     </li>
-            <?PHP } } ?>
+            <?PHP } ?>
             </ul>
+            <?php } ?>
 		</div>
         {{/loop}}
         </div>
             <div class="clearfix"></div>
 
         <div>
-            <div class="pull-left">
-                <a href="/carts/listcart.html">返回购物车</a>
-            </div>
-		    <div class="pull-right">
-                    <p>运费：{{$this->Number->precision($shipFee, 2)}}</p>
-                    <p>已优惠：<span id="total_reduced_span">{{$this->Number->precision($total_reduced, 2)}}</span></p>
-                    <p>总价<small>(含运费)</small>：<span id="total_price_span">{{$this->Number->precision($cart->total_price() + $shipFee, 2)}}</span></p>
-                <a id="submit-button" class="btn btn-primary" onclick="return checkAddress();" href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a>
-            </div>
+		    <ul class="pull-right list-unstyled">
+                    <li>已优惠：<span id="total_reduced_span">{{$this->Number->precision($total_reduced, 2)}}</span></li>
+                    <li>运费：{{$this->Number->precision($shipFee, 2)}}</li>
+                    <li>总价<small>(含运费)</small>：<span id="total_price_span">{{$this->Number->precision($cart->total_price() + $shipFee, 2)}}</span></li>
+                <li><a id="submit-button" class="btn btn-warning" onclick="return checkAddress();"
+                   href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a></li>
+            </ul>
         </div>
 
 	</div>

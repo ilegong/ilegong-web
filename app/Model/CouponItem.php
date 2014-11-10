@@ -162,7 +162,7 @@ class CouponItem extends AppModel {
             'CouponItem.status' => COUPONITEM_STATUS_TO_USE,
             'CouponItem.deleted = 0',
             'CouponItem.applied_order = 0',
-            '(CouponItem.cart_item_id is null or CouponItem.cart_item_id = 0)',
+            '(CouponItem.applied_order is null or CouponItem.applied_order = 0)',
             'Coupon.published' => 1,
             'Coupon.status' => COUPON_STATUS_VALID,
             'Coupon.valid_begin <= ' => $dt->format(FORMAT_DATETIME),
