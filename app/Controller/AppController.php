@@ -372,9 +372,13 @@ class AppController extends Controller {
                     $this->redirect('/users/login?referer='.urlencode($_SERVER['REQUEST_URI'].'?'.$_SERVER['PATH_INFO']));
                 }
                 $uri = "/products/" . date('Ymd', strtotime(${$modelClass}[$modelClass]['created'])) . "/$slug.html";
-                list($friend, $shouldAdd) = $this->track_or_redirect($uri, $current_uid, 'rebate_'.PRODUCT_ID_RICE_10);
+                $track_type = 'rebate_' . PRODUCT_ID_RICE_10;
+                list($friend, $shouldAdd) = $this->track_or_redirect($uri, $current_uid, $track_type);
                 if ($shouldAdd) {
                     //$this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id']));
+                }
+                if (!empty($friend)) {
+                    $this->redirect_for_append_tr_id($uri, $current_uid, $track_type);
                 }
             }
 
@@ -668,7 +672,7 @@ class AppController extends Controller {
      * @param $friendUid
      * @return bool
      */
-    private function track($track_type, $current_uid, $friendUid) {
+    private function recordTrack($track_type, $current_uid, $friendUid) {
         $trackLogs = $this->TrackLog->find('first', array(
             'conditions' => array('type' => $track_type, 'from' => $current_uid, 'to' => $friendUid),
             'fields' => array('id',)
@@ -684,6 +688,11 @@ class AppController extends Controller {
     }
 
     /**
+     *
+     * Check the incoming track code. If it's empty, redirect to current user's link;
+     * If it's from self, return (null, false); If it's other's link, return (friend id and shouldAdd), the caller should
+     * redirect to current user's link.
+     *
      * @param $uri
      * @param $current_uid
      * @param $track_type
@@ -701,7 +710,7 @@ class AppController extends Controller {
             $this->loadModel('User');
             $friend = $this->User->findById($friendUid);
             if (!empty($friend)) {
-                $shouldAdd = $this->track($track_type, $current_uid, $friendUid);
+                $shouldAdd = $this->recordTrack($track_type, $current_uid, $friendUid);
                 return array($friend, $shouldAdd);
             }
             //treat as self
