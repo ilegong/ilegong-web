@@ -70,6 +70,11 @@ class CouponItem extends AppModel {
 
     }
 
+    public function unapply_coupons($owner, $order_id) {
+        $this->updateAll(array('status' => COUPONITEM_STATUS_TO_USE, 'applied_order' => '0'),
+            array('bind_user' => $owner, 'applied_order' => $order_id, 'status' => COUPONITEM_STATUS_USED));
+    }
+
     public function addCoupon($recUserId, $source = 'unknown') {
         $this->save(array('CouponItem' => array(
               'bind_user' => $recUserId,

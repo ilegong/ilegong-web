@@ -475,12 +475,22 @@ class OrdersController extends AppController{
 	}
 
 	function confirm_undo(){
-        $this->edit_status_by_owner_ajax(ORDER_STATUS_WAITING_PAY, ORDER_STATUS_CANCEL);
+        $uid = $this->currentUser['id'];
+        $this->edit_order_by_owner_ajax(function($orderModel, $order, $order_id) use ($uid){
+            if ($order['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
+                $orderModel->cancelWaitingPayOrder($uid, $order_id, $order['Order']['creator']);
+                echo json_encode(array('order_id' => $order_id, 'ok' => 1, 'msg' => '订单已取消'));
+                exit;
+            } else {
+                echo json_encode(array('order_id' => $order_id, 'ok' => 0, 'msg' => '不能修改订单状态了。'));
+                exit;
+            }
+        });
 	}
 
 	function confirm_remove(){
-        $this->edit_order_by_owner_ajax(function($orderModel, $curr_status, $order_id){
-            if ($curr_status == ORDER_STATUS_CANCEL) {
+        $this->edit_order_by_owner_ajax(function($orderModel, $order, $order_id){
+            if ($order['Order']['status'] == ORDER_STATUS_CANCEL) {
                 $orderModel->updateAll(array('published' => 0), array('id' => $order_id));
                 echo json_encode(array('order_id' => $order_id, 'ok' => 1));
             } else {
@@ -491,8 +501,8 @@ class OrdersController extends AppController{
 	}
 
 	private function edit_status_by_owner_ajax($origStatus, $toStatus, $okMsg = ''){
-		$this->edit_order_by_owner_ajax(function($orderModel, $curr_status, $order_id) use ($origStatus, $toStatus,$okMsg) {
-            if ($curr_status == $origStatus) {
+		$this->edit_order_by_owner_ajax(function($orderModel, $order, $order_id) use ($origStatus, $toStatus,$okMsg) {
+            if ($order['Order']['status'] == $origStatus) {
                 $orderModel->updateAll(array('status' => $toStatus), array('id' => $order_id));
                 echo json_encode(array('order_id' => $order_id, 'ok' => 1, 'msg' => $okMsg));
                 exit;
@@ -525,8 +535,7 @@ class OrdersController extends AppController{
             exit;
         }
 
-        $orig_status = $order_info['Order']['status'];
-        $fun($this->Order, $orig_status, $order_id);
+        $fun($this->Order, $order_info, $order_id);
 	}
 
 //    public function test_notify_paid_done($order_id) {
@@ -578,7 +587,8 @@ class OrdersController extends AppController{
             echo json_encode(array('order_id'=>$order_id,'msg'=>'订单已支付'));
             exit;
         } else if ($status == ORDER_STATUS_CANCEL) {
-            if ($order_info['Order']['creator'] != $currentUid) {
+            $owner = $order_info['Order']['creator'];
+            if ($owner != $currentUid) {
                 echo json_encode(array('order_id'=>$order_id,'msg'=>'您没有权限取消此订单'));
                 exit;
             }
@@ -587,7 +597,7 @@ class OrdersController extends AppController{
                 exit;
             }
 
-            $this->Order->updateAll(array('status'=>$status, 'lastupdator'=> $currentUid),array('id'=>$order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+            $this->Order->cancelWaitingPayOrder($currentUid, $order_id, $owner);
             echo json_encode(array('order_id'=>$order_id,'msg'=>'订单已取消'));
             exit;
         } else if ($status == ORDER_STATUS_SHIPPED) {
