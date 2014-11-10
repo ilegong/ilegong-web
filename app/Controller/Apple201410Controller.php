@@ -318,7 +318,7 @@ class Apple201410Controller extends AppController
             try {
                 $this->AwardInfo->save($awardInfo);
             } catch (Exception $e) {
-                if ($e && $e->getMessage() && preg_match('/^\d+: Duplicate entry \'(.*)\' for key \d+$/i', $e->getMessage(), $matches)) {
+                if ($e && $e->getMessage() && strpos($e->getMessage(), 'Duplicate entry') !== false) {
                     $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($current_uid, KEY_APPLE_201410);
                     $this->log('save Award Info error:'.$e->getMessage());
                 } else {
