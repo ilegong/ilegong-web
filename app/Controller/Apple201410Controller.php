@@ -190,6 +190,9 @@ class Apple201410Controller extends AppController
                 $log['uid'] = $id;
                 $log['last_got_time'] = $now;
                 $log['type'] = KEY_APPLE_201410;
+                if (!empty($weixinTimesLog)) {
+                    $wxTimesLogModel->id = $weixinTimesLog['AwardWeixinTimeLog']['id'];
+                }
                 if ($wxTimesLogModel->save(array('AwardWeixinTimeLog' => $log)) !== false) {
                     $cond = array('uid' => $id, 'type' => KEY_APPLE_201410);
                     $this->AwardInfo->updateAll(array('times' => 'times + ' . self::DAILY_TIMES_SUB,), $cond);
