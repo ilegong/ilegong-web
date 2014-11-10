@@ -333,6 +333,8 @@ class OrdersController extends AppController{
         $products = $product_new;
         unset($product_new);
 
+        $this->set('isHelpHuiyan', $orderinfo['Order']['brand_id'] == 71);
+
         $this->set('isMobile', $this->RequestHandler->isMobile());
         $this->set('ship_type', ShipAddress::$ship_type);
         $this->set('order_id',$orderId);
