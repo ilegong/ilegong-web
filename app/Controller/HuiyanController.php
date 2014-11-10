@@ -28,10 +28,21 @@ class HuiyanController extends AppController
     {
         $uid = $this->currentUser['id'];
         if ($uid) {
-            $helpHis = $this->Order->find('all', array('conditions' => array('brand_id' => 71, 'creator' => $uid, 'status' => ORDER_STATUS_PAID)));
+            $helpHis = $this->Order->find('all', array('conditions' => array('brand_id' => 71, 'creator' => $uid, 'status' => ORDER_STATUS_PAID, 'pay_time > \'2014-11-10 02:11:34\'')));
         }
         $total = $this->Order->find('first', array(
-            'conditions' => array('brand_id' => 71, 'status' => ORDER_STATUS_PAID),
+            'conditions' => array('brand_id' => 71, 'status' => ORDER_STATUS_PAID, 'pay_time > \'2014-11-10 02:11:34\''),
+            'fields' => array('sum(total_all_price) as total')
+        ));
+
+        $this->set(compact('helpHis', 'total'));
+    }
+
+    public function all()
+    {
+        $helpHis = $this->Order->find('all', array('conditions' => array('brand_id' => 71, 'status' => ORDER_STATUS_PAID, 'pay_time > \'2014-11-10 02:11:34\'' ), 'order' => 'pay_time asc'));
+        $total = $this->Order->find('first', array(
+            'conditions' => array('brand_id' => 71, 'status' => ORDER_STATUS_PAID, 'pay_time > \'2014-11-10 02:11:34\''),
             'fields' => array('sum(total_all_price) as total')
         ));
 

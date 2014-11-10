@@ -172,7 +172,7 @@
                 </div>
                 <p><small>朋友说的创始团队有两位来自腾讯, 是慧艳的同事，分别是荣浩（rtx:MichaelRong）、刘召仁(rtx: zhaorenliu)。我们承诺您的每一笔都会详细记录，随时可查，立即汇总转交给慧艳。联系我们：<a href="tel:18910275329">189-1027-5329</a>。朋友说平台将承担线上支付的所有手续费，我们祈愿伯父早日康复。</small></p>
                 <p>
-                    朋友说平台收到总额：<strong class="red">{{$this->Number->precision($total[0]['total'], 2)}}</strong>
+                    朋友说平台收到总额：<strong class="red">{{$this->Number->precision($total[0]['total'], 2)}}</strong>，<a href="/huiyan/all.html">详细记录</a>
                 </p>
             </div>
         </div>
@@ -189,6 +189,7 @@
         {{/loop}}
         {{else}}您还没有捐助
         {{/if}}
+        <a href="/huiyan/all.html">所有记录</a>
     </div>
 
     <div id="contacts" class="bg_green pad">
