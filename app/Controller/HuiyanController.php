@@ -24,11 +24,14 @@ class HuiyanController extends AppController
 
     public function index()
     {
-        $helpHis = $this->Order->find('all', array('conditions' => array('brand_id' => 71, 'creator' => $this->currentUser['id'])));
+        $uid = $this->currentUser['id'];
+        $helpHis = $this->Order->find('all', array('conditions' => array('brand_id' => 71, 'creator' => $uid, 'status' => ORDER_STATUS_PAID)));
         $total = $this->Order->find('first', array(
             'conditions' => array('brand_id' => 71, 'status' => ORDER_STATUS_PAID),
-            'fields' => array('total_all_price')
+            'fields' => array('sum(total_all_price) as total')
         ));
+
+        $this->set(compact('helpHis', 'total'));
     }
 
     public function log_num() {
@@ -44,7 +47,7 @@ class HuiyanController extends AppController
             $data['total_price'] = $num;
             $data['total_all_price'] = $num;
             $data['ship_fee'] = 0;
-            $data['brand_id'] = 632;
+            $data['brand_id'] = 71;
             $data['creator'] = $uid;
             $data['remark'] = '帮慧艳';
             $this->Order->create();

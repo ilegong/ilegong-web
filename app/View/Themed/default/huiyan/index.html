@@ -106,18 +106,27 @@
     .pad a.attention{ color:#df1a00; text-decoration:none;}
     .pad a.draw{ color:#ffffff; text-decoration:none; display:block; background-color:#ff6600; padding:0 0.458em; font-size:1em;}
     .pad a.draw:active{ background-color:#db2400; text-decoration:none;}
-    .name{ width:8.3em;}
+    .name{ width:10.3em;}
     .top{ position:fixed; right:0.833em; bottom:0.833em;}
     .top a{ width:2.292em; height:2.292em; background:url(http://www.pyshuo.com/img/top.png) 0 -2.5em; background-size:2.292em 4.792em; display:block;}
     .top a:active{ background:url(http://www.pyshuo.com/img/top.png) 0 0; background-size:2.292em 4.792em; display:block;}
-    .intro p {
+    .intro  {
         margin: 0.5em 0.5em;
+    }
+    .intro img {
+        width: 100%;
     }
 </style>
 
 <div class="container">
     <div class="row intro">
         <h2 class="text-center">帮助慧艳，带爸爸平安归来</h2> <a name="top"></a>
+
+        <div class="voffset3 text-center">
+            <a href="#pay_way" class="apple_nav_links"><small>捐款方式</small></a>
+            <a href="#records" class="apple_nav_links"><small>我的捐款记录</small></a>
+        </div>
+
             <p>河北省张家口市老鸦山镇上小站村是张家口市的一个近郊村，2014年11月7日由于村里城中村改造勒令拆迁事宜，慧艳的父亲，50岁的刘维月由于与村委会意见不一致发生争执，在混乱中从村委三楼摔下，至今仍昏迷医院，生命垂危。</p>
 
             <p>在同事眼中，慧艳勤勉上进，89年的小姑娘，却始终流露出与年龄不符的老成，让人无法知道这个20出头的小姑娘身上背负着怎样的命运。也是这次事件，大家才得知，慧艳是单亲家庭，家里只有她和父亲、妹妹三人，24岁的她早早扛起了家里的重担，努力上进，省吃俭用，所有的付出，只为了让操劳了半辈子的父亲过得好一些。</p>
@@ -125,9 +134,16 @@
             <p>然而，父亲至今仍昏迷不醒，性命垂危，家里只剩她和妹妹，她一年省吃俭用攒下的钱还不敌医院几天的治疗费，一天1万的治疗费对姐妹两简直是天文数字。</p>
 
             <p>此刻只希望你能伸出援手，为一个鲜活的生命，为一个和谐美满的家庭。</p>
+
+            <p style="margin-top: 2em">已经昏迷四天的慧艳父亲：</p>
+            <img src="{{$this->Html->url('/img/huiyan/3.pic.jpg')}}">
+            <img src="{{$this->Html->url('/img/huiyan/4.pic.jpg')}}">
+
+            <p style="margin-top: 2em">《财经周刊》的报道:</p>
+            <img src="{{$this->Html->url('/img/huiyan/5.pic.jpg')}}">
     </div>
 
-    <div class="bg_green pad">
+    <div id="pay_way" class="bg_green pad">
         <div class="title">捐款方式</div>
         <div class="con">1、建行帐号:
             <ul class="list-unstyled"><li>开户行：建行</li>
@@ -151,24 +167,27 @@
                     </div>
                 </div>
                 <p><small>朋友说的创始团队有两位来自腾讯, 是慧艳的同事，分别是荣浩（rtx:MichaelRong）、刘召仁(rtx: zhaorenliu)。我们承诺您的每一笔都会详细记录，随时可查，立即汇总转交给慧艳。联系我们：<a href="tel:18910275329">189-1027-5329</a>。朋友说平台将承担线上支付的所有手续费，我们祈愿伯父早日康复。</small></p>
+                <p>
+                    朋友说平台收到总额：<strong class="red">{{$this->Number->precision($total[0]['total'], 2)}}</strong>
+                </p>
             </div>
         </div>
         </div>
     </div>
 
-    <div class="bg_orange pad">
+    <div id="records" class="bg_orange pad">
         <div class="title">捐助记录</div>
-        {{if $helpMe}}
-        {{loop $helpMe $key $item}}
+        {{if $helpHis}}
+        {{loop $helpHis $key $item}}
         <div class="con clearfix">
-            <div class="fl name">{{$item['pay_time']}}</div>，<div class="fl">捐助<strong class="red">{{$item['total_all_price']}}</strong>元</div>
+            <div class="fl name">{{$item['Order']['pay_time']}}</div><div class="fl">捐助<strong class="red">{{$this->Number->precision($item['Order']['total_all_price'], 2)}}</strong>元</div>
         </div>
         {{/loop}}
         {{else}}您还没有捐助
         {{/if}}
     </div>
 
-    <!--<div class="top"><a class="top" href="#"></a></div>-->
+    <div class="top"><a class="top" href="#"></a></div>
 
 </div>
       <script>
