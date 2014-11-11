@@ -1,9 +1,10 @@
 <div  class="container">
+    {{if $isHelpHuiyan}}
 	<div class="orderinfo voffset3">
         <p style="font-size: 3em">
             您这个支付是为了帮助慧艳，<a href="/huiyan/index.html">查看详情情况</a>
         </p>
-
+    {{/if}}
 <script>
     function go_to_pay_zhifubao() {
         if (location.href.indexOf('{{ALI_HOST}}') == -1) {
