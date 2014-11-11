@@ -119,105 +119,19 @@
 </style>
 
 <div class="container">
-    <div class="row intro">
-        <h2 class="text-center">帮助慧艳，带爸爸平安归来</h2> <a name="top"></a>
-
-        <div class="voffset3 text-center">
-            <a href="#pay_way" class="apple_nav_links"><small>捐款方式</small></a>
-            <a href="#records" class="apple_nav_links"><small>捐款记录</small></a>
-            <a href="#contacts" class="apple_nav_links"><small>联系我们</small></a>
-        </div>
-
-            <p>河北省张家口市老鸦山镇上小站村是张家口市的一个近郊村，2014年11月7日，慧艳的父亲，50岁的刘维月不幸从村委三楼摔下，至今昏迷医院，生命垂危。</p>
-
-            <p>慧艳是我们在腾讯，搜狐的同事，在大家眼里，慧艳勤勉上进，89年的小姑娘，却始终流露出与年龄不符的老成，让人无法知道这个20出头的小姑娘身上背负着怎样的命运。也是这次事件，大家才得知，慧艳是单亲家庭，家里只有她和父亲、妹妹三人，24岁的她早早扛起了家里的重担，努力上进，省吃俭用，所有的付出，只为了让操劳了半辈子的父亲过得好一些。</p>
-
-            <p>然而，父亲至今仍昏迷不醒，性命垂危，家里只剩她和妹妹，她一年省吃俭用攒下的钱还不够医院几天的治疗费，一天1万的治疗费对姐妹俩简直是天文数字。</p>
-
-            <p>作为慧艳的同事，我们能深深体会到此刻慧艳的无助。我们希望大家都能伸出援手，为一个鲜活的生命，为我们的同事贡献一份力量。</p>
-
-
-        <p style="margin-top: 2em">遭此变故前的慧艳爸爸：</p>
-        <img src="{{$this->Html->url('/img/huiyan/2.pic.jpg')}}">
-
-            <p style="margin-top: 2em">已经昏迷四天的慧艳父亲：</p>
-            <img src="{{$this->Html->url('/img/huiyan/3.pic.jpg')}}">
-            <img src="{{$this->Html->url('/img/huiyan/4.pic.jpg')}}">
-
-            <p style="margin-top: 2em">《财经国家周刊》的报道: <a href="http://cjgjzk.cn/a/guonaxinwen/20141110/1384.html">去看详细</a></p>
+    <div class="row text-center">
+        <p style="font-size: 4em"><a href="http://helphuiyan.sinaapp.com/index.html">请点击这里帮助慧艳</a></p>
     </div>
 
-    <div id="pay_way" class="bg_green pad">
-        <div class="title">捐款方式</div>
-        <div class="con">1、建行帐号:
-            <ul class="list-unstyled"><li>开户行：建行</li>
-            <li>卡号： 6227 0000 1117 0820 567</li>
-            <li>户名： 刘慧艳</li>
-            </ul>
-            2、线上转给慧艳：
-            <ul class="list-unstyled">
-                <li>支付宝：18210960587</li>
-            </ul>
-            <br>3、线上支付（通过<a href="http://www.tongshijia.com">[朋友说]</a>平台，支持支付宝、微信支付）：
-        <div style="margin-left: 2em">
-            <div>
-                <label>捐助金额(元)：<input id="number" type="number" value=""></label>
-                <label>留言：<textarea id="notes" value="" style="width: 100%"></textarea></label>
-                <a id="support_btn" class="btn btn-warning" href="/support_huiyan/index" style="">捐助</a>
-                <div id="payment" class="panel panel-warning" style="display: none;">
-                    <div class="panel-body">
-                        {{if $in_weixin}}<a id="wx_btn" class="btn btn-warning" href="javascript:;">微信支付</a>{{/if}}
-                        <a id="zfb" class="btn btn-warning" href="javascript:;">支付宝支付</a>
-                    </div>
-                </div>
-                <p><small>朋友说的创始团队有两位来自腾讯, 是慧艳的同事，分别是荣浩（rtx:MichaelRong）、刘召仁(rtx: zhaorenliu)。我们承诺您的每一笔都会详细记录，随时可查，立即汇总转交给慧艳。联系我们：<a href="tel:18910275329">189-1027-5329</a>。朋友说平台将承担线上支付的所有手续费，我们祈愿伯父早日康复。</small></p>
-                <p>
-                    朋友说平台收到总额：<strong class="red">{{$this->Number->precision($total[0]['total'], 2)}}</strong>，<a href="/huiyan/all.html">详细记录</a>
-                </p>
-            </div>
-        </div>
-        </div>
-    </div>
-
+        {{if $helpHis}}
     <div id="records" class="bg_orange pad">
         <div class="title">我的捐助记录</div>
-        {{if $helpHis}}
         {{loop $helpHis $key $item}}
         <div class="con clearfix">
             <div class="fl name">{{$item['Order']['pay_time']}}</div><div class="fl">捐助<strong class="red">{{$this->Number->precision($item['Order']['total_all_price'], 2)}}</strong>元</div>
         </div>
         {{/loop}}
-        {{else}}您还没有捐助
+        <a href="http://helphuiyan.sinaapp.com/all.html">所有记录</a>
+    </div>
         {{/if}}
-        <a href="/huiyan/all.html">所有记录</a>
-    </div>
-
-    <div id="contacts" class="bg_green pad">
-        <div class="title">联系信息</div>
-        <p>刘慧艳： <a href="tel:18210960587">182-1096-0587</a></p>
-        <p>刘召仁：<a href="tel:18910275329">189-1027-5329</a> (<small>线上支付等相关疑问，请致电</small>) </p>
-    </div>
-
-    <div class="top"><a class="top" href="#"></a></div>
-
 </div>
-      <script>
-          $(document).ready(function () {
-              $('#support_btn').click(function () {
-                  var mon = $('#number').val();
-                  if (mon && parseFloat(mon) > 0) {
-                      $.getJSON('/huiyan/log_num.json?num=' + mon +'&remark='+encodeURIComponent($('#notes').val()), function (data) {
-                          if (data.success) {
-                              $('#wx_btn').attr('href', '/wxPay/jsApiPay/' + data.orderId + '.html?showwxpaytitle=1');
-                              $('#zfb').attr('href', "/ali_pay/{{$isMobile?'wap_to_alipay':'goto_to_alipay'}}/" + data.orderId);
-                              $('#payment').show();
-                          }
-                      });
-                      return false;
-                  } else {
-                      utils.alert('您忘记填捐助数额了');
-                      return false;
-                  }
-              });
-          });
-      </script>
