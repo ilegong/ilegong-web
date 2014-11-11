@@ -74,7 +74,8 @@ class ShipPromotion extends AppModel {
         '229' => array(80, 13, 1),
         PRODUCT_ID_CAKE => array(288, 74, 0),
         '240' => array(306, 78, 1 ),
-        '259' => array(353, 78, 1 )
+        '259' => array(303, 78, 1 ),
+        '204' => array(100, 65, 1 ),
     );
 
     /**
