@@ -27,7 +27,12 @@ class Apple201410Controller extends AppController
     {
         parent::beforeFilter();
         if (empty($this->currentUser['id'])) {
-            $this->redirect(redirect_to_wx_oauth(Router::url($_SERVER['REQUEST_URI']), WX_OAUTH_BASE, true));
+            $ref = Router::url($_SERVER['REQUEST_URI']);
+            if ($this->is_weixin()) {
+                $this->redirect(redirect_to_wx_oauth($ref, WX_OAUTH_BASE, true));
+            } else {
+                $this->redirect('/users/login.html?referer='.$ref);
+            }
         }
         $this->pageTitle = __('摇一摇免费兑稻花香大米');
         $this->set('hideNav', true);
