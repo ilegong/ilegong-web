@@ -79,6 +79,79 @@ class CategoriesController extends AppController {
         $this->set('op_cate', 'categories');
     }
 
+    public function special_list($slug) {
+
+        $current_cateid = -1;
+        $this->loadModel('SpecialList');
+        $specialList = $this->SpecialList->find('first', array('conditions' => array(
+            'slug' => $slug,
+            'published' => 1
+        )));
+
+        if (!empty($specialList)) {
+
+            $limit = $specialList['SpecialList']['show_count'];
+            $limit = $limit ? $limit : 0;
+
+            $join_conditions = array(
+                array(
+                    'table' => 'product_specials',
+                    'alias' => 'Tag',
+                    'conditions' => array(
+                        'Tag.product_id = Product.id',
+                    ),
+                    'type' => 'INNER',
+                )
+            );
+            $orderBy = 'Tag.recommend desc, Product.recommend desc';
+            $conditions = array('Product.deleted'=>0, 'Product.published'=>1, 'Tag.published' => 1);
+
+            $this->loadModel('Product');
+            $list = $this->Product->find('all', array(
+                    'conditions' => $conditions,
+                    'joins' => $join_conditions,
+                    'order' => $orderBy,
+                    'fields' => array('Product.*'),
+                    'limit' => $limit)
+            );
+            if (count($list) < $limit) {
+                $total = count($list);
+            } else {
+                $total = $this->{$data_model}->find('count', array(
+                    'conditions' => $conditions,
+                    'joins' => $join_conditions
+                ));
+            }
+
+            $productList = array();
+            $brandIds = array();
+            foreach ($list as $val) {
+                $productList[] = $val['Product'];
+                $brandIds[] = $val['Product']['brand_id'];
+            }
+        } else {
+            $brandIds = array();
+            $mappedBrands = array();
+            $total = 0;
+            $productList = array();
+        }
+
+        $specialName = $specialList['SpecialList']['name'];
+        $this->pageTitle = $specialName;
+        $navigation = $this->readOrLoadAndCacheNavigations($current_cateid, $this->Category);
+        $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
+        $this->set('sub_title', $specialName);
+        $this->set('brands', $mappedBrands);
+        $this->set('total', $total);
+        $this->set('current_cateid', $current_cateid);
+        $this->set('category_control_name', 'products');
+        $this->set('navigations', $navigation);
+        $this->set('data_list', $productList);
+        $this->set('withBrandInfo', true);
+
+        $this->set('op_cate', 'categories');
+    }
+
     public function listCategories() {
         $productTags = $this->findVisibleTags();
         $descs = array(
