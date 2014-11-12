@@ -368,7 +368,7 @@ class AppController extends Controller {
             if ($pid == PRODUCT_ID_RICE_10) {
 
                 $current_uid = $this->currentUser['id'];
-                if (!$current_uid) {
+                if (!$current_uid && ($this->is_weixin() || !empty($_GET['trid']))) {
                     $this->redirect('/users/login?referer='.urlencode($_SERVER['REQUEST_URI'].'?'.$_SERVER['PATH_INFO']));
                 }
                 $uri = "/products/" . date('Ymd', strtotime(${$modelClass}[$modelClass]['created'])) . "/$slug.html";
