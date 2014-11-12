@@ -70,7 +70,7 @@ class ShipPromotion extends AppModel {
     '259' => array('limit_ship' => true,
         'limit_per_user' => 1,
         'items' => array(
-            array('id' => 32, 'ship_price' => 0.0, 'time' => '', 'address' => '北京华宇(西小口)'),
+            array('id' => 32, 'ship_price' => 0.0, 'time' => '', 'address' => '北京华宇东升科技园B2-5'),
         )
     ),
 
