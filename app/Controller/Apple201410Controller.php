@@ -263,7 +263,7 @@ class Apple201410Controller extends AppController
     public function award()
     {
 
-        $this->log('FORWARD_HOME:'.$_SERVER['HTTP_X_FORWARDED_HOST']);
+        $this->log('clientIp:'. $this->request->clientIp(false));
         $this->log('FORWARD_HOME-for:'.env('HTTP_X_FORWARDED_FOR'));
         $uri = "/apple_201410/award.html";
         $current_uid = $this->currentUser['id'];
