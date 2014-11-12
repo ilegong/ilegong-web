@@ -90,8 +90,8 @@ class CategoriesController extends AppController {
 
         if (!empty($specialList)) {
 
-            $limit = $specialList['SpecialList']['show_count'];
-            $limit = $limit ? $limit : 0;
+            $limit = $specialList['SpecialList']['showed_count'];
+            $limit = $limit ? $limit : 100;
 
             $join_conditions = array(
                 array(
@@ -117,7 +117,7 @@ class CategoriesController extends AppController {
             if (count($list) < $limit) {
                 $total = count($list);
             } else {
-                $total = $this->{$data_model}->find('count', array(
+                $total = $this->Product->find('count', array(
                     'conditions' => $conditions,
                     'joins' => $join_conditions
                 ));
