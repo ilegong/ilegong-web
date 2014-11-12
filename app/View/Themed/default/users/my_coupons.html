@@ -3,7 +3,7 @@
     <?php foreach($coupons as $coupon) { ?>
     <div class="list-group-item">
         <h4 class="list-group-item-heading">{{$coupon['Coupon']['name']}}{{if $coupon['CouponItem']['status'] == COUPONITEM_STATUS_TO_USE }}
-            <a href="{{$this->Html->url('/products/20141101/wu_chang_dao_hua_xiang_ti_qian_yu_shou_500jin_zhi_xian_bei_jing.html')}}">
+            <a href="{{$this->Html->url('/categories/special_list/special_for_rice_coupons.html')}}">
                 <span class="label label-success">马上使用</span></a>
             {{elseif $coupon['CouponItem']['status'] == COUPONITEM_STATUS_USED}}
             <span class="label label-default">已使用</span>{{/if}}</h4>
