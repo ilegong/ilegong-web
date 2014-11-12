@@ -17,7 +17,7 @@ class Apple201410Controller extends AppController
 
     public $components = array('Weixin');
 
-    var $DAY_LIMIT = 8;
+    var $DAY_LIMIT = 20;
     var $AWARD_LIMIT = 100;
 
     const EXCHANGE_RICE_SOURCE = 'apple_exchange_rice';
