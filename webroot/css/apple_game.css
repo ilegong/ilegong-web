@@ -54,6 +54,12 @@ h2 {
     margin:20px 2px 5px 2px;
 }
 
+.apple_medium_links {
+    text-decoration: underline; line-height: 28px;
+    font-size: 1.2em;
+    margin:20px 2px 5px 2px;
+}
+
 .top_links {
     text-decoration: underline; font-size: 12px;
     margin:10px 2px 5px 10px;
