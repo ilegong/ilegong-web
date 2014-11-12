@@ -184,7 +184,7 @@ $(document).ready(function(){
     var coupon_count = data.coupon_count;
     $appleGotCnt.text(apple_count-exchange_apple_count);
     $riceGotCnt.text((apple_count-exchange_apple_count)*10);
-    utils.alert("恭喜，兑换"+coupon_count+"张粮票成功，快去我们服务号个人中心查看呢。");
+    utils.alert("恭喜，兑换"+coupon_count+"张粮票成功，马上点击右侧<span class='apple_numbers'>查看我的优惠券</span>查看!");
     }  else {
     utils.alert("呜呜，兑换失败，请稍后重试。");
     }
