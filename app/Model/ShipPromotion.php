@@ -63,9 +63,24 @@ class ShipPromotion extends AppModel {
     '240' => array('limit_ship' => true,
         'limit_per_user' => 1,
         'items' => array(
-            array('id' => 28, 'ship_price' => 0.0, 'time' => '', 'address' => '腾讯公司希格玛B1交单处'),
+            array('id' => 31, 'ship_price' => 0.0, 'time' => '', 'address' => '腾讯公司希格玛B1交单处'),
         )
-    )
+    ),
+
+    '259' => array('limit_ship' => true,
+        'limit_per_user' => 1,
+        'items' => array(
+            array('id' => 32, 'ship_price' => 0.0, 'time' => '', 'address' => '北京华宇(西小口)'),
+        )
+    ),
+
+    '260' => array('limit_ship' => true,
+        'limit_per_user' => 1,
+        'items' => array(
+            array('id' => 33, 'ship_price' => 0.0, 'time' => '', 'address' => 'ThoughtWorks公司'),
+        )
+    ),
+
     );
 
     private  $pro_num_limit = array(
@@ -76,6 +91,7 @@ class ShipPromotion extends AppModel {
         '240' => array(306, 78, 1 ),
         '259' => array(303, 78, 1 ),
         '204' => array(135, 65, 1 ),
+        '260' => array(51, 57, 1 ),
     );
 
     /**
