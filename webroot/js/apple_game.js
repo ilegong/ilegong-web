@@ -152,7 +152,7 @@ $(document).ready(function(){
 
     var $assignWXSubscribeTimes = $('#assignWXSubscribeTimes, #assignWXSubscribeTimes_2');
     $assignWXSubscribeTimes.click(function(){
-    $.getJSON("/apple_201410/assignWXSubscribeTimes'?r="+Math.random(), function(data){
+    $.getJSON("/apple_201410/assignWXSubscribeTimes?r="+Math.random(), function(data){
     if (data.result == "not-sub") {
     utils.alert("您还没有关注我们的服务号，按<a href=\"http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd\">关注指南</a>关注【朋友说】，就可以来领取啦");
     }  else if (data.result == 'got') {
