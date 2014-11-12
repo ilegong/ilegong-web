@@ -10,8 +10,8 @@
     </div>
     <div id="apple_tree" class="row voffset3">
         <div style="position: relative; left: 0; top: 0;">
-      <img id="apple_tree_img" src="{{$this->Html->url('/img/apple201410/apple_tree.gif')}}" style="position: relative; top: 0; left: 0;"/>
-      <img id="shaking_tips_pic" class="shaking_tips_pic" src="{{$this->Html->url('/img/apple201410/rock.png')}}" style="position: absolute; top: 0; left: 0; display:none"/>
+      <img id="apple_tree_img" src="{{$this->Html->assetUrl('/img/apple201410/apple_tree.gif')}}" style="position: relative; top: 0; left: 0;"/>
+      <img id="shaking_tips_pic" class="shaking_tips_pic" src="{{$this->Html->assetUrl('/img/apple201410/rock.png')}}" style="position: absolute; top: 0; left: 0; display:none"/>
         </div>
     </div>
     <div class="row voffset3 text-center">
@@ -39,7 +39,7 @@
             3、大米券只能在购买稻花香大米时才能抵现金使用，使用期限11月15号前。</div>
     </div>
     <div class="bg_white pad">
-        <div class="title"><img src="{{$this->Html->url('/img/logo.png')}}" border="0" /></div>
+        <div class="title"><img src="{{$this->Html->assetUrl('/img/logo.png')}}" border="0" /></div>
         <div class="con_aboutus">[朋友说]同事间互相分享家乡特产的创业网站,<br />我们都是城市里的乡下人。<br /><strong>
             <a class="attention" href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">点击关注</a></strong>
         </div>
@@ -86,8 +86,8 @@
     </div>
 <script>
     var $got_wx_sub_times = "{{$got_wx_sub_times}}";
-    var shake_pic_url = '{{$this->Html->url("/img/apple201410/apple_shakev1.gif")}}';
+    var shake_pic_url = '{{$this->Html->assetUrl("/img/apple201410/apple_shakev1.gif")}}';
     var sound_url = 'http://51daifan-images.stor.sinaapp.com/tree_shake.mp3';
-    var share_png_url = '{{$this->Html->url("/img/apple201410/share.png")}}';
+    var share_png_url = '{{$this->Html->assetUrl("/img/apple201410/share.png")}}';
 </script>
 {{$this->Html->script(array('apple_game.js'));}}
