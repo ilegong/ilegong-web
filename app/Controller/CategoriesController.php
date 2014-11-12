@@ -5,6 +5,8 @@ class CategoriesController extends AppController {
 
     public function tag($tagSlug = '') {
 
+        $this->log('FORWARD_HOME:'.$_SERVER['HTTP_X_FORWARDED_HOST']);
+
         if ($tagSlug == '') {
             $this->view();
             return;
