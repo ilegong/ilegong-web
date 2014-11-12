@@ -368,17 +368,20 @@ class AppController extends Controller {
             if ($pid == PRODUCT_ID_RICE_10) {
 
                 $current_uid = $this->currentUser['id'];
-                if (!$current_uid && ($this->is_weixin() || !empty($_GET['trid']))) {
-                    $this->redirect('/users/login?referer='.urlencode($_SERVER['REQUEST_URI'].'?'.$_SERVER['PATH_INFO']));
-                }
-                $uri = "/products/" . date('Ymd', strtotime(${$modelClass}[$modelClass]['created'])) . "/$slug.html";
-                $track_type = 'rebate_' . PRODUCT_ID_RICE_10;
-                list($friend, $shouldAdd) = $this->track_or_redirect($uri, $current_uid, $track_type);
-                if ($shouldAdd) {
-                    //$this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id']));
-                }
-                if (!empty($friend)) {
-                    $this->redirect_for_append_tr_id($uri, $current_uid, $track_type);
+
+                if($this->is_weixin() || !empty($_GET['trid'])) {
+                    if (!$current_uid) {
+                        $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
+                    }
+                    $uri = "/products/" . date('Ymd', strtotime(${$modelClass}[$modelClass]['created'])) . "/$slug.html";
+                    $track_type = 'rebate_' . PRODUCT_ID_RICE_10;
+                    list($friend, $shouldAdd) = $this->track_or_redirect($uri, $current_uid, $track_type);
+                    if ($shouldAdd) {
+                        //$this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id']));
+                    }
+                    if (!empty($friend)) {
+                        $this->redirect_for_append_tr_id($uri, $current_uid, $track_type);
+                    }
                 }
             }
 
