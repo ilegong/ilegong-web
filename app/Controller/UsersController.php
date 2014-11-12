@@ -136,7 +136,7 @@ class UsersController extends AppController {
             		App::uses('Charset', 'Lib');
             		$username =  $this->data['User']['username'];
             		$username = Charset::utf8_gbk($username);
-            		$uid = uc_user_register($username,$src_password, $this->data['User']['email'],'','', $this->request->clientIp());
+            		$uid = uc_user_register($username,$src_password, $this->data['User']['email'],'','', $this->request->clientIp(false));
             		if($uid<=0){
             			if($uid == -1) {
             				$error_msg = '用户名不合法';
@@ -459,7 +459,7 @@ class UsersController extends AppController {
             $this->User->id = $id;
             $this->User->updateAll(array(
                 'last_login' => "'" . date('Y-m-d H:i:s') . "'",
-                'last_ip' => "'". $this->request->clientIp() . "'"
+                'last_ip' => "'". $this->request->clientIp(false) . "'"
             ), array('id' => $id,));
             $success = true;
         }
@@ -469,7 +469,7 @@ class UsersController extends AppController {
                 $this->User->id = $this->Auth->user('id');
                 $this->User->updateAll(array(
                     'last_login' => "'" . date('Y-m-d H:i:s') . "'",
-                    'last_ip' => "'". $this->request->clientIp() ."'"
+                    'last_ip' => "'". $this->request->clientIp(false) ."'"
                 ), array('id' => $this->User->id,));
 
                 $this->Session->setFlash('登录成功'.$this->Session->read('Auth.User.session_flash'));

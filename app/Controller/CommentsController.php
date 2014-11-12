@@ -25,7 +25,7 @@ class CommentsController extends AppController {
             $this->data['Comment']['user_id'] = $this->Session->read('Auth.User.id');
             $this->data['Comment']['username'] = $this->Session->read('Auth.User.nickname');
             $this->data['Comment']['body'] = htmlspecialchars($this->data['Comment']['body']);
-            $this->data['Comment']['ip'] = $this->request->clientIp();
+            $this->data['Comment']['ip'] = $this->request->clientIp(false);
             $this->data['Comment']['status'] = 1;
             $this->data['Comment']['created'] = date('Y-m-d H:i:s');
             //comment_type: 评论，补充完善，扩展阅读等等

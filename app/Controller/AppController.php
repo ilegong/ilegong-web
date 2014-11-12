@@ -681,7 +681,7 @@ class AppController extends Controller {
             'fields' => array('id',)
         ));
 
-        $clientIp = $this->request->clientIp();
+        $clientIp = $this->request->clientIp(false);
         $newUser = empty($trackLogs);
         if ($newUser) {
             $toUpdate = array('TrackLog' => array('type' => $track_type, 'last_ip' => '\''.$clientIp.'\'', 'from' => $current_uid, 'to' => $friendUid, 'award_time' => date(FORMAT_DATETIME)));
