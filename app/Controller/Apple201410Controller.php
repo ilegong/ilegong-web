@@ -264,6 +264,7 @@ class Apple201410Controller extends AppController
     {
 
         $this->log('FORWARD_HOME:'.$_SERVER['HTTP_X_FORWARDED_HOST']);
+        $this->log('FORWARD_HOME-for:'.$_SERVER['HTTP_X_FORWARDED_FOR']);
         $uri = "/apple_201410/award.html";
         $current_uid = $this->currentUser['id'];
         list($friend, $shouldAdd) = $this->track_or_redirect($uri, $current_uid, KEY_APPLE_201410);
