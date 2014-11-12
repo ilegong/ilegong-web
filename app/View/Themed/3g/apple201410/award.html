@@ -398,7 +398,7 @@
             }
         });
 
-        var query_interval = 5000;
+        var query_interval = 30000;
         function new_times_query() {
             $.getJSON('{{$this->Html->url(array("action"=>"hasNewTimes"))}}', function (data) {
                 if (data.success && data.new_times > 0) {
