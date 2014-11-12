@@ -5,7 +5,7 @@
         <h2>摇下50个，nana家大米免费兑</h2> <a name="top"></a>
         <div class="col-xs-16">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp; 已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个
             = <span class="apple_numbers" id="rice_got_cnt">{{$total_apple*10}}</span>g大米
-            <button id="get_coupons_button" type="button" class="btn btn-warning">兑换</button>
+            <a href="#get_coupons" class="btn btn-warning">兑换</a>
         </div>
     </div>
     <div id="apple_tree" class="row voffset3">
@@ -32,11 +32,13 @@
         </div>
     </div>
 
-    <div class="bg_green pad">
+    <div id="get_coupons" class="bg_green pad">
         <div class="title">兑换规则</div>
         <div class="con">1、让小伙伴点击分享的苹果游戏链接获机会, 摇苹果可以换稻花香大米喔~<br />
             2、500g大米起兑(50个苹果=500g、100个苹果=1000g大米)；<br />
             3、大米券只能在购买稻花香大米时才能抵现金使用，使用期限11月15号前。</div>
+        <button id="get_coupons_button" type="button" class="btn-sm btn-warning">我要兑换</button>
+        <a class="btn-sm" href="/users/my_coupons.html" >查看我的优惠券</a>
     </div>
     <div class="bg_white pad">
         <div class="title"><img src="{{$this->Html->assetUrl('/img/logo.png')}}" border="0" /></div>
@@ -48,11 +50,11 @@
         <div id="more_chances" class="title">如何获得更多摇一摇机会</div>
         <div class="con clearfix">
             <div class="fl">1、关注我们的服务号, <strong class="red">每天</strong>都可以领取<strong class="red">5</strong>次机会。</div>
-            <div class="fl"><a id="assignWXSubscribeTimes" href="#X" class="draw radius10">领取</a></div>
+            <div class="fl"><a id="assignWXSubscribeTimes" href="javascript:;" class="draw radius10">领取</a></div>
         </div>
         <div class="con clearfix">
             <div class="fl">2、分享给你的朋友们,每个朋友点击过来就增加<strong class="red">1</strong>次机会。</div>
-            <div class="fl"><a id="share_btn_2" href="#X" class="draw radius10">立即分享</a></div>
+            <div class="fl"><a id="share_btn_2" href="javascript:;" class="draw radius10">立即分享</a></div>
         </div>
     </div>
     <div  id="friends" class="bg_green pad">
