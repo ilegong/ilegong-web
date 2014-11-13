@@ -25,6 +25,7 @@ class Apple201410Controller extends AppController
     const CHENGZI_1411 = 'chengzi1411';
 
     var $game_obj_names = array('' => '苹果', self::RICE_201411 => '苹果', self::CHENGZI_1411 => '橙子');
+    var $treeNames = array('' => 'apple_shakev1.gif', self::RICE_201411 => 'apple_shakev1.gif', self::CHENGZI_1411 => 'orange.gif');
     var $game_least_change = array('' => '苹果',
         self::RICE_201411 => 50,
         self::CHENGZI_1411 => 30);
@@ -385,6 +386,7 @@ class Apple201410Controller extends AppController
         $title_in_page = $this->title_in_page[$gameType];
         $this->set('title_in_page', $title_in_page);
         $this->set('game_least_change', $this->game_least_change[$gameType]);
+        $this->set('treeName', $this->treeNames[$gameType]);
 
         $this->pageTitle = $title_in_page;
         $this->set('hideNav', true);
