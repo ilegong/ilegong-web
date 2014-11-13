@@ -34,7 +34,7 @@ class Apple201410Controller extends AppController
                 $this->redirect('/users/login.html?referer='.$ref);
             }
         }
-        $this->pageTitle = __('摇一摇免费兑稻花香大米');
+        $this->pageTitle = __('摇一摇免费送稻花香大米优惠券');
         $this->set('hideNav', true);
         $this->set('noFlash', true);
     }
