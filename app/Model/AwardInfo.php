@@ -16,7 +16,7 @@ class AwardInfo extends AppModel {
     public function getAwardInfoByUidAndType($uid, $type) {
         $awardTimes = $this->find('first', array(
             'conditions' => array('uid' => $uid, 'type' => $type),
-            'fields' => array('times', 'got', 'id'),
+            'fields' => array('times', 'got', 'id', 'spent'),
         ));
         return $awardTimes ? $awardTimes['AwardInfo'] : false;
     }

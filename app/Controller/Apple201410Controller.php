@@ -21,15 +21,17 @@ class Apple201410Controller extends AppController
     var $AWARD_LIMIT = 100;
 
     const EXCHANGE_RICE_SOURCE = 'apple_exchange_rice';
+    const RICE_201411 = 'rice201411';
+    const CHENGZI_1411 = 'chengzi1411';
 
-    var $game_obj_names = array('' => '苹果', 'rice201411' => '苹果', 'chengzi1411' => '橙子');
+    var $game_obj_names = array('' => '苹果', self::RICE_201411 => '苹果', self::CHENGZI_1411 => '橙子');
     var $game_least_change = array('' => '苹果',
-        'rice201411' => 50,
-        'chengzi1411' => 30);
-    var $title_in_page = array('chengzi1411' => '摇下100个，一箱<a href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">橙子</a>免费送', 'rice201411' => '摇下50个，大米优惠券免费送');
+        self::RICE_201411 => 50,
+        self::CHENGZI_1411 => 30);
+    var $title_in_page = array(self::CHENGZI_1411 => '摇下100个，一箱<a href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">橙子</a>免费送', self::RICE_201411 => '摇下50个，大米优惠券免费送');
     var $title_js_func = array('' => '',
-        'rice201411' => "'摇一摇免费兑稻花香大米, 我已经兑到'+total*10+'g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米-朋友说'",
-        'chengzi1411' => "'姚橙来啦，摇一摇免费领赣南脐橙，我已经摇下'+total+'个橙子-城市里的乡下人习蛋蛋分享自己家橙子-朋友说'");
+        self::RICE_201411 => "'摇一摇免费兑稻花香大米, 我已经兑到'+total*10+'g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米-朋友说'",
+        self::CHENGZI_1411 => "'姚橙来啦，摇一摇免费领赣南脐橙，我已经摇下'+total+'个橙子-城市里的乡下人习蛋蛋分享自己家橙子-朋友说'");
 
     public function beforeFilter()
     {
@@ -228,26 +230,42 @@ class Apple201410Controller extends AppController
 
         $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($id, $gameType);
         $apple_count_snapshot = $awardInfo['got'];
-        $can_exchange_apple_count = $apple_count_snapshot;
-
         $exChangeSource = $this->getExchangeType($gameType);
 
+        $can_exchange_apple_count = $apple_count_snapshot - $awardInfo['spent'];
 
-        $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($id, $exChangeSource);
-        if ($exchange_log != false) {
-            $can_exchange_apple_count = $apple_count_snapshot - intval($exchange_log['apple_count_snapshot'] / 50) * 50;
+        $coupon_count = 0;
+        if ($gameType == self::RICE_201411) {
+            if ($can_exchange_apple_count >= 50) {
+                $coupon_count = intval($can_exchange_apple_count / 50);
+                $exchangeCount = 50 * $coupon_count;
+                $this->exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfo['id'], COUPON_TYPE_RICE_1KG);
+            }
+        } else if($gameType == self::CHENGZI_1411) {
+            $exchangeCount = 0;
+            $couponType = 0;
+            if ($can_exchange_apple_count >= 100) {
+                $coupon_count = 1;
+                $exchangeCount = 100;
+                $couponType = COUPON_TYPE_CHZ_100;
+            } else if ($can_exchange_apple_count >= 50) {
+                $coupon_count = 1;
+                $exchangeCount = 50;
+                $couponType = COUPON_TYPE_CHZ_50;
+            } else if ($can_exchange_apple_count >= 30) {
+                $coupon_count = 1;
+                $exchangeCount = 30;
+                $couponType = COUPON_TYPE_CHZ_30;
+            }
+
+            if ($coupon_count > 0 && $couponType) {
+                $this->exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfo['id'], $couponType);
+            }
         }
 
-        if ($can_exchange_apple_count >= 50) {
-            $coupon_count = intval($can_exchange_apple_count / 50);
-            $latest_exchange_log_id = $this->ExchangeLog->addExchangeLog($id, $apple_count_snapshot,
-                50 * $coupon_count, $coupon_count, $exChangeSource);
 
-            for ($i = 1; $i <= $coupon_count; $i++) {
-                $this->CouponItem->addCoupon($id, $exChangeSource . "_" . $latest_exchange_log_id);
-                $this->CouponItem->id = null;
-            }
-            $result['exchange_apple_count'] = 50 * $coupon_count;
+        if ($coupon_count > 0) {
+            $result['exchange_apple_count'] = $exchangeCount;
             $result['coupon_count'] = $coupon_count;
             $result['result'] = "just-got";
 
@@ -255,6 +273,7 @@ class Apple201410Controller extends AppController
         }else{
             $result['result'] = "goon";
         }
+
         echo json_encode($result);
     }
 
@@ -371,8 +390,7 @@ class Apple201410Controller extends AppController
         $this->set('hideNav', true);
         $this->set('noFlash', true);
 
-        $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($current_uid, $this->getExchangeType($gameType));
-        $this->setTotalVariables($awardInfo, $exchange_log);
+        $this->setTotalVariables($awardInfo);
         $this->set('got_apple', 0);
         $this->_updateLastQueryTime(time());
 
@@ -388,14 +406,10 @@ class Apple201410Controller extends AppController
         if (!empty($gameType)) {
             $uid = $this->currentUser['id'];
             $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
-            $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($uid, $this->getExchangeType($gameType));
 
             $apple = $this->guessAwardAndUpdate($awardInfo, $gameType);
             $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
-            $total_apple = $awardInfo && $awardInfo['got'] ? $awardInfo['got'] : 0;
-            if ($total_apple > 0 && $exchange_log != false) {
-                $total_apple = $total_apple - intval($exchange_log['apple_count_snapshot'] / 50) * 50;
-            }
+            $total_apple = $awardInfo && $awardInfo['got'] ? ($awardInfo['got'] - $awardInfo['spent']) : 0;
             $this->_updateLastQueryTime(time());
             echo json_encode(array('success' => true, 'got_apple' => $apple, 'total_apple' => $total_apple, 'total_times' => $totalAwardTimes));
         } else {
@@ -448,15 +462,11 @@ class Apple201410Controller extends AppController
 
     /**
      * @param $awardInfo
-     * @param $exchangeLog
      */
-    private function setTotalVariables($awardInfo, $exchangeLog)
+    private function setTotalVariables($awardInfo)
     {
         $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
-        $total_apple = $awardInfo && $awardInfo['got'] ? $awardInfo['got'] : 0;
-        if($total_apple>0 && $exchangeLog!=false){
-            $total_apple = $total_apple - intval($exchangeLog['apple_count_snapshot'] / 50) * 50;
-        }
+        $total_apple = $awardInfo && $awardInfo['got'] ? ($awardInfo['got'] - $awardInfo['spent']) : 0;
         $this->set('total_apple', $total_apple);
         $this->set('total_times', $totalAwardTimes);
     }
@@ -528,6 +538,31 @@ class Apple201410Controller extends AppController
      * @return string
      */
     private function getExchangeType($gameType) {
-        return $gameType == 'rice201411' ? self::EXCHANGE_RICE_SOURCE : $gameType;
+        return $gameType == self::RICE_201411 ? self::EXCHANGE_RICE_SOURCE : $gameType;
+    }
+
+    /**
+     * @param $id
+     * @param $apple_count_snapshot
+     * @param $exchangeCount
+     * @param $coupon_count
+     * @param $exChangeSource
+     * @param $awardInfoId
+     * @param $couponType
+     */
+    private function exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfoId, $couponType) {
+        $latest_exchange_log_id = $this->ExchangeLog->addExchangeLog($id, $apple_count_snapshot,
+            $exchangeCount, $coupon_count, $exChangeSource);
+
+        $uid = $this->currentUser['id'];
+        if($latest_exchange_log_id) {
+            $awardInfoModel = ClassRegistry::init('AwardInfo');
+            if ($awardInfoModel->updateAll(array('spent ' => 'spent + '. $exchangeCount, ), array('id' => $awardInfoId))) {
+                for ($i = 1; $i <= $coupon_count; $i++) {
+                    $this->CouponItem->addCoupon($id, $couponType, $uid, $exChangeSource . "_" . $latest_exchange_log_id . '_' . $i);
+                    $this->CouponItem->id = null;
+                }
+            }
+        }
     }
 }

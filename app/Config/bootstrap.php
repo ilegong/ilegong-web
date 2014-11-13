@@ -31,6 +31,11 @@ const PRODUCT_ID_CAKE = 230;
 const PRODUCT_ID_RICE_10 = 231;
 const PRODUCT_ID_RICE_BRAND_10 = 13;
 
+const COUPON_TYPE_RICE_1KG = 1;
+const COUPON_TYPE_CHZ_30 = 2;
+const COUPON_TYPE_CHZ_50 = 3;
+const COUPON_TYPE_CHZ_100 = 4;
+
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');

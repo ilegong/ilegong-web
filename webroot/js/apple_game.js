@@ -183,7 +183,7 @@ $(document).ready(function(){
 
     get_coupons_button.click(function(){
     var apple_count = $.trim($appleGotCnt.text());
-    if(apple_count<50){
+    if(parseInt(apple_count) < parseInt(game_least_change)){
     utils.alert("加油小主，我们<span class='apple_numbers'>"+game_least_change+"</span>个"+game_obj_name+"起兑喔，您目前已摇<span class='apple_numbers'>"
     +apple_count+"</span>个。加油加油！");
     }else{

@@ -12,7 +12,7 @@ class ExchangeLog extends AppModel
     {
         $exchangeLogs = $this->find('first', array(
             'conditions' => array('user_id' => $uid, 'source' => $source),
-            'order' => 'id desc'
+            'order' => 'apple_count_snapshot desc'
         ));
         return $exchangeLogs ? $exchangeLogs['ExchangeLog'] : false;
     }
