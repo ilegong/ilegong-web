@@ -12,7 +12,8 @@ class WeixinComponent extends Component
         "ORDER_PAID" => "UXmiPQNz46zZ2nZfDZVVd9xLIx28t66ZPNBoX1WhE8Q",
         "ORDER_SHIPPED" => "87uu4CmlZT-xlZGO45T_XTHiFYAWHQaLv94iGuH-Ke4",
         "ORDER_REBATE" => "DVuV9VC7qYa4H8oP1BaZosOViQ7RrU3v558VrjO7Cv0",
-        "COUPON_RECEIVED" => "op8f7Ca1izIU1QVfrdrg7GBqa_KTXHlaGFjUO2EGG8I"
+        "COUPON_RECEIVED" => "op8f7Ca1izIU1QVfrdrg7GBqa_KTXHlaGFjUO2EGG8I",
+        "COUPON_TIMEOUT" => "KnpyIsYLe6W-8vKDFPVfd9_5WbvKBMn_wQiaIsc1-wE"
     );
 
     public $kuaidi100_ship_type = array(
@@ -80,6 +81,29 @@ class WeixinComponent extends Component
                     "orderTicketStore" => array("value" => $store),
                     "orderTicketRule" => array("value" => $rule),
                     "remark" => array("value" => "点击详情，查询获得的粮票。", "color" => "#FF8800")
+                )
+            );
+            return $this->send_weixin_message($post_data);
+        }
+        return false;
+    }
+
+    public function send_coupon_timeout_message($user_id, $coupon_name, $remain_hours, $money, $rule = "无金额限制")
+    {
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
+        if ($user_weixin != false) {
+            $open_id = $user_weixin['oauth_openid'];
+            $post_data = array(
+                "touser" => $open_id,
+                "template_id" => $this->wx_message_template_ids["COUPON_TIMEOUT"],
+                "url" => $this->get_coupon_url(),
+                "topcolor" => "#FF0000",
+                "data" => array(
+                    "first" => array("value" => "亲，您有1张面额".$money."元的".$coupon_name."优惠券将于".$remain_hours."小时后过期。"),
+                    "orderTicketStore" => array("value" => $coupon_name."所有产品可用。"),
+                    "orderTicketRule" => array("value" => $rule),
+                    "remark" => array("value" => "点击详情，马上使用。", "color" => "#FF8800")
                 )
             );
             return $this->send_weixin_message($post_data);
