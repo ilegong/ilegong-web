@@ -373,8 +373,6 @@ class Apple201410Controller extends AppController
         $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
         $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $current_uid, 'type' => $gameType)));
         $this->set('got_wx_sub_times', $this->gotWxTimesToday($weixinTimesLog, mktime()));
-
-        $this->pageTitle = "摇一摇免费兑稻花香大米, 我已经兑到" . $awardInfo['got']*10 . "g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米";
     }
 
     public function shake($gameType)
