@@ -22,18 +22,43 @@ class Apple201410Controller extends AppController
     const EXCHANGE_RICE_SOURCE = 'apple_exchange_rice';
     const RICE_201411 = 'rice201411';
     const CHENGZI_1411 = 'chengzi1411';
+    const CHOUPG_1411 = 'Choupg1411';
 
-    var $DAY_LIMIT = array(self::RICE_201411 => 20, self::CHENGZI_1411 => 10);
-    var $game_obj_names = array('' => '苹果', self::RICE_201411 => '苹果', self::CHENGZI_1411 => '橙子');
-    var $treeNames = array('' => 'apple_shakev1.gif', self::RICE_201411 => 'apple_shakev1.gif', self::CHENGZI_1411 => 'orange.gif');
-    var $treeStaticNames = array('' => 'apple_tree.gif', self::RICE_201411 => 'apple_tree.gif', self::CHENGZI_1411 => 'orange_static.gif');
-    var $game_least_change = array('' => '苹果',
+    var $DAY_LIMIT = array(
+        self::RICE_201411 => 20,
+        self::CHOUPG_1411 => 3,
+        self::CHENGZI_1411 => 10,
+    );
+    var $game_obj_names = array(
+        self::CHOUPG_1411 => '苹果',
+        self::RICE_201411 => '苹果',
+        self::CHENGZI_1411 => '橙子',
+    );
+    var $treeNames = array(
+        self::CHOUPG_1411 => 'apple_shakev1.gif',
+        self::RICE_201411 => 'apple_shakev1.gif',
+        self::CHENGZI_1411 => 'orange.gif');
+
+    var $treeStaticNames = array(
+        self::CHOUPG_1411 => 'apple_tree.gif',
+        self::RICE_201411 => 'apple_tree.gif',
+        self::CHENGZI_1411 => 'orange_static.gif');
+
+    var $game_least_change = array(
         self::RICE_201411 => 50,
-        self::CHENGZI_1411 => 30);
-    var $title_in_page = array(self::CHENGZI_1411 => '摇下100个，一箱<a href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">橙子</a>免费送', self::RICE_201411 => '摇下50个，大米优惠券免费送');
-    var $title_js_func = array('' => '',
-        self::RICE_201411 => "'摇一摇免费兑稻花香大米, 我已经兑到'+total*10+'g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米-朋友说'",
-        self::CHENGZI_1411 => "'橙妾来啦，摇一摇一箱橙子带回家，我已经...'");
+        self::CHENGZI_1411 => 30,
+        self::CHOUPG_1411 => 30,
+    );
+    var $title_in_page = array(
+        self::CHOUPG_1411 => '摇下100个，十斤<a href="/products/20141028/yun_nan_chou_ping_guo.html">云南丑苹果</a>免费送',
+        self::CHENGZI_1411 => '摇下100个，一箱<a href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">橙子</a>免费送',
+        self::RICE_201411 => '摇下50个，大米优惠券免费送',
+    );
+    var $title_js_func = array(
+        self::CHOUPG_1411 => "'摇一摇换云南丑苹果, 我已经摇到'+total+'个啦",
+        self::RICE_201411 => "'摇一摇免费兑稻花香大米券, 我已经兑到'+total*10+'g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米-朋友说'",
+        self::CHENGZI_1411 => "'橙妾来啦，摇一摇一箱橙子带回家，我已经...'",
+    );
 
     public function beforeFilter()
     {
