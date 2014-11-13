@@ -104,7 +104,7 @@ class ShipPromotion extends AppModel {
     );
 
 
-    static public $shi_liu_ids = array(201, 202, 203);
+    static public $shi_liu_ids = array(201, 202, 233);
     /**
      * @param $pid
      * @param $singleShipFee
