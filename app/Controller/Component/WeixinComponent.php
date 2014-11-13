@@ -77,10 +77,10 @@ class WeixinComponent extends Component
                 "url" => $this->get_coupon_url(),
                 "topcolor" => "#FF0000",
                 "data" => array(
-                    "first" => array("value" => "亲，恭喜您获得".$count."张1斤粮票。"),
+                    "first" => array("value" => "亲，恭喜您获得".$count."张优惠券"),
                     "orderTicketStore" => array("value" => $store),
                     "orderTicketRule" => array("value" => $rule),
-                    "remark" => array("value" => "点击详情，查询获得的粮票。", "color" => "#FF8800")
+                    "remark" => array("value" => "点击详情，查询获得的优惠券。", "color" => "#FF8800")
                 )
             );
             return $this->send_weixin_message($post_data);

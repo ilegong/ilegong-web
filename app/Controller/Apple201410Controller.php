@@ -269,8 +269,11 @@ class Apple201410Controller extends AppController
             $result['exchange_apple_count'] = $exchangeCount;
             $result['coupon_count'] = $coupon_count;
             $result['result'] = "just-got";
-
-            $this->Weixin->send_coupon_received_message($id, $coupon_count);
+            if ($gameType == self::RICE_201411) {
+                $this->Weixin->send_coupon_received_message($id, $coupon_count, "购买nana家大米时使用", "有效期至2014年11月15日");
+            } else if ($gameType == self::CHENGZI_1411) {
+                $this->Weixin->send_coupon_received_message($id, $coupon_count, "购买赣南脐橙时使用", "有效期至2014年11月20日");
+            }
         }else{
             $result['result'] = "goon";
         }
