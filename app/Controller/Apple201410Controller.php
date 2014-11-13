@@ -55,7 +55,7 @@ class Apple201410Controller extends AppController
         self::RICE_201411 => '摇下50个，大米优惠券免费送',
     );
     var $title_in_window = array(
-        self::CHOUPG_1411 => '摇下100个，十斤云南丑苹果免费送',
+        self::CHOUPG_1411 => '摇下100个,十斤云南丑苹果免费送',
         self::CHENGZI_1411 => '摇下100个，一箱橙子免费送',
         self::RICE_201411 => '摇下50个，大米优惠券免费送',
     );
