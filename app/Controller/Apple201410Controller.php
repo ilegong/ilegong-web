@@ -17,13 +17,13 @@ class Apple201410Controller extends AppController
 
     public $components = array('Weixin');
 
-    var $DAY_LIMIT = 20;
     var $AWARD_LIMIT = 100;
 
     const EXCHANGE_RICE_SOURCE = 'apple_exchange_rice';
     const RICE_201411 = 'rice201411';
     const CHENGZI_1411 = 'chengzi1411';
 
+    var $DAY_LIMIT = array(self::RICE_201411 => 20, self::CHENGZI_1411 => 10);
     var $game_obj_names = array('' => '苹果', self::RICE_201411 => '苹果', self::CHENGZI_1411 => '橙子');
     var $treeNames = array('' => 'apple_shakev1.gif', self::RICE_201411 => 'apple_shakev1.gif', self::CHENGZI_1411 => 'orange.gif');
     var $treeStaticNames = array('' => 'apple_tree.gif', self::RICE_201411 => 'apple_tree.gif', self::CHENGZI_1411 => 'orange_static.gif');
@@ -441,7 +441,11 @@ class Apple201410Controller extends AppController
         $uid = $this->currentUser['id'];
         $iAwarded = $model->userIsAwarded($uid, $gameType);
 
-        $curr_got += $this->randGotApple($todayAwarded, $total_got);
+        $dayLimit = $this->DAY_LIMIT[$gameType];
+        if (empty($dayLimit)) {
+            $dayLimit = 0;
+        }
+        $curr_got += $this->randGotApple($todayAwarded, $total_got, $dayLimit);
         $curr_got = ($total_got == 0 && $curr_got == 0 ? 3 : $curr_got);
 
         if (is_array($iAwarded) && empty($iAwarded) && $total_got + $curr_got >= $this->AWARD_LIMIT) {
@@ -511,14 +515,15 @@ class Apple201410Controller extends AppController
     /**
      * @param $todayAwarded
      * @param $total_got
+     * @Param $dailyLimit
      * @return int
      */
-    private function randGotApple($todayAwarded, $total_got) {
+    private function randGotApple($todayAwarded, $total_got, $dailyLimit) {
         $this_got = 0;
         $ext = 10;
         if (!$this->is_weixin()) {
             $ext = 1000000;
-        } else if ($todayAwarded > $this->DAY_LIMIT) {
+        } else if ($todayAwarded > $dailyLimit) {
             $left = $this->AWARD_LIMIT - $total_got;
             if ($left > 0) {
                 if ($left <= 10) {
