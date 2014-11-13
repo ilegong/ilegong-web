@@ -39,9 +39,6 @@ class Apple201410Controller extends AppController
                 $this->redirect('/users/login.html?referer='.$ref);
             }
         }
-        $this->pageTitle = __('摇一摇免费送稻花香大米优惠券');
-        $this->set('hideNav', true);
-        $this->set('noFlash', true);
     }
 
     public function rules()
@@ -361,7 +358,12 @@ class Apple201410Controller extends AppController
 
         $this->set('game_obj_name', $this->game_obj_names[$gameType]);
         $this->set('title_func', $this->title_js_func[$gameType]);
-        $this->set('title_in_page', $this->title_in_page[$gameType]);
+        $title_in_page = $this->title_in_page[$gameType];
+        $this->set('title_in_page', $title_in_page);
+
+        $this->pageTitle = $title_in_page;
+        $this->set('hideNav', true);
+        $this->set('noFlash', true);
 
         $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($current_uid, $this->getExchangeType($gameType));
         $this->setTotalVariables($awardInfo, $exchange_log);
