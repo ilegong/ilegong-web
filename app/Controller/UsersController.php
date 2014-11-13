@@ -336,7 +336,7 @@ class UsersController extends AppController {
         $this->loadModel('CouponItem');
         $coupons = $this->CouponItem->find_my_all_coupons($this->currentUser['id']);
         $this->set(compact('coupons'));
-        $this->pageTitle = __('我的粮票');
+        $this->pageTitle = __('我的优惠劵');
     }
 
     function editpassword() {

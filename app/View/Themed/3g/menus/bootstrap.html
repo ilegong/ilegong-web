@@ -6,7 +6,7 @@
 	    <a href="{{$this->Html->url(array('controller' => 'orders','action'=>'mine','plugin' => null ,))}}" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span>我</a>
 		<ul id="g-account-menu" class="dropdown-menu" style="position: absolute;" role="menu">
 			<li><a href="{{$this->Html->url('/users/my_profile')}}">我的资料</a></li>
-            <li><a href="{{$this->Html->url('/users/my_coupons.html')}}">我的粮票</a></li>
+            <li><a href="{{$this->Html->url('/users/my_coupons.html')}}">优惠券</a></li>
             {{if empty($CurrentUser['username'])}}
 			<li><a href="{{$this->Html->url('/users/editusername')}}">设置用户名</a></li>
             {{/if}}

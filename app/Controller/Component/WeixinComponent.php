@@ -158,12 +158,12 @@ class WeixinComponent extends Component
             "url" => $this->get_order_rebate_url(),
             "topcolor" => "#FF0000",
             "data" => array(
-                "first" => array("value" => "亲，" . $friend_name . "通过您分享的链接购买了稻花香大米，恭喜您获得粮票1张。"),
+                "first" => array("value" => "亲，" . $friend_name . "通过您分享的链接购买了稻花香大米，恭喜您获得优惠劵1张。"),
                 "keyword1" => array("value" => $order_no),
                 "keyword2" => array("value" => $price),
                 "keyword3" => array("value" => date('Y-m-d H:i:s')),
                 "keyword4" => array("value" => "粮票1斤"),
-                "remark" => array("value" => "点击详情，查询获得的粮票。", "color" => "#FF8800")
+                "remark" => array("value" => "点击详情，查询获得的优惠劵。", "color" => "#FF8800")
             )
         );
         return $this->send_weixin_message($post_data);
