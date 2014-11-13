@@ -28,7 +28,6 @@ class Apple201410Controller extends AppController
         'rice201411' => "'摇一摇免费兑稻花香大米, 我已经兑到'+total*10+'g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米-朋友说'",
         'chengzi1411' => "'姚晨来啦，摇一摇免费领赣南脐橙，我已经摇下'+total+'个橙子-城市里的乡下人习蛋蛋分享自己家橙子-朋友说'");
 
-
     public function beforeFilter()
     {
         parent::beforeFilter();
@@ -231,7 +230,8 @@ class Apple201410Controller extends AppController
         $apple_count_snapshot = $awardInfo['got'];
         $can_exchange_apple_count = $apple_count_snapshot;
 
-        $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($id, self::EXCHANGE_RICE_SOURCE);
+        $exChangeSource = $this->getExchangeType($gameType);
+        $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($id, $exChangeSource);
         if ($exchange_log != false) {
             $can_exchange_apple_count = $apple_count_snapshot - intval($exchange_log['apple_count_snapshot'] / 50) * 50;
         }
@@ -239,10 +239,10 @@ class Apple201410Controller extends AppController
         if ($can_exchange_apple_count >= 50) {
             $coupon_count = intval($can_exchange_apple_count / 50);
             $latest_exchange_log_id = $this->ExchangeLog->addExchangeLog($id, $apple_count_snapshot,
-                50 * $coupon_count, $coupon_count, self::EXCHANGE_RICE_SOURCE);
+                50 * $coupon_count, $coupon_count, $exChangeSource);
 
             for ($i = 1; $i <= $coupon_count; $i++) {
-                $this->CouponItem->addCoupon($id, self::EXCHANGE_RICE_SOURCE . "_" . $latest_exchange_log_id);
+                $this->CouponItem->addCoupon($id, $exChangeSource . "_" . $latest_exchange_log_id);
                 $this->CouponItem->id = null;
             }
             $result['exchange_apple_count'] = 50 * $coupon_count;
@@ -363,7 +363,7 @@ class Apple201410Controller extends AppController
         $this->set('title_func', $this->title_js_func[$gameType]);
         $this->set('title_in_page', $this->title_in_page[$gameType]);
 
-        $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($current_uid, self::EXCHANGE_RICE_SOURCE);
+        $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($current_uid, $this->getExchangeType($gameType));
         $this->setTotalVariables($awardInfo, $exchange_log);
         $this->set('got_apple', 0);
         $this->_updateLastQueryTime(time());
@@ -382,7 +382,7 @@ class Apple201410Controller extends AppController
         if (!empty($gameType)) {
             $uid = $this->currentUser['id'];
             $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
-            $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($uid, self::EXCHANGE_RICE_SOURCE);
+            $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($uid, $this->getExchangeType($gameType));
 
             $apple = $this->guessAwardAndUpdate($awardInfo, $gameType);
             $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
@@ -515,5 +515,13 @@ class Apple201410Controller extends AppController
             $this_got += ($mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
         }
         return $this_got;
+    }
+
+    /**
+     * @param $gameType
+     * @return string
+     */
+    private function getExchangeType($gameType) {
+        return $gameType == 'rice201411' ? self::EXCHANGE_RICE_SOURCE : $gameType;
     }
 }
