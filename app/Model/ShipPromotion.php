@@ -81,6 +81,14 @@ class ShipPromotion extends AppModel {
         )
     ),
 
+    '264' => array('limit_ship' => true,
+        'limit_per_user' => 1,
+        'items' => array(
+            array('id' => 34, 'ship_price' => 0.0, 'time' => '', 'address' => '華麗2層7層9-12'),
+            array('id' => 35, 'ship_price' => 0.0, 'time' => '', 'address' => '金寶大廈19'),
+        )
+    ),
+
     );
 
     private  $pro_num_limit = array(
@@ -92,6 +100,7 @@ class ShipPromotion extends AppModel {
         '259' => array(303, 78, 1 ),
         '204' => array(135, 65, 1 ),
         '260' => array(51, 57, 1 ),
+        '264' => array(103, 71, 1 ),
     );
 
     /**
