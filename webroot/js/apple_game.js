@@ -38,6 +38,8 @@ $(document).ready(function(){
     $share_div.show();
     }
 
+        changeTitle($appleGotCnt.text());
+
     var showNoMoreTimesDialog = false;
     function showNoMoreTimes() {
     if (showNoMoreTimesDialog == true) { return; }

@@ -23,7 +23,7 @@ class Apple201410Controller extends AppController
     const EXCHANGE_RICE_SOURCE = 'apple_exchange_rice';
 
     var $game_obj_names = array('' => '苹果', 'rice201411' => '苹果', 'chengzi1411' => '橙子');
-    var $title_in_page = array('chengzi1411' => '摇下100个，一箱橙子免费送', 'rice201411' => '摇下50个，大米优惠券免费送');
+    var $title_in_page = array('chengzi1411' => '摇下100个，一箱<span class="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">橙子</span>免费送', 'rice201411' => '摇下50个，大米优惠券免费送');
     var $title_js_func = array('' => '',
         'rice201411' => "'摇一摇免费兑稻花香大米, 我已经兑到'+total*10+'g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米-朋友说'",
         'chengzi1411' => "'姚晨来啦，摇一摇免费领赣南脐橙，我已经摇下'+total+'个橙子-城市里的乡下人习蛋蛋分享自己家橙子-朋友说'");
@@ -228,6 +228,8 @@ class Apple201410Controller extends AppController
         $can_exchange_apple_count = $apple_count_snapshot;
 
         $exChangeSource = $this->getExchangeType($gameType);
+
+
         $exchange_log = $this->ExchangeLog->getLatestExchangeLogByUidAndSource($id, $exChangeSource);
         if ($exchange_log != false) {
             $can_exchange_apple_count = $apple_count_snapshot - intval($exchange_log['apple_count_snapshot'] / 50) * 50;
@@ -246,7 +248,7 @@ class Apple201410Controller extends AppController
             $result['coupon_count'] = $coupon_count;
             $result['result'] = "just-got";
 
-            $this->Weixin->send_coupon_received_message($id,$coupon_count);
+            $this->Weixin->send_coupon_received_message($id, $coupon_count);
         }else{
             $result['result'] = "goon";
         }
@@ -429,7 +431,7 @@ class Apple201410Controller extends AppController
         }
 
         if ($this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + ' . $curr_got, 'updated' => '\'' . date(FORMAT_DATETIME) . '\''),
-            array('id' => $awardInfo['id'], 'times>0', 'type'=>addslashes($gameType)))) {
+            array('id' => $awardInfo['id'], 'times>0', 'type'=> addslashes($gameType)))) {
             $awardInfo['times'] -= 1;
             $awardInfo['got'] += $curr_got;
         } else {
