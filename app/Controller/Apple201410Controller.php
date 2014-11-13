@@ -32,7 +32,7 @@ class Apple201410Controller extends AppController
     var $title_in_page = array(self::CHENGZI_1411 => '摇下100个，一箱<a href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">橙子</a>免费送', self::RICE_201411 => '摇下50个，大米优惠券免费送');
     var $title_js_func = array('' => '',
         self::RICE_201411 => "'摇一摇免费兑稻花香大米, 我已经兑到'+total*10+'g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米-朋友说'",
-        self::CHENGZI_1411 => "'橙妾来啦，摇一摇免费一箱橙子带回家，我已经摇下'+total+'个橙子-城市里的乡下人习蛋蛋分享自己家橙子-朋友说'");
+        self::CHENGZI_1411 => "'橙妾来啦，摇一摇一箱橙子带回家，我已经摇下'+total+'个橙子-城市里的乡下人习蛋蛋分享自己家橙子-朋友说'");
 
     public function beforeFilter()
     {
