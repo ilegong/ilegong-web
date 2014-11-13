@@ -54,6 +54,11 @@ class Apple201410Controller extends AppController
         self::CHENGZI_1411 => '摇下100个，一箱<a href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">橙子</a>免费送',
         self::RICE_201411 => '摇下50个，大米优惠券免费送',
     );
+    var $title_in_window = array(
+        self::CHOUPG_1411 => '摇下100个，十斤云南丑苹果免费送',
+        self::CHENGZI_1411 => '摇下100个，一箱橙子免费送',
+        self::RICE_201411 => '摇下50个，大米优惠券免费送',
+    );
     var $title_js_func = array(
         self::CHOUPG_1411 => "'摇一摇换云南丑苹果, 我已经摇到'+total+'个啦",
         self::RICE_201411 => "'摇一摇免费兑稻花香大米券, 我已经兑到'+total*10+'g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米-朋友说'",
@@ -412,7 +417,7 @@ class Apple201410Controller extends AppController
 
         $this->set('game_obj_name', $this->game_obj_names[$gameType]);
         $this->set('title_func', $this->title_js_func[$gameType]);
-        $title_in_page = $this->title_in_page[$gameType];
+        $title_in_page = $this->title_in_window[$gameType];
         $this->set('title_in_page', $title_in_page);
         $this->set('game_least_change', $this->game_least_change[$gameType]);
         $this->set('treeName', $this->treeNames[$gameType]);
