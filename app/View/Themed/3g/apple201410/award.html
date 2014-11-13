@@ -1,10 +1,15 @@
 {{$this->Html->script(array('trace/tracekit.min.report.js', 'shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js'), array('block' => 'scriptBottom'));}}
-{{$this->Html->css(array('apple_game.css?v1',));}}
+{{$this->Html->css(array('apple_game.css?v2',));}}
 <div class="container">
     <div class="row text-center">
-        <h2>摇下50个，大米优惠券免费送</h2> <a name="top"></a>
-        <div class="col-xs-16">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp; 已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个
+        <h2>{{$title_in_page}}</h2> <a name="top"></a>
+        <div class="col-xs-16">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp;
+            已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个
+            {{if $game_type == 'rice201411'}}
             = <span class="apple_numbers" id="rice_got_cnt">{{$total_apple*10}}</span>g大米
+            {{elseif $game_type == 'chengzi1411' }}
+            {{ $game_obj_name }}
+            {{/if}}
             <a href="#get_coupons" class="btn btn-warning">兑换</a>
         </div>
     </div>
@@ -22,7 +27,7 @@
         </div>
         <div class="voffset3">
             <!--<a href="#award_names" class="apple_nav_links"><small>获奖名单</small></a>-->
-            <a href="/users/my_coupons.html" class="apple_nav_links"><small>我的粮票</small></a>
+            <a href="/users/my_coupons.html" class="apple_nav_links"><small>我的优惠券</small></a>
             <a href="#friends" class="apple_nav_links"><small>谁帮我了</small></a>
             <a href="#friendsIhelped" class="apple_nav_links"><small>我帮过谁</small></a>
             <a href="/?from=game_home" class="apple_nav_links"><small>美食特产</small></a>
@@ -31,10 +36,14 @@
             <!--<a href="#about_apple" class="apple_nav_links"><small>QA妹子分享富士</small></a>-->
         </div>
     </div>
+</div>
 
+<div class="container">
     <div id="get_coupons" class="bg_green pad">
         <div class="title">兑换规则</div>
-        <div class="con">1、让小伙伴点击分享的苹果游戏链接获机会, 摇苹果可以换稻花香大米喔~<br />
+        <div class="con">
+         {{if $game_type == 'rice201411'}}
+            1、让小伙伴点击分享的苹果游戏链接获机会, 摇苹果可以换稻花香大米喔~<br />
             2、500g大米起兑(50个苹果=500g、100个苹果=1000g大米)；<br />
             3、大米券在<a href="/categories/special_list/special_for_rice_coupons.html" class="apple_medium_links">特惠专场</a>结账时直接抵现金使用，使用期限11月15号前。</div>
         <div class="text-center">
@@ -44,7 +53,15 @@
         <a class="apple_medium_links" href="/categories/special_list/special_for_rice_coupons.html">特惠专场</a>
         </div>
         </div>
+        {{elseif $game_type == 'chengzi1411' }}
+        1、小伙伴点击分享的摇橙游戏链接即获得机会。<br />
+        2、摇下30个，送橙子5元优惠券一张；50个，送橙子10元优惠券一张；100个，送橙子98元优惠券一张。<br />
+        3、橙子优惠券在购买橙子结账时直接抵现金使用，使用期限11月20号23点之前。<br />
+        <button id="get_coupons_button" type="button" class="btn btn-warning">我要兑换</button>
+        {{/if}}
+        </div>
     </div>
+
     <div class="bg_white pad">
         <div class="title"><img src="{{$this->Html->assetUrl('/img/logo.png')}}" border="0" /></div>
         <div class="con_aboutus">[朋友说]同事间互相分享家乡特产的创业网站,<br />我们都是城市里的乡下人。<br /><strong>
@@ -67,7 +84,13 @@
             {{if $helpMe}}
             {{loop $helpMe $key $item}}
                 <div class="con clearfix">
-                    <div class="fl name">{{$item['nickname']}}</div>，<div class="fl">摇到了<strong class="red">{{$item['got']*10}}</strong>g大米</div>
+                    <div class="fl name">{{$item['nickname']}}</div>，<div class="fl">摇到了<strong class="red">
+                    {{if $game_type == 'rice201411'}}
+                    {{$item['got']*10}}</strong>g大米
+                    {{else}}
+                    {{ $item['got'] }}</strong>个
+                    {{/if}}
+                </div>
                 </div>
             {{/loop}}
             {{else}}
@@ -80,7 +103,13 @@
         {{if $meHelp}}
         {{loop $meHelp $key $item}}
         <div class="con clearfix">
-            <div class="fl name">{{$item['nickname']}}</div>，<div class="fl">摇到了<strong class="red">{{$item['got']*10}}</strong>g大米</div>
+            <div class="fl name">{{$item['nickname']}}</div>，<div class="fl">摇到了<strong class="red">
+            {{if $game_type == 'rice201411'}}
+            {{$item['got']*10}}</strong>g大米
+            {{else}}
+            {{ $item['got'] }}</strong>个
+            {{/if}}
+         </div>
         </div>
         {{/loop}}
         {{else}}
@@ -88,13 +117,16 @@
         {{/if}}
     </div>
 
-    <div class="top"><a class="top" href="#"></a></div>
+    <div class="top"><a class="top" href="#top"></a></div>
+</div>
 
-    </div>
 <script>
     var $got_wx_sub_times = "{{$got_wx_sub_times}}";
     var shake_pic_url = '{{$this->Html->assetUrl("/img/apple201410/apple_shakev1.gif")}}';
     var sound_url = 'http://51daifan-images.stor.sinaapp.com/tree_shake.mp3';
     var share_png_url = '{{$this->Html->assetUrl("/img/apple201410/share.png")}}';
+    var game_type = '{{$game_type}}';
+    var game_page_title = function(total){ return {{$title_func}};};
+    var game_obj_name = '{{$game_obj_name}}';
 </script>
-{{$this->Html->script(array('apple_game.js?v4'));}}
+{{$this->Html->script(array('apple_game.js?v5'));}}
