@@ -119,7 +119,7 @@ class WeixinComponent extends Component
             "url" => $this->get_order_query_url($order_no),
             "topcolor" => "#FF0000",
             "data" => array(
-                "first" => array("value" => ($brand_id && $brand_id == 71)? '这是您给慧艳的爱心帮助！' : "亲，您的订单已完成付款，商家将即时为您发货。"),
+                "first" => array("value" => "亲，您的订单已完成付款，商家将即时为您发货。"),
                 "orderProductPrice" => array("value" => $price),
                 "orderProductName" => array("value" => $good_info),
                 "orderAddress" => array("value" => empty($ship_info)?'':$ship_info),
