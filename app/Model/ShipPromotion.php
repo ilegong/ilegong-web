@@ -103,6 +103,8 @@ class ShipPromotion extends AppModel {
         '264' => array(103, 71, 1 ),
     );
 
+
+    static public $shi_liu_ids = array(201, 202, 203);
     /**
      * @param $pid
      * @param $singleShipFee
@@ -111,9 +113,9 @@ class ShipPromotion extends AppModel {
      * @return mixed
      */
     public static function calculateShipFee($pid, $singleShipFee, $num, $area) {
-        if ($pid == 231 && $num >= 2) {
+        if ($pid == PRODUCT_ID_RICE_10 && $num >= 2) {
             return 0.0;
-        } else if ($pid == PRODUCT_ID_CAKE) {
+        } else if ($pid == PRODUCT_ID_CAKE || array_search($pid, self::$shi_liu_ids) !== false) {
             return $singleShipFee * $num;
         }
         return $singleShipFee;
