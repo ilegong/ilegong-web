@@ -50,7 +50,7 @@ class CouponItem extends AppModel {
                     if (empty($coupon_pids) && $coupon_brandId == $brandItem->id) {
                         //TODO: continue check  for category_id, least_total_price, least_total_in_brand or least_total_in_product
                         $availCoupons[$brandItem->id][] = $coupon;
-                    } else if (!empty($coupon_pids) && array_search($coupon_pids, $productItem->pid) !== false) {
+                    } else if (!empty($coupon_pids) && array_search($productItem->pid, $coupon_pids) !== false) {
                         $least_price_in_brand = Hash::get($coupon, 'Coupon.least_total_in_brand');
                         if (!$least_price_in_brand || $least_price_in_brand < $productItem->total_price()) {
                             $availCoupons[$brandItem->id][] = $coupon;
@@ -194,14 +194,15 @@ class CouponItem extends AppModel {
      * @internal param $item
      * @return mixed
      */
-    protected function pid_list_to_array($items) {
+    protected function pid_list_to_array(&$items) {
         foreach ($items as &$item) {
             if (!empty($item['Coupon']['product_list'])) {
                 $pid_array = json_decode($item['Coupon']['product_list']);
             } else {
                 $pid_array = array();
             }
-            $item['Coupon']['product_ids'] = $pid_array;
+            $a = &$item['Coupon'];
+            $a['product_ids'] = $pid_array;
         }
     }
 }
