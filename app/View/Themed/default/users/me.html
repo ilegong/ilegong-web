@@ -13,7 +13,7 @@
     .addr{ margin-top:3.25em; padding:1.25em 0.833em 1.25em 1.667em; font-size:1.25em; border-bottom:1px #dddddd solid; border-top:1px #dddddd solid;}
 </style>
 <div class="main_head border_b">
-    <a href="#X" class="head clearfix">
+    <a href="{{$this->Html->url('/users/my_profile')}}" class="head clearfix">
         <span class="fl"><img class="radius10" src="{{$this->Html->url( $CurrentUser['image'] ? $CurrentUser['image'] : '/img/default_user_icon.jpg')}}" border="0" /></span>
         <span class="name fl">{{if mb_strlen($CurrentUser['nickname'], 'UTF-8')> PROFILE_NICK_LEN}} {{mb_substr($CurrentUser['nickname'], 0, PROFILE_NICK_LEN, 'UTF-8')}} {{else}} {{$CurrentUser['nickname']}} {{/if}}</span>
         <span class="fr more"></span>
