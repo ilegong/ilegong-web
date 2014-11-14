@@ -26,7 +26,7 @@ class Apple201410Controller extends AppController
 
     var $DAY_LIMIT = array(
         self::RICE_201411 => 20,
-        self::CHOUPG_1411 => 3,
+        self::CHOUPG_1411 => 10,
         self::CHENGZI_1411 => 10,
     );
     var $game_obj_names = array(
@@ -551,7 +551,7 @@ class Apple201410Controller extends AppController
     /**
      * @param $todayAwarded
      * @param $total_got
-     * @Param $dailyLimit
+     * @param $dailyLimit
      * @return int
      */
     private function randGotApple($todayAwarded, $total_got, $dailyLimit) {
@@ -564,9 +564,11 @@ class Apple201410Controller extends AppController
             if ($left > 0) {
                 if ($left <= 10) {
                     $ext = 100000;
-                } else if ($left <= 20) {
-                    $ext = 100;
                 }
+                /*
+                else if ($left <= 20) {
+                    $ext = 100;
+                } */
             }
         }
 
