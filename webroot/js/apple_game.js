@@ -196,24 +196,29 @@ $(document).ready(function(){
 
     var get_coupons_button =$('#get_coupons_button');
 
-    get_coupons_button.click(function(){
-    var apple_count = $.trim($appleGotCnt.text());
-    if(parseInt(apple_count) < parseInt(game_least_change)){
-    utils.alert("加油小主，我们<span class='apple_numbers'>"+game_least_change+"</span>个"+game_obj_name+"起兑喔，您目前已摇<span class='apple_numbers'>"
-    +apple_count+"</span>个。加油加油！");
-    }else{
-    $.getJSON("/apple_201410/exchange_coupon/"+game_type+"?r="+Math.random(), function(data){
-    if (data.result == "just-got") {
-    var exchange_apple_count = data.exchange_apple_count;
-    var coupon_count = data.coupon_count;
-    $appleGotCnt.text(apple_count-exchange_apple_count);
-    $riceGotCnt.text((apple_count-exchange_apple_count)*10);
-    utils.alert("恭喜，兑换了"+coupon_count+"张优惠券，<a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
-    }  else {
-    utils.alert("呜呜，兑换失败，请稍后重试。");
-    }
-    });
-    }
+    get_coupons_button.click(function () {
+        var apple_count = $.trim($appleGotCnt.text());
+        if (parseInt(apple_count) < parseInt(game_least_change)) {
+            utils.alert("加油小主，我们<span class='apple_numbers'>" + game_least_change + "</span>个" + game_obj_name + "起兑喔，您目前已摇<span class='apple_numbers'>"
+                + apple_count + "</span>个。加油加油！");
+        };
+
+        bootbox.confirm('您要兑换吗？兑换会减少您摇到的' + game_obj_name + '数目!', function (result) {
+            if (!result) {
+                return;
+            }
+            $.getJSON("/apple_201410/exchange_coupon/" + game_type + "?r=" + Math.random(), function (data) {
+                if (data.result == "just-got") {
+                    var exchange_apple_count = data.exchange_apple_count;
+                    var coupon_count = data.coupon_count;
+                    $appleGotCnt.text(apple_count - exchange_apple_count);
+                    $riceGotCnt.text((apple_count - exchange_apple_count) * 10);
+                    utils.alert("恭喜，兑换了" + coupon_count + "张优惠券，<a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
+                } else {
+                    utils.alert("呜呜，兑换失败，请稍后重试。");
+                }
+            });
+        });
     });
 
     var query_interval = 30000;

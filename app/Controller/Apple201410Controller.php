@@ -51,12 +51,12 @@ class Apple201410Controller extends AppController
     );
     var $title_in_page = array(
         self::CHOUPG_1411 => '摇下100个,一箱<a href="/products/20141028/yun_nan_chou_ping_guo.html">云南丑苹果</a>免费送',
-        self::CHENGZI_1411 => '摇下100个，一箱<a href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">橙子</a>免费送',
+        self::CHENGZI_1411 => '摇下100个，最高一箱<a href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">橙子</a>免费送',
         self::RICE_201411 => '摇下50个，大米优惠券免费送',
     );
     var $title_in_window = array(
         self::CHOUPG_1411 => '摇下100个,十斤云南丑苹果免费送',
-        self::CHENGZI_1411 => '摇下100个，一箱橙子免费送',
+        self::CHENGZI_1411 => '摇下100个，最高一箱橙子免费送',
         self::RICE_201411 => '摇下50个，大米优惠券免费送',
     );
     var $title_js_func = array(
