@@ -671,6 +671,9 @@ class UsersController extends AppController {
                 $openid = $res['openid'];
                 $refresh_token = $res['refresh_token'];
                 if (!empty($access_token) && !empty($res['openid']) && is_string($access_token) && is_string($openid)) {
+
+                    $this->log("before oauthbinds find:");
+
                     $oauth = $this->Oauthbinds->find('first', array('conditions' => array('source' => $oauth_wx_source,
                         'oauth_openid' => $res['openid']
                     )));
@@ -732,12 +735,14 @@ class UsersController extends AppController {
                     }
                     $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
 
+
                     //Do check Require user's authorization to get profile
                     if ($should_require_user_info && $res['scope'] == WX_OAUTH_BASE) {
                         $redi = false;
                         if ($not_bind_yet) {
                             $redi = true;
                         } else {
+                            $this->log("before findNickNames")
                             $name = $this->User->findNicknamesOfUid($new_serviceAccount_binded_uid);
                             if ($name == null || $name == '' || notWeixinAuthUserInfo($new_serviceAccount_binded_uid, $name)) {
                                 $redi = true;
@@ -749,6 +754,8 @@ class UsersController extends AppController {
                     }
 
 
+                    $this->log("before querying WX...")
+
                     //Update User profile with WX profile
                     $wxUserInfo = $res['scope'] == WX_OAUTH_USERINFO ? $this->getWxUserInfo($openid, $access_token) : array();
                     if (!empty($wxUserInfo['unionid'])) {
@@ -756,12 +763,15 @@ class UsersController extends AppController {
                     }
 
                     if ($new_serviceAccount_binded_uid > 0) {
+                        $this->log("before updateUser5ProfileByWeixin");
                         $this->updateUserProfileByWeixin($new_serviceAccount_binded_uid, $wxUserInfo);
                     } else {
                         $this->User->create();
                         if (!empty($wxUserInfo)) {
+                            $this->log("bcore createNewUserByWeixin")
                             $oauth['Oauthbinds']['user_id'] = $this->createNewUserByWeixin($wxUserInfo);
                         } else {
+                            $this->log("create user with array");
                             $uu = array(
                                 'username' => $oauth['Oauthbinds']['oauth_openid'],
                                 'nickname' => '微信用户' . mb_substr($oauth['Oauthbinds']['oauth_openid'], 0, PROFILE_NICK_LEN - 4, 'UTF-8'),
