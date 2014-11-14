@@ -149,9 +149,11 @@
     var game_page_title = function(total){ return {{$title_func}};};
     var game_obj_name = '{{$game_obj_name}}';
     var game_least_change = '{{$game_least_change}}';
-    {{if $game_type == 'chengzi1411' && $total_apple >= 90}}
+    {{if $game_type == 'chengzi1411' && $total_apple >= 80}}
         $(document).ready(function(){
-            utils.alert('亲，摇够了没！橙妾受不了啦，夜长梦多，兑了<span class="apple_numbers">40</span>元券把我带回家吧 :):)');
+            var msg = {{if $total_apple >= 90}}'亲，摇够了没！橙妾受不了啦，后面很难，兑了<span class="apple_numbers">40</span>元券把我带回家吧 <a href="#get_coupons" class="btn-sm btn-warning">兑换</a>'
+            {{else}} '亲，摇到90个兑了<span class="apple_numbers">40</span>元券把橙妾带回家吧 :):)' {{/if}};
+            utils.alert(msg);
         });
     {{/if}}
 </script>
