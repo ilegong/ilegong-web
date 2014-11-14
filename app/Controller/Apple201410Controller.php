@@ -564,7 +564,7 @@ class Apple201410Controller extends AppController
             }
         }
 
-        if ($total_got > 40) {
+        if ($total_got > 40 && $total_got < 70) {
             $total_got -= 30;
         }
 
