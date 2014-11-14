@@ -103,8 +103,8 @@ $(document).ready(function(){
     } else {
         timeout = 5000;
         var msg = '你力气太小啦！只晃掉了几片树叶！<br/><small>(5秒后自动消失)</small>';
-        if (total > 95) {
-            msg += '<br/>大奖按天投放，如果超过四十次树叶，请明天早点来抢哦！';
+        if (total >= 90) {
+            msg += '<br/>大奖每天限量投放，越来越难，也可以考虑其他优惠券！<a href="#get_coupons" class="btn-sm btn-warning">查看</a>';
         }
         utils.alert(msg, function(){}, timeout, close_callback);
     }
