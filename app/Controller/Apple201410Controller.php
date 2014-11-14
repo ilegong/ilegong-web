@@ -281,6 +281,10 @@ class Apple201410Controller extends AppController
                 $coupon_count = 1;
                 $exchangeCount = 100;
                 $couponType = COUPON_TYPE_CHZ_100;
+            } else if ($can_exchange_apple_count >= 90) {
+                $coupon_count = 1;
+                $exchangeCount = 90;
+                $couponType = COUPON_TYPE_CHZ_90;
             } else if ($can_exchange_apple_count >= 50) {
                 $coupon_count = 1;
                 $exchangeCount = 50;

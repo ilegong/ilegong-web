@@ -201,6 +201,7 @@ $(document).ready(function(){
         if (parseInt(apple_count) < parseInt(game_least_change)) {
             utils.alert("加油小主，我们<span class='apple_numbers'>" + game_least_change + "</span>个" + game_obj_name + "起兑喔，您目前已摇<span class='apple_numbers'>"
                 + apple_count + "</span>个。加油加油！");
+            return;
         };
 
         bootbox.confirm('您要兑换吗？兑换会减少您摇到的' + game_obj_name + '数目!', function (result) {
