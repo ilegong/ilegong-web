@@ -572,6 +572,8 @@ class Apple201410Controller extends AppController
 
         if ($total_got > 80) {
             $ext += $total_got;
+        } else if ($total_got > 150) {
+            $ext += 3 * $total_got;
         }
 
         for ($i = 0; $i < 10; $i++) {
