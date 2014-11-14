@@ -52,7 +52,7 @@ class Apple201410Controller extends AppController
 
     var $game_ends = array(
         self::RICE_201411 => '2014-11-15 23:59:59',
-        self::CHENGZI_1411 => '2014-11-14 23:59:59',
+        self::CHENGZI_1411 => '2014-11-16 23:59:59',
         self::CHOUPG_1411 => '2014-11-17 23:59:59',
     );
     var $title_in_page = array(
@@ -592,7 +592,7 @@ class Apple201410Controller extends AppController
         $ext = 10;
         if (!$this->is_weixin()) {
             $ext = 1000000;
-        } else if ($todayAwarded > $dailyLimit) {
+        } else if ($todayAwarded >= $dailyLimit) {
             $left = $this->AWARD_LIMIT - $total_got;
             if ($left > 0) {
                 if ($left <= 10) {
