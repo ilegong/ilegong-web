@@ -417,13 +417,13 @@ class Apple201410Controller extends AppController
 
         $this->set('game_obj_name', $this->game_obj_names[$gameType]);
         $this->set('title_func', $this->title_js_func[$gameType]);
-        $title_in_page = $this->title_in_window[$gameType];
+        $title_in_page = $this->title_in_page[$gameType];
         $this->set('title_in_page', $title_in_page);
         $this->set('game_least_change', $this->game_least_change[$gameType]);
         $this->set('treeName', $this->treeNames[$gameType]);
         $this->set('treeStatic', $this->treeStaticNames[$gameType]);
 
-        $this->pageTitle = $title_in_page;
+        $this->pageTitle = $this->title_in_window[$gameType];
         $this->set('hideNav', true);
         $this->set('noFlash', true);
 
