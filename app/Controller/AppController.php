@@ -373,14 +373,13 @@ class AppController extends Controller {
                     if (!$current_uid) {
                         $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
                     }
-                    $uri = "/products/" . date('Ymd', strtotime(${$modelClass}[$modelClass]['created'])) . "/$slug.html";
-                    $track_type = 'rebate_' . PRODUCT_ID_RICE_10;
-                    list($friend, $shouldAdd, ) = $this->track_or_redirect($uri, $current_uid, $track_type);
+                    $track_type = TRACK_TYPE_PRODUCT_RICE;
+                    list($friend, $shouldAdd, ) = $this->track_or_redirect($current_uid, $track_type);
                     if ($shouldAdd) {
                         //$this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id']));
                     }
                     if (!empty($friend)) {
-                        $this->redirect_for_append_tr_id($uri, $current_uid, $track_type);
+                        $this->redirect_for_append_tr_id($current_uid, $track_type, $_SERVER['REQUEST_URI']);
                     }
                 }
             }
@@ -641,11 +640,12 @@ class AppController extends Controller {
     }
 
     /**
-     * @param $uri
      * @param $uid
      * @param $trackType
+     * @param $defUri
      */
-    protected function redirect_for_append_tr_id($uri, $uid, $trackType) {
+    protected function redirect_for_append_tr_id($uid, $trackType, $defUri = '/') {
+        $uri = game_uri($trackType, $defUri);
         $encodedTrid = $this->encode_apple_tr_id($uid, $trackType);
         $this->redirect("$uri?trid=".urlencode($encodedTrid));
     }
@@ -697,12 +697,11 @@ class AppController extends Controller {
      * If it's from self, return (null, false); If it's other's link, return (friend id and shouldAdd), the caller should
      * redirect to current user's link.
      *
-     * @param $uri
      * @param $current_uid
      * @param $default_track_type
      * @return array ($friend, $shouldAdd, $trType)
      */
-    protected function track_or_redirect($uri, $current_uid, $default_track_type) {
+    protected function track_or_redirect($current_uid, $default_track_type) {
         $tr_id = $_GET['trid'];
         if (!empty($tr_id)) {
             $this->loadModel('TrackLog');
@@ -715,13 +714,13 @@ class AppController extends Controller {
                     return array($friend, $shouldAdd, $trType);
                 }
                 //treat as self
-                $this->redirect_for_append_tr_id($uri, $current_uid, $trType);
+                $this->redirect_for_append_tr_id($current_uid, $trType);
             } else if ($isSelf) {
                 return array(false, true, $trType);
             }
         }
 
-        $this->redirect_for_append_tr_id($uri, $current_uid, $default_track_type);
+        $this->redirect_for_append_tr_id($current_uid, $default_track_type);
         return false;
     }
 }

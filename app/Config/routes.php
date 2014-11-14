@@ -14,8 +14,12 @@ App::uses('CustomRouter', 'Lib');
     CustomRouter::connect('/t/rice_product',
         array('controller'=>'products','action' => 'view', 'wu_chang_dao_hua_xiang_ti_qian_yu_shou_500jin_zhi_xian_bei_jing'));
 
+
     CustomRouter::connect('/t/ag',
         array('controller'=>'apple201410','action' => 'award'));
+    CustomRouter::connect('/t/ag/:type',
+        array('controller'=>'apple201410','action' => 'award'),
+        array('pass' => array('type'), 'type'=>'[\w_]+'));
 
 
     CustomRouter::connect('/:controller/:yearmonth/:slug',

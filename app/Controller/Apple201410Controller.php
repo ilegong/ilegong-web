@@ -84,6 +84,7 @@ class Apple201410Controller extends AppController
 
     public function index()
     {
+        $this->set('game_type', self::RICE_201411);
     }
 
     public function notifiedToMe()
@@ -324,15 +325,14 @@ class Apple201410Controller extends AppController
 
     public function award($gameType = KEY_APPLE_201410)
     {
-        $uri = PATH_GAME;
         $current_uid = $this->currentUser['id'];
-        list($friend, $shouldAdd, $gameType) = $this->track_or_redirect($uri, $current_uid, $gameType);
+        list($friend, $shouldAdd, $gameType) = $this->track_or_redirect($current_uid, $gameType);
         if (!empty($friend)) {
             if ($shouldAdd) {
                 $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id'], 'type' => $gameType));
             }
             $this->_addNotify(filter_invalid_name($friend['User']['nickname']), $shouldAdd);
-            $this->redirect_for_append_tr_id($uri, $current_uid, $gameType);
+            $this->redirect_for_append_tr_id($current_uid, $gameType);
         }
 
         $friendsHelpMe = $this->TrackLog->find('all', array(

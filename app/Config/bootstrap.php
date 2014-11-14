@@ -29,6 +29,7 @@ const COUPONITEM_STATUS_USED = 2;
 
 const PRODUCT_ID_CAKE = 230;
 const PRODUCT_ID_RICE_10 = 231;
+const TRACK_TYPE_PRODUCT_RICE = 'rebate_231';
 
 const PRODUCT_ID_RICE_BRAND_10 = 13;
 
@@ -36,9 +37,6 @@ const COUPON_TYPE_RICE_1KG = 1;
 const COUPON_TYPE_CHZ_30 = 2;
 const COUPON_TYPE_CHZ_50 = 3;
 const COUPON_TYPE_CHZ_100 = 4;
-
-const PATH_GAME = "/t/ag.html";
-
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
@@ -427,4 +425,20 @@ class ShipAddress {
         111 => '宅急送',
         112 => '全峰',
     );
+}
+
+
+function game_uri($gameType, $defUri = '/') {
+
+    if (TRACK_TYPE_PRODUCT_RICE == $gameType) {
+        $pModel = ClassRegistry::init('Product');
+        $riceProduct = $pModel->findById(PRODUCT_ID_RICE_10);
+        if (!empty($riceProduct)) {
+            return "/products/" . date('Ymd', strtotime($riceProduct['Product']['created'])) . "/" . $riceProduct['Product']['slug'] . ".html";
+        } else {
+            return $defUri;
+        }
+    }
+
+    return "/t/ag/$gameType.html";
 }
