@@ -758,6 +758,7 @@ class UsersController extends AppController {
                     if ($new_serviceAccount_binded_uid > 0) {
                         $this->updateUserProfileByWeixin($new_serviceAccount_binded_uid, $wxUserInfo);
                     } else {
+                        $this->User->create();
                         if (!empty($wxUserInfo)) {
                             $oauth['Oauthbinds']['user_id'] = $this->createNewUserByWeixin($wxUserInfo);
                         } else {
