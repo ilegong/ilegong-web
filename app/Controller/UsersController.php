@@ -742,7 +742,7 @@ class UsersController extends AppController {
                         if ($not_bind_yet) {
                             $redi = true;
                         } else {
-                            $this->log("before findNickNames")
+                            $this->log("before findNickNames");
                             $name = $this->User->findNicknamesOfUid($new_serviceAccount_binded_uid);
                             if ($name == null || $name == '' || notWeixinAuthUserInfo($new_serviceAccount_binded_uid, $name)) {
                                 $redi = true;
