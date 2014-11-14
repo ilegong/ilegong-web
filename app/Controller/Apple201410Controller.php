@@ -52,7 +52,7 @@ class Apple201410Controller extends AppController
 
     var $game_ends = array(
         self::RICE_201411 => '2014-11-15 23:59:59',
-        self::CHENGZI_1411 => '2014-11-16 23:59:59',
+        self::CHENGZI_1411 => '2014-11-14 23:59:59',
         self::CHOUPG_1411 => '2014-11-17 23:59:59',
     );
     var $title_in_page = array(
@@ -266,6 +266,15 @@ class Apple201410Controller extends AppController
         $this->autoRender = false;
         $id = $this->currentUser['id'];
         $result = array();
+
+        $game_end = $this->game_ends[$gameType];
+        if ($game_end) {
+            $dt = new DateTime($game_end);
+            if(mktime() - $dt->getTimestamp() > 0) {
+                echo json_encode(array('result' => 'goon', 'msg' => 'game_end'));
+                return;
+            }
+        }
 
         $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($id, $gameType);
         $apple_count_snapshot = $awardInfo['got'];
