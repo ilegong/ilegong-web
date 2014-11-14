@@ -592,7 +592,7 @@ class Apple201410Controller extends AppController
         $ext = 10;
         if (!$this->is_weixin()) {
             $ext = 1000000;
-        } else if ($todayAwarded >= $dailyLimit) {
+        } else if ($this->shouldLimit($todayAwarded, $dailyLimit)) {
             $left = $this->AWARD_LIMIT - $total_got;
             if ($left > 0) {
                 if ($left <= 10) {
@@ -649,5 +649,12 @@ class Apple201410Controller extends AppController
                 }
             }
         }
+    }
+
+    private function shouldLimit($todayAwarded, $dailyLimit) {
+        if($todayAwarded >= $dailyLimit) return true;
+
+        $hour = date('G');
+        return ($todayAwarded >= round($dailyLimit * $hour/24, 0, PHP_ROUND_HALF_UP));
     }
 }
