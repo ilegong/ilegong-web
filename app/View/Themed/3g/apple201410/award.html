@@ -10,7 +10,11 @@
             {{else}}
             {{ $game_obj_name }}
             {{/if}}
-            <a href="#get_coupons" class="btn btn-warning">兑换</a>
+            <a href="#get_coupons" class="btn-sm btn-warning">兑换</a>
+            {{if $game_type == 'chengzi1411'}}
+            <br/>
+            <small class="text-danger">90个兑40元，50个兑10元，30个兑5元！</small>
+            {{/if}}
         </div>
     </div>
     <div id="apple_tree" class="row voffset3">
