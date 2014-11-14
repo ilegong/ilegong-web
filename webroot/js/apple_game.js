@@ -92,8 +92,8 @@ $(document).ready(function(){
     utils.alert('恭喜你！你摇掉了<span class="apple_numbers">' + $got + '</span>个'+game_obj_name+'！<br/><small>(2秒后自动消失)</small>', function(){}, timeout, close_callback);
     } else {
         var msg = '你力气太小啦！只晃掉了几片树叶！<br/><small>(2秒后自动消失)</small>';
-        if ($total > 95) {
-            msg += '<br/>大奖按天投放，如果超过四十次树叶，请明天早点来抢哦！'
+        if (total > 95) {
+            msg += '<br/>大奖按天投放，如果超过四十次树叶，请明天早点来抢哦！';
         }
         utils.alert(msg, function(){}, timeout, close_callback);
     }
