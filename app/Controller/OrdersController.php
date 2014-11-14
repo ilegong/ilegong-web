@@ -287,12 +287,25 @@ class OrdersController extends AppController{
      * @Param string action
      */
     function detail($orderId='', $action = '') {
-        $orderinfo = $this->Order->find('first',array(
-            'conditions'=> array('id'=>$orderId,'creator'=>$this->currentUser['id']),
-        ));
+        $uid = $this->currentUser['id'];
+        $orderinfo = $this->findMyOrderById($orderId, $uid);
         if(empty($orderinfo)){
             $this->__message('订单不存在，或无权查看','/');
         }
+
+        $totalCents = $orderinfo['Order']['total_all_price'] * 100;
+        $noMoreMoney = $totalCents < 1 && $totalCents >= 0;
+
+        if ($noMoreMoney && $action == 'pay_direct')  {
+            if ($orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
+                $this->Order->id = $orderinfo['Order']['id'];
+                if($this->Order->updateAll(array('status' => ORDER_STATUS_PAID), array('id'=>$orderId,'creator'=> $uid, 'status' => ORDER_STATUS_WAITING_PAY))){
+                    $this->Weixin->notifyPaidDone($orderinfo);
+                };
+                $orderinfo = $this->findMyOrderById($orderId, $uid);
+            }
+        }
+
 
         if ($action == 'pay') {
             $this->set('paid_msg', htmlspecialchars($_GET['paid_msg']));
@@ -313,7 +326,7 @@ class OrdersController extends AppController{
         $Carts = $this->Cart->find('all',array(
             'conditions'=>array(
                 'order_id' => $orderId,
-                'creator'=> $this->currentUser['id']
+                'creator'=> $uid
             )));
         $product_ids = array();
         foreach($Carts as $cart) {
@@ -333,6 +346,7 @@ class OrdersController extends AppController{
         $products = $product_new;
         unset($product_new);
 
+        $this->set('no_more_money', $noMoreMoney);
         $this->set('isMobile', $this->RequestHandler->isMobile());
         $this->set('ship_type', ShipAddress::$ship_type);
         $this->set('order_id',$orderId);
@@ -976,5 +990,16 @@ class OrdersController extends AppController{
         $this->set('order_carts', $order_carts);
         $this->set('ship_type', ShipAddress::$ship_type);
         $this->set('creator', $creator);
+    }
+
+    /**
+     * @param $orderId
+     * @param $uid
+     * @return mixed
+     */
+    private function findMyOrderById($orderId, $uid) {
+        return $this->Order->find('first', array(
+            'conditions' => array('id' => $orderId, 'creator' => $uid),
+        ));
     }
 }
