@@ -1,8 +1,8 @@
 {{$this->Html->script(array('trace/tracekit.min.report.js', 'shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js'), array('block' => 'scriptBottom'));}}
 {{$this->Html->css(array('apple_game.css?v2',));}}
 <div class="container">
-    <div class="row text-center">
-        <h2 style="margin-bottom:5px; margin-top: 10px">{{$title_in_page}}</h2> <a name="top"></a>
+    <div id="top" class="row text-center">
+        <h2 style="margin-bottom:5px; margin-top: 10px">{{$title_in_page}}</h2>
         {{if $game_type == 'chengzi1411'}}
         <small>90个兑<span style="color:red">40</span>元，50个兑<span style="color:red">10</span>元，30个兑<span style="color:red">5</span>元！</small>
         {{/if}}
@@ -137,8 +137,17 @@
         {{/if}}
     </div>
 
-    <div class="top"><a class="top" href="#top"></a></div>
+    <div class="top"><a class="top" href="javascript:;" onclick="$('html, body').animate({ scrollTop: $('#top').offset().top }, 1000);"></a></div>
 </div>
+
+        <style>
+            .bootbox-body {
+                text-align: left;
+            }
+            .modal-footer {
+                text-align: center;
+            }
+        </style>
 
 <script>
     var $got_wx_sub_times = "{{$got_wx_sub_times}}";
@@ -151,9 +160,25 @@
     var game_least_change = '{{$game_least_change}}';
     {{if $game_type == 'chengzi1411' && $total_apple >= 80}}
         $(document).ready(function(){
-            var msg = {{if $total_apple >= 90}}'亲，摇够了没！橙妾受不了啦，后面很难，兑了<span class="apple_numbers">40</span>元券把我带回家吧 <a href="#get_coupons" class="btn-sm btn-warning">兑换</a>'
-            {{else}} '亲，摇到90个兑了<span class="apple_numbers">40</span>元券把橙妾带回家吧 :):)' {{/if}};
-            utils.alert(msg);
+            {{if $total_apple >= 90}}
+                bootbox.dialog({message:'亲，摇够了没！橙妾受不了啦，后面很难，兑了<span class="apple_numbers">40</span>元券把我带回家吧',
+                    buttons:{
+                        'no' : { 'label' : '继续耐心摇', className : 'btn-default'},
+                        'yes': { 'label': '去兑换', className:'btn-danger', callback:function () {
+                            $('html, body').animate({
+                                scrollTop: $("#get_coupons").offset().top
+                            }, 1000);
+                        }},
+                    }
+                }).css({
+                    'top': '50%',
+                    'margin-top': function () {
+                        return -($(this).height() / 2);
+                    }
+                });
+            {{else}}
+            utils.alert('亲，摇到90个兑了<span class="apple_numbers">40</span>元券把橙妾带回家吧 :):)');
+            {{/if}}
         });
     {{/if}}
 </script>
