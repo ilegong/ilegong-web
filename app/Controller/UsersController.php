@@ -455,6 +455,10 @@ class UsersController extends AppController {
         	$this->data = $this->request->query['data'];
         }
 
+        if(!empty($_GET['force_login'])) {
+            $this->logoutCurrUser();
+        }
+
         if ($id = $this->Auth->user('id')) { //已经登录的
             $this->User->id = $id;
             $this->User->updateAll(array(
@@ -735,7 +739,7 @@ class UsersController extends AppController {
                             $redi = true;
                         } else {
                             $name = $this->User->findNicknamesOfUid($new_serviceAccount_binded_uid);
-                            if ($name == null || $name == '') {
+                            if ($name == null || $name == '' || notWeixinAuthUserInfo($new_serviceAccount_binded_uid, $name)) {
                                 $redi = true;
                             }
                         }
@@ -831,8 +835,8 @@ class UsersController extends AppController {
         if (!empty($user)) {
             $changed = false;
             $user = $user['User'];
-            if (!$user['nickname']) {
-                $user['nickname'] = $userInfo['nickname'];
+            if (!$user['nickname'] || notWeixinAuthUserInfo($new_serviceAccount_binded_uid, $user['nickname'])) {
+                $user['nickname'] = filter_weixin_username($userInfo['nickname']);
                 $changed = true;
             }
             if ($user['sex'] !== 0 && $user['sex'] != 1) {

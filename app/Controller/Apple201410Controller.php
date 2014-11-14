@@ -446,9 +446,11 @@ class Apple201410Controller extends AppController
 
             $apple = $this->guessAwardAndUpdate($awardInfo, $gameType);
             $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
-            $total_apple = $awardInfo && $awardInfo['got'] ? ($awardInfo['got'] - $awardInfo['spent']) : 0;
+            $got = !empty($awardInfo) ?  $awardInfo['got'] : 0;
+            $total_apple = $got ? ($got - $awardInfo['spent']) : 0;
             $this->_updateLastQueryTime(time());
-            echo json_encode(array('success' => true, 'got_apple' => $apple, 'total_apple' => $total_apple, 'total_times' => $totalAwardTimes));
+            $need_login = $this->is_weixin() && $got > 50 && notWeixinAuthUserInfo($uid, $this->currentUser['nickname']);
+            echo json_encode(array('success' => true, 'got_apple' => $apple, 'total_apple' => $total_apple, 'total_times' => $totalAwardTimes, 'need_login' => $need_login));
         } else {
             $this->log('incorrect award activity type:'. $gameType);
             echo json_encode(array('success' => false, 'msg' => 'incorrect_type'));

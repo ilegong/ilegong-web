@@ -86,12 +86,23 @@ $(document).ready(function(){
     }
     }
 
-    function showAfterGot($got,times, total, timeout) {
+    function showAfterGot($got,times, total, need_login, timeout) {
     var close_callback = times > 0 ? null : showNoMoreTimes;
+    if (need_login) {
+        close_callback = function() {
+            window.location.href = '/users/login?force_login=true&referer='+encodeURIComponent(location.href);
+        };
+    }
     if ($got > 0) {
-    utils.alert('恭喜你！你摇掉了<span class="apple_numbers">' + $got + '</span>个'+game_obj_name+'！<br/><small>(2秒后自动消失)</small>', function(){}, timeout, close_callback);
+        msg = '恭喜你！你摇掉了<span class="apple_numbers">' + $got + '</span>个' + game_obj_name + '！<br/><small>(2秒后自动消失)</small>';
+        if (need_login) {
+            timeout = 5000;
+            msg += '<br/> 亲，您的成绩超过了大多数用户！现在请您先登录。';
+        }
+        utils.alert(msg, function(){}, timeout, close_callback);
     } else {
-        var msg = '你力气太小啦！只晃掉了几片树叶！<br/><small>(2秒后自动消失)</small>';
+        timeout = 5000;
+        var msg = '你力气太小啦！只晃掉了几片树叶！<br/><small>(5秒后自动消失)</small>';
         if (total > 95) {
             msg += '<br/>大奖按天投放，如果超过四十次树叶，请明天早点来抢哦！';
         }
@@ -138,7 +149,7 @@ $(document).ready(function(){
     $riceGotCnt.text(data['total_apple']*10);
     $appleTimesLeft.text(data['total_times'] < 0 ? 0 : data['total_times']);
     $curr_got = data['got_apple'];
-    showAfterGot($curr_got, data['total_times'], data['total_apple'], 2000);
+    showAfterGot($curr_got, data['total_times'], data['total_apple'], data['need_login'], 2000);
     } else if(data.msg == 'incorrect_type') {
         utils.alert('游戏类型错误', function(){
             location.href = '/apple_201410/index.html';

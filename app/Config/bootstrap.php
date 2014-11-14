@@ -442,3 +442,12 @@ function game_uri($gameType, $defUri = '/') {
 
     return "/t/ag/$gameType.html";
 }
+
+
+function notWeixinAuthUserInfo($uid, $userName) {
+    return strpos($userName, '微信用户') === 0;
+}
+
+function filter_weixin_username($name) {
+    return notWeixinAuthUserInfo(0, $name) ?  mb_substr($name, 4) : $name;
+}
