@@ -324,7 +324,7 @@ class Apple201410Controller extends AppController
 
     public function award($gameType = KEY_APPLE_201410)
     {
-        $uri = "/apple_201410/award.html";
+        $uri = PATH_GAME;
         $current_uid = $this->currentUser['id'];
         list($friend, $shouldAdd, $gameType) = $this->track_or_redirect($uri, $current_uid, $gameType);
         if (!empty($friend)) {
