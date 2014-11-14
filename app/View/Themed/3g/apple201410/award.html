@@ -2,7 +2,10 @@
 {{$this->Html->css(array('apple_game.css?v2',));}}
 <div class="container">
     <div class="row text-center">
-        <h2>{{$title_in_page}}</h2> <a name="top"></a>
+        <h2 style="margin-bottom:5px; margin-top: 10px">{{$title_in_page}}</h2> <a name="top"></a>
+        {{if $game_type == 'chengzi1411'}}
+        <small>90个兑<span style="color:red">40</span>元，50个兑<span style="color:red">10</span>元，30个兑<span style="color:red">5</span>元！</small>
+        {{/if}}
         <div class="col-xs-16">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp;
             已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个
             {{if $game_type == 'rice201411'}}
@@ -11,10 +14,6 @@
             {{ $game_obj_name }}
             {{/if}}
             <a href="#get_coupons" class="btn-sm btn-warning">兑换</a>
-            {{if $game_type == 'chengzi1411'}}
-            <br/>
-            <small class="text-danger">90个兑40元，50个兑10元，30个兑5元！</small>
-            {{/if}}
         </div>
     </div>
     <div id="apple_tree" class="row voffset3">
