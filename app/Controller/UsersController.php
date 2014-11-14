@@ -754,7 +754,7 @@ class UsersController extends AppController {
                     }
 
 
-                    $this->log("before querying WX...")
+                    $this->log("before querying WX...");
 
                     //Update User profile with WX profile
                     $wxUserInfo = $res['scope'] == WX_OAUTH_USERINFO ? $this->getWxUserInfo($openid, $access_token) : array();
@@ -768,7 +768,7 @@ class UsersController extends AppController {
                     } else {
                         $this->User->create();
                         if (!empty($wxUserInfo)) {
-                            $this->log("bcore createNewUserByWeixin")
+                            $this->log("bcore createNewUserByWeixin");
                             $oauth['Oauthbinds']['user_id'] = $this->createNewUserByWeixin($wxUserInfo);
                         } else {
                             $this->log("create user with array");
