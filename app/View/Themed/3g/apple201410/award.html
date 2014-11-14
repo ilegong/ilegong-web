@@ -4,7 +4,7 @@
     <div id="top" class="row text-center">
         <h2 style="margin-bottom:5px; margin-top: 10px">{{$title_in_page}}</h2>
         {{if $game_type == 'chengzi1411'}}
-        <small>90个兑<span style="color:red">40</span>元，50个兑<span style="color:red">10</span>元，30个兑<span style="color:red">5</span>元！</small>
+        <small>90个兑<span style="color:red">40</span>元，50个兑<span style="color:red">10</span>元，30个兑<span style="color:red">5</span>元！11月16号结束！</small>
         {{/if}}
         <div class="col-xs-16">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp;
             已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个
@@ -16,18 +16,22 @@
             <a href="#get_coupons" class="btn-sm btn-warning">兑换</a>
         </div>
     </div>
+    {{if !$game_end }}
     <div id="apple_tree" class="row voffset3">
         <div style="position: relative; left: 0; top: 0;">
       <img id="apple_tree_img" src="{{$this->Html->assetUrl('/img/apple201410/'.$treeStatic)}}" style="position: relative; top: 0; left: 0;"/>
       <img id="shaking_tips_pic" class="shaking_tips_pic" src="{{$this->Html->assetUrl('/img/apple201410/rock2.png')}}" style="position: absolute; top: 0; left: 0; display:none"/>
         </div>
     </div>
+    {{/if}}
     <div class="row voffset3 text-center">
-        <div>
-        <button id="shake_btn" class="btn btn-warning" type="button" style="display:{{$total_times <= 0 ? 'none' : ''}}">手机摇一摇<small><em>(iPhone请调大音量)</em></small></button>
-        <button id="share_btn" class="btn btn-warning" type="button" style="display:{{$total_times > 0 ? 'none' : ''}}">朋友帮我摇</button>
-        <button id="assignWXSubscribeTimes_2" type="button" class="btn btn-warning" style="display:{{$total_times > 0 ? 'none' : ''}}">关注加机会</button>
-        </div>
+        {{if !$game_end }}
+            <button id="shake_btn" class="btn btn-warning" type="button" style="display:{{$total_times <= 0 ? 'none' : ''}}">手机摇一摇<small><em>(iPhone请调大音量)</em></small></button>
+            <button id="share_btn" class="btn btn-warning" type="button" style="display:{{$total_times > 0 ? 'none' : ''}}">朋友帮我摇</button>
+            <button id="assignWXSubscribeTimes_2" type="button" class="btn btn-warning" style="display:{{$total_times > 0 ? 'none' : ''}}">关注加机会</button>
+        {{else}}
+        <div class="alert alert-danger" role="alert">活动已结束！</div>
+        {{/if}}
         <div class="voffset3">
             <!--<a href="#award_names" class="apple_nav_links"><small>获奖名单</small></a>-->
             <a href="/users/my_coupons.html" class="apple_nav_links"><small>我的优惠券</small></a>
@@ -48,8 +52,7 @@
          {{if $game_type == 'rice201411'}}
             1、让小伙伴点击分享的苹果游戏链接获机会, 摇苹果可以换稻花香大米喔~<br />
             2、500g大米起兑(50个苹果=500g、100个苹果=1000g大米)；<br />
-            3、大米券在<a href="/categories/special_list/special_for_rice_coupons.html" class="apple_medium_links">特惠专场</a>结账时直接抵现金使用，使用期限11月15号前。
-            4、大奖按天（0点）投放，如果超过90个了却一直不中，请多积攒机会，明天再来。<br />
+            3、大米券在<a href="/categories/special_list/special_for_rice_coupons.html" class="apple_medium_links">特惠专场</a>结账时直接抵现金使用，使用期限11月15号前。<br/>
         </div>
         <div class="text-center">
         <button id="get_coupons_button" type="button" class="btn btn-warning">我要兑换</button>
@@ -60,19 +63,19 @@
         </div>
         {{elseif $game_type == 'chengzi1411' }}
         1、小伙伴点击分享的摇橙游戏链接即获得机会。<br />
-        2、摇下30个，送5元优惠券一张；50个，送10元优惠券一张；90个，送40元优惠券一张； 100个，送98元优惠券一张(每天10张）。<br />
+        2、摇下30个，送5元优惠券一张；50个，送10元优惠券一张；90个，送40元优惠券一张(每天100张）； 100个，送98元优惠券一张(每天10张）。<br />
         3、橙子优惠券在<a class="apple_medium_links" href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">购买橙子</a>结账时直接抵现金使用，使用期限11月16号23点之前。<br />
         4、橙子还在树上，11月22日前后统一发货。<br />
+        5、活动结束日期：11月16日23点59分。 <br/>
         <div class="text-center">
         <button id="get_coupons_button" type="button" class="btn btn-warning">我要兑换</button>
             </div>
         {{elseif $game_type == 'Choupg1411' }}
         1、小伙伴点击分享的摇苹果链接即获得机会。<br />
-        2、摇下30个，送丑苹果5元优惠券一张；60个，送丑苹果10元优惠券一张；100个，送丑苹果69.9元优惠券一张。<br />
-        3、丑苹果优惠券在<a class="apple_medium_links" href="/products/20141028/yun_nan_chou_ping_guo.html">购买丑苹果</a>后结账时直接抵现金使用，使用期限11月18号23点之前。<br />
+        2、摇下30个，送丑苹果5元优惠券一张；50个，送丑苹果10元优惠券一张；100个，送丑苹果69.9元优惠券一张（每天10箱）<br />
+        3、丑苹果优惠券在<a class="apple_medium_links" href="/products/20141028/yun_nan_chou_ping_guo.html">购买丑苹果</a>后结账时直接抵现金使用，使用期限11月17号23点之前。<br />
         4、11月18日前后统一发货。<br />
-        5、不要早早兑换，攒起来兑换69元优惠券更实在。<br />
-        6、大奖按天（0点）投放，如果超过90个了却一直不中，请多积攒机会，明天再来。<br />
+        5、不要早早兑换，攒起来兑换69.9元优惠券更实在。<br />
         <div class="text-center">
         <button id="get_coupons_button" type="button" class="btn btn-warning">我要兑换</button>
             </div>
@@ -156,7 +159,7 @@
     var game_page_title = function(total){ return {{$title_func}};};
     var game_obj_name = '{{$game_obj_name}}';
     var game_least_change = '{{$game_least_change}}';
-    {{if $game_type == 'chengzi1411' && $total_apple >= 80}}
+    {{if $game_type == 'chengzi1411' && !$game_end && $total_apple >= 80}}
         $(document).ready(function(){
             {{if $total_apple >= 90}}
                 bootbox.dialog({message:'亲，摇够了没！橙妾受不了啦，后面很难，兑了<span class="apple_numbers">40</span>元券把我带回家吧',

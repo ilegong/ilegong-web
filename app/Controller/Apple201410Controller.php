@@ -49,6 +49,12 @@ class Apple201410Controller extends AppController
         self::CHENGZI_1411 => 30,
         self::CHOUPG_1411 => 30,
     );
+
+    var $game_ends = array(
+        self::RICE_201411 => '2014-11-15 23:59:59',
+        self::CHENGZI_1411 => '2014-11-16 23:59:59',
+        self::CHOUPG_1411 => '2014-11-17 23:59:59',
+    );
     var $title_in_page = array(
         self::CHOUPG_1411 => '摇下100个,一箱<a href="/products/20141028/yun_nan_chou_ping_guo.html">云南丑苹果</a>免费送',
         self::CHENGZI_1411 => '摇下100个，最高一箱<a href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">橙子</a>免费送',
@@ -435,6 +441,15 @@ class Apple201410Controller extends AppController
         $this->set('got_apple', 0);
         $this->_updateLastQueryTime(time());
 
+
+        $game_end = $this->game_ends[$gameType];
+        if ($game_end) {
+            $dt = new DateTime($game_end);
+            if(mktime() - $dt->getTimestamp() > 0) {
+                $this->set('game_end', true);
+            }
+        }
+
         $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
         $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $current_uid, 'type' => $gameType)));
         $this->set('got_wx_sub_times', $this->gotWxTimesToday($weixinTimesLog, mktime()));
@@ -446,8 +461,17 @@ class Apple201410Controller extends AppController
 
         if (!empty($gameType)) {
             $uid = $this->currentUser['id'];
-            $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
 
+            $game_end = $this->game_ends[$gameType];
+            if ($game_end) {
+                $dt = new DateTime($game_end);
+                if(mktime() - $dt->getTimestamp() > 0) {
+                    echo json_encode(array('success' => false, 'msg' => 'game_end'));
+                    return;
+                }
+            }
+
+            $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
             $apple = $this->guessAwardAndUpdate($awardInfo, $gameType);
             $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
             $got = !empty($awardInfo) ?  $awardInfo['got'] : 0;

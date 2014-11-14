@@ -123,46 +123,49 @@ $(document).ready(function(){
     $shaking_tips_png.show();
     }
 
-    window.addEventListener('shake', shakeEventDidOccur, false);
-    var shaking = false;
-    function shakeEventDidOccur() {
-    if (shaking) {
-    return false;
-    }
-    var timesLeft = parseInt($appleTimesLeft.text());
-    if (timesLeft <= 0) {
-    showNoMoreTimes();
-    return;
-    }
-    shaking = true;
-    $shaking_tips_png.hide();
-    $('#apple_tree').octoberLeaves('start', {'speedC': 1, 'numberOfLeaves':100, 'cycleSpeed':80, 'rotationTrue':0});
-    sound.play();
-    $appleTree.attr('src', shake_pic_url);
+        window.addEventListener('shake', shakeEventDidOccur, false);
+        var shaking = false;
 
-    setTimeout(function(){
-    $('#apple_tree').octoberLeaves('stop');
-    $.getJSON('/apple_201410/shake/'+game_type+'?r=' + Math.random(), function(data){
-    var $curr_got = 0;
-    if (data && data.success) {
-    $appleGotCnt.text(data['total_apple']);
-    $riceGotCnt.text(data['total_apple']*10);
-    $appleTimesLeft.text(data['total_times'] < 0 ? 0 : data['total_times']);
-    $curr_got = data['got_apple'];
-    showAfterGot($curr_got, data['total_times'], data['total_apple'], data['need_login'], 2000);
-    } else if(data.msg == 'incorrect_type') {
-        utils.alert('游戏类型错误', function(){
-            location.href = '/apple_201410/index.html';
-        });
-    }
-    $appleTree.attr('src', apple_tree_url);
-    shaking = false;
+        function shakeEventDidOccur() {
+            if (shaking) {
+                return false;
+            }
+            var timesLeft = parseInt($appleTimesLeft.text());
+            if (timesLeft <= 0) {
+                showNoMoreTimes();
+                return;
+            }
+            shaking = true;
+            $shaking_tips_png.hide();
+            $('#apple_tree').octoberLeaves('start', {'speedC': 1, 'numberOfLeaves': 100, 'cycleSpeed': 80, 'rotationTrue': 0});
+            sound.play();
+            $appleTree.attr('src', shake_pic_url);
+
+            setTimeout(function () {
+                $('#apple_tree').octoberLeaves('stop');
+                $.getJSON('/apple_201410/shake/' + game_type + '?r=' + Math.random(), function (data) {
+                    var $curr_got = 0;
+                    if (data && data.success) {
+                        $appleGotCnt.text(data['total_apple']);
+                        $riceGotCnt.text(data['total_apple'] * 10);
+                        $appleTimesLeft.text(data['total_times'] < 0 ? 0 : data['total_times']);
+                        $curr_got = data['got_apple'];
+                        showAfterGot($curr_got, data['total_times'], data['total_apple'], data['need_login'], 2000);
+                    } else if (data.msg == 'incorrect_type') {
+                        utils.alert('游戏类型错误', function () {
+                            location.href = '/apple_201410/index.html';
+                        });
+                    } else if (data.msg == 'game_end') {
+                        utils.alert('活动已结束！');
+                    }
+                    $appleTree.attr('src', apple_tree_url);
+                    shaking = false;
 //                    if (currTimes() > 0) {
 //                        $shaking_tips_png.show();
 //                    }
-    });
-    }, 2000);
-    }
+                });
+            }, 2000);
+        }
 
     $shakeBtn.click(function(){
     utils.alert('摇动手机！没有声音请开声音！');
