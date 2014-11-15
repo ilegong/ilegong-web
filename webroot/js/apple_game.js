@@ -225,22 +225,27 @@ $(document).ready(function(){
         });
     });
 
-    var query_interval = 30000;
-    function new_times_query() {
-    $.getJSON('/apple_201410/hasNewTimes/'+game_type+'?r=' + Math.random(), function (data) {
-    if (data.success && data.new_times > 0) {
-    var times = currTimes() + data.new_times;
-    $appleTimesLeft.text(times);
-    updateViewState(times);
-    utils.alert('您的朋友<span style="color:red">'+data.nicknames+'</span>为您获得了<span class="apple_numbers">' + data.new_times + '</span>次摇'+game_obj_name+'的机会！', function () {
-    setTimeout(new_times_query, query_interval);
-    });
-    } else {
-    setTimeout(new_times_query, query_interval);
-    }
-    });
-    }
-    setTimeout(new_times_query, query_interval);
+        var query_interval = 10000;
+
+        function new_times_query() {
+            $.getJSON('/apple_201410/hasNewTimes/' + game_type + '?r=' + Math.random(), function (data) {
+                if (data.success && data.new_times > 0) {
+                    var times = currTimes() + data.new_times;
+                    $appleTimesLeft.text(times);
+                    updateViewState(times);
+                    utils.alert('您的朋友<span style="color:red">' + data.nicknames + '</span>为您获得了<span class="apple_numbers">' + data.new_times + '</span>次摇' + game_obj_name + '的机会！', function () {
+                        setTimeout(new_times_query, query_interval);
+                    });
+                } else {
+                    setTimeout(new_times_query, query_interval);
+                }
+
+                if (data && data.left_98) {$('#left_98').text(data.left_98);}
+                if (data && data.left_40) {$('#left_40').text(data.left_40);}
+            });
+        }
+
+        setTimeout(new_times_query, query_interval);
 
     } catch (e) {
     TraceKit.report(e);

@@ -27,7 +27,7 @@ class Apple201410Controller extends AppController
     var $DAY_LIMIT = array(
         self::RICE_201411 => 20,
         self::CHOUPG_1411 => 10,
-        self::CHENGZI_1411 => 10,
+        self::CHENGZI_1411 => 8,
     );
     var $game_obj_names = array(
         self::CHOUPG_1411 => '苹果',
@@ -163,6 +163,10 @@ class Apple201410Controller extends AppController
 //                $r = $notifyHis['UserNotifyLog']['last_notify'];
 //            }
 //        }
+
+
+        list($left_98, $left_40) = $this->calculate_left($gameType);
+
         if ($r && $r > 1413724118 /*2014-10-19 21:00*/) {
             if (time() - $r < 5) {
                 return json_encode(array('success' => false));
@@ -195,10 +199,10 @@ class Apple201410Controller extends AppController
 //            ));
 //        }
             $this->_updateLastQueryTime(time());
-            return json_encode(array('success' => true, 'new_times' => count($logsToMe), 'nicknames' => $nicknames));
+            return json_encode(array('success' => true, 'new_times' => count($logsToMe), 'nicknames' => $nicknames, 'left_98' => $left_98, 'left_40' => $left_40));
         } else {
             $this->_updateLastQueryTime(time());
-            return json_encode(array('success' => false));
+            return json_encode(array('success' => false, 'left_98' => $left_98, 'left_40' => $left_40));
         }
 
     }
@@ -439,21 +443,24 @@ class Apple201410Controller extends AppController
 
 
         //TODO: need cache
-        $awardItems = array();
-        $awardInfos = $this->AwardInfo->find('list', array(
-            'conditions' => array('got >=' => $this->AWARD_LIMIT),
-            'fields' => array('uid', 'got')
-        ));
-        if (!empty($awardInfos)) {
-            $nicknamesMap = $this->User->findNicknamesMap(array_keys($awardInfos));
-            foreach ($awardInfos as $uid => $got) {
-                if (array_search($uid, $this->in_pys) === false) {
-                    $awardItems[] = array('nickname' => filter_invalid_name($nicknamesMap[$uid]), 'got' => $got, 'company' => $this->companies[$uid]);
-                }
-            }
-        }
+//        $awardItems = array();
+//        $awardInfos = $this->AwardInfo->find('list', array(
+//            'conditions' => array('got >=' => $this->AWARD_LIMIT),
+//            'fields' => array('uid', 'got')
+//        ));
+//        if (!empty($awardInfos)) {
+//            $nicknamesMap = $this->User->findNicknamesMap(array_keys($awardInfos));
+//            foreach ($awardInfos as $uid => $got) {
+//                if (array_search($uid, $this->in_pys) === false) {
+//                    $awardItems[] = array('nickname' => filter_invalid_name($nicknamesMap[$uid]), 'got' => $got, 'company' => $this->companies[$uid]);
+//                }
+//            }
+//        }
+//        $this->set('awarded', $awardItems);
 
-        $this->set('awarded', $awardItems);
+        list($left_98, $left_40) = $this->calculate_left($gameType);
+        $this->set(compact('left_98', 'left_40'));
+
         $this->set('game_type', $gameType);
 
         $this->set('game_obj_name', $this->game_obj_names[$gameType]);
@@ -678,5 +685,19 @@ class Apple201410Controller extends AppController
 
         $hour = date('G');
         return ($todayAwarded >= round($dailyLimit * $hour/24, 0, PHP_ROUND_HALF_UP));
+    }
+
+    /**
+     * @param $gameType
+     * @return array
+     */
+    private function calculate_left($gameType) {
+        $left_40 = $left_98 = 0;
+        if ($gameType == self::CHENGZI_1411) {
+            $left_98 = 30 - $this->CouponItem->couponCount(COUPON_TYPE_CHZ_100);
+            $left_40 = 1200 - $this->CouponItem->couponCount(COUPON_TYPE_CHZ_90);
+            return array($left_98, $left_40);
+        }
+        return array($left_98, $left_40);
     }
 }

@@ -70,6 +70,34 @@ class CouponItem extends AppModel {
 
     }
 
+    /**
+     * @param $couponId
+     * @return mixed
+     */
+    public function couponCount($couponId) {
+        $key = 'ci_count_'.$couponId;
+        $result = Cache::read($key);
+        if (!$result) {
+            $result = $this->find('count', array(
+                'conditions' => array('coupon_id' => $couponId, 'deleted = 0')
+            ));
+            Cache::write($key, $result);
+        }
+        return $result;
+    }
+
+    public function afterDelete() {
+        $this->clearCache();
+    }
+
+    public function afterSave($created, $options = array()) {
+        $this->clearCache();
+    }
+
+    protected function clearCache() {
+        Cache::delete($key = 'ci_count_'.$this->data['CouponItem']['coupon_id']);
+    }
+
     public function unapply_coupons($owner, $order_id) {
         $this->updateAll(array('status' => COUPONITEM_STATUS_TO_USE, 'applied_order' => '0'),
             array('bind_user' => $owner, 'applied_order' => $order_id, 'status' => COUPONITEM_STATUS_USED));

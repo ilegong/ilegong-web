@@ -4,14 +4,13 @@
     <div id="top" class="row text-center">
         <h2 style="margin-bottom:5px; margin-top: 10px">{{$title_in_page}}</h2>
         {{if $game_type == 'chengzi1411'}}
-        <small>90个兑<span style="color:red">40</span>元，50个兑<span style="color:red">10</span>元，30个兑<span style="color:red">5</span>元！11月16号结束！</small>
+        <small>11月16号晚截止！ 98元券剩余<span id="left_98" style="color: red">{{$left_98}}</span>张 40券剩余<span id="left_40" style="color:red">{{$left_40}}</span>张</small>
         {{/if}}
-        <div class="col-xs-16">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp;
+        <div class="col-xs-12">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp;
             已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个
             {{if $game_type == 'rice201411'}}
             = <span class="apple_numbers" id="rice_got_cnt">{{$total_apple*10}}</span>g大米
-            {{else}}
-            {{ $game_obj_name }}
+            {{else}}{{ $game_obj_name }}
             {{/if}}
             <a href="#get_coupons" class="btn-sm btn-warning">兑换</a>
         </div>
@@ -63,7 +62,7 @@
         </div>
         {{elseif $game_type == 'chengzi1411' }}
         1、小伙伴点击分享的摇橙游戏链接即获得机会。<br />
-        2、摇下30个，送5元优惠券一张；50个，送10元优惠券一张；90个，送40元优惠券一张(每天100张）； 100个，送98元优惠券一张(每天10张）。<br />
+        2、摇下30个，送5元优惠券一张；50个，送10元优惠券一张；90个，送40元优惠券一张(合计1200张）； 100个，送98元优惠券一张(每天10张）。<br />
         3、橙子优惠券在<a class="apple_medium_links" href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">购买橙子</a>结账时直接抵现金使用，使用期限11月16号23点之前。<br />
         4、橙子还在树上，11月22日前后统一发货。<br />
         5、活动结束日期：11月16日23点59分。 <br/>
@@ -183,4 +182,4 @@
         });
     {{/if}}
 </script>
-{{$this->Html->script(array('apple_game.js?v12'));}}
+{{$this->Html->script(array('apple_game.js?v13'));}}
