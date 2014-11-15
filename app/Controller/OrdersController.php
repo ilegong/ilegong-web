@@ -321,7 +321,6 @@ class OrdersController extends AppController{
             //TODO: check status, if status is not paid, tell user to checking; notify administrators to check
         }
 
-
         $this->loadModel('Cart');
         $Carts = $this->Cart->find('all',array(
             'conditions'=>array(
@@ -346,6 +345,8 @@ class OrdersController extends AppController{
         $products = $product_new;
         unset($product_new);
 
+        $status = $orderinfo['Order']['status'];
+        $this->set('canComment', $this->canComment($status));
         $this->set('no_more_money', $noMoreMoney);
         $this->set('isMobile', $this->RequestHandler->isMobile());
         $this->set('ship_type', ShipAddress::$ship_type);
@@ -1001,5 +1002,16 @@ class OrdersController extends AppController{
         return $this->Order->find('first', array(
             'conditions' => array('id' => $orderId, 'creator' => $uid),
         ));
+    }
+
+    /**
+     * @param $status
+     * @return bool
+     */
+    private function canComment($status) {
+        return $status != ORDER_STATUS_CANCEL
+            && $status != ORDER_STATUS_PAID
+            && $status != ORDER_STATUS_WAITING_PAY
+            && $status != ORDER_STATUS_SHIPPED;
     }
 }

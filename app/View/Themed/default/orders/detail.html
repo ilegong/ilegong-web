@@ -14,7 +14,6 @@
         {{if $show_pay}}
         <div class="panel panel-warning">
             <div class="panel-body">
-
                 {{if $no_more_money }}
                 <a class="btn btn-warning" href="/orders/detail/{{$order['Order']['id']}}/pay_direct">确认支付</a>
                 {{else}}
@@ -71,7 +70,17 @@
             'style' => 'max-height:60px'
             ));}}
             </a>
-            <p class="col-xs-6"><a href="{{'/products/'.date('Ymd',strtotime($p['Product']['created'])).'/'.$p['Product']['slug'].'.html'}}">{{$cart['Cart']['name']}}</a></p>
+            <div class="col-xs-6">
+            <a href="{{'/products/'.date('Ymd',strtotime($p['Product']['created'])).'/'.$p['Product']['slug'].'.html'}}">
+                {{$cart['Cart']['name']}}
+            </a>
+
+                {{if $canComment}}
+            <a href="{{'/products/'.date('Ymd',strtotime($p['Product']['created'])).'/'.$p['Product']['slug'].'.html?_pys_add_comment=1'}}" style="display: inline-block" class="btn-sm btn-warning">
+                去评论
+            </a>
+                {{/if}}
+            </div>
             <div class="col-xs-3 pull-right">
                 <p style="margin-bottom: 0;" class="pull-right">￥{{$this->Number->precision($cart['Cart']['price'], 2)}}</p>
                 <br/>
