@@ -196,8 +196,6 @@ class CouponItem extends AppModel {
             'CouponItem.sent_message_status' => COUPONITEM_MESSAGE_STATUS_TO_SEND,
             'CouponItem.deleted = 0',
             'CouponItem.applied_order = 0',
-            //.todo test use
-            'CouponItem.bind_user = 8',
             '(CouponItem.applied_order is null or CouponItem.applied_order = 0)',
             'Coupon.published' => 1,
             'Coupon.status' => COUPON_STATUS_VALID,
