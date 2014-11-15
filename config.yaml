@@ -13,7 +13,7 @@ handle:
 #ʹ��content-type�ķ�ʽ֧��js��css����php������ص�����
   - compress: if(out_header["Content-Type"] ~ "(text|javascript|json)") compress
 cron:
-#	- description: crawl datas
-#	  url: /manage/admin/crawls/cronCrawlAll?cron_secret=
-#      schedule: 5 6 * * *
-#      timezone: Beijing
+	- description: send coupons timeout message
+	  url: /cron/send_coupon_timeout_message
+      schedule: */2 8-22 * * *
+      timezone: Beijing

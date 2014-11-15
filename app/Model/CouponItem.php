@@ -189,6 +189,37 @@ class CouponItem extends AppModel {
         return $items;
     }
 
+    public function find_24hours_timeout_coupons(){
+        $dt = new DateTime();
+        $cond = array(
+            'CouponItem.status' => COUPONITEM_STATUS_TO_USE,
+            'CouponItem.sent_message_status' => COUPONITEM_MESSAGE_STATUS_TO_SEND,
+            'CouponItem.deleted = 0',
+            'CouponItem.applied_order = 0',
+            //.todo test use
+            'CouponItem.bind_user = 8',
+            '(CouponItem.applied_order is null or CouponItem.applied_order = 0)',
+            'Coupon.published' => 1,
+            'Coupon.status' => COUPON_STATUS_VALID,
+            'date_sub(Coupon.valid_end, interval 24 hour) <= ' => $dt->format(FORMAT_DATETIME),
+            'Coupon.valid_end >= ' => $dt->format(FORMAT_DATETIME)
+        );
+
+        $items = $this->find('all', array(
+            'conditions' => $cond,
+            'joins' => $this->joins_link,
+            'fields' => array('Coupon.*', 'CouponItem.*')
+        ));
+
+        return $items;
+    }
+
+    public function change_coupons_message_status_to_sent($id){
+        return $this->update(array('sent_message_status' => COUPONITEM_MESSAGE_STATUS_SENT),
+            array('id' => $id, 'sent_message_status' => COUPONITEM_MESSAGE_STATUS_TO_SEND)
+        );
+    }
+
     /**
      * Convert the product ids
      * @param $items

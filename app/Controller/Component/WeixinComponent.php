@@ -88,7 +88,7 @@ class WeixinComponent extends Component
         return false;
     }
 
-    public function send_coupon_timeout_message($user_id, $coupon_name, $remain_hours, $money, $rule = "无金额限制")
+    public function send_coupon_timeout_message($user_id, $coupon_name, $timeout_time, $rule = "无金额限制")
     {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
@@ -100,10 +100,10 @@ class WeixinComponent extends Component
                 "url" => $this->get_coupon_url(),
                 "topcolor" => "#FF0000",
                 "data" => array(
-                    "first" => array("value" => "亲，您有1张面额".$money."元的".$coupon_name."优惠券将于".$remain_hours."小时后过期。"),
-                    "orderTicketStore" => array("value" => $coupon_name."所有产品可用。"),
+                    "first" => array("value" => "亲，您有1张".$coupon_name."将于".$timeout_time."过期。"),
+                    "orderTicketStore" => array("value" => ""),
                     "orderTicketRule" => array("value" => $rule),
-                    "remark" => array("value" => "点击详情，马上使用。", "color" => "#FF8800")
+                    "remark" => array("value" => "我不想离开您，点击详情，马上使用我。", "color" => "#FF8800")
                 )
             );
             return $this->send_weixin_message($post_data);
