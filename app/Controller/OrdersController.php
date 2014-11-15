@@ -1012,7 +1012,7 @@ class OrdersController extends AppController{
         return $status != ORDER_STATUS_CANCEL
             && $status != ORDER_STATUS_PAID
             && $status != ORDER_STATUS_WAITING_PAY
-            && $status != ORDER_STATUS_SHIPPED
+//            && $status != ORDER_STATUS_SHIPPED
             ;
     }
 }
