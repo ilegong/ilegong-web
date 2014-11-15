@@ -4,7 +4,7 @@
     <div id="top" class="row text-center">
         <h2 style="margin-bottom:5px; margin-top: 10px">{{$title_in_page}}</h2>
         {{if $game_type == 'chengzi1411'}}
-        <small>11月16号晚截止！ 98元券剩余<span id="left_98" style="color: red">{{$left_98}}</span>张 40券剩余<span id="left_40" style="color:red">{{$left_40}}</span>张</small>
+        <small>11月16号晚截止！ 98元券剩余<span id="left_98" style="color: red">{{$left_98}}</span>张 40元券剩余<span id="left_40" style="color:red">{{$left_40}}</span>张</small>
         {{/if}}
         <div class="col-xs-12">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp;
             已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个
@@ -161,7 +161,7 @@
     {{if $game_type == 'chengzi1411' && !$game_end && $total_apple >= 80}}
         $(document).ready(function(){
             {{if $total_apple >= 90}}
-                bootbox.dialog({message:'亲，摇够了没！橙妾受不了啦，后面很难，兑了<span class="apple_numbers">40</span>元券把我带回家吧',
+                bootbox.dialog({message:'亲，摇够了没！橙妾受不了啦，兑了<span class="apple_numbers">40</span>元券把我带回家吧，手快有手慢无哦！',
                     buttons:{
                         'no' : { 'label' : '耐心摇', className : 'btn-default'},
                         'yes': { 'label': '去兑换', className:'btn-danger', callback:function () {
