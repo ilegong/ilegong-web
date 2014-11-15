@@ -275,7 +275,7 @@ class Apple201410Controller extends AppController
         if ($game_end) {
             $dt = new DateTime($game_end);
             if(mktime() - $dt->getTimestamp() > 0) {
-                echo json_encode(array('result' => 'goon', 'msg' => 'game_end'));
+                echo json_encode(array('result' => 'game_end'));
                 return;
             }
         }
@@ -286,6 +286,7 @@ class Apple201410Controller extends AppController
 
         $can_exchange_apple_count = $apple_count_snapshot - $awardInfo['spent'];
 
+        $sold_out = false;
         $coupon_count = 0;
         $exchangeCount = 0;
         $store = '';
@@ -299,15 +300,26 @@ class Apple201410Controller extends AppController
                 $validDesc = "有效期至2014年11月15日";
             }
         } else if($gameType == self::CHENGZI_1411) {
+
+            list($left_98, $left_40) = $this->calculate_left($gameType);
+
             $couponType = 0;
             if ($can_exchange_apple_count >= 100) {
-                $coupon_count = 1;
-                $exchangeCount = 100;
-                $couponType = COUPON_TYPE_CHZ_100;
+                if ($left_98 > 0) {
+                    $coupon_count = 1;
+                    $exchangeCount = 100;
+                    $couponType = COUPON_TYPE_CHZ_100;
+                } else {
+                    $sold_out = true;
+                }
             } else if ($can_exchange_apple_count >= 90) {
-                $coupon_count = 1;
-                $exchangeCount = 90;
-                $couponType = COUPON_TYPE_CHZ_90;
+                if ($left_40 > 0) {
+                    $coupon_count = 1;
+                    $exchangeCount = 90;
+                    $couponType = COUPON_TYPE_CHZ_90;
+                }  else {
+                    $sold_out = true;
+                }
             } else if ($can_exchange_apple_count >= 50) {
                 $coupon_count = 1;
                 $exchangeCount = 50;
@@ -352,7 +364,7 @@ class Apple201410Controller extends AppController
             $result['result'] = "just-got";
             $this->Weixin->send_coupon_received_message($id, $coupon_count, $store, $validDesc);
         }else{
-            $result['result'] = "goon";
+            $result['result'] = $sold_out ? 'sold_out' : "goon";
         }
 
         echo json_encode($result);

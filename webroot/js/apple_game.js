@@ -218,7 +218,11 @@ $(document).ready(function(){
                     $appleGotCnt.text(apple_count - exchange_apple_count);
                     $riceGotCnt.text((apple_count - exchange_apple_count) * 10);
                     utils.alert("恭喜，兑换了" + coupon_count + "张优惠券，<a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
-                } else {
+                } else if (data.result == 'sold_out'){
+                    utils.alert("呜呜，券已兑完。");
+                } else if (data.result == 'game_end'){
+                    utils.alert("呜呜，活动已结束。");
+                }else {
                     utils.alert("呜呜，兑换失败，请稍后重试。");
                 }
             });
