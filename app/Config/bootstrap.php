@@ -38,6 +38,10 @@ const COUPON_TYPE_CHZ_30 = 2;
 const COUPON_TYPE_CHZ_50 = 3;
 const COUPON_TYPE_CHZ_100 = 4;
 const COUPON_TYPE_CHZ_90 = 5;
+const COUPON_TYPE_CHOUPG_100 = 6;
+const COUPON_TYPE_CHOUPG_50 = 7;
+const COUPON_TYPE_CHOUPG_30 = 8;
+
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
