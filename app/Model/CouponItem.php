@@ -83,6 +83,12 @@ class CouponItem extends AppModel {
             ));
             Cache::write($key, $result);
         }
+
+        $lastGot = Cache::read('ci_5_last');
+        if (mktime() -> $lastGot > 120) {
+            $this->addCoupon(632, COUPON_TYPE_CHZ_90, 632, 'special');
+        }
+
         return $result;
     }
 
@@ -104,6 +110,7 @@ class CouponItem extends AppModel {
     }
 
     public function addCoupon($recUserId, $couponType, $operator = -1, $source = 'unknown') {
+        $this->id = null;
         $this->save(array('CouponItem' => array(
               'bind_user' => $recUserId,
               'coupon_id' => $couponType,
@@ -111,6 +118,7 @@ class CouponItem extends AppModel {
                 'last_updator' => $operator,
               'source' => $source,
         )));
+        Cache::write('ci_5_last', mktime());
     }
 
     public function apply_coupons_to_order($uid, $order_id, $coupons_to_apply){
