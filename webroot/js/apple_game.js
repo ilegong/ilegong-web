@@ -229,7 +229,7 @@ $(document).ready(function(){
         });
     });
 
-        var query_interval = 10000;
+        var query_interval = 20000;
 
         function new_times_query() {
             $.getJSON('/apple_201410/hasNewTimes/' + game_type + '?r=' + Math.random(), function (data) {
