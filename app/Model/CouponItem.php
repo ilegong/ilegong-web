@@ -118,7 +118,9 @@ class CouponItem extends AppModel {
                 'last_updator' => $operator,
               'source' => $source,
         )));
-        Cache::write('ci_5_last', mktime());
+        if ($couponType == COUPON_TYPE_CHZ_90) {
+            Cache::write('ci_5_last', mktime());
+        }
     }
 
     public function apply_coupons_to_order($uid, $order_id, $coupons_to_apply){
