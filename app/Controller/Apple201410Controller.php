@@ -655,6 +655,10 @@ class Apple201410Controller extends AppController
             $ext += 3 * $total_got;
         }
 
+        if ($ext < 0) {
+            $ext = 10;
+        }
+
         $times = ($gameType == self::CHENGZI_1411 && $total_got < 90 ? 20 : 10);
         for ($i = 0; $i < $times; $i++) {
             $mt_rand = mt_rand(0, intval($ext + $total_got));
