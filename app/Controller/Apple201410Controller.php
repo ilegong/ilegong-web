@@ -52,12 +52,12 @@ class Apple201410Controller extends AppController
 
     var $game_ends = array(
         self::RICE_201411 => '2014-11-15 23:59:59',
-        self::CHENGZI_1411 => '2014-11-16 23:59:59',
+        self::CHENGZI_1411 => '2014-11-17 23:59:59',
         self::CHOUPG_1411 => '2014-11-17 23:59:59',
     );
     var $title_in_page = array(
         self::CHOUPG_1411 => '摇一摇,最高一箱<a href="/products/20141028/yun_nan_chou_ping_guo.html">云南丑苹果</a>免费送',
-        self::CHENGZI_1411 => '摇一摇，最高一箱<a href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">脐橙</a>免费送',
+        self::CHENGZI_1411 => '摇一摇，抢<a href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">赣南脐橙</a>四十元优惠券',
         self::RICE_201411 => '摇下50个，大米优惠券免费送',
     );
     var $title_in_window = array(
@@ -68,7 +68,7 @@ class Apple201410Controller extends AppController
     var $title_js_func = array(
         self::CHOUPG_1411 => "'摇一摇换云南丑苹果, 我已经摇到'+total+'个啦'",
         self::RICE_201411 => "'摇一摇免费兑稻花香大米券, 我已经有机会兑到'+total*10+'g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米-朋友说'",
-        self::CHENGZI_1411 => "'橙妾来啦，摇一摇一箱赣南脐橙带回家，我已经...'",
+        self::CHENGZI_1411 => "'橙妾来啦，摇一摇抢有机赣南脐橙优惠券，手快有手慢无...'",
     );
 
     public function beforeFilter()

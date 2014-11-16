@@ -4,7 +4,7 @@
     <div id="top" class="row text-center">
         <h2 style="margin-bottom:5px; margin-top: 10px">{{$title_in_page}}</h2>
         {{if $game_type == 'chengzi1411'}}
-        <small>11月16号晚截止！ 98元券剩余<span id="left_98" style="color: red">{{$left_98}}</span>张 40元券剩余<span id="left_40" style="color:red">{{$left_40}}</span>张</small>
+        <small>11月17号晚截止！ 98元券剩余<span id="left_98" style="color: red">{{$left_98}}</span>张 40元券剩余<span id="left_40" style="color:red">{{$left_40}}</span>张</small>
         {{/if}}
         <div class="col-xs-12">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp;
             已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个
@@ -41,6 +41,21 @@
             <a class="apple_nav_links" href="#more_chances"><small>如何获得更多机会</small></a>
             <!--<a href="#about_apple" class="apple_nav_links"><small>QA妹子分享富士</small></a>-->
         </div>
+
+        {{if $game_type == 'chengzi1411' }}
+        <div class="bg_orange pad text-left voffset3">
+            <div id="product_desc" class="title">习蛋蛋-有机赣南脐橙</div>
+            <div class="title"><img src="http://mmbiz.qpic.cn/mmbiz/UuGM2hE8WNFzdKW8mYibciaEEGylsTSRCka1srA6jm88oGdmqnPOAAJ3LP4KJYxXI92iatZ4obrFbeV754zQvxAmA/0" border="0" />
+                <img src="http://mmbiz.qpic.cn/mmbiz/UuGM2hE8WNFzdKW8mYibciaEEGylsTSRCkW594ElCicGYzh7hpxIqw0fNjsg8bnuSk45CHib2A7Kc00dwNzzwVxQEQ/0"/>
+            </div>
+                &nbsp;&nbsp;11月份中下旬树上自然熟采摘，现在开始预订，树上现摘，无催熟，无打蜡，无激素，无农残。<br/>
+                &nbsp;&nbsp;习蛋蛋，江西返乡创业青年土豪哥，2011年从北京返乡回到自己的家乡，致力发展家乡农产品电子商务，为村民增收带动就业。<br/>
+                <div class="text-center">
+                    <strong><a class="attention" href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">详细信息&gt;&gt;</a></strong>
+                </div>
+            </div>
+        </div>
+        {{/if}}
     </div>
 </div>
 
@@ -63,9 +78,9 @@
         {{elseif $game_type == 'chengzi1411' }}
         1、小伙伴点击分享的摇橙游戏链接即获得机会。<br />
         2、摇下30个，送5元优惠券一张；50个，送10元优惠券一张；90个，送40元优惠券一张(合计1200张）； 100个，送98元优惠券一张(每天10张）。<br />
-        3、橙子优惠券在<a class="apple_medium_links" href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">购买赣南脐橙</a>结账时直接抵现金使用，使用期限11月16号23点之前。<br />
+        3、橙子优惠券在<a class="apple_medium_links" href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">购买赣南脐橙</a>结账时直接抵现金使用，使用期限11月17号23点59分。<br />
         4、橙子还在树上，11月22日前后统一发货。<br />
-        5、活动结束日期：11月16日23点59分。 <br/>
+        5、活动结束日期：<span style="text-decoration: line-through">11月16日23点59分</span>(活动延长至11月17日23点59分)。 <br/>
         <div class="text-center">
         <button id="get_coupons_button" type="button" class="btn btn-warning">我要兑换</button><a class="apple_medium_links" href="/users/my_coupons.html">我的优惠券</a>
             </div>
@@ -88,6 +103,7 @@
             <a class="attention" href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">点击关注</a></strong>
         </div>
     </div>
+
     <div class="bg_orange pad">
         <div id="more_chances" class="title">如何获得更多摇一摇机会</div>
         <div class="con clearfix">
