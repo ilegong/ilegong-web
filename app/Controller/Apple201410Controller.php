@@ -555,7 +555,7 @@ class Apple201410Controller extends AppController
         if (empty($dayLimit)) {
             $dayLimit = 0;
         }
-        $curr_got += $this->randGotApple($todayAwarded, $total_got, $dayLimit);
+        $curr_got += $this->randGotApple($todayAwarded, $total_got, $dayLimit, $gameType);
         $curr_got = ($total_got == 0 && $curr_got == 0 ? 3 : $curr_got);
 
         if (is_array($iAwarded) && empty($iAwarded) && $total_got + $curr_got >= $this->AWARD_LIMIT) {
@@ -626,9 +626,10 @@ class Apple201410Controller extends AppController
      * @param $todayAwarded
      * @param $total_got
      * @param $dailyLimit
+     * @param $gameType
      * @return int
      */
-    private function randGotApple($todayAwarded, $total_got, $dailyLimit) {
+    private function randGotApple($todayAwarded, $total_got, $dailyLimit, $gameType) {
         $this_got = 0;
         $ext = 0;
         if (!$this->is_weixin()) {
@@ -654,7 +655,8 @@ class Apple201410Controller extends AppController
             $ext += 3 * $total_got;
         }
 
-        for ($i = 0; $i < 10; $i++) {
+        $times = ($gameType == self::CHENGZI_1411 && $total_got < 90 ? 20 : 10);
+        for ($i = 0; $i < $times; $i++) {
             $mt_rand = mt_rand(0, intval($ext + $total_got));
             $this_got += ($mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
         }
