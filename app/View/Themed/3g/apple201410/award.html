@@ -161,7 +161,7 @@
     {{if $game_type == 'chengzi1411' && !$game_end && $total_apple >= 80}}
         $(document).ready(function(){
             {{if $total_apple >= 90}}
-                bootbox.dialog({message:'亲，摇够了没！橙妾受不了啦，兑了<span class="apple_numbers">40</span>元券把我带回家吧，手快有手慢无哦！',
+                bootbox.dialog({message:'亲，98元券已兑完，兑了<span class="apple_numbers">40</span>元券把我带回家吧，手快有手慢无哦！',
                     buttons:{
                         'no' : { 'label' : '耐心摇', className : 'btn-default'},
                         'yes': { 'label': '去兑换', className:'btn-danger', callback:function () {
