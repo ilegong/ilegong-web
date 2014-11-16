@@ -656,7 +656,7 @@ class Apple201410Controller extends AppController
         }
 
         if ($ext < 0) {
-            $ext = 10;
+            $ext = 5;
         }
 
         $times = ($gameType == self::CHENGZI_1411 && $total_got < 90 ? 20 : 10);
