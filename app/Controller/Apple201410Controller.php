@@ -634,7 +634,7 @@ class Apple201410Controller extends AppController
         $ext = 0;
         $limit = false;
         if (!$this->is_weixin()) {
-            $ext = 1000000;
+            return 0;
         } else if ($this->shouldLimit($todayAwarded, $dailyLimit)) {
             $left = $this->AWARD_LIMIT - $total_got;
             $limit = true;
@@ -661,7 +661,7 @@ class Apple201410Controller extends AppController
             $ext = 5;
         }
 
-        $times = ($gameType == self::CHENGZI_1411 && $total_got <= 90 ? 30 : 10);
+        $times = ($gameType == self::CHENGZI_1411 && $total_got <= 90 ? 40 : 10);
         for ($i = 0; $i < $times; $i++) {
             $mt_rand = mt_rand(0, intval($ext + $total_got));
             $this_got += ($mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
