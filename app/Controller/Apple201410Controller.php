@@ -636,8 +636,10 @@ class Apple201410Controller extends AppController
         } else if ($this->shouldLimit($todayAwarded, $dailyLimit)) {
             $left = $this->AWARD_LIMIT - $total_got;
             if ($left > 0) {
-                if ($left <= 10) {
+                if ($left <= 3) {
                     $ext = 100000;
+                } else if ($left < 10){
+                    $ext = $left * 100;
                 }
                 /*
                 else if ($left <= 20) {
@@ -647,7 +649,7 @@ class Apple201410Controller extends AppController
         }
 
         if ($total_got < 90 && $total_got>50) {
-            $ext -= 30;
+            $ext -= 40;
         } else if ($total_got > 150) {
             $ext += 3 * $total_got;
         }
