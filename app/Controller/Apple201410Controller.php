@@ -27,7 +27,7 @@ class Apple201410Controller extends AppController
     var $DAY_LIMIT = array(
         self::RICE_201411 => 20,
         self::CHOUPG_1411 => 10,
-        self::CHENGZI_1411 => 8,
+        self::CHENGZI_1411 => 0,
     );
     var $game_obj_names = array(
         self::CHOUPG_1411 => '苹果',
