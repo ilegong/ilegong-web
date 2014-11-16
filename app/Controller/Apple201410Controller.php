@@ -304,7 +304,7 @@ class Apple201410Controller extends AppController
             list($left_98, $left_40) = $this->calculate_left($gameType);
 
             $couponType = 0;
-            if ($can_exchange_apple_count >= 100) {
+            /*if ($can_exchange_apple_count >= 100) {
                 if ($left_98 > 0) {
                     $coupon_count = 1;
                     $exchangeCount = 100;
@@ -312,7 +312,8 @@ class Apple201410Controller extends AppController
                 } else {
                     $sold_out = true;
                 }
-            } else if ($can_exchange_apple_count >= 90) {
+            } else */
+            if ($can_exchange_apple_count >= 90) {
                 if ($left_40 > 0) {
                     $coupon_count = 1;
                     $exchangeCount = 90;
