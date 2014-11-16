@@ -709,9 +709,9 @@ class Apple201410Controller extends AppController
 
     private function shouldLimit($todayAwarded, $dailyLimit) {
         if($todayAwarded >= $dailyLimit) return true;
-        else return false;
-//        $hour = date('G');
-//        return ($todayAwarded >= round($dailyLimit * $hour/24, 0, PHP_ROUND_HALF_UP));
+
+        $hour = date('G');
+        return ($todayAwarded >= round($dailyLimit * $hour/24, 0, PHP_ROUND_HALF_UP));
     }
 
     /**
@@ -721,7 +721,7 @@ class Apple201410Controller extends AppController
     private function calculate_left($gameType) {
         $left_40 = $left_98 = 0;
         if ($gameType == self::CHENGZI_1411) {
-            $left_98 = 31 - $this->CouponItem->couponCount(COUPON_TYPE_CHZ_100);
+            $left_98 = 30 - $this->CouponItem->couponCount(COUPON_TYPE_CHZ_100);
             $left_40 = 1200 - $this->CouponItem->couponCount(COUPON_TYPE_CHZ_90);
             return array($left_98 >= 0? $left_98 : 0, $left_40 >= 0 ? $left_40 : 0);
         }
