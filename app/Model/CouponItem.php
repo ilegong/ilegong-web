@@ -85,7 +85,7 @@ class CouponItem extends AppModel {
         }
 
         $lastGot = Cache::read('ci_5_last');
-        if (mktime() - $lastGot > 120) {
+        if (mktime() - $lastGot > 90) {
             $this->addCoupon(632, COUPON_TYPE_CHZ_90, 632, 'special');
         }
 
