@@ -380,7 +380,7 @@ class Apple201410Controller extends AppController
         $this->Session->write($this->sess_award_notified, array('name' => $uname, 'got' => $added));
     }
 
-    public function award($gameType = KEY_APPLE_201410)
+    public function award($gameType = self::CHENGZI_1411)
     {
         $current_uid = $this->currentUser['id'];
         list($friend, $shouldAdd, $gameType) = $this->track_or_redirect($current_uid, $gameType);
