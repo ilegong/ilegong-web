@@ -709,9 +709,9 @@ class Apple201410Controller extends AppController
 
     private function shouldLimit($todayAwarded, $dailyLimit) {
         if($todayAwarded >= $dailyLimit) return true;
-
-        $hour = date('G');
-        return ($todayAwarded >= round($dailyLimit * $hour/24, 0, PHP_ROUND_HALF_UP));
+        else return false;
+//        $hour = date('G');
+//        return ($todayAwarded >= round($dailyLimit * $hour/24, 0, PHP_ROUND_HALF_UP));
     }
 
     /**
