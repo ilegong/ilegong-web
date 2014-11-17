@@ -121,7 +121,7 @@ class CouponItem extends AppModel {
             array('bind_user' => $owner, 'applied_order' => $order_id, 'status' => COUPONITEM_STATUS_USED));
     }
 
-    public function add_coupon_type($name, $brand_id, $valid_begin, $valid_end, $reduced_price, $published, $type, $operator) {
+    public function add_coupon_type($name, $brand_id, $valid_begin, $valid_end, $reduced_price, $published, $type, $operator, $status) {
         $couponM = ClassRegistry::init('Coupon');
         if($couponM->save(array(
             'name' => $name,
@@ -131,6 +131,7 @@ class CouponItem extends AppModel {
             'reduced_price' => $reduced_price,
             'published' => $published,
             'last_updator' => $operator,
+            'status' => $status,
             'type' => $type
         ))) {
             return $couponM->getLastInsertID();

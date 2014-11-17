@@ -52,7 +52,7 @@ class SharingController extends AppController{
             )
         );
         $accepted_users = Hash::extract($slices, '{n}.SharedSlice.accept_user');
-        $nickNames = $this->User->findNicknamesMap($accepted_users);
+        $nickNames = $this->User->findNicknamesMap(array_merge($accepted_users, (array)$uid));
 
         $brandId = $sharedOffer['ShareOffer']['brand_id'];
         $brandNames = $this->Brand->find('list', array(
@@ -77,7 +77,7 @@ class SharingController extends AppController{
 
                         if($this->SharedSlice->updateAll(array('accept_user' => $uid, 'accept_time' => '\''.addslashes($now).'\''),
                             array('id' => $slice['SharedSlice']['id'], 'accept_user' => 0))) {
-                            $couponId = $this->CouponItem->add_coupon_type($brandNames[$brandId], $brandId, $now, $valid_end, $slice['SharedSlice']['number'], 1, COUPON_TYPE_TYPE_SHARE_OFFER, $uid);
+                            $couponId = $this->CouponItem->add_coupon_type($brandNames[$brandId], $brandId, $now, $valid_end, $slice['SharedSlice']['number'], 1, COUPON_TYPE_TYPE_SHARE_OFFER, $uid, COUPON_STATUS_VALID);
 //                            $recUserId, $couponType, $operator = -1, $source = 'unknown'
                             if ($couponId) {
                                 $this->CouponItem->addCoupon($uid, $couponId, $uid, 'shared_offer'.$shared_offer_id);
