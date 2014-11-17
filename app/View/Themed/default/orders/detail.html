@@ -14,16 +14,18 @@
         {{if $show_pay || !empty($toShare)}}
         <div class="panel panel-warning">
             <div class="panel-body">
+                {{if $show_pay}}
                 {{if $no_more_money }}
                 <a class="btn btn-warning" href="/orders/detail/{{$order['Order']['id']}}/pay_direct">确认支付</a>
                 {{else}}
                 {{if $in_weixin}}<a class="btn btn-warning" href="/wxPay/jsApiPay/{{$order['Order']['id']}}.html?showwxpaytitle=1">微信支付</a>{{/if}}
                 <a class="btn btn-warning" href="javascript:;" onclick="go_to_pay_zhifubao()">支付宝支付</a>
                 {{/if}}
+                {{/if}}
 
                 {{if !empty($toShare)}}
-                    <div class="alert alert-info" role="alert">
-                        您获得{{$toShare['name']}}的{{$this->Number->precision($toShare['number']/100, 2)}}元红包，<a href="/sharing/send/{{$toShare['id']}}.html" class="btn-sm btn-warning">马上领取</a>
+                    <div class="alert alert-info" data-dismiss="false">
+                        恭喜您获得{{$toShare['name']}}的{{$this->Number->precision($toShare['number']/100, 2)}}元红包，<a href="/sharing/send/{{$toShare['id']}}.html" class="btn-sm btn-warning">马上领取</a>
                     </div>
                 {{/if}}
             </div>
