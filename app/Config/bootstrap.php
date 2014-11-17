@@ -44,6 +44,10 @@ const COUPON_TYPE_CHOUPG_100 = 6;
 const COUPON_TYPE_CHOUPG_50 = 7;
 const COUPON_TYPE_CHOUPG_30 = 8;
 
+const SHARED_OFFER_STATUS_EXPIRED = 1;
+
+const COUPON_TYPE_TYPE_SHARE_OFFER = 2;
+
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
@@ -459,6 +463,14 @@ function filter_weixin_username($name) {
     return notWeixinAuthUserInfo(0, $name) ?  mb_substr($name, 4) : $name;
 }
 
+function is_past($timeStr, $addDays = 0) {
+    $end = DateTime::createFromFormat(FORMAT_DATETIME, $timeStr);
+    if ($addDays) {
+        $end->add(new DateInterval('P'.$addDays.'D'));
+    }
+    return ($end->getTimestamp() < mktime());
+}
+
 function coupon_expired($coupon) {
     if(empty($coupon)) {
         return true;
@@ -474,4 +486,14 @@ function coupon_expired($coupon) {
     }
 
     return false;
+}
+
+function brand_link($brand_id) {
+    $brandM = ClassRegistry::init('Brand');
+    $brand = $brandM->findById($brand_id);
+    if(!empty($brand)) {
+        return "/brands/" . date('Ymd', strtotime($brand['Brand']['created'])) . "/" . $brand['Brand']['slug'] . ".html";
+    } else {
+        return '/';
+    }
 }
