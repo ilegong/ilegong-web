@@ -64,7 +64,19 @@
     </noscript>
 </head>
 <body>
-
+{{if !$hideNav }}
+<div class="navbar-fixed-bottom navbar-v1" style="margin-bottom:0;z-index: 10">
+    <div class="container">
+        <ul class="list-inline">
+            <li><a class="home {{if $op_cate == 'home'}}active{{/if}}" href="/techan.html"><span class="op-icon {{if $op_cate == 'home'}}op-icon-active{{/if}}"></span><span>热卖</span></a></li>
+            <li><a class="categories {{if $op_cate == 'categories'}}active{{/if}}" href="/categories/listCategories.html"><span class="op-icon {{if $op_cate == 'categories'}}op-icon-active{{/if}}"></span><span>分类</span></a></li>
+            <li><a class="share {{if $op_cate == 'share'}}active{{/if}}" href="/share.html"><span class="op-icon {{if $op_cate == 'share'}}op-icon-active{{/if}}"></span><span>分享圈</span></a></li>
+            <li><a class="shichituan {{if $op_cate == 'shichituan'}}active{{/if}}" href="/shichituan.html"><span class="op-icon {{if $op_cate == 'shichituan'}}op-icon-active{{/if}}"></span><span>试吃团</span></a></li>
+            <li><a class="me {{if $op_cate == 'me'}}active{{/if}}" href="/users/me.html"><span class="op-icon {{if $op_cate == 'me'}}op-icon-active{{/if}}"></span><span>我的</span></a></li>
+        </ul>
+    </div>
+</div>
+{{/if}}
         {{if !noFlash }}
         <div class="container">
             {{$this->Session->flash()}}
@@ -74,19 +86,6 @@
 
         {{template Elements/cart}}
         {{template Elements/footer}}
-        {{if !$hideNav }}
-        <div class="navbar-fixed-bottom navbar-v1" style="margin-bottom:0;">
-            <div class="container">
-                <ul class="list-inline">
-                    <li><a class="home {{if $op_cate == 'home'}}active{{/if}}" href="/techan.html"><span class="op-icon {{if $op_cate == 'home'}}op-icon-active{{/if}}"></span><span>热卖</span></a></li>
-                    <li><a class="categories {{if $op_cate == 'categories'}}active{{/if}}" href="/categories/listCategories.html"><span class="op-icon {{if $op_cate == 'categories'}}op-icon-active{{/if}}"></span><span>分类</span></a></li>
-                    <li><a class="share {{if $op_cate == 'share'}}active{{/if}}" href="/share.html"><span class="op-icon {{if $op_cate == 'share'}}op-icon-active{{/if}}"></span><span>分享圈</span></a></li>
-                    <li><a class="shichituan {{if $op_cate == 'shichituan'}}active{{/if}}" href="/shichituan.html"><span class="op-icon {{if $op_cate == 'shichituan'}}op-icon-active{{/if}}"></span><span>试吃团</span></a></li>
-                    <li><a class="me {{if $op_cate == 'me'}}active{{/if}}" href="/users/me.html"><span class="op-icon {{if $op_cate == 'me'}}op-icon-active{{/if}}"></span><span>我的</span></a></li>
-                </ul>
-            </div>
-        </div>
-        {{/if}}
 {{$this->fetch('scriptBottom')}}
         <script>
             $(document).ready(function() {
