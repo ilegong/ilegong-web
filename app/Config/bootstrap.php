@@ -458,3 +458,20 @@ function notWeixinAuthUserInfo($uid, $userName) {
 function filter_weixin_username($name) {
     return notWeixinAuthUserInfo(0, $name) ?  mb_substr($name, 4) : $name;
 }
+
+function coupon_expired($coupon) {
+    if(empty($coupon)) {
+        return true;
+    }
+    $end = DateTime::createFromFormat(FORMAT_DATETIME, $coupon['Coupon']['valid_end']);
+    if ($end->getTimestamp() <= mktime()) {
+        return true;
+    }
+
+    $start = DateTime::createFromFormat(FORMAT_DATETIME, $coupon['Coupon']['valid_begin']);
+    if ($start->getTimestamp() >= mktime()) {
+        return true;
+    }
+
+    return false;
+}
