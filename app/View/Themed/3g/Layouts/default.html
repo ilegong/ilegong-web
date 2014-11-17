@@ -65,7 +65,7 @@
 </head>
 <body>
 {{if !$hideNav }}
-<div class="navbar-fixed-bottom navbar-v1" style="margin-bottom:0;z-index: 10">
+<div id="div_navbar" class="navbar-fixed-bottom navbar-v1" style="margin-bottom:0;z-index: 10">
     <div class="container">
         <ul class="list-inline">
             <li><a class="home {{if $op_cate == 'home'}}active{{/if}}" href="/techan.html"><span class="op-icon {{if $op_cate == 'home'}}op-icon-active{{/if}}"></span><span>热卖</span></a></li>
@@ -89,6 +89,13 @@
 {{$this->fetch('scriptBottom')}}
         <script>
             $(document).ready(function() {
+                $('#div_navbar').find('a').click(function(){
+                    var $a = $(this);
+                    $a.addClass('active');
+                    $a.find('span.op-icon').addClass('op-icon-active');
+                });
+
+
                 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
                         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
