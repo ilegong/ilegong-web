@@ -395,7 +395,8 @@ class OrdersController extends AppController{
         $brand_id = $_POST['brand_id'];
         $applying = $_POST['action'] == 'apply';
 
-        $cartsByPid = $this->cartsByPid();
+        $specifiedPids = $this->specified_balance_pids();
+        $cartsByPid = $this->cartsByPid($specifiedPids);
         list($cart, $shipFee) = $this->applyPromoToCart(array_keys($cartsByPid), $cartsByPid, $shipPromotionId);
 
         $this->loadModel('CouponItem');
