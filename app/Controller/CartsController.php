@@ -44,28 +44,8 @@ class CartsController extends AppController{
 		$carts = array();
 		if(!empty($this->data)){
 			$this->autoRender = false;
-			$Carts = $this->Cart->find('first',array(
-				'conditions'=>array(
-					'product_id' => $this->data['Cart']['product_id'],
-					'order_id' => null,
-					'OR'=> $this->user_condition
-			)));
-			if(!empty($Carts)){
-				$this->data['Cart']['id'] = $Carts['Cart']['id'];
-				$this->data['Cart']['num'] += $Carts['Cart']['num'];
-			}
-			
-			$productid = $this->data['Cart']['product_id'];
-			
-			$this->loadModel('Product');
-			$productinfo = $this->Product->findById($productid);
-			
-			$this->data['Cart']['session_id'] = $this->Session->id();			
-			$this->data['Cart']['coverimg'] = $productinfo['Product']['coverimg'];
-			$this->data['Cart']['name'] = $productinfo['Product']['name'];
-			$this->data['Cart']['price'] = $productinfo['Product']['price'];
-			$this->data['Cart']['creator'] = $this->currentUser['id'];
-			$this->Cart->save($this->data);
+            $product_id = $this->data['Cart']['product_id'];
+            $this->_addToCart($product_id);
 			
 			$successinfo = array('success' => __('Success add to cart.'));
 			echo json_encode($successinfo);
@@ -105,6 +85,21 @@ class CartsController extends AppController{
 		echo json_encode($successinfo);
 		exit;
 	}
+
+    function quick_buy() {
+        $pid = intval($_GET['pid']);
+        $num = intval($_GET['num']);
+
+        if (!$pid || !$num) {
+            $this->__message('参数错误', '/');
+        }
+
+        if($this->_addToCart($pid, $num)) {
+            $this->redirect('/orders/info?from=quick_buy&pid_list='.$pid);
+        } else {
+            $this->__message('系统忙，立即下单失败，请返回重试', product_link($pid, '/'));
+        }
+    }
 	
 	function listcart(){
         if (empty($this->currentUser['id'])) {
@@ -149,5 +144,36 @@ class CartsController extends AppController{
 		));
 		$this->redirect('/carts/listcart.html');
 	}
-       
+
+    /**
+     * @param $product_id
+     * @param int $num
+     * @return bool whether saved successfully
+     */
+    private function _addToCart($product_id, $num = 1) {
+        $Carts = $this->Cart->find('first', array(
+            'conditions' => array(
+                'product_id' => $product_id,
+                'order_id' => null,
+                'OR' => $this->user_condition
+            )));
+        if (!empty($Carts)) {
+            $this->data['Cart']['id'] = $Carts['Cart']['id'];
+            $this->data['Cart']['num'] += $Carts['Cart']['num'];
+        } else {
+            $this->data['Cart']['num'] = $num;
+        }
+        $this->data['Cart']['product_id'] = $product_id;
+
+        $this->loadModel('Product');
+        $productinfo = $this->Product->findById($product_id);
+
+        $this->data['Cart']['session_id'] = $this->Session->id();
+        $this->data['Cart']['coverimg'] = $productinfo['Product']['coverimg'];
+        $this->data['Cart']['name'] = $productinfo['Product']['name'];
+        $this->data['Cart']['price'] = $productinfo['Product']['price'];
+        $this->data['Cart']['creator'] = $this->currentUser['id'];
+        return $this->Cart->save($this->data);
+    }
+
 }

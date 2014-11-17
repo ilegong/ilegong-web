@@ -28,10 +28,14 @@ class OrdersController extends AppController{
         return "Balance.promotion.id";
     }
 
+    private static function key_balance_pids() {
+        return "Balance.balance.pids";
+    }
+
     function beforeFilter(){
 		parent::beforeFilter();
 		if(empty($this->currentUser['id']) && array_search($this->request->params['action'], $this->customized_not_logged) === false){
-			$this->redirect('/users/login?referer='.Router::url('/orders/info'));
+			$this->redirect('/users/login?referer='.urlencode($_SERVER['REQUEST_URI']));
 		}
 		$this->user_condition = array(
 			'session_id'=>	$this->Session->id(),
@@ -56,12 +60,18 @@ class OrdersController extends AppController{
 
         $nums = array();
         $Carts = array();
-        $Carts_tmp = $this->Cart->find('all',array(
-                'conditions'=>array(
-                        'status'=> 0,
-                        'order_id' => null,
-                        'OR'=> $this->user_condition
-                )));
+        $cond = array(
+            'status' => 0,
+            'order_id' => null,
+            'OR' => $this->user_condition
+        );
+        $specifiedPids = $this->specified_balance_pids();
+        if (!empty($specifiedPids)) {
+            $cond['product_id'] = $specifiedPids;
+        }
+        $Carts_tmp = $this->Cart->find('all', array(
+            'conditions' => $cond));
+
         foreach($Carts_tmp as $c){
             $product_ids[]=$c['Cart']['product_id'];
             $Carts[$c['Cart']['product_id']] = $c;
@@ -72,8 +82,8 @@ class OrdersController extends AppController{
         )));
 
 		if(empty($Carts)){
-			$this->Session->setFlash('订单金额错误，请返回购物车查看');
-			$this->redirect('/');
+			$this->__message('您没有选择结算商品，请返回购物车检查', '/carts/listcart');
+            return;
 		}
 
         $ship_fees = array();
@@ -178,6 +188,17 @@ class OrdersController extends AppController{
      */
 	function info($order_id=''){
 
+        if ($_GET['from'] == 'list_cart' || $_GET['from'] == 'quick_buy') {
+            $pidList = $_GET['pid_list'];
+            if(!empty($pidList)){
+                $pidArr = preg_split('/,/', $pidList);
+            } else {
+                $pidArr = array();
+            }
+
+            $this->Session->write(self::key_balance_pids(), json_encode($pidArr));
+        }
+
         $this->Session->write(self::key_balanced_ship_promotion_id(), '');
 
 		$has_chosen_consignee = false;
@@ -201,8 +222,7 @@ class OrdersController extends AppController{
             return;
 		}
 
-        $pids = array_keys($cartsByPid);
-        list($cart, $shipFee) = $this->applyPromoToCart($pids, $cartsByPid, $shipPromotionId);
+        list($pids, $cart, $shipFee) = $this->createTmpCarts($cartsByPid, $shipPromotionId);
 
         $consignees = $this->OrderConsignee->find('all',array(
             'conditions'=>array('creator'=>$this->currentUser['id']),
@@ -895,16 +915,21 @@ class OrdersController extends AppController{
     }
 
     /**
+     * @param array $limitPids
      * @return array
      */
-    protected function cartsByPid() {
+    protected function cartsByPid($limitPids = array()) {
         $this->loadModel('Cart');
+        $cond = array(
+            'status' => 0,
+            'order_id' => null,
+            'OR' => $this->user_condition
+        );
+        if (!empty($limitPids)) {
+            $cond['product_id'] = $limitPids;
+        }
         $dbCartItems = $this->Cart->find('all', array(
-            'conditions' => array(
-                'status' => 0,
-                'order_id' => null,
-                'OR' => $this->user_condition
-            )));
+            'conditions' => $cond));
 
         return Hash::combine($dbCartItems, '{n}.Cart.product_id', '{n}.Cart');
     }
@@ -1112,6 +1137,35 @@ class OrdersController extends AppController{
                     );
                 }
             }
+        }
+        return null;
+    }
+
+    /**
+     * @param $cartsByPid
+     * @param $shipPromotionId
+     * @return array
+     */
+    private function createTmpCarts(&$cartsByPid, $shipPromotionId) {
+        $balancePids = $this->specified_balance_pids();
+
+        if (!empty($balancePids)) {
+            $pids = $balancePids;
+            $cartsByPid = $this->cartsByPid($balancePids);
+        } else {
+            $pids = array_keys($cartsByPid);
+        }
+        list($cart, $shipFee) = $this->applyPromoToCart($pids, $cartsByPid, $shipPromotionId);
+        return array($pids, $cart, $shipFee);
+    }
+
+    /**
+     * @return mixed
+     */
+    private function specified_balance_pids() {
+        $balancePidJson = $this->Session->read(self::key_balance_pids());
+        if (!empty($balancePidJson)) {
+            return json_decode($balancePidJson);
         }
         return null;
     }

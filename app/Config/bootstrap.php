@@ -442,16 +442,25 @@ class ShipAddress {
 function game_uri($gameType, $defUri = '/') {
 
     if (TRACK_TYPE_PRODUCT_RICE == $gameType) {
-        $pModel = ClassRegistry::init('Product');
-        $riceProduct = $pModel->findById(PRODUCT_ID_RICE_10);
-        if (!empty($riceProduct)) {
-            return "/products/" . date('Ymd', strtotime($riceProduct['Product']['created'])) . "/" . $riceProduct['Product']['slug'] . ".html";
-        } else {
-            return $defUri;
-        }
+        return product_link(PRODUCT_ID_RICE_10, $defUri);
     }
 
     return "/t/ag/$gameType.html";
+}
+
+/**
+ * @param $pid
+ * @param $defUri
+ * @return string
+ */
+function product_link($pid, $defUri) {
+    $pModel = ClassRegistry::init('Product');
+    $p = $pModel->findById($pid);
+    if (!empty($p)) {
+        return "/products/" . date('Ymd', strtotime($p['Product']['created'])) . "/" . $p['Product']['slug'] . ".html";
+    } else {
+        return $defUri;
+    }
 }
 
 

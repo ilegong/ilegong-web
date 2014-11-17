@@ -123,36 +123,57 @@
 		readFromCookie();
 
 		//items with shopping class
-		$("a.shopping").click(function(){
-			var $item = $(this);
-			var itemId = $item.attr('item-id');
-
-			if( itemId in cart){ // already added, remove it
-				
-				deleteFromCart(itemId);
-			}else { //not added
-
-                var specId = '';
-                if(typeof(_p_spec_m) != 'undefined') {
-                    if(_p_spec_m) {
-                        var spec_labels = $('span.spec_label');
-                        if (spec_labels.size() > 0) {
+        function addToCartWithSpec(itemId, itemNum, $item) {
+            var specId = '';
+            if (typeof(_p_spec_m) != 'undefined') {
+                if (_p_spec_m) {
+                    var spec_labels = $('span.spec_label');
+                    if (spec_labels.size() > 0) {
 //                            $.each(spec_labels, function(idx, spanLabel){
 //                            });
-                            if($('span.spec_item_selected').size() == 0) {
-                                utils.alert("请选择蛋糕口味");
-                                return false;
-                            }
-
-                            specId = _p_spec_m[$('span.spec_item_selected').text()];
+                        if ($('span.spec_item_selected').size() == 0) {
+                            utils.alert("请选择蛋糕口味");
+                            return false;
                         }
+
+                        specId = _p_spec_m[$('span.spec_item_selected').text()];
                     }
                 }
+            }
 
-				addToCart(itemId, parseInt($('#pamount-' + itemId).val()) || 1, (parseFloat($item.attr('item-price')) || 0 ), $item.attr('item-name'), specId||0);
-			}
+            addToCart(itemId, itemNum, (parseFloat($item.attr('item-price')) || 0 ), $item.attr('item-name'), specId || 0);
+            return true;
+        }
+
+        $("a.shopping").click(function(){
+			var $item = $(this);
+			var itemId = $item.attr('item-id');
+            var itemNum = parseInt($('#pamount-' + itemId).val()) || 1;
+			if( itemId in cart){ // already added, remove it
+				deleteFromCart(itemId);
+			}else { //not added
+                if(!addToCartWithSpec(itemId, itemNum, $item)) {
+                    return false;
+                }
+            }
 			
 		});
+
+        $('#btn_quick_buy').click(function(){
+            var $item = $("a.shopping");
+            var itemId = $item.attr('item-id');
+            var itemNum = parseInt($('#pamount-' + itemId).val()) || 1;
+            if(itemId in cart){
+                cart[itemId]['num'] = itemNum;
+                updateCart();
+            }else {
+                if(!addToCartWithSpec(itemId, itemNum, $item)) {
+                    return false;
+                }
+            }
+            $pid = $(this).attr('item-id');
+            window.location.href = '/orders/info?from=quick_buy&pid_list='+$pid;
+        });
 
 		//show cart button
 		$('#card-btn').click(function(ev){
