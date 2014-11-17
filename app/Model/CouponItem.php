@@ -205,14 +205,14 @@ class CouponItem extends AppModel {
             'conditions' => array('CouponItem.bind_user' => $user_id, 'CouponItem.deleted = 0'),
             'joins' => $this->joins_link,
             'fields' => array('Coupon.*', 'CouponItem.*'),
-            'order' => 'Coupon.valid_end asc'
+            'order' => 'CouponItem.created desc'
         ));
     }
 
     public function find_latest_created_coupon_item($userId, $couponId) {
         return $this->find('first', array(
             'conditions' => array('CouponItem.bind_user' => $userId, 'CouponItem.coupon_id' => $couponId),
-            'order' => 'created desc'
+            'order' => 'CouponItem.created desc'
         ));
     }
 
