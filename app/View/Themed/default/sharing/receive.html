@@ -27,7 +27,8 @@
     </div>
     {{if isOwner}}
     <div class="row text-center voffset3">
-        <p>恭喜您获得{{$sharedOffer['ShareOffer']['name']}}总额{{$this->Number->precision($sharedOffer['SharedOffer']['total_number']/100, 2)}}元的{{$total_slice}}个红包</p>
+        <p>恭喜您获得{{$sharedOffer['ShareOffer']['name']}}总额{{$this->Number->precision($sharedOffer['SharedOffer']['total_number']/100, 2)}}元的{{$total_slice}}个红包
+        </p>
     {{if $expired }}
         <a href="javascript:;" class="btn btn-warning">红包已过期</a>
     {{elseif $noMore }}
@@ -63,6 +64,8 @@
                 <span style="margin-left: 1em">￥{{$this->Number->precision($slice['SharedSlice']['number']/100, 2)}}</span>
                 {{if $slice['SharedSlice']['accept_user'] == $uid}}
                 <a href="{{brand_link($sharedOffer['ShareOffer']['brand_id'])}}" class="btn-sm btn-warning pull-right">马上使用</a>
+                {{else}}
+                <span>{{friendlyDateFromStr($slice['SharedSlice']['accept_time'])}}</span>
                 {{/if}}
             </li>
             {{/if}}
