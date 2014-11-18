@@ -46,6 +46,11 @@ class SharingController extends AppController{
                 $this-> __message('红包尚未开封，请等待红包所有人开封后发出邀请', '/');
                 return;
             }
+
+            if ($this->is_weixin() && notWeixinAuthUserInfo($uid, $this->currentUser['nickname'])) {
+                $this->__message('为让朋友知道是谁领了她/他发的红包，请授权我们获取您的微信昵称', '/users/login.html?referer=' . urlencode($_SERVER['REQUEST_URI']));
+            }
+
         }
 
 
