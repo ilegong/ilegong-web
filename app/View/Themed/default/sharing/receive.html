@@ -65,7 +65,7 @@
                 {{if $slice['SharedSlice']['accept_user'] == $uid}}
                 <a href="{{brand_link($sharedOffer['ShareOffer']['brand_id'])}}" class="btn-sm btn-warning pull-right">马上使用</a>
                 {{else}}
-                <span>{{friendlyDateFromStr($slice['SharedSlice']['accept_time'])}}</span>
+                <span class="pull-right">{{friendlyDateFromStr($slice['SharedSlice']['accept_time'])}}</span>
                 {{/if}}
             </li>
             {{/if}}
