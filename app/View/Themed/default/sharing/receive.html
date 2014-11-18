@@ -24,6 +24,8 @@
         {{/if}}
         {{if $just_accepted}}
         <div class="alert alert-danger"><strong>领取成功！</strong>您领取到了一张 ￥{{$this->Number->precision($just_accepted/100, 2)}}元红包！</div>
+        {{elseif $accepted}}
+        <div class="alert alert-danger"><strong>您已经抢过啦！</strong></div>
         {{/if}}
 
         <ul class="list-group">

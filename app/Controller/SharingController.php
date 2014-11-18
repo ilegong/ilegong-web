@@ -67,10 +67,10 @@ class SharingController extends AppController{
             'fields' => array('id', 'name')
         ));
 
+        $accepted =  (array_search($uid, $accepted_users) !== false);
         if (!$expired) {
 
             $just_accepted = 0;
-            $accepted =  (array_search($uid, $accepted_users) !== false);
             $noMore = (array_search(0, $accepted_users) === false);
 
             if (!$accepted && !$noMore) {
