@@ -186,28 +186,44 @@ class OrdersController extends AppController{
 
         $this->loadModel('Order');
         $conditions = array(
-            'created >"' . date("Y-m-d\TH:i:s", $start_date) . '"',
-            'created <"' . date("Y-m-d\TH:i:s", $end_date) . '"'
+            'Order.created >"' . date("Y-m-d\TH:i:s", $start_date) . '"',
+            'Order.created <"' . date("Y-m-d\TH:i:s", $end_date) . '"'
         );
         if($brand_id !=0){
-            array_push($conditions,'brand_id = '.$brand_id);
+            array_push($conditions,'Order.brand_id = '.$brand_id);
         }
         if($order_status!=-1){
-            array_push($conditions,'status = '.$order_status);
+            array_push($conditions,'Order.status = '.$order_status);
         }
         if(!empty($order_id)){
-            array_push($conditions,'id = '.$order_id);
+            array_push($conditions,'Order.id = '.$order_id);
         }
         if(!empty($consignee_name)){
-            array_push($conditions,'consignee_name like "%'.$consignee_name.'%"');
+            array_push($conditions,'Order.consignee_name like "%'.$consignee_name.'%"');
         }
         if(!empty($consignee_mobilephone)){
-            array_push($conditions,'consignee_mobilephone = '.$consignee_mobilephone);
+            array_push($conditions,'Order.consignee_mobilephone = '.$consignee_mobilephone);
         }
+
+        $payNotifyModel = ClassRegistry::init('PayNotify');
+        $payNotifyModel->query("update cake_pay_notifies set order_id =  substring_index(substring_index(out_trade_no,'-',2),'-',-1) where status = 6");
+        $join_conditions = array(
+            array(
+                'table' => 'pay_notifies',
+                'alias' => 'Pay',
+                'conditions' => array(
+                    'Pay.order_id = Order.id'
+                ),
+                'type' => 'LEFT',
+            )
+        );
 
         $orders = $this->Order->find('all',array(
             'order' => 'id desc',
-            'conditions'=> $conditions));
+            'conditions'=> $conditions,
+            'joins' => $join_conditions,
+            'fields' => array('Order.*', 'Pay.trade_type'),
+        ));
 
         $ids = array();
         foreach($orders as $o){

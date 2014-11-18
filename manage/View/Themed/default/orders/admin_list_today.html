@@ -54,6 +54,7 @@
         <th>收件人</th>
         <th>电话</th>
         <th>收件地址</th>
+        <th>支付方式</th>
         <th>快递公司</th>
         <th>快递单号</th>
     </tr>
@@ -94,6 +95,13 @@
         <td>{{$order['Order']['consignee_name']}}</td>
         <td>{{$order['Order']['consignee_mobilephone']}}</td>
         <td>{{$order['Order']['consignee_address']}}</td>
+        <td>
+        {{if $order['Pay']['trade_type']=='JSAPI'}}
+        <font color="red">微信支付</font>
+        {{elseif $order['Pay']['trade_type']=='ZFB'}}
+        <font color="red">支付宝</font>
+        {{/if}}
+        </td>
         <td>
             {{if $order['Order']['ship_type']}}
                 {{$ship_type[$order['Order']['ship_type']]}}
