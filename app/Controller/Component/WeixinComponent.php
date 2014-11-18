@@ -111,20 +111,30 @@ class WeixinComponent extends Component
         return false;
     }
 
-    public function send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_no, $brand_id = null)
+    public function send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_no, $order = null)
     {
+        $so = ClassRegistry::init('ShareOffer');
+        $offer = $so->query_gen_offer($order, $order['Order']['creator']);
+
+        $number = 0;
+        $name = '';
+        if(!empty($offer)) {
+            $number = $offer['number'];
+            $name = $offer['name'];
+        }
+
         $post_data = array(
             "touser" => $open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
             "url" => $this->get_order_query_url($order_no),
             "topcolor" => "#FF0000",
             "data" => array(
-                "first" => array("value" => "亲，您的订单已完成付款，商家将即时为您发货。"),
+                "first" => array("value" => "亲，您的订单已完成付款，商家将即时为您发货。". ($number > 0 && !empty($name)) ? "恭喜您获得".$name."红包，马上领取" : ""),
                 "orderProductPrice" => array("value" => $price),
                 "orderProductName" => array("value" => $good_info),
                 "orderAddress" => array("value" => empty($ship_info)?'':$ship_info),
                 "orderName" => array("value" => $order_no),
-                "remark" => array("value" => "点击详情，查询订单。", "color" => "#FF8800")
+                "remark" => array("value" => "点击详情，查询订单".($number > 0 ? "/领取红包":"")."。", "color" => "#FF8800")
             )
         );
         return $this->send_weixin_message($post_data);
@@ -286,7 +296,7 @@ class WeixinComponent extends Component
 
 
             }  else {
-                $this->send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_id, $order['Order']['brand_id']);
+                $this->send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_id, $order);
             }
 
         }
