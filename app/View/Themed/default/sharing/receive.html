@@ -59,7 +59,7 @@
         <ul class="list-group">
             {{loop $slices $idx $slice}}
             {{if $slice['SharedSlice']['accept_user']}}
-            <li class="list-group-item clearfix">{{$nickNames[$slice['SharedSlice']['accept_user']]}}
+            <li class="list-group-item clearfix"><span class="col-xs-3">{{$nickNames[$slice['SharedSlice']['accept_user']]}}</span>
                 <span style="margin-left: 1em">￥{{$this->Number->precision($slice['SharedSlice']['number']/100, 2)}}</span>
                 {{if $slice['SharedSlice']['accept_user'] == $uid}}
                 <a href="{{brand_link($sharedOffer['ShareOffer']['brand_id'])}}" class="btn-sm btn-warning pull-right">马上使用</a>

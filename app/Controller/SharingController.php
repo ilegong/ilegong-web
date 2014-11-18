@@ -79,7 +79,7 @@ class SharingController extends AppController{
         ));
         $total_slice = count($slices);
         $valuesCounts = array_count_values($accepted_users);
-        $left_slice = $valuesCounts[0];
+        $left_slice = empty($valuesCounts[0])? 0 : $valuesCounts[0];
         $noMore = $total_slice == $left_slice;
 
         $accepted =  (array_search($uid, $accepted_users) !== false);
