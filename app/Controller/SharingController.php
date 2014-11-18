@@ -99,7 +99,7 @@ class SharingController extends AppController{
                 }
             }
         }
-        $this->set(compact('slices', 'expired', 'accepted', 'just_accepted', 'no_more', 'nickNames'));
+        $this->set(compact('slices', 'expired', 'accepted', 'just_accepted', 'no_more', 'nickNames', 'sharedOffer', 'uid'));
     }
 
 }
