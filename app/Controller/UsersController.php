@@ -339,6 +339,22 @@ class UsersController extends AppController {
         $this->pageTitle = __('我的优惠劵');
     }
 
+    function my_offers() {
+        $this->loadModel('SharedOffer');
+        $sharedOffers = $this->SharedOffer->find_my_all_offers($this->currentUser['id']);
+        $expiredIds = array();
+        foreach($sharedOffers as $o) {
+            $expired = is_past($o['SharedOffer']['start'], $o['ShareOffer']['valid_days']);
+            if($expired) {
+                $expiredIds[] = $o['SharedOffer']['id'];
+            } else if (SharedOffer::slicesSharedOut($o['SharedOffer']['id'], $o['SharedOffer']['status'])) {
+                $soldOuts[] = $o['SharedOffer']['id'];
+            }
+        }
+        $this->set(compact('sharedOffers', 'expiredIds', 'soldOuts'));
+        $this->pageTitle = __('我的红包');
+    }
+
     function editpassword() {
         $userinfo = $this->Auth->user();
         if (!$userinfo['id']) {

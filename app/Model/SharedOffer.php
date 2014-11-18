@@ -14,6 +14,17 @@ class SharedOffer extends AppModel {
             'foreignKey' => 'share_offer_id'
         ));
 
+    public static function slicesSharedOut($id, $status) {
+        if ($status != SHARED_OFFER_STATUS_GOING) return true;
+
+        $soM = ClassRegistry::init('SharedOffer');
+        $notAcceptedSlices = $soM->_find_shared_slices($id, false);
+        return empty($notAcceptedSlices);
+    }
+
+    public function find_my_all_offers($uid) {
+        return $this->find('all', array('conditions' => array('uid' => $uid), 'order' => 'SharedOffer.created desc'));
+    }
 
     public function find_user_shared_offer($userId, $orderId, $offerId) {
         return $this->find('first', array('conditions' => array('uid' => $userId, 'order_id' => $orderId, 'share_offer_id' => $offerId)));

@@ -23,9 +23,16 @@ class SharingController extends AppController{
     }
 
     public function send($shared_offer_id) {
-        if ($shared_offer_id != $this->currentUser['id']) {
+        $uid = $this->currentUser['id'];
+        $sharedOffer = $this->SharedOffer->findById($shared_offer_id);
+        if (empty($sharedOffer)) {
+            $this-> __message('红包不存在', '/');
+        }
+        if ($sharedOffer['SharedOffer']['uid'] != $this->currentUser['id']) {
             $this->redirect(array('action' => 'receive', $shared_offer_id));
         }
+
+        $this->set(compact('sharedOffer'));
     }
 
     public function receive($shared_offer_id) {

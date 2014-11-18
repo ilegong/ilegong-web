@@ -44,7 +44,10 @@ const COUPON_TYPE_CHOUPG_100 = 6;
 const COUPON_TYPE_CHOUPG_50 = 7;
 const COUPON_TYPE_CHOUPG_30 = 8;
 
+const SHARED_OFFER_STATUS_NEW = 0;
+const SHARED_OFFER_STATUS_GOING = 3;
 const SHARED_OFFER_STATUS_EXPIRED = 1;
+const SHARED_OFFER_STATUS_OUT = 2;
 
 const COUPON_TYPE_TYPE_SHARE_OFFER = 2;
 
@@ -470,6 +473,14 @@ function notWeixinAuthUserInfo($uid, $userName) {
 
 function filter_weixin_username($name) {
     return notWeixinAuthUserInfo(0, $name) ?  mb_substr($name, 4) : $name;
+}
+
+function date_days($timeStr, $addDays = 0) {
+    $end = DateTime::createFromFormat(FORMAT_DATETIME, $timeStr);
+    if ($addDays) {
+        $end->add(new DateInterval('P'.$addDays.'D'));
+    }
+    return $end;
 }
 
 function is_past($timeStr, $addDays = 0) {

@@ -1,7 +1,7 @@
 <style>
-    img {
+    img.red_offer {
         text-align: center;
-        width: 90%;
+        width: 60%;
     }
     .apple_share {
         position: fixed;
@@ -17,8 +17,11 @@
     }
 </style>
 <div class="text-center">
-    <img src="{{$this->Html->assetUrl('/img/sharing/offer_red.png')}}"/>
+    <img class="red_offer" src="{{$this->Html->assetUrl('/img/sharing/offer_red.png')}}"/>
+    <div class="voffset3">
     <a href="javascript:;" id="share_to_friend" class="btn btn-warning">发红包给朋友们</a>
+    <a href="/sharing/receive/{{$sharedOffer['SharedOffer']['id']}}"  class="btn btn-success">查看领取情况</a>
+    </div>
 </div>
 
 <script>

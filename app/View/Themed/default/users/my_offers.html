@@ -1,0 +1,36 @@
+<style>
+    .bg-danger {
+        background-color: #f2dede;
+    }
+
+    .btn-sm {
+        padding: 5px 6px;
+    }
+</style>
+<h3>我的红包</h3>
+<div class="list-group">
+    <?php foreach($sharedOffers as $coupon) {
+        if ($coupon['SharedOffer']['status'] == SHARED_OFFER_STATUS_NEW){ $status = 'status_new';}
+        else if ($expiredIds[$coupon['SharedOffer']['id']]) {$status = 'status_expired';}
+        else if ($soldOuts[$coupon['SharedOffer']['id']]) { $status = 'status_soldout'; }
+        else {
+            $status = 'status_ongoing';
+        }
+    ?>
+
+    <div class="list-group-item clearfix {{$status}}">
+        <div class="col-xs-3">￥{{$this->Number->precision($coupon['SharedOffer']['total_number']/100, 2)}}</div>
+        <div class="col-xs-6">
+            {{$coupon['ShareOffer']['name']}}<br/>
+            {{date(FORMAT_DATE, date_days($coupon['SharedOffer']['start'], 7)->getTimestamp()) }}<br/>
+            {{$coupon['ShareOffer']['introduct']}}
+        </div>
+        <div class="col-xs-3">
+            {{if $status == 'status_new'}}<a class="btn-sm btn-warning" href="/sharing/send/{{$coupon['SharedOffer']['id']}}">马上领取</a> {{/if}}
+            {{if $status == 'status_expired'}}<span class="label label-default">已过期</span>{{/if}}
+            {{if $status == 'status_soldout'}}<span class="label label-success">已发完</span>{{/if}}
+            {{if $status == 'status_ongoing'}}<a class="btn-sm btn-warning" href="/sharing/send/{{$coupon['SharedOffer']['id']}}">继续发</a>{{/if}}
+        </div>
+    </div>
+    <?php } ?>
+</div>
