@@ -22,14 +22,14 @@
         <div class="col-xs-3">￥{{$this->Number->precision($coupon['SharedOffer']['total_number']/100, 2)}}</div>
         <div class="col-xs-6">
             {{$coupon['ShareOffer']['name']}}<br/>
-            {{date(FORMAT_DATE, date_days($coupon['SharedOffer']['start'], 7)->getTimestamp()) }}<br/>
+            {{date(FORMAT_DATE, date_days($coupon['SharedOffer']['start'], 7)->getTimestamp()) }}前有效<br/>
             {{$coupon['ShareOffer']['introduct']}}
         </div>
         <div class="col-xs-3">
-            {{if $status == 'status_new'}}<a class="btn-sm btn-warning" href="/sharing/send/{{$coupon['SharedOffer']['id']}}">马上领取</a> {{/if}}
+            {{if $status == 'status_new'}}<a class="btn-sm btn-warning" href="/sharing/receive/{{$coupon['SharedOffer']['id']}}">马上领取</a> {{/if}}
             {{if $status == 'status_expired'}}<span class="label label-default">已过期</span>{{/if}}
             {{if $status == 'status_soldout'}}<span class="label label-success">已发完</span>{{/if}}
-            {{if $status == 'status_ongoing'}}<a class="btn-sm btn-warning" href="/sharing/send/{{$coupon['SharedOffer']['id']}}">继续发</a>{{/if}}
+            {{if $status == 'status_ongoing'}}<a class="btn-sm btn-warning" href="/sharing/receive/{{$coupon['SharedOffer']['id']}}">继续发</a>{{/if}}
         </div>
     </div>
     <?php } ?>

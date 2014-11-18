@@ -1,7 +1,7 @@
 <style>
     img.red_offer {
         text-align: center;
-        width: 60%;
+        width: 50%;
     }
     .apple_share {
         position: fixed;
@@ -15,33 +15,115 @@
     .apple_share.in {
         opacity: .9;
     }
+
+    .row {
+        margin-left: 0.833em;
+        margin-right: 0.833em;
+    }
+
 </style>
-<div class="text-center">
-    <img src="{{$this->Html->assetUrl('/img/sharing/offer_red.png')}}"/>
-    {{if !$expired}}
+    <div class="row text-center">
+        <img id="red_offer_png" class="red_offer" src="{{$this->Html->assetUrl('/img/sharing/offer_red.png')}}"/>
+    </div>
+    {{if isOwner}}
+    <div class="row text-center voffset3">
+        <p>恭喜您获得{{$sharedOffer['ShareOffer']['name']}}总额{{$this->Number->precision($sharedOffer['SharedOffer']['total_number']/100, 2)}}元的{{$total_slice}}个红包</p>
+    {{if $expired }}
+        <a href="javascript:;" class="btn btn-warning">红包已过期</a>
+    {{elseif $noMore }}
+        <a href="javascript:;" class="btn btn-warning">红包已发完</a>
+    {{else}}
+        <a href="javascript:;" id="share_to_friend" class="btn btn-warning">发红包给好友</a>
+    {{/if}}
+    </div>
+    {{/if}}
+
+    <div class="row text-center voffset3">
+        {{if !$expired}}
         {{if $noMore}}
         <div class="alert alert-danger"><strong>红包已抢完！</strong>下次早早的哇</div>
         {{/if}}
         {{if $just_accepted}}
         <div class="alert alert-danger"><strong>领取成功！</strong>您领取到了一张 ￥{{$this->Number->precision($just_accepted/100, 2)}}元红包！</div>
         {{elseif $accepted}}
-        <div class="alert alert-danger"><strong>您已经抢过啦！</strong></div>
+        <div class="alert alert-danger"><strong>您已经抢到啦！</strong></div>
         {{/if}}
+        {{else}}
+        <div class="alert alert-danger"><strong>红包已过期！</strong>下次早早的哇</div>
+        {{/if}}
+    </div>
 
+    <div class="row">
+        <p class="text-right">未送出红包<span class="badge">{{$left_slice}}</span>个</p>
+        {{if !empty($slices)}}
         <ul class="list-group">
             {{loop $slices $idx $slice}}
-                {{if $slice['SharedSlice']['accept_user']}}
-                <li class="list-group-item clearfix">{{$nickNames[$slice['SharedSlice']['accept_user']]}}
-                    <span style="margin-left: 1em">￥{{$this->Number->precision($slice['SharedSlice']['number']/100, 2)}}</span>
-                    {{if $slice['SharedSlice']['accept_user'] == $uid}}
-                    <a href="{{brand_link($sharedOffer['ShareOffer']['brand_id'])}}" class="btn-sm btn-warning">马上使用</a>
-                    {{/if}}
-                </li>
+            {{if $slice['SharedSlice']['accept_user']}}
+            <li class="list-group-item clearfix">{{$nickNames[$slice['SharedSlice']['accept_user']]}}
+                <span style="margin-left: 1em">￥{{$this->Number->precision($slice['SharedSlice']['number']/100, 2)}}</span>
+                {{if $slice['SharedSlice']['accept_user'] == $uid}}
+                <a href="{{brand_link($sharedOffer['ShareOffer']['brand_id'])}}" class="btn-sm btn-warning pull-right">马上使用</a>
                 {{/if}}
+            </li>
+            {{/if}}
             {{/loop}}
         </ul>
-    {{else}}
-        <div class="alert alert-danger"><strong>红包已过期！</strong>下次早早的哇</div>
-    {{/if}}
+        {{/if}}
+    </div>
+<script>
+    var share_png_url = '{{$this->Html->assetUrl("/img/apple201410/share.png")}}';
+    $(document).ready(function(){
+        $share_div = $('<div class="apple_share fade in"><img src="'+share_png_url+'"></div>')
+                .hide().click(function(){
+                    $share_div.hide();
+                });
+        $('body').append($share_div);
 
-</div>
+        $('#share_to_friend').click(function(){
+            $share_div.show();
+        });
+
+        var imgUrl = '{{$this->Html->assetUrl("/img/sharing/offer_red.png")}}';
+        var lineLink = window.location.href;
+        var descContent = '{{$sharedOffer["ShareOffer"]["name"]}}给我{{$sharedOffer["ShareOffer"]["split_num"]}}个红包，分你一个，购买优惠还能领更大红包。';
+        var shareTitle = '{{$ownerName}}：快来抢{{$sharedOffer["ShareOffer"]["name"]}}红包！';
+        var appid = '{{WX_APPID}}';
+
+        function shareFriend() {
+            WeixinJSBridge.invoke('sendAppMessage',{
+                "appid": appid,
+                "img_url": imgUrl,
+                "img_width": "640",
+                "img_height": "640",
+                "link": lineLink,
+                "desc": descContent,
+                "title": shareTitle
+            }, function(res) {
+                //_report('send_msg', res.err_msg);
+            })
+        }
+
+        function shareTimeline() {
+            WeixinJSBridge.invoke('shareTimeline',{
+                "img_url": imgUrl,
+                "img_width": "640",
+                "img_height": "640",
+                "link": lineLink,
+                "desc": descContent,
+                "title": shareTitle
+            }, function(res) {
+                //_report('timeline', res.err_msg);
+            });
+        }
+
+        // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
+        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+            WeixinJSBridge.on('menu:share:appmessage', function(argv){
+                shareFriend();
+            });
+            WeixinJSBridge.on('menu:share:timeline', function(argv){
+                shareTimeline();
+            });
+        }, false);
+    });
+</script>

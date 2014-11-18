@@ -51,6 +51,9 @@ const SHARED_OFFER_STATUS_OUT = 2;
 
 const COUPON_TYPE_TYPE_SHARE_OFFER = 2;
 
+CONST PUBLISH_YES = 1;
+CONST PUBLISH_NO = 0;
+
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
@@ -466,6 +469,10 @@ function product_link($pid, $defUri) {
     }
 }
 
+
+function wxDefaultName($name) {
+    return notWeixinAuthUserInfo(0, $name);
+}
 
 function notWeixinAuthUserInfo($uid, $userName) {
     return strpos($userName, '微信用户') === 0;

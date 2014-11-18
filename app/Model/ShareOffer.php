@@ -113,6 +113,7 @@ class ShareOffer extends AppModel {
                             'name' => $so['ShareOffer']['name'],
                             'number' => $toShareNum,
                             'id' => $shared_id,
+                            'status' => SHARED_OFFER_STATUS_NEW,
                         );
 
                     } else {
@@ -124,6 +125,7 @@ class ShareOffer extends AppModel {
                         'name' => $so['ShareOffer']['name'],
                         'number' => $userShared['SharedOffer']['total_number'],
                         'id' => $userShared['SharedOffer']['id'],
+                        'status' => $userShared['SharedOffer']['status']
                     );
                 }
             }

@@ -11,7 +11,7 @@
         {{if $display_status}}
         {{template Elements/paid_msg}}
         {{/if}}
-        {{if $show_pay || !empty($toShare)}}
+        {{if $show_pay}}
         <div class="panel panel-warning">
             <div class="panel-body">
                 {{if $show_pay}}
@@ -23,14 +23,20 @@
                 {{/if}}
                 {{/if}}
 
-                {{if !empty($toShare)}}
-                    <div class="alert alert-info" data-dismiss="false">
-                        恭喜您获得{{$toShare['name']}}的{{$this->Number->precision($toShare['number']/100, 2)}}元红包，<a href="/sharing/send/{{$toShare['id']}}.html" class="btn-sm btn-warning">马上领取</a>
-                    </div>
-                {{/if}}
             </div>
         </div>
         {{/if}}
+
+    {{if !empty($toShare)}}
+    <div class="alert alert-info">
+        您获得{{$toShare['name']}}的{{$this->Number->precision($toShare['number']/100, 2)}}元红包，
+        {{if $toShare['status'] == SHARED_OFFER_STATUS_NEW}}
+        <a href="/sharing/receive/{{$toShare['id']}}.html" class="btn-sm btn-warning">马上领取</a>
+        {{else}}
+        <a href="/sharing/receive/{{$toShare['id']}}.html" class="btn-sm btn-info">查看</a>
+        {{/if}}
+    </div>
+    {{/if}}
 
         <div>
          <p class="col-xs-12"> 订单状态：<span class="order_status_text">
