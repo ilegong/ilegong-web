@@ -17,7 +17,7 @@
     }
 </style>
 <div class="text-center">
-    <img class="red_offer" src="{{$this->Html->assetUrl('/img/sharing/offer_red.png')}}"/>
+    <img id="red_offer_png" class="red_offer" src="{{$this->Html->assetUrl('/img/sharing/offer_red.png')}}"/>
     <div class="voffset3">
     <a href="javascript:;" id="share_to_friend" class="btn btn-warning">发红包给朋友们</a>
     <a href="/sharing/receive/{{$sharedOffer['SharedOffer']['id']}}"  class="btn btn-success">查看领取情况</a>
@@ -36,5 +36,47 @@
         $('#share_to_friend').click(function(){
             $share_div.show();
         });
+
+        var imgUrl = '{{$this->Html->assetUrl("/img/sharing/offer_red.png")}}';
+        var lineLink = window.location.href;
+        var descContent = '{{$sharedOffer["SharedOffer"]["name"]}}给我5个红包，分你一个，购买优惠还能领更大红包。';
+        var shareTitle = '朋友说：快来抢{{$sharedOffer["SharedOffer"]["name"]}}红包！';
+
+        function shareFriend() {
+            WeixinJSBridge.invoke('sendAppMessage',{
+                "appid": appid,
+                "img_url": imgUrl,
+                "img_width": "640",
+                "img_height": "640",
+                "link": lineLink,
+                "desc": descContent,
+                "title": shareTitle
+            }, function(res) {
+                //_report('send_msg', res.err_msg);
+            })
+        }
+
+        function shareTimeline() {
+            WeixinJSBridge.invoke('shareTimeline',{
+                "img_url": imgUrl,
+                "img_width": "640",
+                "img_height": "640",
+                "link": lineLink,
+                "desc": descContent,
+                "title": shareTitle
+            }, function(res) {
+                //_report('timeline', res.err_msg);
+            });
+        }
+
+        // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
+        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+            WeixinJSBridge.on('menu:share:appmessage', function(argv){
+                shareFriend();
+            });
+            WeixinJSBridge.on('menu:share:timeline', function(argv){
+                shareTimeline();
+            });
+        }, false);
     });
 </script>
