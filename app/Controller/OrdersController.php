@@ -1083,6 +1083,7 @@ class OrdersController extends AppController{
                         'uid' => $order['Order']['creator'],
                         'order_id' => $order['Order']['id'],
                     ))) {
+
                         $split_num = $so['ShareOffer']['split_num'];
 
                         $avg = round($toShareNum/$split_num, 0, PHP_ROUND_HALF_UP);
@@ -1125,6 +1126,12 @@ class OrdersController extends AppController{
                                 'accept_time' => null,
                             ));
                         }
+
+                        return array(
+                            'name' => $so['ShareOffer']['name'],
+                            'number' => $toShareNum,
+                            'id' => $shared_id,
+                        );
 
                     } else {
                         return null;

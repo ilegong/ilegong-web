@@ -16,7 +16,7 @@ class SharedOffer extends AppModel {
 
 
     public function find_user_shared_offer($userId, $orderId, $offerId) {
-        return $this->find('first', array('uid' => $userId, 'order_id' => $orderId, 'share_offer_id' => $offerId));
+        return $this->find('first', array('conditions' => array('uid' => $userId, 'order_id' => $orderId, 'share_offer_id' => $offerId)));
     }
 
     public function find_shared_slices($shared_offer_id) {

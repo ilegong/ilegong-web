@@ -6,7 +6,7 @@ function page_loaded()
 			$(this).parent('.ui-portlet').hide();
 		}
 	});
-	$(".alert").alert().append('<a class="close" data-dismiss="alert" href="#">&times;</a>');
+//	$(".alert").alert().append('<a class="close" data-dismiss="alert" href="#">&times;</a>');
 	
 	//$('.tabs').tabs(); // jquery ui.
 	//$( "button, input:submit, input:button").button();
