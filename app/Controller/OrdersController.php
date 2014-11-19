@@ -58,6 +58,23 @@ class OrdersController extends AppController{
         }
         $this->loadModel('ShipPromotion');
 
+        //check problem:
+//        $couponItems = $this->CouponItem->find_my_valid_coupon_items($uid, array_merge($appliedCoupons, (array)$coupon_item_id));
+//        $couponsByShared = array_filter($couponItems, function ($val) {
+//            return ($val['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER);
+//        });
+//
+//        //这里必须安店面去限定
+//        //要把没有查询到的couponItem去掉
+//        if(count($couponsByShared) <= $cart->brandItems[$brand_id]->total_num()) {
+//            //            if($cart->could_apply($brand_id, $cou)){
+//            //TODO: 需要考虑券是否满足可用性等等
+//            $appliedCoupons[] = $coupon_item_id;
+//            $changed = true;
+//        } else {
+//            $reason = 'share_type_coupon_exceed';
+//        }
+
         $nums = array();
         $Carts = array();
         $cond = array(
@@ -414,10 +431,24 @@ class OrdersController extends AppController{
         if ($applying) {
 
             if (empty($appliedCoupons) || array_search($coupon_item_id, $appliedCoupons) === false) {
-//            if($cart->could_apply($brand_id, $cou)){
-                //TODO: 需要考虑券是否满足可用性等等
-                $appliedCoupons[] = $coupon_item_id;
-                $changed = true;
+
+
+                $couponItems = $this->CouponItem->find_my_valid_coupon_items($uid, array_merge($appliedCoupons, (array)$coupon_item_id));
+                $couponsByShared = array_filter($couponItems, function ($val) {
+                    return ($val['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER);
+                });
+
+                //这里必须安店面去限定
+                //要把没有查询到的couponItem去掉
+                if(count($couponsByShared) <= $cart->brandItems[$brand_id]->total_num()) {
+    //            if($cart->could_apply($brand_id, $cou)){
+                    //TODO: 需要考虑券是否满足可用性等等
+                    $appliedCoupons[] = $coupon_item_id;
+                    $changed = true;
+                } else {
+                    $reason = 'share_type_coupon_exceed';
+                }
+
 //            }
             }
         } else {
@@ -433,6 +464,10 @@ class OrdersController extends AppController{
             $this->Session->write($coupon_used_key, json_encode($appliedCoupons));
             $resp['total_reduced'] = $total_reduced/100;
             $resp['total_price'] = $cart->total_price() - $total_reduced/100 + $shipFee;
+        }
+
+        if ($reason) {
+            $resp['reason'] = $reason;
         }
 
         echo json_encode($resp);

@@ -92,7 +92,8 @@ a.coupon_applied .glyphicon {
             <?PHP foreach($coupons as $coupon) {
                 $applied =$brandItem->coupon_applied($coupon['CouponItem']['id']); ?>
                 <li><a data-coupon_item_id="{{$coupon['CouponItem']['id']}}" data-brandId="{{$brandItem->id}}" class="coupon {{if $applied}}coupon_applied{{/if}}" href="javascript:">
-                    {{$coupon['Coupon']['name']}}<span class="glyphicon glyphicon-ok"></span></a><span class="applied_result"></span>
+                    {{$coupon['Coupon']['name']}} {{if $coupon['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER}}(红包券，每件商品可使一张，本单本店共{{$brandItem->total_num()}}件){{/if}}
+                    <span class="glyphicon glyphicon-ok"></span></a><span class="applied_result"></span>
                     </li>
             <?PHP } ?>
             </ul>
@@ -127,7 +128,7 @@ a.coupon_applied .glyphicon {
 //                $notifyDlg.modal('close');
                 if(data) {
                     if(data.changed) {
-                        $this.toggleClass('coupon_applied');
+                        $("[data-coupon_item_id='"+coupon_item_id+"']").toggleClass('coupon_applied');
                         $('#total_price_span').text(utils.toFixed(data.total_price, 2));
                         $('#total_reduced_span').text(utils.toFixed(data.total_reduced, 2));
                     } else {
@@ -135,6 +136,8 @@ a.coupon_applied .glyphicon {
                             utils.alert('您长时间未操作，请重新登录', function(){
                                 window.location.href = '/users/login?refer='+ encodeURIComponent('/carts/listcart');
                             });
+                        } else if (data.reason == 'share_type_coupon_exceed') {
+                            utils.alert('优惠券使用超出限制');
                         }
                     }
                 }

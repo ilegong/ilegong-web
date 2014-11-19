@@ -228,6 +228,36 @@ class CouponItem extends AppModel {
         ));
     }
 
+    public function find_my_valid_coupon_items($user_id, $couponItemIds, $brandId = null) {
+
+        if (empty($couponItemIds) || !$user_id) return false;
+
+        $dt = new DateTime();
+        $cond = array('CouponItem.bind_user' => $user_id,
+            'CouponItem.status' => COUPONITEM_STATUS_TO_USE,
+            'CouponItem.id' => $couponItemIds,
+            'CouponItem.deleted = 0',
+            'CouponItem.applied_order = 0',
+            '(CouponItem.applied_order is null or CouponItem.applied_order = 0)',
+            'Coupon.published' => 1,
+            'Coupon.status' => COUPON_STATUS_VALID,
+            'Coupon.valid_begin <= ' => $dt->format(FORMAT_DATETIME),
+            'Coupon.valid_end >= ' => $dt->format(FORMAT_DATETIME),
+        );
+        if ($brandId) {
+            $cond['OR'] = array('Coupon.brand_id' => $brandId, 'Coupon.brand_id is null', 'Coupon.brand_id == 0');
+        }
+
+        $items = $this->find('all', array(
+            'conditions' => $cond,
+            'joins' => $this->joins_link,
+            'fields' => array('Coupon.*', 'CouponItem.*'),
+            'order' => 'CouponItem.created desc'
+        ));
+
+        return $items;
+    }
+
     public function find_latest_created_coupon_item($userId, $couponId) {
         return $this->find('first', array(
             'conditions' => array('CouponItem.bind_user' => $userId, 'CouponItem.coupon_id' => $couponId),

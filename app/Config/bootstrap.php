@@ -237,6 +237,14 @@ class BrandCartItem {
         return $total;
     }
 
+    public function total_num() {
+        $total = 0;
+        foreach($this->items as $item) {
+            $total += $item->num;
+        }
+        return $total;
+    }
+
     public function coupon_applied($couponItemId) {
         return !empty($this->used_coupons) && array_search($couponItemId, $this->used_coupons) !== false;
     }
