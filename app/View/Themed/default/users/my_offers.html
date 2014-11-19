@@ -10,9 +10,9 @@
 <h3>我的红包</h3>
 <div class="list-group">
     <?php foreach($sharedOffers as $coupon) {
-        if ($coupon['SharedOffer']['status'] == SHARED_OFFER_STATUS_NEW){ $status = 'status_new';}
-        else if (!empty($expiredIds) && array_search($coupon['SharedOffer']['id'], $expiredIds) !== false) {$status = 'status_expired';}
+        if (!empty($expiredIds) && array_search($coupon['SharedOffer']['id'], $expiredIds) !== false) {$status = 'status_expired';}
         else if (!empty($soldOuts) && array_search($coupon['SharedOffer']['id'], $soldOuts) !== false) { $status = 'status_soldout'; }
+        else if ($coupon['SharedOffer']['status'] == SHARED_OFFER_STATUS_NEW){ $status = 'status_new';}
         else {
             $status = 'status_ongoing';
         }
