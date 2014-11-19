@@ -103,9 +103,9 @@ class ShareOffer extends AppModel {
         $sharedModel = ClassRegistry::init('SharedOffer');
         $results = $sharedModel->find('all', array('conditions' => array(
             'uid' => $uid,
-            'share_offer_id' => $shareOfferId,
-        ),
-            'field' => array('order_id')
+//            'share_offer_id' => $shareOfferId,
+            ),
+            'fields' => array('order_id')
         ));
 
         $orderIds = Hash::extract($results, '{n}.SharedOffer.order_id');
