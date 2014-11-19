@@ -102,6 +102,7 @@ class SharingController extends AppController{
 //                            $recUserId, $couponType, $operator = -1, $source = 'unknown'
                             if ($couponId) {
                                 $this->CouponItem->addCoupon($uid, $couponId, $uid, 'shared_offer'.$shared_offer_id);
+                                $this->Weixin->send_coupon_received_message($uid, 1, "在".$sharedOffer['ShareOffer']['name']."店购买时有效","有效期至".friendlyDateFromStr($valid_end, 'full'));
                             }
                         }
                         $slice['SharedSlice']['accept_user'] = $uid;

@@ -21,20 +21,37 @@
         margin-right: 0.833em;
     }
 
+    .bs-callout-danger h4 {
+        color: #d9534f;
+    }
+
+    .bs-callout-danger {
+        border-left-color: #d9534f;
+    }
+    .bs-callout {
+        padding: 20px;
+        margin: 20px 0;
+        border: 1px solid #eee;
+        border-left-width: 5px;
+        border-radius: 3px;
+    }
+
 </style>
     <div class="row text-center">
-        <img id="red_offer_png" class="red_offer" src="{{$this->Html->assetUrl('/img/sharing/offer_red.png')}}"/>
+        <img id="red_offer_png" class="red_offer" src="{{$this->Html->assetUrl('/img/sharing/offer_red.jpg')}}"/>
     </div>
-    {{if isOwner}}
-    <div class="row text-center voffset3">
-        <p>恭喜您获得{{$sharedOffer['ShareOffer']['name']}}总额{{$this->Number->precision($sharedOffer['SharedOffer']['total_number']/100, 2)}}元的{{$total_slice}}个红包
+    {{if $isOwner}}
+    <div class="row voffset3">
+        <h4 style="color:#d9534f" class="text-center">恭喜您获得{{$sharedOffer['ShareOffer']['name']}}总额{{$this->Number->precision($sharedOffer['SharedOffer']['total_number']/100, 2)}}元的{{$total_slice}}个红包</h4>
+        <p>
+            分享红包，和好友一起抢，金额拼人品，购买{{$sharedOffer['ShareOffer']['name']}}产品时直接抵现金。
         </p>
-    {{if $expired }}
-        <a href="javascript:;" class="btn btn-warning">红包已过期</a>
+        {{if $expired }}
+        <a href="javascript:;" class="btn btn-default">红包已过期</a>
     {{elseif $noMore }}
-        <a href="javascript:;" class="btn btn-warning">红包已发完</a>
+        <a href="javascript:;" class="btn btn-default">红包已发完</a>
     {{else}}
-        <a href="javascript:;" id="share_to_friend" class="btn btn-warning">发红包给好友</a>
+        <a href="javascript:;" id="share_to_friend" class="btn btn-warning" style="width: 100%">发红包给好友</a>
     {{/if}}
     </div>
     {{/if}}
@@ -86,9 +103,9 @@
             $share_div.show();
         });
 
-        var imgUrl = '{{$this->Html->assetUrl("/img/sharing/offer_red.png")}}';
+        var imgUrl = $('#red_offer_png').attr('src');
         var lineLink = window.location.href;
-        var descContent = '{{$sharedOffer["ShareOffer"]["name"]}}给我{{$sharedOffer["ShareOffer"]["split_num"]}}个红包，分你一个，购买优惠还能领更大红包。';
+        var descContent = '{{$sharedOffer["ShareOffer"]["name"]}}给我{{$total_slice}}个红包，分你一个，购买优惠还能领更大红包。';
         var shareTitle = '{{$ownerName}}：快来抢{{$sharedOffer["ShareOffer"]["name"]}}红包！';
         var appid = '{{WX_APPID}}';
 
