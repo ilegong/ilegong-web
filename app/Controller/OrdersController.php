@@ -613,10 +613,22 @@ class OrdersController extends AppController{
         $fun($this->Order, $order_info, $order_id);
 	}
 
+    public function test_add_sharedOffers($uid, $sharedOfferId) {
+        if ($this->is_admin($this->currentUser['id'])) {
+            $this->autoRender = false;
+            $so = ClassRegistry::init('ShareOffer');
+            $added = $so->add_shared_slices($uid, $sharedOfferId);
+            echo "test_add_sharedOffers $uid $sharedOfferId : return:". json_encode($added);
+        }
+    }
+
     public function test_notify_paid_done($order_id) {
-        $this->loadModel('Order');
-        $o = $this->Order->findById($order_id);
-        $this->Weixin->notifyPaidDone($o);
+        if ($this->is_admin($this->currentUser['id'])) {
+            $this->autoRender = false;
+            $this->loadModel('Order');
+            $o = $this->Order->findById($order_id);
+            $this->Weixin->notifyPaidDone($o);
+        }
     }
 
 	/**
