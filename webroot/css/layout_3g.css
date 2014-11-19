@@ -346,7 +346,7 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
     display: inline-block !important;
     border: 1px solid red;
     color: white;
-    padding: 2px 2px;
+    padding: 1px 2px;
     font-size: 0.633em;
     background: red;
 }
