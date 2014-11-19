@@ -38,7 +38,7 @@
 
 </style>
     <div class="row text-center">
-        <img id="red_offer_png" class="red_offer" src="{{$this->Html->assetUrl('/img/sharing/offer_red.jpg')}}"/>
+        <img id="red_offer_png" class="red_offer" src="{{$this->Html->assetUrl('/img/sharing/offer_red.jpg')}}?v1"/>
     </div>
     {{if $isOwner}}
     <div class="row voffset3">
@@ -47,9 +47,9 @@
             分享红包，和好友一起抢，金额拼人品，购买{{$sharedOffer['ShareOffer']['name']}}产品时直接抵现金。
         </p>
         {{if $expired }}
-        <a href="javascript:;" class="btn btn-default">红包已过期</a>
+        <a href="javascript:;" class="btn btn-default" style="width: 100%">红包已过期</a>
     {{elseif $noMore }}
-        <a href="javascript:;" class="btn btn-default">红包已发完</a>
+        <a href="javascript:;" class="btn btn-default" style="width: 100%">红包已发完</a>
     {{else}}
         <a href="javascript:;" id="share_to_friend" class="btn btn-warning" style="width: 100%">发红包给好友</a>
     {{/if}}
@@ -59,7 +59,7 @@
     <div class="row text-center voffset3">
         {{if !$expired}}
         {{if $just_accepted}}
-        <div class="alert alert-danger"><strong>领取成功！</strong>您领取到了一个 ￥{{$this->Number->precision($just_accepted/100, 2)}}元红包！</div>
+        <div class="alert alert-danger"><strong>领取成功！</strong>您领取到了一个￥{{$this->Number->precision($just_accepted/100, 2)}}元红包！</div>
         {{elseif $accepted}}
         <div class="alert alert-danger"><strong>您已经抢到啦！</strong></div>
         {{elseif $noMore}}
@@ -71,7 +71,7 @@
     </div>
 
     <div class="row">
-        <p class="text-right">剩余红包<span class="badge">{{$left_slice}}</span>个</p>
+        <p class="text-right">剩余<span class="badge">{{$left_slice}}</span>个红包</p>
         {{if !empty($slices)}}
         <ul class="list-group">
             {{loop $slices $idx $slice}}
@@ -88,6 +88,16 @@
             {{/loop}}
         </ul>
         {{/if}}
+    </div>
+    
+    <div class="row voffset3">
+        <h3>红包使用说明</h3>
+    <ul style="margin-left: 1em" class="list-unstyled">
+        <li>1、购买指定带红包的商品后即有机会获得红包一个；</li>
+        <li>2、把红包分享至朋友圈或微信群，就可以和好友一起抢红包；</li>
+        <li>3、抢到的红包金额直接变为一张优惠券，在购买指定商品时直接抵扣现金；</li>
+        <li>4、红包和优惠券均有有效期，请在有效期内及时分享和使用。</li>
+    </ul>
     </div>
 <script>
     var share_png_url = '{{$this->Html->assetUrl("/img/apple201410/share.png")}}';
