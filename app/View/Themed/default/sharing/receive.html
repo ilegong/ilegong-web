@@ -60,8 +60,10 @@
         {{if !$expired}}
         {{if $just_accepted}}
         <div class="alert alert-danger"><strong>领取成功！</strong>您领取到了一个￥{{$this->Number->precision($just_accepted/100, 2)}}元红包！</div>
+        <a href="javascript:;" id="share_to_friend" class="btn btn-warning" style="width: 100%">转发给朋友</a>
         {{elseif $accepted}}
         <div class="alert alert-danger"><strong>您已经抢到啦！</strong></div>
+        <a href="javascript:;" id="share_to_friend" class="btn btn-warning" style="width: 100%">转发给朋友</a>
         {{elseif $noMore}}
         <div class="alert alert-danger"><strong>红包已抢完！</strong>下次早早的哇</div>
         {{/if}}
@@ -115,7 +117,7 @@
         var imgUrl = $('#red_offer_png').attr('src');
         var lineLink = window.location.href;
         var descContent = '{{$sharedOffer["ShareOffer"]["name"]}}给我{{$total_slice}}个红包，分你一个，购买优惠还能领更大红包。';
-        var shareTitle = '{{$ownerName}}：我在朋友说挣了一个{{$sharedOffer["ShareOffer"]["name"]}}红包，大家快来抢！';
+        var shareTitle = '{{$ownerName}}：我在【朋友说】挣了一个{{$sharedOffer["ShareOffer"]["name"]}}红包，大家快来抢！';
         var appid = '{{WX_APPID}}';
 
         function shareFriend() {
