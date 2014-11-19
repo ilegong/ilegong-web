@@ -331,9 +331,9 @@ class OrdersController extends AppController{
         }
 
         $totalCents = $orderinfo['Order']['total_all_price'] * 100;
-        $noMoreMoney = $totalCents < 1 && $totalCents >= 0;
+        $no_more_money = $totalCents < 1 && $totalCents >= 0;
 
-        if ($noMoreMoney && $action == 'pay_direct')  {
+        if ($no_more_money && $action == 'pay_direct')  {
             if ($orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
                 $this->Order->id = $orderinfo['Order']['id'];
                 if($this->Order->updateAll(array('status' => ORDER_STATUS_PAID), array('id'=>$orderId,'creator'=> $uid, 'status' => ORDER_STATUS_WAITING_PAY))){
