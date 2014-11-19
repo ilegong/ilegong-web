@@ -45,7 +45,7 @@ class SharedOffer extends AppModel {
             'shared_offer_id' => $shared_offer_id
         );
 
-        if ($accepted != null) {
+        if ($accepted !== null) {
             if ($accepted)
                 $cond['accept_user > '] = 0;
             else

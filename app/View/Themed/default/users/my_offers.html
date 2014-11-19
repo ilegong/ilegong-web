@@ -10,6 +10,7 @@
 <h3>我的红包</h3>
 <div class="list-group">
     <?php foreach($sharedOffers as $coupon) {
+        //Don't adjust the order of the if/else's conditions.
         if (!empty($expiredIds) && array_search($coupon['SharedOffer']['id'], $expiredIds) !== false) {$status = 'status_expired';}
         else if (!empty($soldOuts) && array_search($coupon['SharedOffer']['id'], $soldOuts) !== false) { $status = 'status_soldout'; }
         else if ($coupon['SharedOffer']['status'] == SHARED_OFFER_STATUS_NEW){ $status = 'status_new';}
@@ -26,10 +27,10 @@
             {{$coupon['ShareOffer']['introduct']}}
         </div>
         <div class="col-xs-3">
-            {{if $status == 'status_new'}}<a class="btn-sm btn-warning" href="/sharing/receive/{{$coupon['SharedOffer']['id']}}">马上领取</a> {{/if}}
-            {{if $status == 'status_expired'}}<a class="btn-sm btn-default" href="/sharing/receive/{{$coupon['SharedOffer']['id']}}">已过期</a>{{/if}}
-            {{if $status == 'status_soldout'}}<a class="btn-sm btn-default" href="/sharing/receive/{{$coupon['SharedOffer']['id']}}">已发完</a>{{/if}}
-            {{if $status == 'status_ongoing'}}<a class="btn-sm btn-warning" href="/sharing/receive/{{$coupon['SharedOffer']['id']}}">继续发</a>{{/if}}
+            {{if $status == 'status_new'}}<a class="btn btn-warning" href="/sharing/receive/{{$coupon['SharedOffer']['id']}}">马上领取</a> {{/if}}
+            {{if $status == 'status_expired'}}<a class="btn btn-default" href="/sharing/receive/{{$coupon['SharedOffer']['id']}}">已过期</a>{{/if}}
+            {{if $status == 'status_soldout'}}<a class="btn btn-default" href="/sharing/receive/{{$coupon['SharedOffer']['id']}}">已发完</a>{{/if}}
+            {{if $status == 'status_ongoing'}}<a class="btn btn-warning" href="/sharing/receive/{{$coupon['SharedOffer']['id']}}">继续发</a>{{/if}}
         </div>
     </div>
     <?php } ?>
