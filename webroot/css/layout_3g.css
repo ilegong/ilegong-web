@@ -342,6 +342,14 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 .item-banner img, .item-banner-small img { width: 2.708em; height: 2.708em; }
 .item-banner .item-name { font-size: 1.25em; color: #333333; }
 .item-banner .item-brand-name { font-size: 1em; color: #999999; }
+.brand-has-offer {
+    display: inline-block !important;
+    border: 1px solid red;
+    color: white;
+    padding: 2px 2px;
+    font-size: 0.633em;
+    background: red;
+}
 .item-banner .item-price { font-size: 1.25em; color: #ffa200; display: inline; }
 .item-banner .item-price-original { font-size: 1em; color: #999999; display: inline; text-decoration: line-through; }
 .item-banner-small { }

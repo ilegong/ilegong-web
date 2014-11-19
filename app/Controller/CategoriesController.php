@@ -64,6 +64,8 @@ class CategoriesController extends AppController {
             $brandIds[] = $val['Product']['brand_id'];
         }
 
+        $this->setHasOfferBrandIds();
+
         $this->pageTitle = $productTag['ProductTag']['name'];
         $navigation = $this->readOrLoadAndCacheNavigations($current_cateid, $this->Category);
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
@@ -224,6 +226,8 @@ class CategoriesController extends AppController {
                 $tag['Products'][] = $p['Product'];
             }
         }
+
+        $this->setHasOfferBrandIds();
 
         $this->pageTitle =  __('热卖');
         $navigation = $this->readOrLoadAndCacheNavigations($current_cateid, $this->Category);
@@ -472,5 +476,14 @@ class CategoriesController extends AppController {
             'order' => 'priority desc'
         ));
         return $productTags;
+    }
+
+    private function setHasOfferBrandIds() {
+        $this->loadModel('ShareOffer');
+        $allValidOffer = $this->ShareOffer->find_all_valid_offer();
+        if (!empty($allValidOffer)) {
+            $hasOfferBrandIds = Hash::combine($allValidOffer, '{n}.ShareOffer.brand_id');
+        }
+        $this->set('hasOfferBrandIds', $hasOfferBrandIds);
     }
 }

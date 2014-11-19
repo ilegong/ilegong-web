@@ -15,9 +15,12 @@
          </a>
          <a href="{{'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'}}">
              <span class="item-name">{{usubstr($item['name'],0, 12,'')}}</span>
-             <span class="item-brand-name">{{$brands[$item['brand_id']]['Brand']['name']}}</span>
+             <span class="item-brand-name">{{$brands[$item['brand_id']]['Brand']['name']}}
+                 {{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}
+             <span class="brand-has-offer">有红包</span>
+             {{/if}}</span>
          </a>
-        <span style="display: inline-block">
+        <span style="display: block">
          <span class="item-price">
              <strong>¥{{$this->Number->precision($item['price'], 2)}}</strong>
          </span>
@@ -37,8 +40,11 @@
         </a>
 
 
-    <span style="display: inline-block">
-     <span class="item-brand-name">{{usubstr($brands[$item['brand_id']]['Brand']['name'], 0, 8, '')}}</span>
+    <span style="display: block">
+     <span class="item-brand-name">{{usubstr($brands[$item['brand_id']]['Brand']['name'], 0, 8, '')}}
+         {{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}
+        <span class="brand-has-offer">有红包</span>
+        {{/if}}</span>
      <span class="item-price">
          <strong>¥{{$this->Number->precision($item['price'], 2)}}</strong>
      </span>

@@ -27,6 +27,22 @@ class ShareOffer extends AppModel {
         return $this->_find_by_brandId($brandId, true, $actionTime);
     }
 
+    public function find_all_valid_offer($actionTime = null) {
+
+        if (!$actionTime) {
+            $actionTime = date(FORMAT_DATETIME);
+        }
+
+        $cond = array(
+            'published' => 1,
+            'deleted' => 0,
+            'start <' => $actionTime,
+            'end > ' => $actionTime
+        );
+
+        return $this->find("all", array('conditions' => $cond));
+    }
+
     /**
      * Get a share offer to sharing for current order && user
      * @param $order
@@ -69,7 +85,6 @@ class ShareOffer extends AppModel {
         }
         return null;
     }
-
 
     private function _find_by_brandId($brandId, $onlyValid , $actionTime) {
 
