@@ -15,11 +15,16 @@ class SharedOffer extends AppModel {
         ));
 
     public static function slicesSharedOut($id, $status) {
-        if ($status != SHARED_OFFER_STATUS_GOING) return true;
+        if ($status == SHARED_OFFER_STATUS_OUT) return true;
 
         $soM = ClassRegistry::init('SharedOffer');
         $notAcceptedSlices = $soM->_find_shared_slices($id, false);
-        return empty($notAcceptedSlices);
+        $noLeft = empty($notAcceptedSlices);
+        if ($noLeft) {
+            $soM->updateAll(array('status' => SHARED_OFFER_STATUS_OUT)
+                , array('id' => $id, 'status' => SHARED_OFFER_STATUS_GOING));
+        }
+        return $noLeft;
     }
 
     public function find_my_all_offers($uid) {

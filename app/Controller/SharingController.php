@@ -108,14 +108,27 @@ class SharingController extends AppController{
                                 $this->Weixin->send_coupon_received_message($uid, 1, "在".$sharedOffer['ShareOffer']['name']."店购买时有效","有效期至".friendlyDateFromStr($valid_end, 'full'));
                             }
                             $left_slice -= 1;
+                            if ($left_slice == 0) {
+                                $this->SharedOffer->updateAll(array('status' => SHARED_OFFER_STATUS_OUT)
+                                    , array('id' => $shared_offer_id, 'status' => SHARED_OFFER_STATUS_GOING));
+                            }
+
                             $slice['SharedSlice']['accept_user'] = $uid;
                             $slice['SharedSlice']['accept_time'] = $now;
                             $accepted = true;
                             $just_accepted = $slice['SharedSlice']['number'];
+
+
                             break;
                         }
                     }
                 }
+            }
+        } else {
+            //Only ongoing status can go to expired
+            if ($sharedOffer['SharedOffer']['status'] == SHARED_OFFER_STATUS_GOING) {
+                $this->SharedOffer->updateAll(array('status' => SHARED_OFFER_STATUS_EXPIRED)
+                    , array('id' => $shared_offer_id, 'status' => SHARED_OFFER_STATUS_GOING));
             }
         }
         $this->set(compact('slices', 'expired', 'accepted', 'just_accepted', 'noMore', 'nickNames', 'sharedOffer', 'uid', 'isOwner', 'total_slice', 'left_slice', 'ownerName'));
