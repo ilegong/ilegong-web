@@ -48,7 +48,7 @@ class SharingController extends AppController{
             }
 
             if ($this->is_weixin() && notWeixinAuthUserInfo($uid, $this->currentUser['nickname'])) {
-                $this->__message('为让朋友知道是谁领了她/他发的红包，请授权我们获取您的微信昵称', '/users/login.html?referer=' . urlencode($_SERVER['REQUEST_URI']));
+                $this->__message('为让朋友知道是谁领了她/他发的红包，请授权我们获取您的微信昵称', '/users/login.html?force_login=true&referer=' . urlencode($_SERVER['REQUEST_URI']));
             }
 
         }
