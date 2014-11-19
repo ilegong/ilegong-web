@@ -613,12 +613,12 @@ class OrdersController extends AppController{
         $fun($this->Order, $order_info, $order_id);
 	}
 
-    public function test_add_sharedOffers($uid, $sharedOfferId) {
+    public function test_add_sharedOffers($uid, $sharedOfferId, $toShareNum) {
         if ($this->is_admin($this->currentUser['id'])) {
             $this->autoRender = false;
             $so = ClassRegistry::init('ShareOffer');
-            $added = $so->add_shared_slices($uid, $sharedOfferId);
-            echo "test_add_sharedOffers $uid $sharedOfferId : return:". json_encode($added);
+            $added = $so->add_shared_slices($uid, $sharedOfferId, $toShareNum);
+            echo "test_add_sharedOffers $uid $sharedOfferId $toShareNum: return:". json_encode($added);
         }
     }
 

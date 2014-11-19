@@ -87,7 +87,7 @@ class ShareOffer extends AppModel {
         return $this->find("first", array('conditions' => $cond));
     }
 
-    public function add_shared_slices($uid, $shareOfferId) {
+    public function add_shared_slices($uid, $shareOfferId, $toShareNum) {
 
 //        (1, '2014-11-18 16:39:43', '2014-11-30 23:59:59', 7, 20, 4, '', 1, 0, 43, NULL, NULL, '山晋庄园'),
 //        (2, '2014-11-18 16:38:12', '2014-11-30 23:59:59', 7, 20, 5, '', 1, 0, 37, NULL, NULL, '西域美农'),
@@ -96,25 +96,31 @@ class ShareOffer extends AppModel {
 //        (5, '2014-11-18 16:39:43', '2014-11-30 23:59:59', 7, 10, 5, '', 1, 0, 13, NULL, NULL, '五常稻花香-那那'),
 //        (6, '2014-11-18 16:39:43', '2014-11-30 23:59:59', 7, 20, 5, '', 1, 0, 88, NULL, NULL, '阿里巴巴—李瑞'),
 //        (7, '2014-11-18 16:39:43', '2014-11-30 23:59:59', 7, 10, 5, '', 1, 0, 83, NULL, NULL, '陕西眉县猕猴桃');
-        $prices = array(
-            1 => 10,
-            2 => 6,
-            3 => 20,
-            4 => 10,
-            5 => 10,
-            6 => 10,
-            7 => 10
-        );
-
-        $toShareNum = round($prices[$shareOfferId] * 100, 0, PHP_ROUND_HALF_DOWN);
-        if ($toShareNum <= 0) {
-            return null;
-        }
 
         $soModel = ClassRegistry::init('ShareOffer');
         $so = $soModel->findById($shareOfferId);
 
-        return $this->genSharedSlices($uid, 0, ClassRegistry::init('SharedOffer'), $so, $toShareNum);
+        $sharedModel = ClassRegistry::init('SharedOffer');
+        $results = $sharedModel->find('all', array('conditions' => array(
+            'uid' => $uid,
+            'share_offer_id' => $shareOfferId,
+        ),
+            'field' => array('order_id')
+        ));
+
+        $orderIds = Hash::extract($results, '{n}.SharedOffer.order_id');
+
+        $orderId = 0;
+        $i = 1;
+        while(true) {
+            if (array_search($i, $orderIds) === false) {
+                $orderId = $i;
+                break;
+            }
+            $i++;
+        }
+
+        return $this->genSharedSlices($uid, $orderId, $sharedModel, $so, $toShareNum);
     }
 
 
@@ -138,10 +144,8 @@ class ShareOffer extends AppModel {
             'order_id' => $orderId,
         ))
         ) {
-
-            $split_num = $shareOffer['ShareOffer']['split_num'];
-
-            $avg = round($toShareNum / $split_num, 0, PHP_ROUND_HALF_UP);
+            $avg = $shareOffer['ShareOffer']['avg_number'];
+            $split_num = round($toShareNum/$avg, 0, PHP_ROUND_HALF_UP);
             $amount_left = $toShareNum;
 
             $shared_id = $userSharedModel->getLastInsertID();
