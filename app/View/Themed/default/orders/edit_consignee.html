@@ -4,13 +4,13 @@
 <form action="{{$this->Html->url('/orders/info_consignee')}}" onsubmit="return ajaxeSubmitForm(this);" method="post">
 	<div class="middle">
 		<div id="addressListPanel"><div class="cydz"><b>常用地址</b></div>
-			<table  class="table table-bordered"><tbody>
+			<table  id = "addressList" class="table table-bordered"><tbody>
 				{{loop $consignees  $consignee}}
 				<tr class="consignee_row {{if $consignee['OrderConsignee']['status']}}danger{{/if}}" id="consignee_{{$consignee['OrderConsignee']['id']}}">
 				<td style="width:40px;"><input type="radio"  {{if $consignee['OrderConsignee']['status']}}checked="checked"{{/if}} onclick="chose_Consignee({{$consignee['OrderConsignee']['id']}})" name="data[OrderConsignee][id]" value="{{$consignee['OrderConsignee']['id']}}" id="addr_{{$consignee['OrderConsignee']['id']}}"></td>
 				<td><label for="addr_{{$consignee['OrderConsignee']['id']}}"><strong>{{$consignee['OrderConsignee']['name']}}</strong>&nbsp;{{$consignee['OrderConsignee']['area']}}&nbsp;{{$consignee['OrderConsignee']['address']}}</label></td>
 				<td style="width:220px">
-					<a onclick="editConsignee(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none">[编辑]</a>
+					<a onclick="editConsignee(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#consignee_move">[编辑]</a>
 					<a onclick="SetDefaultAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none"><label style="cursor:pointer;" for="addr_{{$consignee['OrderConsignee']['id']}}">[设为默认]</label></a>
 					<a onclick="DelAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none">[删除]</a>
 				</td>
@@ -22,7 +22,7 @@
 				</tr>
 			</tbody></table>
 		</div>
-		
+        <span id="consignee_move"></span>
 		<div id="consignee_addr" {{if count($consignees)}}style="display:none;"{{/if}}>
 			<table class="table table-bordered">
 			<tbody><tr>
@@ -32,16 +32,27 @@
 			    </td>
 			</tr>
 			<tr>
-			    <td valign="middle" align="right"><font color="red">*</font>省　　份：</td>
+			    <td valign="middle" align="right"><font color="red">*</font>所在地区：</td>
 			    <td valign="middle" align="left">
-			    	<input type="text" onblur="check_address()" name="data[OrderConsignee][area]"  value="{{$this->Session->read('OrderConsignee.area')}}" style="margin-left:2px;width:327px" maxlength="50" class="txt" id="consignee_area">&nbsp;
+                    <div class="fl">
+                        <select id="provinceDiv" name="data[OrderConsignee][province_id]" class="" onchange="loadCity()"><option  value='0'>请选择</option></select>
+                        <select id="cityDiv" name="data[OrderConsignee][city_id]" class="" onchange="loadCounty()"><option value='0'>请选择</option></select>
+                        <select id="countyDiv" name="data[OrderConsignee][county_id]" class="" onchange="loadTown()"><option value='0'>请选择</option></select>
+                        <select id="townDiv" style="display: none" name="data[OrderConsignee][town_id]" onchange="fillTownName()"><option value='0'>请选择</option></select>
+                        <span class="error-msg" id="areaNote"></span>
+                    </div>
 			    	
 			    </td>
 			</tr>
 			<tr>
-			    <td valign="middle" align="right"><font color="red">*</font>地　　址：</td>
+			    <td valign="middle" align="right"><font color="red">*</font>详细地址：</td>
 			    <td valign="middle" align="left">
-			        <input type="text" onblur="check_address()" name="data[OrderConsignee][address]"  value="{{$this->Session->read('OrderConsignee.address')}}" style="margin-left:2px;width:327px" maxlength="50" class="txt" id="consignee_address">&nbsp;
+                    <div>
+                        <input id = "areaHide" name = "data[OrderConsignee][area]" type="hidden">
+                        <span style="float: left;margin-right: 5px;line-height:32px;" id="areaName"></span>
+                        <input id="consignee_address" type="text" class="text text1" name = "data[OrderConsignee][address]" onblur="checkConsigneeAddress()"/>
+                        <span class="error-msg" id="consigneeAddressNote"></span>
+                    </div>
 			    </td>
 			</tr>
 			<tr>
@@ -67,7 +78,12 @@
 	</div>
 	<div class="footer">
 		<input type="hidden" name="data[OrderConsignee][edit_type]" id="edit_type" value="{{if count($consignees)}}select{{else}}new{{/if}}">
-	    <input type="submit" value="保存收货人信息" class="btn btn-primary">
+	    <input type="submit" id = "edit_button" value="保存收货人信息"  class="btn btn-primary" >
 	</div>
 </form>
 </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        loadProvince();
+    });
+</script>

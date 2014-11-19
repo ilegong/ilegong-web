@@ -20,7 +20,7 @@ a.coupon_applied .glyphicon {
         {{if !$limit_ship}}<a id="link_use_promotion" href="{{$this->Html->url('/orders/info?ship_promotion=0')}}">[不使用特惠]</a>{{/if}}
         <ul>
             <li>收货人：<span>{{$this->Session->read('OrderConsignee.name')}}</span></li>
-            <li>地址：<span>{{$this->Session->read('OrderConsignee.address')}}</span></li>
+            <li>地址：<span>{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}</span></li>
             <li>手机号码：<span>{{$this->Session->read('OrderConsignee.mobilephone')}}</span></li>
         </ul>
         {{elseif $specialShipPromotion && !$limit_ship}}

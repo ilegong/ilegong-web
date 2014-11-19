@@ -1,7 +1,6 @@
 <style>
 td {padding:5px 10px;}
 </style>
-{{$this->Html->script(array('front_orders'))}}
 <div  class="container">
 	<div class="orderinfo">
 		<div class="o_show">
@@ -21,7 +20,7 @@ td {padding:5px 10px;}
 		<tr>
 			<td>
             订单号：{{$order['Order']['id']}}<br/>
-            收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
+            收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_area']}} {{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
 			总价：￥{{$order['Order']['total_price']}}<br/>
 			下单时间：{{$order['Order']['created']}}<br/>
 			{{if $order['Order']['ship_type']}}	
@@ -89,6 +88,3 @@ td {padding:5px 10px;}
 			
 	</div>
 </div>
-<script>
-
-</script>

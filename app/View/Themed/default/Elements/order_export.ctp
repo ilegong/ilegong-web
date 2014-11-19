@@ -68,6 +68,9 @@ do {
                 if ($fieldName == 'status') {
                     $value = $order_status[$value];
                 }
+                if ($fieldName == 'consignee_address'){
+                    $value = $item['Order']['consignee_area'].$item['Order']['consignee_address'];
+                }
             }
 
             $row[] = $value;

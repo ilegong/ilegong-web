@@ -7,21 +7,21 @@
 				{{loop $consignees  $consignee}}
 				<tr class="consignee_row {{if $consignee['OrderConsignee']['status']}}danger{{/if}}" id="consignee_{{$consignee['OrderConsignee']['id']}}">
 				<td style="width:40px;"><input type="radio"  {{if $consignee['OrderConsignee']['status']}}checked="checked"{{/if}} onclick="chose_Consignee({{$consignee['OrderConsignee']['id']}})" name="data[OrderConsignee][id]" value="{{$consignee['OrderConsignee']['id']}}" id="addr_{{$consignee['OrderConsignee']['id']}}"></td>
-				<td><label for="addr_{{$consignee['OrderConsignee']['id']}}"><strong>{{$consignee['OrderConsignee']['name']}}</strong>&nbsp;({{$consignee['OrderConsignee']['mobilephone']}})<br/>{{$consignee['OrderConsignee']['address']}}</label>
+				<td><label for="addr_{{$consignee['OrderConsignee']['id']}}"><strong>{{$consignee['OrderConsignee']['name']}}</strong>&nbsp;({{$consignee['OrderConsignee']['mobilephone']}})<br/>&nbsp;{{$consignee['OrderConsignee']['area']}}{{$consignee['OrderConsignee']['address']}}</label>
 					<br/>
 					<a onclick="SetDefaultAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none"><label style="cursor:pointer;" for="addr_{{$consignee['OrderConsignee']['id']}}">[设为默认]</label></a>&nbsp;&nbsp;
-					<a onclick="editConsignee(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none">[编辑]</a>&nbsp;&nbsp;
+					<a onclick="editConsignee(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#consignee_move">[编辑]</a>&nbsp;&nbsp;
 					<a onclick="DelAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none">[删除]</a>
 				</td>
 				</tr>
 				{{/loop}}
 				<tr>
-					<td style="width:40px;"><input type="radio" {{if !$total_consignee}}checked="checked"{{else}} onclick="use_NewConsignee()"{{/if}} value="" id="consignee_radio_new" name="data[OrderConsignee][id]" class="hookbox"></td>
+					<td style="width:40px;"><input type="radio" {{if !$total_consignee}}checked="checked" {{else}} onchange="use_NewConsignee()"{{/if}} value="" id="consignee_radio_new" name="data[OrderConsignee][id]" class="hookbox"></td>
 					<td><label for="consignee_radio_new">使用新地址 </label><span style="display:none" class="status error" id="addNumLimitNote">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 当前地址数量已达上限，若要继续添加新地址，请先删除部分收货地址。</span></td>
 				</tr>
 			</tbody></table>
 		</div>
-		
+		<span id="consignee_move"></span>
 		<div id="consignee_addr" class="clearfix" {{if $total_consignee}}style="display:none;"{{/if}}>
 			<div class="form-group">
 			    <label for="consignee_name" class="col-xs-3 control-label">收货人</label>
@@ -29,10 +29,20 @@
 			      <input type="text" class="form-control" placeholder="请输入收货人姓名" id="consignee_name" name="data[OrderConsignee][name]" value="">
 			    </div>
 			</div>
+            <div class="form-group">
+                <label for="consignee_name" class="col-xs-3 control-label">地 区</label>
+                <select id="provinceDiv" name="data[OrderConsignee][province_id]" class="" onchange="loadCity()"><option  value='0'>请选择</option></select>
+                <select id="cityDiv" name="data[OrderConsignee][city_id]" class="" onchange="loadCounty()"><option value='0'>请选择</option></select>
+                <select id="countyDiv" name="data[OrderConsignee][county_id]" class="" onchange="loadTown()"><option value='0'>请选择</option></select>
+                <select id="townDiv" style="display: none" name="data[OrderConsignee][town_id]" onchange="fillTownName()"><option value='0'>请选择</option></select>
+                <span class="error-msg" id="areaNote"></span>
+            </div>
 			<div class="form-group">
-			    <label for="consignee_address" class="col-xs-3 control-label">地　　址</label>
+			    <label for="consignee_address" class="col-xs-3 control-label">详细地址</label>
 			    <div class="col-xs-9">
-			      <input type="text" placeholder="请输入地址" class="form-control" id="consignee_address" name="data[OrderConsignee][address]" value="" >
+                    <input id = "areaHide" name = "data[OrderConsignee][area]" type="hidden">
+                    <span style="float: left;margin-right: 5px;line-height:32px;" id="areaName"></span>
+                    <input type="text" placeholder="请输入详细地址" class="form-control" id="consignee_address" name="data[OrderConsignee][address]" value="{{$this->Session->read('OrderConsignee.address')}}" >
 			    </div>
 			</div>
 			<div class="form-group">
@@ -51,28 +61,38 @@
 </form>
 </div>
 <script>
-$('#save_consignee_sbt').click(function(e){
-	var val = $("input[name='data[OrderConsignee][id]']:checked").val();
-	if(val==""){
-		if($('#consignee_name').val()==""){
-			$('#consignee_name').focus();
-			alert("请输入收货人姓名");
-			e.preventDefault();
-			return false;
-		}
-		if($('#consignee_address').val()==""){
-			$('#consignee_address').focus();
-			alert("请输入收货地址");
-			e.preventDefault();
-			return false;
-		}
-		if($('#consignee_mobilephone').val()==""){
-			$('#consignee_mobilephone').focus();
-			alert("请输入联系电话");
-			e.preventDefault();
-			return false;
-		}
-	}
-})
 
+    $(document).ready(function(){
+        loadProvince();
+        $('#save_consignee_sbt').click(function(e){
+            var val = $("input[name='data[OrderConsignee][id]']:checked").val();
+            if(val == '') {
+                if ($('#consignee_name').val() == "") {
+                    $('#consignee_name').focus();
+                    alert("请输入收货人姓名");
+                    e.preventDefault();
+                    return false;
+                }
+                if ($("#provinceDiv").val() == "0" || $("#cityDiv").val() == "0" || $("#countyDiv").val() == "0") {
+                    $('#provinceDiv').focus();
+                    alert("请选收货地区");
+                    e.preventDefault();
+                    return false;
+                }
+                if ($('#consignee_address').val() == "") {
+                    $('#consignee_address').focus();
+                    alert("请输入收货地址");
+                    e.preventDefault();
+                    return false;
+                }
+                if ($('#consignee_mobilephone').val() == "") {
+                    $('#consignee_mobilephone').focus();
+                    alert("请输入联系电话");
+                    e.preventDefault();
+                    return false;
+                }
+            }
+
+        })
+    });
 </script>
