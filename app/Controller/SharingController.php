@@ -102,15 +102,18 @@ class SharingController extends AppController{
                                 COUPON_TYPE_TYPE_SHARE_OFFER, $uid, COUPON_STATUS_VALID);
                             if ($couponId) {
                                 $this->CouponItem->addCoupon($uid, $couponId, $uid, 'shared_offer'.$shared_offer_id);
+                                $couponItemId = $this->CouponItem->getLastInsertID();
+                                $this->$this->SharedSlice->updateAll(array('coupon_item_id' => $couponItemId),
+                                    array('id' => $slice['SharedSlice']['id'], 'coupon_item_id' => 0));
                                 $this->Weixin->send_coupon_received_message($uid, 1, "在".$sharedOffer['ShareOffer']['name']."店购买时有效","有效期至".friendlyDateFromStr($valid_end, 'full'));
                             }
                             $left_slice -= 1;
+                            $slice['SharedSlice']['accept_user'] = $uid;
+                            $slice['SharedSlice']['accept_time'] = $now;
+                            $accepted = true;
+                            $just_accepted = $slice['SharedSlice']['number'];
+                            break;
                         }
-                        $slice['SharedSlice']['accept_user'] = $uid;
-                        $slice['SharedSlice']['accept_time'] = $now;
-                        $accepted = true;
-                        $just_accepted = $slice['SharedSlice']['number'];
-                        break;
                     }
                 }
             }

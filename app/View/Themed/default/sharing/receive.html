@@ -79,7 +79,7 @@
             <li class="list-group-item clearfix"><span class="col-xs-4">{{$nickNames[$slice['SharedSlice']['accept_user']]}}</span>
                 <span style="margin-left: 1em">￥{{$this->Number->precision($slice['SharedSlice']['number']/100, 2)}}</span>
                 {{if $slice['SharedSlice']['accept_user'] == $uid}}
-                <a href="{{brand_link($sharedOffer['ShareOffer']['brand_id'])}}" class="btn-sm btn-warning pull-right">马上使用</a>
+                <a href="/users/my_coupons.html" class="btn-sm btn-warning pull-right">查看</a>
                 {{else}}
                 <span class="pull-right">{{friendlyDateFromStr($slice['SharedSlice']['accept_time'])}}</span>
                 {{/if}}
