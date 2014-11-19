@@ -80,7 +80,7 @@ class SharingController extends AppController{
         $total_slice = count($slices);
         $valuesCounts = array_count_values($accepted_users);
         $left_slice = empty($valuesCounts[0])? 0 : $valuesCounts[0];
-        $noMore = $total_slice == $left_slice;
+        $noMore = $left_slice == 0;
 
         $accepted =  (array_search($uid, $accepted_users) !== false);
         if (!$expired) {
