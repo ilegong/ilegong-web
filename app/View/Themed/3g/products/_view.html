@@ -4,7 +4,9 @@
         <img src="{{$this->Html->url($Product['Product']['coverimg'])}}" style="width:100%;"
              onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
         {{/if}}
-        <h2 class="Content-title" id="item-detail-title"><?php echo $Product['Product']['name']; ?></h2>
+        <h2 class="Content-title" id="item-detail-title"><?php echo $Product['Product']['name']; ?>{{if $hasOfferBrandIds && array_key_exists($Product['Product']['brand_id'], $hasOfferBrandIds)}}
+            <span class="brand-has-offer">有红包</span>
+            {{/if}}</h2>
         {{if $Product['Product'][promote_name] }}
         <p><?php echo $Product['Product']['promote_name']; ?></p>
         {{/if}}

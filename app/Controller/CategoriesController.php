@@ -477,13 +477,4 @@ class CategoriesController extends AppController {
         ));
         return $productTags;
     }
-
-    private function setHasOfferBrandIds() {
-        $this->loadModel('ShareOffer');
-        $allValidOffer = $this->ShareOffer->find_all_valid_offer();
-        if (!empty($allValidOffer)) {
-            $hasOfferBrandIds = Hash::combine($allValidOffer, '{n}.ShareOffer.brand_id');
-        }
-        $this->set('hasOfferBrandIds', $hasOfferBrandIds);
-    }
 }

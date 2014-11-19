@@ -402,6 +402,7 @@ class AppController extends Controller {
                 $this->set('product_spec_map', $str);
              }
              $this->set('specs_map', $specs_map);
+            $this->setHasOfferBrandIds(${$modelClass}[$modelClass]['brand_id']);
         }
     }
 
@@ -722,6 +723,16 @@ class AppController extends Controller {
 
         $this->redirect_for_append_tr_id($current_uid, $default_track_type);
         return false;
+    }
+
+
+    protected function setHasOfferBrandIds($brandId = null) {
+        $this->loadModel('ShareOffer');
+        $allValidOffer = $this->ShareOffer->find_all_valid_offer($brandId);
+        if (!empty($allValidOffer)) {
+            $hasOfferBrandIds = Hash::combine($allValidOffer, '{n}.ShareOffer.brand_id');
+        }
+        $this->set('hasOfferBrandIds', $hasOfferBrandIds);
     }
 }
 ?>

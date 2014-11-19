@@ -27,7 +27,7 @@ class ShareOffer extends AppModel {
         return $this->_find_by_brandId($brandId, true, $actionTime);
     }
 
-    public function find_all_valid_offer($actionTime = null) {
+    public function find_all_valid_offer($brandId = null, $actionTime = null) {
 
         if (!$actionTime) {
             $actionTime = date(FORMAT_DATETIME);
@@ -39,6 +39,10 @@ class ShareOffer extends AppModel {
             'start <' => $actionTime,
             'end > ' => $actionTime
         );
+
+        if ($brandId !== null) {
+            $cond['brand_id'] = $brandId;
+        }
 
         return $this->find("all", array('conditions' => $cond));
     }
