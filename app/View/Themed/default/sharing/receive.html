@@ -75,10 +75,10 @@
         {{/if}}
     </div>
 
-    <div class="row">
+    <div class="row voffset1">
         <p class="text-right">剩余<span class="badge">{{$left_slice}}</span>个红包</p>
         {{if !empty($slices)}}
-        <ul class="list-group">
+        <ul class="list-group voffset1">
             {{loop $slices $idx $slice}}
             {{if $slice['SharedSlice']['accept_user']}}
             <li class="list-group-item clearfix"><span class="col-xs-4">{{$nickNames[$slice['SharedSlice']['accept_user']]}}</span>

@@ -62,7 +62,7 @@ class SharingController extends AppController{
         }
 
         $slices = $this->SharedSlice->find('all',
-            array('conditions' => array('shared_offer_id' => $shared_offer_id),)
+            array('conditions' => array('shared_offer_id' => $shared_offer_id), 'order' => 'SharedSlice.accept_time desc')
         );
         $accepted_users = Hash::extract($slices, '{n}.SharedSlice.accept_user');
         $nickNames = $this->User->findNicknamesMap(array_merge($accepted_users, array($uid, $owner)));
