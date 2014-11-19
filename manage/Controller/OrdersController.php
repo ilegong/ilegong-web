@@ -226,8 +226,10 @@ class OrdersController extends AppController{
         ));
 
         $ids = array();
+        $total_money = 0;
         foreach($orders as $o){
             $ids[] = $o['Order']['id'];
+            $total_money = $total_money + $o['Order']['total_all_price'];
         }
         $this->loadModel('Cart');
         $carts = $this->Cart->find('all',array(
@@ -245,6 +247,7 @@ class OrdersController extends AppController{
         }
 
         $this->set('orders',$orders);
+        $this->set('total_money',$total_money);
         $this->set('order_carts',$order_carts);
         $this->set('ship_type',$this->ship_type);
         $this->set('brands',$brands);
