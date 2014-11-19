@@ -229,7 +229,10 @@ class OrdersController extends AppController{
         $total_money = 0;
         foreach($orders as $o){
             $ids[] = $o['Order']['id'];
-            $total_money = $total_money + $o['Order']['total_all_price'];
+            $o_status = $o['Order']['status'];
+            if($o_status == 1 || $o_status == 2 || $o_status == 3 ){
+                $total_money = $total_money + $o['Order']['total_all_price'];
+            }
         }
         $this->loadModel('Cart');
         $carts = $this->Cart->find('all',array(
