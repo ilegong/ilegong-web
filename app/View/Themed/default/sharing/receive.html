@@ -62,7 +62,7 @@
         <div class="alert alert-danger"><strong>红包已抢完！</strong>下次早早的哇</div>
         {{/if}}
         {{if $just_accepted}}
-        <div class="alert alert-danger"><strong>领取成功！</strong>您领取到了一张 ￥{{$this->Number->precision($just_accepted/100, 2)}}元红包！</div>
+        <div class="alert alert-danger"><strong>领取成功！</strong>您领取到了一个 ￥{{$this->Number->precision($just_accepted/100, 2)}}元红包！</div>
         {{elseif $accepted}}
         <div class="alert alert-danger"><strong>您已经抢到啦！</strong></div>
         {{/if}}
