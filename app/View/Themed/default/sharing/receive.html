@@ -58,13 +58,12 @@
 
     <div class="row text-center voffset3">
         {{if !$expired}}
-        {{if $noMore}}
-        <div class="alert alert-danger"><strong>红包已抢完！</strong>下次早早的哇</div>
-        {{/if}}
         {{if $just_accepted}}
         <div class="alert alert-danger"><strong>领取成功！</strong>您领取到了一个 ￥{{$this->Number->precision($just_accepted/100, 2)}}元红包！</div>
         {{elseif $accepted}}
         <div class="alert alert-danger"><strong>您已经抢到啦！</strong></div>
+        {{elseif $noMore}}
+        <div class="alert alert-danger"><strong>红包已抢完！</strong>下次早早的哇</div>
         {{/if}}
         {{else}}
         <div class="alert alert-danger"><strong>红包已过期！</strong>下次早早的哇</div>
@@ -72,12 +71,12 @@
     </div>
 
     <div class="row">
-        <p class="text-right">未送出红包<span class="badge">{{$left_slice}}</span>个</p>
+        <p class="text-right">剩余红包<span class="badge">{{$left_slice}}</span>个</p>
         {{if !empty($slices)}}
         <ul class="list-group">
             {{loop $slices $idx $slice}}
             {{if $slice['SharedSlice']['accept_user']}}
-            <li class="list-group-item clearfix"><span class="col-xs-3">{{$nickNames[$slice['SharedSlice']['accept_user']]}}</span>
+            <li class="list-group-item clearfix"><span class="col-xs-4">{{$nickNames[$slice['SharedSlice']['accept_user']]}}</span>
                 <span style="margin-left: 1em">￥{{$this->Number->precision($slice['SharedSlice']['number']/100, 2)}}</span>
                 {{if $slice['SharedSlice']['accept_user'] == $uid}}
                 <a href="{{brand_link($sharedOffer['ShareOffer']['brand_id'])}}" class="btn-sm btn-warning pull-right">马上使用</a>

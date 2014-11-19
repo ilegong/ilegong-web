@@ -95,11 +95,11 @@ class SharingController extends AppController{
                         $dt->add(new DateInterval('P'.$addDays.'D'));
                         $valid_end = $dt->format(FORMAT_DATETIME);
 
-                        if($this->SharedSlice->updateAll(array('accept_user' => $uid, 'accept_time' => '\''.addslashes($now).'\''),
-                            array('id' => $slice['SharedSlice']['id'], 'accept_user' => 0))) {
+                        $updated = $this->SharedSlice->updateAll(array('accept_user' => $uid, 'accept_time' => '\'' . addslashes($now) . '\''),
+                            array('id' => $slice['SharedSlice']['id'], 'accept_user' => 0));
+                        if($updated && $this->SharedSlice->getAffectedRows() == 1) {
                             $couponId = $this->CouponItem->add_coupon_type($brandNames[$brandId], $brandId, $now, $valid_end, $slice['SharedSlice']['number'], PUBLISH_YES,
                                 COUPON_TYPE_TYPE_SHARE_OFFER, $uid, COUPON_STATUS_VALID);
-//                            $recUserId, $couponType, $operator = -1, $source = 'unknown'
                             if ($couponId) {
                                 $this->CouponItem->addCoupon($uid, $couponId, $uid, 'shared_offer'.$shared_offer_id);
                                 $this->Weixin->send_coupon_received_message($uid, 1, "在".$sharedOffer['ShareOffer']['name']."店购买时有效","有效期至".friendlyDateFromStr($valid_end, 'full'));
@@ -115,7 +115,7 @@ class SharingController extends AppController{
                 }
             }
         }
-        $this->set(compact('slices', 'expired', 'accepted', 'just_accepted', 'no_more', 'nickNames', 'sharedOffer', 'uid', 'isOwner', 'total_slice', 'left_slice', 'ownerName'));
+        $this->set(compact('slices', 'expired', 'accepted', 'just_accepted', 'noMore', 'nickNames', 'sharedOffer', 'uid', 'isOwner', 'total_slice', 'left_slice', 'ownerName'));
     }
 
 }
