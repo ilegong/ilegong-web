@@ -95,7 +95,7 @@ class ShipPromotion extends AppModel {
         //total_limit(0 means none), brand_id, per_user_limit (0 means none)
         '228' => array(100, 13, 1),
         '229' => array(80, 13, 1),
-        PRODUCT_ID_CAKE => array(584, 74, 0),
+        PRODUCT_ID_CAKE => array(1084, 74, 0),
         '240' => array(306, 78, 1 ),
         '259' => array(303, 78, 1 ),
         '204' => array(135, 65, 0 ),
