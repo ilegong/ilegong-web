@@ -94,7 +94,7 @@
         <td>{{$order['Order']['created']}}</td>
         <td>{{$order['Order']['consignee_name']}}</td>
         <td>{{$order['Order']['consignee_mobilephone']}}</td>
-        <td>{{$order['Order']['consignee_address']}}</td>
+        <td>{{$order['Order']['consignee_area']}}{{$order['Order']['consignee_address']}}</td>
         <td>
         {{if $order['Pay']['trade_type']=='JSAPI'}}
         <font color="red">微信支付</font>
