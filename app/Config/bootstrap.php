@@ -394,7 +394,7 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
         } else {
 
             if ($newSpecId == $cartItem['specId']) {
-                $cartItem['num'] += $nums[$pid];
+                $cartItem['num'] = $nums[$pid];
                 $cartItem['price'] = $p['Product']['price'];
                 $cartItemId = $cartItem['id'];
             } else {
