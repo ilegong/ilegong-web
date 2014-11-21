@@ -106,8 +106,13 @@ a.coupon_applied .glyphicon {
 		</div>
         {{/loop}}
         </div>
-            <div class="clearfix"></div>
-
+        <div class="clearfix voffset3">
+            <h2 id="coupon_code_title">我有优惠码<span class="caret"></span></h2>
+            <div id="coupon_code_content" style="display: none">
+            <p id="coupon_code_msg" style="color:red"></p>
+            <input id="coupon_code_text" type="text" value="" name="coupon_code"> <a id="coupon_code_apply" href="javascript:;" class="btn-sm btn-warining">应用</a>
+            </div>
+        </div>
         <div>
 		    <ul class="pull-right list-unstyled">
                     <li>已优惠：<span id="total_reduced_span">{{$this->Number->precision($total_reduced, 2)}}</span></li>
@@ -124,38 +129,65 @@ a.coupon_applied .glyphicon {
 
     $(document).ready(function () {
 
-        $('input[type="checkbox"]').on('click', function(e) {
-            e.preventDefault();
-        });
+        function update_price(total_price, total_reduced) {
+            $('#total_price_span').text(utils.toFixed(total_price, 2));
+            $('#total_reduced_span').text(utils.toFixed(total_reduced, 2));
+        }
 
-        $('li > a.coupon').click(function(){
-            var $this = $(this);
-            var brandId = $this.attr('data-brandId');
-            var coupon_item_id = $this.attr('data-coupon_item_id');
-            var action = $this.hasClass('coupon_applied') ? 'unapply' : 'apply';
+        (function() {
+            var couponCodeMsg = $('#coupon_code_msg');
+            $('#coupon_code_title').click(function () {
+                $('#coupon_code_content').toggle();
+            });
+            $('#coupon_code_apply').click(function () {
+                $code = $.trim($('#coupon_code_text').val());
+                if ($code) {
+                    $.post('/orders/apply_coupon_code.json', {'code': $code}, function (data) {
+                        if (data && data.success) {
+                            couponCodeMsg.text('成功应用了优惠码:' + $code + ", 优惠:" + utils.toFixed(data.reduced, 2));
+                        } else if (data && data.error) {
+                            couponCodeMsg.text(data.error);
+                        }
+                        update_price(data.total_price, data.total_reduced);
+                    }, 'json');
+                } else {
+                    couponCodeMsg.text('您输入的优惠码为空');
+                    return false;
+                }
+            });
+
+            $('input[type="checkbox"]').on('click', function (e) {
+                e.preventDefault();
+            });
+
+            $('li > a.coupon').click(function () {
+                var $this = $(this);
+                var brandId = $this.attr('data-brandId');
+                var coupon_item_id = $this.attr('data-coupon_item_id');
+                var action = $this.hasClass('coupon_applied') ? 'unapply' : 'apply';
 //            var $notifyDlg = utils.progress_notify('');
-            $.post('/orders/apply_coupon.json', {'brand_id': brandId, 'coupon_item_id': coupon_item_id, 'action': action}, function(data){
+                $.post('/orders/apply_coupon.json', {'brand_id': brandId, 'coupon_item_id': coupon_item_id, 'action': action}, function (data) {
 //                $notifyDlg.modal('close');
-                if(data) {
-                    if(data.changed) {
-                        var $checked = $("[data-coupon_item_id='" + coupon_item_id + "'] > input[type=checkbox]");
-                        $checked.prop("checked", !$checked.prop("checked"));
+                    if (data) {
+                        if (data.changed) {
+                            var $checked = $("[data-coupon_item_id='" + coupon_item_id + "'] > input[type=checkbox]");
+                            $checked.prop("checked", !$checked.prop("checked"));
 
-                        $("[data-coupon_item_id='"+coupon_item_id+"']").toggleClass('coupon_applied');
-                        $('#total_price_span').text(utils.toFixed(data.total_price, 2));
-                        $('#total_reduced_span').text(utils.toFixed(data.total_reduced, 2));
-                    } else {
-                        if (data.reason == 'not_login') {
-                            utils.alert('您长时间未操作，请重新登录', function(){
-                                window.location.href = '/users/login?refer='+ encodeURIComponent('/carts/listcart');
-                            });
-                        } else if (data.reason == 'share_type_coupon_exceed') {
-                            utils.alert('优惠券使用超出限制');
+                            $("[data-coupon_item_id='" + coupon_item_id + "']").toggleClass('coupon_applied');
+                            update_price(data.total_price, data.total_reduced);
+                        } else {
+                            if (data.reason == 'not_login') {
+                                utils.alert('您长时间未操作，请重新登录', function () {
+                                    window.location.href = '/users/login?refer=' + encodeURIComponent('/carts/listcart');
+                                });
+                            } else if (data.reason == 'share_type_coupon_exceed') {
+                                utils.alert('优惠券使用超出限制');
+                            }
                         }
                     }
-                }
-            }, 'json');
-        });
+                }, 'json');
+            });
+        })();
 
 
         var $specialShipPromotion = $('#specialShipPromotion');

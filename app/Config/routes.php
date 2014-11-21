@@ -15,6 +15,10 @@ App::uses('CustomRouter', 'Lib');
         array('controller'=>'products','action' => 'view', 'wu_chang_dao_hua_xiang_ti_qian_yu_shou_500jin_zhi_xian_bei_jing'));
 
 
+    CustomRouter::connect('/t/special_nov',
+        array('controller'=>'categories','action' => 'special_list', 'special_for_rice_coupons'));
+
+
     CustomRouter::connect('/t/ag',
         array('controller'=>'apple201410','action' => 'award'));
     CustomRouter::connect('/t/ag/:type',
