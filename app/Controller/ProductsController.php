@@ -106,4 +106,38 @@ class ProductsController extends AppController{
 			$this->data = $datainfo; //加载数据到表单中
 		}
 	}
+    function view($slug='/'){
+        parent::view($slug);
+        $tag = $this->Product->query("select tag_id from cake_product_product_tags where product_id = $this->current_data_id limit 1");
+        $tag_id = $tag[0]['cake_product_product_tags']['tag_id'];
+        $id_same_kind = $this->Product->query("select product_id  from cake_product_product_tags where tag_id = $tag_id and product_id != $this->current_data_id ");
+        //热卖
+        $hottest = '1';
+        $id_hottest = $this->Product->query("select product_id  from cake_product_product_tags where tag_id =  $hottest and product_id != $this->current_data_id ");
+        $same_kind_len = count($id_same_kind);
+        $hottest_len = count($id_hottest);
+
+        //利用键的唯一性，确保不同的值
+        $array_product=array();
+        while(count($array_product)< 5 && count($array_product)< $same_kind_len){
+            $id = $id_same_kind [rand(0,$same_kind_len - 1)]['cake_product_product_tags']['product_id'];
+            $array_product[$id]=null;
+        }
+        while(count($array_product)< 8 && count($array_product)< $hottest_len){
+            $id = $id_hottest [rand(0,$hottest_len - 1)]['cake_product_product_tags']['product_id'];
+            $array_product[$id]=null;
+        }
+        $rand_id = array_keys($array_product);
+        $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1, 'Product.id' => $rand_id);
+        $good_recommend = $this->Product->find('all', array(
+            'conditions' => $conditions,
+            'limit' => 6
+        ));
+        $items = array();
+        foreach($good_recommend as $p){
+            $items[] = $p['Product'];
+        }
+        $this->set('items', $items);
+        $this->set('category_control_name', 'products');
+    }
 }

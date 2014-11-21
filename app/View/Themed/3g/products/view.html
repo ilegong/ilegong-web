@@ -1,7 +1,34 @@
 <div  class="container">
-<div  class="row">
-	<div  class="col-xs-12">
-		<portlet id="portlet-33"></portlet>	
-	</div>
+    <div  class="row">
+        <div  class="col-xs-12">
+            <portlet id="portlet-33"></portlet>
+        </div>
+        <hr>
+    </div>
 </div>
+<div class="swiper-container thumbs-cotnainer">
+    <div class="thumbs-title">商品推荐</div>
+    <div class="swiper-wrapper">
+        <?PHP foreach($items as $item) {
+            $item['slug'] = $item['slug']?$item['slug']:$item['id'];
+            ?>
+        {{include 'products/recommend'}}
+        <?php } ?>
+        <div class="swiper-slide" style="display: none"></div>
+    </div>
 </div>
+<script>
+    $().ready(function(){
+        //Thumbs
+        $('.thumbs-cotnainer').each(function(){
+            $(this).swiper({
+                slidesPerView:'auto',
+                offsetPxBefore:25,
+                offsetPxAfter:10,
+                calculateHeight: true
+
+            })
+        })
+    })
+</script>
+{{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'));}}
