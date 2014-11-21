@@ -442,8 +442,8 @@ function addtoCart(id, num, spec, notShowSuccess)
 {
     var url = BASEURL + '/carts/add';
     var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec};
-    if (!sso.check_userlogin({"callback": addtoCart, "callback_args": arguments}))
-        return false;
+//    if (!sso.check_userlogin({"callback": addtoCart, "callback_args": arguments}))
+//        return false;
     ajaxAction(url, postdata, null, 'addtoCart', notShowSuccess, notShowSuccess);
     return false;
 }
