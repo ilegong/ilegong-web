@@ -8,7 +8,7 @@
     </a>
     <div class="app-title">
         {{eval echo $this->Html->link(usubstr($item['name'],0,10,''),
-        '/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
+        '/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html?from=recommend',
         array('title'=>$item['title']));
         }}
     </div>
