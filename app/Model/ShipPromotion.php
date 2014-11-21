@@ -117,6 +117,8 @@ class ShipPromotion extends AppModel {
             return 0.0;
         } else if ($pid == PRODUCT_ID_CAKE || array_search($pid, self::$shi_liu_ids) !== false) {
             return $singleShipFee * $num;
+        } else if ($pid == 269 || $pid == 270) { //灰枣和骏枣
+            return ($num > 1) ? 0 : 15;
         }
         return $singleShipFee;
     }
