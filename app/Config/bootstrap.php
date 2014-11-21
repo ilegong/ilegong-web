@@ -471,6 +471,15 @@ function game_uri($gameType, $defUri = '/') {
 function product_link($pid, $defUri) {
     $pModel = ClassRegistry::init('Product');
     $p = $pModel->findById($pid);
+    return product_link2($p, $defUri);
+}
+
+/**
+ * @param $p
+ * @param $defUri
+ * @return string
+ */
+function product_link2($p, $defUri) {
     if (!empty($p)) {
         return "/products/" . date('Ymd', strtotime($p['Product']['created'])) . "/" . $p['Product']['slug'] . ".html";
     } else {

@@ -9,58 +9,25 @@ td {padding:5px 10px;}
     }
 </style>
 <script>
-var setAmount={
-		min:1,
-		max:999,
-		reg:function(x){
-			return new RegExp("^[1-9]\\d*$").test(x);
-		},
-		amount:function(obj,mode){
-			var x=$(obj).val();
-			if (this.reg(x)){
-				if (mode){
-					x++;
-				}else{
-					x--;
-				}
-			}else{
-				alert("请输入正确的数量！");
-				$(obj).val(1);
-				$(obj).focus();
-			}			
-			return x;
-		},
-		reduce:function(obj){
-			var x=this.amount(obj,false);
-			if (x>=this.min){
-				$(obj).val(x);
-			}else{
-				alert("商品数量最少为"+this.min);
-				$(obj).val(1);
-				$(obj).focus();
-			}
-			editCartNum($(obj).data('id'),$(obj).val());
-		},
-		add:function(obj){
-			var x=this.amount(obj,true);
-			if (x<=this.max){
-				$(obj).val(x);
-			}else{
-				alert("商品数量最多为"+this.max);
-				$(obj).val(999);
-				$(obj).focus();
-			}
-			editCartNum($(obj).data('id'),$(obj).val());
-		},
-		modify:function(obj){
-			var x=$(obj).val();
-			if (x<this.min||x>this.max||!this.reg(x)){
-				alert("请输入正确的数量！");
-				$(obj).val(1);
-				$(obj).focus();
-			}
-		}
+var cart_edit_amount = {
+    modify: function(obj)  {
+        editAmount.modify(obj);
+    },
+    amount: function(obj, mode)  {
+        editAmount.amount(obj, mode);
+    },
+    reduce: function(obj) {
+        editAmount.reduce(obj, function(obj){
+            editCartNum($(obj).data('id'),$(obj).val());
+        });
+    },
+    add: function(obj) {
+        editAmount.add(obj, function(obj){
+            editCartNum($(obj).data('id'),$(obj).val());
+        });
+    }
 };
+
 function editCartNum(id,num){
 	$('#price-'+id).html(utils.toFixed($('#pamount-'+id).data('price')*num, 2));
 	var total_price =0 ;
@@ -73,38 +40,58 @@ function editCartNum(id,num){
 	if(!sso.check_userlogin({"callback":editCartNum,"callback_args":arguments}))
 		return false;
 	ajaxAction(url,null,null,function(data){
-
+        if(data && data.success) {
+            if (typeof(updateCartItemCount) === 'function') {
+                updateCartItemCount();
+            }
+        }
     },{'id':id,'num':num});
 	return false;
 }
 </script>
 <div  class="container">
 <form action="{{$this->Html->url('/orders/info?from=list_cart')}}" method="post">
-
-<table class="table table-striped table-bordered table-hover">
-<thead>
-<tr><th>名称</th><th>价格</th><th>数量</th><th>合计</th><th>操作</th></tr></thead>
-{{loop $Carts $cart}}
-<tr><td>{{$cart['Cart']['name']}}
-    {{$this->Html->image(Router::url($cart['Cart']['coverimg']))}}
-</td>
-<td>{{$this->Number->precision($cart['Cart']['price'], 2)}}</td>
-<td>
-<div class="input-group">
-<span class="reduce input-group-addon" onclick="setAmount.reduce('#pamount-{{$cart['Cart']['id']}}')">-</span>
-<input type="text" disabled="disabled" size="3" id="pamount-{{$cart['Cart']['id']}}" data-id="{{$cart['Cart']['id']}}"
-       data-price="{{$cart['Cart']['price']}}" class="cart-num-input" name="data[Cart][{{$cart['Cart']['id']}}][num]" value="{{$cart['Cart']['num']}}"/>
-<span class="add input-group-addon" onclick="setAmount.add('#pamount-{{$cart['Cart']['id']}}')">+</span>
-</div>
-</td>
-<td><span class="item-price" id="price-{{$cart['Cart']['id']}}">{{$this->Number->precision($cart['Cart']['price']*$cart['Cart']['num'], 2)}}</span></td>
-<td>{{$this->Html->link(__('delete'),Router::url('/carts/delete/'.$cart['Cart']['id']))}}</td>
-</tr>
-{{/loop}}
-<thead>
-<tr><td colspan="5" style="text-align: right"><span id="total-price">总价：{{$this->Number->precision($total_price, 2)}}</span> <input class="btn btn-warning" type="submit"  value="结算"/></td></tr>
-</thead>
-</table>
+    <table class="table table-striped table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>名称</th>
+            <th>价格</th>
+            <th>数量</th>
+            <th>合计</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        {{loop $Carts $cart}}
+        <tr>
+            <td><a href="{{product_link($cart['Cart']['product_id'], 'javascript:;')}}">{{$cart['Cart']['name']}}<br/>
+                {{$this->Html->image(Router::url($cart['Cart']['coverimg']))}}
+                </a>
+            </td>
+            <td>{{$this->Number->precision($cart['Cart']['price'], 2)}}</td>
+            <td>
+                <div class="input-group">
+                    <span class="reduce input-group-addon"
+                          onclick="cart_edit_amount.reduce('#pamount-{{$cart['Cart']['id']}}')">-</span>
+                    <input type="text" disabled="disabled" size="3" id="pamount-{{$cart['Cart']['id']}}"
+                           data-id="{{$cart['Cart']['id']}}"
+                           data-price="{{$cart['Cart']['price']}}" class="cart-num-input"
+                           name="data[Cart][{{$cart['Cart']['id']}}][num]" value="{{$cart['Cart']['num']}}"/>
+                    <span class="add input-group-addon"
+                          onclick="cart_edit_amount.add('#pamount-{{$cart['Cart']['id']}}')">+</span>
+                </div>
+            </td>
+            <td><span class="item-price" id="price-{{$cart['Cart']['id']}}">{{$this->Number->precision($cart['Cart']['price']*$cart['Cart']['num'], 2)}}</span>
+            </td>
+            <td>{{$this->Html->link(__('delete'),Router::url('/carts/delete/'.$cart['Cart']['id']))}}</td>
+        </tr>
+        {{/loop}}
+        <thead>
+        <tr>
+            <td colspan="5" style="text-align: right"><span id="total-price">总价：{{$this->Number->precision($total_price, 2)}}</span>
+                <input class="btn btn-warning" type="submit" value="结算"/></td>
+        </tr>
+        </thead>
+    </table>
 
 </form>
 </div>

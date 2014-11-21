@@ -149,10 +149,12 @@ var rs_callbacks = {
             }
         }
 	},
-	addtoCart:function(request){
-		showSuccessMessage(request.success, function(){
-            window.location.href = window.location.href;
-        });
+	addtoCart:function(request, notShowMessage){
+        if (!notShowMessage) {
+            showSuccessMessage(request.success, function () {
+//            window.location.href = window.location.href;
+            });
+        }
         if (typeof(updateCartItemCount) == 'function') {
             updateCartItemCount();
         }
@@ -176,7 +178,7 @@ var rs_callbacks = {
  * callback_func_name,回调函数名，要在rs_callbacks中定义，回调函数的第一个参数为ajax返回的结果 moreags
  * 传给回调函数的更多参数，参数格式可自定义，字符串、数组、对象等
  */
-function ajaxAction(url,postdata,form,callback_func_name,moreags){
+function ajaxAction(url,postdata,form,callback_func_name, moreags, notShowMsg){
 	if(url.search(/\?/)!=-1){
 		url+='&inajax=1';
 	}
@@ -202,7 +204,7 @@ function ajaxAction(url,postdata,form,callback_func_name,moreags){
 		success: function(request){
 			
 			if(typeof(callback_func_name)=='function'){
-				callback_func_name();
+				callback_func_name(request);
 				return;
 			}
 			else if(callback_func_name && rs_callbacks[callback_func_name]){
@@ -257,7 +259,7 @@ function ajaxAction(url,postdata,form,callback_func_name,moreags){
 				return;
 			}
 			else{
-				if(request.success){
+				if(!notShowMsg && request.success){
 					showSuccessMessage(request.success);
 				}
 				else if(request.error){
@@ -430,21 +432,20 @@ function addtofavor(model,id)
 }
 /**
  * 添加到购物车
- * 
- * @param id
- *            产品编号
- * @param num
- *            产品数量
+ * @param id 产品编号
+ * @param num 产品数量
+ * @param spec 产品规格
+ * @param notShowSuccess
  * @return
  */
-function addtoCart(id,num)
+function addtoCart(id, num, spec, notShowSuccess)
 {
-	var url=BASEURL+'/carts/add';	
-	var postdata = {'data[Cart][num]':num,'data[Cart][product_id]':id};
-	if(!sso.check_userlogin({"callback":addtoCart,"callback_args":arguments}))
-		return false;
-	ajaxAction(url,postdata,null,'addtoCart');
-	return false;
+    var url = BASEURL + '/carts/add';
+    var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec};
+    if (!sso.check_userlogin({"callback": addtoCart, "callback_args": arguments}))
+        return false;
+    ajaxAction(url, postdata, null, 'addtoCart', notShowSuccess, notShowSuccess);
+    return false;
 }
 // $(function(){
 // sso.check_userlogin(); // test
@@ -839,8 +840,75 @@ $(document).ready(function() {
     if (typeof _pys_notify_img_url != 'undefined' && _pys_notify_img_url) {
         $([_pys_notify_img_url]).preload();
     }
+
+    //show cart button
+    $('#card-btn').click(function(ev){
+        if($(this).hasClass('cart_icon_not_empty')){ //has item
+            window.location.href = '/carts/listcart.html';
+        } else {
+            utils.alert('购物车中没有东西');
+            ev.preventDefault();
+            return false;
+        }
+    });
 });
 
+var editAmount = {
+    min:1,
+    max:999,
+    reg:function(x){
+        return new RegExp("^[1-9]\\d*$").test(x);
+    },
+    amount:function(obj,mode){
+        var x=$(obj).val();
+        if (this.reg(x)){
+            if (mode){
+                x++;
+            }else{
+                x--;
+            }
+        }else{
+            alert("请输入正确的数量！");
+            $(obj).val(1);
+            $(obj).focus();
+        }
+        return x;
+    },
+    reduce: function(obj, callback){
+        var x=this.amount(obj,false);
+        if (x>=this.min){
+            $(obj).val(x);
+        }else{
+            alert("商品数量最少为"+this.min);
+            $(obj).val(1);
+            $(obj).focus();
+        }
+        if (typeof callback == 'function') {
+            callback(obj);
+        }
+    },
+    add: function(obj, callback){
+        var x=this.amount(obj,true);
+        if (x<=this.max){
+            $(obj).val(x);
+        }else{
+            alert("商品数量最多为"+this.max);
+            $(obj).val(999);
+            $(obj).focus();
+        }
+        if (typeof callback == 'function') {
+            callback(obj);
+        }
+    },
+    modify:function(obj){
+        var x=$(obj).val();
+        if (x<this.min||x>this.max||!this.reg(x)){
+            alert("请输入正确的数量！");
+            $(obj).val(1);
+            $(obj).focus();
+        }
+    }
+};
 
 var utils = {
 
@@ -910,3 +978,71 @@ var utils = {
         return result;
     }
 };
+
+//js for cart
+$(document).ready(function () {
+    var numInput = $('#input_pamount');
+    var cart_edit_amount = {
+        reduce: function() {
+            editAmount.reduce(numInput);
+        },
+        add : function() {
+            editAmount.add(numInput);
+        },
+        save: function(pid) {
+            addToCartWithSpec(pid, $(numInput).val());
+            return false;
+        }
+    };
+
+    function addToCartWithSpec(pid, itemNum, notShowSuccess) {
+        var specId = '';
+        if (typeof(_p_spec_m) != 'undefined') {
+            if (_p_spec_m) {
+                var spec_labels = $('span.spec_label');
+                if (spec_labels.size() > 0) {
+//                            $.each(spec_labels, function(idx, spanLabel){
+//                            });
+                    var spec_item_selected = $('span.spec_item_selected');
+                    if (spec_item_selected.size() == 0) {
+                        utils.alert("请选择蛋糕口味");
+                        return false;
+                    }
+
+                    specId = _p_spec_m[spec_item_selected.text()];
+                }
+            }
+        }
+
+        addtoCart(pid, itemNum, specId || 0, notShowSuccess);
+        return true;
+    }
+
+
+    $('span.spec_item').click(function (ev) {
+        var $this = $(this);
+        $this.toggleClass('spec_item_selected');
+        $('span.spec_item[item-label="' + $this.attr('item-label') + '"]').not($this).removeClass('spec_item_selected');
+    });
+    $("#btn_add_cart").click(function(e){
+        cart_edit_amount.save($(this).attr('item-id'));
+        e.preventDefault();
+        return false;
+    });
+    $('#pamount_reduce').click(function(e){
+        cart_edit_amount.reduce();
+        return false;
+    });
+    $('#pamount_add').click(function(e){
+        cart_edit_amount.add();
+        return false;
+    });
+    $('#btn_quick_buy').click(function(){
+        var itemId = $(this).attr('item-id');
+        var itemNum = numInput.val() || 1;
+        if(!addToCartWithSpec(itemId, itemNum, true)) {
+            return false;
+        }
+        window.location.href = '/orders/info?from=quick_buy&pid_list='+itemId;
+    });
+});

@@ -18,59 +18,6 @@
 	    line-height: 28px;
 	}
 	</style>
-<script>
-var setAmount={
-		min:1,
-		max:999,
-		reg:function(x){
-			return new RegExp("^[1-9]\\d*$").test(x);
-		},
-		amount:function(obj,mode){
-			var x=$(obj).val();
-			if (this.reg(x)){
-				if (mode){
-					x++;
-				}else{
-					x--;
-				}
-			}else{
-				alert("请输入正确的数量！");
-				$(obj).val(1);
-				$(obj).focus();
-			}
-			return x;
-		},
-		reduce:function(obj){
-			var x=this.amount(obj,false);
-			if (x>=this.min){
-				$(obj).val(x);
-			}else{
-				alert("商品数量最少为"+this.min);
-				$(obj).val(1);
-				$(obj).focus();
-			}
-		},
-		add:function(obj){
-			var x=this.amount(obj,true);
-			if (x<=this.max){
-				$(obj).val(x);
-			}else{
-				alert("商品数量最多为"+this.max);
-				$(obj).val(999);
-				$(obj).focus();
-			}
-		},
-		modify:function(obj){
-			var x=$(obj).val();
-			if (x<this.min||x>this.max||!this.reg(x)){
-				alert("请输入正确的数量！");
-				$(obj).val(1);
-				$(obj).focus();
-			}
-		}
-}
-
-</script>
 
 <h2 class="Content-title"><?php echo $Product['Product']['name']; ?></h2>
 	    <div  id="productinfo">
@@ -92,12 +39,12 @@ var setAmount={
 
             <li>
             <div class="input-group" style="float:left;width:120px;">
-			  <span class="reduce input-group-addon" onclick="setAmount.reduce('#pamount')">-</span>
-			  <input id="pamount" size="3" value="1" class="form-control" name="shoppingnum" type="text">
-			  <span class="add input-group-addon" onclick="setAmount.add('#pamount')">+</span>
+			  <span id="pamount_reduce" class="reduce input-group-addon">-</span>
+			  <input id="input_pamount" item-id="{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text">
+			  <span id="pamount_add" class="add input-group-addon">+</span>
 			</div>
-			<a aria-disabled="false" style="float:left;margin-left:20px;" class="btn btn-primary"
- onclick="return addtoCart({{$Product['Product']['id']}},1);" href="javascript:void(0);">添加到购物车 </a>
+			<a aria-disabled="false" id="btn_add_cart" style="float:left;margin-left:20px;" class="btn btn-primary" item-id="{{$Product['Product']['id']}}" href="javascript:void(0);">添加到购物车 </a>
+            <a class="btn-sm btn-danger" id="btn_quick_buy" item-id="{{$Product['Product']['id']}}" href="javascript:;" style="padding: 8px 4px;">立即购买</a>
 			</li>
         </ul>
 	    </div>

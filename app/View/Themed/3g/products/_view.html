@@ -50,18 +50,6 @@
                     border: 1px #eee solid;
                 }
         </style>
-
-        <script>
-            $(document).ready(function () {
-                $('span.spec_item').click(function (ev) {
-                    var $this = $(this);
-                    $this.toggleClass('spec_item_selected');
-                    $('span.spec_item[item-label="' + $this.attr('item-label') + '"]').not($this).removeClass('spec_item_selected');
-                });
-            });
-        </script>
-
-
         {{if $product_spec_map }}
         {{$product_spec_map}}
         {{/if}}
@@ -80,15 +68,16 @@
             <p>每人限购一份</p>
                 <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="hidden" readonly="readonly">
             {{else}}
-            <div class="input-group" style="float:left; width:120px">
-                <span class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}" >-</span>
-                <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text" readonly="readonly">
-                <span class="add input-group-addon"  item-id="{{$Product['Product']['id']}}">+</span>
+            <div class="input-group" style="width:120px">
+                <span id="pamount_reduce" class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}">-</span>
+                <input id="input_pamount"  item-id="{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text">
+                <span id="pamount_add" class="add input-group-addon" item-id="{{$Product['Product']['id']}}">+</span>
             </div>
             {{/if}}
-            <div class="clearfix col-xs-12">
-            <a aria-disabled="false" style="margin-left:0.5em;padding: 8px 4px;" class="btn-sm btn-warning shopping" id="single-item-{{$Product['Product']['id']}}" item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
-               href="javascript:void(0);">添加到购物车</a>
+            <div class="clearfix col-xs-12 voffset2">
+            <a aria-disabled="false" style="margin-left:0.5em;padding: 8px 4px;" class="btn-sm btn-warning shopping" id="btn_add_cart"
+               item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
+               href="javascript:;">添加到购物车</a>
             <a class="btn-sm btn-danger" id="btn_quick_buy" item-id="{{$Product['Product']['id']}}" href="javascript:;" style="padding: 8px 4px;">立即购买</a>
             </div>
         </div>

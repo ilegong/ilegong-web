@@ -45,7 +45,9 @@ class CartsController extends AppController{
 		if(!empty($this->data)){
 			$this->autoRender = false;
             $product_id = $this->data['Cart']['product_id'];
-            $this->_addToCart($product_id);
+            $num = $this->data['Cart']['num'];
+            $specId = $this->data['Cart']['spec'];
+            $this->_addToCart($product_id, $num, $specId);
 			
 			$successinfo = array('success' => __('Success add to cart.'));
 			echo json_encode($successinfo);
@@ -69,7 +71,6 @@ class CartsController extends AppController{
 		exit;
 	}
 
-    //FIXME: check authorized problem
 	function cart_total(){
         $count = 0;
         if($this->currentUser && $this->currentUser['id']) {
@@ -78,7 +79,7 @@ class CartsController extends AppController{
                     'status' => 0,
                     'order_id' => NULL,
                     'OR' => $this->user_condition
-                )
+                ),
             ));
         }
 		$successinfo = array('count' => $count);
@@ -86,21 +87,6 @@ class CartsController extends AppController{
 		exit;
 	}
 
-    function quick_buy() {
-        $pid = intval($_GET['pid']);
-        $num = intval($_GET['num']);
-
-        if (!$pid || !$num) {
-            $this->__message('参数错误', '/');
-        }
-
-        if($this->_addToCart($pid, $num)) {
-            $this->redirect('/orders/info?from=quick_buy&pid_list='.$pid);
-        } else {
-            $this->__message('系统忙，立即下单失败，请返回重试', product_link($pid, '/'));
-        }
-    }
-	
 	function listcart(){
         if (empty($this->currentUser['id'])) {
             $this->redirect("/users/login?referer=/carts/listcart");
@@ -148,9 +134,10 @@ class CartsController extends AppController{
     /**
      * @param $product_id
      * @param int $num
+     * @param int $spec specified id for
      * @return bool whether saved successfully
      */
-    private function _addToCart($product_id, $num = 1) {
+    private function _addToCart($product_id, $num = 1, $spec = 0) {
         $Carts = $this->Cart->find('first', array(
             'conditions' => array(
                 'product_id' => $product_id,
@@ -159,20 +146,20 @@ class CartsController extends AppController{
             )));
         if (!empty($Carts)) {
             $this->data['Cart']['id'] = $Carts['Cart']['id'];
-            $this->data['Cart']['num'] += $Carts['Cart']['num'];
-        } else {
-            $this->data['Cart']['num'] = $num;
         }
+
+        $this->data['Cart']['num'] = $num;
         $this->data['Cart']['product_id'] = $product_id;
 
         $this->loadModel('Product');
-        $productinfo = $this->Product->findById($product_id);
+        $p = $this->Product->findById($product_id);
 
         $this->data['Cart']['session_id'] = $this->Session->id();
-        $this->data['Cart']['coverimg'] = $productinfo['Product']['coverimg'];
-        $this->data['Cart']['name'] = $productinfo['Product']['name'];
-        $this->data['Cart']['price'] = $productinfo['Product']['price'];
+        $this->data['Cart']['coverimg'] = $p['Product']['coverimg'];
+        $this->data['Cart']['name'] = product_name_with_spec($p['Product']['name'], $spec, $p['Product']['specs']);;
+        $this->data['Cart']['price'] = $p['Product']['price'];
         $this->data['Cart']['creator'] = $this->currentUser['id'];
+        $this->data['Cart']['specId'] = $spec;
         return $this->Cart->save($this->data);
     }
 
