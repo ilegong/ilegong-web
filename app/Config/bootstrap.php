@@ -389,11 +389,11 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
                 'coverimg' => $p['Product']['coverimg'],
                 'num' => $nums[$pid],
                 'price' => $p['Product']['price'],
-                'specId' => $newSpecId
+                'specId' => $newSpecId,
+                'session_id' => $this->Session->id(),
             );
             $cartsByPid[$pid] =& $cartItem;
         } else {
-
             if ($newSpecId == $cartItem['specId']) {
                 $cartItem['num'] = $nums[$pid];
                 $cartItem['price'] = $p['Product']['price'];
@@ -545,15 +545,9 @@ function brand_link($brand_id) {
 }
 
 function small_thumb_link($imgUrl) {
-    if ($imgUrl) {
-//        $replaced = str_replace('/thumb_m/', '/thumb_s/', $imgUrl);
-//        if ($replaced) {
-//            return $replaced;
-//        } else {
-//            $r = preg_replace('/(^\s+\/files\/20\d+\/)(thumb_m\/?)(\s+)/i', '{1}thumb_s/{2}', $imgUrl);
-            $r = preg_replace('/(.*files\/20\d+\/)(thumb_m\/)?(\s*)/i', '${1}thumb_s/${3}', $imgUrl);
-            return ($r != null)? $r : $imgUrl;
-//        }
+    if ($imgUrl && strpos($imgUrl, '/thumb_s/') === false) {
+        $r = preg_replace('/(.*files\/20\d+\/)(thumb_m\/)?(\s*)/i', '${1}thumb_s/${3}', $imgUrl);
+        return ($r != null) ? $r : $imgUrl;
     }
 
     return $imgUrl;
