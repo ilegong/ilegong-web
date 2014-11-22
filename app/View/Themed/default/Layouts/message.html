@@ -26,7 +26,7 @@
     var left = document.getElementById('left_seconds');
     var cal = function () {
         var t = parseInt(left.innerHTML);
-        left.innerHTML = t - 1;
+        left.innerHTML = t - 1 > 0 ? t - 1 : 0 ;
         setTimeout(cal, 1000);
     };
     setTimeout(cal,  1000);

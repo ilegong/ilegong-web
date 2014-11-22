@@ -149,12 +149,14 @@ var rs_callbacks = {
             }
         }
 	},
-	addtoCart:function(request, notShowMessage){
-        if (!notShowMessage) {
-            showSuccessMessage(request.success, function () {
-//            window.location.href = window.location.href;
-            });
+	addtoCart:function(request, quick_buy_pid){
+        if (quick_buy_pid) {
+            window.location.href = '/orders/info?from=quick_buy&pid_list='+quick_buy_pid;
+            return;
         }
+        $('#card-btn').addClass('cart_icon_not_empty');
+        $('#btn_add_cart').removeClass('btn-warning').addClass('btn-success').text('已加入购物车');
+        utils.close_notify();
         if (typeof(updateCartItemCount) == 'function') {
             updateCartItemCount();
         }
@@ -435,19 +437,19 @@ function addtofavor(model,id)
  * @param id 产品编号
  * @param num 产品数量
  * @param spec 产品规格
- * @param notShowSuccess
+ * @param quick_buy_pid
  * @return
  */
-function addtoCart(id, num, spec, notShowSuccess)
+function addtoCart(id, num, spec, quick_buy_pid)
 {
     var url = BASEURL + '/carts/add';
     var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec};
 //    if (!sso.check_userlogin({"callback": addtoCart, "callback_args": arguments}))
 //        return false;
-    ajaxAction(url, postdata, null, 'addtoCart', true);
+    ajaxAction(url, postdata, null, 'addtoCart', quick_buy_pid);
 
-    $('#card-btn').addClass('cart_icon_not_empty');
-    $('#btn_add_cart').removeClass('btn-warning').addClass('btn-success').text('已加入购物车');
+    utils.progress_notify();
+
     return false;
 }
 // $(function(){
@@ -775,7 +777,16 @@ var stack_custom = {"dir1": "right", "dir2": "down"};
 function showSuccessMessage(text, close_callback, timeout)
 {
 	if($('#showMessageModel').size()==0){
-		$('<div id="showMessageModel" class="modal fade"><div class="modal-dialog"><div class="modal-content"> <div class="modal-header">   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>   <h4 class="modal-title">消息提醒</h4> </div> <div class="modal-body"></div> <div class="modal-footer">   <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button></div>	</div>  </div></div>').appendTo('body');
+		$('<div id="showMessageModel" class="modal fade"><div class="modal-dialog">' +
+            '<div class="modal-content">' +
+            '<div class="modal-body"></div> <div class="modal-footer text-center">   <button id="show_msg_close_btn" type="button" class="btn btn-default" data-dismiss="modal">关闭</button></div>	</div>  </div></div>')
+            .css({
+                'top': '50%',
+                'margin-top': function () {
+                    return -($(this).height() / 2);
+                }
+            })
+            .appendTo('body');
 	}
     var $msgDlg = $('#showMessageModel');
     if (typeof(close_callback) == 'function') {
@@ -785,6 +796,16 @@ function showSuccessMessage(text, close_callback, timeout)
     }
     $msgDlg.modal('hide');
     if (timeout) {
+        var $showMsgCloseBtn = $('#show_msg_close_btn');
+        $showMsgCloseBtn.html('关闭(<span>'+ (timeout/1000) +'</span>)');
+        $timeSpan = $showMsgCloseBtn.find('span');
+        var cal = function () {
+            var t = parseInt($timeSpan.html());
+            $timeSpan.html(t - 1 > 0 ? t - 1 : 0) ;
+            setTimeout(cal, 1000);
+        };
+        setTimeout(cal,  1000);
+
         $msgDlg.on('shown.bs.modal', function () {
             clearTimeout($msgDlg.data('hideInteval'))
             var id = setTimeout(function(){
@@ -914,7 +935,7 @@ var editAmount = {
 };
 
 var utils = {
-
+    notify_dialog : null,
     get_notify_img_url : function() {
         if (typeof '_pys_notify_img_url' != 'undefined' && _pys_notify_img_url) {
             return _pys_notify_img_url;
@@ -923,10 +944,22 @@ var utils = {
         }
     },
 
+
+    close_notify : function() {
+        if (utils.notify_dialog) {
+            utils.notify_dialog.modal('hide');
+        }
+    },
+
     progress_notify: function(msg) {
-        return bootbox.dialog({
+        if (msg) {
+            msg = '<br/>' + msg;
+        } else {
+            msg = '';
+        }
+        utils.notify_dialog = bootbox.dialog({
             'closeButton': false,
-            message: '<img src="'+ this.get_notify_img_url()+'"/><br/> ' + msg
+            message: '<img src="'+ this.get_notify_img_url()+'"/>' + msg
         }).css({
             'top': '50%',
             'margin-top': function () {
@@ -998,7 +1031,7 @@ $(document).ready(function () {
         }
     };
 
-    function addToCartWithSpec(pid, itemNum, notShowSuccess) {
+    function addToCartWithSpec(pid, itemNum, quick_buy_pid) {
         var specId = '';
         if (typeof(_p_spec_m) != 'undefined') {
             if (_p_spec_m) {
@@ -1017,7 +1050,7 @@ $(document).ready(function () {
             }
         }
 
-        addtoCart(pid, itemNum, specId || 0, notShowSuccess);
+        addtoCart(pid, itemNum, specId || 0, quick_buy_pid);
         return true;
     }
 
@@ -1043,9 +1076,8 @@ $(document).ready(function () {
     $('#btn_quick_buy').click(function(){
         var itemId = $(this).attr('item-id');
         var itemNum = numInput.val() || 1;
-        if(!addToCartWithSpec(itemId, itemNum, true)) {
+        if(!addToCartWithSpec(itemId, itemNum, itemId)) {
             return false;
         }
-        window.location.href = '/orders/info?from=quick_buy&pid_list='+itemId;
     });
 });
