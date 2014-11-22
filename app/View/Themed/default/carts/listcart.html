@@ -13,45 +13,57 @@ td {padding:3px 3px !important; }
     }
 </style>
 <script>
-var cart_edit_amount = {
-    modify: function(obj)  {
-        editAmount.modify(obj);
-    },
-    amount: function(obj, mode)  {
-        editAmount.amount(obj, mode);
-    },
-    reduce: function(obj) {
-        editAmount.reduce(obj, function(obj){
-            editCartNum($(obj).data('id'),$(obj).val());
-        });
-    },
-    add: function(obj) {
-        editAmount.add(obj, function(obj){
-            editCartNum($(obj).data('id'),$(obj).val());
-        });
-    }
-};
 
-function editCartNum(id,num){
-	$('#price-'+id).html(utils.toFixed($('#pamount-'+id).data('price')*num, 2));
-	var total_price =0 ;
-	$('.item-price').each(function(){
-		total_price += parseFloat($(this).html());
-	});
-	$('#total-price').html(utils.toFixed(total_price, 2));
-	var url=BASEURL+'/carts/editCartNum/'+id+'/'+num;	
-	// var postdata = {'data[Cart][num]':num,'data[Cart][product_id]':id};
-	if(!sso.check_userlogin({"callback":editCartNum,"callback_args":arguments}))
-		return false;
-	ajaxAction(url,null,null,function(data){
-        if(data && data.success) {
-            if (typeof(updateCartItemCount) === 'function') {
-                updateCartItemCount();
-            }
+    $(document).ready(function() {
+
+        $('#submit_btn').click(function(){
+            return sso.check_userlogin(function () {
+                window.location.href = '/carts/listcart.html';
+            });
+
+        });
+
+        function editCartNum(id, num) {
+            $('#price-' + id).html(utils.toFixed($('#pamount-' + id).data('price') * num, 2));
+            var total_price = 0;
+            $('.item-price').each(function () {
+                total_price += parseFloat($(this).html());
+            });
+            $('#total-price').html(utils.toFixed(total_price, 2));
+            var url = BASEURL + '/carts/editCartNum/' + id + '/' + num;
+            // var postdata = {'data[Cart][num]':num,'data[Cart][product_id]':id};
+            if (!sso.check_userlogin({"callback": editCartNum, "callback_args": arguments}))
+                return false;
+            ajaxAction(url, null, null, function (data) {
+                if (data && data.success) {
+                    if (typeof(updateCartItemCount) === 'function') {
+                        updateCartItemCount();
+                    }
+                }
+            }, {'id': id, 'num': num});
+            return false;
         }
-    },{'id':id,'num':num});
-	return false;
-}
+
+        //add to global
+        cart_edit_amount = {
+            modify: function (obj) {
+                editAmount.modify(obj);
+            },
+            amount: function (obj, mode) {
+                editAmount.amount(obj, mode);
+            },
+            reduce: function (obj) {
+                editAmount.reduce(obj, function (obj) {
+                    editCartNum($(obj).data('id'), $(obj).val());
+                });
+            },
+            add: function (obj) {
+                editAmount.add(obj, function (obj) {
+                    editCartNum($(obj).data('id'), $(obj).val());
+                });
+            }
+        };
+    });
 </script>
 <div class="container">
 <form action="{{$this->Html->url('/orders/info?from=list_cart')}}" method="post">
@@ -91,7 +103,7 @@ function editCartNum(id,num){
         <thead>
         <tr>
             <td colspan="4" style="text-align: right"><span id="total-price">总价：{{$this->Number->precision($total_price, 2)}}</span>
-                <input class="btn btn-warning" type="submit" value="结算"/></td>
+                <input id="submit_btn" class="btn btn-warning" type="submit" value="结算"/></td>
         </tr>
         </thead>
     </table>

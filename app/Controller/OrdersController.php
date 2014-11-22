@@ -171,13 +171,13 @@ class OrdersController extends AppController{
                 if ($order_id) {
                     array_push($new_order_ids, $order_id);
                 }
-                $this->apply_coupons_to_order($brand_id, $uid, $order_id);
-                $this->apply_coupon_code_to_order($uid, $order_id);
                 foreach($busi as $pid){
 					$cart = $Carts[$pid];
 // 					echo "==$order_id=====$pid======$total_price====\n";
 					$this->Cart->updateAll(array('order_id'=>$order_id,'status'=>1),array('id'=>$cart['Cart']['id'],'creator'=> $uid));
 				}
+                $this->apply_coupons_to_order($brand_id, $uid, $order_id);
+                $this->apply_coupon_code_to_order($uid, $order_id);
 			}
 			else{
 				$saveFailed = true;
