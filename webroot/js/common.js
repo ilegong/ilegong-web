@@ -444,7 +444,10 @@ function addtoCart(id, num, spec, notShowSuccess)
     var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec};
 //    if (!sso.check_userlogin({"callback": addtoCart, "callback_args": arguments}))
 //        return false;
-    ajaxAction(url, postdata, null, 'addtoCart', notShowSuccess, notShowSuccess);
+    ajaxAction(url, postdata, null, 'addtoCart', true);
+
+    $('#card-btn').addClass('cart_icon_not_empty');
+    $('#btn_add_cart').removeClass('btn-warning').addClass('btn-success').text('已加入购物车');
     return false;
 }
 // $(function(){
