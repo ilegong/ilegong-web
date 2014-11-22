@@ -72,26 +72,19 @@ class CartsController extends AppController{
 	}
 
 	function cart_total(){
-        $count = 0;
-        if($this->currentUser && $this->currentUser['id']) {
-            $count = $this->Cart->find('count', array(
-                'conditions' => array(
-                    'status' => 0,
-                    'order_id' => NULL,
-                    'OR' => $this->user_condition
-                ),
-            ));
-        }
+        $count = $this->Cart->find('count', array(
+            'conditions' => array(
+                'status' => 0,
+                'order_id' => NULL,
+                'OR' => $this->user_condition
+            ),
+        ));
 		$successinfo = array('count' => $count);
 		echo json_encode($successinfo);
 		exit;
 	}
 
 	function listcart(){
-        if (empty($this->currentUser['id'])) {
-            $this->redirect("/users/login?referer=/carts/listcart");
-        }
-
         $dbCartItems = $this->Cart->find('all',array(
 				'conditions'=>array(
 					'status' => 0,
