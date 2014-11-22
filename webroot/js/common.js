@@ -154,9 +154,11 @@ var rs_callbacks = {
             window.location.href = '/orders/info?from=quick_buy&pid_list='+quick_buy_pid;
             return;
         }
-        $('#card-btn').addClass('cart_icon_not_empty');
-        $('#btn_add_cart').removeClass('btn-warning').addClass('btn-success').text('已加入购物车');
-        utils.close_notify();
+        setTimeout(function(){
+            utils.close_notify();
+            $('#card-btn').addClass('cart_icon_not_empty');
+            $('#btn_add_cart').removeClass('btn-warning').addClass('btn-success').text('已加入购物车');
+        }, 500);
         if (typeof(updateCartItemCount) == 'function') {
             updateCartItemCount();
         }
@@ -444,12 +446,8 @@ function addtoCart(id, num, spec, quick_buy_pid)
 {
     var url = BASEURL + '/carts/add';
     var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec};
-//    if (!sso.check_userlogin({"callback": addtoCart, "callback_args": arguments}))
-//        return false;
-    ajaxAction(url, postdata, null, 'addtoCart', quick_buy_pid);
-
     utils.progress_notify();
-
+    ajaxAction(url, postdata, null, 'addtoCart', quick_buy_pid);
     return false;
 }
 // $(function(){
@@ -961,9 +959,9 @@ var utils = {
             'closeButton': false,
             message: '<img src="'+ this.get_notify_img_url()+'"/>' + msg
         }).css({
-            'top': '50%',
-            'margin-top': function () {
-                return -($(this).height() / 2);
+            'overflow-y': 'auto',
+            'padding-top': function () {
+                return ($(this).height() / 2);
             }
         });
     },
@@ -973,9 +971,10 @@ var utils = {
         if (!callback) callback = function(){};
 
         var $dlg = bootbox.alert({'message':msg, 'callback':callback, 'closeButton':false}).css({
-            'top': '50%',
-            'margin-top': function () {
-                return -($(this).height() / 2);
+//            'top': '50%',
+            'overflow-y': 'auto',
+            'padding-top': function () {
+                return ($(this).height() / 2);
             }
         });
 
