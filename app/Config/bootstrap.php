@@ -543,3 +543,18 @@ function brand_link($brand_id) {
         return '/';
     }
 }
+
+function small_thumb_link($imgUrl) {
+    if ($imgUrl) {
+//        $replaced = str_replace('/thumb_m/', '/thumb_s/', $imgUrl);
+//        if ($replaced) {
+//            return $replaced;
+//        } else {
+//            $r = preg_replace('/(^\s+\/files\/20\d+\/)(thumb_m\/?)(\s+)/i', '{1}thumb_s/{2}', $imgUrl);
+            $r = preg_replace('/(.*files\/20\d+\/)(thumb_m\/)?(\s*)/i', '${1}thumb_s/${3}', $imgUrl);
+            return ($r != null)? $r : $imgUrl;
+//        }
+    }
+
+    return $imgUrl;
+}
