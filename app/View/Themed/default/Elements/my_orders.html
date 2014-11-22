@@ -27,9 +27,8 @@ $brand = $brands[$order['Order']['brand_id']];
         {{if !empty($order_carts[$order['Order']['id']])}}
         {{loop $order_carts[$order['Order']['id']] $cart}}
         <div class="clearfix orderitem_item">
-            {{$this->Html->image($cart['Cart']['coverimg'], array(
+            {{$this->Html->image(small_thumb_link($cart['Cart']['coverimg']), array(
             'class' => 'col-xs-3',
-            'style' => 'max-height:60px'
             ));}}
             <p class="col-xs-6">{{$cart['Cart']['name']}}</p>
             <div class="col-xs-3 pull-right">
