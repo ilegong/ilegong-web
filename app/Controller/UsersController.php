@@ -484,7 +484,15 @@ class UsersController extends AppController {
             $success = true;
         }
         else { // 通过表单登录
+            $sid = $this->Session->id();
             if ($this->Auth->login()) {
+
+                $newSid = $this->Session->id();
+
+                $this->loadModel('Cart');
+
+                $this->Cart->updateAll(array('session_id' => '\''.$newSid.'\''),
+                    array('session_id' => $sid, 'creator is null', 'order_id is null', 'date(created) > DATE_SUB(\'' . date('Y-m-d') . '\', INTERVAL 2 DAY)'));
 
                 $this->User->id = $this->Auth->user('id');
                 $this->User->updateAll(array(
