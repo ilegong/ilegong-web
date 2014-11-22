@@ -158,7 +158,7 @@ var rs_callbacks = {
             utils.close_notify();
             $('#card-btn').addClass('cart_icon_not_empty');
             $('#btn_add_cart').removeClass('btn-warning').addClass('btn-success').text('已加入购物车');
-        }, 500);
+        }, 800);
         if (typeof(updateCartItemCount) == 'function') {
             updateCartItemCount();
         }
@@ -446,7 +446,7 @@ function addtoCart(id, num, spec, quick_buy_pid)
 {
     var url = BASEURL + '/carts/add';
     var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec};
-    utils.progress_notify();
+    utils.progress_notify('正在更新购物车');
     ajaxAction(url, postdata, null, 'addtoCart', quick_buy_pid);
     return false;
 }
@@ -958,23 +958,28 @@ var utils = {
         utils.notify_dialog = bootbox.dialog({
             'closeButton': false,
             message: '<img src="'+ this.get_notify_img_url()+'"/>' + msg
-        }).css({
+        });
+
+        var modal_dialog = utils.notify_dialog.find('.modal-dialog');
+        modal_dialog.css('width', '200px').addClass('text-center');
+        utils.notify_dialog.css({
             'overflow-y': 'auto',
             'padding-top': function () {
-                return ($(this).height() / 2);
+                return (($(this).height() - modal_dialog.height()) / 2);
             }
-        });
+        })
     },
 
     alert:function(msg, callback, timeout, close_callback) {
 
         if (!callback) callback = function(){};
 
-        var $dlg = bootbox.alert({'message':msg, 'callback':callback, 'closeButton':false}).css({
-//            'top': '50%',
+        var $dlg = bootbox.alert({'message':msg, 'callback':callback, 'closeButton':false});
+        var modal_dialog = $dlg.find('.modal-dialog');
+        $dlg.css({
             'overflow-y': 'auto',
             'padding-top': function () {
-                return ($(this).height() / 2);
+                return ( ($(this).height() - modal_dialog.height()) / 2);
             }
         });
 
