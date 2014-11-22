@@ -489,16 +489,15 @@ class UsersController extends AppController {
 
                 $newSid = $this->Session->id();
 
-                $this->loadModel('Cart');
-
-                $this->Cart->updateAll(array('session_id' => '\''.$newSid.'\''),
-                    array('session_id' => $sid, 'creator is null', 'order_id is null', 'date(created) > DATE_SUB(\'' . date('Y-m-d') . '\', INTERVAL 2 DAY)'));
 
                 $this->User->id = $this->Auth->user('id');
                 $this->User->updateAll(array(
                     'last_login' => "'" . date('Y-m-d H:i:s') . "'",
                     'last_ip' => "'". $this->request->clientIp(false) ."'"
                 ), array('id' => $this->User->id,));
+
+                $this->loadModel('Cart');
+                $this->Cart->merge_user_carts_after_login($this->User->id, $sid);
 
                 $this->Session->setFlash('登录成功'.$this->Session->read('Auth.User.session_flash'));
                 $success = true;
