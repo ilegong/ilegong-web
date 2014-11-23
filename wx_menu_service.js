@@ -2,7 +2,7 @@
     "button":[
     {
         "type":"view",
-        "name":"特产商城",
+        "name":"购买特产",
         "url":"http://www.pyshuo.com/users/wx_menu_point?referer_key=CLICK_URL_TECHAN&from=service"
     },
     {
