@@ -168,24 +168,22 @@ ul.tags_menu {
 footer { font-size:0.833em; line-height:1.167em; text-align:center; color:#999999; margin-top:4em; margin-bottom: 5.2em}
 footer img{ width:4.625em; height:1.583em;}
 
-.navbar-v1 { font-size: 1em; color: #666666; background-color: #f1f1f1; border-top: 1px #dddddd solid; height: 4.0417em; padding-top: 0.4em; }
+.navbar-v1 { font-size: 1em; background-color: #f1f1f1; border-top: 1px #dddddd solid; height: 4.0417em; padding-top: 0.4em; }
 .navbar-v1 a .op-icon { background: url('/img/mobilev1/pyshuo_icon.png') 0 0 no-repeat; width:1.9167em; height:1.5em; background-size:25em 25em; display: inline-block; vertical-align: text-bottom; }
 .navbar-v1 ul { text-align: center; }
 .navbar-v1 li { width: 18.0%; }
-.navbar-v1 a span { display: block; }
-.navbar-v1 .active { color: #29ac0e; }
+.navbar-v1 a span { display: block;}
+.navbar-v1 a { color:#666666;}
+.navbar-v1 a.active { color: #29ac0e; }
 .navbar-v1 .home .op-icon { background-position: 0 -2.083em; }
 .navbar-v1 .home .op-icon-active { background-position: 0 0; }
 .navbar-v1 .categories .op-icon { background-position: -2.083em  -2.083em; }
 .navbar-v1 .categories .op-icon-active { background-position: -2.083em 0; }
-
 .navbar-v1 .share .op-icon { background-position: -4.167em  -2.083em; }
 .navbar-v1 .share .op-icon-active { background-position: -4.167em  0; }
 .navbar-v1 .shichituan .op-icon { background-position: -6.25em  -2.083em; }
 .navbar-v1 .shichituan .op-icon-active { background-position: -6.25em  0; }
-
 .navbar-v1 .me .op-icon { background-position: -8.333em  -2.083em; }
-
 .navbar-v1 .me .op-icon-active { background-position: -8.333em 0; }
 
 
@@ -232,8 +230,8 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 /* mobile home page v3 */
 .index_banner{ position:relative;}
 .index_banner img{ width:100%;}
-.index_banner ul{ position:absolute; bottom:0.5em; left:45%; z-index:999;}
-.index_banner ul li{ float:left; background:url('/img/mobilev1/pyshuo_icon.png') -1.292em -18.75em no-repeat; background-size:25em 25em; width:0.75em; height:0.75em; margin-right:0.5em;}
+.index_banner ul{ position:absolute; bottom:0.5em; left:45%; z-index:10;}
+.index_banner ul li{ float:left; background:url('/img/mobilev1/pyshuo_icon.png?xxy') -1.292em -18.75em no-repeat; background-size:25em 25em; width:0.75em; height:0.75em; margin-right:0.5em;}
 .index_banner ul li.cur{ background-position:0 -18.75em;}
 .index_good{ margin-top:1em; margin-bottom:1em;}
 .index_good ul{ border-bottom:1px #dddddd solid; border-top:1px #dddddd solid; margin-bottom:0.625em;}
