@@ -2,8 +2,8 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
         {{if $supportWeixin }}
-        <li class="active"><a href="#wechatLogin" role="tab" data-toggle="tab">{{__('By WeChat')}}</a></li>
-        <li><a href="#formLogin" role="tab" data-toggle="tab">{{__('By Username/Password')}}</a></li>
+        <li class="{{if !$login_by_account}} active {{/if}}"><a href="#wechatLogin" role="tab" data-toggle="tab">{{__('By WeChat')}}</a></li>
+        <li class="{{if $login_by_account}} active {{/if}}"><a href="#formLogin" role="tab" data-toggle="tab">{{__('By Username/Password')}}</a></li>
         {{else}}
         <li class="active"><a href="#formLogin" role="tab" data-toggle="tab">{{__('By Username/Password')}}</a></li>
         {{/if}}
@@ -12,7 +12,7 @@
     <!-- Tab panes -->
     <div class="tab-content voffset2" style="padding-left: 20px;">
         {{if $supportWeixin }}
-        <div class="tab-pane fade in active" id="wechatLogin">
+        <div class="tab-pane fade {{if !$login_by_account}} in active{{/if}}" id="wechatLogin">
                 {{if $_GET['login_error']}}
                     <p class="bg-warning" style="color: orangered">{{$_GET['login_error']}}</p>
                 {{else}}
@@ -30,7 +30,15 @@
                 <a id="wx_login_a2" href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" class="btn btn-success" style="vertical-align: bottom">使用微信登录</a>
         </div>
         {{/if}}
-        <div class="tab-pane fade {{if !$supportWeixin}} in active{{/if}}" id="formLogin">
+        <div class="tab-pane fade {{if !$supportWeixin || $login_by_account}} in active{{/if}}" id="formLogin">
+
+            {{if $fail_msg}}
+            <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">登录失败:</span>
+                {{$fail_msg}}
+            </div>
+            {{/if}}
             {{$this->Form->create('User',array('id'=>'loginform','method'=>"post",'class'=>'form-horizontal','onsubmit'=>$isajax ? "return ajaxeSubmitForm(this,'loginSucess');" : "",'escape' => false))}}
             <div class="lgfm nlf">
                 <div class="form-group">

@@ -504,6 +504,7 @@ class UsersController extends AppController {
             }
         }
 
+        $login_by_account = isset($this->data['User']['username']);
         if ($success) {
             $this->Hook->call('loginSuccess');
 
@@ -536,10 +537,11 @@ class UsersController extends AppController {
             } else {
                 $this->redirect($redirect);
             }
-        } elseif (isset($this->data['User']['username'])) {
+        } elseif ($login_by_account) {
+            $loginFailMsg = __('username or password not right');
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
                 // ajax 操作
-                $errorinfo = array('error' => '用户名或密码错误', 'tasks' => array(array('dotype' => 'html', 'selector' => '#login_errorinfo', 'content' => __('username or password not right'))));
+                $errorinfo = array('error' => '用户名或密码错误', 'tasks' => array(array('dotype' => 'html', 'selector' => '#login_errorinfo', 'content' => $loginFailMsg)));
                 $content = json_encode($errorinfo);
                 $this->autoRender = false; // 不显示模板
                 if($_GET['jsoncallback']){
@@ -550,7 +552,8 @@ class UsersController extends AppController {
                 }
             }
             else {
-            	$this->Session->setFlash(__('username or password not right'));
+            	$this->Session->setFlash($loginFailMsg);
+                $this->set('fail_msg', $loginFailMsg);
             }
             //$this->redirect(array('action' => 'forgot'), 401);
         } else {
@@ -562,6 +565,7 @@ class UsersController extends AppController {
         $this->set('supportWeixin', $this->is_weixin());
         $this->data['User']['referer'] = $redirect;
         $this->set('referer', $redirect);
+        $this->set('login_by_account', $login_by_account);
     }
 
     function logout() {
