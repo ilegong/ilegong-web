@@ -267,7 +267,7 @@ class CategoriesController extends AppController {
         }
 
         if ($slug == 'techan' || $conditions['id'] == CATEGORY_ID_TECHAN) {
-            $this->redirect('/categories/productsHome.html');
+            $this->redirect($this->RequestHandler->isMobile() ? '/categories/mobileHome.html' : '/categories/productsHome.html');
             return;
         }
 
