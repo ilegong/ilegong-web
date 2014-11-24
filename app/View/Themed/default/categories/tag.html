@@ -21,7 +21,8 @@
 	    ?>
             <li> <a href="{{'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'}}">
                 <img src="{{$this->Html->assetUrl(small_thumb_link($item['coverimg']))}}" border="0" />
-                <div class="item_name">{{usubstr($item['name'],0, 7,'')}}{{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}<span>有红包</span>
+                <div class="item_name">{{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}{{usubstr($item['name'],0, 7,'')}}<span>有红包</span>
+                    {{else}}{{usubstr($item['name'],0, 9,'')}}
                     {{/if}}</div>
                 </a>
                 <dl class="clearfix">
