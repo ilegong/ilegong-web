@@ -245,6 +245,26 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 .index_good ul li.single{ width:66%; background-size:6.667em 5em; text-align:left;}
 .index_good ul li .pl1{ padding-left:1em;}
 
+/* mobile category items v3 */
+.classlist{ height:3em; line-height:3em; width:100%; border-bottom:1px #dddddd solid; position:fixed; top:0; background-color:#ffffff;}
+.classlist ul{ padding-left:1em; width:40%;}
+.classlist ul li{ float:left; font-size:1.25em; color:#29ac0e; }
+.classlist ul li.back{ width:0.5em; height:1em; background:url('/img/mobilev1/pyshuo_icon.png?xxz') no-repeat -1.25em -16.875em; background-size:25em 25em; margin-top:0.7em; margin-right:0.5em;}
+.classlist_good { margin-top:3em; margin-bottom:1em;}
+.classlist_good ul li{ float:left; width:50%; text-align:center; padding-top:0.5em; border-bottom:1px #dddddd solid; border-right: 1px #dddddd solid;}
+.classlist_good ul li img{ text-align:center; width:8.8em; height:6.6em;}
+.classlist_good ul li .brand_name, .classlist_good ul li .item_name{ font-size:0.8em; color:#666666; text-align:left; font-weight:normal; padding:0.4em 0.833em 0 0.833em;}
+.classlist_good ul li .item_name { font-size:1em; padding-top:0.6em }
+.classlist_good ul li .item_name span{ font-size:0.6em; padding:0.1em 0.2em; background-color:#29ac0e; color:#ffffff;}
+.classlist_good ul li dl{ padding:0.1em 0.833em 0.6em 0.833em;}
+.classlist_good ul li dl dt{ float:left;}
+.classlist_good ul li dl dt img{ width:2.25em; height:2.3em;}
+.classlist_good ul li .brand_name{ font-size:0.85em; color:#999999; font-weight:normal; display: block}
+.classlist_good ul li .listprice{ font-size:0.75em; color:#ff9000; font-weight:normal; display: block}
+.classlist_good ul li .brand_name{ padding-left:0.4em; padding-top:0.1em;}
+.classlist_good ul li .listprice .original{ font-size: 1em; color:#999999; text-decoration:line-through;}
+.classlist_good ul li .listprice span{ color:#ff9000; font-size:1.25em;}
+
 /* slider plugin UI */
 .swiper-container {
 	margin:0 auto;

@@ -1,15 +1,56 @@
+<style>
+    dl {
+        margin-bottom: 0;
+    }
+</style>
 <div class="container clearfix">
-
-    {{if $sub_title }}
-        <h3 class="item-tags">{{$sub_title}}</h3>
-    {{/if}}
-
+    <div class="classlist">
+        <a href="/">
+        <ul class="clearfix list-unstyled">
+            <li class="back"></li>
+            <li>{{$sub_title}}</li>
+        </ul>
+        </a>
+    </div>
+    <div class="classlist_good row">
+        <ul class="clearfix list-unstyled">
 	<?PHP if($total>0){ ?>
 	    <?PHP foreach($data_list as $item) {
 	    $full = true;
 		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
-	    ?>	
-			{{include 'categories/_photolist'}}
+	    ?>
+            <li> <a href="{{'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'}}">
+                <img src="{{$this->Html->assetUrl(small_thumb_link($item['coverimg']))}}" border="0" />
+                <div class="item_name">{{usubstr($item['name'],0, 7,'')}}{{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}<span>有红包</span>
+                    {{/if}}</div>
+                </a>
+                <dl class="clearfix">
+                    <dt>
+                        <a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html')}}">
+                        <img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brands[$item['brand_id']]['Brand']['coverimg']))}}" border="0" />
+                        </a>
+                    </dt>
+                    <dt>
+                        <a href="{{'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'}}">
+                    <span class="brand_name">{{usubstr($brands[$item['brand_id']]['Brand']['name'],0, 7,'')}}</span>
+                    <span class="listprice"><span>¥{{$this->Number->precision($item['price'], 2)}}</span>
+                        {{if !empty($item['original_price'])}}
+                        <span class="original">¥{{$this->Number->precision($item['original_price'], 2)}}</span>
+                        {{/if}}
+                    </span>
+                            </a>
+                    </dt>
+                </dl>
+            </li>
 		<?php } ?>
 	<?php } ?>
+
+            {{if count($data_list) % 2 == 1}}
+            <li style="height: 12.4285em"></li>
+            {{/if}}
+        </ul>
+    </div>
 </div>
+
+
+
