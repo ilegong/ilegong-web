@@ -17,10 +17,7 @@ td {padding:3px 3px !important; }
     $(document).ready(function() {
 
         $('#submit_btn').click(function(){
-            return sso.check_userlogin(function () {
-                window.location.href = '/carts/listcart.html';
-            });
-
+            return sso.check_userlogin({'referer' : '/carts/listcart.html'});
         });
 
         function editCartNum(id, num) {
