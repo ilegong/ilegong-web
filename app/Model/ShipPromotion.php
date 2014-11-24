@@ -107,6 +107,7 @@ class ShipPromotion extends AppModel {
         '204' => array(135, 65, 0 ),
         '260' => array(51, 57, 1 ),
         '264' => array(103, 71, 1 ),
+        '294' => array(103, 92, 1 ),
     );
 
 
