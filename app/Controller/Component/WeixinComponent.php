@@ -44,6 +44,12 @@ class WeixinComponent extends Component
         return WX_HOST . '/orders/detail/' . $order_no;
     }
 
+    public function get_seller_order_query_url()
+    {
+
+        return WX_HOST . '/orders/tobe_shipped_orders.html';
+    }
+
     public function get_order_rebate_url()
     {
         return WX_HOST . '/users/my_coupons.html';
@@ -135,6 +141,25 @@ class WeixinComponent extends Component
                 "orderAddress" => array("value" => empty($ship_info)?'':$ship_info),
                 "orderName" => array("value" => $order_no),
                 "remark" => array("value" => "点击查看订单详情".($number > 0 ? "/领取红包":"")."。", "color" => "#FF8800")
+            )
+        );
+        return $this->send_weixin_message($post_data);
+    }
+
+    public function send_order_paid_message_for_seller($seller_open_id, $price, $good_info, $ship_info, $order_no)
+    {
+        $post_data = array(
+            "touser" => $seller_open_id,
+            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "url" => $this->get_seller_order_query_url(),
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => "亲，有用户刚刚购买了您家的商品，请及时发货。"),
+                "orderProductPrice" => array("value" => $price),
+                "orderProductName" => array("value" => $good_info),
+                "orderAddress" => array("value" => empty($ship_info)?'':$ship_info),
+                "orderName" => array("value" => $order_no),
+                "remark" => array("value" => "点击详情，查看待发货订单", "color" => "#FF8800")
             )
         );
         return $this->send_weixin_message($post_data);
@@ -240,7 +265,14 @@ class WeixinComponent extends Component
             $good_info = $good_info.$cart['Cart']['name'].' x '.$cart['Cart']['num'].';';
         }
         $pids = Hash::extract($carts, '{n}.Cart.product_id');
-        return array("good_info"=>$good_info,"ship_info"=>$ship_info, 'pid_list' => $pids);
+
+        $brandModel = ClassRegistry::init('Brand');
+        $brand = $brandModel->find('first',array(
+            'conditions'=>array(
+                'id' => $order_info['Order']['brand_id']
+            )
+        ));
+        return array("good_info"=>$good_info,"ship_info"=>$ship_info, 'pid_list' => $pids, 'brand_info' => $brand);
     }
 
     /**
@@ -249,15 +281,19 @@ class WeixinComponent extends Component
     public function notifyPaidDone($order) {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($order['Order']['creator']);
-        if ($user_weixin != false) {
-            $good = self::get_order_good_info($order);
-            $this->log("good info:" . $good['good_info'] . " ship info:" . $good['ship_info']);
 
+        $good = self::get_order_good_info($order);
+        $seller_weixin = $oauthBindModel->findWxServiceBindByUid($good['brand_info']['Brand']['creator']);
+
+        $this->log("good info:" . $good['good_info'] . " ship info:" . $good['ship_info']);
+
+        $price = $order['Order']['total_all_price'];
+        $good_info = $good['good_info'];
+        $ship_info = $good['ship_info'];
+        $order_id = $order['Order']['id'];
+
+        if ($user_weixin != false) {
             $open_id = $user_weixin['oauth_openid'];
-            $price = $order['Order']['total_all_price'];
-            $good_info = $good['good_info'];
-            $ship_info = $good['ship_info'];
-            $order_id = $order['Order']['id'];
             if ($this->hasRebates($good['pid_list'])) {
                 $this->send_rice_paid_message($open_id, $price, $good_info, $ship_info, $order_id);
 
@@ -299,6 +335,10 @@ class WeixinComponent extends Component
                 $this->send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_id, $order);
             }
 
+        }
+
+        if($seller_weixin != false){
+            $this->send_order_paid_message_for_seller($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id);
         }
     }
 
