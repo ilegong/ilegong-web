@@ -174,6 +174,11 @@ class CategoriesController extends AppController {
         $this->pageTitle = __('分类');
     }
 
+    public function mobileHome() {
+        $this->productsHome();
+        $this->set('max_show', $this->RequestHandler->isMobile()? 2 : 4);
+    }
+
     public function productsHome() {
 
         $current_cateid = CATEGORY_ID_TECHAN;

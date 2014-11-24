@@ -1,0 +1,61 @@
+<style>
+    img {
+        max-width: 100% !important;
+    }
+</style>
+<div class="index_banner">
+    <ul class="clearfix list-unstyled">
+        <li class="cur"></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <img src="{{ $this->Html->url('/img/banner/pyshuo_banner_meixian_mihoutao.jpg', true); }}" border="0" />
+</div>
+<div class="index_good">
+    <?PHP
+    $colors = array('#ea1e79', '#9ab300', '#a00f12', '#b07406', '#772617', '#ae950e', '#e74e01', '#cb5604', '#883f0d');
+    $i = 0;
+    foreach($tagsWithProducts as $tagWithProduct) {
+    if ($tagWithProduct['ProductTag']['id'] == 1) continue;
+    if(count($tagWithProduct['Products'])>0){ ?>
+    <ul class="clearfix list-unstyled">
+        <li class="border_r class_bg">
+            <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}" class="clearfix">
+                <img src="{{$this->Html->url('/img/class/classn'.$tagWithProduct['ProductTag']['id'].'.png')}}" border="0" />
+            </a>
+        </li>
+    <?PHP
+        $showed = $max_show;
+        foreach($tagWithProduct['Products'] as $item) {
+		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
+		if ($showed-- <= 0) {
+		    $showed = $max_show;
+		    break;
+		}
+		$i++;
+		$color = $colors[$i%count($colors)];
+	    ?>
+        {{if count($tagWithProduct['Products']) > 1}}
+        <li class="{{if $showed == $max_show -1 }}border_r{{/if}}">
+            <a href="{{'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'}}">
+            <div class="title" style="color:{{$color}};">{{usubstr($item['name'],0, 8,'')}}</div>
+            <p>{{$brands[$item['brand_id']]['Brand']['name']}}</p>
+            <img src="{{$this->Html->url(small_thumb_link($item['coverimg']))}}" border="0" />
+            </a>
+        </li>
+        {{else}}
+        <li class="single" style="background: url({{small_thumb_link($this->Html->url($item['coverimg']))}}) no-repeat right">
+            <a href="{{'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'}}">
+            <div class="pl1">
+                <div class="title" style="color:{{$color}};">{{usubstr($item['name'],0, 12,'')}}</div>
+                <p>{{$brands[$item['brand_id']]['Brand']['name']}}</p>
+                <p style="color:#e74e01; padding-top:4.5em;">{{$Product['Product']['promote_name']}}</p>
+            </div>
+            </a>
+        </li>
+        {{/if}}
+    <?php } ?>
+    </ul>
+    <?php } ?>
+    <?php } ?>
+</div>
