@@ -89,6 +89,12 @@ class ShipPromotion extends AppModel {
         )
     ),
 
+    '294' => array('limit_ship' => true,
+        'limit_per_user' => 1,
+        'items' => array(
+            array('id' => 36, 'ship_price' => 0.0, 'time' => '', 'address' => '星光影视园新媒体大厦6层'),
+        )
+    ),
     );
 
     private  $pro_num_limit = array(
