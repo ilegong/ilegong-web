@@ -11,9 +11,8 @@
 			<li><a href="{{$this->Html->url('/users/editusername')}}">设置用户名</a></li>
             {{/if}}
             {{if $CurrentUser['is_business']}}
-            <li><?php echo $this->Html->link('待发货订单', array('controller' => 'orders','action'=>'tobe_shipped_orders','plugin' => null ,)); ?></li>
-            <li><?php echo $this->Html->link('商家订单', array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>
-            <li><?php echo $this->Html->link('我的商品', array('controller' => 'products','action'=>'mine','plugin' => null ,)); ?></li>
+            <li><?php echo $this->Html->link('商家订单', array('controller' => 'orders','action'=>'wait_shipped_orders','plugin' => null ,)); ?></li>
+            <li><?php echo $this->Html->link('商家商品', array('controller' => 'products','action'=>'mine','plugin' => null ,)); ?></li>
             {{/if}}
 	        <li><a href="{{$this->Html->url('/orders/mine')}}">我的订单</a></li>
 	        <li><a href="{{$this->Html->url('/orders/edit_consignee')}}">我的地址</a></li>

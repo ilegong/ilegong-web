@@ -47,7 +47,7 @@ class WeixinComponent extends Component
     public function get_seller_order_query_url()
     {
 
-        return WX_HOST . '/orders/tobe_shipped_orders.html';
+        return WX_HOST . '/orders/wait_shipped_orders.html';
     }
 
     public function get_order_rebate_url()

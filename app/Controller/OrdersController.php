@@ -1077,7 +1077,7 @@ class OrdersController extends AppController{
         }
 
         $cond = array('brand_id' => $brand_ids, 'NOT' => array(
-            'status' => array(ORDER_STATUS_CANCEL, ORDER_STATUS_WAITING_PAY)
+            'status' => array(ORDER_STATUS_CANCEL)
         ));
 
         if (!empty($onlyStatus)) {
@@ -1284,5 +1284,26 @@ class OrdersController extends AppController{
             $total_reduce += 500;
         }
         return $total_reduce;
+    }
+
+
+
+    function wait_shipped_orders($creator=0){
+        $this->__business_orders($creator, array(ORDER_STATUS_PAID));
+    }
+
+
+    function wait_paid_orders($creator=0){
+        $this->__business_orders($creator, array(ORDER_STATUS_WAITING_PAY));
+    }
+
+
+    function shipped_orders($creator=0){
+        $this->__business_orders($creator, array(ORDER_STATUS_SHIPPED));
+    }
+
+
+    function signed_orders($creator=0){
+        $this->__business_orders($creator, array(ORDER_STATUS_RECEIVED));
     }
 }

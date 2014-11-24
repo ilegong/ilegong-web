@@ -22,20 +22,14 @@
 
 {{if $CurrentUser['is_business']}}
 <div class="main_list border_b">
-    <a href="{{$this->Html->url(array('controller' => 'orders','action'=>'tobe_shipped_orders','plugin' => null ,))}}" class="clearfix">
-        <span class="fl">待发货订单</span>
-        <span class="fr more"></span>
-    </a>
-</div>
-<div class="main_list border_b">
-    <a href="{{$this->Html->url(array('controller' => 'orders','action'=>'business','plugin' => null ,))}}" class="clearfix">
+    <a href="{{$this->Html->url(array('controller' => 'orders','action'=>'wait_shipped_orders','plugin' => null ,))}}" class="clearfix">
         <span class="fl">商家订单</span>
         <span class="fr more"></span>
     </a>
 </div>
 <div class="main_list border_b">
     <a href="{{$this->Html->url(array('controller' => 'products','action'=>'mine','plugin' => null ,))}}" class="clearfix">
-        <span class="fl">我的商品</span>
+        <span class="fl">商家商品</span>
         <span class="fr more"></span>
     </a>
 </div>

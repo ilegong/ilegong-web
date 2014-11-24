@@ -1,0 +1,77 @@
+<style>
+td {padding:5px 10px;}
+</style>
+<div  class="container">
+    <ul class="nav nav-tabs" role="tablist">
+        <li><a href="{{$this->Html->url(array('controller' => 'orders','action'=>'wait_shipped_orders'))}}" role="tab">{{__('待发货')}}</a></li>
+        <li><a href="{{$this->Html->url(array('controller' => 'orders','action'=>'wait_paid_orders'))}}" role="tab">{{__('待支付')}}</a></li>
+        <li class="active"><a href="#orders-shipped" role="tab">{{__('已发货')}}</a></li>
+        <li><a href="{{$this->Html->url(array('controller' => 'orders','action'=>'signed_orders'))}}" role="tab" >{{__('已签收')}}</a></li>
+    </ul>
+
+	<div class="orderinfo">
+		<div class="o_show">
+        <h2>已发货订单<span style="color: red">{{count($orders)}}</span>个</h2>
+            {{loop $orders $order}}
+		<table  class="table table-bordered">
+		<tr>
+			<td>
+            订单号：{{$order['Order']['id']}}<br/>
+            收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_area']}}{{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
+			总价：￥{{$order['Order']['total_price']}}<br/>
+			下单时间：{{$order['Order']['created']}}<br/>
+            支付时间：{{$order['Order']['pay_time']}}<br/>
+			{{if $order['Order']['ship_type']}}
+			快递公司: {{$ship_type[$order['Order']['ship_type']]}} ,&nbsp;&nbsp; 快递单号：{{$order['Order']['ship_code']}}
+				{{/if}}<br/>
+            订单备注：{{$order['Order']['remark']}}<br/>
+                <div id="order-status-{{$order['Order']['id']}}">
+                    {{if $order['Order']['status']==0}}
+                    <font color="red">订单待支付</font>
+                    {{elseif $order['Order']['status']==1}}
+                    <font color="red">订单待发货</font>
+                    <div class="well">
+                        <select id="ship-type-{{$order['Order']['id']}}">
+                            <option value="">快递类型</option>
+                            {{loop $ship_type $id $type}}
+                            <option value="{{$id}}">{{$type}}</option>
+                            {{/loop}}
+                        </select>
+                        <input type="text" width="80px;" id="ship-code-{{$order['Order']['id']}}" placeholder="快递单号">
+                        <button type="button"  onclick="ship_order({{$order['Order']['id']}}, {{$creator}});" class="btn btn-primary">订单已发货</button>
+                    </div>
+                    {{elseif $order['Order']['status']==2}}<font color="red">订单已发货</font>
+                    {{elseif $order['Order']['status']==3}}<font color="red">订单已签收</font>
+
+                    {{/if}}
+                </div>
+
+            </td>
+		</tr>
+		{{if !empty($order_carts[$order['Order']['id']])}}
+		<tr><td>
+			<table  class="table table-bordered">
+				<tr><th width="50%">商品名称</th><th>价格</th><th>数量</th><th>合计</th></tr>
+				<tbody>
+				{{loop $order_carts[$order['Order']['id']] $cart}}
+				<tr><td>{{$cart['Cart']['name']}}</td>
+				<td>￥{{$cart['Cart']['price']}}</td>
+				<td>{{$cart['Cart']['num']}}</td>
+				<td>￥{{$cart['Cart']['price']*$cart['Cart']['num']}}</td>		
+				</tr>
+				{{/loop}}
+				</tbody>
+			</table>
+		</td></tr>
+		{{/if}}
+		</table>
+		{{/loop}}	
+        {{template Elements/alert_for_business_user}}
+		</div>
+			
+			
+	</div>
+</div>
+<script>
+
+</script>
