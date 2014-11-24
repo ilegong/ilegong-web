@@ -83,9 +83,7 @@
         $('<li/>').appendTo(ul);
         });
 
-        setTimeout(function () {
-            ul.find('li:first').addClass('cur');
-            swiper_wrapper.find('.swiper-slide').show();
+        //setTimeout(function () {
             var mySwiper = $indexBanner.swiper({
                 mode: 'horizontal',
                 loop: true,
@@ -98,7 +96,8 @@
                 }
                 //etc..
             });
-        }, 100);
+            ul.find('li:first').addClass('cur');
+        //}, 100);
     })
 {{$this->Html->scriptEnd();}}
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'), array('block' => 'scriptBottom'));}}
