@@ -58,43 +58,47 @@
     <?php } ?>
 </div>
 
-<script>
+{{$this->Html->scriptStart(array('block' => 'scriptBottom'));}}
     $().ready(function(){
 
-        var banners = ['{{$this->Html->assetUrl("/img/banner/banner01.jpg", true); }}'
-            , '{{$this->Html->assetUrl("/img/banner/banner02.jpg", true); }}'
-            , '{{$this->Html->assetUrl("/img/banner/banner03.jpg", true); }}'
-            , '{{$this->Html->assetUrl("/img/banner/pyshuo_banner_meixian_mihoutao.jpg", true); }}'
+        var banners = ['{{$this->Html->assetUrl("/img/banner/banner01.jpg"); }}'
+            , '{{$this->Html->assetUrl("/img/banner/banner02.jpg"); }}'
+            , '{{$this->Html->assetUrl("/img/banner/banner03.jpg"); }}'
+            , '{{$this->Html->assetUrl("/img/banner/pyshuo_banner_meixian_mihoutao.jpg"); }}'
         ];
-        var banner_links = ['{{$this->Html->url("/products/20141117/dong_bei_hong_song_zi_1jin_zhuang.html", true); }}'
-            , '{{$this->Html->url("/products/20141117/xin_jiang_hui_zao.html", true); }}'
-            , '{{$this->Html->url("/products/20141013/he_nan_xing_yang_he_yin_ruan_zi_shi_liu_8liang.html", true); }}'
-            , '{{$this->Html->url("/products/20141109/shan_xi_mei_xian_jiao_su_mi_hou_tao.html", true); }}'
+        var banner_links = ['{{$this->Html->url("/products/20141117/dong_bei_hong_song_zi_1jin_zhuang.html"); }}'
+            , '{{$this->Html->url("/products/20141117/xin_jiang_hui_zao.html"); }}'
+            , '{{$this->Html->url("/products/20141013/he_nan_xing_yang_he_yin_ruan_zi_shi_liu_8liang.html"); }}'
+            , '{{$this->Html->url("/products/20141109/shan_xi_mei_xian_jiao_su_mi_hou_tao.html"); }}'
         ];
+
+        //$(banners).preload();
 
         var $indexBanner = $('.index_banner');
         var ul = $indexBanner.find('ul');
         var swiper_wrapper = $indexBanner.find('div.swiper-wrapper');
 
-        $.each(banners, function(idx, value){
-            $('<div class="swiper-slide"><a href="'+banner_links[idx]+'"><img src="'+value+'" border="0" /></a></div>').appendTo(swiper_wrapper);
-            $('<li/>').appendTo(ul);
+        $.each(banners, function (idx, value) {
+        $('<div class="swiper-slide"><a href="' + banner_links[idx] + '"><img src="' + value + '" border="0" /></a></div>').appendTo(swiper_wrapper);
+        $('<li/>').appendTo(ul);
         });
 
-        ul.find('li:first').addClass('cur');
-
-        var mySwiper = $indexBanner.swiper({
-            mode:'horizontal',
-            loop: true,
-            autoplay: 5000,
-            calculateHeight: true,
-            onSlideChangeStart: function(swiper){
-                ul.find('li').removeClass('cur');
-                console.log(swiper.activeLoopIndex + "," +swiper.activeLoopIndex % 4);
-                ul.find('li:nth-child('+(swiper.activeLoopIndex % 4 + 1)+')').toggleClass('cur');
-            }
-            //etc..
-        });
+        setTimeout(function () {
+            ul.find('li:first').addClass('cur');
+            swiper_wrapper.find('.swiper-slide').show();
+            var mySwiper = $indexBanner.swiper({
+                mode: 'horizontal',
+                loop: true,
+                autoplay: 5000,
+                calculateHeight: true,
+                onSlideChangeStart: function (swiper) {
+                    ul.find('li').removeClass('cur');
+                    console.log(swiper.activeLoopIndex + "," + swiper.activeLoopIndex % 4);
+                    ul.find('li:nth-child(' + (swiper.activeLoopIndex % 4 + 1) + ')').toggleClass('cur');
+                }
+                //etc..
+            });
+        }, 100);
     })
-</script>
+{{$this->Html->scriptEnd();}}
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'), array('block' => 'scriptBottom'));}}
