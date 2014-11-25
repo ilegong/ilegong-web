@@ -11,23 +11,28 @@
  */
 class ShareOffer extends AppModel {
 
-    public function findByBrandId($brandId) {
-        return $this->_find_by_brandId($brandId, false, null);
+    public function findByBrandId($brandId, $limitDef = true) {
+        return $this->_find_by_brandId($brandId, false, null, $limitDef);
     }
 
     /**
      * @param $brandId
      * @param $actionTime
+     * @param bool $limitDef
      * @return mixed
      */
-    public function findValidByBrandId($brandId, $actionTime) {
+    public function findValidByBrandId($brandId, $actionTime, $limitDef = true) {
         if ($actionTime == null) {
             return null;
         };
-        return $this->_find_by_brandId($brandId, true, $actionTime);
+        return $this->_find_by_brandId($brandId, true, $actionTime, $limitDef);
     }
 
-    public function find_all_valid_offer($brandId = null, $actionTime = null) {
+    public function find_all_def_valid_offer($brandId = null, $actionTime = null) {
+        return $this->find_all_valid_offer($brandId, $actionTime, true);
+    }
+
+    public function find_all_valid_offer($brandId = null, $actionTime = null, $limitDef = false) {
 
         if (!$actionTime) {
             $actionTime = date(FORMAT_DATETIME);
@@ -44,6 +49,10 @@ class ShareOffer extends AppModel {
             $cond['brand_id'] = $brandId;
         }
 
+        if ($limitDef) {
+            $cond['is_default'] = 1;
+        }
+
         return $this->find("all", array('conditions' => $cond));
     }
 
@@ -57,25 +66,28 @@ class ShareOffer extends AppModel {
         $status = $order['Order']['status'];
         $brandId = $order['Order']['brand_id'];
         $payTime = $order['Order']['pay_time'];
+        $total_all_price = $order['Order']['total_all_price'];
         if ( ($status == ORDER_STATUS_DONE
                 || $status == ORDER_STATUS_PAID
                 || $status == ORDER_STATUS_RECEIVED
                 || $status == ORDER_STATUS_SHIPPED)
             && !empty($payTime)
             && !empty($brandId)
-            && $order['Order']['total_all_price'] > 0
+            && $total_all_price > 0
         ) {
+            $orderCreator = $order['Order']['creator'];
             $soModel = ClassRegistry::init('ShareOffer');
             $so = $soModel->findByBrandId($brandId, true, $payTime);
             if (!empty($so)) {
                 $usModel = ClassRegistry::init('SharedOffer');
-                $userShared = $usModel->find_user_shared_offer($uid, $order['Order']['id'], $so['ShareOffer']['id']);
+                $orderId = $order['Order']['id'];
+                $userShared = $usModel->find_user_shared_offer($uid, $orderId, $so['ShareOffer']['id']);
                 if (empty($userShared)){
-                    $toShareNum = round( ($so['ShareOffer']['ratio_percent'] * $order['Order']['total_all_price'] * 100)/100, 0, PHP_ROUND_HALF_DOWN);
+                    $toShareNum = round( ($so['ShareOffer']['ratio_percent'] * $total_all_price * 100)/100, 0, PHP_ROUND_HALF_DOWN);
                     if ($toShareNum <= 0) {
                         return null;
                     }
-                    return $this->genSharedSlices($order['Order']['creator'], $order['Order']['id'], $usModel, $so, $toShareNum);
+                    return $this->genSharedSlices($orderCreator, $orderId, $usModel, $so, $toShareNum);
                 }
                 else {
                     return array(
@@ -90,13 +102,17 @@ class ShareOffer extends AppModel {
         return null;
     }
 
-    private function _find_by_brandId($brandId, $onlyValid , $actionTime) {
+    private function _find_by_brandId($brandId, $onlyValid , $actionTime, $limitDef = null) {
 
         $cond = array(
             'brand_id' => $brandId,
             'published' => 1,
             'deleted' => 0,
         );
+
+        if ($limitDef !== null) {
+            $cond['is_default'] = $limitDef;
+        }
 
         if ($onlyValid && $actionTime != null) {
             $cond['start <'] = $actionTime;
@@ -153,7 +169,7 @@ class ShareOffer extends AppModel {
      * @return array|null
      */
     private function genSharedSlices($uid, $orderId, $userSharedModel, $shareOffer, $toShareNum) {
-        //订单Id和UID有唯一索引，避免用户重复点击
+        //订单Id和UID无法唯一！！！
         $userSharedModel->create();
         if ($userSharedModel->save(array(
             'share_offer_id' => $shareOffer['ShareOffer']['id'],
@@ -176,7 +192,7 @@ class ShareOffer extends AppModel {
                     if ($i < $split_num) {
                         //减一，避免只有两份的情况下一次全部分完
                         //HALF_UP, 避免0分钱红包
-                        $num = round(rand($avg / 2, $avg * 2 - 1), 0, PHP_ROUND_HALF_UP);
+                        $num = round(rand($avg / 2, $avg * 1.5), 0, PHP_ROUND_HALF_UP);
                         if ($num > $amount_left) {
                             $num = $amount_left;
                         }

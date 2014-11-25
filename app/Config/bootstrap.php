@@ -94,7 +94,8 @@ define('PAID_DISPLAY_SUCCESS', 'success');
 define('PAID_DISPLAY_PENDING', 'pending');
 
 //define('KEY_APPLE_201410',  'apple201410');
-define('KEY_APPLE_201410',  'rice201411');
+//define('KEY_APPLE_201410',  'rice201411');
+define('KEY_APPLE_201410',  'mihoutao1411');
 define('PROFILE_NICK_LEN', 16);
 define('PROFILE_NICK_MIN_LEN', 2);
 

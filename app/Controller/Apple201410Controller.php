@@ -13,7 +13,7 @@ class Apple201410Controller extends AppController
 
     var $name = "Apple201410";
 
-    var $uses = array('User', 'AppleAward', 'AwardInfo', 'TrackLog', 'CouponItem', 'ExchangeLog');
+    var $uses = array('User', 'AppleAward', 'AwardInfo', 'TrackLog', 'CouponItem', 'ExchangeLog', 'GameConfig');
 
     public $components = array('Weixin');
 
@@ -21,54 +21,41 @@ class Apple201410Controller extends AppController
 
     const EXCHANGE_RICE_SOURCE = 'apple_exchange_rice';
     const RICE_201411 = 'rice201411';
-    const CHENGZI_1411 = 'chengzi1411';
-    const CHOUPG_1411 = 'Choupg1411';
+    const MIHOUTAO1411 = 'mihoutao1411';
 
-    var $DAY_LIMIT = array(
-        self::RICE_201411 => 20,
-        self::CHOUPG_1411 => 10,
-        self::CHENGZI_1411 => 0,
-    );
-    var $game_obj_names = array(
-        self::CHOUPG_1411 => '苹果',
-        self::RICE_201411 => '苹果',
-        self::CHENGZI_1411 => '橙子',
-    );
+    /*
+     * INSERT INTO `cake_game_configs` (`game_type`, `day_limit`, `created`, `modified`, `game_obj_name`, `game_end`, `game_start`) VALUES
+    ('chengzi1411', 10, NULL, NULL, '橙子', '2014-11-17 23:59:59', ''),
+    ('rice201411', 20, NULL, NULL, '苹果', '2014-11-15 23:59:59', ''),
+    ('Choupg1411', 10, NULL, NULL, '苹果', '2014-11-17 23:59:59', ''),
+    ('mihoutao1411', 0, NULL, NULL, '猕猴桃', '2014-12-03 23:59:59', '2014-11-26 00:00:00')
+    ;
+     */
+
     var $treeNames = array(
-        self::CHOUPG_1411 => 'apple_shakev1.gif',
         self::RICE_201411 => 'apple_shakev1.gif',
-        self::CHENGZI_1411 => 'orange.gif');
+        self::MIHOUTAO1411 => 'tree_mihoutao_shake.gif');
 
     var $treeStaticNames = array(
-        self::CHOUPG_1411 => 'apple_tree.gif',
         self::RICE_201411 => 'apple_tree.gif',
-        self::CHENGZI_1411 => 'orange_static.gif');
+        self::MIHOUTAO1411 => 'tree_mihoutao_static.gif');
 
     var $game_least_change = array(
         self::RICE_201411 => 50,
-        self::CHENGZI_1411 => 30,
-        self::CHOUPG_1411 => 30,
+        self::MIHOUTAO1411 => 30,
     );
 
-    var $game_ends = array(
-        self::RICE_201411 => '2014-11-15 23:59:59',
-        self::CHENGZI_1411 => '2014-11-17 23:59:59',
-        self::CHOUPG_1411 => '2014-11-17 23:59:59',
-    );
     var $title_in_page = array(
-        self::CHOUPG_1411 => '摇一摇,最高一箱<a href="/products/20141028/yun_nan_chou_ping_guo.html">云南丑苹果</a>免费送',
-        self::CHENGZI_1411 => '摇一摇，抢<a href="/products/20141014/gan_nan_qi_cheng_kai_shi_yu_shou.html">赣南脐橙</a>四十元优惠券',
+        self::MIHOUTAO1411 => '摇下100个，最高一箱猕猴桃免费领',
         self::RICE_201411 => '摇下50个，大米优惠券免费送',
     );
     var $title_in_window = array(
-        self::CHOUPG_1411 => '摇下100个,十斤云南丑苹果免费送',
-        self::CHENGZI_1411 => '摇下100个，最高一箱赣南脐橙免费送',
+        self::MIHOUTAO1411 => '摇下100个，最高一箱猕猴桃免费领',
         self::RICE_201411 => '摇下50个，大米优惠券免费送',
     );
     var $title_js_func = array(
-        self::CHOUPG_1411 => "'摇一摇换云南丑苹果, 我已经摇到'+total+'个啦'",
         self::RICE_201411 => "'摇一摇免费兑稻花香大米券, 我已经有机会兑到'+total*10+'g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米-朋友说'",
-        self::CHENGZI_1411 => "'橙妾来啦，摇一摇抢有机赣南脐橙优惠券，手快有手慢无...'",
+        self::MIHOUTAO1411 => "'摇一摇一起免费兑有机猕猴桃红包，我已经摇下'+total+'个猕猴桃，兑到'+ game_mihoutao_hongbao(total) +'元红包啦 -- 城市里的乡下人张慧敏分享有机种植眉县猕猴桃 -- 朋友说'",
     );
 
     public function beforeFilter()
@@ -143,27 +130,6 @@ class Apple201410Controller extends AppController
     {
         $this->autoRender = false;
         $r = $this->Session->read($this->time_last_query_key);
-//        if (!$r) {
-//            $notifyHis = $this->UserNotifyLog->find('first', array('conditions' => array(
-//                'uid' => $this->currentUser['id'],
-//                'type' => KEY_APPLE_201410
-//            )));
-
-        /**
-         * create table cake_user_notify_logs (
-        `id` bigint(20) NOT NULL AUTO_INCREMENT,
-        `type` char(12) NOT NULL,
-        `uid` bigint(20) NOT NULL,
-        `last_notify` timestamp NOT NULL,
-        primary key(`id`),
-        key(`uid`, `type`)
-        );
-         */
-//            if (!empty($notifyHis)) {
-//                $r = $notifyHis['UserNotifyLog']['last_notify'];
-//            }
-//        }
-
 
         list($left_98, $left_40) = $this->calculate_left($gameType);
 
@@ -271,9 +237,9 @@ class Apple201410Controller extends AppController
         $id = $this->currentUser['id'];
         $result = array();
 
-        $game_end = $this->game_ends[$gameType];
-        if ($game_end) {
-            $dt = new DateTime($game_end);
+        $gameCfg = $this->GameConfig->findByGameType($gameType);
+        if (!empty($gameCfg) && $gameCfg['GameConfig']['game_end']) {
+            $dt = new DateTime($gameCfg['GameConfig']['game_end']);
             if(mktime() - $dt->getTimestamp() > 0) {
                 echo json_encode(array('result' => 'game_end'));
                 return;
@@ -289,81 +255,62 @@ class Apple201410Controller extends AppController
         $sold_out = false;
         $coupon_count = 0;
         $exchangeCount = 0;
-        $store = '';
-        $validDesc = '';
         if ($gameType == self::RICE_201411) {
             if ($can_exchange_apple_count >= 50) {
                 $coupon_count = intval($can_exchange_apple_count / 50);
                 $exchangeCount = 50 * $coupon_count;
-                $this->exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfo['id'], COUPON_TYPE_RICE_1KG);
-                $store = "购买nana家大米时使用";
-                $validDesc = "有效期至2014年11月15日";
-            }
-        } else if($gameType == self::CHENGZI_1411) {
-
-            list($left_98, $left_40) = $this->calculate_left($gameType);
-
-            $couponType = 0;
-            /*if ($can_exchange_apple_count >= 100) {
-                if ($left_98 > 0) {
-                    $coupon_count = 1;
-                    $exchangeCount = 100;
-                    $couponType = COUPON_TYPE_CHZ_100;
-                } else {
-                    $sold_out = true;
+                $this->exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfo['id'],
+                    function($uid, $operator, $source_log_id){
+                        $this->CouponItem->addCoupon($uid, COUPON_TYPE_RICE_1KG, $operator, $source_log_id);
+                        $this->CouponItem->id = null;
+                    }
+                );
+                if ($coupon_count > 0) {
+                    $store = "购买nana家大米时使用";
+                    $validDesc = "有效期至2014年11月15日";
+                    $this->Weixin->send_coupon_received_message($id, $coupon_count, $store, $validDesc);
                 }
-            } else */
-            if ($can_exchange_apple_count >= 90) {
-                if ($left_40 > 0) {
-                    $coupon_count = 1;
-                    $exchangeCount = 90;
-                    $couponType = COUPON_TYPE_CHZ_90;
-                }  else {
-                    $sold_out = true;
-                }
-            } else if ($can_exchange_apple_count >= 50) {
-                $coupon_count = 1;
-                $exchangeCount = 50;
-                $couponType = COUPON_TYPE_CHZ_50;
-            } else if ($can_exchange_apple_count >= 30) {
-                $coupon_count = 1;
-                $exchangeCount = 30;
-                $couponType = COUPON_TYPE_CHZ_30;
             }
+        } else if ($gameType == self::MIHOUTAO1411) {
 
-            if ($coupon_count > 0 && $couponType) {
-                $this->exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfo['id'], $couponType);
-                $store = "购买赣南脐橙时使用";
-                $validDesc = "有效期至2014年11月16日";
-            }
-        } else if ($gameType == self::CHOUPG_1411) {
-            $couponType = 0;
+            //9,10,11,12
+
+            $sharing = array(
+                100 => array(12, 2000 * 20),
+                80 => array(11, 1500 *  15),
+                60 => array(10, 1000 * 10),
+                30 => array(9, 500 * 5),
+            );
             if ($can_exchange_apple_count >= 100) {
-                $coupon_count = 1;
                 $exchangeCount = 100;
-                $couponType = COUPON_TYPE_CHOUPG_100;
-            } else if ($can_exchange_apple_count >= 50) {
-                $coupon_count = 1;
-                $exchangeCount = 50;
-                $couponType = COUPON_TYPE_CHOUPG_50;
+            } else if ($can_exchange_apple_count >= 80) {
+                $exchangeCount = 80;
+            } else if ($can_exchange_apple_count >= 60) {
+                $exchangeCount = 60;
             } else if ($can_exchange_apple_count >= 30) {
-                $coupon_count = 1;
                 $exchangeCount = 30;
-                $couponType = COUPON_TYPE_CHOUPG_30;
             }
 
-            if ($coupon_count > 0 && $couponType) {
-                $this->exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfo['id'], $couponType);
-                $store = "购买云南丑苹果时使用";
-                $validDesc = "有效期至2014年11月17日";
+            if ($exchangeCount > 0) {
+                $sharingPref = $sharing[$exchangeCount];
+                if (!empty($sharingPref)) {
+                    $coupon_count = 1;
+                    $so = ClassRegistry::init('ShareOffer');
+                    $this->exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfo['id'],
+                        function ($uid, $operator, $source_log_id) use ($sharingPref, $so) {
+                            list($shareOfferId, $toShareNum) = $sharingPref;
+                            $added = $so->add_shared_slices($uid, $shareOfferId, $toShareNum);
+                            $so->log('add_shared_slices:uid='. $uid . ', shareOfferId='. $shareOfferId . ', toShareNum='. $toShareNum .', result='. $added);
+                        }
+                    );
+                }
             }
         }
 
-        if ($coupon_count > 0) {
+        if ($exchangeCount > 0) {
             $result['exchange_apple_count'] = $exchangeCount;
             $result['coupon_count'] = $coupon_count;
             $result['result'] = "just-got";
-            $this->Weixin->send_coupon_received_message($id, $coupon_count, $store, $validDesc);
         }else{
             $result['result'] = $sold_out ? 'sold_out' : "goon";
         }
@@ -381,8 +328,14 @@ class Apple201410Controller extends AppController
         $this->Session->write($this->sess_award_notified, array('name' => $uname, 'got' => $added));
     }
 
-    public function award($gameType = self::CHENGZI_1411)
+    public function award($gameType = KEY_APPLE_201410)
     {
+
+        $gameCfg = $this->GameConfig->findByGameType($gameType);
+        if (empty($gameCfg) ) {
+            throw new CakeException("Not found Game Config");
+        }
+
         $current_uid = $this->currentUser['id'];
         list($friend, $shouldAdd, $gameType) = $this->track_or_redirect($current_uid, $gameType);
         if (!empty($friend)) {
@@ -476,7 +429,8 @@ class Apple201410Controller extends AppController
 
         $this->set('game_type', $gameType);
 
-        $this->set('game_obj_name', $this->game_obj_names[$gameType]);
+        $this->set('game_obj_name', $gameCfg['GameConfig']['game_obj_name']);
+
         $this->set('title_func', $this->title_js_func[$gameType]);
         $title_in_page = $this->title_in_page[$gameType];
         $this->set('title_in_page', $title_in_page);
@@ -493,13 +447,7 @@ class Apple201410Controller extends AppController
         $this->_updateLastQueryTime(time());
 
 
-        $game_end = $this->game_ends[$gameType];
-        if ($game_end) {
-            $dt = new DateTime($game_end);
-            if(mktime() - $dt->getTimestamp() > 0) {
-                $this->set('game_end', true);
-            }
-        }
+        $this->set('game_end', $this->is_game_end($gameCfg));
 
         $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
         $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $current_uid, 'type' => $gameType)));
@@ -513,13 +461,14 @@ class Apple201410Controller extends AppController
         if (!empty($gameType)) {
             $uid = $this->currentUser['id'];
 
-            $game_end = $this->game_ends[$gameType];
+            $gameCfg = $this->GameConfig->findByGameType($gameType);
+            if (empty($gameCfg) ) {
+                throw new CakeException("Not found Game Config");
+            }
+            $game_end = $this->is_game_end($gameCfg);
             if ($game_end) {
-                $dt = new DateTime($game_end);
-                if(mktime() - $dt->getTimestamp() > 0) {
-                    echo json_encode(array('success' => false, 'msg' => 'game_end'));
-                    return;
-                }
+                echo json_encode(array('success' => false, 'msg' => 'game_end'));
+                return;
             }
 
             $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
@@ -552,7 +501,12 @@ class Apple201410Controller extends AppController
         $uid = $this->currentUser['id'];
         $iAwarded = $model->userIsAwarded($uid, $gameType);
 
-        $dayLimit = $this->DAY_LIMIT[$gameType];
+        $gameCfg = $this->GameConfig->findByGameType($gameType);
+        if (empty($gameCfg) ) {
+            throw new CakeException("Not found Game Config");
+        }
+
+        $dayLimit = $gameCfg['GameConfig']['game_end'];
         if (empty($dayLimit)) {
             $dayLimit = 0;
         }
@@ -662,10 +616,10 @@ class Apple201410Controller extends AppController
             $ext = 5;
         }
 
-        $times = ($gameType == self::CHENGZI_1411 && $total_got <= 90 ? 40 : 10);
+        $times =10;
         for ($i = 0; $i < $times; $i++) {
             $mt_rand = mt_rand(0, intval($ext + $total_got));
-            $this_got += ($mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
+            $this_got += ( $mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
         }
 
         if ( $limit && ($total_got + $this_got) > $this->AWARD_LIMIT) {
@@ -690,19 +644,18 @@ class Apple201410Controller extends AppController
      * @param $coupon_count
      * @param $exChangeSource
      * @param $awardInfoId
-     * @param $couponType
+     * @param $couponFunc
      */
-    private function exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfoId, $couponType) {
+    private function exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfoId, $couponFunc) {
         $latest_exchange_log_id = $this->ExchangeLog->addExchangeLog($id, $apple_count_snapshot,
             $exchangeCount, $coupon_count, $exChangeSource);
 
-        $uid = $this->currentUser['id'];
+        $operator = $this->currentUser['id'];
         if($latest_exchange_log_id) {
             $awardInfoModel = ClassRegistry::init('AwardInfo');
             if ($awardInfoModel->updateAll(array('spent ' => 'spent + '. $exchangeCount, ), array('id' => $awardInfoId))) {
                 for ($i = 1; $i <= $coupon_count; $i++) {
-                    $this->CouponItem->addCoupon($id, $couponType, $uid, $exChangeSource . "_" . $latest_exchange_log_id . '_' . $i);
-                    $this->CouponItem->id = null;
+                    $couponFunc($id, $operator, $exChangeSource . "_" . $latest_exchange_log_id . '_' . $i);
                 }
             }
         }
@@ -721,11 +674,24 @@ class Apple201410Controller extends AppController
      */
     private function calculate_left($gameType) {
         $left_40 = $left_98 = 0;
-        if ($gameType == self::CHENGZI_1411) {
-            $left_98 = 30 - $this->CouponItem->couponCount(COUPON_TYPE_CHZ_100);
-            $left_40 = 1200 - $this->CouponItem->couponCount(COUPON_TYPE_CHZ_90);
-            return array($left_98 >= 0? $left_98 : 0, $left_40 >= 0 ? $left_40 : 0);
-        }
+//        if ($gameType == self::CHENGZI_1411) {
+//            $left_98 = 30 - $this->CouponItem->couponCount(COUPON_TYPE_CHZ_100);
+//            $left_40 = 1200 - $this->CouponItem->couponCount(COUPON_TYPE_CHZ_90);
+//            return array($left_98 >= 0? $left_98 : 0, $left_40 >= 0 ? $left_40 : 0);
+//        }
         return array($left_98, $left_40);
+    }
+
+    /**
+     * @param $gameCfg
+     * @return bool
+     */
+    private function is_game_end($gameCfg) {
+        $game_end = $gameCfg['GameConfig']['game_end'];
+        if ($game_end) {
+            $dt = new DateTime($game_end);
+            return (mktime() - $dt->getTimestamp() > 0);
+        }
+        return true;
     }
 }

@@ -983,9 +983,9 @@ var utils = {
         var modal_dialog = $dlg.find('.modal-dialog');
         $dlg.css({
             'overflow-y': 'auto',
-            'padding-top': function () {
-                return ( ($(this).height() - modal_dialog.height()) / 2);
-            }
+//            'padding-top': function () {
+//                return ( ($(this).height() - modal_dialog.height()) / 2);
+//            }
         });
 
         if (timeout && timeout > 0) {

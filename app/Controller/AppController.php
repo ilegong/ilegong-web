@@ -729,7 +729,7 @@ class AppController extends Controller {
 
     protected function setHasOfferBrandIds($brandId = null) {
         $this->loadModel('ShareOffer');
-        $allValidOffer = $this->ShareOffer->find_all_valid_offer($brandId);
+        $allValidOffer = $this->ShareOffer->find_all_def_valid_offer($brandId);
         if (!empty($allValidOffer)) {
             $hasOfferBrandIds = Hash::combine($allValidOffer, '{n}.ShareOffer.brand_id');
         }
