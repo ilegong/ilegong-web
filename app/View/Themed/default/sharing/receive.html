@@ -118,7 +118,7 @@
         });
 
         var imgUrl = $('#red_offer_png').attr('src');
-        var lineLink = window.location.href;
+        var lineLink = '{{WX_HOST}}/sharing/receive/{{$sharedOffer["SharedOffer"]["id"]}}.html';
         var descContent = '{{$sharedOffer["ShareOffer"]["name"]}}给我{{$total_slice}}个红包，分你一个，买【朋友说】最好最放心的特产。';
         var shareTitle = '{{$ownerName}}：我在【朋友说】挣了一个{{$sharedOffer["ShareOffer"]["name"]}}红包，大家快来抢！';
         var appid = '{{WX_APPID}}';
