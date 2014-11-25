@@ -123,40 +123,13 @@
         var shareTitle = '{{$ownerName}}：我在【朋友说】挣了一个{{$sharedOffer["ShareOffer"]["name"]}}红包，大家快来抢！';
         var appid = '{{WX_APPID}}';
 
-        function shareFriend() {
-            WeixinJSBridge.invoke('sendAppMessage',{
-                "appid": appid,
-                "img_url": imgUrl,
-                "img_width": "640",
-                "img_height": "640",
-                "link": lineLink,
-                "desc": descContent,
-                "title": shareTitle
-            }, function(res) {
-                //_report('send_msg', res.err_msg);
-            })
-        }
-
-        function shareTimeline() {
-            WeixinJSBridge.invoke('shareTimeline',{
-                "img_url": imgUrl,
-                "img_width": "640",
-                "img_height": "640",
-                "link": lineLink,
-                "desc": descContent,
-                "title": shareTitle
-            }, function(res) {
-                //_report('timeline', res.err_msg);
-            });
-        }
-
         // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
         document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
             WeixinJSBridge.on('menu:share:appmessage', function(argv){
-                shareFriend();
+                utils.wx_to_friend(appid, imgUrl, lineLink, descContent, shareTitle);
             });
             WeixinJSBridge.on('menu:share:timeline', function(argv){
-                shareTimeline();
+                utils.wx_to_timeline(appid, imgUrl, lineLink, descContent, shareTitle);
             });
         }, false);
     });

@@ -106,6 +106,8 @@ class SharingController extends AppController{
                                 $this->SharedSlice->updateAll(array('coupon_item_id' => $couponItemId),
                                     array('id' => $slice['SharedSlice']['id'], 'coupon_item_id' => 0));
                                 $this->Weixin->send_coupon_received_message($uid, 1, "在".$sharedOffer['ShareOffer']['name']."店购买时有效","有效期至".friendlyDateFromStr($valid_end, 'full'));
+                                App::uses('CakeNumber', 'Utility');
+                                $this->Weixin->send_packet_be_got_message($sharedOffer['SharedOffer']['uid'], $nickNames[$uid], CakeNumber::precision($slice['SharedSlice']['number']/100, 2),  $sharedOffer['ShareOffer']['name']."红包");
                             }
                             $left_slice -= 1;
                             if ($left_slice == 0) {

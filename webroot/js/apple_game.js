@@ -27,9 +27,11 @@ $(document).ready(function(){
     });
 
     function changeTitle(total) {
-        var title = game_page_title(total);
-        if (title) {
-            document.title = title;
+        if (typeof(game_page_title) == 'function') {
+            var title = game_page_title(total);
+            if (title) {
+                document.title = title;
+            }
         }
     }
 

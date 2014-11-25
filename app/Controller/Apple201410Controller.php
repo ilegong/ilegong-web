@@ -296,11 +296,16 @@ class Apple201410Controller extends AppController
                 if (!empty($sharingPref)) {
                     $coupon_count = 1;
                     $so = ClassRegistry::init('ShareOffer');
+                    $weixin = $this->Weixin;
                     $this->exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfo['id'],
-                        function ($uid, $operator, $source_log_id) use ($sharingPref, $so) {
+                        function ($uid, $operator, $source_log_id) use ($sharingPref, $so, $weixin) {
                             list($shareOfferId, $toShareNum) = $sharingPref;
                             $added = $so->add_shared_slices($uid, $shareOfferId, $toShareNum);
                             $so->log('add_shared_slices:uid='. $uid . ', shareOfferId='. $shareOfferId . ', toShareNum='. $toShareNum .', result='. $added);
+                            if (!empty($added))  {
+                                App::uses('CakeNumber', 'Utility');
+                                $weixin->send_packet_received_message($uid, CakeNumber::precision($toShareNum/100), "眉县有机猕猴桃红包");
+                            }
                         }
                     );
                 }
