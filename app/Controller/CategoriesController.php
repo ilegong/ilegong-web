@@ -78,7 +78,7 @@ class CategoriesController extends AppController {
         $this->set('data_list', $productList);
         $this->set('withBrandInfo', true);
 
-        $this->set('op_cate', 'categories');
+        $this->set('op_cate', OP_CATE_HOME);
     }
 
     public function special_list($slug) {
@@ -151,7 +151,7 @@ class CategoriesController extends AppController {
         $this->set('data_list', $productList);
         $this->set('withBrandInfo', true);
 
-        $this->set('op_cate', 'categories');
+        $this->set('op_cate', OP_CATE_HOME);
     }
 
     public function listCategories() {
@@ -170,7 +170,7 @@ class CategoriesController extends AppController {
             $tag['ProductTag']['description'] = $descs[$tag['ProductTag']['id']];
         }
         $this->set('productTags', $productTags);
-        $this->set('op_cate', 'categories');
+        $this->set('op_cate', OP_CATE_CATEGORIES);
         $this->pageTitle = __('分类');
     }
 
@@ -245,7 +245,7 @@ class CategoriesController extends AppController {
         $this->set('tagsWithProducts', $productTags);
         $this->set('withBrandInfo', true);
         $this->set('category_control_name', 'products');
-        $this->set('op_cate', 'home');
+        $this->set('op_cate', OP_CATE_HOME);
     }
 
     public function view($slug='/', $brand_id='') {

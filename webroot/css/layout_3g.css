@@ -169,7 +169,7 @@ footer { font-size:0.833em; line-height:1.167em; text-align:center; color:#99999
 footer img{ width:4.625em; height:1.583em;}
 
 .navbar-v1 { font-size: 1em; background-color: #f1f1f1; border-top: 1px #dddddd solid; height: 4.0417em; padding-top: 0.4em; }
-.navbar-v1 a .op-icon { background: url('/img/mobilev1/pyshuo_icon.png') 0 0 no-repeat; width:1.9167em; height:1.5em; background-size:25em 25em; display: inline-block; vertical-align: text-bottom; }
+.navbar-v1 a .op-icon { background: url('/img/mobilev1/pyshuo_icon.png?xx') 0 0 no-repeat; width:1.9167em; height:1.5em; background-size:25em 25em; display: inline-block; vertical-align: text-bottom; }
 .navbar-v1 ul { text-align: center; }
 .navbar-v1 li { width: 18.0%; }
 .navbar-v1 a span { display: block;}
