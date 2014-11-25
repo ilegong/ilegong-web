@@ -1,0 +1,93 @@
+<style>
+    td {
+        padding: 5px 10px;
+    }
+</style>
+{{$this->Html->script(array('front_orders'))}}
+<div class="container">
+    <ul class="nav nav-tabs" role="tablist">
+        <li><a href="#shichituans-all"   role="tab" data-toggle="tab" >{{_('所有期')}}</a></li>
+        <li><a href="#shichituans-first" role="tab" data-toggle="tab" >{{_('第一期')}}</a></li>
+        <li><a href="#shichituans-second" role="tab" data-toggle="tab" >{{_('第二期')}}</a></li>
+        <li><a href="#shichituans-third" role="tab" data-toggle="tab" >{{_('第三期')}}</a></li>
+    </ul>
+    </br>
+    <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
+        <caption>试吃团报名列表</caption>
+        <thead>
+        <tr class="active">
+            <th>多选</th><th>id</th><th>wechat</th><th>name</th><th>company</th><th>gender</th><th>telenum</th><th>email</th><th>comment</th><th>created</th><th>pictures</th><th>status</th>
+        </tr>
+        {{loop $shichituans $shichituan}}
+        <tr class="active">
+            <td><input type="checkbox" class="col-xs-1"/></td>
+            <td>{{$shichituan['Shichituan']['shichi_id']}}</td><td>{{$shichituan['Shichituan']['wechat']}}</td>
+            <td>{{$shichituan['Shichituan']['name']}}</td><td>{{$shichituan['Shichituan']['company']}}</td>
+            <td>{{$shichituan['Shichituan']['gender']}}</td><td>{{$shichituan['Shichituan']['telenum']}}</td>
+            <td>{{$shichituan['Shichituan']['email']}}</td><td>{{$shichituan['Shichituan']['comment']}}</td>
+            <td>{{$shichituan['Shichituan']['created']}}</td><td>{{$this->Html->image(Router::url($shichituan['Shichituan']['pictures']))}}</td>
+            <td>
+                <select data-id="{{$shichituan['Shichituan']['shichi_id']}}"  name="data[Shichituan][status]" >
+                    <option value="0">待审核</option>
+                    <option value="1">通过</option>
+                    <option value="2">未通过</option>
+                </select>
+            </td>
+        </tr>
+        {{/loop}}
+        </thead>
+    </table>
+    <div class="pagination">
+        <div class="row">
+            {{$this->paginator->first('首页 | ')}}
+            {{$this->paginator->prev('上页 | ')}}
+            {{$this->paginator->next('下页 | ')}}
+            {{$this->paginator->last('尾页')}}
+        </div>
+        <div class="row">{{$this->Paginator->numbers();}}</div>
+        <div class="row">{{$this->Paginator->counter();}}</div>
+        <div class="row">{{$this->paginator->counter(' {:page}/{:pages}');}}</div>
+    </div>
+    <?php echo $this->Html->link('导出excel',array('controller' => 'shichituans','action' => 'shichi_list','plugin'=> null),array('class'=>'btn btn-large btn-block btn-primary'));?>
+</div>
+<script>
+    $(document).ready(function(){
+    $('select[data-id]').change(function(){
+       if(confirm('确定编辑吗？')){
+        var dataId = $(this).attr('data-id');
+        var val = $(this).val();
+        var data = {'id': dataId, 'val':val};
+        $.ajax({
+            type:'post',
+            success:function(request, xhr) {
+                if(request.success){
+                    showSuccessMessage(request.success,'', 2);
+                }
+                else{
+                    showErrorMessage(errorinfo);
+                }
+            },
+            url:"{{$this->Html->url(array('controller'=>'shichituans','action'=>'shichi_save'))}}",
+            data:data,
+            dataType:'json'
+        }) ;
+       }
+
+        else{
+            return false;
+        }
+    });
+    });
+</script>
+{{$this->Html->script(array(
+'vendor/jquery.ui.widget.js',
+'//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js',
+'//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js',
+'jquery.iframe-transport.js',
+'jquery.fileupload.js',
+'jquery.fileupload-process.js',
+'jquery.fileupload-image.js',
+'jquery.fileupload-validate.js',
+'jquery.validate.min.js',
+));
+}}

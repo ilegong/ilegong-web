@@ -3,7 +3,13 @@
         <ul class="list-group">
             <li class="list-group-item" style="height: 66px">
                 <span>头像:</span>
-                <img class="pull-right" height="46px" src="{{$this->Html->url( $profile['image'] ? $profile['image'] : '/img/default_user_icon.jpg')}}"/>
+                {{if $result['Shichituan']['status']==1}}
+                <span class="badge" style="vertical-align: super; background-color: darkred">试吃团</span>
+                {{$this->Html->image(Router::url($result['Shichituan']['pictures']),array('class' => 'pull-right','height' => '46px'))}}
+                {{else}}
+                <img class="pull-right" height="46px" src="{{$this->Html->url('/img/default_user_icon.jpg')}}"/>
+                {{/if}}
+
             </li>
             <li id="p_nick" class="list-group-item">
                 <span>昵称:</span>

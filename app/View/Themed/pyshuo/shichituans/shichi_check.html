@@ -1,0 +1,130 @@
+<style>
+    td {
+        padding: 5px 10px;
+    }
+</style>
+{{$this->Html->script(array('front_orders'))}}
+        <div><ul class="nav nav-pills" role="tablist">
+            <li role="presentation"><a  href="/shichituans/shichi_check/1">第一期</a></li>
+            <li role="presentation"><a  href="/shichituans/shichi_check/2">第二期</a></li>
+            <li role="presentation"><a  href="/shichituans/shichi_check/3">第三期</a></li>
+        </ul></div>
+<div class="container">
+    <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
+        <caption>试吃团报名列表</caption>
+        <thead>
+        <tr  class="success">
+            <th>多选</th><th>id</th><th>wechat</th><th>name</th><th>company</th><th>gender</th><th>telenum</th><th>email</th><th>comment</th><th>created</th><th>pictures</th><th>status</th>
+        </tr>
+        {{loop $shichituans $shichituan}}
+        <tr class="active">
+            <td><input type="checkbox" name="checkbox"  data-id="{{$shichituan['Shichituan']['shichi_id']}}"/></td>
+            <td>{{$shichituan['Shichituan']['shichi_id']}}</td><td>{{$shichituan['Shichituan']['wechat']}}</td>
+            <td>{{$shichituan['Shichituan']['name']}}</td><td>{{$shichituan['Shichituan']['company']}}</td>
+            <td>{{$shichituan['Shichituan']['gender']}}</td><td>{{$shichituan['Shichituan']['telenum']}}</td>
+            <td>{{$shichituan['Shichituan']['email']}}</td><td>{{$shichituan['Shichituan']['comment']}}</td>
+            <td>{{$shichituan['Shichituan']['created']}}</td><td>{{$this->Html->image(Router::url($shichituan['Shichituan']['pictures']))}}</td>
+            <td>{{if $shichituan['Shichituan']['status']==0}}待审核 {{elseif $shichituan['Shichituan']['status']==1 }}审核通过{{elseif $shichituan['Shichituan']['status']==2}}审核未通过{{/if}}</td>
+            <!--<td>-->
+                <!--<select data-id="{{$shichituan['Shichituan']['shichi_id']}}"  name="data[Shichituan][status]" >-->
+                    <!--<option value="0">待审核</option>-->
+                    <!--<option value="1">通过</option>-->
+                    <!--<option value="2">未通过</option>-->
+                <!--</select>-->
+            <!--</td>-->
+        </tr>
+        {{/loop}}
+        </thead>
+    </table>
+    <div class="row">
+    <button type="button" id="nonAgree" class="btn-sm  pull-left  btn-info" value="2">未通过</button>
+    <button type="button" id="isAgree"  class="btn-sm  pull-left  btn-info" value="1">通过    </button>
+        <?php echo $this->Html->link('导出excel',array('controller' => 'shichituans','action' => 'shichi_list','plugin'=> null),array('class'=>'btn btn-info pull-right btn-sm'));?>
+    </div>
+    <div class="pagination">
+        <div class="row">
+            {{$this->Paginator->first('首页 | ')}}
+            {{$this->Paginator->prev('上页 | ')}}
+            {{$this->Paginator->next('下页 | ')}}
+            {{$this->Paginator->last('尾页')}}
+        </div>
+        <div class="row">{{$this->Paginator->numbers();}}</div>
+        <div class="row">{{$this->paginator->counter(' {:page}/{:pages}');}}</div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+//    $('select[data-id]').change(function(){
+//       if(confirm('确定编辑吗？')){ if(confirm('确定编辑吗？')){
+//        var dataId = $(this).attr('data-id');
+//        var val = $(this).val();
+//        var data = {'id': dataId, 'val':val};
+//        $.ajax({
+//            type:'post',
+//            success:function(request, xhr) {
+//                if(request.success){
+//                    showSuccessMessage(request.success,'', 2);
+//                }
+//                else{
+//                    showErrorMessage(errorinfo);
+//                }
+//            },
+//            url:"{{$this->Html->url(array('controller'=>'shichituans','action'=>'shichi_save'))}}",
+//            data:data,
+//            dataType:'json'
+//        }) ;
+//       }
+//
+//        else{
+//            return false;
+//        }
+//    });
+       $('#nonAgree,#isAgree').click(function(){
+           var idlist=new Array();
+           var idCount=0;
+           var val=$(this).attr("value");
+           if(confirm('确定编辑吗？')){
+           $("input[name='checkbox']:checked").each(function(){
+               idlist.push($(this).attr('data-id'));
+               idCount++;
+           });
+           if(idCount==0) alert('没有选择任何项！');
+               else{
+           var data={"id":idlist,"count":idCount,"val":val};
+           $.ajax({
+               type:'post',
+               success:function(data){
+                   //alert('right');
+               },
+//                       function(request, xhr) {
+//                   if(request.success){
+//                       showSuccessMessage(request.success,'', 0);
+//                   }
+//                   else{
+//                       showErrorMessage('wrong');
+//                   }
+               error:function(e){alert(e);},
+               url:"{{$this->Html->url(array('controller'=>'shichituans','action'=>'shichi_save'))}}",
+               data:data,
+               dataType:'json'
+           })
+           }
+       }
+       else{
+            return false;
+        }
+    });
+    });
+</script>
+{{$this->Html->script(array(
+'vendor/jquery.ui.widget.js',
+'//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js',
+'//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js',
+'jquery.iframe-transport.js',
+'jquery.fileupload.js',
+'jquery.fileupload-process.js',
+'jquery.fileupload-image.js',
+'jquery.fileupload-validate.js',
+'jquery.validate.min.js',
+));
+}}
