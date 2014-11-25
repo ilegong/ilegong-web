@@ -50,21 +50,29 @@ rs_callbacks.editConsignee = function(request){
                 b++;
                 if(b == 1){
                     $("#provinceDiv").val(f);
-                }else if(b == 2){
                     var g = "<option value='0'>\u8bf7\u9009\u62e9</option>";
-                    for (var d in a.city_list)
+                    for (var d in a.city_list){
                         g += "<option value='" + d + "'>" + a.city_list[d] + "</option>";
-                    $("#cityDiv").html(g).val(f);
-                }else if(b == 3){
+                    }
+                    $("#cityDiv").html(g);
+                }else if(b == 2){
+                    $("#cityDiv").val(f);
                     var g = "<option value='0'>\u8bf7\u9009\u62e9</option>";
-                    for (var d in a.county_list)
+                    g += "<option value='0'>-----</option>";
+                    for (var d in a.county_list){
                         g += "<option value='" + d + "'>" + a.county_list[d] + "</option>";
-                    $("#countyDiv").html(g).val(f);
-                }else if(b == 4){
+                    }
+                    $("#countyDiv").html(g);
+                }else if(b == 3){
+                    $("#countyDiv").val(f);
                     var g = "<option value='0'>\u8bf7\u9009\u62e9</option>";
-                    for (var d in a.town_list)
+                    g += "<option value='0'>-----</option>";
+                    for (var d in a.town_list){
                         g += "<option value='" + d + "'>" + a.town_list[d] + "</option>";
-                    $("#townDiv").html(g).val(f);
+                    }
+                    $("#townDiv").html(g);
+                }else if(b == 4){
+                    $("#townDiv").val(f);
                 }
             }
             if (b > 3) {
@@ -87,6 +95,10 @@ function editConsignee(obj,id){
 	//$("input[name='data[OrderConsignee][id]']").each(function(){
 	//	$(this).attr("checked",false).removeAttr("checked");
 	//});
+    $("#provinceDiv").val('');
+    $("#cityDiv").val('');
+    $("#countyDiv").val('');
+    $("#townDiv").val('');
 	$('#addr_'+id).get(0).checked = true;
 	//$('#addr_'+id).attr("checked",true);
 	$('#edit_type').val('edit');
@@ -327,8 +339,9 @@ function loadProvince() {
     jQuery.ajax({type: "POST",dataType: "json",url: a,data: "",success: function(a) {
         if (a) {
             var b = "<option value= '0'>\u8bf7\u9009\u62e9</option>";
-            for (var c in a)
+            for (var c in a){
                 b += "<option value='" + c + "'>" + a[c] + "</option>";
+            }
             $("#provinceDiv").html(b)
         }
     },error: function() {
@@ -359,8 +372,10 @@ function loadCounty() {
 
             if (a) {
                 var b = ohtml;
-                for (var e in a)
+                b += "<option value='0'>-----</option>";
+                for (var e in a){
                     b += "<option value='" + e + "'>" + a[e] + "</option>";
+                }
                 $("#countyDiv").html(b), $("#townDiv").hide().empty(), $("#areaName").text(c + d);
                 $("#areaHide").val($("#areaName").text());
             }
@@ -383,8 +398,10 @@ function loadTown() {
                 if (b > 0) {
                     $("#townDiv").show();
                     var g = ohtml;
-                    for (var f in a)
+                    g += "<option value='0'>-----</option>";
+                    for (var f in a){
                         g += "<option value='" + f + "'>" + a[f] + "</option>";
+                    }
                     $("#townDiv").html(g);
 
                 }
