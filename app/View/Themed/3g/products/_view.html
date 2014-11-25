@@ -74,12 +74,8 @@
                 <span id="pamount_add" class="add input-group-addon" item-id="{{$Product['Product']['id']}}">+</span>
             </div>
             {{/if}}
-            <div class="clearfix col-xs-12 voffset2">
-            <a aria-disabled="false" style="margin-left:0.5em;padding: 8px 4px;" class="btn-sm btn-warning shopping" id="btn_add_cart"
-               item-id="{{$Product['Product']['id']}}" item-name="{{$Product['Product']['name']}}" item-price="{{$Product['Product']['price']}}"
-               href="javascript:;">添加到购物车</a>
-            <a class="btn-sm btn-danger" id="btn_quick_buy" item-id="{{$Product['Product']['id']}}" href="javascript:;" style="padding: 8px 4px;">立即购买</a>
-            </div>
+            <!--<div class="clearfix col-xs-12 voffset2">-->
+            <!--</div>-->
         </div>
         {{elseif $total_left == 0}}
         <div class="voffset3">

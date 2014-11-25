@@ -315,6 +315,7 @@ class OrdersController extends AppController{
             $this->set('limit_ship', $shipPromotions['limit_ship']);
         }
         $this->pageTitle = __('订单详情');
+        $this->set('op_cate', OP_CATE_CATEGORIES);
 	}
 
     /**

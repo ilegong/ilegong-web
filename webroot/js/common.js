@@ -98,13 +98,14 @@ function updateCartItemCount()
 {
     var itemCount = $('#item-count');
     var cartBtn = $('#card-btn');
-    if (itemCount.length > 0 || cartBtn.length > 0) {
+    var cart_link = $('#cart_link');
+    if (itemCount.length > 0 || cartBtn.length > 0 || cart_link.length > 0) {
         $.getJSON('/carts/cart_total.json', function (data) {
             if (data.count > 0) {
-                $('#item-count').text(data.count);
+                itemCount.text(data.count);
                 cartBtn.addClass('cart_icon_not_empty');
             } else {
-                $('#item-count').text('');
+                itemCount.text('');
             }
         });
     }
@@ -157,7 +158,6 @@ var rs_callbacks = {
         setTimeout(function(){
             utils.close_notify();
             $('#card-btn').addClass('cart_icon_not_empty');
-            $('#btn_add_cart').removeClass('btn-warning').addClass('btn-success').text('已加入购物车');
         }, 800);
         if (typeof(updateCartItemCount) == 'function') {
             updateCartItemCount();
@@ -864,8 +864,10 @@ $(document).ready(function() {
     }
 
     //show cart button
-    $('#card-btn').click(function(ev){
-        if($(this).hasClass('cart_icon_not_empty')){ //has item
+    $('#card-btn, #op_carts, #cart_link').click(function(ev){
+        var itemCount = $('#item-count');
+        var itemNum = (itemCount.length > 0 && $.trim(itemCount.text()) != '' && parseInt($.trim(itemCount.text())));
+        if($(this).hasClass('cart_icon_not_empty') || itemNum){ //has item
             window.location.href = '/carts/listcart.html';
         } else {
             utils.alert('购物车中没有东西');

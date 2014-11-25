@@ -403,6 +403,7 @@ class AppController extends Controller {
              }
              $this->set('specs_map', $specs_map);
             $this->setHasOfferBrandIds(${$modelClass}[$modelClass]['brand_id']);
+            $this->set('hideNav', $this->RequestHandler->isMobile());
         }
     }
 

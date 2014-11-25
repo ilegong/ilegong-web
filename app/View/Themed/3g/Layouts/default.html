@@ -71,7 +71,7 @@
             <li><a class="home {{if $op_cate == 'home'}}active{{/if}}" href="/techan.html"><span class="op-icon {{if $op_cate == 'home'}}op-icon-active{{/if}}"></span><span>首页</span></a></li>
             <li><a class="share {{if $op_cate == 'share'}}active{{/if}}" href="/share.html"><span class="op-icon {{if $op_cate == 'share'}}op-icon-active{{/if}}"></span><span>分享圈</span></a></li>
             <li><a class="shichituan {{if $op_cate == 'shichituan'}}active{{/if}}" href="/shichituan.html"><span class="op-icon {{if $op_cate == 'shichituan'}}op-icon-active{{/if}}"></span><span>试吃团</span></a></li>
-            <li><a class="categories {{if $op_cate == 'categories'}}active{{/if}}" href="/carts/listcart.html"><span class="op-icon {{if $op_cate == 'categories'}}op-icon-active{{/if}}"></span><span>购物车</span></a></li>
+            <li id="op_carts"><a class="categories {{if $op_cate == 'categories'}}active{{/if}}" href="/carts/listcart.html"><span class="op-icon {{if $op_cate == 'categories'}}op-icon-active{{/if}}"></span><span>购物车</span></a></li>
             <li><a class="me {{if $op_cate == 'me'}}active{{/if}}" href="/users/me.html"><span class="op-icon {{if $op_cate == 'me'}}op-icon-active{{/if}}"></span><span>我的</span></a></li>
         </ul>
     </div>
@@ -88,6 +88,18 @@
         {{template Elements/footer}}
 {{$this->fetch('scriptBottom')}}
         <script>
+            //hide footer bar
+            document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+                if (typeof WeixinJSBridge != 'undefined') {
+                    WeixinJSBridge.call('hideToolbar');
+                }
+            });
+
+            $(document).ready(function () {
+                if (typeof(updateCartItemCount) === 'function') {
+                    updateCartItemCount();
+                }
+            });
             $(document).ready(function() {
                 $('#div_navbar').find('a').click(function(){
                     var $a = $(this);
