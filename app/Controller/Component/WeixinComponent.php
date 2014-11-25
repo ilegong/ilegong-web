@@ -13,7 +13,9 @@ class WeixinComponent extends Component
         "ORDER_SHIPPED" => "87uu4CmlZT-xlZGO45T_XTHiFYAWHQaLv94iGuH-Ke4",
         "ORDER_REBATE" => "DVuV9VC7qYa4H8oP1BaZosOViQ7RrU3v558VrjO7Cv0",
         "COUPON_RECEIVED" => "op8f7Ca1izIU1QVfrdrg7GBqa_KTXHlaGFjUO2EGG8I",
-        "COUPON_TIMEOUT" => "KnpyIsYLe6W-8vKDFPVfd9_5WbvKBMn_wQiaIsc1-wE"
+        "COUPON_TIMEOUT" => "KnpyIsYLe6W-8vKDFPVfd9_5WbvKBMn_wQiaIsc1-wE",
+        "PACKET_BE_GOT" => "L2nw1khejEMFilcSGKxfm_2zK4cnrHhf4Gv5le0c204",
+        "PACKET_RECEIVED" => "vffIekz48NrxDRNbiGP5_xTvCqBHusA_W5pidHhGaHs"
     );
 
     public $kuaidi100_ship_type = array(
@@ -63,6 +65,11 @@ class WeixinComponent extends Component
     public function get_coupon_url()
     {
         return WX_HOST . '/users/my_coupons.html';
+    }
+
+    public function get_packet_url()
+    {
+        return WX_HOST . '/users/my_offers.html';
     }
 
 
@@ -221,6 +228,56 @@ class WeixinComponent extends Component
             )
         );
         return $this->send_weixin_message($post_data);
+    }
+
+
+    //领取红包
+    public function send_packet_received_message($user_id, $packet_money, $packet_name="眉县有机猕猴桃红包")
+    {
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
+        if ($user_weixin != false) {
+            $open_id = $user_weixin['oauth_openid'];
+            $post_data = array(
+                "touser" => $open_id,
+                "template_id" => $this->wx_message_template_ids["PACKET_RECEIVED"],
+                "url" => $this->get_packet_url(),
+                "topcolor" => "#FF0000",
+                "data" => array(
+                    "first" => array("value" => "亲，恭喜您获得朋友说红包！"),
+                    "keyword1" => array("value" => $packet_name."（1个）"),
+                    "keyword2" => array("value" => $packet_money."元"),
+                    "remark" => array("value" => "红包可以发送给朋友一起抢，点击详情，分享红包。", "color" => "#FF8800")
+                )
+            );
+            return $this->send_weixin_message($post_data);
+        }
+        return false;
+    }
+
+
+    //红包被领取
+    public function send_packet_be_got_message($user_id, $got_packet_user_name, $got_packet_money, $packet_name="眉县有机猕猴桃红包")
+    {
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
+        if ($user_weixin != false) {
+            $open_id = $user_weixin['oauth_openid'];
+            $post_data = array(
+                "touser" => $open_id,
+                "template_id" => $this->wx_message_template_ids["PACKET_BE_GOT"],
+                "url" => $this->get_packet_url(),
+                "topcolor" => "#FF0000",
+                "data" => array(
+                    "first" => array("value" => $got_packet_user_name."领走了您分享的".$packet_name."，恭喜发财！"),
+                    "keyword1" => array("value" => $got_packet_money."元"),
+                    "keyword2" => array("value" => date('Y-m-d H:i:s')),
+                    "remark" => array("value" => "点击详情，查看红包。", "color" => "#FF8800")
+                )
+            );
+            return $this->send_weixin_message($post_data);
+        }
+        return false;
     }
 
     public function send_weixin_message($post_data)
