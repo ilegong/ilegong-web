@@ -867,10 +867,13 @@ $(document).ready(function() {
     $('#card-btn, #op_carts, #cart_link').click(function(ev){
         var itemCount = $('#item-count');
         var itemNum = (itemCount.length > 0 && $.trim(itemCount.text()) != '' && parseInt($.trim(itemCount.text())));
-        if($(this).hasClass('cart_icon_not_empty') || itemNum){ //has item
+        if($('#card-btn').hasClass('cart_icon_not_empty') || itemNum){ //has item
             window.location.href = '/carts/listcart.html';
         } else {
             utils.alert('购物车中没有东西');
+            var $a = $('#op_carts').find('a');
+            $a.removeClass('active');
+            $a.find('span.op-icon').removeClass('op-icon-active');
             ev.preventDefault();
             return false;
         }
