@@ -8,7 +8,7 @@
             = <span class="apple_numbers" id="rice_got_cnt">{{$total_apple*10}}</span>g大米
             {{else}}{{ $game_obj_name }}
             {{/if}}
-            <a href="#get_coupons" class="btn-sm btn-warning">兑换</a>
+            <a href="#get_coupons" class="btn-sm btn-warning">兑换</a><a class="apple_nav_links" href="#get_coupons"><small>规则</small></a>
         </div>
     </div>
     {{if !$game_end }}
@@ -73,7 +73,38 @@
         </div>
         </div>
         {{elseif $game_type == 'mihoutao1411' }}
-        1、摇下30个，可兑25元5人猕猴桃红包一个；摇下60个，可兑100元10人猕猴桃红包一个；摇下80个，可兑225元15人猕猴桃红包一个；摇下100个，400元20人猕猴桃红包一个，还有机会抽取1箱免费的红绿灯生态猕猴桃（每天1箱）或1箱免费的绿心生态猕猴桃（每天5箱）。<br />
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>摇下数量</td>
+                    <td>红包金额</td>
+                    <td>分享给朋友</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>30个</td>
+                    <td>25元</td>
+                    <td>可供5人抢</td>
+                </tr>
+                <tr>
+                    <td>60个</td>
+                    <td>100元</td>
+                    <td>可供10人抢</td>
+                </tr>
+                <tr>
+                    <td>80个</td>
+                    <td>225元</td>
+                    <td>可供15人抢</td>
+                </tr>
+                <tr>
+                    <td>100个</td>
+                    <td>400元</td>
+                    <td>可供20人抢</td>
+                </tr>
+            </tbody>
+        </table>
+        1、摇下100个，还有机会抽取1箱<span style="color: red">免费</span>的红绿灯生态猕猴桃（每天1箱）或绿心生态猕猴桃（每天5箱）。<br />
         2、猕猴桃红包分享给朋友一起抢，抢得的优惠券在购买眉县生态猕猴桃时直接抵现金使用，使用期限12月5号23点59分之前。<br />
         3、关注朋友说，每天可领取5次游戏机会；小伙伴点击分享的摇一摇游戏链接即增加一次游戏机会。<br />
         4、活动结束日期12月3号23点59分。 <br/>
