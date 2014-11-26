@@ -351,6 +351,11 @@ class Apple201410Controller extends AppController
             $this->redirect_for_append_tr_id($current_uid, $gameType);
         }
 
+        $trid = $_GET['trid'];
+        if ($trid) {
+            $this->set('trid', $trid);
+        }
+
         $friendsHelpMe = $this->TrackLog->find('all', array(
             'conditions' => array('to' => $current_uid, 'type' => $gameType),
             'fields' => array('from'),
