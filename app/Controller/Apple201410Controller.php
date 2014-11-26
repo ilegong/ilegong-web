@@ -282,7 +282,7 @@ class Apple201410Controller extends AppController
             $logstr = 'too frequently';
         }
 
-        echo json_encode(array('success' => true, 'award_type' => $award_type, 'logstr' => $logstr));
+        echo json_encode(array('success' => true, 'award_type' => $award_type, 'logstr' => ''));
     }
 
     public function exchange_coupon($gameType = KEY_APPLE_201410)
