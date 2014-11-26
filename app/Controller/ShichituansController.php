@@ -131,6 +131,7 @@ class ShichituansController extends AppController{
 
     public function shichi_view(){
       
+        $this->pageTitle = __('试吃团');
         $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
         $shichiId = $result['Shichituan']['shichi_id'];
         $status = $result['Shichituan']['status'];
