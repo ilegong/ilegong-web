@@ -135,7 +135,7 @@ class ShichituansController extends AppController{
         $shichiId = $result['Shichituan']['shichi_id'];
         $status = $result['Shichituan']['status'];
         $this->set('result',$result);
-        $this->request->data = $this->Shichituan->read(null, $shichiId);print_r($this->request->data);
+        $this->request->data = $this->Shichituan->read(null, $shichiId);
         if($status == 0){
            $shichimessage=_('申请正在审核中,请耐心等待');
         } else if ($status == 1){
