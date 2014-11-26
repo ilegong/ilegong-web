@@ -131,12 +131,27 @@ class ShichituansController extends AppController{
 
     public function shichi_view(){
       
-//        $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
-//        $shichiId = $result['Shichituan']['shichi_id'];
-//        $status = $result['Shichituan']['status'];
-//        $this->set('result',$result);
-//        $this->request->data = $this->Shichituan->read(null, $shichiId);
-        $status =0;
+        $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
+        $shichiId = $result['Shichituan']['shichi_id'];
+        $status = $result['Shichituan']['status'];
+        $this->set('result',$result);
+        $this->request->data = $this->Shichituan->read(null, $shichiId);
+        if($status == 0){
+           $shichimessage=_('申请正在审核中,请耐心等待');
+        } else if ($status == 1){
+            $shichimessage=_('申请通过,恭喜您加入我们的试吃团');
+        } else  $shichimessage=_('很遗憾,本期已满，请下次再申请');
+        $this->set('message',$shichimessage);
+
+        }
+
+    public function shichi_status(){
+
+        $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
+        $shichiId = $result['Shichituan']['shichi_id'];
+        $status = $result['Shichituan']['status'];
+        $this->set('result',$result);
+        $this->request->data = $this->Shichituan->read(null, $shichiId);
         if($status == 0){
            $shichimessage=_('申请正在审核中,请耐心等待');
         } else if ($status == 1){
