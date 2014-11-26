@@ -46,7 +46,7 @@ class Apple201410Controller extends AppController
     );
 
     var $title_in_page = array(
-        self::MIHOUTAO1411 => '摇下100个，最高一箱猕猴桃免费领',
+        self::MIHOUTAO1411 => '摇下100个，最高1箱猕猴桃免费领',
         self::RICE_201411 => '摇下50个，大米优惠券免费送',
     );
     var $title_in_window = array(
