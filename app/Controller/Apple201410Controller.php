@@ -238,7 +238,6 @@ class Apple201410Controller extends AppController
         $uid = $this->currentUser['id'];
 
         $award_type = 0;
-        $logstr = '';
         $last = $this->Session->read('last_chou_jiang');
         if (time() - $last > 180 && $gameType == self::MIHOUTAO1411) {
             $this->Session->write('last_chou_jiang', time());
@@ -276,6 +275,8 @@ class Apple201410Controller extends AppController
                 }
                 $logstr = "Choujian $uid : todayAwarded=$todayAwarded, iAwarded=$iAwarded, shouldLimit=$shouldLimit";
                 $this->log($logstr);
+            } else {
+                $logstr = "total_got=$total_got, award_limit=".$this->AWARD_LIMIT;
             }
         } else {
             $logstr = 'too frequently';
