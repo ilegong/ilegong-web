@@ -231,6 +231,54 @@ class Apple201410Controller extends AppController
         echo json_encode($res);
     }
 
+
+    public function jp($gameType) {
+        $this->autoRender = false;
+
+        $uid = $this->currentUser['id'];
+
+        $award_type = 0;
+        $last = $this->Session->read('last_chou_jiang');
+        if (time() - $last > 180 && $gameType == self::MIHOUTAO1411) {
+            $this->Session->write('last_chou_jiang', time());
+
+            $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
+            $total_got = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] : 0;
+
+            if ($total_got > $this->AWARD_LIMIT) {
+                $this->loadModel('AwardResult');
+                $model = $this->AwardResult;
+                $todayAwarded = $model->todayAwarded(date(FORMAT_DATE), $gameType);
+                $iAwarded = $model->userIsAwarded($uid, $gameType);
+
+                if (!$iAwarded  && !$this->shouldLimit($todayAwarded, 6)) {
+                    $awardResult = array(
+                        'uid' => $uid,
+                        'type' => $gameType,
+                        'finish_time' => date(FORMAT_DATETIME)
+                    );
+                    if (!$model->save($awardResult)) {
+                        $this->log("Save AwardResult failed:" . json_encode($awardResult));
+                    };
+
+                    $award_type = 69;
+                    $type = 1387;
+                    if ($todayAwarded == 3) {
+                        $type = 1388;
+                        $award_type = 109;
+                    }
+
+                    $this->CouponItem->addCoupon($uid, $type, $uid, 'game_'.$gameType.'_'.mktime());
+                    $store = "购买陕西梅县生态猕猴桃时使用";
+                    $validDesc = "有效期至2014年12月05日";
+                    $this->Weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
+                }
+            }
+        }
+
+        echo json_encode(array('success' => true, 'award_type' => $award_type));
+    }
+
     public function exchange_coupon($gameType = KEY_APPLE_201410)
     {
         $this->autoRender = false;
@@ -523,7 +571,8 @@ class Apple201410Controller extends AppController
         $curr_got += $this->randGotApple($todayAwarded, $total_got, $dayLimit, $gameType);
         $curr_got = ($total_got == 0 && $curr_got == 0 ? 3 : $curr_got);
 
-        if (is_array($iAwarded) && empty($iAwarded) && $total_got + $curr_got >= $this->AWARD_LIMIT) {
+        if ($gameType != self::MIHOUTAO1411
+            && (is_array($iAwarded) && empty($iAwarded) && $total_got + $curr_got >= $this->AWARD_LIMIT)) {
             $awardResult = array(
                 'uid' => $uid,
                 'type' => $gameType,

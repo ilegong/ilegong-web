@@ -224,7 +224,8 @@
         var imgUrl = $('#apple_tree_img').attr('src');
         var lineLink = '{{WX_HOST}}/t/ag/{{$game_type}}.html?{{if $trid}}trid={{urlencode($trid)}}{{/if}}';
         function descContent() {
-            var total = $('#apple_got_cnt').text();
+            var total = $.trim($('#apple_got_cnt').text());
+            total = total != '' ? parseInt(total) : 0;
             return '摇一摇一起免费兑生态猕猴桃红包，我已经摇下'+total+'个猕猴桃，'+ game_mihoutao_hongbao(total) +'元红包啦 -- 朋友说';
         }
         var shareTitle = '摇下100个，400元生态猕猴桃红包免费送';
