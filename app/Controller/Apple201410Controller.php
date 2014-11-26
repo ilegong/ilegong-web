@@ -238,6 +238,7 @@ class Apple201410Controller extends AppController
         $uid = $this->currentUser['id'];
 
         $award_type = 0;
+        $logstr = '';
         $last = $this->Session->read('last_chou_jiang');
         if (time() - $last > 180 && $gameType == self::MIHOUTAO1411) {
             $this->Session->write('last_chou_jiang', time());
@@ -273,11 +274,14 @@ class Apple201410Controller extends AppController
                     $validDesc = "有效期至2014年12月05日";
                     $this->Weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
                 }
-                $this->log("Choujian $uid : todayAwarded=$todayAwarded, iAwarded=$iAwarded, shouldLimit=$shouldLimit");
+                $logstr = "Choujian $uid : todayAwarded=$todayAwarded, iAwarded=$iAwarded, shouldLimit=$shouldLimit";
+                $this->log($logstr);
             }
+        } else {
+            $logstr = 'too frequently';
         }
 
-        echo json_encode(array('success' => true, 'award_type' => $award_type));
+        echo json_encode(array('success' => true, 'award_type' => $award_type, 'logstr' => $logstr));
     }
 
     public function exchange_coupon($gameType = KEY_APPLE_201410)
