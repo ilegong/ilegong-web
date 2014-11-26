@@ -40,7 +40,7 @@ class ShichituansController extends AppController{
         if ($result){
             if($result['Shichituan']['period']==(date('m', time()) - 8))
             {
-            return $this->redirect(array('action' => 'shichi_view'));
+            $this->redirect(array('action' => 'shichi_view'));
             }
             $this->request->data = $this->Shichituan->read(array('Shichituan.wechat','Shichituan.name','Shichituan.company','Shichituan.telenum','Shichituan.email','Shichituan.comment'), $result['Shichituan']['shichi_id']);
         }
