@@ -40,7 +40,7 @@ class ShichituansController extends AppController{
         if ($result){
             if($result['Shichituan']['period']==(date('m', time()) - 8))
             {
-            $this->redirect(array('action' => 'shichi_view'));
+            return $this->redirect(array('action' => 'shichi_view'));
             }
             $this->request->data = $this->Shichituan->read(array('Shichituan.wechat','Shichituan.name','Shichituan.company','Shichituan.telenum','Shichituan.email','Shichituan.comment'), $result['Shichituan']['shichi_id']);
         }
@@ -131,11 +131,12 @@ class ShichituansController extends AppController{
 
     public function shichi_view(){
       
-        $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
-        $shichiId = $result['Shichituan']['shichi_id'];
-        $status = $result['Shichituan']['status'];
-        $this->set('result',$result);
-        $this->request->data = $this->Shichituan->read(null, $shichiId);
+//        $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
+//        $shichiId = $result['Shichituan']['shichi_id'];
+//        $status = $result['Shichituan']['status'];
+//        $this->set('result',$result);
+//        $this->request->data = $this->Shichituan->read(null, $shichiId);
+        $status =0;
         if($status == 0){
            $shichimessage=_('申请正在审核中,请耐心等待');
         } else if ($status == 1){
