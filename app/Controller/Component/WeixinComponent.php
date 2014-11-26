@@ -407,4 +407,33 @@ class WeixinComponent extends Component
         return !empty($pidList) && array_search(PRODUCT_ID_RICE_10, $pidList) !== false;
     }
 
+    public function get_mihoutao_game_url()
+    {
+        return WX_HOST . '/t/ag/mihoutao1411.html';
+    }
+
+    //群发猕猴桃活动消息 5000个25元/100元/225元/400元
+    public function send_mihoutao_game_message($user_id)
+    {
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
+        if ($user_weixin != false) {
+            $open_id = $user_weixin['oauth_openid'];
+            $post_data = array(
+                "touser" => $open_id,
+                "template_id" => $this->wx_message_template_ids["PACKET_RECEIVED"],
+                "url" => $this->get_mihoutao_game_url(),
+                "topcolor" => "#FF0000",
+                "data" => array(
+                    "first" => array("value" => "感恩节，朋友说发红包啦，点击详情，摇下100个，就能和朋友一起获得400元猕猴桃红包，还有机会抽取1箱免费猕猴桃。", "color" => "#FF8800"),
+                    "keyword1" => array("value" => "摇下30个即可开始兑换"),
+                    "keyword2" => array("value" => "25元/100元/225元/400元"),
+                    "remark" => array("value" => "红包分享给朋友一起抢，抢得的优惠券在购买眉县猕猴桃时直接抵现金。", "color" => "#FF8800")
+                )
+            );
+            return $this->send_weixin_message($post_data);
+        }
+        return false;
+    }
+
 }
