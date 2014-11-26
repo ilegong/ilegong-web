@@ -108,6 +108,7 @@
         2、猕猴桃红包分享给朋友一起抢，抢得的优惠券在购买眉县生态猕猴桃时直接抵现金使用，使用期限12月5号23点59分之前。<br />
         3、关注朋友说，每天可领取5次游戏机会；小伙伴点击分享的摇一摇游戏链接即增加一次游戏机会。<br />
         4、活动结束日期12月3号23点59分。 <br/>
+        5、建议不要早早兑换，攒到100个抽<a href="#award_cj">免费大奖</a>。 <br/>
         <div class="text-center">
         <button id="get_coupons_button" type="button" class="btn btn-warning">我要兑换</button><a class="apple_medium_links" href="/users/my_offers.html">我的红包</a>
             </div>
@@ -136,7 +137,7 @@
         background-color: lightgreen;
     }
 </style>
-<div class="bg_orange pad">
+<div id="award_cj" class="bg_orange pad">
     <div class="title">摇下100个，抽大奖</div>
     <div id="yao_jp_div"  class="row text-center">
         <span class="col-xs-12" id="jp_mihoutao_109">红绿灯猕猴桃一箱</span>
@@ -296,27 +297,25 @@
 
     var game_page_title = false;
 
-//       $().ready(function(){
-//           {{if $total_apple >= 90}}
-//               bootbox.dialog({message:'亲，您太能了，马上去抽奖吧！',
-//                   buttons:{
-//                       'no' : { 'label' : '耐心摇', className : 'btn-default'},
-//                       'yes': { 'label': '去抽奖', className:'btn-danger', callback:function () {
-//                           $('html, body').animate({
-//                               scrollTop: $("#get_coupons").offset().top
-//                           }, 1000);
-//                       }},
-//                   }
-//               }).css({
-//                   'top': '50%',
-//                   'margin-top': function () {
-//                       return -($(this).height() / 2);
-//                   }
-//               });
-//               {{else}}
-//               utils.alert('亲，摇到90个兑了<span class="apple_numbers">40</span>元券把橙妾带回家吧 :):)');
-//               {{/if}}
-//       });
+   function showAfterGotCallback(times, total){
+       if (total >= 100) {
+           bootbox.dialog({message: '亲，您太能了，马上去抽奖吧！',
+               buttons: {
+                   'no': { 'label': '耐心摇', className: 'btn-default'},
+                   'yes': { 'label': '去抽奖', className: 'btn-danger', callback: function () {
+                       $('html, body').animate({
+                           scrollTop: $("#award_cj").offset().top
+                       }, 500);
+                   }}
+               }
+           }).css({
+               'top': '50%',
+               'margin-top': function () {
+                   return -($(this).height() / 2);
+               }
+           });
+       }
+    }
 
     // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
     document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
@@ -342,4 +341,4 @@
     {{/if}}
 
 </script>
-{{$this->Html->script(array('apple_game.js?v16'));}}
+{{$this->Html->script(array('apple_game.js?v17'));}}

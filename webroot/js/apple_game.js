@@ -99,7 +99,7 @@ $(document).ready(function(){
         msg = '恭喜你！你摇掉了<span class="apple_numbers">' + $got + '</span>个' + game_obj_name + '！<br/><small>(2秒后自动消失)</small>';
         if (need_login) {
             timeout = 5000;
-            msg += '<br/> 亲，您的成绩超过了大多数用户！现在请您先登录。';
+            msg += '<br/> 亲，您的成绩超过了大多数用户！请您先登录。';
         }
         utils.alert(msg, function(){}, timeout, close_callback);
     } else {
@@ -108,6 +108,9 @@ $(document).ready(function(){
         utils.alert(msg, function(){}, timeout, close_callback);
     }
     updateViewState(times, total);
+       if (typeof('showAfterGotCallback')) {
+           showAfterGotCallback(times, total);
+       }
     }
 
 
