@@ -296,6 +296,27 @@
 
     var game_page_title = false;
 
+//       $().ready(function(){
+//           {{if $total_apple >= 90}}
+//               bootbox.dialog({message:'亲，您太能了，马上去抽奖吧！',
+//                   buttons:{
+//                       'no' : { 'label' : '耐心摇', className : 'btn-default'},
+//                       'yes': { 'label': '去抽奖', className:'btn-danger', callback:function () {
+//                           $('html, body').animate({
+//                               scrollTop: $("#get_coupons").offset().top
+//                           }, 1000);
+//                       }},
+//                   }
+//               }).css({
+//                   'top': '50%',
+//                   'margin-top': function () {
+//                       return -($(this).height() / 2);
+//                   }
+//               });
+//               {{else}}
+//               utils.alert('亲，摇到90个兑了<span class="apple_numbers">40</span>元券把橙妾带回家吧 :):)');
+//               {{/if}}
+//       });
 
     // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
     document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
@@ -321,4 +342,4 @@
     {{/if}}
 
 </script>
-{{$this->Html->script(array('apple_game.js?v15'));}}
+{{$this->Html->script(array('apple_game.js?v16'));}}
