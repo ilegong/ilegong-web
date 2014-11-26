@@ -4,8 +4,8 @@
 			<h2 class="Content-title"><?php echo $Brand['Brand']['name']; ?></h2>	
 			
 			<ul class="nav nav-tabs">
-			  <li class="active"><a href="#intro" data-toggle="tab">同事介绍</a></li>
-			  <li><a href="#products" data-toggle="tab">分享商品</a></li>
+			  <li class="{{if !$_GET['show_products']}} active{{/if}}"><a href="#intro" data-toggle="tab">同事介绍</a></li>
+			  <li class="{{if $_GET['show_products']}} active{{/if}}"><a href="#products" data-toggle="tab">分享商品</a></li>
 			  
 			</ul>
 			
