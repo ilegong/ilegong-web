@@ -245,7 +245,7 @@ class Apple201410Controller extends AppController
             $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
             $total_got = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] : 0;
 
-            if ($total_got > $this->AWARD_LIMIT) {
+            if ($total_got >= $this->AWARD_LIMIT) {
                 $this->loadModel('AwardResult');
                 $model = $this->AwardResult;
                 $todayAwarded = $model->todayAwarded(date(FORMAT_DATE), $gameType);
