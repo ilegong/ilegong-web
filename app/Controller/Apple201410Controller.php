@@ -250,8 +250,8 @@ class Apple201410Controller extends AppController
                 $model = $this->AwardResult;
                 $todayAwarded = $model->todayAwarded(date(FORMAT_DATE), $gameType);
                 $iAwarded = $model->userIsAwarded($uid, $gameType);
-
-                if (!$iAwarded  && !$this->shouldLimit($todayAwarded, 6)) {
+                $shouldLimit = $this->shouldLimit($todayAwarded, 6);
+                if (!$iAwarded  && !$shouldLimit) {
                     $awardResult = array(
                         'uid' => $uid,
                         'type' => $gameType,
@@ -273,6 +273,7 @@ class Apple201410Controller extends AppController
                     $validDesc = "有效期至2014年12月05日";
                     $this->Weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
                 }
+                $this->log("Choujian $uid : todayAwarded=$todayAwarded, iAwarded=$iAwarded, shouldLimit=$shouldLimit");
             }
         }
 
