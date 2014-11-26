@@ -133,8 +133,8 @@ class ShichituansController extends AppController{
       
         $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
         $shichiId = $result['Shichituan']['shichi_id'];
-        $status = $result['Shichituan']['status'];print_r($status);
-        $this->set('result',$result);
+        $status = $result['Shichituan']['status'];
+        $this->set('result',$result);print_r($shichiId);
         $this->request->data = $this->Shichituan->read(null, $shichiId);
         if($status == 0){
            $shichimessage=_('申请正在审核中,请耐心等待');
