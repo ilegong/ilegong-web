@@ -542,14 +542,19 @@ function coupon_expired($coupon) {
     return false;
 }
 
-function brand_link($brand_id) {
+function brand_link($brand_id, $params) {
     $brandM = ClassRegistry::init('Brand');
     $brand = $brandM->findById($brand_id);
-    if(!empty($brand)) {
-        return "/brands/" . date('Ymd', strtotime($brand['Brand']['created'])) . "/" . $brand['Brand']['slug'] . ".html";
-    } else {
-        return '/';
+    $url = (!empty($brand)) ? "/brands/" . date('Ymd', strtotime($brand['Brand']['created'])) . "/" . $brand['Brand']['slug'] . ".html" : '/';
+
+    if(!empty($params) && is_array($params)) {
+        $url .= '?';
+        foreach($params as $k => $v) {
+            $url .= '&'.urlencode($k) . '=' . urlencode($v);
+        }
     }
+
+    return $url;
 }
 
 function small_thumb_link($imgUrl) {
