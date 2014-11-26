@@ -425,10 +425,10 @@ class WeixinComponent extends Component
                 "url" => $this->get_mihoutao_game_url(),
                 "topcolor" => "#FF0000",
                 "data" => array(
-                    "first" => array("value" => "感恩节，朋友说发红包啦，点击详情，摇下100个，就能和朋友一起获得400元猕猴桃红包，还有机会抽取1箱免费猕猴桃。", "color" => "#FF8800"),
+                    "first" => array("value" => "感恩节，朋友说发猕猴桃红包啦！"),
                     "keyword1" => array("value" => "摇下30个即可开始兑换"),
                     "keyword2" => array("value" => "25元/100元/225元/400元"),
-                    "remark" => array("value" => "红包分享给朋友一起抢，抢得的优惠券在购买眉县猕猴桃时直接抵现金。", "color" => "#FF8800")
+                    "remark" => array("value" => "点击详情，摇一摇。", "color" => "#FF8800")
                 )
             );
             return $this->send_weixin_message($post_data);
