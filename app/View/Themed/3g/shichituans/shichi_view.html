@@ -2,6 +2,7 @@
     h3{text-align: center}
     h4{text-align: left}
 </style>
+
 <div class="view container">
   
     <div class="alert alert-danger" role="alert">
@@ -10,7 +11,7 @@
         {{$message}}
     </div>
     <div class="col-sm-9 controls">
-     <p><h3>您的申请信息</h3></p>
+     <h3>您的申请信息</h3>
     {{$this->Form->create('Shichituan',array('type'=>'post','class'=>'form-horizontal'))}}
     {{$this->Form->input('wechat',array('label'=>__('微信'),'class' => 'form-control','disabled'=>'disabled'))}}
     {{$this->Form->input('name',array('label'=>__('姓名'),'class' => 'form-control','disabled'=>'disabled'))}}
