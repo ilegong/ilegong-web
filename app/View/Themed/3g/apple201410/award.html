@@ -123,6 +123,85 @@
         {{/if}}
         </div>
     </div>
+{{if $game_type == 'mihoutao1411' }}
+<style>
+    #yao_jp_div > span {
+        border: 1px solid darkkhaki;
+        margin-bottom: 2px;
+        text-align: center;
+        display: block;
+    }
+
+    .selected {
+        background-color: lightgreen;
+    }
+</style>
+<div class="bg_orange pad">
+    <div class="title">摇下100个，抽大奖</div>
+    <div id="yao_jp_div"  class="row text-center">
+        <span class="col-xs-12" id="jp_mihoutao_109">红绿灯猕猴桃一箱</span>
+        <span class="col-xs-12" id="jp_mihoutao_69">绿心猕猴桃一箱</span>
+        <span class="col-xs-12" id="jp_mihoutao_0">下次继续努力</span>
+    </div>
+    <div class="text-center">
+        <button id="yao_jp" type="button" class="btn btn-warning">抽奖</button>
+    </div>
+</div>
+
+<script>
+    $('#yao_jp').click(function(){
+
+        var total = $.trim($('#apple_got_cnt').text());
+        total = total != '' ? parseInt(total) : 0;
+
+        if (total < 100) {
+            utils.alert('达到100个才能抽奖哦，加油！');
+            return false;
+        }
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+
+
+        var finish = false;
+
+        setTimeout(function() {
+            $.getJSON('/apple_201410/jp/{{$game_type}}', {}, function (data) {
+                finish = true;
+                if (data.success) {
+                    setTimeout(function () {
+                        $items.removeClass('selected');
+                        var jp = $("#jp_mihoutao_" + data.award_type);
+                        jp.addClass('selected');
+                        if (data.award_type != 0) {
+                            utils.alert("恭喜您摇到" + jp.text() + ", <a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
+                        } else {
+                            utils.alert('手气不太好啊, 过一会儿再试试！');
+                        }
+                    }, 1000);
+                } else {
+                    $items.removeClass('selected');
+                    $("#jp_mihoutao_0").addClass('selected');
+                }
+
+            });
+        }, 2000);
+
+        var $items = $('#yao_jp_div').find('span');
+        var interval = 200;
+        function jumping() {
+            $items.removeClass('selected');
+            $($items.get(getRandomInt(1, 1000) % $items.length)).addClass('selected');
+            if (!finish) {
+                setTimeout(jumping, interval);
+            }
+        }
+
+        setTimeout(jumping, interval);
+    });
+</script>
+{{/if}}
 
     <div class="bg_white pad">
         <div class="title"><img src="{{$this->Html->assetUrl('/img/logo.png')}}" border="0" /></div>
