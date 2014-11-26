@@ -130,10 +130,10 @@ class ShichituansController extends AppController{
     }
 
     public function shichi_view(){
-        print_r(123);
+      
         $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
         $shichiId = $result['Shichituan']['shichi_id'];
-        $status = $result['Shichituan']['status'];
+        $status = $result['Shichituan']['status'];print_r($status);
         $this->set('result',$result);
         $this->request->data = $this->Shichituan->read(null, $shichiId);
         if($status == 0){
