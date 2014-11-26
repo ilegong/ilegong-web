@@ -156,9 +156,12 @@ var rs_callbacks = {
             return;
         }
         setTimeout(function(){
-            utils.close_notify();
+            utils.progress_done('添加成功!');
             $('#card-btn').addClass('cart_icon_not_empty');
-        }, 800);
+            setTimeout(function(){
+                utils.close_notify();
+            }, 800);
+        }, 500);
         if (typeof(updateCartItemCount) == 'function') {
             updateCartItemCount();
         }
@@ -951,6 +954,12 @@ var utils = {
     close_notify : function() {
         if (utils.notify_dialog) {
             utils.notify_dialog.modal('hide');
+        }
+    },
+
+    progress_done : function(msg) {
+        if (utils.notify_dialog) {
+            utils.notify_dialog.find('div.bootbox-body').text(msg);
         }
     },
 
