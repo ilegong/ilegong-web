@@ -16,7 +16,7 @@
         /*发红包人*/
     .packet1{ text-align:center; position:relative; background-color:#fea501;}
     .packet1 img,.record_title img{ width:100%;}
-    .packet1 h1{ width:100%; text-align:center; font-size:5em; color:#ffffff; position:absolute; top:40%; font-weight:normal;}
+    .packet1 h2{ width:100%; text-align:center; font-size:5em; color:#ffffff; position:absolute; top:40%; font-weight:normal;}
     .title_owner{ padding-top:0.8em; text-align:center; background-color:#fea501;}
     .title_owner h2{ font-size:1.25em; color:#ffffff; font-weight:normal; padding-bottom:0.5em; text-align:center;}
     .title_owner p{ font-size:0.833em; color:#feff87; line-height:1.3em; padding:0 1em 1.5em 1em;}
@@ -49,11 +49,24 @@
     .record .usebtn a:active{ background-color:#db2400; border:0; color:#ffffff; text-decoration:none; border:1px #db2400 solid;}
     .record .money{ color:#feff87; line-height:2em;}
 
-</style>
+    .apple_share {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1030;
+        background-color: #000;
+    }
+    .apple_share.in {
+        opacity: .9;
+    }
 
+</style>
+<div id="share_remark_div"></div>
 <div class="packet1">
-    <h1>{{$this->Number->precision($sharedOffer['SharedOffer']['total_number']/100, 2)}}元</h1>
-    <img src="{{$this->Html->assetUrl('/img/sharing/packet1.png')}}" border="0" />
+    <h2>{{$this->Number->precision($sharedOffer['SharedOffer']['total_number']/100, 2)}}元</h2>
+    <img id="red_offer_png" src="{{$this->Html->assetUrl('/img/sharing/packet1.png')}}" border="0" />
 </div>
 
 {{if $isOwner}}
@@ -114,16 +127,16 @@
     {{/loop}}
     {{/if}}
 </div>
-    
-    <div class="row voffset3">
-        <h3>红包使用说明</h3>
-    <ul style="margin-left: 1em" class="list-unstyled">
-        <li>1、购买指定带红包的商品后即有机会获得红包一个；</li>
-        <li>2、把红包分享至朋友圈或微信群，就可以和好友一起抢红包；</li>
-        <li>3、抢到的红包金额直接变为一张优惠券，在购买指定商品时直接抵扣现金；</li>
-        <li>4、红包和优惠券均有有效期，请在有效期内及时分享和使用。</li>
-    </ul>
-    </div>
+    <!---->
+    <!--<div class="row voffset3">-->
+        <!--<h3>红包使用说明</h3>-->
+    <!--<ul style="margin-left: 1em" class="list-unstyled">-->
+        <!--<li>1、购买指定带红包的商品后即有机会获得红包一个；</li>-->
+        <!--<li>2、把红包分享至朋友圈或微信群，就可以和好友一起抢红包；</li>-->
+        <!--<li>3、抢到的红包金额直接变为一张优惠券，在购买指定商品时直接抵扣现金；</li>-->
+        <!--<li>4、红包和优惠券均有有效期，请在有效期内及时分享和使用。</li>-->
+    <!--</ul>-->
+    <!--</div>-->
 <script>
     var share_png_url = '{{$this->Html->assetUrl("/img/sharing/share.png")}}';
     $(document).ready(function(){
@@ -131,7 +144,7 @@
                 .hide().click(function(){
                     $share_div.hide();
                 });
-        $('body').append($share_div);
+        $('#share_remark_div').append($share_div);
 
         $('#share_to_friend').click(function(){
             $share_div.show();
