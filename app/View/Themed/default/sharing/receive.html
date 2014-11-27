@@ -113,18 +113,32 @@
 
 <div class="record">
     {{if !empty($slices)}}
+
     {{loop $slices $idx $slice}}
     {{if $slice['SharedSlice']['accept_user']}}
+    {{if $slice['SharedSlice']['accept_user'] == $uid}}
     <ul class="clearfix">
         <li class="fl name">{{$nickNames[$slice['SharedSlice']['accept_user']]}}</li>
         <li class="fl time">{{friendlyDateFromStr($slice['SharedSlice']['accept_time'])}}</li>
-        {{if $slice['SharedSlice']['accept_user'] == $uid}}
         <li class="fr usebtn clearfix"><a href="/users/my_coupons.html" class="radius10 fr">马上使用</a></li>
-        {{/if}}
         <li class="fr money">{{$this->Number->precision($slice['SharedSlice']['number']/100, 2)}}元</li>
     </ul>
     {{/if}}
+    {{/if}}
     {{/loop}}
+
+    {{loop $slices $idx $slice}}
+    {{if $slice['SharedSlice']['accept_user']}}
+    {{if $slice['SharedSlice']['accept_user'] != $uid}}
+    <ul class="clearfix">
+        <li class="fl name">{{$nickNames[$slice['SharedSlice']['accept_user']]}}</li>
+        <li class="fl time">{{friendlyDateFromStr($slice['SharedSlice']['accept_time'])}}</li>
+        <li class="fr money">{{$this->Number->precision($slice['SharedSlice']['number']/100, 2)}}元</li>
+    </ul>
+    {{/if}}
+    {{/if}}
+    {{/loop}}
+
     {{/if}}
 </div>
     <!---->
