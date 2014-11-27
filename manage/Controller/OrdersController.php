@@ -179,7 +179,8 @@ class OrdersController extends AppController{
         $this->loadModel('Brand');
         $brands = $this->Brand->find('all',array(
             'conditions'=>array(
-                'deleted != 1'
+                'deleted != 1',
+                'published = 1'
             ),
             'order' => 'id desc'
         ));
