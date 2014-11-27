@@ -1,99 +1,119 @@
 <style>
-    img.red_offer {
-        text-align: center;
-        width: 50%;
-    }
-    .apple_share {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 1030;
-        background-color: #000;
-    }
-    .apple_share.in {
-        opacity: .9;
-    }
+    @charset "utf-8";
+        /* CSS Document */
 
-    .row {
-        margin-left: 0.833em;
-        margin-right: 0.833em;
+    *{-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}
+    body,h1,h2,p,ul,li{ margin:0; padding:0; font-family:"微软雅黑";}
+    body{ background-color:#ec3925;}
+    ul li{ list-style:none;}
+    .clearfix{*zoom:1;}
+    .clearfix:after{content: ".";display: block;height: 0;clear: both; visibility: hidden;}
+    .fl{ float:left;}
+    .fr{ float:right;}
+    .radius10{
+        -moz-border-radius: 0.417em;/* Gecko browsers */-webkit-border-radius: 0.417em;/* Webkit browsers */border-radius:0.417em;/* W3C syntax */
     }
-
-    .bs-callout-danger h4 {
-        color: #d9534f;
-    }
-
-    .bs-callout-danger {
-        border-left-color: #d9534f;
-    }
-    .bs-callout {
-        padding: 20px;
-        margin: 20px 0;
-        border: 1px solid #eee;
-        border-left-width: 5px;
-        border-radius: 3px;
-    }
+        /*发红包人*/
+    .packet1{ text-align:center; position:relative; background-color:#fea501;}
+    .packet1 img,.record_title img{ width:100%;}
+    .packet1 h1{ width:100%; text-align:center; font-size:5em; color:#ffffff; position:absolute; top:40%; font-weight:normal;}
+    .title_owner{ padding-top:0.8em; text-align:center; background-color:#fea501;}
+    .title_owner h2{ font-size:1.25em; color:#ffffff; font-weight:normal; padding-bottom:0.5em; text-align:center;}
+    .title_owner p{ font-size:0.833em; color:#feff87; line-height:1.3em; padding:0 1em 1.5em 1em;}
+    .title_owner a{ text-decoration:none; font-size:1.417em; width:10em; height:2em; line-height:2em; display:block; margin:0 auto;}
+    .title_owner a.disabled{ background-color:#bcbcbc; color:#eaeaea;}
+    .title_owner a.usable{ background-color:#ec3925; color:#ffffff;}
+    .title_owner a.usable:active{ background-color:#db2400; text-decoration:none;}
+    .tips{ background-color:#fea501;}
+    .tips p{ padding-top:1.5em; font-size:0.75em; text-align:center; color:#feff87;}
+    .count{ color:#ffffff; font-size:1em; text-align:center; padding:0.2em 0 1em 0;}
+    .count span{ background-color:#ec3925; -moz-border-radius:0.417em; -webkit-border-radius:0.417em; border-radius:0.417em;}
+        /*抢包人*/
+    .packet2{ text-align:center; position:relative; background-color:#fea501;}
+    .packet2 img,.record_title img{ width:100%;}
+    .tips_bg{ background-color:#ec3925;}
+    .tips_packet2{ margin:1em 1em 0 1em; background-color:#ffffff; line-height:1.417em; padding:0.5em 1em; color:#666666; text-align:left;}
+    .packet2 h1{ width:100%; text-align:center; font-size:5em; color:#ffffff; position:absolute; top:40%; font-weight:normal;}
+    .packet2 p{ font-size:0.833em; position:absolute; width:100%; text-align:center; bottom:4.5em; color:#ffffff;}
+    .packet2 p a{ color:#feff87; text-decoration:underline;}
+    .packet_img{ position:absolute; top:43%; text-align:center; width:100%;}
+    .packet_img img{ width:10.167em; height:4.067em;}
+        /*抢包记录*/
+    .record_title{ position:relative; background-color:#fea501;}
+    .record_title h1{ position:absolute; width:100%; text-align:center; bottom:-3px; color:#ffffff; font-size:1em; font-weight:normal;}
+    .record{ background-color:#ec3925; padding:1em 2.5em; font-size:0.833em;}
+    .record .name{ color:#ffffff; padding-right:0.5em; line-height:2em;}
+    .record .time{ color:#ffafa6; line-height:2em;}
+    .record .usebtn{ width:7em;}
+    .record .usebtn a{ color:#f7b0a8; display:block; padding:0.2em 0; width:5em; text-align:center; text-decoration:none; border:1px #f7b0a8 solid;}
+    .record .usebtn a:active{ background-color:#db2400; border:0; color:#ffffff; text-decoration:none; border:1px #db2400 solid;}
+    .record .money{ color:#feff87; line-height:2em;}
 
 </style>
-    <div class="row text-center">
-        <img id="red_offer_png" class="red_offer" src="{{$this->Html->assetUrl('/img/sharing/offer_red.jpg')}}?v1"/>
-    </div>
-    {{if $isOwner}}
-    <div class="row voffset3">
-        <h4 style="color:#d9534f" class="text-center">恭喜您获得{{$sharedOffer['ShareOffer']['name']}}总额{{$this->Number->precision($sharedOffer['SharedOffer']['total_number']/100, 2)}}元的{{$total_slice}}个红包</h4>
-        <p>
-            分享红包，和好友一起抢，金额拼人品，购买{{$sharedOffer['ShareOffer']['name']}}产品时直接抵现金。
-        </p>
+
+<div class="packet1">
+    <h1>{{$this->Number->precision($sharedOffer['SharedOffer']['total_number']/100, 2)}}元</h1>
+    <img src="{{$this->Html->assetUrl('/img/sharing/packet1.png')}}" border="0" />
+</div>
+
+{{if $isOwner}}
+    <div class="title_owner">
+        <h2>恭喜您获得{{$sharedOffer['ShareOffer']['name']}}总额{{$this->Number->precision($sharedOffer['SharedOffer']['total_number']/100, 2)}}元的{{$total_slice}}个红包</h2>
+        <p>分享红包, 和好友一起抢, 金额拼人品, 购买{{$sharedOffer['ShareOffer']['name']}}商品时直接抵现金。</p>
         {{if $expired }}
-        <a href="javascript:;" class="btn btn-default" style="width: 100%">红包已过期</a>
-    {{elseif $noMore }}
-        <a href="javascript:;" class="btn btn-default" style="width: 100%">红包已发完</a>
-    {{else}}
-        <a href="javascript:;" id="share_to_friend" class="btn btn-warning" style="width: 100%">发红包给好友</a>
-    {{/if}}
-    </div>
-    {{/if}}
-
-    <div class="row text-center voffset3">
-        {{if !$expired}}
-        {{if $just_accepted}}
-        <div class="alert alert-danger"><strong>领取成功！</strong>您领取到了一个￥{{$this->Number->precision($just_accepted/100, 2)}}元红包！</div>
-        {{elseif $accepted}}
-        <div class="alert alert-danger"><strong>您已经抢到啦！</strong></div>
-
-        {{elseif $noMore}}
-        <div class="alert alert-danger"><strong>红包已抢完！</strong>下次早早的哇</div>
-        {{/if}}
+            <a href="javascript:;" class="usable radius10">红包已过期</a>
+        {{elseif $noMore }}
+            <a href="javascript:;" class="usable radius10">红包已发完</a>
         {{else}}
-        <div class="alert alert-danger"><strong>红包已过期！</strong>下次早早的哇</div>
-        {{/if}}
-
-        {{if !$isOwner && ($just_accepted || $accepted)}}
-        <a href="javascript:;" id="share_to_friend" class="btn btn-warning" style="width: 100%">转发给朋友</a>
+            <a href="javascript:;" id="share_to_friend" class="usable radius10">发红包给好友</a>
         {{/if}}
     </div>
+{{/if}}
 
-    <div class="row voffset1">
-        <p class="text-right">剩余<span class="badge">{{$left_slice}}</span>个红包</p>
-        {{if !empty($slices)}}
-        <ul class="list-group voffset1">
-            {{loop $slices $idx $slice}}
-            {{if $slice['SharedSlice']['accept_user']}}
-            <li class="list-group-item clearfix"><span class="col-xs-4">{{$nickNames[$slice['SharedSlice']['accept_user']]}}</span>
-                <span style="margin-left: 1em">￥{{$this->Number->precision($slice['SharedSlice']['number']/100, 2)}}</span>
-                {{if $slice['SharedSlice']['accept_user'] == $uid}}
-                <a href="/users/my_coupons.html" class="btn-sm btn-warning pull-right">查看</a>
-                {{else}}
-                <span class="pull-right">{{friendlyDateFromStr($slice['SharedSlice']['accept_time'])}}</span>
-                {{/if}}
-            </li>
-            {{/if}}
-            {{/loop}}
-        </ul>
-        {{/if}}
+{{if !$isOwner && ($just_accepted || $accepted)}}
+    <div class="title_owner">
+        <a href="javascript:;" id="share_to_friend" class="usable radius10">转发给朋友</a>
     </div>
+{{/if}}
+
+<div class="tips">
+    {{if !$expired}}
+    {{if $just_accepted}}
+    <p>恭喜您抢到了一个￥{{$this->Number->precision($just_accepted/100, 2)}}元红包！</p>
+    {{elseif $accepted}}
+    <p>您已经抢到啦！</p>
+
+    {{elseif $noMore}}
+    <p>红包已抢完！下次早早的哇</p>
+    {{/if}}
+    {{else}}
+    <p>红包已过期！下次早早的哇</p>
+    {{/if}}
+
+    <div class="count">还有<span>&nbsp;{{$left_slice}}&nbsp;</span>个红包未送出</div>
+</div>
+
+<div class="record_title">
+    <h1>看看朋友们手气如何</h1>
+    <img src="{{$this->Html->assetUrl('/img/sharing/redbg.png')}}" border="0" />
+</div>
+
+<div class="record">
+    {{if !empty($slices)}}
+    {{loop $slices $idx $slice}}
+    {{if $slice['SharedSlice']['accept_user']}}
+    <ul class="clearfix">
+        <li class="fl name">{{$nickNames[$slice['SharedSlice']['accept_user']]}}</li>
+        <li class="fl time">{{friendlyDateFromStr($slice['SharedSlice']['accept_time'])}}</li>
+        {{if $slice['SharedSlice']['accept_user'] == $uid}}
+        <li class="fr usebtn clearfix"><a href="/users/my_coupons.html" class="radius10 fr">马上使用</a></li>
+        {{/if}}
+        <li class="fr money">{{$this->Number->precision($slice['SharedSlice']['number']/100, 2)}}元</li>
+    </ul>
+    {{/if}}
+    {{/loop}}
+    {{/if}}
+</div>
     
     <div class="row voffset3">
         <h3>红包使用说明</h3>
