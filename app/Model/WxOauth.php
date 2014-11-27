@@ -49,7 +49,8 @@ class WxOauth extends Model {
             $accessToken = $this->get_base_access_token();
             if (!empty($accessToken)) {
                 $params = array('access_token' => $accessToken);
-                return $this->do_curl_body(WX_API_PREFIX . "/cgi-bin/user/get?", '{"action_name": "QR_LIMIT_SCENE", "action_info": {"scene": {"scene_id": '.$sceneId.'}}}', $params, true);
+                $url = WX_API_PREFIX . "/cgi-bin/qrcode/create";
+                return $this->do_curl_body($url, '{"action_name": "QR_LIMIT_SCENE", "action_info": {"scene": {"scene_id": '.$sceneId.'}}}', $params, true);
             } else return false;
         }
         return false;
@@ -114,7 +115,7 @@ class WxOauth extends Model {
             $url .= '?';
         }
         foreach($params as $key=>$value) {
-            $url = "&$key=$value";
+            $url .= "&$key=$value";
         }
 
         if (is_array($body)) {
@@ -131,8 +132,13 @@ class WxOauth extends Model {
         $this->log("WXOauth-curl:".$url);
         $time_start = mktime();
         $rtn = curl_exec($curl);
+
+        if ($rtn === FALSE) {
+            $error = curl_error($curl);
+        }
+
         curl_close($curl);
-        $this->log('resp ('.(mktime() - $time_start).'s) result:'. $rtn);
+        $this->log('resp ('.(mktime() - $time_start).'s) result:'. $rtn .", error=$error");
 
         $res = json_decode($rtn, true);
         if (is_null($res)) {
