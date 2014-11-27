@@ -44,6 +44,17 @@ class WxOauth extends Model {
         }
     }
 
+    public function create_qrcode_by_sceneid($sceneId) {
+        if (!empty($sceneId)) {
+            $accessToken = $this->get_base_access_token();
+            if (!empty($accessToken)) {
+                $params = array('access_token' => $accessToken);
+                return $this->do_curl_body(WX_API_PREFIX . "/cgi-bin/user/get?", '{"action_name": "QR_LIMIT_SCENE", "action_info": {"scene": {"scene_id": '.$sceneId.'}}}', $params, true);
+            } else return false;
+        }
+        return false;
+    }
+
     public function get_user_info_by_base_token($openid) {
         if (empty($openid)) {
             return null;
@@ -89,6 +100,55 @@ class WxOauth extends Model {
         }
         return $failed_by_base_token;
     }
+
+    /**
+     * @param $url
+     * @param array|string $body
+     * @param array $params
+     * @param bool $used_base_token_and_check
+     * @internal param bool $use_base_token
+     * @return mixed
+     */
+    protected function do_curl_body($url, $body = '', $params = array(), $used_base_token_and_check = false) {
+        if (strpos($url, '?') !== strlen($url) - 1  && !empty($params)) {
+            $url .= '?';
+        }
+        foreach($params as $key=>$value) {
+            $url = "&$key=$value";
+        }
+
+        if (is_array($body)) {
+            $body = json_encode($body);
+        }
+
+        $curl = curl_init();
+        $options = array(
+            CURLOPT_URL => $url,
+            CURLOPT_CUSTOMREQUEST => 'POST', // GET POST PUT PATCH DELETE HEAD OPTIONS
+            CURLOPT_POSTFIELDS => $body,
+        );
+        curl_setopt_array($curl, ($options + $this->wx_curl_option_defaults));
+        $this->log("WXOauth-curl:".$url);
+        $time_start = mktime();
+        $rtn = curl_exec($curl);
+        curl_close($curl);
+        $this->log('resp ('.(mktime() - $time_start).'s) result:'. $rtn);
+
+        $res = json_decode($rtn, true);
+        if (is_null($res)) {
+            $error = json_last_error();
+            throw new CakeException($error);
+        }
+
+        if ($used_base_token_and_check) {
+            if ($this->clearBaseTokenCacheIfRequired($res['errcode'])){
+                return $this->do_curl_body($url, $body, $params, false);
+            }
+        }
+
+        return $res;
+    }
+
 
     /**
      * @param $url

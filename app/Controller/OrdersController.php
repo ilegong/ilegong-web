@@ -671,6 +671,17 @@ class OrdersController extends AppController{
         }
     }
 
+    public function test_create_qrcode($sceneId) {
+        if ($this->is_admin($this->currentUser['id'])) {
+            $this->autoRender = false;
+            $this->loadModel('WxOauth');
+            $o = $this->WxOauth->create_qrcode_by_sceneid($sceneId);
+            $log = "test_create_qrcode $sceneId:" . $o . ", in json:" . json_encode($o);
+            $this->log($log);
+            echo $log;
+        }
+    }
+
 	/**
 	 * 商家设置订单的状态
 	 */
