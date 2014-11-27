@@ -20,6 +20,7 @@ class SharingController extends AppController{
                 $this->redirect('/users/login.html?referer=' . $ref);
             }
         }
+        $this->set('hideNav', true);
     }
 
     public function receive($shared_offer_id) {
