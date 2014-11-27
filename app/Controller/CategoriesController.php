@@ -3,6 +3,8 @@ class CategoriesController extends AppController {
 
     var $name = 'Categories';
 
+    const PRODUCT_PUBLIC_FIELDS = 'Product.name, Product.id, Product.brand_id, Product.coverimg, Product.promote_name, Product.created,
+                        Product.comment_nums, Product.price, Product.original_price';
     public function tag($tagSlug = '') {
 
         if ($tagSlug == '') {
@@ -44,7 +46,7 @@ class CategoriesController extends AppController {
                 'conditions' => $conditions,
                 'joins' => $join_conditions,
                 'order' => $orderBy,
-                'fields' => array('Product.*'),
+                'fields' => array(self::PRODUCT_PUBLIC_FIELDS),
                 'limit' => $pagesize,
                 'page' => $page)
         );
@@ -79,6 +81,8 @@ class CategoriesController extends AppController {
         $this->set('withBrandInfo', true);
 
         $this->set('op_cate', OP_CATE_HOME);
+
+        $this->set('_serialize', array('brands', 'data_list', 'sub_title'));
     }
 
     public function special_list($slug) {
@@ -214,7 +218,7 @@ class CategoriesController extends AppController {
                     'conditions' => $conditions,
                     'joins' => $join_conditions,
                     'order' => $orderBy,
-                    'fields' => array('Product.*'),
+                    'fields' => array(self::PRODUCT_PUBLIC_FIELDS),
                     'limit' => ($tag['ProductTag']['size_in_home']>0?$tag['ProductTag']['size_in_home']:6),
                     'page' => $page)
             );
@@ -246,6 +250,8 @@ class CategoriesController extends AppController {
         $this->set('withBrandInfo', true);
         $this->set('category_control_name', 'products');
         $this->set('op_cate', OP_CATE_HOME);
+
+        $this->set('_serialize', array('brands', 'tagsWithProducts', 'sub_title'));
     }
 
     public function view($slug='/', $brand_id='') {
