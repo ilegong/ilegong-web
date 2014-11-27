@@ -672,8 +672,8 @@ class OrdersController extends AppController{
     }
 
     public function test_create_qrcode($sceneId) {
+        $this->autoRender = false;
         if ($this->is_admin($this->currentUser['id'])) {
-            $this->autoRender = false;
             $this->loadModel('WxOauth');
             $o = $this->WxOauth->create_qrcode_by_sceneid($sceneId);
             $log = "test_create_qrcode $sceneId:" . $o . ", in json:" . json_encode($o);
