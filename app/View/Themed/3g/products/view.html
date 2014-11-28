@@ -35,6 +35,7 @@
     .shopping_bg:active { background-color:#e01d0e;}
     .bottom_bg a:hover{ color:#ffffff;}
     .bottom_bg p{ padding-top:0.3em;}
+    .cart_btn_soldout { background-color: #808080}
 </style>
 <div class="bottom_bg">
     <ul class="clearfix list-unstyled">
@@ -45,12 +46,12 @@
 
         <li class="fl" style="width:34%;">
             <div style="margin-right:3%;">
-                <a id="btn_quick_buy" item-id="{{$Product['Product']['id']}}" href="javascript:;" class="btn_b pay_bg radius10">立即购买</a>
+                <a id="btn_quick_buy" item-id="{{$Product['Product']['id']}}" href="javascript:;" class="btn_b {{ (($total_left > 0 || $total_left == -1) && $afford_for_curr_user) ? 'pay_bg' : 'cart_btn_soldout'}} radius10">立即购买</a>
             </div>
         </li>
         <li class="fl" style="width:34%;">
             <div style="margin-left:3%;">
-                <a id="btn_add_cart" item-id="{{$Product['Product']['id']}}" href="javascript:;" class="btn_b shopping_bg radius10">加入购物车</a>
+                <a id="btn_add_cart" item-id="{{$Product['Product']['id']}}" href="javascript:;" class="btn_b {{ (($total_left > 0 || $total_left == -1) && $afford_for_curr_user) ? 'shopping_bg' : 'cart_btn_soldout'}} radius10">加入购物车</a>
             </div>
         </li>
         <li class="shopping fr">

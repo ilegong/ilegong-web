@@ -1107,7 +1107,13 @@ $(document).ready(function () {
         $('span.spec_item[item-label="' + $this.attr('item-label') + '"]').not($this).removeClass('spec_item_selected');
     });
     $("#btn_add_cart").click(function(e){
-        cart_edit_amount.save($(this).attr('item-id'));
+        var $this = $(this);
+        if ($this.hasClass('cart_btn_soldout')) {
+            utils.alert('已售完');
+            e.preventDefault();
+            return false;
+        }
+        cart_edit_amount.save($this.attr('item-id'));
         e.preventDefault();
         return false;
     });
@@ -1120,7 +1126,13 @@ $(document).ready(function () {
         return false;
     });
     $('#btn_quick_buy').click(function(){
-        var itemId = $(this).attr('item-id');
+        var $this = $(this);
+        if ($this.hasClass('cart_btn_soldout')) {
+            utils.alert('已售完');
+            e.preventDefault();
+            return false;
+        }
+        var itemId = $this.attr('item-id');
         var itemNum = numInput.val() || 1;
         if(!addToCartWithSpec(itemId, itemNum, itemId)) {
             return false;
