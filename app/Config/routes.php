@@ -18,6 +18,10 @@ App::uses('CustomRouter', 'Lib');
     CustomRouter::connect('/t/special_nov',
         array('controller'=>'categories','action' => 'special_list', 'special_for_rice_coupons'));
 
+    //store
+    CustomRouter::connect('/s', array('controller' => 'stores', 'action' => 'index'));
+    CustomRouter::connect('/s/:action', array('controller' => 'stores'), array('action' => '[\w_]+') );
+    CustomRouter::connect('/b/index/:slug', array('controller' => 'brands', 'action' => 'view'), array('pass' => array('slug'), 'slug' => '[\w_]+') );
 
     CustomRouter::connect('/t/ag',
         array('controller'=>'apple201410','action' => 'award'));

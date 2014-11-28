@@ -1,0 +1,19 @@
+<header class="navbar navbar-default" role="banner">
+    <div class="container">
+        <div class="pull-left">
+            <h1>店铺管理</h1>
+        </div>
+        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+            <ul class="nav navbar-nav pull-right">
+                {{if $CurrentUser['is_business']}}
+                <li><?php echo $this->Html->link('待发货订单', array('controller' => 'orders','action'=>'tobe_shipped_orders','plugin' => null ,)); ?></li>
+                <li><?php echo $this->Html->link('商家订单', array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>
+                <li><?php echo $this->Html->link('商品管理', '/s/products.html'); ?></li>
+                {{/if}}
+                {{if $CurrentUser['id']}}
+                <li>{{$this->Html->link('<i class="glyphicon glyphicon-log-out"></i>退出登录', '/users/logout?referer=/s/index', array('title' => 'logout your account','escape'=>false))}}</li>
+                {{/if}}
+            </ul>
+        </nav>
+    </div>
+</header>

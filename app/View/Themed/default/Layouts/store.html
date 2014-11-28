@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8">
+    <title>{{$pageTitle}}-{{$site[title]}}</title>
+    <META NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}" />
+    <meta name="Description" content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}" />
+    <!--[if lt IE 9]>
+    {{$this->Html->script(array('html5.js', 'respond.js/1.4.2/respond.min.js'))}}
+    <![endif]-->
+    {{$this->Html->meta('icon', '/favicon.ico?v2')}}
+
+    <?PHP echo $this->Combinator->less(); ?>
+
+    <style>
+        @media (min-width: 1200px) {
+            .container{
+                max-width: 970px;
+            }
+        }
+        .voffset  { margin-top: 2px; }
+        .voffset1 { margin-top: 5px; }
+        .voffset2 { margin-top: 10px; }
+        .voffset3 { margin-top: 15px; }
+        .voffset4 { margin-top: 30px; }
+        .voffset5 { margin-top: 40px; }
+        .voffset6 { margin-top: 60px; }
+        .voffset7 { margin-top: 80px; }
+        .voffset8 { margin-top: 100px; }
+        .voffset9 { margin-top: 150px; }
+
+        .text-price {
+            color: #c71673;
+            font-size: 24px;
+        }
+
+        .text-price-small {
+            color: #c71673;
+            font-size: 14px;
+        }
+
+        .text-original-price-small {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+    </style>
+
+    {{$this->Html->css(array('font-awesome.min.css','ui-customer',))}}
+    {{$this->Html->script(array(
+    'http://libs.baidu.com/jquery/1.9.1/jquery.min.js',
+    ));
+    }}
+    <!--[if lte IE 6]>
+    {{$this->Html->css(array(
+    'bootstrap-ie6.css',
+    ))}}
+    {{$this->Html->script(array('jquery/jquery-migrate-1.2.1.min.js'))}}
+    <![endif]-->
+    <script type="text/javascript">
+        var BASEURL = "{{APP_SUB_DIR}}";
+        var ADMIN_BASEURL = BASEURL+"/manage";
+        var _pys_in_weixin = "{{$in_weixin}}";
+        var _pys_notify_img_url = '{{$this->Html->url("/img/progress_notify.gif")}}';
+    </script>
+    <script type="text/javascript">
+        //<![CDATA[
+        // for debugging javascript!
+        (function (window) {
+            window.onerror = function (msg, url, ln) {
+                //transform errors
+                if (typeof(msg) === 'object' && msg.srcElement && msg.target) {
+                    if (msg.srcElement == '[object HTMLScriptElement]' && msg.target == '[object HTMLScriptElement]') {
+                        msg = 'Error loading script';
+                    } else {
+                        msg = 'Event Error - target:' + msg.target + ' srcElement:' + msg.srcElement;
+                    }
+                }
+
+                msg = msg.toString();
+
+                //ignore errors
+                if (msg.indexOf("Location.toString") > -1) {
+                    return;
+                }
+                if (msg.indexOf("Error loading script") > -1) {
+                    return;
+                }
+
+                //report errors
+                window.onerror = function () {
+                };
+                (new Image()).src = "/jserror?msg=" + encodeURIComponent(msg) + "&url=" + encodeURIComponent(url || document.location.toString().replace(/#.*$/, "")) + "&ln=" + parseInt(ln || 0) + "&r=" + (+new Date());
+            };
+        })(window);
+        //]]>
+    </script>
+    <noscript>
+        {{$this->Html->css(array('3g.css',));}}
+        请开启您浏览器的JavaScript选项
+    </noscript>
+</head>
+<body>
+
+{{if !empty($_SESSION['Auth']['Staff']) }}
+<!-- 文件上传进度条 -->
+<div class="flash ui-wedget" id="fsUploadProgress" style="position:absolute;display:none;width:210px;top:80px;right:30px; z-index: 10000000;">
+</div>
+{{/if}}
+{{template menus/store_bootstrap}}
+<div id="header-breadcrumb" >
+    <div class="container clearfix" >
+        {{template Elements/navigation_header}}
+    </div>
+    <div  class="clear"></div>
+</div>
+
+<?php
+    $flash_msg =  $this->Session->flash();
+if($flash_msg){
+echo "<div class=\"container\">$flash_msg</div>";
+}
+//注意#maincontent中，只包含一个'.container'，否则无法前台编辑模板可能会走样。多行的使用实现使用<div class="row"></div>。
+?>
+
+<div id="maincontent" class="maincontent clearfix">
+    <div class="container">
+        {{$content_for_layout}}
+    </div><!-- //end container -->
+</div><!-- //end maincontent -->
+
+{{template Elements/footer}}
+
+{{$this->Html->script(array('jquery/jquery.cookie.js', 'jquery/jquery.lazyload.min.js', 'i18n/language-zh-CN.js','bootstrap.min.js','bootbox/bootbox.min.js', 'common.js?v11','front.js','front_orders.js?v2'));}}
+<script>
+    if (bootbox) {
+        bootbox.setDefaults({
+            locale: "zh_CN"
+        });
+    }
+</script>
+{{$this->fetch('bottomscript')}}
+<script type="text/javascript">
+    $("img.lazy").lazyload({
+        placeholder : "/img/grey.gif",
+        effect: "fadeIn",
+        threshold : 100
+    });
+    $('#to-top').click(function() { $('html,body').animate({ scrollTop: 0 }, 1000); });
+
+    if (typeof(updateCartItemCount) === 'function') {
+        updateCartItemCount();
+    }
+</script>
+</body>
+</html>
