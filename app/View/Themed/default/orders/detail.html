@@ -25,8 +25,8 @@
 
             </div>
         </div>
-        {{elseif $has_expired_product}}
-            <div class="alert alert-info">有{{$has_expired_product}}件商品已下架</div>
+        {{elseif $has_expired_product_type}}
+            <div class="alert alert-info">有{{$has_expired_product_type}}样商品已下架</div>
         {{/if}}
 
     {{if !empty($toShare)}}

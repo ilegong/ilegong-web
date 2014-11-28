@@ -336,10 +336,7 @@ class OrdersController extends AppController{
                 'order_id' => $orderId,
                 'creator'=> $uid
             )));
-        $product_ids = array();
-        foreach($Carts as $cart) {
-            $product_ids[] = $cart['Cart']['product_id'];
-        }
+        $product_ids = Hash::extract($Carts, '{n}.Cart.product_id');
         $this->loadModel('Product');
         $products = $this->Product->find('all', array(
             'fields' => array('id', 'created', 'slug', 'published', 'deleted'),
@@ -354,19 +351,20 @@ class OrdersController extends AppController{
         $products = $product_new;
         unset($product_new);
 
-        $has_expired_product = 0;
+        $expired_pids = array();
         foreach($product_ids as $pid) {
             if (empty($products[$pid])
                 || $products[$pid]['Product']['published'] == PUBLISH_NO
                 || $products[$pid]['Product']['deleted'] == 1) {
-                $has_expired_product++;
+                $expired_pids[] = $pid;
             }
         }
 
+        $has_expired_product_type = count($expired_pids);
         $totalCents = $orderinfo['Order']['total_all_price'] * 100;
         $no_more_money = $totalCents < 1 && $totalCents >= 0;
 
-        if ($no_more_money && $action == 'pay_direct')  {
+        if ($has_expired_product_type == 0 && $no_more_money && $action == 'pay_direct')  {
             if ($orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
                 $this->Order->id = $orderinfo['Order']['id'];
                 if($this->Order->updateAll(array('status' => ORDER_STATUS_PAID), array('id'=>$orderId,'creator'=> $uid, 'status' => ORDER_STATUS_WAITING_PAY))){
@@ -383,7 +381,7 @@ class OrdersController extends AppController{
             $display_status = $_GET['display_status'];
             $this->set('display_status', $display_status);
         }
-        $this->set('show_pay', $has_expired_product == 0
+        $this->set('show_pay', $has_expired_product_type == 0
             && $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
             && ($display_status != PAID_DISPLAY_PENDING && $display_status != PAID_DISPLAY_SUCCESS));
 
@@ -397,7 +395,7 @@ class OrdersController extends AppController{
         $toShare = $shareOffer->query_gen_offer($orderinfo, $this->currentUser['id']);
         $canComment = $this->can_comment($status);
 
-        $this->set(compact('toShare', 'canComment', 'no_more_money', 'order_id', 'order', 'has_expired_product'));
+        $this->set(compact('toShare', 'canComment', 'no_more_money', 'order_id', 'order', 'has_expired_product_type', 'expired_pids'));
 
         $this->set('isMobile', $this->RequestHandler->isMobile());
         $this->set('ship_type', ShipAddress::$ship_type);
