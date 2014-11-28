@@ -11,7 +11,7 @@
                 <li><?php echo $this->Html->link('商品管理', '/s/products.html'); ?></li>
                 {{/if}}
                 {{if $CurrentUser['id']}}
-                <li>{{$this->Html->link('<i class="glyphicon glyphicon-log-out"></i>退出登录', '/users/logout?referer=/s/index', array('title' => 'logout your account','escape'=>false))}}</li>
+                <li>{{$this->Html->link('<i class="glyphicon glyphicon-log-out"></i>退出登录', '/users/logout?referer=/b/index', array('title' => 'logout your account','escape'=>false))}}</li>
                 {{/if}}
             </ul>
         </nav>

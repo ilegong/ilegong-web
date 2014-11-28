@@ -3,7 +3,22 @@
 class BrandsController extends AppController {
 
     var $name = 'Brands';
-    
+
+    public function index($slug='/') {
+        $uid = $this->currentUser['id'];
+        if ($uid) {
+            $this->loadModel('Brand');
+            $this->brand = $this->Brand->find('first',array('conditions'=>array(
+                'creator'=> $uid,
+            )));
+            if (!empty($this->brand)) {
+                $this->view($this->brand['Brand']['slug']);
+            } else {
+                $this->redirect('/');
+            }
+        }
+    }
+
     public function view($slug='/'){
     	$modelClass = $this->modelClass;
     	
