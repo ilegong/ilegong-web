@@ -27,10 +27,12 @@ $brand = $brands[$order['Order']['brand_id']];
         {{if !empty($order_carts[$order['Order']['id']])}}
         {{loop $order_carts[$order['Order']['id']] $cart}}
         <div class="clearfix orderitem_item">
+            <a href="{{product_link($cart['Cart']['product_id'], '/')}}">
             {{$this->Html->image(small_thumb_link($cart['Cart']['coverimg']), array(
             'class' => 'col-xs-3',
             ));}}
             <p class="col-xs-6">{{$cart['Cart']['name']}}</p>
+            </a>
             <div class="col-xs-3 pull-right">
                 <p style="margin-bottom: 0;" class="pull-right">￥{{$this->Number->precision($cart['Cart']['price'], 2)}}</p>
                 <br/>

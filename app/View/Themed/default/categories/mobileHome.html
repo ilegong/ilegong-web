@@ -25,7 +25,7 @@
     <?PHP
         $showed = $max_show;
         foreach($tagWithProduct['Products'] as $item) {
-		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
+		$item['slug'] = !empty($item['slug'])?$item['slug']:$item['id'];
 		if ($showed-- <= 0) {
 		    $showed = $max_show;
 		    break;
@@ -35,7 +35,7 @@
 	    ?>
         {{if count($tagWithProduct['Products']) > 1}}
         <li class="{{if $showed == $max_show -1 }}border_r{{/if}}">
-            <a href="{{'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'}}">
+            <a href="{{product_link2($item)}}">
             <div class="title" style="color:{{$color}};">{{usubstr($item['name'],0, 8,'')}}</div>
             <p>{{$brands[$item['brand_id']]['Brand']['name']}}</p>
             <img src="{{$this->Html->url(small_thumb_link($item['coverimg']))}}" border="0" />
@@ -43,7 +43,7 @@
         </li>
         {{else}}
         <li class="single" style="background: url({{small_thumb_link($this->Html->url($item['coverimg']))}}) no-repeat right">
-            <a href="{{'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'}}">
+            <a href="{{product_link2($item)}}">
             <div class="pl1">
                 <div class="title" style="color:{{$color}};">{{usubstr($item['name'],0, 12,'')}}</div>
                 <p>{{$brands[$item['brand_id']]['Brand']['name']}}</p>

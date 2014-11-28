@@ -4,7 +4,7 @@ class CategoriesController extends AppController {
     var $name = 'Categories';
 
     const PRODUCT_PUBLIC_FIELDS = 'Product.name, Product.id, Product.brand_id, Product.coverimg, Product.promote_name, Product.created,
-                        Product.comment_nums, Product.price, Product.original_price';
+                        Product.comment_nums, Product.price, Product.original_price, Product.slug';
     public function tag($tagSlug = '') {
 
         if ($tagSlug == '') {

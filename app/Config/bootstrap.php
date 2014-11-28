@@ -478,6 +478,10 @@ function game_uri($gameType, $defUri = '/') {
  * @return string
  */
 function product_link($pid, $defUri) {
+    $linkInCache = Cache::read('link_pro_'.$pid);
+    if (!empty($linkInCache)) {
+        return $linkInCache;
+    }
     $pModel = ClassRegistry::init('Product');
     $p = $pModel->findById($pid);
     return product_link2($p, $defUri);
@@ -488,9 +492,12 @@ function product_link($pid, $defUri) {
  * @param $defUri
  * @return string
  */
-function product_link2($p, $defUri) {
+function product_link2($p, $defUri = '/') {
     if (!empty($p)) {
-        return "/products/" . date('Ymd', strtotime($p['Product']['created'])) . "/" . $p['Product']['slug'] . ".html";
+        $pp = empty($p['Product']) ? $p : $p['Product'];
+        $link = "/products/" . date('Ymd', strtotime($pp['created'])) . "/" . $pp['slug'] . ".html";
+        Cache::write('link_pro_'.$pp['id'], $link);
+        return $link;
     } else {
         return $defUri;
     }
