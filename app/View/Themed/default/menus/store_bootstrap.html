@@ -1,19 +1,44 @@
 <header class="navbar navbar-default" role="banner">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
-        <div class="pull-left">
-            <h1>店铺管理</h1>
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">朋友说-商家管理后台</a>
         </div>
-        <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-            <ul class="nav navbar-nav pull-right">
-                {{if $CurrentUser['is_business']}}
-                <li><?php echo $this->Html->link('待发货订单', array('controller' => 'orders','action'=>'tobe_shipped_orders','plugin' => null ,)); ?></li>
-                <li><?php echo $this->Html->link('商家订单', array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>
-                <li><?php echo $this->Html->link('商品管理', '/s/products.html'); ?></li>
-                {{/if}}
-                {{if $CurrentUser['id']}}
-                <li>{{$this->Html->link('<i class="glyphicon glyphicon-log-out"></i>退出登录', '/users/logout?referer=/b/index', array('title' => 'logout your account','escape'=>false))}}</li>
-                {{/if}}
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><?php echo $this->Html->link('店铺', array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>
+                <li><?php echo $this->Html->link('商品', '/s/products.html'); ?></li>
+                <li><?php echo $this->Html->link('订单', array('controller' => 'orders','action'=>'tobe_shipped_orders','plugin' => null ,)); ?></li>
             </ul>
-        </nav>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">{{$CurrentUser['nickname']}}</a></li>
+                <li>
+                    {{$this->Html->link('<i class="glyphicon glyphicon-log-out"></i>退出登录', '/users/logout?referer=/b/index', array('title' => 'logout your account','escape'=>false))}}
+                </li>
+            </ul>
+        </div><!--/.nav-collapse -->
     </div>
+</nav>
 </header>
+
+
+
+<!--<header class="navbar navbar-default" role="banner">-->
+    <!--<div class="container">-->
+        <!--<div class="pull-left">-->
+            <!--<li>朋友说-商家管理后台</li>-->
+        <!--</div>-->
+        <!--<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">-->
+            <!--<ul class="nav navbar-nav pull-right">-->
+                <!--{{if $CurrentUser['is_business']}}-->
+                <!--<li><?php echo $this->Html->link('店铺', array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>-->
+                <!--<li><?php echo $this->Html->link('商品', '/s/products.html'); ?></li>-->
+                <!--<li><?php echo $this->Html->link('订单', array('controller' => 'orders','action'=>'tobe_shipped_orders','plugin' => null ,)); ?></li>-->
+                <!--{{/if}}-->
+                <!--{{if $CurrentUser['id']}}-->
+                <!--<li>{{$this->Html->link('<i class="glyphicon glyphicon-log-out"></i>退出登录', '/users/logout?referer=/b/index', array('title' => 'logout your account','escape'=>false))}}</li>-->
+                <!--{{/if}}-->
+            <!--</ul>-->
+        <!--</nav>-->
+    <!--</div>-->
+<!--</header>-->
