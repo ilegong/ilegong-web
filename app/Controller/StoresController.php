@@ -36,8 +36,37 @@ class StoresController extends AppController {
 
     public function beforeFilter() {
         parent::beforeFilter();
-
         $this->layout = 'store';
+    }
+
+
+    public function profile() {
+        $this->checkAccess();
+        $this->set('brand', $this->brand);
+        $this->setProfileInfo($this->brand['Brand']['weixin_id'],  $this->brand['Brand']['notice']);
+        $this->set('op_cate', 'profile');
+    }
+
+    public function edit_profile() {
+        $this->checkAccess();
+        $this->set('brand', $this->brand);
+
+        if ($this->request->method() == 'POST') {
+            $brandId = $this->brand['Brand']['id'];
+            $weixin_id = trim($_REQUEST['profile_weixin_id']);
+            $notice = trim($_REQUEST['profile_notice']);
+            if (!empty($weixin_id) && mb_strlen($weixin_id) > 3) {
+                $this->Brand->updateAll(array('weixin_id' => '\''.$weixin_id.'\'', 'notice' => '\''.addslashes(htmlspecialchars($notice)).'\''), array('id' => $brandId));
+                $this->Session->setFlash('保存成功');
+                $this->redirect('/s/profile');
+            } else {
+                $this->Session->setFlash('微信Id不能为空，长度不能小于3个字符');
+            }
+            $this->setProfileInfo($weixin_id, $notice);
+        } else {
+            $this->setProfileInfo($this->brand['Brand']['weixin_id'], $this->brand['Brand']['notice']);
+        }
+        $this->set('op_cate', 'profile');
     }
 
     public function index() {
@@ -81,6 +110,7 @@ class StoresController extends AppController {
                 $this->Session->setFlash(__('The Data could not be saved. Please, try again.'));
             }
         }
+        $this->set('op_cate', 'products');
     }
 
     function product_sale_status($id, $on_sale) {
@@ -129,6 +159,7 @@ class StoresController extends AppController {
         else{
             $this->data = $datainfo; //加载数据到表单中
         }
+        $this->set('op_cate', 'products');
     }
 
     function del_product($id) {
@@ -157,7 +188,7 @@ class StoresController extends AppController {
 
         $total = $this->Product->find('count', array('conditions' => array('brand_id' => $this->brand['Brand']['id'])));
         $datalist = $this->Product->find('all', array(
-            'conditions' => array('brand_id' => $this->brand['Brand']['id']),
+            'conditions' => array('brand_id' => $this->brand['Brand']['id'], 'deleted' => DELETED_NO),
             'fields'=>array('id','name','price','published','coverimg', 'deleted', 'saled', 'storage', 'updated', 'slug'),
             'order' => 'updated desc'
         ));
@@ -165,6 +196,7 @@ class StoresController extends AppController {
         $page_navi = getPageLinks($total, $pagesize, '/products/mine', $page);
         $this->set('datalist',$datalist);
         $this->set('page_navi', $page_navi);
+        $this->set('op_cate', 'products');
     }
 
     /**
@@ -174,5 +206,10 @@ class StoresController extends AppController {
      */
     private function findProductByIdAndBrandId($id, $brandId) {
         return $this->Product->find('first', array('conditions' => array('id' => $id, 'brand_id' => $brandId)));
+    }
+
+    private function setProfileInfo($weixinId, $notice) {
+        $this->set('profile_weixin_id', $weixinId);
+        $this->set('profile_notice', $notice);
     }
 }

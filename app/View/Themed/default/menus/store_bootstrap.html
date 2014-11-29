@@ -6,9 +6,9 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><?php echo $this->Html->link('店铺', array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>
-                <li><?php echo $this->Html->link('商品', '/s/products.html'); ?></li>
-                <li><?php echo $this->Html->link('订单', array('controller' => 'orders','action'=>'tobe_shipped_orders','plugin' => null ,)); ?></li>
+                <li {{if $op_cate == 'profile'}}class="active"{{/if}}><?php echo $this->Html->link('店铺资料', array('controller' => 'stores','action'=>'profile','plugin' => null ,)); ?></li>
+                <li {{if $op_cate == 'products'}}class="active"{{/if}}><?php echo $this->Html->link('商品', '/s/products.html'); ?></li>
+                <li {{if $op_cate == 'orders'}}class="active"{{/if}}><?php echo $this->Html->link('订单', array('controller' => 'orders','action'=>'tobe_shipped_orders','plugin' => null ,)); ?></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="#">{{$CurrentUser['nickname']}}</a></li>
@@ -20,25 +20,3 @@
     </div>
 </nav>
 </header>
-
-
-
-<!--<header class="navbar navbar-default" role="banner">-->
-    <!--<div class="container">-->
-        <!--<div class="pull-left">-->
-            <!--<li>朋友说-商家管理后台</li>-->
-        <!--</div>-->
-        <!--<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">-->
-            <!--<ul class="nav navbar-nav pull-right">-->
-                <!--{{if $CurrentUser['is_business']}}-->
-                <!--<li><?php echo $this->Html->link('店铺', array('controller' => 'orders','action'=>'business','plugin' => null ,)); ?></li>-->
-                <!--<li><?php echo $this->Html->link('商品', '/s/products.html'); ?></li>-->
-                <!--<li><?php echo $this->Html->link('订单', array('controller' => 'orders','action'=>'tobe_shipped_orders','plugin' => null ,)); ?></li>-->
-                <!--{{/if}}-->
-                <!--{{if $CurrentUser['id']}}-->
-                <!--<li>{{$this->Html->link('<i class="glyphicon glyphicon-log-out"></i>退出登录', '/users/logout?referer=/b/index', array('title' => 'logout your account','escape'=>false))}}</li>-->
-                <!--{{/if}}-->
-            <!--</ul>-->
-        <!--</nav>-->
-    <!--</div>-->
-<!--</header>-->
