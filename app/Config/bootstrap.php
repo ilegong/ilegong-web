@@ -585,5 +585,5 @@ function small_thumb_link($imgUrl) {
  * @param $error
  */
 function setFlashError($session, $error) {
-    $session->setFlash($error, 'default', array('params' => array('class' => 'alert alert-danger')));
+    $session->setFlash($error, 'default', array('class' => 'alert alert-danger'));
 }
