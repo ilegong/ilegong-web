@@ -192,7 +192,7 @@ class ShareOffer extends AppModel {
                     if ($i < $split_num) {
                         //减一，避免只有两份的情况下一次全部分完
                         //HALF_UP, 避免0分钱红包
-                        $num = round(rand($avg / 2, $avg * 1.5), 0, PHP_ROUND_HALF_UP);
+                        $num = round(rand($avg / 1.5, $avg * 1.25), 0, PHP_ROUND_HALF_UP);
                         if ($num > $amount_left) {
                             $num = $amount_left;
                         }
