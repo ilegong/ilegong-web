@@ -34,7 +34,6 @@ class StoresController extends AppController {
         }
 
         $this->set('brand', $this->brand);
-        $this->pageTitle = '商家后台';
 
         return true;
     }
@@ -42,6 +41,7 @@ class StoresController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
         $this->layout = 'store';
+        $this->pageTitle = '商家后台';
     }
 
 
