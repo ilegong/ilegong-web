@@ -106,8 +106,30 @@ class StoresController extends AppController {
             if(!isset($this->data['Product']['published'])){
                 $this->data['Product']['published'] = 1;
             }
-            $this->data['Product']['deleted'] = 0;
+            $this->data['Product']['deleted'] = DELETED_NO;
             $this->data['Product']['creator'] = $this->currentUser['id'];
+
+            if(!isset($this->data['Product']['slug'])) {
+                $name = $this->data['Product']['name'];
+                $slug = $this->generateSlug($name);
+                if (empty($slug)) {
+                    $slug = random_str(8);
+                }
+
+                $tries = 10;
+                $tryingSlug = $slug;
+                while($tries-- > 0) {
+                    $proBySlug = $this->Product->findBySlug($tryingSlug);
+                    if (!empty($proBySlug)) {
+                        $tryingSlug = $slug . '_' . random_str(4);
+                    } else {
+                        break;
+                    }
+                }
+                $slug = $tryingSlug;
+
+                $this->data['Product']['slug'] = $slug;
+            }
 
             $this->Product->create();
             if ($this->Product->save($this->data)) {
@@ -204,6 +226,24 @@ class StoresController extends AppController {
         $this->set('datalist',$datalist);
         $this->set('page_navi', $page_navi);
         $this->set('op_cate', 'products');
+    }
+
+    /**
+     * 生成链接的slug别名
+     */
+    function genSlug() {
+        $success = false;
+        if($this->checkAccess(false)) {
+            $word = $_REQUEST['word'];
+            $slug = $this->generateSlug($word);
+            $success = false;
+        } else {
+            $slug = 'access_refused';
+            $success = true;
+        }
+
+        $this->autoRender = false;
+        echo json_encode(array('success' => $success, 'slug' => $slug));
     }
 
     /**
@@ -393,5 +433,21 @@ class StoresController extends AppController {
     private function setProfileInfo($weixinId, $notice) {
         $this->set('profile_weixin_id', $weixinId);
         $this->set('profile_notice', $notice);
+    }
+
+    /**
+     * @param $word
+     * @return string
+     */
+    private function generateSlug($word) {
+        if (empty($word)) {
+            return '';
+        }
+        App::uses('Charset', 'Lib');
+        App::uses('Pinyin', 'Lib');
+        $PY = new Pinyin();
+        $slug = $PY->stringToPinyin(Charset::utf8_gbk($word));
+        $slug = Inflector::slug($slug);
+        return $slug;
     }
 }

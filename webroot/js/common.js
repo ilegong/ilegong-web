@@ -1058,6 +1058,13 @@ var utils = {
             result += '.' + padding + fraction;
         }
         return result;
+    },
+
+    genSlug: function(val, callback) {
+        var url = '/s/genSlug';
+        ajaxAction(url,{'word':obj.value},null, function(data){
+            callback(data);
+        });
     }
 };
 

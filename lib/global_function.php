@@ -533,9 +533,10 @@ function getSearchLinks($url, $extra=array(), $delparams=array(),$strip_base=fal
 }
 
 /**
- * 生成随机的串
+ * 生成随机的串. All characters should be url encoding compatible.
  * @param int $length
  * @param string $type
+ * @return string
  */
 function random_str($length, $type = "char") {
     $chars = ($type != 'num') ? "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz" : "0123456789";
