@@ -34,6 +34,7 @@ class StoresController extends AppController {
         }
 
         $this->set('brand', $this->brand);
+        $this->pageTitle = '商家后台';
 
         return true;
     }
