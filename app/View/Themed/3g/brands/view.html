@@ -7,7 +7,7 @@
     <?php $item = $p['Product']; $i++?>
     {{else}}
     <?php $item2 = $p['Product']; $i++?>
-    <ul class="clearfix">
+    <ul class="clearfix list-unstyled">
         <li class="fl">
             <dl class="img_mr">
                 <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}"><img src="{{$item['coverimg']}}" /></a></dt>
@@ -24,7 +24,7 @@
                 <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item2['created'])).'/'.$item2['slug'].'.html')}}" class="title">{{usubstr($item2['name'],0,10,'')}}</a></dt>
                 <dt>
                     <span class="fl current_price">￥{{$item2['price']}}</span>
-                    <span class="fl original_price">{{if $item['original_price']}}{{￥.$item['original_price']}}{{/if}}</span>
+                    <span class="fl original_price">{{if $item['original_price']}}{{￥.$item2['original_price']}}{{/if}}</span>
                 </dt>
             </dl>
         </li>

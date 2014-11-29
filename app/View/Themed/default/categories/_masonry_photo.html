@@ -5,12 +5,12 @@
 		'alt' => $item['title'],'title' => $item['title'],
 		'width'=>'182px',
 		//'onerror'=>'this.src="'.Router::url('/img/products_nophoto.jpg').'";',
-		'url'=> '/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html' 
+		'url'=> '/b/'.$item['slug'].'.html'
 		)); }}
 	</div>
 	<p class="describe" style="text-align:center;">
 		{{eval echo $this->Html->link(usubstr($item['name'],0,10), 
-		'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
+		'/b/'.$item['slug'].'.html',
 		array('title'=>$item['title'])); }}
 	</p>
 </li>

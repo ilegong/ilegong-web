@@ -279,7 +279,7 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 .img_mr{ margin-right:0.417em;}
 .img_ml{ margin-left:0.417em;}
 .shop_good dl dt span{ display:block;}
-.shop_good dl dt a.title{ font-size:1.2em; color:#333333; text-decoration:none; margin-top:0.5em; display:block;}
+.shop_good dl dt a.title{ font-size:1.0em; color:#666666; text-decoration:none; margin-top:0.5em; display:block;}
 .shop_good .current_price{ font-size:1.2em; color:#ffa200;}
 .shop_good .original_price{ font-size:0.833em; color:#cccccc; padding-top:0.4em; text-decoration:line-through;}
 /*bottom*/

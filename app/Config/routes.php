@@ -21,8 +21,8 @@ App::uses('CustomRouter', 'Lib');
     //store
     CustomRouter::connect('/s', array('controller' => 'stores', 'action' => 'index'));
     CustomRouter::connect('/s/:action', array('controller' => 'stores'), array('action' => '[\w_]+') );
-    CustomRouter::connect('/b/index', array('controller' => 'brands', 'action' => 'index'));
-    CustomRouter::connect('/b/index/:slug', array('controller' => 'brands', 'action' => 'index'), array('pass' => array('slug'), 'slug' => '[\w_]+') );
+    CustomRouter::connect('/b/:slug', array('controller' => 'brands', 'action' => 'view'), array('pass' => array('slug'), 'slug' => '[\w_]+'));
+    CustomRouter::connect('/b/index/:slug', array('controller' => 'brands', 'action' => 'view'), array('pass' => array('slug'), 'slug' => '[\w_]+') );
 
     CustomRouter::connect('/t/ag',
         array('controller'=>'apple201410','action' => 'award'));
