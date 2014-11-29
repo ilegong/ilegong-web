@@ -154,9 +154,10 @@ class ProductsController extends AppController{
     private function rand_recommend_pids($tag, $max) {
         $recommend = array();
         if (!empty($tag) && $max > 0) {
-            $pid_candidates = $this->Product->query('select product_id from cake_product_product_tags where tag_id = ' . $tag . ' and product_id != ' . $this->current_data_id);
+            $pid_candidates = $this->Product->query('select distinct product_id from cake_product_product_tags where tag_id = ' . $tag . ' and product_id != ' . $this->current_data_id);
             $candidates_len = count($pid_candidates);
-            while (count($recommend) <= min($max, $candidates_len)) {
+            $tries = 100;
+            while (count($recommend) <= min($max, $candidates_len) && $tries-- > 0) {
                 $idx = rand(0, $candidates_len - 1);
                 $id = $pid_candidates [$idx]['cake_product_product_tags']['product_id'];
                 $recommend[$id] = null;
