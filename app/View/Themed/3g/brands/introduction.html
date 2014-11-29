@@ -1,39 +1,3 @@
-<style>
-    /*店铺首页*/
-    .shop_intro{ padding:0.833em; background-color:#eeeeee;}
-    .shop_head{ float:left; margin-right:0.833em;}
-    .shop_head img{ width:5em; height:5em;}
-    .shop_intro h1{ font-size:1.2em; color:#333333; font-weight:normal; padding-bottom:0.2em;}
-    .shop_intro h2{ font-size:0.75em; color:#999999; font-weight:normal;}
-    .shop_intro p{ font-size:0.75em; color:#666666; line-height:1.2em; padding-top:0.7em;}
-    .shop_good{ margin:0.833em; margin-bottom:4.875em;}
-    .shop_good ul{ margin-bottom:1em;}
-    .shop_good ul li{ width:50%;}
-    .shop_good img{ width:100%;}
-    .img_mr{ margin-right:0.417em;}
-    .img_ml{ margin-left:0.417em;}
-    .shop_good dl dt span{ display:block;}
-    .shop_good dl dt a.title{ font-size:1.2em; color:#333333; text-decoration:none; margin-top:0.5em; display:block;}
-    .shop_good .current_price{ font-size:1.2em; color:#ffa200;}
-    .shop_good .original_price{ font-size:0.833em; color:#cccccc; padding-top:0.4em; text-decoration:line-through;}
-    /*bottom*/
-    .common_bottom{ position:fixed; bottom:0; left:0; background-color:#f1f1f1; height:4.042em; border-top:1px #dddddd solid; font-size:1em; color:#666666; width:100%;}
-    .common_bottom a{ width:25%; float:left; display:block; text-decoration:none;}
-    .common_bottom a span{ display:block; text-align:center; text-decoration:none; color:#666666;}
-    .pyshuo_logo{ width:1.75em; height:1.5em; background:url(../images/pyshuo_icon.png) no-repeat -13em -4.5em; background-size:25em 25em; margin:0 auto; margin-top:0.7em; margin-bottom:0.1em;}
-    .shop_index{ width:1.917em; height:1.5em; background:url(../images/pyshuo_icon.png) no-repeat 0 -2.083em; background-size:25em 25em; margin:0 auto; margin-top:0.7em; margin-bottom:0.1em;}
-    .shop_index_cur{ width:1.917em; height:1.5em; background:url(../images/pyshuo_icon.png) no-repeat 0 0; background-size:25em 25em; margin:0 auto; margin-top:0.7em; margin-bottom:0.1em;}
-    .shop_story{ width:1.5em; height:1.5em; background:url(../images/pyshuo_icon.png) no-repeat -15em -4.5em; background-size:25em 25em; margin:0 auto; margin-top:0.7em; margin-bottom:0.1em;}
-    .shop_story_cur{ width:1.5em; height:1.5em; background:url(../images/pyshuo_icon.png) no-repeat -16.75em -4.5em; background-size:25em 25em; margin:0 auto; margin-top:0.7em; margin-bottom:0.1em;}
-    .shopping_cart{ width:1.917em; height:1.5em; background:url(../images/pyshuo_icon.png) no-repeat -2.042em -2.083em; background-size:25em 25em; margin:0 auto; margin-top:0.7em; margin-bottom:0.1em; position:relative;}
-    .shopping_cart .number{ width:1.125em; height:1.125em; background:url(../images/pyshuo_icon.png) no-repeat -11em -4.5em; background-size:25em 25em; line-height:1.125em; text-align:center; position:absolute; top:-0.5em; right:-0.5em;}
-    .shopping_cart .number label{ font-size:0.9em; color:#ffffff;}
-
-    /*我的故事*/
-    .mystory{ padding:0.833em; margin-bottom:4.875em;}
-    .mystory img{ width:100%;}
-    .mystory p{ text-indent:2em; color:#666666; font-size:1em; line-height:1.5em; padding-top:1em;}
-</style>
 <div class="shop_intro clearfix">
     <div class="shop_head"><img class="radius10" src="{{$Brand['Brand']['coverimg']}}" border="0" /></div>
     <div class="fl" style=" width:73%;">
@@ -49,9 +13,9 @@
 <div class="common_bottom clearfix">
     <a href="/techan.html">
         <span class="pyshuo_logo"></span>
-        <span>去朋友说</span>
+        <span>朋友说</span>
     </a>
-    <a href="{{ $this->Html->url(array('controller'=>'brands','action'=>'view', $slug));}}">
+    <a href="{{$this->Html->url(array('controller'=>'brands','action'=>'view', $slug));}}">
         <span class="shop_index"></span>
         <span>商铺首页</span>
     </a>
