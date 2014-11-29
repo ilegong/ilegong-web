@@ -160,6 +160,7 @@ class ProductsController extends AppController{
             while (count($recommend) <= min($max, $candidates_len) && $tries-- > 0) {
                 $idx = rand(0, $candidates_len - 1);
                 $id = $pid_candidates [$idx]['cake_product_product_tags']['product_id'];
+                $this->log("randomed result: $id $idx");
                 $recommend[$id] = null;
             }
         }
