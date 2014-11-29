@@ -156,8 +156,7 @@ class ProductsController extends AppController{
         if (!empty($tag) && $max > 0) {
             $pid_candidates = $this->Product->query('select distinct product_id from cake_product_product_tags where tag_id = ' . $tag . ' and product_id != ' . $this->current_data_id);
             $candidates_len = count($pid_candidates);
-            $tries = 100;
-            while (count($recommend) <= min($max, $candidates_len) && $tries-- > 0) {
+            while (count($recommend) < min($max, $candidates_len)) {
                 $idx = rand(0, $candidates_len - 1);
                 $id = $pid_candidates [$idx]['cake_product_product_tags']['product_id'];
                 $this->log("randomed result: $id $idx");
