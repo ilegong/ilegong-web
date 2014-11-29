@@ -3,7 +3,7 @@
     <div class="fl">
         <h1>{{$Brand['Brand']['name']}}</h1>
         <h2>微信号: {{$Brand['Brand']['weixin_id']}}</h2>
-        <p>{{$Brand['Brand']['notice']}}</p>
+        <p>{{if !empty($Brand['Brand']['notice'])}}{{$Brand['Brand']['notice']}}{{else}}欢迎光临本店！{{/if}}</p>
     </div>
 </div>
 
