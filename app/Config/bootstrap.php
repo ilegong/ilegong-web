@@ -578,3 +578,12 @@ function small_thumb_link($imgUrl) {
 
     return $imgUrl;
 }
+
+
+/**
+ * @param $session SessionComponent
+ * @param $error
+ */
+function setFlashError($session, $error) {
+    $session->setFlash($error, 'default', array('params' => array('class' => 'alert alert-danger')));
+}

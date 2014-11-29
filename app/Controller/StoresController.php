@@ -65,9 +65,9 @@ class StoresController extends AppController {
             $weixin_id = trim($_REQUEST['profile_weixin_id']);
             $notice = trim($_REQUEST['profile_notice']);
             if (empty($weixin_id) || mb_strlen($weixin_id) <= 3) {
-                $this->Session->setFlash('微信Id不能为空，长度不能小于3个字符');
+                setFlashError($this->Session, '微信Id不能为空，长度不能小于3个字符');
             } else if (mb_strlen($notice) > 30) {
-                $this->Session->setFlash('公告信息不能超过30个汉字');
+                setFlashError($this->Session, '公告信息不能超过30个汉字');
             } else {
                 $this->Brand->updateAll(array('weixin_id' => '\''.$weixin_id.'\'', 'notice' => '\''.addslashes(htmlspecialchars($notice)).'\''), array('id' => $brandId));
                 $this->Session->setFlash('保存成功');
@@ -139,14 +139,14 @@ class StoresController extends AppController {
 
             $error = $this->check_product_publish();
             if (!empty($error)) {
-                $this->Session->setFlash($error);
+                setFlashError($this->Session, $error);
             }  else {
                 $this->Product->create();
                 if ($this->Product->save($this->data)) {
                     $this->Session->setFlash(__('The Data has been saved'));
                     $this->redirect(array('action' => 'products'));
                 } else {
-                    $this->Session->setFlash(__('The Data could not be saved. Please, try again.'));
+                    setFlashError($this->Session, __('The Data could not be saved. Please, try again.'));
                 }
             }
         }
@@ -186,13 +186,13 @@ class StoresController extends AppController {
             $this->data['Product']['creator'] = $this->currentUser['id'];
             $error = $this->check_product_publish();
             if (!empty($error)) {
-                $this->Session->setFlash($error);
+                setFlashError($this->Session, $error);
             }  else {
                 if ($this->Product->save($this->data)) {
                     $this->Session->setFlash(__('The Data has been saved'));
                     //$this->redirect(array('action'=>'index'));
                 } else {
-                    $this->Session->setFlash(__('The Data could not be saved. Please, try again.'));
+                    setFlashError($this->Session, __('The Data could not be saved. Please, try again.'));
                 }
             }
             $successinfo = array('success' => __('Edit success'), 'actions' => array('OK' => 'closedialog'));
@@ -481,7 +481,7 @@ class StoresController extends AppController {
         }
 
         if (!empty($error)) {
-            $this->Session->setFlash($error);
+            setFlashError($this->Session, $error);
         }
 
         return empty($error);
