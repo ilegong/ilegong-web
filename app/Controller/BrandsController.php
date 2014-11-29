@@ -12,7 +12,7 @@ class BrandsController extends AppController {
                 'creator'=> $uid,
             )));
             if (!empty($this->brand)) {
-                $this->view($this->brand['Brand']['slug']);
+                $this->redirect('/b/'.$this->brand['Brand']['slug']);
             } else {
                 $this->redirect('/');
             }
