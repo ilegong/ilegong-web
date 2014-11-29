@@ -269,8 +269,8 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 .shop_intro{ padding:0.833em; background-color:#eeeeee;}
 .shop_head{ float:left; margin-right:0.833em;}
 .shop_head img{ width:5em; height:5em;}
-.shop_intro h1{ font-size:1.2em; color:#333333; font-weight:normal; padding-bottom:0.2em;}
-.shop_intro h2{ font-size:0.75em; color:#999999; font-weight:normal;}
+.shop_intro .brand_name{ font-size:1.2em; color:#333333; font-weight:normal; padding-bottom:0.2em;}
+.shop_intro .brand_weixin{ font-size:0.75em; color:#999999; font-weight:normal;}
 .shop_intro p{ font-size:0.75em; color:#666666; line-height:1.2em; padding-top:0.7em;}
 .shop_good{ margin:0.833em; margin-bottom:4.875em;}
 .shop_good ul{ margin-bottom:1em;}

@@ -1,11 +1,4 @@
-<div class="shop_intro clearfix">
-    <div class="shop_head"><img class="radius10" src="{{$Brand['Brand']['coverimg']}}" border="0" /></div>
-    <div class="fl">
-        <h1>{{$Brand['Brand']['name']}}</h1>
-        <h2>微信号: {{$Brand['Brand']['weixin_id']}}</h2>
-        <p>{{if !empty($Brand['Brand']['notice'])}}{{$Brand['Brand']['notice']}}{{else}}欢迎光临本店！{{/if}}</p>
-    </div>
-</div>
+{{template Elements/brand_intro}}
 <div class="mystory">
     <?php echo $Brand['Brand']['content']; ?>
 </div>
