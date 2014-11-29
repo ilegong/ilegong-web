@@ -50,10 +50,9 @@ class UploadfilesController extends AppController {
 				if($_REQUEST['no_db']){// 不保存到数据库，在ckeditor中上传文件的场景
 					$info ['status'] = '1';
 					$info =array_merge($info,$fileifo);
-                    if (substr($fileifo['fspath'], 0, 7) != 'http://') {
-                        $file_url = str_replace('//', '/', UPLOAD_FILE_URL . $fileifo['fspath']);
-                    } else {
-                        $file_url = $fileifo['fspath'];
+                    $file_url = UPLOAD_FILE_URL . $fileifo['fspath'];
+                    if (strpos($fileifo['fspath'], 'http://') === FALSE) {
+                        $file_url = str_replace('//', '/', $file_url);
                     }
 					if(is_image($file_url)){
 						$info['message'] = '<a href="'.$file_url.'" title="'.__( 'Preview').'" target="_blank"><img src="'.$file_url.'" style="max-height:120px"/></a>';
