@@ -295,6 +295,11 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 .shopping_cart .number{ width:1.125em; height:1.125em; background:url(/img/mobilev1/pyshuo_icon.png) no-repeat -11em -4.5em; background-size:25em 25em; line-height:1.125em; text-align:center; position:absolute; top:-0.5em; right:-0.5em;}
 .shopping_cart .number label{ font-size:0.9em; color:#ffffff;}
 
+/*我的故事*/
+.mystory{ padding:0.833em; margin-bottom:4.875em;}
+.mystory img{ width:100%;}
+.mystory p{ text-indent:2em; color:#666666; font-size:1em; line-height:1.5em; padding-top:1em;}
+
 /* slider plugin UI */
 .swiper-container {
 	margin:0 auto;
