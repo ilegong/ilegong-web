@@ -33,6 +33,8 @@ class StoresController extends AppController {
             }
         }
 
+        $this->set('brand', $this->brand);
+
         return true;
     }
 

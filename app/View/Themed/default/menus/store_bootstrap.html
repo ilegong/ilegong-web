@@ -11,7 +11,7 @@
                 <li {{if $op_cate == 'orders'}}class="active"{{/if}}><?php echo $this->Html->link('订单', array('controller' => 'stores','action'=>'wait_shipped_orders','plugin' => null ,)); ?></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/b/index">{{$CurrentUser['nickname']}}</a></li>
+                <li><a href="/b/index">{{$brand['Brand']['name']}}</a></li>
                 <li>
                     {{$this->Html->link('<i class="glyphicon glyphicon-log-out"></i>退出登录', '/users/logout?referer=/b', array('title' => 'logout your account','escape'=>false))}}
                 </li>
