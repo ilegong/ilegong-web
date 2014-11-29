@@ -10,6 +10,8 @@ class StoresController extends AppController {
 
     public $uses = array('Product', 'Brand', 'Order');
 
+    public $components = array('Paginator');
+
     public $brand = null;
 
     private function checkAccess($refuse_redirect = true){
@@ -257,10 +259,19 @@ class StoresController extends AppController {
         ));
 
         $cond['status'] = $onlyStatus;
-        $orders = $this->Order->find('all', array(
-            'order' => 'id desc',
+
+        $this->Paginator->settings = array(
             'conditions' => $cond,
-        ));
+            'limit' => 15,
+            'order' => array(
+                'Order.id' => 'desc'
+            )
+        );
+
+        $orders = $this->Paginator->paginate('Order');
+
+        $total_count = $this->Order->find('count', array('conditions' => $cond));
+
         $ids = array();
         foreach ($orders as $o) {
             $ids[] = $o['Order']['id'];
@@ -280,6 +291,7 @@ class StoresController extends AppController {
         }
 
         $this->set('orders', $orders);
+        $this->set('total_count', $total_count);
         $this->set('order_carts', $order_carts);
         $this->set('ship_type', ShipAddress::$ship_type);
         $this->set('creator', $creator);
