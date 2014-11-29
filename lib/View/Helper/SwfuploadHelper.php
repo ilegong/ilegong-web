@@ -189,7 +189,7 @@ $(function () {
 				($param['label']?'<label class="col-sm-2 control-label">'.$param['label'].'</label>':'').
 				'<div class="col-sm-10 controls"><span id="spanButtonPlaceholder_'.$fieldid.'"></span>(10MB max)'.$param['after'].'</div>
 				<div class="clearfix"></div>
-				<ul class="col-sm-12 upload-filelist" id="fileuploadinfo_'.$fieldname.'">'.$listfile.'</ul>
+				<ul class="col-sm-10 col-sm-offset-2 upload-filelist" id="fileuploadinfo_'.$fieldname.'">'.$listfile.'</ul>
 		</div>'; 
     }
 
