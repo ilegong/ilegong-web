@@ -3,9 +3,9 @@
         <ul class="nav nav-sidebar">
             <li style="{{if $status==1}} background-color: #F1F1F1{{/if}}">
                 {{if $status==1}}
-                <a href="#">待发货</a>
+                <a href="#">待发货<span style="color: red">{{$total_wait_ship_count}}</span></a>
                 {{else}}
-                <?php echo $this->Html->link('待发货', array('controller' => 'stores','action'=>'wait_shipped_orders','plugin' => null ,)); ?>
+                <a href="/s/wait_shipped_orders.html">待发货<span style="color: red">{{$total_wait_ship_count}}</span></a>
                 {{/if}}
             </li>
             <li style="{{if $status==0}} background-color: #F1F1F1{{/if}}">

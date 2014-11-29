@@ -284,8 +284,11 @@ class StoresController extends AppController {
         $cond = array('brand_id' => $brand_ids, 'NOT' => array(
             'status' => array(ORDER_STATUS_CANCEL)
         ));
-
         $cond['status'] = $onlyStatus;
+
+        $wait_ship_cond = $cond;
+        $wait_ship_cond['status'] = array(ORDER_STATUS_PAID);
+        $total_wait_ship_count = $this->Order->find('count', array('conditions' => $wait_ship_cond));
 
         $this->Paginator->settings = array(
             'conditions' => $cond,
@@ -319,6 +322,7 @@ class StoresController extends AppController {
 
         $this->set('orders', $orders);
         $this->set('total_count', $total_count);
+        $this->set('total_wait_ship_count', $total_wait_ship_count);
         $this->set('order_carts', $order_carts);
         $this->set('ship_type', ShipAddress::$ship_type);
         $this->set('creator', $creator);
