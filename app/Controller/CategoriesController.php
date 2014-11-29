@@ -3,8 +3,6 @@ class CategoriesController extends AppController {
 
     var $name = 'Categories';
 
-    const PRODUCT_PUBLIC_FIELDS = 'Product.name, Product.id, Product.brand_id, Product.coverimg, Product.promote_name, Product.created,
-                        Product.comment_nums, Product.price, Product.original_price, Product.slug';
     public function tag($tagSlug = '') {
 
         if ($tagSlug == '') {
@@ -46,7 +44,7 @@ class CategoriesController extends AppController {
                 'conditions' => $conditions,
                 'joins' => $join_conditions,
                 'order' => $orderBy,
-                'fields' => array(self::PRODUCT_PUBLIC_FIELDS),
+                'fields' => Product::PRODUCT_PUBLIC_FIELDS,
                 'limit' => $pagesize,
                 'page' => $page)
         );
@@ -218,7 +216,7 @@ class CategoriesController extends AppController {
                     'conditions' => $conditions,
                     'joins' => $join_conditions,
                     'order' => $orderBy,
-                    'fields' => array(self::PRODUCT_PUBLIC_FIELDS),
+                    'fields' => explode(',', Product::PRODUCT_PUBLIC_FIELDS),
                     'limit' => ($tag['ProductTag']['size_in_home']>0?$tag['ProductTag']['size_in_home']:6),
                     'page' => $page)
             );

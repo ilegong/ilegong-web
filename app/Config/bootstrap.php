@@ -64,6 +64,8 @@ CONST DELETED_NO = 0;
 const OP_CATE_HOME = 'home';
 const OP_CATE_CATEGORIES = 'categories';
 
+const PRO_TAG_HOTTEST = 1;
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 
@@ -71,7 +73,7 @@ define('ORDER_STATUS_WAITING_PAY', 0);   //待支付
 define('ORDER_STATUS_PAID', 1);         //已支付
 define('ORDER_STATUS_SHIPPED', 2);      //已发货
 define('ORDER_STATUS_RECEIVED', 3);     //已确认收货
-define('ORDER_STATUS_RETURN_MONEY', 4);  //已退款， 不要再用
+define('ORDER_STATUS_RETURN_MONEY', 4);  //已退款
 define('ORDER_STATUS_DONE', 9);         //已完成
 define('ORDER_STATUS_CANCEL', 10);      //已取消
 define('ORDER_STATUS_CONFIRMED', 11);  //已确认有效，不要再用
@@ -388,16 +390,16 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
 
     if (empty($product_ids)) { return array(); }
 
-    $products = $poductModel->findPublishedProductsByIds($product_ids);
+    $products = $poductModel->find_published_products_by_ids($product_ids, array('specs'));
     foreach ($products as $p) {
-        $pid = $p['Product']['id'];
+        $pid = $p['id'];
 
         $newSpecId = empty($specs[$pid]) ? 0 : $specs[$pid];
         $cartItem =& $cartsByPid[$pid];
         if (empty($cartItem)) {
             $cartItem = array(
                 'product_id' => $pid,
-                'name' => product_name_with_spec($p['Product']['name'], $newSpecId, $p['Product']['specs']),
+                'name' => product_name_with_spec($p['name'], $newSpecId, $p['specs']),
                 'coverimg' => $p['Product']['coverimg'],
                 'num' => $nums[$pid],
                 'price' => $p['Product']['price'],
@@ -408,13 +410,13 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
         } else {
             if ($newSpecId == $cartItem['specId']) {
                 $cartItem['num'] = $nums[$pid];
-                $cartItem['price'] = $p['Product']['price'];
+                $cartItem['price'] = $p['price'];
                 $cartItemId = $cartItem['id'];
             } else {
                //CONSIDER to add a new item in shopping cart!!
                 $cartItem['num'] = $nums[$pid];
-                $cartItem['price'] = $p['Product']['price'];
-                $cartItem['name']  = product_name_with_spec($p['Product']['name'], $newSpecId, $p['Product']['specs']);
+                $cartItem['price'] = $p['price'];
+                $cartItem['name']  = product_name_with_spec($p['name'], $newSpecId, $p['specs']);
                 $cartItemId = $cartItem['id'];
                 $cartItem['specId'] = $newSpecId;
             }

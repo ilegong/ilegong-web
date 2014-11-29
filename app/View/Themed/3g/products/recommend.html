@@ -12,5 +12,5 @@
         array('title'=>$item['title']));
         }}
     </div>
-    <div class="app-price">￥ {{$item['price']}}</div>
+    <div class="app-price">￥ {{$this->Number->precision($item['price'], 2)}}</div>
 </div>

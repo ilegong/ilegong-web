@@ -108,36 +108,58 @@ class ProductsController extends AppController{
 	}
     function view($slug='/'){
         parent::view($slug);
-        $tag = $this->Product->query("select tag_id from cake_product_product_tags where product_id = $this->current_data_id limit 1");
-        $tag_id = $tag[0]['cake_product_product_tags']['tag_id'];
-        $id_same_kind = $this->Product->query("select product_id  from cake_product_product_tags where tag_id = $tag_id and product_id != $this->current_data_id ");
-        //热卖
-        $hottest = '1';
-        $id_hottest = $this->Product->query("select product_id  from cake_product_product_tags where tag_id =  $hottest and product_id != $this->current_data_id ");
-        $same_kind_len = count($id_same_kind);
-        $hottest_len = count($id_hottest);
 
-        //利用键的唯一性，确保不同的值
-        $array_product=array();
-        while(count($array_product)< 5 && count($array_product)< $same_kind_len){
-            $id = $id_same_kind [rand(0,$same_kind_len - 1)]['cake_product_product_tags']['product_id'];
-            $array_product[$id]=null;
-        }
-        while(count($array_product)< 8 && count($array_product)< $hottest_len){
-            $id = $id_hottest [rand(0,$hottest_len - 1)]['cake_product_product_tags']['product_id'];
-            $array_product[$id]=null;
-        }
-        $rand_id = array_keys($array_product);
-        $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1, 'Product.id' => $rand_id);
-        $good_recommend = $this->Product->find('all', array(
-            'conditions' => $conditions,
-            'limit' => 6
-        ));
+        $MAX_SAME_KIND = 2;
+        $MAX_RECOMMEND = 6;
+
+        $tag = $this->Product->query("select tag_id from cake_product_product_tags where product_id = $this->current_data_id limit 1");
+        $recomm_same_kind = empty($tag) ? array() : $this->rand_recommend_pids($tag[0]['cake_product_product_tags']['tag_id'], $MAX_SAME_KIND * 2);
+        $recomm_hottest = $this->rand_recommend_pids(PRO_TAG_HOTTEST, ($MAX_RECOMMEND - $MAX_SAME_KIND) * 2);
+
         $items = array();
-        foreach($good_recommend as $p){
-            $items[] = $p['Product'];
+        $same_kind = $this->Product->find_published_products_by_ids($recomm_same_kind);
+        if (!empty($same_kind)) {
+            foreach($recomm_same_kind as $pid){
+                $items[$pid] = $same_kind[$pid];
+                if (count($items) > $MAX_SAME_KIND){
+                    break;
+                }
+            }
         }
+
+        $hottest = $this->Product->find_published_products_by_ids(array_keys($recomm_hottest));
+        if(!empty($hottest)) {
+            foreach($recomm_hottest as $pid => $val){
+                $item = $hottest[$pid];
+                if (!empty($item)) {
+                    $items[$pid] = $item;
+                    if (count($items) > $MAX_RECOMMEND) {
+                        break;
+                    }
+                }
+            }
+        }
+
         $this->set('items', $items);
         $this->set('category_control_name', 'products');
+    }
+
+    /**
+     * @param $tag
+     * @param $max
+     * @return mixed array keyed with the product id
+     */
+    private function rand_recommend_pids($tag, $max) {
+        $recommend = array();
+        if (!empty($tag) && $max > 0) {
+            $pid_candidates = $this->Product->query('select product_id from cake_product_product_tags where tag_id = ' . $tag . ' and product_id != ' . $this->current_data_id);
+            $candidates_len = count($pid_candidates);
+            while (count($recommend) <= min($max, $candidates_len)) {
+                $idx = rand(0, $candidates_len - 1);
+                $id = $pid_candidates [$idx]['cake_product_product_tags']['product_id'];
+                $recommend[$id] = null;
+            }
+        }
+        return $recommend;
     }
 }

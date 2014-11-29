@@ -175,6 +175,7 @@ class OrdersController extends AppController{
 					$cart = $Carts[$pid];
 					$this->Cart->updateAll(array('order_id'=>$order_id,'status'=>CART_ITEM_STATUS_BALANCED),
                         array('id'=>$cart['Cart']['id'], 'status' => CART_ITEM_STATUS_NEW));
+                    $this->Product->update_storage_saled($pid, $cart['Cart']['num']);
 				}
                 $this->apply_coupons_to_order($brand_id, $uid, $order_id);
                 $this->apply_coupon_code_to_order($uid, $order_id);
@@ -762,14 +763,16 @@ class OrdersController extends AppController{
 
             $ship_code = $_REQUEST['ship_code'];
             $ship_type = $_REQUEST['ship_type'];
-            $this->Order->updateAll(array('status'=>$status,'ship_code'=>"'".addslashes($ship_code)."'",'ship_type'=>$ship_type, 'lastupdator'=>$currentUid),array('id'=>$order_id, 'status' => $orig_status));
+            $this->Order->updateAll(array('status'=>$status,'ship_code'=>"'".addslashes($ship_code)."'",'ship_type'=>$ship_type,
+                'lastupdator'=>$currentUid),array('id'=>$order_id, 'status' => $orig_status));
             //add weixin message
             $this->loadModel('Oauthbind');
             $user_weixin = $this->Oauthbind->findWxServiceBindByUid($order_info['Order']['creator']);
             if($user_weixin!=false){
                 $good = $this->get_order_good_info($order_id);
                 $this->log("good info:".$good['good_info'].$good['good_number']);
-                $this->Weixin->send_order_shipped_message($user_weixin['oauth_openid'],$ship_type, ShipAddress::$ship_type[$ship_type], $ship_code, $good['good_info'], $good['good_number']);
+                $this->Weixin->send_order_shipped_message($user_weixin['oauth_openid'],$ship_type,
+                    ShipAddress::$ship_type[$ship_type], $ship_code, $good['good_info'], $good['good_number']);
             }
 
             echo json_encode(array('order_id'=>$order_id,'msg'=>'订单状态已更新为“已发货”'));
@@ -1012,7 +1015,7 @@ class OrdersController extends AppController{
         $shipFee = 0.0;
         $this->loadModel('Product');
         $this->loadModel('ShipPromotion');
-        $productByIds = Hash::combine($this->Product->findPublishedProductsByIds($pids), '{n}.Product.id', '{n}.Product');
+        $productByIds = $this->Product->find_published_products_by_ids($pids, array('Product.ship_fee'));
         foreach ($cartsByPid as $pid => $cartItem) {
             $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
             $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
