@@ -8,7 +8,7 @@
 
 class StoresController extends AppController {
 
-    public $uses = array('Product', 'Brand');
+    public $uses = array('Product', 'Brand', 'Order');
 
     public $brand = null;
 
@@ -206,6 +206,89 @@ class StoresController extends AppController {
      */
     private function findProductByIdAndBrandId($id, $brandId) {
         return $this->Product->find('first', array('conditions' => array('id' => $id, 'brand_id' => $brandId)));
+    }
+
+
+    public function orders(){
+        $this->__business_orders(
+            array(ORDER_STATUS_PAID,ORDER_STATUS_WAITING_PAY,ORDER_STATUS_SHIPPED,ORDER_STATUS_RECEIVED));
+    }
+
+    function wait_shipped_orders(){
+        $this->__business_orders(array(ORDER_STATUS_PAID));
+        $this -> render("orders");
+    }
+
+    function wait_paid_orders(){
+        $this->__business_orders(array(ORDER_STATUS_WAITING_PAY));
+        $this -> render("orders");
+    }
+
+
+    function shipped_orders(){
+        $this->__business_orders(array(ORDER_STATUS_SHIPPED));
+        $this -> render("orders");
+    }
+
+
+    function signed_orders(){
+        $this->__business_orders(array(ORDER_STATUS_RECEIVED));
+        $this -> render("orders");
+    }
+
+    protected function __business_orders($onlyStatus = array()) {
+        $creator = $this->currentUser['id'];
+
+        $this->loadModel('Brand');
+        $brands = $this->Brand->find('list', array('conditions' => array(
+            'creator' => $creator,
+        )));
+
+        if (!empty($brands)) {
+            $brand_ids = array_keys($brands);
+            $this->set('is_business', true);
+        } else {
+            $this->__message('只有合作商家才能查看商家订单，正在为您转向个人订单', '/orders/mine');
+            return;
+        }
+
+        $cond = array('brand_id' => $brand_ids, 'NOT' => array(
+            'status' => array(ORDER_STATUS_CANCEL)
+        ));
+
+        $cond['status'] = $onlyStatus;
+        $orders = $this->Order->find('all', array(
+            'order' => 'id desc',
+            'conditions' => $cond,
+        ));
+        $ids = array();
+        foreach ($orders as $o) {
+            $ids[] = $o['Order']['id'];
+        }
+        $this->loadModel('Cart');
+        $Carts = $this->Cart->find('all', array(
+            'conditions' => array(
+                'order_id' => $ids,
+            )));
+        $order_carts = array();
+        foreach ($Carts as $c) {
+            $order_id = $c['Cart']['order_id'];
+            if (!isset($order_carts[$order_id])) {
+                $order_carts[$order_id] = array();
+            }
+            $order_carts[$order_id][] = $c;
+        }
+
+        $this->set('orders', $orders);
+        $this->set('order_carts', $order_carts);
+        $this->set('ship_type', ShipAddress::$ship_type);
+        $this->set('creator', $creator);
+        if(sizeof($onlyStatus)>1){
+            $this->set('status', -1);
+        }else{
+            $this->set('status', $onlyStatus[0]);
+        }
+        $this->set('op_cate', 'orders');
     }
 
     private function setProfileInfo($weixinId, $notice) {
