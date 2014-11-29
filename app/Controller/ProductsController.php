@@ -120,9 +120,11 @@ class ProductsController extends AppController{
         $same_kind = $this->Product->find_published_products_by_ids($recomm_same_kind);
         if (!empty($same_kind)) {
             foreach($recomm_same_kind as $pid){
-                $items[$pid] = $same_kind[$pid];
-                if (count($items) > $MAX_SAME_KIND){
-                    break;
+                if (!empty($same_kind[$pid])) {
+                    $items[$pid] = $same_kind[$pid];
+                    if (count($items) > $MAX_SAME_KIND) {
+                        break;
+                    }
                 }
             }
         }
