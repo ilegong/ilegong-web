@@ -36,6 +36,8 @@ class BrandsController extends AppController {
     	));
     	$this->set('products',$products);
         $this->set('op_cate', 'share');
+        $this->set('hideNav', true);
+        $this->set('slug', $slug);
     }
 
     public function brands_admin() {
@@ -58,5 +60,25 @@ class BrandsController extends AppController {
             exit;
         }
     }
+    public function introduction($slug='/'){
+        if (empty($id)) {
+            $id = intval($slug);
+        }
+        if (!empty($slug) && $slug != strval(intval($slug))) {
+            $Brand = $this->Brand->find('first', array(
+                'conditions' => array('Brand.published' => 1, 'Brand.deleted' => 0, 'Brand.slug' => $slug),
+            ));
+        } elseif ($id) {
+            $Brand  = $this->Brand ->find('first', array(
+                'conditions' => array('Brand.published' => 1, 'Brand.deleted' => 0, 'Brand.id' => $id),
+            ));
+        }
+        $this->set('Brand', $Brand);
+        $this->set('Brand', $Brand);
+        $this->set('hideNav', true);
+        $this->set('myIntroduction', $_SERVER['REQUEST_URI']);
+        $this->set('slug', $slug);
+    }
+
 }
 ?>

@@ -1,54 +1,112 @@
-<div class="container clearfix">
-	<div class="ui-contain col-md-9">
-		<portlet>
-			<h2 class="Content-title"><?php echo $Brand['Brand']['name']; ?></h2>	
-			
-			<ul class="nav nav-tabs">
-			  <li class="{{if !$_GET['show_products']}} active{{/if}}"><a href="#intro" data-toggle="tab">同事介绍</a></li>
-			  <li class="{{if $_GET['show_products']}} active{{/if}}"><a href="#products" data-toggle="tab">分享商品</a></li>
-			  
-			</ul>
-			
-			<!-- Tab panes -->
-			<div class="tab-content">
-			  <div class="tab-pane{{if !$_GET['show_products']}} active{{/if}}" id="intro">
-				    <div class="Content-body">		    
-				    <?php echo $Brand['Brand']['content']; ?> 
-			        {{$this->Hook->call("affterContent",array('Brand',$Brand['Brand']['id']))}}
-					</div>
-			  </div>
-			  <div class="tab-pane{{if $_GET['show_products']}} active{{/if}}" id="products">
-					{{loop $products $p}}
-						<?php $item = $p['Product'];?>
-						<div class="col-xs-6 col-sm-3">
-						<a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}" class="thumbnail {{if date('Y-m-d H:i:s')>$item['end_time'] && $item['end_time']>0}}no-shopping{{else}}no-shopping{{/if}}" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
-					         {{eval echo $this->Html->image($item['coverimg'], 
-								array(
-								'alt' => $item['title'],'title' => $item['name'],
-								)); }}
-					         <!-- <div class="select-item" style="display: none;">
-								<p><span class="glyphicon glyphicon-ok" style="color:#5e8a2f; font-size:22px;"></span>已选</p>
-						 	 </div>  -->
-					     </a>
-					     <div class="text-left">
-					     	{{eval echo $this->Html->link(usubstr($item['name'],0,10,''), 
-								'/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
-								array('title'=>$item['title'])); 
-							}}
-					     	
-					     	<div>
-					     		<div class="food-info pull-right">
-					             <strong>¥{{$item['price']}}</strong>                                     
-					     		</div>
-					     		<a href="/products/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">{{if $item['promote_name']}}{{$item['promote_name']}}{{else}}评论({{$item['comment_nums']}}){{/if}}</a>
-					     	</div>
-					     </div>
-					     </div>
-					{{/loop}}
-			  </div>
-			  
-			</div>
-			
-		</portlet>
-	</div>
+<style>
+
+/*店铺首页*/
+.shop_intro{ padding:0.833em; background-color:#eeeeee;}
+.shop_head{ float:left; margin-right:0.833em;}
+.shop_head img{ width:5em; height:5em;}
+.shop_intro h1{ font-size:1.2em; color:#333333; font-weight:normal; padding-bottom:0.2em;}
+.shop_intro h2{ font-size:0.75em; color:#999999; font-weight:normal;}
+.shop_intro p{ font-size:0.75em; color:#666666; line-height:1.2em; padding-top:0.7em;}
+.shop_good{ margin:0.833em; margin-bottom:4.875em;}
+.shop_good ul{ margin-bottom:1em;}
+.shop_good ul li{ width:50%;}
+.shop_good img{ width:100%;}
+.img_mr{ margin-right:0.417em;}
+.img_ml{ margin-left:0.417em;}
+.shop_good dl dt span{ display:block;}
+.shop_good dl dt a.title{ font-size:1.2em; color:#333333; text-decoration:none; margin-top:0.5em; display:block;}
+.shop_good .current_price{ font-size:1.2em; color:#ffa200;}
+.shop_good .original_price{ font-size:0.833em; color:#cccccc; padding-top:0.4em; text-decoration:line-through;}
+/*bottom*/
+.common_bottom{ position:fixed; bottom:0; left:0; background-color:#f1f1f1; height:4.042em; border-top:1px #dddddd solid; font-size:1em; color:#666666; width:100%;}
+.common_bottom a{ width:25%; float:left; display:block; text-decoration:none;}
+.common_bottom a span{ display:block; text-align:center; text-decoration:none; color:#666666;}
+.pyshuo_logo{ width:1.75em; height:1.5em; background:url(../images/pyshuo_icon.png) no-repeat -13em -4.5em; background-size:25em 25em; margin:0 auto; margin-top:0.7em; margin-bottom:0.1em;}
+.shop_index{ width:1.917em; height:1.5em; background:url(../images/pyshuo_icon.png) no-repeat 0 -2.083em; background-size:25em 25em; margin:0 auto; margin-top:0.7em; margin-bottom:0.1em;}
+.shop_index_cur{ width:1.917em; height:1.5em; background:url(../images/pyshuo_icon.png) no-repeat 0 0; background-size:25em 25em; margin:0 auto; margin-top:0.7em; margin-bottom:0.1em;}
+.shop_story{ width:1.5em; height:1.5em; background:url(../images/pyshuo_icon.png) no-repeat -15em -4.5em; background-size:25em 25em; margin:0 auto; margin-top:0.7em; margin-bottom:0.1em;}
+.shop_story_cur{ width:1.5em; height:1.5em; background:url(../images/pyshuo_icon.png) no-repeat -16.75em -4.5em; background-size:25em 25em; margin:0 auto; margin-top:0.7em; margin-bottom:0.1em;}
+.shopping_cart{ width:1.917em; height:1.5em; background:url(../images/pyshuo_icon.png) no-repeat -2.042em -2.083em; background-size:25em 25em; margin:0 auto; margin-top:0.7em; margin-bottom:0.1em; position:relative;}
+.shopping_cart .number{ width:1.125em; height:1.125em; background:url(../images/pyshuo_icon.png) no-repeat -11em -4.5em; background-size:25em 25em; line-height:1.125em; text-align:center; position:absolute; top:-0.5em; right:-0.5em;}
+.shopping_cart .number label{ font-size:0.9em; color:#ffffff;}
+
+
+</style>
+<div class="shop_intro clearfix">
+    <div class="shop_head"><img class="radius10" src="{{$Brand['Brand']['coverimg']}}" border="0" /></div>
+    <div class="fl" style=" width:73%;">
+        <h1>{{$Brand['Brand']['name']}}</h1>
+        <h2>微信号: {{$Brand['Brand']['weixin_id']}}</h2>
+        <p>{{$Brand['Brand']['notice']}}</p>
+    </div>
+</div>
+
+<div class="shop_good">
+    <?php $i=0;?>
+    {{loop $products $p}}
+
+    {{if $i % 2 == 0}}
+    <?php $item = $p['Product']; $i++?>
+    {{else}}
+    <?php $item2 = $p['Product']; $i++?>
+    <ul class="clearfix">
+        <li class="fl">
+            <dl class="img_mr">
+                <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}"><img src="{{$item['coverimg']}}" /></a></dt>
+                <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}" class="title">{{usubstr($item['name'],0,10,'')}}</a></dt>
+                <dt>
+                    <span class="fl current_price">￥{{$item['price']}}</span>
+                    <span class="fl original_price">{{if $item['original_price']}}{{￥.$item['original_price']}}{{/if}}</span>
+                </dt>
+            </dl>
+        </li>
+        <li class="fl">
+            <dl class="img_mr">
+                <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item2['created'])).'/'.$item2['slug'].'.html')}}"><img src="{{$item2['coverimg']}}"/></a></dt>
+                <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item2['created'])).'/'.$item2['slug'].'.html')}}" class="title">{{usubstr($item2['name'],0,10,'')}}</a></dt>
+                <dt>
+                    <span class="fl current_price">￥{{$item2['price']}}</span>
+                    <span class="fl original_price">{{if $item['original_price']}}{{￥.$item['original_price']}}{{/if}}</span>
+                </dt>
+            </dl>
+        </li>
+    </ul>
+    {{/if}}
+    {{/loop}}
+    {{if $i%2 == 1}}
+    <ul class="clearfix">
+        <li class="fl">
+            <dl class="img_mr">
+                <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}"><img src="{{$item['coverimg']}}" /></a></dt>
+                <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}" class="title">{{usubstr($item['name'],0,10,'')}}</a></dt>
+                <dt>
+                    <span class="fl current_price">￥{{$item['price']}}</span>
+                    <span class="fl original_price">{{if $item['original_price']}}{{￥.$item['original_price']}}{{/if}}</span>
+                </dt>
+            </dl>
+        </li>
+    </ul>
+
+    {{/if}}
+
+</div>
+<div class="common_bottom clearfix">
+    <a href="/techan.html">
+        <span class="pyshuo_logo"></span>
+        <span>去朋友说</span>
+    </a>
+    <a href="#X">
+        <span class="shop_index_cur"></span>
+        <span style="color:#29ac0e;">商铺首页</span>
+    </a>
+    <a href="{{ $this->Html->url(array('controller'=>'brands','action'=>'introduction', $slug));}}">
+        <span class="shop_story"></span>
+        <span>我的故事</span>
+    </a>
+    <a href="/carts/listcart.html">
+    	<span class="shopping_cart">
+        	<div class="number"><label id="item-count"></label></div>
+        </span>
+        <span>购物车</span>
+    </a>
 </div>
