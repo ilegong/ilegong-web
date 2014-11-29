@@ -117,30 +117,8 @@ class ProductsController extends AppController{
         $recomm_hottest = $this->rand_recommend_pids(PRO_TAG_HOTTEST, ($MAX_RECOMMEND - $MAX_SAME_KIND) * 2);
 
         $items = array();
-        $same_kind = $this->Product->find_published_products_by_ids($recomm_same_kind);
-        if (!empty($same_kind)) {
-            foreach($recomm_same_kind as $pid){
-                if (!empty($same_kind[$pid])) {
-                    $items[$pid] = $same_kind[$pid];
-                    if (count($items) > $MAX_SAME_KIND) {
-                        break;
-                    }
-                }
-            }
-        }
-
-        $hottest = $this->Product->find_published_products_by_ids(array_keys($recomm_hottest));
-        if(!empty($hottest)) {
-            foreach($recomm_hottest as $pid => $val){
-                $item = $hottest[$pid];
-                if (!empty($item)) {
-                    $items[$pid] = $item;
-                    if (count($items) > $MAX_RECOMMEND) {
-                        break;
-                    }
-                }
-            }
-        }
+        $this->fill_recomm_items($recomm_same_kind, $items, $MAX_SAME_KIND);
+        $this->fill_recomm_items($recomm_hottest, $items, $MAX_RECOMMEND);
 
         $this->set('items', $items);
         $this->set('category_control_name', 'products');
@@ -164,5 +142,25 @@ class ProductsController extends AppController{
             }
         }
         return $recommend;
+    }
+
+    /**
+     * @param $recomm_ids array indexed with product id
+     * @param $items
+     * @param $max_item_counts
+     */
+    private function fill_recomm_items($recomm_ids, &$items, $max_item_counts) {
+        $products = $this->Product->find_published_products_by_ids(array_keys($recomm_ids));
+        if (!empty($products)) {
+            foreach ($recomm_ids as $pid => $val) {
+                $item = $products[$pid];
+                if (!empty($item)) {
+                    $items[$pid] = $item;
+                    if (count($items) >= $max_item_counts) {
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
