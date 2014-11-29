@@ -53,6 +53,18 @@
             {{/if}}
             <span style="color: red">{{$total_count}}</span>个
         </h2>
+        {{if $status==0}}
+        <?php echo $this->Html->link('导出Excel', array('controller' => 'stores','action'=>'wait_paid_orders_export','plugin' => null),array('class'=>'btn btn-info pull-right')); ?>
+        {{elseif $status==1}}
+        <?php echo $this->Html->link('导出Excel', array('controller' => 'stores','action'=>'wait_shipped_orders_export','plugin' => null),array('class'=>'btn btn-info pull-right')); ?>
+        {{elseif $status==2}}
+        <?php echo $this->Html->link('导出Excel', array('controller' => 'stores','action'=>'shipped_orders_export','plugin' => null),array('class'=>'btn btn-info pull-right')); ?>
+        {{elseif $status==3}}
+        <?php echo $this->Html->link('导出Excel', array('controller' => 'stores','action'=>'signed_orders_export','plugin' => null),array('class'=>'btn btn-info pull-right')); ?>
+        {{elseif $status==-1}}
+        <?php echo $this->Html->link('导出Excel', array('controller' => 'stores','action'=>'orders_export','plugin' => null),array('class'=>'btn btn-info pull-right')); ?>
+        {{/if}}
+
 
         <div class="table-responsive">
             {{loop $orders $order}}
