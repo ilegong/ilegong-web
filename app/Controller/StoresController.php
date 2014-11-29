@@ -57,12 +57,14 @@ class StoresController extends AppController {
             $brandId = $this->brand['Brand']['id'];
             $weixin_id = trim($_REQUEST['profile_weixin_id']);
             $notice = trim($_REQUEST['profile_notice']);
-            if (!empty($weixin_id) && mb_strlen($weixin_id) > 3) {
+            if (empty($weixin_id) || mb_strlen($weixin_id) <= 3) {
+                $this->Session->setFlash('微信Id不能为空，长度不能小于3个字符');
+            } else if (mb_strlen($notice) > 30) {
+                $this->Session->setFlash('公告信息不能超过30个汉字');
+            } else {
                 $this->Brand->updateAll(array('weixin_id' => '\''.$weixin_id.'\'', 'notice' => '\''.addslashes(htmlspecialchars($notice)).'\''), array('id' => $brandId));
                 $this->Session->setFlash('保存成功');
                 $this->redirect('/s/profile');
-            } else {
-                $this->Session->setFlash('微信Id不能为空，长度不能小于3个字符');
             }
             $this->setProfileInfo($weixin_id, $notice);
         } else {
