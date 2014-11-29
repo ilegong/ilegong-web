@@ -51,7 +51,7 @@ class UploadfilesController extends AppController {
 					$info ['status'] = '1';
 					$info =array_merge($info,$fileifo);
                     $file_url = UPLOAD_FILE_URL . $fileifo['fspath'];
-                    if (strpos($fileifo['fspath'], 'http://') === FALSE) {
+                    if (strpos($file_url, 'http://') === FALSE) {
                         $file_url = str_replace('//', '/', $file_url);
                     }
 					if(is_image($file_url)){
