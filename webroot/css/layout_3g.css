@@ -11,10 +11,6 @@
     margin: 0 auto;
 }
 
-img {
-    max-width: 95%;
-}
-
 .thumbnail {
     position: relative;
     max-height: 115px;
@@ -130,6 +126,8 @@ div.photo-item {
     bottom: 18px;
     right: 10px;
 }
+
+.photoArea img{ width:100%;}
 
 .order_status_text {
     color: darkred

@@ -1,5 +1,5 @@
 <div class="shop_intro clearfix">
-    <span class="shop_head fl"><img class="radius10" src="{{$Brand['Brand']['coverimg']}}" border="0" /></span>
+    <span class="shop_head fl"><img id="shop_head_img" class="radius10" src="{{small_thumb_link($Brand['Brand']['coverimg'])}}" border="0" /></span>
     <span style="display:block; overflow: hidden;">
         <div class="brand_name">{{$Brand['Brand']['name']}} <img src="/img/mobilev1/certificate_ident.png" style="max-height: 0.78em;"/> </div>
         <div class="brand_weixin">微信号: {{$Brand['Brand']['weixin_id']}}</div>
@@ -14,4 +14,23 @@
 <script>
     $('#btn_copy_addr').click(function(){$('#span_store_addr').toggleClass('hide')});
     $('#span_store_addr').on('click focus', function(){$(this).select()});
+
+    $(document).ready(function(){
+        var imgUrl = $('#shop_head_img').attr('src');
+        var lineLink = "{{WX_HOST}}/b/{{$Brand['Brand']['slug']}}.html";
+        var descContent = "{{$Brand['Brand']['name']}}，这是我在朋友说的特产店，大家帮忙多多宣传呢~";
+        var shareTitle = "{{$Brand['Brand']['name']}}";
+        var appid = '{{WX_APPID}}';
+
+        // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
+        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+            WeixinJSBridge.on('menu:share:appmessage', function(argv){
+                utils.wx_to_friend(appid, imgUrl, lineLink, descContent, shareTitle);
+            });
+            WeixinJSBridge.on('menu:share:timeline', function(argv){
+                utils.wx_to_timeline(appid, imgUrl, lineLink, descContent, shareTitle);
+            });
+        }, false);
+    });
+
 </script>
