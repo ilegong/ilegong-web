@@ -203,7 +203,7 @@ class UsersController extends AppController {
                 }
 
             }else{
-                $this->Session->setFlash('短信验证码已过期，请重新获取');
+                $this->Session->setFlash('短信验证未成功，请重新获取');
             }
         }else {
             $this->Session->delete('Message.flash');
