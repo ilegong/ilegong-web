@@ -1,91 +1,162 @@
 <div class="sign-form">
-     <div class="sign-inner">
-                <hr>
-                <form role="form" id="registerform" method="post" action="{{$this->Html->url('/users/register')}}">
-                  
-                  <div class="form-group">
-                    <input type="text" data-original-title="{{__('Username')}}" data-content="{{__('Enter your nickname here.')}}" data-trigger="focus" data-placement="left" data-toggle="popover" placeholder="{{__('Username')}}" name="data[User][username]" required="required" size="25" maxlength="15" onblur="checkusername()"  id="username" class="form-control">
-                  </div>
-                  <div class="form-group">
-                    <div class="row">
-                      <div class="col-sm-4">
-                        <input type="password" data-original-title="{{__('Password')}}" data-content="{{__('Enter a good password here.')}}" data-trigger="focus" data-placement="left" data-toggle="popover" placeholder="{{__('Password')}}" id="password"  class="form-control margin-bottom-xs" maxlength="15" onkeypress="detectCapsLock(event, this)" name="data[User][password]">
-                      </div>
-                      <div class="col-sm-4">
-                        <input type="password" data-original-title="{{__('Repeat Password')}}" data-content="{{__('Confirm your password here.')}}" data-trigger="focus" data-toggle="popover" placeholder="{{__('Repeat Password')}}" id="repeat-password" class="form-control" maxlength="15" onkeypress="detectCapsLock(event, this)" name="data[User][password_confirm]">
-                      </div>
+    <div class="sign-inner">
+        <hr>
+        <form role="form" id="registerform" method="post" action="{{$this->Html->url('/users/register')}}">
+
+            <div class="form-group">
+                <input class="form-control"  style="display: inline; width: 50%" id="mobile_number" name="data[User][mobilephone]"
+                       type="text" value="" required="required" placeholder="手机号">
+            </div>
+            <div class="form-group">
+                <input  class="form-control" style="display: inline; width: 25%" type="text" id="J_CheckCodeInput"
+                       value="" placeholder="验证码">
+                {{$this->Html->image(array('controller' => 'Check','action'=>'captcha'), array('id'=> "image_code", 'alt' => "看不清楚，换一张"))}}
+                <div id="checkInfo"></div>
+            </div>
+            <div class="form-group">
+                <input  class="form-control" style="display: inline; width: 25%" id="message_input" name="data[User][code]"
+                       type="text" required="required" placeholder="短信验证码">
+                <input type="button" id="btnMobileCode" value="获取"/>
+                <span id="sendInfo"></span>
+            </div>
+            <div class="form-group">
+                <input type="text" data-original-title="{{__('Username')}}"
+                       data-content="{{__('Enter your nickname here.')}}" data-trigger="focus" data-placement="left"
+                       data-toggle="popover" placeholder="{{__('Username')}}" name="data[User][username]"
+                       required="required" size="25" maxlength="15" onblur="checkusername()" id="username"
+                       class="form-control" style="display: inline; width: 50%">
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <input type="password" data-original-title="{{__('Password')}}"
+                               data-content="{{__('Enter a good password here.')}}" data-trigger="focus"
+                               data-placement="left" data-toggle="popover" placeholder="{{__('Password')}}"
+                               id="password" class="form-control margin-bottom-xs" maxlength="15"
+                               onkeypress="detectCapsLock(event, this)" name="data[User][password]">
                     </div>
-                  </div>
-                  <!-- <div class="checkbox">
-                    <label>
-                      <input type="checkbox"> I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
-                    </label>
-                  </div>-->
-                  <button class="btn btn-red" type="submit">{{__('Register')}}</button>
-                </form>
-                <hr>
-            <div class="">
-				<h4>{{__('Have account?')}} &nbsp; {{$this->Html->link(__('Login'), array('controller' => 'users','action' => 'login' ),
-					array('onclick'=>"return publishController.open_dialog(this.href,{title:'注册',width:650});"))}}</h4>
-				<div>{{$this->Hook->call('oauthLoginLink')}}</div>
-			</div>
+                    <div class="col-sm-4">
+                        <input type="password" data-original-title="{{__('Repeat Password')}}"
+                               data-content="{{__('Confirm your password here.')}}" data-trigger="focus"
+                               data-toggle="popover" placeholder="{{__('Repeat Password')}}" id="repeat-password"
+                               class="form-control" maxlength="15" onkeypress="detectCapsLock(event, this)"
+                               name="data[User][password_confirm]">
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="checkbox">
+              <label>
+                <input type="checkbox"> I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+              </label>
+            </div>-->
+            <button class="btn btn-red"  type="submit">{{__('Register')}}</button>
+        </form>
+        <hr>
+        <div class="">
+            <h4>{{__('Have account?')}} &nbsp; {{$this->Html->link(__('Login'), array('controller' => 'users','action'
+                => 'login' ),
+                array('onclick'=>"return publishController.open_dialog(this.href,{title:'注册',width:650});"))}}</h4>
+
             <div>{{$this->Hook->call('oauthLoginLink')}}</div>
-     </div>
-     
+        </div>
+        <div>{{$this->Hook->call('oauthLoginLink')}}</div>
+    </div>
+
 </div>
-            
 
 
-<script  type="text/javascript">
-$(function(){
-	$('#username,#email,#password,#repeat-password').popover();
-	$('#username').focus();
-})
-var profile_username_toolong = '用户名超过 15 个字符';
-var profile_username_tooshort = '用户名小于3个字符';
-var lastusername = lastpassword = lastemail = lastinvitecode = '';
+<script type="text/javascript">
+    $(function () {
+        $('#username,#email,#password,#repeat-password').popover();
+        $('#username').focus();
+    })
+    var profile_username_toolong = '用户名超过 15 个字符';
+    var profile_username_tooshort = '用户名小于3个字符';
+    var lastusername = lastpassword = lastemail = lastinvitecode = '';
 
-function errorhandle_register(msg, values) {
-	$('returnmessage4').className = msg == '注册' ? '' : 'onerror';
-	$('returnmessage4').innerHTML = msg;
-}
+    function errorhandle_register(msg, values) {
+        $('returnmessage4').className = msg == '注册' ? '' : 'onerror';
+        $('returnmessage4').innerHTML = msg;
+    }
 
-function checkusername() {
-	var username = trim($('#username').value);
-	if(username == '' || username == lastusername) {
-		return;
-	} else {
-		lastusername = username;
-	}
-	var unlen = username.replace(/[^\x00-\xff]/g, "**").length;
-	if(unlen < 3 || unlen > 15) {
-		errorhandle_register(unlen < 3 ? profile_username_tooshort : profile_username_toolong, {'key':1});
-		return;
-	}
-	ajaxget('forum.php?mod=ajax&amp;infloat=register&amp;handlekey=register&amp;action=checkusername&amp;username=' +  username, 'returnmessage4');
-}
+    function checkusername() {
+        var username = trim($('#username').value);
+        if (username == '' || username == lastusername) {
+            return;
+        } else {
+            lastusername = username;
+        }
+        var unlen = username.replace(/[^\x00-\xff]/g, "**").length;
+        if (unlen < 3 || unlen > 15) {
+            errorhandle_register(unlen < 3 ? profile_username_tooshort : profile_username_toolong, {'key': 1});
+            return;
+        }
+        ajaxget('forum.php?mod=ajax&amp;infloat=register&amp;handlekey=register&amp;action=checkusername&amp;username=' + username, 'returnmessage4');
+    }
 
-function checkemail() {
-	var email = trim($('email').value);
-	if(email == '' || email == lastemail) {
-		return;
-	} else {
-		lastemail = email;
-	}
-	ajaxget('forum.php?mod=ajax&amp;infloat=register&amp;handlekey=register&amp;action=checkemail&amp;email=' + email, 'returnmessage4');
-}
+    function checkemail() {
+        var email = trim($('email').value);
+        if (email == '' || email == lastemail) {
+            return;
+        } else {
+            lastemail = email;
+        }
+        ajaxget('forum.php?mod=ajax&amp;infloat=register&amp;handlekey=register&amp;action=checkemail&amp;email=' + email, 'returnmessage4');
+    }
 
-function checkinvite() {
-	var invitecode = trim($('invitecode').value);
-	if(invitecode == '' || invitecode == lastinvitecode) {
-		return;
-	} else {
-		lastinvitecode = invitecode;
-	}
-	ajaxget('forum.php?mod=ajax&amp;infloat=register&amp;handlekey=register&amp;action=checkinvitecode&amp;invitecode=' + invitecode, 'returnmessage4');	
-}
+    function checkinvite() {
+        var invitecode = trim($('invitecode').value);
+        if (invitecode == '' || invitecode == lastinvitecode) {
+            return;
+        } else {
+            lastinvitecode = invitecode;
+        }
+        ajaxget('forum.php?mod=ajax&amp;infloat=register&amp;handlekey=register&amp;action=checkinvitecode&amp;invitecode=' + invitecode, 'returnmessage4');
+    }
 
-function trim(str) {
-	return str.replace(/^\s*(.*?)[\s\n]*$/g, '$1');
-}
+    function trim(str) {
+        return str.replace(/^\s*(.*?)[\s\n]*$/g, '$1');
+    }
+
+    $().ready(function() {
+        //刷新验证码
+        $('#image_code').click(function () {
+            document.getElementById('image_code').src = '/Check/captcha.html?' + Math.random() * 10000;
+        });
+        //获取手机验证码，显示提示信息
+        $('#btnMobileCode').click(function () {
+            var phone_num = $("#mobile_number").val();
+            var key_str = $("#J_CheckCodeInput").val();
+            $("#sendInfo").html("");
+            $("#checkInfo").html("");
+            var f = "/check/message_code";
+            jQuery.ajax({
+                type: "POST",
+                dataType: "json",
+                url: f,
+                data: {phoneNumbers: phone_num, keyString: key_str},
+                cache: !1,
+                success: function (a) {
+                    if (a.error == 0) {
+                        $("#sendInfo").html("验证短信已发出，请注意接收");
+                    } else if (a.check_error == 1) {
+                        $("#checkInfo").html("验证码错误，请重新输入").addClass('help-inline ');
+                    }
+
+                }
+            });
+            var count = 30;
+            var countdown = setInterval(CountDown, 1000);
+
+            function CountDown() {
+                $("#btnMobileCode").attr("disabled", true);
+                $("#btnMobileCode").val("请耐心等待 " + count + " 秒后重新获取!");
+                if (count == 0) {
+                    $("#btnMobileCode").val("获取").removeAttr("disabled");
+                    clearInterval(countdown);
+                }
+                count--;
+            }
+        })
+    })
 </script>

@@ -42,6 +42,22 @@ class User extends AppModel {
                 'rule' => array('minLength', 3),
                 'message' => 'This field length must big than 3',
             ),
+        ),
+        'mobilephone' => array(
+            'unique' => array(
+                'rule' => 'isUnique',
+                'message' => 'The phone has already been taken.',
+            ),
+            'notempty' => array(
+                'rule' => 'notEmpty',
+                'message' => 'This field cannot be left blank.',
+            ),
+            'phone' => array(
+                'rule' => array('phone', null, 'us')
+            )
+        ),
+        'code' => array(
+            'rule' => 'notEmpty'
         )
     );
 
