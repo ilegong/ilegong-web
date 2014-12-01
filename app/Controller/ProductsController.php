@@ -114,7 +114,6 @@ class ProductsController extends AppController{
         $brand = $this->Brand->findById($brandId);
         $this->set('brand', $brand);
 
-
         $MAX_SAME_KIND = 2;
         $MAX_RECOMMEND = 6;
 

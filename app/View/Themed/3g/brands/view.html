@@ -13,8 +13,8 @@
                 <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}"><img src="{{$item['coverimg']}}" /></a></dt>
                 <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}" class="title">{{usubstr($item['name'],0,10,'')}}</a></dt>
                 <dt>
-                    <span class="fl current_price">￥{{$item['price']}}</span>
-                    <span class="fl original_price">{{if $item['original_price']}}{{￥.$item['original_price']}}{{/if}}</span>
+                    <span class="fl current_price">￥{{$this->Number->precision($item['price'], 2)}}</span>
+                    <span class="fl original_price">{{if $item['original_price']}}{{￥.$this->Number->precision($item['original_price'], 2)}}{{/if}}</span>
                 </dt>
             </dl>
         </li>
@@ -23,8 +23,8 @@
                 <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item2['created'])).'/'.$item2['slug'].'.html')}}"><img src="{{$item2['coverimg']}}"/></a></dt>
                 <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item2['created'])).'/'.$item2['slug'].'.html')}}" class="title">{{usubstr($item2['name'],0,10,'')}}</a></dt>
                 <dt>
-                    <span class="fl current_price">￥{{$item2['price']}}</span>
-                    <span class="fl original_price">{{if $item['original_price']}}{{￥.$item2['original_price']}}{{/if}}</span>
+                    <span class="fl current_price">￥{{$this->Number->precision($item2['price'], 2)}}</span>
+                    <span class="fl original_price">{{if $item['original_price']}}{{￥.$this->Number->precision($item2['original_price'], 2)}}{{/if}}</span>
                 </dt>
             </dl>
         </li>
@@ -38,8 +38,8 @@
                 <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}"><img src="{{$item['coverimg']}}" /></a></dt>
                 <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}" class="title">{{usubstr($item['name'],0,10,'')}}</a></dt>
                 <dt>
-                    <span class="fl current_price">￥{{$item['price']}}</span>
-                    <span class="fl original_price">{{if $item['original_price']}}{{￥.$item['original_price']}}{{/if}}</span>
+                    <span class="fl current_price">￥{{$this->Number->precision($item['price'], 2)}}</span>
+                    <span class="fl original_price">{{if $item['original_price']}}{{￥.$this->Number->precision($item['original_price'], 2)}}{{/if}}</span>
                 </dt>
             </dl>
         </li>

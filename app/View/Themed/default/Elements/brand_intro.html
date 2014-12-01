@@ -7,10 +7,11 @@
     </span>
 </div>
 {{if $is_owner}}
-<div><a id="btn_copy_addr" class="btn-sm pull-right" href="javascript:;">复制店址</a> </div>
-<div id="span_store_addr" class="clearfix alert alert-info invisible" style="word-wrap: break-word">pyshuo.com/b/{{$Brand['Brand']['slug']}}</div>
+<div><a id="btn_copy_addr" class="btn-sm pull-right" href="javascript:;">复制店址</a></div>
+<div id="span_store_addr" class="clearfix alert alert-info hide" style="word-wrap: break-word">pyshuo.com/b/{{$Brand['Brand']['slug']}}</div>
+<span class="clearfix"></span>
 {{/if}}
 <script>
-    $('#btn_copy_addr').click(function(){$('#span_store_addr').toggleClass('invisible')});;
+    $('#btn_copy_addr').click(function(){$('#span_store_addr').toggleClass('hide')});
     $('#span_store_addr').on('click focus', function(){$(this).select()});
 </script>
