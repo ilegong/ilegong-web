@@ -104,90 +104,106 @@ class UsersController extends AppController {
     function register() {
         $this->pageTitle = lang('user_register');
         if (!empty($this->data)) {
-        	$this->User->create();
-            $this->data['User']['role_id'] = Configure::read('User.defaultroler'); // Registered defaultroler
-            $this->data['User']['activation_key'] = md5(uniqid());
-            $useractivate = Configure::read('User.activate');
-            if ($useractivate == 'activate') {
-                $this->data['User']['status'] = 1;
-            } else {
-                $this->data['User']['status'] = 0;
-            }
-
-            /*对密码加密*/
-		    $src_password = $this->data['User']['password'];
-
-            $this->data['User']['username'] = trim($this->data['User']['username']);
-
-            if (mb_strlen($this->data['User']['username'], 'UTF-8') < 4) {
-                $this->Session->setFlash('用户名长度不能小于4个字符');
-            } else if ($this->data['User']['password'] != $this->data['User']['password_confirm']) {
-                $this->Session->setFlash('两次密码不相等');
-            } else if (is_null($this->data['User']['password']) || trim($this->data['User']['password']) == '') {
-                $this->Session->setFlash(__('Password should be longer than 6 characters'));
-            } else if ($this->User->hasAny(array('User.username' => $this->data['User']['username']))){
-                $this->Session->setFlash(__('Username is taken by others.'));
-            } else {
-            	$this->data['User']['password'] = Security::hash($this->data['User']['password'], null, true);
-            	$this->data['User']['nickname'] = $this->data['User']['username'] ;
-            	$has_error = false;
-            	if(defined('UC_APPID')){
-            		App::import('Vendor', '',array('file' => 'uc_client'.DS.'client.php'));
-            		App::uses('Charset', 'Lib');
-            		$username =  $this->data['User']['username'];
-            		$username = Charset::utf8_gbk($username);
-            		$uid = uc_user_register($username,$src_password, $this->data['User']['email'],'','', $this->request->clientIp(false));
-            		if($uid<=0){
-            			if($uid == -1) {
-            				$error_msg = '用户名不合法';
-            			} elseif($uid == -2) {
-            				$error_msg = '包含不允许注册的词语';
-            			} elseif($uid == -3) {
-            				$error_msg = '用户名已经存在';
-            			} elseif($uid == -4) {
-            				$error_msg = 'Email 格式有误';
-            			} elseif($uid == -5) {
-            				$error_msg = 'Email 不允许注册';
-            			} elseif($uid == -6) {
-            				$error_msg = '该 Email 已经被注册';
-            			} else{
-            				$error_msg = '未知错误';
-            			}
-            			$has_error = true;
-            		}
-            		else if($uid>0){
-            			$this->data['User']['uc_id'] = $uid;
-            		}
-            	}
-                if ($has_error==false && $this->User->save($this->data)) {
-//	                $this->autoRender = false;
-                	$this->data['User']['id'] = $this->User->getLastInsertID();
-                    if ($useractivate == 'email') {
-                        $this->Email->from = Configure::read('Site.title') . ' '
-                                . '<SaeCMS@' . preg_replace('#^www\.#', '', strtolower($_SERVER['SERVER_NAME'])) . '>';
-                        $this->Email->to = $this->data['User']['email'];
-                        $this->Email->subject = __('[' . Configure::read('Site.title') . '] Please activate your account', true);
-                        $this->Email->template = 'register';
-
-                        $this->data['User']['password'] = null;
-                        $this->set('user', $this->data);
-                        $this->Email->send();
-
-                        $this->Session->setFlash(__('Please receive email and activate your account.', true));
-                    } elseif ($useractivate == 'hand') {
-                        $this->Session->setFlash(__('Please wait administrator to activate your account.', true));
+            $readCode = $this->data['User']['code'];
+            $msgCode = $this->Session->read('messageCode');
+            if ($msgCode) {
+                $codeLog = json_decode($msgCode, true);
+                if ($codeLog && is_array($codeLog) && $codeLog['code'] == $readCode && (time() - $codeLog['time'] < 30 * 60)) {
+                    $this->User->create();
+                    $this->data['User']['role_id'] = Configure::read('User.defaultroler'); // Registered defaultroler
+                    $this->data['User']['activation_key'] = md5(uniqid());
+                    $useractivate = Configure::read('User.activate');
+                    if ($useractivate == 'activate') {
+                        $this->data['User']['status'] = 1;
+                    } else {
+                        $this->data['User']['status'] = 0;
                     }
-					else{
-						$this->Session->setFlash('注册成功!');
-					}
-                    $data = $this->User->find('first', array('conditions' => array('username' =>  $this->data['User']['username']) ));
-                    $this->Session->write('Auth.User', $data['User']);
-	                $this->redirect('/');
-                } else {
-                    $this->Session->setFlash('注册失败，用户名或已存在');
+
+                    /*对密码加密*/
+                    $src_password = $this->data['User']['password'];
+
+                    $this->data['User']['username'] = trim($this->data['User']['username']);
+                    $this->data['User']['mobilephone'] = trim($this->data['User']['mobilephone']);
+
+                    if (mb_strlen($this->data['User']['username'], 'UTF-8') < 4) {
+                        $this->Session->setFlash('用户名长度不能小于4个字符');
+                    }else if(strlen($this->data['User']['mobilephone']) != 11){
+                        $this->Session->setFlash('手机号码长度位数不正确');
+                    }else if ($this->data['User']['password'] != $this->data['User']['password_confirm']) {
+                        $this->Session->setFlash('两次密码不相等');
+                    }else if (is_null($this->data['User']['password']) || trim($this->data['User']['password']) == '') {
+                        $this->Session->setFlash(__('Password should be longer than 6 characters'));
+                    }else if ($this->User->hasAny(array('User.username' => $this->data['User']['username']))) {
+                        $this->Session->setFlash(__('Username is taken by others.'));
+                    }else if ($this->User->hasAny(array('User.mobilephone' => $this->data['User']['mobilephone']))){
+                        $this->Session->setFlash(__('Mobilephone is taken by others.'));
+                    }else{
+                        $this->data['User']['password'] = Security::hash($this->data['User']['password'], null, true);
+                        $this->data['User']['nickname'] = $this->data['User']['username'] ;
+                        $has_error = false;
+                        $this->data['User']['uc_id'] = 0;
+                        if(defined('UC_APPID')){
+                            App::import('Vendor', '',array('file' => 'uc_client'.DS.'client.php'));
+                            App::uses('Charset', 'Lib');
+                            $username =  $this->data['User']['username'];
+                            $username = Charset::utf8_gbk($username);
+                            $uid = uc_user_register($username,$src_password, $this->data['User']['email'],'','', $this->request->clientIp(false));
+                            if($uid<=0){
+                                if($uid == -1) {
+                                    $error_msg = '用户名不合法';
+                                } elseif($uid == -2) {
+                                    $error_msg = '包含不允许注册的词语';
+                                } elseif($uid == -3) {
+                                    $error_msg = '用户名已经存在';
+                                } elseif($uid == -4) {
+                                    $error_msg = 'Email 格式有误';
+                                } elseif($uid == -5) {
+                                    $error_msg = 'Email 不允许注册';
+                                } elseif($uid == -6) {
+                                    $error_msg = '该 Email 已经被注册';
+                                } else{
+                                    $error_msg = '未知错误';
+                                }
+                                $has_error = true;
+                            }
+                            else if($uid>0){
+                                $this->data['User']['uc_id'] = $uid;
+                            }
+                        }
+                        if ($has_error==false && $this->User->save($this->data)) {
+                            //$this->autoRender = false;
+                            $this->data['User']['id'] = $this->User->getLastInsertID();
+                            if ($useractivate == 'email') {
+                                $this->Email->from = Configure::read('Site.title') . ' '
+                                    . '<SaeCMS@' . preg_replace('#^www\.#', '', strtolower($_SERVER['SERVER_NAME'])) . '>';
+                                $this->Email->to = $this->data['User']['email'];
+                                $this->Email->subject = __('[' . Configure::read('Site.title') . '] Please activate your account', true);
+                                $this->Email->template = 'register';
+
+                                $this->data['User']['password'] = null;
+                                $this->set('user', $this->data);
+                                $this->Email->send();
+
+                                $this->Session->setFlash(__('Please receive email and activate your account.', true));
+                            } elseif ($useractivate == 'hand') {
+                                $this->Session->setFlash(__('Please wait administrator to activate your account.', true));
+                            }
+                            else{
+                                $this->Session->setFlash('注册成功!');
+                            }
+                            $data = $this->User->find('first', array('conditions' => array('username' =>  $this->data['User']['username']) ));
+                            $this->Session->write('Auth.User', $data['User']);
+                            $this->redirect('/');
+                        } else {
+                            $this->Session->setFlash('注册失败，用户名或手机号已存在');
+                        }
+                    }
+                }else {
+                    $this->Session->setFlash('短信验证码错误');
                 }
+
             }
-        } else {
+        }else {
             $this->Session->delete('Message.flash');
         }
 
@@ -471,7 +487,14 @@ class UsersController extends AppController {
         $success = false;
 
         if(empty($this->data) && $this->request->query['data']){ //get 方式传入时,phonegap
-        	$this->data = $this->request->query['data'];
+            $this->data = $this->request->query['data'];
+        }
+        if(!empty($this->data['User']['mobilephone'])){
+            $this->Auth->authenticate = array(
+                'Form' => array(
+                    'fields' => array('username' => 'mobilephone', 'password' => 'password')
+                )
+            );
         }
 
         if(!empty($_GET['force_login'])) {
@@ -526,14 +549,14 @@ class UsersController extends AppController {
 
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
                 $successinfo = array('success' => '登录成功',
-                		'userinfo' => $userinfo,
-                		'tasks'=>array(array('dotype'=>'reload')));
+                    'userinfo' => $userinfo,
+                    'tasks'=>array(array('dotype'=>'reload')));
 
                 $this->autoRender = false; // 不显示模板
 
                 $content = json_encode($successinfo);
                 if($_GET['jsoncallback']){
-                	$content = $_GET['jsoncallback'] . '(' . $content . ');';
+                    $content = $_GET['jsoncallback'] . '(' . $content . ');';
                 }
                 $this->response->body($content);
                 $this->response->send(); exit;// exit退出时，cookie信息未发出，cookie创建失败。
@@ -548,14 +571,14 @@ class UsersController extends AppController {
                 $content = json_encode($errorinfo);
                 $this->autoRender = false; // 不显示模板
                 if($_GET['jsoncallback']){
-                	echo $_GET['jsoncallback'] . '(' . $content . ');';
+                    echo $_GET['jsoncallback'] . '(' . $content . ');';
                 }
                 else{
-                	echo $content;
+                    echo $content;
                 }
             }
             else {
-            	$this->Session->setFlash($loginFailMsg);
+                $this->Session->setFlash($loginFailMsg);
                 $this->set('fail_msg', $loginFailMsg);
             }
             //$this->redirect(array('action' => 'forgot'), 401);
