@@ -200,6 +200,10 @@ class CategoriesController extends AppController {
         $brandIds = array();
         $this->loadModel('Product');
         foreach($productTags as &$tag) {
+
+            //add class image
+            $tag['coverimg'] = '/img/class/classn'.$tag['ProductTag']['id'].'.png';
+
             $join_conditions = array(
                 array(
                     'table' => 'product_product_tags',
@@ -248,6 +252,7 @@ class CategoriesController extends AppController {
         $this->set('withBrandInfo', true);
         $this->set('category_control_name', 'products');
         $this->set('op_cate', OP_CATE_HOME);
+
 
         $this->set('_serialize', array('brands', 'tagsWithProducts', 'sub_title'));
     }
