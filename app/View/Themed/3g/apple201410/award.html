@@ -108,7 +108,7 @@
         2、猕猴桃红包分享给朋友一起抢，抢得的优惠券在购买眉县生态猕猴桃时直接抵现金使用，使用期限12月5号23点59分之前。<br />
         3、关注朋友说，每天可领取5次游戏机会；小伙伴点击分享的摇一摇游戏链接即增加一次游戏机会。<br />
         4、活动结束日期12月3号23点59分。 <br/>
-        5、建议不要早早兑换，攒到100个抽<a href="#award_cj">免费大奖</a>。 <br/>
+        5、累计攒到100个抽<a href="#award_cj">免费大奖</a>。 <br/>
         <div class="text-center">
         <button id="get_coupons_button" type="button" class="btn btn-warning">我要兑换</button><a class="apple_medium_links" href="/users/my_offers.html">我的红包</a>
             </div>
@@ -138,7 +138,7 @@
     }
 </style>
 <div id="award_cj" class="bg_orange pad">
-    <div class="title">摇下100个，抽大奖</div>
+    <div class="title">累计摇下100个，抽大奖</div>
     <div id="yao_jp_div"  class="row text-center">
         <span class="col-xs-12" id="jp_mihoutao_109">红绿灯猕猴桃一箱</span>
         <span class="col-xs-12" id="jp_mihoutao_69">绿心猕猴桃一箱</span>
@@ -152,18 +152,9 @@
 <script>
     $('#yao_jp').click(function(){
 
-        var total = $.trim($('#apple_got_cnt').text());
-        total = total != '' ? parseInt(total) : 0;
-
-        if (total < 100) {
-            utils.alert('达到100个才能抽奖哦，加油！');
-            return false;
-        }
-
         function getRandomInt(min, max) {
             return Math.floor(Math.random() * (max - min)) + min;
         }
-
 
         var finish = false;
 
@@ -178,7 +169,7 @@
                         if (data.award_type != 0) {
                             utils.alert("恭喜您摇到" + jp.text() + ", <a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
                         } else {
-                            utils.alert('手气不太好啊, 过一会儿再试试！');
+                            utils.alert(data.msg == 'not_enough_100' ? '累计已摇下'+data.total+'个，还不满100个，请继续努力~' : '手气不太好啊, 过一会儿再试试！');
                         }
                     }, 1000);
                 } else {

@@ -239,6 +239,7 @@ class Apple201410Controller extends AppController
 
         $award_type = 0;
         $last = $this->Session->read('last_chou_jiang');
+        $msg = '';
         if (time() - $last > 180 && $gameType == self::MIHOUTAO1411) {
             $this->Session->write('last_chou_jiang', time());
 
@@ -276,13 +277,14 @@ class Apple201410Controller extends AppController
                 $logstr = "Choujian $uid : todayAwarded=$todayAwarded, iAwarded=$iAwarded, shouldLimit=$shouldLimit";
                 $this->log($logstr);
             } else {
+                $msg = 'not_enough_100';
                 $logstr = "total_got=$total_got, award_limit=".$this->AWARD_LIMIT;
             }
         } else {
             $logstr = 'too frequently';
         }
 
-        echo json_encode(array('success' => true, 'award_type' => $award_type, 'logstr' => ''));
+        echo json_encode(array('success' => true, 'award_type' => $award_type, 'logstr' => '', 'msg' => $msg, 'total' => $total_got));
     }
 
     public function exchange_coupon($gameType = KEY_APPLE_201410)
