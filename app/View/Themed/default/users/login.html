@@ -2,30 +2,56 @@
     <div id="loginMessage" class="alert alert-warning" style="display:none">登录失败</div>
     <div class="sign-form">
         <div class="sign-inner">
-            <hr>
-            <form action="{{$this->Html->url('/users/login')}}" id="loginform" accept-charset="utf-8"  method="get" role="form" {{if $isajax}} onsubmit="return ajaxeSubmitForm(this,'loginSucess');" {{/if}}>
-            <div id = "loginChange" class="input-group">
-                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                <input type="text" title="" required="required"  data-original-title="" tabindex="1"  name="data[User][mobilephone]" placeholder="输入手机号码" id="phone" class="form-control">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#phoneLogin" data-toggle="tab">手机号登录</a></li>
+                <li><a href="#usernameLogin" data-toggle="tab">用户名登录</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="phoneLogin">
+                    <form action="{{$this->Html->url('/users/login')}}" id="loginform" accept-charset="utf-8"  method="get" role="form" {{if $isajax}} onsubmit="return ajaxeSubmitForm(this,'loginSucess');" {{/if}}>
+                    <div  class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        <input type="text" title="" required="required"  data-original-title="" tabindex="1"  name="data[User][mobilephone]" placeholder="输入手机号码" id="phone" class="form-control">
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                        <input type="password" title="" required="required" name="data[User][password]" maxlength="15"  tabindex="2" onkeypress="detectCapsLock(event, this)"  data-original-title="" placeholder="输入密码" id="password" class="form-control">
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="data[User][remember_me]"  value="2592000"> 记住我的登录状态
+                        </label>
+                    </div>
+                    {{$this->Form->input('referer',array('type'=>'hidden'))}}
+                    <button class="btn btn-red" type="submit">登录</button>
+                    <hr>
+                    </form>
+                </div>
+                <div class="tab-pane" id="usernameLogin">
+                    <form action="{{$this->Html->url('/users/login')}}"  accept-charset="utf-8"  method="get" role="form" {{if $isajax}} onsubmit="return ajaxeSubmitForm(this,'loginSucess');" {{/if}}>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        <input type="text" title="" required="required"  data-original-title="" tabindex="1"  name="data[User][username]" placeholder="输入用户名" id="name" class="form-control">
+                    </div>
+                    <br>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                        <input type="password" title="" required="required" name="data[User][password]" maxlength="15"  tabindex="2" onkeypress="detectCapsLock(event, this)"  data-original-title="" placeholder="输入密码"  class="form-control">
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="data[User][remember_me]"  value="2592000"> 记住我的登录状态
+                        </label>
+                    </div>
+                    {{$this->Form->input('referer',array('type'=>'hidden'))}}
+                    <button class="btn btn-red" type="submit">登录</button>
+                    <hr>
+                    </form>
+                </div>
+
             </div>
-            <br>
-            <div class="input-group">
-                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                <input type="password" title="" required="required" name="data[User][password]" maxlength="15"  tabindex="2" onkeypress="detectCapsLock(event, this)"  data-original-title="" placeholder="输入密码" id="password" class="form-control">
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" name="data[User][remember_me]"  value="2592000"> 记住我的登录状态
-                </label>
-            </div>
-            {{$this->Form->input('referer',array('type'=>'hidden'))}}
-            <button class="btn btn-red" type="submit">登录</button>
-            <div class="pull-right">
-                <span id = "tipTag" style="font-size: 18px; color: #A69E9E;line-height:50px;">切换用户名登录</span>
-                <span id = "boxNext" class='glyphicon glyphicon-circle-arrow-right pull-right' style="font-size: 40px;"></span>
-            </div>
-            <hr>
-            </form>
+
             <p>{{__('Not registered?')}} <a href="{{$this->Html->url('/users/register')}}" onclick="return publishController.open_dialog(this.href,{title:'注册',width:650});" >{{__('Create an Account.')}}</a></p>
             {{$this->Hook->call('oauthLoginLink')}}
             <div class="pwd-lost">
@@ -44,21 +70,4 @@
         </div>
     </div>
 </div>
-<script>
-    $().ready(function(){
-        var inputObj = $('<input type="text" title="" required="required"  data-original-title="" tabindex="1"  name="data[User][username]" placeholder="输入用户名" id="name" class="form-control">');
-        var inputObj2 = $('<input type="text" title="" required="required"  data-original-title="" tabindex="1"  name="data[User][mobilephone]" placeholder="输入手机号码" id="phone" class="form-control">');
-        $("#boxNext").click(function(){
-            if(document.getElementById("phone")){
-                $("#phone").remove();
-                $("#loginChange").append(inputObj);
-                $("#tipTag").text("切换手机号码登录");
-            }else{
-                $("#name").remove();
-                $("#loginChange").append(inputObj2);
-                $("#tipTag").text("切换用户名登录");
-            }
 
-        })
-    })
-</script>

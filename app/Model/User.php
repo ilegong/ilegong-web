@@ -52,9 +52,6 @@ class User extends AppModel {
                 'rule' => 'notEmpty',
                 'message' => 'This field cannot be left blank.',
             ),
-            'phone' => array(
-                'rule' => array('phone', null, 'us')
-            )
         ),
         'code' => array(
             'rule' => 'notEmpty'

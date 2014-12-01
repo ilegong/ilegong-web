@@ -202,6 +202,8 @@ class UsersController extends AppController {
                     $this->Session->setFlash('短信验证码错误');
                 }
 
+            }else{
+                $this->Session->setFlash('短信验证码已过期，请重新获取');
             }
         }else {
             $this->Session->delete('Message.flash');
