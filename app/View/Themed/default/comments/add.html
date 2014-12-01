@@ -25,11 +25,21 @@
 	line-height:20px;
 	float:left;
 	font-size:12px;
+    position:relative;padding:0px;
+}
+.comment_item .t_info .t_signal {
+    background:url(/img/shichi-signal.jpg) no-repeat;
+    background-size:20px 20px;
+    height:56px;
+    width:56px;
+    display:block;
+    position:absolute;
 }
 .comment_item .t_info .t_username {
 	color:#25343b;
 	padding-left:15px;
 	background:transparent url(http://i3.sinaimg.cn/dy/2010/0610/2010610122226.gif) no-repeat scroll -150px -56px;
+
 }
 
 .comment_item .t_info .t_area {
@@ -203,7 +213,7 @@ $(document).ready(function(){
 function addCommintItem(item){
 	var $comment = $('<div newsid="27-1-699265" channel="jc" class="comment_item">'
 +'<div class="t_info">'
-+'<span class="t_username">'+item['username']+'</span><br><span class="t_area"></span>'
++(parseInt(item['shichi_status'])==1 ? '<span class="t_username">'+item['username']+'</span>'+'<span class="t_signal"></span> '+'</span>'+'<br><span class="t_area"></span>':'<span class="t_username">'+item['username']+'</span>'+'</span>'+'<br><span class="t_area"></span>')
 +'</div>'
 +'<div class="t_txt">'
 + (parseInt(item['rating'])==5 ? '<span class="label label-success">好评</span>':(parseInt(item['rating'])==3 ? '<span class="label label-default">中评</span>':'<span class="label label-warning">差评</span>'))

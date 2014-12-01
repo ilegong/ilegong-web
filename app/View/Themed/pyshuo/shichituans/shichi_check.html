@@ -2,36 +2,30 @@
     td {
         padding: 5px 10px;
     }
+    td img {width:100%;height:auto}
 </style>
 {{$this->Html->script(array('front_orders'))}}
         <div><ul class="nav nav-pills" role="tablist">
-            <li role="presentation"><a  href="/shichituans/shichi_check/1">第一期</a></li>
-            <li role="presentation"><a  href="/shichituans/shichi_check/2">第二期</a></li>
-            <li role="presentation"><a  href="/shichituans/shichi_check/3">第三期</a></li>
+           {{loop $period $pe}}
+            <li role="presentation"><a  href="/shichituans/shichi_check/{{$pe['Shichituan']['period']}}">第{{$pe['Shichituan']['period']}}期</a></li>
+            {{/loop}}
         </ul></div>
 <div class="container">
     <table class="table table-striped table-bordered table-hover table-condensed table-responsive">
         <caption>试吃团报名列表</caption>
         <thead>
         <tr  class="success">
-            <th>多选</th><th>id</th><th>wechat</th><th>name</th><th>company</th><th>gender</th><th>telenum</th><th>email</th><th>comment</th><th>created</th><th>pictures</th><th>status</th>
+            <th>多选</th><th>id</th><th>wechat</th><th>userId</th><th>name</th><th>company</th><th>gender</th><th>telenum</th><th>email</th><th>comment</th><th>created</th><th>pictures</th><th>status</th>
         </tr>
         {{loop $shichituans $shichituan}}
         <tr class="active">
             <td><input type="checkbox" name="checkbox"  data-id="{{$shichituan['Shichituan']['shichi_id']}}"/></td>
-            <td>{{$shichituan['Shichituan']['shichi_id']}}</td><td>{{$shichituan['Shichituan']['wechat']}}</td>
+            <td>{{$shichituan['Shichituan']['shichi_id']}}</td><td>{{$shichituan['Shichituan']['wechat']}}</td><td>{{$shichituan['Shichituan']['user_id']}}</td>
             <td>{{$shichituan['Shichituan']['name']}}</td><td>{{$shichituan['Shichituan']['company']}}</td>
             <td>{{$shichituan['Shichituan']['gender']}}</td><td>{{$shichituan['Shichituan']['telenum']}}</td>
             <td>{{$shichituan['Shichituan']['email']}}</td><td>{{$shichituan['Shichituan']['comment']}}</td>
             <td>{{$shichituan['Shichituan']['created']}}</td><td>{{$this->Html->image(Router::url($shichituan['Shichituan']['pictures']))}}</td>
             <td>{{if $shichituan['Shichituan']['status']==0}}待审核 {{elseif $shichituan['Shichituan']['status']==1 }}审核通过{{elseif $shichituan['Shichituan']['status']==2}}审核未通过{{/if}}</td>
-            <!--<td>-->
-                <!--<select data-id="{{$shichituan['Shichituan']['shichi_id']}}"  name="data[Shichituan][status]" >-->
-                    <!--<option value="0">待审核</option>-->
-                    <!--<option value="1">通过</option>-->
-                    <!--<option value="2">未通过</option>-->
-                <!--</select>-->
-            <!--</td>-->
         </tr>
         {{/loop}}
         </thead>
@@ -54,31 +48,6 @@
 </div>
 <script>
     $(document).ready(function(){
-//    $('select[data-id]').change(function(){
-//       if(confirm('确定编辑吗？')){ if(confirm('确定编辑吗？')){
-//        var dataId = $(this).attr('data-id');
-//        var val = $(this).val();
-//        var data = {'id': dataId, 'val':val};
-//        $.ajax({
-//            type:'post',
-//            success:function(request, xhr) {
-//                if(request.success){
-//                    showSuccessMessage(request.success,'', 2);
-//                }
-//                else{
-//                    showErrorMessage(errorinfo);
-//                }
-//            },
-//            url:"{{$this->Html->url(array('controller'=>'shichituans','action'=>'shichi_save'))}}",
-//            data:data,
-//            dataType:'json'
-//        }) ;
-//       }
-//
-//        else{
-//            return false;
-//        }
-//    });
        $('#nonAgree,#isAgree').click(function(){
            var idlist=new Array();
            var idCount=0;

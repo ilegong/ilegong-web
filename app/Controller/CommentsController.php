@@ -7,7 +7,7 @@ class CommentsController extends AppController {
     var $components = array(
         'Email',
     );
-    var $uses = array('Comment', 'User');
+    var $uses = array('Comment', 'User','Shichituan');
     function add() {
     	$this->autoRender = false;
     	$this->layout = 'ajax';
@@ -21,7 +21,6 @@ class CommentsController extends AppController {
                 echo json_encode(array('error'=>'edit_nick_name'));
                 return;
             }
-
             $this->data['Comment']['user_id'] = $this->Session->read('Auth.User.id');
             $this->data['Comment']['username'] = $this->Session->read('Auth.User.nickname');
             $this->data['Comment']['body'] = htmlspecialchars($this->data['Comment']['body']);
@@ -73,7 +72,7 @@ class CommentsController extends AppController {
 		    'limit' => $pagesize, //整型
 		    'page' => $page, //整型    	
     	));
-
+        $this->loadModel('Shichituan');
         $result = array();
         foreach ($comments as $comt){
             $item = $comt['Comment'];
@@ -105,11 +104,14 @@ class CommentsController extends AppController {
 
             unset($item['pictures']);
 
+            $shichi_status=$this->Shichituan->findByUser_id($item['user_id'],array('Shichituan.status'));
+            $item['shichi_status']=$shichi_status['Shichituan']['status'];
             array_push($result,array('Comment' => $item));
         }
 
     	echo json_encode($result);
-    	
+
+
     } 
 
     function __spam_protection($continue, $type, $node) {
@@ -159,5 +161,6 @@ class CommentsController extends AppController {
         }
         $this->set('success',$success);
     }
+
 }
 ?>

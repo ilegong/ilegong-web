@@ -280,7 +280,7 @@ class UsersController extends AppController {
 
     function my_profile() {
         $this->loadModel('Shichituan');
-        $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
+        $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.pictures','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
         $this->set('result',$result);
         $userinfo = $this->Auth->user();
         if ($userinfo['id']) {
@@ -634,7 +634,7 @@ class UsersController extends AppController {
         $this->pageTitle = __('个人中心');
 
         $this->loadModel('Shichituan');
-        $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
+        $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.status','Shichituan.pictures','Shichituan.period'),'Shichituan.shichi_id DESC');
         $this->set('result',$result);
     }
 

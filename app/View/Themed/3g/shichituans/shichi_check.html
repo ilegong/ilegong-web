@@ -1,6 +1,7 @@
 <style>
     td {
         padding: 5px 10px;
+
     }
 </style>
 {{$this->Html->script(array('front_orders'))}}
@@ -16,12 +17,12 @@
         <caption>试吃团报名列表</caption>
         <thead>
         <tr class="active">
-            <th>多选</th><th>id</th><th>wechat</th><th>name</th><th>company</th><th>gender</th><th>telenum</th><th>email</th><th>comment</th><th>created</th><th>pictures</th><th>status</th>
+            <th>多选</th><th>id</th><th>wechat</th><th>userId</th><th>name</th><th>company</th><th>gender</th><th>telenum</th><th>email</th><th>comment</th><th>created</th><th>pictures</th><th>status</th>
         </tr>
         {{loop $shichituans $shichituan}}
         <tr class="active">
             <td><input type="checkbox" class="col-xs-1"/></td>
-            <td>{{$shichituan['Shichituan']['shichi_id']}}</td><td>{{$shichituan['Shichituan']['wechat']}}</td>
+            <td>{{$shichituan['Shichituan']['shichi_id']}}</td><td>{{$shichituan['Shichituan']['wechat']}}</td><td>{{$shichituan['Shichituan']['user_id']}}</td>
             <td>{{$shichituan['Shichituan']['name']}}</td><td>{{$shichituan['Shichituan']['company']}}</td>
             <td>{{$shichituan['Shichituan']['gender']}}</td><td>{{$shichituan['Shichituan']['telenum']}}</td>
             <td>{{$shichituan['Shichituan']['email']}}</td><td>{{$shichituan['Shichituan']['comment']}}</td>

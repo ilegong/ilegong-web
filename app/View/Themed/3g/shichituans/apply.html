@@ -1,5 +1,5 @@
 {{$this->Html->css(array(
-'jquery.fileupload.css',
+'jquery.fileupload.css'
 ))}}
 <style>
     h2,h3
@@ -30,13 +30,13 @@
 
           <label for="shichiname" class="col-sm-2 control-label">姓名*</label><span></span>
           <div class="col-sm-9 controls">
-        {{$this->Form->input('name',array('id' => 'shichiname','type' => 'text','class' => 'form-control', 'placeholder'=>'输入中文姓名','div'=>false,'label'=>false))}}
+        {{$this->Form->input('name',array('id' => 'shichiname','type' => 'text','class' => 'form-control', 'placeholder'=>'输入姓名','div'=>false,'label'=>false))}}
           </div>
       </div>
       <div class="form-group">
           <label for="shichicompany" class="col-sm-2 control-label">收件地址*</label><span></span>
           <div class="col-sm-9 controls">
-        {{$this->Form->input('company',array('id' => 'shichicompany','type' => 'text','class' => 'form-control','placeholder'=>'输入收件地址，最好是工作单位地址','div'=>false,'label'=>false))}}
+        {{$this->Form->input('company',array('id' => 'shichicompany','type' => 'text','class' => 'form-control','placeholder'=>'输入收件地址，','div'=>false,'label'=>false))}}
          </div>
       </div>
       <div class="form-group">
@@ -94,12 +94,12 @@
 </div>
  <script type="text/javascript">
     $(document).ready(function(){      //添加验证规则
-        jQuery.validator.addMethod("isName",function(value,element){ var isName=/^[\u4E00-\u9FA5]+$/;return (isName.test(value))},'');
+//        jQuery.validator.addMethod("isName",function(value,element){ var isName=/^[\u4E00-\u9FA5]+$/;return (isName.test(value))},'');
         jQuery.validator.addMethod("isNum",function(value,element){var isNum=/^(\d+){11}$/;return (value.length==11&&isNum.test(value))},'');
     $("#ShichiForm").validate({
         rules: {
             shichiwechat:{required: true},
-            shichiname: {required: true,isName:true},
+            shichiname: {required: true},
             shichicompany: {required: true},
             //male: {required:true},
             shichiPicture:{required: true},
@@ -110,14 +110,14 @@
         },
         messages: {
             shichiwechat: {required: "微信号不能为空"},
-            shichiname: {required: "姓名不能为空",isName:"姓名只能为中文"},
+            shichiname: {required: "姓名不能为空"},
             shichicompany: {required:"收货地址不能为空"},//工作单位可以不是中文
              //male: {required:" 性别为必选项"},
             //female: {required:" 性别为必选项"},
             shichitelenum: {required: "联系方式不能为空",isNum:"手机号码为11位且只能为数字"},
             shichiemail: {required: "邮箱不能为空",email:"邮箱格式不正确"},
             shichiPicture: {required: "请上传您的生活照"},
-            shichicomment: {required: "评论不能为空", minlength: "评论字数不能少于10"},
+            shichicomment: {required: "评论不能为空", minlength: "自我介绍字数不能少于10"},
             shichiAgree: {required: "您必须同意才能申请"}
         },
         focusCleanup:true,
