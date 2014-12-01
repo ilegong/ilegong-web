@@ -140,7 +140,9 @@ class ShichituansController extends AppController{
             $shichimessage = __('申请正在审核中,请耐心等待');
         } else if ($status == 1) {
             $shichimessage = __('申请通过,恭喜您加入我们的试吃团');
-        } else  $shichimessage = __('很遗憾,本期已满，请下次再申请');
+        } else {
+            $shichimessage = __('很遗憾,本期已满，请下次再申请');
+        }
         $this->set('message', $shichimessage);
     }
 }
