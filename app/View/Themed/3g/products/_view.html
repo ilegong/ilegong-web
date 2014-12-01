@@ -148,17 +148,15 @@
     <!--</ul>-->
 <!--</div>-->
 <div class="b_line"></div>
-<div class="service b_line"><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}">
-        <span class="shop_head"><img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0" /></span>
-    <ul class="clearfix list-unstyled">
-        <li>
-            <span class="gray mr12" style="float:left;">店家：</span>
-			<span style="display: block;overflow: hidden;">
-				<span>{{$brand['Brand']['name']}}</span><br />
-                <span class="btn fl" href="javascript:;">进入商家店铺</span>
-			</span>
+<div class=""><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}">
+    <ul class="clearfix shop_entrance list-unstyled">
+        <li class="fl"><span class="shop_head_small"><img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0" /></span></li>
+        <li class="fl">
+			<span style="overflow: hidden; padding-left:10px"> 店家：{{$brand['Brand']['name']}}</span>
         </li>
-    </ul></a>
+        <li class="fr"><span class="p_more">&nbsp;</span></li>
+    </ul>
+</a>
 </div>
 <!--<div class="all_line">-->
     <!--<ul class="clearfix title list-unstyled">-->
