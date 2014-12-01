@@ -61,6 +61,33 @@
             <?php } ?>
         </p>
         {{/if}}
+
+        {{if ($total_left > 0 || $total_left == -1) && $afford_for_curr_user }}
+        <div id="productinfo" class="clearfix voffset2" style="padding-bottom:10px;">
+            {{if $limit_per_user == 1}}
+            <p>每人限购一份</p>
+            <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="hidden" readonly="readonly">
+            {{else}}
+            <div class="input-group" style="width:120px">
+                <span id="pamount_reduce" class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}">-</span>
+                <input id="input_pamount"  item-id="{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text">
+                <span id="pamount_add" class="add input-group-addon" item-id="{{$Product['Product']['id']}}">+</span>
+            </div>
+            {{/if}}
+            <!--<div class="clearfix col-xs-12 voffset2">-->
+            <!--</div>-->
+        </div>
+        {{elseif $total_left == 0}}
+        <div class="voffset3">
+            <h3 class="text-warning">已经全部抢完！请等待下次开卖！</h3>
+        </div>
+        {{else}}
+
+        <div class="voffset3">
+            <p>您已经买过啦！</p>
+        </div>
+
+        {{/if}}
     </div>
 </div>
 
