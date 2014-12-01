@@ -507,7 +507,5 @@ class StoresController extends AppController {
         return $error;
     }
 
-    public function apply_store(){
 
-    }
 }
