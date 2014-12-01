@@ -187,6 +187,42 @@ footer img{ width:4.625em; height:1.583em;}
 .navbar-v1 .me .op-icon-active { background-position: -8.333em 0; }
 
 
+/*add by mwt start*/
+.b_line{ border-bottom: 1px #dddddd solid;padding-bottom:1em}
+.numbers{color:#999999; font-size:1em;margin:1em 0.833em 1em 0.833em;}
+.numbers .title{ padding-top:0.833em;}
+.numbers li span .num{border:0; border-top:1px #dddddd solid; border-bottom:1px #dddddd solid; position:relative; display:block; float:left; color:#333333; width:1em;text-align:center; padding:0.833em 0.833em;}
+.numbers li span .grew{background-color:#eee; display:block; float:left; border:1px #dddddd solid; color:#333333; width:1em;text-align:center; padding:0.833em 0.833em;}
+
+/*保证有一个参考物*/
+.service{ font-size:1em;margin:1em 0.833em 1em 0.833em;}
+.service ul li{word-wrap: break-word;}
+.service ul li:first-child{ color:#999999;}
+.service ul li:last-child{ color:#333333;}
+.service ul li .btn{ border:1px #dddddd solid; padding:0.5em 0.8em; margin-top:0.5em; color:#666666; text-decoration:none; display:block;}
+
+/*口碑评价*/
+.service ul li a.btn:active{ border-color:#29ac0e; color:#29ac0e;}
+.all_line{width:100%;border-bottom: 1px #dddddd solid;border-top: 1px #dddddd solid; margin-bottom:1em;padding:1em 0em 1em 0em;}
+.all_line .title{ font-size:1.25em;}
+.all_line .title li:first-child{padding-left:0.833em; color:#29ac0e;}
+.all_line li:first-child span{color:#999999;font-weight:normal;font-size:0.9em;}
+.all_line .title li:last-child{padding-right:0.833em;}
+.user{ font-size:1em; line-height:1.667em; color:#666666; margin-top:1em; margin-left:0.833em; margin-right:0.833em; padding-top:1em; border-top:1px #dddddd solid;}
+.user .time{ color:#c0c0c0; font-size:0.8em;}
+.user img{ width:1.667em; height:1.667em; -moz-border-radius: 0.3em;/* Gecko browsers */-webkit-border-radius: 0.3em;/* Webkit browsers */border-radius:0.3em;/* W3C syntax */ margin-right:0.5em;}
+.evaluate_bg{ padding:0.12em 0.375em; color:#ffffff; background-color:#29ac0e; font-size:0.833em; margin-right:0.5em;}
+.evaluate{ margin-left:0.833em; margin-right:0.833em;}
+.evaluate .con{ font-size:0.8em; line-height:1.25em; color:#666666; padding-top:0.2em;}
+.pic{ margin:0.5em 0.833em 0 0.833em;}
+.pic ul li{ float:left; width:25%; overflow:hidden;}
+.pic ul li a{ display:block; margin-right:0.5em;}
+.pic ul li img{ width:100%;}
+.all_line .more{ margin-left:0.833em; margin-right:0.833em; margin-top:0.833em; padding-top:0.833em; border-top:1px #dddddd solid; font-size:1em; text-align:center;}
+.all_line .more a{ color:#333333; text-decoration:none;}
+.all_line .more a:active{ color:#29ac0e;}
+
+
 /* New UI Home page */
 h3.items-tag { margin:0 0.833em 0.625em 0.833em; }
 h3.items-tag a { font-size: 1.417em; color: #29ac0e; }

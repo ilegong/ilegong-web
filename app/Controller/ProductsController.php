@@ -109,6 +109,12 @@ class ProductsController extends AppController{
     function view($slug='/'){
         parent::view($slug);
 
+        $brandId = $this->viewdata['Product']['brand_id'];
+        $this->loadModel('Brand');
+        $brand = $this->Brand->findById($brandId);
+        $this->set('brand', $brand);
+
+
         $MAX_SAME_KIND = 2;
         $MAX_RECOMMEND = 6;
 

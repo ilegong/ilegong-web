@@ -61,40 +61,128 @@
             <?php } ?>
         </p>
         {{/if}}
-
-        {{if ($total_left > 0 || $total_left == -1) && $afford_for_curr_user }}
-        <div id="productinfo" class="clearfix voffset2" style="padding-bottom:10px;">
-            {{if $limit_per_user == 1}}
-            <p>每人限购一份</p>
-                <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="hidden" readonly="readonly">
-            {{else}}
-            <div class="input-group" style="width:120px">
-                <span id="pamount_reduce" class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}">-</span>
-                <input id="input_pamount"  item-id="{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text">
-                <span id="pamount_add" class="add input-group-addon" item-id="{{$Product['Product']['id']}}">+</span>
-            </div>
-            {{/if}}
-            <!--<div class="clearfix col-xs-12 voffset2">-->
-            <!--</div>-->
-        </div>
-        {{elseif $total_left == 0}}
-        <div class="voffset3">
-            <h3 class="text-warning">已经全部抢完！请等待下次开卖！</h3>
-        </div>
-        {{else}}
-
-            <div class="voffset3">
-                <p>您已经买过啦！</p>
-            </div>
-
-        {{/if}}
-        <div class="voffset3">
-            <a style="color:red;" href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($Product['Brand']['created'])).'/'.$Product['Product']['brand_id'])}}">查看商家更多商品</a>
-        </div>
     </div>
 </div>
 
- <?php
+<!--<div class="p_details_title">[明明有梨]食秋梨，润秋燥，保持水润，抵御雾霾</div>-->
+<!--<ul class="p_details_price clearfix">-->
+    <!--<li class="fl price"><span>￥<font>55.0</font></span><em>￥79.9</em></li>-->
+    <!--<li class="fr stat">收藏<span>12</span>&nbsp;&nbsp;&nbsp;评价<span>234</span></li>-->
+<!--</ul>-->
+<!--<ul class="sales clearfix">-->
+    <!--<li>-->
+        <!--<span class="gray title mr12" style="float:left;">促销:</span>-->
+        <!--<span class="sales_c" style="display: block;overflow: hidden;">-->
+            <!--<div class="quota_btn radius10 fl">限购</div>-->
+            <!--<span>仅剩5件</span>-->
+        <!--</span>-->
+    <!--</li>-->
+<!--</ul>-->
+<!--<ul class="standard clearfix">-->
+    <!--<li>-->
+        <!--<span class="gray title mr12" style="float:left;">规格:</span>-->
+        <!--<span class="border" style="display: block;overflow: hidden;">-->
+            <!--<span class="border cur mr12">-->
+                <!--<div class="focus"></div>-->
+                <!--8斤12颗-->
+            <!--</span>-->
+            <!--<span class="mr12 border">-->
+                <!--5斤10颗-->
+            <!--</span>-->
+            <!--<span class="mr12 border">-->
+                <!--5斤10颗-->
+            <!--</span>-->
+            <!--<span class="mr12 border">-->
+                <!--5斤10颗-->
+            <!--</span>-->
+        <!--</span>-->
+    <!--</li>-->
+<!--</ul>-->
+
+<!--<ul id="productinfo" class="numbers clearfix b_line list-unstyled">-->
+    <!--<li class="fl">-->
+        <!--<span class="gray title mr12" style="float:left;">数量:</span>-->
+        <!--<span class="clearfix" style="display: block;overflow: hidden;">-->
+            <!--<div  id="pamount_reduce" class="grew">-</div>-->
+            <!--<div class="num">1</div>-->
+            <!--<div class="grew">+</div>-->
+        <!--</span>-->
+    <!--</li>-->
+<!--</ul>-->
+
+<!--<div class="service">-->
+    <!--<ul class="clearfix b_line">-->
+        <!--<li>-->
+            <!--<span class="gray mr12" style="float:left;">快递:</span>-->
+			<!--<span style="display: block;overflow: hidden;">-->
+				<!--<span>[朋友说]团购特价66元包邮 每周日产地统一发货</span>-->
+			<!--</span>-->
+        <!--</li>-->
+    <!--</ul>-->
+<!--</div>-->
+<div class="b_line"></div>
+<div class="service b_line"><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}">
+        <span class="shop_head"><img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0" /></span>
+    <ul class="clearfix list-unstyled">
+        <li>
+            <span class="gray mr12" style="float:left;">服务:</span>
+			<span style="display: block;overflow: hidden;">
+				<span>由 {{$brand['Brand']['name']}} 提供</span><br />
+                <span class="btn fl" href="javascript:;">进入商家店铺</span>
+			</span>
+        </li>
+    </ul></a>
+</div>
+<!--<div class="all_line">-->
+    <!--<ul class="clearfix title list-unstyled">-->
+        <!--<li class="fl">产品介绍</li>-->
+        <!--<li class="fr"><a href="#X" class="p_more"></a></li>-->
+    <!--</ul>-->
+<!--</div>-->
+<!--<div class="all_line">-->
+    <!--<ul class="clearfix title">-->
+        <!--<li class="fl">口碑评论<span>234</span></li>-->
+        <!--<li class="fr"><a href="#X" class="p_more"></a></li>-->
+    <!--</ul>-->
+    <!--<div>-->
+        <!--<ul class="clearfix user">-->
+            <!--<li class="fl"><img src="images/detail/user.png" border="0" /></li>-->
+            <!--<li class="fl">Lily</li>-->
+            <!--<li class="fr time">2014-10-24  12:06:08</li>-->
+        <!--</ul>-->
+        <!--<div class="evaluate clearfix">-->
+            <!--<span class="evaluate_bg radius10" style="float:left;">好评</span>-->
+            <!--<span class="con" style="display: block;overflow: hidden;">-->
+                <!--<span>汁水多，甜中带一点酸，很新鲜的，口感不错，放久了酸度会加重，所以早点吃玩才好，这也从侧面说明没有任何防腐加工，吃得放心，女儿喜欢吃。</span>-->
+            <!--</span>-->
+        <!--</div>-->
+        <!--<div class="pic">-->
+            <!--<ul class="clearfix">-->
+                <!--<li><a href="#X"><img src="images/detail/pic1.jpg" border="0" /></a></li>-->
+                <!--<li><a href="#X"><img src="images/detail/pic2.jpg" border="0" /></a></li>-->
+                <!--<li><a href="#X"><img src="images/detail/pic1.jpg" border="0" /></a></li>-->
+                <!--<li><a href="#X"><img src="images/detail/pic2.jpg" border="0" /></a></li>-->
+            <!--</ul>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div>-->
+        <!--<ul class="clearfix user">-->
+            <!--<li class="fl"><img src="images/detail/user_default.png" border="0" /></li>-->
+            <!--<li class="fl">yolanda</li>-->
+            <!--<li class="fr time">2014-09-30  11:08:41</li>-->
+        <!--</ul>-->
+        <!--<div class="evaluate clearfix">-->
+            <!--<span class="evaluate_bg radius10" style="float:left;">好评</span>-->
+            <!--<span class="con" style="display: block;overflow: hidden;">-->
+                <!--<span>忍不住就会吃很多，甜中带酸，水分充足，美味又解渴，太喜欢了！</span>-->
+            <!--</span>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="more"><a href="#X">查看全部评价</a></div>-->
+<!--</div>-->
+
+
+<?php
  $defTab = 'product-description';
  if ($_GET['_pys_add_comment']) {
     $defTab = 'product-reviews';
