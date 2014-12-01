@@ -37,7 +37,6 @@ class ShichituansController extends AppController{
     public function apply(){ //试吃团申请
         $this->checkAccess();
         $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.period'),'Shichituan.shichi_id DESC');
-
         if ($result){
             if($result['Shichituan']['period']==((date('y',time())<=2014) ?(date('m', time()) - 8): (date('m',time()) + 4)))
             {
