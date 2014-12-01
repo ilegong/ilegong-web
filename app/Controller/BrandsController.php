@@ -38,6 +38,7 @@ class BrandsController extends AppController {
         $this->set('op_cate', 'share');
         $this->set('hideNav', true);
         $this->set('slug', $slug);
+        $this->set('is_owner', $this->currentUser['id'] == $this->viewdata[$modelClass]['creator']);
     }
 
     public function brands_admin() {

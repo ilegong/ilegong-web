@@ -1,8 +1,16 @@
 <div class="shop_intro clearfix">
     <span class="shop_head fl"><img class="radius10" src="{{$Brand['Brand']['coverimg']}}" border="0" /></span>
     <span style="display:block; overflow: hidden;">
-        <div class="brand_name">{{$Brand['Brand']['name']}}</div>
+        <div class="brand_name">{{$Brand['Brand']['name']}} <span class="certify"><img src="/img/mobilev1/certfy.png"/>朋友说认证</span> </div>
         <div class="brand_weixin">微信号: {{$Brand['Brand']['weixin_id']}}</div>
         <p>{{if !empty($Brand['Brand']['notice'])}}{{$Brand['Brand']['notice']}}{{else}}欢迎光临本店！{{/if}}</p>
     </span>
 </div>
+{{if $is_owner}}
+<div><a id="btn_copy_addr" class="btn-sm pull-right" href="javascript:;">复制店址</a> </div>
+<div id="span_store_addr" class="clearfix alert alert-info invisible" style="word-wrap: break-word">pyshuo.com/b/{{$Brand['Brand']['slug']}}</div>
+{{/if}}
+<script>
+    $('#btn_copy_addr').click(function(){$('#span_store_addr').toggleClass('invisible')});;
+    $('#span_store_addr').on('click focus', function(){$(this).select()});
+</script>

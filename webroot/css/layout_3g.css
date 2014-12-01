@@ -282,6 +282,9 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 .shop_good dl dt a.title{ font-size:1.0em; color:#666666; text-decoration:none; margin-top:0.5em; display:block;}
 .shop_good .current_price{ font-size:1.2em; color:#ffa200;}
 .shop_good .original_price{ font-size:0.833em; color:#cccccc; padding-top:0.4em; text-decoration:line-through;}
+.certify { font-size: 0.75em; background: white; padding: 0.5em 0.2em; color: #E8BF1E; }
+.btn-copy-storeaddr {border: 1px solid; padding:0.1em 0.1em;}
+
 /*bottom*/
 .common_bottom{ position:fixed; bottom:0; left:0; background-color:#f1f1f1; height:4.042em; border-top:1px #dddddd solid; font-size:1em; color:#666666; width:100%;}
 .common_bottom a{ width:25%; float:left; display:block; text-decoration:none;}
