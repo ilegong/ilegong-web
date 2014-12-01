@@ -202,7 +202,7 @@ class CategoriesController extends AppController {
         foreach($productTags as &$tag) {
 
             //add class image
-            $tag['coverimg'] = '/img/class/classn'.$tag['ProductTag']['id'].'.png';
+            $tag['ProductTag']['coverimg'] = '/img/class/classn'.$tag['ProductTag']['id'].'.png';
 
             $join_conditions = array(
                 array(
