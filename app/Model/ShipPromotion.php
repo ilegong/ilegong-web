@@ -99,7 +99,8 @@ class ShipPromotion extends AppModel {
         '310' => array('limit_ship' => true,
             'limit_per_user' => 1,
             'items' => array(
-                array('id' => 37, 'ship_price' => 0.0, 'time' => '', 'address' =>'世贸天阶时尚大厦六层')
+                array('id' => 37, 'ship_price' => 0.0, 'time' => '', 'address' =>'世贸天阶时尚大厦六层'),
+                array('id' => 38, 'ship_price' => 0.0, 'time' => '', 'address' =>'东大桥8号SOHO南塔 1002 号'),
             )
         )
 
