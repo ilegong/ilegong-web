@@ -133,6 +133,7 @@ class StoresController extends AppController {
             }
             $this->data['Product']['deleted'] = DELETED_NO;
             $this->data['Product']['creator'] = $this->currentUser['id'];
+            $this->data['Product']['coverimg'] = trim($this->data['coverimg']);
 
             if(!isset($this->data['Product']['slug'])) {
                 $name = $this->data['Product']['name'];

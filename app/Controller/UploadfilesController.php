@@ -92,6 +92,8 @@ class UploadfilesController extends AppController {
                             $file_url = $this->data [$modelname] ['thumb'];
                         }
 
+                        $info['fspath'] = $file_url;
+
 						if ('image' == substr ( $this->data [$modelname] ['type'], 0, 5 )) {
 							$info ['message'] .= '<img src="' . $file_url . '" width="100px" height="100px"/><br/>';
 						}
