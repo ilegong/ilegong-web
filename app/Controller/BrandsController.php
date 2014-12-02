@@ -80,9 +80,6 @@ class BrandsController extends AppController {
         $this->set('myIntroduction', $_SERVER['REQUEST_URI']);
         $this->set('slug', $slug);
     }
-    public function apply_store(){
-
-    }
 
 }
 ?>
