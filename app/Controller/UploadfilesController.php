@@ -65,20 +65,16 @@ class UploadfilesController extends AppController {
 					$modelname = Inflector::classify ( $this->name );
 					// save the file to the db, or do whateve ryou want to do with
 					// the data
-					$this->data [$modelname] ['modelclass'] = $file_model_name;
-					$this->data [$modelname] ['fieldname'] = $file_post_name;
-					$this->data [$modelname] ['name'] = $this->SwfUpload->filename;
-					$this->data [$modelname] ['size'] = $this->params ['form'] [$file_post_name] ['size'];
-					// $this->params['form'][$file_post_name]['path'] =
-					// $this->SwfUpload->webpath;
-					// fspath，thumb，mid_thumb 为相对路径
-					$this->data [$modelname] ['fspath'] = str_replace ( '\\', '/', $this->SwfUpload->relativeUrl . $this->SwfUpload->savename );
-					// $file_type =
-					$this->data [$modelname] ['type'] = $fileifo['file_type'];
-					if ('image' == substr ( $this->data [$modelname] ['type'], 0, 5 )) {
-						$this->data [$modelname] ['thumb'] = str_replace ( '\\', '/', $this->SwfUpload->relativeUrl . 'thumb_s' . DS . $this->SwfUpload->savename );
-						$this->data [$modelname] ['mid_thumb'] = str_replace ( '\\', '/', $this->SwfUpload->relativeUrl . 'thumb_m' . DS . $this->SwfUpload->savename );
-					}
+                    $this->data [$modelname] ['modelclass'] = $file_model_name;
+                    $this->data [$modelname] ['fieldname'] = $file_post_name;
+                    $this->data [$modelname] ['name'] = $fileifo['filename'];
+                    $this->data [$modelname] ['size'] = $this->params ['form'] [$file_post_name] ['size'];
+                    $this->data [$modelname] ['fspath'] = $fileifo['fspath'];
+                    $this->data [$modelname] ['type'] = $fileifo['file_type'];
+                    if (empty($_REQUEST['no_thumb']) && 'image' == substr ($fileifo['file_type'], 0, 5 )) {
+                        $this->data [$modelname] ['thumb'] = $fileifo['thumb'];
+                        $this->data [$modelname] ['mid_thumb'] = $fileifo['mid_thumb'];
+                    }
 					if (! ($file = $this->Uploadfile->save ( $this->data ))) {
 						$this->Session->setFlash ( 'Database save failed' );
 						$info ['message'] = $this->SwfUpload->filename . ' Database save failed'; // 保存记录时失败
