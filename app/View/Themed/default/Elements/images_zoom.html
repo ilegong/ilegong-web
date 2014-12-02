@@ -45,22 +45,43 @@ $(function(){
 //-->
 </script>
 <div id="preview">
+            {{if count($Product['Uploadfile'])>0 }}
 				<div onclick="" id="spec-n1">
 				<a  class="jqzoom" onclick="return false;" href="{{$this->Html->url('http://51daifan-images.stor.sinaapp.com'.$Product['Uploadfile'][0]['Uploadfile']['fspath'])}}" >
 				<img width="350" alt="" src="{{$this->Html->url('http://51daifan-images.stor.sinaapp.com'.$Product['Uploadfile'][0]['Uploadfile']['mid_thumb'])}}"
 				onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
 				</a>
 				</div>
+
 				<div id="spec-thumb-list" >
 				    <div id="marquee-left" class="control"></div>
 					<div id="marquee-right" class="control"></div>	
 					<div class="marquee" direction="left" step="1" pause="2000" style="position: relative; overflow: hidden; width: 300px; height: 56px;">
 						<ul class="list-h" style="width: 300px; overflow: hidden; position: absolute; left: 0pt; top: 0pt; ">
 				        {{loop $Product['Uploadfile'] $uploadfile}}
-					    	<li><img width="50" height="50" name="{{$this->Html->url('http://51daifan-images.stor.sinaapp.com'.$uploadfile['Uploadfile']['mid_thumb'])}}" alt="{{$Product['Product']['title']}}" src="{{$this->Html->url('http://51daifan-images.stor.sinaapp.com'.$uploadfile['Uploadfile']['thumb'])}}" onerror="this.src='http://www.360buy.com/images/none/none_50.gif'"></li>
+					    	<li><img width="50" height="50" name="{{$this->Html->url('http://51daifan-images.stor.sinaapp.com'.$uploadfile['Uploadfile']['mid_thumb'])}}" alt="{{$Product['Product']['title']}}" src="{{$this->Html->url('http://51daifan-images.stor.sinaapp.com'.$uploadfile['Uploadfile']['thumb'])}}"></li>
 					    {{/loop}} 
 						</ul>
 					</div>
 				</div>
-                
+         {{else}}
+            <div onclick="" id="spec-n1">
+                <a  class="jqzoom" onclick="return false;" href="{{$this->Html->url($Product['Product']['coverimg'])}}" >
+                    <img width="350" alt="" src="{{$this->Html->url(small_thumb_link($Product['Product']['coverimg']))}}"
+                         onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
+                </a>
+            </div>
+
+            <div id="spec-thumb-list" >
+                <div id="marquee-left" class="control"></div>
+                <div id="marquee-right" class="control"></div>
+                <div class="marquee" direction="left" step="1" pause="2000" style="position: relative; overflow: hidden; width: 300px; height: 56px;">
+                    <ul class="list-h" style="width: 300px; overflow: hidden; position: absolute; left: 0pt; top: 0pt; ">
+                        {{loop $Product['Uploadfile'] $uploadfile}}
+                        <li><img width="50" height="50" name="{{$this->Html->url(small_thumb_link($Product['Product']['coverimg']))}}" alt="{{$Product['Product']['title']}}" src="{{$this->Html->url($Product['Product']['coverimg'])}}" onerror="this.src='http://www.360buy.com/images/none/none_50.gif'"></li>
+                        {{/loop}}
+                    </ul>
+                </div>
+            </div>
+         {{/if}}
 </div>
