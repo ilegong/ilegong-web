@@ -485,7 +485,7 @@ class UsersController extends AppController {
 
         $this->pageTitle = __('登录');
 
-        $redirect = $this->data['User']['referer'] ? $this->data['User']['referer'] : ($_GET['referer'] ? $_GET['referer'] : $this->Auth->redirect());
+        $redirect = $this->data['User']['referer'] ? $this->data['User']['referer'] : ($_REQUEST['referer'] ? $_REQUEST['referer'] : $this->Auth->redirect());
         $success = false;
 
         if(empty($this->data) && $this->request->query['data']){ //get 方式传入时,phonegap
@@ -532,7 +532,8 @@ class UsersController extends AppController {
             }
         }
 
-        $login_by_account = isset($this->data['User']['username']);
+        $login_by_account = isset($this->data['User']['username']) ;
+        $login_by_phone =  isset($this->data['User']['mobilephone']);
         if ($success) {
             $this->Hook->call('loginSuccess');
 
@@ -565,11 +566,15 @@ class UsersController extends AppController {
             } else {
                 $this->redirect($redirect);
             }
-        } elseif ($login_by_account) {
+        } elseif ($login_by_account || $login_by_phone) {
             $loginFailMsg = __('username or password not right');
             if ($this->RequestHandler->accepts('json') || $this->RequestHandler->isAjax() || isset($_GET['inajax'])) {
                 // ajax 操作
-                $errorinfo = array('error' => '用户名或密码错误', 'tasks' => array(array('dotype' => 'html', 'selector' => '#login_errorinfo', 'content' => $loginFailMsg)));
+                if($login_by_account){
+                    $errorinfo = array('error' => '用户名或密码错误', 'tasks' => array(array('dotype' => 'html', 'selector' => '#login_errorinfo', 'content' => $loginFailMsg)));
+                }else{
+                    $errorinfo = array('error' => '手机号码或密码错误', 'tasks' => array(array('dotype' => 'html', 'selector' => '#login_errorinfo', 'content' => $loginFailMsg)));
+                }
                 $content = json_encode($errorinfo);
                 $this->autoRender = false; // 不显示模板
                 if($_GET['jsoncallback']){

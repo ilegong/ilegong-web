@@ -8,7 +8,7 @@
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="phoneLogin">
-                    <form action="{{$this->Html->url('/users/login')}}" id="loginform" accept-charset="utf-8"  method="get" role="form" {{if $isajax}} onsubmit="return ajaxeSubmitForm(this,'loginSucess');" {{/if}}>
+                    <form action="{{$this->Html->url('/users/login')}}" id="loginform" accept-charset="utf-8"  method="post" role="form" {{if $isajax}} onsubmit="return ajaxeSubmitForm(this,'loginSucess');" {{/if}}>
                     <div  class="input-group">
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
                         <input type="text" title="" required="required"  data-original-title="" tabindex="1"  name="data[User][mobilephone]" placeholder="输入手机号码" id="phone" class="form-control">
@@ -29,7 +29,7 @@
                     </form>
                 </div>
                 <div class="tab-pane" id="usernameLogin">
-                    <form action="{{$this->Html->url('/users/login')}}"  accept-charset="utf-8"  method="get" role="form" {{if $isajax}} onsubmit="return ajaxeSubmitForm(this,'loginSucess');" {{/if}}>
+                    <form action="{{$this->Html->url('/users/login')}}"  accept-charset="utf-8"  method="post" role="form" {{if $isajax}} onsubmit="return ajaxeSubmitForm(this,'loginSucess');" {{/if}}>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-user"></i></span>
                         <input type="text" title="" required="required"  data-original-title="" tabindex="1"  name="data[User][username]" placeholder="输入用户名" id="name" class="form-control">
