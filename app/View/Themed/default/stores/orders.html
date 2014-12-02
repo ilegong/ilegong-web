@@ -137,12 +137,14 @@
             </table>
             {{/loop}}
         </div>
-        <div>
+        {{if $total_count>0}}
+        <div style="margin-left: 60%">
             {{$this->Paginator->first(__('首页', true), array(), null);}}
             {{$this->Paginator->prev(__('上一页', true), array(), null);}}
             {{$this->Paginator->numbers();}}
             {{$this->Paginator->next(__('下一页', true), array(), null);}}
             {{$this->Paginator->last(__('末页', true), array(), null);}}
         </div>
+        {{/if}}
     </div>
 </div>
