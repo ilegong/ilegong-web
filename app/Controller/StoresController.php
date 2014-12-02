@@ -80,6 +80,26 @@ class StoresController extends AppController {
         $this->set('op_cate', 'profile');
     }
 
+    public function my_story() {
+        $this->checkAccess();
+
+        if (!empty($this->data)) { //有数据提交
+            $brandId = $this->brand['Brand']['id'];
+            $story = $this->data['Brand']['content'];
+            $this->Brand->id = $brandId;
+            $this->Brand->set('content',$story);
+            $this->Brand->save();
+            $this->Session->setFlash('保存成功');
+
+            $this->redirect(array('action' => 'my_story',$brandId));
+        }
+        else{
+            $this->data =  $this->brand;; //加载数据到表单中
+        }
+
+        $this->set('op_cate', 'profile');
+    }
+
     public function index() {
         if ($this->currentUser['id']) {
             $this->loadModel('Brand');
