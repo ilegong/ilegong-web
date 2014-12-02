@@ -42,11 +42,15 @@ class Order extends AppModel {
      * @param $uid
      * @return array orders, order_carts and mapped brands
      */
-    public function get_user_orders($uid) {
+    public function get_user_orders($uid, $order_status=null) {
 
+        $cond = array('creator' => $uid, 'published' => PUBLISH_YES, 'deleted' => DELETED_NO);
+        if ($order_status !== null) {
+            $cond['status'] = $order_status;
+        }
         $orders = $this->find('all', array(
             'order' => 'id desc',
-            'conditions' => array('creator' => $uid, 'published' => PUBLISH_YES, 'deleted' => DELETED_NO),
+            'conditions' => $cond,
         ));
         $order_ids = array();
         $brandIds = array();

@@ -26,7 +26,12 @@ class ApiOrdersController extends AppController {
 
         $uid = $this->currentUser['id'];
 
-        list($orders, $order_carts, $mappedBrands) = $this->Order->get_user_orders($uid);
+        $status = null;
+        if (isset($_REQUEST['status'])) {
+            $status = intval($_REQUEST['status']);
+        }
+
+        list($orders, $order_carts, $mappedBrands) = $this->Order->get_user_orders($uid, $status);
 
         $counts = array();
         foreach($order_carts as $order_id => $c){
