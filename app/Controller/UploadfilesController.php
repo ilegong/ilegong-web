@@ -60,6 +60,7 @@ class UploadfilesController extends AppController {
 					else{
 						$info['message'] = '<a href="'.$file_url.'" target="_blank">'.__( 'Preview').'</a>';
 					}
+                    $info['fspath'] = $file_url;
 				}
 				else{
 					$modelname = Inflector::classify ( $this->name );
