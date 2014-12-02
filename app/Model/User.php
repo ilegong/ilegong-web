@@ -44,10 +44,10 @@ class User extends AppModel {
             ),
         ),
         'mobilephone' => array(
-            'unique' => array(
-                'rule' => 'isUnique',
-                'message' => 'The phone has already been taken.',
-            ),
+//            'unique' => array(
+//                'rule' => 'isUnique',
+//                'message' => 'The phone has already been taken.',
+//            ),
             'notempty' => array(
                 'rule' => 'notEmpty',
                 'message' => 'This field cannot be left blank.',
