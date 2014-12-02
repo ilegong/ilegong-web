@@ -502,52 +502,14 @@ class OrdersController extends AppController{
     }
 	
 	function mine(){
-		$this->loadModel('Brand');
         $uid = $this->currentUser['id'];
-        $brands = $this->Brand->find('first',array(
-				'conditions' => array('creator'=> $uid)));
-		if(!empty($brands)){
-			$this->set('is_business',true);
-		}
-		
-		$orders = $this->Order->find('all',array(
-				'order' => 'id desc',
-				'conditions'=> array('creator'=>$this->currentUser['id'], 'published' => 1),
-		));
-		$ids = array();
-        $brandIds = array();
-		foreach($orders as $o){
-			$ids[] = $o['Order']['id'];
-            $brandIds[] = $o['Order']['brand_id'];
-		}
 
-		$this->loadModel('Cart');
-		$Carts = $this->Cart->find('all',array(
-				'conditions'=>array(
-						'order_id' => $ids,
-						'creator'=> $this->currentUser['id']
-		)));
+        list($orders, $order_carts, $mappedBrands) = $this->Order->get_user_orders($uid);
 
         $counts = array();
-		$order_carts = array();
-		foreach($Carts as $c){
-			$order_id = $c['Cart']['order_id'];
-			if(!isset($order_carts[$order_id])) $order_carts[$order_id] = array();
-			$order_carts[$order_id][] = $c;
-            $counts[$order_id] = $c['Cart']['num'];
+		foreach($order_carts as $order_id => $c){
+            $counts[$order_id] += $c['Cart']['num'];
 		}
-
-        $mappedBrands = array();
-        if ($brandIds) {
-            $brands = $this->Brand->find('all', array(
-                'conditions' => array('id' => $brandIds),
-                'fields' => array('id', 'name', 'created', 'slug', 'coverimg')
-            ));
-
-            foreach($brands as $brand) {
-                $mappedBrands[$brand['Brand']['id']] = $brand;
-            }
-        }
 
         $this->set('brands', $mappedBrands);
 		$this->set('orders',$orders);

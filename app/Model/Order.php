@@ -38,4 +38,53 @@ class Order extends AppModel {
         return $rtn;
     }
 
+    /**
+     * @param $uid
+     * @return array orders, order_carts and mapped brands
+     */
+    public function get_user_orders($uid) {
+
+        $orders = $this->find('all', array(
+            'order' => 'id desc',
+            'conditions' => array('creator' => $uid, 'published' => PUBLISH_YES, 'deleted' => DELETED_NO),
+        ));
+        $order_ids = array();
+        $brandIds = array();
+        foreach ($orders as $o) {
+            $order_ids[] = $o['Order']['id'];
+            $brandIds[] = $o['Order']['brand_id'];
+        }
+
+        $order_carts = array();
+        if (!empty($order_ids)) {
+            $cartM = ClassRegistry::init('Cart');
+            $Carts = $cartM->find('all', array(
+                'conditions' => array(
+                    'order_id' => $order_ids,
+                    'creator' => $uid,
+                    'status' => CART_ITEM_STATUS_BALANCED,
+                )));
+
+            foreach ($Carts as $c) {
+                $order_id = $c['Cart']['order_id'];
+                if (!isset($order_carts[$order_id])) $order_carts[$order_id] = array();
+                $order_carts[$order_id][] = $c;
+            }
+        }
+
+        $mappedBrands = array();
+        if (!empty($brandIds)) {
+            $brandM = ClassRegistry::init('Brand');
+            $brands = $brandM->find('all', array(
+                'conditions' => array('id' => $brandIds),
+                'fields' => array('id', 'name', 'created', 'slug', 'coverimg')
+            ));
+
+            foreach ($brands as $brand) {
+                $mappedBrands[$brand['Brand']['id']] = $brand;
+            }
+        }
+        return array($orders, $order_carts, $mappedBrands);
+    }
+
 } 

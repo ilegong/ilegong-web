@@ -31,7 +31,6 @@ App::uses('CustomRouter', 'Lib');
         array('controller'=>'apple201410','action' => 'award'),
         array('pass' => array('type'), 'type'=>'[\w_]+'));
 
-
     CustomRouter::connect('/:controller/:yearmonth/:slug',
 	array('action' => 'view'),
 	array('pass' => array('slug'),'controller'=>'[\w_]+','yearmonth'=>"[0-9]{8}")
