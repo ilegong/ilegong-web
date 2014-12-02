@@ -85,13 +85,13 @@ class UploadfilesController extends AppController {
 						$info ['fspath'] = $this->data [$modelname] ['fspath'];
 						$info ['file_id'] = $file_id;
 						$info ['message'] = '<div class="ui-upload-filelist" style="float:left;">';
-						
-						if (substr ( $this->data [$modelname] ['thumb'], 0, 7 ) != 'http://') {
-							$file_url = Router::url(str_replace ( '//', '/', $this->request->webroot . ($this->data [$modelname] ['thumb']) ));
-						} else {
-							$file_url = $this->data [$modelname] ['thumb'];
-						}
-						
+
+                        if (substr ( $this->data [$modelname] ['thumb'], 0, 7 ) != 'http://') {
+                            $file_url = UPLOAD_FILE_URL.str_replace ( '//', '/', ($this->data [$modelname] ['thumb']) );
+                        } else {
+                            $file_url = $this->data [$modelname] ['thumb'];
+                        }
+
 						if ('image' == substr ( $this->data [$modelname] ['type'], 0, 5 )) {
 							$info ['message'] .= '<img src="' . $file_url . '" width="100px" height="100px"/><br/>';
 						}
