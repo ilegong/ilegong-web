@@ -74,7 +74,7 @@ class UploadfilesController extends AppController {
 					// fspath，thumb，mid_thumb 为相对路径
 					$this->data [$modelname] ['fspath'] = str_replace ( '\\', '/', $this->SwfUpload->relativeUrl . $this->SwfUpload->savename );
 					// $file_type =
-					$this->data [$modelname] ['type'] = $this->SwfUpload->file_type;
+					$this->data [$modelname] ['type'] = $fileifo['file_type'];
 					if ('image' == substr ( $this->data [$modelname] ['type'], 0, 5 )) {
 						$this->data [$modelname] ['thumb'] = str_replace ( '\\', '/', $this->SwfUpload->relativeUrl . 'thumb_s' . DS . $this->SwfUpload->savename );
 						$this->data [$modelname] ['mid_thumb'] = str_replace ( '\\', '/', $this->SwfUpload->relativeUrl . 'thumb_m' . DS . $this->SwfUpload->savename );
