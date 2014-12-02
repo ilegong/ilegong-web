@@ -11,4 +11,10 @@ class OpenstoresController extends AppController{
     public function apply(){
 
     }
+    public function base(){
+
+    }
+    public function test(){
+
+    }
 }
