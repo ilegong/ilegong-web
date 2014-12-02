@@ -9,11 +9,11 @@
  */
 class ShichituansController extends AppController{
     public $name = 'Shichituans';
-    public $Helper = array('Html', 'Form', 'Paginator','Session');
+    public $helpers = array('Html', 'Form', 'Paginator','Session');
     var $components = array(
         'Email', 'Session', 'Paginator'
     );
-    var $user = array('Shichituan', 'User');
+    var $uses = array('Shichituan', 'User');
     var $paginate = array(
         'Shichituan' => array(
             'order' => 'Shichituan.shichi_id ASC',
@@ -78,6 +78,7 @@ class ShichituansController extends AppController{
     }
 
     public function shichi_check($period = '') {
+        if($this->currentUser['id']){
         if ($this->is_admin($this->currentUser['id'])) {
             $this->Paginator->settings = $this->paginate;
             $shichituans = $this->Paginator->paginate('Shichituan', array('Shichituan.period' => $period));
@@ -93,6 +94,8 @@ class ShichituansController extends AppController{
 
 
         }
+        }
+        $this->redirect('/users/login');
 
     }
 
@@ -145,7 +148,6 @@ class ShichituansController extends AppController{
     }
 
     public function shichi_view(){
-
         $result = $this->Shichituan->findByUser_id($this->currentUser['id'], array('Shichituan.shichi_id', 'Shichituan.status','Shichituan.pictures','Shichituan.period'), 'Shichituan.shichi_id DESC');
         $shichiId = $result['Shichituan']['shichi_id'];
         $status = $result['Shichituan']['status'];
