@@ -1,4 +1,3 @@
-
 <?php
 
 /**
@@ -78,7 +77,7 @@ class ShichituansController extends AppController{
     }
 
     public function shichi_check($period = '') {
-        if($this->currentUser['id']){
+        if ($this->currentUser['id']){
         if ($this->is_admin($this->currentUser['id'])) {
             $this->Paginator->settings = $this->paginate;
             $shichituans = $this->Paginator->paginate('Shichituan', array('Shichituan.period' => $period));
