@@ -20,6 +20,7 @@ class CheckController extends AppController{
             session_start();//开启session;
             if (isset($_SESSION['captcha']) && $_SESSION['captcha'] == $_POST['keyString']) {
                 $mobilephone = $_POST['phoneNumbers'];
+                unset($_SESSION['captcha']);
                 $verifyCode = '';
                 $str = '1234567890';
                 //定义用于验证的数字和字母;
@@ -45,7 +46,7 @@ class CheckController extends AppController{
                 curl_setopt($ch, CURLOPT_USERPWD, 'api:key-fdb14217a00065ca1a47b8fcb597de0d');
 
                 curl_setopt($ch, CURLOPT_POST, TRUE);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, array('mobile' => $mobilephone, 'message' => '验证码:' . $verifyCode . '【朋友说】'));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, array('mobile' => $mobilephone, 'message' => '尊敬的用户，感谢您对朋友说的支持，短信验证码：'. $verifyCode .'，有效期为30分钟，请尽快验证。【朋友说】'));
 
                 $res = curl_exec($ch);
                 curl_close($ch);
