@@ -83,19 +83,19 @@
     </ol>
 </div>
 <div class="applyBox ">
-    <form action="/stores/apply_store" method="post" id="J_ApplyForm"><input type="hidden" name="ua" id="UA_InputId" >
+    <form action="/openstores/apply" method="post" id="J_ApplyForm"><input type="hidden" name="ua" id="UA_InputId" >
         <div class="form-group">
             <div class="form-item">
                 <span class="form-label">店铺名称： </span>
-                <input class="form-control" name="data[Store][store_name]" id="store_name" type="text" value="" placeholder="用户直接看到的店铺名字" >
+                <input class="form-control" name="data[Openstore][store_name]" id="store_name" type="text" value="" placeholder="用户直接看到的店铺名字" >
             </div>
             <div class="form-item">
                 <span class="form-label">联系人姓名： </span>
-                <input class="form-control" name="data[Store][person_name]" id="person_name" type="text" value="" placeholder="请填写完整的真实姓名" >
+                <input class="form-control" name="data[Openstore][link_name]" id="person_name" type="text" value="" placeholder="请填写完整的真实姓名" >
             </div>
             <div class="form-item">
                 <span class="form-label">联系人手机号： </span>
-                <input class="form-control" name="data[Store][mobile]" id="mobile_number" type="text" value="" placeholder="我们会在第一时间联系你" >
+                <input class="form-control" name="data[Openstore][mobile]" id="mobile_number" type="text" value="" placeholder="我们会在第一时间联系你" >
             </div>
             <div class="form-item form-item-checkcode">
                 <span class="form-label tsl" >验证码： </span>
@@ -105,13 +105,13 @@
             </div>
             <div class="form-item form-item-messagecode">
                 <span class="form-label tsl">短信验证码： </span>
-                <input id="message_input" class="form-control" style="display: inline; width: 82px" name="data[Store][msg_code]" type="text" data-outer_placeholder="">
+                <input id="message_input" class="form-control" style="display: inline; width: 82px" name="data[Openstore][msg_code]" type="text" data-outer_placeholder="">
                 <input type="button" id="btnMobileCode" value="获取" />
                 <span id = "sendInfo"></span>
             </div>
             <div class="form-item">
                 <span class="form-label">联系人QQ： </span>
-                <input class="form-control" name="data[Store][qq]" id="qq_number" type="text" value="" >
+                <input class="form-control" name="data[Openstore][qq]" id="qq_number" type="text" value="" >
             </div>
         </div>
         <div class="form-group">
