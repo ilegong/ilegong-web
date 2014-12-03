@@ -329,6 +329,7 @@ class UsersController extends AppController {
     }
 
     function wxBindToAccount($defUsername = '') {
+        $this->pageTitle =__('绑定帐号');
     	$userinfo = $this->Auth->user();
         $uid = $userinfo['id'];
         if (!$uid) {
@@ -347,7 +348,7 @@ class UsersController extends AppController {
 
         $oauth_openid = $wxBind['oauth_openid'];
         if (!empty($wxBind) && $userinfo['username'] != $oauth_openid){
-            $this->Session->setFlash(__('您的微信已经与其他用户'. $userinfo['username'] .'绑定，不能再绑定其他帐号'));
+            $this->__message(__('您的微信已经与帐号'. $userinfo['username'] .'绑定，不能再绑定其他帐号'), '/', 60);
             return;
         }
 
