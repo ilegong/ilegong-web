@@ -369,8 +369,8 @@ class UsersController extends AppController {
                 if (!empty($newUser)) {
                     $newUserId = $newUser['User']['id'];
                     if ($uid != $newUserId) {
-                        $this->transferUserInfo($oauth_openid, $uid, $newUserId);
-                        $this->Oauthbind->update_wx_bind_uid();
+                        $this->transferUserInfo($uid, $newUserId);
+                        $this->Oauthbind->update_wx_bind_uid($oauth_openid, $uid, $newUserId);
                         $this->logoutCurrUser();
                         $this->Auth->login();
                         $this->__message('绑定成功! 自动跳转到您的个人中心', '/users/me.html', 5);

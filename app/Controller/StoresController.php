@@ -110,7 +110,7 @@ class StoresController extends AppController {
             if (!empty($this->brand)) {
                 //
                 $this->set('brand', $this->brand);
-                if ($this->currentUser['id'] == $this->brand['Brand']['creator']) {
+                if ($uid == $this->brand['Brand']['creator']) {
                     $this->loadModel('Oauthbind');
                     $bind = $this->Oauthbind->findWxServiceBindByUid($uid);
                     if (empty($bind)) {
