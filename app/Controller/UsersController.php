@@ -341,7 +341,8 @@ class UsersController extends AppController {
         $this->data['User']['username'] = trim($this->data['User']['username']);
         $wxBind = $this->Oauthbind->findWxServiceBindByUid($uid);
 
-        if (!empty($wxBind) && $userinfo['username'] != $wxBind['oauth_openid']){
+        $oauth_openid = $wxBind['oauth_openid'];
+        if (!empty($wxBind) && $userinfo['username'] != $oauth_openid){
             $this->Session->setFlash(__('您的微信已经与其他用户'. $userinfo['username'] .'绑定，不能再绑定其他帐号'));
             return;
         }
@@ -354,10 +355,6 @@ class UsersController extends AppController {
             }
 
             if (!empty($this->data['User']['username']) && !empty($this->data['User']['password'])) {
-//
-//            if ($this->User->hasAny(array('User.username' => $this->data['User']['username']))){
-//                $this->Session->setFlash(__('Username is taken by others.'));
-//            }
 
                 //TODO: 防止一个用户名绑定了多个微信
                 $newUser = $this->User->find('first', array('conditions' => array(
@@ -370,9 +367,12 @@ class UsersController extends AppController {
                 )));
 
                 if (!empty($newUser)) {
-                    if ($uid != $newUser['User']['id']) {
-                        $this->transferUserInfo($uid, $newUser['User']['id']);
-                        $this->Auth->login($newUser);
+                    $newUserId = $newUser['User']['id'];
+                    if ($uid != $newUserId) {
+                        $this->transferUserInfo($oauth_openid, $uid, $newUserId);
+                        $this->Oauthbind->update_wx_bind_uid();
+                        $this->logoutCurrUser();
+                        $this->Auth->login();
                         $this->__message('绑定成功! 自动跳转到您的个人中心', '/users/me.html', 5);
                     }
                     $this->Session->setFlash(__('绑定成功'));
