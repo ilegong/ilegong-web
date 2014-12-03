@@ -337,13 +337,13 @@ class UsersController extends AppController {
     	}
 
         $this->loadModel('Oauthbind');
+        $wxBind = $this->Oauthbind->findWxServiceBindByUid($uid);
         if (empty($wxBind)) {
             $this->set('error', 'not_wx_user');
             return;
         }
 
         $this->data['User']['username'] = trim($this->data['User']['username']);
-        $wxBind = $this->Oauthbind->findWxServiceBindByUid($uid);
 
         $oauth_openid = $wxBind['oauth_openid'];
         if (!empty($wxBind) && $userinfo['username'] != $oauth_openid){
