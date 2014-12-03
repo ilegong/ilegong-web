@@ -80,14 +80,14 @@
                 cache: !1,
                 success: function (a) {
                     if (a.error == 0) {
-                        $("#sendInfo").html("验证短信已发出，请注意接收");
+                        $("#sendInfo").html("验证短信已发出，请注意接收，未收到可再获取");
                     } else if (a.check_error == 1) {
                         $("#checkInfo").html("验证码错误，请重新输入").addClass('help-inline ');
                     }
 
                 }
             });
-            var count = 30 * 60;
+            var count = 60;
             var countdown = setInterval(CountDown, 1000);
 
             function CountDown() {
