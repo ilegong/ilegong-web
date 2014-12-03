@@ -1,9 +1,11 @@
 <div  class="container">
 <div class="row">
+    <h1>绑定帐号</h1>
 	<div class="col-xs-12">
      {{if $error}}
         <div class="alert alert-danger">
-            {{if $error == 'not_wx_user'}}您当前不是微信登录，点击<a href="{{$this->Html->url('/users/login.html?force_login=true&referer='. urlencode($_SERVER['REQUEST_URI']))}}">切换到微信号登录</a>{{/if}}
+            {{if $error == 'not_wx_user'}}您当前不是用微信登录的 <br/>
+            <a class="btn btn-warning" href="{{$this->Html->url('/users/login.html?force_login=true&referer='. urlencode($_SERVER['REQUEST_URI']))}}">切换到微信号登录</a>{{/if}}
         </div>
      {{else}}
 
