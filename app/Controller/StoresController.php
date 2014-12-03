@@ -101,7 +101,8 @@ class StoresController extends AppController {
     }
 
     public function index() {
-        if ($this->currentUser['id']) {
+        $uid = $this->currentUser['id'];
+        if ($uid) {
             $this->loadModel('Brand');
             $this->brand = $this->Brand->find('first',array('conditions'=>array(
                 'creator'=>$this->currentUser['id'],
@@ -109,6 +110,13 @@ class StoresController extends AppController {
             if (!empty($this->brand)) {
                 //
                 $this->set('brand', $this->brand);
+                if ($this->currentUser['id'] == $this->brand['Brand']['creator']) {
+                    $this->loadModel('Oauthbind');
+                    $bind = $this->Oauthbind->findWxServiceBindByUid($uid);
+                    if (empty($bind)) {
+                        $this->set('should_bind', true);
+                    }
+                }
             } else {
                 $this->redirect('/');
             }
