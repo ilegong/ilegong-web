@@ -340,6 +340,10 @@ class UsersController extends AppController {
 
         $this->data['User']['username'] = trim($this->data['User']['username']);
         $wxBind = $this->Oauthbind->findWxServiceBindByUid($uid);
+        if (empty($wxBind)) {
+            $this->set('error', 'not_wx_user');
+            return;
+        }
 
         $oauth_openid = $wxBind['oauth_openid'];
         if (!empty($wxBind) && $userinfo['username'] != $oauth_openid){
@@ -373,9 +377,8 @@ class UsersController extends AppController {
                         $this->Oauthbind->update_wx_bind_uid($oauth_openid, $uid, $newUserId);
                         $this->logoutCurrUser();
                         $this->Auth->login();
-                        $this->__message('绑定成功! 自动跳转到您的个人中心', '/users/me.html', 5);
                     }
-                    $this->Session->setFlash(__('绑定成功'));
+                    $this->__message('绑定成功! 自动跳转到您的个人中心', '/users/me.html', 5);
                 } else {
                     $this->Session->setFlash(__('用户名或者密码不正确', true));
                 }

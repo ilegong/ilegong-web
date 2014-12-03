@@ -1,7 +1,13 @@
 <div  class="container">
 <div class="row">
 	<div class="col-xs-12">
-	     <div class="alert alert-warning">请输入用户名与密码绑定微信帐号 </div>
+     {{if $error}}
+        <div class="alert alert-danger">
+            {{if $error == 'not_wx_user'}}您当前不是微信登录，点击<a href="{{$this->Html->url('/users/login.html?force_login=true&referer='. urlencode($_SERVER['REQUEST_URI']))}}">切换到微信号登录</a>{{/if}}
+        </div>
+     {{else}}
+
+     <div class="alert alert-warning">请输入用户名与密码绑定微信帐号</div>
     <?php
 	    echo $this->Session->flash();
 	    echo $this->Form->create('User',array(
@@ -38,6 +44,8 @@
 			'after' => '</div>',
     ))}}
     {{$this->Form->end()}}
+
+    {{/if}}
 	</div>
 </div>	
 </div>
