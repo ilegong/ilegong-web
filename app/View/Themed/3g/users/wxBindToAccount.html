@@ -1,0 +1,43 @@
+<div  class="container">
+<div class="row">
+	<div class="col-xs-12">
+	     <div class="alert alert-warning">请输入用户名与密码绑定微信帐号 </div>
+    <?php
+	    echo $this->Session->flash();
+	    echo $this->Form->create('User',array(
+	    'class'=>'form-horizontal', 
+	    'inputDefaults' => array(
+			'div' => array(
+			'class' => 'form-group'
+			),
+			'label' => array(
+			'class' => 'col-sm-2 control-label'
+			),
+			'between' => '<div class="col-sm-10">',
+			'seperator' => '</div>',
+			'after' => '</div>',
+			'class' => 'form-control',
+		),
+		'role' => 'form',));
+    ?>
+        <fieldset>
+        <?php
+        	echo $this->Form->input('id');
+			echo $this->Form->input('username',array('type' => 'text','label'=> array(
+			'class' => 'col-sm-2 control-label','text'=>'用户名'
+			)));
+            echo $this->Form->input('password', array('type' => 'password','value' => '','label'=>array(
+			'class' => 'col-sm-2 control-label','text'=>'密码'
+			)));
+        ?>
+        </fieldset>
+    {{$this->Form->submit('Submit',array(
+    		'class' => 'btn btn-primary',
+			'div' => 'form-group',
+			'before' => '<div class="col-sm-offset-2 col-sm-10">',
+			'after' => '</div>',
+    ))}}
+    {{$this->Form->end()}}
+	</div>
+</div>	
+</div>

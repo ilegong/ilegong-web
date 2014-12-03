@@ -328,6 +328,63 @@ class UsersController extends AppController {
     	}
     }
 
+    function wxBindToAccount($defUsername = '') {
+    	$userinfo = $this->Auth->user();
+        $uid = $userinfo['id'];
+        if (!$uid) {
+    		$this->Session->setFlash(__('You are not authorized to access that location.', true));
+    		$this->redirect(array('action' => 'login'));
+    	}
+
+        $this->loadModel('Oauthbind');
+
+        $this->data['User']['username'] = trim($this->data['User']['username']);
+        $wxBind = $this->Oauthbind->findWxServiceBindByUid($uid);
+
+        if (!empty($wxBind) && $userinfo['username'] != $wxBind['oauth_openid']){
+            $this->Session->setFlash(__('您的微信已经与其他用户'. $userinfo['username'] .'绑定，不能再绑定其他帐号'));
+            return;
+        }
+
+        if (!empty($this->data) && !empty($this->data['User']['username'])) {
+
+            if (!empty($wxBind) && $this->data['User']['username'] == $userinfo['username']){
+                $this->Session->setFlash(__('绑定成功！'));
+                return;
+            }
+
+            if (!empty($this->data['User']['username']) && !empty($this->data['User']['password'])) {
+//
+//            if ($this->User->hasAny(array('User.username' => $this->data['User']['username']))){
+//                $this->Session->setFlash(__('Username is taken by others.'));
+//            }
+
+                //TODO: 防止一个用户名绑定了多个微信
+                $newUser = $this->User->find('first', array('conditions' => array(
+
+                    'OR' => array(
+                        'username' => $this->data['User']['username'],
+                        'mobilephone' => $this->data['User']['username'],
+                    ),
+                    'password' => Security::hash(trim($this->data['User']['password']), null, true),
+                )));
+
+                if (!empty($newUser)) {
+                    if ($uid != $newUser['User']['id']) {
+                        $this->transferUserInfo($uid, $newUser['User']['id']);
+                        $this->Auth->login($newUser);
+                        $this->__message('绑定成功! 自动跳转到您的个人中心', '/users/me.html', 5);
+                    }
+                    $this->Session->setFlash(__('绑定成功'));
+                } else {
+                    $this->Session->setFlash(__('用户名或者密码不正确', true));
+                }
+            } else {
+                $this->Session->setFlash(__('请输入用户名、密码', true));
+            }
+        }
+    }
+
     function edit_nick_name() {
         $userinfo = $this->Auth->user();
         if (!$userinfo['id']) {
@@ -880,14 +937,54 @@ class UsersController extends AppController {
      * @param $new_serviceAccount_bind_uid
      */
     private function transferUserInfo($old_serviceAccount_bind_uid, $new_serviceAccount_bind_uid) {
+        if ($old_serviceAccount_bind_uid == 0 || $new_serviceAccount_bind_uid == 0) {
+            return;
+        }
+
         $this->log("Merge WX Account from  $old_serviceAccount_bind_uid to " . $new_serviceAccount_bind_uid);
         //copy orders && address info
         $this->loadModel('Order');
         $this->loadModel('OrderConsignee');
-
+        $this->loadModel('Cart');
         $orderUpdated = $this->Order->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
         $consigneeUpdated = $this->OrderConsignee->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
-        $this->log("Merge WX Account from  $old_serviceAccount_bind_uid to " . $new_serviceAccount_bind_uid.": orderUpdated=".$orderUpdated.", consigneeUpdated=". $consigneeUpdated);
+        $cartsUpdated =$this->Cart->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
+
+        $this->log("Merge WX Account from  $old_serviceAccount_bind_uid to " . $new_serviceAccount_bind_uid.": orderUpdated=".$orderUpdated.", consigneeUpdated=". $consigneeUpdated .", cartsUpdated=".$cartsUpdated);
+
+        $this->loadModel('Brand');
+        $this->Brand->updateAll(array('creator' => $new_serviceAccount_bind_uid), array('creator' => $old_serviceAccount_bind_uid));
+
+        $this->loadModel('TrackLog');
+        $this->TrackLog->updateAll(array('from' => $new_serviceAccount_bind_uid), array('from' => $old_serviceAccount_bind_uid));
+        $this->TrackLog->updateAll(array('to' => $new_serviceAccount_bind_uid), array('to' => $old_serviceAccount_bind_uid));
+
+        $this->loadModel('AwardWeixinTimeLog');
+        $this->AwardWeixinTimeLog->updateAll(array('uid' => $new_serviceAccount_bind_uid), array('uid' => $old_serviceAccount_bind_uid));
+
+        $this->loadModel('AwardResult');
+        $this->AwardResult->updateAll(array('uid' => $new_serviceAccount_bind_uid), array('uid' => $old_serviceAccount_bind_uid));
+
+//        $this->loadModel('AwardInfo');
+//        $this->AwardInfo->updateAll(array('uid' => $new_serviceAccount_bind_uid), array('uid' => $old_serviceAccount_bind_uid));
+
+        $this->loadModel('SharedOffer');
+        $this->SharedOffer->updateAll(array('uid' => $new_serviceAccount_bind_uid), array('uid' => $old_serviceAccount_bind_uid));
+
+        $this->loadModel('SharedSlice');
+        $this->SharedSlice->updateAll(array('accept_user' => $new_serviceAccount_bind_uid), array('accept_user' => $old_serviceAccount_bind_uid));
+
+        $this->loadModel('ExchangeLog');
+        $this->ExchangeLog->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
+
+        $this->loadModel('CouponItem');
+        $this->CouponItem->updateAll(array('bind_user' => $new_serviceAccount_bind_uid), array('bind_user' => $old_serviceAccount_bind_uid));
+
+        $this->loadModel('Comment');
+        $this->Comment->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
+
+        $this->loadModel('Shichituan');
+        $this->Shichituan->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
     }
 
     /**
