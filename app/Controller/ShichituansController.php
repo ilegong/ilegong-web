@@ -93,8 +93,9 @@ class ShichituansController extends AppController{
 
 
         }
+        } else {
+            $this->redirect('/users/login');
         }
-        $this->redirect('/users/login');
 
     }
 
