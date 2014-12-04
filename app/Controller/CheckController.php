@@ -46,13 +46,15 @@ class CheckController extends AppController{
                 curl_setopt($ch, CURLOPT_USERPWD, 'api:key-fdb14217a00065ca1a47b8fcb597de0d');
 
                 curl_setopt($ch, CURLOPT_POST, TRUE);
-                curl_setopt($ch, CURLOPT_POSTFIELDS, array('mobile' => $mobilephone, 'message' => '尊敬的用户，感谢您对朋友说的支持，短信验证码：'. $verifyCode .'，有效期为30分钟，请尽快验证。【朋友说】'));
+                curl_setopt($ch, CURLOPT_POSTFIELDS, array('mobile' => $mobilephone, 'message' => '尊敬的用户，感谢您对朋友说的支持，短信验证码：'. $verifyCode .'，有效期为20分钟，请尽快验证。【朋友说】'));
 
                 $res = curl_exec($ch);
                 curl_close($ch);
                 //$res  = curl_error( $ch );
                 //{"error":0,"msg":"ok"}
-                echo $res;
+                $res = json_decode($res, true);
+                $res['timelimit'] = date('H:i',time()+20*60);
+                echo json_encode($res);
             } else {
                 $res = array('check_error' => 1);
                 echo json_encode($res);

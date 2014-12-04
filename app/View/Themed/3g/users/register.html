@@ -27,7 +27,7 @@
                             type="text" required="required" placeholder="短信验证码">
                     <input type="button" class="btn btn-xs btn-warning" id="btnMobileCode" value="获取"/>
                 </div>
-                <span id="sendInfo"></span>
+                <div id="sendInfo"></div>
             </div>
 			<div class="form-group">
 			    <label for="username" class="col-xs-3 control-label">用户名</label>
@@ -80,11 +80,11 @@
                 cache: !1,
                 success: function (a) {
                     if (a.error == 0) {
-                        $("#sendInfo").html("验证短信已发出，请注意接收，未收到可再获取");
+                        $("#sendInfo").html('验证短信已发出，'+ a.timelimit +'之前有效，未收到可再获取');
                     } else if (a.check_error == 1) {
                         $("#checkInfo").html("验证码错误，请重新输入").addClass('help-inline ');
+                        document.getElementById('image_code').src = '/Check/captcha.html?' + Math.random() * 10000;
                     }
-
                 }
             });
             var count = 60;
