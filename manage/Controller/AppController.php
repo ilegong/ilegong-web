@@ -1633,7 +1633,7 @@ class AppController extends Controller {
                         $option_result = $this->{$selectmodel_name}->find('all', array(
                                     'conditions' => $conditions,
                                     'order' => $selectmodel_name . '.id ASC',
-                                    'limit' => 100,
+                                    'limit' => 1000,
                                     'page' => 1,
                                     'fields' => array(
                                         $v['selectvaluefield'], $v['selecttxtfield'],
@@ -1650,7 +1650,7 @@ class AppController extends Controller {
                     $option_result = $this->{$selectmodel_name}->find('all', array(
                                 'conditions' => $conditions,
                                 'order' => $selectmodel_name . '.id ASC',
-                                'limit' => 100,
+                                'limit' => 1000,
                                 'page' => 1,
                                 'fields' => array(
                                     $v['selectvaluefield'], $v['selecttxtfield'],
