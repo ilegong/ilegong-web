@@ -243,42 +243,50 @@ class Apple201410Controller extends AppController
         if (time() - $last > 180 && $gameType == self::MIHOUTAO1411) {
             $this->Session->write('last_chou_jiang', time());
 
-            $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
-            $total_got = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] : 0;
-
-            if ($total_got >= $this->AWARD_LIMIT) {
-                $this->loadModel('AwardResult');
-                $model = $this->AwardResult;
-                $todayAwarded = $model->todayAwarded(date(FORMAT_DATE), $gameType);
-                $iAwarded = $model->userIsAwarded($uid, $gameType);
-                $shouldLimit = $this->shouldLimit($todayAwarded, 6);
-                if (!$iAwarded  && !$shouldLimit) {
-                    $awardResult = array(
-                        'uid' => $uid,
-                        'type' => $gameType,
-                        'finish_time' => date(FORMAT_DATETIME)
-                    );
-                    if (!$model->save($awardResult)) {
-                        $this->log("Save AwardResult failed:" . json_encode($awardResult));
-                    };
-
-                    $award_type = 69;
-                    $type = 1387;
-                    if ($todayAwarded == 3) {
-                        $type = 1388;
-                        $award_type = 109;
-                    }
-
-                    $this->CouponItem->addCoupon($uid, $type, $uid, 'game_'.$gameType.'_'.mktime());
-                    $store = "购买陕西梅县生态猕猴桃时使用";
-                    $validDesc = "有效期至2014年12月05日";
-                    $this->Weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
+            $gameCfg = $this->GameConfig->findByGameType($gameType);
+            if (!empty($gameCfg) && $gameCfg['GameConfig']['game_end']) {
+                $dt = new DateTime($gameCfg['GameConfig']['game_end']);
+                if(mktime() - $dt->getTimestamp() > 0) {
+                    $msg = 'game_end';
                 }
-                $logstr = "Choujian $uid : todayAwarded=$todayAwarded, iAwarded=$iAwarded, shouldLimit=$shouldLimit";
-                $this->log($logstr);
-            } else {
-                $msg = 'not_enough_100';
-                $logstr = "total_got=$total_got, award_limit=".$this->AWARD_LIMIT;
+            }  else {
+                $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
+                $total_got = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] : 0;
+
+                if ($total_got >= $this->AWARD_LIMIT) {
+                    $this->loadModel('AwardResult');
+                    $model = $this->AwardResult;
+                    $todayAwarded = $model->todayAwarded(date(FORMAT_DATE), $gameType);
+                    $iAwarded = $model->userIsAwarded($uid, $gameType);
+                    $shouldLimit = $this->shouldLimit($todayAwarded, 6);
+                    if (!$iAwarded && !$shouldLimit) {
+                        $awardResult = array(
+                            'uid' => $uid,
+                            'type' => $gameType,
+                            'finish_time' => date(FORMAT_DATETIME)
+                        );
+                        if (!$model->save($awardResult)) {
+                            $this->log("Save AwardResult failed:" . json_encode($awardResult));
+                        };
+
+                        $award_type = 69;
+                        $type = 1387;
+                        if ($todayAwarded == 3) {
+                            $type = 1388;
+                            $award_type = 109;
+                        }
+
+                        $this->CouponItem->addCoupon($uid, $type, $uid, 'game_' . $gameType . '_' . mktime());
+                        $store = "购买陕西梅县生态猕猴桃时使用";
+                        $validDesc = "有效期至2014年12月05日";
+                        $this->Weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
+                    }
+                    $logstr = "Choujian $uid : todayAwarded=$todayAwarded, iAwarded=$iAwarded, shouldLimit=$shouldLimit";
+                    $this->log($logstr);
+                } else {
+                    $msg = 'not_enough_100';
+                    $logstr = "total_got=$total_got, award_limit=" . $this->AWARD_LIMIT;
+                }
             }
         } else {
             $logstr = 'too frequently';

@@ -169,7 +169,12 @@
                         if (data.award_type != 0) {
                             utils.alert("恭喜您摇到" + jp.text() + ", <a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
                         } else {
-                            utils.alert(data.msg == 'not_enough_100' ? '累计已摇下'+data.total+'个，还不满100个，请继续努力~' : '手气不太好啊, 过一会儿再试试！');
+                            var msg = '手气不太好啊, 过一会儿再试试！';
+                            if (data.msg == 'not_enough_100'){ msg = '累计已摇下' + data.total + '个，还不满100个，请继续努力~';}
+                            else if (data.msg == 'game_end') {
+                                msg = '活动已结束';
+                            }
+                            utils.alert(msg);
                         }
                     }, 1000);
                 } else {
