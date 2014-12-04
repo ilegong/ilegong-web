@@ -140,17 +140,17 @@
                     if (a.error == 0) {
                         $("#sendInfo").html('验证短信已发出，请注意接收，'+ a.timelimit +'之前有效，未收到可再获取');
                     } else if (a.check_error == 1) {
-                        $("#checkInfo").html("验证码错误，请重新输入").addClass('help-inline ');
+                        $("#checkInfo").html("验证码错误，验证短信发送失败，请重新输入").addClass('help-inline ');
                         document.getElementById('image_code').src = '/Check/captcha.html?' + Math.random() * 10000;
                     }
                 }
             });
-            var count = 60;
+            var count = 50;
             var countdown = setInterval(CountDown, 1000);
 
             function CountDown() {
                 $("#btnMobileCode").attr("disabled", true);
-                $("#btnMobileCode").val("请耐心等待 " + count + " 秒后重新获取!");
+                $("#btnMobileCode").val("等待 " + count + " 秒后重新获取!");
                 if (count == 0) {
                     $("#btnMobileCode").val("获取").removeAttr("disabled");
                     clearInterval(countdown);
