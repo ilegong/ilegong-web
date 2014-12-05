@@ -39,7 +39,7 @@ class UsersController extends AppController {
     public function beforeFilter(){
     	parent::beforeFilter();
 
-        $this->Auth->authenticate = array('WeinxinOAuth', 'Form');
+        $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys');
 
     	if(!defined('IS_LOCALHOST')){
     		if(defined('UC_APPID')){
@@ -551,13 +551,6 @@ class UsersController extends AppController {
 
         if(empty($this->data) && $this->request->query['data']){ //get 方式传入时,phonegap
             $this->data = $this->request->query['data'];
-        }
-        if(!empty($this->data['User']['mobilephone'])){
-            $this->Auth->authenticate = array(
-                'Form' => array(
-                    'fields' => array('username' => 'mobilephone', 'password' => 'password')
-                )
-            );
         }
 
         if(!empty($_GET['force_login'])) {
