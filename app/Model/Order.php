@@ -40,6 +40,7 @@ class Order extends AppModel {
 
     /**
      * @param $uid
+     * @param null $order_status
      * @return array orders, order_carts and mapped brands
      */
     public function get_user_orders($uid, $order_status=null) {
@@ -66,7 +67,7 @@ class Order extends AppModel {
                 'conditions' => array(
                     'order_id' => $order_ids,
                     'creator' => $uid,
-                    'status' => CART_ITEM_STATUS_BALANCED,
+//                    'status' => CART_ITEM_STATUS_BALANCED,
                 )));
 
             foreach ($Carts as $c) {
