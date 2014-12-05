@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "POT-Creation-Date: 2014-09-03 22:53+0800\n"
-"PO-Revision-Date: 2014-09-03 23:25+0800\n"
+"PO-Revision-Date: 2014-12-05 14:35+0800\n"
 "Last-Translator: \n"
 "Language-Team:  <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -13,17 +13,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 1.6.9\n"
-"Language: zh_Hans_CN\n"
+"Language: zh_CN\n"
 
 #: Controller/AppController.php:391;418 Controller/ProductsController.php:71
 #: Controller/UsersController.php:232
 msgid "The Data has been saved"
-msgstr ""
+msgstr "保存成功！"
 
 #: Controller/AppController.php:394;421 Controller/ProductsController.php:74
 #: Controller/UsersController.php:235
 msgid "The Data could not be saved. Please, try again."
-msgstr ""
+msgstr "保存失败，请检查重试"
 
 #: Controller/AppController.php:410 Controller/ProductsController.php:63
 #: Controller/UsersController.php:227
@@ -104,7 +104,7 @@ msgstr "预览"
 
 #: Controller/UsersController.php:75;79;90
 msgid "Users"
-msgstr ""
+msgstr "用户"
 
 #: Controller/UsersController.php:158
 msgid "["
