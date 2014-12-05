@@ -92,4 +92,10 @@ class Order extends AppModel {
         return array($orders, $order_carts, $mappedBrands);
     }
 
+    public function find_my_order_byId($orderId, $uid) {
+        return $this->find('first', array(
+            'conditions' => array('id' => $orderId, 'creator' => $uid),
+        ));
+    }
+
 } 

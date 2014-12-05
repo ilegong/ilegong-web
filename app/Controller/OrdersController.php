@@ -1139,9 +1139,7 @@ class OrdersController extends AppController{
      * @return mixed
      */
     private function find_my_order_byId($orderId, $uid) {
-        return $this->Order->find('first', array(
-            'conditions' => array('id' => $orderId, 'creator' => $uid),
-        ));
+        return $this->Order->find_my_order_byId($orderId, $uid);
     }
 
     /**

@@ -66,4 +66,54 @@ class ApiOrdersController extends AppController {
         $this->set('carts', $Carts);
         $this->set('_serialize', array('total_price', 'carts'));
     }
+
+    /**
+     * Display and options for already submitted order
+     * @Param int $order_id
+     * @Param string action
+     */
+    function order_detail($orderId) {
+        $uid = $this->currentUser['id'];
+        $this->loadModel('Order');
+        $order = $this->Order->find_my_order_byId($orderId, $uid);
+        if(empty($order)){
+            echo json_encode(array('success' => 'false', 'msg' => 'not found'));
+            return;
+        }
+
+        $this->loadModel('Cart');
+        $Carts = $this->Cart->find('all', array(
+            'conditions'=>array(
+                'order_id' => $orderId,
+                'creator'=> $uid
+            )));
+        $product_ids = Hash::extract($Carts, '{n}.Cart.product_id');
+        $this->loadModel('Product');
+        $products = $this->Product->find('all', array(
+            'fields' => array('id', 'created', 'slug', 'published', 'deleted'),
+            'conditions'=>array(
+                'id' => $product_ids
+            )));
+
+        $expired_pids = array();
+        foreach($product_ids as $pid) {
+            if (empty($products[$pid])
+                || $products[$pid]['Product']['published'] == PUBLISH_NO
+                || $products[$pid]['Product']['deleted'] == 1) {
+                $expired_pids[] = $pid;
+            }
+        }
+
+        $totalCents = $order['Order']['total_all_price'] * 100;
+        $no_more_money = $totalCents < 1 && $totalCents >= 0;
+
+        $this->set(compact('no_more_money', 'order_id', 'order', 'expired_pids'));
+
+        $this->set('ship_type', ShipAddress::ship_type_list());
+        $this->set('order', $order);
+        $this->set('carts',$Carts);
+        $this->set('products', $products);
+
+        $this->set('_serialize', array('order', 'carts', 'ship_type', 'expired_pids', 'no_more_money', 'products'));
+    }
 }
