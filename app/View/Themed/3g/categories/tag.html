@@ -17,9 +17,10 @@
 	<?PHP if($total>0){ ?>
 	    <?PHP foreach($data_list as $item) {
 	    $full = true;
+	    $i++;
 		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
 	    ?>
-            <li> <a href="{{product_link2($item)}}">
+            <li class="{{if $i/2 == 1}}last{{/if}}"> <a href="{{product_link2($item)}}">
                 <img src="{{$this->Html->assetUrl(small_thumb_link($item['coverimg']))}}" border="0" />
                 <div class="item_name">{{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}{{usubstr($item['name'],0, 7,'')}}<span>有红包</span>
                     {{else}}{{usubstr($item['name'],0, 9,'')}}

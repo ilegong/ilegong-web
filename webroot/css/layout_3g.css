@@ -11,7 +11,7 @@ img {
 }
 
 .container {
-    max-width: 350px;
+    /*max-width: 350px;*/
     margin: 0 auto;
 }
 
@@ -294,6 +294,7 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 .classlist ul li.back{ width:0.5em; height:1em; background:url('/img/mobilev1/pyshuo_icon.png?xxz') no-repeat -1.25em -16.875em; background-size:25em 25em; margin-top:0.7em; margin-right:0.5em;}
 .classlist_good { margin-top:3em; margin-bottom:1em;}
 .classlist_good ul li{ float:left; width:50%; text-align:center; padding-top:0.5em; border-bottom:1px #dddddd solid; border-right: 1px #dddddd solid;}
+.classlist_good ul li.last { border-right: none;}
 .classlist_good ul li img{ text-align:center; width:8.8em; height:6.6em;}
 .classlist_good ul li .brand_name, .classlist_good ul li .item_name{ font-size:0.8em; color:#666666; text-align:left; font-weight:normal; padding:0.4em 0.833em 0 0.833em;}
 .classlist_good ul li .item_name { font-size:1em; padding-top:0.6em }
