@@ -20,13 +20,13 @@
             },
             {
                 "type":"view",
-                "name":"我要分享",
+                "name":"微社区",
                 "url":"http://wsq.qq.com/reflow/177650290"
             },
             {
                 "type":"view",
                 "name":"加入试吃",
-                "url":"http://www.mikecrm.com/f.php?t=3DGEyQ"
+                "url":"http://www.pyshuo.com/users/wx_menu_point?referer_key=CLICK_URL_SHICHI_APPLY&do_wx_auth_if_not_log_in=1&from=service"
             },
             {
                 "type":"view",
