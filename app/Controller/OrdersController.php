@@ -655,6 +655,17 @@ class OrdersController extends AppController{
         }
     }
 
+    public function test_get_basetoken() {
+        $this->autoRender = false;
+        if ($this->is_admin($this->currentUser['id'])) {
+            $this->loadModel('WxOauth');
+            $o = $this->WxOauth->get_base_access_token();
+            $log = "get_base_access_token:" . $o . ", in json:" . json_encode($o);
+            $this->log($log);
+            echo $log;
+        }
+    }
+
 	/**
 	 * 商家设置订单的状态
 	 */
