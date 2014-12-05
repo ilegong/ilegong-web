@@ -31,7 +31,7 @@ class OpenstoresController extends AppController{
                 $msgCode = $this->Session->read('messageCode');
                 //$msgCode ="222";
                 if ($msgCode) {
-                    $codeLog = json_decode($msgCode);
+                    $codeLog = json_decode($msgCode, true);
                     if ($codeLog && is_array($codeLog) && $codeLog['code'] == $this->data['Openstore']['msg_code'] && (time() - $codeLog['time'] < 30 * 60)){
                     //if(1){
                         $this->data['Openstore']['creator'] = $id;

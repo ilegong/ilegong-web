@@ -181,8 +181,7 @@
         <div>
             <span>示例:</span>
             <div>
-                <img src="/img/products_nophoto.jpg">
-                <span>照片要求：身份证信息清晰，无遮挡，文字可辨</span>
+                <img src= {{$this->Html->assetUrl("/img/openstores/cert_identity_hold_1121.jpg");}}>
             </div>
         </div>
     </div>
@@ -190,7 +189,6 @@
         <input type="hidden" name="data[Openstore][person_id_pic]" id="idPictures">
 
         <div class="form-group">
-
             <div class="form-item">
                 <span class="form-label">身份证号码： </span>
                 <input class="form-control" name="data[Openstore][person_id]" id="idcard" type="text" value="" placeholder="与上传图片中的一致" >
@@ -202,6 +200,10 @@
             <div class="form-item">
                 <span class="form-label">工作单位： </span>
                 <input class="form-control" name="data[Openstore][person_unit]" id= "i_unit" type="text" value="" placeholder="" >
+            </div>
+            <div class="form-item">
+                <span class="form-label">店铺名称： </span>
+                <input class="form-control" name="data[Openstore][store_name]" id="store_name" type="text" value="" placeholder="用户直接看到的店铺名字" >
             </div>
             <div class="form-item form-item-short">
                 <button  class="btn btn-warning" type="submit" id="btnStoreCreate">提交认证</button>
@@ -220,12 +222,14 @@
         rules: {
             idcard: {required: true, isIdCard: true},
             i_name: 'required',
-            i_unit: 'required'
+            i_unit: 'required',
+            store_name: 'required'
         },
         messages: {
             idcard: {required: "请输入身份证号码", isIdCard: "身份证号码格式不正确"},
             i_name: {required: "请输入姓名"},
-            i_unit: {required: "请输入工作单位"}
+            i_unit: {required: "请输入工作单位"},
+            store_name: {required: "请输入店铺名称"}
         },
         errorPlacement: function(error, element) {
             error.appendTo(element.parent());

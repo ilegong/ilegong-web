@@ -86,10 +86,6 @@
     <form action="/openstores/apply" method="post" id="J_ApplyForm"><input type="hidden" name="ua" id="UA_InputId" >
         <div class="form-group">
             <div class="form-item">
-                <span class="form-label">店铺名称： </span>
-                <input class="form-control" name="data[Openstore][store_name]" id="store_name" type="text" value="" placeholder="用户直接看到的店铺名字" >
-            </div>
-            <div class="form-item">
                 <span class="form-label">联系人姓名： </span>
                 <input class="form-control" name="data[Openstore][link_name]" id="person_name" type="text" value="" placeholder="请填写完整的真实姓名" >
             </div>
@@ -170,7 +166,7 @@
 
             function CountDown() {
                 $("#btnMobileCode").attr("disabled", true);
-                $("#btnMobileCode").val("请耐心等待 " + count + " 秒后重新获取!");
+                $("#btnMobileCode").val( count + " 秒后重新获取!");
                 if (count == 0) {
                     $("#btnMobileCode").val("获取").removeAttr("disabled");
                     clearInterval(countdown);
@@ -185,14 +181,14 @@
         $("#J_ApplyForm").validate({
             //规则制定根据字段的id属性
             rules: {
-                store_name: 'required',
+
                 person_name: 'required',
                 mobile_number: {required: true, isPhone: true},
                 message_input: 'required',
                 qq_number: {required: true, number: true}
             },
             messages: {
-                store_name: {required: "请输入店铺名称"},
+
                 person_name: {required: "请输入您的真实姓名"},
                 message_input: {required: "请输入您的手机验证码"},
                 mobile_number: {required: "请输入手机号码", isPhone: "手机号码格式不正确"},

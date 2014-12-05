@@ -173,7 +173,7 @@
         <span class="form-label">营业执照： </span>
         <span class="btn btn-success fileinput-button">
             <i class="glyphicon glyphicon-plus"></i>
-            <span>{{__('Add Images...')}}</span>
+            <span>上传营业执照图片</span>
             <input id="fileupload" type="file" name="files" multiple>
         </span>
         <div id="files_1" class="files clearfix"></div>
@@ -181,7 +181,7 @@
         <div>
             <span>示例:</span>
             <div>
-                <img src="/img/products_nophoto.jpg">
+                <img src= {{$this->Html->assetUrl("/img/openstores/cert_license.png");}}>
             </div>
         </div>
     </div>
@@ -204,32 +204,38 @@
         <span class="form-label">法人身份证： </span>
         <span class="btn btn-success fileinput-button">
             <i class="glyphicon glyphicon-plus"></i>
-            <span>{{__('Add Images...')}}</span>
+            <span>上传法人身份证图（正面）</span>
             <input  type="file" name="files" multiple>
         </span>
         <div id="files_3" class="files clearfix"></div>
         <div>
             <span>示例:</span>
+            <span>身份证必须和营业执照“法定代表人姓名”一致</span>
             <div>
-                <img src="/img/products_nophoto.jpg">
+                <img src={{$this->Html->assetUrl("/img/openstores/cert_identity_front.png");}}>
+                <img src={{$this->Html->assetUrl("/img/openstores/cert_license_side.png");}}>
             </div>
         </div>
     </div>
     <div class="form-item">
         <span class="btn btn-success fileinput-button">
             <i class="glyphicon glyphicon-plus"></i>
-            <span>{{__('Add Images...')}}</span>
+            <span>上传法人身份证图（反面）</span>
             <input  type="file" name="files" multiple>
         </span>
         <div id="files_4" class="files clearfix"></div>
         <div>
             <span>示例:</span>
             <div>
-                <img src="/img/products_nophoto.jpg">
+                <img src={{$this->Html->assetUrl("/img/openstores/cert_identity_back.png");}}>
             </div>
         </div>
     </div>
-    <form action="/openstores/company" method="post" id="PersonForm">
+    <form action="/openstores/company" method="post" id="CompanyForm">
+        <div class="form-item">
+            <span class="form-label">店铺名称： </span>
+            <input class="form-control" name="data[Openstore][store_name]" id="store_name" type="text" value="" placeholder="用户直接看到的店铺名字" >
+        </div>
         <input type="hidden" name="data[Openstore][business_licence]" id="pic_files_1" >
         <input type="hidden" name="data[Openstore][food_licence]" id="pic_files_2" >
         <input type="hidden" name="data[Openstore][id_front]" id="pic_files_3" >
@@ -240,10 +246,29 @@
     </form>
 </div>
 
-{{$this->Html->script(array(
-'jquery.validate.min.js',
-));
-}}
+<script>
+    $("#CompanyForm").validate({
+        //规则制定根据字段的id属性
+        rules: {
+            store_name: 'required'
+        },
+        messages: {
+            store_name: {required: "请输入店铺名称"}
+        },
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent());
+        },
+        errorClass: "help-inline",
+        highlight : function(element) {
+            $(element).closest('.form-item').addClass('has-error');
+        },
+        /* 验证通过时的处理 */
+        success : function(label) {
+            label.closest('.form-item').removeClass('has-error');
+            label.remove();
+        }
+    });
+</script>
 <script>
     $(function () {
         'use strict';
