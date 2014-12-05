@@ -413,7 +413,7 @@ class StoresController extends AppController {
         $this->set('total_count', $total_count);
         $this->set('total_wait_ship_count', $total_wait_ship_count);
         $this->set('order_carts', $order_carts);
-        $this->set('ship_type', ShipAddress::$ship_type);
+        $this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('creator', $creator);
         if(sizeof($onlyStatus)>1){
             $this->set('status', -1);
@@ -470,7 +470,7 @@ class StoresController extends AppController {
 
         $this->set('orders', $orders);
         $this->set('order_carts', $order_carts);
-        $this->set('ship_type', ShipAddress::$ship_type);
+        $this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('creator', $creator);
     }
 

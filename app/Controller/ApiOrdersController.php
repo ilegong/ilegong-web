@@ -41,7 +41,7 @@ class ApiOrdersController extends AppController {
         $this->set('brands', $mappedBrands);
         $this->set('orders',$orders);
         $this->set('order_carts',$order_carts);
-        $this->set('ship_type', ShipAddress::$ship_type);
+        $this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('_serialize', array('brands', '$orders', 'order_carts', 'ship_type'));
     }
 

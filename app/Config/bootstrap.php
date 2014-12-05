@@ -451,21 +451,52 @@ function find_latest_clicked_from($buyerId, $pid) {
 }
 
 class ShipAddress {
-    public static $ship_type = array(
-        101 => '申通',
-        102 => '圆通',
-        103 => '韵达',
-        104 => '顺丰',
-        105 => 'EMS',
-        106 => '邮政包裹',
-        107 => '天天',
-        108 => '汇通',
-        109 => '中通',
-        110 => '全一',
-        111 => '宅急送',
-        112 => '全峰',
-        113 => '快捷',
-    );
+//    public static $ship_type = array(
+//        101 => '申通',
+//        102 => '圆通',
+//        103 => '韵达',
+//        104 => '顺丰',
+//        105 => 'EMS',
+//        106 => '邮政包裹',
+//        107 => '天天',
+//        108 => '汇通',
+//        109 => '中通',
+//        110 => '全一',
+//        111 => '宅急送',
+//        112 => '全峰',
+//        113 => '快捷',
+//    );
+
+    /**
+     * @return array keyed with ship type id, value is array of fields for the ship type
+     */
+    public static function ship_type_list() {
+        $ship_types = ShipAddress::ship_types();
+        if (is_array($ship_types)) {
+            return Hash::combine($ship_types, '{n}.id', '{n}.name');
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @return array keyed with ship type id, value is array of fields for the ship type
+     */
+    public static function ship_types() {
+        $shipTypesJson = Cache::read('_shiptypes');
+        if (empty($shipTypesJson)) {
+            $shipTypeModel = ClassRegistry::init('ShipType');
+            $shipTypes = $shipTypeModel->find('all', array(
+                'conditions' => array(
+                    'deleted' => 0
+                )
+            ));
+            $shipTypes = Hash::combine($shipTypes, '{n}.ShipType.id', '{n}.ShipType');
+            $shipTypesJson = json_encode($shipTypes);
+            Cache::write('_shiptypes', $shipTypesJson);
+        }
+        return json_decode($shipTypesJson, true);
+    }
 }
 
 

@@ -399,7 +399,7 @@ class OrdersController extends AppController{
         $this->set(compact('toShare', 'canComment', 'no_more_money', 'order_id', 'order', 'has_expired_product_type', 'expired_pids'));
 
         $this->set('isMobile', $this->RequestHandler->isMobile());
-        $this->set('ship_type', ShipAddress::$ship_type);
+        $this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('order', $orderinfo);
         $this->set('Carts',$Carts);
         $this->set('products', $products);
@@ -514,7 +514,7 @@ class OrdersController extends AppController{
         $this->set('brands', $mappedBrands);
 		$this->set('orders',$orders);
 		$this->set('order_carts',$order_carts);
-		$this->set('ship_type', ShipAddress::$ship_type);
+		$this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('counts', $counts);
 	}
 
@@ -1114,7 +1114,7 @@ class OrdersController extends AppController{
 
         $this->set('orders', $orders);
         $this->set('order_carts', $order_carts);
-        $this->set('ship_type', ShipAddress::$ship_type);
+        $this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('creator', $creator);
     }
 
