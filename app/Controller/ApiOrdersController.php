@@ -45,4 +45,25 @@ class ApiOrdersController extends AppController {
         $this->set('_serialize', array('brands', 'orders', 'order_carts', 'ship_type'));
     }
 
-} 
+    public function list_cart() {
+        $this->loadModel('Cart');
+        $Carts = $this->Cart->find('all',array(
+            'conditions'=>array(
+                'published' => PUBLISH_YES,
+                'deleted' => DELETED_NO,
+                'status' => 0,
+                'order_id' => NULL,
+                'creator'=> $this->currentUser['id'],
+            ),
+            'fields' => array('name', 'product_id', 'name', 'price', 'coverimg', 'used_coupons'),
+        ));
+        $total_price = 0;
+        foreach($Carts as $cart){
+            $total_price += $cart['Cart']['price']*$cart['Cart']['num'];
+        }
+
+        $this->set('total_price', $total_price);
+        $this->set('carts', $Carts);
+        $this->set('_serialize', array('total_price', 'carts'));
+    }
+}
