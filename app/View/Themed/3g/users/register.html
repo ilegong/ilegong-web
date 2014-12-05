@@ -5,10 +5,10 @@
 	<input type="hidden" value="register" name="handlekey">
 	<div class="lgfm">
 		<div id="reginfo_a" fwin="register">
-            <div class="form-group">
+            <div class="form-group" style="padding-top: 10px">
                 <label for="mobile_number" class="col-xs-3 control-label">手机号</label>
-                <div class="col-xs-9">
-                    <input type="text" required="required" id="mobile_number" name="data[User][mobilephone]" class="form-control" placeholder="手机号">
+                <div class="col-xs-9" >
+                    <input type="text" required="required" id="mobile_number" name="data[User][mobilephone]" class="form-control"  placeholder="今后可以使用手机号登录">
                 </div>
             </div>
             <div class="form-group">
@@ -16,9 +16,9 @@
                 <div class="col-xs-9">
                     <input  class="form-control" style="display: inline; width: 40%" type="text" id="J_CheckCodeInput"
                             value="" placeholder="验证码">
-                    {{$this->Html->image(array('controller' => 'Check','action'=>'captcha'), array('id'=> "image_code", 'alt' => "看不清楚，换一张"))}}
-                    <div id="checkInfo"></div>
+                    {{$this->Html->image(array('controller' => 'Check','action'=>'captcha'), array('id'=> "image_code", 'alt' => "看不清楚，换一张", 'style' => "width: 55%"))}}
                 </div>
+                <div id="checkInfo"></div>
             </div>
             <div class="form-group">
                 <label for="message_input" class="col-xs-3 control-label">短信验证码</label>
@@ -38,13 +38,13 @@
 			<div class="form-group">
 			    <label for="user_password" class="col-xs-3 control-label">密码</label>
 			    <div class="col-xs-9">
-			      <input type="password" require="true" id="user_password" name="data[User][password]" class="form-control">
+			      <input type="password" require="true" id="user_password" name="data[User][password]" class="form-control" placeholder="密码">
 			    </div>
 			</div>
 			<div class="form-group">
 			    <label for="user_password_confirm" class="col-xs-3 control-label">确认密码</label>
 			    <div class="col-xs-9">
-			      <input type="password" require="true" id="user_password_confirm" name="data[User][password_confirm]" class="form-control">
+			      <input type="password" require="true" id="user_password_confirm" name="data[User][password_confirm]" class="form-control" placeholder="确认密码">
 			    </div>
 			</div>	
 			<div class="form-group">
