@@ -178,7 +178,17 @@ class CategoriesController extends AppController {
 
     public function mobileHome() {
         $this->productsHome();
+
+        $bannerItems = array(
+            array('img' => "/img/banner/banner_songzi.jpg", 'url' => "/products/20141117/dong_bei_hong_song_zi_1jin_zhuang.html"),
+            array('img' => "/img/banner/banner_dami.jpg",'url' =>  "/products/20141101/wu_chang_dao_hua_xiang_ti_qian_yu_shou_500jin_zhi_xian_bei_jing.html"),
+            array('img' => "/img/banner/banner_huizao.jpg", 'url' => "/products/20141117/xin_jiang_hui_zao.html"),
+            array('img' => "/img/banner/banner_shiliu.jpg", 'url' => "/products/20141013/he_nan_xing_yang_he_yin_ruan_zi_shi_liu_8liang.html"),
+        );
+
+        $this->set('bannerItems', $bannerItems);
         $this->set('max_show', $this->RequestHandler->isMobile()? 2 : 4);
+        $this->set('_serialize', array('brands', 'tagsWithProducts', 'sub_title', 'bannerItems'));
     }
 
     public function productsHome() {
@@ -252,9 +262,6 @@ class CategoriesController extends AppController {
         $this->set('withBrandInfo', true);
         $this->set('category_control_name', 'products');
         $this->set('op_cate', OP_CATE_HOME);
-
-
-        $this->set('_serialize', array('brands', 'tagsWithProducts', 'sub_title'));
     }
 
     public function view($slug='/', $brand_id='') {
