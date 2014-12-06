@@ -22,11 +22,13 @@ class ArticlesController extends AppController{
         ));
 
         foreach($cates as &$cate) {
-            $articles = $this->Article->find('all', array('conditions' => array(
+            $articles = $this->Article->find('all', array(
+                'conditions' => array(
                 'cate_id' => $cate['Category']['id'],
                 'published' => 1,
                 'deleted' => 0,
-            ),
+                ),
+                'fields' => array('id', 'name', 'summary', 'slug', 'coverimg'),
                 'order' => 'updated asc'
             ));
 
@@ -51,6 +53,8 @@ class ArticlesController extends AppController{
         $this->set('Category', $Category);
         $this->set('cates', $cates);
         $this->set('op_cate', 'shichituan');
+
+        $this->set('_serialize', array('cates'));
     }
 
     public function log_js_error() {
