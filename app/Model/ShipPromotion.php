@@ -142,6 +142,8 @@ class ShipPromotion extends AppModel {
             return $singleShipFee * $num;
         } else if ($pid == 269 || $pid == 270) { //灰枣和骏枣
             return ($num > 1) ? 0 : 15;
+        } else if ($pid == 317) { //铁棍山药1斤装
+            return ($num >= 5 ? 0 : $num * $singleShipFee);
         }
         return $singleShipFee;
     }
