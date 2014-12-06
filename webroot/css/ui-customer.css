@@ -263,7 +263,8 @@ ul.title-list li{
 .Content-info {padding:10px 0 5px 0;text-align:center;}
 .Content-body{padding:0 30px;}
 .Content-body p{font-size:14px;line-height:1.4;margin:15px 0;}
-.Content-body img{margin:5px 10px;max-width:650px;}
+.Content-body img{margin:5px 10px;min-width: 100%;
+    height: auto !important;}
 .Content-body, .Content-body div{font-size:14px;}
 /* 对文章的观点的样式 */
 .viewpoint_list a {
@@ -334,7 +335,7 @@ width:170px;
 
 .lgfm{font:12px/1.5 Tahoma,Helvetica,SimSun,sans-serif,Hei;float:left;padding:20px 0;width:270px;border-right:1px solid #CCC;}
 .rgs{margin-bottom:10px;}
-.lgfm,.lgfm label,.lgfm p,lgfm div,.reginfo{line-height:22px;}
+.lgfm,.lgfm label,.lgfm p,.lgfm div,.reginfo{line-height:22px;}
 .reginfo label{display:inline;}
 .reg_c{float:left;width:200px;}
 .lgfm .txt,.lgfm .px{padding:2px 4px;height:16px;border:1px solid;border-color:#CCC #EEE #EEE #CCC;}
@@ -366,7 +367,7 @@ width:170px;
 .cydz{overflow:hidden; margin-bottom:7px}
 
 .cydz li{width:148px; padding:5px; line-height:150%; display:block; float:left; margin-right:7px; background:#F8FBFC; border:#B7D2DF dotted 1px; color:#87B4C9; padding-left:2px; margin-bottom:5px; overflow:hidden;}
-.cydz li.xz{color:#F8AA27; background:#FFFAEE; border:#F9BA53 dotted 1px}*/
+.cydz li.xz{color:#F8AA27; background:#FFFAEE; border:#F9BA53 dotted 1px}
 
 .cydz{overflow:hidden; margin-bottom:7px;border:#B7D2DF dotted 1px; color:#87B4C9;background:#F8FBFC;padding:5px 0 5px 10px;width:80%}
 
