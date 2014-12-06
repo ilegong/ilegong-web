@@ -42,7 +42,7 @@ class User extends AppModel {
         if (!empty($mobilePhone)) {
             $u = $this->find('first', array(
                 'conditions' => array(
-                    'mobilephone' => $mobilePhone
+                    'OR' => array('mobilephone' => $mobilePhone, 'username' => $mobilePhone)
                 )
             ));
             if ( !(empty($u) || $u['User']['id'] == $this->data['User']['id']) ) {
