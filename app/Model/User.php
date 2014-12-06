@@ -45,8 +45,8 @@ class User extends AppModel {
                     'mobilephone' => $mobilePhone
                 )
             ));
-            if (empty($u) || $u['User']['id'] == $this->data['User']['id']) {
-                throw new CakeException("Error for duplicated mobile phone:".$mobilePhone);
+            if ( !(empty($u) || $u['User']['id'] == $this->data['User']['id']) ) {
+                throw new CakeException("duplicated mobile phone:".$mobilePhone, ERROR_CODE_USER_DUP_MOBILE);
             }
         }
         return parent::beforeSave($options);
