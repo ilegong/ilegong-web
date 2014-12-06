@@ -114,8 +114,8 @@ class ProductsController extends AppController{
         $brand = $this->Brand->findById($brandId);
         $this->set('brand', $brand);
 
-        $this->loadComponent('ProductRecom');
-        $recommends = $this->ProductRecom->recommend($this->current_data_id);
+        $recommC = $this->Components->load('ProductRecom');
+        $recommends = $recommC->recommend($this->current_data_id);
         $this->set('items', $recommends);
         $this->set('category_control_name', 'products');
     }
