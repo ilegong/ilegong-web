@@ -61,18 +61,12 @@
 {{$this->Html->scriptStart(array('block' => 'scriptBottom'));}}
     $().ready(function(){
 
-        var banners = ['{{$this->Html->assetUrl("/img/banner/banner_songzi.jpg"); }}'
-            , '{{$this->Html->assetUrl("/img/banner/banner_dami.jpg"); }}'
-            , '{{$this->Html->assetUrl("/img/banner/banner_huizao.jpg"); }}'
-            , '{{$this->Html->assetUrl("/img/banner/banner_shiliu.jpg"); }}'
-            //, '{{$this->Html->assetUrl("/img/banner/banner_mihoutao.jpg"); }}'
-        ];
-        var banner_links = ['{{$this->Html->url("/products/20141117/dong_bei_hong_song_zi_1jin_zhuang.html"); }}'
-            , '{{$this->Html->url("/products/20141101/wu_chang_dao_hua_xiang_ti_qian_yu_shou_500jin_zhi_xian_bei_jing.html"); }}'
-            , '{{$this->Html->url("/products/20141117/xin_jiang_hui_zao.html"); }}'
-            , '{{$this->Html->url("/products/20141013/he_nan_xing_yang_he_yin_ruan_zi_shi_liu_8liang.html"); }}'
-            //, '{{$this->Html->url("/products/20141109/shan_xi_mei_xian_jiao_su_mi_hou_tao.html"); }}'
-        ];
+        var banners = [];
+        var banner_links = [];
+        {{loop $bannerItems $key $banner}}
+            banners.push('{{$this->Html->assetUrl($banner['img'])}}');
+            banner_links.push('{{$this->Html->url($banner['url'])}}');
+        {{/loop}}
 
         //$(banners).preload();
 
