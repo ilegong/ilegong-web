@@ -10,6 +10,7 @@ class ApiOrdersController extends AppController {
 
     public function beforeFilter() {
         parent::beforeFilter();
+//        $this->autoRender = false;
         $access_token = $_REQUEST['token'];
         if (!empty($access_token)) {
             $this->loadModel('User');
@@ -115,5 +116,35 @@ class ApiOrdersController extends AppController {
         $this->set('products', $products);
 
         $this->set('_serialize', array('order', 'carts', 'ship_type', 'expired_pids', 'no_more_money', 'products'));
+    }
+
+    public function product_detail($pid) {
+
+        if (!empty($pid)) {
+
+            $productM = ClassRegistry::init('Product');
+            $pro = $productM->findById($pid);
+            if (!empty($pro) && $pro['Product']['deleted'] == DELETED_NO && $pro['Product']['published'] == PUBLISH_YES) {
+                unset($pro['Product']['content']);
+                unset($pro['Product']['saled']);
+                unset($pro['Product']['storage']);
+                unset($pro['Product']['views_count']);
+                unset($pro['Product']['cost_price']);
+
+                $brandM = ClassRegistry::init('Brand');
+                $brand = $brandM->findById($pro['Product']['brand_id']);
+                $this->set('brand', $brand);
+
+                $recommC = $this->Components->load('ProductRecom');
+                $recommends = $recommC->recommend($pid);
+                $this->set('product',$pro);
+                $this->set('recommends', $recommends);
+                $this->set('brand', $recommends);
+
+                $this->set('_serialize', array('product', 'recommends', 'brand'));
+            }
+        }
+
+
     }
 }

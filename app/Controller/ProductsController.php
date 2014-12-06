@@ -114,64 +114,10 @@ class ProductsController extends AppController{
         $brand = $this->Brand->findById($brandId);
         $this->set('brand', $brand);
 
-        $MAX_SAME_KIND = 2;
-        $MAX_RECOMMEND = 6;
-
-        $tag = $this->Product->query("select tag_id from cake_product_product_tags where product_id = $this->current_data_id limit 1");
-        $recomm_same_kind = empty($tag) ? array() : $this->rand_recommend_pids($tag[0]['cake_product_product_tags']['tag_id'], $MAX_SAME_KIND * 2);
-        $recomm_hottest = $this->rand_recommend_pids(PRO_TAG_HOTTEST, ($MAX_RECOMMEND - $MAX_SAME_KIND) * 2);
-
-        $items = array();
-        $this->fill_recomm_items($recomm_same_kind, $items, $MAX_SAME_KIND);
-        $this->fill_recomm_items($recomm_hottest, $items, $MAX_RECOMMEND);
-
-        $this->set('items', $items);
+        $this->loadComponent('ProductRecom');
+        $recommends = $this->ProductRecom->recommend($this->current_data_id);
+        $this->set('items', $recommends);
         $this->set('category_control_name', 'products');
     }
 
-    /**
-     * @param $tag
-     * @param $max
-     * @return mixed array keyed with the product id
-     */
-    private function rand_recommend_pids($tag, $max) {
-        $recommend = array();
-        if (!empty($tag) && $max > 0) {
-            $pid_candidates = $this->Product->query('select distinct product_id from cake_product_product_tags where tag_id = ' . $tag . ' and product_id != ' . $this->current_data_id);
-            $candidates_len = count($pid_candidates);
-
-            $randTimes = 0;
-            while (count($recommend) < min($max, $candidates_len)) {
-                $idx = rand(0, $candidates_len - 1);
-                $id = $pid_candidates [$idx]['cake_product_product_tags']['product_id'];
-                $randTimes++;
-                $recommend[$id] = null;
-                if ($randTimes > 100) {
-                    break;
-                }
-            }
-            $this->log("random times for $tag: ". $randTimes);
-        }
-        return $recommend;
-    }
-
-    /**
-     * @param $recomm_ids array indexed with product id
-     * @param $items
-     * @param $max_item_counts
-     */
-    private function fill_recomm_items($recomm_ids, &$items, $max_item_counts) {
-        $products = $this->Product->find_published_products_by_ids(array_keys($recomm_ids));
-        if (!empty($products)) {
-            foreach ($recomm_ids as $pid => $val) {
-                $item = $products[$pid];
-                if (!empty($item)) {
-                    $items[$pid] = $item;
-                    if (count($items) >= $max_item_counts) {
-                        break;
-                    }
-                }
-            }
-        }
-    }
 }
