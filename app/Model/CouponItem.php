@@ -319,7 +319,7 @@ class CouponItem extends AppModel {
     }
 
     public function change_coupons_message_status_to_sent($id){
-        return $this->update(array('sent_message_status' => COUPONITEM_MESSAGE_STATUS_SENT),
+        return $this->updateAll(array('sent_message_status' => COUPONITEM_MESSAGE_STATUS_SENT),
             array('id' => $id, 'sent_message_status' => COUPONITEM_MESSAGE_STATUS_TO_SEND)
         );
     }
