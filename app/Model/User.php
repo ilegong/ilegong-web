@@ -29,34 +29,28 @@ class User extends AppModel {
      * @access public
      */
     var $validate = array(
-        'username' => array(
-            'unique' => array(
-                'rule' => 'isUnique',
-                'message' => 'The username has already been taken.',
-            ),
-            'notempty' => array(
-                'rule' => 'notEmpty',
-                'message' => 'This field cannot be left blank.',
-            ),
-            'minLength' => array(
-                'rule' => array('minLength', 3),
-                'message' => 'This field length must big than 3',
-            ),
-        ),
         'mobilephone' => array(
-//            'unique' => array(
-//                'rule' => 'isUnique',
-//                'message' => 'The phone has already been taken.',
-//            ),
             'notempty' => array(
                 'rule' => 'notEmpty',
                 'message' => 'This field cannot be left blank.',
             ),
         ),
-        'code' => array(
-            'rule' => 'notEmpty'
-        )
     );
+
+    public function beforeSave($options = array()) {
+        $mobilePhone = $this->data['User']['mobilephone'];
+        if (!empty($mobilePhone)) {
+            $u = $this->User->find('first', array(
+                'conditions' => array(
+                    'mobilephone' => $mobilePhone
+                )
+            ));
+            if (empty($u) || $u['User']['id'] == $this->data['User']['id']) {
+                throw new CakeException("Error for duplicated mobile phone:".$mobilePhone);
+            }
+        }
+        return parent::beforeSave($options);
+    }
 
     function userlist($page, $count) {
         $this->recursive = -1;
