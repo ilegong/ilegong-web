@@ -10,9 +10,8 @@ class ApiOrdersController extends AppController {
 
     public function beforeFilter() {
         parent::beforeFilter();
-//        $this->autoRender = false;
         $access_token = $_REQUEST['token'];
-        if (!empty($access_token)) {
+        if (!empty($access_token) || array_search($this->request->params['action'], array('product_detail')) !== false) {
             $this->loadModel('User');
             $user = $this->User->findById('146');
             $this->currentUser = $user['User'];
