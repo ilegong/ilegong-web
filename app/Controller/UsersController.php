@@ -123,6 +123,7 @@ class UsersController extends AppController {
                     $src_password = $this->data['User']['password'];
 
                     $this->data['User']['nickname'] = trim($this->data['User']['nickname']);
+                    $this->data['User']['username'] = NULL;
                     $this->data['User']['mobilephone'] = trim($this->data['User']['mobilephone']);
 
                     if (mb_strlen($this->data['User']['nickname'], 'UTF-8') < 2) {
@@ -135,7 +136,9 @@ class UsersController extends AppController {
                         $this->Session->setFlash(__('Password should be longer than 6 characters'));
                     }else if ($this->User->hasAny(array('User.mobilephone' => $this->data['User']['mobilephone']))){
                         $this->Session->setFlash(__('Mobilephone is taken by others.'));
-                    }else{
+                    }else if($this->User->hasAny(array('User.username' => $this->data['User']['mobilephone']))){
+                        $this->Session->setFlash(__('你的账号已被注册'));
+                    } else{
                         $this->data['User']['password'] = Security::hash($this->data['User']['password'], null, true);
                         $has_error = false;
                         $this->data['User']['uc_id'] = 0;
