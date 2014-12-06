@@ -146,6 +146,9 @@ class ProductsController extends AppController{
                 $id = $pid_candidates [$idx]['cake_product_product_tags']['product_id'];
                 $randTimes++;
                 $recommend[$id] = null;
+                if ($randTimes > 100) {
+                    break;
+                }
             }
             $this->log("random times for $tag: ". $randTimes);
         }
