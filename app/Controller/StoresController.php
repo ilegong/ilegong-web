@@ -27,9 +27,7 @@ class StoresController extends AppController {
             }
         }
 
-        $this->brand = $this->Brand->find('first',array('conditions'=>array(
-            'creator'=>$this->currentUser['id'],
-        )));
+        $this->brand = $this->find_my_brand($this->currentUser['id']);
         if(empty($this->brand)){
             if ($refuse_redirect) {
                 $this->__message('您没有权限访问相关页面', '/');
@@ -104,9 +102,7 @@ class StoresController extends AppController {
         $uid = $this->currentUser['id'];
         if ($uid) {
             $this->loadModel('Brand');
-            $this->brand = $this->Brand->find('first',array('conditions'=>array(
-                'creator'=>$this->currentUser['id'],
-            )));
+            $this->brand = $this->find_my_brand($uid);
             if (!empty($this->brand)) {
                 //
                 $this->set('brand', $this->brand);
@@ -358,9 +354,7 @@ class StoresController extends AppController {
         $creator = $this->currentUser['id'];
 
         $this->loadModel('Brand');
-        $brands = $this->Brand->find('list', array('conditions' => array(
-            'creator' => $creator,
-        )));
+        $brands = $this->find_my_brand($creator);
 
         if (!empty($brands)) {
             $brand_ids = array_keys($brands);
@@ -427,9 +421,7 @@ class StoresController extends AppController {
         $creator = $this->currentUser['id'];
 
         $this->loadModel('Brand');
-        $brands = $this->Brand->find('list', array('conditions' => array(
-            'creator' => $creator,
-        )));
+        $brands = $this->find_my_brand($creator);
 
         if (!empty($brands)) {
             $brand_ids = array_keys($brands);
@@ -534,6 +526,17 @@ class StoresController extends AppController {
         }
 
         return $error;
+    }
+
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    private function find_my_brand($userId) {
+        return $this->Brand->find('first', array('conditions' => array(
+            'creator' => $userId,
+            'deleted' => DELETED_NO,
+        )));
     }
 
 
