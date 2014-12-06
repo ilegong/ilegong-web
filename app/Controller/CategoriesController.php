@@ -180,7 +180,7 @@ class CategoriesController extends AppController {
         $this->productsHome();
 
         $bannerItems = array(
-            array('img' => "/img/banner/banner_yongxing_btc.jpg", 'url' => "/products/20141205/zheng_zong_bing_tang_cheng_10jin_jia_ting_zhuang"),
+//            array('img' => "/img/banner/banner_yongxing_btc.jpg", 'url' => "/products/20141205/zheng_zong_bing_tang_cheng_10jin_jia_ting_zhuang"),
             array('img' => "/img/banner/banner_songzi.jpg", 'url' => "/products/20141117/dong_bei_hong_song_zi_1jin_zhuang.html"),
             array('img' => "/img/banner/banner_dami.jpg",'url' =>  "/products/20141101/wu_chang_dao_hua_xiang_ti_qian_yu_shou_500jin_zhi_xian_bei_jing.html"),
             array('img' => "/img/banner/banner_huizao.jpg", 'url' => "/products/20141117/xin_jiang_hui_zao.html"),
