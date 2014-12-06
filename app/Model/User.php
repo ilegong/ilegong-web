@@ -40,7 +40,7 @@ class User extends AppModel {
     public function beforeSave($options = array()) {
         $mobilePhone = $this->data['User']['mobilephone'];
         if (!empty($mobilePhone)) {
-            $u = $this->User->find('first', array(
+            $u = $this->find('first', array(
                 'conditions' => array(
                     'mobilephone' => $mobilePhone
                 )
