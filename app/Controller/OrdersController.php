@@ -748,8 +748,9 @@ class OrdersController extends AppController{
             if($user_weixin!=false){
                 $good = $this->get_order_good_info($order_id);
                 $this->log("good info:".$good['good_info'].$good['good_number']);
+                $ship_type_list = ShipAddress::ship_type_list();
                 $this->Weixin->send_order_shipped_message($user_weixin['oauth_openid'],$ship_type,
-                    ShipAddress::$ship_type[$ship_type], $ship_code, $good['good_info'], $good['good_number']);
+                    $ship_type_list[$ship_type], $ship_code, $good['good_info'], $good['good_number']);
             }
 
             echo json_encode(array('order_id'=>$order_id,'msg'=>'订单状态已更新为“已发货”'));
