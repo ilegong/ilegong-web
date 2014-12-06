@@ -138,7 +138,7 @@ class ApiOrdersController extends AppController {
                 $recommends = $recommC->recommend($pid);
                 $this->set('product',$pro);
                 $this->set('recommends', $recommends);
-                $this->set('brand', $recommends);
+                $this->set('brand', $brand);
 
                 $this->set('_serialize', array('product', 'recommends', 'brand'));
             }
