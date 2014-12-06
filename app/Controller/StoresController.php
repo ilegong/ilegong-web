@@ -354,17 +354,17 @@ class StoresController extends AppController {
         $creator = $this->currentUser['id'];
 
         $this->loadModel('Brand');
-        $brands = $this->find_my_brand($creator);
+        $brand = $this->find_my_brand($creator);
 
-        if (!empty($brands)) {
-            $brand_ids = array_keys($brands);
+        if (!empty($brand)) {
+            $brand_id = $brand['Brand']['id'];
             $this->set('is_business', true);
         } else {
             $this->__message('只有合作商家才能查看商家订单，正在为您转向个人订单', '/orders/mine');
             return;
         }
 
-        $cond = array('brand_id' => $brand_ids, 'NOT' => array(
+        $cond = array('brand_id' => $brand_id, 'NOT' => array(
             'status' => array(ORDER_STATUS_CANCEL)
         ));
         $cond['status'] = $onlyStatus;
