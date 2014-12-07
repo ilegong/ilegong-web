@@ -21,7 +21,7 @@
            {{if $result['Shichituan']['status']==1}}
                 {{$this->Html->image(Router::url($result['Shichituan']['pictures']),array('class' => 'pull-right','height' => '46px'))}}
                 {{else}}
-                <img class="pull-right" height="46px" src="{{$this->Html->url('/img/default_user_icon.jpg')}}"/>
+                <img class="pull-right" height="46px" src="{{$this->Html->assetUrl('/img/default_user_icon.jpg')}}"/>
            {{/if}}
         </span>
 
@@ -30,7 +30,7 @@
         <!--</div>-->
         {{if $result['Shichituan']['status']==1}}
         <div class="shichi-signal">
-            <span class="signal fl"><img class="pull-right" src="{{$this->Html->url('/img/shichi-signal.jpg')}}"/></span>
+            <span class="signal fl"><img class="pull-right" src="{{$this->Html->assetUrl('/img/shichi-signal.jpg')}}"/></span>
         </div>
         {{/if}}
         <span class="fr more"></span>

@@ -152,7 +152,7 @@ $(function () {
 			"return_type":"'.$param['return_type'].'"
 		},
 		
-		button_image_url : "'.$this->Html->url($param['button_image_url']).'",
+		button_image_url : "'.$this->Html->assetUrl($param['button_image_url']).'",
 		button_placeholder_id : "spanButtonPlaceholder_'.$fieldid.'",
 		button_width: '.$param['button_width'].',
 		button_height: '.$param['button_height'].',

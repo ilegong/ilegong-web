@@ -79,7 +79,7 @@ $(function(){
 	}
 	ckeditors['ProductContent'] = CKEDITOR.replace( 'ProductContent',
 		    {
-		        customConfig : '{{$this->Html->url("/js/ckeditor/front-config.js")}}'
+		        customConfig : '{{$this->Html->assetUrl("/js/ckeditor/front-config.js")}}'
 		    });
 	ckeditors['ProductContent'].on('focus',function(e){
 		current_ckeditor_instance = e.editor;
@@ -87,13 +87,13 @@ $(function(){
 	
 
 	CKEDITOR.on( 'instanceReady', function( e ){
-		e.editor.document.appendStyleSheet( '{{$this->Html->url("/stylevars/getcss.css")}}' );
-		e.editor.document.appendStyleSheet( '{{$this->Html->url("/css/ui-customer.css")}}' );
+		e.editor.document.appendStyleSheet( '{{$this->Html->assetUrl("/stylevars/getcss.css")}}' );
+		e.editor.document.appendStyleSheet( '{{$this->Html->assetUrl("/css/ui-customer.css")}}' );
 		//e.editor.setMode( 'source' );
 		e.editor.on( 'mode', function( e ){
 			if(e.editor.mode == 'wysiwyg'){
-				e.editor.document.appendStyleSheet( '{{$this->Html->url("/stylevars/getcss.css")}}' );
-				e.editor.document.appendStyleSheet( '{{$this->Html->url("/css/ui-customer.css")}}' );
+				e.editor.document.appendStyleSheet( '{{$this->Html->assetUrl("/stylevars/getcss.css")}}' );
+				e.editor.document.appendStyleSheet( '{{$this->Html->assetUrl("/css/ui-customer.css")}}' );
 			}
 		});
 		//if($('.cke_top').parent('ui-dialog-content').size()<1){

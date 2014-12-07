@@ -21,7 +21,7 @@
 			
             $rows[] = array(
                 $this->Html->image(
-		$this->Html->url($item['Product']['coverimg']),
+		$this->Html->assetUrl($item['Product']['coverimg']),
 array('style'=>'max-width:100px;max-height:100px;')),
                 $item['Product']['name'],
 				$item['Product']['price'],

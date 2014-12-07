@@ -7,7 +7,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a href="{{$this->Html->url(Configure::read('Site.logo_url'))}}" style="padding:5px 15px;" class="navbar-brand">{{$this->Html->image($this->Html->url(Configure::read('Site.logo')), array('style'=>'height:35px;','title' => $site[title],'alt' => $site[title]))}}</a>
+      <a href="{{$this->Html->assetUrl(Configure::read('Site.logo_url'))}}" style="padding:5px 15px;" class="navbar-brand">{{$this->Html->image($this->Html->assetUrl(Configure::read('Site.logo')), array('style'=>'height:35px;','title' => $site[title],'alt' => $site[title]))}}</a>
     </div>
 	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
 	<?php 

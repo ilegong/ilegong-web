@@ -10,13 +10,13 @@
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
         <div class="item active">
-            <a href="/products/20140809/tai_wan_tu_feng_li_su.html"><img src="{{ $this->Html->url('/img/banner/pyshuo_banner_fengli.jpg', true); }}" alt="土凤梨酥"></a>
+            <a href="/products/20140809/tai_wan_tu_feng_li_su.html"><img src="{{ $this->Html->assetUrl('/img/banner/pyshuo_banner_fengli.jpg', true); }}" alt="土凤梨酥"></a>
         </div>
         <div class="item">
-            <a href="/products/20140903/qing_hai_hu_hua_fen.html"><img src="{{ $this->Html->url('/img/banner/pyshuo_banner_follower.jpg', true); }}" alt="青海湖花粉预售"></a>
+            <a href="/products/20140903/qing_hai_hu_hua_fen.html"><img src="{{ $this->Html->assetUrl('/img/banner/pyshuo_banner_follower.jpg', true); }}" alt="青海湖花粉预售"></a>
         </div>
         <div class="item">
-            <a href="/products/20140901/yan_yan_jia_de_mi.html"><img src="{{ $this->Html->url('/img/banner/pyshuo_banner_yanyan.jpg', true); }}" alt="炎炎家的蜂蜜"></a>
+            <a href="/products/20140901/yan_yan_jia_de_mi.html"><img src="{{ $this->Html->assetUrl('/img/banner/pyshuo_banner_yanyan.jpg', true); }}" alt="炎炎家的蜂蜜"></a>
         </div>
     </div>
 
@@ -67,7 +67,7 @@
 		
 		  $container.infinitescroll({
 		        bufferPx     : 200, //离分页底部还有bufferPx像素时就开始加载下一页的内容 ，设置大一些体验效果会好一些
-			    loading : {img:"{{$this->Html->url('/img/ajax/loading.gif')}}",msgText:"正在加载新的图片...",finishedMsg:"亲，没有更多的啦。。。"},
+			    loading : {img:"{{$this->Html->assetUrl('/img/ajax/loading.gif')}}",msgText:"正在加载新的图片...",finishedMsg:"亲，没有更多的啦。。。"},
 			    animate: true,extraScrollPx:-200, // 回退一段，图片加载补上的缺位需要上移才能看到。
 			    navSelector  : "div.pagelink", // selector for the paged navigation (it will be hidden)
 			    nextSelector : "div.pagelink a:first",  // selector for the NEXT link (to page 2)

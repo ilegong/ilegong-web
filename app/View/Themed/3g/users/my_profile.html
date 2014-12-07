@@ -10,7 +10,7 @@
                 {{if $result['Shichituan']['status']==1}}
                 {{$this->Html->image(Router::url($result['Shichituan']['pictures']),array('class' => 'pull-right','height' => '46px'))}}
                 {{else}}
-                <img class="pull-right" height="46px" src="{{$this->Html->url('/img/default_user_icon.jpg')}}"/>
+                <img class="pull-right" height="46px" src="{{$this->Html->assetUrl('/img/default_user_icon.jpg')}}"/>
                 {{/if}}
 
             </li>

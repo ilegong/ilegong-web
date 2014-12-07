@@ -1,7 +1,7 @@
 <div class="row clearfix">
     <div class="container">
         <div class="col-md-6 pull-left">
-            <a href="{{$this->Html->url(Configure::read('Site.logo_url'))}}" style="" class="navbar-brand">{{$this->Html->image($this->Html->url('/img/logo-pys.png'), array('title' => $site[title],'alt' => $site[title]))}}</a>
+            <a href="{{$this->Html->assetUrl(Configure::read('Site.logo_url'))}}" style="" class="navbar-brand">{{$this->Html->image($this->Html->assetUrl('/img/logo-pys.png'), array('title' => $site[title],'alt' => $site[title]))}}</a>
         </div>
         <div class="col-md-6">
             <div class="pull-right" style="margin-top: 10px">

@@ -30,7 +30,7 @@ if (defined('SAE_MYSQL_DB')) {
     define('UPLOAD_FILE_PATH', 'saestor://'.SAE_STORAGE_UPLOAD_DOMAIN_NAME.'/');
     
     define('WEB_VISIT_CACHE','saemc://cache/');
-    define('WEB_VISIT_CACHE_URL','/cache/');
+    define('WEB_VISIT_CACHE_URL','http://51daifan.vipsinaapp.com/cache/');
     
     define('DATA_PATH', 'saemc://data/'); //data目录使用kvdb，其余stor的均使用upload_file_path
 }
@@ -42,7 +42,7 @@ else{
     define('UPLOAD_FILE_PATH', WWW_ROOT.DS); // 本地上传路径
     define('UPLOAD_FILE_URL',str_replace('\\','/',APP_SUB_DIR)); //APP_SUB_DIR    
     define('WEB_VISIT_CACHE',WWW_ROOT.DS.'cache'.DS);
-    define('WEB_VISIT_CACHE_URL',APP_SUB_DIR.'/cache/');    
+    define('WEB_VISIT_CACHE_URL',APP_SUB_DIR.'/cache/');
     define('DATA_PATH', ROOT.DS.'data'.DS);    
 }
 // 文件的相对地址,结合UPLOAD_FILE_PATH获取到本地的地址
