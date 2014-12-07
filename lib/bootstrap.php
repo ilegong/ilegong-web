@@ -30,7 +30,7 @@ if (defined('SAE_MYSQL_DB')) {
     define('UPLOAD_FILE_PATH', 'saestor://'.SAE_STORAGE_UPLOAD_DOMAIN_NAME.'/');
     
     define('WEB_VISIT_CACHE','saemc://cache/');
-    define('WEB_VISIT_CACHE_URL','http://51daifan.vipsinaapp.com/cache/');
+    define('WEB_VISIT_CACHE_URL','/cache/');
     
     define('DATA_PATH', 'saemc://data/'); //data目录使用kvdb，其余stor的均使用upload_file_path
 }

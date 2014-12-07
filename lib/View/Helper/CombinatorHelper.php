@@ -55,7 +55,7 @@ class CombinatorHelper extends Helper {
 			//$css = preg_replace('/url\(["|\']?(.+?)["|\']?\)/ies',"'url('.\$this->fixurl('\\1').')'",$css);
 			file_put_contents(WEB_VISIT_CACHE.$cachefile, $css);
 		}
-		return '<link href="' . $cachefile . '" rel="stylesheet" type="text/css" >';
+		return '<link href="' .WEB_VISIT_CACHE_URL. $cachefile . '" rel="stylesheet" type="text/css" >';
 	}
 	
 	private function get_js($url) {
