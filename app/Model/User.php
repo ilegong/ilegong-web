@@ -29,12 +29,12 @@ class User extends AppModel {
      * @access public
      */
     var $validate = array(
-        'mobilephone' => array(
-            'notempty' => array(
-                'rule' => 'notEmpty',
-                'message' => 'This field cannot be left blank.',
-            ),
-        ),
+//        'mobilephone' => array(
+//            'notempty' => array(
+//                'rule' => 'notEmpty',
+//                'message' => 'This field cannot be left blank.',
+//            ),
+//        ),
     );
 
     public function beforeSave($options = array()) {

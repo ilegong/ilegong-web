@@ -1023,7 +1023,10 @@ class UsersController extends AppController {
                 $changed = true;
             }
             if ($changed) {
-                $this->User->save($user);
+                $rtn = $this->User->save($user);
+                if (!$rtn) {
+                    $this->log('error to save user:'. $user['id']);
+                }
             }
         }
     }
