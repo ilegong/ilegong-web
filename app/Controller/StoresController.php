@@ -14,7 +14,7 @@ class StoresController extends AppController {
 
 
     /* lower case */
-    public $allowdPostProductFields = array('id', 'promote_name', 'name', 'coverimg', 'content', 'published', 'price', 'ship_fee');
+    public $allowdPostProductFields = array('id', 'promote_name', 'name', 'coverimg', 'content', 'published', 'price', 'ship_fee', 'original_price');
 
     public $brand = null;
 
@@ -498,6 +498,10 @@ class StoresController extends AppController {
                 $error = "不能编辑特定信息:$key";
                 break;
             }
+        }
+
+        if (mb_strlen($this->data['Product']['name'], "UTF-8") > VAL_PRODUCT_NAME_MAX_LEN) {
+            $error = '名称不能长于'.VAL_PRODUCT_NAME_MAX_LEN.'个字符';
         }
 
         if (!empty($error)) {

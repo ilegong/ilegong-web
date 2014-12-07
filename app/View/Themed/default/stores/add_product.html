@@ -10,13 +10,14 @@ body{
 	<div class="form-group">
 		<label class="col-sm-2 control-label" for="ProductName">商品名称</label>
 		<div class="col-sm-9 controls">
-			<input type="text"  class="form-control" id="ProductName" maxlength="250" name="data[Product][name]">
+			<input type="text" value="{{$this->data[Product][name]}}"  class="form-control" id="ProductName" maxlength="250" name="data[Product][name]">
+            <p class="help-block">最多15个字</p>
 		</div>
 	</div>
     <div class="form-group">
         <label class="col-sm-2 control-label" for="promote_name">商品名称补充（促销信息）</label>
         <div class="col-sm-9 controls select">
-            <input type="text" id="promote_name"   class="form-control" name="data[Product][promote_name]"/>
+            <input type="text" id="promote_name" value="{{$this->data[Product][promote_name]}}"  class="form-control" name="data[Product][promote_name]"/>
         </div>
     </div>
 	<div class="form-group">
@@ -39,14 +40,23 @@ body{
 	<div class="form-group">
 		<label class="col-sm-2 control-label" for="ProductPrice">价格(元)</label>
 		<div class="col-sm-9 controls number">
-			<input type="number" id="ProductPrice" step="any" class="form-control" name="data[Product][price]">
+			<input type="number" id="ProductPrice" value="{{$this->Number->precision($this->data[Product][price], 2)}}" step="any" class="form-control" name="data[Product][price]">
+            <p class="help-block">实际售价</p>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="ProductOriginPrice">原价(元)</label>
+		<div class="col-sm-9 controls number">
+			<input type="number" id="ProductOriginPrice" value="{{$this->Number->precision($this->data[Product][original_price], 2)}}" step="any" class="form-control" name="data[Product][original_price]">
+            <p class="help-block">用于显示商品原价或者市场价，不是真实售价</p>
 		</div>
 	</div>
 
     <div class="form-group">
         <label class="col-sm-2 control-label" for="ProductShipfee">快递费用(元)</label>
         <div class="col-sm-9 controls number">
-            <input type="number" id="ProductShipfee" step="any" class="form-control" name="data[Product][ship_fee]">
+            <input type="number" id="ProductShipfee" value="{{$this->Number->precision($this->data[Product][ship_fee], 2)}}" step="any" class="form-control" name="data[Product][ship_fee]">
         </div>
     </div>
 	
@@ -56,7 +66,7 @@ body{
 
 	<div class="form-group">
 		<div class="col-sm-12">
-			<textarea id="ProductContent"  class="form-control" cols="30" rows="4" name="data[Product][content]"></textarea>
+			<textarea id="ProductContent"  class="form-control" cols="30" rows="4" name="data[Product][content]">{{$this->data[Product][content]}}</textarea>
 		</div>
 	</div>
 	

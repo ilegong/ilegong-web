@@ -12,6 +12,7 @@ body{
 		<div class="col-sm-9 controls">
 			{{$this->Form->hidden('id')}}
 			{{$this->Form->input('name',array('class'=>'form-control','div'=>false,'label'=>false))}}
+            <p class="help-block">最多15个字</p>
 		</div>
 	</div>
     <div class="form-group">
@@ -34,6 +35,15 @@ body{
 		<label class="col-sm-2 control-label" for="ProductPrice">价格(元)</label>
 		<div class="col-sm-9 controls number">
 			{{$this->Form->input('price',array('class'=>'form-control','div'=>false,'label'=>false))}}
+            <p class="help-block">实际售价</p>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label" for="ProductOriginalPrice">原价(元)</label>
+		<div class="col-sm-9 controls number">
+			{{$this->Form->input('original_price',array('class'=>'form-control','div'=>false,'label'=>false))}}
+            <p class="help-block">用于显示商品原价或者市场价，不是真实售价</p>
 		</div>
 	</div>
 
