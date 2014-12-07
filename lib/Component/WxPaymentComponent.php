@@ -185,12 +185,17 @@ class WxPaymentComponent extends Component {
                 return $val['Cart']['name'];
             }, array_slice($items, 0, 3));
             $productDesc .= implode('、', $cartItemNames);
-            $productDesc .= " 等" . count($items) . "件商品";
+
+            $body =  mb_substr($productDesc, 0, 25);
+
+            $end = " 等" . count($items) . "件商品";
+            $productDesc .= $end;
+            $body .= $end;
         } else {
             //display errors
             $this->log('Cannot get cart items: ' . $orderId . '/pay?msg=cannot_get_cart_items');
         }
-        $body = mb_strlen($productDesc, 'UTF-8') > 127 ? mb_substr($productDesc, 0, 127, 'UTF-8') : $productDesc;
+//        $body = strlen($productDesc) > 127 ? mb_substr($productDesc, 0, 127, 'UTF-8') : $productDesc;
         return array($productDesc, $body);
     }
 
