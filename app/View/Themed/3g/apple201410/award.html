@@ -274,44 +274,22 @@
     var sound_url = 'http://51daifan-images.stor.sinaapp.com/tree_shake.mp3';
     var share_png_url = '{{$this->Html->assetUrl("/img/apple201410/share.png")}}';
     var game_type = '{{$game_type}}';
-    var game_page_title = function(total){ return {{$title_func}};};
+    var game_page_title = {{if !empty($title_func)}}function(total){ return {{$title_func}};} {{else}} null {{/if}};
     var game_obj_name = '{{$game_obj_name}}';
     var game_least_change = '{{$game_least_change}}';
+    function showAfterGotCallback(times, total){ }
 
-    {{if $game_type == 'mihoutao1411'}}
-    function game_mihoutao_hongbao($total) {
-        if ($total >= 100) return '兑到'+400;
-        else if ($total >= 80) return '兑到'+225;
-        else if ($total >= 60) return '兑到'+100;
-        else if ($total >= 30) return '兑到'+25;
-        else return "马上兑到25";
-    }
+     {{if $game_type == 'mihoutao1411'}}
+        function game_mihoutao_hongbao($total) {
+            if ($total >= 100) return '兑到'+400;
+            else if ($total >= 80) return '兑到'+225;
+            else if ($total >= 60) return '兑到'+100;
+            else if ($total >= 30) return '兑到'+25;
+            else return "马上兑到25";
+        }
+     {{/if}}
 
-    function game_notify_after_exchange(coupon_count) {
-        utils.alert("恭喜，兑换了" + coupon_count + "个红包，<a href='/users/my_offers.html' class='apple_medium_links'>查看我的红包</a>!");
-    }
-
-    var game_page_title = false;
-
-   function showAfterGotCallback(times, total){
-       if (total >= 100) {
-           bootbox.dialog({message: '亲，您太能了，马上去抽奖吧！',
-               buttons: {
-                   'no': { 'label': '耐心摇', className: 'btn-default'},
-                   'yes': { 'label': '去抽奖', className: 'btn-danger', callback: function () {
-                       $('html, body').animate({
-                           scrollTop: $("#award_cj").offset().top
-                       }, 500);
-                   }}
-               }
-           }).css({
-               'top': '50%',
-               'margin-top': function () {
-                   return -($(this).height() / 2);
-               }
-           });
-       }
-    }
+    {{if $game_type == 'qinyBTC1412'}}
 
     // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
     document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
@@ -321,7 +299,7 @@
         function descContent() {
             var total = $.trim($('#apple_got_cnt').text());
             total = total != '' ? parseInt(total) : 0;
-            return '摇一摇一起免费兑生态猕猴桃红包，我已经摇下'+total+'个猕猴桃，'+ game_mihoutao_hongbao(total) +'元红包啦 -- 朋友说';
+            return '万橙，比储橙不止甜了一点，我已经摇下10个万橙，排名第xx名 - 朋友说'+total+'个猕猴桃，'+ game_mihoutao_hongbao(total) +'元红包啦 -- 朋友说';
         }
         var shareTitle = '摇下100个，400元生态猕猴桃红包免费送';
         var appid = '{{WX_APPID}}';

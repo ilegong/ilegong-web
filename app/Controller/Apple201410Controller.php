@@ -22,6 +22,7 @@ class Apple201410Controller extends AppController
     const EXCHANGE_RICE_SOURCE = 'apple_exchange_rice';
     const RICE_201411 = 'rice201411';
     const MIHOUTAO1411 = 'mihoutao1411';
+    const BTC1412 = 'qinyBTC1412';
 
     /*
      * INSERT INTO `cake_game_configs` (`game_type`, `day_limit`, `created`, `modified`, `game_obj_name`, `game_end`, `game_start`) VALUES
@@ -34,24 +35,31 @@ class Apple201410Controller extends AppController
 
     var $treeNames = array(
         self::RICE_201411 => 'apple_shakev1.gif',
-        self::MIHOUTAO1411 => 'tree_mihoutao_shake.gif');
+        self::MIHOUTAO1411 => 'tree_mihoutao_shake.gif',
+        self::BTC1412 => 'orange.gif',
+    );
 
     var $treeStaticNames = array(
         self::RICE_201411 => 'apple_tree.gif',
-        self::MIHOUTAO1411 => 'tree_mihoutao_static.gif');
+        self::MIHOUTAO1411 => 'tree_mihoutao_static.gif',
+        self::BTC1412 => 'orange_static.gif',
+    );
 
     var $game_least_change = array(
         self::RICE_201411 => 50,
         self::MIHOUTAO1411 => 30,
+        self::BTC1412 => 30,
     );
 
     var $title_in_page = array(
         self::MIHOUTAO1411 => '摇下100个，最高1箱猕猴桃免费领',
         self::RICE_201411 => '摇下50个，大米优惠券免费送',
+        self::BTC1412 => '摇下100个，1箱万橙免费领',
     );
     var $title_in_window = array(
         self::MIHOUTAO1411 => '摇下100个，最高一箱猕猴桃免费领',
         self::RICE_201411 => '摇下50个，大米优惠券免费送',
+        self::BTC1412 => '摇下100个，1箱万橙免费领',
     );
     var $title_js_func = array(
         self::RICE_201411 => "'摇一摇免费兑稻花香大米券, 我已经有机会兑到'+total*10+'g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米-朋友说'",
@@ -80,8 +88,7 @@ class Apple201410Controller extends AppController
         $this->set('game_type', self::RICE_201411);
     }
 
-    public function notifiedToMe()
-    {
+    public function notifiedToMe() {
         $key = $this->sess_award_notified;
         $r = $this->Session->read($key);
         if (!empty($r)) {
@@ -94,32 +101,6 @@ class Apple201410Controller extends AppController
         }
         $this->autoRender = false;
     }
-
-    var $companies = array(
-        1156 => '搜狗',
-        1914 => '搜狗',
-        1334 => '搜狗',
-
-        1308 => '北京联合大学',
-        940 => '爱大厨',
-        988 => '原道智业',
-
-
-        8 => '朋友说',
-        578 => '朋友说',
-
-        1608 => '去哪儿',
-        1488 => '去哪儿',
-        1968 => '去哪儿',
-        3468 => '凤凰网',
-
-        4639 => '去哪儿',
-
-        2073 => '',
-        926 => '去哪儿',
-        2727 => '去哪儿',
-        1290 => '对外经贸大学',
-    );
 
     var $in_pys = array(8, 578, 818, 819);
 
@@ -140,6 +121,7 @@ class Apple201410Controller extends AppController
             $logsToMe = $this->TrackLog->find('all', array('conditions' => array(
                 'type' => $gameType,
                 'to' => $this->currentUser['id'],
+                'got' => ' > 0',
                 'award_time > \'' . date(FORMAT_DATETIME, $r) . '\''
             ), 'fields' => array('from')
             ));
@@ -240,7 +222,7 @@ class Apple201410Controller extends AppController
         $award_type = 0;
         $last = $this->Session->read('last_chou_jiang');
         $msg = '';
-        if (time() - $last > 180 && $gameType == self::MIHOUTAO1411) {
+        if (time() - $last > 30 && ($gameType == self::BTC1412)) {
             $this->Session->write('last_chou_jiang', time());
 
             $gameCfg = $this->GameConfig->findByGameType($gameType);
@@ -251,9 +233,9 @@ class Apple201410Controller extends AppController
                 }
             }  else {
                 $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
-                $total_got = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] : 0;
+                $not_spent = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] - $awardInfo['spent'] : 0;
 
-                if ($total_got >= $this->AWARD_LIMIT) {
+                if ($not_spent >= $this->AWARD_LIMIT) {
                     $this->loadModel('AwardResult');
                     $model = $this->AwardResult;
                     $todayAwarded = $model->todayAwarded(date(FORMAT_DATE), $gameType);
@@ -269,30 +251,25 @@ class Apple201410Controller extends AppController
                             $this->log("Save AwardResult failed:" . json_encode($awardResult));
                         };
 
-                        $award_type = 69;
-                        $type = 1387;
-                        if ($todayAwarded == 3) {
-                            $type = 1388;
-                            $award_type = 109;
-                        }
-
-                        $this->CouponItem->addCoupon($uid, $type, $uid, 'game_' . $gameType . '_' . mktime());
-                        $store = "购买陕西梅县生态猕猴桃时使用";
-                        $validDesc = "有效期至2014年12月05日";
+                        $award_type = 58;
+                        $this->CouponItem->addCoupon($uid, 17652, $uid, 'game_' . $gameType . '_' . mktime());
+                        $store = "购买黔阳冰糖橙时使用";
+                        $validDesc = "有效期至2014年12月25日";
                         $this->Weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
+
                     }
                     $logstr = "Choujian $uid : todayAwarded=$todayAwarded, iAwarded=$iAwarded, shouldLimit=$shouldLimit";
                     $this->log($logstr);
                 } else {
                     $msg = 'not_enough_100';
-                    $logstr = "total_got=$total_got, award_limit=" . $this->AWARD_LIMIT;
+                    $logstr = "total_got=$not_spent, award_limit=" . $this->AWARD_LIMIT;
                 }
             }
         } else {
             $logstr = 'too frequently';
         }
 
-        echo json_encode(array('success' => true, 'award_type' => $award_type, 'logstr' => '', 'msg' => $msg, 'total' => $total_got));
+        echo json_encode(array('success' => true, 'award_type' => $award_type, 'logstr' => '', 'msg' => $msg, 'total' => $not_spent));
     }
 
     public function exchange_coupon($gameType = KEY_APPLE_201410)
@@ -405,8 +382,10 @@ class Apple201410Controller extends AppController
             throw new CakeException("Not found Game Config");
         }
 
+        $dailyHelpLimit = ($gameType == self::BTC1412 ? 5 : 0);
+
         $current_uid = $this->currentUser['id'];
-        list($friend, $shouldAdd, $gameType) = $this->track_or_redirect($current_uid, $gameType);
+        list($friend, $shouldAdd, $gameType) = $this->track_or_redirect($current_uid, $gameType, $dailyHelpLimit);
         if (!empty($friend)) {
             if ($shouldAdd) {
                 $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id'], 'type' => $gameType));
@@ -588,6 +567,7 @@ class Apple201410Controller extends AppController
         $curr_got = ($total_got == 0 && $curr_got == 0 ? 3 : $curr_got);
 
         if ($gameType != self::MIHOUTAO1411
+            && $gameType != self::BTC1412
             && (is_array($iAwarded) && empty($iAwarded) && $total_got + $curr_got >= $this->AWARD_LIMIT)) {
             $awardResult = array(
                 'uid' => $uid,

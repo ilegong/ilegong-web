@@ -674,23 +674,39 @@ class AppController extends Controller {
      * @param $track_type
      * @param $current_uid
      * @param $friendUid
+     * @param $dailyHelpLimit
      * @return bool
      */
-    private function recordTrack($track_type, $current_uid, $friendUid) {
+    private function recordTrack($track_type, $current_uid, $friendUid, $dailyHelpLimit) {
+
+        $shouldAdd = true;
+        if ($dailyHelpLimit > 0) {
+            $helped = $this->TrackLog->today_helped($track_type, $current_uid);
+            if ($helped >= $dailyHelpLimit) {
+                $shouldAdd = false;
+            }
+        }
+
         $trackLogs = $this->TrackLog->find('first', array(
             'conditions' => array('type' => $track_type, 'from' => $current_uid, 'to' => $friendUid),
             'fields' => array('id',)
         ));
 
         $clientIp = $this->request->clientIp(false);
-        $newUser = empty($trackLogs);
-        if ($newUser) {
-            $toUpdate = array('TrackLog' => array('type' => $track_type, 'last_ip' => '\''.$clientIp.'\'', 'from' => $current_uid, 'to' => $friendUid, 'award_time' => date(FORMAT_DATETIME)));
+        $hasTrackLogs = empty($trackLogs);
+        $shouldAdd = $shouldAdd && ($hasTrackLogs || $trackLogs['TrackLog']['got'] == 0);
+        if ($hasTrackLogs) {
+            $toUpdate = array('TrackLog' => array('type' => $track_type, 'got' => $shouldAdd?1:0, 'last_ip' => '\''.$clientIp.'\'', 'from' => $current_uid, 'to' => $friendUid, 'award_time' => date(FORMAT_DATETIME)));
             $this->TrackLog->save($toUpdate);
         } else {
-            $this->TrackLog->updateAll(array('latest_click_time' => '\''.date(FORMAT_DATETIME).'\'', 'last_ip' => '\''.$clientIp.'\''), array('id' => $trackLogs['TrackLog']['id']));
+            $updating = array('latest_click_time' => '\'' . date(FORMAT_DATETIME) . '\'', 'last_ip' => '\'' . $clientIp . '\'');
+            if ($shouldAdd) {
+                $updating['got'] = 1;
+                $updating['award_time'] = date(FORMAT_DATETIME);
+            }
+            $this->TrackLog->updateAll($updating, array('id' => $trackLogs['TrackLog']['id']));
         }
-        return $newUser;
+        return $shouldAdd;
     }
 
     /**
@@ -701,9 +717,10 @@ class AppController extends Controller {
      *
      * @param $current_uid
      * @param $default_track_type
+     * @param $dailyHelpLimit int daily limit help per day for a user
      * @return array ($friend, $shouldAdd, $trType)
      */
-    protected function track_or_redirect($current_uid, $default_track_type) {
+    protected function track_or_redirect($current_uid, $default_track_type, $dailyHelpLimit) {
         $tr_id = $_GET['trid'];
         if (!empty($tr_id)) {
             $this->loadModel('TrackLog');
@@ -712,7 +729,7 @@ class AppController extends Controller {
                 $this->loadModel('User');
                 $friend = $this->User->findById($friendUid);
                 if (!empty($friend)) {
-                    $shouldAdd = $this->recordTrack($trType, $current_uid, $friendUid);
+                    $shouldAdd = $this->recordTrack($trType, $current_uid, $friendUid, $dailyHelpLimit);
                     return array($friend, $shouldAdd, $trType);
                 }
                 //treat as self
