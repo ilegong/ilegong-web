@@ -324,6 +324,9 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 .certify { font-size: 0.75em; background: white; padding: 0.5em 0.2em; color: #E8BF1E; }
 .btn-copy-storeaddr {border: 1px solid; padding:0.1em 0.1em;}
 
+.Content-body img{margin:5px 10px;min-width: 100%;
+    height: auto !important;}
+
 /*bottom*/
 .common_bottom{ position:fixed; bottom:0; left:0; background-color:#f1f1f1; height:4.042em; border-top:1px #dddddd solid; font-size:1em; color:#666666; width:100%;}
 .common_bottom a{ width:25%; float:left; display:block; text-decoration:none;}
