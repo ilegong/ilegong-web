@@ -125,7 +125,7 @@ class UsersController extends AppController {
                     if (mb_strlen($this->data['User']['nickname'], 'UTF-8') < 2) {
                         $this->Session->setFlash('用户名长度不能小于2个字符');
                     }else if($this->data['User']['mobilephone'] !=  $current_post_num){
-                        $this->Session->setFlash('验证的手机号码与注册填写的不一致');
+                        $this->Session->setFlash('请重新验证您的手机号码');
                     }else if ($this->data['User']['password'] != $this->data['User']['password_confirm']) {
                         $this->Session->setFlash('两次密码不相等');
                     }else if (is_null($this->data['User']['password']) || trim($this->data['User']['password']) == '') {
