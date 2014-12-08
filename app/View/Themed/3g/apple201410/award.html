@@ -173,6 +173,8 @@
     {{/if}}
 </div>
 
+<span id="helpme_cnt_n" class="hide">{{count($helpMe)}}</span>
+
 <script>
     var $got_wx_sub_times = "{{$got_wx_sub_times}}";
     var shake_pic_url = '{{$this->Html->assetUrl("/img/apple201410/".$treeName)}}';
@@ -243,7 +245,7 @@
                     function descContent() {
                         var total = $.trim($('#apple_got_cnt').text());
                         total = total != '' ? parseInt(total) : 0;
-                        var helpme_cnt_txt = $.trim($('#helpme_cnt').text());
+                        var helpme_cnt_txt = $.trim($('#helpme_cnt_n').text());
                         var helpme_cnt = (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
                         return '万橙，比褚橙不止甜了一点，'+helpme_cnt+'个好基友帮忙，我已经摇下'+total+'个万橙，排名第xx名 -- 朋友说';
                     }

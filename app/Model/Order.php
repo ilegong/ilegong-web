@@ -40,7 +40,7 @@ class Order extends AppModel {
 
     /**
      * @param $uid
-     * @param null $order_status
+     * @param $order_status  int|array
      * @return array orders, order_carts and mapped brands
      */
     public function get_user_orders($uid, $order_status=null) {

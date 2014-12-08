@@ -429,43 +429,49 @@ class Apple201410Controller extends AppController
             'limit' => 500
         ));
 
-        $friendsIHelped = $this->TrackLog->find('all', array(
-            'conditions' => array('from' => $current_uid, 'type' => $gameType, 'got' > 0),
-            'fields' => array('to'),
-            'limit' => 500
-        ));
+        if ($gameType != self::BTC1412) {
 
-        list($allUids, $nameIdMap) = $this->findNicknames($friendsHelpMe, $friendsIHelped);
+            $friendsIHelped = $this->TrackLog->find('all', array(
+                'conditions' => array('from' => $current_uid, 'type' => $gameType, 'got' > 0),
+                'fields' => array('to'),
+                'limit' => 500
+            ));
 
-        $gots = $this->AwardInfo->find('list', array(
-            'conditions' => array('uid' => $allUids, 'type'=> $gameType, 'got' > 0),
-            'fields' => array('uid', 'got')
-        ));
 
-        $helpMeItems = array();
-        foreach ($friendsHelpMe as $item) {
-            $uid = $item['TrackLog']['from'];
-            $helpMeItems[] = array('nickname' => filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid] ? $gots[$uid] : 0);
+            list($allUids, $nameIdMap) = $this->findNicknames($friendsHelpMe, $friendsIHelped);
+
+            $gots = $this->AwardInfo->find('list', array(
+                'conditions' => array('uid' => $allUids, 'type' => $gameType, 'got' > 0),
+                'fields' => array('uid', 'got')
+            ));
+
+            $helpMeItems = array();
+            foreach ($friendsHelpMe as $item) {
+                $uid = $item['TrackLog']['from'];
+                $helpMeItems[] = array('nickname' => filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid] ? $gots[$uid] : 0);
+            }
+
+            $meHelpItems = array();
+            foreach ($friendsIHelped as $item) {
+                $uid = $item['TrackLog']['to'];
+                $meHelpItems[] = array('nickname' => filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid] ? $gots[$uid] : 0);
+            }
+
+
+            function cmp($a, $b) {
+                $sortby = 'got'; //define here the field by which you want to sort
+                return $a[$sortby] < $b[$sortby];
+            }
+
+            uasort($helpMeItems, 'cmp');
+            uasort($meHelpItems, 'cmp');
+
+            $this->set('helpMe', $helpMeItems);
+            $this->set('meHelp', $meHelpItems);
+
+        } else {
+            $this->set('helpMe', $friendsHelpMe);
         }
-
-        $meHelpItems = array();
-        foreach ($friendsIHelped as $item) {
-            $uid = $item['TrackLog']['to'];
-            $meHelpItems[] = array('nickname' => filter_invalid_name($nameIdMap[$uid]), 'got' => $gots[$uid] ? $gots[$uid] : 0);
-        }
-
-
-        function cmp($a, $b)
-        {
-            $sortby = 'got'; //define here the field by which you want to sort
-            return $a[$sortby] < $b[$sortby];
-        }
-
-        uasort($helpMeItems, 'cmp');
-        uasort($meHelpItems, 'cmp');
-
-        $this->set('helpMe', $helpMeItems);
-        $this->set('meHelp', $meHelpItems);
 
         $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($current_uid, $gameType);
         if (empty($awardInfo)) {
