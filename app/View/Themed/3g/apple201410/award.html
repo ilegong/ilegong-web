@@ -8,7 +8,6 @@
         text-align: center;
         display: block;
     }
-
     .selected {
         background-color: lightgreen;
     }
@@ -239,23 +238,20 @@
                 {{if $game_type == 'qinyBTC1412'}}
 
                     var in_top_list = 100;
-
+                    var imgUrl = $('#apple_tree_img').attr('src');
+                    var lineLink = '{{WX_HOST}}/t/ag/{{$game_type}}.html?{{if $trid}}trid={{urlencode($trid)}}{{/if}}';
+                    function descContent() {
+                        var total = $.trim($('#apple_got_cnt').text());
+                        total = total != '' ? parseInt(total) : 0;
+                        var helpme_cnt_txt = $.trim($('#helpme_cnt').text());
+                        var helpme_cnt = (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
+                        return '万橙，比储橙不止甜了一点，'+helpme_cnt+'个好基友帮忙，我已经摇下'+total+'个万橙，排名第xx名 -- 朋友说';
+                    }
+                    var shareTitle = '摇下100个，1箱万橙免费领';
+                    var appid = '{{WX_APPID}}';
 
                     // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
                     document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-
-                        var imgUrl = $('#apple_tree_img').attr('src');
-                        var lineLink = '{{WX_HOST}}/t/ag/{{$game_type}}.html?{{if $trid}}trid={{urlencode($trid)}}{{/if}}';
-                        function descContent() {
-                            var total = $.trim($('#apple_got_cnt').text());
-                            total = total != '' ? parseInt(total) : 0;
-                            var helpme_cnt_txt = $.trim($('$helpme_cnt').text());
-                            var helpme_cnt = (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
-                            return '万橙，比储橙不止甜了一点，'+helpme_cnt+'个好基友帮忙，我已经摇下'+total+'个万橙，排名第xx名 -- 朋友说';
-                        }
-                        var shareTitle = '摇下100个，1箱万橙免费领';
-                        var appid = '{{WX_APPID}}';
-
                         WeixinJSBridge.on('menu:share:appmessage', function(argv){
                             utils.wx_to_friend(appid, imgUrl, lineLink, descContent(), shareTitle);
                         });
@@ -263,7 +259,6 @@
                             utils.wx_to_timeline(appid, imgUrl, lineLink, descContent(), shareTitle);
                         });
                     }, false);
-
                     {{/if}}
         });
 
