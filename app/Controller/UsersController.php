@@ -101,6 +101,7 @@ class UsersController extends AppController {
         if (!empty($this->data)) {
             $readCode = $this->data['User']['code'];
             $msgCode = $this->Session->read('messageCode');
+            $current_post_num = $this->Session->read('current_register_phone');
             if ($msgCode) {
                 $codeLog = json_decode($msgCode, true);
                 if ($codeLog && is_array($codeLog) && $codeLog['code'] == $readCode && (time() - $codeLog['time'] < 30 * 60)) {
@@ -123,8 +124,8 @@ class UsersController extends AppController {
 
                     if (mb_strlen($this->data['User']['nickname'], 'UTF-8') < 2) {
                         $this->Session->setFlash('用户名长度不能小于2个字符');
-                    }else if(strlen($this->data['User']['mobilephone']) != 11){
-                        $this->Session->setFlash('手机号码长度位数不正确');
+                    }else if($this->data['User']['mobilephone'] !=  $current_post_num){
+                        $this->Session->setFlash('验证的手机号码与注册填写的不一致');
                     }else if ($this->data['User']['password'] != $this->data['User']['password_confirm']) {
                         $this->Session->setFlash('两次密码不相等');
                     }else if (is_null($this->data['User']['password']) || trim($this->data['User']['password']) == '') {
@@ -158,7 +159,7 @@ class UsersController extends AppController {
                             else{
                                 $this->Session->setFlash('注册成功!');
                             }
-                            $data = $this->User->find('first', array('conditions' => array('username' =>  $this->data['User']['username']) ));
+                            $data = $this->User->find('first', array('conditions' => array('id' =>  $this->data['User']['id']) ));
                             $this->Session->write('Auth.User', $data['User']);
                             $this->redirect('/');
                         } else {

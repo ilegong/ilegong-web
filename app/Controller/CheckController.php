@@ -34,7 +34,7 @@ class CheckController extends AppController{
                 }
 //                $_SESSION['messageCode'] = $verifyCode;
                 $this->Session->write('messageCode', json_encode(array('code' => $verifyCode, 'time' => time())));
-
+                $this->Session->write('current_register_phone', $mobilephone);
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, "http://sms-api.luosimao.com/v1/send.json");
 
