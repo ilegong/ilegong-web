@@ -508,7 +508,12 @@ class OrdersController extends AppController{
 
         $counts = array();
 		foreach($order_carts as $order_id => $c){
-            $counts[$order_id] += $c['Cart']['num'];
+            $nums = Hash::extract($c, '{n}.Cart.num');
+
+            $total = 0;
+            foreach($nums as $num) $total += $num;
+
+            $counts[$order_id] += $total;
 		}
 
         $this->set('brands', $mappedBrands);
