@@ -245,7 +245,7 @@
                         total = total != '' ? parseInt(total) : 0;
                         var helpme_cnt_txt = $.trim($('#helpme_cnt').text());
                         var helpme_cnt = (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
-                        return '万橙，比储橙不止甜了一点，'+helpme_cnt+'个好基友帮忙，我已经摇下'+total+'个万橙，排名第xx名 -- 朋友说';
+                        return '万橙，比褚橙不止甜了一点，'+helpme_cnt+'个好基友帮忙，我已经摇下'+total+'个万橙，排名第xx名 -- 朋友说';
                     }
                     var shareTitle = '摇下100个，1箱万橙免费领';
                     var appid = '{{WX_APPID}}';
@@ -256,7 +256,7 @@
                             utils.wx_to_friend(appid, imgUrl, lineLink, descContent(), shareTitle);
                         });
                         WeixinJSBridge.on('menu:share:timeline', function(argv){
-                            utils.wx_to_timeline(appid, imgUrl, lineLink, descContent(), shareTitle);
+                            utils.wx_to_timeline(appid, imgUrl, lineLink, '', descContent());
                         });
                     }, false);
                     {{/if}}
