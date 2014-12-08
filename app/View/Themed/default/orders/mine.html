@@ -47,14 +47,12 @@ td {padding:5px 10px;}
     <div class="row tab-content" style="padding-left: 2px; background-color: #f1eff0">
         <?php foreach(array( '-1' => 'all', 0 => 'wait_payment', 1 => 'wait_deliver', 2 => 'wait_receive') as $status => $order_type) { ?>
         <div class="tab-pane fade {{if $order_type == 'all'}} in active {{/if}}" id="orders-{{$order_type}}">
-            <div class="Content-body">
             {{ $this->element('my_orders', array(
                     'orders' => $orders,
                     'brands' => $brands,
                     'counts' => $counts,
                     'status' => $status
                 )); }}
-            </div>
         </div>
         <?php } ?>
     </div>
