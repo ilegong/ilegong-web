@@ -608,14 +608,21 @@ function brand_link($brand_id, $params) {
 }
 
 function small_thumb_link($imgUrl) {
-    if ($imgUrl && strpos($imgUrl, '/thumb_s/') === false) {
-        $r = preg_replace('/(.*files\/20\d+\/)(thumb_m\/)?(\s*)/i', '${1}thumb_s/${3}', $imgUrl);
+    return thumb_link($imgUrl, 'thumb_s');
+}
+
+function medium_thumb_link($imgUrl) {
+    return thumb_link($imgUrl, 'thumb_m');
+}
+
+function thumb_link($imgUrl, $type = 'thumb_s') {
+    if ($imgUrl && strpos($imgUrl, "/$type/") === false) {
+        $r = preg_replace('/(.*files\/20\d+\/)(thumb_[ms]\/)?(\s*)/i', '${1}'.$type.'/${3}', $imgUrl);
         return ($r != null) ? $r : $imgUrl;
     }
 
     return $imgUrl;
 }
-
 
 /**
  * @param $session SessionComponent

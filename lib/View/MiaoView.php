@@ -236,5 +236,9 @@ class MiaoView extends View{
 		CakeLog::error('Missing Template file '.$this->controller_name.DS.$action.$this->ext);
 		return false;
 	}
+
+    public function thumb_by_nettype() {
+//        medium_thumb_link();
+    }
 }
 ?>
