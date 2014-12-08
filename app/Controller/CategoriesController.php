@@ -181,10 +181,10 @@ class CategoriesController extends AppController {
 
         $bannerItems = array(
 //            array('img' => "/img/banner/banner_yongxing_btc.jpg", 'url' => "/products/20141206/qian_yang_bing_tang_cheng.html"),
-            array('img' => "/img/banner/banner_songzi.jpg", 'url' => "/products/20141117/dong_bei_hong_song_zi_1jin_zhuang.html"),
-            array('img' => "/img/banner/banner_dami.jpg",'url' =>  "/products/20141101/wu_chang_dao_hua_xiang_ti_qian_yu_shou_500jin_zhi_xian_bei_jing.html"),
-            array('img' => "/img/banner/banner_huizao.jpg", 'url' => "/products/20141117/xin_jiang_hui_zao.html"),
-            array('img' => "/img/banner/banner_shiliu.jpg", 'url' => "/products/20141013/he_nan_xing_yang_he_yin_ruan_zi_shi_liu_8liang.html"),
+            array('img' => "/img/banner/banner_songzi.jpg", 'url' => "/products/20141117/dong_bei_hong_song_zi_1jin_zhuang.html", 'id' => 266),
+            array('img' => "/img/banner/banner_dami.jpg",'url' =>  "/products/20141101/wu_chang_dao_hua_xiang_ti_qian_yu_shou_500jin_zhi_xian_bei_jing.html", 'id' => 231),
+            array('img' => "/img/banner/banner_huizao.jpg", 'url' => "/products/20141117/xin_jiang_hui_zao.html", 'id' => 269),
+            array('img' => "/img/banner/banner_shiliu.jpg", 'url' => "/products/20141013/he_nan_xing_yang_he_yin_ruan_zi_shi_liu_8liang.html", 'id' => 202),
         );
 
         $this->set('bannerItems', $bannerItems);
