@@ -100,7 +100,7 @@
     </div>
 
     <div class="section">
-        <div id="product_story" class="viewport">
+        <div class="viewport">
             <a href="/b/qian_yang_wan_cheng.html">
             <img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/img01.jpg')}}" />
             <img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/img02.jpg')}}" />
@@ -151,7 +151,7 @@
     </div>
     </div>
 
-    <div id="get_coupons" class="section">
+    <div class="section">
         <div style="background-image: url({{$this->Html->assetUrl('/img/apple201410/btc/rule/bg.jpg')}}); height: 100%">
     <div class="rule">
         <ul class="clearfix">
@@ -188,7 +188,7 @@
             </div>
     </div>
 
-    <div id="abount_us" class="section">
+    <div class="section">
         <div style="background-image: url({{$this->Html->assetUrl('/img/apple201410/btc/aboutus/bg.jpg')}}); height: 100%">
     <div class="guanzhu">
         <img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/title.png')}}" style="width:100%"/><br />
@@ -250,11 +250,11 @@
     </div>
     */ ?>
     {{if $game_type == 'qinyBTC1412'}}
-    <div id="top_list" class="bg_green pad section">
-        <div class="title">排行榜<small id="top_list_update"></small></div>
-        <div id="top_list_contents">
-        </div>
-    </div>
+    <!--<div id="top_list" class="bg_green pad section">-->
+        <!--<div class="title">排行榜<small id="top_list_update"></small></div>-->
+        <!--<div id="top_list_contents">-->
+        <!--</div>-->
+    <!--</div>-->
     {{/if}}
 </div>
 
@@ -271,7 +271,11 @@
     var game_least_change = '{{$game_least_change}}';
 
         $(document).ready(function(){
-            $('#fullpage').fullpage();
+            $('#fullpage').fullpage({
+                touchSensitivity: 15,
+                css3: true,
+                anchors: ['firstPage', 'product_story', 'top_list', 'get_coupons', 'about_us']
+            });
 
             {{if $game_type == 'mihoutao1411'}}
             $('#yao_jp').click(function(){
