@@ -1,6 +1,21 @@
-{{$this->Html->script(array('trace/tracekit.min.report.js', 'shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js'), array('block' => 'scriptBottom'));}}
+{{$this->Html->script(array('trace/tracekit.min.report.js', 'shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js', 'jquery/jquery.fullPage.min.js'), array('block' => 'scriptBottom'));}}
 {{$this->Html->css(array('apple_game.css?v3',));}}
-<div class="container">
+{{if $game_type == 'mihoutao1411' }}
+<style>
+    #yao_jp_div > span {
+        border: 1px solid darkkhaki;
+        margin-bottom: 2px;
+        text-align: center;
+        display: block;
+    }
+
+    .selected {
+        background-color: lightgreen;
+    }
+</style>
+{{/if}}
+<div id="fullpage" class="container">
+    <div class="section">
     <div id="top" class="row text-center">
         <h2 style="margin-bottom:5px; margin-top: 10px">{{$title_in_page}}</h2>
         <div class="col-xs-12">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp;
@@ -36,35 +51,34 @@
             <a href="/?from=game_home" class="apple_nav_links"><small>逛逛朋友说特产</small></a>
             <!--<a href="#about_apple" class="apple_nav_links"><small>QA妹子分享富士</small></a>-->
         </div>
-
-        {{if $game_type == 'mihoutao1411' }}
-        <div class="bg_orange pad text-left voffset3">
-            <div id="product_desc" class="title">张慧敏和她的生态眉县猕猴桃</div>
-            <div class="title"><img src="{{$this->Html->assetUrl('/img/apple201410/mihoutao_owner.jpg');}}" border="0" />
-                <img src="https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGmuhibaGnXyZbiahNvBoTvEwva9J2vlMmPrxgiaYGr1TicKa3oQ450HmWfhnUhuTKu9C5r2BM05JZDsQ/0"/>
-            </div>
-                &nbsp;&nbsp;我是一个来自陕西眉县的一个土生土长的农村孩子，小时候总是和小伙伴们混迹于田间地头，山坡上，小河里，我们挖野菜、捡麦穗、掰玉米、摸小鱼，其乐无穷。
-            <br/>
-                &nbsp;&nbsp;我们的猕猴桃坚持生态种植。一、我们的果型很好，体态苗条匀称，一看就和别的不一样；二、表皮颜色深，软化后，剥皮就犹如蒸熟的土豆，薄薄一层，皮和果肉的组织都极其细腻和紧实。三、口感尤为值得一提，果肉类似西瓜的沙度，甜度非常高，而且吃完之后嘴里有一种清香的味道，不会发酸。
-            。<br/>
-                <div class="text-center">
-                    <strong><a class="attention" href="/brands/20141109/mei_xian_mi_hou_tao.html?show_products=1">点击了解产品详情&gt;&gt;</a></strong>
-                </div>
-            </div>
-        </div>
-        {{/if}}
     </div>
-</div>
+    </div>
 
-<div class="container">
-    <div id="get_coupons" class="bg_green pad">
+    {{if $game_type == 'mihoutao1411' }}
+    <div class="section">
+    <div class="bg_orange pad text-left voffset3">
+        <div id="product_desc" class="title">张慧敏和她的生态眉县猕猴桃</div>
+        <div class="title"><img src="{{$this->Html->assetUrl('/img/apple201410/mihoutao_owner.jpg');}}" border="0" />
+            <img src="https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGmuhibaGnXyZbiahNvBoTvEwva9J2vlMmPrxgiaYGr1TicKa3oQ450HmWfhnUhuTKu9C5r2BM05JZDsQ/0"/>
+        </div>
+        &nbsp;&nbsp;我是一个来自陕西眉县的一个土生土长的农村孩子，小时候总是和小伙伴们混迹于田间地头，山坡上，小河里，我们挖野菜、捡麦穗、掰玉米、摸小鱼，其乐无穷。
+        <br/>
+        &nbsp;&nbsp;我们的猕猴桃坚持生态种植。一、我们的果型很好，体态苗条匀称，一看就和别的不一样；二、表皮颜色深，软化后，剥皮就犹如蒸熟的土豆，薄薄一层，皮和果肉的组织都极其细腻和紧实。三、口感尤为值得一提，果肉类似西瓜的沙度，甜度非常高，而且吃完之后嘴里有一种清香的味道，不会发酸。
+        。<br/>
+        <div class="text-center">
+            <strong><a class="attention" href="/brands/20141109/mei_xian_mi_hou_tao.html?show_products=1">点击了解产品详情&gt;&gt;</a></strong>
+        </div>
+    </div>
+    </div>
+    {{/if}}
+
+    <div id="get_coupons" class="bg_green pad section">
         <div class="title">兑换规则</div>
         <div class="con">
          {{if $game_type == 'rice201411'}}
             1、让小伙伴点击分享的苹果游戏链接获机会, 摇苹果可以换稻花香大米喔~<br />
             2、500g大米起兑(50个苹果=500g、100个苹果=1000g大米)；<br />
             3、大米券在<a href="/categories/special_list/special_for_rice_coupons.html" class="apple_medium_links">特惠专场</a>结账时直接抵现金使用，使用期限11月15号前。<br/>
-        </div>
         <div class="text-center">
         <button id="get_coupons_button" type="button" class="btn btn-warning">我要兑换</button>
         <div class="voffset2">
@@ -122,22 +136,10 @@
         <button id="get_coupons_button" type="button" class="btn btn-warning">我要兑换</button><a class="apple_medium_links" href="/users/my_coupons.html">我的优惠券</a>
             </div>
         {{/if}}
-        </div>
     </div>
+        </div>
 {{if $game_type == 'mihoutao1411' }}
-<style>
-    #yao_jp_div > span {
-        border: 1px solid darkkhaki;
-        margin-bottom: 2px;
-        text-align: center;
-        display: block;
-    }
-
-    .selected {
-        background-color: lightgreen;
-    }
-</style>
-<div id="award_cj" class="bg_orange pad">
+<div id="award_cj" class="bg_orange pad section">
     <div class="title">累计摇下100个，抽大奖</div>
     <div id="yao_jp_div"  class="row text-center">
         <span class="col-xs-12" id="jp_mihoutao_109">红绿灯猕猴桃一箱</span>
@@ -148,66 +150,16 @@
         <button id="yao_jp" type="button" class="btn btn-warning">抽奖</button>
     </div>
 </div>
-
-<script>
-    $('#yao_jp').click(function(){
-
-        function getRandomInt(min, max) {
-            return Math.floor(Math.random() * (max - min)) + min;
-        }
-
-        var finish = false;
-
-        setTimeout(function() {
-            $.getJSON('/apple_201410/jp/{{$game_type}}', {}, function (data) {
-                finish = true;
-                if (data.success) {
-                    setTimeout(function () {
-                        $items.removeClass('selected');
-                        var jp = $("#jp_mihoutao_" + data.award_type);
-                        jp.addClass('selected');
-                        if (data.award_type != 0) {
-                            utils.alert("恭喜您摇到" + jp.text() + ", <a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
-                        } else {
-                            var msg = '手气不太好啊, 过一会儿再试试！';
-                            if (data.msg == 'not_enough_100'){ msg = '累计已摇下' + data.total + '个，还不满100个，请继续努力~';}
-                            else if (data.msg == 'game_end') {
-                                msg = '活动已结束';
-                            }
-                            utils.alert(msg);
-                        }
-                    }, 1000);
-                } else {
-                    $items.removeClass('selected');
-                    $("#jp_mihoutao_0").addClass('selected');
-                }
-
-            });
-        }, 2000);
-
-        var $items = $('#yao_jp_div').find('span');
-        var interval = 200;
-        function jumping() {
-            $items.removeClass('selected');
-            $($items.get(getRandomInt(1, 1000) % $items.length)).addClass('selected');
-            if (!finish) {
-                setTimeout(jumping, interval);
-            }
-        }
-
-        setTimeout(jumping, interval);
-    });
-</script>
 {{/if}}
 
-    <div class="bg_white pad">
+    <div class="bg_white pad section">
         <div class="title"><img src="{{$this->Html->assetUrl('/img/logo.png')}}" border="0" style="width: 100px"/></div>
         <div class="con_aboutus">[朋友说]同事间互相分享家乡特产的创业网站,<br />我们都是城市里的乡下人。<br /><strong>
             <a class="attention" href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">点击关注</a></strong>
         </div>
     </div>
 
-    <div class="bg_orange pad">
+    <div class="bg_orange pad section">
         <div id="more_chances" class="title">如何获得更多摇一摇机会</div>
         <div class="con clearfix">
             <div class="fl">1、关注我们的服务号, <strong class="red">每天</strong>都可以领取<strong class="red">5</strong>次机会。</div>
@@ -218,7 +170,7 @@
             <div class="fl"><a id="share_btn_2" href="javascript:;" class="draw radius10">立即分享</a></div>
         </div>
     </div>
-    <div  id="friends" class="bg_green pad">
+    <div  id="friends" class="bg_green pad section">
         <div class="title"><strong id="helpme_cnt" class="red">{{count($helpMe)}}</strong>个朋友帮了我</div>
             {{if $helpMe}}
             {{loop $helpMe $key $item}}
@@ -237,7 +189,7 @@
             {{/if}}
     </div>
 
-    <div id="friendsIhelped" class="bg_orange pad">
+    <div id="friendsIhelped" class="bg_orange pad section">
         <div class="title">我帮过<strong class="red">{{count($meHelp)}}</strong>个朋友</div>
         {{if $meHelp}}
         {{loop $meHelp $key $item}}
@@ -256,7 +208,7 @@
         {{/if}}
     </div>
 
-    <div id="top_list" class="bg_green pad">
+    <div id="top_list" class="bg_green pad section">
         <div class="title">排行榜</div>
         {{if $meHelp}}
         {{loop $meHelp $key $item}}
@@ -274,9 +226,8 @@
         <div class="con clearfix">你竟然还没有帮过朋友！</div>
         {{/if}}
     </div>
-
-    <div class="top"><a class="top" href="javascript:;" onclick="$('html, body').animate({ scrollTop: $('#top').offset().top }, 1000);"></a></div>
 </div>
+    <!--<div class="top"><a class="top" href="javascript:;" onclick="$('html, body').animate({ scrollTop: $('#top').offset().top }, 1000);"></a></div>-->
 
         <style>
             .bootbox-body {
@@ -296,6 +247,61 @@
     var game_page_title = {{if !empty($title_func)}}function(total){ return {{$title_func}};} {{else}} null {{/if}};
     var game_obj_name = '{{$game_obj_name}}';
     var game_least_change = '{{$game_least_change}}';
+
+        $(document).ready(function(){
+            $('#fullpage').fullpage();
+
+
+            {{if $game_type == 'mihoutao1411'}}
+            $('#yao_jp').click(function(){
+                function getRandomInt(min, max) {
+                    return Math.floor(Math.random() * (max - min)) + min;
+                }
+
+                var finish = false;
+
+                setTimeout(function() {
+                    $.getJSON('/apple_201410/jp/{{$game_type}}', {}, function (data) {
+                        finish = true;
+                        if (data.success) {
+                            setTimeout(function () {
+                                $items.removeClass('selected');
+                                var jp = $("#jp_mihoutao_" + data.award_type);
+                                jp.addClass('selected');
+                                if (data.award_type != 0) {
+                                    utils.alert("恭喜您摇到" + jp.text() + ", <a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
+                                } else {
+                                    var msg = '手气不太好啊, 过一会儿再试试！';
+                                    if (data.msg == 'not_enough_100'){ msg = '累计已摇下' + data.total + '个，还不满100个，请继续努力~';}
+                                    else if (data.msg == 'game_end') {
+                                        msg = '活动已结束';
+                                    }
+                                    utils.alert(msg);
+                                }
+                            }, 1000);
+                        } else {
+                            $items.removeClass('selected');
+                            $("#jp_mihoutao_0").addClass('selected');
+                        }
+
+                    });
+                }, 2000);
+
+                var $items = $('#yao_jp_div').find('span');
+                var interval = 200;
+                function jumping() {
+                    $items.removeClass('selected');
+                    $($items.get(getRandomInt(1, 1000) % $items.length)).addClass('selected');
+                    if (!finish) {
+                        setTimeout(jumping, interval);
+                    }
+                }
+
+                setTimeout(jumping, interval);
+            });
+            {{/if}}
+        });
+
     function showAfterGotCallback(times, total){ }
 
      {{if $game_type == 'mihoutao1411'}}
