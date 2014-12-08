@@ -1023,9 +1023,9 @@ class UsersController extends AppController {
         $userInfo = $this->WxOauth->getUserInfo($openid, $access_token);
         if (!empty($userInfo)) {
             $userInfo = $userInfo['WxOauth'];
-            return $userInfo;
+            return $userInfo['openid'] ? $userInfo : false;
         }
-        return $userInfo;
+        return false;
     }
 
     protected function wxFailAndGotoLogin($ref = '') {
