@@ -11,7 +11,7 @@ class ApiOrdersController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
         $access_token = $_REQUEST['token'];
-        if (!empty($access_token) || array_search($this->request->params['action'], array('product_detail', 'store_list')) !== false) {
+        if (!empty($access_token) || array_search($this->request->params['action'], array('product_detail', 'store_list', 'product_content')) !== false) {
             $this->loadModel('User');
             $user = $this->User->findById('146');
             $this->currentUser = $user['User'];
@@ -141,6 +141,18 @@ class ApiOrdersController extends AppController {
                 $this->set('brand', $brand);
 
                 $this->set('_serialize', array('product', 'recommends', 'brand'));
+            }
+        }
+    }
+
+    public function product_content($pid) {
+
+        if (!empty($pid)) {
+            $productM = ClassRegistry::init('Product');
+            $pro = $productM->findById($pid);
+            if (!empty($pro) && $pro['Product']['deleted'] == DELETED_NO && $pro['Product']['published'] == PUBLISH_YES) {
+                $this->set('content',array('Product' => array('id' => $pid, 'content' => $pro['Product']['content'])));
+                $this->set('_serialize', array('content',));
             }
         }
     }
