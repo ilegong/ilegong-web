@@ -702,7 +702,7 @@ class AppController extends Controller {
             $updating = array('latest_click_time' => '\'' . date(FORMAT_DATETIME) . '\'', 'last_ip' => '\'' . $clientIp . '\'');
             if ($shouldAdd) {
                 $updating['got'] = 1;
-                $updating['award_time'] = date(FORMAT_DATETIME);
+                $updating['award_time'] = '\''.date(FORMAT_DATETIME).'\'';
             }
             $this->TrackLog->updateAll($updating, array('id' => $trackLogs['TrackLog']['id']));
         }
