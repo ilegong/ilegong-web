@@ -475,15 +475,7 @@ class StoresController extends AppController {
      * @return string
      */
     private function generate_slug($word) {
-        if (empty($word)) {
-            return '';
-        }
-        App::uses('Charset', 'Lib');
-        App::uses('Pinyin', 'Lib');
-        $PY = new Pinyin();
-        $slug = $PY->stringToPinyin(Charset::utf8_gbk($word));
-        $slug = Inflector::slug($slug);
-        return $slug;
+        return generate_slug($word);
     }
 
     /**
