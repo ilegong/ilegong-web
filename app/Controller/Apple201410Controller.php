@@ -400,13 +400,13 @@ class Apple201410Controller extends AppController
         }
 
         $friendsHelpMe = $this->TrackLog->find('all', array(
-            'conditions' => array('to' => $current_uid, 'type' => $gameType),
+            'conditions' => array('to' => $current_uid, 'type' => $gameType, 'got' > 0),
             'fields' => array('from'),
             'limit' => 500
         ));
 
         $friendsIHelped = $this->TrackLog->find('all', array(
-            'conditions' => array('from' => $current_uid, 'type' => $gameType),
+            'conditions' => array('from' => $current_uid, 'type' => $gameType, 'got' > 0),
             'fields' => array('to'),
             'limit' => 500
         ));
@@ -414,7 +414,7 @@ class Apple201410Controller extends AppController
         list($allUids, $nameIdMap) = $this->findNicknames($friendsHelpMe, $friendsIHelped);
 
         $gots = $this->AwardInfo->find('list', array(
-            'conditions' => array('uid' => $allUids, 'type'=> $gameType),
+            'conditions' => array('uid' => $allUids, 'type'=> $gameType, 'got' > 0),
             'fields' => array('uid', 'got')
         ));
 
