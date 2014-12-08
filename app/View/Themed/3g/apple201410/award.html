@@ -219,7 +219,7 @@
         </div>
     </div>
     <div  id="friends" class="bg_green pad">
-        <div class="title"><strong class="red">{{count($helpMe)}}</strong>个朋友帮了我</div>
+        <div class="title"><strong id="helpme_cnt" class="red">{{count($helpMe)}}</strong>个朋友帮了我</div>
             {{if $helpMe}}
             {{loop $helpMe $key $item}}
                 <div class="con clearfix">
@@ -239,6 +239,25 @@
 
     <div id="friendsIhelped" class="bg_orange pad">
         <div class="title">我帮过<strong class="red">{{count($meHelp)}}</strong>个朋友</div>
+        {{if $meHelp}}
+        {{loop $meHelp $key $item}}
+        <div class="con clearfix">
+            <div class="fl name">{{$item['nickname']}}</div>，<div class="fl">摇到了<strong class="red">
+            {{if $game_type == 'rice201411'}}
+            {{$item['got']*10}}</strong>g大米
+            {{else}}
+            {{ $item['got'] }}</strong>个
+            {{/if}}
+         </div>
+        </div>
+        {{/loop}}
+        {{else}}
+        <div class="con clearfix">你竟然还没有帮过朋友！</div>
+        {{/if}}
+    </div>
+
+    <div id="top_list" class="bg_green pad">
+        <div class="title">排行榜</div>
         {{if $meHelp}}
         {{loop $meHelp $key $item}}
         <div class="con clearfix">
@@ -291,6 +310,8 @@
 
     {{if $game_type == 'qinyBTC1412'}}
 
+        var in_top_list = 100;
+
     // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
     document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
 
@@ -299,9 +320,11 @@
         function descContent() {
             var total = $.trim($('#apple_got_cnt').text());
             total = total != '' ? parseInt(total) : 0;
-            return '万橙，比储橙不止甜了一点，我已经摇下10个万橙，排名第xx名 - 朋友说'+total+'个猕猴桃，'+ game_mihoutao_hongbao(total) +'元红包啦 -- 朋友说';
+            var helpme_cnt_txt = $.trim($('$helpme_cnt').text());
+            var helpme_cnt = (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
+            return '万橙，比储橙不止甜了一点，在'+helpme_cnt+'个好基友的拔刀相助下，我已经摇下'+total+'个万橙，排名第xx名 -- 朋友说';
         }
-        var shareTitle = '摇下100个，400元生态猕猴桃红包免费送';
+        var shareTitle = '摇下100个，1箱万橙免费领';
         var appid = '{{WX_APPID}}';
 
         WeixinJSBridge.on('menu:share:appmessage', function(argv){
