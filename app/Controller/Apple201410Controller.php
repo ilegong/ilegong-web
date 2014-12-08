@@ -471,6 +471,50 @@ class Apple201410Controller extends AppController
 
         } else {
             $this->set('helpMe', $friendsHelpMe);
+
+            $this->loadModel('Order');
+
+//
+//            CREATE TABLE `cake_game_btc_order_exchanges` (
+//            `id` bigint(20) NOT NULL AUTO_INCREMENT,
+//  `times` int(11) NOT NULL DEFAULT '0',
+//  `uid` bigint(20) NOT NULL,
+//  `updated` datetime DEFAULT NULL,
+//  `created` datetime DEFAULT NULL,
+//  PRIMARY KEY (`id`),
+//  KEY `btc_orders_uid` (`uid`)
+//);
+
+            $start = $gameCfg['GameConfig']['game_start'];
+            $oppu_log = $this->Order->query('select max(created) as latest from cake_game_btc_order_exchanges');
+            if (!empty($oppu_log)) {
+                if($oppu_log[0][0]['latest']){
+                    $start = $oppu_log[0][0]['latest'];
+                }
+            }
+//
+            $cond = array('creator' => $current_uid, 'published' => PUBLISH_YES, 'deleted' => DELETED_NO, 'created >= ' => $start);
+            $cond['status'] = array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED);
+            $order_ids = $this->Order->find('all', array(
+                'conditions' => $cond,
+                'fields' => array('id'),
+            ));
+            if (!empty($order_ids)) {
+                $order_ids = Hash::extract($order_ids, '{n}.Order.id');
+                $this->loadModel('Cart');
+                $carts = $this->Cart->find('all', array(
+                    'conditions' => array('order_id' => $order_ids, 'status' => CART_ITEM_STATUS_BALANCED),
+                    'fields' => array('num')
+                ));
+                $total = 0;
+                foreach($carts as $cart) {
+                    $total += $cart['Cart']['num'];
+                }
+                if ($total > 0) {
+                    $this->Order->query('insert into cake_game_btc_order_exchanges(times, uid, created) values('.$total.', '.$current_uid.', \''.date(FORMAT_DATETIME).'\')');
+                    $rrr = $this->AwardInfo->updateAll(array('times' => ' times + '. ($total * 10)), array('type' => $gameType, 'uid' => $current_uid));
+                }
+            }
         }
 
         $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($current_uid, $gameType);
