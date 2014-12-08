@@ -435,3 +435,8 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
     color: #999;
     text-shadow: 0px 1px 0px #fff;
 }
+
+a:hover, a:focus {
+     /*color: #157ab5; */
+    /* text-decoration: underline; */
+}

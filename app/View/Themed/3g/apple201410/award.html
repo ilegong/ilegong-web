@@ -1,6 +1,4 @@
 {{$this->Html->script(array('trace/tracekit.min.report.js', 'shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js', 'jquery/jquery.fullPage.min.js'), array('block' => 'scriptBottom'));}}
-{{$this->Html->css(array('apple_game.css?v3',));}}
-{{if $game_type == 'mihoutao1411' }}
 <style>
     #yao_jp_div > span {
         border: 1px solid darkkhaki;
@@ -19,109 +17,195 @@
         text-align: center;
     }
 
+    *{ margin:0; padding:0; font-family:"微软雅黑";}
+    img{ border:0;}
+    ul,li{ list-style:none;}
+    .clearfix{*zoom:1;}
+    .clearfix:after{content: ".";display: block;height: 0;clear: both; visibility: hidden;}
+    .fl{ float:left;}
+    .fr{ float:right;}
+    .radius10{
+        -moz-border-radius: 0.417em;/* Gecko browsers */-webkit-border-radius: 0.417em;/* Webkit browsers */border-radius:0.417em;/* W3C syntax */
+    }
+
+    .bg{ width:100%; /*position:absolute; top:0; left:0;*/ z-index:0;}
+    .bg img,.index_bottom img,.index_title img,.tree img{ width:100%;}
+
+    /*index*/
+    .index_bottom{ width:100%; position:absolute; bottom:0; left:0; z-index:1;}
+    .index_title{ width:100%; position:absolute; top:1.3em; left:0; z-index:2;}
+    .tree{ width:100%; position:absolute; top:4.5em; left:0; z-index:2;}
+    .rock_num{ margin:2em 1.2em 0 1.2em; background-color:#ffffff; font-size:0.8em; color:#333333; padding:0.6em 0.5em 0.6em 0.917em; height: 3em; line-height:2em;}
+    .rock_num .fl a{ color:#ff483a; text-decoration:none; text-align:center; width:100%;}
+    .rock_num .fr a{ display:block; color:#ffffff; text-decoration:none; background-color:#ff483a; font-size:1.1em; padding:0 0.625em;}
+    .help{ display:block; margin:0.8em 1.2em 0 1.2em; text-align:center; margin-bottom:0; background-color:#ff483a; font-size:1em; color:#ffffff; padding:0.4em 0.5em 0.4em 0.917em;  line-height:2em; text-decoration:none;}
+    .seckill{ display:block; margin:0.8em 1.2em 0 1.2em; text-align:center; margin-bottom:0; background-color:#cccccc; font-size:1em; color:#ff483a; padding:0.4em 0.5em 0.4em 0.917em;  line-height:2em; text-decoration:none;}
+    .word_link{ text-align:center; font-size:1em; margin-top:1em;}
+    .word_link a{ text-decoration:none; color:#333333;}
+    .next{ display:block; text-align:center; position:absolute; bottom:0.3em; width:100%; z-index:2;}
+    .next img{ width:1.2em; height:0.875em;}
+
+    /*产品故事*/
+    .viewport {min-width:300px; max-width:640px; margin:0 auto;}
+    .viewport img{max-width: 640px;min-width: 320px;width: 100%;}
+    .viewport ul{ /*position:absolute; bottom:0.3em;*/ width:30%; margin: 0 auto; /*left:35%;*/}
+    .viewport ul li img{ width:1.2em; height:0.875em;max-width:1.2em;min-width:1.2em;}
+
+
+    /*排行榜*/
+    /*.ranking{ *//*position:absolute; z-index:2;*//* top:1.2em; left:0; width:100%;}*/
+    .ranking img{ width:100%;}
+    .ranking_notice{ margin:1em 1.2em 1.5em 1.2em; background-color:#ffffff; font-size:0.8em; color:#333333; text-align:center; padding:0.3em;  line-height:2em;}
+    .ranking ul{ font-size:0.8em; color:#ffffff; width:50%; float:left;}
+    .ranking ul li span{ float:left; display:block; line-height:1.8em;}
+
+    /*关于我们加关注*/
+    .guanzhu{ /*position:absolute;*/ z-index:2; padding-top:1.5em; left:0; width:100%;}
+    .guanzhu ul{ padding-top:1.5em;}
+    .guanzhu ul li{ color:#666666; font-size:1em; padding:0.5em 1.2em 0 1.2em; line-height:1.3em;}
+    .attention{ display:block; margin:2em 1.2em 0 1.2em; text-align:center; margin-bottom:0; background-color:#ff483a; font-size:1em; color:#ffffff; padding:0.4em 0.5em 0.4em 0.917em; line-height:2em; text-decoration:none;}
+    .pyshuo{ display:block; margin:0.8em 1.2em 0 1.2em; text-align:center; margin-bottom:0; background-color:#ffa531; font-size:1em; color:#ffffff; padding:0.4em 0.5em 0.4em 0.917em;  line-height:2em; text-decoration:none;}
+    .aboutus{ margin-top:2em; text-align:center; font-size:0.8em; color:#666666; line-height:1.3em;}
+    .aboutus img{ width:4.125em; height:1.667em;}
+
+    /*游戏规则*/
+    .rule{ /*position:absolute;*/ z-index:2; margin-top:5em; left:0; width:100%;}
+    .rule ul{ margin:0 1.2em;}
+    .rule ul li{ float:left; font-size:0.9em;}
+    .rule ul li.title{ background-color:#75b3bc; color:#ffffff; height:2.083em; line-height:2.083em; text-align:center;}
+    .rule ul li.con{ border-bottom:1px #c1e2e5 solid; text-align:center; height:2.083em; line-height:2.083em; color:#333333;}
+    .rule p{ padding:0.2em 1.2em 0.3em 1.2em;; line-height:1.8em; font-size:0.9em; color:#333333;}
+    .rule_bottom{ /*position:absolute;*/ bottom:0; left:0; z-index:1;}
 </style>
-{{/if}}
-<div id="fullpage" class="container">
+<div id="fullpage">
     <div class="section">
-    <div id="top" class="row text-center">
-        <h2 style="margin-bottom:5px; margin-top: 10px">{{$title_in_page}}</h2>
-        <div class="col-xs-12">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp;
-            已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个{{if $game_type == 'rice201411'}}
-            = <span class="apple_numbers" id="rice_got_cnt">{{$total_apple*10}}</span>g大米
-            {{else}}{{ $game_obj_name }}
-            {{/if}}
-            <a href="#get_coupons" class="btn-sm btn-warning">兑换</a><a class="apple_nav_links" href="#get_coupons"><small>规则</small></a>
-        </div>
-    </div>
-    {{if !$game_end }}
-    <div id="apple_tree" class="row voffset3">
-        <div style="position: relative; left: 0; top: 0;">
-      <img id="apple_tree_img" src="{{$this->Html->assetUrl('/img/apple201410/'.$treeStatic)}}" style="position: relative; top: 0; left: 0;"/>
-      <img id="shaking_tips_pic" class="shaking_tips_pic" src="{{$this->Html->assetUrl('/img/apple201410/rock2.png')}}" style="position: absolute; top: 0; left: 0; display:none"/>
-        </div>
-    </div>
-    {{/if}}
-    <div class="row voffset3 text-center">
-        {{if !$game_end }}
-            <button id="shake_btn" class="btn btn-warning" type="button" style="display:{{$total_times <= 0 ? 'none' : ''}}">手机摇一摇<small><em>(iPhone请调大音量)</em></small></button>
-            <button id="share_btn" class="btn btn-warning" type="button" style="display:{{$total_times > 0 ? 'none' : ''}}">朋友帮我摇</button>
-            <button id="assignWXSubscribeTimes_2" type="button" class="btn btn-warning" style="display:{{$total_times > 0 ? 'none' : ''}}">关注加机会</button>
-        {{else}}
-        <div class="alert alert-danger" role="alert">活动已结束！</div>
-        {{/if}}
-        <div class="voffset3">
-            <!--<a href="#award_names" class="apple_nav_links"><small>获奖名单</small></a>-->
-            <!--<a href="/users/my_coupons.html" class="apple_nav_links"><small>我的优惠券</small></a>-->
-            <a class="apple_nav_links" href="#more_chances"><small>更多机会</small></a>
-            <a href="#friends" class="apple_nav_links"><small>谁帮我了</small></a>
-            <a href="#friendsIhelped" class="apple_nav_links"><small>我帮过谁</small></a>
-            <a href="/?from=game_home" class="apple_nav_links"><small>逛逛朋友说特产</small></a>
-            <!--<a href="#about_apple" class="apple_nav_links"><small>QA妹子分享富士</small></a>-->
-        </div>
-    </div>
-    </div>
-
-    {{if $game_type == 'mihoutao1411' }}
-    <div class="section">
-    <div class="bg_orange pad text-left voffset3">
-        <div id="product_desc" class="title">张慧敏和她的生态眉县猕猴桃</div>
-        <div class="title"><img src="{{$this->Html->assetUrl('/img/apple201410/mihoutao_owner.jpg');}}" border="0" />
-            <img src="https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGmuhibaGnXyZbiahNvBoTvEwva9J2vlMmPrxgiaYGr1TicKa3oQ450HmWfhnUhuTKu9C5r2BM05JZDsQ/0"/>
-        </div>
-        &nbsp;&nbsp;我是一个来自陕西眉县的一个土生土长的农村孩子，小时候总是和小伙伴们混迹于田间地头，山坡上，小河里，我们挖野菜、捡麦穗、掰玉米、摸小鱼，其乐无穷。
-        <br/>
-        &nbsp;&nbsp;我们的猕猴桃坚持生态种植。一、我们的果型很好，体态苗条匀称，一看就和别的不一样；二、表皮颜色深，软化后，剥皮就犹如蒸熟的土豆，薄薄一层，皮和果肉的组织都极其细腻和紧实。三、口感尤为值得一提，果肉类似西瓜的沙度，甜度非常高，而且吃完之后嘴里有一种清香的味道，不会发酸。
-        。<br/>
-        <div class="text-center">
-            <strong><a class="attention" href="/brands/20141109/mei_xian_mi_hou_tao.html?show_products=1">点击了解产品详情&gt;&gt;</a></strong>
-        </div>
-    </div>
-    </div>
-    {{/if}}
-
-    <div id="get_coupons" class="bg_green pad section">
-        <div class="title">兑换规则</div>
-        <div class="con">
-         {{if $game_type == 'rice201411'}}
-            1、让小伙伴点击分享的苹果游戏链接获机会, 摇苹果可以换稻花香大米喔~<br />
-            2、500g大米起兑(50个苹果=500g、100个苹果=1000g大米)；<br />
-            3、大米券在<a href="/categories/special_list/special_for_rice_coupons.html" class="apple_medium_links">特惠专场</a>结账时直接抵现金使用，使用期限11月15号前。<br/>
-        <div class="text-center">
-        <button id="get_coupons_button" type="button" class="btn btn-warning">我要兑换</button>
-        <div class="voffset2">
-        <a class="apple_medium_links" href="/users/my_coupons.html">我的优惠券</a>
-        <a class="apple_medium_links" href="/categories/special_list/special_for_rice_coupons.html">特惠专场</a>
-        </div>
-        </div>
-        {{elseif $game_type == 'Choupg1411' }}
-        1、小伙伴点击分享的摇苹果链接即获得机会。<br />
-        2、摇下30个，送丑苹果5元优惠券一张；50个，送丑苹果10元优惠券一张；100个，送丑苹果69.9元优惠券一张（每天10箱）<br />
-        3、丑苹果优惠券在<a class="apple_medium_links" href="/products/20141028/yun_nan_chou_ping_guo.html">购买丑苹果</a>后结账时直接抵现金使用，使用期限11月17号23点之前。<br />
-        4、11月18日前后统一发货。<br />
-        5、不要早早兑换，攒起来兑换69.9元优惠券更实在。<br />
-        <div class="text-center">
-        <button id="get_coupons_button" type="button" class="btn btn-warning">我要兑换</button><a class="apple_medium_links" href="/users/my_coupons.html">我的优惠券</a>
+        <div class="index_title"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/title.png')}}" /></div>
+        <div class="tree">
+            <img id="apple_tree_img" src="{{$this->Html->assetUrl('/img/apple201410/btc/index/tree.png')}}"/>
+            <div class="rock_num radius10">
+                <div class="fl">已经摇下<span id="apple_got_cnt">{{$total_apple}}</span>个, 还有<span id="apple_times_left">{{$total_times}}</span>次机会!&nbsp;<a href="#X">[加机会]</a></div>
+                <div class="fr"><a class="radius10" href="#get_coupons">兑换</a></div>
             </div>
-        {{/if}}
+            <a id="share_btn"  href="javascript:;" class="help radius10" style="display:{{$total_times > 0 ? 'none' : ''}}">找人帮忙</a>
+            <a href="javascript:;" class="seckill radius10">秒杀一箱倒计时<span>11:20:30</span></a>
+            <div class="word_link">
+                <a href="#get_coupons">[游戏规则]</a>&nbsp;&nbsp;&nbsp;
+                <a href="#top_list">[排行榜]</a>&nbsp;&nbsp;&nbsp;
+                <a href="#product_story">[产品故事]</a>
+            </div>
+        </div>
+        <a class="next" href="#X"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a>
+        <div class="index_bottom"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/bottom.jpg')}}" /></div>
+        <div class="bg"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/bg1.jpg')}}" /></div>
     </div>
-        </div>
 
-    <div class="bg_white pad section">
-        <div class="title"><img src="{{$this->Html->assetUrl('/img/logo.png')}}" border="0" style="width: 100px"/></div>
-        <div class="con_aboutus">[朋友说]同事间互相分享家乡特产的创业网站,<br />我们都是城市里的乡下人。<br /><strong>
-            <a class="attention" href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">点击关注</a></strong>
+    <div class="section">
+        <div id="product_story" class="viewport">
+            <img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/img01.jpg')}}" />
+            <img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/img02.jpg')}}" />
+            <img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/img03.jpg')}}" />
+            <img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/img04.jpg')}}" />
+
+            <ul class="clearfix">
+                <li class="fl"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/next.gif')}}" /></li>
+                <li class="fr"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/top.gif')}}" /></li>
+            </ul>
         </div>
     </div>
 
-    <div class="bg_orange pad section">
-        <div id="more_chances" class="title">如何获得更多摇一摇机会</div>
-        <div class="con clearfix">
-            <div class="fl">1、关注我们的服务号, <strong class="red">每天</strong>都可以领取<strong class="red">5</strong>次机会。</div>
-            <div class="fl"><a id="assignWXSubscribeTimes" href="javascript:;" class="draw radius10">领取</a></div>
+    <div class="section">
+    <div class="ranking" style="background-image: url({{$this->Html->assetUrl('/img/apple201410/btc/ranking/bg.jpg')}}); min-height: 100%">
+        <img src="{{$this->Html->assetUrl('/img/apple201410/btc/ranking/title.png')}}" />
+        <div class="ranking_notice radius10">你当前摇到了10个,还没有进入排名,要多多努力哦!</div>
+        <div style="margin:0 1.2em;">
+            <ul>
+                <li class="clearfix">
+                    <span style="width:40%;">1、H***y</span>
+                    <span style="width:60%;">摇到了98个</span>
+                </li>
+                <li class="clearfix">
+                    <span style="width:40%;">1、H***y</span>
+                    <span style="width:60%;">摇到了98个</span>
+                </li>
+                <li class="clearfix">
+                    <span style="width:40%;">1、H***y</span>
+                    <span style="width:60%;">摇到了98个</span>
+                </li>
+            </ul>
+            <ul>
+                <li class="clearfix">
+                    <span style="width:40%;">1、H***y</span>
+                    <span style="width:60%;">摇到了98个</span>
+                </li>
+                <li class="clearfix">
+                    <span style="width:40%;">1、H***y</span>
+                    <span style="width:60%;">摇到了98个</span>
+                </li>
+                <li class="clearfix">
+                    <span style="width:40%;">1、H***y</span>
+                    <span style="width:60%;">摇到了98个</span>
+                </li>
+            </ul>
         </div>
-        <div class="con clearfix">
-            <div class="fl">2、分享给你的朋友们,每个朋友点击过来就增加<strong class="red">1</strong>次机会。</div>
-            <div class="fl"><a id="share_btn_2" href="javascript:;" class="draw radius10">立即分享</a></div>
+    </div>
+    </div>
+
+    <div id="get_coupons" class="section">
+        <div style="background-image: url({{$this->Html->assetUrl('/img/apple201410/btc/rule/bg.jpg')}}); height: 100%">
+    <div class="rule">
+        <ul class="clearfix">
+            <li class="title" style="width:30%;">摇下数量</li>
+            <li class="title" style="width:70%;">购买折扣</li>
+        </ul>
+        <ul class="clearfix">
+            <li class="con" style="width:30%;">30个</li>
+            <li class="con" style="width:70%;">5元优惠券</li>
+        </ul>
+        <ul class="clearfix">
+            <li class="con" style="width:30%;">50个</li>
+            <li class="con" style="width:70%;">10元优惠券</li>
+        </ul>
+        <ul class="clearfix">
+            <li class="con" style="width:30%;">80个</li>
+            <li class="con" style="width:70%;">15元优惠券</li>
+        </ul>
+        <ul class="clearfix">
+            <li class="con" style="width:30%;">100个</li>
+            <li class="con" style="width:70%;">30元优惠券或参加免费秒杀</li>
+        </ul>
+        <br />
+        <p>1、摇下100个，即参加每天8点开始的免费万橙秒杀活动，每天100箱，送完即止；</p>
+        <p>2、活动结束时摇下橙子数量前20名，每人获得价值268元礼品装一箱；</p>
+        <p>3、活动结束日期12月18号23点59分，活动最终解释权归朋友说所有。</p>
+        <a id="get_coupons_button" href="javascript:;" class="pyshuo radius10">马上兑换</a>
+    </div>
+    <ul class="clearfix iconlink_ul">
+        <li class="fl"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></li>
+        <li class="fr"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></li>
+    </ul>
+    <div class="rule_bottom"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/rule/bottom.png')}}" /></div>
+            </div>
+    </div>
+
+    <div class="section">
+        <div style="background-image: url({{$this->Html->assetUrl('/img/apple201410/btc/aboutus/bg.jpg')}}); height: 100%">
+    <div class="guanzhu">
+        <img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/title.png')}}" style="width:100%"/><br />
+        <ul>
+            <li>1、关注朋友说，每天可领取5次游戏机会；</li>
+            <li>2、活动期间每购买1件商品增加10次游戏机会;</li>
+            <li>3、小伙伴点击分享的摇一摇游戏链接增加1次游戏机会。</li>
+        </ul>
+        <a id="assignWXSubscribeTimes" href="javascript:;" class="attention radius10">关注加机会</a>
+        <a href="/" class="pyshuo radius10">去朋友说看看</a>
+        <div class="aboutus">
+            <img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/logo.png')}}" /><br /><br />
+            [朋友说]同事间互相分享家乡特产的创业网站,<br />
+            我们都是城市里的乡下人。
+        </div>
+    </div>
+    <a class="next" href="#X"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a>
+   </div>
         </div>
     </div>
 
@@ -177,9 +261,9 @@
 
 <script>
     var $got_wx_sub_times = "{{$got_wx_sub_times}}";
-    var shake_pic_url = '{{$this->Html->assetUrl("/img/apple201410/".$treeName)}}';
+    var shake_pic_url = '{{$this->Html->assetUrl("/img/apple201410/btc/index/tree.gif")}}';
     var sound_url = 'http://51daifan-images.stor.sinaapp.com/tree_shake.mp3';
-    var share_png_url = '{{$this->Html->assetUrl("/img/apple201410/share.png")}}';
+    var share_png_url = '{{$this->Html->assetUrl("/img/apple201410/btc/index/share.png")}}';
     var game_type = '{{$game_type}}';
     var game_page_title = {{if !empty($title_func)}}function(total){ return {{$title_func}};} {{else}} null {{/if}};
     var game_obj_name = '{{$game_obj_name}}';

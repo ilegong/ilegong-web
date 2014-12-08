@@ -1,0 +1,282 @@
+{{$this->Html->script(array('trace/tracekit.min.report.js', 'shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js', 'jquery/jquery.fullPage.min.js'), array('block' => 'scriptBottom'));}}
+{{$this->Html->css(array('apple_game.css?v3',));}}
+{{if $game_type == 'mihoutao1411' }}
+<style>
+    #yao_jp_div > span {
+        border: 1px solid darkkhaki;
+        margin-bottom: 2px;
+        text-align: center;
+        display: block;
+    }
+    .selected {
+        background-color: lightgreen;
+    }
+
+    .bootbox-body {
+        text-align: left;
+    }
+    .modal-footer {
+        text-align: center;
+    }
+
+</style>
+{{/if}}
+<div id="fullpage" class="container">
+    <div class="section">
+    <div id="top" class="row text-center">
+        <h2 style="margin-bottom:5px; margin-top: 10px">{{$title_in_page}}</h2>
+        <div class="col-xs-12">剩余机会<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次 &nbsp;
+            已摇下<span class="apple_numbers" id="apple_got_cnt">{{$total_apple}}</span>个{{if $game_type == 'rice201411'}}
+            = <span class="apple_numbers" id="rice_got_cnt">{{$total_apple*10}}</span>g大米
+            {{else}}{{ $game_obj_name }}
+            {{/if}}
+            <a href="#get_coupons" class="btn-sm btn-warning">兑换</a><a class="apple_nav_links" href="#get_coupons"><small>规则</small></a>
+        </div>
+    </div>
+    {{if !$game_end }}
+    <div id="apple_tree" class="row voffset3">
+        <div style="position: relative; left: 0; top: 0;">
+      <img id="apple_tree_img" src="{{$this->Html->assetUrl('/img/apple201410/'.$treeStatic)}}" style="position: relative; top: 0; left: 0;"/>
+      <img id="shaking_tips_pic" class="shaking_tips_pic" src="{{$this->Html->assetUrl('/img/apple201410/rock2.png')}}" style="position: absolute; top: 0; left: 0; display:none"/>
+        </div>
+    </div>
+    {{/if}}
+    <div class="row voffset3 text-center">
+        {{if !$game_end }}
+            <button id="shake_btn" class="btn btn-warning" type="button" style="display:{{$total_times <= 0 ? 'none' : ''}}">手机摇一摇<small><em>(iPhone请调大音量)</em></small></button>
+            <button id="share_btn" class="btn btn-warning" type="button" style="display:{{$total_times > 0 ? 'none' : ''}}">朋友帮我摇</button>
+            <button id="assignWXSubscribeTimes_2" type="button" class="btn btn-warning" style="display:{{$total_times > 0 ? 'none' : ''}}">关注加机会</button>
+        {{else}}
+        <div class="alert alert-danger" role="alert">活动已结束！</div>
+        {{/if}}
+        <div class="voffset3">
+            <!--<a href="#award_names" class="apple_nav_links"><small>获奖名单</small></a>-->
+            <!--<a href="/users/my_coupons.html" class="apple_nav_links"><small>我的优惠券</small></a>-->
+            <a class="apple_nav_links" href="#more_chances"><small>更多机会</small></a>
+            <a href="#friends" class="apple_nav_links"><small>谁帮我了</small></a>
+            <a href="#friendsIhelped" class="apple_nav_links"><small>我帮过谁</small></a>
+            <a href="/?from=game_home" class="apple_nav_links"><small>逛逛朋友说特产</small></a>
+            <!--<a href="#about_apple" class="apple_nav_links"><small>QA妹子分享富士</small></a>-->
+        </div>
+    </div>
+    </div>
+
+    {{if $game_type == 'mihoutao1411' }}
+    <div class="section">
+    <div class="bg_orange pad text-left voffset3">
+        <div id="product_desc" class="title">张慧敏和她的生态眉县猕猴桃</div>
+        <div class="title"><img src="{{$this->Html->assetUrl('/img/apple201410/mihoutao_owner.jpg');}}" border="0" />
+            <img src="https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGmuhibaGnXyZbiahNvBoTvEwva9J2vlMmPrxgiaYGr1TicKa3oQ450HmWfhnUhuTKu9C5r2BM05JZDsQ/0"/>
+        </div>
+        &nbsp;&nbsp;我是一个来自陕西眉县的一个土生土长的农村孩子，小时候总是和小伙伴们混迹于田间地头，山坡上，小河里，我们挖野菜、捡麦穗、掰玉米、摸小鱼，其乐无穷。
+        <br/>
+        &nbsp;&nbsp;我们的猕猴桃坚持生态种植。一、我们的果型很好，体态苗条匀称，一看就和别的不一样；二、表皮颜色深，软化后，剥皮就犹如蒸熟的土豆，薄薄一层，皮和果肉的组织都极其细腻和紧实。三、口感尤为值得一提，果肉类似西瓜的沙度，甜度非常高，而且吃完之后嘴里有一种清香的味道，不会发酸。
+        。<br/>
+        <div class="text-center">
+            <strong><a class="attention" href="/brands/20141109/mei_xian_mi_hou_tao.html?show_products=1">点击了解产品详情&gt;&gt;</a></strong>
+        </div>
+    </div>
+    </div>
+    {{/if}}
+
+    <div id="get_coupons" class="bg_green pad section">
+        <div class="title">兑换规则</div>
+        <div class="con">
+         {{if $game_type == 'rice201411'}}
+            1、让小伙伴点击分享的苹果游戏链接获机会, 摇苹果可以换稻花香大米喔~<br />
+            2、500g大米起兑(50个苹果=500g、100个苹果=1000g大米)；<br />
+            3、大米券在<a href="/categories/special_list/special_for_rice_coupons.html" class="apple_medium_links">特惠专场</a>结账时直接抵现金使用，使用期限11月15号前。<br/>
+        <div class="text-center">
+        <button id="get_coupons_button" type="button" class="btn btn-warning">我要兑换</button>
+        <div class="voffset2">
+        <a class="apple_medium_links" href="/users/my_coupons.html">我的优惠券</a>
+        <a class="apple_medium_links" href="/categories/special_list/special_for_rice_coupons.html">特惠专场</a>
+        </div>
+        </div>
+        {{elseif $game_type == 'Choupg1411' }}
+        1、小伙伴点击分享的摇苹果链接即获得机会。<br />
+        2、摇下30个，送丑苹果5元优惠券一张；50个，送丑苹果10元优惠券一张；100个，送丑苹果69.9元优惠券一张（每天10箱）<br />
+        3、丑苹果优惠券在<a class="apple_medium_links" href="/products/20141028/yun_nan_chou_ping_guo.html">购买丑苹果</a>后结账时直接抵现金使用，使用期限11月17号23点之前。<br />
+        4、11月18日前后统一发货。<br />
+        5、不要早早兑换，攒起来兑换69.9元优惠券更实在。<br />
+        <div class="text-center">
+        <button id="get_coupons_button" type="button" class="btn btn-warning">我要兑换</button><a class="apple_medium_links" href="/users/my_coupons.html">我的优惠券</a>
+            </div>
+        {{/if}}
+    </div>
+        </div>
+
+    <div class="bg_white pad section">
+        <div class="title"><img src="{{$this->Html->assetUrl('/img/logo.png')}}" border="0" style="width: 100px"/></div>
+        <div class="con_aboutus">[朋友说]同事间互相分享家乡特产的创业网站,<br />我们都是城市里的乡下人。<br /><strong>
+            <a class="attention" href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">点击关注</a></strong>
+        </div>
+    </div>
+
+    <div class="bg_orange pad section">
+        <div id="more_chances" class="title">如何获得更多摇一摇机会</div>
+        <div class="con clearfix">
+            <div class="fl">1、关注我们的服务号, <strong class="red">每天</strong>都可以领取<strong class="red">5</strong>次机会。</div>
+            <div class="fl"><a id="assignWXSubscribeTimes" href="javascript:;" class="draw radius10">领取</a></div>
+        </div>
+        <div class="con clearfix">
+            <div class="fl">2、分享给你的朋友们,每个朋友点击过来就增加<strong class="red">1</strong>次机会。</div>
+            <div class="fl"><a id="share_btn_2" href="javascript:;" class="draw radius10">立即分享</a></div>
+        </div>
+    </div>
+
+    <?php /*
+    <div  id="friends" class="bg_green pad section">
+        <div class="title"><strong id="helpme_cnt" class="red">{{count($helpMe)}}</strong>个朋友帮了我</div>
+            {{if $helpMe}}
+            {{loop $helpMe $key $item}}
+                <div class="con clearfix">
+                    <div class="fl name">{{$item['nickname']}}</div>，<div class="fl">摇到了<strong class="red">
+                    {{if $game_type == 'rice201411'}}
+                    {{$item['got']*10}}</strong>g大米
+                    {{else}}
+                    {{ $item['got'] }}</strong>个
+                    {{/if}}
+                </div>
+                </div>
+            {{/loop}}
+            {{else}}
+                <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！</div>
+            {{/if}}
+    </div>
+
+    <div id="friendsIhelped" class="bg_orange pad section">
+        <div class="title">我帮过<strong class="red">{{count($meHelp)}}</strong>个朋友</div>
+        {{if $meHelp}}
+        {{loop $meHelp $key $item}}
+        <div class="con clearfix">
+            <div class="fl name">{{$item['nickname']}}</div>，<div class="fl">摇到了<strong class="red">
+            {{if $game_type == 'rice201411'}}
+            {{$item['got']*10}}</strong>g大米
+            {{else}}
+            {{ $item['got'] }}</strong>个
+            {{/if}}
+         </div>
+        </div>
+        {{/loop}}
+        {{else}}
+        <div class="con clearfix">你竟然还没有帮过朋友！</div>
+        {{/if}}
+    </div>
+    */ ?>
+    {{if $game_type == 'qinyBTC1412'}}
+    <div id="top_list" class="bg_green pad section">
+        <div class="title">排行榜<small id="top_list_update"></small></div>
+        <div id="top_list_contents">
+        </div>
+    </div>
+    {{/if}}
+</div>
+
+<span id="helpme_cnt_n" class="hide">{{count($helpMe)}}</span>
+
+<script>
+    var $got_wx_sub_times = "{{$got_wx_sub_times}}";
+    var shake_pic_url = '{{$this->Html->assetUrl("/img/apple201410/".$treeName)}}';
+    var sound_url = 'http://51daifan-images.stor.sinaapp.com/tree_shake.mp3';
+    var share_png_url = '{{$this->Html->assetUrl("/img/apple201410/share.png")}}';
+    var game_type = '{{$game_type}}';
+    var game_page_title = {{if !empty($title_func)}}function(total){ return {{$title_func}};} {{else}} null {{/if}};
+    var game_obj_name = '{{$game_obj_name}}';
+    var game_least_change = '{{$game_least_change}}';
+
+        $(document).ready(function(){
+            $('#fullpage').fullpage();
+
+            {{if $game_type == 'mihoutao1411'}}
+            $('#yao_jp').click(function(){
+                function getRandomInt(min, max) {
+                    return Math.floor(Math.random() * (max - min)) + min;
+                }
+
+                var finish = false;
+
+                setTimeout(function() {
+                    $.getJSON('/apple_201410/jp/{{$game_type}}', {}, function (data) {
+                        finish = true;
+                        if (data.success) {
+                            setTimeout(function () {
+                                $items.removeClass('selected');
+                                var jp = $("#jp_mihoutao_" + data.award_type);
+                                jp.addClass('selected');
+                                if (data.award_type != 0) {
+                                    utils.alert("恭喜您摇到" + jp.text() + ", <a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
+                                } else {
+                                    var msg = '手气不太好啊, 过一会儿再试试！';
+                                    if (data.msg == 'not_enough_100'){ msg = '累计已摇下' + data.total + '个，还不满100个，请继续努力~';}
+                                    else if (data.msg == 'game_end') {
+                                        msg = '活动已结束';
+                                    }
+                                    utils.alert(msg);
+                                }
+                            }, 1000);
+                        } else {
+                            $items.removeClass('selected');
+                            $("#jp_mihoutao_0").addClass('selected');
+                        }
+
+                    });
+                }, 2000);
+
+                var $items = $('#yao_jp_div').find('span');
+                var interval = 200;
+                function jumping() {
+                    $items.removeClass('selected');
+                    $($items.get(getRandomInt(1, 1000) % $items.length)).addClass('selected');
+                    if (!finish) {
+                        setTimeout(jumping, interval);
+                    }
+                }
+
+                setTimeout(jumping, interval);
+            });
+            {{/if}}
+
+                {{if $game_type == 'qinyBTC1412'}}
+
+                    var in_top_list = 100;
+                    var imgUrl = $('#apple_tree_img').attr('src');
+                    var lineLink = '{{WX_HOST}}/t/ag/{{$game_type}}.html?{{if $trid}}trid={{urlencode($trid)}}{{/if}}';
+                    function descContent() {
+                        var total = $.trim($('#apple_got_cnt').text());
+                        total = total != '' ? parseInt(total) : 0;
+                        var helpme_cnt_txt = $.trim($('#helpme_cnt_n').text());
+                        var helpme_cnt = (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
+                        return '万橙，比褚橙不止甜了一点，'+helpme_cnt+'个好基友帮忙，我已经摇下'+total+'个万橙，排名第xx名 -- 朋友说';
+                    }
+                    var shareTitle = '摇下100个，1箱万橙免费领';
+                    var appid = '{{WX_APPID}}';
+
+                    // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
+                    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+                        WeixinJSBridge.on('menu:share:appmessage', function(argv){
+                            utils.wx_to_friend(appid, imgUrl, lineLink, descContent(), shareTitle);
+                        });
+                        WeixinJSBridge.on('menu:share:timeline', function(argv){
+                            utils.wx_to_timeline(appid, imgUrl, lineLink, '', descContent());
+                        });
+                    }, false);
+                    {{/if}}
+        });
+
+    function showAfterGotCallback(times, total){}
+    function update_top_list(list, update_time) {
+        if(list) {
+            var $list_div = $('#top_list_contents');
+            $list_div.html('');
+            $('#top_list_update').html('更新时间:' + update_time);
+            for(var i = 0; i < list.length; i++) {
+                var item = list[i];
+                $list_div.append('<div class="con clearfix"><div class="fl name">'+item[0]+
+                '</div>，<div class="fl">摇到了<strong class="red">'+item[1]+
+                '</strong>个</div></div>');
+            }
+        }
+    }
+</script>
+{{$this->Html->script(array('apple_game.js?v17'));}}

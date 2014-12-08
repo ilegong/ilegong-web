@@ -474,17 +474,6 @@ class Apple201410Controller extends AppController
 
             $this->loadModel('Order');
 
-//
-//            CREATE TABLE `cake_game_btc_order_exchanges` (
-//            `id` bigint(20) NOT NULL AUTO_INCREMENT,
-//  `times` int(11) NOT NULL DEFAULT '0',
-//  `uid` bigint(20) NOT NULL,
-//  `updated` datetime DEFAULT NULL,
-//  `created` datetime DEFAULT NULL,
-//  PRIMARY KEY (`id`),
-//  KEY `btc_orders_uid` (`uid`)
-//);
-
             $start = $gameCfg['GameConfig']['game_start'];
             $oppu_log = $this->Order->query('select max(created) as latest from cake_game_btc_order_exchanges');
             if (!empty($oppu_log)) {
