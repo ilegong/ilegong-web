@@ -12,6 +12,14 @@
     .selected {
         background-color: lightgreen;
     }
+
+    .bootbox-body {
+        text-align: left;
+    }
+    .modal-footer {
+        text-align: center;
+    }
+
 </style>
 {{/if}}
 <div id="fullpage" class="container">
@@ -86,46 +94,6 @@
         <a class="apple_medium_links" href="/categories/special_list/special_for_rice_coupons.html">特惠专场</a>
         </div>
         </div>
-        {{elseif $game_type == 'mihoutao1411' }}
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <td>摇下数量</td>
-                    <td>红包金额</td>
-                    <td>分享给朋友</td>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>30个</td>
-                    <td>25元</td>
-                    <td>可供5人抢</td>
-                </tr>
-                <tr>
-                    <td>60个</td>
-                    <td>100元</td>
-                    <td>可供10人抢</td>
-                </tr>
-                <tr>
-                    <td>80个</td>
-                    <td>225元</td>
-                    <td>可供15人抢</td>
-                </tr>
-                <tr>
-                    <td>100个</td>
-                    <td>400元</td>
-                    <td>可供20人抢</td>
-                </tr>
-            </tbody>
-        </table>
-        1、摇下100个，还有机会抽取1箱<span style="color: red">免费</span>的红绿灯（每天1箱）或绿心猕猴桃（每天5箱）。<br />
-        2、猕猴桃红包分享给朋友一起抢，抢得的优惠券在购买眉县生态猕猴桃时直接抵现金使用，使用期限12月5号23点59分之前。<br />
-        3、关注朋友说，每天可领取5次游戏机会；小伙伴点击分享的摇一摇游戏链接即增加一次游戏机会。<br />
-        4、活动结束日期12月3号23点59分。 <br/>
-        5、累计攒到100个抽<a href="#award_cj">免费大奖</a>。 <br/>
-        <div class="text-center">
-        <button id="get_coupons_button" type="button" class="btn btn-warning">我要兑换</button><a class="apple_medium_links" href="/users/my_offers.html">我的红包</a>
-            </div>
         {{elseif $game_type == 'Choupg1411' }}
         1、小伙伴点击分享的摇苹果链接即获得机会。<br />
         2、摇下30个，送丑苹果5元优惠券一张；50个，送丑苹果10元优惠券一张；100个，送丑苹果69.9元优惠券一张（每天10箱）<br />
@@ -138,19 +106,6 @@
         {{/if}}
     </div>
         </div>
-{{if $game_type == 'mihoutao1411' }}
-<div id="award_cj" class="bg_orange pad section">
-    <div class="title">累计摇下100个，抽大奖</div>
-    <div id="yao_jp_div"  class="row text-center">
-        <span class="col-xs-12" id="jp_mihoutao_109">红绿灯猕猴桃一箱</span>
-        <span class="col-xs-12" id="jp_mihoutao_69">绿心猕猴桃一箱</span>
-        <span class="col-xs-12" id="jp_mihoutao_0">下次继续努力</span>
-    </div>
-    <div class="text-center">
-        <button id="yao_jp" type="button" class="btn btn-warning">抽奖</button>
-    </div>
-</div>
-{{/if}}
 
     <div class="bg_white pad section">
         <div class="title"><img src="{{$this->Html->assetUrl('/img/logo.png')}}" border="0" style="width: 100px"/></div>
@@ -170,6 +125,8 @@
             <div class="fl"><a id="share_btn_2" href="javascript:;" class="draw radius10">立即分享</a></div>
         </div>
     </div>
+
+    <?php /*
     <div  id="friends" class="bg_green pad section">
         <div class="title"><strong id="helpme_cnt" class="red">{{count($helpMe)}}</strong>个朋友帮了我</div>
             {{if $helpMe}}
@@ -207,36 +164,15 @@
         <div class="con clearfix">你竟然还没有帮过朋友！</div>
         {{/if}}
     </div>
-
+    */ ?>
+    {{if $game_type == 'qinyBTC1412'}}
     <div id="top_list" class="bg_green pad section">
-        <div class="title">排行榜</div>
-        {{if $meHelp}}
-        {{loop $meHelp $key $item}}
-        <div class="con clearfix">
-            <div class="fl name">{{$item['nickname']}}</div>，<div class="fl">摇到了<strong class="red">
-            {{if $game_type == 'rice201411'}}
-            {{$item['got']*10}}</strong>g大米
-            {{else}}
-            {{ $item['got'] }}</strong>个
-            {{/if}}
-         </div>
+        <div class="title">排行榜<small id="top_list_update"></small></div>
+        <div id="top_list_contents">
         </div>
-        {{/loop}}
-        {{else}}
-        <div class="con clearfix">你竟然还没有帮过朋友！</div>
-        {{/if}}
     </div>
+    {{/if}}
 </div>
-    <!--<div class="top"><a class="top" href="javascript:;" onclick="$('html, body').animate({ scrollTop: $('#top').offset().top }, 1000);"></a></div>-->
-
-        <style>
-            .bootbox-body {
-                text-align: left;
-            }
-            .modal-footer {
-                text-align: center;
-            }
-        </style>
 
 <script>
     var $got_wx_sub_times = "{{$got_wx_sub_times}}";
@@ -250,7 +186,6 @@
 
         $(document).ready(function(){
             $('#fullpage').fullpage();
-
 
             {{if $game_type == 'mihoutao1411'}}
             $('#yao_jp').click(function(){
@@ -300,48 +235,51 @@
                 setTimeout(jumping, interval);
             });
             {{/if}}
+
+                {{if $game_type == 'qinyBTC1412'}}
+
+                    var in_top_list = 100;
+
+
+                    // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
+                    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+
+                        var imgUrl = $('#apple_tree_img').attr('src');
+                        var lineLink = '{{WX_HOST}}/t/ag/{{$game_type}}.html?{{if $trid}}trid={{urlencode($trid)}}{{/if}}';
+                        function descContent() {
+                            var total = $.trim($('#apple_got_cnt').text());
+                            total = total != '' ? parseInt(total) : 0;
+                            var helpme_cnt_txt = $.trim($('$helpme_cnt').text());
+                            var helpme_cnt = (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
+                            return '万橙，比储橙不止甜了一点，'+helpme_cnt+'个好基友帮忙，我已经摇下'+total+'个万橙，排名第xx名 -- 朋友说';
+                        }
+                        var shareTitle = '摇下100个，1箱万橙免费领';
+                        var appid = '{{WX_APPID}}';
+
+                        WeixinJSBridge.on('menu:share:appmessage', function(argv){
+                            utils.wx_to_friend(appid, imgUrl, lineLink, descContent(), shareTitle);
+                        });
+                        WeixinJSBridge.on('menu:share:timeline', function(argv){
+                            utils.wx_to_timeline(appid, imgUrl, lineLink, descContent(), shareTitle);
+                        });
+                    }, false);
+
+                    {{/if}}
         });
 
-    function showAfterGotCallback(times, total){ }
-
-     {{if $game_type == 'mihoutao1411'}}
-        function game_mihoutao_hongbao($total) {
-            if ($total >= 100) return '兑到'+400;
-            else if ($total >= 80) return '兑到'+225;
-            else if ($total >= 60) return '兑到'+100;
-            else if ($total >= 30) return '兑到'+25;
-            else return "马上兑到25";
+    function showAfterGotCallback(times, total){}
+    function update_top_list(list, update_time) {
+        if(list) {
+            var $list_div = $('#top_list_contents');
+            $list_div.html('');
+            $('#top_list_update').html('更新时间:' + update_time);
+            for(var i = 0; i < list.length; i++) {
+                var item = list[i];
+                $list_div.append('<div class="con clearfix"><div class="fl name">'+item[0]+
+                '</div>，<div class="fl">摇到了<strong class="red">'+item[1]+
+                '</strong>个</div></div>');
+            }
         }
-     {{/if}}
-
-    {{if $game_type == 'qinyBTC1412'}}
-
-        var in_top_list = 100;
-
-    // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
-    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-
-        var imgUrl = $('#apple_tree_img').attr('src');
-        var lineLink = '{{WX_HOST}}/t/ag/{{$game_type}}.html?{{if $trid}}trid={{urlencode($trid)}}{{/if}}';
-        function descContent() {
-            var total = $.trim($('#apple_got_cnt').text());
-            total = total != '' ? parseInt(total) : 0;
-            var helpme_cnt_txt = $.trim($('$helpme_cnt').text());
-            var helpme_cnt = (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
-            return '万橙，比储橙不止甜了一点，在'+helpme_cnt+'个好基友的拔刀相助下，我已经摇下'+total+'个万橙，排名第xx名 -- 朋友说';
-        }
-        var shareTitle = '摇下100个，1箱万橙免费领';
-        var appid = '{{WX_APPID}}';
-
-        WeixinJSBridge.on('menu:share:appmessage', function(argv){
-            utils.wx_to_friend(appid, imgUrl, lineLink, descContent(), shareTitle);
-        });
-        WeixinJSBridge.on('menu:share:timeline', function(argv){
-            utils.wx_to_timeline(appid, imgUrl, lineLink, descContent(), shareTitle);
-        });
-    }, false);
-
-    {{/if}}
-
+    }
 </script>
 {{$this->Html->script(array('apple_game.js?v17'));}}

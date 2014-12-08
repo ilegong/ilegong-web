@@ -250,8 +250,9 @@ $(document).ready(function(){
                     setTimeout(new_times_query, query_interval);
                 }
 
-                if (data && data.left_98) {$('#left_98').text(data.left_98);}
-                if (data && data.left_40) {$('#left_40').text(data.left_40);}
+                if (data.top_list && typeof(update_top_list) == 'function') {
+                    update_top_list(data.top_list, data.update_time);
+                }
             });
         }
 

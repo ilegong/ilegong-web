@@ -112,7 +112,22 @@ class Apple201410Controller extends AppController
         $this->autoRender = false;
         $r = $this->Session->read($this->time_last_query_key);
 
-        list($left_98, $left_40) = $this->calculate_left($gameType);
+        $result = array();
+        if ($gameType == self::BTC1412) {
+            $listR = $this->AwardInfo->top_list($gameType);
+            $result['update_time'] = friendlyDate($listR[0], 'full');
+            $result['top_list'] = array();
+
+            $uids = array();
+            foreach($listR[1] as $uid => $got) {
+                $result['top_list'][] = array($uid, $got);
+                $uids[] = $uid;
+            }
+            $nameIdMap = $this->User->findNicknamesMap($uids);
+            foreach($result['top_list'] as &$list) {
+                $list[0] = filter_invalid_name($nameIdMap[$list[0]]);
+            }
+        }
 
         if ($r && $r > 1413724118 /*2014-10-19 21:00*/) {
             if (time() - $r < 5) {
@@ -147,12 +162,14 @@ class Apple201410Controller extends AppController
 //            ));
 //        }
             $this->_updateLastQueryTime(time());
-            return json_encode(array('success' => true, 'new_times' => count($logsToMe), 'nicknames' => $nicknames, 'left_98' => $left_98, 'left_40' => $left_40));
+            $result['success'] = true;
+            $result['new_times'] =  count($logsToMe);
+            $result['nicknames']  = $nicknames;
         } else {
             $this->_updateLastQueryTime(time());
-            return json_encode(array('success' => false, 'left_98' => $left_98, 'left_40' => $left_40));
+            $result['success'] = false;
         }
-
+        return json_encode($result);
     }
 
     const WX_TIMES_ASSIGN_NOT_SUB = "not-sub";
@@ -213,6 +230,13 @@ class Apple201410Controller extends AppController
         echo json_encode($res);
     }
 
+    public function top_list($gameType) {
+        $this->autoRender = false;
+        if ($gameType == self::BTC1412) {
+            $r = $this->AwardInfo->top_list($gameType);
+            echo json_encode($r);
+        }
+    }
 
     public function jp($gameType) {
         $this->autoRender = false;
