@@ -256,7 +256,7 @@ $(document).ready(function(){
             });
         }
 
-        setTimeout(new_times_query, query_interval);
+        setTimeout(new_times_query, 5);
 
     } catch (e) {
     TraceKit.report(e);
