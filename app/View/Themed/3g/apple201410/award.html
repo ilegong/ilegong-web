@@ -119,11 +119,11 @@
         <div class="tree">
             <img id="apple_tree_img" src="{{$this->Html->assetUrl('/img/apple201410/btc/index/tree.png')}}"/>
             <div class="rock_num radius10">
-                <div class="fl">已经摇下<span id="apple_got_cnt">{{$total_apple}}</span>个, 还有<span id="apple_times_left">{{$total_times}}</span>次机会!&nbsp;<a href="#about_us">[加机会]</a></div>
+                <div class="fl">已经摇下<span id="apple_got_cnt" class="apple_numbers">{{$total_apple}}</span>个, 还有<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次机会!&nbsp;<a href="#about_us">[加机会]</a></div>
                 <div class="fr"><a class="radius10" href="#get_coupons">兑换</a></div>
             </div>
             <a id="share_btn"  href="javascript:;" class="help radius10" style="display:{{$total_times > 0 ? 'none' : ''}}">找人帮忙</a>
-            <a href="javascript:;" class="seckill radius10">秒杀一箱 <span>12月10日八点开始</span></a>
+            <a href="javascript:;" class="seckill radius10">秒杀一箱万橙 <span>12月10日八点开始</span></a>
             <div class="word_link">
                 <a href="#get_coupons">[游戏规则]</a>&nbsp;&nbsp;&nbsp;
                 <a href="#top_list">[排行榜]</a>&nbsp;&nbsp;&nbsp;
