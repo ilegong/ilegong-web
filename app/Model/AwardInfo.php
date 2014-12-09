@@ -32,7 +32,7 @@ class AwardInfo extends AppModel {
         $now = time();
         if (!empty($result)) {
             $decoded = json_decode($result, true);
-            if ($now - $decoded < 30) {
+            if ($now - $decoded[0] < 30) {
                 return $decoded;
             }
         }
