@@ -69,7 +69,7 @@ class OpenstoresController extends AppController{
         }
         echo json_encode($responce);
     }
-    public function admin_verify(){
+    public function admin_list(){
         if($this->request->params['ext']=='json'){
             $this->_list();
             return;
