@@ -117,36 +117,10 @@
     <div class="section">
     <div class="ranking" style="background-image: url({{$this->Html->assetUrl('/img/apple201410/btc/ranking/bg.jpg')}}); min-height: 100%">
         <img src="{{$this->Html->assetUrl('/img/apple201410/btc/ranking/title.png')}}" />
-        <div class="ranking_notice radius10">你当前摇到了10个,还没有进入排名,要多多努力哦!</div>
+        <div id="top_list_update" class="ranking_notice radius10">正在更新...<!--你当前摇到了10个,还没有进入排名,要多多努力哦!--></div>
         <div style="margin:0 1.2em;">
-            <ul>
-                <li class="clearfix">
-                    <span style="width:40%;">1、H***y</span>
-                    <span style="width:60%;">摇到了98个</span>
-                </li>
-                <li class="clearfix">
-                    <span style="width:40%;">1、H***y</span>
-                    <span style="width:60%;">摇到了98个</span>
-                </li>
-                <li class="clearfix">
-                    <span style="width:40%;">1、H***y</span>
-                    <span style="width:60%;">摇到了98个</span>
-                </li>
-            </ul>
-            <ul>
-                <li class="clearfix">
-                    <span style="width:40%;">1、H***y</span>
-                    <span style="width:60%;">摇到了98个</span>
-                </li>
-                <li class="clearfix">
-                    <span style="width:40%;">1、H***y</span>
-                    <span style="width:60%;">摇到了98个</span>
-                </li>
-                <li class="clearfix">
-                    <span style="width:40%;">1、H***y</span>
-                    <span style="width:60%;">摇到了98个</span>
-                </li>
-            </ul>
+            <ul id="top_list_contents_left"></ul>
+            <ul id="top_list_contents_right"></ul>
         </div>
     </div>
     </div>
@@ -357,13 +331,12 @@
     function update_top_list(list, update_time) {
         if(list) {
             var $list_div = $('#top_list_contents');
-            $list_div.html('');
             $('#top_list_update').html('更新时间:' + update_time);
+            var uls = [$('#top_list_contents_left'), $('#top_list_contents_right')];
+            uls[0].html(''); uls[1].html('');
             for(var i = 0; i < list.length; i++) {
                 var item = list[i];
-                $list_div.append('<div class="con clearfix"><div class="fl name">'+item[0]+
-                '</div>，<div class="fl">摇到了<strong class="red">'+item[1]+
-                '</strong>个</div></div>');
+                uls[i%2].append('<li class="clearfix"><span style="width:40%;">'+(i+1)+'、'+item[0]+'</span> <span style="width:60%;">摇到了'+item[1]+'个</span> </li>');
             }
         }
     }
