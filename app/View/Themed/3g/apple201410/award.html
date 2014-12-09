@@ -78,7 +78,7 @@
     .seckill{ display:block; margin:0.8em 1.2em 0 1.2em; text-align:center; margin-bottom:0; background-color:#cccccc; font-size:1em; color:#ff483a; padding:0.4em 0.5em 0.4em 0.917em;  text-decoration:none;}
     .word_link{ text-align:center; font-size:1em; margin-top:0.8em;}
     .word_link a{ text-decoration:none; color:#333333;}
-    .next{ display:block; text-align:center; /*position:absolute; bottom:0.3em;  width:100%; z-index:2;*/}
+    .next{ display:block; text-align:center; position:absolute; bottom:0.3em;  width:100%; z-index:2;}
     .next img{ width:1.2em; height:0.875em;}
 
     /*产品故事*/
@@ -130,8 +130,7 @@
                 <a href="#product_story">[产品故事]</a>
             </div>
         </div>
-        <!--<a class="next" href="#X"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a>-->
-        <!--<div class="index_bottom"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/bottom.jpg')}}" /></div>-->
+        <a class="next" href="#product_story"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a>
         <div class="bg"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/bg1.jpg')}}" /></div>
     </div>
 
