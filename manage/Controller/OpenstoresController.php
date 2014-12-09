@@ -6,12 +6,12 @@
  * Time: 下午1:24
  */
 
-class StoresController extends AppController{
-    var $name = 'Stores';
+class OpenstoresController extends AppController{
+    var $name = 'Openstores';
     protected function _list() {
         $this->autoRender = false;
-        $modelClass = 'Openstore';
-        $this->loadModel($modelClass);
+        $modelClass = $this->modelClass;
+        $control_name = Inflector::tableize($modelClass);
         $page = $_GET['page']; // get the requested page
         $limit = $_GET['rows']; // get how many rows we want to have into the grid
         $sidx = $_GET['sidx']; // get index row - i.e. user click to sort
@@ -38,7 +38,6 @@ class StoresController extends AppController{
         $responce->total = $total_pages;
         $responce->records = $count;
         $i=0;
-        $control_name = 'stores';
         foreach($results as $item){
             /*******重要： action的li之间要一个紧连着一个 ，不要有换行或空格，否则会引起格式错乱。****** */
             $actions = '';
@@ -78,36 +77,36 @@ class StoresController extends AppController{
     }
 
     private function __loadFormStore($id = null){
-        $this->loadModel('Openstore');
-        $result = $this->Openstore->find('first', array('conditions' => array('id' => $id), 'fields' => array('store_name', 'creator')));
-        $item['Store']['name'] = $result['Openstore']['store_name'];
-        $item['Store']['slug'] = generate_slug($result['Openstore']['store_name']);
-        $item['Store']['creator'] = $result['Openstore']['creator'];
-        $this->request->data = $item;
+        $modelClass = $this->modelClass;
+        $result = $this->{$modelClass}->find('first', array('conditions' => array('id' => $id), 'fields' => array('store_name', 'creator')));
+        $result[$modelClass]['slug'] = generate_slug($result[$modelClass]['store_name']);
+        $this->request->data = $result;
         $this->set('id', $id);
     }
     public function admin_add($id = null) {
         $this->pageTitle = __("Add " . $this->modelClass, true);
-        $brand= array();
+        $modelClass = $this->modelClass;
         if (!empty($_POST)) {
             $this->autoRender = false;
-            $brand['Brand']['name'] = $this->data['Store']['name'];
-            $brand['Brand']['slug'] = $this->data['Store']['slug'];
-            $brand['Brand']['creator'] = $this->data['Store']['creator'];
+            $brand= array();
+            $brand['Brand']['name'] = $this->data[$modelClass]['store_name'];
+            $brand['Brand']['slug'] = $this->data[$modelClass]['slug'];
+            $brand['Brand']['creator'] = $this->data[$modelClass]['creator'];
             $brand['Brand']['cate_id'] = '121';
-            $brand['Brand']['published'] = $this->data['Store']['published'];
+            $brand['Brand']['published'] = $this->data[$modelClass]['published'];
             $this->data = $brand;
             $this->loadModel('Brand');
+            $this->loadModel('User');
             if($this->Brand->save($this->data)){
-                $this->loadModel('Openstore');
-                $this->Openstore->updateAll(array('status' => '4'), array('id' => $id));
+                $this->{$modelClass}->updateAll(array('status' => '4'), array('id' => $id));
+                $this->User->updateAll(array('is_business' => 1), array('User.id' => $brand['Brand']['creator']));
                 $successinfo = array(
                     'success' => __('Add success'),
                     'actions' => array(
                         'nexturl' => Router::url(array('action'=>'verify'))
                     ));
                 echo json_encode($successinfo);
-            };
+            }
         } else {
             // 无提交值，生成表单。加载选项
             $this->__loadFormStore($id);
