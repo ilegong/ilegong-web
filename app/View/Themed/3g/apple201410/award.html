@@ -123,7 +123,7 @@
                 <div class="fr"><a class="radius10" href="#get_coupons">兑换</a></div>
             </div>
             <a id="share_btn"  href="javascript:;" class="help radius10" style="display:{{$total_times > 0 ? 'none' : ''}}">找人帮忙</a>
-            <a href="javascript:;" class="seckill radius10">秒杀一箱万橙 <span>12月10日八点开始</span></a>
+            <a href="javascript:;" class="seckill radius10">100箱冰糖橙秒杀<span id="miaosha_time_desc">每天八点开始</span></a>
             <div class="word_link">
                 <a href="#get_coupons">[游戏规则]</a>&nbsp;&nbsp;&nbsp;
                 <a href="#top_list">[排行榜]</a>&nbsp;&nbsp;&nbsp;
@@ -294,6 +294,19 @@
                 loopBottom: true,
                 anchors: ['firstPage', 'product_story', 'top_list', 'get_coupons', 'about_us']
             });
+
+            var miaosha_span = $('#miaosha_time_desc');
+            var t2 = new Date(2014, 11, 10, 8, 0, 0);
+            var dif = (t2.getTime() - new Date())/1000;
+
+            setInterval(function(){
+                var hour = Math.floor(dif/3600);
+                var left = Math.floor(dif % 3600);
+                var min = Math.floor(left/60);
+                var seconds = Math.floor(left % 60);
+                miaosha_span.text(hour + ':' + min + ':' + seconds);
+                dif--;
+            }, 900);
 
             var top_list = {{$top_list}};
             if (top_list && top_list.top_list){update_top_list(top_list.top_list); }
