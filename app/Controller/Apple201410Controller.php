@@ -363,12 +363,12 @@ class Apple201410Controller extends AppController
                 $sharingPref = $sharing[$exchangeCount];
                 if (!empty($sharingPref)) {
                     $coupon_count = 1;
-                    $so = ClassRegistry::init('ShareOffer');
+                    $so = $this->CouponItem;
                     $weixin = $this->Weixin;
                     $this->exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfo['id'],
                         function ($uid, $operator, $source_log_id) use ($sharingPref, $so, $weixin) {
-                            $this->CouponItem->addCoupon($uid, 1, $operator, $source_log_id);
-                            $this->CouponItem->id = null;
+                            $so->addCoupon($uid, 1, $operator, $source_log_id);
+                            $so->id = null;
                                 $store = "在黔阳冰糖橙店购买时使用";
                                 $validDesc = "有效期至2014年12月18日";
                                 $weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
