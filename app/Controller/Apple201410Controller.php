@@ -130,7 +130,7 @@ class Apple201410Controller extends AppController
             }
             $nameIdMap = $this->User->findNicknamesMap($uids);
             foreach($result['top_list'] as &$list) {
-                $list[0] = mb_substr(filter_invalid_name($nameIdMap[$list[0]]), 8);
+                $list[0] = mb_substr(filter_invalid_name($nameIdMap[$list[0]]), 0, 8);
             }
         }
 
