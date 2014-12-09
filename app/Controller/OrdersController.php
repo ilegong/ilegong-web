@@ -231,7 +231,7 @@ class OrdersController extends AppController{
             $cartsByPid = $this->cartsByPid();
 			if(!empty($_COOKIE['cart_products'])){
                 $info = explode(',', $_COOKIE['cart_products']);
-                mergeCartWithDb($this->currentUser['id'], $info, $cartsByPid, $this->Product, $this->Cart);
+                mergeCartWithDb($this->currentUser['id'], $info, $cartsByPid, $this->Product, $this->Cart, $this->Session->id());
                 setcookie("cart_products", '',time()-3600,'/');
 			}
 		}

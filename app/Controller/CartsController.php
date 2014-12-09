@@ -95,7 +95,7 @@ class CartsController extends AppController{
         $poductModel = ClassRegistry::init('Product');
         if(!empty($_COOKIE['cart_products'])){
             $info = explode(',', $_COOKIE['cart_products']);
-            mergeCartWithDb($this->currentUser['id'], $info, $cartsByPid, $poductModel, $this->Cart);
+            mergeCartWithDb($this->currentUser['id'], $info, $cartsByPid, $poductModel, $this->Cart, $this->Session->id());
             setcookie("cart_products", '',time()-3600,'/');
         }
 

@@ -370,17 +370,16 @@ function product_spec_map($specs) {
 }
 
 
-
-
 /**
  * @param $uid
  * @param $cookieItems
  * @param $cartsByPid
  * @param $poductModel
  * @param $cartModel
+ * @param $session_id
  * @return array cartItemsByPid
  */
-function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartModel) {
+function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartModel, $session_id = null) {
     $product_ids = array();
     $nums = array();
     foreach ($cookieItems as $item) {
@@ -410,7 +409,7 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
                 'num' => $nums[$pid],
                 'price' => $p['Product']['price'],
                 'specId' => $newSpecId,
-                'session_id' => $this->Session->id(),
+                'session_id' => $session_id,
             );
             $cartsByPid[$pid] =& $cartItem;
         } else {
