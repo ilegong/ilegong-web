@@ -689,13 +689,13 @@ class AppController extends Controller {
 
         $trackLogs = $this->TrackLog->find('first', array(
             'conditions' => array('type' => $track_type, 'from' => $current_uid, 'to' => $friendUid),
-            'fields' => array('id',)
+            'fields' => array('id', 'got',)
         ));
 
         $clientIp = $this->request->clientIp(false);
-        $hasTrackLogs = empty($trackLogs);
-        $shouldAdd = $shouldAdd && ($hasTrackLogs || $trackLogs['TrackLog']['got'] == 0);
-        if ($hasTrackLogs) {
+        $noTrackLogs = empty($trackLogs);
+        $shouldAdd = $shouldAdd && ($noTrackLogs || $trackLogs['TrackLog']['got'] == 0);
+        if ($noTrackLogs) {
             $toUpdate = array('TrackLog' => array('type' => $track_type, 'got' => $shouldAdd?1:0, 'last_ip' => '\''.$clientIp.'\'', 'from' => $current_uid, 'to' => $friendUid, 'award_time' => date(FORMAT_DATETIME)));
             $this->TrackLog->save($toUpdate);
         } else {
