@@ -267,6 +267,10 @@ $(document).ready(function(){
                 if (data.top_list && typeof(update_top_list) == 'function') {
                     update_top_list(data.top_list);
                 }
+
+                if (data.update_award_list && typeof(update_award_list) == 'function') {
+                    update_award_list(data.award_list);
+                }
             });
         }
 

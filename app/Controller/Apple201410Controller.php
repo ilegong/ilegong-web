@@ -599,6 +599,10 @@ class Apple201410Controller extends AppController
             $result = array();
             $this->fill_top_lists($gameType, $result, $current_uid);
             $this->set('top_list', json_encode($result));
+
+            $result = array();
+            $this->fill_today_award($gameType, $result);
+            $this->set('award_list', json_encode($result));
         }
         $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
         $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $current_uid, 'type' => $gameType)));
@@ -906,7 +910,7 @@ class Apple201410Controller extends AppController
 
         $this->loadModel('AwardResult');
         $day = date(FORMAT_DATE);
-        $listR = $this->AwardResult->list_day_award($gameType, $day);
+        $listR = $this->AwardResult->list_day_award($day, $gameType);
         $updateTime = friendlyDate($listR[0], 'full');
 
         $cache_key = 'v_today_award_list_' .$gameType . '_'. $day . '_' .$listR[0];
@@ -932,8 +936,8 @@ class Apple201410Controller extends AppController
             $names = json_decode($today_award_list_cache);
         }
 
-        $tt_list = array('list' => $names, 'update_time' => $updateTime);
+        $tt_list = array('list' => $names, 'update_time' => $updateTime, 'today_awarded' => $this->AwardResult->todayAwarded($day, $gameType));
 
-        $result['award_names'] = $tt_list;
+        $result['award_list'] = $tt_list;
     }
 }

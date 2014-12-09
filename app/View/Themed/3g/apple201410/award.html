@@ -123,7 +123,7 @@
         <div class="tree">
             <img id="apple_tree_img" src="{{$this->Html->assetUrl('/img/apple201410/btc/index/tree.png?1')}}"/>
             <div class="rock_num radius10">
-                <div class="fl">已经摇下<span id="apple_got_cnt" class="apple_numbers">{{$total_apple}}</span>个, 还有<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次机会!&nbsp;<a href="#about_us">[加机会]</a></div>
+                <div class="fl">已经摇下<span id="apple_got_cnt" class="apple_numbers">{{$total_apple}}</span>个, 还有<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次机会!&nbsp;<a href="#about_us" style="font-size: 1.25em">[加机会]</a></div>
                 <div class="fr"><a class="radius10" href="#get_coupons">兑换</a></div>
             </div>
             <a id="share_btn"  href="javascript:;" class="help radius10" style="display:{{$total_times > 0 ? 'none' : ''}}">找人帮忙</a>
@@ -200,11 +200,26 @@
         <a id="get_coupons_button" href="javascript:;" class="pyshuo radius10">马上兑换</a>
     </div>
     <ul class="clearfix" style="width: 30%; margin: 0 auto; margin-top: 0.5em;">
-        <li class="fl"><a href="#about_us"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a></li>
+        <li class="fl"><a href="#award_list"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a></li>
         <li class="fr"><a href="#top_list"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
     </ul>
     <!--<div class="rule_bottom"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/rule/bottom.png')}}" /></div>-->
     </div>
+    </div>
+
+
+    <div class="section">
+        <div class="ranking" style="background-image: url({{$this->Html->assetUrl('/img/apple201410/btc/award/bg.jpg')}}); min-height: 100%; padding: 0.5em 0.5em 0.2em 0.5em">
+            <img src="{{$this->Html->assetUrl('/img/apple201410/btc/award/title.png')}}" />
+            <a href="#firstPage" class="help radius10">去秒杀</a>
+            <div class="ranking_notice radius10">今日已秒出 <span id="award_list_total"></span>箱 <span style="padding-left: 2em" id="award_list_update">正在更新...</span></div>
+            <div id="award_contents" style="margin:0 1.2em; height: 100%; overflow-y: hidden; overflow-x:hidden;">
+            </div>
+            <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none">
+                <li class="fl"><a href="#about_us"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a></li>
+                <li class="fr"><a href="#get_coupons"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
+            </ul>
+        </div>
     </div>
 
     <div class="section">
@@ -296,7 +311,7 @@
                 touchSensitivity: 15,
                 css3: true,
                 loopBottom: true,
-                anchors: ['firstPage', 'product_story', 'top_list', 'get_coupons', 'about_us']
+                anchors: ['firstPage', 'product_story', 'top_list', 'get_coupons', 'award_list', 'about_us']
             });
 
 
@@ -402,6 +417,9 @@
             var top_list = {{$top_list}};
             if (top_list && top_list.top_list){update_top_list(top_list.top_list); }
 
+            var award_list = {{$award_list}};
+            if (award_list && award_list.award_list){update_award_list(award_list.award_list); }
+
                 {{if $game_type == 'qinyBTC1412'}}
 
                     var in_top_list = 100;
@@ -451,5 +469,26 @@
             }
         }
     }
+
+    function update_award_list(award_list) {
+        var list = award_list['list'],  update_time = award_list['update_time'], today_awarded = award_list['today_awarded'];
+        $('#award_list_total').text(today_awarded ? today_awarded : 0);
+        if(list) {
+            $('#award_list_update').html('更新时间:' + update_time);
+            var $awardContents = $('#award_contents');
+            $awardContents.html('<ul></ul><ul></ul><ul></ul><ul></ul>');
+
+            var uls = [];
+            uls.push($awardContents.find('ul:nth-child(1)'));
+            uls.push($awardContents.find('ul:nth-child(2)'));
+            uls.push($awardContents.find('ul:nth-child(3)'));
+            uls.push($awardContents.find('ul:nth-child(4)'));
+
+            for(var i = 0; i < list.length; i++) {
+                var item = list[i];
+                uls[ i % uls.length ].append('<li>'+(i+1)+'、'+item+'</li>');
+            }
+        }
+    }
 </script>
-{{$this->Html->script(array('apple_game.js?v18'));}}
+{{$this->Html->script(array('apple_game.js?v19'));}}
