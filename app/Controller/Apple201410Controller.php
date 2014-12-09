@@ -122,11 +122,11 @@ class Apple201410Controller extends AppController
             $count = 0;
             $uids = array();
             foreach($listR[1] as $uid => $got) {
-                $result['top_list'][] = array($uid, $got);
-                $uids[] = $uid;
                 if ($count++ >= 30) {
                     break;
                 }
+                $result['top_list'][] = array($uid, $got);
+                $uids[] = $uid;
             }
             $nameIdMap = $this->User->findNicknamesMap($uids);
             foreach($result['top_list'] as &$list) {
