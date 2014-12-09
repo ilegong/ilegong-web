@@ -834,9 +834,9 @@ class Apple201410Controller extends AppController
      * @param array|int $include_uid_pos
      */
     private function fill_top_lists($gameType, &$result, $include_uid_pos = array()) {
+
         $listR = $this->AwardInfo->top_list($gameType);
         $updateTime = friendlyDate($listR[0], 'full');
-        $top_list = array();
 
         $user_pos = array();
         $user_total = array();
@@ -848,20 +848,30 @@ class Apple201410Controller extends AppController
             $user_total[$uid] = $listR[1][$uid];
         }
 
-        $count = 0;
-        $uids = array();
-        foreach ($listR[1] as $uid => $got) {
-            if ($count++ >= 30) {
-                break;
+        $cache_key = 'v_top_list_' . $listR[0];
+        $top_list_cache = Cache::read($cache_key);
+        if (empty($top_list_cache)) {
+            $top_list = array();
+            $count = 0;
+            $uids = array();
+            foreach ($listR[1] as $uid => $got) {
+                if ($count++ >= 30) {
+                    break;
+                }
+                $top_list[] = array($uid, $got);
+                $uids[] = $uid;
             }
-            $top_list[] = array($uid, $got);
-            $uids[] = $uid;
-        }
-        $nameIdMap = $this->User->findNicknamesMap($uids);
-        foreach ($top_list as &$list) {
-            $list[0] = mb_substr(filter_invalid_name($nameIdMap[$list[0]]), 0, 7);
+            $nameIdMap = $this->User->findNicknamesMap($uids);
+            foreach ($top_list as &$list) {
+                $list[0] = mb_substr(filter_invalid_name($nameIdMap[$list[0]]), 0, 7);
+            }
+            Cache::write($cache_key, json_encode($top_list));
+        } else {
+            $top_list = json_decode($top_list_cache);
         }
 
-        $result['top_list'] = array('list' => $top_list, 'update_time' => $updateTime, 'user_pos' => $user_pos, 'user_total' => $user_total);
+        $tt_list = array('list' => $top_list, 'update_time' => $updateTime, 'user_pos' => $user_pos, 'user_total' => $user_total);
+
+        $result['top_list'] = $tt_list;
     }
 }
