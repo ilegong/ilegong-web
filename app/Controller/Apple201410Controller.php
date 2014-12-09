@@ -146,7 +146,7 @@ class Apple201410Controller extends AppController
             $logsToMe = $this->TrackLog->find('all', array('conditions' => array(
                 'type' => $gameType,
                 'to' => $this->currentUser['id'],
-                'got' => ' > 0',
+                'got >' => '0',
                 'award_time > \'' . date(FORMAT_DATETIME, $r) . '\''
             ), 'fields' => array('from')
             ));
