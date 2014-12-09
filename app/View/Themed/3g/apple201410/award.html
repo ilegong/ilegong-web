@@ -117,7 +117,7 @@
     <div class="section">
         <div class="index_title"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/title.png')}}" /></div>
         <div class="tree">
-            <img id="apple_tree_img" src="{{$this->Html->assetUrl('/img/apple201410/btc/index/tree.png')}}"/>
+            <img id="apple_tree_img" src="{{$this->Html->assetUrl('/img/apple201410/btc/index/tree.png?1')}}"/>
             <div class="rock_num radius10">
                 <div class="fl">已经摇下<span id="apple_got_cnt" class="apple_numbers">{{$total_apple}}</span>个, 还有<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次机会!&nbsp;<a href="#about_us">[加机会]</a></div>
                 <div class="fr"><a class="radius10" href="#get_coupons">兑换</a></div>
@@ -272,7 +272,7 @@
 
 <script>
     var $got_wx_sub_times = "{{$got_wx_sub_times}}";
-    var shake_pic_url = '{{$this->Html->assetUrl("/img/apple201410/btc/index/tree.gif")}}';
+    var shake_pic_url = '{{$this->Html->assetUrl("/img/apple201410/btc/index/tree.gif?1")}}';
     var sound_url = 'http://51daifan-images.stor.sinaapp.com/tree_shake.mp3';
     var share_png_url = '{{$this->Html->assetUrl("/img/apple201410/btc/index/share.png")}}';
     var game_type = '{{$game_type}}';
