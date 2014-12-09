@@ -178,7 +178,7 @@ $(document).ready(function(){
                 if (data.notify_type > 0) {
                     msg = '您为<span style="color:red">' + data.name + '</span>获得了<span class="apple_numbers">1</span>次摇' + game_obj_name + '的机会！';
                 } else if (data.notify_type == -1) {
-                    msg = '您今天帮助了太多人了';
+                    msg = '您今天帮助过太多人了，明天再帮吧';
                 } else if (data.notify_type == -2) {
                     msg = '您已经帮这个朋友点过啦！';
                 } else {
@@ -265,7 +265,7 @@ $(document).ready(function(){
                 }
 
                 if (data.top_list && typeof(update_top_list) == 'function') {
-                    update_top_list(data.top_list, data.update_time);
+                    update_top_list(data.top_list);
                 }
             });
         }

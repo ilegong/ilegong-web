@@ -153,7 +153,7 @@
     <div class="section">
     <div class="ranking" style="background-image: url({{$this->Html->assetUrl('/img/apple201410/btc/ranking/bg.jpg')}}); min-height: 100%">
         <img src="{{$this->Html->assetUrl('/img/apple201410/btc/ranking/title.png')}}" />
-        <div id="top_list_update" class="ranking_notice radius10">正在更新...<!--你当前摇到了10个,还没有进入排名,要多多努力哦!--></div>
+        <div class="ranking_notice radius10">我的排名：<span id="top_list_mine"></span><span style="padding-left: 2em" id="top_list_update">正在更新...</span><!--你当前摇到了10个,还没有进入排名,要多多努力哦!--></div>
         <div style="margin:0 1.2em; height: 100%; overflow-y: hidden; overflow-x:hidden;">
             <ul id="top_list_contents_left"></ul>
             <ul id="top_list_contents_right"></ul>
@@ -289,7 +289,7 @@
             });
 
             var top_list = {{$top_list}};
-            if (top_list){update_top_list(top_list['top_list'], top_list['update_time']); }
+            if (top_list && top_list.top_list){update_top_list(top_list.top_list); }
 
             {{if $game_type == 'mihoutao1411'}}
             $('#yao_jp').click(function(){
@@ -349,8 +349,9 @@
                         var total = $.trim($('#apple_got_cnt').text());
                         total = total != '' ? parseInt(total) : 0;
                         var helpme_cnt_txt = $.trim($('#helpme_cnt_n').text());
+                        var my_list = parseInt($.trim($('#top_list_mine').text()));
                         var helpme_cnt = (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
-                        return '万橙，比褚橙不只甜了一点点，'+helpme_cnt+'个好基友帮忙，我已经摇下'+total+'个万橙 -- 朋友说';
+                        return '万橙，比褚橙不只甜了一点点，'+helpme_cnt+'个好基友帮忙，我已经摇下'+total+'个万橙' + (my_list > 0 && my_list<1000 ? '，排名' + my_list + '名' : '') + '－ 朋友说';
                     }
                     var shareTitle = '摇下100个，1箱万橙免费领';
                     var appid = '{{WX_APPID}}';
@@ -368,9 +369,13 @@
         });
 
     function showAfterGotCallback(times, total){}
-    function update_top_list(list, update_time) {
+    function update_top_list(top_list) {
+        var uid = '{{$CurrentUser["id"]}}';
+        var list = top_list['list'],  update_time = top_list['update_time'], user_pos = top_list['user_pos'];
+        if (user_pos && user_pos[uid]) {
+            $('#top_list_mine').text(user_pos[uid] > 0 ? user_pos[uid] : '1000名以后');
+        }
         if(list) {
-            var $list_div = $('#top_list_contents');
             $('#top_list_update').html('更新时间:' + update_time);
             var uls = [$('#top_list_contents_left'), $('#top_list_contents_right')];
             uls[0].html(''); uls[1].html('');
@@ -378,7 +383,7 @@
             var mid = Math.round(list.length/2);
             for(var i = 0; i < list.length; i++) {
                 var item = list[i];
-                uls[ i > mid ? 1 : 0 ].append('<li class="clearfix"><span style="width:65%;">'+(i+1)+'、'+item[0]+'</span> <span style="width:35%;">摇到'+item[1]+'个</span> </li>');
+                uls[ i > mid ? 1 : 0 ].append('<li class="clearfix"><span style="width:65%; display:inline-block">'+(i+1)+'、'+item[0]+'</span> <span style="width:35%;">'+item[1]+'个</span> </li>');
             }
         }
     }

@@ -129,9 +129,10 @@ class Apple201410Controller extends AppController
         $this->autoRender = false;
         $r = $this->Session->read($this->time_last_query_key);
 
+        $current_uid = $this->currentUser['id'];
         $result = array();
         if ($gameType == self::BTC1412) {
-            $this->fill_top_lists($gameType, $result);
+            $this->fill_top_lists($gameType, $result, $current_uid);
             $total_help_me = $this->TrackLog->find('count', array(
                 'conditions' => array('to' => $this->currentUser['id'], 'type' => $gameType, 'got' > 0),
             ));
@@ -574,7 +575,7 @@ class Apple201410Controller extends AppController
         $this->set('game_end', $this->is_game_end($gameCfg));
         if ($gameType == self::BTC1412) {
             $result = array();
-            $this->fill_top_lists($gameType, $result);
+            $this->fill_top_lists($gameType, $result, $current_uid);
             $this->set('top_list', json_encode($result));
         }
         $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
@@ -829,11 +830,20 @@ class Apple201410Controller extends AppController
      * Fill top list elements to the specified result array
      * @param $gameType
      * @param $result
+     * @param array|int $include_uid_pos
      */
-    private function fill_top_lists($gameType, &$result) {
+    private function fill_top_lists($gameType, &$result, $include_uid_pos = array()) {
         $listR = $this->AwardInfo->top_list($gameType);
-        $result['update_time'] = friendlyDate($listR[0], 'full');
-        $result['top_list'] = array();
+        $updateTime = friendlyDate($listR[0], 'full');
+        $top_list = array();
+
+        $user_pos = array();
+        if($include_uid_pos && !is_array($include_uid_pos)) {
+            $include_uid_pos = array($include_uid_pos);
+        }
+        foreach($include_uid_pos as $uid) {
+            $user_pos[$uid] = 1 +  array_search($uid, array_keys($listR[1]));
+        }
 
         $count = 0;
         $uids = array();
@@ -841,12 +851,14 @@ class Apple201410Controller extends AppController
             if ($count++ >= 30) {
                 break;
             }
-            $result['top_list'][] = array($uid, $got);
+            $top_list[] = array($uid, $got);
             $uids[] = $uid;
         }
         $nameIdMap = $this->User->findNicknamesMap($uids);
-        foreach ($result['top_list'] as &$list) {
+        foreach ($top_list as &$list) {
             $list[0] = mb_substr(filter_invalid_name($nameIdMap[$list[0]]), 0, 8);
         }
+
+        $result['top_list'] = array('list' => $top_list, 'update_time' => $updateTime, 'user_pos' => $user_pos);
     }
 }
