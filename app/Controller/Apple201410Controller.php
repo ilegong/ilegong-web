@@ -132,6 +132,11 @@ class Apple201410Controller extends AppController
             foreach($result['top_list'] as &$list) {
                 $list[0] = mb_substr(filter_invalid_name($nameIdMap[$list[0]]), 0, 8);
             }
+
+            $total_help_me = $this->TrackLog->find('count', array(
+                'conditions' => array('to' => $this->currentUser['id'], 'type' => $gameType, 'got' > 0),
+            ));
+            $result['total_help_me'] = $total_help_me;
         }
 
         if ($r && $r > 1413724118 /*2014-10-19 21:00*/) {

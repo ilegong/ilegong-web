@@ -1276,7 +1276,7 @@ function friendlyDate($sTime, $type = 'normal', $alt = 'false') {
         }
         //full: Y-m-d , H:i:s
     }elseif($type=='full'){
-        return date("Y-m-d , H:i:s",$sTime);
+        return date("Y-m-d, H:i:s",$sTime);
     }elseif($type=='ymd'){
         return date("Y-m-d",$sTime);
     }else{

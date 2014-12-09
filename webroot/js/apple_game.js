@@ -250,6 +250,10 @@ $(document).ready(function(){
                     setTimeout(new_times_query, query_interval);
                 }
 
+                if (data.total_help_me) {
+                    $('#helpme_cnt_n').text(data.total_help_me);
+                }
+
                 if (data.top_list && typeof(update_top_list) == 'function') {
                     update_top_list(data.top_list, data.update_time);
                 }
