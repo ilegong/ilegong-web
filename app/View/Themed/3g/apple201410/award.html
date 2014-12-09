@@ -74,7 +74,7 @@
     .aboutus img{ width:4.125em; height:1.667em;}
 
     /*游戏规则*/
-    .rule{ /*position:absolute;*/ z-index:2; margin-top:5em; left:0; width:100%;}
+    .rule{ /*position:absolute;*/ z-index:2; padding-top:5em; left:0; width:100%;}
     .rule ul{ margin:0 1.2em;}
     .rule ul li{ float:left; font-size:0.9em;}
     .rule ul li.title{ background-color:#75b3bc; color:#ffffff; height:2.083em; line-height:2.083em; text-align:center;}
@@ -131,8 +131,8 @@
     </div>
 
     <div class="section">
-        <div style="background-image: url({{$this->Html->assetUrl('/img/apple201410/btc/rule/bg.jpg')}}); height: 100%">
-    <div class="rule">
+        <div style="background-image: url({{$this->Html->assetUrl('/img/apple201410/btc/rule/bg.jpg')}}); background-size: 100%; min-height: 100%">
+    <div class="rule" style="height: 95%">
         <ul class="clearfix">
             <li class="title" style="width:30%;">摇下数量</li>
             <li class="title" style="width:70%;">购买折扣</li>
@@ -159,12 +159,12 @@
         <p>3、活动结束日期12月18号23点59分，活动最终解释权归朋友说所有。</p>
         <a id="get_coupons_button" href="javascript:;" class="pyshuo radius10">马上兑换</a>
     </div>
-    <ul class="clearfix iconlink_ul">
+    <ul class="clearfix" style="width: 30%; margin: 0 auto; margin-top: 0.5em">
         <li class="fl"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></li>
         <li class="fr"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></li>
     </ul>
     <div class="rule_bottom"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/rule/bottom.png')}}" /></div>
-            </div>
+    </div>
     </div>
 
     <div class="section">
