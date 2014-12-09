@@ -118,14 +118,19 @@ class Apple201410Controller extends AppController
             $result['update_time'] = friendlyDate($listR[0], 'full');
             $result['top_list'] = array();
 
+
+            $count = 0;
             $uids = array();
             foreach($listR[1] as $uid => $got) {
                 $result['top_list'][] = array($uid, $got);
                 $uids[] = $uid;
+                if ($count++ >= 30) {
+                    break;
+                }
             }
             $nameIdMap = $this->User->findNicknamesMap($uids);
             foreach($result['top_list'] as &$list) {
-                $list[0] = filter_invalid_name($nameIdMap[$list[0]]);
+                $list[0] = mb_substr(filter_invalid_name($nameIdMap[$list[0]]), 8);
             }
         }
 
