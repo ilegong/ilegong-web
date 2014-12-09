@@ -859,7 +859,7 @@ class Apple201410Controller extends AppController
         }
         $nameIdMap = $this->User->findNicknamesMap($uids);
         foreach ($top_list as &$list) {
-            $list[0] = mb_substr(filter_invalid_name($nameIdMap[$list[0]]), 0, 8);
+            $list[0] = mb_substr(filter_invalid_name($nameIdMap[$list[0]]), 0, 7);
         }
 
         $result['top_list'] = array('list' => $top_list, 'update_time' => $updateTime, 'user_pos' => $user_pos, 'user_total' => $user_total);
