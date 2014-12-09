@@ -1276,7 +1276,7 @@ class OrdersController extends AppController{
 
                 //这里必须安店面去限定
                 //要把没有查询到的couponItem去掉
-                if (count($couponsByShared) <= $cart->brandItems[$brand_id]->total_num()) {
+                if (!empty($cart->brandItems[$brand_id]) && count($couponsByShared) <= $cart->brandItems[$brand_id]->total_num()) {
                     //            if($cart->could_apply($brand_id, $cou)){
                     //TODO: 需要考虑券是否满足可用性等等
                     $this->_brand_apply_coupon($brand_id, $coupon_item_id);
