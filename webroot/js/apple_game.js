@@ -173,10 +173,20 @@ $(document).ready(function(){
     utils.alert('摇动手机！没有声音请开声音！');
     });
         $.getJSON("/apple_201410/notifiedToMe/"+game_type+"?r="+Math.random(), function(data){
-    if (data.notified === false) {
-    var msg = data.got ? '您为<span style="color:red">'+data.name+'</span>获得了<span class="apple_numbers">1</span>次摇'+game_obj_name+'的机会！' : '您已经帮这个朋友点过啦！';
-    utils.alert(msg);
-    }
+            var msg;
+            if (data.notified == false) {
+                if (data.notify_type > 0) {
+                    msg = '您为<span style="color:red">' + data.name + '</span>获得了<span class="apple_numbers">1</span>次摇' + game_obj_name + '的机会！';
+                } else if (data.notify_type == -1) {
+                    msg = '您今天帮助了太多人了';
+                } else if (data.notify_type == -2) {
+                    msg = '您已经帮这个朋友点过啦！';
+                } else {
+                    //msg ＝ '您还没帮过这个朋友';
+                    //Don't show
+                }
+            }
+            if (msg) { utils.alert(msg); }
     });
 
     var $assignWXSubscribeTimes = $('#assignWXSubscribeTimes, #assignWXSubscribeTimes_2');

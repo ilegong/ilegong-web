@@ -88,11 +88,28 @@ class Apple201410Controller extends AppController
         $this->set('game_type', self::RICE_201411);
     }
 
-    public function notifiedToMe() {
+    public function notifiedToMe($gameType = KEY_APPLE_201410) {
         $key = $this->sess_award_notified;
         $r = $this->Session->read($key);
         if (!empty($r)) {
             $r['notified'] = false;
+            $friendUid = $r['friendUid'];
+            if ($friendUid) {
+                $trackLogs = $this->TrackLog->find_track_log($gameType, $this->currentUser['id'], $friendUid);
+                if (empty($trackLogs)){
+                    $notify_type = 0; //Never helped
+                } else if ($trackLogs['TrackLog']['award_time'] == $trackLogs['TrackLog']['latest_click_time']){
+                    // Just Helped !    and Got should be >= 1
+                    $notify_type = $trackLogs['TrackLog']['got'];
+                } else if ($trackLogs['TrackLog']['got'] == 0) {
+                    //refused:
+                    $notify_type = -1;
+                } else {
+                    //already helped
+                    $notify_type = -2;
+                }
+                $r['notify_type'] = $notify_type;
+            }
             echo json_encode($r);
             $this->Session->write($key, 0);
         } else {
@@ -406,9 +423,13 @@ class Apple201410Controller extends AppController
         $this->Session->write($this->time_last_query_key, $curr);
     }
 
-    private function _addNotify($uname, $added)
+    /**
+     * @param $uname
+     * @param $friendUid int notify user id
+     */
+    private function _addNotify($uname, $friendUid)
     {
-        $this->Session->write($this->sess_award_notified, array('name' => $uname, 'got' => $added));
+        $this->Session->write($this->sess_award_notified, array('name' => $uname, 'friendUid' => $friendUid));
     }
 
     public function award($gameType = KEY_APPLE_201410)
@@ -427,7 +448,7 @@ class Apple201410Controller extends AppController
             if ($shouldAdd) {
                 $this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id'], 'type' => $gameType));
             }
-            $this->_addNotify(filter_invalid_name($friend['User']['nickname']), $shouldAdd);
+            $this->_addNotify(filter_invalid_name($friend['User']['nickname']), $friend['User']['id']);
             $this->redirect_for_append_tr_id($current_uid, $gameType);
         }
 

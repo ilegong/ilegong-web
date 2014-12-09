@@ -687,10 +687,7 @@ class AppController extends Controller {
             }
         }
 
-        $trackLogs = $this->TrackLog->find('first', array(
-            'conditions' => array('type' => $track_type, 'from' => $current_uid, 'to' => $friendUid),
-            'fields' => array('id', 'got',)
-        ));
+        $trackLogs = $this->TrackLog->find_track_log($track_type, $current_uid, $friendUid);
 
         $clientIp = $this->request->clientIp(false);
         $noTrackLogs = empty($trackLogs);

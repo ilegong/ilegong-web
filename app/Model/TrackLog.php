@@ -7,6 +7,12 @@
  */
 class TrackLog extends AppModel {
 
+    public function find_track_log($track_type, $current_uid, $friendUid) {
+        return $this->find('first', array(
+            'conditions' => array('type' => $track_type, 'from' => $current_uid, 'to' => $friendUid),
+        ));
+    }
+
     /**
      * @param $type
      * @param $uid
