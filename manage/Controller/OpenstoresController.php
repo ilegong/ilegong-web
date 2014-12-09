@@ -28,7 +28,7 @@ class OpenstoresController extends AppController{
         $results = $this->{$modelClass}->find('all', array(
             'conditions'=>array('status' => 2
             ),
-            'fields' => array('id', 'creator', 'store_name', 'link_name', 'mobile', 'qq', 'person_id', 'person_name', 'person_id_pic'),
+            'fields' => array('id', 'creator', 'store_name', 'link_name', 'mobile', 'qq', 'person_id', 'pattern'),
             'order' => $sidx.' ' .$sord,
             'limit' => $limit,
             'page' => $page
@@ -44,15 +44,12 @@ class OpenstoresController extends AppController{
 
             if($this->AclFilter->check($this->name,'admin_edit')){
                 $actions .= '<li class="ui-state-default grid-row-edit"><a title="通过" href="' . Router::url(array('controller' => $control_name, 'action' => 'add',  'admin' => true, $item[$modelClass]['id'])) . '"><span class="glyphicon glyphicon-ok"></span></a></li>';
-                $actions .= '<li class="ui-state-default grid-row-edit"><a href="' . Router::url(array('controller' => $control_name, 'action' => 'edit', 'admin' => true, $item[$modelClass]['id'])) . '" title="' . __('Copy') . '"><span class="glyphicon glyphicon-file"></span></a></li>';
-            }
-            if (!isset($item[$modelClass]['deleted'])) { // 不包含deleted标记位的模块，直接删除
-                $actions .= '<li class="ui-state-default grid-row-delete"><a href="#" data-confirm="'.__('Are you sure to delete').'" onclick="ajaxAction(\'' . Router::url(array('controller' => $control_name, 'action' => 'delete', 'plugin' => strtolower($plugin), 'admin' => true, $item[$modelClass]['id'],'ext'=>'json')) . '\',null,null,\'deleteGridRow\',this)" title="' . __('Delete') . '"><span class="glyphicon glyphicon-remove"></span></a></li>';
-            } else {// 包含deleted标记位的模块，则删除到回收站
-                $actions .= '<li class="ui-state-default grid-row-trash"><a href="#" data-confirm="'.__('Are you sure to trash').'" onclick="ajaxAction(\'' . Router::url(array('controller' => $control_name, 'action' => 'trash', 'plugin' => strtolower($plugin), 'admin' => true, $item[$modelClass]['id'],'ext'=>'json')) . '\',null,null,\'deleteGridRow\',this)" title="' . __('Trash') . '"><span class="glyphicon glyphicon-trash"></span></a></li>';
+                $actions .= '<li class="ui-state-default grid-row-edit"><a href="' . Router::url(array('controller' => $control_name, 'action' => 'view', 'admin' => true, $item[$modelClass]['id'])) . '" title="查看"><span class="glyphicon glyphicon-file"></span></a></li>';
             }
 
-            $actions .= '<li class="ui-state-default grid-row-view"><a href="' . Router::url(array('controller' => $control_name, 'action' => 'view', 'plugin' => strtolower($plugin), 'admin' => true, $item[$modelClass]['id'])) . '" title="' . __('View') . '"><span class="glyphicon glyphicon-info-sign"></span></a></li>';
+            $actions .= '<li class="ui-state-default grid-row-delete"><a title="通过" href="' . Router::url(array('controller' => $control_name, 'action' => 'reject',  'admin' => true, $item[$modelClass]['id'])) . '"><span class="glyphicon glyphicon-remove "></span></a></li>';
+
+
 
             $actions .= $this->Hook->call('gridDataAction', array($modelClass, $item[$modelClass]));
             $item[$modelClass]['actions'] = $actions;
@@ -63,8 +60,13 @@ class OpenstoresController extends AppController{
             $item[$modelClass]['actions'] = '<ul class="ui-grid-actions">' . $item[$modelClass]['actions'] . '</ul>';
 
             $responce->rows[$i]['id']=$item[$modelClass]['id'];
+            if($item[$modelClass]['pattern'] == '0'){
+                $item[$modelClass]['pattern'] = '个人';
+            }else{
+                $item[$modelClass]['pattern'] = '企业';
+            }
             $responce->rows[$i]['cell']= $item[$modelClass];
-            $responce->rows[$i]['cell']['person_id_pic']= '<img src="' . $responce->rows[$i]['cell']['person_id_pic'] . '" width="80"/>';
+            //$responce->rows[$i]['cell']['person_id_pic']= '<img src="' . $responce->rows[$i]['cell']['person_id_pic'] . '" width="80"/>';
             $i++;
         }
         echo json_encode($responce);
@@ -84,8 +86,8 @@ class OpenstoresController extends AppController{
         $this->set('id', $id);
     }
     public function admin_add($id = null) {
-        $this->pageTitle = __("Add " . $this->modelClass, true);
         $modelClass = $this->modelClass;
+        $this->pageTitle = __("Add " . $this->modelClass, true);
         if (!empty($_POST)) {
             $this->autoRender = false;
             $brand= array();
@@ -112,5 +114,46 @@ class OpenstoresController extends AppController{
             $this->__loadFormStore($id);
         }
     }
+    public function admin_view($id = null){
+        $modelClass = $this->modelClass;
+        $this->pageTitle = __("查看 " . $this->modelClass, true);
+        $result = $this->{$modelClass}->find('first', array(
+            'conditions' => array('id' => $id),
+                'fields' => array('store_name', 'pattern', 'person_id', 'person_name', 'person_id_pic', 'workplace', 'business_licence', 'food_licence','id_front', 'id_back'),
+            )
+        );
+        if($result[$modelClass]['pattern'] == '0'){
+            $this->set('person_id', $result[$modelClass]['person_id']);
+            $this->set('store_name', $result[$modelClass]['store_name']);
+            $this->set('person_name', $result[$modelClass]['person_name']);
+            $this->set('person_id_pic', $result[$modelClass]['person_id_pic']);
+            $this->set('workplace', $result[$modelClass]['workplace']);
+            $this->set('person', true);
+        }else if($result[$modelClass]['pattern'] == '1'){
+            $this->set('business_licence', $result[$modelClass]['business_licence']);
+            $this->set('store_name', $result[$modelClass]['store_name']);
+            $this->set('food_licence', $result[$modelClass]['food_licence']);
+            $this->set('id_front', $result[$modelClass]['id_front']);
+            $this->set('id_back', $result[$modelClass]['id_back']);
+            $this->set('person', false);
+        }
 
+    }
+    public function admin_reject($id = null){
+        $this->set('id', $id);
+        if (!empty($_POST)) {
+            $this->autoRender = false;
+            $modelClass = $this->modelClass;
+            $reason = $_POST['remark'];
+            if($this->{$modelClass}->updateAll(array('reason' => '\''.$reason.'\'', 'status' => 3), array('id' => $id))){
+                $successinfo = array(
+                    'success' => __('审核未通过已确认'),
+                    'actions' => array(
+                        'nexturl' => Router::url(array('action'=>'list'))
+                    ));
+                echo json_encode($successinfo);
+            };
+
+        }
+    }
 }

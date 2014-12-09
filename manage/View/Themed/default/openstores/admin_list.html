@@ -5,7 +5,7 @@
         url:"{{Router::url('/admin/openstores/list.json?q=2')}}",
         datatype: "json",
         autowidth:true,//自动宽
-        colNames:['id','creator', '店铺名', '联系人','手机号码','qq','姓名', '身份证号', '身份证附件', 'Action'],
+        colNames:['id','creator', '店铺名', '联系人','手机号码','qq', '认证类型', 'Action'],
         colModel:[
             {name:'id',index:'id', width:'6%', align:"right"},
             {name:'creator',index:'creator', width:'10%',align:'right'},
@@ -13,17 +13,15 @@
             {name:'link_name',index:'link_name', width:'10%',sortable:false, align:'right'},
             {name:'mobile',index:'mobile', width:'15%', sortable:false, align:"right"},
             {name:'qq',index:'qq', width:'10%', sortable:false, align:"right"},
-            {name:'person_name',index:'person_name', width:'10%', sortable:false, align:"right"},
-            {name:'person_id',index:'person_id', width:'18%', sortable:false, align:"right"},
-            {name:'person_id_pic',index:'person_id_pic', width:'20%', align:"center", sortable:false},
+            {name:'pattern',index:'pattern', width:'10%', align:"right",edittype:"select",editoptions:{value:":Pleaseselect;0:个人;1:企业"}},
             {name:'actions',index:'actions', width:'15%',align:"center", sortable:false}
         ],
         rownumbers:true,//添加左侧行号
         height: 450,
         //altRows:true,//设置为交替行表格,默认为false
         //sortname:'createDate',
-        rowNum:10,
-        rowList:[10,20,30],
+        rowNum:20,
+        rowList:[20,40,70],
         pager: '#pager2',
         sortname: 'id',
         viewrecords: true,

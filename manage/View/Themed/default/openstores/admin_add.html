@@ -4,29 +4,22 @@ echo $this->MForm->create('Openstore',array(
     'url' => array('action' => 'add', $id),
     ));
     ?>
-    <fieldset>
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#brand-main" data-toggle="tab"><span>{{__('Basic Info')}}</span></a></li>
-        </ul>
-        <div class="tab-content">
-            <div id="brand-main" class="tab-pane active">
-                <?php
-                echo $this->MForm->input('store_name',array('size'=>'80','required'=>'required', label=>'店铺名称', 'onblur'=>"generateSlug(this,'#OpenstoreSlug')"));
-                echo $this->MForm->input('slug',array('default'=>'','required'=>'required','size'=>'80','title'=>'不填时，值为数据的id。', label=>'链接字符'));
-                echo $this->MForm->input('creator', array('default'=>0, label=>'绑定商家'));
-                ?>
-                <div class="form-group success"><label for="BrandPublished" class="col-sm-2 control-label">是否发布</label>
-                    <div class="col-sm-10 controls select">
-                        <select name="data[Openstore][published]" class="form-control success" id="BrandPublished">
-                            <option value="0" selected="selected">否</option>
-                            <option value="1">是</option>
-                        </select>
-                    </div>
-                </div>
+    <h1><span class="glyphicon glyphicon-ok"></span>确认通过</h1>
+    <div id="brand-main">
+        <?php
+        echo $this->MForm->input('store_name',array('size'=>'80','required'=>'required', label=>'店铺名称', 'onblur'=>"generateSlug(this,'#OpenstoreSlug')"));
+        echo $this->MForm->input('slug',array('default'=>'','required'=>'required','size'=>'80','title'=>'不填时，值为数据的id。', label=>'链接字符'));
+        echo $this->MForm->input('creator', array('required'=>'required', label=>'绑定商家'));
+        ?>
+        <div class="form-group success">
+            <label for="BrandPublished" class="col-sm-2 control-label">是否发布</label>
+            <div class="col-sm-10 controls select">
+                <select name="data[Openstore][published]" class="form-control success" id="BrandPublished">
+                    <option value="0" selected="selected">否</option>
+                    <option value="1">是</option>
+                </select>
             </div>
         </div>
-
-    </fieldset>
-    <?php echo $this->MForm->end(array('label'=>__('Submit'),'id'=>'btnsubmit')); ?>
-
+        <?php echo $this->MForm->end(array('label'=>__('Submit'),'id'=>'btnsubmit')); ?>
+    </div>
 </div>
