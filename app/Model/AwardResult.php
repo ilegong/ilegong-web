@@ -24,6 +24,23 @@ class AwardResult extends AppModel {
         return $result;
     }
 
+    public function list_day_award($day, $type) {
+        $key = $this->key_day_awarded_list($day, $type);
+        $result = Cache::read($key);
+        if (!$result) {
+            $result = $this->find('all', array(
+                'conditions' => array('date(finish_time) ' => $day, 'type' => $type),
+                'fields' => array('uid', 'finish_time'),
+                'order' => 'finish_time desc'
+            ));
+            $ret = array(time(), $result);
+            Cache::write($key, json_encode($ret));
+            return $ret;
+        } else {
+            return json_decode($result, true);
+        }
+    }
+
     public function userIsAwarded($uid, $type) {
         $key = $this->key_user_is_awarded($uid, $type);
         $result = Cache::read($key);
@@ -62,10 +79,15 @@ class AwardResult extends AppModel {
         return 'today_awarded_' . $day.'_'.$type;
     }
 
+    protected function key_day_awarded_list($day, $type) {
+        return 'today_awarded_list' . $day.'_'.$type;
+    }
+
     protected function clearCache() {
         Cache::delete($this->key_user_is_awarded($this->data['AwardResult']['id'], $this->data['AwardResult']['type']));
         $datetime = new DateTime($this->data['AwardResult']['finish_time']);
         $day = $datetime->format(FORMAT_DATE);
         Cache::delete($this->key_day_awarded($day, $this->data['AwardResult']['type']));
+        Cache::delete($this->key_day_awarded_list($day, $this->data['AwardResult']['type']));
     }
 }

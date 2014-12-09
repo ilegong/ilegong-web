@@ -67,6 +67,7 @@ class Apple201410Controller extends AppController
         self::MIHOUTAO1411 => "'摇一摇一起免费兑有机猕猴桃红包，我已经摇下'+total+'个猕猴桃，兑到XX元红包啦 -- 城市里的乡下人张慧敏分享有机种植眉县猕猴桃 -- 朋友说'",
     );
 
+    const BTC_DAILY_AWARD_LIMIT = 100;
     public function beforeFilter()
     {
         parent::beforeFilter();
@@ -138,6 +139,7 @@ class Apple201410Controller extends AppController
                 'conditions' => array('to' => $this->currentUser['id'], 'type' => $gameType, 'got' > 0),
             ));
             $result['total_help_me'] = $total_help_me;
+            $this->fill_today_award($gameType, $result, 30);
         }
 
         if ($r && $r > 1413724118 /*2014-10-19 21:00*/) {
@@ -166,12 +168,7 @@ class Apple201410Controller extends AppController
                     $nicknames .= __('等');
                 }
             }
-//        if (count($logsToMe) > 0) {
-//            $this->UserNotifyLog->updateAll(array('last_notify' => time()), array(
-//                'uid' => $this->currentUser['id'],
-//                'type' => KEY_APPLE_201410
-//            ));
-//        }
+
             $this->_updateLastQueryTime(time());
             $result['success'] = true;
             $result['new_times'] =  count($logsToMe);
@@ -252,45 +249,65 @@ class Apple201410Controller extends AppController
         if (time() - $last > 30 && ($gameType == self::BTC1412)) {
             $this->Session->write('last_chou_jiang', time());
 
-            $gameCfg = $this->GameConfig->findByGameType($gameType);
-            if (!empty($gameCfg) && $gameCfg['GameConfig']['game_end']) {
-                $dt = new DateTime($gameCfg['GameConfig']['game_end']);
-                if(mktime() - $dt->getTimestamp() > 0) {
-                    $msg = 'game_end';
-                }
-            }  else {
-                $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
-                $not_spent = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] - $awardInfo['spent'] : 0;
+            $hour = date('G');
+            if ($hour >= 8 and $hour <20) {
+                $gameCfg = $this->GameConfig->findByGameType($gameType);
+                if (!empty($gameCfg) && $gameCfg['GameConfig']['game_end']) {
+                    $dt = new DateTime($gameCfg['GameConfig']['game_end']);
+                    if (mktime() - $dt->getTimestamp() > 0) {
+                        $msg = 'game_end';
+                    } else {
+                        $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
+                        $not_spent = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] - $awardInfo['spent'] : 0;
 
-                if ($not_spent >= $this->AWARD_LIMIT) {
-                    $this->loadModel('AwardResult');
-                    $model = $this->AwardResult;
-                    $todayAwarded = $model->todayAwarded(date(FORMAT_DATE), $gameType);
-                    $iAwarded = $model->userIsAwarded($uid, $gameType);
-                    $shouldLimit = $this->shouldLimit($todayAwarded, 6);
-                    if (!$iAwarded && !$shouldLimit) {
-                        $awardResult = array(
-                            'uid' => $uid,
-                            'type' => $gameType,
-                            'finish_time' => date(FORMAT_DATETIME)
-                        );
-                        if (!$model->save($awardResult)) {
-                            $this->log("Save AwardResult failed:" . json_encode($awardResult));
-                        };
+                        if ($not_spent >= $this->AWARD_LIMIT) {
+                            $this->loadModel('AwardResult');
+                            $model = $this->AwardResult;
+                            $todayAwarded = $model->todayAwarded(date(FORMAT_DATE), $gameType);
+                            $iAwarded = $model->userIsAwarded($uid, $gameType);
 
-                        $award_type = 58;
-                        $this->CouponItem->addCoupon($uid, 17652, $uid, 'game_' . $gameType . '_' . mktime());
-                        $store = "购买黔阳冰糖橙时使用";
-                        $validDesc = "有效期至2014年12月25日";
-                        $this->Weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
+                            $daily_award_limit = self::BTC_DAILY_AWARD_LIMIT;
+                            if ($todayAwarded >= $daily_award_limit) {
+                                $msg = 'no more';
+                            } else if (!$iAwarded) {
+                                $awardResult = array(
+                                    'uid' => $uid,
+                                    'type' => $gameType,
+                                    'finish_time' => date(FORMAT_DATETIME)
+                                );
+                                if (!$model->save($awardResult)) {
+                                    $this->log("Save AwardResult failed:" . json_encode($awardResult));
+                                };
 
+                                if ($todayAwarded < $daily_award_limit) {
+                                    $exchangeCount = 100;
+                                    $coupon_count = 1;
+                                    $so = $this->CouponItem;
+                                    $weixin = $this->Weixin;
+                                    $this->exchangeCouponAndLog($uid, $not_spent, $exchangeCount, $coupon_count, $gameType, $awardInfo['id'],
+                                        function ($uid, $operator, $source_log_id) use ($so, $weixin) {
+                                            $so->addCoupon($uid, 17652, $operator, $source_log_id);
+                                            $so->id = null;
+                                            $store = "在黔阳冰糖橙店购买时使用";
+                                            $validDesc = "有效期至2014年12月18日";
+                                            $weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
+                                        }
+                                    );
+                                    $award_type = 58;
+                                } else {
+                                    $msg = 'no_more';
+                                }
+                            }
+                            $logstr = "Choujian $uid : todayAwarded=$todayAwarded, iAwarded=$iAwarded";
+                            $this->log($logstr);
+                        } else {
+                            $msg = 'not_enough_100';
+                            $logstr = "total_got=$not_spent, award_limit=" . $this->AWARD_LIMIT;
+                        }
                     }
-                    $logstr = "Choujian $uid : todayAwarded=$todayAwarded, iAwarded=$iAwarded, shouldLimit=$shouldLimit";
-                    $this->log($logstr);
-                } else {
-                    $msg = 'not_enough_100';
-                    $logstr = "total_got=$not_spent, award_limit=" . $this->AWARD_LIMIT;
                 }
+            } else {
+                $msg = 'time_error';
             }
         } else {
             $logstr = 'too frequently';
@@ -481,6 +498,10 @@ class Apple201410Controller extends AppController
 
         } else {
             $this->set('helpMe', $friendsHelpMe);
+
+            $this->loadModel('AwardResult');
+            $today_awarded = $this->AwardResult->todayAwarded(date(FORMAT_DATE), $gameType);
+            $this->set('today_sold_out', $today_awarded >= self::BTC_DAILY_AWARD_LIMIT);
 
             $this->loadModel('Order');
 
@@ -770,7 +791,7 @@ class Apple201410Controller extends AppController
     }
 
     /**
-     * @param $id
+     * @param $uid
      * @param $apple_count_snapshot
      * @param $exchangeCount
      * @param $coupon_count
@@ -778,8 +799,8 @@ class Apple201410Controller extends AppController
      * @param $awardInfoId
      * @param $couponFunc
      */
-    private function exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfoId, $couponFunc) {
-        $latest_exchange_log_id = $this->ExchangeLog->addExchangeLog($id, $apple_count_snapshot,
+    private function exchangeCouponAndLog($uid, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfoId, $couponFunc) {
+        $latest_exchange_log_id = $this->ExchangeLog->addExchangeLog($uid, $apple_count_snapshot,
             $exchangeCount, $coupon_count, $exChangeSource);
 
         $operator = $this->currentUser['id'];
@@ -787,7 +808,7 @@ class Apple201410Controller extends AppController
             $awardInfoModel = ClassRegistry::init('AwardInfo');
             if ($awardInfoModel->updateAll(array('spent ' => 'spent + '. $exchangeCount, ), array('id' => $awardInfoId))) {
                 for ($i = 1; $i <= $coupon_count; $i++) {
-                    $couponFunc($id, $operator, $exChangeSource . "_" . $latest_exchange_log_id . '_' . $i);
+                    $couponFunc($uid, $operator, $exChangeSource . "_" . $latest_exchange_log_id . '_' . $i);
                 }
             }
         }
@@ -873,5 +894,46 @@ class Apple201410Controller extends AppController
         $tt_list = array('list' => $top_list, 'update_time' => $updateTime, 'user_pos' => $user_pos, 'user_total' => $user_total);
 
         $result['top_list'] = $tt_list;
+    }
+
+    /**
+     * Fill today award user names/updated time to the specified result array
+     * @param $gameType
+     * @param $result
+     * @param int $limit
+     */
+    private function fill_today_award($gameType, &$result, $limit = 30) {
+
+        $this->loadModel('AwardResult');
+        $day = date(FORMAT_DATE);
+        $listR = $this->AwardResult->list_day_award($gameType, $day);
+        $updateTime = friendlyDate($listR[0], 'full');
+
+        $cache_key = 'v_today_award_list_' .$gameType . '_'. $day . '_' .$listR[0];
+        $today_award_list_cache = Cache::read($cache_key);
+        if (empty($today_award_list_cache)) {
+            $count = 0;
+            $uids = array();
+            foreach ($listR[1] as $awardResult) {
+                if ($count++ >= $limit) {
+                    break;
+                }
+                $uid = $awardResult['AwardResult']['uid'];
+                $uids[] = $uid;
+            }
+
+            $names = array();
+            $nameIdMap = $this->User->findNicknamesMap($uids);
+            foreach ($uids as $uid) {
+                $names[] = mb_substr(filter_invalid_name($nameIdMap[$uid]), 0, 8);
+            }
+            Cache::write($cache_key, json_encode($names));
+        } else {
+            $names = json_decode($today_award_list_cache);
+        }
+
+        $tt_list = array('list' => $names, 'update_time' => $updateTime);
+
+        $result['award_names'] = $tt_list;
     }
 }

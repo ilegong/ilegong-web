@@ -127,7 +127,7 @@
                 <div class="fr"><a class="radius10" href="#get_coupons">兑换</a></div>
             </div>
             <a id="share_btn"  href="javascript:;" class="help radius10" style="display:{{$total_times > 0 ? 'none' : ''}}">找人帮忙</a>
-            <a href="javascript:;" class="seckill radius10">每天100箱冰糖橙免费秒 <span id="miaosha_time_desc">每天八点开始</span></a>
+            <a id="miaosha_btn" href="javascript:;" class="seckill radius10">每天100箱冰糖橙免费秒 <span id="miaosha_time_desc">每天八点开始</span></a>
             <div class="word_link">
                 <a href="#get_coupons">[游戏规则]</a>&nbsp;&nbsp;&nbsp;
                 <a href="#top_list">[排行榜]</a>&nbsp;&nbsp;&nbsp;
@@ -299,78 +299,111 @@
                 anchors: ['firstPage', 'product_story', 'top_list', 'get_coupons', 'about_us']
             });
 
-            var miaosha_span = $('#miaosha_time_desc');
-            var t2 = new Date(2014, 11, 10, 8, 0, 0);
-            var dif = (t2.getTime() - new Date())/1000;
 
-            setInterval(function(){
-                var hour = Math.floor(dif/3600);
-                var left = Math.floor(dif % 3600);
-                var min = Math.floor(left/60);
-                var seconds = Math.floor(left % 60);
-                miaosha_span.text('倒计时:' + hour + ':' + min + ':' + seconds);
-                dif--;
-            }, 900);
+            var today_sold_out = '{{$today_sold_out}}';
+
+            var miaosha_hour = 8;
+            function can_miaosha() {
+                var now = new Date;
+                return (!today_sold_out && now.getHours() >= miaosha_hour && now.getHours() < 20);
+            }
+
+            var miaosha_span = $('#miaosha_time_desc');
+            var miaosha_btn = $('#miaosha_btn');
+
+            miaosha_btn.click(function(){
+
+                if (total_not_spent() < 100) {
+                    utils.alert('够100个才能参加秒杀，请继续努力！');
+                    return;
+                }
+
+                if (can_miaosha()) {
+                    utils.progress_notify('正在排队...');
+                    setTimeout( function() {
+                        $.getJSON('/apple_201410/jp/{{$game_type}}?' + Math.random(), {}, function (data) {
+                            utils.close_notify();
+                            if (data.success) {
+                                if (data.award_type != 0) {
+                                    utils.alert("恭喜您秒中价值58元的优惠券，可免费购买一箱冰糖橙！请注意在有效期结束前使用。 <a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
+                                } else {
+                                    var msg = '手气不太好啊, 过一会儿再试试！';
+                                    if (data.msg == 'not_enough_100') {
+                                        msg = '还不满100个，请继续努力~';
+                                    }
+                                    else if (data.msg == 'no_more') {
+                                        msg = '今天的秒杀商品已经全部抢完啦。 <a href="#award_list">查看中奖名单</a>';
+                                        miaosha_btn.removeClass('help').addClass('help');
+                                        checking_miaosha();
+                                    }
+                                    else if (data.msg == 'game_end') {
+                                        msg = '活动已结束';
+                                    } else {
+                                        msg = '排队的人太多，请稍后重试！';
+                                    }
+                                    utils.alert(msg, null, 5000);
+                                }
+                            } else {
+                            }
+                        });
+                    }, 1000);
+                } else {
+                    utils.alert( today_sold_out ? '今天的秒杀商品已经全部抢完啦，请明天继续.  <a href="#award_list">查看中奖名单</a>' : '时间未到', function(){ checking_miaosha(); });
+                }
+            });
+
+            function checking_miaosha() {
+                var now = new Date;
+                if (!today_sold_out && now.getHours() >= miaosha_hour && now.getHours() < 20) {
+                    miaosha_btn.removeClass('seckill').addClass('help');
+                    miaosha_span.text('立即秒杀');
+                } else {
+                    if (now.getHours() >= miaosha_hour) {
+                       now.setDate(now.getDate() + 1);
+                    }
+                    now.setHours(miaosha_hour);
+                    now.setMinutes(0);
+                    now.setSeconds(0);
+                    var dif = (now.getTime() - new Date()) / 1000;
+
+                    var intervalId = setInterval(function () {
+
+                        if (dif < 1) {
+                            clearInterval(intervalId);
+                            checking_miaosha();
+                            return;
+                        }
+
+                        var hour = Math.floor(dif / 3600);
+                        var left = Math.floor(dif % 3600);
+                        var min = Math.floor(left / 60);
+                        var seconds = Math.floor(left % 60);
+                        miaosha_span.text('倒计时 ' + hour + ':' + min + ':' + seconds);
+                        dif--;
+                    }, 900);
+                }
+            }
+
+
+            function total_not_spent() {
+                var total = $.trim($('#apple_got_cnt').text());
+                total = total != '' ? parseInt(total) : 0;
+                return total;
+            }
+
+            function get_total() {
+                var total = total_not_spent();
+                return (total < game_user_total ? game_user_total : total);
+            }
+
+
+            checking_miaosha();
 
             var top_list = {{$top_list}};
             if (top_list && top_list.top_list){update_top_list(top_list.top_list); }
 
-            {{if $game_type == 'mihoutao1411'}}
-            $('#yao_jp').click(function(){
-                function getRandomInt(min, max) {
-                    return Math.floor(Math.random() * (max - min)) + min;
-                }
-
-                var finish = false;
-
-                setTimeout(function() {
-                    $.getJSON('/apple_201410/jp/{{$game_type}}', {}, function (data) {
-                        finish = true;
-                        if (data.success) {
-                            setTimeout(function () {
-                                $items.removeClass('selected');
-                                var jp = $("#jp_mihoutao_" + data.award_type);
-                                jp.addClass('selected');
-                                if (data.award_type != 0) {
-                                    utils.alert("恭喜您摇到" + jp.text() + ", <a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
-                                } else {
-                                    var msg = '手气不太好啊, 过一会儿再试试！';
-                                    if (data.msg == 'not_enough_100'){ msg = '累计已摇下' + data.total + '个，还不满100个，请继续努力~';}
-                                    else if (data.msg == 'game_end') {
-                                        msg = '活动已结束';
-                                    }
-                                    utils.alert(msg);
-                                }
-                            }, 1000);
-                        } else {
-                            $items.removeClass('selected');
-                            $("#jp_mihoutao_0").addClass('selected');
-                        }
-
-                    });
-                }, 2000);
-
-                var $items = $('#yao_jp_div').find('span');
-                var interval = 200;
-                function jumping() {
-                    $items.removeClass('selected');
-                    $($items.get(getRandomInt(1, 1000) % $items.length)).addClass('selected');
-                    if (!finish) {
-                        setTimeout(jumping, interval);
-                    }
-                }
-
-                setTimeout(jumping, interval);
-            });
-            {{/if}}
-
                 {{if $game_type == 'qinyBTC1412'}}
 
-                    function get_total() {
-                        var total = $.trim($('#apple_got_cnt').text());
-                        total = total != '' ? parseInt(total) : 0;
-                        return (total < game_user_total ? game_user_total : total);
-                    }
                     var in_top_list = 100;
                     var imgUrl = $('#apple_tree_img').attr('src');
                     var lineLink = '{{WX_HOST}}/t/ag/{{$game_type}}.html?{{if $trid}}trid={{urlencode($trid)}}{{/if}}';
