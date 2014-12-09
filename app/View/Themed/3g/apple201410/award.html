@@ -112,6 +112,10 @@
     .rule ul li.con{ border-bottom:1px #c1e2e5 solid; text-align:center; height:2.083em; line-height:2.083em; color:#333333;}
     .rule p{ padding:0.2em 1.2em 0.3em 1.2em;; line-height:1.8em; font-size:0.9em; color:#333333; margin:0}
     .rule_bottom{ /*position:absolute;*/ bottom:0; left:0; z-index:1;}
+
+    #miaosha_time_desc {
+        margin-left: 1em;
+    }
 </style>
 <div id="fullpage">
     <div class="section">
@@ -123,7 +127,7 @@
                 <div class="fr"><a class="radius10" href="#get_coupons">兑换</a></div>
             </div>
             <a id="share_btn"  href="javascript:;" class="help radius10" style="display:{{$total_times > 0 ? 'none' : ''}}">找人帮忙</a>
-            <a href="javascript:;" class="seckill radius10">100箱冰糖橙秒杀<span id="miaosha_time_desc">每天八点开始</span></a>
+            <a href="javascript:;" class="seckill radius10">100箱冰糖橙秒杀 <span id="miaosha_time_desc">每天八点开始</span></a>
             <div class="word_link">
                 <a href="#get_coupons">[游戏规则]</a>&nbsp;&nbsp;&nbsp;
                 <a href="#top_list">[排行榜]</a>&nbsp;&nbsp;&nbsp;
@@ -304,7 +308,7 @@
                 var left = Math.floor(dif % 3600);
                 var min = Math.floor(left/60);
                 var seconds = Math.floor(left % 60);
-                miaosha_span.text(hour + ':' + min + ':' + seconds);
+                miaosha_span.text('倒计时：' + hour + ':' + min + ':' + seconds);
                 dif--;
             }, 900);
 
