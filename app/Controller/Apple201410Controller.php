@@ -341,22 +341,20 @@ class Apple201410Controller extends AppController
                     $this->Weixin->send_coupon_received_message($id, $coupon_count, $store, $validDesc);
                 }
             }
-        } else if ($gameType == self::MIHOUTAO1411) {
-
-            //9,10,11,12
+        } else if ($gameType == self::BTC1412) {
 
             $sharing = array(
-                100 => array(12, 2000 * 20),
-                80 => array(11, 1500 *  15),
-                60 => array(10, 1000 * 10),
-                30 => array(9, 500 * 5),
+                100 => array(17725, 2000 * 20),
+                80 => array(17724, 1500 *  15),
+                50 => array(17723, 1000 * 10),
+                30 => array(17722, 500 * 5),
             );
             if ($can_exchange_apple_count >= 100) {
                 $exchangeCount = 100;
             } else if ($can_exchange_apple_count >= 80) {
                 $exchangeCount = 80;
-            } else if ($can_exchange_apple_count >= 60) {
-                $exchangeCount = 60;
+            } else if ($can_exchange_apple_count >= 50) {
+                $exchangeCount = 50;
             } else if ($can_exchange_apple_count >= 30) {
                 $exchangeCount = 30;
             }
@@ -369,13 +367,17 @@ class Apple201410Controller extends AppController
                     $weixin = $this->Weixin;
                     $this->exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfo['id'],
                         function ($uid, $operator, $source_log_id) use ($sharingPref, $so, $weixin) {
-                            list($shareOfferId, $toShareNum) = $sharingPref;
-                            $added = $so->add_shared_slices($uid, $shareOfferId, $toShareNum);
-                            $so->log('add_shared_slices:uid='. $uid . ', shareOfferId='. $shareOfferId . ', toShareNum='. $toShareNum .', result='. $added);
-                            if (!empty($added))  {
-                                App::uses('CakeNumber', 'Utility');
-                                $weixin->send_packet_received_message($uid, CakeNumber::precision($toShareNum/100), "眉县有机猕猴桃红包");
-                            }
+                            $this->CouponItem->addCoupon($uid, 1, $operator, $source_log_id);
+                            $this->CouponItem->id = null;
+                                $store = "在黔阳冰糖橙店购买时使用";
+                                $validDesc = "有效期至2014年12月18日";
+                                $weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
+//                            list($shareOfferId, $toShareNum) = $sharingPref;
+//                            $added = $so->add_shared_slices($uid, $shareOfferId, $toShareNum);
+//                            $so->log('add_shared_slices:uid='. $uid . ', shareOfferId='. $shareOfferId . ', toShareNum='. $toShareNum .', result='. $added);
+//                            if (!empty($added))  {
+//                                App::uses('CakeNumber', 'Utility');
+//                            }
                         }
                     );
                 }
