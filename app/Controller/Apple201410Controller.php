@@ -838,11 +838,13 @@ class Apple201410Controller extends AppController
         $top_list = array();
 
         $user_pos = array();
+        $user_total = array();
         if($include_uid_pos && !is_array($include_uid_pos)) {
             $include_uid_pos = array($include_uid_pos);
         }
         foreach($include_uid_pos as $uid) {
             $user_pos[$uid] = 1 +  array_search($uid, array_keys($listR[1]));
+            $user_total[$uid] = $listR[1][$uid];
         }
 
         $count = 0;
@@ -859,6 +861,6 @@ class Apple201410Controller extends AppController
             $list[0] = mb_substr(filter_invalid_name($nameIdMap[$list[0]]), 0, 8);
         }
 
-        $result['top_list'] = array('list' => $top_list, 'update_time' => $updateTime, 'user_pos' => $user_pos);
+        $result['top_list'] = array('list' => $top_list, 'update_time' => $updateTime, 'user_pos' => $user_pos, 'user_total' => $user_total);
     }
 }

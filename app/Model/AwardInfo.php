@@ -44,9 +44,12 @@ class AwardInfo extends AppModel {
             'limit' => 1000
         ));
 
-        $r = array(time(), $result);
+        $now2 = time();
+        $r = array($now2, $result);
         $cacheJson = json_encode($r);
-        $this->log("top_list db result:" . $cacheJson);
+        if ($now2 - $now >= 1) {
+            $this->log("too long to loading top_list db result:" . $cacheJson);
+        }
         Cache::write($key, $cacheJson);
         return $r;
     }

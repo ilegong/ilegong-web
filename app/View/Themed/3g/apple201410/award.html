@@ -279,6 +279,7 @@
     var game_page_title = {{if !empty($title_func)}}function(total){ return {{$title_func}};} {{else}} null {{/if}};
     var game_obj_name = '{{$game_obj_name}}';
     var game_least_change = '{{$game_least_change}}';
+    var game_user_total = 0; //loading by update_top_list
 
         $(document).ready(function(){
             $('#fullpage').fullpage({
@@ -348,6 +349,9 @@
                     function descContent() {
                         var total = $.trim($('#apple_got_cnt').text());
                         total = total != '' ? parseInt(total) : 0;
+
+                        total = (total < game_user_total ? game_user_total : total);
+
                         var helpme_cnt_txt = $.trim($('#helpme_cnt_n').text());
                         var my_list = parseInt($.trim($('#top_list_mine').text()));
                         var helpme_cnt = (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
@@ -374,6 +378,9 @@
         var list = top_list['list'],  update_time = top_list['update_time'], user_pos = top_list['user_pos'];
         if (user_pos && user_pos[uid]) {
             $('#top_list_mine').text(user_pos[uid] > 0 ? user_pos[uid] : '1000名以后');
+        }
+        if (top_list['user_total'] && top_list['user_total'][uid]) {
+            game_user_total = top_list['user_total'][uid];
         }
         if(list) {
             $('#top_list_update').html('更新时间:' + update_time);
