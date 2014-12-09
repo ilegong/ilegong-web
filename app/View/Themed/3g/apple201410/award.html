@@ -288,6 +288,9 @@
                 anchors: ['firstPage', 'product_story', 'top_list', 'get_coupons', 'about_us']
             });
 
+            var top_list = {{$top_list}};
+            if (top_list){update_top_list(top_list['top_list'], top_list['update_time']); }
+
             {{if $game_type == 'mihoutao1411'}}
             $('#yao_jp').click(function(){
                 function getRandomInt(min, max) {
@@ -371,9 +374,11 @@
             $('#top_list_update').html('更新时间:' + update_time);
             var uls = [$('#top_list_contents_left'), $('#top_list_contents_right')];
             uls[0].html(''); uls[1].html('');
+
+            var mid = Math.round(list.length/2);
             for(var i = 0; i < list.length; i++) {
                 var item = list[i];
-                uls[i%2].append('<li class="clearfix"><span style="width:65%;">'+(i+1)+'、'+item[0]+'</span> <span style="width:35%;">摇到'+item[1]+'个</span> </li>');
+                uls[ i > mid ? 1 : 0 ].append('<li class="clearfix"><span style="width:65%;">'+(i+1)+'、'+item[0]+'</span> <span style="width:35%;">摇到'+item[1]+'个</span> </li>');
             }
         }
     }

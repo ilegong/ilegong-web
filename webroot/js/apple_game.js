@@ -270,7 +270,7 @@ $(document).ready(function(){
             });
         }
 
-        setTimeout(new_times_query, 5);
+        setTimeout(new_times_query, query_interval);
 
     } catch (e) {
     TraceKit.report(e);

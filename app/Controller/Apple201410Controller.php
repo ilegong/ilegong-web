@@ -131,25 +131,7 @@ class Apple201410Controller extends AppController
 
         $result = array();
         if ($gameType == self::BTC1412) {
-            $listR = $this->AwardInfo->top_list($gameType);
-            $result['update_time'] = friendlyDate($listR[0], 'full');
-            $result['top_list'] = array();
-
-
-            $count = 0;
-            $uids = array();
-            foreach($listR[1] as $uid => $got) {
-                if ($count++ >= 30) {
-                    break;
-                }
-                $result['top_list'][] = array($uid, $got);
-                $uids[] = $uid;
-            }
-            $nameIdMap = $this->User->findNicknamesMap($uids);
-            foreach($result['top_list'] as &$list) {
-                $list[0] = mb_substr(filter_invalid_name($nameIdMap[$list[0]]), 0, 8);
-            }
-
+            $this->fill_top_lists($gameType, $result);
             $total_help_me = $this->TrackLog->find('count', array(
                 'conditions' => array('to' => $this->currentUser['id'], 'type' => $gameType, 'got' > 0),
             ));
@@ -255,14 +237,6 @@ class Apple201410Controller extends AppController
         }
         $res['result'] = $result;
         echo json_encode($res);
-    }
-
-    public function top_list($gameType) {
-        $this->autoRender = false;
-        if ($gameType == self::BTC1412) {
-            $r = $this->AwardInfo->top_list($gameType);
-            echo json_encode($r);
-        }
     }
 
     public function jp($gameType) {
@@ -598,7 +572,11 @@ class Apple201410Controller extends AppController
 
 
         $this->set('game_end', $this->is_game_end($gameCfg));
-
+        if ($gameType == self::BTC1412) {
+            $result = array();
+            $this->fill_top_lists($gameType, $result);
+            $this->set('top_list', json_encode($result));
+        }
         $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
         $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $current_uid, 'type' => $gameType)));
         $this->set('got_wx_sub_times', $this->gotWxTimesToday($weixinTimesLog, mktime()));
@@ -845,5 +823,30 @@ class Apple201410Controller extends AppController
             return (mktime() - $dt->getTimestamp() > 0);
         }
         return true;
+    }
+
+    /**
+     * Fill top list elements to the specified result array
+     * @param $gameType
+     * @param $result
+     */
+    private function fill_top_lists($gameType, &$result) {
+        $listR = $this->AwardInfo->top_list($gameType);
+        $result['update_time'] = friendlyDate($listR[0], 'full');
+        $result['top_list'] = array();
+
+        $count = 0;
+        $uids = array();
+        foreach ($listR[1] as $uid => $got) {
+            if ($count++ >= 30) {
+                break;
+            }
+            $result['top_list'][] = array($uid, $got);
+            $uids[] = $uid;
+        }
+        $nameIdMap = $this->User->findNicknamesMap($uids);
+        foreach ($result['top_list'] as &$list) {
+            $list[0] = mb_substr(filter_invalid_name($nameIdMap[$list[0]]), 0, 8);
+        }
     }
 }
