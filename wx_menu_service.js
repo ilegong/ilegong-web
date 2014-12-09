@@ -7,7 +7,7 @@
     },
     {
         "type":"view",
-        "name":"苹果游戏",
+        "name":"摇一摇",
         "url":"http://www.pyshuo.com/t/ag.html"
     },
     {
