@@ -869,7 +869,8 @@ class Apple201410Controller extends AppController
             $include_uid_pos = array($include_uid_pos);
         }
         foreach($include_uid_pos as $uid) {
-            $user_pos[$uid] = 1 +  array_search($uid, array_keys($listR[1]));
+            $searched = array_search($uid, array_keys($listR[1]));
+            $user_pos[$uid] = $searched === false ? -1 :  1 + $searched;
             $user_total[$uid] = $listR[1][$uid];
         }
 
