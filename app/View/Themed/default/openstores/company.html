@@ -351,7 +351,7 @@
                             .wrap(link);
 
                     var pictures = $('#pic_' + picture_id);
-                    pictures.val(pictures.val() + '|' + file.url);
+                    pictures.val(file.url);
 
                 } else if (file.error) {
                     var error = $('<span class="text-danger"/>').text(file.error);
