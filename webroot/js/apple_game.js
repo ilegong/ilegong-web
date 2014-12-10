@@ -125,19 +125,19 @@ $(document).ready(function(){
     }
     if ($got > 0) {
         msg = '恭喜你摇掉了<span class="apple_numbers">' + $got + '</span>个' + game_obj_name + '！'+coupon_message(times, total);
-        timeout = 5000;
+        timeout = 3000;
         if (need_login) {
             msg += '<br/> 亲，您的成绩超过了大多数用户！请您先登录。';
         }
         utils.alert(msg, function(){}, timeout, close_callback);
     } else {
         timeout = 5000;
-        var msg = '你力气太小啦！只晃掉了几片树叶！<br/><small>(5秒后自动消失)</small>';
+        var msg = '你力气太小啦！只晃掉了几片树叶！'+coupon_message(times, total)+'<br/><small>(5秒后自动消失)</small>';
         utils.alert(msg, function(){}, timeout, close_callback);
     }
     updateViewState(times, total);
        if (typeof('showAfterGotCallback')) {
-           showAfterGotCallback(times, total);
+           showAfterGotCallback(times, total, $got);
        }
     }
 
@@ -252,7 +252,7 @@ $(document).ready(function(){
             return;
         };
 
-        bootbox.confirm('您要兑换吗？兑换会减少您摇到的' + game_obj_name + '数目!', function (result) {
+        bootbox.confirm('兑换会扣除相应的' + game_obj_name + '数，您确定要兑换吗？', function (result) {
             if (!result) {
                 return;
             }

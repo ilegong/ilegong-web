@@ -453,6 +453,7 @@
                     {{/if}}
         });
 
+
     function game_coupon_message(times, total) {
         if (total < 30)  { return '还差<span class="apple_numbers">' + (30 - total) + '</span>个就能领到<span class="apple_numbers">5</span>元优惠券啦'; }
         else if (total < 50) {return '还差<span class="apple_numbers">' + (50 - total) + '</span>个就能领到<span class="apple_numbers">10</span>元优惠券啦';}
@@ -461,7 +462,38 @@
         else return '';
     }
 
-    function showAfterGotCallback(times, total){}
+    function showAfterGotCallback(times, total, got){
+        var msg = '';
+        if (total >= 30 && total - got < 30){ msg = '恭喜，您可以兑换<span class="apple_numbers">5</span>元优惠券啦';}
+        if (total >= 50 && total - got < 50){ msg = '恭喜，您可以兑换<span class="apple_numbers">10</span>元优惠券啦';}
+        if (total >= 80 && total - got < 80){ msg = '恭喜，您可以兑换<span class="apple_numbers">15</span>元优惠券啦';}
+        if (total >= 100 && total - got < 100){ msg = '恭喜，您可以兑换<span class="apple_numbers">30</span>元优惠券啦';}
+        if (!msg) {
+            return;
+        }
+        bootbox.dialog({
+            message: msg,
+            buttons: {
+                main: {
+                    label: "继续摇",
+                    className: "btn-default"
+                },
+                danger: {
+                    label: "兑换",
+                    className: "btn-danger",
+                    callback: function () {
+                        $.fn.fullpage.moveTo('get_coupons');
+                    }
+                }
+            }
+        }).css({
+            'top': '50%',
+            'margin-top': function () {
+                return -($(this).height() / 2);
+            }
+        }).find('div.modal-footer').css({'text-align': 'center'});
+    }
+
     function update_top_list(top_list) {
         var uid = '{{$CurrentUser["id"]}}';
         var list = top_list['list'],  update_time = top_list['update_time'], user_pos = top_list['user_pos'];
@@ -505,4 +537,4 @@
         }
     }
 </script>
-{{$this->Html->script(array('apple_game.js?v20'));}}
+{{$this->Html->script(array('apple_game.js?v21'));}}
