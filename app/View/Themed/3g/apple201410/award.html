@@ -456,10 +456,10 @@
 
 
     function game_coupon_message(times, total) {
-        if (total < 30)  { return '还差<span class="apple_numbers">' + (30 - total) + '</span>个就能领到<span class="apple_numbers">5</span>元优惠券啦'; }
-        else if (total < 50) {return '还差<span class="apple_numbers">' + (50 - total) + '</span>个就能领到<span class="apple_numbers">10</span>元优惠券啦';}
-        else if (total < 80) {return '还差<span class="apple_numbers">' + (80 - total) + '</span>个就能领到<span class="apple_numbers">15</span>元优惠券啦';}
-        else if (total < 100) {return '还差<span class="apple_numbers">' + (100 - total) + '</span>个就可以参加秒杀或者拿到<span class="apple_numbers">30</span>元优惠券啦';}
+        if (total < 30)  { return '<br/><small>还差<span class="apple_numbers">' + (30 - total) + '</span>个就能领到<span class="apple_numbers">5</span>元优惠券啦</small>'; }
+        else if (total < 50) {return '<br/><small>还差<span class="apple_numbers">' + (50 - total) + '</span>个就能领到<span class="apple_numbers">10</span>元优惠券啦</small>';}
+        else if (total < 80) {return '<br/><small>还差<span class="apple_numbers">' + (80 - total) + '</span>个就能领到<span class="apple_numbers">15</span>元优惠券啦</small>';}
+        else if (total < 100) {return '<br/><small>还差<span class="apple_numbers">' + (100 - total) + '</span>个就可以参加秒杀或者拿到<span class="apple_numbers">30</span>元优惠券啦</small>';}
         else return '';
     }
 
