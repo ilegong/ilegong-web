@@ -108,6 +108,14 @@ $(document).ready(function(){
         }
     }
 
+    function coupon_message(times, total) {
+        if (typeof(game_coupon_message) == 'function') {
+            return game_coupon_message(times, total);
+        } else {
+            return '';
+        }
+    }
+
     function showAfterGot($got,times, total, need_login, timeout) {
     var close_callback = times > 0 ? null : showNoMoreTimes;
     if (need_login) {
@@ -116,9 +124,9 @@ $(document).ready(function(){
         };
     }
     if ($got > 0) {
-        msg = '恭喜你！你摇掉了<span class="apple_numbers">' + $got + '</span>个' + game_obj_name + '！<br/><small>(2秒后自动消失)</small>';
+        msg = '恭喜你摇掉了<span class="apple_numbers">' + $got + '</span>个' + game_obj_name + '！'+coupon_message(times, total);
+        timeout = 5000;
         if (need_login) {
-            timeout = 5000;
             msg += '<br/> 亲，您的成绩超过了大多数用户！请您先登录。';
         }
         utils.alert(msg, function(){}, timeout, close_callback);
