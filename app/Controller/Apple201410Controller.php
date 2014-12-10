@@ -777,6 +777,8 @@ class Apple201410Controller extends AppController
 
         if ($total_got < 50) {
             $times += 10;
+        }  else if ($total_got < 30) {
+            $times += 20;
         }
 
         for ($i = 0; $i < $times; $i++) {
