@@ -134,7 +134,7 @@
             <a id="miaosha_btn" href="javascript:;" class="seckill radius10">每天100箱8点免费秒 <span id="miaosha_time_desc">每天八点开始</span></a>
             <div class="word_link">
                 <a href="#get_coupons">[游戏规则]</a>&nbsp;&nbsp;&nbsp;
-                <a href="#top_list">[排行榜]</a>&nbsp;&nbsp;&nbsp;
+                <a href="#award_list">[秒中名单]</a>&nbsp;&nbsp;&nbsp;
                 <a href="#product_story">[产品故事]</a>
             </div>
         </div>
@@ -151,25 +151,10 @@
             <img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/img04.jpg')}}" style="max-height:30%"  />
             </a>
             <ul class="clearfix">
-                <li class="fl"><a href="#top_list"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/next.gif')}}" /></a></li>
+                <li class="fl"><a href="#get_coupons"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/next.gif')}}" /></a></li>
                 <li class="fr"><a href="#firstPage"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/top.gif')}}" /></a></li>
             </ul>
         </div>
-    </div>
-
-    <div class="section">
-    <div class="ranking" style="background-image: url({{$this->Html->assetUrl('/img/apple201410/btc/ranking/bg.jpg')}}); min-height: 100%">
-        <img src="{{$this->Html->assetUrl('/img/apple201410/btc/ranking/title.png')}}" />
-        <div class="ranking_notice radius10">我的排名：<span id="top_list_mine"></span><span style="padding-left: 2em" id="top_list_update">正在更新...</span><!--你当前摇到了10个,还没有进入排名,要多多努力哦!--></div>
-        <div style="margin:0 1.2em; height: 100%; overflow-y: hidden; overflow-x:hidden;">
-            <ul id="top_list_contents_left"></ul>
-            <ul id="top_list_contents_right"></ul>
-        </div>
-        <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none">
-            <li class="fl"><a href="#get_coupons"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a></li>
-            <li class="fr"><a href="#product_story"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
-        </ul>
-    </div>
     </div>
 
     <div class="section">
@@ -205,7 +190,7 @@
     </div>
     <ul class="clearfix" style="width: 30%; margin: 0 auto; margin-top: 0.5em;">
         <li class="fl"><a href="#award_list"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a></li>
-        <li class="fr"><a href="#top_list"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
+        <li class="fr"><a href="#product_story"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
     </ul>
     <!--<div class="rule_bottom"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/rule/bottom.png')}}" /></div>-->
     </div>
@@ -220,8 +205,23 @@
             <div id="award_contents" style="margin:0 1.2em; height: 100%; overflow-y: hidden; overflow-x:hidden;">
             </div>
             <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none">
-                <li class="fl"><a href="#about_us"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a></li>
+                <li class="fl"><a href="#top_list"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a></li>
                 <li class="fr"><a href="#get_coupons"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="ranking" style="background-image: url({{$this->Html->assetUrl('/img/apple201410/btc/ranking/bg.jpg')}}); min-height: 100%">
+            <img src="{{$this->Html->assetUrl('/img/apple201410/btc/ranking/title.png')}}" />
+            <div class="ranking_notice radius10">我的排名：<span id="top_list_mine"></span><span style="padding-left: 2em" id="top_list_update">正在更新...</span><!--你当前摇到了10个,还没有进入排名,要多多努力哦!--></div>
+            <div style="margin:0 1.2em; height: 100%; overflow-y: hidden; overflow-x:hidden;">
+                <ul id="top_list_contents_left"></ul>
+                <ul id="top_list_contents_right"></ul>
+            </div>
+            <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none">
+                <li class="fl"><a href="#about_us"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a></li>
+                <li class="fr"><a href="#award_list"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
             </ul>
         </div>
     </div>
@@ -248,6 +248,7 @@
    </div>
         </div>
     </div>
+
 
     <?php /*
     <div  id="friends" class="bg_green pad section">
@@ -316,7 +317,8 @@
                 touchSensitivity: 15,
                 css3: true,
                 loopBottom: true,
-                anchors: ['firstPage', 'product_story', 'top_list', 'get_coupons', 'award_list', 'about_us']
+                loopTop: true,
+                anchors: ['firstPage', 'product_story', 'get_coupons', 'award_list', 'top_list', 'about_us']
             });
 
             var today_sold_out = '{{$today_sold_out}}';
