@@ -66,7 +66,7 @@
 <div id="share_remark_div"></div>
 <div class="packet1">
     <h2>{{$this->Number->precision($sharedOffer['SharedOffer']['total_number']/100, 2)}}元</h2>
-    <img id="red_offer_png" src="{{$this->Html->assetUrl('/img/sharing/packet1.png')}}" border="0" style="width:95%"/>
+    <img id="red_offer_png" src="{{$this->Html->assetUrl('/img/sharing/packet1.png')}}" border="0"/>
 </div>
 
 {{if $isOwner}}
@@ -154,7 +154,7 @@
 <script>
     var share_png_url = '{{$this->Html->assetUrl("/img/sharing/share.png")}}';
     $(document).ready(function(){
-        $share_div = $('<div class="apple_share fade in"><img src="'+share_png_url+'"></div>')
+        $share_div = $('<div class="apple_share fade in"><img src="'+share_png_url+'" style="width:95%"></div>')
                 .hide().click(function(){
                     $share_div.hide();
                 });
