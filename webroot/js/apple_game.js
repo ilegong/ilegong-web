@@ -17,10 +17,21 @@ $(document).ready(function(){
     .hide().click(function(){
     $share_div.hide();
     });
-
-    $shaking_tips_png = $('#shaking_tips_pic');
-
     $('body').append($share_div);
+
+    var $shaking_tips_png;
+    if (yao_tips_png) {
+        $shaking_tips_png = $('<div class="apple_share fade in"><img src="' + yao_tips_png + '"></div>')
+            .hide().click(function () {
+                $shaking_tips_png.hide();
+            });
+        $('body').append($shaking_tips_png);
+
+        if (game_user_total == 0) {
+            $shaking_tips_png.show();
+        }
+    }
+
 
     $('#share_btn_2').add($shareBtn).click(function(){
     showShareAndChangeTitle();

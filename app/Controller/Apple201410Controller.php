@@ -590,7 +590,7 @@ class Apple201410Controller extends AppController
         $this->set('noFlash', true);
 
         $this->setTotalVariables($awardInfo);
-        $this->set('got_apple', 0);
+        $this->set('game_user_total', $awardInfo['got']);
         $this->_updateLastQueryTime(time());
 
 

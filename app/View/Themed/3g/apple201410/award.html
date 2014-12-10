@@ -300,11 +300,12 @@
     var shake_pic_url = '{{$this->Html->assetUrl("/img/apple201410/btc/index/tree.gif?1")}}';
     var sound_url = 'http://51daifan-images.stor.sinaapp.com/tree_shake.mp3';
     var share_png_url = '{{$this->Html->assetUrl("/img/apple201410/btc/index/share.png")}}';
+    var yao_tips_png = '{{$this->Html->assetUrl("/img/apple201410/btc/index/yao.png")}}';
     var game_type = '{{$game_type}}';
     var game_page_title = {{if !empty($title_func)}}function(total){ return {{$title_func}};} {{else}} null {{/if}};
     var game_obj_name = '{{$game_obj_name}}';
     var game_least_change = '{{$game_least_change}}';
-    var game_user_total = 0; //loading by update_top_list
+    var game_user_total = '{{$game_user_total}}'; //loading by update_top_list
 
         $(document).ready(function(){
             $('#fullpage').fullpage({
@@ -313,7 +314,6 @@
                 loopBottom: true,
                 anchors: ['firstPage', 'product_story', 'top_list', 'get_coupons', 'award_list', 'about_us']
             });
-
 
             var today_sold_out = '{{$today_sold_out}}';
 
