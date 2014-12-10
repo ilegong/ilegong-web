@@ -54,49 +54,58 @@ $(document).ready(function(){
         changeTitle($appleGotCnt.text());
 
     var showNoMoreTimesDialog = false;
+
     function showNoMoreTimes() {
-    if (showNoMoreTimesDialog == true) { return; }
-    showNoMoreTimesDialog = true;
-    bootbox.dialog({
-    message: '机会已用完，分享给你的朋友们，每个朋友点击过来就增加<span class="apple_numbers">1</span>次机会！',
-    buttons: {
-    main: {
-    label: "取消",
-    className: "btn-default",
-    callback: function(){showNoMoreTimesDialog = false}
-    },
-    danger: {
-    label: "立即分享",
-    className: "btn-danger",
-    callback: function() {
-    showShareAndChangeTitle();
-    showNoMoreTimesDialog = false;
-    }
-    }
-    }
-    }).css({
-    'top': '50%',
-    'margin-top': function () {
-    return -($(this).height() / 2);
-    }
-    }).find('div.modal-footer').css({'text-align':'center'});
+        if (showNoMoreTimesDialog == true) {
+            return;
+        }
+
+        var $message = (!$today_got_wx) ? '关注朋友说每天增加5次机会' : '机会已用完，分享给你的朋友们，每个朋友点击过来就增加<span class="apple_numbers">1</span>次机会！';
+
+        showNoMoreTimesDialog = true;
+        bootbox.dialog({
+            message: $message,
+            buttons: {
+                main: {
+                    label: "取消",
+                    className: "btn-default",
+                    callback: function () {
+                        showNoMoreTimesDialog = false
+                    }
+                },
+                danger: {
+                    label: $today_got_wx ? "立即分享" : "关注加机会",
+                    className: "btn-danger",
+                    callback: function () {
+                        if ($today_got_wx) { showShareAndChangeTitle(); }
+                        else { try_wx_subscribe_times(); }
+                        showNoMoreTimesDialog = false;
+                    }
+                }
+            }
+        }).css({
+            'top': '50%',
+            'margin-top': function () {
+                return -($(this).height() / 2);
+            }
+        }).find('div.modal-footer').css({'text-align': 'center'});
     }
 
     function updateViewState(times, total) {
-    if (times > 0) {
-    $shakeBtn.show();
-    $shareBtn.hide();
-    $('#assignWXSubscribeTimes_2').hide();
-    } else {
-    $shakeBtn.hide();
-    $shareBtn.show();
-    if (!$got_wx_sub_times) {
-    $('#assignWXSubscribeTimes_2').show();
-    }
-    }
-    if (total && total > 0) {
-    changeTitle(total);
-    }
+        if (times > 0) {
+            $shakeBtn.show();
+            $shareBtn.hide();
+            $('#assignWXSubscribeTimes_2').hide();
+        } else {
+            $shakeBtn.hide();
+            $shareBtn.show();
+            if (!$today_got_wx) {
+                $('#assignWXSubscribeTimes_2').show();
+            }
+        }
+        if (total && total > 0) {
+            changeTitle(total);
+        }
     }
 
     function showAfterGot($got,times, total, need_login, timeout) {
@@ -200,24 +209,29 @@ $(document).ready(function(){
             if (msg) { utils.alert(msg); }
     });
 
-    var $assignWXSubscribeTimes = $('#assignWXSubscribeTimes, #assignWXSubscribeTimes_2');
-    $assignWXSubscribeTimes.click(function(){
-    $.getJSON("/apple_201410/assignWXSubscribeTimes/"+game_type+"?r="+Math.random(), function(data){
-    if (data.result == "not-sub") {
-    utils.alert("您还没有关注我们的服务号，按<a href=\"http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd\">关注指南</a>关注【朋友说】，就可以来领取啦");
-    }  else if (data.result == 'got') {
-    utils.alert("已于"+data.got_time+"领取过啦，请明天再来领取。");
+    function try_wx_subscribe_times() {
+        $.getJSON("/apple_201410/assignWXSubscribeTimes/" + game_type + "?r=" + Math.random(), function (data) {
+            if (data.result == "not-sub") {
+                utils.alert("您还没有关注我们的服务号，按<a href=\"http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd\">关注指南</a>关注【朋友说】，就可以来领取啦");
+            } else if (data.result == 'got') {
+                utils.alert("已于" + data.got_time + "领取过啦，请明天再来领取。");
 //                    disable_wx_times(data.got_time);
-    } else if (data.result == 'just-got') {
-    utils.alert("领取成功！您现在有<span class='apple_numbers'>"+data['total_times']+"</span>次机会" );
-    $appleTimesLeft.text(data['total_times'] < 0 ? 0 : data['total_times']);
+                $today_got_wx = 1;
+            } else if (data.result == 'just-got') {
+                utils.alert("领取成功！您现在有<span class='apple_numbers'>" + data['total_times'] + "</span>次机会");
+                $appleTimesLeft.text(data['total_times'] < 0 ? 0 : data['total_times']);
 //                    disable_wx_times();
-    } else if (data.result == 'retry') {
-    utils.alert("领取失败，可能是网络状态不好，请稍候重试！");
-    } else {
-    utils.alert('可能是网络状态不好，请稍候重新领取！');
+                $today_got_wx = 1;
+            } else if (data.result == 'retry') {
+                utils.alert("领取失败，可能是网络状态不好，请稍候重试！");
+            } else {
+                utils.alert('可能是网络状态不好，请稍候重新领取！');
+            }
+        });
     }
-    });
+    var $assignWXSubscribeTimes = $('#assignWXSubscribeTimes, #assignWXSubscribeTimes_2');
+    $assignWXSubscribeTimes.click(function () {
+        try_wx_subscribe_times();
     });
 
     var get_coupons_button =$('#get_coupons_button');

@@ -606,7 +606,7 @@ class Apple201410Controller extends AppController
         }
         $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
         $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $current_uid, 'type' => $gameType)));
-        $this->set('got_wx_sub_times', $this->gotWxTimesToday($weixinTimesLog, mktime()));
+        $this->set('today_got_wx', $this->gotWxTimesToday($weixinTimesLog, mktime()));
     }
 
     public function shake($gameType)
