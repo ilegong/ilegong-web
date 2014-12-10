@@ -429,26 +429,50 @@
 
                 {{if $game_type == 'qinyBTC1412'}}
 
+                    function helpme_cnt() {
+                        var helpme_cnt_txt = $.trim($('#helpme_cnt_n').text());
+                        return (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
+                    }
+
                     var in_top_list = 100;
                     var imgUrl = $('#apple_tree_img').attr('src');
                     var lineLink = '{{WX_HOST}}/t/ag/{{$game_type}}.html?{{if $trid}}trid={{urlencode($trid)}}{{/if}}';
                     function descContent() {
                         var total = get_total();
-                        var helpme_cnt_txt = $.trim($('#helpme_cnt_n').text());
                         var my_list = parseInt($.trim($('#top_list_mine').text()));
-                        var helpme_cnt = (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
-                        return '万橙，比褚橙不只甜了一点点，'+helpme_cnt+'个好基友帮忙，我已经摇下'+total+'个万橙' + (my_list > 0 && my_list<1000 ? '，排名第' + my_list + '名' : '') + '－ 朋友说';
+                        return '万橙，比褚橙不只甜了一点点，'+helpme_cnt()+'个好基友帮忙，我已经摇下'+total+'个万橙' + (my_list > 0 && my_list<1000 ? '，排名第' + my_list + '名' : '') + '－ 朋友说';
                     }
                     var shareTitle = '摇下100个，1箱万橙免费领';
                     var appid = '{{WX_APPID}}';
 
+
+                    function getRandomInt(min, max) {
+                        return Math.floor(Math.random() * (max - min)) + min;
+                    }
                     // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
                     document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
                         WeixinJSBridge.on('menu:share:appmessage', function(argv){
                             utils.wx_to_friend(appid, imgUrl, lineLink, descContent(), shareTitle);
                         });
                         WeixinJSBridge.on('menu:share:timeline', function(argv){
-                            utils.wx_to_timeline(appid, imgUrl, lineLink, '', shareTitle + ', 我已摇下' + get_total() + '个，求点');
+                            var $r = getRandomInt(1, 10);
+                            var sh_src = 'def';
+                            if ($r >= 8) {
+                                sh_src = 'jj1';
+                            } else if ($r >= 5) {
+                                sh_src = 'zr';
+                            }
+                            lineLink += '&src=' + sh_src;
+
+                            var desc;
+                            if (sh_src == 'jj1') {
+                                desc = '药不能停，出门不吃（摇）怎行？有' + helpme_cnt() + '个好基友给我送药了！已基本治愈！领药请点击';
+                            } else if(sh_src == 'zr') {
+                                desc = '摇一摇，一千箱冰糖橙免费送！我已摇下' + get_total() + '个，你也来试试吧';
+                            } else {
+                                desc = shareTitle + ', 我已摇下' + get_total() + '个，求点';
+                            }
+                            utils.wx_to_timeline(appid, imgUrl, lineLink, '', desc);
                         });
                     }, false);
                     {{/if}}
