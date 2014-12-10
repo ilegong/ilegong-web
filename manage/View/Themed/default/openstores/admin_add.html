@@ -1,10 +1,23 @@
 <div class="users form">
+    <h1><span class="glyphicon glyphicon-ok"></span>确认通过</h1>
+    {{if $name_repeat}}
+    <div class="alert alert-danger alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <strong>店铺名重复!</strong> 数据冲突，令申请者重命名店铺.
+    </div>
+    {{/if}}
+    {{if $slug_repeat}}
+    <div class="alert alert-warning alert-dismissible fade in" role="alert">
+        <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <strong>链接重复!</strong> 数据冲突，修改链接字符.
+    </div>
+    {{/if}}
     <?php
 echo $this->MForm->create('Openstore',array(
     'url' => array('action' => 'add', $id),
     ));
     ?>
-    <h1><span class="glyphicon glyphicon-ok"></span>确认通过</h1>
+
     <div id="brand-main">
         <?php
         echo $this->MForm->input('store_name',array('size'=>'80','required'=>'required', label=>'店铺名称', 'onblur'=>"generateSlug(this,'#OpenstoreSlug')"));

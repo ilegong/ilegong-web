@@ -81,7 +81,14 @@ class OpenstoresController extends AppController{
     private function __loadFormStore($id = null){
         $modelClass = $this->modelClass;
         $result = $this->{$modelClass}->find('first', array('conditions' => array('id' => $id), 'fields' => array('store_name', 'creator')));
+        $this->loadModel('Brand');
+        if($this->Brand->hasany(array('Brand.name' => $result[$modelClass]['store_name']))){
+            $this->set('name_repeat', true);
+        }
         $result[$modelClass]['slug'] = generate_slug($result[$modelClass]['store_name']);
+        if($this->Brand->hasany(array('Brand.slug' => $result[$modelClass]['slug']))){
+            $this->set('slug_repeat', true);
+        }
         $this->request->data = $result;
         $this->set('id', $id);
     }
@@ -99,15 +106,22 @@ class OpenstoresController extends AppController{
             $this->data = $brand;
             $this->loadModel('Brand');
             $this->loadModel('User');
-            if($this->Brand->save($this->data)){
-                $this->{$modelClass}->updateAll(array('status' => '4'), array('id' => $id));
-                $this->User->updateAll(array('is_business' => 1), array('User.id' => $brand['Brand']['creator']));
+            if($this->Brand->hasany(array('Brand.slug' => $brand['Brand']['slug']))){
                 $successinfo = array(
-                    'success' => __('Add success'),
-                    'actions' => array(
-                        'nexturl' => Router::url(array('action'=>'verify'))
-                    ));
+                    'success' => __('数据冲突，链接重复'),
+                    );
                 echo json_encode($successinfo);
+            }else{
+                if($this->Brand->save($this->data)){
+                    $this->{$modelClass}->updateAll(array('status' => '4'), array('id' => $id));
+                    $this->User->updateAll(array('is_business' => 1), array('User.id' => $brand['Brand']['creator']));
+                    $successinfo = array(
+                        'success' => __('Add success'),
+                        'actions' => array(
+                            'nexturl' => Router::url(array('action'=>'verify'))
+                        ));
+                    echo json_encode($successinfo);
+                }
             }
         } else {
             // 无提交值，生成表单。加载选项
@@ -145,15 +159,36 @@ class OpenstoresController extends AppController{
             $this->autoRender = false;
             $modelClass = $this->modelClass;
             $reason = $_POST['remark'];
+            $is_send = $_POST['is_send'];
             if($this->{$modelClass}->updateAll(array('reason' => '\''.$reason.'\'', 'status' => 3), array('id' => $id))){
                 $successinfo = array(
                     'success' => __('审核未通过已确认'),
                     'actions' => array(
                         'nexturl' => Router::url(array('action'=>'list'))
                     ));
+                if($is_send == 1){
+                    $temp = $this->{$modelClass}->find('first',array('conditions' =>$id,'fields' => 'mobile'));
+                    $mobilephone = $temp[$modelClass]['mobile'];
+                    $this->message_send($reason, $mobilephone);
+                }
                 echo json_encode($successinfo);
             };
 
+        }
+    }
+    private function message_send($message = null, $mobilephone = null){
+        if(!empty($message)){
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, "http://sms-api.luosimao.com/v1/send.json");
+            curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+            curl_setopt($ch, CURLOPT_HEADER, FALSE);
+            curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+            curl_setopt($ch, CURLOPT_USERPWD, 'api:key-fdb14217a00065ca1a47b8fcb597de0d');
+            curl_setopt($ch, CURLOPT_POST, TRUE);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, array('mobile' => $mobilephone, 'message' => $message.'【朋友说】'));
+            $res = curl_exec($ch);
+            curl_close($ch);
         }
     }
 }
