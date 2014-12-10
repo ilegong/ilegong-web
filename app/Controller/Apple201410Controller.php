@@ -774,6 +774,11 @@ class Apple201410Controller extends AppController
         }
 
         $times =10;
+
+        if ($total_got < 50) {
+            $times += 10;
+        }
+
         for ($i = 0; $i < $times; $i++) {
             $mt_rand = mt_rand(0, intval($ext + $total_got));
             $this_got += ( $mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
