@@ -95,6 +95,10 @@
     .ranking ul{ font-size:0.8em; color:#ffffff; width:50%; float:left;}
     .ranking ul li span{ float:left; display:block; line-height:1.8em;}
 
+    #award_contents ul {
+        width: 33%;
+    }
+
     /*关于我们加关注*/
     .guanzhu{ /*position:absolute;*/ z-index:2; padding-top:1.5em; left:0; width:100%;}
     .guanzhu ul{ padding-top:1.5em;}
@@ -476,17 +480,17 @@
         if(list) {
             $('#award_list_update').html('更新时间:' + update_time);
             var $awardContents = $('#award_contents');
-            $awardContents.html('<ul></ul><ul></ul><ul></ul><ul></ul>');
+            $awardContents.html('<ul></ul><ul></ul><ul></ul>');
 
             var uls = [];
             uls.push($awardContents.find('ul:nth-child(1)'));
             uls.push($awardContents.find('ul:nth-child(2)'));
             uls.push($awardContents.find('ul:nth-child(3)'));
-            uls.push($awardContents.find('ul:nth-child(4)'));
+//            uls.push($awardContents.find('ul:nth-child(4)'));
 
             for(var i = 0; i < list.length; i++) {
                 var item = list[i];
-                uls[ i % uls.length ].append('<li>'+(i+1)+'、'+item+'</li>');
+                uls[ i % uls.length ].append('<li>'+item+'</li>');
             }
         }
     }

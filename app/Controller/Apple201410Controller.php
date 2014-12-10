@@ -139,7 +139,7 @@ class Apple201410Controller extends AppController
                 'conditions' => array('to' => $this->currentUser['id'], 'type' => $gameType, 'got' > 0),
             ));
             $result['total_help_me'] = $total_help_me;
-            $this->fill_today_award($gameType, $result, 30);
+            $this->fill_today_award($gameType, $result);
         }
 
         if ($r && $r > 1413724118 /*2014-10-19 21:00*/) {
@@ -907,7 +907,7 @@ class Apple201410Controller extends AppController
      * @param $result
      * @param int $limit
      */
-    private function fill_today_award($gameType, &$result, $limit = 30) {
+    private function fill_today_award($gameType, &$result, $limit = 60) {
 
         $this->loadModel('AwardResult');
         $day = date(FORMAT_DATE);
