@@ -11,7 +11,7 @@ class ApiOrdersController extends AppController {
     public function beforeFilter() {
         parent::beforeFilter();
         $access_token = $_REQUEST['token'];
-        if (!empty($access_token) || array_search($this->request->params['action'], array('product_detail', 'store_list', 'product_content')) !== false) {
+        if (!empty($access_token) || array_search($this->request->params['action'], array('product_detail', 'store_list', 'product_content', 'store_content')) !== false) {
             $this->loadModel('User');
             $user = $this->User->findById('146');
             $this->currentUser = $user['User'];
@@ -167,5 +167,24 @@ class ApiOrdersController extends AppController {
 
         $this->set('brands', $brands);
         $this->set('_serialize', array('brands'));
+    }
+
+    public function store_content($id){
+        $brandM = ClassRegistry::init('Brand');
+        $info = $brandM->find('first', array(
+            'conditions' => array('id' => $id, 'published' => PUBLISH_YES, 'deleted' => DELETED_NO),
+            'fields' => array('name', 'slug', 'coverimg', 'weixin_id', 'notice')
+        ));
+        if(!empty($info)){
+            $productM = ClassRegistry::init('Product');
+            $products = $productM->find('all', array(
+                'conditions' => array('brand_id' => $id, 'published' => PUBLISH_YES, 'deleted' => DELETED_NO),
+                'fields' => array('id','name', 'coverimg', 'slug', 'price', 'original_price')
+            ));
+        }
+        $this->set('content', array('info' => $info['Brand'], 'products' => $products));
+        $this->set('_serialize', array('content'));
+
+
     }
 }
