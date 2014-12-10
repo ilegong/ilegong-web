@@ -1,0 +1,46 @@
+<div class="users form">
+    {{if $person}}
+    <div class="page-header">
+        <h1><span class="glyphicon glyphicon-user"></span>个人认证 <small>详细资料</small></h1>
+    </div>
+    <table class="table table-bordered">
+        <tr>
+            <th>店铺名称</th>
+            <td>{{$store_name}}</td>
+        </tr>
+        <tr>
+            <th>身份证号码</th>
+            <td>{{$person_id}}</td>
+        </tr>
+        <tr>
+            <th>姓名</th>
+            <td>{{$person_name}}</td>
+        </tr>
+        <tr>
+            <th>工作单位</th>
+            <td>{{$workplace}}</td>
+        </tr>
+    </table>
+    <div>
+        <h3 class="media-heading">个人身份证：（图片） <button class="btn btn-info" onclick="javascript: window.open('{{$person_id_pic}}')">点击查看原图</button></h3>
+        <img src="{{$person_id_pic}}"  class="img-rounded" onerror = 'this.src="/img/products_nophoto.jpg"'>
+    </div>
+    {{else}}
+    <div class="page-header">
+        <h1><span class="glyphicon glyphicon-home"></span>企业认证 <small>详细资料</small></h1>
+    </div>
+    <div class="companyBox ">
+        <h3>店铺名称： {{$store_name}}</h3>
+        <br>
+        <h3>营业执照： </h3>
+        <img src="{{$business_licence}}"  class="img-rounded" onerror = 'this.src="/img/products_nophoto.jpg"'>
+        <h3>食品流通许可证： </h3>
+        <img src="{{$food_licence}}"  class="img-rounded" onerror = 'this.src="/img/products_nophoto.jpg"'>
+        <h3><span>法人身份证： </span><small>身份证必须和营业执照“法定代表人姓名”一致</small></h3>
+        <img src="{{$id_front}}"  class="img-rounded" onerror = 'this.src="/img/products_nophoto.jpg"'>
+
+        <h3>法人身份证(反面)： </h3>
+        <img src="{{$id_back}}"  class="img-rounded" onerror = 'this.src="/img/products_nophoto.jpg"'>
+    </div>
+    {{/if}}
+</div>
