@@ -419,4 +419,35 @@ function fillTownName() {
     $("#areaName").text(c + d + e + f);
     $("#areaHide").val($("#areaName").text());
 }
+//改价回调函数
+rs_callbacks.modify_order_price = function(request){
+//	$('.order-status-'+request.order_id, '#order-status-'+request.order_id).html('<font color="red">'+request.msg+"</font>");
+    var element= $('#order-status-'+request.order_id);
+    element.prepend('<p style="color:red;">'+request.msg+ " 当前实际价格：￥"+request.modify_price +" 刷新可见</p>");
+};
 
+// 修改订单价格
+function modify_price(order_id, status, creator,obj){
+    var a =$("#order-price-" + order_id).val();
+    if(!$.isNumeric(a)){
+        alert('输入的价格必须是数字');
+        return false;
+    }else{
+        creator = creator || 0;
+        ajaxAction(BASEURL+"/orders/set_status/"+creator,{'order_id':order_id,'status':status, 'price':a},null,'modify_order_price');
+        $(obj).parent().prev().val('');
+        return true;
+    }
+}
+//修改商家备注
+function submit_remark(id,obj){
+    var a = $(obj).parent().prev().val();
+    $.getJSON('/orders/remark_submit',{remark: a,order_id: id}, function(data){
+        if(data.content){
+            $('#business_remark_' + id).html('');
+            $('#business_remark_' + id).html(data.content);
+            $('#remark_' + id).val('');
+        }
+    });
+
+}

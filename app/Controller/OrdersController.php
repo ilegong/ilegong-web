@@ -685,7 +685,7 @@ class OrdersController extends AppController{
         $currentUid = $this->currentUser['id'];
         $is_admin = $this->is_admin($currentUid);
 
-		if(empty($order_id) || empty($status)){
+		if(empty($order_id) || !isset($status)){
 			echo json_encode(array('order_id'=>$order_id,'msg'=>'参数错误'));
 			exit;
 		}
@@ -760,6 +760,29 @@ class OrdersController extends AppController{
 
             echo json_encode(array('order_id'=>$order_id,'msg'=>'订单状态已更新为“已发货”'));
             exit;
+        } else if($status == ORDER_STATUS_WAITING_PAY){
+            if (!$is_brand_admin && !$is_admin) {
+                echo json_encode(array('order_id'=>$order_id,'msg'=>'您没有权限修改此订单'));
+                exit;
+            }else{
+                $order_price = floatval($_REQUEST['price']);
+                $original_price = $order_info['Order']['total_all_price'];
+                if($order_price >= 0){
+                    if($this->Order->updateAll(array('lastupdator'=>$currentUid, 'total_all_price'=>$order_price), array('id'=>$order_id))){
+                        $this->loadModel('OrderEdit');
+                        $data_log = array('order_id'=>$order_id, 'field_name'=>'total_all_price', 'operator'=>$currentUid,
+                            'original_value'=>$original_price, 'modified_value' =>$order_price);
+                        $this->OrderEdit->save($data_log);
+                        $msg='修改成功';
+                        echo json_encode(array('order_id'=>$order_id, 'modify_price'=>$order_price,  'msg'=>$msg));
+                        exit;
+                    }else{
+                        $msg='修改未成功，请重试';
+                        echo json_encode(array('order_id'=>$order_id, 'modify_price'=> "不变",  'msg'=>$msg));
+                        exit;
+                    }
+                }
+            }
         } else{
             echo json_encode(array('order_id'=>$order_id,'msg'=>'不能修改订单状态了'));
             exit;
@@ -1330,5 +1353,36 @@ class OrdersController extends AppController{
 
     function signed_orders($creator=0){
         $this->__business_orders($creator, array(ORDER_STATUS_RECEIVED));
+    }
+    //修改商家备注
+    function remark_submit(){
+        $this->autoRender=false;
+        $order_id = $_REQUEST['order_id'];
+        $remark = $_REQUEST['remark'];
+        $currentUid = $this->currentUser['id'];
+        if(empty($order_id) || !isset($remark)){
+            echo json_encode(array('order_id'=>$order_id,'msg'=>'参数错误'));
+            exit;
+        }
+        $order_info = $this->Order->find('first', array(
+            'conditions' => array('id' => $order_id),
+            'fields' => array('brand_id'),
+        ));
+
+        if(empty($order_info)){
+            echo json_encode(array('order_id'=>$order_id,'msg'=>'您不具备此订单的修改权限，请联系管理员。'));
+            exit;
+        }
+        $this->loadModel('Brand');
+        $brand = $this->Brand->findById($order_info['Order']['brand_id']);
+        $is_brand_admin = !empty($brand) && $brand['Brand']['creator'] == $currentUid;
+        if (!$is_brand_admin) {
+            echo json_encode(array('order_id'=>$order_id,'msg'=>'您没有权限修改商家备注'));
+            exit;
+        }
+        $this->Order->updateAll(array('business_remark' => '\''.$remark.'\''), array('id' => $order_id));
+        $successinfo = array('content' => $remark);
+        echo json_encode($successinfo);
+
     }
 }
