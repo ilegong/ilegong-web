@@ -108,7 +108,7 @@ class CategoriesController extends AppController {
                 )
             );
             $orderBy = 'Tag.recommend desc, Product.recommend desc';
-            $conditions = array('Product.deleted'=>0, 'Product.published'=>1, 'Tag.published' => 1);
+            $conditions = array('Product.deleted'=>0, 'Product.published'=>1, 'Tag.published' => 1, 'Tag.special_id' => $specialList['SpecialList']['id']);
 
             $this->loadModel('Product');
             $list = $this->Product->find('all', array(
