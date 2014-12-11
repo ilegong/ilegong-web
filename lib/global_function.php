@@ -1243,13 +1243,13 @@ function friendlyDate($sTime, $type = 'normal', $alt = 'false') {
     $dYear      =   intval(date("Y",$cTime)) - intval(date("Y",$sTime));
     //normal：n秒前，n分钟前，n小时前，日期
     if($type=='normal'){
-        if( $dTime < 60 ){
+        if($dTime >= 0 && $dTime < 60 ){
             if($dTime < 10){
                 return '刚刚';    //by yangjs
             }else{
                 return intval(floor($dTime / 10) * 10)."秒前";
             }
-        }elseif( $dTime < 3600 ){
+        }elseif($dTime >= 0 && $dTime < 3600 ){
             return intval($dTime/60)."分钟前";
             //今天的数据.年份相同.日期相同.
         }elseif( $dYear==0 && $dDay == 0  ){

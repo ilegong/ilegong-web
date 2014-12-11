@@ -6,11 +6,20 @@
 <div class="container clearfix">
     <div class="classlist">
         <a href="/">
-            <ul class="clearfix list-unstyled">
+            <ul class="clearfix list-unstyled" style="display: inline-block; float:left">
                 <li class="back"></li>
                 <li>{{$sub_title}}</li>
             </ul>
         </a>
+        <span class="special_time">
+        {{if $special_list['SpecialList']['show_timer']}}
+            {{if $special_list['SpecialList']['start'] && date(FORMAT_DATETIME, $special_list['SpecialList']['start']) < time()}}
+                {{friendlyDateFromStr($special_list['SpecialList']['start'])}}开始
+            {{elseif $special_list['SpecialList']['end'] && date(FORMAT_DATETIME, $special_list['SpecialList']['end']) > time() }}
+                {{friendlyDateFromStr($special_list['SpecialList']['end'])}}结束
+            {{/if}}
+        {{/if}}
+            </span>
     </div>
     <div class="classlist_good row special">
         {{if $special_list['SpecialList']['headimg']}}

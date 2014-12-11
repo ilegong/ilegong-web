@@ -72,6 +72,7 @@ const PRO_TAG_HOTTEST = 1;
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
+define('FORMAT_TIME', 'H:i:s');
 
 define('ORDER_STATUS_WAITING_PAY', 0);   //待支付
 define('ORDER_STATUS_PAID', 1);         //已支付
