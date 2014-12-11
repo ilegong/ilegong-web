@@ -539,7 +539,7 @@ class Apple201410Controller extends AppController
 
         $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($current_uid, $gameType);
         if (empty($awardInfo)) {
-            $awardInfo = array('AwardInfo' => array('uid' => $current_uid, 'type' => $gameType, 'times' => 10, 'got' => 0));
+            $awardInfo = array('AwardInfo' => array('uid' => $current_uid, 'type' => $gameType, 'times' => 5, 'got' => 0));
             try {
                 $this->AwardInfo->save($awardInfo);
             } catch (Exception $e) {
@@ -779,6 +779,8 @@ class Apple201410Controller extends AppController
             $times += 10;
         }  else if ($total_got < 30) {
             $times += 20;
+        }  else if ($total_got < 20) {
+            $times += 30;
         }
 
         for ($i = 0; $i < $times; $i++) {
