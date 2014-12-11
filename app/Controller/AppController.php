@@ -103,7 +103,7 @@ class AppController extends Controller {
                 );
                 if (!empty($range)) {
                     if (!empty($range['start'])) { $orderCond['Order.pay_time > '] = $range['start']; };
-                    if (!empty($range['end'])) { $orderCond['Order.pay_time > '] = $range['end']; };
+                    if (!empty($range['end'])) { $orderCond['Order.pay_time < '] = $range['end']; };
                 }
                 $order_ids = $ordersModel->find('list', array(
                     'conditions' => $orderCond,
