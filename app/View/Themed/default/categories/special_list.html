@@ -68,10 +68,7 @@
 <script>
     var shareTitle = '{{$sub_title}} - 朋友说';
     var appid = '{{WX_APPID}}';
-    var imgUrl = $('#img_head').attr('src');
-    if (!imgUrl) {
-        imgUrl = '{{$this->Html->assetUrl("/img/logo.png")}}';
-    }
+    var imgUrl = "{{$this->Html->assetUrl($special_list['SpecialList']['share_img']?$special_list['SpecialList']['share_img'] : '/img/logo.png')}}";
     var lineLink = '{{WX_HOST}}/categories/special_list/{{$special_list["SpecialList"]["slug"]}}.html';
     document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
         WeixinJSBridge.on('menu:share:appmessage', function(argv){
