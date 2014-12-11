@@ -1062,6 +1062,15 @@ class AppController extends Controller {
     			$searchoptions['order'] = $modelClass . '.lft asc';
     		}
     	}
+
+        $_cond = &$searchoptions['conditions'];
+        if ($_cond['User.mobilephone'] == '') {
+            unset($_cond['User.mobilephone']);
+        }
+        if ($_cond['User.username'] == '') {
+            unset($_cond['User.username']);
+        }
+
     	$datas = $this->{$modelClass}->find('all', $searchoptions);
     	
     	if ($has_step_conditions) {
