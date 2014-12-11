@@ -143,18 +143,25 @@ class ProductsController extends AppController{
         }
 
 
+        $use_special = false;
         $price = $this->viewdata['Product']['price'];
         $currUid = $this->currentUser['id'];
         if (!empty($special)) {
             $this->set('special', $special);
-            if ($special['special']['special_price'] >= 0) {
-                $price = $special['special']['special_price']/100;
-            }
             $special_rg = array('start' => $special['start'], 'end' => $special['end']);
             //TODO: check time (current already checked)
+            //CHECK time limit!!!!
             list($afford_for_curr_user, $limit_per_user, $total_left) =
                 AppController::set_limit_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $brandId, $special_rg);
-        } else {
+            if ($total_left > 0) {
+                if ($special['special']['special_price'] >= 0) {
+                    $price = $special['special']['special_price'] / 100;
+                    $use_special = true;
+                }
+            }
+        }
+
+        if (!$use_special) {
             list($afford_for_curr_user, $limit_per_user, $total_left) = self::__affordToUser($pid, $currUid);
         }
 

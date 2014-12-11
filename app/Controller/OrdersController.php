@@ -1027,7 +1027,7 @@ class OrdersController extends AppController{
             $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
             $singleShipFee = empty($pp) || !isset($pp['ship_price']) ? $productByIds[$pid]['ship_fee'] : $pp['ship_price'];
             $shipFee += ShipPromotion::calculateShipFee($pid, $singleShipFee, $num, null);
-            $itemPrice = empty($pp) || !isset($pp['price']) ? $productByIds[$pid]['price'] : $pp['price'];
+            $itemPrice = empty($pp) || !isset($pp['price']) ? calculate_price($pid, $productByIds[$pid]['price']) : $pp['price'];
             $cart->add_product_item($productByIds[$pid]['brand_id'], $pid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name']);
         }
         return array($cart, $shipFee);

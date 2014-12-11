@@ -29,7 +29,7 @@ class CartsController extends AppController{
 			$data['Cart']['session_id'] = $this->Session->id();
 			$data['Cart']['coverimg'] = $productinfo['Product']['coverimg'];
 			$data['Cart']['name'] = $productinfo['Product']['name'];
-			$data['Cart']['price'] = $productinfo['Product']['price'];
+			$data['Cart']['price'] = calculate_price($productinfo['Product']['id'], $productinfo['Product']['price']);
 			$data['Cart']['creator'] = $this->currentUser['id'];
 			$this->Cart->save($data);
 		}
@@ -150,7 +150,7 @@ class CartsController extends AppController{
         $this->data['Cart']['session_id'] = $this->Session->id();
         $this->data['Cart']['coverimg'] = $p['Product']['coverimg'];
         $this->data['Cart']['name'] = product_name_with_spec($p['Product']['name'], $spec, $p['Product']['specs']);;
-        $this->data['Cart']['price'] = $p['Product']['price'];
+        $this->data['Cart']['price'] = calculate_price($p['Product']['id'], $p['Product']['price']);
         $this->data['Cart']['creator'] = $this->currentUser['id'];
         $this->data['Cart']['specId'] = $spec;
         return $this->Cart->save($this->data);

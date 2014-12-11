@@ -196,6 +196,32 @@ function filter_invalid_name($name, $def = '神秘人') {
     return $name;
 }
 
+function calculate_price($pid, $price) {
+    $cr = ClassRegistry::init('SpecialList');
+    $specialLists = $cr->has_special_list($pid);
+    if (!empty($specialLists)) {
+        foreach ($specialLists as $specialList) {
+            if ($specialList['type'] == 1) {
+                $special = $specialList;
+                break;
+            }
+        }
+    }
+
+    if (!empty($special)) {
+        if ($special['special']['special_price'] >= 0) {
+            $price = $special['special']['special_price']/100;
+        }
+
+        $special_rg = array('start' => $special['start'], 'end' => $special['end']);
+        //TODO: check time (current already checked)
+        //CHECK time limit!!!!
+        //CHECK AFFORD!
+    }
+
+    return $price;
+}
+
 
 class ProductCartItem extends Object {
     public $pid;
@@ -408,7 +434,7 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
                 'name' => product_name_with_spec($p['name'], $newSpecId, $p['specs']),
                 'coverimg' => $p['Product']['coverimg'],
                 'num' => $nums[$pid],
-                'price' => $p['Product']['price'],
+                'price' => calculate_price($p['Product']['id'], $p['Product']['price']),
                 'specId' => $newSpecId,
                 'session_id' => $session_id,
             );
@@ -421,7 +447,7 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
             } else {
                //CONSIDER to add a new item in shopping cart!!
                 $cartItem['num'] = $nums[$pid];
-                $cartItem['price'] = $p['price'];
+                $cartItem['price'] = calculate_price($p['id'], $p['price']);
                 $cartItem['name']  = product_name_with_spec($p['name'], $newSpecId, $p['specs']);
                 $cartItemId = $cartItem['id'];
                 $cartItem['specId'] = $newSpecId;
