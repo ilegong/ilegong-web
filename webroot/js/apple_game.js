@@ -252,7 +252,7 @@ $(document).ready(function(){
             return;
         };
 
-        bootbox.confirm('您目前有'+apple_count+'个，兑换会扣除相应的' + game_obj_name + '数，您确定要兑换吗？', function (result) {
+        bootbox.confirm('您目前有'+apple_count+'个' + game_obj_name + '，兑换会扣除相应的数目，您确定要兑换吗？', function (result) {
             if (!result) {
                 return;
             }
