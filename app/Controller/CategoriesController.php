@@ -148,6 +148,7 @@ class CategoriesController extends AppController {
         $this->set('category_control_name', 'products');
         $this->set('navigations', $navigation);
         $this->set('data_list', $list);
+        $this->set('special_list', $specialList);
         $this->set('withBrandInfo', true);
 
         $this->set('op_cate', OP_CATE_HOME);

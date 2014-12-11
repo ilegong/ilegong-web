@@ -13,7 +13,10 @@
         </a>
     </div>
     <div class="classlist_good row special">
-        <ul class="clearfix list-unstyled">
+        {{if $special_list['SpecialList']['headimg']}}
+        <img src="{{$this->Html->assetUrl($special_list['SpecialList']['headimg'])}}" style="margin-bottom: .3em; margin-top: .3em "/>
+        {{/if}}
+        <ul class="clearfix list-unstyled" style="{{if $special_list['SpecialList']['headimg']}}border-top: 1px #dddddd solid;{{/if}}">
             <?PHP if($total>0){ ?>
             <?PHP foreach($data_list as $item) {
 	    $full = true;
