@@ -8,7 +8,7 @@
         <a href="/">
             <ul class="clearfix list-unstyled" style="display: inline-block; float:left">
                 <li class="back"></li>
-                <li>{{$sub_title}}</li>
+                <li id="ul_title">{{$sub_title}}</li>
             </ul>
         </a>
         <span class="special_time">
@@ -23,7 +23,7 @@
     </div>
     <div class="classlist_good row special">
         {{if $special_list['SpecialList']['headimg']}}
-        <img src="{{$this->Html->assetUrl($special_list['SpecialList']['headimg'])}}" style="margin-bottom: .3em; margin-top: .3em; width: 100% "/>
+        <img id="img_head" src="{{$this->Html->assetUrl($special_list['SpecialList']['headimg'])}}" style="margin-bottom: .3em; margin-top: .3em; width: 100% "/>
         {{/if}}
         <ul class="clearfix list-unstyled" style="{{if $special_list['SpecialList']['headimg']}}border-top: 1px #dddddd solid;{{/if}}">
             <?PHP if($total>0){ ?>
@@ -65,6 +65,23 @@
         </ul>
     </div>
 </div>
+<script>
+    var shareTitle = '{{$sub_title}} - 朋友说';
+    var appid = '{{WX_APPID}}';
+    var imgUrl = $('#img_head').attr('src');
+    if (!imgUrl) {
+        imgUrl = '{{$this->Html->assetUrl("/img/logo.png")}}';
+    }
+    var lineLink = '{{WX_HOST}}/categories/special_list/{{$special_list["SpecialList"]["slug"]}}.html';
+    document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+        WeixinJSBridge.on('menu:share:appmessage', function(argv){
+            utils.wx_to_friend(appid, imgUrl, lineLink, shareTitle, '');
+        });
+        WeixinJSBridge.on('menu:share:timeline', function(argv){
+            utils.wx_to_timeline(appid, imgUrl, lineLink, '', shareTitle);
+        });
+    }, false);
+</script>
 
 
 
