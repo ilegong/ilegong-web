@@ -100,22 +100,22 @@ class CategoriesController extends AppController {
             $join_conditions = array(
                 array(
                     'table' => 'product_specials',
-                    'alias' => 'Tag',
+                    'alias' => 'Special',
                     'conditions' => array(
-                        'Tag.product_id = Product.id',
+                        'Special.product_id = Product.id',
                     ),
                     'type' => 'INNER',
                 )
             );
-            $orderBy = 'Tag.recommend desc, Product.recommend desc';
-            $conditions = array('Product.deleted'=>0, 'Product.published'=>1, 'Tag.published' => 1, 'Tag.special_id' => $specialList['SpecialList']['id']);
+            $orderBy = 'Special.recommend desc, Product.recommend desc';
+            $conditions = array('Product.deleted'=>0, 'Product.published'=>1, 'Special.published' => 1, 'Special.special_id' => $specialList['SpecialList']['id']);
 
             $this->loadModel('Product');
             $list = $this->Product->find('all', array(
                     'conditions' => $conditions,
                     'joins' => $join_conditions,
                     'order' => $orderBy,
-                    'fields' => array('Product.*'),
+                    'fields' => array('Product.id', 'Product.name','Product.brand_id','Product.price','Product.original_price', 'Product.created', 'Product.coverimg', 'Product.slug', 'Special.*'),
                     'limit' => $limit)
             );
             if (count($list) < $limit) {
@@ -127,17 +127,14 @@ class CategoriesController extends AppController {
                 ));
             }
 
-            $productList = array();
             $brandIds = array();
             foreach ($list as $val) {
-                $productList[] = $val['Product'];
                 $brandIds[] = $val['Product']['brand_id'];
             }
         } else {
             $brandIds = array();
             $mappedBrands = array();
             $total = 0;
-            $productList = array();
         }
 
         $specialName = $specialList['SpecialList']['name'];
@@ -150,7 +147,7 @@ class CategoriesController extends AppController {
         $this->set('current_cateid', $current_cateid);
         $this->set('category_control_name', 'products');
         $this->set('navigations', $navigation);
-        $this->set('data_list', $productList);
+        $this->set('data_list', $list);
         $this->set('withBrandInfo', true);
 
         $this->set('op_cate', OP_CATE_HOME);

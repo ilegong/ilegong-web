@@ -1,15 +1,59 @@
+<style>
+    dl {
+        margin-bottom: 0;
+    }
+</style>
 <div class="container clearfix">
-
-    {{if $sub_title }}
-        <h3 class="item-tags">{{$sub_title}}</h3>
-    {{/if}}
-
-	<?PHP if($total>0){ ?>
-	    <?PHP foreach($data_list as $item) {
+    <div class="classlist">
+        <a href="/">
+            <ul class="clearfix list-unstyled">
+                <li class="back"></li>
+                <li>{{$sub_title}}</li>
+            </ul>
+        </a>
+    </div>
+    <div class="classlist_good row special">
+        <ul class="clearfix list-unstyled">
+            <?PHP if($total>0){ ?>
+            <?PHP foreach($data_list as $item) {
 	    $full = true;
-		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
-	    ?>	
-			{{include 'categories/_photolist'}}
-		<?php } ?>
-	<?php } ?>
+	    $numbers_per_col = 2;
+	    $i++;
+		$item['Product']['slug'] = $item['Product']['slug']?$item['Product']['slug']:$item['Product']['id'];
+	    ?>
+            <li class="{{if $i % $numbers_per_col == ($numbers_per_col)}}last{{/if}}"> <a href="{{product_link2($item['Product'])}}">
+                <img src="{{$this->Html->assetUrl(small_thumb_link($item['Product']['coverimg']))}}" border="0" />
+                <div class="item_name">{{usubstr($item['Product']['name'],0, 9,'')}}</div>
+            </a>
+                <dl class="clearfix">
+
+                     <dt>
+                         <a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['Product']['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html')}}">
+                             <img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brands[$item['Product']['brand_id']]['Brand']['coverimg']))}}" border="0" />
+                         </a>
+                    </dt>
+                            <dt><a href="{{product_link2($item['Product'])}}">
+                                <span class="price">&nbsp;¥{{$this->Number->precision($item['Special']['special_price']>=0? $item['Special']['special_price']/100 : $item['Product']['price'], 2)}}</span>
+                                {{if !empty($item['Product']['original_price'])}}
+                                <span class="original">¥{{$this->Number->precision( !empty($item['Product']['original_price']) ? $item['Product']['original_price'] : $item['Product']['price'], 2)}}</span>
+                                {{/if}}
+                                <span class="limit">&nbsp;{{if $item['Special']['limit_total']}}剩余{{$item['Special']['limit_total']}}份{{/if}}&nbsp;
+                                {{if $item['Special']['limit_per_user']}}每人{{$item['Special']['limit_per_user']}}份{{/if}}</span>
+                            </a>
+                            </dt>
+
+                </dl>
+            </li>
+            <?php } ?>
+            <?php } ?>
+
+            {{if count($data_list) % 2 == 1}}
+            <li style="height: 12.4285em"></li>
+            {{/if}}
+        </ul>
+    </div>
 </div>
+
+
+
+

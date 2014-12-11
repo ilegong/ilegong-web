@@ -356,6 +356,7 @@
                                     else if (data.msg == 'no_more') {
                                         msg = '今天的秒杀商品已经全部抢完啦。 <a href="#award_list">查看中奖名单</a>';
                                         miaosha_btn.removeClass('help').addClass('help');
+                                        today_sold_out = true;
                                         checking_miaosha();
                                     }
                                     else if (data.msg == 'game_end') {
