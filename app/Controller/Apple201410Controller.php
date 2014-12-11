@@ -67,7 +67,7 @@ class Apple201410Controller extends AppController
         self::MIHOUTAO1411 => "'摇一摇一起免费兑有机猕猴桃红包，我已经摇下'+total+'个猕猴桃，兑到XX元红包啦 -- 城市里的乡下人张慧敏分享有机种植眉县猕猴桃 -- 朋友说'",
     );
 
-    const BTC_DAILY_AWARD_LIMIT = 100;
+    const BTC_DAILY_AWARD_LIMIT = 20;
     public function beforeFilter()
     {
         parent::beforeFilter();
