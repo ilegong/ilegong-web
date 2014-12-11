@@ -788,9 +788,14 @@ class Apple201410Controller extends AppController
             $this_got += ( $mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
         }
 
+        if ($total_got < 20 && $this_got < 10) {
+            $this_got += 5;
+        }
+
         if ( $limit && ($total_got + $this_got) > $this->AWARD_LIMIT) {
             $this_got = 0;
         }
+
 
         return $this_got;
     }
