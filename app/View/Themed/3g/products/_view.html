@@ -66,7 +66,7 @@
         <div id="productinfo" class="clearfix voffset2" style="padding-bottom:10px;">
             {{if $limit_per_user == 1}}
             <p>每人限购一份</p>
-            <input id="pamount-{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="hidden" readonly="readonly">
+            <input id="input_pamount"  item-id="{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="hidden" readonly="readonly">
             {{else}}
             <div class="input-group" style="width:120px">
                 <span id="pamount_reduce" class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}">-</span>
