@@ -109,14 +109,82 @@ class ProductsController extends AppController{
     function view($slug='/'){
         parent::view($slug);
 
+        $pid = $this->current_data_id;
+        if ($pid == PRODUCT_ID_RICE_10) {
+
+            $current_uid = $this->currentUser['id'];
+
+            if($this->is_weixin() || !empty($_GET['trid'])) {
+                if (!$current_uid) {
+                    $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
+                }
+                $track_type = TRACK_TYPE_PRODUCT_RICE;
+                list($friend, $shouldAdd, ) = $this->track_or_redirect($current_uid, $track_type);
+                if ($shouldAdd) {
+                    //$this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id']));
+                }
+                if (!empty($friend)) {
+                    $this->redirect_for_append_tr_id($current_uid, $track_type, $_SERVER['REQUEST_URI']);
+                }
+            }
+        }
+
         $brandId = $this->viewdata['Product']['brand_id'];
+
+        $this->loadModel('SpecialList');
+        $specialLists = $this->SpecialList->has_special_list($pid);
+        if (!empty($specialLists)) {
+            foreach ($specialLists as $specialList) {
+                if ($specialList['type'] == 1) {
+                    $special = $specialList;
+                    break;
+                }
+            }
+        }
+
+
+        $price = $this->viewdata['Product']['price'];
+        $currUid = $this->currentUser['id'];
+        if (!empty($special)) {
+            $this->set('special', $special);
+            if ($special['special']['special_price'] >= 0) {
+                $price = $special['special']['special_price']/100;
+            }
+            $special_rg = array('start' => $special['start'], 'end' => $special['end']);
+            //TODO: check time (current already checked)
+            list($afford_for_curr_user, $limit_per_user, $total_left) =
+                AppController::set_limit_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $brandId, $special_rg);
+        } else {
+            list($afford_for_curr_user, $limit_per_user, $total_left) = self::__affordToUser($pid, $currUid);
+        }
+
+        $this->set('price', $price);
+
+        $this->set('limit_per_user', $limit_per_user);
+        $this->set('total_left', $total_left);
+        $this->set('afford_for_curr_user', $afford_for_curr_user);
+
+        $specs_map = product_spec_map($this->viewdata['Product']['specs']);
+        if (!empty($specs_map['map'])) {
+            $str = '<script>var _p_spec_m = {';
+            foreach($specs_map['map'] as $mid => $mvalue) {
+                $str .= '"'.$mvalue['name'].'":"'. $mid ."\",";
+            }
+            $str .= '};</script>';
+            $this->set('product_spec_map', $str);
+        }
+        $this->set('specs_map', $specs_map);
+        $this->setHasOfferBrandIds($this->viewdata['Product']['brand_id']);
+        $this->set('hideNav', $this->RequestHandler->isMobile());
+
         $this->loadModel('Brand');
         $brand = $this->Brand->findById($brandId);
         $this->set('brand', $brand);
 
         $recommC = $this->Components->load('ProductRecom');
-        $recommends = $recommC->recommend($this->current_data_id);
+        $recommends = $recommC->recommend($pid);
         $this->set('items', $recommends);
+
         $this->set('category_control_name', 'products');
     }
 

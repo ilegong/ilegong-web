@@ -57,7 +57,80 @@ class AppController extends Controller {
             }
         }
     }
-    
+
+    /**
+     * @param $pid
+     * @param $currUid
+     * @param $total_limit   0 means no limit
+     * @param $limit_per_user  0 means no limit
+     * @param $brand_id
+     * @param $range, time range
+     * @return array
+     */
+    public static function set_limit_afford($pid, $currUid, $total_limit, $limit_per_user, $brand_id, $range = array()) {
+        $afford_for_curr_user = true;
+        $total_left = -1;
+
+        $cartModel = ClassRegistry::init('Cart');
+        if ($total_limit != 0 || $limit_per_user != 0) {
+            $cartCond = array('Cart.order_id > 0', 'Cart.product_id' => $pid, 'Cart.deleted' => 0);
+            if (!empty($range)) {
+                if (!empty($range['start'])) { $cartCond['Order.pay_time > '] = $range['start']; };
+                if (!empty($range['end'])) { $cartCond['Order.pay_time < '] = $range['end']; };
+            }
+            $rtn = $cartModel->find('first', array(
+                'joins' => array(array(
+                    'table' => 'orders',
+                    'alias' => 'Order',
+                    'type' => 'inner',
+                    'conditions' => array('Order.id=Cart.order_id', 'Order.status != ' . ORDER_STATUS_CANCEL, 'Order.status != ' . ORDER_STATUS_WAITING_PAY),
+                )),
+                'fields' => 'SUM(Cart.num) as total_num',
+                'conditions' => $cartCond));
+
+            $soldCnt = empty($rtn) ? 0 : $rtn[0]['total_num'];
+
+            if ($soldCnt > $total_limit) {
+                $afford_for_curr_user = false;
+            } else if ($limit_per_user > 0) {
+
+                $ordersModel = ClassRegistry::init('Order');
+                $orderCond = array('brand_id' => $brand_id,
+                    'deleted' => 0,
+                    'published' => 1,
+                    'creator' => $currUid,
+                    'not' => array('status' => array(ORDER_STATUS_CANCEL))
+                );
+                if (!empty($range)) {
+                    if (!empty($range['start'])) { $orderCond['Order.pay_time > '] = $range['start']; };
+                    if (!empty($range['end'])) { $orderCond['Order.pay_time > '] = $range['end']; };
+                }
+                $order_ids = $ordersModel->find('list', array(
+                    'conditions' => $orderCond,
+                    'fields' => array('id', 'id')
+                ));
+                if (!empty($order_ids)) {
+                    $rr = $cartModel->find('first', array(
+                        'conditions' => array('order_id' => $order_ids, 'product_id' => $pid, 'deleted' => 0),
+                        'fields' => array('sum(num) as total_num')
+                    ));
+                    $bought_by_curr_user = empty($rr) ? 0 : $rr[0]['total_num'];
+                    if ($bought_by_curr_user >= $limit_per_user) {
+                        $afford_for_curr_user = false;
+                    }
+                    $limit_per_user = $limit_per_user - $bought_by_curr_user;
+                }
+            }
+            $total_left = $total_limit - $soldCnt;
+            if ($total_left < 0) {
+                $total_left = 0;
+                return array($afford_for_curr_user, $limit_per_user, $total_left);
+            }
+            return array($afford_for_curr_user, $limit_per_user, $total_left);
+        }
+        return array($afford_for_curr_user, $limit_per_user, $total_left);
+    }
+
     public function beforeFilter() {
     	load_lang('default'); // 加载默认语言
     	
@@ -361,50 +434,6 @@ class AppController extends Controller {
         $params = array($modelClass, ${$modelClass}[$modelClass]['id']);
         $this->Hook->call('viewItem', $params);
 //         $this->Hook->call('nextItems', $params);
-
-        if ($modelClass == 'Product') {
-
-            $pid = $this->current_data_id;
-            if ($pid == PRODUCT_ID_RICE_10) {
-
-                $current_uid = $this->currentUser['id'];
-
-                if($this->is_weixin() || !empty($_GET['trid'])) {
-                    if (!$current_uid) {
-                        $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
-                    }
-                    $track_type = TRACK_TYPE_PRODUCT_RICE;
-                    list($friend, $shouldAdd, ) = $this->track_or_redirect($current_uid, $track_type);
-                    if ($shouldAdd) {
-                        //$this->AwardInfo->updateAll(array('times' => 'times + 1',), array('uid' => $friend['User']['id']));
-                    }
-                    if (!empty($friend)) {
-                        $this->redirect_for_append_tr_id($current_uid, $track_type, $_SERVER['REQUEST_URI']);
-                    }
-                }
-            }
-
-            $currUid = $this->currentUser['id'];
-            list($afford_for_curr_user, $limit_per_user, $total_left) = self::__affordToUser($pid, $currUid);
-            if ($limit_per_user) {
-                $this->set('limit_per_user', $limit_per_user);
-            }
-            $this->set('total_left', $total_left);
-            $this->set('afford_for_curr_user', $afford_for_curr_user);
-
-             $specs_map = product_spec_map(${$modelClass}[$modelClass]['specs']);
-             if (!empty($specs_map['map'])) {
-                 $str = '<script>var _p_spec_m = {';
-                 foreach($specs_map['map'] as $mid => $mvalue) {
-                     $str .= '"'.$mvalue['name'].'":"'. $mid ."\",";
-                }
-                $str .= '};</script>';
-                $this->set('product_spec_map', $str);
-             }
-             $this->set('specs_map', $specs_map);
-            $this->setHasOfferBrandIds(${$modelClass}[$modelClass]['brand_id']);
-            $this->set('hideNav', $this->RequestHandler->isMobile());
-        }
     }
 
     function add() {
@@ -564,9 +593,7 @@ class AppController extends Controller {
      * @return array whether afford to current user; limit for current user; total left for all users
      */
     public static function __affordToUser($pid, $currUid) {
-        $afford_for_curr_user = true;
-        $total_left = -1;
-        $cartModel = ClassRegistry::init('Cart');
+
         ClassRegistry::init('ShipPromotion');
         if ($pid == ShipPromotion::QUNAR_PROMOTE_ID) {
             $afford_for_curr_user = false;
@@ -574,49 +601,7 @@ class AppController extends Controller {
         } else {
 
             list($total_limit, $brand_id, $limit_per_user) = ClassRegistry::init('ShipPromotion')->findNumberLimitedPromo($pid);
-            if ($total_limit != 0  || $limit_per_user != 0) {
-                $rtn = $cartModel->find('first', array(
-                    'joins' => array(array(
-                        'table' => 'orders',
-                        'alias' => 'Order',
-                        'type' => 'inner',
-                        'conditions' => array('Order.id=Cart.order_id', 'Order.status != '.ORDER_STATUS_CANCEL, 'Order.status != '.ORDER_STATUS_WAITING_PAY),
-                    )),
-                    'fields' => 'SUM(Cart.num) as total_num',
-                    'conditions' => array('Cart.order_id > 0', 'Cart.product_id' => $pid, 'Cart.deleted' => 0)));
-                $soldCnt = empty($rtn) ? 0 : $rtn[0]['total_num'];
-
-                if ($soldCnt > $total_limit) {
-                    $afford_for_curr_user = false;
-                } else if ($limit_per_user > 0 ) {
-
-                    $ordersModel = ClassRegistry::init('Order');
-                    $order_ids = $ordersModel->find('list', array(
-                        'conditions' => array('brand_id' => $brand_id,
-                            'deleted' => 0,
-                            'published' => 1,
-                            'creator' => $currUid,
-                            'not' => array('status' => array(ORDER_STATUS_CANCEL))
-                        ),
-                        'fields' => array('id', 'id')
-                    ));
-                    if (!empty($order_ids)) {
-                        $rr = $cartModel->find('first', array(
-                            'conditions' => array('order_id' => $order_ids, 'product_id' => $pid, 'deleted' => 0),
-                            'fields' => array('sum(num) as total_num')
-                        ));
-                        $bought_by_curr_user = empty($rr) ? 0 : $rr[0]['total_num'];
-                        if ($bought_by_curr_user >= $limit_per_user) {
-                            $afford_for_curr_user = false;
-                        }
-                        $limit_per_user = $limit_per_user - $bought_by_curr_user;
-                    }
-                }
-                $total_left =  $total_limit - $soldCnt;
-                if ($total_left < 0 ) {
-                    $total_left = 0;
-                }
-            }
+            list($afford_for_curr_user, $limit_per_user, $total_left) = self::set_limit_afford($pid, $currUid, $total_limit, $limit_per_user, $brand_id);
         }
 
         return array($afford_for_curr_user, $limit_per_user, $total_left);
@@ -677,7 +662,7 @@ class AppController extends Controller {
      * @param $dailyHelpLimit
      * @return bool
      */
-    private function recordTrack($track_type, $current_uid, $friendUid, $dailyHelpLimit) {
+    private function recordTrack($track_type, $current_uid, $friendUid, $dailyHelpLimit = 0) {
 
         $shouldAdd = true;
         if ($dailyHelpLimit > 0) {
@@ -717,7 +702,7 @@ class AppController extends Controller {
      * @param $dailyHelpLimit int daily limit help per day for a user
      * @return array ($friend, $shouldAdd, $trType)
      */
-    protected function track_or_redirect($current_uid, $default_track_type, $dailyHelpLimit) {
+    protected function track_or_redirect($current_uid, $default_track_type, $dailyHelpLimit = 0) {
         $tr_id = $_GET['trid'];
         if (!empty($tr_id)) {
             $this->loadModel('TrackLog');

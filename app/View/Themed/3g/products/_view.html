@@ -11,7 +11,7 @@
         <p><?php echo $Product['Product']['promote_name']; ?></p>
         {{/if}}
         <div class="clearfix" style="position: relative">
-            <strong class="vertical-align text-price"> ￥{{$this->Number->precision($Product['Product']['price'], 2)}}</strong>
+            <strong class="vertical-align text-price"> ￥{{$this->Number->precision($price, 2)}}</strong>
             {{if !empty($Product['Product']['original_price'])}}
               <span class="text-original-price-small">
                     ¥{{$this->Number->precision($Product['Product']['original_price'], 2)}}
