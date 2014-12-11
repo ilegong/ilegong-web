@@ -15,11 +15,11 @@ class SpecialList extends AppModel {
             'conditions' => array('product_id' => $pid),
         ));
         if (!empty($specials)) {
-            $special_ids = Hash::extract($specials, '{n}.ProductSpecial.product_id');
+            $special_ids = Hash::extract($specials, '{n}.ProductSpecial.special_id');
             $specialLists = $this->find('all', array(
                 'conditions' => array('id' => $special_ids,
-                    'start = null || start <= NOW()',
-                    'end = null || end > NOW()'
+                    '(start = null || start <= NOW())',
+                    '(end = null || end > NOW())'
                 )
             ));
             $specialListsM = Hash::combine($specialLists, '{n}.SpecialList.id', '{n}.SpecialList');
