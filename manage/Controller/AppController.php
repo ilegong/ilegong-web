@@ -1088,11 +1088,15 @@ class AppController extends Controller {
     			}
     		}
     	}
-    	//print_r($datas);
-    	$count = $this->{$modelClass}->find('count', array(
-    			'conditions' => $conditions,
-    			// 'group' => $search_groupby , 含有group的查询，计算总数时，要用嵌套查询 select count(*) from (select ***) tabl
-    	));
+        //print_r($datas);
+        if ($modelClass == 'User') {
+            $count = 100000000;
+        } else {
+            $count = $this->{$modelClass}->find('count', array(
+                'conditions' => $conditions,
+                // 'group' => $search_groupby , 含有group的查询，计算总数时，要用嵌套查询 select count(*) from (select ***) tabl
+            ));
+        }
     	//        print_r($count);
     	if ($count > 0) {
     		$total_pages = ceil($count / $options['rows']);
