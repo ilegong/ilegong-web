@@ -10,15 +10,21 @@
         {{if $Product['Product'][promote_name] }}
         <p><?php echo $Product['Product']['promote_name']; ?></p>
         {{/if}}
-        <div class="clearfix" style="position: relative">
-            <strong class="vertical-align text-price"> ￥{{$this->Number->precision($price, 2)}}</strong>
-            {{if !empty($Product['Product']['original_price'])}}
-              <span class="text-original-price-small">
-                    ¥{{$this->Number->precision($Product['Product']['original_price'], 2)}}
-              </span>
-            {{/if}}
-            <span class="vertical-align" style="position: absolute; right: 10px; bottom: 0;">快递：{{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</span>
-        </div>
+        <ul class="p_details_price clearfix list-unstyled">
+            <li class="fl price"><span>￥<font>{{$this->Number->precision($price, 2)}}</font></span><em>¥{{$this->Number->precision($Product['Product']['original_price'], 2)}}</em></li>
+            <li class="fr stat">快递：{{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</li>
+        </ul>
+        {{if !empty($special_name)}}
+        <ul class="sales clearfix list-unstyled">
+            <li>
+                <span class="gray title mr12" style="float:left;">促销:</span>
+        <span class="sales_c" style="display: block;overflow: hidden;">
+            <div class="quota_btn radius10 fl">{{$special_name}}</div>
+            <span>{{$special_desc}}</span>
+        </span>
+            </li>
+        </ul>
+        {{/if}}
 
         {{if $Product['Product']['id'] == 192}}
         <div class="clearfix voffset2">

@@ -146,19 +146,25 @@ class ProductsController extends AppController{
         $use_special = false;
         $price = $this->viewdata['Product']['price'];
         $currUid = $this->currentUser['id'];
-        if (!empty($special)) {
-            $this->set('special', $special);
+        if (!empty($special) && $special['special']['special_price'] >= 0) {
             $special_rg = array('start' => $special['start'], 'end' => $special['end']);
             //TODO: check time (current already checked)
             //CHECK time limit!!!!
             list($afford_for_curr_user, $left_cur_user, $total_left) =
                 calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
+
+            $promo_name = $special['name'];
+            $special_price = $special['special']['special_price'] / 100;
+            App::uses('CakeNumber', 'Utility');
+            $promo_desc = '￥'.CakeNumber::precision($special_price, 2);
             if ($afford_for_curr_user) {
-                if ($special['special']['special_price'] >= 0) {
-                    $price = $special['special']['special_price'] / 100;
-                    $use_special = true;
-                }
+                $price = $special_price;
+                $use_special = true;
+            } else {
+                $promo_desc .=  '('. ($left_cur_user == 0 ? '您已买过' : '已卖完') . ')';
             }
+            $this->set('special_desc', $promo_desc);
+            $this->set('special_name', $promo_name);
         }
 
         if (!$use_special) {

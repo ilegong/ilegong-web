@@ -353,6 +353,15 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 .special ul li dl{ padding:0.1em 0.133em 0.6em 0.533em;}
 .special ul li .item_name{ font-size:1em; color:#666666; text-align:left; font-weight:normal; padding:0.6em 0.133em 0.133em 0.533em;}
 
+.sales{ padding:1em 0.833em 1em 0.833em; background-color:#ffffff; border-bottom:1px #dddddd solid; color:#999999; margin-bottom: 0}
+.sales li.quota span{ display:block; float:left; font-size:1em; color:#29ac0e;}
+.sales li span .quota_btn{ padding:0.12em 0.375em; color:#ffffff; background-color:#29ac0e; font-size:0.833em; margin-right:0.5em;}
+.sales_c {color:#29ac0e;}
+.p_details_price{ font-size:1em; padding:0 0.833em 0.5em 0.833em; color:#c0c0c0; border-bottom:1px #dddddd solid; background-color:#ffffff; margin-bottom: 0}
+.p_details_price .price span{ color:#ffa200;}
+.p_details_price .price span font{ font-size:1.667em;}
+.p_details_price .price em{ color:#999999; text-decoration:line-through; font-style:normal; padding-left: 0.3em;}
+.p_details_price .stat{ padding-top:0.5em;}
 
 /* slider plugin UI */
 .swiper-container {
