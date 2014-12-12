@@ -178,6 +178,14 @@
         </span>
         <div id="files_1" class="files clearfix"></div>
         <p id="shareTips" class="bg_danger hide"></p>
+        {{if $business_licence_show}}
+        <div>
+            <span>已上传(再次上传提交将替换):</span>
+            <div>
+                <img src= {{$this->Html->assetUrl($business_licence);}} width="20%">
+            </div>
+        </div>
+        {{/if}}
         <div>
             <span>示例:</span>
             <div>
@@ -193,10 +201,18 @@
             <input  type="file" name="files" multiple>
         </span>
         <div id="files_2" class="files clearfix"></div>
+        {{if $food_licence_show}}
+        <div>
+            <span>已上传(再次上传提交将替换):</span>
+            <div>
+                <img src= {{$this->Html->assetUrl($food_licence);}} width="20%">
+            </div>
+        </div>
+        {{/if}}
         <div>
             <span>示例:</span>
             <div>
-                <img src="/img/products_nophoto.jpg">
+                <img src= {{$this->Html->assetUrl("/img/openstores/food_license.jpg");}}>
             </div>
         </div>
     </div>
@@ -208,6 +224,14 @@
             <input  type="file" name="files" multiple>
         </span>
         <div id="files_3" class="files clearfix"></div>
+        {{if $id_front_show}}
+        <div>
+            <span>已上传(再次上传提交将替换):</span>
+            <div>
+                <img src= {{$this->Html->assetUrl($id_front);}} width="20%">
+            </div>
+        </div>
+        {{/if}}
         <div>
             <span>示例:</span>
             <span>身份证必须和营业执照“法定代表人姓名”一致</span>
@@ -224,6 +248,14 @@
             <input  type="file" name="files" multiple>
         </span>
         <div id="files_4" class="files clearfix"></div>
+        {{if $id_back_show}}
+        <div>
+            <span>已上传(再次上传提交将替换):</span>
+            <div>
+                <img src= {{$this->Html->assetUrl($id_back);}} width="20%">
+            </div>
+        </div>
+        {{/if}}
         <div>
             <span>示例:</span>
             <div>
@@ -234,7 +266,7 @@
     <form action="/openstores/company" method="post" id="CompanyForm">
         <div class="form-item">
             <span class="form-label">店铺名称： </span>
-            <input class="form-control" name="data[Openstore][store_name]" id="store_name" type="text" value="" placeholder="用户直接看到的店铺名字" >
+            <input class="form-control" name="data[Openstore][store_name]" id="store_name" type="text" value="{{$store_name}}" placeholder="用户直接看到的店铺名字" >
         </div>
         <input type="hidden" name="data[Openstore][business_licence]" id="pic_files_1" >
         <input type="hidden" name="data[Openstore][food_licence]" id="pic_files_2" >

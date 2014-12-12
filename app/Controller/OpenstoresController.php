@@ -25,6 +25,8 @@ class OpenstoresController extends AppController{
                 $this->redirect('/openstores/base');
             }else if($application['Openstore']['status'] == 2 || $application['Openstore']['status'] == 3 ){
                 $this->redirect('/openstores/complete');
+            }else{
+                $this->redirect('/');
             }
         }else{
             if(!empty($this->data)){
@@ -60,6 +62,15 @@ class OpenstoresController extends AppController{
                 if($this->Openstore->save($this->data)){
                     $this->redirect('/openstores/complete');
                 }
+            }else{
+                $this->set('person_name', $application['Openstore']['person_name']);
+                $this->set('person_id', $application['Openstore']['person_id']);
+                $this->set('workplace', $application['Openstore']['workplace']);
+                $this->set('store_name', $application['Openstore']['store_name']);
+                if(!empty($application['Openstore']['person_id_pic'])){
+                    $this->set('pic_show', true);
+                    $this->set('person_id_pic', $application['Openstore']['person_id_pic']);
+                }
             }
         }else{
             $this->__message('您需要先通过上一步验证', '/openstores/apply');
@@ -77,6 +88,26 @@ class OpenstoresController extends AppController{
                 if($this->Openstore->save($this->data)){
                     $this->redirect('/openstores/complete');
                 }
+            }else{
+                if(!empty($application['Openstore']['business_licence'])){
+                    $this->set('business_licence_show', true);
+                    $this->set('business_licence', $application['Openstore']['business_licence']);
+                }
+                if(!empty($application['Openstore']['food_licence'])){
+                    $this->set('food_licence_show', true);
+                    $this->set('food_licence', $application['Openstore']['food_licence']);
+                }
+                if(!empty($application['Openstore']['id_front'])){
+                    $this->set('id_front_show', true);
+                    $this->set('id_front', $application['Openstore']['id_front']);
+                }
+                if(!empty($application['Openstore']['id_back'])){
+                    $this->set('id_back_show', true);
+                    $this->set('id_back', $application['Openstore']['id_back']);
+                }
+                $this->set('store_name', $application['Openstore']['store_name']);
+
+
             }
         }else{
             $this->__message('您需要先通过上一步验证', '/openstores/apply');
@@ -90,6 +121,7 @@ class OpenstoresController extends AppController{
                 $this->set('wait', true);
             }else if($application['Openstore']['status'] == 3){
                 $this->set('not_pass', true);
+                $this->set('reason', $application['Openstore']['reason']);
             }
         }
 

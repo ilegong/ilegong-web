@@ -62,7 +62,7 @@
 {{if $wait}}
 <span style="line-height:50px">您的店铺正在审核中。</span>
 {{elseif $not_pass}}
-<span style="line-height:50px">很抱歉，您的店铺审核未通过。原因：{{$not_pass_reason}}</span>
+<span style="line-height:50px">很抱歉，您的店铺审核未通过。原因：{{$reason}}</span>
 <a href="/openstores/base">去修改</a>
 {{else}}
 <span style="line-height:50px">错误，请返回</span>

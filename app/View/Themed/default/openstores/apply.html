@@ -132,15 +132,6 @@
 ));
 }}
 <script>
-
-    //        function createCode(){
-    //            var b = $("#mobile_number").val();
-    //            var f = "/stores/create_code";
-    //            jQuery.ajax({type: "POST",dataType: "json",url: f,data: "phoneNumbers=" + b,cache: !1,success: function(a) {
-    //                var d = a;
-    //javascript:alert('您点到我了');
-    //            }})
-    //        }
     $().ready(function(){
         //刷新验证码
         $('#image_code').click(function(){
@@ -153,17 +144,19 @@
             $("#sendInfo").html("");
             $("#checkInfo").html("");
             var f = "/check/message_code";
-            jQuery.ajax({type: "POST",dataType: "json",url: f,data: {phoneNumbers: phone_num, keyString: key_str},cache: !1,success: function(a) {
-                if(a.error == 0){
-                    $("#sendInfo").html("验证短信已发出，请注意接收");
-                }else if(a.check_error == 1){
-                    $("#checkInfo").html("验证码错误，请重新输入").addClass('help-inline ');
+            var countdown = null;
+            jQuery.ajax({type: "POST",dataType: "json",url: f,data: {phoneNumbers: phone_num, keyString: key_str},cache: !1,
+            success: function (a) {
+                if (a.error == 0) {
+                    $("#sendInfo").html('验证短信已发出，'+ a.timelimit +'之前有效，未收到可再获取');
+                    countdown = setInterval(CountDown, 1000);
+                } else if (a.check_error == 1) {
+                    $("#checkInfo").html("验证码错误，验证短信发送失败，请重新输入").addClass('help-inline ');
                 }
-
-            }});
+                document.getElementById('image_code').src = '/Check/captcha.html?' + Math.random() * 10000;
+            }
+            });
             var count = 30;
-            var countdown = setInterval(CountDown, 1000);
-
             function CountDown() {
                 $("#btnMobileCode").attr("disabled", true);
                 $("#btnMobileCode").val( count + " 秒后重新获取!");

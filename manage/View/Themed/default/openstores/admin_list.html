@@ -1,6 +1,9 @@
 <div>
-    <a href="#" id="a1">查看未通过商家列表</a>
-    <a href="#" id="a2">查看待审核列表</a>
+    <p>
+        <button type="button" id="a1" class="btn btn-warning ">未通过商家列表</button>
+        <button type="button" id="a2" class="btn btn-primary ">待审核列表</button>
+
+    </p>
     <div id = "applycontent">
         <table id="list2"></table>
         <div id="pager2"></div>
@@ -11,16 +14,18 @@
         url:"{{Router::url('/admin/openstores/list.json?q=2')}}",
         datatype: "json",
         autowidth:true,//自动宽
-        colNames:['id','creator', '店铺名', '联系人','手机号码','qq', '认证类型', 'Action'],
+        colNames:['申请号','申请人id', '店铺名', '联系人','手机号码','qq', '认证类型', '创建时间', '修改时间', 'Action'],
         colModel:[
             {name:'id',index:'id', width:'6%', align:"right"},
-            {name:'creator',index:'creator', width:'10%',align:'right'},
+            {name:'creator',index:'creator', width:'8%',align:'right'},
             {name:'store_name',index:'store_name', width:'15%', sortable:false, align:'right'},
-            {name:'contact_name',index:'contact_name', width:'10%',sortable:false, align:'right'},
-            {name:'mobile',index:'mobile', width:'15%', sortable:false, align:"right"},
+            {name:'contact_name',index:'contact_name', width:'7%',sortable:false, align:'right'},
+            {name:'mobile',index:'mobile', width:'10%', sortable:false, align:"right"},
             {name:'qq',index:'qq', width:'10%', sortable:false, align:"right"},
-            {name:'pattern',index:'pattern', width:'10%', align:"right",edittype:"select",editoptions:{value:":Pleaseselect;0:个人;1:企业"}},
-            {name:'actions',index:'actions', width:'15%',align:"center", sortable:false}
+            {name:'pattern',index:'pattern', width:'5%', align:"right",edittype:"select",editoptions:{value:":Pleaseselect;0:个人;1:企业"}},
+            {name:'created',index:'created', width:'10%', align:"right"},
+            {name:'updated',index:'updated', width:'10%', align:"right"},
+            {name:'actions',index:'actions', width:'10%',align:"center", sortable:false}
         ],
         rownumbers:true,//添加左侧行号
         height:800,

@@ -178,6 +178,14 @@
         </span>
         <div id="files" class="files clearfix"></div>
         <p id="shareTips" class="bg_danger hide"></p>
+        {{if $pic_show}}
+        <div>
+            <span>已上传(再次上传提交将替换):</span>
+            <div>
+                <img src= {{$this->Html->assetUrl($person_id_pic);}} width="20%">
+            </div>
+        </div>
+        {{/if}}
         <div>
             <span>示例:</span>
             <div>
@@ -185,25 +193,25 @@
             </div>
         </div>
     </div>
-    <form action="/openstores/base" method="post" id="PersonForm">
+    <form action="/openstores/base" method="post" id="OpenstoreAddForm">
         <input type="hidden" name="data[Openstore][person_id_pic]" id="idPictures">
 
         <div class="form-group">
             <div class="form-item">
                 <span class="form-label">身份证号码： </span>
-                <input class="form-control" name="data[Openstore][person_id]" id="idcard" type="text" value="" placeholder="与上传图片中的一致" >
+                <input class="form-control" name="data[Openstore][person_id]" id="idcard" type="text" value="{{$person_id}}" placeholder="与上传图片中的一致" >
             </div>
             <div class="form-item">
                 <span class="form-label">姓名： </span>
-                <input class="form-control" name="data[Openstore][person_name]" id= "i_name" type="text" value="" placeholder="身份证上的姓名" >
+                <input class="form-control" name="data[Openstore][person_name]" id= "i_name" type="text" value="{{$person_name}}" placeholder="身份证上的姓名" >
             </div>
             <div class="form-item">
                 <span class="form-label">工作单位： </span>
-                <input class="form-control" name="data[Openstore][workplace]" id= "i_workplace" type="text" value="" placeholder="" >
+                <input class="form-control" name="data[Openstore][workplace]" id= "i_workplace" type="text" value="{{$workplace}}" placeholder="" >
             </div>
             <div class="form-item">
                 <span class="form-label">店铺名称： </span>
-                <input class="form-control" name="data[Openstore][store_name]" id="store_name" type="text" value="" placeholder="用户直接看到的店铺名字" >
+                <input class="form-control" name="data[Openstore][store_name]" id="store_name" type="text" value="{{$store_name}}" placeholder="用户直接看到的店铺名字" >
             </div>
             <div class="form-item form-item-short">
                 <button  class="btn btn-warning" type="submit" id="btnStoreCreate">提交认证</button>
@@ -217,7 +225,7 @@
     jQuery.validator.addMethod("isIdCard", function (value, element) {
         return (value.length == 18 && /^(\d+){18}$/.test(value)) ;
     }, "");
-    $("#PersonForm").validate({
+    $("#OpenstoreAddForm").validate({
         //规则制定根据字段的id属性
         rules: {
             idcard: {required: true, isIdCard: true},

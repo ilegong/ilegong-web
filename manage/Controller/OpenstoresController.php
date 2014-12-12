@@ -30,7 +30,7 @@ class OpenstoresController extends AppController{
         $results = $this->{$modelClass}->find('all', array(
             'conditions'=>array('status' => $status
             ),
-            'fields' => array('id', 'creator', 'store_name', 'contact_name', 'mobile', 'qq', 'person_id', 'pattern'),
+            'fields' => array('id', 'creator', 'store_name', 'contact_name', 'mobile', 'qq', 'person_id', 'pattern','created', 'updated'),
             'order' => $sidx.' ' .$sord,
             'limit' => $limit,
             'page' => $page
@@ -131,9 +131,13 @@ class OpenstoresController extends AppController{
         $this->pageTitle = __("查看 " . $this->modelClass, true);
         $result = $this->{$modelClass}->find('first', array(
             'conditions' => array('id' => $id),
-                'fields' => array('store_name', 'pattern', 'person_id', 'person_name', 'person_id_pic', 'workplace', 'business_licence', 'food_licence','id_front', 'id_back'),
+                'fields' => array('store_name', 'pattern', 'person_id', 'person_name', 'person_id_pic', 'workplace', 'business_licence', 'food_licence','id_front', 'id_back', 'reason'),
             )
         );
+        if(!empty($result[$modelClass]['reason'])){
+            $this->set('reason_show', true);
+            $this->set('reason', $result[$modelClass]['reason']);
+        }
         if($result[$modelClass]['pattern'] == '0'){
             $this->set('person_id', $result[$modelClass]['person_id']);
             $this->set('store_name', $result[$modelClass]['store_name']);
