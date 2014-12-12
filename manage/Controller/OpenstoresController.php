@@ -16,8 +16,10 @@ class OpenstoresController extends AppController{
         $limit = $_GET['rows']; // get how many rows we want to have into the grid
         $sidx = $_GET['sidx']; // get index row - i.e. user click to sort
         $sord = $_GET['sord']; // get the direction
+        $options = $_GET['q'];
+        $status = intval($options);
         if(!$sidx) $sidx =1;
-        $count = $this->{$modelClass}->find('count', array('conditions'=> array('status'=>'2')));
+        $count = $this->{$modelClass}->find('count', array('conditions'=> array('status'=>$status)));
         if( $count >0 ) {
             $total_pages = ceil($count/$limit);
         } else {
@@ -26,9 +28,9 @@ class OpenstoresController extends AppController{
         if ($page > $total_pages) $page=$total_pages;
 
         $results = $this->{$modelClass}->find('all', array(
-            'conditions'=>array('status' => 2
+            'conditions'=>array('status' => $status
             ),
-            'fields' => array('id', 'creator', 'store_name', 'link_name', 'mobile', 'qq', 'person_id', 'pattern'),
+            'fields' => array('id', 'creator', 'store_name', 'contact_name', 'mobile', 'qq', 'person_id', 'pattern'),
             'order' => $sidx.' ' .$sord,
             'limit' => $limit,
             'page' => $page
@@ -41,16 +43,12 @@ class OpenstoresController extends AppController{
         foreach($results as $item){
             /*******重要： action的li之间要一个紧连着一个 ，不要有换行或空格，否则会引起格式错乱。****** */
             $actions = '';
-
-            if($this->AclFilter->check($this->name,'admin_edit')){
+            if($status == 2){
                 $actions .= '<li class="ui-state-default grid-row-edit"><a title="通过" href="' . Router::url(array('controller' => $control_name, 'action' => 'add',  'admin' => true, $item[$modelClass]['id'])) . '"><span class="glyphicon glyphicon-ok"></span></a></li>';
-                $actions .= '<li class="ui-state-default grid-row-edit"><a href="' . Router::url(array('controller' => $control_name, 'action' => 'view', 'admin' => true, $item[$modelClass]['id'])) . '" title="查看"><span class="glyphicon glyphicon-file"></span></a></li>';
+                $actions .= '<li class="ui-state-default grid-row-delete"><a title="拒绝" href="' . Router::url(array('controller' => $control_name, 'action' => 'reject',  'admin' => true, $item[$modelClass]['id'])) . '"><span class="glyphicon glyphicon-remove "></span></a></li>';
+
             }
-
-            $actions .= '<li class="ui-state-default grid-row-delete"><a title="通过" href="' . Router::url(array('controller' => $control_name, 'action' => 'reject',  'admin' => true, $item[$modelClass]['id'])) . '"><span class="glyphicon glyphicon-remove "></span></a></li>';
-
-
-
+            $actions .= '<li class="ui-state-default grid-row-edit"><a href="' . Router::url(array('controller' => $control_name, 'action' => 'view', 'admin' => true, $item[$modelClass]['id'])) . '" title="查看"><span class="glyphicon glyphicon-file"></span></a></li>';
             $actions .= $this->Hook->call('gridDataAction', array($modelClass, $item[$modelClass]));
             $item[$modelClass]['actions'] = $actions;
 

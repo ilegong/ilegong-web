@@ -23,7 +23,7 @@ class OpenstoresController extends AppController{
             if($application['Openstore']['status'] == 1){
                 $this->Session->setFlash('继续未完成的认证');
                 $this->redirect('/openstores/base');
-            }else if($application['Openstore']['status'] == 2){
+            }else if($application['Openstore']['status'] == 2 || $application['Openstore']['status'] == 3 ){
                 $this->redirect('/openstores/complete');
             }
         }else{
