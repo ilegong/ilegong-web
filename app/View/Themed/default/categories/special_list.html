@@ -49,7 +49,7 @@
                                 {{if !empty($item['Product']['original_price'])}}
                                 <span class="original">¥{{$this->Number->precision( !empty($item['Product']['original_price']) ? $item['Product']['original_price'] : $item['Product']['price'], 2)}}</span>
                                 {{/if}}
-                                <span class="limit">&nbsp;{{if $item['Special']['limit_total']}}限{{$item['Special']['limit_total']}}份{{/if}}&nbsp;
+                                <span class="limit">&nbsp;{{if $item['Special']['limit_total']}}剩余{{$item['Special']['total_left']}}份{{/if}}&nbsp;
                                 {{if $item['Special']['limit_per_user']}}每人{{$item['Special']['limit_per_user']}}份{{/if}}</span>
                             </a>
                             </dt>

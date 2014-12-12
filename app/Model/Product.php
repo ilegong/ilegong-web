@@ -94,5 +94,4 @@ class Product extends AppModel {
             }
         }
     }
-    
 }

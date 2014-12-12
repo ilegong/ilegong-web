@@ -1215,6 +1215,11 @@ function get_remote_ip() {
     return 'unknown';
 }
 
+function str2date($sTime) {
+    $dt = DateTime::createFromFormat(FORMAT_DATETIME, $sTime);
+    return !empty($dt) ? $dt->getTimestamp() : 0;
+}
+
 function friendlyDateFromStr($sTime, $type = 'normal') {
     if ($sTime) {
         $dt = DateTime::createFromFormat(FORMAT_DATETIME, $sTime);

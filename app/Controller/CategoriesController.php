@@ -127,9 +127,12 @@ class CategoriesController extends AppController {
                 ));
             }
 
+            $range = array('start' => $specialList['SpecialList']['start'] , 'end' => $specialList['SpecialList']['end']);
             $brandIds = array();
-            foreach ($list as $val) {
+            $cartModel = ClassRegistry::init('Cart');
+            foreach ($list as &$val) {
                 $brandIds[] = $val['Product']['brand_id'];
+                $val['Special']['total_left'] = $val['Special']['limit_total'] - total_sold($val['Product']['id'], $range, $cartModel);
             }
         } else {
             $brandIds = array();

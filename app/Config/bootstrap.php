@@ -675,7 +675,6 @@ function setFlashError($session, $error) {
  * @param $total_limit 0 means no limit
  * @param $limit_per_user 0 means no limit
  * @param array $range , time range
- * @internal param $brand_id
  * @return array limits results:
  *  $afford_for_curr_user: whether current user can buy
  *  $limit_cur_user, -1 means no limit; 0 means no more; >1 means limit for curr user
@@ -688,23 +687,7 @@ function calculate_afford($pid, $currUid, $total_limit, $limit_per_user, $range 
 
     $cartModel = ClassRegistry::init('Cart');
     if ($total_limit != 0 || $limit_per_user != 0) {
-        $cartCond = array('Cart.order_id > 0', 'Cart.product_id' => $pid, 'Cart.deleted' => 0);
-        if (!empty($range)) {
-            if (!empty($range['start'])) { $cartCond['Order.pay_time > '] = $range['start']; };
-            if (!empty($range['end'])) { $cartCond['Order.pay_time < '] = $range['end']; };
-        }
-        $rtn = $cartModel->find('first', array(
-            'joins' => array(array(
-                'table' => 'orders',
-                'alias' => 'Order',
-                'type' => 'inner',
-                'conditions' => array('Order.id=Cart.order_id', 'Order.status != ' . ORDER_STATUS_CANCEL, 'Order.status != ' . ORDER_STATUS_WAITING_PAY),
-            )),
-            'fields' => 'SUM(Cart.num) as total_num',
-            'conditions' => $cartCond));
-
-        $soldCnt = empty($rtn) ? 0 : $rtn[0]['total_num'];
-
+        $soldCnt = total_sold($pid, $range, $cartModel);
         if ($soldCnt > $total_limit) {
             $afford_for_curr_user = false;
         } else if ($limit_per_user > 0) {
@@ -750,4 +733,79 @@ function calculate_afford($pid, $currUid, $total_limit, $limit_per_user, $range 
         }
     }
     return array($afford_for_curr_user, $left_curr_user, $total_left);
+}
+
+function clean_total_sold($pid) {
+    $cache_sold_key = total_sold_cache_key($pid);
+    Cache::delete($cache_sold_key);
+}
+
+/**
+ * @param $pid
+ * @return string
+ */
+function total_sold_cache_key($pid) {
+    $cache_sold_key = 'total_sold_pid_' . $pid;
+    return $cache_sold_key;
+}
+
+/**
+ * get the told sold of a pid
+ * @param $pid
+ * @param $range
+ * @param $cartModel Object , default is null
+ * @return array
+ */
+function total_sold($pid, $range, $cartModel = null) {
+
+    $start = str2date($range['start']);
+    $end = str2date($range['end']);
+
+    $cache_sold_key = total_sold_cache_key($pid);
+    $cache = Cache::read($cache_sold_key);
+
+    $range_key = $start.'_'.$end;
+
+    if (!empty($cache)) {
+        $data = json_decode($cache, true);
+        if ($data[$range_key]) {
+            return $cache;
+        }
+    }
+
+    $cartCond = array('Cart.order_id > 0', 'Cart.product_id' => $pid, 'Cart.deleted' => 0);
+    if (!empty($range)) {
+        if (!empty($range['start'])) {
+            $cartCond['Order.pay_time > '] = $range['start'];
+        };
+        if (!empty($range['end'])) {
+            $cartCond['Order.pay_time < '] = $range['end'];
+        };
+    }
+
+    if ($cartModel == null) {
+        $cartModel = ClassRegistry::init('Cart');
+    }
+
+    $rtn = $cartModel->find('first', array(
+        'joins' => array(array(
+            'table' => 'orders',
+            'alias' => 'Order',
+            'type' => 'inner',
+            'conditions' => array('Order.id=Cart.order_id', 'Order.status != ' . ORDER_STATUS_CANCEL, 'Order.status != ' . ORDER_STATUS_WAITING_PAY),
+        )),
+        'fields' => 'SUM(Cart.num) as total_num',
+        'conditions' => $cartCond));
+
+    $total_sold = empty($rtn) || empty($rtn[0]['total_num']) ? 0 : $rtn[0]['total_num'];
+
+    if(!empty($data)) {
+        $data[$range_key] = $total_sold;
+    } else {
+        $data = array($range_key => $total_sold);
+    }
+
+    Cache::write($cache_sold_key, $data);
+
+    return $total_sold;
 }

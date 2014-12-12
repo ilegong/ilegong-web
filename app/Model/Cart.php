@@ -29,5 +29,34 @@ class Cart extends AppModel {
         $this->updateAll(array('creator' => $uid, 'session_id' => NULL), $cond_carts_of_users);
     }
 
+    public function balanced_items($pid, $creator) {
+        return $this->find('all', array(
+            'conditions' => array('product_id' => $pid, 'status' => CART_ITEM_STATUS_BALANCED, 'num > ' => 0, 'creator' => $creator),
+            'fields' => array('num', 'order_id'),
+        ));
+    }
+
+    /**
+     * Find balanced Cart items (product_id, num, name, creator, cover img) through cache.
+     * Balanced items won't change.
+     * @param $order_id int order_id or order id list.
+     * @return array Cart elements
+     */
+    public function find_balanced_items($order_id) {
+        $balanced_order_key = "balanced_cart_items_" . $order_id;
+        $cache = Cache::read($balanced_order_key);
+        if (empty($cache)) {
+            $carts = $this->find('all', array(
+                'conditions' => array('order_id' => $order_id, 'status' => CART_ITEM_STATUS_BALANCED),
+                'fields' => array('num', 'product_id', 'name', 'creator', 'coverimg'),
+            ));
+            $jsonStr = json_encode($carts);
+            Cache::write($balanced_order_key, $jsonStr);
+            return $cache;
+        } else {
+            return json_decode($cache, true);
+        }
+    }
+
 
 } 

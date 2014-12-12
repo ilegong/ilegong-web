@@ -159,7 +159,8 @@ class WxPaymentComponent extends Component {
                 //} else if ($payLog['PayLog']['total_fee'] != $total_fee) {
                 //    $status = PAYNOTIFY_ERR_ORDER_FEE;
                 } else {
-                    $orderModel->updateAll(array('status' => ORDER_STATUS_PAID, 'pay_time' => "'" . date(FORMAT_DATETIME) . "'"), array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY));
+                    $updatedResult = $orderModel->set_order_to_paid($orderId);
+                    $this->log('set_order_to_paid:'.$orderId.', updatedResult='.$updatedResult);
                     $status = PAYNOTIFY_STATUS_ORDER_UPDATED;
                 }
             }

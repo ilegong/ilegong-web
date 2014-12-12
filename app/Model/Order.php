@@ -38,6 +38,23 @@ class Order extends AppModel {
         return $rtn;
     }
 
+    public function set_order_to_paid($orderId) {
+        $rtn = $this->updateAll(array('status' => ORDER_STATUS_PAID, 'pay_time' => "'" . date(FORMAT_DATETIME) . "'")
+            , array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY));
+        $sold = $rtn && $this->getAffectedRows() >= 1;
+        if ($sold) {
+            $cartM = ClassRegistry::init('Cart');
+            $cartItems = $cartM->find_balanced_items($orderId);
+            if (!empty($cartItems)) {
+                $pid_list = Hash::extract($cartItems, '{n}.Cart.product_id');
+                foreach($pid_list as $pid) {
+                    clean_total_sold($pid);
+                }
+            }
+        }
+        return $sold;
+    }
+
     /**
      * @param $uid
      * @param $order_status  int|array
@@ -97,5 +114,16 @@ class Order extends AppModel {
             'conditions' => array('id' => $orderId, 'creator' => $uid),
         ));
     }
-
-} 
+//
+//    public function whether_bought($pid, $creator) {
+//        $cartM = ClassRegistry::init('Cart');
+//        $cartItems = $cartM->balanced_items($pid, $creator);
+//        $order_ids = Hash::extract($cartItems, '{n}.Cart.order_id');
+//
+//        if (!empty($order_ids)) {
+//            $this->find('all', array(
+//                'conditions' => array
+//            ));
+//        }
+//    }
+}
