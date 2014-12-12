@@ -622,6 +622,10 @@ function coupon_expired($coupon) {
     return false;
 }
 
+function special_link($slug) {
+    return '/categories/special_list/'.$slug.'.html';
+}
+
 function brand_link($brand_id, $params) {
     $brandM = ClassRegistry::init('Brand');
     $brand = $brandM->findById($brand_id);

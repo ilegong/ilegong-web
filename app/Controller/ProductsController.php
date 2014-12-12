@@ -157,14 +157,21 @@ class ProductsController extends AppController{
             $special_price = $special['special']['special_price'] / 100;
             App::uses('CakeNumber', 'Utility');
             $promo_desc = '￥'.CakeNumber::precision($special_price, 2);
+            if ($special['special']['limit_total'] > 0) {
+                $promo_desc .= ' 共限'.$special['special']['limit_total'].'件';
+            }
+            if ($special['special']['limit_per_user'] > 0) {
+                $promo_desc .= ' 每人限'.$special['special']['limit_per_user'].'件';
+            }
             if ($afford_for_curr_user) {
                 $price = $special_price;
                 $use_special = true;
             } else {
-                $promo_desc .=  '('. ($left_cur_user == 0 ? '您已买过' : '已卖完') . ')';
+                $promo_desc .=  '('. ($left_cur_user == 0 ? '您已买过' : '已售完') . ')';
             }
             $this->set('special_desc', $promo_desc);
             $this->set('special_name', $promo_name);
+            $this->set('special_slug', $special['slug']);
         }
 
         if (!$use_special) {

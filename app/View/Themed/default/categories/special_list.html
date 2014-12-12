@@ -69,7 +69,7 @@
     var shareTitle = '{{$sub_title}} - 朋友说';
     var appid = '{{WX_APPID}}';
     var imgUrl = "{{$this->Html->assetUrl($special_list['SpecialList']['share_img']?$special_list['SpecialList']['share_img'] : '/img/logo.png')}}";
-    var lineLink = '{{WX_HOST}}/categories/special_list/{{$special_list["SpecialList"]["slug"]}}.html';
+    var lineLink = "{{WX_HOST}}{{special_link($special_list['SpecialList']['slug'])}}";
     document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
         WeixinJSBridge.on('menu:share:appmessage', function(argv){
             utils.wx_to_friend(appid, imgUrl, lineLink, shareTitle, '');
