@@ -196,7 +196,7 @@ function filter_invalid_name($name, $def = '神秘人') {
     return $name;
 }
 
-function calculate_price($pid, $price) {
+function calculate_price($pid, $price, $currUid) {
     $cr = ClassRegistry::init('SpecialList');
     $specialLists = $cr->has_special_list($pid);
     if (!empty($specialLists)) {
@@ -209,11 +209,15 @@ function calculate_price($pid, $price) {
     }
 
     if (!empty($special)) {
+        $special_rg = array('start' => $special['start'], 'end' => $special['end']);
         if ($special['special']['special_price'] >= 0) {
-            $price = $special['special']['special_price']/100;
+            list($afford_for_curr_user, $limit_per_user, $total_left) =
+                calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
+            if ($afford_for_curr_user) {
+                $price = $special['special']['special_price'] / 100;
+            }
         }
 
-        $special_rg = array('start' => $special['start'], 'end' => $special['end']);
         //TODO: check time (current already checked)
         //CHECK time limit!!!!
         //CHECK AFFORD!
@@ -434,7 +438,7 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
                 'name' => product_name_with_spec($p['name'], $newSpecId, $p['specs']),
                 'coverimg' => $p['Product']['coverimg'],
                 'num' => $nums[$pid],
-                'price' => calculate_price($p['Product']['id'], $p['Product']['price']),
+                'price' => calculate_price($p['Product']['id'], $p['Product']['price'], $uid),
                 'specId' => $newSpecId,
                 'session_id' => $session_id,
             );
@@ -447,7 +451,7 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
             } else {
                //CONSIDER to add a new item in shopping cart!!
                 $cartItem['num'] = $nums[$pid];
-                $cartItem['price'] = calculate_price($p['id'], $p['price']);
+                $cartItem['price'] = calculate_price($p['id'], $p['price'], $uid);
                 $cartItem['name']  = product_name_with_spec($p['name'], $newSpecId, $p['specs']);
                 $cartItemId = $cartItem['id'];
                 $cartItem['specId'] = $newSpecId;
@@ -656,4 +660,90 @@ function thumb_link($imgUrl, $type = 'thumb_s') {
  */
 function setFlashError($session, $error) {
     $session->setFlash($error, 'default', array('class' => 'alert alert-danger'));
+}
+
+/**
+ * Calculate left for a user buying a product.
+ *
+ * FIXME: need review!
+ * @param $pid
+ * @param $currUid int 0 means no current uid.
+ * @param $total_limit 0 means no limit
+ * @param $limit_per_user 0 means no limit
+ * @param array $range , time range
+ * @internal param $brand_id
+ * @return array limits results:
+ *  $afford_for_curr_user: whether current user can buy
+ *  $limit_cur_user, -1 means no limit; 0 means no more; >1 means limit for curr user
+ *  $total_left (-1 means no limit, 0 means sold out, more means left)
+ */
+function calculate_afford($pid, $currUid, $total_limit, $limit_per_user, $range = array()) {
+    $afford_for_curr_user = true;
+    $total_left = -1;
+    $left_curr_user = -1;
+
+    $cartModel = ClassRegistry::init('Cart');
+    if ($total_limit != 0 || $limit_per_user != 0) {
+        $cartCond = array('Cart.order_id > 0', 'Cart.product_id' => $pid, 'Cart.deleted' => 0);
+        if (!empty($range)) {
+            if (!empty($range['start'])) { $cartCond['Order.pay_time > '] = $range['start']; };
+            if (!empty($range['end'])) { $cartCond['Order.pay_time < '] = $range['end']; };
+        }
+        $rtn = $cartModel->find('first', array(
+            'joins' => array(array(
+                'table' => 'orders',
+                'alias' => 'Order',
+                'type' => 'inner',
+                'conditions' => array('Order.id=Cart.order_id', 'Order.status != ' . ORDER_STATUS_CANCEL, 'Order.status != ' . ORDER_STATUS_WAITING_PAY),
+            )),
+            'fields' => 'SUM(Cart.num) as total_num',
+            'conditions' => $cartCond));
+
+        $soldCnt = empty($rtn) ? 0 : $rtn[0]['total_num'];
+
+        if ($soldCnt > $total_limit) {
+            $afford_for_curr_user = false;
+        } else if ($limit_per_user > 0) {
+            if ($currUid) {
+                $ordersModel = ClassRegistry::init('Order');
+                $orderCond = array('deleted' => 0,
+                    'published' => 1,
+                    'creator' => $currUid,
+                    'not' => array('status' => array(ORDER_STATUS_CANCEL, ORDER_STATUS_WAITING_PAY))
+                );
+                if (!empty($range)) {
+                    if (!empty($range['start'])) {
+                        $orderCond['Order.pay_time > '] = $range['start'];
+                    };
+                    if (!empty($range['end'])) {
+                        $orderCond['Order.pay_time < '] = $range['end'];
+                    };
+                }
+                $order_ids = $ordersModel->find('list', array(
+                    'conditions' => $orderCond,
+                    'fields' => array('id', 'id')
+                ));
+                if (!empty($order_ids)) {
+                    $rr = $cartModel->find('first', array(
+                        'conditions' => array('order_id' => $order_ids, 'product_id' => $pid, 'deleted' => 0),
+                        'fields' => array('sum(num) as total_num')
+                    ));
+                    $bought_by_curr_user = empty($rr) || empty($rr[0]['total_num']) ? 0 : $rr[0]['total_num'];
+                    $left_curr_user = $limit_per_user - $bought_by_curr_user;
+                    if ($left_curr_user <= 0) {
+                        $afford_for_curr_user = false;
+                    }
+                } else {
+                    $left_curr_user = $limit_per_user;
+                }
+            } else {
+                $left_curr_user = $limit_per_user;
+            }
+        }
+        $total_left = $total_limit - $soldCnt;
+        if ($total_left < 0) {
+            $total_left = 0;
+        }
+    }
+    return array($afford_for_curr_user, $left_curr_user, $total_left);
 }

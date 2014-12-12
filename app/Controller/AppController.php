@@ -58,79 +58,6 @@ class AppController extends Controller {
         }
     }
 
-    /**
-     * @param $pid
-     * @param $currUid
-     * @param $total_limit   0 means no limit
-     * @param $limit_per_user  0 means no limit
-     * @param $brand_id
-     * @param $range, time range
-     * @return array
-     */
-    public static function set_limit_afford($pid, $currUid, $total_limit, $limit_per_user, $brand_id, $range = array()) {
-        $afford_for_curr_user = true;
-        $total_left = -1;
-
-        $cartModel = ClassRegistry::init('Cart');
-        if ($total_limit != 0 || $limit_per_user != 0) {
-            $cartCond = array('Cart.order_id > 0', 'Cart.product_id' => $pid, 'Cart.deleted' => 0);
-            if (!empty($range)) {
-                if (!empty($range['start'])) { $cartCond['Order.pay_time > '] = $range['start']; };
-                if (!empty($range['end'])) { $cartCond['Order.pay_time < '] = $range['end']; };
-            }
-            $rtn = $cartModel->find('first', array(
-                'joins' => array(array(
-                    'table' => 'orders',
-                    'alias' => 'Order',
-                    'type' => 'inner',
-                    'conditions' => array('Order.id=Cart.order_id', 'Order.status != ' . ORDER_STATUS_CANCEL, 'Order.status != ' . ORDER_STATUS_WAITING_PAY),
-                )),
-                'fields' => 'SUM(Cart.num) as total_num',
-                'conditions' => $cartCond));
-
-            $soldCnt = empty($rtn) ? 0 : $rtn[0]['total_num'];
-
-            if ($soldCnt > $total_limit) {
-                $afford_for_curr_user = false;
-            } else if ($limit_per_user > 0) {
-
-                $ordersModel = ClassRegistry::init('Order');
-                $orderCond = array('brand_id' => $brand_id,
-                    'deleted' => 0,
-                    'published' => 1,
-                    'creator' => $currUid,
-                    'not' => array('status' => array(ORDER_STATUS_CANCEL))
-                );
-                if (!empty($range)) {
-                    if (!empty($range['start'])) { $orderCond['Order.pay_time > '] = $range['start']; };
-                    if (!empty($range['end'])) { $orderCond['Order.pay_time < '] = $range['end']; };
-                }
-                $order_ids = $ordersModel->find('list', array(
-                    'conditions' => $orderCond,
-                    'fields' => array('id', 'id')
-                ));
-                if (!empty($order_ids)) {
-                    $rr = $cartModel->find('first', array(
-                        'conditions' => array('order_id' => $order_ids, 'product_id' => $pid, 'deleted' => 0),
-                        'fields' => array('sum(num) as total_num')
-                    ));
-                    $bought_by_curr_user = empty($rr) ? 0 : $rr[0]['total_num'];
-                    if ($bought_by_curr_user >= $limit_per_user) {
-                        $afford_for_curr_user = false;
-                    }
-                    $limit_per_user = $limit_per_user - $bought_by_curr_user;
-                }
-            }
-            $total_left = $total_limit - $soldCnt;
-            if ($total_left < 0) {
-                $total_left = 0;
-                return array($afford_for_curr_user, $limit_per_user, $total_left);
-            }
-            return array($afford_for_curr_user, $limit_per_user, $total_left);
-        }
-        return array($afford_for_curr_user, $limit_per_user, $total_left);
-    }
-
     public function beforeFilter() {
     	load_lang('default'); // 加载默认语言
     	
@@ -599,12 +526,11 @@ class AppController extends Controller {
             $afford_for_curr_user = false;
             return array($afford_for_curr_user, 0);
         } else {
-
-            list($total_limit, $brand_id, $limit_per_user) = ClassRegistry::init('ShipPromotion')->findNumberLimitedPromo($pid);
-            list($afford_for_curr_user, $limit_per_user, $total_left) = self::set_limit_afford($pid, $currUid, $total_limit, $limit_per_user, $brand_id);
+            list($total_limit, $brand_id, $limit_cur_user) = ClassRegistry::init('ShipPromotion')->findNumberLimitedPromo($pid);
+            list($afford_for_curr_user, $limit_cur_user, $total_left) = calculate_afford($pid, $currUid, $total_limit, $limit_cur_user);
         }
 
-        return array($afford_for_curr_user, $limit_per_user, $total_left);
+        return array($afford_for_curr_user, $limit_cur_user, $total_left);
     }
 
 

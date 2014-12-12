@@ -21,6 +21,7 @@ class CartsController extends AppController{
 				'conditions'=>array(
 					'id' => $product_ids,
 			)));
+        $uid = $this->currentUser['id'];
 		foreach($products as $productinfo){
 			$data = array();
 			$data['Cart']['product_id'] = $productinfo['id'];
@@ -29,8 +30,8 @@ class CartsController extends AppController{
 			$data['Cart']['session_id'] = $this->Session->id();
 			$data['Cart']['coverimg'] = $productinfo['Product']['coverimg'];
 			$data['Cart']['name'] = $productinfo['Product']['name'];
-			$data['Cart']['price'] = calculate_price($productinfo['Product']['id'], $productinfo['Product']['price']);
-			$data['Cart']['creator'] = $this->currentUser['id'];
+            $data['Cart']['price'] = calculate_price($productinfo['Product']['id'], $productinfo['Product']['price'], $uid);
+			$data['Cart']['creator'] = $uid;
 			$this->Cart->save($data);
 		}
 		
@@ -105,6 +106,9 @@ class CartsController extends AppController{
                 'order_id' => NULL,
                 'OR'=> $this->user_condition
             )));
+
+        //TODO: 此处修改通知用户购物车价格有变化！
+
 		$total_price = 0;
 		foreach($Carts as $cart){
 			$total_price += $cart['Cart']['price']*$cart['Cart']['num'];
@@ -150,7 +154,7 @@ class CartsController extends AppController{
         $this->data['Cart']['session_id'] = $this->Session->id();
         $this->data['Cart']['coverimg'] = $p['Product']['coverimg'];
         $this->data['Cart']['name'] = product_name_with_spec($p['Product']['name'], $spec, $p['Product']['specs']);;
-        $this->data['Cart']['price'] = calculate_price($p['Product']['id'], $p['Product']['price']);
+        $this->data['Cart']['price'] = calculate_price($p['Product']['id'], $p['Product']['price'], $this->currentUser['id']);
         $this->data['Cart']['creator'] = $this->currentUser['id'];
         $this->data['Cart']['specId'] = $spec;
         return $this->Cart->save($this->data);

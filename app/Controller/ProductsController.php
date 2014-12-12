@@ -151,9 +151,9 @@ class ProductsController extends AppController{
             $special_rg = array('start' => $special['start'], 'end' => $special['end']);
             //TODO: check time (current already checked)
             //CHECK time limit!!!!
-            list($afford_for_curr_user, $limit_per_user, $total_left) =
-                AppController::set_limit_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $brandId, $special_rg);
-            if ($total_left > 0) {
+            list($afford_for_curr_user, $left_cur_user, $total_left) =
+                calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
+            if ($afford_for_curr_user) {
                 if ($special['special']['special_price'] >= 0) {
                     $price = $special['special']['special_price'] / 100;
                     $use_special = true;
@@ -162,12 +162,13 @@ class ProductsController extends AppController{
         }
 
         if (!$use_special) {
-            list($afford_for_curr_user, $limit_per_user, $total_left) = self::__affordToUser($pid, $currUid);
+            list($afford_for_curr_user, $left_cur_user, $total_left) = self::__affordToUser($pid, $currUid);
         }
 
         $this->set('price', $price);
 
-        $this->set('limit_per_user', $limit_per_user);
+        //possible problem
+        $this->set('limit_per_user', $left_cur_user);
         $this->set('total_left', $total_left);
         $this->set('afford_for_curr_user', $afford_for_curr_user);
 

@@ -128,11 +128,11 @@ class OrdersController extends AppController{
 				$total_price+= $Carts[$pid]['Cart']['price']*$Carts[$pid]['Cart']['num'];
                 $ship_fee += $ship_fees[$pid];
 
-                list($afford_for_curr_user, $limit_per_user) = AppController::__affordToUser($pid, $uid);
+                list($afford_for_curr_user, $limit_cur_user) = AppController::__affordToUser($pid, $uid);
                 if (!$afford_for_curr_user) {
                     $this->__message(__($Carts[$pid]['name'].'已售罄或您已经购买超限，请从购物车中调整后再结算'), '/carts/listcart', 5);
                     return;
-                } else if ($limit_per_user > 0 && $Carts[$pid]['Cart']['num'] > $limit_per_user) {
+                } else if ($limit_cur_user == 0 || ($limit_cur_user > 0 && $Carts[$pid]['Cart']['num'] > $limit_cur_user)) {
                     $this->__message(__($Carts[$pid]['name'].'购买超限，请从购物车中调整后再结算'), '/carts/listcart', 5);
                 }
 			}
@@ -1016,7 +1016,8 @@ class OrdersController extends AppController{
      */
     protected function applyPromoToCart($pids, $cartsByPid, $shipPromotionId) {
         $cart = new OrderCartItem();
-        $cart->user_id = $this->currentUser['id'];
+        $uid = $this->currentUser['id'];
+        $cart->user_id = $uid;
 
         $shipFee = 0.0;
         $this->loadModel('Product');
@@ -1027,7 +1028,7 @@ class OrdersController extends AppController{
             $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
             $singleShipFee = empty($pp) || !isset($pp['ship_price']) ? $productByIds[$pid]['ship_fee'] : $pp['ship_price'];
             $shipFee += ShipPromotion::calculateShipFee($pid, $singleShipFee, $num, null);
-            $itemPrice = empty($pp) || !isset($pp['price']) ? calculate_price($pid, $productByIds[$pid]['price']) : $pp['price'];
+            $itemPrice = empty($pp) || !isset($pp['price']) ? calculate_price($pid, $productByIds[$pid]['price'], $uid) : $pp['price'];
             $cart->add_product_item($productByIds[$pid]['brand_id'], $pid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name']);
         }
         return array($cart, $shipFee);
