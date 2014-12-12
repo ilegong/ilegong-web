@@ -132,7 +132,8 @@ class CategoriesController extends AppController {
             $cartModel = ClassRegistry::init('Cart');
             foreach ($list as &$val) {
                 $brandIds[] = $val['Product']['brand_id'];
-                $val['Special']['total_left'] = $val['Special']['limit_total'] - total_sold($val['Product']['id'], $range, $cartModel);
+                $left = $val['Special']['limit_total'] - total_sold($val['Product']['id'], $range, $cartModel);
+                $val['Special']['total_left'] = $left >= 0 ? $left : 0;
             }
         } else {
             $brandIds = array();
