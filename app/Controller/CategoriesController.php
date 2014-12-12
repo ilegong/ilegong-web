@@ -179,7 +179,7 @@ class CategoriesController extends AppController {
 
         $bannerItems = array(
             array('img' => "/img/banner/banner_shibin.jpg", 'url' => "/products/20141204/fu_ping_te_ji_jian_shi_bing.html", 'id' => 331),
-            array('img' => "/img/banner/banner_yongxing_btc.jpg", 'url' => "/b/qian_yang_wan_cheng.html", 'id' => 365),
+            array('img' => "/img/banner/banner_yongxing_btc.jpg?v1", 'url' => "/b/qian_yang_wan_cheng.html", 'id' => 365),
             array('img' => "/img/banner/banner_songzi.jpg", 'url' => "/products/20141117/dong_bei_hong_song_zi_1jin_zhuang.html", 'id' => 266),
             array('img' => "/img/banner/banner_dami.jpg",'url' =>  "/products/20141101/wu_chang_dao_hua_xiang_ti_qian_yu_shou_500jin_zhi_xian_bei_jing.html", 'id' => 231),
             array('img' => "/img/banner/banner_huizao.jpg", 'url' => "/products/20141117/xin_jiang_hui_zao.html", 'id' => 269),
