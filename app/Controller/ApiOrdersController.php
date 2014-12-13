@@ -197,6 +197,19 @@ class ApiOrdersController extends AppController {
     public function my_coupons() {
         $this->loadModel('CouponItem');
         $coupons = $this->CouponItem->find_my_all_coupons($this->currentUser['id']);
+
+        foreach($coupons as &$coupon) {
+            unset($coupon['Coupon']['deleted']);
+            unset($coupon['Coupon']['published']);
+            unset($coupon['Coupon']['last_updator']);
+            unset($coupon['Coupon']['created']);
+            unset($coupon['Coupon']['modified']);
+            unset($coupon['CouponItem']['sent_message_status']);
+            unset($coupon['CouponItem']['deleted']);
+            unset($coupon['CouponItem']['modified']);
+            unset($coupon['CouponItem']['last_updator']);
+        }
+
         $this->set(compact('coupons'));
         $this->set('_serialize', 'coupons');
     }
@@ -226,6 +239,9 @@ class ApiOrdersController extends AppController {
         }
 
         $brands = $this->findBrands($brandIds);
+        if (!empty($brands)) {
+            $brands = Hash::combine($brands, '{n}.Brand.id', '{n}');
+        }
 
         $this->set(compact('sharedOffers', 'expiredIds', 'soldOuts', 'brands'));
         $this->set('_serialize', array('sharedOffers', 'expiredIds', 'soldOuts', 'brands'));
@@ -240,9 +256,9 @@ class ApiOrdersController extends AppController {
         if ($brandM == null) {
             $brandM = ClassRegistry::init('Brand');
         }
-        $info = $brandM->find('first', array(
+        $info = $brandM->find('all', array(
             'conditions' => array('id' => $ids, 'published' => PUBLISH_YES, 'deleted' => DELETED_NO),
-            'fields' => array('name', 'slug', 'coverimg', 'weixin_id', 'notice')
+            'fields' => array('id', 'name', 'slug', 'coverimg', 'weixin_id', 'notice')
         ));
         return $info;
     }
