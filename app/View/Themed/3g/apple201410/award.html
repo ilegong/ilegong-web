@@ -83,9 +83,9 @@
 
     /*产品故事*/
     .viewport {min-width:300px; max-width:640px; margin:0 auto;}
-    .viewport img{max-width: 640px;min-width: 320px;width: 100%;}
+    /*.viewport img{max-width: 640px;min-width: 320px;width: 100%;}*/
     .viewport ul{ /*position:absolute; bottom:0.3em;*/ width:30%; margin: 0 auto; /*left:35%;*/}
-    .viewport ul li img{ width:1.2em; height:0.875em;max-width:1.2em;min-width:1.2em;}
+    /*.viewport ul li img{ width:1.2em; height:0.875em;max-width:1.2em;min-width:1.2em;}*/
 
 
     /*排行榜*/
@@ -120,6 +120,14 @@
     #miaosha_time_desc {
         margin-left: 1em;
     }
+
+    .to_top {
+        text-align: center;
+    }
+
+    .to_top img {
+        width: 3em !important;
+    }
 </style>
 <div id="fullpage">
     <div class="section">
@@ -151,8 +159,7 @@
             <img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/img04.jpg')}}" style="max-height:30%"  />
             </a>
             <ul class="clearfix">
-                <li class="fl"><a href="#get_coupons"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/next.gif')}}" /></a></li>
-                <li class="fr"><a href="#firstPage"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/top.gif')}}" /></a></li>
+                <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/story/top.gif')}}" /></a></li>
             </ul>
         </div>
     </div>
@@ -181,7 +188,7 @@
             <li class="con" style="width:70%;">30元优惠券或参加免费秒杀</li>
         </ul>
         <ul class="clearfix">
-            <li class="con" style="width:30%;">总榜前20名</li>
+            <li class="con" style="width:30%;"><a href="#top_list">总榜</a>前20名</li>
             <li class="con" style="width:70%;">价值268元冰糖橙一箱</li>
         </ul>
         <p>1、摇下100个，即可参加每天白天(8点－22点)整点的万橙秒杀活动，每天100箱，送完即止；</p>
@@ -190,8 +197,7 @@
         <a href="/users/my_coupons.html" class="pyshuo radius10" style=" width:40%; display: inline-block; margin-left: 0.5em">我的优惠券</a>
     </div>
     <ul class="clearfix" style="width: 30%; margin: 0 auto; margin-top: 0.5em;">
-        <li class="fl"><a href="#award_list"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a></li>
-        <li class="fr"><a href="#product_story"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
+        <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
     </ul>
     <!--<div class="rule_bottom"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/rule/bottom.png')}}" /></div>-->
     </div>
@@ -206,8 +212,7 @@
             <div id="award_contents" style="margin:0 1.2em; height: 100%; overflow-y: hidden; overflow-x:hidden;">
             </div>
             <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none">
-                <li class="fl"><a href="#top_list"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a></li>
-                <li class="fr"><a href="#get_coupons"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
+                <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
             </ul>
         </div>
     </div>
@@ -221,8 +226,7 @@
                 <ul id="top_list_contents_right"></ul>
             </div>
             <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none">
-                <li class="fl"><a href="#about_us"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a></li>
-                <li class="fr"><a href="#award_list"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
+                <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
             </ul>
         </div>
     </div>
@@ -244,6 +248,9 @@
             [朋友说]同事间互相分享家乡特产的创业网站,<br />
             我们都是城市里的乡下人。
         </div>
+        <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none">
+            <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
+        </ul>
     </div>
     <!--<a class="next" href="#X"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a>-->
    </div>
@@ -312,6 +319,12 @@
     var game_obj_name = '{{$game_obj_name}}';
     var game_least_change = '{{$game_least_change}}';
     var game_user_total = '{{$game_user_total}}'; //loading by update_top_list
+    var $shaking_tips_png;
+
+    var $share_before_coupon = '{{$share_before_coupon}}';
+    var share_coupon_msg = '';
+    var share_coupon_title = '';
+    var $share_div;
 
         $(document).ready(function(){
             $('#fullpage').fullpage({
@@ -350,7 +363,17 @@
                             utils.close_notify();
                             if (data.success) {
                                 if (data.award_type != 0) {
-                                    utils.alert("恭喜您秒中价值"+data.award_type+"元的优惠券，可抵扣黔阳冰糖橙（万橙）！请注意在有效期结束前使用。 <a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
+                                    var tips = '恭喜您秒中价值'+data.award_type+'元的优惠券，可兑一箱冰糖橙！<b>分享到朋友圈就能领取啦～</b>';
+                                    utils.alert_one(tips, '分享到朋友圈', function(){
+                                        if($shaking_tips_png){
+                                            $share_before_coupon = true;
+                                            share_coupon_msg = '基友们太给力！我已领取1箱冰糖橙，赶紧点还有268元终极大奖，兄弟们，继续摇起！';
+                                            share_coupon_title = '妈呀，我终于获奖了，1箱冰糖橙到手！';
+
+                                            $share_div.show();
+                                        }
+                                    });
+//                                    utils.alert("恭喜您秒中价值"+data.award_type+"元的优惠券，可抵扣黔阳冰糖橙（万橙）！请注意在有效期结束前使用。 <a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
                                 } else {
                                     var msg = '手气不太好啊, 过一会儿再试试！';
                                     if (data.msg == 'not_enough_100') {
@@ -365,7 +388,7 @@
                                     else if (data.msg == 'game_end') {
                                         msg = '活动已结束';
                                     } else {
-                                        msg = '排队的人太多，请稍后重试！';
+                                        msg = '没秒到，请稍后重试！';
                                     }
                                     utils.alert(msg, null, 5000);
                                 }
@@ -416,6 +439,7 @@
                         if (dif < 1) {
                             clearInterval(intervalId);
                             checking_miaosha();
+                            today_sold_out = false;
                             return;
                         }
 
@@ -424,7 +448,6 @@
                     }, 960);
                 }
             }
-
 
             function total_not_spent() {
                 var total = $.trim($('#apple_got_cnt').text());
@@ -437,6 +460,28 @@
                 return (total < game_user_total ? game_user_total : total);
             }
 
+            function show_got_coupon() {
+                utils.alert_one('恭喜您秒杀成功，请注意在有效期结束前使用。还可以抢268元终极大奖哦', '查看我的优惠券', function(){ window.location.href = '/users/my_coupons.html';});
+            }
+
+            var imgUrl = $('#apple_tree_img').attr('src');
+            var lineLink = '{{WX_HOST}}/t/ag/{{$game_type}}.html?{{if $trid}}trid={{urlencode($trid)}}{{/if}}';
+            var appid = '{{WX_APPID}}';
+
+            function share_before_coupon_msg() {
+                utils.wx_to_friend(appid, imgUrl, lineLink, share_coupon_msg, share_coupon_title);
+                show_got_coupon();
+            }
+
+            function share_before_coupon_tl() {
+                utils.wx_to_timeline(appid, imgUrl, lineLink, '', share_coupon_msg);
+                show_got_coupon();
+            }
+
+            function help_me_cnt() {
+                var helpme_cnt_txt = $.trim($('#helpme_cnt_n').text());
+                return (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
+            }
 
             checking_miaosha();
 
@@ -448,50 +493,57 @@
 
                 {{if $game_type == 'qinyBTC1412'}}
 
-                    function helpme_cnt() {
-                        var helpme_cnt_txt = $.trim($('#helpme_cnt_n').text());
-                        return (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
-                    }
-
                     var in_top_list = 100;
-                    var imgUrl = $('#apple_tree_img').attr('src');
-                    var lineLink = '{{WX_HOST}}/t/ag/{{$game_type}}.html?{{if $trid}}trid={{urlencode($trid)}}{{/if}}';
                     function descContent() {
                         var total = get_total();
                         var my_list = parseInt($.trim($('#top_list_mine').text()));
-                        return '万橙，比褚橙不只甜了一点点，'+helpme_cnt()+'个好基友帮忙，我已经摇下'+total+'个万橙' + (my_list > 0 && my_list<1000 ? '，排名第' + my_list + '名' : '') + '－ 朋友说';
+                        return '万橙，比褚橙不只甜了一点点，'+ help_me_cnt() +'个好基友帮忙，我已经摇下'+total+'个万橙' + (my_list > 0 && my_list<1000 ? '，排名第' + my_list + '名' : '') + '－ 朋友说';
                     }
                     var shareTitle = '摇下100个，1箱万橙免费领';
-                    var appid = '{{WX_APPID}}';
-
 
                     function getRandomInt(min, max) {
                         return Math.floor(Math.random() * (max - min)) + min;
                     }
+
+                    function share_timeline(){
+                        var $r = getRandomInt(1, 10);
+                        var sh_src = 'def';
+                        if ($r >= 8) {
+                            sh_src = 'jj1';
+                        } else if ($r >= 5) {
+                            sh_src = 'zr';
+                        }
+                        lineLink += '&src=' + sh_src;
+
+                        var desc;
+                        if (sh_src == 'jj1') {
+                            desc = '药不能停，出门不吃（摇）怎行？有' + help_me_cnt() + '个好基友给我送药了！已基本治愈！领药请点击';
+                        } else if(sh_src == 'zr') {
+                            desc = '摇一摇，一千箱冰糖橙免费送！我已摇下' + get_total() + '个，你也来试试吧';
+                        } else {
+                            desc = shareTitle + ', 我已摇下' + get_total() + '个，求点';
+                        }
+                        utils.wx_to_timeline(appid, imgUrl, lineLink, '', desc);
+                    }
+
                     // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
                     document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
                         WeixinJSBridge.on('menu:share:appmessage', function(argv){
-                            utils.wx_to_friend(appid, imgUrl, lineLink, descContent(), shareTitle);
+                            if ($share_before_coupon) {
+                                share_before_coupon_msg();
+                                $share_before_coupon = false;
+                            } else {
+                                utils.wx_to_friend(appid, imgUrl, lineLink, descContent(), shareTitle);
+                            }
+
                         });
                         WeixinJSBridge.on('menu:share:timeline', function(argv){
-                            var $r = getRandomInt(1, 10);
-                            var sh_src = 'def';
-                            if ($r >= 8) {
-                                sh_src = 'jj1';
-                            } else if ($r >= 5) {
-                                sh_src = 'zr';
-                            }
-                            lineLink += '&src=' + sh_src;
-
-                            var desc;
-                            if (sh_src == 'jj1') {
-                                desc = '药不能停，出门不吃（摇）怎行？有' + helpme_cnt() + '个好基友给我送药了！已基本治愈！领药请点击';
-                            } else if(sh_src == 'zr') {
-                                desc = '摇一摇，一千箱冰糖橙免费送！我已摇下' + get_total() + '个，你也来试试吧';
+                            if ($share_before_coupon) {
+                                share_before_coupon_tl();
+                                $share_before_coupon = false;
                             } else {
-                                desc = shareTitle + ', 我已摇下' + get_total() + '个，求点';
+                                share_timeline();
                             }
-                            utils.wx_to_timeline(appid, imgUrl, lineLink, '', desc);
                         });
                     }, false);
                     {{/if}}
@@ -515,27 +567,8 @@
         if (!msg) {
             return;
         }
-        bootbox.dialog({
-            message: msg,
-            buttons: {
-                main: {
-                    label: "继续摇",
-                    className: "btn-default"
-                },
-                danger: {
-                    label: "兑换",
-                    className: "btn-danger",
-                    callback: function () {
-                        $.fn.fullpage.moveTo('get_coupons');
-                    }
-                }
-            }
-        }).css({
-            'top': '50%',
-            'margin-top': function () {
-                return -($(this).height() / 2);
-            }
-        }).find('div.modal-footer').css({'text-align': 'center'});
+
+        utils.alert_two(msg, '继续摇', null, '兑换', function(){$.fn.fullpage.moveTo('get_coupons');});
     }
 
     function update_top_list(top_list) {
@@ -581,4 +614,4 @@
         }
     }
 </script>
-{{$this->Html->script(array('apple_game.js?v21'));}}
+{{$this->Html->script(array('apple_game.js?v22'));}}

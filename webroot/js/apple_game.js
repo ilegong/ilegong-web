@@ -19,7 +19,6 @@ $(document).ready(function(){
     });
     $('body').append($share_div);
 
-    var $shaking_tips_png;
     if (yao_tips_png) {
         $shaking_tips_png = $('<div class="apple_share fade in"><img src="' + yao_tips_png + '"></div>')
             .hide().click(function () {

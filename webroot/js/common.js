@@ -991,7 +991,7 @@ var utils = {
         var $dlg = bootbox.alert({'message':msg, 'callback':callback, 'closeButton':false});
         var modal_dialog = $dlg.find('.modal-dialog');
         $dlg.css({
-            'overflow-y': 'auto',
+            'overflow-y': 'auto'//,
 //            'padding-top': function () {
 //                return ( ($(this).height() - modal_dialog.height()) / 2);
 //            }
@@ -1012,6 +1012,43 @@ var utils = {
                 });
             }
         }
+    },
+
+    alert_one : function(msg, defLabel, defCallback) {
+        return utils.alert_two(msg, defLabel, null, defCallback);
+    },
+
+    alert_two : function(msg, defLabel, impLabel, defCallack, impCallback){
+        var params = {
+            message: msg,
+            closeButton: false,
+            buttons: {
+                main: {
+                    label: defLabel,
+                    className: impLabel ? "btn-default" : 'btn-danger',
+                    callback: function () {
+                        if (defCallack) defCallack();
+                    }
+                }
+            }
+        };
+
+        if (impLabel) {
+            params['buttons']['danger'] = {
+                label: impLabel,
+                className: "btn-danger",
+                callback: function () {
+                    if (impCallback) impCallback();
+                }
+            };
+        }
+
+        bootbox.dialog(params).css({
+            'top': '50%',
+            'margin-top': function () {
+                return -($(this).height() / 2);
+            }
+        }).find('div.modal-footer').css({'text-align': 'center'});
     },
 
     wx_to_friend : function(appid, imgUrl, lineLink, descContent, shareTitle) {
