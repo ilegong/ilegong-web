@@ -170,11 +170,7 @@ class ApiOrdersController extends AppController {
     }
 
     public function store_content($id){
-        $brandM = ClassRegistry::init('Brand');
-        $info = $brandM->find('first', array(
-            'conditions' => array('id' => $id, 'published' => PUBLISH_YES, 'deleted' => DELETED_NO),
-            'fields' => array('name', 'slug', 'coverimg', 'weixin_id', 'notice')
-        ));
+        $info = $this->findBrands($id);
         if(!empty($info)){
             $productM = ClassRegistry::init('Product');
             $products = $productM->find('all', array(
@@ -209,15 +205,42 @@ class ApiOrdersController extends AppController {
         $this->loadModel('SharedOffer');
         $sharedOffers = $this->SharedOffer->find_my_all_offers($this->currentUser['id']);
         $expiredIds = array();
-        foreach($sharedOffers as $o) {
+        foreach($sharedOffers as &$o) {
             $expired = is_past($o['SharedOffer']['start'], $o['ShareOffer']['valid_days']);
             if($expired) {
                 $expiredIds[] = $o['SharedOffer']['id'];
             } else if (SharedOffer::slicesSharedOut($o['SharedOffer']['id'], $o['SharedOffer']['status'])) {
                 $soldOuts[] = $o['SharedOffer']['id'];
             }
+
+            $o['SharedOffer']['valid_days'] = $o['ShareOffer']['created'];
+
+            unset($o['ShareOffer']);
+            unset($o['SharedOffer']['order_id']);
+            unset($o['SharedOffer']['share_offer_id']);
+            unset($o['SharedOffer']['modified']);
+            unset($o['SharedOffer']['created']);
         }
-        $this->set(compact('sharedOffers', 'expiredIds', 'soldOuts'));
-        $this->set('_serialize', 'sharedOffers', 'expiredIds', 'soldOuts');
+
+        $brands = $this->findBrands(Hash::extract($sharedOffers, '{n}.ShareOffer.brand_id'));
+
+        $this->set(compact('sharedOffers', 'expiredIds', 'soldOuts', 'brands'));
+        $this->set('_serialize', array('sharedOffers', 'expiredIds', 'soldOuts', 'brands'));
+    }
+
+    /**
+     * @param $ids
+     * @param $brandM
+     * @return mixed
+     */
+    private function findBrands($ids, $brandM = null) {
+        if ($brandM == null) {
+            $brandM = ClassRegistry::init('Brand');
+        }
+        $info = $brandM->find('first', array(
+            'conditions' => array('id' => $ids, 'published' => PUBLISH_YES, 'deleted' => DELETED_NO),
+            'fields' => array('name', 'slug', 'coverimg', 'weixin_id', 'notice')
+        ));
+        return $info;
     }
 }
