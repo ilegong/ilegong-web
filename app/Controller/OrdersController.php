@@ -1036,7 +1036,7 @@ class OrdersController extends AppController{
             $itemPrice = empty($pp) || !isset($pp['price']) ? calculate_price($pid, $productByIds[$pid]['price'], $uid) : $pp['price'];
 
             $shipFees[$brand_id] += ShipPromotion::calculateShipFee($pid, $singleShipFee, $num, null);
-            $totalPrices[$brand_id] += $itemPrice;
+            $totalPrices[$brand_id] += ($itemPrice * $num);
 
             $cart->add_product_item($brand_id, $pid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name']);
         }
