@@ -71,12 +71,12 @@
     .index_bottom{ width:100%; position:absolute; bottom:0; left:0; z-index:1;}
     .index_title{ width:100%; position:absolute; top:1.3em; left:0; z-index:2;}
     .tree{ width:100%; position:absolute; top:3.5em; left:0; z-index:2;}
-    .rock_num{ margin:2em 1.2em 0 1.2em; background-color:#ffffff; font-size:0.8em; color:#333333; padding:0.3em 0.5em 0.3em 0.917em; height: 2.4em; line-height:2em;}
+    .rock_num{ margin:1em 1.2em 2em 1.2em; background-color:#ffffff; font-size:0.8em; color:#333333; padding:0.3em 0.5em 0.3em 0.917em; height: 2.4em; line-height:2em;}
     .rock_num .fl a{ color:#ff483a; text-decoration:none; text-align:center; width:100%;}
     .rock_num .fr a{ display:block; color:#ffffff; text-decoration:none; background-color:#ff483a; font-size:1.1em; padding:0 0.625em;}
     .help{ display:block; margin:0.8em 1.2em 0 1.2em; text-align:center; margin-bottom:0; background-color:#ff483a; font-size:1em; color:#ffffff; padding:0.4em 0.5em 0.4em 0.917em;   text-decoration:none;}
     .seckill{ display:block; margin:0.8em 1.2em 0 1.2em; text-align:center; margin-bottom:0; background-color:#cccccc; font-size:1em; color:#ff483a; padding:0.4em 0.5em 0.4em 0.917em;  text-decoration:none;}
-    .word_link{ text-align:center; font-size:1em; margin-top:0.8em;}
+    .word_link{ text-align:center; font-size:1em; margin-top:1.5em;}
     .word_link a{ text-decoration:none; color:#333333;}
     .next{ display:block; text-align:center; position:absolute; bottom:0.3em;  width:100%; z-index:2;}
     .next img{ width:1.2em; height:0.875em;}
@@ -141,12 +141,13 @@
             <a id="share_btn"  href="javascript:;" class="help radius10" style="display:{{$total_times > 0 ? 'none' : ''}}">找人帮忙</a>
             <a id="miaosha_btn" href="javascript:;" class="seckill radius10">每天100箱 整点开秒 <span id="miaosha_time_desc"></span></a>
             <div class="word_link">
-                <a href="#get_coupons">[游戏规则]</a>&nbsp;&nbsp;&nbsp;
+                <a href="#get_coupons">[规则]</a>&nbsp;&nbsp;&nbsp;
+                <!--<a id="show_help_btn" href="javascript:;">[谁帮我]</a>&nbsp;&nbsp;&nbsp;-->
                 <a href="#award_list">[秒中名单]</a>&nbsp;&nbsp;&nbsp;
                 <a href="#product_story">[产品故事]</a>
             </div>
         </div>
-        <a class="next" href="#product_story"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a>
+        <!--<a class="next" href="#product_story"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a>-->
         <div class="bg"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/bg1.jpg')}}" /></div>
     </div>
 
@@ -389,7 +390,7 @@
                                 } else {
                                     msg = '没秒到，请稍后重试！';
                                 }
-                                utils.alert(msg, null, 5000);
+                                utils.alert(msg, null);
                             }
                         } else {
                         }
