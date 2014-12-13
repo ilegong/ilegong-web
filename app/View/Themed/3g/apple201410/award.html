@@ -134,7 +134,7 @@
     .red{ color:#df1a00;}
     .pad{ padding:1.5em 1em;}
     .pad .title{ font-size:1.167em; font-weight:bold; color:#333333; padding-bottom:0.6em; text-align:center;}
-    .pad .con{ font-size:1em; width: 49%; display: inline-block; color:#666666;}
+    .pad .con{ font-size:1em; width: 49%; display: inline-block; color:#666666; line-height: 1.5em; float:left}
 
 </style>
 <div id="fullpage">
@@ -267,7 +267,7 @@
         <ul>
         {{loop $helpMe $key $item}}
         <li class="con clearfix">
-            <span class="fl name">{{$item['nickname']}}</span>，<span class="fl"><strong class="red">{{ $item['got'] }}</strong>个</span>
+            {{$item['nickname']}}<strong class="red">{{ $item['got'] }}</strong>个
         </li>
         {{/loop}}
         </ul>
