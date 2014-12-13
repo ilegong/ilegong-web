@@ -198,6 +198,8 @@ class ApiOrdersController extends AppController {
         $this->loadModel('CouponItem');
         $coupons = $this->CouponItem->find_my_all_coupons($this->currentUser['id']);
 
+        $brandIds = Hash::extract($coupons, '{n}.Coupon.brand_id');
+
         foreach($coupons as &$coupon) {
             unset($coupon['Coupon']['deleted']);
             unset($coupon['Coupon']['published']);
@@ -210,8 +212,14 @@ class ApiOrdersController extends AppController {
             unset($coupon['CouponItem']['last_updator']);
         }
 
-        $this->set(compact('coupons'));
-        $this->set('_serialize', 'coupons');
+        $brands = $this->findBrands($brandIds);
+        if (!empty($brands)) {
+            $brands = Hash::combine($brands, '{n}.Brand.id', '{n}');
+        }
+
+
+        $this->set(compact('coupons', 'brands'));
+        $this->set('_serialize', array('coupons', 'brands'));
     }
 
     public function my_offers() {
