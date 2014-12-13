@@ -128,6 +128,7 @@ class ShipPromotion extends AppModel {
 
 
     static public $shi_liu_ids = array(201, 202, 233);
+
     /**
      * @param $pid
      * @param $singleShipFee
@@ -146,6 +147,14 @@ class ShipPromotion extends AppModel {
             return ($num >= 5 ? 0 : $num * $singleShipFee);
         }
         return $singleShipFee;
+    }
+
+    public static function calculateShipFeeByOrder($shipfee, $brandId, $total_price) {
+        if ($brandId == 130 && $total_price * 100 > 4899) {
+            return 0.0;
+        } else {
+            return $shipfee;
+        }
     }
 
     public function findNumberLimitedPromo($pid) {

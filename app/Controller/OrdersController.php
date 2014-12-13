@@ -142,6 +142,9 @@ class OrdersController extends AppController{
 				$this->redirect('/carts/listcart');
 			}
 
+
+            $ship_fee = ShipPromotion::calculateShipFeeByOrder($ship_fee, $brand_id, $total_price);
+
 			$data = array();
 			$data['total_price'] = $total_price;
 			$data['total_all_price'] = $total_price + $ship_fee;
