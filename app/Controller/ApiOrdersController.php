@@ -187,6 +187,7 @@ class ApiOrdersController extends AppController {
 
 
     }
+
     public function store_story($id){
         $brandM = ClassRegistry::init('Brand');
         $info = $brandM->find('first', array(
@@ -195,7 +196,28 @@ class ApiOrdersController extends AppController {
         ));
         $this->set('story', $info);
         $this->set('_serialize', 'story');
+    }
 
+    public function my_coupons() {
+        $this->loadModel('CouponItem');
+        $coupons = $this->CouponItem->find_my_all_coupons($this->currentUser['id']);
+        $this->set(compact('coupons'));
+        $this->set('_serialize', 'coupons');
+    }
 
+    public function my_offers() {
+        $this->loadModel('SharedOffer');
+        $sharedOffers = $this->SharedOffer->find_my_all_offers($this->currentUser['id']);
+        $expiredIds = array();
+        foreach($sharedOffers as $o) {
+            $expired = is_past($o['SharedOffer']['start'], $o['ShareOffer']['valid_days']);
+            if($expired) {
+                $expiredIds[] = $o['SharedOffer']['id'];
+            } else if (SharedOffer::slicesSharedOut($o['SharedOffer']['id'], $o['SharedOffer']['status'])) {
+                $soldOuts[] = $o['SharedOffer']['id'];
+            }
+        }
+        $this->set(compact('sharedOffers', 'expiredIds', 'soldOuts'));
+        $this->set('_serialize', 'sharedOffers', 'expiredIds', 'soldOuts');
     }
 }
