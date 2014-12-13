@@ -356,7 +356,8 @@
                 }
 
                 if (can_miaosha()) {
-                    utils.progress_notify('正在排队...');
+                    var lefttime = 60;
+                    utils.progress_notify('正在秒杀...(<span id="miaosha_left">'+lefttime+'</span>)');
                     setTimeout( function() {
                         $.getJSON('/apple_201410/jp/{{$game_type}}?' + Math.random(), {}, function (data) {
                             utils.close_notify();
@@ -395,6 +396,16 @@
                             }
                         });
                     }, 1000);
+
+                    var timespan = $('#miaosha_left');
+                    function decreaseTime() {
+                        lefttime--;
+                         timespan.text(lefttime);
+                        if (lefttime > 0) {
+                            setTimeout(decreaseTime, 1000);
+                        }
+                    }
+                    setTimeout(decreaseTime, 1000);
                 } else {
                     utils.alert( today_sold_out ? '本时段已经全部抢完，请明天继续.  <a href="#award_list">查看中奖名单</a>' : '整点开秒，还差'+format_left(calculate_left(), ''), function(){ checking_miaosha(); });
                 }
