@@ -11,7 +11,7 @@
         <p><?php echo $Product['Product']['promote_name']; ?></p>
         {{/if}}
         <ul class="p_details_price clearfix list-unstyled">
-            <li class="fl price"><span>￥<font>{{$this->Number->precision($price, 2)}}</font></span><em>¥{{$this->Number->precision($Product['Product']['original_price'], 2)}}</em></li>
+            <li class="fl price"><span>￥<font>{{$this->Number->precision($price, 2)}}</font></span><em>{{if $Product['Product']['original_price']}}¥{{$this->Number->precision($Product['Product']['original_price'], 2)}}{{/if}}</em></li>
             <li class="fr stat">快递：{{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</li>
         </ul>
         {{if !empty($special_name)}}
