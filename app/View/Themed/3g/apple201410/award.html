@@ -206,10 +206,8 @@
     <ul class="clearfix" style="width: 30%; margin: 0 auto; margin-top: 0.5em;">
         <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
     </ul>
-    <!--<div class="rule_bottom"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/rule/bottom.png')}}" /></div>-->
     </div>
     </div>
-
 
     <div class="section">
         <div class="ranking" style="background-image: url({{$this->Html->assetUrl('/img/apple201410/btc/award/bg.jpg')}}); min-height: 100%; padding: 0.5em 0.5em 0.2em 0.5em">
@@ -266,12 +264,13 @@
     <div class="bg_green pad section">
         <div class="title"><span id="helpme_cnt_n" class="red ">{{count($helpMe)}}</span>个朋友帮了我</div>
         {{if $helpMe}}
+        <ul>
         {{loop $helpMe $key $item}}
-        <div class="con clearfix">
-            <div class="fl name">{{$item['nickname']}}</div>，<div class="fl">摇到了<strong class="red">{{ $item['got'] }}</strong>个
-        </div>
-        </div>
+        <li class="con clearfix">
+            <span class="fl name">{{$item['nickname']}}</span>，<span class="fl"><strong class="red">{{ $item['got'] }}</strong>个</span>
+        </li>
         {{/loop}}
+        </ul>
         {{else}}
         <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！
             <a id="share_btn_3" href="javascript:;" class="help">分享好友求助</a>
