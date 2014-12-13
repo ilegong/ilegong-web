@@ -11,8 +11,10 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active" ><a id="a1" href="#">待审核列表</a></li>
-                <li><a id="a2" href="#">未通过审核列表</a></li>
+                <li class="active" ><a id="a1" href="#">待审核商家</a></li>
+                <li><a id="a2"  href="#">已退回商家</a></li>
+                <li><a id="a3"  href="#">已通过商家</a></li>
+                <li><a id="a4"  href="#">全部商家</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
@@ -71,18 +73,35 @@
         var url = jQuery("#list2").jqGrid('getGridParam','url');
         if (url)	{
             jQuery("#list2").jqGrid("setGridParam",{url: url.split('?')[0] + '?q=2'}).trigger("reloadGrid");
+            $("ul li").removeClass("active");
             $(this).parent().attr('class','active');
-            $('#a2').parent().attr('class','');
         } else { alert("error_1");}
     });
     jQuery("#a2").click( function(){
         var url = jQuery("#list2").jqGrid('getGridParam','url');
         if (url)	{
             jQuery("#list2").jqGrid("setGridParam",{url: url.split('?')[0] + '?q=3'}).trigger("reloadGrid");
+            $("ul li").removeClass("active");
             $(this).parent().attr('class','active');
-            $('#a1').parent().attr('class','');
         } else { alert("error_2");}
     });
+    jQuery("#a3").click( function(){
+        var url = jQuery("#list2").jqGrid('getGridParam','url');
+        if (url)	{
+            jQuery("#list2").jqGrid("setGridParam",{url: url.split('?')[0] + '?q=4'}).trigger("reloadGrid");
+            $("ul li").removeClass("active");
+            $(this).parent().attr('class','active');
+        } else { alert("error_2");}
+    });
+    jQuery("#a4").click( function(){
+        var url = jQuery("#list2").jqGrid('getGridParam','url');
+        if (url)	{
+            jQuery("#list2").jqGrid("setGridParam",{url: url.split('?')[0] + '?q=*'}).trigger("reloadGrid");
+            $("ul li").removeClass("active");
+            $(this).parent().attr('class','active');
+        } else { alert("error_2");}
+    });
+
 
 
 </script>

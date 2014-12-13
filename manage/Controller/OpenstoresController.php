@@ -18,6 +18,9 @@ class OpenstoresController extends AppController{
         $sord = $_GET['sord']; // get the direction
         $options = $_GET['q'];
         $status = intval($options);
+        if($status == 0){
+            $status = array(1,2,3,4);
+        }
         if(!$sidx) $sidx =1;
         $count = $this->{$modelClass}->find('count', array('conditions'=> array('status'=>$status)));
         if( $count >0 ) {
