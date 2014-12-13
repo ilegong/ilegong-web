@@ -782,7 +782,7 @@ class Apple201410Controller extends AppController
         $limit = false;
         if (!$this->is_weixin()) {
             return 0;
-        } else if ($this->shouldLimit($todayAwarded, $dailyLimit)) {
+        } else if (false/*$this->shouldLimit($todayAwarded, $dailyLimit)*/) {
             $left = $this->AWARD_LIMIT - $total_got;
             $limit = true;
             if ($left > 0) {
@@ -797,12 +797,12 @@ class Apple201410Controller extends AppController
                 } */
             }
         }
-
-        if ($total_got < 90 && $total_got>30) {
-//            $ext -= 40;
-        } else if ($total_got > 150) {
-            $ext += 3 * $total_got;
-        }
+//
+//        if ($total_got < 90 && $total_got>30) {
+////            $ext -= 40;
+//        } else if ($total_got > 150) {
+//            $ext += 3 * $total_got;
+//        }
 
         if ($ext < 0) {
             $ext = 5;
