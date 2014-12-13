@@ -131,7 +131,7 @@
                 <div class="fr"><a class="radius10" href="#get_coupons">兑换</a></div>
             </div>
             <a id="share_btn"  href="javascript:;" class="help radius10" style="display:{{$total_times > 0 ? 'none' : ''}}">找人帮忙</a>
-            <a id="miaosha_btn" href="javascript:;" class="seckill radius10">每天100箱8点免费秒 <span id="miaosha_time_desc">每天八点开始</span></a>
+            <a id="miaosha_btn" href="javascript:;" class="seckill radius10">每天100箱 整点开秒 <span id="miaosha_time_desc"></span></a>
             <div class="word_link">
                 <a href="#get_coupons">[游戏规则]</a>&nbsp;&nbsp;&nbsp;
                 <a href="#award_list">[秒中名单]</a>&nbsp;&nbsp;&nbsp;
@@ -184,7 +184,7 @@
             <li class="con" style="width:30%;">总榜前20名</li>
             <li class="con" style="width:70%;">价值268元冰糖橙一箱</li>
         </ul>
-        <p>1、摇下100个，即参加每天8点开始的免费万橙秒杀活动，总共1000箱，送完即止；</p>
+        <p>1、摇下100个，即可参加每天白天(8点－22点)整点的万橙秒杀活动，每天100箱，送完即止；</p>
         <p>2、活动结束日期12月18号23点59分，活动最终解释权归朋友说所有。</p>
         <a id="get_coupons_button" href="javascript:;" class="help radius10" style="float:left; width:40%; display: inline-block; margin-right:0.5em">马上兑换</a>
         <a href="/users/my_coupons.html" class="pyshuo radius10" style=" width:40%; display: inline-block; margin-left: 0.5em">我的优惠券</a>
@@ -240,7 +240,7 @@
         <a href="/?from=game_{{$game_type}}" class="pyshuo radius10">购物加机会</a>
         <a id="share_btn_2"  href="javascript:;" class="help radius10">分享好友求点</a>
         <div class="aboutus">
-            <img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/logo.png')}}" /><br /><br />
+            <a href="/"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/logo.png')}}" /></a><br /><br />
             [朋友说]同事间互相分享家乡特产的创业网站,<br />
             我们都是城市里的乡下人。
         </div>
@@ -324,10 +324,13 @@
 
             var today_sold_out = '{{$today_sold_out}}';
 
-            var miaosha_hour = 8;
+            var miaosha_hour = function(){
+                var now = new Date();
+                return now.getHours();
+            };
             function can_miaosha() {
                 var now = new Date;
-                return (!today_sold_out && now.getHours() >= miaosha_hour && now.getHours() < 20);
+                return (!today_sold_out && now.getHours() >= 8 && now.getHours() < 23);
             }
 
             var miaosha_span = $('#miaosha_time_desc');
@@ -347,14 +350,14 @@
                             utils.close_notify();
                             if (data.success) {
                                 if (data.award_type != 0) {
-                                    utils.alert("恭喜您秒中价值58元的优惠券，可免费购买一箱冰糖橙！请注意在有效期结束前使用。 <a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
+                                    utils.alert("恭喜您秒中价值"+data.award_type+"元的优惠券，可抵扣黔阳冰糖橙（万橙）！请注意在有效期结束前使用。 <a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
                                 } else {
                                     var msg = '手气不太好啊, 过一会儿再试试！';
                                     if (data.msg == 'not_enough_100') {
                                         msg = '还不满100个，请继续努力~';
                                     }
                                     else if (data.msg == 'no_more') {
-                                        msg = '今天的秒杀商品已经全部抢完啦。 <a href="#award_list">查看中奖名单</a>';
+                                        msg = '本时段秒杀商品已经全部抢完。 <a href="#award_list">查看中奖名单</a>';
                                         miaosha_btn.removeClass('help').addClass('help');
                                         today_sold_out = true;
                                         checking_miaosha();
@@ -371,24 +374,43 @@
                         });
                     }, 1000);
                 } else {
-                    utils.alert( today_sold_out ? '今天的秒杀商品已经全部抢完啦，请明天继续.  <a href="#award_list">查看中奖名单</a>' : '时间未到', function(){ checking_miaosha(); });
+                    utils.alert( today_sold_out ? '本时段已经全部抢完，请明天继续.  <a href="#award_list">查看中奖名单</a>' : '整点开秒，还差'+format_left(calculate_left(), ''), function(){ checking_miaosha(); });
                 }
             });
 
-            function checking_miaosha() {
+            function azero(v) {
+                return  (v < 10) ?  ('0'+''+v) : v;
+            }
+
+            function calculate_left() {
                 var now = new Date;
-                if (!today_sold_out && now.getHours() >= miaosha_hour && now.getHours() < 20) {
+                if (now.getHours() >= miaosha_hour()) {
+                    if (now.getHours() >= 22) {
+                        now.setDate(now.getDate() + 1);
+                        now.setHours(8);
+                    } else {
+                        now.setHours(now.getHours() + 1);
+                    }
+                }
+                now.setMinutes(0);
+                now.setSeconds(0);
+                return (now.getTime() - new Date()) / 1000;
+            }
+
+            function format_left(dif, gap) {
+                var hour = Math.floor(dif / 3600);
+                var left = Math.floor(dif % 3600);
+                var min = Math.floor(left / 60);
+                var seconds = Math.floor(left % 60);
+                return azero(hour) + (gap ? gap : '小时') + azero(min) + (gap ? gap : '分') + azero(seconds) + (gap ? '' : '秒');
+            }
+
+            function checking_miaosha() {
+                if (can_miaosha()) {
                     miaosha_btn.removeClass('seckill').addClass('help');
                     miaosha_span.text('立即秒杀');
                 } else {
-                    if (now.getHours() >= miaosha_hour) {
-                       now.setDate(now.getDate() + 1);
-                    }
-                    now.setHours(miaosha_hour);
-                    now.setMinutes(0);
-                    now.setSeconds(0);
-                    var dif = (now.getTime() - new Date()) / 1000;
-
+                    var dif = calculate_left();
                     var intervalId = setInterval(function () {
 
                         if (dif < 1) {
@@ -397,13 +419,9 @@
                             return;
                         }
 
-                        var hour = Math.floor(dif / 3600);
-                        var left = Math.floor(dif % 3600);
-                        var min = Math.floor(left / 60);
-                        var seconds = Math.floor(left % 60);
-                        miaosha_span.text('倒计时 ' + hour + ':' + min + ':' + seconds);
+                        miaosha_span.text('倒计时 ' + format_left(dif, ':'));
                         dif--;
-                    }, 900);
+                    }, 960);
                 }
             }
 

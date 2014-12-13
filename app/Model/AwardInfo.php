@@ -47,8 +47,9 @@ class AwardInfo extends AppModel {
         $now2 = time();
         $r = array($now2, $result);
         $cacheJson = json_encode($r);
-        if ($now2 - $now >= 1) {
-            $this->log("too long to loading top_list db result:" . $cacheJson);
+        $cost = $now2 - $now;
+        if ($cost >= 1) {
+            $this->log("too long ($cost) to loading top_list db result:" . $cacheJson);
         }
         Cache::write($key, $cacheJson);
         return $r;

@@ -238,6 +238,29 @@ class Apple201410Controller extends AppController
         echo json_encode($res);
     }
 
+
+    public function hours_limit() {
+        $hour = date('G');
+        $limits = array(
+            8 => 10,
+            9 => 10,
+            10 => 5,
+            11 => 5,
+            12 => 5,
+            13 => 10,
+            14 => 5,
+            15 => 5,
+            16 => 5,
+            17 => 5,
+            18 => 10,
+            19 => 5,
+            20 => 5,
+            21 => 10,
+            22 => 5,
+        );
+        return empty($limits[$hour]) ? 0 : $limits[$hour];
+    }
+
     public function jp($gameType) {
         $this->autoRender = false;
 
@@ -249,62 +272,74 @@ class Apple201410Controller extends AppController
         if (time() - $last > 30 && ($gameType == self::BTC1412)) {
             $this->Session->write('last_chou_jiang', time());
 
-            $hour = date('G');
-            if ($hour >= 8 and $hour <20) {
-                $gameCfg = $this->GameConfig->findByGameType($gameType);
-                if (!empty($gameCfg) && $gameCfg['GameConfig']['game_end']) {
-                    $dt = new DateTime($gameCfg['GameConfig']['game_end']);
-                    if (mktime() - $dt->getTimestamp() > 0) {
-                        $msg = 'game_end';
-                    } else {
-                        $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
-                        $not_spent = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] - $awardInfo['spent'] : 0;
+            $hour_limit = $this->hours_limit();
+            if ($hour_limit > 0) {
 
-                        if ($not_spent >= $this->AWARD_LIMIT) {
-                            $this->loadModel('AwardResult');
-                            $model = $this->AwardResult;
-                            $todayAwarded = $model->todayAwarded(date(FORMAT_DATE), $gameType);
-                            $iAwarded = $model->userIsAwarded($uid, $gameType);
+                try {
 
-                            $daily_award_limit = self::BTC_DAILY_AWARD_LIMIT;
-                            if ($todayAwarded >= $daily_award_limit) {
-                                $msg = 'no more';
-                            } else if (!$iAwarded) {
-                                $awardResult = array(
-                                    'uid' => $uid,
-                                    'type' => $gameType,
-                                    'finish_time' => date(FORMAT_DATETIME)
-                                );
-                                if (!$model->save($awardResult)) {
-                                    $this->log("Save AwardResult failed:" . json_encode($awardResult));
-                                };
-
-                                if ($todayAwarded < $daily_award_limit) {
-                                    $exchangeCount = 100;
-                                    $coupon_count = 1;
-                                    $so = $this->CouponItem;
-                                    $weixin = $this->Weixin;
-                                    $this->exchangeCouponAndLog($uid, $not_spent, $exchangeCount, $coupon_count, $gameType, $awardInfo['id'],
-                                        function ($uid, $operator, $source_log_id) use ($so, $weixin) {
-                                            $so->addCoupon($uid, 17652, $operator, $source_log_id);
-                                            $so->id = null;
-                                            $store = "在黔阳冰糖橙店购买时使用";
-                                            $validDesc = "有效期至2014年12月18日";
-                                            $weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
-                                        }
-                                    );
-                                    $award_type = 58;
-                                } else {
-                                    $msg = 'no_more';
-                                }
-                            }
-                            $logstr = "Choujian $uid : todayAwarded=$todayAwarded, iAwarded=$iAwarded";
-                            $this->log($logstr);
+                    $gameCfg = $this->GameConfig->findByGameType($gameType);
+                    if (!empty($gameCfg) && $gameCfg['GameConfig']['game_end']) {
+                        $dt = new DateTime($gameCfg['GameConfig']['game_end']);
+                        if (mktime() - $dt->getTimestamp() > 0) {
+                            $msg = 'game_end';
                         } else {
-                            $msg = 'not_enough_100';
-                            $logstr = "total_got=$not_spent, award_limit=" . $this->AWARD_LIMIT;
+                            $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
+                            $not_spent = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] - $awardInfo['spent'] : 0;
+
+                            if ($not_spent >= $this->AWARD_LIMIT) {
+                                $this->loadModel('AwardResult');
+                                $model = $this->AwardResult;
+                                $dayHour = date(FORMAT_DATEH);
+
+                                $hourAwarded = $model->hour_awarded($dayHour, $gameType);
+                                $iAwarded = $model->userIsAwarded($uid, $gameType);
+
+                                if ($hourAwarded >= $hour_limit) {
+                                    $msg = 'no_more';
+                                } else if (!$iAwarded) {
+                                    $awardResult = array(
+                                        'uid' => $uid,
+                                        'type' => $gameType,
+                                        'finish_time' => date(FORMAT_DATETIME)
+                                    );
+                                    if (!$model->save($awardResult)) {
+                                        $this->log("Save AwardResult failed:" . json_encode($awardResult));
+                                        $msg = '';
+                                    } else {
+                                        $lastId = $model->getLastInsertID();
+                                        if ($lastId && $model->hour_awarded($dayHour, $gameType) > $hour_limit) {
+                                            $model->delete($lastId);
+                                            $msg = 'no_more';
+                                        } else {
+                                            $exchangeCount = 100;
+                                            $coupon_count = 1;
+                                            $so = $this->CouponItem;
+                                            $weixin = $this->Weixin;
+                                            $this->exchangeCouponAndLog($uid, $not_spent, $exchangeCount, $coupon_count, $gameType, $awardInfo['id'],
+                                                function ($uid, $operator, $source_log_id) use ($so, $weixin) {
+                                                    $so->addCoupon($uid, 17652, $operator, $source_log_id);
+                                                    $so->id = null;
+                                                    $store = "在黔阳冰糖橙店购买时使用";
+                                                    $validDesc = "有效期至2014年12月18日";
+                                                    $weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
+                                                }
+                                            );
+                                            $award_type = 58;
+                                            $not_spent -= $exchangeCount;
+                                        }
+                                    }
+                                }
+                                $logstr = "Choujian $uid : todayAwarded=$hourAwarded, iAwarded=$iAwarded, msg=" . $msg;
+                                $this->log($logstr);
+                            } else {
+                                $msg = 'not_enough_100';
+                                $logstr = "total_got=$not_spent, award_limit=" . $this->AWARD_LIMIT;
+                            }
                         }
                     }
+                }catch(Exception $e) {
+                    $msg = '';
+                    $this->log('error_jp: '.$e);
                 }
             } else {
                 $msg = 'time_error';
@@ -500,8 +535,8 @@ class Apple201410Controller extends AppController
             $this->set('helpMe', $friendsHelpMe);
 
             $this->loadModel('AwardResult');
-            $today_awarded = $this->AwardResult->todayAwarded(date(FORMAT_DATE), $gameType);
-            $this->set('today_sold_out', $today_awarded >= self::BTC_DAILY_AWARD_LIMIT);
+            $hours_awarded = $this->AwardResult->hour_awarded(date(FORMAT_DATEH), $gameType);
+            $this->set('today_sold_out', $hours_awarded >= $this->hours_limit());
 
             $this->loadModel('Order');
 
@@ -777,10 +812,6 @@ class Apple201410Controller extends AppController
 
         if ($total_got < 50) {
             $times += 10;
-        }  else if ($total_got < 30) {
-            $times += 20;
-        }  else if ($total_got < 20) {
-            $times += 30;
         }
 
         for ($i = 0; $i < $times; $i++) {
@@ -788,7 +819,7 @@ class Apple201410Controller extends AppController
             $this_got += ( $mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
         }
 
-        if ($total_got < 20 && $this_got < 10) {
+        if ($total_got < 30 && $this_got < 5) {
             $this_got += 5;
         }
 

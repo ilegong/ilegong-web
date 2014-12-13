@@ -24,6 +24,23 @@ class AwardResult extends AppModel {
         return $result;
     }
 
+    /**
+     * @param $dayHour string formatted with a date in FORMAT_DATEH
+     * @param $type
+     * @return mixed
+     */
+    public function hour_awarded($dayHour, $type) {
+        $key = $this->key_day_awarded($dayHour, $type);
+        $result = Cache::read($key);
+        if (!$result) {
+            $result = $this->find('count', array(
+                'conditions' => array("DATE_FORMAT(finish_time, '%Y-%m-%d %H')" => $dayHour, 'type' => $type)
+            ));
+            Cache::write($key, $result);
+        }
+        return $result;
+    }
+
     public function list_day_award($day, $type) {
         $key = $this->key_day_awarded_list($day, $type);
         $result = Cache::read($key);
@@ -87,7 +104,9 @@ class AwardResult extends AppModel {
         Cache::delete($this->key_user_is_awarded($this->data['AwardResult']['id'], $this->data['AwardResult']['type']));
         $datetime = new DateTime($this->data['AwardResult']['finish_time']);
         $day = $datetime->format(FORMAT_DATE);
+        $dayHour = $datetime->format(FORMAT_DATEH);
         Cache::delete($this->key_day_awarded($day, $this->data['AwardResult']['type']));
+        Cache::delete($this->key_day_awarded($dayHour, $this->data['AwardResult']['type']));
         Cache::delete($this->key_day_awarded_list($day, $this->data['AwardResult']['type']));
     }
 }
