@@ -492,13 +492,14 @@ class Apple201410Controller extends AppController
         ));
 
         if ($gameType != self::BTC1412) {
-
             $friendsIHelped = $this->TrackLog->find('all', array(
                 'conditions' => array('from' => $current_uid, 'type' => $gameType, 'got' > 0),
                 'fields' => array('to'),
                 'limit' => 500
             ));
-
+        } else {
+            $friendsIHelped = array();
+        }
 
             list($allUids, $nameIdMap) = $this->findNicknames($friendsHelpMe, $friendsIHelped);
 
@@ -530,9 +531,6 @@ class Apple201410Controller extends AppController
 
             $this->set('helpMe', $helpMeItems);
             $this->set('meHelp', $meHelpItems);
-
-        } else {
-            $this->set('helpMe', $friendsHelpMe);
 
             $this->loadModel('AwardResult');
             $hours_awarded = $this->AwardResult->hour_awarded(date(FORMAT_DATEH), $gameType);
@@ -570,7 +568,6 @@ class Apple201410Controller extends AppController
                     $rrr = $this->AwardInfo->updateAll(array('times' => ' times + '. ($total * 10)), array('type' => $gameType, 'uid' => $current_uid));
                 }
             }
-        }
 
         $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($current_uid, $gameType);
         if (empty($awardInfo)) {

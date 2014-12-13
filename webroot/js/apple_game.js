@@ -32,7 +32,7 @@ $(document).ready(function(){
     }
 
 
-    $('#share_btn_2').add($shareBtn).click(function(){
+    $('#share_btn_2, #share_btn_3').add($shareBtn).click(function(){
     showShareAndChangeTitle();
     });
 

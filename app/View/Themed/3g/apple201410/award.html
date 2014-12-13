@@ -128,6 +128,14 @@
     .to_top img {
         width: 3em !important;
     }
+
+    .bg_green{ background-color:#c8ffd8;}
+    .bg_orange{ background-color:#ffeabc;}
+    .red{ color:#df1a00;}
+    .pad{ padding:1.5em 1em;}
+    .pad .title{ font-size:1.167em; font-weight:bold; color:#333333; padding-bottom:0.6em; text-align:center;}
+    .pad .con{ font-size:1em; line-height:1.7em; color:#666666;}
+
 </style>
 <div id="fullpage">
     <div class="section">
@@ -142,12 +150,11 @@
             <a id="miaosha_btn" href="javascript:;" class="seckill radius10">每天100箱 整点开秒 <span id="miaosha_time_desc"></span></a>
             <div class="word_link">
                 <a href="#get_coupons">[规则]</a>&nbsp;&nbsp;&nbsp;
-                <!--<a id="show_help_btn" href="javascript:;">[谁帮我]</a>&nbsp;&nbsp;&nbsp;-->
+                <a id="show_help_btn" href="#friends">[谁帮了我]</a>&nbsp;&nbsp;&nbsp;
                 <a href="#award_list">[秒中名单]</a>&nbsp;&nbsp;&nbsp;
                 <a href="#product_story">[产品故事]</a>
             </div>
         </div>
-        <!--<a class="next" href="#product_story"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/next.gif')}}" /></a>-->
         <div class="bg"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/index/bg1.jpg')}}" /></div>
     </div>
 
@@ -255,8 +262,26 @@
     <!--<a class="next" href="#X"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a>-->
    </div>
         </div>
-    </div>
 
+    <div class="bg_green pad section">
+        <div class="title"><span id="helpme_cnt_n" class="red ">{{count($helpMe)}}</span>个朋友帮了我</div>
+        {{if $helpMe}}
+        {{loop $helpMe $key $item}}
+        <div class="con clearfix">
+            <div class="fl name">{{$item['nickname']}}</div>，<div class="fl">摇到了<strong class="red">{{ $item['got'] }}</strong>个
+        </div>
+        </div>
+        {{/loop}}
+        {{else}}
+        <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！
+            <a id="share_btn_3" href="javascript:;" class="help">分享好友求助</a>
+        </div>
+        {{/if}}
+        <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none">
+            <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
+        </ul>
+    </div>
+    </div>
 
     <?php /*
     <div  id="friends" class="bg_green pad section">
@@ -297,16 +322,7 @@
         {{/if}}
     </div>
     */ ?>
-    {{if $game_type == 'qinyBTC1412'}}
-    <!--<div id="top_list" class="bg_green pad section">-->
-        <!--<div class="title">排行榜<small id="top_list_update"></small></div>-->
-        <!--<div id="top_list_contents">-->
-        <!--</div>-->
-    <!--</div>-->
-    {{/if}}
 </div>
-
-<span id="helpme_cnt_n" class="hide">{{count($helpMe)}}</span>
 
 <script>
     var $today_got_wx = "{{$today_got_wx}}";
@@ -332,7 +348,7 @@
             css3: true,
             loopBottom: true,
             loopTop: true,
-            anchors: ['firstPage', 'product_story', 'get_coupons', 'award_list', 'top_list', 'about_us']
+            anchors: ['firstPage', 'product_story', 'get_coupons', 'award_list', 'top_list', 'about_us', 'friends']
         });
 
         var today_sold_out = '{{$today_sold_out}}';
