@@ -45,7 +45,7 @@ class OpenstoresController extends AppController{
             $actions = '';
             if($status == 2){
                 $actions .= '<li class="ui-state-default grid-row-edit"><a title="通过" href="' . Router::url(array('controller' => $control_name, 'action' => 'add',  'admin' => true, $item[$modelClass]['id'])) . '"><span class="glyphicon glyphicon-ok"></span></a></li>';
-                $actions .= '<li class="ui-state-default grid-row-delete"><a title="拒绝" href="' . Router::url(array('controller' => $control_name, 'action' => 'reject',  'admin' => true, $item[$modelClass]['id'])) . '"><span class="glyphicon glyphicon-remove "></span></a></li>';
+                $actions .= '<li class="ui-state-default grid-row-delete"><a title="拒绝" href="' . Router::url(array('controller' => $control_name, 'action' => 'reject',  'admin' => true, $item[$modelClass]['id'])) . '"><span class="glyphicon glyphicon-share-alt"></span></a></li>';
 
             }
             $actions .= '<li class="ui-state-default grid-row-edit"><a href="' . Router::url(array('controller' => $control_name, 'action' => 'view', 'admin' => true, $item[$modelClass]['id'])) . '" title="查看"><span class="glyphicon glyphicon-file"></span></a></li>';

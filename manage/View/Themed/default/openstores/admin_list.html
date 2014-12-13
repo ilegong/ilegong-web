@@ -1,13 +1,25 @@
-<div>
-    <p>
-        <button type="button" id="a1" class="btn btn-warning ">未通过商家列表</button>
-        <button type="button" id="a2" class="btn btn-primary ">待审核列表</button>
-
-    </p>
-    <div id = "applycontent">
-        <table id="list2"></table>
-        <div id="pager2"></div>
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <span class="navbar-brand">商家审核后台</span>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active" ><a id="a1" href="#">待审核列表</a></li>
+                <li><a id="a2" href="#">未通过审核列表</a></li>
+            </ul>
+        </div><!--/.nav-collapse -->
     </div>
+</nav>
+<div id = "applycontent">
+    <table id="list2"></table>
+    <div id="pager2"></div>
 </div>
 <script>
     jQuery("#list2").jqGrid({
@@ -39,7 +51,7 @@
         sortorder: "desc",
         multiselect: true,
         forceFit : true,
-        caption:"商家审核系统",
+        //caption:"商家审核系统",
         gridComplete: function(){
             /*onDialogSubmitSucess,在page_loaded中，绑定form提交时间里*/
             $('#list2 .ui-grid-actions a').bind('onDialogSubmitSucess',function(){
@@ -58,13 +70,17 @@
     jQuery("#a1").click( function(){
         var url = jQuery("#list2").jqGrid('getGridParam','url');
         if (url)	{
-            jQuery("#list2").jqGrid("setGridParam",{url: url.split('?')[0] + '?q=3'}).trigger("reloadGrid");
+            jQuery("#list2").jqGrid("setGridParam",{url: url.split('?')[0] + '?q=2'}).trigger("reloadGrid");
+            $(this).parent().attr('class','active');
+            $('#a2').parent().attr('class','');
         } else { alert("error_1");}
     });
     jQuery("#a2").click( function(){
         var url = jQuery("#list2").jqGrid('getGridParam','url');
         if (url)	{
-            jQuery("#list2").jqGrid("setGridParam",{url: url.split('?')[0] + '?q=2'}).trigger("reloadGrid");
+            jQuery("#list2").jqGrid("setGridParam",{url: url.split('?')[0] + '?q=3'}).trigger("reloadGrid");
+            $(this).parent().attr('class','active');
+            $('#a1').parent().attr('class','');
         } else { alert("error_2");}
     });
 
