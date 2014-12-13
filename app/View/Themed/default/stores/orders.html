@@ -74,6 +74,7 @@
                         订单号：{{$order['Order']['id']}}<br/>
                         收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_area']}}{{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
                         总价：￥{{$order['Order']['total_price']}}<br/>
+                        运费：￥{{$order['Order']['ship_fee']}}<br/>
                         实际价格：￥{{$this->Number->precision($order['Order']['total_all_price'], 2)}}<br/>
                         下单时间：{{$order['Order']['created']}}<br/>
                         支付时间：{{$order['Order']['pay_time']}}<br/>
