@@ -269,7 +269,7 @@ class Apple201410Controller extends AppController
         $award_type = 0;
         $last = $this->Session->read('last_chou_jiang');
         $msg = '';
-        if (time() - $last > 30 && ($gameType == self::BTC1412)) {
+        if (time() - $last > 10 && ($gameType == self::BTC1412)) {
             $this->Session->write('last_chou_jiang', time());
 
             $hour_limit = $this->hours_limit();
