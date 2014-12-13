@@ -421,6 +421,8 @@
                 if (now.getHours() >= 22) {
                     now.setDate(now.getDate() + 1);
                     now.setHours(8);
+                } else if (now.getHours() < 8) {
+                    now.setHours(8);
                 } else {
                     now.setHours(now.getHours() + 1);
                 }
