@@ -205,6 +205,7 @@ class ApiOrdersController extends AppController {
         $this->loadModel('SharedOffer');
         $sharedOffers = $this->SharedOffer->find_my_all_offers($this->currentUser['id']);
         $expiredIds = array();
+        $brandIds = Hash::extract($sharedOffers, '{n}.ShareOffer.brand_id');
         foreach($sharedOffers as &$o) {
             $expired = is_past($o['SharedOffer']['start'], $o['ShareOffer']['valid_days']);
             if($expired) {
@@ -213,7 +214,9 @@ class ApiOrdersController extends AppController {
                 $soldOuts[] = $o['SharedOffer']['id'];
             }
 
-            $o['SharedOffer']['valid_days'] = $o['ShareOffer']['created'];
+            $o['SharedOffer']['valid_days'] = $o['ShareOffer']['valid_days'];
+            $o['SharedOffer']['brand_id'] = $o['ShareOffer']['brand_id'];
+            $o['SharedOffer']['name'] = $o['ShareOffer']['name'];
 
             unset($o['ShareOffer']);
             unset($o['SharedOffer']['order_id']);
@@ -222,7 +225,7 @@ class ApiOrdersController extends AppController {
             unset($o['SharedOffer']['created']);
         }
 
-        $brands = $this->findBrands(Hash::extract($sharedOffers, '{n}.ShareOffer.brand_id'));
+        $brands = $this->findBrands($brandIds);
 
         $this->set(compact('sharedOffers', 'expiredIds', 'soldOuts', 'brands'));
         $this->set('_serialize', array('sharedOffers', 'expiredIds', 'soldOuts', 'brands'));
