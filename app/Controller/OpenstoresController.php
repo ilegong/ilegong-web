@@ -84,6 +84,7 @@ class OpenstoresController extends AppController{
             $this->data['Openstore']['pattern'] = $company_pattern;
             $this->data['Openstore']['id'] = $application['Openstore']['id'];
             $this->data['Openstore']['status'] = 2;
+            $this->data['Openstore'] = array_filter($this->data['Openstore']);
             if(!empty($this->data)&&$this->request->is('post')){
                 if($this->Openstore->save($this->data)){
                     $this->redirect('/openstores/complete');
@@ -122,6 +123,9 @@ class OpenstoresController extends AppController{
             }else if($application['Openstore']['status'] == 3){
                 $this->set('not_pass', true);
                 $this->set('reason', $application['Openstore']['reason']);
+                if($application['Openstore']['pattern'] == 0) {
+                    $this->set('person_apply', true);
+                }
             }
         }
 
