@@ -19,8 +19,8 @@ class LocationsController extends AppController{
     }
     public function get_city(){
         $this->autoRender = false;
-        if($this->request->is('post')){
-            $province_id = $_POST['provinceId'];
+        if($this->request->is('post')||$this->request->is('get')){
+            $province_id = intval($_REQUEST['provinceId']);
             $params = array('conditions' => array('parent_id' => $province_id ), 'fields' => array('id', 'name'));
             $cities = $this->Location->find('list',$params);
             echo json_encode($cities);
@@ -28,8 +28,8 @@ class LocationsController extends AppController{
     }
     public function get_county(){
         $this->autoRender = false;
-        if($this->request->is('post')){
-            $city_id = $_POST['cityId'];
+        if($this->request->is('post')||$this->request->is('get')){
+            $city_id = intval($_REQUEST['cityId']);
             $params = array('conditions' => array('parent_id' => $city_id ), 'fields' => array('id', 'name'));
             $counties = $this->Location->find('list',$params);
             echo json_encode($counties);
@@ -37,8 +37,8 @@ class LocationsController extends AppController{
     }
     public function get_town(){
         $this->autoRender = false;
-        if($this->request->is('post')){
-            $county_id = $_POST['countyId'];
+        if($this->request->is('post')||$this->request->is('get')){
+            $county_id = intval($_REQUEST['countyId']);
             $params = array('conditions' => array('parent_id' => $county_id ), 'fields' => array('id', 'name'));
             $counties = $this->Location->find('list',$params);
             echo json_encode($counties);

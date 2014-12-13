@@ -352,7 +352,7 @@ function loadCity() {
     var a = $("#provinceDiv option:selected"), b = a.val(), c = a.text();
     if (b > 0 && 84 != b) {
         var d = appDomain +"/get_city";
-        jQuery.ajax({type: "POST",dataType: "json",url: d,data: "provinceId=" + b,cache: !1,success: function(a) {
+        jQuery.ajax({type: "GET",dataType: "json",url: d,data: "provinceId=" + b,cache: !1,success: function(a) {
             var b = ohtml;
             if (a)
                 for (var d in a)
@@ -368,7 +368,7 @@ function loadCounty() {
     var a = $("#cityDiv option:selected"), b = a.val(), c = $("#provinceDiv option:selected").text(), d = a.text();
     if (b > 0) {
         var e = appDomain + "/get_county";
-        jQuery.ajax({type: "POST",dataType: "json",url: e,data: "cityId=" + b,cache: !1,success: function(a) {
+        jQuery.ajax({type: "GET",dataType: "json",url: e,data: "cityId=" + b,cache: !1,success: function(a) {
 
             if (a) {
                 var b = ohtml;
@@ -389,7 +389,7 @@ function loadTown() {
     var a = $("#countyDiv option:selected"), b = a.val(), c = $("#provinceDiv option:selected").text(), d = $("#cityDiv option:selected").text(), e = a.text();
     if (b > 0) {
         var f = appDomain + "/get_town";
-        jQuery.ajax({type: "POST",dataType: "json",url: f,data: "countyId=" + b,cache: !1,success: function(a) {
+        jQuery.ajax({type: "GET",dataType: "json",url: f,data: "countyId=" + b,cache: !1,success: function(a) {
 
             if (a) {
                 var b = 0;
