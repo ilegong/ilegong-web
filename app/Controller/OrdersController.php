@@ -1022,18 +1022,31 @@ class OrdersController extends AppController{
         $uid = $this->currentUser['id'];
         $cart->user_id = $uid;
 
-        $shipFee = 0.0;
+        $shipFees = array();
+        $totalPrices = array();
+
         $this->loadModel('Product');
         $this->loadModel('ShipPromotion');
         $productByIds = $this->Product->find_published_products_by_ids($pids, array('Product.ship_fee'));
         foreach ($cartsByPid as $pid => $cartItem) {
+            $brand_id = $productByIds[$pid]['brand_id'];
             $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
             $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
             $singleShipFee = empty($pp) || !isset($pp['ship_price']) ? $productByIds[$pid]['ship_fee'] : $pp['ship_price'];
-            $shipFee += ShipPromotion::calculateShipFee($pid, $singleShipFee, $num, null);
             $itemPrice = empty($pp) || !isset($pp['price']) ? calculate_price($pid, $productByIds[$pid]['price'], $uid) : $pp['price'];
-            $cart->add_product_item($productByIds[$pid]['brand_id'], $pid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name']);
+
+            $shipFees[$brand_id] += ShipPromotion::calculateShipFee($pid, $singleShipFee, $num, null);
+            $totalPrices[$brand_id] += $itemPrice;
+
+            $cart->add_product_item($brand_id, $pid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name']);
         }
+
+        $shipFee = 0;
+        foreach($shipFees as $brandId => $ship) {
+            $n_ship = ShipPromotion::calculateShipFeeByOrder($ship, $brandId, $totalPrices[$brandId]);
+            $shipFee += $n_ship;
+        }
+
         return array($cart, $shipFee);
     }
 
