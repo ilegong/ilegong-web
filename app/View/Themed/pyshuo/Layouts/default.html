@@ -6,8 +6,9 @@
     <title>{{$pageTitle}}-{{$site[title]}}</title>
     <META NAME="ROBOTS" CONTENT="INDEX,FOLLOW">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}" />
-    <meta name="Description" content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}" />
+    <meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}"/>
+    <meta name="Description"
+          content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}"/>
     <!--[if lt IE 9]>
     {{$this->Html->script(array('html5.js', 'respond.js/1.4.2/respond.min.js'))}}
     <![endif]-->
@@ -17,20 +18,50 @@
 
     <style>
         @media (min-width: 1200px) {
-            .container{
+            .container {
                 max-width: 970px;
             }
         }
-        .voffset  { margin-top: 2px; }
-        .voffset1 { margin-top: 5px; }
-        .voffset2 { margin-top: 10px; }
-        .voffset3 { margin-top: 15px; }
-        .voffset4 { margin-top: 30px; }
-        .voffset5 { margin-top: 40px; }
-        .voffset6 { margin-top: 60px; }
-        .voffset7 { margin-top: 80px; }
-        .voffset8 { margin-top: 100px; }
-        .voffset9 { margin-top: 150px; }
+
+        .voffset {
+            margin-top: 2px;
+        }
+
+        .voffset1 {
+            margin-top: 5px;
+        }
+
+        .voffset2 {
+            margin-top: 10px;
+        }
+
+        .voffset3 {
+            margin-top: 15px;
+        }
+
+        .voffset4 {
+            margin-top: 30px;
+        }
+
+        .voffset5 {
+            margin-top: 40px;
+        }
+
+        .voffset6 {
+            margin-top: 60px;
+        }
+
+        .voffset7 {
+            margin-top: 80px;
+        }
+
+        .voffset8 {
+            margin-top: 100px;
+        }
+
+        .voffset9 {
+            margin-top: 150px;
+        }
 
         .text-price {
             color: #c71673;
@@ -65,7 +96,7 @@
     <![endif]-->
     <script type="text/javascript">
         var BASEURL = "{{APP_SUB_DIR}}";
-        var ADMIN_BASEURL = BASEURL+"/manage";
+        var ADMIN_BASEURL = BASEURL + "/manage";
         var _pys_in_weixin = "{{$in_weixin}}";
         var _pys_notify_img_url = '{{$this->Html->assetUrl("/img/progress_notify.gif")}}';
     </script>
@@ -110,34 +141,39 @@
 
 {{if !empty($_SESSION['Auth']['Staff']) }}
 <!-- 文件上传进度条 -->
-<div class="flash ui-wedget" id="fsUploadProgress" style="position:absolute;display:none;width:210px;top:80px;right:30px; z-index: 10000000;">
+<div class="flash ui-wedget" id="fsUploadProgress"
+     style="position:absolute;display:none;width:210px;top:80px;right:30px; z-index: 10000000;">
 </div>
 {{/if}}
 {{template menus/bootstrap}}
-<div id="header-breadcrumb" >
-    <div class="container clearfix" >
+<div id="header-breadcrumb">
+    <div class="container clearfix">
         {{template Elements/navigation_header}}
     </div>
-    <div  class="clear"></div>
+    <div class="clear"></div>
 </div>
 
 <?php
     $flash_msg =  $this->Session->flash();
-if($flash_msg){
-echo "<div class=\"container\">$flash_msg</div>";
-}
-//注意#maincontent中，只包含一个'.container'，否则无法前台编辑模板可能会走样。多行的使用实现使用<div class="row"></div>。
+    if($flash_msg){
+        echo "<div class=\"container\">$flash_msg</div>";
+    }
+    //注意#maincontent中，只包含一个'.container'，否则无法前台编辑模板可能会走样。多行的使用实现使用<div class="row"></div>。
 ?>
 
 <div id="maincontent" class="maincontent clearfix">
     <div class="container">
         {{$content_for_layout}}
-    </div><!-- //end container -->
-</div><!-- //end maincontent -->
+    </div>
+    <!-- //end container -->
+</div>
+<!-- //end maincontent -->
 
 {{template Elements/footer}}
 
-{{$this->Html->script(array('jquery/jquery.cookie.js', 'jquery/jquery.lazyload.min.js', 'i18n/language-zh-CN.js','bootstrap.min.js','bootbox/bootbox.min.js', 'common.js?v11','front.js','front_orders.js?v2'));}}
+{{$this->Html->script(array('jquery/jquery.cookie.js', 'jquery/jquery.lazyload.min.js',
+'i18n/language-zh-CN.js','bootstrap.min.js','bootbox/bootbox.min.js',
+'common.js?v11','front.js','front_orders.js?v2'));}}
 <script>
     if (bootbox) {
         bootbox.setDefaults({
@@ -148,15 +184,80 @@ echo "<div class=\"container\">$flash_msg</div>";
 {{$this->fetch('bottomscript')}}
 <script type="text/javascript">
     $("img.lazy").lazyload({
-        placeholder : "/img/grey.gif",
+        placeholder: "/img/grey.gif",
         effect: "fadeIn",
-        threshold : 100
+        threshold: 100
     });
-    $('#to-top').click(function() { $('html,body').animate({ scrollTop: 0 }, 1000); });
+    $('#to-top').click(function () {
+        $('html,body').animate({scrollTop: 0}, 1000);
+    });
 
     if (typeof(updateCartItemCount) === 'function') {
         updateCartItemCount();
     }
 </script>
+<!--二维码-->
+<!--浮动面板-->
+<div id="floatPanel">
+    <div class="ctrolPanel" style="background: #fff url({{$this->Html->assetUrl('/img/side_code/float-panel-bg.gif')}}) no-repeat left top;">
+        <a class="arrow" href="#"><span>顶部</span></a><a class="contact" href="/articles/view/377"
+                                                        target="_blank"><span>反馈</span></a><a class="qrcode"
+                                                                                              href="#"><span>微信二维码</span></a><a
+            class="arrow" href="#"><span>底部</span></a></div>
+    <div class="popPanel">
+        <div class="popPanel-inner">
+            <div class="qrcodePanel">
+                <img src="{{ $this->Html->assetUrl('/img/common/wxservice_104_home.jpeg'); }}"/><br><span>扫描二维码关注我们</span></div>
+            <div class="arrowPanel">
+                <div class="arrow01">
+                </div>
+                <div class="arrow02">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        // 页面浮动面板
+        $("#floatPanel > .ctrolPanel > a.arrow").eq(0).click(function () {
+            $("html,body").animate({scrollTop: 0}, 800);
+            return false;
+        });
+        $("#floatPanel > .ctrolPanel > a.arrow").eq(1).click(function () {
+            $("html,body").animate({scrollTop: $(document).height()}, 800);
+            return false;
+        });
+        var objPopPanel = $("#floatPanel > .popPanel");
+        var width = $(this).width();
+        var w = objPopPanel.outerWidth();
+        if(width>=1560) {
+            objPopPanel.css("width", w + "px").show();
+        }
+        $(window).resize(function() {
+            width = $(this).width();
+            if(width<1650){
+                 objPopPanel.css("width","0px").hide();
+                $("#floatPanel > .ctrolPanel > a.qrcode").bind({
+                    mouseover: function () {
+                        objPopPanel.css("width", "0px").show();
+                        objPopPanel.animate({"width": w + "px"}, 300);
+                        return false;
+                    },
+                    mouseout: function () {
+                        objPopPanel.animate({"width": "0px"}, 300);
+                        objPopPanel.css("width", w + "px");
+                        return false;
+                    }
+                });
+            }else{
+                objPopPanel.css("width", w + "px").show();
+                $("#floatPanel > .ctrolPanel > a.qrcode").unbind();
+            }
+        });
+
+    });
+</script>
+<!--/end-->
 </body>
 </html>
