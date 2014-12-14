@@ -427,7 +427,7 @@
                 }
                 setTimeout(decreaseTime, 1000);
             } else {
-                utils.alert( today_sold_out ? '本时段已经全部抢完，请等待下一时段开秒.  <a href="#award_list">查看中奖名单</a>' : '整点开秒，还差'+format_left(calculate_left(), ''), function(){ checking_miaosha(); });
+                utils.alert( today_sold_out ? '本时段已经全部抢完，请等待下一时段开秒，<a href="#award_list">查看中奖名单</a>。 您也可以选择兑换30元券。' : '整点开秒，还差'+format_left(calculate_left(), ''), function(){ checking_miaosha(); });
             }
         });
 
