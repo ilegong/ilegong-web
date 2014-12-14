@@ -10,6 +10,9 @@
         background-color: lightgreen;
     }
 
+    .modal-footer { margin-top:0 }
+    .modal-body {padding-bottom:10px}
+
     .bootbox-body {
         text-align: left;
     }
@@ -75,7 +78,7 @@
     .rock_num .fl a{ color:#ff483a; text-decoration:none; text-align:center; width:100%;}
     .rock_num .fr a{ display:block; color:#ffffff; text-decoration:none; background-color:#ff483a; font-size:1.1em; padding:0 0.625em;}
     .help{ display:block; margin:0.8em 1.2em 0 1.2em; text-align:center; margin-bottom:0; background-color:#ff483a; font-size:1em; color:#ffffff; padding:0.4em 0.5em 0.4em 0.917em;   text-decoration:none;}
-    .seckill{ display:block; margin:0.8em 1.2em 0 1.2em; text-align:center; margin-bottom:0; background-color:#cccccc; font-size:1em; color:#ff483a; padding:0.4em 0.5em 0.4em 0.917em;  text-decoration:none;}
+    .seckill{ display:inline-block; margin:0.8em 1.2em 0 1.2em; text-align:center; margin-bottom:0; background-color:#cccccc; font-size:1em; color:#ff483a; padding:0.4em 0.1em 0.4em 0.117em;  text-decoration:none;}
     .word_link{ text-align:center; font-size:1em; margin-top:1.5em;}
     .word_link a{ text-decoration:none; color:#333333;}
     .next{ display:block; text-align:center; position:absolute; bottom:0.3em;  width:100%; z-index:2;}
@@ -118,7 +121,7 @@
     .rule_bottom{ /*position:absolute;*/ bottom:0; left:0; z-index:1;}
 
     #miaosha_time_desc {
-        margin-left: 1em;
+        margin-left: 0.3em;
     }
 
     .to_top {
@@ -144,10 +147,13 @@
             <img id="apple_tree_img" src="{{$this->Html->assetUrl('/img/apple201410/btc/index/tree.png?1')}}"/>
             <div class="rock_num radius10">
                 <div class="fl">已摇下<span id="apple_got_cnt" class="apple_numbers">{{$total_apple}}</span>个, 还有<span class="apple_numbers" id="apple_times_left">{{$total_times}}</span>次机会!&nbsp;<a href="#about_us" style="font-size: 1.25em">[加机会]</a></div>
-                <div class="fr"><a class="radius10" href="#get_coupons">兑换</a></div>
+                <div class="fr"></div>
             </div>
             <a id="share_btn"  href="javascript:;" class="help radius10" style="display:{{$total_times > 0 ? 'none' : ''}}">找人帮忙</a>
-            <a id="miaosha_btn" href="javascript:;" class="seckill radius10">每天100箱 整点开秒 <span id="miaosha_time_desc"></span></a>
+
+            <a id="miaosha_btn" href="javascript:;" class="seckill radius10" style="width: 60%; display: inline-block; margin-right: 0.5em;">1000箱整点秒 <span id="miaosha_time_desc"></span></a>
+            <a id="go_exchange_btn" class="radius10 help" href="javascript:;" style="width: 25%; display: inline-block; margin-left: 0.1em;">兑优惠券</a>
+
             <div class="word_link">
                 <a href="#get_coupons">[规则]</a>&nbsp;&nbsp;&nbsp;
                 <a id="show_help_btn" href="#friends">[谁帮了我]</a>&nbsp;&nbsp;&nbsp;
@@ -180,19 +186,15 @@
         </ul>
         <ul class="clearfix">
             <li class="con" style="width:30%;">30个</li>
-            <li class="con" style="width:70%;">5元优惠券</li>
-        </ul>
-        <ul class="clearfix">
-            <li class="con" style="width:30%;">50个</li>
-            <li class="con" style="width:70%;">10元优惠券</li>
-        </ul>
-        <ul class="clearfix">
-            <li class="con" style="width:30%;">80个</li>
             <li class="con" style="width:70%;">15元优惠券</li>
         </ul>
         <ul class="clearfix">
+            <li class="con" style="width:30%;">50个</li>
+            <li class="con" style="width:70%;">30元优惠券</li>
+        </ul>
+        <ul class="clearfix">
             <li class="con" style="width:30%;">100个</li>
-            <li class="con" style="width:70%;">30元优惠券或参加免费秒杀</li>
+            <li class="con" style="width:70%;">2张30元优惠券或参加免费秒杀</li>
         </ul>
         <ul class="clearfix">
             <li class="con" style="width:30%;"><a href="#top_list">总榜</a>前20名</li>
@@ -201,7 +203,7 @@
         <p>1、摇下100个，即可参加每天白天(8点－22点)整点的万橙秒杀活动，每天100箱，送完即止；</p>
         <p>2、活动结束日期12月18号23点59分，活动最终解释权归朋友说所有。</p>
         <a id="get_coupons_button" href="javascript:;" class="help radius10" style="float:left; width:40%; display: inline-block; margin-right:0.5em">马上兑换</a>
-        <a href="/users/my_coupons.html" class="pyshuo radius10" style=" width:40%; display: inline-block; margin-left: 0.5em">我的优惠券</a>
+        <a id="view_my_coupons" href="/users/my_coupons.html" class="pyshuo radius10" style=" width:40%; display: inline-block; margin-left: 0.5em">我的优惠券</a>
     </div>
     <ul class="clearfix" style="width: 30%; margin: 0 auto; margin-top: 0.5em;">
         <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
@@ -253,7 +255,7 @@
             [朋友说]同事间互相分享家乡特产的创业网站,<br />
             我们都是城市里的乡下人。
         </div>
-        <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none">
+        <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none; padding-top: 0">
             <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('/img/apple201410/btc/aboutus/top.gif')}}" /></a></li>
         </ul>
     </div>
@@ -549,7 +551,6 @@
 
         checking_miaosha();
 
-        var in_top_list = 100;
         function desc_normal() {
             var total = get_total();
             var my_list = parseInt($.trim($('#top_list_mine').text()));
@@ -560,6 +561,55 @@
         function getRandomInt(min, max) {
             return Math.floor(Math.random() * (max - min)) + min;
         }
+
+        function can_exchange_desc() {
+            var total = total_not_spent();
+            if (total >= 100) {
+                return '2张30元优惠券';
+            } else if (total >= 80) {
+                return '1张30元＋1张15元优惠券';
+            } else if (total >= 50) {
+                return '1张30元优惠券';
+            } else if (total >= 30) {
+                return '1张15元优惠券';
+            } else {
+                return false;
+            }
+        }
+
+        function exchane_coupon_click() {
+            var canExchangeDesc = can_exchange_desc();
+            var msg = '<div class="alert alert-danger" style="margin-bottom: 0.5; margin-top:0.5em">'+ (canExchangeDesc? '恭喜，您可以兑换' + canExchangeDesc : '亲，再摇'+(30 - total_not_spent())+'个就可以兑换啦^_^')+'</div>' +
+                    '<div class="panel panel-warning"><div class = "panel-heading">兑换规则</div>' +
+                    '<table class="table  table-condensed">' +
+                    '<tr><td>扣除30个</td><td>15元优惠券(7.3折)</td></tr>' +
+                    '<tr><td>扣除50个</td><td>30元优惠券(4.8折)</td></tr>' +
+                    '<tr><td>扣除100个</td><td>2张30元优惠券(4.8折)</td></tr>' +
+                    '</table></div>'
+                    ;
+            if (game_user_total > total_not_spent()) {
+                msg += '<div class="text-right"><a href="/users/my_coupons.html">查看我的优惠券</a></div>';
+            }
+            if (canExchangeDesc) {
+                utils.alert_two(msg, '去兑换', '继续摇', function () {
+                    $.fn.fullpage.moveTo('get_coupons');
+                }, null, {top:'5%', 'margin-top':'0'});
+            } else {
+                utils.alert_one(msg, '继续摇', null, {top:'5%', 'margin-top':'0'});
+            }
+        }
+
+        $('#go_exchange_btn').click(function(){
+            exchane_coupon_click();
+        });
+
+        $('#view_my_coupons').click(function(e){
+            if (game_user_total <= total_not_spent()) {
+                e.preventDefault();
+                utils.alert_one('您还没摇到优惠券', '关闭');
+                return false;
+            }
+        });
 
         function share_timeline(){
             var $r = getRandomInt(1, 10);
@@ -616,26 +666,14 @@
         if (award_list && award_list.award_list){update_award_list(award_list.award_list); }
     });
 
-
     function game_coupon_message(times, total) {
-        if (total < 30)  { return '<br/><small>还差<span class="apple_numbers">' + (30 - total) + '</span>个就能领到<span class="apple_numbers">5</span>元优惠券啦</small>'; }
-        else if (total < 50) {return '<br/><small>还差<span class="apple_numbers">' + (50 - total) + '</span>个就能领到<span class="apple_numbers">10</span>元优惠券啦</small>';}
-        else if (total < 80) {return '<br/><small>还差<span class="apple_numbers">' + (80 - total) + '</span>个就能领到<span class="apple_numbers">15</span>元优惠券啦</small>';}
-        else if (total < 100) {return '<br/><small>还差<span class="apple_numbers">' + (100 - total) + '</span>个就可以参加秒杀或者拿到<span class="apple_numbers">30</span>元优惠券啦</small>';}
+        if (total < 30)  { return '<br/><small>差<span class="apple_numbers">' + (30 - total) + '</span>个就能兑换<span class="apple_numbers">15</span>元优惠券</small>'; }
+        else if (total < 50) {return '<br/><small>差<span class="apple_numbers">' + (50 - total) + '</span>个就能兑换<span class="apple_numbers">30</span>元优惠券</small>';}
+        else if (total < 100) {return '<br/><small>差<span class="apple_numbers">' + (100 - total) + '</span>个就可以参加一箱免费秒杀</small>';}
         else return '';
     }
 
     function showAfterGotCallback(times, total, got){
-        var msg = '';
-//        if (total >= 30 && total - got < 30){ msg = '恭喜，您可以兑换<span class="apple_numbers">5</span>元优惠券啦';}
-        if (total >= 50 && total - got < 50){ msg = '恭喜，您可以兑换<span class="apple_numbers">10</span>元优惠券啦';}
-        if (total >= 80 && total - got < 80){ msg = '恭喜，您可以兑换<span class="apple_numbers">15</span>元优惠券啦';}
-        if (total >= 100 && total - got < 100){ msg = '恭喜，您可以兑换<span class="apple_numbers">30</span>元优惠券啦';}
-        if (!msg) {
-            return;
-        }
-
-        utils.alert_two(msg, '继续摇', null, '兑换', function(){$.fn.fullpage.moveTo('get_coupons');});
     }
 
     function update_top_list(top_list) {
@@ -681,4 +719,4 @@
         }
     }
 </script>
-{{$this->Html->script(array('apple_game.js?v22'));}}
+{{$this->Html->script(array('apple_game.js?v23'));}}

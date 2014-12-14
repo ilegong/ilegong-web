@@ -64,6 +64,7 @@ $(document).ready(function(){
         showNoMoreTimesDialog = true;
         bootbox.dialog({
             message: $message,
+            closeButton: false,
             buttons: {
                 main: {
                     label: "取消",
@@ -246,7 +247,7 @@ $(document).ready(function(){
     get_coupons_button.click(function () {
         var apple_count = $.trim($appleGotCnt.text());
         if (parseInt(apple_count) < parseInt(game_least_change)) {
-            utils.alert("加油小主，我们<span class='apple_numbers'>" + game_least_change + "</span>个" + game_obj_name + "起兑喔，您目前已摇<span class='apple_numbers'>"
+            utils.alert("加油，我们<span class='apple_numbers'>" + game_least_change + "</span>个" + game_obj_name + "起兑喔，您目前已摇<span class='apple_numbers'>"
                 + apple_count + "</span>个。加油加油！");
             return;
         };
@@ -264,7 +265,9 @@ $(document).ready(function(){
                     if (typeof(game_notify_after_exchange) == 'function') {
                         game_notify_after_exchange(coupon_count);
                     } else {
-                        utils.alert("恭喜，兑换了" + coupon_count + "张优惠券，<a href='/users/my_coupons.html' class='apple_medium_links'>查看我的优惠券</a>!");
+                        utils.alert_one("恭喜，兑换了" + coupon_count + "张优惠券!", '我的优惠券', function(){
+                            window.location.href = '/users/my_coupons.html';
+                        });
                     }
                 } else if (data.result == 'sold_out'){
                     utils.alert("呜呜，券已兑完。");

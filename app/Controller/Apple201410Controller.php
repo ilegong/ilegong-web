@@ -394,16 +394,17 @@ class Apple201410Controller extends AppController
         } else if ($gameType == self::BTC1412) {
 
             $sharing = array(
-                100 => array(17725, 2000 * 20),
-                80 => array(17724, 1500 *  15),
-                50 => array(17723, 1000 * 10),
-                30 => array(17722, 500 * 5),
+                50 => array(17725, 30),
+                30 => array(17724, 15),
+//                50 => array(17723, 1000 * 10),
+//                30 => array(17722, 500 * 5),
             );
-            if ($can_exchange_apple_count >= 100) {
-                $exchangeCount = 100;
-            } else if ($can_exchange_apple_count >= 80) {
-                $exchangeCount = 80;
-            } else if ($can_exchange_apple_count >= 50) {
+//            if ($can_exchange_apple_count >= 100) {
+//                $exchangeCount = 100;
+//            } else if ($can_exchange_apple_count >= 80) {
+//                $exchangeCount = 80;
+//            } else
+                if ($can_exchange_apple_count >= 50) {
                 $exchangeCount = 50;
             } else if ($can_exchange_apple_count >= 30) {
                 $exchangeCount = 30;
@@ -420,7 +421,7 @@ class Apple201410Controller extends AppController
                             list($couponId, $toShareNum) = $sharingPref;
                             $so->addCoupon($uid, $couponId, $operator, $source_log_id);
                             $so->id = null;
-                                $store = "在黔阳冰糖橙店购买时使用";
+                                $store = "在黔阳冰糖橙店购买时使用(" . $toShareNum . '元)';
                                 $validDesc = "有效期至2014年12月18日";
                                 $weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
 //                            list($shareOfferId, $toShareNum) = $sharingPref;

@@ -1014,11 +1014,11 @@ var utils = {
         }
     },
 
-    alert_one : function(msg, defLabel, defCallback) {
-        return utils.alert_two(msg, defLabel, null, defCallback);
+    alert_one : function(msg, defLabel, defCallback, options) {
+        return utils.alert_two(msg, defLabel, null, defCallback, null, options);
     },
 
-    alert_two : function(msg, defLabel, impLabel, defCallack, impCallback){
+    alert_two : function(msg, defLabel, impLabel, defCallack, impCallback, options){
         var params = {
             message: msg,
             closeButton: false,
@@ -1044,8 +1044,8 @@ var utils = {
         }
 
         bootbox.dialog(params).css({
-            'top': '50%',
-            'margin-top': function () {
+            'top': options && options['top'] ? options['top'] : '50%',
+            'margin-top': options && options['margin-top'] ? options['margin-top'] : function () {
                 return -($(this).height() / 2);
             }
         }).find('div.modal-footer').css({'text-align': 'center'});
