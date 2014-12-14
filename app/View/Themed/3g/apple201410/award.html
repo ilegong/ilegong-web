@@ -460,16 +460,23 @@
             return azero(hour) + (gap ? gap : '小时') + azero(min) + (gap ? gap : '分') + azero(seconds) + (gap ? '' : '秒');
         }
 
+
+        var timer_intervalId = null;
         function checking_miaosha() {
             if (can_miaosha()) {
                 miaosha_btn.removeClass('seckill').addClass('help');
                 miaosha_span.text('立即秒杀');
             } else {
                 var dif = calculate_left();
-                var intervalId = setInterval(function () {
+                if (timer_intervalId) {
+                    clearInterval(timer_intervalId);
+                    timer_intervalId = null;
+                }
+                timer_intervalId = setInterval(function () {
 
                     if (dif < 1) {
-                        clearInterval(intervalId);
+                        clearInterval(timer_intervalId);
+                        timer_intervalId = null;
                         checking_miaosha();
                         today_sold_out = false;
                         return;
