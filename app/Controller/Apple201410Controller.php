@@ -531,7 +531,8 @@ class Apple201410Controller extends AppController
             $this->loadModel('AwardResult');
             $hours_awarded = $this->AwardResult->hour_awarded(date(FORMAT_DATEH), $gameType);
             $this->set('today_sold_out', $hours_awarded >= $this->hours_limit());
-            $this->set('awarded', !empty($this->AwardResult->userIsAwarded($current_uid, $gameType)));
+        $iAwared = $this->AwardResult->userIsAwarded($current_uid, $gameType);
+        $this->set('awarded', !empty($iAwared));
 
             $this->loadModel('Order');
 
