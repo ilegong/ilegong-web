@@ -536,80 +536,84 @@
             return (win == friendGots.length) ? 100 : utils.toFixed(win*100/friendGots.length, 0)
         }
 
+        function desc_cmp_friends() {
+            var desc = '摇一摇，一千箱冰糖橙免费送! 我已摇下' + get_total() + '个';
+            if (friendGots && friendGots.length > 0) {
+                var dabaiPercent = dabai_percent();
+                desc += (dabaiPercent == 100 ? ', 打败了所有好友，哈哈' : (dabaiPercent == 0 ? ', 朋友圈里垫底 ^_^， 快点我吧' : ', 打败了' + dabaiPercent + '%的好友！'));
+            } else {
+                desc += ', 还没人帮过我！快来帮我吧';
+            }
+            return desc;
+        }
+
         checking_miaosha();
+
+        var in_top_list = 100;
+        function desc_normal() {
+            var total = get_total();
+            var my_list = parseInt($.trim($('#top_list_mine').text()));
+            return '万橙，比褚橙不只甜了一点点，'+ help_me_cnt() +'个好基友帮忙，我已经摇下'+total+'个万橙' + (my_list > 0 && my_list<1000 ? '，排名第' + my_list + '名' : '') + '－ 朋友说';
+        }
+        var shareTitle = '摇下100个，1箱万橙免费领';
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+
+        function share_timeline(){
+            var $r = getRandomInt(1, 10);
+            var sh_src = 'def';
+            if ($r >= 8) {
+                sh_src = 'jj1';
+            } else if ($r >= 5) {
+                sh_src = 'zr';
+            }
+            lineLink += '&src=tl';
+
+            var desc;
+//                    if (sh_src == 'jj1') {
+//                        desc = '药不能停，出门不吃（摇）怎行？有' + help_me_cnt() + '个好基友给我送药了！已基本治愈！领药请点击';
+//                    } else if(sh_src == 'zr') {
+//                        desc = '摇一摇，一千箱冰糖橙免费送！我已摇下' + get_total() + '个，你也来试试吧';
+//                    } else {
+                desc = desc_cmp_friends();
+//                    }
+            utils.wx_to_timeline(appid, imgUrl, lineLink, '', desc);
+        }
+
+        // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
+        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+            if (typeof(WeixinJSBridge) != 'undefined') {
+                WeixinJSBridge.on('menu:share:appmessage', function (argv) {
+                    if ($share_before_coupon) {
+                        share_before_coupon_msg();
+                        $share_before_coupon = false;
+                    } else if (awarded) {
+                        utils.wx_to_friend(appid, imgUrl, lineLink, share_coupon_msg, share_coupon_title);
+                    } else {
+                        utils.wx_to_friend(appid, imgUrl, lineLink, desc_cmp_friends(), shareTitle);
+                    }
+
+                });
+                WeixinJSBridge.on('menu:share:timeline', function (argv) {
+                    if ($share_before_coupon) {
+                        share_before_coupon_tl();
+                        $share_before_coupon = false;
+                    } else if (awarded) {
+                        utils.wx_to_timeline(appid, imgUrl, lineLink, '', share_coupon_msg);
+                    } else {
+                        share_timeline();
+                    }
+                });
+            }
+        }, false);
 
         var top_list = {{$top_list}};
         if (top_list && top_list.top_list){update_top_list(top_list.top_list); }
 
         var award_list = {{$award_list}};
         if (award_list && award_list.award_list){update_award_list(award_list.award_list); }
-
-            {{if $game_type == 'qinyBTC1412'}}
-
-                var in_top_list = 100;
-                function descContent() {
-                    var total = get_total();
-                    var my_list = parseInt($.trim($('#top_list_mine').text()));
-                    return '万橙，比褚橙不只甜了一点点，'+ help_me_cnt() +'个好基友帮忙，我已经摇下'+total+'个万橙' + (my_list > 0 && my_list<1000 ? '，排名第' + my_list + '名' : '') + '－ 朋友说';
-                }
-                var shareTitle = '摇下100个，1箱万橙免费领';
-
-                function getRandomInt(min, max) {
-                    return Math.floor(Math.random() * (max - min)) + min;
-                }
-
-                function share_timeline(){
-                    var $r = getRandomInt(1, 10);
-                    var sh_src = 'def';
-                    if ($r >= 8) {
-                        sh_src = 'jj1';
-                    } else if ($r >= 5) {
-                        sh_src = 'zr';
-                    }
-                    lineLink += '&src=tl';
-
-                    var desc;
-//                    if (sh_src == 'jj1') {
-//                        desc = '药不能停，出门不吃（摇）怎行？有' + help_me_cnt() + '个好基友给我送药了！已基本治愈！领药请点击';
-//                    } else if(sh_src == 'zr') {
-//                        desc = '摇一摇，一千箱冰糖橙免费送！我已摇下' + get_total() + '个，你也来试试吧';
-//                    } else {
-                        desc = '摇一摇，一千箱冰糖橙免费送! 我已摇下' + get_total() + '个';
-                        if (friendGots && friendGots.length > 0) {
-                            var dabaiPercent = dabai_percent();
-                            desc += (dabaiPercent == 100? ', 打败了所有好友，哈哈' : (dabaiPercent == 0? ', 朋友圈里垫底 ^_^， 快点我吧' : ', 打败了' + dabaiPercent + '%的好友！'));
-                        } else {
-                            desc += ', 一个人也没帮过我！快点我吧';
-                        }
-//                    }
-                    utils.wx_to_timeline(appid, imgUrl, lineLink, '', desc);
-                }
-
-                // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
-                document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
-                    WeixinJSBridge.on('menu:share:appmessage', function(argv){
-                        if ($share_before_coupon) {
-                            share_before_coupon_msg();
-                            $share_before_coupon = false;
-                        } else if (awarded) {
-                            utils.wx_to_friend(appid, imgUrl, lineLink, share_coupon_msg, share_coupon_title);
-                        } else {
-                            utils.wx_to_friend(appid, imgUrl, lineLink, descContent(), shareTitle);
-                        }
-
-                    });
-                    WeixinJSBridge.on('menu:share:timeline', function(argv){
-                        if ($share_before_coupon) {
-                            share_before_coupon_tl();
-                            $share_before_coupon = false;
-                        } else if (awarded) {
-                            utils.wx_to_timeline(appid, imgUrl, lineLink, '', share_coupon_msg);
-                        }else {
-                            share_timeline();
-                        }
-                    });
-                }, false);
-                {{/if}}
     });
 
 
