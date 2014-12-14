@@ -265,7 +265,7 @@ $(document).ready(function(){
                     if (typeof(game_notify_after_exchange) == 'function') {
                         game_notify_after_exchange(coupon_count);
                     } else {
-                        utils.alert_one("恭喜，兑换了" + coupon_count + "张优惠券!", '我的优惠券', function(){
+                        utils.alert_one("恭喜，兑换了" + coupon_count + "张优惠券!", '查看我的优惠券', function(){
                             window.location.href = '/users/my_coupons.html';
                         });
                     }
