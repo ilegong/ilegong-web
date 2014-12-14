@@ -491,15 +491,11 @@ class Apple201410Controller extends AppController
             'limit' => 500
         ));
 
-        if ($gameType != self::BTC1412) {
             $friendsIHelped = $this->TrackLog->find('all', array(
                 'conditions' => array('from' => $current_uid, 'type' => $gameType, 'got' > 0),
                 'fields' => array('to'),
                 'limit' => 500
             ));
-        } else {
-            $friendsIHelped = array();
-        }
 
             list($allUids, $nameIdMap) = $this->findNicknames($friendsHelpMe, $friendsIHelped);
 
@@ -586,23 +582,6 @@ class Apple201410Controller extends AppController
             }
             $awardInfo = $awardInfo['AwardInfo'];
         }
-
-
-        //TODO: need cache
-//        $awardItems = array();
-//        $awardInfos = $this->AwardInfo->find('list', array(
-//            'conditions' => array('got >=' => $this->AWARD_LIMIT),
-//            'fields' => array('uid', 'got')
-//        ));
-//        if (!empty($awardInfos)) {
-//            $nicknamesMap = $this->User->findNicknamesMap(array_keys($awardInfos));
-//            foreach ($awardInfos as $uid => $got) {
-//                if (array_search($uid, $this->in_pys) === false) {
-//                    $awardItems[] = array('nickname' => filter_invalid_name($nicknamesMap[$uid]), 'got' => $got, 'company' => $this->companies[$uid]);
-//                }
-//            }
-//        }
-//        $this->set('awarded', $awardItems);
 
         list($left_98, $left_40) = $this->calculate_left($gameType);
         $this->set(compact('left_98', 'left_40'));

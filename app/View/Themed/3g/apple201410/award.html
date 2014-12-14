@@ -267,7 +267,7 @@
         <ul>
         {{loop $helpMe $key $item}}
         <li class="con clearfix">
-            {{$item['nickname']}}<strong class="red">{{ $item['got'] }}</strong>个
+            {{$item['nickname']}}<strong class="red gots">{{ $item['got'] }}</strong>个
         </li>
         {{/loop}}
         </ul>
@@ -361,6 +361,12 @@
             var now = new Date;
             return (!today_sold_out && now.getHours() >= 8 && now.getHours() < 23);
         }
+
+        var friendGots = $('.gots').map(function () {
+            var v = $.trim($(this).text());
+            return v ? parseInt(v) : 0;
+        }).get();
+
 
         var miaosha_span = $('#miaosha_time_desc');
         var miaosha_btn = $('#miaosha_btn');
@@ -511,6 +517,18 @@
             return (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
         }
 
+        function dabai_percent() {
+            var total = get_total();
+
+            var win = 0;
+            for(var x in friendGots) {
+                if (total > friendGots[x]) {
+                    win++;
+                }
+            }
+            return (win == friendGots.length) ? 100 : utils.toFixed(win*100/friendGots.length, 0)
+        }
+
         checking_miaosha();
 
         var top_list = {{$top_list}};
@@ -544,13 +562,19 @@
                     lineLink += '&src=' + sh_src;
 
                     var desc;
-                    if (sh_src == 'jj1') {
-                        desc = '药不能停，出门不吃（摇）怎行？有' + help_me_cnt() + '个好基友给我送药了！已基本治愈！领药请点击';
-                    } else if(sh_src == 'zr') {
-                        desc = '摇一摇，一千箱冰糖橙免费送！我已摇下' + get_total() + '个，你也来试试吧';
-                    } else {
-                        desc = shareTitle + ', 我已摇下' + get_total() + '个，求点';
-                    }
+//                    if (sh_src == 'jj1') {
+//                        desc = '药不能停，出门不吃（摇）怎行？有' + help_me_cnt() + '个好基友给我送药了！已基本治愈！领药请点击';
+//                    } else if(sh_src == 'zr') {
+//                        desc = '摇一摇，一千箱冰糖橙免费送！我已摇下' + get_total() + '个，你也来试试吧';
+//                    } else {
+                        desc = '摇一摇，一千箱冰糖橙免费送! 我已摇下' + get_total() + '个';
+                        if (friendGots && friendGots.length > 0) {
+                            var dabaiPercent = dabai_percent();
+                            desc += (dabaiPercent == 100? ', 打败了所有好友，哈哈' : ', 打败了' + dabaiPercent + '的好友！');
+                        } else {
+                            desc += ', 一个人也没帮过我！快点我吧';
+                        }
+//                    }
                     utils.wx_to_timeline(appid, imgUrl, lineLink, '', desc);
                 }
 
