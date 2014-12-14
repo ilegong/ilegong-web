@@ -296,7 +296,7 @@ class Apple201410Controller extends AppController
 
                                 if ($hourAwarded >= $hour_limit) {
                                     $msg = 'no_more';
-                                } else if (!$iAwarded) {
+                                } else if (!$iAwarded && 10 == mt_rand(0, 20)) {
                                     $awardResult = array(
                                         'uid' => $uid,
                                         'type' => $gameType,
