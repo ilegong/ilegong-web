@@ -397,7 +397,7 @@
                                     }
                                 });
                             } else {
-                                var msg = '手气不太好啊, 过一会儿再试试！';
+                                var msg = '';
                                 if (data.msg == 'not_enough_100') {
                                     msg = '还不满100个，请继续努力~';
                                 }
@@ -410,7 +410,7 @@
                                 else if (data.msg == 'game_end') {
                                     msg = '活动已结束';
                                 } else {
-                                    msg = '没秒到，请稍后重试！';
+                                    msg = '手气不太好啊, 请重试！';
                                 }
                                 utils.alert(msg, null);
                             }
@@ -579,7 +579,7 @@
 
         function exchane_coupon_click() {
             var canExchangeDesc = can_exchange_desc();
-            var msg = '<div class="alert alert-danger" style="margin-bottom: 0.5; margin-top:0.5em">'+ (canExchangeDesc? '恭喜，您可以兑换' + canExchangeDesc : '亲，再摇'+(30 - total_not_spent())+'个就可以兑换啦^_^')+'</div>' +
+            var msg = '<div class="alert alert-danger" style="margin-bottom: 0.5em; margin-top:0.5em">'+ (canExchangeDesc? '恭喜，您可以兑换' + canExchangeDesc : '亲，再摇'+(30 - total_not_spent())+'个就可以兑换啦^_^')+'</div>' +
                     '<div class="panel panel-warning"><div class = "panel-heading">兑换规则</div>' +
                     '<table class="table  table-condensed">' +
                     '<tr><td>30个</td><td>15元优惠券(7.4折)</td></tr>' +
