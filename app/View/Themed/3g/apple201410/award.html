@@ -333,6 +333,7 @@
     var game_page_title = {{if !empty($title_func)}}function(total){ return {{$title_func}};} {{else}} null {{/if}};
     var game_obj_name = '{{$game_obj_name}}';
     var game_least_change = '{{$game_least_change}}';
+    var awarded = '{{$awarded}}';
     var game_user_total = '{{$game_user_total}}'; //loading by update_top_list
     var $shaking_tips_png;
 
@@ -383,9 +384,7 @@
                                 utils.alert_one(tips, '分享到朋友圈', function(){
                                     if($shaking_tips_png){
                                         $share_before_coupon = true;
-                                        share_coupon_msg = '基友们太给力！我已领取1箱冰糖橙，赶紧点还有268元终极大奖，兄弟们，继续摇起！';
-                                        share_coupon_title = '妈呀，我终于获奖了，1箱冰糖橙到手！';
-
+                                        awarded = true;
                                         $share_div.show();
                                     }
                                 });
@@ -492,8 +491,10 @@
         }
 
         var imgUrl = $('#apple_tree_img').attr('src');
-        var lineLink = '{{WX_HOST}}/t/ag/{{$game_type}}.html?{{if $trid}}trid={{urlencode($trid)}}{{/if}}';
+        var lineLink = '{{WX_HOST}}/t/ag/{{$game_type}}.html?{{if $trid}}trid={{urlencode($trid)}}{{/if}}&from=awarded';
         var appid = '{{WX_APPID}}';
+        share_coupon_msg = '基友们太给力！我已领取1箱冰糖橙，赶紧点还有268元终极大奖，兄弟们，继续摇起！';
+        share_coupon_title = '妈呀，我终于获奖了，1箱冰糖橙到手！';
 
         function share_before_coupon_msg() {
             utils.wx_to_friend(appid, imgUrl, lineLink, share_coupon_msg, share_coupon_title);
@@ -559,6 +560,8 @@
                         if ($share_before_coupon) {
                             share_before_coupon_msg();
                             $share_before_coupon = false;
+                        } else if (awarded) {
+                            utils.wx_to_friend(appid, imgUrl, lineLink, share_coupon_msg, share_coupon_title);
                         } else {
                             utils.wx_to_friend(appid, imgUrl, lineLink, descContent(), shareTitle);
                         }
@@ -568,7 +571,9 @@
                         if ($share_before_coupon) {
                             share_before_coupon_tl();
                             $share_before_coupon = false;
-                        } else {
+                        } else if (awarded) {
+                            utils.wx_to_timeline(appid, imgUrl, lineLink, '', share_coupon_msg);
+                        }else {
                             share_timeline();
                         }
                     });
