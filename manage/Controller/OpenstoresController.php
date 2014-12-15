@@ -33,7 +33,7 @@ class OpenstoresController extends AppController{
         $results = $this->{$modelClass}->find('all', array(
             'conditions'=>array('status' => $status
             ),
-            'fields' => array('id', 'creator', 'store_name', 'contact_name', 'mobile', 'qq', 'person_id', 'pattern','created', 'updated'),
+            'fields' => array('id', 'creator', 'store_name', 'contact_name', 'mobile', 'qq', 'person_id', 'pattern','created', 'updated','status'),
             'order' => $sidx.' ' .$sord,
             'limit' => $limit,
             'page' => $page
@@ -65,6 +65,16 @@ class OpenstoresController extends AppController{
                 $item[$modelClass]['pattern'] = '个人';
             }else{
                 $item[$modelClass]['pattern'] = '企业';
+            }
+
+            if($item[$modelClass]['status'] == '1'){
+                $item[$modelClass]['status'] = '未完成';
+            }else if($item[$modelClass]['status'] == '2'){
+                $item[$modelClass]['status'] = '待审核';
+            }else if($item[$modelClass]['status'] == '3'){
+                $item[$modelClass]['status'] = '已退回';
+            }else if($item[$modelClass]['status'] == '4'){
+                $item[$modelClass]['status'] = '已通过';
             }
             $responce->rows[$i]['cell']= $item[$modelClass];
             //$responce->rows[$i]['cell']['person_id_pic']= '<img src="' . $responce->rows[$i]['cell']['person_id_pic'] . '" width="80"/>';

@@ -28,7 +28,7 @@
         url:"{{Router::url('/admin/openstores/list.json?q=2')}}",
         datatype: "json",
         autowidth:true,//自动宽
-        colNames:['申请号','申请人id', '店铺名', '联系人','手机号码','qq', '认证类型', '创建时间', '修改时间', 'Action'],
+        colNames:['申请号','申请人id', '店铺名', '联系人','手机号码','qq', '认证类型', '创建时间', '修改时间','状态', 'Action'],
         colModel:[
             {name:'id',index:'id', width:'6%', align:"right"},
             {name:'creator',index:'creator', width:'8%',align:'right'},
@@ -39,6 +39,7 @@
             {name:'pattern',index:'pattern', width:'5%', align:"right",edittype:"select",editoptions:{value:":Pleaseselect;0:个人;1:企业"}},
             {name:'created',index:'created', width:'10%', align:"right"},
             {name:'updated',index:'updated', width:'10%', align:"right"},
+            {name:'status',index:'status', width:'5%', align:"right"},
             {name:'actions',index:'actions', width:'10%',align:"center", sortable:false}
         ],
         rownumbers:true,//添加左侧行号
