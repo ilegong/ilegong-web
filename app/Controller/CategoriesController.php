@@ -70,6 +70,7 @@ class CategoriesController extends AppController {
         $navigation = $this->readOrLoadAndCacheNavigations($current_cateid, $this->Category);
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
         $this->set('sub_title', $productTag['ProductTag']['name']);
+        $this->set('tag', $productTag['ProductTag']);
         $this->set('brands', $mappedBrands);
         $this->set('total', $total);
         $this->set('current_cateid', $current_cateid);
