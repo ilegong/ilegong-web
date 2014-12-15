@@ -394,11 +394,7 @@
                             } else {
                                 var msg = '';
                                 if (data.msg == 'not_enough_100') {
-                                    if (total_not_spent() < 80) {
-                                        msg = '秒杀失败！摇下越多机会越大，您摇下的橙子还不够多，请继续努力';
-                                    } else {
-                                        msg = '秒杀失败！摇下100个，几率就翻倍，请继续努力';
-                                    }
+                                    msg = '秒杀失败！摇下越多机会越大，您摇下的橙子还不够多，请继续努力';
                                 }
                                 else if (data.msg == 'no_more') {
                                     msg = '本时段秒杀商品已经全部抢完。 <a href="#award_list">查看中奖名单</a>';
