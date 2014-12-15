@@ -31,7 +31,7 @@ $().ready(function() {
                 document.getElementById('image_code').src = '/Check/captcha.html?' + Math.random() * 10000;
             }
         });
-        var count = 30;
+        var count = 60;
         function CountDown() {
             $("#btnMobileCode").attr("disabled", true);
             $("#btnMobileCode").val("等待 " + count + " 秒重新获取");
