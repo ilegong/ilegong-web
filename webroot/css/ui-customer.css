@@ -434,8 +434,8 @@ body.cke_editable{margin:20px;}
 }
 
 #floatPanel .popPanel {
-    width: 230px;
-    height: 242px;
+    width: 220px;
+    height: 230px;
     position: fixed;
     right: 20px;
     top: 240px;
@@ -463,7 +463,7 @@ body.cke_editable{margin:20px;}
     width: 200px;
     height: 200px;
     border: none;
-    padding: 10px 10px 5px 10px;
+    padding: 5px 5px 5px 5px;
 }
 
 #floatPanel .popPanel .qrcodePanel span {
