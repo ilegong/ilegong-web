@@ -403,7 +403,7 @@
                                 }
                                 else if (data.msg == 'no_more') {
                                     msg = '本时段秒杀商品已经全部抢完。 <a href="#award_list">查看中奖名单</a>';
-                                    miaosha_btn.removeClass('help').addClass('help');
+                                    miaosha_btn.removeClass('help').addClass('seckill');
                                     today_sold_out = true;
                                     checking_miaosha();
                                 }
@@ -479,8 +479,8 @@
                     if (dif < 1) {
                         clearInterval(timer_intervalId);
                         timer_intervalId = null;
-                        checking_miaosha();
                         today_sold_out = false;
+                        checking_miaosha();
                         return;
                     }
 
