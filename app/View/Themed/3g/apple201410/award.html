@@ -267,11 +267,11 @@
         <div class="title"><span id="helpme_cnt_n" class="red ">{{count($helpMe)}}</span>个朋友帮了我</div>
         {{if $helpMe}}
         <ul>
-        {{loop $helpMe $key $item}}
+        <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=60){break;} ?>
         <li class="con clearfix">
             {{$item['nickname']}}<strong class="red gots">{{ $item['got'] }}</strong>个
         </li>
-        {{/loop}}
+        <?php } ?>
         </ul>
         {{else}}
         <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！
