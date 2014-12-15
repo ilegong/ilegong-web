@@ -997,9 +997,13 @@ var utils = {
 //            }
         });
 
+        utils.__auto_close(timeout, $dlg, close_callback);
+    },
+
+    __auto_close : function (timeout, $dlg, close_callback) {
         if (timeout && timeout > 0) {
             $dlg.on('shown.bs.modal', function () {
-                clearTimeout($dlg.data('hideInteval'))
+                clearTimeout($dlg.data('hideInteval'));
                 var id = setTimeout(function(){
                     $dlg.modal('hide');
                 }, timeout);
@@ -1018,7 +1022,7 @@ var utils = {
         return utils.alert_two(msg, defLabel, null, defCallback, null, options);
     },
 
-    alert_two : function(msg, defLabel, impLabel, defCallack, impCallback, options){
+    alert_two : function(msg, defLabel, impLabel, defCallback, impCallback, options){
         var params = {
             message: msg,
             closeButton: false,
@@ -1027,7 +1031,7 @@ var utils = {
                     label: defLabel,
                     className: impLabel ? "btn-default" : 'btn-danger',
                     callback: function () {
-                        if (defCallack) defCallack();
+                        if (defCallback) defCallback();
                     }
                 }
             }
@@ -1043,12 +1047,16 @@ var utils = {
             };
         }
 
-        bootbox.dialog(params).css({
+        var $dlg = bootbox.dialog(params).css({
             'top': options && options['top'] ? options['top'] : '50%',
             'margin-top': options && options['margin-top'] ? options['margin-top'] : function () {
                 return -($(this).height() / 2);
             }
         }).find('div.modal-footer').css({'text-align': 'center'});
+
+        if (options) {
+            utils.__auto_close(options.timeout, $dlg, options.close_callback);
+        }
     },
 
     wx_to_friend : function(appid, imgUrl, lineLink, descContent, shareTitle) {

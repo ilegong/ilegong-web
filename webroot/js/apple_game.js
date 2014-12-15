@@ -129,11 +129,11 @@ $(document).ready(function(){
         if (need_login) {
             msg += '<br/> 亲，您的成绩超过了大多数用户！请您先登录。';
         }
-        utils.alert(msg, function(){}, timeout, close_callback);
+        utils.alert_one(msg, '继续摇', close_callback, {timeout : timeout, close_callback: close_callback});
     } else {
         timeout = 5000;
-        var msg = '你力气太小啦！只晃掉了几片树叶！'+coupon_message(times, total)+'<br/><small>(5秒后自动消失)</small>';
-        utils.alert(msg, function(){}, timeout, close_callback);
+        var msg = '力气太小啦！只晃掉了几片树叶！'+coupon_message(times, total)+'';
+        utils.alert_one(msg, '继续摇', close_callback, {timeout : timeout, close_callback: close_callback});
     }
     updateViewState(times, total);
        if (typeof('showAfterGotCallback')) {
