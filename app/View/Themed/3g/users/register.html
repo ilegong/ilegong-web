@@ -17,17 +17,18 @@
                     <input  class="form-control" style="display: inline; width: 40%" type="text" id="J_CheckCodeInput"
                             value="" placeholder="验证码">
                     {{$this->Html->image(array('controller' => 'Check','action'=>'captcha'), array('id'=> "image_code", 'alt' => "看不清楚，换一张", 'style' => "width: 55%"))}}
+                    <div id="checkInfo"></div>
                 </div>
-                <div id="checkInfo"></div>
+
             </div>
             <div class="form-group">
                 <label for="message_input" class="col-xs-3 control-label">短信验证码</label>
                 <div class="col-xs-9">
                     <input  class="form-control" style="display: inline; width: 40%" id="message_input" name="data[User][code]"
                             type="text" required="required" placeholder="短信验证码">
-                    <input type="button" class="btn btn-xs btn-warning" id="btnMobileCode" value="获取"/>
+                    <input type="button" class="btn  btn-warning" id="btnMobileCode" value="获取"/>
+                    <div id="sendInfo"></div>
                 </div>
-                <div id="sendInfo"></div>
             </div>
 			<div class="form-group">
 			    <label for="nickname" class="col-xs-3 control-label">昵称</label>
@@ -59,46 +60,7 @@
 </div>
 </form>
 </div>
-<script>
-    $().ready(function() {
-        //刷新验证码
-        $('#image_code').click(function () {
-            document.getElementById('image_code').src = '/Check/captcha.html?' + Math.random() * 10000;
-        });
-        //获取手机验证码，显示提示信息
-        $('#btnMobileCode').click(function () {
-            var phone_num = $("#mobile_number").val();
-            var key_str = $("#J_CheckCodeInput").val();
-            $("#sendInfo").html("");
-            $("#checkInfo").html("");
-            var f = "/check/message_code";
-            jQuery.ajax({
-                type: "POST",
-                dataType: "json",
-                url: f,
-                data: {phoneNumbers: phone_num, keyString: key_str},
-                cache: !1,
-                success: function (a) {
-                    if (a.error == 0) {
-                        $("#sendInfo").html('验证短信已发出，'+ a.timelimit +'之前有效，未收到可再获取');
-                    } else if (a.check_error == 1) {
-                        $("#checkInfo").html("验证码错误，验证短信发送失败，请重新输入").addClass('help-inline ');
-                    }
-                    document.getElementById('image_code').src = '/Check/captcha.html?' + Math.random() * 10000;
-                }
-            });
-            var count = 30;
-            var countdown = setInterval(CountDown, 1000);
-
-            function CountDown() {
-                $("#btnMobileCode").attr("disabled", true);
-                $("#btnMobileCode").val("等待 " + count + " 秒重新获取");
-                if (count == 0) {
-                    $("#btnMobileCode").val("获取").removeAttr("disabled");
-                    clearInterval(countdown);
-                }
-                count--;
-            }
-        })
-    })
-</script>
+{{$this->Html->script(array(
+'msg_code.js',
+));
+}}

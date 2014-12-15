@@ -102,7 +102,7 @@
             <div class="form-item form-item-messagecode">
                 <span class="form-label tsl">短信验证码： </span>
                 <input id="message_input" class="form-control" style="display: inline; width: 82px" name="data[Openstore][msg_code]" type="text" data-outer_placeholder="">
-                <input type="button" id="btnMobileCode" value="获取" />
+                <input type="button" class="btn  btn-default" id="btnMobileCode" value="获取" />
                 <span id = "sendInfo"></span>
             </div>
             <div class="form-item">
@@ -128,86 +128,50 @@
 </div>
 
 {{$this->Html->script(array(
-'jquery.validate.min.js',
+'jquery.validate.min.js','msg_code.js'
 ));
 }}
 <script>
-    $().ready(function(){
-        //刷新验证码
-        $('#image_code').click(function(){
-            document.getElementById('image_code').src = '/check/captcha.html?'+Math.random()*10000;
-        });
-        //获取手机验证码，显示提示信息
-        $('#btnMobileCode').click(function() {
-            var phone_num = $("#mobile_number").val();
-            var key_str = $("#J_CheckCodeInput").val();
-            $("#sendInfo").html("");
-            $("#checkInfo").html("");
-            var f = "/check/message_code";
-            var countdown = null;
-            jQuery.ajax({type: "POST",dataType: "json",url: f,data: {phoneNumbers: phone_num, keyString: key_str},cache: !1,
-            success: function (a) {
-                if (a.error == 0) {
-                    $("#sendInfo").html('验证短信已发出，'+ a.timelimit +'之前有效，未收到可再获取');
-                    countdown = setInterval(CountDown, 1000);
-                } else if (a.check_error == 1) {
-                    $("#checkInfo").html("验证码错误，验证短信发送失败，请重新输入").addClass('help-inline ');
-                }
-                document.getElementById('image_code').src = '/Check/captcha.html?' + Math.random() * 10000;
-            }
-            });
-            var count = 30;
-            function CountDown() {
-                $("#btnMobileCode").attr("disabled", true);
-                $("#btnMobileCode").val( count + " 秒后重新获取!");
-                if (count == 0) {
-                    $("#btnMobileCode").val("获取").removeAttr("disabled");
-                    clearInterval(countdown);
-                }
-                count--;
-            }
-        });
-        //添加自定义验证规则
-        jQuery.validator.addMethod("isPhone", function (value, element) {
-            return (value.length == 11 && /^(\d+){11}$/.test(value)) ;
-        }, "");
-        $("#J_ApplyForm").validate({
-            //规则制定根据字段的id属性
-            rules: {
+    //添加自定义验证规则
+    jQuery.validator.addMethod("isPhone", function (value, element) {
+        return (value.length == 11 && /^(\d+){11}$/.test(value)) ;
+    }, "");
+    $("#J_ApplyForm").validate({
+        //规则制定根据字段的id属性
+        rules: {
 
-                person_name: 'required',
-                mobile_number: {required: true, isPhone: true},
-                message_input: 'required',
-                qq_number: {required: true, number: true}
-            },
-            messages: {
+            person_name: 'required',
+            mobile_number: {required: true, isPhone: true},
+            message_input: 'required',
+            qq_number: {required: true, number: true}
+        },
+        messages: {
 
-                person_name: {required: "请输入您的真实姓名"},
-                message_input: {required: "请输入您的手机验证码"},
-                mobile_number: {required: "请输入手机号码", isPhone: "手机号码格式不正确"},
-                qq_number: {required: "请输入您的qq号", number: "QQ号码格式不正确"},
-            },
-            errorPlacement: function(error, element) {
-                error.appendTo(element.parent());
-            },
-            errorClass: "help-inline",
-            highlight : function(element) {
-                $(element).closest('.form-item').addClass('has-error');
-            },
-            /* 验证通过时的处理 */
-            success : function(label) {
-                label.closest('.form-item').removeClass('has-error');
-                label.remove();
-            }
-        });
-        //添加复选框的js事件
-        $("#J_Agreement").click(function(){
-            if($("#J_Agreement").prop("checked") == true){
-                $("#btnStoreCreate").val("创建店铺").removeAttr("disabled");
-            }else{
-                $("#btnStoreCreate").attr("disabled", true);
-                alert("创建店铺需要同意《朋友说服务协议》");
-            }
-        })
+            person_name: {required: "请输入您的真实姓名"},
+            message_input: {required: "请输入您的手机验证码"},
+            mobile_number: {required: "请输入手机号码", isPhone: "手机号码格式不正确"},
+            qq_number: {required: "请输入您的qq号", number: "QQ号码格式不正确"},
+        },
+        errorPlacement: function(error, element) {
+            error.appendTo(element.parent());
+        },
+        errorClass: "help-inline",
+        highlight : function(element) {
+            $(element).closest('.form-item').addClass('has-error');
+        },
+        /* 验证通过时的处理 */
+        success : function(label) {
+            label.closest('.form-item').removeClass('has-error');
+            label.remove();
+        }
     });
+    //添加复选框的js事件
+    $("#J_Agreement").click(function(){
+        if($("#J_Agreement").prop("checked") == true){
+            $("#btnStoreCreate").val("创建店铺").removeAttr("disabled");
+        }else{
+            $("#btnStoreCreate").attr("disabled", true);
+            alert("创建店铺需要同意《朋友说服务协议》");
+        }
+    })
 </script>
