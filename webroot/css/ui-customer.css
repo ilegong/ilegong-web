@@ -419,27 +419,13 @@ body.cke_editable{margin:20px;}
 #floatPanel {
 }
 
-#floatPanel .ctrolPanel .contact span {
-    line-height: 90px;
-}
-
-#floatPanel .ctrolPanel .qrcode {
-    height: 40px;
-    display: block;
-    margin: 2px auto;
-}
-
-#floatPanel .ctrolPanel .qrcode span {
-    display: none;
-}
-
 #floatPanel .popPanel {
-    width: 220px;
-    height: 230px;
+    width: 150px;
+    height: 180px;
     position: fixed;
     right: 20px;
     top: 240px;
-    z-index: 10000;
+    /*z-index: 10000;*/
     overflow: hidden;
     display: none;
     _position: absolute; /* for IE6 */
@@ -448,8 +434,8 @@ body.cke_editable{margin:20px;}
 
 
 #floatPanel .popPanel .qrcodePanel {
-    width: 220px;
-    height: 240px;
+    width: 150px;
+    height: 180px;
     text-align: center;
     background: #fff;
     /*border: solid 1px #ddd;*/
@@ -460,15 +446,15 @@ body.cke_editable{margin:20px;}
 }
 
 #floatPanel .popPanel .qrcodePanel img {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     border: none;
     padding: 5px 5px 5px 5px;
 }
 
 #floatPanel .popPanel .qrcodePanel span {
-    font-size: 12px;
-    color: #666;
+    font-size: 13px;
+    color: #3177FF;
     line-height: 24px;
     letter-spacing: 1px;
 }
