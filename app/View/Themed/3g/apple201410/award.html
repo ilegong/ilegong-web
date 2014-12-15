@@ -375,11 +375,6 @@
 
         miaosha_btn.click(function(){
 
-            if (total_not_spent() < 100) {
-                utils.alert('够100个才能参加秒杀，请继续努力！摇下越多越优先哦');
-                return;
-            }
-
             if (can_miaosha()) {
                 var lefttime = 60;
                 utils.progress_notify('正在秒杀...(<span id="miaosha_left">'+lefttime+'</span>)');
@@ -399,7 +394,11 @@
                             } else {
                                 var msg = '';
                                 if (data.msg == 'not_enough_100') {
-                                    msg = '还不满100个，请继续努力~';
+                                    if (total_not_spent() < 80) {
+                                        msg = '秒杀失败！摇下越多机会越大，您摇下的橙子还不够多，请继续努力';
+                                    } else {
+                                        msg = '秒杀失败！摇下100个，几率就翻倍，请继续努力';
+                                    }
                                 }
                                 else if (data.msg == 'no_more') {
                                     msg = '本时段秒杀商品已经全部抢完。 <a href="#award_list">查看中奖名单</a>';
