@@ -401,14 +401,15 @@ class Apple201410Controller extends AppController
             } else if ($can_exchange_apple_count >= 50) {
                 $total_ex_count = $ex_count_per_Item = 50;
                 $sharingPref = array(18095, 20);
+                    $coupon_count = 1;
             } else if ($can_exchange_apple_count >= 30) {
                 $total_ex_count = $ex_count_per_Item = 30;
                 $sharingPref = array(17724, 15);
+                    $coupon_count = 1;
             }
 
             if ($ex_count_per_Item > 0) {
                 if (!empty($sharingPref)) {
-                    $coupon_count = 1;
                     $so = $this->CouponItem;
                     $weixin = $this->Weixin;
                     for($i = 0; $i < $coupon_count; $i++) {
