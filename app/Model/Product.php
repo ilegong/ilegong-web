@@ -64,16 +64,7 @@ class Product extends AppModel {
      * @return array  keyed with product id, valued with product items (1 dimension)
      */
     public function find_published_products_by_ids($product_ids, $extra_fields = array()) {
-        if (empty($product_ids)) return array();
-
-        $results = $this->find('all', array('conditions' => array(
-            'id' => $product_ids,
-            'published' => PUBLISH_YES,
-            ),
-            'fields' => array_merge(array('id'), explode(',', self::NO_VISIBLE_SIMPLE_FIELDS), $extra_fields),
-            'recursive' => -1
-        ));
-        return Hash::combine($results, '{n}.Product.id', '{n}.Product');
+        return $this->find_products_by_ids($product_ids, $extra_fields, true);
     }
 
     public function update_storage_saled($pid, $num) {
@@ -93,5 +84,26 @@ class Product extends AppModel {
                 };
             }
         }
+    }
+
+    /**
+     * @param $product_ids
+     * @param $extra_fields
+     * @param $only_published
+     * @return array
+     */
+    public function find_products_by_ids($product_ids, $extra_fields, $only_published = true) {
+        if (empty($product_ids)) return array();
+        $cond = array(
+            'id' => $product_ids,
+        );
+        if ($only_published) {
+            $cond['published'] = PUBLISH_YES;
+        }
+        $results = $this->find('all', array('conditions' => $cond,
+            'fields' => array_merge(array('id'), explode(',', self::NO_VISIBLE_SIMPLE_FIELDS), $extra_fields),
+            'recursive' => -1
+        ));
+        return Hash::combine($results, '{n}.Product.id', '{n}.Product');
     }
 }

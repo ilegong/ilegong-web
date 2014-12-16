@@ -1110,6 +1110,48 @@ var utils = {
         ajaxAction(url,{'word':obj.value},null, function(data){
             callback(data);
         });
+    },
+
+    countDown: function(toTimer, initCallback) {
+        if (toTimer.size() > 0) {
+
+            var dif = (parseInt(toTimer.attr('data-start')) *1000 - new Date().getTime())/1000;
+
+            var hour1 = $('<div class="countdown">0</div>');
+            var hour2 = $('<div class="countdown">0</div>');
+            var min1 = $('<div class="countdown">0</div>');
+            var min2 = $('<div class="countdown">0</div>');
+            var sec1 = $('<div class="countdown">0</div>');
+            var sec2 = $('<div class="countdown">0</div>');
+
+            toTimer.after(hour1, hour2, $('<div class="colon"><strong>:</strong></div>'),
+                min1,min2, $('<div class="colon"><strong>:</strong></div>'), sec1, sec2);
+            if (typeof(initCallback) == 'function') {
+                initCallback(toTimer.parent());
+            }
+
+            toTimer.remove();
+
+            var intvalId = setInterval(function(){
+                if (dif <= 0) {
+                    clearInterval(intvalId);
+                }
+                var h = Math.floor(dif/3600);
+                var left = dif % 3600;
+                var m = Math.floor(left / 60);
+                var s = Math.floor(left % 60);
+
+                hour1.text(Math.floor(h / 10));
+                hour2.text(h % 10);
+
+                min1.text(Math.floor(m / 10));
+                min2.text(m % 10);
+
+                sec1.text(Math.floor(s / 10));
+                sec2.text(s % 10);
+                dif--;
+            }, 1000);
+        }
     }
 };
 

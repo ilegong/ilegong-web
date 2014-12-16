@@ -363,6 +363,9 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 .p_details_price .price em{ color:#999999; text-decoration:line-through; font-style:normal; padding-left: 0.3em;}
 .p_details_price .stat{ padding-top:0.5em;}
 
+.countdown{ float:left; width:1.083em; height:1.8em; line-height:1.8em; background-color:#4f4544; font-size:1em; color:#ffffff; text-align:center; margin-right:1px; -moz-border-radius:0.3em;/* Gecko browsers */-webkit-border-radius:0.3em;/* Webkit browsers */border-radius:0.3em;/* W3C syntax */}
+.colon{ color:#4f4544; height:1.8em; line-height:1.8em; float:left; margin-right:2px;}
+
 /* slider plugin UI */
 .swiper-container {
 	margin:0 auto;

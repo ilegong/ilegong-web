@@ -1,0 +1,69 @@
+<style>
+    /*试吃秒杀列表*/
+    .seckill_banner img{ min-width:320px; max-width:640px; width:100%;}
+    .seckill_tip{ text-align:center; padding-top:0.6em; padding-bottom:0.6em; font-size:0.9em; color:#ff6600; border-bottom:1px #eeeeee solid;}
+    .seckill_tip a{ color:#29ac0e; text-decoration:none;}
+    .seckill_list { border-bottom:1px #dddddd solid; padding:1em;}
+    .seckill_list ul { margin-bottom: 0 }
+    .seckill_list ul li.pic{ border:1px #eeeeee solid; margin:0}
+    .seckill_list ul li.pic img{ width:6.667em; height:5em;}
+    .seckill_list ul li .title{ padding-left:1em; padding-bottom:0.3em;}
+    .seckill_list ul li .title a{ font-size:1.083em; color:#333333;  line-height:1em;}
+    .seckill_list ul li .title{ font-size:1.083em; color:#333333; padding-left:1em; padding-bottom:0.3em; line-height:1em;}
+    .seckill_list ul li .price{ font-size:1em; color:#999999; line-height:1.4em; padding-left:1em; padding-top:0.4em;}
+    .seckill_list ul li .price span{ color:#ffa531;}
+    .seckill_list ul li .price label{ font-size: 0.8em; }
+    .seckill_list ul li .tbtn { float:left; display:block; width:7.917em; height:2em; line-height:2em; text-decoration:none; font-size:1em; text-align:center; margin-left:1em; margin-top:0.4em;}
+    .seckill_list ul li .seckill_btn{ background-color:#ffa531; color:#ffffff;}
+    .seckill_list ul li .end_btn{ background-color:#cccccc; color:#999999;}
+    .seckill_list ul li .sec_start{ background-color:#cccccc; color:#999999; margin-top: 0}
+    .grade{ padding:0.8em 0 0 0.3em; color:#666666;}
+    /*秒杀规则*/
+    .seckill_rule{ background-color:#ffffff; width:70%; padding:1.5em; font-size:1em; color:#666666; line-height:1.5em; position:relative; top:50px;}
+    .seckill_rule .title{ font-size:1.25em; color:#29ac0e; padding-bottom:0.7em; text-align:center;}
+    .seckill_rule .close{ display:block; background:url(/img/mobilev1/pyshuo_icon.png) 0 -20.25em no-repeat; background-size:25em 25em; width:2.5em; height:2.6em; position:absolute; right:-0.7em; top:-0.7em;}
+</style>
+<div class="seckill_banner"><img src="{{$this->Html->assetUrl('/img/mobilev1/flash_shichi_banner.jpg')}}" /></div>
+<div class="seckill_tip">请设置好默认收货地址, 以便更快秒杀!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#X">秒杀规则</a></div>
+{{loop $tryings $key $trying}}
+<div class="seckill_list">
+    <ul class="clearfix list-unstyled" style="position:relative;">
+        <li class="pic fl"><a class="_product_link" href="{{product_link2($trying)}}"><img src="{{$this->Html->assetUrl(small_thumb_link($trying['Product']['coverimg']))}}" /></a></li>
+        <li class="fl">
+            <div class="title"><a class="_product_link" href="{{product_link2($trying)}}">{{usubstr($trying['Product']['name'], 0, 10, '')}}</a></div>
+            <div class="price">秒杀价: <span>￥{{$this->Number->precision($trying['ProductTry']['price']/100, 2)}}</span><label>({{$trying['ProductTry']['spec']}})</label></div>
+            <div class="clearfix buy_div {{if $trying['status'] == 'sec_unstarted' }} hide {{/if}}">
+                <a href="#X" data-pid="{{$trying['Product']['id']}}" class="tbtn {{if $trying['status'] == 'sec_kill'}}seckill_btn{{elseif $trying['status'] =='sec_end'}}end_btn{{/if}} radius10">立即秒杀</a>
+                <div class="fl grade">限{{$trying['ProductTry']['limit_num']}}份</div>
+            </div>
+            <div class="clearfix countdown_div {{if $trying['status'] != 'sec_unstarted' }} hide {{/if}}">
+                <a class="tbtn radius10 sec_start" data-start="{{strtotime($trying['ProductTry']['start_time'])}}" data-pid="{{$trying['Product']['id']}}">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
+                <div class="fl grade" style="padding-top:0.3em;">限{{$trying['ProductTry']['limit_num']}}份</div>
+            </div>
+        </li>
+    </ul>
+</div>
+{{/loop}}
+<!--秒杀规则弹出层-->
+<div class="seckill_rule radius10" style="display:none;">
+    <div class="title">秒杀规则</div>
+    <div>1、有一次评价的用户可以参加试吃秒杀; <br />2、被该不该把</div>
+    <a href="#X" class="close"></a>
+</div>
+<script>
+    $(document).ready(function(){
+        var timerParentStyle = {'margin-left': '1em'};
+        var toTimer = $('.sec_start').first();
+        utils.countDown(toTimer, function(parentJ){
+            parentJ.css(timerParentStyle);
+        });
+
+        $('._product_link').click(function(ev){
+            var prod_link = $(this).attr('href');
+            utils.alert_two('提醒：如果仍要试吃商品秒杀请回到本页进行秒杀操作', '留在本页', '查看商品', null, function(){
+                window.location.href = prod_link;
+            });
+            return false;
+        });
+    });
+</script>

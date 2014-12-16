@@ -61,6 +61,12 @@ const VAL_PRODUCT_NAME_MAX_LEN = 15;
 CONST PUBLISH_YES = 1;
 CONST PUBLISH_NO = 0;
 
+const PRODUCT_STATUS_WAIT_AUDITING = 3;
+const PRODUCT_STATUS_AUDIT_FAILED = 2;
+const PRODUCT_STATUS_EXPR = 4;
+
+const PRODUCT_TRY_ING = 1;
+const PRODUCT_TRY_SOLD_OUT = 2;
 
 CONST DELETED_YES = 1;
 CONST DELETED_NO = 0;
@@ -187,6 +193,19 @@ function same_day($time1, $time2) {
     return ($day1 == $day2);
 }
 
+function before_than($timeStr1, $timeStr2 = null) {
+    $dt1 = DateTime::createFromFormat(FORMAT_DATETIME, $timeStr1);
+    $ts1 = $dt1->getTimestamp();
+
+    if ($timeStr2 != null) {
+        $dt2 = DateTime::createFromFormat(FORMAT_DATETIME, $timeStr1);
+        $ts2 = $dt2->getTimestamp();
+    } else {
+        $ts2 = time();
+    }
+
+    return ($ts1 < $ts2);
+}
 
 function filter_invalid_name($name, $def = '神秘人') {
     if (!$name || $name == 'null') {

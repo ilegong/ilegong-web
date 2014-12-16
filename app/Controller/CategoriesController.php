@@ -191,6 +191,24 @@ class CategoriesController extends AppController {
             array('img' => "/img/banner/banner_shiliu.jpg", 'url' => "/products/20141013/he_nan_xing_yang_he_yin_ruan_zi_shi_liu_8liang.html", 'id' => 202),
         );
 
+        $this->loadModel('ProductTry');
+        $tryings = $this->ProductTry->find_trying(6);
+        if (!empty($tryings)) {
+            $tryProducts = $this->Product->find_products_by_ids(Hash::extract($tryings, '{n}.ProductTry.product_id'), array(), false);
+            if (!empty($tryProducts)) {
+                foreach($tryings as &$trying) {
+                    $prod = $tryProducts[$trying['ProductTry']['product_id']];
+                    if (!empty($prod)) {
+                        $trying['Product'] = $prod;
+                    } else {
+                        unset($trying);
+                    }
+                }
+            }
+        }
+
+        $this->set('tryings', $tryings);
+
         $this->set('bannerItems', $bannerItems);
         $this->set('max_show', $this->RequestHandler->isMobile()? 2 : 4);
         $this->set('_serialize', array('brands', 'tagsWithProducts', 'sub_title', 'bannerItems'));
