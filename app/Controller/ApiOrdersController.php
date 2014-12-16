@@ -270,4 +270,27 @@ class ApiOrdersController extends AppController {
         ));
         return $info;
     }
+
+    public function order_consignees(){
+        $creator = $this->currentUser['id'];
+        $orderM = ClassRegistry::init('OrderConsignees');
+        $info = $orderM->find('all', array(
+            'conditions' => array('creator' => $creator),
+            'fields' => array('id', 'name', 'area', 'address', 'mobilephone', 'telephone', 'email', 'postcode', 'province_id', 'city_id', 'county_id')
+        ));
+        $this->set('order_consigness', $info);
+        $this->set('_serialize', 'order_consigness');
+    }
+    public function my_profile() {
+        $shichituanM = ClassRegistry::init('Shichituan');
+        $result = $shichituanM->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.pictures','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
+        $userM = ClassRegistry::init('User');
+        $user_id = $this->currentUser['id'];
+        $datainfo = $userM->find('first', array('recursive' => -1,
+            'conditions' => array('id' => $user_id),
+            'fields'=>array('nickname', 'email', 'image', 'sex', 'companies', 'bio', 'mobilephone', 'email', 'username', 'id')));
+        $this->set('my_profile', array('Shichituan' => $result['Shichituan'], 'User' => $datainfo['User']));
+        $this->set('_serialize', array('my_profile'));
+
+    }
 }
