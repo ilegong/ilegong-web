@@ -62,7 +62,7 @@
 
         $('._product_link').click(function(ev){
             var prod_link = $(this).attr('href');
-            utils.alert_two('提醒：如果仍要试吃商品秒杀请回到本页进行秒杀操作', '留在本页', '查看商品', null, function(){
+            utils.alert_two('提醒：试吃秒杀请回到本页进行操作', '留在本页', '查看商品', null, function(){
                 window.location.href = prod_link;
             });
             return false;
