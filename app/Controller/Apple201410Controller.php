@@ -374,12 +374,12 @@ class Apple201410Controller extends AppController
 
         $sold_out = false;
         $coupon_count = 0;
-        $exchangeCount = 0;
+        $ex_count_per_Item = 0;
         if ($gameType == self::RICE_201411) {
             if ($can_exchange_apple_count >= 50) {
                 $coupon_count = intval($can_exchange_apple_count / 50);
-                $exchangeCount = 50 * $coupon_count;
-                $this->exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfo['id'],
+                $ex_count_per_Item = 50 * $coupon_count;
+                $this->exchangeCouponAndLog($id, $apple_count_snapshot, $ex_count_per_Item, $coupon_count, $exChangeSource, $awardInfo['id'],
                     function($uid, $operator, $source_log_id){
                         $this->CouponItem->addCoupon($uid, COUPON_TYPE_RICE_1KG, $operator, $source_log_id);
                         $this->CouponItem->id = null;
@@ -394,26 +394,29 @@ class Apple201410Controller extends AppController
         } else if ($gameType == self::BTC1412) {
 
             if ($can_exchange_apple_count >= 100) {
-                $exchangeCount = 50; //100也是扣除50，因为只给一张
+                $coupon_count = 2;
+                $ex_count_per_Item = 50; //100也是扣除50，因为只给一张
+                $total_ex_count = 2 * $ex_count_per_Item;
                 $sharingPref = array(17725, 30);
             } else if ($can_exchange_apple_count >= 50) {
-                $exchangeCount = 50;
+                $total_ex_count = $ex_count_per_Item = 50;
                 $sharingPref = array(18095, 20);
             } else if ($can_exchange_apple_count >= 30) {
-                $exchangeCount = 30;
+                $total_ex_count = $ex_count_per_Item = 30;
                 $sharingPref = array(17724, 15);
             }
 
-            if ($exchangeCount > 0) {
+            if ($ex_count_per_Item > 0) {
                 if (!empty($sharingPref)) {
                     $coupon_count = 1;
                     $so = $this->CouponItem;
                     $weixin = $this->Weixin;
-                    $this->exchangeCouponAndLog($id, $apple_count_snapshot, $exchangeCount, $coupon_count, $exChangeSource, $awardInfo['id'],
-                        function ($uid, $operator, $source_log_id) use ($sharingPref, $so, $weixin) {
-                            list($couponId, $toShareNum) = $sharingPref;
-                            $so->addCoupon($uid, $couponId, $operator, $source_log_id);
-                            $so->id = null;
+                    for($i = 0; $i < $coupon_count; $i++) {
+                        $this->exchangeCouponAndLog($id, $apple_count_snapshot, $ex_count_per_Item, $coupon_count, $exChangeSource, $awardInfo['id'],
+                            function ($uid, $operator, $source_log_id) use ($sharingPref, $so, $weixin) {
+                                list($couponId, $toShareNum) = $sharingPref;
+                                $so->addCoupon($uid, $couponId, $operator, $source_log_id);
+                                $so->id = null;
                                 $store = "在黔阳冰糖橙店购买时使用(" . $toShareNum . '元)';
                                 $validDesc = "有效期至2014年12月18日";
                                 $weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
@@ -423,14 +426,15 @@ class Apple201410Controller extends AppController
 //                            if (!empty($added))  {
 //                                App::uses('CakeNumber', 'Utility');
 //                            }
-                        }
-                    );
+                            }
+                        );
+                    }
                 }
             }
         }
 
-        if ($exchangeCount > 0) {
-            $result['exchange_apple_count'] = $exchangeCount;
+        if ($total_ex_count > 0) {
+            $result['exchange_apple_count'] = $total_ex_count;
             $result['coupon_count'] = $coupon_count;
             $result['result'] = "just-got";
         }else{
