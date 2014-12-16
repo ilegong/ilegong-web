@@ -1257,8 +1257,8 @@ function friendlyDate($sTime, $type = 'normal', $alt = 'false') {
         }elseif($dTime >= 0 && $dTime < 3600 ){
             return intval($dTime/60)."分钟前";
             //今天的数据.年份相同.日期相同.
-        }elseif( $dYear==0 && ($dDay <= 1 || $dDay >= -1)  ) {
-            return ($dDay == 0 ? '今天' : ($dDay == -1 ? '明天' : '昨天')) . date('H:i', $sTime);
+        }elseif( $dYear==0 && ($dDay <= 0 || $dDay >= -1)  ) {
+            return ($dDay == 0 ? '今天' : '明天') . date('H:i', $sTime);
         }elseif($dYear==0){
             return date("m月d日 H:i",$sTime);
         }else{
