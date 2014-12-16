@@ -443,12 +443,14 @@ function addtofavor(model,id)
  * @param num 产品数量
  * @param spec 产品规格
  * @param quick_buy_pid
+ * @param type
  * @return
  */
-function addtoCart(id, num, spec, quick_buy_pid)
+function addtoCart(id, num, spec, quick_buy_pid, type)
 {
+    type = type || 'normal';
     var url = BASEURL + '/carts/add';
-    var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec};
+    var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec, 'data[Cart][type]': type};
     utils.progress_notify('正在更新购物车');
     ajaxAction(url, postdata, null, 'addtoCart', quick_buy_pid);
     return false;
@@ -1171,7 +1173,7 @@ $(document).ready(function () {
         }
     };
 
-    function addToCartWithSpec(pid, itemNum, quick_buy_pid) {
+    function addToCartWithSpec(pid, itemNum, quick_buy_pid, type) {
         var specId = '';
         if (typeof(_p_spec_m) != 'undefined') {
             if (_p_spec_m) {
@@ -1190,7 +1192,7 @@ $(document).ready(function () {
             }
         }
 
-        addtoCart(pid, itemNum, specId || 0, quick_buy_pid);
+        addtoCart(pid, itemNum, specId || 0, quick_buy_pid, type);
         return true;
     }
 

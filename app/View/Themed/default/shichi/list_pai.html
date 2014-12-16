@@ -33,8 +33,8 @@
             <div class="title"><a class="_product_link" href="{{product_link2($trying)}}">{{usubstr($trying['Product']['name'], 0, 10, '')}}</a></div>
             <div class="price">秒杀价: <span>￥{{$this->Number->precision($trying['ProductTry']['price']/100, 2)}}</span><label>({{$trying['ProductTry']['spec']}})</label></div>
             <div class="clearfix buy_div {{if $trying['status'] == 'sec_unstarted' }} hide {{/if}}">
-                <a href="#X" data-pid="{{$trying['Product']['id']}}" class="tbtn {{if $trying['status'] == 'sec_kill'}}seckill_btn{{elseif $trying['status'] =='sec_end'}}end_btn{{/if}} radius10">立即秒杀</a>
-                <div class="fl grade">限{{$trying['ProductTry']['limit_num']}}份</div>
+                <a href="javascript:;" data-pid="{{$trying['Product']['id']}}" class="tbtn {{if $trying['status'] == 'sec_kill'}}seckill_btn{{elseif $trying['status'] =='sec_end'}}end_btn{{/if}} radius10">立即秒杀</a>
+                <div class="fl grade">限<span id="limit_num_{{$trying['ProductTry']['id']}}">{{$trying['ProductTry']['limit_num']}}</span>份</div>
             </div>
             <div class="clearfix countdown_div {{if $trying['status'] != 'sec_unstarted' }} hide {{/if}}">
                 <a class="tbtn radius10 sec_start" data-start="{{strtotime($trying['ProductTry']['start_time'])}}" data-pid="{{$trying['Product']['id']}}">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
@@ -56,6 +56,8 @@
         var toTimer = $('.sec_start').first();
         utils.countDown(toTimer, function(parentJ){
             parentJ.css(timerParentStyle);
+        }, function(){
+
         });
 
         $('._product_link').click(function(ev){
@@ -65,5 +67,41 @@
             });
             return false;
         });
+
+        $('.seckill_btn').click(function(){
+
+        });
+
+
+        /**
+         * 添加到快速购买试吃秒杀
+         * @param id 产品编号
+         * @param num 产品数量
+         * @param spec 产品规格
+         * @param tryId 试吃id
+         * @param type
+         * @param soldOutCallback
+         * @param addedCallback
+         * @return
+         */
+        function quick_buy_try(id, num, spec, tryId, type, soldOutCallback, addedCallback)
+        {
+            type = type || 'normal';
+            var url = BASEURL + '/carts/add';
+            var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec, 'data[Cart][type]': type, 'try_id': tryId};
+            ajaxAction(url, postdata, null, function(data){
+                if (data.success == false) {
+                    if (data.reason == 'not_login') {
+                        window.location.href = '/shichi/list_pai.html';
+                        return false;
+                    } else if (data.reason == 'sold_out') {
+                        utils.alert_one('抱歉：已经被秒完', '关闭', function(){ if (typeof(soldOutCallback) == 'function'){ soldOutCallback()} });
+                    }
+                } else {
+                    addedCallback();
+                }
+            });
+            return false;
+        }
     });
 </script>

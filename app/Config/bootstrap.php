@@ -76,6 +76,10 @@ const OP_CATE_CATEGORIES = 'categories';
 
 const PRO_TAG_HOTTEST = 1;
 
+const CART_ITEM_TYPE_NORMAL = 1;
+const CART_ITEM_TYPE_QUICK_ORDER = 2;
+const CART_ITEM_TYPE_TRY = 3;
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATEH', 'Y-m-d H');

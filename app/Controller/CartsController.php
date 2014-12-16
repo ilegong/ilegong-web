@@ -42,13 +42,27 @@ class CartsController extends AppController{
         //清除Flash信息，避免登录信息显示出来
         $this->Session->delete('Message.flash');
 
+        $this->autoRender = false;
+
 		$carts = array();
 		if(!empty($this->data)){
 			$this->autoRender = false;
             $product_id = $this->data['Cart']['product_id'];
             $num = $this->data['Cart']['num'];
             $specId = $this->data['Cart']['spec'];
-            $this->_addToCart($product_id, $num, $specId);
+            $type = self::convert_cart_type($this->data['Cart']['type']);
+
+            if (!$type) {
+                //FIXME:should give an error to client
+                $type = CART_ITEM_TYPE_NORMAL;
+            }
+
+            if ($type == CART_ITEM_TYPE_TRY && empty($this->currentUser['id'])) {
+                echo json_encode(array('success' => false, 'reason' => 'not_login'));
+                return;
+            }
+
+            $this->_addToCart($product_id, $num, $specId, $type);
 			
 			$successinfo = array('success' => __('Success add to cart.'));
 			echo json_encode($successinfo);
@@ -76,6 +90,7 @@ class CartsController extends AppController{
         $count = $this->Cart->find('count', array(
             'conditions' => array(
                 'status' => 0,
+                'type !='.CART_ITEM_TYPE_TRY,
                 'order_id' => NULL,
                 'OR' => $this->user_condition
             ),
@@ -89,6 +104,7 @@ class CartsController extends AppController{
         $dbCartItems = $this->Cart->find('all',array(
 				'conditions'=>array(
 					'status' => 0,
+                    'type !='.CART_ITEM_TYPE_TRY,
 					'order_id' => NULL,
 					'OR'=> $this->user_condition
 			)));
@@ -132,9 +148,10 @@ class CartsController extends AppController{
      * @param $product_id
      * @param int $num
      * @param int $spec specified id for
+     * @param int $type
      * @return bool whether saved successfully
      */
-    private function _addToCart($product_id, $num = 1, $spec = 0) {
+    private function _addToCart($product_id, $num = 1, $spec = 0, $type = CART_ITEM_TYPE_NORMAL) {
         $Carts = $this->Cart->find('first', array(
             'conditions' => array(
                 'product_id' => $product_id,
@@ -157,7 +174,20 @@ class CartsController extends AppController{
         $this->data['Cart']['price'] = calculate_price($p['Product']['id'], $p['Product']['price'], $this->currentUser['id']);
         $this->data['Cart']['creator'] = $this->currentUser['id'];
         $this->data['Cart']['specId'] = $spec;
+        $this->data['Cart']['type'] = $type;
         return $this->Cart->save($this->data);
+    }
+
+    static function convert_cart_type($typeStr) {
+        if ($typeStr == 'normal') {
+            return CART_ITEM_TYPE_NORMAL;
+        } else if ($typeStr == 'try') {
+            return CART_ITEM_TYPE_TRY;
+        } else if ($typeStr == 'quick_buy') {
+            return CART_ITEM_TYPE_QUICK_ORDER;
+        }  else {
+            return null;
+        }
     }
 
 }
