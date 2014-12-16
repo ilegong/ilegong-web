@@ -393,25 +393,18 @@ class Apple201410Controller extends AppController
             }
         } else if ($gameType == self::BTC1412) {
 
-            $sharing = array(
-                50 => array(17725, 30),
-                30 => array(17724, 15),
-//                50 => array(17723, 1000 * 10),
-//                30 => array(17722, 500 * 5),
-            );
-//            if ($can_exchange_apple_count >= 100) {
-//                $exchangeCount = 100;
-//            } else if ($can_exchange_apple_count >= 80) {
-//                $exchangeCount = 80;
-//            } else
-                if ($can_exchange_apple_count >= 50) {
+            if ($can_exchange_apple_count >= 100) {
+                $exchangeCount = 50; //100也是扣除50，因为只给一张
+                $sharingPref = array(17725, 30);
+            } else if ($can_exchange_apple_count >= 50) {
                 $exchangeCount = 50;
+                $sharingPref = array(18095, 20);
             } else if ($can_exchange_apple_count >= 30) {
                 $exchangeCount = 30;
+                $sharingPref = array(17724, 15);
             }
 
             if ($exchangeCount > 0) {
-                $sharingPref = $sharing[$exchangeCount];
                 if (!empty($sharingPref)) {
                     $coupon_count = 1;
                     $so = $this->CouponItem;
