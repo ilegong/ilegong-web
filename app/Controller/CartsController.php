@@ -234,7 +234,7 @@ class CartsController extends AppController{
         } else if ($typeStr == 'quick_buy') {
             return CART_ITEM_TYPE_QUICK_ORDER;
         }  else {
-            return null;
+            return CART_ITEM_TYPE_NORMAL;
         }
     }
 

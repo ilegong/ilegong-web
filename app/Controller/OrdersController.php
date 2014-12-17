@@ -1094,7 +1094,7 @@ class OrdersController extends AppController{
         $cond = array(
             'status' => 0,
             'order_id' => null,
-            'type' => CART_ITEM_TYPE_TRY,
+            'type != ' => CART_ITEM_TYPE_TRY,
             'OR' => $this->user_condition
         );
         if (!empty($limitPids)) {
