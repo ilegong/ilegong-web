@@ -94,6 +94,9 @@ class Product extends AppModel {
      */
     public function find_products_by_ids($product_ids, $extra_fields, $only_published = true) {
         if (empty($product_ids)) return array();
+
+        if ($extra_fields == null) $extra_fields = array();
+
         $cond = array(
             'id' => $product_ids,
         );

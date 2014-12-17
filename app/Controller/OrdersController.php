@@ -376,52 +376,58 @@ class OrdersController extends AppController{
             )));
         $product_ids = Hash::extract($Carts, '{n}.Cart.product_id');
         $this->loadModel('Product');
-        $products = $this->Product->find('all', array(
-            'fields' => array('id', 'created', 'slug', 'published', 'deleted'),
-            'conditions'=>array(
-                'id' => $product_ids
-            )));
-
-        $product_new = array();
-        foreach($products as &$p) {
-            $product_new[$p['Product']['id']] = $p;
-        }
-        $products = $product_new;
-        unset($product_new);
+        $products = $this->Product->find_products_by_ids($product_ids, array('published', 'deleted'), false);
 
         $expired_pids = array();
         foreach($product_ids as $pid) {
             if (empty($products[$pid])
-                || $products[$pid]['Product']['published'] == PUBLISH_NO
-                || $products[$pid]['Product']['deleted'] == 1) {
+                || $products[$pid]['published'] == PUBLISH_NO
+                || $products[$pid]['deleted'] == DELETED_YES) {
                 $expired_pids[] = $pid;
             }
         }
-
-        $has_expired_product_type = count($expired_pids);
-        $totalCents = $orderinfo['Order']['total_all_price'] * 100;
-        $no_more_money = $totalCents < 1 && $totalCents >= 0;
-
-        if ($has_expired_product_type == 0 && $no_more_money && $action == 'pay_direct')  {
-            if ($orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
-                $this->Order->id = $orderinfo['Order']['id'];
-                if($this->Order->set_order_to_paid($orderId, $orderinfo['Order']['try_id'], $uid)){
-                    $this->Weixin->notifyPaidDone($orderinfo);
-                };
-                $orderinfo = $this->find_my_order_byId($orderId, $uid);
-            }
-        }
-
-        $status = $orderinfo['Order']['status'];
 
         if ($action == 'pay') {
             $this->set('paid_msg', htmlspecialchars($_GET['paid_msg']));
             $display_status = $_GET['display_status'];
             $this->set('display_status', $display_status);
         }
-        $this->set('show_pay', $has_expired_product_type == 0
-            && $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
-            && ($display_status != PAID_DISPLAY_PENDING && $display_status != PAID_DISPLAY_SUCCESS));
+
+        $has_expired_product_type = count($expired_pids);
+        $totalCents = $orderinfo['Order']['total_all_price'] * 100;
+        $no_more_money = $totalCents < 1 && $totalCents >= 0;
+        $status = $orderinfo['Order']['status'];
+
+        if ($orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
+            $try_id = $orderinfo['Order']['try_id'];
+            $afford = true;
+            if ($try_id > 0) {
+                list($afford, $user_left, $total_left) = afford_product_try($try_id, $uid);
+                $total_items = array_sum(Hash::extract($Carts, '{n}.Cart.num'));
+
+                if ($total_left == 0 || ($total_left > 0 && $total_left < $total_items)) {
+                    $this->set('has_sold_out', true);
+                } else if ($user_left == 0 || ($user_left > 0 && $user_left < $total_items)) {
+                    $this->set('has_reach_limit', true);
+                }
+            }
+
+            if ($afford && $has_expired_product_type == 0 && $no_more_money && $action == 'pay_direct') {
+                if ($orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
+                    $this->Order->id = $orderinfo['Order']['id'];
+                    if ($this->Order->set_order_to_paid($orderId, $orderinfo['Order']['try_id'], $uid)) {
+                        $this->Weixin->notifyPaidDone($orderinfo);
+                    };
+                    $orderinfo = $this->find_my_order_byId($orderId, $uid);
+                    $status = $orderinfo['Order']['status'];
+                }
+            }
+
+            $this->set('show_pay', $afford
+                && $has_expired_product_type == 0
+                && $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
+                && ($display_status != PAID_DISPLAY_PENDING && $display_status != PAID_DISPLAY_SUCCESS));
+        }
 
         if ($action == 'paid') {
             $this->log("paid done: $orderId, msg:". $_GET['msg']);

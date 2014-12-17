@@ -27,6 +27,10 @@
         </div>
         {{elseif $has_expired_product_type}}
             <div class="alert alert-info">有{{$has_expired_product_type}}样商品已下架</div>
+        {{elseif $has_sold_out}}
+            <div class="alert alert-info">您订单中待支付的商品已经售完啦</div>
+        {{elseif $has_reach_limit}}
+            <div class="alert alert-info">您订单中待支付的商品已经超限啦</div>
         {{/if}}
 
     {{if !empty($toShare)}}
