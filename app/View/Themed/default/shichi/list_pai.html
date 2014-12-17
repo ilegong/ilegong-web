@@ -36,10 +36,12 @@
                 <a href="javascript:;" data-tryid="{{$trying['ProductTry']['id']}}" data-pid="{{$trying['Product']['id']}}" class="tbtn {{if $trying['status'] == 'sec_kill'}}seckill_btn{{elseif $trying['status'] =='sec_end'}}end_btn{{/if}} radius10">{{$trying['status'] =='sec_end'?'已秒完':'立即秒杀'}}</a>
                 <div class="fl grade">限<span id="limit_num_{{$trying['ProductTry']['id']}}">{{$trying['ProductTry']['limit_num']}}</span>份</div>
             </div>
-            <div class="clearfix countdown_div {{if $trying['status'] != 'sec_unstarted' }} hide {{/if}}">
+            {{if $trying['status'] == 'sec_unstarted' }}
+            <div class="clearfix countdown_div">
                 <a class="tbtn radius10 sec_start" data-start="{{strtotime($trying['ProductTry']['start_time'])}}" data-pid="{{$trying['Product']['id']}}">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
                 <div class="fl grade" style="padding-top:0.3em;">限{{$trying['ProductTry']['limit_num']}}份</div>
             </div>
+            {{/if}}
         </li>
     </ul>
 </div>
