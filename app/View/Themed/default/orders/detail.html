@@ -84,19 +84,19 @@
         {{if !empty($Carts)}}
         {{loop $Carts $cart}}
         <?php $p = $products[$cart['Cart']['product_id']]; ?>
-        <div class="clearfix orderitem_item"><a href="{{'/products/'.date('Ymd',strtotime($p['Product']['created'])).'/'.$p['Product']['slug'].'.html'}}">
+        <div class="clearfix orderitem_item"><a href="{{product_link2($p)}}">
             {{$this->Html->image($cart['Cart']['coverimg'], array(
             'class' => 'col-xs-3',
             'style' => 'max-height:60px'
             ));}}
             </a>
             <div class="col-xs-6">
-            <a href="{{'/products/'.date('Ymd',strtotime($p['Product']['created'])).'/'.$p['Product']['slug'].'.html'}}">
+            <a href="{{product_link2($p)}}">
                 {{$cart['Cart']['name']}}
             </a>
 
                 {{if $canComment}}
-            <a href="{{'/products/'.date('Ymd',strtotime($p['Product']['created'])).'/'.$p['Product']['slug'].'.html?_pys_add_comment=1'}}" style="display: inline-block" class="btn-sm btn-warning">
+            <a href="{{product_link2($p)}}?_pys_add_comment=1" style="display: inline-block" class="btn-sm btn-warning">
                 去评论
             </a>
                 {{/if}}
