@@ -1025,6 +1025,7 @@ var utils = {
     },
 
     alert_two : function(msg, defLabel, impLabel, defCallback, impCallback, options){
+        defLabel = defLabel || '知道了';
         var params = {
             message: msg,
             closeButton: false,

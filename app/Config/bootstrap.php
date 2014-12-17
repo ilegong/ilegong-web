@@ -223,11 +223,13 @@ function filter_invalid_name($name, $def = '神秘人') {
     return $name;
 }
 
-function calculate_try_price($priceInCent, $uid) {
-    $sctM = ClassRegistry::init('Shichituan');
-    $shichituan = $sctM->find_in_period($uid, get_shichituan_period());
-
-    return (!empty($shichituan) ? 99 : $priceInCent)/100;
+function calculate_try_price($priceInCent, $uid, $shichituan = null) {
+    if ($shichituan == null) {
+        $sctM = ClassRegistry::init('Shichituan');
+        $shichituan = $sctM->find_in_period($uid, get_shichituan_period());
+    }
+    $isShichituan = !empty($shichituan);
+    return ($isShichituan ? 99 : $priceInCent)/100;
 }
 
 function calculate_price($pid, $price, $currUid) {

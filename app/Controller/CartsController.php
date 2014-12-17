@@ -82,13 +82,29 @@ class CartsController extends AppController{
                             $success = false;
                             $reason = 'already_buy';
                         }
+
+                        if ($success) {
+                            $sctM = ClassRegistry::init('Shichituan');
+                            $shichituan = $sctM->find_in_period($uid, get_shichituan_period());
+                            $parallelCnt =  (!empty($shichituan))  ? 2 : 1;
+                            $orderShichiM = ClassRegistry::init('OrderShichi');
+                            $notCommentedCnt = $orderShichiM->find('count', array('conditions' => array(
+                                'creator' => $uid,
+                                'is_comment' => 0
+                            )));
+                            if ($parallelCnt <= $notCommentedCnt) {
+                                $success = false;
+                                $reason = 'not_comment';
+                            }
+                        }
                     }
+
                 }
 
                 if ($success) {
-                    $this->_addToCart($product_id, $num, $specId, $type, $tryId, $prodTry);
+                    $this->_addToCart($product_id, $num, $specId, $type, $tryId, $prodTry, $shichituan);
                 }
-                echo json_encode(array('success' => $success, 'reason' => $reason));
+                echo json_encode(array('success' => $success, 'reason' => $reason, 'not_comment_cnt' => intval($notCommentedCnt)));
             } else {
                 $this->_addToCart($product_id, $num, $specId, $type, $tryId);
                 $successinfo = array('success' => __('Success add to cart.'));
@@ -181,10 +197,11 @@ class CartsController extends AppController{
      * @param int $type
      * @param int $try_id
      * @param null $prodTry
+     * @param null $shichituan
      * @throws MissingModelException
      * @return bool whether saved successfully
      */
-    private function _addToCart($product_id, $num = 1, $spec = 0, $type = CART_ITEM_TYPE_NORMAL, $try_id = 0, $prodTry = null) {
+    private function _addToCart($product_id, $num = 1, $spec = 0, $type = CART_ITEM_TYPE_NORMAL, $try_id = 0, $prodTry = null, $shichituan = null) {
         $Carts = $this->Cart->find('first', array(
             'conditions' => array(
                 'product_id' => $product_id,
@@ -214,7 +231,7 @@ class CartsController extends AppController{
         $this->data['Cart']['name'] = $name;
 
         if (!empty($prodTry)) {
-            $price = calculate_try_price($prodTry['ProductTry']['price'], $uid);
+            $price = calculate_try_price($prodTry['ProductTry']['price'], $uid, $shichituan);
         } else {
             $price = calculate_price($p['Product']['id'], $p['Product']['price'], $uid);
         }
