@@ -41,7 +41,7 @@
                     <a  href="/shichi/list_pai.html" class="tbtn seckill_btn radius10" data-pid="{{$trying['Product']['id']}}">正在秒杀</a>
                     {{elseif $trying['status'] == 'sec_end'}}<a class="tbtn end_btn radius10">已秒完</a>
                     {{else}}<div class="clearfix" style="width:8.4em; margin:0 auto; ">
-                        <a data-start="{{strtotime($trying['ProductTry']['start_time'])}}" data-pid="{{$trying['Product']['id']}}" class="tbtn radius10 sec_start">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
+                        <a data-start="{{strtotime($trying['ProductTry']['start_time']) - ($shichi_mem? 30 * 60 : 0)}}" data-pid="{{$trying['Product']['id']}}" class="tbtn radius10 sec_start">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
                     </div>{{/if}}
                  </a>
                 </dt>

@@ -214,7 +214,7 @@ class CartsController extends AppController{
         $this->data['Cart']['name'] = $name;
 
         if (!empty($prodTry)) {
-            $price = $prodTry['ProductTry']['price']/100;
+            $price = calculate_try_price($prodTry['ProductTry']['price'], $uid);
         } else {
             $price = calculate_price($p['Product']['id'], $p['Product']['price'], $uid);
         }

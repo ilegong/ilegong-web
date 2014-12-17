@@ -1289,7 +1289,7 @@ class OrdersController extends AppController{
 
             $cart = new OrderCartItem();
             $cart->is_try = true;
-            $cart->add_product_item($products[0]['Product']['brand_id'], $pid, $prodTry['ProductTry']['price']/100, 1, array(), $cartItem['Cart']['name']);
+            $cart->add_product_item($products[0]['Product']['brand_id'], $pid, calculate_try_price($prodTry['ProductTry']['price'], $uid), 1, array(), $cartItem['Cart']['name']);
             $shipFee = 0;
         } else {
             if (!empty($balancePids)) {

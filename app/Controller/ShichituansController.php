@@ -37,7 +37,7 @@ class ShichituansController extends AppController{
         $this->checkAccess();
         $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.period'),'Shichituan.shichi_id DESC');
         if ($result){
-            if($result['Shichituan']['period']==((date('y',time())<=2014) ?(date('m', time()) - 8): (date('m',time()) + 4)))
+            if($result['Shichituan']['period']== get_shichituan_period())
             {
             return $this->redirect(array('action' => 'shichi_view'));
             }
@@ -53,10 +53,7 @@ class ShichituansController extends AppController{
         $this->autoRender = false;
         $this->layout = 'ajax';
         if ($this->request->is('post')) {
-            if(date('y',time())<=2014){
-                $this->data['Shichituan']['period'] = date('m', time()) - 8;}
-            else{
-                $this->data['Shichituan']['period'] = date('m', time()) + 4;}
+            $this->data['Shichituan']['period'] = get_shichituan_period();
             $this->data['Shichituan']['user_id'] = $this->currentUser['id'];
             $this->data['Shichituan']['comment'] = htmlspecialchars($this->data['Shichituan']['comment']);
             if ($this->Shichituan->save($this->data)) {

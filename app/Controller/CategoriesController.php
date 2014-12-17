@@ -207,6 +207,14 @@ class CategoriesController extends AppController {
             }
         }
 
+        $uid = $this->currentUser['id'];
+        if (!empty($uid)) {
+            $this->loadModel('Shichituan');
+            $shichituan = $this->Shichituan->find_in_period($uid, get_shichituan_period());
+            $is_shichi = (!empty($shichituan) || $shichituan);
+        }
+        $this->set('shichi_mem', $is_shichi);
+
         $this->set('tryings', $tryings);
 
         $this->set('bannerItems', $bannerItems);

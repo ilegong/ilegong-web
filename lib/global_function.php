@@ -1313,3 +1313,16 @@ function generate_slug($word) {
     $slug = Inflector::slug($slug);
     return $slug;
 }
+
+
+/**
+ * FIXME: fix year 2016 problem
+ * @param $time
+ * @return bool|string
+ */
+function get_shichituan_period($time = null) {
+    if ($time == null) {
+        $time = time();
+    }
+    return ((date('y', $time) <= 2014) ? (date('m', $time) - 8) : (date('m', $time) + 4));
+}

@@ -28,4 +28,10 @@ class Shichituan extends AppModel {
 
     );
 
+    public function find_in_period($uid, $period) {
+        return $this->find('first', array(
+            'conditions' => array('period' => $period, 'user_id'=>$uid, 'status' => SHICHI_STATUS_OK)
+        ));
+    }
+
 }

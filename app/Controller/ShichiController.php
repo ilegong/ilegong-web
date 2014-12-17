@@ -39,7 +39,12 @@ class ShichiController extends AppController {
             }
         }
 
-        $this->set('shichi_mem', $this->is_admin($this->currentUser['id']));
+        $uid = $this->currentUser['id'];
+        $this->loadModel('Shichituan');
+        $shichituan = $this->Shichituan->find_in_period($uid, get_shichituan_period());
+        $is_shichi =  (!empty($shichituan) || $shichituan);
+
+        $this->set('shichi_mem', $is_shichi);
         $this->set('tryings', $tryings);
         $this->pageTitle = '试吃秒杀';
     }

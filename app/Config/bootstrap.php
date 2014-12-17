@@ -80,6 +80,9 @@ const CART_ITEM_TYPE_NORMAL = 1;
 const CART_ITEM_TYPE_QUICK_ORDER = 2;
 const CART_ITEM_TYPE_TRY = 3;
 
+const SHICHI_STATUS_OK = 1;
+const SHICHI_STATUS_APPLY = 0;
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATEH', 'Y-m-d H');
@@ -218,6 +221,13 @@ function filter_invalid_name($name, $def = '神秘人') {
         $name = mb_substr($name, 0, 8, 'UTF-8');
     }
     return $name;
+}
+
+function calculate_try_price($priceInCent, $uid) {
+    $sctM = ClassRegistry::init('Shichituan');
+    $shichituan = $sctM->find_in_period($uid, get_shichituan_period());
+
+    return (!empty($shichituan) ? 99 : $priceInCent)/100;
 }
 
 function calculate_price($pid, $price, $currUid) {
