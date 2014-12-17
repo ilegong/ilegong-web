@@ -335,6 +335,7 @@ class BrandCartItem {
 class OrderCartItem {
     public $order_id;
     public $user_id;
+    public $is_try = false;
 
     /**
      * @var array BrandCartItem
@@ -688,6 +689,42 @@ function thumb_link($imgUrl, $type = 'thumb_s') {
  */
 function setFlashError($session, $error) {
     $session->setFlash($error, 'default', array('class' => 'alert alert-danger'));
+}
+
+/**
+ * Calculate afford
+ * @param $tryId
+ * @param $currUid
+ * @param null $prodTry
+ * @throws CakeException
+ * @return array whether afford to current user; limit for current user; total left for all users
+ *  $afford_for_curr_user: whether current user can buy
+ *  $limit_cur_user, -1 means no limit; 0 means no more; >1 means limit for curr user
+ *  $total_left (-1 means no limit, 0 means sold out, more means left)
+ */
+function afford_product_try($tryId, $currUid, $prodTry = null) {
+    if (!$prodTry) {
+        $tryM = ClassRegistry::init('ProductTry');
+        $prodTry = $tryM->findById($tryId);
+    }
+    if (!empty($prodTry)) {
+        $total_limit = $prodTry['ProductTry']['limit_num'];
+        $total_left = $total_limit - $prodTry['ProductTry']['sold_num'];
+        $limit_cur_user = $total_left <= 0 ? 0 : 1 - bought_try_by_user($tryId, $currUid);
+        return array($total_limit != 0 && $limit_cur_user != 0, $limit_cur_user, $total_left);
+    } else {
+        return array(false, 0, 0);
+    }
+}
+
+/**
+ * @param $tryId
+ * @param $currUid
+ * @return mixed
+ */
+function bought_try_by_user($tryId, $currUid) {
+    $shichiM = ClassRegistry::init('OrderShichi');
+    return $shichiM->bought_by_curr_user($tryId, $currUid);
 }
 
 /**

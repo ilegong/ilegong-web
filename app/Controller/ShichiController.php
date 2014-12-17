@@ -10,6 +10,18 @@ class ShichiController extends AppController {
 
     var $uses = array('ProductTry', 'Product');
 
+    public function beforeFilter() {
+        parent::beforeFilter();
+        if (empty($this->currentUser['id'])) {
+            $ref = Router::url($_SERVER['REQUEST_URI']);
+            if ($this->is_weixin()) {
+                $this->redirect(redirect_to_wx_oauth($ref, WX_OAUTH_BASE, true));
+            } else {
+                $this->redirect('/users/login.html?referer='.$ref);
+            }
+        }
+    }
+
     public function list_pai(){
         $this->loadModel('ProductTry');
         $tryings = $this->ProductTry->find_trying(20);

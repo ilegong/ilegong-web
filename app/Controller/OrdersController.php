@@ -77,13 +77,24 @@ class OrdersController extends AppController{
         $nums = array();
         $Carts = array();
         $cond = array(
-            'status' => 0,
+            'status' => CART_ITEM_STATUS_NEW,
             'order_id' => null,
+            'num > 0',
             'OR' => $this->user_condition
         );
         $specifiedPids = $this->specified_balance_pids();
+        $tryId = $specifiedPids['try'];
+        unset($specifiedPids['try']);
         if (!empty($specifiedPids)) {
             $cond['product_id'] = $specifiedPids;
+        }
+
+        if ($tryId) {
+            $cond['type'] = CART_ITEM_TYPE_TRY;
+            $error_back_url = '/shichi/list_pai.html';
+        } else {
+            $cond['type !='] = CART_ITEM_TYPE_TRY;
+            $error_back_url = '/carts/listcart';
         }
         $Carts_tmp = $this->Cart->find('all', array(
             'conditions' => $cond));
@@ -93,14 +104,15 @@ class OrdersController extends AppController{
             $Carts[$c['Cart']['product_id']] = $c;
             $nums[$c['Cart']['product_id']] = $c['Cart']['num'];
         }
+
+        if(empty($Carts)){
+			$this->__message('您没有选择结算商品，请返回购物车检查', $error_back_url);
+            return;
+		}
+
         $products = $this->Product->find('all',array('conditions'=>array(
                 'id' => $product_ids
         )));
-
-		if(empty($Carts)){
-			$this->__message('您没有选择结算商品，请返回购物车检查', '/carts/listcart');
-            return;
-		}
 
         $ship_fees = array();
 		$business = array();
@@ -113,9 +125,15 @@ class OrdersController extends AppController{
 			else{
 				$business[$pBrandId] = array($pid);
 			}
-            $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
-            $singleShipFee = empty($pp) ? $p['Product']['ship_fee'] : $pp['ship_price'];
-            $ship_fees[$pid] = ShipPromotion::calculateShipFee($pid, $singleShipFee, $nums[$pid], null);
+
+            if ($tryId) {
+                $ship_fees[$pid] = 0;
+            } else {
+                $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
+                $singleShipFee = empty($pp) ? $p['Product']['ship_fee'] : $pp['ship_price'];
+                $ship_fees[$pid] = ShipPromotion::calculateShipFee($pid, $singleShipFee, $nums[$pid], null);
+            }
+
 		}
 
         $new_order_ids = array();
@@ -125,27 +143,33 @@ class OrdersController extends AppController{
             $ship_fee = 0.0;
             $uid = $this->currentUser['id'];
             foreach($busi as $pid){
-				$total_price+= $Carts[$pid]['Cart']['price']*$Carts[$pid]['Cart']['num'];
+                $num = $Carts[$pid]['Cart']['num'];
+                $total_price+= $Carts[$pid]['Cart']['price']* $num;
                 $ship_fee += $ship_fees[$pid];
 
-                list($afford_for_curr_user, $limit_cur_user) = AppController::__affordToUser($pid, $uid);
+                list($afford_for_curr_user, $limit_cur_user) = $tryId ? afford_product_try($tryId, $uid) : AppController::__affordToUser($pid, $uid);
                 if (!$afford_for_curr_user) {
-                    $this->__message(__($Carts[$pid]['name'].'已售罄或您已经购买超限，请从购物车中调整后再结算'), '/carts/listcart', 5);
+                    $this->__message(__($Carts[$pid]['name'].'已售罄或您已经购买超限，请从购物车中调整后再结算'), $error_back_url, 5);
                     return;
-                } else if ($limit_cur_user == 0 || ($limit_cur_user > 0 && $Carts[$pid]['Cart']['num'] > $limit_cur_user)) {
-                    $this->__message(__($Carts[$pid]['name'].'购买超限，请从购物车中调整后再结算'), '/carts/listcart', 5);
+                } else if ($limit_cur_user == 0 || ($limit_cur_user > 0 && $num > $limit_cur_user)) {
+                    $this->__message(__($Carts[$pid]['name'].'购买超限，请从购物车中调整后再结算'), $error_back_url, 5);
                 }
 			}
 			
 			if($total_price <= 0){
 				$this->Session->setFlash('订单金额错误，请返回购物车查看');
-				$this->redirect('/carts/listcart');
+				$this->redirect($error_back_url);
 			}
 
 
-            $ship_fee = ShipPromotion::calculateShipFeeByOrder($ship_fee, $brand_id, $total_price);
-
 			$data = array();
+
+            if (!$tryId) {
+                $ship_fee = ShipPromotion::calculateShipFeeByOrder($ship_fee, $brand_id, $total_price);
+            } else {
+                $data['try_id'] = $tryId;
+            }
+
 			$data['total_price'] = $total_price;
 			$data['total_all_price'] = $total_price + $ship_fee;
             $data['ship_fee'] = $ship_fee;
@@ -178,10 +202,15 @@ class OrdersController extends AppController{
 					$cart = $Carts[$pid];
 					$this->Cart->updateAll(array('order_id'=>$order_id,'status'=>CART_ITEM_STATUS_BALANCED),
                         array('id'=>$cart['Cart']['id'], 'status' => CART_ITEM_STATUS_NEW));
-                    $this->Product->update_storage_saled($pid, $cart['Cart']['num']);
+
+                    if (!$tryId) {
+                        $this->Product->update_storage_saled($pid, $cart['Cart']['num']);
+                    }
 				}
-                $this->apply_coupons_to_order($brand_id, $uid, $order_id);
-                $this->apply_coupon_code_to_order($uid, $order_id);
+                if (!$tryId) {
+                    $this->apply_coupons_to_order($brand_id, $uid, $order_id);
+                    $this->apply_coupon_code_to_order($uid, $order_id);
+                }
 			}
 			else{
 				$saveFailed = true;
@@ -210,10 +239,13 @@ class OrdersController extends AppController{
      */
 	function info($order_id=''){
 
-        if ($_GET['from'] == 'list_cart' || $_GET['from'] == 'quick_buy') {
+        if ($_GET['from'] == 'list_cart' || $_GET['from'] == 'quick_buy' || $_GET['from'] == 'try') {
             $pidList = $_GET['pid_list'];
             if(!empty($pidList)){
                 $pidArr = preg_split('/,/', $pidList);
+                if ($_GET['from'] == 'try') {
+                    $pidArr['try'] = $_GET['try'];
+                }
             } else {
                 $pidArr = array();
             }
@@ -303,8 +335,10 @@ class OrdersController extends AppController{
         //TODO: 计算邮费优惠等
         $total_reduced = 0.0;
 
-        $couponItem = ClassRegistry::init('CouponItem');
-        $coupons_of_products = $couponItem->find_user_coupons_for_cart($this->currentUser['id'], $cart);
+        if (!$cart->is_try) {
+            $couponItem = ClassRegistry::init('CouponItem');
+            $coupons_of_products = $couponItem->find_user_coupons_for_cart($this->currentUser['id'], $cart);
+        }
 
 		$total_price = $cart->total_price();
         $this->set(compact('total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'flash_msg', 'total_reduced'));
@@ -371,7 +405,7 @@ class OrdersController extends AppController{
         if ($has_expired_product_type == 0 && $no_more_money && $action == 'pay_direct')  {
             if ($orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
                 $this->Order->id = $orderinfo['Order']['id'];
-                if($this->Order->updateAll(array('status' => ORDER_STATUS_PAID), array('id'=>$orderId,'creator'=> $uid, 'status' => ORDER_STATUS_WAITING_PAY))){
+                if($this->Order->set_order_to_paid($orderId, $orderinfo['Order']['try_id'], $uid)){
                     $this->Weixin->notifyPaidDone($orderinfo);
                 };
                 $orderinfo = $this->find_my_order_byId($orderId, $uid);
@@ -395,6 +429,7 @@ class OrdersController extends AppController{
             //TODO: check status, if status is not paid, tell user to checking; notify administrators to check
         }
 
+        //TODO: Handle product try orders!
         $shareOffer = ClassRegistry::init('ShareOffer');
         $toShare = $shareOffer->query_gen_offer($orderinfo, $this->currentUser['id']);
         $canComment = $this->can_comment($status);
@@ -1059,6 +1094,7 @@ class OrdersController extends AppController{
         $cond = array(
             'status' => 0,
             'order_id' => null,
+            'type' => CART_ITEM_TYPE_TRY,
             'OR' => $this->user_condition
         );
         if (!empty($limitPids)) {
@@ -1203,18 +1239,61 @@ class OrdersController extends AppController{
     /**
      * @param $cartsByPid
      * @param $shipPromotionId
+     * @throws Exception if the specified tryId cannot be found
+     * @throws MissingModelException
      * @return array
      */
     private function createTmpCarts(&$cartsByPid, $shipPromotionId) {
         $balancePids = $this->specified_balance_pids();
 
-        if (!empty($balancePids)) {
+        $isTry = !empty($balancePids) && $balancePids['try'];
+        if ($isTry) {
+
             $pids = $balancePids;
-            $cartsByPid = $this->cartsByPid($balancePids);
+            unset($pids['try']);
+            if (empty($pids)) {
+                throw new Exception("try type set but no pid found!");
+            }
+            $pid = $pids[0];
+
+            $tryId =$balancePids['try'];
+            $this->loadModel('ProductTry');
+            $prodTry = $this->ProductTry->findById($tryId);
+            if (empty($prodTry)) {
+                throw new Exception("cannot found ".$tryId);
+            }
+
+            $pidOfTry = $prodTry['ProductTry']['product_id'];
+            if ($pidOfTry != $pid) {
+                throw new Exception("product_id not equal: $pidOfTry ,". $pid);
+            }
+
+            $this->loadModel('Product');
+            $products = $this->Product->find_products_by_ids($pid, array(), false);
+            if (empty($products)) {
+                throw new Exception("cannot find the specified product: $pid");
+            }
+
+            $this->loadModel('Cart');
+            $uid = $this->currentUser['id'];
+            $cartItem = $this->Cart->find_try_cart_item($pid, $uid);
+            if (empty($cartItem)) {
+                throw new Exception("error to find try_cart_item: $pid , $uid");
+            }
+
+            $cart = new OrderCartItem();
+            $cart->is_try = true;
+            $cart->add_product_item($products[0]['Product']['brand_id'], $pid, $prodTry['ProductTry']['price']/100, 1, array(), $cartItem['Cart']['name']);
+            $shipFee = 0;
         } else {
-            $pids = array_keys($cartsByPid);
+            if (!empty($balancePids)) {
+                $pids = $balancePids;
+                $cartsByPid = $this->cartsByPid($balancePids);
+            } else {
+                $pids = array_keys($cartsByPid);
+            }
+            list($cart, $shipFee) = $this->applyPromoToCart($pids, $cartsByPid, $shipPromotionId);
         }
-        list($cart, $shipFee) = $this->applyPromoToCart($pids, $cartsByPid, $shipPromotionId);
         return array($pids, $cart, $shipFee);
     }
 
@@ -1224,7 +1303,7 @@ class OrdersController extends AppController{
     private function specified_balance_pids() {
         $balancePidJson = $this->Session->read(self::key_balance_pids());
         if (!empty($balancePidJson)) {
-            return json_decode($balancePidJson);
+            return json_decode($balancePidJson, true);
         }
         return null;
     }

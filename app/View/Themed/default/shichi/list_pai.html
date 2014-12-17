@@ -24,7 +24,7 @@
     .seckill_rule .close{ display:block; background:url(/img/mobilev1/pyshuo_icon.png) 0 -20.25em no-repeat; background-size:25em 25em; width:2.5em; height:2.6em; position:absolute; right:-0.7em; top:-0.7em;}
 </style>
 <div class="seckill_banner"><img src="{{$this->Html->assetUrl('/img/mobilev1/flash_shichi_banner.jpg')}}" /></div>
-<div class="seckill_tip">请设置好默认收货地址, 以便更快秒杀!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#X">秒杀规则</a></div>
+<div class="seckill_tip">请设置好默认收货地址, 以便更快秒杀!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!--a href="#X">秒杀规则</a--></div>
 {{loop $tryings $key $trying}}
 <div class="seckill_list">
     <ul class="clearfix list-unstyled" style="position:relative;">
@@ -33,7 +33,7 @@
             <div class="title"><a class="_product_link" href="{{product_link2($trying)}}">{{usubstr($trying['Product']['name'], 0, 10, '')}}</a></div>
             <div class="price">秒杀价: <span>￥{{$this->Number->precision($trying['ProductTry']['price']/100, 2)}}</span><label>({{$trying['ProductTry']['spec']}})</label></div>
             <div class="clearfix buy_div {{if $trying['status'] == 'sec_unstarted' }} hide {{/if}}">
-                <a href="javascript:;" data-pid="{{$trying['Product']['id']}}" class="tbtn {{if $trying['status'] == 'sec_kill'}}seckill_btn{{elseif $trying['status'] =='sec_end'}}end_btn{{/if}} radius10">立即秒杀</a>
+                <a href="javascript:;" data-tryid="{{$trying['ProductTry']['id']}}" data-pid="{{$trying['Product']['id']}}" class="tbtn {{if $trying['status'] == 'sec_kill'}}seckill_btn{{elseif $trying['status'] =='sec_end'}}end_btn{{/if}} radius10">{{$trying['status'] =='sec_end'?'已秒完':'立即秒杀'}}</a>
                 <div class="fl grade">限<span id="limit_num_{{$trying['ProductTry']['id']}}">{{$trying['ProductTry']['limit_num']}}</span>份</div>
             </div>
             <div class="clearfix countdown_div {{if $trying['status'] != 'sec_unstarted' }} hide {{/if}}">
@@ -54,22 +54,47 @@
     $(document).ready(function(){
         var timerParentStyle = {'margin-left': '1em'};
         var toTimer = $('.sec_start').first();
+        var buyDiv = toTimer.parent().parent().find('.buy_div');
+
         utils.countDown(toTimer, function(parentJ){
             parentJ.css(timerParentStyle);
         }, function(){
-
-        });
-
-        $('._product_link').click(function(ev){
-            var prod_link = $(this).attr('href');
-            utils.alert_two('提醒：试吃秒杀请回到本页进行操作', '留在本页', '查看商品', null, function(){
-                window.location.href = prod_link;
+            toTimer.parent().remove();
+            var buyBtn = buyDiv.find('a');
+            buyBtn.addClass('seckill_btn');
+            buyBtn.click(function(){
+                buyBtnClicked($(this));
             });
-            return false;
+            buyDiv.show();
         });
+
+        var link_notified = false;
+        $('._product_link').click(function(ev){
+            if (link_notified == false) {
+                var prod_link = $(this).attr('href');
+                utils.alert_two('提醒：试吃秒杀请回到本页进行操作', '留在本页', '查看商品', null, function () {
+                    window.location.href = prod_link;
+                });
+                link_notified = true;
+                return false;
+            }
+        });
+
+        function buyBtnClicked(buyBtn) {
+            if (buyBtn.hasClass('sec_end')){
+                return false;
+            }
+            var $pid = buyBtn.attr('data-pid');
+            var tryId = buyBtn.attr('data-tryId');
+            quick_buy_try($pid, 1, 0, tryId, 'try', function(){
+                buyBtn.removeClass('seckill_btn').addClass('sec_end');
+            }, function(){
+                //
+            });
+        }
 
         $('.seckill_btn').click(function(){
-
+            buyBtnClicked($(this));
         });
 
 
@@ -96,9 +121,14 @@
                         return false;
                     } else if (data.reason == 'sold_out') {
                         utils.alert_one('抱歉：已经被秒完', '关闭', function(){ if (typeof(soldOutCallback) == 'function'){ soldOutCallback()} });
+                    } else if (data.reason == 'already_buy') {
+                        utils.alert_one('抱歉：您已经秒过啦', '关闭', function(){ });
                     }
                 } else {
-                    addedCallback();
+                    utils.alert_one('您好，下单支付完成才算秒杀完成, 立即跳转结算', '结算', function(){
+                        addedCallback();
+                        window.location.href = '/orders/info?from=try&pid_list='+id+'&try='+tryId;
+                    });
                 }
             });
             return false;

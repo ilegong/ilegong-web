@@ -51,21 +51,50 @@ class CartsController extends AppController{
             $num = $this->data['Cart']['num'];
             $specId = $this->data['Cart']['spec'];
             $type = self::convert_cart_type($this->data['Cart']['type']);
+            $tryId = intval($_POST['try_id']);
 
             if (!$type) {
                 //FIXME:should give an error to client
                 $type = CART_ITEM_TYPE_NORMAL;
             }
 
-            if ($type == CART_ITEM_TYPE_TRY && empty($this->currentUser['id'])) {
-                echo json_encode(array('success' => false, 'reason' => 'not_login'));
-                return;
+            if ($type == CART_ITEM_TYPE_TRY){
+
+                $success = true;
+                $reason = '';
+                $uid = $this->currentUser['id'];
+                if (!$tryId) {
+                    $success = false;
+                    $reason = 'no_try_id';
+                } else {
+                    if(empty($uid)) {
+                        $success = false;
+                        $reason = 'not_login';
+                    } else {
+                        $tryM = ClassRegistry::init('ProductTry');
+                        $prodTry = $tryM->findById($tryId);
+                        list($afford, $my_limit, $total_left) = afford_product_try($tryId, $uid, $prodTry);
+                        if ($total_left == 0){
+                        $reason = 'sold_out';
+                            $success = false;
+                        }
+                        if (!$afford || ($my_limit >= 0 && $my_limit < $this->data['Cart']['num'])) {
+                            $success = false;
+                            $reason = 'already_buy';
+                        }
+                    }
+                }
+
+                if ($success) {
+                    $this->_addToCart($product_id, $num, $specId, $type, $tryId, $prodTry);
+                }
+                echo json_encode(array('success' => $success, 'reason' => $reason));
+            } else {
+                $this->_addToCart($product_id, $num, $specId, $type, $tryId);
+                $successinfo = array('success' => __('Success add to cart.'));
+                echo json_encode($successinfo);
             }
 
-            $this->_addToCart($product_id, $num, $specId, $type);
-			
-			$successinfo = array('success' => __('Success add to cart.'));
-			echo json_encode($successinfo);
 			exit;
 		}
 		$errorinfo = array('save_error' => __('Operation failed'));
@@ -119,6 +148,7 @@ class CartsController extends AppController{
         $Carts = $this->Cart->find('all',array(
             'conditions'=>array(
                 'status' => 0,
+                'type !='.CART_ITEM_TYPE_TRY,
                 'order_id' => NULL,
                 'OR'=> $this->user_condition
             )));
@@ -149,13 +179,17 @@ class CartsController extends AppController{
      * @param int $num
      * @param int $spec specified id for
      * @param int $type
+     * @param int $try_id
+     * @param null $prodTry
+     * @throws MissingModelException
      * @return bool whether saved successfully
      */
-    private function _addToCart($product_id, $num = 1, $spec = 0, $type = CART_ITEM_TYPE_NORMAL) {
+    private function _addToCart($product_id, $num = 1, $spec = 0, $type = CART_ITEM_TYPE_NORMAL, $try_id = 0, $prodTry = null) {
         $Carts = $this->Cart->find('first', array(
             'conditions' => array(
                 'product_id' => $product_id,
                 'order_id' => null,
+                'try_id' => $try_id,
                 'OR' => $this->user_condition
             )));
         if (!empty($Carts)) {
@@ -168,13 +202,27 @@ class CartsController extends AppController{
         $this->loadModel('Product');
         $p = $this->Product->findById($product_id);
 
+        $uid = $this->currentUser['id'];
+
         $this->data['Cart']['session_id'] = $this->Session->id();
         $this->data['Cart']['coverimg'] = $p['Product']['coverimg'];
-        $this->data['Cart']['name'] = product_name_with_spec($p['Product']['name'], $spec, $p['Product']['specs']);;
-        $this->data['Cart']['price'] = calculate_price($p['Product']['id'], $p['Product']['price'], $this->currentUser['id']);
-        $this->data['Cart']['creator'] = $this->currentUser['id'];
+        if ($prodTry) {
+            $name = $p['Product']['name'].'(试吃: '.$prodTry['ProductTry']['spec'].')';
+        } else {
+            $name = product_name_with_spec($p['Product']['name'], $spec, $p['Product']['specs']);
+        }
+        $this->data['Cart']['name'] = $name;
+
+        if (!empty($prodTry)) {
+            $price = $prodTry['ProductTry']['price']/100;
+        } else {
+            $price = calculate_price($p['Product']['id'], $p['Product']['price'], $uid);
+        }
+        $this->data['Cart']['price'] = $price;
+        $this->data['Cart']['creator'] = $uid;
         $this->data['Cart']['specId'] = $spec;
         $this->data['Cart']['type'] = $type;
+        $this->data['Cart']['try_id'] = $try_id;
         return $this->Cart->save($this->data);
     }
 

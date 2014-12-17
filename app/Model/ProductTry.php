@@ -25,7 +25,6 @@ class ProductTry extends AppModel {
         return $tries;
     }
 
-
     static function cal_op($limit_num, $sold_num, $start_time, $status) {
         if ($status == PRODUCT_TRY_ING) {
             if ($limit_num <= $sold_num ) {

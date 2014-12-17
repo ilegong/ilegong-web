@@ -36,6 +36,12 @@ class Cart extends AppModel {
         ));
     }
 
+    public function find_try_cart_item($pid, $creator) {
+        return $this->find('first', array(
+            'conditions' => array('product_id' => $pid, 'status ' => CART_ITEM_STATUS_NEW, 'num > ' => 0, 'creator' => $creator, 'type' => CART_ITEM_TYPE_TRY),
+        ));
+    }
+
     /**
      * Find balanced Cart items (product_id, num, name, creator, cover img) through cache.
      * Balanced items won't change.

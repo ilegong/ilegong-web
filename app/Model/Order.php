@@ -38,17 +38,33 @@ class Order extends AppModel {
         return $rtn;
     }
 
-    public function set_order_to_paid($orderId) {
+    public function set_order_to_paid($orderId, $isTry, $orderOwner) {
         $rtn = $this->updateAll(array('status' => ORDER_STATUS_PAID, 'pay_time' => "'" . date(FORMAT_DATETIME) . "'")
             , array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY));
         $sold = $rtn && $this->getAffectedRows() >= 1;
         if ($sold) {
-            $cartM = ClassRegistry::init('Cart');
-            $cartItems = $cartM->find_balanced_items($orderId);
-            if (!empty($cartItems)) {
-                $pid_list = Hash::extract($cartItems, '{n}.Cart.product_id');
-                foreach($pid_list as $pid) {
-                    clean_total_sold($pid);
+            if ($isTry) {
+                $shichiM = ClassRegistry::init('OrderShichi');
+                $shichiM->create();
+                $shichiM->save(array('OrderShichi' => array(
+                    'data_id' => $isTry,
+                    'creator' => $orderOwner,
+                    'order_id' => $orderId,
+                )));
+                $tryM = ClassRegistry::init('ProductTry');
+                $pTry = $tryM->findById($isTry);
+                if (!empty($pTry)) {
+                    //FIXME: do retry if failed
+                    $tryM->updateAll(array('sold_num' => 'sold_num + 1'), array('id' => $isTry, 'modified' => $pTry['ProductTry']['modified']));
+                }
+            } else {
+                $cartM = ClassRegistry::init('Cart');
+                $cartItems = $cartM->find_balanced_items($orderId);
+                if (!empty($cartItems)) {
+                    $pid_list = Hash::extract($cartItems, '{n}.Cart.product_id');
+                    foreach ($pid_list as $pid) {
+                        clean_total_sold($pid);
+                    }
                 }
             }
         }

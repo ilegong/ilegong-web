@@ -38,7 +38,7 @@
                     <img src="{{$this->Html->assetUrl(small_thumb_link($trying['Product']['coverimg']))}}" />
                     <span>秒杀价<br/>{{$this->Number->precision($trying['ProductTry']['price']/100, 2)}}</span>
                     {{if $trying['status'] == 'sec_kill'}}
-                    <a class="tbtn seckill_btn radius10" data-pid="{{$trying['Product']['id']}}">正在秒杀</a>
+                    <a  href="/shichi/list_pai.html" class="tbtn seckill_btn radius10" data-pid="{{$trying['Product']['id']}}">正在秒杀</a>
                     {{elseif $trying['status'] == 'sec_end'}}<a class="tbtn end_btn radius10" style="display:none;">已秒完</a>
                     {{else}}<div class="clearfix" style="width:8.4em; margin:0 auto; ">
                         <a data-start="{{strtotime($trying['ProductTry']['start_time'])}}" data-pid="{{$trying['Product']['id']}}" class="tbtn radius10 sec_start">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
