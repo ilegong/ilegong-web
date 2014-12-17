@@ -1137,6 +1137,7 @@ var utils = {
             var intvalId = setInterval(function(){
                 if (dif <= 0) {
                     clearInterval(intvalId);
+                    return;
                 }
                 var h = Math.floor(dif/3600);
                 var left = dif % 3600;
