@@ -140,9 +140,9 @@ class ApiOrdersController extends AppController {
                 $this->set('recommends', $recommends);
                 $this->set('brand', $brand);
 
-                $this->set('_serialize', array('product', 'recommends', 'brand'));
             }
         }
+        $this->set('_serialize', array('product', 'recommends', 'brand'));
     }
 
     public function product_content($pid) {
@@ -180,8 +180,6 @@ class ApiOrdersController extends AppController {
         }
         $this->set('content', array('info' => $info['Brand'], 'products' => $products));
         $this->set('_serialize', array('content'));
-
-
     }
 
     public function store_story($id){
