@@ -39,6 +39,7 @@ class ShichiController extends AppController {
             }
         }
 
+        $this->set('shichi_mem', $this->is_admin($this->currentUser['id']));
         $this->set('tryings', $tryings);
         $this->pageTitle = '试吃秒杀';
     }

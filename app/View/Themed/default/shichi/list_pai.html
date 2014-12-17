@@ -38,7 +38,7 @@
             </div>
             {{if $trying['status'] == 'sec_unstarted' }}
             <div class="clearfix countdown_div">
-                <a class="tbtn radius10 sec_start" data-start="{{strtotime($trying['ProductTry']['start_time'])}}" data-pid="{{$trying['Product']['id']}}">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
+                <a class="tbtn radius10 sec_start" data-start="{{strtotime($trying['ProductTry']['start_time']) - ($shichi_mem? 30 * 60 : 0)}}" data-pid="{{$trying['Product']['id']}}">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
                 <div class="fl grade" style="padding-top:0.3em;">限{{$trying['ProductTry']['limit_num']}}份</div>
             </div>
             {{/if}}
