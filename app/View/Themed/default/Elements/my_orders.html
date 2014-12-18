@@ -1,4 +1,3 @@
-
 <?php $found = 0; ?>
 {{loop $orders $order}}
 <?php
@@ -52,9 +51,6 @@ $brand = $brands[$order['Order']['brand_id']];
             <a class="btn-sm btn-primary" href="/orders/detail/{{$order['Order']['id']}}#ship">查看物流</a>
             {{elseif $order['Order']['status'] == 10}}
             <a class="btn-sm btn-warning" href="javascript:;" onclick="bootbox.confirm('您确认要删除吗？', function(result) {if(result){orders_remove({{$order['Order']['id']}})} })">删除订单</a>
-            {{elseif $order['Order']['status'] == 3}}
-            <a class="btn-sm btn-primary" href="{{product_link($cart['Cart']['product_id'], '/').'?_pys_add_shichi_comment=1'}}">去评价</a>
-
             {{elseif $order['Order']['status']==0}}
             <a class="btn-sm btn-primary" href="javascript:;" onclick="bootbox.confirm('您确认要取消吗？', function(result) {if(result){orders_undo({{$order['Order']['id']}})} })">取消订单</a>
             <a class="btn-sm btn-warning" href="/orders/detail/{{$order['Order']['id']}}/pay">去支付</a>
