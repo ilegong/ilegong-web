@@ -517,6 +517,7 @@ body.cke_editable{margin:20px;}
     margin-right: 15px;
     overflow: hidden;
 }
+.classify_list hr{width: 965px}
 .classify_list div a div{overflow: hidden}
 .classify_list div a:hover{ border-color:#29AC0E;}
 .classify_list div a h2{ font-size:14px; color:#333333; font-weight:bold; line-height:30px; padding-top:10px;font-family: "微软雅黑";}
@@ -530,6 +531,7 @@ body.cke_editable{margin:20px;}
     border-top: 0;
     background: #c4e17f;
     border-radius: 5px;
+    width: 960px;
     background-image: -webkit-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
     background-image: -moz-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
     background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
