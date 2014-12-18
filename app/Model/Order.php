@@ -43,25 +43,29 @@ class Order extends AppModel {
             , array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY));
         $sold = $rtn && $this->getAffectedRows() >= 1;
         if ($sold) {
-            if ($isTry) {
-                $shichiM = ClassRegistry::init('OrderShichi');
-                $shichiM->create();
-                $shichiM->save(array('OrderShichi' => array(
-                    'data_id' => $isTry,
-                    'creator' => $orderOwner,
-                    'order_id' => $orderId,
-                )));
-                $tryM = ClassRegistry::init('ProductTry');
-                $pTry = $tryM->findById($isTry);
-                if (!empty($pTry)) {
-                    //FIXME: do retry if failed
-                    $tryM->updateAll(array('sold_num' => 'sold_num + 1'), array('id' => $isTry, 'modified' => $pTry['ProductTry']['modified']));
-                }
-            } else {
-                $cartM = ClassRegistry::init('Cart');
-                $cartItems = $cartM->find_balanced_items($orderId);
-                if (!empty($cartItems)) {
-                    $pid_list = Hash::extract($cartItems, '{n}.Cart.product_id');
+            $cartM = ClassRegistry::init('Cart');
+            $cartItems = $cartM->find_balanced_items($orderId);
+            if (!empty($cartItems)) {
+                $pid_list = Hash::extract($cartItems, '{n}.Cart.product_id');
+            }
+            if (!empty($pid_list)) {
+                if ($isTry) {
+                    $shichiM = ClassRegistry::init('OrderShichi');
+                    foreach($pid_list as $pid) {
+                        $shichiM->create();
+                        $shichiM->save(array('OrderShichi' => array(
+                            'data_id' => $pid,
+                            'creator' => $orderOwner,
+                            'order_id' => $orderId,
+                        )));
+                    }
+                    $tryM = ClassRegistry::init('ProductTry');
+                    $pTry = $tryM->findById($isTry);
+                    if (!empty($pTry)) {
+                        //FIXME: do retry if failed
+                        $tryM->updateAll(array('sold_num' => 'sold_num + 1'), array('id' => $isTry, 'modified' => $pTry['ProductTry']['modified']));
+                    }
+                } else {
                     foreach ($pid_list as $pid) {
                         clean_total_sold($pid);
                     }
