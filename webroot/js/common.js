@@ -1115,10 +1115,16 @@ var utils = {
         });
     },
 
-    countDown: function(toTimer, initCallback) {
+    countDown: function(toTimer, initCallback, timeArrivedCallback) {
         if (toTimer.size() > 0) {
 
             var dif = (parseInt(toTimer.attr('data-start')) *1000 - new Date().getTime())/1000;
+            if (dif <= 0) {
+                if (typeof(timeArrivedCallback) == 'function') {
+                    timeArrivedCallback();
+                }
+                return;
+            }
 
             var hour1 = $('<div class="countdown">0</div>');
             var hour2 = $('<div class="countdown">0</div>');
@@ -1130,7 +1136,7 @@ var utils = {
             toTimer.after(hour1, hour2, $('<div class="colon"><strong>:</strong></div>'),
                 min1,min2, $('<div class="colon"><strong>:</strong></div>'), sec1, sec2);
             if (typeof(initCallback) == 'function') {
-                initCallback(toTimer.parent());
+                initCallback();
             }
 
             toTimer.remove();
@@ -1138,6 +1144,9 @@ var utils = {
             var intvalId = setInterval(function(){
                 if (dif <= 0) {
                     clearInterval(intvalId);
+                    if (typeof(timeArrivedCallback) == 'function') {
+                        timeArrivedCallback();
+                    }
                     return;
                 }
                 var h = Math.floor(dif/3600);

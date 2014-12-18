@@ -223,7 +223,7 @@ function filter_invalid_name($name, $def = '神秘人') {
     return $name;
 }
 
-function calculate_try_price($priceInCent, $uid, $shichituan = null) {
+function calculate_try_price($priceInCent, $uid = 0, $shichituan = null) {
     if ($shichituan == null && $uid) {
         $sctM = ClassRegistry::init('Shichituan');
         $shichituan = $sctM->find_in_period($uid, get_shichituan_period());

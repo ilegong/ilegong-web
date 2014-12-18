@@ -103,8 +103,14 @@
     $(document).ready(function(){
         var timerParentStyle = {'margin-top': '1em'};
         var toTimer = $('.sec_start').first();
-        utils.countDown(toTimer, function(parentJ){
-            parentJ.css(timerParentStyle);
+        var countDiv = toTimer.parent();
+        var pid = toTimer.attr('data-pid');
+        utils.countDown(toTimer, function(){
+            countDiv.css(timerParentStyle);
+        }, function(){
+            var parent = countDiv.parent();
+            countDiv.remove();
+            parent.append('<a  href="/shichi/list_pai.html" class="tbtn seckill_btn radius10" data-pid='+pid+'>正在秒杀</a>');
         });
     });
 </script>
