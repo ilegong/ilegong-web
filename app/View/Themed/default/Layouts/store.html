@@ -13,7 +13,7 @@
     <![endif]-->
     {{$this->Html->meta('icon', '/favicon.ico?v2')}}
 
-    <?PHP echo $this->Combinator->less(); ?>
+    {{$this->Html->css(array('http://'.WX_HOST.'/css/bootstrap_2.css',));}}
 
     <style>
         @media (min-width: 1200px) {

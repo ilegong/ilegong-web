@@ -24,8 +24,7 @@
 <![endif]-->
 {{$this->Html->meta('icon')}}
 
-<?PHP echo $this->Combinator->less(); ?>
-{{$this->Html->css(array('font-awesome.min.css',
+{{$this->Html->css(array('http://'.WX_HOST.'/css/bootstrap_2.css','font-awesome.min.css',
 	'ui-customer',))}}
 {{$this->Html->script(array(
             'http://libs.baidu.com/jquery/1.9.1/jquery.min.js',

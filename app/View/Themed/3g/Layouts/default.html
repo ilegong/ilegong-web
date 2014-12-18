@@ -10,8 +10,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="apple-touch-icon" href="{{$this->Html->assetUrl('/img/logo_mini.png')}}" />
     <title>{{$pageTitle}}-{{$site['title']}}</title>
-    <?PHP echo $this->Combinator->less(); ?>
-    {{$this->Html->css(array('bootstrap_2.css', 'layout_3g.css?ver21',));}}
+    {{$this->Html->css(array('http://'.WX_HOST.'/css/bootstrap_2.css', 'layout_3g.css?ver21',));}}
     <style>
         body.modal-open {
             margin-right: 0;

@@ -6,7 +6,7 @@
           content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
     <meta http-equiv="refresh" content="{{$seconds}}; url={{$this->Html->url($url)}}" />
     <title>{{$pageTitle}}</title>
-    <?PHP echo $this->Combinator->less(); ?>
+    {{$this->Html->css(array('http://'.WX_HOST.'/css/bootstrap_2.css',));}}
 </head>
 <body>
 <div id="header">
