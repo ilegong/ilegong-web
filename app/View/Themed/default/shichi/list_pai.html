@@ -34,12 +34,12 @@
             <div class="price">秒杀价: <span>￥{{$this->Number->precision(calculate_try_price($trying['ProductTry']['price'], 0), 2)}}</span><label>({{$trying['ProductTry']['spec']}})</label></div>
             <div class="clearfix buy_div {{if $trying['status'] == 'sec_unstarted' }} hide {{/if}}">
                 <a href="javascript:;" data-tryid="{{$trying['ProductTry']['id']}}" data-pid="{{$trying['Product']['id']}}" class="tbtn {{if $trying['status'] == 'sec_kill'}}seckill_btn{{elseif $trying['status'] =='sec_end'}}end_btn{{/if}} radius10">{{$trying['status'] =='sec_end'?'已秒完':'立即秒杀'}}</a>
-                <div class="fl grade">限<span id="limit_num_{{$trying['ProductTry']['id']}}">{{$trying['ProductTry']['limit_num']}}</span>份</div>
+                <div class="fl grade">剩余{{max(0, $trying['ProductTry']['limit_num']-$trying['ProductTry']['sold_num'])}}份</div>
             </div>
             {{if $trying['status'] == 'sec_unstarted' }}
             <div class="clearfix countdown_div">
                 <a class="tbtn radius10 sec_start" data-start="{{strtotime($trying['ProductTry']['start_time']) - ($shichi_mem? 30 * 60 : 0)}}" data-pid="{{$trying['Product']['id']}}">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
-                <div class="fl grade" style="padding-top:0.3em;">限{{$trying['ProductTry']['limit_num']}}份</div>
+                <div class="fl grade" style="padding-top:0.3em;">剩余{{max(0, $trying['ProductTry']['limit_num']-$trying['ProductTry']['sold_num'])}}份</div>
             </div>
             {{/if}}
         </li>
