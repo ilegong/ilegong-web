@@ -1190,15 +1190,18 @@ $(document).ready(function () {
             if (_p_spec_m) {
                 var spec_labels = $('span.spec_label');
                 if (spec_labels.size() > 0) {
-//                            $.each(spec_labels, function(idx, spanLabel){
-//                            });
-                    var spec_item_selected = $('span.spec_item_selected');
-                    if (spec_item_selected.size() == 0) {
-                        utils.alert("请选择蛋糕口味");
+                    $.each(spec_labels, function (idx, val) {
+                        var spec_item_selected = $('span.spec_item_selected');
+                        if (spec_item_selected.size() < 1) {
+                            utils.alert("请选择" + $(val).text());
+                            return false;
+                        }  else {
+                            specId = _p_spec_m[spec_item_selected.text()];
+                        }
+                    });
+                    if (!specId) {
                         return false;
                     }
-
-                    specId = _p_spec_m[spec_item_selected.text()];
                 }
             }
         }

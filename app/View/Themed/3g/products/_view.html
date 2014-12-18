@@ -63,7 +63,7 @@
         {{if $specs_map }}
         <p class="product_specs">
             <?php foreach($specs_map['choices'] as $label => $values) { ?>
-            <span class="spec_label">{{$label}}:</span><?php foreach($values as $vaLabel){?><span item-label="{{$label}}" class="spec_item">{{$vaLabel}}</span><?php } ?></li>
+            <span class="spec_label">{{$label}}</span>:<?php foreach($values as $vaLabel){?><span item-label="{{$label}}" class="spec_item">{{$vaLabel}}</span><?php } ?></li>
             <?php } ?>
         </p>
         {{/if}}
