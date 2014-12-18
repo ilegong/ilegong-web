@@ -25,6 +25,8 @@ Configure::write('App.encoding', 'UTF-8');
 define('DEFAULT_LANGUAGE', 'zh-cn');
 Configure::write('Config.language', 'zh-cn');
 
+Configure::write('kuaidi100_key','1c9cbcbc54d0ecf5');
+
 define('WX_APPID', 'wxca7838dcade4709c');
 //ID for service account(DO NOT CHANGE)
 define('WX_APPID_SOURCE', 'wxca78');

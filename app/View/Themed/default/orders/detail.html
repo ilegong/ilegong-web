@@ -45,6 +45,8 @@
     {{/if}}
 
         <div>
+            <h3>基本信息</h3>
+            <br/>
          <p class="col-xs-12"> 订单状态：<span class="order_status_text">
                     {{if $order['Order']['status']==0}}等待付款
                     {{elseif $order['Order']['status']==1}}已支付
@@ -74,11 +76,18 @@
         <hr/>
 
         {{if $order['Order']['ship_type']}}
-        <p><strong>物流信息</strong></p>
-        <span class="col-xs-4">快递公司: {{$ship_type[$order['Order']['ship_type']]}}</span>
-        <span class="col-xs-8 text-right">快递单号：{{$order['Order']['ship_code']}}</span>
-        <div class="clearfix"></div>
-        <hr/>
+            <h3>物流信息</h3>
+            <br/>
+            <span class="col-xs-4">快递公司: {{$ship_type[$order['Order']['ship_type']]}}</span>
+            <span class="col-xs-8 text-right">快递单号：{{$order['Order']['ship_code']}}</span>
+            <div class="clearfix">
+                {{if $shipdetail}}
+                    <iframe name="kuaidi100" src=" {{$shipdetail}}" width="550" height="252" marginwidth="0" marginheight="0" hspace="0" vspace="0" frameborder="no" scrolling="no" allowtransparency="yes">
+
+                    </iframe>
+                {{/if}}
+            </div>
+            <hr/>
         {{/if}}
 
         {{if !empty($Carts)}}

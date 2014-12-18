@@ -441,12 +441,14 @@ class OrdersController extends AppController{
         $canComment = $this->can_comment($status);
 
         $this->set(compact('toShare', 'canComment', 'no_more_money', 'order_id', 'order', 'has_expired_product_type', 'expired_pids'));
-
         $this->set('isMobile', $this->RequestHandler->isMobile());
         $this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('order', $orderinfo);
         $this->set('Carts',$Carts);
         $this->set('products', $products);
+        if ($orderinfo['Order']['ship_type']) {
+            $this->set('shipdetail',ShipAddress::get_ship_detail($orderinfo));
+        }
     }
 
     public function apply_coupon_code() {
@@ -1487,4 +1489,5 @@ class OrdersController extends AppController{
         echo json_encode($successinfo);
 
     }
+
 }

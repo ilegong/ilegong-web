@@ -1,15 +1,14 @@
 <div class="container clearfix">
-
-    {{if $sub_title }}
-    <h3 class="item-tags">{{$sub_title}}</h3>
-    {{/if}}
-
-    <?PHP if($total>0){ ?>
-    <?PHP foreach($data_list as $item) {
-	    $full = true;
-		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
-	    ?>
-    {{include 'categories/_photolist'}}
-    <?php } ?>
-    <?php } ?>
+    <div class="row classify_list">
+        <div class="clearfix">
+            <?PHP if($total>0){ ?>
+            <?PHP foreach($data_list as $index => $item) {
+                $full = true;
+                $item['slug'] = $item['slug']?$item['slug']:$item['id'];
+            ?>
+            {{include 'categories/_photolist'}}
+            <?php } ?>
+            <?php } ?>
+        </div>
+    </div>
 </div>

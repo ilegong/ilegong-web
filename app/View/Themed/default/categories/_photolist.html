@@ -1,23 +1,14 @@
-<li class="col-md-3">
-<div>
-{{eval echo $this->Html->image(Router::url($item['coverimg']), 
-	array(
-	'alt' => $item['title'],'title' => $item['title'],
-	'width'=>'200px','height'=>'200px',
-	//'onerror'=>'this.src="'.Router::url('/img/products_nophoto.jpg').'";',
-	'url'=> '/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html' 
-	)); }}
-</div>
-<p class="center">
-	{{eval echo $this->Html->link(usubstr($item['name'],0,10), 
-	'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
-	array('title'=>$item['title'])); }}
-	<br/>
-	<div style="width:200px; margin-bottom: 20px">
-     		<div class="food-info pull-right">
-             <strong>¥{{$this->Number->precision($item['price'], 2)}}</strong>
-     		</div>
-     		<a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">评论({{$item['comment_nums']}})</a>
-     	</div>
-</p>
-</li>
+<a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">
+    <div><img title="{{$item['name']}}" alt="{{$item['name']}}" class="thumb" src="{{Router::url($item['coverimg'])}}" /></div>
+    <h2>
+        <?php
+            header("Content-Type:text/html; charset=utf-8");
+            if(mb_strlen($item['name'],'utf-8')<=14){
+                echo $item['name'];
+            }else{
+                echo mb_substr($item['name'],0,14,'utf-8').'...';
+            }
+        ?>
+    </h2>
+    <p>￥{{$this->Number->precision($item['price'], 2)}} <span>¥{{$this->Number->precision($item['price'], 2)}}</span></p>
+</a>

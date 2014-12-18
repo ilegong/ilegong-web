@@ -552,10 +552,36 @@ class ShipAddress {
     public static function ship_type_list() {
         $ship_types = ShipAddress::ship_types();
         if (is_array($ship_types)) {
-            return Hash::combine($ship_types, '{n}.id', '{n}.name');
+            return Hash::combine($ship_types,'{n}.id', '{n}.name');
         } else {
             return false;
         }
+    }
+
+    /**
+     * @param $com 快递公司
+     * @param $nu  快递单号
+     */
+    public function get_ship_detail($orderInfo){
+        $ship_types = ShipAddress::ship_types();
+        $ship_type_list = Hash::combine($ship_types,'{n}.company','{n}.name','{n}.id');
+        $com = key($ship_type_list[$orderInfo['Order']['ship_type']]);
+        $nu = $orderInfo['Order']['ship_code'];
+        $AppKey = Configure::read('kuaidi100_key');
+        //http://api.kuaidi100.com/api?id=[]&com=[]&nu=[]&valicode=[]&show=[0|1|2|3]&muti=[0|1]&order=[desc|asc]
+        //http://www.kuaidi100.com/applyurl?key=[]&com=[]&nu=[]
+        $url = 'http://www.kuaidi100.com/applyurl?key='.$AppKey.'&com='.$com.'&nu='.$nu;
+        //优先使用curl模式发送数据
+        if (function_exists('curl_init') == 1) {
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_HEADER, 0);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_TIMEOUT, 5);
+            $get_content = curl_exec($curl);
+            curl_close($curl);
+        }
+        return $get_content;
     }
 
     /**
