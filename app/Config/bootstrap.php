@@ -573,6 +573,7 @@ class ShipAddress {
         $url = 'http://www.kuaidi100.com/applyurl?key='.$AppKey.'&com='.$com.'&nu='.$nu;
         //优先使用curl模式发送数据
         if (function_exists('curl_init') == 1) {
+            $this->log("Curl can init...");
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_URL, $url);
             curl_setopt($curl, CURLOPT_HEADER, 0);
@@ -580,6 +581,8 @@ class ShipAddress {
             curl_setopt($curl, CURLOPT_TIMEOUT, 5);
             $get_content = curl_exec($curl);
             curl_close($curl);
+        }else{
+            $this->log("Curl can't init...");
         }
         return $get_content;
     }
