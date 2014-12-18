@@ -31,7 +31,7 @@
         <li class="pic fl"><a class="_product_link" href="{{product_link2($trying)}}"><img src="{{$this->Html->assetUrl(small_thumb_link($trying['Product']['coverimg']))}}" /></a></li>
         <li class="fl">
             <div class="title"><a class="_product_link" href="{{product_link2($trying)}}">{{usubstr($trying['Product']['name'], 0, 10, '')}}</a></div>
-            <div class="price">秒杀价: <span>￥{{$this->Number->precision($trying['ProductTry']['price']/100, 2)}}</span><label>({{$trying['ProductTry']['spec']}})</label></div>
+            <div class="price">秒杀价: <span>￥{{$this->Number->precision(calculate_try_price($trying['ProductTry']['price'], 0), 2)}}</span><label>({{$trying['ProductTry']['spec']}})</label></div>
             <div class="clearfix buy_div {{if $trying['status'] == 'sec_unstarted' }} hide {{/if}}">
                 <a href="javascript:;" data-tryid="{{$trying['ProductTry']['id']}}" data-pid="{{$trying['Product']['id']}}" class="tbtn {{if $trying['status'] == 'sec_kill'}}seckill_btn{{elseif $trying['status'] =='sec_end'}}end_btn{{/if}} radius10">{{$trying['status'] =='sec_end'?'已秒完':'立即秒杀'}}</a>
                 <div class="fl grade">限<span id="limit_num_{{$trying['ProductTry']['id']}}">{{$trying['ProductTry']['limit_num']}}</span>份</div>

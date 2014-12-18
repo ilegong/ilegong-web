@@ -36,7 +36,7 @@
             <dl class="clearfix"><?php $i = 0; foreach($tryings as $trying) { if ($i++>2) {break;} ?>
                 <dt><a href="/shichi/list_pai.html">
                     <img src="{{$this->Html->assetUrl(small_thumb_link($trying['Product']['coverimg']))}}" />
-                    <span>秒杀价<br/>{{$this->Number->precision($trying['ProductTry']['price']/100, 2)}}</span>
+                    <span>秒杀价<br/>{{$this->Number->precision(calculate_try_price($trying['ProductTry']['price']), 2)}}</span>
                     {{if $trying['status'] == 'sec_kill'}}
                     <a  href="/shichi/list_pai.html" class="tbtn seckill_btn radius10" data-pid="{{$trying['Product']['id']}}">正在秒杀</a>
                     {{elseif $trying['status'] == 'sec_end'}}<a class="tbtn end_btn radius10">已秒完</a>

@@ -212,6 +212,7 @@ class CategoriesController extends AppController {
             $this->loadModel('Shichituan');
             $shichituan = $this->Shichituan->find_in_period($uid, get_shichituan_period());
             $is_shichi = (!empty($shichituan) || $shichituan);
+            $this->set('shichiTuan', $shichituan);
         }
         $this->set('shichi_mem', $is_shichi);
 

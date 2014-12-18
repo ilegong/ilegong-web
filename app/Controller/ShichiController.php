@@ -45,6 +45,7 @@ class ShichiController extends AppController {
         $is_shichi =  (!empty($shichituan) || $shichituan);
 
         $this->set('shichi_mem', $is_shichi);
+        $this->set('shichiTuan', $shichituan);
         $this->set('tryings', $tryings);
         $this->pageTitle = '试吃秒杀';
     }
