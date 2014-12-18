@@ -1,12 +1,13 @@
 <?php
+
 /**
  * Created by IntelliJ IDEA.
  * User: liuzhr
  * Date: 11/28/14
  * Time: 12:45 PM
  */
-
-class StoresController extends AppController {
+class StoresController extends AppController
+{
 
     public $uses = array('Product', 'Brand', 'Order');
 
@@ -18,9 +19,10 @@ class StoresController extends AppController {
 
     public $brand = null;
 
-    private function checkAccess($refuse_redirect = true){
+    private function checkAccess($refuse_redirect = true)
+    {
 
-        if(empty($this->currentUser['id'])){
+        if (empty($this->currentUser['id'])) {
             if ($refuse_redirect) {
                 $this->__message('您需要先登录才能操作', '/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
                 return false;
@@ -28,7 +30,7 @@ class StoresController extends AppController {
         }
 
         $this->brand = $this->find_my_brand($this->currentUser['id']);
-        if(empty($this->brand)){
+        if (empty($this->brand)) {
             if ($refuse_redirect) {
                 $this->__message('您没有权限访问相关页面', '/');
                 return false;
@@ -40,21 +42,24 @@ class StoresController extends AppController {
         return true;
     }
 
-    public function beforeFilter() {
+    public function beforeFilter()
+    {
         parent::beforeFilter();
         $this->layout = 'store';
         $this->pageTitle = '商家后台';
     }
 
 
-    public function profile() {
+    public function profile()
+    {
         $this->checkAccess();
         $this->set('brand', $this->brand);
-        $this->set_profile_info($this->brand['Brand']['weixin_id'],  $this->brand['Brand']['notice']);
+        $this->set_profile_info($this->brand['Brand']['weixin_id'], $this->brand['Brand']['notice']);
         $this->set('op_cate', 'profile');
     }
 
-    public function edit_profile() {
+    public function edit_profile()
+    {
         $this->checkAccess();
         $this->set('brand', $this->brand);
 
@@ -67,7 +72,7 @@ class StoresController extends AppController {
             } else if (mb_strlen($notice) > 30) {
                 setFlashError($this->Session, '公告信息不能超过30个汉字');
             } else {
-                $this->Brand->updateAll(array('weixin_id' => '\''.$weixin_id.'\'', 'notice' => '\''.addslashes(htmlspecialchars($notice)).'\''), array('id' => $brandId));
+                $this->Brand->updateAll(array('weixin_id' => '\'' . $weixin_id . '\'', 'notice' => '\'' . addslashes(htmlspecialchars($notice)) . '\''), array('id' => $brandId));
                 $this->Session->setFlash('保存成功');
                 $this->redirect('/s/profile');
             }
@@ -78,27 +83,28 @@ class StoresController extends AppController {
         $this->set('op_cate', 'profile');
     }
 
-    public function my_story() {
+    public function my_story()
+    {
         $this->checkAccess();
 
         if (!empty($this->data)) { //有数据提交
             $brandId = $this->brand['Brand']['id'];
             $story = $this->data['Brand']['content'];
             $this->Brand->id = $brandId;
-            $this->Brand->set('content',$story);
+            $this->Brand->set('content', $story);
             $this->Brand->save();
             $this->Session->setFlash('保存成功');
 
-            $this->redirect(array('action' => 'my_story',$brandId));
-        }
-        else{
-            $this->data =  $this->brand;; //加载数据到表单中
+            $this->redirect(array('action' => 'my_story', $brandId));
+        } else {
+            $this->data = $this->brand;; //加载数据到表单中
         }
 
         $this->set('op_cate', 'profile');
     }
 
-    public function index() {
+    public function index()
+    {
         $uid = $this->currentUser['id'];
         if ($uid) {
             $this->loadModel('Brand');
@@ -122,24 +128,26 @@ class StoresController extends AppController {
 
     }
 
-    public function add_product() {
+    public function add_product()
+    {
         $this->checkAccess();
 
         if (!empty($this->data) && $this->check_product_post()) {
             $this->data['Product']['brand_id'] = $this->brand['Brand']['id'];
-            foreach ($this->data['Product'] as &$item){
-                if(is_array($item)){
-                    $item = implode(',',$item); // 若提交的内容为数组，则使用逗号连接各项值保存到一个字段里
+            foreach ($this->data['Product'] as &$item) {
+                if (is_array($item)) {
+                    $item = implode(',', $item); // 若提交的内容为数组，则使用逗号连接各项值保存到一个字段里
                 }
             }
-            if(!isset($this->data['Product']['published'])){
-                $this->data['Product']['published'] = 1;
+            if (!isset($this->data['Product']['published'])) {
+//                $this->data['Product']['published'] = 1;
+                $this->data['Product']['published'] = 2;
             }
             $this->data['Product']['deleted'] = DELETED_NO;
             $this->data['Product']['creator'] = $this->currentUser['id'];
             $this->data['Product']['coverimg'] = trim($this->data['coverimg']);
 
-            if(!isset($this->data['Product']['slug'])) {
+            if (!isset($this->data['Product']['slug'])) {
                 $name = $this->data['Product']['name'];
                 $slug = $this->generate_slug($name);
                 if (empty($slug)) {
@@ -148,7 +156,7 @@ class StoresController extends AppController {
 
                 $tries = 10;
                 $tryingSlug = $slug;
-                while($tries-- > 0) {
+                while ($tries-- > 0) {
                     $proBySlug = $this->Product->findBySlug($tryingSlug);
                     if (!empty($proBySlug)) {
                         $tryingSlug = $slug . '_' . random_str(4);
@@ -165,7 +173,7 @@ class StoresController extends AppController {
             $error = $this->check_product_publish();
             if (!empty($error)) {
                 setFlashError($this->Session, $error);
-            }  else {
+            } else {
                 $this->Product->create();
                 if ($this->Product->save($this->data)) {
                     $this->Session->setFlash(__('The Data has been saved'));
@@ -178,12 +186,13 @@ class StoresController extends AppController {
         $this->set('op_cate', 'products');
     }
 
-    function product_sale_status($id, $on_sale) {
+    function product_sale_status($id, $on_sale)
+    {
         $this->autoRender = false;
         $resp = array();
         $success = false;
-        $message= 'ok';
-        if ($this->checkAccess(false)){
+        $message = 'ok';
+        if ($this->checkAccess(false)) {
             $datainfo = $this->find_product_by_id_and_brandId($id, $this->brand['Brand']['id']);
             if (!empty($datainfo)) {
                 $publish_status = $on_sale ? PUBLISH_YES : PUBLISH_NO;
@@ -193,13 +202,14 @@ class StoresController extends AppController {
                 $message = 'no_data_right';
             }
         } else {
-          $message = 'no_right';
+            $message = 'no_right';
         }
         $resp = array('msg' => $message, 'success' => $success);
         echo json_encode($resp);
     }
 
-    function edit_product($id) {
+    function edit_product($id)
+    {
         $this->checkAccess();
         $datainfo = $this->find_product_by_id_and_brandId($id, $this->brand['Brand']['id']);
         if (empty($datainfo)) {
@@ -212,7 +222,7 @@ class StoresController extends AppController {
             $error = $this->check_product_publish();
             if (!empty($error)) {
                 setFlashError($this->Session, $error);
-            }  else {
+            } else {
                 if ($this->Product->save($this->data)) {
                     $this->Session->setFlash(__('The Data has been saved'));
                     //$this->redirect(array('action'=>'index'));
@@ -223,15 +233,15 @@ class StoresController extends AppController {
             $successinfo = array('success' => __('Edit success'), 'actions' => array('OK' => 'closedialog'));
             //echo json_encode($successinfo);
             //return ;
-            $this->redirect(array('action' => 'edit_product',$id));
-        }
-        else{
+            $this->redirect(array('action' => 'edit_product', $id));
+        } else {
             $this->data = $datainfo; //加载数据到表单中
         }
         $this->set('op_cate', 'products');
     }
 
-    function del_product($id) {
+    function del_product($id)
+    {
         $this->checkAccess();
 
         $brandId = $this->brand['Brand']['id'];
@@ -246,24 +256,25 @@ class StoresController extends AppController {
         $this->redirect(array('action' => 'products'));
     }
 
-    public function products() {
+    public function products($product_status='')
+    {
         $this->checkAccess();
 
         $page = 1;
         $pagesize = intval(Configure::read('Product.pagesize'));
-        if(!$pagesize){
+        if (!$pagesize) {
             $pagesize = 15;
         }
 
         $total = $this->Product->find('count', array('conditions' => array('brand_id' => $this->brand['Brand']['id'])));
         $datalist = $this->Product->find('all', array(
-            'conditions' => array('brand_id' => $this->brand['Brand']['id'], 'deleted' => DELETED_NO),
-            'fields'=>array('id','name','price','published','coverimg', 'deleted', 'saled', 'storage', 'updated', 'slug'),
+            'conditions' => array('brand_id' => $this->brand['Brand']['id'], 'deleted' => DELETED_NO, 'published' => $product_status),
+            'fields' => array('id', 'name', 'price', 'published', 'coverimg', 'deleted', 'saled', 'storage', 'updated', 'slug'),
             'order' => 'updated desc'
         ));
 
         $page_navi = getPageLinks($total, $pagesize, '/products/mine', $page);
-        $this->set('datalist',$datalist);
+        $this->set('datalist', $datalist);$this->log('datalist'.json_encode($datalist));
         $this->set('page_navi', $page_navi);
         $this->set('op_cate', 'products');
     }
@@ -271,9 +282,10 @@ class StoresController extends AppController {
     /**
      * 生成链接的slug别名
      */
-    function genSlug() {
+    function genSlug()
+    {
         $success = false;
-        if($this->checkAccess(false)) {
+        if ($this->checkAccess(false)) {
             $word = $_REQUEST['word'];
             $slug = $this->generate_slug($word);
             $success = false;
@@ -291,66 +303,86 @@ class StoresController extends AppController {
      * @param $brandId
      * @return mixed
      */
-    private function find_product_by_id_and_brandId($id, $brandId) {
+    private function find_product_by_id_and_brandId($id, $brandId)
+    {
         return $this->Product->find('first', array('conditions' => array('id' => $id, 'brand_id' => $brandId)));
     }
 
 
-    public function orders(){
+    public function orders()
+    {
         $this->__business_orders(
-            array(ORDER_STATUS_PAID,ORDER_STATUS_WAITING_PAY,ORDER_STATUS_SHIPPED,ORDER_STATUS_RECEIVED));
+            array(ORDER_STATUS_PAID, ORDER_STATUS_WAITING_PAY, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED));
     }
 
-    function wait_shipped_orders(){
+    function wait_shipped_orders()
+    {
         $this->__business_orders(array(ORDER_STATUS_PAID));
-        $this -> render("orders");
+        $this->render("orders");
     }
 
-    function wait_paid_orders(){
+    function wait_paid_orders()
+    {
         $this->__business_orders(array(ORDER_STATUS_WAITING_PAY));
-        $this -> render("orders");
+        $this->render("orders");
     }
 
 
-    function shipped_orders(){
+    function shipped_orders()
+    {
         $this->__business_orders(array(ORDER_STATUS_SHIPPED));
-        $this -> render("orders");
+        $this->render("orders");
     }
 
 
-    function signed_orders(){
+    function signed_orders()
+    {
         $this->__business_orders(array(ORDER_STATUS_RECEIVED));
-        $this -> render("orders");
+        $this->render("orders");
     }
 
-    public function orders_export(){
+    public function orders_export()
+    {
         $this->__business_orders_export(
-            array(ORDER_STATUS_PAID,ORDER_STATUS_WAITING_PAY,ORDER_STATUS_SHIPPED,ORDER_STATUS_RECEIVED));
+            array(ORDER_STATUS_PAID, ORDER_STATUS_WAITING_PAY, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED));
     }
 
-    function wait_shipped_orders_export(){
+    function wait_shipped_orders_export()
+    {
         $this->__business_orders_export(array(ORDER_STATUS_PAID));
-        $this -> render("orders_export");
+        $this->render("orders_export");
     }
 
-    function wait_paid_orders_export(){
+    function wait_paid_orders_export()
+    {
         $this->__business_orders_export(array(ORDER_STATUS_WAITING_PAY));
-        $this -> render("orders_export");
+        $this->render("orders_export");
     }
 
 
-    function shipped_orders_export(){
+    function shipped_orders_export()
+    {
         $this->__business_orders_export(array(ORDER_STATUS_SHIPPED));
-        $this -> render("orders_export");
+        $this->render("orders_export");
     }
 
 
-    function signed_orders_export(){
+    function signed_orders_export()
+    {
         $this->__business_orders_export(array(ORDER_STATUS_RECEIVED));
-        $this -> render("orders_export");
+        $this->render("orders_export");
     }
 
-    protected function __business_orders($onlyStatus = array()) {
+
+    function product_in_check()
+    {
+        $this->__business_products(array(IN_CHECK));
+        $this->render('products');
+    }
+
+
+    protected function __business_orders($onlyStatus = array())
+    {
         $creator = $this->currentUser['id'];
 
         $this->loadModel('Brand');
@@ -409,15 +441,16 @@ class StoresController extends AppController {
         $this->set('order_carts', $order_carts);
         $this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('creator', $creator);
-        if(sizeof($onlyStatus)>1){
+        if (sizeof($onlyStatus) > 1) {
             $this->set('status', -1);
-        }else{
+        } else {
             $this->set('status', $onlyStatus[0]);
         }
         $this->set('op_cate', 'orders');
     }
 
-    protected function __business_orders_export($onlyStatus = array()) {
+    protected function __business_orders_export($onlyStatus = array())
+    {
         $creator = $this->currentUser['id'];
 
         $this->loadModel('Brand');
@@ -465,7 +498,8 @@ class StoresController extends AppController {
         $this->set('creator', $creator);
     }
 
-    private function set_profile_info($weixinId, $notice) {
+    private function set_profile_info($weixinId, $notice)
+    {
         $this->set('profile_weixin_id', $weixinId);
         $this->set('profile_notice', $notice);
     }
@@ -474,7 +508,8 @@ class StoresController extends AppController {
      * @param $word
      * @return string
      */
-    private function generate_slug($word) {
+    private function generate_slug($word)
+    {
         return generate_slug($word);
     }
 
@@ -483,9 +518,10 @@ class StoresController extends AppController {
      *
      * @return string true if passed
      */
-    private function check_product_post() {
+    private function check_product_post()
+    {
 
-        foreach ($this->data['Product'] as $key => $item){
+        foreach ($this->data['Product'] as $key => $item) {
             if (array_search($key, $this->allowdPostProductFields) === FALSE) {
                 $error = "不能编辑特定信息:$key";
                 break;
@@ -493,7 +529,7 @@ class StoresController extends AppController {
         }
 
         if (mb_strlen($this->data['Product']['name'], "UTF-8") > VAL_PRODUCT_NAME_MAX_LEN) {
-            $error = '名称不能长于'.VAL_PRODUCT_NAME_MAX_LEN.'个字符';
+            $error = '名称不能长于' . VAL_PRODUCT_NAME_MAX_LEN . '个字符';
         }
 
         if (!empty($error)) {
@@ -506,9 +542,11 @@ class StoresController extends AppController {
     /**
      * @return string error message
      */
-    private function check_product_publish() {
+    private function check_product_publish()
+    {
         if (isset($this->data['Product']['brand_id'])
-            &&  $this->data['Product']['brand_id'] != $this->brand['Brand']['id']){
+            && $this->data['Product']['brand_id'] != $this->brand['Brand']['id']
+        ) {
             $error = "不能编辑所属商家Id";
         } else if ($this->data['Product']['published'] == PUBLISH_YES) {
             if (empty($this->data['Product']['coverimg'])) {
@@ -527,7 +565,8 @@ class StoresController extends AppController {
      * @param $userId
      * @return mixed
      */
-    private function find_my_brand($userId) {
+    private function find_my_brand($userId)
+    {
         return $this->Brand->find('first', array('conditions' => array(
             'creator' => $userId,
             'deleted' => DELETED_NO,

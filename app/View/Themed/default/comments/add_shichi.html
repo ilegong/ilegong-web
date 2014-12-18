@@ -1,0 +1,469 @@
+{{$this->Html->css(array(
+'jquery.fileupload.css',
+
+))}}
+
+<style>
+    #shichi_comment_list .comment_item {
+        padding:10px 19px 4px;
+        border-top:1px dotted #ccc;
+        _border-top:none;
+    }
+    .shichi_comment_item .comment_selected {
+        background-color:#F5F8FD;
+    }
+    #shichi_comment_list .comment_more {
+        padding:0;
+        border-bottom:1px solid #C8D8F2;
+    }
+    #shichi_comment_list .comment_more div {
+        margin:0 10px;
+        padding:10px;
+        font-size:14px;
+        text-align:center;
+    }
+    .shichi_comment_item .t_info {
+        color:#666666;
+        line-height:20px;
+        float:left;
+        font-size:12px;
+        position:relative;padding:0px;
+    }
+    .shichi_comment_item .t_info .t_signal {
+        background:url(/img/shichi-signal.jpg) no-repeat;
+        background-size:20px 20px;
+        height:56px;
+        width:56px;
+        /*display:block;*/
+        position:absolute;
+    }
+    .shichi_comment_item .t_info .t_username {
+        color:#25343b;
+        padding-left:15px;
+        background:transparent url(http://i3.sinaimg.cn/dy/2010/0610/2010610122226.gif) no-repeat scroll -150px -56px;
+
+    }
+
+    .shichi_comment_item .t_info .t_area {
+        color:#999;
+        padding-left:15px;
+        display:block;
+        width:96px;
+    }
+    .shichi_comment_item .t_info .t_mobile {
+        background:transparent url(http://i3.sinaimg.cn/dy/2010/0610/2010610122226.gif) no-repeat scroll 0px -56px;
+    }
+    .shichi_comment_item .t_txt {
+        line-height:24px;
+        margin-left:124px;
+        font-size:14px;
+        color:#414159;
+    }
+
+    .shichi_comment_item .t_others {
+        margin-left:124px;
+    }
+
+    .shichi_comment_item .t_img img {
+        padding: 2px 0 2px 2px;
+        max-width: 100%;
+    }
+
+    .shichi_comment_item .t_others .datetime {
+        color: #d0d0d0;
+        font-size:12px;
+        margin-top:10px;
+    }
+    .shichi_comment_item .comment_selected .t_others .datetime {
+        color: #999;
+    }
+    .shichi_comment_item .t_others .reply {
+        float:right;
+        display:none;
+    }
+    #CommentAdd_shichiForm label {margin-right:3px;}
+    #CommentAdd_shichiForm .submit{
+        text-align:right;
+    }
+
+    .shichi_CommentBox h2 {
+        height:28px;
+        line-height:26px;
+        padding:10px 20px 0;
+        background-color:#F5F8FD;
+    }
+    .shichi_CommentBox h2 .title {
+        float:left;
+        font-size:18px;
+        line-height:18px;
+        _line-height:24px;
+        font-weight:bold;
+        font-family:'微软雅黑','黑体';
+        _font-weight:normal;
+        padding-left:24px;
+        color:#464646;
+    }
+
+    .shichi_commentBox div {
+        padding-bottom: 5px;
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 0px;
+    }
+
+    .shichi_commentBox {
+        border: 1px solid #e1e1e8;
+        border-radius: 4px;
+    }
+
+    .shichi_commentBody {
+        background-color: #e1e1e8;
+    }
+#vote_table {text-align:left;margin-top:20px;width:100%;}
+#vote_table .col2 {display:inline-block;width:186px;}
+#vote_table .vote-scroll {width:200px;height:16px;margin:auto;background-color:#EEE;border:1px solid #C4AFF6;}
+#vote_table .vote-scroll .comment1 {height:100%;display: inline-block;background-color:#8B58FF;}
+#vote_table .vote-scroll .comment2 {height:100%;display: inline-block;background-color:#8B58FF;}
+.corner {-webkit-border-radius: 4px;}
+#div1 {display:block;}
+
+</style>
+<div class="shichi comment">
+    {{if $is_product_has_shichi}}
+    <div class="shichi_CommentBox">
+
+        <div class="shichi_CommentBody">
+    {{$this->Form->create('Comment',array('action'=>'add_shichi','id'=>'CommentAdd_shichiForm','class'=>'form-horizontal'))}}
+    {{$this->Form->input('data_id',array('type'=>'hidden','value'=>$current_data_id))}}
+    {{$this->Form->input('type',array('type'=>'hidden','value'=>$current_model))}}
+    {{$this->Form->input('pictures',array('type' => 'hidden','class' => 'form-control'))}}
+
+
+        <h3>您对该款商品的意见？</h3>
+        <small>投下您宝贵的一票，您的投票将决定当前试吃商品的上架与否</small>
+        <h4>当前试吃人数:<span id="num"></span></h4>
+        <h4>当前投票人数:<span id="count"></span></h4>
+        <table id="vote_table">
+            <tbody>
+            <tr>
+                <td class="col1">支持:</td>
+                <td class="col2"><div class="vote-scroll corner"><span class="comment1 corner" id="comment1"></span></div></td>
+                <td class="col3" id="col3"></td>
+                <td class="col4"><input type="radio" id="shichicomment1"  checked="checked" name="data[Comment][shichi_rating]" value="1"></td>
+                <td class="col5">&nbsp;</td>
+            </tr>
+            <tr>
+                <td class="col1">不支持:</td>
+                <td class="col2"><div class="vote-scroll corner"><span class="comment2 corner" id="comment2"></span></div></td>
+                <td class="col3" id="col31"></td>
+                <td class="col4"><input type="radio" id="shichicomment2" name="data[Comment][shichi_rating]" value="2"></td>
+                <td class="col5">&nbsp;</td>
+            </tr>
+            </tbody>
+        </table>
+       <br><br>
+
+        </div>
+
+
+    {{if $order_shichi&&$order_shichi['OrderShichi']['is_comment'] ==0}}
+    <div id="div1">
+    {{$this->Form->input('body',array('label'=>false,'type'=>'textarea','rows'=>3,'class' =>'form-control','placeholder' => '写下您的试吃评论吧...'))}}
+    {{$this->Form->end();}}
+
+    <span class="btn btn-success fileinput-button">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>{{__('Add Images...')}}</span>
+        <input id="fileupload" type="file" name="files[]" multiple>
+    </span>
+
+    <div id="files" class="files clearfix"></div>
+    <p id="commentTips" class="bg_danger hide"></p>
+    <div class="submit"><input id="btnSubmit" onclick="return submitaddshichi_comment($('#CommentAdd_shichiForm'));" class="btn btn-primary pull-right" type="submit" value="提交" /></div>
+    </div>
+
+     {{else}}
+     {{$this->Form->end();}}
+     {{/if}}
+
+
+     <br><br>
+
+     <div id="shichi_comment_list">
+     <div class="shichi_comment_item comment_more"></div>
+     <br>
+     <div id="shichi_comment_items"></div>
+    </div>
+
+    </div>
+    {{else}}
+    <div style="text-align: center;">
+        <span class="glyphicon glyphicon-list-alt" style="font-size: 18px; line-height: 1.33;"></span>
+        <p>该商品还没有相关试吃报告</p>
+    </div>
+    {{/if}}
+</div>
+
+<script>
+    $(document).ready(function(){
+        vote_num();
+        loadShichi_CommentData();
+
+        _pys_shichi_comment_cookie.auto_load();
+//        if (window.location.href.indexOf('_pys_add_shichi_comment=1') > 0) {
+//            $('#CommentBody').focus();
+//        }
+
+
+    });
+
+
+    var _pys_shichi_comment_cookie = {
+        auto_load : function() {
+            var body = $('#CommentBody');
+            if (!$.trim(body.val())) {
+                body.val($.cookie('__comments_text'));
+            }
+        },
+
+        save : function() {
+            var body = $('#CommentBody');
+            if ($.trim(body.val())) {
+                $.cookie('__comments_text', body.val());
+            }
+        } ,
+
+        clear : function() {
+            $.removeCookie('__comments_text');
+        }
+    };
+
+    function vote_num(){
+        $.ajax({
+            type:'get',
+            success:function(data){
+               var vote_num=data[0];
+               var count=data[1];var num=data[4];
+
+                $('#count').text(count);
+                $('#num').text(num);
+                $('#comment1').css("width", vote_num[0]+ "%");$("#col3").text( data[2]+'('+vote_num[0] + "%"+')');
+                $('#comment2').css("width", vote_num[1] + "%");$("#col31").text( data[3]+'('+vote_num[1] + "%"+')');
+            },
+            url:"{{$this->Html->url(array('controller'=>'comments','action'=>'shichi_vote',$current_data_id,'ext'=>'json'))}}",
+            dataType:'json'
+        });
+    }
+    function addshichi_CommintItem(item){
+        var $comment = $('<div newsid="27-1-699265" channel="jc" class="shichi_comment_item">'
+                +'<div class="t_info">'
+                +(parseInt(item['is_shichi_tuan_comment'])==1 ? '<span class="t_username">'+item['username']+'<span class="t_signal"></span>'+'</span>'+'<br><span class="t_area"></span>':'<span class="t_username">'+item['username']+'</span>'+'<br><span class="t_area"></span>')
+                +'</div>'
+                +'<div class="t_txt">'
+//                + (parseInt(item['rating'])==5 ? '<span class="label label-success">好评</span>':(parseInt(item['rating'])==3 ? '<span class="label label-default">中评</span>':'<span class="label label-warning">差评</span>'))
+                + item['body']+'</div>'
+                +'<div class="t_others">'
+                +'<span class="reply" style="display: ;">'
+                +'<a onclick="return false;" style="margin-right:18px;" href="#">回复</a>'
+                +'<a onclick="return false;" style="margin-right:0;" href="#">支持</a>'
+                +'</span>'
+                +'<span class="datetime">'+item['created']+'</span>'
+                +'</div>'
+                +'<div style="clear:both"></div>'
+                +'</div>');
+        if (item.images && item.images.length > 0) {
+            var $images = $('<div class="t_img t_others"/>').insertAfter($comment.find('.t_txt'));
+              $.each(item.images, function(idx, val){
+//                $('<a class="preview"></a>').attr('href',val).appendTo($images);
+//               var $image = $('<a>');
+//               $('<img/>').attr('src',val).appendTo($image);
+
+                $('<img/>').attr('src', val).appendTo($images);
+
+
+            });
+        }
+        $comment.appendTo($('#shichi_comment_items'));
+    }
+
+
+
+    function loadShichi_CommentData(){
+        $.ajax({
+            type:'get',
+            success:function(request,xhr){
+                for(var i in request){
+                    addshichi_CommintItem(request[i]['Comment']);
+
+                }
+            },
+            url:"{{$this->Html->url(array('controller'=>'comments','action'=>'get_shichi_list',$current_model,$current_data_id,'ext'=>'json'))}}",
+            dataType:'json'
+        });
+        }
+
+
+    function submitaddshichi_comment(form){
+
+           if ($.trim($('#CommentBody').val()).length == 0) {
+               utils.alert("请填写评论内容");
+               return;
+           }
+
+        var referer = window.location.href;
+        if (referer.indexOf('?') == -1) {
+            referer = referer + '?';
+        }
+
+        //used for pages auto located to add comment box
+        if (referer.indexOf('_pys_add_shichi_comment') == -1) {
+            referer = referer + '&_pys_add_shichi_comment=1';
+        }
+
+        if(!sso.check_userlogin({"callback":submitaddshichi_comment,"callback_args":arguments, 'referer': referer})) {
+            _pys_shichi_comment_cookie.save();
+            return false;
+        }
+
+        $.ajax({
+            type:'post',
+            success:function(request,xhr){
+                if(request.success){
+                    $('#btnSubmit').val('已提交').prop('disabled','disabled');
+                    $('#shichicomment1').prop('disabled','disabled');
+                    $('#shichicomment2').prop('disabled','disabled');
+//                    $('#CommentBody').hide();
+//                    $('#btnSubmit').hide();
+                   $('#div1').hide();
+                    if (request['Comment']){
+                        addshichi_CommintItem(request['Comment']);
+                        vote_num();
+                        _pys_shichi_comment_cookie.clear();
+                    }
+                }else{
+                    showErrorMessage('something is wrong');
+                }
+
+            },
+            url:"{{$this->Html->url(array('controller'=>'comments','action' =>'add_shichi'))}}",
+            data:$(form).serialize(),
+            dataType:'json'
+
+        });
+       }
+
+</script>
+{{$this->Html->script(array(
+'vendor/jquery.ui.widget.js',
+'http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js',
+'http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js',
+'jquery.iframe-transport.js',
+'jquery.fileupload.js',
+'jquery.fileupload-process.js',
+'jquery.fileupload-image.js',
+'jquery.fileupload-validate.js',
+));
+}}
+<script>
+    /*jslint unparam: true, regexp: true */
+    /*global window, $ */
+    $(function () {
+        'use strict';
+        // Change this to the location of your server-side upload handler:
+        var url = '/upload/upload',
+                uploadButton = $('<button/>')
+//                        .addClass('btn btn-primary')
+//                        .prop('disabled', true)
+//                        .text('Processing...')
+                        .on('click', function () {
+                            var $this = $(this),
+                                    data = $this.data();
+                            $this
+                                    .off('click')
+                                    .text('Abort')
+                                    .on('click', function () {
+                                        $this.remove();
+                                        data.abort();
+                                    });
+                            data.submit().always(function () {
+                                $this.remove();
+                            });
+                        });
+
+        $('#fileupload').fileupload({
+            url: url,
+            dataType: 'json',
+            autoUpload: false,
+            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+            maxFileSize: 5000000, // 5 MB
+            // Enable image resizing, except for Android and Opera,
+            // which actually support image resizing, but fail to
+            // send Blob objects via XHR requests:
+            disableImageResize: /Android(?!.*Chrome)|Opera/
+                    .test(window.navigator.userAgent),
+            previewMaxWidth: 100,
+            previewMaxHeight: 100,
+            previewCrop: true
+        }).on('fileuploadadd', function (e, data) {
+            data.context = $('<div/>').css({'width': '120px', 'float':'left'}).appendTo('#files');
+            $.each(data.files, function (index, file) {
+                var node = $('<p/>');
+                if (!index) {
+                    node.append(uploadButton.clone(true).data(data));
+                }
+                node.appendTo(data.context);
+            });
+        }).on('fileuploadprocessalways', function (e, data) {
+            var index = data.index,
+                    file = data.files[index],
+                    node = $(data.context.children()[index]);
+            if (file.preview) {
+                node.prepend('<br>')
+                        .prepend(file.preview);
+            }
+            if (file.error) {
+                node
+                        .append('<br>')
+                        .append($('<span class="text-danger"/>').text(file.error));
+            }
+            if (index + 1 === data.files.length) {
+                data.context.find('button')
+                        .text('{{__("Upload")}}')
+                        .prop('disabled', !!data.files.error);
+            }
+        }).on('fileuploadprogressall', function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            $('#progress .progress-bar').css(
+                    'width',
+                    progress + '%'
+            );
+        }).on('fileuploaddone', function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                if (file.url) {
+                    var link = $('<a>')
+                            .attr('target', '_blank')
+                            .prop('href', file.url);
+                    $(data.context.children()[index])
+                            .wrap(link);
+
+                    var pictures = $('#CommentPictures');
+                    pictures.val(pictures.val() + '|' + file.url);
+
+                } else if (file.error) {
+                    var error = $('<span class="text-danger"/>').text(file.error);
+                    $(data.context.children()[index])
+                            .append('<br>')
+                            .append(error);
+                }
+            });
+        }).on('fileuploadfail', function (e, data) {
+            $.each(data.files, function (index) {
+                var error = $('<span class="text-danger"/>').text('{{__("File upload failed.");}}');
+                $(data.context.children()[index])
+                        .append('<br>')
+                        .append(error);
+            });
+        }).prop('disabled', !$.support.fileInput)
+                .parent().addClass($.support.fileInput ? undefined : 'disabled');
+    });
+    </script>

@@ -142,7 +142,6 @@ class ProductsController extends AppController{
             }
         }
 
-
         $use_special = false;
         $price = $this->viewdata['Product']['price'];
         $currUid = $this->currentUser['id'];
@@ -197,6 +196,13 @@ class ProductsController extends AppController{
         $this->set('specs_map', $specs_map);
         $this->setHasOfferBrandIds($this->viewdata['Product']['brand_id']);
         $this->set('hideNav', $this->RequestHandler->isMobile());
+
+
+        $this->loadModel('OrderShichi');
+        $order_shichi = $this->OrderShichi->find('first', array('conditions' => array('creator' => $currUid, 'data_id' => $pid))); //查找是否有试吃订单
+        $is_product_has_shichi = $this->OrderShichi->find('first',array('conditions' => array('data_id' => $pid)));
+        $this->set('is_product_has_shichi',$is_product_has_shichi);
+        $this->set('order_shichi', $order_shichi);
 
         $this->loadModel('Brand');
         $brand = $this->Brand->findById($brandId);

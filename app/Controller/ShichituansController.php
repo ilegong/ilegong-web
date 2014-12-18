@@ -160,4 +160,6 @@ class ShichituansController extends AppController{
         $this->set('message', $shichimessage);
     }
 
+
+
 }

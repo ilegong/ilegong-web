@@ -55,6 +55,9 @@
 {{if $Product['ModelSplitInfo']}}
 <li><a data-toggle="tab" href="#product-params">产品参数</a></li>
 {{/if}}
+ {{if $is_product_has_shichi}}
+<li><a data-toggle="tab" href="#product-evaluation">试吃报告</a> </li>
+ {{/if}}
 <li><a data-toggle="tab" href="#product-reviews">评价详情</a></li>
 </ul>
 <div  class="tab-content">
@@ -76,6 +79,9 @@
 	</table>
 	</div>
 	{{/if}}
+    <div class="tab-pane" id="product-evaluation">
+        {{template comments/add_shichi}}
+    </div>
 	<div class="tab-pane" id="product-reviews">
 		{{template comments/add}}
 	</div>

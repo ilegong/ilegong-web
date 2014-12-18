@@ -273,6 +273,9 @@ msgstr ""
 msgid "ProductReviews"
 msgstr ""
 
+msgid "ProductEvaluation"
+msgstr ""
+
 msgid "By WeChat"
 msgstr ""
 

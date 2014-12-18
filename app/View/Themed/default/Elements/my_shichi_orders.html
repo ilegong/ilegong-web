@@ -1,0 +1,58 @@
+<?php $found = 0; ?>
+{{loop $orders $order}}
+<?php
+
+$found ++;
+$brand = $brands[$order['Ordershichi']['brand_id']];
+?>
+<div class="voffset3 order_item_{{$order['Ordershichi']['order_id']}}">
+    <div class="orderitem" style="background-color: #ffffff">
+        <div class="orderitem_top">
+            <div style="position: relative">
+                <span class="vertical-align"><a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brand['Brand']['created'])).'/'.$brand['Brand']['slug'].'.html')}}">{{$brand['Brand']['name']}}</a></span>
+            <span class="vrtical-align order_status_text order-status-{{$order['Ordershichi']['order_id']}}" style="position: absolute; right: 0; bottom: 0;">
+                    {{if $order['Ordershichi']['is_comment']==0}}待评价
+                    {{elseif $order['Ordershichi']['is_comment']==1}}已评价
+                    {{/if}}
+            </span>
+            </div>
+        </div>
+        {{if !empty($order_carts[$order['Ordershichi']['order_id']])}}
+        <a href="/order/detail/{{$order['Ordershichi']['order_id']}}">
+            {{loop $order_carts[$order['Ordershichi']['order_id']] $cart}}
+            <div class="clearfix orderitem_item">
+                {{$this->Html->image(small_thumb_link($cart['Cart']['coverimg']), array(
+                'class' => 'col-xs-3',
+                ));}}
+                <p class="col-xs-6">{{$cart['Cart']['name']}}</p>
+                <div class="col-xs-3 pull-right">
+                    <p style="margin-bottom: 0;" class="pull-right">￥{{$this->Number->precision($cart['Cart']['price'], 2)}}</p>
+                    <br/>
+                    <small style="margin-bottom: 0" class="pull-right">×{{$cart['Cart']['num']}}</small>
+                </div>
+            </div>
+            {{/loop}}
+            <div class="orderitem_price clearfix">
+                <span class="pull-left"> 订单号:{{$order['Ordershichi']['order_id']}} </span>
+                <span class="pull-right" style="text-align: right;">共{{$counts[$order['Ordershichi']['order_id']]}}件商品 实付：{{$this->Number->precision($order['Ordershichi']['total_price'], 2)}}</span>
+            </div>
+        </a>
+        <div class="orderitem_actions clearfix pull-right order_item_action_{{$order['Ordershichi']['order_id']}}">
+            <a class="btn-sm btn-primary" href="/order/detail/{{$order['Ordershichi']['order_id']}}">详细</a>
+
+            {{if $order['Ordershichi']['is_comment'] == 0}}
+            <a class="btn-sm btn-primary" href="{{product_link($cart['Cart']['product_id'], '/').'?_pys_add_shichi_comment=1'}}">去评价</a>
+            {{/if}}
+        </div>
+        <div class="clearfix"></div>
+        {{/if}}
+    </div>
+</div>
+{{/loop}}
+
+{{if $found == 0 }}
+<div style="text-align: center;">
+    <span class="glyphicon glyphicon-list-alt" style="font-size: 18px; line-height: 1.33;"></span>
+    <p>您还没有相关试吃订单</p>
+</div>
+{{/if}}

@@ -32,7 +32,7 @@
     background-size:20px 20px;
     height:56px;
     width:56px;
-    display:block;
+    /*display:block;*/
     position:absolute;
 }
 .comment_item .t_info .t_username {
@@ -133,7 +133,7 @@
 {{$this->Form->create('Comment',array('action'=>'add','class'=>'form-horizontal'))}}
 	{{$this->Form->input('data_id',array('type'=>'hidden','value'=>$current_data_id))}}
 	{{$this->Form->input('type',array('type'=>'hidden','value'=>$current_model))}}
-	{{$this->Form->input('pictures',array('type'=>'hidden','value'=>''))}}
+	{{$this->Form->input('pictures',array('type'=>'hidden'))}}
 	 <div class="form-group">
     	<div class="col-sm-8">
 			<label class="radio-inline">
@@ -177,7 +177,7 @@ function loadCommentData(){
 				addCommintItem(request[i]['Comment']);
 			}
 		},
-		url:"{{$this->Html->url(array('controller'=>'comments','action'=>'getlist',$current_model,$current_data_id,'ext'=>'json'))}}",		
+		url:"{{$this->Html->url(array('controller'=>'comments','action'=>'getlist',$current_model,$current_data_id,'ext'=>'json'))}}",
 		dataType:'json'
 	});
 }
@@ -213,7 +213,7 @@ $(document).ready(function(){
 function addCommintItem(item){
 	var $comment = $('<div newsid="27-1-699265" channel="jc" class="comment_item">'
 +'<div class="t_info">'
-+(parseInt(item['shichi_status'])==1 ? '<span class="t_username">'+item['username']+'</span>'+'<span class="t_signal"></span> '+'</span>'+'<br><span class="t_area"></span>':'<span class="t_username">'+item['username']+'</span>'+'</span>'+'<br><span class="t_area"></span>')
++(parseInt(item['is_shichi_tuan_comment'])==1 ? '<span class="t_username">'+item['username']+'<span class="t_signal"></span>'+'</span>'+'<br><span class="t_area"></span>':'<span class="t_username">'+item['username']+'</span>'+'<br><span class="t_area"></span>')
 +'</div>'
 +'<div class="t_txt">'
 + (parseInt(item['rating'])==5 ? '<span class="label label-success">好评</span>':(parseInt(item['rating'])==3 ? '<span class="label label-default">中评</span>':'<span class="label label-warning">差评</span>'))
@@ -239,7 +239,7 @@ function addCommintItem(item){
 function submitaddcomment(form){
 
     if ($.trim($('#CommentBody').val()).length == 0) {
-        utils.alert("请填写评论内容");
+        utils.alert("请填写评论内容!");
         return;
     }
 
@@ -405,7 +405,7 @@ function submitaddcomment(form){
             var progress = parseInt(data.loaded / data.total * 100, 10);
             $('#progress .progress-bar').css(
                     'width',
-                            progress + '%'
+                    progress + '%'
             );
         }).on('fileuploaddone', function (e, data) {
             $.each(data.result.files, function (index, file) {
@@ -417,7 +417,7 @@ function submitaddcomment(form){
                             .wrap(link);
 
                     var pictures = $('#CommentPictures');
-                    pictures.val(pictures.val() + '|' + file.url);
+                    pictures.val(pictures.val() + file.url);
 
                 } else if (file.error) {
                     var error = $('<span class="text-danger"/>').text(file.error);

@@ -30,7 +30,7 @@
         <!--</div>-->
         {{if $result['Shichituan']['status']==1}}
         <div class="shichi-signal">
-            <span class="signal fl"><img class="pull-right" src="{{$this->Html->assetUrl('/img/shichi-signal.jpg')}}"/></span>
+            <span class="signal fl"><img class="pull-right" src="{{$this->Html->url('/img/shichi-signal.jpg')}}"/></span>
         </div>
         {{/if}}
         <span class="fr more"></span>
@@ -72,6 +72,13 @@
 <div class="main_list border_b">
     <a href="{{$this->Html->url('/users/my_offers.html')}}" class="clearfix">
         <span class="fl">我的红包</span>
+        <span class="fr more"></span>
+    </a>
+</div>
+
+<div class="main_list border_b">
+    <a href="{{$this->Html->url('/ordershichis/my_shichi')}}" class="clearfix">
+        <span class="fl">我的试吃</span>
         <span class="fr more"></span>
     </a>
 </div>

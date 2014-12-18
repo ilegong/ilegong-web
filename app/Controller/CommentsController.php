@@ -7,7 +7,7 @@ class CommentsController extends AppController {
     var $components = array(
         'Email',
     );
-    var $uses = array('Comment', 'User','Shichituan');
+    var $uses = array('Comment', 'User', 'Shichituan');
     function add() {
     	$this->autoRender = false;
     	$this->layout = 'ajax';
@@ -15,64 +15,130 @@ class CommentsController extends AppController {
             $this->Session->setFlash(__('Invalid Params', true));
             $this->redirect('/');
         }
-        if($this->Session->check('Auth.User.id') && !empty($this->data)) {
-
-            if ($this->nick_should_edited($this->Session->read('Auth.User.nickname'))) {
-                echo json_encode(array('error'=>'edit_nick_name'));
-                return;
-            }
-            $this->data['Comment']['user_id'] = $this->Session->read('Auth.User.id');
-            $this->data['Comment']['username'] = $this->Session->read('Auth.User.nickname');
-            $this->data['Comment']['body'] = htmlspecialchars($this->data['Comment']['body']);
-            $this->data['Comment']['ip'] = $this->request->clientIp(false);
-            $this->data['Comment']['status'] = 1;
-            $this->data['Comment']['created'] = date('Y-m-d H:i:s');
-            //comment_type: 评论，补充完善，扩展阅读等等
-
-            if ($this->Comment->save($this->data)) {
-            	//$comment_id = $this->Comment->getLastInsertID();
-            	$type_model = $this->data['Comment']['type'];
-            	$this->loadModel($type_model);
-            	$this->{$type_model}->updateAll(
-            			array('comment_nums' => 'comment_nums+1'),
-            			array('id'=> $this->data['Comment']['data_id'])
-            	);
-            	
-                if ($this->data['status']) {
-                	$successinfo = array('success'=> '您的评论已成功提交');
-                    //$this->Session->setFlash(__('Your comment has been added successfully.', true));
-                }else {
-                	$successinfo = array('success'=> '您的评论已成功提交');
-                    //$this->Session->setFlash(__('Your comment will appear after moderation.', true));
-                }
-                $successinfo['Comment'] = $this->data['Comment'];
-            }
-            else{
-            	echo json_encode($this->{$this->modelClass}->validationErrors);
-            	return;
-            }
-            echo json_encode($successinfo);
-       }
-       else{
-	       	echo json_encode(array('error'=>'please_login'));
-            return;
-       }
-       return;
+        $returnInfo = $this->_save_comment();
+        echo json_encode($returnInfo);
     }
-    
-    function getlist($model_name,$id)
-    {
+
+    function add_shichi(){
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+
+        if (!empty($this->data)) {
+            $this->loadModel('OrderShichi');
+            $re = $this->OrderShichi->find('first', array('conditions' => array('creator' => $uid, 'data_id' => $this->data['Comment']['data_id']))); //查找是否有试吃订单
+           $this->log('re:'.json_encode($re));
+            if (!empty($re) && $re['OrderShichi']['is_comment'] == 0) {
+                $this->data['Comment']['is_shichi_vote'] = 1;
+                $info = $this->_save_comment();
+                if ($info['success']) {
+                    $shichiId = $re['OrderShichi']['id'];
+                    $updated = $this->OrderShichi->updateAll(array('is_comment' => 1), array('id' => $shichiId));
+                    $this->log("OrderShichi udpate is_comment($updated):" . $shichiId . ", uid=" . $uid);
+                } else {
+                    $this->log("error to save comment/shichi_vote for $uid:". json_encode($info));
+                }
+            }
+        } else {
+            $info = array('success' => false, 'error' => 'NO_DATA');
+        }
+
+        echo json_encode($info);
+    }
+
+    function shichi_vote($id){
+
+        $this->autoRender=false;
+        $this->layout='ajax';
+        $this->loadModel('OrderShichi');
+        $this->log('id'.json_encode($id));
+        $num=$this->OrderShichi->find('count',array('conditions' => array('data_id' =>$id)));
+        $this->log('num'.json_encode($num));
+        $comments=$this->Comment->find('all',array('conditions'=>array('Comment.data_id'=>$id,'Comment.is_shichi_vote'=>1),'fields'=>array('Comment.shichi_rating')));
+        $this->log('comments'.json_encode($comments));
+//      $Vote_num=array();
+        $Vote_num[0]='0';$Vote_num[1]='0';
+        foreach($comments as $re){
+            if($re['Comment']['shichi_rating']==1){
+                $Vote_num[0]++;
+            }else{
+                $Vote_num[1]++;
+            }
+
+        }
+        $count1=$Vote_num[0];$count2=$Vote_num[1];
+        $count=$Vote_num[0]+$Vote_num[1]; $this->log('count'.json_encode($count));
+        $Vote_num[0] = round($Vote_num[0]/$count*100);
+        $Vote_num[1] = round($Vote_num[1]/$count*100);
+
+        $data=array();
+        $data[]=$Vote_num;$data[]=$count;$data[]=$count1;$data[]=$count2;$data[]=$num;
+        $this->log('data'.json_encode($data));
+//        echo json_encode($Vote_num);
+        echo json_encode($data);
+    }
+
+    function get_shichi_list($model_name,$id) {
+        $page = intval($_GET['page'])?intval($_GET['page']):1;
+        $pagesize = intval($_GET['pagesize'])?intval($_GET['pagesize']):50;
+        $this->autoRender = false;
+        $model_name = Inflector::classify($model_name);
+        $comments = $this->Comment->find('all',array(
+            'conditions' => array('Comment.type' => $model_name,'data_id'=>$id,'status'=>1,'rating'=>0),
+            'order' => array('Comment.created DESC'), //定义顺序的字符串或者数组
+            'limit' => $pagesize, //整型
+            'page' => $page, //整型
+        ));
+//        $this->loadModel('Shichituan');
+        $result = array();
+        foreach ($comments as $comt){
+            $item = $comt['Comment'];
+            if(empty($item['username']) && !empty($item['user_id']) ){
+                $data = $this->User->find('first', array('conditions' => array('id' => $item['user_id'])));
+                if(isset($data['User']['id']) ){
+                    $item['username'] = $data['User']['nickname'];
+                }
+            }
+            if( empty($item['username']) ){
+                $item['username'] = '微信用户';
+            }
+            unset($item['ip']);
+            unset($item['lft']);
+            unset($item['rght']);
+
+            if ($item['pictures']) {
+                $images = array();
+                $pics = mbsplit("\\|", $item['pictures']);
+                foreach($pics as $pic) {
+                    if($pic && strpos($pic, "http://") === 0) {
+                        $images[] = $pic;
+                    }
+                }
+                if (count($pics) > 0) {
+                    $item['images'] = $images;
+                }
+            }
+
+            unset($item['pictures']);
+            array_push($result,array('Comment' => $item));
+        }
+
+        echo json_encode($result);
+
+
+    }
+
+    function getlist($model_name,$id){
     	$page = intval($_GET['page'])?intval($_GET['page']):1;
     	$pagesize = intval($_GET['pagesize'])?intval($_GET['pagesize']):50;
     	$this->autoRender = false;
     	$model_name = Inflector::classify($model_name);
     	$comments = $this->Comment->find('all',array(
-    		 'conditions' => array('Comment.type' => $model_name,'data_id'=>$id,'status'=>1),
+    		 'conditions' => array('Comment.type' => $model_name,'data_id'=>$id,'status'=>1,'rating'=>array('1','5','3')),
     		 'order' => array('Comment.created DESC'), //定义顺序的字符串或者数组
 		    'limit' => $pagesize, //整型
 		    'page' => $page, //整型    	
     	));
-        $this->loadModel('Shichituan');
+//        $this->loadModel('Shichituan');
         $result = array();
         foreach ($comments as $comt){
             $item = $comt['Comment'];
@@ -103,14 +169,10 @@ class CommentsController extends AppController {
             }
 
             unset($item['pictures']);
-
-            $shichi_status=$this->Shichituan->findByUser_id($item['user_id'],array('Shichituan.status'));
-            $item['shichi_status']=$shichi_status['Shichituan']['status'];
             array_push($result,array('Comment' => $item));
         }
 
     	echo json_encode($result);
-
 
     } 
 
@@ -162,5 +224,57 @@ class CommentsController extends AppController {
         $this->set('success',$success);
     }
 
+    /**
+     * @return array the result, which will contains a 'success' index with a not null string value
+     */
+    public function _save_comment()
+    {
+        if ($this->Session->check('Auth.User.id') && !empty($this->data)) {
+            if ($this->nick_should_edited($this->Session->read('Auth.User.nickname'))) {
+                $returnInfo = array('error' => 'edit_nick_name');
+                return $returnInfo;
+            } else {
+                $this->data['Comment']['user_id'] = $this->Session->read('Auth.User.id');
+                $this->data['Comment']['username'] = $this->Session->read('Auth.User.nickname');
+                $this->data['Comment']['body'] = htmlspecialchars($this->data['Comment']['body']);
+                $this->data['Comment']['ip'] = $this->request->clientIp(false);
+                $this->data['Comment']['status'] = 1;
+                $this->data['Comment']['created'] = date('Y-m-d H:i:s');
+
+
+                $shichi_status = $this->Shichituan->findByUser_id($this->currentUser['id'], array('Shichituan.status'));
+                if ($shichi_status['Shichituan']['status'] == 1) {
+                    $this->data['Comment']['is_shichi_tuan_comment'] = 1;
+                }
+
+                //comment_type: 评论，补充完善，扩展阅读等等
+                if ($this->Comment->save($this->data)) {
+                    //$comment_id = $this->Comment->getLastInsertID();
+                    $type_model = $this->data['Comment']['type'];
+                    $this->loadModel($type_model);
+                    $this->{$type_model}->updateAll(
+                        array('comment_nums' => 'comment_nums+1'),
+                        array('id' => $this->data['Comment']['data_id'])
+                    );
+
+                    if ($this->data['status']) {
+                        $returnInfo = array('success' => '您的评论已成功提交');
+                        //$this->Session->setFlash(__('Your comment has been added successfully.', true));
+                    } else {
+                        $returnInfo = array('success' => '您的评论已成功提交');
+                        //$this->Session->setFlash(__('Your comment will appear after moderation.', true));
+                    }
+                    $returnInfo['Comment'] = $this->data['Comment'];
+                    return $returnInfo;
+                } else {
+                    $returnInfo = $this->{$this->modelClass}->validationErrors;
+                    return $returnInfo;
+                }
+            }
+        } else {
+            $returnInfo = array('error' => 'please_login');
+            return $returnInfo;
+        }
+    }
 }
 ?>

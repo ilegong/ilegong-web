@@ -98,6 +98,12 @@ define('ORDER_STATUS_CANCEL', 10);      //已取消
 define('ORDER_STATUS_CONFIRMED', 11);  //已确认有效，不要再用
 define('ORDER_STATUS_TOUSU', 12);   //已投诉， 不要再用，投诉走其他流程
 
+define('ON_SHELVE',PUBLISH_YES);   //已上架
+define('OFF_SHELVE',PUBLISH_NO);   //下架
+define('IN_CHECK',2);              //审查中
+define('IN_SHICHI',3);             //试吃中
+define('SHICHI_AND_NO_CHECK',4);   //试吃／审核不通过
+
 
 define('CATEGORY_ID_TECHAN', 114);
 

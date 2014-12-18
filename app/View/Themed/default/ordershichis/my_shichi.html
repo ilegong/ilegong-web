@@ -1,0 +1,52 @@
+<style>
+    td {padding:5px 10px;}
+
+    .orderitem {
+        border-top: 1px solid #DDDDDD;
+        border-bottom: 1px solid #DDDDDD;
+        padding: 1px 7px 1px 10px;
+    }
+
+    .orderitem_top {
+        border-bottom: 1px solid #DDDDDD;
+        padding: 5px 0 5px 0;
+    }
+
+    .orderitem_item {
+        border-bottom: 1px solid #dddddd;
+        padding: 5px 0 5px 0;
+    }
+
+    .orderitem_price {
+        border-bottom: 1px solid #dddddd;
+        padding: 5px 0 5px 0;
+    }
+
+    .orderitem_actions {
+        padding: 5px 0 5px 0;
+    }
+</style>
+
+<div class="container">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="active"><a href="#orders-all" role="tab" data-toggle="tab">{{__('全部')}}</a></li>
+        <!--<li  role="presentation" ><a href="#orders-wait_payment" role="tab" data-toggle="tab">{{__('待支付')}}</a></li>-->
+        <!--<li  role="presentation" ><a href="#orders-wait_deliver" role="tab" data-toggle="tab">{{__('待发货')}}</a></li>-->
+        <!--<li  role="presentation" ><a href="#orders-wait_evaluat" role="tab" data-toggle="tab">{{__('待评价')}}</a></li>-->
+    </ul>
+    <div class="row tab-content" style="padding-left: 2px; background-color: #f1eff0">
+        <!--<?php foreach(array( '-1' => 'all', 0 => 'wait_payment', 1 => 'wait_deliver', 3 => 'wait_evaluat') as $status => $order_type) { ?>-->
+        <div class="tab-pane fade" id="orders-all">
+            <div class="Content-body">
+                {{ $this->element('my_shichi_orders', array(
+                'orders' => $orders,
+                'brands' => $brands,
+                'counts' => $counts,
+                'order_carts' =>$order_carts
+                )); }}
+            </div>
+        </div>
+        <!--<?php } ?>-->
+    </div>
+
+</div>

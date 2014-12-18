@@ -270,8 +270,12 @@ msgstr "产品介绍"
 msgid "ProductReviews"
 msgstr "口碑评价"
 
+msgid "ProductEvaluation"
+msgstr "试吃报告"
+
 msgid "By WeChat"
 msgstr "微信登录"
 
 msgid "By Username/Password"
 msgstr "账号密码登录"
+

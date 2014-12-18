@@ -213,16 +213,24 @@
 
 
 <?php
- $defTab = 'product-description';
+
  if ($_GET['_pys_add_comment']) {
     $defTab = 'product-reviews';
+ }elseif ($_GET['_pys_add_shichi_comment']) {
+    $defTab = 'product-evaluation';
+ }else {
+ $defTab = 'product-description';
  }
  ?>
 
 <div id="container-part1" class="container clearfix voffset">
     <ul class="nav nav-tabs" role="tablist">
         <li {{if $defTab == 'product-description'}}class="active"{{/if}}><a href="#product-description" role="tab" data-toggle="tab">{{__('ProductIntroduction')}}</a></li>
+        {{if $is_product_has_shichi}}
+        <li {{if $defTab == 'product-evaluation'}}class="active"{{/if}}><a href="#product-evaluation" role="tab" data-toggle="tab">{{__('试吃报告')}}</a></li>
+        {{/if}}
         <li {{if $defTab == 'product-reviews'}}class="active"{{/if}}><a href="#product-reviews" role="tab" data-toggle="tab">{{__('ProductReviews')}}</a></li>
+
     </ul>
 
     <div class="tab-content voffset2" style="padding-left: 2px;">
@@ -232,6 +240,13 @@
                 <?php echo $Product['Product']['content']; ?>
             </div>
         </div>
+        {{if $is_product_has_shichi}}
+        <div class="tab-pane fade{{if $defTab == 'product-evaluation'}} in active{{/if}}" id="product-evaluation">
+            <div class="Content-body">
+                {{template comments/add_shichi}}
+            </div>
+        </div>
+        {{/if}}
         <div class="tab-pane fade{{if $defTab == 'product-reviews'}} in active{{/if}}" id="product-reviews">
             <div class="Content-body">
                 {{template comments/add}}
