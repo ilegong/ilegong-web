@@ -152,6 +152,8 @@ class ShipPromotion extends AppModel {
     public static function calculateShipFeeByOrder($shipFee, $brandId, $total_price) {
         if ($brandId == 130 && $total_price * 100 > 4899) {
             return 0.0;
+        }else if ($brandId == 126 && $total_price * 100 > 11999) {
+            return 0.0;
         } else {
             return $shipFee;
         }
