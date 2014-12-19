@@ -71,6 +71,9 @@
         <li class="fr">
             {{if (!empty($CurrentUser))}}
                 {{$this->Html->link('<span class="head_icon"></span><span>'.$CurrentUser['nickname'].'</span>', array('controller' => 'users','action'=>'edit','plugin' => null ,),array('escape'=>false,'class'=>'head_bg clearfix'));}}
+                {{if $CurrentUser['is_business']}}
+                    {{$this->Html->link('我的店铺', '/s/index',array('escape'=>false,'class'=>'head_bg clearfix'));}}
+                {{/if}}
             {{else}}
                 <div class="head_bg clearfix">
                     <span>{{eval echo $this->Html->link('登录', array('controller' => 'users', 'action' => 'login',),array('onclick'=>"return publishController.open_dialog(this.href,{title:'登录'});"))}}</span>
