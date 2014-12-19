@@ -194,8 +194,6 @@
         </div>
     </div>
     <form action="/openstores/base" method="post" id="OpenstoreAddForm">
-        <input type="hidden" name="data[Openstore][person_id_pic]" id="idPictures">
-
         <div class="form-group">
             <div class="form-item">
                 <span class="form-label">身份证号码： </span>
@@ -216,7 +214,9 @@
             <div class="form-item form-item-short">
                 <button  class="btn btn-warning" type="submit" id="btnStoreCreate">提交认证</button>
             </div>
-
+        <div>
+            <input type="hidden" name="data[Openstore][person_id_pic]" id="idPictures" value="{{$person_id_pic}}">
+        </div>
         </div>
     </form>
 </div>
@@ -230,15 +230,18 @@
         rules: {
             idcard: {required: true, isIdCard: true},
             i_name: 'required',
-            i_unit: 'required',
-            store_name: 'required'
+            i_workplace: 'required',
+            store_name: 'required',
+            idPictures: 'required'
         },
         messages: {
             idcard: {required: "请输入身份证号码", isIdCard: "身份证号码格式不正确"},
             i_name: {required: "请输入姓名"},
-            i_unit: {required: "请输入工作单位"},
-            store_name: {required: "请输入店铺名称"}
+            i_workplace: {required: "请输入工作单位"},
+            store_name: {required: "请输入店铺名称"},
+            idPictures:{required: "您的个人身份证图片上传未成功，请检查"}
         },
+        ignore: "",
         errorPlacement: function(error, element) {
             error.appendTo(element.parent());
         },

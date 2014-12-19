@@ -168,7 +168,7 @@
         </div>
     </div>
 </div>
-<div class="personBox ">
+<div class="CompanyBox ">
     <div class="form-item">
         <span class="form-label">营业执照： </span>
         <span class="btn btn-success fileinput-button">
@@ -182,7 +182,7 @@
         <div>
             <span>已上传(再次上传提交将替换):</span>
             <div>
-                <img src= {{$this->Html->assetUrl($business_licence);}} width="20%">
+                <img src= {{$this->Html->assetUrl($business_licence);}} width="300">
             </div>
         </div>
         {{/if}}
@@ -197,7 +197,7 @@
         <span class="form-label">食品流通许可证： </span>
         <span class="btn btn-success fileinput-button">
             <i class="glyphicon glyphicon-plus"></i>
-            <span>{{__('Add Images...')}}</span>
+            <span>上传食品流通许可证</span>
             <input  type="file" name="files" multiple>
         </span>
         <div id="files_2" class="files clearfix"></div>
@@ -205,7 +205,7 @@
         <div>
             <span>已上传(再次上传提交将替换):</span>
             <div>
-                <img src= {{$this->Html->assetUrl($food_licence);}} width="20%">
+                <img src= {{$this->Html->assetUrl($food_licence);}} width="300">
             </div>
         </div>
         {{/if}}
@@ -213,6 +213,54 @@
             <span>示例:</span>
             <div>
                 <img src= {{$this->Html->assetUrl("/img/openstores/food_license.jpg");}}>
+            </div>
+        </div>
+    </div>
+    <div class="form-item">
+        <span class="form-label">食品生产许可证： </span>
+        <span class="btn btn-success fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>上传食品生产许可证</span>
+            <input  type="file" name="files" multiple>
+        </span>
+        <div id="files_5" class="files clearfix"></div>
+        {{if $food_product_licence_show}}
+        <div>
+            <span>已上传(再次上传提交将替换):</span>
+            <div>
+                <img src= {{$this->Html->assetUrl($food_product_licence);}} width="300">
+            </div>
+        </div>
+        {{/if}}
+        <div>
+            <span>示例:</span>
+            <div>
+                <img src= {{$this->Html->assetUrl("/img/openstores/food_product_license.jpg");}} width="260">
+            </div>
+        </div>
+    </div>
+    <div class="form-item">
+        <span class="form-label">食品卫生许可证： </span>
+        <span class="btn btn-success fileinput-button">
+            <i class="glyphicon glyphicon-plus"></i>
+            <span>上传食品卫生许可证</span>
+            <input  type="file" name="files" multiple>
+        </span>
+
+        <div id="files_6" class="files clearfix"></div>
+        <div>若商家所在地区以上两证已合并为一个证件，只需提供《食品生产许可证》</div>
+        {{if $food_health_licence_show}}
+        <div>
+            <span>已上传(再次上传提交将替换):</span>
+            <div>
+                <img src= {{$this->Html->assetUrl($food_health_licence);}} width="300">
+            </div>
+        </div>
+        {{/if}}
+        <div>
+            <span>示例:</span>
+            <div>
+                <img src= {{$this->Html->assetUrl("/img/openstores/food_health_license.jpg");}}>
             </div>
         </div>
     </div>
@@ -228,7 +276,7 @@
         <div>
             <span>已上传(再次上传提交将替换):</span>
             <div>
-                <img src= {{$this->Html->assetUrl($id_front);}} width="20%">
+                <img src= {{$this->Html->assetUrl($id_front);}} width="300">
             </div>
         </div>
         {{/if}}
@@ -252,7 +300,7 @@
         <div>
             <span>已上传(再次上传提交将替换):</span>
             <div>
-                <img src= {{$this->Html->assetUrl($id_back);}} width="20%">
+                <img src= {{$this->Html->assetUrl($id_back);}} width="300">
             </div>
         </div>
         {{/if}}
@@ -266,15 +314,46 @@
     <form action="/openstores/company" method="post" id="CompanyForm">
         <div class="form-item">
             <span class="form-label">店铺名称： </span>
-            <input class="form-control" name="data[Openstore][store_name]" id="store_name" type="text" value="{{$store_name}}" placeholder="用户直接看到的店铺名字" >
+            <input class="form-control" name="data[Openstore][store_name]" id="store_name" type="text" value="{{$store_name}}" placeholder="用户直接看到的店铺名字">
         </div>
-        <input type="hidden" name="data[Openstore][business_licence]" id="pic_files_1" >
-        <input type="hidden" name="data[Openstore][food_licence]" id="pic_files_2" >
-        <input type="hidden" name="data[Openstore][id_front]" id="pic_files_3" >
-        <input type="hidden" name="data[Openstore][id_back]" id="pic_files_4" >
+        <div>
+            <input type="hidden" name="data[Openstore][business_licence]" id="pic_files_1" value="{{$business_licence}}">
+        </div>
+        <div>
+            <input type="hidden" name="data[Openstore][food_licence]" id="pic_files_2" value="{{$food_licence}}">
+        </div>
+        <div>
+            <input type="hidden" name="data[Openstore][id_front]" id="pic_files_3" value="{{$id_front}}">
+        </div>
+        <div >
+            <input type="hidden" name="data[Openstore][id_back]" id="pic_files_4" value="{{$id_back}}">
+        </div>
+        <div>
+            <input type="hidden" name="data[Openstore][food_product_licence]" id="pic_files_5" value="{{$food_product_licence}}">
+        </div>
+        <div>
+            <input type="hidden" name="data[Openstore][food_health_licence]" id="pic_files_6" value="{{$food_health_licence}}">
+        </div>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog ">
+                <div class="modal-body ">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                        <h4>提醒：</h4>
+                        <p>你的信息未全，但仍可继续提交</p>
+                        <p>
+                            <button type="submit" class="btn btn-danger">继续提交</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">回去补全</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="form-item form-item-short">
             <button  class="btn btn-warning" type="submit" id="btnStoreCreate">提交认证</button>
         </div>
+
     </form>
 </div>
 
@@ -282,11 +361,24 @@
     $("#CompanyForm").validate({
         //规则制定根据字段的id属性
         rules: {
-            store_name: 'required'
+            store_name: 'required',
+            pic_files_1:'required',
+            //pic_files_2:'required',
+            pic_files_3:'required',
+            pic_files_4:'required'
+            //pic_files_5:'required',
+            //pic_files_6:'required'
         },
         messages: {
-            store_name: {required: "请输入店铺名称"}
+            store_name: {required: "请输入店铺名称"},
+            pic_files_1:{required: "您的营业执照未上传成功，请检查"},
+            //pic_files_2:{required: "您的食品流通许可证未上传成功，请检查"},
+            //pic_files_5:{required: "您的食品生产许可证未上传成功，请检查"},
+            //pic_files_6:{required: "您的食品卫生许可证未上传成功，请检查"},
+            pic_files_3:{required: "您的法人身份证图（正面）未上传成功，请检查"},
+            pic_files_4:{required: "您的法人身份证图（反面）未上传成功，请检查"}
         },
+        ignore: "",
         errorPlacement: function(error, element) {
             error.appendTo(element.parent());
         },
@@ -300,6 +392,20 @@
             label.remove();
         }
     });
+    $('#btnStoreCreate').bind('click', function() {
+        var t1 = $("#pic_files_2");
+        var t2 = $("#pic_files_5");
+        var t3 = $("#pic_files_6");
+        if(!$('#CompanyForm').valid()){
+            return false;
+        }
+        if ($.trim(t1.val())=='' || $.trim(t2.val())=='' || $.trim(t3.val())=='') {
+            $('#myModal').modal();
+            event.preventDefault()
+        }
+
+    });
+
 </script>
 <script>
     $(function () {
@@ -315,7 +421,7 @@
                                     data = $this.data();
                             $this
                                     .off('click')
-                                    .text('Abort')
+                                    .text('正在上传')
                                     .on('click', function () {
                                         $this.remove();
                                         data.abort();

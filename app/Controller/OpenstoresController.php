@@ -106,6 +106,14 @@ class OpenstoresController extends AppController{
                     $this->set('id_back_show', true);
                     $this->set('id_back', $application['Openstore']['id_back']);
                 }
+                if(!empty($application['Openstore']['food_product_licence'])){
+                    $this->set('food_product_licence_show', true);
+                    $this->set('food_product_licence', $application['Openstore']['food_product_licence']);
+                }
+                if(!empty($application['Openstore']['food_health_licence'])){
+                    $this->set('food_health_licence_show', true);
+                    $this->set('food_health_licence', $application['Openstore']['food_health_licence']);
+                }
                 $this->set('store_name', $application['Openstore']['store_name']);
 
 

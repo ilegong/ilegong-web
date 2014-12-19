@@ -144,7 +144,7 @@ class OpenstoresController extends AppController{
         $this->pageTitle = __("查看 " . $this->modelClass, true);
         $result = $this->{$modelClass}->find('first', array(
             'conditions' => array('id' => $id),
-                'fields' => array('store_name', 'pattern', 'person_id', 'person_name', 'person_id_pic', 'workplace', 'business_licence', 'food_licence','id_front', 'id_back', 'reason'),
+                'fields' => array('store_name', 'pattern', 'person_id', 'person_name', 'person_id_pic', 'workplace', 'business_licence', 'food_licence','food_product_licence', 'food_health_licence','id_front', 'id_back', 'reason'),
             )
         );
         if(!empty($result[$modelClass]['reason'])){
@@ -164,6 +164,8 @@ class OpenstoresController extends AppController{
             $this->set('food_licence', $result[$modelClass]['food_licence']);
             $this->set('id_front', $result[$modelClass]['id_front']);
             $this->set('id_back', $result[$modelClass]['id_back']);
+            $this->set('food_product_licence', $result[$modelClass]['food_product_licence']);
+            $this->set('food_health_licence', $result[$modelClass]['food_health_licence']);
             $this->set('person', false);
         }
 
