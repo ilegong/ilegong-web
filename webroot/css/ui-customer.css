@@ -516,6 +516,7 @@ ul li{ list-style:none;}
 }
 img{ border:0;}
 /*top*/
+body.modal-open{margin-right: 0px}
 .top{ padding:8px 0 15px 0; background-color:#ffffff; width:1028px; margin:0 auto;}
 .top ul{ height:50px;}
 .search_box{ margin-top:8px; margin-left:60px; _margin-left:30px;}

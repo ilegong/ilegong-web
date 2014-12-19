@@ -622,10 +622,15 @@ class ShipAddress {
         if (function_exists('curl_init') == 1) {
             $this->log("Curl can init...");
             $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, $url);
-            curl_setopt($curl, CURLOPT_HEADER, 0);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($curl, CURLOPT_TIMEOUT, 5);
+            curl_setopt_array(
+                $curl,
+                array(
+                    CURLOPT_URL=>$url,
+                    CURLOPT_HEADER=>0,
+                    CURLOPT_RETURNTRANSFER=>1,
+                    CURLOPT_TIMEOUT=>5
+                )
+            );
             $get_content = curl_exec($curl);
             curl_close($curl);
         }else{
