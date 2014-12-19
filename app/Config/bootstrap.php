@@ -529,6 +529,53 @@ function find_latest_clicked_from($buyerId, $pid) {
     return 0;
 }
 
+
+class ProductCategory{
+
+    public static function product_category_list(){
+        $productCategoryListJson = Cache::read('_productcategorylist');
+        if (empty($productCategoryListJson)) {
+            $productCategoryModel = ClassRegistry::init('ProductTag');
+            $productModel = ClassRegistry::init("Product");
+            $productCategoryList = $productCategoryModel->find('all',  array('conditions' => array(
+                'show_in_home' => 1,
+                'published' => 1
+            ),
+                'order' => 'priority desc'
+            ));
+            $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1);
+            $conditions['Product' . '.recommend >'] = 0;
+            $orderBy = ' Product.recommend desc';
+            foreach($productCategoryList as &$tag) {
+                //add class image
+                $join_conditions = array(
+                    array(
+                        'table' => 'product_product_tags',
+                        'alias' => 'Tag',
+                        'conditions' => array(
+                            'Tag.product_id = Product.id',
+                            'Tag.tag_id' => $tag['ProductTag']['id']
+                        ),
+                        'type' => 'RIGHT',
+                    )
+                );
+                $productsCount = $productModel->find('count', array(
+                        'conditions' => $conditions,
+                        'joins' => $join_conditions,
+                        'order' => $orderBy,
+                        'limit' => ($tag['ProductTag']['size_in_home']>0?$tag['ProductTag']['size_in_home']:6),
+                        'page' => 1)
+                );
+                $tag['ProductCounts'] = $productsCount;
+            }
+            $productCategoryListJson = json_encode($productCategoryList);
+            Cache::write('_productcategorylist', $productCategoryListJson);
+        }
+        return json_decode($productCategoryListJson, true);
+    }
+
+}
+
 class ShipAddress {
 //    public static $ship_type = array(
 //        101 => '申通',

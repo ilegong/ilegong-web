@@ -147,6 +147,7 @@
 </div>
 {{/if}}
 {{template menus/bootstrap}}
+<br/>
 <div id="header-breadcrumb">
     <div class="container clearfix">
         {{template Elements/navigation_header}}
@@ -197,23 +198,23 @@
         updateCartItemCount();
     }
 </script>
-<!--二维码-->
-<!--浮动面板-->
-<div id="floatPanel">
-    <div class="popPanel">
-        <div class="qrcodePanel">
-            <img src="{{ $this->Html->assetUrl('/img/common/wxservice_104_home.jpg'); }}"/><br><span>扫描二维码关注朋友说</span>
-        </div>
-    </div>
-</div>
-<script>
-    $(function () {
-        var objPopPanel = $("#floatPanel > .popPanel");
-        var width = $(this).width();
-        var w = objPopPanel.outerWidth();
-        objPopPanel.css("width", w + "px").show();
+<script type="text/javascript">
+
+    var classification_child_menu = $('#classification_child_menu');
+    var classification_menu_flag = $('#classification_menu_flag');
+    var classification_menu = $('#classification_menu');
+    classification_child_menu.hide();
+    $(document).ready(function(){
+        classification_menu.mouseover(function(){
+            classification_child_menu.show();
+            classification_menu_flag.attr('class','class');
+            return;
+        }).mouseout(function(){
+            classification_child_menu.hide();
+            classification_menu_flag.attr('class','class_up');
+            return;
+        });
     });
 </script>
-<!--/end-->
 </body>
 </html>

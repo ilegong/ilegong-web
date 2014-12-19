@@ -1,96 +1,82 @@
-<div class="row clearfix">
-    <div class="container">
-        <div class="col-md-6 pull-left">
-            <a href="{{$this->Html->assetUrl(Configure::read('Site.logo_url'))}}" style="" class="navbar-brand">{{$this->Html->image($this->Html->assetUrl('/img/logo-pys.png'), array('title' => $site[title],'alt' => $site[title]))}}</a>
-        </div>
-        <div class="col-md-6">
-            <div class="pull-right" style="margin-top: 10px">
-            <p>客服: <em>136-9365-5401</em></p>
-            <p>合作: <em>189-1191-1240</em></p>
-            </div>
-        </div>
-    </div>
-</div>
-<header class="navbar navbar-default" role="banner">
-<div class="container">
-	<div class="navbar-header">
-      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
-        <span class="sr-only">显示折叠导航</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
-	<nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
-	<?php 
-		if(empty($top_category_id)) $top_category_id=0;
-	echo $this->Section->getNavMenu('Category',
-		array(
-			'selectedid'=> $top_category_id,
-			'ulAttributes'=>array('class'=>'nav navbar-nav'),
-                        'defaultClass'=>'ui-state-default',
-			'preli'=>'',
-			'sufli'=>'',
-			'maxdepth' => 2,
-		),$site_cate_id
-	);
-	?>
-	
-	<ul class="nav navbar-nav pull-right">                        
-                    <li class="dropdown">
-                        <a href="{{$this->Html->url(array('controller'=>'carts','action'=>'listcart'))}}"><i class="glyphicon glyphicon-shopping-cart"></i>&nbsp;购物车&nbsp;<span id="item-count" class="badge" style="vertical-align: super; background-color: darkred"></span></a>
-                    </li>
-                    
-                    	{{if (!empty($CurrentUser))}}
-			<li class="dropdown">
-				 {{$this->Html->link($CurrentUser['nickname'].'<b class="caret"></b>', '#', array('title' => 'view your account',"class"=>"dropdown-toggle","data-toggle"=>"dropdown",'escape'=>false)); }}
-				 <ul class="dropdown-menu">
-				 	<li><?php echo $this->Html->link('<i class="glyphicon glyphicon-user"></i>'.lang('edit_profile'), array('controller' => 'users','action'=>'edit','plugin' => null ,),array('escape'=>false)); ?></li>
-					<li><?php echo $this->Html->link('<i class="fa fa-lock"></i>'.lang('edit_password'), array('controller' => 'users','action'=>'editpassword','plugin' => null ,),array('escape'=>false)); ?></li>
-                     {{if $CurrentUser['is_business']}}
-                     <li><?php echo $this->Html->link('我的店铺', '/s/index'); ?></li>
-                     <li><?php echo $this->Html->link('待发货订单', array('controller' => 'stores','action'=>'wait_shipped_orders','plugin' => null ,)); ?></li>
-                     {{/if}}
-                    <li><?php echo $this->Html->link('<i class="glyphicon glyphicon-folder-close"></i>'.lang('user_orders'), array('controller' => 'orders','action'=>'mine','plugin' => null ,),array('escape'=>false)); ?></li>
-                          
-                          {{if (empty($CurrentUser['status']))}}
-					<li class="activate link">
-							{{eval echo $this->Html->link(lang('activate_user'), array(
-								'controller' => 'users', 'action' => 'activate'
-								), array('title' => 'activate your account')); }}
-					</li>
-					{{/if}}
-					<li><?php echo $this->Html->link(__('<i class="glyphicon glyphicon-map-marker"></i>我的地址'), array('controller' => 'orders','action'=>'edit_consignee','plugin' => null ),array('escape'=>false)); ?></li>
-                       
-                    <li>{{$this->Html->link('<i class="glyphicon glyphicon-log-out"></i>退出登录', '/users/logout', array('title' => 'logout your account','escape'=>false))}}</li> 
-				</ul>
-			</li>
-	{{else}}
-			<?php $oauthlogin = $this->Hook->call('oauthLoginLink'); ?>
-			{{if $oauthlogin}}
-			<li>
-			{{eval echo $this->Html->link(lang('login').'<b class="caret"></b>', array(				
-				'controller' => 'users', 'action' => 'login','ext'=>false				
-			),array('onclick'=>"return publishController.open_dialog(this.href,{title:'登录'});","class"=>"dropdown-toggle","data-toggle"=>"dropdown")); }}
-				<ul class="dropdown-menu">
-					{{$oauthlogin}}	
-				</ul>
-			</li>
-			{{else}}
-				<li>
-				{{eval echo $this->Html->link(lang('login'), array(				
-					'controller' => 'users', 'action' => 'login','ext'=>false				
-				),array('onclick'=>"return publishController.open_dialog(this.href,{title:'登录'});")); }}
-				</li>
-			{{/if}}
-			<li>
-			{{eval echo $this->Html->link(lang('register'), array(
-				'controller' => 'users', 'action' => 'register'
-			),array('onclick'=>"return publishController.open_dialog(this.href,{title:'注册',width:650});")); }}
-			</li>		
-			
-	{{/if}}
+<div class="top">
+    <ul class="clearfix">
+        <li class="fl"><a href="/">{{$this->Html->image($this->Html->assetUrl('/img/common/logo-pys.png'), array('title' => $site[title],'alt' => $site[title]))}}</a></li>
+        <li class="search_box fl">
+            <input class="fl" name="" type="text" placeholder="万橙, 比褚橙不只甜了一点点" />
+            <a class="search_btn fl" href="#X">搜索</a>
+        </li>
+        <li class="myorder fr" style="margin-right:15px;">
+            {{if (!empty($CurrentUser))}}
+                <?php echo $this->Html->link('<span class="myhead_icon"></span><span>我的订单</span>', array('controller' => 'orders','action'=>'mine','plugin' => null ,),array('escape'=>false,'class'=>'clearfix',)); ?>
+            {{/if}}
+            <a href="{{$this->Html->url(array('controller'=>'carts','action'=>'listcart'))}}" class="clearfix">
+                <span class="cart_icon"></span>
+                <span>购物车 <strong id="item-count">0</strong> 件</span>
+            </a>
+        </li>
     </ul>
-    </nav>
 </div>
-</header>
+
+<div class="custom_nav">
+    <ul class="clearfix">
+        <li class="fl" id="classification_menu" style="position:relative;">
+            <a href="#">
+                <dl class="clearfix">
+                    <dt>全部商品分类</dt>
+                    <dt class="class_up" id="classification_menu_flag"></dt>
+                </dl>
+            </a>
+            <?PHP
+                $tagsWithProducts = ProductCategory::product_category_list();
+            ?>
+            <!--category-->
+            {{if count($tagsWithProducts)>0}}
+            <dl class="moreclass" id="classification_child_menu">
+                <dd>
+                    <?PHP foreach($tagsWithProducts as $tagWithProduct) {
+                        if($tagWithProduct['ProductCounts']>0){ ?>
+                    <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}">{{$tagWithProduct['ProductTag']['name']}}</a>
+                    <?php } ?>
+                    <?php } ?>
+                </dd>
+            </dl>
+            {{/if}}
+        </li>
+        <!--menu-->
+        <?php
+		if(empty($top_category_id)) $top_category_id=0;
+		echo $this->Section->getNavMenu('Category',
+        array(
+        'selectedid'=> $top_category_id,
+        'defaultClass'=>'',
+        'preli'=>'',
+        'sufli'=>'',
+        'maxdepth' => 2,
+        'ulAttributes' => array(),
+        'liAttributes'=> array('class'=>'fl'),
+        'subliAttributes'=> array(),
+        'subliAttributes2'=> array(),
+        'subliAttributes3'=> array(),
+        'linkAttributes'=> array(), //'activeclass'=>'active'
+        'selectedid' => 0,
+        'dropdown' => true,
+        'outtag' => '',// 当 outtag,midtag为空或false时，外围无ul,li.
+        'midtag' => 'li',
+        'separator'=>'',
+        'inner_separator'=>'',
+        'dropdownClass' => '',
+        ),$site_cate_id
+        );
+        ?>
+        <li class="fr">
+            {{if (!empty($CurrentUser))}}
+                {{$this->Html->link('<span class="head_icon"></span><span>'.$CurrentUser['nickname'].'</span>', array('controller' => 'users','action'=>'edit','plugin' => null ,),array('escape'=>false,'class'=>'head_bg clearfix'));}}
+            {{else}}
+                <div class="head_bg clearfix">
+                    <span>{{eval echo $this->Html->link('登录', array('controller' => 'users', 'action' => 'login',),array('onclick'=>"return publishController.open_dialog(this.href,{title:'登录'});"))}}</span>
+                    <span>{{eval echo $this->Html->link('注册', array('controller' => 'users', 'action' => 'register'),array('onclick'=>"return publishController.open_dialog(this.href,{title:'注册',width:650});"))}}</span>
+                </div>
+            {{/if}}
+        </li>
+    </ul>
+</div>
