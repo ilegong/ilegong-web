@@ -135,18 +135,8 @@ class WeixinController extends AppController {
                 case "3":
 					echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://wx.wsq.qq.com/177650290\" >51daifan微社区</a>");
 					break;
-				case "4":
-					echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/share.html?wx_openid=$user_code").'">分享同事列表页</a>');
-					break;
-                case "5":
-                    echo $this->newTextMsg($user, $me, "点击进入<a href=\"http://www.mikecrm.com/f.php?t=3DGEyQ\">朋友说试吃团报名</a>");
-                    break;
                 case "CLICK_URL_SALE_AFTER_SAIL":
                     echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_SALE_AFTER_SAIL', $host3g)).'">售后服务</a>');
-                    break;
-				case "大米":
-				case "9":
-                    echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/users/goTage?wx_openid=$user_code").'" >天天踏歌购买娜娜家的大米</a>');
                     break;
                 case "CLICK_URL_SHICHITUAN":
                     echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_SHICHITUAN', $host3g)).'">试吃评价</a>');
