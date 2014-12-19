@@ -121,7 +121,7 @@
     }
 #vote_table {text-align:left;margin-top:20px;width:100%;}
 #vote_table .col2 {display:inline-block;width:186px;}
-#vote_table .vote-scroll {width:200px;height:16px;margin:auto;background-color:#EEE;border:1px solid #C4AFF6;}
+#vote_table .vote-scroll {width:90%;height:16px;margin:auto;background-color:#EEE;border:1px solid #C4AFF6;}
 #vote_table .vote-scroll .comment1 {height:100%;display: inline-block;background-color:#8B58FF;}
 #vote_table .vote-scroll .comment2 {height:100%;display: inline-block;background-color:#8B58FF;}
 .corner {-webkit-border-radius: 4px;}
@@ -136,7 +136,7 @@
     {{$this->Form->create('Comment',array('action'=>'add_shichi','id'=>'CommentAdd_shichiForm','class'=>'form-horizontal'))}}
     {{$this->Form->input('data_id',array('type'=>'hidden','value'=>$current_data_id))}}
     {{$this->Form->input('type',array('type'=>'hidden','value'=>$current_model))}}
-    {{$this->Form->input('pictures',array('type' => 'hidden','class' => 'form-control'))}}
+    {{$this->Form->input('pictures',array('id' => 'Shichi_CommentPictures','type' => 'hidden','value' => ''))}}
 
 
         <h3>您对该款商品的意见？</h3>
@@ -174,7 +174,7 @@
     <span class="btn btn-success fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
         <span>{{__('Add Images...')}}</span>
-        <input id="fileupload" type="file" name="files[]" multiple>
+        <input id="shichi_fileupload" type="file" name="files[]" multiple>
     </span>
 
     <div id="files" class="files clearfix"></div>
@@ -372,9 +372,9 @@
         // Change this to the location of your server-side upload handler:
         var url = '/upload/upload',
                 uploadButton = $('<button/>')
-//                        .addClass('btn btn-primary')
-//                        .prop('disabled', true)
-//                        .text('Processing...')
+                        .addClass('btn btn-primary')
+                        .prop('disabled', true)
+                        .text('Processing...')
                         .on('click', function () {
                             var $this = $(this),
                                     data = $this.data();
@@ -390,7 +390,7 @@
                             });
                         });
 
-        $('#fileupload').fileupload({
+        $('#shichi_fileupload').fileupload({
             url: url,
             dataType: 'json',
             autoUpload: false,
@@ -446,7 +446,7 @@
                     $(data.context.children()[index])
                             .wrap(link);
 
-                    var pictures = $('#CommentPictures');
+                    var pictures = $('#Shichi_CommentPictures');
                     pictures.val(pictures.val() + '|' + file.url);
 
                 } else if (file.error) {

@@ -18,7 +18,7 @@
 	margin:0 10px;
 	padding:10px;
 	font-size:14px;
-	text-align:center;	
+	text-align:center;
 }
 .comment_item .t_info {
 	color:#666666;
@@ -124,7 +124,7 @@
 	<div id="comment_items">
 	</div>
 	<div class="comment_item comment_more">
-		
+
 	</div>
 </div>
 <div class="CommentBox">
@@ -133,7 +133,7 @@
 {{$this->Form->create('Comment',array('action'=>'add','class'=>'form-horizontal'))}}
 	{{$this->Form->input('data_id',array('type'=>'hidden','value'=>$current_data_id))}}
 	{{$this->Form->input('type',array('type'=>'hidden','value'=>$current_model))}}
-	{{$this->Form->input('pictures',array('type'=>'hidden'))}}
+	{{$this->Form->input('pictures',array('type'=>'hidden','value'=>''))}}
 	 <div class="form-group">
     	<div class="col-sm-8">
 			<label class="radio-inline">
@@ -318,15 +318,15 @@ function submitaddcomment(form){
 		url:"{{$this->Html->url(array('controller'=>'comments','action'=>'add'))}}",
 		data:$(form).serialize(),
 		dataType:'json'
-	}) ;
+	});
 	return false;
 }
 //]]>
 </script>
 {{$this->Html->script(array(
 'vendor/jquery.ui.widget.js',
-'http://blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js',
-'http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js',
+'//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js',
+'//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js',
 'jquery.iframe-transport.js',
 'jquery.fileupload.js',
 'jquery.fileupload-process.js',
@@ -417,7 +417,7 @@ function submitaddcomment(form){
                             .wrap(link);
 
                     var pictures = $('#CommentPictures');
-                    pictures.val(pictures.val() + file.url);
+                    pictures.val(pictures.val() + '|' + file.url);
 
                 } else if (file.error) {
                     var error = $('<span class="text-danger"/>').text(file.error);
