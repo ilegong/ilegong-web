@@ -78,6 +78,7 @@
             {{else}}
                 <div class="head_bg clearfix">
                     <span>{{eval echo $this->Html->link('登录', array('controller' => 'users', 'action' => 'login',),array('onclick'=>"return publishController.open_dialog(this.href,{title:'登录'});"))}}</span>
+                    <span class="line">|</span>
                     <span>{{eval echo $this->Html->link('注册', array('controller' => 'users', 'action' => 'register'),array('onclick'=>"return publishController.open_dialog(this.href,{title:'注册',width:650});"))}}</span>
                 </div>
             {{/if}}
