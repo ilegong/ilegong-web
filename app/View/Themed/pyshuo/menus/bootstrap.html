@@ -68,6 +68,11 @@
         ),$site_cate_id
         );
         ?>
+        {{if $CurrentUser['is_business']}}
+        <li class="fl"><a href="/s/index"  class=" ui-menu-last">我的店铺</a></li>
+        {{else}}
+        <li class="fl"><a href="/openstores/apply"  class=" ui-menu-last">我要开店</a></li>
+        {{/if}}
         <li class="fr">
             {{if (!empty($CurrentUser))}}
             <div class="head_bg clearfix">
