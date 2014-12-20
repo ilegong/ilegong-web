@@ -228,8 +228,8 @@ class CategoriesController extends AppController {
         if (!$disableAutoRedirect) {
             if ($this->RequestHandler->isMobile()) {
                 $this->redirect('/categories/mobileHome.html');
+                return;
             }
-            return;
         }
 
         $current_cateid = CATEGORY_ID_TECHAN;
