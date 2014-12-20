@@ -34,30 +34,30 @@ class User extends AppModel {
  * @access public
  */
     var $validate = array(
-        'username' => array(
-    		'unique'=>array(
-	            'rule' => 'isUnique',
-	            'message' => 'The username has already been taken.',
-    		),
-    		'notempty'=>array(
-	            'rule' => 'notEmpty',
-	            'message' => 'This field cannot be left blank.',
-    		),
-    		'minLength'=>array(
-	            'rule' => array('minLength',3),
-	            'message' => 'This field length must big than 3',
-    		),
-        ),
-        'email' => array(
-            'email' => array(
-                'rule' => 'email',
-                'message' => 'Please provide a valid email address.',
-            ),
-            'isUnique' => array(
-                'rule' => 'isUnique',
-                'message' => 'Email address already in use.',
-            ),
-        ),
+//        'username' => array(
+//    		'unique'=>array(
+//	            'rule' => 'isUnique',
+//	            'message' => 'The username has already been taken.',
+//    		),
+//    		'notempty'=>array(
+//	            'rule' => 'notEmpty',
+//	            'message' => 'This field cannot be left blank.',
+//    		),
+//    		'minLength'=>array(
+//	            'rule' => array('minLength',3),
+//	            'message' => 'This field length must big than 3',
+//    		),
+//        ),
+//        'email' => array(
+//            'email' => array(
+//                'rule' => 'email',
+//                'message' => 'Please provide a valid email address.',
+//            ),
+//            'isUnique' => array(
+//                'rule' => 'isUnique',
+//                'message' => 'Email address already in use.',
+//            ),
+//        ),
         'password' => array(
             'rule' => array('minLength', 6),
             'message' => 'Passwords must be at least 6 characters long.',
@@ -67,6 +67,21 @@ class User extends AppModel {
             'message' => 'This field cannot be left blank.',
         ),
     );
+
+    public function beforeSave($options = array()) {
+        $mobilePhone = $this->data['User']['mobilephone'];
+        if (!empty($mobilePhone)) {
+            $u = $this->find('first', array(
+                'conditions' => array(
+                    'OR' => array('mobilephone' => $mobilePhone, 'username' => $mobilePhone)
+                )
+            ));
+            if ( !(empty($u) || $u['User']['id'] == $this->data['User']['id']) ) {
+                throw new CakeException("duplicated mobile phone:".$mobilePhone, ERROR_CODE_USER_DUP_MOBILE);
+            }
+        }
+        return parent::beforeSave($options);
+    }
 
 	function userlist($page,$count) {
 		$this->recursive = -1;
