@@ -5,6 +5,11 @@
  * Date: 14/12/2
  * Time: 下午3:08
  */
+define('APPLY_STATUS_WAIT_AUTH', 1);         //待认证
+define('APPLY_STATUS_WAIT_VERIFY', 2);      //待审核
+define('APPLY_STATUS_NEED_FIX', 3);     //返回修改
+define('APPLY_STATUS_PASSED', 4);  //已通过
+
 
 class OpenstoresController extends AppController{
     var $name = 'Openstores';
@@ -17,15 +22,19 @@ class OpenstoresController extends AppController{
         }
     }
     public function apply(){
+        $this->pageTitle = '店铺申请';
         $id = $this->currentUser['id'];
         $application =$this->Openstore->find('first', array('conditions' => array('creator' => $id)));
         if(!empty($application)){
-            if($application['Openstore']['status'] == 1){
+            if($application['Openstore']['status'] == APPLY_STATUS_WAIT_AUTH){
                 $this->Session->setFlash('继续未完成的认证');
                 $this->redirect('/openstores/base');
-            }else if($application['Openstore']['status'] == 2 || $application['Openstore']['status'] == 3 ){
+            }else if($application['Openstore']['status'] == APPLY_STATUS_WAIT_VERIFY || $application['Openstore']['status'] == APPLY_STATUS_NEED_FIX ){
                 $this->redirect('/openstores/complete');
-            }else{
+            }else if($application['Openstore']['status'] == APPLY_STATUS_PASSED) {
+                $this->redirect('/stores/index');
+            }
+            else{
                 $this->redirect('/');
             }
         }else{
@@ -37,7 +46,7 @@ class OpenstoresController extends AppController{
                     if ($codeLog && is_array($codeLog) && $codeLog['code'] == $this->data['Openstore']['msg_code'] && (time() - $codeLog['time'] < 30 * 60)){
                     //if(1){
                         $this->data['Openstore']['creator'] = $id;
-                        $this->data['Openstore']['status'] = 1;
+                        $this->data['Openstore']['status'] = APPLY_STATUS_WAIT_AUTH;
                         if($this->Openstore->save($this->data)){
                             $this->redirect('/openstores/base');
                         }
@@ -51,14 +60,15 @@ class OpenstoresController extends AppController{
         }
     }
     public function base(){
+        $this->pageTitle = '店铺个人认证';
         $id = $this->currentUser['id'];
         $application =$this->Openstore->find('first', array('conditions' => array('creator' => $id)));
-        if(!empty($application)){
+        if(!empty($application) && $application['Openstore']['status'] != APPLY_STATUS_PASSED){
             if(!empty($this->data)&& $this->request->is('post')){
                 $person_pattern = 0;
                 $this->data['Openstore']['pattern'] = $person_pattern;
                 $this->data['Openstore']['id'] = $application['Openstore']['id'];
-                $this->data['Openstore']['status'] = 2;
+                $this->data['Openstore']['status'] = APPLY_STATUS_WAIT_VERIFY;
                 if($this->Openstore->save($this->data)){
                     $this->redirect('/openstores/complete');
                 }
@@ -77,13 +87,14 @@ class OpenstoresController extends AppController{
         }
     }
     public function company(){
+        $this->pageTitle = '店铺企业认证';
         $id = $this->currentUser['id'];
         $application =$this->Openstore->find('first', array('conditions' => array('creator' => $id)));
-        if(!empty($application) ){
+        if(!empty($application) && $application['Openstore']['status'] != APPLY_STATUS_PASSED ){
             $company_pattern = 1;
             $this->data['Openstore']['pattern'] = $company_pattern;
             $this->data['Openstore']['id'] = $application['Openstore']['id'];
-            $this->data['Openstore']['status'] = 2;
+            $this->data['Openstore']['status'] = APPLY_STATUS_WAIT_VERIFY;
             $this->data['Openstore'] = array_filter($this->data['Openstore']);
             if(!empty($this->data)&&$this->request->is('post')){
                 if($this->Openstore->save($this->data)){
@@ -123,12 +134,13 @@ class OpenstoresController extends AppController{
         }
     }
     public function complete(){
+        $this->pageTitle = '店铺审核';
         $id = $this->currentUser['id'];
         $application =$this->Openstore->find('first', array('conditions' => array('creator' => $id)));
         if(!empty($application)){
-            if($application['Openstore']['status'] == 2){
+            if($application['Openstore']['status'] == APPLY_STATUS_WAIT_VERIFY){
                 $this->set('wait', true);
-            }else if($application['Openstore']['status'] == 3){
+            }else if($application['Openstore']['status'] == APPLY_STATUS_NEED_FIX){
                 $this->set('not_pass', true);
                 $this->set('reason', $application['Openstore']['reason']);
                 if($application['Openstore']['pattern'] == 0) {
@@ -137,5 +149,8 @@ class OpenstoresController extends AppController{
             }
         }
 
+    }
+    public function agreement(){
+        $this->layout = null;
     }
 }
