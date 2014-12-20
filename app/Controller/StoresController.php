@@ -267,8 +267,9 @@ class StoresController extends AppController
         }
 
         $total = $this->Product->find('count', array('conditions' => array('brand_id' => $this->brand['Brand']['id'])));
+        $cond = array('brand_id' => $this->brand['Brand']['id'], 'deleted' => DELETED_NO);
         $datalist = $this->Product->find('all', array(
-            'conditions' => array('brand_id' => $this->brand['Brand']['id'], 'deleted' => DELETED_NO, 'published' => $product_status),
+            'conditions' => $cond,
             'fields' => array('id', 'name', 'price', 'published', 'coverimg', 'deleted', 'saled', 'storage', 'updated', 'slug'),
             'order' => 'updated desc'
         ));
