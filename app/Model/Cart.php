@@ -58,7 +58,7 @@ class Cart extends AppModel {
             ));
             $jsonStr = json_encode($carts);
             Cache::write($balanced_order_key, $jsonStr);
-            return $cache;
+            return $carts;
         } else {
             return json_decode($cache, true);
         }
