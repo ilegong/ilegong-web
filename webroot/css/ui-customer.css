@@ -561,5 +561,5 @@ body.modal-open{margin-right: 0px}
 .bottom ul li p{ line-height:20px; font-size:12px;}
 .bottom ul li p a{ color:#666666; text-decoration:none;}
 .bottom ul li p a:hover{ color:#29ac0e;}
-.bottom dl{ line-height:20px; color:#cccccc; text-align:center;}
+.bottom dl{width:1425px ; line-height:20px; color:#cccccc; text-align:center;}
 /*end public css*/

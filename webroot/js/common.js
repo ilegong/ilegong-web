@@ -105,7 +105,7 @@ function updateCartItemCount()
                 itemCount.text(data.count);
                 cartBtn.addClass('cart_icon_not_empty');
             } else {
-                itemCount.text('');
+                itemCount.text('0');
             }
         });
     }
