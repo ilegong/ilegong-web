@@ -149,9 +149,10 @@ class ApiOrdersController extends AppController {
             $pro = $productM->findById($pid);
             if (!empty($pro) && $pro['Product']['deleted'] == DELETED_NO && $pro['Product']['published'] == PUBLISH_YES) {
                 $this->set('content',array('Product' => array('id' => $pid, 'content' => $pro['Product']['content'])));
-                $this->set('_serialize', array('content',));
             }
+
         }
+        $this->set('_serialize', array('content'));
     }
 
     public function store_list() {
