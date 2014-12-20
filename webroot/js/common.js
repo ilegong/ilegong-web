@@ -97,15 +97,16 @@ function setCKEditorVal(form)
 function updateCartItemCount()
 {
     var itemCount = $('#item-count');
+    console.log(itemCount)
     var cartBtn = $('#card-btn');
     var cart_link = $('#cart_link');
     if (itemCount.length > 0 || cartBtn.length > 0 || cart_link.length > 0) {
         $.getJSON('/carts/cart_total.json', function (data) {
             if (data.count > 0) {
-                itemCount.text(data.count);
+                itemCount.html('购物车 <strong>'+data.count+'</strong> 件');
                 cartBtn.addClass('cart_icon_not_empty');
             } else {
-                itemCount.text('0');
+                itemCount.html('购物车');
             }
         });
     }

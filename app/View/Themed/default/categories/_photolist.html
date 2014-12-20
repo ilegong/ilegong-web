@@ -10,5 +10,9 @@
             }
         ?>
     </h2>
-    <p>￥{{$this->Number->precision($item['price'], 2)}} <span>¥{{$this->Number->precision($item['price'], 2)}}</span></p>
+    <p>￥{{$this->Number->precision($item['price'], 2)}}
+        {{if $this->Number->precision($item['original_price'], 2)>0}}
+        <span>¥{{$this->Number->precision($item['original_price'], 2)}}</span>
+        {{/if}}
+    </p>
 </a>

@@ -498,7 +498,9 @@ body.cke_editable{margin:20px;}
 }
 /*end custom hr*/
 /*pc front public page css*/
-body, button, input, select, textarea{font:12px/1.5 tahoma,arial,'Hiragino Sans GB','\5b8b\4f53',sans-serif;}
+body, button, input, select, textarea {
+    font: 14px/1.5 tahoma,arial,'Hiragino Sans GB','\5b8b\4f53',sans-serif;
+}
 ul li{ list-style:none;}
 .fl{ float:left;}
 .fr{ float:right;}
@@ -517,7 +519,12 @@ ul li{ list-style:none;}
 img{ border:0;}
 /*top*/
 body.modal-open{margin-right: 0px}
-.top{ padding:8px 0 15px 0; background-color:#ffffff; width:1028px; margin:0 auto;}
+.top{
+    padding:15px 0 15px 0;
+    background-color: #ffffff;
+    width: 1028px;
+    margin: 0 auto;
+}
 .top ul{ height:50px;}
 .search_box{ margin-top:8px; margin-left:60px; _margin-left:30px;}
 .search_box input{ border:2px #29AC0E solid; border-right:0; height:30px; height:20px; width:320px; padding:5px; line-height:20px; color:#333333; font-size:14px; font-family:"微软雅黑"; outline:none;}
@@ -551,14 +558,24 @@ body.modal-open{margin-right: 0px}
 .custom_nav ul li a.head_bg{ background-color:#FFA200; margin-right:15px;}
 .custom_nav ul li div.head_bg{ background-color:#FFA200; margin-right:15px;}
 .custom_nav ul li div.head_bg a:hover{ background-color:#ff9000;}
+.custom_nav ul li span.line{ background-color:#FFA200; display:block; float:left; color:#ffffff; font-weight:normal;}
 .custom_nav ul li div.head_bg span{ display:block; float:left;}
 .head_icon{ width:17px; height:17px; background:url(/img/common/pyspc.png) no-repeat 0 -6px; margin-top:10px; margin-right:5px;}
 
 /*bottom*/
 .bottom{ border-top:1px #dddddd solid; width:100%; padding:20px 0; font-family:"微软雅黑";margin: auto}
 .bottom ul li{ float:left; width:224px;}
-.bottom ul li h1{ font-size:18px; color:#333333; padding-bottom:10px; font-weight:normal; padding-top:5px;}
-.bottom ul li p{ line-height:20px; font-size:12px;}
+.bottom ul li h1 {
+    font-size: 18px;
+    color: #333333;
+    padding-bottom: 10px;
+    font-weight: normal;
+    padding-top: 5px;
+    font-family: 微软雅黑;
+}
+.bottom ul li p {
+    line-height: 20px;
+}
 .bottom ul li p a{ color:#666666; text-decoration:none;}
 .bottom ul li p a:hover{ color:#29ac0e;}
 .bottom dl{width:1425px ; line-height:20px; color:#cccccc; text-align:center;}

@@ -1,10 +1,10 @@
 <div class="top">
     <ul class="clearfix">
         <li class="fl"><a href="/">{{$this->Html->image($this->Html->assetUrl('/img/common/logo-pys.png'), array('title' => $site[title],'alt' => $site[title]))}}</a></li>
-        <li class="search_box fl">
-            <input class="fl" name="" type="text" placeholder="万橙, 比褚橙不只甜了一点点" />
-            <a class="search_btn fl" href="#X">搜索</a>
-        </li>
+        <!--<li class="search_box fl">-->
+            <!--<input class="fl" name="" type="text" placeholder="万橙, 比褚橙不只甜了一点点" />-->
+            <!--<a class="search_btn fl" href="#X">搜索</a>-->
+        <!--</li>-->
         <li class="myorder fr" style="margin-right:15px;">
             {{if (!empty($CurrentUser))}}
                 <?php echo $this->Html->link('<span class="myhead_icon"></span><span>我的订单</span>', array('controller' => 'orders','action'=>'mine','plugin' => null ,),array('escape'=>false,'class'=>'clearfix',)); ?>
@@ -70,10 +70,11 @@
         ?>
         <li class="fr">
             {{if (!empty($CurrentUser))}}
-                {{$this->Html->link('<span class="head_icon"></span><span>'.$CurrentUser['nickname'].'</span>', array('controller' => 'users','action'=>'edit','plugin' => null ,),array('escape'=>false,'class'=>'head_bg clearfix'));}}
-                {{if $CurrentUser['is_business']}}
-                    {{$this->Html->link('我的店铺', '/s/index',array('escape'=>false,'class'=>'head_bg clearfix'));}}
-                {{/if}}
+            <div class="head_bg clearfix">
+                <span>{{$this->Html->link('<span class="head_icon"></span><span>'.$CurrentUser['nickname'].'</span>', array('controller' => 'users','action'=>'edit','plugin' => null ,),array('escape'=>false));}}</span>
+                <span class="line">|</span>
+                <span>{{$this->Html->link('退出登录', '/users/logout', array('title' => 'logout your account','escape'=>false))}}</span>
+            </div>
             {{else}}
                 <div class="head_bg clearfix">
                     <span>{{eval echo $this->Html->link('登录', array('controller' => 'users', 'action' => 'login',),array('onclick'=>"return publishController.open_dialog(this.href,{title:'登录'});"))}}</span>
