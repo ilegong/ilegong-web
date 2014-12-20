@@ -563,6 +563,16 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
 		if ($user) {
 			return array('user_id' => $user['User'][$this->User->primaryKey]);
 		}
+        $user = $this->User->find('first', array(
+            'conditions' => array(
+                'mobilephone' => $username,
+                $this->authenticate['fields']['password'] => AuthComponent::password($password)
+            ),
+            'recursive' => -1
+        ));
+        if ($user) {
+            return array('user_id' => $user['User'][$this->User->primaryKey]);
+        }
 		return false;
 	}
 
