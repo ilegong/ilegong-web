@@ -25,7 +25,9 @@ class OpenstoresController extends AppController{
         $this->pageTitle = '店铺申请';
         $id = $this->currentUser['id'];
         $application =$this->Openstore->find('first', array('conditions' => array('creator' => $id)));
-        if(!empty($application)){
+        if($this->currentUser['is_business']){
+            $this->redirect('/s/index');
+        }else if(!empty($application)){
             if($application['Openstore']['status'] == APPLY_STATUS_WAIT_AUTH){
                 $this->Session->setFlash('继续未完成的认证');
                 $this->redirect('/openstores/base');
