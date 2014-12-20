@@ -285,6 +285,7 @@ class ApiOrdersController extends AppController {
         $this->set('order_consigness', $info);
         $this->set('_serialize', 'order_consigness');
     }
+
     public function my_profile() {
         $shichituanM = ClassRegistry::init('Shichituan');
         $result = $shichituanM->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.pictures','Shichituan.status','Shichituan.period'),'Shichituan.shichi_id DESC');
@@ -296,5 +297,47 @@ class ApiOrdersController extends AppController {
         $this->set('my_profile', array('Shichituan' => $result['Shichituan'], 'User' => $datainfo['User']));
         $this->set('_serialize', array('my_profile'));
 
+    }
+
+    public function cart_edit_num($id, $num) {
+        $cartM = ClassRegistry::init('Cart');
+        $success = $cartM->edit_num($id, $num, $this->currentUser['id']);
+
+        $info = array('success' => $success);
+        $this->set('info', $info);
+        $this->set('_serialize', 'info');
+    }
+
+    public function cart_del($id) {
+        $cartM = ClassRegistry::init('Cart');
+        $success = $cartM->delete_item($id, $this->currentUser['id']);
+
+        $info = array('success' => $success);
+        $this->set('info', $info);
+        $this->set('_serialize', 'info');
+    }
+
+    public function cart_add() {
+        $buyingCom = $this->Components->load('Buying');
+        $data = $this->request->input('json_decode');
+        if (!empty($data)) {
+            $product_id = $data['product_id'];
+            $num = $data['num'];
+            $specId = $data['spec'];
+            $type = $buyingCom->convert_cart_type($data['type']);
+            $tryId = intval($data['try_id']);
+            $uid = $this->currentUser['id'];
+            $cartM = ClassRegistry::init('Cart');
+
+            if (!$type) {
+                $type = CART_ITEM_TYPE_NORMAL;
+            }
+
+            $info = $buyingCom->check_and_add($cartM, $type, $tryId, $uid, $num, $product_id, $specId, null);
+        } else {
+            $info = array('success' => false, 'reason' => 'invalid_parameter');
+        }
+        $this->set('info', $info);
+        $this->set('_serialize', 'info');
     }
 }

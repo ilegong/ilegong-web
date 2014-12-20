@@ -34,7 +34,6 @@ class CartsController extends AppController{
 			$data['Cart']['creator'] = $uid;
 			$this->Cart->save($data);
 		}
-		
 	}
 	
 	function add(){
@@ -44,90 +43,41 @@ class CartsController extends AppController{
 
         $this->autoRender = false;
 
-		$carts = array();
 		if(!empty($this->data)){
+
+            $buyingCom = $this->Components->load('Buying');
+
 			$this->autoRender = false;
             $product_id = $this->data['Cart']['product_id'];
             $num = $this->data['Cart']['num'];
             $specId = $this->data['Cart']['spec'];
-            $type = self::convert_cart_type($this->data['Cart']['type']);
+            $type = $buyingCom->convert_cart_type($this->data['Cart']['type']);
             $tryId = intval($_POST['try_id']);
+            $uid = $this->currentUser['id'];
+            $sessionId = $this->Session->id();
+            $cartM = $this->Cart;
 
             if (!$type) {
                 //FIXME:should give an error to client
                 $type = CART_ITEM_TYPE_NORMAL;
             }
 
-            if ($type == CART_ITEM_TYPE_TRY){
-
-                $success = true;
-                $reason = '';
-                $uid = $this->currentUser['id'];
-                if (!$tryId) {
-                    $success = false;
-                    $reason = 'no_try_id';
-                } else {
-                    if(empty($uid)) {
-                        $success = false;
-                        $reason = 'not_login';
-                    } else {
-                        $tryM = ClassRegistry::init('ProductTry');
-                        $prodTry = $tryM->findById($tryId);
-                        list($afford, $my_limit, $total_left) = afford_product_try($tryId, $uid, $prodTry);
-                        if ($total_left == 0){
-                        $reason = 'sold_out';
-                            $success = false;
-                        }
-                        if (!$afford || ($my_limit >= 0 && $my_limit < $this->data['Cart']['num'])) {
-                            $success = false;
-                            $reason = 'already_buy';
-                        }
-
-                        if ($success) {
-                            $sctM = ClassRegistry::init('Shichituan');
-                            $shichituan = $sctM->find_in_period($uid, get_shichituan_period());
-                            $parallelCnt =  (!empty($shichituan))  ? 2 : 1;
-                            $orderShichiM = ClassRegistry::init('OrderShichi');
-                            $notCommentedCnt = $orderShichiM->find('count', array('conditions' => array(
-                                'creator' => $uid,
-                                'is_comment' => 0
-                            )));
-                            if ($parallelCnt <= $notCommentedCnt) {
-                                $success = false;
-                                $reason = 'not_comment';
-                            }
-                        }
-                    }
-
-                }
-
-                if ($success) {
-                    $this->_addToCart($product_id, $num, $specId, $type, $tryId, $prodTry, $shichituan);
-                }
-                echo json_encode(array('success' => $success, 'reason' => $reason, 'not_comment_cnt' => intval($notCommentedCnt)));
-            } else {
-                $this->_addToCart($product_id, $num, $specId, $type, $tryId);
-                $successinfo = array('success' => __('Success add to cart.'));
-                echo json_encode($successinfo);
-            }
-
+            $returnInfo = $buyingCom->check_and_add($cartM, $type, $tryId, $uid, $num, $product_id, $specId, $sessionId);
+            echo json_encode($returnInfo);
 			exit;
 		}
 		$errorinfo = array('save_error' => __('Operation failed'));
         echo json_encode($errorinfo);
-        exit;
 	}
 
     //FIXME: authorized
-	function editCartNum($id,$num){
-		if($num<=0){
-			$op_flag = $this->Cart->deleteAll(array('id' => $id,'status' => 0,'order_id' => NULL,'OR'=> $this->user_condition), true, true);
-		}
-		else{
-			$op_flag = $this->Cart->updateAll(array('num'=>$num), array('id' => $id,'status' => 0,'order_id' => NULL,'OR'=> $this->user_condition));
-		}
-		$successinfo = array('success' => __('Success edit nums.'));
-		echo json_encode($successinfo);
+	function editCartNum($id, $num){
+        if($this->Cart->edit_num($id, $num, $this->currentUser['id'], $this->Session->id())) {
+            $info = array('success' => true, 'msg' => __('Success edit nums.'));
+        } else {
+            $info = array('success' => false);
+        }
+		echo json_encode($info);
 		exit;
 	}
 
@@ -182,77 +132,7 @@ class CartsController extends AppController{
 	}
 	
 	function delete($id){
-		$this->Cart->deleteAll(array(
-				'status' => 0,
-				'id' =>$id,
-				'OR' => $this->user_condition
-		));
+		$this->Cart->delete_item($id, $this->currentUser['id'], $this->Session->id());
 		$this->redirect('/carts/listcart.html');
 	}
-
-    /**
-     * @param $product_id
-     * @param int $num
-     * @param int $spec specified id for
-     * @param int $type
-     * @param int $try_id
-     * @param null $prodTry
-     * @param null $shichituan
-     * @throws MissingModelException
-     * @return bool whether saved successfully
-     */
-    private function _addToCart($product_id, $num = 1, $spec = 0, $type = CART_ITEM_TYPE_NORMAL, $try_id = 0, $prodTry = null, $shichituan = null) {
-        $Carts = $this->Cart->find('first', array(
-            'conditions' => array(
-                'product_id' => $product_id,
-                'order_id' => null,
-                'try_id' => $try_id,
-                'OR' => $this->user_condition
-            )));
-        if (!empty($Carts)) {
-            $this->data['Cart']['id'] = $Carts['Cart']['id'];
-        }
-
-        $this->data['Cart']['num'] = $num;
-        $this->data['Cart']['product_id'] = $product_id;
-
-        $this->loadModel('Product');
-        $p = $this->Product->findById($product_id);
-
-        $uid = $this->currentUser['id'];
-
-        $this->data['Cart']['session_id'] = $this->Session->id();
-        $this->data['Cart']['coverimg'] = $p['Product']['coverimg'];
-        if ($prodTry) {
-            $name = $p['Product']['name'].'(试吃: '.$prodTry['ProductTry']['spec'].')';
-        } else {
-            $name = product_name_with_spec($p['Product']['name'], $spec, $p['Product']['specs']);
-        }
-        $this->data['Cart']['name'] = $name;
-
-        if (!empty($prodTry)) {
-            $price = calculate_try_price($prodTry['ProductTry']['price'], $uid, $shichituan);
-        } else {
-            $price = calculate_price($p['Product']['id'], $p['Product']['price'], $uid);
-        }
-        $this->data['Cart']['price'] = $price;
-        $this->data['Cart']['creator'] = $uid;
-        $this->data['Cart']['specId'] = $spec;
-        $this->data['Cart']['type'] = $type;
-        $this->data['Cart']['try_id'] = $try_id;
-        return $this->Cart->save($this->data);
-    }
-
-    static function convert_cart_type($typeStr) {
-        if ($typeStr == 'normal') {
-            return CART_ITEM_TYPE_NORMAL;
-        } else if ($typeStr == 'try') {
-            return CART_ITEM_TYPE_TRY;
-        } else if ($typeStr == 'quick_buy') {
-            return CART_ITEM_TYPE_QUICK_ORDER;
-        }  else {
-            return CART_ITEM_TYPE_NORMAL;
-        }
-    }
-
 }

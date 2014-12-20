@@ -49,6 +49,9 @@ class Cart extends AppModel {
      * @return array Cart elements
      */
     public function find_balanced_items($order_id) {
+        if (empty($order_id)) {
+            return false;
+        }
         $balanced_order_key = "balanced_cart_items_" . $order_id;
         $cache = Cache::read($balanced_order_key);
         if (empty($cache)) {
@@ -64,5 +67,109 @@ class Cart extends AppModel {
         }
     }
 
+    /**
+     * @param $product_id
+     * @param int $num
+     * @param int $spec specified id for
+     * @param int $type
+     * @param int $try_id
+     * @param null $uid
+     * @param null $sessionId
+     * @param null $prodTry
+     * @param null $shichituan
+     * @throws Exception
+     * @return bool whether saved successfully
+     */
+    public function add_to_cart($product_id, $num = 1, $spec = 0, $type = CART_ITEM_TYPE_NORMAL, $try_id = 0,
+                                $uid = null, $sessionId=null, $prodTry = null, $shichituan = null) {
+
+        $user_cond = $this->create_user_cond($uid, $sessionId);
+
+        $Carts = $this->find('first', array(
+            'conditions' => array(
+                'product_id' => $product_id,
+                'order_id' => null,
+                'try_id' => $try_id,
+                'OR' => $user_cond
+            )));
+
+        $data = array();
+        if (!empty($Carts)) {
+            $data['Cart']['id'] = $Carts['Cart']['id'];
+        }
+
+        $data['Cart']['num'] = $num;
+        $data['Cart']['product_id'] = $product_id;
+
+        $proM = ClassRegistry::init('Product');
+        $p = $proM->findById($product_id);
+
+        $data['Cart']['session_id'] = $sessionId;
+        $data['Cart']['coverimg'] = $p['Product']['coverimg'];
+        if ($prodTry) {
+            $name = $p['Product']['name'].'(试吃: '.$prodTry['ProductTry']['spec'].')';
+        } else {
+            $name = product_name_with_spec($p['Product']['name'], $spec, $p['Product']['specs']);
+        }
+        $data['Cart']['name'] = $name;
+
+        if (!empty($prodTry)) {
+            $price = calculate_try_price($prodTry['ProductTry']['price'], $uid, $shichituan);
+        } else {
+            $price = calculate_price($p['Product']['id'], $p['Product']['price'], $uid);
+        }
+        $data['Cart']['price'] = $price;
+        $data['Cart']['creator'] = $uid;
+        $data['Cart']['specId'] = $spec;
+        $data['Cart']['type'] = $type;
+        $data['Cart']['try_id'] = $try_id;
+
+        return $this->save($data);
+    }
+
+    function delete_item($id, $uid, $sessionId = null) {
+        $cond = $this->create_user_cond($uid, $sessionId);
+
+        return $this->deleteAll(array(
+            'status' => 0,
+            'id' => $id,
+            'order_id' => NULL,
+            'OR' => $cond
+        ));
+    }
+
+    function edit_num($id, $num, $uid, $sessionId = null) {
+        $user_cond = $this->create_user_cond($uid, $sessionId);
+        if ($num <= 0) {
+            $op_flag = $this->deleteAll(array('id' => $id, 'status' => 0, 'order_id' => NULL, 'OR' => $user_cond), true, true);
+        }
+        else{
+            $op_flag = $this->updateAll(array('num' => $num), array('id' => $id, 'status' => 0, 'order_id' => NULL, 'OR' => $user_cond));
+        }
+        return $op_flag;
+    }
+
+    /**
+     * @param $uid
+     * @param $sessionId
+     * @return array
+     * @throws Exception
+     */
+    private function create_user_cond($uid, $sessionId) {
+        $user_cond = array();
+        if (!empty($sessionId)) {
+            $user_cond['session_id'] = $sessionId;
+        }
+
+        if (!empty($uid)) {
+            $user_cond['creator'] = $uid;
+        }
+
+        if (empty($user_cond)) {
+            throw new Exception("You have to provide session-id or user-id");
+        }
+
+        return $user_cond;
+    }
 
 } 
