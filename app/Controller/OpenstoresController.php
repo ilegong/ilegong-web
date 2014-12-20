@@ -17,7 +17,7 @@ class OpenstoresController extends AppController{
     public function beforeFilter(){
         parent::beforeFilter();
         if(empty($this->currentUser['id'])){
-            $this->__message('您需要先登录才能操作', '/users/login');
+            $this->redirect('/users/login.html?referer='.urlencode($_SERVER['REQUEST_URI']));
             exit;
         }
     }

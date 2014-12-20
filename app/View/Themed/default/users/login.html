@@ -17,6 +17,7 @@
                         <input type="checkbox" name="data[User][remember_me]"  value="2592000"> 记住我的登录状态
                     </label>
                 </div>
+                {{$this->Form->input('User.referer',array('type'=>'hidden'))}}
                 {{$this->Form->input('referer',array('type'=>'hidden'))}}
                 <button class="btn btn-red" type="submit">登录</button>
             <hr>
