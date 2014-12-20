@@ -10,13 +10,21 @@ class ApiOrdersController extends AppController {
     public $components = array('OAuth.OAuth', 'Auth', 'Session', 'Security');
     public function beforeFilter() {
         parent::beforeFilter();
-        $allow_action = array('product_detail', 'store_list', 'product_content', 'store_content', 'store_story');
+        $allow_action = array('product_detail', 'store_list', 'product_content', 'store_content', 'store_story','oauth_writte');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action)  == false) {
             $this->currentUser = $this->OAuth->user();
         }
     }
-
+    //写入一个client_id到clien表,每个app版本对应一个id
+    /*
+    public function oauth_writte(){
+        $data = array('Client' => array('user_id'=>'1', 'redirect_uri'=>'http://www.tongshijia.com'));
+        $client = $this->OAuth->Client->add($data);
+        $this->set('client', $client);
+        $this->set('_serialize','client');
+    }
+*/
     public function mine() {
 
         $this->loadModel('Order');
