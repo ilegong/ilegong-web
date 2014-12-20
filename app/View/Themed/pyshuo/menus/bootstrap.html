@@ -31,7 +31,7 @@
             ?>
             <!--category-->
             {{if count($tagsWithProducts)>0}}
-            <dl class="moreclass" id="classification_child_menu">
+            <dl class="moreclass" id="classification_child_menu" style="display: none">
                 <dd>
                     <?PHP foreach($tagsWithProducts as $tagWithProduct) {
                         if($tagWithProduct['ProductCounts']>0){ ?>
@@ -73,7 +73,7 @@
             <div class="head_bg clearfix">
                 <span>{{$this->Html->link('<span class="head_icon"></span><span>'.$CurrentUser['nickname'].'</span>', array('controller' => 'users','action'=>'edit','plugin' => null ,),array('escape'=>false));}}</span>
                 <span class="line">|</span>
-                <span>{{$this->Html->link('退出登录', '/users/logout', array('title' => 'logout your account','escape'=>false))}}</span>
+                <span>{{$this->Html->link('退出', '/users/logout', array('title' => 'logout your account','escape'=>false))}}</span>
             </div>
             {{else}}
                 <div class="head_bg clearfix">
