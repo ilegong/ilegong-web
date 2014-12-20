@@ -67,17 +67,31 @@ class WeixinController extends AppController {
 			$input = "";
 			if(!empty($req['Event'])){
 				if($req['Event']=='subscribe'){ //订阅
-                    $content = array(
-                        array(title => '朋友说 | 城市里的乡下人，我们为什么离职做家乡特产。', description => '',
-                            picUrl => 'http://mmbiz.qpic.cn/mmbiz/qpxHrxLKdR0uibCrGiacHPg9F1xIicXRYZndaIZuXoUKicAeaicQadpbxyjIyED0kIomnCyXCcektOjsKSapmb5zcHQ/640',
-                            url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200777756&idx=1&sn=65992423b055c450b1c57e31287d3615#rd'),
-                        array(title => '朋友说 | 城市里的乡下人，腾讯nana分享父亲种的五常稻花香。', description => '',
-                            picUrl => 'http://mmbiz.qpic.cn/mmbiz/UuGM2hE8WNE0oBpsGonFUEqGctJHVjCQW4BjEgyekF1TFVKM1oXaGZ2hXql3er64XG6zPYYicR5D96qwOSEXgZA/640',
-                            url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200884609&idx=1&sn=1734d46f49186c7354215066143deec5#rd')
-//                        array(title => '朋友说 |摇一摇，小娟家苹果一箱免费送！', description => '',
-//                            picUrl => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR2LvZrkiavyicU6ibfz8A2ZPMv7pibtqYoDaEf00AewOOKKf9wvTtNuU7UMlxjV4Xib4ySwYicKl5Nx3uVw/0',
-//                            url => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200777756&idx=4&sn=309bdfea90c0b3cff2e18d76a1d10163#rd')
-                    );
+                    if ($from == FROM_WX_SERVICE) {
+                        $content = array(
+                            array('title' => '朋友说是什么？看完你就懂了！', 'description' => '',
+                                'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XZn7as5FuHch5zFzFnvibjUGYU3J4ibxRyLicytfdd9qDQoqV1ODOp3Rjg/0',
+                                'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=1&sn=8dea494e02c96dc21e51931604771748#rd'),
+                            array('title' => '朋友说上真实、纯朴、平凡的商家故事', 'description' => '',
+                                'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8X6T44E6S6eq8j4ZKjneD7QTQSWosTpePqnU37LSATvTp1icyotZ614ibA/0',
+                                'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=2&sn=fea08fff581b496c70448505e6c32ccc#rd'),
+                            array('title' => '朋友说优质产品一览表', 'description' => '',
+                                'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XYT9A69hTUYIomNtyJMbLnMibbSHO3NO5UaEics7OwEo9qLHfqmHas8zQ/0',
+                                'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=3&sn=75c4b8f32c29e1c088c7de4ee2e22719#rd')
+                        );
+                    } else {
+                        $content = array(
+                            array('title' => '朋友说是什么？看完你就懂了！', 'description' => '',
+                                'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XZn7as5FuHch5zFzFnvibjUGYU3J4ibxRyLicytfdd9qDQoqV1ODOp3Rjg/0',
+                                'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=203424483&idx=1&sn=e281fc56834fb0c2942f887d2edd8d48#rd'),
+                            array('title' => '朋友说上真实、纯朴、平凡的商家故事', 'description' => '',
+                                'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8X6T44E6S6eq8j4ZKjneD7QTQSWosTpePqnU37LSATvTp1icyotZ614ibA/0',
+                                'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=203424483&idx=2&sn=31229814ba277288dbf1ce98ac497115#rd'),
+                            array('title' => '朋友说优质产品一览表', 'description' => '',
+                                'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XYT9A69hTUYIomNtyJMbLnMibbSHO3NO5UaEics7OwEo9qLHfqmHas8zQ/0',
+                                'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=203424483&idx=3&sn=6331c07da8078c579126950bbfa2a71e#rd')
+                        );
+                    }
 					echo $this->newArticleMsg($user, $me, $content);
 					exit;
 				} else if ($req['Event'] == 'CLICK') {
