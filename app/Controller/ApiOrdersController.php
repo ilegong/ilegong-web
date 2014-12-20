@@ -10,16 +10,11 @@ class ApiOrdersController extends AppController {
     public $components = array('OAuth.OAuth', 'Auth', 'Session', 'Security');
     public function beforeFilter() {
         parent::beforeFilter();
-        $this->OAuth->allow();
-        $this->currentUser = $this->OAuth->user();
-//        $access_token = $_REQUEST['token'];
-//        if (!empty($access_token) || array_search($this->request->params['action'], array('product_detail', 'store_list', 'product_content', 'store_content', 'store_story')) !== false) {
-//            $this->loadModel('User');
-//            $user = $this->User->findById('146');
-//            $this->currentUser = $user['User'];
-//        }  else {
-//            exit('denied');
-//        }
+        $allow_action = array('product_detail', 'store_list', 'product_content', 'store_content', 'store_story');
+        $this->OAuth->allow($allow_action);
+        if (array_search($this->request->params['action'], $allow_action)  == false) {
+            $this->currentUser = $this->OAuth->user();
+        }
     }
 
     public function mine() {
@@ -276,7 +271,7 @@ class ApiOrdersController extends AppController {
         $orderM = ClassRegistry::init('OrderConsignees');
         $info = $orderM->find('all', array(
             'conditions' => array('creator' => $creator),
-            'fields' => array('id', 'name', 'area', 'address', 'mobilephone', 'telephone', 'email', 'postcode', 'province_id', 'city_id', 'county_id')
+            'fields' => array('id', 'name', 'status', 'area', 'address', 'mobilephone', 'telephone', 'email', 'postcode', 'province_id', 'city_id', 'county_id')
         ));
         $this->set('order_consigness', $info);
         $this->set('_serialize', 'order_consigness');
