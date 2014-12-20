@@ -7,17 +7,19 @@
  */
 
 class ApiOrdersController extends AppController {
-
+    public $components = array('OAuth.OAuth', 'Auth', 'Session', 'Security');
     public function beforeFilter() {
         parent::beforeFilter();
-        $access_token = $_REQUEST['token'];
-        if (!empty($access_token) || array_search($this->request->params['action'], array('product_detail', 'store_list', 'product_content', 'store_content', 'store_story')) !== false) {
-            $this->loadModel('User');
-            $user = $this->User->findById('146');
-            $this->currentUser = $user['User'];
-        }  else {
-            exit('denied');
-        }
+        $this->OAuth->allow();
+        $this->currentUser = $this->OAuth->user();
+//        $access_token = $_REQUEST['token'];
+//        if (!empty($access_token) || array_search($this->request->params['action'], array('product_detail', 'store_list', 'product_content', 'store_content', 'store_story')) !== false) {
+//            $this->loadModel('User');
+//            $user = $this->User->findById('146');
+//            $this->currentUser = $user['User'];
+//        }  else {
+//            exit('denied');
+//        }
     }
 
     public function mine() {

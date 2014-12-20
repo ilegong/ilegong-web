@@ -969,3 +969,6 @@ function total_sold($pid, $range, $cartModel = null) {
 
     return $total_sold;
 }
+CakePlugin::load(array(
+    'OAuth' => array('routes' => true)
+));
