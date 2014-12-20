@@ -271,6 +271,16 @@ a.coupon_applied .glyphicon {
             }
         }
 
+        var $saveConsigneeSbt = $('#save_consignee_sbt');
+        if ($saveConsigneeSbt.size() > 0) {
+            utils.alert_one('请先保存收货人信息', '好的', function () {
+                $('html, body').animate({
+                    scrollTop: $('#part_consignee').offset().top
+                }, 200)
+            });
+            return false;
+        }
+
         var link = $("#submit-button").attr("href");
         var params = (link.indexOf("?")>-1)?"&":"?";
         $(".remark").each(function(){
