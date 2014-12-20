@@ -180,7 +180,7 @@ class CategoriesController extends AppController {
     }
 
     public function mobileHome() {
-        $this->productsHome();
+        $this->productsHome(true);
 
         $bannerItems = array(
             array('img' => "/img/banner/banner_shibin.jpg?v1", 'url' => "/products/20141204/fu_ping_te_ji_jian_shi_bing.html", 'id' => 331),
@@ -223,7 +223,14 @@ class CategoriesController extends AppController {
         $this->set('_serialize', array('brands', 'tagsWithProducts', 'sub_title', 'bannerItems'));
     }
 
-    public function productsHome() {
+    public function productsHome($disableAutoRedirect = false) {
+
+        if (!$disableAutoRedirect) {
+            if ($this->RequestHandler->isMobile()) {
+                $this->redirect('/categories/mobileHome.html');
+            }
+            return;
+        }
 
         $current_cateid = CATEGORY_ID_TECHAN;
         $page = 1;
