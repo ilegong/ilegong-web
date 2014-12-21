@@ -928,8 +928,8 @@ function total_sold($pid, $range, $cartModel = null) {
 
     if (!empty($cache)) {
         $data = json_decode($cache, true);
-        if ($data[$range_key]) {
-            return $cache;
+        if (array_key_exists($range_key, $data)) {
+            return $data[$range_key];
         }
     }
 
@@ -965,7 +965,7 @@ function total_sold($pid, $range, $cartModel = null) {
         $data = array($range_key => $total_sold);
     }
 
-    Cache::write($cache_sold_key, $data);
+    Cache::write($cache_sold_key, json_encode($data));
 
     return $total_sold;
 }
