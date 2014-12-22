@@ -50,7 +50,7 @@ class OrderShichisController extends AppController {
         $this->set('brands', $mappedBrands);
         $this->set('ordershichis', $ordershichis);
         $this->set('order_carts', $order_carts);
-//        $this->set('ship_type', ShipAddress::ship_type_list());
+        $this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('counts', $counts);
         $this->set('orders', $orders);
 
