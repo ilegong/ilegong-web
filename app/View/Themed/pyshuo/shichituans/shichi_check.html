@@ -24,7 +24,8 @@
             <td>{{$shichituan['Shichituan']['name']}}</td><td>{{$shichituan['Shichituan']['company']}}</td>
             <td>{{$shichituan['Shichituan']['gender']}}</td><td>{{$shichituan['Shichituan']['telenum']}}</td>
             <td>{{$shichituan['Shichituan']['email']}}</td><td>{{$shichituan['Shichituan']['comment']}}</td>
-            <td>{{$shichituan['Shichituan']['created']}}</td><td>{{$this->Html->image(Router::url($shichituan['Shichituan']['pictures']))}}</td>
+            <td>{{$shichituan['Shichituan']['created']}}</td>
+            <td><a href="{{$shichituan['Shichituan']['pictures']}}">{{$this->Html->image(Router::url($shichituan['Shichituan']['pictures']),array('style'=>'max-width:100px;max-height:100px;'))}}</a></td>
             <td>{{if $shichituan['Shichituan']['status']==0}}待审核 {{elseif $shichituan['Shichituan']['status']==1 }}审核通过{{elseif $shichituan['Shichituan']['status']==2}}审核未通过{{/if}}</td>
         </tr>
         {{/loop}}

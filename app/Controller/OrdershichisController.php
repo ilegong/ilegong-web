@@ -53,10 +53,10 @@ class OrderShichisController extends  AppController {
 
 
 
-        $this->log('order'.json_encode($orders));
-        $this->log('brands'.json_encode($mappedBrands));
-        $this->log('order_carts'.json_encode($order_carts));
-        $this->log('counts'.json_encode($counts));
+//        $this->log('order'.json_encode($orders));
+//        $this->log('brands'.json_encode($mappedBrands));
+//        $this->log('order_carts'.json_encode($order_carts));
+//        $this->log('counts'.json_encode($counts));
     }
 
 

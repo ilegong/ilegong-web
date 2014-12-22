@@ -36,15 +36,15 @@
     </ul>
     <div class="row tab-content" style="padding-left: 2px; background-color: #f1eff0">
         <!--<?php foreach(array( '-1' => 'all', 0 => 'wait_payment', 1 => 'wait_deliver', 3 => 'wait_evaluat') as $status => $order_type) { ?>-->
-        <div class="tab-pane fade" id="orders-all">
-            <div class="Content-body">
+        <div class="tab-pane fade in active" id="orders-all">
+
                 {{ $this->element('my_shichi_orders', array(
                 'orders' => $orders,
                 'brands' => $brands,
                 'counts' => $counts,
                 'order_carts' =>$order_carts
                 )); }}
-            </div>
+
         </div>
         <!--<?php } ?>-->
     </div>

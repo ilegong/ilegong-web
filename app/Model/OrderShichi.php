@@ -45,6 +45,23 @@ class OrderShichi extends AppModel {
             $brandIds[] = $o['OrderShichi']['brand_id'];
         }
 
+        $ordershichis = array();
+        if (!empty($order_ids)) {
+            $orderM = ClassRegistry::init('Order');
+            $order_shichis = $orderM->find('all',array(
+                'conditions' => array(
+                    'id' => $order_ids
+                ),
+                'fields' => array(
+                    'id','status'
+                )
+            ));
+
+            foreach ($order_shichis as $order_shichi) {
+                $ordershichis[$order_shichi['Order']['id']] = $order_shichi;
+            }
+        }
+
         $order_carts = array();
         if (!empty($order_ids)) {
             $cartM = ClassRegistry::init('Cart');
@@ -62,6 +79,8 @@ class OrderShichi extends AppModel {
             }
         }
 
+
+
         $mappedBrands = array();
         if (!empty($brandIds)) {
             $brandM = ClassRegistry::init('Brand');
@@ -74,7 +93,7 @@ class OrderShichi extends AppModel {
                 $mappedBrands[$brand['Brand']['id']] = $brand;
             }
         }
-        return array($orders, $order_carts, $mappedBrands);
+        return array($orders,$ordershichis, $order_carts, $mappedBrands);
     }
 
 }

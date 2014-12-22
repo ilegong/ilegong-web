@@ -442,7 +442,7 @@ class OrdersController extends AppController{
 
         $this->set(compact('toShare', 'canComment', 'no_more_money', 'order_id', 'order', 'has_expired_product_type', 'expired_pids'));
         $this->set('isMobile', $this->RequestHandler->isMobile());
-        $this->set('ship_type', ShipAddress::ship_type_list());
+//        $this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('order', $orderinfo);
         $this->set('Carts',$Carts);
         $this->set('products', $products);
@@ -565,9 +565,19 @@ class OrdersController extends AppController{
         $this->set('brands', $mappedBrands);
 		$this->set('orders',$orders);
 		$this->set('order_carts',$order_carts);
-		$this->set('ship_type', ShipAddress::ship_type_list());
+//		$this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('counts', $counts);
 	}
+
+
+    function find_order_status($order_id = '') {
+
+        $this->autoRender = false;
+        $order = $this->Order->find('first',array('conditions' => array('id' => $order_id),'fields' => array('status')));
+        $order_status = $order['Order']['status'];
+//        $this->log('order_status'.json_encode($order_status));
+        echo json_encode($order_status);
+    }
 
 	function business($creator=0){
         $this->__business_orders($creator);

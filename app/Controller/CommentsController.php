@@ -67,14 +67,13 @@ class CommentsController extends AppController {
         }
         $count1=$Vote_num[0];$count2=$Vote_num[1];
         $count=$Vote_num[0]+$Vote_num[1]; $this->log('count'.json_encode($count));
-        if($count!=0){
+        if ($count !=0){
         $Vote_num[0] = round($Vote_num[0]/$count*100);
         $Vote_num[1] = round($Vote_num[1]/$count*100);
         }else {
             $Vote_num[0] = 0;
             $Vote_num[1] = 0;
         }
-
         $data=array();
         $data[]=$Vote_num;$data[]=$count;$data[]=$count1;$data[]=$count2;$data[]=$num;
         $this->log('data'.json_encode($data));
