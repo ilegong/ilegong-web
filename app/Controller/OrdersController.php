@@ -565,7 +565,7 @@ class OrdersController extends AppController{
         $this->set('brands', $mappedBrands);
 		$this->set('orders',$orders);
 		$this->set('order_carts',$order_carts);
-//		$this->set('ship_type', ShipAddress::ship_type_list());
+		$this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('counts', $counts);
 	}
 
