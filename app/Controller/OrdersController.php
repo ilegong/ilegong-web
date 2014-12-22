@@ -442,7 +442,7 @@ class OrdersController extends AppController{
 
         $this->set(compact('toShare', 'canComment', 'no_more_money', 'order_id', 'order', 'has_expired_product_type', 'expired_pids'));
         $this->set('isMobile', $this->RequestHandler->isMobile());
-//        $this->set('ship_type', ShipAddress::ship_type_list());
+        $this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('order', $orderinfo);
         $this->set('Carts',$Carts);
         $this->set('products', $products);
