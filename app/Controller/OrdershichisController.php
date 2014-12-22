@@ -50,14 +50,14 @@ class OrderShichisController extends AppController {
         $this->set('brands', $mappedBrands);
         $this->set('ordershichis', $ordershichis);
         $this->set('order_carts', $order_carts);
-        $this->set('ship_type', ShipAddress::ship_type_list());
+//        $this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('counts', $counts);
         $this->set('orders', $orders);
 
 //        json_encode($ordershichis['Order']['status']);
 //        $this->log('12'.json_encode($ordershichis['Order']['status']));
-//        $this->log('order'.json_encode($orders));
-//        $this->log('order_shichis'.json_encode($order_shichis));
+          $this->log('order of my shichi'.json_encode($orders));
+         $this->log('order_shichis'.json_encode($order_shichis));
 //        $this->log('brands'.json_encode($mappedBrands));
 //        $this->log('order_carts'.json_encode($order_carts));
 //        $this->log('counts'.json_encode($counts));
