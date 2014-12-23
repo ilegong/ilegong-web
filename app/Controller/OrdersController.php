@@ -74,7 +74,6 @@ class OrdersController extends AppController{
 //            $reason = 'share_type_coupon_exceed';
 //        }
 
-        $nums = array();
         $Carts = array();
         $cond = array(
             'status' => CART_ITEM_STATUS_NEW,
@@ -102,7 +101,6 @@ class OrdersController extends AppController{
         foreach($Carts_tmp as $c){
             $product_ids[]=$c['Cart']['product_id'];
             $Carts[$c['Cart']['product_id']] = $c;
-            $nums[$c['Cart']['product_id']] = $c['Cart']['num'];
         }
 
         if(empty($Carts)){
@@ -110,42 +108,59 @@ class OrdersController extends AppController{
             return;
 		}
 
-        $products = $this->Product->find('all',array('conditions'=>array(
+        $allP = $this->Product->find('all',array('conditions'=>array(
                 'id' => $product_ids
         )));
+        $business = Hash::combine($allP, '{n}.Product.brand_id', '{n}');
+        $pids = Hash::extract($allP, '{n}.Product.id');
 
-        $ship_fees = array();
-		$business = array();
-		foreach($products as $p){
-            $pid = $p['Product']['id'];
-            $pBrandId = $p['Product']['brand_id'];
-            if(isset($business[$pBrandId])){
-                $business[$pBrandId][] = $pid;
-			}
-			else{
-				$business[$pBrandId] = array($pid);
-			}
+//        $ship_fees = array();
+//		$business = array();
+//		foreach($products as $p){
+//            $pid = $p['Product']['id'];
+//            $pBrandId = $p['Product']['brand_id'];
+//            if(isset($business[$pBrandId])){
+//                $business[$pBrandId][] = $pid;
+//			}
+//			else{
+//				$business[$pBrandId] = array($pid);
+//			}
+//
+//            if ($tryId) {
+//                $ship_fees[$pid] = 0;
+//            } else {
+//                $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
+//                $singleShipFee = empty($pp) ? $p['Product']['ship_fee'] : $pp['ship_price'];
+//                $ship_fees[$pid] = ShipPromotion::calculateShipFee($pid, $singleShipFee, $nums[$pid], null);
+//            }
+//
+//		}
 
-            if ($tryId) {
-                $ship_fees[$pid] = 0;
-            } else {
-                $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
-                $singleShipFee = empty($pp) ? $p['Product']['ship_fee'] : $pp['ship_price'];
-                $ship_fees[$pid] = ShipPromotion::calculateShipFee($pid, $singleShipFee, $nums[$pid], null);
-            }
+        $uid = $this->currentUser['id'];
 
-		}
+        $this->loadModel('OrderConsignee');
+        $addressId = $this->Session->read('OrderConsignee.id');
+        $address = $this->OrderConsignee->find('first', array(
+            'conditions' => array('id' => $addressId, 'creator' => $uid)
+        ));
+        if (empty($address)) {
+            $this->log('orders_balance: cannot find address:'.$addressId.', uid='.$uid);
+        } else {
+            $provinceId = $address['OrderConsignee']['province_id'];
+        }
+
+        $this->loadModel('ShipSetting');
+        $shipSettings = $this->ShipSetting->find_by_pids($pids, $provinceId);
+        $pidShipSettings = Hash::combine($shipSettings, '{n}.ShipSetting.product_id', '{n}');
 
         $new_order_ids = array();
 		$saveFailed = false;
-		foreach($business as $brand_id => $busi){
+        foreach ($business as $brand_id => $products) {
 			$total_price = 0.0;
-            $ship_fee = 0.0;
-            $uid = $this->currentUser['id'];
-            foreach($busi as $pid){
+            foreach($products as $pro){
+                $pid = $pro['id'];
                 $num = $Carts[$pid]['Cart']['num'];
-                $total_price+= $Carts[$pid]['Cart']['price']* $num;
-                $ship_fee += $ship_fees[$pid];
+                $total_price+= $Carts[$pid]['Cart']['price'] * $num;
 
                 list($afford_for_curr_user, $limit_cur_user) = $tryId ? afford_product_try($tryId, $uid) : AppController::__affordToUser($pid, $uid);
                 if (!$afford_for_curr_user) {
@@ -155,17 +170,37 @@ class OrdersController extends AppController{
                     $this->__message(__($Carts[$pid]['name'].'购买超限，请从购物车中调整后再结算'), $error_back_url, 5);
                 }
 			}
-			
+
 			if($total_price <= 0){
 				$this->Session->setFlash('订单金额错误，请返回购物车查看');
 				$this->redirect($error_back_url);
 			}
 
 
+            $ship_fee = 0.0;
+            $ship_fees = array();
+            foreach($products as $pro) {
+                $pid = $pro['id'];
+                $num = $Carts[$pid]['Cart']['num'];
+
+                if ($tryId) {
+                    $ship_fees[$pid] = 0;
+                } else {
+                    $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
+                    $singleShipFee = empty($pp) ? $pro['ship_fee'] : $pp['ship_price'];
+
+                    $pss = empty($pidShipSettings)? false : $pidShipSettings[$pid];
+                    $ship_fees[$pid] = ShipPromotion::calculateShipFee($total_price, $pid, $singleShipFee, $num, $pss);
+
+                }
+                $ship_fee += $ship_fees[$pid];
+            }
+
+
 			$data = array();
 
             if (!$tryId) {
-                $ship_fee = ShipPromotion::calculateShipFeeByOrder($ship_fee, $brand_id, $total_price);
+//                $ship_fee = ShipPromotion::calculateShipFeeByOrder($ship_fee, $brand_id, $total_price);
             } else {
                 $data['try_id'] = $tryId;
             }
@@ -179,7 +214,7 @@ class OrdersController extends AppController{
             $remark = $_REQUEST['remark_' . $brand_id];
             $data['remark'] = empty($remark) ? "" : $remark;
 
-			$data['consignee_id'] = $this->Session->read('OrderConsignee.id');
+            $data['consignee_id'] = $addressId;
 			$data['consignee_name'] = $this->Session->read('OrderConsignee.name');
 			$data['consignee_area'] = $this->Session->read('OrderConsignee.area');
 			$data['consignee_address'] = $this->Session->read('OrderConsignee.address');
@@ -198,7 +233,8 @@ class OrdersController extends AppController{
                 if ($order_id) {
                     array_push($new_order_ids, $order_id);
                 }
-                foreach($busi as $pid){
+                foreach($products as $pro){
+                    $pid = $pro['id'];
 					$cart = $Carts[$pid];
 					$this->Cart->updateAll(array('order_id'=>$order_id,'status'=>CART_ITEM_STATUS_BALANCED),
                         array('id'=>$cart['Cart']['id'], 'status' => CART_ITEM_STATUS_NEW));
@@ -290,7 +326,7 @@ class OrdersController extends AppController{
 
                 $productItemInCart = $cart->find_product_item($specialPid);
                 if (isset($specialAddress['least_num']) && (!$productItemInCart || ($specialAddress['least_num'] > $productItemInCart->num))) {
-                    $flash_msg = __('使用您选定的优惠地址需要购买'.$specialAddress['least_num'].'件"'.$productItemInCart->name.'"');
+                    $flash_msg = __('错误：使用您选定的优惠地址需要购买'.$specialAddress['least_num'].'件"'.$productItemInCart->name.'"');
                     unset($shipPromotionId);
                 } else {
 
@@ -1075,7 +1111,6 @@ class OrdersController extends AppController{
         $uid = $this->currentUser['id'];
         $cart->user_id = $uid;
 
-        $shipFees = array();
         $totalPrices = array();
 
         $this->loadModel('Product');
@@ -1085,19 +1120,33 @@ class OrdersController extends AppController{
             $brand_id = $productByIds[$pid]['brand_id'];
             $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
             $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
-            $singleShipFee = empty($pp) || !isset($pp['ship_price']) ? $productByIds[$pid]['ship_fee'] : $pp['ship_price'];
             $itemPrice = empty($pp) || !isset($pp['price']) ? calculate_price($pid, $productByIds[$pid]['price'], $uid) : $pp['price'];
 
-            $shipFees[$brand_id] += ShipPromotion::calculateShipFee($pid, $singleShipFee, $num, null);
             $totalPrices[$brand_id] += ($itemPrice * $num);
 
             $cart->add_product_item($brand_id, $pid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name']);
         }
 
+
+        $this->loadModel('ShipSetting');
+        $shipSettings = $this->ShipSetting->find_by_pids($pids, null);
+        $pidShipSettings = Hash::combine($shipSettings, '{n}.ShipSetting.product_id', '{n}');
+
+        $shipFees = array();
+        $brandItems = $cart->brandItems;
+        foreach ($brandItems as $brandId => $brandItem) {
+            foreach ($brandItem->items as $pid => $item) {
+                $num = ($cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
+                $singleShipFee = empty($pp) || !isset($pp['ship_price']) ? $productByIds[$pid]['ship_fee'] : $pp['ship_price'];
+                $total_price = $totalPrices[$brandId];
+                //FIXME: add ship fee by province
+                $shipFees[$brandId] += ShipPromotion::calculateShipFee($total_price, $pid, $singleShipFee, $num, $pidShipSettings[$pid]);
+            }
+        }
+
         $shipFee = 0;
-        foreach($shipFees as $brandId => $ship) {
-            $n_ship = ShipPromotion::calculateShipFeeByOrder($ship, $brandId, $totalPrices[$brandId]);
-            $shipFee += $n_ship;
+        foreach($shipFees as $ship) {
+            $shipFee += $ship;
         }
 
         return array($cart, $shipFee);

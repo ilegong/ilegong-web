@@ -10,6 +10,7 @@ class ShipPromotion extends AppModel {
     const PID = 192;
 
     const QUNAR_PROMOTE_BRAND_ID = 61;
+    /** @depreted */
     const QUNAR_PROMOTE_ID = 222;
 
     public $useTable = false;
@@ -129,37 +130,67 @@ class ShipPromotion extends AppModel {
 
     static public $shi_liu_ids = array(201, 202, 233);
 
+
+    //Product 表里设置是这个产品，不论多少都是同一邮费
+    static public $TYPE_ORDER_PRICE = 1;  //订单总价满多少包邮
+    static public $TYPE_REDUCE_BY_NUMS = 2; //同一商品满几件包邮
+    static public $TYPE_FIXED = 3; //同订单固定邮费
+    static public $TYPE_MUL_NUMS = 4; //每件相乘
+
+
     /**
+     *
+     * //地区：省份限制或者不限制
+     * //统一邮费 或者 按件数相乘
+     * //满足多少件包邮
+     * //全订单：满多少金额包邮
+     *
+     * @param $total_price int 订单商品总价
      * @param $pid
      * @param $singleShipFee
      * @param $num
-     * @param $area
+     * @param $pss
      * @return mixed
      */
-    public static function calculateShipFee($pid, $singleShipFee, $num, $area) {
-        if ($pid == PRODUCT_ID_RICE_10 && $num >= 2) {
-            return 0.0;
-        } else if ($pid == PRODUCT_ID_CAKE || array_search($pid, self::$shi_liu_ids) !== false) {
-            return $singleShipFee * $num;
-        } else if ($pid == 269 || $pid == 270) { //灰枣和骏枣
-            return ($num > 1) ? 0 : 15;
-        } else if ($pid == 317) { //铁棍山药1斤装
-            return ($num >= 5 ? 0 : $num * $singleShipFee);
-        } else if ($pid == 406) { //呼伦贝尔牛肉干
-            return ($num >= 5 ? 0 : 8);
+    public static function calculateShipFee($total_price, $pid, $singleShipFee, $num, $pss) {
+
+        if (!empty($pss)) {
+            $type = $pss['ShipSetting']['type'];
+            if ($type == self::$TYPE_ORDER_PRICE && $total_price * 100 >= $pss['ShipSetting']['least_total_price']) {
+                return $pss['ShipSetting']['ship_fee'];
+            } else if ($type == self::$TYPE_FIXED) {
+                return $pss['ShipSetting']['ship_fee'];
+            } else if ($type == self::$TYPE_MUL_NUMS) {
+                return $num * $singleShipFee;
+            } else if ($type == self::$TYPE_REDUCE_BY_NUMS && $num >= $pss['ShipSetting']['least_num']) {
+                return $pss['ShipSetting']['ship_fee'];
+            }
         }
+
+//        if ($pid == PRODUCT_ID_RICE_10 && $num >= 2) {
+//            return 0.0;
+////        } else if ($pid == PRODUCT_ID_CAKE || array_search($pid, self::$shi_liu_ids) !== false) {
+////            return $singleShipFee * $num;
+//        } else if ($pid == 269 || $pid == 270) { //灰枣和骏枣
+//            return ($num > 1) ? 0 : 15;     //check 15 problem:
+//        } else if ($pid == 317) { //铁棍山药1斤装
+//            return ($num >= 5 ? 0 : $num * $singleShipFee);
+//        } else if ($pid == 406) { //呼伦贝尔牛肉干
+//            return ($num >= 5 ? 0 : 8);
+//        }
+
         return $singleShipFee;
     }
 
-    public static function calculateShipFeeByOrder($shipFee, $brandId, $total_price) {
-        if ($brandId == 130 && $total_price * 100 > 4899) {
-            return 0.0;
-        }else if ($brandId == 126 && $total_price * 100 > 11999) {
-            return 0.0;
-        } else {
-            return $shipFee;
-        }
-    }
+//    public static function calculateShipFeeByOrder($shipFee, $brandId, $total_price) {
+//        if ($brandId == 130 && $total_price * 100 > 4899) {
+//            return 0.0;
+//        }else if ($brandId == 126 && $total_price * 100 > 11999) {
+//            return 0.0;
+//        } else {
+//            return $shipFee;
+//        }
+//    }
 
     public function findNumberLimitedPromo($pid) {
         return $this->pro_num_limit[$pid];
