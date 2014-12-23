@@ -165,12 +165,11 @@
 
         </div>
 
-
-    {{if $order_shichi&&$order_shichi['OrderShichi']['is_comment'] ==0}}
-    <div id="div1">
+    {{if $order_shichi}}
+    {{if $order_shichi['OrderShichi']['is_comment'] ==0}}
+    <div id="div1" value="{{$order_shichi_status}}">
     {{$this->Form->input('body',array('label'=>false,'type'=>'textarea','rows'=>3,'class' =>'form-control','placeholder' => '写下您的试吃评论吧...'))}}
     {{$this->Form->end();}}
-
     <span class="btn btn-success fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
         <span>{{__('Add Images...')}}</span>
@@ -182,6 +181,12 @@
     <div class="submit"><input id="btnSubmit" onclick="return submitaddshichi_comment($('#CommentAdd_shichiForm'));" class="btn btn-primary pull-right" type="submit" value="提交" /></div>
     </div>
 
+        <!--<div style="text-align: center;">-->
+            <!--<span class="glyphicon glyphicon-list-alt" style="font-size: 18px; line-height: 1.33;"></span>-->
+            <!--<p>亲，请您确认收货后再进行评价哦</p>-->
+        <!--</div>-->
+
+     {{/if}}
      {{else}}
      {{$this->Form->end();}}
      {{/if}}
@@ -304,6 +309,11 @@
 
 
     function submitaddshichi_comment(form){
+
+         if($('#div1').attr('value') !=3) {
+            utils.alert_one('亲，为保证评价客观性，请确认收货并试吃后再点评哦','知道了');
+            return;
+         }
 
            if ($.trim($('#CommentBody').val()).length == 0) {
                utils.alert("请填写评论内容");

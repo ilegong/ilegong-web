@@ -204,6 +204,15 @@ class ProductsController extends AppController{
         $this->set('is_product_has_shichi',$is_product_has_shichi);
         $this->set('order_shichi', $order_shichi);
 
+        $this->loadModel('Order');
+        if (!empty($order_shichi)) {
+            $order_id = $order_shichi['OrderShichi']['order_id'];
+            $order = $this->Order->find('first',array('conditions' => array('id' => $order_id)));
+            $order_shichi_status = $order['Order']['status'];
+            $this->set('order_shichi_status',$order_shichi_status);
+        }
+
+
         $this->loadModel('Brand');
         $brand = $this->Brand->findById($brandId);
         $this->set('brand', $brand);
