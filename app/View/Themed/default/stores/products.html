@@ -10,11 +10,11 @@
         '销量',
         '状态',
         '更新时间',
-        '操作',
+        '排序权值',
+        '操作'
         ));
 
         echo '<thead>'.$tableHeaders.'</thead>';
-
         $rows = array();
         foreach ($datalist AS $item) {
         if ($item['Product']['deleted'] != DELETED_YES) {
@@ -34,12 +34,34 @@
         $item['Product']['saled'],
         $item['Product']['deleted'] == DELETED_YES ? '已删除' : ($item['Product']['published'] == PUBLISH_YES ? '上架' : '下架'),
         friendlyDateFromStr($item['Product']['updated']),
+        '<input type="number" name="weight" id="product_pid_' . $item['Product']['id'] . '"class="form-control" data-toggle="tooltip" data-placement="right" title="权值已保存" value="'.$item['Product']['sort_in_store'].'" style="width: 70px">',
         $actions,
         );
         }
         echo $this->Html->tableCells($rows);
 
         ?>
+
     </table>
     {{$page_navi}}
 </div>
+<script>
+    $(document).ready(function(){
+        $("input[name='weight']").on('focusout', function(){
+            var id = $(this).attr('id').substr(12);
+            $.get('/stores/product_sort',{pid: id, weight:$(this).val()},function(result){
+                if(result.success){
+                    $("#product_pid_"+id).val(result.weight);
+                    $("#product_pid_"+id).tooltip('show');
+                    setTimeout(function(){
+                        $("#product_pid_"+id).tooltip('destroy');
+                    },500);
+
+                }else{
+                    alert('error');
+                }
+            }, 'json');
+
+        });
+    })
+</script>

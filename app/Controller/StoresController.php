@@ -270,12 +270,12 @@ class StoresController extends AppController
         $cond = array('brand_id' => $this->brand['Brand']['id'], 'deleted' => DELETED_NO);
         $datalist = $this->Product->find('all', array(
             'conditions' => $cond,
-            'fields' => array('id', 'name', 'price', 'published', 'coverimg', 'deleted', 'saled', 'storage', 'updated', 'slug'),
+            'fields' => array('id', 'name', 'price', 'published', 'coverimg', 'deleted', 'saled', 'storage', 'updated', 'slug', 'sort_in_store'),
             'order' => 'updated desc'
         ));
 
         $page_navi = getPageLinks($total, $pagesize, '/products/mine', $page);
-        $this->set('datalist', $datalist);$this->log('datalist'.json_encode($datalist));
+        $this->set('datalist', $datalist);
         $this->set('page_navi', $page_navi);
         $this->set('op_cate', 'products');
     }
@@ -573,6 +573,23 @@ class StoresController extends AppController
             'deleted' => DELETED_NO,
         )));
     }
-
-
+    /**店内商品排序
+    */
+    public function product_sort(){
+        $this->autoRender = false;
+        $this->checkAccess();
+        $pid = intval($_REQUEST['pid']);
+        $weight = intval($_REQUEST['weight']);
+        $brand_id=$this->Product->find('first', array(
+            'conditions' => array('id'=>$pid),
+            'fields'=>'brand_id'
+        ));
+        if($brand_id['Product']['brand_id'] != $this->brand['Brand']['id']){
+            throw new ForbiddenException(__('You cannot edit this data'));
+        }else{
+            $this->loadModel('Product');
+            $this->Product->updateAll(array('sort_in_store' => $weight), array('id' => $pid));
+            echo json_encode(array('success'=> true, 'weight'=>$weight));
+        }
+    }
 }

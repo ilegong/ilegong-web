@@ -33,6 +33,7 @@ class BrandsController extends AppController {
     			'Product.deleted' => 0
     		),
     		'limit'=>'100',
+            'order'=>'sort_in_store desc'
     	));
     	$this->set('products',$products);
         $this->set('op_cate', 'share');
