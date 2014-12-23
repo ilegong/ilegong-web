@@ -130,14 +130,6 @@ class ShipPromotion extends AppModel {
 
     static public $shi_liu_ids = array(201, 202, 233);
 
-
-    //Product 表里设置是这个产品，不论多少都是同一邮费
-    static public $TYPE_ORDER_PRICE = 1;  //订单总价满多少包邮
-    static public $TYPE_REDUCE_BY_NUMS = 2; //同一商品满几件包邮
-    static public $TYPE_FIXED = 3; //同订单固定邮费
-    static public $TYPE_MUL_NUMS = 4; //每件相乘
-
-
     /**
      *
      * //地区：省份限制或者不限制
@@ -146,25 +138,17 @@ class ShipPromotion extends AppModel {
      * //全订单：满多少金额包邮
      *
      * @param $total_price int 订单商品总价
-     * @param $pid
      * @param $singleShipFee
      * @param $num
      * @param $pss
+     * @param $context
      * @return mixed
      */
-    public static function calculateShipFee($total_price, $pid, $singleShipFee, $num, $pss) {
+    public static function calculateShipFee($total_price, $singleShipFee, $num, $pss, &$context) {
 
-        if (!empty($pss)) {
-            $type = $pss['ShipSetting']['type'];
-            if ($type == self::$TYPE_ORDER_PRICE && $total_price * 100 >= $pss['ShipSetting']['least_total_price']) {
-                return $pss['ShipSetting']['ship_fee'];
-            } else if ($type == self::$TYPE_FIXED) {
-                return $pss['ShipSetting']['ship_fee'];
-            } else if ($type == self::$TYPE_MUL_NUMS) {
-                return $num * $singleShipFee;
-            } else if ($type == self::$TYPE_REDUCE_BY_NUMS && $num >= $pss['ShipSetting']['least_num']) {
-                return $pss['ShipSetting']['ship_fee'];
-            }
+        $calculated = self::calculate_ship_fee($pss, $total_price, $singleShipFee, $num, $context);
+        if ($calculated !== false) {
+            return $calculated/100;
         }
 
 //        if ($pid == PRODUCT_ID_RICE_10 && $num >= 2) {
@@ -180,6 +164,36 @@ class ShipPromotion extends AppModel {
 //        }
 
         return $singleShipFee;
+    }
+
+    public static function calculate_ship_fee($pss, $total_price, $singleShipFee, $num, &$context) {
+        if (!empty($pss)) {
+            $pss = Hash::combine($pss, '{n}.ShipSetting.type', '{n}.ShipSetting');
+            $orderPricePss = $pss[TYPE_ORDER_PRICE];
+            if (!empty($orderPricePss) && $total_price * 100 >= $orderPricePss['least_total_price']) {
+                return $orderPricePss['ship_fee'];
+            }
+
+            $orderFixPss = $pss[TYPE_ORDER_FIXED];
+            if (!empty($orderFixPss)) {
+                if (empty($context['order_fix_calculated'])) {
+                    $context['order_fix_calculated'] = 1;
+                    return $orderFixPss['ship_fee'];
+                } else return 0;
+            }
+
+            $byNumsPss = $pss[TYPE_REDUCE_BY_NUMS];
+            if (!empty($byNumsPss) && $num >= $pss['least_num']) {
+                return $byNumsPss['ship_fee'];
+            }
+
+            $mulNumsPss = $pss[TYPE_MUL_NUMS];
+            if (!empty($mulNumsPss)) {
+                return $num * $singleShipFee;
+            }
+        }
+
+        return false;
     }
 
 //    public static function calculateShipFeeByOrder($shipFee, $brandId, $total_price) {

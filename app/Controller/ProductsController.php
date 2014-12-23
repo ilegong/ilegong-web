@@ -221,7 +221,33 @@ class ProductsController extends AppController{
         $recommends = $recommC->recommend($pid);
         $this->set('items', $recommends);
 
+
+        App::uses('CakeNumber', 'Utility');
+        $this->loadModel('ShipSetting');
+        $shipSettings = $this->ShipSetting->find_by_pids($pid, null);
+        foreach($shipSettings as $shipS) {
+            $type = $shipS['ShipSetting']['type'];
+            $ship_fee = $shipS['ShipSetting']['ship_fee'];
+            if ($type == TYPE_MUL_NUMS) {
+                $this->set('ship_by_item_num', true);
+            } else if ($type == TYPE_ORDER_FIXED) {
+                $this->set('ship_fixed', true);
+            } else if ($type == TYPE_REDUCE_BY_NUMS) {
+                $this->set('ship_promo_nums', '满'.$shipS['ShipSetting']['least_num'].'件'. $this->ship_desc_1($ship_fee));
+            } else if ($type == TYPE_ORDER_PRICE) {
+                $this->set('ship_promo_amount', '参与本店购满'.CakeNumber::precision($shipS['ShipSetting']['least_total_price']/100, 2).'元'. $this->ship_desc_1($ship_fee));
+            }
+        }
+
         $this->set('category_control_name', 'products');
+    }
+
+    /**
+     * @param $ship_fee
+     * @return string
+     */
+    private function ship_desc_1($ship_fee) {
+        return ($ship_fee == 0 ? '包邮' : '邮费' . CakeNumber::precision($ship_fee / 100, 2) . '元');
     }
 
 }

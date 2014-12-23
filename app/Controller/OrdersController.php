@@ -111,7 +111,15 @@ class OrdersController extends AppController{
         $allP = $this->Product->find('all',array('conditions'=>array(
                 'id' => $product_ids
         )));
-        $business = Hash::combine($allP, '{n}.Product.brand_id', '{n}');
+
+        $business = array();
+        foreach($allP as $p) {
+            if(!is_array($business[$p['Product']['brand_id']])) {
+                $business[$p['Product']['brand_id']] = array();
+            }
+            $business[$p['Product']['brand_id']][] = $p['Product'];
+        }
+
         $pids = Hash::extract($allP, '{n}.Product.id');
 
 //        $ship_fees = array();
@@ -151,7 +159,6 @@ class OrdersController extends AppController{
 
         $this->loadModel('ShipSetting');
         $shipSettings = $this->ShipSetting->find_by_pids($pids, $provinceId);
-        $pidShipSettings = Hash::combine($shipSettings, '{n}.ShipSetting.product_id', '{n}');
 
         $new_order_ids = array();
 		$saveFailed = false;
@@ -177,10 +184,18 @@ class OrdersController extends AppController{
 			}
 
 
+            $shipFeeContext = array();
             $ship_fee = 0.0;
             $ship_fees = array();
             foreach($products as $pro) {
                 $pid = $pro['id'];
+                $pidShipSettings = array();
+                foreach($shipSettings as $val){
+                    if($val['ShipSetting']['product_id'] == $pid){
+                        $pidShipSettings[] = $val;
+                    }
+                };
+
                 $num = $Carts[$pid]['Cart']['num'];
 
                 if ($tryId) {
@@ -188,10 +203,7 @@ class OrdersController extends AppController{
                 } else {
                     $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
                     $singleShipFee = empty($pp) ? $pro['ship_fee'] : $pp['ship_price'];
-
-                    $pss = empty($pidShipSettings)? false : $pidShipSettings[$pid];
-                    $ship_fees[$pid] = ShipPromotion::calculateShipFee($total_price, $pid, $singleShipFee, $num, $pss);
-
+                    $ship_fees[$pid] = ShipPromotion::calculateShipFee($total_price, $singleShipFee, $num, $pidShipSettings, $shipFeeContext);
                 }
                 $ship_fee += $ship_fees[$pid];
             }
@@ -1130,17 +1142,23 @@ class OrdersController extends AppController{
 
         $this->loadModel('ShipSetting');
         $shipSettings = $this->ShipSetting->find_by_pids($pids, null);
-        $pidShipSettings = Hash::combine($shipSettings, '{n}.ShipSetting.product_id', '{n}');
 
+        $shipFeeContext = array();
         $shipFees = array();
         $brandItems = $cart->brandItems;
         foreach ($brandItems as $brandId => $brandItem) {
             foreach ($brandItem->items as $pid => $item) {
+                $pidShipSettings = array();
+                foreach($shipSettings as $val){
+                    if($val['ShipSetting']['product_id'] == $pid){
+                        $pidShipSettings[] = $val;
+                    }
+                };
                 $num = ($cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
                 $singleShipFee = empty($pp) || !isset($pp['ship_price']) ? $productByIds[$pid]['ship_fee'] : $pp['ship_price'];
                 $total_price = $totalPrices[$brandId];
                 //FIXME: add ship fee by province
-                $shipFees[$brandId] += ShipPromotion::calculateShipFee($total_price, $pid, $singleShipFee, $num, $pidShipSettings[$pid]);
+                $shipFees[$brandId] += ShipPromotion::calculateShipFee($total_price, $singleShipFee, $num, $pidShipSettings, $shipFeeContext);
             }
         }
 
