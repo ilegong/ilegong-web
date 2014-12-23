@@ -491,8 +491,12 @@ class AppController extends Controller {
 
     public function logoutCurrUser()
     {
-        $this->Cookie->destroy();
-        $this->Session->destroy();
+        if ($this->Cookie) {
+            $this->Cookie->destroy();
+        }
+        if ($this->Session) {
+            $this->Session->destroy();
+        }
         unset($this->currentUser);
     }
 
