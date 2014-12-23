@@ -189,7 +189,7 @@ class ShipPromotion extends AppModel {
 
             $mulNumsPss = $pss[TYPE_MUL_NUMS];
             if (!empty($mulNumsPss)) {
-                return $num * $singleShipFee;
+                return $num * $singleShipFee * 100;
             }
         }
 
