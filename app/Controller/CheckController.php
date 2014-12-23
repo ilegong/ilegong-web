@@ -25,9 +25,13 @@ class CheckController extends AppController{
             if($this->check_mobile($inputData['mobile'])){
                 $this->loadModel('MobileRegister');
                 $data = array();
-                $data['MobileRegister']['id'] = $inputData['mobile'];
-                $data['MobileRegister']['picture_code'] = $this->Kcaptcha->keyString;
-                $this->MobileRegister->save($data);
+                $data['mobile'] = $inputData['mobile'];
+                $data['picture_code'] = $this->Kcaptcha->keyString;
+                if($this->MobileRegister->hasAny(array('mobile' => $inputData['mobile']))){
+                    $this->MobileRegister->updateAll(array('picture_code'=> '\'' . $data['picture_code'] . '\''), array('mobile' => $inputData['mobile']));
+                }else{
+                    $this->MobileRegister->save($data);
+                }
             }
         }
     }
@@ -65,12 +69,12 @@ class CheckController extends AppController{
             }else if(isset($inputData['type']) && $inputData['type'] == 'app'){
                 //api接口操作
                 $this->loadModel('MobileRegister');
-                $register_data = $this->MobileRegister->find('first', array('conditions'=>array('id' => $inputData['mobile'])));
+                $register_data = $this->MobileRegister->find('first', array('conditions'=>array('mobile' => $inputData['mobile'])));
                 if(!empty($register_data) && $register_data['MobileRegister']['picture_code'] == $inputData['keystring']){
                     $res = message_send($msg, $inputData['mobile']);
                     $res = json_decode($res, true);
                     $res['timelimit'] = date('H:i',time()+20*60);
-                    $this->MobileRegister->updateAll(array('message_code'=>$verifyCode), array('id' => $inputData['mobile']));
+                    $this->MobileRegister->updateAll(array('message_code'=>$verifyCode), array('mobile' => $inputData['mobile']));
                 }else{
                     $res = array('error'=> 1, 'msg'=>'not found');
                 }
