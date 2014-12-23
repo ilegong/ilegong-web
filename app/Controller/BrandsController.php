@@ -32,7 +32,7 @@ class BrandsController extends AppController {
     			'Product.published' => 1, 
     			'Product.deleted' => 0
     		),
-    		'limit'=>'20',
+    		'limit'=>'100',
     	));
     	$this->set('products',$products);
         $this->set('op_cate', 'share');
