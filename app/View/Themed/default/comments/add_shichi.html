@@ -315,10 +315,15 @@
             return;
          }
 
-           if ($.trim($('#CommentBody').val()).length == 0) {
-               utils.alert("请填写评论内容");
+           if ($.trim($('#CommentBody').val()).length <= 50) {
+               utils.alert("评论内容不能少于50字");
                return;
            }
+           if ($.trim($('#Shichi_CommentPictures').val()).length ==0) {
+               utils.alert_one('亲，为保证评价客观性，请附上试吃商品的实物图片哦','知道了');
+               return;
+           }
+
 
         var referer = window.location.href;
         if (referer.indexOf('?') == -1) {
