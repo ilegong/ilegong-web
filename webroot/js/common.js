@@ -102,10 +102,10 @@ function updateCartItemCount()
     if (itemCount.length > 0 || cartBtn.length > 0 || cart_link.length > 0) {
         $.getJSON('/carts/cart_total.json', function (data) {
             if (data.count > 0) {
-                itemCount.html('购物车 <strong>'+data.count+'</strong> 件');
+                itemCount.text(data.count);
                 cartBtn.addClass('cart_icon_not_empty');
             } else {
-                itemCount.html('购物车');
+                itemCount.text('');
             }
         });
     }
