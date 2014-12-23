@@ -129,7 +129,7 @@ define('PAID_DISPLAY_PENDING', 'pending');
 define('KEY_APPLE_201410',  'qinyBTC1412');
 define('PROFILE_NICK_LEN', 16);
 define('PROFILE_NICK_MIN_LEN', 2);
-
+define('MSG_API_KEY','api:key-fdb14217a00065ca1a47b8fcb597de0d'); //发短信密钥
 
 global $page_style;
 global $pages_tpl;
@@ -972,3 +972,20 @@ function total_sold($pid, $range, $cartModel = null) {
 CakePlugin::load(array(
     'OAuth' => array('routes' => true)
 ));
+
+
+function message_send($msg=null, $mobilephone=null){
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "http://sms-api.luosimao.com/v1/send.json");
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    curl_setopt($ch, CURLOPT_USERPWD, MSG_API_KEY);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, array('mobile' => $mobilephone, 'message' => $msg.'【朋友说】'));
+    $res = curl_exec($ch);
+    //{"error":0,"msg":"ok"}
+    curl_close($ch);
+    return $res;
+}

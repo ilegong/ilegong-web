@@ -211,6 +211,8 @@ class KCAPTCHA{
 			header("Content-Type: image/x-png");
 			imagepng($img2);
 		}
+        // Free up memory
+        imagedestroy($img2);
 	}
 
 	// returns keystring
