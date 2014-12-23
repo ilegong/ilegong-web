@@ -97,7 +97,6 @@ function setCKEditorVal(form)
 function updateCartItemCount()
 {
     var itemCount = $('#item-count');
-    console.log(itemCount)
     var cartBtn = $('#card-btn');
     var cart_link = $('#cart_link');
     if (itemCount.length > 0 || cartBtn.length > 0 || cart_link.length > 0) {
