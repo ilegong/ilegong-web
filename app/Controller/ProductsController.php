@@ -241,15 +241,6 @@ class ProductsController extends AppController{
             }
         }
 
-        $this->set('category_control_name', 'products');
-    }
-
-    /**
-     * @param $ship_fee
-     * @return string
-     */
-    private function ship_desc_1($ship_fee) {
-        return ($ship_fee == 0 ? '包邮' : '邮费' . CakeNumber::precision($ship_fee / 100, 2) . '元');
         $currentUser = $_SESSION['Auth']['User'];
         if($currentUser){
             $this->loadModel('ViewedProduct');
@@ -257,7 +248,7 @@ class ProductsController extends AppController{
             $browsingHistoryProductsData = $this->ViewedProduct->find('first',
                 array(
                     'conditions' => array('uid' => $userId),
-               )
+                )
             );
             $viewedDataId = current($browsingHistoryProductsData)['id'];
         }
@@ -283,6 +274,7 @@ class ProductsController extends AppController{
         ));
 
         $this->set('browsing_history_products',$browsingHistoryProducts);
+
         if(count($browsing_history)>9){
             array_shift($browsing_history);
         }
@@ -296,6 +288,16 @@ class ProductsController extends AppController{
             ));
         }
         $this->Session->write('BrowsingHistory',$browsing_history);
+
+        $this->set('category_control_name', 'products');
+    }
+
+    /**
+     * @param $ship_fee
+     * @return string
+     */
+    private function ship_desc_1($ship_fee) {
+        return ($ship_fee == 0 ? '包邮' : '邮费' . CakeNumber::precision($ship_fee / 100, 2) . '元');
     }
 
 }
