@@ -135,7 +135,7 @@
         <div class="index_title">摇下20粒，西瑞东北珍珠米免费抢</div>
         <div class="tree"><img id="apple_tree_img"  src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/mi.gif" /></div>
         <div class="rock_num radius10">
-            <div class="fl" style="padding-left:0.9em;">已摇下<span id="apple_got_cnt">{{$total_apple}}</span>个, 还有<span id="apple_times_left">{{$total_times}}</span>次机会!</div>
+            <div class="fl" style="padding-left:0.9em;">已摇下<span id="apple_got_cnt">{{$total_apple}}</span>粒, 还有<span id="apple_times_left">{{$total_times}}</span>次机会!</div>
             <div class="fr"><a href="#about_us">加机会</a></div>
         </div>
         <a id="share_btn" href="javascript:;" class="share"><img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/shareicon.png" /></a>
@@ -277,13 +277,20 @@
         <div class="help_title">谁帮了我(<span id="helpme_cnt_n" class="red ">{{count($helpMe)}}</span>)</div>
         <div class="help_list">
             {{if $helpMe}}
-            <ul>
-                <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=60){break;} ?>
-                <li class="con clearfix">
-                    {{$item['nickname']}}<strong class="red gots">{{ $item['got'] }}</strong>粒
-                </li>
+                <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=60){break;} if ($i%2 ==1){continue;} ?>
+                <ul>
+                    <li class="con clearfix">
+                        {{$item['nickname']}}<strong class="red gots">{{ $item['got'] }}</strong>粒
+                    </li>
+                </ul>
                 <?php } ?>
-            </ul>
+                <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=60){break;} if ($i%2 == 0){continue;} ?>
+                <ul>
+                    <li class="con clearfix">
+                        {{$item['nickname']}}<strong class="red gots">{{ $item['got'] }}</strong>粒
+                    </li>
+                </ul>
+                <?php } ?>
             {{else}}
             <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！
                 <a id="share_btn_3" href="javascript:;" class="help">分享好友求助</a>
@@ -448,7 +455,7 @@
         function desc_normal() {
             var total = get_total();
             var my_list = parseInt($.trim($('#top_list_mine').text()));
-            return '万橙，比褚橙不只甜了一点点，'+ help_me_cnt() +'个好基友帮忙，我已经摇下'+total+'个万橙' + (my_list > 0 && my_list<1000 ? '，排名第' + my_list + '名' : '') + '－ 朋友说';
+            return '';
         }
 
         var shareTitle = '摇下20粒，西瑞东北珍珠米免费抢';
@@ -477,9 +484,9 @@
 
             var desc;
 //                    if (sh_src == 'jj1') {
-//                        desc = '药不能停，出门不吃（摇）怎行？有' + help_me_cnt() + '个好基友给我送药了！已基本治愈！领药请点击';
+//                        desc = '药不能停，出门不吃（摇）怎行？有' + help_me_cnt() + '颗好基友给我送药了！已基本治愈！领药请点击';
 //                    } else if(sh_src == 'zr') {
-//                        desc = '摇一摇，一千箱冰糖橙免费送！我已摇下' + get_total() + '个，你也来试试吧';
+//                        desc = '摇一摇，一千箱冰糖橙免费送！我已摇下' + get_total() + '颗，你也来试试吧';
 //                    } else {
                 desc = desc_cmp_friends();
 //                    }
