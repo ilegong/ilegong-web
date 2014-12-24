@@ -58,6 +58,20 @@ class Product extends AppModel {
         ),
     );
 
+    public function find_shichi_products($limit = 10) {
+        $results = $this->find('all', array('conditions' => array(
+            'status' => PRODUCT_STATUS_EXPR,
+            'published' => PUBLISH_YES,
+            'shichi_time >= NOW()',
+            ),
+            'fields' => array_merge(array('id'), explode(',', self::NO_VISIBLE_SIMPLE_FIELDS), array('shichi_time', 'shichi_price', 'shichi_number')),
+            'order' => 'shichi_time desc',
+            'limit' => $limit,
+            'recursive' => -1
+        ));
+        return $results;
+    }
+
     /**
      * @param $product_ids
      * @param array $extra_fields

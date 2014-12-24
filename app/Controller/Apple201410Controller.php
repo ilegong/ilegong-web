@@ -53,17 +53,20 @@ VALUES
         self::RICE_201411 => 50,
         self::MIHOUTAO1411 => 30,
         self::BTC1412 => 30,
+        self::XIRUI1412 => 20,
     );
 
     var $title_in_page = array(
         self::MIHOUTAO1411 => '摇下100个，最高1箱猕猴桃免费领',
         self::RICE_201411 => '摇下50个，大米优惠券免费送',
         self::BTC1412 => '摇下100个，1箱万橙免费领',
+        self::XIRUI1412 => '摇下20粒，西瑞东北珍珠米免费抢',
     );
     var $title_in_window = array(
         self::MIHOUTAO1411 => '摇下100个，最高一箱猕猴桃免费领',
         self::RICE_201411 => '摇下50个，大米优惠券免费送',
         self::BTC1412 => '摇下100个，1箱万橙免费领',
+        self::XIRUI1412 => '摇下20粒，西瑞东北珍珠米免费抢',
     );
     var $title_js_func = array(
         self::RICE_201411 => "'摇一摇免费兑稻花香大米券, 我已经有机会兑到'+total*10+'g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米-朋友说'",
