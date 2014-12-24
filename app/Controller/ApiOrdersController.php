@@ -60,7 +60,7 @@ class ApiOrdersController extends AppController {
                 'order_id' => NULL,
                 'creator'=> $this->currentUser['id'],
             ),
-            'fields' => array('id', 'name', 'product_id', 'name', 'price', 'coverimg', 'used_coupons'),
+            'fields' => array('id', 'name', 'product_id', 'num', 'name', 'price', 'coverimg', 'used_coupons'),
         ));
         $total_price = 0;
         foreach($Carts as $cart){
