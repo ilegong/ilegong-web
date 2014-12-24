@@ -28,7 +28,41 @@
         	echo $this->Form->input('id');
             echo $this->Form->input('nickname');
             echo $this->Form->input('email');
-            echo $this->Form->input('sex');
+            ?>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">手机号码</label>
+                <div class="col-sm-10">
+                    <input name="data[User][mobilephone]" readonly class="form-control" maxlength="50" type="text" value="{{$this->request['data']['User']['mobilephone']}}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">性别</label>
+                <div class="col-sm-10">
+                    <label class="radio-inline">
+                        {{if $this->request['data']['User']['sex']==1}}
+                            <input type="radio" name="data[User][sex]" value="1" checked="checked"> 男
+                        {{else}}
+                             <input type="radio" name="data[User][sex]" value="1"> 男
+                        {{/if}}
+                    </label>
+                    <label class="radio-inline">
+                        {{if $this->request['data']['User']['sex']==2}}
+                        <input type="radio" name="data[User][sex]" value="2" checked="checked"> 女
+                        {{else}}
+                        <input type="radio" name="data[User][sex]" value="2"> 女
+                        {{/if}}
+                    </label>
+                    <label class="radio-inline">
+                        {{if (!$this->request['data']['User']['sex']||$this->request['data']['User']['sex']==3)}}
+                        <input type="radio" name="data[User][sex]" value="3" checked="checked"> 保密
+                        {{else}}
+                        <input type="radio" name="data[User][sex]" value="3"> 保密
+                        {{/if}}
+                    </label>
+                </div>
+            </div>
+            <?php
+
             echo $this->Form->input('idcard');
         ?>
         </fieldset>
