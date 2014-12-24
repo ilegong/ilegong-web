@@ -62,7 +62,7 @@ class ShipPromotion extends AppModel {
             array('id' => 38, 'ship_price' => 10.0, 'time' => '', 'address' => '朝阳自提（超过10个发货), 运送费：每个10元。地址: 劲松二区208楼底商晨阳惠友商店（眉州东坡酒楼劲松店西侧小路向北50米）67720201'),
             array('id' => 39, 'ship_price' => 10.0, 'time' => '', 'address' => '丰台自提（超过10个发货), 运送费：每个10元。地址: 六里桥桥南西行200米西局西路58号院，底商58-31，国烟国酒超市 63770644'),
             array('id' => 40, 'ship_price' => 10.0, 'time' => '', 'address' => '海淀自提（超过10个发货), 运送费：每个10元。地址: 健德门桥东北200米京客隆超市 62059955'),
-            array('id' => 41, 'ship_price' => 10.0, 'time' => '', 'address' => '通州自提（超过20个发货), 运送费：每个10元。地址: 九棵树翠屏里20号楼23 81524153'),
+//            array('id' => 41, 'ship_price' => 10.0, 'time' => '', 'address' => '通州自提（超过20个发货), 运送费：每个10元。地址: 九棵树翠屏里20号楼23 81524153'),
         )
     ),
     '240' => array('limit_ship' => true,
@@ -115,7 +115,7 @@ class ShipPromotion extends AppModel {
         //total_limit(0 means none), brand_id, per_user_limit (0 means none)
         '228' => array(100, 13, 1),
         '229' => array(80, 13, 1),
-        PRODUCT_ID_CAKE => array(2084, 74, 0),
+        PRODUCT_ID_CAKE => array(2584, 74, 0),
         '240' => array(306, 78, 1 ),
         '259' => array(303, 78, 1 ),
         '204' => array(135, 65, 0 ),
