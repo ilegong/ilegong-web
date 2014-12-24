@@ -250,7 +250,8 @@ class ProductsController extends AppController{
                     'conditions' => array('uid' => $userId),
                 )
             );
-            $viewedDataId = current($browsingHistoryProductsData)['id'];
+            $cur = current($browsingHistoryProductsData);
+            $viewedDataId = $cur['id'];
         }
         $browsing_history = $_SESSION['BrowsingHistory'];
         if(!$browsing_history){
