@@ -23,6 +23,7 @@ class Apple201410Controller extends AppController
     const RICE_201411 = 'rice201411';
     const MIHOUTAO1411 = 'mihoutao1411';
     const BTC1412 = 'qinyBTC1412';
+    const XIRUI1412 = 'xirui1412';
 
     /*
      * INSERT INTO `cake_game_configs` (`game_type`, `day_limit`, `created`, `modified`, `game_obj_name`, `game_end`, `game_start`) VALUES
@@ -30,6 +31,9 @@ class Apple201410Controller extends AppController
     ('rice201411', 20, NULL, NULL, '苹果', '2014-11-15 23:59:59', ''),
     ('Choupg1411', 10, NULL, NULL, '苹果', '2014-11-17 23:59:59', ''),
     ('mihoutao1411', 0, NULL, NULL, '猕猴桃', '2014-12-03 23:59:59', '2014-11-26 00:00:00')
+    INSERT INTO `cake_game_configs` (`game_type`, `day_limit`, `created`, `modified`, `game_obj_name`, `game_end`, `game_start`)
+VALUES
+	('xirui1412', 50, NULL, NULL, '大米', '2014-12-30 23:59:59', '2014-12-24 00:00:00');
     ;
      */
 
@@ -65,6 +69,9 @@ class Apple201410Controller extends AppController
         self::RICE_201411 => "'摇一摇免费兑稻花香大米券, 我已经有机会兑到'+total*10+'g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米-朋友说'",
 //        self::MIHOUTAO1411 => "'摇一摇一起免费兑有机猕猴桃红包，我已经摇下'+total+'个猕猴桃，兑到'+ game_mihoutao_hongbao(total) +'元红包啦 -- 城市里的乡下人张慧敏分享有机种植眉县猕猴桃 -- 朋友说'",
         self::MIHOUTAO1411 => "'摇一摇一起免费兑有机猕猴桃红包，我已经摇下'+total+'个猕猴桃，兑到XX元红包啦 -- 城市里的乡下人张慧敏分享有机种植眉县猕猴桃 -- 朋友说'",
+    );
+    var $customized_view_files = array(
+        self::XIRUI1412 => 'xirui_rice'
     );
 
     const BTC_DAILY_AWARD_LIMIT = 20;
@@ -619,6 +626,11 @@ class Apple201410Controller extends AppController
         $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
         $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $current_uid, 'type' => $gameType)));
         $this->set('today_got_wx', $this->gotWxTimesToday($weixinTimesLog, mktime()));
+
+        $customized_game = $this->customized_view_files[$gameType];
+        if (!empty($customized_game)) {
+            $this->__viewFileName = $customized_game;
+        }
     }
 
     public function shake($gameType)
