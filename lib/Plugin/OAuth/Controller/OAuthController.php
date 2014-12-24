@@ -33,6 +33,8 @@ class OAuthController extends OAuthAppController {
 	public function beforeFilter() {
 		parent::beforeFilter();
 		//$this->OAuth->authenticate = array('fields' => array('username' => 'email'));
+        $this->Auth->allow('register');
+        $this->OAuth->allow('register');
 		$this->Auth->allow($this->OAuth->allowedActions);
 		$this->Security->blackHoleCallback = 'blackHole';
 	}
@@ -198,5 +200,54 @@ class OAuthController extends OAuthAppController {
 			throw new BadRequestException(__d('OAuth', 'The request has been black-holed'));
 		}
 	}
+
+    public function register(){
+        $this->autoRender = false;
+        if (!isset($inputData)) {
+            $inputData = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST : $_GET;
+        }
+        header("HTTP/1.1 " . '400 Bad Request');
+        if(!$inputData['mobile'] || !$inputData['password'] || !$inputData['code'] || !$inputData['client_id'] ){
+            echo json_encode(array('error'=>1, 'error_description'=>'input data wrong'));
+            exit();
+        }
+        $mobile = intval($inputData['mobile']);
+        $this->loadModel('MobileRegisters');
+        $app_register = $this->MobileRegisters->find('first', array('conditions' => array('mobile' => $mobile)));
+        if($app_register['MobileRegisters']['message_code'] == $inputData['code']){
+            $userM = ClassRegistry::init('User');
+            $userM->create();
+            $data = array();
+            $data['User']['role_id'] = Configure::read('User.defaultroler'); // Registered defaultroler
+            $data['User']['activation_key'] = md5(uniqid());
+            $data['User']['nickname'] = trim($inputData['nickname']);
+            $data['User']['mobilephone'] = $mobile;
+            if (mb_strlen($data['User']['nickname'], 'UTF-8') < 1) {
+                echo json_encode(array('error'=>2, 'error_description'=>'nickname too short'));
+                exit();
+            }else if ($userM->hasAny(array('User.mobilephone' => $data['User']['mobilephone']))){
+                echo json_encode(array('error'=>2, 'error_description'=>'Mobile is taken by others'));
+                exit();
+            }else if($userM->hasAny(array('User.username' => $data['User']['mobilephone']))){
+                echo json_encode(array('error'=>2, 'error_description'=>'Mobile is taken by older'));
+                exit();
+            } else{
+                $data['User']['password'] = Security::hash($inputData['password'], null, true);
+                $data['User']['uc_id'] = APP_REGISTER_MARK;
+                if ($userM->save($data)) {
+                    //$user_id = $userM->getLastInsertID();
+                    //$token = $this->OAuth->createAccessToken($inputData['client_id'], $user_id);
+                    //echo json_encode($token);
+                    echo json_encode(array('error'=>0, 'error_description'=>'register success'));
+                } else {
+                    echo json_encode(array('error'=>3, 'error_description'=>'saving wrong'));
+                    exit();
+                }
+            }
+        }else {
+            echo json_encode(array('error'=>4, 'error_description'=>'code wrong'));
+            exit();
+        }
+    }
 
 }

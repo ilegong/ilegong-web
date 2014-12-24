@@ -137,6 +137,7 @@ define('KEY_APPLE_201410',  'qinyBTC1412');
 define('PROFILE_NICK_LEN', 16);
 define('PROFILE_NICK_MIN_LEN', 2);
 define('MSG_API_KEY','api:key-fdb14217a00065ca1a47b8fcb597de0d'); //发短信密钥
+define('APP_REGISTER_MARK', 11); //APP注册用户标示
 
 global $page_style;
 global $pages_tpl;
