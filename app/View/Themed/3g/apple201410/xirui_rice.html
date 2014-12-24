@@ -111,6 +111,10 @@
     /*米的故事*/
     .story img{ width:100%;}
 
+    /*关于我们*/
+    .aboutus{ margin-top:2em; text-align:center; font-size:0.8em; color:#999999; line-height:1.3em;}
+    .aboutus img{ width:4.125em; height:1.667em;}
+
     /*抽奖*/
     .cj{ text-align:center; margin-top:1.2em; position:relative;}
     .cj img{ width:18em; height:18em;}
@@ -119,6 +123,7 @@
     .cj_tip{ border-top:1px #dddddd solid; padding-top:0.8em; font-size:0.9em; color:#666666; text-align:left; color:#666666; line-height:1.7em;}
     .cj_tip label{ color:#ff4a49;}
     .cj_tip i{ text-decoration:underline;}
+    .to_top {text-align: center}
 </style>
 <div id="fullpage">
     <div class="section">
@@ -181,35 +186,66 @@
         </ul>
     </div>
 
+
     <div class="section">
-        <div class="ranking" style="background-image: url({{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/rice_xirui/award/bg.jpg')}}); min-height: 100%; padding: 0.5em 0.5em 0.2em 0.5em">
-            <img src="{{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/rice_xirui/award/title.png')}}" />
-            <a href="#firstPage" class="help radius10">去秒杀</a>
-            <div class="ranking_notice radius10">今日已秒出 <span id="award_list_total"></span>箱 <span style="padding-left: 2em" id="award_list_update">正在更新...</span></div>
-            <div id="award_contents" style="margin:0 1.2em; height: 100%; overflow-y: hidden; overflow-x:hidden;">
-            </div>
-            <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none">
-                <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/btc/story/top.gif')}}" /></a></li>
+        <div class="help_title">我的奖品</div>
+        <div class="help_list">
+            <ul>
+                <li>你还没有抽到奖品</li>
             </ul>
+            <!--<ul>
+                <li>1元优惠券</li>
+                <li>5元优惠券</li>
+                <li>西瑞谷物圈100g</li>
+                <li>西瑞东北珍珠米2.5kg</li>
+            </ul>
+            <ul>
+                <li>1元优惠券</li>
+                <li>5元优惠券</li>
+                <li>1元优惠券</li>
+                <li>西瑞东北珍珠米2.5kg</li>
+            </ul>-->
         </div>
+        <ul class="clearfix" style="width: 30%; margin: 0 auto; margin-top: 0.5em;">
+            <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/btc/story/top.gif')}}" /></a></li>
+        </ul>
+    </div>
+
+
+    <div class="section">
+        <div class="cj">
+            <img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/cj/cj1.gif" />
+            <a href="javascript:;"><img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/cj/start.png" /></a>
+        </div>
+        <!--获奖提示-->
+        <div style=" display:none;">
+            <div style="position:relative;" class="tip_bg radius10">
+                <a class="close" href="#X"><img src="images/index/close.png" /></a>
+                <span style="padding-top:0;">恭喜你, 获得一张&nbsp;<strong>3</strong>&nbsp;元优惠券<br /><label>(限朋友西瑞食品微店所有产品使用)</label></span>
+                <a href="#X" class="cjbtn radius10">去购买</a>
+            </div>
+        </div>
+        <div class="cj_banner">
+            <img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/cj/cj_banner.jpg" />
+            <a href="/b/xi_rui_ji_tuan.html">去店铺瞧瞧</a>
+        </div>
+        <!--大奖提示-->
+        <div style=" display:none;">
+            <div style="position:relative; width:75%;" class="tip_bg radius10">
+                <a class="close" href="#X"><img src="images/index/close.png" /></a>
+                <span style="padding-top:0;">恭喜你, 获得&nbsp;<strong>2.5kg</strong>&nbsp;东北珍珠米<br />你的兑换码是 <strong>gjo343</strong></span>
+                <div class="cj_tip">
+                    <label>领奖方式</label><br />
+                    在电脑上登录天猫网站<label>www.tianmao.com</label>，搜索<label>”西瑞食品旗舰店”</label>,进入店铺，找客服回复以下文字：<br /><i>您好！我是朋友说用户，通过摇一摇游戏，获得西瑞集团提供的2.5kg西瑞东北珍珠米，我的兑码是gjo343，感谢西瑞集团！</i>
+                </div>
+            </div>
+        </div>
+        <ul class="clearfix" style="width: 30%; margin: 0 auto; margin-top: 0.5em;">
+            <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/btc/story/top.gif')}}" /></a></li>
+        </ul>
     </div>
 
     <div class="section">
-        <div class="ranking" style="background-image: url({{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/rice_xirui/ranking/bg.jpg')}}); min-height: 100%">
-            <img src="{{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/rice_xirui/ranking/title.png')}}" />
-            <div class="ranking_notice radius10">我的排名：<span id="top_list_mine"></span><span style="padding-left: 2em">活动已结束，前20名请拨打<a href="tel:13693655401">13693655401</a>领取奖品</span><!--你当前摇到了10个,还没有进入排名,要多多努力哦!--></div>
-            <div style="margin:0 1.2em; height: 100%; overflow-y: hidden; overflow-x:hidden;">
-                <ul id="top_list_contents_left"></ul>
-                <ul id="top_list_contents_right"></ul>
-            </div>
-            <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none">
-                <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/btc/story/top.gif')}}" /></a></li>
-            </ul>
-        </div>
-    </div>
-
-    <div class="section">
-
         <div class="chance_title">摇一摇加机会秘诀</div>
         <div class="chance_tip">
             <ul>
@@ -221,76 +257,42 @@
             <a href="/?from=game_{{$game_type}}" class="sharebtn radius10">购物加机会</a>
             <a id="share_btn_2"  href="javascript:;" class="sharebtn radius10">分享好友求点</a>
         </div>
+        <div class="aboutus">
+            <img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/logo.png" /><br />
+            [朋友说]同事间互相分享家乡特产的创业网站,<br />
+            我们都是城市里的乡下人。
+        </div>
         <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none; padding-top: 0">
             <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/btc/story/top.gif')}}" /></a></li>
         </ul>
-
     </div>
 
     <div class="bg_green pad section">
-        <div class="title"><span id="helpme_cnt_n" class="red ">{{count($helpMe)}}</span>个朋友帮了我</div>
-        {{if $helpMe}}
-        <ul>
-        <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=60){break;} ?>
-        <li class="con clearfix">
-            {{$item['nickname']}}<strong class="red gots">{{ $item['got'] }}</strong>个
-        </li>
-        <?php } ?>
-        </ul>
-        {{else}}
-        <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！
-            <a id="share_btn_3" href="javascript:;" class="help">分享好友求助</a>
+        <div class="help_title">谁帮了我(<span id="helpme_cnt_n" class="red ">{{count($helpMe)}}</span>)</div>
+        <div class="help_list">
+            {{if $helpMe}}
+            <ul>
+                <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=60){break;} ?>
+                <li class="con clearfix">
+                    {{$item['nickname']}}<strong class="red gots">{{ $item['got'] }}</strong>粒
+                </li>
+                <?php } ?>
+            </ul>
+            {{else}}
+            <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！
+                <a id="share_btn_3" href="javascript:;" class="help">分享好友求助</a>
+            </div>
+            {{/if}}
         </div>
-        {{/if}}
         <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none">
             <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/btc/story/top.gif')}}" /></a></li>
         </ul>
     </div>
     </div>
-
-    <?php /*
-    <div  id="friends" class="bg_green pad section">
-        <div class="title"><strong id="helpme_cnt" class="red">{{count($helpMe)}}</strong>个朋友帮了我</div>
-            {{if $helpMe}}
-            {{loop $helpMe $key $item}}
-                <div class="con clearfix">
-                    <div class="fl name">{{$item['nickname']}}</div>，<div class="fl">摇到了<strong class="red">
-                    {{if $game_type == 'rice201411'}}
-                    {{$item['got']*10}}</strong>g大米
-                    {{else}}
-                    {{ $item['got'] }}</strong>个
-                    {{/if}}
-                </div>
-                </div>
-            {{/loop}}
-            {{else}}
-                <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！</div>
-            {{/if}}
-    </div>
-
-    <div id="friendsIhelped" class="bg_orange pad section">
-        <div class="title">我帮过<strong class="red">{{count($meHelp)}}</strong>个朋友</div>
-        {{if $meHelp}}
-        {{loop $meHelp $key $item}}
-        <div class="con clearfix">
-            <div class="fl name">{{$item['nickname']}}</div>，<div class="fl">摇到了<strong class="red">
-            {{if $game_type == 'rice201411'}}
-            {{$item['got']*10}}</strong>g大米
-            {{else}}
-            {{ $item['got'] }}</strong>个
-            {{/if}}
-         </div>
-        </div>
-        {{/loop}}
-        {{else}}
-        <div class="con clearfix">你竟然还没有帮过朋友！</div>
-        {{/if}}
-    </div>
-    */ ?>
 </div>
 <!--领奖方式层-->
 <div id="view_get_jiang_pin" class="apple_share in modal" style="display:none;margin-top: 40px; margin-left: auto; margin-right: auto;" onclick="$(this).hide();">
-    <ul class="rule_bg radius10" style="position:relative;">
+    <ul class="rule_bg radius10" style="position:relative; margin: 2em auto 0;">
         <li class="title">一等奖和二等奖领奖方式</li>
         <li>在电脑上登录天猫网站<span>www.tianmao.com</span>，搜索<span>”西瑞食品旗舰店”</span>,进入店铺，找客服回复以下文字：</li>
         <li><span>一等奖回复: </span></li>
@@ -306,7 +308,7 @@
     var shake_pic_url = '{{$this->Html->assetUrl("http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/migif.gif?1")}}';
     var sound_url = 'http://51daifan-images.stor.sinaapp.com/tree_shake.mp3';
     var share_png_url = '{{$this->Html->assetUrl("http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/share.png")}}';
-    var yao_tips_png = '{{$this->Html->assetUrl("http://51daifan-images.stor.sinaapp.com/as/btc/index/yao.png")}}';
+    var yao_tips_png = '{{$this->Html->assetUrl("http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/yao.png")}}';
     var game_type = '{{$game_type}}';
     var game_page_title = {{if !empty($title_func)}}function(total){ return {{$title_func}};} {{else}} null {{/if}};
     var game_obj_name = '{{$game_obj_name}}';
@@ -326,7 +328,7 @@
             css3: true,
             loopBottom: true,
             loopTop: true,
-            anchors: ['firstPage', 'product_story', 'get_coupons', 'award_list', 'top_list', 'about_us', 'friends']
+            anchors: ['firstPage', 'product_story', 'get_coupons', 'my_award', 'top_list', 'about_us', 'friends']
         });
 
         var today_sold_out = '{{$today_sold_out}}';
@@ -346,63 +348,6 @@
         }).get();
 
 
-        var miaosha_span = $('#miaosha_time_desc');
-        var miaosha_btn = $('#miaosha_btn');
-
-        miaosha_btn.click(function(){
-
-            if (can_miaosha()) {
-                var lefttime = 60;
-                utils.progress_notify('正在秒杀...(<span id="miaosha_left">'+lefttime+'</span>)');
-                setTimeout( function() {
-                    $.getJSON('/apple_201410/jp/{{$game_type}}?' + Math.random(), {}, function (data) {
-                        utils.close_notify();
-                        if (data.success) {
-                            if (data.award_type != 0) {
-                                var tips = '恭喜您秒中价值'+data.award_type+'元的优惠券，可兑一箱冰糖橙！<b>分享到朋友圈就能领取啦～</b>';
-                                utils.alert_one(tips, '分享到朋友圈', function(){
-                                    if($shaking_tips_png){
-                                        $share_before_coupon = true;
-                                        awarded = true;
-                                        $share_div.show();
-                                    }
-                                });
-                            } else {
-                                var msg = '';
-                                if (data.msg == 'not_enough_100') {
-                                    msg = '秒杀失败！摇下越多机会越大，您摇下的橙子还不够多，请继续努力';
-                                }
-                                else if (data.msg == 'no_more') {
-                                    msg = '本时段秒杀商品已经全部抢完。 <a href="#award_list">查看中奖名单</a>';
-                                    miaosha_btn.removeClass('help').addClass('seckill');
-                                    today_sold_out = true;
-                                    checking_miaosha();
-                                }
-                                else if (data.msg == 'game_end') {
-                                    msg = '活动已结束';
-                                } else {
-                                    msg = '手气不太好啊, 请重试！';
-                                }
-                                utils.alert(msg, null);
-                            }
-                        } else {
-                        }
-                    });
-                }, 1000);
-
-                var timespan = $('#miaosha_left');
-                function decreaseTime() {
-                    lefttime--;
-                     timespan.text(lefttime);
-                    if (lefttime > 0) {
-                        setTimeout(decreaseTime, 1000);
-                    }
-                }
-                setTimeout(decreaseTime, 1000);
-            } else {
-                utils.alert( today_sold_out ? '本时段已经全部抢完，请等待下一时段开秒，<a href="#award_list">查看中奖名单</a>。 您也可以选择兑换优惠券。' : '整点开秒，还差'+format_left(calculate_left(), ''), function(){ checking_miaosha(); });
-            }
-        });
 
         function azero(v) {
             return  (v < 10) ?  ('0'+''+v) : v;
@@ -510,14 +455,16 @@
         }
 
         function desc_cmp_friends() {
-            var desc = '摇一摇，一千箱冰糖橙免费送! 我已摇下' + get_total() + '个';
-            if (friendGots && friendGots.length > 0) {
-                var dabaiPercent = dabai_percent();
-                desc += (dabaiPercent == 100 ? ', 打败了所有好友，哈哈' : (dabaiPercent == 0 ? ', 朋友圈里垫底 ^_^， 快点我吧' : ', 打败了' + dabaiPercent + '%的好友！'));
-            } else {
-                desc += ', 还没人帮过我！快来帮我吧';
-            }
-            return desc;
+
+//            var desc = '摇一摇，一千箱冰糖橙免费送! 我已摇下' + get_total() + '个';
+//            if (friendGots && friendGots.length > 0) {
+//                var dabaiPercent = dabai_percent();
+//                desc += (dabaiPercent == 100 ? ', 打败了所有好友，哈哈' : (dabaiPercent == 0 ? ', 朋友圈里垫底 ^_^， 快点我吧' : ', 打败了' + dabaiPercent + '%的好友！'));
+//            } else {
+//                desc += ', 还没人帮过我！快来帮我吧';
+//            }
+//            return desc;
+            return '摇一摇 ，西瑞珍珠米5斤轻松免费抢，我已摇下20粒，大奖等你来';
         }
 
         checking_miaosha();
@@ -527,57 +474,16 @@
             var my_list = parseInt($.trim($('#top_list_mine').text()));
             return '万橙，比褚橙不只甜了一点点，'+ help_me_cnt() +'个好基友帮忙，我已经摇下'+total+'个万橙' + (my_list > 0 && my_list<1000 ? '，排名第' + my_list + '名' : '') + '－ 朋友说';
         }
-        var shareTitle = '摇下100个，1箱万橙免费领';
+        var shareTitle = '摇下20粒，西瑞东北珍珠米免费抢';
 
         function getRandomInt(min, max) {
             return Math.floor(Math.random() * (max - min)) + min;
         }
 
-        function can_exchange_desc() {
-            var total = total_not_spent();
-            if (total >= 100) {
-                return '2张30元优惠券';
-            } else if (total >= 80) {
-                return '1张20元＋1张15元优惠券';
-            } else if (total >= 50) {
-                return '1张20元优惠券';
-            } else if (total >= 30) {
-                return '1张15元优惠券';
-            } else {
-                return false;
-            }
-        }
-
-        function exchane_coupon_click() {
-            var canExchangeDesc = can_exchange_desc();
-            var msg = '<div class="alert alert-danger" style="margin-bottom: 0.5em; margin-top:0.5em">'+ (canExchangeDesc? '恭喜，您可以兑换' + canExchangeDesc : '亲，再摇'+(30 - total_not_spent())+'个就可以兑换啦^_^')+'</div>' +
-                    '<div class="panel panel-warning"><div class = "panel-heading">兑换规则</div>' +
-                    '<table class="table  table-condensed">' +
-                    '<tr><td>30个</td><td>15元优惠券(7.4折)</td></tr>' +
-                    '<tr><td>50个</td><td>20元优惠券(6.5折)</td></tr>' +
-                    '<tr><td>100个</td><td>2张30元优惠券(4.8折)</td></tr>' +
-                    '</table></div>'
-                    ;
-            if (game_user_total > total_not_spent()) {
-                msg += '<div class="text-right"><a href="/users/my_coupons.html">查看我的优惠券</a></div>';
-            }
-            if (canExchangeDesc) {
-                utils.alert_two(msg, '去兑换', '继续摇', function () {
-                    $.fn.fullpage.moveTo('get_coupons');
-                }, null, {top:'5%', 'margin-top':'0'});
-            } else {
-                utils.alert_one(msg, '继续摇', null, {top:'5%', 'margin-top':'0'});
-            }
-        }
-
-        $('#go_exchange_btn').click(function(){
-            exchane_coupon_click();
-        });
-
         $('#view_my_coupons').click(function(e){
             if (game_user_total <= total_not_spent()) {
                 e.preventDefault();
-                utils.alert_one('您还没摇到优惠券', '关闭');
+                utils.alert_one('您还没抽到优惠券', '关闭');
                 return false;
             }
         });
@@ -629,65 +535,14 @@
                 });
             }
         }, false);
-
-        var top_list = {{if $top_list}}{{$top_list}} {{else}}''{{/if}};
-        if (top_list && top_list.top_list){update_top_list(top_list.top_list); }
-
-        var award_list = {{if $award_list}} {{$award_list}} {{else}}''{{/if}};
-        if (award_list && award_list.award_list){update_award_list(award_list.award_list); }
     });
 
     function game_coupon_message(times, total) {
-        if (total < 30)  { return '<br/><small>差<span class="apple_numbers">' + (30 - total) + '</span>个就能兑换<span class="apple_numbers">15</span>元优惠券</small>'; }
-        else if (total < 50) {return '<br/><small>差<span class="apple_numbers">' + (50 - total) + '</span>个就能兑换<span class="apple_numbers">30</span>元优惠券</small>';}
-        else if (total < 100) {return '<br/><small>差<span class="apple_numbers">' + (100 - total) + '</span>个就可以参加一箱免费秒杀</small>';}
+        if (total < 20)  { return '<br/><small>差<span class="apple_numbers">' + (20 - total) + '</span>粒就可以抽奖啦</small>'; }
         else return '';
     }
 
     function showAfterGotCallback(times, total, got){
-    }
-
-    function update_top_list(top_list) {
-        var uid = '{{$CurrentUser["id"]}}';
-        var list = top_list['list'],  update_time = top_list['update_time'], user_pos = top_list['user_pos'];
-        if (user_pos && user_pos[uid]) {
-            $('#top_list_mine').text(user_pos[uid] > 0 ? user_pos[uid] : '1000名以后');
-        }
-        if (top_list['user_total'] && top_list['user_total'][uid]) {
-            game_user_total = top_list['user_total'][uid];
-        }
-        if(list) {
-            $('#top_list_update').html('更新时间:' + update_time);
-            var uls = [$('#top_list_contents_left'), $('#top_list_contents_right')];
-            uls[0].html(''); uls[1].html('');
-
-            var mid = Math.round(list.length/2);
-            for(var i = 0; i < list.length; i++) {
-                var item = list[i];
-                uls[ i >= mid ? 1 : 0 ].append('<li class="clearfix"><span style="width:75%;">'+(i+1)+'、'+item[0]+'</span> <span style="width:25%;">'+item[1]+'个</span> </li>');
-            }
-        }
-    }
-
-    function update_award_list(award_list) {
-        var list = award_list['list'],  update_time = award_list['update_time'], today_awarded = award_list['today_awarded'];
-        $('#award_list_total').text(today_awarded ? today_awarded : 0);
-        if(list) {
-            $('#award_list_update').html('更新时间:' + update_time);
-            var $awardContents = $('#award_contents');
-            $awardContents.html('<ul></ul><ul></ul><ul></ul>');
-
-            var uls = [];
-            uls.push($awardContents.find('ul:nth-child(1)'));
-            uls.push($awardContents.find('ul:nth-child(2)'));
-            uls.push($awardContents.find('ul:nth-child(3)'));
-//            uls.push($awardContents.find('ul:nth-child(4)'));
-
-            for(var i = 0; i < list.length; i++) {
-                var item = list[i];
-                uls[ i % uls.length ].append('<li>'+item+'</li>');
-            }
-        }
     }
 </script>
 {{$this->Html->script(array('apple_game.js?v24'));}}
