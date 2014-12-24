@@ -379,33 +379,6 @@
         }
 
 
-        var timer_intervalId = null;
-        function checking_miaosha() {
-            if (can_miaosha()) {
-                miaosha_btn.removeClass('seckill').addClass('help');
-                miaosha_span.text('立即秒杀');
-            } else {
-                var dif = calculate_left();
-                if (timer_intervalId) {
-                    clearInterval(timer_intervalId);
-                    timer_intervalId = null;
-                }
-                timer_intervalId = setInterval(function () {
-
-                    if (dif < 1) {
-                        clearInterval(timer_intervalId);
-                        timer_intervalId = null;
-                        today_sold_out = false;
-                        checking_miaosha();
-                        return;
-                    }
-
-                    miaosha_span.text('倒计时 ' + format_left(dif, ':'));
-                    dif--;
-                }, 1000);
-            }
-        }
-
         function total_not_spent() {
             var total = $.trim($('#apple_got_cnt').text());
             total = total != '' ? parseInt(total) : 0;
@@ -466,8 +439,6 @@
 //            return desc;
             return '摇一摇 ，西瑞珍珠米5斤轻松免费抢，我已摇下20粒，大奖等你来';
         }
-
-        checking_miaosha();
 
         function desc_normal() {
             var total = get_total();
