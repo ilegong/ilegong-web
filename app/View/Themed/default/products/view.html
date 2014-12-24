@@ -1,173 +1,184 @@
 <div class="main details">
-<h1><a href="/">首页</a> > <a href="{{$history}}">{{$tag}}</a> > <a href="#">{{$Product['Product']['name']}}</a></h1>
-<div class="clearfix">
-    {{if count($Product['Uploadfile'])>0 }}
-    <div class="fl">
-        {{template Elements/images_sild}}
-    </div>
-    {{/if}}
-    <div class="fl name">
-        <h1>{{$Product['Product']['name']}}</h1>
-        {{if $Product['Product']['promote_name'] }}
-            <p class="borderb">{{$Product['Product']['promote_name']}}</p>
+    <h1><a href="/">首页</a> > <a href="{{$history}}">{{$tag}}</a> > <a href="#">{{$Product['Product']['name']}}</a></h1>
+
+    <div class="clearfix">
+        {{if count($Product['Uploadfile'])>0 }}
+        <div class="fl">
+            {{template Elements/images_sild}}
+        </div>
         {{/if}}
-        <ul class="clearfix pt15">
-            <li class="title">价格:</li>
-            <li><strong class="price">￥{{$this->Number->precision($Product['Product']['price'], 2)}}</strong>
-                {{if !empty($Product['Product']['original_price'])}}
+        <div class="fl name">
+            <h1>{{$Product['Product']['name']}}</h1>
+            {{if $Product['Product']['promote_name'] }}
+            <p class="borderb">{{$Product['Product']['promote_name']}}</p>
+            {{/if}}
+            <ul class="clearfix pt15">
+                <li class="title">价格:</li>
+                <li><strong class="price">￥{{$this->Number->precision($Product['Product']['price'], 2)}}</strong>
+                    {{if !empty($Product['Product']['original_price'])}}
                     <span class="mar_price">¥{{$this->Number->precision($Product['Product']['original_price'], 2)}}</span>
-                {{/if}}
-            </li>
-        </ul>
-        <!--<ul class="clearfix">-->
+                    {{/if}}
+                </li>
+            </ul>
+            <!--<ul class="clearfix">-->
             <!--<li class="title">促销信息:</li>-->
             <!--<li class="radius5 red_packet">有红包</li>-->
-        <!--</ul>-->
-        <ul class="clearfix">
-            <li class="title">累计评价:</li>
-            <li class="green">已有{{$Product['Product']['comment_nums']}}人评价</li>
-        </ul>
-        <ul class="clearfix borderb pb15">
-            <li class="title">服务:</li>
-            <li>由 <strong>{{$brand['Brand']['name']}}</strong> 发货并提供售后服务</li>
-            <div style="position:relative;">
-                <ul class="clearfix">
-                    <li class="title">运费:</li>
-                    <li class="yunfei clearfix">
-                        <span>{{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</span>
-                    </li>
-                </ul>
-            </div>
-        </ul>
-
-        <ul class="clearfix pt15">
-            <li class="title">数量:</li>
-            <li>
-                <div class="wrap_input">
-                    <a class="btn_reduce"></a>
-                    <input id="input_pamount" class="fl text" item-id="{{$Product['Product']['id']}}" size="3" value="1" name="shoppingnum" type="text">
-                    <a class="btn_add"></a>
+            <!--</ul>-->
+            <ul class="clearfix">
+                <li class="title">累计评价:</li>
+                <li class="green">已有{{$Product['Product']['comment_nums']}}人评价</li>
+            </ul>
+            <ul class="clearfix borderb pb15">
+                <li class="title">服务:</li>
+                <li>由 <strong>{{$brand['Brand']['name']}}</strong> 发货并提供售后服务</li>
+                <div style="position:relative;">
+                    <ul class="clearfix">
+                        <li class="title">运费:</li>
+                        <li class="yunfei clearfix">
+                            <span>{{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</span>
+                        </li>
+                    </ul>
                 </div>
-            </li>
-        </ul>
-        <div class="clearfix tb_action">
-            <a class="tb_btn_buy fl" item-id="{{$Product['Product']['id']}}" href="javascript:void(0)" id="btn_quick_buy">立即购买</a>
-            <a class="tb_btn_basket fl" item-id="{{$Product['Product']['id']}}" href="javascript:void(0);" id="btn_add_cart">加入购物车</a>
+            </ul>
+
+            <ul class="clearfix pt15">
+                <li class="title">数量:</li>
+                <li>
+                    <div class="wrap_input">
+                        <a class="btn_reduce"></a>
+                        <input id="input_pamount" class="fl text" item-id="{{$Product['Product']['id']}}" size="3"
+                               value="1" name="shoppingnum" type="text">
+                        <a class="btn_add"></a>
+                    </div>
+                </li>
+            </ul>
+            <div class="clearfix tb_action">
+                <a class="tb_btn_buy fl" item-id="{{$Product['Product']['id']}}" href="javascript:void(0)"
+                   id="btn_quick_buy">立即购买</a>
+                <a class="tb_btn_basket fl" item-id="{{$Product['Product']['id']}}" href="javascript:void(0);"
+                   id="btn_add_cart">加入购物车</a>
+            </div>
         </div>
-    </div>
-    <div class="recommend fl">
-        <h1><span>相关产品</span></h1>
-        <?PHP
+        <div class="recommend fl">
+            <h1><span>相关产品</span></h1>
+            <?PHP
         $loopCount = count($items)>3?3:count($items);
-        $loopFlag = 0;
-        foreach($items as $item) {
+            $loopFlag = 0;
+            foreach($items as $item) {
             $item['slug'] = $item['slug']?$item['slug']:$item['id'];
             $loopFlag++;
             if($loopFlag>3){
-                break;
+            break;
             }
             ?>
             <a href="{{$this->Html->url('/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html?from=recommend')}}">
-                <img width="120px" height="90px" src="{{small_thumb_link($item['coverimg'])}}" onerror="{{$this->Html->assetUrl('/img/products_nophoto.jpg')}}" />
+                <img width="120px" height="90px" src="{{small_thumb_link($item['coverimg'])}}"
+                     onerror="{{$this->Html->assetUrl('/img/products_nophoto.jpg')}}"/>
                 <span class="pt10">{{$item['name']}}</span>
                 <span>￥ {{$this->Number->precision($item['price'], 2)}}</span>
             </a>
 
-        <?php } ?>
+            <?php } ?>
 
-        <!--<a href="#X">-->
+            <!--<a href="#X">-->
             <!--<img src="/img/product-demo/pic_small.jpg" />-->
             <!--<span class="pt10">血橙 正宗赣南血橙10斤</span>-->
             <!--<span>¥28.00</span>-->
-        <!--</a>-->
+            <!--</a>-->
 
-    </div>
-</div>
-<div class="clearfix pt15">
-    <div class="fl">
-        <a class="store_a" id="quick_in_store" href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}" style="display:none;">进入商家店铺</a>
-        <div class="store">
-            <img width="155px" height="155px" src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" /><br />
-            <strong>分享人：<span>{{$brand['Brand']['name']}}</span></strong>
-            <dl class="clearfix">
-                <dt class="ident_icon"></dt>
-                <dt>&nbsp;朋友说认证</dt>
-            </dl>
-            <a class="store_entr" href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}">进入商家店铺</a>
-            <!--<p style="display:none;">电话：{{$brand['Brand']['']}}<br />所在地：{{$brand['Brand']['']}}</p>-->
         </div>
-        <div class="browse">
-            <h1>我看过了</h1>
-            <?PHP foreach(array_reverse($browsing_history_products) as $item) {
+    </div>
+    <div class="clearfix pt15">
+        <div class="fl">
+            <a class="store_a" id="quick_in_store" href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}"
+               style="display:none;">进入商家店铺</a>
+
+            <div class="store">
+                <img width="155px" height="155px"
+                     src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}"/><br/>
+                <strong>分享人：<span>{{$brand['Brand']['name']}}</span></strong>
+                <dl class="clearfix">
+                    <dt class="ident_icon"></dt>
+                    <dt>&nbsp;朋友说认证</dt>
+                </dl>
+                <a class="store_entr" href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}">进入商家店铺</a>
+                <!--<p style="display:none;">电话：{{$brand['Brand']['']}}<br />所在地：{{$brand['Brand']['']}}</p>-->
+            </div>
+            <div class="browse">
+                <h1>我看过了</h1>
+                <?PHP foreach(array_reverse($browsing_history_products) as $item) {
             ?>
-                 <a href="{{$this->Html->url('/'.$category_control_name.'/'.date('Ymd',strtotime($item['Product']['created'])).'/'.$item['Product']['slug'].'.html')}}">
-                    <img width="160px" height="120px" src="{{small_thumb_link($item['Product']['coverimg'])}}" onerror="{{$this->Html->assetUrl('/img/products_nophoto.jpg')}}" /><br />
+                <a href="{{$this->Html->url('/'.$category_control_name.'/'.date('Ymd',strtotime($item['Product']['created'])).'/'.$item['Product']['slug'].'.html')}}">
+                    <img width="160px" height="120px" src="{{small_thumb_link($item['Product']['coverimg'])}}"
+                         onerror="{{$this->Html->assetUrl('/img/products_nophoto.jpg')}}"/><br/>
                     <span class="pt10">{{$item['Product']['name']}}</span>
                     <span>￥ {{$this->Number->precision($item['Product']['price'], 2)}}</span>
                 </a>
-            <?php }?>
-        </div>
-    </div>
-    <div class="fl product_details">
-        <ul class="clearfix" id="product_nav_tab">
-            <li class="fl tm_selected" data-togid="product_detail_content"><a href="#X">产品详情</a></li>
-            {{if $Product['ModelSplitInfo']}}
-            <li class="fl" data-togid="product_params_content"><a href="#X">产品参数</a></li>
-            {{/if}}
-            {{if $is_product_has_shichi}}
-            <li class="fl" data-togid="product_try_comment_content"><a href="#X">试吃评价</a></li>
-            {{/if}}
-            <li class="fl" data-togid="product_comment_content"><a href="#X">累计评价({{$Product['Product']['comment_nums']}})</a></li>
-            <li class="fr tb_btn_basket" id="quick_add_cart" style="display: none" item-id="{{$Product['Product']['id']}}" href="javascript:void(0);"><a href="#X">加入购物车</a></li>
-        </ul>
-        <div class="details_nav" id="detail_nav" style="display:none;"></div>
-        <div>
-        <div id="product_detail_content">
-            <div class="descrip">
-                <div>
-                    <?php echo $Product['Product']['content']; ?>
-                </div>
-                <div class="state">
-                    <span>声明</span><br />
-                    朋友说 所有特产均来自于同事分享和推荐。如希望加入分享，请联系我们：189-1191-1240<br />
-                    <strong>朋友说：你身边最真挚的分享</strong><br />
-                    <label>微信：</label>爱乐供-朋友说<br />
-                    <label>网站：</label>http://pyshuo.com
-                </div>
+                <?php }?>
             </div>
         </div>
-        {{if $Product['ModelSplitInfo']}}
-        <div style="display: none" id="product_params_content">
-            <div class="descrip">产品：湖南黔阳冰糖橙（国家地理标志产品）<br />产地：源产地，无工业无污染，生态环境</div>
-            <div class="products_intro"><img src="/img/product-demo/pic.jpg" /></div>
-            <div class="state">
-                <span>声明</span><br />
-                朋友说 所有特产均来自于同事分享和推荐。如希望加入分享，请联系我们：189-1191-1240<br />
-                <strong>朋友说：你身边最真挚的分享</strong><br />
-                <label>微信：</label>爱乐供-朋友说<br />
-                <label>网站：</label>http://pyshuo.com
-            </div>
-        </div>
-         {{/if}}
-        {{if $is_product_has_shichi}}
-        <div style="display: none" id="product_try_comment_content">
-            <div class="comment">
-                <ul class="clearfix">
-                    <li class="fl tm_selected"><a href="#X">全部评价(9)</a></li>
-                    <li class="fl"><a href="#X">好评(9)</a></li>
-                    <li class="fl"><a href="#X">中评(0)</a></li>
-                    <li class="fl"><a href="#X">差评(0)</a></li>
-                </ul>
+        <div class="fl product_details">
+            <ul class="clearfix" id="product_nav_tab">
+                <li class="fl tm_selected" data-togid="product_detail_content"><a href="#X">产品详情</a></li>
+                {{if $Product['ModelSplitInfo']}}
+                <li class="fl" data-togid="product_params_content"><a href="#X">产品参数</a></li>
+                {{/if}}
+                {{if $is_product_has_shichi}}
+                <li class="fl" data-togid="product_try_comment_content"><a href="#X">试吃评价</a></li>
+                {{/if}}
+                <li class="fl" data-togid="product_comment_content"><a href="#X">累计评价({{$Product['Product']['comment_nums']}})</a>
+                </li>
+                <li class="fr tb_btn_basket" id="quick_add_cart" style="display: none"
+                    item-id="{{$Product['Product']['id']}}" href="javascript:void(0);"><a href="#X">加入购物车</a></li>
+            </ul>
+            <div class="details_nav" id="detail_nav" style="display:none;"></div>
+            <div>
+                <div id="product_detail_content">
+                    <div class="descrip">
+                        <div>
+                            <?php echo $Product['Product']['content']; ?>
+                        </div>
+                        <div class="state">
+                            <span>声明</span><br/>
+                            朋友说 所有特产均来自于同事分享和推荐。如希望加入分享，请联系我们：189-1191-1240<br/>
+                            <strong>朋友说：你身边最真挚的分享</strong><br/>
+                            <label>微信：</label>爱乐供-朋友说<br/>
+                            <label>网站：</label>http://pyshuo.com
+                        </div>
+                    </div>
+                </div>
+                {{if $Product['ModelSplitInfo']}}
+                <div style="display: none" id="product_params_content">
+                    <div class="descrip">产品：湖南黔阳冰糖橙（国家地理标志产品）<br/>产地：源产地，无工业无污染，生态环境</div>
+                    <div class="products_intro"><img src="/img/product-demo/pic.jpg"/></div>
+                    <div class="state">
+                        <span>声明</span><br/>
+                        朋友说 所有特产均来自于同事分享和推荐。如希望加入分享，请联系我们：189-1191-1240<br/>
+                        <strong>朋友说：你身边最真挚的分享</strong><br/>
+                        <label>微信：</label>爱乐供-朋友说<br/>
+                        <label>网站：</label>http://pyshuo.com
+                    </div>
+                </div>
+                {{/if}}
+                {{if $is_product_has_shichi}}
+                <div style="display: none" id="product_try_comment_content">
+                    <div class="comment">
+                        <ul class="clearfix">
+                            <li class="fl tm_selected"><a href="#X">全部评价(9)</a></li>
+                            <li class="fl"><a href="#X">好评(9)</a></li>
+                            <li class="fl"><a href="#X">中评(0)</a></li>
+                            <li class="fl"><a href="#X">差评(0)</a></li>
+                        </ul>
 
+                    </div>
+                </div>
+                {{/if}}
+                <div style="display: none" id="product_comment_content">
+                    {{template comments/pc_comments}}
+                </div>
             </div>
         </div>
-        {{/if}}
-        <div style="display: none" id="product_comment_content">
-            {{template comments/pc_comments}}
-        </div>
-        </div>
     </div>
-</div>
 </div>
 <script type="text/javascript">
 
@@ -179,10 +190,10 @@
      */
     function SmartFloat(options) {
         this.config = {
-            targetElem   :  '#product_nav_tab' , // 要定位的dom节点
-            quickInStore :'#quick_in_store',
-            quickAddCart:'#quick_add_cart',
-            detailNav:'#detail_nav'
+            targetElem: '#product_nav_tab', // 要定位的dom节点
+            quickInStore: '#quick_in_store',
+            quickAddCart: '#quick_add_cart',
+            detailNav: '#detail_nav'
         };
 
         this.cache = {};
@@ -192,20 +203,20 @@
 
     SmartFloat.prototype = {
         constructor: SmartFloat,
-        init: function(options){
+        init: function (options) {
             this.config = $.extend(this.config, options || {});
             var self = this,
                     _config = self.config,
                     _cache = self.cache;
             var top = $(_config.targetElem).offset().top;
-            $(window).scroll(function(){
+            $(window).scroll(function () {
                 var winTop = $(this).scrollTop();
-                if(winTop >= top) {
+                if (winTop >= top) {
                     $(_config.targetElem).addClass('slide');
                     $(_config.quickInStore).show();
                     $(_config.quickAddCart).show();
                     $(_config.detailNav).show();
-                }else {
+                } else {
                     $(_config.targetElem).removeClass('slide');
                     $(_config.quickInStore).hide();
                     $(_config.quickAddCart).hide();
@@ -216,38 +227,37 @@
     };
 
 
-    $(document).ready(function(){
-        $('#product_nav_tab li.fl').each(function(index,element){
+    $(document).ready(function () {
+        $('#product_nav_tab li.fl').each(function (index, element) {
             var target = element;
-            $(target).on('click',function handlerTabClick(target){
+            $(target).on('click', function handlerTabClick(target) {
                 $(element).addClass('tm_selected').siblings().removeClass('tm_selected');
                 console.log(element);
                 console.log($(element).data('togid'));
-                var content = $('#'+$(element).data('togid'));
+                var content = $('#' + $(element).data('togid'));
                 console.log(content);
                 $(content).show().siblings().hide();
             });
         });
 
-        $('.btn_reduce').on('click',function(){
+        $('.btn_reduce').on('click', function () {
             var currentCount = parseInt($('#input_pamount').val());
-            if(currentCount>1){
-                $('#input_pamount').val(currentCount-1);
+            if (currentCount > 1) {
+                $('#input_pamount').val(currentCount - 1);
             }
             return;
         });
-        $('.btn_add').on('click',function(){
+        $('.btn_add').on('click', function () {
             var currentCount = parseInt($('#input_pamount').val());
-            if(currentCount<100){
-                $('#input_pamount').val(currentCount+1);
+            if (currentCount < 100) {
+                $('#input_pamount').val(currentCount + 1);
             }
             return;
         });
 
-        new SmartFloat({
-        });
+        new SmartFloat({});
 
-        $('#quick_add_cart').on('click',function(){
+        $('#quick_add_cart').on('click', function () {
             $('#btn_add_cart').trigger('click');
             return;
         });

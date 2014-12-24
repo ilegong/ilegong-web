@@ -253,13 +253,15 @@ class ProductsController extends AppController{
             $viewedDataId = current($browsingHistoryProductsData)['id'];
         }
         $browsing_history = $_SESSION['BrowsingHistory'];
+        if(!$browsing_history){
+            $browsing_history =array();
+        }
+
         if(!is_array($browsing_history)){
             $browsing_history = array();
             array_push($browsing_history,$_SESSION['BrowsingHistory']);
         }
-        if(!$browsing_history){
-            $browsing_history =array();
-        }
+
         if($browsingHistoryProductsData){
             $viewedData = $browsingHistoryProductsData[0]['ViewedProduct']['browsing_history'];
         }
@@ -284,7 +286,7 @@ class ProductsController extends AppController{
             $this->ViewedProduct->id = $viewedDataId;
             $this->ViewedProduct->save(array(
                 'uid'=>$userId,
-                'browsing_history'=>join($browsing_history,',')
+                'browsing_history'=>join(array_reverse($browsing_history),',')
             ));
         }
         $this->Session->write('BrowsingHistory',$browsing_history);
