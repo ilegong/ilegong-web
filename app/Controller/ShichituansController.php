@@ -116,7 +116,13 @@ class ShichituansController extends AppController{
                 $data = array('Shichituan' => array('shichi_id' => $re, 'status' => $val));
                 if ($this->Shichituan->save($data)) {
                     $res [$re] = array('success' => __('申请状态修改成功.', true));
-
+                    if($data['Shichituan']['status'] == 1) {
+                    $shichi_data = $this->Shichituan->find('first',array('conditions' => array('shichi_id' =>$re),'fields' => array('period','telenum')));
+                    $msg = '亲，恭喜您成功加入第'.$shichi_data['Shichituan']['period'].'期试吃团，感谢您对朋友说的支持';
+                    $tel = $shichi_data['Shichituan']['telenum'];
+                    $this->log('data'.json_encode($shichi_data));
+                    message_send($msg,$tel);
+                    }
                 } else {
                     $res [$re] = array('error' => $this->{$this->modelClass}->validationErrors);
                 }

@@ -168,7 +168,7 @@
     {{if $order_shichi}}
     {{if $order_shichi['OrderShichi']['is_comment'] ==0}}
     <div id="div1" value="{{$order_shichi_status}}">
-    {{$this->Form->input('body',array('label'=>false,'type'=>'textarea','rows'=>3,'class' =>'form-control','placeholder' => '写下您的试吃评论吧...'))}}
+    {{$this->Form->input('body',array('label'=>false,'id' => 'Shichi_CommentBody','type'=>'textarea','rows'=>3,'class' =>'form-control','placeholder' => '写下您的试吃评论吧...'))}}
     {{$this->Form->end();}}
     <span class="btn btn-success fileinput-button">
         <i class="glyphicon glyphicon-plus"></i>
@@ -225,14 +225,14 @@
 
     var _pys_shichi_comment_cookie = {
         auto_load : function() {
-            var body = $('#CommentBody');
+            var body = $('#Shichi_CommentBody');
             if (!$.trim(body.val())) {
                 body.val($.cookie('__comments_text'));
             }
         },
 
         save : function() {
-            var body = $('#CommentBody');
+            var body = $('#Shichi_CommentBody');
             if ($.trim(body.val())) {
                 $.cookie('__comments_text', body.val());
             }
@@ -315,7 +315,7 @@
             return;
          }
 
-           if ($.trim($('#CommentBody').val()).length <= 50) {
+           if ($.trim($('#Shichi_CommentBody').val()).length <= 50) {
                utils.alert("评论内容不能少于50字");
                return;
            }
