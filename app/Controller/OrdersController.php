@@ -524,18 +524,23 @@ class OrdersController extends AppController{
         if (!empty($code)) {
             if ($code == 'pengyoushuo2014') {
                 if ($applied_coupon_code != $code) {
-                    $applying_code_ins = null;
+                    $usedCnt = $this->Order->used_code_cnt($uid, $code);
+                    if ($usedCnt <= 0) {
+                        $applying_code_ins = null;
 //            $couponCodeItems = $this->CouponItem->find_valid_coupon_code_items($applied_coupon_code);
-                    //TODO: check more coupon items validation
-                    //TODO: 补充校验信息
+                        //TODO: check more coupon items validation
+                        //TODO: 补充校验信息
 //            if (!empty($couponCodeItems)) {
 //                foreach($couponCodeItems as $code_ins) {
 //                    if (array_search($code_ins['CouponCodeItems']['pid'], $balancingPids) !== false) {
-                    $applying_code_ins = $code; // $code_ins;
-                    $this->_save_applied_coupon_code($code);
+                        $applying_code_ins = $code; // $code_ins;
+                        $this->_save_applied_coupon_code($code);
 //                        break;
 //                    }
-                    $success = true;
+                        $success = true;
+                    } else {
+                        $error = '优惠码已失效';
+                    }
 //                }
 //            }
                 } else {
@@ -1235,12 +1240,17 @@ class OrdersController extends AppController{
         $code = $this->_applied_couon_code();
         $code_reduce = 500;
         if ($code == 'pengyoushuo2014') {
-            $coupon_total = $code_reduce;
-            $reduced = $coupon_total / 100;
-            $toUpdate = array('applied_code' => '\'$code\'',
-                'coupon_total' => 'coupon_total + 500',
-                'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, 0, total_all_price - ' . $reduced . ')');
-            $this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+
+            $usedCnt = $this->Order->used_code_cnt($uid, $code);
+
+            if ($usedCnt <= 0) {
+                $coupon_total = $code_reduce;
+                $reduced = $coupon_total / 100;
+                $toUpdate = array('applied_code' => '\'' . $code . '\'',
+                    'coupon_total' => 'coupon_total + 500',
+                    'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, 0, total_all_price - ' . $reduced . ')');
+                $this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+            }
         }
     }
 

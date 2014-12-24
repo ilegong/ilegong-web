@@ -146,4 +146,11 @@ class Order extends AppModel {
 //            ));
 //        }
 //    }
+
+    public function used_code_cnt($uid, $code) {
+        return $this->find('count', array('conditions' => array(
+            'creator' => $uid,
+            'applied_code' => $code
+        )));
+    }
 }
