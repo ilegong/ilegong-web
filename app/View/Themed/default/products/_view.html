@@ -70,8 +70,8 @@
 	{{if $Product['ModelSplitInfo']}}
 	<div class="tab-pane" id="product-params">
 	<table  cellspacing="0" cellpadding="0" border="1" id="param-tb" style="border-color:#c5d7ed">
-		{{loop $Product['ModelSplitInfo'] $key $value}}	
-			<?PHP if(in_array($key,array('id','deleted'))) continue; ?>		
+		{{loop $Product['ModelSplitInfo'] $key $value}}
+			<?PHP if(in_array($key,array('id','deleted'))) continue; ?>
 			<tr><td nowrap="nowrap">{{$ProductSplitSchema[$key]}}</td>
 	            <td class="val"><span>{{if is_numeric($value)&& isset($ProductSplitOptions[$value])}} {{$ProductSplitOptions[$value]}} {{else}} {{$value}}{{/if}}</span></td>
 	        </tr>

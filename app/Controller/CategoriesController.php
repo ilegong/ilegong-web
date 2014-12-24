@@ -22,7 +22,6 @@ class CategoriesController extends AppController {
             $this->view();
             return;
         }
-
         $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1);
         $conditions['Product' . '.recommend >'] = 0;
 
@@ -82,6 +81,7 @@ class CategoriesController extends AppController {
         $this->set('op_cate', OP_CATE_HOME);
 
         $this->set('_serialize', array('brands', 'data_list', 'sub_title'));
+        $this->set('history',$_REQUEST['history']);
     }
 
     public function special_list($slug) {

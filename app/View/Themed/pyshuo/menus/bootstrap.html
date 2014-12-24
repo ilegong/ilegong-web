@@ -35,7 +35,7 @@
                 <dd>
                     <?PHP foreach($tagsWithProducts as $tagWithProduct) {
                         if($tagWithProduct['ProductCounts']>0){ ?>
-                    <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}">{{$tagWithProduct['ProductTag']['name']}}</a>
+                    <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}?history={{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}">{{$tagWithProduct['ProductTag']['name']}}</a>
                     <?php } ?>
                     <?php } ?>
                 </dd>

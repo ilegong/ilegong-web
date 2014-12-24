@@ -173,6 +173,15 @@ class CommentsController extends AppController {
             }
 
             unset($item['pictures']);
+            $commentUserId = $item['user_id'];
+            $photo = $this->User->find('all',array(
+                'fields'=>array('image'),
+                'conditions'=>array(
+                    'id' => $commentUserId
+                ),
+                'recursive'=>-1
+            ));
+            $item['userPhoto']= $photo[0]['User']['image'];
             array_push($result,array('Comment' => $item));
         }
 

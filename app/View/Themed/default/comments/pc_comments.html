@@ -1,0 +1,111 @@
+<div class="comment" style="margin-top: 5px">
+    <ul class="clearfix">
+        <li class="fl tm_selected"><a id="all_comment_btn" href="#X">全部评价</a></li>
+        <li class="fl"><a id="good_comment_btn" href="#X">好评</a></li>
+        <li class="fl"><a id="middle_comment_btn" href="#X">中评</a></li>
+        <li class="fl"><a id="bad_comment_btn" href="#X">差评</a></li>
+    </ul>
+    <div id="all_comment_content">
+
+    </div>
+    <div id="good_comment_content" style="display: none">
+
+    </div>
+    <div id="middle_comment_content" style="display: none">
+
+    </div>
+    <div id="bad_comment_content" style="display: none">
+
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var allBtn = $('#all_comment_btn').on('click', function(){
+            var me = this;
+            $(me).parent('li').addClass('tm_selected').siblings().removeClass('tm_selected');
+            $('#all_comment_content').show().siblings('div').hide();
+            return;
+        });
+        var goodBtn = $('#good_comment_btn').on('click', function(){
+            var me = this;
+            $(me).parent('li').addClass('tm_selected').siblings().removeClass('tm_selected');
+            $('#good_comment_content').show().siblings('div').hide();
+            return;
+        });
+        var middleBtn = $('#middle_comment_btn').on('click',function(){
+            var me = this;
+            $(me).parent('li').addClass('tm_selected').siblings().removeClass('tm_selected');
+            $('#middle_comment_content').show().siblings('div').hide();
+            return;
+        });
+        var badBtn = $('#bad_comment_btn').on('click',function(){
+            var me = this;
+            $(me).parent('li').addClass('tm_selected').siblings().removeClass('tm_selected');
+            $('#bad_comment_content').show('div').siblings('div').hide();
+            return;
+        });
+
+        $.getJSON("{{$this->Html->url(array('controller'=>'comments','action'=>'getlist',$current_model,$current_data_id,'ext'=>'json'))}}", function (data) {
+            var good_comment = '';
+            var good_comment_count = 0;
+            var middle_comment = '';
+            var middle_comment_count = 0;
+            var bad_comment = '';
+            var bad_comment_count = 0;
+            $.each(data, function (index, item) {
+                var comment = item['Comment'];
+                var template = '<dl class="clearfix">';
+                var defaultPhoto = '{{$this->Html->assetUrl("/img/default_user_icon.jpg")}}';
+                if(comment["userPhoto"]){
+                    defaultPhoto = comment["userPhoto"];
+                }
+                template += '<dt class="header"> <img width="60px" height="60px" class="radius5" src="'+defaultPhoto+'" /><br /> <span>' + comment['username'] + '</span> </dt>';
+                template += '<dt class="content"> <b></b><div class="clearfix c_content">';
+                console.log(comment['rating']);
+                var images = '';
+                if (comment['images']) {
+                    $.each(comment['images'], function(idx, val){
+                        images+='<img width="600px" src="'+val+'"/>'
+                    });
+                }
+                if (comment['rating'] === "5") {
+                    template += '<span class="radius5 c_good fl">好评</span>';
+                    template += '<span class="time fr">' + comment['created'] + '</span>';
+                    template += '</div>';
+                    template += '<p>' + comment['body'] + images+'</p>';
+                    template += '</dl>';
+                    good_comment += template;
+                    good_comment_count += 1;
+                } else if (comment['rating'] === "3") {
+                    template += '<span class="radius5 c_middle fl">中评</span>';
+                    template += '<span class="time fr">' + comment['created'] + '</span>';
+                    template += '</div>';
+                    template += '<p>' + comment['body'] +images+'</p>';
+                    template += '</dl>';
+                    middle_comment += template;
+                    middle_comment_count += 1;
+                } else {
+                    template += '<span class="radius5 c_bad fl">差评</span>';
+                    template += '<span class="time fr">' + comment['created'] + '</span>';
+                    template += '</div>';
+                    template += '<p>' + comment['body'];
+                    template += images;
+                    template +='</p>';
+                    template += '</dl>';
+                    bad_comment += template;
+                    bad_comment_count += 1;
+                }
+            });
+            var all_comment = good_comment + middle_comment + bad_comment;
+            $('#all_comment_content').html(all_comment===""?"<div style='padding-top: 15px'>暂无评价...</div>":all_comment);
+            $('#good_comment_content').html(good_comment===""?"<div style='padding-top: 15px'>暂无评价...</div>":good_comment);
+            $('#middle_comment_content').html(middle_comment===""?"<div style='padding-top: 15px'>暂无评价...</div>":middle_comment);
+            $('#bad_comment_content').html(bad_comment===""?"<div style='padding-top: 15px'>暂无评价...</div>":bad_comment);
+            allBtn.text(allBtn.text() + '(' + (good_comment_count + middle_comment_count + bad_comment_count) + ')');
+            goodBtn.text(goodBtn.text() + '(' + good_comment_count + ')');
+            middleBtn.text(middleBtn.text() + '(' + middle_comment_count + ')');
+            badBtn.text(badBtn.text() + '(' + bad_comment_count + ')');
+        });
+    })
+    ;
+</script>

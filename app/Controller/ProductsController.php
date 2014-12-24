@@ -220,6 +220,8 @@ class ProductsController extends AppController{
         $recommC = $this->Components->load('ProductRecom');
         $recommends = $recommC->recommend($pid);
         $this->set('items', $recommends);
+        $this->set('history',$_REQUEST['history']);
+        $this->set('tag',$_REQUEST['tag']);
 
 
         App::uses('CakeNumber', 'Utility');
@@ -248,6 +250,52 @@ class ProductsController extends AppController{
      */
     private function ship_desc_1($ship_fee) {
         return ($ship_fee == 0 ? '包邮' : '邮费' . CakeNumber::precision($ship_fee / 100, 2) . '元');
+        $currentUser = $_SESSION['Auth']['User'];
+        if($currentUser){
+            $this->loadModel('ViewedProduct');
+            $userId = $currentUser['id'];
+            $browsingHistoryProductsData = $this->ViewedProduct->find('first',
+                array(
+                    'conditions' => array('uid' => $userId),
+               )
+            );
+            $viewedDataId = current($browsingHistoryProductsData)['id'];
+        }
+        $browsing_history = $_SESSION['BrowsingHistory'];
+        if(!is_array($browsing_history)){
+            $browsing_history = array();
+            array_push($browsing_history,$_SESSION['BrowsingHistory']);
+        }
+        if(!$browsing_history){
+            $browsing_history =array();
+        }
+        if($browsingHistoryProductsData){
+            $viewedData = $browsingHistoryProductsData[0]['ViewedProduct']['browsing_history'];
+        }
+        if($viewedData){
+            $browsing_history = explode(',',$viewedData);
+        }
+        $browsingHistoryProducts = $this->Product->find('all',array(
+            'conditions'=>array(
+                'id' =>$browsing_history
+            ),
+            'recursive' => -1,
+        ));
+
+        $this->set('browsing_history_products',$browsingHistoryProducts);
+        if(count($browsing_history)>9){
+            array_shift($browsing_history);
+        }
+        array_push($browsing_history,$pid);
+
+        if($currentUser){
+            $this->ViewedProduct->id = $viewedDataId;
+            $this->ViewedProduct->save(array(
+                'uid'=>$userId,
+                'browsing_history'=>join($browsing_history,',')
+            ));
+        }
+        $this->Session->write('BrowsingHistory',$browsing_history);
     }
 
 }

@@ -1,0 +1,176 @@
+<style>
+    .ban {
+        width: 400px;
+        height: 400px;
+        position: relative;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .ban2 {
+        width: 400px;
+        height: 300px;
+        position: relative;
+        overflow: hidden;
+        border: solid 1px
+    }
+
+    .ban2 ul {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    .ban2 ul li {
+        width: 400px;
+        height: 300px;
+        border: 1px #DDDDDD solid
+    }
+
+    .prev {
+        float: left;
+        cursor: pointer;
+    }
+
+    .num {
+        height: 84px;
+        overflow: hidden;
+        width: 500px;
+        position: relative;
+        float: left;
+    }
+
+    .min_pic {
+        padding-top: 10px;
+        width: 400px;
+    }
+
+    .num ul {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 500px;
+        height: 500px
+    }
+
+    .num ul li {
+        width: 83px;
+        height: 84px;
+        margin-right: 5px;
+        padding: 1px;
+    }
+
+    .num ul li.on {
+        border: 1px solid red;
+        padding: 1px;
+    }
+
+    .prev_btn1 {
+        width: 16px;
+        text-align: center;
+        height: 18px;
+        margin-top: 30px;
+        margin-right: 20px;
+        cursor: pointer;
+        float: left;
+    }
+
+    .next_btn1 {
+        width: 16px;
+        text-align: center;
+        height: 18px;
+        margin-top: 30px;
+        cursor: pointer;
+        float: right;
+    }
+
+    .prev1 {
+        position: absolute;
+        top: 120px;
+        left: 20px;
+        width: 28px;
+        height: 51px;
+        z-index: 9;
+        cursor: pointer;
+    }
+
+    .next1 {
+        position: absolute;
+        top: 120px;
+        right: 20px;
+        width: 28px;
+        height: 51px;
+        z-index: 9;
+        cursor: pointer;
+    }
+</style>
+{{$this->Html->script(array(
+'pic_tab.js',
+));
+}}
+
+
+<div class="ban" id="demo1">
+    <div class="ban2" id="ban_pic1">
+        <!--<div class="prev1" id="prev1"><img src="/img/product-demo/index_tab_l.png" width="28" height="51"  alt=""/></div>-->
+        <!--<div class="next1" id="next1"><img src="/img/product-demo/index_tab_r.png" width="28" height="51"  alt=""/></div>-->
+        <ul id="ShowPictureBox">
+            {{loop $Product['Uploadfile'] $uploadfile}}
+            <li><a class="jqzoom" href="{{$this->Html->url('http://51daifan-images.stor.sinaapp.com'.$uploadfile['Uploadfile']['mid_thumb'])}}"><img
+                    src="{{$this->Html->url('http://51daifan-images.stor.sinaapp.com'.$uploadfile['Uploadfile']['mid_thumb'])}}"
+                    onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'" alt=""/>
+            </a>
+            </li>
+            {{/loop}}
+        </ul>
+    </div>
+
+    <div class="min_pic">
+        {{if count($Product['Uploadfile'])>4}}
+        <div class="prev_btn1" id="prev_btn1"><img src="/img/product-demo/feel3.png" width="9" height="18" alt=""/>
+        </div>
+        {{/if}}
+        <div class="num" id="ban_num1">
+            <ul>
+                {{loop $Product['Uploadfile'] $uploadfile}}
+                <li><a href="javascript:;"><img
+                        name="{{$this->Html->url('http://51daifan-images.stor.sinaapp.com'.$uploadfile['Uploadfile']['mid_thumb'])}}"
+                        alt="{{$Product['Product']['title']}}"
+                        src="{{$this->Html->url('http://51daifan-images.stor.sinaapp.com'.$uploadfile['Uploadfile']['thumb'])}}"
+                        width="80" height="80"/></a></li>
+                {{/loop}}
+            </ul>
+        </div>
+        {{if count($Product['Uploadfile'])>4}}
+        <div class="next_btn1" id="next_btn1"><img src="/img/product-demo/feel4.png" width="9" height="18" alt=""/>
+        </div>
+        {{/if}}
+    </div>
+</div>
+<script type="text/javascript">
+
+    $('#demo1').banqh({
+        box: "#demo1",//总框架
+        pic: "#ban_pic1",//大图框架
+        pnum: "#ban_num1",//小图框架
+        prev_btn: "#prev_btn1",//小图左箭头
+        next_btn: "#next_btn1",//小图右箭头
+        pop_prev: "#prev2",//弹出框左箭头
+        pop_next: "#next2",//弹出框右箭头
+        prev: "#prev1",//大图左箭头
+        next: "#next1",//大图右箭头
+        pop_div: "",//弹出框框架
+        pop_pic: "",//弹出框图片框架
+        pop_xx: ".pop_up_xx",//关闭弹出框按钮
+        mhc: ".mhc",//朦灰层
+        autoplay: true,//是否自动播放
+        interTime: 5000,//图片自动切换间隔
+        delayTime: 400,//切换一张图片时间
+        pop_delayTime: 400,//弹出框切换一张图片时间
+        order: 0,//当前显示的图片（从0开始）
+        picdire: true,//大图滚动方向（true为水平方向滚动）
+        mindire: true,//小图滚动方向（true为水平方向滚动）
+        min_picnum: 5,//小图显示数量
+        pop_up: false//大图是否有弹出框
+    });
+</script>

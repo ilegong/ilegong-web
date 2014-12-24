@@ -33,17 +33,20 @@
     $full = $tagWithProduct['ProductTag']['id'] == 1;
     if(count($tagWithProduct['Products'])>0){ ?>
            {{if !$full}}
-                <h1 class="muted"><a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}">{{$tagWithProduct['ProductTag']['name']}} &gt;</a></h1>
+                <h1 class="muted"><a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}?history={{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}">{{$tagWithProduct['ProductTag']['name']}} &gt;</a></h1>
                 <hr class="colorgraph"/>
                 <!--<h3 class="items-tag"><a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}">{{$tagWithProduct['ProductTag']['name']}} &gt;</a></h3>-->
             {{/if}}
            {{if $full}}
-                <h1 class="muted"><a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}">{{$tagWithProduct['ProductTag']['name']}} &gt;</a></h1>
+                <h1 class="muted"><a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}?history={{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}">{{$tagWithProduct['ProductTag']['name']}} &gt;</a></h1>
                 <hr class="colorgraph"/>
             {{/if}}
         <div class="row classify_list">
         <div class="clearfix">
-	    <?PHP foreach($tagWithProduct['Products'] as $item) {
+	    <?PHP
+	    $history = $this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ));
+        $tag = $tagWithProduct['ProductTag'];
+	    foreach($tagWithProduct['Products'] as $item) {
 		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
 	    ?>	
 			{{include 'categories/_photolist'}}
