@@ -79,6 +79,7 @@
     .share img{ width:92%;}
     .word_link{ text-align:center; font-size:0.9em; margin-top:1em;}
     .word_link a{ text-decoration:none; color:#ff4a49;}
+    /*.cj_btn { line-height:2em; height:2em; font-size:1.1em; text-align:center; background-color:#ff483a; text-decoration:none; color:#ffffff; width:92%; margin:0 auto; display:block; margin-top:1em;}*/
     /*层提示*/
     .tip{ width:70%; margin:0 auto; background-color:#474747; line-height:2.5em; height:2.5em; color:#ffffff; font-size:0.9em; text-align:center;}
     .tip_bg{ background-color:#ffffff; width:90%; padding:1.5em; border:1px #dddddd solid; text-align:center;}
@@ -87,7 +88,7 @@
     .tip_bg span{ display:block; padding:1em 0; font-size:1em; color:#666666;}
     .tip_bg span label{ font-size:0.8em; color:#999999;}
     .tip_bg span strong{ color:#ff4a49;}
-    .cjbtn{ display:block; margin:0 auto; width:6em; height:2em; background-color:#ff4a49; color:#ffffff; text-decoration:none; text-align:center; line-height:2em; font-size:1em;}
+    .cjbtn { display:block; margin:0 auto; width:6em; height:2em; background-color:#ff4a49; color:#ffffff; text-decoration:none; text-align:center; line-height:2em; font-size:1em;}
 
     /*谁帮了我*/
     .help_title{ background-color:#fab53c; text-align:center; height:2.5em; line-height:2.5em; font-size:1.5em; color:#ffffff;}
@@ -144,6 +145,7 @@
             <a id="show_help_btn" href="#friends">谁帮了我</a>&nbsp;&nbsp;&nbsp;
             <a href="#my_award">我的奖品</a>
         </div>
+        <a href="#award_cj" class="sharebtn radius10">去抽奖</a>
         <!--摇大米提示-->
         <div class="tip radius10" style="display:none;">你摇到了&nbsp;<strong>2</strong>&nbsp;粒大米</div>
         <!--抽奖提示-->
@@ -152,7 +154,7 @@
                 <a class="close" href="#X"><img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/close.png" /></a>
                 <p><img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/lipin.png" /></p>
                 <span>恭喜你, 摇到&nbsp;<strong>20</strong>&nbsp;粒, 可以参与抽奖了</span>
-                <a href="#X" class="cjbtn radius10">去抽奖</a>
+                <a href="#award_cj" class="cjbtn radius10">去抽奖</a>
             </div>
         </div>
     </div>
@@ -219,7 +221,7 @@
     <div class="section">
         <div class="cj">
             <img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/cj/cj1.gif" />
-            <a href="javascript:;"><img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/cj/start.png" /></a>
+            <a href="javascript:;" onclick="utils.alert_one('12月25日早上9点开始抽奖，请设好闹钟～')"><img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/cj/start.png" /></a>
         </div>
         <!--获奖提示-->
         <div style=" display:none;">
@@ -332,7 +334,7 @@
             css3: true,
             loopBottom: true,
             loopTop: true,
-            anchors: ['firstPage', 'product_story', 'get_coupons', 'my_award', 'top_list', 'about_us', 'friends']
+            anchors: ['firstPage', 'product_story', 'get_coupons', 'my_award', 'award_cj', 'about_us', 'friends']
         });
 
         var today_sold_out = '{{$today_sold_out}}';
