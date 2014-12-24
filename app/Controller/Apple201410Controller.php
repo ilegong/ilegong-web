@@ -9,7 +9,7 @@
 class Apple201410Controller extends AppController
 {
 
-    const DAILY_TIMES_SUB = 5;
+    const DAILY_TIMES_SUB = 2;
 
     var $name = "Apple201410";
 
@@ -144,12 +144,12 @@ VALUES
         $current_uid = $this->currentUser['id'];
         $result = array();
         if ($gameType == self::BTC1412) {
-            $this->fill_top_lists($gameType, $result, $current_uid);
+//            $this->fill_top_lists($gameType, $result, $current_uid);
             $total_help_me = $this->TrackLog->find('count', array(
                 'conditions' => array('to' => $this->currentUser['id'], 'type' => $gameType, 'got' > 0),
             ));
             $result['total_help_me'] = $total_help_me;
-            $this->fill_today_award($gameType, $result);
+//            $this->fill_today_award($gameType, $result);
         }
 
         if ($r && $r > 1413724118 /*2014-10-19 21:00*/) {
@@ -572,7 +572,7 @@ VALUES
                 }
                 if ($total > 0) {
                     $this->Order->query('insert into cake_game_btc_order_exchanges(times, uid, created) values('.$total.', '.$current_uid.', \''.date(FORMAT_DATETIME).'\')');
-                    $rrr = $this->AwardInfo->updateAll(array('times' => ' times + '. ($total * 10)), array('type' => $gameType, 'uid' => $current_uid));
+                    $rrr = $this->AwardInfo->updateAll(array('times' => ' times + '. ($total * 2)), array('type' => $gameType, 'uid' => $current_uid));
                 }
             }
 

@@ -139,7 +139,7 @@
         </div>
         <a id="share_btn" href="javascript:;" class="share"><img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/shareicon.png" /></a>
         <div class="word_link">
-            <a href="#get_coupons">游戏规则</a>&nbsp;&nbsp;&nbsp;
+            <a href="#get_coupons">奖品设置</a>&nbsp;&nbsp;&nbsp;
             <a href="#product_story">米的故事</a>&nbsp;&nbsp;&nbsp;
             <a id="show_help_btn" href="#friends">谁帮了我</a>&nbsp;&nbsp;&nbsp;
             <a href="#my_award">我的奖品</a>
@@ -433,15 +433,14 @@
 
         function desc_cmp_friends() {
 
-//            var desc = '摇一摇，一千箱冰糖橙免费送! 我已摇下' + get_total() + '个';
-//            if (friendGots && friendGots.length > 0) {
-//                var dabaiPercent = dabai_percent();
-//                desc += (dabaiPercent == 100 ? ', 打败了所有好友，哈哈' : (dabaiPercent == 0 ? ', 朋友圈里垫底 ^_^， 快点我吧' : ', 打败了' + dabaiPercent + '%的好友！'));
-//            } else {
-//                desc += ', 还没人帮过我！快来帮我吧';
-//            }
-//            return desc;
-            return '摇一摇 ，西瑞珍珠米5斤轻松免费抢，我已摇下20粒，大奖等你来';
+            var desc = '摇一摇 ，西瑞珍珠米5斤轻松免费抢，我已摇下'+get_total()+'粒';
+            if (friendGots && friendGots.length > 0) {
+                var dabaiPercent = dabai_percent();
+                desc += (dabaiPercent == 100 ? ', 打败了所有好友，哈哈' : (dabaiPercent == 0 ? ', 朋友圈里垫底 ^_^， 快点我吧' : ', 打败了' + dabaiPercent + '%的好友！'));
+            } else {
+                desc += ', 还没人帮过我！快来帮我吧';
+            }
+            return desc;
         }
 
         function desc_normal() {
@@ -449,6 +448,7 @@
             var my_list = parseInt($.trim($('#top_list_mine').text()));
             return '万橙，比褚橙不只甜了一点点，'+ help_me_cnt() +'个好基友帮忙，我已经摇下'+total+'个万橙' + (my_list > 0 && my_list<1000 ? '，排名第' + my_list + '名' : '') + '－ 朋友说';
         }
+
         var shareTitle = '摇下20粒，西瑞东北珍珠米免费抢';
 
         function getRandomInt(min, max) {
