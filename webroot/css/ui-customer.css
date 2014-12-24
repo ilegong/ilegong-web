@@ -600,7 +600,7 @@ body.modal-open{margin-right: 0px}
 .preview{ width:400px; height:300px; border:1px #DDDDDD solid;}
 .spec_list{ width:402px; padding-top:15px;}
 .spec_list li{ float:left;}
-.name{ padding-left:35px; width:370px;}
+.name{ padding-left:35px; width:410px;}
 .name h1{ font-size:16px; font-weight:bold; padding:0;}
 .name p{ font-size:12px; color:#666666; line-height:18px; padding-top:10px; padding-bottom:15px;}
 .name ul li{ float:left; line-height:28px; color:#333333;}
@@ -681,7 +681,7 @@ body.modal-open{margin-right: 0px}
 .comment dl{ padding-top:20px;}
 .comment dl dt{ float:left;}
 .comment dl dt.header{ width:90px; text-align:center; color:#666666;}
-.comment dl dt.content{ border:1px #dddddd solid; margin-left:10px; position:relative; width:666px; padding:10px 15px;}
+.comment dl dt.content{ border:1px #dddddd solid; margin-left:10px; position:relative; width:698px; padding:10px 15px;}
 .comment dl dt.content b{ width:10px; height:18px; background:url(/img/common/pyspc.png) no-repeat 0 -75px; display:block; position:absolute; left:-10px; top:15px;}
 .c_good{background-color: #29AC0E;color: #ffffff;font-size: 12px;font-family: "微软雅黑";line-height: 22px;padding: 0 8px;margin-top: 3px; display:block;}
 .c_good{background-color: #29AC0E;color: #ffffff;font-size: 12px;font-family: "微软雅黑";line-height: 22px;padding: 0 8px;margin-top: 3px; display:block;}
