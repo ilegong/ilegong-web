@@ -2,11 +2,9 @@
     <h1><a href="/">首页</a> > <a href="{{$history}}">{{$tag}}</a> > <a href="#">{{$Product['Product']['name']}}</a></h1>
 
     <div class="clearfix">
-        {{if count($Product['Uploadfile'])>0 }}
         <div class="fl">
             {{template Elements/images_sild}}
         </div>
-        {{/if}}
         <div class="fl name">
             <h1>{{$Product['Product']['name']}}</h1>
             {{if $Product['Product']['promote_name'] }}
@@ -88,6 +86,7 @@
 
         </div>
     </div>
+    <a name="top"></a>
     <div class="clearfix pt15">
         <div class="fl">
             <a class="store_a" id="quick_in_store" href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}"
@@ -106,27 +105,28 @@
             </div>
             <div class="browse">
                 <h1>我看过了</h1>
-                <?PHP foreach(array_reverse($browsing_history_products) as $item) {
-            ?>
-                <a href="{{$this->Html->url('/'.$category_control_name.'/'.date('Ymd',strtotime($item['Product']['created'])).'/'.$item['Product']['slug'].'.html')}}">
-                    <img width="160px" height="120px" src="{{small_thumb_link($item['Product']['coverimg'])}}"
+                <?PHP foreach(array_reverse($browsing_history_ids) as $item_id) {
+                    $item = $browsing_history_products[$item_id];
+                ?>
+                <a href="{{$this->Html->url('/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}">
+                    <img width="160px" height="120px" src="{{small_thumb_link($item['coverimg'])}}"
                          onerror="{{$this->Html->assetUrl('/img/products_nophoto.jpg')}}"/><br/>
-                    <span class="pt10">{{$item['Product']['name']}}</span>
-                    <span>￥ {{$this->Number->precision($item['Product']['price'], 2)}}</span>
+                    <span class="pt10">{{$item['name']}}</span>
+                    <span>￥ {{$this->Number->precision($item['price'], 2)}}</span>
                 </a>
                 <?php }?>
             </div>
         </div>
         <div class="fl product_details">
             <ul class="clearfix" id="product_nav_tab">
-                <li class="fl tm_selected" data-togid="product_detail_content"><a href="#X">产品详情</a></li>
+                <li class="fl tm_selected" data-togid="product_detail_content"><a href="#top">产品详情</a></li>
                 {{if $Product['ModelSplitInfo']}}
                 <li class="fl" data-togid="product_params_content"><a href="#X">产品参数</a></li>
                 {{/if}}
                 {{if $is_product_has_shichi}}
                 <li class="fl" data-togid="product_try_comment_content"><a href="#X">试吃评价</a></li>
                 {{/if}}
-                <li class="fl" data-togid="product_comment_content"><a href="#X">累计评价({{$Product['Product']['comment_nums']}})</a>
+                <li class="fl" data-togid="product_comment_content"><a href="#top">累计评价({{$Product['Product']['comment_nums']}})</a>
                 </li>
                 <li class="fr tb_btn_basket" id="quick_add_cart" style="display: none"
                     item-id="{{$Product['Product']['id']}}" href="javascript:void(0);"><a href="#X">加入购物车</a></li>
@@ -149,8 +149,14 @@
                 </div>
                 {{if $Product['ModelSplitInfo']}}
                 <div style="display: none" id="product_params_content">
-                    <div class="descrip">产品：湖南黔阳冰糖橙（国家地理标志产品）<br/>产地：源产地，无工业无污染，生态环境</div>
-                    <div class="products_intro"><img src="/img/product-demo/pic.jpg"/></div>
+                    <div class="descrip">
+                        {{loop $Product['ModelSplitInfo'] $key $value}}
+                        <?PHP if(in_array($key,array('id','deleted'))) continue; ?>
+                        <tr><td nowrap="nowrap">{{$ProductSplitSchema[$key]}}</td>
+                            <td class="val"><span>{{if is_numeric($value)&& isset($ProductSplitOptions[$value])}} {{$ProductSplitOptions[$value]}} {{else}} {{$value}}{{/if}}</span></td>
+                        </tr>
+                        {{/loop}}
+                    </div>
                     <div class="state">
                         <span>声明</span><br/>
                         朋友说 所有特产均来自于同事分享和推荐。如希望加入分享，请联系我们：189-1191-1240<br/>
@@ -173,6 +179,7 @@
                     </div>
                 </div>
                 {{/if}}
+
                 <div style="display: none" id="product_comment_content">
                     {{template comments/pc_comments}}
                 </div>

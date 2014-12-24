@@ -220,9 +220,14 @@ class ProductsController extends AppController{
         $recommC = $this->Components->load('ProductRecom');
         $recommends = $recommC->recommend($pid);
         $this->set('items', $recommends);
-        $this->set('history',$_REQUEST['history']);
-        $this->set('tag',$_REQUEST['tag']);
-
+        if($_REQUEST['tag']){
+            $this->set('history',$_REQUEST['history']);
+            $this->set('tag',$_REQUEST['tag']);
+        }else{
+            $productTag = $this->findTagsByProduct($this->viewdata['Product']['id']);
+            $this->set('history','/categories/tag/'.$productTag['ProductTag']['slug'].'.html');
+            $this->set('tag',$productTag['ProductTag']['name']);
+        }
 
         App::uses('CakeNumber', 'Utility');
         $this->loadModel('ShipSetting');
@@ -269,6 +274,7 @@ class ProductsController extends AppController{
         if($viewedData){
             $browsing_history = explode(',',$viewedData);
         }
+        $browsing_history = array_unique($browsing_history);
         $browsingHistoryProducts = $this->Product->find('all',array(
             'conditions'=>array(
                 'id' =>$browsing_history
@@ -276,22 +282,23 @@ class ProductsController extends AppController{
             'recursive' => -1,
         ));
 
+
+        $browsingHistoryProducts = Hash::combine($browsingHistoryProducts, '{n}.Product.id','{n}.Product');
         $this->set('browsing_history_products',$browsingHistoryProducts);
 
+        $this->set('browsing_history_ids',$browsing_history);
         if(count($browsing_history)>9){
             array_shift($browsing_history);
         }
-        array_push($browsing_history,$pid);
-
+        array_push($browsing_history,$this->viewdata['Product']['id']);
         if($currentUser){
             $this->ViewedProduct->id = $viewedDataId;
             $this->ViewedProduct->save(array(
                 'uid'=>$userId,
-                'browsing_history'=>join(array_reverse($browsing_history),',')
+                'browsing_history'=>join($browsing_history,',')
             ));
         }
         $this->Session->write('BrowsingHistory',$browsing_history);
-
         $this->set('category_control_name', 'products');
     }
 
@@ -301,6 +308,32 @@ class ProductsController extends AppController{
      */
     private function ship_desc_1($ship_fee) {
         return ($ship_fee == 0 ? '包邮' : '邮费' . CakeNumber::precision($ship_fee / 100, 2) . '元');
+    }
+
+    /**
+     * @return mixed
+     */
+    private function findTagsByProduct($productId) {
+        $this->loadModel('ProductTag');
+        $join_conditions = array(
+            array(
+                'table' => 'product_product_tags',
+                'alias' => 'Tag',
+                'conditions' => array(
+                    'Tag.tag_id = ProductTag.id',
+                    'Tag.product_id' => $productId
+                ),
+                'type' => 'RIGHT',
+            )
+        );
+        $productTags = $this->ProductTag->find('first', array('conditions' => array(
+            'show_in_home' => 1,
+            'published' => 1,
+        ),
+            'joins' => $join_conditions,
+            'order' => 'priority desc'
+        ));
+        return $productTags;
     }
 
 }
