@@ -278,20 +278,20 @@
         <div class="help_title">谁帮了我(<span id="helpme_cnt_n" class="red ">{{count($helpMe)}}</span>)</div>
         <div class="help_list">
             {{if $helpMe}}
+                <ul>
                 <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=60){break;} if ($i%2 ==1){continue;} ?>
-                <ul>
                     <li class="con clearfix">
                         {{$item['nickname']}}<strong class="red gots">{{ $item['got'] }}</strong>粒
                     </li>
-                </ul>
                 <?php } ?>
+                </ul>
+                <ul>
                 <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=60){break;} if ($i%2 == 0){continue;} ?>
-                <ul>
                     <li class="con clearfix">
                         {{$item['nickname']}}<strong class="red gots">{{ $item['got'] }}</strong>粒
                     </li>
-                </ul>
                 <?php } ?>
+                </ul>
             {{else}}
             <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！
                 <a id="share_btn_3" href="javascript:;" class="help">分享好友求助</a>
