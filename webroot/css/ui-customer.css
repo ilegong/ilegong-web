@@ -415,7 +415,48 @@ body.cke_editable{margin:20px;}
 .margin-zore,.margin-zore .controls{margin:0 0;}
 .cke_dialog_contents_body {overflow:hidden;}
 
+/*index main */
 
+/* CSS Document */
+.banner{ background:url(/img/product-demo/banner01.jpg) center no-repeat; height:400px; min-width:1028px; margin-bottom:30px;}
+.class_title{ height:35px; border-bottom:2px solid; color:#ffffff; margin-right:15px; margin-bottom:15px;}
+.orange_border{ border-bottom-color:#FFA200;}
+.green_border{ border-bottom-color:#29AC0E;}
+.orange_bg{ background-color:#FFA200;}
+.green_bg{ background-color:#29AC0E;}
+.class_title li.word{ font-size:15px; text-align:center; width:100px; height:35px; line-height:35px;}
+.slogan{ padding:9px 0 0 25px;}
+.orange_border li a{ line-height:35px; text-decoration:none; color:#FFA200; font-size:14px;}
+.green_border li a{ line-height:35px; text-decoration:none; color:#29AC0E; font-size:14px;}
+.class_title li a:hover{ text-decoration:underline;}
+.item{ margin-bottom:15px;}
+.item a.tuijian{ display:block; float:left; margin-right:15px; border:0; padding:0;}
+.item a{ display:block; float:left; width:240px; border:1px #dddddd solid; padding-bottom:15px; text-align:center; text-decoration:none; margin-bottom:15px; margin-right:15px;}
+.item a:hover{ border-color:#29AC0E;}
+.item a h2{ font-size:14px; color:#333333; font-weight:bold; line-height:30px; padding-top:10px;}
+.item a p{ font-weight:bold; color:#EC4E4C; font-size:18px;}
+.item a p span{ font-weight:normal; color:#999999; font-size:12px; text-decoration:line-through;}
+/*回到顶部和二维码*/
+.weixin {
+    position: absolute;
+    left: 1023px;
+    top: 0px;
+}
+.weixin a{ display:block;}
+.returnTop {
+    width: 40px;
+    height: 40px;
+    background-color: #29ac0e;
+    position: fixed;
+    left: 50%;
+    margin-left: 510px;
+    bottom: 10px;
+    z-index: 999;
+    cursor: pointer;
+}
+.returnTop img{ margin-top:1px; margin-left:1px;}
+.returnTop:hover{ background-color:#1d8308;}
+/*end index main*/
 /*product profile*/
 * {
     padding: 0;
@@ -466,7 +507,7 @@ body.cke_editable{margin:20px;}
 .classify_list div a {
     display: block;
     float: left;
-    width: 230px;
+    width: 240px;
     height: 240px;
     border: 1px #dddddd solid;
     padding-bottom: 10px;
@@ -609,7 +650,6 @@ body.modal-open{margin-right: 0px}
 .mar_price{ text-decoration:line-through; color:#999999;}
 .name ul li.red_packet{ background-color:#EC4E4C; color:#ffffff; font-size:12px; font-family:"微软雅黑"; line-height:22px; padding:0 8px; margin-top:3px;}
 .details .text{ width:30px; height:16px; border:1px solid #ccc; padding:2px; text-align:center; float:left;}
-
 /*运费*/
 .tb_deliveryAdd{ margin:0 6px 0 0;}
 .mui_addr_tri{color: #333;margin-right: -12px;padding-right: 12px;cursor: pointer;background: 0 0;border: 0;position: relative;z-index: 2;}

@@ -1,0 +1,42 @@
+{{$this->Html->script(array('/js/banner/jquery.onImagesLoad.min.js', '/js/banner/jquery.responsiveSlides.js'))}}
+<div id="banner" class="banner">
+    <img src="/img/product-demo/banner01.jpg">
+    <img src="/img/product-demo/banner02.jpg">
+    <img src="/img/product-demo/banner03.jpg">
+    <img src="/img/product-demo/banner04.jpg">
+</div>
+
+<script language="javascript">
+
+    $(function(){
+        var p=$('#banner').responsiveSlides({
+            height:450,						// slides conteiner height
+            background:'#fff',				// background color and color of overlayer to fadeout on init
+            autoStart:true,					// boolean autostart
+            startDelay:0,					// start whit delay
+            effectInterval:5000,			// time to swap photo
+            effectTransition:1000,			// time effect
+            pagination:[
+                {
+                    active:true,			// activate pagination
+                    inner:true,				// pagination inside or aouside slides conteiner
+                    position:'B_C', 		/*
+                     pagination align:
+                     T_L = top left
+                     T_C = top center
+                     T_R = top right
+
+                     B_L = bottom left
+                     B_C = bottom center
+                     B_R = bottom right
+                     */
+                    margin:520, 				// pagination margin
+                    dotStyle:'', 			// dot pagination class style
+                    dotStyleHover:'', 		// dot pagination class hover style
+                    dotStyleDisable:''		// dot pagination class disable style
+                }
+            ]
+        });
+
+    });
+</script>

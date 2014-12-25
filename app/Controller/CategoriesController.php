@@ -301,6 +301,7 @@ class CategoriesController extends AppController {
         $this->set('withBrandInfo', true);
         $this->set('category_control_name', 'products');
         $this->set('op_cate', OP_CATE_HOME);
+        $this->set('is_index',true);
     }
 
     public function view($slug='/', $brand_id='') {

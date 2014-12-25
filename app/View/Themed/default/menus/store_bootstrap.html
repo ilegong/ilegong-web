@@ -1,22 +1,25 @@
-<header class="navbar navbar-default" role="banner">
+<header class="navbar navbar-default" role="banner" style="margin-bottom: 15px">
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
+    <div class="">
         <div class="navbar-header">
             <a class="navbar-brand" href="/s/index">朋友说-商家管理后台</a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
+            <ul id="navbar" class="nav navbar-nav navbar-btn">
                 <li {{if $op_cate == 'profile'}}class="active"{{/if}}><?php echo $this->Html->link('店铺资料', array('controller' => 'stores','action'=>'profile','plugin' => null ,)); ?></li>
                 <li {{if $op_cate == 'products'}}class="active"{{/if}}><?php echo $this->Html->link('商品', '/s/products.html'); ?></li>
                 <li {{if $op_cate == 'orders'}}class="active"{{/if}}><?php echo $this->Html->link('订单', array('controller' => 'stores','action'=>'wait_shipped_orders','plugin' => null ,)); ?></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="/b/index">{{$brand['Brand']['name']}}</a></li>
-                <li>
-                    {{$this->Html->link('<i class="glyphicon glyphicon-log-out"></i>退出登录', '/users/logout?referer=/b', array('title' => 'logout your account','escape'=>false))}}
+                <li class="dropdown navbar-right" style="style-type:none;text-align:right; margin-right: 30px">
+                    <a href="/b/index" class="dropdown-toggle" data-toggle="dropdown">
+                        {{$brand['Brand']['name']}}
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            {{$this->Html->link('<i class="glyphicon glyphicon-log-out"></i>退出登录', '/users/logout?referer=/b', array('title' => 'logout your account','escape'=>false))}}
+                        </li>
+                    </ul>
                 </li>
             </ul>
-        </div><!--/.nav-collapse -->
+        </div>
     </div>
 </nav>
 </header>

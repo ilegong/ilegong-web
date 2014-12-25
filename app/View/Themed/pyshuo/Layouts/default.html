@@ -164,7 +164,12 @@
 ?>
 
 <div id="maincontent" class="maincontent clearfix">
-    <div class="container">
+    <?PHP if(!$in_weixin&&$is_index) { ?>
+    <!--<div class="banner"></div>-->
+    {{template Elements/banner}}
+    <?PHP } ?>
+    <div class="container main" style="position: relative">
+        {{template Elements/weixin}}
         {{$content_for_layout}}
     </div>
     <!-- //end container -->
@@ -215,5 +220,21 @@
         });
     });
 </script>
+<script>
+    /*回头顶部*/
+    $(window).scroll(function(){
+        var t = $(window).scrollTop();
+        //alert(t);
+        if(t>0)
+        {
+            $('#top').show();
+        }
+        else
+        {
+            $('#top').hide();
+        }
+    })
+</script>
+<a href="javascript:scroll(0,0)" class="returnTop" id="top" style="display: none;"><img src="{{$this->Html->assetUrl('/img/common/returnTop.png')}}" /></a>
 </body>
 </html>
