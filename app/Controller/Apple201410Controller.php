@@ -309,7 +309,7 @@ VALUES
                                 $iAwarded = $this->GameXiruiCode->userIsAwarded($uid);
                                 $mt_rand = mt_rand(0, 20);
                                 if (empty($iAwarded)  && $mt_rand < 10 ) {
-                                    $first_type_award = array(1 => 13, 2 => 25);
+                                    $first_type_award = array(1 => 13, 2 => 50);
                                     foreach ($first_type_award as $type => $limit) {
                                         $today_awarded = $this->GameXiruiCode->today_awarded($day, $type);
                                         if ($this->shouldLimit($today_awarded, $limit)) {
