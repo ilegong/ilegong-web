@@ -409,7 +409,7 @@ class WeixinComponent extends Component
 
     public function get_mihoutao_game_url()
     {
-        return WX_HOST . '/t/ag/mihoutao1411.html';
+        return WX_HOST . '/t/ag/xirui1412.html?trid='.urlencode('2bacv21iiFA4Fva6MF3bIUIAhQ4oYegjmWoxgJbIannTF70I8jpqkjcAMAdV');
     }
 
     //群发猕猴桃活动消息 5000个25元/100元/225元/400元
@@ -425,9 +425,9 @@ class WeixinComponent extends Component
                 "url" => $this->get_mihoutao_game_url(),
                 "topcolor" => "#FF0000",
                 "data" => array(
-                    "first" => array("value" => "感恩节，朋友说发猕猴桃红包啦！"),
-                    "keyword1" => array("value" => "摇下30个即可开始兑换"),
-                    "keyword2" => array("value" => "25元/100元/225元/400元"),
+                    "first" => array("value" => "感恩节，朋友说与西瑞集团联合送福利啦！"),
+                    "keyword1" => array("value" => "摇一摇，摇下20粒就有奖"),
+                    "keyword2" => array("value" => "东北珍珠米2.5kg/谷物圈100g/超值优惠券"),
                     "remark" => array("value" => "点击详情，摇一摇。", "color" => "#FF8800")
                 )
             );

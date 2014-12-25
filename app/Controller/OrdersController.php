@@ -735,21 +735,25 @@ class OrdersController extends AppController{
         }
     }
 
-    public function test_notify_users($start_got) {
+    public function test_notify_users($start_got, $uid = 0) {
         if ($this->is_admin($this->currentUser['id'])) {
             $this->autoRender = false;
-            $this->loadModel('Order');
-            $o = $this->Order->query("select distinct uid, got from chengzi_uid_cnt where got <=". intval($start_got)." order by got desc limit 6000 ");
-            $last_got = $start_got;
-            if(!empty($o)) {
-                foreach($o as $value) {
-                    $uid = $value['chengzi_uid_cnt']['uid'];
-                    $this->Weixin->send_mihoutao_game_message($uid);
-                    $last_got = $value['chengzi_uid_cnt']['got'];
-                    $this->log('notify_users: got='.$last_got.", uid=".$uid);
+
+            if ($uid) {
+                $this->Weixin->send_mihoutao_game_message($uid);
+            } else {
+                $this->loadModel('Order');
+                $o = $this->Order->query("select distinct uid, got from chengzi_uid_cnt where got <=" . intval($start_got) . " order by got desc limit 6000 ");
+                $last_got = $start_got;
+                if (!empty($o)) {
+                    foreach ($o as $value) {
+                        $uid = $value['chengzi_uid_cnt']['uid'];
+                        $this->Weixin->send_mihoutao_game_message($uid);
+                        $last_got = $value['chengzi_uid_cnt']['got'];
+                        $this->log('notify_users: got=' . $last_got . ", uid=" . $uid);
+                    }
                 }
             }
-
             echo "last got:".$last_got;
         }
     }
