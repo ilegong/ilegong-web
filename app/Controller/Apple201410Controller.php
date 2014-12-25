@@ -279,7 +279,7 @@ VALUES
         $award_type = 0;
         $last = $this->Session->read('last_chou_jiang');
         $msg = '';
-        if (time() - $last > 10 && ($gameType == self::BTC1412) && $this->is_weixin()) {
+        if (time() - $last > 10 && ($gameType == self::XIRUI1412) && $this->is_weixin()) {
             $this->Session->write('last_chou_jiang', time());
 
             $hour_limit = $this->hours_limit();
@@ -296,50 +296,69 @@ VALUES
                             $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
                             $not_spent = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] - $awardInfo['spent'] : 0;
 
-                            if ($not_spent >= $this->AWARD_LIMIT) {
+                            $per_spent = 20;
+                            if ($not_spent >= $per_spent) {
                                 $this->loadModel('AwardResult');
-                                $model = $this->AwardResult;
-                                $dayHour = date(FORMAT_DATEH);
+                                $day = date(FORMAT_DATE);
+                                $exchangeCount = 20;
 
-                                $hourAwarded = $model->hour_awarded($dayHour, $gameType);
-                                $iAwarded = $model->userIsAwarded($uid, $gameType);
+                                $this->loadModel('GameXiruiCode');
 
-                                if ($hourAwarded >= $hour_limit) {
-                                    $msg = 'no_more';
-                                } else if (!$iAwarded && 10 == mt_rand(0, 20)) {
-                                    $awardResult = array(
-                                        'uid' => $uid,
-                                        'type' => $gameType,
-                                        'finish_time' => date(FORMAT_DATETIME)
-                                    );
-                                    if (!$model->save($awardResult)) {
-                                        $this->log("Save AwardResult failed:" . json_encode($awardResult));
-                                        $msg = '';
-                                    } else {
-                                        $lastId = $model->getLastInsertID();
-                                        if ($lastId && $model->hour_awarded($dayHour, $gameType) > $hour_limit) {
-                                            $model->delete($lastId);
-                                            $msg = 'no_more';
-                                        } else {
-                                            $exchangeCount = 100;
-                                            $coupon_count = 1;
-                                            $so = $this->CouponItem;
-                                            $weixin = $this->Weixin;
-                                            $this->exchangeCouponAndLog($uid, $not_spent, $exchangeCount, $coupon_count, $gameType, $awardInfo['id'],
-                                                function ($uid, $operator, $source_log_id) use ($so, $weixin) {
-                                                    $so->addCoupon($uid, 17652, $operator, $source_log_id);
-                                                    $so->id = null;
-                                                    $store = "在黔阳冰糖橙店购买时使用";
-                                                    $validDesc = "有效期至2014年12月18日";
-                                                    $weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
-                                                }
+                                $iAwarded = $this->GameXiruiCode->userIsAwarded($uid);
+                                $mt_rand = mt_rand(0, 20);
+                                if (empty($iAwarded) && $mt_rand < 10) {
+                                    $first_type_award = array(1 => 50, 2 => 100);
+                                    foreach ($first_type_award as $type => $limit) {
+                                        $today_awarded = $this->GameXiruiCode->today_awarded($day, $type);
+                                        if ($this->shouldLimit($today_awarded, $limit)) {
+                                            continue;
+                                        }
+
+                                        $code = $this->GameXiruiCode->find('first', array('conditions' => array(
+                                            'type' => $type,
+                                            'uid' => 0
+                                        )));
+                                        if (empty($code)) {
+                                            continue;
+                                        }
+
+                                        if ($this->GameXiruiCode->save(array(
+                                            'uid' => $uid,
+                                            'type' => $type,
+                                            'created' => date(FORMAT_DATETIME)
+                                        ))) {
+                                            $this->exchangeCouponAndLog($uid, $not_spent, $exchangeCount, 1, $gameType, $awardInfo['id'],
+                                                function ($uid, $operator, $source_log_id)  {}
                                             );
-                                            $award_type = 58;
-                                            $not_spent -= $exchangeCount;
+                                            $award_type = $type;
+                                            $award_code = $code['GameXiruiCode']['code'];
+                                            break;
                                         }
                                     }
                                 }
-                                $logstr = "Choujian $uid : todayAwarded=$hourAwarded, iAwarded=$iAwarded, msg=" . $msg;
+
+                                if ($award_type == 0) {
+
+                                    //award_limit: 1=>50, 2=>30, 3=>3000/5000, 4=>unlimited
+                                    //18278  500
+                                    //18279  300
+                                    //18280  100
+                                    $coupon_count = 1;
+                                    $award_type = $mt_rand > 5 ? 18278 : 18279;
+                                    $so = $this->CouponItem;
+                                    $weixin = $this->Weixin;
+                                    $this->exchangeCouponAndLog($uid, $not_spent, $exchangeCount, $coupon_count, $gameType, $awardInfo['id'],
+                                        function ($uid, $operator, $source_log_id) use ($so, $weixin, $award_type) {
+                                            $so->addCoupon($uid, $award_type, $operator, $source_log_id);
+                                            $so->id = null;
+                                            $store = "在朋友说西瑞食品微店购买时使用";
+                                            $validDesc = "有效期至2014年12月31日";
+                                            $weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
+                                        }
+                                    );
+                                }
+                                $not_spent -= $exchangeCount;
+                                $logstr = "Choujian $uid : todayAwarded=$today_awarded, iAwarded=$iAwarded, award_type = $award_type, msg=" . $msg;
                                 $this->log($logstr);
                             } else {
                                 $msg = 'not_enough_100';
@@ -358,7 +377,7 @@ VALUES
             $logstr = 'too frequently';
         }
 
-        echo json_encode(array('success' => true, 'award_type' => $award_type, 'logstr' => '', 'msg' => $msg, 'total' => $not_spent));
+        echo json_encode(array('success' => true, 'award_type' => $award_type, 'logstr' => '', 'msg' => $msg, 'total' => $not_spent, 'award_code' => $award_code));
     }
 
     public function exchange_coupon($gameType = KEY_APPLE_201410)

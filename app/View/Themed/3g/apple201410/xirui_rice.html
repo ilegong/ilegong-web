@@ -1,4 +1,4 @@
-{{$this->Html->script(array('trace/tracekit.min.report.js', 'shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js', 'jquery/jquery.fullPage.min.js'), array('block' => 'scriptBottom'));}}
+{{$this->Html->script(array('trace/tracekit.min.report.js', 'shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js', 'jquery/jquery.fullPage.min.js', 'jquery/jquery.rotate.js'), array('block' => 'scriptBottom'));}}
 <style>
     #yao_jp_div > span {
         border: 1px solid darkkhaki;
@@ -222,7 +222,7 @@
     <div class="section">
         <div class="cj">
             <img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/cj/cj1.gif" />
-            <a href="javascript:;" onclick="utils.alert_one('12月25日早上9点开始抽奖，请设好闹钟～')"><img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/cj/start.png" /></a>
+            <a href="javascript:;" id="cj_start_btn"><img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/cj/start.png" /></a>
         </div>
         <!--获奖提示-->
         <div style=" display:none;">
@@ -440,6 +440,81 @@
             }
             return (win == friendGots.length) ? 100 : utils.toFixed(win*100/friendGots.length, 0)
         }
+
+            $('#cj_start_btn').click(function(){
+
+                var st = new Date(2014,11,24,9,0);
+                if (new Date().getTime() < st.getTime()) {
+                    utils.alert_one('12月25日早上9点开始抽奖，请设好闹钟～');
+                    return;
+                }
+
+                var startImg = $(this).find('img');
+                var finish = false;
+                var stop_rotate = 0;
+                function jp() {
+                    setTimeout(function () {
+                        $.getJSON('/apple_201410/jp/{{$game_type}}?' + Math.random(), {}, function (data) {
+                            finish = true;
+                            if (data.success) {
+                                if (data.award_type != 0) {
+                                    var tips = '恭喜，您抽中西瑞食品集团提供的';
+                                    if (data.award_type == 1) {
+                                        tips += '西瑞东北珍珠米2.5kg，兑换码:' + data.award_code;
+                                        stop_rotate = 0;
+                                    } else if (data.award_type == 2) {
+                                        tips += '西瑞谷物圈100g，兑换码:' + data.award_code;
+                                        stop_rotate = 144;
+                                    } else if (data.award_type == 18278) {
+                                        tips += '优惠券5元（可在朋友说西瑞店铺所有产品使用）';
+                                        stop_rotate = 216;
+                                    } else if (data.award_type == 18279) {
+                                        tips += '优惠券3元（可在朋友说西瑞店铺所有产品使用）';
+                                        stop_rotate = 72;
+                                    } else if (data.award_type == 18280) {
+                                        tips += '优惠券1元（可在朋友说西瑞店铺所有产品使用）';
+                                        stop_rotate = 288;
+                                    }
+                                    utils.alert_one(tips, '查看我的奖品', function () {
+                                        window.location = '/t/ag/xirui1412.html#my_award';
+                                    });
+//                            utils.alert_one(tips, '分享到朋友圈', function () {
+//                                if ($shaking_tips_png) {
+//                                    $share_before_coupon = true;
+//                                    awarded = true;
+//                                    $share_div.show();
+//                                }
+//                            });
+                                } else {
+                                    var msg = '';
+                                    if (data.msg == 'not_enough_100') {
+                                        msg = '抱歉，抽奖失败，够20粒才可以抽！';
+                                    }
+                                    else if (data.msg == 'game_end') {
+                                        msg = '活动已结束';
+                                    } else {
+                                        msg = '手气不太好啊, 请重试！';
+                                    }
+                                    utils.alert(msg, null);
+                                }
+                            } else {
+                            }
+                        });
+                    }, 1000);
+                }
+
+                function rotate() {
+                    if (finish) {
+                        startImg.css('rotate', 0);
+                    } else {
+                        startImg.animate({rotate: '360'}, 2000, 'linear', function () {
+                            rotate();
+                        });
+                    }
+                }
+                jp();
+                rotate();
+            });
 
         function desc_cmp_friends() {
 

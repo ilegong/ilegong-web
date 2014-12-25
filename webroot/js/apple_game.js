@@ -59,7 +59,7 @@ $(document).ready(function(){
             return;
         }
 
-        var $message = (!$today_got_wx) ? '关注朋友说每天增加5次机会' : '机会已用完，分享给你的朋友们，每个朋友点击过来就增加<span class="apple_numbers">1</span>次机会！';
+        var $message = (!$today_got_wx) ? '关注朋友说每天增加2次机会' : '机会已用完，分享给你的朋友们，每个朋友点击过来就增加<span class="apple_numbers">1</span>次机会！';
 
         showNoMoreTimesDialog = true;
         bootbox.dialog({
@@ -124,7 +124,7 @@ $(document).ready(function(){
         };
     }
     if ($got > 0) {
-        msg = '恭喜你摇掉了<span class="apple_numbers">' + $got + '</span>个' + game_obj_name + '！'+coupon_message(times, total);
+        msg = '恭喜你摇掉了<span class="apple_numbers">' + $got + '</span>颗' + game_obj_name + '！'+coupon_message(times, total);
         timeout = 3000;
         if (need_login) {
             msg += '<br/> 亲，您的成绩超过了大多数用户！请您先登录。';
