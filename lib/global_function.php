@@ -1326,3 +1326,13 @@ function get_shichituan_period($time = null) {
     }
     return ((date('y', $time) <= 2014) ? (date('m', $time) - 8) : (date('m', $time) + 4));
 }
+
+
+/**
+ * @param $id
+ * @param string $acc default pys
+ * @return string
+ */
+function key_cache_sub($id, $acc='pys') {
+    return '_wx_sub_'.$acc.'_' . $id;
+}

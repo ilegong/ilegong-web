@@ -199,11 +199,13 @@ VALUES
     public function assignWXSubscribeTimes($gameType = KEY_APPLE_201410)
     {
         $this->autoRender = false;
-        $subscribe_status = 0;//$this->currentUser['wx_subscribe_status'];
-
         $id = $this->currentUser['id'];
+
         $res = array();
-        if ($subscribe_status == WX_STATUS_UNKNOWN) {
+
+        $key = key_cache_sub($id);
+        $subscribe_status = Cache::read($key);
+        if (empty($result) || $subscribe_status == WX_STATUS_UNKNOWN ) {
             $this->loadModel('Oauthbind');
             $oauth = $this->Oauthbind->findWxServiceBindByUid($id);
             if (!empty($oauth)) {
@@ -211,11 +213,13 @@ VALUES
                 $uinfo = $this->WxOauth->get_user_info_by_base_token($oauth['oauth_openid']);
                 if (!empty($uinfo)) {
                     $subscribe_status = ($uinfo['subscribe'] != 0 ? WX_STATUS_SUBSCRIBED : WX_STATUS_UNSUBSCRIBED);
-                    $this->loadModel('User');
-                    $this->User->updateAll(array('wx_subscribe_status' => $subscribe_status), array('id' => $id));
+                    Cache::write($key, $subscribe_status);
+//                        $this->loadModel('User');
+//                        $this->User->updateAll(array('wx_subscribe_status' => $subscribe_status), array('id' => $id));
                 }
             }
         }
+
 
         if (WX_STATUS_SUBSCRIBED == $subscribe_status) {
             $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');

@@ -79,6 +79,11 @@ class WeixinController extends AppController {
                                 'picUrl' => 'https://mmbiz.qlogo.cn/mmbiz/qpxHrxLKdR0A6F8hWz04wVpntT9Jiao8XYT9A69hTUYIomNtyJMbLnMibbSHO3NO5UaEics7OwEo9qLHfqmHas8zQ/0',
                                 'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=3&sn=75c4b8f32c29e1c088c7de4ee2e22719#rd')
                         );
+
+                        $uid = $this->Oauthbinds->findUidByWx(trim($req['FromUserName']));
+                        if ($uid) {
+                            Cache::write(key_cache_sub($uid), WX_STATUS_SUBSCRIBED);
+                        }
                     } else {
                         $content = array(
                             array('title' => '朋友说是什么？看完你就懂了！', 'description' => '',
@@ -96,6 +101,14 @@ class WeixinController extends AppController {
 					exit;
 				} else if ($req['Event'] == 'CLICK') {
                     $input = $req['EventKey'];
+                } else if ($req['Event'] == 'unsubscribe') {
+
+                    if ($from == FROM_WX_SERVICE) {
+                        $uid = $this->Oauthbinds->findUidByWx(trim($req['FromUserName']));
+                        if ($uid) {
+                            Cache::write(key_cache_sub($uid), WX_STATUS_UNSUBSCRIBED);
+                        }
+                    }
                 }
 			}
 
