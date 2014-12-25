@@ -474,7 +474,7 @@
                                     }
                                     utils.alert_one(tips, '查看我的奖品', function () {
                                         window.location.href = '/t/ag/xirui1412.html?section=my_award';
-                                    });
+                                    }, {top:'70%'});
 //                            utils.alert_one(tips, '分享到朋友圈', function () {
 //                                if ($shaking_tips_png) {
 //                                    $share_before_coupon = true;
@@ -502,9 +502,9 @@
 
                 function rotate() {
                     if (finish) {
-                        startImg.css('rotate', stop_rotate);
+                        startImg.animate({'rotate': stop_rotate});
                     } else {
-                        startImg.animate({rotate: '360'}, 2000, 'linear', function () {
+                        startImg.animate({rotate: '360'}, 1000, 'linear', function () {
                             rotate();
                         });
                     }
