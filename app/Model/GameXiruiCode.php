@@ -12,7 +12,7 @@ class GameXiruiCode extends AppModel {
      * @param $type
      * @return mixed
      */
-    public function todayAwarded($day, $type) {
+    public function today_awarded($day, $type) {
         $key = $this->key_day_awarded($day, $type);
         $result = Cache::read($key);
         if (!$result) {

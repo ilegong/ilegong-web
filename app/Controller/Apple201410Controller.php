@@ -279,11 +279,13 @@ VALUES
         $award_type = 0;
         $last = $this->Session->read('last_chou_jiang');
         $msg = '';
-        if (time() - $last > 10 && ($gameType == self::XIRUI1412) && $this->is_weixin()) {
+        if (time() - $last > 10 && ($gameType == self::XIRUI1412)
+            && $this->is_weixin()
+        ) {
             $this->Session->write('last_chou_jiang', time());
-
-            $hour_limit = $this->hours_limit();
-            if ($hour_limit > 0) {
+//
+//            $hour_limit = $this->hours_limit();
+//            if ($hour_limit > 0) {
 
                 try {
 
@@ -306,8 +308,8 @@ VALUES
 
                                 $iAwarded = $this->GameXiruiCode->userIsAwarded($uid);
                                 $mt_rand = mt_rand(0, 20);
-                                if (empty($iAwarded) && $mt_rand < 10) {
-                                    $first_type_award = array(1 => 1, 2 => 1);
+                                if (empty($iAwarded)  && $mt_rand < 10 ) {
+                                    $first_type_award = array(1 => 13, 2 => 25);
                                     foreach ($first_type_award as $type => $limit) {
                                         $today_awarded = $this->GameXiruiCode->today_awarded($day, $type);
                                         if ($this->shouldLimit($today_awarded, $limit)) {
@@ -322,11 +324,11 @@ VALUES
                                             continue;
                                         }
 
-                                        if ($this->GameXiruiCode->save(array(
+                                        if ($this->GameXiruiCode->updateAll(array(
                                             'uid' => $uid,
                                             'type' => $type,
-                                            'created' => date(FORMAT_DATETIME)
-                                        ))) {
+                                            'created' => '\''.date(FORMAT_DATETIME).'\''
+                                        ), array('code' => $code['GameXiruiCode']['code'], 'uid' => 0))) {
                                             $this->exchangeCouponAndLog($uid, $not_spent, $exchangeCount, 1, $gameType, $awardInfo['id'],
                                                 function ($uid, $operator, $source_log_id)  {}
                                             );
@@ -370,9 +372,9 @@ VALUES
                     $msg = '';
                     $this->log('error_jp: '.$e);
                 }
-            } else {
-                $msg = 'time_error';
-            }
+//            } else {
+//                $msg = 'time_error';
+//            }
         } else {
             $logstr = 'too frequently';
         }
@@ -635,6 +637,13 @@ VALUES
         $this->_updateLastQueryTime(time());
 
         if ($awardInfo['got'] > 20) {
+
+            $this->loadModel('GameXiruiCode');
+            if ($this->GameXiruiCode->userIsAwarded($current_uid)) {
+                $gotCode = $this->GameXiruiCode->find('first', array('conditions' => array('uid' => $current_uid), 'order' => 'created asc'));
+                $this->set('gotCode', $gotCode);
+            }
+
             $this->loadModel('CouponItem');
             $coupons = $this->CouponItem->find_my_valid_coupons($current_uid, 147, false);
             $this->set('coupons', $coupons);

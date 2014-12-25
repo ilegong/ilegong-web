@@ -197,8 +197,11 @@
     <div class="section">
         <div class="help_title">我的奖品</div>
         <div class="help_list">
-            <ul>
-            {{if !empty($coupons)}}
+            <ul style="width: 90%">
+            {{if !empty($coupons) || !empty($gotCode)}}
+            {{if ($gotCode)}} <li> {{if $gotCode['GameXiruiCode']['type'] == 1}} 西瑞东北珍珠米2.5kg {{else}} 西瑞谷物圈100g {{/if}}, 兑换码：{{$gotCode['GameXiruiCode']['code']}}
+                <a href="javascript:;" class="rule_a radius10" onclick="$('#view_get_jiang_pin').show();">兑换</a></li>
+            {{/if}}
             {{loop $coupons $k $coupon}}
                 <li>{{$this->Number->precision($coupon['Coupon']['reduced_price']/100, 0)}}元优惠券 <a href="/b/xi_rui_ji_tuan.html">去使用</a></li>
             {{/loop}}
