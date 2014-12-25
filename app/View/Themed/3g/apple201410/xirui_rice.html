@@ -200,7 +200,7 @@
             <ul>
             {{if !empty($coupons)}}
             {{loop $coupons $k $coupon}}
-                <li>{{$this->Number->precision($coupons['Coupon']['reduced_price'], 0)}}元优惠券 <a href="/b/xi_rui_ji_tuan.html">去使用</a></li>
+                <li>{{$this->Number->precision($coupon['Coupon']['reduced_price'], 0)}}元优惠券 <a href="/b/xi_rui_ji_tuan.html">去使用</a></li>
             {{/loop}}
             {{else}}
                 <li>你还没有抽到奖品</li>
