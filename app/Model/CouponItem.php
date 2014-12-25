@@ -237,7 +237,6 @@ class CouponItem extends AppModel {
             'CouponItem.status' => COUPONITEM_STATUS_TO_USE,
             'CouponItem.id' => $couponItemIds,
             'CouponItem.deleted = 0',
-            'CouponItem.applied_order = 0',
             '(CouponItem.applied_order is null or CouponItem.applied_order = 0)',
             'Coupon.published' => 1,
             'Coupon.status' => COUPON_STATUS_VALID,
@@ -265,20 +264,21 @@ class CouponItem extends AppModel {
         ));
     }
 
-    public function find_my_valid_coupons($user_id, $brandId = null) {
+    public function find_my_valid_coupons($user_id, $brandId = null, $limit_non_used = true) {
         if (!$user_id) { return false; }
 
         $dt = new DateTime();
         $cond = array('CouponItem.bind_user' => $user_id,
             'CouponItem.status' => COUPONITEM_STATUS_TO_USE,
             'CouponItem.deleted = 0',
-            'CouponItem.applied_order = 0',
-            '(CouponItem.applied_order is null or CouponItem.applied_order = 0)',
             'Coupon.published' => 1,
             'Coupon.status' => COUPON_STATUS_VALID,
             'Coupon.valid_begin <= ' => $dt->format(FORMAT_DATETIME),
             'Coupon.valid_end >= ' => $dt->format(FORMAT_DATETIME)
         );
+        if ($limit_non_used) {
+            $cond[] = '(CouponItem.applied_order is null or CouponItem.applied_order = 0)';
+        }
         if ($brandId) {
             $cond['OR'] = array('Coupon.brand_id' => $brandId, 'Coupon.brand_id is null', 'Coupon.brand_id == 0');
         }

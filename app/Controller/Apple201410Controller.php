@@ -634,6 +634,12 @@ VALUES
         $this->set('game_user_total', $awardInfo['got']);
         $this->_updateLastQueryTime(time());
 
+        if ($awardInfo['got'] > 20) {
+            $this->loadModel('CouponItem');
+            $coupons = $this->CouponItem->find_my_valid_coupons($current_uid, 147, false);
+            $this->set('coupons', $coupons);
+        }
+
 
         $this->set('game_end', $this->is_game_end($gameCfg));
         if ($gameType == self::BTC1412) {
