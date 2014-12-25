@@ -186,7 +186,7 @@ class ShipPromotion extends AppModel {
             }
 
             $byNumsPss = $pss[TYPE_REDUCE_BY_NUMS];
-            if (!empty($byNumsPss) && $num >= $pss['least_num']) {
+            if (!empty($byNumsPss) && $num >= $byNumsPss['least_num']) {
                 return $byNumsPss['ship_fee'];
             }
 
