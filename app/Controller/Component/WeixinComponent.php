@@ -425,7 +425,7 @@ class WeixinComponent extends Component
                 "url" => $this->get_mihoutao_game_url(),
                 "topcolor" => "#FF0000",
                 "data" => array(
-                    "first" => array("value" => "感恩节，朋友说与西瑞集团联合送福利啦！"),
+                    "first" => array("value" => "圣诞节，朋友说与西瑞集团联合送福利啦！"),
                     "keyword1" => array("value" => "摇一摇，摇下20粒就有奖"),
                     "keyword2" => array("value" => "东北珍珠米2.5kg/谷物圈100g/超值优惠券"),
                     "remark" => array("value" => "点击详情，摇一摇。", "color" => "#FF8800")
