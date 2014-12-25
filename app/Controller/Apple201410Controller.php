@@ -199,7 +199,7 @@ VALUES
     public function assignWXSubscribeTimes($gameType = KEY_APPLE_201410)
     {
         $this->autoRender = false;
-        $subscribe_status = $this->currentUser['wx_subscribe_status'];
+        $subscribe_status = 0;//$this->currentUser['wx_subscribe_status'];
 
         $id = $this->currentUser['id'];
         $res = array();
