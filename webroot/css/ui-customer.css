@@ -608,7 +608,8 @@ body.modal-open{margin-right: 0px}
 .name ul li .price{ color:#EC4E4C; font-size:16px;}
 .mar_price{ text-decoration:line-through; color:#999999;}
 .name ul li.red_packet{ background-color:#EC4E4C; color:#ffffff; font-size:12px; font-family:"微软雅黑"; line-height:22px; padding:0 8px; margin-top:3px;}
-.text{ width:30px; height:16px; border:1px solid #ccc; padding:2px; text-align:center; float:left;}
+.details .text{ width:30px; height:16px; border:1px solid #ccc; padding:2px; text-align:center; float:left;}
+
 /*运费*/
 .tb_deliveryAdd{ margin:0 6px 0 0;}
 .mui_addr_tri{color: #333;margin-right: -12px;padding-right: 12px;cursor: pointer;background: 0 0;border: 0;position: relative;z-index: 2;}
