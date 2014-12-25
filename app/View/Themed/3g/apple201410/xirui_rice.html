@@ -199,7 +199,7 @@
         <div class="help_list">
             <ul style="width: 90%">
             {{if !empty($coupons) || !empty($gotCode)}}
-            {{if ($gotCode)}} <li> {{if $gotCode['GameXiruiCode']['type'] == 1}} 西瑞东北珍珠米2.5kg {{else}} 西瑞谷物圈100g {{/if}}, 兑换码：{{$gotCode['GameXiruiCode']['code']}}
+            {{if ($gotCode)}} <li> <span id="game_xirui_award">{{if $gotCode['GameXiruiCode']['type'] == 1}} 西瑞东北珍珠米2.5kg {{else}} 西瑞谷物圈100g {{/if}}</span>, 兑换码：{{$gotCode['GameXiruiCode']['code']}}
                 <a href="javascript:;" class="rule_a radius10" onclick="$('#view_get_jiang_pin').show();">兑换</a></li>
             {{/if}}
             {{loop $coupons $k $coupon}}
@@ -342,23 +342,12 @@
             anchors: ['firstPage', 'product_story', 'get_coupons', 'my_award', 'award_cj', 'about_us', 'friends']
         });
 
-        var today_sold_out = '{{$today_sold_out}}';
-
-        var miaosha_hour = function(){
-            var now = new Date();
-            return now.getHours();
-        };
-        function can_miaosha() {
-            var now = new Date;
-            return (!today_sold_out && now.getHours() >= 8 && now.getHours() < 23);
-        }
-
         var friendGots = $('.gots').map(function () {
             var v = $.trim($(this).text());
             return v ? parseInt(v) : 0;
         }).get();
 
-
+        awarded = $('#game_xirui_award').size() > 0;
 
         function azero(v) {
             return  (v < 10) ?  ('0'+''+v) : v;
@@ -402,14 +391,14 @@
         }
 
         function show_got_coupon() {
-            utils.alert_one('恭喜您秒杀成功，请注意在有效期结束前使用。还可以抢268元终极大奖哦', '查看我的优惠券', function(){ window.location.href = '/users/my_coupons.html';});
+            utils.alert_one('恭喜您获奖啦，请在有效期结束前兑换/使用。', '我的奖品', function(){ window.location.href = '/t/ag/xirui1412.html?section=my_award';});
         }
 
         var imgUrl = $('#apple_tree_img').attr('src');
         var lineLink = '{{WX_HOST}}/t/ag/{{$game_type}}.html?{{if $trid}}trid={{urlencode($trid)}}{{/if}}&from=awarded';
         var appid = '{{WX_APPID}}';
-        share_coupon_msg = '基友们太给力！我已领取1箱冰糖橙，赶紧点还有268元终极大奖，兄弟们，继续摇起！';
-        share_coupon_title = '妈呀，我终于获奖了，1箱冰糖橙到手！';
+        share_coupon_msg = '基友们太给力！我摇到由西瑞食品提供的'+$('#game_xirui_award').text()+'啦，兄弟们，继续摇起！';
+        share_coupon_title = '妈呀，我终于获奖了！';
 
         function share_before_coupon_msg() {
             utils.wx_to_friend(appid, imgUrl, lineLink, share_coupon_msg, share_coupon_title);

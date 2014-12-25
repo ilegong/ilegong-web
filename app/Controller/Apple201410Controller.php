@@ -18,7 +18,7 @@ class Apple201410Controller extends AppController
 
     public $components = array('Weixin');
 
-    var $AWARD_LIMIT = 100;
+    var $AWARD_LIMIT = 200;
 
     const EXCHANGE_RICE_SOURCE = 'apple_exchange_rice';
     const RICE_201411 = 'rice201411';
@@ -559,11 +559,15 @@ VALUES
             $this->set('helpMe', $helpMeItems);
             $this->set('meHelp', $meHelpItems);
 
-            $this->loadModel('AwardResult');
-            $hours_awarded = $this->AwardResult->hour_awarded(date(FORMAT_DATEH), $gameType);
-            $this->set('today_sold_out', $hours_awarded >= $this->hours_limit());
-        $iAwared = $this->AwardResult->userIsAwarded($current_uid, $gameType);
-        $this->set('awarded', !empty($iAwared));
+//            $this->loadModel('AwardResult');
+//            $iAwared = $this->AwardResult->userIsAwarded($current_uid, $gameType);
+//            $this->set('awarded', !empty($iAwared));
+
+//            $this->loadModel('GameXiruiCode');
+//            if ($this->GameXiruiCode->userIsAwarded($current_uid)) {
+//                $gotCode = $this->GameXiruiCode->find('first', array('conditions' => array('uid' => $current_uid), 'order' => 'created asc'));
+//                $this->set('awarded', $gotCode);
+//            }
 
             $this->loadModel('Order');
 
@@ -709,14 +713,14 @@ VALUES
             return 0;
         };
 
+        $uid = $this->currentUser['id'];
         $total_got = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] : 0;
         $curr_got = 0;
 
-        $this->loadModel('AwardResult');
-        $model = $this->AwardResult;
-        $todayAwarded = $model->todayAwarded(date(FORMAT_DATE), $gameType);
-        $uid = $this->currentUser['id'];
-        $iAwarded = $model->userIsAwarded($uid, $gameType);
+//        $this->loadModel('AwardResult');
+//        $model = $this->AwardResult;
+        $todayAwarded = 0 ; // $model->todayAwarded(date(FORMAT_DATE), $gameType);
+//        $iAwarded = $model->userIsAwarded($uid, $gameType);
 
         $gameCfg = $this->GameConfig->findByGameType($gameType);
         if (empty($gameCfg) ) {
@@ -729,19 +733,20 @@ VALUES
         }
         $curr_got += $this->randGotApple($todayAwarded, $total_got, $dayLimit, $gameType);
         $curr_got = ($total_got == 0 && $curr_got == 0 ? 3 : $curr_got);
-
-        if ($gameType != self::MIHOUTAO1411
-            && $gameType != self::BTC1412
-            && (is_array($iAwarded) && empty($iAwarded) && $total_got + $curr_got >= $this->AWARD_LIMIT)) {
-            $awardResult = array(
-                'uid' => $uid,
-                'type' => $gameType,
-                'finish_time' => date(FORMAT_DATETIME)
-            );
-            if (!$model->save($awardResult)) {
-                $this->log("update AwardResult failed:" . json_encode($awardResult));
-            };
-        }
+//
+//        if ($gameType != self::MIHOUTAO1411
+//            && $gameType != self::BTC1412
+//            && $gameType != self::XIRUI1412
+//            && (is_array($iAwarded) && empty($iAwarded) && $total_got + $curr_got >= $this->AWARD_LIMIT)) {
+//            $awardResult = array(
+//                'uid' => $uid,
+//                'type' => $gameType,
+//                'finish_time' => date(FORMAT_DATETIME)
+//            );
+//            if (!$model->save($awardResult)) {
+//                $this->log("update AwardResult failed:" . json_encode($awardResult));
+//            };
+//        }
 
         if ($this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + ' . $curr_got, 'updated' => '\'' . date(FORMAT_DATETIME) . '\''),
             array('id' => $awardInfo['id'], 'times>0', 'type'=> addslashes($gameType)))) {
