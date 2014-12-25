@@ -564,7 +564,11 @@ class AppController extends Controller {
     protected function redirect_for_append_tr_id($uid, $trackType, $defUri = '/') {
         $uri = game_uri($trackType, $defUri);
         $encodedTrid = $this->encode_apple_tr_id($uid, $trackType);
-        $this->redirect("$uri?trid=".urlencode($encodedTrid));
+            $url = "$uri?trid=" . urlencode($encodedTrid);
+        if (!empty($_GET['section'])) {
+            $url .= '&section='.$_GET['section'];
+        }
+            $this->redirect($url);
     }
 
     protected  function encode_apple_tr_id($id, $trackType) {

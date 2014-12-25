@@ -473,7 +473,7 @@
                                         stop_rotate = 288;
                                     }
                                     utils.alert_one(tips, '查看我的奖品', function () {
-                                        window.location.href = '/t/ag/xirui1412.html#my_award';
+                                        window.location.href = '/t/ag/xirui1412.html?section=my_award';
                                     });
 //                            utils.alert_one(tips, '分享到朋友圈', function () {
 //                                if ($shaking_tips_png) {
@@ -577,6 +577,10 @@
                 });
             }
         }, false);
+
+        {{if $_GET['section']}}
+            $.fn.fullpage.moveTo('{{$_GET['section']}}');
+            {{/if}}
     });
 
     function game_coupon_message(times, total) {
