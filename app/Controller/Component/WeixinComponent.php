@@ -285,7 +285,6 @@ class WeixinComponent extends Component
         $tries = 2;
         while ($tries-- > 0) {
             $access_token = $this->get_access_token();
-            $this->log("get weixin api access token: " . $access_token, LOG_DEBUG);
             if (!empty($access_token)) {
                 $curl = curl_init();
                 $options = array(
