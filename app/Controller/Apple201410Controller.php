@@ -10,6 +10,7 @@ class Apple201410Controller extends AppController
 {
 
     const DAILY_TIMES_SUB = 2;
+    const TIMES_INITIAL = 2;
 
     var $name = "Apple201410";
 
@@ -599,7 +600,7 @@ VALUES
 
         $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($current_uid, $gameType);
         if (empty($awardInfo)) {
-            $awardInfo = array('AwardInfo' => array('uid' => $current_uid, 'type' => $gameType, 'times' => 5, 'got' => 0));
+            $awardInfo = array('AwardInfo' => array('uid' => $current_uid, 'type' => $gameType, 'times' => self::TIMES_INITIAL, 'got' => 0));
             try {
                 $this->AwardInfo->save($awardInfo);
             } catch (Exception $e) {
