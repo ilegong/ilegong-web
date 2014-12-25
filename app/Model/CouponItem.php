@@ -244,7 +244,7 @@ class CouponItem extends AppModel {
             'Coupon.valid_end >= ' => $dt->format(FORMAT_DATETIME),
         );
         if ($brandId) {
-            $cond['OR'] = array('Coupon.brand_id' => $brandId, 'Coupon.brand_id is null', 'Coupon.brand_id == 0');
+            $cond['OR'] = array('Coupon.brand_id' => $brandId, 'Coupon.brand_id is null', 'Coupon.brand_id = 0');
         }
 
         $items = $this->find('all', array(
@@ -280,7 +280,7 @@ class CouponItem extends AppModel {
             $cond[] = '(CouponItem.applied_order is null or CouponItem.applied_order = 0)';
         }
         if ($brandId) {
-            $cond['OR'] = array('Coupon.brand_id' => $brandId, 'Coupon.brand_id is null', 'Coupon.brand_id == 0');
+            $cond['OR'] = array('Coupon.brand_id' => $brandId, 'Coupon.brand_id is null', 'Coupon.brand_id = 0');
         }
 
         $items = $this->find('all', array(
