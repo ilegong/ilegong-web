@@ -397,7 +397,12 @@
         var imgUrl = $('#apple_tree_img').attr('src');
         var lineLink = '{{WX_HOST}}/t/ag/{{$game_type}}.html?{{if $trid}}trid={{urlencode($trid)}}{{/if}}&from=awarded';
         var appid = '{{WX_APPID}}';
-        share_coupon_msg = '基友们太给力！我摇到由西瑞食品提供的'+$('#game_xirui_award').text()+'啦，兄弟们，继续摇起！';
+
+        function get_share_msg(msg) {
+            return '基友们太给力！我摇到由西瑞食品提供的' + msg + '啦，兄弟们，继续摇起！';
+        }
+
+        share_coupon_msg = get_share_msg($('#game_xirui_award').text());
         share_coupon_title = '妈呀，我终于获奖了！';
 
         function share_before_coupon_msg() {
