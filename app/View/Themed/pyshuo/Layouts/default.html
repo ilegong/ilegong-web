@@ -148,12 +148,9 @@
 {{/if}}
 {{template menus/bootstrap}}
 
-<div id="header-breadcrumb">
-    <div class="container clearfix">
-        {{template Elements/navigation_header}}
-    </div>
-    <div class="clear"></div>
-</div>
+<!--<div id="header-breadcrumb">-->
+    <!--<div class="clear"></div>-->
+<!--</div>-->
 
 <?php
     $flash_msg =  $this->Session->flash();
@@ -203,6 +200,7 @@
         updateCartItemCount();
     }
 </script>
+{{if !$is_index}}
 <script type="text/javascript">
     var classification_child_menu = $('#classification_child_menu');
     var classification_menu_flag = $('#classification_menu_flag');
@@ -220,6 +218,7 @@
         });
     });
 </script>
+{{/if}}
 <script>
     /*回头顶部*/
     $(window).scroll(function(){

@@ -20,10 +20,10 @@
 <div class="custom_nav">
     <ul class="clearfix">
         <li class="fl" id="classification_menu" style="position:relative;">
-            <a href="/">
+            <a href="/" style="background: {{$is_index?'#1D8308':''}}">
                 <dl class="clearfix">
                     <dt>全部商品分类</dt>
-                    <dt class="class_up" id="classification_menu_flag"></dt>
+                    <dt class="{{$is_index?'class':'class_up'}}" id="classification_menu_flag"></dt>
                 </dl>
             </a>
             <?PHP
@@ -31,7 +31,7 @@
             ?>
             <!--category-->
             {{if count($tagsWithProducts)>0}}
-            <dl class="moreclass" id="classification_child_menu" style="display: none">
+            <dl class="moreclass" id="classification_child_menu">
                 <dd>
                     <?PHP foreach($tagsWithProducts as $tagWithProduct) {
                         if($tagWithProduct['ProductCounts']>0){ ?>

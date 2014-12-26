@@ -419,7 +419,12 @@ body.cke_editable{margin:20px;}
 
 /* CSS Document */
 .banner{ background:url(/img/product-demo/banner01.jpg) center no-repeat; height:400px; min-width:1028px; margin-bottom:30px;}
-.class_title{ height:35px; border-bottom:2px solid; color:#ffffff; margin-right:15px; margin-bottom:15px;}
+.class_title {
+    height: 35px;
+    border-bottom: 2px solid;
+    color: #ffffff;
+    margin-right: 15px;
+}
 .orange_border{ border-bottom-color:#FFA200;}
 .green_border{ border-bottom-color:#29AC0E;}
 .orange_bg{ background-color:#FFA200;}
@@ -468,8 +473,8 @@ body.cke_editable{margin:20px;}
 .classify_list{ width: 1028;  }
 .row .thumb{
     border: 0;
-    width: 227px;
-    height: 160px;
+    width: 240px;
+    height: 180px;
     overflow: hidden;
     position: relative;
     z-index:1;
@@ -500,15 +505,18 @@ body.cke_editable{margin:20px;}
     -webkit-transform:scale(1.2, 1.2); /* Safari 和 Chrome */
     -o-transform:scale(1.2, 1.2); 	/* Opera */
 }
-.classify_list{ padding-bottom:10px;}
+.classify_list {
+    padding-bottom: 30px;
+    margin-left: 0px;
+    margin-right: 0;
+}
 .classify_list h1{ font-size:12px; color:#333333; font-weight:normal;}
 .classify_list h1 a{ color:#333333; text-decoration:none; line-height:24px;}
 .classify_list h1 a:hover{ color:#29AC0E; text-decoration:underline;}
 .classify_list div a {
     display: block;
     float: left;
-    width: 229px;
-    height: 240px;
+    width: 242px;
     border: 1px #dddddd solid;
     padding-bottom: 10px;
     text-align: center;
@@ -549,7 +557,7 @@ ul li{ list-style:none;}
     -webkit-box-sizing: content-box;
     box-sizing: content-box;
 }
-.clearfix{ zoom:1;margin: auto}
+.clearfix{ zoom:1;}
 .clearfix:after{
     content:".";
     display:block;
@@ -567,7 +575,7 @@ img{ border:0;}
     -moz-border-radius:5px;/* Gecko browsers */-webkit-border-radius:5px;/* Webkit browsers */border-radius:0.417em;/* W3C syntax */
 }
 .green{ color:#29AC0E;}
-.main{ width:1028px; margin:0 auto;}
+.main{ width:1028px; margin:0 auto; padding: 0}
 .borderb{ border-bottom:1px #eeeeee solid;}
 /*top*/
 body.modal-open{margin-right: 0px}
@@ -603,8 +611,22 @@ body.modal-open{margin-right: 0px}
 .class{ width:10px; height:5px; background:url(/img/common/pyspc.png) no-repeat 0 0; margin:17px 0 0 5px;}
 .class_up{ width:10px; height:5px; background:url(/img/common/pyspc.png) no-repeat -10px 0;margin:17px 0 0 5px;}
 .moreclass{ position:absolute; top:40px; left:0;z-index: 2}
-.custom_nav ul li dl dd{ line-height:30px; padding:10px 10px 10px 15px; border:2px #1D8308 solid; border-top:0; background-color:#ffffff; width:139px;}
-.custom_nav ul li dl dd a{ color:#333333; font-weight:normal; font-size:14px; line-height:28px;}
+.custom_nav ul li dl dd {
+    line-height: 30px;
+    padding: 9px 10px 9px 15px;
+    border: 2px #1D8308 solid;
+    border-top: 0;
+    background-color: #ffffff;
+    width: 139px;
+}
+/*.custom_nav ul li dl dd{ line-height:30px; padding:10px 10px 10px 15px; border:2px #1D8308 solid; border-top:0; background-color:#ffffff; width:139px;}*/
+.custom_nav ul li dl dd a{ color:#333333; font-weight:normal; font-size:14px; line-height:33px;}
+/*.nav ul li dl dd a {*/
+    /*color: #333333;*/
+    /*font-weight: normal;*/
+    /*font-size: 14px;*/
+    /*line-height: 33px;*/
+/*}*/
 .custom_nav ul li dl dd a:hover{ background-color:#ffffff; color:#29AC0E; font-weight:bold;}
 .custom_nav ul li a span{ display:block; float:left}
 .custom_nav ul li a.head_bg{ background-color:#FFA200; margin-right:15px;}
@@ -615,7 +637,7 @@ body.modal-open{margin-right: 0px}
 .head_icon{ width:17px; height:17px; background:url(/img/common/pyspc.png) no-repeat 0 -6px; margin-top:10px; margin-right:5px;}
 
 /*bottom*/
-.bottom{ border-top:1px #dddddd solid; width:100%; padding:20px 0; font-family:"微软雅黑";margin: auto}
+.bottom{ border-top:1px #dddddd solid; width:100%; padding-top: 20px; font-family:"微软雅黑";margin: auto}
 .bottom ul li{ float:left; width:224px;}
 .bottom ul li h1 {
     font-size: 18px;
@@ -630,7 +652,8 @@ body.modal-open{margin-right: 0px}
 }
 .bottom ul li p a{ color:#666666; text-decoration:none;}
 .bottom ul li p a:hover{ color:#29ac0e;}
-.bottom dl{width:1425px ; line-height:20px; color:#cccccc; text-align:center;}
+.bottom dl dt{font-weight: normal}
+.bottom dl{line-height:20px; color:#cccccc; text-align:center;}
 /*end public css*/
 /*product deatil  css*/
 

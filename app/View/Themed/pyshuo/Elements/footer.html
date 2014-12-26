@@ -102,3 +102,20 @@ $(function(){
     ga('send', 'pageview');
 
 </script>
+
+<script>
+    $(document).ready(function(){
+
+        var href = window.location.href;
+        if(href.indexOf('productsHome')>0){
+            $('#link-114').css({'background': '#1D8308'});
+        }
+        if(href.indexOf('share')>0){
+            $('#link-121').css({'background': '#1D8308'});
+        }
+        if(href.indexOf('shichituan')>0){
+            $('#link-126').css({'background': '#1D8308'});
+        }
+
+    });
+</script>

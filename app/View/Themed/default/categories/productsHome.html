@@ -4,7 +4,7 @@
     if(count($tagWithProduct['Products'])>0){ ?>
             <ul class="clearfix class_title {{$style}}_border">
                 <li class="fl word {{$style}}_bg">{{$tagWithProduct['ProductTag']['name']}}</li>
-                <!--<li class="fl slogan"><img src="{{$this->Html->assetUrl('/img/common/slogan01.gif')}}" /></li>-->
+                <li class="fl slogan"><img src="{{$this->Html->assetUrl('/img/product-demo/slogan/slogan0'.($index+1).'.gif')}}" /></li>å
                 <li class="fr"><a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}?history={{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}">更多</a></li>
             </ul>
         <div class="row classify_list">
@@ -24,3 +24,4 @@
     <?php } ?>
 
 	<?php } ?>
+
