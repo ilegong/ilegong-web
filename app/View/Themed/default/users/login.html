@@ -1,45 +1,55 @@
-<div id="container-part1" class="clearfix">
-    <div id="loginMessage" class="alert alert-warning" style="display:none">登录失败</div>
-    <div class="sign-form">
-        <div class="sign-inner">
-            <form action="{{$this->Html->url('/users/login')}}"  accept-charset="utf-8"  method="post" role="form" {{if $isajax}} onsubmit="return ajaxeSubmitForm(this,'loginSucess');" {{/if}}>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <input type="text" title="" required="required"  data-original-title="" tabindex="1"  name="data[User][username]" placeholder="输入账号" id="name" class="form-control">
-                </div>
-                <br>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                    <input type="password" title="" required="required" name="data[User][password]" maxlength="15"  tabindex="2" onkeypress="detectCapsLock(event, this)"  data-original-title="" placeholder="输入密码"  class="form-control">
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox" name="data[User][remember_me]"  value="2592000"> 记住我的登录状态
-                    </label>
-                </div>
-                {{$this->Form->input('User.referer',array('type'=>'hidden'))}}
-                {{$this->Form->input('referer',array('type'=>'hidden'))}}
-                <button class="btn btn-red" type="submit">登录</button>
-            <hr>
-            </form>
+<div class="row">
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">登录</div>
+            <div class="panel-body">
+                <div id="container-part1" class="clearfix">
+                    <div id="loginMessage" class="alert alert-warning" style="display:none">登录失败</div>
+                    <div class="sign-form">
+                        <div class="sign-inner">
+                            <form action="{{$this->Html->url('/users/login')}}"  accept-charset="utf-8"  method="post" role="form" {{if $isajax}} onsubmit="return ajaxeSubmitForm(this,'loginSucess');" {{/if}}>
+                            <br/>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="text" title="" required="required"  data-original-title="" tabindex="1"  name="data[User][username]" placeholder="输入账号" id="name" class="form-control col-sm-8">
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                                <input type="password" title="" required="required" name="data[User][password]" maxlength="15"  tabindex="2" onkeypress="detectCapsLock(event, this)"  data-original-title="" placeholder="输入密码"  class="form-control col-sm-8">
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="data[User][remember_me]"  value="2592000"> 记住我的登录状态
+                                </label>
+                            </div>
+                            {{$this->Form->input('User.referer',array('type'=>'hidden'))}}
+                            {{$this->Form->input('referer',array('type'=>'hidden'))}}
+                            <button class="btn btn-red" type="submit">登录</button>
+                            <hr>
+                            </form>
 
-        </div>
-
-            <p>{{__('Not registered?')}} <a href="{{$this->Html->url('/users/register')}}" onclick="return publishController.open_dialog(this.href,{title:'注册',width:650});" >{{__('Create an Account.')}}</a></p>
-            {{$this->Hook->call('oauthLoginLink')}}
-            <div class="pwd-lost">
-                <div class="pwd-lost-q show">{{__('Lost your password?')}} <a href="{{$this->Html->url('/users/forgot')}}">{{__('Click here to recover.')}}</a></div>
-                <div class="pwd-lost-f hidden">
-                    <p class="text-muted">{{__('Enter your email address below and we will send you a link to reset your password.')}}</p>
-                    <form role="form" class="form-inline">
-                        <div class="form-group">
-                            <label for="email-pwd" class="sr-only">{{__('Email address')}}</label>
-                            <input type="email" placeholder="{{__('Enter email')}}" id="email-pwd" class="form-control">
                         </div>
-                        <button class="btn btn-blue" type="submit">{{__('Send')}}</button>
-                    </form>
+
+                        <p>{{__('Not registered?')}} <a href="{{$this->Html->url('/users/register')}}" onclick="return publishController.open_dialog(this.href,{title:'注册',width:650});" >{{__('Create an Account.')}}</a></p>
+                        {{$this->Hook->call('oauthLoginLink')}}
+                        <div class="pwd-lost">
+                            <div class="pwd-lost-q show">{{__('Lost your password?')}} <a href="{{$this->Html->url('/users/forgot')}}">{{__('Click here to recover.')}}</a></div>
+                            <div class="pwd-lost-f hidden">
+                                <p class="text-muted">{{__('Enter your email address below and we will send you a link to reset your password.')}}</p>
+                                <form role="form" class="form-inline">
+                                    <div class="form-group">
+                                        <label for="email-pwd" class="sr-only">{{__('Email address')}}</label>
+                                        <input type="email" placeholder="{{__('Enter email')}}" id="email-pwd" class="form-control">
+                                    </div>
+                                    <button class="btn btn-blue" type="submit">{{__('Send')}}</button>
+                                </form>
+                            </div>
+                        </div> <!-- / .pwd-lost -->
+                    </div>
                 </div>
-            </div> <!-- / .pwd-lost -->
+            </div>
+            </div>
         </div>
     </div>
 </div>

@@ -1,5 +1,5 @@
 <div class="container clearfix">
-	<div class="ui-contain col-md-9">
+	<div class="ui-contain col-md-12">
 		<portlet>
 			<h2 class="Content-title"><?php echo $Brand['Brand']['name']; ?></h2>	
 			
@@ -22,7 +22,7 @@
 						<?php $item = $p['Product'];?>
 						<div class="col-xs-6 col-sm-3">
 						<a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}" class="thumbnail {{if date('Y-m-d H:i:s')>$item['end_time'] && $item['end_time']>0}}no-shopping{{else}}no-shopping{{/if}}" style="margin-bottom: 5px;" id="item-{{$item['id']}}" item-id="{{$item['id']}}" item-name="{{$item['name']}}" item-price="{{$item['price']}}">
-					         {{eval echo $this->Html->image($item['coverimg'], 
+					         {{eval echo $this->Html->image($item['coverimg'],
 								array(
 								'alt' => $item['title'],'title' => $item['name'],
 								)); }}
@@ -31,14 +31,14 @@
 						 	 </div>  -->
 					     </a>
 					     <div class="text-left">
-					     	{{eval echo $this->Html->link(usubstr($item['name'],0,10,''), 
+					     	{{eval echo $this->Html->link(usubstr($item['name'],0,10,''),
 								'/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
-								array('title'=>$item['title'])); 
+								array('title'=>$item['title']));
 							}}
-					     	
+
 					     	<div>
 					     		<div class="food-info pull-right">
-					             <strong>¥{{$item['price']}}</strong>                                     
+					             <strong>¥{{$item['price']}}</strong>
 					     		</div>
 					     		<a href="/products/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html">{{if $item['promote_name']}}{{$item['promote_name']}}{{else}}评论({{$item['comment_nums']}}){{/if}}</a>
 					     	</div>

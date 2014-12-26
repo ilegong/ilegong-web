@@ -73,10 +73,10 @@
 				$('.tgtimg',_this).append('<img src="'+e+'" style="position:absolute; z-index:1; top:0px; left:0px; height:'+settings.height+'px; display:'+((i==0)?'block':'none')+'" class="'+((i==0)?'current':'')+'">');
 			});
 		}
-		$('img',$('.tgtimg',_this)).onImagesLoad(function(){
+		$('a',$('.tgtimg',_this)).onImagesLoad(function(){
 			// every images are loaded. can i init
 			$(window).resize(function(){
-				$('img',$('.tgtimg',_this)).each(function(i,e){
+				$('a',$('.tgtimg',_this)).each(function(i,e){
 					var l=-(($(e).width()-$(_this).width())/2);
 					if($(_this).width()>$(e).width()){
 						l=($(_this).width()-$(e).width())/2;
@@ -89,8 +89,7 @@
 				var pos=(p.position.substring(0,1)=='B')?'top:'+p.margin+'px; ':'bottom:'+p.margin+'px; ';
 				pos+=(p.position.substring(2,3)=='L')?'left:'+(p.margin*2)+'px; ':(p.position.substring(2,3)=='R')?'right:'+(p.margin/2)+'px; ':'left:50%; ';
 				var elm='';
-				
-				$('img',$('.tgtimg',_this)).each(function(i,e){elm+='<div'+((p.dotStyle=='')?' style="float:left; height:15px; width:15px; background:#fff; margin-left:2px; cursor:pointer"':' class="'+p.dotStyle+'"')+'></div>';});
+				$('a',$('.tgtimg',_this)).each(function(i,e){elm+='<div'+((p.dotStyle=='')?' style="float:left; height:15px; width:15px; background:#fff; margin-left:2px; cursor:pointer"':' class="'+p.dotStyle+'"')+'></div>';});
 				$(_this).append('<div class="pagination" style="position:absolute; z-index:10; '+pos+'">'+elm+'</div>');
 				if(p.position.substring(2,3)=='C'){
 					$('.pagination',_this).css('margin-left','-'+parseInt($('.pagination',_this).width()/2)+'px');

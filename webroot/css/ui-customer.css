@@ -418,7 +418,8 @@ body.cke_editable{margin:20px;}
 /*index main */
 
 /* CSS Document */
-.banner{ background:url(/img/product-demo/banner01.jpg) center no-repeat; height:400px; min-width:1028px; margin-bottom:30px;}
+.banner{height:400px; min-width:1028px; margin-bottom:30px;}
+.banner .tgtimg a img{text-align: center}
 .class_title {
     height: 35px;
     border-bottom: 2px solid;
@@ -433,7 +434,9 @@ body.cke_editable{margin:20px;}
 .class_title li.word{ font-size:15px; text-align:center; width:100px; height:35px; line-height:35px;}
 .slogan{ padding:9px 0 0 25px;}
 .orange_border li a{ line-height:35px; text-decoration:none; color:#FFA200; font-size:14px;}
+.orange_border .word a{line-height:35px; text-decoration:none; color:#FFFFFF; font-size:14px;}
 .green_border li a{ line-height:35px; text-decoration:none; color:#29AC0E; font-size:14px;}
+.green_border .word a{line-height:35px; text-decoration:none; color:#FFFFFF; font-size:14px;}
 .class_title li a:hover{ text-decoration:underline;}
 .item{ margin-bottom:15px;}
 .item a.tuijian{ display:block; float:left; margin-right:15px; border:0; padding:0;}
@@ -506,7 +509,7 @@ body.cke_editable{margin:20px;}
     -o-transform:scale(1.2, 1.2); 	/* Opera */
 }
 .classify_list {
-    padding-bottom: 30px;
+    padding-bottom: 15px;
     margin-left: 0px;
     margin-right: 0;
     width: 1028px;

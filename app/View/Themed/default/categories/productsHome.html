@@ -1,19 +1,41 @@
+<?php
+    $recommend_url = array('/products/20141204/shan_dong_qi_xia_ping_guo_8ke_zhuang.html',
+    '/products/20141206/nan_feng_mi_ju.html',
+    '/products/20141204/fu_ping_te_ji_jian_shi_bing.html',
+    '/products/20141101/wei_wei_an_shui_guo_dan_gao.html',
+    '/products/20141120/jin_qiu_dong_bei_xin_mu_er.html',
+    '/products/20141209/xin_huo_nong_jia_zi_chan_you_ji_you_zhi_hong_xiao_dou.html',
+    '/products/20141205/a_lian_ma_ma_shou_gong_mi_jiu_15.html',
+    '/products/20140923/shun_yi_san_yang_you_ji_he_ji_dan.html',
+    '/products/20141205/sha_la_sheng_cai.html',
+    '/products/20140915/xiao_niu_cun_ye_sheng_chu_kou_hai_dai_600g.html');
+?>
 <?PHP foreach($tagsWithProducts as $index=>$tagWithProduct) {
     $full = $tagWithProduct['ProductTag']['id'] == 1;
     $style = ($index%2==0?'orange':'green');
     if(count($tagWithProduct['Products'])>0){ ?>
             <ul class="clearfix class_title {{$style}}_border">
-                <li class="fl word {{$style}}_bg">{{$tagWithProduct['ProductTag']['name']}}</li>
-                <li class="fl slogan"><img src="{{$this->Html->assetUrl('/img/product-demo/slogan/slogan0'.($index+1).'.gif')}}" /></li>
-                <li class="fr"><a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}?history={{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}">更多</a></li>
+                <li class="fl word {{$style}}_bg"><a style="text-decoration:none" href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}?history={{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}">{{$tagWithProduct['ProductTag']['name']}}</a></li>
+                <li class="fl slogan"><img src="{{$this->Html->assetUrl('/img/product-demo/slogan/slogan'.($index+1).'.gif')}}" /></li>
+                <li class="fr"><a style="text-decoration:none" href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}?history={{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ))}}">更多</a></li>
             </ul>
         <div class="row classify_list">
         <div class="clearfix">
+        <a target="_blank" href="{{$recommend_url[$index]}}" class="tuijian" style="border: 0"><img src="/img/product-demo/product-recommend/classb{{$index+1}}.jpg" /></a>
 	    <?PHP
 	    $history = $this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ));
         $tag = $tagWithProduct['ProductTag'];
-	    foreach($tagWithProduct['Products'] as $item) {
+        $tag_index = 0;
+	    foreach($tagWithProduct['Products'] as $index=>$item) {
 		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
+            $current_url = $recommend_url[$index];
+            if(strpos($current_url,$item['slug'])>0){
+                continue;
+            }
+            $tag_index++;
+            if($tag_index>6){
+                break;
+            }
 	    ?>	
 			{{include 'categories/_photolist'}}
 		<?php } ?>
