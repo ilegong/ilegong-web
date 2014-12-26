@@ -107,7 +107,7 @@
 					if(p.dotStyleHover!=''){$(this).removeClass(p.dotStyleHover);}else{$(this).css('background','#fff');}
 				}).click(function(){
 					_this.RS_Stop();
-					_this.RS_ShowPhoto($('img:eq('+$(this).index()+')',$('.tgtimg',_this)));
+					_this.RS_ShowPhoto($('a:eq('+$(this).index()+')',$('.tgtimg',_this)));
 				});
 			}
 			// init transition after delay and remove overlayer whit custom bg color
