@@ -7,7 +7,7 @@
  */
 
 class ApiOrdersController extends AppController {
-    public $components = array('OAuth.OAuth', 'Session', 'Security');
+    public $components = array('OAuth.OAuth', 'Session');
     public function beforeFilter() {
         parent::beforeFilter();
         $allow_action = array('product_detail', 'store_list', 'product_content', 'store_content', 'store_story','oauth_writte');
