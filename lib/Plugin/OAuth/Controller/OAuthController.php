@@ -207,7 +207,7 @@ class OAuthController extends OAuthAppController {
             $inputData = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST : $_GET;
         }
         header("HTTP/1.1 " . '400 Bad Request');
-        if(!$inputData['mobile'] || !$inputData['password'] || !$inputData['code'] || !$inputData['device_uuid'] || !$inputData['nickname'] ){
+        if(!$inputData['mobile'] || !$inputData['password'] || !$inputData['code'] || !$inputData['device_uuid'] || !$inputData['client_id'] ){
             echo json_encode(array('error'=>1, 'error_description'=>'input data wrong'));
             exit();
         }
@@ -220,12 +220,12 @@ class OAuthController extends OAuthAppController {
             $data = array();
             $data['User']['role_id'] = Configure::read('User.defaultroler'); // Registered defaultroler
             $data['User']['activation_key'] = md5(uniqid());
-            $data['User']['nickname'] = trim($inputData['nickname']);
+            //$data['User']['nickname'] = trim($inputData['nickname']);
             $data['User']['mobilephone'] = $mobile;
-            if (mb_strlen($data['User']['nickname'], 'UTF-8') < 1) {
-                echo json_encode(array('error'=>2, 'error_description'=>'nickname too short'));
-                exit();
-            }else if($inputData['mobile'] != $app_register['MobileRegisters']['mobile']){
+//            if (mb_strlen($data['User']['nickname'], 'UTF-8') < 1) {
+//                echo json_encode(array('error'=>2, 'error_description'=>'nickname too short'));
+//                exit();
+            if($inputData['mobile'] != $app_register['MobileRegisters']['mobile']){
                 echo json_encode(array('error'=>2, 'error_description'=>'Mobile is not as same as previous'));
                 exit();
             }else if ($userM->hasAny(array('User.mobilephone' => $data['User']['mobilephone']))){
@@ -241,7 +241,16 @@ class OAuthController extends OAuthAppController {
                     //$user_id = $userM->getLastInsertID();
                     //$token = $this->OAuth->createAccessToken($inputData['client_id'], $user_id);
                     //echo json_encode($token);
-                    echo json_encode(array('error'=>0, 'error_description'=>'register success'));
+                    //echo json_encode(array('error'=>0, 'error_description'=>'register success'));
+                    $_POST['username'] = $mobile;
+                    $_POST['password'] = $inputData['password'];
+                    $_POST['client_id'] = $inputData['client_id'];
+                    $_POST['grant_type'] = 'password';
+                    $_GET['username'] = $mobile;
+                    $_GET['password'] = $inputData['password'];
+                    $_GET['client_id'] = $inputData['client_id'];
+                    $_GET['grant_type'] = 'password';
+                    $this->token();
                 } else {
                     echo json_encode(array('error'=>3, 'error_description'=>'saving wrong'));
                     exit();
