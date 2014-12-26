@@ -699,7 +699,10 @@ VALUES
         }
         $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
         $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $current_uid, 'type' => $gameType)));
-        $this->set('today_got_wx', $this->gotWxTimesToday($weixinTimesLog, mktime()));
+        $pys_got = $this->gotWxTimesToday($weixinTimesLog, mktime());
+
+        $xirui_got = Cache::read(key_assigned_times('xirui', $current_uid)) >= 1;
+        $this->set('today_got_wx', $pys_got && $xirui_got);
 
         $customized_game = $this->customized_view_files[$gameType];
         if (!empty($customized_game)) {
