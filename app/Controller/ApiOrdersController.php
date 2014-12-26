@@ -319,7 +319,8 @@ class ApiOrdersController extends AppController {
 
     public function cart_add() {
         $buyingCom = $this->Components->load('Buying');
-        $data = $this->request->input('json_decode');
+        $postStr = file_get_contents('php://input');;
+        $data = json_decode(trim($postStr), true);
         if (!empty($data)) {
             $product_id = $data['product_id'];
             $num = $data['num'];
