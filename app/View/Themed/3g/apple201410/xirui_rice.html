@@ -355,7 +355,7 @@
                     utils.alert_one('恭喜，您增加了两次机会');
                 } else if (data.reason == 'not_follow') {
                     utils.alert_two('关注西瑞集团服务号，每天可以增加两次机会', '暂不关注', '去关注', function(){} , function(){
-                        window.location.href = '/weixin_pub/follow/xirui.html';
+                        window.location.href = '/weixin_pub/follow/xirui.html?'+Math.random();
                     });
                 } else if (data.reason == 'already_assigned') {
                     utils.alert_one('您今天已经领取过啦');

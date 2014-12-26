@@ -289,13 +289,18 @@ VALUES
                 $success = true;
                 Cache::write($key_assigned_times, time());
                 $this->loadModel('AwardInfo');
-                $this->AwardInfo->updateAll(array('times' => 'times + 2',), array('uid' => $uid, 'type' => self::XIRUI1412));
+                $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, self::XIRUI1412);
+                if (!empty($awardInfo)) {
+                    $this->AwardInfo->updateAll(array('times' => 'times + 2',),  array('uid' => $uid, 'type' => self::XIRUI1412));
+                }
+
+                $total_times = $awardInfo['times'] + 2;
             }
 
         } else {
             $reason = 'not_follow';
         }
-        $rtn = array('success' => $success, 'reason' => $reason);
+        $rtn = array('success' => $success, 'reason' => $reason, 'total_times' => $total_times);
         echo json_encode($rtn);
     }
 
