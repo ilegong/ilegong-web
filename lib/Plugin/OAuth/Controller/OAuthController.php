@@ -225,6 +225,9 @@ class OAuthController extends OAuthAppController {
             if (mb_strlen($data['User']['nickname'], 'UTF-8') < 1) {
                 echo json_encode(array('error'=>2, 'error_description'=>'nickname too short'));
                 exit();
+            }else if($inputData['mobile'] != $app_register['MobileRegisters']['mobile']){
+                echo json_encode(array('error'=>2, 'error_description'=>'Mobile is not as same as previous'));
+                exit();
             }else if ($userM->hasAny(array('User.mobilephone' => $data['User']['mobilephone']))){
                 echo json_encode(array('error'=>2, 'error_description'=>'Mobile is taken by others'));
                 exit();
