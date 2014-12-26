@@ -23,9 +23,9 @@
 		_this.RS_Start=function(){
 			_this.RS_Stop();
 			_int=setInterval(function(){
-				var n=$('.current',$('.tgtimg',_this)).next('img');
+				var n=$('.current',$('.tgtimg',_this)).next('a');
 				if(n.length==0){
-					n=$('img:first',$('.tgtimg',_this));
+					n=$('a:first',$('.tgtimg',_this));
 				}
 				_this.RS_ShowPhoto(n);
 			},settings.effectInterval);
@@ -62,7 +62,7 @@
 
  		if(settings.img==null || settings.img==undefined || settings.img=='undefined'){
 			$('a',_this).appendTo($('.tgtimg',_this));
-			$('img',$('.tgtimg',_this)).each(function(i,e){
+			$('a',$('.tgtimg',_this)).each(function(i,e){
 				$(this).attr('style','position:absolute; z-index:1; top:0px; left:0px; height:'+settings.height+'px; display:'+((i==0)?'block':'none'))
 				if(i==0){
 					$(this).addClass('current');
