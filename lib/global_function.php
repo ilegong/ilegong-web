@@ -1336,3 +1336,23 @@ function get_shichituan_period($time = null) {
 function key_cache_sub($id, $acc='pys') {
     return '_wx_sub_'.$acc.'_' . $id;
 }
+
+
+/**
+ * @param $exId
+ * @param $id
+ * @return string
+ */
+function key_follow_brand_time($exId, $id) {
+    $key = '_fo_bra_' . $id . '_' . $exId;
+    return $key;
+}
+
+/**
+ * @param $exId
+ * @param $id
+ * @return string
+ */
+function key_assigned_times($exId, $id) {
+    return '_fo_ass_' . $id . '_' . $exId;
+}

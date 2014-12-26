@@ -276,6 +276,29 @@ VALUES
         return empty($limits[$hour]) ? 0 : $limits[$hour];
     }
 
+    public function xirui_times() {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        $key_followed = key_follow_brand_time('xirui', $uid);
+        $success = false;
+        if (Cache::read($key_followed) > 1) {
+            $key_assigned_times = key_assigned_times('xirui', $uid);
+            if (Cache::read($key_assigned_times) > 1) {
+                $reason = 'already_assigned';
+            } else {
+                $success = true;
+                Cache::write($key_assigned_times, time());
+                $this->loadModel('AwardInfo');
+                $this->AwardInfo->updateAll(array('times' => 'times + 2',), array('uid' => $uid, 'type' => self::XIRUI1412));
+            }
+
+        } else {
+            $reason = 'not_follow';
+        }
+        $rtn = array('success' => $success, 'reason' => $reason);
+        echo json_encode($rtn);
+    }
+
     public function jp($gameType) {
         $this->autoRender = false;
 

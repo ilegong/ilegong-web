@@ -253,11 +253,13 @@
         <div class="chance_title">摇一摇加机会秘诀</div>
         <div class="chance_tip">
             <ul>
-                <li>1、关注朋友说，每天可领取2次游戏机会；</li>
-                <li>2、活动期间每购买1件商品增加2次游戏机会;</li>
-                <li>3、小伙伴点击分享的摇一摇游戏链接增加1次游戏机会。</li>
+                <li>1、关注西瑞集团服务号，每天可领取2次游戏机会；</li>
+                <li>2、关注朋友说，每天可领取2次游戏机会；</li>
+                <li>3、活动期间每购买1件商品增加2次游戏机会;</li>
+                <li>4、小伙伴点击分享的摇一摇游戏链接增加1次游戏机会。</li>
             </ul>
-            <a id="assignWXSubscribeTimes" href="javascript:;" class="chancebtn radius10">关注加机会</a>
+            <a id="assignXiruiTimes" href="javascript:;" class="chancebtn radius10">关注西瑞服务号</a>
+            <a id="assignWXSubscribeTimes" href="javascript:;" class="sharebtn radius10">关注朋友说</a>
             <a href="/?from=game_{{$game_type}}" class="sharebtn radius10">购物加机会</a>
             <a id="share_btn_2"  href="javascript:;" class="sharebtn radius10">分享好友求点</a>
         </div>
@@ -333,6 +335,8 @@
     var share_coupon_title = '';
     var $share_div;
 
+
+
     $(document).ready(function(){
         $('#fullpage').fullpage({
             touchSensitivity: 15,
@@ -340,6 +344,23 @@
             loopBottom: true,
             loopTop: true,
             anchors: ['firstPage', 'product_story', 'get_coupons', 'my_award', 'award_cj', 'about_us', 'friends']
+        });
+
+        var $appleTimesLeft = $('#apple_times_left, #apple_times_left_bottom');
+
+        $('#assignXiruiTimes').click(function(){
+            $.getJSON('/apple_201410/xirui_times.json?'+ Math.random(), '', function(data){
+                if (data.success) {
+                    $appleTimesLeft.text(data['total_times'] < 0 ? 0 : data['total_times']);
+                    utils.alert_one('恭喜，您增加了两次机会');
+                } else if (data.reason == 'not_follow') {
+                    utils.alert_two('关注西瑞集团服务号，每天可以增加两次机会', '暂不关注', '去关注', function(){} , function(){
+                        window.location.href = '/weixin_pub/follow/xirui.html';
+                    });
+                } else if (data.reason == 'already_assigned') {
+                    utils.alert_one('您今天已经领取过啦');
+                }
+            });
         });
 
         var friendGots = $('.gots').map(function () {
