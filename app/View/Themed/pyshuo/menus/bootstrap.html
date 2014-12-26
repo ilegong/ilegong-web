@@ -16,14 +16,28 @@
         </li>
     </ul>
 </div>
-
+<style>
+    #index_class_all:hover{
+        background-color:#29AC0E;
+        text-decoration:none;
+    }
+</style>
 <div class="custom_nav">
     <ul class="clearfix">
         <li class="fl" id="classification_menu" style="position:relative;">
-            <a href="/" style="background: {{$is_index?'#1D8308':''}}">
+            {{if $is_index}}
+            <a href="/" id="index_class_all">
+            {{else}}
+            <a href="/">
+            {{/if}}
                 <dl class="clearfix">
                     <dt>全部商品分类</dt>
-                    <dt class="{{$is_index?'class':'class_up'}}" id="classification_menu_flag"></dt>
+                    {{if !$is_index}}
+                        <dt class="class" id="classification_menu_flag"></dt>
+                    {{else}}
+                        <dt style="width:10px; height:5px; margin:17px 0 0 5px;"></dt>
+                    {{/if}}
+
                 </dl>
             </a>
             <?PHP
