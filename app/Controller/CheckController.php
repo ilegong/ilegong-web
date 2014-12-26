@@ -27,10 +27,29 @@ class CheckController extends AppController{
             $data['device_uuid'] = $inputData['device_uuid'];
             $data['picture_code'] = $this->Kcaptcha->keyString;
             if($this->MobileRegister->hasAny(array('device_uuid' => $inputData['device_uuid']))){
-                $this->MobileRegister->updateAll(array('picture_code'=> '\'' . $data['picture_code'] . '\''), array('device_uuid' => $inputData['device_uuid']));
+                $this->MobileRegister->updateAll(array('picture_code'=> '\'' . $data['picture_code'] . '\'', 'validated' => 0), array('device_uuid' => $inputData['device_uuid']));
             }else{
                 $this->MobileRegister->save($data);
             }
+        }
+    }
+    public function verify(){
+        $this->autoRender = false;
+        if (!isset($inputData)) {
+            $inputData = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST : $_GET;
+        }
+        if($inputData['device_uuid'] && $inputData['keyString'] && $inputData['type'] == 'app'){
+            $this->loadModel('MobileRegister');
+            $code = $this->MobileRegister->find('first', array(
+                'conditions' => array('device_uuid' => $inputData['device_uuid']),
+                'fields' => array('picture_code')
+
+            ));
+        }
+        if(!empty($inputData['keyString']) && $code['MobileRegister']['picture_code']== $inputData['keyString']){
+            echo json_encode(array('success' => true));
+        }else{
+            echo json_encode(array('success' => false));
         }
     }
     public function message_code(array $inputData = null){
@@ -69,12 +88,16 @@ class CheckController extends AppController{
             $this->loadModel('MobileRegister');
             $register_data = $this->MobileRegister->find('first', array('conditions'=>array('device_uuid' => $inputData['device_uuid'])));
             if(!empty($register_data) && $register_data['MobileRegister']['picture_code'] == $inputData['keyString']){
-                $res = message_send($msg, $inputData['mobile']);
-                $res = json_decode($res, true);
-                $res['timelimit'] = date('H:i',time()+20*60);
-                $this->MobileRegister->updateAll(array('message_code'=>$verifyCode, 'mobile' => $inputData['mobile']), array('device_uuid' => $inputData['device_uuid']));
+                $back_call = message_send($msg, $inputData['mobile']);
+                $back_call = json_decode($back_call, true);
+                if($back_call['error'] == 0){
+                    $res = array('success'=> true, 'timelimit' => date('H:i',time()+20*60));
+                }else{
+                    $res = array('success'=> false);
+                }
+                $this->MobileRegister->updateAll(array('message_code'=>$verifyCode, 'mobile' => $inputData['mobile'], 'validated' => 1), array('device_uuid' => $inputData['device_uuid']));
             }else{
-                $res = array('error'=> 1, 'msg'=>'not right');
+                $res = array('success'=> false, 'msg'=>'not right');
             }
             echo json_encode($res);
 
