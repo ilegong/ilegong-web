@@ -1,4 +1,4 @@
-<a href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html?history={{$history}}&tag={{$tag['name']}}">
+<a target="_blank" href="/{{$category_control_name}}/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html?history={{$history}}&tag={{$tag['name']}}">
     <div><img title="{{$item['name']}}" alt="{{$item['name']}}" class="thumb" src="{{Router::url($item['coverimg'])}}" /></div>
     <h2>
         <?php

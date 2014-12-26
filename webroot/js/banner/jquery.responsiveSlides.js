@@ -61,7 +61,7 @@
 		$(_this).height(settings.height).prepend('<div class="overslide '+settings.loadingClassStyle+'" style="'+overstyle+'">loading..</div><div class="tgtimg" style="'+tgtstyle+'"></div>');
 
  		if(settings.img==null || settings.img==undefined || settings.img=='undefined'){
-			$('img',_this).appendTo($('.tgtimg',_this));
+			$('a',_this).appendTo($('.tgtimg',_this));
 			$('img',$('.tgtimg',_this)).each(function(i,e){
 				$(this).attr('style','position:absolute; z-index:1; top:0px; left:0px; height:'+settings.height+'px; display:'+((i==0)?'block':'none'))
 				if(i==0){
