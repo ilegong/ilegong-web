@@ -207,13 +207,13 @@ class OAuthController extends OAuthAppController {
             $inputData = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST : $_GET;
         }
         header("HTTP/1.1 " . '400 Bad Request');
-        if(!$inputData['mobile'] || !$inputData['password'] || !$inputData['code'] || !$inputData['client_id'] ){
+        if(!$inputData['mobile'] || !$inputData['password'] || !$inputData['code'] || !$inputData['device_uuid'] || !$inputData['nickname'] ){
             echo json_encode(array('error'=>1, 'error_description'=>'input data wrong'));
             exit();
         }
         $mobile = intval($inputData['mobile']);
         $this->loadModel('MobileRegisters');
-        $app_register = $this->MobileRegisters->find('first', array('conditions' => array('mobile' => $mobile)));
+        $app_register = $this->MobileRegisters->find('first', array('conditions' => array('device_uuid' => $inputData['device_uuid'])));
         if($app_register['MobileRegisters']['message_code'] == $inputData['code']){
             $userM = ClassRegistry::init('User');
             $userM->create();

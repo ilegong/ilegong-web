@@ -21,17 +21,15 @@ class CheckController extends AppController{
         if (!isset($inputData)) {
             $inputData = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST : $_GET;
         }
-        if(isset($inputData['type']) && $inputData['type'] == 'app'){
-            if($this->check_mobile($inputData['mobile'])){
-                $this->loadModel('MobileRegister');
-                $data = array();
-                $data['mobile'] = $inputData['mobile'];
-                $data['picture_code'] = $this->Kcaptcha->keyString;
-                if($this->MobileRegister->hasAny(array('mobile' => $inputData['mobile']))){
-                    $this->MobileRegister->updateAll(array('picture_code'=> '\'' . $data['picture_code'] . '\''), array('mobile' => $inputData['mobile']));
-                }else{
-                    $this->MobileRegister->save($data);
-                }
+        if(isset($inputData['type']) && $inputData['type'] == 'app'&& isset($inputData['device_uuid'])){
+            $this->loadModel('MobileRegister');
+            $data = array();
+            $data['device_uuid'] = $inputData['device_uuid'];
+            $data['picture_code'] = $this->Kcaptcha->keyString;
+            if($this->MobileRegister->hasAny(array('device_uuid' => $inputData['device_uuid']))){
+                $this->MobileRegister->updateAll(array('picture_code'=> '\'' . $data['picture_code'] . '\''), array('device_uuid' => $inputData['device_uuid']));
+            }else{
+                $this->MobileRegister->save($data);
             }
         }
     }
@@ -66,17 +64,17 @@ class CheckController extends AppController{
             $this->Session->write('current_register_phone', $inputData['mobile']);
             echo json_encode($res);
 
-        }else if(isset($inputData['type']) && $inputData['type'] == 'app'){
+        }else if(isset($inputData['type']) && $inputData['type'] == 'app'&&isset($inputData['device_uuid'])){
             //api接口操作
             $this->loadModel('MobileRegister');
-            $register_data = $this->MobileRegister->find('first', array('conditions'=>array('mobile' => $inputData['mobile'])));
+            $register_data = $this->MobileRegister->find('first', array('conditions'=>array('device_uuid' => $inputData['device_uuid'])));
             if(!empty($register_data) && $register_data['MobileRegister']['picture_code'] == $inputData['keyString']){
                 $res = message_send($msg, $inputData['mobile']);
                 $res = json_decode($res, true);
                 $res['timelimit'] = date('H:i',time()+20*60);
-                $this->MobileRegister->updateAll(array('message_code'=>$verifyCode), array('mobile' => $inputData['mobile']));
+                $this->MobileRegister->updateAll(array('message_code'=>$verifyCode, 'mobile' => $inputData['mobile']), array('device_uuid' => $inputData['device_uuid']));
             }else{
-                $res = array('error'=> 1, 'msg'=>'not found');
+                $res = array('error'=> 1, 'msg'=>'not right');
             }
             echo json_encode($res);
 
