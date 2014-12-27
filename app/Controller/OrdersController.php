@@ -309,12 +309,15 @@ class OrdersController extends AppController{
 		$this->loadModel('Cart');
         $this->loadModel('Product');
         $this->loadModel('ShipPromotion');
+        $buyingCom = $this->Components->load('Buying');
 
-		if(empty($order_id)){
-            $cartsByPid = $this->cartsByPid();
+        $uid = $this->currentUser['id'];
+        $sessionId = $this->Session->id();
+        if(empty($order_id)){
+            $cartsByPid = $buyingCom->cartsByPid(null, $uid, $sessionId);
 			if(!empty($_COOKIE['cart_products'])){
                 $info = explode(',', $_COOKIE['cart_products']);
-                mergeCartWithDb($this->currentUser['id'], $info, $cartsByPid, $this->Product, $this->Cart, $this->Session->id());
+                mergeCartWithDb($uid, $info, $cartsByPid, $this->Product, $this->Cart, $sessionId);
                 setcookie("cart_products", '',time()-3600,'/');
 			}
 		}
@@ -324,10 +327,11 @@ class OrdersController extends AppController{
             return;
 		}
 
-        list($pids, $cart, $shipFee) = $this->createTmpCarts($cartsByPid, $shipPromotionId);
+        $balancePids = $this->specified_balance_pids();
+        list($pids, $cart, $shipFee) = $buyingCom->createTmpCarts($cartsByPid, $shipPromotionId, $balancePids, $uid, $sessionId);
 
         $consignees = $this->OrderConsignee->find('all',array(
-            'conditions'=>array('creator'=>$this->currentUser['id']),
+            'conditions'=>array('creator'=> $uid),
             'order' => 'status desc',
         ));
         $total_consignee = count($consignees);
@@ -385,7 +389,7 @@ class OrdersController extends AppController{
 
         if (!$cart->is_try) {
             $couponItem = ClassRegistry::init('CouponItem');
-            $coupons_of_products = $couponItem->find_user_coupons_for_cart($this->currentUser['id'], $cart);
+            $coupons_of_products = $couponItem->find_user_coupons_for_cart($uid, $cart);
         }
 
 		$total_price = $cart->total_price();
@@ -511,12 +515,14 @@ class OrdersController extends AppController{
 
         $code = trim($_REQUEST['code']);
 
+        $buyingCom = $this->Components->load('Buying');
+
         $this->loadModel('CouponItem');
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
         $specifiedPids = $this->specified_balance_pids();
-        $cartsByPid = $this->cartsByPid($specifiedPids);
+        $cartsByPid = $buyingCom->cartsByPid($specifiedPids, $uid, $this->Session->id());
         $balancingPids = array_keys($cartsByPid);
-        list($cart, $shipFee) = $this->applyPromoToCart($balancingPids, $cartsByPid, $shipPromotionId);
+        list($cart, $shipFee) = $buyingCom->applyPromoToCart($balancingPids, $cartsByPid, $shipPromotionId,$uid);
         $applied_coupon_code = $this->_applied_couon_code();
 
         $success = false;
@@ -578,9 +584,10 @@ class OrdersController extends AppController{
         $brand_id = $_POST['brand_id'];
         $applying = $_POST['action'] == 'apply';
 
+        $buyingCom = $this->Components->load('Buying');
         $specifiedPids = $this->specified_balance_pids();
-        $cartsByPid = $this->cartsByPid($specifiedPids);
-        list($cart, $shipFee) = $this->applyPromoToCart(array_keys($cartsByPid), $cartsByPid, $shipPromotionId);
+        $cartsByPid = $buyingCom->cartsByPid($specifiedPids, $uid, $this->Session->id());
+        list($cart, $shipFee) = $buyingCom->applyPromoToCart(array_keys($cartsByPid), $cartsByPid, $shipPromotionId, $uid);
 
         $this->loadModel('CouponItem');
 
@@ -1122,85 +1129,6 @@ class OrdersController extends AppController{
     }
 
     /**
-     * @param $pids
-     * @param $cartsByPid
-     * @param $shipPromotionId
-     * @return mixed
-     */
-    protected function applyPromoToCart($pids, $cartsByPid, $shipPromotionId) {
-        $cart = new OrderCartItem();
-        $uid = $this->currentUser['id'];
-        $cart->user_id = $uid;
-
-        $totalPrices = array();
-
-        $this->loadModel('Product');
-        $this->loadModel('ShipPromotion');
-        $productByIds = $this->Product->find_published_products_by_ids($pids, array('Product.ship_fee'));
-        foreach ($cartsByPid as $pid => $cartItem) {
-            $brand_id = $productByIds[$pid]['brand_id'];
-            $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
-            $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
-            $itemPrice = empty($pp) || !isset($pp['price']) ? calculate_price($pid, $productByIds[$pid]['price'], $uid) : $pp['price'];
-
-            $totalPrices[$brand_id] += ($itemPrice * $num);
-
-            $cart->add_product_item($brand_id, $pid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name']);
-        }
-
-
-        $this->loadModel('ShipSetting');
-        $shipSettings = $this->ShipSetting->find_by_pids($pids, null);
-
-        $shipFeeContext = array();
-        $shipFees = array();
-        $brandItems = $cart->brandItems;
-        foreach ($brandItems as $brandId => $brandItem) {
-            foreach ($brandItem->items as $pid => $item) {
-                $pidShipSettings = array();
-                foreach($shipSettings as $val){
-                    if($val['ShipSetting']['product_id'] == $pid){
-                        $pidShipSettings[] = $val;
-                    }
-                };
-                $num = ($cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
-                $singleShipFee = empty($pp) || !isset($pp['ship_price']) ? $productByIds[$pid]['ship_fee'] : $pp['ship_price'];
-                $total_price = $totalPrices[$brandId];
-                //FIXME: add ship fee by province
-                $shipFees[$brandId] += ShipPromotion::calculateShipFee($total_price, $singleShipFee, $num, $pidShipSettings, $shipFeeContext);
-            }
-        }
-
-        $shipFee = 0;
-        foreach($shipFees as $ship) {
-            $shipFee += $ship;
-        }
-
-        return array($cart, $shipFee);
-    }
-
-    /**
-     * @param array $limitPids
-     * @return array
-     */
-    protected function cartsByPid($limitPids = array()) {
-        $this->loadModel('Cart');
-        $cond = array(
-            'status' => 0,
-            'order_id' => null,
-            'type != ' => CART_ITEM_TYPE_TRY,
-            'OR' => $this->user_condition
-        );
-        if (!empty($limitPids)) {
-            $cond['product_id'] = $limitPids;
-        }
-        $dbCartItems = $this->Cart->find('all', array(
-            'conditions' => $cond));
-
-        return Hash::combine($dbCartItems, '{n}.Cart.product_id', '{n}.Cart');
-    }
-
-    /**
      * @param $brand_id
      * @param $uid
      * @param $order_id
@@ -1335,66 +1263,7 @@ class OrdersController extends AppController{
             ;
     }
 
-    /**
-     * @param $cartsByPid
-     * @param $shipPromotionId
-     * @throws Exception if the specified tryId cannot be found
-     * @throws MissingModelException
-     * @return array
-     */
-    private function createTmpCarts(&$cartsByPid, $shipPromotionId) {
-        $balancePids = $this->specified_balance_pids();
 
-        $isTry = !empty($balancePids) && $balancePids['try'];
-        if ($isTry) {
-
-            $pids = $balancePids;
-            unset($pids['try']);
-            if (empty($pids)) {
-                throw new Exception("try type set but no pid found!");
-            }
-            $pid = $pids[0];
-
-            $tryId =$balancePids['try'];
-            $this->loadModel('ProductTry');
-            $prodTry = $this->ProductTry->findById($tryId);
-            if (empty($prodTry)) {
-                throw new Exception("cannot found ".$tryId);
-            }
-
-            $pidOfTry = $prodTry['ProductTry']['product_id'];
-            if ($pidOfTry != $pid) {
-                throw new Exception("product_id not equal: $pidOfTry ,". $pid);
-            }
-
-            $this->loadModel('Product');
-            $products = $this->Product->find_products_by_ids($pid, array(), false);
-            if (empty($products)) {
-                throw new Exception("cannot find the specified product: $pid");
-            }
-
-            $this->loadModel('Cart');
-            $uid = $this->currentUser['id'];
-            $cartItem = $this->Cart->find_try_cart_item($pid, $uid);
-            if (empty($cartItem)) {
-                throw new Exception("error to find try_cart_item: $pid , $uid");
-            }
-
-            $cart = new OrderCartItem();
-            $cart->is_try = true;
-            $cart->add_product_item($products[0]['Product']['brand_id'], $pid, calculate_try_price($prodTry['ProductTry']['price'], $uid), 1, array(), $cartItem['Cart']['name']);
-            $shipFee = 0;
-        } else {
-            if (!empty($balancePids)) {
-                $pids = $balancePids;
-                $cartsByPid = $this->cartsByPid($balancePids);
-            } else {
-                $pids = array_keys($cartsByPid);
-            }
-            list($cart, $shipFee) = $this->applyPromoToCart($pids, $cartsByPid, $shipPromotionId);
-        }
-        return array($pids, $cart, $shipFee);
-    }
 
     /**
      * @return mixed

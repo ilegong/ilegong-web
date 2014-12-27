@@ -156,20 +156,7 @@ class Cart extends AppModel {
      * @throws Exception
      */
     private function create_user_cond($uid, $sessionId) {
-        $user_cond = array();
-        if (!empty($sessionId)) {
-            $user_cond['session_id'] = $sessionId;
-        }
-
-        if (!empty($uid)) {
-            $user_cond['creator'] = $uid;
-        }
-
-        if (empty($user_cond)) {
-            throw new Exception("You have to provide session-id or user-id");
-        }
-
-        return $user_cond;
+        return create_user_cond($uid, $sessionId);
     }
 
 } 

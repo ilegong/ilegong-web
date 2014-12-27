@@ -1327,6 +1327,23 @@ function get_shichituan_period($time = null) {
     return ((date('y', $time) <= 2014) ? (date('m', $time) - 8) : (date('m', $time) + 4));
 }
 
+function create_user_cond($uid, $sessionId = null) {
+    $user_cond = array();
+    if (!empty($sessionId)) {
+        $user_cond['session_id'] = $sessionId;
+    }
+
+    if (!empty($uid)) {
+        $user_cond['creator'] = $uid;
+    }
+
+    if (empty($user_cond)) {
+        throw new Exception("You have to provide session-id or user-id");
+    }
+
+    return $user_cond;
+}
+
 
 /**
  * @param $id

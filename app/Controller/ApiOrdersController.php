@@ -341,4 +341,46 @@ class ApiOrdersController extends AppController {
         $this->set('info', $info);
         $this->set('_serialize', 'info');
     }
+
+
+    /**
+     * 订单信息页，确认各项订单信息
+     * @throws CakeException
+     * @throws MissingModelException
+     * @internal param int|string $order_id
+     */
+    function cart_info(){
+        $success = false;
+        $postStr = file_get_contents('php://input');;
+        $data = json_decode(trim($postStr), true);
+        $pidList = $data['pid_list'];
+        if (!empty($pidList)) {
+            $this->loadModel('Cart');
+            $this->loadModel('Product');
+            $this->loadModel('ShipPromotion');
+            $uid = $this->currentUser['id'];
+            $buyingCom = $this->Components->load('Buying');
+            //FIXME: check pid list
+            $cartsByPid = $buyingCom->cartsByPid($pidList, $uid);
+
+            list($pids, $cart, $shipFee) = $buyingCom->createTmpCarts($cartsByPid, 0, $pidList, $uid);
+            $brand_ids = array_keys($cart->brandItems);
+            if (!empty($brand_ids)) {
+                $this->loadModel('Brand');
+                $brands = $this->Brand->find('list', array('conditions' => array('id' => $brand_ids), 'fields' => array('id', 'name')));
+            } else {
+                $brands = array();
+            }
+
+            if (!$cart->is_try) {
+                $couponItem = ClassRegistry::init('CouponItem');
+                $coupons_of_products = $couponItem->find_user_coupons_for_cart($uid, $cart);
+            }
+
+            $total_price = $cart->total_price();
+            $success = true;
+        }
+        $this->set(compact('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands'));
+        $this->set('_serialize', array('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands'));
+    }
 }
