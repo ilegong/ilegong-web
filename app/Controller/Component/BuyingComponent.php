@@ -90,6 +90,16 @@ class BuyingComponent extends Component {
         return $returnInfo;
     }
 
+    public function total_reduced($uid, $applied_coupons, $applied_code) {
+        $itemM = ClassRegistry::init('CouponItem');
+        $total_reduce = $itemM->compute_total_reduced($uid, $applied_coupons);
+        //TODO: fix coupon code!!!
+        if ($applied_code == 'pengyoushuo2014') {
+            $total_reduce += 500;
+        }
+        return $total_reduce;
+    }
+
 
     /**
      * @param $cartsByPid

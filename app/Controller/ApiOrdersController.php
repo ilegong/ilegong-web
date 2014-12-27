@@ -354,7 +354,9 @@ class ApiOrdersController extends AppController {
         $postStr = file_get_contents('php://input');;
         $data = json_decode(trim($postStr), true);
         $pidList = $data['pid_list'];
-        if (!empty($pidList)) {
+        $couponCode = $data['coupon_code'];
+        $addressId = $data['addressId'];
+        if (!empty($pidList) && !empty($addressId)) {
             $this->loadModel('Cart');
             $this->loadModel('Product');
             $this->loadModel('ShipPromotion');
@@ -372,10 +374,19 @@ class ApiOrdersController extends AppController {
                 $coupons_of_products = $couponItem->find_user_coupons_for_cart($uid, $cart);
             }
 
-            $total_price = $cart->total_price();
+            $reduced_percent = $buyingCom->total_reduced($uid, array(), $couponCode);
+            $total_price = max(0,  ($cart->total_price() * 100 - $reduced_percent) /100 );
+            $reduced = $reduced_percent/100;
             $success = true;
+        } else {
+            if (empty($pidList)) {
+                $reason[] = 'empty_products';
+            }
+            if (empty($addressId)) {
+                $reason[] = 'invalid_address';
+            }
         }
-        $this->set(compact('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'shipFees'));
-        $this->set('_serialize', array('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'shipFees'));
+        $this->set(compact('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'shipFees', 'reduced'));
+        $this->set('_serialize', array('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'shipFees', 'reduced'));
     }
 }

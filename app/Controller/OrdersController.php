@@ -5,7 +5,7 @@ class OrdersController extends AppController{
 
 	var $user_condition = array();
 
-    public $components = array('Weixin');
+    public $components = array('Weixin', 'Buying');
 	
     var $customized_not_logged = array('apply_coupon');
 
@@ -1389,15 +1389,10 @@ class OrdersController extends AppController{
      * @return mixed
      */
     private function _cal_total_reduced($uid) {
-        $total_reduce = $this->CouponItem->compute_total_reduced($uid, $this->_applied_coupons());
-        //TODO: fix coupon code!!!
+        $applied_coupons = $this->_applied_coupons();
         $coupon_code = $this->_applied_couon_code();
-        if ($coupon_code == 'pengyoushuo2014') {
-            $total_reduce += 500;
-        }
-        return $total_reduce;
+        return $this->Buying->total_reduced($uid, $applied_coupons, $coupon_code);
     }
-
 
 
     function wait_shipped_orders($creator=0){
