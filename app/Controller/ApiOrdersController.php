@@ -363,14 +363,9 @@ class ApiOrdersController extends AppController {
             //FIXME: check pid list
             $cartsByPid = $buyingCom->cartsByPid($pidList, $uid);
 
-            list($pids, $cart, $shipFee) = $buyingCom->createTmpCarts($cartsByPid, 0, $pidList, $uid);
+            list($pids, $cart, $shipFee, $shipFees) = $buyingCom->createTmpCarts($cartsByPid, 0, $pidList, $uid);
             $brand_ids = array_keys($cart->brandItems);
-            if (!empty($brand_ids)) {
-                $this->loadModel('Brand');
-                $brands = $this->Brand->find('list', array('conditions' => array('id' => $brand_ids), 'fields' => array('id', 'name')));
-            } else {
-                $brands = array();
-            }
+            $brands = $this->findBrands($brand_ids);
 
             if (!$cart->is_try) {
                 $couponItem = ClassRegistry::init('CouponItem');
@@ -380,7 +375,7 @@ class ApiOrdersController extends AppController {
             $total_price = $cart->total_price();
             $success = true;
         }
-        $this->set(compact('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands'));
-        $this->set('_serialize', array('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands'));
+        $this->set(compact('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'shipFees'));
+        $this->set('_serialize', array('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'shipFees'));
     }
 }

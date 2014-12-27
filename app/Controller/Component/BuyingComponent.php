@@ -147,9 +147,9 @@ class BuyingComponent extends Component {
             } else {
                 $pids = array_keys($cartsByPid);
             }
-            list($cart, $shipFee) = $this->applyPromoToCart($pids, $cartsByPid, $shipPromotionId, $uid);
+            list($cart, $shipFee, $shipFees) = $this->applyPromoToCart($pids, $cartsByPid, $shipPromotionId, $uid);
         }
-        return array($pids, $cart, $shipFee);
+        return array($pids, $cart, $shipFee, $shipFees);
     }
 
     /**
@@ -233,7 +233,7 @@ class BuyingComponent extends Component {
             $shipFee += $ship;
         }
 
-        return array($cart, $shipFee);
+        return array($cart, $shipFee, $shipFees);
     }
 
 }
