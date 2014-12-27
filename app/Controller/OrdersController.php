@@ -313,7 +313,7 @@ class OrdersController extends AppController{
         $uid = $this->currentUser['id'];
         $sessionId = $this->Session->id();
         if(empty($order_id)){
-            $cartsByPid = $buyingCom->cartsByPid(null, $uid, $sessionId);
+            $cartsByPid = $this->Buying->cartsByPid(null, $uid, $sessionId);
 			if(!empty($_COOKIE['cart_products'])){
                 $info = explode(',', $_COOKIE['cart_products']);
                 mergeCartWithDb($uid, $info, $cartsByPid, $this->Product, $this->Cart, $sessionId);
@@ -327,7 +327,7 @@ class OrdersController extends AppController{
 		}
 
         $balancePids = $this->specified_balance_pids();
-        list($pids, $cart, $shipFee) = $buyingCom->createTmpCarts($cartsByPid, $shipPromotionId, $balancePids, $uid, $sessionId);
+        list($pids, $cart, $shipFee) = $this->Buying->createTmpCarts($cartsByPid, $shipPromotionId, $balancePids, $uid, $sessionId);
 
         $consignees = $this->OrderConsignee->find('all',array(
             'conditions'=>array('creator'=> $uid),
@@ -514,14 +514,12 @@ class OrdersController extends AppController{
 
         $code = trim($_REQUEST['code']);
 
-        $buyingCom = $this->Components->load('Buying');
-
         $this->loadModel('CouponItem');
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
         $specifiedPids = $this->specified_balance_pids();
-        $cartsByPid = $buyingCom->cartsByPid($specifiedPids, $uid, $this->Session->id());
+        $cartsByPid = $this->Buying->cartsByPid($specifiedPids, $uid, $this->Session->id());
         $balancingPids = array_keys($cartsByPid);
-        list($cart, $shipFee) = $buyingCom->applyPromoToCart($balancingPids, $cartsByPid, $shipPromotionId,$uid);
+        list($cart, $shipFee) = $this->Buying->applyPromoToCart($balancingPids, $cartsByPid, $shipPromotionId,$uid);
         $applied_coupon_code = $this->_applied_couon_code();
 
         $success = false;
@@ -583,10 +581,9 @@ class OrdersController extends AppController{
         $brand_id = $_POST['brand_id'];
         $applying = $_POST['action'] == 'apply';
 
-        $buyingCom = $this->Components->load('Buying');
         $specifiedPids = $this->specified_balance_pids();
-        $cartsByPid = $buyingCom->cartsByPid($specifiedPids, $uid, $this->Session->id());
-        list($cart, $shipFee) = $buyingCom->applyPromoToCart(array_keys($cartsByPid), $cartsByPid, $shipPromotionId, $uid);
+        $cartsByPid = $this->Buying->cartsByPid($specifiedPids, $uid, $this->Session->id());
+        list($cart, $shipFee) = $this->Buying->applyPromoToCart(array_keys($cartsByPid), $cartsByPid, $shipPromotionId, $uid);
 
         $this->loadModel('CouponItem');
 
