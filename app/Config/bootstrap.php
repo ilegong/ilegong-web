@@ -622,6 +622,9 @@ class ShipAddress {
         $ship_type_list = Hash::combine($ship_types,'{n}.company','{n}.name','{n}.id');
         $com = key($ship_type_list[$orderInfo['Order']['ship_type']]);
         $nu = $orderInfo['Order']['ship_code'];
+        if($nu=='无'||$nu==''||$nu=='已发货'){
+            return null;
+        }
         $AppKey = Configure::read('kuaidi100_key');
         //http://api.kuaidi100.com/api?id=[]&com=[]&nu=[]&valicode=[]&show=[0|1|2|3]&muti=[0|1]&order=[desc|asc]
         //http://www.kuaidi100.com/applyurl?key=[]&com=[]&nu=[]
