@@ -124,9 +124,9 @@
                 <li class="fl" data-togid="product_params_content"><a href="#X">产品参数</a></li>
                 {{/if}}
                 {{if $is_product_has_shichi}}
-                <li class="fl" data-togid="product_try_comment_content"><a href="#X">试吃评价</a></li>
+                <li class="fl" data-togid="product_try_comment_content"><a href="#X" id="all_try_comment_count">试吃评价</a></li>
                 {{/if}}
-                <li class="fl" data-togid="product_comment_content"><a href="#top">累计评价({{$Product['Product']['comment_nums']}})</a>
+                <li class="fl" data-togid="product_comment_content"><a href="#top" id="all_buy_comment_count">购买评价</a>
                 </li>
                 <li class="fr tb_btn_basket" id="quick_add_cart" style="display: none"
                     item-id="{{$Product['Product']['id']}}" href="javascript:void(0);"><a href="#X">加入购物车</a></li>

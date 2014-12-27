@@ -20,6 +20,7 @@
 </div>
 <script type="text/javascript">
     $(document).ready(function () {
+        var allBuyComment = $('#all_buy_comment_count');
         var allBtn = $('#all_comment_btn').on('click', function(){
             var me = this;
             $(me).parent('li').addClass('tm_selected').siblings().removeClass('tm_selected');
@@ -102,6 +103,7 @@
             $('#middle_comment_content').html(middle_comment===""?"<div style='padding-top: 15px'>暂无评价...</div>":middle_comment);
             $('#bad_comment_content').html(bad_comment===""?"<div style='padding-top: 15px'>暂无评价...</div>":bad_comment);
             allBtn.text(allBtn.text() + '(' + (good_comment_count + middle_comment_count + bad_comment_count) + ')');
+            allBuyComment.text(allBuyComment.text()+'('+(good_comment_count + middle_comment_count + bad_comment_count)+')');
             goodBtn.text(goodBtn.text() + '(' + good_comment_count + ')');
             middleBtn.text(middleBtn.text() + '(' + middle_comment_count + ')');
             badBtn.text(badBtn.text() + '(' + bad_comment_count + ')');

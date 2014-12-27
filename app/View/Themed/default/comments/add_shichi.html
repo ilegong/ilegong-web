@@ -297,6 +297,8 @@
         $.ajax({
             type:'get',
             success:function(request,xhr){
+                var allTryComment = $('#all_try_comment_count');
+                allTryComment.text(allTryComment.text()+'('+request.length+')');
                 for(var i in request){
                     addshichi_CommintItem(request[i]['Comment']);
 
