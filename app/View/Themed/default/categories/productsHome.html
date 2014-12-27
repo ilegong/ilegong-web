@@ -26,9 +26,9 @@
 	    $history = $this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ));
         $tag = $tagWithProduct['ProductTag'];
         $tag_index = 0;
+        $current_url = $recommend_url[$index];
 	    foreach($tagWithProduct['Products'] as $index=>$item) {
 		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
-            $current_url = $recommend_url[$index];
             if(strpos($current_url,$item['slug'])>0){
                 continue;
             }

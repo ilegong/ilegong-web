@@ -138,13 +138,13 @@
                         <div style="overflow: hidden">
                             <?php echo $Product['Product']['content']; ?>
                         </div>
-                        <div class="state">
-                            <span>声明</span><br/>
-                            朋友说 所有特产均来自于同事分享和推荐。如希望加入分享，请联系我们：189-1191-1240<br/>
-                            <strong>朋友说：你身边最真挚的分享</strong><br/>
-                            <label>微信：</label>爱乐供-朋友说<br/>
-                            <label>网站：</label>http://pyshuo.com
-                        </div>
+                        <!--<div class="state">-->
+                            <!--<span>声明</span><br/>-->
+                            <!--朋友说 所有特产均来自于同事分享和推荐。如希望加入分享，请联系我们：189-1191-1240<br/>-->
+                            <!--<strong>朋友说：你身边最真挚的分享</strong><br/>-->
+                            <!--<label>微信：</label>爱乐供-朋友说<br/>-->
+                            <!--<label>网站：</label>http://pyshuo.com-->
+                        <!--</div>-->
                     </div>
                 </div>
                 {{if $Product['ModelSplitInfo']}}
@@ -169,13 +169,13 @@
                 {{if $is_product_has_shichi}}
                 <div style="display: none" id="product_try_comment_content">
                     <div class="comment">
-                        <ul class="clearfix">
-                            <li class="fl tm_selected"><a href="#X">全部评价(9)</a></li>
-                            <li class="fl"><a href="#X">好评(9)</a></li>
-                            <li class="fl"><a href="#X">中评(0)</a></li>
-                            <li class="fl"><a href="#X">差评(0)</a></li>
-                        </ul>
-
+                        <!--<ul class="clearfix">-->
+                            <!--<li class="fl tm_selected"><a href="#X">全部评价(9)</a></li>-->
+                            <!--<li class="fl"><a href="#X">好评(9)</a></li>-->
+                            <!--<li class="fl"><a href="#X">中评(0)</a></li>-->
+                            <!--<li class="fl"><a href="#X">差评(0)</a></li>-->
+                        <!--</ul>-->
+                        {{template comments/add_shichi}}
                     </div>
                 </div>
                 {{/if}}
@@ -192,7 +192,7 @@
     /**
      * JS仿淘宝详情页菜单条智能定位效果
      * constructor SmartFloat
-     * @author tugenhua
+     * @author
      * @time 2014-1-15
      */
     function SmartFloat(options) {

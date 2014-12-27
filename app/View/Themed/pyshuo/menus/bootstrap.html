@@ -45,7 +45,7 @@
             ?>
             <!--category-->
             {{if count($tagsWithProducts)>0}}
-            <dl class="moreclass" id="classification_child_menu">
+            <dl class="moreclass" id="classification_child_menu" style="display: {{$is_index?'':'none'}}">
                 <dd>
                     <?PHP foreach($tagsWithProducts as $tagWithProduct) {
                         if($tagWithProduct['ProductCounts']>0){ ?>
