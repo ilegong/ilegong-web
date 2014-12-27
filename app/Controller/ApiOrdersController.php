@@ -386,7 +386,211 @@ class ApiOrdersController extends AppController {
                 $reason[] = 'invalid_address';
             }
         }
-        $this->set(compact('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'shipFees', 'reduced'));
-        $this->set('_serialize', array('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'shipFees', 'reduced'));
+        $this->set(compact('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'shipFees', 'reduced', 'reason'));
+        $this->set('_serialize', array('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'shipFees', 'reduced', 'reason'));
+    }
+
+    public function balance() {
+
+        $success = true;
+        $postStr = file_get_contents('php://input');;
+        $data = json_decode(trim($postStr), true);
+        $pidList = $data['pid_list'];
+        $addressId = $data['addressId'];
+        $couponCode = $data['coupon_code'];
+        $remarks = $data['remarks'];
+        if (!empty($pidList) && !empty($addressId)) {
+
+            $this->loadModel('Cart');
+            $this->loadModel('Product');
+            $product_ids = array();
+            $shipPromotionId = intval($_REQUEST['ship_promotion']);
+            $this->loadModel('ShipPromotion');
+            $this->loadModel('Order');
+
+            //check problem:
+//        $couponItems = $this->CouponItem->find_my_valid_coupon_items($uid, array_merge($appliedCoupons, (array)$coupon_item_id));
+//        $couponsByShared = array_filter($couponItems, function ($val) {
+//            return ($val['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER);
+//        });
+//
+//        //这里必须安店面去限定
+//        //要把没有查询到的couponItem去掉
+//        if(count($couponsByShared) <= $cart->brandItems[$brand_id]->total_num()) {
+//            //            if($cart->could_apply($brand_id, $cou)){
+//            //TODO: 需要考虑券是否满足可用性等等
+//            $appliedCoupons[] = $coupon_item_id;
+//            $changed = true;
+//        } else {
+//            $reason = 'share_type_coupon_exceed';
+//        }
+
+            $Carts = array();
+            $uid = $this->currentUser['id'];
+            $cond = array(
+                'status' => CART_ITEM_STATUS_NEW,
+                'order_id' => null,
+                'num > 0',
+                'product_id' => $pidList,
+                'creator' => $uid
+            );
+
+            $Carts_tmp = $this->Cart->find('all', array(
+                'conditions' => $cond));
+
+            foreach($Carts_tmp as $c){
+                $product_ids[]=$c['Cart']['product_id'];
+                $Carts[$c['Cart']['product_id']] = $c;
+            }
+
+            if(empty($Carts)){
+                $success = false;
+                $reason[] = 'empty_products';
+            } else {
+                $this->loadModel('OrderConsignee');
+                $address = $this->OrderConsignee->find('first', array(
+                    'conditions' => array('id' => $addressId, 'creator' => $uid, 'deleted' => DELETED_NO)
+                ));
+                if (empty($address) || empty($address['OrderConsignee']['name'])
+                    || empty($address['OrderConsignee']['address'])
+                    || empty($address['OrderConsignee']['mobilephone'])) {
+                    $this->log('orders_balance: cannot find address:'.$addressId.', uid='.$uid);
+                    $success = false;
+                    $reason[] = 'invalid_address';
+                } else {
+                    $provinceId = $address['OrderConsignee']['province_id'];
+                    $allP = $this->Product->find('all',array('conditions'=>array(
+                        'id' => $product_ids
+                    )));
+
+                    $business = array();
+                    foreach($allP as $p) {
+                        if(!is_array($business[$p['Product']['brand_id']])) {
+                            $business[$p['Product']['brand_id']] = array();
+                        }
+                        $business[$p['Product']['brand_id']][] = $p['Product'];
+                    }
+
+                    $pids = Hash::extract($allP, '{n}.Product.id');
+
+                    $tryId = 0;
+
+                    $this->loadModel('ShipSetting');
+                    $shipSettings = $this->ShipSetting->find_by_pids($pids, $provinceId);
+
+                    $new_order_ids = array();
+                    foreach ($business as $brand_id => $products) {
+                        $total_price = 0.0;
+                        foreach($products as $pro){
+                            $pid = $pro['id'];
+                            $num = $Carts[$pid]['Cart']['num'];
+                            $total_price+= $Carts[$pid]['Cart']['price'] * $num;
+
+                            list($afford_for_curr_user, $limit_cur_user) = $tryId ? afford_product_try($tryId, $uid) : AppController::__affordToUser($pid, $uid);
+                            if (!$afford_for_curr_user) {
+                                $success = false;
+                                $reason[] = 'sold_out_'.$pid;
+                                break;
+                            } else if ($limit_cur_user == 0 || ($limit_cur_user > 0 && $num > $limit_cur_user)) {
+                                $success = false;
+                                $reason[] = 'exceed_limit_'.$pid;
+                                break;
+                            }
+                        }
+
+                        if ($success) {
+                            if($total_price <= 0){
+                                $success = false;
+                                $reason[] = 'invalid_total_price';
+                            }
+
+                            $shipFeeContext = array();
+                            $ship_fee = 0.0;
+                            $ship_fees = array();
+                            foreach($products as $pro) {
+                                $pid = $pro['id'];
+                                $pidShipSettings = array();
+                                foreach($shipSettings as $val){
+                                    if($val['ShipSetting']['product_id'] == $pid){
+                                        $pidShipSettings[] = $val;
+                                    }
+                                };
+
+                                $num = $Carts[$pid]['Cart']['num'];
+
+                                if ($tryId) {
+                                    $ship_fees[$pid] = 0;
+                                } else {
+                                    $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
+                                    $singleShipFee = empty($pp) ? $pro['ship_fee'] : $pp['ship_price'];
+                                    $ship_fees[$pid] = ShipPromotion::calculateShipFee($total_price, $singleShipFee, $num, $pidShipSettings, $shipFeeContext);
+                                }
+                                $ship_fee += $ship_fees[$pid];
+                            }
+
+
+                            $data = array();
+
+                            if (!$tryId) {
+                                //$ship_fee = ShipPromotion::calculateShipFeeByOrder($ship_fee, $brand_id, $total_price);
+                            } else {
+                                $data['try_id'] = $tryId;
+                            }
+
+                            $data['total_price'] = $total_price;
+                            $data['total_all_price'] = $total_price + $ship_fee;
+                            $data['ship_fee'] = $ship_fee;
+                            $data['brand_id'] = $brand_id;
+                            $data['creator'] = $uid;
+
+                            $remark = $remarks[$brand_id];
+                            $data['remark'] = empty($remark) ? "" : $remark;
+
+                            $data['consignee_id'] = $addressId;
+                            $data['consignee_name'] = $address['OrderConsignee']['name'];
+                            $data['consignee_area'] = $address['OrderConsignee']['area'];
+                            $data['consignee_address'] = $address['OrderConsignee']['address'];
+                            $data['consignee_mobilephone'] = $address['OrderConsignee']['mobilephone'];
+                            $data['consignee_telephone'] = $address['OrderConsignee']['telephone'];
+                            $data['consignee_email'] = $address['OrderConsignee']['email'];
+                            $data['consignee_postcode'] = $address['OrderConsignee']['postcode'];
+
+                            $this->Order->create();
+
+                            if($this->Order->save($data)){
+                                $order_id = $this->Order->getLastInsertID();
+                                if ($order_id) {
+                                    array_push($new_order_ids, $order_id);
+                                }
+                                foreach($products as $pro){
+                                    $pid = $pro['id'];
+                                    $cart = $Carts[$pid];
+                                    $this->Cart->updateAll(array('order_id'=>$order_id,'status'=>CART_ITEM_STATUS_BALANCED),
+                                        array('id'=>$cart['Cart']['id'], 'status' => CART_ITEM_STATUS_NEW));
+
+                                    if (!$tryId) {
+                                        $this->Product->update_storage_saled($pid, $cart['Cart']['num']);
+                                    }
+                                }
+                                if (!$tryId) {
+                                    //$this->apply_coupons_to_order($brand_id, $uid, $order_id);
+                                    //$this->apply_coupon_code_to_order($uid, $order_id);
+                                }
+                            }
+                            else{
+                                $this->log('failed to save order: uid='.$uid.', order_content:'.json_encode($data));
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            $success = false;
+            $reason[] = 'invalid_parameter';
+        }
+
+        $this->set(compact('success', 'reason'));
+        $this->set('order_ids', isset($new_order_ids) ? $new_order_ids : array());
+        $this->set('_serialize', array('success', 'order_ids', 'reason'));
     }
 }

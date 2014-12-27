@@ -309,7 +309,6 @@ class OrdersController extends AppController{
 		$this->loadModel('Cart');
         $this->loadModel('Product');
         $this->loadModel('ShipPromotion');
-        $buyingCom = $this->Components->load('Buying');
 
         $uid = $this->currentUser['id'];
         $sessionId = $this->Session->id();
