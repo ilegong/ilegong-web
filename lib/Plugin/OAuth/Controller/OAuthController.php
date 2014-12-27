@@ -250,6 +250,7 @@ class OAuthController extends OAuthAppController {
                     $_GET['password'] = $inputData['password'];
                     $_GET['client_id'] = $inputData['client_id'];
                     $_GET['grant_type'] = 'password';
+                    header("HTTP/1.1 " . '200 OK');
                     $this->token();
                 } else {
                     echo json_encode(array('error'=>3, 'error_description'=>'saving wrong'));
