@@ -95,6 +95,9 @@
     ))}}
     {{$this->Html->script(array('jquery/jquery-migrate-1.2.1.min.js'))}}
     <![endif]-->
+    <!--[if lte IE 8]>
+        {{$this->Html->css(array('ie-patch/ie78.css'))}}
+    <![endif]-->
     <script type="text/javascript">
         var BASEURL = "{{APP_SUB_DIR}}";
         var ADMIN_BASEURL = BASEURL + "/manage";
@@ -138,7 +141,12 @@
         请开启您浏览器的JavaScript选项
     </noscript>
 </head>
+<!--[if IE 7]><body class="ie7"><![endif]-->
+<!--[if IE 8]><body class="ie8"><![endif]-->
+<!--[if IE 9]><body class="ie9"><![endif]-->
+<!--[if !IE]>-->
 <body>
+<!--<![endif]-->
 
 {{if !empty($_SESSION['Auth']['Staff']) }}
 <!-- 文件上传进度条 -->
