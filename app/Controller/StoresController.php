@@ -257,7 +257,7 @@ class StoresController extends AppController
         $this->redirect(array('action' => 'products'));
     }
 
-    public function products($published)
+    public function products()
     {
         $this->checkAccess();
 
@@ -268,7 +268,7 @@ class StoresController extends AppController
         }
 
         $total = $this->Product->find('count', array('conditions' => array('brand_id' => $this->brand['Brand']['id'])));
-        $cond = array('brand_id' => $this->brand['Brand']['id'], 'deleted' => DELETED_NO,'published' => $published);
+        $cond = array('brand_id' => $this->brand['Brand']['id'], 'deleted' => DELETED_NO);
         $datalist = $this->Product->find('all', array(
             'conditions' => $cond,
             'fields' => array('id', 'name', 'price', 'published', 'coverimg', 'deleted', 'saled', 'storage', 'updated', 'slug','sort_in_store'),
