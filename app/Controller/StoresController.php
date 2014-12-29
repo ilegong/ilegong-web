@@ -140,9 +140,10 @@ class StoresController extends AppController
                 }
             }
             if (!isset($this->data['Product']['published'])) {
-//                $this->data['Product']['published'] = 1;
-                $this->data['Product']['published'] = 2;
+                $this->data['Product']['published'] = 1;
+//                $this->data['Product']['published'] = 2;
             }
+            $this->data['Product']['status'] = IN_CHECK; //默认商家增加的商品进入审核中状态
             $this->data['Product']['deleted'] = DELETED_NO;
             $this->data['Product']['creator'] = $this->currentUser['id'];
             $this->data['Product']['coverimg'] = trim($this->data['coverimg']);
@@ -256,7 +257,7 @@ class StoresController extends AppController
         $this->redirect(array('action' => 'products'));
     }
 
-    public function products($product_status='')
+    public function products($published,$product_status=null)
     {
         $this->checkAccess();
 
@@ -267,10 +268,11 @@ class StoresController extends AppController
         }
 
         $total = $this->Product->find('count', array('conditions' => array('brand_id' => $this->brand['Brand']['id'])));
-        $cond = array('brand_id' => $this->brand['Brand']['id'], 'deleted' => DELETED_NO);
+        $cond = array('brand_id' => $this->brand['Brand']['id'], 'deleted' => DELETED_NO,'published' => $published,'status' =>$product_status);
         $datalist = $this->Product->find('all', array(
             'conditions' => $cond,
             'fields' => array('id', 'name', 'price', 'published', 'coverimg', 'deleted', 'saled', 'storage', 'updated', 'slug', 'sort_in_store'),
+            'fields' => array('id', 'name', 'price', 'published', 'coverimg', 'deleted', 'saled', 'storage', 'updated', 'slug','status'),
             'order' => 'updated desc'
         ));
 

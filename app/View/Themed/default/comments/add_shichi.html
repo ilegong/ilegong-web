@@ -318,14 +318,13 @@
          }
 
            if ($.trim($('#Shichi_CommentBody').val()).length <= 50) {
-               utils.alert("评论内容不能少于50字");
+               utils.alert("评论内容不能少于30字");
                return;
            }
-           if ($.trim($('#Shichi_CommentPictures').val()).length ==0) {
-               utils.alert_one('亲，为保证评价客观性，请附上试吃商品的实物图片哦','知道了');
-               return;
-           }
-
+//           if ($.trim($('#Shichi_CommentPictures').val()).length ==0) {
+//               utils.alert_one('亲，为保证评价客观性，请附上试吃商品的实物图片哦','知道了');
+//               return;
+//           }
 
         var referer = window.location.href;
         if (referer.indexOf('?') == -1) {
