@@ -451,6 +451,15 @@ function addtoCart(id, num, spec, quick_buy_pid, type)
     type = type || 'normal';
     var url = BASEURL + '/carts/add';
     var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec, 'data[Cart][type]': type};
+
+    //special for cake
+    if ($('span.spec_item[item-label="SD"]').size()>0) {
+        var cake_date_selected = $('span.spec_item_selected[item-label="SD"]');
+        if (cake_date_selected.size() >= 1) {
+            postdata['dating'] = cake_date_selected.text();
+        }
+    }
+
     utils.progress_notify('正在更新购物车');
     ajaxAction(url, postdata, null, 'addtoCart', quick_buy_pid);
     return false;
@@ -1191,9 +1200,10 @@ $(document).ready(function () {
                 var spec_labels = $('span.spec_label');
                 if (spec_labels.size() > 0) {
                     $.each(spec_labels, function (idx, val) {
-                        var spec_item_selected = $('span.spec_item_selected');
+                        var itemLabel = $(val).text();
+                        var spec_item_selected = $('span.spec_item_selected[item-label="' + itemLabel + '"]');
                         if (spec_item_selected.size() < 1) {
-                            utils.alert("请选择" + $(val).text());
+                            utils.alert("请选择" + itemLabel);
                             return false;
                         }  else {
                             specId = _p_spec_m[spec_item_selected.text()];
@@ -1203,6 +1213,15 @@ $(document).ready(function () {
                         return false;
                     }
                 }
+            }
+        }
+
+        //special for cake
+        if ($('span.spec_item[item-label="SD"]').size()>0) {
+            var cake_date_selected = $('span.spec_item_selected[item-label="SD"]');
+            if (cake_date_selected.size() < 1) {
+                utils.alert("请选择送货日期");
+                return false;
             }
         }
 

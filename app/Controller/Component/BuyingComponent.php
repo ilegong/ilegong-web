@@ -84,8 +84,11 @@ class BuyingComponent extends Component {
             }
             $returnInfo = array('success' => $success, 'reason' => $reason, 'not_comment_cnt' => intval($notCommentedCnt));
         } else {
-            $cartM->add_to_cart($product_id, $num, $specId, $type, $tryId, $uid, $sessionId);
-            $returnInfo = array('success' => true, 'msg' => __('Success add to cart.'));
+            $savedD = $cartM->add_to_cart($product_id, $num, $specId, $type, $tryId, $uid, $sessionId);
+            if ($savedD) {
+                $cartId = $savedD['Cart']['id'];
+            }
+            $returnInfo = array('success' => true, 'msg' => __('Success add to cart.'), 'id' => $cartId);
         }
         return $returnInfo;
     }
@@ -148,8 +151,10 @@ class BuyingComponent extends Component {
 
             $cart = new OrderCartItem();
             $cart->is_try = true;
-            $cart->add_product_item($products[0]['Product']['brand_id'], $pid, calculate_try_price($prodTry['ProductTry']['price'], $uid), 1, array(), $cartItem['Cart']['name']);
+            $brand_id = $products[0]['Product']['brand_id'];
+            $cart->add_product_item($brand_id, $pid, calculate_try_price($prodTry['ProductTry']['price'], $uid), 1, array(), $cartItem['Cart']['name']);
             $shipFee = 0;
+            $shipFees = array($brand_id => $shipFee);
         } else {
             if (!empty($balancePids)) {
                 $pids = $balancePids;

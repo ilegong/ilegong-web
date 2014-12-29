@@ -78,7 +78,7 @@ class Cart extends AppModel {
      * @param null $prodTry
      * @param null $shichituan
      * @throws Exception
-     * @return bool whether saved successfully
+     * @return mixed On success Model::$data if its not empty or true, false on failure
      */
     public function add_to_cart($product_id, $num = 1, $spec = 0, $type = CART_ITEM_TYPE_NORMAL, $try_id = 0,
                                 $uid = null, $sessionId=null, $prodTry = null, $shichituan = null) {

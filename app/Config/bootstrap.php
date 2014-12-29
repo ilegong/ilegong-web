@@ -86,6 +86,7 @@ const SHICHI_STATUS_APPLY = 0;
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
+define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');
 define('FORMAT_DATEH', 'Y-m-d H');
 define('FORMAT_TIME', 'H:i:s');
 
@@ -1000,4 +1001,22 @@ function message_send($msg=null, $mobilephone=null){
     //{"error":0,"msg":"ok"}
     curl_close($ch);
     return $res;
+}
+
+function cake_send_date() {
+    $cakeDateM = ClassRegistry::init('CakeDate');
+    $send_dates = $cakeDateM->find('all', array(
+        'conditions' => array('published' => PUBLISH_YES),
+        'order' => 'send_date',
+        'field' => 'send_date',
+        'limit' => 3,
+    ));
+    $rtn = array();
+    foreach($send_dates as $date) {
+        $dt = DateTime::createFromFormat(FORMAT_DATE, $date['CakeDate']['send_date']);
+        if (!empty($dt)) {
+            $rtn[] = date(FORMAT_DATE_YUE_RI_HAN, $dt->getTimestamp());
+        }
+    }
+    return $rtn;
 }

@@ -710,18 +710,25 @@ class StoresController extends AppController
                 return;
             }
 
-
             if ("add" == $action) {
                 $this->CakeDate->id = null;
                 $send_date = $_REQUEST['send_date'];
                 $published = ($_REQUEST['published'] == PUBLISH_YES);
                 if ($send_date) {
-                    $data = array();
-                    $data['CakeDate']['send_date'] = $send_date;
-                    $data['CakeDate']['published'] = $published;
-                    $this->CakeDate->save($data);
+
+                    $found = $this->CakeDate->find('first', array(
+                        'conditions' => array('send_date' => $send_date)
+                    ));
+                    if (!empty($found)) {
+                        setFlashError($this->Session, '发货日期已存在, 不能重复添加');
+                    } else {
+                        $data = array();
+                        $data['CakeDate']['send_date'] = $send_date;
+                        $data['CakeDate']['published'] = $published;
+                        $this->CakeDate->save($data);
+                    }
                 } else {
-                    setFlashError($this->Session, '发送日期不能为空');
+                    setFlashError($this->Session, '发货日期不能为空');
                 }
             } else if ("delete" == $action) {
                 $id = intval($_REQUEST['id']);

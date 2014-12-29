@@ -63,6 +63,14 @@ class CartsController extends AppController{
             }
 
             $returnInfo = $buyingCom->check_and_add($cartM, $type, $tryId, $uid, $num, $product_id, $specId, $sessionId);
+            if (!empty($returnInfo) && $returnInfo['success']) {
+                if ($product_id == PRODUCT_ID_CAKE && $_REQUEST['dating'] && $returnInfo['id']) {
+                    $dating = trim($_REQUEST['dating']);
+                    if ($dating) {
+                        $cartM->updateAll(array('name' => 'concat(name, "(' . $dating . ')")'), array('id' =>  $returnInfo['id']));
+                    }
+                }
+            }
             echo json_encode($returnInfo);
 			exit;
 		}

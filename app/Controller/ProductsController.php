@@ -299,6 +299,12 @@ class ProductsController extends AppController{
             ));
         }
         $this->Session->write('BrowsingHistory',$browsing_history);
+
+
+        if ($pid == PRODUCT_ID_CAKE) {
+            $this->set('cake_dates', cake_send_date());
+        }
+
         $this->set('category_control_name', 'products');
     }
 
