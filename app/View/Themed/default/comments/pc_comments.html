@@ -62,7 +62,6 @@
                 }
                 template += '<dt class="header"> <img width="60px" height="60px" class="radius5" src="'+defaultPhoto+'" /><br /> <span>' + comment['username'] + '</span> </dt>';
                 template += '<dt class="content"> <b></b><div class="clearfix c_content">';
-                console.log(comment['rating']);
                 var images = '';
                 if (comment['images']) {
                     $.each(comment['images'], function(idx, val){

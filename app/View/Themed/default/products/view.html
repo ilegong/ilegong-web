@@ -239,10 +239,7 @@
             var target = element;
             $(target).on('click', function handlerTabClick(target) {
                 $(element).addClass('tm_selected').siblings().removeClass('tm_selected');
-                console.log(element);
-                console.log($(element).data('togid'));
                 var content = $('#' + $(element).data('togid'));
-                console.log(content);
                 $(content).show().siblings().hide();
             });
         });
