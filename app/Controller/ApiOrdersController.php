@@ -279,7 +279,7 @@ class ApiOrdersController extends AppController {
         $creator = $this->currentUser['id'];
         $orderM = ClassRegistry::init('OrderConsignees');
         $info = $orderM->find('all', array(
-            'conditions' => array('creator' => $creator),
+            'conditions' => array('creator' => $creator, 'deleted' => 0 ),
             'fields' => array('id', 'name', 'status', 'area', 'address', 'mobilephone', 'telephone', 'email', 'postcode', 'province_id', 'city_id', 'county_id')
         ));
         $this->set('order_consigness', $info);
@@ -593,4 +593,52 @@ class ApiOrdersController extends AppController {
         $this->set('order_ids', isset($new_order_ids) ? $new_order_ids : array());
         $this->set('_serialize', array('success', 'order_ids', 'reason'));
     }
+
+    public function info_consignee(){
+        if (!isset($inputData)) {
+            $inputData = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST : $_GET;
+        }
+        $orderC = ClassRegistry::init('OrderConsignees');
+        $areaC = ClassRegistry::init('Locations');
+        $data = array();
+        $data['creator'] = $this->currentUser['id'];
+        $data['name'] = trim($inputData['name']);
+        $data['address'] = trim($inputData['address']);
+        $data['province_id'] = intval($inputData['province_id']);
+        $data['city_id']= intval($inputData['city_id']);
+        $data['county_id']= intval($inputData['county_id']) ;
+        $data['mobilephone'] = $inputData['mobilephone'];
+        $area = $areaC->find('list', array(
+            'conditions'=> array('id' => array($data['province_id'], $data['city_id'], $data['county_id'])),
+            'fields'=> array('name')
+        ));
+        $data['area']= implode("", $area);
+        $info = array('success' => false);;
+        if($inputData['type'] && $inputData['type'] == 'edit' && $inputData['id'] && $inputData['mobilephone']){
+            $data['id'] = $inputData['id'];
+            if($orderC->hasAny(array('creator' => $this->currentUser['id'], 'id' => $inputData['id']))){
+
+                if($orderC->save($data)){
+                    $info =  array('success' => true);
+                }
+            }
+
+        }else if($inputData['type'] && $inputData['type'] == 'create'){
+            if($orderC->save($data['OrderConsignee'])){
+                $info =  array('success' => true);
+            }
+        }
+        $this->set('info', $info);
+        $this->set('_serialize', 'info');
+    }
+
+    public function delete_consignee($id){
+        $orderC = ClassRegistry::init('OrderConsignees');
+        if($orderC->updateAll(array('deleted'=> 1), array('id'=> $id, 'creator' => $this->currentUser['id']))){
+            $this->set('info', array('success' => true));
+        }
+        $this->set('_serialize', 'info');
+    }
+
+
 }
