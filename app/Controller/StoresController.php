@@ -257,7 +257,7 @@ class StoresController extends AppController
         $this->redirect(array('action' => 'products'));
     }
 
-    public function products($published,$product_status=null)
+    public function products($published)
     {
         $this->checkAccess();
 
@@ -268,11 +268,10 @@ class StoresController extends AppController
         }
 
         $total = $this->Product->find('count', array('conditions' => array('brand_id' => $this->brand['Brand']['id'])));
-        $cond = array('brand_id' => $this->brand['Brand']['id'], 'deleted' => DELETED_NO,'published' => $published,'status' =>$product_status);
+        $cond = array('brand_id' => $this->brand['Brand']['id'], 'deleted' => DELETED_NO,'published' => $published);
         $datalist = $this->Product->find('all', array(
             'conditions' => $cond,
-            'fields' => array('id', 'name', 'price', 'published', 'coverimg', 'deleted', 'saled', 'storage', 'updated', 'slug', 'sort_in_store'),
-            'fields' => array('id', 'name', 'price', 'published', 'coverimg', 'deleted', 'saled', 'storage', 'updated', 'slug','status'),
+            'fields' => array('id', 'name', 'price', 'published', 'coverimg', 'deleted', 'saled', 'storage', 'updated', 'slug','sort_in_store'),
             'order' => 'updated desc'
         ));
 
@@ -594,4 +593,107 @@ class StoresController extends AppController
             echo json_encode(array('success'=> true, 'weight'=>$weight));
         }
     }
+
+    /**
+     * 店铺红包
+     */
+
+    public function share_offers() {
+        $this->checkAccess();
+        $this->loadModel('ShareOffer');
+        $this->set('brand',$this->brand);
+        $brand_id = $this->brand['Brand']['id'];
+//        $this->log('id'.json_encode($brand_id));
+        $store_offer = $this->ShareOffer->find('all',array('conditions' =>array('brand_id' => $brand_id),'fields' => array('id','name','introduct','start','end','valid_days','avg_number')));
+        $this->set('store_offers',$store_offer);
+        $this->log('ss'.json_encode($store_offer));
+
+
+
+        $this->set('op_cate','share_offers');
+    }
+
+
+    /**
+     * 店铺红包设置
+     */
+     public function add_share_offers() {
+        $this->checkAccess();
+        $this->set('brand',$this->brand);
+        $this->loadModel('ShareOffer');
+        if (!empty($this->data)) {
+            $this->data['ShareOffer']['brand_id'] = $this->brand['Brand']['id'];
+            if($this->ShareOffer->save($this->data)) {
+              $this->Session->setFlash(__('The data has been saved'));
+              $this->redirect(array('action' => 'share_offers'));
+            }else {
+              setFlashError($this->Session, __('The Data could not be saved. Please, try again.'));
+            }
+        }
+
+         $this->set('op_cate','share_offers');
+     }
+
+    /**
+     * 店铺红包编辑
+     */
+
+    public function edit_share_offers($id) {
+       $this->checkAccess();
+        $brand_id = $this->brand['Brand']['id'];
+        $datainfo = $this->find_share_offers_by_id_and_brandid($id,$brand_id);
+        $this->log('datainfo'.json_encode($datainfo));
+        if (empty($datainfo)) {
+            throw new ForbiddenException(__('You cannot edit this data'));
+        }
+        if (!empty($this->data)) {
+            $this->autoRender = false;
+            if ($this->ShareOffer->save($this->data)){
+            $this->Session->setFlash(__('The data has been saved'));
+            } else {
+                setFlashError($this->Session, __('The Data could not be saved. Please, try again.'));
+            }
+            $this->redirect(array('action' =>'share_offers' ,$id));
+        } else {
+           $this->data = $datainfo;
+//           $this->data['ShareOffer']['start']= date('Y-m-d',strtotime($datainfo['ShareOffer']['start']));
+//
+//             $this->log('time'.json_encode($this->data['ShareOffer']['start']));
+
+        }
+        $this->set('opt','share_offers');
+    }
+
+    /**
+     * 删除红包
+     * @param $id
+     * @throws ForbiddenException
+     */
+
+    public function delete_share_offers($id) {
+
+       $this->checkAccess();
+       $brand_id = $this->brand['Brand']['id'];
+       $datainfo = $this->find_share_offers_by_id_and_brandid($id,$brand_id);
+
+        if (empty($datainfo)) {
+            throw new ForbiddenException(__('You cannot edit this data'));
+        }
+        $this->ShareOffer->updateAll(array('deleted' => DELETED_YES),array('id' => $id,'deleted' => DELETED_NO,'brand_id' => $brand_id));
+        $this->Session->setFlash(__('删除成功'));
+        $this->redirect(array('action' => 'share_offers'));
+
+    }
+
+    /*
+     * 根据ID和brandId 查找红包信息
+     * @param $id
+     * @param $brand_id
+     * @return mixed
+     */
+    private function find_share_offers_by_id_and_brandid ($id,$brand_id) {
+        $this->loadModel('ShareOffer');
+        return $this->ShareOffer->find('first',array('conditions' => array('id' =>$id,'brand_id' => $brand_id)));
+    }
+
 }

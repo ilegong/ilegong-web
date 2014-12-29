@@ -57,6 +57,9 @@ class ShichituansController extends AppController{
             $this->data['Shichituan']['user_id'] = $this->currentUser['id'];
             $this->data['Shichituan']['comment'] = htmlspecialchars($this->data['Shichituan']['comment']);
             if ($this->Shichituan->save($this->data)) {
+                $msg ='感谢亲报名朋友说试吃团，我们会尽快审核报名资料,亲加一下朋友说试吃团的QQ群：374179511,我们会将第一手审核信息公布在群中，再次感谢报名';
+                $tel = $this->data['Shichituan']['telenum'];
+                message_send($msg,$tel);
                 $successinfo = array('success' => __('谢谢您的申请，我们每月30号统一审核,请您耐心等待.', true));
                 echo json_encode($successinfo);
             } else {
@@ -120,7 +123,7 @@ class ShichituansController extends AppController{
                     $shichi_data = $this->Shichituan->find('first',array('conditions' => array('shichi_id' =>$re),'fields' => array('period','telenum')));
                     $msg = '亲，恭喜您成功加入第'.$shichi_data['Shichituan']['period'].'期试吃团，感谢您对朋友说的支持';
                     $tel = $shichi_data['Shichituan']['telenum'];
-                    $this->log('data'.json_encode($shichi_data));
+//                    $this->log('data'.json_encode($shichi_data));
                     message_send($msg,$tel);
                     }
                 } else {

@@ -1,27 +1,5 @@
 <div class="container">
     <?php echo $this->Html->link('新增商品', '/s/add_product.html',array('class'=>'btn btn-warning pull-right')); ?>
-
-    <div class="col-sm-3 col-md-2 sidebar">
-        <ul class="nav nav-sidebar">
-            <li class = "active" style="background-color: #F1F1F1">
-                <a href="/stores/products/1/0">已上架</a>
-            </li>
-            <li role="presentation">
-                <a href="/stores/products/0/2">审核中</a>
-            </li>
-            <li role="presentation">
-                <a href="/stores/products/0/3">试吃中</a>
-            </li>
-            <li role="presentation">
-                <a href="/stores/products/0/4">试吃／审核不通过</a>
-            </li>
-            <li role="presentation">
-                <a href="/stores/products/0/0">已下架</a>
-            </li>
-        </ul>
-   </div>
-    <div class="col-sm-9 col-md-10 main">
-      <div class="table-responsive">
     <table class="table table-striped table-hover">
         <?php
         $tableHeaders =  $this->Html->tableHeaders(array(
@@ -31,7 +9,6 @@
         '库存',
         '销量',
         '状态',
-
         '更新时间',
         '排序权值',
         '操作'
@@ -46,16 +23,6 @@
             .' | '.$this->Html->link('查看', array('controller' => 'products', 'action' => 'view', $item['Product']['id']), array('target' => '_blank'))
             ;
         }
-        $published_status = $item['Product']['published'];
-        $status = $item['Product']['status'];
-        if ($published_status ==0) {
-        if ($status ==2) {$status_msg = '审核中';}
-        elseif ($status ==3) {$status_msg ='试吃中';}
-        elseif ($status ==4) {$status_msg = '试吃/审核不通过';}
-        else {$status_msg = '下架';}
-        } else {
-        $status_msg = '上架';
-        }
 
         $rows[] = array(
         $this->Html->image(
@@ -65,8 +32,7 @@
         $this->Number->precision($item['Product']['price'], 2),
         $item['Product']['storage'],
         $item['Product']['saled'],
-
-        $status_msg,
+        $item['Product']['deleted'] == DELETED_YES ? '已删除' : ($item['Product']['published'] == PUBLISH_YES ? '上架' : '下架'),
         friendlyDateFromStr($item['Product']['updated']),
         '<input type="number" name="weight" id="product_pid_' . $item['Product']['id'] . '"class="form-control" data-toggle="tooltip" data-placement="right" title="权值已保存" value="'.$item['Product']['sort_in_store'].'" style="width: 70px">',
         $actions,
@@ -79,6 +45,8 @@
     </table>
     {{$page_navi}}
 </div>
+
+
 <script>
     $(document).ready(function(){
         $("input[name='weight']").on('focusout', function(){
@@ -98,6 +66,4 @@
 
         });
     })
-</script>   </div>
-  </div>
-</div>
+</script>
