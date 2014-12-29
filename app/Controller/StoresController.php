@@ -700,6 +700,7 @@ class StoresController extends AppController
 
     public function cake_dating($action) {
         $this->checkAccess();
+        $this->pageTitle = '设置可选的发货日期';
         if ($this->brand['Brand']['id'] == BRAND_ID_CAKE) {
             $this->loadModel('CakeDate');
             if ("list" == $action) {
