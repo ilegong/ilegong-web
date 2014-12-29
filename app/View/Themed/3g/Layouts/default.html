@@ -8,6 +8,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="format-detection" content="telephone=no">
+    <meta name="chinaz-site-verification" content="081e7651-48c6-4c2f-a569-99321685eab1" />
+    <meta name="baidu-site-verification" content="mGej7ZzIc1" />
+    <meta name="360-site-verification" content="11513c90635fb70282692446172cae58" />
+    <meta name="Keywords" content="{{if $seokeywords}}{{$seokeywords}}{{else}}{{$site[seokeywords]}}{{/if}}"/>
+    <meta name="Description"
+          content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}"/>
     <link rel="apple-touch-icon" href="{{$this->Html->assetUrl('/img/logo_mini.png')}}" />
     <title>{{$pageTitle}}-{{$site['title']}}</title>
     {{$this->Html->css(array('http://'.WX_HOST.'/css/bootstrap_2.css', 'layout_3g.css?ver21',));}}
@@ -118,4 +124,14 @@
             });
         </script>
 </body>
+<!--baidu statics-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?024856ad924d6a6714cb18c1090f25b2";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
 </html>
