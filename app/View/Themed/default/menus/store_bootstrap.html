@@ -9,6 +9,7 @@
                 <li {{if $op_cate == 'profile'}}class="active"{{/if}}><?php echo $this->Html->link('店铺资料', array('controller' => 'stores','action'=>'profile','plugin' => null ,)); ?></li>
                 <li {{if $op_cate == 'products'}}class="active"{{/if}}><?php echo $this->Html->link('商品', '/s/products.html'); ?></li>
                 <li {{if $op_cate == 'orders'}}class="active"{{/if}}><?php echo $this->Html->link('订单', array('controller' => 'stores','action'=>'wait_shipped_orders','plugin' => null ,)); ?></li>
+                {{if $brand['Brand']['id'] == BRAND_ID_CAKE}}<li><?php echo $this->Html->link('排期', array('controller' => 'stores','action'=>'cake_dating')); ?></li>{{/if}}
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/b/index">{{$brand['Brand']['name']}}</a></li>

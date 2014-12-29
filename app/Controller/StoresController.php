@@ -257,7 +257,7 @@ class StoresController extends AppController
         $this->redirect(array('action' => 'products'));
     }
 
-    public function products()
+    public function products($published,$product_status=null)
     {
         $this->checkAccess();
 
@@ -696,4 +696,52 @@ class StoresController extends AppController
         return $this->ShareOffer->find('first',array('conditions' => array('id' =>$id,'brand_id' => $brand_id)));
     }
 
+
+
+    public function cake_dating($action) {
+        $this->checkAccess();
+        if ($this->brand['Brand']['id'] == BRAND_ID_CAKE) {
+            $this->loadModel('CakeDate');
+            if ("list" == $action) {
+                $dates = $this->CakeDate->find('all', array(
+                    'order' => 'send_date desc'
+                ));
+                $this->set('dates', $dates);
+                return;
+            }
+
+
+            if ("add" == $action) {
+                $this->CakeDate->id = null;
+                $send_date = $_REQUEST['send_date'];
+                $published = ($_REQUEST['published'] == PUBLISH_YES);
+                if ($send_date) {
+                    $data = array();
+                    $data['CakeDate']['send_date'] = $send_date;
+                    $data['CakeDate']['published'] = $published;
+                    $this->CakeDate->save($data);
+                } else {
+                    setFlashError($this->Session, '发送日期不能为空');
+                }
+            } else if ("delete" == $action) {
+                $id = intval($_REQUEST['id']);
+                $this->CakeDate->delete($id);
+            } else if ("publish" == $action) {
+                $id = intval($_REQUEST['id']);
+                $data = array();
+                $data['CakeDate']['published'] = PUBLISH_YES;
+                $data['CakeDate']['id'] = $id;
+                $this->CakeDate->save($data);
+            } else if ("unpublish" == $action) {
+                $id = intval($_REQUEST['id']);
+                $data = array();
+                $data['CakeDate']['published'] = PUBLISH_NO;
+                $data['CakeDate']['id'] = $id;
+                $this->CakeDate->save($data);
+            }
+            $this->redirect('/stores/cake_dating/list');
+        } else {
+            $this->__message("您没有权限进行操作", '/stores/index');
+        }
+    }
 }
