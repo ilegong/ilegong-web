@@ -685,15 +685,15 @@ function game_uri($gameType, $defUri = '/') {
 
 
 function add_coupon_for_new($uid) {
-    $ci = ClassRegistry::init('CouponItem') ;
-    $new_user_coupons = array(18483, 18482);
-    $found = $ci->find_coupon_item_by_type_no_join($uid, $new_user_coupons);
-    if (empty($found)) {
-        foreach($new_user_coupons as $coupon_id) {
-            //$ci->addCoupon($uid, $coupon_id, $uid, 'new_register');
-        }
-        return false;
-    }
+//    $ci = ClassRegistry::init('CouponItem') ;
+//    $new_user_coupons = array(18483, 18482);
+//    $found = $ci->find_coupon_item_by_type_no_join($uid, $new_user_coupons);
+//    if (empty($found)) {
+//        foreach($new_user_coupons as $coupon_id) {
+//            $ci->addCoupon($uid, $coupon_id, $uid, 'new_register');
+//        }
+//        return false;
+//    }
     return false;
 }
 
