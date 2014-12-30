@@ -23,6 +23,10 @@ class OrdersController extends AppController{
         return "Balance.coupons";
     }
 
+    public static function key_balanced_conpon_global() {
+        return "Balance.coupons.global";
+    }
+
     public static function key_balanced_ship_promotion_id() {
         return "Balance.promotion.id";
     }
@@ -160,7 +164,7 @@ class OrdersController extends AppController{
         $this->loadModel('ShipSetting');
         $shipSettings = $this->ShipSetting->find_by_pids($pids, $provinceId);
 
-        $new_order_ids = array();
+        $order_results = array();
 		$saveFailed = false;
         foreach ($business as $brand_id => $products) {
 			$total_price = 0.0;
@@ -243,7 +247,7 @@ class OrdersController extends AppController{
 			if($this->Order->save($data)){
 				$order_id = $this->Order->getLastInsertID();
                 if ($order_id) {
-                    array_push($new_order_ids, $order_id);
+                    $order_results[$brand_id] = array($order_id, $total_price);
                 }
                 foreach($products as $pro){
                     $pid = $pro['id'];
@@ -255,21 +259,26 @@ class OrdersController extends AppController{
                         $this->Product->update_storage_saled($pid, $cart['Cart']['num']);
                     }
 				}
-                if (!$tryId) {
-                    $this->apply_coupons_to_order($brand_id, $uid, $order_id);
-                    $this->apply_coupon_code_to_order($uid, $order_id);
-                }
 			}
 			else{
 				$saveFailed = true;
 			}
 		}
 
+        if (!$tryId && !$saveFailed) {
+            foreach($order_results as $brand_id => $order_val) {
+                $order_id = $order_val[0];
+                $this->apply_coupons_to_order($brand_id, $uid, $order_id, $order_results);
+                $this->apply_coupon_code_to_order($uid, $order_id);
+            }
+        }
+
         $this->_clear_coupons();
 
 		if(!$saveFailed){
-            if (count($new_order_ids) == 1) {
-                $this->redirect(array('action' => 'detail', $new_order_ids[0], 'pay'));
+            if (count($order_results) == 1) {
+                $newOIds = array_values($order_results);
+                $this->redirect(array('action' => 'detail', $newOIds[0][0], 'pay'));
             }  else {
 			    $this->Session->setFlash('订单已生成,不同商家的商品会拆分到不同的订单，请您分别付款。');
                 $this->redirect('/orders/mine');
@@ -1128,33 +1137,69 @@ class OrdersController extends AppController{
      * @param $brand_id
      * @param $uid
      * @param $order_id
+     * @param $order_results
+     * @throws MissingModelException
      */
-    protected function apply_coupons_to_order($brand_id, $uid, $order_id) {
+    protected function apply_coupons_to_order($brand_id, $uid, $order_id, $order_results) {
         //TODO：检查是否可以应用这些券的合法性
         $used_coupons_str = $this->Session->read(self::key_balanced_conpons());
+        $total_reduced_cent = 0;
+        $total_reduce_coupons = array();
+        $total_price = 0;
+        foreach($order_results as $val) {
+            $total_price += $val[1];
+        }
         if ($used_coupons_str) {
             $used_coupons = json_decode($used_coupons_str, true);
             if (!empty($used_coupons) && is_array($used_coupons)) {
                 $used_coupons_of_brand = $used_coupons[$brand_id];
             }
+
+            $global_coupons = $used_coupons[0];
+            if (!empty($global_coupons)) {
+                $this->loadModel('CouponItem');
+                $g_items = $this->CouponItem->find_my_valid_coupon_items($uid, $global_coupons);
+                if (!empty($g_items)) {
+                    foreach ($g_items as $item) {
+                        if ($item['Coupon']['type'] == COUPON_TYPE_TYPE_MAN_JIAN) {
+                            $curr_order_price_cent = ($order_results[$brand_id][1]) * 100;
+                            $total_reduced_cent = $total_reduced_cent + ($item['Coupon']['reduced_price'] * $curr_order_price_cent / ($total_price * 100));
+                            $total_reduce_coupons[] = $item['CouponItem']['id'];
+                        }
+                    }
+                }
+            }
         }
+
+
+        $coupon_total = 0;
+        $applied_coupons = array();
         if (!empty($used_coupons_of_brand) && is_array($used_coupons_of_brand)) {
             $this->loadModel('CouponItem');
             if ($this->CouponItem->apply_coupons_to_order($uid, $order_id, $used_coupons_of_brand)) {
                 $computed = $this->CouponItem->compute_coupons_for_order($uid, $order_id);
                 $applied_coupons = $computed['applied'];
                 $coupon_total = $computed['reduced'];
-                if (!empty($applied_coupons)) {
-                    $reduced = $coupon_total / 100;
-                    $toUpdate = array('applied_coupons' => '\''.implode(',', $applied_coupons).'\'',
-                        'coupon_total' => $coupon_total,
-                        'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, 0, total_all_price - ' . $reduced . ')');
-                    $this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY));
-                }
-                if (count($used_coupons_of_brand) != count($applied_coupons) || array_diff($used_coupons_of_brand, $applied_coupons)) {
-                    $this->log("not expected coupon size: order_id=$order_id, original:" . json_encode($used_coupons_of_brand) . ", final:" . json_encode($applied_coupons));
+            }
+        }
+
+        if (!empty($applied_coupons) || !empty($total_reduce_coupons)) {
+            $reduced = $coupon_total / 100;
+            $global_reduced = $total_reduced_cent/100;
+            $toUpdate = array('applied_coupons' => '\''.implode(',', $applied_coupons).'\'',
+                'coupon_total' => $coupon_total,
+                'global_coupon_total' => $total_reduced_cent,
+                'applied_global_coupon' => '\''.implode(',', $total_reduce_coupons).'\'',
+                'total_all_price' => 'if(total_all_price - ' . $reduced . ' - '.$global_reduced.' < 0, 0, total_all_price - ' . $reduced . ' - '.$global_reduced.')');
+            if($this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY))){
+                //FIXME: support more orders
+                if (!empty($global_coupons)) {
+                    $this->CouponItem->apply_coupons_to_order($uid, $order_id, $global_coupons);
                 }
             }
+        }
+        if (count($used_coupons_of_brand) != count($applied_coupons) || (is_array($used_coupons_of_brand) && array_diff($used_coupons_of_brand, $applied_coupons))) {
+            $this->log("not expected coupon size: order_id=$order_id, original:" . json_encode($used_coupons_of_brand) . ", final:" . json_encode($applied_coupons));
         }
     }
 
@@ -1357,17 +1402,28 @@ class OrdersController extends AppController{
                     return ($val['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER);
                 });
 
-                //这里必须安店面去限定
-                //要把没有查询到的couponItem去掉
-                if (!empty($cart->brandItems[$brand_id]) && count($couponsByShared) <= $cart->brandItems[$brand_id]->total_num()) {
-                    //            if($cart->could_apply($brand_id, $cou)){
-                    //TODO: 需要考虑券是否满足可用性等等
-                    $this->_brand_apply_coupon($brand_id, $coupon_item_id);
-                    $changed = true;
-                } else {
-                    $reason = 'share_type_coupon_exceed';
-                }
+                $curr_coupon_item = array_filter($couponItems, function ($val ) use ($coupon_item_id) {
+                    return ($val['CouponItem']['id'] == $coupon_item_id);
+                });
 
+                if (empty($curr_coupon_item)) {
+                    $reason = 'share_type_not_exists';
+                } else {
+                    //这里必须安店面去限定
+                    //要把没有查询到的couponItem去掉
+                    if ($curr_coupon_item['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER
+                        && !empty($cart->brandItems[$brand_id]) && count($couponsByShared) <= $cart->brandItems[$brand_id]->total_num()) {
+                        //            if($cart->could_apply($brand_id, $cou)){
+                        //TODO: 需要考虑券是否满足可用性等等
+                        $this->_brand_apply_coupon($brand_id, $coupon_item_id);
+                        $changed = true;
+                    } else if (count($couponItems) == 1) {
+                        $this->_brand_apply_coupon(0, $coupon_item_id);
+                        $changed = true;
+                    } else {
+                        $reason = 'share_type_coupon_exceed';
+                    }
+                }
 //            }
             }
         } else {

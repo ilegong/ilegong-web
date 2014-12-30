@@ -128,7 +128,7 @@
         商品总价：￥{{$this->Number->precision($order['Order']['total_price'], 2)}}<br/>
         运费：￥{{$this->Number->precision($order['Order']['ship_fee'], 2)}}<br/>
         总价：￥{{$this->Number->precision($order['Order']['ship_fee'] + $order['Order']['total_price'], 2)}}<br/>
-        优惠券：￥{{$this->Number->precision($order['Order']['coupon_total']/100, 2)}}<br/>
+        优惠券：￥{{$this->Number->precision(($order['Order']['coupon_total']+$order['Order']['global_coupon_total'])/100, 2)}}<br/>
         实付(含运费)：￥{{$this->Number->precision($order['Order']['total_all_price'], 2)}}
         </p>
 

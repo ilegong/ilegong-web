@@ -112,6 +112,19 @@ a.coupon_applied .glyphicon {
             <p id="coupon_code_msg" style="color:red"></p>
             <input id="coupon_code_text" type="text" value="" name="coupon_code"> <a id="coupon_code_apply" href="javascript:;" class="btn btn-warning">应用</a>
             </div>
+
+            <?php $coupons = $coupons_of_products[0]; if(!empty($coupons)){ ?>
+            <h4>可用优惠券：</h4>
+            <ul>
+                <?PHP foreach($coupons as $coupon) {
+                $applied =$brandItem->coupon_applied($coupon['CouponItem']['id']); ?>
+                <li><a data-coupon_item_id="{{$coupon['CouponItem']['id']}}" data-brandId="0" class="coupon {{if $applied}}coupon_applied{{/if}}" href="javascript:"><input type="checkbox" {{if $applied}}checked="checked"{{/if}}>
+                    {{$coupon['Coupon']['name']}} <span style="color: red">{{$this->Number->precision($coupon['Coupon']['reduced_price']/100, 2)}}</span> {{if $coupon['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER}}(红包券，每件商品可使一张，本单本店共{{$brandItem->total_num()}}件){{/if}}
+                    <span class="glyphicon glyphicon-ok" style="display: none"></span></a><span class="applied_result"></span>
+                </li>
+                <?PHP } ?>
+            </ul>
+            <?php } ?>
         </div>
         <div>
 		    <ul class="pull-right list-unstyled">

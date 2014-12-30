@@ -34,6 +34,8 @@ class CouponItem extends AppModel {
 
         if (!$user_id || !$cart || empty($cart->brandItems)) { return false; }
 
+        $total_price_cent = $cart->total_price() * 100;
+
         $myCoupons = $this->find_my_valid_coupons($user_id);
 
         $availCoupons = array();
@@ -41,18 +43,31 @@ class CouponItem extends AppModel {
 
             $coupon_brandId = Hash::get($coupon, 'Coupon.brand_id');
             $coupon_pids = Hash::get($coupon, 'Coupon.product_ids');
+            $categories = Hash::get($coupon, 'Coupon.category_id');
+            if (!$coupon_brandId && !$coupon_pids && !$categories) {
+                if ($coupon['Coupon']['type'] != COUPON_TYPE_TYPE_MAN_JIAN
+                    || $total_price_cent >= $coupon['Coupon']['least_price']) {
+                    $availCoupons[0][] = $coupon;
+                }
+                continue;
+            }
+
             foreach($cart->brandItems as $brandItem) {
                 if ($coupon_brandId && $coupon_brandId != $brandItem->id) {
                     continue;
                 }
 
                 foreach($brandItem->items as $productItem) {
+                    $brand_total_price = $brandItem->total_price() * 100;
                     if (empty($coupon_pids) && $coupon_brandId == $brandItem->id) {
                         //TODO: continue check  for category_id, least_total_price, least_total_in_brand or least_total_in_product
-                        $availCoupons[$brandItem->id][] = $coupon;
+                        if ($coupon['Coupon']['type'] != COUPON_TYPE_TYPE_MAN_JIAN
+                            || $brand_total_price >= $coupon['Coupon']['least_price']) {
+                            $availCoupons[$brandItem->id][] = $coupon;
+                        }
                     } else if (!empty($coupon_pids) && array_search($productItem->pid, $coupon_pids) !== false) {
-                        $least_price_in_brand = Hash::get($coupon, 'Coupon.least_total_in_brand');
-                        if (!$least_price_in_brand || $least_price_in_brand < $productItem->total_price()) {
+                        if ($coupon['Coupon']['type'] != COUPON_TYPE_TYPE_MAN_JIAN
+                            || $brand_total_price >= $coupon['Coupon']['least_price']) {
                             $availCoupons[$brandItem->id][] = $coupon;
                         }
                     }
