@@ -1,0 +1,16 @@
+<form action="/groupons/organizing/" method="post">
+    {{$this->Form->input('team',array('type'=>'hidden'))}}
+    <div class="form-group">
+        <label for="grouperName" >发起人姓名</label>
+        <input type="text" class="form-control" id="grouperName" name="data[Groupon][name]" >
+    </div>
+    <div class="form-group">
+        <label for="grouperMobile">手机号</label>
+        <input type="text" class="form-control" id="grouperMobile" name="data[Groupon][mobile]">
+    </div>
+    <div class="form-group">
+        <label for="grouperAddress">收货地址</label>
+        <input type="text" class="form-control" id="grouperAddress" name="data[Groupon][address]">
+    </div>
+    <button type="submit" class="btn btn-warning btn-lg btn-block">提交</button>
+</form>
