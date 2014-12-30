@@ -26,7 +26,7 @@ class GrouponsController extends AppController{
             }
         }
     }
-    public function lists($slug){
+    public function view($slug){
         if($slug){
             $this->loadModel('Team');
             $team = $this->Team->find('first', array(
@@ -57,7 +57,7 @@ class GrouponsController extends AppController{
                 $this->loadModel('GrouponMember');
                 if($this->GrouponMember->hasAny(array('user_id' => $current_uid, 'status' => GROUP_HAD_PAID, 'team_id' => $team['Team']['id'] ))){
                     $this->Session->setFlash(__('您已经参加过该商品的一次团了'));
-                    $this->redirect('/lists/'. $this->data['team']);
+                    $this->redirect('/view/'. $this->data['team']);
                 }else{
                     $info = array();
                     $info['Groupon']['name'] = $this->data['Groupon']['name'];
@@ -71,7 +71,7 @@ class GrouponsController extends AppController{
                         $this->redirect('/groupons/join');
                     }else{
                         $this->Session->setFlash(__('提交失败'));
-                        $this->redirect('/lists/'. $this->data['team']);
+                        $this->redirect('/view/'. $this->data['team']);
                     }
                 }
 
