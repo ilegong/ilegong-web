@@ -624,7 +624,7 @@ class ApiOrdersController extends AppController {
             }
 
         }else if($inputData['type'] && $inputData['type'] == 'create'){
-            if($orderC->save($data['OrderConsignee'])){
+            if($orderC->save($data)){
                 $info =  array('success' => true);
             }
         }
