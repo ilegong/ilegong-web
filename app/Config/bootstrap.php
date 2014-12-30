@@ -690,7 +690,7 @@ function add_coupon_for_new($uid) {
     $found = $ci->find_coupon_item_by_type_no_join($uid, $new_user_coupons);
     if (empty($found)) {
         foreach($new_user_coupons as $coupon_id) {
-            $ci->addCoupon($uid, $coupon_id, $uid, 'new_register');
+            //$ci->addCoupon($uid, $coupon_id, $uid, 'new_register');
         }
         return false;
     }
