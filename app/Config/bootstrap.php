@@ -692,7 +692,7 @@ function add_coupon_for_new($uid) {
         foreach($new_user_coupons as $coupon_id) {
             $ci->addCoupon($uid, $coupon_id, $uid, 'new_register');
         }
-        return true;
+        return false;
     }
     return false;
 }
