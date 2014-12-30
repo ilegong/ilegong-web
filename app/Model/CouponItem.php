@@ -234,6 +234,15 @@ class CouponItem extends AppModel {
         return empty($arr) ? false : $arr[0];
     }
 
+    public function find_coupon_item_by_type_no_join($uid, $couponIds) {
+        if (!empty($couponIds) && $uid) {
+            return $this->find('all', array(
+                'conditions' => array('coupon_id' => $couponIds, 'deleted = 0', 'bind_user' => $uid),
+            ));
+        }
+        return false;
+    }
+
     public function find_my_all_coupons($user_id) {
         return $this->find('all', array(
             'conditions' => array('CouponItem.bind_user' => $user_id, 'CouponItem.deleted = 0'),

@@ -159,6 +159,7 @@ class UsersController extends AppController {
                             else{
                                 $this->Session->setFlash('注册成功!');
                             }
+                            $this->after_create_user($this->data['User']['id']);
                             $data = $this->User->find('first', array('conditions' => array('id' =>  $this->data['User']['id']) ));
                             $this->Session->write('Auth.User', $data['User']);
                             $this->redirect('/');
@@ -835,6 +836,7 @@ class UsersController extends AppController {
                         $oauth['Oauthbinds']['unionId'] = $wxUserInfo['unionid'];
                     }
 
+                    $new_created = false;
                     if ($new_serviceAccount_binded_uid > 0) {
                         $this->updateUserProfileByWeixin($new_serviceAccount_binded_uid, $wxUserInfo);
                     } else {
@@ -854,6 +856,7 @@ class UsersController extends AppController {
                             $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
                         }
                         $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
+                        $new_created = true;
 
                         if (!$new_serviceAccount_binded_uid){
                             $this->log("login failed for cannot got create new user with the current WX info: res=".json_encode($res).", wxUserInfo=".json_encode($wxUserInfo));
@@ -865,6 +868,9 @@ class UsersController extends AppController {
                     $this->Oauthbinds->save($oauth['Oauthbinds']);
                     if ($need_transfer && isset($old_serviceAccount_binded_uid) && $old_serviceAccount_binded_uid != $new_serviceAccount_binded_uid) {
                         $this->transferUserInfo($old_serviceAccount_binded_uid, $new_serviceAccount_binded_uid);
+                    }
+                    if($new_serviceAccount_binded_uid) {
+                        $this->after_create_user($new_serviceAccount_binded_uid);
                     }
 
                     //TODO: fix risk
@@ -888,6 +894,13 @@ class UsersController extends AppController {
             //用户没有授权
             $this->log("cannot get auth code:" . $_SERVER['QUERY_STRING']);
             $this->wxFailAndGotoLogin();
+        }
+    }
+
+    private function after_create_user($uid) {
+        if(add_coupon_for_new($uid)) {
+            $weixinC = $this->Components->load('Weixin');
+            $weixinC->send_coupon_received_message($uid, 2, "可购买全站商品", "满100元减20， 满50元减10元");
         }
     }
 
