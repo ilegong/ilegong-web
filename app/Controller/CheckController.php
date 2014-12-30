@@ -72,7 +72,7 @@ class CheckController extends AppController{
             //每次随机抽取一位数字;从第一个字到该字串最大长度,
             $verifyCode .= $str[$num];
         }
-        $msg = '尊敬的用户，感谢您对朋友说的支持，短信验证码：'. $verifyCode .'，有效期为20分钟，请尽快验证。';
+        $msg = '短信验证码：'. $verifyCode .'，有效期为20分钟，感谢您对朋友说的支持。';
 
         if (!isset($inputData['type'])&&isset($_SESSION['captcha']) && $_SESSION['captcha'] == $inputData['keyString']) {
             unset($_SESSION['captcha']);
