@@ -23,7 +23,7 @@
         <div class="col-xs-3">￥{{$this->Number->precision($coupon['SharedOffer']['total_number']/100, 2)}}</div>
         <div class="col-xs-6">
             {{$coupon['ShareOffer']['name']}}<br/>
-            {{date(FORMAT_DATE, date_days($coupon['SharedOffer']['start'], 7)->getTimestamp()) }}前有效<br/>
+            {{date(FORMAT_DATE, date_days($coupon['SharedOffer']['start'], $coupon['SharedOffer']['valid_days'])->getTimestamp()) }}前有效<br/>
             {{$coupon['ShareOffer']['introduct']}}
         </div>
         <div class="col-xs-3">

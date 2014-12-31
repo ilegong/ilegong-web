@@ -51,14 +51,40 @@
         </div>
     </div>
 
+    <!--<div class="form-group">-->
+        <!--<label class="col-sm-2 control-label" for="share_offer_num">红包数目</label>-->
+        <!--<div class="col-sm-6 controls">-->
+
+            <!--<p class="help-block">设置红包的数量</p>-->
+        <!--</div>-->
+    <!--</div>-->
+
     <div class="form-group">
-        <label class="col-sm-2 control-label" for="share_offerpublished">是否发布</label>
-        <div class="col-sm-6 controls select">
-            {{$this->Form->input('published',array('class'=>'form-control','type'=>'select','options'=>array('0'=>'否','1'=>'是',),'div'=>false,'label'=>false))}}
-            <p class="help-block">是否立即发布</p>
+        <label class="col-sm-2 control-label" for="share_offer_avg_num">红包平均金额</label>
+        <div class="col-sm-6 controls">
+            {{$this->Form->input('avg_number',array('class'=>'form-control','div'=>false,'label'=>false))}}
+            <p class="help-block">设置红包的平均金额（分），例：1.5 元，即150分</p>
         </div>
     </div>
 
+    <!--<div class="form-group">-->
+        <!--<label class="col-sm-2 control-label" for="share_offerpublished">是否发布</label>-->
+        <!--<div class="col-sm-6 controls select">-->
+
+            <!--<p class="help-block">是否立即发布红包</p>-->
+        <!--</div>-->
+    <!--</div>-->
+
+
+    {{if empty($store_offer)}}
+    <div class="form-group">
+        <label class="col-sm-2 control-label" for="share_offeris_default">是否创建默认红包</label>
+        <div class="col-sm-6 controls">
+            {{$this->Form->input('is_default',array('class'=>'form-control','type'=>'select','options'=>array('0'=>'否','1'=>'是',),'div'=>false,'label'=>false))}}
+            <p class="help-block">每位商家只能创建一个默认红包</p>
+        </div>
+    </div>
+    {{/if}}
 
     <div class="form-group">
         <label class="col-sm-2 control-label" for="share_offerintroduct">使用说明</label>
@@ -69,7 +95,7 @@
     </div>
 
     <div class="form-group">
-        <div class="col-sm-6"><input class="btn btn-primary  pull-right" type="submit" value="提交"></div>
+        <div class="col-sm-5"><input class="btn btn-primary  pull-right" onclick="return checkTime()" type="submit" value="提交"></div>
     </div>
     {{$this->Form->end()}}
 </div>
@@ -89,5 +115,6 @@
     $('#share_offerstart,#share_offerend').datepicker({
      dateFormat : "yy-mm-dd"
      });
+
  });
 </script>

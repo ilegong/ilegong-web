@@ -19,26 +19,37 @@
                 '红包简介',
                 '开始时间',
                 '结束时间',
-                '有效时间',
-                '平均价格',
+                '有效时间(天)',
+                '红包金额(元)',
+                '默认红包',
+
                 '操作'
                 ));
             echo '<thead>'.$tableHeaders.'</thead>';
                 $row =array();
 
                 foreach ($store_offers as $store_offer) {
-                if ($item['Product']['deleted'] != DELETED_YES) {
+                if ($store_offer['ShareOffer']['deleted'] != DELETED_YES) {
+                 if($store_offer['ShareOffer']['is_default']!=1){
                  $actions = ' '.$this->Html->link('修改',array('action' => 'edit_share_offers', $store_offer['ShareOffer']['id']))
-                            .'|'.$this->Html->link('删除',array('action' => 'delete_share_offers', $store_offer['ShareOffer']['id']));
-                 }
-
+                            .'|'.$this->Html->link('删除',array('action' => 'delete_share_offers', $store_offer['ShareOffer']['id']),array('confirm' => '确定删除嘛？'))
+                            .'|'.$this->Html->link('发红包',array('action' => 'publish_share_offers'),array('class' => 'button','id'=>$store_offer['ShareOffer']['id'],'number'=>$store_offer['ShareOffer']['avg_number']));
+                 } else {
+                $actions = ' '.$this->Html->link('修改',array('action' => 'edit_share_offers', $store_offer['ShareOffer']['id']))
+                .'|'.$this->Html->link('发红包',array('action' => 'publish_share_offers'),array('class' => 'button','id'=>$store_offer['ShareOffer']['id'],'number'=>$store_offer['ShareOffer']['avg_number']));
+                }
+                }
+                 if ($store_offer['ShareOffer']['is_default'] == 1) {$msg='是';}
+                 else {$msg='否';}
                  $row[]=array(
                  $store_offer['ShareOffer']['name'],
                  $store_offer['ShareOffer']['introduct'],
                  $store_offer['ShareOffer']['start'],
                  $store_offer['ShareOffer']['end'],
                  $store_offer['ShareOffer']['valid_days'],
-                 $store_offer['ShareOffer']['avg_number'],
+                 $store_offer['ShareOffer']['avg_number']/100,
+                 $msg,
+
                  $actions,
                 );
 
@@ -52,3 +63,33 @@
     </div>
 
 </div>
+
+<script>
+    $(document).ready(function(){
+        $('.button').click(function(){
+            var shareId = $(this).attr('id');
+            var share_avg_num = $(this).attr('number');
+            var shareNum = prompt('请输入红包数量:','');
+          if(shareNum >0) {
+        var data = {"shareNum":shareNum,"shareOfferId":shareId,"share_avg_num":share_avg_num};
+        $.ajax({
+            type:'post',
+            success:function(data){
+
+            window.location.href = '/s/share_offers';
+            },
+            url:"{{$this->Html->url(array('controller' => 'stores','action' => 'publish_share_offers'))}}",
+            data:data,
+//            dataType:'html'
+        });
+          } else {
+              alert('红包数量必须大于0哦');
+              return false;
+          }
+
+
+
+        });
+    });
+</script>
+

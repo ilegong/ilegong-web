@@ -57,7 +57,7 @@ class ShichituansController extends AppController{
             $this->data['Shichituan']['user_id'] = $this->currentUser['id'];
             $this->data['Shichituan']['comment'] = htmlspecialchars($this->data['Shichituan']['comment']);
             if ($this->Shichituan->save($this->data)) {
-                $msg ='感谢亲报名朋友说试吃团，我们会尽快审核报名资料,亲加一下朋友说试吃团的QQ群：374179511,我们会将第一手审核信息公布在群中，再次感谢报名';
+                $msg ='我们已经收到亲的试吃报名资料，请加QQ群374179511，具体审核信息将会在试吃群中公告.';
                 $tel = $this->data['Shichituan']['telenum'];
                 message_send($msg,$tel);
                 $successinfo = array('success' => __('谢谢您的申请，我们每月30号统一审核,请您耐心等待.', true));
