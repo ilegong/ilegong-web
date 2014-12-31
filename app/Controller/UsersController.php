@@ -457,22 +457,22 @@ class UsersController extends AppController {
                     }
                 }
             }
-            $imgCode =$this->data['User']['imgCode'];
-            if(empty($imgCode)){
-                $this->Session->setFlash('图片验证码不能为空');
-                return;
-            }else{
-                $captcha = $this->Session->read('captcha');
-                if(!$captcha){
-                    $this->Session->setFlash('图片验证码错误');
-                    return;
-                }else{
-                    if($captcha!=$imgCode){
-                        $this->Session->setFlash('图片验证码输入错误');
-                        return;
-                    }
-                }
-            }
+//            $imgCode =$this->data['User']['imgCode'];
+//            if(empty($imgCode)){
+//                $this->Session->setFlash('图片验证码不能为空');
+//                return;
+//            }else{
+//                $captcha = $this->Session->read('captcha');
+//                if(!$captcha){
+//                    $this->Session->setFlash('图片验证码错误');
+//                    return;
+//                }else{
+//                    if($captcha!=$imgCode){
+//                        $this->Session->setFlash('图片验证码输入错误');
+//                        return;
+//                    }
+//                }
+//            }
             if(empty($this->data['User']['password'])){
                 $this->Session->setFlash('密码不为空');
                 return;
