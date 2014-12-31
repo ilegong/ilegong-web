@@ -26,17 +26,15 @@
                 <li class="title">累计评价:</li>
                 <li class="green">已有{{$Product['Product']['comment_nums']}}人评价</li>
             </ul>
-            <ul class="clearfix borderb pb15">
+            <ul class="clearfix">
                 <li class="title">服务:</li>
                 <li>由 <strong>{{$brand['Brand']['name']}}</strong> 发货并提供售后服务</li>
-                <div style="position:relative;">
-                    <ul class="clearfix">
-                        <li class="title">运费:</li>
-                        <li class="yunfei clearfix">
-                            <span>{{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</span>
-                        </li>
-                    </ul>
-                </div>
+            </ul>
+            <ul class="clearfix borderb pb15">
+                <li class="title">运费:</li>
+                <li class="yunfei clearfix">
+                    <span>{{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</span>
+                </li>
             </ul>
 
             <ul class="clearfix pt15">
