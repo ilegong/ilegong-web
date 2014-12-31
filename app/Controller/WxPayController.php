@@ -19,21 +19,99 @@ class WxPayController extends AppController {
         }
     }
 
-    public function jsApiPay($orderId) {
+    public function group_pay($memberId) {
 
-        if (!$this->is_weixin()) {
-//            $this->set('__error', __('微信支付只能在微信客户端中'));
-            throw new CakeException("您只能在微信中使用微信支付。");
+        $uid = $this->currentUser['id'];
+
+        $this->loadModel('GrouponMember');
+        $gm = $this->GrouponMember->findById($memberId);
+
+        if (empty($gm)) {
+            setFlashError($this->Session, '参数不正确');
+            $this->redirect('/');
+        }
+
+        $error_text = '';
+        if ($gm['GrouponMember']['user_id'] != $uid) {
+            $error_text = '不是您的参团记录，您不能支付';
+        } else if ($gm['GroupMember']['status'] == STATUS_GROUP_PAID) {
+            $error_text = '已经支付过了';
+        }
+        $team_id = $gm['GrouponMember']['team_id'];
+        $group_url = '/groupons/view/?team_id=' . $team_id;
+        if (!empty($error_text)) {
+            $this->__message($error_text, $group_url);
             return;
         }
 
-        $id = $this->currentUser['id'];
-        $order = $this->WxPayment->findOrderAndCheckStatus($orderId, $id);
+        $this->loadModel('Team');
+        $team = $this->Team->findById($team_id);
+        if (empty($team)) {
+            $this->__message('内部错误', '/');
+            return;
+        }
+        $begin = $team['Team']['begin_time'];
+        $end = $team['Team']['end_time'];
+        $fee = $team['Team']['unit_pay'];
+        $now = time();
+        if ($now < $begin || $now > $end) {
+            $this->__message('团购已过期', $group_url);
+            return;
+        }
+
+        $order = $this->Order->createOrFindGrouponOrder($memberId, $uid, $fee/100, $team['Team']['product_id']);
+        $orderId = $order['Order']['id'];
+
+        $error_pay_redirect = $group_url;
+        $this->pageTitle = '安全支付';
+        $order = $this->WxPayment->findOrderAndCheckStatus($orderId, $uid);
+
+        $isWeixin = $this->is_weixin();
+        if ($isWeixin) {
+            list($jsapi_param, $out_trade_no, $productDesc) = $this->__prepareWXPay($error_pay_redirect, $orderId, $uid, $order);
+            $this->set('jsApiParameters', $jsapi_param);
+            $this->set('totalFee', $order['Order']['total_all_price']);
+            $this->set('tradeNo', $out_trade_no);
+        }
+
+        $this->set('weixin', $isWeixin);
+        $this->set('productDesc', $productDesc);
+        $this->set('orderId', $orderId);
+    }
+
+    public function jsApiPay($orderId) {
+
+        $uid = $this->currentUser['id'];
+        $error_pay_redirect = '/orders/detail/' . $orderId . '/pay';
+        $this->pageTitle = '微信支付';
+
+        $order = $this->WxPayment->findOrderAndCheckStatus($orderId, $uid);
+
+        list($jsapi_param, $out_trade_no, $productDesc) = $this->__prepareWXPay($error_pay_redirect, $orderId, $uid, $order);
+        $this->set('jsApiParameters', $jsapi_param);
+        $this->set('totalFee', $order['Order']['total_all_price']);
+        $this->set('tradeNo', $out_trade_no);
+        $this->set('productDesc', $productDesc);
+        $this->set('orderId', $orderId);
+    }
+
+    /**
+     * @param $error_pay_redirect
+     * @param $orderId
+     * @param $uid
+     * @param $order
+     * @throws CakeException
+     * @return array js api parameters, out trade no, product description
+     */
+    private function __prepareWXPay($error_pay_redirect, $orderId, $uid, $order) {
+        if (!$this->is_weixin()) {
+            throw new CakeException("您只能在微信中使用微信支付。");
+        }
 
         //使用jsapi接口
         $jsApi = $this->WxPayment->createJsApi();
 
-        $oauth = ClassRegistry::init('Oauthbind')->findWxServiceBindByUid($id);
+        $oauth = ClassRegistry::init('Oauthbind')->findWxServiceBindByUid($uid);
 
         if ($oauth && $oauth['oauth_openid']) {
             $openid = $oauth['oauth_openid'];
@@ -43,6 +121,7 @@ class WxPayController extends AppController {
                 //触发微信返回code码
                 $url = $jsApi->createOauthUrlForCode(WxPayConf_pub::JS_API_CALL_URL . '/' . $orderId . '?showwxpaytitle=1');
                 Header("Location: $url");
+                return;
             } else {
                 //获取code码，以获取openid
                 $code = $_GET['code'];
@@ -70,17 +149,13 @@ class WxPayController extends AppController {
 
             //=========步骤3：使用jsapi调起支付============
             $jsApi->setPrepayId($prepay_id);
-            $this->set('jsApiParameters', $jsApi->getParameters());
-            $this->set('totalFee', $order['Order']['total_all_price']);
-            $this->set('tradeNo', $out_trade_no);
-            $this->set('productDesc', $productDesc);
-            $this->set('orderId', $orderId);
-            $this->pageTitle = '微信支付';
-
-            $this->log("wxpay:" . $jsApi->getParameters());
+            $jsapi_param = $jsApi->getParameters();
+            $this->log("wxpay:" . $jsapi_param);
+            return array($jsapi_param, $out_trade_no, $productDesc);
         }  else {
             $this->log('wx_prepare_error');
-            $this->__message('支付服务忙死了，请您稍后重试', '/orders/detail/'.$orderId.'/pay', 5);
+            $this->__message('支付服务忙死了，请您稍后重试', $error_pay_redirect, 5);
+            exit();
         }
     }
 

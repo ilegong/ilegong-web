@@ -8,6 +8,33 @@
 
 class Order extends AppModel {
 
+    public function createOrFindGrouponOrder($memberId, $uid, $fee, $product_id) {
+        $existsOrder = $this->find('first', array(
+            'conditions' => array('member_id' => $memberId,
+                'creator' => $uid,
+                'type' => ORDER_TYPE_GROUP,
+            )
+        ));
+
+        if (empty($existsOrder)) {
+            $arr = array(
+                'creator' => $uid,
+                'total_all_price' => $fee,
+                'type' => ORDER_TYPE_GROUP,
+                'member_id' => $memberId
+            );
+            $order = $this->save($arr);
+            if (!empty($order)) {
+                $cartM = ClassRegistry::init('Cart');
+                $inserted = $cartM->add_to_cart($product_id, 1, 0, CART_ITEM_TYPE_GROUPON_PROM, 0, $uid);
+                $cartM->updateAll(array('order_id' => $order['Order']['id'], 'status' => CART_ITEM_STATUS_BALANCED), array('id' => $inserted['Cart']['id']));
+            }
+
+            return $order['Order']['id'];
+        } else {
+            return $existsOrder;
+        }
+    }
 
     /**
      * @param $operator

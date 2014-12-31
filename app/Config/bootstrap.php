@@ -81,9 +81,14 @@ const PRO_TAG_HOTTEST = 1;
 const CART_ITEM_TYPE_NORMAL = 1;
 const CART_ITEM_TYPE_QUICK_ORDER = 2;
 const CART_ITEM_TYPE_TRY = 3;
+const CART_ITEM_TYPE_GROUPON_PROM = 4;
 
 const SHICHI_STATUS_OK = 1;
 const SHICHI_STATUS_APPLY = 0;
+
+const ORDER_TYPE_DEF = 1;
+const ORDER_TYPE_GROUP = 2;
+const ORDER_TYPE_PARENT = 3;
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
@@ -114,6 +119,7 @@ const TYPE_REDUCE_BY_NUMS = 2; //同一商品满几件包邮
 const TYPE_ORDER_FIXED = 3; //同订单固定邮费
 const TYPE_MUL_NUMS = 4; //每件相乘
 
+const STATUS_GROUP_PAID = 1;
 
 define('CATEGORY_ID_TECHAN', 114);
 

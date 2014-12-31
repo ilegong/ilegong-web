@@ -1,0 +1,69 @@
+{{if $weixin}}
+<div class="pay_tip">请选择支付方式</div>
+<div class="pay_list">
+    <a href="#X" class="clearfix" id="btn_call_wx_pay">
+        <span class="payicon"><img src="images/weixin.png" /></span>
+        <span class="payname">微信支付</span>
+    </a>
+</div>
+<script type="text/javascript">
+    //调用微信JS api 支付
+    function jsApiCall()
+    {
+        var doneUrlPrefix = '/groupons/view/' + {{$groupon_slug}} + '/paid?tradeNo={{urlencode($tradeNo)}}&msg=';
+    WeixinJSBridge.invoke(
+            'getBrandWCPayRequest',
+            js_api_parameters,
+    function(res){
+        var $msg, not_redirect;
+        if(res.err_msg == "get_brand_wcpay_request:ok" ) {
+            $msg = 'ok';
+        } else if(res.err_msg == "get_brand_wcpay_request:cancel") {
+            $msg = 'cancel';
+        } else if(res.err_msg == "get_brand_wcpay_request:fail") {
+            $msg = 'fail';
+        } else if(res.err_msg == "system:access_denied" || res.err_msg == "access_control:not_allow" || res.err_msg == 'getBrandWCPayRequest:fail_invalid appid'){
+            $msg = 'denied';
+            utils.alert('<div class="alert-warning">请搜索{{WX_SERVICE_ID_NO}}立即关注我们的服务号，在『个人中心』->『我的订单』完成支付。</div>', function(){
+                window.location.href = doneUrlPrefix + encodeURIComponent($msg);
+            });
+            not_redirect = true;
+        } else {
+            WeixinJSBridge.log(res.err_msg);
+            $msg = res.err_msg;
+        }
+
+        if (!not_redirect) {
+            window.location.href = doneUrlPrefix + encodeURIComponent($msg);
+        }
+    }
+    );
+    };
+
+    function callpay()
+    {
+        var $this = $(this);
+        if ($this.attr('disabled') == 'disabled') {
+            return;
+        }
+        $this.attr('disabled', 'disabled').addClass('disabled');
+        if (typeof WeixinJSBridge == "undefined"){
+            if (document.addEventListener){
+                document.addEventListener('WeixinJSBridgeReady', jsApiCall, false);
+            } else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', jsApiCall);
+                document.attachEvent('onWeixinJSBridgeReady', jsApiCall);
+            }
+        }else{
+            jsApiCall();
+        }
+    }
+    var js_api_parameters = {{$jsApiParameters}};
+</script>
+{{/if}}
+<div class="pay_list" style="margin-top:-1px;">
+    <a href="#X" class="clearfix">
+        <span class="payicon"><img src="images/alipay.png" /></span>
+        <span class="payname">支付宝支付</span>
+    </a>
+</div>
