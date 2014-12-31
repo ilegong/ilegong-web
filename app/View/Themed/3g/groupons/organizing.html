@@ -1,16 +1,27 @@
+
+{{$this->Html->css(array(
+'groupon.css',
+))}}
+<div class="bg">
+    <p class="title">邀请好友支付1元直抵5元! 组团一起吃, 一箱贡柑低至17元, 包邮! </p>
+</div>
 <form action="/groupons/organizing/" method="post">
     {{$this->Form->input('team',array('type'=>'hidden'))}}
-    <div class="form-group">
-        <label for="grouperName" >发起人姓名</label>
-        <input type="text" class="form-control" id="grouperName" name="data[Groupon][name]" >
-    </div>
-    <div class="form-group">
-        <label for="grouperMobile">手机号</label>
-        <input type="text" class="form-control" id="grouperMobile" name="data[Groupon][mobile]">
-    </div>
-    <div class="form-group">
-        <label for="grouperAddress">收货地址</label>
-        <input type="text" class="form-control" id="grouperAddress" name="data[Groupon][address]">
-    </div>
-    <button type="submit" class="btn btn-warning btn-lg btn-block">提交</button>
+    <ul class="check clearfix mt12">
+        <li class="clearfix">
+            <span class="name fl">发起人姓名:</span>
+            <span class="fl" style="display:none;">Alice</span>
+            <span class="fl"><input name="data[Groupon][name]" type="text" placeholder="请输入你的姓名" /></span>
+        </li>
+        <li class="clearfix" style="margin-top:-1px;">
+            <span class="name fl">手机号:</span>
+            <span class="fl"><input name="data[Groupon][mobile]" type="text" placeholder="请输入你的手机号" /></span></span>
+        </li>
+        <li class="clearfix" style="margin-top:-1px;">
+            <span class="name fl">收货地址:<span class="moreicon" style="top:50%; margin-top:-0.7em;"><img src="/img/groupon/more.png"  /></span></span>
+            <span style="overflow:hidden; margin-right:1em; display:none;">北京  北京市 朝阳区 慈云寺 住邦2000  2号楼2101室</span>
+            <span style="overflow:hidden; margin-right:1em; color:#acacac;">编辑常用收货地址</span>
+        </li>
+    </ul>
+    <button type="submit" class="tuanbtn radius10">确认收货信息, 下一步</button>
 </form>

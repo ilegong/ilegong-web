@@ -1087,6 +1087,7 @@ class UsersController extends AppController {
     public function mobile_bind(){
         $this->pageTitle = __('手机号绑定');
         $redirect = $this->data['User']['referer'] ? $this->data['User']['referer'] : $_REQUEST['referer'];
+        $title = $_REQUEST['title'];
         if(empty($this->currentUser['id'])){
             $this->redirect('/users/login?referer='.urlencode($_SERVER['REQUEST_URI']));
         }
@@ -1112,12 +1113,12 @@ class UsersController extends AppController {
                         $this->Session->setFlash(__('你的手机号已注册过，无法绑定'));
                     }
                 } else{
-                    if($this->is_weixin()){
-                        if (is_null($this->data['User']['password']) || trim($this->data['User']['password']) == '') {
-                            $this->Session->setFlash(__('Password should be longer than 6 characters'));
-                        }
-                        $user_info['User']['password'] = Security::hash($this->data['User']['password'], null, true);
-                    }
+//                    if($this->is_weixin()){
+//                        if (is_null($this->data['User']['password']) || trim($this->data['User']['password']) == '') {
+//                            $this->Session->setFlash(__('Password should be longer than 6 characters'));
+//                        }
+//                        $user_info['User']['password'] = Security::hash($this->data['User']['password'], null, true);
+//                    }
                     if ($this->User->save($user_info)) {
                         $this->data['User']['id'] = $this->User->getLastInsertID();
                         $data = $this->User->find('first', array('conditions' => array('id' =>  $this->data['User']['id']) ));
@@ -1133,6 +1134,7 @@ class UsersController extends AppController {
         }
         $this->set('supportWeixin', $this->is_weixin());
         $this->data['User']['referer'] = $redirect;
+        $this->set('title', $title);
     }
 }
 

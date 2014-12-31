@@ -20,7 +20,7 @@ class GrouponsController extends AppController{
                 'fields' => array('mobilephone')
             ));
             if(empty($user_info['User']['mobilephone'])){
-                $this->redirect('/users/mobile_bind?referer='.urlencode($_SERVER['REQUEST_URI']));
+                $this->redirect('/users/mobile_bind?referer='.urlencode($_SERVER['REQUEST_URI']).'&title=绑定手机号码马上享受组团优惠');
             }
         }
     }

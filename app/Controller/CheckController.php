@@ -45,10 +45,14 @@ class CheckController extends AppController{
                 'fields' => array('picture_code')
 
             ));
+        }else if($inputData['type'] == 'pc'&& $inputData['keyString']){
+            $code = $_SESSION['captcha'];
         }
         if(!empty($inputData['keyString']) && $code['MobileRegister']['picture_code']== $inputData['keyString']){
             echo json_encode(array('success' => true));
-        }else{
+        }else if(!empty($inputData['keyString']) &&$code == $inputData['keyString']){
+            echo json_encode(array('success' => true));
+        } else{
             echo json_encode(array('success' => false));
         }
     }
