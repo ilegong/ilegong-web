@@ -1,18 +1,166 @@
-
 <div class="row">
     <div class="col-md-8">
         <div class="panel panel-default">
             <div class="panel-heading"><?php echo $pageTitle; ?></div>
             <div class="panel-body">
-                <form role="form" action="/users/forgot.html" id="UserForgotForm" method="post" accept-charset="utf-8">
+                <?php
+                    $flashMsg = $this->Session->flash();
+                    if($flashMsg){
+                        echo $flashMsg;
+                    }
+                ?>
+                <div class="alert alert-warning alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert"><span
+                            aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <p id="checkInfo"><strong>注意!</strong>获取短信验证码之前先输入图片验证码。</p>
+                    <p id="sendInfo"></p>
+                </div>
+                <form role="form" class="form-horizontal" action="/users/forgot.html" id="UserForgotForm" method="post"
+                      accept-charset="utf-8">
                     <input type="hidden" name="_method" value="POST"/>
+
                     <div class="form-group">
-                        <label for="UserUsername">用户名</label>
-                        <input type="text" class="form-control" placeholder="输入用户名" name="data[User][username]" maxlength="60" type="text" id="UserUsername">
+                        <label for="mobile_number" class="col-sm-2 control-label">绑定手机号码</label>
+
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" placeholder="输入手机号码" name="data[User][mobilephone]"
+                                   maxlength="60" type="text" id="mobile_number">
+                        </div>
                     </div>
-                    <button type="submit" class="btn btn-default">提交</button>
+                    <div class="form-group">
+                        <label for="J_CheckCodeInput" class="col-sm-2 control-label">验证码</label>
+
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <input style="height: 50px" class="form-control" type="text" id="J_CheckCodeInput"
+                                       value="" placeholder="验证码" name="data[User][imgCode]">
+                                <span class="input-group-addon" style="padding: 0">
+                                    {{$this->Html->image(array('controller' => 'Check','action'=>'captcha'), array('id'=> "image_code", 'alt' => "看不清楚，换一张"))}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="message_input">短信验证码</label>
+
+                        <div class="col-sm-6">
+                            <div class="input-group">
+                                <input type="text" type="text" placeholder="短信验证码"
+                                       class="form-control" id="message_input" name="data[User][code]">
+                              <span class="input-group-btn">
+                                <button class="btn btn-info" type="button" id="btnMobileCode">获取</button>
+                              </span>
+                            </div>
+                            <!-- /input-group -->
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user_password" class="col-sm-2 control-label">新密码</label>
+
+                        <div class="col-sm-6">
+                            <input type="password" class="form-control" id="user_password" placeholder="输入密码"
+                                   name="data[User][password]">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="re_password" class="col-sm-2 control-label">确认密码</label>
+
+                        <div class="col-sm-6">
+                            <input type="password" class="form-control" id="re_password" placeholder="确认密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-primary">找回密码</button>
+                        </div>
+                    </div>
+
                 </form>
             </div>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#image_code').click(function () {
+            document.getElementById('image_code').src = '/check/captcha.html?' + Math.random() * 10000;
+        });
+        var $mobile_number = $('#mobile_number');
+        var $img_code = $('#J_CheckCodeInput');
+        var $user_password = $('#user_password');
+        var $re_password = $('#re_password');
+        var $message_input=$('#message_input');
+        $('#UserForgotForm').on('submit', function () {
+            if(!isPhone($mobile_number.val())){
+                $("#checkInfo").html("<em>手机号码输入有误。</em>");
+                return false;
+            }
+
+            if(!$img_code.val()){
+                $("#checkInfo").html("<em>输入验证码。</em>");
+                return false;
+            }
+
+            if(!$user_password.val()){
+                $("#checkInfo").html("<em>输入密码。</em>");
+                return false;
+            }
+
+            if($user_password.val()!=$re_password.val()){
+                $("#checkInfo").html("<em>两次输入密码不对。</em>");
+                return false;
+            }
+
+            if(!$message_input.val()){
+                $("#checkInfo").html("<em>输入短信验证码。</em>");
+                return false;
+            }
+
+            return true;
+        });
+        $('#btnMobileCode').on('click', function () {
+            var mobile = $mobile_number.val();
+            if (!isPhone(mobile)) {
+                $("#checkInfo").html("<em>手机号码输入有误。</em>");
+                return;
+            }
+            var code = $img_code.val();
+            if (!code.length) {
+                $("#checkInfo").html("<em>输入验证码。</em>");
+                return;
+            }
+            $('#btnMobileCode').attr('disabled','disabled');
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '/check/message_code',
+                data: {mobile: mobile, keyString: code},
+                cache: !1,
+                success: function (a) {
+                    setTimeout(function(){
+                        $("#btnMobileCode").removeAttr("disabled");
+                    }, 60000);
+                    if (a.error == 0) {
+                        $("#sendInfo").html('<em>验证短信已发出，' + a.timelimit + '之前有效，未收到可再获取</em>');
+                    } else if (a.error == 1) {
+                        $("#checkInfo").html("<em>验证码错误，验证短信发送失败，请重新输入</em>");
+                    } else if (a.error == 2) {
+                        $("#checkInfo").html("<em>手机号码格式错误，验证短信发送失败，请重新输入</em>");
+                    }
+                    document.getElementById('image_code').src = '/check/captcha.html?' + Math.random() * 10000;
+                },
+                error:function(){
+                    $('#btnMobileCode').removeAttr('disabled');
+                }
+            });
+        });
+    });
+    function isPhone(aPhone) {
+        var bValidate = RegExp(/^(0|86|17951)?(13[0-9]|15[012356789]|18[0-9]|14[57])[0-9]{8}$/).test(aPhone);
+        if (bValidate) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+</script>

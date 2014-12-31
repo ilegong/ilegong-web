@@ -163,7 +163,7 @@
 <?php
     $flash_msg =  $this->Session->flash();
     if($flash_msg){
-        echo "<div class=\"container\">$flash_msg</div>";
+        echo "<div id=\"flash_msg\" class=\"container\">$flash_msg</div>";
     }
     //注意#maincontent中，只包含一个'.container'，否则无法前台编辑模板可能会走样。多行的使用实现使用<div class="row"></div>。
 ?>
@@ -225,6 +225,11 @@
             return;
         });
     });
+</script>
+{{/if}}
+{{if $is_index}}
+<script>
+    $('#flash_msg').hide();
 </script>
 {{/if}}
 <script>

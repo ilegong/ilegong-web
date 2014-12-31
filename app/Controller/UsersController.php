@@ -439,28 +439,57 @@ class UsersController extends AppController {
 
     function forgot() {
         $this->pageTitle = __('Forgot Password', true);
-        if (!empty($this->data) && isset($this->data['User']['username'])) {
-            $user = $this->User->findByUsername($this->data['User']['username']);
+        if (!empty($this->data) && isset($this->data['User']['mobilephone'])) {
+            $msgCode = $this->Session->read('messageCode');
+            $readCode = $this->data['User']['code'];
+            if(empty($readCode)){
+                $this->Session->setFlash('短信验证码不能为空');
+                return;
+            }else{
+                if(!$msgCode){
+                    $this->Session->setFlash('短信验证失败');
+                    return;
+                }else{
+                    $codeLog = json_decode($msgCode, true);
+                    if (!($codeLog && is_array($codeLog) && $codeLog['code'] == $readCode && (time() - $codeLog['time'] < 30 * 60))){
+                        $this->Session->setFlash('短信验证未成功，请重新获取');
+                        return;
+                    }
+                }
+            }
+            $imgCode =$this->data['User']['imgCode'];
+            if(empty($imgCode)){
+                $this->Session->setFlash('图片验证码不能为空');
+                return;
+            }else{
+                $captcha = $this->Session->read('captcha');
+                if(!$captcha){
+                    $this->Session->setFlash('图片验证码错误');
+                    return;
+                }else{
+                    if($captcha!=$imgCode){
+                        $this->Session->setFlash('图片验证码输入错误');
+                        return;
+                    }
+                }
+            }
+            if(empty($this->data['User']['password'])){
+                $this->Session->setFlash('密码不为空');
+                return;
+            }
+            $user = $this->User->findByMobilephone($this->data['User']['mobilephone']);
             if (!isset($user['User']['id'])) {
-                $this->redirect(array('action' => 'login'));
+                $this->Session->setFlash('没有与该手机对应的用户');
+                $this->redirect(array('action' => 'register'));
             }
             $this->User->id = $user['User']['id'];
             $activationKey = md5(uniqid());
             $this->User->saveField('activation_key', $activationKey);
             $this->set(array('user'=>$user, 'activationKey'=>$activationKey));
-
-            $this->Email->from = Configure::read('Site.title') . ' '
-            . '<' . Configure::read('Site.email') . '>';
-
-            //$this->Email->from = Configure::read('Site.title') . ' '
-            //        . '<SaeCMS@' . preg_replace('#^www\.#', '', strtolower($_SERVER['SERVER_NAME'])) . '>';
-            $this->Email->to = $user['User']['email'];
-            $this->Email->subject = '[' . Configure::read('Site.title') . '] ' . __('Reset Password', true);
-            $this->Email->template = 'forgot_password';
-            $this->autoRender = false;
-
-//             $this->Email->viewRender('Dzstyle');
-            if ($this->Email->send()) {
+            
+            $user['User']['password'] = Security::hash($this->data['User']['new_password'], null, true);
+            if($this->User->save($user)){
+                $this->Session->setFlash(__('Password is updated success.', true));
                 $this->redirect(array('action' => 'login'));
             }
             die();
