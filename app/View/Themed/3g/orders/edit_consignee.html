@@ -86,7 +86,7 @@
                 }
 
             }
-            if ($('#consignee_mobilephone').val().length != 11) {
+            if ($('#consignee_addr').is(":visible") && $('#consignee_mobilephone').val().length != 11) {
                 $('#consignee_mobilephone').focus();
                 utils.alert("联系电话格式不正确");
                 e.preventDefault();
