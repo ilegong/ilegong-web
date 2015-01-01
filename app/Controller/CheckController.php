@@ -112,6 +112,34 @@ class CheckController extends AppController{
 
 
     }
+    public function un_code(){
+        $this->autoRender = false;
+        if (!isset($inputData)) {
+            $inputData = $_POST;
+        }
+        if(!$this->check_mobile($inputData['mobile'])){
+            echo json_encode(array('error' => 2));
+            return;
+        }
+        $verifyCode = '';
+        $str = '1234567890';
+        //定义用于验证的数字和字母;
+        $l = strlen($str); //得到字串的长度;
+        //循环随机抽取四位前面定义的字母和数字;
+        for ($i = 1; $i <= 6; $i++) {
+            $num = rand(0, $l - 1);
+            //每次随机抽取一位数字;从第一个字到该字串最大长度,
+            $verifyCode .= $str[$num];
+        }
+        $msg = '短信验证码：'. $verifyCode .'，有效期为20分钟，感谢您对朋友说的支持。';
+        $res = message_send($msg, $inputData['mobile']);
+        $res = json_decode($res, true);
+        $res['timelimit'] = date('H:i',time()+20*60);
+        $this->Session->write('messageCode', json_encode(array('code' => $verifyCode, 'time' => time())));
+        $this->Session->write('current_register_phone', $inputData['mobile']);
+        echo json_encode($res);
+    }
+
 
     function _checkCaptcha($model){
         if ($this->Session->check('captcha')) {

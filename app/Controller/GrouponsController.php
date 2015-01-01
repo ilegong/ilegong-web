@@ -13,14 +13,18 @@ class GrouponsController extends AppController{
 
     public function beforeFilter(){
         parent::beforeFilter();
-        if($this->currentUser['id']){
-            $this->loadModel('User');
-            $user_info=$this->User->find('first', array(
-                'conditions' => array('id' => $this->currentUser['id']),
-                'fields' => array('mobilephone')
-            ));
-            if(empty($user_info['User']['mobilephone'])){
-                $this->redirect('/users/mobile_bind?referer='.urlencode($_SERVER['REQUEST_URI']).'&title=绑定手机号码马上享受组团优惠');
+        if (array_search($this->request->params['action'], array('view', 'mobile_bind')) === false) {
+            if($this->currentUser['id']){
+                $this->loadModel('User');
+                $user_info=$this->User->find('first', array(
+                    'conditions' => array('id' => $this->currentUser['id']),
+                    'fields' => array('mobilephone')
+                ));
+                if(empty($user_info['User']['mobilephone'])){
+                    $this->redirect('/groupons/mobile_bind?referer='.urlencode($_SERVER['REQUEST_URI']));
+                }
+            }else{
+                $this->redirect('/users/login?referer='.urlencode($_SERVER['REQUEST_URI']));
             }
         }
     }
@@ -127,5 +131,13 @@ class GrouponsController extends AppController{
 
     public function test() {}
 
+    public function mobile_bind(){
+        $this->pageTitle = __('手机号绑定');
+        $redirect = $_REQUEST['referer'];
+        if(empty($this->currentUser['id'])){
+            $this->redirect('/users/login?referer='.urlencode($_SERVER['REQUEST_URI']));
+        }
+        $this->data['referer'] = $redirect;
+    }
 
 }

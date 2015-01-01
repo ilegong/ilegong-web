@@ -1,0 +1,82 @@
+
+{{$this->Html->css(array(
+'groupon.css',
+))}}
+{{$this->Form->input('referer',array('type'=>'hidden', 'id' => 'referer'))}}
+<div class="yanzheng_tip">绑定手机号码马上享受组团优惠!</div>
+<ul class="check clearfix">
+    <li class="clearfix">
+        <span><input style="text-align:center; width:100%;" name="" type="text" placeholder="请输入您的手机号" id="mobile_number"/></span>
+    </li>
+</ul>
+<a href="#X" id = "msg_send" class="tuanbtn radius10">发送短信验证码</a>
+<div id="checkInfo"></div>
+
+<div id="validate_block" style="display:none;">
+    <ul class="check clearfix mt24">
+        <li class="clearfix">
+            <span><input style="text-align:center; width:100%;" name="" type="text" placeholder="输入短信验证码" id="msg_code"/></span>
+        </li>
+    </ul>
+    <a href="#X" id="validate_code" class="tuanbtn radius10">验证</a>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var countdown = null;
+        var sendPoneCode = function() {
+            $("#checkInfo").html("");
+            var f = "/check/un_code";
+            var phone_num = $("#mobile_number").val();
+            jQuery.ajax({
+                type: "POST",
+                dataType: "json",
+                url: f,
+                data: {mobile: phone_num},
+                success: function (a) {
+                    if (a.error == 0) {
+                        $('#validate_block').show();
+                        countdown = setInterval(CountDown, 1000);
+                    } else if (a.error == 2) {
+                        $("#checkInfo").html("<em>手机号码格式错误，验证短信发送失败，请重新输入</em>").addClass('help-inline ');
+                    }
+                }
+            });
+        };
+        $('#msg_send').on('click',sendPoneCode);
+        var count = 60;
+        function CountDown() {
+            //$("#msg_send").unbind("click");
+            $("#msg_send").attr('href','javascript:void(0)'),
+                    $("#msg_send").addClass('codebtn').html(count + " 秒后可重新获取");
+            if (count == 0) {
+                $("#msg_send").removeClass('codebtn').html("发送短信验证码");
+                //$("#msg_send").bind("click",sendPhoneCode);
+                $("#msg_send").attr('href','#'),
+                        clearInterval(countdown);
+            }
+            count--;
+        }
+
+        $('#validate_code').on('click',function(){
+            var message_code = $("#msg_code").val();
+            var phone_num = $("#mobile_number").val();
+            jQuery.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/users/mobile_bind",
+                data: {mobile: phone_num, code:message_code},
+                success: function (a) {
+                    if (a) {
+                        var redirect = $('#referer').val();
+                        window.location.href = redirect;
+                    }else {
+                        $("#checkInfo").html("<em>"+ a.msg+"</em>").addClass('help-inline ');
+                    }
+                }
+            });
+        })
+    });
+
+
+
+</script>

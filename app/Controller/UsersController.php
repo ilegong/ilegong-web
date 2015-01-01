@@ -1085,57 +1085,50 @@ class UsersController extends AppController {
     }
 
     public function mobile_bind(){
-        $this->pageTitle = __('手机号绑定');
-        $redirect = $this->data['User']['referer'] ? $this->data['User']['referer'] : $_REQUEST['referer'];
-        $title = $_REQUEST['title'];
-        if(empty($this->currentUser['id'])){
-            $this->redirect('/users/login?referer='.urlencode($_SERVER['REQUEST_URI']));
-        }
-        if ($this->request->is('post')){
-            $readCode = $this->data['User']['code'];
-            $msgCode = $this->Session->read('messageCode');
-            $current_post_num = $this->Session->read('current_register_phone');
-            $codeLog = json_decode($msgCode, true);
-            $user_info= array();
-            if ($codeLog && is_array($codeLog) && $codeLog['code'] == $readCode && (time() - $codeLog['time'] < 30 * 60)) {
-                $user_info['User']['mobilephone'] = trim($this->data['User']['mobilephone']);
-                $user_info['User']['id'] = $this->currentUser['id'];
-                $user_info['User']['uc_id'] = 5;
-                if($this->data['User']['mobilephone'] !=  $current_post_num){
-                    $this->Session->setFlash('请重新验证您的手机号码');
-                }else if ($this->User->hasAny(array('User.mobilephone' => $this->data['User']['mobilephone']))){
-                    $this->Session->setFlash(__('你的账号已被注册'));
-                }else if($this->User->hasAny(array('User.username' => $this->data['User']['mobilephone']))){
-                    if($this->currentUser['username'] == $this->data['User']['mobilephone']){
-                        $this->User->save($user_info);
-                        $this->Session->setFlash(__('你的账号和手机号绑定成功'));
-                    }else{
-                        $this->Session->setFlash(__('你的手机号已注册过，无法绑定'));
-                    }
-                } else{
+        $this->autoRender=false;
+        $readCode = $_POST['code'];
+        $mobile_num = $_POST['mobile'];
+        $msgCode = $this->Session->read('messageCode');
+        $current_post_num = $this->Session->read('current_register_phone');
+        $codeLog = json_decode($msgCode, true);
+        $user_info= array();
+        if ($codeLog && is_array($codeLog) && $codeLog['code'] == $readCode && (time() - $codeLog['time'] < 30 * 60)) {
+            $user_info['User']['mobilephone'] = $mobile_num;
+            $user_info['User']['id'] = $this->currentUser['id'];
+            $user_info['User']['uc_id'] = 5;
+            if(empty($this->currentUser['id'])){
+                $res = array('success'=> false, 'msg'=>'please login');
+            } else if($mobile_num !=  $current_post_num){
+                $res = array('success'=> false, 'msg'=>'请重新验证您的手机号码');
+            }else if ($this->User->hasAny(array('User.mobilephone' => $mobile_num))){
+                $res = array('success'=> false, 'msg'=>'你的账号已被注册');
+            }else if($this->User->hasAny(array('User.username' => $mobile_num))){
+                if($this->currentUser['username'] == $mobile_num){
+                    if($this->User->save($user_info)){
+                        $res = array('success'=> true, 'msg'=>'你的账号和手机号绑定成功');
+                    };
+                }else{
+                    $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定');
+                }
+            } else{
 //                    if($this->is_weixin()){
 //                        if (is_null($this->data['User']['password']) || trim($this->data['User']['password']) == '') {
 //                            $this->Session->setFlash(__('Password should be longer than 6 characters'));
 //                        }
 //                        $user_info['User']['password'] = Security::hash($this->data['User']['password'], null, true);
 //                    }
-                    if ($this->User->save($user_info)) {
-                        $this->data['User']['id'] = $this->User->getLastInsertID();
-                        $data = $this->User->find('first', array('conditions' => array('id' =>  $this->data['User']['id']) ));
-                        $this->Session->write('Auth.User', $data['User']);
-                        $this->redirect($redirect);
-                    } else {
-                        $this->Session->setFlash('绑定失败，数据库忙');
-                    }
+                if ($this->User->save($user_info)) {
+                    $res = array('success'=> true, 'msg'=>'你的账号和手机号绑定成功');
+                } else {
+                    $res = array('success'=> false, 'msg'=>'绑定失败，数据库忙');
                 }
-            }else {
-                $this->Session->setFlash('短信验证码错误');
             }
+        }else {
+            $res = array('success'=> false, 'msg'=>'短信验证码错误');
         }
-        $this->set('supportWeixin', $this->is_weixin());
-        $this->data['User']['referer'] = $redirect;
-        $this->set('title', $title);
+        echo json_encode($res);
     }
+
 }
 
 ?>
