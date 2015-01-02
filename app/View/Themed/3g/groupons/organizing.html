@@ -2,26 +2,86 @@
 {{$this->Html->css(array(
 'groupon.css',
 ))}}
+{{$this->Form->input('team',array('type'=>'hidden', 'id' => 'team'))}}
+<div id="checkInfo"></div>
 <div class="bg">
     <p class="title">邀请好友支付1元直抵5元! 组团一起吃, 一箱贡柑低至17元, 包邮! </p>
 </div>
-<form action="/groupons/organizing/" method="post">
-    {{$this->Form->input('team',array('type'=>'hidden'))}}
-    <ul class="check clearfix mt12">
-        <li class="clearfix">
-            <span class="name fl">发起人姓名:</span>
-            <span class="fl" style="display:none;">Alice</span>
-            <span class="fl"><input name="data[Groupon][name]" type="text" placeholder="请输入你的姓名" /></span>
-        </li>
+<ul class="check clearfix mt12">
+    <li class="clearfix">
+        <span class="name fl">发起人姓名:</span>
+        <span class="fl"><input name="" id = "your_name" type="text" placeholder="请输入你的姓名" /></span>
+    </li>
+    <li class="clearfix" style="margin-top:-1px;">
+        <span class="name fl">手机号:</span>
+        <span class="fl"><input name="" id="mobile_number" type="text" placeholder="请输入你的手机号" /></span>
+    </li>
+    <a href="#X" id = "edit_show">
         <li class="clearfix" style="margin-top:-1px;">
-            <span class="name fl">手机号:</span>
-            <span class="fl"><input name="data[Groupon][mobile]" type="text" placeholder="请输入你的手机号" /></span></span>
+            <span class="name fl">收货地址:<span class="moreicon" style="top:50%; margin-top:-0.7em;"><img src="/img/groupon/more.png" /></span></span>
+            <span id = "my_address" style="overflow:hidden; margin-right:1em; display:none;"></span>
+            <span id = "default_tip" style="overflow:hidden; margin-right:1em; color:#acacac;">编辑常用收货地址</span>
         </li>
-        <li class="clearfix" style="margin-top:-1px;">
-            <span class="name fl">收货地址:<span class="moreicon" style="top:50%; margin-top:-0.7em;"><img src="/img/groupon/more.png"  /></span></span>
-            <span style="overflow:hidden; margin-right:1em; display:none;">北京  北京市 朝阳区 慈云寺 住邦2000  2号楼2101室</span>
-            <span style="overflow:hidden; margin-right:1em; color:#acacac;">编辑常用收货地址</span>
-        </li>
-    </ul>
-    <button type="submit" class="tuanbtn radius10">确认收货信息, 下一步</button>
-</form>
+    </a>
+
+</ul>
+<div id = "edit_address" style="display: none">
+    <div class="select" style="margin-top:0px;outline:none;border:none;border-radius:4px;position:relative;">
+        <span class="col-xs-3">地 区</span>
+        <select  id="provinceDiv" class="text" onchange="loadCity()" style="-webkit-appearance:none;appearance:none;border:none;padding:0px 20px;-webkit-box-sizing:border-box;box-sizing:border-box;background-color: #FFFFFF;color:#333333;border-radius:4px;">
+            <option  value='0'>请选择</option>
+        </select>
+        <select  id="cityDiv" onchange="loadCounty()" class="text" style="-webkit-appearance:none;appearance:none;border:none;padding:0px 20px;-webkit-box-sizing:border-box;box-sizing:border-box;background-color: #FFFFFF;color:#333333;border-radius:4px;">
+            <option value='0'>请选择</option>
+        </select>
+    </div>
+
+    <div style="margin-top:8px;">
+        <span class="col-xs-3">详细地址</span>
+        <input id="detailed_address" name="" type="text" placeholder="你的具体地址" />
+    </div>
+    <div class="row container">
+        <div class="pull-right">
+            <button id="confirm_address" type="button" class="btn btn-success">保存</button>
+        </div>
+    </div>
+</div>
+
+<a id="confirm_next" href="" class="tuanbtn radius10">确认收货信息, 下一步</a>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        loadProvince();
+        $('#edit_show').bind('click',function(){
+            $('#edit_address').show();
+        })
+        $('#confirm_address').bind('click', function(){
+            var provice_name = $("#provinceDiv option:selected").text();
+            var city_name = $("#cityDiv option:selected").text();
+            var add_detailed = $('#detailed_address').val();
+            $('#default_tip').hide();
+            $('#my_address').text(provice_name + ' ' + city_name + ' ' + add_detailed).show();
+            $('#edit_address').hide();
+        });
+        $('#confirm_next').on('click',function(){
+            var name = $("#your_name").val();
+            var mobile = $("#mobile_number").val();
+            var address = $('#my_address').text();
+            var team = $('#team').val();
+            jQuery.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/groupons/organizing",
+                data: {name:name,mobile: mobile, address:address, team:team},
+                success: function (a) {
+                    if (a) {
+                        window.location.href = '/groupons/join/' + a.group_id;
+                    }else {
+                        $("#checkInfo").html("<em>"+ a.msg+"</em>");
+                    }
+                }
+            });
+        })
+    })
+</script>

@@ -1,4 +1,73 @@
-<br><br>
-<a href="/groupons/go_join/{{$groupon['Groupon']['id']}}" onclick=""><button type="button" class="btn btn-warning btn-lg btn-block">去支付</button></a>
-<br>
-<a href=""><button type="button" class="btn btn-danger btn-lg btn-block">邀请好友一起团</button></a>
+{{$this->Html->css(array(
+'groupon.css',
+))}}
+<div class="bg">
+    <p class="title">邀请好友支付1元直抵5元! 组团一起吃, 一箱贡柑低至17元, 包邮! </p>
+    <ul class="clearfix tuan_masg">
+        <li class="fl"><img src="" /></li>
+        <li class="fl pl12">
+            <div class="tuan_price">现价: <span>¥85</span>&nbsp;&nbsp;&nbsp;<i>原价: ¥85</i></div>
+            <div class="tip">好友支付<strong>&nbsp;1&nbsp;</strong>元立减<strong>&nbsp;5&nbsp;</strong>元</div>
+            <div class="people">已有<span>0</span>人参团, 限<span>17</span>人</div>
+        </li>
+    </ul>
+    <ul class="address">
+        <li class="clearfix">
+            <span class="title fl">发起人: </span>
+            <span class="fl">{{$groupon['Groupon']['name']}}</span>
+        </li>
+        <li class="clearfix">
+            <span class="title fl">送货地址: </span>
+            <span style="overflow: hidden;">{{$groupon['Groupon']['address']}}</span>
+        </li>
+    </ul>
+</div>
+<div class="listbg mt12">
+    <a href="#X">活动细则<span class="moreicon"><img src="/img/groupon/more.png" /></span></a>
+    <div class="detail" style="display:none;">
+        {{$team['Team']['notice']}}
+    </div>
+</div>
+<div class="listbg" style="margin-top:-1px; margin-bottom:1em;">
+    <a href="#X">产品介绍<span class="moreicon"><img src="/img/groupon/more.png" /></span></a>
+    <div class="detail" style="display:none;">
+        产品介绍
+    </div>
+</div>
+{{if $is_organizer}}
+<a href="#X" class="share"><img src="/img/groupon/share.png" /></a>
+<a href="/groupons/pay_choices/{{$groupon['Groupon']['id']}}" class="newtuanbtn radius10">去支付</a>
+{{else}}
+<a href="/groupons/pay_choices/{{$groupon['Groupon']['id']}}" class="tuanbtn radius10">支付1元参团</a>
+<a href="#X" class="share"><img src="/img/groupon/share.png" /></a>
+<a href="#X" class="newtuanbtn radius10">不在一起? 发起新团</a>
+{{/if}}
+<div class="listbg mt12">
+    <a href="#X" id="event">参团记录<span class="moreicon"><img src="/img/groupon/more.png" /></span></a>
+    <div style="">
+        <ul class="tuan_list">
+            {{loop $join_info $j}}
+            <li class="clearfix">
+                <span class="title fl">{{$j['nickname']}}</span>
+                <span class="fl">{{$j['time']}}</span>
+            </li>
+            {{/loop}}
+            <li class="clearfix">
+                <span class="title fl">罗武林</span>
+                <span class="fl">12-23  23:12</span>
+            </li>
+            <li class="clearfix">
+                <span class="title fl">13758494435</span>
+                <span class="fl">12-23  23:12</span>
+            </li>
+        </ul>
+        <a href="#X" class="more_list">更多记录</a>
+    </div>
+</div>
+<!--弹出层-->
+<div style="position:absolute; left:50%; top:30%; margin-left:-8em; display:none;">
+    <ul class="layer radius10">
+        <li style="display:none;">你已经参加过<span>&nbsp;Alice&nbsp;</span>创建的团!<br />一人只能参加一个团购</li>
+        <li><a class="closebtn radius10" href="#X">关闭</a></li>
+    </ul>
+</div>

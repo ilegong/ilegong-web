@@ -13,7 +13,7 @@ class GrouponsController extends AppController{
 
     public function beforeFilter(){
         parent::beforeFilter();
-        if (array_search($this->request->params['action'], array('view', 'mobile_bind')) === false) {
+        if (array_search($this->request->params['action'], array('view', 'mobile_bind','join', 'pay_choices')) === false) {
             if($this->currentUser['id']){
                 $this->loadModel('User');
                 $user_info=$this->User->find('first', array(
@@ -42,40 +42,38 @@ class GrouponsController extends AppController{
         }
     }
     public function organizing(){
-       $team_slug =  $this->data['team']  ? $this->data['team']  :  $_GET['team'];
+        $team_slug =  $_POST['team']  ? $_POST['team']  :  $_GET['team'];
 
         if($this->request->is('post')){
+            $this->autoRender=false;
             $current_uid = $this->currentUser['id'];
             $team = $this->Team->find('first', array(
                 'conditions' => array('slug' => trim($this->data['team'])),
                 //'fields' => array('id')
             ));
             if(empty($team) || $team['Team']['begin_time']> time() || $team['Team']['end_time']< time()){
-                $this->Session->setFlash(__('团购项目不存在'));
-                $this->redirect('/');
+                $res = array('success'=> false, 'msg'=>'团购项目不存在');
             }else{
                 $this->loadModel('GrouponMember');
                 if($this->GrouponMember->hasAny(array('user_id' => $current_uid, 'status' => STATUS_GROUP__PAID, 'team_id' => $team['Team']['id'] ))){
-                    $this->Session->setFlash(__('您已经参加过该商品的一次团了'));
-                    $this->redirect('/view/'. $this->data['team']);
+                    $res = array('success'=> false, 'msg'=>'您已经参加过该商品的一次团了');
                 }else{
                     $info = array();
-                    $info['Groupon']['name'] = $this->data['Groupon']['name'];
-                    $info['Groupon']['mobile'] = $this->data['Groupon']['mobile'];
-                    $info['Groupon']['address'] = $this->data['Groupon']['address'];
+                    $info['Groupon']['name'] = $_POST['name'];
+                    $info['Groupon']['mobile'] = $_POST['mobile'];
+                    $info['Groupon']['address'] = $_POST['address'];
                     $info['Groupon']['team_id'] = $team['Team']['id'];
                     $info['Groupon']['user_id'] = $current_uid;
 
                     if($this->Groupon->save($info)){
-                        $this->Session->setFlash(__('组团成功'));
-                        $this->redirect('/groupons/join');
+                        $group_id = $this->Groupon->getLastInsertID();
+                        $res = array('success'=> true, 'group_id'=>$group_id);
                     }else{
-                        $this->Session->setFlash(__('提交失败'));
-                        $this->redirect('/view/'. $this->data['team']);
+                        $res = array('success'=> false, 'msg'=>'保存失败，请重试');
                     }
                 }
-
             }
+            echo json_encode($res);
         }
         $this->data['team'] = $team_slug;
 
@@ -121,12 +119,35 @@ class GrouponsController extends AppController{
 
         $uid = $this->currentUser['id'];
         if (!empty($uid)) {
-            $groupon = $this->GrouponMember->find_by_uid_and_groupon_id($groupId, $uid);
-            $this->set('member', $groupon);
+            $groupon_member = $this->GrouponMember->find_by_uid_and_groupon_id($groupId, $uid);
+            $this->set('member', $groupon_member);
         };
+        $this->loadModel('GrouponMember');
+        $join_users = $this->GrouponMember->find('list', array(
+            'conditions' => array('groupon_id' => $groupId, 'status' => STATUS_GROUP__PAID),
+            'fields' => array('user_id','created')
+        ));
+        $join_ids = array_keys($join_users);
+        if(!empty($join_ids)){
+            $this->loadModel('User');
+            $nicknames = $this->User->find('list', array(
+                'conditions' => array('id' => $join_ids),
+                'fields' => array('id','nickname')
+            ));
+            $join_info = array();
+            $k = 0;
+            foreach($join_users as $key=>$value){
+                $join_info[$k] = array('nickname' => $nicknames[$key], 'time' =>$value);
+                $k++;
+            }
+        }
 
+        if($uid === $groupon['Groupon']['user_id']){
+            $this->set('is_organizer', true);
+        }
         $this->set('team', $team);
         $this->set('groupon', $groupon);
+        $this->set('join_info', $join_info);
     }
 
     public function test() {}
@@ -138,6 +159,18 @@ class GrouponsController extends AppController{
             $this->redirect('/users/login?referer='.urlencode($_SERVER['REQUEST_URI']));
         }
         $this->data['referer'] = $redirect;
+    }
+    public function pay_choices($groupId){
+        $groupon = $this->Groupon->findById($groupId);
+        if (empty($groupon)) {
+            $this->log("not found groupon for id:". $groupId);
+            throw new NotFoundException();
+        }
+        $uid = $this->currentUser['id'];
+        if($uid === $groupon['Groupon']['user_id']){
+            $this->set('is_organizer', true);
+        }
+        $this->set('groupon_id', $groupId);
     }
 
 }

@@ -1,0 +1,15 @@
+{{$this->Html->css(array(
+'groupon.css',
+))}}
+<p class="total_title">邀请好友支付1元直抵5元! 组团一起吃, 一箱贡柑低至17元, 包邮! </p>
+<div class="total_price">支付金额:
+    <span>￥
+        {{if $is_organizer}}
+        45
+        {{else}}
+        1
+        {{/if}}
+    </span>
+</div>
+<a href="/groupons/go_join/{{$groupon_id}}" class="pay_btn weixin radius10">微信支付</a>
+<a href="#X" class="pay_btn alipay radius10">支付宝</a>
