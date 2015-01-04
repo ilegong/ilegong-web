@@ -614,8 +614,30 @@ class StoresController extends AppController
 //        $this->log('ss'.json_encode($store_offer));
 
 
+        if($this->request->is('post')){
+            $shareNum = $_REQUEST['shareNum'];
+            $shareOfferId = $_REQUEST['shareOfferId']; $this->log('shareNum'.json_encode($shareNum));
+            $share_avg_num = $_REQUEST['share_avg_num'];
+            $brand_id = $this->brand['Brand']['id'];
+
+            $toShareNum = $shareNum * $share_avg_num;
+            $brandId = $this->ShareOffer->find('first',array('conditions' => array('id' => $shareOfferId)));
+            if ($brandId['ShareOffer']['brand_id'] != $brand_id) {
+                throw new ForbiddenException(__('You cannot edit this data'));
+            } else {
+                $user_id = $this->Brand->find('first',array('conditions' => array('id' => $brand_id)));
+                $uid = $user_id['Brand']['creator'];
+                $pub_share_offers = $this->ShareOffer->add_shared_slices($uid,$shareOfferId,$toShareNum);  $this->log('share_offer'.json_encode($pub_share_offers));
+                $this->Session->setFlash(__('红包发布成功,请到移动端个人中心查看我的红包'));
+
+            }
+        }
 
         $this->set('op_cate','share_offers');
+
+
+
+
     }
 
 
@@ -720,42 +742,6 @@ class StoresController extends AppController
         $this->loadModel('ShareOffer');
         return $this->ShareOffer->find('first',array('conditions' => array('id' =>$id,'brand_id' => $brand_id)));
     }
-
-
-    /*发布红包
-     *
-     */
-    public function publish_share_offers(){
-        $this->autoRender = false;
-        $this->layout = 'ajax';
-        $this->checkAccess();
-        $brand_id = $this->brand['Brand']['id'];
-        if($this->request->is('post')){
-        $shareNum = $_REQUEST['shareNum'];
-        $shareOfferId = $_REQUEST['shareOfferId'];
-        $this->log('shareNum'.json_encode($shareNum));
-        $share_avg_num = $_REQUEST['share_avg_num'];
-        $toShareNum = $shareNum * $share_avg_num;
-        $this->loadModel('ShareOffer');
-        $brandId = $this->ShareOffer->find('first',array('conditions' => array('id' => $shareOfferId)));
-        if ($brandId['ShareOffer']['brand_id'] != $brand_id) {
-            throw new ForbiddenException(__('You cannot edit this data'));
-        } else {
-            $user_id = $this->Brand->find('first',array('conditions' => array('id' => $brand_id)));
-            $uid = $user_id['Brand']['creator'];
-            $pub_share_offers = $this->ShareOffer->add_shared_slices($uid,$shareOfferId,$toShareNum);
-//            echo json_encode($pub_share_offers);
-            $this->log('share_offer'.json_encode($pub_share_offers));
-            $this->Session->setFlash(__('红包发布成功,请到移动端个人中心查看我的红包'));
-//            $this->redirect('/stores/share_offers');
-        }
-        }
-
-
-
-
-    }
-
 
 
 
