@@ -153,6 +153,30 @@ class WeixinComponent extends Component
         return $this->send_weixin_message($post_data);
     }
 
+    public function send_groupon_paid_message($open_id, $price, $url, $order_no, $good_info, $isDone, $isSelf, $isOrganizer, $organizerName, $newMemberName, $leftPeople)
+    {
+        if ($isDone) {
+            $msg = $isOrganizer ? "亲，您发起的团购已经成团，请等待收货。" : ( $isSelf ? "亲，您参加 $organizerName 发起的团购成功，已经成团，请等待 $organizerName 收货。" : "亲，$newMemberName 刚刚加入了我们的团购，已经成团，请等待 $organizerName 收货。");
+        } else {
+            $msg =  $isSelf ? ($isOrganizer ? "亲，您发起的团购成团啦，请等待收货" : "亲，您参加 $organizerName 发起的团购成功，现在只差 $leftPeople 人就可以成团啦。") : "亲，$newMemberName 刚刚加入了我们的团购，现在只差 $leftPeople 人就可以发货啦";
+        }
+        $post_data = array(
+            "touser" => $open_id,
+            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "url" => $url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => $msg) ,
+                "orderProductPrice" => array("value" => $price),
+                "orderProductName" => array("value" => $good_info),
+                "orderAddress" => array("value" => empty($ship_info)?'':$ship_info),
+                "orderName" => array("value" => $order_no),
+                "remark" => array("value" => "点击查看详情", "color" => "#FF8800")
+            )
+        );
+        return $this->send_weixin_message($post_data);
+    }
+
     public function send_order_paid_message_for_seller($seller_open_id, $price, $good_info, $ship_info, $order_no)
     {
         $post_data = array(
@@ -336,7 +360,8 @@ class WeixinComponent extends Component
      */
     public function notifyPaidDone($order) {
         $oauthBindModel = ClassRegistry::init('Oauthbind');
-        $user_weixin = $oauthBindModel->findWxServiceBindByUid($order['Order']['creator']);
+        $orderCreator = $order['Order']['creator'];
+        $user_weixin = $oauthBindModel->findWxServiceBindByUid($orderCreator);
 
         $good = self::get_order_good_info($order);
         $seller_weixin = $oauthBindModel->findWxServiceBindByUid($good['brand_info']['Brand']['creator']);
@@ -354,8 +379,8 @@ class WeixinComponent extends Component
                 $this->send_rice_paid_message($open_id, $price, $good_info, $ship_info, $order_id);
 
                 $could_rebate_ids = array(PRODUCT_ID_RICE_10);
-                foreach($could_rebate_ids as $pid) {
-                    $be_recommend_uid = $order['Order']['creator'];
+                foreach ($could_rebate_ids as $pid) {
+                    $be_recommend_uid = $orderCreator;
                     $recUserId = find_latest_clicked_from($be_recommend_uid, $pid);
                     $this->log("find_latest_clicked_from: $recUserId, be_recommend_uid $be_recommend_uid ");
                     if ($recUserId) {
@@ -365,12 +390,11 @@ class WeixinComponent extends Component
                             $toUser = $uModel->findById($be_recommend_uid);
                             if (!empty($toUser)) {
 
-
                                 try {
                                     $ciModel = ClassRegistry::init('CouponItem');
-                                    $ciModel->addCoupon($recUserId, COUPON_TYPE_RICE_1KG, 'rebate_'.$pid.'_'.$order_id);
-                                }catch(Exception $e) {
-                                    $this->log("exception to add coupon:".$recUserId.", for used user:".$be_recommend_uid);
+                                    $ciModel->addCoupon($recUserId, COUPON_TYPE_RICE_1KG, 'rebate_' . $pid . '_' . $order_id);
+                                } catch (Exception $e) {
+                                    $this->log("exception to add coupon:" . $recUserId . ", for used user:" . $be_recommend_uid);
                                 }
 
                                 $buyer_name = $toUser['User']['nickname'];
@@ -382,10 +406,40 @@ class WeixinComponent extends Component
                                     }
                                 }
                             }
-                            }
+                        }
                     }
                 }
+            } else if ($order['Order']['type'] == ORDER_TYPE_GROUP || $order['Order']['type'] == ORDER_TYPE_GROUP_FILL) {
 
+                $gmM = ClassRegistry::init('GrouponMember');
+                $gm = $gmM->findById($order['Order']['member_id']);
+                $groupon_id = $gm['GrouponMember']['groupon_id'];
+                $gmLists = $gmM->find('all', array(
+                    'conditions' => array('groupon_id' => $groupon_id,),
+                ));
+
+                $groupon = ClassRegistry::init('Groupon')->findById($groupon_id);
+
+                $team = ClassRegistry::init('Team')->findById($groupon['Groupon']['team_id']);
+
+                $url = 'http://'.WX_HOST.'/groupons/join/'. $groupon_id .'.html';
+
+                $isDone = $groupon['Groupon']['status'] == STATUS_GROUP_REACHED;
+                $leftPeople = $team['Team']['min_number'] - $groupon['Groupon']['pay_number'];
+
+                $organizerId = $groupon['Groupon']['user_id'];
+                $userM = ClassRegistry::init('User');
+                $nameIdMap = $userM->findNicknamesMap(array($organizerId, $orderCreator));
+                $organizerName = $nameIdMap[$organizerId];
+                $newMemberName = $nameIdMap[$orderCreator];
+
+                foreach($gmLists as $gml) {
+                    $curr_uid = $gml['GrouponMember']['user_id'];
+                    $wxBind = $oauthBindModel->findWxServiceBindByUid($curr_uid);
+                    if (!empty($wxBind)) {
+                        $this->send_groupon_paid_message($wxBind['oauth_openid'], $price, $url, $order['Order']['id'], '团购', $isDone, $curr_uid == $orderCreator, $curr_uid == $organizerId, $organizerName, $newMemberName, $leftPeople);
+                    }
+                }
 
             }  else {
                 $this->send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_id, $order);

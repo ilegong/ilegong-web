@@ -36,9 +36,7 @@
 </div>
 {{if $is_organizer}}
 <a href="javascript:;" id="share_to_friend" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share.png')}}" /></a>
-        {{if $not_pay}}
-<a href="/groupons/go_join/{{$groupon['Groupon']['id']}}" class="newtuanbtn radius10">去支付</a>
-        {{elseif ($groupon['Groupon']['status'] != STATUS_GROUP_REACHED)}}
+        {{if ($groupon['Groupon']['status'] != STATUS_GROUP_REACHED)}}
 <a href="/groupons/go_join/{{$groupon['Groupon']['id']}}?type=done" class="newtuanbtn radius10">支付{{$balance/100}}元提前成团</a>
         {{/if}}
 {{else}}
