@@ -141,6 +141,12 @@ class WeixinController extends AppController {
 
             $host3g = (WX_HOST);
 
+            $special = $this->getSpecialTitle($from, $input);
+            if (!empty($special)) {
+                echo $this->newArticleMsg($user, $me, array('url' => $special['url'], 'title' => $special['title'], 'picUrl' => $special['pic'], 'description' => '点击查看详情，获得你的前世吃货身份'));
+                return;
+            }
+
 			$user_code = urlencode(authcode($user,'ENCODE'));
 			//判断输入内容
 			switch($input)
@@ -295,6 +301,35 @@ class WeixinController extends AppController {
         $oauth = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $subOpenId, 'source' => 'weixin',)));
         $hasAccountWithSubOpenId = !empty($oauth) && !empty($oauth['Oauthbinds']['user_id']);
         return array($oauth, $hasAccountWithSubOpenId);
+    }
+
+
+    private function getSpecialTitle($type, $val) {
+        $elements = array(FROM_WX_SERVICE =>
+          array(
+                '打' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204166400&idx=1&sn=6f250ac6c2e5c677af859317ac2842a5#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia357phWhKGa8jUUC94zLOEXE4ND3PDMx4sWe0yPY7jdltD6Riasa0SceWA/0', 'title'=>'【你前世的吃货身份：武大郎】'),
+                '死' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204166086&idx=1&sn=fc8251ab2d5cda2af825895b9e0e228d#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35xd3hZfWYK2kEmCRtqZiaUzATl1XVdpKZh9HfE113oJTuqqk0G0y6PVQ/0', 'title'=>'【你前世的吃货身份：武则天】'),
+                '都' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204165678&idx=1&sn=b7ed9f3d1263675456d7431a912305f4#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35bz312xCVICquYMn9UY5K5ibf8d540CQicImR9TxcAic9Kfk12Dj5dYN4Q/0', 'title'=>'【你前世的吃货身份：唐伯虎】'),
+                '不' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204165330&idx=1&sn=c11bcc24f5083550082c30991f14233d#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35kvYSljfzYjhuYicjOAfapMib3eCnDY19CVaIkY3qEpBbjJFvc5EANYicQ/0', 'title'=>'【你前世的吃货身份：如花】'),
+                '是' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204165084&idx=1&sn=09fb2503326549242af067b269df40b4#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia357vzbHyBriamXdwsQq7SAXpc5p93cHSk9icEATWzxkyO6nYqSvLp1FdHg/0', 'title'=>'【你前世的吃货身份：包租婆】'),
+                '猪' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204164747&idx=1&sn=9b9478886ec864dda9e71fe4fc8d1ede#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia350WwImJ0QEBk45RnjIqq8mqem4KdgicGVaSRWmOY8tJ1PHdGvgZIgFdg/0', 'title'=>'【你前世的吃货身份：猪八戒】'),
+                '八' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204164184&idx=1&sn=16188fdda3594bdeee968fd84928cb96#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35bgswj4J7wCt0amx6s6vpUZLgJX2Nq0NvWfV2xEggFqBEmIE8kBIvdQ/0', 'title'=>'【你前世的吃货身份：林黛玉】'),
+                '戒' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5NzQ3NTkxNA==&mid=204162688&idx=1&sn=959c8132480eabd4cdb6bb3a14be649b#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35KENKL8pQcdolSp59YgeHfqyt7YWBMfvarXkmHsrz3eCicpI7xZX6qag/0', 'title'=>'【你前世的吃货身份：肥仔】')
+          )
+        , FROM_WX_SUB =>
+      array(
+            '打' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247008&idx=1&sn=62fc1d3cdc6fc03dc0455edae5e5ccbe#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia357phWhKGa8jUUC94zLOEXE4ND3PDMx4sWe0yPY7jdltD6Riasa0SceWA/0', 'title' => '【你前世的吃货身份：武大郎】'),
+            '死' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247055&idx=1&sn=891b24b7d1c57199096cc135290f34f3#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35xd3hZfWYK2kEmCRtqZiaUzATl1XVdpKZh9HfE113oJTuqqk0G0y6PVQ/0', 'title' => '【你前世的吃货身份：武则天】'),
+            '都' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247108&idx=1&sn=538860cfe732e97e7f5472df1720e831#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35bz312xCVICquYMn9UY5K5ibf8d540CQicImR9TxcAic9Kfk12Dj5dYN4Q/0', 'title' => '【你前世的吃货身份：唐伯虎】'),
+            '不' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247151&idx=1&sn=6591069bc0d7618c7840065012431dfe#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35kvYSljfzYjhuYicjOAfapMib3eCnDY19CVaIkY3qEpBbjJFvc5EANYicQ/0', 'title' => '【你前世的吃货身份：如花】'),
+            '是' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247205&idx=1&sn=3a81fab29a02f03b8c06ccf5ca591bbc#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia357vzbHyBriamXdwsQq7SAXpc5p93cHSk9icEATWzxkyO6nYqSvLp1FdHg/0', 'title' => '【你前世的吃货身份：包租婆】'),
+            '猪' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247235&idx=1&sn=cb4024d719503c8ba7def775d7a789f4#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia350WwImJ0QEBk45RnjIqq8mqem4KdgicGVaSRWmOY8tJ1PHdGvgZIgFdg/0', 'title' => '【你前世的吃货身份：猪八戒】'),
+            '八' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247289&idx=1&sn=140e36756bf287074ec206d90b856921#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35bgswj4J7wCt0amx6s6vpUZLgJX2Nq0NvWfV2xEggFqBEmIE8kBIvdQ/0', 'title' => '【你前世的吃货身份：林黛玉】'),
+            '戒' => array('url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=202247377&idx=1&sn=67296ad1022e3d9afeb61944e4fed480#rd', 'pic' => 'https://mmbiz.qlogo.cn/mmbiz/UuGM2hE8WNGMCRo9uNFuJAluvfc1iaia35KENKL8pQcdolSp59YgeHfqyt7YWBMfvarXkmHsrz3eCicpI7xZX6qag/0', 'title' => '【你前世的吃货身份：肥仔】'),
+      )
+        );
+
+        return $elements[$type][$val];
     }
 }
 ?>
