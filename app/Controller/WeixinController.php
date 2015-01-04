@@ -12,7 +12,7 @@ class WeixinController extends AppController {
 
 	var $name = 'Weixin';
 
-    var $uses = array('Oauthbinds');
+    var $uses = array('Oauthbind');
 	
 	public function beforeFilter(){
 		parent::beforeFilter();
@@ -80,7 +80,7 @@ class WeixinController extends AppController {
                                 'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=3&sn=75c4b8f32c29e1c088c7de4ee2e22719#rd')
                         );
 
-                        $uid = $this->Oauthbinds->findUidByWx(trim($req['FromUserName']));
+                        $uid = $this->Oauthbind->findUidByWx(trim($req['FromUserName']));
                         if ($uid) {
                             Cache::write(key_cache_sub($uid), WX_STATUS_SUBSCRIBED);
                         }
@@ -104,7 +104,7 @@ class WeixinController extends AppController {
                 } else if ($req['Event'] == 'unsubscribe') {
 
                     if ($from == FROM_WX_SERVICE) {
-                        $uid = $this->Oauthbinds->findUidByWx(trim($req['FromUserName']));
+                        $uid = $this->Oauthbind->findUidByWx(trim($req['FromUserName']));
                         if ($uid) {
                             Cache::write(key_cache_sub($uid), WX_STATUS_UNSUBSCRIBED);
                         }
@@ -189,7 +189,7 @@ class WeixinController extends AppController {
                         list($oauth, $hasAccountWithSubOpenId) = $this->hasAccountWithSubOpenId($user);
                         if (!$hasAccountWithSubOpenId) {
                             echo $this->newTextMsg($user, $me, '您没有历史账号信息');
-                        } else if ($this->whetherBinded($oauth['Oauthbinds']['user_id'])) {
+                        } else if ($this->whetherBinded($oauth['Oauthbind']['user_id'])) {
                             echo $this->newTextMsg($user, $me, '您的历史账号信息已经合并');
                         } else {
                             echo $this->newTextMsg($user, $me, '您有历史账号信息未绑定，点击<a href="' . $this->loginServiceIfNeed($from, $user, "http://$host3g/users/after_bind_relogin.html?wx_openid=$user_code", true) . '">绑定账号</a>');
@@ -285,7 +285,7 @@ class WeixinController extends AppController {
      */
     private function whetherBinded($user_id) {
         if ($user_id) {
-            $r = $this->Oauthbinds->find('first', array('conditions' => array('user_id' => $user_id, 'source' => oauth_wx_source(),)));
+            $r = $this->Oauthbind->find('first', array('conditions' => array('user_id' => $user_id, 'source' => oauth_wx_source(),)));
             if (!empty($r)) {
                 return true;
             }
@@ -298,8 +298,8 @@ class WeixinController extends AppController {
      * @return array :  list($oauth, $hasAccountWithSubOpenId)
      */
     private function hasAccountWithSubOpenId($subOpenId) {
-        $oauth = $this->Oauthbinds->find('first', array('conditions' => array('oauth_openid' => $subOpenId, 'source' => 'weixin',)));
-        $hasAccountWithSubOpenId = !empty($oauth) && !empty($oauth['Oauthbinds']['user_id']);
+        $oauth = $this->Oauthbind->find('first', array('conditions' => array('oauth_openid' => $subOpenId, 'source' => 'weixin',)));
+        $hasAccountWithSubOpenId = !empty($oauth) && !empty($oauth['Oauthbind']['user_id']);
         return array($oauth, $hasAccountWithSubOpenId);
     }
 
