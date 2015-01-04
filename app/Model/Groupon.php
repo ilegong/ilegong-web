@@ -50,6 +50,11 @@ class Groupon extends AppModel {
             ));
         }
         if (!empty($team) && !empty($groupon)) {
+
+            if ($this->is_all_paid($groupon_id, $team, $groupon)) {
+                return 0;
+            }
+
             $pay_number = $groupon['Groupon']['pay_number'];
             return max($team['Team']['market_price'] - $pay_number * $team['Team']['unit_val'], 0);
         } else {
