@@ -128,9 +128,9 @@ class Order extends AppModel {
             $cond['status'] = $order_status;
         }
 
-//        if ($only_normal_type) {
-//            $cond['type'] = array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL);
-//        }
+        if ($only_normal_type) {
+            $cond['type'] = array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL);
+        }
 
         $orders = $this->find('all', array(
             'order' => 'id desc',
