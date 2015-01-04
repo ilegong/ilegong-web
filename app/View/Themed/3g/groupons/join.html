@@ -45,7 +45,7 @@
         {{/if}}
 <a href="javascript:;" id="share_to_friend2" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share.png')}}" /></a>
         {{if !$has_organized}}
-<a href="/groupons/organizing.html?team={{$team['Team']['slug']}}" class="newtuanbtn radius10">不在一起? 发起新团</a>
+<a href="/groupons/organizing.html?team={{$team['Team']['slug']}}" class="newtuanbtn radius10">{{ ($closed?"本团已满":"不在一起?"). "发起新团"}}</a>
         {{/if}}
 {{/if}}
 <div class="listbg mt12">
