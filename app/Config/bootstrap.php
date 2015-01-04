@@ -119,7 +119,8 @@ const TYPE_REDUCE_BY_NUMS = 2; //同一商品满几件包邮
 const TYPE_ORDER_FIXED = 3; //同订单固定邮费
 const TYPE_MUL_NUMS = 4; //每件相乘
 
-const STATUS_GROUP_PAID = 1;
+const STATUS_GROUP_MEM_PAID = 1;
+const STATUS_GROUP_REACHED = 1;
 
 define('CATEGORY_ID_TECHAN', 114);
 

@@ -15,4 +15,20 @@ class GrouponMember extends AppModel {
         )));
     }
 
+    public function find_by_uid_and_id($id, $uid) {
+        return $this->find('first', array('conditions' => array(
+            'id' => $id,
+            'user_id' => $uid
+        )));
+    }
+
+    public function paid_done($memberId, $uid) {
+        $gm = $this->find_by_uid_and_id($memberId, $uid);
+        if (!empty($gm)) {
+            $this->updateAll(array('status' => STATUS_GROUP_MEM_PAID), array('id' => $memberId));
+            $grouponM = ClassRegistry::init('Groupon');
+            $grouponM->paid_done($gm['GrouponMemeber']['groupon_id']);
+        }
+    }
+
 }

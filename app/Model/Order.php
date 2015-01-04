@@ -65,7 +65,7 @@ class Order extends AppModel {
         return $rtn;
     }
 
-    public function set_order_to_paid($orderId, $isTry, $orderOwner) {
+    public function set_order_to_paid($orderId, $isTry, $orderOwner, $type, $memberId=0) {
         $rtn = $this->updateAll(array('status' => ORDER_STATUS_PAID, 'pay_time' => "'" . date(FORMAT_DATETIME) . "'")
             , array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY));
         $sold = $rtn && $this->getAffectedRows() >= 1;
@@ -78,7 +78,7 @@ class Order extends AppModel {
             if (!empty($pid_list)) {
                 if ($isTry) {
                     $shichiM = ClassRegistry::init('OrderShichi');
-                    foreach($pid_list as $pid) {
+                    foreach ($pid_list as $pid) {
                         $shichiM->create();
                         $shichiM->save(array('OrderShichi' => array(
                             'data_id' => $pid,
@@ -92,6 +92,9 @@ class Order extends AppModel {
                         //FIXME: do retry if failed
                         $tryM->updateAll(array('sold_num' => 'sold_num + 1'), array('id' => $isTry, 'modified' => $pTry['ProductTry']['modified']));
                     }
+                } else if ($type == ORDER_TYPE_GROUP) {
+                    $gmM = ClassRegistry::init('GrouponMember');
+                    $gmM->paid_done($memberId, $orderOwner);
                 } else {
                     foreach ($pid_list as $pid) {
                         clean_total_sold($pid);

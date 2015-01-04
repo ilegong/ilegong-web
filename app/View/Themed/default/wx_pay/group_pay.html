@@ -1,16 +1,28 @@
+{{$this->Html->css(array(
+'groupon.css',
+))}}
 {{if $weixin}}
-<div class="pay_tip">请选择支付方式</div>
-<div class="pay_list">
-    <a href="#X" class="clearfix" id="btn_call_wx_pay">
-        <span class="payicon"><img src="images/weixin.png" /></span>
-        <span class="payname">微信支付</span>
-    </a>
+{{$this->Html->css(array(
+'groupon.css',
+))}}
+<p class="total_title">邀请好友支付1元直抵5元! 组团一起吃, 一箱贡柑低至17元, 包邮! </p>
+<div class="total_price">支付金额:
+    <span>￥
+        {{if $is_organizer}}
+        45
+        {{else}}
+        1
+        {{/if}}
+    </span>
 </div>
+<a href="javascript:;" id="btn_call_wx_pay" class="pay_btn weixin radius10">微信支付</a>
+<a href="javascript:;" id="pay_zhifubao" class="pay_btn alipay radius10">支付宝</a>
+
 <script type="text/javascript">
     //调用微信JS api 支付
     function jsApiCall()
     {
-        var doneUrlPrefix = '/groupons/view/' + {{$groupon_slug}} + '/paid?tradeNo={{urlencode($tradeNo)}}&msg=';
+        var doneUrlPrefix = '{{$group_url}}?tradeNo={{urlencode($tradeNo)}}&msg=';
     WeixinJSBridge.invoke(
             'getBrandWCPayRequest',
             js_api_parameters,
@@ -40,9 +52,8 @@
     );
     };
 
-    function callpay()
+    function callpay($this)
     {
-        var $this = $(this);
         if ($this.attr('disabled') == 'disabled') {
             return;
         }
@@ -59,11 +70,26 @@
         }
     }
     var js_api_parameters = {{$jsApiParameters}};
+
+    $(document).ready(function(){
+        $('#btn_call_wx_pay').click(function(){
+            callpay($(this));
+        });
+    });
 </script>
 {{/if}}
-<div class="pay_list" style="margin-top:-1px;">
-    <a href="#X" class="clearfix">
-        <span class="payicon"><img src="images/alipay.png" /></span>
-        <span class="payname">支付宝支付</span>
-    </a>
-</div>
+<script>
+    function go_to_pay_zhifubao() {
+        if (location.href.indexOf('{{ALI_HOST}}') == -1) {
+            bootbox.alert('我们的账号信息：<br>账户：<span>yxg@ilegong.com</span> <br/> 收款人：北京爱乐供科技有限公司');
+        } else {
+            location.href  = "/ali_pay/{{$isMobile?'wap_to_alipay':'goto_to_alipay'}}/{{$orderId}}";
+        }
+    }
+
+    $(document).ready(function(){
+        $('#pay_zhifubao').click(function(){
+            go_to_pay_zhifubao();
+        });
+    });
+</script>

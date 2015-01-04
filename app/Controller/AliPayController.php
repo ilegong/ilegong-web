@@ -169,6 +169,8 @@ class AliPayController extends AppController {
             $this->log("Zhifubao: return_back: request:" . json_encode($_REQUEST));
 
             $order_id = $display_status = $msg = '';
+            $order_type = ORDER_TYPE_DEF;
+            $order_member_id = 0;
 
             if ($isSuccess) {
 
@@ -187,6 +189,8 @@ class AliPayController extends AppController {
 
                 if (!empty($order)) {
                     $order_id = $order['Order']['id'];
+                    $order_type = $order['Order']['type'];
+                    $order_member_id = $order['Order']['member_id'];
                 }
             } else {
                 $this->log("return back failed for incorrect trade_status: for $out_trade_no, $trade_status");
@@ -207,7 +211,12 @@ class AliPayController extends AppController {
         }
 
         if ($order_id) {
-            $this->redirect(array('controller' => 'Orders', 'action' => 'detail', $order_id, 'pay', '?' => array('paid_msg' => $msg, 'display_status' => $display_status)));
+            if ($order_type == ORDER_TYPE_GROUP) {
+                $group_url = '/groupons/join/' . $order_member_id;
+                $this->redirect($group_url);
+            } else {
+                $this->redirect(array('controller' => 'Orders', 'action' => 'detail', $order_id, 'pay', '?' => array('paid_msg' => $msg, 'display_status' => $display_status)));
+            }
             $this->autoRender = false;
         } else {
             $this->set('paid_msg', $msg);

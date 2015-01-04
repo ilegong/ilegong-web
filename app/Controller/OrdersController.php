@@ -475,7 +475,7 @@ class OrdersController extends AppController{
             if ($afford && $has_expired_product_type == 0 && $no_more_money && $action == 'pay_direct') {
                 if ($orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
                     $this->Order->id = $orderinfo['Order']['id'];
-                    if ($this->Order->set_order_to_paid($orderId, $orderinfo['Order']['try_id'], $uid)) {
+                    if ($this->Order->set_order_to_paid($orderId, $orderinfo['Order']['try_id'], $uid, $order['Order']['type'], $order['Order']['member_id'])) {
                         $this->Weixin->notifyPaidDone($orderinfo);
                     };
                     $orderinfo = $this->find_my_order_byId($orderId, $uid);

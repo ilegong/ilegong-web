@@ -27,6 +27,8 @@ class GrouponsController extends AppController{
                 $this->redirect('/users/login?referer='.urlencode($_SERVER['REQUEST_URI']));
             }
         }
+        $this->pageTitle = '团购杀价';
+        $this->set('hideNav', true);
     }
     public function view($slug){
         if($slug){
@@ -98,7 +100,8 @@ class GrouponsController extends AppController{
                     'team_id' => $groupon['Groupon']['team_id'],
                 ));
             }
-            $this->redirect('/wx_pay/group_pay/' . $member['GrouponMember']['id']);
+            $this->redirect('/wxPay/jsApiPay/0?action=group_pay&memberId=' . $member['GrouponMember']['id']);
+//            $this->redirect('/wxPay/group_pay/' . $member['GrouponMember']['id']);
         }
     }
 
