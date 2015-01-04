@@ -6,9 +6,20 @@
         "url":"http://www.pyshuo.com/users/wx_menu_point?referer_key=CLICK_URL_TECHAN&from=service"
     },
     {
-        "type":"view",
-        "name":"摇一摇",
-        "url":"http://www.pyshuo.com/t/ag.html"
+        "name":"特惠活动",
+        "sub_button":[
+            {
+                "type":"view",
+                "name":"组团购",
+                "url":"http://www.pyshuo.com/groupons/view.html"
+            },
+            {
+                "type":"view",
+                "name":"摇一摇",
+                "url":"http://www.pyshuo.com/t/ag.html"
+            }
+        ]
+
     },
     {
         "name":"个人中心",
