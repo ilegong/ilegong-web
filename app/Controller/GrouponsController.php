@@ -185,6 +185,10 @@ class GrouponsController extends AppController{
             }
         } else if (array_search($uid, $join_ids) === false && $balance > $team['Team']['unit_val']){
             $this->set('not_pay', true);
+            $found = $this->Groupon->find('first', array(
+                'conditions' => array('user_id' => $uid)
+            ));
+            $this->set('has_organized', !empty($found));
         }
 
 
