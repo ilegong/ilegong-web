@@ -38,7 +38,7 @@ class WxPayController extends AppController {
             $error_text = '已经支付过了';
         }
         $team_id = $gm['GrouponMember']['team_id'];
-        $group_url = '/groupons/join/' . $gm['GrouponMember']['id'];
+        $group_url = '/groupons/join/' . $gm['GrouponMember']['groupon_id'];
         if (!empty($error_text)) {
             $this->__message($error_text, $group_url);
             return;
