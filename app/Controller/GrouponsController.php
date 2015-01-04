@@ -189,8 +189,11 @@ class GrouponsController extends AppController{
             ));
             $this->set('my_join_id',$my_join_id);
         } else {
+            $joinedCnt = $this->find('count', array(
+                array('status' => STATUS_GROUP_MEM_PAID, 'user_id' => $uid)
+            ));
             $will_closed = $balance <= $team['Team']['unit_val'];
-            if (array_search($uid, $join_ids) === false && !$will_closed) {
+            if ($joinedCnt < 1 && !$will_closed) {
                 $this->set('not_pay', true);
             }
             $found = $this->Groupon->find('first', array(
