@@ -1,23 +1,12 @@
 {{$this->Html->css(array(
 'groupon.css',
 ))}}
-{{if $weixin}}
-{{$this->Html->css(array(
-'groupon.css',
-))}}
-<p class="total_title">邀请好友支付1元直抵5元! 组团一起吃, 一箱贡柑低至17元, 包邮! </p>
+<p class="total_title">{{$team['Team']['title']}}</p>
 <div class="total_price">支付金额:
-    <span>￥
-        {{if $is_organizer}}
-        45
-        {{else}}
-        1
-        {{/if}}
-    </span>
+    <span>￥{{$this->Number->precision($team['Team']['unit_pay']/100 , 2)}}</span>
 </div>
+{{if $weixin}}
 <a href="javascript:;" id="btn_call_wx_pay" class="pay_btn weixin radius10">微信支付</a>
-<a href="javascript:;" id="pay_zhifubao" class="pay_btn alipay radius10">支付宝</a>
-
 <script type="text/javascript">
     //调用微信JS api 支付
     function jsApiCall()
@@ -78,6 +67,7 @@
     });
 </script>
 {{/if}}
+<a href="javascript:;" id="pay_zhifubao" class="pay_btn alipay radius10">支付宝</a>
 <script>
     function go_to_pay_zhifubao() {
         if (location.href.indexOf('{{ALI_HOST}}') == -1) {

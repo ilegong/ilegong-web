@@ -78,6 +78,7 @@ class WxPayController extends AppController {
             $this->set('tradeNo', $out_trade_no);
         }
 
+        $this->set('team', $team);
         $this->set('weixin', $isWeixin);
         $this->set('productDesc', $productDesc);
         $this->set('orderId', $orderId);
