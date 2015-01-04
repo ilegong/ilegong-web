@@ -153,7 +153,7 @@ class WeixinComponent extends Component
         return $this->send_weixin_message($post_data);
     }
 
-    public function send_groupon_paid_message($open_id, $price, $url, $order_no, $good_info, $isDone, $isSelf, $isOrganizer, $organizerName, $newMemberName, $leftPeople)
+    public function send_groupon_paid_message($open_id, $price, $url, $order_no, $good_info, $isDone, $isSelf, $isOrganizer, $organizerName, $newMemberName, $leftPeople, $ship_info)
     {
         if ($isDone) {
             $msg = $isOrganizer ? "亲，您发起的团购已经成团，请等待收货。" : ( $isSelf ? "亲，您参加 $organizerName 发起的团购成功，已经成团，请等待 $organizerName 收货。" : "亲，$newMemberName 刚刚加入了我们的团购，已经成团，请等待 $organizerName 收货。");
@@ -433,11 +433,13 @@ class WeixinComponent extends Component
                 $organizerName = $nameIdMap[$organizerId];
                 $newMemberName = $nameIdMap[$orderCreator];
 
+                $ship_info = $groupon['Groupon']['address'] . $groupon['Groupon']['name'];
+
                 foreach($gmLists as $gml) {
                     $curr_uid = $gml['GrouponMember']['user_id'];
                     $wxBind = $oauthBindModel->findWxServiceBindByUid($curr_uid);
                     if (!empty($wxBind)) {
-                        $this->send_groupon_paid_message($wxBind['oauth_openid'], $price, $url, $order['Order']['id'], $team['Team']['name'], $isDone, $curr_uid == $orderCreator, $curr_uid == $organizerId, $organizerName, $newMemberName, $leftPeople);
+                        $this->send_groupon_paid_message($wxBind['oauth_openid'], $price, $url, $order['Order']['id'], $team['Team']['name'], $isDone, $curr_uid == $orderCreator, $curr_uid == $organizerId, $organizerName, $newMemberName, $leftPeople, $ship_info);
                     }
                 }
 
