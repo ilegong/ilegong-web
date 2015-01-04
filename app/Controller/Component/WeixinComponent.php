@@ -437,7 +437,7 @@ class WeixinComponent extends Component
                     $curr_uid = $gml['GrouponMember']['user_id'];
                     $wxBind = $oauthBindModel->findWxServiceBindByUid($curr_uid);
                     if (!empty($wxBind)) {
-                        $this->send_groupon_paid_message($wxBind['oauth_openid'], $price, $url, $order['Order']['id'], '团购', $isDone, $curr_uid == $orderCreator, $curr_uid == $organizerId, $organizerName, $newMemberName, $leftPeople);
+                        $this->send_groupon_paid_message($wxBind['oauth_openid'], $price, $url, $order['Order']['id'], $team['Team']['name'], $isDone, $curr_uid == $orderCreator, $curr_uid == $organizerId, $organizerName, $newMemberName, $leftPeople);
                     }
                 }
 
