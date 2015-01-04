@@ -21,7 +21,7 @@ class GrouponsController extends AppController{
                 $this->redirect('/users/login.html?referer='.$ref);
             }
         }
-        $this->pageTitle = '团购杀价';
+        $this->pageTitle = '组团购';
         $this->set('hideNav', true);
     }
     public function view($slug = null){
