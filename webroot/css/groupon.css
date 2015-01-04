@@ -43,7 +43,7 @@ input{ outline:none;}
 .address li span.title{ width:5em;}
 .share{ margin:0.5em 0; text-align:center; display:block;}
 .share img{ width:92%;}
-.newtuanbtn{ line-height:2em; height:1.8em; overflow:hidden; font-size:1em; text-align:center; background-color:#ffffff; border:1px #ffa531 solid; text-decoration:none; color:#ffa531; width:92%; margin:0 auto; display:block;}
+.newtuanbtn{ line-height:2em; overflow:hidden; font-size:1em; text-align:center; background-color:#ffffff; border:1px #ffa531 solid; text-decoration:none; color:#ffa531; width:92%; margin:0 auto; display:block;}
 .tuan_list{ line-height:1.2em; padding-top:0.5em; color:#999999; border-top:1px #dddddd solid; margin-top:0.5em;}
 .tuan_list li span{ display:block; font-size:0.9em;}
 .tuan_list li span.title{ width:11em; color:#666666;}
