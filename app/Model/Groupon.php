@@ -29,6 +29,10 @@ class Groupon extends AppModel {
         }
     }
 
+    public function set_paid_done($groupon_id) {
+        $this->updateAll(array('status' => STATUS_GROUP_REACHED), array('id' => $groupon_id));
+    }
+
     public function calculate_balance($groupon_id, $team, $groupon) {
 
         if ($groupon == null) {

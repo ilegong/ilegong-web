@@ -52,10 +52,10 @@ class GrouponsController extends AppController{
             $this->loadModel('GrouponMember');
             $grouponMember = $this->GrouponMember->find('first', array(
                 'conditions' =>array('user_id' => $uid, 'team_id' => $team['Team']['id'], 'status' => STATUS_GROUP_MEM_PAID),
-                'fields' => array('id')
+                'fields' => array('id', 'groupon_id')
             ));
             if($grouponMember){
-                $this->redirect('/groupons/join/'.$grouponMember['Groupon']['groupon_id']);
+                $this->redirect('/groupons/join/'.$grouponMember['GrouponMember']['groupon_id']);
             }
         }
 
@@ -175,11 +175,17 @@ class GrouponsController extends AppController{
 
         if($uid === $groupon['Groupon']['user_id']){
             $this->set('is_organizer', true);
-            $this->set('balance',$this->calculate_balance($groupId, $team, $groupon));
-        }
-        if(array_search($uid, $join_ids) === false){
+            $is_paid = $this->Groupon->is_all_paid($groupId, $team, $groupon);
+            if ($is_paid) {
+                $this->Groupon->set_paid_done($groupId);
+                //reloading
+                $groupon = $this->Groupon->findById($groupId);
+            }
+        } else if (array_search($uid, $join_ids) === false){
             $this->set('not_pay', true);
         }
+
+        $this->set('balance', $this->calculate_balance($groupId, $team, $groupon));
 
         $this->set('team', $team);
         $this->set('groupon', $groupon);
