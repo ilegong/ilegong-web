@@ -88,6 +88,7 @@ const SHICHI_STATUS_APPLY = 0;
 
 const ORDER_TYPE_DEF = 1;
 const ORDER_TYPE_GROUP = 2;
+const ORDER_TYPE_GROUP_FILL = 4; //团购补充素有剩下的
 const ORDER_TYPE_PARENT = 3;
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');

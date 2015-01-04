@@ -3,7 +3,7 @@
 ))}}
 <p class="total_title">{{$team['Team']['title']}}</p>
 <div class="total_price">支付金额:
-    <span>￥{{$this->Number->precision($team['Team']['unit_pay']/100 , 2)}}</span>
+    <span>￥{{$this->Number->precision($fee/100 , 2)}}</span>
 </div>
 {{if $weixin}}
 <a href="javascript:;" id="btn_call_wx_pay" class="pay_btn weixin radius10">微信支付</a>

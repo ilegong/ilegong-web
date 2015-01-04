@@ -39,7 +39,7 @@
         {{if $not_pay}}
 <a href="/groupons/go_join/{{$groupon['Groupon']['id']}}" class="newtuanbtn radius10">去支付</a>
         {{else}}
-<a href="/groupons/go_join/{{$groupon['Groupon']['id']}}&type=done" class="newtuanbtn radius10">支付{{$balance/100}}元提前成团</a>
+<a href="/groupons/go_join/{{$groupon['Groupon']['id']}}?type=done" class="newtuanbtn radius10">支付{{$balance/100}}元提前成团</a>
         {{/if}}
 {{else}}
         {{if $not_pay}}

@@ -22,6 +22,7 @@ class WxPayController extends AppController {
     public function group_pay($memberId) {
 
         $uid = $this->currentUser['id'];
+        $type = $_REQUEST['type'];
 
         $this->loadModel('GrouponMember');
         $gm = $this->GrouponMember->findById($memberId);
@@ -34,11 +35,12 @@ class WxPayController extends AppController {
         $error_text = '';
         if ($gm['GrouponMember']['user_id'] != $uid) {
             $error_text = '不是您的参团记录，您不能支付';
-        } else if ($gm['GroupMember']['status'] == STATUS_GROUP_MEM_PAID) {
+        } else if ($gm['GroupMember']['status'] == STATUS_GROUP_MEM_PAID && $type != 'done') {
             $error_text = '已经支付过了';
         }
         $team_id = $gm['GrouponMember']['team_id'];
-        $group_url = '/groupons/join/' . $gm['GrouponMember']['groupon_id'];
+        $groupon_id = $gm['GrouponMember']['groupon_id'];
+        $group_url = '/groupons/join/' . $groupon_id;
         if (!empty($error_text)) {
             $this->__message($error_text, $group_url);
             return;
@@ -59,7 +61,18 @@ class WxPayController extends AppController {
             return;
         }
 
-        $order = $this->Order->createOrFindGrouponOrder($memberId, $uid, $fee/100, $team['Team']['product_id']);
+        if ($type == 'done') {
+            $this->loadModel("Groupon");
+            $groupon = $this->Groupon->findById($groupon_id);
+            if ($groupon['Groupon']['user_id'] == $uid) {
+                $fee = $this->Groupon->calculate_balance($groupon_id, $team, $groupon);
+            } else {
+                $this->__message('您不是团购的发起人，不能提前结束团购', $group_url);
+            }
+        }
+
+        $order_type = ($type == 'done' ? ORDER_TYPE_GROUP_FILL : ORDER_TYPE_GROUP);
+        $order = $this->Order->createOrFindGrouponOrder($memberId, $uid, $fee/100, $team['Team']['product_id'], $order_type);
         if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
             $this->__message('您已经支付过了', $group_url);
             return;
@@ -85,6 +98,7 @@ class WxPayController extends AppController {
         $this->set('group_url', $group_url);
         $this->set('isMobile', $this->RequestHandler->isMobile());
         $this->set('hideNav', true);
+        $this->set('fee', $fee);
     }
 
     public function jsApiPay($orderId) {

@@ -186,7 +186,7 @@ class GrouponsController extends AppController{
 
         if($uid === $groupon['Groupon']['user_id']){
             $this->set('is_organizer', true);
-            $this->set('balance',$this->calculate_balance($groupId));
+            $this->set('balance',$this->calculate_balance($groupId, $team, $groupon));
         }
         if(array_search($uid, $join_ids) === false){
             $this->set('not_pay', true);
@@ -219,19 +219,10 @@ class GrouponsController extends AppController{
         }
         $this->set('groupon_id', $groupId);
     }
-    private function calculate_balance($groupId){
-        $this->loadModel('Team');
-        $groupon = $this->Groupon->find('first',array(
-            'conditions' => array('id' => $groupId),
-            'fields' => array('pay_number', 'team_id')
-        ));
-        $pay_number = $groupon['Groupon']['pay_number'];
-        $team = $this->Team->find('first', array(
-            'conditions' => array('id' => $groupon['Groupon']['team_id']),
-            'fields' => array('market_price', 'unit_pay','unit_val')
-        ));
-        $balance = $team['Team']['market_price'] - $pay_number*$team['Team']['unit_val'];
-        return $balance;
+
+    private function calculate_balance($groupId, $team = null, $groupon = null){
+        $this->loadModel('Groupon');
+        return $this->Groupon->calculate_balance($groupId, $team, $groupon);
     }
 
 }

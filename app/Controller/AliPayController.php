@@ -213,7 +213,7 @@ class AliPayController extends AppController {
         }
 
         if ($order_id) {
-            if ($order_type == ORDER_TYPE_GROUP) {
+            if ($order_type == ORDER_TYPE_GROUP || $order_type == ORDER_TYPE_GROUP_FILL) {
                 $group_url = '/groupons/my_join/' . $order_member_id;
                 $this->redirect($group_url);
             } else {

@@ -8,11 +8,15 @@
 
 class Order extends AppModel {
 
-    public function createOrFindGrouponOrder($memberId, $uid, $fee, $product_id) {
+    public function createOrFindGrouponOrder($memberId, $uid, $fee, $product_id, $type = ORDER_TYPE_GROUP) {
+        if ($type != ORDER_TYPE_GROUP && $type != ORDER_TYPE_GROUP_FILL) {
+            throw new CakeException("error order type:".$type);
+        }
+
         $existsOrder = $this->find('first', array(
             'conditions' => array('member_id' => $memberId,
                 'creator' => $uid,
-                'type' => ORDER_TYPE_GROUP,
+                'type' => $type,
             )
         ));
 
@@ -20,7 +24,7 @@ class Order extends AppModel {
             $arr = array(
                 'creator' => $uid,
                 'total_all_price' => $fee,
-                'type' => ORDER_TYPE_GROUP,
+                'type' => $type,
                 'member_id' => $memberId
             );
             $order = $this->save($arr);
@@ -30,7 +34,7 @@ class Order extends AppModel {
                 $cartM->updateAll(array('order_id' => $order['Order']['id'], 'status' => CART_ITEM_STATUS_BALANCED), array('id' => $inserted['Cart']['id']));
             }
 
-            return $order['Order']['id'];
+            return $order;
         } else {
             return $existsOrder;
         }
@@ -92,9 +96,9 @@ class Order extends AppModel {
                         //FIXME: do retry if failed
                         $tryM->updateAll(array('sold_num' => 'sold_num + 1'), array('id' => $isTry, 'modified' => $pTry['ProductTry']['modified']));
                     }
-                } else if ($type == ORDER_TYPE_GROUP) {
+                } else if ($type == ORDER_TYPE_GROUP || $type == ORDER_TYPE_GROUP_FILL) {
                     $gmM = ClassRegistry::init('GrouponMember');
-                    $gmM->paid_done($memberId, $orderOwner);
+                    $gmM->paid_done($memberId, $orderOwner, $type);
                 } else {
                     foreach ($pid_list as $pid) {
                         clean_total_sold($pid);
