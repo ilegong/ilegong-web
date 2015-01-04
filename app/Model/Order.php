@@ -112,14 +112,21 @@ class Order extends AppModel {
     /**
      * @param $uid
      * @param $order_status  int|array
+     * @param bool $only_normal_type
+     * @throws CakeException
      * @return array orders, order_carts and mapped brands
      */
-    public function get_user_orders($uid, $order_status=null) {
+    public function get_user_orders($uid, $order_status=null, $only_normal_type = true) {
 
         $cond = array('creator' => $uid, 'published' => PUBLISH_YES, 'deleted' => DELETED_NO);
         if ($order_status !== null) {
             $cond['status'] = $order_status;
         }
+
+        if ($only_normal_type) {
+            $cond['type'] = ORDER_TYPE_DEF;
+        }
+
         $orders = $this->find('all', array(
             'order' => 'id desc',
             'conditions' => $cond,
