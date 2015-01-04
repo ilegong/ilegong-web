@@ -29,7 +29,7 @@ class GrouponMember extends AppModel {
                 $this->updateAll(array('status' => STATUS_GROUP_MEM_PAID), array('id' => $memberId));
             }
             $grouponM = ClassRegistry::init('Groupon');
-            $grouponM->paid_done($gm['GrouponMemeber']['groupon_id'], $order_type);
+            $grouponM->paid_done($gm['GrouponMember']['groupon_id'], $order_type);
         }
     }
 
