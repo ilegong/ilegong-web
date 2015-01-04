@@ -15,13 +15,13 @@
     </ul>
 </div>
 <div class="listbg mt12">
-    <a href="#X">活动细则<span class="moreicon"><img src="/img/groupon/more.png" /></span></a>
+    <a href="#X">活动细则<span class="moreicon"><img src="{{$this->Html->assetUrl('/img/groupon/more.png')}}" /></span></a>
     <div class="detail" style="display:none;">
         {{$team['Team']['notice']}}
     </div>
 </div>
 <div class="listbg" style="margin-top:-1px;">
-    <a id ="product_summary" href="#X">产品介绍<span class="moreicon"><img src="/img/groupon/more.png" /></span></a>
+    <a id ="product_summary" href="#X">产品介绍<span class="moreicon"><img src="{{$this->Html->assetUrl('/img/groupon/more.png')}}" /></span></a>
     <div id="product_summary_content" class="detail" style="display:none;">
         {{$team['Team']['summary']}}
     </div>

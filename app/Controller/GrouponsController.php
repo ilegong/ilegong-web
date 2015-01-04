@@ -35,37 +35,41 @@ class GrouponsController extends AppController{
         $this->pageTitle = '团购杀价';
         $this->set('hideNav', true);
     }
-    public function view($slug){
-        $this->pageTitle = '组团购';
-        $uid = $this->currentUser['id'];
-        if($slug){
+    public function view($slug = null){
+        if(empty($slug)){
+            $team = $this->Team->find('first', array(
+                'order' => 'id desc'
+            ));
+        }else{
             $team = $this->Team->find('first', array(
                 'conditions' => array('slug' => $slug)
             ));
-            if(empty($team) || $team['Team']['begin_time']> time() || $team['Team']['end_time']< time()){
-                $this->Session->setFlash(__('团购项目不存在'));
-                $this->redirect('/');
-            }else{
-                $this->set('team', $team);
+        }
+        $uid = $this->currentUser['id'];
 
-                $this->loadModel('Groupon');
-                $groupon = $this->Groupon->find('first', array(
-                    'conditions' =>array('user_id' => $uid, 'team_id' => $team['Team']['id']),
-                    'fields' => array('id')
-                ));
-                if($groupon){
-                    $this->redirect('/groupons/join/'.$groupon['Groupon']['id']);
-                }
-                $this->loadModel('GrouponMember');
-                $grouponMember = $this->GrouponMember->find('first', array(
-                    'conditions' =>array('user_id' => $uid, 'team_id' => $team['Team']['id'], 'status' => STATUS_GROUP__PAID),
-                    'fields' => array('id')
-                ));
-                if($grouponMember){
-                    $this->redirect('/groupons/join/'.$grouponMember['Groupon']['groupon_id']);
-                }
+        if(empty($team) || $team['Team']['begin_time']> time() || $team['Team']['end_time']< time()){
+            $this->Session->setFlash(__('团购项目不存在'));
+            $this->redirect('/');
+        }else{
+            $this->set('team', $team);
+            $this->loadModel('Groupon');
+            $groupon = $this->Groupon->find('first', array(
+                'conditions' =>array('user_id' => $uid, 'team_id' => $team['Team']['id']),
+                'fields' => array('id')
+            ));
+            if($groupon){
+                $this->redirect('/groupons/join/'.$groupon['Groupon']['id']);
+            }
+            $this->loadModel('GrouponMember');
+            $grouponMember = $this->GrouponMember->find('first', array(
+                'conditions' =>array('user_id' => $uid, 'team_id' => $team['Team']['id'], 'status' => STATUS_GROUP__PAID),
+                'fields' => array('id')
+            ));
+            if($grouponMember){
+                $this->redirect('/groupons/join/'.$grouponMember['Groupon']['groupon_id']);
             }
         }
+
     }
     public function organizing(){
         $team_slug =   $this->data['team']  ?  $this->data['team']  :  $_GET['team'];
@@ -171,9 +175,12 @@ class GrouponsController extends AppController{
 
         if($uid === $groupon['Groupon']['user_id']){
             $this->set('is_organizer', true);
-        }else{
-
+            $this->set('balance',$this->calculate_balance($groupId));
         }
+        if(array_search($uid, $join_ids) === false){
+            $this->set('not_pay', true);
+        }
+
         $this->set('team', $team);
         $this->set('groupon', $groupon);
         $this->set('join_info', $join_info);
@@ -200,6 +207,20 @@ class GrouponsController extends AppController{
             $this->set('is_organizer', true);
         }
         $this->set('groupon_id', $groupId);
+    }
+    private function calculate_balance($groupId){
+        $this->loadModel('Team');
+        $groupon = $this->Groupon->find('first',array(
+            'conditions' => array('id' => $groupId),
+            'fields' => array('pay_number', 'team_id')
+        ));
+        $pay_number = $groupon['Groupon']['pay_number'];
+        $team = $this->Team->find('first', array(
+            'conditions' => array('id' => $groupon['Groupon']['team_id']),
+            'fields' => array('market_price', 'unit_pay','unit_val')
+        ));
+        $balance = $team['Team']['market_price'] - $pay_number*$team['Team']['unit_val'];
+        return $balance;
     }
 
 }
