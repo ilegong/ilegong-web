@@ -443,6 +443,10 @@ class WeixinComponent extends Component
                     }
                 }
 
+                if ($order['Order']['type'] == ORDER_TYPE_GROUP) {
+                    $seller_weixin = '';
+                }
+
             }  else {
                 $this->send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_id, $order);
             }
