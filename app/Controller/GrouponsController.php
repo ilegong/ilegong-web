@@ -5,7 +5,7 @@
  * Date: 14/12/24
  * Time: 下午4:48
  */
-
+define('STATUS_GROUP__PAID',1);
 class GrouponsController extends AppController{
     var $name = 'Groupon';
 
@@ -13,8 +13,15 @@ class GrouponsController extends AppController{
 
     public function beforeFilter(){
         parent::beforeFilter();
-        if (array_search($this->request->params['action'], array('view', 'mobile_bind','join', 'pay_choices')) === false) {
-            if($this->currentUser['id']){
+        if (array_search($this->request->params['action'], array('mobile_bind','join', 'pay_choices')) === false) {
+            if (empty($this->currentUser['id'])) {
+                $ref = Router::url($_SERVER['REQUEST_URI']);
+                if ($this->is_weixin()) {
+                    $this->redirect(redirect_to_wx_oauth($ref, WX_OAUTH_BASE, true));
+                } else {
+                    $this->redirect('/users/login.html?referer='.$ref);
+                }
+            }else{
                 $this->loadModel('User');
                 $user_info=$this->User->find('first', array(
                     'conditions' => array('id' => $this->currentUser['id']),
@@ -23,14 +30,14 @@ class GrouponsController extends AppController{
                 if(empty($user_info['User']['mobilephone'])){
                     $this->redirect('/groupons/mobile_bind?referer='.urlencode($_SERVER['REQUEST_URI']));
                 }
-            }else{
-                $this->redirect('/users/login?referer='.urlencode($_SERVER['REQUEST_URI']));
             }
         }
         $this->pageTitle = '团购杀价';
         $this->set('hideNav', true);
     }
     public function view($slug){
+        $this->pageTitle = '组团购';
+        $uid = $this->currentUser['id'];
         if($slug){
             $team = $this->Team->find('first', array(
                 'conditions' => array('slug' => $slug)
@@ -39,20 +46,36 @@ class GrouponsController extends AppController{
                 $this->Session->setFlash(__('团购项目不存在'));
                 $this->redirect('/');
             }else{
-                $this->set('team', $team['Team']);
+                $this->set('team', $team);
+
+                $this->loadModel('Groupon');
+                $groupon = $this->Groupon->find('first', array(
+                    'conditions' =>array('user_id' => $uid, 'team_id' => $team['Team']['id']),
+                    'fields' => array('id')
+                ));
+                if($groupon){
+                    $this->redirect('/groupons/join/'.$groupon['Groupon']['id']);
+                }
+                $this->loadModel('GrouponMember');
+                $grouponMember = $this->GrouponMember->find('first', array(
+                    'conditions' =>array('user_id' => $uid, 'team_id' => $team['Team']['id'], 'status' => STATUS_GROUP__PAID),
+                    'fields' => array('id')
+                ));
+                if($grouponMember){
+                    $this->redirect('/groupons/join/'.$grouponMember['Groupon']['groupon_id']);
+                }
             }
         }
     }
     public function organizing(){
-        $team_slug =  $_POST['team']  ? $_POST['team']  :  $_GET['team'];
-
+        $team_slug =   $this->data['team']  ?  $this->data['team']  :  $_GET['team'];
+        $team = $this->Team->find('first', array(
+            'conditions' => array('slug' => trim($team_slug)),
+            'fields' => array('id','title','begin_time', 'end_time')
+        ));
         if($this->request->is('post')){
             $this->autoRender=false;
             $current_uid = $this->currentUser['id'];
-            $team = $this->Team->find('first', array(
-                'conditions' => array('slug' => trim($this->data['team'])),
-                //'fields' => array('id')
-            ));
             if(empty($team) || $team['Team']['begin_time']> time() || $team['Team']['end_time']< time()){
                 $res = array('success'=> false, 'msg'=>'团购项目不存在');
             }else{
@@ -77,6 +100,7 @@ class GrouponsController extends AppController{
             }
             echo json_encode($res);
         }
+        $this->set('team', $team);
         $this->data['team'] = $team_slug;
 
     }
@@ -147,6 +171,8 @@ class GrouponsController extends AppController{
 
         if($uid === $groupon['Groupon']['user_id']){
             $this->set('is_organizer', true);
+        }else{
+
         }
         $this->set('team', $team);
         $this->set('groupon', $groupon);

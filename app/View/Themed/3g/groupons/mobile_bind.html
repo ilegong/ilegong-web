@@ -9,7 +9,7 @@
         <span><input style="text-align:center; width:100%;" name="" type="text" placeholder="请输入您的手机号" id="mobile_number"/></span>
     </li>
 </ul>
-<a href="#X" id = "msg_send" class="tuanbtn radius10">发送短信验证码</a>
+<a href="javascript:void(0)" id = "msg_send" class="tuanbtn radius10" data_disable="false">发送短信验证码</a>
 <div id="checkInfo"></div>
 
 <div id="validate_block" style="display:none;">
@@ -18,41 +18,44 @@
             <span><input style="text-align:center; width:100%;" name="" type="text" placeholder="输入短信验证码" id="msg_code"/></span>
         </li>
     </ul>
-    <a href="#X" id="validate_code" class="tuanbtn radius10">验证</a>
+    <a href="javascript:void(0)" id="validate_code" class="tuanbtn radius10">验证</a>
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
         var countdown = null;
+        var count = 60;
         var sendPoneCode = function() {
             $("#checkInfo").html("");
             var f = "/check/un_code";
-            var phone_num = $("#mobile_number").val();
-            jQuery.ajax({
-                type: "POST",
-                dataType: "json",
-                url: f,
-                data: {mobile: phone_num},
-                success: function (a) {
-                    if (a.error == 0) {
-                        $('#validate_block').show();
-                        countdown = setInterval(CountDown, 1000);
-                    } else if (a.error == 2) {
-                        $("#checkInfo").html("<em>手机号码格式错误，验证短信发送失败，请重新输入</em>").addClass('help-inline ');
+            if($("#msg_send").attr('data_disable') == 'false'){
+                var phone_num = $("#mobile_number").val();
+                jQuery.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: f,
+                    data: {mobile: phone_num},
+                    success: function (a) {
+                        if (a.error == 0) {
+                            $("#msg_send").attr('data_disable','true');
+                            $('#validate_block').show();
+                            countdown = setInterval(CountDown, 1000);
+                        } else if (a.error == 2) {
+                            $("#checkInfo").html("<em>手机号码格式错误，验证短信发送失败，请重新输入</em>").addClass('help-inline ');
+                        }
                     }
-                }
-            });
+                });
+            }
         };
         $('#msg_send').on('click',sendPoneCode);
-        var count = 60;
         function CountDown() {
             //$("#msg_send").unbind("click");
-            $("#msg_send").attr('href','javascript:void(0)'),
-                    $("#msg_send").addClass('codebtn').html(count + " 秒后可重新获取");
+            $("#msg_send").addClass('codebtn').html(count + " 秒后可重新获取");
             if (count == 0) {
                 $("#msg_send").removeClass('codebtn').html("发送短信验证码");
                 //$("#msg_send").bind("click",sendPhoneCode);
-                $("#msg_send").attr('href','#'),
-                        clearInterval(countdown);
+                $("#msg_send").attr('data_disable','false');
+                clearInterval(countdown);
+                count = 60;
             }
             count--;
         }

@@ -2,13 +2,13 @@
 'groupon.css',
 ))}}
 <div class="bg">
-    <p class="title">邀请好友支付1元直抵5元! 组团一起吃, 一箱贡柑低至17元, 包邮! </p>
+    <p class="title">{{$team['Team']['title']}} </p>
     <ul class="clearfix tuan_masg">
-        <li class="fl"><img id="product_img" src="" /></li>
+        <li class="fl"><img src="" /></li>
         <li class="fl pl12">
-            <div class="tuan_price">现价: <span>¥85</span>&nbsp;&nbsp;&nbsp;<i>原价: ¥85</i></div>
-            <div class="tip">好友支付<strong>&nbsp;1&nbsp;</strong>元立减<strong>&nbsp;5&nbsp;</strong>元</div>
-            <div class="people">已有<span>0</span>人参团, 限<span>17</span>人</div>
+            <div class="tuan_price">现价: <span>¥{{$this->Number->precision($team['Team']['team_price']/100, 2)}}</span>&nbsp;&nbsp;&nbsp;<i>原价: ¥{{$this->Number->precision($team['Team']['market_price']/100, 2)}}</i></div>
+            <div class="tip">好友支付<strong>&nbsp;{{$this->Number->precision($team['Team']['unit_pay']/100, 2)}}&nbsp;</strong>元立减<strong>&nbsp;{{$this->Number->precision($team['Team']['unit_val']/100, 2)}}&nbsp;</strong>元</div>
+            <div class="people">已有<span>{{$groupon['Groupon']['pay_number']}}</span>人参团, 限<span>{{$team['Team']['min_number']}}</span>人</div>
         </li>
     </ul>
     <ul class="address">
@@ -23,15 +23,15 @@
     </ul>
 </div>
 <div class="listbg mt12">
-    <a href="#X">活动细则<span class="moreicon"><img src="/img/groupon/more.png" /></span></a>
-    <div class="detail" style="display:none;">
+    <a href="javascript:void(0)" id="product_rule">活动细则<span class="moreicon"><img src="{{$this->Html->assetUrl('/img/groupon/more.png')}}" /></span></a>
+    <div id="product_rule_content" class="detail" style="display:none;">
         {{$team['Team']['notice']}}
     </div>
 </div>
 <div class="listbg" style="margin-top:-1px; margin-bottom:1em;">
-    <a href="#X">产品介绍<span class="moreicon"><img src="/img/groupon/more.png" /></span></a>
-    <div class="detail" style="display:none;">
-        产品介绍
+    <a href="javascript:void(0)" id="product_summary">产品介绍<span class="moreicon"><img src="{{$this->Html->assetUrl('/img/groupon/more.png')}}" /></span></a>
+    <div id="product_summary_content" class="detail" style="display:none;">
+        {{$team['Team']['summary']}}
     </div>
 </div>
 {{if $is_organizer}}
@@ -44,22 +44,15 @@
 {{/if}}
 <div class="listbg mt12">
     <a href="#X" id="event">参团记录<span class="moreicon"><img src="{{$this->Html->assetUrl('/img/groupon/more.png')}}" /></span></a>
-    <div style="">
+    <div id="event_list" style="display:none;">
         <ul class="tuan_list">
             {{loop $join_info $j}}
             <li class="clearfix">
-                <span class="title fl">{{$j['nickname']}}</span>
+                <span class="title fl">{{$j['nickname']?$j['nickname']:'匿名'}}</span>
                 <span class="fl">{{$j['time']}}</span>
             </li>
             {{/loop}}
-            <li class="clearfix">
-                <span class="title fl">罗武林</span>
-                <span class="fl">12-23  23:12</span>
-            </li>
-            <li class="clearfix">
-                <span class="title fl">13758494435</span>
-                <span class="fl">12-23  23:12</span>
-            </li>
+
         </ul>
         <a href="#X" class="more_list">更多记录</a>
     </div>
@@ -113,4 +106,17 @@
             });
         }, false);
     });
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#product_rule').on('click',function(){
+            $('#product_rule_content').toggle()
+        });
+        $('#product_summary').on('click',function(){
+            $('#product_summary_content').toggle()
+        });
+        $('#event').on('click',function(){
+            $('#event_list').toggle()
+        });
+    })
 </script>

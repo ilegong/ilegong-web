@@ -5,7 +5,7 @@
 {{$this->Form->input('team',array('type'=>'hidden', 'id' => 'team'))}}
 <div id="checkInfo"></div>
 <div class="bg">
-    <p class="title">邀请好友支付1元直抵5元! 组团一起吃, 一箱贡柑低至17元, 包邮! </p>
+    <p class="title">{{$team['Team']['title']}}</p>
 </div>
 <ul class="check clearfix mt12">
     <li class="clearfix">
@@ -16,7 +16,7 @@
         <span class="name fl">手机号:</span>
         <span class="fl"><input name="" id="mobile_number" type="text" placeholder="请输入你的手机号" /></span>
     </li>
-    <a href="#X" id = "edit_show">
+    <a href="javascript:void(0)" id = "edit_show">
         <li class="clearfix" style="margin-top:-1px;">
             <span class="name fl">收货地址:<span class="moreicon" style="top:50%; margin-top:-0.7em;"><img src="/img/groupon/more.png" /></span></span>
             <span id = "my_address" style="overflow:hidden; margin-right:1em; display:none;"></span>
@@ -47,7 +47,7 @@
     </div>
 </div>
 
-<a id="confirm_next" href="" class="tuanbtn radius10">确认收货信息, 下一步</a>
+<a id="confirm_next" href="javascript:void(0)" class="tuanbtn radius10" data-disable="false">确认收货信息, 下一步</a>
 
 
 <script type="text/javascript">
@@ -65,23 +65,44 @@
             $('#edit_address').hide();
         });
         $('#confirm_next').on('click',function(){
-            var name = $("#your_name").val();
-            var mobile = $("#mobile_number").val();
-            var address = $('#my_address').text();
-            var team = $('#team').val();
-            jQuery.ajax({
-                type: "POST",
-                dataType: "json",
-                url: "/groupons/organizing",
-                data: {name:name,mobile: mobile, address:address, team:team},
-                success: function (a) {
-                    if (a) {
-                        window.location.href = '/groupons/join/' + a.group_id;
-                    }else {
-                        $("#checkInfo").html("<em>"+ a.msg+"</em>");
-                    }
+            if($("#confirm_next").attr('data-disable') == 'false') {
+                if ($('#your_name').val() == "") {
+                    utils.alert("请输入你的姓名");
+                    e.preventDefault();
+                    $('#your_name').focus();
+                    return false;
                 }
-            });
-        })
+                if ($('#mobile_number').val().length != 11) {
+                    utils.alert("联系电话格式不正确");
+                    $('#mobile_number').focus();
+                    e.preventDefault();
+                    return false;
+                }
+                if ($('#my_address').text()=="") {
+                    utils.alert("你的地址未填写");
+                    e.preventDefault();
+                    return false;
+                }
+                var name = $("#your_name").val();
+                var mobile = $("#mobile_number").val();
+                var address = $('#my_address').text();
+                var team = $('#team').val();
+                jQuery.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "/groupons/organizing",
+                    data: {name: name, mobile: mobile, address: address, team: team},
+                    success: function (a) {
+                        if (a) {
+                            $("#confirm_next").attr('data-disable', 'true');
+                            window.location.href = '/groupons/join/' + a.group_id;
+                        } else {
+                            $("#checkInfo").html("<em>" + a.msg + "</em>");
+                        }
+                    }
+                });
+            }
+        });
+
     })
 </script>

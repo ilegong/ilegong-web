@@ -6,27 +6,27 @@
 <div class="bg">
     <p class="title"></p>
     <ul class="clearfix tuan_masg">
-        <li class="fl"><img src={{$this->Html->assetUrl($team['image']);}} /></li>
+        <li class="fl"><img src={{$this->Html->assetUrl($team['Team']['image']);}} /></li>
         <li class="fl pl12">
-            <div class="tuan_price">现价: <span>¥85</span></div>
-            <div class="tip">好友支付<strong>&nbsp;1&nbsp;</strong>元立减<strong>&nbsp;5&nbsp;</strong>元</div>
-            <div class="people">限<span>17</span>人</div>
+            <div class="tuan_price">现价: <span>¥{{$this->Number->precision($team['Team']['market_price']/100, 2)}}</span></div>
+            <div class="tip">好友支付<strong>&nbsp;{{$this->Number->precision($team['Team']['unit_pay']/100, 2)}}&nbsp;</strong>元立减<strong>&nbsp;{{$this->Number->precision($team['Team']['unit_val']/100, 2)}}&nbsp;</strong>元</div>
+            <div class="people">限<span>{{$team['Team']['min_number']}}</span>人</div>
         </li>
     </ul>
 </div>
 <div class="listbg mt12">
     <a href="#X">活动细则<span class="moreicon"><img src="/img/groupon/more.png" /></span></a>
     <div class="detail" style="display:none;">
-        {{$team['summary']}}<br />{{$team['notice']}}
+        {{$team['Team']['notice']}}
     </div>
 </div>
 <div class="listbg" style="margin-top:-1px;">
-    <a href="#X">产品介绍<span class="moreicon"><img src="/img/groupon/more.png" /></span></a>
-    <div class="detail" style="display:none;">
-        好朋友一起团着吃, 一个人支付1元直抵5元;<br />一个人只能参加一个团购。
+    <a id ="product_summary" href="#X">产品介绍<span class="moreicon"><img src="/img/groupon/more.png" /></span></a>
+    <div id="product_summary_content" class="detail" style="display:none;">
+        {{$team['Team']['summary']}}
     </div>
 </div>
-<a href="/groupons/organizing.html?team={{$team['slug']}}" class="tuanbtn radius10">马上组团</a>
+<a href="/groupons/organizing.html?team={{$team['Team']['slug']}}" class="tuanbtn radius10">马上组团</a>
 <!--弹出层-->
 <div style="position:absolute; left:50%; top:30%; margin-left:-8em; display:none;">
     <ul class="layer radius10">
@@ -38,6 +38,9 @@
     $(document).ready(function(){
         $('.listbg.mt12 a').on('click',function(){
             $('.listbg.mt12 .detail').toggle()
+        });
+        $('#product_summary').on('click',function(){
+            $('#product_summary_content').toggle()
         });
 
     })
