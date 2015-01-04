@@ -3,7 +3,7 @@
 'groupon.css',
 ))}}
 {{$this->Form->input('team',array('type'=>'hidden', 'id' => 'team'))}}
-<div id="checkInfo"></div>
+
 <div class="bg">
     <p class="title">{{$team['Team']['title']}}</p>
 </div>
@@ -48,7 +48,7 @@
 </div>
 
 <a id="confirm_next" href="javascript:void(0)" class="tuanbtn radius10" data-disable="false">确认收货信息, 下一步</a>
-
+<div id="checkInfo" style="text-align:center;"></div>
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -93,7 +93,7 @@
                     url: "/groupons/organizing",
                     data: {name: name, mobile: mobile, address: address, team: team},
                     success: function (a) {
-                        if (a) {
+                        if (a.success) {
                             $("#confirm_next").attr('data-disable', 'true');
                             window.location.href = '/groupons/join/' + a.group_id;
                         } else {

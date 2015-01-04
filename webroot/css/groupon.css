@@ -78,3 +78,5 @@ input{ outline:none;}
 .alipay{ background-color:#ffa531;}
 
 
+/*已参团*/
+.can_paid{ text-align:center; font-size:1.25em; padding-bottom:0.8em; color:#ff483a;}

@@ -71,9 +71,9 @@ class GrouponsController extends AppController{
             if(empty($team) || $team['Team']['begin_time']> time() || $team['Team']['end_time']< time()){
                 $res = array('success'=> false, 'msg'=>'团购项目不存在');
             }else{
-                $this->loadModel('GrouponMember');
-                if($this->GrouponMember->hasAny(array('user_id' => $current_uid, 'status' => STATUS_GROUP_MEM_PAID, 'team_id' => $team['Team']['id'] ))){
-                    $res = array('success'=> false, 'msg'=>'您已经参加过该商品的一次团了');
+                $count = $this->Groupon->find('count',array('conditions'=>array('user_id' => $current_uid, 'team_id' => $team['Team']['id'])));
+                if($count >= 1){
+                    $res = array('success'=> false, 'msg'=>'您已经发起过该商品的一次团了');
                 }else{
                     $info = array();
                     $info['Groupon']['name'] = $_POST['name'];
@@ -183,6 +183,11 @@ class GrouponsController extends AppController{
                 //reloading
                 $groupon = $this->Groupon->findById($groupId);
             }
+            $my_join_id =$this->GrouponMember->find('first', array(
+                'conditions'=>array('user_id'=> $uid, 'team_id' => $team_id, 'groupon_id !=' =>$groupId),
+                'fields' => array('groupon_id')
+            ));
+            $this->set('my_join_id',$my_join_id);
         } else {
             $will_closed = $balance <= $team['Team']['unit_val'];
             if (array_search($uid, $join_ids) === false && !$will_closed) {
@@ -195,6 +200,9 @@ class GrouponsController extends AppController{
             $this->set('closed', $will_closed);
         }
 
+        if($groupon['Groupon']['pay_number'] == $team['Team']['min_number']){
+            $this->set('complete', true);
+        }
 
         $this->set('team', $team);
         $this->set('groupon', $groupon);
