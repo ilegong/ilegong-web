@@ -10,9 +10,9 @@
     </li>
 </ul>
 <a href="javascript:void(0)" id = "msg_send" class="tuanbtn radius10" data_disable="false">发送短信验证码</a>
-<div id="checkInfo"></div>
+<div id="checkInfo" style="text-align:center;"></div>
 
-<div id="validate_block" style="display:none;">
+<div id="validate_block" style="display: none">
     <ul class="check clearfix mt24">
         <li class="clearfix">
             <span><input style="text-align:center; width:100%;" name="" type="text" placeholder="输入短信验证码" id="msg_code"/></span>
@@ -69,7 +69,7 @@
                 url: "/users/mobile_bind",
                 data: {mobile: phone_num, code:message_code},
                 success: function (a) {
-                    if (a) {
+                    if (a.success) {
                         var redirect = $('#referer').val();
                         window.location.href = redirect;
                     }else {

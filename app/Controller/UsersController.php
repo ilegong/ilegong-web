@@ -1101,14 +1101,14 @@ class UsersController extends AppController {
             } else if($mobile_num !=  $current_post_num){
                 $res = array('success'=> false, 'msg'=>'请重新验证您的手机号码');
             }else if ($this->User->hasAny(array('User.mobilephone' => $mobile_num))){
-                $res = array('success'=> false, 'msg'=>'你的账号已被注册');
+                $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录');
             }else if($this->User->hasAny(array('User.username' => $mobile_num))){
                 if($this->currentUser['username'] == $mobile_num){
                     if($this->User->save($user_info)){
                         $res = array('success'=> true, 'msg'=>'你的账号和手机号绑定成功');
                     };
                 }else{
-                    $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定');
+                    $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录');
                 }
             } else{
 //                    if($this->is_weixin()){
