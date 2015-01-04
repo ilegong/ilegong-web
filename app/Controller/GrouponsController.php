@@ -13,23 +13,12 @@ class GrouponsController extends AppController{
 
     public function beforeFilter(){
         parent::beforeFilter();
-        if (array_search($this->request->params['action'], array('mobile_bind','join', 'pay_choices')) === false) {
-            if (empty($this->currentUser['id'])) {
-                $ref = Router::url($_SERVER['REQUEST_URI']);
-                if ($this->is_weixin()) {
-                    $this->redirect(redirect_to_wx_oauth($ref, WX_OAUTH_BASE, true));
-                } else {
-                    $this->redirect('/users/login.html?referer='.$ref);
-                }
-            }else{
-                $this->loadModel('User');
-                $user_info=$this->User->find('first', array(
-                    'conditions' => array('id' => $this->currentUser['id']),
-                    'fields' => array('mobilephone')
-                ));
-                if(empty($user_info['User']['mobilephone'])){
-                    $this->redirect('/groupons/mobile_bind?referer='.urlencode($_SERVER['REQUEST_URI']));
-                }
+        if (empty($this->currentUser['id'])) {
+            $ref = Router::url($_SERVER['REQUEST_URI']);
+            if ($this->is_weixin()) {
+                $this->redirect(redirect_to_wx_oauth($ref, WX_OAUTH_BASE, true));
+            } else {
+                $this->redirect('/users/login.html?referer='.$ref);
             }
         }
         $this->pageTitle = '团购杀价';
