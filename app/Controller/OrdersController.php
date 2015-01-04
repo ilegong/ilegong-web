@@ -949,6 +949,7 @@ class OrdersController extends AppController{
 					'name'=>$this->data['OrderConsignee']['name'],
 					'address'=>$this->data['OrderConsignee']['address'],
 					'area'=>$this->data['OrderConsignee']['area'],
+                    'mobilephone'=>$this->data['OrderConsignee']['mobilephone'],
 				))
 			);
 			if($this->data['OrderConsignee']['edit_type']=='select'){
