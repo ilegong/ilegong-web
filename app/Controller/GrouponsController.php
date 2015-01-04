@@ -172,6 +172,9 @@ class GrouponsController extends AppController{
             }
         }
 
+        $balance = $this->calculate_balance($groupId, $team, $groupon);
+        $this->set('balance', $balance);
+
         if($uid === $groupon['Groupon']['user_id']){
             $this->set('is_organizer', true);
             $is_paid = $this->Groupon->is_all_paid($groupId, $team, $groupon);
@@ -180,11 +183,10 @@ class GrouponsController extends AppController{
                 //reloading
                 $groupon = $this->Groupon->findById($groupId);
             }
-        } else if (array_search($uid, $join_ids) === false){
+        } else if (array_search($uid, $join_ids) === false && $balance > $team['Team']['unit_val']){
             $this->set('not_pay', true);
         }
 
-        $this->set('balance', $this->calculate_balance($groupId, $team, $groupon));
 
         $this->set('team', $team);
         $this->set('groupon', $groupon);
