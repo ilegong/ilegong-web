@@ -161,6 +161,8 @@ class AliPayController extends AppController {
      * @param $out_trade_no
      * @param $trade_no
      * @param $isSuccess
+     * @param $attach
+     * @throws CakeException
      */
     protected function handle_return_back($verify, $trade_status, $out_trade_no, $trade_no, $isSuccess, $attach) {
         if ($verify) {
@@ -212,7 +214,7 @@ class AliPayController extends AppController {
 
         if ($order_id) {
             if ($order_type == ORDER_TYPE_GROUP) {
-                $group_url = '/groupons/join/' . $order_member_id;
+                $group_url = '/groupons/my_join/' . $order_member_id;
                 $this->redirect($group_url);
             } else {
                 $this->redirect(array('controller' => 'Orders', 'action' => 'detail', $order_id, 'pay', '?' => array('paid_msg' => $msg, 'display_status' => $display_status)));

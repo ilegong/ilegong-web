@@ -84,6 +84,7 @@ class WxPayController extends AppController {
         $this->set('orderId', $orderId);
         $this->set('group_url', $group_url);
         $this->set('isMobile', $this->RequestHandler->isMobile());
+        $this->set('hideNav', true);
     }
 
     public function jsApiPay($orderId) {

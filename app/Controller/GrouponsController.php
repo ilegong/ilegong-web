@@ -128,8 +128,19 @@ class GrouponsController extends AppController{
                     'team_id' => $groupon['Groupon']['team_id'],
                 ));
             }
-            $this->redirect('/wxPay/jsApiPay/0?action=group_pay&memberId=' . $member['GrouponMember']['id']);
+            $this->redirect('/wxPay/jsApiPay/0?action=group_pay&memberId=' . $member['GrouponMember']['id'] . '&type='.$_REQUEST['type']);
 //            $this->redirect('/wxPay/group_pay/' . $member['GrouponMember']['id']);
+        }
+    }
+
+    public function my_join($member_id) {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if (!empty($uid)) {
+            $groupon_member = $this->GrouponMember->findById($member_id);
+            $this->redirect('/groupons/join/'.$groupon_member['GrouponMember']['groupon_id']);
+        }else {
+            $this->redirect('/groupons/view');
         }
     }
 
