@@ -661,16 +661,16 @@ class OrdersController extends AppController{
         $this->tobe_shipped_orders($creator);
     }
 
-	function confirm_receive($order_id){
-        $this->Buying->confirm_receive($this->currentUser['id'], $order_id);
+	function confirm_receive(){
+        $this->Buying->confirm_receive($this->currentUser['id'], $_REQUEST['order_id']);
 	}
 
-	function confirm_undo($order_id){
-        $this->Buying->confirm_undo($this->currentUser['id'], $order_id);
+	function confirm_undo(){
+        $this->Buying->confirm_undo($this->currentUser['id'], $_REQUEST['order_id']);
 	}
 
-	function confirm_remove($order_id){
-        $this->Buying->confirm_remove($this->currentUser['id'], $order_id);
+	function confirm_remove(){
+        $this->Buying->confirm_remove($this->currentUser['id'], $_REQUEST['order_id']);
 	}
 
     public function test_add_sharedOffers($uid, $sharedOfferId, $toShareNum) {

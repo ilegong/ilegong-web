@@ -122,19 +122,19 @@ class ApiOrdersController extends AppController {
         $this->set('_serialize', array('order', 'carts', 'ship_type', 'expired_pids', 'no_more_money', 'products'));
     }
 
-    function confirm_receive(){
+    function confirm_receive($order_id){
         $buyingCom = $this->Components->load('Buying');
-        $buyingCom->confirm_receive($this->currentUser['id'], $_REQUEST['order_id']);
+        $buyingCom->confirm_receive($this->currentUser['id'], $order_id);
     }
 
-    function confirm_undo(){
+    function confirm_undo($order_id){
         $buyingCom = $this->Components->load('Buying');
-        $buyingCom->confirm_undo($this->currentUser['id'], $_REQUEST['order_id']);
+        $buyingCom->confirm_undo($this->currentUser['id'], $order_id);
     }
 
-    function confirm_remove(){
+    function confirm_remove($order_id){
         $buyingCom = $this->Components->load('Buying');
-        $buyingCom->confirm_remove($this->currentUser['id'], $_REQUEST['order_id']);
+        $buyingCom->confirm_remove($this->currentUser['id'], $order_id);
     }
 
     public function product_detail($pid) {
