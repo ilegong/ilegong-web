@@ -122,6 +122,21 @@ class ApiOrdersController extends AppController {
         $this->set('_serialize', array('order', 'carts', 'ship_type', 'expired_pids', 'no_more_money', 'products'));
     }
 
+    function confirm_receive(){
+        $buyingCom = $this->Components->load('Buying');
+        $buyingCom->confirm_receive($this->currentUser['id'], $_REQUEST['order_id']);
+    }
+
+    function confirm_undo(){
+        $buyingCom = $this->Components->load('Buying');
+        $buyingCom->confirm_undo($this->currentUser['id'], $_REQUEST['order_id']);
+    }
+
+    function confirm_remove(){
+        $buyingCom = $this->Components->load('Buying');
+        $buyingCom->confirm_remove($this->currentUser['id'], $_REQUEST['order_id']);
+    }
+
     public function product_detail($pid) {
 
         if (!empty($pid)) {

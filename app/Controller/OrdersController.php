@@ -661,72 +661,16 @@ class OrdersController extends AppController{
         $this->tobe_shipped_orders($creator);
     }
 
-	function confirm_receive(){
-        $this->edit_status_by_owner_ajax(ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, '已收货');
+	function confirm_receive($order_id){
+        $this->Buying->confirm_receive($this->currentUser['id'], $order_id);
 	}
 
-	function confirm_undo(){
-        $uid = $this->currentUser['id'];
-        $this->edit_order_by_owner_ajax(function($orderModel, $order, $order_id) use ($uid){
-            if ($order['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
-                $orderModel->cancelWaitingPayOrder($uid, $order_id, $order['Order']['creator']);
-                echo json_encode(array('order_id' => $order_id, 'ok' => 1, 'msg' => '订单已取消'));
-                exit;
-            } else {
-                echo json_encode(array('order_id' => $order_id, 'ok' => 0, 'msg' => '不能修改订单状态了。'));
-                exit;
-            }
-        });
+	function confirm_undo($order_id){
+        $this->Buying->confirm_undo($this->currentUser['id'], $order_id);
 	}
 
-	function confirm_remove(){
-        $this->edit_order_by_owner_ajax(function($orderModel, $order, $order_id){
-            if ($order['Order']['status'] == ORDER_STATUS_CANCEL) {
-                $orderModel->updateAll(array('published' => 0), array('id' => $order_id));
-                echo json_encode(array('order_id' => $order_id, 'ok' => 1));
-            } else {
-                echo json_encode(array('order_id' => $order_id, 'ok' => 0));
-            }
-            exit;
-        });
-	}
-
-	private function edit_status_by_owner_ajax($origStatus, $toStatus, $okMsg = ''){
-		$this->edit_order_by_owner_ajax(function($orderModel, $order, $order_id) use ($origStatus, $toStatus,$okMsg) {
-            if ($order['Order']['status'] == $origStatus) {
-                $orderModel->updateAll(array('status' => $toStatus), array('id' => $order_id));
-                echo json_encode(array('order_id' => $order_id, 'ok' => 1, 'msg' => $okMsg));
-                exit;
-            } else {
-                echo json_encode(array('order_id' => $order_id, 'ok' => 0, 'msg' => '不能修改订单状态了。'));
-                exit;
-            }
-        });
-	}
-
-    /**
-     * @param $fun callback:  a callback with parameters: OrderModel, curr_status, and order_id
-     */
-    private function edit_order_by_owner_ajax($fun){
-        $order_id = $_REQUEST['order_id'];
-
-        if (empty($order_id)) {
-            echo json_encode(array('order_id' => $order_id, 'msg' => '参数错误'));
-            exit;
-        }
-
-        $currUid = $this->currentUser['id'];
-        $order_info = $this->Order->find('first', array(
-            'conditions' => array('id' => $order_id, 'creator' => $currUid),
-        ));
-
-        if (empty($order_info) || $currUid != $order_info['Order']['creator']) {
-            $this->log("denied edit_order_by_owner_ajax: order($order_id) is empty?".empty($order_info).", current-user-id=".$currUid);
-            echo json_encode(array('order_id' => $order_id, 'msg' => '您不具备此订单的修改权限。'));
-            exit;
-        }
-
-        $fun($this->Order, $order_info, $order_id);
+	function confirm_remove($order_id){
+        $this->Buying->confirm_remove($this->currentUser['id'], $order_id);
 	}
 
     public function test_add_sharedOffers($uid, $sharedOfferId, $toShareNum) {

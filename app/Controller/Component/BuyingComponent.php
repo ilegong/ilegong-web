@@ -251,5 +251,74 @@ class BuyingComponent extends Component {
         return array($cart, $shipFee, $shipFees);
     }
 
+    function confirm_receive($uid, $order_id){
+        $this->edit_status_by_owner_ajax($uid, $order_id, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, '已收货');
+    }
+
+    function confirm_undo($uid, $order_id){
+        $this->edit_order_by_owner_ajax($uid, $order_id, function($orderModel, $order, $order_id) use ($uid){
+            if ($order['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
+                $orderModel->cancelWaitingPayOrder($uid, $order_id, $order['Order']['creator']);
+                echo json_encode(array('order_id' => $order_id, 'ok' => 1, 'msg' => '订单已取消'));
+                exit;
+            } else {
+                echo json_encode(array('order_id' => $order_id, 'ok' => 0, 'msg' => '不能修改订单状态了。'));
+                exit;
+            }
+        });
+    }
+
+    function confirm_remove($uid, $order_id){
+        $this->edit_order_by_owner_ajax($uid, $order_id, function($orderModel, $order, $order_id){
+            if ($order['Order']['status'] == ORDER_STATUS_CANCEL) {
+                $orderModel->updateAll(array('published' => 0), array('id' => $order_id));
+                echo json_encode(array('order_id' => $order_id, 'ok' => 1));
+            } else {
+                echo json_encode(array('order_id' => $order_id, 'ok' => 0));
+            }
+            exit;
+        });
+    }
+
+    private function edit_status_by_owner_ajax($uid, $order_id, $origStatus, $toStatus, $okMsg = ''){
+        $this->edit_order_by_owner_ajax($uid, $order_id, function($orderModel, $order, $order_id) use ($origStatus, $toStatus,$okMsg) {
+            if ($order['Order']['status'] == $origStatus) {
+                $orderModel->updateAll(array('status' => $toStatus), array('id' => $order_id));
+                echo json_encode(array('order_id' => $order_id, 'ok' => 1, 'msg' => $okMsg));
+                exit;
+            } else {
+                echo json_encode(array('order_id' => $order_id, 'ok' => 0, 'msg' => '不能修改订单状态了。'));
+                exit;
+            }
+        });
+    }
+
+    /**
+     * @param $currUid
+     * @param $order_id
+     * @param $fun callback:  a callback with parameters: OrderModel, curr_status, and order_id
+     */
+    private function edit_order_by_owner_ajax($currUid, $order_id, $fun){
+
+        if (empty($order_id)) {
+            echo json_encode(array('order_id' => $order_id, 'msg' => '参数错误'));
+            exit;
+        }
+
+        $orderM = ClassRegistry::init('Order');
+
+        $order_info = $orderM->find('first', array(
+            'conditions' => array('id' => $order_id, 'creator' => $currUid),
+        ));
+
+        if (empty($order_info) || $currUid != $order_info['Order']['creator']) {
+            $this->log("denied edit_order_by_owner_ajax: order($order_id) is empty?".empty($order_info).", current-user-id=".$currUid);
+            echo json_encode(array('order_id' => $order_id, 'msg' => '您不具备此订单的修改权限。'));
+            exit;
+        }
+
+        $fun($orderM, $order_info, $order_id);
+    }
+
 }
 ?>
