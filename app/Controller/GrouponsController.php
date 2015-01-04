@@ -22,7 +22,6 @@ class GrouponsController extends AppController{
             }
         }
         $this->pageTitle = '组团购';
-        $this->set('hideNav', true);
     }
     public function view($slug = null){
         if(empty($slug)){
