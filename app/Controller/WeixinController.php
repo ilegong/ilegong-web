@@ -143,7 +143,7 @@ class WeixinController extends AppController {
 
             $special = $this->getSpecialTitle($from, $input);
             if (!empty($special)) {
-                echo $this->newArticleMsg($user, $me, array('url' => $special['url'], 'title' => $special['title'], 'picUrl' => $special['pic'], 'description' => '点击查看详情，获得你的前世吃货身份'));
+                echo $this->newArticleMsg($user, $me, array(array('url' => $special['url'], 'title' => $special['title'], 'picUrl' => $special['pic'], 'description' => '点击查看详情，获得你的前世吃货身份')));
                 return;
             }
 
