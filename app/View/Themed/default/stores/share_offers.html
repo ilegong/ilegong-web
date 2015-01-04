@@ -20,7 +20,7 @@
                 '开始时间',
                 '结束时间',
                 '有效时间(天)',
-                '红包金额(元)',
+                '红包平均金额(元)',
                 '默认红包',
 
                 '操作'
@@ -35,8 +35,8 @@
                             .'|'.$this->Html->link('删除',array('action' => 'delete_share_offers', $store_offer['ShareOffer']['id']),array('confirm' => '确定删除嘛？'))
                             .'|'.$this->Html->link('发红包',array('action' => 'publish_share_offers'),array('class' => 'button','id'=>$store_offer['ShareOffer']['id'],'number'=>$store_offer['ShareOffer']['avg_number']));
                  } else {
-                $actions = ' '.$this->Html->link('修改',array('action' => 'edit_share_offers', $store_offer['ShareOffer']['id']))
-                .'|'.$this->Html->link('发红包',array('action' => 'publish_share_offers'),array('class' => 'button','id'=>$store_offer['ShareOffer']['id'],'number'=>$store_offer['ShareOffer']['avg_number']));
+                $actions = ' '.$this->Html->link('修改',array('action' => 'edit_share_offers', $store_offer['ShareOffer']['id']));
+
                 }
                 }
                  if ($store_offer['ShareOffer']['is_default'] == 1) {$msg='是';}

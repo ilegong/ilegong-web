@@ -43,13 +43,6 @@
         </div>
     </div>
 
-    <div class="form-group">
-        <label class="col-sm-2 control-label" for="share_offeratio_percent">返还比率</label>
-        <div class="col-sm-6 controls number">
-            {{$this->Form->input('ratio_percent',array('class'=>'form-control','div'=>false,'label'=>false))}}
-            <p class="help-block">红包金额＝订单金额＊返利比率,例：返利比例为10，表示10%</p>
-        </div>
-    </div>
 
     <!--<div class="form-group">-->
         <!--<label class="col-sm-2 control-label" for="share_offer_num">红包数目</label>-->
@@ -76,14 +69,23 @@
     <!--</div>-->
 
 
-    {{if empty($store_offer)}}
+    {{if $store_offer['ShareOffer']['is_default']==1}}
     <div class="form-group">
         <label class="col-sm-2 control-label" for="share_offeris_default">是否创建默认红包</label>
         <div class="col-sm-6 controls">
             {{$this->Form->input('is_default',array('class'=>'form-control','type'=>'select','options'=>array('0'=>'否','1'=>'是',),'div'=>false,'label'=>false))}}
-            <p class="help-block">每位商家只能创建一个默认红包</p>
+            <p class="help-block">可以修改默认红包为普通红包,每位商家只能创建一个默认红包,默认红包在用户购买商品后会自动发出</p>
         </div>
     </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label" for="share_offeratio_percent">返还比率</label>
+        <div class="col-sm-6 controls number">
+            {{$this->Form->input('ratio_percent',array('class'=>'form-control','div'=>false,'label'=>false))}}
+            <p class="help-block">红包金额＝订单金额＊返利比率,例：返利比例为10，表示10%;只针对默认红包</p>
+        </div>
+    </div>
+    
     {{/if}}
 
     <div class="form-group">

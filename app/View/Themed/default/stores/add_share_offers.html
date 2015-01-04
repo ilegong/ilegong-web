@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label" for="share_offerend">截至时间</label>
+            <label class="col-sm-2 control-label" for="share_offerend">截止时间</label>
             <div class="col-sm-6 controls">
                 <input type="text" value=""  class="form-control" id="share_offerend" maxlength="100" name="data[ShareOffer][end]">
                 <p class="help-block">从这个日期过后，用户购买商品后不再送他红包</p>
@@ -48,13 +48,7 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="col-sm-2 control-label" for="share_offeratio_percent">返利比率</label>
-            <div class="col-sm-6 controls">
-                <input type="text" value=""  class="form-control" id="share_offeratio_percent" maxlength="100" name="data[ShareOffer][ratio_percent]">
-                <p class="help-block">红包金额＝订单金额＊返利比率,例：返利比例为10，表示10%；订单金额为100元，红包就是10元</p>
-            </div>
-        </div>
+
 
         <!--<div class="form-group">-->
             <!--<label class="col-sm-2 control-label" for="share_offer_num">红包数目</label>-->
@@ -91,9 +85,18 @@
                     <option value="0">否</option>
                     <option value="1">是</option>
                 </select>
-                <p class="help-block">每位商家只能创建一个默认红包</p>
+                <p class="help-block">每位商家只能创建一个默认红包，默认红包在用户购买商家商品并付款后会自动发出</p>
             </div>
         </div>
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label" for="share_offeratio_percent">返利比率</label>
+            <div class="col-sm-6 controls">
+                <input type="text" value=""  class="form-control" id="share_offeratio_percent" maxlength="100" name="data[ShareOffer][ratio_percent]">
+                <p class="help-block">红包金额＝订单金额＊返利比率,例：返利比例为10，表示10%；订单金额为100元，红包就是10元;只针对默认红包</p>
+            </div>
+        </div>
+
         {{/if}}
 
         <div class="form-group">

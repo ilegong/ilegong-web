@@ -664,6 +664,8 @@ class StoresController extends AppController
        $this->checkAccess();
         $brand_id = $this->brand['Brand']['id'];
         $datainfo = $this->find_share_offers_by_id_and_brandid($id,$brand_id);
+
+        $store_offer = $this->ShareOffer->find('first',array('conditions' =>array('id' => $id),'fields' => array('is_default')));
         $this->log('datainfo'.json_encode($datainfo));
         if (empty($datainfo)) {
             throw new ForbiddenException(__('You cannot edit this data'));
@@ -683,6 +685,7 @@ class StoresController extends AppController
 //             $this->log('time'.json_encode($this->data['ShareOffer']['start']));
 
         }
+        $this->set('store_offer',$store_offer); $this->log('store_offer'.json_encode($store_offer));
         $this->set('opt','share_offers');
     }
 

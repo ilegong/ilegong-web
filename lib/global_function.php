@@ -1324,7 +1324,7 @@ function get_shichituan_period($time = null) {
     if ($time == null) {
         $time = time();
     }
-    return ((date('y', $time) <= 2014) ? (date('m', $time) - 8) : (date('m', $time) + 4));
+    return ((date('Y', $time) <= 2014) ? (date('m', $time) - 8) : (date('m', $time) + 4));
 }
 
 function create_user_cond($uid, $sessionId = null) {
