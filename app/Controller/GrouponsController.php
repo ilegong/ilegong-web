@@ -5,7 +5,7 @@
  * Date: 14/12/24
  * Time: 下午4:48
  */
-define('STATUS_GROUP__PAID',1);
+
 class GrouponsController extends AppController{
     var $name = 'Groupon';
 
@@ -62,7 +62,7 @@ class GrouponsController extends AppController{
             }
             $this->loadModel('GrouponMember');
             $grouponMember = $this->GrouponMember->find('first', array(
-                'conditions' =>array('user_id' => $uid, 'team_id' => $team['Team']['id'], 'status' => STATUS_GROUP__PAID),
+                'conditions' =>array('user_id' => $uid, 'team_id' => $team['Team']['id'], 'status' => STATUS_GROUP_MEM_PAID),
                 'fields' => array('id')
             ));
             if($grouponMember){
@@ -84,7 +84,7 @@ class GrouponsController extends AppController{
                 $res = array('success'=> false, 'msg'=>'团购项目不存在');
             }else{
                 $this->loadModel('GrouponMember');
-                if($this->GrouponMember->hasAny(array('user_id' => $current_uid, 'status' => STATUS_GROUP__PAID, 'team_id' => $team['Team']['id'] ))){
+                if($this->GrouponMember->hasAny(array('user_id' => $current_uid, 'status' => STATUS_GROUP_MEM_PAID, 'team_id' => $team['Team']['id'] ))){
                     $res = array('success'=> false, 'msg'=>'您已经参加过该商品的一次团了');
                 }else{
                     $info = array();
@@ -155,7 +155,7 @@ class GrouponsController extends AppController{
         };
         $this->loadModel('GrouponMember');
         $join_users = $this->GrouponMember->find('list', array(
-            'conditions' => array('groupon_id' => $groupId, 'status' => STATUS_GROUP__PAID),
+            'conditions' => array('groupon_id' => $groupId, 'status' => STATUS_GROUP_MEM_PAID),
             'fields' => array('user_id','created')
         ));
         $join_ids = array_keys($join_users);
