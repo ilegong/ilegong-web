@@ -36,7 +36,12 @@ class Order extends AppModel {
 
             return $order;
         } else {
-            return $existsOrder;
+
+            if (abs($existsOrder['Order']['total_all_price'] * 100 - $fee * 100) >= 1 && $existsOrder['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
+                $this->Order->updateAll(array('total_all_price'  => $fee), array('id' => $existsOrder['Order']['id'], 'status' => ORDER_STATUS_WAITING_PAY));
+            }
+
+            return $this->createOrFindGrouponOrder($memberId, $uid, $fee, $product_id, $type);
         }
     }
 
