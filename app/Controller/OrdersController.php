@@ -1410,6 +1410,7 @@ class OrdersController extends AppController{
                 if (empty($curr_coupon_item)) {
                     $reason = 'share_type_not_exists';
                 } else {
+                    $curr_coupon_item = $curr_coupon_item[0];
                     //这里必须安店面去限定
                     //要把没有查询到的couponItem去掉
                     if ($curr_coupon_item['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER
