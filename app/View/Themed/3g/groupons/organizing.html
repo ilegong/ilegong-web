@@ -57,11 +57,11 @@
             $('#edit_address').show();
         })
         $('#confirm_address').bind('click', function(){
-            var provice_name = $("#provinceDiv option:selected").text();
+            var province_name = $("#provinceDiv option:selected").text();
             var city_name = $("#cityDiv option:selected").text();
             var add_detailed = $('#detailed_address').val();
             $('#default_tip').hide();
-            $('#my_address').text(provice_name + ' ' + city_name + ' ' + add_detailed).show();
+            $('#my_address').text(province_name + ' ' + city_name + ' ' + add_detailed).show();
             $('#edit_address').hide();
         });
         $('#confirm_next').on('click',function(){
@@ -87,11 +87,13 @@
                 var mobile = $("#mobile_number").val();
                 var address = $('#my_address').text();
                 var team = $('#team').val();
+                var province_id = $("#provinceDiv option:selected").val();
+                var city_id = $("#cityDiv option:selected").val();
                 jQuery.ajax({
                     type: "POST",
                     dataType: "json",
                     url: "/groupons/organizing",
-                    data: {name: name, mobile: mobile, address: address, team: team},
+                    data: {name: name, mobile: mobile, address: address, team: team, province_id:province_id, city_id:city_id },
                     success: function (a) {
                         if (a.success) {
                             $("#confirm_next").attr('data-disable', 'true');

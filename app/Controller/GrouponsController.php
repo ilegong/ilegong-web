@@ -90,6 +90,8 @@ class GrouponsController extends AppController{
                     $info['Groupon']['mobile'] = $_POST['mobile'];
                     $info['Groupon']['address'] = $_POST['address'];
                     $info['Groupon']['team_id'] = $team['Team']['id'];
+                    $info['Groupon']['province_id'] = intval($_POST['province_id']);
+                    $info['Groupon']['city_id'] = intval($_POST['city_id']);
                     $info['Groupon']['user_id'] = $current_uid;
 
                     if($this->Groupon->save($info)){
