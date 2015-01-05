@@ -37,7 +37,7 @@ class Order extends AppModel {
                 'consignee_area' => $area,
                 'consignee_name' => $name,
                 'consignee_address' => $address,
-                'consignee_mobile' => $mobile,
+                'consignee_mobilephone' => $mobile,
             );
             $order = $this->save($arr);
             if (!empty($order)) {
