@@ -47,6 +47,7 @@
         <div>
             <h3>基本信息</h3>
             <br/>
+            {{if $order['Order']['type'] == ORDER_TYPE_GROUP_FILL}}<span>这是一个组团购订单</span><br/>{{/if}}
          <p class="col-xs-12"> 订单状态：<span class="order_status_text">
                     {{if $order['Order']['status']==0}}等待付款
                     {{elseif $order['Order']['status']==1}}已支付
