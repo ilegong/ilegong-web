@@ -204,6 +204,8 @@ class GrouponsController extends AppController{
             $will_closed = $balance <= $team['Team']['unit_val'];
             if ($joinedCnt < 1 && !$will_closed) {
                 $this->set('not_pay', true);
+            } else if ($joinedCnt>=1) {
+                $this->set('joined_exceed', true);
             }
             $found = $this->Groupon->find('first', array(
                 'conditions' => array('user_id' => $uid)

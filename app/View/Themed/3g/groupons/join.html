@@ -38,7 +38,7 @@
     {{if $complete}}
 <div class="can_paid">团购已完成, 等待收货吧!</div>
     {{/if}}
-<a href="javascript:;" id="share_to_friend" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share.png')}}" /></a>
+<a href="javascript:;" id="share_to_friend" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share.jpg')}}" /></a>
         {{if ($groupon['Groupon']['status'] != STATUS_GROUP_REACHED)}}
 <a href="/groupons/go_join/{{$groupon['Groupon']['id']}}?type=done" class="newtuanbtn radius10">支付{{$balance/100}}元结束团购</a>
         {{/if}}
@@ -47,12 +47,14 @@
         {{/if}}
 {{else}}
     {{if $complete}}
-<div class="can_paid">团购已完成, 等待收货吧!</div>
+        <div class="can_paid">团购已完成, 等待收货吧!</div>
+        {{elseif $joined_exceed}}
+        <div class="can_paid">每人只能团一次，您已参过团啦</div>
     {{/if}}
         {{if $not_pay}}
 <a href="/groupons/go_join/{{$groupon['Groupon']['id']}}" class="tuanbtn radius10">支付{{$team['Team']['unit_pay']/100}}元参团</a>
         {{/if}}
-<a href="javascript:;" id="share_to_friend2" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share.png')}}" /></a>
+<a href="javascript:;" id="share_to_friend2" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share.jpg')}}" /></a>
         {{if !$has_organized}}
 <a href="/groupons/organizing.html?team={{$team['Team']['slug']}}" class="newtuanbtn radius10">{{ ($closed?"本团已满":"不在一起?"). "发起新团"}}</a>
         {{/if}}
