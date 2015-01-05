@@ -8,7 +8,7 @@
 
 class Order extends AppModel {
 
-    public function createOrFindGrouponOrder($memberId, $uid, $fee, $product_id, $type = ORDER_TYPE_GROUP) {
+    public function createOrFindGrouponOrder($memberId, $uid, $fee, $product_id, $type = ORDER_TYPE_GROUP, $area='', $address='', $mobile='', $name='') {
         if ($type != ORDER_TYPE_GROUP && $type != ORDER_TYPE_GROUP_FILL) {
             throw new CakeException("error order type:".$type);
         }
@@ -21,11 +21,23 @@ class Order extends AppModel {
         ));
 
         if (empty($existsOrder)) {
+
+            $product = ClassRegistry::init('Product')->find('first', array(
+                'conditions' => array('id' => $product_id),
+                'fields' => 'brand_id',
+            ));
+            $brand_id = empty($product)? 0 : $product['Product']['brand_id'];
+
             $arr = array(
                 'creator' => $uid,
                 'total_all_price' => $fee,
                 'type' => $type,
-                'member_id' => $memberId
+                'brand_id' => $brand_id,
+                'member_id' => $memberId,
+                'consignee_area' => $area,
+                'consignee_name' => $name,
+                'consignee_address' => $address,
+                'consignee_mobile' => $mobile,
             );
             $order = $this->save($arr);
             if (!empty($order)) {
@@ -39,7 +51,7 @@ class Order extends AppModel {
 
             if (abs($existsOrder['Order']['total_all_price'] * 100 - $fee * 100) >= 1 && $existsOrder['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
                 $this->updateAll(array('total_all_price'  => $fee), array('id' => $existsOrder['Order']['id'], 'status' => ORDER_STATUS_WAITING_PAY));
-                return $this->createOrFindGrouponOrder($memberId, $uid, $fee, $product_id, $type);
+                return $this->createOrFindGrouponOrder($memberId, $uid, $fee, $product_id, $type, $area, $address, $mobile, $name);
             } else {
                 return $existsOrder;
             }

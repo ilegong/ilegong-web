@@ -66,13 +66,17 @@ class WxPayController extends AppController {
             $groupon = $this->Groupon->findById($groupon_id);
             if ($groupon['Groupon']['user_id'] == $uid) {
                 $fee = $this->Groupon->calculate_balance($groupon_id, $team, $groupon);
+                $area = $groupon['Groupon']['area'];
+                $address = $groupon['Groupon']['address'];
+                $mobile = $groupon['Groupon']['mobile'];
+                $name = $groupon['Groupon']['name'];
             } else {
                 $this->__message('您不是团购的发起人，不能提前结束团购', $group_url);
             }
         }
 
         $order_type = ($type == 'done' ? ORDER_TYPE_GROUP_FILL : ORDER_TYPE_GROUP);
-        $order = $this->Order->createOrFindGrouponOrder($memberId, $uid, $fee/100, $team['Team']['product_id'], $order_type);
+        $order = $this->Order->createOrFindGrouponOrder($memberId, $uid, $fee/100, $team['Team']['product_id'], $order_type, $area, $address, $mobile, $name);
         if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
             $this->__message('您已经支付过了', $group_url);
             return;
