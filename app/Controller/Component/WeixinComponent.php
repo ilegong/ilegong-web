@@ -435,11 +435,25 @@ class WeixinComponent extends Component
 
                 $ship_info = $groupon['Groupon']['address'] . $groupon['Groupon']['name'];
 
+                $organizerNotified = false;
                 foreach($gmLists as $gml) {
                     $curr_uid = $gml['GrouponMember']['user_id'];
                     $wxBind = $oauthBindModel->findWxServiceBindByUid($curr_uid);
                     if (!empty($wxBind)) {
-                        $this->send_groupon_paid_message($wxBind['oauth_openid'], $price, $url, $order['Order']['id'], $team['Team']['name'], $isDone, $curr_uid == $orderCreator, $curr_uid == $organizerId, $organizerName, $newMemberName, $leftPeople, $ship_info);
+                        $this->send_groupon_paid_message($wxBind['oauth_openid'], $price, $url, $orderCreator,
+                            $team['Team']['name'], $isDone, $curr_uid == $orderCreator, $curr_uid == $organizerId,
+                            $organizerName, $newMemberName, $leftPeople, $ship_info);
+                        if ($curr_uid == $organizerId) {
+                            $organizerNotified = true;
+                        }
+                    }
+                }
+                if (!$organizerNotified) {
+                    $wxBind = $oauthBindModel->findWxServiceBindByUid($organizerId);
+                    if (!empty($wxBind)) {
+                        $this->send_groupon_paid_message($wxBind['oauth_openid'], $price, $url, $orderCreator,
+                            $team['Team']['name'], $isDone, $organizerId == $orderCreator, true,
+                            $organizerName, $newMemberName, $leftPeople, $ship_info);
                     }
                 }
 
