@@ -48,13 +48,11 @@ $(function() {
         $.each(tags,function(index,tag){
             if(!tagIsInMap(tag)){
                 var mapData = spec_obj['map'];
-                mapData[maxIndex] = tag;
+                mapData[maxIndex] = {"name":tag};
                 update = true;
             }
         });
-        if(update){
-            updateView();
-        }
+        updateView();
     }
 
     function updateView(){
@@ -71,23 +69,24 @@ $(function() {
         }
     }
     function removeJsonCode(tag){
-        if($.inArray(tag, hasSelect)){
+        if($.inArray(tag, hasSelect)>=0){
             //remove data
-            hasSelect = $.grep(hasSelect, function(tag) {
-                return value != tag;
-            });
+            hasSelect.splice($.inArray(tag,hasSelect),1);
             updateChoice(hasSelect);
             updateData(hasSelect);
         }
+
     }
 
     function tagIsInMap(tag){
+        var flag = false;
         $.each(spec_obj['map'],function(key,value){
             if(value['name']==tag){
-                return true;
+                flag = true;
+                return false;
             }
         });
-        return false;
+        return flag;
     }
 
     function updateChoice(hasSelect){
