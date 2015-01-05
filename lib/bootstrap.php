@@ -7,6 +7,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 const ORDER_TYPE_DEF = 1;
 const ORDER_TYPE_GROUP = 2;
+const ORDER_TYPE_GROUP_FILL = 4;
 
 App::build(array(
 	'plugins' => array(COMMON_PATH.'Plugin'.DS, APP_PATH.'Plugin'.DS, ),
