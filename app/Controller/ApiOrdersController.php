@@ -10,7 +10,7 @@ class ApiOrdersController extends AppController {
     public $components = array('OAuth.OAuth', 'Session');
     public function beforeFilter() {
         parent::beforeFilter();
-        $allow_action = array('product_detail', 'store_list', 'product_content', 'store_content', 'store_story','oauth_writte');
+        $allow_action = array('test','product_detail', 'store_list', 'product_content', 'store_content', 'store_story','oauth_writte');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action)  == false) {
             $this->currentUser = $this->OAuth->user();
@@ -654,6 +654,7 @@ class ApiOrdersController extends AppController {
         }
         $this->set('_serialize', 'info');
     }
+    public function test(){}
 
 
 }

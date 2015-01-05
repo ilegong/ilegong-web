@@ -33,7 +33,7 @@
                 <span>个性签名:</span>
                 <span class="glyphicon glyphicon-chevron-right pull-right"></span>
                 <span class="text-right pull-right">
-                    {{if $profile['bio']}}$profile['bio']{{else}}暂无{{/if}}
+                    {{if $profile['bio']}}{{$profile['bio']}}{{else}}暂无{{/if}}
                 </span>
             </li>
         </ul>
