@@ -10,7 +10,7 @@ class ApiOrdersController extends AppController {
     public $components = array('OAuth.OAuth', 'Session');
     public function beforeFilter() {
         parent::beforeFilter();
-        $allow_action = array('test','product_detail', 'store_list', 'product_content', 'store_content', 'store_story','oauth_writte');
+        $allow_action = array('test','product_detail', 'store_list', 'product_content', 'store_content', 'store_story');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action)  == false) {
             $this->currentUser = $this->OAuth->user();
@@ -655,6 +655,26 @@ class ApiOrdersController extends AppController {
         $this->set('_serialize', 'info');
     }
     public function test(){}
+
+    public  function edit_my_profile(){
+        $allow_edit_fields = array('nickname'=>'', 'image'=>'', 'sex'=>'', 'bio'=>'', 'companies'=>'');
+        $info = array('success' => false);
+        $postStr = file_get_contents('php://input');
+        $data = json_decode(trim($postStr), true);
+        $accept_data=array_intersect_key($data, $allow_edit_fields);
+        if(array_key_exists('sex', $accept_data)){
+            $accept_data['sex'] = intval($accept_data['sex']);
+        }
+        $userM = ClassRegistry::init('User');
+        if($this->currentUser['id']){
+            $accept_data['id'] = $this->currentUser['id'];
+            if($userM->save($accept_data)){
+                $info = array('success' => true, 'my_profile' => $accept_data);
+            }
+        }
+        $this->set('info', $info);
+        $this->set('_serialize', 'info');
+    }
 
 
 }
