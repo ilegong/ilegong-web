@@ -149,7 +149,7 @@ class WxPayController extends AppController {
                 //触发微信返回code码
                 $url = $jsApi->createOauthUrlForCode(WxPayConf_pub::JS_API_CALL_URL . '/' . $orderId . '?showwxpaytitle=1');
                 Header("Location: $url");
-                return;
+                exit();   //cannot use return!!!
             } else {
                 //获取code码，以获取openid
                 $code = $_GET['code'];
