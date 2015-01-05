@@ -40,7 +40,7 @@
     {{/if}}
 <a href="javascript:;" id="share_to_friend" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share.png')}}" /></a>
         {{if ($groupon['Groupon']['status'] != STATUS_GROUP_REACHED)}}
-<a href="/groupons/go_join/{{$groupon['Groupon']['id']}}?type=done" class="newtuanbtn radius10">支付{{$balance/100}}元成团</a>
+<a href="/groupons/go_join/{{$groupon['Groupon']['id']}}?type=done" class="newtuanbtn radius10">支付{{$balance/100}}元结束团购</a>
         {{/if}}
         {{if $my_join_id}}
 <a href="/groupons/join/{{$my_join_id['GrouponMember']['groupon_id']}}" class="newtuanbtn radius10" style="margin-top:0.2em">我参与的团</a>
