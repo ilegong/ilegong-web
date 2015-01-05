@@ -54,7 +54,7 @@
         {{if $not_pay}}
 <a href="/groupons/go_join/{{$groupon['Groupon']['id']}}" class="tuanbtn radius10">支付{{$team['Team']['unit_pay']/100}}元参团</a>
         {{/if}}
-<a href="javascript:;" id="share_to_friend2" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share.jpg')}}" /></a>
+<a href="javascript:;" id="share_to_friend2" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share1.png')}}" /></a>
         {{if !$has_organized}}
 <a href="/groupons/organizing.html?team={{$team['Team']['slug']}}" class="newtuanbtn radius10">{{ ($closed?"本团已满":"不在一起?"). "发起新团"}}</a>
         {{/if}}
