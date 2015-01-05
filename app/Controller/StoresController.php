@@ -398,7 +398,9 @@ class StoresController extends AppController
             return;
         }
 
-        $cond = array('brand_id' => $brand_id, 'NOT' => array(
+        $cond = array('brand_id' => $brand_id,
+            'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL),
+            'NOT' => array(
             'status' => array(ORDER_STATUS_CANCEL)
         ));
         $cond['status'] = $onlyStatus;

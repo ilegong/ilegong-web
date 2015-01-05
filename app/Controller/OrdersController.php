@@ -1192,7 +1192,9 @@ class OrdersController extends AppController{
             return;
         }
 
-        $cond = array('brand_id' => $brand_ids, 'NOT' => array(
+        $cond = array('brand_id' => $brand_ids,
+            'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL),
+            'NOT' => array(
             'status' => array(ORDER_STATUS_CANCEL)
         ));
 
