@@ -623,13 +623,15 @@ class ApiOrdersController extends AppController {
         $data['city_id']= intval($inputData['city_id']);
         $data['county_id']= intval($inputData['county_id']) ;
         $data['mobilephone'] = $inputData['mobilephone'];
-        $area = $areaC->find('list', array(
-            'conditions'=> array('id' => array($data['province_id'], $data['city_id'], $data['county_id'])),
-            'fields'=> array('name')
-        ));
-        $data['area']= implode("", $area);
-        $info = array('success' => false);;
-        if($inputData['type'] && $inputData['type'] == 'edit' && $inputData['id'] && $inputData['mobilephone']){
+        if($inputData['province_id']){
+            $area = $areaC->find('list', array(
+                'conditions'=> array('id' => array($data['province_id'], $data['city_id'], $data['county_id'])),
+                'fields'=> array('name')
+            ));
+            $data['area']= implode("", $area);
+        }
+        $info = array('success' => false);
+        if($inputData['type'] == 'edit' && $inputData['id'] && $inputData['mobilephone']){
             $data['id'] = $inputData['id'];
             if($orderC->hasAny(array('creator' => $this->currentUser['id'], 'id' => $inputData['id']))){
 
@@ -642,6 +644,11 @@ class ApiOrdersController extends AppController {
             if($orderC->save($data)){
                 $info =  array('success' => true);
             }
+        }else if($inputData['type'] == 'default' && $inputData['id']){
+            $oid = intval($inputData['id']);
+            $orderC->updateAll(array('status'=> 0), array('creator' => $this->currentUser['id']));
+            $orderC->updateAll(array('status'=> 1), array('id' => $oid,'creator' => $this->currentUser['id']));
+            $info =  array('success' => true);
         }
         $this->set('info', $info);
         $this->set('_serialize', 'info');
