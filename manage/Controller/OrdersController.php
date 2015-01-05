@@ -188,7 +188,8 @@ class OrdersController extends AppController{
         $this->loadModel('Order');
         $conditions = array(
             'Order.created >"' . date("Y-m-d\TH:i:s", $start_date) . '"',
-            'Order.created <"' . date("Y-m-d\TH:i:s", $end_date) . '"'
+            'Order.created <"' . date("Y-m-d\TH:i:s", $end_date) . '"',
+            'Order.type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL)
         );
         if($brand_id !=0){
             array_push($conditions,'Order.brand_id = '.$brand_id);

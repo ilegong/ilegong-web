@@ -5,6 +5,9 @@ include_once COMMON_PATH.'global_function.php';
 
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
+const ORDER_TYPE_DEF = 1;
+const ORDER_TYPE_GROUP = 2;
+
 App::build(array(
 	'plugins' => array(COMMON_PATH.'Plugin'.DS, APP_PATH.'Plugin'.DS, ),
 	//'views' => array(COMMON_PATH.'View'.DS),
