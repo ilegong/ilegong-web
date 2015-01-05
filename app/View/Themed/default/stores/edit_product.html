@@ -4,6 +4,7 @@ body{
 	overflow-x:hidden;
 }
 </style>
+{{$this->Html->css(array('/js/tag_input/jquery.tagsinput.css',))}}
 <h2><span class="title">编辑商品</span></h2>
 
 {{$this->Form->create('Product', array('url' => array('controller' => 'stores', 'action'=>'edit_product', $id) , 'class'=>'form-horizontal','role'=>'form'))}}
@@ -54,6 +55,23 @@ body{
         </div>
     </div>
 
+    <div class="form-group">
+        <label class="col-sm-2 control-label" for="ProductSpecs">产品规格</label>
+        <div class="col-sm-9 controls">
+            <input type="text"  class="form-control" id="product_tag_name" placeholder="规格名称">
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="hidden" value="" id="product_specs" name="data[Product][specs]" />
+        <div class="col-sm-9 controls col-sm-offset-2">
+            <input id="spec_tags" type="text" class="tags">
+            <p class="help-block">结果<pre id="json_spec_str">{{if $this->data['Product']['specs']}}
+{{$this->data['Product']['specs']}}{{else}}
+{"map": {}, "choices": { "规格": []}}{{/if}}
+        </pre></p>
+        </div>
+    </div>
+
 	<div class="form-group">
 		<label class="col-sm-2 control-label" for="ProductName">商品描述</label>
 	</div>
@@ -76,6 +94,8 @@ body{
 	'swfupload/swfupload.cookies.js',
 	'swfupload/fileprogress.js',
 	'swfupload/handlers.js',
+    'tag_input/jquery.tagsinput.min.js',
+    'product_spec.js'
 ))}}
 <script>
 $(function(){

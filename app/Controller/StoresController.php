@@ -15,7 +15,7 @@ class StoresController extends AppController
 
 
     /* lower case */
-    public $allowdPostProductFields = array('id', 'promote_name', 'name', 'coverimg', 'content', 'published', 'price', 'ship_fee', 'original_price');
+    public $allowdPostProductFields = array('id', 'promote_name', 'name', 'coverimg', 'content', 'published', 'price', 'ship_fee', 'original_price','specs');
 
     public $brand = null;
 
