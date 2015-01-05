@@ -21,6 +21,16 @@ class GrouponsController extends AppController{
                 $this->redirect('/users/login.html?referer='.$ref);
             }
         }
+        if (array_search($this->request->params['action'], array('mobile_bind','view', 'join')) === false){
+            $this->loadModel('User');
+            $user_info=$this->User->find('first', array(
+                'conditions' => array('id' => $this->currentUser['id']),
+                'fields' => array('mobilephone')
+            ));
+            if(empty($user_info['User']['mobilephone'])){
+                $this->redirect('/groupons/mobile_bind?referer='.urlencode($_SERVER['REQUEST_URI']));
+            }
+        }
         $this->pageTitle = '组团来杀价，一元抵五元';
     }
     public function view($slug = null){
