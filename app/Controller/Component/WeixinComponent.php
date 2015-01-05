@@ -440,7 +440,7 @@ class WeixinComponent extends Component
                     $curr_uid = $gml['GrouponMember']['user_id'];
                     $wxBind = $oauthBindModel->findWxServiceBindByUid($curr_uid);
                     if (!empty($wxBind)) {
-                        $this->send_groupon_paid_message($wxBind['oauth_openid'], $price, $url, $orderCreator,
+                        $this->send_groupon_paid_message($wxBind['oauth_openid'], $price, $url, $order_id,
                             $team['Team']['name'], $isDone, $curr_uid == $orderCreator, $curr_uid == $organizerId,
                             $organizerName, $newMemberName, $leftPeople, $ship_info);
                         if ($curr_uid == $organizerId) {
@@ -451,7 +451,7 @@ class WeixinComponent extends Component
                 if (!$organizerNotified) {
                     $wxBind = $oauthBindModel->findWxServiceBindByUid($organizerId);
                     if (!empty($wxBind)) {
-                        $this->send_groupon_paid_message($wxBind['oauth_openid'], $price, $url, $orderCreator,
+                        $this->send_groupon_paid_message($wxBind['oauth_openid'], $price, $url, $order_id,
                             $team['Team']['name'], $isDone, $organizerId == $orderCreator, true,
                             $organizerName, $newMemberName, $leftPeople, $ship_info);
                     }
