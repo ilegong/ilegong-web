@@ -62,7 +62,16 @@
 <div class="listbg mt12">
     <a href="#X" id="event">参团记录<span class="moreicon"><img src="{{$this->Html->assetUrl('/img/groupon/more.png')}}" /></span></a>
     <div id="event_list" style="display:none;">
-        <ul class="tuan_list">
+        <ul class="tuan_list" id="front_record">
+            <?php $remark_num=(count($join_info)>2 ? 2:count($join_info)); for ($i=0 ; $i < $remark_num; $i++) {?>
+            <li class="clearfix">
+                <span class="title fl">{{$join_info[$i]['nickname']?$join_info[$i]['nickname']:'匿名'}}</span>
+                <span class="fl">{{$join_info[$i]['time']}}</span>
+            </li>
+            <?PHP } ?>
+
+        </ul>
+        <ul class="tuan_list" id="more_record" style="display:none;">
             {{loop $join_info $j}}
             <li class="clearfix">
                 <span class="title fl">{{$j['nickname']?$j['nickname']:'匿名'}}</span>
@@ -71,7 +80,7 @@
             {{/loop}}
 
         </ul>
-        <a href="#X" class="more_list">更多记录</a>
+        <a href="#X" id="more_record_show" class="more_list">更多记录</a>
     </div>
 </div>
 <!--弹出层-->
@@ -133,7 +142,15 @@
             $('#product_summary_content').toggle()
         });
         $('#event').on('click',function(){
-            $('#event_list').toggle()
+            $('#event_list').toggle();
+            $('#front_record').show();
+            $('#more_record').hide();
+            $('#more_record_show').show();
+        });
+        $('#more_record_show').on('click',function(){
+            $('#front_record').hide();
+            $('#more_record').show();
+            $('#more_record_show').toggle();
         });
     })
 </script>
