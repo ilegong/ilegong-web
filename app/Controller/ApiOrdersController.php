@@ -10,7 +10,7 @@ class ApiOrdersController extends AppController {
     public $components = array('OAuth.OAuth', 'Session');
     public function beforeFilter() {
         parent::beforeFilter();
-        $allow_action = array('test','product_detail', 'store_list', 'product_content', 'store_content', 'store_story');
+        $allow_action = array('test','product_detail', 'store_list', 'product_content', 'store_content', 'store_story','_save_comment');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action)  == false) {
             $this->currentUser = $this->OAuth->user();
@@ -682,6 +682,141 @@ class ApiOrdersController extends AppController {
         $this->set('info', $info);
         $this->set('_serialize', 'info');
     }
+
+    /**
+     * 增加商品评论
+     */
+    public function comment_add() {
+       $commentC = ClassRegistry::init('Comment');
+       $postStr = file_get_contents('php://input');;
+       $data = json_decode(trim($postStr), true);
+       if (!isset($data['Comment']['data_id'])) {
+           $this->Session->setFlash(__('Invalid Params', true));
+           $this->redirect('/');
+       }
+        $returnInfo = $commentC->_save_comment($data);
+        $info = array('success' => true,'returnInfo' => $returnInfo);
+        $this->set('info',$info);
+        $this->set('_serialize','info');
+
+    }
+
+    function _save_comment($inputData) {
+        $commentC = ClassRegistry::init('Comment');
+     if(!empty($inputData)) {
+
+         $data=array();
+         $data['user_id'] = $inputData['Comment']['user_id'];
+         $data['username'] = $inputData['Comment']['username'];
+         $data['body'] = $inputData['Comment']['body'];
+         $data['rating'] = $inputData ['Comment']['rating'];
+         $data['type'] = $inputData['Comment']['type'];
+         $data['pictures'] = $inputData['Comment']['pictures'];
+         $data['status'] = 1;
+
+         $shichituanC=ClassRegistry::init('Shichituan');
+         $shichituan_status = $shichituanC->findByUser_id($inputData['Comment']['user_id'],array('status'));
+         if($shichituan_status['Shichituan']['status'] == 1) {
+             $data['is_shichi_tuan_comment'] = 1;
+         }
+
+         if($commentC->save($data)) {
+             $type_model = $data['type'];
+             $this->loadModel($type_model);
+             $this->{$type_model}->updateAll(
+                 array('comment_nums' => 'comment_nums+1'),
+                 array('id' => $inputData['Comment']['data_id'])
+             );
+             if ($data['status']) {
+                 $returnInfo = array('success' => '您的评论已成功提交');
+                 //$this->Session->setFlash(__('Your comment has been added successfully.', true));
+             } else {
+                 $returnInfo = array('success' => '您的评论已成功提交');
+                 //$this->Session->setFlash(__('Your comment will appear after moderation.', true));
+             }
+             $returnInfo['Comment'] = $inputData['Comment'];
+
+         } else {
+             $returnInfo = $commentC->validationErrors;
+
+         }
+     }else {
+           $returnInfo = array('error' => 'please_login');
+    }
+       $info = array('success' => true,'returnInfo' => $returnInfo);
+        $this->set('info',$info);
+        $this->set('_serialize','info');
+
+
+    }
+
+    /**商品评论列表
+     * @param $model_name
+     * @param $id
+     */
+    function get_comment_list($model_name,$id) {
+
+        $commentC = ClassRegistry::init('Comment');
+        $page = intval($_GET['page'])?intval($_GET['page']):1;
+        $pagesize = intval($_GET['pagesize'])?intval($_GET['pagesize']):50;
+
+        $model_name = Inflector::classify($model_name);
+        $comments = $commentC->find('all',array(
+            'conditions' => array('Comment.type' => $model_name,'data_id'=>$id,'status'=>1,'rating'=>array('1','5','3')),
+            'order' => array('Comment.created DESC'), //定义顺序的字符串或者数组
+            'limit' => $pagesize, //整型
+            'page' => $page, //整型
+        ));
+
+        $result = array();
+        $userC = ClassRegistry::init('User');
+        foreach ($comments as $comt){
+            $item = $comt['Comment'];
+            if(empty($item['username']) && !empty($item['user_id']) ){
+                $data = $userC->find('first', array('conditions' => array('id' => $item['user_id'])));
+                if(isset($data['User']['id']) ){
+                    $item['username'] = $data['User']['nickname'];
+                }
+            }
+            if( empty($item['username']) ){
+                $item['username'] = '微信用户';
+            }
+            unset($item['ip']);
+            unset($item['lft']);
+            unset($item['rght']);
+
+            if ($item['pictures']) {
+                $images = array();
+                $pics = mbsplit("\\|", $item['pictures']);
+                foreach($pics as $pic) {
+                    if($pic && strpos($pic, "http://") === 0) {
+                        $images[] = $pic;
+                    }
+                }
+                if (count($pics) > 0) {
+                    $item['images'] = $images;
+                }
+            }
+
+            unset($item['pictures']);
+            $commentUserId = $item['user_id'];
+            $photo = $userC->find('all',array(
+                'fields'=>array('image'),
+                'conditions'=>array(
+                    'id' => $commentUserId
+                ),
+                'recursive'=>-1
+            ));
+            $item['userPhoto']= $photo[0]['User']['image'];
+            array_push($result,array('Comment' => $item));
+        }
+
+       $info = array('success' => true,'result' => $result);
+       $this->set('info',$info);
+       $this->set('_serialize','info');
+
+    }
+
 
 
 }
