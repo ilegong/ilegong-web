@@ -81,7 +81,7 @@ class GrouponsController extends AppController{
             if(empty($team) || $team['Team']['begin_time']> time() || $team['Team']['end_time']< time()){
                 $res = array('success'=> false, 'msg'=>'团购项目不存在');
             }else{
-                $count = $this->Groupon->find('count',array('conditions'=>array('user_id' => $current_uid, 'team_id' => $team['Team']['id'])));
+                $count = $this->Groupon->find('count',array('conditions'=>array('user_id' => $current_uid)));
                 if($count >= 1){
                     $res = array('success'=> false, 'msg'=>'您已经发起过该商品的一次团了');
                 }else{
@@ -196,7 +196,7 @@ class GrouponsController extends AppController{
                 $groupon = $this->Groupon->findById($groupId);
             }
             $my_join_id =$this->GrouponMember->find('first', array(
-                'conditions'=>array('user_id'=> $uid, 'team_id' => $team_id, 'groupon_id !=' =>$groupId),
+                'conditions'=>array('user_id'=> $uid, 'groupon_id !=' =>$groupId),
                 'fields' => array('groupon_id')
             ));
             $this->set('my_join_id',$my_join_id);
