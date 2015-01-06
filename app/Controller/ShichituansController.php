@@ -121,7 +121,7 @@ class ShichituansController extends AppController{
                     $res [$re] = array('success' => __('申请状态修改成功.', true));
                     if($data['Shichituan']['status'] == 1) {
                     $shichi_data = $this->Shichituan->find('first',array('conditions' => array('shichi_id' =>$re),'fields' => array('period','telenum')));
-                    $msg = '亲，恭喜您成功加入第'.$shichi_data['Shichituan']['period'].'期试吃团，感谢您对朋友说的支持';
+                    $msg = '恭喜亲成为第'.$shichi_data['Shichituan']['period'].'期试吃团员,本月所有新品美食都被亲承包了，请加静团长微信[gjj18510162740]，我将大家拉到5期微信群，今天18:00前有效';
                     $tel = $shichi_data['Shichituan']['telenum'];
 //                    $this->log('data'.json_encode($shichi_data));
                     message_send($msg,$tel);
