@@ -42,7 +42,7 @@ class OrderShichi extends AppModel {
         $brandIds = array();
         foreach ($orders as $o) {
             $order_ids[] = $o['OrderShichi']['order_id'];
-            $brandIds[] = $o['OrderShichi']['brand_id'];
+//            $brandIds[] = $o['OrderShichi']['brand_id'];
         }
 
         $ordershichis = array();
@@ -53,11 +53,12 @@ class OrderShichi extends AppModel {
                     'id' => $order_ids
                 ),
                 'fields' => array(
-                    'id','status'
+                    'id','status','brand_id'
                 )
             ));
 
             foreach ($order_shichis as $order_shichi) {
+                $brandIds[] = $order_shichi['Order']['brand_id'];
                 $ordershichis[$order_shichi['Order']['id']] = $order_shichi;
             }
         }

@@ -3,8 +3,9 @@
 <?php
 
 $found ++;
-$brand = $brands[$order['OrderShichi']['brand_id']];
+
 $orderShichi =$ordershichis[$order['OrderShichi']['order_id']];
+$brand = $brands[$orderShichi['Order']['brand_id']];
 ?>
 <div class="voffset3 order_item_{{$order['OrderShichi']['order_id']}}">
     <div class="orderitem" style="background-color: #ffffff">
