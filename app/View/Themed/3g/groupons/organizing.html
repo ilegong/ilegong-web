@@ -64,7 +64,7 @@
             $('#my_address').text(province_name + ' ' + city_name + ' ' + add_detailed).show();
             $('#edit_address').hide();
         });
-        $('#confirm_next').on('click',function(){
+        $('#confirm_next').on('click',function(e){
             if($("#confirm_next").attr('data-disable') == 'false') {
                 if ($('#your_name').val() == "") {
                     utils.alert("请输入你的姓名");
