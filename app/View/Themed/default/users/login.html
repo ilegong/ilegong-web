@@ -6,25 +6,35 @@
                     <div id="loginMessage" class="alert alert-warning" style="display:none">登录失败</div>
                     <div class="sign-form">
                         <div class="sign-inner">
-                            <form action="{{$this->Html->url('/users/login')}}"  accept-charset="utf-8" class="form-horizontal"  method="post" role="form" {{if $isajax}} onsubmit="return ajaxeSubmitForm(this,'loginSucess');" {{/if}}>
-                            <br/>
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input type="text" title="" required="required"  data-original-title="" tabindex="1"  name="data[User][username]" placeholder="输入账号" id="name" class="form-control col-sm-8">
-                            </div>
-                            <br>
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                                <input type="password" title="" required="required" name="data[User][password]" maxlength="15"  tabindex="2" onkeypress="detectCapsLock(event, this)"  data-original-title="" placeholder="输入密码"  class="form-control col-sm-8">
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="data[User][remember_me]"  value="2592000"> 记住我的登录状态
-                                </label>
-                            </div>
+                            <form action="{{$this->Html->url('/users/login')}}" accept-charset="utf-8" class="form-horizontal"  method="post" role="form" {{if $isajax}} onsubmit="return ajaxeSubmitForm(this,'loginSucess');" {{/if}}>
+                                <div class="form-group">
+                                    <label for="name" class="col-sm-2 control-label">账号</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" title="" required="required"  data-original-title="" tabindex="1"  name="data[User][username]" placeholder="输入账号" id="name" class="form-control col-sm-8">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">密码</label>
+                                    <div class="col-sm-10">
+                                        <input type="password" title="" required="required" name="data[User][password]" maxlength="15"  tabindex="2" onkeypress="detectCapsLock(event, this)"  data-original-title="" placeholder="输入密码"  class="form-control col-sm-8">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="data[User][remember_me]"  value="2592000"> 记住我的登录状态
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             {{$this->Form->input('User.referer',array('type'=>'hidden'))}}
                             {{$this->Form->input('referer',array('type'=>'hidden'))}}
-                            <button class="btn btn-red" type="submit">登录</button>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button class="btn btn-primary" type="submit">登录</button>
+                                    </div>
+                                </div>
                             <hr>
                             </form>
 
