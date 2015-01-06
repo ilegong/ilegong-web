@@ -580,6 +580,7 @@ img{ border:0;}
 .pt10{ padding-top:10px;}
 .pt15{ padding-top:15px;}
 .pr20{ padding-right:20px;}
+.pt25{ padding-top:25px;}
 .pb10{ padding-bottom:10px;}
 .pb15{ padding-bottom:15px;}
 .radius5{
@@ -748,6 +749,10 @@ body.modal-open{margin-right: 0px}
 .descrip{ border:1px #dddddd solid; padding:20px; line-height:28px; font-size:14px; color:#333333;}
 .details_nav{border-bottom: 1px solid #ccc;background-color: #fff;position: fixed;top: 0;left: 0;right: 0;height:41px;z-index: 99;-webkit-box-shadow: rgba(0,0,0,.2) 0 1px 5px 0;-moz-box-shadow: rgba(0,0,0,.2) 0 1px 5px 0;box-shadow: rgba(0,0,0,.2) 0 1px 5px 0; z-index:1;overflow: hidden}
 .products_intro{ padding:15px 0;}
+/*规格*/
+.name ul.guige{ padding-bottom:5px;}
+.name ul.guige li span{ display:block; float:left; margin-right:10px; line-height:26px; text-decoration:none; padding:0 10px; background-color:#ffffff; font-size:14px; border:1px #cccccc solid; color:#666666; margin-top:5px;}
+.name ul.guige li span.cur{ border:1px #29AC0E solid; color:#29AC0E;}
 /*声明*/
 .state{ border:1px #dddddd dashed; border-left:0; border-right:0; padding:10px; margin-bottom:20px; margin-top:5px; line-height:28px; color:#333333; font-size:14px;}
 .state span{ color:#EC4E4C; font-weight:bold;}
