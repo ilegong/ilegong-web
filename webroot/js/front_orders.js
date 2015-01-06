@@ -110,7 +110,7 @@ function editConsignee(obj,id){
 //新增地址
 function use_NewConsignee(){
 	$('#edit_type').val('new');
-	$('#consignee_addr').val('').show();
+	$('#consignee_addr').val('').toggle();
 	
 	$('#consignee_name').val('');
 	$('#consignee_area').val('');	
@@ -450,4 +450,8 @@ function submit_remark(id,obj){
         }
     });
 
+}
+//edit_type choose select
+function chose_Consignee(e){
+    $('#edit_type').val('select');
 }

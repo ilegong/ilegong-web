@@ -6,7 +6,7 @@
 			<table  class="table table-bordered"><tbody>
 				{{loop $consignees  $consignee}}
 				<tr class="consignee_row {{if $consignee['OrderConsignee']['status']}}danger{{/if}}" id="consignee_{{$consignee['OrderConsignee']['id']}}">
-				<td style="width:40px;"><input type="radio"  {{if $consignee['OrderConsignee']['status']}}checked="checked"{{/if}} onclick="chose_Consignee({{$consignee['OrderConsignee']['id']}})" name="data[OrderConsignee][id]" value="{{$consignee['OrderConsignee']['id']}}" id="addr_{{$consignee['OrderConsignee']['id']}}"></td>
+				<td style="width:40px;"><input type="radio"  {{if $consignee['OrderConsignee']['status']}}checked="checked"{{/if}} onchange="chose_Consignee({{$consignee['OrderConsignee']['id']}})" name="data[OrderConsignee][id]" value="{{$consignee['OrderConsignee']['id']}}" id="addr_{{$consignee['OrderConsignee']['id']}}"></td>
 				<td><label for="addr_{{$consignee['OrderConsignee']['id']}}"><strong>{{$consignee['OrderConsignee']['name']}}</strong>&nbsp;({{$consignee['OrderConsignee']['mobilephone']}})<br/>&nbsp;{{$consignee['OrderConsignee']['area']}}{{$consignee['OrderConsignee']['address']}}</label>
 					<br/>
 					<a onclick="SetDefaultAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none"><label style="cursor:pointer;" for="addr_{{$consignee['OrderConsignee']['id']}}">[设为默认]</label></a>&nbsp;&nbsp;
@@ -16,7 +16,7 @@
 				</tr>
 				{{/loop}}
 				<tr>
-					<td style="width:40px;"><input type="radio" {{if !$total_consignee}}checked="checked" {{else}} onchange="use_NewConsignee()"{{/if}} value="" id="consignee_radio_new" name="data[OrderConsignee][id]" class="hookbox"></td>
+					<td style="width:40px;"><input type="radio" {{if !$total_consignee}}checked="checked" {{else}} onclick="use_NewConsignee()"{{/if}} value="" id="consignee_radio_new" name="data[OrderConsignee][id]" class="hookbox"></td>
 					<td><label for="consignee_radio_new">使用新地址 </label><span style="display:none" class="status error" id="addNumLimitNote">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 当前地址数量已达上限，若要继续添加新地址，请先删除部分收货地址。</span></td>
 				</tr>
 			</tbody></table>
@@ -68,19 +68,19 @@
             if(val == '') {
                 if ($('#consignee_name').val() == "") {
                     $('#consignee_name').focus();
-                    alert("请输入收货人姓名");
+                    utils.alert("请输入收货人姓名");
                     e.preventDefault();
                     return false;
                 }
                 if ($("#provinceDiv").val() == "0" || $("#cityDiv").val() == "0" ) {
                     $('#provinceDiv').focus();
-                    alert("请选收货地区");
+                    utils.alert("请选收货地区");
                     e.preventDefault();
                     return false;
                 }
                 if ($('#consignee_address').val() == "") {
                     $('#consignee_address').focus();
-                    alert("请输入收货地址");
+                    utils.alert("请输入收货地址");
                     e.preventDefault();
                     return false;
                 }
