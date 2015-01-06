@@ -32,7 +32,13 @@ class AppController extends Controller {
     public $firephp_vars = array();
     public $viewdata = null;
 
-    public $admins = array('753', '632', '658', '146', '8', '141', '818', '819', '755', '773');
+    public $admins = array('753', '632', '658', '146', '8', '141'
+    , '818' //罗武林
+    , '819' //高静静
+    , '755'
+    , '773'
+    , '701166' //刘丹
+    );
 
     // 自定义构造函数
     public function __construct($request = null, $response = null) {
