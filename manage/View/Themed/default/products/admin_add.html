@@ -41,7 +41,16 @@ echo $this->MForm->create($current_model,array(
 						echo $this->MForm->input('slug',array('required'=>'required'));
 						echo $this->MForm->input('promote_name');	
 						echo $this->MForm->input('recommend');	
-						echo $this->MForm->input('published');						
+						echo $this->MForm->input('published');
+                        ?>
+                        <div class="form-group">
+                            <label for="search_brand" class="col-sm-2 control-label">搜素商家</label>
+                            <div class="col-sm-10 controls number">
+                                <input name="" class="form-control" type="text" id="search_brand">
+                                搜索商家
+                            </div>
+                        </div>
+                    <?php
 						echo $this->MForm->input('brand_id');
                         echo $this->MForm->input('price');
                         echo $this->MForm->input('original_price');
@@ -94,6 +103,46 @@ $(function(){
 	}).trigger('change');
 	
 });
+</script>
+<script>
+    $(function(){
+        var allBrands = new Array();//all
+        var searchBrands = new Array();//searched
+        var $selectBrand = $('#ProductBrandId');
+        var allBrandsHtml = $selectBrand.html();
+        var historySearchTxt = '';
+        $('option',$selectBrand).each(function(){
+            var currentElement = $(this);
+            var item = {
+                "name":currentElement.text(),
+                "value":currentElement.val()
+            };
+            allBrands.push(item);
+        });
+
+        $('#search_brand').on('blur',function(e){
+            e.preventDefault();
+            var searchTxt = $(this).val();
+            if(searchTxt!=historySearchTxt){
+                searchBrands=[];
+                historySearchTxt = searchTxt;
+                $.each(allBrands,function(index,item){
+                    if((item['name'].indexOf(searchTxt))>-1){
+                        searchBrands.push(item);
+                    }
+                });
+                if(searchBrands.length>0){
+                    var searchBrandHtml = '';
+                    $.each(searchBrands,function(index,item){
+                        searchBrandHtml+='<option value="'+item["value"]+'">'+item["name"]+'</option>';
+                    });
+                    $selectBrand.html(searchBrandHtml);
+                }else{
+                    $selectBrand.html(allBrandsHtml);
+                }
+            }
+        });
+    });
 </script>
 
 
