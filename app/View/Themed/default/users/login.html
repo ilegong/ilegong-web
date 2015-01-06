@@ -1,12 +1,12 @@
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-12">
         <div class="panel panel-default">
             <div class="panel-body">
                 <div id="container-part1" class="clearfix">
                     <div id="loginMessage" class="alert alert-warning" style="display:none">登录失败</div>
                     <div class="sign-form">
                         <div class="sign-inner">
-                            <form action="{{$this->Html->url('/users/login')}}"  accept-charset="utf-8"  method="post" role="form" {{if $isajax}} onsubmit="return ajaxeSubmitForm(this,'loginSucess');" {{/if}}>
+                            <form action="{{$this->Html->url('/users/login')}}"  accept-charset="utf-8" class="form-horizontal"  method="post" role="form" {{if $isajax}} onsubmit="return ajaxeSubmitForm(this,'loginSucess');" {{/if}}>
                             <br/>
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
