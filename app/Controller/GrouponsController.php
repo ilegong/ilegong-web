@@ -160,10 +160,10 @@ class GrouponsController extends AppController{
         }
 
         $uid = $this->currentUser['id'];
-        if (!empty($uid)) {
-            $groupon_member = $this->GrouponMember->find_by_uid_and_groupon_id($groupId, $uid);
-            $this->set('member', $groupon_member);
-        };
+//        if (!empty($uid)) {
+//            $groupon_member = $this->GrouponMember->find_by_uid_and_groupon_id($groupId, $uid);
+//            $this->set('member', $groupon_member);
+//        };
         $this->loadModel('GrouponMember');
         $join_users = $this->GrouponMember->find('list', array(
             'conditions' => array('groupon_id' => $groupId, 'status' => STATUS_GROUP_MEM_PAID),
@@ -171,11 +171,13 @@ class GrouponsController extends AppController{
         ));
         $join_ids = array_keys($join_users);
         if(!empty($join_ids)){
+
             $this->loadModel('User');
-            $nicknames = $this->User->find('list', array(
-                'conditions' => array('id' => $join_ids),
-                'fields' => array('id','nickname')
-            ));
+//            $nicknames = $this->User->find('list', array(
+//                'conditions' => array('id' => $join_ids),
+//                'fields' => array('id','nickname')
+//            ));
+            $nicknames = $this->User->findNicknamesMap($join_ids);
             $join_info = array();
             $k = 0;
             foreach($join_users as $key=>$value){
