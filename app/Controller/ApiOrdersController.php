@@ -706,12 +706,15 @@ class ApiOrdersController extends AppController {
      if(!empty($inputData)) {
 
          $data=array();
-         $data['user_id'] = $inputData['Comment']['user_id'];
-         $data['username'] = $inputData['Comment']['username'];
-         $data['body'] = $inputData['Comment']['body'];
-         $data['rating'] = $inputData ['Comment']['rating'];
-         $data['type'] = $inputData['Comment']['type'];
-         $data['pictures'] = $inputData['Comment']['pictures'];
+         $data['user_id'] = $commentC->Session->read('Auth.User.id');
+         $data['username'] = $commentC->Session->read('Auth.User.nickname');
+         $data['data_id'] = $input['data_id'];
+         $data['body'] = $inputData['body'];
+         $data['rating'] = $inputData['rating'];
+         $data['type'] = $inputData['type'];
+         $data['pictures'] = $inputData['pictures'];
+         $data['ip'] = $commentC->request->clientIp(false);
+         $data['created'] = date('Y-m-d H:i:s');
          $data['status'] = 1;
 
          $shichituanC=ClassRegistry::init('Shichituan');
