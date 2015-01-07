@@ -119,7 +119,7 @@
     /*抽奖*/
     .cj{ text-align:center; padding-top:2.2em; position:relative;}
     .cj img{ width:18em; height:18em;}
-    .cj a img{ width:6em; height:7em; position:absolute; top:50%; left:50%; margin-left:-3em; margin-top:-3em;}
+    .cj a img{ width:6em; height:6em; position:absolute; top:50%; left:50%; margin-left:-3em; margin-top:-2em;}
     .cj_banner{ text-align:center; padding-top:1.3em;}
     .cj_banner img{ width:90%;}
     .cj_banner a{ display:block; text-align:center; padding-top:0.8em; color:#ff4a49; text-decoration:none;}
@@ -133,7 +133,7 @@
 </style>
 <div id="fullpage">
     <div class="section">
-        <div class="index_title">摇下20粒，西瑞东北珍珠米免费抢</div>
+        <div class="index_title">{{$title_in_page}}</div>
         <div class="tree"><img id="apple_tree_img"  src="http://51daifan-images.stor.sinaapp.com/as/normal1/tree.png" /></div>
         <div class="rock_num radius10">
             <div class="fl" style="padding-left:0.9em;">已摇下<span id="apple_got_cnt">{{$total_apple}}</span>粒, 还有<span id="apple_times_left">{{$total_times}}</span>次机会!</div>
@@ -187,15 +187,12 @@
         <div class="help_title">我的奖品</div>
         <div class="help_list">
             <ul style="width: 90%">
-            {{if !empty($coupons) || !empty($gotCode)}}
-            {{if ($gotCode)}} <li> <span id="game_xirui_award">{{if $gotCode['GameXiruiCode']['type'] == 1}} 西瑞东北珍珠米2.5kg {{else}} 西瑞谷物圈100g {{/if}}</span>, 兑换码：{{$gotCode['GameXiruiCode']['code']}}
-                <a href="javascript:;" class="rule_a radius10" onclick="$('#view_get_jiang_pin').show();">兑换</a></li>
-            {{/if}}
+            {{if !empty($coupons)}}
             {{loop $coupons $k $coupon}}
-                <li>{{$this->Number->precision($coupon['Coupon']['reduced_price']/100, 0)}}元优惠券 <a class="rule_a" href="/b/xi_rui_ji_tuan.html">去使用</a></li>
+                <li>{{$coupon['Coupon']['name'].'的'. $this->Number->precision($coupon['Coupon']['reduced_price']/100, 0)}}元优惠券 <a class="rule_a" href="{{brand_link($coupon['Coupon']['brand_id'])}}">去使用</a></li>
             {{/loop}}
             {{else}}
-                <li>你还没有抽到奖品</li>
+                <li>您还没有抽到奖品</li>
             {{/if}}
             </ul>
         </div>
@@ -326,7 +323,8 @@
             return v ? parseInt(v) : 0;
         }).get();
 
-        awarded = $('#game_xirui_award').size() > 0;
+        var $gameXiruiAward = $('#game_xirui_award');
+        awarded = $gameXiruiAward.size() > 0;
 
         function azero(v) {
             return  (v < 10) ?  ('0'+''+v) : v;
@@ -381,7 +379,7 @@
             return '基友们太给力！我摇到由朋友说的美食商家提供的' + msg + '啦，兄弟们，继续摇起！';
         }
 
-        share_coupon_msg = get_share_msg($('#game_xirui_award').text());
+        share_coupon_msg = get_share_msg($gameXiruiAward.text());
         share_coupon_title = '妈呀，我终于获奖了！';
 
         function share_before_coupon_msg() {
@@ -422,25 +420,11 @@
                             finish = true;
                             if (data.success) {
                                 if (data.award_type != 0) {
-                                    var tips = '恭喜，您抽中西瑞食品集团提供的';
-                                    if (data.award_type == 1) {
-                                        tips += '西瑞东北珍珠米2.5kg，兑换码:' + data.award_code;
-                                        stop_rotate = 0;
-                                    } else if (data.award_type == 2) {
-                                        tips += '西瑞谷物圈100g，兑换码:' + data.award_code;
-                                        stop_rotate = 144;
-                                    } else if (data.award_type == 18278) {
-                                        tips += '优惠券5元（可在朋友说西瑞店铺所有产品使用）';
-                                        stop_rotate = 216;
-                                    } else if (data.award_type == 18279) {
-                                        tips += '优惠券3元（可在朋友说西瑞店铺所有产品使用）';
-                                        stop_rotate = 72;
-                                    } else if (data.award_type == 18280) {
-                                        tips += '优惠券1元（可在朋友说西瑞店铺所有产品使用）';
-                                        stop_rotate = 288;
-                                    }
-                                    utils.alert_one(tips, '查看我的奖品', function () {
-                                        window.location.href = '/t/ag/xirui1412.html?section=my_award';
+                                    var tips = '恭喜，您抽中';
+                                        tips += data.brand_name + '提供的优惠券';
+                                        stop_rotate = data.rotate;
+                                        utils.alert_one(tips, '查看我的奖品', function () {
+                                        window.location.href = '/t/ag/normal1.html?section=my_award';
                                     }, {top:'70%'});
 //                            utils.alert_one(tips, '分享到朋友圈', function () {
 //                                if ($shaking_tips_png) {
@@ -452,7 +436,7 @@
                                 } else {
                                     var msg = '';
                                     if (data.msg == 'not_enough_100') {
-                                        msg = '抱歉，抽奖失败，够20粒才可以抽！';
+                                        msg = '抱歉，抽奖失败，够20个才可以抽！';
                                     }
                                     else if (data.msg == 'game_end') {
                                         msg = '活动已结束';
@@ -482,7 +466,7 @@
 
         function desc_cmp_friends() {
 
-            var desc = '摇一摇 ，西瑞珍珠米5斤轻松免费抢，我已摇下'+get_total()+'粒';
+            var desc = '摇一摇 ，朋友说各种美食优惠来袭，我已摇下'+get_total()+'颗';
             if (friendGots && friendGots.length > 0) {
                 var dabaiPercent = dabai_percent();
                 desc += (dabaiPercent == 100 ? ', 打败了所有好友，哈哈' : (dabaiPercent == 0 ? ', 朋友圈里垫底 ^_^， 快点我吧' : ', 打败了' + dabaiPercent + '%的好友！'));
@@ -498,7 +482,7 @@
 //            return '';
 //        }
 
-        var shareTitle = '摇下20粒，西瑞东北珍珠米免费抢';
+        var shareTitle = '摇下20粒，朋友说各种美食优惠来袭';
 
         function getRandomInt(min, max) {
             return Math.floor(Math.random() * (max - min)) + min;
@@ -551,7 +535,7 @@
     });
 
     function game_coupon_message(times, total) {
-        if (total < 20)  { return '<br/><small>差<span class="apple_numbers">' + (20 - total) + '</span>粒就可以抽奖啦</small>'; }
+        if (total < 20)  { return '<br/><small>差<span class="apple_numbers">' + (20 - total) + '</span>个就可以抽奖啦</small>'; }
         else return '';
     }
 

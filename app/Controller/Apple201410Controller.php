@@ -342,11 +342,12 @@ VALUES
                                 $this->loadModel('AwardResult');
                                 $day = date(FORMAT_DATE);
                                 $exchangeCount = 20;
+                                $mt_rand = mt_rand(0, 20);
 
+                                /** Xirui Code
                                 $this->loadModel('GameXiruiCode');
 
                                 $iAwarded = $this->GameXiruiCode->userIsAwarded($uid);
-                                $mt_rand = mt_rand(0, 20);
                                 if (empty($iAwarded)  && $mt_rand < 10 ) {
                                     $first_type_award = array(1 => 13, 2 => 50);
                                     foreach ($first_type_award as $type => $limit) {
@@ -377,6 +378,10 @@ VALUES
                                         }
                                     }
                                 }
+                                */
+
+                                $today_awarded = 0;
+                                $iAwarded = 0;
 
                                 if ($award_type == 0) {
 
@@ -384,15 +389,43 @@ VALUES
                                     //18278  500
                                     //18279  300
                                     //18280  100
+                                    $coupon_id_list = array(
+                                        18704, //30 + 4*60 + 30 = 300
+                                        18706, //180
+                                        18707, //240
+                                        18708, //60
+                                        18709, //120
+                                        18705, //30
+                                    );
+                                    //切忌不能动，位置多意境对应上了
+                                    $step_rotate = array(
+                                        18704 => 300,
+                                        18706 => 180,
+                                        18707 => 240,
+                                        18708 => 60,
+                                        18709 => 120,
+                                        18705 => 30,
+                                    );
+                                    $rotate = $step_rotate[$award_type];
+                                    $coupon_name_list = array(
+                                        '生活速递联盟',
+                                        '天下农夫-朱晓宇',
+                                        '腾讯rabbi',
+                                        '阿莲妈妈',
+                                        '铁棍山药-艳艳',
+                                        '德庆贡柑－林玲',
+                                    );
                                     $coupon_count = 1;
-                                    $award_type = $mt_rand > 5 ? 18278 : 18279;
+                                    $award_idx = $mt_rand % count($coupon_id_list);
+                                    $award_type = $coupon_id_list[$award_idx];
+                                    $award_brand_name = $coupon_name_list[$award_idx];
                                     $so = $this->CouponItem;
                                     $weixin = $this->Weixin;
                                     $this->exchangeCouponAndLog($uid, $not_spent, $exchangeCount, $coupon_count, $gameType, $awardInfo['id'],
-                                        function ($uid, $operator, $source_log_id) use ($so, $weixin, $award_type) {
+                                        function ($uid, $operator, $source_log_id) use ($so, $weixin, $award_type, $award_brand_name) {
                                             $so->addCoupon($uid, $award_type, $operator, $source_log_id);
                                             $so->id = null;
-                                            $store = "在朋友说西瑞食品微店购买时使用";
+                                            $store = "在朋友说".$award_brand_name."店购买时使用";
                                             $validDesc = "有效期至2014年12月31日";
                                             $weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
                                         }
@@ -418,7 +451,7 @@ VALUES
             $logstr = 'too frequently';
         }
 
-        echo json_encode(array('success' => true, 'award_type' => $award_type, 'logstr' => '', 'msg' => $msg, 'total' => $not_spent, 'award_code' => $award_code));
+        echo json_encode(array('success' => true, 'award_type' => $award_type, 'brand_name' => $award_brand_name, 'rotate' => $rotate, 'logstr' => '', 'msg' => $msg, 'total' => $not_spent));
     }
 
     public function exchange_coupon($gameType = KEY_APPLE_201410)
