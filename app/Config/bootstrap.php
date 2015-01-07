@@ -140,7 +140,7 @@ define('PAID_DISPLAY_PENDING', 'pending');
 
 //define('KEY_APPLE_201410',  'apple201410');
 //define('KEY_APPLE_201410',  'rice201411');
-define('KEY_APPLE_201410',  'xirui1412');
+define('KEY_APPLE_201410',  'normal1');
 define('PROFILE_NICK_LEN', 16);
 define('PROFILE_NICK_MIN_LEN', 2);
 define('MSG_API_KEY','api:key-fdb14217a00065ca1a47b8fcb597de0d'); //发短信密钥

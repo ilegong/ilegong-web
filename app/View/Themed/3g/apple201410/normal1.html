@@ -1,0 +1,561 @@
+{{$this->Html->script(array('trace/tracekit.min.report.js', 'shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js', 'jquery/jquery.fullPage.min.js', 'jquery/jquery.rotate.js'), array('block' => 'scriptBottom'));}}
+<style>
+    #yao_jp_div > span {
+        border: 1px solid darkkhaki;
+        margin-bottom: 2px;
+        text-align: center;
+        display: block;
+    }
+    .selected {
+        background-color: lightgreen;
+    }
+
+    .modal-footer { margin-top:0 }
+    .modal-body {padding-bottom:10px}
+
+    .bootbox-body {
+        text-align: left;
+    }
+    .modal-footer {
+        text-align: center;
+    }
+
+    .october-leaf {
+        position: absolute;
+        background-color: transparent;
+        background-image: url('http://51daifan.sinaapp.com/img/apple201410/leavesv2.png');
+        -webkit-transform: translateZ(0);
+        -moz-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+    .apple_share {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1030;
+        background-color: #000;
+    }
+
+    .apple_share.in {
+        opacity: .9;
+    }
+
+    img {
+        max-width: 100%;
+    }
+
+    a:hover, a:focus {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .apple_numbers {
+        color: red;
+        font-size: 20px;
+    }
+
+
+    *{ margin:0; padding:0; font-family:"微软雅黑";}
+    img{ border:0;}
+    ul,li{ list-style:none;}
+    .clearfix{*zoom:1;}
+    .clearfix:after{content: ".";display: block;height: 0;clear: both; visibility: hidden;}
+    .fl{ float:left;}
+    .fr{ float:right;}
+    .radius10{
+        -moz-border-radius: 0.417em;/* Gecko browsers */-webkit-border-radius: 0.417em;/* Webkit browsers */border-radius:0.417em;/* W3C syntax */
+    }
+
+    /*index*/
+    .index_title{ width:100%; text-align:center; padding:0.8em 0 0.5em 0; color:#ff4a49; font-size:1.2em;}
+    .tree{ width:100%; border-bottom:2px #b1d649 solid; text-align:center;}
+    .tree img{ width:16em;}
+    .rock_num{ width:92%; margin:0 auto; margin-top:1.0em; background-color:#ffffff; font-size:0.9em; color:#666666; height:2.6em; line-height:2.6em; border:1px #ff4a49 solid; overflow:hidden;}
+    .rock_num .fl span{ color:#ff4a49; font-size:1.3em; font-weight:bold;}
+    .rock_num .fr a{ display:block; color:#ffffff; text-decoration:none; background-color:#ff483a; font-size:1.1em; padding:0 0.9em; height:100%;}
+    .share{ text-align:center; padding-top:0.8em; display:block;}
+    .share img{ width:92%;}
+    .word_link{ text-align:center; font-size:0.9em; margin-top:1em;}
+    .word_link a{ text-decoration:none; color:#ff4a49;}
+    /*.cj_btn { line-height:2em; height:2em; font-size:1.1em; text-align:center; background-color:#ff483a; text-decoration:none; color:#ffffff; width:92%; margin:0 auto; display:block; margin-top:1em;}*/
+    /*层提示*/
+    .tip{ width:70%; margin:0 auto; background-color:#474747; line-height:2.5em; height:2.5em; color:#ffffff; font-size:0.9em; text-align:center;}
+    .tip_bg{ background-color:#ffffff; width:90%; padding:1.5em; border:1px #dddddd solid; text-align:center;}
+    .tip_bg a.close img{ width:2em; height:2em; position:absolute; right:-1em; top:-1em;}
+    .tip_bg p img{ width:5.3em; height:5em;}
+    .tip_bg span{ display:block; padding:1em 0; font-size:1em; color:#666666;}
+    .tip_bg span label{ font-size:0.8em; color:#999999;}
+    .tip_bg span strong{ color:#ff4a49;}
+    .cjbtn { display:block; margin:0 auto; width:6em; height:2em; background-color:#ff4a49; color:#ffffff; text-decoration:none; text-align:center; line-height:2em; font-size:1em;}
+
+    /*谁帮了我*/
+    .help_title{ background-color:#fab53c; text-align:center; height:2.5em; line-height:2.5em; font-size:1.5em; color:#ffffff;}
+    .help_list{ padding:0.9em 0 0 0.5em;}
+    .help_list ul{ float:left; padding-left:0.8em; line-height:1.5em; color:#666666; font-size:0.9em; width:45%;}
+    .help_list ul span{ color:#ff4a49;}
+
+    /*加机会*/
+    .chance_title{ background-color:#ff4a49; text-align:center; height:2.5em; line-height:2.5em; font-size:1.5em; color:#ffffff;}
+    .chance_tip{ color:#666666; font-size:0.9em; line-height:1.8em; padding:1em 0.5em 0 0.7em;}
+    .chancebtn{ display:block; text-align:center; text-decoration:none; width:92%; margin:0 auto; margin-top:1.2em; background-color:#ffa93a; font-size:0.9em; color:#ffffff; height:2.2em; line-height:2.2em; overflow:hidden; font-size:1.1em;}
+    .sharebtn{ margin:0 auto; margin-top:0.4em; display:block; text-align:center; text-decoration:none; width:92%; font-size:0.9em; color:#ff4a49; border:1px #ff4a49 solid; height:2.2em; line-height:2.2em; overflow:hidden; font-size:1.1em;}
+
+    /*游戏规则*/
+    .rule_a{ color:#ff4a49; text-decoration:none; font-size:1.1em;}
+    .rule_bg{ background-color:#ffffff; line-height:1.6em; color:#666666; font-size:0.9em; width:80%; padding:1.2em;}
+    .rule_bg a.close img{ width:2em; height:2em; position:absolute; right:-1em; top:-1em;}
+    .rule_bg .title{ font-size:1.2em; text-align:center; color:#ff4a49; padding-bottom:0.5em;}
+    .rule_bg span,.chance_tip span{ color:#ff4a49;}
+
+    /*米的故事*/
+    .story img{ width:100%; max-height: 95%}
+
+    /*关于我们*/
+    .aboutus{ margin-top:2em; text-align:center; font-size:0.8em; color:#999999; line-height:1.3em;}
+    .aboutus img{ width:4.125em; height:1.667em;}
+
+    /*抽奖*/
+    .cj{ text-align:center; padding-top:2.2em; position:relative;}
+    .cj img{ width:18em; height:18em;}
+    .cj a img{ width:6em; height:7em; position:absolute; top:50%; left:50%; margin-left:-3em; margin-top:-3em;}
+    .cj_banner{ text-align:center; padding-top:1.3em;}
+    .cj_banner img{ width:90%;}
+    .cj_banner a{ display:block; text-align:center; padding-top:0.8em; color:#ff4a49; text-decoration:none;}
+
+    /*抽奖提示层*/
+    .cj_tip{ border-top:1px #dddddd solid; padding-top:0.8em; font-size:0.9em; color:#666666; text-align:left; color:#666666; line-height:1.7em;}
+    .cj_tip label{ color:#ff4a49;}
+    .cj_tip i{ text-decoration:underline;}
+    .to_top {text-align: center}
+    .to_top img { max-width: 2em; }
+</style>
+<div id="fullpage">
+    <div class="section">
+        <div class="index_title">摇下20粒，西瑞东北珍珠米免费抢</div>
+        <div class="tree"><img id="apple_tree_img"  src="http://51daifan-images.stor.sinaapp.com/as/normal1/tree.png" /></div>
+        <div class="rock_num radius10">
+            <div class="fl" style="padding-left:0.9em;">已摇下<span id="apple_got_cnt">{{$total_apple}}</span>粒, 还有<span id="apple_times_left">{{$total_times}}</span>次机会!</div>
+            <div class="fr"><a href="#about_us">加机会</a></div>
+        </div>
+        <a id="share_btn" href="javascript:;" class="share"><img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/shareicon.png" /></a>
+        <div class="word_link">
+            <a href="#get_coupons">奖品设置</a>&nbsp;&nbsp;&nbsp;
+            <!--<a href="#product_story">米的故事</a>&nbsp;&nbsp;&nbsp;-->
+            <a id="show_help_btn" href="#friends">谁帮了我</a>&nbsp;&nbsp;&nbsp;
+            <a href="#my_award">我的奖品</a>
+        </div>
+        <a href="#award_cj" class="sharebtn radius10">去抽奖</a>
+        <!--摇大米提示-->
+        <div class="tip radius10" style="display:none;">你摇到了&nbsp;<strong>2</strong>&nbsp;粒大米</div>
+        <!--抽奖提示-->
+        <div style="display:none;">
+            <div style="position:relative;" class="tip_bg radius10">
+                <a class="close" href="#X"><img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/close.png" /></a>
+                <p><img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/lipin.png" /></p>
+                <span>恭喜你, 摇到&nbsp;<strong>20</strong>&nbsp;粒, 可以参与抽奖了</span>
+                <a href="#award_cj" class="cjbtn radius10">去抽奖</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+
+        <div class="chance_title">游戏规则</div>
+        <div class="chance_tip">
+            <ul>
+                <li>1、摇下20个有机会抽奖，抽奖之后减少20粒，如果剩余超过20个可以继续摇参与抽奖；</li>
+                <li>2、活动结束时间：1月10日23:59:59；</li>
+                <li>3、发货时间：兑换后下单就发货，活动最终解释权归朋友说所有。</li>
+            </ul>
+            <ul>
+                <li><span>奖品</span></li>
+                <li>一等奖：价值88元的皇帝柑一箱 </li>
+                <li>二等奖：10元或8元等价值不等的优惠券</li>
+            </ul>
+            <div style=" text-align:center; padding-top:0.2em;"><a class="rule_a radius10" href="#award_cj">去抽奖</a>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a id="view_my_coupons" href="/users/my_coupons.html" class="rule_a radius10">我的优惠券</a></div>
+        </div>
+        <ul class="clearfix" style="width: 30%; margin: 0 auto; margin-top: 0.5em;">
+            <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/btc/story/top.gif')}}" /></a></li>
+        </ul>
+    </div>
+
+
+    <div class="section">
+        <div class="help_title">我的奖品</div>
+        <div class="help_list">
+            <ul style="width: 90%">
+            {{if !empty($coupons) || !empty($gotCode)}}
+            {{if ($gotCode)}} <li> <span id="game_xirui_award">{{if $gotCode['GameXiruiCode']['type'] == 1}} 西瑞东北珍珠米2.5kg {{else}} 西瑞谷物圈100g {{/if}}</span>, 兑换码：{{$gotCode['GameXiruiCode']['code']}}
+                <a href="javascript:;" class="rule_a radius10" onclick="$('#view_get_jiang_pin').show();">兑换</a></li>
+            {{/if}}
+            {{loop $coupons $k $coupon}}
+                <li>{{$this->Number->precision($coupon['Coupon']['reduced_price']/100, 0)}}元优惠券 <a class="rule_a" href="/b/xi_rui_ji_tuan.html">去使用</a></li>
+            {{/loop}}
+            {{else}}
+                <li>你还没有抽到奖品</li>
+            {{/if}}
+            </ul>
+        </div>
+        <ul class="clearfix" style="width: 30%; margin: 0 auto; margin-top: 0.5em;">
+            <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/btc/story/top.gif')}}" /></a></li>
+        </ul>
+    </div>
+
+
+    <div class="section">
+        <div class="cj">
+            <img src="http://51daifan-images.stor.sinaapp.com/as/normal1/cj.gif" />
+            <a href="javascript:;" id="cj_start_btn"><img src="http://51daifan-images.stor.sinaapp.com/as/normal1/start.png" /></a>
+        </div>
+        <!--获奖提示-->
+        <!--<div style=" display:none;">-->
+            <!--<div style="position:relative;" class="tip_bg radius10">-->
+                <!--<a class="close" href="#X"><img src="images/index/close.png" /></a>-->
+                <!--<span style="padding-top:0;">恭喜你, 获得一张&nbsp;<strong>3</strong>&nbsp;元优惠券<br /><label>(限朋友西瑞食品微店所有产品使用)</label></span>-->
+                <!--<a href="#X" class="cjbtn radius10">去购买</a>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="cj_banner">
+            <img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/cj/cj_banner.jpg" />
+            <a href="/b/xi_rui_ji_tuan.html">去店铺瞧瞧</a>
+        </div>
+        <!--大奖提示-->
+        <!--<div style=" display:none;">-->
+            <!--<div style="position:relative; width:75%;" class="tip_bg radius10">-->
+                <!--<a class="close" href="#X"><img src="images/index/close.png" /></a>-->
+                <!--<span style="padding-top:0;">恭喜你, 获得&nbsp;<strong>2.5kg</strong>&nbsp;东北珍珠米<br />你的兑换码是 <strong>gjo343</strong></span>-->
+                <!--<div class="cj_tip">-->
+                    <!--<label>领奖方式</label><br />-->
+                    <!--在电脑上登录天猫网站<label>www.tianmao.com</label>，搜索<label>”西瑞食品旗舰店”</label>,进入店铺，找客服回复以下文字：<br /><i>您好！我是朋友说用户，通过摇一摇游戏，获得西瑞集团提供的2.5kg西瑞东北珍珠米，我的兑码是gjo343，感谢西瑞集团！</i>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <ul class="clearfix" style="width: 30%; margin: 0 auto; margin-top: 0.5em;">
+            <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/btc/story/top.gif')}}" /></a></li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <div class="chance_title">摇一摇加机会秘诀</div>
+        <div class="chance_tip">
+            <ul>
+                <li>1、关注朋友说，每天可领取2次游戏机会；</li>
+                <li>2、活动期间每购买1件商品增加2次游戏机会;</li>
+                <li>3、小伙伴点击分享的摇一摇游戏链接增加1次游戏机会。</li>
+            </ul>
+            <a id="assignWXSubscribeTimes" href="javascript:;" class="chancebtn radius10">关注朋友说</a>
+            <a href="/?from=game_{{$game_type}}" class="sharebtn radius10">购物加机会</a>
+            <a id="share_btn_2"  href="javascript:;" class="sharebtn radius10">分享好友求点</a>
+        </div>
+        <div class="aboutus">
+            <img src="http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/logo.png" /><br />
+            [朋友说]同事间互相分享家乡特产的创业网站,<br />
+            我们都是城市里的乡下人。
+        </div>
+        <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none; padding-top: 0">
+            <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/btc/story/top.gif')}}" /></a></li>
+        </ul>
+    </div>
+
+    <div class="bg_green pad section">
+        <div class="help_title">谁帮了我(<span id="helpme_cnt_n" class="red ">{{count($helpMe)}}</span>)</div>
+        <div class="help_list">
+            {{if $helpMe}}
+                <ul>
+                <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=60){break;} if ($i%2 ==1){continue;} ?>
+                    <li class="con clearfix">
+                        {{$item['nickname']}}<strong class="red gots">{{ $item['got'] }}</strong>粒
+                    </li>
+                <?php } ?>
+                </ul>
+                <ul>
+                <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=60){break;} if ($i%2 == 0){continue;} ?>
+                    <li class="con clearfix">
+                        {{$item['nickname']}}<strong class="red gots">{{ $item['got'] }}</strong>粒
+                    </li>
+                <?php } ?>
+                </ul>
+            {{else}}
+            <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！
+                <a id="share_btn_3" href="javascript:;" class="help">分享好友求助</a>
+            </div>
+            {{/if}}
+        </div>
+        <ul class="clearfix" style="width: 30%; margin: 0 auto; float: none">
+            <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/btc/story/top.gif')}}" /></a></li>
+        </ul>
+    </div>
+    </div>
+</div>
+
+<script>
+    var $today_got_wx = "{{$today_got_wx}}";
+    var shake_pic_url = '{{$this->Html->assetUrl("http://51daifan-images.stor.sinaapp.com/as/normal1/tree.gif")}}';
+    var sound_url = 'http://51daifan-images.stor.sinaapp.com/tree_shake.mp3';
+    var share_png_url = '{{$this->Html->assetUrl("http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/share.png")}}';
+    var yao_tips_png = '{{$this->Html->assetUrl("http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/yao.png")}}';
+    var game_type = '{{$game_type}}';
+    var game_page_title = {{if !empty($title_func)}}function(total){ return {{$title_func}};} {{else}} null {{/if}};
+    var game_obj_name = '{{$game_obj_name}}';
+    var game_least_change = '{{$game_least_change}}';
+    var awarded = '{{$awarded}}';
+    var game_user_total = '{{$game_user_total}}'; //loading by update_top_list
+    var $shaking_tips_png;
+
+    var $share_before_coupon = '{{$share_before_coupon}}';
+    var share_coupon_msg = '';
+    var share_coupon_title = '';
+    var $share_div;
+
+    $(document).ready(function(){
+        $('#fullpage').fullpage({
+            touchSensitivity: 15,
+            css3: true,
+            loopBottom: true,
+            loopTop: true,
+            anchors: ['firstPage'/*, 'product_story'*/, 'get_coupons', 'my_award', 'award_cj', 'about_us', 'friends']
+        });
+
+        var $appleTimesLeft = $('#apple_times_left, #apple_times_left_bottom');
+
+        var friendGots = $('.gots').map(function () {
+            var v = $.trim($(this).text());
+            return v ? parseInt(v) : 0;
+        }).get();
+
+        awarded = $('#game_xirui_award').size() > 0;
+
+        function azero(v) {
+            return  (v < 10) ?  ('0'+''+v) : v;
+        }
+
+        function calculate_left() {
+            var now = new Date;
+            if (now.getHours() >= miaosha_hour()) {
+                if (now.getHours() >= 22) {
+                    now.setDate(now.getDate() + 1);
+                    now.setHours(8);
+                } else if (now.getHours() < 8) {
+                    now.setHours(8);
+                } else {
+                    now.setHours(now.getHours() + 1);
+                }
+            }
+            now.setMinutes(0);
+            now.setSeconds(0);
+            return (now.getTime() - new Date()) / 1000;
+        }
+
+        function format_left(dif, gap) {
+            var hour = Math.floor(dif / 3600);
+            var left = Math.floor(dif % 3600);
+            var min = Math.floor(left / 60);
+            var seconds = Math.floor(left % 60);
+            return azero(hour) + (gap ? gap : '小时') + azero(min) + (gap ? gap : '分') + azero(seconds) + (gap ? '' : '秒');
+        }
+
+
+        function total_not_spent() {
+            var total = $.trim($('#apple_got_cnt').text());
+            total = total != '' ? parseInt(total) : 0;
+            return total;
+        }
+
+        function get_total() {
+            var total = total_not_spent();
+            return (total < game_user_total ? game_user_total : total);
+        }
+
+        function show_got_coupon() {
+            utils.alert_one('恭喜您获奖啦，请在有效期结束前兑换/使用。', '我的奖品', function(){ window.location.href = '/t/ag/normal1.html?section=my_award';});
+        }
+
+        var imgUrl = $('#apple_tree_img').attr('src');
+        var lineLink = '{{WX_HOST}}/t/ag/{{$game_type}}.html?{{if $trid}}trid={{urlencode($trid)}}{{/if}}&from=awarded';
+        var appid = '{{WX_APPID}}';
+
+        function get_share_msg(msg) {
+            return '基友们太给力！我摇到由朋友说的美食商家提供的' + msg + '啦，兄弟们，继续摇起！';
+        }
+
+        share_coupon_msg = get_share_msg($('#game_xirui_award').text());
+        share_coupon_title = '妈呀，我终于获奖了！';
+
+        function share_before_coupon_msg() {
+            utils.wx_to_friend(appid, imgUrl, lineLink, share_coupon_msg, share_coupon_title);
+            show_got_coupon();
+        }
+
+        function share_before_coupon_tl() {
+            utils.wx_to_timeline(appid, imgUrl, lineLink, '', share_coupon_msg);
+            show_got_coupon();
+        }
+
+        function help_me_cnt() {
+            var helpme_cnt_txt = $.trim($('#helpme_cnt_n').text());
+            return (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
+        }
+
+        function dabai_percent() {
+            var total = get_total();
+
+            var win = 0;
+            for(var x in friendGots) {
+                if (total > friendGots[x]) {
+                    win++;
+                }
+            }
+            return (win == friendGots.length) ? 100 : utils.toFixed(win*100/friendGots.length, 0)
+        }
+
+            $('#cj_start_btn').click(function(){
+
+                var startImg = $(this).find('img');
+                var finish = false;
+                var stop_rotate = 0;
+                function jp() {
+                    setTimeout(function () {
+                        $.getJSON('/apple_201410/jp/{{$game_type}}?' + Math.random(), {}, function (data) {
+                            finish = true;
+                            if (data.success) {
+                                if (data.award_type != 0) {
+                                    var tips = '恭喜，您抽中西瑞食品集团提供的';
+                                    if (data.award_type == 1) {
+                                        tips += '西瑞东北珍珠米2.5kg，兑换码:' + data.award_code;
+                                        stop_rotate = 0;
+                                    } else if (data.award_type == 2) {
+                                        tips += '西瑞谷物圈100g，兑换码:' + data.award_code;
+                                        stop_rotate = 144;
+                                    } else if (data.award_type == 18278) {
+                                        tips += '优惠券5元（可在朋友说西瑞店铺所有产品使用）';
+                                        stop_rotate = 216;
+                                    } else if (data.award_type == 18279) {
+                                        tips += '优惠券3元（可在朋友说西瑞店铺所有产品使用）';
+                                        stop_rotate = 72;
+                                    } else if (data.award_type == 18280) {
+                                        tips += '优惠券1元（可在朋友说西瑞店铺所有产品使用）';
+                                        stop_rotate = 288;
+                                    }
+                                    utils.alert_one(tips, '查看我的奖品', function () {
+                                        window.location.href = '/t/ag/xirui1412.html?section=my_award';
+                                    }, {top:'70%'});
+//                            utils.alert_one(tips, '分享到朋友圈', function () {
+//                                if ($shaking_tips_png) {
+//                                    $share_before_coupon = true;
+//                                    awarded = true;
+//                                    $share_div.show();
+//                                }
+//                            });
+                                } else {
+                                    var msg = '';
+                                    if (data.msg == 'not_enough_100') {
+                                        msg = '抱歉，抽奖失败，够20粒才可以抽！';
+                                    }
+                                    else if (data.msg == 'game_end') {
+                                        msg = '活动已结束';
+                                    } else {
+                                        msg = '手气不太好啊, 请重试！';
+                                    }
+                                    utils.alert(msg, null);
+                                }
+                            } else {
+                            }
+                        });
+                    }, 1000);
+                }
+
+                function rotate() {
+                    if (finish) {
+                        startImg.animate({'rotate': stop_rotate});
+                    } else {
+                        startImg.animate({rotate: '360'}, 1000, 'linear', function () {
+                            rotate();
+                        });
+                    }
+                }
+                jp();
+                rotate();
+            });
+
+        function desc_cmp_friends() {
+
+            var desc = '摇一摇 ，西瑞珍珠米5斤轻松免费抢，我已摇下'+get_total()+'粒';
+            if (friendGots && friendGots.length > 0) {
+                var dabaiPercent = dabai_percent();
+                desc += (dabaiPercent == 100 ? ', 打败了所有好友，哈哈' : (dabaiPercent == 0 ? ', 朋友圈里垫底 ^_^， 快点我吧' : ', 打败了' + dabaiPercent + '%的好友！'));
+            } else {
+                desc += ', 还没人帮过我！快来帮我吧';
+            }
+            return desc;
+        }
+//
+//        function desc_normal() {
+//            var total = get_total();
+//            var my_list = parseInt($.trim($('#top_list_mine').text()));
+//            return '';
+//        }
+
+        var shareTitle = '摇下20粒，西瑞东北珍珠米免费抢';
+
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+
+        $('#view_my_coupons').click(function(e){
+            if (game_user_total <= total_not_spent()) {
+                e.preventDefault();
+                utils.alert_one('您还没抽到优惠券', '关闭');
+                return false;
+            }
+        });
+
+        function share_timeline(){
+            lineLink += '&src=tl';
+            var desc = desc_cmp_friends();
+            utils.wx_to_timeline(appid, imgUrl, lineLink, '', desc);
+        }
+
+        // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
+        document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+            if (typeof(WeixinJSBridge) != 'undefined') {
+                WeixinJSBridge.on('menu:share:appmessage', function (argv) {
+                    if ($share_before_coupon) {
+                        share_before_coupon_msg();
+                        $share_before_coupon = false;
+                    } else if (awarded) {
+                        utils.wx_to_friend(appid, imgUrl, lineLink, share_coupon_msg, share_coupon_title);
+                    } else {
+                        utils.wx_to_friend(appid, imgUrl, lineLink, desc_cmp_friends(), shareTitle);
+                    }
+
+                });
+                WeixinJSBridge.on('menu:share:timeline', function (argv) {
+                    if ($share_before_coupon) {
+                        share_before_coupon_tl();
+                        $share_before_coupon = false;
+                    } else if (awarded) {
+                        utils.wx_to_timeline(appid, imgUrl, lineLink, '', share_coupon_msg);
+                    } else {
+                        share_timeline();
+                    }
+                });
+            }
+        }, false);
+
+        {{if $_GET['section']}}
+            $.fn.fullpage.moveTo('{{$_GET['section']}}');
+            {{/if}}
+    });
+
+    function game_coupon_message(times, total) {
+        if (total < 20)  { return '<br/><small>差<span class="apple_numbers">' + (20 - total) + '</span>粒就可以抽奖啦</small>'; }
+        else return '';
+    }
+
+    function showAfterGotCallback(times, total, got){
+    }
+</script>
+{{$this->Html->script(array('apple_game.js?v25'));}}
