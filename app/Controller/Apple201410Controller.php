@@ -395,7 +395,7 @@ VALUES
                                         18707, //240
                                         18708, //60
                                         18709, //120
-                                        18705, //30
+                                        18705, //0
                                     );
                                     //切忌不能动，位置多意境对应上了
                                     $step_rotate = array(
@@ -404,7 +404,7 @@ VALUES
                                         18707 => 240,
                                         18708 => 60,
                                         18709 => 120,
-                                        18705 => 30,
+                                        18705 => 0,
                                     );
                                     $rotate = $step_rotate[$award_type];
                                     $coupon_name_list = array(
@@ -416,8 +416,15 @@ VALUES
                                         '德庆贡柑－林玲',
                                     );
                                     $coupon_count = 1;
-                                    $award_idx = $mt_rand % count($coupon_id_list);
-                                    $award_type = $coupon_id_list[$award_idx];
+
+                                    $award_idx = 0;
+                                    while(true) {
+                                        $award_idx = $mt_rand % count($coupon_id_list);
+                                        $award_type = $coupon_id_list[$award_idx];
+                                        if ($award_type != 18705) {
+                                            break;
+                                        }
+                                    }
                                     $award_brand_name = $coupon_name_list[$award_idx];
                                     $so = $this->CouponItem;
                                     $weixin = $this->Weixin;
@@ -713,13 +720,6 @@ VALUES
         $this->_updateLastQueryTime(time());
 
         if ($awardInfo['got'] > 20) {
-
-            $this->loadModel('GameXiruiCode');
-            if ($this->GameXiruiCode->userIsAwarded($current_uid)) {
-                $gotCode = $this->GameXiruiCode->find('first', array('conditions' => array('uid' => $current_uid), 'order' => 'created asc'));
-                $this->set('gotCode', $gotCode);
-            }
-
             $this->loadModel('CouponItem');
             $coupons = $this->CouponItem->find_my_valid_coupons($current_uid, 147, false);
             $this->set('coupons', $coupons);
@@ -740,8 +740,7 @@ VALUES
         $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $current_uid, 'type' => $gameType)));
         $pys_got = $this->gotWxTimesToday($weixinTimesLog, mktime());
 
-        $xirui_got = Cache::read(key_assigned_times('xirui', $current_uid)) >= 1;
-        $this->set('today_got_wx', $pys_got && $xirui_got);
+        $this->set('today_got_wx', $pys_got);
 
         $customized_game = $this->customized_view_files[$gameType];
         if (!empty($customized_game)) {
@@ -772,7 +771,7 @@ VALUES
             $got = !empty($awardInfo) ?  $awardInfo['got'] : 0;
             $total_apple = $got ? ($got - $awardInfo['spent']) : 0;
             $this->_updateLastQueryTime(time());
-            $need_login = $this->is_weixin() && $got > 50 && notWeixinAuthUserInfo($uid, $this->currentUser['nickname']);
+            $need_login = $this->is_weixin() && $got > 20 && notWeixinAuthUserInfo($uid, $this->currentUser['nickname']);
             echo json_encode(array('success' => true, 'got_apple' => $apple, 'total_apple' => $total_apple, 'total_times' => $totalAwardTimes, 'need_login' => $need_login));
         } else {
             $this->log('incorrect award activity type:'. $gameType);
