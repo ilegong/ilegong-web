@@ -264,14 +264,14 @@
                 <ul>
                 <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=60){break;} if ($i%2 ==1){continue;} ?>
                     <li class="con clearfix">
-                        {{$item['nickname']}}<strong class="red gots">{{ $item['got'] }}</strong>粒
+                        {{$item['nickname']}}<strong class="red gots">{{ $item['got'] }}</strong>{{$game_obj_name}}
                     </li>
                 <?php } ?>
                 </ul>
                 <ul>
                 <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=60){break;} if ($i%2 == 0){continue;} ?>
                     <li class="con clearfix">
-                        {{$item['nickname']}}<strong class="red gots">{{ $item['got'] }}</strong>粒
+                        {{$item['nickname']}}<strong class="red gots">{{ $item['got'] }}</strong>{{$game_obj_name}}
                     </li>
                 <?php } ?>
                 </ul>
