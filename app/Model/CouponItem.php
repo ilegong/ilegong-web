@@ -98,24 +98,6 @@ class CouponItem extends AppModel {
             ));
             Cache::write($key, $result);
         }
-
-//        $lastGot = Cache::read('ci_5_last');
-//        $interval = 90;
-//        if (mktime() - $lastGot > $interval) {
-//            $mine_latest = $this->find_latest_created_coupon_item(632, COUPON_TYPE_CHZ_90);
-//            if (!empty($mine_latest)) {
-//                $dt = DateTime::createFromFormat(FORMAT_DATETIME, $mine_latest['CouponItem']['created']);
-//                $lastCreated = $dt->getTimestamp();
-//                if ($lastCreated > $lastGot) {
-//                    Cache::write('ci_5_last', $lastCreated);
-//                    $lastGot = $lastCreated;
-//                }
-//            }
-//            if (mktime() - $lastGot > $interval) {
-//                $this->addCoupon(632, COUPON_TYPE_CHZ_90, 632, 'special');
-//            }
-//        }
-
         return $result;
     }
 
