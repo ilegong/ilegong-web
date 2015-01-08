@@ -414,6 +414,12 @@
                 var startImg = $(this).find('img');
                 var finish = false;
                 var stop_rotate = 0;
+
+                if (total_not_spent()<20) {
+                    utils.alert('抱歉，抽奖失败，够20个才可以抽！', null);
+                    return;
+                }
+
                 function jp() {
                     setTimeout(function () {
                         $.getJSON('/apple_201410/jp/{{$game_type}}?' + Math.random(), {}, function (data) {

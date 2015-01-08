@@ -84,6 +84,17 @@ VALUES
         self::NORMAL_1 => 'normal1',
     );
 
+
+    //切忌不能动，位置多意境对应上了
+    var $coupon_steps = array(
+        18704 => 300,
+        18706 => 180,
+        18707 => 240,
+        18708 => 60,
+        18709 => 120,
+        18705 => 0,
+    );
+
     const BTC_DAILY_AWARD_LIMIT = 20;
     public function beforeFilter()
     {
@@ -318,7 +329,7 @@ VALUES
         $award_type = 0;
         $last = $this->Session->read('last_chou_jiang');
         $msg = '';
-        if (time() - $last > 10 && ($gameType == self::XIRUI1412)
+        if (time() - $last > 10 && ($gameType == self::NORMAL_1)
             && $this->is_weixin()
         ) {
             $this->Session->write('last_chou_jiang', time());
@@ -389,24 +400,7 @@ VALUES
                                     //18278  500
                                     //18279  300
                                     //18280  100
-                                    $coupon_id_list = array(
-                                        18704, //30 + 4*60 + 30 = 300
-                                        18706, //180
-                                        18707, //240
-                                        18708, //60
-                                        18709, //120
-                                        18705, //0
-                                    );
-                                    //切忌不能动，位置多意境对应上了
-                                    $step_rotate = array(
-                                        18704 => 300,
-                                        18706 => 180,
-                                        18707 => 240,
-                                        18708 => 60,
-                                        18709 => 120,
-                                        18705 => 0,
-                                    );
-                                    $rotate = $step_rotate[$award_type];
+                                    $coupon_id_list = array_keys($this->coupon_steps);
                                     $coupon_name_list = array(
                                         '生活速递联盟',
                                         '天下农夫-朱晓宇',
@@ -425,6 +419,7 @@ VALUES
                                             break;
                                         }
                                     }
+                                    $rotate = $this->coupon_steps[$award_type];
                                     $award_brand_name = $coupon_name_list[$award_idx];
                                     $so = $this->CouponItem;
                                     $weixin = $this->Weixin;
@@ -719,9 +714,9 @@ VALUES
         $this->set('game_user_total', $awardInfo['got']);
         $this->_updateLastQueryTime(time());
 
-        if ($awardInfo['got'] > 20) {
+        if ($awardInfo['got'] >= 20) {
             $this->loadModel('CouponItem');
-            $coupons = $this->CouponItem->find_my_valid_coupons($current_uid, 147, false);
+            $coupons = $this->CouponItem->find_coupon_item_by_type($current_uid, array_keys($this->coupon_steps));
             $this->set('coupons', $coupons);
         }
 

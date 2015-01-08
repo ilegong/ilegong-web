@@ -243,6 +243,17 @@ class CouponItem extends AppModel {
         return false;
     }
 
+    public function find_coupon_item_by_type($uid, $couponIds) {
+        if (!empty($couponIds) && $uid) {
+            return $this->find('all', array(
+                'joins' => $this->joins_link,
+                'fields' => array('Coupon.*', 'CouponItem.*'),
+                'conditions' => array('CouponItem.coupon_id' => $couponIds, 'CouponItem.deleted = 0', 'CouponItem.bind_user' => $uid),
+            ));
+        }
+        return false;
+    }
+
     public function find_my_all_coupons($user_id) {
         return $this->find('all', array(
             'conditions' => array('CouponItem.bind_user' => $user_id, 'CouponItem.deleted = 0'),
