@@ -417,13 +417,7 @@ VALUES
                                     while(true) {
                                         $award_idx = $mt_rand % count($coupon_id_list);
                                         $award_type = $coupon_id_list[$award_idx];
-                                        if ($award_type == 18705 && $top_award_count < $top_award_limit) {
-//                                            if ($top_award_count == -1) {
-//                                                $top_award_count = $this->CouponItem->couponCount(18705);
-//                                            }
-//                                            if ($top_award_count < $top_award_limit) {
-//                                                break;
-//                                            }
+                                        if ($award_type == 18705 ) {
                                         } else {
                                             break;
                                         }
