@@ -439,7 +439,7 @@ VALUES
                                             $so->addCoupon($uid, $award_type, $operator, $source_log_id);
                                             $so->id = null;
                                             $store = "在朋友说".$award_brand_name."店购买时使用";
-                                            $validDesc = "有效期至2014年12月31日";
+                                            $validDesc = "有效期至2015年1月24日";
                                             $weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
                                         }
                                     );
