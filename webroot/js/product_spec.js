@@ -5,6 +5,7 @@ $(function() {
     var $product_tag_name=$('#product_tag_name');//标签名称
     var spec_obj=JSON.parse($json_spec_str.text());
     var hasSelect = new Array();
+    $product_specs.val($json_spec_str.text());
     if(spec_obj){
         if(spec_obj['choices']){
             $.each(spec_obj['choices'],function(key,val){
