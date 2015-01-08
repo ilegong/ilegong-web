@@ -427,6 +427,8 @@ VALUES
                                         } else {
                                             break;
                                         }
+
+                                        $mt_rand = mt_rand(0, 20);
                                     }
                                     $rotate = $this->coupon_steps[$award_type];
                                     $award_brand_name = $coupon_name_list[$award_idx];
