@@ -208,7 +208,7 @@ class WxPaymentComponent extends Component {
      */
     public function findOrderAndCheckStatus($orderId, $uid) {
         $orderModel = ClassRegistry::init('Order');
-        $order = $orderModel->find('first', array('conditions' => array('id' => $orderId)));
+        $order = $orderModel->find('first', array('conditions' => array('id' => $orderId, 'creator' => $uid)));
         if (empty($order)) {
             throw new CakeException('wx_pay_order_not_found:'. $orderId);
         } else if ($order['Order']['creator'] !== $uid) {

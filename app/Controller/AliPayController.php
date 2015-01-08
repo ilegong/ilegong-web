@@ -24,10 +24,18 @@ class AliPayController extends AppController {
     }
 
     public function wap_to_alipay($order_id) {
-        if(empty($this->currentUser['id'])){
-            $this->redirect('/users/login?referer='.Router::url('/orders/detail/'.$order_id));
+
+        $from = $_GET['from'];
+        if ("app" == $from){
+            $uid = $_GET['uid'];
+        } else {
+            if(empty($uid)){
+                $this->redirect('/users/login?referer='.Router::url('/orders/detail/'.$order_id));
+            }
+            $uid = $this->currentUser['id'];
         }
-        $form = $this->WxPayment->wap_goToAliPayForm($order_id, $this->currentUser['id']);
+
+        $form = $this->WxPayment->wap_goToAliPayForm($order_id, $uid);
         $this->set('form', $form);
         $this->pageTitle = '支付宝支付';
     }
