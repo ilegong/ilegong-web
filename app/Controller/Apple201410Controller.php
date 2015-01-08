@@ -417,7 +417,7 @@ VALUES
                                         $award_type = $coupon_id_list[$award_idx];
                                         if ($award_type == 18705) {
                                             $count = $this->CouponItem->couponCount(18705);
-                                            if ($count < 5) {
+                                            if ($count < 2) {
                                                 break;
                                             }
                                         } else {
