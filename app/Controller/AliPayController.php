@@ -29,10 +29,10 @@ class AliPayController extends AppController {
         if ("app" == $from){
             $uid = $_GET['uid'];
         } else {
+            $uid = $this->currentUser['id'];
             if(empty($uid)){
                 $this->redirect('/users/login?referer='.Router::url('/orders/detail/'.$order_id));
             }
-            $uid = $this->currentUser['id'];
         }
 
         $form = $this->WxPayment->wap_goToAliPayForm($order_id, $uid);
