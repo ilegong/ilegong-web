@@ -1,0 +1,205 @@
+<style>
+    .row{
+        margin-top:40px;
+        padding: 0 10px;
+    }
+    .clickable{
+        cursor: pointer;
+    }
+
+    .panel-heading div {
+        margin-top: -18px;
+        font-size: 15px;
+    }
+    .panel-heading div span{
+        margin-left:5px;
+    }
+    .panel-body{
+        display: none;
+    }
+</style>
+<div class="Singleform">
+    <script>
+        var current_module = '{{$current_model}}';
+        var current_id = '{{$id}}';
+        var current_data = null;
+        {{if $current_data}}
+            current_data = {{$current_data}};
+        {{/if}}
+    </script>
+    {{if $copy}}
+    <div class="ui-state-highlight">
+        复制数据，保存时，创建一条新的数据记录。修改不影响原记录内容。
+    </div>
+    {{/if}}
+    <div class="tabs">
+        {{if $current_action=='admin_add'}}
+        <?php
+echo $this->MForm->form(array(
+        'model'=> $current_model,
+        'auto_form' => 1,
+        'class'=>'form-horizontal',
+        'form_type' => 'add',
+        'url' => array('action' => 'add'),
+        ));
+        ?>
+        {{elseif $current_action=='admin_edit'}}
+        <?php
+echo $this->MForm->form(array(
+        'model'=> $current_model,
+        'class'=>'form-horizontal',
+        'auto_form' => 1,
+        'form_type' => 'edit',
+        'url' => array('action' => 'edit',$id,$copy),
+        ));
+        ?>
+        {{/if}}
+    </div>
+</div>
+
+{{if $current_action=='admin_edit'}}
+<script>
+/**
+ *   I don't recommend using this plugin on large tables, I just wrote it to make the demo useable. It will work fine for smaller tables
+ *   but will likely encounter performance issues on larger tables.
+ *
+ *		<input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#dev-table" placeholder="Filter Developers" />
+ *		$(input-element).filterTable()
+ *
+ *	The important attributes are 'data-action="filter"' and 'data-filters="#table-selector"'
+ */
+(function(){
+    'use strict';
+    var $ = jQuery;
+    $.fn.extend({
+        filterTable: function(){
+            return this.each(function(){
+                $(this).on('keyup', function(e){
+                    $('.filterTable_no_results').remove();
+                    var $this = $(this), search = $this.val().toLowerCase(), target = $this.attr('data-filters'), $target = $(target), $rows = $target.find('tbody tr');
+                    if(search == '') {
+                        $rows.show();
+                    } else {
+                        $rows.each(function(){
+                            var $this = $(this);
+                            $this.text().toLowerCase().indexOf(search) === -1 ? $this.hide() : $this.show();
+                        })
+                        if($target.find('tbody tr:visible').size() === 0) {
+                            var col_count = $target.find('tr').first().find('td').size();
+                            var no_results = $('<tr class="filterTable_no_results"><td colspan="'+col_count+'">No results found</td></tr>')
+                            $target.find('tbody').append(no_results);
+                        }
+                    }
+                });
+            });
+        }
+    });
+    $('[data-action="filter"]').filterTable();
+})(jQuery);
+</script>
+<script>
+    var editHTML;
+    var editText;
+    function setEditHTML(value){
+        editHTML = '<input type="text" value="'+value+'" />';
+        editHTML += '<input type="button" onclick="ok(this)" value="修改" />';
+        editHTML += '<input type="button" onclick="cancel(this)" value="取消" />';
+    }
+
+    //取消
+    function cancel(cbtn){
+        var $obj = $(cbtn).parent(); //'取消'按钮的上一级，即单元格td
+        $obj.html($obj.data("oldtxt")); //将单元格内容设为原始数据，取消修改
+        $obj.bind("dblclick",function(){ //重新绑定单元格双击事件
+            editText = $(this).html();
+            setEditHTML(editText);
+            $(this).data("oldtxt",editText)
+                    .html(editHTML).unbind("dblclick");
+        });
+    }
+
+    //修改
+    function ok(obtn){
+        var $obj = $(obtn).parent(); //'修改'按钮的上一级，即单元格td
+        var id = $obj.parent().attr("id").replace("tr_",""); //取得该行数据的ID，此例ID绑定在tr中
+        var value = $obj.find("input:text")[0].value; //取得文本框的值，即新数据
+        //AJAX 修改数据略
+
+        var postData = {
+            "id":id,
+            "currentRecommend":value
+        };
+        $.post('/manage/admin/product_tags/edit_recommend',postData,function(data){
+            var result = JSON.parse(data);
+            //成功
+            if(result['success']){
+                alert("success");
+                $obj.data("oldtxt",value); //设置此单元格缓存为新数据
+                cancel(obtn); //调用'取消'方法，
+                //在此应传'取消'按钮过去，
+                //但在'取消'事件中没有用'取消'按钮这个对 象,
+                //用的只是它的上一级，即td，
+                //固在此直接用'修改'按钮替代
+            }
+            //失败
+            else{
+                alert("error");
+                cancel(obtn);
+            }
+        });
+
+    }
+</script>
+<script>
+    $(document).ready(function(){
+        var $intPanel  = '<div class="panel panel-primary" id="product-panel"> <div class="panel-heading"> <h3 class="panel-title">商品列表</h3>'+
+                            '<div class="pull-right">'+
+                            '<span class="clickable filter" data-toggle="tooltip" title="Toggle table filter" data-container="body">'+
+                            '<i class="glyphicon glyphicon-filter"></i>'+
+                            '</span>'+
+                            '</div>'+
+                            '</div>'+
+                            '<div class="panel-body">'+
+                            '<input type="text" class="form-control" id="dev-table-filter" data-action="filter" data-filters="#product-table" placeholder="查找商品" />'+
+                            '</div>'+
+                            '<table class="table table-hover" id="product-table">'+
+                            '<thead><tr><th style="width: 100px">id</th><th style="width: 200px">商品名字</th><th style="width: 300px">推荐度</th></tr></thead>'+
+                            '<tbody id="product-list">'+
+                            '</tbody>'+
+                            '</table>'+
+                            '</div>';
+        var $tab = $('#ProductTag-advanced-info');
+        $tab.html($intPanel);
+        // attach table filter plugin to inputs
+        $('[data-action="filter"]').filterTable();
+        $tab.on('click', '.panel-heading span.filter', function(e){
+            var $this = $(this),
+                    $panel = $this.parents('.panel');
+            $panel.find('.panel-body').slideToggle();
+            if($this.css('display') != 'none') {
+                $panel.find('.panel-body input').focus();
+            }
+        });
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $.get('/manage/admin/product_tags/list_products?tagId='+current_id,function(data){
+            var $html = '';
+            $.each(JSON.parse(data),function(index,item){
+                $html+='<tr id="tr_'+item['id']+'"><td>'+item['id']+'</td><td>'+item['product_name']+'</td><td class="editbox">'+item['recommend']+'</td></tr>'
+            });
+            $('#product-list').html($html);
+            //绑定事件
+            $(".editbox",$tab).each(function(){ //取得所有class为editbox的对像
+                $(this).bind("dblclick",function(){ //给其绑定双击事件
+                    editText = $(this).html(); //取得表格单元格的文本
+                    setEditHTML(editText); //初始化控件
+                    $(this).data("oldtxt",editText) //将单元格原文本保存在其缓存中，便修改失败或取消时用
+                            .html(editHTML) //改变单元格内容为编辑状态
+                            .unbind("dblclick"); //删除单元格双击事件，避免多次双击
+                });
+            });
+        });
+    });
+</script>
+
+{{/if}}
