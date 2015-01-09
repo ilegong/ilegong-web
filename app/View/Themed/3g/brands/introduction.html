@@ -2,7 +2,24 @@
 <div class="mystory">
     <?php echo $Brand['Brand']['content']; ?>
 </div>
-
+{{if $hide_icon}}
+<div class="common_bottom clearfix">
+    <a href="{{$this->Html->url('/b/'.$slug);}}" style="width:33%;">
+        <span class="shop_index"></span>
+        <span>商铺首页</span>
+    </a>
+    <a href="javascript:" style="width:33%;">
+        <span class="shop_story_cur" ></span>
+        <span style="color:#29ac0e;">我的故事</span>
+    </a>
+    <a href="/carts/listcart.html" style="width:33%;">
+    	<span class="shopping_cart">
+        	<div class="number"><label id="item-count"></label></div>
+        </span>
+        <span>购物车</span>
+    </a>
+</div>
+{{else}}
 <div class="common_bottom clearfix">
     <a href="/techan.html">
         <span class="pyshuo_logo"></span>
@@ -23,3 +40,4 @@
         <span>购物车</span>
     </a>
 </div>
+{{/if}}

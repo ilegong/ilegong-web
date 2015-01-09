@@ -35,6 +35,10 @@ class BrandsController extends AppController {
     		'limit'=>'100',
             'order'=>'sort_in_store desc'
     	));
+        $hide_icon_set = array('xi_rui_ji_tuan');
+        if(!(array_search($slug, $hide_icon_set) === false)){
+            $this->set('hide_icon', true);
+        }
     	$this->set('products',$products);
         $this->set('op_cate', 'share');
         $this->set('hideNav', true);
@@ -74,6 +78,10 @@ class BrandsController extends AppController {
             $Brand  = $this->Brand ->find('first', array(
                 'conditions' => array('Brand.published' => 1, 'Brand.deleted' => 0, 'Brand.id' => $id),
             ));
+        }
+        $hide_icon_set = array('xi_rui_ji_tuan');
+        if(!(array_search($slug, $hide_icon_set) === false)){
+            $this->set('hide_icon', true);
         }
         $this->set('Brand', $Brand);
         $this->set('Brand', $Brand);
