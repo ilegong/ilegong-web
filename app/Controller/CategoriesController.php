@@ -183,13 +183,13 @@ class CategoriesController extends AppController {
         $this->productsHome(true);
 
         $zutuangous = array(
-            array('img' => "/img/banner/banner_zutuangou1.jpg", 'url' => "/groupons/view/chengzi.html?from=home1", 'id' => 0),
+            array('img' => "/img/banner/banner_zutuangou3.jpg", 'url' => "/groupons/view/chengzi.html?from=home1", 'id' => 0),
             array('img' => "/img/banner/banner_zutuangou2.jpg", 'url' => "/groupons/view/chengzi.html?from=home2", 'id' => 0),
             array('img' => "/img/banner/banner_zutuangou.jpg", 'url' => "/groupons/view/gonggan.html?from=home", 'id' => 0),
         );
 
         $bannerItems = array(
-            $zutuangous[mt_rand(1000) % count($zutuangous)],
+            $zutuangous[mt_rand(0, 1000) % count($zutuangous)],
             array('img' => "/img/banner/banner_shibin.jpg?v2", 'url' => "/products/20141204/fu_ping_te_ji_jian_shi_bing.html", 'id' => 331),
             array('img' => "/img/banner/banner_gonglianzi.jpg", 'url' => "/products/20141229/jiang_xi_gong_lian_zi.html", 'id' => 560),
             array('img' => "/img/banner/banner_yongxing_btc.jpg?v1", 'url' => "/b/qian_yang_wan_cheng.html", 'id' => 365),
