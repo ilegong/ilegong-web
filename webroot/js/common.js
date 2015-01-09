@@ -1232,8 +1232,8 @@ $(document).ready(function () {
 
     $('span.spec_item').click(function (ev) {
         var $this = $(this);
-        $this.toggleClass('spec_item_selected');
-        $('span.spec_item[item-label="' + $this.attr('item-label') + '"]').not($this).removeClass('spec_item_selected');
+        $this.toggleClass('spec_item_selected').toggleClass('cur');
+        $('span.spec_item[item-label="' + $this.attr('item-label') + '"]').not($this).removeClass('spec_item_selected').removeClass('cur');
     });
     $("#btn_add_cart").click(function(e){
         var $this = $(this);

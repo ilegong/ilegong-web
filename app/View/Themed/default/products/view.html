@@ -285,11 +285,5 @@
             $('#btn_add_cart').trigger('click');
             return;
         });
-        $('span.spec_item').click(function (ev) {
-            ev.preventDefault();
-            var $this = $(this);
-            $this.addClass('spec_item_selected').addClass('cur');
-            $('span.spec_item[item-label="' + $this.attr('item-label') + '"]').not($this).removeClass('spec_item_selected').removeClass('cur');
-        });
     });
 </script>
