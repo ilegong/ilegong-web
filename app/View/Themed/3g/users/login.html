@@ -1,3 +1,14 @@
+<?php
+    $referer_link = '';
+    if (!empty($referer)) {
+        $referer_link .= '&referer='.urlencode($referer);
+    }
+?>
+{{if $supportWeixin && !empty($_GET['auto_weixin'])}}
+<script>
+    window.location.href='{{$this->Html->url("/users/wx_login.html?")}}{{$referer_link}}';
+</script>
+{{/if}}
 <div id="container-part1" class="container clearfix">
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
@@ -17,17 +28,6 @@
                     <p class="bg-warning" style="color: orangered">{{$_GET['login_error']}}</p>
                 {{else}}
                 <p>授权我们使用您的微信账号登录朋友说。</p>
-                {{/if}}
-                <?php
-                $referer_link = '';
-                if (!empty($referer)) {
-                    $referer_link .= '&referer='.urlencode($referer);
-                }
-                ?>
-                {{if $_GET['auto_weixin'] == 'true'}}
-                <script>
-                    window.location.href='{{$this->Html->url("/users/wx_login.html?")}}{{$referer_link}}';
-                </script>
                 {{/if}}
                 <a id="wx_login_a1" href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" style="vertical-align: bottom">
                     <img src="{{$this->Html->url('/img/Wechat-logo-315_315.png');}}" style="width:90px;height:90px">

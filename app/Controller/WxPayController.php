@@ -22,7 +22,12 @@ class WxPayController extends AppController {
     public function group_pay($memberId) {
 
         $uid = $this->currentUser['id'];
-        $type = $_REQUEST['type'];
+        $type = $_GET['type'];
+
+        if (name_empty_or_weixin($this->currentUser['nickname'])) {
+            $ref = Router::url($_SERVER['REQUEST_URI']);
+            $this->redirect('/users/login.html?force_login=1&auto_weixin='.$this->is_weixin().'&referer=' . urlencode($ref));
+        }
 
         $this->loadModel('GrouponMember');
         $gm = $this->GrouponMember->findById($memberId);
