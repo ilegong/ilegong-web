@@ -24,6 +24,11 @@
                     $referer_link .= '&referer='.urlencode($referer);
                 }
                 ?>
+                {{if $_GET['auto_weixin'] == 'true'}}
+                <script>
+                    window.location.href='{{$this->Html->url("/users/wx_login.html?")}}{{$referer_link}}';
+                </script>
+                {{/if}}
                 <a id="wx_login_a1" href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" style="vertical-align: bottom">
                     <img src="{{$this->Html->url('/img/Wechat-logo-315_315.png');}}" style="width:90px;height:90px">
                 </a>

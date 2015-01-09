@@ -1373,3 +1373,8 @@ function key_follow_brand_time($exId, $id) {
 function key_assigned_times($exId, $id) {
     return '_fo_ass_' . $id . '_' . $exId;
 }
+
+function name_empty_or_weixin($nick) {
+    $nick = trim($nick);
+    return (!$nick || strpos($nick, '微信用户') === 0);
+}

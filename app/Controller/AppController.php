@@ -237,8 +237,7 @@ class AppController extends Controller {
     }
 
     protected function nick_should_edited($nick) {
-        $nick = trim($nick);
-        return (!$nick || strpos($nick, '微信用户') === 0);
+        return name_empty_or_weixin($nick);
     }
 
     protected function _getParamVars($name,$default='') {

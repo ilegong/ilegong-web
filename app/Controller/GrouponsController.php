@@ -72,8 +72,7 @@ class GrouponsController extends AppController{
                 $this->set('show_found_new', $for);
                 $this->set('refer_name', $refName);
             } else {
-                $this->set('share_alert_tuhao', $for == "tuhao" && $uid == $fromId);
-                $this->set('share_alert_leader', $for == "leader" && $uid == $fromId);
+                $this->set_show_share_tips($for, $fromId, $uid);
             }
 
             $this->loadModel('GrouponMember');
@@ -244,8 +243,8 @@ class GrouponsController extends AppController{
                 $this->set('joined_exceed', true);
             }
 
-            $this->set('share_alert_tuhao',  $for == "tuhao" && $uid == $fromId);
-            $this->set('share_alert_leader',  $for == "leader" && $uid == $fromId);
+            $this->set_show_share_tips($for, $fromId, $uid);
+
             $this->set('has_organized', !empty($foundGroupon));
             $this->set('closed', $will_closed);
         }
@@ -289,6 +288,26 @@ class GrouponsController extends AppController{
     private function calculate_balance($groupId, $team = null, $groupon = null){
         $this->loadModel('Groupon');
         return $this->Groupon->calculate_balance($groupId, $team, $groupon);
+    }
+
+    /**
+     * @param $for
+     * @param $fromId
+     * @param $uid
+     */
+    private function set_show_share_tips($for, $fromId, $uid) {
+        $alert_tuhao = $for == "tuhao" && $uid == $fromId;
+        $alert_leader = $for == "leader" && $uid == $fromId;
+
+        if ($alert_leader || $alert_leader) {
+            if (name_empty_or_weixin($this->currentUser['nickname'])) {
+                $ref = Router::url($_SERVER['REQUEST_URI']);
+                $this->redirect('/users/login.html?force_login=1&auto_weixin='.$this->is_weixin().'&referer=' . $ref);
+            }
+        }
+
+        $this->set('share_alert_tuhao', $alert_tuhao);
+        $this->set('share_alert_leader', $alert_leader);
     }
 
 }
