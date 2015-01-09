@@ -61,11 +61,13 @@ class WxPayController extends AppController {
             return;
         }
 
+
         if ($type == 'done') {
             $this->loadModel("Groupon");
             $groupon = $this->Groupon->findById($groupon_id);
             if ($groupon['Groupon']['user_id'] == $uid) {
-                $fee = $this->Groupon->calculate_balance($groupon_id, $team, $groupon);
+                $balance = $this->Groupon->calculate_balance($groupon_id, $team, $groupon);
+                $fee = $balance > $team['Team']['unit_val'] ? $balance : $team['Team']['unit_pay'];
                 $area = $groupon['Groupon']['area'];
                 $address = $groupon['Groupon']['address'];
                 $mobile = $groupon['Groupon']['mobile'];

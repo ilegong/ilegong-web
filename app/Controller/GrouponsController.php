@@ -31,12 +31,12 @@ class GrouponsController extends AppController{
                 $this->redirect('/groupons/mobile_bind?referer='.urlencode($_SERVER['REQUEST_URI']));
             }
         }
-        $this->pageTitle = '组团来杀价，一元抵五元';
+        $this->pageTitle = '组团一起吃，只要一块钱';
     }
     public function view($slug = null){
         if(empty($slug)){
             $team = $this->Team->find('first', array(
-                'order' => 'id desc'
+                'order' => 'id asc'
             ));
         }else{
             $team = $this->Team->find('first', array(
@@ -58,6 +58,16 @@ class GrouponsController extends AppController{
             if($groupon){
                 $this->redirect('/groupons/join/'.$groupon['Groupon']['id']);
             }
+
+            $refUid = $_GET['fromid'];
+            if (!empty($_GET['for']) && !empty($refUid) && $refUid != $uid ) {
+                $this->loadModel('User');
+                $nnMap = $this->User->findNicknamesMap(array($refUid));
+                $refName = filter_invalid_name($nnMap[$refUid]);
+                $this->set('show_found_new', $_GET['for']);
+                $this->set('refer_name', $refName);
+            }
+
             $this->loadModel('GrouponMember');
             $grouponMember = $this->GrouponMember->find('first', array(
                 'conditions' =>array('user_id' => $uid, 'team_id' => $team['Team']['id'], 'status' => STATUS_GROUP_MEM_PAID),
@@ -144,7 +154,7 @@ class GrouponsController extends AppController{
         }
     }
 
-    public function join($groupId){
+    public function join($groupId, $for = '', $fromId = ''){
 
         $groupon = $this->Groupon->findById($groupId);
         if (empty($groupon)) {
@@ -160,10 +170,6 @@ class GrouponsController extends AppController{
         }
 
         $uid = $this->currentUser['id'];
-//        if (!empty($uid)) {
-//            $groupon_member = $this->GrouponMember->find_by_uid_and_groupon_id($groupId, $uid);
-//            $this->set('member', $groupon_member);
-//        };
         $this->loadModel('GrouponMember');
         $join_users = $this->GrouponMember->find('list', array(
             'conditions' => array('groupon_id' => $groupId, 'status' => STATUS_GROUP_MEM_PAID),
@@ -202,25 +208,46 @@ class GrouponsController extends AppController{
                 'fields' => array('groupon_id')
             ));
             $this->set('my_join_id',$my_join_id);
+            $this->set('closed', $groupon['Groupon']['status'] == STATUS_GROUP_REACHED);
         } else {
-            $found = $this->Groupon->find('first', array(
+            $foundGroupon = $this->Groupon->find('first', array(
                 'conditions' => array('user_id' => $uid)
             ));
-            $joinedCnt = $this->GrouponMember->find('count', array('conditions' => array('status' => STATUS_GROUP_MEM_PAID, 'user_id' => $uid, 'groupon_id !=' => $found['Groupon']['id'])
+            $joined = $this->GrouponMember->find('all', array(
+                'conditions' => array('status' => STATUS_GROUP_MEM_PAID, 'user_id' => $uid, 'groupon_id !=' => $foundGroupon['Groupon']['id']),
             ));
+
+            foreach($joined as $j) {
+                if ($j['GrouponMember']['groupon_id'] == $groupId) {
+                    $this->set('attend', true);
+                    break;
+                }
+            }
+
+            if(empty($foundGroupon) && !empty($for) && $fromId != $uid) {
+                $this->redirect(array('action' => 'view', $team['Team']['slug'], '?' => array('for' => $for, 'fromid' => $fromId, )));
+                exit();
+            }
+
             $will_closed = $balance <= $team['Team']['unit_val'];
-            if ($joinedCnt < 1 && !$will_closed) {
-                $this->set('not_pay', true);
-            } else if ($joinedCnt>=1) {
+            $joinedCnt = count($joined);
+            if ($joinedCnt >= 1) {
                 $this->set('joined_exceed', true);
             }
-            $this->set('has_organized', !empty($found));
+
+            $this->set('share_alert_tuhao',  $for == "tuhao" && $uid == $fromId);
+            $this->set('share_alert_leader',  $for == "leader" && $uid == $fromId);
+            $this->set('has_organized', !empty($foundGroupon));
             $this->set('closed', $will_closed);
         }
 
-        if($groupon['Groupon']['pay_number'] == $team['Team']['min_number']){
-            $this->set('complete', true);
-        }
+
+        $this->loadModel('Product');
+        $product = $this->Product->find('first', array(
+            'conditions' => array('id' => $team['Team']['product_id']),
+            'fields' => 'id, name, coverimg, price, created, slug'
+        ));
+        $this->set('product', $product);
 
         $this->set('team', $team);
         $this->set('groupon', $groupon);

@@ -25,9 +25,9 @@ input{ outline:none;}
 .tuan_price{ font-size:1.1em; color:#666666;}
 .tuan_price span{ color:#ffa200;}
 .tuan_price i{ color:#999999; font-size:0.8em;}
-.tip{ color:#ff483a; font-size:0.8em; padding-top:0.4em;}
+.tip{ color:#ff483a; padding-top:0.4em;}
 .tip strong{ font-size:16px;}
-.people{ color:#666666; padding-top:0.6em;}
+.people{ color:#666666; padding-top:0.2em}
 .people span{ color:#ff483a;}
 .tuanbtn{ line-height:2em; height:2em; font-size:1.1em; text-align:center; background-color:#ffa531; text-decoration:none; color:#ffffff; width:92%; margin:0 auto; display:block; margin-top:1em;}
 .listbg{ padding:0.8em; background-color:#ffffff; border-bottom:1px #dddddd solid; border-top:1px #dddddd solid; color:#666666; position:relative;}

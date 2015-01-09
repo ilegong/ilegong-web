@@ -1,21 +1,27 @@
-
 {{$this->Html->css(array(
 'groupon.css',
 ))}}
 
 <div class="bg">
     <p class="title">{{$team['Team']['title']}}</p>
+
+    {{if $show_found_new}}
+    <div class="alert alert-success" id="alert_info_laoban">
+        {{$show_found_new == 'leader' ? '老板':'土豪'}}!   {{$refer_name}}呼唤您发起{{$team['Team']['unit_pay']/100}}元组团，为大家发福利啦
+    </div>
+    {{/if}}
+
     <ul class="clearfix tuan_masg">
         <li class="fl"><img src={{$this->Html->assetUrl($team['Team']['image']);}} /></li>
-        <li class="fl pl12">
-            <div class="tuan_price">现价: <span>¥{{$this->Number->precision($team['Team']['market_price']/100, 2)}}</span></div>
-            <div class="tip">好友支付<strong>&nbsp;{{$this->Number->precision($team['Team']['unit_pay']/100, 2)}}&nbsp;</strong>元立减<strong>&nbsp;{{$this->Number->precision($team['Team']['unit_val']/100, 2)}}&nbsp;</strong>元</div>
-            <div class="people">限<span>{{$team['Team']['min_number']}}</span>人</div>
+        <li class="fl pl12" style="width:16em">
+            <div class="tuan_price">现价: <span>¥{{$this->Number->precision($team['Team']['team_price']/100, 2)}}</span>&nbsp;&nbsp;<i>原价: ¥{{$this->Number->precision($team['Team']['market_price']/100, 2)}}</i></div>
+            <div class="tip">满<strong>&nbsp;{{$team['Team']['min_number']}}&nbsp;</strong>人立即发货</div>
+            <span class="people">{{$team['Team']['intro_sum']}}</span>
         </li>
-    </ul>
+    </ul></a>
 </div>
 <div class="listbg mt12">
-    <a href="#X">活动细则<span class="moreicon"><img src="{{$this->Html->assetUrl('/img/groupon/more.png')}}" /></span></a>
+    <a href="javascript:;">活动细则<span class="moreicon"><img src="{{$this->Html->assetUrl('/img/groupon/more.png')}}" /></span></a>
     <div class="detail" style="display:none;">
         {{$team['Team']['notice']}}
     </div>
@@ -23,6 +29,7 @@
 <div class="listbg" style="margin-top:-1px;">
     <a id ="product_summary" href="#X">产品介绍<span class="moreicon"><img src="{{$this->Html->assetUrl('/img/groupon/more.png')}}" /></span></a>
     <div id="product_summary_content" class="detail" style="display:none;">
+        <p>{{$team['Team']['intro_sum']}}  <a href="{{product_link($team['Team']['product_id'], '/')}}" class="btn-sm" style="display: inline-block">查看更多</a> </p>
         {{$team['Team']['summary']}}
     </div>
 </div>
@@ -42,6 +49,11 @@
         $('#product_summary').on('click',function(){
             $('#product_summary_content').toggle()
         });
+
+        $laoban = $('#alert_info_laoban');
+        if ($laoban.size() > 0) {
+            utils.alert($laoban.text());
+        }
 
     })
 </script>

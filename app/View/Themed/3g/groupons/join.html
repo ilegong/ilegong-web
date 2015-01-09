@@ -3,84 +3,84 @@
 ))}}
 <div class="bg">
     <p class="title">{{$team['Team']['title']}} </p>
-    <ul class="clearfix tuan_masg">
-        <li class="fl"><img src="{{$this->Html->assetUrl($team['Team']['image']);}}" /></li>
-        <li class="fl pl12">
-            <div class="tuan_price">现价: <span>¥{{$this->Number->precision($balance/100, 2)}}</span>&nbsp;&nbsp;&nbsp;<i>原价: ¥{{$this->Number->precision($team['Team']['market_price']/100, 2)}}</i></div>
-            <div class="tip">好友支付<strong>&nbsp;{{$this->Number->precision($team['Team']['unit_pay']/100, 2)}}&nbsp;</strong>元立减<strong>&nbsp;{{$this->Number->precision($team['Team']['unit_val']/100, 2)}}&nbsp;</strong>元</div>
-            <div class="people">已有<span>{{$groupon['Groupon']['pay_number']}}</span>人参团, 限<span>{{$team['Team']['min_number']}}</span>人</div>
+    <div class="people" style="border-top: 1px solid #CCCCCC; padding-top:0.5em; margin-top:1.5em">本团已有<span>{{$groupon['Groupon']['pay_number'] + 1}}</span>人参团, 还差<span><?php echo ($team['Team']['min_number'] - $groupon['Groupon']['pay_number'] - 1) ?></span>人</div>
+    <div class="people">发起人：{{$groupon['Groupon']['name']}} </div>
+    <div class="people">收货地址：{{$groupon['Groupon']['address']}}</div>
+</div>
+
+    <div class="listbg mt12">
+    <a id="product_summary" href="javascript:;">产品介绍<span class="moreicon"><img src="{{$this->Html->assetUrl('/img/groupon/more.png')}}" /></span></a>
+    <a id="product_summary_content" href="{{product_link2($product, '/')}}" style="display: none; border-top: 1px solid #CCCCCC;">
+    <ul class="clearfix tuan_masg" style="position: relative">
+        <li class="fl"><img src="{{$this->Html->assetUrl($product['Product']['coverimg']);}}" /></li>
+        <li class="fl pl12" style="width:12em">
+            <div class="tuan_price">原价: <span>¥{{$this->Number->precision($product['Product']['price'], 2)}}</span>&nbsp;&nbsp;&nbsp;</div>
+            <div class="tip">{{$team['Team']['intro_sum']}}</div>
+            <!--<span class="moreicon"><img src="{{$this->Html->assetUrl('/img/groupon/more.png')}}" /></span>-->
         </li>
     </ul>
-    <ul class="address">
-        <li class="clearfix">
-            <span class="title fl">发起人: </span>
-            <span class="fl">{{$groupon['Groupon']['name']}}</span>
-        </li>
-        <li class="clearfix">
-            <span class="title fl">送货地址: </span>
-            <span style="overflow: hidden;">{{$groupon['Groupon']['address']}}</span>
-        </li>
-    </ul>
-</div>
-<div class="listbg mt12">
-    <a href="javascript:void(0)" id="product_rule">活动细则<span class="moreicon"><img src="{{$this->Html->assetUrl('/img/groupon/more.png')}}" /></span></a>
-    <div id="product_rule_content" class="detail" style="display:none;">
-        {{$team['Team']['notice']}}
+    </a>
     </div>
-</div>
-<div class="listbg" style="margin-top:-1px; margin-bottom:1em;">
-    <a href="javascript:void(0)" id="product_summary">产品介绍<span class="moreicon"><img src="{{$this->Html->assetUrl('/img/groupon/more.png')}}" /></span></a>
-    <div id="product_summary_content" class="detail" style="display:none;">
-        {{$team['Team']['summary']}}
+    <div class="listbg mt12">
+        <p style="margin-top: 0.5em; margin-bottom: 0">活动规则</p>
+        <div id="product_rule_content" style="border-top: 1px solid #CCCCCC; padding-top:0.5em">
+            {{$team['Team']['notice']}}
+        </div>
     </div>
-</div>
 {{if $is_organizer}}
-    {{if $complete}}
-<div class="can_paid">团购已完成, 等待收货吧!</div>
+    {{if $closed}}
+<div class="can_paid" style="margin-top:1em">组团成功, 等待收货吧!</div>
     {{/if}}
-<a href="javascript:;" id="share_to_friend" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share.jpg')}}" /></a>
+        {{if $balance > $team['Team']['unit_val']}}
+        <a href="javascript:;" id="share_to_friend" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share.jpg')}}" /></a>
+        {{/if}}
         {{if ($groupon['Groupon']['status'] != STATUS_GROUP_REACHED)}}
-<a href="/groupons/go_join/{{$groupon['Groupon']['id']}}?type=done" class="newtuanbtn radius10">支付{{$balance/100}}元结束团购</a>
+        <a href="/groupons/go_join/{{$groupon['Groupon']['id']}}?type=done" class="newtuanbtn radius10">凑不齐？支付{{ ($balance > $team['Team']['unit_val'] ? $balance : $team['Team']['unit_pay']) /100}}元结束组团</a>
         {{/if}}
         {{if $my_join_id}}
-<a href="/groupons/join/{{$my_join_id['GrouponMember']['groupon_id']}}" class="newtuanbtn radius10" style="margin-top:0.2em">我参与的团</a>
+        <a href="/groupons/join/{{$my_join_id['GrouponMember']['groupon_id']}}" class="newtuanbtn radius10" style="margin-top:0.2em">我参与的团</a>
         {{/if}}
 {{else}}
-    {{if $complete}}
-        <div class="can_paid">团购已完成, 等待收货吧!</div>
-        {{elseif $joined_exceed}}
+    {{if $closed}}
+        <div class="can_paid" style="margin-top:1em">{{$attend?'组团成功, 等待收货吧!':'该团已满'}}</div>
+     {{elseif !$attend && $joined_exceed}}
         <div class="can_paid">每人只能团一次，您已参过团啦</div>
-    {{/if}}
-        {{if $not_pay}}
-<a href="/groupons/go_join/{{$groupon['Groupon']['id']}}" class="tuanbtn radius10">支付{{$team['Team']['unit_pay']/100}}元参团</a>
+    {{elseif !$attend}}
+            <a href="/groupons/go_join/{{$groupon['Groupon']['id']}}" class="tuanbtn radius10">支付{{$team['Team']['unit_pay']/100}}元参团</a>
         {{/if}}
-<a href="javascript:;" id="share_to_friend2" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share1.png')}}" /></a>
-        {{if !$has_organized}}
-<a href="/groupons/organizing.html?team={{$team['Team']['slug']}}" class="newtuanbtn radius10">{{ ($closed?"本团已满":"不在一起?"). "发起新团"}}</a>
+
+        {{if !$closed && $attend }}
+        <a href="javascript:;" id="share_to_friend2" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share1.png')}}" /></a>
         {{/if}}
+
+        {{if $has_organized}}
+        <a href="/groupons/view/{{$team['Team']['slug']}}" class="newtuanbtn radius10" style="margin-top:0.5em">看看我组的团</a>
+        {{else}}
+        <a href="/groupons/organizing.html?team={{$team['Team']['slug']}}" class="newtuanbtn radius10" style="margin-top:0.5em">我要组团</a>
+        {{/if}}
+
+        <div style="margin:10px auto; text-align: center">
+        <a id="share_to_leader" href="/groupons/join/{{$groupon['Groupon']['id']}}/leader/{{$CurrentUser['id']}}.html" class="newtuanbtn radius10" style="width: 45%; display:inline-block">请领导组团</a>
+        <a id="share_to_tuhao" href="/groupons/join/{{$groupon['Groupon']['id']}}/tuhao/{{$CurrentUser['id']}}.html" class="newtuanbtn radius10" style="width: 45%; display:inline-block">请土豪组团</a>
+        </div>
+
 {{/if}}
 <div class="listbg mt12">
-    <a href="#X" id="event">参团记录<span class="moreicon"><img src="{{$this->Html->assetUrl('/img/groupon/more.png')}}" /></span></a>
-    <div id="event_list" style="display:none;">
-        <ul class="tuan_list" id="front_record">
-            <?php $remark_num=(count($join_info)>2 ? 2:count($join_info)); for ($i=0 ; $i < $remark_num; $i++) {?>
+    <a href="javascript:;">参团记录</a>
+    <div id="event_list">
+        <ul class="tuan_list" id="more_record">
             <li class="clearfix">
-                <span class="title fl">{{$join_info[$i]['nickname']?$join_info[$i]['nickname']:'匿名'}}</span>
-                <span class="fl">{{$join_info[$i]['time']}}</span>
+                <span class="title fl">{{$groupon['Groupon']['name']}}</span>
+                <span class="fl">{{friendlyDateFromStr($groupon['Groupon']['created'])}}</span>
             </li>
-            <?PHP } ?>
-
-        </ul>
-        <ul class="tuan_list" id="more_record" style="display:none;">
             {{loop $join_info $j}}
             <li class="clearfix">
                 <span class="title fl">{{$j['nickname']?$j['nickname']:'匿名'}}</span>
-                <span class="fl">{{$j['time']}}</span>
+                <span class="fl">{{friendlyDateFromStr($j['time'])}}</span>
             </li>
             {{/loop}}
 
         </ul>
-        <a href="#X" id="more_record_show" class="more_list">更多记录</a>
     </div>
 </div>
 <!--弹出层-->
@@ -106,20 +106,59 @@
 </style>
 <script>
     var share_png_url = '{{$this->Html->assetUrl("/img/groupon/shareicon.png")}}';
+    var show_alert_tuhao = '{{$share_alert_tuhao}}';
+    var show_alert_leader = '{{$share_alert_leader}}';
+
     $(document).ready(function(){
-       var $share_div = $('<div class="apple_share fade in"><img src="'+share_png_url+'" style="width:95%"></div>')
-                .hide().click(function(){
-                    $share_div.hide();
-                });
-        $('body').append($share_div);
-        $('#share_to_friend, #share_to_friend2').click(function(){
-            $share_div.show();
-        });
+        if (show_alert_leader || show_alert_tuhao) {
+            var $share_div = $('<div class="apple_share fade in"><img src="http://51daifan-images.stor.sinaapp.com/as/normal1/shareiconn.png" style="width:95%"></div>')
+                    .hide().click(function(){
+                        $share_div.hide();
+                    });
+            $('body').append($share_div);
+            $sel = '#share_to_friend, #share_to_friend2';
+            if (show_alert_leader) {
+                $sel += ', #share_to_leader';
+            }
+            if (show_alert_tuhao) {
+                $sel += ', #share_to_tuhao';
+            }
+            $($sel).click(function(e){
+                if (show_alert_leader || show_alert_tuhao) {
+                    document.title = (show_alert_leader ? '领导':'土豪') + '，请你来组团给大家发福利啦！';
+                }
+                $share_div.show();
+                e.preventDefault();
+            });
+        } else {
+            var $share_div = $('<div class="apple_share fade in"><img src="'+share_png_url+'" style="width:95%"></div>')
+                    .hide().click(function(){
+                        $share_div.hide();
+                    });
+            $('body').append($share_div);
+            $('#share_to_friend, #share_to_friend2').click(function(){
+                $share_div.show();
+            });
+        }
 
         var imgUrl = $('#product_img').attr('src');
         var lineLink = 'http://{{WX_HOST}}/groupons/join/{{$groupon["Groupon"]["id"]}}.html?trid={{$trid}}';
         var descContent = '{{($groupon["Groupon"]["pay_number"]>0 ? "已有".$groupon["Groupon"]["pay_number"]."个小伙伴一起团，" : "")}} {{$team["Team"]["share_desc"]}}';
         var shareTitle = '{{$team["Team"]["share_title"]}}';
+        if(show_alert_leader || show_alert_tuhao) {
+            shareTitle = (show_alert_leader ? '领导':'土豪') + '，请你来组团给大家发福利啦！';
+            document.title = shareTitle;
+            descContent = '{{$team["Team"]["share_desc"]}}';
+            lineLink = window.location.href;
+
+            if (show_alert_leader) {
+                $('#share_to_leader').trigger('click');
+            } else if (show_alert_tuhao) {
+                $('#share_to_tuhao').trigger('click');
+            }
+        }
+
+
         var appid = '{{WX_APPID}}';
 
         // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
