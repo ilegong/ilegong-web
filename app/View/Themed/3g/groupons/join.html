@@ -5,7 +5,7 @@
     <p class="title">{{$team['Team']['title']}} </p>
     <div class="people" style="border-top: 1px solid #CCCCCC; padding-top:0.5em; margin-top:1.5em">本团已有<span>{{$groupon['Groupon']['pay_number'] + 1}}</span>人参团, 还差<span><?php echo ($team['Team']['min_number'] - $groupon['Groupon']['pay_number'] - 1) ?></span>人</div>
     <div class="people">发起人：{{$groupon['Groupon']['name']}} </div>
-    <div class="people">收货地址：{{$groupon['Groupon']['address']}}</div>
+    <div class="people">收货地址：{{$is_organizer? $groupon['Groupon']['address'] : (special_privacy($groupon['Groupon']['address'], 6).' (<small><i>隐私原因，后6位部分屏蔽</i></small>)')}}</div>
 </div>
 
     <div class="listbg mt12">

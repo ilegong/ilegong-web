@@ -433,7 +433,7 @@ class WeixinComponent extends Component
                 $organizerName = $nameIdMap[$organizerId];
                 $newMemberName = $nameIdMap[$orderCreator];
 
-                $ship_info = $groupon['Groupon']['address'] . $groupon['Groupon']['name'];
+                $ship_info = $groupon['Groupon']['name']. ' ' . special_privacy($groupon['Groupon']['address'], 6) ;
 
                 $organizerNotified = false;
                 foreach($gmLists as $gml) {

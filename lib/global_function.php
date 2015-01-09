@@ -1378,3 +1378,16 @@ function name_empty_or_weixin($nick) {
     $nick = trim($nick);
     return (!$nick || strpos($nick, '微信用户') === 0);
 }
+
+function special_privacy($address, $len_from_last = 6) {
+    if ($len_from_last <= 0) {
+        return $address;
+    }
+    $len = mb_strlen($address);
+    $start_pos = max($len - $len_from_last, 0);
+    $str = $start_pos == 0 ?  "" : mb_substr($address, 0, $start_pos);
+    for($i = $start_pos; $i < $len; $i++) {
+        $str .= ($i % 2 == 0 ? mb_substr($address, $i, 1) : '*');
+    }
+    return $str;
+}
