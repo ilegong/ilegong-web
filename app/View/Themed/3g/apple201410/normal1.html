@@ -197,6 +197,11 @@
             {{/if}}
             </ul>
         </div>
+        {{if !empty($my_ward_ad)}}
+        <div class="cj_banner">
+            <a href="{{$my_ward_ad['url']}}"><img src="{{$this->Html->assetUrl($my_ward_ad['img'])}}"/></a>
+        </div>
+        {{/if}}
         <ul class="clearfix" style="width: 30%; margin: 0 auto; margin-top: 0.5em;">
             <li class="to_top"><a href="#firstPage"><img src="{{$this->Html->assetUrl('http://51daifan-images.stor.sinaapp.com/as/btc/story/top.gif')}}" /></a></li>
         </ul>
