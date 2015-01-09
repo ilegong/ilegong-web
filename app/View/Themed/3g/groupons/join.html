@@ -35,7 +35,7 @@
         <a href="javascript:;" id="share_to_friend" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share.jpg')}}" /></a>
         {{/if}}
         {{if ($groupon['Groupon']['status'] != STATUS_GROUP_REACHED)}}
-        <a href="/groupons/go_join/{{$groupon['Groupon']['id']}}?type=done" class="newtuanbtn radius10">凑不齐？支付{{ ($balance > $team['Team']['unit_val'] ? $balance : $team['Team']['unit_pay']) /100}}元结束组团</a>
+        <a id="pay_done" href="/groupons/go_join/{{$groupon['Groupon']['id']}}?type=done" class="newtuanbtn radius10">凑不齐？支付{{ ($balance > $team['Team']['unit_val'] ? $balance : $team['Team']['unit_pay']) /100}}元结束组团</a>
         {{/if}}
         {{if $my_join_id}}
         <a href="/groupons/join/{{$my_join_id['GrouponMember']['groupon_id']}}" class="newtuanbtn radius10" style="margin-top:0.2em">我参与的团</a>
@@ -143,6 +143,19 @@
                 $('#share_to_tuhao').trigger('click');
             }
         }
+
+        $('#pay_done').click(function(e){
+
+            var href = $(this).attr('href');
+
+            utils.alert_two('您确认要结束组团吗？参团的人越多，结束团购需要支付的金额越少！', '邀人参团', '结束组团', null, function(){
+                window.location.href = href;
+            });
+
+            e.preventDefault();
+            return false;
+
+        });
 
 
         var appid = '{{WX_APPID}}';
