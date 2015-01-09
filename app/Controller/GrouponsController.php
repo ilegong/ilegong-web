@@ -33,7 +33,7 @@ class GrouponsController extends AppController{
         }
         $this->pageTitle = '组团一起吃，只要一块钱';
     }
-    public function view($slug = null){
+    public function view($slug = null, $for = '', $fromId = ''){
         if(empty($slug)){
             $team = $this->Team->find('first', array(
                 'order' => 'id asc'
@@ -59,13 +59,21 @@ class GrouponsController extends AppController{
                 $this->redirect('/groupons/join/'.$groupon['Groupon']['id']);
             }
 
-            $refUid = $_GET['fromid'];
-            if (!empty($_GET['for']) && !empty($refUid) && $refUid != $uid ) {
+            if (!empty($_GET['fromid'])) {
+                $fromId = $_GET['fromid'];
+            }
+            if (!empty($_GET['for'])) {
+                $for = $_GET['for'];
+            }
+            if (!empty($for) && !empty($fromId) && $fromId != $uid ) {
                 $this->loadModel('User');
-                $nnMap = $this->User->findNicknamesMap(array($refUid));
-                $refName = filter_invalid_name($nnMap[$refUid]);
-                $this->set('show_found_new', $_GET['for']);
+                $nnMap = $this->User->findNicknamesMap(array($fromId));
+                $refName = filter_invalid_name($nnMap[$fromId]);
+                $this->set('show_found_new', $for);
                 $this->set('refer_name', $refName);
+            } else {
+                $this->set('share_alert_tuhao', $for == "tuhao" && $uid == $fromId);
+                $this->set('share_alert_leader', $for == "leader" && $uid == $fromId);
             }
 
             $this->loadModel('GrouponMember');
@@ -173,7 +181,8 @@ class GrouponsController extends AppController{
         $this->loadModel('GrouponMember');
         $join_users = $this->GrouponMember->find('list', array(
             'conditions' => array('groupon_id' => $groupId, 'status' => STATUS_GROUP_MEM_PAID),
-            'fields' => array('user_id','created')
+            'fields' => array('user_id','created') ,
+            'order' => 'created desc'
         ));
         $join_ids = array_keys($join_users);
         if(!empty($join_ids)){

@@ -1,5 +1,5 @@
 {{$this->Html->css(array(
-'groupon.css',
+'groupon.css?1',
 ))}}
 
 <div class="bg">
@@ -13,7 +13,7 @@
 
     <ul class="clearfix tuan_masg">
         <li class="fl"><img src={{$this->Html->assetUrl($team['Team']['image']);}} /></li>
-        <li class="fl pl12" style="width:16em">
+        <li class="fl pl12" style="width:15em">
             <div class="tuan_price">现价: <span>¥{{$this->Number->precision($team['Team']['team_price']/100, 2)}}</span>&nbsp;&nbsp;<i>原价: ¥{{$this->Number->precision($team['Team']['market_price']/100, 2)}}</i></div>
             <div class="tip">满<strong>&nbsp;{{$team['Team']['min_number']}}&nbsp;</strong>人立即发货</div>
             <span class="people">{{$team['Team']['intro_sum']}}</span>
@@ -34,6 +34,13 @@
     </div>
 </div>
 <a href="/groupons/organizing.html?team={{$team['Team']['slug']}}" class="tuanbtn radius10">马上组团</a>
+
+{{if !$show_found_new}}
+<div style="margin:10px auto; text-align: center">
+    <a id="share_to_leader" href="/groupons/view/{{$team['Team']['slug']}}/leader/{{$CurrentUser['id']}}.html" class="newtuanbtn radius10" style="width: 45%; display:inline-block">请领导组团</a>
+    <a id="share_to_tuhao" href="/groupons/view/{{$team['Team']['slug']}}/tuhao/{{$CurrentUser['id']}}.html" class="newtuanbtn radius10" style="width: 45%; display:inline-block">请土豪组团</a>
+</div>
+{{/if}}
 <!--弹出层-->
 <div style="position:absolute; left:50%; top:30%; margin-left:-8em; display:none;">
     <ul class="layer radius10">
@@ -42,7 +49,63 @@
     </ul>
 </div>
 <script type="text/javascript">
+    var share_png_url = '{{$this->Html->assetUrl("/img/groupon/shareicon.png")}}';
+    var show_alert_tuhao = '{{$share_alert_tuhao}}';
+    var show_alert_leader = '{{$share_alert_leader}}';
+
     $(document).ready(function(){
+        if (show_alert_leader || show_alert_tuhao) {
+            var $share_div = $('<div class="apple_share fade in"><img src="http://51daifan-images.stor.sinaapp.com/as/normal1/shareiconn.png" style="width:95%"></div>')
+                    .hide().click(function(){
+                        $share_div.hide();
+                    });
+            $('body').append($share_div);
+            if (show_alert_leader) {
+                $sel = '#share_to_leader';
+            }
+            if (show_alert_tuhao) {
+                $sel = '#share_to_tuhao';
+            }
+            $($sel).click(function(e){
+                if (show_alert_leader || show_alert_tuhao) {
+                    document.title = (show_alert_leader ? '领导':'土豪') + '，请你来组团给大家发福利啦！';
+                }
+                $share_div.show();
+                e.preventDefault();
+            });
+            var imgUrl = $('#product_img').attr('src');
+            var lineLink = 'http://{{WX_HOST}}/groupons/view/{{$team["Team"]["slug"]}}.html?trid={{$trid}}';
+            var descContent = '{{$team["Team"]["share_desc"]}}';
+            var shareTitle = '{{$team["Team"]["share_title"]}}';
+            if(show_alert_leader || show_alert_tuhao) {
+                shareTitle = (show_alert_leader ? '领导':'土豪') + '，请你来组团给大家发福利啦！';
+                document.title = shareTitle;
+                descContent = '{{$team["Team"]["share_desc"]}}';
+                lineLink = window.location.href;
+
+                if (show_alert_leader) {
+                    $('#share_to_leader').trigger('click');
+                } else if (show_alert_tuhao) {
+                    $('#share_to_tuhao').trigger('click');
+                }
+            }
+
+
+            var appid = '{{WX_APPID}}';
+
+            // 当微信内置浏览器完成内部初始化后会触发WeixinJSBridgeReady事件。
+            document.addEventListener('WeixinJSBridgeReady', function onBridgeReady() {
+                WeixinJSBridge.on('menu:share:appmessage', function(argv){
+                    utils.wx_to_friend(appid, imgUrl, lineLink, descContent, shareTitle);
+                });
+                WeixinJSBridge.on('menu:share:timeline', function(argv){
+                    utils.wx_to_timeline(appid, imgUrl, lineLink, descContent, shareTitle);
+                });
+            }, false);
+        }
+
+
+
         $('.listbg.mt12 a').on('click',function(){
             $('.listbg.mt12 .detail').toggle()
         });

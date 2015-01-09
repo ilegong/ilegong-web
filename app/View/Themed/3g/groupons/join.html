@@ -1,5 +1,5 @@
 {{$this->Html->css(array(
-'groupon.css',
+'groupon.css?1',
 ))}}
 <div class="bg">
     <p class="title">{{$team['Team']['title']}} </p>
@@ -90,20 +90,6 @@
         <li><a class="closebtn radius10" href="#X">关闭</a></li>
     </ul>
 </div>
-<style>
-    .apple_share {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 1030;
-        background-color: #000;
-    }
-    .apple_share.in {
-        opacity: .9;
-    }
-</style>
 <script>
     var share_png_url = '{{$this->Html->assetUrl("/img/groupon/shareicon.png")}}';
     var show_alert_tuhao = '{{$share_alert_tuhao}}';

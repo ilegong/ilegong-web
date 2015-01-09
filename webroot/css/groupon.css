@@ -80,3 +80,16 @@ input{ outline:none;}
 
 /*已参团*/
 .can_paid{ text-align:center; font-size:1.25em; padding-bottom:0.8em; color:#ff483a;}
+
+.apple_share {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1030;
+    background-color: #000;
+}
+.apple_share.in {
+    opacity: .9;
+}
