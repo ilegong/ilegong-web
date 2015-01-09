@@ -107,7 +107,7 @@ $(function() {
             if(max<keys[i])
                 max=keys[i];
         }
-        return max?parseInt(max)+1:0;
+        return max?parseInt(max)+1:1;
     }
 });
 
