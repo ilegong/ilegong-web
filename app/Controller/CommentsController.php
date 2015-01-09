@@ -247,6 +247,7 @@ class CommentsController extends AppController {
                 $returnInfo = array('error' => 'edit_nick_name');
                 return $returnInfo;
             } else {
+
                 $this->data['Comment']['user_id'] = $this->Session->read('Auth.User.id');
                 $this->data['Comment']['username'] = $this->Session->read('Auth.User.nickname');
                 $this->data['Comment']['body'] = htmlspecialchars($this->data['Comment']['body']);
@@ -254,8 +255,44 @@ class CommentsController extends AppController {
                 $this->data['Comment']['status'] = 1;
                 $this->data['Comment']['created'] = date('Y-m-d H:i:s');
 
+                $can_comment = true;
+                $uid = $this->currentUser['id'];
+                $type_model = $this->data['Comment']['type'];
+                if ($type_model == 'Product') {
+                    $product_id = $this->data['Comment']['data_id'];
+                    $this->loadModel('Cart');
+                    $found = $this->Cart->find('all', array(
+                        'conditions' => array('product_id' => $product_id, 'creator' => $uid, 'status' => CART_ITEM_STATUS_BALANCED),
+                        'fields' => array('order_id')
+                    ));
 
-                $shichi_status = $this->Shichituan->findByUser_id($this->currentUser['id'], array('Shichituan.status'));
+                    if (!empty($found)) {
+                        $this->loadModel('Order');
+                        $orderIds = array();
+                        foreach($found as $e) {
+                            $orderIds[] = $e['Cart']['order_id'];
+                        }
+                        $orders = $this->Order->find_all_my_order_byId($orderIds, $uid);
+                        foreach($orders as $o) {
+                            $status = $o['Order']['status'];
+                            if ($status == ORDER_STATUS_CANCEL
+                                || $status == ORDER_STATUS_WAITING_PAY
+                                || $status == ORDER_STATUS_RETURN_MONEY
+                                ) {
+                                $can_comment = false;
+                                break;
+                            }
+                        }
+                    } else {
+                        $can_comment = false;
+                    }
+                }
+
+                if (!$can_comment)  {
+                    return array('error' => 'cannot_comment');
+                }
+
+                $shichi_status = $this->Shichituan->findByUser_id($uid, array('Shichituan.status'));
                 if ($shichi_status['Shichituan']['status'] == 1) {
                     $this->data['Comment']['is_shichi_tuan_comment'] = 1;
                 }
@@ -263,11 +300,10 @@ class CommentsController extends AppController {
                 //comment_type: 评论，补充完善，扩展阅读等等
                 if ($this->Comment->save($this->data)) {
                     //$comment_id = $this->Comment->getLastInsertID();
-                    $type_model = $this->data['Comment']['type'];
                     $this->loadModel($type_model);
                     $this->{$type_model}->updateAll(
                         array('comment_nums' => 'comment_nums+1'),
-                        array('id' => $this->data['Comment']['data_id'])
+                        array('id' => $product_id)
                     );
 
                     if ($this->data['status']) {

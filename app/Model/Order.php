@@ -194,6 +194,12 @@ class Order extends AppModel {
             'conditions' => array('id' => $orderId, 'creator' => $uid),
         ));
     }
+
+    public function find_all_my_order_byId($orderIds, $uid) {
+        return $this->find('all', array(
+            'conditions' => array('id' => $orderIds, 'creator' => $uid),
+        ));
+    }
 //
 //    public function whether_bought($pid, $creator) {
 //        $cartM = ClassRegistry::init('Cart');
