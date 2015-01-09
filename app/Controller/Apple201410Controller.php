@@ -748,9 +748,9 @@ VALUES
         }
 
         $zutuangous = array(
-            array('img' => "/img/banner/banner_zutuangou.jpg", 'url' => "/groupons/view/gonggan.html?from=home", 'id' => 0),
             array('img' => "/img/banner/banner_zutuangou1.jpg", 'url' => "/groupons/view/chengzi.html?from=home1", 'id' => 0),
             array('img' => "/img/banner/banner_zutuangou2.jpg", 'url' => "/groupons/view/chengzi.html?from=home2", 'id' => 0),
+            array('img' => "/img/banner/banner_zutuangou.jpg", 'url' => "/groupons/view/gonggan.html?from=home", 'id' => 0),
         );
 
         $this->set('my_ward_ad', $zutuangous[mt_rand(1000) % count($zutuangous)]);
