@@ -1198,9 +1198,12 @@ $(document).ready(function () {
         if (typeof(_p_spec_m) != 'undefined') {
             if (_p_spec_m) {
                 var spec_labels = $('span.spec_label');
+                if(spec_labels.length===0){
+                    spec_labels = $('li.spec_label');
+                }
                 if (spec_labels.size() > 0) {
                     $.each(spec_labels, function (idx, val) {
-                        var itemLabel = $(val).text();
+                        var itemLabel = $(val).text().replace(":","");
                         var spec_item_selected = $('span.spec_item_selected[item-label="' + itemLabel + '"]');
                         if (spec_item_selected.size() < 1) {
                             utils.alert("请选择" + itemLabel);

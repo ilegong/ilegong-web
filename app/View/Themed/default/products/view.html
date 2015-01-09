@@ -36,7 +36,7 @@
             {{if $specs_map }}
             <?php foreach($specs_map['choices'] as $label => $values) { ?>
             <ul class="clearfix guige">
-                <li class="title" style="padding-top:5px;">{{$label}}:</li>
+                <li class="title spec_label" style="padding-top:5px;">{{$label}}:</li>
                 <li style="width:296px;">
                     <?php foreach($values as $vaLabel){?><span class="spec_item" item-label="{{$label}}">{{$vaLabel}}</span><?php } ?>
                 </li>
