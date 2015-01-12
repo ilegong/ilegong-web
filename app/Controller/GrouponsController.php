@@ -34,27 +34,50 @@ class GrouponsController extends AppController{
         $this->pageTitle = '组团一起吃，只要一块钱';
     }
     public function view($slug = null, $for = '', $fromId = ''){
+        $uid = $this->currentUser['id'];
         if(empty($slug)){
-            $team = $this->Team->find('first', array(
-                'order' => 'id asc'
+            $groupon = $this->Groupon->find('first', array(
+                'conditions' =>array('user_id' => $uid),
+                'fields' => array('id', 'team_id')
             ));
+            if (empty($groupon)) {
+                $grouponMember = $this->GrouponMember->find('first', array(
+                    'conditions' =>array('user_id' => $uid,  'status' => STATUS_GROUP_MEM_PAID),
+                    'fields' => array('id', 'groupon_id', 'team_id')
+                ));
+                if (!empty($grouponMember)) {
+                    $teamId = $grouponMember['GrouponMember']['team_id'];
+                }
+            } else {
+                $teamId = $groupon['Groupon']['team_id'];
+            }
+
+            if (!empty($teamId)) {
+                $team = $this->Team->findById($teamId);
+            } else {
+                $team = $this->Team->find('first', array(
+                    'order' => 'id asc'
+                ));
+            }
+
         }else{
             $team = $this->Team->find('first', array(
                 'conditions' => array('slug' => $slug)
             ));
         }
-        $uid = $this->currentUser['id'];
 
         if(empty($team) || $team['Team']['begin_time']> time() || $team['Team']['end_time']< time()){
             $this->Session->setFlash(__('团购项目不存在'));
             $this->redirect('/');
         }else{
             $this->set('team', $team);
-            $this->loadModel('Groupon');
-            $groupon = $this->Groupon->find('first', array(
-                'conditions' =>array('user_id' => $uid, 'team_id' => $team['Team']['id']),
-                'fields' => array('id')
-            ));
+
+            if (empty($groupon)) {
+                $groupon = $this->Groupon->find('first', array(
+                    'conditions' => array('user_id' => $uid, 'team_id' => $team['Team']['id']),
+                    'fields' => array('id')
+                ));
+            }
             if($groupon){
                 $this->redirect('/groupons/join/'.$groupon['Groupon']['id']);
             }
@@ -75,11 +98,12 @@ class GrouponsController extends AppController{
                 $this->set_show_share_tips($for, $fromId, $uid);
             }
 
-            $this->loadModel('GrouponMember');
-            $grouponMember = $this->GrouponMember->find('first', array(
-                'conditions' =>array('user_id' => $uid, 'team_id' => $team['Team']['id'], 'status' => STATUS_GROUP_MEM_PAID),
-                'fields' => array('id', 'groupon_id')
-            ));
+            if (empty($grouponMember)) {
+                $grouponMember = $this->GrouponMember->find('first', array(
+                    'conditions' => array('user_id' => $uid, 'team_id' => $team['Team']['id'], 'status' => STATUS_GROUP_MEM_PAID),
+                    'fields' => array('id', 'groupon_id')
+                ));
+            }
             if($grouponMember){
                 $this->redirect('/groupons/join/'.$grouponMember['GrouponMember']['groupon_id']);
             }
