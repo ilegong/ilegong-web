@@ -999,7 +999,8 @@ class UsersController extends AppController {
             $changed = false;
             $user = $user['User'];
             if (!$user['nickname'] || notWeixinAuthUserInfo($new_serviceAccount_binded_uid, $user['nickname'])) {
-                $user['nickname'] = filter_weixin_username($userInfo['nickname']);
+                $wx_nick = remove_emoji($userInfo['nickname']);
+                $user['nickname'] = filter_weixin_username($wx_nick);
                 $changed = true;
             }
             if ($user['sex'] !== 0 && $user['sex'] != 1) {
@@ -1039,8 +1040,11 @@ class UsersController extends AppController {
      * @param $userInfo
      */
     protected function createNewUserByWeixin($userInfo) {
+
+        $nickname = remove_emoji($userInfo['nickname']);
+
         if (!$this->User->save(array(
-            'nickname' => $userInfo['nickname'],
+            'nickname' => $nickname,
             'sex' => $userInfo['sex'] == 1 ? 0 : ($userInfo['sex'] == 2 ? 1 : null),
             'image' => $userInfo['headimgurl'],
             'province' => $userInfo['province'],
