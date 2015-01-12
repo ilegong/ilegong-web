@@ -202,21 +202,21 @@ class GrouponsController extends AppController{
 
         $balance = $this->calculate_balance($groupId, $team, $groupon);
         $this->set('balance', $balance);
-
+        $this->set('closed', $groupon['Groupon']['status'] == STATUS_GROUP_REACHED);
         if($uid === $groupon['Groupon']['user_id']){
             $this->set('is_organizer', true);
-            $is_paid = $this->Groupon->is_all_paid($groupId, $team, $groupon);
-            if ($is_paid) {
-                $this->Groupon->set_paid_done($groupId);
-                //reloading
-                $groupon = $this->Groupon->findById($groupId);
-            }
+//            $is_paid = $this->Groupon->is_all_paid($groupId, $team, $groupon);
+//            if ($is_paid) {
+//                $this->Groupon->set_paid_done($groupId);
+//                //reloading
+//                $groupon = $this->Groupon->findById($groupId);
+//            }
             $my_join_id =$this->GrouponMember->find('first', array(
                 'conditions'=>array('user_id'=> $uid, 'groupon_id !=' =>$groupId),
                 'fields' => array('groupon_id')
             ));
             $this->set('my_join_id',$my_join_id);
-            $this->set('closed', $groupon['Groupon']['status'] == STATUS_GROUP_REACHED);
+
         } else {
             $foundGroupon = $this->Groupon->find('first', array(
                 'conditions' => array('user_id' => $uid)
@@ -246,7 +246,7 @@ class GrouponsController extends AppController{
             $this->set_show_share_tips($for, $fromId, $uid);
 
             $this->set('has_organized', !empty($foundGroupon));
-            $this->set('closed', $will_closed);
+            $this->set('will_closed', $will_closed);
         }
 
 

@@ -3,7 +3,18 @@
 ))}}
 <div class="bg">
     <p class="title">{{$team['Team']['title']}} </p>
-    <div class="people" style="border-top: 1px solid #CCCCCC; padding-top:0.5em; margin-top:1.5em">本团已有<span>{{$groupon['Groupon']['pay_number'] + 1}}</span>人参团, 还差<span><?php echo ($team['Team']['min_number'] - $groupon['Groupon']['pay_number'] - 1) ?></span>人</div>
+    <div class="people" style="border-top: 1px solid #CCCCCC; padding-top:0.5em; margin-top:1.5em">
+        本团已有<span>{{$groupon['Groupon']['pay_number'] + 1}}</span>人参团,
+        {{if $groupon['Groupon']['status'] != STATUS_GROUP_REACHED}}
+            {{if $balance <= $team['Team']['unit_val'] }}
+                团满，等待发起者支付
+            {{else}}
+                还差<span><?php echo ($team['Team']['min_number'] - $groupon['Groupon']['pay_number'] - 1) ?></span>人
+            {{/if}}
+        {{else}}
+            组团成功
+        {{/if}}
+    </div>
     <div class="people">发起人：{{$groupon['Groupon']['name']}} </div>
     <div class="people">收货地址：{{$is_organizer? $groupon['Groupon']['address'] : (special_privacy($groupon['Groupon']['address'], 6).' (<small><i>隐私原因，后6位部分屏蔽</i></small>)')}}</div>
 </div>
@@ -35,7 +46,11 @@
         <a href="javascript:;" id="share_to_friend" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share.jpg')}}" /></a>
         {{/if}}
         {{if ($groupon['Groupon']['status'] != STATUS_GROUP_REACHED)}}
-        <a id="pay_done" href="/groupons/go_join/{{$groupon['Groupon']['id']}}?type=done" class="newtuanbtn radius10">凑不齐？支付{{ ($balance > $team['Team']['unit_val'] ? $balance : $team['Team']['unit_pay']) /100}}元结束组团</a>
+            {{if $balance <= $team['Team']['unit_val'] }}
+        <a id="organizer_pay_last" href="/groupons/go_join/{{$groupon['Groupon']['id']}}?type=done" class="newtuanbtn radius10">人数凑齐，支付{{ ($balance <= 0? 0 : $team['Team']['unit_pay']) /100}}元结束组团</a>
+            {{else}}
+        <a id="pay_done" href="/groupons/go_join/{{$groupon['Groupon']['id']}}?type=done" class="newtuanbtn radius10">凑不齐？支付{{$balance/100}}元结束组团</a>
+            {{/if}}
         {{/if}}
         {{if $my_join_id}}
         <a href="/groupons/join/{{$my_join_id['GrouponMember']['groupon_id']}}" class="newtuanbtn radius10" style="margin-top:0.2em">我参与的团</a>
@@ -43,13 +58,15 @@
 {{else}}
     {{if $closed}}
         <div class="can_paid" style="margin-top:1em">{{$attend?'组团成功, 等待收货吧!':'该团已满'}}</div>
-     {{elseif !$attend && $joined_exceed}}
+    {{elseif $will_closed}}
+        <div class="can_paid" style="margin-top:1em">{{$attend?'本团已有'.$team['Team']['min_number'].'人， 等待发起人提交成团':'该团已满'}}</div>
+    {{elseif !$attend && $joined_exceed}}
         <div class="can_paid">每人只能团一次，您已参过团啦</div>
     {{elseif !$attend}}
             <a href="/groupons/go_join/{{$groupon['Groupon']['id']}}" class="tuanbtn radius10">支付{{$team['Team']['unit_pay']/100}}元参团</a>
-        {{/if}}
+    {{/if}}
 
-        {{if !$closed && $attend }}
+        {{if $attend && !$will_closed}}
         <a href="javascript:;" id="share_to_friend2" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share1.png')}}" /></a>
         {{/if}}
 

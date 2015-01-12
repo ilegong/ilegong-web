@@ -40,7 +40,7 @@ class WxPayController extends AppController {
         $error_text = '';
         if ($gm['GrouponMember']['user_id'] != $uid) {
             $error_text = '不是您的参团记录，您不能支付';
-        } else if ($gm['GroupMember']['status'] == STATUS_GROUP_MEM_PAID && $type != 'done') {
+        } else if ($gm['GrouponMember']['status'] == STATUS_GROUP_MEM_PAID && $type != 'done') {
             $error_text = '已经支付过了';
         }
         $team_id = $gm['GrouponMember']['team_id'];
@@ -66,12 +66,11 @@ class WxPayController extends AppController {
             return;
         }
 
-
+        $this->loadModel("Groupon");
+        $groupon = $this->Groupon->findById($groupon_id);
+        $balance = $this->Groupon->calculate_balance($groupon_id, $team, $groupon);
         if ($type == 'done') {
-            $this->loadModel("Groupon");
-            $groupon = $this->Groupon->findById($groupon_id);
             if ($groupon['Groupon']['user_id'] == $uid) {
-                $balance = $this->Groupon->calculate_balance($groupon_id, $team, $groupon);
                 $fee = $balance > $team['Team']['unit_val'] ? $balance : $team['Team']['unit_pay'];
                 $area = $groupon['Groupon']['area'];
                 $address = $groupon['Groupon']['address'];
@@ -80,6 +79,11 @@ class WxPayController extends AppController {
             } else {
                 $this->__message('您不是团购的发起人，不能提前结束团购', $group_url);
             }
+        }else{
+            if($balance <= $team['Team']['unit_val']){
+                $this->__message('该团已满', $group_url);
+                return;
+            }
         }
 
         $order_type = ($type == 'done' ? ORDER_TYPE_GROUP_FILL : ORDER_TYPE_GROUP);
@@ -87,6 +91,16 @@ class WxPayController extends AppController {
         if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
             $this->__message('您已经支付过了', $group_url);
             return;
+        }
+        $no_more_money = $balance <= 0 ;
+        if ($no_more_money && $order_type == ORDER_TYPE_GROUP_FILL) {
+            if ($order['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
+                if ($this->Order->set_order_to_paid($order['Order']['id'], $order['Order']['try_id'], $uid, $order['Order']['type'], $order['Order']['member_id'])) {
+                    $this->Weixin->notifyPaidDone($order);
+                    $this->__message('支付成功', $group_url);
+                    return;
+                }
+            }
         }
         $orderId = $order['Order']['id'];
 
