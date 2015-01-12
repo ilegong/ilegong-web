@@ -782,7 +782,7 @@ function special_link($slug) {
     return '/categories/special_list/'.$slug.'.html';
 }
 
-function brand_link($brand_id, $params) {
+function brand_link($brand_id, $params = array()) {
     $brandM = ClassRegistry::init('Brand');
     $brand = $brandM->findById($brand_id);
     $url = (!empty($brand)) ? "/brands/" . date('Ymd', strtotime($brand['Brand']['created'])) . "/" . $brand['Brand']['slug'] . ".html" : '/';
