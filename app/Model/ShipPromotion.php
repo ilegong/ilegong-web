@@ -235,7 +235,7 @@ class ShipPromotion extends AppModel {
     public function find_special_address_by_id($promotionId) {
 
         if ($promotionId == self::BIN_BIN_SHIP_PROMO_ID) {
-            return $this->BIN_BIN_PROMO;
+            return array(-1, $this->BIN_BIN_PROMO);
         }
 
         foreach($this->specialPromotions as $pid=>$promotions) {
@@ -250,7 +250,7 @@ class ShipPromotion extends AppModel {
     public function find_ship_promotion_limit($productId, $promotionId) {
 
         if ($promotionId == self::BIN_BIN_SHIP_PROMO_ID) {
-            return $this->BIN_BIN_PROMO;
+            return array(false, $this->BIN_BIN_PROMO['items'][0]);
         }
 
         $promotions = $this->specialPromotions[$productId];
