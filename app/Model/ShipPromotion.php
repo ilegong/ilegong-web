@@ -20,7 +20,7 @@ class ShipPromotion extends AppModel {
 
     var $BIN_BIN_PROMO = array('limit_ship' => true,
         'items' => array(
-            array('id' => self::BIN_BIN_SHIP_PROMO_ID, 'address' => '自提地址：海淀区上地十街辉煌国际大厦2号楼1706室 189-1105-8517'),
+            array('id' => self::BIN_BIN_SHIP_PROMO_ID, 'address' => '自提：海淀区上地十街辉煌国际大厦2号楼1706室 189-1105-8517'),
         )
     );
 
