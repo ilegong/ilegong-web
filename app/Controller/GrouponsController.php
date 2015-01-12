@@ -179,10 +179,11 @@ class GrouponsController extends AppController{
         $uid = $this->currentUser['id'];
         if (!empty($uid)) {
             $groupon_member = $this->GrouponMember->findById($member_id);
-            $this->redirect('/groupons/join/'.$groupon_member['GrouponMember']['groupon_id']);
-        }else {
-            $this->redirect('/groupons/view');
+            if (!empty($groupon_member)) {
+                $this->redirect('/groupons/join/' . $groupon_member['GrouponMember']['groupon_id'] . '.html');
+            }
         }
+        $this->redirect('/groupons/view');
     }
 
     public function join($groupId, $for = '', $fromId = ''){
