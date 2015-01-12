@@ -406,7 +406,7 @@ class OrdersController extends AppController{
 		$this->set('total_consignee', $total_consignee);
 		$this->set('consignees', $consignees);
 
-        $shipPromotions = $this->ShipPromotion->findShipPromotions($pids);
+        $shipPromotions = $this->ShipPromotion->findShipPromotions($pids, $brand_ids);
         if ($shipPromotions && !empty($shipPromotions)) {
             $this->set('specialShipPromotionId', $shipPromotionId);
             $this->set('specialShipPromotion', $shipPromotions['items']);

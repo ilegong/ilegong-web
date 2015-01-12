@@ -9,11 +9,20 @@
 class ShipPromotion extends AppModel {
     const PID = 192;
 
+    const BIN_BIN_BRAND_ID = 26;
+    const BIN_BIN_SHIP_PROMO_ID = 2601;
+
     const QUNAR_PROMOTE_BRAND_ID = 61;
     /** @depreted */
     const QUNAR_PROMOTE_ID = 222;
 
     public $useTable = false;
+
+    var $BIN_BIN_PROMO = array('limit_ship' => true,
+        'items' => array(
+            array('id' => self::BIN_BIN_SHIP_PROMO_ID, 'address' => '自提地址：海淀区上地十街辉煌国际大厦2号楼1706室 189-1105-8517'),
+        )
+    );
 
     var $specialPromotions = array(
     '192' => array('lowest' => 49.90,
@@ -224,6 +233,11 @@ class ShipPromotion extends AppModel {
      * @return mixed address and its properties
      */
     public function find_special_address_by_id($promotionId) {
+
+        if ($promotionId == self::BIN_BIN_SHIP_PROMO_ID) {
+            return $this->BIN_BIN_PROMO;
+        }
+
         foreach($this->specialPromotions as $pid=>$promotions) {
             list($limit_per_user, $addressList) = $this->find_ship_promotion_limit($pid, $promotionId);
             if (!empty($addressList)) {
@@ -234,6 +248,11 @@ class ShipPromotion extends AppModel {
     }
 
     public function find_ship_promotion_limit($productId, $promotionId) {
+
+        if ($promotionId == self::BIN_BIN_SHIP_PROMO_ID) {
+            return $this->BIN_BIN_PROMO;
+        }
+
         $promotions = $this->specialPromotions[$productId];
         if ($promotions && !empty($promotions)) {
             $promotion = array_filter($promotions['items'], function ($item) use ($promotionId) {
@@ -247,7 +266,13 @@ class ShipPromotion extends AppModel {
         return null;
     }
 
-    public function findShipPromotions($product_ids) {
+    public function findShipPromotions($product_ids, $brand_ids) {
+        if (!empty($brand_ids)) {
+            if(array_search(self::BIN_BIN_BRAND_ID, $brand_ids) !== false) {
+                return $this->BIN_BIN_PROMO;
+            }
+        }
+
         foreach($product_ids as $pid) {
             $promotions = $this->specialPromotions[$pid];
             if ($promotions && !empty($promotions)) {
