@@ -46,7 +46,7 @@ class Order extends AppModel {
                 $cartM->updateAll(array('order_id' => $order['Order']['id'], 'status' => CART_ITEM_STATUS_BALANCED), array('id' => $inserted['Cart']['id']));
             }
 
-            return $order;
+            return $this->findById($order['Order']['id']);
         } else {
 
             if (abs($existsOrder['Order']['total_all_price'] * 100 - $fee * 100) >= 1 && $existsOrder['Order']['status'] == ORDER_STATUS_WAITING_PAY) {

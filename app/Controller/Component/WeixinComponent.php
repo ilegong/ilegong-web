@@ -158,7 +158,11 @@ class WeixinComponent extends Component
         if ($isDone) {
             $msg = $isOrganizer ? "亲，您发起的团购已经成团，请等待收货。" : ( $isSelf ? "亲，您参加 $organizerName 发起的团购成功，已经成团，请等待 $organizerName 收货。" : "亲，$newMemberName 刚刚加入了我们的团购，已经成团，请等待 $organizerName 收货。");
         } else {
-            $msg =  $isSelf ? ($isOrganizer ? "亲，您发起的团购成团啦，请等待收货" : "亲，您参加 $organizerName 发起的团购成功，现在只差 $leftPeople 人就可以成团啦。") : "亲，$newMemberName 刚刚加入了我们的团购，现在只差 $leftPeople 人就可以发货啦";
+            if($leftPeople == 1){
+                $msg =  $isSelf ? ("亲，您参加 $organizerName 发起的团购成功，等待他提交支付就可以发货啦。") : ( $isOrganizer ? "亲，$newMemberName 刚刚加入了我们的团购，现在只需要您提交支付就可以发货啦" :"亲，$newMemberName 刚刚加入了我们的团购，现在只需要发起者提交支付就可以发货啦");
+            }else{
+                $msg =  $isSelf ? ($isOrganizer ? "亲，您发起的团购成团啦，请等待收货" : "亲，您参加 $organizerName 发起的团购成功，现在只差 $leftPeople 人就可以成团啦。") : "亲，$newMemberName 刚刚加入了我们的团购，现在只差 $leftPeople 人就可以成团啦";
+            }
         }
         $post_data = array(
             "touser" => $open_id,
