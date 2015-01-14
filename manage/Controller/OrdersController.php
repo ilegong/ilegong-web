@@ -168,9 +168,29 @@ class OrdersController extends AppController{
 
 
     public function admin_list_today() {
+
+        $sent_by_our_self = array(
+            35,//电科院-刘炎炎
+            413,//腾讯-nancyqi
+            41, //小牛村-王成宝
+            92, //朋友说
+            116, //中国移动-黄亮
+            88, //阿里巴巴—李瑞
+            36, //你好植物-张小伟
+            72, //蓝靛果-王野
+            34,//去哪儿-荣浩
+        );
+
         $start_date= $this->get_day_start($_REQUEST['start_date']);
         $end_date = $this->get_day_end($_REQUEST['end_date']);
         $brand_id=empty($_REQUEST['brand_id'])?0:$_REQUEST['brand_id'];
+
+        if(empty($brand_id)) {
+            if ($_REQUEST['sent_by_us'] == 1) {
+                $brand_id = $sent_by_our_self;
+            }
+        }
+
         $order_status=!isset($_REQUEST['order_status'])?-1:$_REQUEST['order_status'];
         $order_id=!isset($_REQUEST['order_id'])?"":$_REQUEST['order_id'];
         $consignee_name=!isset($_REQUEST['consignee_name'])?"":$_REQUEST['consignee_name'];
@@ -192,7 +212,7 @@ class OrdersController extends AppController{
             'Order.type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL)
         );
         if($brand_id !=0){
-            array_push($conditions,'Order.brand_id = '.$brand_id);
+            $conditions['Order.brand_id'] = $brand_id;
         }
         if($order_status!=-1){
             array_push($conditions,'Order.status = '.$order_status);

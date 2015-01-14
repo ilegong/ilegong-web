@@ -33,6 +33,9 @@
     收件人手机：
         <input name="consignee_mobilephone" type="text" value="{{$consignee_mobilephone}}">
 
+    只显示我们发货的商家
+        <input name="sent_by_us" type="checkbox" value="1" <?php if($_REQUEST['sent_by_us'] == 1) echo "checked"  ?> />
+
         <input type="submit" value="查询" class="btn">
 
     </form>
