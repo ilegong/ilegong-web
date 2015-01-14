@@ -189,13 +189,13 @@ class CategoriesController extends AppController {
         );
 
         $mobileTagIds = array(3,5,8,12,9,6,4,10);
-
         $mobileTags = $this->findTagsByIds($mobileTagIds);
-
         $mobileTags = Hash::combine($mobileTags,'{n}.ProductTag.id','{n}.ProductTag');
-
         $this->set('mobile_tag',$mobileTags);
-
+        $specTagIds = array(13,14,15);
+        $specTags = $this->findTagsByIds($specTagIds);
+        $specTags = Hash::combine($specTags,'{n}.ProductTag.id','{n}.ProductTag');
+        $this->set('spec_tags',$specTags);
         $bannerItems = array(
             $zutuangous[mt_rand(0, 1000) % count($zutuangous)],
             array('img' => "/img/banner/banner_shibin.jpg?v2", 'url' => "/products/20141204/fu_ping_te_ji_jian_shi_bing.html", 'id' => 331),
@@ -231,9 +231,7 @@ class CategoriesController extends AppController {
             $this->set('shichiTuan', $shichituan);
         }
         $this->set('shichi_mem', $is_shichi);
-
         $this->set('tryings', $tryings);
-
         $this->set('bannerItems', $bannerItems);
         $this->set('max_show', $this->RequestHandler->isMobile()? 2 : 4);
         $this->set('_serialize', array('brands', 'tagsWithProducts', 'sub_title', 'bannerItems'));
@@ -318,7 +316,6 @@ class CategoriesController extends AppController {
         $this->set('category_control_name', 'products');
         $this->set('op_cate', OP_CATE_HOME);
         $this->set('is_index',true);
-        $this->set('spec_tags',$specTags);
     }
 
     public function specCategoryList(){
@@ -562,6 +559,16 @@ class CategoriesController extends AppController {
         return $productTags;
     }
 
+    protected function findNoVisibleTags(){
+        $this->loadModel('ProductTag');
+        $productTags = $this->ProductTag->find('all', array('conditions' => array(
+            'show_in_home' => 0,
+            'published' => 1
+        ),
+            'order' => 'priority desc'
+        ));
+        return $productTags;
+    }
 
     protected function findTagsByIds($ids){
         $this->loadModel('ProductTag');
