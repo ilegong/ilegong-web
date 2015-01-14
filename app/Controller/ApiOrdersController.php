@@ -72,7 +72,7 @@ class ApiOrdersController extends AppController {
         $products = $this->Product->find_products_by_ids($pids);
 
         foreach($Carts as &$cart) {
-            $cart['Cart']['brand_id'] = $products[$cart['Cart']['product_id']];
+            $cart['Cart']['brand_id'] = $products[$cart['Cart']['product_id']]['brand_id'];
         }
 
         $brandIds = Hash::extract($products, '{n}.brand_id');
