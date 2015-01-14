@@ -81,5 +81,29 @@ class User extends AppModel {
         return $map;
     }
 
+    function set_score($uid, $score) {
+        $old_score = $this->get_score($uid, true);
+        return $this->updateAll(array('score = score + '.$score), array('score' => $old_score, 'id' => $uid));
+    }
+
+    function get_score($uid, $ignoreCache = false) {
+        $score_key = $this->score_key($uid);
+        $score = $ignoreCache ? false : Cache::read($score_key);
+        if ($score !== 0 && empty($score)) {
+            $u = $this->findById($uid);
+            $score = $u['User']['score'];
+            Cache::write($score_key, $score);
+        }
+        return $score;
+    }
+
+    /**
+     * @param $uid
+     * @return string
+     */
+    private function score_key($uid) {
+        return '_u_score_' . $uid;
+    }
+
 }
 ?>
