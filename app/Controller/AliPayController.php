@@ -26,7 +26,7 @@ class AliPayController extends AppController {
     public function wap_to_alipay($order_id) {
 
         $from = $_GET['from'];
-        if ("app" == $from){                         p
+        if ("app" == $from){
             $uid = $_GET['uid'];
         } else {
             $uid = $this->currentUser['id'];
