@@ -87,6 +87,8 @@ const CART_ITEM_TYPE_GROUPON_PROM = 4;
 const SHICHI_STATUS_OK = 1;
 const SHICHI_STATUS_APPLY = 0;
 
+const CSAD_PHONE='13693655401';
+
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
