@@ -318,7 +318,12 @@ class CategoriesController extends AppController {
         $this->set('is_index',true);
     }
 
-    public function specCategoryList(){
+    public function specCategoryList($tagSlug){
+        $productTag = $this->ProductTag->find('first', array('conditions' => array(
+            'slug' => $tagSlug,
+            'published' => 1
+        )));
+        $this->pageTitle=$productTag['ProductTag']['name'];
         $ids = array(16,17,18,19);
         $tags = $this->findTagsByIds($ids);
         $this->set('tags',$tags);
