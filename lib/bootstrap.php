@@ -10,6 +10,10 @@ const ORDER_TYPE_GROUP = 2;
 const ORDER_TYPE_GROUP_FILL = 4; //团购补充素有剩下的
 const ORDER_TYPE_PARENT = 3;
 
+const ALI_PAY_TYPE_WAP = "wap";
+const ALI_PAY_TYPE_WAPAPP = "wapapp";
+const ALI_PAY_TYPE_PC = "pc";
+
 App::build(array(
 	'plugins' => array(COMMON_PATH.'Plugin'.DS, APP_PATH.'Plugin'.DS, ),
 	//'views' => array(COMMON_PATH.'View'.DS),

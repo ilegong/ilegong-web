@@ -72,6 +72,10 @@ class AliPayController extends AppController {
         }
     }
 
+    public function wap_return_back_app() {
+        $this->wap_return_back();
+    }
+
     public function wap_return_back() {
         $verify = $this->WxPayment->wap_verify_return();
         $out_trade_no = $_GET['out_trade_no'];
@@ -170,7 +174,6 @@ class AliPayController extends AppController {
      * @param $trade_no
      * @param $isSuccess
      * @param $attach
-     * @throws CakeException
      */
     protected function handle_return_back($verify, $trade_status, $out_trade_no, $trade_no, $isSuccess, $attach) {
         if ($verify) {
@@ -220,13 +223,15 @@ class AliPayController extends AppController {
             }
         }
 
-        if ($order_id) {
+        if ($order_id && $this->request->params['action'] != 'wap_return_back_app') {
+
             if ($order_type == ORDER_TYPE_GROUP || $order_type == ORDER_TYPE_GROUP_FILL) {
                 $group_url = '/groupons/my_join/' . $order_member_id;
                 $this->redirect($group_url);
             } else {
                 $this->redirect(array('controller' => 'Orders', 'action' => 'detail', $order_id, 'pay', '?' => array('paid_msg' => $msg, 'display_status' => $display_status)));
             }
+
             $this->autoRender = false;
         } else {
             $this->set('paid_msg', $msg);

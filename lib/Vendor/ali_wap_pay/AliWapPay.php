@@ -82,7 +82,7 @@ class AliWapPay extends Object {
         return $alipayNotify->verifyReturn();
     }
 
-    public function & api_form($out_trade_no, $order_id, $subject, $total_fee, $body) {
+    public function & api_form($out_trade_no, $order_id, $subject, $total_fee, $body, $type = ALI_PAY_TYPE_WAP) {
         $format = "xml";
         $v = "2.0";
         //请求号，需要保证每次都是唯一
@@ -92,7 +92,7 @@ class AliWapPay extends Object {
         $merchant_url = $this->alipay_config['transport'].'://'. ALI_HOST."/orders/detail/$order_id/pay.html?from=zhifubaopay";
         //需http://格式的完整路径，不能加?id=123这类自定义参数
         $notify_url = 'http://'.ALI_HOST.'/ali_pay/wap_notify.html';
-        $call_back_url = 'http://'.ALI_HOST.'/ali_pay/wap_return_back.html';
+        $call_back_url = 'http://'.ALI_HOST.'/ali_pay/wap_return_back'.($type == ALI_PAY_TYPE_WAPAPP?'_app':'').'.html';
 
         //请求业务参数详细
         $req_data = '<direct_trade_create_req><notify_url>' . $notify_url . '</notify_url><call_back_url>' . $call_back_url . '</call_back_url><seller_account_name>' . $seller_email . '</seller_account_name><out_trade_no>' . $out_trade_no . '</out_trade_no><subject>' . $subject . '</subject><total_fee>' . $total_fee . '</total_fee><merchant_url>' . $merchant_url . '</merchant_url></direct_trade_create_req>';
