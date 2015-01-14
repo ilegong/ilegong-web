@@ -207,9 +207,9 @@ class WeixinController extends AppController {
 				default:
                     $hour = date('G');
                     if($hour>=9&&$hour<21){
-                        echo $this->newTextMsg($user, $me,  "回复“2”查看我的订单<br/>其他问题客服MM将尽快给您回复");
+                        echo $this->newTextMsg($user, $me,  "回复“2”查看我的订单\n其他问题客服MM将尽快给您回复");
                     }else{
-                        echo $this->newTextMsg($user, $me, "回复“2”查看我的订单<br/>客服工作时间9:00-21:00。紧急情况请电话联系<a href=\"tel:".CSAD_PHONE."\">".CSAD_PHONE."</a>");
+                        echo $this->newTextMsg($user, $me, "回复“2”查看我的订单\n客服工作时间9:00-21:00。紧急情况请电话联系<a href=\"tel:".CSAD_PHONE."\">".CSAD_PHONE."</a>");
                     }
 			}
 		}
