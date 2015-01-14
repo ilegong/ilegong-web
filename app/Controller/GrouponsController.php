@@ -31,7 +31,7 @@ class GrouponsController extends AppController{
                 $this->redirect('/groupons/mobile_bind?referer='.urlencode($_SERVER['REQUEST_URI']));
             }
         }
-        $this->pageTitle = '组团一起吃，只要一块钱';
+        $this->pageTitle = '组团一起吃';
     }
     public function view($slug = null, $for = '', $fromId = ''){
         $uid = $this->currentUser['id'];
