@@ -31,8 +31,9 @@ class GrouponsController extends AppController{
                 $this->redirect('/groupons/mobile_bind?referer='.urlencode($_SERVER['REQUEST_URI']));
             }
         }
-        $this->pageTitle = '组团一起吃';
+
     }
+
     public function view($slug = null, $for = '', $fromId = ''){
         $uid = $this->currentUser['id'];
         if(empty($slug)){
@@ -107,8 +108,10 @@ class GrouponsController extends AppController{
             if($grouponMember){
                 $this->redirect('/groupons/join/'.$grouponMember['GrouponMember']['groupon_id']);
             }
+
         }
 
+        $this->setTitle($team);
     }
     public function organizing(){
         $team_slug =   $this->data['team']  ?  $this->data['team']  :  $_GET['team'];
@@ -147,7 +150,7 @@ class GrouponsController extends AppController{
         }
         $this->set('team', $team);
         $this->data['team'] = $team_slug;
-
+        $this->setTitle($team);
     }
 
     public function go_join($groupId) {
@@ -285,6 +288,7 @@ class GrouponsController extends AppController{
         $this->set('team', $team);
         $this->set('groupon', $groupon);
         $this->set('join_info', $join_info);
+        $this->setTitle($team);
     }
 
     public function test() {}
@@ -333,6 +337,14 @@ class GrouponsController extends AppController{
 
         $this->set('share_alert_tuhao', $alert_tuhao);
         $this->set('share_alert_leader', $alert_leader);
+    }
+
+    /**
+     * @param $team
+     * @return string
+     */
+    private function setTitle($team) {
+        return $this->pageTitle = '组团一起吃' . (!empty($team) ? $team['Team']['name'] : '');
     }
 
 }
