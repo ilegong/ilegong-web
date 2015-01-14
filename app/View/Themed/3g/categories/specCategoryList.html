@@ -1,7 +1,14 @@
 <div class="bannerlist">
-    <?php foreach($tags as $index=>$tag){?>
-    <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tag['ProductTag']['slug']))}}">
-        <img src="{{$this->Html->assetUrl('/img/mobile/bannerlist/bannerlist0'.($index+1).'.jpg')}}" />
+    <a href="/categories/tag/lianyoumimian.html">
+        <img src="{{$this->Html->assetUrl('/img/mobile/bannerlist/bannerlist01.jpg')}}" />
     </a>
-    <?php }?>
+    <a href="/categories/tag/liangyou.html">
+        <img src="{{$this->Html->assetUrl('/img/mobile/bannerlist/bannerlist02.jpg')}}" />
+    </a>
+    <a href="/categories/tag/shilingshucai.html">
+        <img src="{{$this->Html->assetUrl('/img/mobile/bannerlist/bannerlist03.jpg')}}" />
+    </a>
+    <a href="/categories/tag/shuichanhaixian.html">
+        <img src="{{$this->Html->assetUrl('/img/mobile/bannerlist/bannerlist04.jpg')}}" />
+    </a>
 </div>
