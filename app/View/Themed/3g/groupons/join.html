@@ -43,7 +43,7 @@
 <div class="can_paid" style="margin-top:1em">组团成功, 等待收货吧!</div>
     {{/if}}
         {{if $balance > $team['Team']['unit_val']}}
-        <a href="javascript:;" id="share_to_friend" class="share"><img src="{{$this->Html->assetUrl('/img/groupon/share.jpg')}}" /></a>
+        <a href="javascript:;" id="share_to_friend" class="newtuanbtn radius10" style="margin-top:0.2em">邀请好友一起来团</a>
         {{/if}}
         {{if ($groupon['Groupon']['status'] != STATUS_GROUP_REACHED)}}
             {{if $balance <= $team['Team']['unit_val'] }}
