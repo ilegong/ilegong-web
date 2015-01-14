@@ -12,8 +12,9 @@
 .index_pt ul li img{ width:100%;}
 .index_class_title{ font-size:1.2em; color:#666666; padding:0.5em 0 0.2em 0.417em;}
 .index_class{ padding:0 0.417em;}
+.index_class ul li{width:50%;}
 .index_class ul{ padding-bottom:0.2em;}
-.index_class ul img{ width:12.667em; height:4.583em;}
+.index_class ul img{width:98%;}
 .index_bao_title{ font-size:1.2em; color:#666666; padding:0.1em 0 0.2em 0.417em;}
 .index_bao{ padding:0 0.417em;}
 .index_bao a{ display:block; padding-bottom:0.6em;}
