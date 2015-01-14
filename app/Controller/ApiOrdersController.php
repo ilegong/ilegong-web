@@ -67,9 +67,16 @@ class ApiOrdersController extends AppController {
             $total_price += $cart['Cart']['price']*$cart['Cart']['num'];
         }
 
+        $pids = Hash::combine($Carts, '{n}.Cart.product_id');
+        $this->loadModel('Product');
+        $products = $this->Product->find_products_by_ids($pids);
+        $brandIds = Hash::combine($products, '{n}.Product.brand_id');
+        $brands = $this->findBrands($brandIds);
+
         $this->set('total_price', $total_price);
+        $this->set('brands', $brands);
         $this->set('carts', $Carts);
-        $this->set('_serialize', array('total_price', 'carts'));
+        $this->set('_serialize', array('total_price', 'carts', 'brands'));
     }
 
     /**
