@@ -1,0 +1,7 @@
+<div class="bannerlist">
+    <?php foreach($tags as $index=>$tag){?>
+    <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tag['ProductTag']['slug']))}}">
+        <img src="{{$this->Html->assetUrl('/img/mobile/bannerlist/bannerlist0'.($index+1).'.jpg')}}" />
+    </a>
+    <?php }?>
+</div>

@@ -188,6 +188,14 @@ class CategoriesController extends AppController {
             array('img' => "/img/banner/banner_zutuangou.jpg", 'url' => "/groupons/view/gonggan.html?from=home", 'id' => 0),
         );
 
+        $mobileTagIds = array(3,5,8,12,9,6,4,10);
+
+        $mobileTags = $this->findTagsByIds($mobileTagIds);
+
+        $mobileTags = Hash::combine($mobileTags,'{n}.ProductTag.id','{n}.ProductTag');
+
+        $this->set('mobile_tag',$mobileTags);
+
         $bannerItems = array(
             $zutuangous[mt_rand(0, 1000) % count($zutuangous)],
             array('img' => "/img/banner/banner_shibin.jpg?v2", 'url' => "/products/20141204/fu_ping_te_ji_jian_shi_bing.html", 'id' => 331),
@@ -310,6 +318,13 @@ class CategoriesController extends AppController {
         $this->set('category_control_name', 'products');
         $this->set('op_cate', OP_CATE_HOME);
         $this->set('is_index',true);
+        $this->set('spec_tags',$specTags);
+    }
+
+    public function specCategoryList(){
+        $ids = array(16,17,18,19);
+        $tags = $this->findTagsByIds($ids);
+        $this->set('tags',$tags);
     }
 
     public function view($slug='/', $brand_id='') {
@@ -540,6 +555,18 @@ class CategoriesController extends AppController {
         $this->loadModel('ProductTag');
         $productTags = $this->ProductTag->find('all', array('conditions' => array(
             'show_in_home' => 1,
+            'published' => 1
+        ),
+            'order' => 'priority desc'
+        ));
+        return $productTags;
+    }
+
+
+    protected function findTagsByIds($ids){
+        $this->loadModel('ProductTag');
+        $productTags = $this->ProductTag->find('all', array('conditions' => array(
+            'id'=>$ids,
             'published' => 1
         ),
             'order' => 'priority desc'
