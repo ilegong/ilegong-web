@@ -344,7 +344,7 @@ class GrouponsController extends AppController{
      * @return string
      */
     private function setTitle($team) {
-        return $this->pageTitle = '组团一起吃' . (!empty($team) ? $team['Team']['name'] : '');
+        return $this->pageTitle = '组团一起吃' . (!empty($team) ? "-".$team['Team']['name'] : '');
     }
 
 }
