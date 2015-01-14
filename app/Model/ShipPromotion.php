@@ -117,7 +117,22 @@ class ShipPromotion extends AppModel {
             'limit_per_user' => 1,
             'items' => array(
 //                array('id' => 37, 'ship_price' => 0.0, 'time' => '', 'address' =>'世贸天阶时尚大厦六层'),
-                array('id' => 45, 'ship_price' => 0.0, 'time' => '', 'address' =>'东大桥8号SOHO南塔 1002 号'),
+                array('id' => 65, 'ship_price' => 0.0, 'time' => '', 'address' =>'东大桥8号SOHO南塔 1002 号'),
+            )
+        ),
+
+        PRODUCT_ID_CAKE_FRUITS => array('limit_ship' => true,
+            'items' => array(
+                array('id' => 66, 'price' => 258.0, 'time' => '', 'least_num' => 5,  'address' => '团购满5箱（含），送到指定地点', 'need_address_remark' => true),
+                array('id' => 67, 'price' => 248.0, 'time' => '', 'least_num' => 10,  'address' => '团购满10箱（含），送到指定地点', 'need_address_remark' => true),
+                array('id' => 68, 'price' => 268.0, 'time' => '', 'address' => '昌平自提 地址: 昌平区商业街66号世纪联华超市（近商业街西口）13693336613'),
+                array('id' => 69, 'price' => 268.0, 'time' => '', 'address' => '顺义自提 地址: 顺义区顺白路望泉家园万科四季花城小区42号楼103室（万科四季花城南门旁）'),
+                array('id' => 70, 'price' => 268.0, 'time' => '', 'address' => '朝阳劲松 地址: 劲松二区208楼底商晨阳惠友商店（眉州东坡酒楼劲松店西侧小路向北50米）67720201'),
+                array('id' => 71, 'price' => 268.0, 'time' => '', 'address' => '丰台自提 地址: 六里桥桥南西行200米西局西路58号院，底商58-31，国烟国酒超市 63770644'),
+                array('id' => 72, 'price' => 268.0, 'time' => '', 'address' => '海淀自提 地址: 健德门桥东北200米京客隆超市 62059955'),
+                array('id' => 73, 'price' => 268.0, 'time' => '', 'address' => '西城车公庄自提 地址: 西城区展览路12-5号，烟酒销售 88360166'),
+                array('id' => 74, 'price' => 268.0, 'time' => '', 'address' => '东城区朝阳门自提 地址: 朝阳门内大街97号底商，平价商店 15901495532'),
+                array('id' => 75, 'price' => 268.0, 'time' => '', 'address' => '崇文门蟠桃宫自提 地址: 崇文门东大街8-2号，蟠桃宫便利店 18511077986'),
             )
         )
 
