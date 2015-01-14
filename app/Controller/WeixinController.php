@@ -204,8 +204,13 @@ class WeixinController extends AppController {
                 case '5152':
                     echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/apple_201410/index.html").'">苹果游戏Demo</a>');
                     break;
-				//default :
-				//	echo $this->newTextMsg($user, $me, "回复“预定”进入预定页\n回复“订单”查看我的订单");
+				default:
+                    $hour = date('G');
+                    if($hour>=9&&$hour<21){
+                        echo $this->newTextMsg($user, $me, '回复“2”查看我的订单\n其他问题客服MM将尽快给您回复');
+                    }else{
+                        echo $this->newTextMsg($user, $me, '回复“2”查看我的订单\n客服工作时间9:00-21:00。紧急情况请电话联系<a href="tel:13693655401">13693655401</a>');
+                    }
 			}
 		}
 	}
