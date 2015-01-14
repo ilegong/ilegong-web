@@ -67,7 +67,7 @@ class ApiOrdersController extends AppController {
             $total_price += $cart['Cart']['price']*$cart['Cart']['num'];
         }
 
-        $pids = Hash::combine($Carts, '{n}.Cart.product_id');
+        $pids = Hash::extract($Carts, '{n}.Cart.product_id');
         $this->loadModel('Product');
         $products = $this->Product->find_products_by_ids($pids);
 
@@ -75,7 +75,7 @@ class ApiOrdersController extends AppController {
             $cart['Cart']['brand_id'] = $products[$cart['Cart']['product_id']];
         }
 
-        $brandIds = Hash::combine($products, '{n}.brand_id');
+        $brandIds = Hash::extract($products, '{n}.brand_id');
         $brands = $this->findBrands($brandIds);
 
         $this->set('total_price', $total_price);
