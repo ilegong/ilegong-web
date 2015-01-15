@@ -29,7 +29,7 @@ class WxPaymentComponent extends Component {
     public function goToAliPayForm($order_id, $uid) {
         App::import('Vendor', 'ali_direct_pay/AliPay');
         $ali = new AliPay();
-        return $this->api_form($order_id, $uid, $ali);
+        return $this->api_form($order_id, $uid, $ali, ALI_PAY_TYPE_PC);
     }
 
     public function verify_notify() {
@@ -45,10 +45,10 @@ class WxPaymentComponent extends Component {
         return $ali->verify_return();
     }
 
-    public function wap_goToAliPayForm($order_id, $uid) {
+    public function wap_goToAliPayForm($order_id, $uid, $type = ALI_PAY_TYPE_WAP) {
         App::import('Vendor', 'ali_wap_pay/AliWapPay');
         $ali = new AliWapPay();
-        return $this->api_form($order_id, $uid, $ali);
+        return $this->api_form($order_id, $uid, $ali, $type);
     }
 
     public function wap_notify() {
@@ -228,7 +228,7 @@ class WxPaymentComponent extends Component {
      * @param $ali
      * @return mixed
      */
-    protected function api_form($order_id, $uid, $ali) {
+    protected function api_form($order_id, $uid, $ali, $type) {
         $order = $this->findOrderAndCheckStatus($order_id, $uid);
 
         $totalFee = $order['Order']['total_all_price'];
@@ -236,7 +236,7 @@ class WxPaymentComponent extends Component {
 
         $out_trade_no = $this->out_trade_no(TRADE_ALI_TYPE, $order_id);
         $this->savePayLog($order_id, $out_trade_no, $body, TRADE_ALI_TYPE, $totalFee * 100, '', '');
-        return $ali->api_form($out_trade_no, $order_id, $subject, $totalFee, $body);
+        return $ali->api_form($out_trade_no, $order_id, $subject, $totalFee, $body, $type);
     }
 
 } 

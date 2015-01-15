@@ -35,7 +35,7 @@ class AliPayController extends AppController {
             }
         }
 
-        $form = $this->WxPayment->wap_goToAliPayForm($order_id, $uid);
+        $form = $this->WxPayment->wap_goToAliPayForm($order_id, $uid, ALI_PAY_TYPE_WAPAPP);
         $this->set('form', $form);
         $this->pageTitle = '支付宝支付';
     }
