@@ -325,7 +325,7 @@ class WeixinComponent extends Component
                 $json = curl_exec($curl);
                 curl_close($curl);
                 $output = json_decode($json, true);
-                $this->log("post weixin api send template message output: " . $output, LOG_DEBUG);
+                $this->log("post weixin api send template message output: " . json_encode($output), LOG_DEBUG);
                 if ($output['errcode'] == 0) {
                     return true;
                 } else {
