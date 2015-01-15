@@ -272,7 +272,10 @@ class WeixinController extends AppController {
                                     echo $this->newTextMsg($user, $me, '亲，您不能领取此优惠');
                                 } else {
                                     $weixinC = $this->Components->load('Weixin');
-                                    if (!add_coupon_for_new($uid, $weixinC)) {
+                                    if (!add_coupon_for_new($uid, $weixinC,
+                                        array(18753, 18754, 18755, 18756, 18757),
+                                        "满50元减5元；满100元减10元；满150元减15元；满200元减20元；满400元减50元")
+                                    ) {
                                         echo $this->newTextMsg($user, $me, '欢迎关注朋友说，您已经领过啦');
                                     }
                                 }

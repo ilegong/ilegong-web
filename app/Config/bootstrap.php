@@ -694,15 +694,15 @@ function game_uri($gameType, $defUri = '/') {
 }
 
 
-function add_coupon_for_new($uid, $weixinC) {
+function add_coupon_for_new($uid, $weixinC, $coupons = array(18483, 18482), $descs = "满100元减20， 满50元减10元") {
     $ci = ClassRegistry::init('CouponItem') ;
-    $new_user_coupons = array(18483, 18482);
+    $new_user_coupons = $coupons;
     $found = $ci->find_coupon_item_by_type_no_join($uid, $new_user_coupons);
     if (empty($found)) {
         foreach($new_user_coupons as $coupon_id) {
             $ci->addCoupon($uid, $coupon_id, $uid, 'new_register');
         }
-        $weixinC->send_coupon_received_message($uid, 2, "可购买全站商品", "满100元减20， 满50元减10元");
+        $weixinC->send_coupon_received_message($uid, 2, "可购买全站商品", $descs);
         return true;
     }
     return false;
