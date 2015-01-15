@@ -504,6 +504,15 @@ class OrdersController extends AppController{
                     }
                 }
             }
+        }else{
+            if($orderinfo['Order']['status'] == ORDER_STATUS_PAID || $orderinfo['Order']['status'] == ORDER_STATUS_SHIPPED){
+                if($uid && $this->is_weixin()){
+                    $this->loadModel('WxOauth');
+                    if(!$this->WxOauth->is_subscribe_wx_pyshuo($uid)){
+                        $this->set('remind_attentions', true);
+                    }
+                }
+            }
         }
 
         //TODO: Handle product try orders!

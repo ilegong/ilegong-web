@@ -45,7 +45,10 @@
     {{/if}}
 
         <div>
-            <h3>基本信息</h3>
+            <h3 style="display:inline;">基本信息</h3>
+            {{if $need_attentions || $remind_attentions}}
+            <a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd"><span class="order_status_text" style ="float:right">关注朋友说接收订单状态变更通知</span></a>
+            {{/if}}
             <br/>
             {{if $order['Order']['type'] == ORDER_TYPE_GROUP_FILL}}<span>这是一个组团购订单</span> <a class="btn-sm btn-warning" href="/groupons/my_join/{{$order['Order']['member_id']}}.html">查看组团</a><br/>{{/if}}
          <p class="col-xs-12"> 订单状态：<span class="order_status_text">

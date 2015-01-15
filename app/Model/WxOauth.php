@@ -198,7 +198,7 @@ class WxOauth extends Model {
         return $res;
     }
     public function is_subscribe_wx_pyshuo($uid){
-        $key = key_cache_sub($uid,'attention');
+        $key = key_cache_sub($uid);
         $subscribe_status = Cache::read($key);
         if ($subscribe_status == WX_STATUS_SUBSCRIBED ) {
             return true;
