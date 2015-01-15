@@ -999,8 +999,7 @@ class UsersController extends AppController {
             $changed = false;
             $user = $user['User'];
             if (!$user['nickname'] || notWeixinAuthUserInfo($new_serviceAccount_binded_uid, $user['nickname'])) {
-                $wx_nick = remove_emoji($userInfo['nickname']);
-                $user['nickname'] = filter_weixin_username($wx_nick);
+                $user['nickname'] = filter_weixin_username($this->convertWxName($userInfo['nickname']));
                 $changed = true;
             }
             if ($user['sex'] !== 0 && $user['sex'] != 1) {
@@ -1041,10 +1040,8 @@ class UsersController extends AppController {
      */
     protected function createNewUserByWeixin($userInfo) {
 
-        $nickname = remove_emoji($userInfo['nickname']);
-
         if (!$this->User->save(array(
-            'nickname' => $nickname,
+            'nickname' => $this->convertWxName($userInfo['nickname']),
             'sex' => $userInfo['sex'] == 1 ? 0 : ($userInfo['sex'] == 2 ? 1 : null),
             'image' => $userInfo['headimgurl'],
             'province' => $userInfo['province'],
@@ -1131,6 +1128,15 @@ class UsersController extends AppController {
             $res = array('success'=> false, 'msg'=>'短信验证码错误');
         }
         echo json_encode($res);
+    }
+
+    /**
+     * @param $text
+     * @return mixed|string
+     */
+    protected function convertWxName($text) {
+        $nickname = remove_emoji($text);
+        return ($nickname == '' ? '用户_' . mt_rand(10, 1000) : $nickname);
     }
 
 }
