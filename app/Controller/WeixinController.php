@@ -424,7 +424,7 @@ class WeixinController extends AppController {
             }elseif($_GET['orderId']){
                 $data = json_encode(array('orderId'=> intval($_GET['orderId'])));
             }elseif($_GET['type'] == 'follow') {
-                $data = json_encode(array('follow'=> intval($_GET['orderId'])));
+                $data = json_encode(array('follow'=> 1));
             }
             Cache::write($key, $data);
         }

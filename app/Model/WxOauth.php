@@ -222,7 +222,7 @@ class WxOauth extends Model {
         $accessToken = $this->get_base_access_token();
         if (!empty($accessToken) && !empty($body)) {
             $params = array('access_token' => $accessToken);
-            return $this->do_curl(WX_API_PREFIX . "/cgi-bin/message/custom/send",$body, $params, true);
+            return $this->do_curl_body(WX_API_PREFIX . "/cgi-bin/message/custom/send",$body, $params);
         } else return false;
     }
 
