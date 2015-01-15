@@ -39,7 +39,7 @@ class OrderShichi extends AppModel {
             'conditions' => $cond,
         ));
 
-        $this->log("Shichi Orders found in db:". json_encode($shichiOrders));
+        $this->log("Shichi Orders found in db:". json_encode($shichiOrders) . ", conditions:". json_encode($cond));
 
         $order_ids = array();
         $brandIds = array();
