@@ -223,7 +223,8 @@ class WeixinController extends AppController {
                 case "e100":
                 case "E100":
                     if ($from == FROM_WX_SERVICE) {
-                        $uid = $this->Oauthbind->findUidByWx(trim($user));
+                        $openId =  trim($user);
+                        $uid = $this->Oauthbind->findUidByWx($openId);
                         if ($uid) {
                             $this->loadModel('User');
                             $u = $this->User->findById($uid);
@@ -241,7 +242,7 @@ class WeixinController extends AppController {
                                 }
                             }
                         } else {
-                            $this->log("notfound:".$user);
+                            $this->log("notfound:".$openId);
                         }
                     }
                     break;
