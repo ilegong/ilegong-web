@@ -499,7 +499,9 @@ class OrdersController extends AppController{
             if($_GET['msg'] == 'ok'){
                 if($uid && $this->is_weixin()){
                     $this->loadModel('WxOauth');
-                    if(!$this->WxOauth->is_subscribe_wx_pyshuo($uid)){
+                    if(!$this->WxOauth->is_subscribe_wx_service($uid)){
+                        $key = key_cache_sub($uid,'kfinfo');
+                        Cache::write($key, 'order_'.$orderId);
                         $this->set('need_attentions',true);
                     }
                 }
@@ -508,7 +510,9 @@ class OrdersController extends AppController{
             if($orderinfo['Order']['status'] == ORDER_STATUS_PAID || $orderinfo['Order']['status'] == ORDER_STATUS_SHIPPED){
                 if($uid && $this->is_weixin()){
                     $this->loadModel('WxOauth');
-                    if(!$this->WxOauth->is_subscribe_wx_pyshuo($uid)){
+                    if(!$this->WxOauth->is_subscribe_wx_service($uid)){
+                        $key = key_cache_sub($uid,'kfinfo');
+                        Cache::write($key, 'detail_'.$orderId);
                         $this->set('remind_attentions', true);
                     }
                 }

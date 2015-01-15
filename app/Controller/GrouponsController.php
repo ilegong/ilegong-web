@@ -278,7 +278,9 @@ class GrouponsController extends AppController{
         if($_GET['msg'] == 'ok'){
             if($uid && $this->is_weixin()){
                 $this->loadModel('WxOauth');
-                if(!$this->WxOauth->is_subscribe_wx_pyshuo($uid)){
+                if(!$this->WxOauth->is_subscribe_wx_service($uid)){
+                    $key = key_cache_sub($uid,'kfinfo');
+                    Cache::write($key, 'group_'.$groupId);
                     $this->set('need_attentions',true);
                 }
             }

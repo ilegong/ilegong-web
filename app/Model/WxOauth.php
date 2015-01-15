@@ -197,7 +197,7 @@ class WxOauth extends Model {
 
         return $res;
     }
-    public function is_subscribe_wx_pyshuo($uid){
+    public function is_subscribe_wx_service($uid){
         $key = key_cache_sub($uid);
         $subscribe_status = Cache::read($key);
         if ($subscribe_status == WX_STATUS_SUBSCRIBED ) {
@@ -213,9 +213,17 @@ class WxOauth extends Model {
                     $subscribe_status = ($uinfo['subscribe'] != 0 ? WX_STATUS_SUBSCRIBED : WX_STATUS_UNSUBSCRIBED);
                     Cache::write($key, $subscribe_status);
                 }
-                return $subscribe_status==1?true:false;
+                return $subscribe_status==1;
             }
         }
         return false;
     }
+    public function send_kefu($body){
+        $accessToken = $this->get_base_access_token();
+        if (!empty($accessToken) && !empty($body)) {
+            $params = array('access_token' => $accessToken);
+            return $this->do_curl(WX_API_PREFIX . "/cgi-bin/message/custom/send",$body, $params, true);
+        } else return false;
+    }
+
 }

@@ -114,6 +114,42 @@ class WeixinController extends AppController {
                         );
                     }
 					echo $this->newArticleMsg($user, $me, $content);
+
+                    if($from == FROM_WX_SERVICE){
+                        $key = key_cache_sub($uid,'kfinfo');
+                        $subscribe_array = json_decode(Cache::read($key),true);
+                        if(!empty($subscribe_array)){
+                            $this->loadModel('WxOauth');
+                            $body=array();
+                            if(array_key_exists('groupId',$subscribe_array)){
+                                $body=array(
+                                    'touser'=>$user,
+                                    "msgtype"=>"text",
+                                    "text"=>array(
+                                        "content"=>'您在［朋友说］参加的［组团］活动成功<a href="'.$this->loginServiceIfNeed($from, $user, "http://".WX_HOST."/groupons/join/".$subscribe_array['groupId']).'>查看详情</a>'
+                                    )
+                                );
+
+                            }elseif(array_key_exists('orderId',$subscribe_array)){
+                                $body=array(
+                                    'touser'=>$user,
+                                    "msgtype"=>"text",
+                                    "text"=>array(
+                                        "content"=>'您在［朋友说］购买的商品已支付成功，<a href="'.$this->loginServiceIfNeed($from, $user, "http://".WX_HOST."/orders/detail/".$subscribe_array['orderId']).'>查看详情</a>'
+                                    )
+                                );
+                            }elseif(array_key_exists('follow',$subscribe_array)){
+                                $body=array(
+                                    'touser'=>$user,
+                                    "msgtype"=>"text",
+                                    "text"=>array(
+                                        "content"=>'关注成功！当您的订单状态有变化时系统将通过微信消息通知您。 <a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_MINE', WX_HOST)).'>查看您的订单</a>'
+                                    )
+                                );
+                            }
+                            $this->WxOauth->send_kefu($body);
+                        }
+                    }
 					exit;
 				} else if ($req['Event'] == 'CLICK') {
                     $input = $req['EventKey'];
@@ -377,6 +413,21 @@ class WeixinController extends AppController {
         );
 
         return $elements[$type][$val];
+    }
+    public function save_subscribe_info(){
+        $uid = $this->currentUser['id'];
+        if($uid){
+            $data =array();
+            $key = key_cache_sub($uid,'kfinfo');
+            if($_GET['groupId']){
+                $data = json_encode(array('groupId'=> intval($_GET['groupId'])));
+            }elseif($_GET['orderId']){
+                $data = json_encode(array('orderId'=> intval($_GET['orderId'])));
+            }elseif($_GET['type'] == 'follow') {
+                $data = json_encode(array('follow'=> intval($_GET['orderId'])));
+            }
+            Cache::write($key, $data);
+        }
     }
 }
 ?>

@@ -47,7 +47,7 @@
         <div>
             <h3 style="display:inline;">基本信息</h3>
             {{if $need_attentions || $remind_attentions}}
-            <a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd"><span class="order_status_text" style ="float:right">关注朋友说接收订单状态变更通知</span></a>
+            <a href="javascript:void(0)" id="follow_subscribe"><span class="order_status_text" style ="float:right">关注朋友说接收订单状态变更通知</span></a>
             {{/if}}
             <br/>
             {{if $order['Order']['type'] == ORDER_TYPE_GROUP_FILL}}<span>这是一个组团购订单</span> <a class="btn-sm btn-warning" href="/groupons/my_join/{{$order['Order']['member_id']}}.html">查看组团</a><br/>{{/if}}
@@ -144,15 +144,27 @@
         <div>关注<span>[朋友说]</span>后, 可以查看订单状态!</div>
         <ul class="clearfix">
             <li class="fl"><a class="comment_bingbtn radius10" data-dismiss="modal" href="javascript:void(0)">稍后关注</a></li>
-            <li class="fr"><a class="comment_nobingbtn radius10" href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">关注</a></li>
+            <li class="fr"><a class="comment_nobingbtn radius10" id="subscribe">关注</a></li>
         </ul>
     </div>
 </div>
 {{/if}}
+<span id="orderId" style="display: none">{{$order['Order']['id']}}</span>
 <script>
     $(document).ready(function(){
         if($('#myModal').size()>=1){
+            $('#subscribe').bind('click', function(){
+                var order_id = $('#orderId').text();
+                $.get("/weixin/save_subscribe_info?groupId="+order_id);
+                window.location.href = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd';
+            });
             $('#myModal').modal('show');
+        }
+        if($('#follow_subscribe').size()>=1){
+            $('#follow_subscribe').bind('click', function(){
+                $.get("/weixin/save_subscribe_info?type=follow");
+                window.location.href = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd';
+            });
         }
     })
 </script>
