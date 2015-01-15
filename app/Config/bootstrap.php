@@ -89,6 +89,9 @@ const SHICHI_STATUS_APPLY = 0;
 
 const CSAD_PHONE='13693655401';
 
+const SPEC_PARAM_KEY_COMM='_pys_add_comment';
+const SPEC_PARAM_KEY_SHICHI_COMM='_pys_add_shichi_comment';
+
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');

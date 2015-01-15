@@ -42,6 +42,8 @@ class CommentsController extends AppController {
             $info = array('success' => false, 'error' => 'NO_DATA');
         }
 
+        $this->log('add_shichi_return:'. json_encode($info));
+
         echo json_encode($info);
     }
 

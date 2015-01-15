@@ -107,6 +107,17 @@ class ProductsController extends AppController{
 		}
 	}
     function view($slug='/'){
+
+        //要求评论登录
+        if ($_GET[SPEC_PARAM_KEY_COMM] == 1 || $_GET[SPEC_PARAM_KEY_SHICHI_COMM] == 1) {
+            if ($this->is_weixin()) {
+                if (empty($this->currentUser) || name_empty_or_weixin($this->currentUser['nickname'])) {
+                    $ref = Router::url($_SERVER['REQUEST_URI']);
+                    $this->redirect('/users/login.html?force_login=1&auto_weixin=1&referer=' . urlencode($ref));
+                }
+            }
+        }
+
         parent::view($slug);
 
         $pid = $this->current_data_id;
