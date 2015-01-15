@@ -97,7 +97,7 @@ class WxPayController extends AppController {
             if ($order['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
                 if ($this->Order->set_order_to_paid($order['Order']['id'], $order['Order']['try_id'], $uid, $order['Order']['type'], $order['Order']['member_id'])) {
                     $this->Weixin->notifyPaidDone($order);
-                    $this->__message('支付成功', $group_url);
+                    $this->__message('支付成功', $group_url.'?msg=ok');
                     return;
                 }
             }

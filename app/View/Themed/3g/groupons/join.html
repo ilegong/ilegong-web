@@ -100,13 +100,17 @@
         </ul>
     </div>
 </div>
-<!--弹出层-->
-<div style="position:absolute; left:50%; top:30%; margin-left:-8em; display:none;">
-    <ul class="layer radius10">
-        <li style="display:none;">你已经参加过<span>&nbsp;Alice&nbsp;</span>创建的团!<br />一人只能参加一个团购</li>
-        <li><a class="closebtn radius10" href="#X">关闭</a></li>
-    </ul>
+{{if $need_attentions}}
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="comment_tanchubg_layer radius10">
+        <div>关注<span>[朋友说]</span>后, 跟踪组团状态!</div>
+        <ul class="clearfix">
+            <li class="fl"><a class="comment_bingbtn radius10" data-dismiss="modal" href="javascript:void(0)">稍后关注</a></li>
+            <li class="fr"><a class="comment_nobingbtn radius10" href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd">关注</a></li>
+        </ul>
+    </div>
 </div>
+{{/if}}
 <script>
     var share_png_url = '{{$this->Html->assetUrl("/img/groupon/shareicon.png")}}';
     var show_alert_tuhao = '{{$share_alert_tuhao}}';
@@ -186,10 +190,7 @@
                 utils.wx_to_timeline(appid, imgUrl, lineLink, descContent, shareTitle);
             });
         }, false);
-    });
-</script>
-<script type="text/javascript">
-    $(document).ready(function(){
+
         $('#product_rule').on('click',function(){
             $('#product_rule_content').toggle()
         });
@@ -207,5 +208,8 @@
             $('#more_record').show();
             $('#more_record_show').toggle();
         });
+        if($('#myModal').size()>=1){
+            $('#myModal').modal('show');
+        }
     })
 </script>

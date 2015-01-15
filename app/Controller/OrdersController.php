@@ -477,6 +477,8 @@ class OrdersController extends AppController{
                     $this->Order->id = $orderinfo['Order']['id'];
                     if ($this->Order->set_order_to_paid($orderId, $orderinfo['Order']['try_id'], $uid, $orderinfo['Order']['type'], $orderinfo['Order']['member_id'])) {
                         $this->Weixin->notifyPaidDone($orderinfo);
+                        $action == 'paid';
+                        $_GET['msg'] == 'ok';
                     };
                     $orderinfo = $this->find_my_order_byId($orderId, $uid);
                     $status = $orderinfo['Order']['status'];
@@ -494,6 +496,14 @@ class OrdersController extends AppController{
             $this->log("paid done: $orderId, msg:". $_GET['msg']);
             //:orders/detail/1118/paid?tradeNo=wxca78-1118-1414580077&msg=ok
             //TODO: check status, if status is not paid, tell user to checking; notify administrators to check
+            if($_GET['msg'] == 'ok'){
+                if($uid && $this->is_weixin()){
+                    $this->loadModel('WxOauth');
+                    if(!$this->WxOauth->is_subscribe_wx_pyshuo($uid)){
+                        $this->set('need_attentions',true);
+                    }
+                }
+            }
         }
 
         //TODO: Handle product try orders!

@@ -197,4 +197,25 @@ class WxOauth extends Model {
 
         return $res;
     }
+    public function is_subscribe_wx_pyshuo($uid){
+        $key = key_cache_sub($uid,'attention');
+        $subscribe_status = Cache::read($key);
+        if ($subscribe_status == WX_STATUS_SUBSCRIBED ) {
+            return true;
+        } elseif($subscribe_status == WX_STATUS_UNSUBSCRIBED){
+            return false;
+        } elseif(empty($subscribe_status)){
+            $OauthbindM = ClassRegistry::init('Oauthbind');
+            $oauth = $OauthbindM->findWxServiceBindByUid($uid);
+            if (!empty($oauth)) {
+                $uinfo = $this->get_user_info_by_base_token($oauth['oauth_openid']);
+                if (!empty($uinfo)) {
+                    $subscribe_status = ($uinfo['subscribe'] != 0 ? WX_STATUS_SUBSCRIBED : WX_STATUS_UNSUBSCRIBED);
+                    Cache::write($key, $subscribe_status);
+                }
+                return $subscribe_status==1?true:false;
+            }
+        }
+        return false;
+    }
 }

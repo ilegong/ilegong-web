@@ -183,14 +183,13 @@ class GrouponsController extends AppController{
         if (!empty($uid)) {
             $groupon_member = $this->GrouponMember->findById($member_id);
             if (!empty($groupon_member)) {
-                $this->redirect('/groupons/join/' . $groupon_member['GrouponMember']['groupon_id'] . '.html');
+                $this->redirect('/groupons/join/' . $groupon_member['GrouponMember']['groupon_id'] . '?msg='.$_GET['msg']);
             }
         }
         $this->redirect('/groupons/view');
     }
 
     public function join($groupId, $for = '', $fromId = ''){
-
         $groupon = $this->Groupon->findById($groupId);
         if (empty($groupon)) {
             $this->log("not found groupon for id:". $groupId);
@@ -276,8 +275,14 @@ class GrouponsController extends AppController{
             $this->set('has_organized', !empty($foundGroupon));
             $this->set('will_closed', $will_closed);
         }
-
-
+        if($_GET['msg'] == 'ok'){
+            if($uid && $this->is_weixin()){
+                $this->loadModel('WxOauth');
+                if(!$this->WxOauth->is_subscribe_wx_pyshuo($uid)){
+                    $this->set('need_attentions',true);
+                }
+            }
+        }
         $this->loadModel('Product');
         $product = $this->Product->find('first', array(
             'conditions' => array('id' => $team['Team']['product_id']),

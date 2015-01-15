@@ -461,3 +461,13 @@ a:hover, a:focus {
      /*color: #157ab5; */
     /* text-decoration: underline; */
 }
+
+/*提示用户是否关注弹出层*/
+.comment_tanchubg_layer{ background-color:#ffffff; width:68%; color:#666666; line-height:1.5em; font-size:1.2em; padding:1em; position:absolute; top:30%; left:50%; margin-left:-33%; text-align:center;
+    -webkit-box-shadow: #666 0px 0px 10px;
+    -moz-box-shadow: #666 0px 0px 10px;
+    box-shadow: #666 0px 0px 10px;}
+.comment_tanchubg_layer span{ color:#ffa531;}
+.comment_tanchubg_layer ul{ width:10.5em; margin:0 auto; padding-top:1em;}
+.comment_bingbtn{ width:5.2em; display:block; text-decoration:none; font-size:0.9em; background-color:#ffffff; text-align:center; padding:0.2em 0; border:1px #dddddd solid; color:#999999;}
+.comment_nobingbtn{ width:5.2em; display:block; text-decoration:none; font-size:0.9em; background-color:#ffa531; text-align:center; padding:0.2em 0; border:1px #ffa531 solid; color:#ffffff;}
