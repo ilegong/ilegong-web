@@ -28,27 +28,30 @@ class OrderShichi extends AppModel {
      * @return array orders, order_carts and mapped brands
      */
 
-    public function get_user_shichi_orders($uid,$order_status=null) {
+    public function get_user_shichi_orders($uid, $order_status = null) {
 
         $cond = array('creator' => $uid);
         if ($order_status !== null) {
             $cond['status'] = $order_status;
         }
-        $orders = $this->find('all', array(
+        $shichiOrders = $this->find('all', array(
             'order' => 'id desc',
             'conditions' => $cond,
         ));
+
+        $this->log("Shichi Orders found in db:". json_encode($shichiOrders));
+
         $order_ids = array();
         $brandIds = array();
-        foreach ($orders as $o) {
+        foreach ($shichiOrders as $o) {
             $order_ids[] = $o['OrderShichi']['order_id'];
 //            $brandIds[] = $o['OrderShichi']['brand_id'];
         }
 
-        $ordershichis = array();
+        $ordersMap = array();
         if (!empty($order_ids)) {
             $orderM = ClassRegistry::init('Order');
-            $order_shichis = $orderM->find('all',array(
+            $orders = $orderM->find('all',array(
                 'conditions' => array(
                     'id' => $order_ids
                 ),
@@ -57,11 +60,13 @@ class OrderShichi extends AppModel {
                 )
             ));
 
-            foreach ($order_shichis as $order_shichi) {
-                $brandIds[] = $order_shichi['Order']['brand_id'];
-                $ordershichis[$order_shichi['Order']['id']] = $order_shichi;
+            foreach ($orders as $order) {
+                $brandIds[] = $order['Order']['brand_id'];
+                $ordersMap[$order['Order']['id']] = $order;
             }
         }
+
+        $this->log("Shichi Map Orders:".json_encode($ordersMap));
 
         $order_carts = array();
         if (!empty($order_ids)) {
@@ -94,7 +99,7 @@ class OrderShichi extends AppModel {
                 $mappedBrands[$brand['Brand']['id']] = $brand;
             }
         }
-        return array($orders,$ordershichis, $order_carts, $mappedBrands);
+        return array($shichiOrders, $ordersMap, $order_carts, $mappedBrands);
     }
 
 }
