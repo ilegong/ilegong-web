@@ -222,22 +222,26 @@ class WeixinController extends AppController {
                     break;
                 case "e100":
                 case "E100":
-                    $uid = $this->Oauthbind->findUidByWx(trim($user));
-                    if ($uid) {
-                        $this->loadModel('User');
-                        $u = $this->User->findById($uid);
-                        if (!empty($u)  ) {
-                            $this->log('Found user:'.json_encode($u));
-                            $dt2 = DateTime::createFromFormat(FORMAT_DATETIME, $u['User']['created']);
-                            $ts2 = $dt2->getTimestamp();
-                            if (time() - $ts2 > 24 * 3600)   {
-                                echo $this->newTextMsg($user, $me, '您已经领过啦');
-                            } else {
-                                $weixinC = $this->Components->load('Weixin');
-                                if (!add_coupon_for_new($uid, $weixinC)) {
+                    if ($from == FROM_WX_SERVICE) {
+                        $uid = $this->Oauthbind->findUidByWx(trim($user));
+                        if ($uid) {
+                            $this->loadModel('User');
+                            $u = $this->User->findById($uid);
+                            $this->log('Found user: id='. $uid .', ' . json_encode($u));
+                            if (!empty($u)) {
+                                $dt2 = DateTime::createFromFormat(FORMAT_DATETIME, $u['User']['created']);
+                                $ts2 = $dt2->getTimestamp();
+                                if (time() - $ts2 > 24 * 3600) {
                                     echo $this->newTextMsg($user, $me, '您已经领过啦');
+                                } else {
+                                    $weixinC = $this->Components->load('Weixin');
+                                    if (!add_coupon_for_new($uid, $weixinC)) {
+                                        echo $this->newTextMsg($user, $me, '您已经领过啦');
+                                    }
                                 }
                             }
+                        } else {
+                            $this->log("notfound:".$user);
                         }
                     }
                     break;
