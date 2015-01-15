@@ -220,12 +220,14 @@ class WeixinController extends AppController {
                 case '5152':
                     echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/apple_201410/index.html").'">苹果游戏Demo</a>');
                     break;
-                case 'e100':
+                case "e100":
+                case "E100":
                     $uid = $this->Oauthbind->findUidByWx(trim($user));
                     if ($uid) {
                         $this->loadModel('User');
                         $u = $this->User->findById($uid);
                         if (!empty($u)  ) {
+                            $this->log('Found user:'.json_encode($u));
                             $dt2 = DateTime::createFromFormat(FORMAT_DATETIME, $u['User']['created']);
                             $ts2 = $dt2->getTimestamp();
                             if (time() - $ts2 > 24 * 3600)   {
