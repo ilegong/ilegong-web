@@ -268,6 +268,8 @@ class CommentsController extends AppController {
                         'fields' => array('order_id')
                     ));
 
+                    $this->log("found to comment orders-id:". json_encode($found));
+
                     if (!empty($found)) {
                         $this->loadModel('Order');
                         $orderIds = array();
@@ -282,6 +284,7 @@ class CommentsController extends AppController {
                                 || $status == ORDER_STATUS_RETURN_MONEY
                                 ) {
                                 $can_comment = false;
+                                $this->log("cannot_comment: status=".$status.", order-id=".json_encode($o));
                                 break;
                             }
                         }
