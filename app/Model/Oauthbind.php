@@ -16,7 +16,7 @@ class Oauthbind extends AppModel {
             ),
             'fields' => array('user_id')
         ));
-        return ($oauth_record && $oauth_record['user_id'] > 0) ? $oauth_record['user_id'] : 0;
+        return ($oauth_record && $oauth_record['Oauthbind']['user_id'] > 0) ? $oauth_record['Oauthbind']['user_id'] : 0;
     }
 
 
