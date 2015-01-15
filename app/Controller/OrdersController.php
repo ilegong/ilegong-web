@@ -507,6 +507,7 @@ class OrdersController extends AppController{
         $this->set('order', $orderinfo);
         $this->set('Carts',$Carts);
         $this->set('products', $products);
+        $this->set('is_try', $orderinfo['Order']['try_id'] > 0);
         if ($orderinfo['Order']['ship_type']) {
             $this->set('shipdetail',ShipAddress::get_ship_detail($orderinfo));
         }

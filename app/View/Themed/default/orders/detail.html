@@ -106,7 +106,7 @@
             </a>
 
                 {{if $canComment}}
-            <a href="{{product_link2($p)}}?_pys_add_comment=1" style="display: inline-block" class="btn-sm btn-warning">
+            <a href="{{product_link2($p)}}?{{$is_try?SPEC_PARAM_KEY_SHICHI_COMM  : SPEC_PARAM_KEY_COMM}}=1" style="display: inline-block" class="btn-sm btn-warning">
                 去评论
             </a>
                 {{/if}}
