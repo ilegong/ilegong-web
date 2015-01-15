@@ -12,7 +12,7 @@ class WeixinController extends AppController {
 
 	var $name = 'Weixin';
 
-    var $uses = array('Oauthbind');
+    var $uses = array('Oauthbind', 'User');
 	
 	public function beforeFilter(){
 		parent::beforeFilter();
@@ -80,9 +80,25 @@ class WeixinController extends AppController {
                                 'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=3&sn=75c4b8f32c29e1c088c7de4ee2e22719#rd')
                         );
 
-                        $uid = $this->Oauthbind->findUidByWx(trim($req['FromUserName']));
+                        $openId = trim($req['FromUserName']);
+                        $uid = $this->Oauthbind->findUidByWx($openId);
                         if ($uid) {
                             Cache::write(key_cache_sub($uid), WX_STATUS_SUBSCRIBED);
+                        } else {
+                            try {
+                                $oauth_wx_source = oauth_wx_source();
+                                $this->loadModel('WxOauth');
+                                $uinfo = $this->WxOauth->get_user_info_by_base_token($openId);
+                                $userId = createNewUserByWeixin($uinfo, $this->User);
+                                $oauth['Oauthbind']['oauth_openid'] = $openId;
+                                $oauth['Oauthbind']['created'] = date(FORMAT_DATETIME);
+                                $oauth['Oauthbind']['source'] = $oauth_wx_source;
+                                $oauth['Oauthbind']['domain'] = $oauth_wx_source;
+                                $oauth['Oauthbind']['user_id'] = $userId;
+                                $this->Oauthbind->save($oauth['Oauthbind']);
+                            }catch (Exception $e){
+                                $this->log("error to save new user:".$e);
+                            }
                         }
                     } else {
                         $content = array(
@@ -203,6 +219,25 @@ class WeixinController extends AppController {
                     break;
                 case '5152':
                     echo $this->newTextMsg($user, $me, '点击进入<a href="'.$this->loginServiceIfNeed($from, $user, "http://$host3g/apple_201410/index.html").'">苹果游戏Demo</a>');
+                    break;
+                case 'e100':
+                    $uid = $this->Oauthbind->findUidByWx(trim($user));
+                    if ($uid) {
+                        $this->loadModel('User');
+                        $u = $this->User->findById($uid);
+                        if (!empty($u)  ) {
+                            $dt2 = DateTime::createFromFormat(FORMAT_DATETIME, $u['User']['created']);
+                            $ts2 = $dt2->getTimestamp();
+                            if (time() - $ts2 > 24 * 3600)   {
+                                echo $this->newTextMsg($user, $me, '您已经领过啦');
+                            } else {
+                                $weixinC = $this->Components->load('Weixin');
+                                if (!add_coupon_for_new($uid, $weixinC)) {
+                                    echo $this->newTextMsg($user, $me, '您已经领过啦');
+                                }
+                            }
+                        }
+                    }
                     break;
 				default:
                     $hour = date('G');

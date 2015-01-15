@@ -927,10 +927,8 @@ class UsersController extends AppController {
     }
 
     private function after_create_user($uid) {
-        if(add_coupon_for_new($uid)) {
-            $weixinC = $this->Components->load('Weixin');
-            $weixinC->send_coupon_received_message($uid, 2, "可购买全站商品", "满100元减20， 满50元减10元");
-        }
+        $weixinC = $this->Components->load('Weixin');
+        //add_coupon_for_new($uid, $weixinC);
     }
 
     /**
@@ -1037,24 +1035,15 @@ class UsersController extends AppController {
 
     /**
      * @param $userInfo
+     * @return int new created user id
      */
     protected function createNewUserByWeixin($userInfo) {
-
-        if (!$this->User->save(array(
-            'nickname' => $this->convertWxName($userInfo['nickname']),
-            'sex' => $userInfo['sex'] == 1 ? 0 : ($userInfo['sex'] == 2 ? 1 : null),
-            'image' => $userInfo['headimgurl'],
-            'province' => $userInfo['province'],
-            'city' => $userInfo['city'],
-            'country' => $userInfo['country'],
-            'language' => $userInfo['language'],
-            'username' => $userInfo['openid'],
-            'password' => '',
-            'uc_id' => 0
-        ))) {
+        $uid = createNewUserByWeixin($userInfo, $this->User);
+        if (empty($uid)) {
             $this->log("error to save createNewUserByWeixin: with ". json_encode($userInfo));
+        } else {
+            return $uid;
         }
-        return $this->User->getLastInsertID();
     }
 
     /**

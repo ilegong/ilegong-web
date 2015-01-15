@@ -232,7 +232,7 @@ function before_than($timeStr1, $timeStr2 = null) {
     $ts1 = $dt1->getTimestamp();
 
     if ($timeStr2 != null) {
-        $dt2 = DateTime::createFromFormat(FORMAT_DATETIME, $timeStr1);
+        $dt2 = DateTime::createFromFormat(FORMAT_DATETIME, $timeStr2);
         $ts2 = $dt2->getTimestamp();
     } else {
         $ts2 = time();
@@ -694,16 +694,17 @@ function game_uri($gameType, $defUri = '/') {
 }
 
 
-function add_coupon_for_new($uid) {
-//    $ci = ClassRegistry::init('CouponItem') ;
-//    $new_user_coupons = array(18483, 18482);
-//    $found = $ci->find_coupon_item_by_type_no_join($uid, $new_user_coupons);
-//    if (empty($found)) {
-//        foreach($new_user_coupons as $coupon_id) {
-//            $ci->addCoupon($uid, $coupon_id, $uid, 'new_register');
-//        }
-//        return false;
-//    }
+function add_coupon_for_new($uid, $weixinC) {
+    $ci = ClassRegistry::init('CouponItem') ;
+    $new_user_coupons = array(18483, 18482);
+    $found = $ci->find_coupon_item_by_type_no_join($uid, $new_user_coupons);
+    if (empty($found)) {
+        foreach($new_user_coupons as $coupon_id) {
+            $ci->addCoupon($uid, $coupon_id, $uid, 'new_register');
+        }
+        $weixinC->send_coupon_received_message($uid, 2, "可购买全站商品", "满100元减20， 满50元减10元");
+        return true;
+    }
     return false;
 }
 
@@ -1049,4 +1050,27 @@ function cake_send_date() {
 function remove_emoji($text){
     if (empty($text)) { return ""; }
     return preg_replace('/([0-9|#][\x{20E3}])|[\x{00ae}|\x{00a9}|\x{203C}|\x{2047}|\x{2048}|\x{2049}|\x{3030}|\x{303D}|\x{2139}|\x{2122}|\x{3297}|\x{3299}][\x{FE00}-\x{FEFF}]?|[\x{2190}-\x{21FF}][\x{FE00}-\x{FEFF}]?|[\x{2300}-\x{23FF}][\x{FE00}-\x{FEFF}]?|[\x{2460}-\x{24FF}][\x{FE00}-\x{FEFF}]?|[\x{25A0}-\x{25FF}][\x{FE00}-\x{FEFF}]?|[\x{2600}-\x{27BF}][\x{FE00}-\x{FEFF}]?|[\x{2900}-\x{297F}][\x{FE00}-\x{FEFF}]?|[\x{2B00}-\x{2BF0}][\x{FE00}-\x{FEFF}]?|[\x{1F000}-\x{1F6FF}][\x{FE00}-\x{FEFF}]?/u', '', $text);
+}
+
+/**
+ * @param $userInfo
+ * @param $userModel
+ * @return int if created failed return 0
+ */
+function createNewUserByWeixin($userInfo, $userModel) {
+    if (!$userModel->save(array(
+        'nickname' => $this->convertWxName($userInfo['nickname']),
+        'sex' => $userInfo['sex'] == 1 ? 0 : ($userInfo['sex'] == 2 ? 1 : null),
+        'image' => $userInfo['headimgurl'],
+        'province' => $userInfo['province'],
+        'city' => $userInfo['city'],
+        'country' => $userInfo['country'],
+        'language' => $userInfo['language'],
+        'username' => $userInfo['openid'],
+        'password' => '',
+        'uc_id' => 0
+    ))) {
+        return 0;
+    }
+    return $userModel->getLastInsertID();
 }
