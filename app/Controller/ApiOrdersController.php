@@ -296,7 +296,7 @@ class ApiOrdersController extends AppController {
             $brandM = ClassRegistry::init('Brand');
         }
         $info = $brandM->find('all', array(
-            'conditions' => array('id' => $ids, 'published' => PUBLISH_YES, 'deleted' => DELETED_NO),
+            'conditions' => array('id' => $ids, 'deleted' => DELETED_NO),
             'fields' => array('id', 'name', 'slug', 'coverimg', 'weixin_id', 'notice')
         ));
         return $info;
