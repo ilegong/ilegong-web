@@ -233,7 +233,7 @@ class WeixinController extends AppController {
                                 $dt2 = DateTime::createFromFormat(FORMAT_DATETIME, $u['User']['created']);
                                 $ts2 = $dt2->getTimestamp();
                                 if (time() - $ts2 > 24 * 3600) {
-                                    echo $this->newTextMsg($user, $me, '您已经领过啦');
+                                    echo $this->newTextMsg($user, $me, '您不能领取此优惠');
                                 } else {
                                     $weixinC = $this->Components->load('Weixin');
                                     if (!add_coupon_for_new($uid, $weixinC)) {
