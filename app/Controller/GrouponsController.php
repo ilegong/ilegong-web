@@ -259,7 +259,7 @@ class GrouponsController extends AppController{
                 }
             }
 
-            if(empty($foundGroupon) && !empty($for) && $fromId != $uid) {
+            if(!empty($for) && $fromId != $uid) {
                 $this->redirect(array('action' => 'view', $team['Team']['slug'], '?' => array('for' => $for, 'fromid' => $fromId, )));
                 exit();
             }
