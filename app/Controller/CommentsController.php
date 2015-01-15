@@ -276,17 +276,22 @@ class CommentsController extends AppController {
                         foreach($found as $e) {
                             $orderIds[] = $e['Cart']['order_id'];
                         }
+
+                        $has_valid = 0;
                         $orders = $this->Order->find_all_my_order_byId($orderIds, $uid);
                         foreach($orders as $o) {
                             $status = $o['Order']['status'];
-                            if ($status == ORDER_STATUS_CANCEL
-                                || $status == ORDER_STATUS_WAITING_PAY
-                                || $status == ORDER_STATUS_RETURN_MONEY
+                            if ($status != ORDER_STATUS_CANCEL
+                                && $status != ORDER_STATUS_WAITING_PAY
+                                && $status != ORDER_STATUS_RETURN_MONEY
                                 ) {
-                                $can_comment = false;
+                                $has_valid++;
+                            } else {
                                 $this->log("cannot_comment: status=".$status.", order-id=".json_encode($o));
-                                break;
                             }
+                        }
+                        if ($has_valid == 0) {
+                            $can_comment = false;
                         }
                     } else {
                         $can_comment = false;
