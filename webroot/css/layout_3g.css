@@ -471,3 +471,4 @@ a:hover, a:focus {
 .comment_tanchubg_layer ul{ width:10.5em; margin:0 auto; padding-top:1em;}
 .comment_bingbtn{ width:5.2em; display:block; text-decoration:none; font-size:0.9em; background-color:#ffffff; text-align:center; padding:0.2em 0; border:1px #dddddd solid; color:#999999;}
 .comment_nobingbtn{ width:5.2em; display:block; text-decoration:none; font-size:0.9em; background-color:#ffa531; text-align:center; padding:0.2em 0; border:1px #ffa531 solid; color:#ffffff;}
+.comment_tanchubg_layer ul li{ list-style:none;}
