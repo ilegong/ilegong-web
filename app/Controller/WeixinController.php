@@ -147,7 +147,10 @@ class WeixinController extends AppController {
                                     )
                                 );
                             }
-                            $body=json_encode($body,JSON_UNESCAPED_UNICODE);
+                            foreach ( $body['text'] as $key => $value ) {
+                                $body['text'][$key] = urlencode($value);
+                            }
+                            $body = urldecode(json_encode($body));
                             $this->WxOauth->send_kefu($body);
                         }
                     }
