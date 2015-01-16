@@ -498,7 +498,7 @@ class OrdersController extends AppController{
             //TODO: check status, if status is not paid, tell user to checking; notify administrators to check
 
         }
-        if($action == 'pay'){
+        if($action == 'pay'|| $action == 'paid'){
             if($_GET['msg'] == 'ok'){
                 if($uid && $this->is_weixin()){
                     $this->loadModel('WxOauth');
