@@ -78,7 +78,7 @@
                     e.preventDefault();
                     return false;
                 }
-                if ($('#my_address').text()=="") {
+                if ($('#my_address').text()=="" || $('#my_address').text().indexOf('请选择') != -1) {
                     utils.alert("你的地址未填写");
                     e.preventDefault();
                     return false;

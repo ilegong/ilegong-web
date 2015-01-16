@@ -37,8 +37,7 @@
                     <div class="fl">
                         <select id="provinceDiv" name="data[OrderConsignee][province_id]" class="" onchange="loadCity()"><option  value='0'>请选择</option></select>
                         <select id="cityDiv" name="data[OrderConsignee][city_id]" class="" onchange="loadCounty()"><option value='0'>请选择</option></select>
-                        <select id="countyDiv" name="data[OrderConsignee][county_id]" class="" onchange="loadTown()"><option value='0'>请选择</option></select>
-                        <select id="townDiv" style="display: none" name="data[OrderConsignee][town_id]" onchange="fillTownName()"><option value='0'>请选择</option></select>
+                        <select id="countyDiv" name="data[OrderConsignee][county_id]" class="" onchange="choseTown()"><option value='0'>请选择</option></select>
                         <span class="error-msg" id="areaNote"></span>
                     </div>
 			    	
@@ -58,13 +57,13 @@
 			<tr>
 			    <td valign="middle" align="right"><font color="red">*</font>手机号码：</td>
 			    <td valign="middle" align="left">
-			        <input type="text" onblur="check_mobile();"  name="data[OrderConsignee][mobilephone]"  value="{{$this->Session->read('OrderConsignee.mobilephone')}}" class="txt" id="consignee_mobilephone"> &nbsp;或者 固定电话： <input type="text"  name="data[OrderConsignee][telephone]"  onblur="check_telephone()" value="{{$this->Session->read('OrderConsignee.telephone')}}" class="txt" id="consignee_telephone">&nbsp;<font color="#000000">用于接收发货通知短信及送货前确认</font>
+			        <input type="text" onblur="check_mobile();"  name="data[OrderConsignee][mobilephone]"  value="{{$this->Session->read('OrderConsignee.mobilephone')}}" class="txt" id="consignee_mobilephone"> &nbsp;或者 固定电话： <input type="text"  name="data[OrderConsignee][telephone]"  onblur="check_telephone()" value="{{$this->Session->read('OrderConsignee.telephone')}}" class="txt" id="consignee_telephone">
 			    </td>
 			</tr>
 			<tr>
 			    <td valign="middle" align="right">电子邮件：</td>
 			    <td valign="middle" align="left">
-			        <input type="text" onblur="check_email()"  name="data[OrderConsignee][email]"  value="{{$this->Session->read('OrderConsignee.email')}}" class="txt" id="consignee_email"> &nbsp;<font color="#000000">用来接收订单提醒邮件，便于您及时了解订单状态</font>
+			        <input type="text" onblur="check_email()"  name="data[OrderConsignee][email]"  value="{{$this->Session->read('OrderConsignee.email')}}" class="txt" id="consignee_email">
 			    </td>
 			</tr>
 			<tr>
@@ -78,12 +77,41 @@
 	</div>
 	<div class="footer">
 		<input type="hidden" name="data[OrderConsignee][edit_type]" id="edit_type" value="{{if count($consignees)}}select{{else}}new{{/if}}">
-	    <input type="submit" id = "edit_button" value="保存收货人信息"  class="btn btn-primary" >
+	    <input type="submit" id = "save_consignee_sbt" value="保存收货人信息"  class="btn btn-primary" >
 	</div>
 </form>
 </div>
-<script type="text/javascript">
-    $(document).ready(function(){
-        loadProvince();
-    });
+<script>
+	$(document).ready(function(){
+		loadProvince();
+		$('#save_consignee_sbt').click(function(e){
+			var val = $("input[name='data[OrderConsignee][id]']:checked").val();
+			if(val == '') {
+				if ($('#consignee_name').val() == "") {
+					$('#consignee_name').focus();
+					utils.alert("请输入收货人姓名");
+					e.preventDefault();
+					return false;
+				}
+				if ($("#provinceDiv").val() == "0" || $("#cityDiv").val() == "0" ) {
+					$('#provinceDiv').focus();
+					utils.alert("请选收货地区");
+					e.preventDefault();
+					return false;
+				}
+				if ($('#consignee_address').val() == "") {
+					$('#consignee_address').focus();
+					utils.alert("请输入收货地址");
+					e.preventDefault();
+					return false;
+				}
+			}
+			if ($('#consignee_addr').is(":visible") && $('#consignee_mobilephone').val().length != 11) {
+				$('#consignee_mobilephone').focus();
+				utils.alert("联系电话格式不正确");
+				e.preventDefault();
+				return false;
+			}
+		})
+	});
 </script>

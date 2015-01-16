@@ -413,6 +413,11 @@ function loadTown() {
     } else
         $("#townDiv").hide().empty(), $("#areaName").text(c + d)
 }
+function choseTown(){
+    var a = $("#countyDiv option:selected"), c = $("#provinceDiv option:selected").text(), d = $("#cityDiv option:selected").text(), e = a.text() != '\u8bf7\u9009\u62e9' ? a.text():'';
+    $("#areaName").text(c + d + e);
+    $("#areaHide").val($("#areaName").text());
+}
 // js显示所选，传值到input，等待submit
 function fillTownName() {
     var a = $("#townDiv option:selected"), b = a.val(), c = $("#provinceDiv option:selected").text(), d = $("#cityDiv option:selected").text(), e = $("#countyDiv option:selected").text(), f = b > 0 ? a.text() : "";
