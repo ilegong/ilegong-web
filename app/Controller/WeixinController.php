@@ -435,6 +435,7 @@ class WeixinController extends AppController {
             }
             Cache::write($key, $data);
         }
+        echo 1;
     }
 }
 ?>

@@ -158,15 +158,17 @@
         if($('#myModal').size()>=1){
             $('#subscribe').bind('click', function(){
                 var order_id = $('#orderId').text();
-                $.get("/weixin/save_subscribe_info?orderId="+order_id);
-                window.location.href = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd';
+                $.get("/weixin/save_subscribe_info?orderId="+order_id, function(data) {
+                    window.location.href = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd';
+                });
             });
             $('#myModal').modal('show');
         }
         if($('#follow_subscribe').size()>=1){
             $('#follow_subscribe').bind('click', function(){
-                $.get("/weixin/save_subscribe_info?type=follow");
-                window.location.href = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd';
+                $.get("/weixin/save_subscribe_info?type=follow", function(data) {
+                    window.location.href = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd';
+                });
             });
         }
     })
