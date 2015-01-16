@@ -147,6 +147,7 @@ class WeixinController extends AppController {
                                     )
                                 );
                             }
+                            $body=json_encode($body,JSON_UNESCAPED_UNICODE);
                             $this->WxOauth->send_kefu($body);
                         }
                     }
