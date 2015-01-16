@@ -126,7 +126,7 @@ class WeixinController extends AppController {
                                     'touser'=>$user,
                                     "msgtype"=>"text",
                                     "text"=>array(
-                                        "content"=>'您在［朋友说］参加的［组团］活动成功<a href="'.$this->loginServiceIfNeed($from, $user, "http://".WX_HOST."/groupons/join/".$subscribe_array['groupId']).'">查看详情</a>'
+                                        "content"=>'您在［朋友说］参加的［组团］活动成功<a href=\"'.$this->loginServiceIfNeed($from, $user, "http://".WX_HOST."/groupons/join/".$subscribe_array['groupId']).'\">查看详情<\/a>'
                                     )
                                 );
 
@@ -135,7 +135,7 @@ class WeixinController extends AppController {
                                     'touser'=>$user,
                                     "msgtype"=>"text",
                                     "text"=>array(
-                                        "content"=>'您在［朋友说］购买的商品已支付成功，<a href="'.$this->loginServiceIfNeed($from, $user, "http://".WX_HOST."/orders/detail/".$subscribe_array['orderId']).'">查看详情</a>'
+                                        "content"=>'您在［朋友说］购买的商品已支付成功，<a href=\"'.$this->loginServiceIfNeed($from, $user, "http://".WX_HOST."/orders/detail/".$subscribe_array['orderId']).'\">查看详情<\/a>'
                                     )
                                 );
                             }elseif(array_key_exists('follow',$subscribe_array)){
@@ -143,7 +143,7 @@ class WeixinController extends AppController {
                                     'touser'=>$user,
                                     "msgtype"=>"text",
                                     "text"=>array(
-                                        "content"=>'关注成功！当您的订单状态有变化时系统将通过微信消息通知您。 <a href="'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_MINE', WX_HOST)).'">查看您的订单</a>'
+                                        "content"=>'关注成功！当您的订单状态有变化时系统将通过微信消息通知您。 <a href=\"'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_MINE', WX_HOST)).'\">查看您的订单<\/a>'
                                     )
                                 );
                             }
