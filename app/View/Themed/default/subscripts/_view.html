@@ -1,0 +1,27 @@
+<div class="container clearfix">
+    <div class="ui-contain col-md-12">
+
+        {{loop $datas $data}}
+
+        <div class="clearfix voffset1">
+            <div class="col-xs-4">
+                <?PHP if ($data['Subscript']['pictures'] != 'nophoto.gif') { ?>
+                {{$this->Html->image($data['Subscript']['pictures'], array('width'=>"100%"));}}
+                <?php } ?>
+            </div>
+            <div style="float: right" class="col-xs-8">
+                {{if $data['Subscript']['link']}}
+                <p><a href="{{$data['Subscript']['link']}}">{{$data['Subscript']['title']}}</a></p>
+                {{else}}
+                <p>{{$this->Html->link($data['Subscript']['title'], array('controller' => 'subscripts', 'action' => 'view', $data['Subscript']['id']))}}</p>
+                {{/if}}
+
+                <p>{{$data['Subscript']['summary']}}</p>
+            </div>
+        </div>
+        {{/loop}}
+        <div class="clear"></div>
+        <div class="ui-contain col-md-3">
+        </div>
+    </div>
+</div>

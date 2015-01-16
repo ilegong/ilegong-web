@@ -1,0 +1,13 @@
+<h2 class="Content-title"><?php echo $Subscript['Subscript']['title']; ?></h2>
+<div class="Content-body">
+    <!-- <div class="ui-share">
+        <div class="btn btn-default"><a href="javasctipt:void(0);" onclick="return addtofavor('Article','{{$Article['Article']['id']}}');">分享</a></div>
+        <div class="ui-share-num"><span class="ui-stats-num Stats-Article-{{$Article['Article']['id']}}-favor_nums">{{if $Article['Article']['favor_nums']}}({{$Article['Article']['favor_nums']}}){{else}}0{{/if}}</span></div>
+    </div> -->
+    <?php echo $this->TplParse->executePortlet($Subscript['Subscript']['content']); ?>
+
+    {{$this->Hook->call("affterContent",array('Subscript',$Subscript['Subscript']['id']))}}
+</div>
+<div id="dialog-share" style="display:none;" title="温馨提示">
+    <div class="ui-pop-tips"><span class="ico ico-success" style="float:left;"></span><div class="tips-cnt">发表观点成功，是否也分享给您的好友？</div></div>
+</div>
