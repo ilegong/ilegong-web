@@ -8,8 +8,17 @@
                 "url": "http://www.pyshuo.com/subscripts/chu_niang_bang_shou.html"
             },
             {"type": "view",
-                "name": "美食故事",
-                "url": "http://www.pyshuo.com/subscripts/mei_shi_gu_shi.html"
+                "name": "朋友故事",
+                "url": "http://www.pyshuo.com/subscripts/peng_you_gu_shi.html"
+            },
+            {"type":"view",
+                "name":"朋友推荐",
+                "url":"http://www.pyshuo.com/subscripts/peng_you_recommend.html"
+
+            },
+            { "type":"view",
+                "name":"哈哈哈哈",
+                "url":"http://www.pyshuo.com/subscripts/ha_ha_ha_ha.html"
             }
         ]
     },
@@ -49,9 +58,15 @@
             },
             {
                 "type":"view",
+                "name":"线上活动",
+                "url":"http://www.pyshuo.com/subscripts/xian_shang_huo_dong.html"
+            },
+            {
+                "type":"view",
                 "name":"狂点调戏",
                 "url":"http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd"
             }
+
         ]
     }
 ]
