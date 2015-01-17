@@ -46,17 +46,25 @@ class LocationsController extends AppController{
     }
     public function get_address(){
         $this->autoRender = false;
-        if($this->request->is('get')){
-            $province_id = intval($_REQUEST['province_id']);
-            $city_id = intval($_REQUEST['city_id']);
-            $county_id = intval($_REQUEST['county_id']);
-            $town_id = intval($_REQUEST['town_id']);
-            $params = array($province_id, $city_id, $county_id, $town_id);
-            $group_id = array($province_id, $city_id, $county_id);
-            $histories = $this->Location->find('list', array('conditions' => array('id' => $params), 'fields' => array('id', 'name') ));
-            $address_group = $this->Location->find('list', array('conditions' => array('parent_id' => $group_id), 'fields' => array('id', 'name', 'parent_id') ));
-            $successinfo = array('histories'=> $histories, 'city_list' => $address_group[$province_id], 'county_list' => $address_group[$city_id ], 'town_list' => $address_group[$county_id]);
-            echo json_encode($successinfo);
+        $inputData = ($_SERVER['REQUEST_METHOD'] == 'POST') ? $_POST : $_GET;
+        $province_id = intval($inputData['province_id']);
+        $city_id = intval($inputData['city_id']);
+        $history_params = array($province_id, $city_id);
+        $connection_params = array($province_id, $city_id);
+        if(!empty($inputData['county_id'])){
+            $county_id = intval($inputData['county_id']);
+            $history_params[] = $county_id;
+            if(!$this->RequestHandler->isMobile()){
+                $connection_params[] = $county_id;
+            }
         }
+        if(!empty($inputData['town_id'])){
+            $town_id = intval($inputData['town_id']);
+            $history_params[] = $town_id;
+        }
+        $histories = $this->Location->find('list', array('conditions' => array('id' => $history_params), 'fields' => array('id', 'name') ));
+        $connection_address = $this->Location->find('list', array('conditions' => array('parent_id' => $connection_params), 'fields' => array('id', 'name', 'parent_id') ));
+        $successinfo = array('histories'=> $histories, 'city_list' => $connection_address[$province_id], 'county_list' => $connection_address[$city_id ], 'town_list' => $connection_address[$county_id]);
+        echo json_encode($successinfo);
     }
 }

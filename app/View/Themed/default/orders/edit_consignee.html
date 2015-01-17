@@ -37,7 +37,8 @@
                     <div class="fl">
                         <select id="provinceDiv" name="data[OrderConsignee][province_id]" class="" onchange="loadCity()"><option  value='0'>请选择</option></select>
                         <select id="cityDiv" name="data[OrderConsignee][city_id]" class="" onchange="loadCounty()"><option value='0'>请选择</option></select>
-                        <select id="countyDiv" name="data[OrderConsignee][county_id]" class="" onchange="choseTown()"><option value='0'>请选择</option></select>
+						<select id="countyDiv" name="data[OrderConsignee][county_id]" class="" onchange="loadTown()"><option value='0'>请选择</option></select>
+						<select id="townDiv" style="display: none" name="data[OrderConsignee][town_id]" onchange="fillTownName()"><option value='0'>请选择</option></select>
                         <span class="error-msg" id="areaNote"></span>
                     </div>
 			    	
@@ -85,8 +86,7 @@
 	$(document).ready(function(){
 		loadProvince();
 		$('#save_consignee_sbt').click(function(e){
-			var val = $("input[name='data[OrderConsignee][id]']:checked").val();
-			if(val == '') {
+			if($('#consignee_addr').is(":visible")) {
 				if ($('#consignee_name').val() == "") {
 					$('#consignee_name').focus();
 					utils.alert("请输入收货人姓名");
@@ -101,16 +101,16 @@
 				}
 				if ($('#consignee_address').val() == "") {
 					$('#consignee_address').focus();
-					utils.alert("请输入收货地址");
+					utils.alert("请输入收货详细地址");
 					e.preventDefault();
 					return false;
 				}
-			}
-			if ($('#consignee_addr').is(":visible") && $('#consignee_mobilephone').val().length != 11) {
-				$('#consignee_mobilephone').focus();
-				utils.alert("联系电话格式不正确");
-				e.preventDefault();
-				return false;
+				if ($('#consignee_mobilephone').val().length != 11) {
+					$('#consignee_mobilephone').focus();
+					utils.alert("联系电话格式不正确");
+					e.preventDefault();
+					return false;
+				}
 			}
 		})
 	});

@@ -1010,6 +1010,7 @@ class OrdersController extends AppController{
 		$consignee = $this->OrderConsignee->find('first',
 		array(
 			'conditions'=>array('id'=>$id,'creator'=>$this->currentUser['id']),
+            'fields' => array('name', 'address', 'mobilephone', 'telephone', 'email', 'postcode', 'area', 'province_id','city_id','county_id', 'town_id')
 		));
 		echo json_encode($consignee['OrderConsignee']);
         exit;
