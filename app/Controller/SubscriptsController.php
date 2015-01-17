@@ -17,9 +17,9 @@ class SubscriptsController extends AppController {
         $this->pageTitle=__('厨娘帮手');
     }
 
-    public function mei_shi_gu_shi(){
-        $this->_find_article(mei_shi_gu_shi);
-        $this->pageTitle=__('美食故事');
+    public function peng_you_gu_shi(){
+        $this->_find_article(peng_you_gu_shi);
+        $this->pageTitle=__('朋友故事');
     }
 
     public function chi_huo_ju_hui(){
@@ -37,11 +37,26 @@ class SubscriptsController extends AppController {
         $this->pageTitle=__('关于我们');
     }
 
+    public function ha_ha_ha_ha(){
+        $this->_find_article(ha_ha_ha_ha);
+        $this->pageTitle=__('哈哈哈哈');
+    }
+
+    public function xian_shang_huo_dong(){
+        $this->_find_article(xian_shang_huo_dong);
+        $this->pageTitle=__('线上活动');
+    }
+
+    public function peng_you_recommend(){
+        $this->_find_article(peng_you_recommend);
+        $this->pageTitle=__('朋友推荐');
+    }
+
     public function _find_article($slug){
 
       $data = $this->Subscript->find('all',array(
           'conditions' => array('slug' => $slug,'deleted' => 0,'published' =>1),
-          'fileds' => array('title','summary','pictures','published','deleted','slug','priority','link','name','content'),
+          'fileds' => array('title','summary','pictures','published','deleted','slug','priority','link','name','content','coverimg'),
           'order' => 'priority desc'
       ));
 
