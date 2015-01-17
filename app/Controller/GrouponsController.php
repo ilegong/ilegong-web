@@ -132,12 +132,12 @@ class GrouponsController extends AppController{
                     $info = array();
                     $info['Groupon']['name'] = $_POST['name'];
                     $info['Groupon']['mobile'] = $_POST['mobile'];
+                    $info['Groupon']['area'] = $_POST['area'];
                     $info['Groupon']['address'] = $_POST['address'];
                     $info['Groupon']['team_id'] = $team['Team']['id'];
                     $info['Groupon']['province_id'] = intval($_POST['province_id']);
                     $info['Groupon']['city_id'] = intval($_POST['city_id']);
                     $info['Groupon']['user_id'] = $current_uid;
-
                     if($this->Groupon->save($info)){
                         $group_id = $this->Groupon->getLastInsertID();
                         $res = array('success'=> true, 'group_id'=>$group_id);

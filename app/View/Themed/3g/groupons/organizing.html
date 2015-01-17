@@ -31,7 +31,7 @@
         <select  id="provinceDiv" class="text" onchange="loadCity()" style="-webkit-appearance:none;appearance:none;border:none;padding:0px 20px;-webkit-box-sizing:border-box;box-sizing:border-box;background-color: #FFFFFF;color:#333333;border-radius:4px;">
             <option  value='0'>请选择</option>
         </select>
-        <select  id="cityDiv" onchange="loadCounty()" class="text" style="-webkit-appearance:none;appearance:none;border:none;padding:0px 20px;-webkit-box-sizing:border-box;box-sizing:border-box;background-color: #FFFFFF;color:#333333;border-radius:4px;">
+        <select  id="cityDiv"  class="text" style="-webkit-appearance:none;appearance:none;border:none;padding:0px 20px;-webkit-box-sizing:border-box;box-sizing:border-box;background-color: #FFFFFF;color:#333333;border-radius:4px;">
             <option value='0'>请选择</option>
         </select>
     </div>
@@ -53,7 +53,10 @@
 <script type="text/javascript">
     var groupon_var ={
         province_id : 0,
-        city_id : 0
+        city_id : 0,
+        province_name:$("#provinceDiv option:selected").text(),
+        city_name : $("#cityDiv option:selected").text(),
+        address: $('#detailed_address').val()
     };
     $(document).ready(function(){
         loadProvince();
@@ -61,14 +64,14 @@
             $('#edit_address').show();
         });
         $('#confirm_address').bind('click', function(){
-            var province_name = $("#provinceDiv option:selected").text();
-            var city_name = $("#cityDiv option:selected").text();
-            var add_detailed = $('#detailed_address').val();
             $('#default_tip').hide();
-            $('#my_address').text(province_name + ' ' + city_name + ' ' + add_detailed).show();
-            $('#edit_address').hide();
             groupon_var.province_id = $("#provinceDiv option:selected").val();
             groupon_var.city_id = $("#cityDiv option:selected").val();
+            groupon_var.province_name = $("#provinceDiv option:selected").text();
+            groupon_var.city_name = $("#cityDiv option:selected").text();
+            groupon_var.address = $('#detailed_address').val();
+            $('#my_address').text(groupon_var.province_name + ' ' + groupon_var.city_name + ' ' + groupon_var.address).show();
+            $('#edit_address').hide();
         });
         $('#confirm_next').on('click',function(e){
             if($("#confirm_next").attr('data-disable') == 'false') {
@@ -91,13 +94,12 @@
                 }
                 var name = $("#your_name").val();
                 var mobile = $("#mobile_number").val();
-                var address = $('#my_address').text();
                 var team = $('#team').val();
                 jQuery.ajax({
                     type: "POST",
                     dataType: "json",
                     url: "/groupons/organizing",
-                    data: {name: name, mobile: mobile, address: address, team: team, province_id:groupon_var.province_id, city_id:groupon_var.city_id },
+                    data: {name: name, mobile: mobile, area: groupon_var.province_name + ' ' +groupon_var.city_name + ' ', address: groupon_var.address, team: team, province_id:groupon_var.province_id, city_id:groupon_var.city_id },
                     success: function (a) {
                         if (a.success) {
                             $("#confirm_next").attr('data-disable', 'true');
@@ -109,6 +111,5 @@
                 });
             }
         });
-
     })
 </script>
