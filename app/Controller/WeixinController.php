@@ -272,9 +272,9 @@ class WeixinController extends AppController {
                             if (!empty($u)) {
                                 $dt2 = DateTime::createFromFormat(FORMAT_DATETIME, $u['User']['created']);
                                 $ts2 = $dt2->getTimestamp();
-//                                if (time() - $ts2 > 24 * 3600) {
-//                                    echo $this->newTextMsg($user, $me, '亲，您不能领取此优惠');
-//                                } else {
+                                if (time() - $ts2 > 3 * 24 * 3600) {
+                                    echo $this->newTextMsg($user, $me, '亲，只有从e袋洗过来的新用户才能领取此优惠哦');
+                                } else {
                                     $weixinC = $this->Components->load('Weixin');
                                     if (!add_coupon_for_new($uid, $weixinC,
                                         array(18753, 18754, 18755, 18756, 18757),
@@ -282,7 +282,7 @@ class WeixinController extends AppController {
                                     ) {
                                         echo $this->newTextMsg($user, $me, '欢迎关注朋友说，您已经领过啦');
                                     }
-//                                }
+                                }
                             }
                         } else {
                             $this->log("notfound:".$openId);
