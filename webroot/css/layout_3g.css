@@ -1,11 +1,5 @@
 @charset "utf-8";
 /*css reset*/
-* {
-    margin: 0;
-    padding: 0;
-    font-family: 'Microsoft Yahei', 'Simsun';
-}
-
 .container {
     /*max-width: 350px;*/
     margin: 0 auto;
@@ -184,14 +178,6 @@ footer img{ width:4.625em; height:1.583em;}
 .navbar-v1 .me .op-icon { background-position: -8.333em  -2.083em; }
 .navbar-v1 .me .op-icon-active { background-position: -8.333em 0; }
 
-
-/*add by mwt start*/
-.b_line{ border-bottom: 1px #dddddd solid;padding-bottom:1em}
-.numbers{color:#999999; font-size:1em;margin:1em 0.833em 1em 0.833em;}
-.numbers .title{ padding-top:0.833em;}
-.numbers li span .num{border:0; border-top:1px #dddddd solid; border-bottom:1px #dddddd solid; position:relative; display:block; float:left; color:#333333; width:1em;text-align:center; padding:0.833em 0.833em;}
-.numbers li span .grew{background-color:#eee; display:block; float:left; border:1px #dddddd solid; color:#333333; width:1em;text-align:center; padding:0.833em 0.833em;}
-
 /*保证有一个参考物*/
 .service{ font-size:1em;margin:1em 0.833em 1em 0.833em;}
 .service ul li{word-wrap: break-word;}
@@ -254,7 +240,9 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 .item-banner-small .item-price { display: inline-block; font-size: 1.25em; color: #ffa200; }
 .item-banner-small .item-price-original { display: inline-block; font-size: 0.833em; color: #999999; text-decoration: line-through; }
 
-/*body{ padding:0; margin:0; font-family:"微软雅黑";}*/
+*{ padding:0; margin:0; font-family:"微软雅黑";}
+body{ min-width:320px; font-size:14px;}
+ul li{ list-style:none;}
 .fl{ float:left;}
 .fr{ float:right;}
 .clearfix{ zoom:1;}
@@ -264,6 +252,7 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
     -moz-border-radius: 0.417em;/* Gecko browsers */-webkit-border-radius: 0.417em;/* Webkit browsers */border-radius:0.417em;/* W3C syntax */
 }
 .border_b{ border-bottom:1px #dddddd solid;}
+.gray{ color:#999999;}
 
 /* mobile home page v3 */
 .index_banner{ position:relative;}
@@ -288,6 +277,11 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 .classlist ul{ padding-left:1em; width:50%;}
 .classlist ul li{ float:left; font-size:1.25em; color:#29ac0e; }
 .classlist ul li.back{ width:0.5em; height:1em; background:url('/img/mobilev1/pyshuo_icon.png?xxz') no-repeat -1.25em -16.875em; background-size:25em 25em; margin-top:0.7em; margin-right:0.5em;}
+.classlist_v2{ height:2.5em; line-height:2.5em; width:100%; border-bottom:1px #dddddd solid; background-color:#f5f5f5; position:fixed; top:0;}
+.classlist_v2 ul{ padding-left:0.8em; font-size:1em; color:#666666;}
+.classlist_v2 ul li{ float:left;}
+.classlist_v2 ul li a.back{ display:block; width:0.5em; height:1em; background:url('/img/mobilev1/pyshuo_icon.png?xxz') no-repeat -1.25em -16.875em; background-size:25em 25em; margin-top:0.7em; margin-right:0.8em;}
+.classlist_v2 ul li.line{ height:2.5em; width:1px; border-right:1px #dddddd solid; margin-right:0.8em;}
 .classlist_good { margin-top:3em; margin-bottom:1em;}
 .classlist_good ul li{ float:left; width:50%; text-align:center; padding-top:0.5em; border-bottom:1px #dddddd solid; border-right: 1px #dddddd solid;}
 .classlist_good ul li.last { border-right: none;}
@@ -353,6 +347,7 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 .special ul li dl{ padding:0.1em 0.133em 0.6em 0.533em;}
 .special ul li .item_name{ font-size:1em; color:#666666; text-align:left; font-weight:normal; padding:0.6em 0.133em 0.133em 0.533em;}
 
+/*商品详情*/
 .sales{ padding:1em 0.833em 1em 0.833em; background-color:#ffffff; border-bottom:1px #dddddd solid; color:#999999; margin-bottom: 0}
 .sales li.quota span{ display:block; float:left; font-size:1em; color:#29ac0e;}
 .sales li span .quota_btn{ padding:0.12em 0.375em; color:#ffffff; background-color:#29ac0e; font-size:0.833em; margin-right:0.5em;}
@@ -362,6 +357,11 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 .p_details_price .price span font{ font-size:1.667em;}
 .p_details_price .price em{ color:#999999; text-decoration:line-through; font-style:normal; padding-left: 0.3em;}
 .p_details_price .stat{ padding-top:0.5em;}
+.b_line{ border-bottom: 1px #dddddd solid;padding-bottom:1em}
+.numbers{color:#999999; font-size:1em;margin:1em 0.833em 1em 0.833em;}
+.numbers .title{ padding-top:0.833em;}
+.numbers li span .num{border:0; border-top:1px #dddddd solid; border-bottom:1px #dddddd solid; position:relative; display:block; float:left; color:#333333; width:1em;text-align:center; padding:0.833em 0.833em;}
+.numbers li span .grew{background-color:#eee; display:block; float:left; border:1px #dddddd solid; color:#333333; width:1em;text-align:center; padding:0.833em 0.833em;}
 
 .countdown{ float:left; width:1.083em; height:1.8em; line-height:1.8em; background-color:#4f4544; font-size:1em; color:#ffffff; text-align:center; margin-right:1px; -moz-border-radius:0.3em;/* Gecko browsers */-webkit-border-radius:0.3em;/* Webkit browsers */border-radius:0.3em;/* W3C syntax */}
 .colon{ color:#4f4544; height:1.8em; line-height:1.8em; float:left; margin-right:2px;}
@@ -471,4 +471,4 @@ a:hover, a:focus {
 .comment_tanchubg_layer ul{ width:10.5em; margin:0 auto; padding-top:1em;}
 .comment_bingbtn{ width:5.2em; display:block; text-decoration:none; font-size:0.9em; background-color:#ffffff; text-align:center; padding:0.2em 0; border:1px #dddddd solid; color:#999999;}
 .comment_nobingbtn{ width:5.2em; display:block; text-decoration:none; font-size:0.9em; background-color:#ffa531; text-align:center; padding:0.2em 0; border:1px #ffa531 solid; color:#ffffff;}
-.comment_tanchubg_layer ul li{ list-style:none;}
+.comment_tanchubg_layer {font-size:14px}

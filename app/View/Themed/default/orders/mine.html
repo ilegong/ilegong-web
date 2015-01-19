@@ -29,14 +29,20 @@ td {padding:5px 10px;}
 }
 
 </style>
-<div class="container">
+<div class="classlist_v2" style="z-index:1">
+    <ul class="clearfix">
+        <li><a href="/techan.html" class="back"></a></li>
+        <li class="line"></li>
+        <li>我的订单</li>
+    </ul>
+</div>
+<div class="container" style="margin-top: 2.5em">
     <ul class="nav nav-tabs" role="tablist">
         <li class="active"><a href="#orders-all" role="tab" data-toggle="tab">{{__('全部')}}</a></li>
         <li><a href="#orders-wait_payment" role="tab" data-toggle="tab">{{__('待支付')}}</a></li>
         <li><a href="#orders-wait_deliver" role="tab" data-toggle="tab">{{__('待发货')}}</a></li>
         <li><a href="#orders-wait_receive" role="tab" data-toggle="tab">{{__('待收货')}}</a></li>
     </ul>
-
     {{if empty($orders)}}
     <div class="alert alert-warning alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>

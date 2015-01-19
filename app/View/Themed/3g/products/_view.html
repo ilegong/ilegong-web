@@ -1,4 +1,11 @@
-<div class="row voffset1">
+<div class="classlist_v2" style="z-index:1">
+    <ul class="clearfix">
+        <li><a href="/" class="back"></a></li>
+        <li class="line"></li>
+        <li>商品详情</li>
+    </ul>
+</div>
+<div class="row voffset1" style="margin-top: 2.5em;">
     <div class="col-xs-12 col-md-6">
         {{if !empty($Product['Product']['coverimg'])}}
         <img src="{{$this->Html->assetUrl(medium_thumb_link($Product['Product']['coverimg']))}}" style="width:100%;"
