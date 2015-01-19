@@ -292,7 +292,7 @@ class WeixinController extends AppController {
 				default:
                     $hour = date('G');
                     if($hour>=9&&$hour<21){
-                        echo $this->newTextMsg($user, $me,  "回复“2”查看我的订单\n其他问题加微信MM客服：pyshuo2015 我们将尽快给您回复");
+                        echo $this->newTextMsg($user, $me,  "回复“2”查看我的订单\n其他问题加微信MM客服：pyshuo2015，我们将尽快给您回复");
                     }else{
                         echo $this->newTextMsg($user, $me, "回复“2”查看我的订单\n微信MM客服：pyshuo2015 \n工作时间9:00-21:00。\n紧急情况请电话联系\n".CSAD_PHONE);
                     }
