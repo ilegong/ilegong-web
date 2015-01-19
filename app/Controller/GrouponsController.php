@@ -57,7 +57,7 @@ class GrouponsController extends AppController{
                 $team = $this->Team->findById($teamId);
             } else {
                 $team = $this->Team->find('first', array(
-                    'order' => 'id asc'
+                    'order' => 'recommend desc, id asc',
                 ));
             }
 
