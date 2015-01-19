@@ -586,4 +586,38 @@ class CategoriesController extends AppController {
         ));
         return $productTags;
     }
+    public function spring(){
+        $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1);
+        $conditions['Product' . '.recommend >'] = 0;
+
+        $join_conditions = array(
+            array(
+                'table' => 'product_product_tags',
+                'alias' => 'Tag',
+                'conditions' => array(
+                    'Tag.product_id = Product.id',
+                    'Tag.tag_id' => 9
+                ),
+                'type' => 'RIGHT',
+            )
+        );
+        $orderBy = 'Tag.recommend desc, Product.recommend desc';
+
+        $this->loadModel('Product');
+        $list = $this->Product->find('all', array(
+                'conditions' => $conditions,
+                'joins' => $join_conditions,
+                'order' => $orderBy,
+                'fields' => Product::PRODUCT_PUBLIC_FIELDS,
+               )
+        );
+        $brandIds = array();
+        foreach ($list as $val) {
+            $productList[] = $val['Product'];
+            $brandIds[] = $val['Product']['brand_id'];
+        }
+        $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
+        $this->set('brands', $mappedBrands);
+        $this->set('data_list', $productList);
+    }
 }
