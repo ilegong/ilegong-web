@@ -487,7 +487,7 @@ class UsersController extends AppController {
             $this->User->saveField('activation_key', $activationKey);
             $this->set(array('user'=>$user, 'activationKey'=>$activationKey));
             
-            $user['User']['password'] = Security::hash($this->data['User']['new_password'], null, true);
+            $user['User']['password'] = Security::hash($this->data['User']['password'], null, true);
             if($this->User->save($user)){
                 $this->Session->setFlash(__('Password is updated success.', true));
                 $this->redirect(array('action' => 'login'));
@@ -1044,6 +1044,7 @@ class UsersController extends AppController {
         } else {
             return $uid;
         }
+        return $this->User->getLastInsertID();
     }
 
     /**
@@ -1091,14 +1092,14 @@ class UsersController extends AppController {
             } else if($mobile_num !=  $current_post_num){
                 $res = array('success'=> false, 'msg'=>'请重新验证您的手机号码');
             }else if ($this->User->hasAny(array('User.mobilephone' => $mobile_num))){
-                $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录');
+                $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录','code'=>2);
             }else if($this->User->hasAny(array('User.username' => $mobile_num))){
                 if($this->currentUser['username'] == $mobile_num){
                     if($this->User->save($user_info)){
                         $res = array('success'=> true, 'msg'=>'你的账号和手机号绑定成功');
                     };
                 }else{
-                    $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录');
+                    $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录','code'=>2);
                 }
             } else{
 //                    if($this->is_weixin()){
@@ -1119,6 +1120,47 @@ class UsersController extends AppController {
         echo json_encode($res);
     }
 
+    /**
+     * @param $text
+     * @return mixed|string
+     */
+    protected function convertWxName($text) {
+        $nickname = remove_emoji($text);
+        return ($nickname == '' ? '用户_' . mt_rand(10, 1000) : $nickname);
+    }
+
+    function to_bind_mobile(){
+        $userId = $this->Session->read('Auth.User.id');
+        $this->set('userId',$userId);
+        $this->pageTitle="绑定手机号";
+    }
+
+    function merge_data(){
+        $this->autoRender=false;
+        $userId = $this->Session->read('Auth.User.id');
+        $mobile = $_REQUEST['mobile'];
+        $mobileCode = $_REQUEST['mobileCode'];
+        $msgCode = $this->Session->read('messageCode');
+        $codeLog = json_decode($msgCode, true);
+        if(is_array($codeLog)&&$codeLog['code']==$mobileCode){
+            $newUser = $this->getUserByMobile($mobile);
+            $newUserId = $newUser['User']['id'];
+            $this->transferUserInfo($userId,$newUserId);
+            $result = array('success'=>'true','msg'=>'信息合并成功');
+        }else{
+            $result = array('success'=>'false','msg'=>'手机验证码不正确');
+        }
+        echo json_encode($result);
+
+        return;
+    }
+
+    function getUserByMobile($mobile){
+        $user = $this->User->find('first',
+            array('conditions' => array('mobilephone' => $mobile,'published'=>1))
+            );
+        return $user;
+    }
 }
 
 ?>
