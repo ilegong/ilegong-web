@@ -134,6 +134,14 @@ class ShipPromotion extends AppModel {
                 array('id' => 74, 'price' => 268.0, 'time' => '', 'address' => '东城区朝阳门自提 地址: 朝阳门内大街97号底商，平价商店 15901495532'),
                 array('id' => 75, 'price' => 268.0, 'time' => '', 'address' => '崇文门蟠桃宫自提 地址: 崇文门东大街8-2号，蟠桃宫便利店 18511077986'),
             )
+        ),
+
+        705 => array('limit_ship' => true,
+            'items' => array(
+                array('id' => 76, 'price' => 268.0, 'time' => '', 'address' => '电科院（北京市海淀区小营东路15号）'),
+                array('id' => 77, 'price' => 268.0, 'time' => '', 'address' => '西小口东升科技园（北京市海淀区西小口路66）'),
+                array('id' => 78, 'price' => 268.0, 'time' => '', 'address' => '微软大厦（中关村丹棱街附近）'),
+            )
         )
 
     );
