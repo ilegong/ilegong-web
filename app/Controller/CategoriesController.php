@@ -587,6 +587,7 @@ class CategoriesController extends AppController {
         return $productTags;
     }
     public function spring(){
+        $this->pageTitle="年货";
         $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1);
         $conditions['Product' . '.recommend >'] = 0;
 
@@ -621,8 +622,8 @@ class CategoriesController extends AppController {
         $this->set('brands', $mappedBrands);
         $this->set('data_list', $productList);
         $this->set('pid_coupon',$rtn);
-
-
+        $spring_coupons = $this->CouponItem->find_got_spring_festival_coupons_infos($pid_lists);
+        $this->set('spring_coupons',$spring_coupons);
 //        $key = key_cache_sub($uid,'spring');
 //        $subscribe_array = json_decode(Cache::read($key),true);
 //        if(!empty($subscribe_array)){
@@ -631,6 +632,7 @@ class CategoriesController extends AppController {
 //            $this->set('lingqu',true);
 //            Cache::clear(false, $key);
 //        }
+        $this->set('not_show_nav',true);
     }
     public function get_spring_conpon(){
         $this->autoRender=false;

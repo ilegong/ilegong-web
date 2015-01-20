@@ -268,12 +268,12 @@ class CouponItem extends AppModel {
 
         if (empty($cached)) {
             $couponM = ClassRegistry::init('Coupon');
-            $found = $couponM->find('list', array(
+            $found = $couponM->find('all', array(
                 'conditions' => array(
                     'product_list' => $pid_lists,
                     'valid_end' => '2015-02-02 00:00:00'
                 ),
-                'fields' => array('product_list', 'id')
+                'fields' => array('id','reduced_price','product_list')
             ));
 
             $result = array();
@@ -300,8 +300,9 @@ class CouponItem extends AppModel {
         $rtn = array();
         $spring_coupons = $this->read_spring_festivals($pid_lists);
         if (!empty($spring_coupons)) {
+            $spring_coupon_ids = Hash::extract($spring_coupons,'{n}.Coupon.id');
             $itemIdByCouponIds = $this->find('list', array(
-                'conditions' => array('coupon_id' => $spring_coupons, 'bind_user' => $user_id),
+                'conditions' => array('coupon_id' => $spring_coupon_ids, 'bind_user' => $user_id),
                 'fields' => array('coupon_id', 'id')
             ) );
 
@@ -316,6 +317,13 @@ class CouponItem extends AppModel {
         $this->log("find_got_spring_festival_coupons:".$user_id.", pid_lists:".json_encode($pid_lists).", result:".json_encode($rtn));
 
         return $rtn;
+    }
+
+    public function find_got_spring_festival_coupons_infos($pid_lists) {
+        $spring_coupons = $this->read_spring_festivals($pid_lists);
+        if (!empty($spring_coupons)) {
+            return Hash::combine($spring_coupons,'{n}.Coupon.product_list','{n}.Coupon.reduced_price');
+        }
     }
 
     public function find_my_valid_coupon_items($user_id, $couponItemIds, $brandId = null) {

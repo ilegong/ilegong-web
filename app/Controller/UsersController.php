@@ -41,7 +41,7 @@ class UsersController extends AppController {
 
         $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys');
 
-    	$this->Auth->allowedActions = array('register','login','forgot','captcha','reset', 'wx_login', 'wx_auth', 'wx_menu_point', 'login_state', 'get_spring_coupon');
+    	$this->Auth->allowedActions = array('register','login','forgot','captcha','reset', 'wx_login', 'wx_auth', 'wx_menu_point', 'login_state','get_spring_coupon');
         $this->set('op_cate', 'me');
     }
 
@@ -1131,7 +1131,9 @@ class UsersController extends AppController {
 
     function to_bind_mobile(){
         $userId = $this->Session->read('Auth.User.id');
+        $userNickName = $this->Session->read('Auth.User.nickname');
         $this->set('userId',$userId);
+        $this->set('nickname',$userNickName);
         $this->pageTitle="绑定手机号";
     }
 

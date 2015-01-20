@@ -1,0 +1,81 @@
+<div id="spring-product">
+    {{$this->Html->css(array('/spring/css/newyear.css'))}}
+    <div class="banner_bg">
+        <div class="main1000"><img src="{{$this->Html->assetUrl('/spring/images/newyear/banner01.jpg')}}" /><br /><img src="{{$this->Html->assetUrl('/spring/images/newyear/banner02.jpg')}}" /></div>
+    </div>
+    <div class="main1000"><img src="{{$this->Html->assetUrl('/spring/images/newyear/tip.png')}}" /></div>
+    <div class="goodtopbg">
+        <ul class="clearfix" style="width: 80%">
+            <?php foreach($data_list as $index=>$product){ ?>
+                <li {{if $index%2==0}}class="fl"{{else}}class="fr"{{/if}}>
+                    <img style="width: 290px;height: 218px" src="{{$this->Html->url(small_thumb_link($product['coverimg']))}}" /><br />
+                    <dl class="clearfix">
+                        <dt class="fl"><img class="radius5" style="width: 40px;height: 40px" src="{{$this->Html->assetUrl(small_thumb_link($brands[$product['brand_id']]['Brand']['coverimg']))}}" /></dt>
+                        <dt class="fl">{{$brands[$product['brand_id']]['Brand']['name']}}</dt>
+                    </dl>
+                    <h1>{{$product['name']}}</h1>
+                    <div class="price">¥<span class="price_year">{{$this->Number->precision($product['price'], 2)}}</span>&nbsp;&nbsp;<span class="price_original">{{if $product['original_price']>0&&$product['original_price']!=$product['price']}}¥{{$this->Number->precision($product['original_price'], 2)}}{{/if}}</span></div>
+                    <dl>
+                        <dd class="fl">
+                            <a href="#X" data-product="{{$product['id']}}" class="ticket_usable_btn {{if $pid_coupon[$product['id']]}}disabled{{/if}} radius5">
+                                <div class="lingqu">领<br />取</div>
+                                <div class="quan">¥ <span>{{$spring_coupons[$product['id']]?$spring_coupons[$product['id']]:0}}</span> 券</div>
+                            </a>
+                        </dd>
+                        <dd class="fr"><a name="btn_quick_buy" item-id="{{$product['id']}}" href="javascript:;" class="pay_usable_btn radius5">立即购买</a></dd>
+                    </dl>
+                </li>
+            <?php } ?>
+        </ul>
+    </div>
+    <div class="layer_lingqu radius5" style="display: none;" id="info-panel">领取成功! 下单结算时即可使用。</div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        PyshuoSpring.init('spring-product');
+    });
+</script>
+
+<script>
+    PyshuoSpring = {
+        init:function(select){
+            this.$el = $('#'+select);
+            this.$infoPanel = $('#info-panel',this.$el);
+            this.getCoupon();
+        },
+        getCoupon:function(){
+          //if no login do login
+           var me = this;
+          $('a.ticket_usable_btn',this.$el).on('click',function(e){
+              e.preventDefault();
+              var element = $(this);
+              if(element.hasClass('disabled')){
+                  return false;
+              }
+              var productId = $(element).data('product');
+              $.getJSON('/users/get_spring_coupon/'+productId,function(data,status){
+                  if(data['success']){
+                      element.addClass('disabled');
+                  }else{
+                      if(data['reason']){
+                        me.doLogin();
+                      }else{
+                        me.showGetSuccessInfo('领取失败请联系管理员..');
+                      }
+                  }
+                  if(status==='403'){
+                      me.showGetSuccessInfo('领取失败请联系管理员..');
+                  }
+              });
+
+          });
+        },
+        showGetSuccessInfo:function(msg){
+            this.$infoPanel.text(msg).fadeIn(1000).fadeOut(2000);
+        },
+        doLogin:function(){
+            publishController.open_dialog('/users/login.html',{'title':'登录'});
+        }
+    };
+</script>

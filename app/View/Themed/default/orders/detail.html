@@ -52,6 +52,7 @@
     {{/if}}
 
         <div>
+            <br/>
             <h3>基本信息</h3>
             {{if $need_attentions || $remind_attentions}}
             <a href="javascript:void(0)" id="follow_subscribe"><span class="order_status_text" style ="float:right">关注朋友说接收订单状态变更通知</span></a>
@@ -70,7 +71,7 @@
                     {{elseif $order['Order']['status']==12}}已投诉
                     {{/if}}</span>
          </p>
-        <span class="col-xs-12">下单时间：{{$order['Order']['created']}}</span>
+            <span class="col-xs-12">下单时间：{{$order['Order']['created']}}</span>
         <br> {{if $order['Order']['pay_time']}}
             <span class="col-xs-12">支付时间：{{$order['Order']['pay_time']}}</span>
         <br>{{/if}}
