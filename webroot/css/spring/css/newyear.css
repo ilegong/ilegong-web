@@ -25,16 +25,41 @@ img{ border:0;}
 .main1000{ width:1000px; margin:0 auto; text-align:center;}
 .goodtopbg{ width:1000px; margin:0 auto; background:url(/img/spring/images/newyear/goodtopbg.png) no-repeat; text-align:center; padding-top:75px;}
 .goodtopbg ul{ margin:0 auto; padding:0 60px 30px 60px; background-color:#971626;}
-.goodtopbg ul li{ background-color:#ffffff; padding:10px;}
+.goodtopbg ul li {
+    background-color: #ffffff;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.goodtopbg ul li h1 {
+    font-size: 16px;
+    color: #333333;
+    padding-top: 8px;
+    text-align: left;
+    font-family: 微软雅黑;
+}
+
 .goodtopbg ul li dl dt{ color:#666666; line-height:40px; font-size:14px;}
-.goodtopbg ul li dl{ margin-top:10px;}
+.goodtopbg ul li dl {
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
 .goodtopbg ul li dl dt img{ margin-right:10px;}
 .goodtopbg ul li h1{ font-size:16px; color:#333333; padding-top:8px; text-align:left;}
 .goodtopbg ul li .price{ font-size:14px; color:#ff483a; text-align:left;}
 .goodtopbg ul li .price_year{ font-size:30px;}
 .goodtopbg ul li .price_original{ color:#999999; text-decoration:line-through;}
-
-.pay_usable_btn{ border:2px #ff483a solid; width:120px; height:45px; line-height:45px; color:#ff483a; font-size:22px; text-align:center; display:block; text-decoration:none;}
+.pay_usable_btn {
+    border: 2px #ff483a solid;
+    width: 120px;
+    height: 45px;
+    line-height: 38px;
+    color: #ff483a;
+    font-size: 22px;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
 .pay_usable_btn:hover{text-decoration: none;color:#ff483a; }
 .pay_usable_btn:active{text-decoration: none;color:#ff483a; }
 .pay_usable_btn:visited{text-decoration: none;color:#ff483a; }
@@ -43,8 +68,17 @@ img{ border:0;}
 .ticket_usable_btn:hover{background-color:#dbfbd4; border:1px #87de76 dashed; display:block; color:#29ac0e; text-decoration:none; overflow:hidden;}
 .ticket_usable_btn:focus{background-color:#dbfbd4; border:1px #87de76 dashed; display:block; color:#29ac0e; text-decoration:none; overflow:hidden;}
 .ticket_usable_btn .lingqu{ font-size:16px; text-align:center; line-height:18px; padding-top:5px; width:35px; height:40px; border-right:1px #87de76 dashed; float:left;}
-.ticket_usable_btn .quan span{ font-size:30px;}
+.ticket_usable_btn .quan {
+    text-align: center;
+    float: left;
+    font-size: 14px;
+    width: 84px;
+    line-height: 40px;
+}
 .ticket_usable_btn .quan{ text-align:center; float:left; font-size:14px; width:84px; line-height:45px;}
+.ticket_usable_btn .quan span {
+    font-size: 30px;
+}
 .goodtopbg ul li dl dd .disabled{ width:125px; height:45px; background-color:#eeeeee; border:1px #dddddd dashed; display:block; color:#999999; text-decoration:none;}
 .goodtopbg ul li dl dd .disabled .lingqu{ font-size:16px; text-align:center; line-height:18px; padding-top:5px; width:35px; height:40px; border-right:1px #dddddd dashed; float:left;}
 
