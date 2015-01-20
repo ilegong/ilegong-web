@@ -137,6 +137,22 @@ class CouponItem extends AppModel {
         }
     }
 
+    public function add_spring_festival_coupon($userId, $pid) {
+        $coupon_types = $this->read_spring_festivals($pid);
+        $couponType = $coupon_types[$pid];
+        if (!empty($couponType)) {
+            $got_items = $this->find_got_spring_festival_coupons($userId, $pid);
+            if(empty($got_items)){
+                $this->addCoupon($userId, $couponType, $userId, 'spring_festival');
+                return true;
+            } else {
+                $this->log("already got for ".$userId." of ". $couponType);
+            }
+        }
+
+        return false;
+    }
+
     public function addCoupon($recUserId, $couponType, $operator = -1, $source = 'unknown') {
         $this->id = null;
         $this->save(array('CouponItem' => array(
@@ -243,6 +259,63 @@ class CouponItem extends AppModel {
             'fields' => array('Coupon.*', 'CouponItem.*'),
             'order' => 'CouponItem.created desc'
         ));
+    }
+
+    public function read_spring_festivals($pid_lists) {
+
+        $cache_key = '_spring_fes_coupon_types';
+        $cached = Cache::read($cache_key);
+
+        if (empty($cached)) {
+            $couponM = ClassRegistry::init('Coupon');
+            $found = $couponM->find('list', array(
+                'conditions' => array(
+                    'product_list' => $pid_lists,
+                    'valid_end' => '2015-02-02 00:00:00'
+                ),
+                'fields' => array('product_list', 'id')
+            ));
+
+            $result = array();
+
+            if (!empty($found)) {
+                foreach ($found as $key => $value) {
+                    $key = trim($key);
+                    $result[$key] = $value;
+                }
+            }
+
+            $cached = json_encode($result);
+            Cache::write($cache_key, $cached);
+        } else {
+            $result = json_decode($cached, true);
+        }
+
+        $this->log("read_spring_festivals:". $cached);
+
+        return $result;
+    }
+
+    public function find_got_spring_festival_coupons($user_id, $pid_lists) {
+        $rtn = array();
+        $spring_coupons = $this->read_spring_festivals($pid_lists);
+        if (!empty($spring_coupons)) {
+            $itemIdByCouponIds = $this->find('list', array(
+                'conditions' => array('coupon_id' => $spring_coupons, 'bind_user' => $user_id),
+                'fields' => array('coupon_id', 'id')
+            ) );
+
+            if (!empty($itemIdByCouponIds)) {
+                foreach ($spring_coupons as $pid => $coupon_id) {
+                    $rtn[$pid] = empty($itemIdByCouponIds[$coupon_id]) ? false : $itemIdByCouponIds[$coupon_id];
+                }
+                return $rtn;
+            }
+        }
+
+        $this->log("find_got_spring_festival_coupons:".$user_id.", pid_lists:".json_encode($pid_lists).", result:".json_encode($rtn));
+
+        return $rtn;
     }
 
     public function find_my_valid_coupon_items($user_id, $couponItemIds, $brandId = null) {

@@ -41,7 +41,7 @@ class UsersController extends AppController {
 
         $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys');
 
-    	$this->Auth->allowedActions = array('register','login','forgot','captcha','reset', 'wx_login', 'wx_auth', 'wx_menu_point', 'login_state');
+    	$this->Auth->allowedActions = array('register','login','forgot','captcha','reset', 'wx_login', 'wx_auth', 'wx_menu_point', 'login_state', 'get_spring_coupon');
         $this->set('op_cate', 'me');
     }
 
@@ -1162,6 +1162,24 @@ class UsersController extends AppController {
             array('conditions' => array('mobilephone' => $mobile,'published'=>1))
             );
         return $user;
+    }
+
+    function get_spring_coupon($pid) {
+        $this->autoRender = false;
+        $got = false;
+        try {
+            $cM = ClassRegistry::init('CouponItem');
+            $reason = '';
+            if (!empty($this->currentUser['id'])) {
+                $got = $cM->add_spring_festival_coupon($this->currentUser['id'], $pid);
+            } else {
+                $reason = 'not_login';
+            }
+        }catch (Exception $e) {
+            $this->log("exception:". $e);
+            $reason = 'unknown';
+        }
+        echo json_encode(array('success' => $got, 'reason' => $reason));
     }
 }
 
