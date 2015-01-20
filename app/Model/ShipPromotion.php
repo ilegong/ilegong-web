@@ -138,9 +138,9 @@ class ShipPromotion extends AppModel {
 
         705 => array('limit_ship' => true,
             'items' => array(
-                array('id' => 76, 'price' => 268.0, 'time' => '', 'address' => '电科院（北京市海淀区小营东路15号）'),
-                array('id' => 77, 'price' => 268.0, 'time' => '', 'address' => '西小口东升科技园（北京市海淀区西小口路66）'),
-                array('id' => 78, 'price' => 268.0, 'time' => '', 'address' => '微软大厦（中关村丹棱街附近）'),
+                array('id' => 76, 'time' => '', 'address' => '电科院（北京市海淀区小营东路15号）'),
+                array('id' => 77, 'time' => '', 'address' => '西小口东升科技园（北京市海淀区西小口路66）'),
+                array('id' => 78, 'time' => '', 'address' => '微软大厦（中关村丹棱街附近）'),
             )
         )
 
