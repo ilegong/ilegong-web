@@ -300,14 +300,14 @@ class CouponItem extends AppModel {
         $rtn = array();
         $spring_coupons = $this->read_spring_festivals($pid_lists);
         if (!empty($spring_coupons)) {
-            $spring_coupon_ids = Hash::extract($spring_coupons,'{n}.Coupon.id');
+            $spring_coupon_ids = Hash::combine($spring_coupons,'{n}.Coupon.product_list','{n}.Coupon.id');
             $itemIdByCouponIds = $this->find('list', array(
                 'conditions' => array('coupon_id' => $spring_coupon_ids, 'bind_user' => $user_id),
                 'fields' => array('coupon_id', 'id')
             ) );
 
             if (!empty($itemIdByCouponIds)) {
-                foreach ($spring_coupons as $pid => $coupon_id) {
+                foreach ($spring_coupon_ids as $pid => $coupon_id) {
                     $rtn[$pid] = empty($itemIdByCouponIds[$coupon_id]) ? false : $itemIdByCouponIds[$coupon_id];
                 }
                 return $rtn;
