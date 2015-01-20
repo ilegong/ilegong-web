@@ -25,7 +25,7 @@
                         <div class="quan">¥<span>15</span>券</div>
                     </a>
                 </dd>
-                <dd class="fr"><a href="#X" class="pay_usable_btn radius10">&nbsp;立即购买&nbsp;</a></dd>
+                <dd class="fr"><a  item-id="{{$item['id']}}" href="javascript:;" class="pay_usable_btn radius10">&nbsp;立即购买&nbsp;</a></dd>
             </dl>
         </li>
         <li class="fr">
@@ -35,7 +35,7 @@
                 <dt class="fl">{{usubstr($brands[$item2['brand_id']]['Brand']['name'],0, 7,'')}}</dt>
             </dl>
             <div class="year_good_title">{{usubstr($item2['name'],0, 9,'')}}</div>
-            <div class="price">¥<span class="price_year">{{$this->Number->precision($item2['price'], 2)}}</span>&nbsp;&nbsp;<span class="price_original">¥{{$this->Number->precision($item['original_price'], 2)}}</span></div>
+            <div class="price">¥<span class="price_year">{{$this->Number->precision($item2['price'], 2)}}</span>&nbsp;&nbsp;<span class="price_original">¥{{$this->Number->precision($item2['original_price'], 2)}}</span></div>
             <dl>
                 <dd class="fl">
                     <a href="#X" class="ticket_usable_btn disabled radius10">
@@ -49,13 +49,72 @@
     </ul>
     {{/if}}
     {{/loop}}
+    {{if $i%2 == 1}}
+    <ul class="clearfix">
+        <li class="fl">
+            <img src="{{$this->Html->assetUrl(small_thumb_link($item['coverimg']))}}" /><br/>
+            <dl class="clearfix">
+                <dt class="fl"><img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brands[$item['brand_id']]['Brand']['coverimg']))}}" /></dt>
+                <dt class="fl">{{usubstr($brands[$item['brand_id']]['Brand']['name'],0, 7,'')}}</dt>
+            </dl>
+            <div class="year_good_title">{{usubstr($item['name'],0, 9,'')}}</div>
+            <div class="price">¥<span class="price_year">{{$this->Number->precision($item['price'], 2)}}</span>&nbsp;&nbsp;<span class="price_original">¥{{$this->Number->precision($item['original_price'], 2)}}</span></div>
+            <dl class="clearfix">
+                <dd class="fl">
+                    <a href="#X" class="ticket_usable_btn radius10">
+                        <div class="lingqu">领<br />取</div>
+                        <div class="quan">¥<span>15</span>券</div>
+                    </a>
+                </dd>
+                <dd class="fr"><a  item-id="{{$item['id']}}" href="javascript:;" class="pay_usable_btn radius10">&nbsp;立即购买&nbsp;</a></dd>
+            </dl>
+        </li>
+    </ul>
+
+    {{/if}}
 </div>
 <!--领取成功-->
-<div class="layer_lingqu radius10" style="display:none;">领取成功! 下单结算时即可使用。</div>
+<div class="layer_lingqu radius10" style="display:none;" >领取成功! 下单结算时即可使用。</div>
 
-
-<div class="layer_guanzhu radius10">
-    <div class="guanzhu_title">关注[朋友说]服务号, 接收优惠券通知!</div>
-    <div>优惠券将通过服务号发送到您的微信，<br />便于您使用和查看。</div>
-    <a href="#X" class="radius10">马上关注</a>
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="layer_guanzhu radius10">
+        <div class="guanzhu_title">关注[朋友说]服务号, 接收优惠券通知!</div>
+        <div>优惠券将通过服务号发送到您的微信，<br />便于您使用和查看。</div>
+        <a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd" class="radius10">马上关注</a>
+    </div>
 </div>
+
+
+<script>
+    $('.ticket_usable_btn').each(function(){
+        $(this).on('click',function(){
+            //alert($(this).attr('item-id'));
+            if(!sso.check_userlogin()){
+                return false;
+            }else{
+                var group_id = $('#groupId').text();
+                var count = 1;
+                $.getJSON("/categories/get_spring_conpon?conponItem_id=1", function(data) {
+                    if(data.success){
+                        var countdown = setInterval(function(){
+                            $('.layer_lingqu').show();
+                            if (count == 0) {
+                                $('.layer_lingqu').hide();
+                                var $share_div = $('<div class="apple_share fade in"><img src="/img/festival/share.png" style="width:95%"></div>')
+                                        .show().click(function(){
+                                            $share_div.hide();
+                                        });
+                                $('body').append($share_div);
+                                clearInterval(countdown);
+                            }
+                            count--;
+                        }, 1000);
+
+                    }else{
+                        $('#myModal').modal('show');
+                    }
+                });
+            }
+        });
+    })
+</script>

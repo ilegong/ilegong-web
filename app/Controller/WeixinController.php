@@ -146,12 +146,25 @@ class WeixinController extends AppController {
                                         "content"=>'关注成功！当您的订单状态有变化时系统将通过微信消息通知您。 <a href=\"'.$this->loginServiceIfNeed($from, $user, oauth_wx_goto('CLICK_URL_MINE', WX_HOST)).'\">查看您的订单<\/a>'
                                     )
                                 );
+                            }else if(array_key_exists('spring_conpon',$subscribe_array)){
+                                $key = key_cache_sub($uid,'spring');
+                                $data = json_encode(array('conponId'=> $subscribe_array['spring_conpon']));
+                                Cache::write($key, $data);
+                                $body=array(
+                                    'touser'=>$user,
+                                    "msgtype"=>"text",
+                                    "text"=>array(
+                                        "content"=>'关注成功！领取优惠卷成功。 <a href=\"'.$this->loginServiceIfNeed($from, $user, "http://".WX_HOST."/categories/spring").'\">去年货专场<\/a>'
+                                    )
+                                );
                             }
-                            foreach ( $body['text'] as $key => $value ) {
-                                $body['text'][$key] = urlencode($value);
+                            if(!empty($body)){
+                                foreach ( $body['text'] as $key => $value ) {
+                                    $body['text'][$key] = urlencode($value);
+                                }
+                                $body = urldecode(json_encode($body));
+                                $this->WxOauth->send_kefu($body);
                             }
-                            $body = urldecode(json_encode($body));
-                            $this->WxOauth->send_kefu($body);
                         }
                     }
 					exit;

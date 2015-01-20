@@ -611,13 +611,42 @@ class CategoriesController extends AppController {
                 'fields' => Product::PRODUCT_PUBLIC_FIELDS,
                )
         );
-        $brandIds = array();
-        foreach ($list as $val) {
-            $productList[] = $val['Product'];
-            $brandIds[] = $val['Product']['brand_id'];
-        }
+        $brandIds = Hash::extract($list,'{n}.Product.brand_id');
+        $productList = Hash::extract($list,'{n}.Product');
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
+        $uid = $this->currentUser['id'];
+        $this->loadModel('CouponItem');
+        $pid_lists = array_column($productList, 'id');
+        $rtn=$this->CouponItem->find_got_spring_festival_coupons($uid, $pid_lists);
         $this->set('brands', $mappedBrands);
         $this->set('data_list', $productList);
+        $this->set('pid_coupon',$rtn);
+
+
+//        $key = key_cache_sub($uid,'spring');
+//        $subscribe_array = json_decode(Cache::read($key),true);
+//        if(!empty($subscribe_array)){
+//            $weixinC = $this->Components->load('Weixin');
+//            add_coupon_for_new($uid, $weixinC, $subscribe_array['conponId'], "");
+//            $this->set('lingqu',true);
+//            Cache::clear(false, $key);
+//        }
     }
+    public function get_spring_conpon(){
+        $this->autoRender=false;
+        $uid = $this->currentUser['id'];
+        if($_GET['conponItem_id']){
+            if($uid && $this->is_weixin()){
+                $this->loadModel('WxOauth');
+                if(!$this->WxOauth->is_subscribe_wx_service($uid)){
+                    echo json_encode(array('success'=>false));
+                }else{
+                    echo json_encode(array('success'=>true));
+                }
+            }else if($uid){
+                echo json_encode(array('success'=>true));
+            }
+        }
+    }
+
 }
