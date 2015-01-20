@@ -1270,4 +1270,18 @@ $(document).ready(function () {
             return false;
         }
     });
+	$('a[name="btn_quick_buy"]').on('click',function(e){
+		e.preventDefault();
+		var $this = $(this);
+		if ($this.hasClass('cart_btn_soldout')) {
+			utils.alert('已售完');
+			e.preventDefault();
+			return false;
+		}
+		var itemId = $this.attr('item-id');
+		var itemNum = 1;
+		if(!addToCartWithSpec(itemId, itemNum, itemId)) {
+			return false;
+		}
+	});
 });

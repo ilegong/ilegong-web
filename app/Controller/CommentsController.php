@@ -335,5 +335,206 @@ class CommentsController extends AppController {
             return $returnInfo;
         }
     }
+
+    function add_order_comment(){
+        $this->autoRender=false;
+        $status = $_REQUEST['status'];
+        $currentDate = date('Y-m-d H:i:s');
+        $orderId = $_REQUEST['orderId'];
+        $serverStar = $_REQUEST['service_star'];
+        $logisticsStar=$_REQUEST['logistics_star'];
+        if ($this->Session->check('Auth.User.id')){
+            $userId = $this->Session->read('Auth.User.id');
+            $orderComment = ClassRegistry::init('OrderComment');
+            $tempComment = $orderComment->find('all',array(
+                'conditions'=>array('order_id'=>$orderId,'user_id'=>$userId)
+            ));
+            if($tempComment){
+                //$tempComment=array_merge(array('server_star'=>$serverStar, 'logistics_star'=>$logisticsStar, 'updated'=>$currentDate, 'status'=>$status),$tempComment[0]['BrandComment']);
+                $orderComment->id=$tempComment[0]['OrderComment']['id'];
+                $tempComment = $orderComment->save(array('service_star'=>$serverStar, 'logistics_star'=>$logisticsStar, 'updated'=>$currentDate, 'status'=>$status));
+            }else{
+                $tempComment=array(
+                    'order_id'=>$orderId,
+                    'user_id'=>$userId,
+                    'service_star'=>$serverStar,
+                    'logistics_star'=>$logisticsStar,
+                    'created'=>$currentDate,
+                    'status'=>$status
+                );
+                $orderComment->save($tempComment);
+            }
+            if($tempComment){
+                $result = array('success'=>true);
+            }else{
+                $result = array('success'=>false);
+            }
+            echo json_encode($result);
+        }
+
+    }
+    //to add comment view
+    function add_comment($orderId){
+        $this->pageTitle="添加评论";
+        //TODO check user nick name
+        if ($this->Session->check('Auth.User.id')) {
+            $mobileNum = $this->Session->read('Auth.User.mobilephone');
+            //has bind mobile
+            if($mobileNum){
+                $uid = $this->currentUser['id'];
+                $products = $this->get_order_products($orderId,$uid);
+                $this->set("products",$products);
+                $order= $this->get_order($orderId,$uid);
+                $this->set("order",$order);
+                $draftOrderRating = $this->get_order_rating($uid,$orderId);
+                if($draftOrderRating){
+                    $this->set('order_rating',$draftOrderRating);
+                }
+            }else{
+                $this->redirect('/users/to_bind_mobile');
+            }
+        }else{
+            $this->redirect('/users/login');
+        }
+    }
+    //change order comment status
+    function submit_order_comment(){
+        $this->autoRender=false;
+        $orderId = $_REQUEST['orderId'];
+        $uid = $this->Session->read('Auth.User.id');
+        $Order = ClassRegistry::init('Order');
+        $currentOrder = $Order->find('first',array(
+            'conditions'=>array(
+                'id'=>$orderId,
+                'is_comment'=>0,
+                'status'=>3,
+                'published'=>1
+            )
+        ));
+        if($currentOrder){
+            //get order and update comment status
+            $Order->id = $currentOrder['Order']['id'];
+            $data = $Order->save(array('is_comment'=>1));
+            if($data){
+                $result = array('success'=>true,'msg'=>'评论成功');
+                //add score log and set user score
+                $this->_set_user_comment_score($orderId,$uid);
+            }else{
+                $result = array('success'=>true,'msg'=>'评论失败');
+            }
+        }else{
+            //error
+            $result=array('success'=>false,'msg'=>'该订单不能评价');
+        }
+        echo json_encode($result);
+    }
+    //get draft order rating
+    function get_order_rating($uid,$orderId){
+        $orderComment = ClassRegistry::init('OrderComment');
+        $draftOrderRating = $orderComment->find('first',array(
+            'conditions'=>array(
+                'order_id'=>$orderId,
+                'user_id'=>$uid
+            )
+        ));
+        return $draftOrderRating;
+    }
+
+    //get product with draft comment
+    function get_order_products($orderId,$uid){
+        $Cart = ClassRegistry::init('Cart');
+        $order_products = $Cart->find('all', array(
+            'conditions'=>array(
+                'order_id' => $orderId,
+                'creator'=> $uid
+            ),
+            'fields'=>array(
+                'name',
+                'order_id',
+                'coverimg',
+                'product_id'
+            ),
+        ));
+        //add draft
+        $productIds = Hash::extract($order_products,'{n}.Cart.product_id');
+        $draftComments = $this->Comment->find('all',array(
+            'conditions'=>array(
+                'user_id'=>$uid,
+                'data_id'=>$productIds,
+                'order_id'=>$orderId
+            )
+        ));
+        //merge data product and comment
+        $order_products = Hash::combine($order_products,'{n}.Cart.product_id','{n}.Cart');
+        $draftComments = Hash::combine($draftComments,'{n}.Comment.data_id','{n}.Comment');
+        $productWithComments = Hash::merge($order_products,$draftComments);
+        return $productWithComments;
+    }
+
+    function get_order($orderId,$uid){
+        $Order = ClassRegistry::init('Order');
+        return $Order->find_my_order_byId($orderId, $uid);
+    }
+
+    function _set_user_comment_score($orderId,$uid){
+        $Order = ClassRegistry::init('Order');
+        $User = ClassRegistry::init('User');
+        $Comment = ClassRegistry::init('Comment');
+        $Score = ClassRegistry::init('Score');
+        $OrderComment=ClassRegistry::init('OrderComment');
+        $order_comment = $OrderComment->find('first',array(
+            'user_id'=>$uid,
+            'order_id'=>$orderId
+        ));
+        $commentId = $order_comment['OrderComment']['id'];
+        $hadScore = $User->find('first',array(
+            'conditions'=>array(
+                'id'=>$uid
+            ),
+            'fields'=>array(
+                'score'
+            )
+        ));
+        $hadScore = $hadScore['User']['score'];
+        $score=0;
+        $current_order = $Order->find('first',array(
+            'conditions'=>array(
+                'id'=>$orderId
+            )
+        ));
+        $total_price = $current_order['Order']['total_price'];
+        if($total_price>100){
+            $score += floor($total_price);
+        }else{
+            $score +=100;
+        }
+        $product_comments = $Comment->find('all',array(
+            'conditions'=>array(
+                'order_id'=>$orderId,
+                'user_id'=>$uid,
+                'status'=>1
+            )
+        ));
+        $product_ids = Hash::combine($product_comments,'{n}.Comment.id','{n}.Comment.data_id');
+        foreach($product_ids as $id=>$data_id){
+            $commentsByProductId = $Comment->find('all',array(
+                'conditions'=>array(
+                    'data_id'=>$data_id,
+                    'status'=>1,
+                ),
+                'order'=>array(
+                    'created asc'
+                ),
+                'limit'=>5
+            ));
+            $commentIds = Hash::extract($commentsByProductId,'{n}.Comment.id');
+            if(in_array($id,$commentIds)){
+                $score+=100;
+            }
+        }
+        $User->id = $uid;
+        $Score->add_score_by_comment($uid,$orderId,$commentId,$score);
+        $User->save(array('score'=>($score+$hadScore)));
+    }
 }
 ?>

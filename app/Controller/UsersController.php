@@ -1131,7 +1131,9 @@ class UsersController extends AppController {
 
     function to_bind_mobile(){
         $userId = $this->Session->read('Auth.User.id');
+        $userNickName = $this->Session->read('Auth.User.nickname');
         $this->set('userId',$userId);
+        $this->set('nickname',$userNickName);
         $this->pageTitle="绑定手机号";
     }
 
