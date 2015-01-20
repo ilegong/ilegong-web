@@ -57,6 +57,7 @@
               $.getJSON('/users/get_spring_coupon/'+productId,function(data,status){
                   if(data['success']){
                       element.addClass('disabled');
+                      me.showGetSuccessInfo('领取成功! 下单结算时即可使用。');
                   }else{
                       if(data['reason']){
                         me.doLogin();
