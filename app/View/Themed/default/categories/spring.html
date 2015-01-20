@@ -1,5 +1,7 @@
 <div id="spring-product">
     {{$this->Html->css(array('/css/spring/css/newyear.css'))}}
+    <input type="hidden" id="hold-user-id" value="{{$uid}}"/>
+    <input type="hidden" id="hold-product-id" value="{{$pid}}"/>
     <div class="banner_bg">
         <div class="main1000"><img src="{{$this->Html->assetUrl('/img/spring/images/newyear/banner01.jpg')}}" /><br /><img src="{{$this->Html->assetUrl('/img/spring/images/newyear/banner02.jpg')}}" /></div>
     </div>
@@ -42,6 +44,11 @@
         init:function(select){
             this.$el = $('#'+select);
             this.$infoPanel = $('#info-panel',this.$el);
+            this.uid = $('#hold-user-id',this.$el).val();
+            this.pid = $('#hold-product-id',this.$el).val();
+            if(this.pid&&this.pid!=="undefined"){
+                this.addCoupon(this.pid,$('a[data-product＝'+this.pid+']',this.$el));
+            }
             this.getCoupon();
         },
         getCoupon:function(){
@@ -54,29 +61,32 @@
                   return false;
               }
               var productId = $(element).data('product');
-              $.getJSON('/users/get_spring_coupon/'+productId,function(data,status){
-                  if(data['success']){
-                      element.addClass('disabled');
-                      me.showGetSuccessInfo('领取成功! 下单结算时即可使用。');
-                  }else{
-                      if(data['reason']){
-                        me.doLogin();
-                      }else{
-                        me.showGetSuccessInfo('领取失败请联系管理员..');
-                      }
-                  }
-                  if(status==='403'){
-                      me.showGetSuccessInfo('领取失败请联系管理员..');
-                  }
-              });
-
+              me.addCoupon(productId,element);
           });
+        },
+        addCoupon:function(productId,element){
+            var me=this;
+            $.getJSON('/users/get_spring_coupon/'+productId,function(data,status){
+                if(data['success']){
+                    element.addClass('disabled');
+                    me.showGetSuccessInfo('领取成功! 下单结算时即可使用。');
+                }else{
+                    if(data['reason']){
+                        me.doLogin();
+                    }else{
+                        me.showGetSuccessInfo('领取失败请联系管理员..');
+                    }
+                }
+                if(status==='403'){
+                    me.showGetSuccessInfo('领取失败请联系管理员..');
+                }
+            });
         },
         showGetSuccessInfo:function(msg){
             this.$infoPanel.text(msg).fadeIn(1000).fadeOut(2000);
         },
-        doLogin:function(){
-            publishController.open_dialog('/users/login.html',{'title':'登录'});
+        doLogin:function($id){
+            publishController.open_dialog('/users/login.html?type=coupon&coupon-id='+$id,{'title':'登录'});
         }
     };
 </script>

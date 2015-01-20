@@ -3,6 +3,9 @@
         <div class="panel-body col-sm-10">
             <div id="container-part1" class="clearfix">
                 <div id="loginMessage" class="alert alert-warning" style="display:none">登录失败</div>
+                {{if $errorType=='coupon'}}
+                    <div class="alert alert-danger" role="alert">登陆后才能领取优惠券..</div>
+                {{/if}}
                 <div class="sign-form">
                     <div class="sign-inner">
                         <form action="{{$this->Html->url('/users/login')}}" accept-charset="utf-8" class="form-horizontal"  method="post" role="form" {{if $isajax}} onsubmit="return ajaxeSubmitForm(this,'loginSucess');" {{/if}}>

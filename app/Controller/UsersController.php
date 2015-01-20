@@ -650,6 +650,8 @@ class UsersController extends AppController {
         $this->set('supportWeixin', $this->is_weixin());
         $this->data['User']['referer'] = $redirect;
         $this->set('referer', $redirect);
+        $this->set('errorType',$_REQUEST['type']);
+        $this->Session->write('coupon-id',$_REQUEST['coupon-id']);
         $this->set('login_by_account', $login_by_account);
     }
 

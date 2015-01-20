@@ -597,7 +597,7 @@ class CategoriesController extends AppController {
                 'alias' => 'Tag',
                 'conditions' => array(
                     'Tag.product_id = Product.id',
-                    'Tag.tag_id' => 20
+                    'Tag.tag_id' => 9
                 ),
                 'type' => 'RIGHT',
             )
@@ -625,7 +625,11 @@ class CategoriesController extends AppController {
         $spring_coupons = $this->CouponItem->find_got_spring_festival_coupons_infos($pid_lists);
         $this->set('spring_coupons',$spring_coupons);
         $this->set('not_show_nav',true);
-
+        $uid = $this->Session->read('Auth.User.id');
+        $this->set('uid',$uid);
+        $temp_pid = $this->Session->read('coupon-id');
+        $this->Session->delete('coupon-id');
+        $this->set('pid',$temp_pid);
         $key = key_cache_sub($uid,'spring');
         $cache_pid = Cache::read($key);
         if(!empty($cache_pid)){
