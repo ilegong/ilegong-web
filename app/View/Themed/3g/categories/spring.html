@@ -25,7 +25,7 @@
                         <div class="quan">¥<span>{{$spring_coupons[$item['id']]?$this->Number->precision($spring_coupons[$item['id']]/100, 0):0}}</span>券</div>
                     </a>
                 </dd>
-                <dd class="fr"><a  name="btn_quick_buy" item-id="{{$item['id']}}" href="javascript:;" class="pay_usable_btn radius10">&nbsp;立即购买&nbsp;</a></dd>
+                <dd class="fr"><a  item-id="{{$item['id']}}" href="/products/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html" class="pay_usable_btn radius10">&nbsp;立即购买&nbsp;</a></dd>
             </dl>
         </li>
         <li class="fr">
@@ -43,7 +43,7 @@
                         <div class="quan">¥<span>{{$spring_coupons[$item['id']]?$this->Number->precision($spring_coupons[$item2['id']]/100, 0):0}}</span>券</div>
                     </a>
                 </dd>
-                <dd class="fr"><a name="btn_quick_buy" item-id="{{$item2['id']}}" href="javascript:;" class="pay_usable_btn radius10">&nbsp;立即购买&nbsp;</a></dd>
+                <dd class="fr"><a  item-id="{{$item2['id']}}" href="/products/{{date('Ymd',strtotime($item2['created']))}}/{{$item2['slug']}}.html" class="pay_usable_btn radius10">&nbsp;立即购买&nbsp;</a></dd>
             </dl>
         </li>
     </ul>
@@ -66,7 +66,7 @@
                         <div class="quan">¥<span>{{$spring_coupons[$item['id']]?$this->Number->precision($spring_coupons[$item['id']]/100, 0):0}}</span>券</div>
                     </a>
                 </dd>
-                <dd class="fr"><a  name="btn_quick_buy" item-id="{{$item['id']}}" href="javascript:;" class="pay_usable_btn radius10">&nbsp;立即购买&nbsp;</a></dd>
+                <dd class="fr"><a   item-id="{{$item['id']}}" href="/products/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html" class="pay_usable_btn radius10">&nbsp;立即购买&nbsp;</a></dd>
             </dl>
         </li>
     </ul>

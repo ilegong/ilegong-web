@@ -642,16 +642,6 @@ class CategoriesController extends AppController {
         $temp_pid = $this->Session->read('coupon-id');
         $this->Session->delete('coupon-id');
         $this->set('pid',$temp_pid);
-        $key = key_cache_sub($uid,'spring');
-        $cache_pid = Cache::read($key);
-        if(!empty($cache_pid)){
-            $cM = ClassRegistry::init('CouponItem');
-            $got = $cM->add_spring_festival_coupon($this->currentUser['id'], $cache_pid);
-            if($got){
-                $this->set('lingqu',true);
-            }
-            Cache::delete($key);
-        }
     }
     public function mobile_get_spring_coupon(){
         $this->autoRender=false;
