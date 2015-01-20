@@ -257,6 +257,13 @@ class ProductsController extends AppController{
             }
         }
 
+        if (empty($shipSettings)) {
+            $shipPromotions = $this->ShipPromotion->findShipPromotions(array($pid));
+            if ($shipPromotions && !empty($shipPromotions)) {
+                $this->set('limit_ship', $shipPromotions['limit_ship']);
+            }
+        }
+
         $currentUser = $_SESSION['Auth']['User'];
         if($currentUser){
             $this->loadModel('ViewedProduct');

@@ -289,7 +289,7 @@ class ShipPromotion extends AppModel {
         return null;
     }
 
-    public function findShipPromotions($product_ids, $brand_ids) {
+    public function findShipPromotions($product_ids, $brand_ids = array()) {
         if (!empty($brand_ids)) {
             if(array_search(self::BIN_BIN_BRAND_ID, $brand_ids) !== false) {
                 return $this->BIN_BIN_PROMO;
