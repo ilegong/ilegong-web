@@ -22,7 +22,7 @@
                 <dd class="fl">
                     <a href="javascript:;" pid="{{$item['id']}}" class="ticket_usable_btn {{if $pid_coupon[$item['id']]}}disabled {{/if}} radius10">
                         <div class="lingqu">领<br />取</div>
-                        <div class="quan">¥<span>{{$spring_coupons[$item['id']]?$spring_coupons[$item['id']]:0}}</span>券</div>
+                        <div class="quan">¥<span>{{$spring_coupons[$item['id']]?$this->Number->precision($spring_coupons[$item['id']]/100, 0):0}}</span>券</div>
                     </a>
                 </dd>
                 <dd class="fr"><a  item-id="{{$item['id']}}" href="javascript:;" class="pay_usable_btn radius10">&nbsp;立即购买&nbsp;</a></dd>
@@ -40,7 +40,7 @@
                 <dd class="fl">
                     <a href="javascript:;" pid="{{$item2['id']}}" class="ticket_usable_btn {{if $pid_coupon[$item2['id']]}}disabled {{/if}} radius10">
                         <div class="lingqu">领<br />取</div>
-                        <div class="quan">¥<span>{{$spring_coupons[$item2['id']]?$spring_coupons[$item2['id']]:0}}</span>券</div>
+                        <div class="quan">¥<span>{{$spring_coupons[$item['id']]?$this->Number->precision($spring_coupons[$item2['id']]/100, 0):0}}</span>券</div>
                     </a>
                 </dd>
                 <dd class="fr"><a href="javascript:;" class="pay_usable_btn radius10">&nbsp;立即购买&nbsp;</a></dd>
@@ -63,7 +63,7 @@
                 <dd class="fl">
                     <a href="javascript:;" pid="{{$item['id']}}" class="ticket_usable_btn {{if $pid_coupon[$item['id']]}}disabled {{/if}} radius10">
                         <div class="lingqu">领<br />取</div>
-                        <div class="quan">¥<span>{{$spring_coupons[$item['id']]?$spring_coupons[$item['id']]:0}}</span>券</div>
+                        <div class="quan">¥<span>{{$spring_coupons[$item['id']]?$this->Number->precision($spring_coupons[$item['id']]/100, 0):0}}</span>券</div>
                     </a>
                 </dd>
                 <dd class="fr"><a  item-id="{{$item['id']}}" href="javascript:;" class="pay_usable_btn radius10">&nbsp;立即购买&nbsp;</a></dd>
