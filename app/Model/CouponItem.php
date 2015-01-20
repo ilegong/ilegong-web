@@ -139,10 +139,10 @@ class CouponItem extends AppModel {
 
     public function add_spring_festival_coupon($userId, $pid) {
         $coupon_types = $this->read_spring_festivals($pid);
-        $couponType = $coupon_types[$pid];
+        $couponType = $coupon_types[0]['Coupon']['id'];
         if (!empty($couponType)) {
             $got_items = $this->find_got_spring_festival_coupons($userId, $pid);
-            if(empty($got_items)){
+            if(empty($got_items[$pid])){
                 $this->addCoupon($userId, $couponType, $userId, 'spring_festival');
                 return true;
             } else {
