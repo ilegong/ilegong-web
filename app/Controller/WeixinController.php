@@ -148,7 +148,7 @@ class WeixinController extends AppController {
                                 );
                             }else if(array_key_exists('pid',$subscribe_array)){
                                 $key = key_cache_sub($uid,'spring');
-                                $data = $subscribe_array['spring'];
+                                $data = $subscribe_array['pid'];
                                 Cache::write($key, $data);
                                 $body=array(
                                     'touser'=>$user,
