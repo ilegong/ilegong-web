@@ -8,8 +8,6 @@
 
 class Score {
 
-    var $name="ScoreLog";
-
 
     public function add_score_by_bought($userId, $orderId, $total_all_price) {
 
@@ -22,14 +20,9 @@ class Score {
 
     }
 
-    public function add_score_by_comment($userId, $orderId, $order_comment_id,$score) {
-        $this->data['Score']['user_id']=$userId;
-        $this->data['Score']['OrderId']=$orderId;
-        $this->data['Score']['commentId']=$order_comment_id;
-        $this->data['Score']['created']=date('Y-m-d H:i:s');
-        $this->data['Score']['reason']=SCORE_ORDER_COMMENT;
-        $this->data['Score']['desc']="对订单(".$orderId.")评价赢取".$score."积分";
-        $this->data['Score']['score']=$score;
-        return $this->save($this->data);
+    public function add_score_by_comment($userId, $orderId, $order_comment_id) {
+
+
+
     }
 }

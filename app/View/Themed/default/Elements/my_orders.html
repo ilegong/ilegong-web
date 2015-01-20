@@ -54,12 +54,6 @@ $brand = $brands[$order['Order']['brand_id']];
             {{elseif $order['Order']['status']==0}}
             <a class="btn-sm btn-primary" href="javascript:;" onclick="bootbox.confirm('您确认要取消吗？', function(result) {if(result){orders_undo({{$order['Order']['id']}})} })">取消订单</a>
             <a class="btn-sm btn-warning" href="/orders/detail/{{$order['Order']['id']}}/pay">去支付</a>
-            {{elseif $order['Order']['status']==3}}
-                {{if $order['Order']['is_comment']==1}}
-                    <a class="btn-sm btn-warning" href="/comments/add_comment/{{$order['Order']['id']}}">查看评论</a>
-                {{else}}
-                    <a class="btn-sm btn-warning" href="/comments/add_comment/{{$order['Order']['id']}}">评论赢积分</a>
-                {{/if}}
             {{/if}}
         </div>
         <div class="clearfix"></div>

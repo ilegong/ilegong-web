@@ -1,18 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
-*{ padding:0; margin:0; font-family:"微软雅黑";}
-body{ min-width:320px; font-size:14px;}
-ul li{ list-style:none;}
-.fl{ float:left;}
-.fr{ float:right;}
-.clearfix{ zoom:1;}
-.clearfix:after{ content:".";display:block;height:0;clear:both; visibility:hidden;}
 
-.radius10{
-    -moz-border-radius: 0.417em;/* Gecko browsers */-webkit-border-radius: 0.417em;/* Webkit browsers */border-radius:0.417em;/* W3C syntax */
-}
-.border_b{ border-bottom:1px #dddddd solid;}
-.gray{ color:#999999;}
+
 /*首页*/
 .index_pt ul,.index_class ul{margin-bottom: 0;}
 .index_banner img{ width:100%;}
@@ -36,59 +25,6 @@ ul li{ list-style:none;}
 /*二级分类页面*/
 .bannerlist a{ display:block; padding-bottom:0.8em;}
 .bannerlist a img{ width:100%;}
-
-/**/
-#bind_mobile{}
-#bind_mobile a:hover{color:#ffffff;text-decoration: none;}
-#bind_mobile a:focus{color:#ffffff;text-decoration: none;}
-
-/*评价绑定手机号*/
-.comment_yanzheng_tip{ text-align:center; padding:0.7em 0; color:#999999; font-size:1em;}
-.comment_check li{ padding:0.8em; font-size:1em; background-color:#ffffff; border-bottom:1px #dddddd solid; border-top:1px #dddddd solid; position:relative;}
-.comment_check li span{ display:block; color:#333333;}
-.comment_check li span.name{ width:5.5em; color:#999999;}
-.comment_check img{ width:0.7em; height:1.4em;}
-.comment_check li span input{ font-size:1.1em; color:#333333; border:0;}
-.comment_codebtn{ line-height:2.2em; height:2.2em; font-size:1.2em; text-align:center; background-color:#ffa531; text-decoration:none; color:#ffffff; width:92%; margin:0 auto; display:block; margin-top:1em;}
-.comment_codebtn_disable{ line-height:2.2em; height:2.2em; font-size:1.2em; text-align:center; background-color:#bcbcbc; text-decoration:none; color:#ffffff; width:92%; margin:0 auto; display:block; margin-top:1em;}
-.comment_codebtn:hover{text-decoration: none;color:#ffffff;}
-.comment_codebtn:focus{text-decoration: none;color:#ffffff;}
-.comment_codebtn_disable:hover{text-decoration: none;color:#ffffff;}
-.comment_codebtn_disable:focus{text-decoration: none;color:#ffffff;}
-.comment_check_tel{ color:#999999; font-size:1em; padding:1em 0; text-align:center;}
-.mt24{ margin-top:1em;}
-/*提示框*/
-.comment_tip_layer{ background-color:#505050; text-align:center; padding:0.6em 0 0.3em 0; font-size:1.1em; line-height:1.5em; color:#ffffff; position:absolute;}
-.comment_tip_layer img{ width:1.1em; height:1.1em; padding-right:0.3em; margin-top:0.1em;}
-.comment_tip_layer ul{ padding-left:3.5em;}
-/*提示是否合并弹出层*/
-.comment_tanchubg_layer{ background-color:#ffffff; width:60%; color:#666666; line-height:1.5em; font-size:1.2em; padding:1em; position:absolute; top:30%; left:50%; margin-left:-33%; text-align:center;
-    -webkit-box-shadow: #666 0px 0px 10px;
-    -moz-box-shadow: #666 0px 0px 10px;
-    box-shadow: #666 0px 0px 10px;}
-.comment_tanchubg_layer span{ color:#ffa531;}
-.comment_tanchubg_layer ul{ width:10.5em; margin:0 auto; padding-top:1em;}
-/*合并按钮两个状态*/
-.comment_bingbtn{ width:5.2em; display:block; text-decoration:none; font-size:0.9em; background-color:#ffffff; text-align:center; padding:0.2em 0; border:1px #dddddd solid; color:#999999;}
-.comment_bingbtn_disable{ width:5.2em; display:block; text-decoration:none; font-size:0.9em; background-color:#ffa531; text-align:center; padding:0.2em 0; border:1px #ffa531 solid; color:#ffffff;}
-/*订单评价*/
-.comment{ padding:1em; background-color:#ffffff;}
-.comment_pic{ border:1px #dddddd solid; height:3.9em;}
-.comment_pic img{ width:5em; height:3.75em;}
-.comment_con{ padding-left:0.8em;}
-.comment_title{ font-size:1.083em; color:#333333;}
-.comment_star{ color:#666666; font-size:1.083em; padding-top:1em; padding-right:0.5em;}
-.comment_star_orange{ width:1.45em; height:1.5em; background:url(/img/mobile/pyshuo_icon.png) -12em -8.75em no-repeat; background-size:30em 30em; margin-right:0.7em; margin-left:0.2em; margin-top:0.8em;}
-.comment_star_gray{ width:1.45em; height:1.5em; background:url(/img/mobile/pyshuo_icon.png) -14.4em -8.75em no-repeat; background-size:30em 30em; margin-right:0.7em; margin-left:0.2em; margin-top:0.8em;}
-.comment textarea{width:100%;height:80px;line-height:24px;background: #ffffff;font-size:1em;font-weight: normal;color: #666666;-webkit-appearance: none;border: 1px #dddddd solid; margin-top:0.8em;}
-.comment label{position:absolute; color:#999999; line-height:20px; top:0.5em; left:0; width:95%; margin:0.8em; z-index:2;}
-.comment_upload{ border:1px #dddddd solid; text-align:center; padding:1em; display:block; background-color:#f5f5f5; float:left; margin-top:1em; margin-right:0.7em;}
-.comment_upload span{ display:block; width:2.292em; height:2.292em; background:url(/img/mobile/pyshuo_icon.png) -14.583em -7.25em no-repeat; background-size:25em 25em;}
-.comment_submit{ height:2.8em; width:100%; display:block; background-color:#ffa531; line-height:2.8em; text-align:center; color:#ffffff; font-size:1.25em; margin-top:1.5em; text-decoration:none; position:fixed; bottom:0; left:0;}
-.comment_submit_disable{ height:2.8em; width:100%; display:block; background-color:#bcbcbc; line-height:2.8em; text-align:center; color:#ffffff; font-size:1.25em; margin-top:-4em; text-decoration:none; position:relative; bottom:0; left:0; z-index:3;}
-.comment_submit_disable:hover{color: #ffffff;text-decoration: none}
-.comment_submit_disable:focus{color: #ffffff;text-decoration: none}
-.comment_csi{ padding:0 1em 5em 1em;}
 
 
 
