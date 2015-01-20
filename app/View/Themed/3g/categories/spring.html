@@ -20,7 +20,7 @@
             <div class="price">¥<span class="price_year">{{$this->Number->precision($item['price'], 2)}}</span>&nbsp;&nbsp;<span class="price_original">¥{{$this->Number->precision($item['original_price'], 2)}}</span></div>
             <dl class="clearfix">
                 <dd class="fl">
-                    <a href="#X" class="ticket_usable_btn radius10">
+                    <a href="javascript:;" pid="{{$item['id']}}" class="ticket_usable_btn {{if $pid_coupon[$item['id']]}}disabled {{/if}} radius10">
                         <div class="lingqu">领<br />取</div>
                         <div class="quan">¥<span>15</span>券</div>
                     </a>
@@ -38,12 +38,12 @@
             <div class="price">¥<span class="price_year">{{$this->Number->precision($item2['price'], 2)}}</span>&nbsp;&nbsp;<span class="price_original">¥{{$this->Number->precision($item2['original_price'], 2)}}</span></div>
             <dl>
                 <dd class="fl">
-                    <a href="#X" class="ticket_usable_btn disabled radius10">
+                    <a href="javascript:;" pid="{{$item2['id']}}" class="ticket_usable_btn {{if $pid_coupon[$item2['id']]}}disabled {{/if}} radius10">
                         <div class="lingqu">领<br />取</div>
                         <div class="quan">¥<span>5</span>券</div>
                     </a>
                 </dd>
-                <dd class="fr"><a href="#X" class="pay_usable_btn radius10">&nbsp;立即购买&nbsp;</a></dd>
+                <dd class="fr"><a href="javascript:;" class="pay_usable_btn radius10">&nbsp;立即购买&nbsp;</a></dd>
             </dl>
         </li>
     </ul>
@@ -61,7 +61,7 @@
             <div class="price">¥<span class="price_year">{{$this->Number->precision($item['price'], 2)}}</span>&nbsp;&nbsp;<span class="price_original">¥{{$this->Number->precision($item['original_price'], 2)}}</span></div>
             <dl class="clearfix">
                 <dd class="fl">
-                    <a href="#X" class="ticket_usable_btn radius10">
+                    <a href="javascript:;" pid="{{$item['id']}}" class="ticket_usable_btn {{if $pid_coupon[$item['id']]}}disabled {{/if}} radius10">
                         <div class="lingqu">领<br />取</div>
                         <div class="quan">¥<span>15</span>券</div>
                     </a>
@@ -73,14 +73,20 @@
 
     {{/if}}
 </div>
+<input type="text" id="current_pid" class="hidden">
 <!--领取成功-->
 <div class="layer_lingqu radius10" style="display:none;" >领取成功! 下单结算时即可使用。</div>
+
+{{if $lingqu}}
+<div id="sub_back" class="layer_lingqu radius10" style="display:none;" >领取成功! 下单结算时即可使用。</div>
+{{/if}}
+
 
 <div class="modal fade" id="myModal" role="dialog">
     <div class="layer_guanzhu radius10">
         <div class="guanzhu_title">关注[朋友说]服务号, 接收优惠券通知!</div>
         <div>优惠券将通过服务号发送到您的微信，<br />便于您使用和查看。</div>
-        <a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd" class="radius10">马上关注</a>
+        <a href="javascript:;" id="subscribe" class="radius10">马上关注</a>
     </div>
 </div>
 
@@ -92,9 +98,9 @@
             if(!sso.check_userlogin()){
                 return false;
             }else{
-                var group_id = $('#groupId').text();
+                var pid = $(this).attr('pid');
                 var count = 1;
-                $.getJSON("/categories/get_spring_conpon?conponItem_id=1", function(data) {
+                $.getJSON("/categories/mobile_get_spring_coupon?pid=" + pid, function(data) {
                     if(data.success){
                         var countdown = setInterval(function(){
                             $('.layer_lingqu').show();
@@ -111,10 +117,32 @@
                         }, 1000);
 
                     }else{
-                        $('#myModal').modal('show');
+                        if(data.reason == 'need_sub'){
+                            $('#myModal').modal('show');
+                            $('#current_pid').val(pid);
+                        }else{
+                            utils.alert('无法领取');
+                        }
                     }
                 });
             }
         });
     })
+    $('#subscribe').bind('click', function(){
+        var pid = $('#current_pid').val();
+        $.get("/weixin/save_subscribe_info?spring="+pid, function(data) {
+            window.location.href = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd';
+        });
+    });
+    if($('#sub_back').size()>=1){
+        var count = 2;
+        var countdown = setInterval(function(){
+            $('#sub_back').show();
+            if (count == 0) {
+                $('#sub_back').hide();
+                clearInterval(countdown);
+            }
+            count--;
+        }, 1000);
+    }
 </script>

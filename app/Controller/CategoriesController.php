@@ -624,31 +624,51 @@ class CategoriesController extends AppController {
         $this->set('pid_coupon',$rtn);
         $spring_coupons = $this->CouponItem->find_got_spring_festival_coupons_infos($pid_lists);
         $this->set('spring_coupons',$spring_coupons);
-//        $key = key_cache_sub($uid,'spring');
-//        $subscribe_array = json_decode(Cache::read($key),true);
-//        if(!empty($subscribe_array)){
-//            $weixinC = $this->Components->load('Weixin');
-//            add_coupon_for_new($uid, $weixinC, $subscribe_array['conponId'], "");
-//            $this->set('lingqu',true);
-//            Cache::clear(false, $key);
-//        }
-        $this->set('not_show_nav',true);
+
+
+        $key = key_cache_sub($uid,'spring');
+        $cache_pid = Cache::read($key);
+        if(!empty($cache_pid)){
+            $cM = ClassRegistry::init('CouponItem');
+            $got = $cM->add_spring_festival_coupon($this->currentUser['id'], $cache_pid);
+            if($got){
+                $this->set('lingqu',true);
+            }
+            Cache::delete($key);
+        }
     }
-    public function get_spring_conpon(){
+    public function mobile_get_spring_coupon(){
         $this->autoRender=false;
         $uid = $this->currentUser['id'];
-        if($_GET['conponItem_id']){
-            if($uid && $this->is_weixin()){
+        if($_GET['pid'] && $uid){
+            $pid = intval($_GET['pid']);
+            if($this->is_weixin()){
                 $this->loadModel('WxOauth');
                 if(!$this->WxOauth->is_subscribe_wx_service($uid)){
-                    echo json_encode(array('success'=>false));
+                    echo json_encode(array('success'=>false, 'reason' => 'need_sub'));
                 }else{
-                    echo json_encode(array('success'=>true));
+                    try {
+                        $cM = ClassRegistry::init('CouponItem');
+                        $got = $cM->add_spring_festival_coupon($this->currentUser['id'], $pid);
+                        $reason = 'got';
+                    }catch (Exception $e) {
+                        $this->log("exception:". $e);
+                        $reason = 'unknown';
+                    }
+                    echo json_encode(array('success'=>$got , 'reason' => $reason));
                 }
-            }else if($uid){
-                echo json_encode(array('success'=>true));
+            }else{
+                try {
+                    $cM = ClassRegistry::init('CouponItem');
+                    $got = $cM->add_spring_festival_coupon($this->currentUser['id'], $pid);
+                    $reason = 'got';
+                }catch (Exception $e) {
+                    $this->log("exception:". $e);
+                    $reason = 'unknown';
+                }
+                echo json_encode(array('success'=>$got, 'reason' => $reason));
             }
         }
     }
 
-}
+}  
