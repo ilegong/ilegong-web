@@ -19,7 +19,7 @@
                         <dd class="fl">
                             <a href="#X" data-product="{{$product['id']}}" class="ticket_usable_btn {{if $pid_coupon[$product['id']]}}disabled{{/if}} radius5">
                                 <div class="lingqu">领<br />取</div>
-                                <div class="quan">¥ <span>{{$spring_coupons[$product['id']]?$spring_coupons[$product['id']]:0}}</span> 券</div>
+                                <div class="quan">¥ <span>{{$spring_coupons[$product['id']]?$this->Number->precision($spring_coupons[$product['id']]/100):0}}</span> 券</div>
                             </a>
                         </dd>
                         <dd class="fr"><a name="btn_quick_buy" item-id="{{$product['id']}}" href="javascript:;" class="pay_usable_btn radius5">立即购买</a></dd>
