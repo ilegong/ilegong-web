@@ -612,10 +612,22 @@ class CategoriesController extends AppController {
                 'fields' => Product::PRODUCT_PUBLIC_FIELDS,
                )
         );
+
+        $uid = $this->currentUser['id'];
+        $key = key_cache_sub($uid,'spring');
+        $cache_pid = Cache::read($key);
+        if(!empty($cache_pid)){
+            $cM = ClassRegistry::init('CouponItem');
+            $got = $cM->add_spring_festival_coupon($this->currentUser['id'], $cache_pid);
+            if($got){
+                $this->set('lingqu',true);
+            }
+            Cache::delete($key);
+        }
         $brandIds = Hash::extract($list,'{n}.Product.brand_id');
         $productList = Hash::extract($list,'{n}.Product');
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
-        $uid = $this->currentUser['id'];
+        
         $this->loadModel('CouponItem');
         $pid_lists=Hash::extract($productList,'{n}.id');
         $rtn=$this->CouponItem->find_got_spring_festival_coupons($uid, $pid_lists);

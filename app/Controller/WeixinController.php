@@ -154,7 +154,7 @@ class WeixinController extends AppController {
                                     'touser'=>$user,
                                     "msgtype"=>"text",
                                     "text"=>array(
-                                        "content"=>'关注成功！领取优惠卷成功。 <a href=\"'.$this->loginServiceIfNeed($from, $user, "http://".WX_HOST."/categories/spring").'\">去年货专场<\/a>'
+                                        "content"=>'关注成功！领取优惠券成功。 <a href=\"'.$this->loginServiceIfNeed($from, $user, "http://".WX_HOST."/categories/spring").'\">去年货专场<\/a>'
                                     )
                                 );
                             }
