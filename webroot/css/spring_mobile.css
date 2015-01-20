@@ -25,12 +25,27 @@ input{ outline:none;}
 .year_good_title{ font-size:1em; color:#333333; padding:0.5em; padding-bottom:0; text-align:left;}
 .year_good ul li dl dt{ color:#666666; line-height:2.2em; font-size:0.833em;}
 .year_good ul li dl dt img{ width:2em; height:2em; margin-right:0.417em;}
-.year_good ul li dl{ margin-top:0.417em; padding:0 0.5em;}
+.year_good ul li dl {
+    margin-top: 0.417em;
+    padding: 0 0.5em;
+    margin-bottom: 0;
+}
+/*.year_good ul li dl{ margin-top:0.417em; padding:0 0.5em;}*/
 .year_good ul li .price{ font-size:0.833em; color:#ff483a; padding:0 0.5em 0.5em 0.5em; text-align:left;}
 .year_good ul li .price_year{ font-size:2em;}
 .year_good ul li .price_original{ color:#999999; text-decoration:line-through; font-size:0.0.833em;}
 
-.pay_usable_btn{ border:2px #ff483a solid; height:28px; line-height:28px; color:#ff483a; font-size:0.85em; text-align:center; display:block; text-decoration:none;}
+/*.pay_usable_btn{ border:2px #ff483a solid; height:28px; line-height:28px; color:#ff483a; font-size:0.85em; text-align:center; display:block; text-decoration:none;}*/
+.pay_usable_btn {
+    border: 2px #ff483a solid;
+    height: 30px;
+    line-height: 26px;
+    color: #ff483a;
+    font-size: 0.85em;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
 .ticket_usable_btn{ width:4.6em; height:30px; background-color:#dbfbd4; border:1px #87de76 dashed; display:block; color:#29ac0e; text-decoration:none; overflow:hidden;}
 .ticket_usable_btn .lingqu{ font-size:0.833em; text-align:center; line-height:1em; padding-top:0.25em; width:18px; height:2em; border-right:1px #87de76 dashed; float:left;}
 .ticket_usable_btn .quan span{ font-size:1.4em;}
