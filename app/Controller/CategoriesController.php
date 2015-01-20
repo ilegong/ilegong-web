@@ -624,7 +624,7 @@ class CategoriesController extends AppController {
         $this->set('pid_coupon',$rtn);
         $spring_coupons = $this->CouponItem->find_got_spring_festival_coupons_infos($pid_lists);
         $this->set('spring_coupons',$spring_coupons);
-
+        $this->set('not_show_nav',true);
 
         $key = key_cache_sub($uid,'spring');
         $cache_pid = Cache::read($key);
