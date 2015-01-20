@@ -597,7 +597,7 @@ class CategoriesController extends AppController {
                 'alias' => 'Tag',
                 'conditions' => array(
                     'Tag.product_id = Product.id',
-                    'Tag.tag_id' => 20
+                    'Tag.tag_id' => 9
                 ),
                 'type' => 'RIGHT',
             )
@@ -617,7 +617,7 @@ class CategoriesController extends AppController {
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
         $uid = $this->currentUser['id'];
         $this->loadModel('CouponItem');
-        $pid_lists = array_column($productList, 'id');
+        $pid_lists=Hash::extract($productList,'{n}.id');
         $rtn=$this->CouponItem->find_got_spring_festival_coupons($uid, $pid_lists);
         $this->set('brands', $mappedBrands);
         $this->set('data_list', $productList);
