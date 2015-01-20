@@ -94,18 +94,21 @@
 <script>
     $('.ticket_usable_btn').each(function(){
         $(this).on('click',function(){
-            //alert($(this).attr('item-id'));
+            var element = $(this);
+            if(element.hasClass('disabled')){
+                return false;
+            }
             if(!sso.check_userlogin()){
                 return false;
             }else{
                 var pid = $(this).attr('pid');
-                var count = 1;
+                var count = 2;
                 $.getJSON("/categories/mobile_get_spring_coupon?pid=" + pid, function(data) {
                     if(data.success){
+                        element.addClass('disabled');
+                        $('.layer_lingqu').fadeIn(1000).fadeOut(2000);
                         var countdown = setInterval(function(){
-                            $('.layer_lingqu').show();
                             if (count == 0) {
-                                $('.layer_lingqu').hide();
                                 var $share_div = $('<div class="apple_share fade in"><img src="/img/festival/newyear/share.png" style="width:95%"></div>')
                                         .show().click(function(){
                                             $share_div.hide();
@@ -115,7 +118,6 @@
                             }
                             count--;
                         }, 1000);
-
                     }else{
                         if(data.reason == 'need_sub'){
                             $('#myModal').modal('show');
@@ -127,7 +129,7 @@
                 });
             }
         });
-    })
+    });
     $('#subscribe').bind('click', function(){
         var pid = $('#current_pid').val();
         $.get("/weixin/save_subscribe_info?spring="+pid, function(data) {
@@ -135,15 +137,7 @@
         });
     });
     if($('#sub_back').size()>=1){
-        var count = 2;
-        var countdown = setInterval(function(){
-            $('#sub_back').show();
-            if (count == 0) {
-                $('#sub_back').hide();
-                clearInterval(countdown);
-            }
-            count--;
-        }, 1000);
+        $('#sub_back').fadeIn(1000).fadeOut(2000);
     }
 
 </script>
