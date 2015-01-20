@@ -258,6 +258,7 @@ class ProductsController extends AppController{
         }
 
         if (empty($shipSettings)) {
+            $this->loadModel('ShipPromotion');
             $shipPromotions = $this->ShipPromotion->findShipPromotions(array($pid));
             if ($shipPromotions && !empty($shipPromotions)) {
                 $this->set('limit_ship', $shipPromotions['limit_ship']);
