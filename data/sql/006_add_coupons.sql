@@ -18,4 +18,5 @@ insert into cake_coupons(name, valid_begin, valid_end, last_updator, type, produ
 insert into cake_coupons(name, valid_begin, valid_end, last_updator, type, product_list, reduced_price) values('年货专场', '2015-01-21 00:00:00', '2015-02-02 00:00:00', 632, 2, '329', 2000);
 
 update cake_coupons c inner join cake_products p on c.product_list = p.id  set c.status = 1,  c.brand_id = p.brand_id, c.published = 1  where valid_end='2015-02-02 00:00:00';
+update cake_coupons c inner join cake_products p on c.product_list = p.id  set c.name = concat(c.name, '(', p.name, ')'), c.status = 1,  c.brand_id = p.brand_id, c.published = 1  where valid_end='2015-02-02 00:00:00';
 update cake_coupons c set valid_begin='2015-01-20 00:00:00'  where valid_end='2015-02-02 00:00:00';
