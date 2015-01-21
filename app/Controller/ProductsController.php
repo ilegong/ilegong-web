@@ -173,7 +173,7 @@ class ProductsController extends AppController{
             list($afford_for_curr_user, $left_cur_user, $total_left) =
                 calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
 
-            $this->log('view product afford: for_curr_user='.$afford_for_curr_user.', left_cur_user='.$left_cur_user.', total_left='.$total_left.', range='.json_encode($special_rg));
+            $this->log('view product afford(special): for_curr_user='.$afford_for_curr_user.', left_cur_user='.$left_cur_user.', total_left='.$total_left.', range='.json_encode($special_rg).', uid='.$currUid);
 
             $promo_name = $special['name'];
             $special_price = $special['special']['special_price'] / 100;
@@ -199,6 +199,7 @@ class ProductsController extends AppController{
 
         if (!$use_special) {
             list($afford_for_curr_user, $left_cur_user, $total_left) = self::__affordToUser($pid, $currUid);
+            $this->log('view product afford(not special): for_curr_user=' . $afford_for_curr_user . ', left_cur_user=' . $left_cur_user . ', total_left=' . $total_left . ', uid=' . $currUid);
         }
 
         $this->set('price', $price);

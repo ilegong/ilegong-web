@@ -35,7 +35,7 @@
             </li>
             <li>
             <span class="fl">
-                {{if $ship_fixed}}优惠：参与本店每单{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}元快递优惠</br>{{/if}}
+                {{if $ship_fixed}}优惠：参与本店每单{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}元快递优惠<br/>{{/if}}
                 {{if $ship_promo_nums}}优惠：{{$ship_promo_nums}}<br/>{{/if}}
                 {{if $ship_promo_amount}}优惠：{{$ship_promo_amount}}<br/>{{/if}}
             </span>
