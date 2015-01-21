@@ -1,6 +1,6 @@
-<div  class="container">
-    <div  class="row">
-        <div  class="col-xs-12">
+<div  class="container" style="padding: 0">
+    <div  class="row" style="margin-left: 0;margin-right: 0;">
+        <div  class="col-xs-12" style="padding: 0;">
             <portlet id="portlet-33"></portlet>
         </div>
         <hr>
@@ -8,8 +8,8 @@
 </div>
 
 <div class="swiper-container thumbs-cotnainer" style="margin-bottom: 5em">
-    <div class="thumbs-title">商品推荐</div>
-    <div class="swiper-wrapper">
+    <div class="thumbs-title" style="padding-left: 0.8em;padding-bottom: 0.5em;">商品推荐</div>
+    <div class="swiper-wrapper" style="padding-left: 0.8em;padding-right: 0.8em;">
         <?PHP foreach($items as $item) {
             $item['slug'] = $item['slug']?$item['slug']:$item['id'];
             ?>
