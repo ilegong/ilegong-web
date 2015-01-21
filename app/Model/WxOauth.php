@@ -71,8 +71,8 @@ class WxOauth extends Model {
     }
     public function getSignPackage() {
         $jsapiTicket = $this->get_js_api_ticket();
-        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-        $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $protocol = "http://".WX_HOST;
+        $url = "$protocol$_SERVER[REQUEST_URI]";
         $timestamp = time();
         $nonceStr = $this->createNonceStr();
         // 这里参数的顺序要按照 key 值 ASCII 码升序排序
@@ -85,7 +85,6 @@ class WxOauth extends Model {
             "url"       => $url,
             "signature" => $signature,
             "rawString" => $string,
-            "jsapiTicket" => $jsapiTicket,
         );
         return $signPackage;
     }
