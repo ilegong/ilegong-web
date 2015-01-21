@@ -157,7 +157,15 @@ class ProductsController extends AppController{
         $price = $this->viewdata['Product']['price'];
         $currUid = $this->currentUser['id'];
         if (!empty($special) && $special['special']['special_price'] >= 0) {
-            $special_rg = array('start' => $special['start'], 'end' => $special['end']);
+
+            if ($special['special']['show_day'] != '0000-00-00') {
+                $day_start = $special['special']['show_day'] . ' 00:00:00';
+                $day_end = $special['special']['show_day'] . ' 23:59:59';
+                $special_rg = array('start' => $day_start, 'end' => $day_end);
+            } else {
+                $special_rg = array('start' => $special['start'], 'end' => $special['end']);
+            }
+
             //TODO: check time (current already checked)
             //CHECK time limit!!!!
             list($afford_for_curr_user, $left_cur_user, $total_left) =
@@ -182,6 +190,7 @@ class ProductsController extends AppController{
             $this->set('special_desc', $promo_desc);
             $this->set('special_name', $promo_name);
             $this->set('special_slug', $special['slug']);
+            $this->set('show_special_link', $special['visible'] > 0);
         }
 
         if (!$use_special) {
