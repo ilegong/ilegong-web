@@ -17,6 +17,7 @@ class WxOauth extends Model {
     );
 
     const MD_KEY_WX_BASE_ACCESS_TOKEN = "wx_base_access_token";
+    const MD_KEY_JS_APITICKET = "wx_js_api_ticket";
     public function getUserInfo($openid, $token, $lang = 'zh_CN') {
         return $this->find('all', array(
             'method' => 'get_user_info',
@@ -43,7 +44,50 @@ class WxOauth extends Model {
             return $token_data['token'];
         }
     }
-
+    private function get_js_api_ticket(){
+        $key = self::MD_KEY_JS_APITICKET;
+        $data = Cache::read($key);
+        if (empty($data) || $data['expire'] < time() || empty($data['ticket'])) {
+            $accessToken = $this->get_base_access_token();
+            $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=$accessToken";
+            $res = $this->do_curl($url);
+            $ticket = $res['ticket'];
+            if (!empty($ticket)) {
+                Cache::write($key, array('ticket' => $ticket, 'expire'=> time() + 7000));
+                return $ticket;
+            }
+        } else {
+            $ticket = $data['ticket'];
+        }
+        return $ticket;
+    }
+    private function createNonceStr($length = 16) {
+        $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        $str = "";
+        for ($i = 0; $i < $length; $i++) {
+            $str .= substr($chars, mt_rand(0, strlen($chars) - 1), 1);
+        }
+        return $str;
+    }
+    public function getSignPackage() {
+        $jsapiTicket = $this->get_js_api_ticket();
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+        $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        $timestamp = time();
+        $nonceStr = $this->createNonceStr();
+        // 这里参数的顺序要按照 key 值 ASCII 码升序排序
+        $string = "jsapi_ticket=$jsapiTicket&noncestr=$nonceStr&timestamp=$timestamp&url=$url";
+        $signature = sha1($string);
+        $signPackage = array(
+            "appId"     => WX_APPID,
+            "nonceStr"  => $nonceStr,
+            "timestamp" => $timestamp,
+            "url"       => $url,
+            "signature" => $signature,
+            "rawString" => $string
+        );
+        return $signPackage;
+    }
     public function create_qrcode_by_sceneid($sceneId) {
         if (!empty($sceneId)) {
             $accessToken = $this->get_base_access_token();

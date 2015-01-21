@@ -626,6 +626,9 @@ class CategoriesController extends AppController {
                 }
                 Cache::delete($key);
             }
+            $this->loadModel('WxOauth');
+            $signPackage = $this->WxOauth->getSignPackage();
+            $this->set('signPackage', $signPackage);
             $this->set('nickname', $nickname);
         }
 
