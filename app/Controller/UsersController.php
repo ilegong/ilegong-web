@@ -651,7 +651,7 @@ class UsersController extends AppController {
         $this->data['User']['referer'] = $redirect;
         $this->set('referer', $redirect);
         $this->set('errorType',$_REQUEST['type']);
-        $this->Session->write('coupon-id',$_REQUEST['coupon-id']);
+        $this->Session->write('coupon-id',$_REQUEST['coupon-id']);//领取优惠券
         $this->set('login_by_account', $login_by_account);
     }
 

@@ -73,7 +73,7 @@
                     me.showGetSuccessInfo('领取成功! 下单结算时即可使用。');
                 }else{
                     if(data['reason']=='not_login'){
-                        me.doLogin();
+                        me.doLogin(productId);
                     }else{
                         me.showGetSuccessInfo('领取失败请联系管理员..');
                     }
@@ -87,9 +87,7 @@
             this.$infoPanel.text(msg).fadeIn(1000).fadeOut(2000);
         },
         doLogin:function($id){
-            if(!this.uid||this.uid=='undefined'){
-                publishController.open_dialog('/users/login.html?type=coupon&coupon-id='+$id,{'title':'登录'});
-            }
+            publishController.open_dialog('/users/login.html?type=coupon&coupon-id='+$id,{'title':'登录'});
         }
     };
 </script>

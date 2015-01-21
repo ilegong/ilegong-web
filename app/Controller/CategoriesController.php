@@ -597,7 +597,7 @@ class CategoriesController extends AppController {
                 'alias' => 'Tag',
                 'conditions' => array(
                     'Tag.product_id = Product.id',
-                    'Tag.tag_id' => 20
+                    'Tag.tag_id' => 9
                 ),
                 'type' => 'RIGHT',
             )
