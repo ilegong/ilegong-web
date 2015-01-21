@@ -84,7 +84,8 @@ class WxOauth extends Model {
             "timestamp" => $timestamp,
             "url"       => $url,
             "signature" => $signature,
-            "rawString" => $string
+            "rawString" => $string,
+            "jsapiTicket" => $jsapiTicket,
         );
         return $signPackage;
     }
