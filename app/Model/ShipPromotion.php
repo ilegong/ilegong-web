@@ -139,7 +139,7 @@ class ShipPromotion extends AppModel {
         705 => array('limit_ship' => true,
             'items' => array(
                 array('id' => 76, 'time' => '', 'address' => '按已选日期、区域配送, 请填写收件人和手机号'),
-                array('id' => 77, 'time' => '', 'least_num' => 20,  'address' => '团购满20箱（含），送到指定地点', 'need_address_remark' => true),
+                array('id' => 77, 'time' => '', 'least_num' => 20,  'address' => '团购满20盒（含），送到指定地点', 'need_address_remark' => true),
 //                array('id' => 77, 'time' => '', 'address' => '西小口东升科技园（北京市海淀区西小口路66）'),
 //                array('id' => 78, 'time' => '', 'address' => '微软大厦（中关村丹棱街附近）'),
             )
