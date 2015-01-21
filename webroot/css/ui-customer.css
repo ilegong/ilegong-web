@@ -746,7 +746,7 @@ body.modal-open{margin-right: 0px}
 .product_details ul li.tb_btn_basket a{ background-color:#EC4E4C; color:#ffffff; font-weight:bold;}
 .product_details ul li.tb_btn_basket a:hover{ background-color:#db2321;}
 .product_details ul.slide{position:fixed; top:0; width:798px; background-color:#FFF; z-index:2;}
-.descrip{ border:1px #dddddd solid; padding:0px; line-height:28px; font-size:14px; color:#333333;}
+.descrip{ border:1px #dddddd solid; padding:20px; padding-top:0px; line-height:28px; font-size:14px; color:#333333;}
 .details_nav{border-bottom: 1px solid #ccc;background-color: #fff;position: fixed;top: 0;left: 0;right: 0;height:41px;z-index: 99;-webkit-box-shadow: rgba(0,0,0,.2) 0 1px 5px 0;-moz-box-shadow: rgba(0,0,0,.2) 0 1px 5px 0;box-shadow: rgba(0,0,0,.2) 0 1px 5px 0; z-index:1;overflow: hidden}
 .products_intro{ padding:15px 0;}
 /*规格*/
