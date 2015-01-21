@@ -612,18 +612,23 @@ class CategoriesController extends AppController {
                 'fields' => Product::PRODUCT_PUBLIC_FIELDS,
                )
         );
-
         $uid = $this->currentUser['id'];
-        $key = key_cache_sub($uid,'spring');
-        $cache_pid = Cache::read($key);
-        if(!empty($cache_pid)){
-            $cM = ClassRegistry::init('CouponItem');
-            $got = $cM->add_spring_festival_coupon($this->currentUser['id'], $cache_pid);
-            if($got){
-                $this->set('lingqu',true);
+        if($this->is_weixin()){
+            $this->loadModel('User');
+            $nickname =$this->User->findNicknamesOfUid($uid);
+            $key = key_cache_sub($uid,'spring');
+            $cache_pid = Cache::read($key);
+            if(!empty($cache_pid)){
+                $cM = ClassRegistry::init('CouponItem');
+                $got = $cM->add_spring_festival_coupon($this->currentUser['id'], $cache_pid);
+                if($got){
+                    $this->set('lingqu',true);
+                }
+                Cache::delete($key);
             }
-            Cache::delete($key);
+            $this->set('nickname', $nickname);
         }
+
         $brandIds = Hash::extract($list,'{n}.Product.brand_id');
         $productList = Hash::extract($list,'{n}.Product');
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
@@ -648,7 +653,9 @@ class CategoriesController extends AppController {
         $uid = $this->currentUser['id'];
         if($_GET['pid'] && $uid){
             $pid = intval($_GET['pid']);
-            if($this->is_weixin()){
+            $OauthbindM = ClassRegistry::init('Oauthbind');
+            $oauth = $OauthbindM->findWxServiceBindByUid($uid);
+            if(!empty($oauth)){
                 $this->loadModel('WxOauth');
                 if(!$this->WxOauth->is_subscribe_wx_service($uid)){
                     echo json_encode(array('success'=>false, 'reason' => 'need_sub'));
