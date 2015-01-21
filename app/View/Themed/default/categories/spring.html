@@ -47,8 +47,7 @@
             this.uid = $('#hold-user-id',this.$el).val();
             this.pid = $('#hold-product-id',this.$el).val();
             if(this.pid&&this.pid!=="undefined"){
-                var pe = $('a[name="to_get_coupon"]',this.$el)
-                console.log(pe);
+                var pe = $('a[name="to_get_coupon"]',this.$el);
                 this.addCoupon(this.pid,pe);
             }
             this.getCoupon();
