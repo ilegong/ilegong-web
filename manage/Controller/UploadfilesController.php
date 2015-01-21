@@ -304,7 +304,7 @@ class UploadfilesController extends AppController {
 		// 删除文件
 		//$this->SwfUpload->deletefile ( $file ['Uploadfile'] ['fspath'] );
 		// 从数据库删除
-		//parent::admin_delete($id);
+		parent::admin_delete($id);
 	}
 	
 	function get($id) {
