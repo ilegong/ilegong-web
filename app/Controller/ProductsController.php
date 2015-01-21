@@ -160,13 +160,7 @@ class ProductsController extends AppController{
         $currUid = $this->currentUser['id'];
         if (!empty($special) && $special['special']['special_price'] >= 0) {
 
-            if ($special['special']['show_day'] != '0000-00-00') {
-                $day_start = $special['special']['show_day'] . ' 00:00:00';
-                $day_end = $special['special']['show_day'] . ' 23:59:59';
-                $special_rg = array('start' => $day_start, 'end' => $day_end);
-            } else {
-                $special_rg = array('start' => $special['start'], 'end' => $special['end']);
-            }
+            $special_rg = range_by_special($special);
 
             //TODO: check time (current already checked)
             //CHECK time limit!!!!

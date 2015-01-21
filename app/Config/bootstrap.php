@@ -272,7 +272,7 @@ function calculate_price($pid, $price, $currUid) {
     }
 
     if (!empty($special)) {
-        $special_rg = array('start' => $special['start'], 'end' => $special['end']);
+        $special_rg = range_by_special($special);
         if ($special['special']['special_price'] >= 0) {
             list($afford_for_curr_user, $limit_per_user, $total_left) =
                 calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
@@ -887,7 +887,7 @@ function calculate_afford($pid, $currUid, $total_limit, $limit_per_user, $range 
     $cartModel = ClassRegistry::init('Cart');
     if ($total_limit != 0 || $limit_per_user != 0) {
         $soldCnt = total_sold($pid, $range, $cartModel);
-        if ($soldCnt > $total_limit) {
+        if ($total_limit != 0 && $soldCnt >= $total_limit) {
             $afford_for_curr_user = false;
         } else if ($limit_per_user > 0) {
             if ($currUid) {
@@ -926,9 +926,14 @@ function calculate_afford($pid, $currUid, $total_limit, $limit_per_user, $range 
                 $left_curr_user = $limit_per_user;
             }
         }
-        $total_left = $total_limit - $soldCnt;
-        if ($total_left < 0) {
-            $total_left = 0;
+
+        if ($total_limit == 0) {
+            $total_left = -1;
+        } else {
+            $total_left = $total_limit - $soldCnt;
+            if ($total_left < 0) {
+                $total_left = 0;
+            }
         }
     }
     return array($afford_for_curr_user, $left_curr_user, $total_left);
@@ -1083,4 +1088,21 @@ function createNewUserByWeixin($userInfo, $userModel) {
         return 0;
     }
     return $userModel->getLastInsertID();
+}
+
+
+/**
+ * @param $special
+ * @return array
+ */
+function range_by_special($special) {
+    if ($special['special']['show_day'] != '0000-00-00') {
+        $day_start = $special['special']['show_day'] . ' 00:00:00';
+        $day_end = $special['special']['show_day'] . ' 23:59:59';
+        $special_rg = array('start' => $day_start, 'end' => $day_end);
+        return $special_rg;
+    } else {
+        $special_rg = array('start' => $special['start'], 'end' => $special['end']);
+        return $special_rg;
+    }
 }
