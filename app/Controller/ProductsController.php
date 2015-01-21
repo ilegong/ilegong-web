@@ -153,6 +153,8 @@ class ProductsController extends AppController{
             }
         }
 
+        $this->log("view product:".$pid.", specialLists=".json_encode($specialLists));
+
         $use_special = false;
         $price = $this->viewdata['Product']['price'];
         $currUid = $this->currentUser['id'];
@@ -171,6 +173,8 @@ class ProductsController extends AppController{
             list($afford_for_curr_user, $left_cur_user, $total_left) =
                 calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
 
+            $this->log('view product afford: for_curr_user='.$afford_for_curr_user.', left_cur_user='.$left_cur_user.', total_left='.$total_left.', range='.json_encode($special_rg));
+
             $promo_name = $special['name'];
             $special_price = $special['special']['special_price'] / 100;
             App::uses('CakeNumber', 'Utility');
@@ -185,7 +189,7 @@ class ProductsController extends AppController{
                 $price = $special_price;
                 $use_special = true;
             } else {
-                $promo_desc .=  '('. ($left_cur_user == 0 ? '您已买过' : '已售完') . ')';
+                $promo_desc .=  '('. ($left_cur_user == 0 ? '您已买过' : '已抢完') . ')';
             }
             $this->set('special_desc', $promo_desc);
             $this->set('special_name', $promo_name);
