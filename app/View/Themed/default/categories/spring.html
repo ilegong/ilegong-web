@@ -75,12 +75,11 @@
                 }else{
                     if(data['reason']=='not_login'){
                         me.doLogin(productId);
+                    }else if(data['reason']=='unknown'){
+                        me.showGetSuccessInfo('领取失败，请联系客服..');
                     }else{
-                        me.showGetSuccessInfo('领取失败请联系管理员..');
+                        me.showGetSuccessInfo('您已经领取过该优惠券了..');
                     }
-                }
-                if(status==='403'){
-                    me.showGetSuccessInfo('领取失败请联系管理员..');
                 }
             });
         },
