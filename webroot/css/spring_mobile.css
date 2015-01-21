@@ -25,51 +25,24 @@ input{ outline:none;}
 .year_good_title{ font-size:1em; color:#333333; padding:0.5em; padding-bottom:0; text-align:left;}
 .year_good ul li dl dt{ color:#666666; line-height:2.2em; font-size:0.833em;}
 .year_good ul li dl dt img{ width:2em; height:2em; margin-right:0.417em;}
-.year_good ul li dl {
-    margin-top: 0.417em;
-    padding: 0 0.5em;
-    margin-bottom: 0;
-}
+.year_good ul li dl {margin-top: 0.417em;padding: 0 0.5em;margin-bottom: 0;}
 /*.year_good ul li dl{ margin-top:0.417em; padding:0 0.5em;}*/
 .year_good ul li .price{ font-size:0.833em; color:#ff483a; padding:0 0.5em 0.5em 0.5em; text-align:left;}
 .year_good ul li .price_year{ font-size:2em;}
 .year_good ul li .price_original{ color:#999999; text-decoration:line-through; font-size:0.0.833em;}
-
 /*.pay_usable_btn{ border:2px #ff483a solid; height:28px; line-height:28px; color:#ff483a; font-size:0.85em; text-align:center; display:block; text-decoration:none;}*/
-.pay_usable_btn {
-    border: 2px #ff483a solid;
-    height: 30px;
-    line-height: 26px;
-    color: #ff483a;
-    font-size: 0.85em;
-    text-align: center;
-    display: block;
-    text-decoration: none;
-}
+.pay_usable_btn {border: 2px #ff483a solid;height: 30px;line-height: 26px;color: #ff483a;font-size: 0.85em; text-align: center;display: block;text-decoration: none;}
 .ticket_usable_btn{ width:4.6em; height:30px; background-color:#dbfbd4; border:1px #87de76 dashed; display:block; color:#29ac0e; text-decoration:none; overflow:hidden;}
 .ticket_usable_btn .lingqu{ font-size:0.833em; text-align:center; line-height:1em; padding-top:0.25em; width:18px; height:2em; border-right:1px #87de76 dashed; float:left;}
 .ticket_usable_btn .quan span{ font-size:1.4em;}
 .ticket_usable_btn .quan{ text-align:center; float:left; font-size:0.8em; width:3.7em; line-height:28px;}
 .year_good ul li dl dd .disabled{ width:4.6em; height:30px; background-color:#eeeeee; border:1px #dddddd dashed; display:block; color:#999999; text-decoration:none;}
 .year_good ul li dl dd .disabled .lingqu{ font-size:0.833em; text-align:center; line-height:1em; width:18px; height:2em; border-right:1px #dddddd dashed; float:left;}
-
 /*领取成功提示*/
 .layer_lingqu{ width:16em; margin:0 auto; text-align:center; color:#ffffff; font-size:1em; line-height:2.2em; background-color:#505050; position:fixed; top:50%; left:50%; margin-left:-8em;-webkit-box-shadow:0 0 10px #777777;-moz-box-shadow:0 0 10px #777777;box-shadow:0 0 10px #777777;}
-
 /*关注朋友说*/
 .layer_guanzhu{ width:85%; margin:0 auto; text-align:center; color:#999999; font-size:1em; line-height:1.4em; padding:1em 0.5em; background-color:#ffffff; position:fixed; top:50%; left:50%; margin-left:-45%; margin-top:-10%; -webkit-box-shadow:0 0 15px #730513;-moz-box-shadow:0 0 15px #730513;box-shadow:0 0 15px #730513; text-align:center;}
 .guanzhu_title{ font-size:1.15em; color:#333333; padding-bottom:0.8em;}
 .layer_guanzhu a{ display:block; width:5em; height:2em; line-height:2em; margin:0 auto; margin-top:1em; font-size:1em; color:#ff483a; border:2px #ff483a solid; text-decoration:none; text-align:center;}
-
-.apple_share {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1030;
-    background-color: #000;
-}
-.apple_share.in {
-    opacity: .9;
-}
+.apple_share {position: fixed;top: 0; right: 0; bottom: 0; left: 0; z-index: 1030;background-color: #000;}
+.apple_share.in {opacity: .9;}
