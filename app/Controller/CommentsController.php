@@ -282,7 +282,7 @@ class CommentsController extends AppController {
                         foreach($orders as $o) {
                             $status = $o['Order']['status'];
                             if ($status != ORDER_STATUS_CANCEL
-                                && $status != ORDER_STATUS_WAITING_PAY
+//                                && $status != ORDER_STATUS_WAITING_PAY
                                 && $status != ORDER_STATUS_RETURN_MONEY
                                 ) {
                                 $has_valid++;
