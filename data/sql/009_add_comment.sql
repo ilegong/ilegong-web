@@ -44,3 +44,18 @@ VALUES
 	;
 
 
+
+--	http://www.tongshijia.com/products/20150121/man_xiang_san_yang_hei_zhu_rou_li_he.html   707 => 125, 124, 71
+--	http://www.tongshijia.com/products/20150113/tian_tian_mi_mi_guo_da_nian_li_he_zhuang.html#top      664 => 331
+--	http://www.tongshijia.com/products/20141112/teng_xun_huo_dong_qing_hai_hu_hua_fen.html      262 => 146, 160
+--
+--http://www.tongshijia.com/products/20150120/fan_er_nian_huo_li_he.html#top  703 => 381, 383, 384, 386
+--
+--
+--http://www.tongshijia.com/products/20141230/a_lian_ma_ma_mi_ding_zhi_li_he.html#top （挪动）
+--
+--    http://www.tongshijia.com/products/20150109/gan_huo_li_he_gao_duan_nian_huo_1095g.html#top   (自己评论)
+--    http://www.tongshijia.com/products/20150113/tu_hao_jin_te_da_du_tou_hei_suan_li_he_nian_huo.html#top (自己评论)
+--
+--
+--    更新数字
