@@ -328,6 +328,18 @@ class ProductsController extends AppController{
         $this->Session->write('BrowsingHistory',$browsing_history);
 
 
+        $this->loadModel('ProductProductTag');
+        $nianhuo = $this->ProductProductTag->find('first', array(
+                'conditions' => array(
+                    'tag_id' => 20,
+                    'product_id' => $pid
+                ),
+            )
+        );
+        if (!empty($nianhuo)) {
+            $this->set('in_nianhuo', true);
+        }
+
         if ($pid == PRODUCT_ID_CAKE) {
             $this->set('cake_dates', cake_send_date());
         }

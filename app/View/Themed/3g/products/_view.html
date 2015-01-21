@@ -41,7 +41,7 @@
             </span>
             </li>
         </ul>
-        {{if !empty($special_name)}}
+        {{if !empty($special_name) || $in_nianhuo}}
         <ul class="sales clearfix list-unstyled">
             <li>
                 <span class="gray title mr12" style="float:left;">促销:</span>
@@ -50,6 +50,15 @@
             <span>{{$special_desc}}</span>
         </span>
             </li>
+            {{if $in_nianhuo}}
+            <li>
+                <span class="gray title mr12" style="float:left;">促销:</span>
+                <span class="sales_c" style="display: block;overflow: hidden;">
+                    <a href="/categories/spring.html"><div class="quota_btn radius10 fl">年货专场大优惠</div></a>
+                    <span>{{$special_desc}}</span>
+                </span>
+            </li>
+            {{/if}}
         </ul>
         {{/if}}
 
