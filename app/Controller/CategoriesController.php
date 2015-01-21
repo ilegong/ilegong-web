@@ -619,7 +619,7 @@ class CategoriesController extends AppController {
                )
         );
         $uid = $this->currentUser['id'];
-
+        //if($this->is_weixin()){
             $this->loadModel('User');
             $nickname =$this->User->findNicknamesOfUid($uid);
             $key = key_cache_sub($uid,'spring');
@@ -636,7 +636,7 @@ class CategoriesController extends AppController {
             $signPackage = $this->WxOauth->getSignPackage();
             $this->set('signPackage', $signPackage);
             $this->set('nickname', $nickname);
-
+        //}
 
         $brandIds = Hash::extract($list,'{n}.Product.brand_id');
         $productList = Hash::extract($list,'{n}.Product');
