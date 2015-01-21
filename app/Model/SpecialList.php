@@ -40,5 +40,19 @@ class SpecialList extends AppModel {
 
         return false;
     }
+
+    public function find_daily_special($day = null) {
+        if ($day == null) {
+            $day = date(FORMAT_DATE, mktime());
+        }
+
+        $psM = ClassRegistry::init('ProductSpecial');
+
+        $specials = $psM->find('first', array(
+            'conditions' => array('show_day' => $day, 'special_id' => SPEICAL_LIST_DAILY_ID, 'published' => PUBLISH_YES),
+        ));
+
+        return $specials;
+    }
 }
 ?>

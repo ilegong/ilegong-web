@@ -55,10 +55,16 @@
 </div>
 {{/if}}
 <div class="index_pt">
-    <div class="price"><span>¥</span><strong>12.00</strong>起</div>
+    {{if empty($daily_special)}}<div class="price"><span>¥</span><strong>12.00</strong>起</div>{{/if}}
     <ul class="clearfix" style="list-style-type: none">
-        <li class="fl"><a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $spec_tags[13]['slug'] ))}}" style="display:block;"><img src="{{$this->Html->assetUrl('/img/mobile/index/p1.jpg');}}" /></a></li>
-        <li class="fl"><a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $spec_tags[14]['slug'] ))}}"><img src="{{$this->Html->assetUrl('/img/mobile/index/p2.jpg');}}" /></a><br />
+        <li class="fl">
+            {{if $daily_special}}
+            <a href="{{product_link($daily_special['ProductSpecial']['product_id'], '/')}}" style="display:block;"><img src="{{'http://s.tongshijia.com/img/dailyspecials/'.$daily_special['ProductSpecial']['show_day'].'.jpg';}}" /></a>
+            {{else}}
+            <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $spec_tags[13]['slug'] ))}}" style="display:block;"><img src="{{$this->Html->assetUrl('/img/mobile/index/p1.jpg');}}" /></a>
+            {{/if}}
+        </li>
+        <li class="fl"><a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $mobile_tag[5]['slug'] ))}}"><img src="{{$this->Html->assetUrl('/img/mobile/index/p2.jpg');}}" /></a><br />
             <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'specCategoryList', $spec_tags[15]['slug'] ))}}"><img src="{{$this->Html->assetUrl('/img/mobile/index/p3.jpg');}}" /></a></li>
     </ul>
 </div>

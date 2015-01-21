@@ -20,6 +20,8 @@ const SCORE_ORDER_DONE = 3;
 
 const SPEICAL_LIST_DAILY_ID = 4;
 
+const ASSET_SXA_DOMAIN = 's.tongshijia.com';
+
 App::build(array(
 	'plugins' => array(COMMON_PATH.'Plugin'.DS, APP_PATH.'Plugin'.DS, ),
 	//'views' => array(COMMON_PATH.'View'.DS),

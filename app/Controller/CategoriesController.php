@@ -224,6 +224,12 @@ class CategoriesController extends AppController {
             }
         }
 
+        $this->loadModel('SpecialList');
+        $daily_special = $this->SpecialList->find_daily_special();
+        if (!empty($daily_special)) {
+            $this->set('daily_special', $daily_special);
+        }
+
         $uid = $this->currentUser['id'];
         if (!empty($uid)) {
             $this->loadModel('Shichituan');

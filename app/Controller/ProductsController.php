@@ -180,7 +180,7 @@ class ProductsController extends AppController{
             App::uses('CakeNumber', 'Utility');
             $promo_desc = '￥'.CakeNumber::precision($special_price, 2);
             if ($special['special']['limit_total'] > 0) {
-                $promo_desc .= ' 共限'.$special['special']['limit_total'].'件';
+                $promo_desc .= ' 限'.$special['special']['limit_total'].'件';
             }
             if ($special['special']['limit_per_user'] > 0) {
                 $promo_desc .= ' 每人限'.$special['special']['limit_per_user'].'件';
