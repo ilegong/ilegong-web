@@ -79,6 +79,8 @@ img{ border:0;}
 .ticket_usable_btn .quan span {
     font-size: 30px;
 }
+.goodtopbg ul li dl dt a,.goodtopbg ul li dl dt a:hover{ color:#666666; text-decoration:none;}
+.goodtopbg ul li h1 a,.goodtopbg ul li h1 a:hover{ color:#333333; font-weight:bold; text-decoration:none;}
 .goodtopbg ul li dl dd .disabled{ width:125px; height:45px; background-color:#eeeeee; border:1px #dddddd dashed; display:block; color:#999999; text-decoration:none;}
 .goodtopbg ul li dl dd .disabled .lingqu{ font-size:16px; text-align:center; line-height:18px; padding-top:5px; width:35px; height:40px; border-right:1px #dddddd dashed; float:left;}
 
