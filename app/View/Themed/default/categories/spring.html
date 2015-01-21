@@ -10,7 +10,7 @@
         <ul class="clearfix" style="width: 80%">
             <?php foreach($data_list as $index=>$product){ ?>
                 <li {{if $index%2==0}}class="fl"{{else}}class="fr"{{/if}}>
-                    <a target="_blank" href="/products/{{date('Ymd',strtotime($product['created']))}}/{{$product['slug']}}.html"><img style="width: 290px;height: 218px" src="{{$this->Html->url(small_thumb_link($product['coverimg']))}}" /></a><br />
+                    <a target="_blank" href="/products/{{date('Ymd',strtotime($product['created']))}}/{{$product['slug']}}.html"><img style="width: 290px;height: 218px" src="{{$this->Html->url(medium_thumb_link($product['coverimg']))}}" /></a><br />
                     <dl class="clearfix">
                         <dt class="fl"><a target="_blank" href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$product['brand_id']]['Brand']['created'])).'/'.$brands[$product['brand_id']]['Brand']['slug'].'.html')}}"><img class="radius5" style="width: 40px;height: 40px" src="{{$this->Html->assetUrl(small_thumb_link($brands[$product['brand_id']]['Brand']['coverimg']))}}" /></a></dt>
                         <dt class="fl"><a target="_blank" href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$product['brand_id']]['Brand']['created'])).'/'.$brands[$product['brand_id']]['Brand']['slug'].'.html')}}">{{$brands[$product['brand_id']]['Brand']['name']}}</a></dt>
@@ -67,7 +67,7 @@
         },
         addCoupon:function(productId,element){
             var me=this;
-            $.getJSON('/users/get_spring_coupon/'+productId,function(data,status){
+            $.getJSON('/users/get_spring_coupon/'+productId+'.json?random='+Math.random(),function(data,status){
                 if(data['success']){
                     element.addClass('disabled');
                     $('div.lingqu',element).html('已<br />领');
