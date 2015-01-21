@@ -172,9 +172,43 @@ class ApiOrdersController extends AppController {
                 $this->set('recommends', $recommends);
                 $this->set('brand', $brand);
 
+                $specialListM = ClassRegistry::init('SpecialList');
+                $specialLists = $specialListM->has_special_list($pid);
+                if (!empty($specialLists)) {
+                    foreach ($specialLists as $specialList) {
+                        if ($specialList['type'] == 1) {
+                            $special = $specialList;
+                            break;
+                        }
+                    }
+                }
+                $currUid = $this->currentUser['id'];
+                if (!empty($special) && $special['special']['special_price'] >= 0) {
+                    $special_rg = array('start' => $special['start'], 'end' => $special['end']);
+                    //CHECK time limit!!!!
+                    list($afford_for_curr_user, $left_cur_user, $total_left) =
+                        calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
+                    $promo_name = $special['name'];
+                    $special_price = $special['special']['special_price'] / 100;
+                    App::uses('CakeNumber', 'Utility');
+                    $promo_desc = '￥'.CakeNumber::precision($special_price, 2);
+                    if ($special['special']['limit_total'] > 0) {
+                        $promo_desc .= ' 共限'.$special['special']['limit_total'].'件';
+                    }
+                    if ($special['special']['limit_per_user'] > 0) {
+                        $promo_desc .= ' 每人限'.$special['special']['limit_per_user'].'件';
+                    }
+                    if ($afford_for_curr_user) {
+                        ;
+                    } else {
+                        $promo_desc .=  '('. ($left_cur_user == 0 ? '您已买过' : '已售完') . ')';
+                    }
+                    $special = array('special_desc' => $promo_desc, 'special_name'=>$promo_name, 'special_slug'=>$special['slug']);
+                    $this->set('special', $special);
+                }
             }
         }
-        $this->set('_serialize', array('product', 'recommends', 'brand'));
+        $this->set('_serialize', array('product', 'recommends', 'brand','special'));
     }
 
     public function product_content($pid) {
