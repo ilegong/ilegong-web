@@ -589,7 +589,7 @@ class CategoriesController extends AppController {
     public function spring(){
         $this->pageTitle="年货";
         $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1);
-        $conditions['Product' . '.recommend >'] = 0;
+        $conditions['Product' . '.recommend >='] = 0;
 
         $join_conditions = array(
             array(
