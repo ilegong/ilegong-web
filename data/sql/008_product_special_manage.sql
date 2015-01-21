@@ -15,7 +15,7 @@ VALUES ('id', 1, '编号', 'integer', 'ProductSpecial', 'zh_cn', '11', 28, 0, 1,
 ('show_day', 1, '优惠日', ' date', 'ProductSpecial', 'zh_cn', NULL, 23, 1, 1, NULL, NULL, NULL, NULL, 1, NULL, 0, NULL, NULL, 'equal', 'input', '0000-00-00', 1, NULL, '', NULL, NULL, '今日特价适用（0000-00-00是则不限制优惠日）', NULL),
 ('created', 1, '创建时间', 'datetime', 'ProductSpecial', 'zh_cn', NULL, 22, 0, 0, NULL, NULL, NULL, NULL, 1, NULL, 0, NULL, NULL, 'equal', 'datetime', NULL, 1, NULL, '', NULL, NULL, NULL, NULL),
 ('published', 1, '是否发布', 'boolean', 'ProductSpecial', 'zh_cn', '1', 21, 1, 1, NULL, NULL, NULL, NULL, 1, '0=>否\n1=>是', 0, NULL, NULL, 'equal', 'select', '1', 1, NULL, '', NULL, NULL, '', NULL),
-('limit_total', 1, '总份数限制', 'integer', 'ProductSpecial', 'zh_cn', '4', 19, 1, 1, NULL, NULL, NULL, NULL, 1, '', 0, NULL, NULL, 'equal', 'input', '-1', 1, NULL, '', NULL, NULL, '可选，-1则不限制', NULL),
+('limit_total', 1, '总份数限制', 'integer', 'ProductSpecial', 'zh_cn', '4', 19, 1, 1, NULL, NULL, NULL, NULL, 1, '', 0, NULL, NULL, 'equal', 'input', '0', 1, NULL, '', NULL, NULL, '可选，0则不限制', NULL),
 ('limit_per_user', 1, '每人限制', 'integer', 'ProductSpecial', 'zh_cn', '4', 18, 1,1, NULL, NULL, NULL, NULL, 1, '', 0, NULL, NULL, 'equal', 'input', '0', 1, NULL, NULL, NULL, NULL, '可选， 0则不限制', NULL),
 ('special_price', 1, '价格', 'integer', 'ProductSpecial', 'zh_cn', '11', 24, 1, 1, NULL, NULL, NULL, NULL, 1, '', 0, NULL, NULL, 'equal', 'input', '-1', 1, NULL, ' ', NULL, NULL, '单位为分！为-1则使用默认价格, 不会在产品详情页显示优惠', NULL),
 ('recommend',1,'排序优先级','integer','ProductSpecial','zh_cn','11',25,1,1,NULL,NULL,NULL,NULL,1,'',0,NULL,NULL,'equal','',1,1,NULL,NULL,NULL,NULL,'排序优先级，值越大的排前面',NULL);
