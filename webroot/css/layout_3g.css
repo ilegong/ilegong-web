@@ -486,3 +486,19 @@ a:hover, a:focus {
 .comment_bingbtn{ width:5.2em; display:block; text-decoration:none; font-size:0.9em; background-color:#ffffff; text-align:center; padding:0.2em 0; border:1px #dddddd solid; color:#999999;}
 .comment_nobingbtn{ width:5.2em; display:block; text-decoration:none; font-size:0.9em; background-color:#ffa531; text-align:center; padding:0.2em 0; border:1px #ffa531 solid; color:#ffffff;}
 .comment_tanchubg_layer {font-size:14px}
+
+.badge{
+    padding: 0 4px;
+    height: 1em;
+    line-height: 1em;
+    border-radius: 0.5em;
+    text-align: center;
+    color: #FFF;
+    font-family: Arial;
+    box-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+    background: #ff483a;
+    position: absolute;
+    top: -10px;
+    right: -5px;
+    z-index: 3;
+}

@@ -370,7 +370,7 @@ var publishController = {
 			$dialog.dialogid = url.replace(/\/|\.|:|,|\?|=|&|%/g,'_')+'-ajax—action';
 
 			if($('#'+$dialog.dialogid).size()<1){
-				$('<div  class="modal fade" id="'+$dialog.dialogid+'"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3 id="myModalLabel">'+options.title+'</h3></div><div class="modal-body"></div></div></div></div>').appendTo('body');
+				$('<div  class="modal fade" id="'+$dialog.dialogid+'"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h3 id="myModalLabel">'+options.title+'</h3></div><div class="modal-body" style="padding-top: 0;"></div></div></div></div>').appendTo('body');
 
 				var obj = $('#'+$dialog.dialogid).find('.modal-body').load(url,{},function(){
 					$('.nav-tabs a','#'+$dialog.dialogid).click(function (e) {

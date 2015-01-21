@@ -197,10 +197,11 @@ class CategoriesController extends AppController {
         $specTags = Hash::combine($specTags,'{n}.ProductTag.id','{n}.ProductTag');
         $this->set('spec_tags',$specTags);
         $bannerItems = array(
-            array('img' => "/img/banner/banner_cao_mei_cai_zhai.jpg", 'url' => "/products/20150119/xing_shou_xiu_cao_mei_yuan_cai_zhai_2jin.html", 'id' => 697),
+            array('img' => "/img/banner/spring-weixin.jpg", 'url' => "/categories/spring"),
             $zutuangous[mt_rand(0, 1000) % count($zutuangous)],
+            array('img' => "/img/banner/banner_cao_mei_cai_zhai.jpg", 'url' => "/products/20150119/xing_shou_xiu_cao_mei_yuan_cai_zhai_2jin.html", 'id' => 697),
             array('img' => "/img/banner/banner_shibin.jpg?v2", 'url' => "/products/20141204/fu_ping_te_ji_jian_shi_bing.html", 'id' => 331),
-            array('img' => "/img/banner/banner_gonglianzi.jpg", 'url' => "/products/20141229/jiang_xi_gong_lian_zi.html", 'id' => 560),
+            //array('img' => "/img/banner/banner_gonglianzi.jpg", 'url' => "/products/20141229/jiang_xi_gong_lian_zi.html", 'id' => 560),
             //array('img' => "/img/banner/banner_yongxing_btc.jpg?v1", 'url' => "/b/qian_yang_wan_cheng.html", 'id' => 365),
 //            array('img' => "/img/banner/banner_songzi.jpg?v2", 'url' => "/products/20141117/dong_bei_hong_song_zi_1jin_zhuang.html", 'id' => 266),
 //            array('img' => "/img/banner/banner_dami.jpg?v1",'url' =>  "/products/20141101/wu_chang_dao_hua_xiang_ti_qian_yu_shou_500jin_zhi_xian_bei_jing.html", 'id' => 231),
