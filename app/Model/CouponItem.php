@@ -151,10 +151,11 @@ class CouponItem extends AppModel {
                 return true;
             } else {
                 $this->log("already got for ".$userId." of ". $couponType);
+                return false;
             }
         }
 
-        return false;
+        throw new CakeException("unknown coupon type ".$couponType);
     }
 
     public function addCoupon($recUserId, $couponType, $operator = -1, $source = 'unknown') {
