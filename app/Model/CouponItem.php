@@ -65,7 +65,10 @@ class CouponItem extends AppModel {
                             || $brand_total_price >= $coupon['Coupon']['least_price']) {
                             $availCoupons[$brandItem->id][] = $coupon;
                         }
-                    } else if (!empty($coupon_pids) && array_search($productItem->pid, $coupon_pids) !== false) {
+                    } else if (!empty($coupon_pids) &&
+                        ( $coupon_pids == $productItem->pid  ||
+                        (is_array($coupon_pids) && array_search($productItem->pid, $coupon_pids) !== false)
+                    )) {
                         if ($coupon['Coupon']['type'] != COUPON_TYPE_TYPE_MAN_JIAN
                             || $brand_total_price >= $coupon['Coupon']['least_price']) {
                             $availCoupons[$brandItem->id][] = $coupon;

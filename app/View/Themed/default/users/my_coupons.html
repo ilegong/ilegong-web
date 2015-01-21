@@ -22,6 +22,7 @@
         {{if $coupon['CouponItem']['status'] == COUPONITEM_STATUS_TO_USE && !$expired }}
         <div class="btn-sm btn-warning">
             {{if $coupon['Coupon']['id']  == COUPON_TYPE_RICE_1KG }}去<a style="color: #ffffff;text-decoration: underline; padding-left: 0.5em; padding-right: 0.5em" href="/categories/special_list/special_for_rice_coupons.html">大米劵特惠专场</a>选择购买商品
+            {{elseif intval($coupon['Coupon']['product_list']) > 0 }}<a style="color: #ffffff; text-decoration: underline;text-decoration: underline; padding-left: 0.5em; padding-right: 0.5em" href="{{product_link($coupon['Coupon']['product_list'], '/')}}">查看商品</a>
             {{elseif $coupon['Coupon']['brand_id'] && empty($coupon['Coupon']['product_list'])}} 去<a style="color: #ffffff;text-decoration: underline; padding-left: 0.5em; padding-right: 0.5em" href="{{brand_link($coupon['Coupon']['brand_id'], array('show_products' => 1))}}">专店</a>选购
             {{elseif !empty($coupon['Coupon']['brand_id'])}}去<a style="color: #ffffff; text-decoration: underline;text-decoration: underline; padding-left: 0.5em; padding-right: 0.5em" href="{{brand_link($coupon['Coupon']['brand_id'])}}">专店</a>选购
             {{else}}在<a style="color: #ffffff; text-decoration: underline;text-decoration: underline; padding-left: 0.5em; padding-right: 0.5em" href="/">朋友说全站</a>购物
