@@ -640,7 +640,6 @@ class CategoriesController extends AppController {
         $uid = $this->Session->read('Auth.User.id');
         $this->set('uid',$uid);
         $temp_pid = $this->Session->read('coupon-id');
-        $this->Session->delete('coupon-id');
         $this->set('pid',$temp_pid);
     }
     public function mobile_get_spring_coupon(){
