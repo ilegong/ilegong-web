@@ -117,7 +117,7 @@ class ApiOrdersController extends AppController {
             $value = $product_spec[$cart['Cart']['product_id']];
             $spec_info = json_decode($value,true);
             $specId = $cart['Cart']['specId'];
-            $Carts[$num]['Cart'][] = array('spec' => $spec_info['map'][$specId]['name']);
+            $Carts[$num]['Cart']['spec'] =  $spec_info['map'][$specId]['name'];
             $num ++;
         }
         $expired_pids = array();
