@@ -184,7 +184,7 @@ class WeixinController extends AppController {
                     if ($from == FROM_WX_SERVICE) {
                         $ticket = $req['Ticket'];
                         if ($ticket == SCAN_TICKET_CAOMEI) {
-                            echo $this->newTextMsg($user, $me, '点击<a href="http://"'.$host3g.'/products/20150120/you_ji_hong_yan_cao_mei_tuan_gou.html">查看草莓详情</a>');
+                            echo $this->newTextMsg($user, $me, '点击<a href="http://'.$host3g.'/products/20150120/you_ji_hong_yan_cao_mei_tuan_gou.html">查看草莓详情</a>');
                             return;
                         }
                     }
