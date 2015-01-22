@@ -111,7 +111,13 @@ class ApiOrdersController extends AppController {
             'conditions'=>array(
                 'id' => $product_ids
             )));
-
+        $product_spec = Hash::combine($products, '{n}.Product.id', '{n}.Product.specs');
+        foreach ($Carts as $cart){
+            $value = $product_spec[$cart['product_id']];
+            $spec_info = json_decode($value,true);
+            $specId = $cart['specId'];
+            $cart[] = array('spec' => $spec_info['map'][$specId]['name']);
+        }
         $expired_pids = array();
         foreach($product_ids as $pid) {
             if (empty($products[$pid])
@@ -124,7 +130,7 @@ class ApiOrdersController extends AppController {
         $totalCents = $order['Order']['total_all_price'] * 100;
         $no_more_money = $totalCents < 1 && $totalCents >= 0;
         $store = $this->findBrands($order['Order']['brand_id']);
-
+        $products = Hash::combine($products, '{n}.Product.id', '{n}.Product.slug');
         $this->set(compact('no_more_money', 'order_id', 'order', 'expired_pids'));
 
         $this->set('ship_type', ShipAddress::ship_type_list());
