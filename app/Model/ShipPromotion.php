@@ -138,8 +138,10 @@ class ShipPromotion extends AppModel {
 
         705 => array('limit_ship' => true,
             'items' => array(
-                array('id' => 76, 'time' => '', 'address' => '按已选日期、区域配送, 请填写收件人和手机号'),
-                array('id' => 77, 'time' => '', 'least_num' => 20,  'address' => '团购满20盒（含），送到指定地点', 'need_address_remark' => true),
+                array('id' => 76, 'time' => '', 'address' => '西二旗辉煌国际大厦B1层超市发门口  徐庆  18686504547'),
+                array('id' => 77, 'time' => '', 'address' => ' 海淀西小口路中关村东升科技园果仕芙 张经理 57112013'),
+                array('id' => 78, 'time' => '', 'address' => ' 海淀清河小营电科院旁边超市发 荣浩  18911692346'),
+                array('id' => 79, 'time' => '', 'least_num' => 20,  'address' => '团购满20盒（含），送到指定地点(限北京城区)', 'need_address_remark' => true),
 //                array('id' => 77, 'time' => '', 'address' => '西小口东升科技园（北京市海淀区西小口路66）'),
 //                array('id' => 78, 'time' => '', 'address' => '微软大厦（中关村丹棱街附近）'),
             )
