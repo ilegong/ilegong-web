@@ -107,7 +107,7 @@ class ApiOrdersController extends AppController {
         $product_ids = Hash::extract($Carts, '{n}.Cart.product_id');
         $this->loadModel('Product');
         $products = $this->Product->find('all', array(
-            'fields' => array('id', 'created', 'slug', 'published', 'deleted'),
+            'fields' => array('id', 'created', 'slug', 'published', 'deleted','specs'),
             'conditions'=>array(
                 'id' => $product_ids
             )));
