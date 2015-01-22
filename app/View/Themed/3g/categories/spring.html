@@ -16,7 +16,7 @@
                 <dt class="fl"><a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html')}}"><img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brands[$item['brand_id']]['Brand']['coverimg']))}}" /></a></dt>
                 <dt class="fl">{{usubstr($brands[$item['brand_id']]['Brand']['name'],0, 7,'')}}</dt>
             </dl>
-            <a href="/products/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html"><div class="year_good_title">{{usubstr($item['name'],0, 10,'')}}</div></a>
+            <a href="/products/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html"><div class="year_good_title">{{usubstr($item['name'],0, 15,'')}}</div></a>
             <div class="price">¥<span class="price_year">{{$this->Number->precision($item['price'], 2)}}</span>&nbsp;&nbsp;<span class="price_original">¥{{$this->Number->precision($item['original_price'], 2)}}</span></div>
             <dl class="clearfix">
                 <dd class="fl">
@@ -38,7 +38,7 @@
                 <dt class="fl"><a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['Brand']['created'])).'/'.$brands[$item2['brand_id']]['Brand']['slug'].'.html')}}"><img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brands[$item2['brand_id']]['Brand']['coverimg']))}}" /></a></dt>
                 <dt class="fl">{{usubstr($brands[$item2['brand_id']]['Brand']['name'],0, 7,'')}}</dt>
             </dl>
-            <a href="/products/{{date('Ymd',strtotime($item2['created']))}}/{{$item2['slug']}}.html"><div class="year_good_title">{{usubstr($item2['name'],0, 10,'')}}</div></a>
+            <a href="/products/{{date('Ymd',strtotime($item2['created']))}}/{{$item2['slug']}}.html"><div class="year_good_title">{{usubstr($item2['name'],0, 15,'')}}</div></a>
             <div class="price">¥<span class="price_year">{{$this->Number->precision($item2['price'], 2)}}</span>&nbsp;&nbsp;<span class="price_original">¥{{$this->Number->precision($item2['original_price'], 2)}}</span></div>
             <dl>
                 <dd class="fl">
@@ -65,7 +65,7 @@
                 <dt class="fl"><a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html')}}"><img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brands[$item['brand_id']]['Brand']['coverimg']))}}" /></a></dt>
                 <dt class="fl">{{usubstr($brands[$item['brand_id']]['Brand']['name'],0, 7,'')}}</dt>
             </dl>
-            <a href="/products/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html"><div class="year_good_title">{{usubstr($item['name'],0, 10,'')}}</div></a>
+            <a href="/products/{{date('Ymd',strtotime($item['created']))}}/{{$item['slug']}}.html"><div class="year_good_title">{{usubstr($item['name'],0, 15,'')}}</div></a>
             <div class="price">¥<span class="price_year">{{$this->Number->precision($item['price'], 2)}}</span>&nbsp;&nbsp;<span class="price_original">¥{{$this->Number->precision($item['original_price'], 2)}}</span></div>
             <dl class="clearfix">
                 <dd class="fl">
