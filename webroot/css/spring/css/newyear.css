@@ -45,9 +45,17 @@ img{ border:0;}
 }
 
 .goodtopbg ul li dl dt img{ margin-right:10px;}
-.goodtopbg ul li h1{ font-size:16px; color:#333333; padding-top:8px; text-align:left;}
+.goodtopbg ul li h1 {
+    font-size: 14px;
+    color: #333333;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    text-align: left;
+}
 .goodtopbg ul li .price{ font-size:14px; color:#ff483a; text-align:left;}
-.goodtopbg ul li .price_year{ font-size:30px;}
+.goodtopbg ul li .price_year {
+    font-size: 28px;
+}
 .goodtopbg ul li .price_original{ color:#999999; text-decoration:line-through;}
 .pay_usable_btn {
     border: 2px #ff483a solid;
@@ -86,7 +94,6 @@ img{ border:0;}
 
 /*领取成功提示*/
 .layer_lingqu{ width:275px; margin:0 auto; text-align:center; color:#666666; font-size:16px; line-height:45px; background-color:#ffffff; position:fixed; top:50%; left:50%; margin-left:-137px;-webkit-box-shadow:0 0 15px #730513;-moz-box-shadow:0 0 15px #730513;box-shadow:0 0 15px #730513;}
-
 
 
 
