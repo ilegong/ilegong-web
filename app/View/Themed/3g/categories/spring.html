@@ -21,7 +21,11 @@
             <dl class="clearfix">
                 <dd class="fl">
                     <a href="javascript:;" pid="{{$item['id']}}" class="ticket_usable_btn {{if $pid_coupon[$item['id']]}}disabled {{/if}} radius10">
+                        {{if $pid_coupon[$item['id']]}}
+                        <div class="lingqu">已<br />领</div>
+                        {{else}}
                         <div class="lingqu">领<br />取</div>
+                        {{/if}}
                         <div class="quan">¥<span>{{$spring_coupons[$item['id']]?$this->Number->precision($spring_coupons[$item['id']]/100, 0):0}}</span>券</div>
                     </a>
                 </dd>
@@ -39,7 +43,11 @@
             <dl>
                 <dd class="fl">
                     <a href="javascript:;" pid="{{$item2['id']}}" class="ticket_usable_btn {{if $pid_coupon[$item2['id']]}}disabled {{/if}} radius10">
+                        {{if $pid_coupon[$item2['id']]}}
+                        <div class="lingqu">已<br />领</div>
+                        {{else}}
                         <div class="lingqu">领<br />取</div>
+                        {{/if}}
                         <div class="quan">¥<span>{{$spring_coupons[$item['id']]?$this->Number->precision($spring_coupons[$item2['id']]/100, 0):0}}</span>券</div>
                     </a>
                 </dd>
@@ -62,7 +70,11 @@
             <dl class="clearfix">
                 <dd class="fl">
                     <a href="javascript:;" pid="{{$item['id']}}" class="ticket_usable_btn {{if $pid_coupon[$item['id']]}}disabled {{/if}} radius10">
+                        {{if $pid_coupon[$item['id']]}}
+                        <div class="lingqu">已<br />领</div>
+                        {{else}}
                         <div class="lingqu">领<br />取</div>
+                        {{/if}}
                         <div class="quan">¥<span>{{$spring_coupons[$item['id']]?$this->Number->precision($spring_coupons[$item['id']]/100, 0):0}}</span>券</div>
                     </a>
                 </dd>
@@ -98,8 +110,8 @@
         <a href="javascript:;" class="radius10" style="color:#666666; border-color:#dddddd;" data-dismiss="modal">关闭</a>
     </div>
 </div>
+{{if $is_weixin}}
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-
 <script>
     wx.config({
         debug: false,
@@ -131,6 +143,7 @@
 
     });
 </script>
+{{/if}}
 <script>
     $(document).ready(function(){
         $('.year_banner').on('click',function(){
@@ -149,6 +162,7 @@
                     var count = 2;
                     $.getJSON("/categories/mobile_get_spring_coupon?pid=" + pid, function(data) {
                         if(data.success){
+                            element.find('.lingqu').html('已<br />领');
                             element.addClass('disabled');
                             $('.layer_lingqu').fadeIn(1000).fadeOut(2000);
                             var countdown = setInterval(function(){

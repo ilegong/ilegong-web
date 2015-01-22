@@ -637,6 +637,7 @@ class CategoriesController extends AppController {
             $signPackage = $this->WxOauth->getSignPackage();
             $this->set('signPackage', $signPackage);
             $this->set('nickname', $nickname);
+            $this->set('is_weixin', true);
         }
 
         $brandIds = Hash::extract($list,'{n}.Product.brand_id');
