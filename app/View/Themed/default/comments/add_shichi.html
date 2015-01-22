@@ -120,7 +120,7 @@
         background-color: #e1e1e8;
     }
 #vote_table {text-align:left;margin-top:20px;width:100%;}
-#vote_table .col2 {display:inline-block;width:186px;}
+#vote_table .col2 {display:inline-block;width:170px;}
 #vote_table .vote-scroll {width:90%;height:16px;margin:auto;background-color:#EEE;border:1px solid #C4AFF6;}
 #vote_table .vote-scroll .comment1 {height:100%;display: inline-block;background-color:#8B58FF;}
 #vote_table .vote-scroll .comment2 {height:100%;display: inline-block;background-color:#8B58FF;}
@@ -317,7 +317,7 @@
             return;
          }
 
-           if ($.trim($('#Shichi_CommentBody').val()).length <= 50) {
+           if ($.trim($('#Shichi_CommentBody').val()).length <= 30) {
                utils.alert("评论内容不能少于30字");
                return;
            }
