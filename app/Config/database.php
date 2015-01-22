@@ -76,7 +76,7 @@ class DATABASE_CONFIG {
 				'host' => 'localhost',
 				'login' => '51daifan',	// jieli
 				'password' => 'PGdvFePBenE4TtBb',	//zFY8smWUKcaLrUs5	
-				'database' => '51daifan',
+				'database' => $_SERVER["dbname"]? $_SERVER["dbname"] : '51daifan',
 				'prefix' => 'cake_',
 				'encoding'=>'utf8', 
 			);		

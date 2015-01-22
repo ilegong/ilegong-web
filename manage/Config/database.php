@@ -60,10 +60,10 @@ class DATABASE_CONFIG {
 			$this->default = array(
 				'datasource' => 'Database/Mysql',
 				'persistent' => false,
-				'host' => 'localhost',
+				'host' => $_SERVER["dbhost"]? $_SERVER["dbhost"] : 'localhost',
 				'login' => '51daifan',	// jieli
 				'password' => 'PGdvFePBenE4TtBb',	//zFY8smWUKcaLrUs5	
-				'database' => '51daifan',
+                'database' => $_SERVER["dbname"]? $_SERVER["dbname"] : '51daifan',
 				'prefix' => 'cake_',
 				'encoding'=>'utf8', 
 			);		
