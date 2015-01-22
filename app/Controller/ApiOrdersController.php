@@ -123,6 +123,7 @@ class ApiOrdersController extends AppController {
 
         $totalCents = $order['Order']['total_all_price'] * 100;
         $no_more_money = $totalCents < 1 && $totalCents >= 0;
+        $store = $this->findBrands($order['Order']['brand_id']);
 
         $this->set(compact('no_more_money', 'order_id', 'order', 'expired_pids'));
 
@@ -130,8 +131,9 @@ class ApiOrdersController extends AppController {
         $this->set('order', $order);
         $this->set('carts',$Carts);
         $this->set('products', $products);
+        $this->set('store', array_slice($store[0]['Brand'],0,4));
 
-        $this->set('_serialize', array('order', 'carts', 'ship_type', 'expired_pids', 'no_more_money', 'products'));
+        $this->set('_serialize', array('order', 'carts', 'ship_type', 'expired_pids', 'no_more_money', 'products', 'store'));
     }
 
     function confirm_receive($order_id){
@@ -245,7 +247,7 @@ class ApiOrdersController extends AppController {
                 'fields' => array('id','name', 'coverimg', 'slug', 'price', 'original_price')
             ));
         }
-        $this->set('content', array('info' => $info['Brand'], 'products' => $products));
+        $this->set('content', array('info' => $info['0']['Brand'], 'products' => $products));
         $this->set('_serialize', array('content'));
     }
 
