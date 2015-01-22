@@ -23,7 +23,7 @@ input{ outline:none;}
 .year_good ul li{ background-color:#ffffff; padding-bottom:0.833em; width:48%;}
 .year_good ul li img{ width:100%;}
 /*.year_good_title{ font-size:1em; color:#333333; padding:0.5em; padding-bottom:0; text-align:left;}*/
-.year_good_title {font-size: 0.8em;color: #333333;padding: 0.5em;padding-bottom: 0;text-align: left;}
+.year_good_title {font-size: 0.9em;color: #333333;padding: 0.5em;padding-bottom: 0;text-align: left;}
 .year_good ul li dl dt{ color:#666666; line-height:2.2em; font-size:0.833em;}
 .year_good ul li dl dt img{ width:2em; height:2em; margin-right:0.417em;}
 .year_good ul li dl {margin-top: 0.417em;padding: 0 0.5em;margin-bottom: 0;}
