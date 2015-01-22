@@ -63,8 +63,8 @@
             },
             {
                 "type":"view",
-                "name":"狂点调戏",
-                "url":"http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd"
+                "name":"微商城",
+                "url":"http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=204634769&idx=1&sn=f5af9cff6e55b6a2835327431e47f2ff#rd"
             }
 
         ]
