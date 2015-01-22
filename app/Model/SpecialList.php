@@ -12,7 +12,7 @@ class SpecialList extends AppModel {
     public function has_special_list($pid) {
         $specialM = ClassRegistry::init('ProductSpecial');
         $specials = $specialM->find('all', array(
-            'conditions' => array('product_id' => $pid),
+            'conditions' => array('product_id' => $pid, 'published' => PUBLISH_YES, '(show_day = "0000-00-00" or show_day = "'. date(FORMAT_DATE) .'")'),
         ));
         if (!empty($specials)) {
             $special_ids = Hash::extract($specials, '{n}.ProductSpecial.special_id');
