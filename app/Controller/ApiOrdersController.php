@@ -112,11 +112,13 @@ class ApiOrdersController extends AppController {
                 'id' => $product_ids
             )));
         $product_spec = Hash::combine($products, '{n}.Product.id', '{n}.Product.specs');
+        $num = 0;
         foreach ($Carts as $cart){
-            $value = $product_spec[$cart['product_id']];
+            $value = $product_spec[$cart['Cart']['product_id']];
             $spec_info = json_decode($value,true);
-            $specId = $cart['specId'];
-            $cart[] = array('spec' => $spec_info['map'][$specId]['name']);
+            $specId = $cart['Cart']['specId'];
+            $Carts[$num]['Cart'][] = array('spec' => $spec_info['map'][$specId]['name']);
+            $num ++;
         }
         $expired_pids = array();
         foreach($product_ids as $pid) {
