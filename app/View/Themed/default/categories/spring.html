@@ -43,6 +43,7 @@
     PyshuoSpring = {
         init:function(select){
             this.$el = $('#'+select);
+            $('#flashMessage').hide();
             this.$infoPanel = $('#info-panel',this.$el);
             this.uid = $('#hold-user-id',this.$el).val();
             this.pid = $('#hold-product-id',this.$el).val();
@@ -84,7 +85,12 @@
             });
         },
         showGetSuccessInfo:function(msg){
-            this.$infoPanel.text(msg).fadeIn(1000).fadeOut(2000);
+            var me = this;
+            me.$infoPanel.text(msg);
+            me.$infoPanel.show();
+            setTimeout(function(){
+                me.$infoPanel.hide();
+            },3000);
         },
         doLogin:function($id){
             publishController.open_dialog('/users/login.html?type=coupon&coupon-id='+$id,{'title':'登录'});
