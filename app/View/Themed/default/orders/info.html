@@ -10,7 +10,16 @@ a.coupon_applied .glyphicon {
     color: darkgreen;
 }
 </style>
-<div  class="container">
+{{if $is_mobile}}
+<div class="classlist_v2" style="z-index:1">
+    <ul class="clearfix">
+        <li><a href="javascript:void(0)" id="return_label" class="back"></a></li>
+        <li class="line"></li>
+        <li>结算</li>
+    </ul>
+</div>
+{{/if}}
+<div  class="container" style="{{if $is_mobile}}margin-top: 2.5em;{{/if}}">
 
     {{if $flash_msg}}<div class="alert alert-danger" role="alert">{{$flash_msg}}</div>{{/if}}
 
@@ -264,6 +273,20 @@ a.coupon_applied .glyphicon {
                 $(this).text("使用特惠");
             }
         });
+
+        {{if $is_mobile}}
+            var referurl = document.referrer;
+            var host = referurl.split('/',3);
+            if(host[2] == '{{WX_HOST}}'){
+                $('#return_label').on('click',function(){
+                    window.location.href = referurl;
+                })
+            }else{
+                $('#return_label').on('click',function(){
+                    window.location.href = '/carts/listcart.html';
+                })
+            }
+        {{/if}}
     });
 
     function checkAddress(){

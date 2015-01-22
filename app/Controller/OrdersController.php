@@ -412,6 +412,9 @@ class OrdersController extends AppController{
             $this->set('specialShipPromotion', $shipPromotions['items']);
             $this->set('limit_ship', $shipPromotions['limit_ship']);
         }
+        if($this->RequestHandler->isMobile()){
+            $this->set('is_mobile',true);
+        }
         $this->pageTitle = __('订单详情');
         $this->set('op_cate', OP_CATE_CATEGORIES);
 	}
@@ -650,7 +653,9 @@ class OrdersController extends AppController{
 
             $counts[$order_id] += $total;
 		}
-
+        if($this->RequestHandler->isMobile()){
+            $this->set('is_mobile',true);
+        }
         $this->set('brands', $mappedBrands);
 		$this->set('orders',$orders);
 		$this->set('order_carts',$order_carts);
