@@ -64,6 +64,8 @@ class WeixinController extends AppController {
 
             $this->log($req);
 
+            $host3g = (WX_HOST);
+
 			$input = "";
 			if(!empty($req['Event'])){
 				if($req['Event']=='subscribe'){ //订阅
@@ -176,6 +178,14 @@ class WeixinController extends AppController {
                         $uid = $this->Oauthbind->findUidByWx(trim($req['FromUserName']));
                         if ($uid) {
                             Cache::write(key_cache_sub($uid), WX_STATUS_UNSUBSCRIBED);
+                        }
+                    }
+                } else if ( strtoupper($req['Event']) == 'SCAN') {
+                    if ($from == FROM_WX_SERVICE) {
+                        $ticket = $req['Ticket'];
+                        if ($ticket == SCAN_TICKET_CAOMEI) {
+                            echo $this->newTextMsg($user, $me, '点击<a href="http://"'.$host3g.'/products/20150120/you_ji_hong_yan_cao_mei_tuan_gou.html">查看草莓</a>');
+                            return;
                         }
                     }
                 }

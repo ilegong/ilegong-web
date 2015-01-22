@@ -93,6 +93,8 @@ const SPEC_PARAM_KEY_COMM='_pys_add_comment';
 const SPEC_PARAM_KEY_SHICHI_COMM='_pys_add_shichi_comment';
 
 
+const SCAN_TICKET_CAOMEI = 'gQHP8DoAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xLzZIV1BfNWJsb1JyWUF1NTJDRmxvAAIEmH7AVAMEAAAAAA==';
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');
