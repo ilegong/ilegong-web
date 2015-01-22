@@ -23,6 +23,7 @@ class CartsController extends AppController{
 			)));
         $uid = $this->currentUser['id'];
 		foreach($products as $productinfo){
+            list($price, $special_id) = calculate_price($productinfo['Product']['id'], $productinfo['Product']['price'], $uid);
 			$data = array();
 			$data['Cart']['product_id'] = $productinfo['id'];
 			$data['Cart']['num'] = $product_nums[$productinfo['id']];
@@ -30,7 +31,8 @@ class CartsController extends AppController{
 			$data['Cart']['session_id'] = $this->Session->id();
 			$data['Cart']['coverimg'] = $productinfo['Product']['coverimg'];
 			$data['Cart']['name'] = $productinfo['Product']['name'];
-            $data['Cart']['price'] = calculate_price($productinfo['Product']['id'], $productinfo['Product']['price'], $uid);
+            $data['Cart']['price'] = $price;
+            $data['Cart']['applied_special'] = empty($special_id)?  0 : $special_id;
 			$data['Cart']['creator'] = $uid;
 			$this->Cart->save($data);
 		}

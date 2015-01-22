@@ -116,13 +116,16 @@ class Cart extends AppModel {
         if (!empty($prodTry)) {
             $price = calculate_try_price($prodTry['ProductTry']['price'], $uid, $shichituan);
         } else {
-            $price = calculate_price($p['Product']['id'], $p['Product']['price'], $uid);
+            list($price, $special_id) = calculate_price($p['Product']['id'], $p['Product']['price'], $uid);
         }
         $data['Cart']['price'] = $price;
         $data['Cart']['creator'] = $uid;
         $data['Cart']['specId'] = $spec;
         $data['Cart']['type'] = $type;
         $data['Cart']['try_id'] = $try_id;
+        if (!empty($special_id)) {
+            $data['Cart']['applied_special'] = $special_id;
+        }
 
         return $this->save($data);
     }

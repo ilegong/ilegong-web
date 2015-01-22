@@ -213,10 +213,14 @@ class BuyingComponent extends Component {
             $brand_id = $productByIds[$pid]['brand_id'];
             $pp = $shipPromotionId ? $shipPromo->find_ship_promotion($pid, $shipPromotionId) : array();
             $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
-            $itemPrice = empty($pp) || !isset($pp['price']) ? calculate_price($pid, $productByIds[$pid]['price'], $uid) : $pp['price'];
+
+            if (empty($pp) || !isset($pp['price'])) {
+                list($itemPrice,) = calculate_price($pid, $productByIds[$pid]['price'], $uid);
+            } else {
+                $itemPrice = $pp['price'];
+            }
 
             $totalPrices[$brand_id] += ($itemPrice * $num);
-
             $cart->add_product_item($brand_id, $pid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name']);
         }
 

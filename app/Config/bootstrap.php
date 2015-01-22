@@ -259,6 +259,12 @@ function calculate_try_price($priceInCent, $uid = 0, $shichituan = null) {
     return ($isShichituan ? 99 : $priceInCent)/100;
 }
 
+/**
+ * @param $pid
+ * @param $price
+ * @param $currUid
+ * @return array array of price && specialId
+ */
 function calculate_price($pid, $price, $currUid) {
     $cr = ClassRegistry::init('SpecialList');
     $specialLists = $cr->has_special_list($pid);
@@ -278,6 +284,7 @@ function calculate_price($pid, $price, $currUid) {
                 calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
             if ($afford_for_curr_user) {
                 $price = $special['special']['special_price'] / 100;
+                return array($price, $special['special']['id']);
             }
         }
 
@@ -286,7 +293,7 @@ function calculate_price($pid, $price, $currUid) {
         //CHECK AFFORD!
     }
 
-    return $price;
+    return array($price, null);
 }
 
 
@@ -497,12 +504,14 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
         $newSpecId = empty($specs[$pid]) ? 0 : $specs[$pid];
         $cartItem =& $cartsByPid[$pid];
         if (empty($cartItem)) {
+            list($price, $special_id) = calculate_price($p['Product']['id'], $p['Product']['price'], $uid);
             $cartItem = array(
                 'product_id' => $pid,
                 'name' => product_name_with_spec($p['name'], $newSpecId, $p['specs']),
                 'coverimg' => $p['Product']['coverimg'],
                 'num' => $nums[$pid],
-                'price' => calculate_price($p['Product']['id'], $p['Product']['price'], $uid),
+                'price' => $price,
+                'applied_special' => empty($special_id) ? 0 : $special_id,
                 'specId' => $newSpecId,
                 'session_id' => $session_id,
             );
@@ -513,9 +522,11 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
                 $cartItem['price'] = $p['price'];
                 $cartItemId = $cartItem['id'];
             } else {
+                list($price, $special_id) = calculate_price($p['id'], $p['price'], $uid);
                //CONSIDER to add a new item in shopping cart!!
                 $cartItem['num'] = $nums[$pid];
-                $cartItem['price'] = calculate_price($p['id'], $p['price'], $uid);
+                $cartItem['price'] = $price;
+                $cartItem['applied_special'] = empty($special_id) ? 0 : $special_id;
                 $cartItem['name']  = product_name_with_spec($p['name'], $newSpecId, $p['specs']);
                 $cartItemId = $cartItem['id'];
                 $cartItem['specId'] = $newSpecId;
