@@ -92,21 +92,17 @@
         </style>
         {{if $product_spec_map }}
         {{$product_spec_map}}
-        {{/if}}
-
-        {{if $specs_map }}
-        <p class="product_specs">
-            <?php foreach($specs_map['choices'] as $label => $values) { ?>
-            <span class="spec_label">{{$label}}</span>:<?php foreach($values as $vaLabel){?><span item-label="{{$label}}" class="spec_item">{{$vaLabel}}</span><?php } ?><br/>
-            <?php } ?>
-
-
-            {{if $Product['Product']['id'] == PRODUCT_ID_CAKE && !empty($cake_dates)}}
-            <span style="margin-left: 0 !important;">送货日期</span>:<?php foreach($cake_dates as $date){?><span item-label="SD" class="spec_item">{{$date}}</span><?php } ?>
+            {{if $specs_map }}
+                <p class="product_specs">
+                    <?php foreach($specs_map['choices'] as $label => $values) { ?>
+                    <span class="spec_label">{{$label}}</span>:<?php foreach($values as $vaLabel){?><span item-label="{{$label}}" class="spec_item">{{$vaLabel}}</span><?php } ?><br/>
+                    <?php } ?>
+                    {{if $Product['Product']['id'] == PRODUCT_ID_CAKE && !empty($cake_dates)}}
+                    <span style="margin-left: 0 !important;">送货日期</span>:<?php foreach($cake_dates as $date){?><span item-label="SD" class="spec_item">{{$date}}</span><?php } ?>
+                    {{/if}}
+                </p>
             {{/if}}
-        </p>
         {{/if}}
-
         {{if ($total_left > 0 || $total_left == -1) && $afford_for_curr_user }}
         <div id="productinfo" class="clearfix voffset2" style="margin-top: 0;padding-left: 0.8em;">
             {{if $limit_per_user == 1}}

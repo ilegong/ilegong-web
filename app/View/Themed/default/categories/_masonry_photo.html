@@ -1,14 +1,15 @@
-<li class="list-item-photo center-block">
-	<div class="photoArea">
+<li class="list-item-photo center-block" style="margin: 0 15px 15px 0; background: #ffffff;">
+	<div class="photoArea" style="padding: 0;;">
 		{{eval echo $this->Html->image($item['coverimg'],
 		array(
 		'alt' => $item['title'],'title' => $item['title'],
-		'width'=>'182px',
+		'width'=>'240px',
+		'height'=>'240px',
 		//'onerror'=>'this.src="'.Router::url('/img/products_nophoto.jpg').'";',
 		'url'=> '/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html'
 		)); }}
 	</div>
-	<p class="describe" style="text-align:center;">
+	<p class="describe" style="text-align:center;padding: 10px 0;">
 		{{eval echo $this->Html->link(usubstr($item['name'],0,10),
 		'/'.$category_control_name.'/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html',
 		array('title'=>$item['title'])); }}
