@@ -20,6 +20,9 @@ insert into cake_coupons(name, valid_begin, valid_end, last_updator, type, produ
 insert into cake_coupons(name, valid_begin, valid_end, last_updator, type, product_list, reduced_price) values('年货专场', '2015-01-21 00:00:00', '2015-02-02 00:00:00', 632, 2, '704', 3000);
 insert into cake_coupons(name, valid_begin, valid_end, last_updator, type, product_list, reduced_price) values('年货专场', '2015-01-21 00:00:00', '2015-02-02 00:00:00', 632, 2, '707', 3000);
 insert into cake_coupons(name, valid_begin, valid_end, last_updator, type, product_list, reduced_price) values('年货专场', '2015-01-21 00:00:00', '2015-02-02 00:00:00', 632, 2, '453', 1500);
+insert into cake_coupons(name, valid_begin, valid_end, last_updator, type, product_list, reduced_price) values('年货专场', '2015-01-21 00:00:00', '2015-02-02 00:00:00', 632, 2, '715', 1000);
+insert into cake_coupons(name, valid_begin, valid_end, last_updator, type, product_list, reduced_price) values('年货专场', '2015-01-21 00:00:00', '2015-02-02 00:00:00', 632, 2, '716', 3000);
+insert into cake_coupons(name, valid_begin, valid_end, last_updator, type, product_list, reduced_price) values('年货专场', '2015-01-21 00:00:00', '2015-02-02 00:00:00', 632, 2, '532', 2000);
 
 insert into cake_coupons(name, valid_begin, valid_end, last_updator, type, product_list, reduced_price) values('年货专场', '2015-01-21 00:00:00', '2015-02-02 00:00:00', 632, 2, '709', 2000);
 
