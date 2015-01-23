@@ -40,7 +40,7 @@ a.coupon_applied .glyphicon {
 
         {{if (!$specialShipPromotionId)}}<h2>收货人信息</h2>
         {{if $limit_ship}}
-        <p class="text-warning">只支持以下快递方式：</p>
+        <p class="text-warning">请选择以下自提点：</p>
         {{/if}}
         {{/if}}
         <div id="specialShipPromotion" style="{{if !$limit_ship || $specialShipPromotionId }}display: none{{/if}}">
