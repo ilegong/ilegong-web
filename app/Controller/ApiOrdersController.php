@@ -764,7 +764,7 @@ class ApiOrdersController extends AppController {
          $data=array();
          $data['user_id'] = $commentC->Session->read('Auth.User.id');
          $data['username'] = $commentC->Session->read('Auth.User.nickname');
-         $data['data_id'] = $input['data_id'];
+         $data['data_id'] = $inputData['data_id'];
          $data['body'] = $inputData['body'];
          $data['rating'] = $inputData['rating'];
          $data['type'] = $inputData['type'];
@@ -802,9 +802,10 @@ class ApiOrdersController extends AppController {
      }else {
            $returnInfo = array('error' => 'please_login');
     }
-       $info = array('success' => true,'returnInfo' => $returnInfo);
-        $this->set('info',$info);
-        $this->set('_serialize','info');
+//       $info = array('success' => true,'returnInfo' => $returnInfo);
+//        $this->set('info',$info);
+//        $this->set('_serialize','info');
+         return $returnInfo;
 
 
     }

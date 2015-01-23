@@ -376,6 +376,8 @@ class WeixinComponent extends Component
         $good_info = $good['good_info'];
         $ship_info = $good['ship_info'];
         $order_id = $order['Order']['id'];
+        $order_consinessname = $order['Order']['consignee_name'];
+        $brandId = $order['Order']['brand_id'];
 
         if ($user_weixin != false) {
             $open_id = $user_weixin['oauth_openid'];
@@ -474,6 +476,21 @@ class WeixinComponent extends Component
         if($seller_weixin != false){
             $this->send_order_paid_message_for_seller($seller_weixin['oauth_openid'], $price, $good_info, $ship_info, $order_id);
         }
+
+        $Brand = ClassRegistry::init('Brand');
+        $User = ClassRegistry::init('User');
+        $Cart = ClassRegistry::init('Cart');
+        $brand_creator = $Brand->find('first',array('conditions' => array('id' => $brandId),'fields' => array('creator')));
+
+        $bussiness_info = $User->find('first',array('conditions' => array('id' => $brand_creator['Brand']['creator']),'fields' => array('mobilephone')));
+        $bussiness_mobilephone = $bussiness_info['User']['mobilephone'];
+
+        $good_num = $Cart->find('count',array('conditions' => array('order_id' => $order['Order']['id'],'creator' => $order['Order']['creator'])));
+        $good_infomation = explode(';',$good_info);
+        $msg = '用户'.$order_consinessname.'刚刚购买了'.$good_infomation[0].'、'.$good_infomation[1].'等'.$good_num.'件商品，订单金额'.$price.'元，请您发货。订单号'.$order_id.'，关注服务号接收更详细信息。';
+
+        $this->log('brand_creator:'.json_encode($brand_creator).'bussiness_info'.json_encode($bussiness_info).'bussiness_mobilephone'.json_encode($bussiness_mobilephone).'msg'.$msg);
+        message_send($msg, $bussiness_mobilephone);
     }
 
     /**
