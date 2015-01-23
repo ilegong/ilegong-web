@@ -22,14 +22,34 @@ ul li{ list-style:none;}
 .index_pt .price strong{ color:#dc0029;}
 .index_pt ul li{ width:50%;}
 .index_pt ul li img{ width:100%;}
-.index_class_title{ font-size:1.2em; color:#666666; padding:0.5em 0 0.2em 0.417em;}
-.index_class{ padding:0 0.417em;}
+.index_class_title {
+    font-size: 1.2em;
+    color: #666666;
+    padding: 0.8em 0.8em 0.5em 0.8em;
+}
+.index_class {
+    padding: 0 0.8em;
+}
+.index_class ul {
+    padding-bottom: 0.8em;
+}
 .index_class ul li{width:50%;}
-.index_class ul{ padding-bottom:0.5em;}
-.index_class ul img{width:98%;}
-.index_bao_title{ font-size:1.2em; color:#666666; padding:0.1em 0 0.2em 0.417em;}
-.index_bao{ padding:0 0.417em;}
-.index_bao a{ display:block; padding-bottom:0.6em;}
+.index_class ul img {
+    width: 97%;
+}
+.index_bao_title {
+    font-size: 1.2em;
+    color: #666666;
+    padding: 0 0.8em 0.5em 0.8em;
+    font-weight: bold;
+}
+.index_bao {
+    padding: 0 0.8em;
+}
+.index_bao a {
+    display: block;
+    padding-bottom: 0.8em;
+}
 .index_bao a img{ width:100%;}
 
 
@@ -62,7 +82,7 @@ ul li{ list-style:none;}
 .comment_tip_layer img{ width:1.1em; height:1.1em; padding-right:0.3em; margin-top:0.1em;}
 .comment_tip_layer ul{ padding-left:3.5em;}
 /*提示是否合并弹出层*/
-.comment_tanchubg_layer{ background-color:#ffffff; width:60%; color:#666666; line-height:1.5em; font-size:1.2em; padding:1em; position:absolute; top:30%; left:50%; margin-left:-33%; text-align:center;
+.comment_tanchubg_layer{ background-color:#ffffff; color:#666666; line-height:1.5em; font-size:1.2em; padding:1em; position:absolute; top:30%; left:50%; margin-left:-33%; text-align:center;
     -webkit-box-shadow: #666 0px 0px 10px;
     -moz-box-shadow: #666 0px 0px 10px;
     box-shadow: #666 0px 0px 10px;}
@@ -84,7 +104,9 @@ ul li{ list-style:none;}
 .comment label{position:absolute; color:#999999; line-height:20px; top:0.5em; left:0; width:95%; margin:0.8em; z-index:2;}
 .comment_upload{ border:1px #dddddd solid; text-align:center; padding:1em; display:block; background-color:#f5f5f5; float:left; margin-top:1em; margin-right:0.7em;}
 .comment_upload span{ display:block; width:2.292em; height:2.292em; background:url(/img/mobile/pyshuo_icon.png) -14.583em -7.25em no-repeat; background-size:25em 25em;}
-.comment_submit{ height:2.8em; width:100%; display:block; background-color:#ffa531; line-height:2.8em; text-align:center; color:#ffffff; font-size:1.25em; margin-top:1.5em; text-decoration:none; position:fixed; bottom:0; left:0;}
+.comment_submit{ height:2.8em; width:100%; display:block; background-color:#ffa531; line-height:2.8em; text-align:center; color:#ffffff; font-size:1.25em; margin-top:1.5em; text-decoration:none; position:relative; bottom:0; left:0;margin-top: -4em;}
+.comment_submit:hover{color: #ffffff;text-decoration: none}
+.comment_submit:focus{color: #ffffff;text-decoration: none}
 .comment_submit_disable{ height:2.8em; width:100%; display:block; background-color:#bcbcbc; line-height:2.8em; text-align:center; color:#ffffff; font-size:1.25em; margin-top:-4em; text-decoration:none; position:relative; bottom:0; left:0; z-index:3;}
 .comment_submit_disable:hover{color: #ffffff;text-decoration: none}
 .comment_submit_disable:focus{color: #ffffff;text-decoration: none}

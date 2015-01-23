@@ -23,6 +23,8 @@
         body.modal-open {
             margin-right: 0;
         }
+        .shopping_icon{ width:3em; height:1.9em; background:url('{{$this->Html->assetUrl("/img/mobilev1/pyshuo_icon.png?xx")}}') -5em -15em no-repeat; background-size:25em 25em; display:block; margin:0 auto; text-decoration:none;}
+        .shopping_count{ position:absolute; right:3px; top:2px; width:14px; text-align:center; color:#ffffff; font-size:1em;}
     </style>
     {{$this->Html->css(array('mobile-view.css?v=0.1',))}}
     {{$this->Html->script(array(
@@ -79,7 +81,7 @@
             <li><a class="home {{if $op_cate == 'home'}}active{{/if}}" href="/techan.html"><span class="op-icon {{if $op_cate == 'home'}}op-icon-active{{/if}}"></span><span>首页</span></a></li>
             <li><a class="share {{if $op_cate == 'share'}}active{{/if}}" href="/share.html"><span class="op-icon {{if $op_cate == 'share'}}op-icon-active{{/if}}"></span><span>分享圈</span></a></li>
             <li><a class="shichituan {{if $op_cate == 'shichituan'}}active{{/if}}" href="/shichituan.html"><span class="op-icon {{if $op_cate == 'shichituan'}}op-icon-active{{/if}}"></span><span>试吃团</span></a></li>
-            <li id="op_carts"><span class="badge"></span><a class="categories {{if $op_cate == 'categories'}}active{{/if}}" href="/carts/listcart.html"><span class="op-icon {{if $op_cate == 'categories'}}op-icon-active{{/if}}"></span><span>购物车</span></a></li>
+            <li id="op_carts"><a class="categories {{if $op_cate == 'categories'}}active{{/if}}" href="/carts/listcart.html"><span style="position: relative;" class="shopping_icon"><div id="item-count" class="shopping_count"></div></span><span>购物车</span></a></li>
             <li><a class="me {{if $op_cate == 'me'}}active{{/if}}" href="/users/me.html"><span class="op-icon {{if $op_cate == 'me'}}op-icon-active{{/if}}"></span><span>我的</span></a></li>
         </ul>
     </div>
