@@ -98,7 +98,7 @@ a.coupon_applied .glyphicon {
 			</tbody>
 			</table>
             <p>
-                <label>给分享人留言：<input type="text" maxlength="50" class="remark" name={{"remark_".$brandItem->id}} /> </label>
+                <label>给卖家留言：<input type="text" maxlength="50" class="remark" name={{"remark_".$brandItem->id}} /> </label>
             </p>
             <?php $coupons = $coupons_of_products[$brandItem->id]; if(!empty($coupons)){ ?>
             <h4>可用优惠券：</h4>
@@ -109,8 +109,7 @@ a.coupon_applied .glyphicon {
                     {{$coupon['Coupon']['name']}} <span style="color: red">{{$this->Number->precision($coupon['Coupon']['reduced_price']/100, 2)}}</span> {{if $coupon['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER}}(红包券，每件商品可使一张，本单本店共{{$brandItem->total_num()}}件){{/if}}
                     <span class="glyphicon glyphicon-ok" style="display: none"></span></a><span class="applied_result"></span>
                     </li>
-            <?PHP } ?>
-            </ul>
+             </ul>
             <?php } ?>
 		</div>
         {{/loop}}
