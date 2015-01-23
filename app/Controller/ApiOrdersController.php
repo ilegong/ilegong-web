@@ -435,8 +435,25 @@ class ApiOrdersController extends AppController {
             $buyingCom = $this->Components->load('Buying');
             //FIXME: check pid list
             $cartsByPid = $buyingCom->cartsByPid($pidList, $uid);
-
             list($pids, $cart, $shipFee, $shipFees) = $buyingCom->createTmpCarts($cartsByPid, 0, $pidList, $uid);
+
+            $product_ids = Hash::extract($cart, '{n}.Cart.product_id');
+            $this->loadModel('Product');
+            $products = $this->Product->find('all', array(
+                'fields' => array('id', 'created', 'slug', 'published', 'deleted','specs'),
+                'conditions'=>array(
+                    'id' => $product_ids
+                )));
+            $product_spec = Hash::combine($products, '{n}.Product.id', '{n}.Product.specs');
+            $num = 0;
+            foreach ($cart as $temp){
+                $value = $product_spec[$temp['Cart']['product_id']];
+                $spec_info = json_decode($value,true);
+                $specId = $temp['Cart']['specId'];
+                $cart[$num]['Cart']['spec'] =  $spec_info['map'][$specId]['name'];
+                $num ++;
+            }
+
             $brand_ids = array_keys($cart->brandItems);
             $brands = $this->findBrands($brand_ids);
 
