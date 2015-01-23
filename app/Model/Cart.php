@@ -116,7 +116,7 @@ class Cart extends AppModel {
         if (!empty($prodTry)) {
             $price = calculate_try_price($prodTry['ProductTry']['price'], $uid, $shichituan);
         } else {
-            list($price, $special_id) = calculate_price($p['Product']['id'], $p['Product']['price'], $uid);
+            list($price, $special_id) = calculate_price($p['Product']['id'], $p['Product']['price'], $uid, $num);
         }
         $data['Cart']['price'] = $price;
         $data['Cart']['creator'] = $uid;

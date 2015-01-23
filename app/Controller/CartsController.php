@@ -23,11 +23,11 @@ class CartsController extends AppController{
 			)));
         $uid = $this->currentUser['id'];
 		foreach($products as $productinfo){
-            list($price, $special_id) = calculate_price($productinfo['Product']['id'], $productinfo['Product']['price'], $uid);
+            $num = $product_nums[$productinfo['id']];
+            list($price, $special_id) = calculate_price($productinfo['Product']['id'], $productinfo['Product']['price'], $uid, $num);
 			$data = array();
 			$data['Cart']['product_id'] = $productinfo['id'];
-			$data['Cart']['num'] = $product_nums[$productinfo['id']];
-			$data['Cart']['num'] = $productinfo['id'];
+            $data['Cart']['num'] = $num;
 			$data['Cart']['session_id'] = $this->Session->id();
 			$data['Cart']['coverimg'] = $productinfo['Product']['coverimg'];
 			$data['Cart']['name'] = $productinfo['Product']['name'];

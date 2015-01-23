@@ -215,7 +215,7 @@ class BuyingComponent extends Component {
             $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
 
             if (empty($pp) || !isset($pp['price'])) {
-                list($itemPrice,) = calculate_price($pid, $productByIds[$pid]['price'], $uid);
+                list($itemPrice,) = calculate_price($pid, $productByIds[$pid]['price'], $uid, $num);
             } else {
                 $itemPrice = $pp['price'];
             }

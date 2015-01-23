@@ -170,9 +170,10 @@ class ProductsController extends AppController{
             $this->log('view product afford(special): for_curr_user='.$afford_for_curr_user.', left_cur_user='.$left_cur_user.', total_left='.$total_left.', range='.json_encode($special_rg).', uid='.$currUid);
 
             $promo_name = $special['name'];
+            $special_least_num = $special['special']['least_num'];
             $special_price = $special['special']['special_price'] / 100;
             App::uses('CakeNumber', 'Utility');
-            $promo_desc = '￥'.CakeNumber::precision($special_price, 2);
+            $promo_desc = ($special_least_num > 0 ? '满'.$special_least_num.'件' : '') .'￥'.CakeNumber::precision($special_price, 2);
             if ($special['special']['limit_total'] > 0) {
                 $promo_desc .= ' 限'.$special['special']['limit_total'].'件';
             }
@@ -180,7 +181,7 @@ class ProductsController extends AppController{
                 $promo_desc .= ' 每人限'.$special['special']['limit_per_user'].'件';
             }
             if ($afford_for_curr_user) {
-                $price = $special_price;
+                if ($special_least_num <= 0) { $price = $special_price; }
                 $use_special = true;
             } else {
                 $promo_desc .=  '('. ($left_cur_user == 0 ? '您已买过' : '已抢完') . ')';

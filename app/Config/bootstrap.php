@@ -265,9 +265,10 @@ function calculate_try_price($priceInCent, $uid = 0, $shichituan = null) {
  * @param $pid
  * @param $price
  * @param $currUid
+ * @param $num
  * @return array array of price && specialId
  */
-function calculate_price($pid, $price, $currUid) {
+function calculate_price($pid, $price, $currUid, $num) {
     $cr = ClassRegistry::init('SpecialList');
     $specialLists = $cr->has_special_list($pid);
     if (!empty($specialLists)) {
@@ -285,7 +286,9 @@ function calculate_price($pid, $price, $currUid) {
             list($afford_for_curr_user, $limit_per_user, $total_left) =
                 calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
             if ($afford_for_curr_user) {
-                $price = $special['special']['special_price'] / 100;
+                if ($special['special']['least_num'] <= 0 || $special['special']['least_num'] >= $num) {
+                    $price = $special['special']['special_price'] / 100;
+                }
                 return array($price, $special['special']['id']);
             }
         }
@@ -505,13 +508,14 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
 
         $newSpecId = empty($specs[$pid]) ? 0 : $specs[$pid];
         $cartItem =& $cartsByPid[$pid];
+        $pNum = $nums[$pid];
         if (empty($cartItem)) {
-            list($price, $special_id) = calculate_price($p['Product']['id'], $p['Product']['price'], $uid);
+            list($price, $special_id) = calculate_price($p['Product']['id'], $p['Product']['price'], $uid, $pNum);
             $cartItem = array(
                 'product_id' => $pid,
                 'name' => product_name_with_spec($p['name'], $newSpecId, $p['specs']),
                 'coverimg' => $p['Product']['coverimg'],
-                'num' => $nums[$pid],
+                'num' => $pNum,
                 'price' => $price,
                 'applied_special' => empty($special_id) ? 0 : $special_id,
                 'specId' => $newSpecId,
@@ -520,13 +524,13 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
             $cartsByPid[$pid] =& $cartItem;
         } else {
             if ($newSpecId == $cartItem['specId']) {
-                $cartItem['num'] = $nums[$pid];
+                $cartItem['num'] = $pNum;
                 $cartItem['price'] = $p['price'];
                 $cartItemId = $cartItem['id'];
             } else {
-                list($price, $special_id) = calculate_price($p['id'], $p['price'], $uid);
+                list($price, $special_id) = calculate_price($p['id'], $p['price'], $uid, $pNum);
                //CONSIDER to add a new item in shopping cart!!
-                $cartItem['num'] = $nums[$pid];
+                $cartItem['num'] = $pNum;
                 $cartItem['price'] = $price;
                 $cartItem['applied_special'] = empty($special_id) ? 0 : $special_id;
                 $cartItem['name']  = product_name_with_spec($p['name'], $newSpecId, $p['specs']);
