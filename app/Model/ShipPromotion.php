@@ -143,7 +143,8 @@ class ShipPromotion extends AppModel {
                 array('id' => 78, 'time' => '', 'address' => ' 海淀清河小营电科院旁边超市发 荣浩  18911692346'),
                 array('id' => 79, 'time' => '', 'address' => ' 海淀中关村银科大厦附近'),
                 array('id' => 80, 'time' => '', 'address' => ' 海淀五道口搜狐网络大厦附近'),
-                array('id' => 81, 'time' => '', 'least_num' => 20,  'address' => '团购满20盒（含），送到指定地点(限北京城区)', 'need_address_remark' => true),
+                array('id' => 81, 'time' => '', 'address' => ' 海淀科学院南路搜狐媒体中心附近'),
+                array('id' => 86, 'time' => '', 'least_num' => 20,  'address' => '团购满20盒（含），送到指定地点(限北京城区)', 'need_address_remark' => true),
 //                array('id' => 77, 'time' => '', 'address' => '西小口东升科技园（北京市海淀区西小口路66）'),
 //                array('id' => 78, 'time' => '', 'address' => '微软大厦（中关村丹棱街附近）'),
             )
