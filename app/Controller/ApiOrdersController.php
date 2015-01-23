@@ -10,7 +10,7 @@ class ApiOrdersController extends AppController {
     public $components = array('OAuth.OAuth', 'Session');
     public function beforeFilter() {
         parent::beforeFilter();
-        $allow_action = array('test','product_detail', 'store_list', 'product_content', 'store_content', 'store_story','_save_comment');
+        $allow_action = array('test','product_detail', 'store_list', 'product_content', 'store_content', 'store_story','_save_comment', 'home');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action)  == false) {
             $this->currentUser = $this->OAuth->user();
@@ -812,6 +812,45 @@ class ApiOrdersController extends AppController {
 
     }
 
-
-
+    public function home(){
+        $bannerItems = array(
+            array('img' => "/img/banner/spring-weixin.jpg", 'url' => "/categories/spring"),
+            array('img' => "/img/banner/banner_cao_mei_cai_zhai.jpg", 'url' => "/products/20150119/xing_shou_xiu_cao_mei_yuan_cai_zhai_2jin.html"),
+        );
+        $hotItems =array(
+            array('img' => "/img/mobile/index/d3.jpg", 'url' => "/products/20150120/you_ji_hong_yan_cao_mei_tuan_gou.html"),
+            array('img' => "/img/mobile/index/d1.jpg", 'url' => "/products/20141101/wei_wei_an_shui_guo_dan_gao.html"),
+            array('img' => "/img/mobile/index/d2.jpg", 'url' => "/products/20141204/fu_ping_te_ji_jian_shi_bing.html"),
+        );
+        $specTagIds = array(13,14,15);
+        $specTagImg = array('/img/mobile/index/p1.jpg', '/img/mobile/index/p2.jpg', '/img/mobile/index/p3.jpg');
+        $mainTagIds = array(3,5,8,12,9,6,4,10);
+        $mainTagImg = array('/img/mobile/index/c1.jpg', '/img/mobile/index/c2.jpg', '/img/mobile/index/c3.jpg', '/img/mobile/index/c4.jpg', '/img/mobile/index/c5.jpg', '/img/mobile/index/c6.jpg', '/img/mobile/index/c7.jpg', '/img/mobile/index/c8.jpg');
+        $resultTag = array_merge($mainTagIds, $specTagIds);
+        $productTagM = ClassRegistry::init('ProductTag');
+        $productTags = $productTagM->find('list', array('conditions' => array(
+            'id'=> $resultTag,
+            'published' => 1
+        ),
+            'fields' => array('id', 'slug'),
+            'order' => 'priority desc'
+        ));
+        $mainTagItems = array();
+        $specTagItems = array();
+        $imgNum = 0;
+        foreach($mainTagIds as $mainTagId){
+            $mainTagItems[] = array('id' =>$mainTagId , 'slug'=>$productTags[$mainTagId], 'img'=> $mainTagImg[$imgNum]);
+            $imgNum ++;
+        }
+        $imgNum = 0;
+        foreach($specTagIds as $specTagId){
+            $specTagItems[] = array('id' =>$specTagId , 'slug'=>$productTags[$specTagId], 'img'=> $specTagImg[$imgNum]);
+            $imgNum ++;
+        }
+        $productTryM = ClassRegistry::init('ProductTry');
+        $tryingItems = $productTryM->find_trying(2);
+        $info = array('bannerItems' => $bannerItems, 'tryingItems' => $tryingItems, 'specTagItems' => $specTagItems, 'mainTagItems' => $mainTagItems, 'hotItems' => $hotItems);
+        $this->set('info', $info);
+        $this->set('_serialize','info');
+    }
 }
