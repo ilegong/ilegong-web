@@ -102,12 +102,12 @@ $(function() {
         $.each(map,function(index,val){
             keys.push(index);
         });
-        var max = keys[0];
+        var max = parseInt(keys[0]);
         for(var i=1;i<keys.length;i++){
-            if(max<keys[i])
-                max=keys[i];
+            if(max<parseInt(keys[i]))
+                max=parseInt(keys[i]);
         }
-        return max?parseInt(max)+1:1;
+        return max?max+1:1;
     }
 });
 
