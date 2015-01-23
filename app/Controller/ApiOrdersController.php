@@ -10,7 +10,7 @@ class ApiOrdersController extends AppController {
     public $components = array('OAuth.OAuth', 'Session');
     public function beforeFilter() {
         parent::beforeFilter();
-        $allow_action = array('test','product_detail', 'store_list', 'product_content', 'store_content', 'store_story','_save_comment', 'home');
+        $allow_action = array('test','product_detail', 'store_list', 'product_content', 'store_content', 'store_story','_save_comment');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action)  == false) {
             $this->currentUser = $this->OAuth->user();
@@ -760,15 +760,22 @@ class ApiOrdersController extends AppController {
      * 增加商品评论
      */
     public function comment_add() {
-       $commentC = ClassRegistry::init('Comment');
-       $postStr = file_get_contents('php://input');;
-       $data = json_decode(trim($postStr), true);
+//       $commentC = ClassRegistry::init('Comment');
+//      $postStr = file_get_contents('php://input');
+//       $data = json_decode(trim($postStr), true);
+        $this->loadModel('Comment');
+        $data = array();
+        $data['data_id'] = $_REQUEST['data_id'];
+        $data['type'] = $_REQUEST['type'];
+        $data['rating'] = $_REQUEST['rating'];
+        $data['body'] = $_REQUEST['body'];
+        $data['pictures'] = $_REQUEST['pictures'];
        if (!isset($data['data_id'])) {
 //           $this->Session->setFlash(__('Invalid Params', true));
            $info = array('success' => false,'reason' => 'Invalid Params');
            $this->redirect('/');
        }else{
-        $returnInfo = $commentC->_save_comment($data);
+        $returnInfo = $this->_save_comment($data);
         $info = array('success' => true,'returnInfo' => $returnInfo);
        }
         $this->set('info',$info);
@@ -776,7 +783,7 @@ class ApiOrdersController extends AppController {
 
     }
 
-    function _save_comment($inputData) {
+   private function _save_comment($inputData) {
         $commentC = ClassRegistry::init('Comment');
      if(!empty($inputData)) {
 
@@ -788,7 +795,6 @@ class ApiOrdersController extends AppController {
          $data['rating'] = $inputData['rating'];
          $data['type'] = $inputData['type'];
          $data['pictures'] = $inputData['pictures'];
-//         $data['ip'] = $commentC->request->clientIp(false);
          $data['created'] = date('Y-m-d H:i:s');
          $data['status'] = 1;
 
@@ -812,7 +818,7 @@ class ApiOrdersController extends AppController {
                  $returnInfo = array('success' => '您的评论已成功提交');
                  //$this->Session->setFlash(__('Your comment will appear after moderation.', true));
              }
-             $returnInfo['Comment'] = $inputData['Comment'];
+             $returnInfo['Comment'] = $data;
 
          } else {
              $returnInfo = $commentC->validationErrors;
@@ -821,9 +827,6 @@ class ApiOrdersController extends AppController {
      }else {
            $returnInfo = array('error' => 'please_login');
     }
-//       $info = array('success' => true,'returnInfo' => $returnInfo);
-//        $this->set('info',$info);
-//        $this->set('_serialize','info');
          return $returnInfo;
 
 
