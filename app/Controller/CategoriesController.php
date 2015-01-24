@@ -263,13 +263,24 @@ class CategoriesController extends AppController {
             return;
         }
 
+        $excludeProductIds = array(449,364,331,230,283,390,354,161,339,154);
+
         $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1);
         $conditions['Product' . '.recommend >='] = 0;
+        $conditions['NOT']=array('Product'.'.id'=>$excludeProductIds);
 
         $orderBy = /*'Tag.recommend desc,*/' Product.recommend desc';
-
         $brandIds = array();
         $this->loadModel('Product');
+        $orderFiledValue = array("FIELD(Product.id,".join(',',$excludeProductIds).")");
+        //recommend products
+        $excludeProducts = $this->Product->find('all',array(
+            'conditions'=>array(
+                'id'=>$excludeProductIds
+            ),
+            'order'=>$orderFiledValue
+        ));
+        $this->set('recommendProducts',$excludeProducts);
         foreach($productTags as &$tag) {
 
             //add class image
@@ -292,7 +303,7 @@ class CategoriesController extends AppController {
                     'joins' => $join_conditions,
                     'order' => $orderBy,
                     'fields' => explode(',', Product::PRODUCT_PUBLIC_FIELDS),
-                    'limit' => ($tag['ProductTag']['size_in_home']>0?$tag['ProductTag']['size_in_home']:6),
+                    'limit' => ($tag['ProductTag']['size_in_home']>=0?$tag['ProductTag']['size_in_home']:6),
                     'page' => $page)
             );
 //            if ($page == 1 && count($list) < $pagesize) {

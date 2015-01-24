@@ -1,15 +1,3 @@
-<?php
-    $recommend_url = array('/products/20141212/a_ke_su_bing_tang_xin_ping_guo.html',
-    '/products/20141206/nan_feng_mi_ju.html',
-    '/products/20141204/fu_ping_te_ji_jian_shi_bing.html',
-    '/products/20141101/wei_wei_an_shui_guo_dan_gao.html',
-    '/products/20141120/jin_qiu_dong_bei_xin_mu_er.html',
-    '/products/20141209/xin_huo_nong_jia_zi_chan_you_ji_you_zhi_hong_xiao_dou.html',
-    '/products/20141205/a_lian_ma_ma_shou_gong_mi_jiu_15.html',
-    '/products/20140923/shun_yi_san_yang_you_ji_he_ji_dan.html',
-    '/products/20141205/sha_la_sheng_cai.html',
-    '/products/20140915/xiao_niu_cun_ye_sheng_chu_kou_hai_dai_600g.html');
-?>
 <?PHP foreach($tagsWithProducts as $index=>$tagWithProduct) {
     $full = $tagWithProduct['ProductTag']['id'] == 1;
     $style = ($index%2==0?'orange':'green');
@@ -21,7 +9,7 @@
             </ul>
         <div class="row classify_list">
         <div class="clearfix">
-        <a target="_blank" href="{{$recommend_url[$index]}}" class="tuijian" style="border: 0"><img src="/img/product-demo/product-recommend/classb{{$index+1}}.jpg" /></a>
+        <a target="_blank" href="/{{$category_control_name}}/{{date('Ymd',strtotime($recommendProducts[$index]['Product']['created']))}}/{{$recommendProducts[$index]['Product']['slug']}}.html" class="tuijian" style="border: 0"><img src="/img/product-demo/product-recommend/classb{{$index+1}}.jpg" /></a>
 	    <?PHP
 	    $history = $this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ));
         $tag = $tagWithProduct['ProductTag'];
