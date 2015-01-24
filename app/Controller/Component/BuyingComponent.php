@@ -240,6 +240,7 @@ class BuyingComponent extends Component {
                     }
                 };
                 $num = ($cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
+                $pp = $shipPromotionId ? $shipPromo->find_ship_promotion($pid, $shipPromotionId) : array();
                 $singleShipFee = empty($pp) || !isset($pp['ship_price']) ? $productByIds[$pid]['ship_fee'] : $pp['ship_price'];
                 $total_price = $totalPrices[$brandId];
                 //FIXME: add ship fee by province

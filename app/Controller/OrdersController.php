@@ -60,6 +60,7 @@ class OrdersController extends AppController{
             $shipPromotionId = intval($this->Session->read(self::key_balanced_ship_promotion_id()));
         }
         $this->loadModel('ShipPromotion');
+        $shipPromo = $this->ShipPromotion;
 
         //check problem:
 //        $couponItems = $this->CouponItem->find_my_valid_coupon_items($uid, array_merge($appliedCoupons, (array)$coupon_item_id));
@@ -171,7 +172,17 @@ class OrdersController extends AppController{
             foreach($products as $pro){
                 $pid = $pro['id'];
                 $num = $Carts[$pid]['Cart']['num'];
-                $total_price+= $Carts[$pid]['Cart']['price'] * $num;
+
+                $pp = $shipPromotionId ? $shipPromo->find_ship_promotion($pid, $shipPromotionId) : array();
+                $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $num ? $num : 1);
+
+                if (empty($pp) || !isset($pp['price'])) {
+                    list($itemPrice,) = calculate_price($pid, $pro['price'], $uid, $num);
+                } else {
+                    $itemPrice = $pp['price'];
+                }
+
+                $total_price+= $itemPrice * $num;
 
                 list($afford_for_curr_user, $limit_cur_user) = $tryId ? afford_product_try($tryId, $uid) : AppController::__affordToUser($pid, $uid);
                 if (!$afford_for_curr_user) {
