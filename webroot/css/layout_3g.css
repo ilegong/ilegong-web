@@ -284,11 +284,11 @@ ul li{ list-style:none;}
 .classlist ul{ padding-left:1em; width:50%;}
 .classlist ul li{ float:left; font-size:1.25em; color:#29ac0e; }
 .classlist ul li.back{ width:0.5em; height:1em; background:url('/img/mobilev1/pyshuo_icon.png?xxz') no-repeat -1.25em -16.875em; background-size:25em 25em; margin-top:0.7em; margin-right:0.5em;}
-.classlist_v2{ height:2.5em; line-height:2.5em; width:100%; border-bottom:1px #dddddd solid; background-color:#f5f5f5; position:fixed; top:0;}
-.classlist_v2 ul{ padding-left:0.8em; font-size:1em; color:#666666;}
+.classlist_v2 {height: 3em;line-height: 3em;width: 100%;border-bottom: 1px #dddddd solid;background-color: #f5f5f5;position: fixed;top: 0;}
+.classlist_v2 ul{ padding-left:0.8em; font-size:1.1em; color:#666666;}
 .classlist_v2 ul li{ float:left;}
-.classlist_v2 ul li a.back{ display:block; width:0.5em; height:1em; background:url('/img/mobilev1/pyshuo_icon.png?xxz') no-repeat -1.25em -16.875em; background-size:25em 25em; margin-top:0.7em; margin-right:0.8em;}
-.classlist_v2 ul li.line{ height:2.5em; width:1px; border-right:1px #dddddd solid; margin-right:0.8em;}
+.classlist_v2 ul li a.back {display: block; width: 1.2em; height: 1.5em; background: url('/img/mobile/pyshuo_icon.png?xxz') no-repeat -1.5em -20.25em; background-size: 30em 30em; margin-top: 0.8em; margin-right: 0.7em; margin-left: 0.5em;}
+.classlist_v2 ul li.line {height: 3em;width: 1px;border-right: 1px #dddddd solid;margin-right: 1em;}
 .classlist_good { margin-top:3em; margin-bottom:1em;}
 .classlist_good ul li{ float:left; width:50%; text-align:center; padding-top:0.5em; border-bottom:1px #dddddd solid; border-right: 1px #dddddd solid;}
 .classlist_good ul li.last { border-right: none;}
