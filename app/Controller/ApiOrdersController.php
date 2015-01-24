@@ -828,18 +828,18 @@ class ApiOrdersController extends AppController {
 
     public function home(){
         $bannerItems = array(
-            array('img' => "www.tongshijia.com/img/banner/spring-weixin.jpg", 'id' => null),
-            array('img' => "www.tongshijia.com/img/banner/banner_cao_mei_cai_zhai.jpg", 'id' => 705),
+            array('img' => "http://www.tongshijia.com/img/banner/spring-weixin.jpg", 'id' => null),
+            array('img' => "http://www.tongshijia.com/img/banner/banner_cao_mei_cai_zhai.jpg", 'id' => 705),
         );
         $hotItems =array(
-            array('img' => "www.tongshijia.com/img/mobile/index/d3.jpg", 'id' => 705),
-            array('img' => "www.tongshijia.com/img/mobile/index/d1.jpg", 'id' => 230),
-            array('img' => "www.tongshijia.com/img/mobile/index/d2.jpg", 'id' => 331),
+            array('img' => "http://www.tongshijia.com/img/mobile/index/d3.jpg", 'id' => 705),
+            array('img' => "http://www.tongshijia.com/img/mobile/index/d1.jpg", 'id' => 230),
+            array('img' => "http://www.tongshijia.com/img/mobile/index/d2.jpg", 'id' => 331),
         );
         $specTagIds = array(13,14,15);
-        $specTagImg = array('www.tongshijia.com/img/mobile/index/p1.jpg', 'www.tongshijia.com/img/mobile/index/p2.jpg', 'www.tongshijia.com/img/mobile/index/p3.jpg');
+        $specTagImg = array('http://www.tongshijia.com/img/mobile/index/p1.jpg', 'http://www.tongshijia.com/img/mobile/index/p2.jpg', 'http://www.tongshijia.com/img/mobile/index/p3.jpg');
         $mainTagIds = array(3,5,8,12,9,6,4,10);
-        $mainTagImg = array('www.tongshijia.com/img/mobile/index/c1.jpg', 'www.tongshijia.com/img/mobile/index/c2.jpg', 'www.tongshijia.com/img/mobile/index/c3.jpg', 'www.tongshijia.com/img/mobile/index/c4.jpg', 'www.tongshijia.com/img/mobile/index/c5.jpg', 'www.tongshijia.com/img/mobile/index/c6.jpg', 'www.tongshijia.com/img/mobile/index/c7.jpg', 'www.tongshijia.com/img/mobile/index/c8.jpg');
+        $mainTagImg = array('http://www.tongshijia.com/img/mobile/index/c1.jpg', 'http://www.tongshijia.com/img/mobile/index/c2.jpg', 'http://www.tongshijia.com/img/mobile/index/c3.jpg', 'http://www.tongshijia.com/img/mobile/index/c4.jpg', 'http://www.tongshijia.com/img/mobile/index/c5.jpg', 'http://www.tongshijia.com/img/mobile/index/c6.jpg', 'http://www.tongshijia.com/img/mobile/index/c7.jpg', 'http://www.tongshijia.com/img/mobile/index/c8.jpg');
         $resultTag = array_merge($mainTagIds, $specTagIds);
         $productTagM = ClassRegistry::init('ProductTag');
         $productTags = $productTagM->find('list', array('conditions' => array(
