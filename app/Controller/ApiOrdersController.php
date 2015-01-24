@@ -437,22 +437,16 @@ class ApiOrdersController extends AppController {
             $cartsByPid = $buyingCom->cartsByPid($pidList, $uid);
             list($pids, $cart, $shipFee, $shipFees) = $buyingCom->createTmpCarts($cartsByPid, 0, $pidList, $uid);
 
-            $product_ids = Hash::extract($cart, '{n}.Cart.product_id');
-            $this->loadModel('Product');
             $products = $this->Product->find('all', array(
-                'fields' => array('id', 'created', 'slug', 'published', 'deleted','specs'),
+                'fields' => array('id', 'created', 'slug', 'published', 'deleted','specs','coverimg'),
                 'conditions'=>array(
-                    'id' => $product_ids
+                    'id' => $pidList
                 )));
-            $product_spec = Hash::combine($products, '{n}.Product.id', '{n}.Product.specs');
-            $num = 0;
-            foreach ($cart as $temp){
-                $value = $product_spec[$temp['Cart']['product_id']];
-                $spec_info = json_decode($value,true);
-                $specId = $temp['Cart']['specId'];
-                $cart[$num]['Cart']['spec'] =  $spec_info['map'][$specId]['name'];
-                $num ++;
+            $product_specs = array();
+            foreach ($products as $product) {
+                $product_specs[$product['Product']['id']] = array('img' => $product['Product']['coverimg'], 'spec'=> $product['Product']['specs']);
             }
+            $cart->products = $product_specs;
 
             $brand_ids = array_keys($cart->brandItems);
             $brands = $this->findBrands($brand_ids);
@@ -834,18 +828,18 @@ class ApiOrdersController extends AppController {
 
     public function home(){
         $bannerItems = array(
-            array('img' => "/img/banner/spring-weixin.jpg", 'url' => "/categories/spring"),
-            array('img' => "/img/banner/banner_cao_mei_cai_zhai.jpg", 'url' => "/products/20150119/xing_shou_xiu_cao_mei_yuan_cai_zhai_2jin.html"),
+            array('img' => "www.tongshijia.com/img/banner/spring-weixin.jpg", 'id' => null),
+            array('img' => "www.tongshijia.com/img/banner/banner_cao_mei_cai_zhai.jpg", 'id' => 705),
         );
         $hotItems =array(
-            array('img' => "/img/mobile/index/d3.jpg", 'url' => "/products/20150120/you_ji_hong_yan_cao_mei_tuan_gou.html"),
-            array('img' => "/img/mobile/index/d1.jpg", 'url' => "/products/20141101/wei_wei_an_shui_guo_dan_gao.html"),
-            array('img' => "/img/mobile/index/d2.jpg", 'url' => "/products/20141204/fu_ping_te_ji_jian_shi_bing.html"),
+            array('img' => "www.tongshijia.com/img/mobile/index/d3.jpg", 'id' => 705),
+            array('img' => "www.tongshijia.com/img/mobile/index/d1.jpg", 'id' => 230),
+            array('img' => "www.tongshijia.com/img/mobile/index/d2.jpg", 'id' => 331),
         );
         $specTagIds = array(13,14,15);
-        $specTagImg = array('/img/mobile/index/p1.jpg', '/img/mobile/index/p2.jpg', '/img/mobile/index/p3.jpg');
+        $specTagImg = array('www.tongshijia.com/img/mobile/index/p1.jpg', 'www.tongshijia.com/img/mobile/index/p2.jpg', 'www.tongshijia.com/img/mobile/index/p3.jpg');
         $mainTagIds = array(3,5,8,12,9,6,4,10);
-        $mainTagImg = array('/img/mobile/index/c1.jpg', '/img/mobile/index/c2.jpg', '/img/mobile/index/c3.jpg', '/img/mobile/index/c4.jpg', '/img/mobile/index/c5.jpg', '/img/mobile/index/c6.jpg', '/img/mobile/index/c7.jpg', '/img/mobile/index/c8.jpg');
+        $mainTagImg = array('www.tongshijia.com/img/mobile/index/c1.jpg', 'www.tongshijia.com/img/mobile/index/c2.jpg', 'www.tongshijia.com/img/mobile/index/c3.jpg', 'www.tongshijia.com/img/mobile/index/c4.jpg', 'www.tongshijia.com/img/mobile/index/c5.jpg', 'www.tongshijia.com/img/mobile/index/c6.jpg', 'www.tongshijia.com/img/mobile/index/c7.jpg', 'www.tongshijia.com/img/mobile/index/c8.jpg');
         $resultTag = array_merge($mainTagIds, $specTagIds);
         $productTagM = ClassRegistry::init('ProductTag');
         $productTags = $productTagM->find('list', array('conditions' => array(
