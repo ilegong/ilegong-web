@@ -238,9 +238,9 @@ class CategoriesController extends AppController {
             $is_shichi = (!empty($shichituan) || $shichituan);
             $this->set('shichiTuan', $shichituan);
         }
-        $configBanners = $this->getBanner();
+        $configBanners = $this->getBanner(array(0,2));
         if(!empty($configBanners)){
-            $bannerItems = Hash::combine($configBanners,'{n}','{n}.Banner');
+            $bannerItems = Hash::combine($configBanners,'{n}.Banner.id','{n}.Banner');
         }
         $this->set('bannerItems', $bannerItems);
         $this->set('shichi_mem', $is_shichi);
@@ -324,9 +324,9 @@ class CategoriesController extends AppController {
         }
 
         $this->setHasOfferBrandIds();
-        $configBanners = $this->getBanner();
+        $configBanners = $this->getBanner(array(0,1));
         if(!empty($configBanners)){
-            $bannerItems = Hash::combine($configBanners,'{n}','{n}.Banner');
+            $bannerItems = Hash::combine($configBanners,'{n}.Banner.id','{n}.Banner');
             $this->set('bannerItems',$bannerItems);
         }
         $this->pageTitle =  __('热卖');
@@ -714,9 +714,15 @@ class CategoriesController extends AppController {
         }
     }
 
-    function getBanner(){
+    function getBanner($types){
         $Banner = ClassRegistry::init('Banner');
+        //0 -> show pc and mobile
+        //1 -> only show pc
+        //2 -> only show mobile
         $banners = $Banner->find('all',array(
+            'conditions'=>array(
+                'type'=>$types
+            ),
             'order'=>'recommend desc',
             'limit'=>4
         ));
