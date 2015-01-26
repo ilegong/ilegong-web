@@ -109,14 +109,5 @@
         signature: wx_jssdk_signature,
         jsApiList: jsApiList
     });
-    $(document).ready(function () {
-        var to_timeline_title = "{{$Product['Product']['name']}}，" + "{{$Product['Product'][promote_name]}}。" + "现价{{$this->Number->precision($price, 2)}}元";
-        var to_friend_title = "{{$Product['Product']['name']}}";
-        var link = document.URL;
-        var imgUrl = "{{$this->Html->assetUrl(medium_thumb_link($Product['Product']['coverimg']))}}";
-        var desc = "{{$Product['Product'][promote_name]}}。现价{{$this->Number->precision($price, 2)}}元。{{$special_desc}}";
-        utils.wx_jssdk_to_friend(to_friend_title, desc, link, imgUrl);
-        utils.wx_jssdk_to_timeline(to_timeline_title, link, imgUrl);
-    })
 </script>
 
