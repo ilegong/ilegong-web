@@ -338,13 +338,14 @@ class CategoriesController extends AppController {
     }
 
     public function specCategoryList($tagSlug){
+        global $_display_tags_in_home;
+        $this->loadModel('ProductTag');
         $productTag = $this->ProductTag->find('first', array('conditions' => array(
             'slug' => $tagSlug,
-            'published' => 1
+            'published' => PUBLISH_YES,
         )));
         $this->pageTitle=$productTag['ProductTag']['name'];
-        $ids = array(16,17,18,19);
-        $tags = $this->findTagsByIds($ids);
+        $tags = $this->findTagsByIds($_display_tags_in_home);
         $this->set('tags',$tags);
     }
 

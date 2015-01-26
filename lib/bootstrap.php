@@ -22,6 +22,13 @@ const SPEICAL_LIST_DAILY_ID = 4;
 
 const ASSET_SXA_DOMAIN = 's.tongshijia.com';
 
+const TAG_ID_CHULIANG = 16;
+const TAG_ID_ROUQIN_DANPIN = 17;
+const TAG_ID_XINXIANSHUIGUO = 18;
+const TAG_ID_XINPIN_SHICHI = 19;
+
+$_display_tags_in_home = array(TAG_ID_CHULIANG, TAG_ID_ROUQIN_DANPIN, TAG_ID_XINPIN_SHICHI, TAG_ID_XINPIN_SHICHI);
+
 App::build(array(
 	'plugins' => array(COMMON_PATH.'Plugin'.DS, APP_PATH.'Plugin'.DS, ),
 	//'views' => array(COMMON_PATH.'View'.DS),
