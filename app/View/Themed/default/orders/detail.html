@@ -14,6 +14,44 @@
             location.href  = "/ali_pay/{{$isMobile?'wap_to_alipay':'goto_to_alipay'}}/{{$order['Order']['id']}}";
         }
     }
+
+    function mobileTip(msg,fadeInTime,fadeOutTime,callBack){
+
+        this.$tipInfoPanel = $('<div class="comment_tip_layer radius10" style="width:60%; left:50%; top:30%; margin-left:-30%; display: none;"></div>');
+        $('body').append(this.$tipInfoPanel);
+        fadeInTime = fadeInTime?fadeInTime:1000;
+        fadeOutTime = fadeOutTime?fadeOutTime:3000;
+        callBack = callBack?callBack:function(){
+        };
+        this.$tipInfoPanel.text(msg).fadeIn(fadeInTime).fadeOut(fadeOutTime,callBack);
+    }
+    $(document).ready(function(){
+       $('#remind-deliver').click(function(){
+        var order_id = $(this).val();
+           $.ajax({
+               type:'post',
+               success:function(data){
+                    if(data==1|| data==3){
+                   $('#remind-deliver').text('已提醒商家').prop('disabled','disabled');
+//                   $('#remind_deliver').html("商家已收到您的提醒啦").show(200).delay(1000).hide(300);
+                      mobileTip('商家已收到您的提醒啦');
+                    }else if(data==2){
+//                   $('#remind_deliver').html('您已经提醒过啦，请15分钟后再提醒').hide(1000);
+                        mobileTip('您已经提醒过啦，请15分钟后再提醒');
+                    }else {
+//                    $('#remind_deliver').html("提醒发货失败，请稍后再试").show(200).delay(1000).hide(300);
+                        mobileTip('提醒发货失败，请稍后再试');
+                    }
+               },
+               data:{},
+               url:'/orders/remind_deliver/'+order_id,
+              dataType:'json'
+           })
+
+
+       });
+    });
+
 </script>
         {{if $display_status}}
         {{template Elements/paid_msg}}
@@ -50,7 +88,13 @@
         {{/if}}
     </div>
     {{/if}}
-
+    {{if $order['Order']['status']== ORDER_STATUS_PAID}}
+        <div class="panel-body">
+            <button class="btn-sm btn-success" id="remind-deliver"  value="{{$order['Order']['id']}}">提醒发货</button>
+            <!--<span id="remind_deliver"></span>-->
+            <div class="comment_tip_layer radius10" style="width:60%; left:50%; top:30%; margin-left:-30%; display: none;"></div>
+        </div>
+    {{/if}}
         <div>
             <br/>
             <h3>基本信息</h3>

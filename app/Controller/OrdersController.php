@@ -1486,4 +1486,66 @@ class OrdersController extends AppController{
 
     }
 
+
+    /*
+     * remind the sellers to deliver goods
+     */
+    function remind_deliver($order_id){
+
+        $this->autoRender = false;
+        $this->loadModel('RemindDeliver');
+        $this->loadModel('Brand');
+        $this->loadModel('User');
+        $order_info = $this->Order->find('first',array('conditions' => array('id' => $order_id),'user_id' => $this->currentUser['id']));
+        $remind_info = $this->RemindDeliver->find('first',array('conditions' => array('order_id' => $order_id,'user_id' => $this->currentUser['id']),'order' => 'times desc'));
+        $brand_info = $this->Brand->find('first',array('conditions' => array('id' => $order_info['Order']['brand_id'])));
+        $seller_info = $this->User->find('first',array('conditions' => array('id' => $brand_info['Brand']['creator'])));
+
+        $cTime = time();
+        $nTime = $remind_info['RemindDeliver']['remind_time'];
+        $dTime = $cTime - strtotime($nTime);
+        $data = array();
+        $data['order_id'] = $order_id;
+        $data['user_id'] = $this->currentUser['id'];
+        $data['remind_time'] = date('Y-m-d H:i:s');
+        $paid_time_past = strtotime($data['remind_time']) - strtotime($order_info['Order']['pay_time']);
+        $dDay =  intval(date("d",strtotime($data['remind_time']))) - intval(date("d",strtotime($order_info['Order']['pay_time'])));
+        $dHour = intval(($paid_time_past/3600)%24);
+        $dDay = $dDay>0?$dDay.'天':'';
+        $dHour = $dHour>0?$dHour.'小时':'';
+        $dMin = ($dDay==''&&$dHour=='')?intval(($paid_time_past/60)%60).'分钟':'';
+        $this->log('$paid_time_past'.json_encode($dHour));
+
+        if(empty($remind_info)){
+            $data['times'] = 1;
+            if($this->RemindDeliver->save($data)){
+            $msg = '用户'.$order_info['Order']['consignee_name']. '催促您发货。订单号'.$order_id.'，离用户支付成功已过去'.$dDay.$dHour.$dMin;
+            $tel = $seller_info['User']['mobilephone'];
+            message_send($msg,$tel);
+            $return_Info = 1;
+            echo  json_encode($return_Info);
+            exit;
+
+            }
+        }else {
+            if(intval($dTime/60)<=15){
+                $return_Info = 2;
+                echo  json_encode($return_Info);
+                exit;
+            }else{
+                $data['times'] = $remind_info['RemindDeliver']['times']+1;
+                if($this->RemindDeliver->save($data)){
+                    $msg = '用户'.$order_info['Order']['consignee_name']. '第'.$data['times'].'次催促您发货。订单号'.$order_id.'，离用户支付成功已过去'.$dDay.$dHour.$dMin;
+                    $tel = $seller_info['User']['mobilephone'];
+                     message_send($msg,$tel);
+                    $return_Info = 3;
+                    echo  json_encode($return_Info);
+                }
+            }
+        }
+
+
+    }
+
+
 }
