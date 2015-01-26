@@ -197,7 +197,7 @@ class CategoriesController extends AppController {
         $specTags = Hash::combine($specTags,'{n}.ProductTag.id','{n}.ProductTag');
         $this->set('spec_tags',$specTags);
         $bannerItems = array(
-            array('img' => "/img/banner/spring-weixin.jpg", 'url' => "/categories/spring"),
+            array('mobile_image' => "/img/banner/spring-weixin.jpg", 'detail_url' => "/categories/spring"),
 //            $zutuangous[mt_rand(0, 1000) % count($zutuangous)],
 //            array('img' => "/img/banner/banner_cao_mei_cai_zhai.jpg", 'url' => "/products/20150119/xing_shou_xiu_cao_mei_yuan_cai_zhai_2jin.html", 'id' => 697),
 //            array('img' => "/img/banner/banner_shibin.jpg?v2", 'url' => "/products/20141204/fu_ping_te_ji_jian_shi_bing.html", 'id' => 331),
@@ -238,9 +238,13 @@ class CategoriesController extends AppController {
             $is_shichi = (!empty($shichituan) || $shichituan);
             $this->set('shichiTuan', $shichituan);
         }
+        $configBanners = $this->getBanner();
+        if(!empty($configBanners)){
+            $bannerItems = Hash::combine($configBanners,'{n}','{n}.Banner');
+        }
+        $this->set('bannerItems', $bannerItems);
         $this->set('shichi_mem', $is_shichi);
         $this->set('tryings', $tryings);
-        $this->set('bannerItems', $bannerItems);
         $this->set('max_show', $this->RequestHandler->isMobile()? 2 : 4);
         $this->set('_serialize', array('brands', 'tagsWithProducts', 'sub_title', 'bannerItems'));
     }
@@ -253,7 +257,6 @@ class CategoriesController extends AppController {
                 return;
             }
         }
-
         $current_cateid = CATEGORY_ID_TECHAN;
         $page = 1;
         $pagesize = 60;
@@ -321,7 +324,11 @@ class CategoriesController extends AppController {
         }
 
         $this->setHasOfferBrandIds();
-
+        $configBanners = $this->getBanner();
+        if(!empty($configBanners)){
+            $bannerItems = Hash::combine($configBanners,'{n}','{n}.Banner');
+            $this->set('bannerItems',$bannerItems);
+        }
         $this->pageTitle =  __('热卖');
         $navigation = $this->readOrLoadAndCacheNavigations($current_cateid, $this->Category);
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
@@ -705,6 +712,15 @@ class CategoriesController extends AppController {
                 echo json_encode(array('success'=>$got, 'reason' => $reason));
             }
         }
+    }
+
+    function getBanner(){
+        $Banner = ClassRegistry::init('Banner');
+        $banners = $Banner->find('all',array(
+            'order'=>'recommend desc',
+            'limit'=>4
+        ));
+        return $banners;
     }
 
 }  

@@ -136,8 +136,8 @@
         var banners = [];
         var banner_links = [];
         {{loop $bannerItems $key $banner}}
-            banners.push('{{$this->Html->assetUrl($banner['img'])}}');
-            banner_links.push('{{$this->Html->url($banner['url'])}}');
+            banners.push('{{$this->Html->assetUrl($banner['mobile_image'])}}');
+            banner_links.push('{{$this->Html->url($banner['detail_url'])}}');
         {{/loop}}
 
         //$(banners).preload();
