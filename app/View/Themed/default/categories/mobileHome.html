@@ -59,7 +59,7 @@
     <ul class="clearfix" style="list-style-type: none">
         <li class="fl">
             {{if $daily_special}}
-            <a href="{{product_link($daily_special['ProductSpecial']['product_id'], '/')}}" style="display:block;"><img src="{{'http://s.tongshijia.com/img/dailyspecials/'.$daily_special['ProductSpecial']['show_day'].'.jpg';}}" /></a>
+            <a href="{{product_link($daily_special['ProductSpecial']['product_id'], '/')}}" style="display:block;"><img src="{{'http://s.tongshijia.com/img/u/dailyspecials/'.$daily_special['ProductSpecial']['show_day'].'.jpg';}}" /></a>
             {{else}}
             <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $spec_tags[13]['slug'] ))}}" style="display:block;"><img src="{{$this->Html->assetUrl('/img/mobile/index/p1.jpg');}}" /></a>
             {{/if}}
