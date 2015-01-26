@@ -75,7 +75,7 @@ if (defined('SAE_MYSQL_DB')) {
 if (defined('SAE_MYSQL_DB')) {
     $engine = 'Saemc';
 }
-elseif(preg_match('/\.aliapp\.com$/',$_SERVER['HTTP_HOST'])){
+elseif(isset($_SERVER['HTTP_HOST'])&&preg_match('/\.aliapp\.com$/',$_SERVER['HTTP_HOST'])){
 	$engine = 'Acemc';
 }
 else {
