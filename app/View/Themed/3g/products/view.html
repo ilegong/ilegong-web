@@ -67,6 +67,7 @@
         </li>
     </ul>
 </div>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
     $().ready(function(){
         //Thumbs
@@ -90,33 +91,30 @@
                 window.location.href = '/';
             })
         }
+        var wx_jssdk_appId = '{{$signPackage["appId"]}}';
+        var wx_jssdk_timestamp = {{$signPackage["timestamp"]?$signPackage["timestamp"]:1}};
+        var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
+        var wx_jssdk_signature = '{{$signPackage["signature"]}}';
+        var jsApiList = ['checkJsApi','onMenuShareTimeline','onMenuShareAppMessage'];
+        wx.config({
+            debug: false,
+            appId: wx_jssdk_appId,
+            timestamp: wx_jssdk_timestamp,
+            nonceStr: wx_jssdk_nonceStr,
+            signature: wx_jssdk_signature,
+            jsApiList: jsApiList
+        });
+        wx.ready(function () {
+            var to_timeline_title = "{{$Product['Product']['name']}}，" + "{{$Product['Product'][promote_name]}}。" + "现价{{$this->Number->precision($price, 2)}}元";
+            var to_friend_title = "{{$Product['Product']['name']}}";
+            var link = document.URL;
+            var imgUrl = "{{$this->Html->assetUrl(medium_thumb_link($Product['Product']['coverimg']))}}";
+            var desc = "{{$Product['Product'][promote_name]}}。现价{{$this->Number->precision($price, 2)}}元。{{$special_desc}}";
+            utils.wx_jssdk_to_friend(to_friend_title, desc, link, imgUrl);
+            utils.wx_jssdk_to_timeline(to_timeline_title, link, imgUrl);
+        })
     })
 </script>
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'));}}
 
-<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<script>
-    var wx_jssdk_appId = '{{$signPackage["appId"]}}';
-    var wx_jssdk_timestamp = {{$signPackage["timestamp"]?$signPackage["timestamp"]:1}};
-    var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
-    var wx_jssdk_signature = '{{$signPackage["signature"]}}';
-    var jsApiList = ['checkJsApi','onMenuShareTimeline','onMenuShareAppMessage'];
-    wx.config({
-        debug: false,
-        appId: wx_jssdk_appId,
-        timestamp: wx_jssdk_timestamp,
-        nonceStr: wx_jssdk_nonceStr,
-        signature: wx_jssdk_signature,
-        jsApiList: jsApiList
-    });
-    wx.ready(function () {
-        var to_timeline_title = "{{$Product['Product']['name']}}，" + "{{$Product['Product'][promote_name]}}。" + "现价{{$this->Number->precision($price, 2)}}元";
-        var to_friend_title = "{{$Product['Product']['name']}}";
-        var link = document.URL;
-        var imgUrl = "{{$this->Html->assetUrl(medium_thumb_link($Product['Product']['coverimg']))}}";
-        var desc = "{{$Product['Product'][promote_name]}}。现价{{$this->Number->precision($price, 2)}}元。{{$special_desc}}";
-        //utils.wx_jssdk_to_friend(to_friend_title, desc, link, imgUrl);
-        //utils.wx_jssdk_to_timeline(to_timeline_title, link, imgUrl);
-    })
-</script>
 
