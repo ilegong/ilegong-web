@@ -346,6 +346,11 @@ class ProductsController extends AppController{
         }
 
         $this->set('category_control_name', 'products');
+        if($this->is_weixin()){
+            $this->loadModel('WxOauth');
+            $signPackage = $this->WxOauth->getSignPackage();
+            $this->set('signPackage', $signPackage);
+        }
     }
 
     /**
