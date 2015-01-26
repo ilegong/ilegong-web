@@ -1098,32 +1098,7 @@ var utils = {
             //_report('timeline', res.err_msg);
         });
     },
-	wx_jssdk_cofig: function(appid, timestamp, nonceStr, signature,jsApiList){
-		jsApiList = arguments[4] ? arguments[4] :['checkJsApi','onMenuShareTimeline','onMenuShareAppMessage'];
-		wx.config({
-			debug: false,
-			appId: appid,
-			timestamp: timestamp,
-			nonceStr: nonceStr,
-			signature: signature,
-			jsApiList: jsApiList
-		})
-	},
-	wx_jssdk_to_friend :function(title, link, imgUrl){
-		wx.onMenuShareAppMessage({
-			title: title,
-			link: link,
-			imgUrl: imgUrl
-		});
-	},
-	wx_jssdk_to_timeline : function(title, desc, link, imgUrl){
-		wx.onMenuShareTimeline({
-			title: title,
-			desc: desc,
-			link: link,
-			imgUrl: imgUrl
-		});
-	},
+
     is_weixin: function(){
         return (typeof '_pys_in_weixin' != 'undefined' && _pys_in_weixin);
     },
