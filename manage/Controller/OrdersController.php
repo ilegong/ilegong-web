@@ -241,7 +241,7 @@ class OrdersController extends AppController{
                 echo '<span style="font-size: large;color: #ff0000">&#x56E2;&#x8D2D;&#x8BA2;&#x5355;&#x65E0;&#x4EBA;&#x53C2;&#x56E2;</span>';
                 return;
             }
-            $find_order_conditions =array('member_id' => $groupon_member_lists, 'creator' => $organizer_ids, 'status'=>array(ORDER_STATUS_PAID,ORDER_STATUS_WAITING_PAY));
+            $find_order_conditions =array('member_id' => $groupon_member_lists, 'creator' => $organizer_ids, 'status !='=>array(ORDER_STATUS_PAID,ORDER_STATUS_WAITING_PAY));
             if($this->Order->hasAny($find_order_conditions)){
                 //团购订单已发货或已收货
                 echo '<span style="font-size: large;color: #ff0000">&#x56E2;&#x8D2D;&#x8BA2;&#x5355;&#x5DF2;&#x53D1;&#x8D27;&#x6216;&#x5DF2;&#x6536;&#x8D27;</span>';
