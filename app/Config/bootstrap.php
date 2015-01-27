@@ -309,7 +309,8 @@ function calculate_price($pid, $price, $currUid, $num, $cart_id = 0) {
             list($afford_for_curr_user, $limit_per_user, $total_left) =
                 calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
             if ($afford_for_curr_user) {
-                if ($special['special']['least_num'] <= 0 || $num >= $special['special']['least_num']) {
+                if ( ($special['special']['least_num'] <= 0 || $num >= $special['special']['least_num'])
+                    && ($special['special']['limit_per_user'] <= 0 || $special['special']['limit_per_user'] < $num) ) {
                     $price = $special['special']['special_price'] / 100;
                 }
                 return array($price, $special['special']['id']);
