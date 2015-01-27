@@ -39,7 +39,7 @@ class UsersController extends AppController {
     public function beforeFilter(){
     	parent::beforeFilter();
 
-        $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys');
+        $this->Auth->authenticate = array('WeinxinOAuth', 'Form', 'Pys','Mobile');
 
     	$this->Auth->allowedActions = array('register','login','forgot','captcha','reset', 'wx_login', 'wx_auth', 'wx_menu_point', 'login_state','get_spring_coupon');
         $this->set('op_cate', 'me');
@@ -1094,23 +1094,20 @@ class UsersController extends AppController {
             } else if($mobile_num !=  $current_post_num){
                 $res = array('success'=> false, 'msg'=>'请重新验证您的手机号码');
             }else if ($this->User->hasAny(array('User.mobilephone' => $mobile_num))){
-                $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录','code'=>2);
+                $tempUser = $this->getUserNamebyMobile($mobile_num);
+                $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录','code'=>2,'username'=>$tempUser['User']['username']);
             }else if($this->User->hasAny(array('User.username' => $mobile_num))){
                 if($this->currentUser['username'] == $mobile_num){
                     if($this->User->save($user_info)){
                         $res = array('success'=> true, 'msg'=>'你的账号和手机号绑定成功');
                     };
                 }else{
-                    $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录','code'=>2);
+                    $tempUser = $this->getUserNamebyMobile($mobile_num);
+                    $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录','code'=>2,'username'=>$tempUser['User']['username']);
                 }
             } else{
-//                    if($this->is_weixin()){
-//                        if (is_null($this->data['User']['password']) || trim($this->data['User']['password']) == '') {
-//                            $this->Session->setFlash(__('Password should be longer than 6 characters'));
-//                        }
-//                        $user_info['User']['password'] = Security::hash($this->data['User']['password'], null, true);
-//                    }
                 if ($this->User->save($user_info)) {
+                    $this->Session->write('Auth.User.mobilephone',$mobile_num);
                     $res = array('success'=> true, 'msg'=>'你的账号和手机号绑定成功');
                 } else {
                     $res = array('success'=> false, 'msg'=>'绑定失败，数据库忙');
@@ -1134,14 +1131,24 @@ class UsersController extends AppController {
     function to_bind_mobile(){
         $userId = $this->Session->read('Auth.User.id');
         $userNickName = $this->Session->read('Auth.User.nickname');
+        $orderId = $_REQUEST['order_id'];
         $this->set('userId',$userId);
         $this->set('nickname',$userNickName);
+        $this->set('orderId',$orderId);
         $this->pageTitle="绑定手机号";
     }
 
     function merge_data(){
         $this->autoRender=false;
         $userId = $this->Session->read('Auth.User.id');
+        //no login user must to login
+        if(!$userId){
+            $this->Session->setFlash(__('You are not authorized to access that location.', true));
+            $this->redirect(array('action' => 'login'));
+        }
+        $this->loadModel('Oauthbind');
+        $wxBind = $this->Oauthbind->findWxServiceBindByUid($userId);
+        $oauth_openid = $wxBind['oauth_openid'];
         $mobile = $_REQUEST['mobile'];
         $mobileCode = $_REQUEST['mobileCode'];
         $msgCode = $this->Session->read('messageCode');
@@ -1149,7 +1156,15 @@ class UsersController extends AppController {
         if(is_array($codeLog)&&$codeLog['code']==$mobileCode){
             $newUser = $this->getUserByMobile($mobile);
             $newUserId = $newUser['User']['id'];
+            if (!empty($wxBind)) {
+                //do wx bind
+                $this->Oauthbind->update_wx_bind_uid($oauth_openid, $userId, $newUserId);
+            }
             $this->transferUserInfo($userId,$newUserId);
+            $this->logoutCurrUser();
+            $this->data['checkMobileCode']=true;
+            $this->data['User'] = $newUser['User'];
+            $this->Auth->login();
             $result = array('success'=>'true','msg'=>'信息合并成功');
         }else{
             $result = array('success'=>'false','msg'=>'手机验证码不正确');
@@ -1164,6 +1179,14 @@ class UsersController extends AppController {
             array('conditions' => array('mobilephone' => $mobile,'published'=>1))
             );
         return $user;
+    }
+
+    function getUserNamebyMobile($mobile){
+        $username = $this->User->find('first',array(
+            'conditions'=>array('mobilephone'=>$mobile,'published'=>1),
+            'fields'=>array('username')
+        ));
+        return $username;
     }
 
     function get_spring_coupon($pid) {

@@ -22,14 +22,20 @@ Pyshuo.ui.utils={
         }
     },
     mobileShowTip:function(msg,fadeInTime,fadeOutTime,callBack){
-        if(!this.$tipInfoPanel){
-            this.$tipInfoPanel = $('<div class="comment_tip_layer radius10" style="width:60%; left:50%; top:30%; margin-left:-30%; display: none;"></div>');
-            $('body').append(this.$tipInfoPanel);
+        var me = this;
+        if(!me.$tipInfoPanel){
+            me.$tipInfoPanel = $('<div class="comment_tip_layer radius10" style="width:60%; left:50%; top:30%; margin-left:-30%; display: none;"></div>');
+            $('body').append(me.$tipInfoPanel);
         }
-        fadeInTime = fadeInTime?fadeInTime:1000;
-        fadeOutTime = fadeOutTime?fadeOutTime:2000;
+        fadeInTime = fadeInTime?fadeInTime:500;
+        fadeOutTime = fadeOutTime?fadeOutTime:1000;
         callBack = callBack?callBack:function(){
         };
-        this.$tipInfoPanel.text(msg).fadeIn(fadeInTime).fadeOut(fadeOutTime,callBack);
+        me.$tipInfoPanel.text(msg).fadeIn(fadeInTime)
+        setTimeout(
+            function(){
+                me.$tipInfoPanel.fadeOut(fadeOutTime,callBack);
+            },1500);
+
     }
 };

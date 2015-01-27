@@ -1,3 +1,4 @@
+{{if $isMobile}}
 <div class="classlist_v2" style="z-index:1">
     <ul class="clearfix">
     <li><a href="/orders/mine" class="back"></a></li>
@@ -5,6 +6,7 @@
         <li><strong>订单详情</strong></li>
     </ul>
 </div>
+{{/if}}
 <div  class="container" style="margin-top: 2.5em;">
 <script>
     function go_to_pay_zhifubao() {
@@ -67,7 +69,6 @@
                 <a class="btn btn-warning" href="javascript:;" onclick="go_to_pay_zhifubao()">支付宝支付</a>
                 {{/if}}
                 {{/if}}
-
             </div>
         </div>
         {{elseif $has_expired_product_type}}
@@ -76,6 +77,13 @@
             <div class="alert alert-info">您订单中待支付的商品已经售完啦</div>
         {{elseif $has_reach_limit}}
             <div class="alert alert-info">您订单中待支付的商品已经超限啦</div>
+        {{/if}}
+        {{if $order['Order']['status']==3}}
+        <div class="panel panel-warning">
+            <div class="panel-body">
+                <a class="btn-sm btn-warning" href="/comments/add_comment/{{$order['Order']['id']}}">{{if $order['Order']['is_comment']==0}}评论赢积分{{else}}查看评论{{/if}}</a>
+            </div>
+        </div>
         {{/if}}
 
     {{if !empty($toShare)}}
@@ -160,7 +168,7 @@
                 {{$cart['Cart']['name']}}
             </a>
 
-                {{if $canComment}}
+                {{if $canComment&&$is_try}}
             <a href="{{product_link2($p)}}?{{$is_try?SPEC_PARAM_KEY_SHICHI_COMM  : SPEC_PARAM_KEY_COMM}}=1" style="display: inline-block" class="btn-sm btn-warning">
                 去评论
             </a>

@@ -32,7 +32,7 @@ td {padding:5px 10px;}
 {{if $is_mobile}}
 <div class="classlist_v2" style="z-index:1">
     <ul class="clearfix">
-        <li><a href="/users/me" class="back"></a></li>
+        <li><a href="javascript:history.back(-1);" class="back"></a></li>
         <li class="line"></li>
         <li><strong>我的订单</strong></li>
     </ul>
@@ -64,4 +64,5 @@ td {padding:5px 10px;}
         </div>
         <?php } ?>
     </div>
+    <br/>
 </div>

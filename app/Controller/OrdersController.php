@@ -672,6 +672,7 @@ class OrdersController extends AppController{
 		$this->set('order_carts',$order_carts);
 		$this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('counts', $counts);
+        $this->set('is_weixin',$this->RequestHandler->isMobile());
 	}
 
 

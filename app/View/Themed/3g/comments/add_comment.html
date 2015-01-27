@@ -1,0 +1,355 @@
+<div class="classlist_v2" style="z-index:999">
+    <ul class="clearfix">
+        <li><a href="javascript:history.back(-1);" class="back"></a></li>
+        <li class="line"></li>
+        <li><strong>评论</strong></li>
+    </ul>
+</div>
+<div class="mobile_custom" style="background-color: #f5f5f5;margin-top: 40px;">
+    <?php foreach($products as $index=>$product){?>
+    <form action="{{$this->Html->url(array('controller'=>'comments','action'=>'persistent_comment'))}}" method="post" name="{{$product['name']}}">
+        <div class="comment comment_bg">
+            <input type="hidden" name="data[Comment][data_id]" value="{{$index}}"/>
+            <input type="hidden" name="data[Comment][type]" value="Product"/>
+            <input type="hidden" name="data[Comment][pictures]" value="{{$product['pictures']}}"/>
+            <input type="hidden" name="data[Comment][status]" data="data_status" value="0">
+            <input type="hidden" name="data[Comment][order_id]" value="{{$order['Order']['id']}}"/>
+            <ul class="clearfix">
+                <li class="comment_pic fl"><a href="{{'/products/' . date('Ymd', strtotime($product['product_created'])) . '/' . $product['product_slug'] . '.html'}}"><img src="{{$product['coverimg']}}"/></a></li>
+                <li class="comment_con fl">
+                    <div class="comment_title">{{mb_substr($product['name'] , 0 , 13).'...'}}</div>
+                    <dl class="clearfix raty" style="margin: 0px">
+                        <input style="display: none" name="data[Comment][rating]" value="{{$product['rating']}}"/>
+                        <dt class="comment_star fl">评分:</dt>
+                        <dt class="fl comment_star_gray star" data-rank="1"></dt>
+                        <dt class="fl comment_star_gray star" data-rank="2"></dt>
+                        <dt class="fl comment_star_gray star" data-rank="3"></dt>
+                        <dt class="fl comment_star_gray star" data-rank="4"></dt>
+                        <dt class="fl comment_star_gray star" data-rank="5"></dt>
+                    </dl>
+                </li>
+            </ul>
+            <div style="position:relative;" name="comment-place">
+                <textarea name="data[Comment][body]" cols="" rows="" style="background: #f5f5f5;" placeholder="" {{if $order['Order']['is_comment']==1}}disabled="disabled" style="background: #999999;"{{/if}}>{{$product['body']}}</textarea>
+                <label style="display: none;">长度在10-500个字之间<br/>写下您真实的购买体会,马上获得200积分,同时可以为其他小伙伴提供参考...</label>
+            </div>
+            <div class="clearfix upload-image">
+                <input style="width: 0;height: 0;" type="file" name="files[]" accept="image/*;capture=camera"/>
+                <a href="#X" class="comment_upload"><span></span></a>
+                <a href="#X" class="comment_upload"><span></span></a>
+                <a href="#X" class="comment_upload"><span></span></a>
+                <a href="#X" class="comment_upload"><span></span></a>
+            </div>
+        </div>
+    </form>
+    <?php } ?>
+    <form action="{{$this->Html->url(array('controller'=>'comments','action'=>'add_order_comment'))}}" method="post">
+        <input type="hidden" name="id" value="{{$order_rating['OrderComment']['id']}}"/>
+        <input type="hidden" name="orderId" value="{{$order['Order']['id']}}"/>
+        <input type="hidden" name="brandId" value="{{$order['Order'][brand_id]}}"/>
+        <input type="hidden" name="status" data="data_status" value="0">
+        <div class="comment_csi" {{if $order['Order']['is_comment']==1}}style="padding-bottom:0.5em;"{{/if}}>
+            <dl class="clearfix raty" style="margin-bottom: 10px">
+                <input style="display: none" name="server_star" value="{{$order_rating['OrderComment']['service_star']}}"/>
+                <dt class="comment_star fl">服务满意度:</dt>
+                <dt class="fl comment_star_gray star" data-rank="1"></dt>
+                <dt class="fl comment_star_gray star" data-rank="2"></dt>
+                <dt class="fl comment_star_gray star" data-rank="3"></dt>
+                <dt class="fl comment_star_gray star" data-rank="4"></dt>
+                <dt class="fl comment_star_gray star" data-rank="5"></dt>
+            </dl>
+            <dl class="clearfix raty" style="margin-bottom: 10px">
+                <input style="display: none" name="logistics_star" value="{{$order_rating['OrderComment']['logistics_star']}}"/>
+                <dt class="comment_star fl">物流满意度:</dt>
+                <dt class="fl comment_star_gray star" data-rank="1"></dt>
+                <dt class="fl comment_star_gray star" data-rank="2"></dt>
+                <dt class="fl comment_star_gray star" data-rank="3"></dt>
+                <dt class="fl comment_star_gray star" data-rank="4"></dt>
+                <dt class="fl comment_star_gray star" data-rank="5"></dt>
+            </dl>
+        </div>
+    </form>
+{{if $order['Order']['is_comment']==0}}
+<a href="#X" id="submit_comment" class="comment_submit">提交评价</a>
+{{/if}}
+</div>
+<!--add upload form-->
+{{$this->Html->script(array('/js/jquery.form.js','/js/pyshuo.common.js?v=0.3'));}}
+{{if $order['Order']['is_comment']==0}}
+<script>
+    $(document).ready(function () {
+        var orderId = "{{$order['Order']['id']}}";
+        changeSubmitStatus();
+        //comment area view
+        $('div[name="comment-place"]').each(function(index,item){
+            var me = $(item);
+            var $textArea = $('textarea',me);
+            var $label = $('label',me);
+            me.on('click',function(e){
+                e.preventDefault();
+                $textArea.focus();
+            });
+            if(!$textArea.val()){
+                $label.show();
+            }else{
+                $label.hide();
+            }
+            $textArea.on('focus',function(e){
+                e.preventDefault();
+                $label.hide();
+            }).on('change',function(e){
+                changeState();
+            }).on('blur',function(e){
+                e.preventDefault();
+                changeState();
+            });
+            function changeState(){
+                if($textArea.val()){
+                    $label.hide();
+                }else{
+                    $label.show();
+                }
+                changeSubmitStatus();
+            }
+        });
+
+        function changeSubmitStatus(){
+            var $textAreas = $('textarea');
+            var flag = true;
+            $.each($textAreas,function(index,item){
+                var content = $(item).val();
+                if(content.length<10){
+                    flag = false;
+                    return false;
+                }
+            });
+            if(flag){
+                $('#submit_comment').addClass('comment_submit').removeClass('comment_submit_disable');
+            }else{
+                $('#submit_comment').addClass('comment_submit_disable').removeClass('comment_submit');
+            }
+        }
+
+        $('div[name="comment-place"] textarea').on('change',function(){
+            saveDraftComment($(this));
+        });
+
+        function saveDraftComment(element){
+            //TODO handle error msg or save local storge
+            //TODO reset id
+            $(element).parents('form').ajaxSubmit();
+        }
+
+        $('dl.raty').each(function (index, item) {
+            $(item).pyRaty();
+        });
+        $('div.upload-image').each(function (index, item) {
+            $(item).pyUpload();
+        });
+
+        $('#submit_comment').on('click',function(e){
+            e.preventDefault();
+            if($(this).hasClass('comment_submit_disable')){
+                Pyshuo.ui.utils.mobileShowTip('评论内容不能小于10个字..');
+                return;
+            }
+            if($(this).attr('disabled')){
+                return;
+            }
+            $(this).attr("disabled","disabled");
+            //set status draft comment can show in view page
+            //async ?
+            $('input[data="data_status"]').each(function(index,item){
+                $(item).val("1");
+            });
+            //set order is comment
+            submitComment();
+        });
+        function formVaild(formData, jqForm, options){
+            var isValid = true;
+            $.each(formData,function(index,data){
+                if(data['name']==='data[Comment][body]'){
+                    var dataBody = $.trim(data['value']);
+                    if(!dataBody||dataBody.length<10){
+                        isValid=false;
+                        return false;
+                    }
+                }
+            });
+            if(!isValid){
+                Pyshuo.ui.utils.mobileShowTip('评论内容不能小于10个字..');
+                $('#submit_comment').removeAttr('disabled');
+            }
+            return isValid;
+        }
+        function submitComment(){
+            var results = [];
+            $('form[name!="py-custom-upload"]').each(function(index,item){
+                var dtd = $.Deferred();
+                results.push(dtd);
+                $(item).ajaxSubmit({
+                    dataType:'json',
+                    beforeSubmit:formVaild,
+                    success:function(data){
+                        dtd.resolve(data);
+                    },
+                    error:function(data){
+                        dtd.reject(data);
+                    }
+
+                });
+            });
+            $.when.apply(this,results).done(function(){
+                var isAllSubmit = true;
+                $.each(arguments,function(index,item){
+                    if(!('success' in item)||!item['success']){
+                        isAllSubmit = false;
+                        return false;
+                    }
+                });
+                //change order comment status
+                if(isAllSubmit){
+                    $.post('/comments/submit_order_comment',{'orderId':orderId},function(data){
+                        var result = JSON.parse(data);
+                        if(result['success']){
+                            //redirect or reload
+                            Pyshuo.ui.utils.mobileShowTip(result['msg'],1000,1000,function(){
+                                window.location.href='/orders/mine';
+                            });
+
+                        }else{
+                            //do nothing
+                            $('#submit_comment').removeAttr('disabled');
+                            Pyshuo.ui.utils.mobileShowTip(result['msg']);
+                        }
+                    });
+                }else{
+                    $('#submit_comment').removeAttr('disabled');
+                }
+            });
+        }
+    });
+</script>
+{{else}}
+<script>
+    $(document).ready(function(){
+        $('dl.raty').each(function (index, item) {
+            $(item).pyRaty({isSubmit:false});
+        });
+        $('div.upload-image').each(function (index, item) {
+            $(item).pyUpload({isSubmit:false});
+        });
+    });
+</script>
+{{/if}}
+<script>
+    (function ($) {
+        $.fn.pyUpload = function (option) {
+            var me = $(this);
+            //TODO auto add pic holder
+            var defaultOption = {
+                uploadUrl: '/upload/upload',
+                name: 'py-custom-upload',
+                dataHolder:'CommentPictures',
+                isSubmit:true
+            };
+            var config = $.extend(defaultOption, option);
+            var $data = me.siblings('input[name="data[Comment][pictures]"]');
+            var $parentForm = me.parents('form');
+            me.wrap('<form name="' + config['name'] + '" action="' + config['uploadUrl'] + '" method="post" enctype="multipart/form-data"></form>');
+            var $images = $data.val();
+            var $imageHolders = $('a.comment_upload',me);
+            //remove blank val
+            $images = $.grep($images.split('|'), function(n) {return $.trim(n).length > 0;});
+            $.each($images,function(index,item){
+                $($imageHolders[index]).attr('href',item).html('<img src="'+item+'"/>');
+            });
+            var $fileInput = $('input', me);
+            $('a.comment_upload',me).each(function (index, item) {
+                //TODO  use custom function
+                $(item).on('click', function (e) {
+                    e.preventDefault();
+                    $fileInput.attr('data-index', index);
+                    if(config['isSubmit']){
+                        $fileInput.trigger('click');
+                    }
+                    return false;
+                });
+            });
+            if(config['isSubmit']){
+                $fileInput.on('change', function (e) {
+                    e.preventDefault();
+                    var index = $(this).attr('data-index');
+                    var $imageHolder = $imageHolders[index];
+                    var $delete_a = $($imageHolder);
+                    //TODO delete image
+                    if($delete_a.attr('href').indexOf('http')===0){
+                        var tmpUrl = $delete_a.attr('href');
+                        $images = $.grep($images, function(n) {return n!=tmpUrl;});
+                    }
+                    me.parent().ajaxSubmit({
+                        dataType: 'json',
+                        beforeSend: function () {
+                        },
+                        uploadProgress: function () {
+                        },
+                        success: function (data) {
+                            if(!data['files'][0]['error']){
+                                var thumbnaiImgUrl = data['files'][0]['thumbnailUrl'];
+                                var deleteUrl=data['files'][0]['deleteUrl'];
+                                var imageUrl = data['files'][0]['url'];
+                                $($imageHolder).html('<img src="'+thumbnaiImgUrl+'"/>');
+                                $($delete_a).attr('href',imageUrl);
+                                $images.push(imageUrl);
+                                $data.val($images.join('|'));
+                                $parentForm.ajaxSubmit();
+                            }else{
+                                //TODO error
+                            }
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    });
+                });
+            }
+        }
+    })(jQuery);
+
+</script>
+<script>
+    (function ($) {
+        $.fn.pyRaty = function (option) {
+            var me = $(this);
+            var $valueHolder = $('input', me);
+            var draftVal = $valueHolder.val();
+            var defaultOption = {
+                score: draftVal?draftVal:5,
+                isSubmit:true
+            };
+            var mergeOption = $.extend(defaultOption, option);
+            showStar(mergeOption['score']);
+            var stars = $('dt.star', me);
+            if(mergeOption['isSubmit']){
+                $.each(stars, function (index, item) {
+                    $(item).on('click', function (e) {
+                        e.preventDefault();
+                        var value = $(item).data('rank');
+                        showStar(value);
+                        $(item).parents('form').ajaxSubmit();
+                    });
+                });
+            }
+            function showStar(value) {
+                $valueHolder.val(value);
+                $('dt.star', me).each(function (index, item) {
+                    $(item).removeClass('comment_star_orange').addClass('comment_star_gray');
+                });
+                $('dt.star:lt(' + value + ')', me).each(function (index, item) {
+                    $(item).removeClass('comment_star_gray').addClass('comment_star_orange');
+                });
+            }
+
+        }
+    })(jQuery);
+</script>
