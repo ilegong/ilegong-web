@@ -211,6 +211,42 @@ class OrdersController extends AppController{
             'Order.created <"' . date("Y-m-d\TH:i:s", $end_date) . '"',
             'Order.type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL)
         );
+        if($_REQUEST['search_groupon'] === "1" && $_REQUEST['consignee_mobilephone']){
+            $mobile_num = intval($_REQUEST['consignee_mobilephone']);
+            $this->loadModel('Groupon');
+            $groupons = $this->Groupon->find('all', array(
+                'conditions' => array('mobile' => $mobile_num)
+            ));
+            if($groupons){
+                $groupon_lists = Hash::extract($groupons, '{n}.Groupon.id');
+                $organizer_ids = Hash::extract($groupons, '{n}.Groupon.user_id');
+            }else{
+                echo '<span style="font-size: large;color: #ff0000">团购订单查询不到</span>';
+                return;
+            }
+            $this->loadModel('GrouponMember');
+            $groupon_members = $this->GrouponMember->find('all', array(
+                'conditions' => array('groupon_id'=>$groupon_lists ,'status' => 1),
+                'fields' => array('id','groupon_id')
+            ));
+            $groupon_member_lists = Hash::extract($groupon_members, '{n}.GrouponMember.id');
+            $order_groupon_link = Hash::combine($groupon_members, '{n}.GrouponMember.id', '{n}.GrouponMember.groupon_id');
+            if($groupon_member_lists){
+                $conditions[] = array('Order.member_id' => $groupon_member_lists);
+                $conditions['Order.type'] = array(ORDER_TYPE_GROUP, ORDER_TYPE_GROUP_FILL);
+                $consignee_mobilephone = null;
+            }else{
+                echo '<span style="font-size: large;color: #ff0000">团购订单暂时无人参团</span>';
+                return;
+            }
+            $find_order_conditions =array('member_id' => $groupon_member_lists, 'creator' => $organizer_ids, 'status'=>array(ORDER_STATUS_PAID,ORDER_STATUS_WAITING_PAY));
+            if($this->Order->hasAny($find_order_conditions)){
+                echo '<span style="font-size: large;color: #ff0000">团购订单已发货或已确认收货</span>';
+                return;
+            }
+            $this->set('order_groupon_link',$order_groupon_link);
+        }
+
         if($brand_id !=0){
             $conditions['Order.brand_id'] = $brand_id;
         }
