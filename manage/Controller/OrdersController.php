@@ -221,7 +221,8 @@ class OrdersController extends AppController{
                 $groupon_lists = Hash::extract($groupons, '{n}.Groupon.id');
                 $organizer_ids = Hash::extract($groupons, '{n}.Groupon.user_id');
             }else{
-                echo '<span style="font-size: large;color: #ff0000">\u8fd9\u662f\u4e00\u4e2a\u4f8b\u5b50</span>';
+                //团购订单查询不到
+                echo '<span style="font-size: large;color: #ff0000">&#x56E2;&#x8D2D;&#x8BA2;&#x5355;&#x67E5;&#x8BE2;&#x4E0D;&#x5230;</span>';
                 return;
             }
             $this->loadModel('GrouponMember');
@@ -236,12 +237,14 @@ class OrdersController extends AppController{
                 $conditions['Order.type'] = array(ORDER_TYPE_GROUP, ORDER_TYPE_GROUP_FILL);
                 $consignee_mobilephone = null;
             }else{
-                echo '<span style="font-size: large;color: #ff0000">\u56e2\u8d2d\u8ba2\u5355\u6682\u65f6\u65e0\u4eba\u53c2\u56e2</span>';
+                //团购订单暂时无人参团
+                echo '<span style="font-size: large;color: #ff0000">&#x56E2;&#x8D2D;&#x8BA2;&#x5355;&#x65E0;&#x4EBA;&#x53C2;&#x56E2;</span>';
                 return;
             }
             $find_order_conditions =array('member_id' => $groupon_member_lists, 'creator' => $organizer_ids, 'status'=>array(ORDER_STATUS_PAID,ORDER_STATUS_WAITING_PAY));
             if($this->Order->hasAny($find_order_conditions)){
-                echo '<span style="font-size: large;color: #ff0000">\u56e2\u8d2d\u8ba2\u5355\u5df2\u53d1\u8d27\u6216\u5df2\u786e\u8ba4\u6536\u8d27</span>';
+                //团购订单已发货或已收货
+                echo '<span style="font-size: large;color: #ff0000">&#x56E2;&#x8D2D;&#x8BA2;&#x5355;&#x5DF2;&#x53D1;&#x8D27;&#x6216;&#x5DF2;&#x6536;&#x8D27;</span>';
                 return;
             }
             $this->set('order_groupon_link',$order_groupon_link);
