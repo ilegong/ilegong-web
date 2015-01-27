@@ -71,19 +71,19 @@
             if ($price==''||$price< 1){
                 mobileTip('最低价1元，请您输入正确的价格！');
             }else{
-                $share_div = $('<div class="apple_share fade in"><img src="'+share_url+'" style="width:95%"></div>')
-                        .hide().click(function(){
-                            $share_div.hide();
-                            flag = true;
-                            if (flag){
+//                $share_div = $('<div class="apple_share fade in"><img src="'+share_url+'" style="width:95%"></div>')
+//                        .hide().click(function(){
+//                            $share_div.hide();
+//                            flag = true;
+//                            if (flag){
                                 var $btnquickbuy = $('#btn_quick_buy');
                                 $btnquickbuy.attr('customized-price', $price);
                                 $btnquickbuy.trigger('click');
-                            }
+//                            }
 
-                        });
-                $('#share_remark_div').append($share_div);
-                $share_div.show();
+//                        });
+//                $('#share_remark_div').append($share_div);
+//                $share_div.show();
 
             }
         })
