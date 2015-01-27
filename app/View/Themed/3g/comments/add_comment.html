@@ -31,7 +31,7 @@
             </ul>
             <div style="position:relative;" name="comment-place">
                 <textarea name="data[Comment][body]" cols="" rows="" style="background: #f5f5f5;" placeholder="" {{if $order['Order']['is_comment']==1}}disabled="disabled" style="background: #999999;"{{/if}}>{{$product['body']}}</textarea>
-                <label style="display: none;">长度在10-500个字之间<br/>写下您真实的购买体会,马上获得200积分,同时可以为其他小伙伴提供参考...</label>
+                <label style="display: none;">长度在10-500个字之间<br/>写下您真实的购买体会</label>
             </div>
             <div class="clearfix upload-image">
                 <input style="display: none;" type="file" name="files[]" accept="image/*;capture=camera"/>
@@ -74,7 +74,7 @@
 {{/if}}
 </div>
 <!--add upload form-->
-{{$this->Html->script(array('/js/jquery.form.js','/js/pyshuo.common.js?v=0.3'));}}
+{{$this->Html->script(array('/js/jquery.form.js','/js/pyshuo.common.js?v=0.4'));}}
 {{if $order['Order']['is_comment']==0}}
 <script>
     $(document).ready(function () {
@@ -324,7 +324,7 @@
             var $valueHolder = $('input', me);
             var draftVal = $valueHolder.val();
             var defaultOption = {
-                score: draftVal?draftVal:5,
+                score: draftVal?draftVal:4,
                 isSubmit:true
             };
             var mergeOption = $.extend(defaultOption, option);
