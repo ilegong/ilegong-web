@@ -37,6 +37,7 @@ const PRODUCT_ID_CAKE = 230;
 const PRODUCT_ID_CAKE_FRUITS = 657;
 const PRODUCT_ID_RICE_10 = 231;
 const TRACK_TYPE_PRODUCT_RICE = 'rebate_231';
+const PRODUCT_ID_JD_HS_NZT = 484; //经典花生牛轧糖
 
 const PRODUCT_ID_RICE_BRAND_10 = 13;
 
@@ -266,9 +267,25 @@ function calculate_try_price($priceInCent, $uid = 0, $shichituan = null) {
  * @param $price
  * @param $currUid
  * @param $num
+ * @param int $cart_id
  * @return array array of price && specialId
  */
-function calculate_price($pid, $price, $currUid, $num) {
+function calculate_price($pid, $price, $currUid, $num, $cart_id = 0) {
+
+    if (accept_user_price_pid($pid) && accept_user_price_pid_num($pid, $num) && !empty($cart_id)) {
+        $userPrice = ClassRegistry::init('UserPrice');
+        $up = $userPrice->find('first', array( 'conditions' => array(
+            'product_id' => $pid,
+            'uid' => $currUid,
+            'cart_id' => $cart_id,
+        )));
+        if (!empty($up)) {
+            return $up['UserPrice']['price'];
+        }
+
+    }
+
+
     $cr = ClassRegistry::init('SpecialList');
     $specialLists = $cr->has_special_list($pid);
     if (!empty($specialLists)) {
@@ -1122,4 +1139,16 @@ function range_by_special($special) {
         $special_rg = array('start' => $special['start'], 'end' => $special['end']);
         return $special_rg;
     }
+}
+
+function accept_user_price_pid_num($pid, $num) {
+    return $pid == PRODUCT_ID_JD_HS_NZT && $num == 1;
+}
+
+function accept_user_price_pid($product_id) {
+    return $product_id == PRODUCT_ID_JD_HS_NZT;
+}
+
+function accept_user_price($product_id, $user_price) {
+    return ($product_id == PRODUCT_ID_JD_HS_NZT) && !empty($user_price) && $user_price >= 1;
 }

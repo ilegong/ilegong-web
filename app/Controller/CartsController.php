@@ -66,11 +66,23 @@ class CartsController extends AppController{
 
             $returnInfo = $buyingCom->check_and_add($cartM, $type, $tryId, $uid, $num, $product_id, $specId, $sessionId);
             if (!empty($returnInfo) && $returnInfo['success']) {
-                if ($product_id == PRODUCT_ID_CAKE && $_REQUEST['dating'] && $returnInfo['id']) {
+                $cart_id = $returnInfo['id'];
+                if ($product_id == PRODUCT_ID_CAKE && $_REQUEST['dating'] && $cart_id) {
                     $dating = trim($_REQUEST['dating']);
                     if ($dating) {
-                        $cartM->updateAll(array('name' => 'concat(name, "(' . $dating . ')")'), array('id' =>  $returnInfo['id']));
+                        $cartM->updateAll(array('name' => 'concat(name, "(' . $dating . ')")'), array('id' => $cart_id));
                     }
+                }
+                $customized_price = $this->data['Cart']['customized_price'];
+                if (accept_user_price($product_id, $customized_price)) {
+                    if (empty($uid)) {
+                        $returnInfo['success']  = false;
+                        $returnInfo['reason'] = 'not_login';
+                        echo json_encode($returnInfo);
+                        exit();
+                    }
+                    $this->loadModel('UserPrice');
+                    $this->UserPrice->add($product_id, $customized_price, $uid, $cart_id);
                 }
             }
             echo json_encode($returnInfo);

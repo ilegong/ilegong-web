@@ -177,7 +177,7 @@ class OrdersController extends AppController{
                 $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $num ? $num : 1);
 
                 if (empty($pp) || !isset($pp['price'])) {
-                    list($itemPrice,) = calculate_price($pid, $pro['price'], $uid, $num);
+                    list($itemPrice,) = calculate_price($pid, $pro['price'], $uid, $num, $Carts[$pid]['Cart']['id']);
                 } else {
                     $itemPrice = $pp['price'];
                 }

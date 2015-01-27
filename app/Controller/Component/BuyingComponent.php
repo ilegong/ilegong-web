@@ -210,12 +210,13 @@ class BuyingComponent extends Component {
         $shipPromo = ClassRegistry::init('ShipPromotion');
         $productByIds = $proM->find_published_products_by_ids($pids, array('Product.ship_fee'));
         foreach ($cartsByPid as $pid => $cartItem) {
+            $cartItem = $cartsByPid[$pid];
             $brand_id = $productByIds[$pid]['brand_id'];
             $pp = $shipPromotionId ? $shipPromo->find_ship_promotion($pid, $shipPromotionId) : array();
-            $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
+            $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartItem['num']) ? $cartItem['num'] : 1;
 
             if (empty($pp) || !isset($pp['price'])) {
-                list($itemPrice,) = calculate_price($pid, $productByIds[$pid]['price'], $uid, $num);
+                list($itemPrice,) = calculate_price($pid, $productByIds[$pid]['price'], $uid, $num, $cartItem['id']);
             } else {
                 $itemPrice = $pp['price'];
             }
@@ -233,13 +234,14 @@ class BuyingComponent extends Component {
         $brandItems = $cart->brandItems;
         foreach ($brandItems as $brandId => $brandItem) {
             foreach ($brandItem->items as $pid => $item) {
+                $cartItem = $cartsByPid[$pid];
                 $pidShipSettings = array();
                 foreach($shipSettings as $val){
                     if($val['ShipSetting']['product_id'] == $pid){
                         $pidShipSettings[] = $val;
                     }
                 };
-                $num = ($cartsByPid[$pid]['num']) ? $cartsByPid[$pid]['num'] : 1;
+                $num = ($cartItem['num']) ? $cartItem['num'] : 1;
                 $pp = $shipPromotionId ? $shipPromo->find_ship_promotion($pid, $shipPromotionId) : array();
                 $singleShipFee = empty($pp) || !isset($pp['ship_price']) ? $productByIds[$pid]['ship_fee'] : $pp['ship_price'];
                 $total_price = $totalPrices[$brandId];
