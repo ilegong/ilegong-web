@@ -19,7 +19,7 @@
                 <li class="comment_con fl">
                     <div class="comment_title">{{mb_substr($product['name'] , 0 , 13).'...'}}</div>
                     <dl class="clearfix raty" style="margin: 0px">
-                        <input style="width: 0;height: 0;opacity: 0;" name="data[Comment][rating]" value="{{$product['rating']}}"/>
+                        <input style="display: none" name="data[Comment][rating]" value="{{$product['rating']}}"/>
                         <dt class="comment_star fl">评分:</dt>
                         <dt class="fl comment_star_gray star" data-rank="1"></dt>
                         <dt class="fl comment_star_gray star" data-rank="2"></dt>
@@ -34,7 +34,7 @@
                 <label style="display: none;">长度在10-500个字之间<br/>写下您真实的购买体会</label>
             </div>
             <div class="clearfix upload-image">
-                <input style="display: none;" type="file" name="files[]" accept="image/*;capture=camera"/>
+                <input style="width: 0;height: 0;opacity: 0;" type="file" name="files[]" accept="image/*;capture=camera"/>
                 <a href="#X" class="comment_upload"><span></span></a>
                 <a href="#X" class="comment_upload"><span></span></a>
                 <a href="#X" class="comment_upload"><span></span></a>
