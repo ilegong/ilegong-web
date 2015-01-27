@@ -31,5 +31,17 @@ Pyshuo.ui.utils={
         fadeOutTime = fadeOutTime?fadeOutTime:3000;
         callBack = callBack?callBack:function(){};
         me.$tipInfoPanel.text(msg).fadeIn(fadeInTime).fadeOut(fadeOutTime,callBack);
+    },
+    mobileShowTip2:function(callback){
+        var me = this;
+        if(!me.$tipInfoPanel){
+            me.$tipInfoPanel = $('<div class="comment_tip_layer radius10" style="width:60%; left:50%; top:30%; margin-left:-30%; display: none;"></div>');
+            $('body').append(me.$tipInfoPanel);
+        }
+        me.$tipInfoPanel.show();
+        setTimeout(function(){
+            me.$tipInfoPanel.hide();
+            callback();
+        },3000);
     }
 };
