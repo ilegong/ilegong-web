@@ -68,7 +68,8 @@
     $(document).ready(function(){
         $('#buy').click(function(){
             var $price = $('#price').val();
-            if ($price==''||$price< 1){
+            if(!isNaN($price)){
+            if ($price< 1){
                 mobileTip('最低价1元，请您输入正确的价格！');
             }else{
 //                $share_div = $('<div class="apple_share fade in"><img src="'+share_url+'" style="width:95%"></div>')
@@ -85,6 +86,9 @@
 //                $('#share_remark_div').append($share_div);
 //                $share_div.show();
 
+            }
+            }else{
+                mobileTip('请您输入正确的价格！');
             }
         })
 
