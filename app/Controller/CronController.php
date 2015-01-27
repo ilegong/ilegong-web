@@ -34,5 +34,19 @@ class CronController extends AppController
         $result['count'] = count($couponItems);
         echo json_encode($result);
     }
-
+    public function send_kefu_message(){
+        $this->autoRender = false;
+        $cron = $this->Cron->find('all', array('conditions' => array('type' =>0)
+        ));
+        $cron_ids = Hash::extract($cron,'{n}.Cron.id');
+        $this->loadModel('WxOauth');
+        foreach ($cron as $rn){
+            $this->WxOauth->send_kefu($rn['Cron']['content']);
+        }
+        $expires_time = time();
+        $this->Cron->deleteAll(array('OR' => array(
+            array('id' => $cron_ids),
+            array('expires < ' => $expires_time)
+        )));
+    }
 }
