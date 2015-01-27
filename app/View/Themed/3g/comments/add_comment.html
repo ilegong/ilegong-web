@@ -30,7 +30,7 @@
                 </li>
             </ul>
             <div style="position:relative;" name="comment-place">
-                <textarea name="data[Comment][body]" cols="" rows="" style="background: #f5f5f5;" placeholder="" {{if $order['Order']['is_comment']==1}}disabled="disabled" style="background: #999999;"{{/if}}>{{$product['body']}}</textarea>
+                <textarea name="data[Comment][body]" cols="" rows="" placeholder="" {{if $order['Order']['is_comment']==1}}disabled="disabled" style="background: #f5f5f5;color: #3A3A3A;"{{else}}style="background: #f5f5f5;"{{/if}}>{{$product['body']}}</textarea>
                 <label style="display: none;">长度在10-500个字之间<br/>写下您真实的购买体会</label>
             </div>
             <div class="clearfix upload-image">
@@ -74,7 +74,7 @@
 {{/if}}
 </div>
 <!--add upload form-->
-{{$this->Html->script(array('/js/jquery.form.js','/js/pyshuo.common.js?v=0.4'));}}
+{{$this->Html->script(array('/js/jquery.form.js','/js/pyshuo.common.js?v=1'));}}
 {{if $order['Order']['is_comment']==0}}
 <script>
     $(document).ready(function () {
@@ -213,7 +213,7 @@
                         var result = JSON.parse(data);
                         if(result['success']){
                             //redirect or reload
-                            Pyshuo.ui.utils.mobileShowTip(result['msg'],1000,1000,function(){
+                            Pyshuo.ui.utils.mobileShowTip(result['msg'],1000,2000,function(){
                                 window.location.href='/orders/mine';
                             });
 
@@ -295,10 +295,9 @@
                         },
                         success: function (data) {
                             if(!data['files'][0]['error']){
-                                var thumbnaiImgUrl = data['files'][0]['thumbnailUrl'];
                                 var deleteUrl=data['files'][0]['deleteUrl'];
                                 var imageUrl = data['files'][0]['url'];
-                                $($imageHolder).html('<img src="'+thumbnaiImgUrl+'"/>');
+                                $($imageHolder).html('<img src="'+imageUrl+'"/>');
                                 $($delete_a).attr('href',imageUrl);
                                 $images.push(imageUrl);
                                 $data.val($images.join('|'));
