@@ -444,14 +444,19 @@ function addtofavor(model,id)
  * @param num 产品数量
  * @param spec 产品规格
  * @param quick_buy_pid
- * @param type
+ * @param type default type is zero or empty
+ * @param customized_price user given price for a special product
  * @return
  */
-function addtoCart(id, num, spec, quick_buy_pid, type)
+function addtoCart(id, num, spec, quick_buy_pid, type, customized_price)
 {
     type = type || 'normal';
     var url = BASEURL + '/carts/add';
     var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec, 'data[Cart][type]': type};
+
+    if (customized_price) {
+        postdata['data[Cart][customized_price]'] = customized_price;
+    }
 
     //special for cake
     if ($('span.spec_item[item-label="SD"]').size()>0) {
@@ -1194,7 +1199,7 @@ $(document).ready(function () {
         }
     };
 
-    function addToCartWithSpec(pid, itemNum, quick_buy_pid, type) {
+    function addToCartWithSpec(pid, itemNum, quick_buy_pid, type, $price) {
         var specId = '';
         if (typeof(_p_spec_m) != 'undefined') {
             if (_p_spec_m) {
@@ -1229,7 +1234,7 @@ $(document).ready(function () {
             }
         }
 
-        addtoCart(pid, itemNum, specId || 0, quick_buy_pid, type);
+        addtoCart(pid, itemNum, specId || 0, quick_buy_pid, type, $price);
         return true;
     }
 
@@ -1267,7 +1272,11 @@ $(document).ready(function () {
         }
         var itemId = $this.attr('item-id');
         var itemNum = numInput.val() || 1;
-        if(!addToCartWithSpec(itemId, itemNum, itemId)) {
+        var $price = 0;
+        if ($this.attr('customized-price')) {
+            $price = parseFloat($this.attr('customized-price'));
+        }
+        if(!addToCartWithSpec(itemId, itemNum, itemId, 0, $price)) {
             return false;
         }
     });
@@ -1281,7 +1290,13 @@ $(document).ready(function () {
 		}
 		var itemId = $this.attr('item-id');
 		var itemNum = 1;
-		if(!addToCartWithSpec(itemId, itemNum, itemId)) {
+
+        var $price = 0;
+        if ($this.attr('customized-price')) {
+            $price = parseFloat($this.attr('customized-price'));
+        }
+
+		if(!addToCartWithSpec(itemId, itemNum, itemId, 0, $price)) {
 			return false;
 		}
 	});

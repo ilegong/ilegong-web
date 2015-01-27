@@ -387,4 +387,20 @@ class ProductsController extends AppController{
         return $productTags;
     }
 
+    function guess_product_price(){
+
+        $this->pageTitle = '任意出价';
+        $bannerItems = array(
+            array('img' => "/img/guess_price/banner01.jpg"),
+            array('img' => "/img/guess_price/banner02.jpg"),
+            array('img' => "/img/guess_price/banner03.jpg"),
+        );
+        $this->set('bannerItems',$bannerItems);
+        $this->set('hideNav',true);
+    }
+    function guess_product_detail(){
+        $this->pageTitle = '商品详情';
+        $this->set('hideNav',true);
+    }
+
 }
