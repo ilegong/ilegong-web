@@ -19,7 +19,7 @@ class UploadController extends AppController {
         $this->autoRender = false;
         App::import('Vendor', 'UploadHandler', array('file' => 'file.upload/UploadHandler.php'));
 
-        $tmp = defined('SAE_MYSQL_DB')? SAE_TMP_PATH : '/tmp/';
+        $tmp = defined('SAE_MYSQL_DB')? SAE_TMP_PATH : WWW_ROOT.'/files/';
         $options = array(
             'upload_dir' => $tmp,
             'accept_file_types' => '/\.(gif|jpe?g|png)$/i'
