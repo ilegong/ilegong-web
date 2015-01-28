@@ -279,7 +279,9 @@
                         $me.html('<span></span>');
                         $me.attr('href','');
                         $data.val($images.join('|'));
-                        $parentForm.ajaxSubmit();
+                        if(config['isSubmit']){
+                            $parentForm.ajaxSubmit();
+                        }
                         return;
                     }
                     $fileInput.attr('data-index', index);
