@@ -85,7 +85,7 @@ class CartsController extends AppController{
                         exit();
                     }
                     $total_sold = total_sold($product_id, array('start' => '2015-01-28 00:00:00', 'end' => '2014-01-29 00:00:00'), $this->Cart);
-                    $this->log('total sold for add special_price:'. $total_sold. ', product_id='.$product_id);
+                    $this->log('total sold for add special_price:'. $total_sold. ', product_id='.$product_id.', uid='.$uid);
                     if ($total_sold > 100) {
                         $returnInfo['success'] = false;
                         $returnInfo['reason'] = 'exceed';
