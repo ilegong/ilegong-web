@@ -90,6 +90,7 @@ class CartsController extends AppController{
                         echo json_encode($returnInfo);
                         exit();
                     }
+                    $this->log('total sold for add special_price:'. $total_sold. ', product_id='.$product_id);
                     $this->loadModel('UserPrice');
                     $this->UserPrice->add($product_id, $customized_price, $uid, $cart_id);
                 }
