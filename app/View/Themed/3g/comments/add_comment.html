@@ -260,7 +260,11 @@
             //remove blank val
             $images = $.grep($images.split('|'), function(n) {return $.trim(n).length > 0;});
             $.each($images,function(index,item){
-                $($imageHolders[index]).attr('href',item).html('<img src="'+item+'"/><div class="comment_delete"></div>');
+                if(config['isSubmit']){
+                    $($imageHolders[index]).attr('href',item).html('<img src="'+item+'"/><div class="comment_delete"></div>');
+                }else{
+                    $($imageHolders[index]).attr('href',item).html('<img src="'+item+'"/>');
+                }
             });
             var $fileInput = $('input', me);
             $('a.comment_upload',me).each(function (index, item) {
