@@ -58,6 +58,7 @@ class CartsController extends AppController{
             $uid = $this->currentUser['id'];
             $sessionId = $this->Session->id();
             $cartM = $this->Cart;
+            $customized_price = $this->data['Cart']['customized_price'];
 
             if (!$type) {
                 //FIXME:should give an error to client
@@ -65,7 +66,8 @@ class CartsController extends AppController{
             }
 
             $returnInfo = $buyingCom->check_and_add($cartM, $type, $tryId, $uid, $num, $product_id, $specId, $sessionId);
-            $this->log('check_and_add:specId='.$specId.', type='.$type.', tryId='.$tryId.', uid='.$uid.',num='.$num.', product_id='.$product_id.', returnInfo='.json_encode($returnInfo));
+            $this->log('check_and_add:specId='.$specId.', type='.$type.', tryId='.$tryId.', uid='.$uid.',num='.$num.', product_id='.$product_id.',
+             customized_price='.$customized_price.', returnInfo='.json_encode($returnInfo));
             if (!empty($returnInfo) && $returnInfo['success']) {
                 $cart_id = $returnInfo['id'];
                 if ($product_id == PRODUCT_ID_CAKE && $_REQUEST['dating'] && $cart_id) {
@@ -76,7 +78,6 @@ class CartsController extends AppController{
                 }
 
 
-                $customized_price = $this->data['Cart']['customized_price'];
                 if (accept_user_price($product_id, $customized_price)) {
                     if (empty($uid)) {
                         $returnInfo['success']  = false;
