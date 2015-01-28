@@ -253,10 +253,16 @@ function confirm_order(order_id, status, creator){
 }
 
 //用户确认收货
-function orders_receive_3g(order_id){
+function orders_receive_3g(order_id,is_try){
     return ajaxAction(BASEURL+"/orders/confirm_receive/",{'order_id':order_id},null, function(){
         showSuccessMessage('您已确认收货', function(){
-            $('.order_item_action_'+order_id).html('<a class="btn-sm btn-primary" href="/orders/detail/'+order_id+'">详细</a><a class="btn-sm btn-warning" href="/comments/add_comment/'+order_id+'">评论赢积分</a>');
+            if(is_try){
+                $('.order_item_action_'+order_id).html('<a class="btn-sm btn-primary" href="/orders/detail/'+order_id+'">详细</a>');
+
+            }else{
+                $('.order_item_action_'+order_id).html('<a class="btn-sm btn-primary" href="/orders/detail/'+order_id+'">详细</a><a class="btn-sm btn-warning" href="/comments/add_comment/'+order_id+'">评论赢积分</a>');
+
+            }
             $('.order-status-'+order_id).html('已收货');
             $('#orders-wait_receive').find('.order_item_'+order_id).remove();
         }, 10000);
