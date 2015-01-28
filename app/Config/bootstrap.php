@@ -283,7 +283,7 @@ function calculate_price($pid, $price, $currUid, $num, $cart_id = 0) {
         $up = $userPrice->find('first', array( 'conditions' => array(
             'product_id' => $pid,
             'uid' => $currUid,
-            'cart_id' => $cart_id,
+//            'cart_id' => $cart_id,
         )));
         if (!empty($up)) {
             return array($up['UserPrice']['customized_price'],);
