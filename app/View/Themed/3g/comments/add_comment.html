@@ -274,12 +274,12 @@
                     var $me = $(this);
                     //do delete image can't delete server image
                     if($me.attr('href').indexOf('http')===0){
-                        var tmpUrl = $me.attr('href');
-                        $images = $.grep($images, function(n) {return n!=tmpUrl;});
-                        $me.html('<span></span>');
-                        $me.attr('href','');
-                        $data.val($images.join('|'));
                         if(config['isSubmit']){
+                            var tmpUrl = $me.attr('href');
+                            $images = $.grep($images, function(n) {return n!=tmpUrl;});
+                            $me.html('<span></span>');
+                            $me.attr('href','');
+                            $data.val($images.join('|'));
                             $parentForm.ajaxSubmit();
                         }
                         return;
