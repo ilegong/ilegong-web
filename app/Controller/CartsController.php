@@ -73,11 +73,20 @@ class CartsController extends AppController{
                         $cartM->updateAll(array('name' => 'concat(name, "(' . $dating . ')")'), array('id' => $cart_id));
                     }
                 }
+
+
                 $customized_price = $this->data['Cart']['customized_price'];
                 if (accept_user_price($product_id, $customized_price)) {
                     if (empty($uid)) {
                         $returnInfo['success']  = false;
                         $returnInfo['reason'] = 'not_login';
+                        echo json_encode($returnInfo);
+                        exit();
+                    }
+                    $total_sold = total_sold($product_id, array('start' => '2015-01-28 00:00:00', 'end' => '2014-01-29 00:00:00'), $this->Cart);
+                    if ($total_sold > 100) {
+                        $returnInfo['success'] = false;
+                        $returnInfo['reason'] = 'exceed';
                         echo json_encode($returnInfo);
                         exit();
                     }

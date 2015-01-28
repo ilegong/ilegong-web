@@ -389,6 +389,13 @@ class ProductsController extends AppController{
 
     function guess_product_price(){
 
+        if (empty($this->currentUser['id']) && $this->is_weixin()) {
+            $ref = Router::url($_SERVER['REQUEST_URI']);
+            $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
+        }
+
+        $total_sold = total_sold(PRODUCT_ID_JD_HS_NZT, array('start' => '2015-01-28 00:00:00', 'end' => '2014-01-29 00:00:00'), $this->Cart);
+
         $this->pageTitle = '任意出价';
         $bannerItems = array(
             array('img' => "/img/guess_price/banner01.jpg"),
@@ -397,6 +404,7 @@ class ProductsController extends AppController{
         );
         $this->set('bannerItems',$bannerItems);
         $this->set('hideNav',true);
+        $this->set('soldout', $total_sold > 100);
     }
     function guess_product_detail(){
         $this->pageTitle = '商品详情';

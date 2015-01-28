@@ -60,11 +60,12 @@
    <div style="height:50px;"></div>
     <div class="guessprice_tips radius10"></div>
     <a style="display: none" class="guessprice_btn" id="btn_quick_buy" item-id="484" href="javascript:;">立即购买</a>
-    <a class="guessprice_btn " id="buy" href="javascript:;">立即购买</a>
+    <a class="guessprice_btn " id="buy" href="javascript:;">{{$soldout ? '已售完' : '立即购买'}}</a>
 
 <script>
     var share_url = '{{$this->Html->assetUrl("/img/guess_price/share.png")}}';
     var flag = false;
+    var soldout = '{{$soldout}}';
     $(document).ready(function(){
         $('#buy').click(function(){
             var $price = $('#price').val();
@@ -79,7 +80,9 @@
 //                            if (flag){
                                 var $btnquickbuy = $('#btn_quick_buy');
                                 $btnquickbuy.attr('customized-price', $price);
-                                $btnquickbuy.trigger('click');
+                                if (!soldout) {
+                                    $btnquickbuy.trigger('click');
+                                }
 //                            }
 
 //                        });
