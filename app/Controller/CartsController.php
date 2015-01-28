@@ -65,7 +65,7 @@ class CartsController extends AppController{
             }
 
             $returnInfo = $buyingCom->check_and_add($cartM, $type, $tryId, $uid, $num, $product_id, $specId, $sessionId);
-            $this->log('check_and_add:specId='.$specId.', type='.$type.', tryId='.$tryId.', uid='.$uid.',num='.$num.', product_id='.$product_id);
+            $this->log('check_and_add:specId='.$specId.', type='.$type.', tryId='.$tryId.', uid='.$uid.',num='.$num.', product_id='.$product_id.', returnInfo='.json_encode($returnInfo));
             if (!empty($returnInfo) && $returnInfo['success']) {
                 $cart_id = $returnInfo['id'];
                 if ($product_id == PRODUCT_ID_CAKE && $_REQUEST['dating'] && $cart_id) {
