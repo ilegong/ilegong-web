@@ -78,7 +78,7 @@
         {{elseif $has_reach_limit}}
             <div class="alert alert-info">您订单中待支付的商品已经超限啦</div>
         {{/if}}
-        {{if $order['Order']['status']==3}}
+        {{if $order['Order']['status']==3&&$order['Order']['try_id']==0}}
         <div class="panel panel-warning">
             <div class="panel-body">
                 <a class="btn-sm btn-warning" href="/comments/add_comment/{{$order['Order']['id']}}">{{if $order['Order']['is_comment']==0}}评论赢积分{{else}}查看评论{{/if}}</a>
