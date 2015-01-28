@@ -286,7 +286,7 @@ function calculate_price($pid, $price, $currUid, $num, $cart_id = 0) {
             'cart_id' => $cart_id,
         )));
         if (!empty($up)) {
-            return $up['UserPrice']['customized_price'];
+            return array($up['UserPrice']['customized_price'],);
         }
 
     }

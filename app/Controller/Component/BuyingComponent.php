@@ -186,7 +186,10 @@ class BuyingComponent extends Component {
             $cond['product_id'] = $limitPids;
         }
         $dbCartItems = $cartM->find('all', array(
-            'conditions' => $cond));
+            'conditions' => $cond,
+            'order' => 'id desc',
+            )
+        );
 
         return Hash::combine($dbCartItems, '{n}.Cart.product_id', '{n}.Cart');
     }
