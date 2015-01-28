@@ -1514,7 +1514,7 @@ class OrdersController extends AppController{
         $dHour = intval(($paid_time_past/3600)%24);
         $dDay = $dDay>0?$dDay.'天':'';
         $dHour = $dHour>0?$dHour.'小时':'';
-        $dMin = ($dDay==''&&$dHour=='')?intval(($paid_time_past/60)%60).'分钟':'';
+        $dMin = ($dDay==''&&$dHour=='')?intval(($paid_time_past/60)%60+1).'分钟':'';
         $this->log('$paid_time_past'.json_encode($dHour));
 
         if(empty($remind_info)){
