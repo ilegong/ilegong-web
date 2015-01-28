@@ -116,9 +116,10 @@ ul li{ list-style:none;}
     margin: 0.8em;
     z-index: 2;
 }
-.comment_upload{ border:1px #dddddd solid; text-align:center; display:block; background-color:#f5f5f5; float:left; margin-top:1em; margin-right:0.7em;}
+.comment_upload{ border:1px #dddddd solid; text-align:center; display:block; background-color:#f5f5f5; float:left; margin-top:1em; margin-right:0.7em; position:relative;}
 .comment_upload span{ display:block; width:2.292em; margin:1em;height:2.292em; background:url(/img/mobile/pyshuo_icon.png) -14.583em -7.25em no-repeat; background-size:25em 25em;}
 .comment_upload img{width: 62px;height: 62px}
+.comment_delete{ width:1.48em; height:1.47em; background:url(/img/mobile/pyshuo_icon.png) -7.083em -20.417em; background-size:25em 25em; position:absolute; right:-0.5em; top:-0.5em;}
 .comment_submit{ height:2.8em; width:100%; display:block; background-color:#ffa531; line-height:2.8em; text-align:center; color:#ffffff; font-size:1.25em; margin-top:1.5em; text-decoration:none; position:fixed; bottom:0; left:0;}
 .comment_submit:hover{color: #ffffff;text-decoration: none}
 .comment_submit:focus{color: #ffffff;text-decoration: none}

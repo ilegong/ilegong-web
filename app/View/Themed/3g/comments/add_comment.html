@@ -245,7 +245,6 @@
     (function ($) {
         $.fn.pyUpload = function (option) {
             var me = $(this);
-            //TODO auto add pic holder
             var defaultOption = {
                 uploadUrl: '/upload/upload',
                 name: 'py-custom-upload',
@@ -261,13 +260,24 @@
             //remove blank val
             $images = $.grep($images.split('|'), function(n) {return $.trim(n).length > 0;});
             $.each($images,function(index,item){
-                $($imageHolders[index]).attr('href',item).html('<img src="'+item+'"/>');
+                $($imageHolders[index]).attr('href',item).html('<img src="'+item+'"/><div class="comment_delete"></div>');
             });
             var $fileInput = $('input', me);
             $('a.comment_upload',me).each(function (index, item) {
                 //TODO  use custom function
                 $(item).on('click', function (e) {
                     e.preventDefault();
+                    var $me = $(this);
+                    //do delete image can't delete server image
+                    if($me.attr('href').indexOf('http')===0){
+                        var tmpUrl = $me.attr('href');
+                        $images = $.grep($images, function(n) {return n!=tmpUrl;});
+                        $me.html('<span></span>');
+                        $me.attr('href','');
+                        $data.val($images.join('|'));
+                        $parentForm.ajaxSubmit();
+                        return;
+                    }
                     $fileInput.attr('data-index', index);
                     if(config['isSubmit']){
                         $fileInput.trigger('click');
@@ -281,22 +291,15 @@
                     var index = $(this).attr('data-index');
                     var $imageHolder = $imageHolders[index];
                     var $delete_a = $($imageHolder);
-                    //TODO delete image
-                    if($delete_a.attr('href').indexOf('http')===0){
-                        var tmpUrl = $delete_a.attr('href');
-                        $images = $.grep($images, function(n) {return n!=tmpUrl;});
-                    }
                     me.parent().ajaxSubmit({
                         dataType: 'json',
-                        beforeSend: function () {
-                        },
-                        uploadProgress: function () {
-                        },
+                        beforeSend: function () {},
+                        uploadProgress: function () {},
                         success: function (data) {
                             if(!data['files'][0]['error']){
                                 var deleteUrl=data['files'][0]['deleteUrl'];
                                 var imageUrl = data['files'][0]['url'];
-                                $($imageHolder).html('<img src="'+imageUrl+'"/>');
+                                $($imageHolder).html('<img src="'+imageUrl+'"/><div class="comment_delete"></div>');
                                 $($delete_a).attr('href',imageUrl);
                                 $images.push(imageUrl);
                                 $data.val($images.join('|'));

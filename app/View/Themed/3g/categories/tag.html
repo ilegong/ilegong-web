@@ -3,7 +3,7 @@
         margin-bottom: 0;
     }
 </style>
-<div class="container clearfix">
+<div class="container clearfix" style="padding: 0;">
     <div class="classlist">
         <a href="/">
         <ul class="clearfix list-unstyled">
@@ -12,24 +12,25 @@
         </ul>
         </a>
     </div>
-    <div class="classlist_good row">
+    <div class="classlist_good row" style="margin:0;margin-top:3em;">
         {{if $tag['banner']}}
         <img src="{{$this->Html->assetUrl($tag['banner'])}}" style="width:100%"/>
         {{/if}}
-        <ul class="clearfix list-unstyled">
+        <ul class="clearfix list-unstyled" style="padding-left:10px;">
 	<?PHP if($total>0){ ?>
 	    <?PHP foreach($data_list as $item) {
 	    $full = true;
 	    $i++;
 		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
 	    ?>
-            <li class="{{if $i/2 == 1}}last{{/if}}"> <a href="{{product_link2($item)}}">
-                <img src="{{$this->Html->assetUrl(small_thumb_link($item['coverimg']))}}" border="0" />
+            <li class="{{if $i/2 == 1}}last{{/if}}">
+                <a href="{{product_link2($item)}}" style="display:block; background-color:#ffffff; margin-right:10px;">
+                <img src="{{$this->Html->assetUrl(small_thumb_link($item['coverimg']))}}" border="0" style="display:block; background-color:#ffffff; padding-bottom:0.5em;"/>
                 <div class="item_name">{{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}{{usubstr($item['name'],0, 7,'')}}<span>有红包</span>
                     {{else}}{{usubstr($item['name'],0, 9,'')}}
                     {{/if}}</div>
                 </a>
-                <dl class="clearfix">
+                <dl class="clearfix" style="margin-right: 10px;">
                     <dt>
                         <a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html')}}">
                         <img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brands[$item['brand_id']]['Brand']['coverimg']))}}" border="0" />

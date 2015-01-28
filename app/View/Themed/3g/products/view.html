@@ -28,14 +28,14 @@
 <style>
     /*底部购买*/
     .bottom_bg{ height:5em; background-color:#f1f1f1; border-top:1px #dddddd solid; width:100%; font-size:0.8em; color:#666666; position:fixed; bottom:0; left:0;}
-    .bottom_bg li.love{ width:15%; text-align:center;}
-    .bottom_bg li.shopping{ width:17%; text-align:center;}
+    .bottom_bg li.love{width:0; text-align:center;}
+    .bottom_bg li.shopping{ width:15%; text-align:center;}
     .love_icon{ width:1.72em; height:1.5em; background:url('{{$this->Html->assetUrl("/img/mobilev1/pyshuo_icon.png")}}') 0 -15em no-repeat; background-size:25em 25em; display:block; margin:0 auto; margin-top:1.2em;}
     .love_visited{ width:1.708em; height:1.5em; background:url('{{$this->Html->assetUrl("/img/mobilev1/pyshuo_icon.png")}}') -2.25 -15em no-repeat; background-size:25em 25em;}
     .p_visited{ color:#29ac0e;}
     .shopping_icon{ width:3em; height:1.917em; background:url('{{$this->Html->assetUrl("/img/mobilev1/pyshuo_icon.png?xx")}}') -5em -15em no-repeat; background-size:25em 25em; display:block; margin:0 auto; margin-top:0.9em; text-decoration:none;}
     .shopping_count{ position:absolute; right:3px; top:2px; width:14px; text-align:center; color:#ffffff; font-size:1em;}
-    .btn_b{ width:100%; height:3em; font-size:1.25em; line-height:3em; display:block; text-align:center; color:#ffffff; text-decoration:none; margin-top:0.5em;}
+    .btn_b{width:100%; height:2.7em; font-size:1.4em; line-height:2.7em; display:block; text-align:center; color:#ffffff; text-decoration:none; margin-top:0.5em;}
     .pay_bg{ background-color:#ffa531;}
     .pay_bg:active{ background-color:#ed8600;}
     .shopping_bg{ background-color:#ff483a;}
@@ -45,19 +45,19 @@
     .cart_btn_soldout { background-color: #808080}
 </style>
 <div class="bottom_bg">
-    <ul class="clearfix list-unstyled">
+    <ul class="clearfix list-unstyled" style="padding: 0 0.8em;">
         <li class="love fl">
             <!--<a href="javascript:;" class="love_icon"></a>-->
             <p>&nbsp;</p>
         </li>
 
-        <li class="fl" style="width:34%;">
-            <div style="margin-right:3%;">
+        <li class="fl" style="width:42%;">
+            <div style="margin-right:4%;">
                 <a id="btn_quick_buy" item-id="{{$Product['Product']['id']}}" href="javascript:;" class="btn_b {{ (($total_left > 0 || $total_left == -1) && $afford_for_curr_user) ? 'pay_bg' : 'cart_btn_soldout'}} radius10">立即购买</a>
             </div>
         </li>
-        <li class="fl" style="width:34%;">
-            <div style="margin-left:3%;">
+        <li class="fl" style="width:42%;">
+            <div style="margin-left:4%;">
                 <a id="btn_add_cart" item-id="{{$Product['Product']['id']}}" href="javascript:;" class="btn_b {{ (($total_left > 0 || $total_left == -1) && $afford_for_curr_user) ? 'shopping_bg' : 'cart_btn_soldout'}} radius10">加入购物车</a>
             </div>
         </li>

@@ -4,17 +4,17 @@
         <img src="{{$this->Html->assetUrl(medium_thumb_link($Product['Product']['coverimg']))}}" style="width:100%;"
              onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
         {{/if}}
-        <h2 class="Content-title" id="item-detail-title" style="padding: 0 0.5em;margin-top: 15px;"><?php echo $Product['Product']['name']; ?>{{if $hasOfferBrandIds && array_key_exists($Product['Product']['brand_id'], $hasOfferBrandIds)}}
+        <h2 class="Content-title" id="item-detail-title" style="padding: 10px 0.5em;margin: 0px;background-color: #ffffff"><?php echo $Product['Product']['name']; ?>{{if $hasOfferBrandIds && array_key_exists($Product['Product']['brand_id'], $hasOfferBrandIds)}}
             <span class="brand-has-offer">有红包</span>
             {{/if}}</h2>
         {{if $Product['Product'][promote_name] }}
-        <p style="padding: 0 0.8em;margin: 0;"><?php echo $Product['Product']['promote_name']; ?></p>
+        <p style="padding: 0 0.8em;margin: 0;background-color: #ffffff"><?php echo $Product['Product']['promote_name']; ?></p>
         {{/if}}
         <ul class="p_details_price clearfix list-unstyled">
             <li class="fl price"><span>￥<font>{{$this->Number->precision($price, 2)}}</font></span><em>{{if $Product['Product']['original_price']}}¥{{$this->Number->precision($Product['Product']['original_price'], 2)}}{{/if}}</em></li>
             <li class="fr stat"></li>
         </ul>
-        <ul class="clearfix b_line list-unstyled" style="padding: 0.8em">
+        <ul class="clearfix b_line list-unstyled" style="padding: 0.8em;margin-top: 0.5em;background-color: #ffffff;border-top: 1px #DDDDDD solid;margin-bottom: 0;">
             <li>
                 <span class="gray mr12" style="float:left;">快递:</span>
 			<span style="display: block;overflow: hidden;">
@@ -86,7 +86,7 @@
         {{if $product_spec_map }}
         {{$product_spec_map}}
             {{if $specs_map }}
-                <p class="product_specs">
+                <p class="product_specs" style="padding: 0.8em;background-color: #ffffff;border-bottom: 1px #DDDDDD solid;margin-bottom: 0;">
                     <?php foreach($specs_map['choices'] as $label => $values) { ?>
                     <span class="spec_label">{{$label}}</span>:<?php foreach($values as $vaLabel){?><span item-label="{{$label}}" class="spec_item">{{$vaLabel}}</span><?php } ?><br/>
                     <?php } ?>
@@ -97,7 +97,7 @@
             {{/if}}
         {{/if}}
         {{if ($total_left > 0 || $total_left == -1) && $afford_for_curr_user }}
-        <div id="productinfo" class="clearfix voffset2" style="margin-top: 0;padding-left: 0.8em;">
+        <div id="productinfo" class="clearfix voffset2" style="margin-top: 0;padding: 0.8em;background-color: #ffffff;border-bottom: 1px #DDDDDD solid;">
             {{if $limit_per_user == 1}}
             <p>每人限购一份</p>
             <input id="input_pamount"  item-id="{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="hidden" readonly="readonly">
@@ -241,7 +241,6 @@
 
 
 <?php
-
  if ($_GET['_pys_add_comment']) {
     $defTab = 'product-reviews';
  }elseif ($_GET['_pys_add_shichi_comment']) {
@@ -249,16 +248,32 @@
  }else {
  $defTab = 'product-description';
  }
+ if($is_product_has_shichi){
+    $liWidth=33.33;
+ }else{
+    $liWidth=50;
+ }
  ?>
-
-<div id="container-part1" class="container clearfix voffset" style="padding: 0;">
+<style>
+    #container-part1 ul.nav li a{
+        margin: 0;
+        border: 0;
+        border-right: 1px #DDDDDD solid;
+        color: #666666;
+        font-weight: bold;
+        border-radius: 0;
+    }
+    #container-part1 ul.nav li.active a{
+        color: #29AC0E;
+    }
+</style>
+<div id="container-part1" class="container clearfix voffset" style="padding: 0;background-color: #ffffff;border-top: 1px #DDDDDD solid;margin-top: 0;">
     <ul class="nav nav-tabs" role="tablist">
-        <li {{if $defTab == 'product-description'}}class="active"{{/if}}><a href="#product-description" role="tab" data-toggle="tab">{{__('ProductIntroduction')}}</a></li>
+        <li style="width: {{$liWidth}}%;text-align: center;float: left;margin-bottom:0;" {{if $defTab == 'product-description'}}class="active"{{/if}}><a href="#product-description" role="tab" data-toggle="tab">{{__('ProductIntroduction')}}</a></li>
         {{if $is_product_has_shichi}}
-        <li {{if $defTab == 'product-evaluation'}}class="active"{{/if}}><a href="#product-evaluation" role="tab" data-toggle="tab">{{__('试吃报告')}}</a></li>
+        <li style="width: {{$liWidth}}%;text-align: center;float: left;margin-bottom:0;" {{if $defTab == 'product-evaluation'}}class="active"{{/if}}><a href="#product-evaluation" role="tab" data-toggle="tab">{{__('试吃报告')}}</a></li>
         {{/if}}
-        <li {{if $defTab == 'product-reviews'}}class="active"{{/if}}><a href="#product-reviews" role="tab" data-toggle="tab">{{__('ProductReviews')}}</a></li>
-
+        <li style="width: {{$liWidth}}%;text-align: center;float: left;margin-bottom:0;" {{if $defTab == 'product-reviews'}}class="active"{{/if}}><a href="#product-reviews" role="tab" data-toggle="tab">{{__('ProductReviews')}}</a></li>
     </ul>
 
     <div class="tab-content voffset2" style="padding:  0.5em;margin-top: 0;">

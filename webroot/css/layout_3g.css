@@ -212,11 +212,11 @@ footer img{ width:4.625em; height:1.583em;}
     font-size: 1.167em;
     line-height: 2.2em;
     color: #666666;
-    margin-top: 0.6em;
+    margin-top: 0.5em;
     padding: 0.3em 0.8em 0.5em 0.8em;
     border-top: 1px #dddddd solid;
     border-bottom: 1px #dddddd solid;
-    background-color: #f8f8f8;
+    background-color: #ffffff;
 }
 /* New UI Home page */
 h3.items-tag { margin:0 0.833em 0.625em 0.833em; }
@@ -290,17 +290,17 @@ ul li{ list-style:none;}
 .classlist_v2 ul li a.back {display: block; width: 1.2em; height: 1.5em; background: url('/img/mobile/pyshuo_icon.png?xxz') no-repeat -1.5em -20.25em; background-size: 30em 30em; margin-top: 0.6em; margin-right: 0.7em; margin-left: 0.5em;}
 .classlist_v2 ul li.line {height: 3em;width: 1px;border-right: 1px #dddddd solid;margin-right: 1em;font-size:1em;}
 .classlist_good { margin-top:3em; margin-bottom:1em;}
-.classlist_good ul li{ float:left; width:50%; text-align:center; padding-top:0.5em; border-bottom:1px #dddddd solid; border-right: 1px #dddddd solid;}
+.classlist_good ul li{float:left; width:50%; text-align:center; margin-top:0.8em;}
 .classlist_good ul li.last { border-right: none;}
-.classlist_good ul li img{ text-align:center; width:8.8em; height:6.6em;}
-.classlist_good ul li .brand_name, .classlist_good ul li .item_name{ font-size:0.8em; color:#666666; text-align:left; font-weight:normal; padding:0.4em 0.833em 0 0.833em;}
-.classlist_good ul li .item_name { font-size:1em; padding-top:0.6em }
+.classlist_good ul li img{text-align:center; width:100%;}
+.classlist_good ul li .brand_name, .classlist_good ul li .item_name{ font-size:0.8em; color:#666666; text-align:left; font-weight:normal; padding:0.4em 0.8em 0 0.8em;}
+.classlist_good ul li .item_name{font-size:1em; padding-top:0.1em;}
 .classlist_good ul li .item_name span{ font-size:0.6em; padding:0.1em 0.2em; background-color:#29ac0e; color:#ffffff;}
-.classlist_good ul li dl{ padding:0.1em 0.833em 0.6em 0.833em;}
+.classlist_good ul li dl{padding:0.1em 0.8em 0.6em 0.8em; background-color:#ffffff;}
 .classlist_good ul li dl dt{ float:left;}
 .classlist_good ul li dl dt img{ width:2.25em; height:2.3em;}
 .classlist_good ul li .brand_name{ font-size:0.85em; color:#999999; font-weight:normal; display: block}
-.classlist_good ul li .listprice{ font-size:0.75em; color:#ff9000; font-weight:normal; display: block}
+.classlist_good ul li .listprice{font-size:0.75em; color:#ff9000; font-weight:normal; display:block; text-align:left; padding-left:0.5em;}
 .classlist_good ul li .brand_name{ padding-left:0.4em; padding-top:0.1em;}
 .classlist_good ul li .listprice .original{ font-size: 1em; color:#999999; text-decoration:line-through;}
 .classlist_good ul li .listprice span{ color:#ff9000; font-size:1.25em;}
@@ -359,13 +359,13 @@ ul li{ list-style:none;}
 .sales li.quota span{ display:block; float:left; font-size:1em; color:#29ac0e;}
 .sales li span .quota_btn{ padding:0.12em 0.375em; color:#ffffff; background-color:#29ac0e; font-size:0.833em; margin-right:0.5em;}
 .sales_c {color:#29ac0e;}
-.p_details_price {
-    font-size: 1em;
-    padding: 0 0.5em 0.5em 0.5em;
-    color: #c0c0c0;
-    border-bottom: 1px #dddddd solid;
-    background-color: #ffffff;
-    margin-bottom: 0;
+.p_details_price{
+    font-size:1em;
+    padding:0 0.5em 0.5em 0.5em;
+    color:#c0c0c0;
+    border-bottom:1px #dddddd solid;
+    background-color:#ffffff;
+    margin-bottom:0;
 }
 .p_details_price .price span{ color:#ffa200;}
 .p_details_price .price span font{ font-size:1.667em;}
@@ -486,19 +486,3 @@ a:hover, a:focus {
 .comment_bingbtn{ width:5.2em; display:block; text-decoration:none; font-size:0.9em; background-color:#ffffff; text-align:center; padding:0.2em 0; border:1px #dddddd solid; color:#999999;}
 .comment_nobingbtn{ width:5.2em; display:block; text-decoration:none; font-size:0.9em; background-color:#ffa531; text-align:center; padding:0.2em 0; border:1px #ffa531 solid; color:#ffffff;}
 .comment_tanchubg_layer {font-size:14px}
-
-.badge{
-    padding: 0 4px;
-    height: 1em;
-    line-height: 1em;
-    border-radius: 0.5em;
-    text-align: center;
-    color: #FFF;
-    font-family: Arial;
-    box-shadow: 1px 1px 1px rgba(0,0,0,0.3);
-    background: #ff483a;
-    position: absolute;
-    top: -10px;
-    right: -5px;
-    z-index: 3;
-}
