@@ -394,7 +394,8 @@ class ProductsController extends AppController{
             $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
         }
 
-        $total_sold = total_sold(PRODUCT_ID_JD_HS_NZT, array('start' => '2015-01-28 00:00:00', 'end' => '2014-01-29 00:00:00'), $this->Cart);
+        $cartM = ClassRegistry::init('Cart');
+        $total_sold = total_sold(PRODUCT_ID_JD_HS_NZT, array('start' => '2015-01-28 00:00:00', 'end' => '2014-01-29 00:00:00'), $cartM);
 
         $this->pageTitle = '任意出价';
         $bannerItems = array(
