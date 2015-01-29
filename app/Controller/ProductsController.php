@@ -445,6 +445,13 @@ class ProductsController extends AppController{
             array('img' => "/img/guess_price/banner02.jpg"),
             array('img' => "/img/guess_price/banner03.jpg"),
         );
+
+        $this->loadModel('UserPrice');
+        $this->loadModel('User');
+        $userprice_info = $this->UserPrice->find('first',array('order' => 'customized_price desc'));
+        $user_info = $this->User->find('first',array('conditions' => array('id' => $userprice_info['UserPrice']['uid'])));
+        $this->set('userprice_info',$userprice_info);
+        $this->set('user_info',$user_info);
         $this->set('bannerItems',$bannerItems);
         $this->set('hideNav',true);
         $this->set('soldout', $total_sold > 100);
