@@ -26,25 +26,27 @@
             <li class="{{if $i/2 == 1}}last{{/if}}">
                 <a href="{{product_link2($item)}}" style="display:block; background-color:#ffffff; margin-right:10px;">
                 <img src="{{$this->Html->assetUrl(small_thumb_link($item['coverimg']))}}" border="0" style="display:block; background-color:#ffffff; padding-bottom:0.5em;"/>
-                <div class="item_name">{{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}{{usubstr($item['name'],0, 7,'')}}<span>有红包</span>
-                    {{else}}{{usubstr($item['name'],0, 9,'')}}
-                    {{/if}}</div>
+                <div class="item_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;">{{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}{{$item['name']}}<span>有红包</span>
+                    {{else}}
+                        {{$item['name']}}
+                    {{/if}}
+                </div>
                 </a>
-                <dl class="clearfix" style="margin-right: 10px;">
+                <dl class="clearfix" style="margin-right: 10px; display: flex;">
                     <dt>
                         <a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html')}}">
                         <img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brands[$item['brand_id']]['Brand']['coverimg']))}}" border="0" />
                         </a>
                     </dt>
-                    <dt>
+                    <dt style="margin-left: 0.4em;">
                         <a href="{{product_link2($item)}}">
-                    <span class="brand_name">{{usubstr($brands[$item['brand_id']]['Brand']['name'],0, 7,'')}}</span>
-                    <span class="listprice"><span>¥{{$this->Number->precision($item['price'], 2)}}</span>
-                        {{if !empty($item['original_price'])}}
-                        <span class="original">¥{{$this->Number->precision($item['original_price'], 2)}}</span>
-                        {{/if}}
-                    </span>
-                            </a>
+                            <span class="brand_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;"dl>{{$brands[$item['brand_id']]['Brand']['name']}}</span>
+                            <span class="listprice"><span>¥{{$this->Number->precision($item['price'], 2)}}</span>
+                                {{if !empty($item['original_price'])}}
+                                <span class="original">¥{{$this->Number->precision($item['original_price'], 2)}}</span>
+                                {{/if}}
+                            </span>
+                        </a>
                     </dt>
                 </dl>
             </li>

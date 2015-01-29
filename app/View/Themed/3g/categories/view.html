@@ -1,4 +1,4 @@
-<div class="container clearfix" style="margin-top:5px;">
+<div class="container clearfix" style="padding: 0;padding-left: 10px;">
 
     {{if $sub_title }}
         <h3>{{$sub_title}}</h3>
@@ -6,7 +6,7 @@
 
 	<?PHP if($total>0){ ?>
 
-	<div class="row">
+	<div class="row" style="margin: 0;">
 	    <?PHP foreach($Category['datalist'] as $item) {
 		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
 	    ?>	

@@ -53,6 +53,10 @@ $(function() {
                 update = true;
             }
         });
+        var postData = JSON.stringify(spec_obj);
+        if(postData.length>500){
+            cleanMapData(tags);
+        }
         updateView();
     }
 
@@ -69,6 +73,7 @@ $(function() {
             updateData(hasSelect);
         }
     }
+
     function removeJsonCode(tag){
         if($.inArray(tag, hasSelect)>=0){
             //remove data
@@ -90,6 +95,15 @@ $(function() {
         return flag;
     }
 
+    function cleanMapData(tags){
+        var mapData = spec_obj['map'];
+        $.each(mapData,function(key,value){
+            if($.inArray(value['name'],tags)<0){
+                delete mapData[key];
+            }
+        });
+    }
+
     function updateChoice(hasSelect){
         var choiceData = spec_obj['choices'];
         $.each(choiceData,function(key,value){
@@ -104,11 +118,14 @@ $(function() {
         });
         var max = parseInt(keys[0]);
         for(var i=1;i<keys.length;i++){
-            if(max<parseInt(keys[i]))
+            if(max<parseInt(keys[i])){
                 max=parseInt(keys[i]);
+            }
         }
         return max?max+1:1;
     }
+
+
 });
 
 //        var guid = (function() {
