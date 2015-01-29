@@ -4,7 +4,9 @@
 		收货人信息&nbsp;{{if !$order_id}}<a onclick="showForm_consignee(this)" href="javascript:void(0)" id="lbtnConsigneeWrite">[修改]</a>{{/if}}
 		</h2>
 		<div class="middle">
-            {{$this->Session->read('OrderConsignee.name')}} {{$this->Session->read('OrderConsignee.area')}} {{$this->Session->read('OrderConsignee.address')}} {{$this->Session->read('OrderConsignee.mobilephone')}}
+            <span>{{$this->Session->read('OrderConsignee.name')}}</span>
+            <span>{{$this->Session->read('OrderConsignee.mobilephone')}}</span>
+            <span>{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}</span>
 		</div>
 	</div>
 
