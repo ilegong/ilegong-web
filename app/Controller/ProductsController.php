@@ -456,6 +456,12 @@ class ProductsController extends AppController{
         $this->set('bannerItems',$bannerItems);
         $this->set('hideNav',true);
         $this->set('soldout', $total_sold > 100);
+        if($this->is_weixin()){
+            $this->loadModel('WxOauth');
+            $signPackage = $this->WxOauth->getSignPackage();
+            $this->set('signPackage', $signPackage);
+            $this->set('jWeixinOn', true);
+        }
     }
     function guess_product_detail(){
         $this->pageTitle = '商品详情';
