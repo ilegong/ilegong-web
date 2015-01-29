@@ -468,7 +468,7 @@ class ProductsController extends AppController{
 //        );
 
         $this->loadModel('UserPrice');
-        $top_price = $this->UserPrice->find('all', array(
+        $top_price = $this->UserPrice->find('first', array(
             'conditions' => array('uid' => $ids, 'product_id' => 484),
             'order' => 'customized_price desc',
             'limit' => 1,
