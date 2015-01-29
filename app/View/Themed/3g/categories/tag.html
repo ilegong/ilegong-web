@@ -32,13 +32,13 @@
                     {{/if}}
                 </div>
                 </a>
-                <dl class="clearfix" style="margin-right: 10px; display: flex;">
+                <dl class="clearfix" style="margin-right: 10px;">
                     <dt>
                         <a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html')}}">
                         <img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brands[$item['brand_id']]['Brand']['coverimg']))}}" border="0" />
                         </a>
                     </dt>
-                    <dt style="margin-left: 0.4em;">
+                    <dt style="margin-left: 2.5em; float: none;">
                         <a href="{{product_link2($item)}}">
                             <span class="brand_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;"dl>{{$brands[$item['brand_id']]['Brand']['name']}}</span>
                             <span class="listprice"><span>¥{{$this->Number->precision($item['price'], 2)}}</span>
