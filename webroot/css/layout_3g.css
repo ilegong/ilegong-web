@@ -310,7 +310,7 @@ ul li{ list-style:none;}
 .classlist_good ul li .brand_name{ font-size:0.85em; color:#999999; font-weight:normal; display: block}
 .classlist_good ul li .listprice{font-size:0.75em; color:#ff9000; font-weight:normal; display:block; text-align:left; padding-left:0.5em;}
 .classlist_good ul li .brand_name{padding-top:0.1em;}
-.classlist_good ul li .listprice .original{ font-size: 1em; color:#999999; text-decoration:line-through;}
+.classlist_good ul li .listprice .original{ font-size: 0.9em; color:#999999; text-decoration:line-through;}
 .classlist_good ul li .listprice span{ color:#ff9000; font-size:1.25em;}
 
 /* Brands */
