@@ -470,7 +470,7 @@ class ProductsController extends AppController{
 
         $user_info = $this->User->find('first',array('conditions' => array('id' => $top_price_cart['Cart']['creator'])));
         $this->set('user_info',$user_info);
-        $this->set('top_price', max($top_price_cart['Cart']['price'], 20)); //assume 20 at lease
+        $this->set('top_price', max($top_price_cart['Cart']['price'], 19.9)); //assume 20 at lease
         $this->set('bannerItems',$bannerItems);
         $this->set('hideNav',true);
         $this->set('soldout', $total_sold > 100);
