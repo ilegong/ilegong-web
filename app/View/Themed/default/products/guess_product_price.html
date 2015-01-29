@@ -153,19 +153,20 @@ ul.find('li:first').addClass('cur');
 {{if $jWeixinOn}}
 <script>
     wx.ready(function () {
-        var title = "经典花生牛轧糖,纯手工,不甜不腻不粘牙,吃货依一妈妈的老手艺, 你想多少钱买?";
+        var to_friend_title = "经典花生牛轧糖,纯手工,不甜不腻不粘牙,吃货依一妈妈的老手艺, 你想多少钱买?";
+        var to_timeline_title = "你说多少钱，就卖多少钱！";
         var link = document.URL;
         var imgUrl = "http://www.tongshijia.com/img/guess_price/fupic.jpg";
-        var desc = '你说多少钱，就卖多少钱！';
+        var desc = "经典花生牛轧糖,纯手工,不甜不腻不粘牙,吃货依一妈妈的老手艺, 你想多少钱买?";
         wx.onMenuShareAppMessage({
-            title: title,
+            title: to_friend_title,
             desc: desc,
             link: link,
             imgUrl: imgUrl
 
         });
         wx.onMenuShareTimeline({
-            title: title,
+            title: to_timeline_title,
             link: link,
             imgUrl: imgUrl
         });
