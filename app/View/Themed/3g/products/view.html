@@ -94,22 +94,8 @@
     })
 </script>
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'));}}
-{{if $in_weixin}}
-<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+{{if $jWeixinOn}}
 <script>
-    var wx_jssdk_appId = '{{$signPackage["appId"]}}';
-    var wx_jssdk_timestamp = {{$signPackage["timestamp"]?$signPackage["timestamp"]:1}};
-    var wx_jssdk_nonceStr = '{{$signPackage["nonceStr"]}}';
-    var wx_jssdk_signature = '{{$signPackage["signature"]}}';
-    var jsApiList = ['checkJsApi','onMenuShareTimeline','onMenuShareAppMessage'];
-    wx.config({
-        debug: false,
-        appId: wx_jssdk_appId,
-        timestamp: wx_jssdk_timestamp,
-        nonceStr: wx_jssdk_nonceStr,
-        signature: wx_jssdk_signature,
-        jsApiList: jsApiList
-    });
     wx.ready(function () {
         var share_string = '{{$share_string ? $share_string :"0"}}';
         var to_timeline_title = "{{$Product['Product']['name']}}，" + "{{$Product['Product'][promote_name]}}。" + "现价{{$this->Number->precision($price, 2)}}元";

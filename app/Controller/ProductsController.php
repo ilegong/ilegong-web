@@ -348,13 +348,14 @@ class ProductsController extends AppController{
         $this->set('category_control_name', 'products');
         $this->track_share_click();
         if($this->is_weixin()){
-            $this->loadModel('WxOauth');
-            $signPackage = $this->WxOauth->getSignPackage();
-            $this->set('signPackage', $signPackage);
             if($currUid){
+                $this->loadModel('WxOauth');
+                $signPackage = $this->WxOauth->getSignPackage();
                 $share_string = $currUid.'-'.time().'-rebate-pid_'.$pid;
                 $share_code = authcode($share_string, 'ENCODE', 'SHARE_TID');
+                $this->set('signPackage', $signPackage);
                 $this->set('share_string',urlencode($share_code));
+                $this->set('jWeixinOn', true);
             }
         }
     }
