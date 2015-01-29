@@ -397,7 +397,7 @@ class ProductsController extends AppController{
         $cartM = ClassRegistry::init('Cart');
         $total_sold = total_sold(PRODUCT_ID_JD_HS_NZT, array('start' => '2015-01-28 00:00:00', 'end' => '2014-01-29 00:00:00'), $cartM);
 
-        $this->pageTitle = '任意出价';
+        $this->pageTitle = '你敢出价，我就敢卖！';
         $bannerItems = array(
             array('img' => "/img/guess_price/banner01.jpg"),
             array('img' => "/img/guess_price/banner02.jpg"),
