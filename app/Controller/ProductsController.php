@@ -346,10 +346,16 @@ class ProductsController extends AppController{
         }
 
         $this->set('category_control_name', 'products');
+        $this->track_share_click();
         if($this->is_weixin()){
             $this->loadModel('WxOauth');
             $signPackage = $this->WxOauth->getSignPackage();
             $this->set('signPackage', $signPackage);
+            if($currUid){
+                $share_string = $currUid.'-'.time().'-rebate-pid_'.$pid;
+                $share_code = authcode($share_string, 'ENCODE', 'SHARE_TID');
+                $this->set('share_string',urlencode($share_code));
+            }
         }
     }
 
@@ -385,6 +391,42 @@ class ProductsController extends AppController{
             'order' => 'priority desc'
         ));
         return $productTags;
+    }
+    private function track_share_click(){
+        if($_GET['share_type'] && $_GET['trstr']){
+            if (empty($this->currentUser['id']) && $this->is_weixin()) {
+                $ref = Router::url($_SERVER['REQUEST_URI']);
+                $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
+                exit();
+            }
+            $share_type = $_GET['share_type'];
+            $trstr = $_GET['trstr'];
+            if($share_type != 'timeline' && $share_type != 'appMsg'){
+                $this->log("WxShare: type wrong");
+                return;
+            }
+            $type = $share_type == 'timeline' ? 1:0;
+            $decode_string = authcode($trstr, 'DECODE', 'SHARE_TID');
+            $str = explode('-',$decode_string);
+            $data_str = explode('_',$str[3]);
+            if($str[2] != 'rebate'){
+                $this->log("WxShare: PRODUCT_KEY WRONG");
+                return;
+            }
+            if($data_str[0] == 'pid'){
+                $data_type = 'product';
+            }else{
+                $this->log("WxShare: data type error");
+                return;
+            }
+            $sharer = intval($str[0]);
+            $created = intval($str[1]);
+            $clicker = $this->currentUser['id']? $this->currentUser['id']:0;
+            $this->loadModel('ShareTrackLog');
+            $data =array('sharer' => $sharer, 'clicker' => $clicker, 'share_time' => $created, 'click_time'=>time(), 'data_type' => $data_type, 'data_id' => intval($data_str[1]) , 'share_type' => $type);
+            $this->ShareTrackLog->save($data);
+        }
+        return;
     }
 
     function guess_product_price(){
