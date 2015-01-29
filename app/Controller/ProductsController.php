@@ -460,9 +460,10 @@ class ProductsController extends AppController{
 
         $ids = Hash::extract($order_ids, '{n}.Order.id');
 
-        $top_price_cart = $this->Cart->find('first', array(
+        $top_price_cart = $this->Cart->find('all', array(
             'conditions' => array('order_id' => $ids, 'product_id' => 484),
             'order' => 'price desc',
+            'limit' => 1,
             )
         );
 
