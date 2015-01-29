@@ -456,6 +456,8 @@ class ProductsController extends AppController{
             'fields' => 'id'
         ));
 
+        $this->log("order ids for guess_price:". json_encode($order_ids));
+
         $ids = Hash::extract($order_ids, '{n}.Order.id');
 
         $top_price_cart = $this->Cart->find('first', array(
@@ -463,6 +465,8 @@ class ProductsController extends AppController{
             'order' => 'price desc',
             )
         );
+
+        $this->log("find top_price_cart ".json_encode($top_price_cart).", with order_ids:".$order_ids);
 
         $user_info = $this->User->find('first',array('conditions' => array('id' => $top_price_cart['Cart']['creator'])));
         $this->set('user_info',$user_info);
