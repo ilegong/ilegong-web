@@ -451,27 +451,35 @@ class ProductsController extends AppController{
         $this->loadModel('User');
 
         $this->loadModel('Order');
-        $order_ids = $this->Order->find('all', array(
+        $order_creators = $this->Order->find('all', array(
             'conditions' => array('brand_id' => 143, 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED), 'id > 11000'),
-            'fields' => 'id'
+            'fields' => 'creator'
         ));
 
-        $this->log("order ids for guess_price:". json_encode($order_ids));
+        $this->log("order ids for guess_price:". json_encode($order_creators));
 
-        $ids = Hash::extract($order_ids, '{n}.Order.id');
+        $ids = Hash::extract($order_creators, '{n}.Order.creator');
 
-        $top_price_cart = $this->Cart->find('all', array(
-            'conditions' => array('order_id' => $ids, 'product_id' => 484),
-            'order' => 'price desc',
+//        $top_price_cart = $this->Cart->find('all', array(
+//            'conditions' => array('order_id' => $ids, 'product_id' => 484),
+//            'order' => 'price desc',
+//            'limit' => 1,
+//            )
+//        );
+
+        $this->loadModel('UserPrice');
+        $top_price = $this->UserPrice->find('all', array(
+            'conditions' => array('uid' => $ids, 'product_id' => 484),
+            'order' => 'customized_price desc',
             'limit' => 1,
             )
         );
 
-        $this->log("find top_price_cart ".json_encode($top_price_cart).", with order_ids:".$order_ids);
+//        $this->log("find top_price_cart ".json_encode($top_price_cart).", with order_ids:".$order_creators);
 
-        $user_info = $this->User->find('first',array('conditions' => array('id' => $top_price_cart['Cart']['creator'])));
+        $user_info = $this->User->find('first',array('conditions' => array('id' => $top_price['UserPrice']['uid'])));
         $this->set('user_info',$user_info);
-        $this->set('top_price', max($top_price_cart['Cart']['price'], 19.9)); //assume 20 at lease
+        $this->set('top_price', max($top_price['UserPrice']['customized_price'], 19.9)); //assume 20 at lease
         $this->set('bannerItems',$bannerItems);
         $this->set('hideNav',true);
         $this->set('soldout', $total_sold > 100);
