@@ -447,12 +447,26 @@ class ProductsController extends AppController{
             array('img' => "/img/guess_price/banner03.jpg"),
         );
 
-        $this->loadModel('UserPrice');
+        $this->loadModel('Cart');
         $this->loadModel('User');
-        $userprice_info = $this->UserPrice->find('first',array('order' => 'customized_price desc'));
-        $user_info = $this->User->find('first',array('conditions' => array('id' => $userprice_info['UserPrice']['uid'])));
-        $this->set('userprice_info',$userprice_info);
+
+        $this->loadModel('Order');
+        $order_ids = $this->Order->find('all', array(
+            'conditions' => array('brand_id' => 143, 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED), 'id > 11000'),
+            'fields' => 'id'
+        ));
+
+        $ids = Hash::extract($order_ids, '{n}.Order.id');
+
+        $top_price_cart = $this->Cart->find('first', array(
+            'conditions' => array('id' => $ids, 'product_id' => 484),
+            'order' => 'price desc',
+            )
+        );
+
+        $user_info = $this->User->find('first',array('conditions' => array('id' => $top_price_cart['Cart']['creator'])));
         $this->set('user_info',$user_info);
+        $this->set('top_price', max($top_price_cart['Cart']['price'], 20)); //assume 20 at lease
         $this->set('bannerItems',$bannerItems);
         $this->set('hideNav',true);
         $this->set('soldout', $total_sold > 100);

@@ -64,7 +64,7 @@
         </dt>
     </dl>
     <span class="topprice">
-        牛轧糖当前最高出价:<strong>{{$user_info['User']['nickname']?$user_info['User']['nickname']:神秘土豪}}&nbsp;出价{{$userprice_info['UserPrice']['customized_price']}}元</strong>
+        当前最高出价:<strong>{{$user_info['User']['nickname']?$user_info['User']['nickname']:神秘土豪}}&nbsp;出价{{$this->Number->precision($top_price, 2)}}元</strong>
     </span>
     </div>
 </div>
