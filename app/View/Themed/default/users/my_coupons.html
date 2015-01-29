@@ -1,34 +1,63 @@
-<style>
-    .bg-danger {
-        background-color: #f2dede;
-    }
-</style>
-<h3>我的优惠券</h3>
-<div class="list-group">
+{{if empty($coupons)}}
+<!--暂无优惠券-->
+<div class="coupon_no" >
+    <ul>
+        <li class="coupon_no_icon"></li>
+        <li class="coupon_no_word">暂无优惠券</li>
+    </ul>
+</div>
+{{else}}
+<div class="coupon">
     <?php foreach($coupons as $coupon) {
      $expired = coupon_expired($coupon);
     ?>
-    <div class="list-group-item">
-        <h4 class="list-group-item-heading">{{$coupon['Coupon']['name']}} &nbsp;&nbsp;
-            {{if $coupon['CouponItem']['status'] == COUPONITEM_STATUS_USED}}
-            <span class="label label-default">已使用</span>
-            {{elseif $expired }}<span class="label label-default">已过期</span>
-            {{elseif $coupon['CouponItem']['status'] == COUPONITEM_STATUS_TO_USE }}
-            <span class="label label-success">未使用</span>
-            {{/if}} &nbsp;面值：<span style="color: #ffa200;">{{$this->Number->precision($coupon['Coupon']['reduced_price']/100, 2)}}</span></h4>
-        <p class="list-group-item-text">
-            有效期：{{$coupon['Coupon']['valid_begin']}} - {{$coupon['Coupon']['valid_end']}}
-        </p>
-        {{if $coupon['CouponItem']['status'] == COUPONITEM_STATUS_TO_USE && !$expired }}
-        <div class="btn-sm btn-warning">
-            {{if $coupon['Coupon']['id']  == COUPON_TYPE_RICE_1KG }}去<a style="color: #ffffff;text-decoration: underline; padding-left: 0.5em; padding-right: 0.5em" href="/categories/special_list/special_for_rice_coupons.html">大米劵特惠专场</a>选择购买商品
-            {{elseif intval($coupon['Coupon']['product_list']) > 0 }}<a style="color: #ffffff; text-decoration: underline;text-decoration: underline; padding-left: 0.5em; padding-right: 0.5em" href="{{product_link($coupon['Coupon']['product_list'], '/')}}">查看商品</a>
-            {{elseif $coupon['Coupon']['brand_id'] && empty($coupon['Coupon']['product_list'])}} 去<a style="color: #ffffff;text-decoration: underline; padding-left: 0.5em; padding-right: 0.5em" href="{{brand_link($coupon['Coupon']['brand_id'], array('show_products' => 1))}}">专店</a>选购
-            {{elseif !empty($coupon['Coupon']['brand_id'])}}去<a style="color: #ffffff; text-decoration: underline;text-decoration: underline; padding-left: 0.5em; padding-right: 0.5em" href="{{brand_link($coupon['Coupon']['brand_id'])}}">专店</a>选购
-            {{else}}在<a style="color: #ffffff; text-decoration: underline;text-decoration: underline; padding-left: 0.5em; padding-right: 0.5em" href="/">朋友说全站</a>购物
-            {{/if}}
-            ，结算时使用</div>
-        {{/if}}
-        </div>
+
+    <a class="coupon_usable" {{if $expired }} style="display:none;" {{/if}}
+    {{if intval($coupon['Coupon']['product_list']) > 0 }}
+        href="{{product_link($coupon['Coupon']['product_list'], '/')}}"
+    {{elseif !empty($coupon['Coupon']['brand_id']) && empty($coupon['Coupon']['product_list'])}}
+        href="{{brand_link($coupon['Coupon']['brand_id'])}}"
+    {{elseif !empty($coupon['Coupon']['category_id'])}}
+        href="{{category_link($coupon['Coupon']['category_id'])}}"
+    {{else}}
+        href="/"
+    {{/if}}
+    >
+        <ul class="clearfix">
+            <Li class="fl {{if $expired || $coupon['CouponItem']['status'] == COUPONITEM_STATUS_USED}} disabled {{else}}usable{{/if}}">
+                <div style="padding-left:0.5em;">
+                    <span>{{$coupon['Coupon']['name']}}</span><br />￥<strong>{{$this->Number->precision($coupon['Coupon']['reduced_price']/100, 2)}}</strong><br />
+                    {{if ($coupon['Coupon']['least_price'] != 0)}}<span style="padding-left:0.5em;">订单满 {{$coupon['Coupon']['least_price']/100}} 元使用 (不包含邮费)</span>{{/if}}
+                </div>
+            </Li>
+            <Li class="fr">
+                <span>有效期</span><br /><span>{{date("m.d", strtotime($coupon['Coupon']['valid_begin']))}}~{{date("m.d", strtotime($coupon['Coupon']['valid_end']))}}</span><br />
+                <span>
+                    {{if $coupon['CouponItem']['status'] == COUPONITEM_STATUS_USED}}
+                        已使用
+                    {{elseif $expired }}
+                        已过期
+                    {{elseif $coupon['CouponItem']['status'] == COUPONITEM_STATUS_TO_USE }}
+                        使用
+                    {{/if}}
+                </span>
+            </Li>
+        </ul>
+    </a>
     <?php } ?>
+    <a id="coupon_toggle" style="text-decoration:none" class="coupon_link">查看过期优惠券</a>
 </div>
+{{/if}}
+<div style="padding-bottom: 50px"></div>
+<script>
+    $(document).ready(function(){
+        $('body').css("background-color","#f5f5f5");
+        $('footer').hide();
+        $('#coupon_toggle').on('click', function(){
+            var link_text = $('#coupon_toggle').text();
+            $('#coupon_toggle').text(link_text == '收起'? '查看过期优惠券': '收起');
+            $('.coupon_usable .disabled').closest('a').toggle();
+            $('#coupon_toggle').css('color', '#999999');
+        })
+    })
+</script>

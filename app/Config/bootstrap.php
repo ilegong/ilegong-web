@@ -844,7 +844,15 @@ function brand_link($brand_id, $params = array()) {
 
     return $url;
 }
-
+function category_link($category_id){
+    $productTagM = ClassRegistry::init('ProductTag');
+    $tag = $productTagM->find('first', array(
+        'conditions' => array($category_id),
+        'fields' => array('slug')
+    ));
+    $url = (!empty($tag)) ? '/categories/tag/'.$tag['ProductTag']['slug'].'.html' : '/';
+    return $url;
+}
 function small_thumb_link($imgUrl) {
     return thumb_link($imgUrl, 'thumb_s');
 }
