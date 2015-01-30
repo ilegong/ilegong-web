@@ -240,16 +240,7 @@ class OAuthController extends OAuthAppController {
                 if ($userM->save($data)) {
                     //$user_id = $userM->getLastInsertID();
                     //$token = $this->OAuth->createAccessToken($inputData['client_id'], $user_id);
-                    //echo json_encode($token);
-                    //echo json_encode(array('error'=>0, 'error_description'=>'register success'));
-                    $_POST['username'] = $mobile;
-                    $_POST['password'] = $inputData['password'];
-                    $_POST['client_id'] = $inputData['client_id'];
-                    $_POST['grant_type'] = 'password';
-                    $_GET['username'] = $mobile;
-                    $_GET['password'] = $inputData['password'];
-                    $_GET['client_id'] = $inputData['client_id'];
-                    $_GET['grant_type'] = 'password';
+					$_GET = array('username'=>$mobile, 'password'=>$inputData['password'], 'client_id'=>$inputData['client_id'], 'grant_type'=>'password');
                     header("HTTP/1.1 " . '200 OK');
                     $this->token();
                 } else {
