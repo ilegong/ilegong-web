@@ -465,7 +465,7 @@ function submit_remark(id,obj){
 
 }
 //edit_type choose select
-function chose_Consignee(e){
+function chose_Consignee(){
     $('#edit_type').val('select');
     $('#consignee_addr').hide();
 }

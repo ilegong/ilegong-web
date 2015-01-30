@@ -6,7 +6,7 @@
 			<table  class="table table-bordered"><tbody>
 				{{loop $consignees  $consignee}}
 				<tr class="consignee_row {{if $consignee['OrderConsignee']['status']}}danger{{/if}}" id="consignee_{{$consignee['OrderConsignee']['id']}}">
-				<td style="width:40px;"><input type="radio"  {{if $consignee['OrderConsignee']['status']}}checked="checked"{{/if}} onchange="chose_Consignee({{$consignee['OrderConsignee']['id']}})" name="data[OrderConsignee][id]" value="{{$consignee['OrderConsignee']['id']}}" id="addr_{{$consignee['OrderConsignee']['id']}}"></td>
+				<td style="width:40px;"><input type="radio"  {{if $consignee['OrderConsignee']['status']}}checked="checked"{{/if}} onchange="chose_Consignee()" name="data[OrderConsignee][id]" value="{{$consignee['OrderConsignee']['id']}}" id="addr_{{$consignee['OrderConsignee']['id']}}"></td>
 				<td><strong>{{$consignee['OrderConsignee']['name']}}</strong>&nbsp;({{$consignee['OrderConsignee']['mobilephone']}})<br/>&nbsp;{{$consignee['OrderConsignee']['area']}}{{$consignee['OrderConsignee']['address']}}
 					<br/>
 					<a onclick="SetDefaultAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none"><strong style="cursor:pointer;" >[设为默认]</strong></a>&nbsp;&nbsp;
