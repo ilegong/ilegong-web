@@ -35,7 +35,7 @@ class Score extends AppModel {
         $data = json_encode($order_id_to_scores);
         $desc = '订单' . implode('、', array_keys($order_id_to_scores)) . '使用' . $spent . '积分';
 
-        return $this->save_score_log($userId, $spent, $reason, $data, $desc);
+        return $this->save_score_log($userId, -$spent, $reason, $data, $desc);
 
     }
 
@@ -53,7 +53,7 @@ class Score extends AppModel {
             'reason' => $reason,
             'data' => $data,
             'desc' => $desc,
-            'score' => -$change,
+            'score' => $change,
         ));
     }
 }
