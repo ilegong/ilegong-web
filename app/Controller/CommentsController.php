@@ -524,66 +524,42 @@ class CommentsController extends AppController {
         return $Order->find_my_order_byId($orderId, $uid);
     }
 
-    function _set_user_comment_score($orderId,$uid){
+    function _set_user_comment_score($orderId, $uid) {
+
         $Order = ClassRegistry::init('Order');
-        $User = ClassRegistry::init('User');
-        $Comment = ClassRegistry::init('Comment');
-        $Score = ClassRegistry::init('Score');
-        $OrderComment=ClassRegistry::init('OrderComment');
-        $order_comment = $OrderComment->find('first',array(
-            'user_id'=>$uid,
-            'order_id'=>$orderId
-        ));
-        $commentId = $order_comment['OrderComment']['id'];
-        $hadScore = $User->find('first',array(
-            'conditions'=>array(
-                'id'=>$uid
-            ),
-            'fields'=>array(
-                'score'
-            )
-        ));
-        $hadScore = $hadScore['User']['score'];
-        $score=0;
-        $current_order = $Order->find('first',array(
-            'conditions'=>array(
-                'id'=>$orderId
-            )
-        ));
-        $total_price = $current_order['Order']['total_all_price'];
-        if($total_price>COMMENT_AWARD_BASE_PRICE){
-            $score += floor($total_price);
-        }else{
-            $score +=COMMENT_AWARD_SCORE;
-        }
-        $product_comments = $Comment->find('all',array(
-            'conditions'=>array(
-                'order_id'=>$orderId,
-                'user_id'=>$uid,
-                'status'=>COMMENT_SHOW_STATUS,
+        $commentM = ClassRegistry::init('Comment');
+
+        $product_comments = $commentM->find('all', array(
+            'conditions' => array(
+                'order_id' => $orderId,
+                'user_id' => $uid,
+                'status' => COMMENT_SHOW_STATUS,
                 ''
             )
         ));
-        $product_ids = Hash::combine($product_comments,'{n}.Comment.id','{n}.Comment.data_id');
-        foreach($product_ids as $id=>$data_id){
-            $commentsByProductId = $Comment->find('all',array(
-                'conditions'=>array(
-                    'data_id'=>$data_id,
-                    'status'=>COMMENT_SHOW_STATUS,
-                ),
-                'order'=>array(
-                    'created asc'
-                ),
-                'limit'=>COMMENT_EXTRA_LIMIT
-            ));
-            $commentIds = Hash::extract($commentsByProductId,'{n}.Comment.id');
-            if(in_array($id,$commentIds)){
-                $score+=COMMENT_EXTRA_SCORE;
-            }
+        $product_ids = Hash::combine($product_comments, '{n}.Comment.id', '{n}.Comment.data_id');
+
+        $current_order = $Order->findById($orderId);
+        $total_price = $current_order['Order']['total_all_price'];
+
+        list($score, $award_extra_ids) = $commentM->estimate_score_value($total_price, $product_ids);
+
+        $Score = ClassRegistry::init('Score');
+        $OrderComment = ClassRegistry::init('OrderComment');
+        $order_comment = $OrderComment->find('first', array(
+            'user_id' => $uid,
+            'order_id' => $orderId
+        ));
+        $commentId = $order_comment['OrderComment']['id'];
+
+        if($Score->add_score_by_comment($uid, $score, $orderId, $commentId, $award_extra_ids)) {
+            $userM = ClassRegistry::init('User');
+            $userM->add_score($uid, $score);
+            $this->log("add score: $uid, $score, $orderId, $commentId");
+        } else {
+            $this->log("failed to add core for comment order ".$orderId." by user with ". $uid);
         }
-        $User->id = $uid;
-        $Score->add_score_by_comment($uid,$orderId,$commentId,$score);
-        $User->save(array('score'=>($score+$hadScore)));
+
     }
 }
 ?>

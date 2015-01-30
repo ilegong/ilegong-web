@@ -81,9 +81,9 @@ class User extends AppModel {
         return $map;
     }
 
-    function set_score($uid, $score) {
+    function add_score($uid, $changed) {
         $old_score = $this->get_score($uid, true);
-        return $this->updateAll(array('score = score + '.$score), array('score' => $old_score, 'id' => $uid));
+        return $this->updateAll(array('score' => 'score + ('.$changed.')'), array('score' => $old_score, 'id' => $uid));
     }
 
     function get_score($uid, $ignoreCache = false) {

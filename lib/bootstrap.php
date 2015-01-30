@@ -17,6 +17,7 @@ const ALI_PAY_TYPE_PC = "pc";
 const SCORE_ORDER_COMMENT = 1;
 const SCORE_NEW_USER = 2;
 const SCORE_ORDER_DONE = 3;
+const SCORE_ORDER_SPENT = 4;
 
 const SPEICAL_LIST_DAILY_ID = 4;
 

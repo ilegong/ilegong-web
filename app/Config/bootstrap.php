@@ -96,11 +96,11 @@ const SPEC_PARAM_KEY_SHICHI_COMM='_pys_add_shichi_comment';
 
 const SCAN_TICKET_CAOMEI = 'gQHP8DoAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xLzZIV1BfNWJsb1JyWUF1NTJDRmxvAAIEmH7AVAMEAAAAAA==';
 
-const COMMENT_AWARD_BASE_PRICE=100;
-const COMMENT_EXTRA_LIMIT=5;
-const COMMENT_AWARD_SCORE=100;
-const COMMENT_EXTRA_SCORE=100;
-const COMMENT_SHOW_STATUS=1;
+const COMMENT_AWARD_BASE_PRICE = 100;
+const COMMENT_EXTRA_LIMIT = 5;
+const COMMENT_AWARD_SCORE = 100;
+const COMMENT_EXTRA_SCORE = 100;
+const COMMENT_SHOW_STATUS = 1;
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
@@ -1166,4 +1166,13 @@ function accept_user_price_pid($product_id) {
 
 function accept_user_price($product_id, $user_price) {
     return ($product_id == PRODUCT_ID_JD_HS_NZT) && !empty($user_price) && $user_price >= 1;
+}
+
+function cal_score_money($score, $total_price) {
+    $score_money = $score / 100;
+    if ($score_money > $total_price/2) {
+        return $total_price/2;
+    } else {
+        return $score_money;
+    }
 }
