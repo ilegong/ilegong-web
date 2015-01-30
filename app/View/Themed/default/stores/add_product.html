@@ -22,9 +22,7 @@
 
             <div class="col-sm-9 controls">
                 <input type="text" value="{{$this->data[Product][name]}}" class="form-control" id="ProductName"
-                       maxlength="250" name="data[Product][name]">
-
-                <p class="help-block">最多15个字</p>
+                       maxlength="250" name="data[Product][name]" placeholder="最少15个字，最多30个字">
             </div>
         </div>
         <div class="form-group">
@@ -127,7 +125,9 @@
     'swfupload/handlers.js',
     'tag_input/jquery.tagsinput.min.js',
     '/js/json2.js',
-    'product_spec.js?v2',
+    'product_spec.js?2',
+    'jquery.validate.min.js',
+
     ))}}
 
     <script>
@@ -158,6 +158,19 @@
                 //	$('.cke_top').addClass('clearfix').affix();
                 //}
             });
+            $('#ProductAddForm').validate({
+                rules:{
+                    ProductName:{
+                        required:true,
+                        rangelength:[15,30]
+                    }
+                },
+                messages:{
+                    ProductName:{required:'标题不能为空哦',rangelength:'最少15个字，最多30个字'}
+                }
+
+            })
+
         })
     </script>
 </div>

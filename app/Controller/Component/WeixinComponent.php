@@ -346,7 +346,7 @@ class WeixinComponent extends Component
         $carts = $cartModel->find('all',array(
             'conditions'=>array('order_id' => $order_info['Order']['id'])));
         foreach($carts as $cart){
-            $good_info = $good_info.$cart['Cart']['name'].' x '.$cart['Cart']['num'].';';
+            $good_info = $good_info.$cart['Cart']['name'].':'.$cart['Cart']['num'].'件;';
         }
         $pids = Hash::extract($carts, '{n}.Cart.product_id');
 
@@ -463,6 +463,7 @@ class WeixinComponent extends Component
                     }
                 }
 
+
                 if ($order['Order']['type'] == ORDER_TYPE_GROUP) {
                     $seller_weixin = '';
                 }
@@ -488,7 +489,7 @@ class WeixinComponent extends Component
         $good_num = $Cart->find('count',array('conditions' => array('order_id' => $order['Order']['id'],'creator' => $order['Order']['creator'])));
         $good_infomation = explode(';',$good_info);
         if ($good_num == 1){
-        $msg = '用户'.$order_consinessname.'刚刚购买了'.$good_infomation[0].'等'.$good_num.'件商品，订单金额'.$price.'元，请您发货。订单号'.$order_id.'，关注服务号接收更详细信息。';
+        $msg = '用户'.$order_consinessname.'刚刚购买了'.$good_infomation[0].'等'.$good_num.'份商品，订单金额'.$price.'元，请您发货。订单号'.$order_id.'，关注服务号接收更详细信息。';
         }else {
         $msg = '用户'.$order_consinessname.'刚刚购买了'.$good_infomation[0].'、'.$good_infomation[1].'等'.$good_num.'件商品，订单金额'.$price.'元，请您发货。订单号'.$order_id.'，关注服务号接收更详细信息。';
         }
