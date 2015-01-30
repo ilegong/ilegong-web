@@ -7,9 +7,9 @@
 				{{loop $consignees  $consignee}}
 				<tr class="consignee_row {{if $consignee['OrderConsignee']['status']}}danger{{/if}}" id="consignee_{{$consignee['OrderConsignee']['id']}}">
 				<td style="width:40px;"><input type="radio"  {{if $consignee['OrderConsignee']['status']}}checked="checked"{{/if}} onchange="chose_Consignee({{$consignee['OrderConsignee']['id']}})" name="data[OrderConsignee][id]" value="{{$consignee['OrderConsignee']['id']}}" id="addr_{{$consignee['OrderConsignee']['id']}}"></td>
-				<td><label for="addr_{{$consignee['OrderConsignee']['id']}}"><strong>{{$consignee['OrderConsignee']['name']}}</strong>&nbsp;({{$consignee['OrderConsignee']['mobilephone']}})<br/>&nbsp;{{$consignee['OrderConsignee']['area']}}{{$consignee['OrderConsignee']['address']}}</label>
+				<td><strong>{{$consignee['OrderConsignee']['name']}}</strong>&nbsp;({{$consignee['OrderConsignee']['mobilephone']}})<br/>&nbsp;{{$consignee['OrderConsignee']['area']}}{{$consignee['OrderConsignee']['address']}}
 					<br/>
-					<a onclick="SetDefaultAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none"><label style="cursor:pointer;" for="addr_{{$consignee['OrderConsignee']['id']}}">[设为默认]</label></a>&nbsp;&nbsp;
+					<a onclick="SetDefaultAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none"><strong style="cursor:pointer;" >[设为默认]</strong></a>&nbsp;&nbsp;
 					<a onclick="editConsignee(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#consignee_move">[编辑]</a>&nbsp;&nbsp;
 					<a onclick="DelAddress(this,'{{$consignee['OrderConsignee']['id']}}');" class="remark" href="#none">[删除]</a>
 				</td>
@@ -22,7 +22,7 @@
 			</tbody></table>
 		</div>
 		<span id="consignee_move"></span>
-		<div id="consignee_addr" class="clearfix" {{if $total_consignee}}style="display:none;"{{/if}}>
+		<div id="consignee_addr" class="container" {{if $total_consignee}}style="display:none;"{{/if}}>
 			<div class="form-group">
 			    <label for="consignee_name" class="col-xs-3 control-label">收货人</label>
 			    <div class="col-xs-9">
@@ -30,11 +30,12 @@
 			    </div>
 			</div>
             <div class="form-group">
-                <label for="consignee_name" class="col-xs-3 control-label">地 区</label>
-                <select id="provinceDiv" name="data[OrderConsignee][province_id]" class="" onchange="loadCity()"><option  value='0'>请选择</option></select>
-                <select id="cityDiv" name="data[OrderConsignee][city_id]" class="" onchange="loadCounty()"><option value='0'>请选择</option></select>
-                <select id="countyDiv" name="data[OrderConsignee][county_id]" class="" onchange="fillTownName()" ><option value='0'>请选择</option></select>
-                <span class="error-msg" id="areaNote"></span>
+                <label for="consignee_address" class="col-xs-3 control-label">地　　区</label>
+				<div class="col-xs-9">
+					<select id="provinceDiv" name="data[OrderConsignee][province_id]" class="form-control " onchange="loadCity()"><option  value='0'>请选择</option></select>
+					<select id="cityDiv" name="data[OrderConsignee][city_id]" class="form-control" onchange="loadCounty()"><option value='0'>请选择</option></select>
+					<select id="countyDiv" name="data[OrderConsignee][county_id]" class="form-control" onchange="fillTownName()" ><option value='0'>请选择</option></select>
+				</div>
             </div>
 			<div class="form-group">
 			    <label for="consignee_address" class="col-xs-3 control-label">详细地址</label>
