@@ -12,7 +12,7 @@
      $expired = coupon_expired($coupon);
     ?>
 
-    <a class="coupon_usable" {{if $expired }} style="display:none;" {{/if}}
+    <a class="coupon_usable" {{if $expired }} style="display:none;"  link-type = "expired"{{/if}}
     {{if intval($coupon['Coupon']['product_list']) > 0 }}
         href="{{product_link($coupon['Coupon']['product_list'], '/')}}"
     {{elseif !empty($coupon['Coupon']['brand_id']) && empty($coupon['Coupon']['product_list'])}}
@@ -27,7 +27,7 @@
             <Li class="fl {{if $expired || $coupon['CouponItem']['status'] == COUPONITEM_STATUS_USED}} disabled {{else}}usable{{/if}}">
                 <div style="padding-left:0.5em;">
                     <span>{{$coupon['Coupon']['name']}}</span><br />￥<strong>{{$this->Number->precision($coupon['Coupon']['reduced_price']/100, 2)}}</strong><br />
-                    {{if ($coupon['Coupon']['least_price'] != 0)}}<span style="padding-left:0.5em;">订单满 {{$coupon['Coupon']['least_price']/100}} 元使用 (不包含邮费)</span>{{/if}}
+                    {{if ($coupon['Coupon']['least_price'] != 0)}}<span>订单满 {{$coupon['Coupon']['least_price']/100}} 元使用 (不包含邮费)</span>{{/if}}
                 </div>
             </Li>
             <Li class="fr">
@@ -59,8 +59,13 @@
         if($('#coupon_toggle').size() > 0){
             $('#coupon_toggle').on('click', function(){
                 var link_text = $('#coupon_toggle').text();
-                $('#coupon_toggle').text(link_text == '收起'? '查看过期优惠券': '收起');
-                $('.coupon_usable .disabled').closest('a').toggle();
+                if(link_text == '收起'){
+                    $('#coupon_toggle').text('查看过期优惠券');
+                    $("a[link-type='expired']").hide();
+                }else{
+                    $('#coupon_toggle').text('收起');
+                    $("a[link-type='expired']").show();
+                }
                 $('#coupon_toggle').css('color', '#999999');
             })
         }

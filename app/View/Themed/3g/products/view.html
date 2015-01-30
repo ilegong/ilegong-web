@@ -98,7 +98,7 @@
 <script>
     wx.ready(function () {
         var share_string = '{{$share_string ? $share_string :"0"}}';
-        var to_timeline_title = "{{$Product['Product']['name']}}，" + "{{$Product['Product'][promote_name]}}。" + "现价{{$this->Number->precision($price, 2)}}元";
+        var to_timeline_title = "{{$Product['Product']['name']}}，" + "{{$Product['Product'][promote_name]}}。" + "现价{{$this->Number->precision($price, 2)}}元" + "{{$special_desc}}";
         var to_friend_title = "{{$Product['Product']['name']}}";
         var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
         var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';

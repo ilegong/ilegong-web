@@ -498,8 +498,8 @@ a:hover, a:focus {
 /*我的优惠券*/
 .coupon{ padding:0.833em;}
 .coupon_usable{ border:#dddddd 1px solid; background-color:#ffffff; display:block; text-decoration:none; margin-bottom:0.833em;height:84px;}
-.coupon_usable ul li.usable{ width:70%; background-color:#fdb456; font-size:1em; line-height:1.5em; color:#ffffff; padding:0.5em 0; height:84px;}
-.coupon_usable ul li.disabled{ width:70%; background-color:#dddddd; font-size:1em; line-height:1.5em; color:#999999; padding:0.5em 0; height:84px;}
+.coupon_usable ul li.usable{ width:70%; background-color:#fdb456; font-size:1em; line-height:1.5em; color:#ffffff; padding:0.5em 0; height:83px;}
+.coupon_usable ul li.disabled{ width:70%; background-color:#dddddd; font-size:1em; line-height:1.5em; color:#999999; padding:0.5em 0; height:83px;}
 .coupon_usable ul li.fl strong{ font-size:2em;}
 .coupon_usable ul li.fr{ width:30%; font-size:1em; line-height:1.5em; color:#666666; text-align:center; padding:0.7em 0 0 0;}
 .coupon_link{ font-size:1em; color:#999999; text-align:center; line-height:2.5em; display:block;}
