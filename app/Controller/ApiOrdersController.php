@@ -842,23 +842,24 @@ class ApiOrdersController extends AppController {
         $mainTagImg = array('http://www.tongshijia.com/img/mobile/index/c1.jpg', 'http://www.tongshijia.com/img/mobile/index/c2.jpg', 'http://www.tongshijia.com/img/mobile/index/c3.jpg', 'http://www.tongshijia.com/img/mobile/index/c4.jpg', 'http://www.tongshijia.com/img/mobile/index/c5.jpg', 'http://www.tongshijia.com/img/mobile/index/c6.jpg', 'http://www.tongshijia.com/img/mobile/index/c7.jpg', 'http://www.tongshijia.com/img/mobile/index/c8.jpg');
         $resultTag = array_merge($mainTagIds, $specTagIds);
         $productTagM = ClassRegistry::init('ProductTag');
-        $productTags = $productTagM->find('list', array('conditions' => array(
+        $tagInfo = $productTagM->find('all', array('conditions' => array(
             'id'=> $resultTag,
             'published' => 1
         ),
-            'fields' => array('id', 'slug'),
+            'fields' => array('id', 'slug','name'),
             'order' => 'priority desc'
         ));
+        $productTags = Hash::combine($tagInfo, '{n}.ProductTag.id', '{n}.ProductTag');
         $mainTagItems = array();
         $specTagItems = array();
         $imgNum = 0;
         foreach($mainTagIds as $mainTagId){
-            $mainTagItems[] = array('id' =>$mainTagId , 'slug'=>$productTags[$mainTagId], 'img'=> $mainTagImg[$imgNum]);
+            $mainTagItems[] = array('id' =>$mainTagId , 'name' => $productTags[$mainTagId]['name'], 'slug'=>$productTags[$mainTagId]['slug'], 'img'=> $mainTagImg[$imgNum]);
             $imgNum ++;
         }
         $imgNum = 0;
         foreach($specTagIds as $specTagId){
-            $specTagItems[] = array('id' =>$specTagId , 'slug'=>$productTags[$specTagId], 'img'=> $specTagImg[$imgNum]);
+            $specTagItems[] = array('id' =>$specTagId , 'name' => $productTags[$mainTagId]['name'], 'slug'=>$productTags[$specTagId]['slug'], 'img'=> $specTagImg[$imgNum]);
             $imgNum ++;
         }
         $productTryM = ClassRegistry::init('ProductTry');
