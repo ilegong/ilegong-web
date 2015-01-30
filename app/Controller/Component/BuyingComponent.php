@@ -222,11 +222,7 @@ class BuyingComponent extends Component {
             $pp = $shipPromotionId ? $shipPromo->find_ship_promotion($pid, $shipPromotionId) : array();
             $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartItem['num']) ? $cartItem['num'] : 1;
 
-            if (empty($pp) || !isset($pp['price'])) {
-                list($itemPrice,) = calculate_price($pid, $productByIds[$pid]['price'], $uid, $num, $cartItem['id']);
-            } else {
-                $itemPrice = $pp['price'];
-            }
+            list($itemPrice,) = calculate_price($pid, $productByIds[$pid]['price'], $uid, $num, $cartItem['id'], $pp);
 
             $totalPrices[$brand_id] += ($itemPrice * $num);
             $cart->add_product_item($brand_id, $pid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name']);

@@ -268,15 +268,20 @@ function calculate_try_price($priceInCent, $uid = 0, $shichituan = null) {
     return ($isShichituan ? 99 : $priceInCent)/100;
 }
 
+function special_cake_users($uid) {
+    return $uid == 699919 /*|| $uid == 632*/; //Special user provided by Agnes(Li Hainan)
+}
+
 /**
  * @param $pid
  * @param $price
  * @param $currUid
  * @param $num
  * @param int $cart_id
+ * @param null $pp special price by ShipPromotion
  * @return array array of price && specialId
  */
-function calculate_price($pid, $price, $currUid, $num, $cart_id = 0) {
+function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null) {
 
     if (accept_user_price_pid($pid) && accept_user_price_pid_num($pid, $num) && !empty($cart_id)) {
         $userPrice = ClassRegistry::init('UserPrice');
@@ -289,6 +294,14 @@ function calculate_price($pid, $price, $currUid, $num, $cart_id = 0) {
             return array($up['UserPrice']['customized_price'],);
         }
 
+    }
+
+    if (!empty($pp) && isset($pp['price'])) {
+        if (PRODUCT_ID_CAKE == $pid && special_cake_users($currUid)) {
+            return array($pp['price'] - 20,);
+        } else {
+            return array($pp['price'], );
+        }
     }
 
 
