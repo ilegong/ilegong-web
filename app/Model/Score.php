@@ -24,7 +24,7 @@ class Score extends AppModel {
         $desc = '评价订单 '.$orderId.' 获得 '.$score_change.' 个积分';
 
         if (!empty($award_extra_ids)) {
-            $desc .='，包含产品'.implode('、', $award_extra_ids).'的抢先评论奖励积分';
+            $desc .='，包含'.count($award_extra_ids).'种商品(ID 为'.implode('、', $award_extra_ids).')的抢先评论奖励';
         }
         $data = json_encode(array('order_id' => $orderId, 'order_comment_id' => $order_comment_id));
         return $this->save_score_log($userId, $score_change, SCORE_ORDER_COMMENT, $data, $desc);
