@@ -55,7 +55,7 @@
             <ul class="clearfix borderb pb15">
                 <li class="title">运费:</li>
                 <li class="yunfei clearfix">
-                    <span>{{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</span>
+                    <span>{{if $Product['Product']['ship_fee'] < 0 }}到付(详见商品详情){{elseif $Product['Product']['ship_fee']>0}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</span>
                 </li>
             </ul>
 
