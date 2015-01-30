@@ -21,7 +21,7 @@
                 <span class="fl">
                     {{if $ship_by_item_num && $Product['Product']['ship_fee'] }}每件{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}元
                     {{else}}
-                        {{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}
+                        {{if $Product['Product']['ship_fee'] < 0 }}到付(详见商品详情){{elseif $Product['Product']['ship_fee']>0}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}
                     {{/if}}
                 </span>
 			</span>

@@ -34,7 +34,7 @@
             </li>
 
             <li>
-               <span class="vertical-align">快递：{{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</span>
+               <span class="vertical-align">快递：{{if $Product['Product']['ship_fee'] < 0 }}到付(详见商品详情){{elseif $Product['Product']['ship_fee']>0}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}</span>
             </li>
 
             <li>
