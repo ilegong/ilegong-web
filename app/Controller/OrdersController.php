@@ -294,7 +294,7 @@ class OrdersController extends AppController{
                 $this->apply_coupon_code_to_order($uid, $order_id);
 
                 if($score > 0 ) {
-                    $spent_on_order = $score * ($total_all_price / $all_order_total);
+                    $spent_on_order = round($score * ($total_all_price / $all_order_total));
                     $reduced = $spent_on_order / 100;
                     $toUpdate = array('applied_score' => $spent_on_order,
                         'total_all_price' => 'if(total_all_price - ' . $reduced .' < 0, 0, total_all_price - ' . $reduced .')');

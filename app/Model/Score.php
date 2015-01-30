@@ -21,7 +21,7 @@ class Score extends AppModel {
     }
 
     public function add_score_by_comment($userId, $score_change, $orderId, $order_comment_id, $award_extra_ids) {
-        $desc = '评价订单 '.$score_change.' 获得 '.$score_change.' 个积分';
+        $desc = '评价订单 '.$orderId.' 获得 '.$score_change.' 个积分';
 
         if (!empty($award_extra_ids)) {
             $desc .='，包含产品'.implode('、', $award_extra_ids).'的抢先评论奖励积分';
