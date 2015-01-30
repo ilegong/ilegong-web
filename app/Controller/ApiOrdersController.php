@@ -859,7 +859,7 @@ class ApiOrdersController extends AppController {
         }
         $imgNum = 0;
         foreach($specTagIds as $specTagId){
-            $specTagItems[] = array('id' =>$specTagId , 'name' => $productTags[$mainTagId]['name'], 'slug'=>$productTags[$specTagId]['slug'], 'img'=> $specTagImg[$imgNum]);
+            $specTagItems[] = array('id' =>$specTagId , 'name' => $productTags[$specTagId]['name'], 'slug'=>$productTags[$specTagId]['slug'], 'img'=> $specTagImg[$imgNum]);
             $imgNum ++;
         }
         $productTryM = ClassRegistry::init('ProductTry');
