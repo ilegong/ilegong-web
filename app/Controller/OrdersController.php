@@ -686,6 +686,53 @@ class OrdersController extends AppController{
         echo json_encode($resp);
     }
 	
+    public function apply_score() {
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            echo json_encode(array('changed' => false, 'reason' => 'not_login'));
+            return;
+        }
+
+        $use = ("true" == $_REQUEST['use']);
+        $shipPromotionId = intval($_REQUEST['ship_promotion']);
+        $score_num = intval($_REQUEST['score']);
+
+        $specifiedPids = $this->specified_balance_pids();
+        $cartsByPid = $this->Buying->cartsByPid($specifiedPids, $uid, $this->Session->id());
+        list($cart, $shipFee) = $this->Buying->applyPromoToCart(array_keys($cartsByPid), $cartsByPid, $shipPromotionId, $uid);
+
+        $this->Session->write(self::key_balanced_scores(), '');
+        $total_reduced = $this->_cal_total_reduced($uid);
+        $total_price = $cart->total_price() - $total_reduced / 100 + $shipFee;
+
+        $this->loadModel('User');
+        $score = $this->User->get_score($uid, true);
+        $could_score_money = cal_score_money($score, $total_price);
+        $could_use_score = $could_score_money * 100;
+
+        if ($use) {
+            if ($score_num > $could_use_score) {
+                $score_num = $could_use_score;
+            }
+            $this->Session->write(self::key_balanced_scores(), $score_num);
+            $total_reduced = $this->_cal_total_reduced($uid);
+            $total_price = $cart->total_price() - $total_reduced / 100 + $shipFee;
+        } else {
+            $this->Session->write(self::key_balanced_scores(), '');
+        }
+
+        $resp['success'] = true;
+        $resp['score_usable'] = $could_use_score;
+        $resp['score_money'] = $could_score_money;
+        $used_score = $this->Session->read(self::key_balanced_scores());
+        $resp['score_used'] = !empty($used_score);
+
+        $resp['total_reduced'] = $total_reduced/100;
+        $resp['total_price'] = $total_price;
+        echo json_encode($resp);
+    }
+
 	function mine(){
         $uid = $this->currentUser['id'];
 
