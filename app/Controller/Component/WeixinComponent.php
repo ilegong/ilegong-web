@@ -239,12 +239,13 @@ class WeixinComponent extends Component
         return $this->send_weixin_message($post_data);
     }
 
-    public function send_order_shipped_message($open_id, $ship_type, $ship_company, $ship_code, $good_info, $good_number)
+    public function send_order_shipped_message($open_id, $ship_type, $ship_company, $ship_code, $good_info, $good_number,$order_id)
     {
         $post_data = array(
             "touser" => $open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_SHIPPED"],
-            "url" => $this->get_kuaidi_query_url($ship_type, $ship_code),
+//            "url" => $this->get_kuaidi_query_url($ship_type, $ship_code),
+            "url" => $this->get_order_query_url($order_id),
             "topcolor" => "#FF0000",
             "data" => array(
                 "first" => array("value" => "亲，您的特产已经从家乡启程啦。"),
@@ -252,7 +253,7 @@ class WeixinComponent extends Component
                 "keyword2" => array("value" => $ship_code),
                 "keyword3" => array("value" => $good_info),
                 "keyword4" => array("value" => $good_number),
-                "remark" => array("value" => "点击详情，查询快递状态。", "color" => "#FF8800")
+                "remark" => array("value" => "点击查看订单详情。", "color" => "#FF8800")
             )
         );
         return $this->send_weixin_message($post_data);

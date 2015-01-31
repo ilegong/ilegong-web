@@ -948,7 +948,7 @@ class OrdersController extends AppController{
                 $this->log("good info:".$good['good_info'].$good['good_number']);
                 $ship_type_list = ShipAddress::ship_type_list();
                 $this->Weixin->send_order_shipped_message($user_weixin['oauth_openid'],$ship_type,
-                    $ship_type_list[$ship_type], $ship_code, $good['good_info'], $good['good_number']);
+                    $ship_type_list[$ship_type], $ship_code, $good['good_info'], $good['good_number'],$order_id);
             }
             $good_info = $this->get_order_good_info($order_id);
             $good = $good_info['good_info'];
