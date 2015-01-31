@@ -426,8 +426,8 @@ class ApiOrdersController extends AppController {
         $data = json_decode(trim($postStr), true);
         $pidList = $data['pid_list'];
         $couponCode = $data['coupon_code'];
-        $addressId = $data['addressId'];
-        if (!empty($pidList) && !empty($addressId)) {
+        //$addressId = $data['addressId'];
+        if (!empty($pidList)) {
             $this->loadModel('Cart');
             $this->loadModel('Product');
             $this->loadModel('ShipPromotion');
@@ -464,9 +464,9 @@ class ApiOrdersController extends AppController {
             if (empty($pidList)) {
                 $reason[] = 'empty_products';
             }
-            if (empty($addressId)) {
-                $reason[] = 'invalid_address';
-            }
+//            if (empty($addressId)) {
+//                $reason[] = 'invalid_address';
+//            }
         }
         $this->set(compact('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'shipFees', 'reduced', 'reason'));
         $this->set('_serialize', array('success', 'total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'shipFees', 'reduced', 'reason'));
