@@ -952,7 +952,7 @@ class OrdersController extends AppController{
             }
             $good_info = $this->get_order_good_info($order_id);
             $good = $good_info['good_info'];
-            $good = substr($good,0,strlen($good)-2);
+//            $good = substr($good,0,strlen($good)-2);
             $mobile_phone = $order_info['Order']['consignee_mobilephone'];
             $brand_name = $brand['Brand']['name'];
             $msg = '您购买的['.$brand_name.']['.$good.']已经发货，请关注微信pyshuo2014追踪物流信息';
@@ -998,6 +998,8 @@ class OrdersController extends AppController{
             $info = $info.$cart['Cart']['name'].':'.$cart['Cart']['num'].'件、';
             $number +=$cart['Cart']['num'];
         }
+
+       $info = substr($info,0,strlen($info)-2);
         return array("good_info"=>$info,"good_number"=>$number);
     }
 	

@@ -340,13 +340,14 @@ class WeixinComponent extends Component
     }
 
     public static function get_order_good_info($order_info){
-        $good_info ='';
+        $good_info ='';$number = 0;
         $ship_info = $order_info['Order']['consignee_name'].','.$order_info['Order']['consignee_address'].','.$order_info['Order']['consignee_mobilephone'];
         $cartModel = ClassRegistry::init('Cart');
         $carts = $cartModel->find('all',array(
             'conditions'=>array('order_id' => $order_info['Order']['id'])));
         foreach($carts as $cart){
-            $good_info = $good_info.$cart['Cart']['name'].':'.$cart['Cart']['num'].'件;';
+            $good_info = $good_info.$cart['Cart']['name'].'x'.$cart['Cart']['num'].';';
+            $number +=$cart['Cart']['num'];
         }
         $pids = Hash::extract($carts, '{n}.Cart.product_id');
 
@@ -356,7 +357,7 @@ class WeixinComponent extends Component
                 'id' => $order_info['Order']['brand_id']
             )
         ));
-        return array("good_info"=>$good_info,"ship_info"=>$ship_info, 'pid_list' => $pids, 'brand_info' => $brand);
+        return array("good_info"=>$good_info,"ship_info"=>$ship_info, 'pid_list' => $pids, 'brand_info' => $brand,'good_num' => $number);
     }
 
     /**
@@ -376,6 +377,7 @@ class WeixinComponent extends Component
         $good_info = $good['good_info'];
         $ship_info = $good['ship_info'];
         $order_id = $order['Order']['id'];
+        $good_num = $good['good_num'];
         $order_consinessname = $order['Order']['consignee_name'];
         $brandId = $order['Order']['brand_id'];
 
@@ -480,16 +482,13 @@ class WeixinComponent extends Component
 
         $Brand = ClassRegistry::init('Brand');
         $User = ClassRegistry::init('User');
-        $Cart = ClassRegistry::init('Cart');
         $brand_creator = $Brand->find('first',array('conditions' => array('id' => $brandId),'fields' => array('creator')));
-
         $bussiness_info = $User->find('first',array('conditions' => array('id' => $brand_creator['Brand']['creator']),'fields' => array('mobilephone')));
         $bussiness_mobilephone = $bussiness_info['User']['mobilephone'];
 
-        $good_num = $Cart->find('count',array('conditions' => array('order_id' => $order['Order']['id'],'creator' => $order['Order']['creator'])));
         $good_infomation = explode(';',$good_info);
         if ($good_num == 1){
-        $msg = '用户'.$order_consinessname.'刚刚购买了'.$good_infomation[0].'等'.$good_num.'份商品，订单金额'.$price.'元，请您发货。订单号'.$order_id.'，关注服务号接收更详细信息。';
+        $msg = '用户'.$order_consinessname.'刚刚购买了'.$good_infomation[0].'共'.$good_num.'件商品，订单金额'.$price.'元，请您发货。订单号'.$order_id.'，关注服务号接收更详细信息。';
         }else {
         $msg = '用户'.$order_consinessname.'刚刚购买了'.$good_infomation[0].'、'.$good_infomation[1].'等'.$good_num.'件商品，订单金额'.$price.'元，请您发货。订单号'.$order_id.'，关注服务号接收更详细信息。';
         }
