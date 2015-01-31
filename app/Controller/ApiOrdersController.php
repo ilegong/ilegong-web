@@ -10,7 +10,7 @@ class ApiOrdersController extends AppController {
     public $components = array('OAuth.OAuth', 'Session');
     public function beforeFilter() {
         parent::beforeFilter();
-        $allow_action = array('test','product_detail', 'store_list', 'product_content', 'store_content', 'store_story','_save_comment', 'home','articles');
+        $allow_action = array('test','product_detail','cart_info', 'store_list', 'product_content', 'store_content', 'store_story','_save_comment', 'home','articles');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action)  == false) {
             $this->currentUser = $this->OAuth->user();
@@ -448,9 +448,13 @@ class ApiOrdersController extends AppController {
 //            }
 //            $cart->products = $product_specs;
             $products= Hash::combine($products,'{n}.Product.id','{n}.Product');
-
-            foreach($cart['brandItems'] as &$bi){
-                $bi['items']=Hash::merge($bi['items'],$products);
+            $bis = $cart->brandItems;
+            foreach($bis as &$bi){
+                $items=$bi->items;
+                foreach($items as $index=>$i){
+                    $i->coverimg=$products[$index]['coverimg'];
+                    $i->specs=$products[$index]['specs'];
+                }
             }
 
             $brand_ids = array_keys($cart->brandItems);
