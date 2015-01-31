@@ -276,7 +276,7 @@ class CouponItem extends AppModel {
             $found = $couponM->find('all', array(
                 'conditions' => array(
                     'product_list' => $pid_lists,
-                    'valid_end' => '2015-02-02 00:00:00'
+                    'valid_end' => '2015-02-06 00:00:00'
                 ),
                 'fields' => array('id','reduced_price','product_list')
             ));
