@@ -442,11 +442,16 @@ class ApiOrdersController extends AppController {
                 'conditions'=>array(
                     'id' => $pidList
                 )));
-            $product_specs = array();
-            foreach ($products as $product) {
-                $product_specs[$product['Product']['id']] = array('img' => $product['Product']['coverimg'], 'spec'=> $product['Product']['specs']);
+//            $product_specs = array();
+//            foreach ($products as $product) {
+//                $product_specs[$product['Product']['id']] = array('img' => $product['Product']['coverimg'], 'spec'=> $product['Product']['specs']);
+//            }
+//            $cart->products = $product_specs;
+            $products= Hash::combine($products,'{n}.Product.id','{n}.Product');
+
+            foreach($cart['brandItems'] as &$bi){
+                $bi['items']=Hash::merge($bi['items'],$products);
             }
-            $cart->products = $product_specs;
 
             $brand_ids = array_keys($cart->brandItems);
             $brands = $this->findBrands($brand_ids);
