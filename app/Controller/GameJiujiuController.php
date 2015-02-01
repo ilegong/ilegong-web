@@ -115,6 +115,8 @@ VALUES
 
     public function story()
     {
+        $this->set('hideNav', true);
+        $this->pageTitle = '玖玖草莓';
     }
 
     public function notifiedToMe($gameType = KEY_APPLE_201410) {
