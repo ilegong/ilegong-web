@@ -1,0 +1,108 @@
+{{$this->Html->script(array('trace/tracekit.min.report.js', 'shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js', 'jquery/jquery.fullPage.min.js', 'jquery/jquery.rotate.js'), array('block' => 'scriptBottom'));}}
+{{$this->Html->css(array('game_jiujiu.css?ver1',));}}
+<script>
+	$(document).ready(function(){
+		var height = $(window).height();
+		var width = $(window).width();
+		$('#strawberry_bg').height(height);
+		$('#strawberry_bg').width(width);
+		$('#strawberry_trbg').height(height);
+		$('#strawberry_trbg').width(width);
+	})
+</script>
+<div id="strawberry_bg">
+	<i class="strawberry_bg"></i>
+</div>
+<div class="strawberry_title"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/title.png')}}" /></div>
+<div class="strawberry_basket"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/basket.gif')}}" /></div>
+<div class="strawberry_num">你已经摇下<span>0</span>个草莓<br />你有<span>3</span>次摇的机会</div>
+<div class="strawberry_btn">
+	<ul>
+    	<li class="clearfix">
+            <a href="#X" class="fl">游戏规则</a>
+            <a href="#X" class="fr">加机会</a>
+        </li>
+        <li class="clearfix">
+            <a href="#X" class="fl">产品故事</a>
+            <a href="#X" class="fr">获奖名单</a>
+        </li>
+        <li class="clearfix">
+            <a href="#X" class="fl">谁帮了我<span>(10)</span></a>
+            <a href="#X" class="fr">我帮了谁</a>
+        </li>
+    </ul>
+</div>
+
+<!--摇到但还没抽奖机会-->
+<div class="strawberry_rocknum_tips radius3" style="display:none; top:40%;">你这次摇下了<span>10</span>个草莓!</div>
+<!--没摇到-->
+<div class="strawberry_rocknum_tips radius3" style="display:none; top:40%;">你这次没有摇下来草莓, <br/>继续努力(⊙o⊙)哦!</div>
+<!--摇到抽一等奖机会-->
+<div class="strawberry_rocknum_tips radius3" style="display:none; top:30%;">
+    <ul>
+    	<li class="strawberry_thisnum">你这次摇下了<span>10</span>个草莓!</li>
+        <li class="strawberry_totalnum">共摇下草莓<span>100</span>个, <br/>你是否要兑换 "<span>3斤草莓</span>" ?</li>
+        <li class="clearfix">
+        	<a href="#X" class="strawberry_exchangebtn fl">兑换</a>
+            <a href="#X" class="strawberry_cancelbtn fr">取消</a>
+        </li>
+    </ul>
+</div>
+<!--摇到抽二等奖机会-->
+<div class="strawberry_rocknum_tips radius3" style="display:none; top:30%;">
+    <ul>
+    	<li class="strawberry_thisnum">你这次摇下了<span>10</span>个草莓!</li>
+        <li class="strawberry_totalnum">共摇下草莓<span>50</span>个, <br/>你是否要兑换 "<span>74元优惠券</span>" ?</li>
+        <li class="clearfix">
+        	<a href="#X" class="strawberry_exchangebtn fl">兑换</a>
+            <a href="#X" class="strawberry_cancelbtn fr">取消</a>
+        </li>
+    </ul>
+</div>
+<!--摇到抽三等奖机会-->
+<div class="strawberry_rocknum_tips radius3" style="display:none; top:30%;">
+    <ul>
+    	<li class="strawberry_thisnum">你这次摇下了<span>10</span>个草莓!</li>
+        <li class="strawberry_totalnum">共摇下草莓<span>30</span>个, <br/>你是否要兑换 "<span>50元优惠券</span>" ?</li>
+        <li class="clearfix">
+        	<a href="#X" class="strawberry_exchangebtn fl">兑换</a>
+            <a href="#X" class="strawberry_cancelbtn fr">取消</a>
+        </li>
+    </ul>
+</div>
+<!--获奖名单-->
+<div class="strawberry_prize" style="display:none; top:8%;">
+	<a class="strawberry_prize_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/close.png')}}" /></a>
+	<ul>
+    	<li class="strawberry_prize_title">获奖名单<span>(最新100名)</span></li>
+        <li class="strawberry_prize_surplus">一等奖剩余10, 二等奖剩余40, 三等奖剩余50</li>
+    </ul>
+    <div class="strawberry_prize_list">
+    	<dl class="clearfix">
+            <dt class="fl"><span>Alice</span>获一等奖</dt>
+            <dt class="fr">1小时前</dt>
+        </dl>
+    </div>
+</div>
+<!--加机会-->
+<div class="strawberry_chance" style="display:; top:8%;">
+	<a class="strawberry_prize_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/close.png')}}" /></a>
+	<ul>
+    	<li class="strawberry_chance_title">摇一摇加机会秘诀</li>
+    </ul>
+    <dl class="clearfix">
+    	<dd class="fl"><a href="#X">关注朋友说</a></dd>
+        <dd class="strawberry_chance_explain">每天加5次机会</dd>
+    </dl>
+    <dl class="clearfix">
+    	<dd class="fl"><a href="#X">分享游戏</a></dd>
+        <dd class="strawberry_chance_explain">朋友点击分享的游戏加机会</dd>
+    </dl>
+    <div class="strawberry_chance_aboutus">
+    	<img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/logo.png')}}" /><br />[朋友说]同事间互相分享家乡特产的创业网站,<br />我们都是城市里的乡下人。
+    </div>
+</div>
+<!--透明黑色背景-->
+<div id="strawberry_trbg" style="display:;"></div>
+</body>
+</html>

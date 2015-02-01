@@ -1,0 +1,69 @@
+@charset "utf-8";
+/* CSS Document */
+
+*{ margin:0; padding:0; font-family:"微软雅黑"; font-size:14px;}
+img{ border:0;}
+ul,li{ list-style:none;}
+.clearfix{*zoom:1;} 
+.clearfix:after{content: ".";display: block;height: 0;clear: both; visibility: hidden;}
+.fl{ float:left;}
+.fr{ float:right;}
+.radius3{
+	-moz-border-radius:2px;/* Gecko browsers */-webkit-border-radius:2px;/* Webkit browsers */border-radius:2px;/* W3C syntax */
+}
+
+.bg{ width:100%; position:absolute; top:0; left:0; z-index:0;}
+.bg img,.index_bottom img,.index_title img,.tree img,.rule_bottom img{ width:100%;}
+
+/*index*/
+.strawberry_bg{ width:100%; height:100%; background:url(http://51daifan.sinaapp.com/img/game_jiujiu/index/index_bg.jpg) no-repeat; background-size:cover; display:block;}
+.strawberry_title{ width:85%; position:absolute; top:1em; left:7.5%; z-index:3;}
+.strawberry_title img{ width:100%;}
+.strawberry_basket{ position:absolute; top:0; left:50%; margin-left:-4em; z-index:2;}
+.strawberry_basket img{ width:55%;}
+.strawberry_num{ text-align:center; line-height:1.3em; font-size:1.2em; color:#555555; position:absolute; top:52%; width:100%;}
+.strawberry_num span{ color:#d50000; font-size:1.4em;}
+.strawberry_btn{ position:absolute; bottom:5px; left:50%; margin-left:-110px; width:220px;}
+.strawberry_btn ul li{ padding-bottom:10px;}
+.strawberry_btn ul li a{ width:105px; height:35px; line-height:35px; text-align:center; display:block; color:#333333; background-color:#ffffff; filter:alpha(opacity=75); opacity:0.75; font-size:15px; text-decoration:none;}
+.strawberry_btn ul li a span{ color:#d50000;}
+
+/*产品故事*/
+.strawberry_story img{width:100%;}
+
+
+/*提示层*/
+.strawberry_rocknum_tips{ position:fixed; left:50%; margin-left:-40%; width:80%; background-color:#ffffff; -webkit-box-shadow:0 0 5px #cccccc; -moz-box-shadow:0 0 5px #cccccc; box-shadow:0 0 5px #cccccc; color:#555555; text-align:center; padding:1em 0; z-index:999;}
+.strawberry_rocknum_tips span{ color:#d50000; font-size:1.2em;}
+.strawberry_thisnum{ font-size:1.2em; line-height:1.5em;}
+.strawberry_totalnum{ font-size:1.2em; line-height:1.5em; padding:1em 0;}
+.strawberry_rocknum_tips li.clearfix{ width:220px; margin:0 auto; padding-bottom:0.5em;}
+.strawberry_rocknum_tips a{ display:block; width:100px; height:35px; line-height:35px; text-align:center; font-size:16px; text-decoration:none;}
+.strawberry_exchangebtn{ border:1px #d50000 solid; color:#d50000;}
+.strawberry_cancelbtn{ border:1px #cccccc solid; color:#555555;}
+.strawberry_li{ display:block; text-decoration:none; font-size:1em; color:#ffffff; text-align:center; padding-bottom:1em;}
+/*获奖名单提示层*/
+.strawberry_prize{ position:fixed; left:50%; margin-left:-45%; width:90%; height:80%; background-color:#ffffff; color:#555555; text-align:center; padding:1em 0; z-index:999;}
+.strawberry_prize_title,.strawberry_chance_title{ font-size:1.4em; color:#333333; text-align:center; padding-bottom:0.4em;}
+.strawberry_prize_surplus{ font-size:1em; color:#d50000; text-align:center; padding-bottom:1em;}
+#strawberry_trbg{ width:100%; height:100%; background-color:#000000; background-size:cover; display:block; filter:alpha(opacity=45); opacity:0.45; position:absolute; top:0; left:0; z-index:2;}
+.strawberry_prize_list{width:80%; margin:0 auto; margin-left:10%; height:85%; overflow:scroll; color:#555555; font-size:1em;}
+.strawberry_prize ul li a{ font-size:1em;}
+.strawberry_prize dl dt{ width:50%; line-height:2em;}
+.strawberry_prize dl dt.fl{ text-align:left;}
+.strawberry_prize dl dt.fr{ text-align:right;}
+.strawberry_prize dl dt span{ padding-right:0.5em;}
+.strawberry_prize_close{ position:fixed; top:6%; right:-2.5%;}
+.strawberry_prize_close img{ width:50%; height:50%;}
+/*加机会提示层*/
+.strawberry_chance{ position:fixed; left:50%; margin-left:-45%; width:90%; background-color:#ffffff; color:#555555; text-align:center; padding:1em 0; z-index:999;}
+.strawberry_chance dl{ width:18.5em; margin:0 auto; padding-top:1.2em;}
+.strawberry_chance dl dd a{ display:block; width:80px; height:35px; color:#d50000; text-decoration:none; border:1px #d50000 solid; line-height:35px; font-size:14px; text-align:center;}
+.strawberry_chance_explain{ line-height:37px; padding-left:0.5em; float:left; font-size:1em;}
+.strawberry_chance_aboutus{ padding-top:4em; margin:0 auto; font-size:12px; line-height:1.5em;}
+.strawberry_chance_aboutus img{ width:4.95em; height:2em;}
+
+
+
+
+
