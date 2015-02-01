@@ -453,7 +453,10 @@ class ApiOrdersController extends AppController {
                 $items=$bi->items;
                 foreach($items as $index=>$i){
                     $i->coverimg=$products[$index]['coverimg'];
-                    $i->specs=$products[$index]['specs'];
+                    $specs = json_decode($products[$index]['specs'],true);
+                    $specId = intval($cartsByPid[$index]["specId"]);
+                    $i->specId=$specId;
+                    $i->spec=$specs['map'][$specId]['name'];
                 }
             }
 
