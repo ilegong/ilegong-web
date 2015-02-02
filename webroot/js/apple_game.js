@@ -13,7 +13,7 @@ $(document).ready(function(){
     var $shakeBtn = $('#shake_btn');
     var $shareBtn = $('#share_btn');
 
-    $share_div = $('<div class="apple_share fade in"><img style="width:100%" src="'+share_png_url+'"></div>')
+    $share_div = $('<div class="apple_share fade in"><img style="width:80%; position: absolute; top: 0; right: 0" src="'+share_png_url+'"></div>')
     .hide().click(function(){
     $share_div.hide();
     });

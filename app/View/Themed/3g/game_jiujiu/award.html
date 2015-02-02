@@ -12,7 +12,7 @@
     }
 
     .apple_share.in {
-        opacity: .9;
+        opacity: .75;
     }
 </style>
 <script>
@@ -219,8 +219,8 @@
         <dd class="strawberry_chance_explain">每天加2次机会</dd>
     </dl>
     <dl class="clearfix">
-    	<dd class="fl"><a id="share_btn" href="javascript:;">分享游戏</a></dd>
-        <dd class="strawberry_chance_explain">朋友点击分享的游戏加机会</dd>
+    	<dd class="fl"><a id="share_btn" href="javascript:;">邀请朋友</a></dd>
+        <dd class="strawberry_chance_explain">每个朋友增加一次机会</dd>
     </dl>
     <div class="strawberry_chance_aboutus">
     	<img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/logo.png')}}" /><br />朋友、同事间互相分享、推荐家乡特产的平台,<br />我们都是城市里的乡下人。
@@ -240,6 +240,8 @@
     var game_least_change = '{{$game_least_change}}';
     var awarded = '{{$awarded}}';
     var game_user_total = '{{$game_user_total}}'; //loading by update_top_list
+
+    var showAfterGotCallback = function(){}
 
 </script>
 {{$this->Html->script(array('apple_game.js?v25'));}}
