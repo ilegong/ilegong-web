@@ -47,13 +47,17 @@
     <div class="guessprice_con">
         <div class="guessprice_con_title">125g经典花生牛轧糖, 你想多少钱买?</div>
         <ul class="clearfix" style="margin-bottom: 0">
-            <li class="fl guessprice_yourprice">
-                <input type="text" name="price" id="price" value="">
-                <span>元</span>
+            <li style="color: #ff0000; padding-bottom:5px">
+                自由出价活动已结束~
             </li>
-            <li class="fr">
-                <a style="display: none" class="guessprice_btn" id="btn_quick_buy" item-id="484" href="javascript:;">立即购买</a>
-                <a class="guessprice_btn " id="buy" href="javascript:;">{{$soldout ? '已售完' : '立即购买'}}</a>
+            <!--<li class="fl guessprice_yourprice">-->
+                <!--&lt;!&ndash;<input type="text" name="price" id="price" value="">&ndash;&gt;-->
+                <!--&lt;!&ndash;<span>元</span>&ndash;&gt;-->
+                <!--自有出价活动已结束~-->
+            <!--</li>-->
+            <li>
+                <a class="guessprice_btn" id="btn_quick_buy" item-id="484" href="javascript:;">原价购买</a>
+                <a style="display: none"  class="guessprice_btn " id="buy" href="javascript:;">{{$soldout ? '已售完' : '立即购买'}}</a>
             </li>
         </ul>
     <div class="guessprice_con_title_fu">附加奖励</div>
@@ -64,7 +68,7 @@
         </dt>
     </dl>
     <span class="topprice">
-        当前最高出价:<strong>{{$user_info['User']['nickname']?$user_info['User']['nickname']:神秘土豪}}&nbsp;出价{{$this->Number->precision($top_price, 2)}}元</strong>
+        当前最高出价:<strong>{{$user_info['User']['nickname']?$user_info['User']['nickname']:'神秘土豪'}}&nbsp;出价{{$this->Number->precision($top_price, 2)}}元</strong>
     </span>
     </div>
 </div>
@@ -85,10 +89,10 @@
             if ($price< 1){
                 mobileTip('最低价1元，请您输入正确的价格！');
             }else{
-                                $btnquickbuy.attr('customized-price', $price);
-                                if (!soldout) {
-                                    $btnquickbuy.trigger('click');
-                                }
+                $btnquickbuy.attr('customized-price', $price);
+                if (!soldout) {
+                    $btnquickbuy.trigger('click');
+                }
             }
             }else{
                 mobileTip('请您输入正确的价格！');
