@@ -1171,15 +1171,15 @@ function range_by_special($special) {
 }
 
 function accept_user_price_pid_num($pid, $num) {
-    return $pid == PRODUCT_ID_JD_HS_NZT && $num == 1;
+    return false;// $pid == PRODUCT_ID_JD_HS_NZT && $num == 1;
 }
 
 function accept_user_price_pid($product_id) {
-    return $product_id == PRODUCT_ID_JD_HS_NZT;
+    return false; //$product_id == PRODUCT_ID_JD_HS_NZT;
 }
 
 function accept_user_price($product_id, $user_price) {
-    return ($product_id == PRODUCT_ID_JD_HS_NZT) && !empty($user_price) && $user_price >= 1;
+    return  false; //($product_id == PRODUCT_ID_JD_HS_NZT) && !empty($user_price) && $user_price >= 1;
 }
 
 function cal_score_money($score, $total_price) {
