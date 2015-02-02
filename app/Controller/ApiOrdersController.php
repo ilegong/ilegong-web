@@ -10,7 +10,7 @@ class ApiOrdersController extends AppController {
     public $components = array('OAuth.OAuth', 'Session');
     public function beforeFilter() {
         parent::beforeFilter();
-        $allow_action = array('test','product_detail','store_list', 'product_content', 'store_content', 'store_story','_save_comment', 'home','articles');
+        $allow_action = array('test','product_detail','store_list','product_content', 'store_content', 'store_story','_save_comment', 'home','articles');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action)  == false) {
             $this->currentUser = $this->OAuth->user();
@@ -60,7 +60,7 @@ class ApiOrdersController extends AppController {
                 'order_id' => NULL,
                 'creator'=> $this->currentUser['id'],
             ),
-            'fields' => array('id', 'name', 'product_id', 'num', 'name', 'price', 'coverimg', 'used_coupons'),
+            'fields' => array('id', 'name', 'product_id', 'num', 'name', 'price', 'coverimg', 'used_coupons','specId'),
         ));
         $total_price = 0;
         foreach($Carts as $cart){
@@ -73,6 +73,14 @@ class ApiOrdersController extends AppController {
 
         foreach($Carts as &$cart) {
             $cart['Cart']['brand_id'] = $products[$cart['Cart']['product_id']]['brand_id'];
+            $specObj = json_decode($products[$cart['Cart']['product_id']]['specs'],true);
+            $specId = intval($cart['Cart']['specId']);
+            if($specObj){
+                $cart['Cart']['spec']=$specObj['map'][$specId]['name'];
+            }else{
+                $cart['Cart']['spec']=null;
+            }
+
         }
 
         $brandIds = Hash::extract($products, '{n}.brand_id');
