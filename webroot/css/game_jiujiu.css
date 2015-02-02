@@ -19,9 +19,11 @@ ul,li{ list-style:none;}
 .strawberry_bg{ width:100%; height:100%; background:url(http://51daifan.sinaapp.com/img/game_jiujiu/index/index_bg.jpg) no-repeat; background-size:cover; display:block;}
 .strawberry_title{ width:85%; position:absolute; top:1em; left:7.5%; z-index:3;}
 .strawberry_title img{ width:100%;}
-.strawberry_basket{ position:absolute; top:0; left:50%; margin-left:-4em; z-index:2;}
-.strawberry_basket img{ width:55%;}
-.strawberry_num{ text-align:center; line-height:1.3em; font-size:1.2em; color:#555555; position:absolute; top:52%; width:100%;}
+
+.strawberry_basket{ position:absolute; top:0; left:39%; margin-left:-4em; z-index:2;}
+.strawberry_basket img{ width:70%;}
+
+.strawberry_num{ text-align:center; line-height:1.3em; font-size:1.2em; color:#555555; position:absolute; top:55%; width:100%;}
 .strawberry_num span{ color:#d50000; font-size:1.4em;}
 .strawberry_btn{ position:absolute; bottom:5px; left:50%; margin-left:-110px; width:220px;}
 .strawberry_btn ul li{ padding-bottom:10px;}

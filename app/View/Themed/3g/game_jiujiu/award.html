@@ -77,8 +77,10 @@
 </div>
 <div class="strawberry_title"><a href="/game_jiujiu/story.html"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/title.png')}}" /></a></div>
 <div class="strawberry_basket"><img id="apple_tree_img" src="{{$this->Html->assetUrl('/img/game_jiujiu/index/basket.gif')}}" /></div>
-<div class="strawberry_num">你已摇下<span id="apple_got_cnt">{{$total_apple}}</span>个草莓!<br />剩余<span id="apple_times_left">{{$total_times}}</span>次机会</div>
+
+<div class="strawberry_num">已摇下<span id="apple_got_cnt">{{$total_apple}}</span>个草莓! 剩余<span id="apple_times_left">{{$total_times}}</span>次机会</div>
 <div class="strawberry_btn">
+
 	<ul>
     	<li class="clearfix">
             <a id="btn_rules" href="javascript:;" class="fl">规则/兑奖</a>
@@ -177,10 +179,10 @@
 	<a class="strawberry_prize_close" href="javascript:;"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/close.png')}}" /></a>
     <div class="strawberry_prize_list">
         {{if $helpMe}}
-            <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=60){break;} ?>
+            <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=100){break;} ?>
         <dl class="clearfix">
             <dt class="fl"><span>{{$item['nickname']}}</span>摇下</dt>
-            <dt class="fr">{{ $item['got'] }}</dt>
+            <dt class="fr gots">{{ $item['got'] }}</dt>
         </dl>
             <?php } ?>
         {{else}}
@@ -195,10 +197,10 @@
 	<a class="strawberry_prize_close" href="javascript:;"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/close.png')}}" /></a>
     <div class="strawberry_prize_list">
         {{if $meHelp}}
-        <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i>=60){break;} ?>
+        <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i>=100){break;} ?>
         <dl class="clearfix">
             <dt class="fl"><span>{{$item['nickname']}}</span>摇下</dt>
-            <dt class="fr">{{ $item['got'] }}</dt>
+            <dt class="fr gots">{{ $item['got'] }}</dt>
         </dl>
         <?php } ?>
         {{else}}
@@ -232,6 +234,7 @@
     var $today_got_wx = "{{$today_got_wx}}";
     var shake_pic_url = '{{$this->Html->assetUrl("/img/game_jiujiu/index/basketmove.gif")}}';
     var sound_url = 'http://51daifan-images.stor.sinaapp.com/tree_shake.mp3';
+//    var share_png_url = '{{$this->Html->assetUrl("http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/share.png")}}';
     var share_png_url = '{{$this->Html->assetUrl("http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/share.png")}}';
     var yao_tips_png = '{{$this->Html->assetUrl("http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/yao.png")}}';
     var game_type = '{{$game_type}}';
@@ -243,5 +246,89 @@
 
     var showAfterGotCallback = function(){}
 
+    function total_not_spent() {
+        var total = $.trim($('#apple_got_cnt').text());
+        total = total != '' ? parseInt(total) : 0;
+        return total;
+    }
+
+    var friendGots = $('.gots').map(function () {
+        var v = $.trim($(this).text());
+        return v ? parseInt(v) : 0;
+    }).get();
+
+    function get_total() {
+        var total = total_not_spent();
+        return (total < game_user_total ? game_user_total : total);
+    }
+
+    function show_got_coupon() {
+        utils.alert_one('恭喜您秒杀成功，请注意在有效期结束前使用。还可以抢268元终极大奖哦', '查看我的优惠券', function(){ window.location.href = '/users/my_coupons.html';});
+    }
+
+    function help_me_cnt() {
+        var helpme_cnt_txt = $.trim($('#helpme_cnt_n').text());
+        return (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
+    }
+
+    function dabai_percent() {
+        var total = get_total();
+
+        var win = 0;
+        for(var x in friendGots) {
+            if (total > friendGots[x]) {
+                win++;
+            }
+        }
+        return (win == friendGots.length) ? 100 : utils.toFixed(win*100/friendGots.length, 0)
+    }
+
+    function desc_cmp_friends() {
+        var desc = '我已摇下' + get_total() + '个';
+        if (friendGots && friendGots.length > 0) {
+            var dabaiPercent = dabai_percent();
+            desc += (dabaiPercent == 100 ? ', 打败了所有好友，哈哈' : (dabaiPercent == 0 ? ', 朋友圈里垫底 ^_^， 快点我吧' : ', 打败了' + dabaiPercent + '%的好友！'));
+        } else {
+            desc += ', 还没人帮过我！快来帮我吧';
+        }
+        return desc;
+    }
+
+    $(document).ready(function() {
+        if (typeof(wx) != 'undefined') {
+            wx.ready(function () {
+                var share_string = '{{$share_string ? $share_string :"0"}}';
+                var to_timeline_title = "摇下50个， 送丹东玖玖草莓一盒（3斤），来自有机认证的水土，中国最早的草莓种植地（之一）。 ";
+                var to_friend_title = "摇下50个， 送丹东玖玖草莓一盒（3斤）";
+                var to_friend_desc = desc_cmp_friends();
+                var to_friend_link = window.location.href;
+                var to_timeline_link = window.location.href;
+                var imgUrl = "{{$this->Html->assetUrl('/img/game_jiujiu/index/share_logo.jpg')}}";
+                wx.onMenuShareAppMessage({
+                    title: to_friend_title,
+                    desc: to_friend_desc,
+                    link: to_friend_link,
+                    imgUrl: imgUrl,
+                    success: function () {
+                        if (share_string != '0') {
+                            $.post('/wx_shares/log_share', { trstr: share_string, share_type: "appMsg" });
+                        }
+                    }
+                });
+                wx.onMenuShareTimeline({
+                    title: to_timeline_title,
+                    link: to_timeline_link,
+                    imgUrl: imgUrl,
+                    success: function () {
+                        if (share_string != '0') {
+                            $.post('/wx_shares/log_share', { trstr: share_string, share_type: "timeline" });
+                        }
+                    }
+                });
+
+                alert("wx_ready");
+            })
+        }
+    });
 </script>
 {{$this->Html->script(array('apple_game.js?v25'));}}

@@ -140,6 +140,10 @@ class AppController extends Controller {
 	    		exit;
     		}
     	}
+
+        if ($this->is_weixin() && !empty($this->currentUser['id'])) {
+            $this->set('jWeixinOn', true);
+        }
     }
 
     public function afterFilter() {
