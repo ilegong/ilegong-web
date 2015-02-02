@@ -13,14 +13,14 @@ $(document).ready(function(){
     var $shakeBtn = $('#shake_btn');
     var $shareBtn = $('#share_btn');
 
-    $share_div = $('<div class="apple_share fade in"><img src="'+share_png_url+'"></div>')
+    $share_div = $('<div class="apple_share fade in"><img style="width:100%" src="'+share_png_url+'"></div>')
     .hide().click(function(){
     $share_div.hide();
     });
     $('body').append($share_div);
 
     if (yao_tips_png) {
-        $shaking_tips_png = $('<div class="apple_share fade in"><img src="' + yao_tips_png + '"></div>')
+        $shaking_tips_png = $('<div class="apple_share fade in"><img style="width:100%" src="' + yao_tips_png + '"></div>')
             .hide().click(function () {
                 $shaking_tips_png.hide();
             });

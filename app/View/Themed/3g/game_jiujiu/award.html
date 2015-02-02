@@ -1,5 +1,20 @@
 {{$this->Html->script(array('trace/tracekit.min.report.js', 'shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js', 'jquery/jquery.fullPage.min.js', 'jquery/jquery.rotate.js'), array('block' => 'scriptBottom'));}}
 {{$this->Html->css(array('game_jiujiu.css?ver1',));}}
+<style>
+    .apple_share {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1030;
+        background-color: #000;
+    }
+
+    .apple_share.in {
+        opacity: .9;
+    }
+</style>
 <script>
 	$(document).ready(function(){
 		var height = $(window).height();
@@ -204,7 +219,7 @@
         <dd class="strawberry_chance_explain">每天加2次机会</dd>
     </dl>
     <dl class="clearfix">
-    	<dd class="fl"><a href="javascript:;">分享游戏</a></dd>
+    	<dd class="fl"><a id="share_btn" href="javascript:;">分享游戏</a></dd>
         <dd class="strawberry_chance_explain">朋友点击分享的游戏加机会</dd>
     </dl>
     <div class="strawberry_chance_aboutus">

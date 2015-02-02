@@ -26,20 +26,7 @@ class GameJiujiuController extends AppController
     const BTC1412 = 'qinyBTC1412';
     const XIRUI1412 = 'xirui1412';
     const NORMAL_1 = 'normal1';
-
-    /*
-     * INSERT INTO `cake_game_configs` (`game_type`, `day_limit`, `created`, `modified`, `game_obj_name`, `game_end`, `game_start`) VALUES
-    ('chengzi1411', 10, NULL, NULL, '橙子', '2014-11-17 23:59:59', ''),
-    ('rice201411', 20, NULL, NULL, '苹果', '2014-11-15 23:59:59', ''),
-    ('Choupg1411', 10, NULL, NULL, '苹果', '2014-11-17 23:59:59', ''),
-    ('mihoutao1411', 0, NULL, NULL, '猕猴桃', '2014-12-03 23:59:59', '2014-11-26 00:00:00')
-    INSERT INTO `cake_game_configs` (`game_type`, `day_limit`, `created`, `modified`, `game_obj_name`, `game_end`, `game_start`)
-VALUES
-	('xirui1412', 50, NULL, NULL, '大米', '2014-12-30 23:59:59', '2014-12-24 00:00:00'),
-	('normal1', 50, NULL, NULL, '橙子', '2014-12-30 23:59:59', '2015-12-24 00:00:00')
-    ;
-    ;
-     */
+    const GAME_JIUJIU = 'jiujiu';
 
     var $treeNames = array(
         self::RICE_201411 => 'apple_shakev1.gif',
@@ -61,29 +48,13 @@ VALUES
     );
 
     var $title_in_page = array(
-        self::MIHOUTAO1411 => '摇下100个，最高1箱猕猴桃免费领',
-        self::RICE_201411 => '摇下50个，大米优惠券免费送',
-        self::BTC1412 => '摇下100个，1箱万橙免费领',
-        self::XIRUI1412 => '摇下20粒，西瑞东北珍珠米免费抢',
-        self::NORMAL_1 => '摇下20个，奖品优惠免费送',
+        self::GAME_JIUJIU => '摇下50个，3斤丹东草莓免费送',
     );
     var $title_in_window = array(
-        self::MIHOUTAO1411 => '摇下100个，最高一箱猕猴桃免费领',
-        self::RICE_201411 => '摇下50个，大米优惠券免费送',
-        self::BTC1412 => '摇下100个，1箱万橙免费领',
-        self::XIRUI1412 => '摇下20粒，西瑞东北珍珠米免费抢',
-        self::NORMAL_1 => '摇下20个，奖品优惠免费送',
+        self::GAME_JIUJIU => '摇下50个，3斤丹东草莓免费送',
     );
     var $title_js_func = array(
-        self::RICE_201411 => "'摇一摇免费兑稻花香大米券, 我已经有机会兑到'+total*10+'g五常稻花香大米啦 -- 城市里的乡下人腾讯nana分享爸爸种的大米-朋友说'",
-//        self::MIHOUTAO1411 => "'摇一摇一起免费兑有机猕猴桃红包，我已经摇下'+total+'个猕猴桃，兑到'+ game_mihoutao_hongbao(total) +'元红包啦 -- 城市里的乡下人张慧敏分享有机种植眉县猕猴桃 -- 朋友说'",
-        self::MIHOUTAO1411 => "'摇一摇一起免费兑有机猕猴桃红包，我已经摇下'+total+'个猕猴桃，兑到XX元红包啦 -- 城市里的乡下人张慧敏分享有机种植眉县猕猴桃 -- 朋友说'",
     );
-    var $customized_view_files = array(
-        self::XIRUI1412 => 'xirui_rice',
-        self::NORMAL_1 => 'normal1',
-    );
-
 
     //切忌不能动，位置多意境对应上了
     var $coupon_steps = array(
@@ -638,48 +609,7 @@ VALUES
             $this->set('helpMe', $helpMeItems);
             $this->set('meHelp', $meHelpItems);
 
-//            $this->loadModel('AwardResult');
-//            $iAwared = $this->AwardResult->userIsAwarded($current_uid, $gameType);
-//            $this->set('awarded', !empty($iAwared));
-
-//            $this->loadModel('GameXiruiCode');
-//            if ($this->GameXiruiCode->userIsAwarded($current_uid)) {
-//                $gotCode = $this->GameXiruiCode->find('first', array('conditions' => array('uid' => $current_uid), 'order' => 'created asc'));
-//                $this->set('awarded', $gotCode);
-//            }
-
             $this->loadModel('Order');
-
-            $start = $gameCfg['GameConfig']['game_start'];
-            $oppu_log = $this->Order->query('select max(created) as latest from cake_game_btc_order_exchanges');
-            if (!empty($oppu_log)) {
-                if($oppu_log[0][0]['latest']){
-                    $start = $oppu_log[0][0]['latest'];
-                }
-            }
-//
-            $cond = array('creator' => $current_uid, 'published' => PUBLISH_YES, 'deleted' => DELETED_NO, 'created >= ' => $start);
-            $cond['status'] = array(ORDER_STATUS_DONE, ORDER_STATUS_PAID, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED);
-            $order_ids = $this->Order->find('all', array(
-                'conditions' => $cond,
-                'fields' => array('id'),
-            ));
-            if (!empty($order_ids)) {
-                $order_ids = Hash::extract($order_ids, '{n}.Order.id');
-                $this->loadModel('Cart');
-                $carts = $this->Cart->find('all', array(
-                    'conditions' => array('order_id' => $order_ids, 'status' => CART_ITEM_STATUS_BALANCED),
-                    'fields' => array('num')
-                ));
-                $total = 0;
-                foreach($carts as $cart) {
-                    $total += $cart['Cart']['num'];
-                }
-                if ($total > 0) {
-                    $this->Order->query('insert into cake_game_btc_order_exchanges(times, uid, created) values('.$total.', '.$current_uid.', \''.date(FORMAT_DATETIME).'\')');
-                    $rrr = $this->AwardInfo->updateAll(array('times' => ' times + '. ($total * 2)), array('type' => $gameType, 'uid' => $current_uid));
-                }
-            }
 
         $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($current_uid, $gameType);
         if (empty($awardInfo)) {
