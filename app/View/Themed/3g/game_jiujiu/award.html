@@ -1,5 +1,5 @@
 {{$this->Html->script(array('trace/tracekit.min.report.js', 'shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js', 'jquery/jquery.fullPage.min.js', 'jquery/jquery.rotate.js'), array('block' => 'scriptBottom'));}}
-{{$this->Html->css(array('game_jiujiu.css?ver1',));}}
+{{$this->Html->css(array('game_jiujiu.css?ver2',));}}
 <style>
     .apple_share {
         position: fixed;
@@ -169,7 +169,7 @@
         <h4>游戏规则</h4>
         <ul><li>1）时间：2015年2月1日-2月5日</li>
         <li>2）免费送出和使用优惠券购买的奖品，第二天或第三天统一发货</li>
-        <li>3）每个手机号仅限一人使用，如有作弊，奖品作废</li>
+        <li>3）手机号、微信号、用户相同视为一人，如有作弊，奖品作废</li>
         </ul>
 
     </div>
@@ -325,8 +325,6 @@
                         }
                     }
                 });
-
-                alert("wx_ready");
             })
         }
     });
