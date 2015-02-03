@@ -26,7 +26,7 @@ App::uses('CustomRouter', 'Lib');
     CustomRouter::connect('/b/:slug/:action', array('controller' => 'brands'), array('pass' => array('slug',), 'action' => '[\w_]+' , 'slug' => '[\w_]+'));
 
     CustomRouter::connect('/t/ag',
-        array('controller'=>'apple201410','action' => 'award'));
+        array('controller'=>'game_jiujiu','action' => 'award', 'jiujiu'));
     CustomRouter::connect('/t/ag/jiujiu',
         array('controller'=>'game_jiujiu','action' => 'award', 'jiujiu'));
     CustomRouter::connect('/t/ag/:type',
