@@ -1095,7 +1095,7 @@ class UsersController extends AppController {
                 $res = array('success'=> false, 'msg'=>'请重新验证您的手机号码');
             }else if ($this->User->hasAny(array('User.mobilephone' => $mobile_num))){
                 $tempUser = $this->getUserNamebyMobile($mobile_num);
-                $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录','code'=>2,'username'=>$tempUser['User']['username']);
+                $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录','code'=>2,'username'=>$tempUser['User']['nickname']);
             }else if($this->User->hasAny(array('User.username' => $mobile_num))){
                 if($this->currentUser['username'] == $mobile_num){
                     if($this->User->save($user_info)){
@@ -1103,7 +1103,7 @@ class UsersController extends AppController {
                     };
                 }else{
                     $tempUser = $this->getUserNamebyMobile($mobile_num);
-                    $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录','code'=>2,'username'=>$tempUser['User']['username']);
+                    $res = array('success'=> false, 'msg'=>'你的手机号已注册过，无法绑定，请用手机号登录','code'=>2,'username'=>$tempUser['User']['nickname']);
                 }
             } else{
                 if ($this->User->save($user_info)) {
@@ -1165,7 +1165,10 @@ class UsersController extends AppController {
             $newUserId = $newUser['User']['id'];
             if (!empty($wxBind)) {
                 //do wx bind
-                $this->Oauthbind->update_wx_bind_uid($oauth_openid, $userId, $newUserId);
+                $wxNewBind = $this->Oauthbind->findWxServiceBindByUid($newUserId);
+                if(empty($wxNewBind)){
+                    $this->Oauthbind->update_wx_bind_uid($oauth_openid, $userId, $newUserId);
+                }
             }
             $this->transferUserInfo($userId,$newUserId);
             $this->logoutCurrUser();
