@@ -48,10 +48,10 @@ class GameJiujiuController extends AppController
     );
 
     var $title_in_page = array(
-        self::GAME_JIUJIU => '摇下50个，3斤丹东草莓免费送',
+        self::GAME_JIUJIU => '摇下50个，3斤丹东玖玖农场草莓免费送',
     );
     var $title_in_window = array(
-        self::GAME_JIUJIU => '摇下50个，3斤丹东草莓免费送',
+        self::GAME_JIUJIU => '摇下50个，3斤丹东玖玖农场草莓免费送',
     );
     var $title_js_func = array(
     );
@@ -656,7 +656,8 @@ class GameJiujiuController extends AppController
         $customized_game = $this->customized_view_files[$gameType];
         if (!empty($customized_game)) {
             $this->__viewFileName = $customized_game;
-        }    }
+        }
+    }
 
     public function shake($gameType)
     {
@@ -793,7 +794,7 @@ class GameJiujiuController extends AppController
             if ($left > 0) {
                 if ($left <= 3) {
                     $ext = 100000;
-                } else if ($left < 10){
+                } else if ($left < 10) {
                     $ext = $left * 100;
                 }
                 /*
@@ -813,14 +814,22 @@ class GameJiujiuController extends AppController
             $ext = 5;
         }
 
-        $times =10;
+        $times = 10;
+
+        if ($total_got >= 30) {
+            $ext = 50;
+        } else if($total_got >= 40) {
+            $this->loadModel('MobileInfo');
+            $info = $this->MobileInfo->get_province($mobileNum);
+            $ext = ($info == '天津' || $info == '北京') ? 100 : 400;
+        }
 
         for ($i = 0; $i < $times; $i++) {
             $mt_rand = mt_rand(0, intval($ext + $total_got));
-            $this_got += ( $mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
+            $this_got += ($mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
         }
 
-        if ( $limit && ($total_got + $this_got) > $this->AWARD_LIMIT) {
+        if (($total_got + $this_got) > 90 /*$this->AWARD_LIMIT*/) {
             $this_got = 0;
         }
 
