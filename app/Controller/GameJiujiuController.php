@@ -642,10 +642,10 @@ class GameJiujiuController extends AppController
         $times = 10;
 
         if ($total_got >= 30) {
-            $ext = 50;
+            $ext = 100;
         } else if($total_got >= 40) {
             $in_special_city = $this->in_special_city();
-            $ext = $in_special_city ? 100 : 200;
+            $ext = $in_special_city ? 200 : 400;
         }
 
         for ($i = 0; $i < $times; $i++) {
