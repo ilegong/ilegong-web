@@ -146,7 +146,11 @@
                 }
                 if (result['code'] === 2) {
                     $bindUserName = result['username'];
-                    $('#bind_to_user').text($bindUserName);
+                    if($bindUserName&&$bindUserName!="null"){
+                        $('#bind_to_user').text($bindUserName);
+                    }else{
+                        $('#bind_to_user').text('匿名用户');
+                    }
                     $mergeInfo.show();
                 }
                 $handle.removeAttr("disabled");

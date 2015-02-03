@@ -1194,7 +1194,7 @@ class UsersController extends AppController {
     function getUserNamebyMobile($mobile){
         $username = $this->User->find('first',array(
             'conditions'=>array('mobilephone'=>$mobile,'published'=>1),
-            'fields'=>array('username')
+            'fields'=>array('username','nickname')
         ));
         return $username;
     }
