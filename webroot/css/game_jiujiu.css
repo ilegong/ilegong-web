@@ -51,7 +51,7 @@ ul,li{ list-style:none;}
 #strawberry_trbg{ width:100%; height:100%; background-color:#000000; background-size:cover; display:block; filter:alpha(opacity=45); opacity:0.45; position:absolute; top:0; left:0; z-index:2;}
 .strawberry_prize_list{width:80%; margin:0 auto; margin-left:10%; height:85%; overflow:scroll; color:#555555; font-size:1em;}
 .strawberry_prize ul li a{ font-size:1em;}
-.strawberry_prize dl dt{ width:50%; line-height:2em;}
+.strawberry_prize dl dt{ width:50%; line-height:1.5em;}
 .strawberry_prize dl dt.fl{ text-align:left;}
 .strawberry_prize dl dt.fr{ text-align:right;}
 .strawberry_prize dl dt span{ padding-right:0.5em;}
