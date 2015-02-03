@@ -1,5 +1,13 @@
 $(document).ready(function(){
     try {
+
+        _path_exchange = _path_exchange || '/apple_201410/exchange_coupon';
+        _path_shake = _path_shake || '/apple_201410/shake';
+        _path_notify = _path_notify || '/apple_201410/notifiedToMe';
+        _path_assign_follow = _path_assign_follow || '/apple_201410/assignWXSubscribeTimes';
+        _path_query = _path_query || '/apple_201410/hasNewTimes';
+        _mobile_bind_reason = _mobile_bind_reason || '';
+
     $([shake_pic_url]).preload();
     var sound = new Howl({
     urls: [sound_url]
@@ -12,6 +20,12 @@ $(document).ready(function(){
 
     var $shakeBtn = $('#shake_btn');
     var $shareBtn = $('#share_btn');
+
+    if (typeof(get_coupons_button) != 'undefined') {
+        get_coupons_button.add($('#get_coupons_button'));
+    } else {
+        var get_coupons_button = $('#get_coupons_button');
+    }
 
     $share_div = $('<div class="apple_share fade in"><img style="width:80%; position: absolute; top: 0; right: 0" src="'+share_png_url+'"></div>')
     .hide().click(function(){
@@ -116,13 +130,19 @@ $(document).ready(function(){
         }
     }
 
-    function showAfterGot($got,times, total, need_login, timeout) {
+    function showAfterGot($got,times, total, need_login, timeout, $need_mobile) {
     var close_callback = times > 0 ? null : showNoMoreTimes;
     if (need_login) {
         close_callback = function() {
             window.location.href = '/users/login?force_login=true&referer='+encodeURIComponent(location.href);
         };
     }
+
+        if ($need_mobile) {
+            window.location.href = '/users/to_bind_mobile?ref_url='+encodeURIComponent(location.href)+'&reason='+encodeURIComponent(mobile_bind_reason);
+            return;
+        }
+
     if ($got > 0) {
         msg = '恭喜你摇掉了<span class="apple_numbers">' + $got + '</span>个' + game_obj_name + '！'+coupon_message(times, total);
         timeout = 3000;
@@ -173,14 +193,14 @@ $(document).ready(function(){
 
             setTimeout(function () {
                 $('#apple_tree').octoberLeaves('stop');
-                $.getJSON('/apple_201410/shake/' + game_type + '?r=' + Math.random(), function (data) {
+                $.getJSON(_path_shake + '/' + game_type + '?r=' + Math.random(), function (data) {
                     var $curr_got = 0;
                     if (data && data.success) {
                         $appleGotCnt.text(data['total_apple']);
                         $riceGotCnt.text(data['total_apple'] * 10);
                         $appleTimesLeft.text(data['total_times'] < 0 ? 0 : data['total_times']);
                         $curr_got = data['got_apple'];
-                        showAfterGot($curr_got, data['total_times'], data['total_apple'], data['need_login'], 2000);
+                        showAfterGot($curr_got, data['total_times'], data['total_apple'], data['need_login'], 2000, data['need_mobile']);
                     } else if (data.msg == 'incorrect_type') {
                         utils.alert('游戏类型错误', function () {
                             location.href = '/apple_201410/index.html';
@@ -200,7 +220,7 @@ $(document).ready(function(){
     $shakeBtn.click(function(){
     utils.alert('摇动手机！没有声音请开声音！');
     });
-        $.getJSON("/apple_201410/notifiedToMe/"+game_type+"?r="+Math.random(), function(data){
+        $.getJSON(_path_notify + "/"+game_type+"?r="+Math.random(), function(data){
             var msg;
             if (data.notified == false) {
                 if (data.notify_type > 0) {
@@ -218,7 +238,7 @@ $(document).ready(function(){
     });
 
     function try_wx_subscribe_times() {
-        $.getJSON("/apple_201410/assignWXSubscribeTimes/" + game_type + "?r=" + Math.random(), function (data) {
+        $.getJSON(_path_assign_follow + "/" + game_type + "?r=" + Math.random(), function (data) {
             if (data.result == "not-sub") {
                 utils.alert("您还没有关注我们的服务号，按<a href=\"http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd\">关注指南</a>关注【朋友说】，就可以来领取啦");
             } else if (data.result == 'got') {
@@ -242,35 +262,43 @@ $(document).ready(function(){
         try_wx_subscribe_times();
     });
 
-    var get_coupons_button =$('#get_coupons_button');
-
-    get_coupons_button.click(function () {
+    /**
+     * @param coupon_type  empty means no expect
+     */
+    function get_coupon_click(coupon_type) {
         var apple_count = $.trim($appleGotCnt.text());
         if (parseInt(apple_count) < parseInt(game_least_change)) {
             utils.alert("加油，我们<span class='apple_numbers'>" + game_least_change + "</span>个" + game_obj_name + "起兑喔，您目前已摇<span class='apple_numbers'>"
                 + apple_count + "</span>个。加油加油！");
             return;
-        };
-
+        }
         bootbox.confirm('您目前有'+apple_count+'个' + game_obj_name + '，兑换会扣除相应的数目，您确定要兑换吗？', function (result) {
             if (!result) {
                 return;
             }
-            $.getJSON("/apple_201410/exchange_coupon/" + game_type + "?r=" + Math.random(), function (data) {
+            var coupon_url = _path_exchange + '/' + game_type + "?";
+            if (typeof coupon_type != 'undefined' && coupon_type) {
+                coupon_url += 'expect=' + coupon_type;
+            }
+            $.getJSON(coupon_url + "&r=" + Math.random(), function (data) {
                 if (data.result == "just-got") {
                     var exchange_apple_count = data.exchange_apple_count;
                     var coupon_count = data.coupon_count;
                     $appleGotCnt.text(apple_count - exchange_apple_count);
                     $riceGotCnt.text((apple_count - exchange_apple_count) * 10);
                     if (typeof(game_notify_after_exchange) == 'function') {
-                        game_notify_after_exchange(coupon_count);
+                        game_notify_after_exchange(coupon_count, coupon_type);
                     } else {
                         utils.alert_one("恭喜，兑换了" + coupon_count + "张优惠券!", '查看我的优惠券', function(){
                             window.location.href = '/users/my_coupons.html';
                         });
                     }
                 } else if (data.result == 'sold_out'){
-                    utils.alert("呜呜，券已兑完。");
+                    if (typeof(game_notify_after_exchange) == 'function') {
+                        game_notify_after_exchange(coupon_count, coupon_type);
+                    } else {
+                        utils.alert("呜呜，券已兑完。");
+                    }
                 } else if (data.result == 'game_end'){
                     utils.alert("呜呜，活动已结束。");
                 }else {
@@ -278,12 +306,18 @@ $(document).ready(function(){
                 }
             });
         });
+    }
+
+    get_coupon_click_func = get_coupon_click;
+
+    get_coupons_button.click(function(){
+        get_coupon_click();
     });
 
         var query_interval = 20000;
 
         function new_times_query() {
-            $.getJSON('/apple_201410/hasNewTimes/' + game_type + '?r=' + Math.random(), function (data) {
+            $.getJSON(_path_query + '/' + game_type + '?r=' + Math.random(), function (data) {
                 if (data.success && data.new_times > 0) {
                     var times = currTimes() + data.new_times;
                     $appleTimesLeft.text(times);

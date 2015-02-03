@@ -1135,6 +1135,13 @@ class UsersController extends AppController {
         $this->set('userId',$userId);
         $this->set('nickname',$userNickName);
         $this->set('orderId',$orderId);
+
+        $short_intro = $_REQUEST['reason'];
+        $ref_url = $_REQUEST['ref'];
+
+        $this->set('short_intro', $short_intro);
+        $this->set('ref_url', $ref_url);
+
         $this->pageTitle="绑定手机号";
     }
 

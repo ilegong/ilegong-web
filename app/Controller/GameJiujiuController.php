@@ -67,6 +67,10 @@ class GameJiujiuController extends AppController
     );
 
     const BTC_DAILY_AWARD_LIMIT = 20;
+    const COUPON_JIUJIU_FIRST = 19037;
+    const COUPON_JIUJIU_SEC = 19036;
+    const COUPON_JIUJIU_THIRD = 19035;
+    const NEED_MOBILE_LEAST = 40;
     public function beforeFilter()
     {
         parent::beforeFilter();
@@ -246,21 +250,16 @@ class GameJiujiuController extends AppController
     public function hours_limit() {
         $hour = date('G');
         $limits = array(
-            8 => 10,
-            9 => 10,
-            10 => 5,
-            11 => 5,
-            12 => 5,
-            13 => 10,
-            14 => 5,
-            15 => 5,
-            16 => 5,
-            17 => 5,
-            18 => 10,
-            19 => 5,
-            20 => 5,
-            21 => 10,
-            22 => 5,
+            10 => 2,
+            11 => 2,
+            12 => 2,
+            13 => 2,
+            14 => 2,
+            15 => 2,
+            16 => 2,
+            17 => 2,
+            18 => 2,
+            19 => 2,
         );
         return empty($limits[$hour]) ? 0 : $limits[$hour];
     }
@@ -310,7 +309,6 @@ class GameJiujiuController extends AppController
 //            if ($hour_limit > 0) {
 
                 try {
-
                     $gameCfg = $this->GameConfig->findByGameType($gameType);
                     if (!empty($gameCfg) && $gameCfg['GameConfig']['game_end']) {
                         $dt = new DateTime($gameCfg['GameConfig']['game_end']);
@@ -448,6 +446,8 @@ class GameJiujiuController extends AppController
             }
         }
 
+        $expect = $_REQUEST['expect'];
+
         $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($id, $gameType);
         $apple_count_snapshot = $awardInfo['got'];
         $exChangeSource = $this->getExchangeType($gameType);
@@ -457,37 +457,20 @@ class GameJiujiuController extends AppController
         $sold_out = false;
         $coupon_count = 0;
         $ex_count_per_Item = 0;
-        if ($gameType == self::RICE_201411) {
-            if ($can_exchange_apple_count >= 50) {
-                $coupon_count = intval($can_exchange_apple_count / 50);
-                $ex_count_per_Item = 50 * $coupon_count;
-                $this->exchangeCouponAndLog($id, $apple_count_snapshot, $ex_count_per_Item, $coupon_count, $exChangeSource, $awardInfo['id'],
-                    function($uid, $operator, $source_log_id){
-                        $this->CouponItem->addCoupon($uid, COUPON_TYPE_RICE_1KG, $operator, $source_log_id);
-                        $this->CouponItem->id = null;
-                    }
-                );
-                if ($coupon_count > 0) {
-                    $store = "购买nana家大米时使用";
-                    $validDesc = "有效期至2014年11月15日";
-                    $this->Weixin->send_coupon_received_message($id, $coupon_count, $store, $validDesc);
+        if ($gameType == self::GAME_JIUJIU) {
+            if ((empty($expect) || $expect == 'first') && $can_exchange_apple_count >= 50) {
+                $rnd = mt_rand(0, 17);
+                $hourlyCnt = $this->CouponItem->couponCountHourly(self::COUPON_JIUJIU_FIRST, time());
+                if ($hourlyCnt < $this->hours_limit() && $rnd == 10) {
+                    $coupon_count = 1;
+                    $ex_count_per_Item = 50;
+                    $total_ex_count = $ex_count_per_Item;
+                    $sharingPref = array(self::COUPON_JIUJIU_FIRST, 148);
                 }
-            }
-        } else if ($gameType == self::BTC1412) {
-
-            if ($can_exchange_apple_count >= 100) {
-                $coupon_count = 2;
-                $ex_count_per_Item = 50; //100也是扣除50，因为只给一张
-                $total_ex_count = 2 * $ex_count_per_Item;
-                $sharingPref = array(17725, 30);
-            } else if ($can_exchange_apple_count >= 50) {
-                $total_ex_count = $ex_count_per_Item = 50;
-                $sharingPref = array(18095, 20);
-                    $coupon_count = 1;
-            } else if ($can_exchange_apple_count >= 30) {
+            } else if ( (empty($expect) || $expect == 'sec') && $can_exchange_apple_count >= 30) {
                 $total_ex_count = $ex_count_per_Item = 30;
-                $sharingPref = array(17724, 15);
-                    $coupon_count = 1;
+                $sharingPref = array(self::COUPON_JIUJIU_SEC, 74);
+                $coupon_count = 1;
             }
 
             if ($ex_count_per_Item > 0) {
@@ -500,15 +483,9 @@ class GameJiujiuController extends AppController
                                 list($couponId, $toShareNum) = $sharingPref;
                                 $so->addCoupon($uid, $couponId, $operator, $source_log_id);
                                 $so->id = null;
-                                $store = "在黔阳冰糖橙店购买时使用(" . $toShareNum . '元)';
-                                $validDesc = "有效期至2014年12月18日";
+                                $store = "在丹东玖玖农场店购买时使用(" . $toShareNum . '元)';
+                                $validDesc = "建议一小时内使用";
                                 $weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
-//                            list($shareOfferId, $toShareNum) = $sharingPref;
-//                            $added = $so->add_shared_slices($uid, $shareOfferId, $toShareNum);
-//                            $so->log('add_shared_slices:uid='. $uid . ', shareOfferId='. $shareOfferId . ', toShareNum='. $toShareNum .', result='. $added);
-//                            if (!empty($added))  {
-//                                App::uses('CakeNumber', 'Utility');
-//                            }
                             }
                         );
                     }
@@ -650,15 +627,17 @@ class GameJiujiuController extends AppController
         $this->set('game_user_total', $awardInfo['got']);
         $this->_updateLastQueryTime(time());
 
-        if ($awardInfo['got'] >= 20) {
+        if ($awardInfo['got'] >= 30) {
             $this->loadModel('CouponItem');
-            $coupons = $this->CouponItem->find_coupon_item_by_type($current_uid, array_keys($this->coupon_steps));
-            $this->set('coupons', $coupons);
+            $coupons = $this->CouponItem->find_coupon_item_by_type_no_join($current_uid, array(self::COUPON_JIUJIU_FIRST, self::COUPON_JIUJIU_SEC, self::COUPON_JIUJIU_THIRD));
+            $couponIds = Hash::combine($coupons, '{n}.CouponItem.coupon_id', '{n}.CouponItem.created');
+            $this->set('had_coupon_first', $couponIds[self::COUPON_JIUJIU_FIRST]);
+            $this->set('had_coupon_sec', $couponIds[self::COUPON_JIUJIU_SEC]);
+            $this->set('had_coupon_third', $couponIds[self::COUPON_JIUJIU_THIRD]);
         }
 
-
         $this->set('game_end', $this->is_game_end($gameCfg));
-        if ($gameType == self::BTC1412) {
+        if ($gameType == self::GAME_JIUJIU) {
             $result = array();
             $this->fill_top_lists($gameType, $result, $current_uid);
             $this->set('top_list', json_encode($result));
@@ -667,6 +646,7 @@ class GameJiujiuController extends AppController
             $this->fill_today_award($gameType, $result);
             $this->set('award_list', json_encode($result));
         }
+
         $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
         $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $current_uid, 'type' => $gameType)));
         $pys_got = $this->gotWxTimesToday($weixinTimesLog, mktime());
@@ -676,16 +656,7 @@ class GameJiujiuController extends AppController
         $customized_game = $this->customized_view_files[$gameType];
         if (!empty($customized_game)) {
             $this->__viewFileName = $customized_game;
-        }
-
-        $zutuangous = array(
-            array('img' => "/img/banner/banner_zutuangou3.jpg", 'url' => "/groupons/view/chengzi.html?from=game3", 'id' => 0),
-            array('img' => "/img/banner/banner_zutuangou2.jpg", 'url' => "/groupons/view/chengzi.html?from=game2", 'id' => 0),
-//            array('img' => "/img/banner/banner_zutuangou.jpg", 'url' => "/groupons/view/gonggan.html?from=home", 'id' => 0),
-        );
-
-        $this->set('my_ward_ad', $zutuangous[mt_rand(1, 1000) % count($zutuangous)]);
-    }
+        }    }
 
     public function shake($gameType)
     {
@@ -711,7 +682,10 @@ class GameJiujiuController extends AppController
             $total_apple = $got ? ($got - $awardInfo['spent']) : 0;
             $this->_updateLastQueryTime(time());
             $need_login = $this->is_weixin() && $got > 20 && notWeixinAuthUserInfo($uid, $this->currentUser['nickname']);
-            echo json_encode(array('success' => true, 'got_apple' => $apple, 'total_apple' => $total_apple, 'total_times' => $totalAwardTimes, 'need_login' => $need_login));
+
+            $mobile = $this->Session->read('Auth.User.mobilephone');
+            $need_mobile = $gameType == self::GAME_JIUJIU && $got >= self::NEED_MOBILE_LEAST && empty($mobile);
+            echo json_encode(array('success' => true, 'got_apple' => $apple, 'total_apple' => $total_apple, 'total_times' => $totalAwardTimes, 'need_login' => $need_login, 'need_mobile' => $need_mobile));
         } else {
             $this->log('incorrect award activity type:'. $gameType);
             echo json_encode(array('success' => false, 'msg' => 'incorrect_type'));
@@ -745,20 +719,6 @@ class GameJiujiuController extends AppController
         }
         $curr_got += $this->randGotApple($todayAwarded, $total_got, $dayLimit, $gameType);
         $curr_got = ($total_got == 0 && $curr_got == 0 ? 3 : $curr_got);
-//
-//        if ($gameType != self::MIHOUTAO1411
-//            && $gameType != self::BTC1412
-//            && $gameType != self::XIRUI1412
-//            && (is_array($iAwarded) && empty($iAwarded) && $total_got + $curr_got >= $this->AWARD_LIMIT)) {
-//            $awardResult = array(
-//                'uid' => $uid,
-//                'type' => $gameType,
-//                'finish_time' => date(FORMAT_DATETIME)
-//            );
-//            if (!$model->save($awardResult)) {
-//                $this->log("update AwardResult failed:" . json_encode($awardResult));
-//            };
-//        }
 
         if ($this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + ' . $curr_got, 'updated' => '\'' . date(FORMAT_DATETIME) . '\''),
             array('id' => $awardInfo['id'], 'times>0', 'type'=> addslashes($gameType)))) {
@@ -824,7 +784,8 @@ class GameJiujiuController extends AppController
         $this_got = 0;
         $ext = 0;
         $limit = false;
-        if (!$this->is_weixin()) {
+        $mobileNum = $this->Session->read('Auth.User.mobilephone');
+        if (!$this->is_weixin() || (empty($mobileNum) && $total_got > self::NEED_MOBILE_LEAST)) {
             return 0;
         } else if (false/*$this->shouldLimit($todayAwarded, $dailyLimit)*/) {
             $left = $this->AWARD_LIMIT - $total_got;
@@ -939,9 +900,9 @@ class GameJiujiuController extends AppController
      * @param $result
      * @param array|int $include_uid_pos
      */
-    private function fill_top_lists($gameType, &$result, $include_uid_pos = array()) {
+    private function fill_latest_awards($gameType, &$result, $include_uid_pos = array()) {
 
-        $listR = $this->AwardInfo->top_list($gameType);
+        $listR = $this->CouponItem->find_latest_coupon_item_by_type_no_join(array(self::COUPON_JIUJIU_FIRST, self::COUPON_JIUJIU_SEC), 100);
         $updateTime = friendlyDate($listR[0], 'full');
 
         $user_pos = array();
@@ -955,7 +916,7 @@ class GameJiujiuController extends AppController
             $user_total[$uid] = $listR[1][$uid];
         }
 
-        $cache_key = 'v_top_list_' . $listR[0];
+        $cache_key = 'v_latest_list_' . $gameType . '_' . $listR[0];
         $top_list_cache = Cache::read($cache_key);
         if (empty($top_list_cache)) {
             $top_list = array();
@@ -992,10 +953,10 @@ class GameJiujiuController extends AppController
 
         $this->loadModel('AwardResult');
         $day = date(FORMAT_DATE);
-        $listR = $this->AwardResult->list_day_award($day, $gameType);
-        $updateTime = friendlyDate($listR[0], 'full');
+        $listR = $this->CouponItem->find_latest_coupon_item_by_type_no_join(array(self::COUPON_JIUJIU_FIRST, self::COUPON_JIUJIU_SEC));
+        $updateTime = friendlyDate(time(), 'full');
 
-        $cache_key = 'v_today_award_list_' .$gameType . '_'. $day . '_' .$listR[0];
+        $cache_key = 'v_list_' .$gameType . '_'. $day . '_' .$listR[0];
         $today_award_list_cache = Cache::read($cache_key);
         if (empty($today_award_list_cache)) {
             $count = 0;

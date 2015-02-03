@@ -14,13 +14,25 @@
     .apple_share.in {
         opacity: .75;
     }
+
+    dl {
+        margin-bottom: 0;
+    }
 </style>
 <script>
+    _path_exchange = '/game_jiujiu/exchange_coupon';
+    _path_shake = '/game_jiujiu/shake';
+    _path_notify = '/game_jiujiu/notifiedToMe';
+    _path_assign_follow = '/game_jiujiu/assignWXSubscribeTimes';
+    _path_query = '/game_jiujiu/hasNewTimes';
+    _mobile_bind_reason = '离大奖很近了，请绑定手机号验证是否人类';
+
 	$(document).ready(function(){
 		var height = $(window).height();
 		var width = $(window).width();
-		$('#strawberry_bg').height(height);
-		$('#strawberry_bg').width(width);
+        var $strawberryBg = $('#strawberry_bg');
+        $strawberryBg.height(height);
+		$strawberryBg.width(width);
         var $strawberryTrbg = $('#strawberry_trbg');
         var $strawberryChance = $('#strawberry_chance');
         var $strawberry_prize = $('#strawberry_prize');
@@ -58,9 +70,44 @@
             $strawberryTrbg.show();
         });
 
+        var apple_got_cnt = $('apple_got_cnt');
+        var $couponFirstLi = $('#coupon_first_li');
+        var $couponSecLi = $('#coupon_sec_li');
+        var $couponThirdLi = $('#coupon_third_li');
+
+        game_notify_after_exchange = function (coupon_count, coupon_type) {
+            if (coupon_count > 0) {
+                if ('first' == coupon_type ) {
+                    $('a#get_coupon_' + coupon_type).hide();
+                    $couponFirstLi.append('<a href="/products/view/738.html">去使用</a>');
+                } else if ('sec' == coupon_type) {
+                    $('a#get_coupon_' + coupon_type).hide();
+                    $couponSecLi.append('<a href="/products/view/738.html">去使用</a>');
+                }
+            } else {
+                utils.alert("呜呜，本时段已兑完。");
+            }
+        };
+
+        function func_li(li, lowest_limit, type) {
+            if (li.find('a').length == 1) {
+                if (total_not_spent() >= lowest_limit) {
+                    li.append('<a id="get_coupon_'+type+'" href="javascript:;">领取</a>');
+                    $('#get_coupon_'+type).click(function () {
+                        if (typeof get_coupon_click_func == 'function') {
+                            get_coupon_click_func(type);
+                        }
+                    });
+                }
+            }
+        }
+
         $('#btn_rules').click(function(){
             $strawberry_rules.show();
             $strawberryTrbg.show();
+            func_li($couponFirstLi, 50, 'first');
+            func_li($couponSecLi, 40, 'sec');
+            func_li($couponThirdLi, 30, 'third');
         });
         $('#btn_help_me').click(function(){
             strawberry_help_me.show();
@@ -83,11 +130,11 @@
 
 	<ul>
     	<li class="clearfix">
-            <a id="btn_rules" href="javascript:;" class="fl">规则/兑奖</a>
+            <a id="btn_rules" href="javascript:;" class="fl" style="position: relative">规则/兑奖<i></i></a>
             <a id="btn_add_chance" href="javascript:;" class="fr">加机会</a>
         </li>
         <li class="clearfix">
-            <a id="btn_story" href="/game_jiujiu/story.html" class="fl">玖玖草莓</a>
+            <a id="btn_story" href="/game_jiujiu/story.html" class="fl">产品故事</a>
             <a id="btn_award" href="javascript:;" class="fr">获奖名单</a>
         </li>
         <li class="clearfix">
@@ -95,6 +142,9 @@
             <a id="btn_i_help" href="javascript:;" class="fr">我帮了谁</a>
         </li>
     </ul>
+    <dl>
+        <dt><a href="/">招募代理</a >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/brands/20150127/jiu_jiu_nong_chang_xu_gang.html">去店铺看看</a ></dt>
+    </dl>
 </div>
 
 <!--摇到但还没抽奖机会-->
@@ -105,7 +155,7 @@
 <div class="strawberry_rocknum_tips radius3" style="display:none; top:30%;">
     <ul>
     	<li class="strawberry_thisnum">你这次摇下了<span>10</span>个草莓!</li>
-        <li class="strawberry_totalnum">共摇下草莓<span>100</span>个, <br/>你是否要兑换 "<span>3斤草莓</span>" ?</li>
+        <li class="strawberry_totalnum">共摇下草莓<span>50</span>个, <br/>你是否要兑换 "<span>3斤草莓</span>" ?</li>
         <li class="clearfix">
         	<a href="javascript:;" class="strawberry_exchangebtn fl">兑换</a>
             <a href="javascript:;" class="strawberry_cancelbtn fr">取消</a>
@@ -115,8 +165,8 @@
 <!--摇到抽二等奖机会-->
 <div class="strawberry_rocknum_tips radius3" style="display:none; top:30%;">
     <ul>
-    	<li class="strawberry_thisnum">你这次摇下了<span>10</span>个草莓!</li>
-        <li class="strawberry_totalnum">共摇下草莓<span>50</span>个, <br/>你是否要兑换 "<span>74元优惠券</span>" ?</li>
+    	<li class="strawberry_thisnum">你这次摇下了<span>10</span>颗草莓!</li>
+        <li class="strawberry_totalnum">共摇下草莓<span>50</span>颗, <br/>你是否要兑换 "<span>74元优惠券</span>" ?</li>
         <li class="clearfix">
         	<a href="javascript:;" class="strawberry_exchangebtn fl">兑换</a>
             <a href="javascript:;" class="strawberry_cancelbtn fr">取消</a>
@@ -126,8 +176,8 @@
 <!--摇到抽三等奖机会-->
 <div class="strawberry_rocknum_tips radius3" style="display:none; top:30%;">
     <ul>
-    	<li class="strawberry_thisnum">你这次摇下了<span>10</span>个草莓!</li>
-        <li class="strawberry_totalnum">共摇下草莓<span>30</span>个, <br/>你是否要兑换 "<span>50元优惠券</span>" ?</li>
+    	<li class="strawberry_thisnum">你这次摇下了<span>10</span>颗草莓!</li>
+        <li class="strawberry_totalnum">共摇下草莓<span>30</span>颗, <br/>你是否要兑换 "<span>50元优惠券</span>" ?</li>
         <li class="clearfix">
         	<a href="javascript:;" class="strawberry_exchangebtn fl">兑换</a>
             <a href="javascript:;" class="strawberry_cancelbtn fr">取消</a>
@@ -162,14 +212,17 @@
 	<a class="strawberry_prize_close" href="javascript:;"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/close.png')}}" /></a>
     <div class="strawberry_prize_list rules_list">
         <h4>奖项</h4>
-        <ul><li>1）一等奖：摇满50个，免费获得一盒草莓（3斤装）(每天20箱， 送完即止)</li>
-        <li>2）二等奖：摇满40个，送价值148元玖玖草莓（3斤）的5折券</li>
-        <li>3）三等奖：摇满30个，送价值99元玖玖小柿子（6斤）的5折券</li></ul>
+        <ul><li id="coupon_first_li">一等奖：摇满50颗，免费获得价值<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">148元玖玖草莓</a>(每天20箱， 10-19点每小时放2箱，送完即止) {{if $had_coupon_first}}<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">请在1小时内使用，去使用</a>{{/if}}</li>
+        <li id="coupon_sec_li">二等奖：摇满40颗，可兑价值<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">148元玖玖草莓</a>的5折券（每天限量200张） {{if $had_coupon_sec}}<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">请在1小时内使用，去使用</a>{{/if}} </li>
+        <?php /** <li id="coupon_third_li">3）三等奖：摇满30颗，可兑价值148元玖玖小柿子（6斤）的5折券（每天限量300张） {{if $had_coupon_third}}<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">去使用</a>{{/if}}</li> */ ?>
+        </ul>
 
         <h4>游戏规则</h4>
         <ul><li>1）时间：2015年2月1日-2月5日</li>
-        <li>2）免费送出和使用优惠券购买的奖品，第二天或第三天统一发货</li>
-        <li>3）手机号、微信号、用户相同视为一人，如有作弊，奖品作废</li>
+        <li>2）所有奖品请在领取后请在1小时内使用</li>
+        <li>3）免费送出和使用优惠券购买的奖品，第二天或第三天统一发货。其中，北京、天津外规格有区别，详见商品介绍页面。 </li>
+        <li>4）相同手机号、微信号、用户、地址视为一人，如有作弊，奖品作废</li>
+        <li>5）法律许可范围内，本次活动解释权归朋友说所有</li>
         </ul>
 
     </div>
@@ -187,7 +240,7 @@
             <?php } ?>
         {{else}}
         <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！
-            <a id="share_btn_3" href="javascript:;" class="help">分享好友求助</a>
+            <a id="share_btn_2" href="javascript:;" class="help">分享好友求助</a>
         </div>
         {{/if}}
     </div>
@@ -204,8 +257,8 @@
         </dl>
         <?php } ?>
         {{else}}
-        <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！
-            <a id="share_btn_2" href="javascript:;" class="help">邀请好友</a>
+        <div class="con clearfix">还没有帮过好友！
+            <a id="share_btn_3" href="javascript:;" class="help">邀请好友来玩</a>
         </div>
         {{/if}}
     </div>
@@ -221,7 +274,7 @@
         <dd class="strawberry_chance_explain">每天加2次机会</dd>
     </dl>
     <dl class="clearfix">
-    	<dd class="fl"><a id="share_btn_3" href="javascript:;">邀请朋友</a></dd>
+    	<dd class="fl"><a id="share_btn" href="javascript:;">邀请朋友</a></dd>
         <dd class="strawberry_chance_explain">每个朋友增加一次机会</dd>
     </dl>
     <div class="strawberry_chance_aboutus">
@@ -243,8 +296,9 @@
     var game_least_change = '{{$game_least_change}}';
     var awarded = '{{$awarded}}';
     var game_user_total = '{{$game_user_total}}'; //loading by update_top_list
+    var get_coupons_button = $('');
 
-    var showAfterGotCallback = function(){}
+    var showAfterGotCallback = function(){};
 
     function total_not_spent() {
         var total = $.trim($('#apple_got_cnt').text());
@@ -284,7 +338,7 @@
     }
 
     function desc_cmp_friends() {
-        var desc = '我已摇下' + get_total() + '个';
+        var desc = '我已摇下' + get_total() + '颗';
         if (friendGots && friendGots.length > 0) {
             var dabaiPercent = dabai_percent();
             desc += (dabaiPercent == 100 ? ', 打败了所有好友，哈哈' : (dabaiPercent == 0 ? ', 朋友圈里垫底 ^_^， 快点我吧' : ', 打败了' + dabaiPercent + '%的好友！'));
@@ -298,8 +352,8 @@
         if (typeof(wx) != 'undefined') {
             wx.ready(function () {
                 var share_string = '{{$share_string ? $share_string :"0"}}';
-                var to_timeline_title = "摇下50个， 送丹东玖玖草莓一盒（3斤），来自有机认证的水土，中国最早的草莓种植地（之一）。 ";
-                var to_friend_title = "摇下50个， 送丹东玖玖草莓一盒（3斤）";
+                var to_timeline_title = "摇下50颗， 3斤丹东玖玖农场草莓免费送，来自有机认证的水土，中国最早的草莓种植地（之一）。 ";
+                var to_friend_title = "摇下50颗， 3斤丹东玖玖农场草莓免费送";
                 var to_friend_desc = desc_cmp_friends();
                 var to_friend_link = window.location.href;
                 var to_timeline_link = window.location.href;

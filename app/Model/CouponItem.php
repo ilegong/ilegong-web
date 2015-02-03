@@ -104,6 +104,23 @@ class CouponItem extends AppModel {
         return $result;
     }
 
+    /**
+     * @param $couponId
+     * @param $time
+     * @return mixed
+     */
+    public function couponCountHourly($couponId, $time) {
+        list($hourStr, $key) = $this->key_hourly($couponId, $time);
+        $result = Cache::read($key);
+        if (!$result) {
+            $result = $this->find('count', array(
+                'conditions' => array('coupon_id' => $couponId, 'deleted = 0', "date(created, '%Y%m%d%H') = '".$hourStr."'")
+            ));
+            Cache::write($key, $result);
+        }
+        return $result;
+    }
+
     public function afterDelete() {
         $this->clearCache();
     }
@@ -113,7 +130,10 @@ class CouponItem extends AppModel {
     }
 
     protected function clearCache() {
-        Cache::delete($key = 'ci_count_'.$this->data['CouponItem']['coupon_id']);
+        $coupon_id = $this->data['CouponItem']['coupon_id'];
+        Cache::delete($key = 'ci_count_'. $coupon_id);
+        list($hourStr, $key) = $this->key_hourly($coupon_id, $this->data['CouponItem']['created']);
+        Cache::delete($key);
     }
 
     public function unapply_coupons($owner, $order_id) {
@@ -241,6 +261,17 @@ class CouponItem extends AppModel {
         if (!empty($couponIds) && $uid) {
             return $this->find('all', array(
                 'conditions' => array('coupon_id' => $couponIds, 'deleted = 0', 'bind_user' => $uid),
+            ));
+        }
+        return false;
+    }
+
+    public function find_latest_coupon_item_by_type_no_join($couponIds, $limit) {
+        if (!empty($couponIds)) {
+            return $this->find('all', array(
+                'conditions' => array('coupon_id' => $couponIds, 'deleted = 0'),
+                'order' => 'created desc',
+                'limit' => $limit
             ));
         }
         return false;
@@ -443,5 +474,16 @@ class CouponItem extends AppModel {
             $a = &$item['Coupon'];
             $a['product_ids'] = $pid_array;
         }
+    }
+
+    /**
+     * @param $couponId
+     * @param $time
+     * @return array
+     */
+    protected function key_hourly($couponId, $time) {
+        $hourStr = date('YmdH', $time);
+        $key = 'ci_count_h_' . $couponId . '-' . $hourStr;
+        return array($hourStr, $key);
     }
 }
