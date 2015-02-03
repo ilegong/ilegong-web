@@ -143,6 +143,9 @@ class AppController extends Controller {
 
         if ($this->is_weixin() && !empty($this->currentUser['id'])) {
             $this->set('jWeixinOn', true);
+            $this->loadModel('WxOauth');
+            $signPackage = $this->WxOauth->getSignPackage();
+            $this->set('signPackage', $signPackage);
         }
     }
 
