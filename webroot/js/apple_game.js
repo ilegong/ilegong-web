@@ -145,7 +145,7 @@ $(document).ready(function(){
         }
 
     if ($got > 0) {
-        msg = '恭喜你摇掉了<span class="apple_numbers">' + $got + '</span>个' + game_obj_name + '！'+coupon_message(times, total);
+        msg = '恭喜你摇掉了<span class="apple_numbers">' + $got + '</span>个' + game_obj_name + '！'+ coupon_message(times, total);
         timeout = 3000;
         if (need_login) {
             msg += '<br/> 亲，您的成绩超过了大多数用户！请您先登录。';

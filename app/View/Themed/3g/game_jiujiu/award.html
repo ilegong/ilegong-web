@@ -136,7 +136,7 @@
 
 	<ul>
     	<li class="clearfix">
-            <a id="btn_rules" href="javascript:;" class="fl" style="position: relative">规则/兑奖<i></i></a>
+            <a id="btn_rules" href="javascript:;" class="fl" style="position: relative">规则/兑奖<i id="red_point" style="display: none"></i></a>
             <a id="btn_add_chance" href="javascript:;" class="fr">加机会</a>
         </li>
         <li class="clearfix">
@@ -307,7 +307,26 @@
     var game_user_total = '{{$game_user_total}}'; //loading by update_top_list
     var get_coupons_button = $('');
 
-    var showAfterGotCallback = function(){};
+    function toggle_red_point(total) {
+        var $redPoint = $('#red_point');
+        if ($redPoint) {
+            if (total >= 30) {
+                $redPoint.show();
+            } else {
+                $redPoint.hide();
+            }
+        }
+    }
+
+
+    function game_coupon_message(times, total) {
+        if (total >= 30)  { return '<br/>可以去规则页兑换优惠券啦'; }
+        else return '';
+    }
+
+    var showAfterGotCallback = function($times, total, $got){
+        toggle_red_point(total);
+    };
 
     function total_not_spent() {
         var total = $.trim($('#apple_got_cnt').text());
@@ -323,10 +342,6 @@
     function get_total() {
         var total = total_not_spent();
         return (total < game_user_total ? game_user_total : total);
-    }
-
-    function show_got_coupon() {
-        utils.alert_one('恭喜您秒杀成功，请注意在有效期结束前使用。还可以抢268元终极大奖哦', '查看我的优惠券', function(){ window.location.href = '/users/my_coupons.html';});
     }
 
     function help_me_cnt() {
@@ -358,6 +373,9 @@
     }
 
     $(document).ready(function() {
+
+        toggle_red_point(total_not_spent());
+
         if (typeof(wx) != 'undefined') {
             wx.ready(function () {
                 var share_string = '{{$share_string ? $share_string :"0"}}';
