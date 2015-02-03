@@ -76,7 +76,7 @@
             $strawberryTrbg.show();
         });
 
-        var apple_got_cnt = $('apple_got_cnt');
+        var apple_got_cnt = $('#apple_got_cnt');
         var $couponFirstLi = $('#coupon_first_li');
         var $couponSecLi = $('#coupon_sec_li');
         var $couponThirdLi = $('#coupon_third_li');
@@ -329,7 +329,7 @@
 
     function total_not_spent() {
         var total = $.trim($('#apple_got_cnt').text());
-        total = total != '' ? parseInt(total) : 0;
+        total = (total != '' ? parseInt(total) : 0);
         return total;
     }
 
