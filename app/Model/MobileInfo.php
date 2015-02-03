@@ -24,18 +24,20 @@ class MobileInfo extends AppModel {
         $options = array(
             CURLOPT_URL => 'http://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=' . $mobile,
             CURLOPT_CUSTOMREQUEST => 'GET',
+            CURLOPT_HEADER => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 30
         );
         curl_setopt_array($curl, ($options));
         $json = curl_exec($curl);
         curl_close($curl);
 
-        $left_brace = mb_strchr($json, '{');
-        $right_brace = mb_strchr($json, '}');
+        $left_brace = mb_strpos($json, 'province:\'', null, 'CP936') + 10;
+        $right_brace = mb_strpos($json, '\'', $left_brace , 'CP936');
 
-        $str = mb_substr($json, $left_brace, $right_brace - $left_brace + 1);
+        $str = mb_substr($json, $left_brace , $right_brace - $left_brace  + 1, 'CP936');
         if (!empty($str)) {
-            $json = json_encode($str, true);
-            return $json['province'];
+            return mb_convert_encoding($str, 'UTF-8', 'CP936');
         } else {
             return '';
         }
