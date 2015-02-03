@@ -70,7 +70,7 @@ class GameJiujiuController extends AppController
     const COUPON_JIUJIU_FIRST = 19037;
     const COUPON_JIUJIU_SEC = 19036;
     const COUPON_JIUJIU_THIRD = 19035;
-    const NEED_MOBILE_LEAST = 40;
+    const NEED_MOBILE_LEAST = 30;
     public function beforeFilter()
     {
         parent::beforeFilter();
