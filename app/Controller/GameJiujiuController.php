@@ -280,13 +280,18 @@ class GameJiujiuController extends AppController
         $ex_count_per_Item = 0;
         if ($gameType == self::GAME_JIUJIU) {
             if ((empty($expect) || $expect == 'first') && $can_exchange_apple_count >= 50) {
-                $rnd = mt_rand(0, 17);
-                $hourlyCnt = $this->CouponItem->couponCountHourly(self::COUPON_JIUJIU_FIRST, time());
-                if ($hourlyCnt < $this->hours_limit() && $rnd == 10) {
-                    $coupon_count = 1;
-                    $ex_count_per_Item = 50;
-                    $total_ex_count = $ex_count_per_Item;
-                    $sharingPref = array(self::COUPON_JIUJIU_FIRST, 148);
+                $in_special_city = $this->in_special_city();
+                if ($in_special_city) {
+                    $rnd = mt_rand(0, 17);
+                    $hourlyCnt = $this->CouponItem->couponCountHourly(self::COUPON_JIUJIU_FIRST, time());
+                    if ($hourlyCnt < $this->hours_limit() && $rnd == 10) {
+                        $coupon_count = 1;
+                        $ex_count_per_Item = 50;
+                        $total_ex_count = $ex_count_per_Item;
+                        $sharingPref = array(self::COUPON_JIUJIU_FIRST, 148);
+                    }
+                } else {
+                    $sold_out = true;
                 }
             } else if ( (empty($expect) || $expect == 'sec') && $can_exchange_apple_count >= 30) {
                 $total_ex_count = $ex_count_per_Item = 30;
@@ -642,9 +647,8 @@ class GameJiujiuController extends AppController
         if ($total_got >= 30) {
             $ext = 50;
         } else if($total_got >= 40) {
-            $this->loadModel('MobileInfo');
-            $info = $this->MobileInfo->get_province($mobileNum);
-            $ext = ($info == '天津' || $info == '北京') ? 100 : 400;
+            $in_special_city = $this->in_special_city();
+            $ext = $in_special_city ? 100 : 200;
         }
 
         for ($i = 0; $i < $times; $i++) {
@@ -814,5 +818,15 @@ class GameJiujiuController extends AppController
         $tt_list = array('list' => $names, 'update_time' => $updateTime, 'today_awarded' => $this->AwardResult->todayAwarded($day, $gameType));
 
         $result['award_list'] = $tt_list;
+    }
+
+    /**
+     * @return bool
+     */
+    private function in_special_city() {
+        $mobileNum = $this->Session->read('Auth.User.mobilephone');
+        $this->loadModel('MobileInfo');
+        $info = $this->MobileInfo->get_province($mobileNum);
+        return $info == '天津' || $info == '北京';
     }
 }
