@@ -1167,9 +1167,10 @@ class UsersController extends AppController {
                 //do wx bind
                 $wxNewBind = $this->Oauthbind->findWxServiceBindByUid($newUserId);
                 if(empty($wxNewBind)){
-                    $this->Oauthbind->update_wx_bind_uid($oauth_openid, $newUserId,$userId);
+                    $this->Oauthbind->update_wx_bind_uid($oauth_openid, $userId,$newUserId);
                 }else{
-                    $this->Oauthbind->update_wx_bind_uid($oauth_openid, $userId, $newUserId);
+                    $new_oauth_openid = $wxNewBind['oauth_openid'];
+                    $this->Oauthbind->update_wx_bind_uid($new_oauth_openid, $userId, $newUserId);
                 }
             }
             $this->transferUserInfo($userId,$newUserId);
