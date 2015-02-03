@@ -638,13 +638,13 @@ class GameJiujiuController extends AppController
 
         $this->set('game_end', $this->is_game_end($gameCfg));
         if ($gameType == self::GAME_JIUJIU) {
-            $result = array();
-            $this->fill_top_lists($gameType, $result, $current_uid);
-            $this->set('top_list', json_encode($result));
-
-            $result = array();
-            $this->fill_today_award($gameType, $result);
-            $this->set('award_list', json_encode($result));
+//            $result = array();
+//            $this->fill_top_lists($gameType, $result, $current_uid);
+//            $this->set('top_list', json_encode($result));
+//
+//            $result = array();
+//            $this->fill_today_award($gameType, $result);
+//            $this->set('award_list', json_encode($result));
         }
 
         $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
