@@ -352,7 +352,7 @@ class GameJiujiuController extends AppController
             throw new CakeException("Not found Game Config");
         }
 
-        $dailyHelpLimit = ($gameType == self::BTC1412 ? 5 : 0);
+        $dailyHelpLimit = ($gameType == self::GAME_JIUJIU ? 5 : 0);
 
         $current_uid = $this->currentUser['id'];
         list($friend, $shouldAdd, $gameType) = $this->track_or_redirect($current_uid, $gameType, $dailyHelpLimit);
