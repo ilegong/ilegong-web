@@ -465,13 +465,9 @@ class GameJiujiuController extends AppController
 
         $this->set('game_end', $this->is_game_end($gameCfg));
         if ($gameType == self::GAME_JIUJIU) {
-//            $result = array();
-//            $this->fill_top_lists($gameType, $result, $current_uid);
-//            $this->set('top_list', json_encode($result));
-//
-//            $result = array();
-//            $this->fill_today_award($gameType, $result);
-//            $this->set('award_list', json_encode($result));
+            $result = array();
+            $this->fill_latest_awards($gameType, $result);
+            $this->set('award_list', $result['latest_awards']);
         }
 
         $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
@@ -735,49 +731,37 @@ class GameJiujiuController extends AppController
      * Fill top list elements to the specified result array
      * @param $gameType
      * @param $result
-     * @param array|int $include_uid_pos
      */
-    private function fill_latest_awards($gameType, &$result, $include_uid_pos = array()) {
+    private function fill_latest_awards($gameType, &$result) {
 
         $listR = $this->CouponItem->find_latest_coupon_item_by_type_no_join(array(self::COUPON_JIUJIU_FIRST, self::COUPON_JIUJIU_SEC), 100);
-        $updateTime = friendlyDate($listR[0], 'full');
+        $now_time = time();
+        $updateTime = friendlyDate($now_time, 'full');
 
-        $user_pos = array();
-        $user_total = array();
-        if($include_uid_pos && !is_array($include_uid_pos)) {
-            $include_uid_pos = array($include_uid_pos);
-        }
-        foreach($include_uid_pos as $uid) {
-            $searched = array_search($uid, array_keys($listR[1]));
-            $user_pos[$uid] = $searched === false ? -1 :  1 + $searched;
-            $user_total[$uid] = $listR[1][$uid];
-        }
-
-        $cache_key = 'v_latest_list_' . $gameType . '_' . $listR[0];
+        $cache_key = 'v_latest_list_' . $gameType . '_' . date('Y-m-d Hi', $now_time);
         $top_list_cache = Cache::read($cache_key);
         if (empty($top_list_cache)) {
-            $top_list = array();
-            $count = 0;
+            $award_list = array();
             $uids = array();
-            foreach ($listR[1] as $uid => $got) {
-                if ($count++ >= 30) {
-                    break;
-                }
-                $top_list[] = array($uid, $got);
-                $uids[] = $uid;
+            foreach ($listR as $res) {
+                $bind_user = $res['CouponItem']['bind_user'];
+                $coupon_id = $res['CouponItem']['coupon_id'];
+                $created = friendlyDateFromStr($res['CouponItem']['created']);
+                $award_list[] = array($bind_user, $coupon_id == self::COUPON_JIUJIU_FIRST ? 'first' : 'sec', $created);
+                $uids[] = $bind_user;
             }
             $nameIdMap = $this->User->findNicknamesMap($uids);
-            foreach ($top_list as &$list) {
+            foreach ($award_list as &$list) {
                 $list[0] = mb_substr(filter_invalid_name($nameIdMap[$list[0]]), 0, 7);
             }
-            Cache::write($cache_key, json_encode($top_list));
+            Cache::write($cache_key, json_encode($award_list));
         } else {
-            $top_list = json_decode($top_list_cache);
+            $award_list = json_decode($top_list_cache);
         }
 
-        $tt_list = array('list' => $top_list, 'update_time' => $updateTime, 'user_pos' => $user_pos, 'user_total' => $user_total);
+        $tt_list = array('list' => $award_list, 'update_time' => $updateTime);
 
-        $result['top_list'] = $tt_list;
+        $result['latest_awards'] = $tt_list;
     }
 
     /**

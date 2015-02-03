@@ -195,13 +195,16 @@
 	<a class="strawberry_prize_close" href="javascript:;"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/close.png')}}" /></a>
 	<ul>
     	<li class="strawberry_prize_title">获奖名单<span>(最新100名)</span></li>
-        <li class="strawberry_prize_surplus">一等奖剩余10, 二等奖剩余40, 三等奖剩余50</li>
+        <!--<li class="strawberry_prize_surplus">一等奖剩余10, 二等奖剩余40</li>-->
+        <li class="strawberry_prize_surplus">更新时间：{{$award_list['update_time']}}</li>
     </ul>
     <div class="strawberry_prize_list">
+        <?php foreach($award_list['list'] as $item) { ?>
     	<dl class="clearfix">
-            <dt class="fl"><span>Alice</span>获一等奖</dt>
-            <dt class="fr">1小时前</dt>
+            <dt class="fl"><span>{{$item[0]}}</span>获{{$item[1] == 'first' ? '一等奖' : '二等奖'}}</dt>
+            <dt class="fr">{{$item[2]}}</dt>
         </dl>
+        <?php } ?>
     </div>
 </div>
 <!--游戏规则
@@ -224,7 +227,7 @@
         </ul>
 
         <h4>游戏规则</h4>
-        <ul><li>1）时间：2015年2月1日-2月5日</li>
+        <ul><li>1）时间：2015年2月4日-2月6日</li>
         <li>2）所有奖券请领取后请在1小时内使用</li>
         <li>3）免费送出和使用优惠券购买的奖品，第二天或第三天统一发货。其中，北京、天津外规格有区别，详见商品介绍页面。 </li>
         <li>4）相同手机号、微信号、用户、地址视为一人，如有作弊，奖品作废</li>
@@ -240,8 +243,8 @@
         {{if $helpMe}}
             <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=100){break;} ?>
         <dl class="clearfix">
-            <dt class="fl"><span>{{$item['nickname']}}</span>摇下</dt>
-            <dt class="fr gots">{{ $item['got'] }}</dt>
+            <dt class="fl"><span>{{$item['nickname']}}</span></dt>
+            <dt class="fr gots">摇下{{ $item['got'] }}</dt>
         </dl>
             <?php } ?>
         {{else}}
@@ -258,8 +261,8 @@
         {{if $meHelp}}
         <?php $i=0; foreach($meHelp as $key => $item) { $i++; if($i>=100){break;} ?>
         <dl class="clearfix">
-            <dt class="fl"><span>{{$item['nickname']}}</span>摇下</dt>
-            <dt class="fr gots">{{ $item['got'] }}</dt>
+            <dt class="fl"><span>{{$item['nickname']}}</span></dt>
+            <dt class="fr gots">摇下{{ $item['got'] }}</dt>
         </dl>
         <?php } ?>
         {{else}}
