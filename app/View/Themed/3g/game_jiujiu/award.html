@@ -243,7 +243,7 @@
             <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=100){break;} ?>
         <dl class="clearfix">
             <dt class="fl"><span>{{$item['nickname']}}</span></dt>
-            <dt class="fr gots">摇下{{ $item['got'] }}</dt>
+            <dt class="fr">摇下<span class="gots">{{ $item['got'] }}</span></dt>
         </dl>
             <?php } ?>
         {{else}}
@@ -261,7 +261,7 @@
         <?php $i=0; foreach($meHelp as $key => $item) { $i++; if($i>=100){break;} ?>
         <dl class="clearfix">
             <dt class="fl"><span>{{$item['nickname']}}</span></dt>
-            <dt class="fr gots">摇下{{ $item['got'] }}</dt>
+            <dt class="fr">摇下<span class="gots">{{ $item['got'] }}</span></dt>
         </dl>
         <?php } ?>
         {{else}}
@@ -383,7 +383,8 @@
                 var to_friend_link = window.location.href;
                 var to_timeline_link = window.location.href;
                 var imgUrl = "{{$this->Html->assetUrl('http://www.tongshijia.com/img/game_jiujiu/index/share_logo.jpg')}}";
-                wx.onMenuShareAppMessage({
+
+                var xx = {
                     title: to_friend_title,
                     desc: desc_cmp_friends(),
                     link: to_friend_link,
@@ -392,8 +393,13 @@
                         if (share_string != '0') {
                             $.post('/wx_shares/log_share', { trstr: share_string, share_type: "appMsg" });
                         }
+                    },
+                    trigger: function() {
+                        xx.desc = desc_cmp_friends();
                     }
-                });
+                };
+
+                wx.onMenuShareAppMessage(xx);
                 wx.onMenuShareTimeline({
                     title: to_timeline_title,
                     link: to_timeline_link,
