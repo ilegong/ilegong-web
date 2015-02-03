@@ -455,7 +455,8 @@ class GameJiujiuController extends AppController
 
         if ($awardInfo['got'] >= 30) {
             $this->loadModel('CouponItem');
-            $coupons = $this->CouponItem->find_coupon_item_by_type_no_join($current_uid, array(self::COUPON_JIUJIU_FIRST, self::COUPON_JIUJIU_SEC, self::COUPON_JIUJIU_THIRD));
+            $coupons = $this->CouponItem->find_coupon_item_by_type_no_join($current_uid,
+                array(self::COUPON_JIUJIU_FIRST, self::COUPON_JIUJIU_SEC, self::COUPON_JIUJIU_THIRD));
             $couponIds = Hash::combine($coupons, '{n}.CouponItem.coupon_id', '{n}.CouponItem.created');
             $this->set('had_coupon_first', $couponIds[self::COUPON_JIUJIU_FIRST]);
             $this->set('had_coupon_sec', $couponIds[self::COUPON_JIUJIU_SEC]);

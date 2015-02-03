@@ -256,7 +256,7 @@
 	<a class="strawberry_prize_close" href="javascript:;"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/close.png')}}" /></a>
     <div class="strawberry_prize_list">
         {{if $meHelp}}
-        <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i>=100){break;} ?>
+        <?php $i=0; foreach($meHelp as $key => $item) { $i++; if($i>=100){break;} ?>
         <dl class="clearfix">
             <dt class="fl"><span>{{$item['nickname']}}</span>摇下</dt>
             <dt class="fr gots">{{ $item['got'] }}</dt>
