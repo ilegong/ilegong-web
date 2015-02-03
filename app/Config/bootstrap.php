@@ -1103,7 +1103,7 @@ function cake_send_date() {
         'conditions' => array('published' => PUBLISH_YES),
         'order' => 'send_date',
         'field' => 'send_date',
-        'limit' => 3,
+        'limit' => 5,
     ));
     $rtn = array();
     foreach($send_dates as $date) {
