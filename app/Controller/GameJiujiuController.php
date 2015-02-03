@@ -48,10 +48,10 @@ class GameJiujiuController extends AppController
     );
 
     var $title_in_page = array(
-        self::GAME_JIUJIU => '摇下50个，3斤丹东玖玖农场草莓免费送',
+        self::GAME_JIUJIU => '摇下50颗，3斤丹东玖玖农场草莓免费送',
     );
     var $title_in_window = array(
-        self::GAME_JIUJIU => '摇下50个，3斤丹东玖玖农场草莓免费送',
+        self::GAME_JIUJIU => '摇下50颗，3斤丹东玖玖农场草莓免费送',
     );
     var $title_js_func = array(
     );
@@ -70,7 +70,7 @@ class GameJiujiuController extends AppController
     const COUPON_JIUJIU_FIRST = 19037;
     const COUPON_JIUJIU_SEC = 19036;
     const COUPON_JIUJIU_THIRD = 19035;
-    const NEED_MOBILE_LEAST = 30;
+    const NEED_MOBILE_LEAST = 33;
     public function beforeFilter()
     {
         parent::beforeFilter();
@@ -641,22 +641,22 @@ class GameJiujiuController extends AppController
 
         $times = 10;
 
-        if ($total_got >= 30) {
+        if ($total_got >= 31) {
             $in_special_city = $this->in_special_city();
-            $ext = $in_special_city ? 100 : 200;
-        } else if($total_got >= 40) {
+            $ext = $in_special_city ? 80 : 160;
+        } /*else if($total_got >= 40) {
             $in_special_city = $this->in_special_city();
             $ext = $in_special_city ? 200 : 500;
-        }
+        } */
 
         for ($i = 0; $i < $times; $i++) {
             $mt_rand = mt_rand(0, intval($ext + $total_got));
             $this_got += ($mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
         }
 
-        if (($total_got + $this_got) > 90 /*$this->AWARD_LIMIT*/) {
-            $this_got = 0;
-        }
+//        if (($total_got + $this_got) > 90 /*$this->AWARD_LIMIT*/) {
+//            $this_got = 0;
+//        }
 
 
         return $this_got;

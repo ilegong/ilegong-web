@@ -95,10 +95,10 @@
             }
         };
 
-        function func_li(li, lowest_limit, type) {
+        function func_li(li, lowest_limit, type, label) {
             if (li.find('a').length == 1) {
                 if (total_not_spent() >= lowest_limit) {
-                    li.append('<a id="get_coupon_'+type+'" href="javascript:;">领取</a>');
+                    li.append('<a id="get_coupon_'+type+'" href="javascript:;">'+label+'</a>');
                     $('#get_coupon_'+type).click(function () {
                         if (typeof get_coupon_click_func == 'function') {
                             get_coupon_click_func(type);
@@ -111,8 +111,8 @@
         $('#btn_rules').click(function(){
             $strawberry_rules.show();
             $strawberryTrbg.show();
-            func_li($couponFirstLi, 50, 'first');
-            func_li($couponSecLi, 30, 'sec');
+            func_li($couponFirstLi, 50, 'first', '秒杀');
+            func_li($couponSecLi, 30, 'sec', '领取');
         });
         $('#btn_help_me').click(function(){
             strawberry_help_me.show();
@@ -148,7 +148,7 @@
         </li>
     </ul>
     <dl>
-        <dt><a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=204887757&idx=1&sn=94a8cf51cf2f2e36a4b51b0240071936#rd">商务合作</a >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/brands/20150127/jiu_jiu_nong_chang_xu_gang.html">去店铺看看</a ></dt>
+        <dt><a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=204887757&idx=1&sn=94a8cf51cf2f2e36a4b51b0240071936#rd">我要挣钱</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/brands/20150127/jiu_jiu_nong_chang_xu_gang.html">去店铺看看</a ></dt>
     </dl>
 </div>
 
@@ -220,16 +220,15 @@
 	<a class="strawberry_prize_close" href="javascript:;"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/close.png')}}" /></a>
     <div class="strawberry_prize_list rules_list">
         <h4>奖项</h4>
-        <ul><li id="coupon_first_li">一等奖：摇满50颗，免费获得价值<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">148元玖玖草莓</a>(每天20箱， 10-19点每小时放2箱，送完即止) {{if $had_coupon_first}}<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">请在1小时内使用，去使用</a>{{/if}}</li>
-        <li id="coupon_sec_li">二等奖：摇满30颗，可兑价值<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">148元玖玖草莓</a>的5折券（每天限量200张） {{if $had_coupon_sec}}<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">请在1小时内使用，去使用</a>{{/if}} </li>
-        <?php /** <li id="coupon_third_li">3）三等奖：摇满30颗，可兑价值148元玖玖小柿子（6斤）的5折券（每天限量300张） {{if $had_coupon_third}}<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">去使用</a>{{/if}}</li> */ ?>
+        <ul><li id="coupon_first_li">一等奖：，获得价值<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">148元玖玖草莓</a>秒杀机会(每天20箱， 10-19点每小时放2箱，秒完即止) {{if $had_coupon_first}}<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">请在1小时内使用，去使用</a>{{/if}}</li>
+        <li id="coupon_sec_li">二等奖：摇满30颗，可兑摇满50颗价值<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">148元玖玖草莓</a>的5折券（每天限量200张） {{if $had_coupon_sec}}<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">请在1小时内使用，去使用</a>{{/if}} </li>
         </ul>
 
         <h4>游戏规则</h4>
         <ul><li>1）时间：2015年2月4日-2月6日</li>
         <li>2）所有奖券请领取后请在1小时内使用</li>
         <li>3）免费送出和使用优惠券购买的奖品，第二天或第三天统一发货。其中，北京、天津外规格有区别，详见商品介绍页面。 </li>
-        <li>4）相同手机号、微信号、用户、地址视为一人，如有作弊，奖品作废</li>
+        <li>4）相同手机号、微信号、用户、地址只能中奖一次，如有作弊，奖品作废</li>
         <li>5）法律许可范围内，本次活动解释权归朋友说所有</li>
         </ul>
 
@@ -319,7 +318,9 @@
 
 
     function game_coupon_message(times, total) {
-        if (total >= 30)  { return '<br/><span style="color:red">'+total_not_spent()+'</span>颗了，可去规则页兑奖啦'; }
+        if (total >= 50)  { return '<br/><span style="color:red">'+total_not_spent()+'</span>颗了，可去规则页秒杀大奖啦'; }
+        else if (total >= 40)  { return '<br/>还差<span style="color:red">'+ (50 - total_not_spent()) +'</span>颗获得大奖秒杀机会！'; }
+        else if (total >= 30)  { return '<br/><span style="color:red">'+total_not_spent()+'</span>颗了，可去规则页兑奖啦'; }
         else return '';
     }
 
@@ -361,7 +362,7 @@
     }
 
     function desc_cmp_friends() {
-        var desc = '我已摇下' + get_total() + '颗';
+        var desc = '我已摇下至少' + get_total() + '颗';
         if (friendGots && friendGots.length > 0) {
             var dabaiPercent = dabai_percent();
             desc += (dabaiPercent == 100 ? ', 打败了所有好友，哈哈' : (dabaiPercent == 0 ? ', 朋友圈里垫底 ^_^， 快点我吧' : ', 打败了' + dabaiPercent + '%的好友！'));
@@ -378,8 +379,8 @@
         if (typeof(wx) != 'undefined') {
             wx.ready(function () {
                 var share_string = '{{$share_string ? $share_string :"0"}}';
-                var to_timeline_title = "摇下50颗， 3斤丹东玖玖农场草莓免费送，来自有机认证的水土，中国最早的草莓种植地（之一）。 ";
-                var to_friend_title = "摇下50颗， 3斤丹东玖玖农场草莓免费送";
+                var to_timeline_title = "摇下50颗，3斤丹东玖玖农场草莓免费送，来自有机认证的水土，中国最早的草莓种植地（之一）。 ";
+                var to_friend_title = "摇下50颗，3斤丹东玖玖农场草莓免费送";
                 var to_friend_link = window.location.href;
                 var to_timeline_link = window.location.href;
                 var imgUrl = "{{$this->Html->assetUrl('http://www.tongshijia.com/img/game_jiujiu/index/share_logo.jpg')}}";
