@@ -1190,3 +1190,25 @@ function cal_score_money($score, $total_price) {
         return $score_money;
     }
 }
+
+/**
+ * @param $uid
+ * @return int|mixed
+ */
+function user_subscribed_pys($uid) {
+    $key = key_cache_sub($uid);
+    $subscribe_status = Cache::read($key);
+    if (empty($subscribe_status) || $subscribe_status == WX_STATUS_UNKNOWN) {
+        $outhBindM = ClassRegistry::init('Oauthbind');
+        $oauth = $outhBindM->findWxServiceBindByUid($uid);
+        if (!empty($oauth)) {
+            $wxOauthM = ClassRegistry::init('WxOauth');
+            $uinfo = $wxOauthM->get_user_info_by_base_token($oauth['oauth_openid']);
+            if (!empty($uinfo)) {
+                $subscribe_status = ($uinfo['subscribe'] != 0 ? WX_STATUS_SUBSCRIBED : WX_STATUS_UNSUBSCRIBED);
+                Cache::write($key, $subscribe_status);
+            }
+        }
+    }
+    return $subscribe_status;
+}

@@ -192,47 +192,31 @@ class GameJiujiuController extends AppController
     public function assignWXSubscribeTimes($gameType = KEY_APPLE_201410)
     {
         $this->autoRender = false;
-        $id = $this->currentUser['id'];
+        $uid = $this->currentUser['id'];
 
         $res = array();
 
-        $key = key_cache_sub($id);
-        $subscribe_status = Cache::read($key);
-        if (empty($result) || $subscribe_status == WX_STATUS_UNKNOWN ) {
-            $this->loadModel('Oauthbind');
-            $oauth = $this->Oauthbind->findWxServiceBindByUid($id);
-            if (!empty($oauth)) {
-                $this->loadModel('WxOauth');
-                $uinfo = $this->WxOauth->get_user_info_by_base_token($oauth['oauth_openid']);
-                if (!empty($uinfo)) {
-                    $subscribe_status = ($uinfo['subscribe'] != 0 ? WX_STATUS_SUBSCRIBED : WX_STATUS_UNSUBSCRIBED);
-                    Cache::write($key, $subscribe_status);
-//                        $this->loadModel('User');
-//                        $this->User->updateAll(array('wx_subscribe_status' => $subscribe_status), array('id' => $id));
-                }
-            }
-        }
-
+        $subscribe_status = user_subscribed_pys($uid);
 
         if (WX_STATUS_SUBSCRIBED == $subscribe_status) {
             $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
-            $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $id, 'type' => $gameType)));
+            $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $uid, 'type' => $gameType)));
             $now = mktime();
             if ($this->gotWxTimesToday($weixinTimesLog, $now)) {
                 $result = self::WX_TIMES_ASSIGN_GOT;
                 $res['got_time'] = date('H点i分', $weixinTimesLog['AwardWeixinTimeLog']['last_got_time']);
             } else {
                 $log = array();
-                $log['uid'] = $id;
+                $log['uid'] = $uid;
                 $log['last_got_time'] = $now;
                 $log['type'] = $gameType;
                 if (!empty($weixinTimesLog)) {
                     $wxTimesLogModel->id = $weixinTimesLog['AwardWeixinTimeLog']['id'];
                 }
                 if ($wxTimesLogModel->save(array('AwardWeixinTimeLog' => $log)) !== false) {
-                    $cond = array('uid' => $id, 'type' => $gameType);
+                    $cond = array('uid' => $uid, 'type' => $gameType);
                     $this->AwardInfo->updateAll(array('times' => 'times + ' . self::DAILY_TIMES_SUB,), $cond);
-                    $awardInfo = $this->AwardInfo->find('first', array('conditions' => array('uid' => $id, 'type' => $gameType)));
+                    $awardInfo = $this->AwardInfo->find('first', array('conditions' => array('uid' => $uid, 'type' => $gameType)));
                     $res['total_times'] = $awardInfo['AwardInfo']['times'];
                     $result = self::WX_TIMES_ASSIGN_JUST_GOT;
                 } else {
@@ -264,171 +248,8 @@ class GameJiujiuController extends AppController
         return empty($limits[$hour]) ? 0 : $limits[$hour];
     }
 
-    public function xirui_times() {
-        $this->autoRender = false;
-        $uid = $this->currentUser['id'];
-        $key_followed = key_follow_brand_time('xirui', $uid);
-        $success = false;
-        if (Cache::read($key_followed) > 1) {
-            $key_assigned_times = key_assigned_times('xirui', $uid);
-            if (Cache::read($key_assigned_times) > 1) {
-                $reason = 'already_assigned';
-            } else {
-                $success = true;
-                Cache::write($key_assigned_times, time());
-                $this->loadModel('AwardInfo');
-                $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, self::XIRUI1412);
-                if (!empty($awardInfo)) {
-                    $this->AwardInfo->updateAll(array('times' => 'times + 2',),  array('uid' => $uid, 'type' => self::XIRUI1412));
-                }
-
-                $total_times = $awardInfo['times'] + 2;
-            }
-
-        } else {
-            $reason = 'not_follow';
-        }
-        $rtn = array('success' => $success, 'reason' => $reason, 'total_times' => $total_times);
-        echo json_encode($rtn);
-    }
-
     public function jp($gameType) {
         $this->autoRender = false;
-
-        $uid = $this->currentUser['id'];
-
-        $award_type = 0;
-        $last = $this->Session->read('last_chou_jiang');
-        $msg = '';
-        if (time() - $last > 10 && ($gameType == self::NORMAL_1)
-            && $this->is_weixin()
-        ) {
-            $this->Session->write('last_chou_jiang', time());
-//
-//            $hour_limit = $this->hours_limit();
-//            if ($hour_limit > 0) {
-
-                try {
-                    $gameCfg = $this->GameConfig->findByGameType($gameType);
-                    if (!empty($gameCfg) && $gameCfg['GameConfig']['game_end']) {
-                        $dt = new DateTime($gameCfg['GameConfig']['game_end']);
-                        if (mktime() - $dt->getTimestamp() > 0) {
-                            $msg = 'game_end';
-                        } else {
-                            $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
-                            $not_spent = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] - $awardInfo['spent'] : 0;
-
-                            $per_spent = 20;
-                            if ($not_spent >= $per_spent) {
-                                $this->loadModel('AwardResult');
-                                $day = date(FORMAT_DATE);
-                                $exchangeCount = 20;
-                                $mt_rand = mt_rand(0, 20);
-
-                                /** Xirui Code
-                                $this->loadModel('GameXiruiCode');
-
-                                $iAwarded = $this->GameXiruiCode->userIsAwarded($uid);
-                                if (empty($iAwarded)  && $mt_rand < 10 ) {
-                                    $first_type_award = array(1 => 13, 2 => 50);
-                                    foreach ($first_type_award as $type => $limit) {
-                                        $today_awarded = $this->GameXiruiCode->today_awarded($day, $type);
-                                        if ($this->shouldLimit($today_awarded, $limit)) {
-                                            continue;
-                                        }
-
-                                        $code = $this->GameXiruiCode->find('first', array('conditions' => array(
-                                            'type' => $type,
-                                            'uid' => 0
-                                        )));
-                                        if (empty($code)) {
-                                            continue;
-                                        }
-
-                                        if ($this->GameXiruiCode->updateAll(array(
-                                            'uid' => $uid,
-                                            'type' => $type,
-                                            'created' => '\''.date(FORMAT_DATETIME).'\''
-                                        ), array('code' => $code['GameXiruiCode']['code'], 'uid' => 0))) {
-                                            $this->exchangeCouponAndLog($uid, $not_spent, $exchangeCount, 1, $gameType, $awardInfo['id'],
-                                                function ($uid, $operator, $source_log_id)  {}
-                                            );
-                                            $award_type = $type;
-                                            $award_code = $code['GameXiruiCode']['code'];
-                                            break;
-                                        }
-                                    }
-                                }
-                                */
-
-                                $today_awarded = 0;
-                                $iAwarded = 0;
-
-                                if ($award_type == 0) {
-
-                                    //award_limit: 1=>50, 2=>30, 3=>3000/5000, 4=>unlimited
-                                    //18278  500
-                                    //18279  300
-                                    //18280  100
-                                    $coupon_id_list = array_keys($this->coupon_steps);
-                                    $coupon_name_list = array(
-                                        '生活速递联盟',
-                                        '天下农夫-朱晓宇',
-                                        '腾讯rabbi',
-                                        '阿莲妈妈',
-                                        '铁棍山药-艳艳',
-                                        '德庆贡柑－林玲',
-                                    );
-                                    $coupon_count = 1;
-
-                                    $award_idx = 0;
-                                    $top_award_count = -1;
-                                    $top_award_limit = 9;
-                                    while(true) {
-                                        $award_idx = $mt_rand % count($coupon_id_list);
-                                        $award_type = $coupon_id_list[$award_idx];
-                                        if ($award_type == 18705 ) {
-                                        } else {
-                                            break;
-                                        }
-
-                                        $mt_rand = mt_rand(0, 20);
-                                    }
-                                    $rotate = $this->coupon_steps[$award_type];
-                                    $award_brand_name = $coupon_name_list[$award_idx];
-                                    $so = $this->CouponItem;
-                                    $weixin = $this->Weixin;
-                                    $this->exchangeCouponAndLog($uid, $not_spent, $exchangeCount, $coupon_count, $gameType, $awardInfo['id'],
-                                        function ($uid, $operator, $source_log_id) use ($so, $weixin, $award_type, $award_brand_name) {
-                                            $so->addCoupon($uid, $award_type, $operator, $source_log_id);
-                                            $so->id = null;
-                                            $store = "在朋友说".$award_brand_name."店购买时使用";
-                                            $validDesc = "有效期至2015年1月24日";
-                                            $weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
-                                        }
-                                    );
-                                }
-                                $not_spent -= $exchangeCount;
-                                $logstr = "Choujian $uid : todayAwarded=$today_awarded, iAwarded=$iAwarded, award_type = $award_type, msg=" . $msg;
-                                $this->log($logstr);
-                            } else {
-                                $msg = 'not_enough_100';
-                                $logstr = "total_got=$not_spent, award_limit=" . $this->AWARD_LIMIT;
-                            }
-                        }
-                    }
-                }catch(Exception $e) {
-                    $msg = '';
-                    $this->log('error_jp: '.$e);
-                }
-//            } else {
-//                $msg = 'time_error';
-//            }
-        } else {
-            $logstr = 'too frequently';
-        }
-
-        echo json_encode(array('success' => true, 'award_type' => $award_type, 'brand_name' => $award_brand_name, 'rotate' => $rotate, 'logstr' => '', 'msg' => $msg, 'total' => $not_spent));
     }
 
     public function exchange_coupon($gameType = KEY_APPLE_201410)
@@ -652,6 +473,8 @@ class GameJiujiuController extends AppController
         $pys_got = $this->gotWxTimesToday($weixinTimesLog, mktime());
 
         $this->set('today_got_wx', $pys_got);
+        $subscribe_status = user_subscribed_pys($current_uid);
+        $this->set('user_subscribed', $subscribe_status == WX_STATUS_SUBSCRIBED);
 
         $customized_game = $this->customized_view_files[$gameType];
         if (!empty($customized_game)) {

@@ -73,7 +73,8 @@ $(document).ready(function(){
             return;
         }
 
-        var $message = (!$today_got_wx) ? '关注朋友说每天增加2次机会' : '机会已用完，分享给你的朋友们，每个朋友点击过来就增加<span class="apple_numbers">1</span>次机会！';
+        var not_sure_subscribed = !(typeof(user_subscribed) != 'undefined' && user_subscribed);
+        var $message = (!$today_got_wx && not_sure_subscribed ) ? '关注朋友说每天增加2次机会' : '机会已用完，分享给你的朋友们，每个朋友点击过来就增加<span class="apple_numbers">1</span>次机会！';
 
         showNoMoreTimesDialog = true;
         bootbox.dialog({
@@ -88,7 +89,7 @@ $(document).ready(function(){
                     }
                 },
                 danger: {
-                    label: $today_got_wx ? "立即分享" : "关注加机会",
+                    label: $today_got_wx ? "立即分享" : "领取机会",
                     className: "btn-danger",
                     callback: function () {
                         if ($today_got_wx) { showShareAndChangeTitle(); }
