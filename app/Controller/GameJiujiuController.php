@@ -179,7 +179,7 @@ class GameJiujiuController extends AppController
             $result['nicknames']  = $nicknames;
 
 //            $result['left_'.self::COUPON_JIUJIU_FIRST] = 30 - $this->CouponItem->couponCount(self::COUPON_JIUJIU_FIRST);
-            $result['left_sec'] = 300 - $this->CouponItem->couponCount(self::COUPON_JIUJIU_SEC);
+            $result['left_sec'] = $this->left_sec_coupon();
             $result['first_waiting'] = $this->AwardInfo->count_ge_no_spent_50($gameType, 50);
 
         } else {
@@ -492,6 +492,8 @@ class GameJiujiuController extends AppController
         ));
 
         $this->set('has_no_orders', empty($found_order));
+
+        $this->set('left_sec', $this->left_sec_coupon());
 
         $customized_game = $this->customized_view_files[$gameType];
         if (!empty($customized_game)) {
@@ -816,5 +818,12 @@ class GameJiujiuController extends AppController
         $info = $this->MobileInfo->get_province($mobileNum);
         $this->log('city_by_phone:'.$mobileNum.", info=".$info);
         return $info == '天津' || $info == '北京';
+    }
+
+    /**
+     * @return int
+     */
+    private function left_sec_coupon() {
+        return 300 - $this->CouponItem->couponCount(self::COUPON_JIUJIU_SEC);
     }
 }
