@@ -815,6 +815,7 @@ class GameJiujiuController extends AppController
         $mobileNum = $this->Session->read('Auth.User.mobilephone');
         $this->loadModel('MobileInfo');
         $info = $this->MobileInfo->get_province($mobileNum);
+        $this->log('city_by_phone:'.$mobileNum.", info=".$info);
         return $info == '天津' || $info == '北京';
     }
 }
