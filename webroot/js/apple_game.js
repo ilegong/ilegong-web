@@ -144,18 +144,24 @@ $(document).ready(function(){
             return;
         }
 
+    var msg;
     if ($got > 0) {
         msg = '恭喜你摇掉了<span class="apple_numbers">' + $got + '</span>个' + game_obj_name + '！'+ coupon_message(times, total);
         timeout = 3000;
         if (need_login) {
             msg += '<br/> 亲，您的成绩超过了大多数用户！请您先登录。';
         }
-        utils.alert_one(msg, '继续摇', close_callback, {timeout : timeout, close_callback: close_callback});
     } else {
         timeout = 5000;
-        var msg = '力气太小啦！只晃掉了几片树叶！'+coupon_message(times, total)+'';
-        utils.alert_one(msg, '继续摇', close_callback, {timeout : timeout, close_callback: close_callback});
+        msg = '力气太小啦！只晃掉了几片树叶！'+coupon_message(times, total)+'';
     }
+
+    if (typeof notify_after_shake == 'function') {
+        notify_after_shake(total, times, msg, close_callback, timeout);
+    } else {
+        utils.alert_one(msg, '继续摇', close_callback, {timeout: timeout, close_callback: close_callback});
+    }
+
     updateViewState(times, total);
        if (typeof('showAfterGotCallback')) {
            showAfterGotCallback(times, total, $got);

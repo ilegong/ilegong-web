@@ -316,6 +316,15 @@
         }
     }
 
+    function  notify_after_shake(total, times, msg, close_callback, timeout) {
+        if (total >= 30) {
+            utils.alert_two(msg, '去兑奖', '继续摇', function(){
+                $('#btn_rules').trigger("click");
+            }, close_callback, {timeout: timeout, close_callback: close_callback});
+        } else {
+            utils.alert_one(msg, '继续摇', close_callback, {timeout: timeout, close_callback: close_callback});
+        }
+    }
 
     function game_coupon_message(times, total) {
         if (total >= 50)  { return '<br/><span style="color:red">'+total_not_spent()+'</span>颗了，可去规则页秒杀大奖啦'; }
@@ -415,4 +424,4 @@
         }
     });
 </script>
-{{$this->Html->script(array('apple_game.js?v28'));}}
+{{$this->Html->script(array('apple_game.js?v29'));}}

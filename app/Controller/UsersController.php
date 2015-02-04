@@ -986,6 +986,11 @@ class UsersController extends AppController {
 
         $this->loadModel('Shichituan');
         $this->Shichituan->updateAll(array('user_id' => $new_serviceAccount_bind_uid), array('user_id' => $old_serviceAccount_bind_uid));
+
+        //团购的
+        //积分的
+        //在后台给1000个
+        //优惠券兑换的功能
     }
 
     /**
