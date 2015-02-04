@@ -113,8 +113,8 @@
     <div class="strawberry_prize_list">
         <?php foreach($award_list['list'] as $item) { ?>
     	<dl class="clearfix">
-            <dt class="fl" style="width:69%"><span>{{$item[0]}}</span>获</dt>
-            <dt class="fr" style="width:30%">{{$item[1] == 'first' ? '一等奖' : '二等奖'}}</dt>
+            <dt class="fl" style="width:69%"><span>{{$item[0]}}</span>获{{$item[1] == 'first' ? '一等奖' : '二等奖'}}</dt>
+            <dt class="fr" style="width:30%">{{$item[2]}}</dt>
         </dl>
         <?php } ?>
     </div>
