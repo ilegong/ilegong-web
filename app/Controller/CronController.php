@@ -64,6 +64,7 @@ class CronController extends AppController
                 'status'=>ORDER_STATUS_SHIPPED,
                 'published'=>1,
                 'deleted'=>0,
+                'id'=>14567,
                 'not'=>array(
                     'ship_code'=>null,
                     'ship_type'=>null,
@@ -104,9 +105,9 @@ class CronController extends AppController
                     $currentShipInfo = $contentObject['data'][0];
                     $shipInfo = $currentShipInfo['time'].' '.$currentShipInfo['context'];
                     if($this->Weixin->send_order_ship_info_msg($order['Order']['creator'],$shipInfo,$orderId)){
-                        $this->log('push ship info '.$orderId.' wx send success on date '.$date);
+                        $this->log('push ship info '.$orderId.' wx send success on date '.$date.' curl fetch data '.$contents);
                     }else{
-                        $this->log('push ship info '.$orderId.' wx send error on date '.$date);
+                        $this->log('push ship info '.$orderId.' wx send error on date '.$date.' curl fetch data '.$contents);
                     }
                 }else{
                     $this->log('push ship info '.$orderId.' can not fetch ship info on date '.$date.' url is '.$url.' return content is '.$contents);
