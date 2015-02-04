@@ -417,8 +417,8 @@
                 var share_string = '{{$share_string ? $share_string :"0"}}';
                 var to_timeline_title = "摇下50颗，3斤丹东玖玖农场草莓免费送，来自有机认证的水土，中国最早的草莓种植地（之一）。 ";
                 var to_friend_title = "摇下50颗，3斤丹东玖玖农场草莓免费送";
-                var to_friend_link = window.location.href;
-                var to_timeline_link = window.location.href;
+                var to_friend_link = 'http://www.tongshijia.com/t/ag/jiujiu.html?trid={{urlencode($_REQUEST["trid"])}}';
+                var to_timeline_link = to_friend_link;
                 var imgUrl = "{{$this->Html->assetUrl('http://www.tongshijia.com/img/game_jiujiu/index/share_logo.jpg')}}";
 
                 var xx = {
