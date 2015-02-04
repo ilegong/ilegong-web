@@ -105,6 +105,13 @@ class CheckController extends AppController{
             }
             echo json_encode($res);
 
+        }else if(!isset($inputData['type'])&&$inputData['force']){
+            $res = message_send($msg, $inputData['mobile']);
+            $res = json_decode($res, true);
+            $res['timelimit'] = date('H:i',time()+20*60);
+            $this->Session->write('messageCode', json_encode(array('code' => $verifyCode, 'time' => time())));
+            $this->Session->write('current_register_phone', $inputData['mobile']);
+            echo json_encode($res);
         } else {
             $res = array('error' => 1);
             echo json_encode($res);

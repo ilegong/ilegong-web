@@ -1,4 +1,11 @@
-<div class="mobile_custom" style="background-color: #f5f5f5">
+<div class="classlist_v2" style="z-index:1">
+    <ul class="clearfix">
+        <li><a href="javascript:history.back(-1);" class="back"></a></li>
+        <li class="line"></li>
+        <li><strong>绑定手机号码</strong></li>
+    </ul>
+</div>
+<div class="mobile_custom" style="background-color: #f5f5f5;margin-top: 50px;">
     <input type="hidden" id="order_id" value="{{$orderId}}"/>
     <div class="comment_yanzheng_tip">{{$short_intro}}</div>
     <ul class="comment_check clearfix">
@@ -8,17 +15,6 @@
                          value="" id="mobile_num"/></span>
         </li>
     </ul>
-    <ul class="comment_check clearfix" style="height: 45px">
-        <li class="clearfix" style="padding: 0.1em 0.8em;">
-        <span>
-            <input style="text-align:center; width:50%; height: 40px;" name="" type="text" id="img_code"
-                   placeholder="输入验证码"/>
-            {{$this->Html->image(array('controller' => 'Check','action'=>'captcha'), array('id'=> "image_code",'style'=>"width:120px;height:40px;", 'alt' => "看不清楚，换一张"))}}
-        </span>
-        </li>
-    </ul>
-    <!--<a href="#X" class="comment_codebtn_disable radius10">60秒后可重新发送</a>-->
-    <br/>
     <ul class="comment_check clearfix mt24" style="display: none;" id="confirm_info_panel">
         <li class="clearfix">
             <span style="text-align:center;display:none;">13948576032</span>
@@ -87,10 +83,10 @@
                     showTip('手机号码输入不正确');
                     return;
                 }
-                if (!imgCode && imgCode === '') {
-                    showTip('图片验证码不能为空');
-                    return;
-                }
+//                if (!imgCode && imgCode === '') {
+//                    showTip('图片验证码不能为空');
+//                    return;
+//                }
                 if(me.attr('disabled')){
                     return;
                 }
@@ -163,10 +159,10 @@
                 type: "POST",
                 dataType: "json",
                 url: '/check/message_code',
-                data: {mobile: mobile, keyString: code},
+                data: {mobile: mobile, keyString: code,force:true},
                 cache: !1,
                 success: function (a) {
-                    $('#image_code').attr('src', '/check/captcha.html?' + Math.random() * 10000);
+                    //$('#image_code').attr('src', '/check/captcha.html?' + Math.random() * 10000);
                     $moileCode.val('');
                     if (a.error == 0) {
                         showTip('验证短信已发出，' + a.timelimit + '之前有效，未收到可再获取');
