@@ -57,6 +57,7 @@ class CronController extends AppController
         $start_date = date("Y-m-d H:i:s",strtotime("-7 day"));
         $date = date('m/d/Y h:i:s a', time());
         $AppKey = Configure::read('kuaidi100_key');
+        $host = array( 'Host: www.kuaidi100.com' );
         $orders = $this->Order->find('all',array(
             'conditions'=>array(
                 'created >='=>$start_date,
@@ -89,8 +90,10 @@ class CronController extends AppController
                     array(
                         CURLOPT_URL=>$url,
                         CURLOPT_HEADER=>0,
+                        CURLOPT_HTTPHEADER=>$host,
                         CURLOPT_RETURNTRANSFER=>1,
-                        CURLOPT_TIMEOUT=>5
+                        CURLOPT_TIMEOUT=>5,
+                        CURLOPT_USERAGENT=>'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36'
                     )
                 );
                 $contents = curl_exec($curl);
