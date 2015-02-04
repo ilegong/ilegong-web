@@ -46,7 +46,7 @@ ul,li{ list-style:none;}
 .strawberry_li{ display:block; text-decoration:none; font-size:1em; color:#ffffff; text-align:center; padding-bottom:1em;}
 /*获奖名单提示层*/
 .strawberry_prize{ position:fixed; left:50%; margin-left:-45%; width:90%; height:80%; background-color:#ffffff; color:#555555; text-align:center; padding:1em 0; z-index:999;}
-.strawberry_prize_title,.strawberry_chance_title{ font-size:1.4em; color:#333333; text-align:center; padding-bottom:0.4em;}
+.strawberry_prize_title,.strawberry_chance_title,.strawberry_rule_title{ font-size:1.4em; color:#333333; text-align:center; padding-bottom:0.4em;}
 .strawberry_prize_surplus{ font-size:1em; color:#d50000; text-align:center; padding-bottom:1em;}
 #strawberry_trbg{ width:100%; height:100%; background-color:#000000; background-size:cover; display:block; filter:alpha(opacity=45); opacity:0.45; position:absolute; top:0; left:0; z-index:2;}
 .strawberry_prize_list{width:80%; margin:0 auto; margin-left:10%; height:85%; overflow:scroll; color:#555555; font-size:1em;}
@@ -68,6 +68,20 @@ ul,li{ list-style:none;}
 .strawberry_btn ul li a i{ display:block; position:absolute; z-index:999; right:9px; top:8px; width:8px; height:8px; background:#d50000; -moz-border-radius:4px; -webkit-border-radius:4px; border-radius:4px;}
 .strawberry_btn dl dt{ text-align:center;}
 .strawberry_btn dl dt a{ color:#ffffff; font-size:1.1em; text-decoration:underline;}
+
+/*规则兑换*/
+.strawberry_rule{ position:fixed; left:50%; margin-left:-45%; width:90%; height:80%; background-color:#ffffff; color:#555555; text-align:center; padding:1em 0; z-index:999;}
+.strawberry_rule_list{width:90%; margin:0 auto; padding-top:5px; color:#555555; font-size:1em;}
+.strawberry_rule_list strong{ color:#333333; font-size:1.2em; text-align:center; display:block;}
+.strawberry_rule_list li{ text-align:left; line-height:1.3em; padding-bottom:0.7em;}
+.strawberry_rule_list li span{ display:block;}
+.strawberry_rule_list li span a{ color:#d50000; margin-left:5px;}
+/*广告图*/
+/*.strawberry_adver{ width:90%; position:fixed; display:block; bottom:6%; left:;}*/
+/*.strawberry_adver img{ width:100%;}*/
+
+
+
 
 
 

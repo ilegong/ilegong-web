@@ -98,7 +98,7 @@
         function func_li(li, lowest_limit, type, label) {
             if (li.find('a').length == 1) {
                 if (total_not_spent() >= lowest_limit) {
-                    li.append('<a id="get_coupon_'+type+'" href="javascript:;">'+label+'</a>');
+                    li.append('<a id="get_coupon_'+type+'" class="btn btn-warning" style="color:white" href="javascript:;">'+label+'</a>');
                     $('#get_coupon_'+type).click(function () {
                         if (typeof get_coupon_click_func == 'function') {
                             get_coupon_click_func(type);
@@ -216,23 +216,50 @@
                 font-size: 0.9em;
             }
         </style>
-<div id="strawberry_rules" class="strawberry_prize" style="display:none; top:8%;">
-	<a class="strawberry_prize_close" href="javascript:;"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/close.png')}}" /></a>
-    <div class="strawberry_prize_list rules_list">
-        <h4>奖项</h4>
-        <ul><li id="coupon_first_li">一等奖：摇满50颗，即可获得价值<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">148元玖玖草莓</a>秒杀机会(每天送出20箱， 每日10:00时到19:00时每小时送出2箱，秒完即止) {{if $had_coupon_first}}<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">请在1小时内使用</a>{{/if}}</li>
-        <li id="coupon_sec_li">二等奖：摇满30颗，即可兑换<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">148元玖玖草莓</a>的5折券（每天限量200张） {{if $had_coupon_sec}}<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">请在1小时内使用</a>{{/if}} </li>
-        </ul>
-
-        <h4>游戏规则</h4>
-        <ul><li>1）时间：2015年2月4日至2月8日23:59</li>
-        <li>2）所有奖券请领取后请在1小时内使用</li>
-        <li>3）免费送出和使用优惠券购买的奖品，第二天或第三天统一发货。其中，北京、天津外规格有区别，详见商品介绍页面。 </li>
-        <li>4）相同手机号、微信号、用户、地址只能中奖一次，如有作弊，奖品作废</li>
-        <li>5）法律许可范围内，本次活动解释权归朋友说所有</li>
-        </ul>
-
-    </div>
+<div id="strawberry_rules" class="strawberry_rule" style="display:none; top:8%;">
+    <a class="strawberry_prize_close" href="javascript:;"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/close.png')}}" /></a>
+    <ul>
+        <li class="strawberry_chance_title">游戏规则与奖品兑换</li>
+    </ul>
+    <ul class="strawberry_rule_list">
+        <li><strong>奖品兑换</strong></li>
+        <li class="clearfix">
+            <span class="fl">一等奖：</span>
+            <span style="overflow:hidden;" id="coupon_first_li">
+            	摇满50颗，即可获得价值<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">148元玖玖草莓</a>秒杀机会(每天送出20箱， 每日10时到19时每小时送出2箱，秒完即止)
+                {{if $had_coupon_first}}<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">请在1小时内使用</a>{{/if}}
+            </span>
+        </li>
+        <li class="clearfix">
+            <span class="fl">二等奖：</span>
+            <span style="overflow:hidden;" id="coupon_sec_li">
+            	摇满30颗，即可兑换<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">148元玖玖草莓</a>的5折券（每天限量200张）
+                {{if $had_coupon_sec}}<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">请在1小时内使用</a>{{/if}}
+            </span>
+        </li>
+        <li style="padding-top:1em;"><strong>游戏规则</strong></li>
+        <li>
+            <span class="fl">1）</span>
+            <span style="overflow:hidden;">时间：2015年2月4日至2月8日23:59</span>
+        </li>
+        <li>
+            <span class="fl">2）</span>
+            <span style="overflow:hidden;">所有奖券请领取后请在1小时内使用</span>
+        </li>
+        <li>
+            <span class="fl">3）</span>
+            <span style="overflow:hidden;">免费送出和使用优惠券购买的奖品，第二天或第三天统一发货。其中，北京、天津外规格有区别，详见商品介绍页面</span>
+        </li>
+        <li>
+            <span class="fl">4）</span>
+            <span style="overflow:hidden;">相同手机号、微信号、用户、地址只能中奖一次，如有作弊，奖品作废</span>
+        </li>
+        <li>
+            <span class="fl">5）</span>
+            <span style="overflow:hidden;">法律许可范围内，本次活动解释权归朋友说所有</span>
+        </li>
+    </ul>
+    <div class="strawberry_adver"><img src="images/index/adver.jpg" /></div>
 </div>
 <!--谁帮助过我-->
 <div id="strawberry_help_me" class="strawberry_prize" style="display:none; top:8%;">
