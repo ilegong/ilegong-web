@@ -50,4 +50,39 @@ class CronController extends AppController
 
         echo count($cron_ids);
     }
+
+    public function send_ship_info(){
+        $this->autoRender=false;
+        App::uses('SimpleHtmlDom', 'Utility');
+        $this->loadModel('Order');
+        $start_date = date("Y-m-d H:i:s",strtotime("-7 day"));
+        $date = date('m/d/Y h:i:s a', time());
+        $orders = $this->Order->find('all',array(
+            'conditions'=>array(
+                'created >='=>$start_date,
+                'status'=>ORDER_STATUS_SHIPPED,
+                'published'=>1,
+                'deleted'=>0
+            )
+        ));
+        $ship_infos = ShipAddress::get_all_ship_info();
+        foreach($orders as $order){
+            $com = key($ship_infos[$order['Order']['ship_type']]);
+            //http://www.kuaidi100.com/query?id=1&type=quanfengkuaidi&postid=710023594269&valicode=&temp=0.018777450546622276
+            $contents = file_get_contents('http://www.kuaidi100.com/query?id=1&type='.$com.'&postid='.$order['Order']['ship_code'].'&valicode=&temp='.(mt_rand()/mt_getrandmax()));
+            $contentObject = json_decode($contents,true);
+            $orderId = $order['Order']['id'];
+            //get ship info
+            if(count($contentObject['data'])>0){
+                $currentShipInfo = $contentObject['data'][0];
+                $shipInfo = $currentShipInfo['time'].' '.$currentShipInfo['context'];
+                if(!$this->Weixin->send_order_ship_info_msg($order['Order']['creator'],$shipInfo,$orderId)){
+                    $this->log('push ship info '.$orderId.' wx send error on date '.$date);
+                }
+            }else{
+                $this->log('push ship info '.$orderId.' can not fetch ship info on date '.$date);
+            }
+        }
+        echo 'success';
+    }
 }

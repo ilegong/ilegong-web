@@ -124,6 +124,30 @@ class WeixinComponent extends Component
         return false;
     }
 
+
+    public function send_order_ship_info_msg($user_id,$msg,$order_id){
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
+        if ($user_weixin != false) {
+            $open_id = $user_weixin['oauth_openid'];
+            $post_data = array(
+                "touser" => $open_id,
+                "template_id" => $this->wx_message_template_ids["COUPON_TIMEOUT"],
+                "url" => $this->get_coupon_url(),
+                "topcolor" => "#FF0000",
+                "data" => array(
+                    "first" => array("value" => "亲，您的订单号是".$order_id."的最新物流信息: ".$msg),
+                    "orderTicketStore" => array("value" => ""),
+                    "orderTicketRule" => array("value" => ""),
+                    "remark" => array("value" => "我想快点见到您", "color" => "#FF8800")
+                )
+            );
+            return $this->send_weixin_message($post_data);
+        }
+        return false;
+    }
+
+
     public function send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_no, $order = null)
     {
         $so = ClassRegistry::init('ShareOffer');

@@ -102,6 +102,8 @@ const COMMENT_AWARD_SCORE = 100;
 const COMMENT_EXTRA_SCORE = 100;
 const COMMENT_SHOW_STATUS = 1;
 
+const COMMENT_LIMIT_IN_PRODUCT_VIEW=5;
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');
@@ -679,6 +681,12 @@ class ShipAddress {
         } else {
             return false;
         }
+    }
+
+    public function get_all_ship_info(){
+        $ship_types = ShipAddress::ship_types();
+        $ship_type_list = Hash::combine($ship_types,'{n}.company','{n}.name','{n}.id');
+        return $ship_type_list;
     }
 
     /**
