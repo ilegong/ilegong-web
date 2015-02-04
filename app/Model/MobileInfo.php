@@ -35,7 +35,7 @@ class MobileInfo extends AppModel {
         $left_brace = mb_strpos($json, 'province:\'', null, 'CP936') + 10;
         $right_brace = mb_strpos($json, '\'', $left_brace , 'CP936');
 
-        $str = mb_substr($json, $left_brace , $right_brace - $left_brace  + 1, 'CP936');
+        $str = mb_substr($json, $left_brace , $right_brace - $left_brace, 'CP936');
         if (!empty($str)) {
             return mb_convert_encoding($str, 'UTF-8', 'CP936');
         } else {
