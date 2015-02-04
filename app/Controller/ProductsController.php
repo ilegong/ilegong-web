@@ -432,6 +432,8 @@ class ProductsController extends AppController{
 
     function guess_product_price(){
 
+        global $order_after_paid_status;
+
         if (empty($this->currentUser['id']) && $this->is_weixin()) {
             $ref = Router::url($_SERVER['REQUEST_URI']);
             $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
@@ -452,7 +454,7 @@ class ProductsController extends AppController{
 
         $this->loadModel('Order');
         $order_creators = $this->Order->find('all', array(
-            'conditions' => array('brand_id' => 143, 'status' => array(ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED), 'id > 11000'),
+            'conditions' => array('brand_id' => 143, 'status' => $order_after_paid_status, 'id > 11000'),
             'fields' => 'creator'
         ));
 

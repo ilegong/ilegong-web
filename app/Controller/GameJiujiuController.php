@@ -482,12 +482,14 @@ class GameJiujiuController extends AppController
         $subscribe_status = user_subscribed_pys($current_uid);
         $this->set('user_subscribed', $subscribe_status == WX_STATUS_SUBSCRIBED);
 
-//        $this->loadModel('Order');
-//        $this->Order->find('first', array(
-//            'conditions' => array('status')
-//        ));
-//
-//        $this->set('has_orders');
+        global $order_after_paid_status;
+
+        $this->loadModel('Order');
+        $found_order = $this->Order->find('first', array(
+            'conditions' => array('status' => $order_after_paid_status)
+        ));
+
+        $this->set('has_no_orders', empty($found_order));
 
         $customized_game = $this->customized_view_files[$gameType];
         if (!empty($customized_game)) {
