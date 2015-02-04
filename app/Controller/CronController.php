@@ -103,7 +103,7 @@ class CronController extends AppController
                         $this->log('push ship info '.$orderId.' wx send error on date '.$date);
                     }
                 }else{
-                    $this->log('push ship info '.$orderId.' can not fetch ship info on date '.$date);
+                    $this->log('push ship info '.$orderId.' can not fetch ship info on date '.$date.' url is '.$url);
                 }
             }
         }
