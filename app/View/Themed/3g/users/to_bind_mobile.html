@@ -1,5 +1,6 @@
 <div class="mobile_custom" style="background-color: #f5f5f5;margin-top: 10px;">
     <input type="hidden" id="order_id" value="{{$orderId}}"/>
+    <input type="hidden" id="bind_from" value="{{$from}}"/>
     <div class="comment_yanzheng_tip">{{$short_intro}}</div>
     <ul class="comment_check clearfix">
         <li class="clearfix">
@@ -59,6 +60,8 @@
         var $mergeResult = $('#merge_result');
         var ref_url = '{{$ref_url}}';
         var $orderId = $('#order_id');
+        var $from = $('#bind_from');
+        var from_value = $from.val();
         if ($orderId.val()) {
             ref_url = '/comments/add_comment/' + $orderId.val() + '?';
         } else if (!ref_url) {
@@ -133,14 +136,20 @@
                         window.location.href = ref_url;
                     });
                 }
-                if (result['code'] === 2) {
-                    $bindUserName = result['username'];
-                    if($bindUserName&&$bindUserName!="null"){
-                        $('#bind_to_user').text($bindUserName);
-                    }else{
-                        $('#bind_to_user').text('匿名用户');
+                if(from_value&&from_value!='null'){
+                    showTip('该手机号已经被注册',function(){
+                        window.location.href = ref_url;
+                    });
+                }else{
+                    if (result['code'] === 2) {
+                        $bindUserName = result['username'];
+                        if($bindUserName&&$bindUserName!="null"){
+                            $('#bind_to_user').text($bindUserName);
+                        }else{
+                            $('#bind_to_user').text('匿名用户');
+                        }
+                        $mergeInfo.show();
                     }
-                    $mergeInfo.show();
                 }
                 $handle.removeAttr("disabled");
             });

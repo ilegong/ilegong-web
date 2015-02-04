@@ -1132,10 +1132,11 @@ class UsersController extends AppController {
         $userId = $this->Session->read('Auth.User.id');
         $userNickName = $this->Session->read('Auth.User.nickname');
         $orderId = $_REQUEST['order_id'];
+        $from = $_REQUEST['from'];
         $this->set('userId',$userId);
         $this->set('nickname',$userNickName);
         $this->set('orderId',$orderId);
-
+        $this->set('from',$from);
         $short_intro = $_REQUEST['reason'];
         $ref_url = $_REQUEST['ref'];
 
