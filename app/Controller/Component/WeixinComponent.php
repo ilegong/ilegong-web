@@ -125,21 +125,24 @@ class WeixinComponent extends Component
     }
 
 
-    public function send_order_ship_info_msg($user_id,$msg,$order_id){
+    public function send_order_ship_info_msg($user_id,$msg,$order_id,$ship_company,$good_info,$good_number){
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
         if ($user_weixin != false) {
             $open_id = $user_weixin['oauth_openid'];
             $post_data = array(
                 "touser" => $open_id,
-                "template_id" => $this->wx_message_template_ids["COUPON_TIMEOUT"],
-                "url" => $this->get_coupon_url(),
+                "template_id" => $this->wx_message_template_ids["ORDER_SHIPPED"],
+//            "url" => $this->get_kuaidi_query_url($ship_type, $ship_code),
+                "url" => $this->get_order_query_url($order_id),
                 "topcolor" => "#FF0000",
                 "data" => array(
-                    "first" => array("value" => "亲，您的订单号是".$order_id."的最新物流信息: ".$msg),
-                    "orderTicketStore" => array("value" => ""),
-                    "orderTicketRule" => array("value" => ""),
-                    "remark" => array("value" => "我想快点见到您", "color" => "#FF8800")
+                    "first" => array("value" => "亲，您的订单号为".$order_id."的最新物流信息: ".$msg),
+                    "keyword1" => array("value" => $ship_company),
+                    "keyword2" => array("value" => $order_id),
+                    "keyword3" => array("value" => $good_info),
+                    "keyword4" => array("value" => '总数'.$good_number),
+                    "remark" => array("value" => "点此查看详情", "color" => "#FF8800")
                 )
             );
             return $this->send_weixin_message($post_data);

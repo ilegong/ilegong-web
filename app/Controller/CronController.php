@@ -54,6 +54,7 @@ class CronController extends AppController
     public function send_ship_info(){
         $this->autoRender=false;
         $this->loadModel('Order');
+        $this->loadModel('Cart');
         $start_date = date("Y-m-d H:i:s",strtotime("-7 day"));
         $date = date('m/d/Y h:i:s a', time());
         $orders = $this->Order->find('all',array(
@@ -76,16 +77,33 @@ class CronController extends AppController
             $ship_code=$order['Order']['ship_code'];
             if(!preg_match("/([\x81-\xfe][\x40-\xfe])/", $ship_code, $match)&&!empty($ship_code)&&!empty($ship_type)&&!mb_strpos($consignee_address,'自提')){
                 $com = key($ship_infos[$order['Order']['ship_type']]);
+                $comName=current($ship_infos[$order['Order']['ship_type']]);
                 //http://www.kuaidi100.com/query?id=1&type=quanfengkuaidi&postid=710023594269&valicode=&temp=0.018777450546622276
                 $url = 'http://www.kuaidi100.com/query?id=&type='.trim($com).'&postid='.trim($order['Order']['ship_code']);
                 $contents = $this->gethtml($from_url,$url);
                 $contentObject = json_decode($contents,true);
                 $orderId = $order['Order']['id'];
+                $userId = $order['Order']['creator'];
                 //get ship info
                 if(count($contentObject['data'])>0){
                     $currentShipInfo = $contentObject['data'][0];
                     $shipInfo = $currentShipInfo['time'].' '.$currentShipInfo['context'];
-                    if($this->Weixin->send_order_ship_info_msg($order['Order']['creator'],$shipInfo,$orderId)){
+                    $products = $this->Cart->find('all',array(
+                        'conditions'=>array(
+                            'order_id'=>$orderId,
+                            'creator'=>$userId,
+                            'deleted'=>0,
+                            'status'=>1
+                        ),
+                        'fields'=>array('name','num')
+                    ));
+                    $goodInfo='';
+                    $goodNum=0;
+                    foreach($products as $p){
+                        $goodInfo.=$p['Cart']['name'].'X'.$p['Cart']['num'].' ';
+                        $goodNum=$goodNum+$p['Cart']['num'];
+                    }
+                    if($this->Weixin->send_order_ship_info_msg($userId,$shipInfo,$orderId,$comName,$goodInfo,$goodNum)){
                         $this->log('push ship info '.$orderId.' wx send success on date '.$date.' curl fetch data '.$contents);
                     }else{
                         $this->log('push ship info '.$orderId.' wx send error on date '.$date.' curl fetch data '.$contents);
