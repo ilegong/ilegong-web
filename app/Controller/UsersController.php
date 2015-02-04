@@ -1141,6 +1141,7 @@ class UsersController extends AppController {
 
         $this->set('short_intro', $short_intro);
         $this->set('ref_url', $ref_url);
+        $this->set('hideNav',true);
 
         $this->pageTitle="绑定手机号";
     }
