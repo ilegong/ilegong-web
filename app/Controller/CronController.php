@@ -56,6 +56,7 @@ class CronController extends AppController
         $this->loadModel('Order');
         $start_date = date("Y-m-d H:i:s",strtotime("-7 day"));
         $date = date('m/d/Y h:i:s a', time());
+        $AppKey = Configure::read('kuaidi100_key');
         $orders = $this->Order->find('all',array(
             'conditions'=>array(
                 'created >='=>$start_date,
@@ -82,7 +83,7 @@ class CronController extends AppController
             if(!preg_match("/([\x81-\xfe][\x40-\xfe])/", $ship_code, $match)&&!empty($ship_code)&&!empty($ship_type)&&!mb_strpos($consignee_address,'自提')){
                 $com = key($ship_infos[$order['Order']['ship_type']]);
                 //http://www.kuaidi100.com/query?id=1&type=quanfengkuaidi&postid=710023594269&valicode=&temp=0.018777450546622276
-                $url = 'http://www.kuaidi100.com/query?id=1&type='.$com.'&postid='.$order['Order']['ship_code'].'&valicode=&temp='.(mt_rand()/mt_getrandmax());
+                $url = 'http://www.kuaidi100.com/query?id='.$AppKey.'&type='.$com.'&postid='.$order['Order']['ship_code'].'&valicode=&temp='.(mt_rand()/mt_getrandmax());
                 curl_setopt_array(
                     $curl,
                     array(
