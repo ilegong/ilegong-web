@@ -21,6 +21,23 @@ class AwardInfo extends AppModel {
         return $awardTimes ? $awardTimes['AwardInfo'] : false;
     }
 
+    public function count_ge_no_spent_50($type) {
+        $this->count_ge_no_spent($type, 50);
+    }
+
+    private function count_ge_no_spent($type, $mark) {
+        $key = $this->key_ge_than($type, $mark);
+        $result = Cache::read($key);
+
+        if (empty($result)) {
+            $result = $this->find('count', array(
+                'conditions' => array('type' => $type, 'got >=' => $mark, 'spent' => 0),
+            ));
+            Cache::write($key, $result);
+        }
+        return $result;
+    }
+
     /**
      * @param $type
      * @return mixed
@@ -56,9 +73,11 @@ class AwardInfo extends AppModel {
     }
 
     public function afterDelete() {
+        $this->clearCache();
     }
 
     public function afterSave($created, $options = array()) {
+        $this->clearCache();
     }
 
     /**
@@ -70,6 +89,16 @@ class AwardInfo extends AppModel {
     }
 
     protected function clearCache() {
-        Cache::delete($this->key_top_list($this->data['AwardResult']['type']));
+        //Cache::delete($this->key_top_list($this->data['AwardResult']['type']));
+
+        $type = $this->data['AwardResult']['type'];
+        $got = $this->data['AwardResult']['got'];
+        if ($got > 50) {
+            Cache::delete($this->key_ge_than($type, 50));
+        }
+    }
+
+    private function key_ge_than($type, $mark) {
+        return '_game_ge_'.$type.'_'.$mark;
     }
 } 

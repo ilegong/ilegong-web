@@ -347,6 +347,10 @@ $(document).ready(function(){
                 if (data.update_award_list && typeof(update_award_list) == 'function') {
                     update_award_list(data.award_list);
                 }
+
+                if (typeof update_after_times_query == 'function') {
+                    update_after_times_query(data);
+                }
             });
         }
 

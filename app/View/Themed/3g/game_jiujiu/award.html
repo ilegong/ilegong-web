@@ -33,96 +33,6 @@
     _path_query = '/game_jiujiu/hasNewTimes';
     _mobile_bind_reason = '离大奖很近了，请绑定手机号验证是否人类';
 
-	$(document).ready(function(){
-		var height = $(window).height();
-		var width = $(window).width();
-        var $strawberryBg = $('#strawberry_bg');
-        $strawberryBg.height(height);
-		$strawberryBg.width(width);
-        var $strawberryTrbg = $('#strawberry_trbg');
-        var $strawberryChance = $('#strawberry_chance');
-        var $strawberry_prize = $('#strawberry_prize');
-        var $strawberry_rules = $('#strawberry_rules');
-        var strawberry_help_me = $('#strawberry_help_me');
-        var strawberry_i_help = $('#strawberry_i_help');
-
-        $strawberryTrbg.height(height);
-		$strawberryTrbg.width(width);
-
-        function hidePages() {
-            $strawberryChance.hide();
-            $strawberryTrbg.hide();
-            $strawberry_prize.hide();
-            $strawberry_rules.hide();
-            strawberry_i_help.hide();
-            strawberry_help_me.hide();
-        }
-
-        $strawberryTrbg.click(function(){
-            hidePages();
-        });
-
-        $('.strawberry_prize_close').click(function(){
-            hidePages();
-        });
-
-        $('#btn_add_chance').click(function(){
-            $strawberryTrbg.show();
-            $strawberryChance.show();
-        });
-
-        $('#btn_award').click(function(){
-            $strawberry_prize.show();
-            $strawberryTrbg.show();
-        });
-
-        var apple_got_cnt = $('#apple_got_cnt');
-        var $couponFirstLi = $('#coupon_first_li');
-        var $couponSecLi = $('#coupon_sec_li');
-        var $couponThirdLi = $('#coupon_third_li');
-
-        game_notify_after_exchange = function (coupon_count, coupon_type) {
-            if (coupon_count > 0) {
-                if ('first' == coupon_type ) {
-                    $('a#get_coupon_' + coupon_type).hide();
-                    $couponFirstLi.append('<a href="/products/view/738.html">去使用</a>');
-                } else if ('sec' == coupon_type) {
-                    $('a#get_coupon_' + coupon_type).hide();
-                    $couponSecLi.append('<a href="/products/view/738.html">去使用</a>');
-                }
-            } else {
-                utils.alert("呜呜，本时段已兑完。");
-            }
-        };
-
-        function func_li(li, lowest_limit, type, label) {
-            if (li.find('a').length == 1) {
-                if (total_not_spent() >= lowest_limit) {
-                    li.append('<a id="get_coupon_'+type+'" class="btn btn-warning" style="color:white" href="javascript:;">'+label+'</a>');
-                    $('#get_coupon_'+type).click(function () {
-                        if (typeof get_coupon_click_func == 'function') {
-                            get_coupon_click_func(type);
-                        }
-                    });
-                }
-            }
-        }
-
-        $('#btn_rules').click(function(){
-            $strawberry_rules.show();
-            $strawberryTrbg.show();
-            func_li($couponFirstLi, 50, 'first', '秒杀');
-            func_li($couponSecLi, 30, 'sec', '领取');
-        });
-        $('#btn_help_me').click(function(){
-            strawberry_help_me.show();
-            $strawberryTrbg.show();
-        });
-        $('#btn_i_help').click(function(){
-            strawberry_i_help.show();
-            $strawberryTrbg.show();
-        });
-	})
 </script>
 <div id="strawberry_bg">
 	<i class="strawberry_bg"></i>
@@ -229,14 +139,15 @@
         <li class="clearfix">
             <span class="fl">一等奖：</span>
             <span style="overflow:hidden;" id="coupon_first_li">
-            	摇满50颗，即可获得价值<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">148元玖玖草莓</a>秒杀机会(每天送出20箱， 每日10时到19时每小时送出2箱，秒完即止)
+            	摇满50颗，即可获得价值<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">148元玖玖草莓</a>秒杀机会(每天9、12、16、20点各送出5箱，秒完即止)
                 {{if $had_coupon_first}}<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">请在1小时内使用</a>{{/if}}
             </span>
         </li>
         <li class="clearfix">
             <span class="fl">二等奖：</span>
             <span style="overflow:hidden;" id="coupon_sec_li">
-            	摇满30颗，即可兑换<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">148元玖玖草莓</a>的5折券（每天限量200张）
+            	摇满30颗，即可兑换<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">148元玖玖草莓</a>的5折券（每天限量300张）
+                <span style="display: none;margin-top:10px" id="left_sec_span">剩余<i id="left_sec_i" style="color:red"></i>张</span>
                 {{if $had_coupon_sec}}<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">请在1小时内使用</a>{{/if}}
             </span>
         </li>
@@ -335,6 +246,17 @@
     var game_user_total = '{{$game_user_total}}'; //loading by update_top_list
     var get_coupons_button = $('');
 
+    var first_waiting = 0;
+    var left_sec = 0;
+
+    function update_after_times_query(data) {
+        first_waiting = data['first_waiting'];
+        left_sec = data['left_sec'];
+
+        $('#left_sec_span').show();
+        $('#left_sec_i').text(data['left_sec']);
+    }
+
     function toggle_red_point(total) {
         var $redPoint = $('#red_point');
         if ($redPoint) {
@@ -413,6 +335,100 @@
 
     $(document).ready(function() {
 
+        var height = $(window).height();
+        var width = $(window).width();
+        var $strawberryBg = $('#strawberry_bg');
+        $strawberryBg.height(height);
+        $strawberryBg.width(width);
+        var $strawberryTrbg = $('#strawberry_trbg');
+        var $strawberryChance = $('#strawberry_chance');
+        var $strawberry_prize = $('#strawberry_prize');
+        var $strawberry_rules = $('#strawberry_rules');
+        var strawberry_help_me = $('#strawberry_help_me');
+        var strawberry_i_help = $('#strawberry_i_help');
+
+        $strawberryTrbg.height(height);
+        $strawberryTrbg.width(width);
+
+        function hidePages() {
+            $strawberryChance.hide();
+            $strawberryTrbg.hide();
+            $strawberry_prize.hide();
+            $strawberry_rules.hide();
+            strawberry_i_help.hide();
+            strawberry_help_me.hide();
+        }
+
+        $strawberryTrbg.click(function(){
+            hidePages();
+        });
+
+        $('.strawberry_prize_close').click(function(){
+            hidePages();
+        });
+
+        $('#btn_add_chance').click(function(){
+            $strawberryTrbg.show();
+            $strawberryChance.show();
+        });
+
+        $('#btn_award').click(function(){
+            $strawberry_prize.show();
+            $strawberryTrbg.show();
+        });
+
+        var apple_got_cnt = $('#apple_got_cnt');
+        var $couponFirstLi = $('#coupon_first_li');
+        var $couponSecLi = $('#coupon_sec_li');
+        var $couponThirdLi = $('#coupon_third_li');
+
+        game_notify_after_exchange = function (coupon_count, coupon_type) {
+            if (coupon_count > 0) {
+                if ('first' == coupon_type ) {
+                    $('a#get_coupon_' + coupon_type).hide();
+                    $couponFirstLi.append('<a href="/products/view/738.html">去使用</a>');
+                } else if ('sec' == coupon_type) {
+                    $('a#get_coupon_' + coupon_type).hide();
+                    $couponSecLi.append('<a href="/products/view/738.html">去使用</a>');
+                }
+            } else {
+                if (coupon_type == 'first') {
+                    utils.alert_one("抱歉本时段已兑完，排队人数"+first_waiting+"人，建议您选择兑换二等奖", '知道了');
+                } else {
+                    utils.alert("呜呜，本时段已兑完。");
+                }
+
+            }
+        };
+
+        function func_li(li, lowest_limit, type, label) {
+            if (li.find('a').length == 1) {
+                if (total_not_spent() >= lowest_limit) {
+                    li.append('<a id="get_coupon_'+type+'" class="btn btn-warning" style="color:white" href="javascript:;">'+label+'</a>');
+                    $('#get_coupon_'+type).click(function () {
+                        if (typeof get_coupon_click_func == 'function') {
+                            get_coupon_click_func(type);
+                        }
+                    });
+                }
+            }
+        }
+
+        $('#btn_rules').click(function(){
+            $strawberry_rules.show();
+            $strawberryTrbg.show();
+            func_li($couponFirstLi, 50, 'first', '秒杀');
+            func_li($couponSecLi, 30, 'sec', '领取');
+        });
+        $('#btn_help_me').click(function(){
+            strawberry_help_me.show();
+            $strawberryTrbg.show();
+        });
+        $('#btn_i_help').click(function(){
+            strawberry_i_help.show();
+            $strawberryTrbg.show();
+        });
+
         toggle_red_point(total_not_spent());
 
         if (typeof(wx) != 'undefined') {
@@ -438,7 +454,6 @@
                         xx.desc = desc_cmp_friends();
                     }
                 };
-
                 wx.onMenuShareAppMessage(xx);
                 wx.onMenuShareTimeline({
                     title: to_timeline_title,

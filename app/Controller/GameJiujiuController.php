@@ -177,6 +177,11 @@ class GameJiujiuController extends AppController
             $result['success'] = true;
             $result['new_times'] =  count($logsToMe);
             $result['nicknames']  = $nicknames;
+
+//            $result['left_'.self::COUPON_JIUJIU_FIRST] = 30 - $this->CouponItem->couponCount(self::COUPON_JIUJIU_FIRST);
+            $result['left_sec'] = 300 - $this->CouponItem->couponCount(self::COUPON_JIUJIU_SEC);
+            $result['first_waiting'] = $this->AwardInfo->count_ge_no_spent_50($gameType, 50);
+
         } else {
             $this->_updateLastQueryTime(time());
             $result['success'] = false;
@@ -234,16 +239,10 @@ class GameJiujiuController extends AppController
     public function hours_limit() {
         $hour = date('G');
         $limits = array(
-            10 => 2,
-            11 => 2,
-            12 => 2,
-            13 => 2,
-            14 => 2,
-            15 => 2,
-            16 => 2,
-            17 => 2,
-            18 => 2,
-            19 => 2,
+            9 => 5,
+            12 => 5,
+            16 => 5,
+            20 => 5,
         );
         return empty($limits[$hour]) ? 0 : $limits[$hour];
     }
@@ -281,23 +280,23 @@ class GameJiujiuController extends AppController
         if ($gameType == self::GAME_JIUJIU) {
             if ((empty($expect) || $expect == 'first') && $can_exchange_apple_count >= 50) {
                 $in_special_city = $this->in_special_city();
-                if ($in_special_city) {
-                    $rnd = mt_rand(0, 7);
+                $rnd = mt_rand(0, 7);
+                if ($rnd < 3 || $in_special_city) {
                     $hourlyCnt = $this->CouponItem->couponCountHourly(self::COUPON_JIUJIU_FIRST, time());
                     $this->log("exchange_coupon_first: special city=" . $in_special_city . ", rnd=" . $rnd .", hourlyCnt=".$hourlyCnt.', hour_limit='.$this->hours_limit());
-                    if ($rnd == 3) {
-                        if ($hourlyCnt < $this->hours_limit()) {
-                            $coupon_count = 1;
-                            $ex_count_per_Item = 50;
-                            $total_ex_count = $ex_count_per_Item;
-                            $sharingPref = array(self::COUPON_JIUJIU_FIRST, 148);
-                        }
+                    if ($hourlyCnt < $this->hours_limit()) {
+                        $coupon_count = 1;
+                        $ex_count_per_Item = 50;
+                        $total_ex_count = $ex_count_per_Item;
+                        $sharingPref = array(self::COUPON_JIUJIU_FIRST, 148);
                     }
-                } else {
-                    $this->log("exchange_coupon_first: special city=".$in_special_city.", set to sold out");
+                }
+
+                if ($coupon_count < 1) {
+                    $this->log("exchange_coupon_first: rnd=$rnd, special city=".$in_special_city.", set to sold out");
                     $sold_out = true;
                 }
-            } else if ( (empty($expect) || $expect == 'sec') && $can_exchange_apple_count >= 30) {
+            } else if ((empty($expect) || $expect == 'sec') && $can_exchange_apple_count >= 30) {
                 $total_ex_count = $ex_count_per_Item = 30;
                 $sharingPref = array(self::COUPON_JIUJIU_SEC, 74);
                 $coupon_count = 1;
@@ -440,9 +439,6 @@ class GameJiujiuController extends AppController
             }
             $awardInfo = $awardInfo['AwardInfo'];
         }
-
-        list($left_98, $left_40) = $this->calculate_left($gameType);
-        $this->set(compact('left_98', 'left_40'));
 
         $this->set('game_type', $gameType);
 
@@ -658,7 +654,7 @@ class GameJiujiuController extends AppController
             $ext = 5;
         }
 
-        $times = 10;
+        $times = $total_got > 31 ? 10 : 15;
 
         if ($total_got >= 31) {
             $in_special_city = $this->in_special_city();
@@ -718,20 +714,6 @@ class GameJiujiuController extends AppController
 
         $hour = date('G');
         return ($todayAwarded >= round($dailyLimit * $hour/24, 0, PHP_ROUND_HALF_UP));
-    }
-
-    /**
-     * @param $gameType
-     * @return array
-     */
-    private function calculate_left($gameType) {
-        $left_40 = $left_98 = 0;
-//        if ($gameType == self::CHENGZI_1411) {
-//            $left_98 = 30 - $this->CouponItem->couponCount(COUPON_TYPE_CHZ_100);
-//            $left_40 = 1200 - $this->CouponItem->couponCount(COUPON_TYPE_CHZ_90);
-//            return array($left_98 >= 0? $left_98 : 0, $left_40 >= 0 ? $left_40 : 0);
-//        }
-        return array($left_98, $left_40);
     }
 
     /**
