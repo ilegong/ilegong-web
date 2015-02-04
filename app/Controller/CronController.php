@@ -66,10 +66,26 @@ class CronController extends AppController
             )
         ));
         $ship_infos = ShipAddress::get_all_ship_info();
+        if (function_exists('curl_init') == 1) {
+            $this->log("Curl can init...");
+            $curl = curl_init();
+        }else{
+            $this->log("Curl can't init...");
+        }
         foreach($orders as $order){
             $com = key($ship_infos[$order['Order']['ship_type']]);
             //http://www.kuaidi100.com/query?id=1&type=quanfengkuaidi&postid=710023594269&valicode=&temp=0.018777450546622276
-            $contents = file_get_contents('http://www.kuaidi100.com/query?id=1&type='.$com.'&postid='.$order['Order']['ship_code'].'&valicode=&temp='.(mt_rand()/mt_getrandmax()));
+            $url = 'http://www.kuaidi100.com/query?id=1&type='.$com.'&postid='.$order['Order']['ship_code'].'&valicode=&temp='.(mt_rand()/mt_getrandmax());
+            curl_setopt_array(
+                $curl,
+                array(
+                    CURLOPT_URL=>$url,
+                    CURLOPT_HEADER=>0,
+                    CURLOPT_RETURNTRANSFER=>1,
+                    CURLOPT_TIMEOUT=>5
+                )
+            );
+            $contents = curl_exec($curl);
             $contentObject = json_decode($contents,true);
             $orderId = $order['Order']['id'];
             //get ship info
@@ -83,6 +99,7 @@ class CronController extends AppController
                 $this->log('push ship info '.$orderId.' can not fetch ship info on date '.$date);
             }
         }
+        curl_close($curl);
         echo 'success';
     }
 }
