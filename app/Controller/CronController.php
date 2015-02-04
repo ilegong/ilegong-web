@@ -56,7 +56,6 @@ class CronController extends AppController
         $this->loadModel('Order');
         $start_date = date("Y-m-d H:i:s",strtotime("-7 day"));
         $date = date('m/d/Y h:i:s a', time());
-        $AppKey = Configure::read('kuaidi100_key');
         $orders = $this->Order->find('all',array(
             'conditions'=>array(
                 'created >='=>$start_date,
@@ -69,17 +68,17 @@ class CronController extends AppController
                 ),
             )
         ));
+        $from_url='www.kuaidi100.com';
         $ship_infos = ShipAddress::get_all_ship_info();
         foreach($orders as $order){
-            $f = new SaeFetchurl();
             $ship_type = $order['Order']['ship_type'];
             $consignee_address=$order['Order']['consignee_address'];
             $ship_code=$order['Order']['ship_code'];
             if(!preg_match("/([\x81-\xfe][\x40-\xfe])/", $ship_code, $match)&&!empty($ship_code)&&!empty($ship_type)&&!mb_strpos($consignee_address,'自提')){
                 $com = key($ship_infos[$order['Order']['ship_type']]);
                 //http://www.kuaidi100.com/query?id=1&type=quanfengkuaidi&postid=710023594269&valicode=&temp=0.018777450546622276
-                $url = 'http://www.kuaidi100.com/query?id='.$AppKey.'&type='.trim($com).'&postid='.trim($order['Order']['ship_code']);
-                $contents =  $f->fetch($url);
+                $url = 'http://www.kuaidi100.com/query?id=&type='.trim($com).'&postid='.trim($order['Order']['ship_code']);
+                $contents = $this->gethtml($from_url,$url);
                 $contentObject = json_decode($contents,true);
                 $orderId = $order['Order']['id'];
                 //get ship info
@@ -97,5 +96,22 @@ class CronController extends AppController
             }
         }
         echo 'success';
+    }
+
+    function gethtml($from_url,$url){
+        $ch = curl_init();
+        //设置 来路，这个很重要 ，表示这个访问 是从 $form_url 这个链接点过去的。
+        curl_setopt($ch,CURLOPT_REFERER,$from_url);
+        //获取 的url地址
+        curl_setopt ($ch,CURLOPT_URL,$url);
+        //设置  返回原生的（Raw）输出
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+        //发送POST请求 CURLOPT_CUSTOMREQUEST
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+        //模拟浏览器发送报文 ，这里模拟 IE6 浏览器访问
+        curl_setopt($ch,CURLOPT_USERAGENT,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)");
+        $res = curl_exec($ch);
+        curl_close ($ch);
+        return $res;
     }
 }
