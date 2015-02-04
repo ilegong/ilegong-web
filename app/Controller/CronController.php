@@ -83,8 +83,7 @@ class CronController extends AppController
             if(!preg_match("/([\x81-\xfe][\x40-\xfe])/", $ship_code, $match)&&!empty($ship_code)&&!empty($ship_type)&&!mb_strpos($consignee_address,'自提')){
                 $com = key($ship_infos[$order['Order']['ship_type']]);
                 //http://www.kuaidi100.com/query?id=1&type=quanfengkuaidi&postid=710023594269&valicode=&temp=0.018777450546622276
-                $url = 'http://www.kuaidi100.com/query?id='.$AppKey.'&type='.$com.'&postid='.$order['Order']['ship_code'].'&valicode=&temp='.(mt_rand()/mt_getrandmax());
-                $url = str_replace(" ","",$url);
+                $url = 'http://www.kuaidi100.com/query?id='.$AppKey.'&type='.trim($com).'&postid='.trim($order['Order']['ship_code']).'&valicode=&temp='.(mt_rand()/mt_getrandmax());
                 curl_setopt_array(
                     $curl,
                     array(
