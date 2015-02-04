@@ -53,7 +53,6 @@ class CronController extends AppController
 
     public function send_ship_info(){
         $this->autoRender=false;
-        App::uses('SimpleHtmlDom', 'Utility');
         $this->loadModel('Order');
         $start_date = date("Y-m-d H:i:s",strtotime("-7 day"));
         $date = date('m/d/Y h:i:s a', time());
@@ -62,7 +61,11 @@ class CronController extends AppController
                 'created >='=>$start_date,
                 'status'=>ORDER_STATUS_SHIPPED,
                 'published'=>1,
-                'deleted'=>0
+                'deleted'=>0,
+                'not'=>array(
+                    'ship_code'=>null,
+                    'ship_type'=>null,
+                )
             )
         ));
         $ship_infos = ShipAddress::get_all_ship_info();
@@ -73,30 +76,35 @@ class CronController extends AppController
             $this->log("Curl can't init...");
         }
         foreach($orders as $order){
-            $com = key($ship_infos[$order['Order']['ship_type']]);
-            //http://www.kuaidi100.com/query?id=1&type=quanfengkuaidi&postid=710023594269&valicode=&temp=0.018777450546622276
-            $url = 'http://www.kuaidi100.com/query?id=1&type='.$com.'&postid='.$order['Order']['ship_code'].'&valicode=&temp='.(mt_rand()/mt_getrandmax());
-            curl_setopt_array(
-                $curl,
-                array(
-                    CURLOPT_URL=>$url,
-                    CURLOPT_HEADER=>0,
-                    CURLOPT_RETURNTRANSFER=>1,
-                    CURLOPT_TIMEOUT=>5
-                )
-            );
-            $contents = curl_exec($curl);
-            $contentObject = json_decode($contents,true);
-            $orderId = $order['Order']['id'];
-            //get ship info
-            if(count($contentObject['data'])>0){
-                $currentShipInfo = $contentObject['data'][0];
-                $shipInfo = $currentShipInfo['time'].' '.$currentShipInfo['context'];
-                if(!$this->Weixin->send_order_ship_info_msg($order['Order']['creator'],$shipInfo,$orderId)){
-                    $this->log('push ship info '.$orderId.' wx send error on date '.$date);
+            $ship_type = $order['Order']['ship_type'];
+            $consignee_address=$order['Order']['consignee_address'];
+            $ship_code=$order['Order']['ship_code'];
+            if(!preg_match("/([\x81-\xfe][\x40-\xfe])/", $ship_code, $match)&&!empty($ship_code)&&!empty($ship_type)&&!mb_strpos($consignee_address,'自提')){
+                $com = key($ship_infos[$order['Order']['ship_type']]);
+                //http://www.kuaidi100.com/query?id=1&type=quanfengkuaidi&postid=710023594269&valicode=&temp=0.018777450546622276
+                $url = 'http://www.kuaidi100.com/query?id=1&type='.$com.'&postid='.$order['Order']['ship_code'].'&valicode=&temp='.(mt_rand()/mt_getrandmax());
+                curl_setopt_array(
+                    $curl,
+                    array(
+                        CURLOPT_URL=>$url,
+                        CURLOPT_HEADER=>0,
+                        CURLOPT_RETURNTRANSFER=>1,
+                        CURLOPT_TIMEOUT=>5
+                    )
+                );
+                $contents = curl_exec($curl);
+                $contentObject = json_decode($contents,true);
+                $orderId = $order['Order']['id'];
+                //get ship info
+                if(count($contentObject['data'])>0){
+                    $currentShipInfo = $contentObject['data'][0];
+                    $shipInfo = $currentShipInfo['time'].' '.$currentShipInfo['context'];
+                    if(!$this->Weixin->send_order_ship_info_msg($order['Order']['creator'],$shipInfo,$orderId)){
+                        $this->log('push ship info '.$orderId.' wx send error on date '.$date);
+                    }
+                }else{
+                    $this->log('push ship info '.$orderId.' can not fetch ship info on date '.$date);
                 }
-            }else{
-                $this->log('push ship info '.$orderId.' can not fetch ship info on date '.$date);
             }
         }
         curl_close($curl);
