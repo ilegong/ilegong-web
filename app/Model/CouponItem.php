@@ -112,11 +112,13 @@ class CouponItem extends AppModel {
     public function couponCountHourly($couponId, $time) {
         list($hourStr, $key) = $this->key_hourly($couponId, $time);
         $result = Cache::read($key);
-        if (!empty($result)) {
+        if (empty($result)) {
             $result = $this->find('count', array(
                 'conditions' => array('coupon_id' => $couponId, 'deleted = 0', "date_format(created, '%Y%m%d%H') = '".$hourStr."'")
             ));
-            Cache::write($key, $result);
+            if ($result > 0 ) {
+                Cache::write($key, $result);
+            }
         }
         return $result;
     }

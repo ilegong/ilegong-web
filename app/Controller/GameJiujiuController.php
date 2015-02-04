@@ -334,6 +334,12 @@ class GameJiujiuController extends AppController
         echo json_encode($result);
     }
 
+    public function hourlycnt() {
+        $this->autoRender = false;
+        $hourlyCnt = $this->CouponItem->couponCountHourly(self::COUPON_JIUJIU_FIRST, time());
+        echo $hourlyCnt;
+    }
+
     private function _updateLastQueryTime($curr)
     {
         $this->Session->write($this->time_last_query_key, $curr);
