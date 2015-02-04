@@ -84,6 +84,7 @@ class CronController extends AppController
                 $com = key($ship_infos[$order['Order']['ship_type']]);
                 //http://www.kuaidi100.com/query?id=1&type=quanfengkuaidi&postid=710023594269&valicode=&temp=0.018777450546622276
                 $url = 'http://www.kuaidi100.com/query?id='.$AppKey.'&type='.$com.'&postid='.$order['Order']['ship_code'].'&valicode=&temp='.(mt_rand()/mt_getrandmax());
+                $url = str_replace(" ","",$url);
                 curl_setopt_array(
                     $curl,
                     array(
