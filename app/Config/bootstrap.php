@@ -275,6 +275,11 @@ function special_cake_users($uid) {
         || $uid == 708029/*|| $uid == 632*/; //Special user provided by Agnes(Li Hainan)
 }
 
+
+function promo_code_new_user($pids) {
+    return ( (is_array($pids) && count($pids) == 1 && $pids[0] == PRODUCT_ID_CAKE) || ($pids == PRODUCT_ID_CAKE) );
+}
+
 /**
  * @param $pid
  * @param $price

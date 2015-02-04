@@ -286,7 +286,7 @@ class GameJiujiuController extends AppController
                     $hourlyCnt = $this->CouponItem->couponCountHourly(self::COUPON_JIUJIU_FIRST, time());
                     $this->log("exchange_coupon_first: special city=" . $in_special_city . ", rnd=" . $rnd .", hourlyCnt=".$hourlyCnt.', hour_limit='.$this->hours_limit());
                     if ($rnd == 3) {
-                        if (false /*$hourlyCnt < $this->hours_limit()*/) {
+                        if ($hourlyCnt < $this->hours_limit()) {
                             $coupon_count = 1;
                             $ex_count_per_Item = 50;
                             $total_ex_count = $ex_count_per_Item;
@@ -481,6 +481,13 @@ class GameJiujiuController extends AppController
         $this->set('today_got_wx', $pys_got);
         $subscribe_status = user_subscribed_pys($current_uid);
         $this->set('user_subscribed', $subscribe_status == WX_STATUS_SUBSCRIBED);
+
+//        $this->loadModel('Order');
+//        $this->Order->find('first', array(
+//            'conditions' => array('status')
+//        ));
+//
+//        $this->set('has_orders');
 
         $customized_game = $this->customized_view_files[$gameType];
         if (!empty($customized_game)) {
