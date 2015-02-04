@@ -57,7 +57,7 @@ class CronController extends AppController
         $start_date = date("Y-m-d H:i:s",strtotime("-7 day"));
         $date = date('m/d/Y h:i:s a', time());
         $AppKey = Configure::read('kuaidi100_key');
-        $host = array( 'Host: www.kuaidi100.com' );
+        $host = array('Host: www.kuaidi100.com');
         $orders = $this->Order->find('all',array(
             'conditions'=>array(
                 'created >='=>$start_date,
@@ -71,13 +71,13 @@ class CronController extends AppController
             )
         ));
         $ship_infos = ShipAddress::get_all_ship_info();
-        if (function_exists('curl_init') == 1) {
-            $this->log("Curl can init...");
-            $curl = curl_init();
-        }else{
-            $this->log("Curl can't init...");
-        }
         foreach($orders as $order){
+            if (function_exists('curl_init') == 1) {
+                $this->log("Curl can init...");
+                $curl = curl_init();
+            }else{
+                $this->log("Curl can't init...");
+            }
             $ship_type = $order['Order']['ship_type'];
             $consignee_address=$order['Order']['consignee_address'];
             $ship_code=$order['Order']['ship_code'];
@@ -103,15 +103,17 @@ class CronController extends AppController
                 if(count($contentObject['data'])>0){
                     $currentShipInfo = $contentObject['data'][0];
                     $shipInfo = $currentShipInfo['time'].' '.$currentShipInfo['context'];
-                    if(!$this->Weixin->send_order_ship_info_msg($order['Order']['creator'],$shipInfo,$orderId)){
+                    if($this->Weixin->send_order_ship_info_msg($order['Order']['creator'],$shipInfo,$orderId)){
+                        $this->log('push ship info '.$orderId.' wx send success on date '.$date);
+                    }else{
                         $this->log('push ship info '.$orderId.' wx send error on date '.$date);
                     }
                 }else{
                     $this->log('push ship info '.$orderId.' can not fetch ship info on date '.$date.' url is '.$url.' return content is '.$contents);
                 }
             }
+            curl_close($curl);
         }
-        curl_close($curl);
         echo 'success';
     }
 }
