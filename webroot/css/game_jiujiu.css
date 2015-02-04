@@ -71,7 +71,7 @@ ul,li{ list-style:none;}
 
 /*规则兑换*/
 .strawberry_rule{ position:fixed; left:50%; margin-left:-45%; width:90%; height:80%; background-color:#ffffff; color:#555555; text-align:center; padding:1em 0; z-index:999;}
-.strawberry_rule_list{width:90%; margin:0 auto; padding-top:5px; color:#555555; font-size:1em;}
+.strawberry_rule_list{width:90%; margin:0 auto; padding-top:5px; color:#555555; font-size:1em; overflow-y: scroll; height: 85%}
 .strawberry_rule_list strong{ color:#333333; font-size:1.2em; text-align:center; display:block;}
 .strawberry_rule_list li{ text-align:left; line-height:1.3em; padding-bottom:0.7em;}
 .strawberry_rule_list li span{ display:block;}
