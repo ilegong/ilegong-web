@@ -1165,14 +1165,15 @@ class UsersController extends AppController {
             $newUser = $this->getUserByMobile($mobile);
             $newUserId = $newUser['User']['id'];
             if (!empty($wxBind)) {
+                $this->Oauthbind->update_wx_bind_uid($oauth_openid, $userId, $newUserId);
                 //do wx bind
-                $wxNewBind = $this->Oauthbind->findWxServiceBindByUid($newUserId);
-                if(empty($wxNewBind)){
-                    $this->Oauthbind->update_wx_bind_uid($oauth_openid, $userId,$newUserId);
-                }else{
-                    $new_oauth_openid = $wxNewBind['oauth_openid'];
-                    $this->Oauthbind->update_wx_bind_uid($new_oauth_openid, $userId, $newUserId);
-                }
+//                $wxNewBind = $this->Oauthbind->findWxServiceBindByUid($newUserId);
+//                if(empty($wxNewBind)){
+//                    $this->Oauthbind->update_wx_bind_uid($oauth_openid, $userId,$newUserId);
+//                }else{
+//                    //$new_oauth_openid = $wxNewBind['oauth_openid'];
+//
+//                }
             }
             $this->transferUserInfo($userId,$newUserId);
             $this->logoutCurrUser();
