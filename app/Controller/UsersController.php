@@ -1165,7 +1165,12 @@ class UsersController extends AppController {
             $newUser = $this->getUserByMobile($mobile);
             $newUserId = $newUser['User']['id'];
             if (!empty($wxBind)) {
-                $this->Oauthbind->update_wx_bind_uid($oauth_openid, $userId, $newUserId);
+                try{
+                    $this->Oauthbind->update_wx_bind_uid($oauth_openid, $userId, $newUserId);
+                }catch (Exception $e){
+                    $this->log("merge user data has exception user id ".$userId." new user id ".$newUserId).($e->getMessage());
+                    $result = array('success'=>'fale','msg'=>'信息合并失败');
+                }
                 //do wx bind
 //                $wxNewBind = $this->Oauthbind->findWxServiceBindByUid($newUserId);
 //                if(empty($wxNewBind)){
@@ -1185,8 +1190,6 @@ class UsersController extends AppController {
             $result = array('success'=>'false','msg'=>'手机验证码不正确');
         }
         echo json_encode($result);
-
-        return;
     }
 
     function getUserByMobile($mobile){
