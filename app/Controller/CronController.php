@@ -57,28 +57,21 @@ class CronController extends AppController
         $start_date = date("Y-m-d H:i:s",strtotime("-7 day"));
         $date = date('m/d/Y h:i:s a', time());
         $AppKey = Configure::read('kuaidi100_key');
-        $host = array('Host: www.kuaidi100.com');
         $orders = $this->Order->find('all',array(
             'conditions'=>array(
                 'created >='=>$start_date,
                 'status'=>ORDER_STATUS_SHIPPED,
                 'published'=>1,
                 'deleted'=>0,
-                'id'=>14567,
                 'not'=>array(
                     'ship_code'=>null,
                     'ship_type'=>null,
-                )
+                ),
             )
         ));
         $ship_infos = ShipAddress::get_all_ship_info();
         foreach($orders as $order){
-            if (function_exists('curl_init') == 1) {
-                $this->log("Curl can init...");
-                $curl = curl_init();
-            }else{
-                $this->log("Curl can't init...");
-            }
+            $f = new SaeFetchurl();
             $ship_type = $order['Order']['ship_type'];
             $consignee_address=$order['Order']['consignee_address'];
             $ship_code=$order['Order']['ship_code'];
@@ -86,18 +79,7 @@ class CronController extends AppController
                 $com = key($ship_infos[$order['Order']['ship_type']]);
                 //http://www.kuaidi100.com/query?id=1&type=quanfengkuaidi&postid=710023594269&valicode=&temp=0.018777450546622276
                 $url = 'http://www.kuaidi100.com/query?id='.$AppKey.'&type='.trim($com).'&postid='.trim($order['Order']['ship_code']);
-                curl_setopt_array(
-                    $curl,
-                    array(
-                        CURLOPT_URL=>$url,
-                        CURLOPT_HEADER=>0,
-                        CURLOPT_HTTPHEADER=>$host,
-                        CURLOPT_RETURNTRANSFER=>1,
-                        CURLOPT_TIMEOUT=>5,
-                        CURLOPT_USERAGENT=>'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36'
-                    )
-                );
-                $contents = curl_exec($curl);
+                $contents =  $f->fetch($url);
                 $contentObject = json_decode($contents,true);
                 $orderId = $order['Order']['id'];
                 //get ship info
@@ -113,7 +95,6 @@ class CronController extends AppController
                     $this->log('push ship info '.$orderId.' can not fetch ship info on date '.$date.' url is '.$url.' return content is '.$contents);
                 }
             }
-            curl_close($curl);
         }
         echo 'success';
     }
