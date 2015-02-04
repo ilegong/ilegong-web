@@ -114,7 +114,7 @@ class CouponItem extends AppModel {
         $result = Cache::read($key);
         if (!$result) {
             $result = $this->find('count', array(
-                'conditions' => array('coupon_id' => $couponId, 'deleted = 0', "date(created, '%Y%m%d%H') = '".$hourStr."'")
+                'conditions' => array('coupon_id' => $couponId, 'deleted = 0', "date_format(created, '%Y%m%d%H') = '".$hourStr."'")
             ));
             Cache::write($key, $result);
         }

@@ -282,14 +282,16 @@ class GameJiujiuController extends AppController
             if ((empty($expect) || $expect == 'first') && $can_exchange_apple_count >= 50) {
                 $in_special_city = $this->in_special_city();
                 if ($in_special_city) {
-                    $rnd = mt_rand(0, 17);
-                    $this->log("exchange_coupon_first: special city=".$in_special_city.", rnd=".$rnd);
-                    $hourlyCnt = $this->CouponItem->couponCountHourly(self::COUPON_JIUJIU_FIRST, time());
-                    if ($hourlyCnt < $this->hours_limit() && $rnd == 10) {
-                        $coupon_count = 1;
-                        $ex_count_per_Item = 50;
-                        $total_ex_count = $ex_count_per_Item;
-                        $sharingPref = array(self::COUPON_JIUJIU_FIRST, 148);
+                    $rnd = mt_rand(0, 7);
+                    $this->log("exchange_coupon_first: special city=" . $in_special_city . ", rnd=" . $rnd);
+                    if ($rnd == 10) {
+                        $hourlyCnt = $this->CouponItem->couponCountHourly(self::COUPON_JIUJIU_FIRST, time());
+                        if ($hourlyCnt < $this->hours_limit()) {
+                            $coupon_count = 1;
+                            $ex_count_per_Item = 50;
+                            $total_ex_count = $ex_count_per_Item;
+                            $sharingPref = array(self::COUPON_JIUJIU_FIRST, 148);
+                        }
                     }
                 } else {
                     $this->log("exchange_coupon_first: special city=".$in_special_city.", set to sold out");
