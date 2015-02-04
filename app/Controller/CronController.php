@@ -55,11 +55,12 @@ class CronController extends AppController
         $this->autoRender=false;
         $this->loadModel('Order');
         $this->loadModel('Cart');
-        $start_date = date("Y-m-d H:i:s",strtotime("-7 day"));
-        $date = date('m/d/Y h:i:s a', time());
+        $start_date = date("Y-m-d",strtotime("-7 day"));
+        $date = date('Y-m-d', time());
         $orders = $this->Order->find('all',array(
             'conditions'=>array(
                 'created >='=>$start_date,
+                'created <'=>$date,
                 'status'=>ORDER_STATUS_SHIPPED,
                 'published'=>1,
                 'deleted'=>0,
