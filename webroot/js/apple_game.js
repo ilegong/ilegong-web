@@ -140,7 +140,7 @@ $(document).ready(function(){
     }
 
         if ($need_mobile) {
-            window.location.href = '/users/to_bind_mobile?ref_url='+encodeURIComponent(location.href)+'&reason='+encodeURIComponent(_mobile_bind_reason);
+            window.location.href = '/users/to_bind_mobile?ref_url='+encodeURIComponent(location.href)+'&reason='+encodeURIComponent(_mobile_bind_reason)+'&from=game_jiujiu';
             return;
         }
 
