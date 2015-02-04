@@ -132,6 +132,8 @@ function uploadSuccess(file, serverData) {
 				this.customSettings.upload_successful = true;
 				var html = $("#fileuploadinfo_"+data.fieldname).html();
 				$("#fileuploadinfo_"+data.fieldname).html(html+data.message);
+			}else{
+				alert(data.message);
 			}
 		}		
 	} catch (e) {

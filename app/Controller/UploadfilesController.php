@@ -34,19 +34,31 @@ class UploadfilesController extends AppController {
 			throw new NotFoundException(__('Error url,this url page is not exist.'));
 		}
 	}
-	
+
+	function delete($id) {
+		$file = $this->Uploadfile->findById ( $id );
+		$this->log("prevent trying to delete a Upload file $id, values:".var_export($file, true));
+		// 删除文件
+		//$this->SwfUpload->deletefile ( $file ['Uploadfile'] ['fspath'] );
+		// 从数据库删除
+		$this->Uploadfile->delete($id);
+		$result = array('success'=>true);
+		echo json_encode($result);
+	}
 	
 	function upload() {
-		
+		//select image
+		$select=$_REQUEST['select'];
 		$file_post_name = $_POST['file_post_name']?$_POST['file_post_name']:'upload';
 		$file_model_name = $_POST ['file_model_name'];
 		$info = array (); // return json data
 		$info ['status'] = '0';
 		$info ['fieldname'] = $file_post_name;
 		if (isset ( $this->params ['form'] [$file_post_name] )) {
+			//check file size
 			// upload the file
 			$this->SwfUpload->file_post_name = $file_post_name;
-			if ($fileifo = $this->SwfUpload->upload ()) {
+			if ($fileifo = $this->SwfUpload->upload ($file_model_name)) {
 				if($_REQUEST['no_db']){// 不保存到数据库，在ckeditor中上传文件的场景
 					$info ['status'] = '1';
 					$info =array_merge($info,$fileifo);
@@ -63,6 +75,8 @@ class UploadfilesController extends AppController {
                     $info['fspath'] = $file_url;
 				}
 				else{
+					//check image size
+					$fspath = $fileifo['fspath'];
 					$modelname = Inflector::classify ( $this->name );
 					// save the file to the db, or do whateve ryou want to do with
 					// the data
@@ -70,7 +84,7 @@ class UploadfilesController extends AppController {
                     $this->data [$modelname] ['fieldname'] = $file_post_name;
                     $this->data [$modelname] ['name'] = $fileifo['filename'];
                     $this->data [$modelname] ['size'] = $this->params ['form'] [$file_post_name] ['size'];
-                    $this->data [$modelname] ['fspath'] = $fileifo['fspath'];
+                    $this->data [$modelname] ['fspath'] = $fspath;
                     $this->data [$modelname] ['type'] = $fileifo['file_type'];
                     if (empty($_REQUEST['no_thumb']) && 'image' == substr ($fileifo['file_type'], 0, 5 )) {
                         $this->data [$modelname] ['thumb'] = $fileifo['thumb'];
@@ -104,13 +118,28 @@ class UploadfilesController extends AppController {
 						$info ['message'] .= '<input type="hidden" name="data[Uploadfile][' . $file_id . '][id]" value="' . $file_id . '">';
 						
 						if ('image' == substr ( $this->data [$modelname] ['type'], 0, 5 )) {
-							$mid_thumb_url = str_replace ( '\\', '/', $this->request->webroot . $this->data [$modelname] ['mid_thumb'] );
-							
+
+							$mid_url = $this->data [$modelname] ['mid_thumb'];
+							//check
+							if(strpos($mid_url,'/')==0){
+								$mid_thumb_url = str_replace ( '\\', '/', $this->data [$modelname] ['mid_thumb'] );
+							}else{
+								$mid_thumb_url = str_replace ( '\\', '/', $this->request->webroot . $this->data [$modelname] ['mid_thumb'] );
+							}
+
 							if (substr ( $this->data [$modelname] ['fspath'], 0, 7 ) != 'http://') {
 								$src_url = Router::url (str_replace ( '//', '/', $this->request->webroot . ($this->data [$modelname] ['fspath']) ));
 							} else {
 								$src_url = $this->data [$modelname] ['fspath'];
 							}
+						}
+						//商家管理产品可以选择多幅图片
+						if($select){
+							$info ['message'] .= '<p>
+							<a href="' . $src_url . '" target="_blank">' . __ ( 'Preview') . '</a>
+			        		<a class="upload-file-delete" onclick="deleteImg(this);" rel="'.$file_id.'" href="#" data-url="' . Router::url ( '/uploadfiles/delete/' . $file_id.'.json') . '">' . __ ( 'Delete') . '</a>
+			        		<a href="javascript:void(0);" onclick="setCoverImg(\'' . $this->data [$modelname] ['modelclass'] . '\',\'' . $mid_thumb_url . '\');">' . __ ( 'Set as title img') . '</a></p>
+							';
 						}
 						$info ['message'] .= '</div>';
 					}

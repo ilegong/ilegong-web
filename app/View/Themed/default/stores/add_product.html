@@ -22,7 +22,7 @@
 
             <div class="col-sm-9 controls">
                 <input type="text" value="{{$this->data[Product][name]}}" class="form-control" id="ProductName"
-                       maxlength="250" name="data[Product][name]" placeholder="最少15个字，最多30个字">
+                       maxlength="250" name="data[Product][name]" placeholder="最少15个字，最多30个字(3-5个卖点和产品规格 例如:(海南空运“薇薇安”水果千层蛋糕 约1.5磅)">
             </div>
         </div>
         <div class="form-group">
@@ -45,11 +45,18 @@
         </div>
 
         <div class="form-group">
-            <label class="col-sm-2 control-label" for="ProductPublished">封面图片</label>
+            <label class="col-sm-2 control-label" for="ProductPublished">标题图片</label>
+            <div class="col-sm-9 controls select">
+                <input id="ProductCoverimg" class="form-control" name="data[Product][coverimg]" type="hidden"/>
+                <img src="/img/nophoto.gif" width="120" id="ProductCoverimgPreview" alt="">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <!--<label class="col-sm-2 control-label" for="ProductPublished">封面图片</label>-->
 
             <div class="col-sm-9 controls select">
-                {{$this->Swfupload->load('coverimg',array('label'=>false,'isadmin'=>false, 'modelClass'=>'Product',
-                'no_db'=>1,'upload_limit'=>1))}}
+                {{$this->Swfupload->load('photo','Product',true)}}
             </div>
         </div>
 
@@ -127,7 +134,7 @@
     '/js/json2.js',
     'product_spec.js?2',
     'jquery.validate.min.js',
-
+    'store.js',
     ))}}
 
     <script>
@@ -166,7 +173,7 @@
                     }
                 },
                 messages:{
-                    ProductName:{required:'标题不能为空哦',rangelength:'最少15个字，最多30个字'}
+                    ProductName:{required:'标题不能为空哦',rangelength:'最少15个字，最多30个字(3-5个卖点和产品规格 例如:(海南空运“薇薇安”水果千层蛋糕 约1.5磅)'}
                 }
 
             })

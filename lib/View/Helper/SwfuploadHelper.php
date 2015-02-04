@@ -3,7 +3,7 @@ class SwfuploadHelper extends FormHelper {
 	
 	var $helpers = array('Html','Form');
 	
-	function load($file_post_name = 'Filedata',$param = array()) {
+	function load($file_post_name = 'Filedata',$param = array(),$select=false) {
 		
 		$this->setEntity($file_post_name);
 		$size=10;
@@ -25,7 +25,7 @@ class SwfuploadHelper extends FormHelper {
 		//no_db支持从外部方法中传入，即在模板中指定值。其他都保存至uploadfiles表
 		$param = array_merge(array(
 				'modelClass'=> 'Article',
-				'isadmin' => true,
+				'isadmin' => false,
 				'label' => __d('i18nfield','Field_'.$param['modelClass'].'_'.$fieldname),
 				'after' => '',//描述
 				'upload_limit'=> 0, // 最多允许上传的文件数，0为不限制
@@ -70,11 +70,9 @@ class SwfuploadHelper extends FormHelper {
 						$listfile.='<img src="'.$thumb_url.'"/>';
 					}
 	        		$listfile.='<input type="hidden" name="data[Uploadfile]['.$uploadfile['id'].'][id]" value="'.$uploadfile['id'].'">
-	        		<p><input type="text" name="data[Uploadfile]['.$uploadfile['id'].'][name]" value="'.urldecode($uploadfile['name']).'"/></p>
+	        		<p><input type="text" readonly name="data[Uploadfile]['.$uploadfile['id'].'][name]" value="'.urldecode($uploadfile['name']).'"/></p>
 	        		 <p><a href="'.$file_url.'" target="_blank">' . __ ( 'Preview') . '</a>
-	        		<a href="javascript:void(0);" onclick="insertHTML(\'&lt;img id=&#34;file_'.$uploadfile['id'].'&#34; src=&#34;'.($file_url).'&#34; >\')">'.__('Insert').'</a>
-	        		
-	        		<a class="upload-file-delete" rel="'.$uploadfile['id'].'" href="#" data-url="'.$this->url('/admin/uploadfiles/delete/'.$uploadfile['id'].'.json').'">'.__('Delete').'</a>
+	        		<a class="upload-file-delete" onclick="deleteImg(this);" rel="'.$uploadfile['id'].'" href="#" data-url="'.$this->url('/uploadfiles/delete/'.$uploadfile['id'].'.json').'">'.__('Delete').'</a>
 	        		<a href="javascript:void(0);" onclick="setCoverImg(\''.$param['modelClass'].'\',\''.$thumb_url.'\');">' . __ ( 'Set as title img') . '</a></p>
 	        		';
 	        		$listfile.='</li>';
@@ -108,11 +106,14 @@ class SwfuploadHelper extends FormHelper {
         	}
         }
         if($param['isadmin']){
-        	$upload_url = $this->Html->url('/admin/uploadfiles/upload');
+        	$upload_url = $this->Html->url('/uploadfiles/admin_upload');
         }
         else{
         	$upload_url = $this->Html->url('/uploadfiles/upload');
         }
+		if($select){
+			$upload_url.='?select=true';
+		}
         $script = '<script>
 '.(($param['upload_limit']==1)?
 'function '.$param['upload_success_handler'].'(file, serverData) {
@@ -130,7 +131,7 @@ class SwfuploadHelper extends FormHelper {
 						}
 					}
 				} catch (e) {
-					alert(serverData);
+					alert("上传失败");
 				}
 			}':'').
 'var swfu_'.$fieldid.';

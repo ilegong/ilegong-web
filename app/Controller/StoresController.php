@@ -15,7 +15,7 @@ class StoresController extends AppController
 
 
     /* lower case */
-    public $allowdPostProductFields = array('id', 'promote_name', 'name', 'coverimg', 'content', 'published', 'price', 'ship_fee', 'original_price','specs');
+    public $allowdPostProductFields = array('id', 'promote_name', 'name', 'coverimg','photo' ,'content', 'published', 'price', 'ship_fee', 'original_price','specs');
 
     public $brand = null;
 
@@ -146,7 +146,7 @@ class StoresController extends AppController
             $this->data['Product']['status'] = IN_CHECK; //默认商家增加的商品进入审核中状态
             $this->data['Product']['deleted'] = DELETED_NO;
             $this->data['Product']['creator'] = $this->currentUser['id'];
-            $this->data['Product']['coverimg'] = trim($this->data['coverimg']);
+            //$this->data['Product']['coverimg'] = trim($this->data['coverimg']);
 
             if (!isset($this->data['Product']['slug'])) {
                 $name = $this->data['Product']['name'];
@@ -176,7 +176,20 @@ class StoresController extends AppController
                 setFlashError($this->Session, $error);
             } else {
                 $this->Product->create();
-                if ($this->Product->save($this->data)) {
+                $p =$this->Product->save($this->data);
+                if ($p) {
+                    //保存上传的附件；形如 data[Uploadfile][39][id] , data[Uploadfile][39][name]
+                    if (isset($this->data['Uploadfile']) && is_array($this->data['Uploadfile'])) {
+                        $this->loadModel('Uploadfile');
+                        foreach ($this->data['Uploadfile'] as $file) {
+                            $this->Uploadfile->create();
+                            $fileinfo = array();
+                            $fileinfo['id'] = $file['id'];
+                            $fileinfo['data_id'] =$p['Product']['id'];
+                            // 只修改  data_id
+                            $this->Uploadfile->save($fileinfo, true, array('data_id'));
+                        }
+                    }
                     $this->Session->setFlash(__('The Data has been saved'));
                     $this->redirect(array('action' => 'products'));
                 } else {
@@ -224,7 +237,20 @@ class StoresController extends AppController
             if (!empty($error)) {
                 setFlashError($this->Session, $error);
             } else {
-                if ($this->Product->save($this->data)) {
+                $p =$this->Product->save($this->data);
+                if ($p) {
+                    //保存上传的附件；形如 data[Uploadfile][39][id] , data[Uploadfile][39][name]
+                    if (isset($this->data['Uploadfile']) && is_array($this->data['Uploadfile'])) {
+                        $this->loadModel('Uploadfile');
+                        foreach ($this->data['Uploadfile'] as $file) {
+                            $this->Uploadfile->create();
+                            $fileinfo = array();
+                            $fileinfo['id'] = $file['id'];
+                            $fileinfo['data_id'] =$p['Product']['id'];
+                            // 只修改  data_id
+                            $this->Uploadfile->save($fileinfo, true, array('data_id'));
+                        }
+                    }
                     $this->Session->setFlash(__('The Data has been saved'));
                     //$this->redirect(array('action'=>'index'));
                 } else {
@@ -237,6 +263,16 @@ class StoresController extends AppController
             $this->redirect(array('action' => 'edit_product', $id));
         } else {
             $this->data = $datainfo; //加载数据到表单中
+            $this->loadModel('Uploadfile');
+            $uploadFiles=$this->Uploadfile->find('all',array(
+                'conditions'=>array(
+                        'modelclass'=>'Product',
+                        'data_id'=>$id,
+                    ),
+            ));
+            $uploadFiles = Hash::extract($uploadFiles,'{n}.Uploadfile');
+            $this->data['Uploadfile']=$uploadFiles;
+
         }
         $this->set('op_cate', 'products');
     }

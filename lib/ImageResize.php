@@ -111,7 +111,7 @@ class ImageResize {
 				$this->ImageQuality = 9;
 				$source = imagecreatefrompng ($this->TmpName);
 			}
-		
+
 			$ret = @imagecopyresampled($normal, $source,    0, 0, 0, 0, $this->newWidth, $this->newHeight, $width_orig, $height_orig);
 			imagedestroy($source);
 			if($ret){

@@ -70,9 +70,9 @@ class SwfUploadComponent extends Component {
 	 * Uploads a file to location
 	 * @return boolean true if upload was successful, false otherwise.
 	 */
-	public function upload() {
+	public function upload($file_model_name=null) {
 		$ok = false;
-		if ($this->validate()) {
+		if ($this->validate($file_model_name)) {
 			$this->filename = $this->params['form'][$this->file_post_name]['name'];
 			
 			$fileparts = explode('.', $this->filename);
@@ -164,11 +164,18 @@ class SwfUploadComponent extends Component {
 	 * validates the post data and checks receipt of the upload
 	 * @return boolean true if post data is valid and file has been properly uploaded, false if not
 	 */
-	public function validate() {
+	public function validate($file_model_name) {
 		$post_ok = isset($this->params['form'][$this->file_post_name]);
 		$upload_error = $this->params['form'][$this->file_post_name]['error'];
-		$got_data = (is_uploaded_file($this->params['form'][$this->file_post_name]['tmp_name']));
-		
+		$temp_name = $this->params['form'][$this->file_post_name]['tmp_name'];
+		$got_data = (is_uploaded_file($temp_name));
+		if($file_model_name=="Product"){
+			list($width,$height,$type,$attr) = getimagesize($temp_name);
+			if($width!=800||$height!=600){
+				$this->setError(2100,'Validation faild','上传图片尺寸只能是800X600');
+				return false;
+			}
+		}
 		if (!$post_ok){
 			$this->setError(2000, 'Validation failed.', 'Expected file upload field to be named "Filedata."');
 		}
