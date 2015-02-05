@@ -843,7 +843,7 @@ class GameJiujiuController extends AppController
         $start = 752361;  //21
         $start2 = 754218;  //63
           $ids = array(
-              '2015020516' => array($start + 0, $start+1,  $start+2,  $start+3,  $start+4,),
+//              '2015020516' => array($start + 0, $start+1,  $start+2,  $start+3,  $start+4,),
               '2015020521' => array($start + 5, $start+6,  $start+7,  $start+8,  $start+9),
               '2015020609' => array($start + 10, $start+11,  $start+12,  $start+13,  $start+14),
               '2015020612' => array($start + 15, $start+16,  $start+17,  $start+18,  $start+19),
