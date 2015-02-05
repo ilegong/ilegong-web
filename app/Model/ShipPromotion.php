@@ -148,7 +148,14 @@ class ShipPromotion extends AppModel {
 //                array('id' => 77, 'time' => '', 'address' => '西小口东升科技园（北京市海淀区西小口路66）'),
 //                array('id' => 78, 'time' => '', 'address' => '微软大厦（中关村丹棱街附近）'),
             )
+        ),
+
+        790=>array(
+            'items' => array(
+                array('id' => 87, 'time' => '', 'address' => '海淀区万泉河路68号紫金大厦好邻居超市   '),
+            )
         )
+
 
     );
 
