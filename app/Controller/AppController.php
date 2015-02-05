@@ -32,19 +32,16 @@ class AppController extends Controller {
     public $firephp_vars = array();
     public $viewdata = null;
 
-    public $admins = array('753', '632', '658', '146', '8', '141'
-    , '818' //罗武林
-    , '819' //高静静
-    , '755'
-    , '773'
-    , '701166' //刘丹
-    );
+    public $admins = array();
 
     // 自定义构造函数
     public function __construct($request = null, $response = null) {
+        global $_admin_uids;
         if ($request instanceof CakeRequest) {
             $this->name = $request['params']['controller'];
         }
+
+        $this->admins = $_admin_uids;
         
         if (substr($_SERVER['REQUEST_URI'], 0, 11) == '/index.php/') {
             header('location:' . substr($_SERVER['REQUEST_URI'], 10));
@@ -235,7 +232,7 @@ class AppController extends Controller {
     }
 
     protected function is_admin($uid) {
-        return $uid && false !== array_search($uid, $this->admins, true);
+        return is_admin_uid($uid);
     }
 
     /** Also used in view files as a global javascript variable */

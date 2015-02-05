@@ -68,6 +68,10 @@ class WeixinController extends AppController {
 
 			$input = "";
 			if(!empty($req['Event'])){
+
+                        $openId = trim($req['FromUserName']);
+                        $uid = $this->Oauthbind->findUidByWx($openId);
+
 				if($req['Event']=='subscribe'){ //订阅
                     if ($from == FROM_WX_SERVICE) {
                         $content = array(
@@ -82,8 +86,6 @@ class WeixinController extends AppController {
                                 'url' => 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=201694178&idx=3&sn=75c4b8f32c29e1c088c7de4ee2e22719#rd')
                         );
 
-                        $openId = trim($req['FromUserName']);
-                        $uid = $this->Oauthbind->findUidByWx($openId);
                         if ($uid) {
                             Cache::write(key_cache_sub($uid), WX_STATUS_SUBSCRIBED);
                         } else {
@@ -225,6 +227,19 @@ class WeixinController extends AppController {
                 echo $this->newArticleMsg($user, $me, array(array('url' => $special['url'], 'title' => $special['title'], 'picUrl' => $special['pic'], 'description' => '点击查看详情，获得你的前世吃货身份')));
                 return;
             }
+
+            if (!empty($uid) && is_admin_uid($uid)) {
+                $parameters = explode(' ', $input);
+                if (count($parameters >= 1)) {
+                    $upper_input = trim(mb_strtoupper($parameters[0]));
+                    switch($upper_input) {
+                        case 'ADMIN_COUPON':
+                            $this->handle_admin_coupon($parameters, $user, $me);
+                            return;
+                    }
+                }
+            }
+
 
 			$user_code = urlencode(authcode($user,'ENCODE'));
 			//判断输入内容
@@ -461,6 +476,66 @@ class WeixinController extends AppController {
             Cache::write($key, $data);
         }
         echo 1;
+    }
+
+    /**
+     * @param $parameters
+     * @param $user
+     * @param $me
+     */
+    private function handle_admin_coupon($parameters, $user, $me) {
+        global $_coupon_could_distribute;
+        $msg = "";
+        if (count($parameters) < 2) {
+            $msg = "格式错误， 发优惠券的格式为 admin_coupon {{uid或者手机号}} {{COUPON_ID}}";
+        } else {
+            $identity = $parameters[1];
+            $identity_len = strlen($identity);
+            $identity_nick = '';
+            if ($identity_len > 8) {
+                if ($identity_len != 11) {
+                    $msg = '手机号应该为11位';
+                } else {
+                    $this->loadModel('User');
+                    $u = $this->User->findByMobilephone($identity);
+                    if (!empty($u)) {
+                        $uid = $u['User']['id'];
+                        $identity_nick = $u['User']['nickname'];
+                    } else {
+                        $msg = '手机号不存在';
+                    }
+                }
+            } else if($identity > 0) {
+                $u = $this->User->findById($identity);
+                if (!empty($u)) {
+                    $identity_nick = $u['User']['nickname'];
+                    $uid = $identity;
+                } else {
+                    $msg = '用户 id 不存在';
+                }
+            } else {
+                $msg = '用户Id错误';
+            }
+            if (!empty($uid)) {
+                if (count($parameters) == 2 || empty($parameters[2]) || array_search($parameters[2], array_keys($_coupon_could_distribute)) === false) {
+                    $msg = '可用优惠券：';
+                    foreach($_coupon_could_distribute as $cid => $label) {
+                        $msg .= $cid .'=>'.$label.'; ';
+                    }
+                } else {
+                    $weixinC = $this->Components->load('Weixin');
+                    $coupon_desc = $_coupon_could_distribute[$parameters[2]];
+                    if (!add_coupon_for_new($uid, $weixinC,
+                        array($parameters[2]), $coupon_desc)) {
+                        $msg = '给用户'.$identity_nick.'发优惠券('.$coupon_desc.')失败， 该用户已经拥有此优惠券';
+                    } else {
+                        $msg = '给用户'.$identity_nick.'发优惠券('.$coupon_desc.')成功';
+                    }
+                }
+            }
+
+        }
+        echo $this->newTextMsg($user, $me, $msg);
     }
 }
 ?>

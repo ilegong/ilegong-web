@@ -30,6 +30,21 @@ const TAG_ID_XINPIN_SHICHI = 19;
 
 $_display_tags_in_home = array(TAG_ID_CHULIANG, TAG_ID_ROUQIN_DANPIN, TAG_ID_XINPIN_SHICHI, TAG_ID_XINPIN_SHICHI);
 
+$_admin_uids = array('753', '632', '658', '146', '8', '141'
+, '818' //罗武林
+, '819' //高静静
+, '755'
+, '773'
+, '701166' //刘丹
+);
+
+$_coupon_could_distribute = array(18483 => '新用户50返10元券', 18482 => '新用户100返20元券');
+
+function is_admin_uid($uid) {
+    global $_admin_uids;
+    return $uid && false !== array_search($uid, $_admin_uids, true);
+}
+
 App::build(array(
 	'plugins' => array(COMMON_PATH.'Plugin'.DS, APP_PATH.'Plugin'.DS, ),
 	//'views' => array(COMMON_PATH.'View'.DS),
