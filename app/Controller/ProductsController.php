@@ -540,9 +540,6 @@ class ProductsController extends AppController{
         if(!$history){
             $history = $this->request->referer();
         }
-        if(strpos($history,'http')==0){
-            $history='/';
-        }
         $this->set('history',$history);
     }
 
