@@ -238,6 +238,7 @@ class WeixinController extends AppController {
                 if (count($parameters >= 1)) {
                     $upper_input = trim(mb_strtoupper($parameters[0]));
                     switch($upper_input) {
+                        case '5152':
                         case 'ADMIN_COUPON':
                             $this->handle_admin_coupon($parameters, $user, $me);
                             return;
