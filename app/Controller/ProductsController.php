@@ -108,22 +108,25 @@ class ProductsController extends AppController{
     }
 
     function product_detail($slug){
+        $this->setHistory();
         $fields = array('id','slug','name','content','created');
         parent::view($slug,$fields);
     }
 
     function view_shichi_comment($slug){
+        $this->setHistory();
         $fields = array('id','slug','name','created');
         parent::view($slug,$fields);
     }
 
     function product_comments($slug){
+        $this->setHistory();
         $fields = array('id','slug','name','content','created');
         parent::view($slug,$fields);
     }
 
     function view($slug='/'){
-
+        $this->setHistory();
         //要求评论登录
         if ($_GET[SPEC_PARAM_KEY_COMM] == 1 || $_GET[SPEC_PARAM_KEY_SHICHI_COMM] == 1) {
             if ($this->is_weixin()) {
@@ -530,6 +533,17 @@ class ProductsController extends AppController{
     function guess_product_detail(){
         $this->pageTitle = '商品详情';
         $this->set('hideNav',true);
+    }
+
+    function setHistory(){
+        $history = $_REQUEST['history'];
+        if(!$history){
+            $history = $this->request->referer();
+        }
+        if(strpos($history,'http')==0){
+            $history='/';
+        }
+        $this->set('history',$history);
     }
 
 }

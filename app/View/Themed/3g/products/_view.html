@@ -127,14 +127,14 @@
         <div class="all_line">
             <ul class="clearfix title" style="margin-bottom: 0;">
                 <li class="fl">产品介绍</li>
-                <li class="fr"><a href="/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html" class="p_more"></a></li>
+                <li class="fr"><a href="/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}" class="p_more"></a></li>
             </ul>
         </div>
         {{if $is_product_has_shichi}}
         <div class="all_line">
             <ul class="clearfix title">
                 <li class="fl">试吃报告</li>
-                <li class="fr"><a href="/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html" class="p_more"></a></li>
+                <li class="fr"><a href="/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}" class="p_more"></a></li>
             </ul>
 
         </div>
@@ -143,7 +143,7 @@
             <ul class="clearfix title" style="margin-bottom: 0;">
                 <li class="fl">口碑评论<span> {{$Product['Product']['comment_nums']}}</span></li>
                 {{if $commet_count>5}}
-                <li class="fr"><a href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html" class="p_more"></a></li>
+                <li class="fr"><a href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}" class="p_more"></a></li>
                 {{/if}}
             </ul>
             {{template products/template_product_comments}}

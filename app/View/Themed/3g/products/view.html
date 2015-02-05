@@ -1,6 +1,6 @@
 <div class="classlist_v2" style="z-index:1">
     <ul class="clearfix">
-        <li><a href="javascript:void(0)" id="return_label" class="back"></a></li>
+        <li><a href="{{$history}}" id="return_label" class="back"></a></li>
         <li class="line"></li>
         <li><strong>商品详情</strong></li>
     </ul>
@@ -39,35 +39,6 @@
     </ul>
 </div>
 
-
-<script>
-    $(document).ready(function(){
-        //Thumbs
-        $('.thumbs-cotnainer').each(function(){
-            $(this).swiper({
-                slidesPerView:'auto',
-                offsetPxBefore:25,
-                offsetPxAfter:10,
-                calculateHeight: true
-
-            })
-        });
-        var referurl = document.referrer;
-        var host = referurl.split('/',3);
-        if(host[2] == '{{WX_HOST}}'){
-            $('#return_label').on('click',function(){
-                if(referurl.indexOf('product_comments')>0||referurl.indexOf('product_detail')>0){
-                    history.go(-2);
-                }
-                window.location.href = referurl;
-            })
-        }else{
-            $('#return_label').on('click',function(){
-                window.location.href = '/';
-            })
-        }
-    })
-</script>
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'));}}
 {{if $jWeixinOn}}
 <script>
