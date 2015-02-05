@@ -58,7 +58,7 @@
                 var template = '<dl class="clearfix">';
                 var defaultPhoto = '{{$this->Html->assetUrl("/img/default_user_icon.jpg")}}';
                 if(comment["userPhoto"]){
-                    defaultPhoto = comment["userPhoto"];
+                    defaultPhoto = comment["userPhoto"].replace('thumb_s/','');
                 }
                 template += '<dt class="header"> <img width="60px" height="60px" class="radius5" src="'+defaultPhoto+'" /><br /> <span>' + comment['username'] + '</span> </dt>';
                 template += '<dt class="content"> <b></b><div class="clearfix c_content">';

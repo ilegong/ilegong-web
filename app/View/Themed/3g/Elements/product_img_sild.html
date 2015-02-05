@@ -1,0 +1,51 @@
+<div class="p_details_pic">
+    <a href="#X" class="pre"></a>
+    <a href="#X" class="next"></a>
+    <?php foreach($Product['Uploadfile'] as $index=>$uploadfile){ ?>
+        <img data-index="{{$index}}" src="{{$this->Html->url('http://51daifan-images.stor.sinaapp.com'.$uploadfile['Uploadfile']['mid_thumb'])}}" width="100%" border="0" {{if $index>0}}style="display:none"{{/if}}/>
+    <?php }?>
+</div>
+<script>
+    $(document).ready(function(){
+        var currentImgIndex = 0;
+        var allImages = $('div.p_details_pic img');
+        var imagesLength = allImages.length;
+        var $pre = $('a.pre');
+        var $next = $('a.next');
+        processSlidBtn();
+        $pre.on('click',function(e){
+            e.preventDefault();
+            calCurrentIndex(1);
+        });
+        $next.on('click',function(e){
+            e.preventDefault();
+            calCurrentIndex(-1);
+        });
+        function calCurrentIndex(val){
+            currentImgIndex+=val;
+            if(currentImgIndex<0){
+                currentImgIndex=imagesLength-1;
+            }
+            if(currentImgIndex>imagesLength||currentImgIndex==imagesLength){
+                currentImgIndex=0;
+            }
+            processSlidBtn();
+            allImages.hide();
+            $(allImages[currentImgIndex]).show();
+        }
+        function processSlidBtn(){
+            if(currentImgIndex==0){
+                $pre.hide();
+                if(imagesLength>1){
+                    $next.show();
+                }
+            }
+            if(currentImgIndex==imagesLength-1){
+                $next.hide();
+                if(imagesLength>1){
+                    $pre.show();
+                }
+            }
+        }
+    });
+</script>

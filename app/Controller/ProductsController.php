@@ -1,28 +1,28 @@
 <?php
 
 class ProductsController extends AppController{
-	var $name = 'Products';	
-	public $brand = null;
-	
-	public function beforeFilter(){
-		parent::beforeFilter();
-	}
-	
-	private function checkAccess(){
-		
-		if(empty($this->currentUser['id'])){
-			$this->__message('您需要先登录才能操作','/users/login');
-		}
-		
-		$this->loadModel('Brand');
-		$this->brand = $this->Brand->find('first',array('conditions'=>array(
-				'creator'=>$this->currentUser['id'],
-		)));
-		if(empty($this->brand)){
-			$this->__message('只有合作商家才能添加商品','/');
-		}
-		
-	}
+    var $name = 'Products';
+    public $brand = null;
+
+    public function beforeFilter(){
+        parent::beforeFilter();
+    }
+
+    private function checkAccess(){
+
+        if(empty($this->currentUser['id'])){
+            $this->__message('您需要先登录才能操作','/users/login');
+        }
+
+        $this->loadModel('Brand');
+        $this->brand = $this->Brand->find('first',array('conditions'=>array(
+            'creator'=>$this->currentUser['id'],
+        )));
+        if(empty($this->brand)){
+            $this->__message('只有合作商家才能添加商品','/');
+        }
+
+    }
 
 //    public function view() {
 //        parent::view();
@@ -47,65 +47,81 @@ class ProductsController extends AppController{
 //        $this->set('afford_for_curr_user', $afford_for_curr_user);
 //    }
 
-	
-	public function add(){
-		
-		$this->checkAccess();
-		
-		if(!empty($this->data)){
-			$this->data[$this->modelClass]['brand_id'] = $this->brand['Brand']['id'];
-		}
-		parent::add();
-	}
-	
-	public function mine(){
-		$this->checkAccess();
-		
-		$pagesize = intval(Configure::read($this->modelClass.'.pagesize'));
-		if(!$pagesize){
-			$pagesize = 15;
-		}
-		
-		$total = $this->{$this->modelClass}->find('count', array('conditions' => array('brand_id' => $this->brand['Brand']['id'])));
-		$datalist = $this->{$this->modelClass}->find('all', array(
-				'conditions' => array('brand_id' => $this->brand['Brand']['id']),
-				'fields'=>array('id','name','price','published','coverimg'),
-		));
-		
-		$page_navi = getPageLinks($total, $pagesize, '/products/mine', $page);
-		$this->set('datalist',$datalist);
-		$this->set('page_navi', $page_navi);
-	}
-	
-	function edit($id) {
-		$modelClass = $this->modelClass;
-		
-		$this->checkAccess();
-		
-		$datainfo = $this->{$this->modelClass}->find('first', array('conditions' => array('id' => $id, 'brand_id' => $this->brand['Brand']['id'])));
-		if (empty($datainfo)) {
-			throw new ForbiddenException(__('You cannot edit this data'));
-		}
-	
-		if (!empty($this->data)) { //有数据提交
-			$this->autoRender = false;
-			$this->data[$modelClass]['creator'] = $this->currentUser['id'];
-	
-			if ($this->{$this->modelClass}->save($this->data)) {
-				$this->Session->setFlash(__('The Data has been saved'));
-				//$this->redirect(array('action'=>'index'));
-			} else {
-				$this->Session->setFlash(__('The Data could not be saved. Please, try again.'));
-			}
-			$successinfo = array('success' => __('Edit success'), 'actions' => array('OK' => 'closedialog'));
-			//echo json_encode($successinfo);
-			//return ;
-			$this->redirect(array('action' => 'edit',$id));
-		}
-		else{
-			$this->data = $datainfo; //加载数据到表单中
-		}
-	}
+
+    public function add(){
+
+        $this->checkAccess();
+
+        if(!empty($this->data)){
+            $this->data[$this->modelClass]['brand_id'] = $this->brand['Brand']['id'];
+        }
+        parent::add();
+    }
+
+    public function mine(){
+        $this->checkAccess();
+
+        $pagesize = intval(Configure::read($this->modelClass.'.pagesize'));
+        if(!$pagesize){
+            $pagesize = 15;
+        }
+
+        $total = $this->{$this->modelClass}->find('count', array('conditions' => array('brand_id' => $this->brand['Brand']['id'])));
+        $datalist = $this->{$this->modelClass}->find('all', array(
+            'conditions' => array('brand_id' => $this->brand['Brand']['id']),
+            'fields'=>array('id','name','price','published','coverimg'),
+        ));
+
+        $page_navi = getPageLinks($total, $pagesize, '/products/mine', $page);
+        $this->set('datalist',$datalist);
+        $this->set('page_navi', $page_navi);
+    }
+
+    function edit($id) {
+        $modelClass = $this->modelClass;
+
+        $this->checkAccess();
+
+        $datainfo = $this->{$this->modelClass}->find('first', array('conditions' => array('id' => $id, 'brand_id' => $this->brand['Brand']['id'])));
+        if (empty($datainfo)) {
+            throw new ForbiddenException(__('You cannot edit this data'));
+        }
+
+        if (!empty($this->data)) { //有数据提交
+            $this->autoRender = false;
+            $this->data[$modelClass]['creator'] = $this->currentUser['id'];
+
+            if ($this->{$this->modelClass}->save($this->data)) {
+                $this->Session->setFlash(__('The Data has been saved'));
+                //$this->redirect(array('action'=>'index'));
+            } else {
+                $this->Session->setFlash(__('The Data could not be saved. Please, try again.'));
+            }
+            $successinfo = array('success' => __('Edit success'), 'actions' => array('OK' => 'closedialog'));
+            //echo json_encode($successinfo);
+            //return ;
+            $this->redirect(array('action' => 'edit',$id));
+        }
+        else{
+            $this->data = $datainfo; //加载数据到表单中
+        }
+    }
+
+    function product_detail($slug){
+        $fields = array('id','slug','name','content','created');
+        parent::view($slug,$fields);
+    }
+
+    function view_shichi_comment($slug){
+        $fields = array('id','slug','name','created');
+        parent::view($slug,$fields);
+    }
+
+    function product_comments($slug){
+        $fields = array('id','slug','name','content','created');
+        parent::view($slug,$fields);
+    }
+
     function view($slug='/'){
 
         //要求评论登录
@@ -118,9 +134,27 @@ class ProductsController extends AppController{
             }
         }
 
-        parent::view($slug);
-
+        if($this->RequestHandler->isMobile()){
+            $fields=array('id','user_id','name','coverimg','slug','color','material','manufacturer','price','special','manual','remoteurl','status','deleted','priority','views_count','saled','storage','seotitle',
+                'seodescription','seokeywords', 'created', 'updated', 'published', 'brand_id', 'photo', 'cate_id', 'end_time', 'promote_name', 'comment_nums', 'recommend', 'ship_fee', 'original_price', 'cost_price', 'specs', 'sort_in_store',);
+        }
+        parent::view($slug,$fields);
         $pid = $this->current_data_id;
+        if($this->RequestHandler->isMobile()){
+            $this->loadModel('Comment');
+            //load shichi comment count
+            $shi_chi_comment_count = $this->Comment->find('count',array(
+                'conditions'=>array(
+                    'data_id'=>$pid,
+                    'status'=>1,
+                    'is_shichi_tuan_comment'=>1
+                )
+            ));
+            $comment_count = $this->viewdata['Product']['comment_nums'];
+            $this->set('shi_chi_comment_count',$shi_chi_comment_count);
+            $this->set('commet_count',($comment_count-$shi_chi_comment_count));
+            $this->set('limitCommentCount',COMMENT_LIMIT_IN_PRODUCT_VIEW);
+        }
         if ($pid == PRODUCT_ID_RICE_10) {
 
             $current_uid = $this->currentUser['id'];
@@ -141,6 +175,7 @@ class ProductsController extends AppController{
         }
 
         $brandId = $this->viewdata['Product']['brand_id'];
+
 
         $this->loadModel('SpecialList');
         $specialLists = $this->SpecialList->has_special_list($pid);
@@ -471,9 +506,9 @@ class ProductsController extends AppController{
 
         $this->loadModel('UserPrice');
         $top_price = $this->UserPrice->find('first', array(
-            'conditions' => array('uid' => $ids, 'product_id' => 484),
-            'order' => 'customized_price desc',
-            'limit' => 1,
+                'conditions' => array('uid' => $ids, 'product_id' => 484),
+                'order' => 'customized_price desc',
+                'limit' => 1,
             )
         );
 

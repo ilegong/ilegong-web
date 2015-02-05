@@ -1,300 +1,144 @@
 <div class="row voffset1" style="margin-left: 0;margin-right: 0;">
     <div class="col-xs-12 col-md-6" style="padding: 0;">
-        {{if !empty($Product['Product']['coverimg'])}}
-        <img src="{{$this->Html->assetUrl(medium_thumb_link($Product['Product']['coverimg']))}}" style="width:100%;"
-             onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'">
-        {{/if}}
-        <h2 class="Content-title" id="item-detail-title" style="padding: 10px 0.5em;margin: 0px;background-color: #ffffff"><?php echo $Product['Product']['name']; ?>{{if $hasOfferBrandIds && array_key_exists($Product['Product']['brand_id'], $hasOfferBrandIds)}}
-            <span class="brand-has-offer">有红包</span>
-            {{/if}}</h2>
-        {{if $Product['Product'][promote_name] }}
-        <p style="padding: 0 0.8em;margin: 0;background-color: #ffffff"><?php echo $Product['Product']['promote_name']; ?></p>
-        {{/if}}
-        <ul class="p_details_price clearfix list-unstyled">
-            <li class="fl price"><span>￥<font>{{$this->Number->precision($price, 2)}}</font></span><em>{{if $Product['Product']['original_price']}}¥{{$this->Number->precision($Product['Product']['original_price'], 2)}}{{/if}}</em></li>
-            <li class="fr stat"></li>
+        {{template Elements/product_img_sild}}
+        <div class="p_details_title">{{$Product['Product']['name']}}</div>
+        <ul class="p_details_price clearfix">
+            <li class="fl price">{{if $Product['Product']['original_price']}}<span>￥<font>{{$this->Number->precision($Product['Product']['original_price'], 2)}}</font></span>{{/if}}<em>{{$this->Number->precision($price, 2)}}</em></li>
+            <li class="fr stat"><a href="#comment-div" style="color: #333333    ">评价<span>({{$commet_count}})</span></a></li>
         </ul>
-        <ul class="clearfix b_line list-unstyled" style="padding: 0.8em;margin-top: 0.5em;background-color: #ffffff;border-top: 1px #DDDDDD solid;margin-bottom: 0;">
+        {{if $hasOfferBrandIds && array_key_exists($Product['Product']['brand_id'], $hasOfferBrandIds)}}
+        <ul class="sales clearfix">
             <li>
-                <span class="gray mr12" style="float:left;">快递:</span>
-			<span style="display: block;overflow: hidden;">
-                <span class="fl">
-                    {{if $ship_by_item_num && $Product['Product']['ship_fee'] }}每件{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}元
-                    {{else}}
-                        {{if $Product['Product']['ship_fee'] < 0 }}到付(详见商品详情){{elseif $Product['Product']['ship_fee']>0}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}包邮{{/if}}
-                    {{/if}}
-                </span>
-			</span>
-            </li>
-            <li>
-            <span class="fl">
-                {{if $ship_fixed}}优惠：参与本店每单{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}元快递优惠<br/>{{/if}}
-                {{if $ship_promo_nums}}优惠：{{$ship_promo_nums}}<br/>{{/if}}
-                {{if $ship_promo_amount}}优惠：{{$ship_promo_amount}}<br/>{{/if}}
-            </span>
-            </li>
-        </ul>
-        {{if !empty($special_name) || $in_nianhuo}}
-        <ul class="sales clearfix list-unstyled" style="padding-top: 0;padding-bottom: 0.7em;">
-            {{if $in_nianhuo}}
-            <li>
-                <span class="gray title mr12" style="float:left;">促销:</span>
+                <span class="gray title mr12" style="float:left;">红包:</span>
                 <span class="sales_c" style="display: block;overflow: hidden;">
-                    <a href="/categories/spring.html"><div class="quota_btn radius10 fl">年货领券更优惠</div></a>
-                    <span>{{$special_desc}}</span>
+                    <div class="quota_btn radius10 fl">有红包</div>
                 </span>
             </li>
-            {{else}}
+        </ul>
+        {{/if}}
+        {{if $Product['Product']['promote_name']||$ship_fixed||$ship_promo_nums||$ship_promo_amount||!empty($special_name)||$in_nianhuo||$total_left>0}}
+        <ul class="sales clearfix">
             <li>
-                <span class="gray title mr12" style="float:left;">促销:</span>
-        <span class="sales_c" style="display: block;overflow: hidden;">
-            <a href="{{$show_special_link ? special_link($special_slug) : 'javascript:;'}}"><div class="quota_btn radius10 fl">{{$special_name}}</div></a>
-            <span>{{$special_desc}}</span>
-        </span>
+                <span class="gray mr12" style="float:left;">促销:</span>
+                <span style="display: block;overflow: hidden;">
+                    <span><?php echo $Product['Product']['promote_name']; ?><br/></span>
+                    {{if $ship_fixed}}<span>参与本店每单{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}元快递优惠</span></br>{{/if}}
+                    {{if $ship_promo_nums}}<span>{{$ship_promo_nums}}</span><br/>{{/if}}
+                    {{if $ship_promo_amount}}<span>{{$ship_promo_amount}}</span><br/>{{/if}}
+                    {{if !empty($special_name) || $in_nianhuo}}
+                        {{if $in_nianhuo}}
+                            <a href="/categories/spring.html"><div class="quota_btn radius10 fl">年货领券更优惠</div></a>
+                         {{else}}
+                            <a href="{{$show_special_link ? special_link($special_slug) : 'javascript:;'}}"><div class="quota_btn radius10 fl">{{$special_name}}</div></a>
+                            <span>{{$special_desc}}</span>
+                        {{/if}}
+                    {{/if}}
+                    {{if $total_left>0}}
+                        <div class="quota_btn radius10 fl">限购</div><span>仅剩{{$total_left}}件</span>
+                    {{/if}}
+                </span>
+            </li>
+        </ul>
+        {{/if}}
+        {{if $product_spec_map||!empty($cake_dates)}}
+        {{$product_spec_map}}
+        <ul class="standard clearfix">
+            {{if $specs_map}}
+            <?php foreach($specs_map['choices'] as $label => $values) { ?>
+            <li>
+                <span class="gray title mr12 spec_label" style="float:left;">{{$label}}:</span>
+                            <span class="border" style="display: block;overflow: hidden;">
+                            <?php foreach($values as $vaLabel){?>
+                                <span class="mr12 border spec_item" item-label="{{$label}}">
+                                    {{$vaLabel}}
+                                </span>
+                                <?php } ?>
+                            </span>
+            </li>
+            <?php } ?>
+            {{/if}}
+            {{if $Product['Product']['id'] == PRODUCT_ID_CAKE && !empty($cake_dates)}}
+            <li>
+                <span class="gray title mr12" style="float:left;">送货日期:</span>
+                        <span class="border" style="display: block;overflow: hidden;">
+                        <?php foreach($cake_dates as $date){?>
+                            <span class="mr12 border spec_item" item-label="SD">
+                                {{$date}}
+                            </span>
+                            <?php } ?>
+                        </span>
             </li>
             {{/if}}
         </ul>
-        {{/if}}
-
-        {{if $total_left > 0}}
-        <div class="voffset3">
-            <p class="text-warning" style="font-size: 1.5em">剩余<span class="text-danger">{{$total_left}}</span>件！</p>
-        </div> {{/if}}
-
-        <style>
-                p.product_specs > span {
-                    margin-left: 0.5em;
-                    border-radius: 0;
-                }
-
-                .spec_label {
-                    margin-left: 0 !important;
-                }
-
-                .spec_item {
-                    padding: 0.5em 0.5em;
-                    display: inline-block;
-                    background-color: wheat;
-                    border: 1px #eee solid;
-                }
-
-                .spec_item_selected {
-                    background-color: yellowgreen;
-                    border: 1px #eee solid;
-                }
-        </style>
-        {{if $product_spec_map }}
-        {{$product_spec_map}}
-            {{if $specs_map }}
-                <p class="product_specs" style="padding: 0.8em;background-color: #ffffff;border-bottom: 1px #DDDDDD solid;margin-bottom: 0;">
-                    <?php foreach($specs_map['choices'] as $label => $values) { ?>
-                    <span class="spec_label">{{$label}}</span>:<?php foreach($values as $vaLabel){?><span item-label="{{$label}}" class="spec_item">{{$vaLabel}}</span><?php } ?><br/>
-                    <?php } ?>
-                    {{if $Product['Product']['id'] == PRODUCT_ID_CAKE && !empty($cake_dates)}}
-                    <span style="margin-left: 0 !important;">送货日期</span>:<?php foreach($cake_dates as $date){?><span item-label="SD" class="spec_item">{{$date}}</span><?php } ?>
-                    {{/if}}
-                </p>
-            {{/if}}
         {{/if}}
         {{if ($total_left > 0 || $total_left == -1) && $afford_for_curr_user }}
-        <div id="productinfo" class="clearfix voffset2" style="margin-top: 0;padding: 0.8em;background-color: #ffffff;border-bottom: 1px #DDDDDD solid;">
-            {{if $limit_per_user == 1}}
-            <p>每人限购一份</p>
-            <input id="input_pamount"  item-id="{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="hidden" readonly="readonly">
-            {{else}}
-            <div class="input-group" style="width:120px">
-                <span id="pamount_reduce" class="reduce input-group-addon"  item-id="{{$Product['Product']['id']}}">-</span>
-                <input id="input_pamount"  item-id="{{$Product['Product']['id']}}" size="3" value="1" class="form-control" name="shoppingnum" type="text">
-                <span id="pamount_add" class="add input-group-addon" item-id="{{$Product['Product']['id']}}">+</span>
-            </div>
-            {{/if}}
-            <!--<div class="clearfix col-xs-12 voffset2">-->
-            <!--</div>-->
-        </div>
-        {{elseif $total_left == 0}}
-        <div class="voffset3">
-            <h3 class="text-warning">已经全部抢完！请等待下次开卖！</h3>
-        </div>
-        {{else}}
-
-        <div class="voffset3">
-            <p>您已经买过啦！</p>
-        </div>
-
+        <ul class="numbers clearfix b_line">
+            <li class="fl">
+                <span class="gray title mr12" style="float:left;">数量:</span>
+                {{if $limit_per_user == 1}}
+                <p>每人限购一份</p>
+                <input id="input_pamount"  item-id="{{$Product['Product']['id']}}" size="3" value="1" class="num" name="shoppingnum" type="hidden" readonly="readonly">
+                {{else}}
+                <span class="clearfix" style="display: block;overflow: hidden;">
+                    <div id="pamount_reduce" class="grew"  item-id="{{$Product['Product']['id']}}">-</div>
+                    <input id="input_pamount"  item-id="{{$Product['Product']['id']}}" size="3" value="1" class="num" name="shoppingnum" type="text"/>
+                    <div id="pamount_add" class="grew" item-id="{{$Product['Product']['id']}}">+</div>
+                </span>
+                {{/if}}
+            </li>
+        </ul>
         {{/if}}
-    </div>
-</div>
-
-<!--<div class="p_details_title">[明明有梨]食秋梨，润秋燥，保持水润，抵御雾霾</div>-->
-<!--<ul class="p_details_price clearfix">-->
-    <!--<li class="fl price"><span>￥<font>55.0</font></span><em>￥79.9</em></li>-->
-    <!--<li class="fr stat">收藏<span>12</span>&nbsp;&nbsp;&nbsp;评价<span>234</span></li>-->
-<!--</ul>-->
-<!--<ul class="sales clearfix">-->
-    <!--<li>-->
-        <!--<span class="gray title mr12" style="float:left;">促销:</span>-->
-        <!--<span class="sales_c" style="display: block;overflow: hidden;">-->
-            <!--<div class="quota_btn radius10 fl">限购</div>-->
-            <!--<span>仅剩5件</span>-->
-        <!--</span>-->
-    <!--</li>-->
-<!--</ul>-->
-<!--<ul class="standard clearfix">-->
-    <!--<li>-->
-        <!--<span class="gray title mr12" style="float:left;">规格:</span>-->
-        <!--<span class="border" style="display: block;overflow: hidden;">-->
-            <!--<span class="border cur mr12">-->
-                <!--<div class="focus"></div>-->
-                <!--8斤12颗-->
-            <!--</span>-->
-            <!--<span class="mr12 border">-->
-                <!--5斤10颗-->
-            <!--</span>-->
-            <!--<span class="mr12 border">-->
-                <!--5斤10颗-->
-            <!--</span>-->
-            <!--<span class="mr12 border">-->
-                <!--5斤10颗-->
-            <!--</span>-->
-        <!--</span>-->
-    <!--</li>-->
-<!--</ul>-->
-
-<!--<ul id="productinfo" class="numbers clearfix b_line list-unstyled">-->
-    <!--<li class="fl">-->
-        <!--<span class="gray title mr12" style="float:left;">数量:</span>-->
-        <!--<span class="clearfix" style="display: block;overflow: hidden;">-->
-            <!--<div  id="pamount_reduce" class="grew">-</div>-->
-            <!--<div class="num">1</div>-->
-            <!--<div class="grew">+</div>-->
-        <!--</span>-->
-    <!--</li>-->
-<!--</ul>-->
-
-<!--<div class="service">-->
-    <!--<ul class="clearfix b_line">-->
-        <!--<li>-->
-            <!--<span class="gray mr12" style="float:left;">快递:</span>-->
-			<!--<span style="display: block;overflow: hidden;">-->
-				<!--<span>[朋友说]团购特价66元包邮 每周日产地统一发货</span>-->
-			<!--</span>-->
-        <!--</li>-->
-    <!--</ul>-->
-<!--</div>-->
-<div class=""><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}">
-    <ul class="clearfix shop_entrance list-unstyled">
-        <li class="fl"><span class="shop_head_small"><img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0" /></span></li>
-        <li class="fl" style="padding-left: 5px;">
-			<span style="overflow: hidden;"> 店家：{{$brand['Brand']['name']}}</span>
-        </li>
-        <li class="fr"><span class="p_more">&nbsp;</span></li>
-    </ul>
-</a>
-</div>
-<!--<div class="all_line">-->
-    <!--<ul class="clearfix title list-unstyled">-->
-        <!--<li class="fl">产品介绍</li>-->
-        <!--<li class="fr"><a href="#X" class="p_more"></a></li>-->
-    <!--</ul>-->
-<!--</div>-->
-<!--<div class="all_line">-->
-    <!--<ul class="clearfix title">-->
-        <!--<li class="fl">口碑评论<span>234</span></li>-->
-        <!--<li class="fr"><a href="#X" class="p_more"></a></li>-->
-    <!--</ul>-->
-    <!--<div>-->
-        <!--<ul class="clearfix user">-->
-            <!--<li class="fl"><img src="images/detail/user.png" border="0" /></li>-->
-            <!--<li class="fl">Lily</li>-->
-            <!--<li class="fr time">2014-10-24  12:06:08</li>-->
-        <!--</ul>-->
-        <!--<div class="evaluate clearfix">-->
-            <!--<span class="evaluate_bg radius10" style="float:left;">好评</span>-->
-            <!--<span class="con" style="display: block;overflow: hidden;">-->
-                <!--<span>汁水多，甜中带一点酸，很新鲜的，口感不错，放久了酸度会加重，所以早点吃玩才好，这也从侧面说明没有任何防腐加工，吃得放心，女儿喜欢吃。</span>-->
-            <!--</span>-->
-        <!--</div>-->
-        <!--<div class="pic">-->
-            <!--<ul class="clearfix">-->
-                <!--<li><a href="#X"><img src="images/detail/pic1.jpg" border="0" /></a></li>-->
-                <!--<li><a href="#X"><img src="images/detail/pic2.jpg" border="0" /></a></li>-->
-                <!--<li><a href="#X"><img src="images/detail/pic1.jpg" border="0" /></a></li>-->
-                <!--<li><a href="#X"><img src="images/detail/pic2.jpg" border="0" /></a></li>-->
-            <!--</ul>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div>-->
-        <!--<ul class="clearfix user">-->
-            <!--<li class="fl"><img src="images/detail/user_default.png" border="0" /></li>-->
-            <!--<li class="fl">yolanda</li>-->
-            <!--<li class="fr time">2014-09-30  11:08:41</li>-->
-        <!--</ul>-->
-        <!--<div class="evaluate clearfix">-->
-            <!--<span class="evaluate_bg radius10" style="float:left;">好评</span>-->
-            <!--<span class="con" style="display: block;overflow: hidden;">-->
-                <!--<span>忍不住就会吃很多，甜中带酸，水分充足，美味又解渴，太喜欢了！</span>-->
-            <!--</span>-->
-        <!--</div>-->
-    <!--</div>-->
-    <!--<div class="more"><a href="#X">查看全部评价</a></div>-->
-<!--</div>-->
-
-
-<?php
- if ($_GET['_pys_add_comment']) {
-    $defTab = 'product-reviews';
- }elseif ($_GET['_pys_add_shichi_comment']) {
-    $defTab = 'product-evaluation';
- }else {
- $defTab = 'product-description';
- }
- if($is_product_has_shichi){
-    $liWidth=33.33;
- }else{
-    $liWidth=50;
- }
- ?>
-<style>
-    #container-part1 ul.nav li a{
-        margin: 0;
-        border: 0;
-        border-right: 1px #DDDDDD solid;
-        color: #666666;
-        font-weight: bold;
-        border-radius: 0;
-    }
-    #container-part1 ul.nav li.active a{
-        color: #29AC0E;
-    }
-</style>
-<div id="container-part1" class="container clearfix voffset" style="padding: 0;background-color: #ffffff;border-top: 1px #DDDDDD solid;margin-top: 0;">
-    <ul class="nav nav-tabs" role="tablist">
-        <li style="width: {{$liWidth}}%;text-align: center;float: left;margin-bottom:0;" {{if $defTab == 'product-description'}}class="active"{{/if}}><a href="#product-description" role="tab" data-toggle="tab">{{__('ProductIntroduction')}}</a></li>
-        {{if $is_product_has_shichi}}
-        <li style="width: {{$liWidth}}%;text-align: center;float: left;margin-bottom:0;" {{if $defTab == 'product-evaluation'}}class="active"{{/if}}><a href="#product-evaluation" role="tab" data-toggle="tab">{{__('试吃报告')}}</a></li>
-        {{/if}}
-        <li style="width: {{$liWidth}}%;text-align: center;float: left;margin-bottom:0;" {{if $defTab == 'product-reviews'}}class="active"{{/if}}><a href="#product-reviews" role="tab" data-toggle="tab">{{__('ProductReviews')}}</a></li>
-    </ul>
-
-    <div class="tab-content voffset2" style="padding:  0.5em;margin-top: 0;">
-        <div class="tab-pane fade{{if $defTab == 'product-description'}} in active{{/if}}" id="product-description">
-            <div class="Content-body">
-                <div class="clear"></div>
-                <?php echo $Product['Product']['content']; ?>
-            </div>
+        <ul class="clearfix shop_entrance">
+            <li class="fl"><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0" /></a></li>
+            <li class="fl"><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}">进入{{$brand['Brand']['name']}}的店铺</a></li>
+            <li class="fr" style="margin-top: 0.3em;height: 1.634em;"><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}" class="p_more"></a></li>
+        </ul>
+        <div class="service">
+            <ul class="clearfix b_line">
+                <li>
+                    <span class="gray mr12" style="float:left;">快递:</span>
+			<span style="display: block;overflow: hidden;">
+                {{if $ship_by_item_num && $Product['Product']['ship_fee'] }}
+                    <span>每件{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}元</span>
+                {{else}}
+                    {{if $Product['Product']['ship_fee']}} ￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}} {{else}}<span>包邮</span>{{/if}}
+                {{/if}}
+			</span>
+                </li>
+            </ul>
+            <ul class="clearfix">
+                <li>
+                    <span class="gray mr12" style="float:left;">服务:</span>
+			<span style="display: block;overflow: hidden;">
+				<span>本商品由 {{$brand['Brand']['name']}} 提供、发货.</span><br />
+                <span>朋友说提供售后服务, 服务热线: 01056245991</span>
+			</span>
+                </li>
+            </ul>
+        </div>
+        <div class="all_line">
+            <ul class="clearfix title" style="margin-bottom: 0;">
+                <li class="fl">产品介绍</li>
+                <li class="fr"><a href="/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html" class="p_more"></a></li>
+            </ul>
         </div>
         {{if $is_product_has_shichi}}
-        <div class="tab-pane fade{{if $defTab == 'product-evaluation'}} in active{{/if}}" id="product-evaluation">
-            <div class="Content-body">
-                {{template comments/add_shichi}}
-            </div>
+        <div class="all_line">
+            <ul class="clearfix title">
+                <li class="fl">试吃报告</li>
+                <li class="fr"><a href="/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html" class="p_more"></a></li>
+            </ul>
+
         </div>
         {{/if}}
-        <div class="tab-pane fade{{if $defTab == 'product-reviews'}} in active{{/if}}" id="product-reviews">
-            <div class="Content-body">
-                {{template comments/add}}
-            </div>
+        <div class="all_line" id="comment-div">
+            <ul class="clearfix title">
+                <li class="fl">口碑评论<span> {{$Product['Product']['comment_nums']}}</span></li>
+                {{if $commet_count>5}}
+                <li class="fr"><a href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html" class="p_more"></a></li>
+                {{/if}}
+            </ul>
+            {{template products/template_product_comments}}
         </div>
     </div>
 </div>
-

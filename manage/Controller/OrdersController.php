@@ -12,7 +12,15 @@ class OrdersController extends AppController{
 		$this->set('carts',$carts);
 		parent::admin_view($id);				
 	}
-	
+
+    public function admin_edit($id = null,$copy = NULL){
+        parent::admin_edit($id,$copy);
+        $username = $this->currentUser['username'];
+        $user_agent = $this->request->header('User-Agent');
+        $user_ip = $this->request->clientIp(true);
+        $this->log('admin user edit order'.$id.' admin user is '.$username.' request ip '.$user_ip.' user_agent '.$user_agent);
+    }
+
 	public function admin_trash($ids){		
 		if(is_array($_POST['ids'])&& !empty($_POST['ids'])){
 			$ids = $_POST['ids'];

@@ -1,0 +1,75 @@
+<div id="comment_items">
+
+</div>
+{{if $commet_count>5}}
+<div class="more" id="view_all_comments"><a href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html">查看全部评价</a></div>
+{{/if}}
+<script>
+    $(document).ready(function(){
+        var $viewAllComments = $('#view_all_comments');
+        var $commentItems = $('#comment_items');
+        //load comment
+        function loadCommentData(){
+            $.ajax({
+                async:true,
+                type:'get',
+                success:function(request, xhr) {
+                    if(request.length>3){
+                        $viewAllComments.show();
+                    }
+                    for(var i in request){
+                        processCommentData(request[i]['Comment']);
+                    }
+                    //$commentItems.children().slice(0,5).show();
+                },
+                url:"{{$this->Html->url(array('controller'=>'comments','action'=>'getlist',$current_model,$current_data_id,'ext'=>'json','?'=>array('pagesize'=>$limitCommentCount)))}}",
+                dataType:'json'
+            });
+        }
+
+        function processCommentData(item){
+            var rating = parseInt(item['rating']);
+            var ratingStr = "差评";
+            if(rating>3){
+                ratingStr="好评";
+            }
+            if(rating==3||rating==2){
+                ratingStr="中评";
+            }
+            var userPhoto='{{$this->Html->assetUrl("/img/default_user_icon.jpg")}}';
+            if(item["userPhoto"]&&item["userPhoto"]!='null'){
+                userPhoto=item["userPhoto"].replace('thumb_s','thumb_m');
+            }
+            //TODO buy time
+            var $comment = '<div style="padding-bottom: 7px;">'+
+                                '<ul class="clearfix user">'+
+                                    '<li class="fl"><img src="'+userPhoto+'" border="0"/></li>'+
+                                    '<li class="fl">'+item['username']+'</li>'+
+                                    '<li class="fr time">'+item['created']+'</li>'+
+                                '</ul>'+
+                                '<div class="evaluate clearfix">'+
+                                    '<span class="evaluate_bg radius10" style="float:left;">'+ratingStr+'</span>'+
+                                    '<span class="con" style="display: block;overflow: hidden;">'+
+                                        '<span>'+item['body']+'</span>'+
+                                    '</span>'+
+                                '</div>';
+                                    if (item.images && item.images.length > 0) {
+                                        $comment+='<div class="pic">'+
+                                                        '<ul class="clearfix" style="margin-bottom: 3px;">';
+                                        $.each(item.images, function(idx, val){
+                                            $comment+='<li><a href="#X"><img src="'+val+'" border="0" /></a></li>';
+                                        });
+                                        $comment+='</ul>'+
+                                        '</div>';
+                                    }
+                            if(item['buy_time']){
+                                $comment+= '<div class="pay_time">购买时间: '+item['buy_time']+'</div>'+
+                                '</div>';
+                            }
+
+            $($comment).appendTo($commentItems);
+        }
+        loadCommentData();
+
+    });
+</script>
