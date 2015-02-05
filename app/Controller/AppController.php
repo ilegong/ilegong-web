@@ -229,6 +229,7 @@ class AppController extends Controller {
         $this->set('current_named', $this->request->params['named']);
 
         $this->set('in_weixin', $this->is_weixin());
+        $this->set('isMobile', $this->RequestHandler->isMobile());
     }
 
     protected function is_admin($uid) {
