@@ -254,6 +254,7 @@ class GameJiujiuController extends AppController
     public function exchange_coupon($gameType = KEY_APPLE_201410)
     {
         $this->autoRender = false;
+        return false;
         $id = $this->currentUser['id'];
         $result = array();
 
