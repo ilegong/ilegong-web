@@ -71,6 +71,11 @@ class GameJiujiuController extends AppController
     const COUPON_JIUJIU_SEC = 19036;
     const COUPON_JIUJIU_THIRD = 19035;
     const NEED_MOBILE_LEAST = 33;
+
+    const    start = 752361;  //21
+    const    start2 = 754218;  //63
+    var    $ids = array();
+
     public function beforeFilter()
     {
         parent::beforeFilter();
@@ -82,6 +87,27 @@ class GameJiujiuController extends AppController
                 $this->redirect('/users/login.html?referer='.$ref);
             }
         }
+
+        $start = self::start;
+        $start2 = self::start2;
+
+        $this->ids = array(
+//              '2015020516' => array($start + 0, $start+1,  $start+2,  $start+3,  $start+4,),
+        '2015020521' => array($start + 5, $start+6,  $start+7,  $start+8,  $start+9),
+        '2015020609' => array($start + 10, $start+11,  $start+12,  $start+13,  $start+14),
+        '2015020612' => array($start + 15, $start+16,  $start+17,  $start+18,  $start+19),
+
+        '2015020616' => array($start2 + 45, $start2+46,  $start2+47,  $start2+48,  $start2+49),
+        '2015020621' => array($start2 + 0,  $start2+1,   $start2+2,   $start2+3,   $start2+4,),
+        '2015020709' => array($start2 + 5,  $start2+6,   $start2+7,   $start2+8,   $start2+9),
+        '2015020712' => array($start2 + 10, $start2+11,  $start2+12,  $start2+13,  $start2+14),
+        '2015020716' => array($start2 + 15, $start2+16,  $start2+17,  $start2+18,  $start2+19),
+        '2015020721' => array($start2 + 20, $start2+21,  $start2+22,  $start2+23,  $start2+24),
+        '2015020809' => array($start2 + 25, $start2+26,  $start2+27,  $start2+28,  $start2+29),
+        '2015020812' => array($start2 + 30, $start2+31,  $start2+32,  $start2+33,  $start2+34),
+        '2015020816' => array($start2 + 35, $start2+36,  $start2+37,  $start2+38,  $start2+39),
+        '2015020821' => array($start2 + 40, $start2+41,  $start2+42,  $start2+43,  $start2+44),
+    );
     }
 
     public function rules()
@@ -840,32 +866,12 @@ class GameJiujiuController extends AppController
 
     private function get_special_ids() {
         $dayHour = date('YmdH');
-        $start = 752361;  //21
-        $start2 = 754218;  //63
-          $ids = array(
-//              '2015020516' => array($start + 0, $start+1,  $start+2,  $start+3,  $start+4,),
-              '2015020521' => array($start + 5, $start+6,  $start+7,  $start+8,  $start+9),
-              '2015020609' => array($start + 10, $start+11,  $start+12,  $start+13,  $start+14),
-              '2015020612' => array($start + 15, $start+16,  $start+17,  $start+18,  $start+19),
-
-              '2015020616' => array($start2 + 45, $start2+46,  $start2+47,  $start2+48,  $start2+49),
-              '2015020621' => array($start2 + 0,  $start2+1,   $start2+2,   $start2+3,   $start2+4,),
-              '2015020709' => array($start2 + 5,  $start2+6,   $start2+7,   $start2+8,   $start2+9),
-              '2015020712' => array($start2 + 10, $start2+11,  $start2+12,  $start2+13,  $start2+14),
-              '2015020716' => array($start2 + 15, $start2+16,  $start2+17,  $start2+18,  $start2+19),
-              '2015020721' => array($start2 + 20, $start2+21,  $start2+22,  $start2+23,  $start2+24),
-              '2015020809' => array($start2 + 25, $start2+26,  $start2+27,  $start2+28,  $start2+29),
-              '2015020812' => array($start2 + 30, $start2+31,  $start2+32,  $start2+33,  $start2+34),
-              '2015020816' => array($start2 + 35, $start2+36,  $start2+37,  $start2+38,  $start2+39),
-              '2015020821' => array($start2 + 40, $start2+41,  $start2+42,  $start2+43,  $start2+44),
-          );
-
         $dateHourKey = '_date_special_' . $dayHour;
         $read = Cache::read($dayHour);
         if (empty($read)) {
             Cache::write($dateHourKey, true);
-            $this->log("get date_special:".json_encode($ids[$dayHour]).", dayHour=".$dayHour);
-            return $ids[$dayHour];
+            $this->log("get date_special:".json_encode($this->ids[$dayHour]).", dayHour=".$dayHour);
+            return $this->ids[$dayHour];
         } else {
             return array();
         }
@@ -876,6 +882,16 @@ class GameJiujiuController extends AppController
      * @return mixed
      */
     private function get_first_waiting($gameType) {
-        return $this->AwardInfo->count_ge_no_spent_50($gameType) + 97;
+
+        $dayHour = date('YmdH');
+
+        $cnt = 0;
+        foreach($this->ids as $key=>$value) {
+            if ($key <= $dayHour) {
+                $cnt += count($value);
+            }
+        }
+
+        return $this->AwardInfo->count_ge_no_spent_50($gameType) + 97 - $cnt;
     }
 }
