@@ -317,7 +317,10 @@ class GameJiujiuController extends AppController
                         if (!empty($special_uids)) {
                             foreach ($special_uids as $uid) {
                                 $so = $this->CouponItem;
-                                $so->addCoupon($uid, self::COUPON_JIUJIU_FIRST, $uid, 'special_te');
+                                $found = $so->find_coupon_item_by_type_no_join($uid, array(self::COUPON_JIUJIU_FIRST));
+                                if (empty($found)) {
+                                    $so->addCoupon($uid, self::COUPON_JIUJIU_FIRST, $uid, 'special_te');
+                                }
                             }
                         }
 
