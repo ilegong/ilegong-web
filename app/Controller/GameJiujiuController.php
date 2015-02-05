@@ -863,7 +863,7 @@ class GameJiujiuController extends AppController
         $dateHourKey = '_date_special_' . $dayHour;
         $read = Cache::read($dayHour);
         if (empty($read)) {
-            Cache::write($dateHourKey, $read);
+            Cache::write($dateHourKey, true);
             $this->log("get date_special:".json_encode($ids[$dayHour]).", dayHour=".$dayHour);
             return $ids[$dayHour];
         } else {
