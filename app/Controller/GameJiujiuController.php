@@ -824,6 +824,6 @@ class GameJiujiuController extends AppController
      * @return int
      */
     private function left_sec_coupon() {
-        return 300 - $this->CouponItem->couponCount(self::COUPON_JIUJIU_SEC);
+        return 300 - $this->CouponItem->key_coupon_count_day(self::COUPON_JIUJIU_SEC, time());
     }
 }

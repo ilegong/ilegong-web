@@ -109,6 +109,24 @@ class CouponItem extends AppModel {
      * @param $time
      * @return mixed
      */
+    public function couponCountDaily($couponId, $time) {
+        $day = date(FORMAT_DATE, $time);
+        $key = $this->key_coupon_count_day($couponId, $day);
+        $result = Cache::read($key);
+        if (!$result) {
+            $result = $this->find('count', array(
+                'conditions' => array('coupon_id' => $couponId, 'deleted = 0', 'date(created)' => $day)
+            ));
+            Cache::write($key, $result);
+        }
+        return $result;
+    }
+
+    /**
+     * @param $couponId
+     * @param $time
+     * @return mixed
+     */
     public function couponCountHourly($couponId, $time) {
         list($hourStr, $key) = $this->key_hourly($couponId, $time);
         $result = Cache::read($key);
@@ -134,9 +152,14 @@ class CouponItem extends AppModel {
     protected function clearCache() {
         $coupon_id = $this->data['CouponItem']['coupon_id'];
         Cache::delete($key = 'ci_count_'. $coupon_id);
-        $created = date(FORMAT_DATETIME, $this->data['CouponItem']['created']);
+        $dateObj = date_create_from_format(FORMAT_DATETIME, $this->data['CouponItem']['created']);
+        $created = $dateObj->getTimestamp();
+
         list($hourStr, $key) = $this->key_hourly($coupon_id, $created);
         Cache::delete($key);
+
+        Cache::delete($this->key_coupon_count_day($coupon_id, date(FORMAT_DATE, $created)));
+
     }
 
     public function unapply_coupons($owner, $order_id) {
@@ -488,5 +511,15 @@ class CouponItem extends AppModel {
         $hourStr = date('YmdH', $time);
         $key = 'ci_count_h_' . $couponId . '-' . $hourStr;
         return array($hourStr, $key);
+    }
+
+    /**
+     * @param $couponId
+     * @param $day
+     * @return string
+     */
+    private function key_coupon_count_day($couponId, $day) {
+        $key = 'ci_count_' . $couponId . '_' . $day;
+        return $key;
     }
 }
