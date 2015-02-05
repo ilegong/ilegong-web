@@ -388,6 +388,7 @@ class UsersController extends AppController {
         $coupons = $this->CouponItem->find_my_all_coupons($this->currentUser['id']);
         $this->set(compact('coupons'));
         $this->pageTitle = __('我的优惠劵');
+        $this->set('hideNav', true);
     }
 
     function my_offers() {

@@ -1,3 +1,12 @@
+{{if $is_mobile}}
+<div class="classlist_v2" style="z-index:1">
+    <ul class="clearfix">
+        <li><a href="/users/me" class="back"></a></li>
+        <li class="line"></li>
+        <li><strong>我的优惠券</strong></li>
+    </ul>
+</div>
+{{/if}}
 {{if empty($coupons)}}
 <!--暂无优惠券-->
 <div class="coupon_no" >
