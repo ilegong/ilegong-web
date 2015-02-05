@@ -33,7 +33,7 @@ $('<li/>').appendTo(ul);
 //setTimeout(function () {
 var mySwiper = $indexBanner.swiper({
 mode: 'horizontal',
-loop: true,
+loop: banners.length>1,
 autoplay: 10000,
 calculateHeight: true,
 onSlideChangeStart: function (swiper) {

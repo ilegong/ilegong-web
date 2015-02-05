@@ -3,7 +3,7 @@
         {{template Elements/product_img_sild}}
         <div class="p_details_title">{{$Product['Product']['name']}}</div>
         <ul class="p_details_price clearfix">
-            <li class="fl price">{{if $Product['Product']['original_price']}}<span>￥<font>{{$this->Number->precision($Product['Product']['original_price'], 2)}}</font></span>{{/if}}<em>{{$this->Number->precision($price, 2)}}</em></li>
+            <li class="fl price">{{if $Product['Product']['original_price']}}<span>￥<font>{{$this->Number->precision($Product['Product']['original_price'], 2)}}</font></span>{{/if}}<em>{{$this->Number->precision($Product['Product']['price'], 2)}}</em></li>
             <li class="fr stat"><a {{if $comment_count>0}}href="#comment-div"{{/if}} style="color: #333333">评价<span>({{$commet_count}})</span></a></li>
         </ul>
         {{if $hasOfferBrandIds && array_key_exists($Product['Product']['brand_id'], $hasOfferBrandIds)}}
@@ -98,7 +98,7 @@
         {{/if}}
         <ul class="clearfix shop_entrance">
             <li class="fl"><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0" /></a></li>
-            <li class="fl"><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}">进入{{$brand['Brand']['name']}}的店铺</a></li>
+            <li class="fl"><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}">{{$brand['Brand']['name']}}</a></li>
             <li class="fr" style="margin-top: 0.3em;height: 1.634em;"><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}" class="p_more"></a></li>
         </ul>
         <div class="service">
@@ -167,19 +167,13 @@
                             </div>
                         </a>
                         <dl class="clearfix" style="margin-right: 10px;">
-                            <dt>
-                                <a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['created'])).'/'.$brands[$item['brand_id']]['slug'].'.html')}}">
-                                    <img style="width: 2.25em;height: 2.3em;" class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brands[$item['brand_id']]['coverimg']))}}" border="0" />
-                                </a>
-                            </dt>
                             <dt style="margin-left: 2.3em; float: none;">
                                 <a href="{{product_link2($item)}}">
-                                    <span class="brand_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;"dl>{{$brands[$item['brand_id']]['Brand']['name']}}</span>
-                            <span class="listprice"><span>¥{{$this->Number->precision($item['price'], 2)}}</span>
-                                {{if !empty($item['original_price'])}}
-                                <span class="original">¥{{$this->Number->precision($item['original_price'], 2)}}</span>
-                                {{/if}}
-                            </span>
+                                    <span class="listprice"><span>¥{{$this->Number->precision($item['price'], 2)}}</span>
+                                        {{if !empty($item['original_price'])}}
+                                        <span class="original">¥{{$this->Number->precision($item['original_price'], 2)}}</span>
+                                        {{/if}}
+                                    </span>
                                 </a>
                             </dt>
                         </dl>
