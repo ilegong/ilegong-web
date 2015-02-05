@@ -672,9 +672,9 @@ class GameJiujiuController extends AppController
             $this_got += ($mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
         }
 
-//        if (($total_got + $this_got) > 90 /*$this->AWARD_LIMIT*/) {
-//            $this_got = 0;
-//        }
+        if (($total_got + $this_got) > 99 /*$this->AWARD_LIMIT*/) {
+            $this_got = 0;
+        }
 
 
         return $this_got;
