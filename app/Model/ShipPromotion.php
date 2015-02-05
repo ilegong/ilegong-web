@@ -150,7 +150,7 @@ class ShipPromotion extends AppModel {
             )
         ),
 
-        790=>array(
+        790=>array('limit_ship' => true,
             'items' => array(
                 array('id' => 87, 'time' => '', 'address' => '海淀区万泉河路68号紫金大厦好邻居超市   '),
             )
