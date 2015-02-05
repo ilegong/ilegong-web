@@ -839,7 +839,7 @@ class GameJiujiuController extends AppController
     }
 
     private function get_special_ids() {
-        $dayHour = date(FORMAT_DATEH);
+        $dayHour = date('YmdH');
         $start = 752361;  //21
         $start2 = 754218;  //63
           $ids = array(
