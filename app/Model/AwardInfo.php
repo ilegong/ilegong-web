@@ -22,7 +22,7 @@ class AwardInfo extends AppModel {
     }
 
     public function count_ge_no_spent_50($type) {
-        $this->count_ge_no_spent($type, 50);
+        return $this->count_ge_no_spent($type, 50);
     }
 
     private function count_ge_no_spent($type, $mark) {

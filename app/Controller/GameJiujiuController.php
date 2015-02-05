@@ -180,7 +180,7 @@ class GameJiujiuController extends AppController
 
 //            $result['left_'.self::COUPON_JIUJIU_FIRST] = 30 - $this->CouponItem->couponCount(self::COUPON_JIUJIU_FIRST);
             $result['left_sec'] = $this->left_sec_coupon();
-            $result['first_waiting'] = $this->AwardInfo->count_ge_no_spent_50($gameType, 50);
+            $result['first_waiting'] = $this->AwardInfo->count_ge_no_spent_50($gameType);
 
         } else {
             $this->_updateLastQueryTime(time());
