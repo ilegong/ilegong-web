@@ -15,7 +15,7 @@ banners.push('{{$this->Html->assetUrl($this->Html->url('http://51daifan-images.s
 banner_links.push('#');
 {{/loop}}
 {{if empty($Product['Uploadfile'])}}
-banners.push('$Product['Product']['coverimg']');
+banners.push('{{$Product['Product']['coverimg']}}');
 banner_links.push('#');
 {{/if}}
 
