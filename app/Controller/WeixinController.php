@@ -66,11 +66,16 @@ class WeixinController extends AppController {
 
             $host3g = (WX_HOST);
 
+            $openId = trim($req['FromUserName']);
+            if (!empty($openId)) {
+                if ($from == FROM_WX_SERVICE) {
+                    $uid = $this->Oauthbind->findUidByWx($openId);
+                }
+            }
+
 			$input = "";
 			if(!empty($req['Event'])){
 
-                        $openId = trim($req['FromUserName']);
-                        $uid = $this->Oauthbind->findUidByWx($openId);
 
 				if($req['Event']=='subscribe'){ //订阅
                     if ($from == FROM_WX_SERVICE) {
