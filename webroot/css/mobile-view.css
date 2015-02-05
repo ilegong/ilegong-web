@@ -212,7 +212,11 @@ ul li{ list-style:none;}
 }
 .all_line .title{ font-size:1.25em;}
 .all_line .title li:first-child{padding-left:0.8em; color:#29ac0e;}
-.all_line li:first-child span{color:#999999;font-weight:normal;font-size:0.9em;}
+.all_line li:first-child span {
+    color: #999999;
+    font-weight: normal;
+    font-size: 1em;
+}
 .all_line .title li:last-child{padding-right:0.8em;}
 .user {
     font-size: 1em;

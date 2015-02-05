@@ -140,7 +140,7 @@
         </div>
         {{/if}}
         <div class="all_line" id="comment-div">
-            <ul class="clearfix title">
+            <ul class="clearfix title" style="margin-bottom: 0;">
                 <li class="fl">口碑评论<span> {{$Product['Product']['comment_nums']}}</span></li>
                 {{if $commet_count>5}}
                 <li class="fr"><a href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html" class="p_more"></a></li>
@@ -148,7 +148,7 @@
             </ul>
             {{template products/template_product_comments}}
         </div>
-        <div class="all_line">
+        <div class="all_line" style="margin-bottom: 0;">
             <ul class="clearfix title">
                 <li class="fl">相关推荐</li>
             </ul>
@@ -166,10 +166,10 @@
                                 {{/if}}
                             </div>
                         </a>
-                        <dl class="clearfix" style="margin-right: 10px;">
-                            <dt style="margin-left: 2.3em; float: none;">
+                        <dl class="clearfix" style="margin-right: 10px;margin-bottom: 0;">
+                            <dt style="float: none;">
                                 <a href="{{product_link2($item)}}">
-                                    <span class="listprice"><span>¥{{$this->Number->precision($item['price'], 2)}}</span>
+                                    <span class="listprice" style="padding-left: 0;"><span>¥{{$this->Number->precision($item['price'], 2)}}</span>
                                         {{if !empty($item['original_price'])}}
                                         <span class="original">¥{{$this->Number->precision($item['original_price'], 2)}}</span>
                                         {{/if}}
