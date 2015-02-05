@@ -327,6 +327,10 @@ class WeixinController extends AppController {
                         }
                     }
                     break;
+                case '19':
+                case 'uid':
+                    echo $this->newTextMsg($user, $me,  "您的用户id为".$uid);
+                    break;
 				default:
                     $hour = date('G');
                     if($hour>=9&&$hour<21){
