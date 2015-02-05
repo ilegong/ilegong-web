@@ -160,7 +160,7 @@ class CouponItem extends AppModel {
             Cache::delete($daily_key);
             $this->log("clear-cache:".$coupon_id.", created_time:".$created_time.", dateObj=".json_encode($dateObj).", hourly_Key=".$hourly_key.", daily_key=".$daily_key);
         } else {
-            $this->log("clear-cache with coupon_id=".$coupon_id);
+            $this->log("clear-cache: for dateObj being empty: coupon_id=".$coupon_id.", created_time:".$created_time);
         }
 
     }
