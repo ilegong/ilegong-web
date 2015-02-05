@@ -68,13 +68,18 @@ $(document).ready(function(){
 
     var showNoMoreTimesDialog = false;
 
+    function total_not_spent() {
+        var total = $.trim($('#apple_got_cnt').text());
+        return (total != '' ? parseInt(total) : 0);
+    }
+
     function showNoMoreTimes() {
         if (showNoMoreTimesDialog == true) {
             return;
         }
 
         var not_sure_subscribed = !(typeof(user_subscribed) != 'undefined' && user_subscribed);
-        var $message = (!$today_got_wx && not_sure_subscribed ) ? '关注朋友说每天增加2次机会' : '机会已用完，分享给你的朋友们，每个朋友点击过来就增加<span class="apple_numbers">1</span>次机会！';
+        var $message = (!$today_got_wx && not_sure_subscribed && total_not_spent() > 15 ) ? '关注朋友说每天增加2次机会' : '机会已用完，分享给你的朋友们，每个朋友点击过来就增加<span class="apple_numbers">1</span>次机会！';
 
         showNoMoreTimesDialog = true;
         bootbox.dialog({
