@@ -13,9 +13,15 @@
         if (location.href.indexOf('{{ALI_HOST}}') == -1) {
             bootbox.alert('我们的账号信息：<br>账户：<span>yxg@ilegong.com</span> <br/> 收款人：北京爱乐供科技有限公司');
         } else {
-            utils.alert_two('非常抱歉，微信与支付宝正在火拼，如支付出现问题，请返回选择微信支付。','取消', '支付宝', function(){}, function(){
-                location.href  = "/ali_pay/{{$isMobile?'wap_to_alipay':'goto_to_alipay'}}/{{$order['Order']['id']}}";
-            });
+            var new_href = "/ali_pay/{{$isMobile?'wap_to_alipay':'goto_to_alipay'}}/{{$order['Order']['id']}}";
+            if (typeof (_pys_in_weixin) != 'undefined' && _pys_in_weixin) {
+                utils.alert_two('非常抱歉，微信与支付宝正在火拼，如支付出现问题，请返回选择微信支付。', '取消', '支付宝', function () {
+                }, function () {
+                    location.href = new_href;
+                });
+            } else {
+                location.href = new_href;
+            }
         }
     }
 
