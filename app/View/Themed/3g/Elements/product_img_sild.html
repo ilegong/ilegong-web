@@ -1,51 +1,49 @@
 <div class="p_details_pic">
-    <a href="#X" class="pre"></a>
-    <a href="#X" class="next"></a>
-    <?php foreach($Product['Uploadfile'] as $index=>$uploadfile){ ?>
-        <img data-index="{{$index}}" src="{{$this->Html->url('http://51daifan-images.stor.sinaapp.com'.$uploadfile['Uploadfile']['mid_thumb'])}}" width="100%" border="0" {{if $index>0}}style="display:none"{{/if}}/>
-    <?php }?>
+    <div class="index_banner swiper-container">
+        <ul class="clearfix list-unstyled">
+        </ul>
+        <div class="swiper-wrapper">
+        </div>
+    </div>
 </div>
-<script>
-    $(document).ready(function(){
-        var currentImgIndex = 0;
-        var allImages = $('div.p_details_pic img');
-        var imagesLength = allImages.length;
-        var $pre = $('a.pre');
-        var $next = $('a.next');
-        processSlidBtn();
-        $pre.on('click',function(e){
-            e.preventDefault();
-            calCurrentIndex(1);
-        });
-        $next.on('click',function(e){
-            e.preventDefault();
-            calCurrentIndex(-1);
-        });
-        function calCurrentIndex(val){
-            currentImgIndex+=val;
-            if(currentImgIndex<0){
-                currentImgIndex=imagesLength-1;
-            }
-            if(currentImgIndex>imagesLength||currentImgIndex==imagesLength){
-                currentImgIndex=0;
-            }
-            processSlidBtn();
-            allImages.hide();
-            $(allImages[currentImgIndex]).show();
-        }
-        function processSlidBtn(){
-            if(currentImgIndex==0){
-                $pre.hide();
-                if(imagesLength>1){
-                    $next.show();
-                }
-            }
-            if(currentImgIndex==imagesLength-1){
-                $next.hide();
-                if(imagesLength>1){
-                    $pre.show();
-                }
-            }
-        }
-    });
-</script>
+{{$this->Html->scriptStart(array('block' => 'scriptBottom'));}}
+$().ready(function(){
+var banners = [];
+var banner_links = [];
+{{loop $Product['Uploadfile'] $key $uploadfile}}
+banners.push('{{$this->Html->assetUrl($this->Html->url('http://51daifan-images.stor.sinaapp.com'.$uploadfile['Uploadfile']['mid_thumb']))}}');
+banner_links.push('#');
+{{/loop}}
+{{if empty($Product['Uploadfile'])}}
+banners.push('$Product['Product']['coverimg']');
+banner_links.push('#');
+{{/if}}
+
+//$(banners).preload();
+
+var $indexBanner = $('.index_banner');
+var ul = $indexBanner.find('ul');
+var swiper_wrapper = $indexBanner.find('div.swiper-wrapper');
+
+$.each(banners, function (idx, value) {
+$('<div class="swiper-slide"><a href="' + banner_links[idx] + '"><img src="' + value + '" border="0" /></a></div>').appendTo(swiper_wrapper);
+$('<li/>').appendTo(ul);
+});
+
+//setTimeout(function () {
+var mySwiper = $indexBanner.swiper({
+mode: 'horizontal',
+loop: true,
+autoplay: 10000,
+calculateHeight: true,
+onSlideChangeStart: function (swiper) {
+ul.find('li').removeClass('cur');
+ul.find('li:nth-child(' + (swiper.activeLoopIndex % 4 + 1) + ')').toggleClass('cur');
+}
+//etc..
+});
+ul.find('li:first').addClass('cur');
+//}, 100);
+})
+{{$this->Html->scriptEnd();}}
+{{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'), array('block' => 'scriptBottom'));}}

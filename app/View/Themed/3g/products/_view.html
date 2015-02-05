@@ -4,7 +4,7 @@
         <div class="p_details_title">{{$Product['Product']['name']}}</div>
         <ul class="p_details_price clearfix">
             <li class="fl price">{{if $Product['Product']['original_price']}}<span>￥<font>{{$this->Number->precision($Product['Product']['original_price'], 2)}}</font></span>{{/if}}<em>{{$this->Number->precision($price, 2)}}</em></li>
-            <li class="fr stat"><a href="#comment-div" style="color: #333333    ">评价<span>({{$commet_count}})</span></a></li>
+            <li class="fr stat"><a {{if $comment_count>0}}href="#comment-div"{{/if}} style="color: #333333">评价<span>({{$commet_count}})</span></a></li>
         </ul>
         {{if $hasOfferBrandIds && array_key_exists($Product['Product']['brand_id'], $hasOfferBrandIds)}}
         <ul class="sales clearfix">
@@ -16,12 +16,20 @@
             </li>
         </ul>
         {{/if}}
-        {{if $Product['Product']['promote_name']||$ship_fixed||$ship_promo_nums||$ship_promo_amount||!empty($special_name)||$in_nianhuo||$total_left>0}}
+        {{if $Product['Product']['promote_name']}}
+        <ul class="sales clearfix">
+            <li>
+                <span style="display: block;overflow: hidden;">
+                    <span><?php echo $Product['Product']['promote_name']; ?><br/></span>
+                </span>
+            </li>
+        </ul>
+        {{/if}}
+        {{if $ship_fixed||$ship_promo_nums||$ship_promo_amount||!empty($special_name)||$in_nianhuo||$total_left>0}}
         <ul class="sales clearfix">
             <li>
                 <span class="gray mr12" style="float:left;">促销:</span>
                 <span style="display: block;overflow: hidden;">
-                    <span><?php echo $Product['Product']['promote_name']; ?><br/></span>
                     {{if $ship_fixed}}<span>参与本店每单{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}元快递优惠</span></br>{{/if}}
                     {{if $ship_promo_nums}}<span>{{$ship_promo_nums}}</span><br/>{{/if}}
                     {{if $ship_promo_amount}}<span>{{$ship_promo_amount}}</span><br/>{{/if}}
@@ -139,6 +147,49 @@
                 {{/if}}
             </ul>
             {{template products/template_product_comments}}
+        </div>
+        <div class="all_line">
+            <ul class="clearfix title">
+                <li class="fl">相关推荐</li>
+            </ul>
+            <div class="classlist_good" style="margin-top: 0;">
+                <ul class="clearfix list-unstyled" style="padding-left:10px;">
+                    <?PHP foreach($items as $index=>$item) {
+                    $item['slug'] = $item['slug']?$item['slug']:$item['id'];
+                    ?>
+                    <li class="{{if $index%2 !=0}}last{{/if}}">
+                        <a href="{{product_link2($item)}}" style="display:block; background-color:#ffffff; margin-right:10px;">
+                            <img  src="{{$this->Html->assetUrl(small_thumb_link($item['coverimg']))}}" border="0" style="display:block; background-color:#ffffff; padding-bottom:0.5em; height: 136px"/>
+                            <div class="item_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;">{{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}{{$item['name']}}<span>有红包</span>
+                                {{else}}
+                                {{$item['name']}}
+                                {{/if}}
+                            </div>
+                        </a>
+                        <dl class="clearfix" style="margin-right: 10px;">
+                            <dt>
+                                <a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['created'])).'/'.$brands[$item['brand_id']]['slug'].'.html')}}">
+                                    <img style="width: 2.25em;height: 2.3em;" class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brands[$item['brand_id']]['coverimg']))}}" border="0" />
+                                </a>
+                            </dt>
+                            <dt style="margin-left: 2.3em; float: none;">
+                                <a href="{{product_link2($item)}}">
+                                    <span class="brand_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;"dl>{{$brands[$item['brand_id']]['Brand']['name']}}</span>
+                            <span class="listprice"><span>¥{{$this->Number->precision($item['price'], 2)}}</span>
+                                {{if !empty($item['original_price'])}}
+                                <span class="original">¥{{$this->Number->precision($item['original_price'], 2)}}</span>
+                                {{/if}}
+                            </span>
+                                </a>
+                            </dt>
+                        </dl>
+                    </li>
+                    <?php } ?>
+                    {{if count($data_list) % 2 == 1}}
+                    <li style="height: 12.4285em"></li>
+                    {{/if}}
+                </ul>
+            </div>
         </div>
     </div>
 </div>

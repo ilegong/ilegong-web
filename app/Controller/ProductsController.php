@@ -274,6 +274,14 @@ class ProductsController extends AppController{
 
         $recommC = $this->Components->load('ProductRecom');
         $recommends = $recommC->recommend($pid);
+        $recommend_brand_ids = Hash::extract($recommends,'{n}.brand_id');
+        $this->loadModel('Brand');
+        $recommend_brands = $this->Brand->find('all', array(
+            'conditions' => array('id' => array_unique($recommend_brand_ids)),
+            'fields' => array('id', 'name', 'created', 'slug', 'coverimg')
+        ));
+        $recommend_brands = Hash::combine($recommend_brands,'{n}.Brand.id','{n}.Brand');
+        $this->set('brands',$recommend_brands);
         $this->set('items', $recommends);
         if($_REQUEST['tag']){
             $this->set('history',$_REQUEST['history']);

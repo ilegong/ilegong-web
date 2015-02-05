@@ -14,17 +14,6 @@
     </div>
 </div>
 
-<div class="swiper-container thumbs-cotnainer" style="margin-bottom: 5em">
-    <div class="thumbs-title" style="padding-left: 0.8em;padding-bottom: 0.5em;">商品推荐</div>
-    <div class="swiper-wrapper" style="padding-left: 0.8em;padding-right: 0.8em;">
-        <?PHP foreach($items as $item) {
-            $item['slug'] = $item['slug']?$item['slug']:$item['id'];
-            ?>
-        {{include 'products/recommend'}}
-        <?php } ?>
-        <div class="swiper-slide" style="display: none"></div>
-    </div>
-</div>
 <!--底部购买-->
 <div class="bottom_bg">
     <ul class="clearfix">
@@ -43,7 +32,7 @@
             </div>
         </li>
         <li class="shopping fr">
-            <a href="/carts/listcart.html" style="position:relative;" class="shopping_icon"><div id="item-count" class="shopping_count"></div></a>
+            <a href="/carts/listcart.html" style="position:relative; margin-top: 0.9em;" class="shopping_icon"><div id="item-count" class="shopping_count"></div></a>
             <p>购物车</p>
         </li>
     </ul>
@@ -66,6 +55,9 @@
         var host = referurl.split('/',3);
         if(host[2] == '{{WX_HOST}}'){
             $('#return_label').on('click',function(){
+                if(referurl.indexOf('product_comments')>0||referurl.indexOf('product_detail')>0){
+                    history.go(-2);
+                }
                 window.location.href = referurl;
             })
         }else{
