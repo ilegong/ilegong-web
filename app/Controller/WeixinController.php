@@ -493,7 +493,7 @@ class WeixinController extends AppController {
      * @param $me
      */
     private function handle_admin_coupon($parameters, $user, $me) {
-        global $_coupon_could_distribute;
+        $_coupon_could_distribute = array(18483 => '新用户50返10元券', 18482 => '新用户100返20元券');
         $msg = "";
         if (count($parameters) < 2) {
             $msg = "格式错误， 发优惠券的格式为 admin_coupon {{uid或者手机号}} {{COUPON_ID}}";
