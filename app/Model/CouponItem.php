@@ -150,9 +150,10 @@ class CouponItem extends AppModel {
     protected function clearCache() {
         $coupon_id = $this->data['CouponItem']['coupon_id'];
         Cache::delete($hourly_key = 'ci_count_'. $coupon_id);
+
         $created_time = $this->data['CouponItem']['created'];
         $dateObj = date_create_from_format(FORMAT_DATETIME, $created_time);
-        if (!empty($dataObj)) {
+        if (!empty($dateObj)) {
             $created = $dateObj->getTimestamp();
             list($hourStr, $hourly_key) = $this->key_hourly($coupon_id, $created);
             $daily_key = $this->key_coupon_count_day($coupon_id, date(FORMAT_DATE, $created));
