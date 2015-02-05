@@ -494,6 +494,7 @@ class GameJiujiuController extends AppController
         $this->set('has_no_orders', empty($found_order));
 
         $this->set('left_sec', $this->left_sec_coupon());
+        $this->set('first_waiting', $this->AwardInfo->count_ge_no_spent_50($gameType));
 
         $customized_game = $this->customized_view_files[$gameType];
         if (!empty($customized_game)) {

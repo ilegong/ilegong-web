@@ -140,6 +140,7 @@
             <span class="fl">一等奖：</span>
             <span style="overflow:hidden;" id="coupon_first_li">
             	摇满50颗，即可获得价值<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">148元玖玖草莓</a>秒杀机会(每天9、12、16、20整点各送出5箱，秒完即止)
+                <span style="margin-top:10px;display:none" id="first_waiting_span">共<i id="first_waiting_i" style="color:red">{{$first_waiting}}</i>人等待兑奖</span>
                 {{if $had_coupon_first}}<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html">请在1小时内使用</a>{{/if}}
             </span>
         </li>
@@ -249,12 +250,17 @@
     var first_waiting = 0;
     var left_sec = 0;
 
+    if (total_not_spent() >= 30) {
+        $('#first_waiting_span').show();
+    }
+
     function update_after_times_query(data) {
         first_waiting = data['first_waiting'];
         left_sec = data['left_sec'];
 
         $('#left_sec_span').show();
-        $('#left_sec_i').text(data['left_sec']);
+        $('#left_sec_i').text(left_sec);
+        $('#first_waiting_i').text(first_waiting);
     }
 
     function toggle_red_point(total) {
