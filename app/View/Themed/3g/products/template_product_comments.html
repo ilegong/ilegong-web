@@ -6,12 +6,14 @@
 {{/if}}
 <script>
     $(document).ready(function(){
+        {{if $limitCommentCount}}
         var $limitCommentCount={{$limitCommentCount}};
+        {{/if}}
         var $viewAllComments = $('#view_all_comments');
         var $commentItems = $('#comment_items');
         //load comment
         function loadCommentData(){
-            if(!$limitCommentCount>0){
+            if(!$limitCommentCount){
                 utils.progress_notify('评论加载中...');
             }
             $.ajax({
@@ -24,7 +26,7 @@
                     for(var i in request){
                         processCommentData(request[i]['Comment']);
                     }
-                    if(!$limitCommentCount>0){
+                    if(!$limitCommentCount){
                         utils.close_notify();
                     }
                     //$commentItems.children().slice(0,5).show();
