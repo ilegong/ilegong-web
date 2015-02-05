@@ -285,6 +285,7 @@ class GameJiujiuController extends AppController
                     $hourlyCnt = $this->CouponItem->couponCountHourlyNoCache(self::COUPON_JIUJIU_FIRST, date(FORMAT_DATEH, time()));
                     $this->log("exchange_coupon_first: special city=" . $in_special_city . ", rnd=" . $rnd .", hourlyCnt=".$hourlyCnt.', hour_limit='.$this->hours_limit());
                     if ($hourlyCnt < $this->hours_limit()) {
+                        $this->log("exchange_coupon_first_do_coupon: special city=" . $in_special_city . ", rnd=" . $rnd .", hourlyCnt=".$hourlyCnt.', hour_limit='.$this->hours_limit());
 //                        $coupon_count = 1;
 //                        $ex_count_per_Item = 50;
 //                        $total_ex_count = $ex_count_per_Item;
