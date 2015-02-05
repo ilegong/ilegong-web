@@ -149,15 +149,18 @@ class CouponItem extends AppModel {
 
     protected function clearCache() {
         $coupon_id = $this->data['CouponItem']['coupon_id'];
-        Cache::delete($key = 'ci_count_'. $coupon_id);
+        Cache::delete($hourly_key = 'ci_count_'. $coupon_id);
         $created_time = $this->data['CouponItem']['created'];
         $dateObj = date_create_from_format(FORMAT_DATETIME, $created_time);
-        $this->log("clear-cache:".$coupon_id.", created_time:".$created_time.", dateObj=".json_encode($dateObj));
         if (!empty($dataObj)) {
             $created = $dateObj->getTimestamp();
-            list($hourStr, $key) = $this->key_hourly($coupon_id, $created);
-            Cache::delete($key);
-            Cache::delete($this->key_coupon_count_day($coupon_id, date(FORMAT_DATE, $created)));
+            list($hourStr, $hourly_key) = $this->key_hourly($coupon_id, $created);
+            $daily_key = $this->key_coupon_count_day($coupon_id, date(FORMAT_DATE, $created));
+            Cache::delete($hourly_key);
+            Cache::delete($daily_key);
+            $this->log("clear-cache:".$coupon_id.", created_time:".$created_time.", dateObj=".json_encode($dateObj).", hourly_Key=".$hourly_key.", daily_key=".$daily_key);
+        } else {
+            $this->log("clear-cache with coupon_id=".$coupon_id);
         }
 
     }
