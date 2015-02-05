@@ -527,7 +527,7 @@ class WeixinController extends AppController {
             }
             if (!empty($uid)) {
                 if (count($parameters) == 2 || empty($parameters[2]) || array_search($parameters[2], array_keys($_coupon_could_distribute)) === false) {
-                    $msg = '可用优惠券：';
+                    $msg = '可用优惠券：'.json_encode($_coupon_could_distribute);
                     foreach($_coupon_could_distribute as $cid => $label) {
                         $msg .= $cid .'=>'.$label.'; ';
                     }
