@@ -63,9 +63,7 @@ class UploadfilesController extends AppController {
 					$info ['status'] = '1';
 					$info =array_merge($info,$fileifo);
                     $file_url = UPLOAD_FILE_URL . $fileifo['fspath'];
-                    if (strpos($file_url, 'http://') === FALSE) {
-                        $file_url = str_replace('//', '/', $file_url);
-                    }
+					$file_url = str_replace('//', '/', $file_url);
 					if(is_image($file_url)){
 						$info['message'] = '<a href="'.$file_url.'" title="'.__( 'Preview').'" target="_blank"><img src="'.$file_url.'" style="max-height:120px"/></a>';
 					}
