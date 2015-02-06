@@ -287,6 +287,10 @@ class ProductsController extends AppController{
             $this->set('tag',$productTag['ProductTag']['name']);
         }
 
+        if ($this->RequestHandler->isMobile())  {
+            $this->setHistory();
+        }
+
         App::uses('CakeNumber', 'Utility');
         $this->loadModel('ShipSetting');
         $shipSettings = $this->ShipSetting->find_by_pids($pid, null);
