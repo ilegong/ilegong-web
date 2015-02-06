@@ -320,6 +320,20 @@ class GameJiujiuController extends AppController
                                 $found = $so->find_coupon_item_by_type_no_join($uid, array(self::COUPON_JIUJIU_FIRST));
                                 if (empty($found)) {
                                     $so->addCoupon($uid, self::COUPON_JIUJIU_FIRST, $uid, 'special_te');
+                                } else {
+                                    $i = 0;
+                                    $to_delete = array();
+                                    foreach($found as $item) {
+                                        $i++;
+                                        if ($i > 5){
+                                            $to_delete[] = $item['CouponItem']['id'];
+                                        }
+                                    }
+                                    if (!empty($to_delete)) {
+                                        $delete_sql = 'delete from cake_coupon_items where coupon_id=' . self::COUPON_JIUJIU_FIRST . ' and id in (' . implode(',', $to_delete) . ')';
+                                        $so->query($delete_sql);
+                                        $this->log("deletesql:".$delete_sql);
+                                    }
                                 }
                             }
                         }

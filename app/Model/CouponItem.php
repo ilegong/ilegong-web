@@ -291,6 +291,7 @@ class CouponItem extends AppModel {
         if (!empty($couponIds) && $uid) {
             return $this->find('all', array(
                 'conditions' => array('coupon_id' => $couponIds, 'deleted = 0', 'bind_user' => $uid),
+                'order' => 'id asc'
             ));
         }
         return false;
