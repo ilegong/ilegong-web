@@ -7,7 +7,9 @@
 <script>
     $(document).ready(function(){
         {{if $limitCommentCount}}
-        var $limitCommentCount={{$limitCommentCount}};
+            var $limitCommentCount={{$limitCommentCount}};
+        {{else}}
+            var $limitCommentCount=null;
         {{/if}}
         var $viewAllComments = $('#view_all_comments');
         var $commentItems = $('#comment_items');
@@ -64,7 +66,7 @@
                                 '</div>';
                                     if (item.images && item.images.length > 0) {
                                         $comment+='<div class="pic">'+
-                                                        '<ul class="clearfix" style="margin-bottom: 3px;">';
+                                                        '<ul class="clearfix" style="margin-bottom: 3px;margin-left: 35px;">';
                                         $.each(item.images, function(idx, val){
                                             $comment+='<li><a href="#X"><img src="'+val+'" border="0" /></a></li>';
                                         });
