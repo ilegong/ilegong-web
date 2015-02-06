@@ -110,18 +110,22 @@ class ProductsController extends AppController{
     function product_detail($slug){
         $this->setHistory();
         $fields = array('id','slug','name','content','created');
+        $this->set('hideNav',true);
         parent::view($slug,$fields);
     }
 
     function view_shichi_comment($slug){
         $this->setHistory();
         $fields = array('id','slug','name','created');
+        $this->set('hideNav',true);
         parent::view($slug,$fields);
+
     }
 
     function product_comments($slug){
         $this->setHistory();
         $fields = array('id','slug','name','content','created');
+        $this->set('hideNav',true);
         parent::view($slug,$fields);
     }
 

@@ -96,11 +96,13 @@
             </li>
         </ul>
         {{/if}}
-        <ul class="clearfix shop_entrance" style="color: #29AC0E;">
-            <li class="fl"><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0" /></a></li>
-            <li class="fl"><a style="color:#29AC0E;" href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}">{{$brand['Brand']['name']}}</a></li>
-            <li class="fr" style="margin-top: 0.3em;height: 1.634em;"><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}" class="p_more"></a></li>
-        </ul>
+        <a style="color:#29AC0E;" href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}">
+            <ul class="clearfix shop_entrance" style="color: #29AC0E;">
+                <li class="fl"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0"/></li>
+                <li class="fl">{{$brand['Brand']['name']}}</li>
+                <li class="fr" style="margin-top: 0.3em;height: 1.634em;"><a class="p_more"></a></li>
+            </ul>
+        </a>
         <div class="service">
             <ul class="clearfix b_line">
                 <li>
@@ -118,36 +120,42 @@
                 <li>
                     <span class="gray mr12" style="float:left;">服务:</span>
 			<span style="display: block;overflow: hidden;">
-				<span>本商品由 {{$brand['Brand']['name']}} 发货并提供售后服务。</span><br />
+				<span>本商品由 {{$brand['Brand']['name']}} 发货并提供售后服务。</span>
                 {{if !empty($brand['Brand']['weixin_id'])}}
-                <span>联系商家:微信号 {{$brand['Brand']['weixin_id']}}</span>
+                <span>联系商家:微信号 {{$brand['Brand']['weixin_id']}}。</span>
                 {{/if}}
 			</span>
                 </li>
             </ul>
         </div>
         <div class="all_line">
-            <ul class="clearfix title" style="margin-bottom: 0;">
-                <li class="fl"><a style="color:#29AC0E;" href="/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}">产品介绍</a></li>
-                <li class="fr"><a href="/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}" class="p_more"></a></li>
-            </ul>
+            <a style="color:#29AC0E;" href="/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}">
+                <ul class="clearfix title" style="margin-bottom: 0;">
+                    <li class="fl">产品介绍</li>
+                    <li class="fr"><a class="p_more"></a></li>
+                </ul>
+            </a>
         </div>
         {{if $is_product_has_shichi}}
         <div class="all_line">
+            <a style="color:#29AC0E;" href="/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}">
             <ul class="clearfix title">
                 <li class="fl">试吃报告</li>
-                <li class="fr"><a style="color:#29AC0E;" href="/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}" class="p_more"></a></li>
+                <li class="fr"><a style="color:#29AC0E;" class="p_more"></a></li>
             </ul>
-
+            </a>
         </div>
         {{/if}}
+
         <div class="all_line" id="comment-div">
-            <ul class="clearfix title" style="margin-bottom: 0;">
-                <li class="fl"><a style="color:#29AC0E;" href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}">口碑评论<span> {{$Product['Product']['comment_nums']}}</span></a></li>
-                {{if $commet_count>5}}
-                <li class="fr"><a href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}" class="p_more"></a></li>
-                {{/if}}
-            </ul>
+            {{if $commet_count>5}} <a style="color:#29AC0E;" href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}">{{/if}}
+                <ul class="clearfix title" style="margin-bottom: 0;">
+                    <li class="fl">口碑评论<span> {{$Product['Product']['comment_nums']}}</span></li>
+                    {{if $commet_count>5}}
+                    <li class="fr"><a class="p_more"></a></li>
+                    {{/if}}
+                </ul>
+            {{if $commet_count>5}}</a>{{/if}}
             {{template products/template_product_comments}}
         </div>
         <div class="all_line" style="margin-bottom: 0;">
