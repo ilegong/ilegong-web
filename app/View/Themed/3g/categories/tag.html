@@ -2,9 +2,32 @@
     dl {
         margin-bottom: 0;
     }
+    /**
+ * Grid container
+ */
+    #tag-product-list {
+        list-style-type: none;
+        position: relative; /** Needed to ensure items are laid out relative to this container **/
+        margin: 0;
+        padding: 0;
+    }
+
+    /**
+     * Grid items
+     */
+    #tag-product-list li {
+        display: none; /** Hide items initially to avoid a flicker effect **/
+    }
+
+    #tag-product-list li.inactive {
+        visibility: hidden;
+        opacity: 0;
+    }
+
+
 </style>
 <div class="container clearfix" style="padding: 0;">
-    <div class="classlist">
+    <div class="classlist" style="z-index: 999">
         <a href="/">
         <ul class="clearfix list-unstyled">
             <li class="back"></li>
@@ -16,21 +39,21 @@
         {{if $tag['banner']}}
         <img src="{{$this->Html->assetUrl($tag['banner'])}}" style="width:100%"/>
         {{/if}}
-        <ul class="clearfix list-unstyled" style="padding-left:10px;">
+        <ul class="clearfix list-unstyled" style="padding-left:10px;position: relative;" id="tag-product-list">
 	<?PHP if($total>0){ ?>
 	    <?PHP foreach($data_list as $item) {
 	    $full = true;
 	    $i++;
 		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
 	    ?>
-            <li class="{{if $i/2 == 1}}last{{/if}}">
+            <li>
                 <a href="{{product_link2($item)}}?history=/categories/tag/{{$flagTag}}.html" style="display:block; background-color:#ffffff; margin-right:10px;">
-                <img src="{{$this->Html->assetUrl(small_thumb_link($item['coverimg']))}}" border="0" style="display:block; background-color:#ffffff; padding-bottom:0.5em;"/>
-                <div class="item_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;">{{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}{{$item['name']}}<span>有红包</span>
-                    {{else}}
-                        {{$item['name']}}
-                    {{/if}}
-                </div>
+                    <img src="{{$this->Html->assetUrl(small_thumb_link($item['coverimg']))}}" border="0" style="display:block; background-color:#ffffff; padding-bottom:0.5em;"/>
+                    <div class="item_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;">{{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}{{$item['name']}}<span>有红包</span>
+                        {{else}}
+                            {{$item['name']}}
+                        {{/if}}
+                    </div>
                 </a>
                 <dl class="clearfix" style="margin-right: 10px;">
                     <dt>
@@ -38,7 +61,7 @@
                         <img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brands[$item['brand_id']]['Brand']['coverimg']))}}" border="0" />
                         </a>
                     </dt>
-                    <dt style="margin-left: 2.3em; float: none;">
+                    <dt style="display:block;margin-left: 2.3em; float: none;">
                         <a href="{{product_link2($item)}}">
                             <span class="brand_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;"dl>{{$brands[$item['brand_id']]['Brand']['name']}}</span>
                             <span class="listprice"><span>¥{{$this->Number->precision($item['price'], 2)}}</span>
@@ -53,12 +76,34 @@
 		<?php } ?>
 	<?php } ?>
 
-            {{if count($data_list) % 2 == 1}}
-            <li style="height: 12.4285em"></li>
-            {{/if}}
         </ul>
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+        var container=$('#tag-product-list');
+        var width = container.width();
+        var lis = $('#tag-product-list li');
+        var itemWidth=(width-10)/2;
+        //it can to use imagesLoaded and try to call wookmart two
+        $(window).load(function(){
+            lis.wookmark({
+                itemWidth:itemWidth,
+                container:container,
+                autoResize: false,
+                flexibleWidth: '40%',
+                offset: 5,
+                align: 'center',
+                direction: 'right',
+                outerOffset: 2,
+                fillEmptySpace: true,
+                resizeDelay: 0
+            });
+        });
+    });
+
+
+</script>
 
 
 
