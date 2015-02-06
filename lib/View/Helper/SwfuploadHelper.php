@@ -62,12 +62,13 @@ class SwfuploadHelper extends FormHelper {
                     }
 	        		if('image' == substr($uploadfile['type'],0,5)){
 	        			if(substr($uploadfile['thumb'],0,7) != 'http://'){
-                        	$thumb_url = str_replace('//','/',UPLOAD_FILE_URL.($uploadfile['thumb']));
+                        	//$thumb_url = str_replace('//','/',UPLOAD_FILE_URL.($uploadfile['thumb']));
+							$thumb_url=UPLOAD_FILE_URL.($uploadfile['thumb']);
 	                    }
 	                    else{
 	                        $thumb_url = $uploadfile['thumb'];
 	                    }
-						$listfile.='<img src="'.$thumb_url.'" value="'.$uploadfile['thumb'].'"/>';
+						$listfile.='<img src="'.$thumb_url.'"/>';
 					}
 	        		$listfile.='<input type="hidden" name="data[Uploadfile]['.$uploadfile['id'].'][id]" value="'.$uploadfile['id'].'">
 	        		<p><input type="text" readonly name="data[Uploadfile]['.$uploadfile['id'].'][name]" value="'.urldecode($uploadfile['name']).'"/></p>
