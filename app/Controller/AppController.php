@@ -32,8 +32,6 @@ class AppController extends Controller {
     public $firephp_vars = array();
     public $viewdata = null;
 
-    public $admins = array();
-
     // 自定义构造函数
     public function __construct($request = null, $response = null) {
         global $_admin_uids;
@@ -41,8 +39,6 @@ class AppController extends Controller {
             $this->name = $request['params']['controller'];
         }
 
-        $this->admins = $_admin_uids;
-        
         if (substr($_SERVER['REQUEST_URI'], 0, 11) == '/index.php/') {
             header('location:' . substr($_SERVER['REQUEST_URI'], 10));
             exit;
