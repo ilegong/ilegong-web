@@ -1,10 +1,15 @@
 <div class="classlist_v2" style="z-index:1">
-    <ul class="clearfix">
-        <li><a href="/products/{{date('Ymd',strtotime($Product['Product']['created']))}}/{{$Product['Product']['slug']}}.html?history={{$history}}" class="back"></a></li>
+    <ul class="clearfix" onclick="back('/products/{{date('Ymd',strtotime($Product['Product']['created']))}}/{{$Product['Product']['slug']}}.html?history={{$history}}')">
+        <li><a class="back"></a></li>
         <li class="line"></li>
-        <li><strong><a style="color: #333333"  href="/products/{{date('Ymd',strtotime($Product['Product']['created']))}}/{{$Product['Product']['slug']}}.html?history={{$history}}">口碑评价</a></strong></li>
+        <li><strong>口碑评价</strong></li>
     </ul>
 </div>
 <div class="container" style="margin-top: 41px;background-color: #ffffff;border-bottom: 1px #dddddd solid;padding: 0;">
     {{template products/template_product_comments}}
 </div>
+<script>
+    function back(url){
+        window.location.href=url;
+    }
+</script>
