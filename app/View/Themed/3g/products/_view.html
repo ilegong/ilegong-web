@@ -119,9 +119,8 @@
                     <span class="gray mr12" style="float:left;">服务:</span>
 			<span style="display: block;overflow: hidden;">
 				<span>本商品由 {{$brand['Brand']['name']}} 提供、发货.</span><br />
-                <span>朋友说提供售后服务, 服务热线: 01056245991</span>
                 {{if !empty($brand['Brand']['weixin_id'])}}
-                <span>联系商家:微信号 $brand['Brand']['weixin_id']</span>
+                <span>联系商家:微信号 {{$brand['Brand']['weixin_id']}}</span>
                 {{/if}}
 			</span>
                 </li>
