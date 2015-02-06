@@ -303,7 +303,7 @@ class GameJiujiuController extends AppController
         $sold_out = false;
         $coupon_count = 0;
         $ex_count_per_Item = 0;
-        if ($gameType == self::GAME_JIUJIU) {
+        if ($gameType == self::GAME_JIUJIU && $this->is_weixin()) {
             if ((empty($expect) || $expect == 'first') && $can_exchange_apple_count >= 50) {
                 $in_special_city = $this->in_special_city();
                 $rnd = mt_rand(0, 7);
@@ -321,7 +321,7 @@ class GameJiujiuController extends AppController
                                        $found = $so->find_coupon_item_by_type_no_join($uid, array(self::COUPON_JIUJIU_FIRST), $start);
                                        if (empty($found)) {
                                            $so->addCoupon($uid, self::COUPON_JIUJIU_FIRST, $uid, 'special_te');
-                                       } else {
+                                       } else if($rnd == 6) {
                                            $i = 0;
                                            $to_delete = array();
                                            foreach ($found as $item) {
