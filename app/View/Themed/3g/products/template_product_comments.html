@@ -2,7 +2,7 @@
 
 </div>
 {{if $commet_count>5}}
-<div class="more" id="view_all_comments"><a href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html">查看全部评价</a></div>
+<div class="more" id="view_all_comments"><a href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}">查看全部评价</a></div>
 {{/if}}
 <script>
     $(document).ready(function(){
