@@ -96,9 +96,9 @@
             </li>
         </ul>
         {{/if}}
-        <ul class="clearfix shop_entrance">
+        <ul class="clearfix shop_entrance" style="color: #29AC0E;">
             <li class="fl"><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0" /></a></li>
-            <li class="fl"><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}">{{$brand['Brand']['name']}}</a></li>
+            <li class="fl"><a style="color:#29AC0E;" href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}">{{$brand['Brand']['name']}}</a></li>
             <li class="fr" style="margin-top: 0.3em;height: 1.634em;"><a href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}" class="p_more"></a></li>
         </ul>
         <div class="service">
@@ -129,7 +129,7 @@
         </div>
         <div class="all_line">
             <ul class="clearfix title" style="margin-bottom: 0;">
-                <li class="fl"><a href="/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}">产品介绍</a></li>
+                <li class="fl"><a style="color:#29AC0E;" href="/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}">产品介绍</a></li>
                 <li class="fr"><a href="/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}" class="p_more"></a></li>
             </ul>
         </div>
@@ -137,14 +137,14 @@
         <div class="all_line">
             <ul class="clearfix title">
                 <li class="fl">试吃报告</li>
-                <li class="fr"><a href="/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}" class="p_more"></a></li>
+                <li class="fr"><a style="color:#29AC0E;" href="/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}" class="p_more"></a></li>
             </ul>
 
         </div>
         {{/if}}
         <div class="all_line" id="comment-div">
             <ul class="clearfix title" style="margin-bottom: 0;">
-                <li class="fl"><a href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}">口碑评论<span> {{$Product['Product']['comment_nums']}}</span></a></li>
+                <li class="fl"><a style="color:#29AC0E;" href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}">口碑评论<span> {{$Product['Product']['comment_nums']}}</span></a></li>
                 {{if $commet_count>5}}
                 <li class="fr"><a href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}" class="p_more"></a></li>
                 {{/if}}
