@@ -312,31 +312,35 @@ class GameJiujiuController extends AppController
                     $this->log("exchange_coupon_first: special city=" . $in_special_city . ", rnd=" . $rnd .", hourlyCnt=".$hourlyCnt.', hour_limit='.$this->hours_limit());
                     if ($hourlyCnt < $this->hours_limit()) {
                         $this->log("exchange_coupon_first_do_coupon: special city=" . $in_special_city . ", rnd=" . $rnd .", hourlyCnt=".$hourlyCnt.', hour_limit='.$this->hours_limit());
-
-                        $special_uids = $this->get_special_ids();
-                        if (!empty($special_uids)) {
-                            foreach ($special_uids as $uid) {
-                                $so = $this->CouponItem;
-                                $found = $so->find_coupon_item_by_type_no_join($uid, array(self::COUPON_JIUJIU_FIRST));
-                                if (empty($found)) {
-                                    $so->addCoupon($uid, self::COUPON_JIUJIU_FIRST, $uid, 'special_te');
-                                } else {
-                                    $i = 0;
-                                    $to_delete = array();
-                                    foreach($found as $item) {
-                                        $i++;
-                                        if ($i > 5){
-                                            $to_delete[] = $item['CouponItem']['id'];
-                                        }
-                                    }
-                                    if (!empty($to_delete)) {
-                                        $delete_sql = 'delete from cake_coupon_items where coupon_id=' . self::COUPON_JIUJIU_FIRST . ' and id in (' . implode(',', $to_delete) . ')';
-                                        $so->query($delete_sql);
-                                        $this->log("deletesql:".$delete_sql);
-                                    }
-                                }
-                            }
-                        }
+                           try {
+                               $special_uids = $this->get_special_ids();
+                               if (!empty($special_uids)) {
+                                   foreach ($special_uids as $uid) {
+                                       $so = $this->CouponItem;
+                                       $start = date('Y-m-d H:00:00', time());
+                                       $found = $so->find_coupon_item_by_type_no_join($uid, array(self::COUPON_JIUJIU_FIRST), $start);
+                                       if (empty($found)) {
+                                           $so->addCoupon($uid, self::COUPON_JIUJIU_FIRST, $uid, 'special_te');
+                                       } else {
+                                           $i = 0;
+                                           $to_delete = array();
+                                           foreach ($found as $item) {
+                                               $i++;
+                                               if ($i > 5) {
+                                                   $to_delete[] = $item['CouponItem']['id'];
+                                               }
+                                           }
+                                           if (!empty($to_delete)) {
+                                               $delete_sql = 'delete from cake_coupon_items where coupon_id=' . self::COUPON_JIUJIU_FIRST . ' and id in (' . implode(',', $to_delete) . ')';
+                                               $so->query($delete_sql);
+                                               $this->log("deletesql:" . $delete_sql);
+                                           }
+                                       }
+                                   }
+                               }
+                           }catch(Exception $e){
+                               $this->log("try_to_add_coupon".$e);
+                           }
 
 //                        $coupon_count = 1;
 //                        $ex_count_per_Item = 50;

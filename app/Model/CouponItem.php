@@ -287,10 +287,14 @@ class CouponItem extends AppModel {
         return empty($arr) ? false : $arr[0];
     }
 
-    public function find_coupon_item_by_type_no_join($uid, $couponIds) {
+    public function find_coupon_item_by_type_no_join($uid, $couponIds, $start = null) {
         if (!empty($couponIds) && $uid) {
+            $cond = array('coupon_id' => $couponIds, 'deleted = 0', 'bind_user' => $uid);
+            if (!empty($start)) {
+                $cond['created >=\''.$start.'\''];
+            }
             return $this->find('all', array(
-                'conditions' => array('coupon_id' => $couponIds, 'deleted = 0', 'bind_user' => $uid),
+                'conditions' => $cond,
                 'order' => 'id asc'
             ));
         }
