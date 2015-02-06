@@ -294,11 +294,7 @@ class ProductsController extends AppController{
                 $this->set('tag',$productTag['ProductTag']['name']);
             }
         }
-
-        if ($this->RequestHandler->isMobile())  {
-            $this->setHistory();
-        }
-
+        
         App::uses('CakeNumber', 'Utility');
         $this->loadModel('ShipSetting');
         $shipSettings = $this->ShipSetting->find_by_pids($pid, null);
@@ -551,7 +547,7 @@ class ProductsController extends AppController{
     function setHistory(){
         $history = $_REQUEST['history'];
         if(!$history){
-            $history = $this->request->referer();
+            $history ='/';
         }
         if(!(strpos($history,WX_HOST)>=0)){
             $history='/';
