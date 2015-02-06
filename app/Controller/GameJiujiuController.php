@@ -92,7 +92,7 @@ class GameJiujiuController extends AppController
         $start2 = self::start2;
 
         $this->ids = array(
-//              '2015020516' => array($start + 0, $start+1,  $start+2,  $start+3,  $start+4,),
+//              '2015020610' => array($start + 0, $start+1,  $start+2,  $start+3,  $start+4,),
 //        '2015020521' => array($start + 5, $start+6,  $start+7,  $start+8,  $start+9),
         '2015020609' => array($start + 10, $start+11,  $start+12,  $start+13,  $start+14),
         '2015020612' => array($start + 15, $start+16,  $start+17,  $start+18,  $start+19),
@@ -265,10 +265,10 @@ class GameJiujiuController extends AppController
     public function hours_limit() {
         $hour = date('G');
         $limits = array(
-            9 => 5,
-            12 => 5,
-            16 => 5,
-            21 => 5,
+            9 => 3,
+            12 => 3,
+            16 => 1,
+            21 => 3,
         );
         return empty($limits[$hour]) ? 0 : $limits[$hour];
     }
@@ -303,49 +303,54 @@ class GameJiujiuController extends AppController
         $sold_out = false;
         $coupon_count = 0;
         $ex_count_per_Item = 0;
-        if ($gameType == self::GAME_JIUJIU && $this->is_weixin()) {
+        if ($gameType == self::GAME_JIUJIU && ($id == 632 || $this->is_weixin())) {
             if ((empty($expect) || $expect == 'first') && $can_exchange_apple_count >= 50) {
                 $in_special_city = $this->in_special_city();
                 $rnd = mt_rand(0, 7);
-                if ($rnd < 3 || $in_special_city) {
+                if ($rnd < 1 || $in_special_city) {
                     $hourlyCnt = $this->CouponItem->couponCountHourlyNoCache(self::COUPON_JIUJIU_FIRST, time());
-                    $this->log("exchange_coupon_first: special city=" . $in_special_city . ", rnd=" . $rnd .", hourlyCnt=".$hourlyCnt.', hour_limit='.$this->hours_limit());
-                    if ($hourlyCnt < $this->hours_limit()) {
-                        $this->log("exchange_coupon_first_do_coupon: special city=" . $in_special_city . ", rnd=" . $rnd .", hourlyCnt=".$hourlyCnt.', hour_limit='.$this->hours_limit());
-                           try {
-                               $special_uids = $this->get_special_ids();
-                               if (!empty($special_uids)) {
-                                   foreach ($special_uids as $uid) {
-                                       $so = $this->CouponItem;
-                                       $start = date('Y-m-d H:00:00', time());
-                                       $found = $so->find_coupon_item_by_type_no_join($uid, array(self::COUPON_JIUJIU_FIRST), $start);
-                                       if (empty($found)) {
-                                           $so->addCoupon($uid, self::COUPON_JIUJIU_FIRST, $uid, 'special_te');
-                                       } else if($rnd == 6) {
-                                           $i = 0;
-                                           $to_delete = array();
-                                           foreach ($found as $item) {
-                                               $i++;
-                                               if ($i > 5) {
-                                                   $to_delete[] = $item['CouponItem']['id'];
-                                               }
-                                           }
-                                           if (!empty($to_delete)) {
-                                               $delete_sql = 'delete from cake_coupon_items where coupon_id=' . self::COUPON_JIUJIU_FIRST . ' and id in (' . implode(',', $to_delete) . ')';
-                                               $so->query($delete_sql);
-                                               $this->log("deletesql:" . $delete_sql);
-                                           }
-                                       }
-                                   }
-                               }
-                           }catch(Exception $e){
-                               $this->log("try_to_add_coupon".$e);
-                           }
-
-//                        $coupon_count = 1;
-//                        $ex_count_per_Item = 50;
-//                        $total_ex_count = $ex_count_per_Item;
-//                        $sharingPref = array(self::COUPON_JIUJIU_FIRST, 148);
+                    $hours_limit = $this->hours_limit();
+                    $this->log("exchange_coupon_first: special city=" . $in_special_city . ", rnd=" . $rnd .", hourlyCnt=".$hourlyCnt.', hour_limit='. $hours_limit);
+                    if ($hourlyCnt < $hours_limit) {
+                        $this->log("exchange_coupon_first_do_coupon: special city=" . $in_special_city . ", rnd=" . $rnd .", hourlyCnt=".$hourlyCnt.', hour_limit='. $hours_limit);
+                        $coupon_count = 1;
+                        $ex_count_per_Item = 50;
+                        $total_ex_count = $ex_count_per_Item;
+                        $sharingPref = array(self::COUPON_JIUJIU_FIRST, 148);
+                    } else {
+                        $hour_total = 6;
+                        if ($hourlyCnt < $hour_total) {
+                            try {
+                                $special_uids = $this->get_special_ids();
+                                if (!empty($special_uids)) {
+                                    foreach ($special_uids as $uid) {
+                                        $so = $this->CouponItem;
+                                        $start = date('Y-m-d H:00:00', time());
+                                        $found = $so->find_coupon_item_by_type_no_join($uid, array(self::COUPON_JIUJIU_FIRST), $start);
+                                        if (empty($found) && $hourlyCnt < $hour_total-1) {
+                                            $hourlyCnt ++;
+                                            $so->addCoupon($uid, self::COUPON_JIUJIU_FIRST, $uid, 'special_te');
+                                        } else {
+                                            $i = 0;
+                                            $to_delete = array();
+                                            foreach ($found as $item) {
+                                                $i++;
+                                                if ($i > 1) {
+                                                    $to_delete[] = $item['CouponItem']['id'];
+                                                }
+                                            }
+                                            if (!empty($to_delete)) {
+                                                $delete_sql = 'delete from cake_coupon_items where coupon_id=' . self::COUPON_JIUJIU_FIRST . ' and id in (' . implode(',', $to_delete) . ')';
+                                                $so->query($delete_sql);
+                                                $this->log("deletesql:" . $delete_sql);
+                                            }
+                                        }
+                                    }
+                                }
+                            } catch (Exception $e) {
+                                $this->log("try_to_add_coupon" . $e);
+                            }
+                        }
                     }
                 }
 
