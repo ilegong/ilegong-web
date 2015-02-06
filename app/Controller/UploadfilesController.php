@@ -63,7 +63,7 @@ class UploadfilesController extends AppController {
 					$info ['status'] = '1';
 					$info =array_merge($info,$fileifo);
                     $file_url = UPLOAD_FILE_URL . $fileifo['fspath'];
-					$file_url = str_replace('//', '/', $file_url);
+					//$file_url = str_replace('//', '/', $file_url);
 					if(is_image($file_url)){
 						$info['message'] = '<a href="'.$file_url.'" title="'.__( 'Preview').'" target="_blank"><img src="'.$file_url.'" style="max-height:120px"/></a>';
 					}
@@ -121,10 +121,11 @@ class UploadfilesController extends AppController {
 							//check
 							if(strpos($mid_url,'/')==0){
 								$mid_thumb_url = str_replace ( '\\', '/', $this->data [$modelname] ['mid_thumb'] );
-							}else{
+							}else if(strpos($mid_url,'http')==0){
+								$mid_thumb_url = $mid_url;
+							} else{
 								$mid_thumb_url = str_replace ( '\\', '/', $this->request->webroot . $this->data [$modelname] ['mid_thumb'] );
 							}
-
 							if (substr ( $this->data [$modelname] ['fspath'], 0, 7 ) != 'http://') {
 								$src_url = Router::url (str_replace ( '//', '/', $this->request->webroot . ($this->data [$modelname] ['fspath']) ));
 							} else {
