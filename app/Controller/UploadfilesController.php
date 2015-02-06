@@ -101,8 +101,10 @@ class UploadfilesController extends AppController {
 
                         if (substr ( $this->data [$modelname] ['thumb'], 0, 7 ) != 'http://') {
                             $file_url = UPLOAD_FILE_URL.str_replace ( '//', '/', ($this->data [$modelname] ['thumb']) );
+							$mid_url =  UPLOAD_FILE_URL.str_replace ( '//', '/', ($this->data [$modelname] ['mid_thumb']) );;
                         } else {
                             $file_url = $this->data [$modelname] ['thumb'];
+							$mid_url = $this->data [$modelname] ['mid_thumb'];
                         }
 
                         $info['fspath'] = $file_url;
@@ -117,7 +119,7 @@ class UploadfilesController extends AppController {
 						
 						if ('image' == substr ( $this->data [$modelname] ['type'], 0, 5 )) {
 
-							$mid_url = $this->data [$modelname] ['mid_thumb'];
+
 							//check
 							if(strpos($mid_url,'/')==0){
 								$mid_thumb_url = str_replace ( '\\', '/', $this->data [$modelname] ['mid_thumb'] );
