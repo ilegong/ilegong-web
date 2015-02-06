@@ -26,7 +26,7 @@ var ul = $indexBanner.find('ul');
 var swiper_wrapper = $indexBanner.find('div.swiper-wrapper');
 
 $.each(banners, function (idx, value) {
-$('<div class="swiper-slide"><a href="' + banner_links[idx] + '"><img src="' + value + '" border="0" /></a></div>').appendTo(swiper_wrapper);
+$('<div class="swiper-slide"><a href="' + banner_links[idx] + '"><img style="height: 240px;" src="' + value + '" border="0" /></a></div>').appendTo(swiper_wrapper);
 $('<li/>').appendTo(ul);
 });
 
@@ -35,7 +35,7 @@ var mySwiper = $indexBanner.swiper({
 mode: 'horizontal',
 loop: banners.length>1,
 autoplay: 10000,
-calculateHeight: true,
+calculateHeight: false,
 onSlideChangeStart: function (swiper) {
 ul.find('li').removeClass('cur');
 ul.find('li:nth-child(' + (swiper.activeLoopIndex % 4 + 1) + ')').toggleClass('cur');
