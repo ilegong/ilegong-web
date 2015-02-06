@@ -53,7 +53,7 @@ class SwfuploadHelper extends FormHelper {
         if(isset($this->data['Uploadfile']) && is_array($this->data['Uploadfile']) && !empty($this->data['Uploadfile'])){
 	        foreach($this->data['Uploadfile'] as $uploadfile){
 	        	if($uploadfile['fieldname']==$file_post_name){
-	        		$listfile.='<li class="upload-fileitem pull-left" id="upload-file-'.$uploadfile['id'].'">';	        		
+	        		$listfile.='<li class="upload-fileitem pull-left" id="upload-file-'.$uploadfile['id'].'">';
                     if(substr($uploadfile['fspath'],0,7) != 'http://'){
                         $file_url = str_replace('//','/',UPLOAD_FILE_URL.($uploadfile['fspath']));
                     }
@@ -67,7 +67,7 @@ class SwfuploadHelper extends FormHelper {
 	                    else{
 	                        $thumb_url = $uploadfile['thumb'];
 	                    }
-						$listfile.='<img src="'.$thumb_url.'"/>';
+						$listfile.='<img src="'.$thumb_url.'" value="'.$uploadfile['thumb'].'"/>';
 					}
 	        		$listfile.='<input type="hidden" name="data[Uploadfile]['.$uploadfile['id'].'][id]" value="'.$uploadfile['id'].'">
 	        		<p><input type="text" readonly name="data[Uploadfile]['.$uploadfile['id'].'][name]" value="'.urldecode($uploadfile['name']).'"/></p>
