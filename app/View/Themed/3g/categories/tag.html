@@ -24,7 +24,7 @@
 		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
 	    ?>
             <li class="{{if $i/2 == 1}}last{{/if}}">
-                <a href="{{product_link2($item)}}" style="display:block; background-color:#ffffff; margin-right:10px;">
+                <a href="{{product_link2($item)}}?history=/categories/tag/{{$flagTag}}.html" style="display:block; background-color:#ffffff; margin-right:10px;">
                 <img src="{{$this->Html->assetUrl(small_thumb_link($item['coverimg']))}}" border="0" style="display:block; background-color:#ffffff; padding-bottom:0.5em;"/>
                 <div class="item_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;">{{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}{{$item['name']}}<span>有红包</span>
                     {{else}}

@@ -9,7 +9,7 @@ class CategoriesController extends AppController {
             $this->view();
             return;
         }
-
+        $this->set('flagTag',$tagSlug);
         $current_cateid = -1;
         $page = 1;
         $pagesize = 60;

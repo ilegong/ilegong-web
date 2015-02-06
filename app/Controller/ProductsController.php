@@ -130,7 +130,6 @@ class ProductsController extends AppController{
     }
 
     function view($slug='/'){
-        $this->setHistory();
         //要求评论登录
         if ($_GET[SPEC_PARAM_KEY_COMM] == 1 || $_GET[SPEC_PARAM_KEY_SHICHI_COMM] == 1) {
             if ($this->is_weixin()) {
@@ -282,13 +281,18 @@ class ProductsController extends AppController{
         $recommC = $this->Components->load('ProductRecom');
         $recommends = $recommC->recommend($pid);
         $this->set('items', $recommends);
-        if($_REQUEST['tag']){
-            $this->set('history',$_REQUEST['history']);
-            $this->set('tag',$_REQUEST['tag']);
+
+        if($this->RequestHandler->isMobile()){
+            $this->setHistory();
         }else{
-            $productTag = $this->findTagsByProduct($this->viewdata['Product']['id']);
-            $this->set('history','/categories/tag/'.$productTag['ProductTag']['slug'].'.html');
-            $this->set('tag',$productTag['ProductTag']['name']);
+            if($_REQUEST['tag']){
+                $this->set('history',$_REQUEST['history']);
+                $this->set('tag',$_REQUEST['tag']);
+            }else{
+                $productTag = $this->findTagsByProduct($this->viewdata['Product']['id']);
+                $this->set('history','/categories/tag/'.$productTag['ProductTag']['slug'].'.html');
+                $this->set('tag',$productTag['ProductTag']['name']);
+            }
         }
 
         if ($this->RequestHandler->isMobile())  {
@@ -538,6 +542,7 @@ class ProductsController extends AppController{
             $this->set('jWeixinOn', true);
         }
     }
+
     function guess_product_detail(){
         $this->pageTitle = '商品详情';
         $this->set('hideNav',true);
@@ -547,6 +552,9 @@ class ProductsController extends AppController{
         $history = $_REQUEST['history'];
         if(!$history){
             $history = $this->request->referer();
+        }
+        if(!(strpos($history,WX_HOST)>=0)){
+            $history='/';
         }
         $this->set('history',$history);
     }
