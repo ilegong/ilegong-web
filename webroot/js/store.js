@@ -1,6 +1,6 @@
 function setCoverImg(model,imgsrc){
-    $('#'+model+'Coverimg').val(imgsrc);
-    $('#'+model+'CoverimgPreview').attr('src',imgsrc);
+    $('#'+model+'Coverimg').val('http://51daifan-images.stor.sinaapp.com'+imgsrc);
+    $('#'+model+'CoverimgPreview').attr('src','http://51daifan-images.stor.sinaapp.com'+imgsrc);
 }
 
 function deleteImg(element){
