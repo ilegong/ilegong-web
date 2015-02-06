@@ -96,7 +96,7 @@
             </li>
         </ul>
         {{/if}}
-        <ul class="clearfix shop_entrance" style="color: #29AC0E;">
+        <ul class="clearfix shop_entrance" style="color: #29AC0E;" onclick="to_brand();">
             <li class="fl"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0"/></li>
             <li class="fl">{{$brand['Brand']['name']}}</li>
             <li class="fr" style="margin-top: 0.3em;height: 1.634em;"><a class="p_more"></a></li>
@@ -134,7 +134,7 @@
         </div>
         {{if $is_product_has_shichi}}
         <div class="all_line">
-            <ul class="clearfix title">
+            <ul class="clearfix title" onclick="to_shichi();">
                 <li class="fl">试吃报告</li>
                 <li class="fr"><a style="color:#29AC0E;" class="p_more"></a></li>
             </ul>
@@ -142,8 +142,7 @@
         {{/if}}
 
         <div class="all_line" id="comment-div">
-
-                <ul class="clearfix title" style="margin-bottom: 0;">
+                <ul class="clearfix title" style="margin-bottom: 0;" {{if $commet_count>5}}onclick="to_comment();"{{/if}}>
                     <li class="fl">口碑评论<span> {{$Product['Product']['comment_nums']}}</span></li>
                     {{if $commet_count>5}}
                     <li class="fr"><a class="p_more"></a></li>
