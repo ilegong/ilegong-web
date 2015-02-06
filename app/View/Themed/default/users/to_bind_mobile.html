@@ -175,11 +175,17 @@
                         showTip('验证码错误，验证短信发送失败，请重新输入');
                     } else if (a.error == 2) {
                         showTip('手机号码格式错误，验证短信发送失败，请重新输入');
+                    }else if(a.error == -42){
+                        showTip('短信验证码已经发出,'+ a['timelimit']+'后重试..');
+                        $confirmInfo.show();
+                        changeBtnState('绑定手机号码', 'bind-mobile');
+                    }else{
+                        showTip('验证短信发送失败，请重新输入');
                     }
                     $handle.removeAttr("disabled");
                 },
                 error: function () {
-                    $('#image_code').attr('src', '/check/captcha.html?' + Math.random() * 10000);
+                    //$('#image_code').attr('src', '/check/captcha.html?' + Math.random() * 10000);
                     showTip('短信验证码获取失败，请重新获取');
                     $handle.removeAttr("disabled");
                 }

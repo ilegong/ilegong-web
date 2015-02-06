@@ -297,3 +297,19 @@ ul li{ list-style:none;}
 .shopping_bg{ background-color:#ff483a;}
 .shopping_bg:active{ background-color:#e01d0e;}
 .bottom_bg p{ padding-top:0.3em;}
+.clearfix a{
+    color: #29AC0E;
+    text-decoration: none;
+}
+.clearfix a:link{
+    color: #29AC0E;
+    text-decoration: none;
+}
+.clearfix a:visited{
+    color: #29AC0E;
+    text-decoration: none;
+}
+.clearfix a:hover{
+    color: #29AC0E;
+    text-decoration: none;
+}
