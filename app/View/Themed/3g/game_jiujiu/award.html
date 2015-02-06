@@ -108,7 +108,7 @@
 	<ul>
     	<li class="strawberry_prize_title">获奖名单<span>(最新100名)</span></li>
         <!--<li class="strawberry_prize_surplus">一等奖剩余10, 二等奖剩余40</li>-->
-        <li class="strawberry_prize_surplus">更新时间：{{$award_list['update_time']}}</li>
+        <li class="strawberry_prize_surplus" style="color:#999999"><a style="color:red; border:1px solid red; padding: 2px" href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=204959507&idx=1&sn=ea373b31b51d837320e14e13a2a853ba#rd">看看谁得奖</a>&nbsp;&nbsp;更新于{{$award_list['update_time']}} </li>
     </ul>
     <div class="strawberry_prize_list">
         <?php foreach($award_list['list'] as $item) { ?>
