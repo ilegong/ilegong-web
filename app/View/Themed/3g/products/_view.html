@@ -96,13 +96,11 @@
             </li>
         </ul>
         {{/if}}
-        <a style="color:#29AC0E;" href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}">
-            <ul class="clearfix shop_entrance" style="color: #29AC0E;">
-                <li class="fl"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0"/></li>
-                <li class="fl">{{$brand['Brand']['name']}}</li>
-                <li class="fr" style="margin-top: 0.3em;height: 1.634em;"><a class="p_more"></a></li>
-            </ul>
-        </a>
+        <ul class="clearfix shop_entrance" style="color: #29AC0E;">
+            <li class="fl"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0"/></li>
+            <li class="fl">{{$brand['Brand']['name']}}</li>
+            <li class="fr" style="margin-top: 0.3em;height: 1.634em;"><a class="p_more"></a></li>
+        </ul>
         <div class="service">
             <ul class="clearfix b_line">
                 <li>
@@ -129,33 +127,28 @@
             </ul>
         </div>
         <div class="all_line">
-            <a style="color:#29AC0E;" href="/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}">
-                <ul class="clearfix title" style="margin-bottom: 0;">
+                <ul class="clearfix title" style="margin-bottom: 0;" onclick="to_detail();">
                     <li class="fl">产品介绍</li>
                     <li class="fr"><a class="p_more"></a></li>
                 </ul>
-            </a>
         </div>
         {{if $is_product_has_shichi}}
         <div class="all_line">
-            <a style="color:#29AC0E;" href="/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}">
             <ul class="clearfix title">
                 <li class="fl">试吃报告</li>
                 <li class="fr"><a style="color:#29AC0E;" class="p_more"></a></li>
             </ul>
-            </a>
         </div>
         {{/if}}
 
         <div class="all_line" id="comment-div">
-            {{if $commet_count>5}} <a style="color:#29AC0E;" href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}">{{/if}}
+
                 <ul class="clearfix title" style="margin-bottom: 0;">
                     <li class="fl">口碑评论<span> {{$Product['Product']['comment_nums']}}</span></li>
                     {{if $commet_count>5}}
                     <li class="fr"><a class="p_more"></a></li>
                     {{/if}}
                 </ul>
-            {{if $commet_count>5}}</a>{{/if}}
             {{template products/template_product_comments}}
         </div>
         <div class="all_line" style="margin-bottom: 0;">
@@ -195,3 +188,20 @@
         </div>
     </div>
 </div>
+
+<script>
+    function to_brand(){
+        window.location.href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}";
+    }
+    function to_shichi(){
+        window.location.href="/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}";
+    }
+    {{if $commet_count>5}}
+        function to_comment(){
+            window.location.href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}";
+        }
+    {{/if}}
+    function to_detail(){
+        window.location.href="/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}";
+    }
+</script>
