@@ -281,17 +281,20 @@ class AppController extends Controller {
         }
     	$this->{$modelClass}->recursive = 1; // 显示时，查询出相关联的数据。
         
+        $cond = array($modelClass . '.deleted' => 0, );
+        if ($modelClass != 'Product') {
+            $cond[$modelClass . '.published'] = 1;
+        }
         if (!empty($slug) && $slug != strval(intval($slug))) {
-            ${$modelClass} = $this->{$modelClass}->find('first', array(
-                    'conditions' => array($modelClass.'.published' => 1, $modelClass.'.deleted' => 0, $modelClass.'.slug' => $slug),
-            ));
+            $cond[$modelClass . '.slug'] = $slug;
         } elseif ($id) {
-            ${$modelClass} = $this->{$modelClass}->find('first', array(
-                    'conditions' => array($modelClass.'.published' => 1, $modelClass.'.deleted' => 0, $modelClass.'.id' => $id),
-            ));
+            $cond[$modelClass.'.id'] = $id;
         } else {
             $this->redirect(array('action' => 'lists'));
         }
+        ${$modelClass} = $this->{$modelClass}->find('first', array(
+                'conditions' => $cond,
+        ));
         $this->viewdata = ${$modelClass};
         
         if (empty(${$modelClass})) {
