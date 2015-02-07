@@ -346,8 +346,10 @@ class WeixinComponent extends Component
                 $options = array(
                     CURLOPT_URL => 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $access_token,
                     CURLOPT_CUSTOMREQUEST => 'POST', // GET POST PUT PATCH DELETE HEAD OPTIONS
-                    CURLOPT_POSTFIELDS => json_encode($post_data)
                 );
+                if (!empty($post_data)) {
+                    $options[CURLOPT_POSTFIELDS] = json_encode($post_data);
+                }
 
                 curl_setopt_array($curl, ($options + $this->wx_curl_option_defaults));
                 $json = curl_exec($curl);
