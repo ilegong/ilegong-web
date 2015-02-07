@@ -29,6 +29,8 @@ App::uses('CustomRouter', 'Lib');
         array('controller'=>'game_jiujiu','action' => 'award', 'jiujiu'));
     CustomRouter::connect('/t/ag/jiujiu',
         array('controller'=>'game_jiujiu','action' => 'award', 'jiujiu'));
+    CustomRouter::connect('/t/ag/xiyang',
+        array('controller'=>'game_xiyang','action' => 'award', 'xiyang'));
     CustomRouter::connect('/t/ag/:type',
         array('controller'=>'apple201410','action' => 'award'),
         array('pass' => array('type'), 'type'=>'[\w_]+'));
