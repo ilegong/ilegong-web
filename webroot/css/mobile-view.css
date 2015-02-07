@@ -297,6 +297,8 @@ ul li{ list-style:none;}
 .shopping_bg{ background-color:#ff483a;}
 .shopping_bg:active{ background-color:#e01d0e;}
 .bottom_bg p{ padding-top:0.3em;}
+.bottom_bg a:hover{ color:#ffffff;}
+.cart_btn_soldout { background-color: #808080}
 .clearfix a{
     text-decoration: none;
 }
