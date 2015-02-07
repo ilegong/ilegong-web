@@ -3,7 +3,7 @@
         {{template Elements/product_img_sild}}
         <div class="p_details_title">{{$Product['Product']['name']}}</div>
         <ul class="p_details_price clearfix">
-            <li class="fl price"><span>￥<font>{{$this->Number->precision($Product['Product']['price'], 2)}}</font></span>{{if $Product['Product']['original_price']}}<em>{{$this->Number->precision($Product['Product']['original_price'], 2)}}</em>{{/if}}</li>
+            <li class="fl price"><span>￥<font>{{$this->Number->precision($price, 2)}}</font></span>{{if $Product['Product']['original_price']}}<em>{{$this->Number->precision($Product['Product']['original_price'], 2)}}</em>{{/if}}</li>
             <li class="fr stat"><a {{if $comment_count>0}}href="#comment-div"{{/if}} style="color: #333333">评价<span>({{$commet_count}})</span></a></li>
         </ul>
         {{if $hasOfferBrandIds && array_key_exists($Product['Product']['brand_id'], $hasOfferBrandIds)}}
