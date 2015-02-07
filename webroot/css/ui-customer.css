@@ -712,6 +712,8 @@ body.modal-open{margin-right: 0px}
 .tb_action .tb_btn_buy:hover{ background-color:#ff9000;text-decoration:none;}
 .tb_action .tb_btn_basket{ background-color:#EC4E4C;}
 .tb_action .tb_btn_basket:hover{ background-color:#db2321;text-decoration:none;}
+.tb_action .cart_btn_soldout{background-color: #AEA698;margin-right:15px;}
+.tb_action .cart_btn_soldout:hover{background-color: #AEA698;text-decoration: none}
 
 /*相关推荐*/
 .recommend{ border-left:1px #eeeeee solid; margin-left:40px; padding-left:10px; width:155px;}
