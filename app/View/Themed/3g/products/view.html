@@ -49,7 +49,7 @@
         var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
         var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
         var imgUrl = "{{$this->Html->assetUrl(small_thumb_link($Product['Product']['coverimg']))}}";
-        var desc = "{{$Product['Product'][promote_name]}}。现价{{$this->Number->precision($price, 2)}}元。{{$special_desc}}";
+        var desc = "{{empty($Product['Product']['promote_name']) ? '' : $Product['Product']['promote_name'].'。'}}现价{{$this->Number->precision($price, 2)}}元。{{$special_desc}}";
         wx.onMenuShareAppMessage({
             title: to_friend_title,
             desc: desc,
