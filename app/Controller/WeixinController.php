@@ -336,6 +336,7 @@ class WeixinController extends AppController {
                 case '19':
                 case 'uid':
                     echo $this->newTextMsg($user, $me,  "您的用户id为".$uid);
+                    echo $this->newTextMsg($user, $me,  "您的用户id为(test2):".$uid);
                     break;
 				default:
                     $hour = date('G');
