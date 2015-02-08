@@ -10,195 +10,178 @@
     _path_query = '/game_xiyang/hasNewTimes';
     _mobile_bind_reason = '离大奖很近了，请绑定手机号验证是否人类';
 </script>
+<div id="xy_game">
+    <div class="gold_bg" id="xy_top">
+        <div class="gold_title"><img src="{{$this->Html->assetUrl('/img/game_xiyang/title.gif')}}"></div>
+        <div class="gold_sheep"><img src="{{$this->Html->assetUrl('/img/game_xiyang/sheep.jpg')}}"></div>
+        <div class="gold_count">你摇到 <span id="apple_got_cnt">{{$total_apple}}</span> 个金币，剩余机会 <span>{{$total_times}}</span> 次</div>
+        <ul class="clearfix">
+            <li class="fl"><a id="btn_rules" href="#xy_top"><img src="{{$this->Html->assetUrl('/img/game_xiyang/rule_btn.gif')}}" ></a></li>
+            <li class="fr"><a id="btn_add_chance" href="#xy_top"><img src="{{$this->Html->assetUrl('/img/game_xiyang/addchance_btn.gif')}}" ></a></li>
+        </ul>
+        <ul class="clearfix">
+            <li class="fl"><a id="btn_story" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/story_btn.gif')}}" ></a></li>
+            <li class="fr"><a id="btn_help_me" href="#xy_top"><img src="{{$this->Html->assetUrl('/img/game_xiyang/help_btn.gif')}}" ></a></li>
+        </ul>
+        <a class="gold_prizelist_btn" id="xy_prizelist_btn" href="#gold_prizelist"><img src="{{$this->Html->assetUrl('/img/game_xiyang/prize_btn.gif')}}" ></a>
+    </div>
 
-<div class="gold_bg">
-    <div class="gold_title"><img src="{{$this->Html->assetUrl('/img/game_xiyang/title.gif')}}"></div>
-    <div class="gold_sheep"><img src="{{$this->Html->assetUrl('/img/game_xiyang/sheep.jpg')}}"></div>
-    <div class="gold_count">你摇到 <span id="apple_got_cnt">{{$total_apple}}</span> 个金币，剩余机会 <span>{{$total_times}}</span> 次</div>
-    <ul class="clearfix">
-        <li class="fl"><a id="btn_rules" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/rule_btn.gif')}}" ></a></li>
-        <li class="fr"><a id="btn_add_chance" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/addchance_btn.gif')}}" ></a></li>
-    </ul>
-    <ul class="clearfix">
-        <li class="fl"><a id="btn_story" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/story_btn.gif')}}" ></a></li>
-        <li class="fr"><a id="btn_help_me" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/help_btn.gif')}}" ></a></li>
-    </ul>
-    <a class="gold_prizelist_btn" id="xy_prizelist_btn" href="#gold_prizelist"><img src="{{$this->Html->assetUrl('/img/game_xiyang/prize_btn.gif')}}" ></a>
-</div>
+    <div class="gold_prizeset">
+        <div class="gold_prizeset_title"><img src="{{$this->Html->assetUrl('/img/game_xiyang/prizeset.gif')}}" ></div>
+        <div class="gold_prizeset_level_title">一等奖：</div>
+        <ul class="clearfix">
+            <li>
+                <div>
+                    <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize1.jpg')}}"><br/>
+                    <p>2月13日下午21:00整点秒杀<br/><a href="#X">使用说明</a></p>
+                    <a class="gold_prizeset_seckill_disabled radius4" href="#X">50金币参加秒杀</a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize2.jpg')}}"><br/>
+                    <p>9-13日每天9/12/16/21<br/>整点秒杀，每次1盒<br/><a href="#X">使用说明</a></p>
+                    <a class="gold_prizeset_seckill_usable radius4" href="#X">去使用</a>
+                </div>
+            </li>
+        </ul>
+        <ul class="clearfix">
+            <li>
+                <div>
+                    <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize3.jpg')}}"><br/>
+                    <p>9-13日每天9/12/16/21<br/>整点秒杀，每次一盒<br/><a href="#X">使用说明</a></p>
+                    <a class="gold_prizeset_seckill_disabled radius4" href="#X">50金币参加秒杀</a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize4.jpg')}}"><br/>
+                    <p>9-13日每天9/12/16/21<br/>整点秒杀，每次一盒<br/><a href="#X">使用说明</a></p>
+                    <a class="gold_prizeset_seckill_usable radius4" href="#X">凭码兑换<span>(45845)</span></a>
+                </div>
+            </li>
+        </ul>
+        <div class="gold_prizeset_level_title">二等奖：</div>
+        <ul class="clearfix">
+            <li>
+                <div>
+                    <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize5.jpg')}}"><br/>
+                    <p>随时兑换，不限份数<br/><a href="#X">使用说明</a></p>
+                    <a class="gold_prizeset_seckill_disabled radius4" href="#X">30金币兑换</a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize6.jpg')}}"><br/>
+                    <p>随时兑换，限当天使用<br/>剩余500张<br/><a href="#X">使用说明</a></p>
+                    <a class="gold_prizeset_seckill_usable radius4" href="#X">去使用</a>
+                </div>
+            </li>
+        </ul>
+        <ul class="clearfix">
+            <li>
+                <div>
+                    <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize7.jpg')}}"><br/>
+                    <p>随时兑换，限当天使用<br/>剩余200份<br/><a href="#X">使用说明</a></p>
+                    <a class="gold_prizeset_seckill_disabled radius4" href="#X">50金币参加秒杀</a>
+                </div>
+            </li>
+            <li>
+                <div>
+                    <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize8.jpg')}}"><br/>
+                    <p>随时兑换，剩余300张<br/><a href="#X">使用说明</a></p>
+                    <a class="gold_prizeset_seckill_usable radius4" href="#X">凭码兑换<span>(45845)</span></a>
+                </div>
+            </li>
+        </ul>
+    </div>
 
-<div class="gold_prizeset">
-    <div class="gold_prizeset_title"><img src="{{$this->Html->assetUrl('/img/game_xiyang/prizeset.gif')}}" ></div>
-    <div class="gold_prizeset_level_title">一等奖：</div>
-    <ul class="clearfix">
-        <li>
-            <div>
-                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize1.jpg')}}"><br/>
-                <p>2月13日下午21:00整点秒杀<br/><a href="#X">使用说明</a></p>
-                <a class="gold_prizeset_seckill_disabled radius4" href="#X">50金币参加秒杀</a>
+    <div class="gold_prizelist" id="gold_prizelist">
+        <div class="gold_prizelist_title"><img src="{{$this->Html->assetUrl('/img/game_xiyang/prizelist.gif')}}" ></div>
+        <p>更新于2015-02-07,11:32:30</p>
+        <a href="#X">看看谁得奖</a>
+        <ul class="clearfix">
+            <li class="fl"><strong>小郑</strong>  <span>获得二等奖</span></li>
+            <li class="fr"><span>4分钟前</span></li>
+        </ul>
+    </div>
+    <!--游戏规则-->
+    <div id="xy_rules" class="gold_chance" style="display:none; top:8%;">
+        <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
+        <ul>
+            <li class="strawberry_chance_title">游戏规则与奖品兑换</li>
+        </ul>
+        <ul class="strawberry_rule_list">
+            <li style="padding-top:1em;"><strong>游戏规则</strong></li>
+            <li>
+                <span class="fl">1）</span>
+                <span style="overflow:hidden;">时间：2015年2月4日至2月8日23:59</span>
+            </li>
+            <li>
+                <span class="fl">2）</span>
+                <span style="overflow:hidden;">所有奖券请领取后请在1小时内使用</span>
+            </li>
+            <li>
+                <span class="fl">3）</span>
+                <span style="overflow:hidden;">免费送出和使用优惠券购买的奖品，第二天或第三天统一发货。其中，北京、天津外规格有区别，详见商品介绍页面</span>
+            </li>
+            <li>
+                <span class="fl">4）</span>
+                <span style="overflow:hidden;">相同手机号、微信号、用户、地址只能中奖一次，如有作弊，奖品作废</span>
+            </li>
+            <li>
+                <span class="fl">5）</span>
+                <span style="overflow:hidden;">法律许可范围内，本次活动解释权归朋友说所有</span>
+            </li>
+        </ul>
+        <!--<div class="strawberry_adver"><img src="images/index/adver.jpg" /></div>-->
+    </div>
+    <!--谁帮助过我-->
+    <div id="xy_help_me" class="gold_chance" style="display:none; top:8%;">
+        <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
+        <div class="strawberry_prize_list">
+            {{if $helpMe}}
+            <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=100){break;} ?>
+            <dl class="clearfix">
+                <dt class="fl"><span>{{$item['nickname']}}</span></dt>
+                <dt class="fr">摇下<span class="gots">{{ $item['got'] }}</span></dt>
+            </dl>
+            <?php } ?>
+            {{else}}
+            <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！
+                <a id="share_btn_2" href="javascript:;" class="help">分享好友求助</a>
             </div>
-        </li>
-        <li>
-            <div>
-                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize2.jpg')}}"><br/>
-                <p>9-13日每天9/12/16/21<br/>整点秒杀，每次1盒<br/><a href="#X">使用说明</a></p>
-                <a class="gold_prizeset_seckill_usable radius4" href="#X">去使用</a>
-            </div>
-        </li>
-    </ul>
-    <ul class="clearfix">
-        <li>
-            <div>
-                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize3.jpg')}}"><br/>
-                <p>9-13日每天9/12/16/21<br/>整点秒杀，每次一盒<br/><a href="#X">使用说明</a></p>
-                <a class="gold_prizeset_seckill_disabled radius4" href="#X">50金币参加秒杀</a>
-            </div>
-        </li>
-        <li>
-            <div>
-                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize4.jpg')}}"><br/>
-                <p>9-13日每天9/12/16/21<br/>整点秒杀，每次一盒<br/><a href="#X">使用说明</a></p>
-                <a class="gold_prizeset_seckill_usable radius4" href="#X">凭码兑换<span>(45845)</span></a>
-            </div>
-        </li>
-    </ul>
-    <div class="gold_prizeset_level_title">二等奖：</div>
-    <ul class="clearfix">
-        <li>
-            <div>
-                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize5.jpg')}}"><br/>
-                <p>随时兑换，不限份数<br/><a href="#X">使用说明</a></p>
-                <a class="gold_prizeset_seckill_disabled radius4" href="#X">30金币兑换</a>
-            </div>
-        </li>
-        <li>
-            <div>
-                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize6.jpg')}}"><br/>
-                <p>随时兑换，限当天使用<br/>剩余500张<br/><a href="#X">使用说明</a></p>
-                <a class="gold_prizeset_seckill_usable radius4" href="#X">去使用</a>
-            </div>
-        </li>
-    </ul>
-    <ul class="clearfix">
-        <li>
-            <div>
-                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize7.jpg')}}"><br/>
-                <p>随时兑换，限当天使用<br/>剩余200份<br/><a href="#X">使用说明</a></p>
-                <a class="gold_prizeset_seckill_disabled radius4" href="#X">50金币参加秒杀</a>
-            </div>
-        </li>
-        <li>
-            <div>
-                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize8.jpg')}}"><br/>
-                <p>随时兑换，剩余300张<br/><a href="#X">使用说明</a></p>
-                <a class="gold_prizeset_seckill_usable radius4" href="#X">凭码兑换<span>(45845)</span></a>
-            </div>
-        </li>
-    </ul>
-</div>
-
-<div class="gold_prizelist" id="gold_prizelist">
-    <div class="gold_prizelist_title"><img src="{{$this->Html->assetUrl('/img/game_xiyang/prizelist.gif')}}" ></div>
-    <p>更新于2015-02-07,11:32:30</p>
-    <a href="#X">看看谁得奖</a>
-    <ul class="clearfix">
-        <li class="fl"><strong>小郑</strong>  <span>获得二等奖</span></li>
-        <li class="fr"><span>4分钟前</span></li>
-    </ul>
-</div>
-<!--游戏规则-->
-<div id="xy_rules" class="gold_chance" style="display:none; top:8%;">
-    <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
-    <ul>
-        <li class="strawberry_chance_title">游戏规则与奖品兑换</li>
-    </ul>
-    <ul class="strawberry_rule_list">
-        <li><strong>奖品兑换</strong></li>
-        <li class="clearfix">
-            <span class="fl">一等奖：</span>
-            <span style="overflow:hidden;" id="coupon_first_li">
-            	摇满50颗，即可获得价值<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html?history={{urlencode('/t/ag/jiujiu.html')}}">148元玖玖草莓</a>秒杀机会(每天9、12、16、21整点各送出5箱，秒完即止)
-                <span style="margin-top:10px;display:none" id="first_waiting_span">共<i id="first_waiting_i" style="color:red">{{$first_waiting}}</i>人等待兑奖</span>
-                {{if $had_coupon_first}}<a  class="btn btn-warning" style="color:white" href="/products/20150127/dan_dong_99cao_mei_hong_yan.html?history={{urlencode('/t/ag/jiujiu.html')}}">请在1小时内使用</a>(获奖后请分享到朋友圈截图回复服务号pyshuo2014确认){{/if}}
-            </span>
-        </li>
-        <li class="clearfix">
-            <span class="fl">二等奖：</span>
-            <span style="overflow:hidden;" id="coupon_sec_li">
-            	摇满30颗，即可兑换<a href="/products/20150127/dan_dong_99cao_mei_hong_yan.html?history={{urlencode('/t/ag/jiujiu.html')}}">148元玖玖草莓</a>的5折券（每天限量300张）
-                <span style="margin-top:10px" id="left_sec_span">剩余<i id="left_sec_i" style="color:red">{{$left_sec}}</i>张</span>
-                {{if $had_coupon_sec}}<a  class="btn btn-warning" style="color:white" href="/products/20150127/dan_dong_99cao_mei_hong_yan.html?&history={{urlencode('/t/ag/jiujiu.html')}}">请在1小时内使用</a>{{/if}}
-            </span>
-        </li>
-        <li style="padding-top:1em;"><strong>游戏规则</strong></li>
-        <li>
-            <span class="fl">1）</span>
-            <span style="overflow:hidden;">时间：2015年2月4日至2月8日23:59</span>
-        </li>
-        <li>
-            <span class="fl">2）</span>
-            <span style="overflow:hidden;">所有奖券请领取后请在1小时内使用</span>
-        </li>
-        <li>
-            <span class="fl">3）</span>
-            <span style="overflow:hidden;">免费送出和使用优惠券购买的奖品，第二天或第三天统一发货。其中，北京、天津外规格有区别，详见商品介绍页面</span>
-        </li>
-        <li>
-            <span class="fl">4）</span>
-            <span style="overflow:hidden;">相同手机号、微信号、用户、地址只能中奖一次，如有作弊，奖品作废</span>
-        </li>
-        <li>
-            <span class="fl">5）</span>
-            <span style="overflow:hidden;">法律许可范围内，本次活动解释权归朋友说所有</span>
-        </li>
-    </ul>
-    <!--<div class="strawberry_adver"><img src="images/index/adver.jpg" /></div>-->
-</div>
-<!--谁帮助过我-->
-<div id="xy_help_me" class="gold_chance" style="display:none; top:8%;">
-    <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
-    <div class="strawberry_prize_list">
-        {{if $helpMe}}
-        <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=100){break;} ?>
-        <dl class="clearfix">
-            <dt class="fl"><span>{{$item['nickname']}}</span></dt>
-            <dt class="fr">摇下<span class="gots">{{ $item['got'] }}</span></dt>
-        </dl>
-        <?php } ?>
-        {{else}}
-        <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！
-            <a id="share_btn_2" href="javascript:;" class="help">分享好友求助</a>
+            {{/if}}
         </div>
-        {{/if}}
     </div>
-</div>
-<!--加机会-->
-<div id="xy_add_chance" class="gold_chance" style="display: none; top:8%;">
-    <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
-    <ul>
-        <li class="gold_chance_title">摇一摇加机会秘诀</li>
-    </ul>
-    <p>关注以下平台，分别加2次机会</p>
-    <!--<ul>-->
+    <!--加机会-->
+    <div id="xy_add_chance" class="gold_chance" style="display: none; top:8%;">
+        <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
+        <ul>
+            <li class="gold_chance_title">摇一摇加机会秘诀</li>
+        </ul>
+        <p>关注以下平台，分别加2次机会</p>
+        <!--<ul>-->
         <!--<li><a href="#X" class="radius4">关注朋友说</a></li>-->
-    <!--</ul>-->
-    <dl class="clearfix">
-        <dt class="fl"><a href="#X" class="radius4">关注朋友说</a></dt>
-        <dt class="fr"><a href="#X" class="radius4">关注原态绿</a></dt>
-    </dl>
-    <dl class="clearfix">
-        <dt class="fl"><a href="#X" class="radius4">关注万国万购</a></dt>
-        <dt class="fr"><a href="#X" class="radius4">关注宜生到家</a></dt>
-    </dl>
-    <p>每个朋友点击分享的游戏，<br />分别加1次机会</p>
-    <ul>
-        <li><a href="javascript:;" id="share_btn" class="radius4">分享游戏加机会</a></li>
-    </ul>
-    <div class="gold_chance_aboutus">
-        <img src="{{$this->Html->assetUrl('/img/game_xiyang/logo.png')}}" /><br />[朋友说]同事间互相分享家乡特产的创业网站,<br />我们都是城市里的乡下人。
+        <!--</ul>-->
+        <dl class="clearfix">
+            <dt class="fl"><a href="#X" class="radius4">关注朋友说</a></dt>
+            <dt class="fr"><a href="#X" class="radius4">关注原态绿</a></dt>
+        </dl>
+        <dl class="clearfix">
+            <dt class="fl"><a href="#X" class="radius4">关注万国万购</a></dt>
+            <dt class="fr"><a href="#X" class="radius4">关注宜生到家</a></dt>
+        </dl>
+        <p>每个朋友点击分享的游戏，<br />分别加1次机会</p>
+        <ul>
+            <li><a href="javascript:;" id="share_btn" class="radius4">分享游戏加机会</a></li>
+        </ul>
+        <div class="gold_chance_aboutus">
+            <img src="{{$this->Html->assetUrl('/img/game_xiyang/logo.png')}}" /><br />[朋友说]同事间互相分享家乡特产的创业网站,<br />我们都是城市里的乡下人。
+        </div>
     </div>
+    <div id="gold_trbg" style="display:none;"></div>
 </div>
-<div id="gold_trbg" style="display:none;"></div>
-
 <script type="text/javascript">
     var $today_got_wx = "{{$today_got_wx}}";
     var shake_pic_url = '{{$this->Html->assetUrl("/img/game_jiujiu/index/basketmove.gif")}}';
@@ -308,6 +291,7 @@
 
     $(document).ready(function(){
         //dom
+        var $xy_game_div = $('#xy_game');
         var $gold_trbg = $('#gold_trbg');
         var $xy_add_chance=$('#xy_add_chance');
         var $btn_rules = $('#btn_rules');
@@ -321,26 +305,39 @@
         var $xy_close_btn=$('a.gold_chance_close');
         var apple_got_cnt = $('#apple_got_cnt');
 
+        //prevent scroll
+        function stopScroll(){
+            $('body').bind('touchmove', function(e){e.preventDefault()});
+        }
+
+        function ebableScroll(){
+            $('body').unbind('touchmove');
+        }
+
         //handle close event
         function hidePages(){
             $xy_add_chance.hide();
             $gold_trbg.hide();
             $xy_rules.hide();
             $xy_help_me.hide();
+            ebableScroll();
         }
         $xy_close_btn.on('click',hidePages);
         $gold_trbg.on('click',hidePages);
         $btn_add_chance.on('click',function(){
             $gold_trbg.show();
             $xy_add_chance.show();
+            stopScroll();
         });
         $btn_rules.on('click',function(){
             $gold_trbg.show();
             $xy_rules.show();
+            stopScroll();
         });
         $btn_help_me.on('click',function(){
             $gold_trbg.show();
             $xy_help_me.show();
+            stopScroll();
         });
         $xy_prizelist_btn.on('click',function(){
             window.location.hash='#gold_prizelist';

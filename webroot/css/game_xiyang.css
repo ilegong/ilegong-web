@@ -26,10 +26,6 @@ ul,li{ list-style:none;}
     opacity: .75;
 }
 
-.stop-scrolling {
-    height: 100%;
-    overflow: hidden;
-}
 
 /*摇一摇金币*/
 .gold_bg{ background-color: #b82e2e;}
