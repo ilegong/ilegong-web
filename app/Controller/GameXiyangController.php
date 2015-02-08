@@ -28,7 +28,9 @@ class GameXiyangController extends AppController
     const COUPON_JIUJIU_THIRD = 19035;
     const NEED_MOBILE_LEAST = 33;
 
-    var    $ids = array();
+    var $ids = array();
+
+    var $wx_accounts = array('wgwg','fuqiaoshangmen','yuantailv');
 
     public function beforeFilter()
     {
@@ -149,6 +151,49 @@ class GameXiyangController extends AppController
     const WX_TIMES_ASSIGN_GOT = "got";
     const WX_TIMES_ASSIGN_JUST_GOT = "just-got";
 
+    //订阅其他号 每天加机会
+    public function assignOterWXSubscribeTimes($gameType = KEY_APPLE_201410){
+        $this->autoRender=false;
+        $uid=$this->currentUser['id'];
+        $res = array();
+        $from = $_REQUEST['from'];
+        if($from!=null){
+            $follow_log=$this->is_follow_other_account($from,$uid);
+            if($follow_log!=null){
+                $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
+                $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $uid, 'type' => $gameType,'from'=>$from)));
+                $now = mktime();
+                if ($this->gotWxTimesToday($weixinTimesLog, $now)) {
+                    $result = self::WX_TIMES_ASSIGN_GOT;
+                    $res['got_time'] = date('H点i分', $weixinTimesLog['AwardWeixinTimeLog']['last_got_time']);
+                } else {
+                    $log = array();
+                    $log['uid'] = $uid;
+                    $log['last_got_time'] = $now;
+                    $log['type'] = $gameType;
+                    if (!empty($weixinTimesLog)) {
+                        $wxTimesLogModel->id = $weixinTimesLog['AwardWeixinTimeLog']['id'];
+                    }
+                    if ($wxTimesLogModel->save(array('AwardWeixinTimeLog' => $log)) !== false) {
+                        $cond = array('uid' => $uid, 'type' => $gameType);
+                        $this->AwardInfo->updateAll(array('times' => 'times + ' . self::DAILY_TIMES_SUB,), $cond);
+                        $awardInfo = $this->AwardInfo->find('first', array('conditions' => array('uid' => $uid, 'type' => $gameType)));
+                        $res['total_times'] = $awardInfo['AwardInfo']['times'];
+                        $result = self::WX_TIMES_ASSIGN_JUST_GOT;
+                    } else {
+                        $result = self::WX_TIMES_ASSIGN_RETRY;
+                    }
+                }
+            }else{
+                $result = self::WX_TIMES_ASSIGN_NOT_SUB;
+            }
+        }else{
+            $result = self::WX_TIMES_ASSIGN_RETRY;
+        }
+        $res['result'] = $result;
+        echo json_encode($res);
+    }
+
     public function assignWXSubscribeTimes($gameType = KEY_APPLE_201410)
     {
         $this->autoRender = false;
@@ -232,7 +277,7 @@ class GameXiyangController extends AppController
         $sold_out = false;
         $coupon_count = 0;
         $ex_count_per_Item = 0;
-        if ($gameType == self::GAME_JIUJIU && ($id == 632 || $this->is_weixin())) {
+        if ($gameType == self::GAME_XIYANG && ($id == 632 || $this->is_weixin())) {
             if ((empty($expect) || $expect == 'first') && $can_exchange_apple_count >= 50) {
                 $in_special_city = $this->in_special_city();
                 $rnd = mt_rand(0, 7);
@@ -346,15 +391,18 @@ class GameXiyangController extends AppController
 
     public function award($gameType = KEY_APPLE_201410)
     {
-
         $gameCfg = $this->GameConfig->findByGameType($gameType);
         if (empty($gameCfg) ) {
             throw new CakeException("Not found Game Config");
         }
-
         $dailyHelpLimit = 0; //($gameType == self::GAME_JIUJIU ? 5 : 0);
-
         $current_uid = $this->currentUser['id'];
+        //add follow other account log
+        $from = $_REQUEST['from'];
+        $token=$_REQUEST['token'];
+        if($from){
+            $this->add_follow_other_account_log($from,$current_uid,$token);
+        }
         list($friend, $shouldAdd, $gameType) = $this->track_or_redirect($current_uid, $gameType, $dailyHelpLimit);
         if (!empty($friend)) {
             if ($shouldAdd) {
@@ -461,7 +509,7 @@ class GameXiyangController extends AppController
         }
 
         $this->set('game_end', $this->is_game_end($gameCfg));
-        if ($gameType == self::GAME_JIUJIU) {
+        if ($gameType == self::GAME_XIYANG) {
             $result = array();
             $this->fill_latest_awards($gameType, $result);
             $this->set('award_list', $result['latest_awards']);
@@ -486,6 +534,10 @@ class GameXiyangController extends AppController
 
         $this->set('left_sec', $this->left_sec_coupon());
         $this->set('first_waiting', $this->get_first_waiting($gameType));
+
+        $followLogs = $this->get_user_follow_other_account_info($current_uid);
+        $followLogs = Hash::combine($followLogs,'{n}.FollowOtherAccountLog.from','{n}.FollowOtherAccountLog');
+        $this->set('follow_infos',$followLogs);
 
         $customized_game = $this->customized_view_files[$gameType];
         if (!empty($customized_game)) {
@@ -519,7 +571,7 @@ class GameXiyangController extends AppController
             $need_login = $this->is_weixin() && $got > 20 && notWeixinAuthUserInfo($uid, $this->currentUser['nickname']);
 
             $mobile = $this->Session->read('Auth.User.mobilephone');
-            $need_mobile = $gameType == self::GAME_JIUJIU && $got >= self::NEED_MOBILE_LEAST && empty($mobile);
+            $need_mobile = $gameType == self::GAME_XIYANG && $got >= self::NEED_MOBILE_LEAST && empty($mobile);
             echo json_encode(array('success' => true, 'got_apple' => $apple, 'total_apple' => $total_apple, 'total_times' => $totalAwardTimes, 'need_login' => $need_login, 'need_mobile' => $need_mobile));
         } else {
             $this->log('incorrect award activity type:'. $gameType);
@@ -848,5 +900,58 @@ class GameXiyangController extends AppController
         }
 
         return $this->AwardInfo->count_ge_no_spent_50($gameType) + 97 - $cnt;
+    }
+
+    /**
+     * @param $from
+     * @param $uid
+     * @param null $token
+     * @param null $wx_account
+     */
+    private function add_follow_other_account_log($from,$uid,$token=null,$wx_account=null){
+        if(in_array($from,$this->wx_accounts)){
+            $followOtherAccountLog = ClassRegistry::init('FollowOtherAccountLog');
+            $followLog = $followOtherAccountLog->find('first',array(
+                'conditions'=>array(
+                    'uid'=>$uid,
+                    'from'=>$from,
+                )
+            ));
+            $now = date('Y-m-d H:i:s');
+            if(!$followLog){
+                //add
+                $followOtherAccountLog->save(array('from'=>$from,'uid'=>$uid,'follow_token'=>$token,'wx_account'=>$wx_account,'created'=>$now));
+            }
+// update token
+//            else{
+//                //update
+//                $id=$followLog['FolllowOtherAccountLog']['id'];
+//                $followOtherAccountLog->updateAll(array(),array('id'=>$id));
+//            }
+        }
+    }
+
+    private function is_follow_other_account($from,$uid,$token=null,$wx_account=null){
+        $followOtherAccountLog = ClassRegistry::init('FollowOtherAccountLog');
+        $followLog = $followOtherAccountLog->find('first',array(
+            'conditions'=>array(
+                'uid'=>$uid,
+                'from'=>$from,
+                'follow_token'=>$token,
+                'wx_account'=>$wx_account
+            )
+        ));
+        return $followLog;
+    }
+
+    private function get_user_follow_other_account_info($uid){
+        $followOtherAccountLog = ClassRegistry::init('FollowOtherAccountLog');
+        $followLogs = $followOtherAccountLog->find('all',array(
+            'conditions'=>array(
+                'uid'=>$uid,
+                'from'=>$this->wx_accounts,
+            )
+        ));
+        return $followLogs;
     }
 }

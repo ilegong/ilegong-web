@@ -7,6 +7,7 @@
     _path_shake = '/game_xiyang/shake';
     _path_notify = '/game_xiyang/notifiedToMe';
     _path_assign_follow = '/game_xiyang/assignWXSubscribeTimes';
+    _path_other_assign_follow='/game_xiyang/assignOterWXSubscribeTimes';
     _path_query = '/game_xiyang/hasNewTimes';
     _mobile_bind_reason = '离大奖很近了，请绑定手机号验证是否人类';
 </script>
@@ -166,11 +167,11 @@
         <!--</ul>-->
         <dl class="clearfix">
             <dt class="fl"><a href="#X" id="assignWXSubscribeTimes" class="radius4">关注朋友说</a></dt>
-            <dt class="fr"><a href="#X" class="radius4">关注原态绿</a></dt>
+            <dt class="fr"><a id="yuantailv" {{if $follow_infos['yuantailv']!=null}}name="assignOtherWXSubscribeTimes"{{/if}} href="#X" class="radius4">关注原态绿</a></dt>
         </dl>
         <dl class="clearfix">
-            <dt class="fl"><a href="http://mp.weixin.qq.com/s?__biz=MjM5ODgyMjQ1Nw==&mid=203560202&idx=1&sn=bcc16db724964a9ad66ad9b265dc9570#rd" class="radius4">关注万国万购</a></dt>
-            <dt class="fr"><a href="http://mp.weixin.qq.com/s?__biz=MjM5Njc3Mzg5NQ==&mid=205483700&idx=1&sn=289d1921688989587189c2fca0e7434b" class="radius4">关注富侨上门</a></dt>
+            <dt class="fl"><a id="wgwg" {{if $follow_infos['wgwg']!=null}} name="assignOtherWXSubscribeTimes"{{/if}} href="http://mp.weixin.qq.com/s?__biz=MjM5ODgyMjQ1Nw==&mid=203560202&idx=1&sn=bcc16db724964a9ad66ad9b265dc9570#rd" class="radius4">关注万国万购</a></dt>
+            <dt class="fr"><a id="fuqiaoshangmen"  {{if $follow_infos['fuqiaoshangmen']!=null}}name="assignOtherWXSubscribeTimes"{{/if}} href="http://mp.weixin.qq.com/s?__biz=MjM5Njc3Mzg5NQ==&mid=205483700&idx=1&sn=289d1921688989587189c2fca0e7434b" class="radius4">关注富侨上门</a></dt>
         </dl>
         <p>每个朋友点击分享的游戏，<br />分别加1次机会</p>
         <ul>
@@ -300,8 +301,11 @@
         var $xy_help_me=$('#xy_help_me');
         var $xy_prizelist_btn=$('#xy_prizelist_btn');
 
+        var $other_wx_account= $('a[name="assignOtherWXSubscribeTimes"]')
+
         //red close btn
         var $xy_close_btn=$('a.gold_chance_close');
+
         var apple_got_cnt = $('#apple_got_cnt');
 
         //prevent scroll
@@ -340,6 +344,38 @@
         });
         $xy_prizelist_btn.on('click',function(){
             window.location.hash='#gold_prizelist';
+        });
+
+        $other_wx_account.on('click',function(){
+            //git times
+            var $me = $(this);
+            var from = $me.attr('id');
+            var href = $me.attr('href');
+            var name = $me.text();
+            var reqData = {
+                'from':from
+            };
+            $.getJSON(_path_other_assign_follow + "/" + game_type + "?r=" + Math.random(), reqData,function (data) {
+                if (data.result == "not-sub") {
+                    utils.alert("您还没有关注"+name);
+                    setTimeout(function(){
+                        window.location.href=href;
+                    },1500);
+                } else if (data.result == 'got') {
+                    utils.alert_one("已于" + data.got_time + "领取过啦，请明天再来领取。");
+                    $today_got_wx = 1;
+                } else if (data.result == 'just-got') {
+                    utils.alert("领取成功！您现在有<span class='apple_numbers'>" + data['total_times'] + "</span>次机会");
+                    $('#apple_times_left').text(data['total_times'] < 0 ? 0 : data['total_times']);
+                    $today_got_wx = 1;
+                } else if (data.result == 'retry') {
+                    utils.alert("领取失败，可能是网络状态不好，请稍候重试！");
+                } else {
+                    utils.alert('可能是网络状态不好，请稍候重新领取！');
+                }
+            });
+
+            return false;
         });
 
         game_notify_after_exchange = function (coupon_count, coupon_type) {
