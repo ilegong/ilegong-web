@@ -268,7 +268,7 @@ class GameJiujiuController extends AppController
             9 => 3,
             12 => 3,
             16 => 1,
-            21 => 3,
+            21 => 1,
         );
         return empty($limits[$hour]) ? 0 : $limits[$hour];
     }
