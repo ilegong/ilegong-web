@@ -111,12 +111,12 @@
         <li class="strawberry_prize_surplus" style="color:#999999"><a style="color:red; border:1px solid red; padding: 2px" href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=204959507&idx=1&sn=ea373b31b51d837320e14e13a2a853ba#rd">看看谁得奖</a>&nbsp;&nbsp;更新于{{$award_list['update_time']}} </li>
     </ul>
     <div class="strawberry_prize_list">
-        <?php foreach($award_list['list'] as $item) { ?>
+        <?php if (!empty($award_list['list'])){ foreach($award_list['list'] as $item) { ?>
     	<dl class="clearfix">
             <dt class="fl" style="width:69%"><span>{{$item[0]}}</span>获{{$item[1] == 'first' ? '一等奖' : '二等奖'}}</dt>
             <dt class="fr" style="width:30%">{{$item[2]}}</dt>
         </dl>
-        <?php } ?>
+        <?php } } ?>
     </div>
 </div>
 <!--游戏规则
