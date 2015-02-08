@@ -99,12 +99,15 @@
 
     <div class="gold_prizelist" id="gold_prizelist">
         <div class="gold_prizelist_title"><img src="{{$this->Html->assetUrl('/img/game_xiyang/prizelist.gif')}}" ></div>
-        <p>更新于2015-02-07,11:32:30</p>
-        <a href="#X">看看谁得奖</a>
+        <p>更新于{{$award_list['update_time']}}</p>
+        <a href="#X" style="display:none">看看谁得奖</a>
         <ul class="clearfix">
-            <li class="fl"><strong>小郑</strong>  <span>获得二等奖</span></li>
-            <li class="fr"><span>4分钟前</span></li>
+        <?php foreach($award_list['list'] as $item) { ?>
+            <li class="fl"><strong>{{$item[0]}}</strong>  <span>{{$item[1]}}</span></li>
+            <li class="fr"><span>{{$item[2]}}</span></li>
+        <?php } ?>
         </ul>
+
     </div>
     <!--游戏规则-->
     <div id="xy_rules" class="gold_chance" style="display:none; top:8%;">
@@ -162,9 +165,6 @@
             <li class="gold_chance_title">摇一摇加机会秘诀</li>
         </ul>
         <p>关注以下平台，分别加2次机会</p>
-        <!--<ul>-->
-        <!--<li><a href="#X" class="radius4">关注朋友说</a></li>-->
-        <!--</ul>-->
         <dl class="clearfix">
             <dt class="fl"><a href="#X" id="assignWXSubscribeTimes" class="radius4">关注朋友说</a></dt>
             <dt class="fr"><a id="yuantailv" {{if $follow_infos['yuantailv']!=null}}name="assignOtherWXSubscribeTimes"{{/if}} href="#X" class="radius4">关注原态绿</a></dt>

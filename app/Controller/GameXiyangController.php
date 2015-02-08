@@ -14,7 +14,7 @@ class GameXiyangController extends AppController
 
     var $name = "Xiyang";
 
-    var $uses = array('User', 'AppleAward', 'AwardInfo', 'TrackLog', 'CouponItem', 'ExchangeLog', 'GameConfig');
+    var $uses = array('User', 'AwardResult', 'AwardInfo', 'TrackLog', 'CouponItem', 'ExchangeLog', 'GameConfig');
 
     public $components = array('Weixin');
 
@@ -23,12 +23,30 @@ class GameXiyangController extends AppController
     const EXCHANGE_RICE_SOURCE = 'apple_exchange_rice';
     const GAME_XIYANG = 'xiyang';
 
-    const COUPON_JIUJIU_FIRST = 19037;
-    const COUPON_JIUJIU_SEC = 19036;
-    const COUPON_JIUJIU_THIRD = 19035;
+    const COUPON_YTL_FIRST = 29037;
+    const COUPON_YTL_SEC = 29036;
     const NEED_MOBILE_LEAST = 33;
+    const AWARD_SECOND_LEAST = 30;
 
-    var $ids = array();
+    const AW_BAOJIA_1 = 'baojia-1';
+    const AW_FQSM_1 = 'fqsm-1';
+    const AW_YTL_1 = 'ytv-1';
+    const AW_WGWG_1 = 'wgwg-1';
+
+    const AW_BAOJIA_2 = 'baojia-2';
+    const AW_FQSM_2 = 'fqsm-2';
+    const AW_YTL_2 = 'ytv-2';
+    const AW_WGWG_2 = 'wgwg-2';
+
+    var $coupon_info = array(
+        self::AW_BAOJIA_1 => array(
+            'intro' => '',
+            'store' => '', //适用范围
+            'rule' => '',
+            'click_intro' => '',
+            'coupon_url' => '',
+        )
+    );
 
     var $wx_accounts = array('wgwg','fuqiaoshangmen','yuantailv');
 
@@ -135,7 +153,6 @@ class GameXiyangController extends AppController
             $result['new_times'] =  count($logsToMe);
             $result['nicknames']  = $nicknames;
 
-//            $result['left_'.self::COUPON_JIUJIU_FIRST] = 30 - $this->CouponItem->couponCount(self::COUPON_JIUJIU_FIRST);
             $result['left_sec'] = $this->left_sec_coupon();
             $result['first_waiting'] = $this->get_first_waiting($gameType);
 
@@ -235,18 +252,6 @@ class GameXiyangController extends AppController
         echo json_encode($res);
     }
 
-
-    public function hours_limit() {
-        $hour = date('G');
-        $limits = array(
-            9 => 3,
-            12 => 3,
-            16 => 1,
-            21 => 3,
-        );
-        return empty($limits[$hour]) ? 0 : $limits[$hour];
-    }
-
     public function jp($gameType) {
         $this->autoRender = false;
     }
@@ -256,6 +261,11 @@ class GameXiyangController extends AppController
         $this->autoRender = false;
         $id = $this->currentUser['id'];
         $result = array();
+
+        if (empty($id)) {
+            echo json_encode(array('result' => 'need_login'));
+            return;
+        }
 
         $gameCfg = $this->GameConfig->findByGameType($gameType);
         if (!empty($gameCfg) && $gameCfg['GameConfig']['game_end']) {
@@ -277,88 +287,80 @@ class GameXiyangController extends AppController
         $sold_out = false;
         $coupon_count = 0;
         $ex_count_per_Item = 0;
-        if ($gameType == self::GAME_XIYANG && ($id == 632 || $this->is_weixin())) {
-            if ((empty($expect) || $expect == 'first') && $can_exchange_apple_count >= 50) {
-                $in_special_city = $this->in_special_city();
-                $rnd = mt_rand(0, 7);
-                if ($rnd < 1 || $in_special_city) {
-                    $hourlyCnt = $this->CouponItem->couponCountHourlyNoCache(self::COUPON_JIUJIU_FIRST, time());
-                    $hours_limit = $this->hours_limit();
-                    $this->log("exchange_coupon_first: special city=" . $in_special_city . ", rnd=" . $rnd .", hourlyCnt=".$hourlyCnt.', hour_limit='. $hours_limit);
-                    if ($hourlyCnt < $hours_limit) {
-                        $this->log("exchange_coupon_first_do_coupon: special city=" . $in_special_city . ", rnd=" . $rnd .", hourlyCnt=".$hourlyCnt.', hour_limit='. $hours_limit);
+        if ($id == 632 || $this->is_weixin()) {
+            if (($expect == self::AW_BAOJIA_1 || $expect == self::AW_FQSM_1 || $expect == self::AW_YTL_1 || $expect == self::AW_WGWG_1)
+                && $can_exchange_apple_count >= 50) {
+                $can_go = true;
+                if ($expect == self::AW_BAOJIA_1 || $expect == self::AW_FQSM_1 ) {
+                    $can_go = ('北京' == $this->get_user_province());
+                } else if ($expect == self::AW_YTL_1) {
+                    $rnd = mt_rand(0, 7);
+                    $user_province = $this->get_user_province();
+                    $can_go = ('北京' == $user_province || $rnd < 2);
+                }
+                if ($can_go) {
+                    $secKillM = $this->loadModel('Seckilling');
+                    $killed = $secKillM->seckilling($id, self::GAME_XIYANG, $expect, time());
+                    if (!empty($killed)) {
+                        $this->log("exchange_coupon_first_do_coupon: uid=" . $id . ', killed='. json_encode($killed));
                         $coupon_count = 1;
                         $ex_count_per_Item = 50;
                         $total_ex_count = $ex_count_per_Item;
-                        $sharingPref = array(self::COUPON_JIUJIU_FIRST, 148);
-                    } else {
-                        $hour_total = 6;
-                        if ($hourlyCnt < $hour_total) {
-                            try {
-                                $special_uids = $this->get_special_ids();
-                                if (!empty($special_uids)) {
-                                    foreach ($special_uids as $uid) {
-                                        $so = $this->CouponItem;
-                                        $start = date('Y-m-d H:00:00', time());
-                                        $found = $so->find_coupon_item_by_type_no_join($uid, array(self::COUPON_JIUJIU_FIRST), $start);
-                                        if (empty($found) && $hourlyCnt < $hour_total-1) {
-                                            $hourlyCnt ++;
-                                            $so->addCoupon($uid, self::COUPON_JIUJIU_FIRST, $uid, 'special_te');
-                                        } else {
-                                            $i = 0;
-                                            $to_delete = array();
-                                            foreach ($found as $item) {
-                                                $i++;
-                                                if ($i > 1) {
-                                                    $to_delete[] = $item['CouponItem']['id'];
-                                                }
-                                            }
-                                            if (!empty($to_delete)) {
-                                                $delete_sql = 'delete from cake_coupon_items where coupon_id=' . self::COUPON_JIUJIU_FIRST . ' and id in (' . implode(',', $to_delete) . ')';
-                                                $so->query($delete_sql);
-                                                $this->log("deletesql:" . $delete_sql);
-                                            }
-                                        }
-                                    }
-                                }
-                            } catch (Exception $e) {
-                                $this->log("try_to_add_coupon" . $e);
-                            }
+
+                        if ($expect == self::AW_YTL_1) {
+                            $awarded_coupon_id = self::COUPON_YTL_FIRST;
                         }
                     }
                 }
 
                 if ($coupon_count < 1) {
-                    $this->log("exchange_coupon_first: rnd=$rnd, special city=".$in_special_city.", set to sold out");
                     $sold_out = true;
                 }
-            } else if ((empty($expect) || $expect == 'sec') && $can_exchange_apple_count >= 30) {
+            } else if ( ($expect == self::AW_BAOJIA_2
+                    || $expect == self::AW_FQSM_2
+                    || $expect == self::AW_WGWG_2
+                    || $expect == self::AW_YTL_2)
+                    && $can_exchange_apple_count >= self::AWARD_SECOND_LEAST) {
                 $total_ex_count = $ex_count_per_Item = 30;
-                $sharingPref = array(self::COUPON_JIUJIU_SEC, 74);
+                $awarded_coupon_id = self::COUPON_YTL_SEC;
                 $coupon_count = 1;
             }
 
-            if ($ex_count_per_Item > 0) {
+            if ($coupon_count > 0) {
                 if (!empty($sharingPref)) {
                     $so = $this->CouponItem;
                     $weixin = $this->Weixin;
-                    for($i = 0; $i < $coupon_count; $i++) {
-                        $this->exchangeCouponAndLog($id, $apple_count_snapshot, $ex_count_per_Item, $coupon_count, $exChangeSource, $awardInfo['id'],
-                            function ($uid, $operator, $source_log_id) use ($sharingPref, $so, $weixin) {
-                                list($couponId, $toShareNum) = $sharingPref;
-                                $so->addCoupon($uid, $couponId, $operator, $source_log_id);
-                                $so->id = null;
-                                $store = "在丹东玖玖农场店购买时使用(" . $toShareNum . '元)';
-                                $validDesc = "建议一小时内使用";
-                                $weixin->send_coupon_received_message($uid, 1, $store, $validDesc);
+                    $this->exchangeCouponAndLog($id, $apple_count_snapshot, $ex_count_per_Item, $coupon_count, $exChangeSource, $awardInfo['id'],
+                        function ($uid, $operator, $source_log_id) use ($awarded_coupon_id, $so, $weixin) {
+                            if (!empty($awarded_coupon_id)) {
+                                $so->addCoupon($uid, $awarded_coupon_id, $operator, $source_log_id);
                             }
-                        );
+                            $so->id = null;
+                        }
+                    );
+                    $this->loadModel('AwardResult');
+                    $awardResult = array(
+                        'uid' => $id,
+                        'type' => $gameType,
+                        'award_type' => $expect,
+                        'finish_time' => date(FORMAT_DATETIME),
+                    );
+                    if (!$this->AwardResult->save($awardResult)) {
+                        $this->log("update AwardResult failed:" . json_encode($awardResult));
+                    } else {
+                        $array = $this->coupon_info[$expect];
+                        $first_intro = $array['intro'];
+                        $store = $array['store'];
+                        $rule = $array['rule'];
+                        $click_intro = $array['click_intro'];
+                        $coupon_url = $array['coupon_url'];
+                        $weixin->send_coupon_message_on_received($id, $store, $rule, $coupon_url, $first_intro, $click_intro);
                     }
                 }
             }
         }
 
-        if ($total_ex_count > 0) {
+        if ($coupon_count > 0) {
             $result['exchange_apple_count'] = $total_ex_count;
             $result['coupon_count'] = $coupon_count;
             $result['result'] = "just-got";
@@ -369,11 +371,6 @@ class GameXiyangController extends AppController
         echo json_encode($result);
     }
 
-    public function hourlycnt() {
-        $this->autoRender = false;
-        $hourlyCnt = $this->CouponItem->couponCountHourly(self::COUPON_JIUJIU_FIRST, time());
-        echo $hourlyCnt;
-    }
 
     private function _updateLastQueryTime($curr)
     {
@@ -501,19 +498,17 @@ class GameXiyangController extends AppController
         if ($awardInfo['got'] >= 30) {
             $this->loadModel('CouponItem');
             $coupons = $this->CouponItem->find_coupon_item_by_type_no_join($current_uid,
-                array(self::COUPON_JIUJIU_FIRST, self::COUPON_JIUJIU_SEC, self::COUPON_JIUJIU_THIRD));
+                array(self::COUPON_YTL_FIRST, self::COUPON_YTL_SEC, self::COUPON_JIUJIU_THIRD));
             $couponIds = Hash::combine($coupons, '{n}.CouponItem.coupon_id', '{n}.CouponItem.created');
-            $this->set('had_coupon_first', $couponIds[self::COUPON_JIUJIU_FIRST]);
-            $this->set('had_coupon_sec', $couponIds[self::COUPON_JIUJIU_SEC]);
+            $this->set('had_coupon_first', $couponIds[self::COUPON_YTL_FIRST]);
+            $this->set('had_coupon_sec', $couponIds[self::COUPON_YTL_SEC]);
             $this->set('had_coupon_third', $couponIds[self::COUPON_JIUJIU_THIRD]);
         }
 
         $this->set('game_end', $this->is_game_end($gameCfg));
-        if ($gameType == self::GAME_XIYANG) {
-            $result = array();
-            $this->fill_latest_awards($gameType, $result);
-            $this->set('award_list', $result['latest_awards']);
-        }
+        $result = array();
+        $this->fill_latest_awards($gameType, $result);
+        $this->set('award_list', $result['latest_awards']);
 
         $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
         $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $current_uid, 'type' => $gameType)));
@@ -572,7 +567,9 @@ class GameXiyangController extends AppController
 
             $mobile = $this->Session->read('Auth.User.mobilephone');
             $need_mobile = $gameType == self::GAME_XIYANG && $got >= self::NEED_MOBILE_LEAST && empty($mobile);
-            echo json_encode(array('success' => true, 'got_apple' => $apple, 'total_apple' => $total_apple, 'total_times' => $totalAwardTimes, 'need_login' => $need_login, 'need_mobile' => $need_mobile));
+            echo json_encode(array('success' => true, 'got_apple' => $apple,
+                'total_apple' => $total_apple, 'total_times' => $totalAwardTimes,
+                'need_login' => $need_login, 'need_mobile' => $need_mobile));
         } else {
             $this->log('incorrect award activity type:'. $gameType);
             echo json_encode(array('success' => false, 'msg' => 'incorrect_type'));
@@ -669,54 +666,29 @@ class GameXiyangController extends AppController
      */
     private function randGotApple($todayAwarded, $total_got, $dailyLimit, $gameType) {
         $this_got = 0;
-        $ext = 0;
-        $limit = false;
         $mobileNum = $this->Session->read('Auth.User.mobilephone');
         if (!$this->is_weixin() || (empty($mobileNum) && $total_got > self::NEED_MOBILE_LEAST)) {
             return 0;
-        } else if (false/*$this->shouldLimit($todayAwarded, $dailyLimit)*/) {
-            $left = $this->AWARD_LIMIT - $total_got;
-            $limit = true;
-            if ($left > 0) {
-                if ($left <= 3) {
-                    $ext = 100000;
-                } else if ($left < 10) {
-                    $ext = $left * 100;
-                }
-                /*
-                else if ($left <= 20) {
-                    $ext = 100;
-                } */
-            }
-        }
-//
-//        if ($total_got < 90 && $total_got>30) {
-////            $ext -= 40;
-//        } else if ($total_got > 150) {
-//            $ext += 3 * $total_got;
-//        }
-
-        if ($ext < 0) {
-            $ext = 5;
         }
 
-        $times = $total_got > 31 ? 10 : 15;
-
-        if ($total_got >= 31) {
-            $in_special_city = $this->in_special_city();
-            $ext = $in_special_city ? 80 : 160;
-        } /*else if($total_got >= 40) {
-            $in_special_city = $this->in_special_city();
-            $ext = $in_special_city ? 200 : 500;
-        } */
+        $times = 10;
+        $ext =  ($total_got >= self::AWARD_SECOND_LEAST ? 100 : 20);
 
         for ($i = 0; $i < $times; $i++) {
             $mt_rand = mt_rand(0, intval($ext + $total_got));
             $this_got += ($mt_rand >= 1 && $mt_rand <= 5 ? 1 : 0);
         }
 
-        if (($total_got + $this_got) >= 90 /*$this->AWARD_LIMIT*/) {
+        $new_got = $total_got + $this_got;
+
+        //avoid get twice big award
+        if ($new_got >= 90) {
             $this_got = 0;
+        }
+
+        //give more to new user
+        if ($new_got  < 5) {
+            $this_got = max($this_got, 2);
         }
 
 
@@ -755,13 +727,6 @@ class GameXiyangController extends AppController
         }
     }
 
-    private function shouldLimit($todayAwarded, $dailyLimit) {
-        if($todayAwarded >= $dailyLimit) return true;
-
-        $hour = date('G');
-        return ($todayAwarded >= round($dailyLimit * $hour/24, 0, PHP_ROUND_HALF_UP));
-    }
-
     /**
      * @param $gameCfg
      * @return bool
@@ -782,29 +747,31 @@ class GameXiyangController extends AppController
      */
     private function fill_latest_awards($gameType, &$result) {
 
-        $listR = $this->CouponItem->find_latest_coupon_item_by_type_no_join(array(self::COUPON_JIUJIU_FIRST, self::COUPON_JIUJIU_SEC), 100);
         $now_time = time();
-        $updateTime = friendlyDate($now_time, 'full');
 
         $cache_key = 'v_latest_list_' . $gameType . '_' . date('Y-m-d Hi', $now_time);
         $top_list_cache = Cache::read($cache_key);
         if (empty($top_list_cache)) {
+            $updateTime = friendlyDate($now_time, 'full');
             $award_list = array();
+            $listR = $this->AwardResult->find_latest_award_results($gameType, 100);
             $uids = array();
             foreach ($listR as $res) {
                 $bind_user = $res['CouponItem']['bind_user'];
                 $coupon_id = $res['CouponItem']['coupon_id'];
                 $created = friendlyDateFromStr($res['CouponItem']['created']);
-                $award_list[] = array($bind_user, $coupon_id == self::COUPON_JIUJIU_FIRST ? 'first' : 'sec', $created);
+                $award_list[] = array($bind_user, $coupon_id == self::COUPON_YTL_FIRST ? 'first' : 'sec', $created);
                 $uids[] = $bind_user;
             }
             $nameIdMap = $this->User->findNicknamesMap($uids);
             foreach ($award_list as &$list) {
                 $list[0] = mb_substr(filter_invalid_name($nameIdMap[$list[0]]), 0, 7);
             }
-            Cache::write($cache_key, json_encode($award_list));
+            Cache::write($cache_key, json_encode(array('list' => $award_list, 'update' => $updateTime)));
         } else {
-            $award_list = json_decode($top_list_cache);
+            $arr = json_decode($top_list_cache);
+            $award_list = $arr['list'];
+            $updateTime = $arr['update'];
         }
 
         $tt_list = array('list' => $award_list, 'update_time' => $updateTime);
@@ -813,75 +780,21 @@ class GameXiyangController extends AppController
     }
 
     /**
-     * Fill today award user names/updated time to the specified result array
-     * @param $gameType
-     * @param $result
-     * @param int $limit
-     */
-    private function fill_today_award($gameType, &$result, $limit = 60) {
-
-        $this->loadModel('AwardResult');
-        $day = date(FORMAT_DATE);
-        $listR = $this->CouponItem->find_latest_coupon_item_by_type_no_join(array(self::COUPON_JIUJIU_FIRST, self::COUPON_JIUJIU_SEC));
-        $updateTime = friendlyDate(time(), 'full');
-
-        $cache_key = 'v_list_' .$gameType . '_'. $day . '_' .$listR[0];
-        $today_award_list_cache = Cache::read($cache_key);
-        if (empty($today_award_list_cache)) {
-            $count = 0;
-            $uids = array();
-            foreach ($listR[1] as $awardResult) {
-                if ($count++ >= $limit) {
-                    break;
-                }
-                $uid = $awardResult['AwardResult']['uid'];
-                $uids[] = $uid;
-            }
-
-            $names = array();
-            $nameIdMap = $this->User->findNicknamesMap($uids);
-            foreach ($uids as $uid) {
-                $names[] = mb_substr(filter_invalid_name($nameIdMap[$uid]), 0, 8);
-            }
-            Cache::write($cache_key, json_encode($names));
-        } else {
-            $names = json_decode($today_award_list_cache);
-        }
-
-        $tt_list = array('list' => $names, 'update_time' => $updateTime, 'today_awarded' => $this->AwardResult->todayAwarded($day, $gameType));
-
-        $result['award_list'] = $tt_list;
-    }
-
-    /**
      * @return bool
      */
-    private function in_special_city() {
+    private function get_user_province() {
         $mobileNum = $this->Session->read('Auth.User.mobilephone');
         $this->loadModel('MobileInfo');
         $info = $this->MobileInfo->get_province($mobileNum);
         $this->log('city_by_phone:'.$mobileNum.", info=".$info);
-        return $info == '天津' || $info == '北京';
+        return $info;
     }
 
     /**
      * @return int
      */
     private function left_sec_coupon() {
-        return 300 - $this->CouponItem->couponCountDaily(self::COUPON_JIUJIU_SEC, time());
-    }
-
-    private function get_special_ids() {
-        $dayHour = date('YmdH');
-        $dateHourKey = '_date_special_' . $dayHour;
-        $read = Cache::read($dayHour);
-        if (empty($read)) {
-            Cache::write($dateHourKey, true);
-            $this->log("get date_special:".json_encode($this->ids[$dayHour]).", dayHour=".$dayHour);
-            return $this->ids[$dayHour];
-        } else {
-            return array();
-        }
+        return 300 - $this->CouponItem->couponCountDaily(self::COUPON_YTL_SEC, time());
     }
 
     /**
@@ -889,17 +802,7 @@ class GameXiyangController extends AppController
      * @return mixed
      */
     private function get_first_waiting($gameType) {
-
-        $dayHour = date('YmdH');
-
-        $cnt = 0;
-        foreach($this->ids as $key=>$value) {
-            if ($key <= $dayHour) {
-                $cnt += count($value);
-            }
-        }
-
-        return $this->AwardInfo->count_ge_no_spent_50($gameType) + 97 - $cnt;
+        return $this->AwardInfo->count_ge_no_spent_50($gameType);
     }
 
     /**

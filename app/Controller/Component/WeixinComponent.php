@@ -80,25 +80,11 @@ class WeixinComponent extends Component
 
     public function send_coupon_received_message($user_id, $count=1, $store="购买nana家大米时使用", $rule="有效期至2014年11月15日")
     {
-        $oauthBindModel = ClassRegistry::init('Oauthbind');
-        $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
-        if ($user_weixin != false) {
-            $open_id = $user_weixin['oauth_openid'];
-            $post_data = array(
-                "touser" => $open_id,
-                "template_id" => $this->wx_message_template_ids["COUPON_RECEIVED"],
-                "url" => $this->get_coupon_url(),
-                "topcolor" => "#FF0000",
-                "data" => array(
-                    "first" => array("value" => "亲，恭喜您获得".$count."张优惠券"),
-                    "orderTicketStore" => array("value" => $store),
-                    "orderTicketRule" => array("value" => $rule),
-                    "remark" => array("value" => "点击详情，查询获得的优惠券。", "color" => "#FF8800")
-                )
-            );
-            return $this->send_weixin_message($post_data);
-        }
-        return false;
+            $coupon_url = $this->get_coupon_url();
+            $first_intro = "亲，恭喜您获得" . $count . "张优惠券";
+            $click_intro = "点击详情，查询获得的优惠券。";
+
+        return $this->send_coupon_message_on_received($user_id, $store, $rule, $coupon_url, $first_intro, $click_intro);
     }
 
     public function send_coupon_timeout_message($user_id, $coupon_name, $timeout_time, $rule = "无金额限制")
@@ -557,6 +543,37 @@ class WeixinComponent extends Component
                     "keyword1" => array("value" => "摇一摇，摇下20粒就有奖"),
                     "keyword2" => array("value" => "东北珍珠米2.5kg/谷物圈100g/超值优惠券"),
                     "remark" => array("value" => "点击详情，摇一摇。", "color" => "#FF8800")
+                )
+            );
+            return $this->send_weixin_message($post_data);
+        }
+        return false;
+    }
+
+    /**
+     * @param $user_id
+     * @param $store
+     * @param $rule
+     * @param $coupon_url
+     * @param $first_intro
+     * @param $click_intro
+     * @return bool
+     */
+    public function send_coupon_message_on_received($user_id, $store, $rule, $coupon_url, $first_intro, $click_intro) {
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
+        if ($user_weixin != false) {
+            $open_id = $user_weixin['oauth_openid'];
+            $post_data = array(
+                "touser" => $open_id,
+                "template_id" => $this->wx_message_template_ids["COUPON_RECEIVED"],
+                "url" => $coupon_url,
+                "topcolor" => "#FF0000",
+                "data" => array(
+                    "first" => array("value" => $first_intro),
+                    "orderTicketStore" => array("value" => $store),
+                    "orderTicketRule" => array("value" => $rule),
+                    "remark" => array("value" => $click_intro, "color" => "#FF8800")
                 )
             );
             return $this->send_weixin_message($post_data);
