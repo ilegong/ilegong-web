@@ -12,7 +12,7 @@ create table cake_seckillings (
     `updated` datetime null,
     `occupied_at` datetime not null,
   PRIMARY KEY (`id`),
-  unique (`uid`, `type`)
+  key (`type`, `uid`)
 );
 
 
