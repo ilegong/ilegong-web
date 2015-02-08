@@ -1,136 +1,113 @@
+{{$this->Html->css(array('game_xiyang.css?ver1',));}}
 {{$this->Html->script(array('trace/tracekit.min.report.js', 'shake/shake.js', 'howler/howler.min.js', '3dfalling/rotate3Di.min.js', '3dfalling/3d-falling-leaves.js', 'jquery/jquery.fullPage.min.js', 'jquery/jquery.rotate.js'), array('block' => 'scriptBottom'));}}
-{{$this->Html->css(array('game_jiujiu.css?ver4',));}}
-<style>
-    .apple_share {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 1030;
-        background-color: #000;
-    }
 
-    .apple_share.in {
-        opacity: .75;
-    }
-
-    dl {
-        margin-bottom: 0;
-    }
-
-    ul {
-        margin-bottom: 0 !important;
-    }
-</style>
 <script>
-
     user_subscribed = "{{$user_subscribed}}";
-    _path_exchange = '/game_jiujiu/exchange_coupon';
-    _path_shake = '/game_jiujiu/shake';
-    _path_notify = '/game_jiujiu/notifiedToMe';
-    _path_assign_follow = '/game_jiujiu/assignWXSubscribeTimes';
-    _path_query = '/game_jiujiu/hasNewTimes';
+    _path_exchange = '/game_xiyang/exchange_coupon';
+    _path_shake = '/game_xiyang/shake';
+    _path_notify = '/game_xiyang/notifiedToMe';
+    _path_assign_follow = '/game_xiyang/assignWXSubscribeTimes';
+    _path_query = '/game_xiyang/hasNewTimes';
     _mobile_bind_reason = '离大奖很近了，请绑定手机号验证是否人类';
-
 </script>
-<div id="strawberry_bg">
-	<i class="strawberry_bg"></i>
-</div>
-<div class="strawberry_title"><a href="/game_jiujiu/story.html"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/title.png')}}" /></a></div>
-<div class="strawberry_basket"><img id="apple_tree_img" src="{{$this->Html->assetUrl('/img/game_jiujiu/index/basket.gif')}}" /></div>
 
-<div class="strawberry_num">已摇下<span id="apple_got_cnt">{{$total_apple}}</span>个草莓! 剩余<span id="apple_times_left">{{$total_times}}</span>次机会</div>
-<div class="strawberry_btn">
-
-	<ul>
-    	<li class="clearfix">
-            <a id="btn_rules" href="javascript:;" class="fl" style="position: relative">规则/兑奖<i id="red_point" style="display: none"></i></a>
-            <a id="btn_add_chance" href="javascript:;" class="fr">加机会</a>
-        </li>
-        <li class="clearfix">
-            <a id="btn_story" href="/game_jiujiu/story.html" class="fl">产品故事</a>
-            <a id="btn_award" href="javascript:;" class="fr">获奖名单</a>
-        </li>
-        <li class="clearfix">
-            <a id="btn_help_me" href="javascript:;" class="fl">谁帮了我<span>(<span id="helpme_cnt_n">{{count($helpMe)}}</span>)</span></a>
-            <a id="btn_i_help" href="javascript:;" class="fr">我帮了谁</a>
-        </li>
+<div class="gold_bg">
+    <div class="gold_title"><img src="{{$this->Html->assetUrl('/img/game_xiyang/title.gif')}}"></div>
+    <div class="gold_sheep"><img src="{{$this->Html->assetUrl('/img/game_xiyang/sheep.jpg')}}"></div>
+    <div class="gold_count">你摇到 <span id="apple_got_cnt">{{$total_apple}}</span> 个金币，剩余机会 <span>{{$total_times}}</span> 次</div>
+    <ul class="clearfix">
+        <li class="fl"><a id="btn_rules" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/rule_btn.gif')}}" ></a></li>
+        <li class="fr"><a id="btn_add_chance" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/addchance_btn.gif')}}" ></a></li>
     </ul>
-    <dl>
-        <dt><a href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=204887757&idx=1&sn=94a8cf51cf2f2e36a4b51b0240071936#rd">我要挣钱</a>
-            &nbsp;&nbsp;<a href="/brands/20150127/jiu_jiu_nong_chang_xu_gang.html">玖玖店铺</a>
-            {{if $has_no_orders}}&nbsp;&nbsp;<a href="/categories/tag/xinshouzhuanchang.html?from=game_jiujiu">首单立减</a>{{/if}}
-        </dt>
-    </dl>
+    <ul class="clearfix">
+        <li class="fl"><a id="btn_story" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/story_btn.gif')}}" ></a></li>
+        <li class="fr"><a id="btn_help_me" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/help_btn.gif')}}" ></a></li>
+    </ul>
+    <a class="gold_prizelist_btn" id="xy_prizelist_btn" href="#gold_prizelist"><img src="{{$this->Html->assetUrl('/img/game_xiyang/prize_btn.gif')}}" ></a>
 </div>
 
-<!--摇到但还没抽奖机会-->
-<div class="strawberry_rocknum_tips radius3" style="display:none; top:40%;">摇下了<span>5</span>个草莓!</div>
-<!--没摇到-->
-<div class="strawberry_rocknum_tips radius3" style="display:none; top:40%;">没有摇下来草莓, <br/>继续努力(⊙o⊙)哦!</div>
-<!--摇到抽一等奖机会-->
-<div class="strawberry_rocknum_tips radius3" style="display:none; top:30%;">
-    <ul>
-    	<li class="strawberry_thisnum">你这次摇下了<span>10</span>个草莓!</li>
-        <li class="strawberry_totalnum">共摇下草莓<span>50</span>个, <br/>你是否要兑换 "<span>3斤草莓</span>" ?</li>
-        <li class="clearfix">
-        	<a href="javascript:;" class="strawberry_exchangebtn fl">兑换</a>
-            <a href="javascript:;" class="strawberry_cancelbtn fr">取消</a>
+<div class="gold_prizeset">
+    <div class="gold_prizeset_title"><img src="{{$this->Html->assetUrl('/img/game_xiyang/prizeset.gif')}}" ></div>
+    <div class="gold_prizeset_level_title">一等奖：</div>
+    <ul class="clearfix">
+        <li>
+            <div>
+                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize1.jpg')}}"><br/>
+                <p>2月13日下午21:00整点秒杀<br/><a href="#X">使用说明</a></p>
+                <a class="gold_prizeset_seckill_disabled radius4" href="#X">50金币参加秒杀</a>
+            </div>
+        </li>
+        <li>
+            <div>
+                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize2.jpg')}}"><br/>
+                <p>9-13日每天9/12/16/21<br/>整点秒杀，每次1盒<br/><a href="#X">使用说明</a></p>
+                <a class="gold_prizeset_seckill_usable radius4" href="#X">去使用</a>
+            </div>
+        </li>
+    </ul>
+    <ul class="clearfix">
+        <li>
+            <div>
+                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize3.jpg')}}"><br/>
+                <p>9-13日每天9/12/16/21<br/>整点秒杀，每次一盒<br/><a href="#X">使用说明</a></p>
+                <a class="gold_prizeset_seckill_disabled radius4" href="#X">50金币参加秒杀</a>
+            </div>
+        </li>
+        <li>
+            <div>
+                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize4.jpg')}}"><br/>
+                <p>9-13日每天9/12/16/21<br/>整点秒杀，每次一盒<br/><a href="#X">使用说明</a></p>
+                <a class="gold_prizeset_seckill_usable radius4" href="#X">凭码兑换<span>(45845)</span></a>
+            </div>
+        </li>
+    </ul>
+    <div class="gold_prizeset_level_title">二等奖：</div>
+    <ul class="clearfix">
+        <li>
+            <div>
+                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize5.jpg')}}"><br/>
+                <p>随时兑换，不限份数<br/><a href="#X">使用说明</a></p>
+                <a class="gold_prizeset_seckill_disabled radius4" href="#X">30金币兑换</a>
+            </div>
+        </li>
+        <li>
+            <div>
+                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize6.jpg')}}"><br/>
+                <p>随时兑换，限当天使用<br/>剩余500张<br/><a href="#X">使用说明</a></p>
+                <a class="gold_prizeset_seckill_usable radius4" href="#X">去使用</a>
+            </div>
+        </li>
+    </ul>
+    <ul class="clearfix">
+        <li>
+            <div>
+                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize7.jpg')}}"><br/>
+                <p>随时兑换，限当天使用<br/>剩余200份<br/><a href="#X">使用说明</a></p>
+                <a class="gold_prizeset_seckill_disabled radius4" href="#X">50金币参加秒杀</a>
+            </div>
+        </li>
+        <li>
+            <div>
+                <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize8.jpg')}}"><br/>
+                <p>随时兑换，剩余300张<br/><a href="#X">使用说明</a></p>
+                <a class="gold_prizeset_seckill_usable radius4" href="#X">凭码兑换<span>(45845)</span></a>
+            </div>
         </li>
     </ul>
 </div>
-<!--摇到抽二等奖机会-->
-<div class="strawberry_rocknum_tips radius3" style="display:none; top:30%;">
-    <ul>
-    	<li class="strawberry_thisnum">你这次摇下了<span>10</span>颗草莓!</li>
-        <li class="strawberry_totalnum">共摇下草莓<span>50</span>颗, <br/>你是否要兑换 "<span>74元优惠券</span>" ?</li>
-        <li class="clearfix">
-        	<a href="javascript:;" class="strawberry_exchangebtn fl">兑换</a>
-            <a href="javascript:;" class="strawberry_cancelbtn fr">取消</a>
-        </li>
+
+<div class="gold_prizelist" id="gold_prizelist">
+    <div class="gold_prizelist_title"><img src="{{$this->Html->assetUrl('/img/game_xiyang/prizelist.gif')}}" ></div>
+    <p>更新于2015-02-07,11:32:30</p>
+    <a href="#X">看看谁得奖</a>
+    <ul class="clearfix">
+        <li class="fl"><strong>小郑</strong>  <span>获得二等奖</span></li>
+        <li class="fr"><span>4分钟前</span></li>
     </ul>
 </div>
-<!--摇到抽三等奖机会-->
-<div class="strawberry_rocknum_tips radius3" style="display:none; top:30%;">
-    <ul>
-    	<li class="strawberry_thisnum">你这次摇下了<span>10</span>颗草莓!</li>
-        <li class="strawberry_totalnum">共摇下草莓<span>30</span>颗, <br/>你是否要兑换 "<span>50元优惠券</span>" ?</li>
-        <li class="clearfix">
-        	<a href="javascript:;" class="strawberry_exchangebtn fl">兑换</a>
-            <a href="javascript:;" class="strawberry_cancelbtn fr">取消</a>
-        </li>
-    </ul>
-</div>
-<!--获奖名单-->
-<div id="strawberry_prize" class="strawberry_prize" style="display:none; top:8%;">
-	<a class="strawberry_prize_close" href="javascript:;"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/close.png')}}" /></a>
-	<ul>
-    	<li class="strawberry_prize_title">获奖名单<span>(最新100名)</span></li>
-        <!--<li class="strawberry_prize_surplus">一等奖剩余10, 二等奖剩余40</li>-->
-        <li class="strawberry_prize_surplus" style="color:#999999"><a style="color:red; border:1px solid red; padding: 2px" href="http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=204959507&idx=1&sn=ea373b31b51d837320e14e13a2a853ba#rd">看看谁得奖</a>&nbsp;&nbsp;更新于{{$award_list['update_time']}} </li>
-    </ul>
-    <div class="strawberry_prize_list">
-        <?php if (!empty($award_list['list'])){ foreach($award_list['list'] as $item) { ?>
-    	<dl class="clearfix">
-            <dt class="fl" style="width:69%"><span>{{$item[0]}}</span>获{{$item[1] == 'first' ? '一等奖' : '二等奖'}}</dt>
-            <dt class="fr" style="width:30%">{{$item[2]}}</dt>
-        </dl>
-        <?php } } ?>
-    </div>
-</div>
-<!--游戏规则
--->
-        <style>
-            .rules_list {
-                text-align: left;
-            }
-            .rules_list ul li {
-                font-size: 0.9em;
-            }
-        </style>
-<div id="strawberry_rules" class="strawberry_rule" style="display:none; top:8%;">
-    <a class="strawberry_prize_close" href="javascript:;"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/close.png')}}" /></a>
+<!--游戏规则-->
+<div id="xy_rules" class="gold_chance" style="display:none; top:8%;">
+    <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
     <ul>
         <li class="strawberry_chance_title">游戏规则与奖品兑换</li>
     </ul>
@@ -177,16 +154,16 @@
     <!--<div class="strawberry_adver"><img src="images/index/adver.jpg" /></div>-->
 </div>
 <!--谁帮助过我-->
-<div id="strawberry_help_me" class="strawberry_prize" style="display:none; top:8%;">
-	<a class="strawberry_prize_close" href="javascript:;"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/close.png')}}" /></a>
+<div id="xy_help_me" class="gold_chance" style="display:none; top:8%;">
+    <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
     <div class="strawberry_prize_list">
         {{if $helpMe}}
-            <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=100){break;} ?>
+        <?php $i=0; foreach($helpMe as $key => $item) { $i++; if($i >=100){break;} ?>
         <dl class="clearfix">
             <dt class="fl"><span>{{$item['nickname']}}</span></dt>
             <dt class="fr">摇下<span class="gots">{{ $item['got'] }}</span></dt>
         </dl>
-            <?php } ?>
+        <?php } ?>
         {{else}}
         <div class="con clearfix">还没有朋友帮过你啊，马上分享给朋友们吧！
             <a id="share_btn_2" href="javascript:;" class="help">分享好友求助</a>
@@ -194,49 +171,39 @@
         {{/if}}
     </div>
 </div>
-<!--我帮助过的朋友-->
-<div id="strawberry_i_help" class="strawberry_prize" style="display:none; top:8%;">
-	<a class="strawberry_prize_close" href="javascript:;"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/close.png')}}" /></a>
-    <div class="strawberry_prize_list">
-        {{if $meHelp}}
-        <?php $i=0; foreach($meHelp as $key => $item) { $i++; if($i>=100){break;} ?>
-        <dl class="clearfix">
-            <dt class="fl"><span>{{$item['nickname']}}</span></dt>
-            <dt class="fr">摇下<span class="gots">{{ $item['got'] }}</span></dt>
-        </dl>
-        <?php } ?>
-        {{else}}
-        <div class="con clearfix">还没有帮过好友！
-            <a id="share_btn_3" href="javascript:;" class="help">邀请好友来玩</a>
-        </div>
-        {{/if}}
-    </div>
-</div>
 <!--加机会-->
-<div id="strawberry_chance" class="strawberry_chance" style="display:none; top:8%;">
-	<a class="strawberry_prize_close" href="javascript:;"><img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/close.png')}}" /></a>
-	<ul>
-    	<li class="strawberry_chance_title">摇一摇加机会秘诀</li>
+<div id="xy_add_chance" class="gold_chance" style="display: none; top:8%;">
+    <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
+    <ul>
+        <li class="gold_chance_title">摇一摇加机会秘诀</li>
     </ul>
+    <p>关注以下平台，分别加2次机会</p>
+    <!--<ul>-->
+        <!--<li><a href="#X" class="radius4">关注朋友说</a></li>-->
+    <!--</ul>-->
     <dl class="clearfix">
-    	<dd class="fl"><a id="assignWXSubscribeTimes" href="javascript:;">关注朋友说</a></dd>
-        <dd class="strawberry_chance_explain">每天加2次机会</dd>
+        <dt class="fl"><a href="#X" class="radius4">关注朋友说</a></dt>
+        <dt class="fr"><a href="#X" class="radius4">关注原态绿</a></dt>
     </dl>
     <dl class="clearfix">
-    	<dd class="fl"><a id="share_btn" href="javascript:;">邀请朋友</a></dd>
-        <dd class="strawberry_chance_explain">每个朋友增加一次机会</dd>
+        <dt class="fl"><a href="#X" class="radius4">关注万国万购</a></dt>
+        <dt class="fr"><a href="#X" class="radius4">关注宜生到家</a></dt>
     </dl>
-    <div class="strawberry_chance_aboutus">
-    	<img src="{{$this->Html->assetUrl('/img/game_jiujiu/index/logo.png')}}" /><br />朋友、同事间互相分享、推荐家乡特产的平台,<br />我们都是城市里的乡下人。
+    <p>每个朋友点击分享的游戏，<br />分别加1次机会</p>
+    <ul>
+        <li><a href="javascript:;" id="share_btn" class="radius4">分享游戏加机会</a></li>
+    </ul>
+    <div class="gold_chance_aboutus">
+        <img src="{{$this->Html->assetUrl('/img/game_xiyang/logo.png')}}" /><br />[朋友说]同事间互相分享家乡特产的创业网站,<br />我们都是城市里的乡下人。
     </div>
 </div>
-<!--透明黑色背景-->
-<div id="strawberry_trbg" style="display:none;"></div>
-<script>
+<div id="gold_trbg" style="display:none;"></div>
+
+<script type="text/javascript">
     var $today_got_wx = "{{$today_got_wx}}";
     var shake_pic_url = '{{$this->Html->assetUrl("/img/game_jiujiu/index/basketmove.gif")}}';
     var sound_url = 'http://51daifan-images.stor.sinaapp.com/tree_shake.mp3';
-//    var share_png_url = '{{$this->Html->assetUrl("http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/share.png")}}';
+    //    var share_png_url = '{{$this->Html->assetUrl("http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/share.png")}}';
     var share_png_url = '{{$this->Html->assetUrl("http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/share.png")}}';
     var yao_tips_png = '{{$this->Html->assetUrl("http://51daifan-images.stor.sinaapp.com/as/rice_xirui/index/yao.png")}}';
     var game_type = '{{$game_type}}';
@@ -339,54 +306,45 @@
         return desc;
     }
 
-    $(document).ready(function() {
+    $(document).ready(function(){
+        //dom
+        var $gold_trbg = $('#gold_trbg');
+        var $xy_add_chance=$('#xy_add_chance');
+        var $btn_rules = $('#btn_rules');
+        var $xy_rules=$('#xy_rules');
+        var $btn_add_chance=$('#btn_add_chance');
+        var $btn_help_me=$('#btn_help_me');
+        var $xy_help_me=$('#xy_help_me');
+        var $xy_prizelist_btn=$('#xy_prizelist_btn');
 
-        var height = $(window).height();
-        var width = $(window).width();
-        var $strawberryBg = $('#strawberry_bg');
-        $strawberryBg.height(height);
-        $strawberryBg.width(width);
-        var $strawberryTrbg = $('#strawberry_trbg');
-        var $strawberryChance = $('#strawberry_chance');
-        var $strawberry_prize = $('#strawberry_prize');
-        var $strawberry_rules = $('#strawberry_rules');
-        var strawberry_help_me = $('#strawberry_help_me');
-        var strawberry_i_help = $('#strawberry_i_help');
-
-        $strawberryTrbg.height(height);
-        $strawberryTrbg.width(width);
-
-        function hidePages() {
-            $strawberryChance.hide();
-            $strawberryTrbg.hide();
-            $strawberry_prize.hide();
-            $strawberry_rules.hide();
-            strawberry_i_help.hide();
-            strawberry_help_me.hide();
-        }
-
-        $strawberryTrbg.click(function(){
-            hidePages();
-        });
-
-        $('.strawberry_prize_close').click(function(){
-            hidePages();
-        });
-
-        $('#btn_add_chance').click(function(){
-            $strawberryTrbg.show();
-            $strawberryChance.show();
-        });
-
-        $('#btn_award').click(function(){
-            $strawberry_prize.show();
-            $strawberryTrbg.show();
-        });
-
+        //red close btn
+        var $xy_close_btn=$('a.gold_chance_close');
         var apple_got_cnt = $('#apple_got_cnt');
-        var $couponFirstLi = $('#coupon_first_li');
-        var $couponSecLi = $('#coupon_sec_li');
-        var $couponThirdLi = $('#coupon_third_li');
+
+        //handle close event
+        function hidePages(){
+            $xy_add_chance.hide();
+            $gold_trbg.hide();
+            $xy_rules.hide();
+            $xy_help_me.hide();
+        }
+        $xy_close_btn.on('click',hidePages);
+        $gold_trbg.on('click',hidePages);
+        $btn_add_chance.on('click',function(){
+            $gold_trbg.show();
+            $xy_add_chance.show();
+        });
+        $btn_rules.on('click',function(){
+            $gold_trbg.show();
+            $xy_rules.show();
+        });
+        $btn_help_me.on('click',function(){
+            $gold_trbg.show();
+            $xy_help_me.show();
+        });
+        $xy_prizelist_btn.on('click',function(){
+            window.location.hash='#gold_prizelist';
+        });
 
         game_notify_after_exchange = function (coupon_count, coupon_type) {
             if (coupon_count > 0) {
@@ -407,72 +365,45 @@
             }
         };
 
-        function func_li(li, lowest_limit, type, label) {
-            if (li.find('a').length == 1) {
-                if (total_not_spent() >= lowest_limit) {
-                    li.append('<a id="get_coupon_'+type+'" class="btn btn-warning" style="color:white" href="javascript:;">'+label+'</a>');
-                    $('#get_coupon_'+type).click(function () {
-                        if (typeof get_coupon_click_func == 'function') {
-                            get_coupon_click_func(type);
-                        }
-                    });
-                }
-            }
-        }
-
-        $('#btn_rules').click(function(){
-            $strawberry_rules.show();
-            $strawberryTrbg.show();
-            func_li($couponFirstLi, 50, 'first', '秒杀');
-            func_li($couponSecLi, 30, 'sec', '领取');
-        });
-        $('#btn_help_me').click(function(){
-            strawberry_help_me.show();
-            $strawberryTrbg.show();
-        });
-        $('#btn_i_help').click(function(){
-            strawberry_i_help.show();
-            $strawberryTrbg.show();
-        });
-
-        toggle_red_point(total_not_spent());
-
-        if (typeof(wx) != 'undefined') {
-            wx.ready(function () {
-                var share_string = '{{$share_string ? $share_string :"0"}}';
-                var to_timeline_title = "摇下50颗，3斤丹东玖玖农场草莓免费送，来自有机认证的水土，中国最早的草莓种植地（之一）。 ";
-                var to_friend_title = "摇下50颗，3斤丹东玖玖农场草莓免费送";
-                var to_friend_link = 'http://www.tongshijia.com/t/ag/jiujiu.html?trid={{urlencode($_REQUEST["trid"])}}';
-                var to_timeline_link = to_friend_link;
-                var imgUrl = "{{$this->Html->assetUrl('http://www.tongshijia.com/img/game_jiujiu/index/share_logo.jpg')}}";
-
-                var xx = {
-                    title: to_friend_title,
-                    desc: desc_cmp_friends(),
-                    link: to_friend_link,
-                    imgUrl: imgUrl,
-                    success: function () {
-                        if (share_string != '0') {
-                            $.post('/wx_shares/log_share', { trstr: share_string, share_type: "appMsg" });
-                        }
-                    },
-                    trigger: function() {
-                        xx.desc = desc_cmp_friends();
-                    }
-                };
-                wx.onMenuShareAppMessage(xx);
-                wx.onMenuShareTimeline({
-                    title: to_timeline_title,
-                    link: to_timeline_link,
-                    imgUrl: imgUrl,
-                    success: function () {
-                        if (share_string != '0') {
-                            $.post('/wx_shares/log_share', { trstr: share_string, share_type: "timeline" });
-                        }
-                    }
-                });
-            })
-        }
     });
+
+    //wx share
+    if (typeof(wx) != 'undefined') {
+        wx.ready(function () {
+            var share_string = '{{$share_string ? $share_string :"0"}}';
+            var to_timeline_title = "摇下50颗，3斤丹东玖玖农场草莓免费送，来自有机认证的水土，中国最早的草莓种植地（之一）。 ";
+            var to_friend_title = "摇下50颗，3斤丹东玖玖农场草莓免费送";
+            var to_friend_link = 'http://www.tongshijia.com/t/ag/jiujiu.html?trid={{urlencode($_REQUEST["trid"])}}';
+            var to_timeline_link = to_friend_link;
+            var imgUrl = "{{$this->Html->assetUrl('http://www.tongshijia.com/img/game_jiujiu/index/share_logo.jpg')}}";
+
+            var xx = {
+                title: to_friend_title,
+                desc: desc_cmp_friends(),
+                link: to_friend_link,
+                imgUrl: imgUrl,
+                success: function () {
+                    if (share_string != '0') {
+                        $.post('/wx_shares/log_share', { trstr: share_string, share_type: "appMsg" });
+                    }
+                },
+                trigger: function() {
+                    xx.desc = desc_cmp_friends();
+                }
+            };
+            wx.onMenuShareAppMessage(xx);
+            wx.onMenuShareTimeline({
+                title: to_timeline_title,
+                link: to_timeline_link,
+                imgUrl: imgUrl,
+                success: function () {
+                    if (share_string != '0') {
+                        $.post('/wx_shares/log_share', { trstr: share_string, share_type: "timeline" });
+                    }
+                }
+            });
+        })
+    }
 </script>
-{{$this->Html->script(array('apple_game.js?v30'));}}
+{{$this->Html->script(array('apple_game.js?v30'))}}
+
