@@ -486,7 +486,7 @@
                 imgUrl: imgUrl,
                 success: function () {
                     if (share_string != '0') {
-                        $.post('/wx_shares/log_share', { from: '{{$from}}', share_type: "appMsg" });
+                        $.post('/wx_shares/log_share_xy_game', { from: '{{$from}}', share_type: "appMsg" });
                     }
                 },
                 trigger: function() {
@@ -500,7 +500,7 @@
                 imgUrl: imgUrl,
                 success: function () {
                     if (share_string != '0') {
-                        $.post('/wx_shares/log_share', { from: '{{$from}}', share_type: "timeline" });
+                        $.post('/wx_shares/log_share_xy_game', { from: '{{$from}}', share_type: "timeline" });
                     }
                 }
             });
