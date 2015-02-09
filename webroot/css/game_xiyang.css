@@ -85,7 +85,7 @@ ul,li{ list-style:none;}
 
 /*加机会提示层*/
 .gold_chance{ position:fixed; left:50%; margin-left:-45%; width:90%; background-color:#ffffff; color:#555555; text-align:center; padding:1em 0; z-index:999;}
-.gold_chance_title{ font-size:1.4em; color:#333333; text-align:center; padding-bottom:0.4em;}
+.gold_chance_title{ font-size:1.8em; color:#333333; text-align:center; padding-bottom:0.4em;}
 .gold_chance p{ font-size: 1.1em; color: #444444; padding: 0.5em 1em 0.5em 1em;}
 .gold_chance ul li a{ display:block; width:75%; height:35px; color:#d50000; text-decoration:none; border:1px #d50000 solid; line-height:35px; font-size:15px; text-align:center; margin:0 auto; margin-bottom: 0.8em;}
 .gold_chance dl{width:75%; margin:0 auto;}
@@ -96,7 +96,7 @@ ul,li{ list-style:none;}
 .gold_chance_aboutus img{ width:4.95em; height:2em;}
 .gold_chance_close{ position:fixed; top:6%; right:-2.5%;}
 .gold_chance_close img{ width:50%; height:50%;}
-#gold_trbg{ width:100%; height:100%; background-color:#000000; background-size:cover; display:block; filter:alpha(opacity=45); opacity:0.45; position:absolute; top:0; left:0; z-index:2;}
+#gold_trbg{ width:100%; height:100%; background-color:#000000; background-size:cover; display:block; filter:alpha(opacity=75); opacity:0.75; position:fixed; top:0; left:0; z-index:2;}
 
 .strawberry_rule{ position:fixed; left:50%; margin-left:-45%; width:90%; height:80%; background-color:#ffffff; color:#555555; text-align:center; padding:1em 0; z-index:999;}
 .strawberry_rule_list{width:90%; margin:0 auto; padding-top:5px; color:#555555; font-size:1em; overflow-y: scroll; height: 85%}

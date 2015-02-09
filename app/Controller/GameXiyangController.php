@@ -311,9 +311,7 @@ class GameXiyangController extends AppController
                 $success = true;
                 if ($expect == self::AW_YTL_2) {
                     $awarded_coupon_id = self::COUPON_YTL_SEC;
-                }
-
-                if ($expect == self::AW_FQSM_2) {
+                } else if ($expect == self::AW_FQSM_2) {
                     $mobile = $this->Session->read('Auth.User.mobilephone');
                     if (empty($mobile)) {
                         $success = false;
@@ -343,6 +341,16 @@ class GameXiyangController extends AppController
 //                        }
 
                         $this->log("querying FQSM second award of mobile:" . $mobile . ', result=' . $json);
+                    }
+                } else if ($expect == self::AW_WGWG_2) {
+                    $this->loadModel('Seckilling');
+                    $killed = $this->Seckilling->sec_kill($id, self::GAME_XIYANG, $expect, time());
+                    if (!empty($killed)) {
+                        $this->log("exchange_coupon_second_do_coupon: uid=" . $id . ', killed='. json_encode($killed));
+                        $coupon_count = 1;
+                        $ex_count_per_Item = 30;
+                        $total_ex_count = $ex_count_per_Item;
+                        $award_data = $killed['Seckilling']['code'];
                     }
                 }
 
