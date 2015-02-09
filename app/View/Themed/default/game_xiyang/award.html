@@ -478,6 +478,7 @@
         var to_friend_titles=['摇下50个，秒价值198元的韩国奇迹马油面霜。','摇下50个，500元富侨上门按摩卡免费秒。','摇下50个，Love柚情人礼盒免费秒。','摇下50个，悍马免费开。'];
         var to_friend_links_from=['init-wgwg','init-fqsm','init-ytl','init-bjzc'];
         var share_imgs = ["http://www.tongshijia.com/img/game_xiyang/parize3.jpg","http://www.tongshijia.com/img/game_xiyang/parize4.jpg","http://www.tongshijia.com/img/game_xiyang/parize2.jpg","http://www.tongshijia.com/img/game_xiyang/parize1.jpg"];
+        var descs = ['摇30个就送百元德国奶粉优惠券！免费租车、按摩、情人节礼物等你来拿！','摇下30个就送50元代金券。免费租车、上门按摩、情人节礼物等你来拿！','摇30送58元优惠券。韩国面霜，免费租车、免费上门按摩等你来拿。','摇30就送200券多重车型免费租。上门按摩，情人节礼物，奶粉面霜等你来拿。'];
         var randomVal = Math.floor(Math.random() * (3 + 1));
         wx.ready(function () {
             {{if $from=="wgwg"}}
@@ -485,37 +486,43 @@
                 var to_friend_title = to_friend_titles[0];
                 var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&from='+to_friend_links_from[0];
                 var imgUrl = share_imgs[0];
+                var desc = descs[0];
             {{elseif $from=="fuqiaoshangmen"}}
                 var to_timeline_title = to_timeline_titles[1];
                 var to_friend_title = to_friend_titles[1];
                 var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&from='+to_friend_links_from[1];
                 var imgUrl = share_imgs[1];
+                var desc = descs[1];
             {{elseif $from=="yuantailv"}}
                 var to_timeline_title = to_timeline_titles[2];
                 var to_friend_title = to_friend_titles[2];
                 var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&from='+to_friend_links_from[2];
                 var imgUrl = share_imgs[2];
+                var desc = descs[3];
             {{elseif $from=="baojiazuche"}}
                 var to_timeline_title = to_timeline_titles[3];
                 var to_friend_title = to_friend_titles[3];
                 var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&from='+to_friend_links_from[3];
                 var imgUrl = share_imgs[3];
+                var desc = descs[3];
             {{else}}
                 var to_timeline_title = to_timeline_titles[randomVal];
                 var to_friend_title = to_friend_titles[randomVal];
                 var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&from='+to_friend_links_from[randomVal];
                 var imgUrl = share_imgs[randomVal];
+                var desc = descs[randomVal];
             {{/if}}
                 var to_timeline_link = to_friend_link;
             var xx = {
                 title: to_friend_title,
-                desc: desc_cmp_friends(),
+                desc: desc,
                 link: to_friend_link,
                 imgUrl: imgUrl,
                 success: function () {
                     $.post('/wx_shares/log_share_xy_game', { from: '{{$from}}', share_type: "appMsg" });
                 },
                 trigger: function() {
+                    //xx.desc = desc_cmp_friends();
                 }
             };
             wx.onMenuShareAppMessage(xx);
