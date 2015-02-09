@@ -23,8 +23,8 @@ class GameXiyangController extends AppController
     const EXCHANGE_RICE_SOURCE = 'apple_exchange_rice';
     const GAME_XIYANG = 'xiyang';
 
-    const COUPON_YTL_FIRST = 29037;
-    const COUPON_YTL_SEC = 29036;
+    const COUPON_YTL_FIRST = 19070;
+    const COUPON_YTL_SEC = 19069;
     const NEED_MOBILE_LEAST = 33;
     const AWARD_SECOND_LEAST = 30;
 
