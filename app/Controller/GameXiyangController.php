@@ -52,6 +52,8 @@ class GameXiyangController extends AppController
 
     var $wx_accounts_map = array('wgwg'=>'万国万购','fuqiaoshangmen'=>'富侨上门','yuantailv'=>'原态绿');
 
+    var $wx_accounts_init_map = array('init-wgwg'=>'wgwg','init-fqsm'=>'fuqiaoshangmen','init-ytl'=>'yuantailv','init-bjzc'=>'baojiazuche');
+
     public function beforeFilter()
     {
         parent::beforeFilter();
@@ -372,13 +374,18 @@ class GameXiyangController extends AppController
         //add follow other account log
         $from = $_REQUEST['from'];
         $token=$_REQUEST['token'];
-        if($from){
-            if($this->add_follow_other_account_log($from,$current_uid,$token)){
-                $result = $this->add_follow_other_account_times($from,$current_uid,$gameType);
-                if($result == self::WX_TIMES_ASSIGN_JUST_GOT){
-                    $follow_tip_info = '您关注'.$this->wx_accounts_map[$from].'成功，增加'.self::DAILY_TIMES_SUB.'机会。';
-                    $this->set('follow_tip_info',$follow_tip_info);
+        if($from!=null){
+            if(strpos($from,'init')===false){
+                $this->Session->write('game_from',$from);
+                if($this->add_follow_other_account_log($from,$current_uid,$token)){
+                    $result = $this->add_follow_other_account_times($from,$current_uid,$gameType);
+                    if($result == self::WX_TIMES_ASSIGN_JUST_GOT){
+                        $follow_tip_info = '您关注'.$this->wx_accounts_map[$from].'成功，增加'.self::DAILY_TIMES_SUB.'机会。';
+                        $this->Session->write('follow_tip_info',$follow_tip_info);
+                    }
                 }
+            }else{
+                $this->Session->write('game_from',$this->wx_accounts_init_map[$from]);
             }
         }
         list($friend, $shouldAdd, $gameType) = $this->track_or_redirect($current_uid, $gameType, $dailyHelpLimit);
@@ -750,7 +757,7 @@ class GameXiyangController extends AppController
             }
             Cache::write($cache_key, json_encode(array('list' => $award_list, 'update' => $updateTime)));
         } else {
-            $arr = json_decode($top_list_cache);
+            $arr = json_decode($top_list_cache, true);
             $award_list = $arr['list'];
             $updateTime = $arr['update'];
         }

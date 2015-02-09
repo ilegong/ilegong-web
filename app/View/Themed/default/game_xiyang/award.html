@@ -11,9 +11,22 @@
     _path_query = '/game_xiyang/hasNewTimes';
     _mobile_bind_reason = '离大奖很近了，请绑定手机号验证是否人类';
 </script>
+<?php
+    $from = $this->Session->read('game_from');
+?>
 <div id="xy_game">
     <div class="gold_bg" id="xy_top">
-        <div class="gold_title"><img src="{{$this->Html->assetUrl('/img/game_xiyang/title.gif')}}"></div>
+        <div class="gold_title">
+            {{if $from=="wgwg"}}
+                <img src="{{$this->Html->assetUrl('/img/game_xiyang/title4.gif')}}">
+            {{elseif $from=="fuqiaoshangmen"}}
+                <img src="{{$this->Html->assetUrl('/img/game_xiyang/title2.gif')}}">
+            {{elseif $from=="yuantailv"}}
+                <img src="{{$this->Html->assetUrl('/img/game_xiyang/title3.gif')}}">
+            {{else}}
+                 <img src="{{$this->Html->assetUrl('/img/game_xiyang/title.gif')}}">
+            {{/if}}
+        </div>
         <div class="gold_sheep"><img src="{{$this->Html->assetUrl('/img/game_xiyang/sheep.jpg')}}"></div>
         <div class="gold_count">你摇到 <span id="apple_got_cnt">{{$total_apple}}</span> 个金币，剩余机会 <span id="apple_times_left">{{$total_times}}</span> 次</div>
         <ul class="clearfix">
@@ -183,7 +196,11 @@
     </div>
     <div id="gold_trbg" style="display:none;"></div>
 </div>
-{{if $follow_tip_info}}
+<?php
+  $follow_tip_info=$this->Session->read('follow_tip_info');
+  $_SESSION['follow_tip_info']=null;
+?>
+{{if $follow_tip_info!=null}}
 <script type="text/javascript">
     $(document).ready(function(){
         utils.alert('{{$follow_tip_info}}');
