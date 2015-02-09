@@ -1,4 +1,4 @@
-CREATE TABLE `51daifan`.`cake_follow_other_account_logs` (
+CREATE TABLE `cake_follow_other_account_logs` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `uid` INT NULL,
   `wx_account` VARCHAR(45) NULL,
@@ -6,17 +6,22 @@ CREATE TABLE `51daifan`.`cake_follow_other_account_logs` (
   `created` DATETIME NULL,
   PRIMARY KEY (`id`));
 
-ALTER TABLE `51daifan`.`cake_follow_other_account_logs`
+ALTER TABLE `cake_follow_other_account_logs`
 ADD COLUMN `follow_token` VARCHAR(100) NULL AFTER `created`;
 
-ALTER TABLE `51daifan`.`cake_follow_other_account_logs`
+ALTER TABLE `cake_follow_other_account_logs`
 ADD COLUMN `from` VARCHAR(45) NULL AFTER `follow_token`;
 
-ALTER TABLE `51daifan`.`cake_follow_other_account_logs`
+ALTER TABLE `cake_follow_other_account_logs`
 ADD COLUMN `updated` DATETIME NULL AFTER `from`;
 
 
-ALTER TABLE `51daifan`.`cake_award_weixin_time_logs`
+ALTER TABLE `cake_award_weixin_time_logs`
 ADD COLUMN `from` VARCHAR(45) NULL AFTER `modified`;
+
+ALTER TABLE `cake_award_weixin_time_logs`
+DROP INDEX `award_info` ,
+ADD UNIQUE INDEX `award_info` (`type` ASC, `uid` ASC, `from` ASC);
+
 
 

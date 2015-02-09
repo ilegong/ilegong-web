@@ -50,6 +50,8 @@ class GameXiyangController extends AppController
 
     var $wx_accounts = array('wgwg','fuqiaoshangmen','yuantailv');
 
+    var $wx_accounts_map = array('wgwg'=>'万国万购','fuqiaoshangmen'=>'富侨上门','yuantailv'=>'原态绿');
+
     public function beforeFilter()
     {
         parent::beforeFilter();
@@ -175,35 +177,7 @@ class GameXiyangController extends AppController
         $res = array();
         $from = $_REQUEST['from'];
         if($from!=null){
-            $follow_log=$this->is_follow_other_account($from,$uid);
-            if($follow_log!=null){
-                $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
-                $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $uid, 'type' => $gameType,'from'=>$from)));
-                $now = mktime();
-                if ($this->gotWxTimesToday($weixinTimesLog, $now)) {
-                    $result = self::WX_TIMES_ASSIGN_GOT;
-                    $res['got_time'] = date('H点i分', $weixinTimesLog['AwardWeixinTimeLog']['last_got_time']);
-                } else {
-                    $log = array();
-                    $log['uid'] = $uid;
-                    $log['last_got_time'] = $now;
-                    $log['type'] = $gameType;
-                    if (!empty($weixinTimesLog)) {
-                        $wxTimesLogModel->id = $weixinTimesLog['AwardWeixinTimeLog']['id'];
-                    }
-                    if ($wxTimesLogModel->save(array('AwardWeixinTimeLog' => $log)) !== false) {
-                        $cond = array('uid' => $uid, 'type' => $gameType);
-                        $this->AwardInfo->updateAll(array('times' => 'times + ' . self::DAILY_TIMES_SUB,), $cond);
-                        $awardInfo = $this->AwardInfo->find('first', array('conditions' => array('uid' => $uid, 'type' => $gameType)));
-                        $res['total_times'] = $awardInfo['AwardInfo']['times'];
-                        $result = self::WX_TIMES_ASSIGN_JUST_GOT;
-                    } else {
-                        $result = self::WX_TIMES_ASSIGN_RETRY;
-                    }
-                }
-            }else{
-                $result = self::WX_TIMES_ASSIGN_NOT_SUB;
-            }
+            $result = $this->add_follow_other_account_times($from,$uid,$gameType,$res);
         }else{
             $result = self::WX_TIMES_ASSIGN_RETRY;
         }
@@ -388,6 +362,7 @@ class GameXiyangController extends AppController
 
     public function award($gameType = KEY_APPLE_201410)
     {
+
         $gameCfg = $this->GameConfig->findByGameType($gameType);
         if (empty($gameCfg) ) {
             throw new CakeException("Not found Game Config");
@@ -398,7 +373,13 @@ class GameXiyangController extends AppController
         $from = $_REQUEST['from'];
         $token=$_REQUEST['token'];
         if($from){
-            $this->add_follow_other_account_log($from,$current_uid,$token);
+            if($this->add_follow_other_account_log($from,$current_uid,$token)){
+                $result = $this->add_follow_other_account_times($from,$current_uid,$gameType);
+                if($result == self::WX_TIMES_ASSIGN_JUST_GOT){
+                    $follow_tip_info = '您关注'.$this->wx_accounts_map[$from].'成功，增加'.self::DAILY_TIMES_SUB.'机会。';
+                    $this->set('follow_tip_info',$follow_tip_info);
+                }
+            }
         }
         list($friend, $shouldAdd, $gameType) = $this->track_or_redirect($current_uid, $gameType, $dailyHelpLimit);
         if (!empty($friend)) {
@@ -810,6 +791,7 @@ class GameXiyangController extends AppController
      * @param $uid
      * @param null $token
      * @param null $wx_account
+     * @return null
      */
     private function add_follow_other_account_log($from,$uid,$token=null,$wx_account=null){
         if(in_array($from,$this->wx_accounts)){
@@ -823,8 +805,10 @@ class GameXiyangController extends AppController
             $now = date('Y-m-d H:i:s');
             if(!$followLog){
                 //add
-                $followOtherAccountLog->save(array('from'=>$from,'uid'=>$uid,'follow_token'=>$token,'wx_account'=>$wx_account,'created'=>$now));
+               return $followOtherAccountLog->save(array('from'=>$from,'uid'=>$uid,'follow_token'=>$token,'wx_account'=>$wx_account,'created'=>$now));
             }
+
+            return null;
 // update token
 //            else{
 //                //update
@@ -856,5 +840,43 @@ class GameXiyangController extends AppController
             )
         ));
         return $followLogs;
+    }
+
+    private function add_follow_other_account_times($from,$uid,$gameType,&$res=null){
+        $follow_log=$this->is_follow_other_account($from,$uid);
+        if($follow_log!=null){
+            $wxTimesLogModel = ClassRegistry::init('AwardWeixinTimeLog');
+            $weixinTimesLog = $wxTimesLogModel->find('first', array('conditions' => array('uid' => $uid, 'type' => $gameType,'from'=>$from)));
+            $now = mktime();
+            if ($this->gotWxTimesToday($weixinTimesLog, $now)) {
+                $result = self::WX_TIMES_ASSIGN_GOT;
+                if(is_array($res)){
+                    $res['got_time'] = date('H点i分', $weixinTimesLog['AwardWeixinTimeLog']['last_got_time']);
+                }
+            } else {
+                $log = array();
+                $log['uid'] = $uid;
+                $log['last_got_time'] = $now;
+                $log['type'] = $gameType;
+                $log['from']=$from;
+                if (!empty($weixinTimesLog)) {
+                    $wxTimesLogModel->id = $weixinTimesLog['AwardWeixinTimeLog']['id'];
+                }
+                if ($wxTimesLogModel->save(array('AwardWeixinTimeLog' => $log)) !== false) {
+                    $cond = array('uid' => $uid, 'type' => $gameType);
+                    $this->AwardInfo->updateAll(array('times' => 'times + ' . self::DAILY_TIMES_SUB,), $cond);
+                    if(is_array($res)){
+                        $awardInfo = $this->AwardInfo->find('first', array('conditions' => array('uid' => $uid, 'type' => $gameType)));
+                        $res['total_times'] = $awardInfo['AwardInfo']['times'];
+                    }
+                    $result = self::WX_TIMES_ASSIGN_JUST_GOT;
+                } else {
+                    $result = self::WX_TIMES_ASSIGN_RETRY;
+                }
+            }
+        }else{
+            $result = self::WX_TIMES_ASSIGN_NOT_SUB;
+        }
+        return $result;
     }
 }

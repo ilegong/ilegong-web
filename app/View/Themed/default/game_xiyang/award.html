@@ -183,6 +183,13 @@
     </div>
     <div id="gold_trbg" style="display:none;"></div>
 </div>
+{{if $follow_tip_info}}
+<script type="text/javascript">
+    $(document).ready(function(){
+        utils.alert('{{$follow_tip_info}}');
+    });
+</script>
+{{/if}}
 <script type="text/javascript">
     var $today_got_wx = "{{$today_got_wx}}";
     var shake_pic_url = '{{$this->Html->assetUrl("/img/game_jiujiu/index/basketmove.gif")}}';
