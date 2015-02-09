@@ -54,7 +54,12 @@ class GameXiyangController extends AppController
 
     var $wx_accounts_init_map = array('init-wgwg'=>'wgwg','init-fqsm'=>'fuqiaoshangmen','init-ytl'=>'yuantailv','init-bjzc'=>'baojiazuche','init-pys'=>'pyshuo');
 
-    var $xw_accounts_map_page = array('wgwg'=>'http://mp.weixin.qq.com/s?__biz=MjM5ODgyMjQ1Nw==&mid=203560202&idx=1&sn=bcc16db724964a9ad66ad9b265dc9570#rd','fuqiaoshangmen'=>'http://mp.weixin.qq.com/s?__biz=MjM5Njc3Mzg5NQ==&mid=205483700&idx=1&sn=289d1921688989587189c2fca0e7434b','yuantailv'=>'http://shop984425.koudaitong.com/v2/showcase/mpnews?alias=9dlutzi1&spm=m1423443892620694414615768.scan.1380097986&from=groupmessage&isappinstalled=0');
+    var $xw_accounts_map_page = array('wgwg' => 'http://mp.weixin.qq.com/s?__biz=MjM5ODgyMjQ1Nw==&mid=203560202&idx=1&sn=bcc16db724964a9ad66ad9b265dc9570#rd',
+        'fuqiaoshangmen' => 'http://mp.weixin.qq.com/s?__biz=MjM5Njc3Mzg5NQ==&mid=205483700&idx=1&sn=289d1921688989587189c2fca0e7434b',
+        'yuantailv' => 'http://shop984425.koudaitong.com/v2/showcase/mpnews?alias=9dlutzi1&spm=m1423443892620694414615768.scan.1380097986&from=groupmessage&isappinstalled=0',
+        'award_bjzc_sec' => 'http://m.baojia.com/compaign/coupon/offline/?utm_source=moka_zuke',
+        'award_fqsm_sec' => 'http://mp.weixin.qq.com/s?__biz=MjM5Njc3Mzg5NQ==&mid=205483700&idx=1&sn=289d1921688989587189c2fca0e7434b',
+);
 
     var $page_titles = array('wgwg'=>'羊年赢大奖,马油面霜免费领','fuqiaoshangmen'=>'羊年赢大奖,免费上门按摩','yuantailv'=>'羊年赢大奖,Love柚免费领','pyshuo'=>'羊年赢大奖,悍马免费开','default'=>'羊年赢大奖,悍马免费开');
 
@@ -846,6 +851,11 @@ class GameXiyangController extends AppController
         if(in_array($to,$this->wx_accounts)){
             $this->redirect($this->xw_accounts_map_page[$to]);
         }
+    }
+
+    public function rd($page) {
+        $url = $this->xw_accounts_map_page[$page];
+        $this->redirect(empty($url) ? '/' : $url);
     }
 
     /**

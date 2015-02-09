@@ -315,11 +315,10 @@
 
     function award_usage_guide(coupon_type) {
         if (coupon_type == 'baojia-2') {
-            window.location.href = 'http://m.baojia.com/compaign/coupon/offline/?utm_source=moka_zuke';
+            window.location.href = '/game_xiyang/rd/award_bjzc_sec';
         } else if (coupon_type == 'fqsm-2') {
-            var url = 'http://mp.weixin.qq.com/s?__biz=MjM5Njc3Mzg5NQ==&mid=205483700&idx=1&sn=289d1921688989587189c2fca0e7434b';
-            utils.alert_two('<a href="'+url+'">点击这里</a>进入“富侨上门-宜生到家”公众号，回复 LQJP + 手机号充值进入您的帐号', '暂不充值', '去充值', function(){}, function(){
-                window.location.href = url;
+            utils.alert_two('进入“富侨上门-宜生到家”公众号，回复 LQJP + 手机号充值进入您的帐号', '暂不充值', '去充值', function(){}, function(){
+                window.location.href = '/game_xiyang/rd/award_fqsm_sec';
             });
         }
     }
