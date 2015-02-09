@@ -76,7 +76,7 @@ ul,li{ list-style:none;}
 .gold_prizelist_title img{ width: 65%; text-align: center;}
 .gold_prizelist p{ text-align: center; font-size: 1em; color: #999999; padding:0.6em 0;}
 .gold_prizelist a{ display: block; height: 26px; line-height: 26px; border: 1px #c62a35 solid; color: #c62a35; width:90px; margin:0 auto; text-align: center; font-size: 1em; text-decoration: none;}
-.gold_prizelist ul{ padding:0.8em 20px 0 20px; color: #333333; font-size: 1em;}
+.gold_prizelist ul{ padding:0.2em 20px 0 20px; color: #333333; font-size: 1em;}
 .gold_prizelist ul .fl span{ color: #666666;}
 .gold_prizelist ul .fr span{ color: #999999;}
 
