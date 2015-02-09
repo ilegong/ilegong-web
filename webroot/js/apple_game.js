@@ -317,7 +317,7 @@ $(document).ready(function(){
                     utils.alert("呜呜，活动已结束。");
                 } else {
                     if (data.reason == 'need_mobile') {
-                        window.location.href = '/users/to_bind_mobile?ref_url='+encodeURIComponent(location.href)+'&reason='+encodeURIComponent('需要设置您的手机号接收兑奖短信')+'&from=game_xiyang';
+                        window.location.href = '/users/to_bind_mobile?ref_url='+encodeURIComponent(location.href)+'&reason='+encodeURIComponent('使用时优惠券会校验手机号， 请设置您的手机号')+'&from=game_xiyang';
                         return;
                     }
                     utils.alert("呜呜，兑换失败，请稍后重试。");
