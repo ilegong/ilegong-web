@@ -158,7 +158,7 @@ $(document).ready(function(){
         }
     } else {
         timeout = 5000;
-        msg = '力气太小啦！只晃掉了几片树叶！'+coupon_message(times, total)+'';
+        msg = '力气太小啦！只薅下了几根羊毛羊毛！'+coupon_message(times, total)+'';
     }
 
     if (typeof notify_after_shake == 'function') {
