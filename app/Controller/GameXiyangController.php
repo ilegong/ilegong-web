@@ -454,7 +454,7 @@ class GameXiyangController extends AppController
                     if($this->add_follow_other_account_log($from,$current_uid,$token)){
                         $result = $this->add_follow_other_account_times($from,$current_uid,$gameType);
                         if($result == self::WX_TIMES_ASSIGN_JUST_GOT){
-                            $follow_tip_info = '您关注'.$this->wx_accounts_map[$from].'成功，增加'.self::DAILY_TIMES_SUB.'机会。';
+                            $follow_tip_info = '您关注'.$this->wx_accounts_map[$from].'成功，增加'.self::DAILY_TIMES_SUB.'次机会。';
                             $this->Session->write('follow_tip_info',$follow_tip_info);
                         }
                     }
