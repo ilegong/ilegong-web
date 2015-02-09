@@ -430,9 +430,10 @@
             }, function () {
                 window.location.href = '/game_xiyang/rd/award_wgwg_1?r=' + Math.random();
             });
-        } else if (coupon_type == 'wgwg-1' || coupon_type == 'baojia-1' || coupon_type == 'ytl-1') {
-            //TODO:
+        } else if (coupon_type == 'baojia-1') {
             utils.alert('请在朋友圈晒获奖，讲截图发给朋友说服务号，拨打客服电话即可');
+        } else if (coupon_type == 'ytl-1' || coupon_type == 'ytl-2') {
+            location.href = '/users/my_coupons.html';
         }
     }
 
