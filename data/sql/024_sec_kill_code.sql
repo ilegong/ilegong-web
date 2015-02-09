@@ -19,24 +19,25 @@ create table cake_seckillings (
 -- 规则里要说明，每个人只能秒一次大奖？是否需要这个约束？
 -- 做好统计， 用于跟商家要数据， 要求更多大奖
 
--- 2/09
+-- 2/10
 INSERT INTO `cake_seckillings` (`uid`, `type`, `sub_type`, `valid_begin`, `valid_end`, `code`)
 VALUES
-	(0, 'xiyang', 'wgwg-1', UNIX_TIMESTAMP('2015-02-09 09:00:00'), UNIX_TIMESTAMP('2015-02-09 09:59:59'), 'JXJ69WEM56'),
-	(0, 'xiyang', 'wgwg-1', UNIX_TIMESTAMP('2015-02-09 12:00:00'), UNIX_TIMESTAMP('2015-02-09 12:59:59'), 'H34FX27VYK'),
-	(0, 'xiyang', 'wgwg-1', UNIX_TIMESTAMP('2015-02-09 16:00:00'), UNIX_TIMESTAMP('2015-02-09 16:59:59'), 'NZ6X72X4C6'),
-	(0, 'xiyang', 'wgwg-1', UNIX_TIMESTAMP('2015-02-09 21:00:00'), UNIX_TIMESTAMP('2015-02-09 21:59:59'), 'DXHPXVW4K3'),
+	(0, 'xiyang', 'baojia-1', UNIX_TIMESTAMP('2015-02-10 21:00:00'), UNIX_TIMESTAMP('2015-02-10 21:59:59'), 'HWF6PEJ3X'),
+	(0, 'xiyang', 'wgwg-1', UNIX_TIMESTAMP('2015-02-09 09:00:00'), UNIX_TIMESTAMP('2015-02-10 09:59:59'), 'JXJ69WEM56'),
+	(0, 'xiyang', 'wgwg-1', UNIX_TIMESTAMP('2015-02-09 12:00:00'), UNIX_TIMESTAMP('2015-02-10 12:59:59'), 'H34FX27VYK'),
+	(0, 'xiyang', 'wgwg-1', UNIX_TIMESTAMP('2015-02-09 16:00:00'), UNIX_TIMESTAMP('2015-02-10 16:59:59'), 'NZ6X72X4C6'),
+	(0, 'xiyang', 'wgwg-1', UNIX_TIMESTAMP('2015-02-09 21:00:00'), UNIX_TIMESTAMP('2015-02-10 21:59:59'), 'DXHPXVW4K3'),
 
-	(0, 'xiyang', 'fqsm-1', UNIX_TIMESTAMP('2015-02-09 09:00:00'), UNIX_TIMESTAMP('2015-02-09 09:59:59'), ''),
-	(0, 'xiyang', 'fqsm-1', UNIX_TIMESTAMP('2015-02-09 09:00:00'), UNIX_TIMESTAMP('2015-02-09 09:59:59'), ''),
-	(0, 'xiyang', 'fqsm-1', UNIX_TIMESTAMP('2015-02-09 12:00:00'), UNIX_TIMESTAMP('2015-02-09 12:59:59'), ''),
-	(0, 'xiyang', 'fqsm-1', UNIX_TIMESTAMP('2015-02-09 16:00:00'), UNIX_TIMESTAMP('2015-02-09 16:59:59'), ''),
-	(0, 'xiyang', 'fqsm-1', UNIX_TIMESTAMP('2015-02-09 21:00:00'), UNIX_TIMESTAMP('2015-02-09 22:59:59'), ''),
+	(0, 'xiyang', 'fqsm-1', UNIX_TIMESTAMP('2015-02-09 09:00:00'), UNIX_TIMESTAMP('2015-02-10 09:59:59'), ''),
+	(0, 'xiyang', 'fqsm-1', UNIX_TIMESTAMP('2015-02-09 09:00:00'), UNIX_TIMESTAMP('2015-02-10 09:59:59'), ''),
+	(0, 'xiyang', 'fqsm-1', UNIX_TIMESTAMP('2015-02-09 12:00:00'), UNIX_TIMESTAMP('2015-02-10 12:59:59'), ''),
+	(0, 'xiyang', 'fqsm-1', UNIX_TIMESTAMP('2015-02-09 16:00:00'), UNIX_TIMESTAMP('2015-02-10 16:59:59'), ''),
+	(0, 'xiyang', 'fqsm-1', UNIX_TIMESTAMP('2015-02-09 21:00:00'), UNIX_TIMESTAMP('2015-02-10 22:59:59'), ''),
 
-	(0, 'xiyang', 'ytl-1', UNIX_TIMESTAMP('2015-02-09 09:00:00'), UNIX_TIMESTAMP('2015-02-09 09:59:59'), ''),
-	(0, 'xiyang', 'ytl-1', UNIX_TIMESTAMP('2015-02-09 12:00:00'), UNIX_TIMESTAMP('2015-02-09 12:59:59'), ''),
-	(0, 'xiyang', 'ytl-1', UNIX_TIMESTAMP('2015-02-09 16:00:00'), UNIX_TIMESTAMP('2015-02-09 16:59:59'), ''),
-	(0, 'xiyang', 'ytl-1', UNIX_TIMESTAMP('2015-02-09 21:00:00'), UNIX_TIMESTAMP('2015-02-09 21:59:59'), '');
+	(0, 'xiyang', 'ytl-1', UNIX_TIMESTAMP('2015-02-09 09:00:00'), UNIX_TIMESTAMP('2015-02-10 09:59:59'), ''),
+	(0, 'xiyang', 'ytl-1', UNIX_TIMESTAMP('2015-02-09 12:00:00'), UNIX_TIMESTAMP('2015-02-10 12:59:59'), ''),
+	(0, 'xiyang', 'ytl-1', UNIX_TIMESTAMP('2015-02-09 16:00:00'), UNIX_TIMESTAMP('2015-02-10 16:59:59'), ''),
+	(0, 'xiyang', 'ytl-1', UNIX_TIMESTAMP('2015-02-09 21:00:00'), UNIX_TIMESTAMP('2015-02-10 21:59:59'), '');
 
 INSERT INTO `cake_seckillings` (`uid`, `type`, `sub_type`, `valid_begin`, `valid_end`, `code`)
 VALUES
@@ -92,10 +93,18 @@ VALUES
     (0, 'xiyang', 'wgwg-2', UNIX_TIMESTAMP('2015-02-09 09:00:00'), UNIX_TIMESTAMP('2015-02-10 23:59:59'), '9M4A9WZ5WJ')
     ;
 
+-- 2/11
+
+-- 2/12
+INSERT INTO `cake_seckillings`(`uid`, `type`, `sub_type`, `valid_begin`, `valid_end`, `code`)
+VALUES
+	(0, 'xiyang', 'baojia-1', UNIX_TIMESTAMP('2015-02-12 21:00:00'), UNIX_TIMESTAMP('2015-02-12 23:59:59'), 'HWF6PEJ3X');
+
+
 -- 2/13
 INSERT INTO `cake_seckillings`(`uid`, `type`, `sub_type`, `valid_begin`, `valid_end`, `code`)
 VALUES
-	(0, 'xiyang', 'baojia-1', UNIX_TIMESTAMP('2015-02-13 21:00:00'), UNIX_TIMESTAMP('2015-02-13 21:59:59'), 'HWF6PEJ3X'),
+	(0, 'xiyang', 'baojia-1', UNIX_TIMESTAMP('2015-02-10 12:00:00'), UNIX_TIMESTAMP('2015-02-10 23:59:59'), 'HWF6PEJ3X'),
 
 	(0, 'xiyang', 'wgwg-1', UNIX_TIMESTAMP('2015-02-13 09:00:00'), UNIX_TIMESTAMP('2015-02-13 09:59:59'), 'JXJ69WEM56'),
 	(0, 'xiyang', 'wgwg-1', UNIX_TIMESTAMP('2015-02-13 12:00:00'), UNIX_TIMESTAMP('2015-02-13 12:59:59'), 'H34FX27VYK'),

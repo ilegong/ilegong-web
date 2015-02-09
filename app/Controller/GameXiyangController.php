@@ -67,7 +67,7 @@ class GameXiyangController extends AppController
 
     var $xw_accounts_map_page = array('wgwg' => 'http://mp.weixin.qq.com/s?__biz=MjM5ODgyMjQ1Nw==&mid=203560202&idx=1&sn=bcc16db724964a9ad66ad9b265dc9570#rd',
         'fuqiaoshangmen' => 'http://mp.weixin.qq.com/s?__biz=MjM5Njc3Mzg5NQ==&mid=205483700&idx=1&sn=289d1921688989587189c2fca0e7434b',
-        'yuantailv' => 'http://shop984425.koudaitong.com/v2/showcase/mpnews?alias=9dlutzi1&spm=m1423443892620694414615768.scan.1380097986&from=groupmessage&isappinstalled=0',
+        'yuantailv' => 'http://mp.weixin.qq.com/s?__biz=MzA3NDg3ODcyMA==&mid=208197716&idx=1&sn=f50b7fa68a45aa4eb62529a87229c95d',
         'award_bjzc_sec' => 'http://m.baojia.com/compaign/coupon/offline/?utm_source=moka_zuke',
         'award_fqsm_sec' => 'http://mp.weixin.qq.com/s?__biz=MjM5Njc3Mzg5NQ==&mid=205539179&idx=1&sn=d995742affe6ea91822e2352e5ae34df',
         'award_wgwg_1' => 'http://mp.weixin.qq.com/s?__biz=MjM5ODgyMjQ1Nw==&mid=203609357&idx=1&sn=4030238205ee0f04a174049a7d0614c1#rd',
@@ -329,28 +329,28 @@ class GameXiyangController extends AppController
                         $success = false;
                         $fail_reason = 'need_mobile';
                     } else {
-//                        $curl = curl_init();
-//                        $options = array(
-//                            CURLOPT_URL => 'http://w.iyishengyuan.com/index/getredpaper.html?mobilephone=' . $mobile . '&sign=' . md5($mobile . 'ppsiyishengyuan'),
-//                            CURLOPT_CUSTOMREQUEST => 'GET',
-//                            CURLOPT_HEADER => false,
-//                            CURLOPT_RETURNTRANSFER => true,
-//                            CURLOPT_TIMEOUT => 30
-//                        );
-//                        curl_setopt_array($curl, ($options));
-//                        $json = curl_exec($curl);
-//                        curl_close($curl);
-//
-//                        $resu = json_decode($json, true);
-//                        if (!empty($resu)) {
-//                            if ($resu['state'] != 0) {
-//                                $success = false;
-//                                $fail_reason = $resu['msg'];
-//                            }
-//                        } else {
-//                            $success = false;
-//                            $fail_reason = '获取富侨上门发奖接口结果失败';
-//                        }
+                        $curl = curl_init();
+                        $options = array(
+                            CURLOPT_URL => 'http://w.iyishengyuan.com/index/getredpaper.html?mobilephone=' . $mobile . '&sign=' . md5($mobile . 'ppsiyishengyuan'),
+                            CURLOPT_CUSTOMREQUEST => 'GET',
+                            CURLOPT_HEADER => false,
+                            CURLOPT_RETURNTRANSFER => true,
+                            CURLOPT_TIMEOUT => 30,
+                        );
+                        curl_setopt_array($curl, ($options));
+                        $json = curl_exec($curl);
+                        curl_close($curl);
+
+                        $resu = json_decode($json, true);
+                        if (!empty($resu)) {
+                            if ($resu['state'] != 0) {
+                                $success = false;
+                                $fail_reason = $resu['msg'];
+                            }
+                        } else {
+                            $success = false;
+                            $fail_reason = '获取富侨上门发奖接口结果失败';
+                        }
 
                         $this->log("querying FQSM second award of mobile:" . $mobile . ', result=' . $json);
                     }
@@ -409,6 +409,7 @@ class GameXiyangController extends AppController
             $result['exchange_apple_count'] = $total_ex_count;
             $result['coupon_count'] = $coupon_count;
             $result['result'] = "just-got";
+            $result['award_data'] = empty($award_data)?'':$award_data;
         }else{
             $result['result'] = $sold_out ? 'sold_out' : "goon";
             $result['reason'] = $fail_reason;

@@ -78,7 +78,7 @@
                     {{if empty($award_by_type['fqsm-1'])}}
                     <a type="fqsm-1" class="{{if $total_apple<50}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize {{/if}} radius4" href="javascript:;">{{if $total_apple<50}}50金币{{/if}}参加秒杀</a>
                     {{else}}
-                    <a type="fqsm-1" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去领取</a>
+                    <a type="fqsm-1" class="gold_prizeset_seckill_usable radius4 _js_award_prize" award_data="{{$award_by_type['fqsm-1']['award_data']}}" href="javascript:;">已秒到，去领取</a>
                     {{/if}}
                 </div>
             </li>
@@ -89,7 +89,7 @@
                     {{if empty($award_by_type['wgwg-1'])}}
                     <a type="wgwg-1" class="{{if $total_apple<50}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize {{/if}} radius4" href="javascript:;">{{if $total_apple<50}}50金币{{/if}}参加秒杀</a>
                     {{else}}
-                    <a type="wgwg-1" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去领取</a>
+                    <a type="wgwg-1" class="gold_prizeset_seckill_usable radius4 _js_award_prize" award_data="{{$award_by_type['wgwg-2']['award_data']}}" href="javascript:;">已秒到，去领取</a>
                     {{/if}}
                 </div>
             </li>
@@ -114,7 +114,7 @@
                     {{if empty($award_by_type['wgwg-2'])}}
                     <a type="wgwg-2" class="{{if $total_apple<30}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize_30 {{/if}} radius4" href="javascript:;">{{if $total_apple<30}}30金币{{/if}}兑换</a>
                     {{else}}
-                    <a type="wgwg-2" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去领取</a>
+                    <a type="wgwg-2" class="gold_prizeset_seckill_usable radius4 _js_award_prize" award_data="{{$award_by_type['wgwg-2']['award_data']}}" href="javascript:;">已秒到，去领取</a>
                     {{/if}}
                 </div>
             </li>
@@ -138,7 +138,7 @@
                     {{if empty($award_by_type['fqsm-2'])}}
                     <a type="fqsm-2" class="{{if $total_apple<30}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize_30 {{/if}} radius4" href="javascript:;">{{if $total_apple<30}}30金币{{/if}}兑换</a>
                     {{else}}
-                    <a type="fqsm-2" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去领取</a>
+                    <a type="fqsm-2" class="gold_prizeset_seckill_usable radius4 _js_award_prize" award_data="{{$award_by_type['fqsm-2']['award_data']}}" href="javascript:;">已秒到，去领取</a>
                     {{/if}}
                 </div>
             </li>
@@ -437,13 +437,13 @@
     }
 
     $('._js_award_prize').click(function(){
-        award_usage_guide($(this).attr('type'));
+        award_usage_guide($(this).attr('type'), $(this).attr('award_data'));
     });
 
-    game_notify_after_exchange = function (coupon_count, coupon_type) {
+    game_notify_after_exchange = function (coupon_count, coupon_type, award_data) {
         if (coupon_count > 0) {
             $('[type="'+coupon_type+'"').removeClass('_js_get_prize_30').removeClass('_js_get_prize').text('已秒到，去领取').click(function(){
-                award_usage_guide(coupon_type);
+                award_usage_guide(coupon_type, award_data);
             });
         } else {
             if (coupon_type == 'baojia-1' || coupon_type == 'fqsm-1' || coupon_type == 'wgwg-1' || coupon_type == 'ytl-1') {
