@@ -13,6 +13,9 @@
 </script>
 <?php
     $from = $this->Session->read('game_from');
+    if(empty($from)){
+        $from='pyshuo';
+    }
 ?>
 <div id="xy_game">
     <div class="gold_bg" id="xy_top">
@@ -43,7 +46,7 @@
     <div class="gold_prizeset">
         <div class="gold_prizeset_title"><img src="{{$this->Html->assetUrl('/img/game_xiyang/prizeset.gif')}}" ></div>
         <div class="gold_prizeset_level_title">一等奖：</div>
-        <ul class="clearfix">
+        <ul class="clearfix" style="margin-bottom: 0;">
             <li>
                 <div>
                     <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize1.jpg')}}"><br/>
@@ -59,7 +62,7 @@
                 </div>
             </li>
         </ul>
-        <ul class="clearfix">
+        <ul class="clearfix" style="margin-bottom: 0;">
             <li>
                 <div>
                     <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize3.jpg')}}"><br/>
@@ -76,7 +79,7 @@
             </li>
         </ul>
         <div class="gold_prizeset_level_title">二等奖：</div>
-        <ul class="clearfix">
+        <ul class="clearfix" style="margin-bottom: 0;">
             <li>
                 <div>
                     <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize5.jpg')}}"><br/>
@@ -92,7 +95,7 @@
                 </div>
             </li>
         </ul>
-        <ul class="clearfix">
+        <ul class="clearfix" style="margin-bottom: 0;">
             <li>
                 <div>
                     <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize7.jpg')}}"><br/>
@@ -507,5 +510,5 @@
         });
     }
 </script>
-{{$this->Html->script(array('apple_game.js?v30'))}}
+{{$this->Html->script(array('apple_game.js?v31'))}}
 

@@ -47,8 +47,21 @@ ul,li{ list-style:none;}
 .gold_prizeset ul li{ width: 50%; float: left;}
 .gold_prizeset ul li div{ margin-right: 10px; background-color: #ffffff; padding-bottom: 1em; margin-bottom: 10px;}
 .gold_prizeset ul li img{ width: 100%;}
-.gold_prizeset ul li p{ padding: 0 0.5em; margin: 0; text-align: center; height: 4.5em; padding-bottom: 0.8em; line-height: 1.5em; font-size: 0.9em; color: #333333;}
-.gold_prizeset ul li p a{ color: #c62a35; font-size: 1.3em; text-decoration: none;}
+.gold_prizeset ul li p {
+    padding: 0 0.5em;
+    margin: 0;
+    text-align: center;
+    height: 5em;
+    padding-bottom: 0.8em;
+    line-height: 1.5em;
+    font-size: 0.9em;
+    color: #333333;
+}
+.gold_prizeset ul li p a {
+    color: #c62a35;
+    font-size: 1.2em;
+    text-decoration: none;
+}
 .gold_prizeset_seckill_disabled{ display: block; text-decoration: none; border: 1px #cccccc solid; color: #999999; width: 80%; margin: 0 auto;height: 30px; line-height: 30px; text-align: center; font-size: 1.1em;}
 .gold_prizeset_seckill_disabled:hover{color: #999999;text-decoration: none}
 .gold_prizeset_seckill_disabled:focus{color: #999999;text-decoration: none}

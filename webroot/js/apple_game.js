@@ -34,7 +34,7 @@ $(document).ready(function(){
     $('body').append($share_div);
 
     if (yao_tips_png) {
-        $shaking_tips_png = $('<div class="apple_share fade in" style="text-align: center; padding-top: 2em;"><img style="width:80%" src="' + yao_tips_png + '"></div>')
+        $shaking_tips_png = $('<div class="apple_share fade in" style="text-align: center; padding-top: 2em;"><img style="width:80%;margin-top: 40%;" src="' + yao_tips_png + '"></div>')
             .hide().click(function () {
                 $shaking_tips_png.hide();
             });
