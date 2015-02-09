@@ -24,8 +24,8 @@ DROP INDEX `award_info` ,
 ADD UNIQUE INDEX `award_info` (`type` ASC, `uid` ASC, `from` ASC);
 
 INSERT INTO `cake_coupons` (`id`, `name`, `brand_id`, `product_list`, `category_id`, `status`, `valid_begin`, `valid_end`, `published`, `last_updator`, `deleted`, `created`, `modified`, `reduced_price`, `type`, `least_price`) VALUES
-(19069, '羊年游戏-58元券', 0, '816', 1, 1, '2015-02-10 00:00:00', '2015-02-13 23:59:59', 0, 632, 0, NULL, NULL, 5800, 2, 0),
-(19070, '羊年游戏-158元券', 0, '816', 1, 1, '2015-02-10 00:00:00', '2015-02-13 23:59:59', 0, 632, 0, NULL, NULL, 15800, 2, 0);
+(19069, '羊年游戏-58元券', 0, '816', 1, 1, '2015-02-10 00:00:00', '2015-02-13 23:59:59', 1, 632, 0, NULL, NULL, 5800, 2, 0),
+(19070, '羊年游戏-158元券', 0, '816', 1, 1, '2015-02-10 00:00:00', '2015-02-13 23:59:59', 1, 632, 0, NULL, NULL, 15800, 2, 0);
 
 
 
