@@ -48,6 +48,17 @@ class GameXiyangController extends AppController
         )
     );
 
+    var $xy_awards = array(
+        self::AW_BAOJIA_1=>'宝驾租车一等奖',
+        self::AW_FQSM_1=>'富侨上门一等奖',
+        self::AW_YTL_1=>'源态绿一等奖',
+        self::AW_WGWG_1=>'万国万购一等奖',
+        self::AW_BAOJIA_2=>'宝驾租车二等奖',
+        self::AW_FQSM_2=>'富侨上门二等奖',
+        self::AW_YTL_2=>'源态绿二等奖',
+        self::AW_WGWG_2=>'万国万购二等奖'
+    );
+
     var $wx_accounts = array('wgwg','fuqiaoshangmen','yuantailv');
 
     var $wx_accounts_map = array('wgwg'=>'万国万购','fuqiaoshangmen'=>'富侨上门','yuantailv'=>'原态绿');
@@ -811,10 +822,11 @@ class GameXiyangController extends AppController
             $listR = $this->AwardResult->find_latest_award_results($gameType, 100);
             $uids = array();
             foreach ($listR as $res) {
-                $bind_user = $res['CouponItem']['bind_user'];
-                $coupon_id = $res['CouponItem']['coupon_id'];
-                $created = friendlyDateFromStr($res['CouponItem']['created']);
-                $award_list[] = array($bind_user, $coupon_id == self::COUPON_YTL_FIRST ? 'first' : 'sec', $created);
+                $bind_user = $res['AwardResult']['uid'];
+                $created = friendlyDateFromStr($res['AwardResult']['finish_time']);
+                $award_type=$res['AwardResult']['award_type'];
+                $award_info = $this->xy_awards[$award_type];
+                $award_list[] = array($bind_user, $award_info, $created);
                 $uids[] = $bind_user;
             }
             $nameIdMap = $this->User->findNicknamesMap($uids);
