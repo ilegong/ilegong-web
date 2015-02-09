@@ -70,6 +70,7 @@ class GameXiyangController extends AppController
         'yuantailv' => 'http://shop984425.koudaitong.com/v2/showcase/mpnews?alias=9dlutzi1&spm=m1423443892620694414615768.scan.1380097986&from=groupmessage&isappinstalled=0',
         'award_bjzc_sec' => 'http://m.baojia.com/compaign/coupon/offline/?utm_source=moka_zuke',
         'award_fqsm_sec' => 'http://mp.weixin.qq.com/s?__biz=MjM5Njc3Mzg5NQ==&mid=205539179&idx=1&sn=d995742affe6ea91822e2352e5ae34df',
+        'award_wgwg_1' => 'http://mp.weixin.qq.com/s?__biz=MjM5ODgyMjQ1Nw==&mid=203609357&idx=1&sn=4030238205ee0f04a174049a7d0614c1#rd',
 );
 
     var $page_titles = array('wgwg'=>'羊年赢大奖,马油面霜免费领','fuqiaoshangmen'=>'羊年赢大奖,免费上门按摩','yuantailv'=>'羊年赢大奖,Love柚免费领','pyshuo'=>'羊年赢大奖,悍马免费开','default'=>'羊年赢大奖,悍马免费开');
