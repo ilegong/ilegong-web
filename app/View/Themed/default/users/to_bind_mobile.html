@@ -132,7 +132,7 @@
             $handle.attr("disabled","disabled");
             $.post('/users/mobile_bind', {'mobile': mobile, 'code': code}, function (data) {
                 var result = JSON.parse(data);
-                if(result['code']!==2){
+                if(!result['code']){
                     showTip(result['msg'],function(){
                         window.location.href = ref_url;
                     });
