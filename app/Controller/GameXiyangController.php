@@ -52,7 +52,11 @@ class GameXiyangController extends AppController
 
     var $wx_accounts_map = array('wgwg'=>'万国万购','fuqiaoshangmen'=>'富侨上门','yuantailv'=>'原态绿');
 
-    var $wx_accounts_init_map = array('init-wgwg'=>'wgwg','init-fqsm'=>'fuqiaoshangmen','init-ytl'=>'yuantailv','init-bjzc'=>'baojiazuche');
+    var $wx_accounts_init_map = array('init-wgwg'=>'wgwg','init-fqsm'=>'fuqiaoshangmen','init-ytl'=>'yuantailv','init-bjzc'=>'baojiazuche','init-pys'=>'pyshuo');
+
+    var $xw_accounts_map_page = array('wgwg'=>'http://mp.weixin.qq.com/s?__biz=MjM5ODgyMjQ1Nw==&mid=203560202&idx=1&sn=bcc16db724964a9ad66ad9b265dc9570#rd','fuqiaoshangmen'=>'http://mp.weixin.qq.com/s?__biz=MjM5Njc3Mzg5NQ==&mid=205483700&idx=1&sn=289d1921688989587189c2fca0e7434b','yuantailv'=>'http://shop984425.koudaitong.com/v2/showcase/mpnews?alias=9dlutzi1&spm=m1423443892620694414615768.scan.1380097986&from=groupmessage&isappinstalled=0');
+
+    var $page_titles = array('wgwg'=>'羊年赢大奖,马油面霜免费领','fuqiaoshangmen'=>'羊年赢大奖,免费上门按摩','yuantailv'=>'羊年赢大奖,Love柚免费领','pyshuo'=>'羊年赢大奖,悍马免费开','default'=>'羊年赢大奖,悍马免费开');
 
     public function beforeFilter()
     {
@@ -388,6 +392,12 @@ class GameXiyangController extends AppController
                 $this->Session->write('game_from',$this->wx_accounts_init_map[$from]);
             }
         }
+        $from = $this->Session->read('game_from');
+        if($this->page_titles[$from]!=null){
+            $this->pageTitle = $this->page_titles[$from];
+        }else{
+            $this->pageTitle = $this->page_titles['default'];
+        }
         list($friend, $shouldAdd, $gameType) = $this->track_or_redirect($current_uid, $gameType, $dailyHelpLimit);
         if (!empty($friend)) {
             if ($shouldAdd) {
@@ -396,7 +406,6 @@ class GameXiyangController extends AppController
             $this->_addNotify(filter_invalid_name($friend['User']['nickname']), $friend['User']['id']);
             $this->redirect_for_append_tr_id($current_uid, $gameType);
         }
-
         $trid = $_GET['trid'];
         if ($trid) {
             $this->set('trid', $trid);
@@ -475,7 +484,6 @@ class GameXiyangController extends AppController
         $this->set('treeName', $this->treeNames[$gameType]);
         $this->set('treeStatic', $this->treeStaticNames[$gameType]);
 
-        $this->pageTitle = $this->title_in_window[$gameType];
         $this->set('hideNav', true);
         $this->set('noFlash', true);
 
@@ -791,6 +799,14 @@ class GameXiyangController extends AppController
      */
     private function get_first_waiting($gameType) {
         return $this->AwardInfo->count_ge_no_spent_50($gameType);
+    }
+
+
+    public function redirect_to_account_follow_page(){
+        $to = $_REQUEST['to'];
+        if(in_array($to,$this->wx_accounts)){
+            $this->redirect($this->xw_accounts_map_page[$to]);
+        }
     }
 
     /**

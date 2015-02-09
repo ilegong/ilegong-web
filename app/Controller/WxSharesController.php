@@ -41,4 +41,22 @@ class WxSharesController extends AppController{
             $this->WxShare->save($data);
         }
     }
+
+    public function log_share_xy_game(){
+        $this->autoRender =false;
+        if($this->is_weixin()&& $this->currentUser['id']){
+            $share_type = $_POST['share_type'];
+            if($share_type != 'timeline' && $share_type != 'appMsg'){
+                $this->log("WxShare: type wrong");
+                exit();
+            }
+            $type = $share_type == 'timeline' ? 1:0;
+            $uid = $this->currentUser['id'];
+            $created = date('Y-m-d H:i:s');
+            $from = $_POST['from'];
+            $data = array('sharer' => $uid, 'created' => $created, 'data_type' =>'xy_game' , 'data_id' => $from,'share_type'=>$type);
+            $this->WxShare->save($data);
+        }
+    }
+
 }

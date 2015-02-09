@@ -16,7 +16,7 @@
 ?>
 <div id="xy_game">
     <div class="gold_bg" id="xy_top">
-        <div class="gold_title">
+        <div class="gold_title" id="gold_title_img">
             {{if $from=="wgwg"}}
                 <img src="{{$this->Html->assetUrl('/img/game_xiyang/title4.gif')}}">
             {{elseif $from=="fuqiaoshangmen"}}
@@ -180,11 +180,11 @@
         <p>关注以下平台，分别加2次机会</p>
         <dl class="clearfix">
             <dt class="fl"><a href="#X" id="assignWXSubscribeTimes" class="radius4">关注朋友说</a></dt>
-            <dt class="fr"><a id="yuantailv" {{if $follow_infos['yuantailv']!=null}}name="assignOtherWXSubscribeTimes"{{/if}} href="#X" class="radius4">关注原态绿</a></dt>
+            <dt class="fr"><a id="yuantailv" {{if $follow_infos['yuantailv']!=null}}name="assignOtherWXSubscribeTimes"{{/if}} href="/game_xiyang/redirect_to_account_follow_page?to=yuantailv" class="radius4">关注原态绿</a></dt>
         </dl>
         <dl class="clearfix">
-            <dt class="fl"><a id="wgwg" {{if $follow_infos['wgwg']!=null}} name="assignOtherWXSubscribeTimes"{{/if}} href="http://mp.weixin.qq.com/s?__biz=MjM5ODgyMjQ1Nw==&mid=203560202&idx=1&sn=bcc16db724964a9ad66ad9b265dc9570#rd" class="radius4">关注万国万购</a></dt>
-            <dt class="fr"><a id="fuqiaoshangmen"  {{if $follow_infos['fuqiaoshangmen']!=null}}name="assignOtherWXSubscribeTimes"{{/if}} href="http://mp.weixin.qq.com/s?__biz=MjM5Njc3Mzg5NQ==&mid=205483700&idx=1&sn=289d1921688989587189c2fca0e7434b" class="radius4">关注富侨上门</a></dt>
+            <dt class="fl"><a id="wgwg" {{if $follow_infos['wgwg']!=null}} name="assignOtherWXSubscribeTimes"{{/if}} href="/game_xiyang/redirect_to_account_follow_page?to=wgwg" class="radius4">关注万国万购</a></dt>
+            <dt class="fr"><a id="fuqiaoshangmen"  {{if $follow_infos['fuqiaoshangmen']!=null}}name="assignOtherWXSubscribeTimes"{{/if}} href="/game_xiyang/redirect_to_account_follow_page?to=fuqiaoshangmen" class="radius4">关注富侨上门</a></dt>
         </dl>
         <p>每个朋友点击分享的游戏，<br />分别加1次机会</p>
         <ul>
@@ -207,6 +207,20 @@
     });
 </script>
 {{/if}}
+<script>
+    $(document).ready(function(){
+        var titleImages = ["{{$this->Html->assetUrl('/img/game_xiyang/title.gif')}}","{{$this->Html->assetUrl('/img/game_xiyang/title2.gif')}}","{{$this->Html->assetUrl('/img/game_xiyang/title3.gif')}}","{{$this->Html->assetUrl('/img/game_xiyang/title4.gif')}}"];
+        var currentIndex = 0;
+        var $gold_title_img=$('#gold_title_img');
+        setInterval(function(){
+            currentIndex = currentIndex+1;
+            if(currentIndex==4){
+                currentIndex=0;
+            }
+            $gold_title_img.html('<img src="'+titleImages[currentIndex]+'">');
+        },30000);
+    });
+</script>
 <script type="text/javascript">
     var $today_got_wx = "{{$today_got_wx}}";
     var shake_pic_url = '{{$this->Html->assetUrl("/img/game_jiujiu/index/basketmove.gif")}}';
@@ -425,14 +439,46 @@
 
     //wx share
     if (typeof(wx) != 'undefined') {
-        wx.ready(function () {
-            var share_string = '{{$share_string ? $share_string :"0"}}';
-            var to_timeline_title = "摇下50颗，3斤丹东玖玖农场草莓免费送，来自有机认证的水土，中国最早的草莓种植地（之一）。 ";
-            var to_friend_title = "摇下50颗，3斤丹东玖玖农场草莓免费送";
-            var to_friend_link = 'http://www.tongshijia.com/t/ag/jiujiu.html?trid={{urlencode($_REQUEST["trid"])}}';
-            var to_timeline_link = to_friend_link;
-            var imgUrl = "{{$this->Html->assetUrl('http://www.tongshijia.com/img/game_jiujiu/index/share_logo.jpg')}}";
 
+        var to_timeline_titles = ["摇下50个，秒价值198元的韩国奇迹马油面霜。摇30个就送百元德国美奶粉优惠券！免费租车、上门按摩、情人节礼物等你来拿！","摇下50个，500元富侨上门按摩卡免费秒。摇下30个就送50元代金券。免费租车、上门按摩、情人节礼物等你来拿！",
+                                   '摇下50个，Love柚情人礼盒免费秒。摇30送58元优惠券。韩国面霜，免费租车、免费上门按摩等你来拿。 ','摇下50个，悍马免费开。摇30送200元券多重车型免费租。上门按摩，情人节礼物，奶粉面霜等你来拿。 ' ];
+
+        var to_friend_titles=['摇下50个，秒价值198元的韩国奇迹马油面霜。','摇下50个，500元富侨上门按摩卡免费秒。','摇下50个，Love柚情人礼盒免费秒。','摇下50个，悍马免费开。'];
+
+        var to_friend_links_from=['init-wgwg','init-fqsm','init-ytl','init-bjzc'];
+
+        var share_imgs = ["{{$this->Html->assetUrl('/img/game_xiyang/parize3.jpg')}}","{{$this->Html->assetUrl('/img/game_xiyang/parize4.jpg')}}","{{$this->Html->assetUrl('/img/game_xiyang/parize2.jpg')}}","{{$this->Html->assetUrl('/img/game_xiyang/parize1.jpg')}}"];
+
+        var randomVal = Math.floor(Math.random() * (3 + 1));
+
+        wx.ready(function () {
+            {{if $from=="wgwg"}}
+                var to_timeline_title = to_timeline_titles[0];
+                var to_friend_title = to_friend_title[0];
+                var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&from='+to_friend_links_from[0];
+                var imgUrl = share_imgs[0];
+            {{elseif $from=="fuqiaoshangmen"}}
+                var to_timeline_title = to_timeline_titles[1];
+                var to_friend_title = to_friend_title[1];
+                var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&from='+to_friend_links_from[1];
+                var imgUrl = share_imgs[1];
+            {{elseif $from=="yuantailv"}}
+                var to_timeline_title = to_timeline_titles[2];
+                var to_friend_title = to_friend_title[2];
+                var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&from='+to_friend_links_from[2];
+                var imgUrl = share_imgs[2];
+            {{elseif $from=="baojiazuche"}}
+                var to_timeline_title = to_timeline_titles[3];
+                var to_friend_title = to_friend_title[3];
+                var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&from='+to_friend_links_from[3];
+                var imgUrl = share_imgs[3];
+            {{else}}
+                var to_timeline_title = to_timeline_titles[randomVal];
+                var to_friend_title = to_friend_title[randomVal];
+                var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&from='+to_friend_links_from[randomVal];
+                var imgUrl = share_imgs[randomVal];
+            {{/if}}
+                var to_timeline_link = to_friend_link;
             var xx = {
                 title: to_friend_title,
                 desc: desc_cmp_friends(),
@@ -440,7 +486,7 @@
                 imgUrl: imgUrl,
                 success: function () {
                     if (share_string != '0') {
-                        $.post('/wx_shares/log_share', { trstr: share_string, share_type: "appMsg" });
+                        $.post('/wx_shares/log_share', { from: '{{$from}}', share_type: "appMsg" });
                     }
                 },
                 trigger: function() {
@@ -454,11 +500,11 @@
                 imgUrl: imgUrl,
                 success: function () {
                     if (share_string != '0') {
-                        $.post('/wx_shares/log_share', { trstr: share_string, share_type: "timeline" });
+                        $.post('/wx_shares/log_share', { from: '{{$from}}', share_type: "timeline" });
                     }
                 }
             });
-        })
+        });
     }
 </script>
 {{$this->Html->script(array('apple_game.js?v30'))}}
