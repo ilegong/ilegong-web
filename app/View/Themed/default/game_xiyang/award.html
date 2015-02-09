@@ -45,7 +45,7 @@
 
     <div class="gold_prizeset">
         <div class="gold_prizeset_title"><img src="{{$this->Html->assetUrl('/img/game_xiyang/prizeset.gif')}}" ></div>
-        <div class="gold_prizeset_level_title">一等奖：</div>
+        <div id="btn_first_award" class="gold_prizeset_level_title">一等奖：</div>
         <ul class="clearfix" style="margin-bottom: 0;">
             <li>
                 <div>
@@ -94,7 +94,7 @@
                 </div>
             </li>
         </ul>
-        <div class="gold_prizeset_level_title">二等奖：</div>
+        <div id="btn_sec_award" class="gold_prizeset_level_title">二等奖：</div>
         <ul class="clearfix" style="margin-bottom: 0;">
             <li>
                 <div>
@@ -400,7 +400,8 @@
     function  notify_after_shake(total, times, msg, close_callback, timeout) {
         if (total >= 30) {
             utils.alert_two(msg, '去兑奖', '继续摇', function(){
-                $('#btn_rules').trigger("click");
+                if (total >= 50) {window.location.hash = '#btn_first_award';}
+               else if (total >= 30) { window.location.hash = '#btn_sec_award'; }
             }, close_callback, {timeout: timeout, close_callback: close_callback});
         } else {
             utils.alert_one(msg, '继续摇', close_callback, {timeout: timeout, close_callback: close_callback});
