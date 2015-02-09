@@ -73,23 +73,23 @@
         <ul class="clearfix" style="margin-bottom: 0;">
             <li>
                 <div>
+                    <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize4.jpg')}}"><br/>
+                    <p>9-13日每天9/12/16/21<br/>整点秒杀，每次一张<br/><a id="fqsmRulesBtn1" href="javascript:;">使用说明</a></p>
+                    {{if empty($award_by_type['fqsm-1'])}}
+                    <a type="fqsm-1" class="{{if $total_apple<50}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize {{/if}} radius4" href="javascript:;">{{if $total_apple<50}}50金币{{/if}}参加秒杀</a>
+                    {{else}}
+                    <a type="fqsm-1" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去使用</a>
+                    {{/if}}
+                </div>
+            </li>
+            <li>
+                <div>
                     <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize3.jpg')}}"><br/>
                     <p>9-13日每天9/12/16/21<br/>整点秒杀，每次一盒<br/><a href="#X">使用说明</a></p>
                     {{if empty($award_by_type['wgwg-1'])}}
                     <a type="wgwg-1" class="{{if $total_apple<50}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize {{/if}} radius4" href="javascript:;">{{if $total_apple<50}}50金币{{/if}}参加秒杀</a>
                     {{else}}
                     <a type="wgwg-1" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去使用</a>
-                    {{/if}}
-                </div>
-            </li>
-            <li>
-                <div>
-                    <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize4.jpg')}}"><br/>
-                    <p>9-13日每天9/12/16/21<br/>整点秒杀，每次一盒<br/><a href="#X">使用说明</a></p>
-                    {{if empty($award_by_type['fqsm-1'])}}
-                    <a type="fqsm-1" class="{{if $total_apple<50}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize {{/if}} radius4" href="javascript:;">{{if $total_apple<50}}50金币{{/if}}参加秒杀</a>
-                    {{else}}
-                    <a type="fqsm-1" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去使用</a>
                     {{/if}}
                 </div>
             </li>
@@ -495,7 +495,7 @@
             $baojia2Rules.show();
             stopScroll();
         });
-        $('#fqsm2RulesBtn').on('click', function(){
+        $('#fqsm2RulesBtn, #fqsmRulesBtn1').on('click', function(){
             $gold_trbg.show();
             $fqsm2Rules.show();
             stopScroll();
