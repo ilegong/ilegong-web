@@ -552,31 +552,31 @@
             {{if $from=="wgwg"}}
                 var to_timeline_title = to_timeline_titles[0];
                 var to_friend_title = to_friend_titles[0];
-                var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&from='+to_friend_links_from[0];
+                var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&f='+to_friend_links_from[0];
                 var imgUrl = share_imgs[0];
                 var desc = descs[0];
             {{elseif $from=="fuqiaoshangmen"}}
                 var to_timeline_title = to_timeline_titles[1];
                 var to_friend_title = to_friend_titles[1];
-                var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&from='+to_friend_links_from[1];
+                var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&f='+to_friend_links_from[1];
                 var imgUrl = share_imgs[1];
                 var desc = descs[1];
             {{elseif $from=="yuantailv"}}
                 var to_timeline_title = to_timeline_titles[2];
                 var to_friend_title = to_friend_titles[2];
-                var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&from='+to_friend_links_from[2];
+                var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&f='+to_friend_links_from[2];
                 var imgUrl = share_imgs[2];
                 var desc = descs[3];
             {{elseif $from=="baojiazuche"}}
                 var to_timeline_title = to_timeline_titles[3];
                 var to_friend_title = to_friend_titles[3];
-                var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&from='+to_friend_links_from[3];
+                var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&f='+to_friend_links_from[3];
                 var imgUrl = share_imgs[3];
                 var desc = descs[3];
             {{else}}
                 var to_timeline_title = to_timeline_titles[randomVal];
                 var to_friend_title = to_friend_titles[randomVal];
-                var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&from='+to_friend_links_from[randomVal];
+                var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&f='+to_friend_links_from[randomVal];
                 var imgUrl = share_imgs[randomVal];
                 var desc = descs[randomVal];
             {{/if}}
