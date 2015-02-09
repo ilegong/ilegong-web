@@ -516,7 +516,6 @@
                     $.post('/wx_shares/log_share_xy_game', { from: '{{$from}}', share_type: "appMsg" });
                 },
                 trigger: function() {
-                    xx.desc = desc_cmp_friends();
                 }
             };
             wx.onMenuShareAppMessage(xx);
