@@ -51,14 +51,22 @@
                 <div>
                     <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize1.jpg')}}"><br/>
                     <p>2月13日下午21:00整点秒杀<br/><a href="#X">使用说明</a></p>
-                    <a class="gold_prizeset_seckill_disabled radius4" href="#X">50金币参加秒杀</a>
+                    {{if empty($award_by_type['baojia-1'])}}
+                    <a type="baojia-1" class="{{if $total_apple<50}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize {{/if}} radius4" href="javascript:;">{{if $total_apple<50}}50金币{{/if}}参加秒杀</a>
+                    {{else}}
+                    <a type="baojia-1" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去使用</a>
+                    {{/if}}
                 </div>
             </li>
             <li>
                 <div>
                     <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize2.jpg')}}"><br/>
                     <p>9-13日每天9/12/16/21<br/>整点秒杀，每次1盒<br/><a href="#X">使用说明</a></p>
-                    <a class="gold_prizeset_seckill_usable radius4" href="#X">去使用</a>
+                    {{if empty($award_by_type['ytl-1'])}}
+                    <a type="ytl-1" class="{{if $total_apple<50}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize {{/if}} radius4" href="javascript:;">{{if $total_apple<50}}50金币{{/if}}参加秒杀</a>
+                    {{else}}
+                    <a type="ytl-1" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去使用</a>
+                    {{/if}}
                 </div>
             </li>
         </ul>
@@ -67,14 +75,22 @@
                 <div>
                     <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize3.jpg')}}"><br/>
                     <p>9-13日每天9/12/16/21<br/>整点秒杀，每次一盒<br/><a href="#X">使用说明</a></p>
-                    <a class="gold_prizeset_seckill_disabled radius4" href="#X">50金币参加秒杀</a>
+                    {{if empty($award_by_type['wgwg-1'])}}
+                    <a type="wgwg-1" class="{{if $total_apple<50}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize {{/if}} radius4" href="javascript:;">{{if $total_apple<50}}50金币{{/if}}参加秒杀</a>
+                    {{else}}
+                    <a type="wgwg-1" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去使用</a>
+                    {{/if}}
                 </div>
             </li>
             <li>
                 <div>
                     <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize4.jpg')}}"><br/>
                     <p>9-13日每天9/12/16/21<br/>整点秒杀，每次一盒<br/><a href="#X">使用说明</a></p>
-                    <a class="gold_prizeset_seckill_usable radius4" href="#X">凭码兑换<span>(45845)</span></a>
+                    {{if empty($award_by_type['fqsm-1'])}}
+                    <a type="fqsm-1" class="{{if $total_apple<50}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize {{/if}} radius4" href="javascript:;">{{if $total_apple<50}}50金币{{/if}}参加秒杀</a>
+                    {{else}}
+                    <a type="fqsm-1" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去使用</a>
+                    {{/if}}
                 </div>
             </li>
         </ul>
@@ -84,14 +100,22 @@
                 <div>
                     <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize5.jpg')}}"><br/>
                     <p>随时兑换，不限份数<br/><a href="#X">使用说明</a></p>
-                    <a class="gold_prizeset_seckill_disabled radius4" href="#X">30金币兑换</a>
+                    {{if empty($award_by_type['baojia-2'])}}
+                    <a type="baojia-2" class="{{if $total_apple<30}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize_30 {{/if}} radius4" href="javascript:;">{{if $total_apple<30}}30金币{{/if}}兑换</a>
+                    {{else}}
+                    <a type="baojia-2" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去使用</a>
+                    {{/if}}
                 </div>
             </li>
             <li>
                 <div>
                     <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize6.jpg')}}"><br/>
                     <p>随时兑换，限当天使用<br/>剩余500张<br/><a href="#X">使用说明</a></p>
-                    <a class="gold_prizeset_seckill_usable radius4" href="#X">去使用</a>
+                    {{if empty($award_by_type['wgwg-2'])}}
+                    <a type="wgwg-2" class="{{if $total_apple<30}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize_30 {{/if}} radius4" href="javascript:;">{{if $total_apple<30}}30金币{{/if}}兑换</a>
+                    {{else}}
+                    <a type="wgwg-2" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去使用</a>
+                    {{/if}}
                 </div>
             </li>
         </ul>
@@ -100,14 +124,22 @@
                 <div>
                     <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize7.jpg')}}"><br/>
                     <p>随时兑换，限当天使用<br/>剩余200份<br/><a href="#X">使用说明</a></p>
-                    <a class="gold_prizeset_seckill_disabled radius4" href="#X">50金币参加秒杀</a>
+                    {{if empty($award_by_type['ytl-2'])}}
+                    <a type="ytl-2" class="{{if $total_apple<30}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize_30 {{/if}} radius4" href="javascript:;">{{if $total_apple<30}}30金币{{/if}}兑换</a>
+                    {{else}}
+                    <a type="ytl-2" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去使用</a>
+                    {{/if}}
                 </div>
             </li>
             <li>
                 <div>
                     <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize8.jpg')}}"><br/>
                     <p>随时兑换，剩余300张<br/><a href="#X">使用说明</a></p>
-                    <a class="gold_prizeset_seckill_usable radius4" href="#X">凭码兑换<span>(45845)</span></a>
+                    {{if empty($award_by_type['fqsm-2'])}}
+                    <a type="fqsm-2" class="{{if $total_apple<30}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize_30 {{/if}} radius4" href="javascript:;">{{if $total_apple<30}}30金币{{/if}}兑换</a>
+                    {{else}}
+                    <a type="fqsm-2" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去使用</a>
+                    {{/if}}
                 </div>
             </li>
         </ul>
@@ -129,21 +161,20 @@
     <div id="xy_rules" class="gold_chance" style="display:none; top:8%;">
         <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
         <ul>
-            <li class="strawberry_chance_title">游戏规则与奖品兑换</li>
+            <li class="strawberry_chance_title">游戏规则</li>
         </ul>
         <ul class="strawberry_rule_list">
-            <li style="padding-top:1em;"><strong>游戏规则</strong></li>
             <li>
                 <span class="fl">1）</span>
-                <span style="overflow:hidden;">时间：2015年2月4日至2月8日23:59</span>
+                <span style="overflow:hidden;">时间：2015年2月10日至2月13日23:59</span>
             </li>
             <li>
                 <span class="fl">2）</span>
-                <span style="overflow:hidden;">所有奖券请领取后请在1小时内使用</span>
+                <span style="overflow:hidden;">摇到30个金币可以兑换二等奖，摇到50个金币可以秒杀一等奖。兑奖成功会扣除相应的金币数。</span>
             </li>
             <li>
                 <span class="fl">3）</span>
-                <span style="overflow:hidden;">免费送出和使用优惠券购买的奖品，第二天或第三天统一发货。其中，北京、天津外规格有区别，详见商品介绍页面</span>
+                <span style="overflow:hidden;">每种奖品的使用与兑换请参看抽奖页面的“使用说明”，如需帮助请致电客服{{SERVICE_LINE}}</span>
             </li>
             <li>
                 <span class="fl">4）</span>
@@ -151,10 +182,9 @@
             </li>
             <li>
                 <span class="fl">5）</span>
-                <span style="overflow:hidden;">法律许可范围内，本次活动解释权归朋友说所有</span>
+                <span style="overflow:hidden;">法律许可范围内，本次活动解释权归朋友说及其合作伙伴所有</span>
             </li>
         </ul>
-        <!--<div class="strawberry_adver"><img src="images/index/adver.jpg" /></div>-->
     </div>
     <!--谁帮助过我-->
     <div id="xy_help_me" class="gold_chance" style="display:none; top:8%;">
@@ -276,11 +306,42 @@
     }
 
     function game_coupon_message(times, total) {
-        if (total >= 50)  { return '<br/><span style="color:red">'+total_not_spent()+'</span>颗了，可去规则页秒杀大奖啦'; }
-        else if (total >= 40)  { return '<br/>还差<span style="color:red">'+ (50 - total_not_spent()) +'</span>颗获得大奖秒杀机会！'; }
-        else if (total >= 30)  { return '<br/><span style="color:red">'+total_not_spent()+'</span>颗了，可去规则页兑奖啦'; }
+        if (total >= 50)  { return '<br/><span style="color:red">'+total_not_spent()+'</span>个了，可去秒杀大奖啦'; }
+        else if (total >= 40)  { return '<br/>还差<span style="color:red">'+ (50 - total_not_spent()) +'</span>个获得大奖秒杀机会！'; }
+        else if (total >= 30)  { return '<br/><span style="color:red">'+total_not_spent()+'</span>个了，可去兑奖啦'; }
         else return '';
     }
+
+
+    function award_usage_guide(coupon_type) {
+        if (coupon_type == 'baojia-2') {
+            window.location.href = 'http://m.baojia.com/compaign/coupon/offline/?utm_source=moka_zuke';
+        } else if (coupon_type == 'fqsm-2') {
+            var url = 'http://mp.weixin.qq.com/s?__biz=MjM5Njc3Mzg5NQ==&mid=205483700&idx=1&sn=289d1921688989587189c2fca0e7434b';
+            utils.alert_two('<a href="'+url+'">点击这里</a>进入“富侨上门-宜生到家”公众号，回复 LQJP + 手机号充值进入您的帐号', '暂不充值', '去充值', function(){}, function(){
+                window.location.href = url;
+            });
+        }
+    }
+
+    $('._js_award_prize').click(function(){
+        award_usage_guide($(this).attr('type'));
+    });
+
+    game_notify_after_exchange = function (coupon_count, coupon_type) {
+        if (coupon_count > 0) {
+            $('[type="'+coupon_type+'"').removeClass('_js_get_prize_30').removeClass('_js_get_prize').text('已秒到，去使用').click(function(){
+                award_usage_guide(coupon_type);
+            });
+        } else {
+            if (coupon_type == 'baojia-1' || coupon_type == 'fqsm-1' || coupon_type == 'wgwg-1' || coupon_type == 'ytl-1') {
+                utils.alert_one("抱歉本时段已兑完，排队人数"+first_waiting+"人，建议您选择兑换二等奖", '知道了');
+            } else {
+                utils.alert("呜呜，本时段已兑完。");
+            }
+        }
+    };
+
 
     var showAfterGotCallback = function($times, total, $got){
         toggle_red_point(total);
@@ -307,29 +368,6 @@
         return (helpme_cnt_txt == '' ? 0 : parseInt(helpme_cnt_txt));
     }
 
-    function dabai_percent() {
-        var total = get_total();
-
-        var win = 0;
-        for(var x in friendGots) {
-            if (total > friendGots[x]) {
-                win++;
-            }
-        }
-        return (win == friendGots.length) ? 100 : utils.toFixed(win*100/friendGots.length, 0)
-    }
-
-    function desc_cmp_friends() {
-        var desc = '我已摇下至少' + get_total() + '颗';
-        if (friendGots && friendGots.length > 0) {
-            var dabaiPercent = dabai_percent();
-            desc += (dabaiPercent == 100 ? ', 打败了所有好友，哈哈' : (dabaiPercent == 0 ? ', 朋友圈里垫底 ^_^， 快点我吧' : ', 打败了' + dabaiPercent + '%的好友！'));
-        } else {
-            desc += ', 还没人帮过我！快来帮我吧';
-        }
-        return desc;
-    }
-
     $(document).ready(function(){
         //dom
         var $xy_game_div = $('#xy_game');
@@ -343,6 +381,18 @@
         var $xy_prizelist_btn=$('#xy_prizelist_btn');
 
         var $other_wx_account= $('a[name="assignOtherWXSubscribeTimes"]')
+
+        $('._js_get_prize, ._js_get_prize_30').click(function () {
+            var This = $(this);
+            var reduce_cnt = This.hasClass('_js_get_prize_30') ? 30 : (This.hasClass('_js_get_prize') ? 50 : 0 );
+            if (reduce_cnt == 0) {
+                return;
+            }
+            var couponType = This.attr('type');
+            if (typeof get_coupon_click_func == 'function') {
+                get_coupon_click_func(couponType, reduce_cnt);
+            }
+        });
 
         //red close btn
         var $xy_close_btn=$('a.gold_chance_close');
@@ -418,25 +468,6 @@
 
             return false;
         });
-
-        game_notify_after_exchange = function (coupon_count, coupon_type) {
-            if (coupon_count > 0) {
-                if ('first' == coupon_type ) {
-                    $('a#get_coupon_' + coupon_type).hide();
-                    $couponFirstLi.append('<a class="btn btn-warning" style="color:white" href="/products/view/738.html">去使用</a>');
-                } else if ('sec' == coupon_type) {
-                    $('a#get_coupon_' + coupon_type).hide();
-                    $couponSecLi.append('<a class="btn btn-warning" style="color:white" href="/products/view/738.html">去使用</a>');
-                }
-            } else {
-                if (coupon_type == 'first') {
-                    utils.alert_one("抱歉本时段已兑完，排队人数"+first_waiting+"人，建议您选择兑换二等奖", '知道了');
-                } else {
-                    utils.alert("呜呜，本时段已兑完。");
-                }
-
-            }
-        };
 
     });
 

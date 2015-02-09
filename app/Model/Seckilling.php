@@ -6,7 +6,7 @@
  * Time: 8:44 PM
  */
 
-class seckilling extends AppModel {
+class Seckilling extends AppModel {
 
     /**
      * @param $uid
@@ -15,15 +15,15 @@ class seckilling extends AppModel {
      * @param $time int unix timestamp
      * @return bool|array false on fails, the updated record on success
      */
-    public function seckilling($uid, $type, $sub_type, $time) {
+    public function sec_kill($uid, $type, $sub_type, $time) {
 
         $conds = array('uid' => 0,
             'type' => $type,
             'sub_type' => $sub_type,
             'deleted' => DELETED_NO,
             'published' => PUBLISH_YES,
-            'valid_begin<=' => $time,
-            'valid_end>=' => $time
+            'valid_begin <='.$time,
+            'valid_end >='.$time,
         );
         $found = $this->find('first', array(
             'conditions' => $conds,

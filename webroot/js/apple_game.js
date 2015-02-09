@@ -274,17 +274,19 @@ $(document).ready(function(){
         try_wx_subscribe_times();
     });
 
-    /**
-     * @param coupon_type  empty means no expect
-     */
-    function get_coupon_click(coupon_type) {
+        /**
+         * @param coupon_type  empty means no expect
+         * @param reduce_cnt
+         */
+    function get_coupon_click(coupon_type, reduce_cnt) {
         var apple_count = $.trim($appleGotCnt.text());
         if (parseInt(apple_count) < parseInt(game_least_change)) {
             utils.alert("加油，我们<span class='apple_numbers'>" + game_least_change + "</span>个" + game_obj_name + "起兑喔，您目前已摇<span class='apple_numbers'>"
                 + apple_count + "</span>个。加油加油！");
             return;
         }
-        bootbox.confirm('您目前有'+apple_count+'个' + game_obj_name + '，兑换会扣除相应的数目，您确定要兑换吗？', function (result) {
+        var reduce_desc = typeof(reduce_cnt) != 'undefined' && reduce_cnt ? reduce_cnt + '个' : '相应的数目';
+        bootbox.confirm('您目前有'+apple_count+'个' + game_obj_name + '，兑换会扣除'+reduce_desc+'，您确定要兑换吗？', function (result) {
             if (!result) {
                 return;
             }
@@ -311,9 +313,13 @@ $(document).ready(function(){
                     } else {
                         utils.alert("呜呜，券已兑完。");
                     }
-                } else if (data.result == 'game_end'){
+                } else if (data.result == 'game_end') {
                     utils.alert("呜呜，活动已结束。");
-                }else {
+                } else {
+                    if (data.reason == 'need_mobile') {
+                        window.location.href = '/users/to_bind_mobile?ref_url='+encodeURIComponent(location.href)+'&reason='+encodeURIComponent('需要设置您的手机号接收兑奖短信')+'&from=game_xiyang';
+                        return;
+                    }
                     utils.alert("呜呜，兑换失败，请稍后重试。");
                 }
             });

@@ -279,13 +279,14 @@ class GameXiyangController extends AppController
                     $can_go = ('北京' == $user_province || $rnd < 2);
                 }
                 if ($can_go) {
-                    $secKillM = $this->loadModel('Seckilling');
-                    $killed = $secKillM->seckilling($id, self::GAME_XIYANG, $expect, time());
+                    $this->loadModel('Seckilling');
+                    $killed = $this->Seckilling->sec_kill($id, self::GAME_XIYANG, $expect, time());
                     if (!empty($killed)) {
                         $this->log("exchange_coupon_first_do_coupon: uid=" . $id . ', killed='. json_encode($killed));
                         $coupon_count = 1;
                         $ex_count_per_Item = 50;
                         $total_ex_count = $ex_count_per_Item;
+                        $award_data = $killed['Seckilling']['code'];
 
                         if ($expect == self::AW_YTL_1) {
                             $awarded_coupon_id = self::COUPON_YTL_FIRST;
@@ -301,41 +302,80 @@ class GameXiyangController extends AppController
                     || $expect == self::AW_WGWG_2
                     || $expect == self::AW_YTL_2)
                     && $can_exchange_apple_count >= self::AWARD_SECOND_LEAST) {
-                $total_ex_count = $ex_count_per_Item = 30;
-                $awarded_coupon_id = self::COUPON_YTL_SEC;
-                $coupon_count = 1;
+
+                $success = true;
+                if ($expect == self::AW_YTL_2) {
+                    $awarded_coupon_id = self::COUPON_YTL_SEC;
+                }
+
+                if ($expect == self::AW_FQSM_2) {
+                    $mobile = $this->Session->read('Auth.User.mobilephone');
+                    if (empty($mobile)) {
+                        $success = false;
+                        $fail_reason = 'need_mobile';
+                    } else {
+//                        $curl = curl_init();
+//                        $options = array(
+//                            CURLOPT_URL => 'http://w.iyishengyuan.com/index/getredpaper.html?mobilephone=' . $mobile . '&sign=' . md5($mobile . 'ppsiyishengyuan'),
+//                            CURLOPT_CUSTOMREQUEST => 'GET',
+//                            CURLOPT_HEADER => false,
+//                            CURLOPT_RETURNTRANSFER => true,
+//                            CURLOPT_TIMEOUT => 30
+//                        );
+//                        curl_setopt_array($curl, ($options));
+//                        $json = curl_exec($curl);
+//                        curl_close($curl);
+//
+//                        $resu = json_decode($json, true);
+//                        if (!empty($resu)) {
+//                            if ($resu['state'] != 0) {
+//                                $success = false;
+//                                $fail_reason = $resu['msg'];
+//                            }
+//                        } else {
+//                            $success = false;
+//                            $fail_reason = '获取富侨上门发奖接口结果失败';
+//                        }
+
+                        $this->log("querying FQSM second award of mobile:" . $mobile . ', result=' . $json);
+                    }
+                }
+
+                if ($success) {
+                    $total_ex_count = $ex_count_per_Item = 30;
+                    $coupon_count = 1;
+                }
             }
 
             if ($coupon_count > 0) {
-                if (!empty($sharingPref)) {
-                    $so = $this->CouponItem;
-                    $weixin = $this->Weixin;
-                    $this->exchangeCouponAndLog($id, $apple_count_snapshot, $ex_count_per_Item, $coupon_count, $exChangeSource, $awardInfo['id'],
-                        function ($uid, $operator, $source_log_id) use ($awarded_coupon_id, $so, $weixin) {
-                            if (!empty($awarded_coupon_id)) {
-                                $so->addCoupon($uid, $awarded_coupon_id, $operator, $source_log_id);
-                            }
-                            $so->id = null;
+                $so = $this->CouponItem;
+                $weixin = $this->Weixin;
+                $this->exchangeCouponAndLog($id, $apple_count_snapshot, $ex_count_per_Item, $coupon_count, $exChangeSource, $awardInfo['id'],
+                    function ($uid, $operator, $source_log_id) use ($awarded_coupon_id, $so, $weixin) {
+                        if (!empty($awarded_coupon_id)) {
+                            $so->addCoupon($uid, $awarded_coupon_id, $operator, $source_log_id);
                         }
-                    );
-                    $this->loadModel('AwardResult');
-                    $awardResult = array(
-                        'uid' => $id,
-                        'type' => $gameType,
-                        'award_type' => $expect,
-                        'finish_time' => date(FORMAT_DATETIME),
-                    );
-                    if (!$this->AwardResult->save($awardResult)) {
-                        $this->log("update AwardResult failed:" . json_encode($awardResult));
-                    } else {
-                        $array = $this->coupon_info[$expect];
-                        $first_intro = $array['intro'];
-                        $store = $array['store'];
-                        $rule = $array['rule'];
-                        $click_intro = $array['click_intro'];
-                        $coupon_url = $array['coupon_url'];
-                        $weixin->send_coupon_message_on_received($id, $store, $rule, $coupon_url, $first_intro, $click_intro);
+                        $so->id = null;
                     }
+                );
+                $this->loadModel('AwardResult');
+                $awardResult = array(
+                    'uid' => $id,
+                    'type' => $gameType,
+                    'award_type' => $expect,
+                    'award_data' => empty($award_data)?'':$award_data,
+                    'finish_time' => date(FORMAT_DATETIME),
+                );
+                if (!$this->AwardResult->save($awardResult)) {
+                    $this->log("update AwardResult failed:" . json_encode($awardResult));
+                } else {
+                    $array = $this->coupon_info[$expect];
+                    $first_intro = $array['intro'];
+                    $store = $array['store'];
+                    $rule = $array['rule'];
+                    $click_intro = $array['click_intro'];
+                    $coupon_url = $array['coupon_url'];
+                    $weixin->send_coupon_message_on_received($id, $store, $rule, $coupon_url, $first_intro, $click_intro);
                 }
             }
         }
@@ -346,6 +386,7 @@ class GameXiyangController extends AppController
             $result['result'] = "just-got";
         }else{
             $result['result'] = $sold_out ? 'sold_out' : "goon";
+            $result['reason'] = $fail_reason;
         }
 
         echo json_encode($result);
@@ -491,14 +532,12 @@ class GameXiyangController extends AppController
         $this->set('game_user_total', $awardInfo['got']);
         $this->_updateLastQueryTime(time());
 
-        if ($awardInfo['got'] >= 30) {
-            $this->loadModel('CouponItem');
-            $coupons = $this->CouponItem->find_coupon_item_by_type_no_join($current_uid,
-                array(self::COUPON_YTL_FIRST, self::COUPON_YTL_SEC, self::COUPON_JIUJIU_THIRD));
-            $couponIds = Hash::combine($coupons, '{n}.CouponItem.coupon_id', '{n}.CouponItem.created');
-            $this->set('had_coupon_first', $couponIds[self::COUPON_YTL_FIRST]);
-            $this->set('had_coupon_sec', $couponIds[self::COUPON_YTL_SEC]);
-            $this->set('had_coupon_third', $couponIds[self::COUPON_JIUJIU_THIRD]);
+        if ($awardInfo['got'] >= self::AWARD_SECOND_LEAST) {
+            $awardResults = $this->AwardResult->find_my_award_results($current_uid, $gameType);
+            if (!empty($awardResults)) {
+                $awards_by_type = Hash::combine($awardResults, '{n}.AwardResult.award_type', '{n}.AwardResult');
+                $this->set('award_by_type', $awards_by_type);
+            }
         }
 
         $this->set('game_end', $this->is_game_end($gameCfg));
@@ -696,7 +735,7 @@ class GameXiyangController extends AppController
      * @return string
      */
     private function getExchangeType($gameType) {
-        return $gameType == self::RICE_201411 ? self::EXCHANGE_RICE_SOURCE : $gameType;
+        return $gameType;
     }
 
     /**

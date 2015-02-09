@@ -66,6 +66,12 @@ class AwardResult extends AppModel {
         ));
     }
 
+    public function find_my_award_results($uid, $gameType) {
+        return $this->find('all', array(
+            'conditions' => array('type' => $gameType, 'uid' => $uid)
+        ));
+    }
+
     public function userIsAwarded($uid, $type) {
         $key = $this->key_user_is_awarded($uid, $type);
         $result = Cache::read($key);

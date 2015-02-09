@@ -98,6 +98,13 @@ ul,li{ list-style:none;}
 .gold_chance_close img{ width:50%; height:50%;}
 #gold_trbg{ width:100%; height:100%; background-color:#000000; background-size:cover; display:block; filter:alpha(opacity=45); opacity:0.45; position:absolute; top:0; left:0; z-index:2;}
 
+.strawberry_rule{ position:fixed; left:50%; margin-left:-45%; width:90%; height:80%; background-color:#ffffff; color:#555555; text-align:center; padding:1em 0; z-index:999;}
+.strawberry_rule_list{width:90%; margin:0 auto; padding-top:5px; color:#555555; font-size:1em; overflow-y: scroll; height: 85%}
+.strawberry_rule_list strong{ color:#333333; font-size:1.2em; text-align:center; display:block;}
+.strawberry_rule_list li{ text-align:left; line-height:1.3em; padding-bottom:0.7em;}
+.strawberry_rule_list li span{ display:block;}
+.strawberry_rule_list li span a{ color:#d50000; margin-left:5px;}
+
 
 
 
