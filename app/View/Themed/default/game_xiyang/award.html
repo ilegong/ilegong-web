@@ -345,8 +345,16 @@
 <script>
     $(document).ready(function(){
         var titleImages = ["{{$this->Html->assetUrl('/img/game_xiyang/title.gif')}}","{{$this->Html->assetUrl('/img/game_xiyang/title2.gif')}}","{{$this->Html->assetUrl('/img/game_xiyang/title3.gif')}}","{{$this->Html->assetUrl('/img/game_xiyang/title4.gif')}}"];
-        var currentIndex = 0;
         var $gold_title_img=$('#gold_title_img');
+        {{if $from=="wgwg"}}
+            var currentIndex = 3;
+        {{elseif $from=="fuqiaoshangmen"}}
+            var currentIndex = 1;
+        {{elseif $from=="yuantailv"}}
+            var currentIndex = 2;
+        {{else}}
+            var currentIndex = 0;
+        {{/if}}
         setInterval(function(){
             currentIndex = currentIndex+1;
             if(currentIndex==4){
