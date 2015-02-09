@@ -47,14 +47,14 @@ class GameXiyangController extends AppController
             'coupon_url' => 'http://www.tongshijia.com/t/ag/xiyang.html',
         ),
         self::AW_YTL_1 => array(
-            'intro' => '您参与“羊年游戏“，获得原态绿提供的158元券（免费获得情人节Love柚礼盒）',
+            'intro' => '您参与"羊年游戏"，获得原态绿提供的158元券（免费获得情人节Love柚礼盒）',
             'store' => '原态绿店情人节Love柚礼盒', //适用范围
             'rule' => '请在2月13日23:59分前使用',
             'click_intro' => '点击进入查看优惠券',
             'coupon_url' => 'http://www.tongshijia.com/users/my_coupons.html',
         ),
         self::AW_YTL_2 => array(
-            'intro' => '您参与“羊年游戏“，获得原态绿提供的情人节Love柚礼盒58元券',
+            'intro' => '您参与"羊年游戏"，获得原态绿提供的情人节Love柚礼盒58元券',
             'store' => '原态绿店情人节Love柚礼盒', //适用范围
             'rule' => '请在2月13日23:59分前使用',
             'click_intro' => '点击进入查看优惠券',
