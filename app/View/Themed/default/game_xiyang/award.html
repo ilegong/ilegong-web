@@ -99,7 +99,7 @@
             <li>
                 <div>
                     <img src="{{$this->Html->assetUrl('/img/game_xiyang/parize5.jpg')}}"><br/>
-                    <p>随时兑换，不限份数<br/><a href="#X">使用说明</a></p>
+                    <p>免费租大众现代雪弗兰别克等，13城市通用<br/><a id="baojia2RulesBtn" href="javascript:;">使用说明</a></p>
                     {{if empty($award_by_type['baojia-2'])}}
                     <a type="baojia-2" class="{{if $total_apple<30}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize_30 {{/if}} radius4" href="javascript:;">{{if $total_apple<30}}30金币{{/if}}兑换</a>
                     {{else}}
@@ -157,11 +157,58 @@
         </ul>
 
     </div>
+
+    <div id="baojia_2_rules" class="gold_chance" style="display:none; top:8%;">
+        <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
+        <ul>
+            <li class="gold_chance_title">使用说明</li>
+        </ul>
+        <ul class="strawberry_rule_list">
+            <li>
+                <span class="fl">1）</span>
+                <span style="overflow:hidden;">使用有效期：3月31日截止兑换，兑换一个月内有效。 </span>
+            </li>
+            <li>
+                <span class="fl">2）</span>
+                <span style="overflow:hidden;">日租金200元以下车型可免费租车一天，日租金200元以上车型立减200元。 （200元日租以下车型包括：大众、现代、雪弗兰、别克等众多好车免费租用）</span>
+            </li>
+            <li>
+                <span class="fl">3）</span>
+                <span style="overflow:hidden;">适用城市：全国13个城市北京、上海、广州、	深圳、杭州、郑州、长沙、西安、成都、重庆、天津、武汉、南京</span>
+            </li>
+            <li>
+                <span class="fl">4）</span>
+                <span style="overflow:hidden;">该优惠活动不与其他活动同时使用，客服电话：<a href="tel:4008081651">400-808-1651</a> </span>
+            </li>
+        </ul>
+    </div>
+
+    <div id="fqsm_2_rules" class="gold_chance" style="display:none; top:8%;">
+        <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
+        <ul>
+            <li class="gold_chance_title">使用说明</li>
+        </ul>
+        <ul class="strawberry_rule_list">
+            <li>
+                <span class="fl">1）</span>
+                <span style="overflow:hidden;">按摩优惠券可以预订服务时抵扣现金，项目使用优惠券的额度30－130元不等。 </span>
+            </li>
+            <li>
+                <span class="fl">2）</span>
+                <span style="overflow:hidden;">充值卡（宜生卡）等同现金，可以富侨上门（宜生到家）微信预订平台随意预订上门足疗按摩服务。</span>
+            </li>
+            <li>
+                <span class="fl">3）</span>
+                <span style="overflow:hidden;">注：宜生卡可以与平台发放的红包（优惠券）同时使用， “首单30元体验”除外。</span>
+            </li>
+        </ul>
+    </div>
+
     <!--游戏规则-->
     <div id="xy_rules" class="gold_chance" style="display:none; top:8%;">
         <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
         <ul>
-            <li class="strawberry_chance_title">游戏规则</li>
+            <li class="gold_chance_title">游戏规则</li>
         </ul>
         <ul class="strawberry_rule_list">
             <li>
@@ -186,6 +233,7 @@
             </li>
         </ul>
     </div>
+
     <!--谁帮助过我-->
     <div id="xy_help_me" class="gold_chance" style="display:none; top:8%;">
         <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
@@ -407,12 +455,17 @@
             $('body').unbind('touchmove');
         }
 
+        var $baojia2Rules = $('#baojia_2_rules');
+        var $fqsm2Rules = $('#fqsm_2_rules');
+
         //handle close event
         function hidePages(){
             $xy_add_chance.hide();
             $gold_trbg.hide();
             $xy_rules.hide();
             $xy_help_me.hide();
+            $baojia2Rules.hide();
+            $fqsm2Rules.hide();
             ebableScroll();
         }
         $xy_close_btn.on('click',hidePages);
@@ -432,6 +485,18 @@
             $xy_help_me.show();
             stopScroll();
         });
+
+        $('#baojia2RulesBtn').on('click', function(){
+            $gold_trbg.show();
+            $baojia2Rules.show();
+            stopScroll();
+        });
+        $('#fqsm2RulesBtn').on('click', function(){
+            $gold_trbg.show();
+            $fqsm2Rules.show();
+            stopScroll();
+        });
+
         $xy_prizelist_btn.on('click',function(){
             window.location.hash='#gold_prizelist';
         });
