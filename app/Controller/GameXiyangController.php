@@ -40,12 +40,12 @@ class GameXiyangController extends AppController
 
     var $coupon_info = array(
         self::AW_BAOJIA_1 => array(
-            'intro' => '',
-            'store' => '', //适用范围
-            'rule' => '',
-            'click_intro' => '',
-            'coupon_url' => '',
-        )
+            'intro' => '您参与“羊年游戏“，获得宝驾租车提供的悍马免费租车券，情人节立即使用',
+            'store' => '宝驾租车，限北京', //适用范围
+            'rule' => '请在4月30日之前使用',
+            'click_intro' => '点击进入游戏获奖页面查看兑换流程',
+            'coupon_url' => 'http://www.tongshijia.com/t/ag/xiyang.html',
+        ),
     );
 
     var $xy_awards = array(
