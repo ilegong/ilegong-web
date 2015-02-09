@@ -30,12 +30,12 @@ class GameXiyangController extends AppController
 
     const AW_BAOJIA_1 = 'baojia-1';
     const AW_FQSM_1 = 'fqsm-1';
-    const AW_YTL_1 = 'ytv-1';
+    const AW_YTL_1 = 'ytl-1';
     const AW_WGWG_1 = 'wgwg-1';
 
     const AW_BAOJIA_2 = 'baojia-2';
     const AW_FQSM_2 = 'fqsm-2';
-    const AW_YTL_2 = 'ytv-2';
+    const AW_YTL_2 = 'ytl-2';
     const AW_WGWG_2 = 'wgwg-2';
 
     var $coupon_info = array(
@@ -45,6 +45,20 @@ class GameXiyangController extends AppController
             'rule' => '请在4月30日之前使用',
             'click_intro' => '点击进入游戏获奖页面查看兑换流程',
             'coupon_url' => 'http://www.tongshijia.com/t/ag/xiyang.html',
+        ),
+        self::AW_YTL_1 => array(
+            'intro' => '您参与“羊年游戏“，获得原态绿提供的158元券（免费获得情人节Love柚礼盒）',
+            'store' => '原态绿店情人节Love柚礼盒', //适用范围
+            'rule' => '请在2月13日23:59分前使用',
+            'click_intro' => '点击进入查看优惠券',
+            'coupon_url' => 'http://www.tongshijia.com/users/my_coupons.html',
+        ),
+        self::AW_YTL_2 => array(
+            'intro' => '您参与“羊年游戏“，获得原态绿提供的情人节Love柚礼盒58元券',
+            'store' => '原态绿店情人节Love柚礼盒', //适用范围
+            'rule' => '请在2月13日23:59分前使用',
+            'click_intro' => '点击进入查看优惠券',
+            'coupon_url' => 'http://www.tongshijia.com/users/my_coupons.html',
         ),
     );
 
@@ -395,12 +409,14 @@ class GameXiyangController extends AppController
                     $this->log("update AwardResult failed:" . json_encode($awardResult));
                 } else {
                     $array = $this->coupon_info[$expect];
-                    $first_intro = $array['intro'];
-                    $store = $array['store'];
-                    $rule = $array['rule'];
-                    $click_intro = $array['click_intro'];
-                    $coupon_url = $array['coupon_url'];
-                    $weixin->send_coupon_message_on_received($id, $store, $rule, $coupon_url, $first_intro, $click_intro);
+                    if (!empty($array)) {
+                        $first_intro = $array['intro'];
+                        $store = $array['store'];
+                        $rule = $array['rule'];
+                        $click_intro = $array['click_intro'];
+                        $coupon_url = $array['coupon_url'];
+                        $weixin->send_coupon_message_on_received($id, $store, $rule, $coupon_url, $first_intro, $click_intro);
+                    }
                 }
             }
         }
