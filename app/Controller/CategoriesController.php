@@ -192,7 +192,7 @@ class CategoriesController extends AppController {
         $mobileTags = $this->findTagsByIds($mobileTagIds);
         $mobileTags = Hash::combine($mobileTags,'{n}.ProductTag.id','{n}.ProductTag');
         $this->set('mobile_tag',$mobileTags);
-        $specTagIds = array(13,14,15);
+        $specTagIds = array(13,22,15);
         $specTags = $this->findTagsByIds($specTagIds);
         $specTags = Hash::combine($specTags,'{n}.ProductTag.id','{n}.ProductTag');
         $this->set('spec_tags',$specTags);
