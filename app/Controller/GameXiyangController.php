@@ -430,21 +430,27 @@ class GameXiyangController extends AppController
         $dailyHelpLimit = 0; //($gameType == self::GAME_JIUJIU ? 5 : 0);
         $current_uid = $this->currentUser['id'];
         //add follow other account log
-        $from = $_REQUEST['from'];
-        $token=$_REQUEST['token'];
-        if($from!=null){
-            if(strpos($from,'init')===false){
-                $this->Session->write('game_from',$from);
-                if($this->add_follow_other_account_log($from,$current_uid,$token)){
-                    $result = $this->add_follow_other_account_times($from,$current_uid,$gameType);
-                    if($result == self::WX_TIMES_ASSIGN_JUST_GOT){
-                        $follow_tip_info = '您关注'.$this->wx_accounts_map[$from].'成功，增加'.self::DAILY_TIMES_SUB.'机会。';
-                        $this->Session->write('follow_tip_info',$follow_tip_info);
+        //prevent wx from param
+        $f = $_REQUEST['f'];
+        if($f==null){
+            $from = $_REQUEST['from'];
+            $token=$_REQUEST['token'];
+            if($from!=null){
+                if(strpos($from,'init')===false){
+                    $this->Session->write('game_from',$from);
+                    if($this->add_follow_other_account_log($from,$current_uid,$token)){
+                        $result = $this->add_follow_other_account_times($from,$current_uid,$gameType);
+                        if($result == self::WX_TIMES_ASSIGN_JUST_GOT){
+                            $follow_tip_info = '您关注'.$this->wx_accounts_map[$from].'成功，增加'.self::DAILY_TIMES_SUB.'机会。';
+                            $this->Session->write('follow_tip_info',$follow_tip_info);
+                        }
                     }
+                }else{
+                    $this->Session->write('game_from',$this->wx_accounts_init_map[$from]);
                 }
-            }else{
-                $this->Session->write('game_from',$this->wx_accounts_init_map[$from]);
             }
+        }else{
+            $this->Session->write('game_from',$this->wx_accounts_init_map[$f]);
         }
         $from = $this->Session->read('game_from');
         if($this->page_titles[$from]!=null){
