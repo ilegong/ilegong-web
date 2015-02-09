@@ -407,10 +407,14 @@
 
     function award_usage_guide(coupon_type) {
         if (coupon_type == 'baojia-2') {
-            window.location.href = '/game_xiyang/rd/award_bjzc_sec';
+            window.location.href = '/game_xiyang/rd/award_bjzc_sec?r='+Math.random();
         } else if (coupon_type == 'fqsm-2') {
-            utils.alert_two('进入“富侨上门-宜生到家”公众号，回复 LQJP + 手机号充值进入您的帐号', '暂不充值', '去充值', function(){}, function(){
-                window.location.href = '/game_xiyang/rd/award_fqsm_sec';
+            utils.alert_two('进入“富侨上门-宜生到家”公众号，我的 -> 我的红包， 验证手机号即可将红包存入帐号', '暂不领取', '去领取', function(){}, function(){
+                window.location.href = '/game_xiyang/rd/award_fqsm_sec?r='+Math.random();
+            });
+        } else if (coupon_type == 'fqsm-1') {
+            utils.alert_two('进入“富侨上门-宜生到家”公众号，[我的]—[我的账户]—[我要充值]—[宜生卡充值]， 即可将500元充入帐号', '暂不充值', '去充值', function(){}, function(){
+                window.location.href = '/game_xiyang/rd/award_fqsm_sec?r='+Math.random();
             });
         }
     }
