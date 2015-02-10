@@ -755,7 +755,7 @@ class GameXiyangController extends AppController
         }
 
         $times = 10;
-        $ext =  ($total_got >= self::AWARD_SECOND_LEAST ? 100 : 10);
+        $ext =  ($total_got >= self::AWARD_SECOND_LEAST ? 100 : 1);
 
         for ($i = 0; $i < $times; $i++) {
             $mt_rand = mt_rand(0, intval($ext + $total_got));
@@ -770,7 +770,7 @@ class GameXiyangController extends AppController
         }
 
         //give more to new user
-        if ($total_got  < 5) {
+        if ($new_got  < 5) {
             $this_got = max($this_got, 2);
         }
 
