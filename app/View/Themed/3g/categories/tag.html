@@ -56,7 +56,7 @@
                     </div>
                 </a>
                 <dl class="clearfix" style="margin-right: 10px;">
-                    <dt>
+                    <dt style="padding-top: 3px;">
                         <a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html')}}">
                         <img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brands[$item['brand_id']]['Brand']['coverimg']))}}" border="0" />
                         </a>
@@ -92,10 +92,10 @@
                 container:container,
                 autoResize: false,
                 flexibleWidth: '40%',
-                offset: 5,
+                offset: 7,
                 align: 'center',
                 direction: 'right',
-                outerOffset: 2,
+                outerOffset: 0,
                 fillEmptySpace: true,
                 resizeDelay: 0
             });
