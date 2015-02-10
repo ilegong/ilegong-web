@@ -765,7 +765,7 @@ class GameXiyangController extends AppController
         }
 
         $times = 10;
-        $ext =  ($total_got - $spent >= self::AWARD_SECOND_LEAST ? 100 : 20);
+        $ext =  ($total_got - $spent >= self::AWARD_SECOND_LEAST ? 40 : 20);
 
         for ($i = 0; $i < $times; $i++) {
             $mt_rand = mt_rand(0, intval($ext + $total_got));
