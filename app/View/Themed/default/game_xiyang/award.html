@@ -13,21 +13,21 @@
 </script>
 <?php
     $from = $this->Session->read('game_from');
-    if(empty($from)){
-        $from='pyshuo';
-    }
+if(empty($from)){
+$from='pyshuo';
+}
 ?>
 <div id="xy_game">
     <div class="gold_bg" id="xy_top">
         <div class="gold_title" id="gold_title_img">
             {{if $from=="wgwg"}}
-                <img src="{{$this->Html->assetUrl('/img/game_xiyang/title4.gif')}}">
+            <img src="{{$this->Html->assetUrl('/img/game_xiyang/title4.gif')}}">
             {{elseif $from=="fuqiaoshangmen"}}
-                <img src="{{$this->Html->assetUrl('/img/game_xiyang/title2.gif')}}">
+            <img src="{{$this->Html->assetUrl('/img/game_xiyang/title2.gif')}}">
             {{elseif $from=="yuantailv"}}
-                <img src="{{$this->Html->assetUrl('/img/game_xiyang/title3.gif')}}">
+            <img src="{{$this->Html->assetUrl('/img/game_xiyang/title3.gif')}}">
             {{else}}
-                 <img src="{{$this->Html->assetUrl('/img/game_xiyang/title.gif')}}">
+            <img src="{{$this->Html->assetUrl('/img/game_xiyang/title.gif')}}">
             {{/if}}
         </div>
         <div class="gold_sheep"><img id="apple_tree_img" src="{{$this->Html->assetUrl('/img/game_xiyang/sheep.jpg')}}"></div>
@@ -150,10 +150,10 @@
         <p>更新于{{$award_list['update_time']}}</p>
         <a href="#X" style="display:none">看看谁得奖</a>
         <?php foreach($award_list['list'] as $item) { ?>
-            <ul class="clearfix" style="margin-bottom: 0px;">
-                <li class="fl"><strong>{{$item[0]}}</strong>&nbsp;&nbsp;&nbsp;<span>{{$item[1]}}</span></li>
-                <li class="fr"><span>{{$item[2]}}</span></li>
-            </ul>
+        <ul class="clearfix" style="margin-bottom: 0px;">
+            <li class="fl"><strong>{{$item[0]}}</strong>&nbsp;&nbsp;&nbsp;<span>{{$item[1]}}</span></li>
+            <li class="fr"><span>{{$item[2]}}</span></li>
+        </ul>
         <?php } ?>
 
     </div>
@@ -313,8 +313,11 @@
             <li class="gold_chance_title">摇一摇加机会秘诀</li>
         </ul>
         <p>关注以下平台，分别加2次机会</p>
+        <ul>
+            <li><a href="#X" id="assignWXSubscribeTimes" class="radius4">关注朋友说</a></li>
+        </ul>
         <dl class="clearfix">
-            <dt class="fl"><a href="#X" id="assignWXSubscribeTimes" class="radius4">关注朋友说</a></dt>
+            <dt class="fl"><a href="baojiazuche" {{if $follow_infos['baojiazuche']!=null}}name="assignOtherWXSubscribeTimes"{{/if}} href="/game_xiyang/redirect_to_account_follow_page?to=baojiazuche" class="radius4">关注宝驾租车</a></dt>
             <dt class="fr"><a id="yuantailv" {{if $follow_infos['yuantailv']!=null}}name="assignOtherWXSubscribeTimes"{{/if}} href="/game_xiyang/redirect_to_account_follow_page?to=yuantailv" class="radius4">关注原态绿</a></dt>
         </dl>
         <dl class="clearfix">
@@ -333,7 +336,7 @@
 </div>
 <?php
   $follow_tip_info=$this->Session->read('follow_tip_info');
-  $_SESSION['follow_tip_info']=null;
+$_SESSION['follow_tip_info']=null;
 ?>
 {{if $follow_tip_info!=null}}
 <script type="text/javascript">
@@ -349,22 +352,22 @@
         var $gold_title_img=$('#gold_title_img');
         {{if $from=="wgwg"}}
             var currentIndex = 3;
-        {{elseif $from=="fuqiaoshangmen"}}
+            {{elseif $from=="fuqiaoshangmen"}}
             var currentIndex = 1;
-        {{elseif $from=="yuantailv"}}
+            {{elseif $from=="yuantailv"}}
             var currentIndex = 2;
-        {{else}}
+            {{else}}
             var currentIndex = 0;
-        {{/if}}
-        setInterval(function(){
-            currentIndex = currentIndex+1;
-            if(currentIndex==4){
-                currentIndex=0;
-            }
-            document.title = titles[currentIndex];
-            $gold_title_img.html('<img src="'+titleImages[currentIndex]+'">');
-        },30000);
-    });
+            {{/if}}
+                setInterval(function(){
+                    currentIndex = currentIndex+1;
+                    if(currentIndex==4){
+                        currentIndex=0;
+                    }
+                    document.title = titles[currentIndex];
+                    $gold_title_img.html('<img src="'+titleImages[currentIndex]+'">');
+                },30000);
+            });
 </script>
 <script type="text/javascript">
     var $today_got_wx = "{{$today_got_wx}}";
@@ -400,7 +403,7 @@
         if (total >= 30 && total<40) {
             utils.alert_two(msg, '去兑奖', '继续摇', function(){
                 if (total >= 50) {window.location.hash = '#btn_first_award';}
-               else if (total >= 30) { window.location.hash = '#btn_sec_award'; }
+                else if (total >= 30) { window.location.hash = '#btn_sec_award'; }
             }, close_callback, {timeout: timeout, close_callback: close_callback});
         } else {
             utils.alert_one(msg, '继续摇', close_callback, {timeout: timeout, close_callback: close_callback});
@@ -668,55 +671,55 @@
                 var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&f='+to_friend_links_from[0];
                 var imgUrl = share_imgs[0];
                 var desc = descs[0];
-            {{elseif $from=="fuqiaoshangmen"}}
+                {{elseif $from=="fuqiaoshangmen"}}
                 var to_timeline_title = to_timeline_titles[1];
                 var to_friend_title = to_friend_titles[1];
                 var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&f='+to_friend_links_from[1];
                 var imgUrl = share_imgs[1];
                 var desc = descs[1];
-            {{elseif $from=="yuantailv"}}
+                {{elseif $from=="yuantailv"}}
                 var to_timeline_title = to_timeline_titles[2];
                 var to_friend_title = to_friend_titles[2];
                 var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&f='+to_friend_links_from[2];
                 var imgUrl = share_imgs[2];
                 var desc = descs[3];
-            {{elseif $from=="baojiazuche"}}
+                {{elseif $from=="baojiazuche"}}
                 var to_timeline_title = to_timeline_titles[3];
                 var to_friend_title = to_friend_titles[3];
                 var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&f='+to_friend_links_from[3];
                 var imgUrl = share_imgs[3];
                 var desc = descs[3];
-            {{else}}
+                {{else}}
                 var to_timeline_title = to_timeline_titles[randomVal];
                 var to_friend_title = to_friend_titles[randomVal];
                 var to_friend_link = 'http://www.tongshijia.com/t/ag/xiyang.html?trid={{urlencode($_REQUEST["trid"])}}&f='+to_friend_links_from[randomVal];
                 var imgUrl = share_imgs[randomVal];
                 var desc = descs[randomVal];
-            {{/if}}
-                var to_timeline_link = to_friend_link;
-            var xx = {
-                title: to_friend_title,
-                desc: desc,
-                link: to_friend_link,
-                imgUrl: imgUrl,
-                success: function () {
-                    $.post('/wx_shares/log_share_xy_game', { from: '{{$from}}', share_type: "appMsg" });
-                },
-                trigger: function() {
-                    //xx.desc = desc_cmp_friends();
-                }
-            };
-            wx.onMenuShareAppMessage(xx);
-            wx.onMenuShareTimeline({
-                title: to_timeline_title,
-                link: to_timeline_link,
-                imgUrl: imgUrl,
-                success: function () {
-                    $.post('/wx_shares/log_share_xy_game', { from: '{{$from}}', share_type: "timeline" });
-                }
-            });
-        });
-    }
+                {{/if}}
+                    var to_timeline_link = to_friend_link;
+                    var xx = {
+                        title: to_friend_title,
+                        desc: desc,
+                        link: to_friend_link,
+                        imgUrl: imgUrl,
+                        success: function () {
+                            $.post('/wx_shares/log_share_xy_game', { from: '{{$from}}', share_type: "appMsg" });
+                        },
+                        trigger: function() {
+                            //xx.desc = desc_cmp_friends();
+                        }
+                    };
+                    wx.onMenuShareAppMessage(xx);
+                    wx.onMenuShareTimeline({
+                        title: to_timeline_title,
+                        link: to_timeline_link,
+                        imgUrl: imgUrl,
+                        success: function () {
+                            $.post('/wx_shares/log_share_xy_game', { from: '{{$from}}', share_type: "timeline" });
+                        }
+                    });
+                });
+            }
 </script>
 {{$this->Html->script(array('apple_game.js?v34'))}}
 
