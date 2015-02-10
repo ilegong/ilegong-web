@@ -448,6 +448,7 @@
             $('[type="'+coupon_type+'"').removeClass('_js_get_prize_30').removeClass('_js_get_prize').text('已秒到，去领取').click(function(){
                 award_usage_guide(coupon_type, award_data);
             });
+            award_usage_guide(coupon_type, award_data);
         } else {
             if (coupon_type == 'baojia-1' || coupon_type == 'fqsm-1' || coupon_type == 'wgwg-1' || coupon_type == 'ytl-1') {
                 utils.alert_one("抱歉本时段已兑完，排队人数较多，建议您选择兑换二等奖", '知道了');
