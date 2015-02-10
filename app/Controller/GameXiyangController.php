@@ -73,7 +73,7 @@ class GameXiyangController extends AppController
         self::AW_WGWG_2=>'爱他美奶粉100元优惠券',
     );
 
-    var $wx_accounts = array('wgwg','fuqiaoshangmen','yuantailv');
+    var $wx_accounts = array('wgwg','fuqiaoshangmen','yuantailv','baojiazuche');
 
     var $wx_accounts_map = array('wgwg'=>'万国万购','fuqiaoshangmen'=>'富侨上门','yuantailv'=>'原态绿','baojiazuche'=>'保驾租车');
 
