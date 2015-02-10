@@ -765,9 +765,9 @@ class GameXiyangController extends AppController
         $new_got = $total_got + $this_got;
 
         //avoid get twice big award
-        if ($new_got >= 90) {
-            $this_got = 0;
-        }
+//        if ($new_got >= 90) {
+//            $this_got = 0;
+//        }
 
         //give more to new user
         if ($new_got  < 5) {
