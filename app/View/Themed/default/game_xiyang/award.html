@@ -54,7 +54,7 @@ $from='pyshuo';
                     {{if empty($award_by_type['baojia-1'])}}
                     <a type="baojia-1" class="{{if $total_apple<50}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize {{/if}} radius4" href="javascript:;">{{if $total_apple<50}}50金币{{/if}}参加秒杀</a>
                     {{else}}
-                    <a type="baojia-1" class="gold_prizeset_seckill_usable radius4 _js_award_prize" href="javascript:;">已秒到，去领取</a>
+                    <a type="baojia-1" class="gold_prizeset_seckill_usable radius4 _js_award_prize" award_data="{{$award_by_type['baojia-1']['award_data']}}" href="javascript:;">已秒到，去领取</a>
                     {{/if}}
                 </div>
             </li>
@@ -89,7 +89,7 @@ $from='pyshuo';
                     {{if empty($award_by_type['wgwg-1'])}}
                     <a type="wgwg-1" class="{{if $total_apple<50}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize {{/if}} radius4" href="javascript:;">{{if $total_apple<50}}50金币{{/if}}参加秒杀</a>
                     {{else}}
-                    <a type="wgwg-1" class="gold_prizeset_seckill_usable radius4 _js_award_prize" award_data="{{$award_by_type['wgwg-2']['award_data']}}" href="javascript:;">已秒到，去领取</a>
+                    <a type="wgwg-1" class="gold_prizeset_seckill_usable radius4 _js_award_prize" award_data="{{$award_by_type['wgwg-1']['award_data']}}" href="javascript:;">已秒到，去领取</a>
                     {{/if}}
                 </div>
             </li>
@@ -490,7 +490,7 @@ $_SESSION['follow_tip_info']=null;
                 window.location.href = '/game_xiyang/rd/award_wgwg_1?r=' + Math.random();
             });
         } else if (coupon_type == 'baojia-1') {
-            utils.alert('请在朋友圈晒获奖，讲截图发给朋友说服务号，拨打客服电话即可');
+            utils.alert('请在朋友圈晒获奖，截图发给朋友说服务号，拨打客服电话即可');
         } else if (coupon_type == 'ytl-1' || coupon_type == 'ytl-2') {
             location.href = '/users/my_coupons.html';
         }
