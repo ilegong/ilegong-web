@@ -65,11 +65,11 @@ class GameXiyangController extends AppController
     var $xy_awards = array(
         self::AW_BAOJIA_1=>'宝驾租车一等奖',
         self::AW_FQSM_1=>'富侨上门一等奖',
-        self::AW_YTL_1=>'源态绿一等奖',
+        self::AW_YTL_1=>'原态绿一等奖',
         self::AW_WGWG_1=>'万国万购一等奖',
         self::AW_BAOJIA_2=>'宝驾租车二等奖',
         self::AW_FQSM_2=>'富侨上门二等奖',
-        self::AW_YTL_2=>'源态绿二等奖',
+        self::AW_YTL_2=>'原态绿二等奖',
         self::AW_WGWG_2=>'万国万购二等奖'
     );
 
