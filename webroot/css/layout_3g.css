@@ -1,4 +1,5 @@
 @charset "utf-8";
+*{ padding:0; margin:0; font-family:Helvetica,STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial;}
 /*css reset*/
 .container {
     /*max-width: 350px;*/
@@ -223,7 +224,6 @@ div.photo-item { display: inline-block; /*margin:0 0.433em 1.75em 0.433em;*/ pad
 .item-banner-small .item-price { display: inline-block; font-size: 1.25em; color: #ffa200; }
 .item-banner-small .item-price-original { display: inline-block; font-size: 0.833em; color: #999999; text-decoration: line-through; }
 
-*{ padding:0; margin:0; font-family:"微软雅黑";}
 body{ min-width:320px; font-size:14px;}
 ul li{ list-style:none;}
 .fl{ float:left;}

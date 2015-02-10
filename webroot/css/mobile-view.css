@@ -1,6 +1,6 @@
 @charset "utf-8";
 /* CSS Document */
-*{ padding:0; margin:0; font-family:"微软雅黑";}
+*{ padding:0; margin:0; font-family:Helvetica,STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial;}
 body{ min-width:320px; font-size:14px;}
 ul li{ list-style:none;}
 .fl{ float:left;}
