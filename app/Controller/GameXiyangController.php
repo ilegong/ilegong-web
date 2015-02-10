@@ -754,7 +754,7 @@ class GameXiyangController extends AppController
             return 0;
         }
 
-        $times = ($total_got >= self::AWARD_SECOND_LEAST ? 10 : 20);
+        $times = 10;
         $ext =  ($total_got >= self::AWARD_SECOND_LEAST ? 100 : 1);
 
         for ($i = 0; $i < $times; $i++) {
@@ -773,6 +773,7 @@ class GameXiyangController extends AppController
         if ($new_got  < 5) {
             $this_got = max($this_got, 2);
         }
+        $this_got = min($this_got, 10);
 
 
         return $this_got;
