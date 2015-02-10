@@ -123,7 +123,7 @@ $from='pyshuo';
             <li>
                 <div>
                     <img name="parize_img" src="{{$this->Html->assetUrl('/img/game_xiyang/parize7.jpg')}}"><br/>
-                    <p>爱你是真的<br/>云南Love柚好吃不上火<br/><a href="#X">使用说明</a></p>
+                    <p>爱你是真的<br/>云南Love柚好吃不上火<br/><a id="meiyouBtn2" href="#X">使用说明</a></p>
                     {{if empty($award_by_type['ytl-2'])}}
                     <a type="ytl-2" class="{{if $total_apple<30}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize_30 {{/if}} radius4" href="javascript:;">{{if $total_apple<30}}30金币{{/if}}兑换</a>
                     {{else}}
@@ -590,7 +590,7 @@ $_SESSION['follow_tip_info']=null;
         var $fqsm2Rules = $('#fqsm_2_rules');
         var $wgwg2Rules = $('#wgwg_2_rules');
         var $loveu1Rules=$('#love_u_1_rules');
-        var $love2Rules=$('#love_u_2_rules');
+        var $loveu2Rules=$('#love_u_2_rules');
 
         //handle close event
         function hidePages(){
@@ -603,6 +603,7 @@ $_SESSION['follow_tip_info']=null;
             $fqsm2Rules.hide();
             $wgwg2Rules.hide();
             $loveu1Rules.hide();
+            $loveu2Rules.hide();
             ebableScroll();
         }
         $xy_close_btn.on('click',hidePages);
@@ -626,6 +627,12 @@ $_SESSION['follow_tip_info']=null;
         $('#meiyouBtn1').on('click',function(){
             $gold_trbg.show();
             $loveu1Rules.show();
+            stopScroll();
+        });
+
+        $('#meiyouBtn2').on('click',function(){
+            $gold_trbg.show();
+            $loveu2Rules.show();
             stopScroll();
         });
 
