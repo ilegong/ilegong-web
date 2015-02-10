@@ -569,7 +569,7 @@ class GameXiyangController extends AppController
         $this->set('title_func', $this->title_js_func[$gameType]);
         $title_in_page = $this->title_in_page[$gameType];
         $this->set('title_in_page', $title_in_page);
-        $this->set('game_least_change', $this->game_least_change[$gameType]);
+        $this->set('game_least_change', self::AWARD_SECOND_LEAST);
         $this->set('treeName', $this->treeNames[$gameType]);
         $this->set('treeStatic', $this->treeStaticNames[$gameType]);
 
