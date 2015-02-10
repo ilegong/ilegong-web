@@ -140,7 +140,7 @@ $(document).ready(function(){
     var close_callback = times > 0 ? null : showNoMoreTimes;
     if (need_login) {
         close_callback = function() {
-            window.location.href = '/users/login?force_login=true&referer='+encodeURIComponent(location.href);
+            window.location.href = '/users/login?force_login=true&auto_weixin=1&referer='+encodeURIComponent(location.href);
         };
     }
 
