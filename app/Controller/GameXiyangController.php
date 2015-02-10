@@ -75,7 +75,7 @@ class GameXiyangController extends AppController
 
     var $wx_accounts = array('wgwg','fuqiaoshangmen','yuantailv');
 
-    var $wx_accounts_map = array('wgwg'=>'万国万购','fuqiaoshangmen'=>'富侨上门','yuantailv'=>'原态绿');
+    var $wx_accounts_map = array('wgwg'=>'万国万购','fuqiaoshangmen'=>'富侨上门','yuantailv'=>'原态绿','baojiazuche'=>'保驾租车');
 
     var $wx_accounts_init_map = array('init-wgwg'=>'wgwg','init-fqsm'=>'fuqiaoshangmen','init-ytl'=>'yuantailv','init-bjzc'=>'baojiazuche','init-pys'=>'pyshuo');
 
@@ -85,9 +85,10 @@ class GameXiyangController extends AppController
         'award_bjzc_sec' => 'http://m.baojia.com/compaign/coupon/offline/?utm_source=moka_zuke',
         'award_fqsm_sec' => 'http://mp.weixin.qq.com/s?__biz=MjM5Njc3Mzg5NQ==&mid=205539179&idx=1&sn=d995742affe6ea91822e2352e5ae34df',
         'award_wgwg_1' => 'http://mp.weixin.qq.com/s?__biz=MjM5ODgyMjQ1Nw==&mid=203609357&idx=1&sn=4030238205ee0f04a174049a7d0614c1#rd',
+        'baojiazuche'=>'http://mp.weixin.qq.com/s?__biz=MzA5MzYzNzMyNw==&mid=202782178&idx=2&sn=d7560c16467217923c0cc983f7e5b133&scene=1&key=2d53ada1ce21a460f498ae2f43cc5cbea44e06608327274d89ffaa67e3bc5c859a5143ffee080339c052ae32a2be81f7&ascene=0&uin=MjI3MjkzNTk4MA%3D%3D&devicetype=iMac+MacBookAir6%2C2+OSX+OSX+10.10.2+build(14C109)&version=11020012&pass_ticket=Jg1MDpiBf9GYc17hAQsJHA0MGBt8iUUXCmG4ZpD93mQXB6OS2Fhm40V%2FoXf6w5WO'
 );
 
-    var $page_titles = array('wgwg'=>'羊年赢大奖,马油面霜免费领','fuqiaoshangmen'=>'羊年赢大奖,免费上门按摩','yuantailv'=>'羊年赢大奖,Love柚免费领','pyshuo'=>'羊年赢大奖,悍马免费开','default'=>'羊年赢大奖,悍马免费开');
+    var $page_titles = array('wgwg'=>'羊年赢大奖,马油面霜免费领','fuqiaoshangmen'=>'羊年赢大奖,免费上门按摩','yuantailv'=>'羊年赢大奖,Love柚免费领','baojiazuche'=>'羊年赢大奖,悍马免费开','pyshuo'=>'羊年赢大奖,悍马免费开','default'=>'羊年赢大奖,悍马免费开');
 
     public function beforeFilter()
     {
