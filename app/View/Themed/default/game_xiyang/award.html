@@ -158,6 +158,60 @@ $from='pyshuo';
 
     </div>
 
+    <div id="love_u_1_rules" class="gold_chance" style="display:none; top:8%;">
+        <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
+        <ul>
+            <li class="gold_chance_title">使用说明</li>
+        </ul>
+        <ul class="strawberry_rule_list">
+            <li>
+                <span class="fl">1）</span>
+                <span style="overflow:hidden;">有效期：2月14日 23:59:59秒前。 </span>
+            </li>
+            <li>
+                <span class="fl">2）</span>
+                <span style="overflow:hidden;">规格：约2500gLove柚+Love蜜1罐。</span>
+            </li>
+            <li>
+                <span class="fl">3）</span>
+                <span style="overflow:hidden;">快递：领取下单后尽快发货，偏远地区海南、甘肃、青海、宁夏、内蒙、新疆、西藏地区需要补邮费</span>
+            </li>
+            <li>
+                <span class="fl">4）</span>
+                <span style="overflow:hidden;">客服电话：<a href="tel:4006506652">400-650-6652</a> </span>
+            </li>
+        </ul>
+    </div>
+
+    <div id="love_u_2_rules" class="gold_chance" style="display:none; top:8%;">
+        <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
+        <ul>
+            <li class="gold_chance_title">使用说明</li>
+        </ul>
+        <ul class="strawberry_rule_list">
+            <li>
+                <span class="fl">1）</span>
+                <span style="overflow:hidden;">有效期：2015年3月31日 23:59:59秒前。 </span>
+            </li>
+            <li>
+                <span class="fl">2）</span>
+                <span style="overflow:hidden;">规格：约2500gLove柚+Love蜜1罐。</span>
+            </li>
+            <li>
+                <span class="fl">3）</span>
+                <span style="overflow:hidden;">快递：下单后尽快发货，偏远地区海南、甘肃、青海、宁夏、内蒙、新疆、西藏地区需要补邮费。</span>
+            </li>
+            <li>
+                <span class="fl">4）</span>
+                <span style="overflow:hidden;">奖券不能重复使用； 同一件商品可使用一张券。</span>
+            </li>
+            <li>
+                <span class="fl">5）</span>
+                <span style="overflow:hidden;">客服电话：<a href=“tel:4006506652”>400-650-6652</a > </span>
+            </li>
+        </ul>
+    </div>
+
     <div id="baojia_2_rules" class="gold_chance" style="display:none; top:8%;">
         <a class="gold_chance_close" href="#X"><img src="{{$this->Html->assetUrl('/img/game_xiyang/close.png')}}" /></a>
         <ul>
@@ -535,6 +589,8 @@ $_SESSION['follow_tip_info']=null;
         var $baojia2Rules = $('#baojia_2_rules');
         var $fqsm2Rules = $('#fqsm_2_rules');
         var $wgwg2Rules = $('#wgwg_2_rules');
+        var $loveu1Rules=$('#love_u_1_rules');
+        var $love2Rules=$('#love_u_2_rules');
 
         //handle close event
         function hidePages(){
@@ -546,6 +602,7 @@ $_SESSION['follow_tip_info']=null;
             $baojia1Rules.hide();
             $fqsm2Rules.hide();
             $wgwg2Rules.hide();
+            $loveu1Rules.hide();
             ebableScroll();
         }
         $xy_close_btn.on('click',hidePages);
@@ -563,6 +620,12 @@ $_SESSION['follow_tip_info']=null;
         $btn_help_me.on('click',function(){
             $gold_trbg.show();
             $xy_help_me.show();
+            stopScroll();
+        });
+
+        $('#meiyouBtn1').on('click',function(){
+            $gold_trbg.show();
+            $loveu1Rules.show();
             stopScroll();
         });
 
