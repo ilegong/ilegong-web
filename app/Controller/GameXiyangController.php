@@ -754,7 +754,7 @@ class GameXiyangController extends AppController
             return 0;
         }
 
-        $times = 10;
+        $times = ($total_got >= self::AWARD_SECOND_LEAST ? 10 : 20);
         $ext =  ($total_got >= self::AWARD_SECOND_LEAST ? 100 : 1);
 
         for ($i = 0; $i < $times; $i++) {
