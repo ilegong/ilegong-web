@@ -668,6 +668,7 @@ class GameXiyangController extends AppController
 
         $uid = $this->currentUser['id'];
         $total_got = ($awardInfo && $awardInfo['got']) ? $awardInfo['got'] : 0;
+        $spent = ($awardInfo && $awardInfo['spent']) ? $awardInfo['spent'] : 0;
         $curr_got = 0;
 
 //        $this->loadModel('AwardResult');
@@ -684,7 +685,7 @@ class GameXiyangController extends AppController
         if (empty($dayLimit)) {
             $dayLimit = 0;
         }
-        $curr_got += $this->randGotApple($todayAwarded, $total_got, $dayLimit, $gameType);
+        $curr_got += $this->randGotApple($todayAwarded, $total_got, $spent, $gameType);
         $curr_got = ($total_got == 0 && $curr_got == 0 ? 3 : $curr_got);
 
         if ($this->AwardInfo->updateAll(array('times' => 'times - 1', 'got' => 'got + ' . $curr_got, 'updated' => '\'' . date(FORMAT_DATETIME) . '\''),
@@ -743,11 +744,11 @@ class GameXiyangController extends AppController
     /**
      * @param $todayAwarded
      * @param $total_got
-     * @param $dailyLimit
+     * @param $spent
      * @param $gameType
      * @return int
      */
-    private function randGotApple($todayAwarded, $total_got, $dailyLimit, $gameType) {
+    private function randGotApple($todayAwarded, $total_got, $spent, $gameType) {
         $this_got = 0;
         $mobileNum = $this->Session->read('Auth.User.mobilephone');
         if (!$this->is_weixin() || (empty($mobileNum) && $total_got > self::NEED_MOBILE_LEAST)) {
@@ -755,7 +756,7 @@ class GameXiyangController extends AppController
         }
 
         $times = 10;
-        $ext =  ($total_got >= self::AWARD_SECOND_LEAST ? 100 : 20);
+        $ext =  ($total_got - $spent >= self::AWARD_SECOND_LEAST ? 100 : 20);
 
         for ($i = 0; $i < $times; $i++) {
             $mt_rand = mt_rand(0, intval($ext + $total_got));
