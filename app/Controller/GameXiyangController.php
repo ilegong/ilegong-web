@@ -783,7 +783,7 @@ class GameXiyangController extends AppController
         if ($new_got  < 5) {
             $this_got = max($this_got, 2);
         } else {
-            $this_got = min(1, $this_got);
+            $this_got = max(1, $this_got);
         }
 
 
