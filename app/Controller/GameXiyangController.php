@@ -641,15 +641,23 @@ class GameXiyangController extends AppController
             }
 
             $awardInfo = $this->AwardInfo->getAwardInfoByUidAndType($uid, $gameType);
-            $apple = $this->guessAwardAndUpdate($awardInfo, $gameType);
-            $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
             $got = !empty($awardInfo) ?  $awardInfo['got'] : 0;
-            $total_apple = $got ? ($got - $awardInfo['spent']) : 0;
-            $this->_updateLastQueryTime(time());
-            $need_login = $this->is_weixin() && $got > 20 && notWeixinAuthUserInfo($uid, $this->currentUser['nickname']);
-
             $mobile = $this->Session->read('Auth.User.mobilephone');
             $need_mobile = $gameType == self::GAME_XIYANG && $got >= self::NEED_MOBILE_LEAST && empty($mobile);
+            $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
+            $total_apple = $got ? ($got - $awardInfo['spent']) : 0;
+            $apple = 0;
+            $need_login = false;
+            if (!$need_mobile) {
+                $need_login = $this->is_weixin() && $got > 20 && notWeixinAuthUserInfo($uid, $this->currentUser['nickname']);
+                if (!$need_login) {
+                    $apple = $this->guessAwardAndUpdate($awardInfo, $gameType);
+                    $totalAwardTimes = $awardInfo && $awardInfo['times'] ? $awardInfo['times'] : 0;
+                    $got = !empty($awardInfo) ?  $awardInfo['got'] : 0;
+                    $total_apple = $got ? ($got - $awardInfo['spent']) : 0;
+                }
+            }
+            $this->_updateLastQueryTime(time());
             echo json_encode(array('success' => true, 'got_apple' => $apple,
                 'total_apple' => $total_apple, 'total_times' => $totalAwardTimes,
                 'need_login' => $need_login, 'need_mobile' => $need_mobile));
