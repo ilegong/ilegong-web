@@ -63,14 +63,14 @@ class GameXiyangController extends AppController
     );
 
     var $xy_awards = array(
-        self::AW_BAOJIA_1=>'宝驾租车，悍马一天租车券',
-        self::AW_FQSM_1=>'富侨上门，500宜生卡',
-        self::AW_YTL_1=>'源态绿，Love柚情人礼盒券',
-        self::AW_WGWG_1=>'万国万购，韩国奇迹马油霜',
-        self::AW_BAOJIA_2=>'宝驾租车，200元租车优惠券',
-        self::AW_FQSM_2=>'富侨上门，50元上门按摩优惠券',
-        self::AW_YTL_2=>'源态绿，58元Love柚优惠券',
-        self::AW_WGWG_2=>'万国万购，爱他美奶粉100元优惠券',
+        self::AW_BAOJIA_1=>'悍马一天租车券',
+        self::AW_FQSM_1=>'500宜生卡',
+        self::AW_YTL_1=>'Love柚情人礼盒券',
+        self::AW_WGWG_1=>'韩国奇迹马油霜',
+        self::AW_BAOJIA_2=>'200元租车优惠券',
+        self::AW_FQSM_2=>'50元上门按摩优惠券',
+        self::AW_YTL_2=>'58元Love柚优惠券',
+        self::AW_WGWG_2=>'爱他美奶粉100元优惠券',
     );
 
     var $wx_accounts = array('wgwg','fuqiaoshangmen','yuantailv');
