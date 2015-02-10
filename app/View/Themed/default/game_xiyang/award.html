@@ -345,6 +345,7 @@
 <script>
     $(document).ready(function(){
         var titleImages = ["{{$this->Html->assetUrl('/img/game_xiyang/title.gif')}}","{{$this->Html->assetUrl('/img/game_xiyang/title2.gif')}}","{{$this->Html->assetUrl('/img/game_xiyang/title3.gif')}}","{{$this->Html->assetUrl('/img/game_xiyang/title4.gif')}}"];
+        var titles=['羊年赢大奖,悍马免费开','羊年赢大奖,免费上门按摩','羊年赢大奖,Love柚免费领','羊年赢大奖,马油面霜免费领'];
         var $gold_title_img=$('#gold_title_img');
         {{if $from=="wgwg"}}
             var currentIndex = 3;
@@ -360,6 +361,7 @@
             if(currentIndex==4){
                 currentIndex=0;
             }
+            document.title = titles[currentIndex];
             $gold_title_img.html('<img src="'+titleImages[currentIndex]+'">');
         },30000);
     });

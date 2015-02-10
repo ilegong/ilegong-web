@@ -63,14 +63,14 @@ class GameXiyangController extends AppController
     );
 
     var $xy_awards = array(
-        self::AW_BAOJIA_1=>'宝驾租车一等奖',
-        self::AW_FQSM_1=>'富侨上门一等奖',
-        self::AW_YTL_1=>'原态绿一等奖',
-        self::AW_WGWG_1=>'万国万购一等奖',
-        self::AW_BAOJIA_2=>'宝驾租车二等奖',
-        self::AW_FQSM_2=>'富侨上门二等奖',
-        self::AW_YTL_2=>'原态绿二等奖',
-        self::AW_WGWG_2=>'万国万购二等奖'
+        self::AW_BAOJIA_1=>'宝驾租车，悍马一天租车券',
+        self::AW_FQSM_1=>'富侨上门，500宜生卡',
+        self::AW_YTL_1=>'源态绿，Love柚情人礼盒券',
+        self::AW_WGWG_1=>'万国万购，韩国奇迹马油霜',
+        self::AW_BAOJIA_2=>'宝驾租车，200元租车优惠券',
+        self::AW_FQSM_2=>'富侨上门，50元上门按摩优惠券',
+        self::AW_YTL_2=>'源态绿，58元Love柚优惠券',
+        self::AW_WGWG_2=>'万国万购，爱他美奶粉100元优惠券',
     );
 
     var $wx_accounts = array('wgwg','fuqiaoshangmen','yuantailv');
@@ -569,7 +569,7 @@ class GameXiyangController extends AppController
         $this->set('title_func', $this->title_js_func[$gameType]);
         $title_in_page = $this->title_in_page[$gameType];
         $this->set('title_in_page', $title_in_page);
-        $this->set('game_least_change', self::AWARD_SECOND_LEAST);
+        $this->set('game_least_change', $this->game_least_change[$gameType]);
         $this->set('treeName', $this->treeNames[$gameType]);
         $this->set('treeStatic', $this->treeStaticNames[$gameType]);
 
@@ -755,7 +755,7 @@ class GameXiyangController extends AppController
         }
 
         $times = 10;
-        $ext =  ($total_got >= self::AWARD_SECOND_LEAST ? 20 : 1);
+        $ext =  ($total_got >= self::AWARD_SECOND_LEAST ? 100 : 20);
 
         for ($i = 0; $i < $times; $i++) {
             $mt_rand = mt_rand(0, intval($ext + $total_got));
@@ -773,7 +773,6 @@ class GameXiyangController extends AppController
         if ($new_got  < 5) {
             $this_got = max($this_got, 2);
         }
-        $this_got = min($this_got, 10);
 
 
         return $this_got;
