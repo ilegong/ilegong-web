@@ -286,7 +286,7 @@ $(document).ready(function(){
             return;
         }
         var reduce_desc = typeof(reduce_cnt) != 'undefined' && reduce_cnt ? reduce_cnt + '个' : '相应的数目';
-        bootbox.confirm('您目前有'+apple_count+'个' + game_obj_name + '，兑换会扣除'+reduce_desc+'，您确定要兑换吗？', function (result) {
+        bootbox.confirm('您目前有'+apple_count+'个' + game_obj_name + '，兑换成功会扣除'+reduce_desc+'，您确定要兑换吗？', function (result) {
             if (!result) {
                 return;
             }
