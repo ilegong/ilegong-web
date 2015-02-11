@@ -28,14 +28,16 @@ class AliPayController extends AppController {
         $from = $_GET['from'];
         if ("app" == $from){
             $uid = $_GET['uid'];
+            $type=ALI_PAY_TYPE_WAPAPP;
         } else {
             $uid = $this->currentUser['id'];
             if(empty($uid)){
                 $this->redirect('/users/login?referer='.Router::url('/orders/detail/'.$order_id));
             }
+            $type=ALI_PAY_TYPE_WAP;
         }
 
-        $form = $this->WxPayment->wap_goToAliPayForm($order_id, $uid, ALI_PAY_TYPE_WAP);
+        $form = $this->WxPayment->wap_goToAliPayForm($order_id, $uid, $type);
         $this->set('form', $form);
         $this->pageTitle = '支付宝支付';
     }
