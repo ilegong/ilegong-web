@@ -510,9 +510,9 @@ $_SESSION['follow_tip_info']=null;
 
     game_notify_after_exchange = function (coupon_count, coupon_type, award_data) {
         if (coupon_count > 0) {
-            $('[type="'+coupon_type+'"').removeClass('_js_get_prize_30').removeClass('_js_get_prize').text('已秒到，去领取').click(function(){
-                award_usage_guide(coupon_type, award_data);
-            });
+//            $('[type="'+coupon_type+'"').removeClass('_js_get_prize_30').removeClass('_js_get_prize').text('已秒到，去领取').click(function(){
+//                award_usage_guide(coupon_type, award_data);
+//            });
             award_usage_guide(coupon_type, award_data);
         } else {
             if (coupon_type == 'baojia-1' || coupon_type == 'fqsm-1' || coupon_type == 'wgwg-1' || coupon_type == 'ytl-1') {
