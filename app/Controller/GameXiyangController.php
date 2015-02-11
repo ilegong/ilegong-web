@@ -622,6 +622,12 @@ class GameXiyangController extends AppController
         if (!empty($customized_game)) {
             $this->__viewFileName = $customized_game;
         }
+        $this->response->header(array(
+            'Expires' => -1,
+            'Cache-Control' => 'no-cache',
+            'Pragma'=>'no-cache',
+            'Cache-Control'=> 'No-store',
+        ));
     }
 
     public function shake($gameType)
