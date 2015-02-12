@@ -61,7 +61,7 @@ $from='pyshuo';
             <li>
                 <div>
                     <img name="parize_img" src="{{$this->Html->assetUrl('/img/game_xiyang/parize2.jpg')}}"><br/>
-                    <p>每天9/12/16/21<br/>整点秒杀，每次1盒<br/><a id="meiyouBtn1" href="#X">使用说明</a></p>
+                    <p>每天9/12/16/21<br/>整点秒杀，(12日16点、21点每次放3盒)<br/><a id="meiyouBtn1" href="javascript:;">使用说明</a></p>
                     {{if empty($award_by_type['ytl-1'])}}
                     <a type="ytl-1" class="{{if $total_apple<50}}gold_prizeset_seckill_disabled {{else}} gold_prizeset_seckill_usable _js_get_prize {{/if}} radius4" href="javascript:;">{{if $total_apple<50}}50金币{{/if}}参加秒杀</a>
                     {{else}}
