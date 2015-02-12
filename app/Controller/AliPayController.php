@@ -10,6 +10,8 @@ class AliPayController extends AppController {
 
     public $components = array('WxPayment', 'Weixin');
 
+    const SHORT_URL_STATUS_DONE = 0;
+    const SHORT_URL_STATUS_NEW = 1;
     public function beforeFilter() {
         parent::beforeFilter();
     }
@@ -31,7 +33,7 @@ class AliPayController extends AppController {
             $cache_form = $AlipayCacheForm->find('first', array(
                     'conditions' => array(
                         'uuid' => $uuid,
-                        'status' => 1
+                        'status' => self::SHORT_URL_STATUS_NEW
                     ),
                 )
             );
@@ -40,7 +42,7 @@ class AliPayController extends AppController {
             if($is_callback){
                 $cache_form_id = $cache_form['AlipayCacheForm']['id'];
                 //check is save
-                $AlipayCacheForm->save(array('id'=>$cache_form_id,'status'=>0));
+                $AlipayCacheForm->updateAll(array('status' => self::SHORT_URL_STATUS_DONE,), array('id' => $cache_form_id,));
                 $pay_status  = $_REQUEST['display_status'];
                 $is_ok = $_REQUEST['msg'];
                 $paid_msg = $_REQUEST['paid_msg'];
@@ -60,6 +62,36 @@ class AliPayController extends AppController {
                     $this->set('tip_info','支付链接已经失效，请在微信里面重新打开支付...');
                 }
             }
+        } else {
+
+            if ($_GET['action'] == 'check') {
+                $this->autoRender = false;
+                $AlipayCacheForm = ClassRegistry::init('AlipayCacheForm');
+                $cache_form = $AlipayCacheForm->find('first', array(
+                        'conditions' => array(
+                            'uuid' => $uuid,
+                        ),
+                    )
+                );
+                if (!empty($cache_form)) {
+                    $done =  ($cache_form['AlipayCacheForm']['status'] == self::SHORT_URL_STATUS_DONE);
+                    $order_id = $cache_form['AlipayCacheForm']['order_id'];
+                    if (!$done) {
+                        $this->loadModel('Order');
+                        $order = $this->Order->findById($order_id);
+                        if (!empty($order) && $order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
+                            $done = true;
+                        }
+                    }
+                    echo json_encode(array('result' => $done, 'order_id' => $order_id));
+                } else {
+                    echo json_encode(array('result' => false, 'reason' => 'not_found_'.$uuid));
+                }
+
+            } else {
+                $this->set('uuid', $uuid);
+            }
+
         }
     }
 
