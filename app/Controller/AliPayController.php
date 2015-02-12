@@ -23,6 +23,37 @@ class AliPayController extends AppController {
         $this->pageTitle = '支付宝支付';
     }
 
+    public function pay_short_url($uuid){
+        $this->pageTitle = '支付宝支付';
+        if(!$this->is_weixin()){
+            $AlipayCacheForm = ClassRegistry::init('AlipayCacheForm');
+            $cache_form = $AlipayCacheForm->find('first',array(
+                'uuid'=>$uuid
+            ));
+            //check is callback
+            $is_callback = $_REQUEST['callback'];
+            if($is_callback){
+                $pay_status  = $_REQUEST['display_status'];
+                $is_ok = $_REQUEST['ok'];
+                $paid_msg = $_REQUEST['paid_msg'];
+                $this->set('pay_status',$pay_status);
+                $this->set('is_ok',!empty($is_ok));
+                $this->set('paid_msg',$paid_msg);
+                $this->set('call_back',true);
+            }else{
+                //check limit time
+                $limit_time = $cache_form['AlipayCacheForm']['limit_time'];
+                if(!before_than($limit_time)){
+                    $this->set('form', $cache_form['AlipayCacheForm']['form']);
+                    //handle for alipay return back
+                    $this->Session->write('alipay_uuid',$uuid);
+                }else{
+                    $this->set('tip_info','支付链接已经失效，请在微信里面重新打开支付...');
+                }
+            }
+        }
+    }
+
     public function wap_to_alipay($order_id) {
 
         $from = $_GET['from'];
@@ -36,10 +67,40 @@ class AliPayController extends AppController {
             }
             $type=ALI_PAY_TYPE_WAP;
         }
-
         $form = $this->WxPayment->wap_goToAliPayForm($order_id, $uid, $type);
-        $this->set('form', $form);
-        $this->pageTitle = '支付宝支付';
+        if($this->RequestHandler->isMobile()&&$this->is_weixin()){
+            $AlipayCacheForm = ClassRegistry::init('AlipayCacheForm');
+            $cache_form = $AlipayCacheForm->find('first',array(
+                'order_id'=>$order_id,
+                'status'=>1
+            ));
+            $uuid = $this->sigvaris_unique(12);
+            $limit_time = date("Y-m-d H:i:s", time()+60*20);
+            $create_time = date("Y-m-d H:i:s");
+            if(!empty($cache_form)){
+                $cache_form = $AlipayCacheForm->save(array(
+                    'id'=>$cache_form['AlipayCacheForm']['id'],
+                    'uuid'=>$uuid,
+                    'limit_time'=>$limit_time,
+                    'form'=>$form,
+                ));
+            }else{
+                $cache_form = $AlipayCacheForm->save(array(
+                    'uuid'=>$uuid,
+                    'limit_time'=>$limit_time,
+                    'form'=>$form,
+                    'order_id'=>$order_id,
+                    'created'=>$create_time,
+                ));
+            }
+            if(!empty($cache_form)){
+                //goto pay short url
+                $this->redirect(array('action' => 'pay_short_url', $uuid));
+            }
+        }else{
+            $this->set('form', $form);
+            $this->pageTitle = '支付宝支付';
+        }
     }
 
     public function wap_notify() {
@@ -186,6 +247,8 @@ class AliPayController extends AppController {
             $order_id = $display_status = $msg = '';
             $order_type = ORDER_TYPE_DEF;
             $order_member_id = 0;
+            //pay_uuid
+            $pay_uuid = $this->Session->read('alipay_uuid');
 
             if ($isSuccess) {
 
@@ -225,6 +288,18 @@ class AliPayController extends AppController {
             }
         }
 
+        if($pay_uuid){
+            if($isSuccess){
+                $this->redirect(array('action'=>'pay_short_url',$pay_uuid,'?'=>array(
+                    'paid_msg' => $msg, 'display_status' => $display_status, 'msg' => 'ok','callback'=>true
+                )));
+            }else{
+                $this->redirect(array('action'=>'pay_short_url',$pay_uuid,'?'=>array(
+                    'paid_msg' => $msg, 'display_status' => $display_status,'callback'=>true
+                )));
+            }
+        }
+
         if ($order_id && $this->request->params['action'] != 'wap_return_back_app') {
 
             if ($order_type == ORDER_TYPE_GROUP || $order_type == ORDER_TYPE_GROUP_FILL) {
@@ -248,6 +323,19 @@ class AliPayController extends AppController {
             $this->set('paid_msg', $msg);
             $this->set('display_status', $display_status);
         }
+    }
+
+    /**
+     * @param int $length
+     * @return string
+     */
+    function sigvaris_unique($length = 10) {
+        //生成唯一字符串
+        $string = uniqid(md5(rand(0, time())));
+        if ($length >= strlen($string)) {
+            return $string;
+        }
+        return substr($string, rand(0, strlen($string) - ($length + 1)), $length);
     }
 
 } 
