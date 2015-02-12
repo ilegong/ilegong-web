@@ -39,6 +39,7 @@ function is_admin_uid($uid) {
     , '819' //高静静
     , '755'
     , '773'
+    , '544307' //ronghao
     , '701166' //刘丹
     );
     return $uid && false !== array_search($uid, $_admin_uids, true);
