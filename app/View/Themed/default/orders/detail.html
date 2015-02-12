@@ -9,21 +9,21 @@
 {{/if}}
 <div  class="container" style="margin-top: 2.5em;">
 <script>
-    function go_to_pay_zhifubao() {
-        if (location.href.indexOf('{{ALI_HOST}}') == -1) {
-            bootbox.alert('我们的账号信息：<br>账户：<span>yxg@ilegong.com</span> <br/> 收款人：北京爱乐供科技有限公司');
-        } else {
-            var new_href = "/ali_pay/{{$isMobile?'wap_to_alipay':'goto_to_alipay'}}/{{$order['Order']['id']}}";
-            if (typeof (_pys_in_weixin) != 'undefined' && _pys_in_weixin) {
-                utils.alert_two('非常抱歉，微信与支付宝正在打架，如出现问题请按微信提示复制链接到浏览器支付。', '取消', '支付宝', function () {
-                }, function () {
-                    location.href = new_href;
-                });
-            } else {
-                location.href = new_href;
-            }
-        }
-    }
+//    function go_to_pay_zhifubao() {
+//        if (location.href.indexOf('{{ALI_HOST}}') == -1) {
+//            bootbox.alert('我们的账号信息：<br>账户：<span>yxg@ilegong.com</span> <br/> 收款人：北京爱乐供科技有限公司');
+//        } else {
+//            var new_href = "/ali_pay/{{$isMobile?'wap_to_alipay':'goto_to_alipay'}}/{{$order['Order']['id']}}";
+//            if (typeof (_pys_in_weixin) != 'undefined' && _pys_in_weixin) {
+//                utils.alert_two('非常抱歉，微信与支付宝正在打架，如出现问题请按微信提示复制链接到浏览器支付。', '取消', '支付宝', function () {
+//                }, function () {
+//                    location.href = new_href;
+//                });
+//            } else {
+//                location.href = new_href;
+//            }
+//        }
+//    }
 
     function mobileTip(msg,fadeInTime,fadeOutTime,callBack){
 
@@ -74,7 +74,7 @@
                 <a class="btn btn-warning" href="/orders/detail/{{$order['Order']['id']}}/pay_direct">确认支付</a>
                 {{else}}
                 {{if $in_weixin}}<a class="btn btn-warning" href="/wxPay/jsApiPay/{{$order['Order']['id']}}.html?showwxpaytitle=1">微信支付</a>{{/if}}
-                <a class="btn btn-warning" href="javascript:;" onclick="go_to_pay_zhifubao()">支付宝支付</a>
+                <a class="btn btn-warning" href="/ali_pay/{{$isMobile?'wap_to_alipay':'goto_to_alipay'}}/{{$order['Order']['id']}}">支付宝支付</a>
                 {{/if}}
                 {{/if}}
             </div>

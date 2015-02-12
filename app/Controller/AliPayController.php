@@ -25,16 +25,21 @@ class AliPayController extends AppController {
 
     public function pay_short_url($uuid){
         $this->pageTitle = '支付宝支付';
+        $this->set('hideNav',true);
         if(!$this->is_weixin()){
             $AlipayCacheForm = ClassRegistry::init('AlipayCacheForm');
             $cache_form = $AlipayCacheForm->find('first',array(
-                'uuid'=>$uuid
+                'uuid'=>$uuid,
+                'status'=>1
             ));
             //check is callback
             $is_callback = $_REQUEST['callback'];
             if($is_callback){
+                $cache_form_id = $cache_form['AlipayCacheForm']['id'];
+                //check is save
+                $AlipayCacheForm->save(array('id'=>$cache_form_id,'status'=>0));
                 $pay_status  = $_REQUEST['display_status'];
-                $is_ok = $_REQUEST['ok'];
+                $is_ok = $_REQUEST['msg'];
                 $paid_msg = $_REQUEST['paid_msg'];
                 $this->set('pay_status',$pay_status);
                 $this->set('is_ok',!empty($is_ok));
@@ -68,11 +73,13 @@ class AliPayController extends AppController {
             $type=ALI_PAY_TYPE_WAP;
         }
         $form = $this->WxPayment->wap_goToAliPayForm($order_id, $uid, $type);
-        if($this->RequestHandler->isMobile()&&$this->is_weixin()){
+        if($this->RequestHandler->isMobile()){
             $AlipayCacheForm = ClassRegistry::init('AlipayCacheForm');
             $cache_form = $AlipayCacheForm->find('first',array(
-                'order_id'=>$order_id,
-                'status'=>1
+                'conditions'=>array(
+                    'order_id'=>$order_id,
+                    'status'=>1,
+                )
             ));
             $uuid = $this->sigvaris_unique(12);
             $limit_time = date("Y-m-d H:i:s", time()+60*20);
@@ -83,6 +90,7 @@ class AliPayController extends AppController {
                     'uuid'=>$uuid,
                     'limit_time'=>$limit_time,
                     'form'=>$form,
+                    'status'=>1,
                 ));
             }else{
                 $cache_form = $AlipayCacheForm->save(array(
@@ -91,6 +99,7 @@ class AliPayController extends AppController {
                     'form'=>$form,
                     'order_id'=>$order_id,
                     'created'=>$create_time,
+                    'status'=>1,
                 ));
             }
             if(!empty($cache_form)){

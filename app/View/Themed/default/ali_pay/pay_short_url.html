@@ -5,22 +5,32 @@
         </div>
     {{else}}
         <div class="col-sm-12">
-            <img src="{{$this->Html->assetUrl('/img/ailipayvswx.jpg')}}" width="100%">
             {{if $call_back}}
-            {{if $is_ok}}
-            <div class="alert alert-success" role="alert">{{$paid_msg}}</div>
-            {{else}}
-            <div class="alert alert-danger" role="alert">{{$paid_msg}}</div>
-            {{/if}}
+                {{if $is_ok}}
+                    <div class="alert alert-success" role="alert">
+                        {{$paid_msg}}
+                        <p>
+                            <small>进入微信追踪订单状态。</small>
+                        </p>
+                    </div>
+                {{else}}
+                    <div class="alert alert-danger" role="alert">
+                        {{$paid_msg}}
+                        <p>
+                            <small>回到微信检查支付状态。</small>
+                        </p>
+                    </div>
+                {{/if}}
             {{else}}
             {{if $tip_info}}
-            <div class="alert alert-danger" role="alert">{{$tip_info}}</div>
+                <div class="alert alert-danger" role="alert">{{$tip_info}}</div>
             {{else}}
-            <div class="alert alert-success" role="alert">
-                尊敬的用户，微信和支付宝正在掐架，请点击右上角选项在浏览器打开完成支付...
-                <br/>
-                因此带来的不便，敬请谅解..
-            </div>
+                <img src="{{$this->Html->assetUrl('/img/ailipayvswx.jpg')}}" width="100%">
+                <div class="alert alert-success" role="alert">
+                    尊敬的用户，微信和支付宝正在掐架，请点击右上角选项在浏览器打开完成支付...
+                    <br/>
+                    因此带来的不便，敬请谅解..
+                </div>
             {{/if}}
             {{/if}}
         </div>
