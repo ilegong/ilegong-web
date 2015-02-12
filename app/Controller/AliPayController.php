@@ -28,10 +28,13 @@ class AliPayController extends AppController {
         $this->set('hideNav',true);
         if(!$this->is_weixin()){
             $AlipayCacheForm = ClassRegistry::init('AlipayCacheForm');
-            $cache_form = $AlipayCacheForm->find('first',array(
-                'uuid'=>$uuid,
-                'status'=>1
-            ));
+            $cache_form = $AlipayCacheForm->find('first', array(
+                    'conditions' => array(
+                        'uuid' => $uuid,
+                        'status' => 1
+                    ),
+                )
+            );
             //check is callback
             $is_callback = $_REQUEST['callback'];
             if($is_callback){
