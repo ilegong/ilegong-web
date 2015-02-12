@@ -48,6 +48,7 @@ class AliPayController extends AppController {
             }else{
                 //check limit time
                 $limit_time = $cache_form['AlipayCacheForm']['limit_time'];
+                $this->log('limit_time for result, limit_time='.$limit_time);
                 if(!before_than($limit_time)){
                     $this->set('form', $cache_form['AlipayCacheForm']['form']);
                     //handle for alipay return back
