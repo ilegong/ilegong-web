@@ -499,3 +499,37 @@ a:hover, a:focus {
     right: -5px;
     z-index: 3;
 }
+
+
+
+/*积分明细*/
+.jifen_detail{ margin-top: 43px;}
+.jifen_detail p{ font-size: 1em; color: #999999; padding: 0.8em 0 0.3em 0.833em;}
+.jifen_detail ul li{ font-size: 1em; line-height: 1.4em; float: left;}
+.jifen_detail ul{ padding: 12px 0.833em; background-color: #ffffff;}
+.jifen_detail ul li.jifen_detail_con{ color: #333333; width: 70%; margin-right: 30px;}
+.jifen_detail ul li.jifen_detail_add{ color: #ffa531;}
+.jifen_detail ul li.jifen_detail_reduce{ color: #29ac0e;}
+.jifen_detail a{ display: block; padding: 1em; margin-top: 0.5em; text-align: center; color: #999999; text-decoration: none;}
+.jifen_detail p{ margin-bottom: 0}
+
+/*积分首页*/
+.jifen_banner{ margin-top: 43px;}
+.jifen_banner img{ width: 100%;}
+.jifen_mine{ padding: 12px 0.833em; font-size: 1em; color: #333333; background-color: #ffffff; border-bottom: 1px #dddddd solid;}
+.jifen_mine a{ color: #29ac0e; text-decoration: none;}
+.jifen_mine span,.jifen_obtain p span,.jifen_obtain ul li span label{ color: #ffa531;}
+.jifen_obtain,.jifen_ranking{ background-color: #ffffff; border-top: 1px #dddddd solid; border-bottom: 1px #dddddd solid; padding-top: 0.833em; margin-top: 10px;}
+.jifen_obtain p,.jifen_ranking p{ font-size: 1.5em; color: #333333; text-align: center; padding-bottom: 12px;}
+.jifen_obtain ul li{ float: left; width: 50%; padding-bottom: 1.1em;}
+.jifen_obtain ul li span{ display: block; line-height: 1.5em; font-size: 1em; color: #333333; text-align: center;}
+.jifen_obtain ul li a{ border: 1px #29ac0e solid; border-radius: 4px; color: #29ac0e; text-decoration: none; text-align: center; display: block; width: 100px; height: 30px; line-height: 30px; margin: 0 auto; margin-top: 0.3em;}
+.jifen_ranking ul li{ width: 33.3%; padding-bottom: 1em;}
+.jifen_ranking ul li,.jifen_ranking ul li{ display: block; float: left; color: #666666;}
+.jifen_ranking ul li img{ width: 30%; margin-left: 10px; margin-right: 5px; float: left;}
+.jifen_ranking ul li label{ display: block; float: left; line-height: 1.3em;}
+
+/*积分规则*/
+.jifen_rule{ padding: 0.833em; padding-top: 0; margin-top: 43px;}
+.jifen_rule p{ font-size: 1.1em; color: #333333; padding-top: 15px; line-height: 20px; font-weight: bold;}
+.jifen_rule label{ display: block; line-height: 18px; color: #666666; padding-left: 20px; padding-top: 0.5em;}

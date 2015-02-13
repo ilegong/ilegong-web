@@ -39,6 +39,14 @@ class Score extends AppModel {
 
     }
 
+    public function find_user_score_logs($userId, $start = PHP_INT_MAX, $limit = 10) {
+        return $this->find('all', array(
+            'conditions' => array('user_id' => $userId, 'id' <= $start),
+            'limit' => $limit,
+            'order' => 'id desc',
+        ));
+    }
+
     /**
      * @param $userId
      * @param $change

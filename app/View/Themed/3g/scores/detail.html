@@ -1,0 +1,46 @@
+<div class="classlist_v2">
+    <ul class="clearfix">
+        <li><a href="{{!empty($CurrentUser['id'])? '/users/me.html':'/'}}" class="back"></a></li>
+        <li class="line"></li>
+        <li>积分明细</li>
+    </ul>
+</div>
+<div class="jifen_detail">
+    {{if $scores['success']}}
+    {{loop $scores['scores'] $key $score}}
+    <p>{{$score['date']}}</p>
+    <ul class="clearfix">
+        <li class="jifen_detail_con">{{$score['reason']}}</li>
+        <li class="{{$score['num']>0? 'jifen_detail_add':'jifen_detail_reduce'}}">{{$score['num']>=0? '+':'-'}}{{abs($score['num'])}}</li>
+    </ul>
+    {{/loop}}
+    {{/if}}
+    <a id="next_btn" href="javascript:;">{{$scores['next'] > 0 ? '查看更多明细':'没有更多明细了'}}</a>
+</div>
+
+<script>
+    $(document).ready(function() {
+        var next = '{{$next_id}}';
+        var $nextBtn = $('#next_btn');
+        $nextBtn.click(function() {
+            if (next > 0) {
+                $.getJSON('/scores/detail_lists/' + next, function (data) {
+                    if (data.success) {
+                        if (data['scores'] && data['scores'].length == 0) {
+                            for (var score in data['scores']) {
+                                $nextBtn.prepend('<p>'+score['date']+'</p><ul class="clearfix"><li class="jifen_detail_con">' + score['reason'] + '</li>' +
+                                        '<li class="' + (score['num'] > 0 ? 'jifen_detail_add' : 'jifen_detail_reduce') + '>' + (score['num'] >= 0 ? '+' : '-') + score['num'] + '</li></ul>');
+                            }
+                            next = data['next'];
+                        } else {
+                            next = 0;
+                        }
+                        if (data['next'] <= 0) {
+                            $nextBtn.text('没有更多明细了');
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>
