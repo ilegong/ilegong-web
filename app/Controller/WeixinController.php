@@ -483,6 +483,8 @@ class WeixinController extends AppController {
                 $data = json_encode(array('follow'=> 1));
             }else if($_GET['spring']){
                 $data = json_encode(array('pid'=> intval($_GET['spring'])));
+            } else if ($_GET['type'] == 'more_score') {
+                $data = json_encode(array('type'  => 'more_score'));
             }
             Cache::write($key, $data);
         }
