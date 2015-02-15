@@ -21,6 +21,7 @@ const WX_OAUTH_USERINFO = 'snsapi_userinfo';
 const WX_OAUTH_BASE = 'snsapi_base';
 const WX_STATUS_SUBSCRIBED = 1;
 const WX_STATUS_UNSUBSCRIBED = 3;
+const WX_STATUS_NO_WX = 4;
 const WX_STATUS_UNKNOWN = 0;
 
 const CART_ITEM_STATUS_NEW = 0;
@@ -103,6 +104,8 @@ const COMMENT_EXTRA_SCORE = 100;
 const COMMENT_SHOW_STATUS = 1;
 
 const COMMENT_LIMIT_IN_PRODUCT_VIEW=5;
+
+const ORDER_COMMENTED = 1;
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
@@ -699,13 +702,17 @@ class ShipAddress {
     }
 
     /**
-     * @param $com 快递公司
-     * @param $nu  快递单号
+     * @param $orderInfo 快递公司
+     * @return mixed
      */
-    public function get_ship_detail($orderInfo){
+    public static function get_ship_detail($orderInfo){
         $ship_types = ShipAddress::ship_types();
         $ship_type_list = Hash::combine($ship_types,'{n}.company','{n}.name','{n}.id');
-        $com = key($ship_type_list[$orderInfo['Order']['ship_type']]);
+        $ship_type = $ship_type_list[$orderInfo['Order']['ship_type']];
+        if (empty($ship_type)){
+            return null;
+        }
+        $com = key($ship_type);
         $nu = $orderInfo['Order']['ship_code'];
         if($nu=='无'||$nu==''||$nu=='已发货'){
             return null;
@@ -716,7 +723,7 @@ class ShipAddress {
         $url = 'http://www.kuaidi100.com/applyurl?key='.$AppKey.'&com='.$com.'&nu='.$nu;
         //优先使用curl模式发送数据
         if (function_exists('curl_init') == 1) {
-            $this->log("Curl can init...");
+//            $this->log("Curl can init...");
             $curl = curl_init();
             curl_setopt_array(
                 $curl,
@@ -730,7 +737,7 @@ class ShipAddress {
             $get_content = curl_exec($curl);
             curl_close($curl);
         }else{
-            $this->log("Curl can't init...");
+//            $this->log("Curl can't init...");
         }
         return $get_content;
     }
@@ -1225,6 +1232,9 @@ function user_subscribed_pys($uid) {
                 $subscribe_status = ($uinfo['subscribe'] != 0 ? WX_STATUS_SUBSCRIBED : WX_STATUS_UNSUBSCRIBED);
                 Cache::write($key, $subscribe_status);
             }
+        } else {
+            $subscribe_status = WX_STATUS_NO_WX;
+            Cache::write($key, $subscribe_status);
         }
     }
     return $subscribe_status;

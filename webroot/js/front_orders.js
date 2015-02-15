@@ -268,6 +268,12 @@ function orders_receive_3g(order_id,is_try){
         }, 10000);
     });
 }
+//用户确认收货
+function orders_receive_3g_detail(order_id,is_try, callback){
+    return ajaxAction(BASEURL+"/orders/confirm_receive/",{'order_id':order_id},null, function(data){
+        callback(data);
+    });
+}
 
 function orders_undo(order_id) {
     return ajaxAction(BASEURL+"/orders/confirm_undo/",{'order_id':order_id},null, function(){

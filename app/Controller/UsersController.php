@@ -263,6 +263,7 @@ class UsersController extends AppController {
             $this->redirect(array('action' => 'login'));
         }
         $this->pageTitle = __('个人信息');
+        $this->set('hideNav', true);
     }
 
 

@@ -1,6 +1,6 @@
 <div class="classlist_v2">
     <ul class="clearfix">
-        <li><a href="{{empty($CurrentUser['id'])? '/users/me.html':'/'}}" class="back"></a></li>
+        <li><a href="{{empty($_GET['history'])? (!empty($CurrentUser['id'])? '/users/me.html':'/') : $_GET['history']}}" class="back"></a></li>
         <li class="line"></li>
         <li>积分规则</li>
     </ul>

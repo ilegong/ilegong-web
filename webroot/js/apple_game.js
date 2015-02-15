@@ -252,7 +252,7 @@ $(document).ready(function(){
     function try_wx_subscribe_times() {
         $.getJSON(_path_assign_follow + "/" + game_type + "?r=" + Math.random(), function (data) {
             if (data.result == "not-sub") {
-                utils.alert("您还没有关注我们的服务号，按<a href=\"http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd\">关注指南</a>关注【朋友说】，就可以来领取啦");
+                utils.alert("您还没有关注我们的服务号，按<a href=\"'+wx_follow_url+'\">关注指南</a>关注【朋友说】，就可以来领取啦");
             } else if (data.result == 'got') {
                 utils.alert_one("已于" + data.got_time + "领取过啦，请明天再来领取。");
 //                    disable_wx_times(data.got_time);

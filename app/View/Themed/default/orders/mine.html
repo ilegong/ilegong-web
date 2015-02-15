@@ -28,6 +28,10 @@ td {padding:5px 10px;}
     padding: 5px 0 5px 0;
 }
 
+.nav > li > a {
+    padding: 10px 12px !important;
+}
+
 </style>
 {{if $is_mobile}}
 <div class="classlist_v2" style="z-index:1">
@@ -43,7 +47,7 @@ td {padding:5px 10px;}
         <li class="active"><a href="#orders-all" role="tab" data-toggle="tab">{{__('全部')}}</a></li>
         <li><a href="#orders-wait_payment" role="tab" data-toggle="tab">{{__('待支付')}}</a></li>
         <li><a href="#orders-wait_deliver" role="tab" data-toggle="tab">{{__('待发货')}}</a></li>
-        <li><a href="#orders-wait_receive" role="tab" data-toggle="tab">{{__('待收货')}}</a></li>
+        <li><a id="tab_wait_receive" href="#orders-wait_receive" role="tab" data-toggle="tab">{{__('待收货/评价')}}</a></li>
     </ul>
 
     <div class="row tab-content" style="padding-left: 2px; background-color: #f1eff0">
@@ -60,3 +64,10 @@ td {padding:5px 10px;}
     </div>
     <br/>
 </div>
+{{if $_GET['tab'] == 'comment'}}
+ <script>
+    $(document).ready(function(){
+        $('#tab_wait_receive').tab('show');
+    });
+ </script>
+{{/if}}

@@ -383,7 +383,7 @@ class CommentsController extends AppController {
             //has bind mobile
             $uid = $this->currentUser['id'];
             $order= $this->get_order($orderId,$uid);
-            if($mobileNum||$force||$order['Order']['is_comment']=="1"){
+            if ( true || /*$mobileNum||*/ $force || $order['Order']['is_comment'] == ORDER_COMMENTED) {
                 $products = $this->get_order_products($orderId,$uid);
                 $this->set("products",$products);
                 $this->set("order",$order);

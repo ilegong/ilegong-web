@@ -214,7 +214,7 @@
             $('#subscribe').bind('click', function(){
                 var group_id = $('#groupId').text();
                 $.get("/weixin/save_subscribe_info?groupId="+group_id, function(data) {
-                    window.location.href = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd';
+                    window.location.href = wx_follow_url;
                 });
             });
             $('#myModal').modal('show');

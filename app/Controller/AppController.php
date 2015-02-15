@@ -225,6 +225,7 @@ class AppController extends Controller {
         $this->set('current_named', $this->request->params['named']);
 
         $this->set('in_weixin', $this->is_weixin());
+        $this->set('wx_follow_url', 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd');
         $this->set('isMobile', $this->RequestHandler->isMobile());
     }
 

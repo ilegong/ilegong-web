@@ -293,7 +293,7 @@ class BuyingComponent extends Component {
     private function edit_status_by_owner_ajax($uid, $order_id, $origStatus, $toStatus, $okMsg = ''){
         $this->edit_order_by_owner_ajax($uid, $order_id, function($orderModel, $order, $order_id) use ($origStatus, $toStatus,$okMsg) {
             if ($order['Order']['status'] == $origStatus) {
-                $orderModel->updateAll(array('status' => $toStatus), array('id' => $order_id));
+                $orderModel->update_order_status($order_id, $toStatus, $origStatus);
                 echo json_encode(array('order_id' => $order_id, 'ok' => 1, 'msg' => $okMsg));
                 exit;
             } else {

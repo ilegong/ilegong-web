@@ -1,6 +1,6 @@
 <div class="classlist_v2" style="z-index:999">
     <ul class="clearfix">
-        <li><a href="javascript:history.back(-1);" class="back"></a></li>
+        <li><a href="{{empty($_GET['history']) ? 'javascript:history.back(-1);':$_GET['history']}}" class="back"></a></li>
         <li class="line"></li>
         <li><strong>评论</strong></li>
     </ul>

@@ -89,7 +89,7 @@
         {{if $order['Order']['status']==3&&$order['Order']['try_id']==0}}
         <div class="panel panel-warning">
             <div class="panel-body">
-                <a class="btn-sm btn-warning" href="/comments/add_comment/{{$order['Order']['id']}}">{{if $order['Order']['is_comment']==0}}评论赢积分{{else}}查看评论{{/if}}</a>
+                <a class="btn btn-warning" href="/comments/add_comment/{{$order['Order']['id']}}">{{if $order['Order']['is_comment']==0}}评论赢积分{{else}}查看评论{{/if}}</a>
             </div>
         </div>
         {{/if}}
@@ -106,10 +106,16 @@
     {{/if}}
     {{if $order['Order']['status']== ORDER_STATUS_PAID}}
         <div class="panel-body">
-            <button class="btn-sm btn-success" id="remind-deliver"  value="{{$order['Order']['id']}}">提醒发货</button>
+            <button class="btn btn-success" id="remind-deliver"  value="{{$order['Order']['id']}}">提醒发货</button>
             <!--<span id="remind_deliver"></span>-->
             <div class="comment_tip_layer radius10" style="width:60%; left:50%; top:30%; margin-left:-30%; display: none;"></div>
         </div>
+    {{elseif $order['Order']['status']== ORDER_STATUS_SHIPPED}}
+    <div class="panel panel-warning">
+        <div id="order_shipped_panel" class="panel-body">
+            <button class="btn btn-success" id="btn_confirm_receive">确认收货</button>
+        </div>
+    </div>
     {{/if}}
         <div>
             <br/>
@@ -220,21 +226,44 @@
 <span id="orderId" style="display: none">{{$order['Order']['id']}}</span>
 <script>
     $(document).ready(function(){
-        if($('#myModal').size()>=1){
+        var order_id = "{{$order['Order']['id']}}";
+        var order_try_id = "{{$order['Order']['try_id']}}";
+        var $myModal = $('#myModal');
+        if($myModal.size()>=1){
             $('#subscribe').bind('click', function(){
                 var order_id = $('#orderId').text();
                 $.get("/weixin/save_subscribe_info?orderId="+order_id, function(data) {
-                    window.location.href = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd';
+                    window.location.href = wx_follow_url;
                 });
             });
-            $('#myModal').modal('show');
+            $myModal.modal('show');
         }
-        if($('#follow_subscribe').size()>=1){
-            $('#follow_subscribe').bind('click', function(){
+        var $followSubscribe = $('#follow_subscribe');
+        if($followSubscribe.size()>=1){
+            $followSubscribe.bind('click', function(){
                 $.get("/weixin/save_subscribe_info?type=follow", function(data) {
-                    window.location.href = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd';
+                    window.location.href = wx_follow_url;
                 });
             });
         }
+
+        var receiveBtn = $('#btn_confirm_receive');
+        receiveBtn.click(
+                function () {
+                    bootbox.confirm('您要确认收货吗？', function (result) {
+                        if (result) {
+                            orders_receive_3g_detail(order_id, order_try_id, function(data){
+                                var $orderShippedPanel = $('#order_shipped_panel');
+                                if (data.ok && order_try_id) {
+                                    $orderShippedPanel.html('<a class="btn btn-warning" href="/comments/add_comment/' + order_id + '.html">评论赢积分</a>');
+                                } else {
+                                    window.location.href = '/orders/detail/' + order_id + '.html';
+                                }
+                            });
+                        }
+                    })
+                }
+        );
+
     })
 </script>

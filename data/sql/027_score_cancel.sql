@@ -1,0 +1,1 @@
+alter table cake_scores add status not null default 0;

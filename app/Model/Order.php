@@ -200,6 +200,12 @@ class Order extends AppModel {
             'conditions' => array('id' => $orderIds, 'creator' => $uid),
         ));
     }
+
+    public function count_to_comments($uid) {
+        return $this->find('count', array(
+            'conditions' => array('creator' => $uid, 'status' => array(ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED), 'is_comment != '.ORDER_COMMENTED),
+        ));
+    }
 //
 //    public function whether_bought($pid, $creator) {
 //        $cartM = ClassRegistry::init('Cart');
@@ -216,7 +222,30 @@ class Order extends AppModel {
     public function used_code_cnt($uid, $code) {
         return $this->find('count', array('conditions' => array(
             'creator' => $uid,
-            'applied_code' => $code
+            'applied_code' => $code,
         )));
+    }
+
+    /**
+     * Update order status common method
+     * @param $order_id
+     * @param $toStatus
+     * @param $origStatus
+     * @internal param $orderModel
+     */
+    function update_order_status($order_id, $toStatus, $origStatus) {
+        $result = $this->updateAll(array('status' => $toStatus), array('id' => $order_id, 'status' => $origStatus));
+        if ($result) {
+            if ($origStatus == ORDER_STATUS_SHIPPED && $toStatus == ORDER_STATUS_RECEIVED) {
+                $this->log('change order '.$order_id.' status from '.$toStatus.' to '.$origStatus);
+                $scoreM = ClassRegistry::init('Score');
+                $order = $this->findById($order_id);
+                if (!empty($order)) {
+                    $creator = $order['Order']['creator'];
+                    $rtn = $scoreM->add_score_by_bought($creator, $order_id, $order['Order']['total_all_price']);
+                    $this->log('add_score_by_bought: uid='.$creator.', order_id='.$order_id.', result:'. json_encode($rtn));
+                }
+            }
+        }
     }
 }

@@ -191,7 +191,7 @@
         $('#subscribe').bind('click', function(){
             var pid = $('#current_pid').val();
             $.get("/weixin/save_subscribe_info?spring="+pid, function(data) {
-                window.location.href = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200769784&idx=1&sn=8cce5a47e8a6123028169065877446b9#rd';
+                window.location.href = wx_follow_url;
             });
         });
         if($('#sub_back').size()>=1){

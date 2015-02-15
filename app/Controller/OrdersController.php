@@ -583,6 +583,7 @@ class OrdersController extends AppController{
         if ($orderinfo['Order']['ship_type']) {
             $this->set('shipdetail', ShipAddress::get_ship_detail($orderinfo));
         }
+        $this->set('hideNav', true);
     }
 
     public function apply_coupon_code() {
@@ -755,7 +756,7 @@ class OrdersController extends AppController{
 		$this->set('order_carts',$order_carts);
 		$this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('counts', $counts);
-        $this->set('is_weixin',$this->RequestHandler->isMobile());
+        $this->set('hideNav', true);
 	}
 
 

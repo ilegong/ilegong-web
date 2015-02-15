@@ -10,14 +10,22 @@ class Score extends AppModel {
 
 
     public function add_score_by_bought($userId, $orderId, $total_all_price) {
+        $reason = SCORE_ORDER_SPENT;
+        $score_change = round($total_all_price, PHP_ROUND_HALF_DOWN);
+        $desc = '完成订单 '.$orderId.' 获得 '. $score_change . ' 个积分';
 
-//        `reason` int(10) NOT NULL,
-//  `score` int(10)  NOT NULL,
-//  `desc` varchar(255) NOT NULL,
+        $data = json_encode(array('order_id' => $orderId));
+        return $this->save_score_log($userId, $score_change, $reason, $data, $desc);
+    }
 
-        $reason = SCORE_ORDER_COMMENT;
-
-
+    public function cancel_score_by_bought($userId, $orderId) {
+        $found = $this->find('first', array(
+            'conditions' => array('user_id' => $userId, 'order_id' => $orderId, 'reason' => SCORE_ORDER_SPENT),
+        ));
+        if (!empty($found)) {
+            $desc = '订单 '. $orderId .' 退款返还积分';
+            $this->save_score_log($userId, $found['Score']['score'], SCORE_ORDER_SPENT_CANCEL, json_encode(array('order_id' => $orderId,)), $desc, $orderId);
+        }
     }
 
     public function add_score_by_comment($userId, $score_change, $orderId, $order_comment_id, $award_extra_ids) {
@@ -27,7 +35,7 @@ class Score extends AppModel {
             $desc .='，包含'.count($award_extra_ids).'种商品(ID 为'.implode('、', $award_extra_ids).')的抢先评论奖励';
         }
         $data = json_encode(array('order_id' => $orderId, 'order_comment_id' => $order_comment_id));
-        return $this->save_score_log($userId, $score_change, SCORE_ORDER_COMMENT, $data, $desc);
+        return $this->save_score_log($userId, $score_change, SCORE_ORDER_COMMENT, $data, $desc, $orderId);
     }
 
     public function spent_score_by_order($userId, $spent, $order_id_to_scores) {
@@ -53,15 +61,17 @@ class Score extends AppModel {
      * @param $reason
      * @param $data
      * @param $desc
+     * @param null $orderId
      * @return mixed
      */
-    protected function save_score_log($userId, $change, $reason, $data, $desc) {
+    protected function save_score_log($userId, $change, $reason, $data, $desc, $orderId = null) {
         return $this->save(array(
             'user_id' => $userId,
             'reason' => $reason,
             'data' => $data,
             'desc' => $desc,
             'score' => $change,
+            'order_id' => empty($orderId) ? 0 : $orderId,
         ));
     }
 }
