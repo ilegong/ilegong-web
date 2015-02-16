@@ -1,55 +1,64 @@
 <style>
-    .main_head{ padding:1.75em 0.833em;}
-    .head{ display:block; text-decoration:none; color:#29ac0e; font-size:1.25em;
-        outline:none;}
-    .head span,.main_list span{ display:block;}
-    .main_head .head img{ width:2.708em; height:2.708em;}
-    .head span.name{ padding-left:0.833em; line-height:3.2em;}
-    .head span.more{ background:url('/img/mobilev1/pyshuo_icon.png') -20em 0 no-repeat; background-size:25em 25em; width:0.667em; height:1.333em; margin-top:0.708em;}
-    .main_list{ padding:1.25em 0.833em 1.25em 1.667em; font-size:1.25em;}
-    .main_list a,.addr a{ color:#333333; text-decoration:none; outline:none;}
-    .main_list span.quantity{ color:#999999;}
-    .main_list span.more,.addr span.more{ background:url('/img/mobilev1/pyshuo_icon.png') -20em 0 no-repeat; background-size:25em 25em; width:0.667em; height:1.333em;}
-    .addr{ margin-top:3.25em; padding:1.25em 0.833em 1.25em 1.667em; font-size:1.25em; border-bottom:1px #dddddd solid; border-top:1px #dddddd solid;}
-    /*.grd{position:relative;padding:0px}*/
-    /*.grd span{background:url('/img/shichi-signal.jpg') no-repeat;background-size:25px 25px;background-position:10px 10px;display:block;}*/
-    .shichi-signal img{zoom:20%;}
+    /*我的*/
+    .mine_bg{ position: relative;}
+    .mine_bg ul li a{ display: block; color: #333333; text-decoration: none;}
+    .mine_bg img{ width: 100%;}
+    .mine_bg .mine_login{ display: block; border: 1px #ffffff solid; border-radius: 5px; position: absolute; font-size: 1.2em; width: 150px; height: 35px; line-height: 35px; text-align: center; text-decoration: none; color: #ffffff; left: 50%; margin-left: -75px; top: 25%;}
+    .mine_bg ul{ position: absolute; bottom: 0; background-color: #ffffff; filter: alpha(opacity=50); opacity: 0.5; height: 50px; line-height: 25px; width: 100%; margin-bottom: 0}
+    .mine_bg ul li{ float: left; width: 25%; font-size: 1em; text-align: center; line-height: 1.8em; padding-top: 0.25em; color: #333333;}
+    .mine_bg ul li span.mine_ordersum{ border-radius: 20px; background-color: #e01d0e; color: #ffffff; display: block; width: 20px; line-height: 20px; margin: 0 auto;}
+    .mine_bg ul li span{ line-height: 20px;}
+    .mine{ margin-top: 10px; border-bottom: 1px #dddddd solid;}
+    .mine_head{ position: absolute; left: 50%; top: 10%; margin-left: -53px; width: 106px; text-decoration: none; line-height: 20px; display: block; text-align: center; font-size: 1em; color: #555555;}
+    .mine_head img{ width: 60%;}
+    .mine a{ text-decoration: none; display: block; padding: 10px 0.6em 10px 0.833em; background-color: #ffffff; border-top: 1px #dddddd solid; line-height: 2em; font-size: 1.2em; color: #333333;}
+    .mine_order_icon{ width: 2em; height: 2em; background: url('http://51daifan.sinapp.com/img/mobilev1/pyshuo_icon.png') -12.292em -14.167em no-repeat; background-size: 25em 25em; margin-right: 0.5em;}
+    .mine_foretaste_icon{ width: 2em; height: 2em; background: url('http://51daifan.sinapp.com/img/mobilev1/pyshuo_icon.png') -12.292em -16.667em no-repeat; background-size: 25em 25em; margin-right: 0.5em;}
+    .mine_coupon_icon{ width: 2em; height: 2em; background: url('http://51daifan.sinapp.com/img/mobilev1/pyshuo_icon.png') -12.292em -19.167em no-repeat; background-size: 25em 25em; margin-right: 0.5em;}
+    .mine_packet_icon{ width: 2em; height: 2em; background: url('http://51daifan.sinapp.com/img/mobilev1/pyshuo_icon.png') -12.292em -21.458em no-repeat; background-size: 25em 25em; margin-right: 0.5em;}
+    .mine_address_icon{ width: 2em; height: 2em; background: url('http://51daifan.sinapp.com/img/mobilev1/pyshuo_icon.png') -15.208em -14.167em no-repeat; background-size: 25em 25em; margin-right: 0.5em;}
+    .mine_jifen_icon{ width: 2em; height: 2em; background: url('http://51daifan.sinapp.com/img/mobilev1/pyshuo_icon.png') -15.208em -16.667em no-repeat; background-size: 25em 25em; margin-right: 0.5em;}
+    .mine_mer_icon{ width: 2em; height: 2em; background: url('http://51daifan.sinapp.com/img/mobilev1/pyshuo_icon.png') -15.208em -19.167em no-repeat; background-size: 25em 25em; margin-right: 0.5em;}
+    .mine_time_icon{ width: 2em; height: 2em; background: url('http://51daifan.sinapp.com/img/mobilev1/pyshuo_icon.png') -15.208em -21.458em no-repeat; background-size: 25em 25em; margin-right: 0.5em;}
+    .mine ul .more{ background: url('http://51daifan.sinapp.com/img/mobilev1/pyshuo_icon.png') -9.167em -15em no-repeat; background-size: 25em 25em; width: 0.667em; height: 1.333em; margin-top:0.35em; }
 </style>
-<div class="main_head border_b">
-    <a href="{{$this->Html->url('/users/my_profile')}}" class="head clearfix">
-        <span class="fl">
-           {{if $result['Shichituan']['status']==1}}
-                {{$this->Html->image(Router::url($result['Shichituan']['pictures']),array('class' => 'pull-right','height' => '46px'))}}
-                {{else}}
-                <img class="pull-right" height="46px" src="{{$this->Html->assetUrl('/img/default_user_icon.jpg')}}"/>
-           {{/if}}
-        </span>
-
-        <!--<div class="grd">-->
-        <span class="name fl">{{if mb_strlen($CurrentUser['nickname'], 'UTF-8')> PROFILE_NICK_LEN}} {{mb_substr($CurrentUser['nickname'], 0, PROFILE_NICK_LEN, 'UTF-8')}} {{else}} {{$CurrentUser['nickname']}} {{/if}} </span>
-        <!--</div>-->
-        {{if $result['Shichituan']['status']==1}}
-        <div class="shichi-signal">
-            <span class="signal fl"><img class="pull-right" src="{{$this->Html->url('/img/shichi-signal.jpg')}}"/></span>
-        </div>
+<div class="mine_bg">
+    <!--<a href="#X" class="mine_login" style="display: none;">登录/注册</a>-->
+    <a href="{{$this->Html->url('/users/my_profile.html')}}" class="mine_head">
+        {{if $result['Shichituan']['status']==1 && !empty($result['Shichituan']['pictures'])}}
+        {{$this->Html->image(Router::url($result['Shichituan']['pictures']))}}
+        {{else}}
+        <img src="{{$this->Html->assetUrl(!empty($CurrentUser['image'])? $CurrentUser['image']:'/img/default_user_icon.jpg')}}"/>
         {{/if}}
-        <span class="fr more"></span>
+        <br/>{{$CurrentUser['nickname']}}
     </a>
+    <ul class="clearfix">
+        <li><a href="/orders/mine.html?tab=waiting_pay"><span class="mine_ordersum">{{$order_count[ORDER_STATUS_WAITING_PAY]}}</span><p>待付款</p></a></li>
+        <li><a href="/orders/mine.html?tab=paid"><span>{{intval($order_count[ORDER_STATUS_PAID])}}</span><p>待发货</p></a></li>
+        <li><a href="/orders/mine.html?tab=shipped"><span>{{intval($order_count[ORDER_STATUS_SHIPPED])}}</span><p>待收货</p></a></li>
+        <li><a href="/orders/mine.html?tab=comment"><span>{{$order_count[ORDER_STATUS_COMMENT]}}</span><p>待评价</p></a></li>
+    </ul>
+    <img src="{{$this->Html->assetUrl('/img/mobilev1/mine_bg.jpg')}}" />
 </div>
 {{if $CurrentUser['is_business']}}
-<div class="main_list border_b">
+<div class="mine">
     <a href="{{$this->Html->url(array('controller' => 'orders','action'=>'wait_shipped_orders','plugin' => null ,))}}" class="clearfix">
-        <span class="fl">商家订单</span>
-        <span class="fr more"></span>
+        <p class="mine_order_icon fl"></p>
+        <label class="fl">商家订单</label>
+        <i class="more fr"></i>
     </a>
-</div>
-<div class="main_list border_b">
     <a href="{{$this->Html->url(array('controller' => 'products','action'=>'mine','plugin' => null ,))}}" class="clearfix">
-        <span class="fl">商家商品</span>
-        <span class="fr more"></span>
+        <p class="mine_mer_icon fl"></p>
+        <label class="fl">商家商品</label>
+        <i class="more fr"></i>
+    </a>
+    <a href="/stores/cake_dating/list" class="clearfix">
+        <p class="mine_time_icon fl"></p>
+        <label class="fl">商家排期</label>
+        <i class="more fr"></i>
     </a>
 </div>
-{{if $CurrentUser['is_business'] == 10962 }}
+{{if $CurrentUser['id'] == 10962 }}
 <div class="main_list border_b">
     <a href="/stores/cake_dating/list" class="clearfix">
         <span class="fl">排期</span>
@@ -58,42 +67,39 @@
 </div>
 {{/if}}
 {{/if}}
-
-<div class="main_list border_b">
-    <a href="{{$this->Html->url('/orders/mine')}}" class="clearfix">
-        <span class="fl">全部订单</span>
-        <span class="fr more"></span>
+<div class="mine">
+    <a href="/orders/mine" class="clearfix">
+        <p class="mine_order_icon fl"></p>
+        <label class="fl">我的订单</label>
+        <i class="more fr"></i>
+    </a>
+    <a href="/order_shichis/my_shichi" class="clearfix">
+        <p class="mine_foretaste_icon fl"></p>
+        <label class="fl">我的试吃</label>
+        <i class="more fr"></i>
+    </a>
+    <a href="/scores/more_score" class="clearfix">
+        <p class="mine_jifen_icon fl"></p>
+        <label class="fl">我的积分</label>
+        <i class="more fr"></i>
+    </a>
+    <a href="/users/my_coupons" class="clearfix">
+        <p class="mine_coupon_icon fl"></p>
+        <label class="fl">我的优惠券</label>
+        <i class="more fr"></i>
     </a>
 </div>
-<div class="main_list border_b">
-    <a href="{{$this->Html->url('/users/my_coupons.html')}}" class="clearfix">
-        <span class="fl">优惠券</span>
-        <span class="fr more"></span>
+<div class="mine">
+    <a href="/users/my_offers" class="clearfix">
+        <p class="mine_packet_icon fl"></p>
+        <label class="fl">我要发红包</label>
+        <i class="more fr"></i>
     </a>
 </div>
-<div class="main_list border_b">
-    <a href="{{$this->Html->url('/users/my_offers.html')}}" class="clearfix">
-        <span class="fl">我要发红包</span>
-        <span class="fr more"></span>
-    </a>
-</div>
-
-<div class="main_list border_b">
-    <a href="{{$this->Html->url('/order_shichis/my_shichi')}}" class="clearfix">
-        <span class="fl">我的试吃</span>
-        <span class="fr more"></span>
-    </a>
-</div>
-<div class="main_list border_b">
-    <a href="{{$this->Html->url('/users/my_profile')}}" class="clearfix">
-        <span class="fl">我的资料</span>
-        <span class="fr more"></span>
-    </a>
-</div>
-
-<div class="addr">
-    <a href="{{$this->Html->url('/orders/edit_consignee')}}" class="clearfix">
-        <span class="fl">收货地址设置</span>
-        <span class="fr more"></span>
+<div class="mine">
+    <a href="/orders/edit_consignee" class="clearfix">
+        <p class="mine_address_icon fl"></p>
+        <label class="fl">地址管理</label>
+        <i class="more fr"></i>
     </a>
 </div>

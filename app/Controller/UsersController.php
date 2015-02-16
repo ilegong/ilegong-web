@@ -688,8 +688,19 @@ class UsersController extends AppController {
     function me() {
         $this->pageTitle = __('个人中心');
 
+        $this->loadModel('Order');
+        $uid = $this->currentUser['id'];
+        $count = $this->Order->count_by_status($uid);
+        if (!is_array($count)) {
+            $count = array();
+        }
+        $left_to_comment = $this->Order->count_to_comments($uid);
+        $count[ORDER_STATUS_COMMENT] = $left_to_comment;
+
+        $this->set('order_count', $count);
+
         $this->loadModel('Shichituan');
-        $result = $this->Shichituan->findByUser_id($this->currentUser['id'],array('Shichituan.shichi_id','Shichituan.status','Shichituan.pictures','Shichituan.period'),'Shichituan.shichi_id DESC');
+        $result = $this->Shichituan->findByUser_id($uid,array('Shichituan.shichi_id','Shichituan.status','Shichituan.pictures','Shichituan.period'),'Shichituan.shichi_id DESC');
         $this->set('result',$result);
     }
 

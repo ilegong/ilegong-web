@@ -45,8 +45,8 @@ td {padding:5px 10px;}
 <div class="container" {{if $is_mobile}} style="margin-top: 2.5em" {{/if}}>
     <ul class="nav nav-tabs" role="tablist">
         <li class="active"><a href="#orders-all" role="tab" data-toggle="tab">{{__('全部')}}</a></li>
-        <li><a href="#orders-wait_payment" role="tab" data-toggle="tab">{{__('待支付')}}</a></li>
-        <li><a href="#orders-wait_deliver" role="tab" data-toggle="tab">{{__('待发货')}}</a></li>
+        <li><a id="tab_wait_pay" href="#orders-wait_payment" role="tab" data-toggle="tab">{{__('待支付')}}</a></li>
+        <li><a id="tab_wait_paid" href="#orders-wait_deliver" role="tab" data-toggle="tab">{{__('待发货')}}</a></li>
         <li><a id="tab_wait_receive" href="#orders-wait_receive" role="tab" data-toggle="tab">{{__('待收货/评价')}}</a></li>
     </ul>
 
@@ -64,10 +64,16 @@ td {padding:5px 10px;}
     </div>
     <br/>
 </div>
-{{if $_GET['tab'] == 'comment'}}
+{{if !empty($_GET['tab'])}}
  <script>
+     _tab_id_m = {
+        'comment': 'tab_wait_receive',
+        'waiting_pay': 'tab_wait_pay',
+        'paid': 'tab_wait_paid',
+        'shipped': 'tab_wait_receive'
+     };
     $(document).ready(function(){
-        $('#tab_wait_receive').tab('show');
+        $('#'+ _tab_id_m['{{$_GET["tab"]}}']).tab('show');
     });
  </script>
 {{/if}}
