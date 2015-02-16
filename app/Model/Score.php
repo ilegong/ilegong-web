@@ -13,7 +13,7 @@ class Score extends AppModel {
         $reason = SCORE_ORDER_DONE;
         $score_change = round($total_all_price, 0, PHP_ROUND_HALF_DOWN);
         if ($score_change > 0) {
-            $desc = '完成订单 ' . $orderId . ' 获得 ' . $score_change . ' 个积分';
+            $desc = '订单 ' . $orderId . ' 交易完成获得 ' . $score_change . ' 个积分';
 
             $data = json_encode(array('order_id' => $orderId));
             return $this->save_score_log($userId, $score_change, $reason, $data, $desc, $orderId);
