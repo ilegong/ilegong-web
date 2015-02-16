@@ -67,10 +67,9 @@ class Order extends AppModel {
      */
     public function cancelWaitingPayOrder($operator, $order_id, $owner) {
 
-        $rtn = $this->updateAll(array('status' => ORDER_STATUS_CANCEL, 'lastupdator' => $operator),
-            array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+        list($rtn, $affectedRows) = $this->update_order_status($order_id, ORDER_STATUS_CANCEL, ORDER_STATUS_WAITING_PAY, $operator);
 
-        if ($rtn && $this->getAffectedRows() >= 1) {
+        if ($rtn && $affectedRows >= 1) {
             ClassRegistry::init('CouponItem')->unapply_coupons($owner, $order_id);
             $cartModel = ClassRegistry::init('Cart');
             $boughts = $cartModel->find('list', array(
@@ -246,15 +245,18 @@ class Order extends AppModel {
      * @param $order_id
      * @param $toStatus
      * @param $origStatus
-     * @internal param $orderModel
+     * @param int $operator
+     * @return array operation update result and affected rows
      */
-    function update_order_status($order_id, $toStatus, $origStatus) {
-        $result = $this->updateAll(array('status' => $toStatus), array('id' => $order_id, 'status' => $origStatus));
+    function update_order_status($order_id, $toStatus, $origStatus, $operator) {
+        $result = $this->updateAll(array('status' => $toStatus, 'lastupdator' => $operator), array('id' => $order_id, 'status' => $origStatus));
+
         if ($result) {
+            $affectedRows = $this->getAffectedRows();
             if ($origStatus == ORDER_STATUS_SHIPPED && $toStatus == ORDER_STATUS_RECEIVED) {
                 $this->log('change order '.$order_id.' status from '.$toStatus.' to '.$origStatus);
-                $scoreM = ClassRegistry::init('Score');
                 $order = $this->findById($order_id);
+                $scoreM = ClassRegistry::init('Score');
                 if (!empty($order)) {
                     $creator = $order['Order']['creator'];
                     $rtn = $scoreM->add_score_by_bought($creator, $order_id, $order['Order']['total_all_price']);
@@ -264,7 +266,22 @@ class Order extends AppModel {
                         $userM->add_score($creator, $rtn['Score']['score']);
                     }
                 }
+            } else if ($origStatus == ORDER_STATUS_WAITING_PAY && $toStatus == ORDER_STATUS_CANCEL) {
+                $order = $this->findById($order_id);
+                $scoreM = ClassRegistry::init('Score');
+                if (!empty($order)) {
+                    $creator = $order['Order']['creator'];
+                    $rtn = $scoreM->restore_score_by_undo_order($creator, $order['Order']['applied_score'], $order_id);
+                    $this->log('restore_score_by_undo_order: uid='.$creator.', order_id='.$order_id.', result:'. json_encode($rtn));
+                    if (!empty($rtn)) {
+                        $userM = ClassRegistry::init('User');
+                        $userM->add_score($creator, $rtn['Score']['score']);
+                    }
+                }
             }
+        } else {
+            $affectedRows = 0;
         }
+        return array($result, $affectedRows);
     }
 }

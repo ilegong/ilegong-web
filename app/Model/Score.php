@@ -27,7 +27,7 @@ class Score extends AppModel {
             'conditions' => array('user_id' => $userId, 'order_id' => $orderId, 'reason' => SCORE_ORDER_SPENT),
         ));
         if (!empty($found)) {
-            $desc = '订单 '. $orderId .' 退款返还积分';
+            $desc = '订单 '. $orderId .' 退款取消积分';
             $this->save_score_log($userId, $found['Score']['score'], SCORE_ORDER_SPENT_CANCEL, json_encode(array('order_id' => $orderId,)), $desc, $orderId);
         }
     }
@@ -48,7 +48,13 @@ class Score extends AppModel {
         $desc = '订单' . implode('、', array_keys($order_id_to_scores)) . '使用' . $spent . '积分';
 
         return $this->save_score_log($userId, -$spent, $reason, $data, $desc);
+    }
 
+    public function restore_score_by_undo_order($userId, $spent, $order_id) {
+        $reason = SCORE_ORDER_SPENT_UNDO;
+        $desc = '取消订单' . $order_id . '返还' . $spent . '积分';
+
+        return $this->save_score_log($userId, $spent, $reason, '', $desc);
     }
 
     public function find_user_score_logs($userId, $start = PHP_INT_MAX, $limit = 10) {
@@ -109,7 +115,7 @@ class Score extends AppModel {
                 $this->log('error to calculate left to score:' . $e);
             }
 
-            $click_desc = ($left_got > 0 ? '您有' . $left_got . '个积分待领取，' : '') . '点击查看更多详情';
+            $click_desc = ($left_got > 0 ? '您有 ' . $left_got . ' 积分待领取' : '');
         }
 
 
@@ -131,10 +137,10 @@ class Score extends AppModel {
                     "topcolor" => "#FF0000",
                     "data" => array(
                         "first" => array("value" => $intro_desc),
-                        "FieldName" => array("value" => "账户"),
-                        "Account" => array("value" => $user_id),
+                        "FieldName" => array("value" => "有效期 "),
+                        "Account" => array("value" => '2015年12月31日前'),
                         "change" => array("value" => $action),
-                        "CreditChange" => array("value" => $score_change),
+                        "CreditChange" => array("value" => abs($score_change)),
                         "CreditTotal" => array("value" => $totalScore),
                         "Remark" => array("value" => $click_desc, "color" => "#FF8800")
                     )

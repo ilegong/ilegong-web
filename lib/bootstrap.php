@@ -18,7 +18,10 @@ const SCORE_ORDER_COMMENT = 1;
 const SCORE_NEW_USER = 2;
 const SCORE_ORDER_DONE = 3;
 const SCORE_ORDER_SPENT = 4;
-const SCORE_ORDER_SPENT_CANCEL = 5;
+
+const SCORE_ORDER_SPENT_UNDO = 6; //取消/退款等，返回使用的积分
+
+const SCORE_ORDER_SPENT_CANCEL = 5; //退款取消已经发放的积分
 
 const SPEICAL_LIST_DAILY_ID = 4;
 
@@ -54,17 +57,16 @@ function is_admin_uid($uid) {
 function action_of_score_item($change, $reason) {
     if ($reason == SCORE_NEW_USER || $reason == SCORE_ORDER_COMMENT || $reason == SCORE_ORDER_DONE) {
         $action = '增加';
-        return $action;
     } else if ($reason == SCORE_ORDER_SPENT) {
         $action = '消费';
-        return $action;
-    } else if ($reason == SCORE_ORDER_SPENT_CANCEL) {
+    } else if($reason == SCORE_ORDER_SPENT_UNDO) {
         $action = '返还';
-        return $action;
+    } else if ($reason == SCORE_ORDER_SPENT_CANCEL) {
+        $action = '取消';
     } else {
         $action = $change > 0 ? '增加' : '减少';
-        return $action;
     }
+    return $action;
 }
 
 App::build(array(
