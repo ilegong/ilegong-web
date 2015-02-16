@@ -32,7 +32,7 @@ class ScoresController extends AppController {
         $this->set('ranks', $ranks);
 
         $uid = $this->currentUser['id'];
-        $left_to_follow = (WX_STATUS_UNSUBSCRIBED == user_subscribed_pys($uid));
+        $left_to_follow = false;// (WX_STATUS_UNSUBSCRIBED == user_subscribed_pys($uid));
         $left_to_follow_score = $left_to_follow ?  50 : 0;
 
         $this->set('left_to_follow', $left_to_follow);
