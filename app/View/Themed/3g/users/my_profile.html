@@ -3,7 +3,8 @@
     <!--.grd span{background:url('/img/shichi-signal.jpg') no-repeat;height:36px:display:block;position:absolute;}-->
 <!--</style>-->
 <style>
-    .exit{ display: block; width: 90%; border: 1px #e01d0e solid; color: #e01d0e; height: 35px; line-height: 35px; text-align: center; font-size: 1.2em; text-decoration: none; border-radius: 5px; margin:10px auto;}
+    .exit{ display: block; width: 90%; border: 1px #e01d0e solid; color: #e01d0e; height: 35px; line-height: 35px; text-align: center; font-size: 1.2em; text-decoration: none; border-radius: 5px;
+        margin:10px auto 30px auto;}
 </style>
 <div class="classlist_v2" style="z-index:1">
     <ul class="clearfix">
@@ -17,7 +18,7 @@
         <ul class="list-group">
             <li class="list-group-item" style="height: 66px">
                 <span>头像:</span>
-                {{if $result['Shichituan']['status']==1}}
+                {{if $result['Shichituan']['status']==1  && !empty($result['Shichituan']['pictures'])}}
                 {{$this->Html->image(Router::url($result['Shichituan']['pictures']),array('class' => 'pull-right','height' => '46px'))}}
                 {{else}}
                 <img class="pull-right" height="46px" src="{{$this->Html->assetUrl('/img/default_user_icon.jpg')}}"/>
