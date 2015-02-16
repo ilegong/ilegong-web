@@ -7,10 +7,10 @@
     .mine_bg ul{ position: absolute; bottom: 0; background-color: #ffffff; filter: alpha(opacity=50); opacity: 0.5; height: 50px; line-height: 25px; width: 100%; margin-bottom: 0}
     .mine_bg ul li{ float: left; width: 25%; font-size: 1em; text-align: center; line-height: 1.8em; padding-top: 0.25em; color: #333333;}
     .mine_bg ul li span.mine_ordersum{ border-radius: 20px; background-color: #e01d0e; color: #ffffff; display: block; width: 20px; line-height: 20px; margin: 0 auto;}
-    .mine_bg ul li span{ line-height: 20px;}
+    .mine_bg ul li span{ line-height: 20px; display: block}
     .mine{ margin-top: 10px; border-bottom: 1px #dddddd solid;}
     .mine_head{ position: absolute; left: 50%; top: 10%; margin-left: -53px; width: 106px; text-decoration: none; line-height: 20px; display: block; text-align: center; font-size: 1em; color: #555555;}
-    .mine_head img{ width: 60%;}
+    .mine_head img{ width: 60%; border-radius: 60%;}
     .mine a{ text-decoration: none; display: block; padding: 10px 0.6em 10px 0.833em; background-color: #ffffff; border-top: 1px #dddddd solid; line-height: 2em; font-size: 1.2em; color: #333333;}
     .mine_order_icon{ width: 2em; height: 2em; background: url('http://51daifan.sinaapp.com/img/mobilev1/pyshuo_icon.png') -12.292em -14.167em no-repeat; background-size: 25em 25em; margin-right: 0.5em;}
     .mine_foretaste_icon{ width: 2em; height: 2em; background: url('http://51daifan.sinaapp.com/img/mobilev1/pyshuo_icon.png') -12.292em -16.667em no-repeat; background-size: 25em 25em; margin-right: 0.5em;}
@@ -21,7 +21,8 @@
     .mine_mer_icon{ width: 2em; height: 2em; background: url('http://51daifan.sinaapp.com/img/mobilev1/pyshuo_icon.png') -15.208em -19.167em no-repeat; background-size: 25em 25em; margin-right: 0.5em;}
     .mine_time_icon{ width: 2em; height: 2em; background: url('http://51daifan.sinaapp.com/img/mobilev1/pyshuo_icon.png') -15.208em -21.458em no-repeat; background-size: 25em 25em; margin-right: 0.5em;}
     .mine ul .more{ background: url('http://51daifan.sinaapp.com/img/mobilev1/pyshuo_icon.png') -9.167em -15em no-repeat; background-size: 25em 25em; width: 0.667em; height: 1.333em; margin-top:0.35em; }
-    .mine p, .mine label {margin-bottom: 0}
+    .mine_bg ul li a p, .mine p, .mine label {margin-bottom: 0; font-weight: normal}
+    .mine a label span {font-size: 0.8em}
 </style>
 <div class="mine_bg">
     <!--<a href="#X" class="mine_login" style="display: none;">登录/注册</a>-->
@@ -29,7 +30,7 @@
         {{if $result['Shichituan']['status']==1 && !empty($result['Shichituan']['pictures'])}}
         {{$this->Html->image(Router::url($result['Shichituan']['pictures']))}}
         {{else}}
-        <img src="{{$this->Html->assetUrl(!empty($CurrentUser['image'])? $CurrentUser['image']:'/img/default_user_icon.jpg')}}"/>
+        <img src="{{$this->Html->assetUrl(!empty($CurrentUser['image'])? $CurrentUser['image']:'/img/mine_head.png')}}"/>
         {{/if}}
         <br/>{{$CurrentUser['nickname']}}
     </a>
@@ -81,7 +82,7 @@
     </a>
     <a href="/scores/more_score" class="clearfix">
         <p class="mine_jifen_icon fl"></p>
-        <label class="fl">我的积分 ({{$total_score}})</label>
+        <label class="fl">我的积分 <span>({{$total_score}})</span></label>
         <i class="more fr"></i>
     </a>
     <a href="/users/my_coupons" class="clearfix">
