@@ -16,7 +16,7 @@ class Score extends AppModel {
             $desc = '完成订单 ' . $orderId . ' 获得 ' . $score_change . ' 个积分';
 
             $data = json_encode(array('order_id' => $orderId));
-            return $this->save_score_log($userId, $score_change, $reason, $data, $desc);
+            return $this->save_score_log($userId, $score_change, $reason, $data, $desc, $orderId);
         } else {
             return 0;
         }
