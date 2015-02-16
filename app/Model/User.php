@@ -83,7 +83,11 @@ class User extends AppModel {
 
     function add_score($uid, $changed) {
         $old_score = $this->get_score($uid, true);
-        return $this->updateAll(array('score' => 'score + ('.$changed.')'), array('score' => $old_score, 'id' => $uid));
+        $updated = $this->updateAll(array('score' => 'score + (' . $changed . ')'), array('score' => $old_score, 'id' => $uid));
+        if ($updated) {
+            Cache::delete($this->score_key($uid));
+        }
+        return $updated;
     }
 
     function get_score($uid, $ignoreCache = false) {
