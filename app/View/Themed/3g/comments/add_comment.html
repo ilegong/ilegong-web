@@ -51,7 +51,7 @@
         <input type="hidden" name="status" data="data_status" value="0">
         <div class="comment_csi" {{if $order['Order']['is_comment']==1}}style="padding-bottom:0.5em;"{{/if}}>
             <dl class="clearfix raty" style="margin-bottom: 10px">
-                <input style="display: none" name="server_star" value="{{$order_rating['OrderComment']['service_star']}}"/>
+                <input style="display: none" name="service_star" value="{{$order_rating['OrderComment']['service_star']}}"/>
                 <dt class="comment_star fl">服务满意度:</dt>
                 <dt class="fl comment_star_gray star" data-rank="1"></dt>
                 <dt class="fl comment_star_gray star" data-rank="2"></dt>
