@@ -1,0 +1,1 @@
+alter table cake_scores CHANGE orderId order_id bigint not null default 0;
