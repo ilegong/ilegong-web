@@ -51,10 +51,11 @@ class Score extends AppModel {
     }
 
     public function restore_score_by_undo_order($userId, $spent, $order_id) {
-        $reason = SCORE_ORDER_SPENT_UNDO;
-        $desc = '取消订单' . $order_id . '返还' . $spent . '积分';
-
-        return $this->save_score_log($userId, $spent, $reason, '', $desc);
+        if($spent > 0) {
+            $reason = SCORE_ORDER_SPENT_UNDO;
+            $desc = '取消订单' . $order_id . '返还' . $spent . '积分';
+            return $this->save_score_log($userId, $spent, $reason, '', $desc);
+        }  else return false;
     }
 
     public function find_user_score_logs($userId, $start = PHP_INT_MAX, $limit = 10) {
