@@ -547,8 +547,10 @@ class CommentsController extends AppController {
         $Score = ClassRegistry::init('Score');
         $OrderComment = ClassRegistry::init('OrderComment');
         $order_comment = $OrderComment->find('first', array(
-            'user_id' => $uid,
-            'order_id' => $orderId
+            'conditions' => array(
+                'user_id' => $uid,
+                'order_id' => $orderId,
+            ),
         ));
         $commentId = $order_comment['OrderComment']['id'];
 
