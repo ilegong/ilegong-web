@@ -303,10 +303,10 @@ class OrdersController extends AppController{
             }
 
             if ($score_consumed > 0) {
-                $this->loadModel('User');
-                $this->User->add_score($uid, -$score_consumed);
                 $scoreM = ClassRegistry::init('Score');
                 $scoreM->spent_score_by_order($uid, $score_consumed, $order_id_spents);
+                $this->loadModel('User');
+                $this->User->add_score($uid, -$score_consumed);
             }
         }
 

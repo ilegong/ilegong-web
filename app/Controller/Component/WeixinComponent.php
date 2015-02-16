@@ -322,37 +322,8 @@ class WeixinComponent extends Component
         return false;
     }
 
-    public function send_weixin_message($post_data)
-    {
-        $tries = 2;
-        while ($tries-- > 0) {
-            $access_token = $this->get_access_token();
-            if (!empty($access_token)) {
-                $curl = curl_init();
-                $options = array(
-                    CURLOPT_URL => 'https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=' . $access_token,
-                    CURLOPT_CUSTOMREQUEST => 'POST', // GET POST PUT PATCH DELETE HEAD OPTIONS
-                );
-                if (!empty($post_data)) {
-                    $options[CURLOPT_POSTFIELDS] = json_encode($post_data);
-                }
-
-                curl_setopt_array($curl, ($options + $this->wx_curl_option_defaults));
-                $json = curl_exec($curl);
-                curl_close($curl);
-                $output = json_decode($json, true);
-                $this->log("post weixin api send template message output: " . json_encode($output), LOG_DEBUG);
-                if ($output['errcode'] == 0) {
-                    return true;
-                } else {
-                    if (!ClassRegistry::init('WxOauth')->should_retry_for_failed_token($output)) {
-                        return false;
-                    };
-                }
-                return false;
-            }
-        }
-        return false;
+    public function send_weixin_message($post_data) {
+        return send_weixin_message($post_data, $this);
     }
 
     public static function get_order_good_info($order_info){

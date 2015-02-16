@@ -46,6 +46,27 @@ function is_admin_uid($uid) {
     return $uid && false !== array_search($uid, $_admin_uids, true);
 }
 
+/**
+ * @param $change
+ * @param $reason
+ * @return string
+ */
+function action_of_score_item($change, $reason) {
+    if ($reason == SCORE_NEW_USER || $reason == SCORE_ORDER_COMMENT || $reason == SCORE_ORDER_DONE) {
+        $action = '增加';
+        return $action;
+    } else if ($reason == SCORE_ORDER_SPENT) {
+        $action = '消费';
+        return $action;
+    } else if ($reason == SCORE_ORDER_SPENT_CANCEL) {
+        $action = '返还';
+        return $action;
+    } else {
+        $action = $change > 0 ? '增加' : '减少';
+        return $action;
+    }
+}
+
 App::build(array(
 	'plugins' => array(COMMON_PATH.'Plugin'.DS, APP_PATH.'Plugin'.DS, ),
 	//'views' => array(COMMON_PATH.'View'.DS),

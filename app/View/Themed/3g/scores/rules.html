@@ -1,3 +1,6 @@
+<style>
+    label {font-weight: normal}
+</style>
 <div class="classlist_v2">
     <ul class="clearfix">
         <li><a href="{{empty($_GET['history'])? (!empty($CurrentUser['id'])? '/users/me.html':'/') : $_GET['history']}}" class="back"></a></li>
@@ -7,17 +10,17 @@
 </div>
 <div class="jifen_rule">
     <p>1、如何获得积分</p>
-    <label>1) 每消费1元可获得1积分，不满1元的部分将不赠送积分；</label>
-    <label>2) 评价订单获得订单相等金额(不含不满1元的部分)的积分，例如101.83元的订单可获得101个积分；</label>
-    <label>3) 2015年春季积分活动期间，评价的订单金额不满100元，也可获得100个积分；</label>
+    <label>1) 每消费1元可获得1积分，不满1元的部分不赠送积分；（以订单确认收货为准）</label>
+    <label>2) 评价订单获得与订单金额相等的积分，不满1元的部分不赠送积分，例如101.83元的订单可获得101个积分；</label>
+    <label>3) 2015年3月31日之前，评价订单最少可获得100个积分；</label>
     <label>4) 每种商品的前五个评论可获得额外100积分奖励；</label>
     <label style="display: none">5) 新用户获得10个积分;</label>
     <label style="display: none">6) 用户绑定手机号码获得100个积分；</label>
     <label style="display: none">7) 用户关注微信获得50个积分；</label>
     <p>2、消费积分规则</p>
     <label>1) 积分可以在结算时抵扣现金使用，一个积分抵扣一分钱。结算时如果生成了多个订单，积分会分摊到每个订单中。 取消订单时，该订单使用的积分会得到返还。</label>
-    <label>2) 每次结算，积分金额不能超过订单金额的50%。</label>
+    <label>2) 每次结算，使用的积分不能超过订单金额的50%。</label>
     <p>3、积分失效</p>
-    <label>1) 每年年底，当年度积分清零失效;</label>
+    <label>1) 每年年底积分清零;</label>
     <p>因业务调整或者其他原因，朋友说保留随时调整积分规则的权利。</p>
 </div>

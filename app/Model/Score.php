@@ -10,12 +10,16 @@ class Score extends AppModel {
 
 
     public function add_score_by_bought($userId, $orderId, $total_all_price) {
-        $reason = SCORE_ORDER_SPENT;
-        $score_change = round($total_all_price, PHP_ROUND_HALF_DOWN);
-        $desc = '完成订单 '.$orderId.' 获得 '. $score_change . ' 个积分';
+        $reason = SCORE_ORDER_DONE;
+        $score_change = round($total_all_price, 0, PHP_ROUND_HALF_DOWN);
+        if ($score_change > 0) {
+            $desc = '完成订单 ' . $orderId . ' 获得 ' . $score_change . ' 个积分';
 
-        $data = json_encode(array('order_id' => $orderId));
-        return $this->save_score_log($userId, $score_change, $reason, $data, $desc);
+            $data = json_encode(array('order_id' => $orderId));
+            return $this->save_score_log($userId, $score_change, $reason, $data, $desc);
+        } else {
+            return 0;
+        }
     }
 
     public function cancel_score_by_bought($userId, $orderId) {
@@ -65,7 +69,7 @@ class Score extends AppModel {
      * @return mixed
      */
     protected function save_score_log($userId, $change, $reason, $data, $desc, $orderId = null) {
-        return $this->save(array(
+        $saved = $this->save(array(
             'user_id' => $userId,
             'reason' => $reason,
             'data' => $data,
@@ -73,5 +77,74 @@ class Score extends AppModel {
             'score' => $change,
             'order_id' => empty($orderId) ? 0 : $orderId,
         ));
+        if ($saved) {
+            $action = action_of_score_item($change, $reason);
+            $this->send_score_change_message($userId, $desc, $action, $change);
+        }
+        return $saved;
+    }
+
+
+    public function send_score_change_message($user_id, $intro_desc, $action, $score_change, $click_desc = null)
+    {
+
+//        {{first.DATA}}
+//
+//        {{FieldName.DATA}}:{{Account.DATA}}
+//        {{change.DATA}}积分:{{CreditChange.DATA}}
+//        积分余额:{{CreditTotal.DATA}}
+//        {{Remark.DATA}}
+
+        if (empty($click_desc)) {
+            try {
+                $left_to_follow = (WX_STATUS_UNSUBSCRIBED == user_subscribed_pys($user_id));
+                $left_to_follow_score = $left_to_follow ? 50 : 0;
+                $orderM = ClassRegistry::init('Order');
+                $left_to_comment = $orderM->count_to_comments($user_id);
+                $score_to_comment = $left_to_comment * 100; //Should adjust
+                list($left_receive_cnt, $left_receive_total) = $orderM->count_to_confirm_received($user_id);
+                $left_got = $score_to_comment + $left_to_follow_score + $left_receive_total;
+            } catch (Exception $e) {
+                $left_got = 0;
+                $this->log('error to calculate left to score:' . $e);
+            }
+
+            $click_desc = ($left_got > 0 ? '您有' . $left_got . '个积分待领取，' : '') . '点击查看更多详情';
+        }
+
+
+        try {
+            $userM = ClassRegistry::init('User');
+            $totalScore = $userM->get_score($user_id);
+            $totalScore += $score_change;
+
+            $click_url = !empty($click_url) ? $click_url : 'http://' . WX_HOST . '/scores/more_score.html';
+
+            $oauthBindModel = ClassRegistry::init('Oauthbind');
+            $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
+            if ($user_weixin != false) {
+                $open_id = $user_weixin['oauth_openid'];
+                $post_data = array(
+                    "touser" => $open_id,
+                    "template_id" => 'SpyG5LYbgkJrlgKNM7bWzCaqXdoUOOkO_G14Dxk0P5Y',
+                    "url" => $click_url,
+                    "topcolor" => "#FF0000",
+                    "data" => array(
+                        "first" => array("value" => $intro_desc),
+                        "FieldName" => array("value" => "账户"),
+                        "Account" => array("value" => $user_id),
+                        "change" => array("value" => $action),
+                        "CreditChange" => array("value" => $score_change),
+                        "CreditTotal" => array("value" => $totalScore),
+                        "Remark" => array("value" => $click_desc, "color" => "#FF8800")
+                    )
+                );
+                return send_weixin_message($post_data);
+            }
+            return false;
+        }catch(Exception $e) {
+            $this->log('error to send_score_change_message:(uid='.$user_id.', action='.$action.', intro_desc='.$intro_desc.'):'.$e);
+            return false;
+        }
     }
 }
