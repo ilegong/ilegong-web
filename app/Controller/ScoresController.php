@@ -35,12 +35,17 @@ class ScoresController extends AppController {
 
         $this->loadModel('Order');
         $left_to_comment = $this->Order->count_to_comments($uid);
-        $score_to_comment = $left_to_comment * 100;
+        $score_to_comment = $left_to_comment * 100;  //Should adjust
+
+        list($left_receive_cnt, $left_receive_total) = $this->Order->count_to_confirm_received($uid);
 
         $this->set('score_left_comment', $score_to_comment);
         $this->set('left_to_comment', $left_to_comment);
 
-        $left_got = $score_to_comment + $left_to_follow_score;
+        $this->set('left_receive_cnt', $left_receive_cnt);
+        $this->set('left_receive_total', $left_receive_total);
+
+        $left_got = $score_to_comment + $left_to_follow_score + $left_receive_total;
         $this->set('left_got', $left_got);
 
         $this->loadModel('User');

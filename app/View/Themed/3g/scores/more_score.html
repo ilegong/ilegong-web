@@ -17,6 +17,12 @@
 <div class="jifen_obtain">
     <p>你还有<span>{{$left_got}}</span>个积分待领取</p>
     <ul class="clearfix">
+        {{if $left_receive_total > 0}}
+        <li>
+            <span>{{$left_receive_cnt}}个订单待收货,<br/>可获得<label>{{$left_receive_total}}</label>积分</span>
+            <a href="/orders/mine.html?tab=comment">去收货</a>
+        </li>
+        {{/if}}
         {{if $left_to_comment > 0}}
         <li>
             <span>{{$left_to_comment}}个订单待收货/待评价,<br/>最低可获得<label>{{$score_left_comment}}</label>积分</span>
