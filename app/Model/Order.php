@@ -254,6 +254,10 @@ class Order extends AppModel {
                     $creator = $order['Order']['creator'];
                     $rtn = $scoreM->add_score_by_bought($creator, $order_id, $order['Order']['total_all_price']);
                     $this->log('add_score_by_bought: uid='.$creator.', order_id='.$order_id.', result:'. json_encode($rtn));
+                    if (!empty($rtn)) {
+                        $userM = ClassRegistry::init('User');
+                        $userM->add_score($creator, $rtn['Score']['score']);
+                    }
                 }
             }
         }

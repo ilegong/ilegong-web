@@ -699,6 +699,8 @@ class UsersController extends AppController {
 
         $this->set('order_count', $count);
 
+        $this->set('total_score', $this->User->get_score($uid));
+
         $this->loadModel('Shichituan');
         $result = $this->Shichituan->findByUser_id($uid,array('Shichituan.shichi_id','Shichituan.status','Shichituan.pictures','Shichituan.period'),'Shichituan.shichi_id DESC');
         $this->set('result',$result);

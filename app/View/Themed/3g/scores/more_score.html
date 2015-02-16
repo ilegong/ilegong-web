@@ -1,3 +1,6 @@
+<style>
+    .jifen_obtain p, .jifen_obtain ul {margin-bottom: 0}
+</style>
 <div class="classlist_v2">
     <ul class="clearfix">
         <li><a href="{{!empty($CurrentUser['id'])? '/users/me.html':'/'}}" class="back"></a></li>
@@ -8,7 +11,7 @@
 <div class="jifen_banner"><img src="{{$this->Html->assetUrl('/img/jifen/jifen_banner.gif')}}"></div>
 <ul class="jifen_mine clearfix">
     {{if empty($CurrentUser['id'])}}<li class="fl"><a href="/users/login.html?referer=/scores/more_score.html">登录</a></li>
-    {{else}}<li class="fl">已赚到：<span>{{$total_score}}</span>&nbsp;&nbsp;&nbsp;<a href="/scores/detail.html?history={{urlencode('/scores/more_score.html')}}">积分明细</a></li>{{/if}}
+    {{else}}<li class="fl">当前积分：<span>{{$total_score}}</span>&nbsp;&nbsp;&nbsp;<a href="/scores/detail.html?history={{urlencode('/scores/more_score.html')}}">积分明细</a></li>{{/if}}
     <li class="fr"><a href="/scores/rules.html?history={{urlencode('/scores/more_score.html')}}">积分规则</a></li>
 </ul>
 <div class="jifen_obtain">

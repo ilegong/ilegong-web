@@ -71,7 +71,7 @@
         </div>
     </form>
 {{if $order['Order']['is_comment']==0}}
-<a href="#X" id="submit_comment" class="comment_submit">提交评价</a>
+<a href="javascript:;" id="submit_comment" class="comment_submit">提交评价</a>
 {{/if}}
 </div>
 <!--add upload form-->
@@ -215,7 +215,7 @@
                         if(result['success']){
                             //redirect or reload
                             Pyshuo.ui.utils.mobileShowTip(result['msg'],1000,2000,function(){
-                                window.location.href='/orders/mine';
+                                window.location.href='/orders/mine?tab=comment';
                             });
                         }else{
                             //do nothing

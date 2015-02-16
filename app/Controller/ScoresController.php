@@ -42,6 +42,9 @@ class ScoresController extends AppController {
 
         $left_got = $score_to_comment + $left_to_follow_score;
         $this->set('left_got', $left_got);
+
+        $this->loadModel('User');
+        $this->set('total_score', $this->User->get_score($this->currentUser['id']));
     }
 
     public function detail() {
