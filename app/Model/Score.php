@@ -137,7 +137,7 @@ class Score extends AppModel {
                     "topcolor" => "#FF0000",
                     "data" => array(
                         "first" => array("value" => $intro_desc),
-                        "FieldName" => array("value" => "有效期 "),
+                        "FieldName" => array("value" => "有 效 期 "),
                         "Account" => array("value" => '2015年12月31日前'),
                         "change" => array("value" => $action),
                         "CreditChange" => array("value" => abs($score_change)),
