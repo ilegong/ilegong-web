@@ -39,6 +39,9 @@
             {{$team['Team']['notice']}}
         </div>
     </div>
+
+        {{if !$team_end}}
+
 {{if $is_organizer}}
     {{if $closed}}
 <div class="can_paid" style="margin-top:1em">组团成功, 等待收货吧!</div>
@@ -83,6 +86,10 @@
         </div>
 
 {{/if}}
+
+        {{else}}
+            <div class="can_paid" style="margin-top:1em">该团已结束，我们将为您退款。</div>
+        {{/if}}
 <div class="listbg mt12">
     <a href="javascript:;">参团记录</a>
     <div id="event_list">

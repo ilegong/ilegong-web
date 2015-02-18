@@ -67,10 +67,14 @@ class GrouponsController extends AppController{
             ));
         }
 
-        if(empty($team) || $team['Team']['begin_time']> time() || $team['Team']['end_time']< time()){
-            $this->Session->setFlash(__('团购项目不存在'));
-            $this->redirect('/');
+        if(empty($team) || $team['Team']['begin_time']> time()){
+            $this->__message(__('团购项目不存在'), '/');
         }else{
+
+            if ($team['Team']['end_time']< time()) {
+                $this->set('team_end', true);
+            }
+
             $this->set('team', $team);
 
             if (empty($groupon)) {
@@ -201,6 +205,11 @@ class GrouponsController extends AppController{
         if (empty($team)) {
             $this->log("not found team for groupon:".$groupId." with team_id=".$team_id);
             throw new NotFoundException();
+        }
+
+
+        if ($team['Team']['end_time']< time()) {
+            $this->set('team_end', true);
         }
 
         $uid = $this->currentUser['id'];
