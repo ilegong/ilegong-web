@@ -88,7 +88,7 @@
 {{/if}}
 
         {{else}}
-            <div class="can_paid" style="margin-top:1em">该团已结束，我们将为您退款。</div>
+            <div class="can_paid" style="margin-top:1em">该团已结束{{if $attend || $is_organizer}}，我们将为您退款{{/if}}。</div>
         {{/if}}
 <div class="listbg mt12">
     <a href="javascript:;">参团记录</a>
