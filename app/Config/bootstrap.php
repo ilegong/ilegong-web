@@ -248,8 +248,14 @@ function same_day($time1, $time2) {
 }
 
 function before_than($timeStr1, $timeStr2 = null) {
+    if (!$timeStr1) {
+        return false;
+    }
+
     $dt1 = DateTime::createFromFormat(FORMAT_DATETIME, $timeStr1);
-    $ts1 = $dt1->getTimestamp();
+    if (!$dt1) {
+        return false;
+    }
 
     if ($timeStr2 != null) {
         $dt2 = DateTime::createFromFormat(FORMAT_DATETIME, $timeStr2);
@@ -257,6 +263,8 @@ function before_than($timeStr1, $timeStr2 = null) {
     } else {
         $ts2 = time();
     }
+
+    $ts1 = $dt1->getTimestamp();
 
     return ($ts1 < $ts2);
 }
