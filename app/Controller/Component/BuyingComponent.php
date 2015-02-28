@@ -262,7 +262,7 @@ class BuyingComponent extends Component {
     }
 
     function confirm_receive($uid, $order_id){
-        $this->edit_status_by_owner_ajax($uid, $order_id, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, '已收货');
+        $this->edit_status_by_owner_ajax($uid, $order_id, ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, '已收货', $uid);
     }
 
     function confirm_undo($uid, $order_id){
@@ -290,10 +290,10 @@ class BuyingComponent extends Component {
         });
     }
 
-    private function edit_status_by_owner_ajax($uid, $order_id, $origStatus, $toStatus, $okMsg = ''){
-        $this->edit_order_by_owner_ajax($uid, $order_id, function($orderModel, $order, $order_id) use ($origStatus, $toStatus,$okMsg) {
+    private function edit_status_by_owner_ajax($uid, $order_id, $origStatus, $toStatus, $okMsg = '', $operator = 0){
+        $this->edit_order_by_owner_ajax($uid, $order_id, function($orderModel, $order, $order_id) use ($origStatus, $toStatus,$okMsg, $operator) {
             if ($order['Order']['status'] == $origStatus) {
-                $orderModel->update_order_status($order_id, $toStatus, $origStatus);
+                $orderModel->update_order_status($order_id, $toStatus, $origStatus, $operator);
                 echo json_encode(array('order_id' => $order_id, 'ok' => 1, 'msg' => $okMsg));
                 exit;
             } else {
