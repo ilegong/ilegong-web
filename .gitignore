@@ -3,3 +3,4 @@ data/logs
 data/settings.php
 webroot/cache/*.css
 .idea
+.svn
