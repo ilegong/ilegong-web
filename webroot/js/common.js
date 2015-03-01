@@ -1254,7 +1254,7 @@ $(document).ready(function () {
 		var $this = $(this);
 		if ($this.hasClass('cart_btn_soldout')) {
             var $reason = $this.attr("reason");
-			utils.alert($reason == 'limit_ship' ? '不支持加入购物车请单独购买' : '已售完');
+			utils.alert($reason == 'limit_ship' ? '不支持加入购物车请选择立即购买' : '已售完');
 			e.preventDefault();
 			return false;
 		}
