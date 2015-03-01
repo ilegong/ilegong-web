@@ -391,6 +391,9 @@ class ProductsController extends AppController{
             $this->set('cake_dates', cake_send_date());
         }
 
+        $is_limit_ship = ClassRegistry::init('ShipPromotion')->is_limit_ship($pid);
+        $this->set('limit_ship', $is_limit_ship);
+
         $this->set('category_control_name', 'products');
         $this->track_share_click();
         if($this->is_weixin()){

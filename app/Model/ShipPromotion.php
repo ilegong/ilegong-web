@@ -311,6 +311,11 @@ class ShipPromotion extends AppModel {
         return null;
     }
 
+    public function is_limit_ship($productId) {
+        $promotions = $this->specialPromotions[$productId];
+        return ($promotions && !empty($promotions) && $promotions['limit_ship'] === true);
+    }
+
     public function find_ship_promotion_limit($productId, $promotionId) {
 
         if ($promotionId == self::BIN_BIN_SHIP_PROMO_ID) {

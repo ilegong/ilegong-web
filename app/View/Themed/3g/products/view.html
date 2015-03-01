@@ -28,7 +28,7 @@
         </li>
         <li class="fl" style="width:34%;">
             <div style="margin-left:3%;">
-                <a id="btn_add_cart"  item-id="{{$Product['Product']['id']}}" href="javascript:;" class="btn_b {{ (($total_left > 0 || $total_left == -1) && $afford_for_curr_user) && $Product['Product']['published'] ? 'shopping_bg' : 'cart_btn_soldout'}} radius10">加入购物车</a>
+                <a id="btn_add_cart"  item-id="{{$Product['Product']['id']}}" href="javascript:;" reason="{{$limit_ship?'limit_ship':''}}" class="btn_b {{ (($total_left > 0 || $total_left == -1) && $afford_for_curr_user) && $Product['Product']['published'] && !limit_ship ? 'shopping_bg' : 'cart_btn_soldout'}} radius10">{{$limit_ship?'不支持购物车':'加入购物车'}}</a>
             </div>
         </li>
         <li class="shopping fr">

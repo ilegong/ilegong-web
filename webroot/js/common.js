@@ -1253,7 +1253,8 @@ $(document).ready(function () {
 	$("#btn_add_cart").click(function(e){
 		var $this = $(this);
 		if ($this.hasClass('cart_btn_soldout')) {
-			utils.alert('已售完');
+            var $reason = $this.attr("reason");
+			utils.alert($reason == 'limit_ship' ? '不支持加入购物车请单独购买' : '已售完');
 			e.preventDefault();
 			return false;
 		}
