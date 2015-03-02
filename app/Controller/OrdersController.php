@@ -221,6 +221,9 @@ class OrdersController extends AppController{
                     $singleShipFee = empty($pp) ? $pro['ship_fee'] : $pp['ship_price'];
                     $ship_fees[$pid] = ShipPromotion::calculateShipFee($total_price, $singleShipFee, $num, $pidShipSettings, $shipFeeContext);
                 }
+                if($ship_fees[$pid]==-1){
+                    $ship_fees[$pid] = 0;
+                }
                 $ship_fee += $ship_fees[$pid];
             }
 
