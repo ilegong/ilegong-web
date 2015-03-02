@@ -151,7 +151,7 @@ a.coupon_applied .glyphicon {
                         <li>运费：{{$this->Number->precision($shipFee, 2)}}</li>
                     {{/if}}
                     <li>总价<small>(含运费)</small>：<span id="total_price_span">
-                        {{if $shipFee==-1}}
+                        {{if $shipFee<0}}
                             {{$this->Number->precision($cart->total_price(), 2)}}
                         {{else}}
                             {{$this->Number->precision($cart->total_price() + $shipFee, 2)}}
