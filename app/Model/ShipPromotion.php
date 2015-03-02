@@ -76,6 +76,8 @@ class ShipPromotion extends AppModel {
             array('id' => 43, 'price' => 160.0, 'time' => '', 'address' => '东城区朝阳门自提；地址: 朝阳门内大街97号底商，平价商店 15901495532'),
             array('id' => 44, 'price' => 160.0, 'time' => '', 'address' => '崇文区崇文门自提；地址: 崇文门东大街8-2号，蟠桃宫便利店 18511077986'),
             array('id' => 45, 'price' => 160.0, 'time' => '', 'address' => '石景山自提 地址：石景山万达广场，石景山区政达路2号1层110CRD 弘浩商贸 68647677'),
+            array('id' => 46, 'price' => 160.0, 'time' => '', 'address' => '大兴亦庄自提 地址：迪龙天天便利店 亦庄新康家园东门 67875215'),
+
         )
     ),
     '240' => array('limit_ship' => true,
@@ -135,6 +137,7 @@ class ShipPromotion extends AppModel {
                 array('id' => 74, 'price' => 268.0, 'time' => '', 'address' => '东城区朝阳门自提 地址: 朝阳门内大街97号底商，平价商店 15901495532'),
                 array('id' => 75, 'price' => 268.0, 'time' => '', 'address' => '崇文门蟠桃宫自提 地址: 崇文门东大街8-2号，蟠桃宫便利店 18511077986'),
                 array('id' => 114, 'price' => 268.0, 'time' => '', 'address' => '石景山自提 地址：石景山万达广场，石景山区政达路2号1层110CRD 弘浩商贸 68647677'),
+                array('id' => 117, 'price' => 268.0, 'time' => '', 'address' => '大兴亦庄自提 地址：迪龙天天便利店 亦庄新康家园东门 67875215'),
             )
         ),
 
@@ -170,6 +173,7 @@ class ShipPromotion extends AppModel {
                 array('id' => 104, 'time' => '', 'address' => '东城区朝阳门自提 地址: 朝阳门内大街97号底商，平价商店 15901495532'),
                 array('id' => 105, 'time' => '', 'address' => '崇文门蟠桃宫自提 地址: 崇文门东大街8-2号，蟠桃宫便利店 18511077986'),
                 array('id' => 115,  'time' => '', 'address' => '石景山自提 地址：石景山万达广场，石景山区政达路2号1层110CRD 弘浩商贸 68647677'),
+                array('id' => 118,  'time' => '', 'address' => '大兴亦庄自提 地址：迪龙天天便利店 亦庄新康家园东门 67875215'),
             )
         ),
 
@@ -184,6 +188,7 @@ class ShipPromotion extends AppModel {
                 array('id' => 112, 'time' => '', 'address' => '东城区朝阳门自提 地址: 朝阳门内大街97号底商，平价商店 15901495532'),
                 array('id' => 113, 'time' => '', 'address' => '崇文门蟠桃宫自提 地址: 崇文门东大街8-2号，蟠桃宫便利店 18511077986'),
                 array('id' => 116,  'time' => '', 'address' => '石景山自提 地址：石景山万达广场，石景山区政达路2号1层110CRD 弘浩商贸 68647677'),
+                array('id' => 119,  'time' => '', 'address' => '大兴亦庄自提 地址：迪龙天天便利店 亦庄新康家园东门 67875215'),
             )
         ),
 
@@ -354,4 +359,4 @@ class ShipPromotion extends AppModel {
         }
         return array();
     }
-} 
+}
