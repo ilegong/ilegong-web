@@ -145,7 +145,7 @@ a.coupon_applied .glyphicon {
         <div>
 		    <ul class="pull-right list-unstyled">
                     <li>已优惠：<span id="total_reduced_span">{{$this->Number->precision($total_reduced, 2)}}</span></li>
-                    {{if $shipFee==-1}}
+                    {{if $shipFee<0}}
                         <li>运费：到付</li>
                     {{else}}
                         <li>运费：{{$this->Number->precision($shipFee, 2)}}</li>
