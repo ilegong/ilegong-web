@@ -1189,6 +1189,14 @@ function createNewUserByWeixin($userInfo, $userModel) {
 
 
 /**
+ * @param $range
+ * @return bool
+ */
+function in_range($range) {
+    return (empty($range['start']) || !before_than($range['start'])) && (empty($range['end']) || before_than($range['end']));
+}
+
+/**
  * @param $special
  * @return array
  */

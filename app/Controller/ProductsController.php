@@ -202,35 +202,38 @@ class ProductsController extends AppController{
         if (!empty($special) && $special['special']['special_price'] >= 0) {
 
             $special_rg = range_by_special($special);
+            if (empty($special_rg) || in_range($special_rg)) {
+                //TODO: check time (current already checked)
+                //CHECK time limit!!!!
+                list($afford_for_curr_user, $left_cur_user, $total_left) =
+                    calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
 
-            //TODO: check time (current already checked)
-            //CHECK time limit!!!!
-            list($afford_for_curr_user, $left_cur_user, $total_left) =
-                calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
+                $this->log('view product afford(special): for_curr_user=' . $afford_for_curr_user . ', left_cur_user=' . $left_cur_user . ', total_left=' . $total_left . ', range=' . json_encode($special_rg) . ', uid=' . $currUid);
 
-            $this->log('view product afford(special): for_curr_user='.$afford_for_curr_user.', left_cur_user='.$left_cur_user.', total_left='.$total_left.', range='.json_encode($special_rg).', uid='.$currUid);
-
-            $promo_name = $special['name'];
-            $special_least_num = $special['special']['least_num'];
-            $special_price = $special['special']['special_price'] / 100;
-            App::uses('CakeNumber', 'Utility');
-            $promo_desc = ($special_least_num > 0 ? '满'.$special_least_num.'件' : '') .'￥'.CakeNumber::precision($special_price, 2);
-            if ($special['special']['limit_total'] > 0) {
-                $promo_desc .= ' 限'.$special['special']['limit_total'].'件';
+                $promo_name = $special['name'];
+                $special_least_num = $special['special']['least_num'];
+                $special_price = $special['special']['special_price'] / 100;
+                App::uses('CakeNumber', 'Utility');
+                $promo_desc = ($special_least_num > 0 ? '满' . $special_least_num . '件' : '') . '￥' . CakeNumber::precision($special_price, 2);
+                if ($special['special']['limit_total'] > 0) {
+                    $promo_desc .= ' 限' . $special['special']['limit_total'] . '件';
+                }
+                if ($special['special']['limit_per_user'] > 0) {
+                    $promo_desc .= ' 每人限' . $special['special']['limit_per_user'] . '件';
+                }
+                if ($afford_for_curr_user) {
+                    if ($special_least_num <= 0) {
+                        $price = $special_price;
+                    }
+                    $use_special = true;
+                } else {
+                    $promo_desc .= '(' . ($left_cur_user == 0 ? '您已买过' : '已抢完') . ')';
+                }
+                $this->set('special_desc', $promo_desc);
+                $this->set('special_name', $promo_name);
+                $this->set('special_slug', $special['slug']);
+                $this->set('show_special_link', $special['visible'] > 0);
             }
-            if ($special['special']['limit_per_user'] > 0) {
-                $promo_desc .= ' 每人限'.$special['special']['limit_per_user'].'件';
-            }
-            if ($afford_for_curr_user) {
-                if ($special_least_num <= 0) { $price = $special_price; }
-                $use_special = true;
-            } else {
-                $promo_desc .=  '('. ($left_cur_user == 0 ? '您已买过' : '已抢完') . ')';
-            }
-            $this->set('special_desc', $promo_desc);
-            $this->set('special_name', $promo_name);
-            $this->set('special_slug', $special['slug']);
-            $this->set('show_special_link', $special['visible'] > 0);
         }
 
         if (!$use_special) {
@@ -375,17 +378,17 @@ class ProductsController extends AppController{
         $this->Session->write('BrowsingHistory',$browsing_history);
 
 
-        $this->loadModel('ProductProductTag');
-        $nianhuo = $this->ProductProductTag->find('first', array(
-                'conditions' => array(
-                    'tag_id' => 20,
-                    'product_id' => $pid
-                ),
-            )
-        );
-        if (!empty($nianhuo)) {
-            $this->set('in_nianhuo', true);
-        }
+//        $this->loadModel('ProductProductTag');
+//        $nianhuo = $this->ProductProductTag->find('first', array(
+//                'conditions' => array(
+//                    'tag_id' => 20,
+//                    'product_id' => $pid
+//                ),
+//            )
+//        );
+//        if (!empty($nianhuo)) {
+//            $this->set('in_nianhuo', true);
+//        }
 
         if ($pid == PRODUCT_ID_CAKE) {
             $this->set('cake_dates', cake_send_date());
