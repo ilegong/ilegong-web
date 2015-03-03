@@ -238,7 +238,13 @@ ul li{ list-style:none;}
 /* mobile home page v3 */
 .index_banner{ position:relative;}
 .index_banner img{ width:100%;}
-.index_banner ul{ position:absolute; bottom:0.5em; left:45%; z-index:10;}
+.index_banner ul {
+    position: absolute;
+    bottom: 0.5em;
+    left: 43%;
+    z-index: 10;
+    margin-bottom: 0;
+}
 .index_banner ul li{ float:left; background:url('/img/mobilev1/pyshuo_icon.png?xxy') -1.292em -18.75em no-repeat; background-size:25em 25em; width:0.75em; height:0.75em; margin-right:0.5em;}
 .index_banner ul li.cur{ background-position:0 -18.75em;}
 .index_good{ margin-top:1em; margin-bottom:1em;}
