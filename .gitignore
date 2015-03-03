@@ -1,5 +1,6 @@
 data/cache
 data/logs
 data/settings.php
+webroot/files/*
 .idea
 .svn
