@@ -14,6 +14,7 @@
             <input type="hidden" name="data[Comment][pictures]" value="{{$product['pictures']}}"/>
             <input type="hidden" name="data[Comment][status]" data="data_status" value="0">
             <input type="hidden" name="data[Comment][order_id]" value="{{$order['Order']['id']}}"/>
+            <input type="hidden" name="data[Comment][buy_time]" value="{{$order['Order']['created']}}"/>
             <ul class="clearfix">
                 <li class="comment_pic fl"><a href="{{'/products/' . date('Ymd', strtotime($product['product_created'])) . '/' . $product['product_slug'] . '.html'}}"><img src="{{$product['coverimg']}}"/></a></li>
                 <li class="comment_con fl">

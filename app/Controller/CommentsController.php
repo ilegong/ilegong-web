@@ -135,7 +135,7 @@ class CommentsController extends AppController {
 
     function getlist($model_name,$id){
     	$page = intval($_GET['page'])?intval($_GET['page']):1;
-    	$pagesize = intval($_GET['pagesize'])?intval($_GET['pagesize']):50;
+    	$pagesize = intval($_GET['pagesize'])?intval($_GET['pagesize']):100;
     	$this->autoRender = false;
     	$model_name = Inflector::classify($model_name);
     	$comments = $this->Comment->find('all',array(
@@ -165,7 +165,7 @@ class CommentsController extends AppController {
                 $images = array();
                 $pics = mbsplit("\\|", $item['pictures']);
                 foreach($pics as $pic) {
-                    if($pic && strpos($pic, "http://") === 0) {
+                    if($pic && (strpos($pic, "http://") === 0||strpos($pic, "/") === 0)) {
                         $images[] = $pic;
                     }
                 }
