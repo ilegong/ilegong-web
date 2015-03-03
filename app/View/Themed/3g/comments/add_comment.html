@@ -317,12 +317,18 @@
                         //server download and return url
                         tempImage.serverId=res.serverId;
                         $.getJSON('/downloads/download_wx_img?media_id='+tempImage.serverId,function(data){
+                            //download url
                             var imageUrl = data['download_url'];
-                            $($imageHolder).html('<img src="'+imageUrl+'"/><div class="comment_delete"></div>');
-                            $($delete_a).attr('href',imageUrl);
-                            $images.push(imageUrl);
-                            $data.val($images.join('|'));
-                            $parentForm.ajaxSubmit();
+                            if(imageUrl){
+                                $($imageHolder).html('<img src="'+imageUrl+'"/><div class="comment_delete"></div>');
+                                $($delete_a).attr('href',imageUrl);
+                                $images.push(imageUrl);
+                                $data.val($images.join('|'));
+                                $parentForm.ajaxSubmit();
+                            }else{
+                                //upload fail
+                                alert('上传图片失败');
+                            }
                         });
                     },
                     fail: function(res){
