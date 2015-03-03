@@ -143,7 +143,7 @@ class ShipPromotion extends AppModel {
 
         705 => array('limit_ship' => true,
             'items' => array(
-                array('id' => 76, 'time' => '', 'least_num' => 10, 'address' => '西二旗辉煌国际大厦B1层超市发门口  徐庆  18686504547'),
+//                array('id' => 76, 'time' => '', 'least_num' => 10, 'address' => '西二旗辉煌国际大厦B1层超市发门口  徐庆  18686504547'),
                 array('id' => 77, 'time' => '', 'least_num' => 10, 'address' => ' 海淀西小口路中关村东升科技园果仕芙 张经理 57112013'),
                 array('id' => 78, 'time' => '', 'least_num' => 10, 'address' => ' 海淀清河小营电科院旁边超市发 荣浩  18911692346'),
                 array('id' => 79, 'time' => '', 'least_num' => 10, 'address' => ' 海淀中关村银科大厦附近'),
