@@ -1,5 +1,31 @@
 <?php
 
 class DownloadsController extends AppController{
-	public $name = 'Downloads';	
+	public $name = 'Downloads';
+
+	public function download_wx_img(){
+		$this->autoRender=false;
+		App::uses('CurlDownloader','Lib');
+		$wxOauthM = ClassRegistry::init('WxOauth');
+		$media_id = $_REQUEST['media_id'];
+		$access_token = $wxOauthM->get_base_access_token();
+		$source = 'http://file.api.weixin.qq.com/cgi-bin/media/get?access_token='.$access_token.'&media_id='.$media_id;
+		//download as a temp file
+		$dl = new CurlDownloader($source);
+		$size = $dl->download();
+		if(defined('SAE_MYSQL_DB')){
+			$stor = new SaeStorage();
+			$download_url = $stor->upload(SAE_STORAGE_UPLOAD_DOMAIN_NAME , $dl->getFileName() , $dl->getFileName());
+			$this->log('handle_file_upload: final file='. $download_url .', $file-path='. $dl->getFileName() .', $uploaded_file='. $dl->getFileName());
+		} else {
+			copy($dl->getFileName(),WWW_ROOT.'files/wx-download/'.$dl->getFileName());
+			$download_url = '/files/wx-download/'.$dl->getFileName();
+		}
+		//delete temp file
+		unlink($dl->getFileName());
+		echo json_encode(array(
+			'download_url'=>$download_url
+		));
+	}
+
 }

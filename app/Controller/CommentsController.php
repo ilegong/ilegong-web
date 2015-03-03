@@ -392,6 +392,7 @@ class CommentsController extends AppController {
                 if($draftOrderRating){
                     $this->set('order_rating',$draftOrderRating);
                 }
+                $this->set('jWeixinOn', true);
             }else{
                 $this->redirect('/users/to_bind_mobile?order_id='.$orderId);
             }

@@ -22,3 +22,8 @@ ADD COLUMN `order_id` INT NOT NULL AFTER `is_shichi_vote`;
 SET SQL_SAFE_UPDATES = 0;
 
 update cake_comments co, cake_carts ca set co.order_id=ca.order_id where co.data_id=ca.product_id and co.user_id=ca.creator and ca.order_id is not null and co.type='Product';
+
+ALTER TABLE `cake_comments`
+ADD COLUMN `buy_time` DATETIME NULL AFTER `order_id`;
+
+update cake_comments co,cake_orders orders set co.buy_time=orders.created where co.order_id=orders.id and co.buy_time is not null;
