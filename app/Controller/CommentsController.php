@@ -138,8 +138,9 @@ class CommentsController extends AppController {
     	$pagesize = intval($_GET['pagesize'])?intval($_GET['pagesize']):100;
     	$this->autoRender = false;
     	$model_name = Inflector::classify($model_name);
+        //'rating'=>array('1','5','3')
     	$comments = $this->Comment->find('all',array(
-    		 'conditions' => array('Comment.type' => $model_name,'data_id'=>$id,'status'=>1,'rating'=>array('1','5','3')),
+    		 'conditions' => array('Comment.type' => $model_name,'data_id'=>$id,'status'=>1,),
     		 'order' => array('Comment.created DESC'), //定义顺序的字符串或者数组
 		    'limit' => $pagesize, //整型
 		    'page' => $page, //整型    	
