@@ -407,6 +407,8 @@ class CommentsController extends AppController {
         $uid = $this->Session->read('Auth.User.id');
         $orderId = $this->data['Comment']['order_id'];
         $dataId = $this->data['Comment']['data_id'];
+        $type_model = $this->data['Comment']['type'];
+        $status = $this->data['Comment']['status'];
         $this->data['Comment']['ip'] = $this->request->clientIp(false);
         $draftComment = $this->Comment->find('first',array(
             'conditions'=>array(
@@ -429,6 +431,14 @@ class CommentsController extends AppController {
             $comment = $this->Comment->save($this->data);
         }
         if($comment){
+            //product add comment num
+            if($status=='1'){
+                $this->loadModel($type_model);
+                $this->{$type_model}->updateAll(
+                    array('comment_nums' => 'comment_nums+1'),
+                    array('id' => $dataId)
+                );
+            }
             $result = array('success'=>true,'msg'=>'添加评论成功');
         }else{
             $result = array('success'=>false,'msg'=>'添加评论失败');
@@ -536,7 +546,6 @@ class CommentsController extends AppController {
                 'order_id' => $orderId,
                 'user_id' => $uid,
                 'status' => COMMENT_SHOW_STATUS,
-                ''
             )
         ));
         $product_ids = Hash::combine($product_comments, '{n}.Comment.id', '{n}.Comment.data_id');
