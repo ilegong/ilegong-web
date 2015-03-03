@@ -34,7 +34,7 @@
                 <label style="display: none;">长度在10-500个字之间<br/>写下您真实的购买体会</label>
             </div>
             <div class="clearfix upload-image">
-                <input style="width: 0;height: 0;opacity: 0;" type="file" name="upload" accept="image/*;capture=camera"/>
+                <input type="hidden" name="upload"/>
                 <input type="hidden" name="no_db" value="true"/>
                 <a href="#X" class="comment_upload"><span></span></a>
                 <a href="#X" class="comment_upload"><span></span></a>
@@ -78,156 +78,158 @@
 {{$this->Html->script(array('/js/jquery.form.js','/js/pyshuo.common.js?v=1'));}}
 {{if $order['Order']['is_comment']==0}}
 <script>
-    $(document).ready(function () {
-        var orderId = "{{$order['Order']['id']}}";
-        changeSubmitStatus();
-        //comment area view
-        $('div[name="comment-place"]').each(function(index,item){
-            var me = $(item);
-            var $textArea = $('textarea',me);
-            var $label = $('label',me);
-            me.on('click',function(e){
-                e.preventDefault();
-                $textArea.focus();
-            });
-            if(!$textArea.val()){
-                $label.show();
-            }else{
-                $label.hide();
-            }
-            $textArea.on('focus',function(e){
-                e.preventDefault();
-                $label.hide();
-            }).on('change',function(e){
-                changeState();
-            }).on('blur',function(e){
-                e.preventDefault();
-                changeState();
-            });
-            function changeState(){
-                if($textArea.val()){
-                    $label.hide();
-                }else{
+    wx.ready(function(){
+        $(document).ready(function () {
+            var orderId = "{{$order['Order']['id']}}";
+            changeSubmitStatus();
+            //comment area view
+            $('div[name="comment-place"]').each(function(index,item){
+                var me = $(item);
+                var $textArea = $('textarea',me);
+                var $label = $('label',me);
+                me.on('click',function(e){
+                    e.preventDefault();
+                    $textArea.focus();
+                });
+                if(!$textArea.val()){
                     $label.show();
-                }
-                changeSubmitStatus();
-            }
-        });
-
-        function changeSubmitStatus(){
-            var $textAreas = $('textarea');
-            var flag = true;
-            $.each($textAreas,function(index,item){
-                var content = $(item).val();
-                if(content.length<10){
-                    flag = false;
-                    return false;
-                }
-            });
-            if(flag){
-                $('#submit_comment').addClass('comment_submit').removeClass('comment_submit_disable');
-            }else{
-                $('#submit_comment').addClass('comment_submit_disable').removeClass('comment_submit');
-            }
-        }
-
-        $('div[name="comment-place"] textarea').on('change',function(){
-            saveDraftComment($(this));
-        });
-
-        function saveDraftComment(element){
-            //TODO handle error msg or save local storge
-            //TODO reset id
-            $(element).parents('form').ajaxSubmit();
-        }
-
-        $('dl.raty').each(function (index, item) {
-            $(item).pyRaty();
-        });
-        $('div.upload-image').each(function (index, item) {
-            $(item).pyUpload();
-        });
-
-        $('#submit_comment').on('click',function(e){
-            e.preventDefault();
-            if($(this).hasClass('comment_submit_disable')){
-                Pyshuo.ui.utils.mobileShowTip('评论内容不能小于10个字..');
-                return;
-            }
-            if($(this).attr('disabled')){
-                return;
-            }
-            $(this).attr("disabled","disabled");
-            //set status draft comment can show in view page
-            //async ?
-            $('input[data="data_status"]').each(function(index,item){
-                $(item).val("1");
-            });
-            //set order is comment
-            submitComment();
-        });
-        function formVaild(formData, jqForm, options){
-            var isValid = true;
-            $.each(formData,function(index,data){
-                if(data['name']==='data[Comment][body]'){
-                    var dataBody = $.trim(data['value']);
-                    if(!dataBody||dataBody.length<10){
-                        isValid=false;
-                        return false;
-                    }
-                }
-            });
-            if(!isValid){
-                Pyshuo.ui.utils.mobileShowTip('评论内容不能小于10个字..');
-                $('#submit_comment').removeAttr('disabled');
-            }
-            return isValid;
-        }
-        function submitComment(){
-            var results = [];
-            $('form[name!="py-custom-upload"]').each(function(index,item){
-                var dtd = $.Deferred();
-                results.push(dtd);
-                $(item).ajaxSubmit({
-                    dataType:'json',
-                    beforeSubmit:formVaild,
-                    success:function(data){
-                        dtd.resolve(data);
-                    },
-                    error:function(data){
-                        dtd.reject(data);
-                    }
-
-                });
-            });
-            $.when.apply(this,results).done(function(){
-                var isAllSubmit = true;
-                $.each(arguments,function(index,item){
-                    if(!('success' in item)||!item['success']){
-                        isAllSubmit = false;
-                        return false;
-                    }
-                });
-                //change order comment status
-                if(isAllSubmit){
-                    $.post('/comments/submit_order_comment',{'orderId':orderId},function(data){
-                        var result = JSON.parse(data);
-                        if(result['success']){
-                            //redirect or reload
-                            Pyshuo.ui.utils.mobileShowTip(result['msg'],1000,2000,function(){
-                                window.location.href='/orders/mine?tab=comment';
-                            });
-                        }else{
-                            //do nothing
-                            $('#submit_comment').removeAttr('disabled');
-                            Pyshuo.ui.utils.mobileShowTip(result['msg']);
-                        }
-                    });
                 }else{
+                    $label.hide();
+                }
+                $textArea.on('focus',function(e){
+                    e.preventDefault();
+                    $label.hide();
+                }).on('change',function(e){
+                    changeState();
+                }).on('blur',function(e){
+                    e.preventDefault();
+                    changeState();
+                });
+                function changeState(){
+                    if($textArea.val()){
+                        $label.hide();
+                    }else{
+                        $label.show();
+                    }
+                    changeSubmitStatus();
+                }
+            });
+
+            function changeSubmitStatus(){
+                var $textAreas = $('textarea');
+                var flag = true;
+                $.each($textAreas,function(index,item){
+                    var content = $(item).val();
+                    if(content.length<10){
+                        flag = false;
+                        return false;
+                    }
+                });
+                if(flag){
+                    $('#submit_comment').addClass('comment_submit').removeClass('comment_submit_disable');
+                }else{
+                    $('#submit_comment').addClass('comment_submit_disable').removeClass('comment_submit');
+                }
+            }
+
+            $('div[name="comment-place"] textarea').on('change',function(){
+                saveDraftComment($(this));
+            });
+
+            function saveDraftComment(element){
+                //TODO handle error msg or save local storge
+                //TODO reset id
+                $(element).parents('form').ajaxSubmit();
+            }
+
+            $('dl.raty').each(function (index, item) {
+                $(item).pyRaty();
+            });
+            $('div.upload-image').each(function (index, item) {
+                $(item).pyUpload();
+            });
+
+            $('#submit_comment').on('click',function(e){
+                e.preventDefault();
+                if($(this).hasClass('comment_submit_disable')){
+                    Pyshuo.ui.utils.mobileShowTip('评论内容不能小于10个字..');
+                    return;
+                }
+                if($(this).attr('disabled')){
+                    return;
+                }
+                $(this).attr("disabled","disabled");
+                //set status draft comment can show in view page
+                //async ?
+                $('input[data="data_status"]').each(function(index,item){
+                    $(item).val("1");
+                });
+                //set order is comment
+                submitComment();
+            });
+            function formVaild(formData, jqForm, options){
+                var isValid = true;
+                $.each(formData,function(index,data){
+                    if(data['name']==='data[Comment][body]'){
+                        var dataBody = $.trim(data['value']);
+                        if(!dataBody||dataBody.length<10){
+                            isValid=false;
+                            return false;
+                        }
+                    }
+                });
+                if(!isValid){
+                    Pyshuo.ui.utils.mobileShowTip('评论内容不能小于10个字..');
                     $('#submit_comment').removeAttr('disabled');
                 }
-            });
-        }
+                return isValid;
+            }
+            function submitComment(){
+                var results = [];
+                $('form[name!="py-custom-upload"]').each(function(index,item){
+                    var dtd = $.Deferred();
+                    results.push(dtd);
+                    $(item).ajaxSubmit({
+                        dataType:'json',
+                        beforeSubmit:formVaild,
+                        success:function(data){
+                            dtd.resolve(data);
+                        },
+                        error:function(data){
+                            dtd.reject(data);
+                        }
+
+                    });
+                });
+                $.when.apply(this,results).done(function(){
+                    var isAllSubmit = true;
+                    $.each(arguments,function(index,item){
+                        if(!('success' in item)||!item['success']){
+                            isAllSubmit = false;
+                            return false;
+                        }
+                    });
+                    //change order comment status
+                    if(isAllSubmit){
+                        $.post('/comments/submit_order_comment',{'orderId':orderId},function(data){
+                            var result = JSON.parse(data);
+                            if(result['success']){
+                                //redirect or reload
+                                Pyshuo.ui.utils.mobileShowTip(result['msg'],1000,2000,function(){
+                                    window.location.href='/orders/mine?tab=comment';
+                                });
+                            }else{
+                                //do nothing
+                                $('#submit_comment').removeAttr('disabled');
+                                Pyshuo.ui.utils.mobileShowTip(result['msg']);
+                            }
+                        });
+                    }else{
+                        $('#submit_comment').removeAttr('disabled');
+                    }
+                });
+            }
+        });
     });
 </script>
 {{else}}
@@ -253,9 +255,12 @@
                 isSubmit:true
             };
             var config = $.extend(defaultOption, option);
+            var tempImage = {
+                localId:'',
+                serverId:''
+            };
             var $data = me.siblings('input[name="data[Comment][pictures]"]');
             var $parentForm = me.parents('form');
-            me.wrap('<form name="' + config['name'] + '" action="' + config['uploadUrl'] + '" method="post" enctype="multipart/form-data"></form>');
             var $images = $data.val();
             var $imageHolders = $('a.comment_upload',me);
             //remove blank val
@@ -269,12 +274,11 @@
             });
             var $fileInput = $('input', me);
             $('a.comment_upload',me).each(function (index, item) {
-                //TODO  use custom function
                 $(item).on('click', function (e) {
                     e.preventDefault();
                     var $me = $(this);
                     //do delete image can't delete server image
-                    if($me.attr('href').indexOf('http')===0){
+                    if($me.attr('href').indexOf('http')==0||$me.attr('href').indexOf('/')==0){
                         if(config['isSubmit']){
                             var tmpUrl = $me.attr('href');
                             $images = $.grep($images, function(n) {return n!=tmpUrl;});
@@ -285,45 +289,49 @@
                         }
                         return;
                     }
+                    //choose img
+                    //only choose first img
                     $fileInput.attr('data-index', index);
                     if(config['isSubmit']){
-                        $fileInput.trigger('click');
+                        wx.chooseImage({
+                            success: function (res) {
+                                tempImage.localId = res.localIds[0];
+                                setTimeout(wxUploadFile,50);
+                            }
+                        });
                     }
                     return false;
                 });
             });
-            if(config['isSubmit']){
-                $fileInput.on('change', function (e) {
-                    e.preventDefault();
-                    var index = $(this).attr('data-index');
-                    var $imageHolder = $imageHolders[index];
-                    var $delete_a = $($imageHolder);
-                    me.parent().ajaxSubmit({
-                        dataType: 'json',
-                        beforeSend: function () {},
-                        uploadProgress: function () {},
-                        success: function (data) {
-                            if(data['status']=="1"){
-                                var deleteUrl=data['thumb'];
-                                var imageUrl = data['thumb'];
-                                $($imageHolder).html('<img src="'+imageUrl+'"/><div class="comment_delete"></div>');
-                                $($delete_a).attr('href',imageUrl);
-                                $images.push(imageUrl);
-                                $data.val($images.join('|'));
-                                $parentForm.ajaxSubmit();
-                            }else{
-                                //TODO error
-                            }
-                        },
-                        error: function (data) {
-                            console.log(data);
-                        }
-                    });
+            function wxUploadFile(){
+                var index = $fileInput.attr('data-index');
+                var $imageHolder = $imageHolders[index];
+                var $delete_a = $($imageHolder);
+                //alert('upload image');
+                //upload file
+                //TODO upload many files
+                wx.uploadImage({
+                    localId: tempImage.localId,
+                    isShowProgressTips:1,
+                    success : function(res){
+                        //server download and return url
+                        tempImage.serverId=res.serverId;
+                        $.getJSON('/downloads/download_wx_img?media_id='+tempImage.serverId,function(data){
+                            var imageUrl = data['download_url'];
+                            $($imageHolder).html('<img src="'+imageUrl+'"/><div class="comment_delete"></div>');
+                            $($delete_a).attr('href',imageUrl);
+                            $images.push(imageUrl);
+                            $data.val($images.join('|'));
+                            $parentForm.ajaxSubmit();
+                        });
+                    },
+                    fail: function(res){
+                        alert(JSON.stringify(res));
+                    }
                 });
             }
         }
     })(jQuery);
-
 </script>
 <script>
     (function ($) {
