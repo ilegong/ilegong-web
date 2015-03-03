@@ -170,7 +170,7 @@ class ApiOrdersController extends AppController {
     public function product_detail($pid) {
 
         if (!empty($pid)) {
-
+            $is_limit_ship = ClassRegistry::init('ShipPromotion')->is_limit_ship($pid);
             $productM = ClassRegistry::init('Product');
             $pro = $productM->findById($pid);
             if (!empty($pro) && $pro['Product']['deleted'] == DELETED_NO && $pro['Product']['published'] == PUBLISH_YES) {
@@ -179,13 +179,14 @@ class ApiOrdersController extends AppController {
                 unset($pro['Product']['storage']);
                 unset($pro['Product']['views_count']);
                 unset($pro['Product']['cost_price']);
-
+                $pro['Product']['limit_ship']=$is_limit_ship;
                 $brandM = ClassRegistry::init('Brand');
                 $brand = $brandM->findById($pro['Product']['brand_id']);
                 $this->set('brand', $brand);
 
                 $recommC = $this->Components->load('ProductRecom');
                 $recommends = $recommC->recommend($pid);
+
                 $this->set('product',$pro);
                 $this->set('recommends', $recommends);
                 $this->set('brand', $brand);
