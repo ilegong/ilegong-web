@@ -23,9 +23,9 @@ class DownloadsController extends AppController{
 			} else {
 				copy($dl->getFileName(),WWW_ROOT.'files/wx-download/'.$dl->getFileName());
 				$download_url = '/files/wx-download/'.$dl->getFileName();
+				//delete temp file
+				unlink($dl->getFileName());
 			}
-			//delete temp file
-			unlink($dl->getFileName());
 			echo json_encode(array(
 				'success'=>true,
 				'download_url'=>$download_url
