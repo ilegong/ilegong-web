@@ -257,8 +257,8 @@
             };
             var config = $.extend(defaultOption, option);
             var tempImage = {
-                localId:'',
-                serverId:''
+                localId:[],
+                serverId:[]
             };
             var $data = me.siblings('input[name="data[Comment][pictures]"]');
             var $parentForm = me.parents('form');
@@ -296,7 +296,7 @@
                     if(config['isSubmit']){
                         wx.chooseImage({
                             success: function (res) {
-                                tempImage.localId = res.localIds[0];
+                                tempImage.localId = res.localIds;
                                 setTimeout(wxUploadFile,50);
                             }
                         });
@@ -305,37 +305,60 @@
                 });
             });
             function wxUploadFile(){
-                var index = $fileInput.attr('data-index');
-                var $imageHolder = $imageHolders[index];
-                var $delete_a = $($imageHolder);
                 //alert('upload image');
                 //upload file
-                //TODO upload many files
-                wx.uploadImage({
-                    localId: tempImage.localId,
-                    isShowProgressTips:1,
-                    success : function(res){
-                        //server download and return url
-                        tempImage.serverId=res.serverId;
-                        $.getJSON('/downloads/download_wx_img?media_id='+tempImage.serverId,function(data){
-                            //download url
-                            var imageUrl = data['download_url'];
-                            if(imageUrl){
-                                $($imageHolder).html('<img src="'+imageUrl+'"/><div class="comment_delete"></div>');
-                                $($delete_a).attr('href',imageUrl);
-                                $images.push(imageUrl);
-                                $data.val($images.join('|'));
-                                $parentForm.ajaxSubmit();
-                            }else{
-                                //upload fail
-                                alert('上传图片失败');
+                //slice localId
+                tempImage.localId = tempImage.localId.slice(0,getNoImageHolderLen());
+                var toShowHolders = getNoImageHolder();
+                var i=0;
+                var len = tempImage.localId.length;
+                var signals = [];
+                for(var i=0;i<len;i++){
+                    (function(index){
+                        //小心作用域 调试半天
+                        var dtd = $.Deferred();
+                        signals.push(dtd);
+                        wx.uploadImage({
+                            localId: tempImage.localId[index],
+                            isShowProgressTips:1,
+                            success : function(res){
+                                //server download and return url
+                                tempImage.serverId.push(res.serverId);
+                                $.getJSON('/downloads/download_wx_img?media_id='+res.serverId,function(data){
+                                    //download url
+                                    dtd.resolve(data);
+                                });
+                            },
+                            fail: function(res){
+                                alert(JSON.stringify(res));
                             }
                         });
-                    },
-                    fail: function(res){
-                        alert(JSON.stringify(res));
+                    })(i);
+                }
+                $.when.apply($,signals).done(function(){
+                    var len = arguments.length;
+                    for(var i = 0;i<len;i++){
+                        var item = arguments[i];
+                        if(item['success']){
+                            var imageUrl = item['download_url'];
+                            var $imageHolder = toShowHolders[i];
+                            var $delete_a = $($imageHolder);
+                            $($imageHolder).html('<img src="'+imageUrl+'"/><div class="comment_delete"></div>');
+                            $($delete_a).attr('href',imageUrl);
+                            $images.push(imageUrl);
+                            $data.val($images.join('|'));
+                        }
                     }
+                    $parentForm.ajaxSubmit();
                 });
+            }
+            function getNoImageHolder(){
+                var $result = $('a.comment_upload',me).has('span');
+                return $result;
+            }
+            function getNoImageHolderLen(){
+                var $result = $('a.comment_upload',me).has('span');
+                return $result.length;
             }
         }
     })(jQuery);
