@@ -14,6 +14,8 @@ const ALI_PAY_TYPE_WAP = "wap";
 const ALI_PAY_TYPE_WAPAPP = "wapapp";
 const ALI_PAY_TYPE_PC = "pc";
 
+const SHIPTYPE_ID_ZITI = 137;
+
 const SCORE_ORDER_COMMENT = 1;
 const SCORE_NEW_USER = 2;
 const SCORE_ORDER_DONE = 3;

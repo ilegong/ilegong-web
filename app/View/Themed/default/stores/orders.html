@@ -120,7 +120,7 @@
                                 <select id="ship-type-{{$order['Order']['id']}}">
                                     <option value="">快递类型</option>
                                     {{loop $ship_type $id $type}}
-                                    <option value="{{$id}}">{{$type}}</option>
+                                    <option value="{{$id}}" {{$default_ship_id && $id==$default_ship_id?'selected':''}}>{{$type}}</option>
                                     {{/loop}}
                                 </select>
                                 <input type="text" width="80px;" id="ship-code-{{$order['Order']['id']}}"

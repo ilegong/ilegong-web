@@ -356,6 +356,9 @@ class StoresController extends AppController
     function wait_shipped_orders()
     {
         $this->__business_orders(array(ORDER_STATUS_PAID));
+        if ($this->brand && $this->brand['Brand']['id'] == BRAND_ID_CAKE) {
+            $this->set('default_ship_id', SHIPTYPE_ID_ZITI);
+        }
         $this->render("orders");
     }
 
@@ -425,6 +428,7 @@ class StoresController extends AppController
 
         $this->loadModel('Brand');
         $brand = $this->find_my_brand($creator);
+        $this->checkAccess();
 
         if (!empty($brand)) {
             $brand_id = $brand['Brand']['id'];
