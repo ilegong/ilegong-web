@@ -313,38 +313,42 @@
                 var i=0;
                 var len = tempImage.localId.length;
                 var signals = [];
-                for(var i=0;i<len;i++){
-                    (function(index){
-                        //小心作用域 调试半天
-                        var dtd = $.Deferred();
-                        signals.push(dtd);
-                        wx.uploadImage({
-                            localId: tempImage.localId[index],
-                            isShowProgressTips:1,
-                            success : function(res){
-                                //server download and return url
-                                tempImage.serverId.push(res.serverId);
-                                $.getJSON('/downloads/download_wx_img?media_id='+res.serverId,function(data){
-                                    //download url
-                                    dtd.resolve(data);
-                                });
-                            },
-                            fail: function(res){
-                                alert(JSON.stringify(res));
-                            }
-                        });
-                    })(i);
+                function doUpload(index){
+                    //小心作用域 调试半天
+                    var dtd = $.Deferred();
+                    signals.push(dtd);
+                    wx.uploadImage({
+                        localId: tempImage.localId[index],
+                        isShowProgressTips:1,
+                        success : function(res){
+                            //server download and return url
+                            tempImage.serverId.push(res.serverId);
+                            $.getJSON('/downloads/download_wx_img?media_id='+res.serverId,function(data){
+                                //download url
+                                dtd.resolve(data);
+                                var imageUrl = data['download_url'];
+                                var $imageHolder = toShowHolders[index];
+                                var $delete_a = $($imageHolder);
+                                $($imageHolder).html('<img src="'+imageUrl+'"/><div class="comment_delete"></div>');
+                                $($delete_a).attr('href',imageUrl);
+                                i++;
+                                if(i<len){
+                                    doUpload(i);
+                                }
+                            });
+                        },
+                        fail: function(res){
+                            alert(JSON.stringify(res));
+                        }
+                    });
                 }
+                doUpload(i);
                 $.when.apply($,signals).done(function(){
                     var len = arguments.length;
                     for(var i = 0;i<len;i++){
                         var item = arguments[i];
                         if(item['success']){
                             var imageUrl = item['download_url'];
-                            var $imageHolder = toShowHolders[i];
-                            var $delete_a = $($imageHolder);
-                            $($imageHolder).html('<img src="'+imageUrl+'"/><div class="comment_delete"></div>');
-                            $($delete_a).attr('href',imageUrl);
                             $images.push(imageUrl);
                             $data.val($images.join('|'));
                         }
