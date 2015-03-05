@@ -45,5 +45,8 @@ ul.find('li:nth-child(' + (swiper.activeLoopIndex % 4 + 1) + ')').toggleClass('c
 ul.find('li:first').addClass('cur');
 //}, 1000);
 })
+
 {{$this->Html->scriptEnd();}}
+{{if count($Product['Uploadfile'])>1}}
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'), array('block' => 'scriptBottom'));}}
+{{/if}}

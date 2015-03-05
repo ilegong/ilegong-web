@@ -65,6 +65,15 @@ class CategoriesController extends AppController {
 
         $this->setHasOfferBrandIds();
 
+        $mobileTagIds = array(3,5,8,12,9,6,4,10);
+        $mobileTags = $this->findTagsByIds($mobileTagIds);
+        $mobileTags = Hash::combine($mobileTags,'{n}.ProductTag.id','{n}.ProductTag');
+        $this->set('mobile_tag',$mobileTags);
+        $specTagIds = array(13,22,15);
+        $specTags = $this->findTagsByIds($specTagIds);
+        $specTags = Hash::combine($specTags,'{n}.ProductTag.id','{n}.ProductTag');
+        $this->set('spec_tags',$specTags);
+
         $this->pageTitle = $productTag['ProductTag']['name'];
         $navigation = $this->readOrLoadAndCacheNavigations($current_cateid, $this->Category);
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
@@ -77,6 +86,7 @@ class CategoriesController extends AppController {
         $this->set('navigations', $navigation);
         $this->set('data_list', $productList);
         $this->set('withBrandInfo', true);
+        $this->set('page_title',$this->pageTitle);
 
         $this->set('op_cate', OP_CATE_HOME);
 

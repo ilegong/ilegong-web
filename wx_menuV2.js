@@ -1,7 +1,7 @@
 {
     "button":[
     {
-        "name":"朋友推荐",
+        "name":"购买特产",
         "sub_button":[
             {"type": "view",
                 "name": "厨娘帮手",
@@ -16,9 +16,9 @@
                 "url":"http://www.pyshuo.com/subscripts/peng_you_recommend.html"
 
             },
-            { "type":"view",
-                "name":"哈哈哈哈",
-                "url":"http://www.pyshuo.com/subscripts/ha_ha_ha_ha.html"
+            {"type": "view",
+                "name": "购买特产",
+                "url": "http://www.pyshuo.com/users/wx_menu_point?referer_key=CLICK_URL_TECHAN&from=service"
             }
         ]
     },

@@ -112,6 +112,20 @@ class ProductsController extends AppController{
         $fields = array('id','slug','name','content','created');
         $this->set('hideNav',true);
         parent::view($slug,$fields);
+        $pid = $this->current_data_id;
+        $currUid = $this->currentUser['id'];
+        $this->track_share_click();
+        if($this->is_weixin()){
+            if($currUid){
+                $this->loadModel('WxOauth');
+                $signPackage = $this->WxOauth->getSignPackage();
+                $share_string = $currUid.'-'.time().'-rebate-pid_'.$pid;
+                $share_code = authcode($share_string, 'ENCODE', 'SHARE_TID');
+                $this->set('signPackage', $signPackage);
+                $this->set('share_string',urlencode($share_code));
+                $this->set('jWeixinOn', true);
+            }
+        }
     }
 
     function view_shichi_comment($slug){

@@ -175,7 +175,7 @@ a.coupon_applied .glyphicon {
             $('#total_reduced_span').text(utils.toFixed(data.total_reduced, 2));
             $scoreUseAvail.text(data.score_usable);
             $('#score_money').text(data.score_money);
-            $('#score_will_got').text(utils.toFixed(data.total_price * 100));
+            $('#score_will_got').text(utils.toFixed(data.total_price));
             $('#chb_use_score').prop('checked', data.score_used);
         }
 

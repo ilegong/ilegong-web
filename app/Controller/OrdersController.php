@@ -956,7 +956,7 @@ class OrdersController extends AppController{
 //            $good = substr($good,0,strlen($good)-2);
             $mobile_phone = $order_info['Order']['consignee_mobilephone'];
             $brand_name = $brand['Brand']['name'];
-            $msg = '您购买的['.$brand_name.']['.$good.']已经发货，请关注微信pyshuo2014追踪物流信息';
+            $msg = '您在['.$brand_name.']购买的['.$good.']已经发货，请关注微信pyshuo2014追踪物流信息';
             message_send($msg,$mobile_phone);
             echo json_encode(array('order_id'=>$order_id,'msg'=>'订单状态已更新为“已发货”'));
             exit;
