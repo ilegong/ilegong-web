@@ -26,4 +26,4 @@ update cake_comments co, cake_carts ca set co.order_id=ca.order_id where co.data
 ALTER TABLE `cake_comments`
 ADD COLUMN `buy_time` DATETIME NULL AFTER `order_id`;
 
-update cake_comments co,cake_orders orders set co.buy_time=orders.created where co.order_id=orders.id and co.buy_time is not null;
+update cake_comments co,cake_orders orders set co.buy_time=orders.created where co.order_id=orders.id and co.buy_time is null;

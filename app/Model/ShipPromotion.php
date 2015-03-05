@@ -265,7 +265,7 @@ class ShipPromotion extends AppModel {
 //            return ($num >= 5 ? 0 : 8);
 //        }
 
-        return $singleShipFee;
+        return $singleShipFee<0 ? 0:$singleShipFee;
     }
 
     public static function calculate_ship_fee($pss, $total_price, $singleShipFee, $num, &$context) {
