@@ -52,7 +52,9 @@
         {{$product_spec_map}}
         <ul class="standard clearfix">
             {{if $specs_map && !empty($specs_map['choices'])}}
-            <?php foreach($specs_map['choices'] as $label => $values) { ?>
+            <?php foreach($specs_map['choices'] as $label => $values) {
+            if(!empty($label) && !empty($vaLabel)){
+            ?>
             <li>
                 <span class="gray title mr12 spec_label" style="float:left;">{{$label}}:</span>
                             <span class="border" style="display: block;overflow: hidden;">
@@ -63,7 +65,7 @@
                                 <?php } ?>
                             </span>
             </li>
-            <?php } ?>
+            <?php } } ?>
             {{/if}}
             {{if $Product['Product']['id'] == PRODUCT_ID_CAKE && !empty($cake_dates)}}
             <li>
