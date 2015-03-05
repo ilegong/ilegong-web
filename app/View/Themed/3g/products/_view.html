@@ -143,9 +143,9 @@
         {{/if}}
 
         <div class="all_line" id="comment-div">
-                <ul class="clearfix title" style="margin-bottom: 0;" {{if $commet_count>5}}onclick="to_comment();"{{/if}}>
+                <ul class="clearfix title" style="margin-bottom: 0;" {{if $comment_count>5}}onclick="to_comment();"{{/if}}>
                     <li class="fl">口碑评论<span> {{$comment_count}}</span></li>
-                    {{if $commet_count>5}}
+                    {{if $comment_count>5}}
                     <li class="fr"><a class="p_more"></a></li>
                     {{/if}}
                 </ul>
@@ -196,7 +196,7 @@
     function to_shichi(){
         window.location.href="/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}";
     }
-    {{if $commet_count>5}}
+    {{if $comment_count>5}}
         function to_comment(){
             window.location.href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}";
         }
