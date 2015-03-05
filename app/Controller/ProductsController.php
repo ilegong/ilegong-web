@@ -171,7 +171,7 @@ class ProductsController extends AppController{
                     'is_shichi_vote'=>1
                 )
             ));
-            $comment_count = $this->viewdata['Product']['comment_nums'];
+            $comment_count = intval($this->viewdata['Product']['comment_nums']);
             $this->set('shi_chi_comment_count',$shi_chi_comment_count);
             $this->set('comment_count',($comment_count-$shi_chi_comment_count));
             $this->set('limitCommentCount',COMMENT_LIMIT_IN_PRODUCT_VIEW);
