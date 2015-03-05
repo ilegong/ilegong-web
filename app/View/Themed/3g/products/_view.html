@@ -4,7 +4,7 @@
         <div class="p_details_title">{{$Product['Product']['name']}}</div>
         <ul class="p_details_price clearfix">
             <li class="fl price"><span>￥<font>{{$this->Number->precision($price, 2)}}</font></span>{{if $Product['Product']['original_price']}}<em>{{$this->Number->precision($Product['Product']['original_price'], 2)}}</em>{{/if}}</li>
-            <li class="fr stat"><a {{if $comment_count>0}}href="#comment-div"{{/if}} style="color: #333333">评价<span>({{$commet_count}})</span></a></li>
+            <li class="fr stat"><a {{if $comment_count>0}}href="#comment-div"{{/if}} style="color: #333333">评价<span>({{$comment_count}})</span></a></li>
         </ul>
         {{if $hasOfferBrandIds && array_key_exists($Product['Product']['brand_id'], $hasOfferBrandIds)}}
         <ul class="sales clearfix">
@@ -136,7 +136,7 @@
         {{if $is_product_has_shichi}}
         <div class="all_line">
             <ul class="clearfix title" onclick="to_shichi();">
-                <li class="fl">试吃报告</li>
+                <li class="fl">试吃报告<span> {{$shi_chi_comment_count}}</span></li>
                 <li class="fr"><a style="color:#29AC0E;" class="p_more"></a></li>
             </ul>
         </div>
@@ -144,7 +144,7 @@
 
         <div class="all_line" id="comment-div">
                 <ul class="clearfix title" style="margin-bottom: 0;" {{if $commet_count>5}}onclick="to_comment();"{{/if}}>
-                    <li class="fl">口碑评论<span> {{$commet_count}}</span></li>
+                    <li class="fl">口碑评论<span> {{$comment_count}}</span></li>
                     {{if $commet_count>5}}
                     <li class="fr"><a class="p_more"></a></li>
                     {{/if}}

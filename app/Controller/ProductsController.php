@@ -173,7 +173,7 @@ class ProductsController extends AppController{
             ));
             $comment_count = $this->viewdata['Product']['comment_nums'];
             $this->set('shi_chi_comment_count',$shi_chi_comment_count);
-            $this->set('commet_count',($comment_count-$shi_chi_comment_count));
+            $this->set('comment_count',($comment_count-$shi_chi_comment_count));
             $this->set('limitCommentCount',COMMENT_LIMIT_IN_PRODUCT_VIEW);
         }
         if ($pid == PRODUCT_ID_RICE_10) {
