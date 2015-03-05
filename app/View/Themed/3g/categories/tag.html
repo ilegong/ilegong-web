@@ -47,7 +47,7 @@
 		$item['slug'] = $item['slug']?$item['slug']:$item['id'];
 	    ?>
             <li>
-                <a href="{{product_link2($item)}}?history=/categories/tag/{{$flagTag}}.html" style="display:block; background-color:#ffffff; margin-right:10px;">
+                <a href="{{url_colored(product_link2($item).'?history=/categories/tag/'.$flagTag.'.html', 'h5.cate.list')}}" style="display:block; background-color:#ffffff; margin-right:10px;">
                     <img src="{{$this->Html->assetUrl(small_thumb_link($item['coverimg']))}}" border="0" style="display:block; background-color:#ffffff; padding-bottom:0.5em;"/>
                     <div class="item_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;">{{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}{{$item['name']}}<span>有红包</span>
                         {{else}}
@@ -62,7 +62,7 @@
                         </a>
                     </dt>
                     <dt style="display:block;margin-left: 2.3em; float: none;">
-                        <a href="{{product_link2($item)}}">
+                        <a href="{{url_colored(product_link2($item).'?history=/categories/tag/'.$flagTag.'.html', 'h5.cate.list')}}">
                             <span class="brand_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;"dl>{{$brands[$item['brand_id']]['Brand']['name']}}</span>
                             <span class="listprice"><span>¥{{$this->Number->precision($item['price'], 2)}}</span>
                                 {{if !empty($item['original_price'])}}

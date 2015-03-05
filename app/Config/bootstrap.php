@@ -828,6 +828,16 @@ function product_link2($p, $defUri = '/') {
     }
 }
 
+function url_append($url, $name, $value) {
+    if(strpos($url, '?') !== false) {
+        return $url.'&'.urlencode($name).'='.urlencode($value);
+    }else {
+        return $url.'?'.$name.'='.urlencode($value);
+    }
+}
+function url_colored($url, $value) {
+    return url_append($url, '_sl', $value);
+}
 
 function wxDefaultName($name) {
     return notWeixinAuthUserInfo(0, $name);

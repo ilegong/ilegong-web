@@ -59,7 +59,7 @@
     <ul class="clearfix" style="list-style-type: none">
         <li class="fl">
             {{if $daily_special}}
-            <a href="{{product_link($daily_special['ProductSpecial']['product_id'], '/')}}" style="display:block;"><img src="{{'http://s.tongshijia.com/img/u/dailyspecials/'.$daily_special['ProductSpecial']['show_day'].'.jpg';}}" /></a>
+            <a href="{{url_colored(product_link($daily_special['ProductSpecial']['product_id'], '/'), 'h5.home.dailyspecial')}}" style="display:block;"><img src="{{'http://s.tongshijia.com/img/u/dailyspecials/'.$daily_special['ProductSpecial']['show_day'].'.jpg';}}" /></a>
             {{else}}
             <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $spec_tags[13]['slug'] ))}}" style="display:block;"><img src="{{$this->Html->assetUrl('/img/mobile/index/p1.jpg');}}" /></a>
             {{/if}}
@@ -75,11 +75,11 @@
     </strong>
 </div>
 <div class="index_bao">
-    <a href="/products/20150209/Bei_Jing_San.html"><img src="{{$this->Html->assetUrl('/img/mobile/index/d1.jpg?v5')}}" /></a>
-    <a href="/products/20150302/Dong_Bei_Wu_Chang_Dao_Hua_Xiang_Da_Mi_Wu_Chang_Dang_Di_Mi_Chang_Zhuan_Gong_Yue.html"><img src="{{$this->Html->assetUrl('/img/mobile/index/d2.jpg?v6')}}" /></a>
-    <a href="/products/20141110/qi_xia_ping_guo_10jin_zhuang.html"><img src="{{$this->Html->assetUrl('/img/mobile/index/d3.jpg?v5')}}" /></a>
-    <a href="/products/20150131/mi_yun_shui_ku_ye_sheng_gong_yu_man_zi.html"><img src="{{$this->Html->assetUrl('/img/mobile/index/d4.jpg?v5')}}" /></a>
-    <a href="/products/20141205/dong_bei_te_ji_qiu_mu_er.html"><img src="{{$this->Html->assetUrl('/img/mobile/index/d5.jpg?v6')}}" /></a>
+    <a href="{{url_colored('/products/20150209/Bei_Jing_San.html', 'h5.home.recom')}}"><img src="{{$this->Html->assetUrl('/img/mobile/index/d1.jpg?v5')}}" /></a>
+    <a href="{{url_colored('/products/20150302/Dong_Bei_Wu_Chang_Dao_Hua_Xiang_Da_Mi_Wu_Chang_Dang_Di_Mi_Chang_Zhuan_Gong_Yue.html', 'h5.home.recom')}}"><img src="{{$this->Html->assetUrl('/img/mobile/index/d2.jpg?v6')}}" /></a>
+    <a href="{{url_colored('/products/20141110/qi_xia_ping_guo_10jin_zhuang.html', 'h5.home.recom')}}"><img src="{{$this->Html->assetUrl('/img/mobile/index/d3.jpg?v5')}}" /></a>
+    <a href="{{url_colored('/products/20150131/mi_yun_shui_ku_ye_sheng_gong_yu_man_zi.html', 'h5.home.recom')}}"><img src="{{$this->Html->assetUrl('/img/mobile/index/d4.jpg?v5')}}" /></a>
+    <a href="{{url_colored('/products/20141205/dong_bei_te_ji_qiu_mu_er.html', 'h5.home.recom')}}"><img src="{{$this->Html->assetUrl('/img/mobile/index/d5.jpg?v6')}}" /></a>
 </div>
 
 <div class="index_bao_title">
@@ -141,7 +141,7 @@
         var banner_links = [];
         {{loop $bannerItems $key $banner}}
             banners.push('{{$this->Html->assetUrl($banner['mobile_image'])}}');
-            banner_links.push('{{$this->Html->url($banner['detail_url'])}}');
+            banner_links.push('{{url_colored($this->Html->url($banner['detail_url']), "h5.home.banner")}}');
         {{/loop}}
 
         //$(banners).preload();
