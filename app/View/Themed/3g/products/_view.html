@@ -144,7 +144,7 @@
 
         <div class="all_line" id="comment-div">
                 <ul class="clearfix title" style="margin-bottom: 0;" {{if $commet_count>5}}onclick="to_comment();"{{/if}}>
-                    <li class="fl">口碑评论<span> {{$Product['Product']['comment_nums']}}</span></li>
+                    <li class="fl">口碑评论<span> {{$commet_count}}</span></li>
                     {{if $commet_count>5}}
                     <li class="fr"><a class="p_more"></a></li>
                     {{/if}}

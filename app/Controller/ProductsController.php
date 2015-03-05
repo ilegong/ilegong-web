@@ -119,6 +119,21 @@ class ProductsController extends AppController{
         $fields = array('id','slug','name','created');
         $this->set('hideNav',true);
         parent::view($slug,$fields);
+        $currUid = $this->currentUser['id'];
+        $pid = $this->current_data_id;
+        $this->loadModel('OrderShichi');
+        $order_shichi = $this->OrderShichi->find('first', array('conditions' => array('creator' => $currUid, 'data_id' => $pid))); //查找是否有试吃订单
+        $is_product_has_shichi = $this->OrderShichi->find('first',array('conditions' => array('data_id' => $pid)));
+        $this->set('is_product_has_shichi',$is_product_has_shichi);
+        $this->set('order_shichi', $order_shichi);
+
+        $this->loadModel('Order');
+        if (!empty($order_shichi)) {
+            $order_id = $order_shichi['OrderShichi']['order_id'];
+            $order = $this->Order->find('first',array('conditions' => array('id' => $order_id)));
+            $order_shichi_status = $order['Order']['status'];
+            $this->set('order_shichi_status',$order_shichi_status);
+        }
 
     }
 
@@ -153,7 +168,7 @@ class ProductsController extends AppController{
                 'conditions'=>array(
                     'data_id'=>$pid,
                     'status'=>1,
-                    'is_shichi_tuan_comment'=>1
+                    'is_shichi_vote'=>1
                 )
             ));
             $comment_count = $this->viewdata['Product']['comment_nums'];

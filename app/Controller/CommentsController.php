@@ -140,10 +140,10 @@ class CommentsController extends AppController {
     	$model_name = Inflector::classify($model_name);
         //'rating'=>array('1','5','3')
     	$comments = $this->Comment->find('all',array(
-    		 'conditions' => array('Comment.type' => $model_name,'data_id'=>$id,'status'=>1,),
+    		 'conditions' => array('Comment.type' => $model_name,'data_id'=>$id,'status'=>1,'is_shichi_vote'=>0,),
     		 'order' => array('Comment.created DESC'), //定义顺序的字符串或者数组
 		    'limit' => $pagesize, //整型
-		    'page' => $page, //整型    	
+		    'page' => $page, //整型
     	));
 //        $this->loadModel('Shichituan');
         $result = array();
