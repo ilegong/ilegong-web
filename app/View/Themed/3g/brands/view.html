@@ -10,8 +10,8 @@
     <ul class="clearfix list-unstyled">
         <li class="fl">
             <dl class="img_mr">
-                <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}?history={{$back_url}}"><img src="{{small_thumb_link($item['coverimg'])}}" /></a></dt>
-                <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}?history={{$back_url}}" class="title">{{usubstr($item['name'],0,10,'')}}</a></dt>
+                <dt><a href="{{url_colored($this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html?history='.$back_url), 'h5.store.list')}}"><img src="{{small_thumb_link($item['coverimg'])}}" /></a></dt>
+                <dt><a href="{{url_colored($this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html?history='.$back_url), 'h5.store.list')}}" class="title">{{usubstr($item['name'],0,10,'')}}</a></dt>
                 <dt>
                     <span class="fl current_price">￥{{$this->Number->precision($item['price'], 2)}}</span>
                     <span class="fl original_price">{{if $item['original_price']}}{{￥.$this->Number->precision($item['original_price'], 2)}}{{/if}}</span>
@@ -20,8 +20,8 @@
         </li>
         <li class="fl">
             <dl class="img_mr">
-                <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item2['created'])).'/'.$item2['slug'].'.html')}}?history={{$back_url}}"><img src="{{small_thumb_link($item2['coverimg'])}}"/></a></dt>
-                <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item2['created'])).'/'.$item2['slug'].'.html')}}?history={{$back_url}}" class="title">{{usubstr($item2['name'],0,10,'')}}</a></dt>
+                <dt><a href="{{url_colored($this->Html->url('/products/'.date('Ymd',strtotime($item2['created'])).'/'.$item2['slug'].'.html?history='.$back_url), 'h5.store.list')}}"><img src="{{small_thumb_link($item2['coverimg'])}}"/></a></dt>
+                <dt><a href="{{url_colored($this->Html->url('/products/'.date('Ymd',strtotime($item2['created'])).'/'.$item2['slug'].'.html?history='.$back_url), 'h5.store.list')}}" class="title">{{usubstr($item2['name'],0,10,'')}}</a></dt>
                 <dt>
                     <span class="fl current_price">￥{{$this->Number->precision($item2['price'], 2)}}</span>
                     <span class="fl original_price">{{if $item['original_price']}}{{￥.$this->Number->precision($item2['original_price'], 2)}}{{/if}}</span>
@@ -35,8 +35,8 @@
     <ul class="clearfix">
         <li class="fl">
             <dl class="img_mr">
-                <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}?history={{$back_url}}"><img src="{{small_thumb_link($item['coverimg'])}}" /></a></dt>
-                <dt><a href="{{$this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html')}}?history={{$back_url}}" class="title">{{usubstr($item['name'],0,10,'')}}</a></dt>
+                <dt><a href="{{url_colored($this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html?history='.$back_url), 'h5.store.list')}}"><img src="{{small_thumb_link($item['coverimg'])}}" /></a></dt>
+                <dt><a href="{{url_colored($this->Html->url('/products/'.date('Ymd',strtotime($item['created'])).'/'.$item['slug'].'.html?history='.$back_url), 'h5.store.list')}}" class="title">{{usubstr($item['name'],0,10,'')}}</a></dt>
                 <dt>
                     <span class="fl current_price">￥{{$this->Number->precision($item['price'], 2)}}</span>
                     <span class="fl original_price">{{if $item['original_price']}}{{￥.$this->Number->precision($item['original_price'], 2)}}{{/if}}</span>
