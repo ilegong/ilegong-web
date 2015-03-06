@@ -38,41 +38,10 @@
     </ul>
 </div>
 {{if $jWeixinOn}}
-<script>
-    wx.ready(function () {
-        var share_string = '{{$share_string ? $share_string :"0"}}';
-        var to_timeline_title = "{{$Product['Product']['name']}}" + "{{empty($Product['Product'][promote_name])?'，'.$Product['Product'][promote_name]:''}}。" + "现价{{$this->Number->precision($price, 2)}}元" + "{{$special_desc}}";
-        var to_friend_title = "{{$Product['Product']['name']}}";
-        var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
-        var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
-        var imgUrl = "{{$this->Html->assetUrl(small_thumb_link($Product['Product']['coverimg']))}}";
-        var desc = "{{empty($Product['Product']['promote_name']) ? '' : $Product['Product']['promote_name'].'。'}}现价{{$this->Number->precision($price, 2)}}元。{{$special_desc}}";
-        wx.onMenuShareAppMessage({
-            title: to_friend_title,
-            desc: desc,
-            link: to_friend_link,
-            imgUrl: imgUrl,
-            success: function () {
-                // 用户确认分享后执行的回调函数
-                if(share_string != '0'){
-                   setTimeout(500, function(){
-                       $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
-                   });
-                }
-            }
-        });
-        wx.onMenuShareTimeline({
-            title: to_timeline_title,
-            link: to_timeline_link,
-            imgUrl: imgUrl,
-            success: function () {
-                if(share_string != '0'){
-                    setTimeout(500, function(){
-                        $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
-                    });
-                }
-            }
-        });
-    })
-</script>
+{{$this->element('wx_share_product', array(
+'share_string' => $share_string,
+'Product' => $Product,
+'price' => $price,
+'special_desc' => $special_desc,
+)); }}
 {{/if}}

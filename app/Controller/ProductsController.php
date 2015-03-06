@@ -112,19 +112,13 @@ class ProductsController extends AppController{
         $fields = array('id','slug','name','content','created');
         $this->set('hideNav',true);
         parent::view($slug,$fields);
+
+
         $pid = $this->current_data_id;
         $currUid = $this->currentUser['id'];
-        $this->track_share_click();
-        if($this->is_weixin()){
-            if($currUid){
-                $this->loadModel('WxOauth');
-                $signPackage = $this->WxOauth->getSignPackage();
-                $share_string = $currUid.'-'.time().'-rebate-pid_'.$pid;
-                $share_code = authcode($share_string, 'ENCODE', 'SHARE_TID');
-                $this->set('signPackage', $signPackage);
-                $this->set('share_string',urlencode($share_code));
-                $this->set('jWeixinOn', true);
-            }
+        $this->calculate_price_limitation($pid, $currUid);
+        if ($this->is_weixin()) {
+            $this->prepare_wx_sharing($currUid, $pid);
         }
     }
 
@@ -156,6 +150,13 @@ class ProductsController extends AppController{
         $fields = array('id','slug','name','content','created');
         $this->set('hideNav',true);
         parent::view($slug,$fields);
+
+        $pid = $this->current_data_id;
+        $currUid = $this->currentUser['id'];
+        $this->calculate_price_limitation($pid, $currUid);
+        if ($this->is_weixin()) {
+            $this->prepare_wx_sharing($currUid, $pid);
+        }
     }
 
     function view($slug='/'){
@@ -211,71 +212,8 @@ class ProductsController extends AppController{
 
         $brandId = $this->viewdata['Product']['brand_id'];
 
-
-        $this->loadModel('SpecialList');
-        $specialLists = $this->SpecialList->has_special_list($pid);
-        if (!empty($specialLists)) {
-            foreach ($specialLists as $specialList) {
-                if ($specialList['type'] == 1) {
-                    $special = $specialList;
-                    break;
-                }
-            }
-        }
-
-        $this->log("view product:".$pid.", specialLists=".json_encode($specialLists));
-
-        $use_special = false;
-        $price = $this->viewdata['Product']['price'];
         $currUid = $this->currentUser['id'];
-        if (!empty($special) && $special['special']['special_price'] >= 0) {
-
-            $special_rg = range_by_special($special);
-            if (empty($special_rg) || in_range($special_rg)) {
-                //TODO: check time (current already checked)
-                //CHECK time limit!!!!
-                list($afford_for_curr_user, $left_cur_user, $total_left) =
-                    calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
-
-                $this->log('view product afford(special): for_curr_user=' . $afford_for_curr_user . ', left_cur_user=' . $left_cur_user . ', total_left=' . $total_left . ', range=' . json_encode($special_rg) . ', uid=' . $currUid);
-
-                $promo_name = $special['name'];
-                $special_least_num = $special['special']['least_num'];
-                $special_price = $special['special']['special_price'] / 100;
-                App::uses('CakeNumber', 'Utility');
-                $promo_desc = ($special_least_num > 0 ? '满' . $special_least_num . '件' : '') . '￥' . CakeNumber::precision($special_price, 2);
-                if ($special['special']['limit_total'] > 0) {
-                    $promo_desc .= ' 限' . $special['special']['limit_total'] . '件';
-                }
-                if ($special['special']['limit_per_user'] > 0) {
-                    $promo_desc .= ' 每人限' . $special['special']['limit_per_user'] . '件';
-                }
-                if ($afford_for_curr_user) {
-                    if ($special_least_num <= 0) {
-                        $price = $special_price;
-                    }
-                    $use_special = true;
-                } else {
-                    $promo_desc .= '(' . ($left_cur_user == 0 ? '您已买过' : '已抢完') . ')';
-                }
-                $this->set('special_desc', $promo_desc);
-                $this->set('special_name', $promo_name);
-                $this->set('special_slug', $special['slug']);
-                $this->set('show_special_link', $special['visible'] > 0);
-            }
-        }
-
-        if (!$use_special) {
-            list($afford_for_curr_user, $left_cur_user, $total_left) = self::__affordToUser($pid, $currUid);
-            $this->log('view product afford(not special): for_curr_user=' . $afford_for_curr_user . ', left_cur_user=' . $left_cur_user . ', total_left=' . $total_left . ', uid=' . $currUid);
-        }
-
-        $this->set('price', $price);
-
-        //possible problem
-        $this->set('limit_per_user', $left_cur_user);
-        $this->set('total_left', $total_left);
-        $this->set('afford_for_curr_user', $afford_for_curr_user);
+        list($price, $afford_for_curr_user, $left_cur_user, $total_left) = $this->calculate_price_limitation($pid, $currUid);
 
         $specs_map = product_spec_map($this->viewdata['Product']['specs']);
         if (!empty($specs_map['map'])) {
@@ -352,13 +290,11 @@ class ProductsController extends AppController{
             }
         }
 
-        $currentUser = $_SESSION['Auth']['User'];
-        if($currentUser){
+        if($currUid){
             $this->loadModel('ViewedProduct');
-            $userId = $currentUser['id'];
             $browsingHistoryProductsData = $this->ViewedProduct->find('first',
                 array(
-                    'conditions' => array('uid' => $userId),
+                    'conditions' => array('uid' => $currUid),
                 )
             );
             $cur = current($browsingHistoryProductsData);
@@ -393,14 +329,14 @@ class ProductsController extends AppController{
         $this->set('browsing_history_products',$browsingHistoryProducts);
 
         $this->set('browsing_history_ids',$browsing_history);
-        if(count($browsing_history)>9){
+        if(count($browsing_history)>30){
             array_shift($browsing_history);
         }
         array_push($browsing_history,$this->viewdata['Product']['id']);
-        if($currentUser){
+        if($currUid){
             $this->ViewedProduct->id = $viewedDataId;
             $this->ViewedProduct->save(array(
-                'uid'=>$userId,
+                'uid'=>$currUid,
                 'browsing_history'=>join($browsing_history,',')
             ));
         }
@@ -429,15 +365,7 @@ class ProductsController extends AppController{
         $this->set('category_control_name', 'products');
         $this->track_share_click();
         if($this->is_weixin()){
-            if($currUid){
-                $this->loadModel('WxOauth');
-                $signPackage = $this->WxOauth->getSignPackage();
-                $share_string = $currUid.'-'.time().'-rebate-pid_'.$pid;
-                $share_code = authcode($share_string, 'ENCODE', 'SHARE_TID');
-                $this->set('signPackage', $signPackage);
-                $this->set('share_string',urlencode($share_code));
-                $this->set('jWeixinOn', true);
-            }
+            $this->prepare_wx_sharing($currUid, $pid);
         }
     }
 
@@ -450,6 +378,7 @@ class ProductsController extends AppController{
     }
 
     /**
+     * @param $productId
      * @return mixed
      */
     private function findTagsByProduct($productId) {
@@ -588,6 +517,99 @@ class ProductsController extends AppController{
             $history='/';
         }
         $this->set('history',$history);
+    }
+
+    /**
+     * @param $currUid
+     * @param $pid
+     */
+    protected function prepare_wx_sharing($currUid, $pid) {
+
+        $currUid = empty($currUid) ? 0 : $currUid;
+
+        $share_string = $currUid . '-' . time() . '-rebate-pid_' . $pid;
+        $share_code = authcode($share_string, 'ENCODE', 'SHARE_TID');
+
+        $oauthM = ClassRegistry::init('WxOauth');
+        $signPackage = $oauthM->getSignPackage();
+        $this->set('signPackage', $signPackage);
+        $this->set('share_string', urlencode($share_code));
+        $this->set('jWeixinOn', true);
+    }
+
+    /**
+     * @param $pid
+     * @param $currUid
+     * @return array
+     */
+    protected function calculate_price_limitation($pid, $currUid) {
+
+        $this->loadModel('SpecialList');
+        $specialLists = $this->SpecialList->has_special_list($pid);
+        if (!empty($specialLists)) {
+            foreach ($specialLists as $specialList) {
+                if ($specialList['type'] == 1) {
+                    $special = $specialList;
+                    break;
+                }
+            }
+        }
+
+        $this->log("view product:".$pid.", specialLists=".json_encode($specialLists));
+
+        $use_special = false;
+        $price = $this->viewdata['Product']['price'];
+        if (!empty($special) && $special['special']['special_price'] >= 0) {
+
+            $special_rg = range_by_special($special);
+            if (empty($special_rg) || in_range($special_rg)) {
+                //TODO: check time (current already checked)
+                //CHECK time limit!!!!
+                list($afford_for_curr_user, $left_cur_user, $total_left) =
+                    calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
+
+                $this->log('view product afford(special): for_curr_user=' . $afford_for_curr_user . ', left_cur_user=' . $left_cur_user . ', total_left=' . $total_left . ', range=' . json_encode($special_rg) . ', uid=' . $currUid);
+
+                $promo_name = $special['name'];
+                $special_least_num = $special['special']['least_num'];
+                $special_price = $special['special']['special_price'] / 100;
+                App::uses('CakeNumber', 'Utility');
+                $promo_desc = ($special_least_num > 0 ? '满' . $special_least_num . '件' : '') . '￥' . CakeNumber::precision($special_price, 2);
+                if ($special['special']['limit_total'] > 0) {
+                    $promo_desc .= ' 限' . $special['special']['limit_total'] . '件';
+                }
+                if ($special['special']['limit_per_user'] > 0) {
+                    $promo_desc .= ' 每人限' . $special['special']['limit_per_user'] . '件';
+                }
+                if ($afford_for_curr_user) {
+                    if ($special_least_num <= 0) {
+                        $price = $special_price;
+                    }
+                    $use_special = true;
+                } else {
+                    $promo_desc .= '(' . ($left_cur_user == 0 ? '您已买过' : '已抢完') . ')';
+                }
+                $this->set('special_desc', $promo_desc);
+                $this->set('special_name', $promo_name);
+                $this->set('special_slug', $special['slug']);
+                $this->set('show_special_link', $special['visible'] > 0);
+            }
+        }
+
+        if (!$use_special) {
+            list($afford_for_curr_user, $left_cur_user, $total_left) = self::__affordToUser($pid, $currUid);
+            $this->log('view product afford(not special): for_curr_user=' . $afford_for_curr_user . ', left_cur_user=' . $left_cur_user . ', total_left=' . $total_left . ', uid=' . $currUid);
+        }
+
+
+        $this->set('price', $price);
+
+        //possible problem
+        $this->set('limit_per_user', $left_cur_user);
+        $this->set('total_left', $total_left);
+        $this->set('afford_for_curr_user', $afford_for_curr_user);
+
+        return array($price, $afford_for_curr_user, $left_cur_user, $total_left);
     }
 
 }

@@ -92,6 +92,9 @@ class CategoriesController extends AppController {
 
         $this->set('_serialize', array('brands', 'data_list', 'sub_title'));
         $this->set('history',$_REQUEST['history']);
+
+
+
     }
 
     public function special_list($slug) {

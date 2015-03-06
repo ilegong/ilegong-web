@@ -1,11 +1,11 @@
 <div class="classlist_v2" style="z-index:1">
-    <ul class="clearfix" onclick="back('/products/{{date('Ymd',strtotime($Product['Product']['created']))}}/{{$Product['Product']['slug']}}.html?history={{$history}}')">
+    <ul class="clearfix" onclick="back('back')">
         <li><a class="back"></a></li>
         <li class="line"></li>
         <li style="text-overflow: ellipsis;"><strong><?php echo mb_substr($Product['Product']['name'],0,13); ?></strong></li>
     </ul>
 </div>
-<div class="container" style="margin-top: 50px;">
+<div class="container" style="margin-top: 50px;padding-bottom:5em">
     <div class="Content-body">
         <div class="clear"></div>
         <?php echo $Product['Product']['content']; ?>
@@ -18,14 +18,9 @@
             <a href="#X" class="love_icon"></a>
             <!--<p>关注</p>-->
         </li>
-        <li class="fl" style="width:34%;">
+        <li class="fl" style="width:68%;">
             <div style="margin-right:3%;">
-                <a id="btn_quick_buy_1" item-id="{{$Product['Product']['id']}}" onclick="back('/products/{{date('Ymd',strtotime($Product['Product']['created']))}}/{{$Product['Product']['slug']}}.html?history={{$history}}')" class="btn_b pay_bg radius10">立即购买</a>
-            </div>
-        </li>
-        <li class="fl" style="width:34%;">
-            <div style="margin-left:3%;">
-                <a id="btn_add_cart_1"  item-id="{{$Product['Product']['id']}}" onclick="back('/products/{{date('Ymd',strtotime($Product['Product']['created']))}}/{{$Product['Product']['slug']}}.html?history={{$history}}')" class="btn_b shopping_bg radius10">加入购物车</a>
+                <a onclick="back('buy')" class="btn_b pay_bg radius10">去购买</a>
             </div>
         </li>
         <li class="shopping fr">
@@ -35,47 +30,19 @@
     </ul>
 </div>
 <script>
-    function back(url){
-        window.location.href=url;
+    function back(flag){
+        if (flag == 'buy') {
+            window.location.href = "{{url_colored(url_append(product_link2($Product), 'history', $history), 'h5.product_de.buy')}}";
+        } else if (flag == 'back') {
+            window.location.href = "{{url_colored(url_append(product_link2($Product), 'history', $history), 'h5.product_de.back')}}"
+        }
     }
 </script>
- {{if $jWeixinOn}}
- <script>
-     wx.ready(function () {
-         var  url ='http://www.tongshijia.com/products/{{date('Ymd',strtotime($Product['Product']['created']))}}/{{$Product['Product']['slug']}}.html?history={{$history}}';
-         var share_string = '{{$share_string ? $share_string :"0"}}';
-         var to_timeline_title = "{{$Product['Product']['name']}}" + "{{empty($Product['Product'][promote_name])?'，'.$Product['Product'][promote_name]:''}}。" + "现价{{$this->Number->precision($Product['Product']['price'], 2)}}元" + "{{$special_desc}}";
-         var to_friend_title = "{{$Product['Product']['name']}}";
-         var to_friend_link = url  + '&share_type=appMsg';
-         var to_timeline_link = url + '&share_type=timeline';
-         var imgUrl = "{{$this->Html->assetUrl(small_thumb_link($Product['Product']['coverimg']))}}";
-         var desc = "{{empty($Product['Product']['promote_name']) ? '' : $Product['Product']['promote_name'].'。'}}现价{{$this->Number->precision($price, 2)}}元。{{$special_desc}}";
-         wx.onMenuShareAppMessage({
-             title: to_friend_title,
-             desc: desc,
-             link: to_friend_link,
-             imgUrl: imgUrl,
-             success: function () {
-                 // 用户确认分享后执行的回调函数
-                 if(share_string != '0'){
-                     setTimeout(500, function(){
-                         $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
-                     });
-                 }
-             }
-         });
-         wx.onMenuShareTimeline({
-             title: to_timeline_title,
-             link: to_timeline_link,
-             imgUrl: imgUrl,
-             success: function () {
-                 if(share_string != '0'){
-                     setTimeout(500, function(){
-                         $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
-                     });
-                 }
-             }
-         });
-     })
- </script>
- {{/if}}
+{{if $jWeixinOn}}
+{{$this->element('wx_share_product', array(
+'share_string' => $share_string,
+'Product' => $Product,
+'price' => $price,
+'special_desc' => $special_desc,
+)); }}
+{{/if}}
