@@ -16,7 +16,7 @@
           content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}"/>
     <link rel="apple-touch-icon" href="{{$this->Html->assetUrl('/img/logo_mini.png')}}" />
     <title>{{$pageTitle}}-{{$site['title']}}</title>
-    {{$this->Html->css(array('http://'.WX_HOST.'/css/bootstrap_2.css?v1', 'layout_3g.css?ver36',));}}
+    {{$this->Html->css(array('http://'.WX_HOST.'/css/bootstrap_2.css?v1', 'layout_3g.css?ver37',));}}
     <!--<script type="text/javascript" name="baidu-tc-cerfication" data-appid="5181580" src="http://apps.bdimg.com/cloudaapi/lightapp.js"></script>-->
 
     <style>
@@ -24,9 +24,9 @@
             margin-right: 0;
         }
         .shopping_icon{ width:3em; height:1.9em; background:url('{{$this->Html->assetUrl("/img/mobilev1/pyshuo_icon.png?xx")}}') -5em -15em no-repeat; background-size:25em 25em; display:block; margin:0 auto; text-decoration:none;}
-        .shopping_count{ position:absolute; right:3px; top:2px; width:14px; text-align:center; color:#ffffff; font-size:1em;}
+        .shopping_count{ position:absolute; right:3px; top:2px; width:14px; text-align:center; color:#ffffff; font-size:1em;display: none;}
     </style>
-    {{$this->Html->css(array('mobile-view.css?v=3.5',))}}
+    {{$this->Html->css(array('mobile-view.css?v4.0',))}}
     {{$this->Html->script(array(
     'http://libs.baidu.com/jquery/1.9.1/jquery.min.js',
     'jquery/jquery.cookie.js','i18n/language-zh-CN.js'));}}
@@ -96,7 +96,7 @@
 <body style="background-color: #F5F5F5">
 {{if !$hideNav }}
 <div id="div_navbar" class="navbar-fixed-bottom navbar-v1" style="margin-bottom:0; padding-top: 0; margin-right: 0; z-index: 10">
-    <div class="container">
+    <div class="container" style="padding-right: 0px;">
         <ul class="list-inline">
             <li><a class="home {{if $op_cate == 'home'}}active{{/if}}" href="/techan.html"><span class="op-icon {{if $op_cate == 'home'}}op-icon-active{{/if}}"></span><span>首页</span></a></li>
             <li><a class="share {{if $op_cate == 'share'}}active{{/if}}" href="/share.html"><span class="op-icon {{if $op_cate == 'share'}}op-icon-active{{/if}}"></span><span>分享圈</span></a></li>

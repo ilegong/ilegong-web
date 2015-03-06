@@ -61,7 +61,7 @@
                         <img class="radius10" src="{{$this->Html->assetUrl(small_thumb_link($brands[$item['brand_id']]['Brand']['coverimg']))}}" border="0" />
                         </a>
                     </dt>
-                    <dt style="display:block;margin-left: 2.3em; float: none;">
+                    <dt style="display:block;margin-left: 2em; float: none; line-height: 1.2em;">
                         <a href="{{url_colored(product_link2($item).'?history=/categories/tag/'.$flagTag.'.html', 'h5.cate.list')}}">
                             <span class="brand_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;"dl>{{$brands[$item['brand_id']]['Brand']['name']}}</span>
                             <span class="listprice"><span>¥{{$this->Number->precision($item['price'], 2)}}</span>
@@ -84,18 +84,18 @@
         var container=$('#tag-product-list');
         var width = container.width();
         var lis = $('#tag-product-list li');
-        var itemWidth=(width-10)/2;
+        var itemWidth=(width-6)/2;
         //it can to use imagesLoaded and try to call wookmart two
         lis.wookmark({
             itemWidth:itemWidth,
             container:container,
             autoResize: false,
-            flexibleWidth: '40%',
-            offset: 7,
+            flexibleWidth: '50%',
+            offset: 6,
             align: 'center',
             direction: 'right',
             outerOffset: 0,
-            fillEmptySpace: true,
+            fillEmptySpace: false,
             resizeDelay: 0
         });
         $(window).load(function(){
@@ -103,14 +103,15 @@
                 itemWidth:itemWidth,
                 container:container,
                 autoResize: false,
-                flexibleWidth: '40%',
-                offset: 7,
+                flexibleWidth: '50%',
+                offset: 6,
                 align: 'center',
                 direction: 'right',
                 outerOffset: 0,
-                fillEmptySpace: true,
+                fillEmptySpace: false,
                 resizeDelay: 0
             });
+            //margin-bottom: 0;margin-top: 0;
             $('div.wookmark-placeholder').remove();
         });
     });

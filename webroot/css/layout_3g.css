@@ -160,11 +160,19 @@ ul.tags_menu {
 /* New UI version */
 footer { font-size:0.833em; line-height:1.167em; text-align:center; color:#999999; margin-top:4em; margin-bottom: 5.2em}
 footer img{ width:4.625em; height:1.583em;}
-
-.navbar-v1 { font-size: 1em; background-color: #f1f1f1; border-top: 1px #dddddd solid; height: 4.0417em; padding-top: 0.4em; }
+.navbar-v1 {
+    font-size: 0.9em;
+    background-color: #f1f1f1;
+    border-top: 1px #dddddd solid;
+    height: 3.8em;
+}
 .navbar-v1 a .op-icon { background: url('/img/mobilev1/pyshuo_icon.png?xx') 0 0 no-repeat; width:1.9167em; height:1.5em; background-size:25em 25em; display: inline-block; vertical-align: text-bottom; }
 .navbar-v1 ul { text-align: center; }
-.navbar-v1 li { width: 18.0%; }
+.navbar-v1 li {
+    width: 19.0%;
+    margin-top: -3px;
+    padding: 0;
+}
 .navbar-v1 a span { display: block;}
 .navbar-v1 a { color:#666666;}
 .navbar-v1 a.active { color: #29ac0e; }
@@ -270,7 +278,11 @@ ul li{ list-style:none;}
 .classlist_v2 ul li a.back {display: block; width: 1.2em; height: 1.5em; background: url('/img/mobile/pyshuo_icon.png?xxz') no-repeat -1.5em -20.25em; background-size: 30em 30em; margin-top: 0.6em; margin-right: 0.7em; margin-left: 0.5em;}
 .classlist_v2 ul li.line {height: 3em;width: 1px;border-right: 1px #dddddd solid;margin-right: 1em;font-size:1em;}
 .classlist_good { margin-top:3em; margin-bottom:1em;}
-.classlist_good ul li{float:left; width:50%; text-align:center; margin-top:0.8em;}
+.classlist_good ul li {
+    float: left;
+    width: 50%;
+    text-align: center;
+}
 .classlist_good ul li.last { border-right: none;}
 .classlist_good ul li img{text-align:center; width:100%;}
 .classlist_good ul li .brand_name, .classlist_good ul li .item_name {
@@ -282,11 +294,11 @@ ul li{ list-style:none;}
 .classlist_good ul li .item_name{font-size:1em; padding-top:0.1em;}
 .classlist_good ul li .item_name span{ font-size:0.6em; padding:0.1em 0.2em; background-color:#29ac0e; color:#ffffff;}
 .classlist_good ul li dl {
-    padding: 0.1em 0.5em 0.6em 0.5em;
+    padding: 0.1em 0.5em 0.3em 0.5em;
     background-color: #ffffff;
 }
 .classlist_good ul li dl dt{ float:left;}
-.classlist_good ul li dl dt img{ width:2.25em; height:2.3em;}
+.classlist_good ul li dl dt img{ width:2.1em; height:2.1em;}
 .classlist_good ul li .brand_name{ font-size:0.85em; color:#999999; font-weight:normal; display: block}
 .classlist_good ul li .listprice {
     font-size: 1em;
@@ -298,7 +310,7 @@ ul li{ list-style:none;}
 }
 .classlist_good ul li .brand_name{padding-top:0.1em;}
 .classlist_good ul li .listprice .original{ font-size: 0.9em; color:#999999; text-decoration:line-through;}
-.classlist_good ul li .listprice span{ color:#ff9000; font-size:1.25em;}
+.classlist_good ul li .listprice span{ color:#ff9000;}
 
 /* Brands */
 .shop_intro{ padding:0.833em; background-color:#eeeeee;}
