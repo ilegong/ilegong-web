@@ -94,17 +94,41 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label" for="ProductSpecs">购买可选项</label>
-            <div class="col-sm-9 controls">
-                <input type="text"  class="form-control" id="product_tag_name" placeholder="购买可选项">
+            <label class="col-sm-2 control-label" >购买可选项</label>
+            <div class="col-sm-3 controls" name="spec-tag">
+                <div class="col-xs-8">
+                    <select class="form-control" name="spec-1">
+
+                    </select>
+                </div>
+                <br/>
+                <br/>
+                <input type="text" name="tags-1">
+            </div>
+            <div class="col-sm-3 controls" name="spec-tag">
+                <div class="col-xs-8">
+                    <select class="form-control" name="spec-2">
+
+                    </select>
+                </div>
+                <br/>
+                <br/>
+                <input type="text" name="tags-2">
+            </div>
+            <div class="col-sm-3 controls" name="spec-tag">
+                <div class="col-xs-8">
+                    <select class="form-control" name="spec-3">
+
+                    </select>
+                </div>
+                <br/>
+                <br/>
+                <input type="text" name="tags-3">
             </div>
         </div>
         <div class="form-group">
-            <input type="hidden" value="" id="product_specs" name="data[Product][specs]" />
-            <div class="col-sm-9 controls col-sm-offset-2">
-                <input id="spec_tags" type="text" class="tags">
-                <p class="help-block">结果<pre id="json_spec_str">{"map": {}, "choices": { "规格": []}}
-                </pre></p>
+            <div class="col-sm-9 controls col-sm-offset-3">
+
             </div>
         </div>
 
@@ -119,7 +143,7 @@
         </div>
 
         <div class="form-group">
-            <div class="col-sm-9 col-sm-offset-2"><input class="btn btn-primary" type="submit" value="提交"></div>
+            <div class="col-sm-9 col-sm-offset-2"><input id="submit-btn" class="btn btn-primary" type="submit" value="提交"></div>
         </div>
     </form>
 
@@ -132,9 +156,9 @@
     'swfupload/handlers.js',
     'tag_input/jquery.tagsinput.min.js',
     '/js/json2.js',
-    'product_spec.js?2',
     'jquery.validate.min.js',
     'store.js?v1',
+    'edit_product_spec.js',
     ))}}
 
     <script>

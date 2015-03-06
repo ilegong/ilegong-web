@@ -178,6 +178,8 @@ class StoresController extends AppController
                 $this->Product->create();
                 $p =$this->Product->save($this->data);
                 if ($p) {
+                    //save product spec
+                    $this->save_product_spec($p['Product']['id']);
                     //保存上传的附件；形如 data[Uploadfile][39][id] , data[Uploadfile][39][name]
                     if (isset($this->data['Uploadfile']) && is_array($this->data['Uploadfile'])) {
                         $this->loadModel('Uploadfile');
@@ -239,6 +241,8 @@ class StoresController extends AppController
             } else {
                 $p =$this->Product->save($this->data);
                 if ($p) {
+                    //save product spec
+                    $this->save_product_spec($p['id']);
                     //保存上传的附件；形如 data[Uploadfile][39][id] , data[Uploadfile][39][name]
                     if (isset($this->data['Uploadfile']) && is_array($this->data['Uploadfile'])) {
                         $this->loadModel('Uploadfile');
@@ -595,9 +599,10 @@ class StoresController extends AppController
         ) {
             $error = "不能编辑所属商家Id";
         } else if ($this->data['Product']['published'] == PUBLISH_YES) {
-            if (empty($this->data['Product']['coverimg'])) {
-                $error = '上架产品的图片不能为空';
-            } else if (empty($this->data['Product']['name'])) {
+//            if (empty($this->data['Product']['coverimg'])) {
+//                $error = '上架产品的图片不能为空';
+//            } else
+                if (empty($this->data['Product']['name'])) {
                 $error = '请设置产品的标题，最多不超过8个字';
             } else if (empty($this->data['Product']['price']) || $this->data['Product']['price'] < 0.01) {
                 $error = '上架产品的价格最低为1分钱';
@@ -842,5 +847,26 @@ class StoresController extends AppController
         } else {
             $this->__message("您没有权限进行操作", '/stores/index');
         }
+    }
+
+    public function save_product_spec($pid,$isEdit=false){
+        $this->loadModel('ProductSpec');
+        if($isEdit){
+            //delete before data
+            $this->ProductSpec->deleteAll(array('product_id'=>$pid));
+        }
+        $data = array();
+        //product max spec
+        foreach(range(1,3) as $index){
+            $p_attr = $_REQUEST['spec-'.$index];
+            $p_tag=$_REQUEST['tags-'.$index];
+            if(!empty($p_attr)&&!empty($p_tag)&&$p_attr!='0'){
+                $tag_array = explode(',',$p_tag);
+                foreach($tag_array as $tag){
+                    $data[] = array('name'=>$tag,'product_id'=>$pid,'attr_id'=>$p_attr);
+                }
+            }
+        }
+        $this->ProductSpec->saveAll($data);
     }
 }
