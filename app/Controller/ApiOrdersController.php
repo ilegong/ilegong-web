@@ -235,7 +235,8 @@ class ApiOrdersController extends AppController {
         if (!empty($pid)) {
             $productM = ClassRegistry::init('Product');
             $pro = $productM->findById($pid);
-            if (!empty($pro) && $pro['Product']['deleted'] == DELETED_NO && $pro['Product']['published'] == PUBLISH_YES) {
+            //&& $pro['Product']['published'] == PUBLISH_YES
+            if (!empty($pro) && $pro['Product']['deleted'] == DELETED_NO) {
                 $this->set('content',array('Product' => array('id' => $pid, 'content' => $pro['Product']['content'])));
             }
 
