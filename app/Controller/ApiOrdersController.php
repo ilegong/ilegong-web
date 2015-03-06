@@ -173,7 +173,8 @@ class ApiOrdersController extends AppController {
             $is_limit_ship = ClassRegistry::init('ShipPromotion')->is_limit_ship($pid);
             $productM = ClassRegistry::init('Product');
             $pro = $productM->findById($pid);
-            if (!empty($pro) && $pro['Product']['deleted'] == DELETED_NO && $pro['Product']['published'] == PUBLISH_YES) {
+            //&& $pro['Product']['published'] == PUBLISH_YES
+            if (!empty($pro) && $pro['Product']['deleted'] == DELETED_NO) {
                 unset($pro['Product']['content']);
                 unset($pro['Product']['saled']);
                 unset($pro['Product']['storage']);
