@@ -85,19 +85,10 @@
         var width = container.width();
         var lis = $('#tag-product-list li');
         var itemWidth=(width-6)/2;
+        var $footer = $('footer');
         //it can to use imagesLoaded and try to call wookmart two
-        lis.wookmark({
-            itemWidth:itemWidth,
-            container:container,
-            autoResize: false,
-            flexibleWidth: '50%',
-            offset: 6,
-            align: 'center',
-            direction: 'right',
-            outerOffset: 0,
-            fillEmptySpace: false,
-            resizeDelay: 0
-        });
+        utils.progress_notify('页面加载中...');
+        $footer.hide();
         $(window).load(function(){
             lis.wookmark({
                 itemWidth:itemWidth,
@@ -113,6 +104,8 @@
             });
             //margin-bottom: 0;margin-top: 0;
             $('div.wookmark-placeholder').remove();
+            utils.close_notify();
+            $footer.show();
         });
     });
 
