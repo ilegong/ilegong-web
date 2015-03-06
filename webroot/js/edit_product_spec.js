@@ -26,6 +26,7 @@ $(function(){
         if($.inArray(currVal,hasSelectAttr)<0){
             hasSelectAttr = removeA(hasSelectAttr,before);
             if(currVal!=0){
+                me.attr('before-value',currVal);
                 hasSelectAttr.push(currVal);
             }
         }else{
