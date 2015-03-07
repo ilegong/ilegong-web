@@ -272,6 +272,7 @@ class StoresController extends AppController
             //get specs
             $this->set('product_attrs',ProductSpeciality::get_product_attrs());
             $specs = $this->get_product_spec($id);
+            $specs = Hash::extract($specs,'{n}.ProductSpec');
             $this->set('specs',json_encode($specs));
             $this->data = $datainfo; //加载数据到表单中
             $this->loadModel('Uploadfile');
@@ -864,21 +865,7 @@ class StoresController extends AppController
                 'deleted'=>0
             )
         ));
-        $specs = Hash::extract($specs,'{n}.ProductSpec');
         return $specs;
-    }
-
-    //get spec by name and productId
-    public function get_spec_by_pid_and_name($pid,$name){
-        $this->loadModel('ProductSpec');
-        $spec = $this->ProductSpec->find('first',array(
-            'conditions'=>array(
-                'product_id'=>$pid,
-                'deleted'=>0,
-                'name'=>$name
-            )
-        ));
-        return $spec;
     }
 
     public function save_product_spec($pid,$isEdit=false){
@@ -903,8 +890,32 @@ class StoresController extends AppController
     }
 
     public function save_product_spec_gorup($pid){
+        $this->loadModel('ProductSpecGroup');
+        //delete before group?
         $specGroup = json_decode($_REQUEST['spec_table'],true);
         $this->loadModel('ProductSpecGroup');
-
+        $specs = $this->get_product_spec($pid);
+        $specs = Hash::combine($specs,'{n}.ProductSpec.id','{n}.ProductSpec');
+        $saveData = array();
+        foreach($specGroup as $item){
+            $tempSpecIds = array();
+            foreach($item as $key=>$value){
+                if($key!='price'||$key!='stock'){
+                       $tempSpecIds[]=$this->extract_spec_id($key,$value,$specs);
+                }
+            }
+            $saveData[]=array('price'=>$item['price'],'stock'=>$item['stock'],'spec_ids'=>join(',',$tempSpecIds));
+        }
+        $this->ProductSpecGroup->saveAll($saveData);
     }
+
+    public function extract_spec_id($name,$attrId,$specs){
+        foreach($specs as $key=>$item){
+            if($item['attr_id']==$attrId&&$item['name']==$name){
+                return $key;
+            }
+
+        }
+    }
+
 }
