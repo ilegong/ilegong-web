@@ -18,15 +18,15 @@ class DownloadsController extends AppController{
 		if($dl->getFileName()!='remote.out'){
 			if(defined('SAE_MYSQL_DB')){
 				$stor = new SaeStorage();
-				$download_url = $stor->upload(SAE_STORAGE_UPLOAD_DOMAIN_NAME , $dl->getUploadFileName(), $dl->getFileName(),array(),true);
+				$download_url = $stor->upload(SAE_STORAGE_UPLOAD_DOMAIN_NAME , $dl->getUploadFileName(), $dl->getFileName());
                 if(!$download_url){
                     //retry
                     $download_url = $stor->upload(SAE_STORAGE_UPLOAD_DOMAIN_NAME , $dl->getUploadFileName(), $dl->getFileName());
                 }
                 unlink($dl->getFileName());
                 $this->log('handle_file_upload: final file='. $download_url .', $file-path='. $dl->getFileName() .', $uploaded_file='. $dl->getFileName());
-                if($download_url){
-                    $this->log('upload file to sae errMsg'.$stor->errMsg.' errNum '.$stor->errNum);
+                if(!$download_url){
+                    $this->log('upload file to sae errMsg');
                 }
 			} else {
 				copy($dl->getFileName(),WWW_ROOT.'files/wx-download/'.$dl->getFileName());
