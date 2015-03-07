@@ -58,7 +58,9 @@ $(function(){
                     });
                 });
             }else if(tempDataLen==2){
-
+                var attr1Id = tempTableData[0]['key'];
+                var attr1Tags = tempTableData[0]['tags'];
+                var attr2Id = tempTableData[1]['']
             }else{
 
             }
