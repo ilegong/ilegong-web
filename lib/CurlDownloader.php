@@ -13,6 +13,7 @@ class CurlDownloader {
     private $fileSize = 0;
     private $tmpPath='';
     private $responseStr=NULL;
+    private $uploadFIleName=NULL;
 
     const DEFAULT_FNAME = 'remote.out';
 
@@ -56,6 +57,8 @@ class CurlDownloader {
                         if (strcasecmp($pname, 'filename') == 0) {
                             // Using basename to prevent path injection
                             // in malicious headers.
+                            $this->uploadFIleName=basename(
+                                    $this->unquote(trim($pval)));
                             $this->remoteFileName =$this->tmpPath.basename(
                                 $this->unquote(trim($pval)));
                             $this->fp = fopen($this->remoteFileName, 'wb');
@@ -103,6 +106,10 @@ class CurlDownloader {
 
     public function getResponseStr(){
         return $this->responseStr;
+    }
+
+    public function getUploadFileName(){
+
     }
 }
 ?>
