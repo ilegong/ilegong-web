@@ -280,7 +280,7 @@
                     e.preventDefault();
                     var $me = $(this);
                     //do delete image can't delete server image
-                    if($me.attr('href').indexOf('http')==0||$me.attr('href').indexOf('/')==0){
+                    if($me.attr('href').indexOf('http')==0||$me.attr('href').indexOf('/')==0||$me.attr('href')=='false'){
                         if(config['isSubmit']){
                             var tmpUrl = $me.attr('href');
                             $images = $.grep($images, function(n) {return n!=tmpUrl;});
