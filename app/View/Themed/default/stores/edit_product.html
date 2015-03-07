@@ -112,7 +112,10 @@ body{
 		<div class="col-sm-12"><input class="btn btn-primary" type="submit" value="提交"></div>
 	</div>
 {{$this->Form->end()}}
-
+    <script>
+        var all_product_attrs = JSON.parse('{{$product_attrs}}');
+        var product_specs = JSON.parse('{{$specs}}');
+    </script>
 {{$this->Html->script(array(
 	'ckeditor/ckeditor.js',
 	'swfupload/swfupload.js',
@@ -126,6 +129,7 @@ body{
 	'store.js?v1',
     'edit_product_spec.js',
 ))}}
+
 <script>
 $(function(){
 	CKEDITOR.editorConfig = function( config ){

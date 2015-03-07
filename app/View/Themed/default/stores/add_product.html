@@ -1,4 +1,4 @@
-{{$this->Html->css(array('/js/tag_input/jquery.tagsinput.css',))}}
+{{$this->Html->css(array('/js/tag_input/jquery.tagsinput.css','/js/handsontable/handsontable.full.min.css'))}}
 <div class="container">
     <style>
         body {
@@ -127,8 +127,10 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="col-sm-9 controls col-sm-offset-3">
+            <div class="col-sm-9 controls col-sm-offset-2">
+                <div id="spec_table">
 
+                </div>
             </div>
         </div>
 
@@ -140,12 +142,14 @@
         </div>
 
         <div class="form-group">
-        </div>
-
-        <div class="form-group">
             <div class="col-sm-9 col-sm-offset-2"><input id="submit-btn" class="btn btn-primary" type="submit" value="提交"></div>
         </div>
     </form>
+
+    <script>
+        var all_product_attrs = JSON.parse('{{$product_attrs}}');
+        var product_specs=[];
+    </script>
 
     {{$this->Html->script(array(
     'ckeditor/ckeditor.js',
@@ -155,6 +159,7 @@
     'swfupload/fileprogress.js',
     'swfupload/handlers.js',
     'tag_input/jquery.tagsinput.min.js',
+    '/js/handsontable/handsontable.full.min.js',
     '/js/json2.js',
     'jquery.validate.min.js',
     'store.js?v1',

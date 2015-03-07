@@ -199,6 +199,7 @@ class StoresController extends AppController
                 }
             }
         }
+        $this->set('product_attrs',ProductSpeciality::get_product_attrs());
         $this->set('op_cate', 'products');
     }
 
@@ -266,6 +267,10 @@ class StoresController extends AppController
             //return ;
             $this->redirect(array('action' => 'edit_product', $id));
         } else {
+            //get specs
+            $this->set('product_attrs',ProductSpeciality::get_product_attrs());
+            $specs = $this->get_product_spec($id);
+            $this->set('specs',$specs);
             $this->data = $datainfo; //加载数据到表单中
             $this->loadModel('Uploadfile');
             $uploadFiles=$this->Uploadfile->find('all',array(
@@ -847,6 +852,18 @@ class StoresController extends AppController
         } else {
             $this->__message("您没有权限进行操作", '/stores/index');
         }
+    }
+
+    public function get_product_spec($pid){
+        $this->loadModel('ProductSpec');
+        $specs = $this->ProductSpec->find('all',array(
+            'conditions'=>array(
+                'product_id'=>$pid,
+                'deleted'=>0
+            )
+        ));
+        $specs = Hash::extract($specs,'{n}.ProductSpec');
+        return json_encode($specs);
     }
 
     public function save_product_spec($pid,$isEdit=false){

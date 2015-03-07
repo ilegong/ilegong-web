@@ -676,6 +676,28 @@ class ProductCategory{
 
 }
 
+class ProductSpeciality{
+
+    //获取产品属性指标
+    public static function get_product_attrs(){
+        $allAttrs = Cache::read('all_product_attributes');
+        if(empty($allAttrs)){
+            $productAttribute = ClassRegistry::init('ProductAttribute');
+            $allAttrs = $productAttribute->find('all',array(
+                'conditions'=>array(
+                    'deleted'=>0
+                )
+            ));
+            $allAttrs = Hash::extract($allAttrs,'{n}.ProductAttribute');
+            $allAttrs = json_encode($allAttrs);
+            Cache::write('all_product_attributes',$allAttrs);
+        }
+
+        return $allAttrs;
+    }
+
+}
+
 class ShipAddress {
 //    public static $ship_type = array(
 //        101 => '申通',
