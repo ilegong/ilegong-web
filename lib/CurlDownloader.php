@@ -34,6 +34,9 @@ class CurlDownloader {
             array($this, 'headerCallback'));
         curl_setopt($this->ch, CURLOPT_WRITEFUNCTION,
             array($this, 'bodyCallback'));
+        if(defined('SAE_MYSQL_DB')){
+            $this->tmpPath =SAE_TMP_PATH;
+        }
     }
 
     public function headerCallback($ch, $string) {
@@ -72,12 +75,13 @@ class CurlDownloader {
                 E_USER_WARNING);
             $this->remoteFileName = self::DEFAULT_FNAME;
             $this->responseStr=$string;
-            return 0;
-        }else{
-            $len = fwrite($this->fp, $string);
-            $this->fileSize += $len;
-            return $len;
+            $this->fp = fopen($this->remoteFileName, 'wb');
+            if (!$this->fp)
+                throw new RuntimeException("Can't open default filename");
         }
+        $len = fwrite($this->fp, $string);
+        $this->fileSize += $len;
+        return $len;
     }
 
     public function download() {
