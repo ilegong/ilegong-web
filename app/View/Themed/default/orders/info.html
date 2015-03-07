@@ -146,7 +146,7 @@ a.coupon_applied .glyphicon {
 		    <ul class="pull-right list-unstyled">
                     <li>已优惠：<span id="total_reduced_span">{{$this->Number->precision($total_reduced, 2)}}</span></li>
                     {{if $shipFee<0}}
-                        <li>运费：到付</li>
+                        <li>运费：{{$this->Number->precision(0, 2)}}</li>
                     {{else}}
                         <li>运费：{{$this->Number->precision($shipFee, 2)}}</li>
                     {{/if}}
@@ -167,9 +167,7 @@ a.coupon_applied .glyphicon {
 <script>
 
     $(document).ready(function () {
-
         var $scoreUseAvail = $('#score_use_avail');
-
         function update_price(data) {
             $('#total_price_span').text(utils.toFixed(data.total_price, 2));
             $('#total_reduced_span').text(utils.toFixed(data.total_reduced, 2));
@@ -178,7 +176,6 @@ a.coupon_applied .glyphicon {
             $('#score_will_got').text(utils.toFixed(data.total_price));
             $('#chb_use_score').prop('checked', data.score_used);
         }
-
         (function() {
             var couponCodeMsg = $('#coupon_code_msg');
             $('#coupon_code_title').click(function () {
