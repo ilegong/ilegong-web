@@ -314,6 +314,7 @@
                 var i=0;
                 var len = tempImage.localId.length;
                 var signals = [];
+                var toShowIndex=0;
                 function doUpload(index){
                     var dtd = $.Deferred();
                     signals.push(dtd);
@@ -328,10 +329,11 @@
                                 dtd.resolve(data);
                                 var imageUrl = data['download_url'];
                                 if(imageUrl&&imageUrl!='false'){
-                                    var $imageHolder = toShowHolders[index];
+                                    var $imageHolder = toShowHolders[toShowIndex];
                                     var $delete_a = $($imageHolder);
                                     $($imageHolder).html('<img src="'+imageUrl+'"/><div class="comment_delete"></div>');
                                     $($delete_a).attr('href',imageUrl);
+                                    toShowIndex++;
                                 }
                                 i++;
                                 if(i<len){
