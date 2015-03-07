@@ -180,6 +180,8 @@ class StoresController extends AppController
                 if ($p) {
                     //save product spec
                     $this->save_product_spec($p['Product']['id']);
+                    //get spec group
+                    $this->save_product_spec_gorup($p['Product']['id']);
                     //保存上传的附件；形如 data[Uploadfile][39][id] , data[Uploadfile][39][name]
                     if (isset($this->data['Uploadfile']) && is_array($this->data['Uploadfile'])) {
                         $this->loadModel('Uploadfile');
@@ -270,7 +272,7 @@ class StoresController extends AppController
             //get specs
             $this->set('product_attrs',ProductSpeciality::get_product_attrs());
             $specs = $this->get_product_spec($id);
-            $this->set('specs',$specs);
+            $this->set('specs',json_encode($specs));
             $this->data = $datainfo; //加载数据到表单中
             $this->loadModel('Uploadfile');
             $uploadFiles=$this->Uploadfile->find('all',array(
@@ -863,7 +865,20 @@ class StoresController extends AppController
             )
         ));
         $specs = Hash::extract($specs,'{n}.ProductSpec');
-        return json_encode($specs);
+        return $specs;
+    }
+
+    //get spec by name and productId
+    public function get_spec_by_pid_and_name($pid,$name){
+        $this->loadModel('ProductSpec');
+        $spec = $this->ProductSpec->find('first',array(
+            'conditions'=>array(
+                'product_id'=>$pid,
+                'deleted'=>0,
+                'name'=>$name
+            )
+        ));
+        return $spec;
     }
 
     public function save_product_spec($pid,$isEdit=false){
@@ -885,5 +900,11 @@ class StoresController extends AppController
             }
         }
         $this->ProductSpec->saveAll($data);
+    }
+
+    public function save_product_spec_gorup($pid){
+        $specGroup = json_decode($_REQUEST['spec_table'],true);
+        $this->loadModel('ProductSpecGroup');
+
     }
 }
