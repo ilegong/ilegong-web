@@ -36,7 +36,7 @@ class CurlDownloader {
         curl_setopt($this->ch, CURLOPT_WRITEFUNCTION,
             array($this, 'bodyCallback'));
         if(defined('SAE_MYSQL_DB')){
-            $this->tmpPath =SAE_TMP_PATH;
+            $this->tmpPath=SAE_TMP_PATH;
         }
     }
 
