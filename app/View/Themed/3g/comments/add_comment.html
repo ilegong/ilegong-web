@@ -100,7 +100,8 @@
                 $textArea.on('focus',function(e){
                     e.preventDefault();
                     $label.hide();
-                }).on('change',function(e){
+                }).on('change keyup',function(e){
+                    e.preventDefault();
                     changeState();
                 }).on('blur',function(e){
                     e.preventDefault();
@@ -313,8 +314,8 @@
                 var i=0;
                 var len = tempImage.localId.length;
                 var signals = [];
+                var toShowIndex=0;
                 function doUpload(index){
-                    //小心作用域 调试半天
                     var dtd = $.Deferred();
                     signals.push(dtd);
                     wx.uploadImage({
@@ -327,10 +328,13 @@
                                 //download url
                                 dtd.resolve(data);
                                 var imageUrl = data['download_url'];
-                                var $imageHolder = toShowHolders[index];
-                                var $delete_a = $($imageHolder);
-                                $($imageHolder).html('<img src="'+imageUrl+'"/><div class="comment_delete"></div>');
-                                $($delete_a).attr('href',imageUrl);
+                                if(imageUrl&&imageUrl!='false'){
+                                    var $imageHolder = toShowHolders[toShowIndex];
+                                    var $delete_a = $($imageHolder);
+                                    $($imageHolder).html('<img src="'+imageUrl+'"/><div class="comment_delete"></div>');
+                                    $($delete_a).attr('href',imageUrl);
+                                    toShowIndex++;
+                                }
                                 i++;
                                 if(i<len){
                                     doUpload(i);
@@ -338,20 +342,30 @@
                             });
                         },
                         fail: function(res){
-                            alert(JSON.stringify(res));
+                            Pyshuo.ui.utils.mobileShowTip('图片上传失败。请重新上传。');
                         }
                     });
                 }
                 doUpload(i);
                 $.when.apply($,signals).done(function(){
                     var len = arguments.length;
+                    var successFiles = [];
+                    var failCount = 0;
                     for(var i = 0;i<len;i++){
                         var item = arguments[i];
                         if(item['success']){
                             var imageUrl = item['download_url'];
-                            $images.push(imageUrl);
-                            $data.val($images.join('|'));
+                            if(imageUrl&&imageUrl!='false'){
+                                successFiles.push(imageUrl);
+                                $images.push(imageUrl);
+                                $data.val($images.join('|'));
+                            }else{
+                                failCount++;
+                            }
                         }
+                    }
+                    if(failCount>0){
+                        Pyshuo.ui.utils.mobileShowTip(failCount+'张图片上传失败。请重新上传。');
                     }
                     $parentForm.ajaxSubmit();
                 });

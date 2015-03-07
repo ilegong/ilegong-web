@@ -12,6 +12,8 @@ class CurlDownloader {
     private $debug = FALSE;
     private $fileSize = 0;
     private $tmpPath='';
+    private $responseStr=NULL;
+    private $uploadFIleName=NULL;
 
     const DEFAULT_FNAME = 'remote.out';
 
@@ -55,6 +57,8 @@ class CurlDownloader {
                         if (strcasecmp($pname, 'filename') == 0) {
                             // Using basename to prevent path injection
                             // in malicious headers.
+                            $this->uploadFIleName=basename(
+                                    $this->unquote(trim($pval)));
                             $this->remoteFileName =$this->tmpPath.basename(
                                 $this->unquote(trim($pval)));
                             $this->fp = fopen($this->remoteFileName, 'wb');
@@ -72,7 +76,8 @@ class CurlDownloader {
         if (!$this->fp) {
             trigger_error("No remote filename received, trying default",
                 E_USER_WARNING);
-            $this->remoteFileName = $this->tmpPath.self::DEFAULT_FNAME;
+            $this->remoteFileName = self::DEFAULT_FNAME;
+            $this->responseStr=$string;
             $this->fp = fopen($this->remoteFileName, 'wb');
             if (!$this->fp)
                 throw new RuntimeException("Can't open default filename");
@@ -97,6 +102,14 @@ class CurlDownloader {
 
     private function unquote($string) {
         return str_replace(array("'", '"'), '', $string);
+    }
+
+    public function getResponseStr(){
+        return $this->responseStr;
+    }
+
+    public function getUploadFileName(){
+
     }
 }
 ?>
