@@ -38,6 +38,11 @@
             });
         }
 
+        function getSimpleDate(dateStr){
+            var date = new Date(dateStr);
+            return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
+        }
+
         function processCommentData(item){
             var rating = parseInt(item['rating']);
             var ratingStr = "差评";
@@ -56,7 +61,7 @@
                                 '<ul class="clearfix user">'+
                                     '<li class="fl"><img src="'+userPhoto+'" border="0"/></li>'+
                                     '<li class="fl">'+item['username']+'</li>'+
-                                    '<li class="fr time">'+item['created']+'</li>'+
+                                    '<li class="fr time">'+item['updated']+'</li>'+
                                 '</ul>'+
                                 '<div class="evaluate clearfix">'+
                                     '<span class="evaluate_bg radius10" style="float:left;">'+ratingStr+'</span>'+
@@ -74,7 +79,7 @@
                                         '</div>';
                                     }
                             if(item['buy_time']){
-                                $comment+= '<div class="pay_time">购买时间: '+item['buy_time']+'</div>'+
+                                $comment+= '<div class="pay_time">购买时间: '+getSimpleDate(item['buy_time'])+'</div>'+
                                 '</div>';
                             }
 
