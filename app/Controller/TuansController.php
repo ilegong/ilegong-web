@@ -10,7 +10,7 @@ class TuansController extends AppController{
 
     public function detail($teamId=null){
         $this->autoRender = true;
-        $this->pageTitle = '团购详情';
+        $this->pageTitle = '草莓团购';
         $teamInfo = $this->Tuan->find('first',array('condition' => array('id' => $teamId)));
 //        $this->loadModel('Product');
 //        $proInfo = $this->Product->find('first',array('conditions' => array('id' => 838)));
@@ -25,14 +25,12 @@ class TuansController extends AppController{
 
     }
     public function lbs_map(){
-        $this->autoRender = false;
-        $this->pageTitle =__('自取点');
+        $this->pageTitle =__('草莓自取点');
         $this->set('hideNav',true);
     }
 
     public function cart_info(){
         $this->autoRender = false;
-        $this->pageTitle = '参团信息';
         $this->loadModel('Cart');
         $product_id = intval($_REQUEST['product_id']);
         $product_num = intval($_REQUEST['product_num']);
@@ -48,6 +46,8 @@ class TuansController extends AppController{
     }
 
     public function join($pid, $tuan_id){
+
+        $this->pageTitle = '订单确认';
         $this->loadModel('Cart');
         $this->loadModel('Tuan');
         $tuan_info = $this->Tuan->findById($tuan_id);
@@ -69,6 +69,7 @@ class TuansController extends AppController{
         $Carts = $this->Cart->find('first', array(
             'conditions' => $cond));
         $total_price = $Carts['Cart']['price'] * $Carts['Cart']['num'];
+        $this->set('buy_count',$Carts['Cart']['num']);
         $this->set('total_price', $total_price);
         $this->set('cart_id', $Carts['Cart']['id']);
         $this->set('tuan_id', $tuan_id);
