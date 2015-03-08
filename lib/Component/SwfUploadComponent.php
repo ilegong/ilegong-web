@@ -171,11 +171,11 @@ class SwfUploadComponent extends Component {
 		$got_data = (is_uploaded_file($temp_name));
 		if($file_model_name=="Product"){
 			list($width,$height,$type,$attr) = getimagesize($temp_name);
-            $radio =$height>0? $width/$height:0;
-			if($radio!=4/3||$radio!=1){
-				$this->setError(2100,'Validation faild','上传图片比例只能为4:3～4:4, 例800x600');
-				return false;
-			}
+            //$radio =$height>0? $width/$height:0;
+            if($width!=800||$height!=600){
+                $this->setError(2100,'Validation faild','您上传的图片尺寸为：'.$width.'x'.$height.'上传图片尺寸必须为800x600');
+                return false;
+            }
 		}
 		if (!$post_ok){
 			$this->setError(2000, 'Validation failed.', 'Expected file upload field to be named "Filedata."');

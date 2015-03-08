@@ -100,7 +100,8 @@
                 $textArea.on('focus',function(e){
                     e.preventDefault();
                     $label.hide();
-                }).on('change',function(e){
+                }).on('change keyup',function(e){
+                    e.preventDefault();
                     changeState();
                 }).on('blur',function(e){
                     e.preventDefault();
@@ -279,7 +280,7 @@
                     e.preventDefault();
                     var $me = $(this);
                     //do delete image can't delete server image
-                    if($me.attr('href').indexOf('http')==0||$me.attr('href').indexOf('/')==0){
+                    if($me.attr('href').indexOf('http')==0||$me.attr('href').indexOf('/')==0||$me.attr('href')=='false'){
                         if(config['isSubmit']){
                             var tmpUrl = $me.attr('href');
                             $images = $.grep($images, function(n) {return n!=tmpUrl;});
@@ -291,13 +292,12 @@
                         return;
                     }
                     //choose img
-                    //only choose first img
                     $fileInput.attr('data-index', index);
                     if(config['isSubmit']){
                         wx.chooseImage({
                             success: function (res) {
                                 tempImage.localId = res.localIds;
-                                setTimeout(wxUploadFile,50);
+                                setTimeout(wxUploadFile,30);
                             }
                         });
                     }
@@ -312,11 +312,10 @@
                 var toShowHolders = getNoImageHolder();
                 var i=0;
                 var len = tempImage.localId.length;
-                var signals = [];
+                var failCount = 0;
+                //防止上传失败图片显示位置错位
+                var toShowIndex=0;
                 function doUpload(index){
-                    //小心作用域 调试半天
-                    var dtd = $.Deferred();
-                    signals.push(dtd);
                     wx.uploadImage({
                         localId: tempImage.localId[index],
                         isShowProgressTips:1,
@@ -325,36 +324,37 @@
                             tempImage.serverId.push(res.serverId);
                             $.getJSON('/downloads/download_wx_img?media_id='+res.serverId,function(data){
                                 //download url
-                                dtd.resolve(data);
                                 var imageUrl = data['download_url'];
-                                var $imageHolder = toShowHolders[index];
-                                var $delete_a = $($imageHolder);
-                                $($imageHolder).html('<img src="'+imageUrl+'"/><div class="comment_delete"></div>');
-                                $($delete_a).attr('href',imageUrl);
+                                //先显示图片和添加数据
+                                if(imageUrl&&imageUrl!='false'){
+                                    var $imageHolder = toShowHolders[toShowIndex];
+                                    var $delete_a = $($imageHolder);
+                                    $($imageHolder).html('<img src="'+imageUrl+'"/><div class="comment_delete"></div>');
+                                    $($delete_a).attr('href',imageUrl);
+                                    $images.push(imageUrl);
+                                    toShowIndex++;
+                                }else{
+                                    failCount++;
+                                }
                                 i++;
                                 if(i<len){
                                     doUpload(i);
+                                }else{
+                                    $data.val($images.join('|'));
+                                    $parentForm.ajaxSubmit();
+                                    if(failCount>0){
+                                        utils.alert(failCount+'张图片上传失败。请重新上传。');
+                                    }
                                 }
                             });
                         },
-                        fail: function(res){
-                            alert(JSON.stringify(res));
+                        fail: function(){
+                            failCount++;
+                            //utils.alert('图片上传失败。请重新上传。');
                         }
                     });
                 }
                 doUpload(i);
-                $.when.apply($,signals).done(function(){
-                    var len = arguments.length;
-                    for(var i = 0;i<len;i++){
-                        var item = arguments[i];
-                        if(item['success']){
-                            var imageUrl = item['download_url'];
-                            $images.push(imageUrl);
-                            $data.val($images.join('|'));
-                        }
-                    }
-                    $parentForm.ajaxSubmit();
-                });
             }
             function getNoImageHolder(){
                 var $result = $('a.comment_upload',me).has('span');

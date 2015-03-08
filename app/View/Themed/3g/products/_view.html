@@ -107,7 +107,7 @@
                 <li>
                     <span class="gray mr12" style="float:left;">快递:</span>
 			<span style="display: block;overflow: hidden;">
-                {{if $ship_by_item_num && $Product['Product']['ship_fee'] }}
+                {{if $ship_by_item_num && $Product['Product']['ship_fee'] >0 }}
                     <span>每件{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}元</span>
                 {{else}}
                     {{if $Product['Product']['ship_fee']}} {{if $Product['Product']['ship_fee']==-1}}到付{{elseif $Product['Product']['ship_fee']==-2}}自提{{else}}￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}{{/if}} {{else}}<span>包邮</span>{{/if}}
@@ -144,7 +144,7 @@
 
         <div class="all_line" id="comment-div">
                 <ul class="clearfix title" style="margin-bottom: 0;" {{if $comment_count>5}}onclick="to_comment();"{{/if}}>
-                    <li class="fl"><strong>口碑评论</strong><span> {{$comment_count}}</span></li>
+                    <li class="fl">口碑评论<span> {{$comment_count>0?$comment_count:评价有积分奖励哦}}</span></li>
                     {{if $comment_count>5}}
                     <li class="fr"><a class="p_more"></a></li>
                     {{/if}}

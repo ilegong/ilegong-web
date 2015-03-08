@@ -856,11 +856,11 @@ class ApiOrdersController extends AppController {
         );
         //TODO manage it
         $hotItems =array(
+            array('img' => "http://www.tongshijia.com/img/mobile/index/d4.jpg", 'id' => 705),
             array('img' => "http://www.tongshijia.com/img/mobile/index/d1.jpg", 'id' => 818),
             array('img' => "http://www.tongshijia.com/img/mobile/index/d2.jpg", 'id' => 826),
             array('img' => "http://www.tongshijia.com/img/mobile/index/d3.jpg", 'id' => 253),
-            array('img' => "http://www.tongshijia.com/img/mobile/index/d4.jpg", 'id' => 747),
-            array('img' => "http://www.tongshijia.com/img/mobile/index/d5.jpg", 'id' => 336),
+            array('img' => "http://www.tongshijia.com/img/mobile/index/d5.jpg", 'id' => 283),
         );
         $specTagIds = array(13,14,15);
         $specTagImg = array('http://www.tongshijia.com/img/mobile/index/p1.jpg', 'http://www.tongshijia.com/img/mobile/index/p2.jpg', 'http://www.tongshijia.com/img/mobile/index/p3.jpg');
