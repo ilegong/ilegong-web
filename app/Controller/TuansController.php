@@ -7,10 +7,46 @@
  */
 
 class TuansController extends AppController{
-    public function detail(){
-        $this->set('hideNav', true);
+
+    public function detail($teamId=null){
+        $this->autoRender = true;
+        $this->pageTitle = '团购详情';
+        $teamInfo = $this->Tuan->find('first',array('condition' => array('id' => $teamId)));
+//        $this->loadModel('Product');
+//        $proInfo = $this->Product->find('first',array('conditions' => array('id' => 838)));
+        $this->set('Product',$proInfo);
+        $this->set('sold_num',$teamInfo['Tuan']['sold_num']);
+        $this->set('tuan_name',$teamInfo['Tuan']['tuan_name']);
+        $this->set('tuan_leader_name',$teamInfo['Tuan']['leader_name']);
+        $this->set('tuan_leader_weixin',$teamInfo['Tuan']['leader_weixin']);
+        $this->set('tuan_address',$teamInfo['Tuan']['address']);
+        $this->set('hideNav',true);
+
 
     }
+    public function lbs_map(){
+        $this->autoRender = false;
+        $this->pageTitle =__('自取点');
+        $this->set('hideNav',true);
+    }
+
+    public function cart_info(){
+        $this->autoRender = false;
+        $this->pageTitle = '参团信息';
+        $this->loadModel('Cart');
+        $product_id = intval($_REQUEST['product_id']);
+        $product_num = intval($_REQUEST['product_num']);
+        $uId = $this->currentUser['id'];
+        $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,0,5,0,$uId);
+        $this->log('cartInfo'.json_encode($cartInfo));
+        if($cartInfo){
+            echo json_encode(array('success' => true));
+        }else{
+            echo json_encode(array('error' => false));
+        }
+
+    }
+
     public function join($pid, $tuan_id){
         $this->loadModel('Cart');
         $this->loadModel('Tuan');
