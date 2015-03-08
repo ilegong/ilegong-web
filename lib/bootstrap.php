@@ -9,6 +9,7 @@ const ORDER_TYPE_DEF = 1;
 const ORDER_TYPE_GROUP = 2;
 const ORDER_TYPE_GROUP_FILL = 4; //团购补充素有剩下的
 const ORDER_TYPE_PARENT = 3;
+const ORDER_TYPE_TUAN = 5; //团长团购
 
 const ALI_PAY_TYPE_WAP = "wap";
 const ALI_PAY_TYPE_WAPAPP = "wapapp";

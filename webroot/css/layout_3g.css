@@ -551,3 +551,11 @@ a:hover, a:focus {
 .jifen_rule{ padding: 0.833em; padding-top: 0; margin-top: 43px;}
 .jifen_rule p{ font-size: 1.1em; color: #333333; padding-top: 15px; line-height: 20px; font-weight: bold;}
 .jifen_rule label{ display: block; line-height: 18px; color: #666666; padding-left: 20px; padding-top: 0.5em;}
+
+
+/*团长团购*/
+.tuanxq{ border-top: 1px #eeeeee solid; border-bottom: 1px #eeeeee solid; background-color: #ffffff; padding: 10px; font-size: 1em; color: #555555; line-height: 22px;}
+.tuanxq span{ display: block;}
+.tuanxq img{ width: 1.5em; float: left;}
+.tuanxq a{ display: block; text-decoration: none;}
+.tuanxq a s{ text-decoration: none; float: left; padding-left: 3px; color: #2eae14;}

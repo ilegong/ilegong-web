@@ -58,7 +58,38 @@ class Order extends AppModel {
 
         }
     }
+    public function createTuanOrder($memberId, $uid, $fee, $product_id, $type = ORDER_TYPE_TUAN, $area='', $address='', $mobile='', $name='', $cart_id) {
+        if ($type != ORDER_TYPE_TUAN) {
+            throw new CakeException("error order type:".$type);
+        }
+        $product = ClassRegistry::init('Product')->find('first', array(
+            'conditions' => array('id' => $product_id),
+            'fields' => 'brand_id',
+        ));
+        $brand_id = empty($product)? 0 : $product['Product']['brand_id'];
 
+        $arr = array(
+            'creator' => $uid,
+            'total_all_price' => $fee,
+            'type' => $type,
+            'brand_id' => $brand_id,
+            'member_id' => $memberId,
+            'consignee_area' => $area,
+            'consignee_name' => $name,
+            'consignee_address' => $address,
+            'consignee_mobilephone' => $mobile,
+            'status' => ORDER_STATUS_WAITING_PAY
+        );
+        $order = $this->save($arr);
+        if (!empty($order)) {
+            $cartM = ClassRegistry::init('Cart');
+            $cartM->updateAll(array('order_id' => $order['Order']['id'], 'status' => CART_ITEM_STATUS_BALANCED), array('id' => $cart_id));
+            return $order;
+        }else{
+            return null;
+        }
+
+    }
     /**
      * @param $operator
      * @param $order_id
@@ -117,6 +148,10 @@ class Order extends AppModel {
                 } else if ($type == ORDER_TYPE_GROUP || $type == ORDER_TYPE_GROUP_FILL) {
                     $gmM = ClassRegistry::init('GrouponMember');
                     $gmM->paid_done($memberId, $orderOwner, $type);
+                }elseif($type == ORDER_TYPE_TUAN){
+                    $gmM = ClassRegistry::init('Tuan');
+                    $gmM->paid_done($memberId,$orderId);
+
                 } else {
                     foreach ($pid_list as $pid) {
                         clean_total_sold($pid);
