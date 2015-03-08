@@ -22,6 +22,7 @@ $(function(){
         });
     }
     function initView(){
+        initData();
         var i=0;
         $.each(specData,function(index,item){
             //console.log(index);
@@ -31,8 +32,16 @@ $(function(){
             $($tags[i]).val(item.join(','));
             i++;
         });
+        $tags.tagsInput({
+            'height':'100px',
+            'width':'230px',
+            'interactive':true,
+            'defaultText':'添加规格',
+            'onChange':onChangeTag
+        });
         //TODO init table
         //table data
+        genTable();
     }
     //before gen table
     function initTable(){
@@ -196,17 +205,11 @@ $(function(){
         return true;
     });
 
-    initData();
     initView();
-    $tags.tagsInput({
-        'height':'100px',
-        'width':'230px',
-        'interactive':true,
-        'defaultText':'添加规格',
-        'onChange':onChangeTag
-    });
     function onChangeTag(input,tag){
         //TODO reset table
-        genTable();
+        if(!should_init){
+            genTable();
+        }
     }
 });

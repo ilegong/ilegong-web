@@ -4,7 +4,7 @@ body{
 	overflow-x:hidden;
 }
 </style>
-{{$this->Html->css(array('/js/tag_input/jquery.tagsinput.css',))}}
+{{$this->Html->css(array('/js/tag_input/jquery.tagsinput.css','/js/handsontable/handsontable.full.min.css'))}}
 <h2><span class="title">编辑商品</span></h2>
 
 {{$this->Form->create('Product', array('url' => array('controller' => 'stores', 'action'=>'edit_product', $id) , 'class'=>'form-horizontal','role'=>'form'))}}
@@ -93,8 +93,10 @@ body{
         </div>
     </div>
     <div class="form-group">
-        <div class="col-sm-9 controls col-sm-offset-3">
+        <div class="col-sm-9 controls col-sm-offset-2">
+            <div id="spec_table">
 
+            </div>
         </div>
     </div>
 
@@ -107,6 +109,8 @@ body{
 			{{$this->Form->input('content',array('class'=>'form-control','div'=>false,'label'=>false,'type'=>'textarea'))}}
 		</div>
 	</div>
+
+    <input type="hidden" id="spec_table_data" name="spec_table"/>
 	
 	<div class="form-group">
 		<div class="col-sm-12"><input class="btn btn-primary" type="submit" value="提交"></div>
@@ -115,6 +119,7 @@ body{
     <script>
         var all_product_attrs = JSON.parse('{{$product_attrs}}');
         var product_specs = JSON.parse('{{$specs}}');
+        var should_init = true;
     </script>
 {{$this->Html->script(array(
 	'ckeditor/ckeditor.js',
@@ -124,6 +129,7 @@ body{
 	'swfupload/fileprogress.js',
 	'swfupload/handlers.js',
     'tag_input/jquery.tagsinput.min.js',
+    '/js/handsontable/handsontable.full.min.js',
 	'/js/json2.js',
     'jquery.validate.min.js',
 	'store.js?v1',

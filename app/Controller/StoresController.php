@@ -800,8 +800,6 @@ class StoresController extends AppController
         return $this->ShareOffer->find('first',array('conditions' => array('id' =>$id,'brand_id' => $brand_id)));
     }
 
-
-
     public function cake_dating($action) {
         $this->checkAccess();
         $this->pageTitle = '设置可选的发货日期';
@@ -900,7 +898,7 @@ class StoresController extends AppController
         foreach($specGroup as $item){
             $tempSpecIds = array();
             foreach($item as $key=>$value){
-                if($key!='price'||$key!='stock'){
+                if($key!='price'&&$key!='stock'){
                        $tempSpecIds[]=$this->extract_spec_id($key,$value,$specs);
                 }
             }
@@ -909,7 +907,7 @@ class StoresController extends AppController
         $this->ProductSpecGroup->saveAll($saveData);
     }
 
-    public function extract_spec_id($name,$attrId,$specs){
+    public function extract_spec_id($attrId,$name,$specs){
         foreach($specs as $key=>$item){
             if($item['attr_id']==$attrId&&$item['name']==$name){
                 return $key;
