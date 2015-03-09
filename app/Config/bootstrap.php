@@ -819,13 +819,18 @@ function product_link($pid, $defUri) {
  * @return string
  */
 function product_link2($p, $defUri = '/') {
-    if (!empty($p)) {
-        $pp = empty($p['Product']) ? $p : $p['Product'];
-        $link = "/products/" . date('Ymd', strtotime($pp['created'])) . "/" . $pp['slug'] . ".html";
-        Cache::write('link_pro_'.$pp['id'], $link);
+    if($p['Product']['id'] == 838){
+        $link = "/tuans/lists.html";
         return $link;
-    } else {
-        return $defUri;
+    }else{
+        if (!empty($p)) {
+            $pp = empty($p['Product']) ? $p : $p['Product'];
+            $link = "/products/" . date('Ymd', strtotime($pp['created'])) . "/" . $pp['slug'] . ".html";
+            Cache::write('link_pro_'.$pp['id'], $link);
+            return $link;
+        } else {
+            return $defUri;
+        }
     }
 }
 

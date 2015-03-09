@@ -7,7 +7,9 @@
  */
 
 class TuansController extends AppController{
+    public function lists(){
 
+    }
     public function detail($teamId=null){
         $this->autoRender = true;
         $this->pageTitle = '草莓团购';
