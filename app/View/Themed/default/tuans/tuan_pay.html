@@ -1,0 +1,50 @@
+<div class="panel panel-warning">
+    <div class="panel-body">
+        <a class="btn btn-warning" href="/ali_pay/goto_to_alipay/{{$orderId}}">支付宝支付</a>
+    </div>
+</div>
+<div>
+    <br/>
+    <h3>基本信息</h3>
+    <br/>
+    <p class="col-xs-12"> 订单状态：
+        <span class="order_status_text">
+                    等待付款
+        </span>
+    </p>
+    <span class="col-xs-12">下单时间：{{$order['Order']['created']}}</span>
+    <br> <span class="col-xs-12">订单号:{{$order['Order']['id']}}</span>
+
+    <div class="clearfix"></div>
+</div>
+
+<div class="voffset3" id="ship_info">
+    <span class="col-xs-6"><strong>收货人：{{$order['Order']['consignee_name']}}</strong></span>
+    <span class="col-xs-6 text-right"><strong>{{$order['Order']['consignee_mobilephone']}}</strong></span>
+    <span class="col-xs-10">收货地址：{{$order['Order']['consignee_address']}}</span>
+
+    <div class="clearfix"></div>
+</div>
+<hr/>
+
+<div class="clearfix orderitem_item"><a href="/tuans/lists.html">
+    <img src="http://51daifan-images.stor.sinaapp.com/files/201503/thumb_s/4dd65a241cf_0307.jpg" class="col-xs-3"
+         style="max-width:100px" alt=""/> </a>
+
+    <div class="col-xs-6">
+        <a href="/tuans/lists.html">
+            团购草莓送酸奶 昌平兴寿红颜草莓 现采现卖 400g/盒 20盒起团 截止3.10号22点 </a>
+
+    </div>
+    <div class="col-xs-3 pull-right">
+        <p style="margin-bottom: 0;" class="pull-right">￥{{$cart['price']}}</p>
+        <br/>
+        <small style="margin-bottom: 0" class="pull-right">×{{cart['num']}}</small>
+    </div>
+</div>
+<hr>
+<p class="col-xs-12 text-right">
+    商品总价：￥{{$order['Order']['total_price']}}<br/>
+    运费：￥0.00<br/>
+    实付(含运费)：￥{{$order['Order']['total_price']}}
+</p>

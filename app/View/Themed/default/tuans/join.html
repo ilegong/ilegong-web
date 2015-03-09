@@ -1,0 +1,86 @@
+<div class="container" style="">
+    <div class="orderinfo voffset3">
+        <h2>收货人信息</h2>
+        <p class="text-warning">具体地点：</p>
+        <div id="specialShipPromotion" style="">
+            <ul id="ul_special_promotion" class="list-group">
+                <li item-id="25" item-addr-mark="1" class="list-group-item ">
+                    <span class="text-price-small pull-right">{{$this->Number->precision($total_price, 2)}}</span>
+                    <small>{{$tuan_address}}</small>
+                </li>
+
+            </ul>
+            <input type="text" class="form-control" placeholder="收货人姓名" id="p_consignee_name" name="consignee_name">
+            <input type="text" class="form-control" placeholder="手机号" id="p_consignee_mobile" name="consignee_mobilephone">
+        </div>
+        <hr/>
+        <div class="o_show">
+            <div class="p-list">
+                <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                        <td>团购草莓送酸奶 昌平兴寿红颜草莓 现采现卖 400g/盒 20盒起团 截止3.10号22点</td>
+                        <td style="width: 80px; font-size: 0.8em">单价：19.00</td>
+                        <td>×{{$buy_count}}</td>
+                        <td>{{$this->Number->precision($total_price, 2)}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>
+            <ul class="pull-right list-unstyled">
+                <li>运费：0.00</li>
+                <li>总价
+                    <small>(含运费)</small>
+                    ：<span id="total_price_span">
+                        {{$this->Number->precision($total_price, 2)}}
+                    </span>
+                </li>
+                <li><a id="confirm_next" class="btn btn-warning" href="javascript:void(0)">提交订单</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#confirm_next').on('click',function(e){
+            if($("#confirm_next").attr('data-disable') == 'false') {
+                if ($('#p_consignee_name').val() == "") {
+                    utils.alert("请输入你的姓名");
+                    e.preventDefault();
+                    $('#p_consignee_name').focus();
+                    return false;
+                }
+                if ($('#p_consignee_mobile').val().length != 11) {
+                    utils.alert("联系电话格式不正确");
+                    $('#p_consignee_mobile').focus();
+                    e.preventDefault();
+                    return false;
+                }
+                var name = $("#p_consignee_name").val();
+                var mobile = $("#p_consignee_mobile").val();
+                var cart_id = {{$cart_id}};
+            var tuan_id = {{$tuan_id}};
+        jQuery.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "/tuans/pre_order",
+            data: {name: name, mobile: mobile, cart_id: cart_id, tuan_id: tuan_id },
+            success: function (a) {
+                if (a.success) {
+                    $("#confirm_next").attr('data-disable', 'true');
+                    window.location.href = '/tuans/tuan_pay/' + a.order_id;
+                } else {
+                    if(a.info){
+                        utils.alert(a.info);
+                    }else{
+                        utils.alert("结算出错，请刷新重试");
+                    }
+                }
+            }
+        });
+    }
+    });
+    })
+</script>

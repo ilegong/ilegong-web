@@ -79,12 +79,18 @@ class TuansController extends AppController{
     public function tuan_pay($orderId){
         $this->pageTitle = '团购';
         $this->loadModel('Order');
+        $this->loadModel('Cart');
         $order_info = $this->Order->find('first', array(
             'conditions' =>array('id' => $orderId),
-            'fields' => array('total_all_price')
+            'fields' => array('total_all_price', 'created', 'id', 'consignee_address', 'consignee_name')
+        ));
+        $cart_info = $this->Cart->find('first', array(
+            'conditions' =>array('order_id' => $orderId),
+            'fields' => array('num', 'price')
         ));
         $this->set('orderId', $orderId);
-        $this->set('total_price', $order_info['Order']['total_all_price']);
+        $this->set('order', $order_info);
+        $this->set('cart', $cart_info );
     }
 
     public function pre_order() {

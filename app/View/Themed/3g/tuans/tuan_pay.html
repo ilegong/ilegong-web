@@ -1,9 +1,9 @@
 {{$this->Html->css(array(
 'groupon.css',
 ))}}
-<p class="total_title">{{$team['Team']['title']}}</p>
+<p class="total_title"></p>
 <div class="total_price">支付金额:
-    <span>￥{{$total_price}}</span>
+    <span>￥{{$order['Order']['total_price']}}</span>
 </div>
 
 <a href="/wxPay/jsApiPay/{{$orderId}}" id="btn_call_wx_pay" class="pay_btn weixin radius10">微信支付</a>
