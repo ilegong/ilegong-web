@@ -220,6 +220,15 @@ class ProductsController extends AppController{
         //get specs from database
         $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($this->viewdata['Product']['id'],'spec_names');
         $this->set('product_spec_group',json_encode($product_spec_group));
+        $product_price_range = Hash::extract($product_spec_group,'{s}.price');
+        if(!empty($product_price_range)){
+            $min_product_price = min($product_price_range);
+            $max_product_price = max($product_price_range);
+            if($min_product_price!=$max_product_price){
+                $product_price_range = min($product_price_range).'-'.max($product_price_range);
+                $this->set('product_price_range',$product_price_range);
+            }
+        }
         $specs_map = $this->ProductSpecGroup->get_product_spec_json($this->viewdata['Product']['id']);
         if (!empty($specs_map['map'])) {
             $str = '<script>var _p_spec_m = {';

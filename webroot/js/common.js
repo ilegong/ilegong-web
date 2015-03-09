@@ -1255,7 +1255,7 @@ $(document).ready(function () {
         var $selected_spec = $('span.spec_item_selected');
         var all_spec = [];
         $.each($selected_spec,function(index,item){
-            all_spec.push($(item).text());
+            all_spec.push(($(item).text()).trim());
         });
         var spec_group_str = all_spec.join(',');
         var spec_group_data = product_spec_group[spec_group_str];
