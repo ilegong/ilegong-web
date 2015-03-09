@@ -287,7 +287,9 @@
         <script>
             $(document).ready(function(){
             $('#tuan_buy').click(function(){
-                if(sso.check_userlogin()){
+                if(!sso.check_userlogin()){
+                    return false;
+                }else{
                 var product_id = $('#tuan_buy').attr('item-id');
                 var product_num = $('#input_pamount').val();
                 var postdata = {'product_id':product_id,'product_num':product_num};
