@@ -14,7 +14,7 @@ class TuansController extends AppController{
         $teamInfo = $this->Tuan->find('first',array('condition' => array('id' => $teamId)));
 //        $this->loadModel('Product');
 //        $proInfo = $this->Product->find('first',array('conditions' => array('id' => 838)));
-        $this->set('Product',$proInfo);
+//        $this->set('Product',$proInfo);
         $this->set('sold_num',$teamInfo['Tuan']['sold_num']);
         $this->set('tuan_name',$teamInfo['Tuan']['tuan_name']);
         $this->set('tuan_leader_name',$teamInfo['Tuan']['leader_name']);
