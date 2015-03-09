@@ -70,7 +70,7 @@ class Cart extends AppModel {
     /**
      * @param $product_id
      * @param int $num
-     * @param int $spec specified id for
+     * @param int $specId specified id for
      * @param int $type
      * @param int $try_id
      * @param null $uid
@@ -80,7 +80,7 @@ class Cart extends AppModel {
      * @throws Exception
      * @return mixed On success Model::$data if its not empty or true, false on failure
      */
-    public function add_to_cart($product_id, $num = 1, $spec = 0, $type = CART_ITEM_TYPE_NORMAL, $try_id = 0,
+    public function add_to_cart($product_id, $num = 1, $specId = 0, $type = CART_ITEM_TYPE_NORMAL, $try_id = 0,
                                 $uid = null, $sessionId=null, $prodTry = null, $shichituan = null) {
 
         $user_cond = $this->create_user_cond($uid, $sessionId);
@@ -90,6 +90,7 @@ class Cart extends AppModel {
                 'product_id' => $product_id,
                 'order_id' => null,
                 'try_id' => $try_id,
+                'specId' => $specId,
                 'OR' => $user_cond
             )));
 
@@ -109,7 +110,7 @@ class Cart extends AppModel {
         if ($prodTry) {
             $name = $p['Product']['name'].'(试吃: '.$prodTry['ProductTry']['spec'].')';
         } else {
-            $name = product_name_with_spec($p['Product']['name'], $spec, $p['Product']['specs']);
+            $name = product_name_with_spec($p['Product']['name'], $specId, $p['Product']['specs']);
         }
         $data['Cart']['name'] = $name;
 
@@ -120,7 +121,7 @@ class Cart extends AppModel {
         }
         $data['Cart']['price'] = $price;
         $data['Cart']['creator'] = $uid;
-        $data['Cart']['specId'] = $spec;
+        $data['Cart']['specId'] = $specId;
         $data['Cart']['type'] = $type;
         $data['Cart']['try_id'] = $try_id;
         if (!empty($special_id)) {

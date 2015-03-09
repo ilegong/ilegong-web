@@ -543,13 +543,13 @@ function product_spec_map($specs) {
 /**
  * @param $uid
  * @param $cookieItems
- * @param $cartsByPid
+ * @param $cartsDict
  * @param $poductModel
  * @param $cartModel
  * @param $session_id
  * @return array cartItemsByPid
  */
-function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartModel, $session_id = null) {
+function mergeCartWithDb($uid, $cookieItems, &$cartsDict, $poductModel, $cartModel, $session_id = null) {
     $product_ids = array();
     $nums = array();
     foreach ($cookieItems as $item) {
@@ -570,10 +570,11 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
         $pid = $p['id'];
 
         $newSpecId = empty($specs[$pid]) ? 0 : $specs[$pid];
-        $cartItem =& $cartsByPid[$pid];
+        $cart_key = cart_dict_key($pid, $newSpecId);
+        $cartItem =& $cartsDict[$cart_key];
         $pNum = $nums[$pid];
         if (empty($cartItem)) {
-            list($price, $special_id) = calculate_price($p['Product']['id'], $p['Product']['price'], $uid, $pNum);
+            list($price, $special_id) = calculate_price($p['id'], $p['price'], $uid, $pNum);
             $cartItem = array(
                 'product_id' => $pid,
                 'name' => product_name_with_spec($p['name'], $newSpecId, $p['specs']),
@@ -584,22 +585,11 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
                 'specId' => $newSpecId,
                 'session_id' => $session_id,
             );
-            $cartsByPid[$pid] =& $cartItem;
+            $cartsDict[$cart_key] =& $cartItem;
         } else {
-            if ($newSpecId == $cartItem['specId']) {
-                $cartItem['num'] = $pNum;
-                $cartItem['price'] = $p['price'];
-                $cartItemId = $cartItem['id'];
-            } else {
-                list($price, $special_id) = calculate_price($p['id'], $p['price'], $uid, $pNum);
-               //CONSIDER to add a new item in shopping cart!!
-                $cartItem['num'] = $pNum;
-                $cartItem['price'] = $price;
-                $cartItem['applied_special'] = empty($special_id) ? 0 : $special_id;
-                $cartItem['name']  = product_name_with_spec($p['name'], $newSpecId, $p['specs']);
-                $cartItemId = $cartItem['id'];
-                $cartItem['specId'] = $newSpecId;
-            }
+            $cartItem['num'] = $pNum;
+            $cartItem['price'] = $p['price'];
+            $cartItemId = $cartItem['id'];
         }
         $cartItem['creator'] = $uid;
 
@@ -612,6 +602,29 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsByPid, $poductModel, $cartMo
         if($cartModel->save(array('Cart' => $cartItem))){
             $cartItem['id'] = $cartModel->id;
         }
+    }
+}
+
+/**
+ * @param $pid
+ * @param $newSpecId
+ * @return string
+ */
+function cart_dict_key($pid, $newSpecId) {
+    return $pid . '-' . $newSpecId;
+}
+
+/**
+ * @param $dbCartItems
+ * @return array
+ */
+function dict_db_carts($dbCartItems) {
+    $cartsDicts = array();
+    if (!empty($dbCartItems)) {
+        foreach ($dbCartItems as $ci) {
+            $cartsDicts[cart_dict_key($ci['Cart']['product_id'], $ci['Cart']['specId'])] = $ci['Cart'];
+        }
+        return $cartsDicts;
     }
 }
 
@@ -682,6 +695,9 @@ class ProductSpeciality{
     //获取产品属性指标
     public static function get_product_attrs(){
         $allAttrs = Cache::read('all_product_attributes');
+        if (!empty($allAttrs)) {
+            $allAttrs = json_decode($allAttrs, true);
+        }
         if(empty($allAttrs)){
             $productAttribute = ClassRegistry::init('ProductAttribute');
             $allAttrs = $productAttribute->find('all',array(

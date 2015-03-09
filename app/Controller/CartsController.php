@@ -136,11 +136,13 @@ class CartsController extends AppController{
 					'order_id' => NULL,
 					'OR'=> $this->user_condition
 			)));
-        $cartsByPid = Hash::combine($dbCartItems, '{n}.Cart.product_id', '{n}.Cart');
+
+        $cartsDicts = dict_db_carts($dbCartItems);
+
         $poductModel = ClassRegistry::init('Product');
         if(!empty($_COOKIE['cart_products'])){
             $info = explode(',', $_COOKIE['cart_products']);
-            mergeCartWithDb($this->currentUser['id'], $info, $cartsByPid, $poductModel, $this->Cart, $this->Session->id());
+            mergeCartWithDb($this->currentUser['id'], $info, $cartsDicts, $poductModel, $this->Cart, $this->Session->id());
             setcookie("cart_products", '',time()-3600,'/');
         }
 
