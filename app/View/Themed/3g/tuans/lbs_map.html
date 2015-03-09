@@ -5,15 +5,16 @@
 </style>
 <div class="container">
   <div class="classlist_v2" style="z-index:1">
-    <ul class="clearfix" onclick="back('./detail/1')">
+    <ul class="clearfix" onclick="back('/tuans/detail/{{$teamId}}')">
         <li><a class="back"></a></li>
         <li class="line"></li>
-        <li style="text-overflow: ellipsis;"><strong>{{搜狐媒体大厦}}</strong></li>
+        <li style="text-overflow: ellipsis;"><strong>{{$name}}</strong></li>
     </ul>
   </div>
 <lbs-map  id ="position">
-    <lbs-poi  name="搜狐媒体大厦" location="116.331908,39.98913" addr="北京市海淀区科学院南路2号院3号楼融科资讯中心D座 " ></lbs-poi>
+    <lbs-poi  name="{{$name}}" location="{{$location_1}},{{$location_2}}" addr="{{$addr}}" ></lbs-poi>
 </lbs-map>
+    {{$location_1}}
 </div>
 <script src="http://api.map.baidu.com/components?ak=A1LHIfSqj7LRrmcbIBHmK7fC&v=1.0"></script>
 <script>

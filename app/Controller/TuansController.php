@@ -15,10 +15,11 @@ class TuansController extends AppController{
     public function detail($teamId=null){
         $this->autoRender = true;
         $this->pageTitle = '草莓团购';
-        $teamInfo = $this->Tuan->find('first',array('condition' => array('id' => $teamId)));
+        $teamInfo = $this->Tuan->find('first',array('conditions' => array('id' => $teamId)));
 //        $this->loadModel('Product');
 //        $proInfo = $this->Product->find('first',array('conditions' => array('id' => 838)));
 //        $this->set('Product',$proInfo);
+        $this->set('teamId',$teamId);
         $this->set('sold_num',$teamInfo['Tuan']['sold_num']);
         $this->set('tuan_name',$teamInfo['Tuan']['tuan_name']);
         $this->set('tuan_leader_name',$teamInfo['Tuan']['leader_name']);
@@ -28,8 +29,15 @@ class TuansController extends AppController{
 
 
     }
-    public function lbs_map(){
+    public function lbs_map($teamId=''){
         $this->pageTitle =__('草莓自取点');
+        $teamInfo = $this->Tuan->find('first',array('conditions' => array('id' => $teamId)));
+        $this->set('teamId',$teamId);
+        $this->set('name',$teamInfo['Tuan']['tuan_name']);
+        $this->set('location_1',$teamInfo['Tuan']['tuan_location_1']);
+        $this->set('location_2',$teamInfo['Tuan']['tuan_location_2']);
+        $this->set('addr',$teamInfo['Tuan']['tuan_addr']);
+        $this->log('teamInfo'.json_encode($teamInfo));
         $this->set('hideNav',true);
     }
 
