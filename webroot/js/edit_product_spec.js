@@ -6,7 +6,9 @@ $(function(){
     var $batch_setting = $('#batch_setting');
     var $ProductPrice = $('#ProductPrice');
     var $batch_set_price = $('#batch_set_price');
+    var $batch_set_price_val=$('#batch_set_price_val');
     var $batch_set_stcok=$('#batch_set_stock');
+    var $batch_set_stock_val=$('#batch_set_stock_val');
     var $editForm = $('form');
     var hasSelectAttr = [];
     var specData = {};
@@ -175,6 +177,31 @@ $(function(){
     Handsontable.hooks.add('afterChange', function() {
         setMinPrice();
     });
+    $batch_set_price.on('click',function(){
+        var price = $batch_set_price_val.val();
+        batch_set_val(price,'price');
+        $ProductPrice.val(price);
+    });
+    $batch_set_stcok.on('click',function(){
+        var stock = $batch_set_stock_val.val();
+        batch_set_val(stock,'stock');
+    });
+    function batch_set_val(value,filedName){
+        $.each(tableData,function(_,item){
+            item[filedName]=value;
+        });
+        specPriceTable = $spec_table.handsontable({
+            data: tableData,
+            colHeaders: true,
+            contextMenu: true,
+            mergeCells:true,
+            colHeaders:tableHeaders,
+            manualColumnResize: true,
+            manualRowResize: true,
+            colWidths:colWidths,
+            columns:columns
+        });
+    }
     function genTable(){
         initTable();
         if(tableData.length>0){
