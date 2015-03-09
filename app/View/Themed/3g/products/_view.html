@@ -3,8 +3,8 @@
         {{template Elements/product_img_sild}}
         <div class="p_details_title">{{$Product['Product']['name']}}</div>
         <ul class="p_details_price clearfix">
-            <li class="fl price"><span>￥<font>{{$this->Number->precision($price, 2)}}</font></span>{{if $Product['Product']['original_price']}}<em>{{$this->Number->precision($Product['Product']['original_price'], 2)}}</em>{{/if}}</li>
-            <li class="fr stat"><a {{if $comment_count>0}}href="#comment-div"{{/if}} style="color: #333333">评价<span>({{$comment_count}})</span></a></li>
+            <li class="fl price"><span>￥<font id="product_price">{{$this->Number->precision($price, 2)}}</font></span>{{if $Product['Product']['original_price']}}<em>{{$this->Number->precision($Product['Product']['original_price'], 2)}}</em>{{/if}}</li>
+            <li class="fr stat"><a {{if $comment_count>0}}href="#comment-div"{{/if}} style="color: #333333">评价<span>({{$commet_count}})</span></a></li>
         </ul>
         {{if $hasOfferBrandIds && array_key_exists($Product['Product']['brand_id'], $hasOfferBrandIds)}}
         <ul class="sales clearfix">
@@ -97,9 +97,9 @@
             </li>
         </ul>
         {{/if}}
-        <ul class="clearfix shop_entrance" style="color: #29AC0E;padding: 4px 0.8em 5px 0.8em;" onclick="to_brand();">
+        <ul class="clearfix shop_entrance" style="color: #29AC0E;" onclick="to_brand();">
             <li class="fl"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0"/></li>
-            <li class="fl" style="color: #333333;">{{$brand['Brand']['name']}}</li>
+            <li class="fl">{{$brand['Brand']['name']}}</li>
             <li class="fr" style="margin-top: 0.3em;height: 1.634em;"><a class="p_more"></a></li>
         </ul>
         <div class="service">
@@ -107,7 +107,7 @@
                 <li>
                     <span class="gray mr12" style="float:left;">快递:</span>
 			<span style="display: block;overflow: hidden;">
-                {{if $ship_by_item_num && $Product['Product']['ship_fee'] >0 }}
+                {{if $ship_by_item_num && $Product['Product']['ship_fee'] }}
                     <span>每件{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}元</span>
                 {{else}}
                     {{if $Product['Product']['ship_fee']}} {{if $Product['Product']['ship_fee']==-1}}到付{{elseif $Product['Product']['ship_fee']==-2}}自提{{else}}￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}{{/if}} {{else}}<span>包邮</span>{{/if}}
@@ -129,39 +129,39 @@
         </div>
         <div class="all_line">
                 <ul class="clearfix title" style="margin-bottom: 0;" onclick="to_detail();">
-                    <li class="fl"><strong>图文详情</strong>(建议在Wifi下浏览)</li>
+                    <li class="fl">产品介绍</li>
                     <li class="fr"><a class="p_more"></a></li>
                 </ul>
         </div>
         {{if $is_product_has_shichi}}
         <div class="all_line">
             <ul class="clearfix title" onclick="to_shichi();">
-                <li class="fl">试吃报告<span> {{$shi_chi_comment_count}}</span></li>
+                <li class="fl">试吃报告</li>
                 <li class="fr"><a style="color:#29AC0E;" class="p_more"></a></li>
             </ul>
         </div>
         {{/if}}
 
         <div class="all_line" id="comment-div">
-                <ul class="clearfix title" style="margin-bottom: 0;" {{if $comment_count>5}}onclick="to_comment();"{{/if}}>
-                    <li class="fl">口碑评论<span> {{$comment_count>0?$comment_count:评价有积分奖励哦}}</span></li>
-                    {{if $comment_count>5}}
+                <ul class="clearfix title" style="margin-bottom: 0;" {{if $commet_count>5}}onclick="to_comment();"{{/if}}>
+                    <li class="fl">口碑评论<span> {{$Product['Product']['comment_nums']}}</span></li>
+                    {{if $commet_count>5}}
                     <li class="fr"><a class="p_more"></a></li>
                     {{/if}}
                 </ul>
             {{template products/template_product_comments}}
         </div>
         <div class="all_line" style="margin-bottom: 0;">
-            <ul class="clearfix title" style="margin-bottom: 0px;">
+            <ul class="clearfix title">
                 <li class="fl">相关推荐</li>
             </ul>
-            <div class="classlist_good" style="margin-top: 8px;">
+            <div class="classlist_good" style="margin-top: 0;">
                 <ul class="clearfix list-unstyled" style="padding-left:10px;">
                     <?PHP foreach($items as $index=>$item) {
                     $item['slug'] = $item['slug']?$item['slug']:$item['id'];
                     ?>
                     <li class="{{if $index%2 !=0}}last{{/if}}">
-                        <a href="{{url_colored(product_link2($item), 'h5.product.recom')}}" style="display:block; background-color:#ffffff; margin-right:10px;">
+                        <a href="{{product_link2($item)}}" style="display:block; background-color:#ffffff; margin-right:10px;">
                             <img  src="{{$this->Html->assetUrl(small_thumb_link($item['coverimg']))}}" border="0" style="display:block; background-color:#ffffff; padding-bottom:0.5em; height: 136px"/>
                             <div class="item_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;">{{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}{{$item['name']}}<span>有红包</span>
                                 {{else}}
@@ -171,7 +171,7 @@
                         </a>
                         <dl class="clearfix" style="margin-right: 10px;margin-bottom: 0;">
                             <dt style="float: none;">
-                                <a href="{{url_colored(product_link2($item), 'h5.product.recom')}}">
+                                <a href="{{product_link2($item)}}">
                                     <span class="listprice" style="padding-left: 0;">
                                         <span>¥{{$this->Number->precision($item['price'], 2)}}</span>
                                     </span>
@@ -196,7 +196,7 @@
     function to_shichi(){
         window.location.href="/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}";
     }
-    {{if $comment_count>5}}
+    {{if $commet_count>5}}
         function to_comment(){
             window.location.href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}";
         }
