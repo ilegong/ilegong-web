@@ -2,7 +2,7 @@
 
     <div class="main details">
         <div style="height: 20px"></div>
-        <h1><a href="/">首页</a> &gt; <a href="/categories/tag/.html"></a> &gt; <a href="#">团购草莓送酸奶 昌平兴寿红颜草莓 现采现卖 400g/盒 20盒起团 截止3.10号22点</a></h1>
+        <h1><a href="/">首页</a> &gt; <a href="/categories/tag/shuiguoganguo.html">新鲜水果</a> &gt; <a href="#">团购草莓送酸奶 昌平兴寿红颜草莓 现采现卖 400g/盒 20盒起团 截止3.10号22点</a></h1>
         <div class="clearfix">
             <div class="fl">
                 <style>
@@ -166,6 +166,15 @@
             <div class="fl name">
                 <h1>团购草莓送酸奶 昌平兴寿红颜草莓 现采现卖 400g/盒 20盒起团 截止3.10号22点</h1>
                 <p class="borderb">当天采摘，当天送达，自然熟透，无碰损，科学除虫，无农药，孕妇宝宝水果佳品！</p>
+                <div class="clearfix tuanxq">
+                    {{$tuan_name}}&nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_leader_name}}<br/>参团请加团长微信，微信号:{{$tuan_leader_weixin}}
+                </div>
+                <div class="clearfix tuanxq" style="margin-top: -1px;">
+                    <span class="fl">{{$tuan_address}}</span>
+                    <!--<a class="fr" href="/tuans/lbs_map/{{$teamId}}">-->
+                        <!--<img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>-->
+                    <!--</a>-->
+                </div>
                 <ul class="clearfix pt15">
                     <li class="title">价格:</li>
                     <li><strong class="price">￥19.00</strong>
@@ -194,7 +203,7 @@
                     </li>
                 </ul>
                 <div class="clearfix tb_action">
-                    <a class="fl tb_btn_buy" item-id="838" href="javascript:void(0)" id="btn_quick_buy">立即购买</a>
+                    <a class="fl tb_btn_buy" item-id="838" href="javascript:void(0)" id="tuan_buy">立即购买</a>
                 </div>
             </div>
             <div class="recommend fl">
@@ -372,3 +381,50 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function(){
+        $('#tuan_buy').click(function(){
+            if(!sso.check_userlogin()){
+                return false;
+            }else{
+                var product_id = $('#tuan_buy').attr('item-id');
+                var product_num = $('#input_pamount').val();
+                var postdata = {'product_id':product_id,'product_num':product_num};
+                utils.progress_notify('正在更新购物车');
+                $.ajax({
+                    type:'post',
+                    data: postdata,
+                    url:'/tuans/cart_info',
+                    success:function(data){
+                        if(data.success)
+                        {
+                            window.location.href = '/tuans/join/'+ product_id+'/{{$teamId}}';
+                        }
+                        else
+                        {
+                            showErrorMessage(data.error);
+                        }
+                    },
+                    dataType:'json'
+                });
+            }
+        });
+        $('.btn_reduce').on('click', function () {
+            var currentCount = parseInt($('#input_pamount').val());
+            if (currentCount > 1) {
+                $('#input_pamount').val(currentCount - 1);
+            }
+            return;
+        });
+        $('.btn_add').on('click', function () {
+            var currentCount = parseInt($('#input_pamount').val());
+            if (currentCount < 100) {
+                $('#input_pamount').val(currentCount + 1);
+            }
+            return;
+        });
+
+
+    })
+</script>
