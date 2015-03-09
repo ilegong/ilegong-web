@@ -55,12 +55,14 @@ class TuansController extends AppController{
         $this->loadModel('Tuan');
         $tuan_info = $this->Tuan->findById($tuan_id);
         $this->Cart->find('first');
+        $uid =$this->currentUser['id'];
         $cond = array(
             'status' => CART_ITEM_STATUS_NEW,
             'order_id' => null,
             'num > 0',
             'product_id' => $pid,
             'type' => CART_ITEM_TYPE_TUAN,
+            'creator' => $uid
         );
         $Carts = $this->Cart->find('first', array(
             'conditions' => $cond));
