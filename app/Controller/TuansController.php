@@ -75,6 +75,7 @@ class TuansController extends AppController{
     }
 
     public function tuan_pay($orderId){
+        $this->pageTitle = '团购';
         $this->loadModel('Order');
         $order_info = $this->Order->find('first', array(
             'conditions' =>array('id' => $orderId),

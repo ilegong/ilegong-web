@@ -15,10 +15,10 @@ class Tuan extends AppModel {
         $sold_num = $cart_info['Cart']['num'];
         $this->updateAll(array('join_num' => 'join_num + 1', 'sold_num' => 'sold_num + ' . $sold_num), array('id' => $memberId));
         $tuan_info = $this->find('first', array(
-            'conditions' => array('order_id' => $order_id),
+            'conditions' => array('id' => $memberId),
             'fields' => array('sold_num')
         ));
-        if($tuan_info['Cart']['sold_num'] >= 20){
+        if($tuan_info['Cart']['sold_num'] >= 100){
             $this->updateAll(array('status' => 1), array('id' => $memberId));
         }
     }
