@@ -819,7 +819,7 @@ function product_link($pid, $defUri) {
  * @return string
  */
 function product_link2($p, $defUri = '/') {
-    if($p['Product']['id'] == 838 || $p == 838){
+    if($p['Product']['id'] == 838 || $p['id'] == 838){
         $link = "/tuans/lists.html";
         return $link;
     }else{
