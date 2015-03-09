@@ -10,7 +10,17 @@ $(function(){
     var tableHeaders=[];
     var columns=[];
     var tempTableData = [];
+    var colWidths = [];
     var specPriceTable;
+    //overwrite test tag exist
+    //一个商品下面规格名称不能重复
+    $.fn.tagExist = function(val){
+        var allTags = [];
+        $.each($tags,function(index,item){
+            allTags = allTags.concat(getTagsByElement($(item)));
+        });
+        return ($.inArray(val,allTags)>=0);
+    }
     function initData(){
         $.each(product_specs,function(index,item){
             var attr_id = item['attr_id'];
@@ -37,11 +47,13 @@ $(function(){
             'width':'230px',
             'interactive':true,
             'defaultText':'添加规格',
-            'onChange':onChangeTag
+            'onChange':onChangeTag,
+            'minChars':2
         });
         //TODO init table
         //table data
         genTable();
+        should_init=false;
     }
     //before gen table
     function initTable(){
@@ -57,7 +69,7 @@ $(function(){
             if(val!=0&&selectedTags.length>0){
                 var attrName = $('option:selected',me).text();
                 tableHeaders.push(attrName);
-                columns.push({data:val});
+                columns.push({data:val,readOnly:true});
                 tempTableData.push({'key':val,'tags':selectedTags});
             }
         });
@@ -77,9 +89,16 @@ $(function(){
                 var attr1Tags = tempTableData[0]['tags'];
                 $.each(attr1Tags,function(index,tag1){
                     var itemData = {};
+                    var key = tag1;
+                    var price=0;
+                    var stock=0;
+                    if(edit_spec_groups[key]){
+                        price = edit_spec_groups[key]['price'];
+                        stock = edit_spec_groups[key]['stock'];
+                    }
                     itemData[attr1Id]=tag1;
-                    itemData['price']=0;
-                    itemData['stock']=0;
+                    itemData['price']=price;
+                    itemData['stock']=stock;
                     tableData.push(itemData);
                 });
             }else if(tempDataLen==2){
@@ -90,10 +109,17 @@ $(function(){
                 $.each(attr1Tags,function(i,tag1){
                     $.each(attr2Tags,function(j,tag2){
                         var itemData = {};
+                        var key = tag1+','+tag2;
+                        var price=0;
+                        var stock=0;
+                        if(edit_spec_groups[key]){
+                            price = edit_spec_groups[key]['price'];
+                            stock = edit_spec_groups[key]['stock'];
+                        }
                         itemData[attr1Id]=tag1;
                         itemData[attr2Id]=tag2;
-                        itemData['price']=0;
-                        itemData['stock']=0;
+                        itemData['price']=price;
+                        itemData['stock']=stock;
                         tableData.push(itemData);
                     });
 
@@ -109,11 +135,18 @@ $(function(){
                     $.each(attr2Tags,function(j,tag2){
                         $.each(attr3Tags,function(k,tag3){
                             var itemData = {};
+                            var key = tag1+','+tag2+','+tag3;
+                            var price=0;
+                            var stock=0;
+                            if(edit_spec_groups[key]){
+                                price = edit_spec_groups[key]['price'];
+                                stock = edit_spec_groups[key]['stock'];
+                            }
                             itemData[attr1Id]=tag1;
                             itemData[attr2Id]=tag2;
                             itemData[attr3Id]=tag3;
-                            itemData['price']=0;
-                            itemData['stock']=0;
+                            itemData['price']=price;
+                            itemData['stock']=stock;
                             tableData.push(itemData);
                         });
 
@@ -126,12 +159,16 @@ $(function(){
     function genTable(){
         initTable();
         //var container = document.getElementById('hot');
+        colWidths = Array.apply(null,new Array(columns.length)).map(Number.prototype.valueOf,120);
         specPriceTable = $spec_table.handsontable({
             data: tableData,
             colHeaders: true,
             contextMenu: true,
             mergeCells:true,
             colHeaders:tableHeaders,
+            manualColumnResize: true,
+            manualRowResize: true,
+            colWidths:colWidths,
             columns:columns
         });
     }

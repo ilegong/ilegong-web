@@ -1249,6 +1249,20 @@ $(document).ready(function () {
 		}
 		$this.toggleClass('spec_item_selected').toggleClass('cur');
 		$('span.spec_item[item-label="' + $this.attr('item-label') + '"]').not($this).removeClass('spec_item_selected').removeClass('cur');
+        //reset product price
+        var $selected_spec = $('span.spec_item_selected');
+        var all_spec = [];
+        $.each($selected_spec,function(index,item){
+            all_spec.push($(item).text());
+        });
+        var spec_group_str = all_spec.join(',');
+        var spec_group_data = product_spec_group[spec_group_str];
+        if(spec_group_data){
+            var price = spec_group_data['price'];
+            if(price&&price!='0'){
+                $('#product_price').text('¥ '+price);
+            }
+        }
 	});
 	$("#btn_add_cart").click(function(e){
 		var $this = $(this);

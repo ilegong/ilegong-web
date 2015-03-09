@@ -18,3 +18,11 @@ CREATE TABLE cake_product_spec_groups (
   `stock` INT NULL,
   `deleted` INT NULL DEFAULT 0,
   PRIMARY KEY (`id`));
+
+ALTER TABLE `cake_product_spec_groups`
+ADD COLUMN `spec_names` VARCHAR(500) NULL AFTER `deleted`;
+
+ALTER TABLE `cake_product_spec_groups`
+ADD COLUMN `product_id` INT NULL AFTER `spec_names`;
+
+
