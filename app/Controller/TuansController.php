@@ -9,6 +9,8 @@
 class TuansController extends AppController{
     public function lists(){
         $this->pageTitle = '团购列表';
+        $tuan_info = $this->Tuan->find('all');
+        $this->set('tuans_info', $tuan_info);
     }
     public function detail($teamId=null){
         $this->autoRender = true;

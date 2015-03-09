@@ -1,17 +1,19 @@
 <ul class="sales clearfix">
-    <a href="/tuans/detail/1">
-        <li>
-            <div class="clearfix tuanxq">
-                搜狐媒体大厦团&nbsp;&nbsp;&nbsp;&nbsp;团长:潘婷 <br>微信号:pt8220707
-            </div>
-            <div class="clearfix tuanxq" style="margin-top: -1px;">
-                <span class="fl">搜狐媒体大厦好邻居便利店</span>
-                <a class="fr" href="/tuans/lbs_map.html">
-                    <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
-                </a>
-            </div>
-        </li>
-    </a>
+    {{loop $tuans_info $tuan}}
+    <li>
+        <a href="/tuans/detail/{{$tuan['Tuan']['id']}}">
+        <div class="clearfix tuanxq">
+            {{$tuan['Tuan']['tuan_name']}}&nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan['Tuan']['leader_name']}} <br>微信号:{{$tuan['Tuan']['leader_weixin']}}
+        </div>
+        </a>
+        <div class="clearfix tuanxq" style="margin-top: -1px;">
+            <span class="fl">{{$tuan['Tuan']['address']}}</span>
+            <a class="fr" href="/tuans/lbs_map.html">
+                <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
+            </a>
+        </div>
+    </li>
+    {{/loop}}
 </ul>
 
 
