@@ -106,6 +106,7 @@ class TuansController extends AppController{
         $creator = $cart_info['Cart']['creator'];
         $order_type = $cart_info['Cart']['type'];
         if($creator != $uid){
+            $this->log("no right to this order, uid".$uid. "creator:".$creator);
             $res = array('success'=> false, 'info'=> '团购订单不属于你，请刷新重试');
         }elseif($order_type != CART_ITEM_TYPE_TUAN){
             $res = array('success'=> false, 'info'=> '该订单不属于团购订单，请重试');
