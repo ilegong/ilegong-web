@@ -11,7 +11,7 @@ class StoresController extends AppController
 
     public $uses = array('Product', 'Brand', 'Order');
 
-    public $components = array('Paginator');
+    public $components = array('Paginator','ProductSpecGroup');
 
 
     /* lower case */
@@ -178,6 +178,10 @@ class StoresController extends AppController
                 $this->Product->create();
                 $p =$this->Product->save($this->data);
                 if ($p) {
+                    //save product spec
+                    $this->save_product_spec($p['Product']['id']);
+                    //get spec group
+                    $this->save_product_spec_gorup($p['Product']['id']);
                     //保存上传的附件；形如 data[Uploadfile][39][id] , data[Uploadfile][39][name]
                     if (isset($this->data['Uploadfile']) && is_array($this->data['Uploadfile'])) {
                         $this->loadModel('Uploadfile');
@@ -197,6 +201,7 @@ class StoresController extends AppController
                 }
             }
         }
+        $this->set('product_attrs',ProductSpeciality::get_product_attrs());
         $this->set('op_cate', 'products');
     }
 
@@ -239,6 +244,9 @@ class StoresController extends AppController
             } else {
                 $p =$this->Product->save($this->data);
                 if ($p) {
+                    //save product spec
+                    $this->save_product_spec($id,true);
+                    $this->save_product_spec_gorup($id,true);
                     //保存上传的附件；形如 data[Uploadfile][39][id] , data[Uploadfile][39][name]
                     if (isset($this->data['Uploadfile']) && is_array($this->data['Uploadfile'])) {
                         $this->loadModel('Uploadfile');
@@ -262,6 +270,14 @@ class StoresController extends AppController
             //return ;
             $this->redirect(array('action' => 'edit_product', $id));
         } else {
+            //get specs
+            $this->set('product_attrs',ProductSpeciality::get_product_attrs());
+            $specs = $this->get_product_spec($id);
+            $specs = Hash::extract($specs,'{n}.ProductSpec');
+            $this->set('specs',json_encode($specs));
+            //get spec group by pid
+            $specGroups = $this->ProductSpecGroup->extract_spec_group_map($id,'spec_names');
+            $this->set('specGroups',json_encode($specGroups));
             $this->data = $datainfo; //加载数据到表单中
             $this->loadModel('Uploadfile');
             $uploadFiles=$this->Uploadfile->find('all',array(
@@ -787,8 +803,6 @@ class StoresController extends AppController
         return $this->ShareOffer->find('first',array('conditions' => array('id' =>$id,'brand_id' => $brand_id)));
     }
 
-
-
     public function cake_dating($action) {
         $this->checkAccess();
         $this->pageTitle = '设置可选的发货日期';
@@ -843,4 +857,73 @@ class StoresController extends AppController
             $this->__message("您没有权限进行操作", '/stores/index');
         }
     }
+
+    public function get_product_spec($pid){
+        $this->loadModel('ProductSpec');
+        $specs = $this->ProductSpec->find('all',array(
+            'conditions'=>array(
+                'product_id'=>$pid,
+                'deleted'=>0
+            )
+        ));
+        return $specs;
+    }
+
+    public function save_product_spec($pid,$isEdit=false){
+        $this->loadModel('ProductSpec');
+        if($isEdit){
+            //delete before data
+            $this->ProductSpec->deleteAll(array('product_id'=>$pid));
+        }
+        $data = array();
+        //todo product max spec is 3 move to bootstrap.php
+        foreach(range(1,3) as $index){
+            $p_attr = $_REQUEST['spec-'.$index];
+            $p_tag=$_REQUEST['tags-'.$index];
+            if(!empty($p_attr)&&!empty($p_tag)&&$p_attr!='0'){
+                $tag_array = explode(',',$p_tag);
+                foreach($tag_array as $tag){
+                    $data[] = array('name'=>$tag,'product_id'=>$pid,'attr_id'=>$p_attr);
+                }
+            }
+        }
+        $this->ProductSpec->saveAll($data);
+    }
+    //save spec group
+    public function save_product_spec_gorup($pid,$isEdit=false){
+        $this->loadModel('ProductSpecGroup');
+        //delete all before group
+        if($isEdit){
+            $this->ProductSpecGroup->deleteAll(array(
+                'product_id'=>$pid
+            ));
+        }
+        $specGroup = json_decode($_REQUEST['spec_table'],true);
+        $specs = $this->get_product_spec($pid);
+        $specs = Hash::combine($specs,'{n}.ProductSpec.id','{n}.ProductSpec');
+        $saveData = array();
+        foreach($specGroup as $item){
+            $tempSpecIds = array();
+            $tempSpecNames = array();
+            foreach($item as $key=>$value){
+                if($key!='price'&&$key!='stock'){
+                    $tempSpecIds[]=$this->extract_spec_id($key,$value,$specs);
+                    $tempSpecNames[]=$value;
+                }
+            }
+            $saveData[]=array('product_id'=>$pid,'price'=>$item['price'],'stock'=>$item['stock'],'spec_ids'=>join(',',$tempSpecIds),'spec_names'=>join(',',$tempSpecNames));
+        }
+        $this->ProductSpecGroup->saveAll($saveData);
+    }
+    //约定同一个产品下面规格的名称是唯一的
+    public function extract_spec_id($attrId,$name,$specs){
+        foreach($specs as $key=>$item){
+            if($item['attr_id']==$attrId&&$item['name']==$name){
+                return $key;
+            }
+
+        }
+    }
+
+
 }
