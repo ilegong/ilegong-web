@@ -251,7 +251,6 @@ class ProductsController extends AppController{
         $this->set('afford_for_curr_user', $afford_for_curr_user);
 
         //get specs from database
-        //$specs_map = product_spec_map($this->viewdata['Product']['specs']);
         $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($this->viewdata['Product']['id'],'spec_names');
         $this->set('product_spec_group',json_encode($product_spec_group));
         $specs_map = $this->ProductSpecGroup->get_product_spec_json($this->viewdata['Product']['id']);

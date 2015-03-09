@@ -53,7 +53,7 @@
         <ul class="standard clearfix">
             {{if $specs_map && !empty($specs_map['choices'])}}
             <?php foreach($specs_map['choices'] as $label => $values) {
-            if(!empty($label) && !empty($vaLabel)){
+            if(!empty($label) && !empty($values)){
             ?>
             <li>
                 <span class="gray title mr12 spec_label" style="float:left;">{{$label}}:</span>
