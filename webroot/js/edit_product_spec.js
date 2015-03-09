@@ -3,6 +3,10 @@ $(function(){
     var $specs = $('select[name^="spec"]');
     var $spec_table = $('#spec_table');
     var $spec_table_data = $('#spec_table_data');
+    var $batch_setting = $('#batch_setting');
+    var $ProductPrice = $('#ProductPrice');
+    var $batch_set_price = $('#batch_set_price');
+    var $batch_set_stcok=$('#batch_set_stock');
     var $editForm = $('form');
     var hasSelectAttr = [];
     var specData = {};
@@ -21,6 +25,9 @@ $(function(){
         });
         return ($.inArray(val,allTags)>=0);
     }
+    Array.prototype.min = function() {
+        return Math.min.apply(null, this);
+    };
     function initData(){
         $.each(product_specs,function(index,item){
             var attr_id = item['attr_id'];
@@ -156,8 +163,28 @@ $(function(){
             }
         }
     }
+
+    function setMinPrice(){
+        var data = $spec_table.data('handsontable').getData();
+        var priceArray = [];
+        $.each(data,function(_,item){
+            priceArray.push(parseFloat(item['price']));
+        });
+        $ProductPrice.val(priceArray.min());
+    }
+    Handsontable.hooks.add('afterChange', function() {
+        setMinPrice();
+    });
     function genTable(){
         initTable();
+        if(tableData.length>0){
+            $batch_setting.show();
+            $ProductPrice.attr('readonly','readonly');
+        }else{
+            $batch_setting.hide();
+            $ProductPrice.removeAttr('readonly');
+        }
+        console.log(tableData);
         //var container = document.getElementById('hot');
         colWidths = Array.apply(null,new Array(columns.length)).map(Number.prototype.valueOf,120);
         specPriceTable = $spec_table.handsontable({
@@ -171,6 +198,7 @@ $(function(){
             colWidths:colWidths,
             columns:columns
         });
+        setMinPrice();
     }
     var $options = '<option value="0">请选择规格名称</option>';
     $.each(all_product_attrs,function(index,item){

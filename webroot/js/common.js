@@ -1216,15 +1216,17 @@ $(document).ready(function () {
 						if (spec_item_selected.size() < 1) {
 							utils.alert("请选择" + itemLabel);
 							return false;
-						}  else {
-							specId = _p_spec_m[$.trim(spec_item_selected.text())];
 						}
 					});
-					if (!specId) {
-						return false;
-					}
 				}
 			}
+            var spec_group_data = get_spec_group();
+            if(spec_group_data){
+                specId = spec_group_data['id']||0;
+            }
+            if (!specId) {
+                return false;
+            }
 		}
 
 		//special for cake
@@ -1235,10 +1237,20 @@ $(document).ready(function () {
 				return false;
 			}
 		}
-
 		addtoCart(pid, itemNum, specId || 0, quick_buy_pid, type, $price);
 		return true;
 	}
+
+    function get_spec_group(){
+        var $selected_spec = $('span.spec_item_selected[item-label!="SD"]');
+        var all_spec = [];
+        $.each($selected_spec,function(index,item){
+            all_spec.push(($(item).text()).trim());
+        });
+        var spec_group_str = all_spec.join(',');
+        var spec_group_data = product_spec_group[spec_group_str];
+        return spec_group_data;
+    }
 
 
 	$('span.spec_item').click(function (ev) {
@@ -1252,13 +1264,7 @@ $(document).ready(function () {
 		$this.toggleClass('spec_item_selected').toggleClass('cur');
 		$('span.spec_item[item-label="' + $this.attr('item-label') + '"]').not($this).removeClass('spec_item_selected').removeClass('cur');
         //reset product price
-        var $selected_spec = $('span.spec_item_selected');
-        var all_spec = [];
-        $.each($selected_spec,function(index,item){
-            all_spec.push(($(item).text()).trim());
-        });
-        var spec_group_str = all_spec.join(',');
-        var spec_group_data = product_spec_group[spec_group_str];
+        var spec_group_data = get_spec_group();
         if(spec_group_data){
             var price = spec_group_data['price'];
             if(price&&price!='0'){
@@ -1270,6 +1276,7 @@ $(document).ready(function () {
                 }
             }
         }
+
 	});
 	$("#btn_add_cart").click(function(e){
 		var $this = $(this);
