@@ -71,7 +71,7 @@ class ProductSpecGroupComponent extends Component{
                     $price = $specGroup['ProductSpecGroup']['price'];
                 }
             }
-            $result[]=array();
+            $result[]=array($pid.'-'.$sid=>$price);
         }
         return $result;
     }

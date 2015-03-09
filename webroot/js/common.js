@@ -1262,7 +1262,12 @@ $(document).ready(function () {
         if(spec_group_data){
             var price = spec_group_data['price'];
             if(price&&price!='0'){
-                $('#product_price').text('¥ '+price);
+                var $price_element = $('#product_price');
+                if($price_element.prop('tagName').toUpperCase()=='FONT'){
+                    $('#product_price').text(price);
+                }else{
+                    $('#product_price').text('¥ '+price);
+                }
             }
         }
 	});
