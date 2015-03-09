@@ -46,25 +46,21 @@ class TuansController extends AppController{
     }
 
     public function join($pid, $tuan_id){
-
         $this->pageTitle = '订单确认';
+        if(empty($this->currentUser['id'])){
+            $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
+            return;
+        }
         $this->loadModel('Cart');
         $this->loadModel('Tuan');
         $tuan_info = $this->Tuan->findById($tuan_id);
         $this->Cart->find('first');
-        $user_condition = array(
-            'session_id'=>	$this->Session->id(),
-        );
-        if($this->currentUser['id']){
-            $user_condition['creator']=$this->currentUser['id'];
-        }
         $cond = array(
             'status' => CART_ITEM_STATUS_NEW,
             'order_id' => null,
             'num > 0',
             'product_id' => $pid,
             'type' => CART_ITEM_TYPE_TUAN,
-            'OR' => $user_condition
         );
         $Carts = $this->Cart->find('first', array(
             'conditions' => $cond));
@@ -73,7 +69,7 @@ class TuansController extends AppController{
         $this->set('total_price', $total_price);
         $this->set('cart_id', $Carts['Cart']['id']);
         $this->set('tuan_id', $tuan_id);
-        $this->set('tuan_address', $tuan_info['Cart']['address']);
+        $this->set('tuan_address', $tuan_info['Tuan']['address']);
     }
 
     public function tuan_pay($orderId){
@@ -94,50 +90,47 @@ class TuansController extends AppController{
         $name = $_POST['name'];
         $uid = $this->currentUser['id'];
         if (empty($uid)) {
-            $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
+            $this->log("not login for tuan order:".$cart_id);
+            echo json_encode(array('success'=> false));
             return;
-        } else {
-            $tuan_url = '/tuans/detail';
-            if(empty($cart_id)){
-                $this->__message('团购信息出错，请返回重试', $tuan_url);
+        }
+        if(empty($cart_id)){
+            $this->log("tuan cart id error:".$cart_id);
+            echo json_encode(array('success'=> false));
+            return;
+        }
+        $this->loadModel('Cart');
+        $this->loadModel('Order');
+        $this->loadModel('Tuan');
+        $cart_info = $this->Cart->findById($cart_id);
+        $creator = $cart_info['Cart']['creator'];
+        $order_type = $cart_info['Cart']['type'];
+        if($creator != $uid){
+            $res = array('success'=> false, 'info'=> '团购订单不属于你，请刷新重试');
+        }elseif($order_type != CART_ITEM_TYPE_TUAN){
+            $res = array('success'=> false, 'info'=> '该订单不属于团购订单，请重试');
+        }else{
+            if(!empty($cart_info['Cart']['order_id'])){
+                $this->log("cart order id error,cart id".$cart_id);
                 return;
+            }
+            $total_price = $cart_info['Cart']['num'] * $cart_info['Cart']['price'];
+            if($total_price < 0 ){
+                $this->log("error tuan price, cart id".$cart_id);
+                return;
+            }
+            $pid = $cart_info['Cart']['product_id'];
+            $area = '';
+            $tuan_info = $this->Tuan->findById($tuan_id);
+            $address = $tuan_info['Tuan']['address'];
+            $order = $this->Order->createTuanOrder($tuan_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id);
+            if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
+                $res = array('success'=> false, 'info'=> '你已经支付过了');
             }else{
-                $this->loadModel('Cart');
-                $this->loadModel('Order');
-                $this->loadModel('Tuan');
-                $cart_info = $this->Cart->findById($cart_id);
-                $creator = $cart_info['Cart']['creator'];
-                $order_type = $cart_info['Cart']['type'];
-                if($creator != $uid){
-                    $this->__message('团购订单不属于你，请重试', $tuan_url);
-                    return;
-                }
-                if($order_type != CART_ITEM_TYPE_TUAN){
-                    $this->__message('该订单不属于团购订单，请重试', $tuan_url);
-                    return;
-                }
-                if(!empty($cart_info['Cart']['order_id'])){
-                    throw new CakeException("cart order id error ");
-                }
-                $total_price = $cart_info['Cart']['num'] * $cart_info['Cart']['price'];
-                if($total_price <= 0 ){
-                    throw new CakeException("error tuan order price ");
-                }
-                $pid = $cart_info['Cart']['product_id'];
-                $area = '';
-                $tuan_info = $this->Tuan->findById($tuan_id);
-                $address = $tuan_info['Tuan']['address'];
-
-                $order = $this->Order->createTuanOrder($tuan_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id);
-                if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
-                    $this->__message('您已经支付过了', $tuan_url);
-                    return;
-                }else{
-                    $res = array('success'=> true, 'order_id'=>$order['Order']['id']);
-                    echo json_encode($res);
-                }
+                $res = array('success'=> true, 'order_id'=>$order['Order']['id']);
             }
         }
+        echo json_encode($res);
     }
 
 }
