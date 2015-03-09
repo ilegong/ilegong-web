@@ -47,7 +47,7 @@ class ProductSpecGroupComponent extends Component{
 
     public function get_product_spec_json($pid){
         $productSpec = ClassRegistry::init('ProductSpec');
-        $productAttrs = json_decode(ProductSpeciality::get_product_attrs(),true);
+        $productAttrs = ProductSpeciality::get_product_attrs();
         $productAttrs = Hash::combine($productAttrs,'{n}.id','{n}.name');
         //todo
         $allProductSpec = $productSpec->find('all',array(
