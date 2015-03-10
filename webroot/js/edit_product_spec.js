@@ -183,7 +183,7 @@ $(function(){
     });
     $batch_set_price.on('click',function(){
         var price = $batch_set_price_val.val();
-        if(!isNaN(price)){
+        if(!isNaN(price)&&price!=''){
             batch_set_val(price,'price');
             $ProductPrice.val(price);
         }else{
@@ -192,7 +192,7 @@ $(function(){
     });
     $batch_set_stcok.on('click',function(){
         var stock = $batch_set_stock_val.val();
-        if(!isNaN(stock)){
+        if(!isNaN(stock)&&stock!=''){
             batch_set_val(stock,'stock');
         }else{
             alert("请输入数字");
