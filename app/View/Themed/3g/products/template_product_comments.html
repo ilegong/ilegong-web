@@ -38,11 +38,6 @@
             });
         }
 
-        function getSimpleDate(dateStr){
-            var date = new Date(dateStr);
-            return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
-        }
-
         function processCommentData(item){
             var rating = parseInt(item['rating']);
             var ratingStr = "差评";
@@ -79,7 +74,7 @@
                                         '</div>';
                                     }
                             if(item['buy_time']){
-                                $comment+= '<div class="pay_time">购买时间: '+getSimpleDate(item['buy_time'])+'</div>'+
+                                $comment+= '<div class="pay_time">购买时间: '+item['buy_time']+'</div>'+
                                 '</div>';
                             }
 

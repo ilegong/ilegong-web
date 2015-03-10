@@ -161,7 +161,7 @@ class CommentsController extends AppController {
             unset($item['ip']);
             unset($item['lft']);
             unset($item['rght']);
-
+            $item['buy_time'] = friendlyDateFromStr($item['buy_time'],'ymd');
             if ($item['pictures']) {
                 $images = array();
                 $pics = mbsplit("\\|", $item['pictures']);
