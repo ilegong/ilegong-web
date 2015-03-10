@@ -465,15 +465,16 @@ class OrderCartItem {
         $brandItem->add_product_item(new ProductCartItem($pid, $itemPrice, $num, $used_coupons, $name));
     }
 
-    public function find_product_item($pid) {
+    public function count_total_num($pid) {
+        $num = 0;
         foreach($this->brandItems as $bid=>$brandItem) {
             foreach($brandItem->items as $productItem) {
                 if($productItem->pid == $pid) {
-                    return $productItem;
+                    $num += $productItem->num;
                 }
             }
         }
-        return null;
+        return $num;
     }
 
 

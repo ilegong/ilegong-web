@@ -446,7 +446,7 @@ class ApiOrdersController extends AppController {
             $buyingCom = $this->Components->load('Buying');
             //FIXME: check pid list
             $cartsByPid = $buyingCom->cartsByPid($pidList, $uid);
-            list($pids, $cart, $shipFee, $shipFees) = $buyingCom->createTmpCarts($cartsByPid, 0, $pidList, $uid);
+            list($pids, $cart, $shipFee, $shipFees) = $buyingCom->createTmpCarts(0, $pidList, $uid);
 
             $products = $this->Product->find('all', array(
                 'fields' => array('id', 'created', 'slug', 'published', 'deleted','specs','coverimg'),

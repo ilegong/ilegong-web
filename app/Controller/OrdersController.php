@@ -83,39 +83,49 @@ class OrdersController extends AppController{
 //            $reason = 'share_type_coupon_exceed';
 //        }
 
-        $Carts = array();
-        $cond = array(
-            'status' => CART_ITEM_STATUS_NEW,
-            'order_id' => null,
-            'num > 0',
-            'OR' => $this->user_condition
-        );
-        $specifiedPids = $this->specified_balance_pids();
-        $tryId = $specifiedPids['try'];
-        unset($specifiedPids['try']);
-        if (!empty($specifiedPids)) {
-            $cond['product_id'] = $specifiedPids;
-        }
+        $carts = array();
+        $nums = array();
+        $cart_by_pids = array();
 
-        if ($tryId) {
-            $cond['type'] = CART_ITEM_TYPE_TRY;
-            $error_back_url = '/shichi/list_pai.html';
-        } else {
-            $cond['type !='] = CART_ITEM_TYPE_TRY;
-            $error_back_url = '/carts/listcart';
-        }
-        $Carts_tmp = $this->Cart->find('all', array(
-            'conditions' => $cond));
+        $specified_cart_ids = $this->specified_balance_pids();
+        $tryId = $specified_cart_ids['try'];
+        unset($specified_cart_ids['try']);
 
-        foreach($Carts_tmp as $c){
-            $product_ids[]=$c['Cart']['product_id'];
-            $Carts[$c['Cart']['product_id']] = $c;
-        }
+        $error_back_url = '/';
+        if (!empty($specified_cart_ids)) {
+            $cond = array(
+                'status' => CART_ITEM_STATUS_NEW,
+                'order_id' => null,
+                'num > 0',
+                'OR' => $this->user_condition,
+                'id' => $specified_cart_ids,
+            );
+            if ($tryId) {
+                $cond['type'] = CART_ITEM_TYPE_TRY;
+                $error_back_url = '/shichi/list_pai.html';
+            } else {
+                $cond['type !='] = CART_ITEM_TYPE_TRY;
+                $error_back_url = '/carts/listcart.html';
+            }
+            $carts = $this->Cart->find('all', array(
+                'conditions' => $cond));
 
-        if(empty($Carts)){
+            foreach ($carts as $c) {
+                $cart_pid = $c['Cart']['product_id'];
+                $product_ids[] = $cart_pid;
+                $nums[$cart_pid] += $c['Cart']['num'];
+                $cart_by_pids[$cart_pid][] = $c;
+            }
+
+            $product_ids = array_unique($product_ids);
+
+        }
+        if(empty($carts)) {
 			$this->__message('您没有选择结算商品，请返回购物车检查', $error_back_url);
             return;
 		}
+
+        $uid = $this->currentUser['id'];
 
         $allP = $this->Product->find('all', array('conditions' => array(
             'id' => $product_ids
@@ -127,33 +137,20 @@ class OrdersController extends AppController{
                 $business[$p['Product']['brand_id']] = array();
             }
             $business[$p['Product']['brand_id']][] = $p['Product'];
+            $pid = $p['Product']['id'];
+            $num = $nums[$pid];
+            list($afford_for_curr_user, $limit_cur_user) = $tryId ? afford_product_try($tryId, $uid) : AppController::__affordToUser($pid, $uid);
+            $pName = $p['Product']['name'];
+            if (!$afford_for_curr_user) {
+                $this->__message($pName .__('已售罄或您已经购买超限，请从购物车中调整后再结算'), $error_back_url, 5);
+                return;
+            } else if ($limit_cur_user == 0 || ($limit_cur_user > 0 && $num > $limit_cur_user)) {
+                $this->__message($pName .__('购买超限，请从购物车中调整后再结算'), $error_back_url, 5);
+            }
+
         }
 
         $pids = Hash::extract($allP, '{n}.Product.id');
-
-//        $ship_fees = array();
-//		$business = array();
-//		foreach($products as $p){
-//            $pid = $p['Product']['id'];
-//            $pBrandId = $p['Product']['brand_id'];
-//            if(isset($business[$pBrandId])){
-//                $business[$pBrandId][] = $pid;
-//			}
-//			else{
-//				$business[$pBrandId] = array($pid);
-//			}
-//
-//            if ($tryId) {
-//                $ship_fees[$pid] = 0;
-//            } else {
-//                $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
-//                $singleShipFee = empty($pp) ? $p['Product']['ship_fee'] : $pp['ship_price'];
-//                $ship_fees[$pid] = ShipPromotion::calculateShipFee($pid, $singleShipFee, $nums[$pid], null);
-//            }
-//
-//		}
-
-        $uid = $this->currentUser['id'];
 
         $this->loadModel('OrderConsignee');
         $addressId = $this->Session->read('OrderConsignee.id');
@@ -176,21 +173,16 @@ class OrdersController extends AppController{
 			$total_price = 0.0;
             foreach($products as $pro){
                 $pid = $pro['id'];
-                $num = $Carts[$pid]['Cart']['num'];
 
-                $pp = $shipPromotionId ? $shipPromo->find_ship_promotion($pid, $shipPromotionId) : array();
-                $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $num ? $num : 1);
+                $pps = $cart_by_pids[$pid];
+                if (!empty($pps)) {
+                    foreach ($pps as $carts_of_p) {
+                        $pp = $shipPromotionId ? $shipPromo->find_ship_promotion($pid, $shipPromotionId) : array();
+                        $num = $carts_of_p['Cart']['num'];
+                        list($itemPrice,) = calculate_price($pid, $pro['price'], $uid, $num, $carts_of_p['Cart']['id'], $pp);
 
-                list($itemPrice,) = calculate_price($pid, $pro['price'], $uid, $num, $Carts[$pid]['Cart']['id'], $pp);
-
-                $total_price+= $itemPrice * $num;
-
-                list($afford_for_curr_user, $limit_cur_user) = $tryId ? afford_product_try($tryId, $uid) : AppController::__affordToUser($pid, $uid);
-                if (!$afford_for_curr_user) {
-                    $this->__message(__($Carts[$pid]['name'].'已售罄或您已经购买超限，请从购物车中调整后再结算'), $error_back_url, 5);
-                    return;
-                } else if ($limit_cur_user == 0 || ($limit_cur_user > 0 && $num > $limit_cur_user)) {
-                    $this->__message(__($Carts[$pid]['name'].'购买超限，请从购物车中调整后再结算'), $error_back_url, 5);
+                        $total_price += $itemPrice * $num;
+                    }
                 }
 			}
 
@@ -198,7 +190,6 @@ class OrdersController extends AppController{
 				$this->Session->setFlash('订单金额错误，请返回购物车查看');
 				$this->redirect($error_back_url);
 			}
-
 
             $shipFeeContext = array();
             $ship_fee = 0.0;
@@ -210,9 +201,9 @@ class OrdersController extends AppController{
                     if($val['ShipSetting']['product_id'] == $pid){
                         $pidShipSettings[] = $val;
                     }
-                };
+                }
 
-                $num = $Carts[$pid]['Cart']['num'];
+                $num = $nums[$pid];
 
                 if ($tryId) {
                     $ship_fees[$pid] = 0;
@@ -265,12 +256,15 @@ class OrdersController extends AppController{
                 }
                 foreach($products as $pro){
                     $pid = $pro['id'];
-					$cart = $Carts[$pid];
-					$this->Cart->updateAll(array('order_id'=>$order_id,'status'=>CART_ITEM_STATUS_BALANCED),
-                        array('id'=>$cart['Cart']['id'], 'status' => CART_ITEM_STATUS_NEW));
+                    if (!empty($cart_by_pids[$pid])) {
+                        $pid_list = Hash::extract($cart_by_pids[$pid], '{n}.Cart.id');
 
-                    if (!$tryId) {
-                        $this->Product->update_storage_saled($pid, $cart['Cart']['num']);
+                        $this->Cart->updateAll(array('order_id' => $order_id, 'status' => CART_ITEM_STATUS_BALANCED),
+                            array('id' => $pid_list, 'status' => CART_ITEM_STATUS_NEW));
+
+                        if (!$tryId) {
+                            $this->Product->update_storage_saled($pid, $nums[$pid]);
+                        }
                     }
 				}
 			}
@@ -336,15 +330,15 @@ class OrdersController extends AppController{
         if ($_GET['from'] == 'list_cart' || $_GET['from'] == 'quick_buy' || $_GET['from'] == 'try') {
             $pidList = $_GET['pid_list'];
             if(!empty($pidList)){
-                $pidArr = preg_split('/,/', $pidList);
+                $cidAttr = preg_split('/,/', $pidList);
                 if ($_GET['from'] == 'try') {
-                    $pidArr['try'] = $_GET['try'];
+                    $cidAttr['try'] = $_GET['try'];
                 }
             } else {
-                $pidArr = array();
+                $cidAttr = array();
             }
 
-            $this->Session->write(self::key_balance_pids(), json_encode($pidArr));
+            $this->Session->write(self::key_balance_pids(), json_encode($cidAttr));
         }
 
         $this->Session->write(self::key_balanced_ship_promotion_id(), '');
@@ -359,8 +353,8 @@ class OrdersController extends AppController{
         $uid = $this->currentUser['id'];
         $sessionId = $this->Session->id();
         if(empty($order_id)){
-            $cartsByPid = $this->Buying->cartsByPid(null, $uid, $sessionId);
 			if(!empty($_COOKIE['cart_products'])){
+                $cartsByPid = $this->Buying->cartsByPid(null, $uid, $sessionId);
                 $info = explode(',', $_COOKIE['cart_products']);
                 mergeCartWithDb($uid, $info, $cartsByPid, $this->Product, $this->Cart, $sessionId);
                 setcookie("cart_products", '',time()-3600,'/');
@@ -372,8 +366,13 @@ class OrdersController extends AppController{
             return;
 		}
 
-        $balancePids = $this->specified_balance_pids();
-        list($pids, $cart, $shipFee) = $this->Buying->createTmpCarts($cartsByPid, $shipPromotionId, $balancePids, $uid, $sessionId);
+        $balance_cids = $this->specified_balance_pids();
+
+        if (empty($balance_cids)) {
+            $balance_cids =
+        }
+
+        list($pids, $cart, $shipFee) = $this->Buying->createTmpCarts($shipPromotionId, $balance_cids, $uid, $sessionId);
 
         $consignees = $this->OrderConsignee->find('all',array(
             'conditions'=>array('creator'=> $uid),
@@ -385,9 +384,9 @@ class OrdersController extends AppController{
             list($specialPid, $specialAddress) = $this->ShipPromotion->find_special_address_by_id($shipPromotionId);
             if (!empty($specialAddress)) {
 
-                $productItemInCart = $cart->find_product_item($specialPid);
-                if (isset($specialAddress['least_num']) && (!$productItemInCart || ($specialAddress['least_num'] > $productItemInCart->num))) {
-                    $flash_msg = __('错误：使用您选定的优惠地址需要购买'.$specialAddress['least_num'].'件"'.$productItemInCart->name.'"');
+                $total_num_cart = $cart->count_total_num($specialPid);
+                if (isset($specialAddress['least_num']) && (!$total_num_cart || ($specialAddress['least_num'] > $total_num_cart))) {
+                    $flash_msg = __('错误：使用您选定的优惠地址需要购买'.$specialAddress['least_num'].'件');
                     unset($shipPromotionId);
                 } else {
 

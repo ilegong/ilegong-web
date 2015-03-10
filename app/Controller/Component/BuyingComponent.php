@@ -109,7 +109,6 @@ class BuyingComponent extends Component {
 
 
     /**
-     * @param $cartsByPid
      * @param $shipPromotionId
      * @param $balancePids
      * @param $uid
@@ -118,7 +117,7 @@ class BuyingComponent extends Component {
      * @throws Exception
      * @return array
      */
-    public function createTmpCarts(&$cartsByPid, $shipPromotionId, $balancePids, $uid, $sessionId = null) {
+    public function createTmpCarts($shipPromotionId, $balancePids, $uid, $sessionId = null) {
         $isTry = !empty($balancePids) && $balancePids['try'];
         if ($isTry) {
 
