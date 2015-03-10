@@ -249,8 +249,8 @@ $(function(){
         var before = me.attr('before-value');
         var currVal = me.val();
         if($.inArray(currVal,hasSelectAttr)<0){
-            hasSelectAttr = removeA(hasSelectAttr,before);
             if(currVal!=0){
+                hasSelectAttr = removeA(hasSelectAttr,before);
                 me.attr('before-value',currVal);
                 hasSelectAttr.push(currVal);
                 //clean tags

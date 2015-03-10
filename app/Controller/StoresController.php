@@ -871,6 +871,12 @@ class StoresController extends AppController
 
     public function save_product_spec($pid,$isEdit=false){
         $this->loadModel('ProductSpec');
+        if($isEdit){
+            $this->ProductSpec->updateAll(
+                array('deleted'=>1),
+                array('product_id'=>$pid)
+            );
+        }
         $data = array();
         //todo product max spec is 3 move to bootstrap.php
         foreach(range(1,3) as $index){
@@ -940,7 +946,13 @@ class StoresController extends AppController
                 'product_id'=>$pid
             )
         ));
-        return !empty($spec);
+        if(!empty($spec)){
+            $spec['ProductSpec']['deleted']=0;
+            $this->ProductSpec->save($spec['ProductSpec']);
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public function spec_group_is_in_database($pid,$spec_ids,$spec_names){

@@ -53,3 +53,5 @@ INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) 
 
 
 
+
+
