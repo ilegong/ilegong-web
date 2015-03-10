@@ -946,6 +946,7 @@ class StoresController extends AppController
                 'product_id'=>$pid
             )
         ));
+        //把重复的规格删除标记为0
         if(!empty($spec)){
             $spec['ProductSpec']['deleted']=0;
             $this->ProductSpec->save($spec['ProductSpec']);
