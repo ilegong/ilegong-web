@@ -223,7 +223,7 @@ $(function(){
             $batch_setting.hide();
             $ProductPrice.removeAttr('readonly');
         }
-        console.log(tableData);
+        //console.log(tableData);
         //var container = document.getElementById('hot');
         colWidths = Array.apply(null,new Array(columns.length)).map(Number.prototype.valueOf,120);
         specPriceTable = $spec_table.handsontable({
