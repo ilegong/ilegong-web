@@ -16,7 +16,10 @@
             history: false,
             focus: false,
             showAnimationDuration: 0,
-            hideAnimationDuration: 0
+            hideAnimationDuration: 0,
+            pinchToClose: true,
+            closeOnScroll: false,
+            closeOnVerticalDrag: true
         };
         var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
         gallery.init();
