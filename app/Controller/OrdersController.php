@@ -327,6 +327,7 @@ class OrdersController extends AppController{
      */
 	function info($order_id=''){
 
+        $cidAttr = array();
         if ($_GET['from'] == 'list_cart' || $_GET['from'] == 'quick_buy' || $_GET['from'] == 'try') {
             $pidList = $_GET['pid_list'];
             if(!empty($pidList)){
@@ -334,13 +335,10 @@ class OrdersController extends AppController{
                 if ($_GET['from'] == 'try') {
                     $cidAttr['try'] = $_GET['try'];
                 }
-            } else {
-                $cidAttr = array();
             }
-
-            $this->Session->write(self::key_balance_pids(), json_encode($cidAttr));
         }
 
+        $this->Session->write(self::key_balance_pids(), json_encode($cidAttr));
         $this->Session->write(self::key_balanced_ship_promotion_id(), '');
 
 		$has_chosen_consignee = false;
@@ -368,11 +366,11 @@ class OrdersController extends AppController{
 
         $balance_cids = $this->specified_balance_pids();
 
-        if (empty($balance_cids)) {
-            $balance_cids =
-        }
-
         list($pids, $cart, $shipFee) = $this->Buying->createTmpCarts($shipPromotionId, $balance_cids, $uid, $sessionId);
+        if (empty($balance_cids)) {
+            $balance_cids = $cart->list_cart_id();
+            $this->Session->write(self::key_balance_pids(), json_encode($balance_cids));
+        }
 
         $consignees = $this->OrderConsignee->find('all',array(
             'conditions'=>array('creator'=> $uid),

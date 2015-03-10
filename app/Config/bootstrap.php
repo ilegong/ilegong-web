@@ -478,6 +478,28 @@ class OrderCartItem {
         return null;
     }
 
+    public function count_total_num($pid) {
+        $num = 0;
+        foreach($this->brandItems as $bid=>$brandItem) {
+            foreach($brandItem->items as $productItem) {
+                if($productItem->pid == $pid) {
+                    $num += $productItem->num;
+                }
+            }
+        }
+        return $num;
+    }
+
+    public function list_cart_id() {
+        $cart_ids = array();
+        foreach($this->brandItems as $bid=>$brandItem) {
+            foreach($brandItem->items as $productItem) {
+                $cart_ids[] = $productItem->cartId;
+            }
+        }
+        return $cart_ids;
+    }
+
 
     public function total_price() {
         $total = 0.0;

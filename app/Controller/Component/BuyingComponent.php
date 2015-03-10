@@ -160,7 +160,7 @@ class BuyingComponent extends Component {
             $shipFees = array($brand_id => $shipFee);
         } else {
             $cartsDict = $this->cartsByIds($balanceCartIds, $uid, $sessionId);
-            $pids = Hash::extract($cartsDict, '{n}.product_id');
+            $pids = array_unique(Hash::extract($cartsDict, '{n}.product_id'));
             list($cart, $shipFee, $shipFees) = $this->applyPromoToCart($cartsDict, $shipPromotionId, $uid);
         }
         return array($pids, $cart, $shipFee, $shipFees);
@@ -236,16 +236,18 @@ class BuyingComponent extends Component {
         $cart->user_id = $uid;
 
         $totalPrices = array();
-        $pids = Hash::extract($cartsByIds, '{n}.product_id');
+        $pids = array_unique(Hash::extract($cartsByIds, '{n}.product_id'));
 
         $proM = ClassRegistry::init('Product');
         $shipPromo = ClassRegistry::init('ShipPromotion');
         $productByIds = $proM->find_published_products_by_ids($pids, array('Product.ship_fee'));
+        $numByPid = array();
         foreach ($cartsByIds as $cid => $cartItem) {
             $pid = $cartItem['product_id'];
             $brand_id = $productByIds[$pid]['brand_id'];
             $pp = $shipPromotionId ? $shipPromo->find_ship_promotion($pid, $shipPromotionId) : array();
-            $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartItem['num']) ? $cartItem['num'] : 1;
+            $num = $cartItem['num'];
+            $numByPid[$pid] += $num;
 
             list($itemPrice,) = calculate_price($pid, $productByIds[$pid]['price'], $uid, $num, $cartItem['id'], $pp);
 
@@ -261,21 +263,27 @@ class BuyingComponent extends Component {
         $shipFees = array();
         $brandItems = $cart->brandItems;
         foreach ($brandItems as $brandId => $brandItem) {
+            $calculated_pid = array();
             foreach ($brandItem->items as $cid => $item) {
-                $cartItem = $cartsByIds[$cid];
-                $pid = $cartItem['product_id'];
+                $pid = $item->pid;
+
+                if (array_search($pid, $calculated_pid) !== false) {
+                    continue;
+                }
+
                 $pidShipSettings = array();
                 foreach($shipSettings as $val){
                     if($val['ShipSetting']['product_id'] == $pid){
                         $pidShipSettings[] = $val;
                     }
                 };
-                $num = ($cartItem['num']) ? $cartItem['num'] : 1;
+                $num = $numByPid[$pid];
                 $pp = $shipPromotionId ? $shipPromo->find_ship_promotion($pid, $shipPromotionId) : array();
                 $singleShipFee = empty($pp) || !isset($pp['ship_price']) ? $productByIds[$pid]['ship_fee'] : $pp['ship_price'];
                 $total_price = $totalPrices[$brandId];
                 //FIXME: add ship fee by province
                 $shipFees[$brandId] += ShipPromotion::calculateShipFee($total_price, $singleShipFee, $num, $pidShipSettings, $shipFeeContext);
+                $calculated_pid[] = $pid;
             }
         }
 
