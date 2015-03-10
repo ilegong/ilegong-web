@@ -88,6 +88,7 @@
             {{elseif $order['Order']['status']==11}}<font color="red">待支付</font>
 
             {{/if}}
+            {{if $order['Order']['type'] ==ORDER_TYPE_TUAN}}(团购){{/if}}
         </td>
         <td>
             {{loop $brands $brand}}

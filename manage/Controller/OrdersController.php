@@ -217,7 +217,7 @@ class OrdersController extends AppController{
         $conditions = array(
             'Order.created >"' . date("Y-m-d\TH:i:s", $start_date) . '"',
             'Order.created <"' . date("Y-m-d\TH:i:s", $end_date) . '"',
-            'Order.type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL)
+            'Order.type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN)
         );
         if($_REQUEST['search_groupon'] === "1" && $_REQUEST['consignee_mobilephone']){
             $mobile_num = intval($_REQUEST['consignee_mobilephone']);
