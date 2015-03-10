@@ -29,8 +29,8 @@
             $.each($images,function(_,item){
                 var data = {};
                 data['src']=$(item).attr('src');
-                data['w']=1000;
-                data['h']=800;
+                data['w']=$(item)[0].naturalWidth;
+                data['h']=$(item)[0].naturalHeight;
                 items.push(data);
             });
             openPhotoSwipe(items);
