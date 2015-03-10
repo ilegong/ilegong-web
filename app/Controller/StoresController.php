@@ -894,6 +894,7 @@ class StoresController extends AppController
     //save spec group
     public function save_product_spec_gorup($pid,$isEdit=false){
         $this->loadModel('ProductSpecGroup');
+        App::uses('CakeNumber', 'Utility');
         $specGroup = json_decode($_REQUEST['spec_table'],true);
         $specs = $this->get_product_spec($pid);
         $specs = Hash::combine($specs,'{n}.ProductSpec.id','{n}.ProductSpec');
@@ -909,7 +910,7 @@ class StoresController extends AppController
             }
             $specIds = join(',',$tempSpecIds);
             $specNames = join(',',$tempSpecNames);
-            $price = $this->Number->precision($item['price'], 2);
+            $price = CakeNumber::precision($item['price'], 2);
             if($isEdit){
                 if(!$this->spec_group_is_in_database($pid,$specIds,$specNames)){
                     $saveData[]=array('product_id'=>$pid,'price'=>$price,'stock'=>$item['stock'],'spec_ids'=>$specIds,'spec_names'=>$specNames);
