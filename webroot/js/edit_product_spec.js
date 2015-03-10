@@ -18,6 +18,7 @@ $(function(){
     var tempTableData = [];
     var colWidths = [];
     var specPriceTable;
+    var product_before_price = $ProductPrice.val()||0;
     //overwrite test tag exist
     //一个商品下面规格名称不能重复
     $.fn.tagExist = function(val){
@@ -99,7 +100,7 @@ $(function(){
                 $.each(attr1Tags,function(index,tag1){
                     var itemData = {};
                     var key = tag1;
-                    var price=0;
+                    var price=product_before_price;
                     var stock=0;
                     if(edit_spec_groups[key]){
                         price = edit_spec_groups[key]['price'];
@@ -119,7 +120,7 @@ $(function(){
                     $.each(attr2Tags,function(j,tag2){
                         var itemData = {};
                         var key = tag1+','+tag2;
-                        var price=0;
+                        var price=product_before_price;
                         var stock=0;
                         if(edit_spec_groups[key]){
                             price = edit_spec_groups[key]['price'];
@@ -145,7 +146,7 @@ $(function(){
                         $.each(attr3Tags,function(k,tag3){
                             var itemData = {};
                             var key = tag1+','+tag2+','+tag3;
-                            var price=0;
+                            var price=product_before_price;
                             var stock=0;
                             if(edit_spec_groups[key]){
                                 price = edit_spec_groups[key]['price'];
