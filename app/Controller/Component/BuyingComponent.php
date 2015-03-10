@@ -110,25 +110,25 @@ class BuyingComponent extends Component {
 
     /**
      * @param $shipPromotionId
-     * @param $balancePids
+     * @param $balanceCartIds (cart ids usually, but can put a 'try'=>$pid to identity a trying product)
      * @param $uid
      * @param null $sessionId
      * @throws CakeException
      * @throws Exception
      * @return array
      */
-    public function createTmpCarts($shipPromotionId, $balancePids, $uid, $sessionId = null) {
-        $isTry = !empty($balancePids) && $balancePids['try'];
+    public function createTmpCarts($shipPromotionId, $balanceCartIds, $uid, $sessionId = null) {
+        $isTry = !empty($balanceCartIds) && $balanceCartIds['try'];
         if ($isTry) {
 
-            $pids = $balancePids;
+            $pids = $balanceCartIds;
             unset($pids['try']);
             if (empty($pids)) {
                 throw new Exception("try type set but no pid found!");
             }
             $pid = $pids[0];
 
-            $tryId =$balancePids['try'];
+            $tryId =$balanceCartIds['try'];
             $prodTryM = ClassRegistry::init('ProductTry');
             $prodTry = $prodTryM->findById($tryId);
             if (empty($prodTry)) {
@@ -155,17 +155,13 @@ class BuyingComponent extends Component {
             $cart = new OrderCartItem();
             $cart->is_try = true;
             $brand_id = $products[0]['Product']['brand_id'];
-            $cart->add_product_item($brand_id, $pid, calculate_try_price($prodTry['ProductTry']['price'], $uid), 1, array(), $cartItem['Cart']['name']);
+            $cart->add_product_item($brand_id, $cartItem['Cart']['id'], calculate_try_price($prodTry['ProductTry']['price'], $uid), 1, array(), $cartItem['Cart']['name'], $pid);
             $shipFee = 0;
             $shipFees = array($brand_id => $shipFee);
         } else {
-            if (!empty($balancePids)) {
-                $pids = $balancePids;
-                $cartsByPid = $this->cartsByPid($balancePids, $uid, $sessionId);
-            } else {
-                $pids = array_keys($cartsByPid);
-            }
-            list($cart, $shipFee, $shipFees) = $this->applyPromoToCart($pids, $cartsByPid, $shipPromotionId, $uid);
+            $cartsDict = $this->cartsByIds($balanceCartIds, $uid, $sessionId);
+            $pids = Hash::extract($cartsDict, '{n}.product_id');
+            list($cart, $shipFee, $shipFees) = $this->applyPromoToCart($cartsDict, $shipPromotionId, $uid);
         }
         return array($pids, $cart, $shipFee, $shipFees);
     }
@@ -183,7 +179,7 @@ class BuyingComponent extends Component {
             'status' => 0,
             'order_id' => null,
             'type != ' => CART_ITEM_TYPE_TRY,
-            'OR' => create_user_cond($uid, $session_id)
+            'OR' => create_user_cond($uid, $session_id),
         );
         if (!empty($limitPids)) {
             $cond['product_id'] = $limitPids;
@@ -197,26 +193,56 @@ class BuyingComponent extends Component {
         return Hash::combine($dbCartItems, '{n}.Cart.product_id', '{n}.Cart');
     }
 
+    /**
+     * @param array $limitCartIds
+     * @param $uid
+     * @param null $session_id
+     * @throws CakeException
+     * @return array
+     */
+    public function cartsByIds($limitCartIds = array(), $uid, $session_id = null) {
+        $cartM = ClassRegistry::init('Cart');
+        $cond = array(
+            'status' => 0,
+            'order_id' => null,
+            'OR' => create_user_cond($uid, $session_id)
+        );
+
+        if (empty($limitCartIds)) {
+            $cond['type'] = CART_ITEM_TYPE_NORMAL;
+        } else {
+            $cond['id'] = $limitCartIds;
+        }
+
+        $dbCartItems = $cartM->find('all', array(
+            'conditions' => $cond,
+            'order' => 'id desc',
+            )
+        );
+
+        return Hash::combine($dbCartItems, '{n}.Cart.id', '{n}.Cart');
+    }
+
 
     /**
-     * @param $pids
-     * @param $cartsByPid
+     * @param $cartsByIds
      * @param $shipPromotionId
      * @param $uid
      * @throws CakeException
      * @return mixed
      */
-    public function applyPromoToCart($pids, $cartsByPid, $shipPromotionId, $uid) {
+    public function applyPromoToCart($cartsByIds, $shipPromotionId, $uid) {
         $cart = new OrderCartItem();
         $cart->user_id = $uid;
 
         $totalPrices = array();
+        $pids = Hash::extract($cartsByIds, '{n}.product_id');
 
         $proM = ClassRegistry::init('Product');
         $shipPromo = ClassRegistry::init('ShipPromotion');
         $productByIds = $proM->find_published_products_by_ids($pids, array('Product.ship_fee'));
-        foreach ($cartsByPid as $pid => $cartItem) {
-            $cartItem = $cartsByPid[$pid];
+        foreach ($cartsByIds as $cid => $cartItem) {
+            $pid = $cartItem['product_id'];
             $brand_id = $productByIds[$pid]['brand_id'];
             $pp = $shipPromotionId ? $shipPromo->find_ship_promotion($pid, $shipPromotionId) : array();
             $num = ($pid != ShipPromotion::QUNAR_PROMOTE_ID && $cartItem['num']) ? $cartItem['num'] : 1;
@@ -224,7 +250,7 @@ class BuyingComponent extends Component {
             list($itemPrice,) = calculate_price($pid, $productByIds[$pid]['price'], $uid, $num, $cartItem['id'], $pp);
 
             $totalPrices[$brand_id] += ($itemPrice * $num);
-            $cart->add_product_item($brand_id, $pid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name']);
+            $cart->add_product_item($brand_id, $cid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name'], $pid);
         }
 
 
@@ -235,8 +261,9 @@ class BuyingComponent extends Component {
         $shipFees = array();
         $brandItems = $cart->brandItems;
         foreach ($brandItems as $brandId => $brandItem) {
-            foreach ($brandItem->items as $pid => $item) {
-                $cartItem = $cartsByPid[$pid];
+            foreach ($brandItem->items as $cid => $item) {
+                $cartItem = $cartsByIds[$cid];
+                $pid = $cartItem['product_id'];
                 $pidShipSettings = array();
                 foreach($shipSettings as $val){
                     if($val['ShipSetting']['product_id'] == $pid){

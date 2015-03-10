@@ -366,12 +366,14 @@ function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null)
 
 
 class ProductCartItem extends Object {
+    public $cartId;
     public $pid;
     public $num;
     public $price;
     public $name;
 
-    public function __construct($pid, $itemPrice, $num, $used_coupons, $name) {
+    public function __construct($cartId, $itemPrice, $num, $used_coupons, $name, $pid) {
+        $this->cartId = $cartId;
         $this->pid = $pid;
         $this->price = $itemPrice;
         $this->num = $num;
@@ -387,7 +389,7 @@ class ProductCartItem extends Object {
      * @param ProductCartItem $other
      */
     public function merge($other) {
-        if ($this->pid != $other->pid) {
+        if ($this->cartId != $other->cartId) {
             $msg = "not equals product id to merge a ProductCartItem:";
             $this->log($msg.", src=".json_encode($this).", other=".json_encode($other));
             throw new CakeException($msg);
@@ -411,9 +413,9 @@ class BrandCartItem {
     }
 
     public function add_product_item($item) {
-        $proItem = $this->items[$item->pid];
+        $proItem = $this->items[$item->cartId];
         if (empty($proItem)) {
-            $this->items[$item->pid] = $item;
+            $this->items[$item->cartId] = $item;
         } else {
             $proItem->merge($item);
         }
@@ -456,25 +458,24 @@ class OrderCartItem {
      */
     public $brandItems = array();
 
-    public function add_product_item($brand_id, $pid, $itemPrice, $num, $used_coupons, $name) {
+    public function add_product_item($brand_id, $cartId, $itemPrice, $num, $used_coupons, $name, $pid) {
         $brandItem = $this->brandItems[$brand_id];
         if (empty($brandItem)) {
             $brandItem = new BrandCartItem($brand_id);
             $this->brandItems[$brand_id] = $brandItem;
         }
-        $brandItem->add_product_item(new ProductCartItem($pid, $itemPrice, $num, $used_coupons, $name));
+        $brandItem->add_product_item(new ProductCartItem($cartId, $itemPrice, $num, $used_coupons, $name, $pid));
     }
 
-    public function count_total_num($pid) {
-        $num = 0;
+    public function find_product_item($cartId) {
         foreach($this->brandItems as $bid=>$brandItem) {
             foreach($brandItem->items as $productItem) {
-                if($productItem->pid == $pid) {
-                    $num += $productItem->num;
+                if($productItem->cartId == $cartId) {
+                    return $productItem;
                 }
             }
         }
-        return $num;
+        return null;
     }
 
 
@@ -544,7 +545,7 @@ function product_spec_map($specs) {
 /**
  * @param $uid
  * @param $cookieItems
- * @param $cartsDict
+ * @param $cartsDict  array: key=product_id-specId, value=Cart Object
  * @param $poductModel
  * @param $cartModel
  * @param $session_id

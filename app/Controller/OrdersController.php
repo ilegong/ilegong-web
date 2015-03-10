@@ -600,9 +600,8 @@ class OrdersController extends AppController{
         $this->loadModel('CouponItem');
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
         $specifiedPids = $this->specified_balance_pids();
-        $cartsByPid = $this->Buying->cartsByPid($specifiedPids, $uid, $this->Session->id());
-        $balancingPids = array_keys($cartsByPid);
-        list($cart, $shipFee) = $this->Buying->applyPromoToCart($balancingPids, $cartsByPid, $shipPromotionId,$uid);
+        $cartsByPid = $this->Buying->cartsByIds($specifiedPids, $uid, $this->Session->id());
+        list($cart, $shipFee) = $this->Buying->applyPromoToCart($cartsByPid, $shipPromotionId, $uid);
         $applied_coupon_code = $this->_applied_couon_code();
 
         $success = false;
@@ -664,9 +663,9 @@ class OrdersController extends AppController{
         $brand_id = $_POST['brand_id'];
         $applying = $_POST['action'] == 'apply';
 
-        $specifiedPids = $this->specified_balance_pids();
-        $cartsByPid = $this->Buying->cartsByPid($specifiedPids, $uid, $this->Session->id());
-        list($cart, $shipFee) = $this->Buying->applyPromoToCart(array_keys($cartsByPid), $cartsByPid, $shipPromotionId, $uid);
+        $specifiedCartIds = $this->specified_balance_pids();
+        $cartsByIds = $this->Buying->cartsByIds($specifiedCartIds, $uid, $this->Session->id());
+        list($cart, $shipFee) = $this->Buying->applyPromoToCart($cartsByIds, $shipPromotionId, $uid);
 
         $this->loadModel('CouponItem');
 
@@ -698,9 +697,9 @@ class OrdersController extends AppController{
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
         $score_num = intval($_REQUEST['score']);
 
-        $specifiedPids = $this->specified_balance_pids();
-        $cartsByPid = $this->Buying->cartsByPid($specifiedPids, $uid, $this->Session->id());
-        list($cart, $shipFee) = $this->Buying->applyPromoToCart(array_keys($cartsByPid), $cartsByPid, $shipPromotionId, $uid);
+        $specifiedCartIds = $this->specified_balance_pids();
+        $cartsByIds = $this->Buying->cartsByIds($specifiedCartIds, $uid, $this->Session->id());
+        list($cart, $shipFee) = $this->Buying->applyPromoToCart($cartsByIds, $shipPromotionId, $uid);
 
         $this->Session->write(self::key_balanced_scores(), '');
         $total_reduced = $this->_cal_total_reduced($uid);
