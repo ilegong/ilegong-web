@@ -3,6 +3,12 @@ $(function(){
     var $specs = $('select[name^="spec"]');
     var $spec_table = $('#spec_table');
     var $spec_table_data = $('#spec_table_data');
+    var $batch_setting = $('#batch_setting');
+    var $ProductPrice = $('#ProductPrice');
+    var $batch_set_price = $('#batch_set_price');
+    var $batch_set_price_val=$('#batch_set_price_val');
+    var $batch_set_stcok=$('#batch_set_stock');
+    var $batch_set_stock_val=$('#batch_set_stock_val');
     var $editForm = $('form');
     var hasSelectAttr = [];
     var specData = {};
@@ -12,6 +18,7 @@ $(function(){
     var tempTableData = [];
     var colWidths = [];
     var specPriceTable;
+    var product_before_price = $ProductPrice.val()||0;
     //overwrite test tag exist
     //一个商品下面规格名称不能重复
     $.fn.tagExist = function(val){
@@ -21,6 +28,9 @@ $(function(){
         });
         return ($.inArray(val,allTags)>=0);
     }
+    Array.prototype.min = function() {
+        return Math.min.apply(null, this);
+    };
     function initData(){
         $.each(product_specs,function(index,item){
             var attr_id = item['attr_id'];
@@ -90,7 +100,7 @@ $(function(){
                 $.each(attr1Tags,function(index,tag1){
                     var itemData = {};
                     var key = tag1;
-                    var price=0;
+                    var price=product_before_price;
                     var stock=0;
                     if(edit_spec_groups[key]){
                         price = edit_spec_groups[key]['price'];
@@ -110,7 +120,7 @@ $(function(){
                     $.each(attr2Tags,function(j,tag2){
                         var itemData = {};
                         var key = tag1+','+tag2;
-                        var price=0;
+                        var price=product_before_price;
                         var stock=0;
                         if(edit_spec_groups[key]){
                             price = edit_spec_groups[key]['price'];
@@ -136,7 +146,7 @@ $(function(){
                         $.each(attr3Tags,function(k,tag3){
                             var itemData = {};
                             var key = tag1+','+tag2+','+tag3;
-                            var price=0;
+                            var price=product_before_price;
                             var stock=0;
                             if(edit_spec_groups[key]){
                                 price = edit_spec_groups[key]['price'];
@@ -156,8 +166,64 @@ $(function(){
             }
         }
     }
+
+    function setMinPrice(){
+        var data = $spec_table.data('handsontable').getData();
+        var priceArray = [];
+        $.each(data,function(_,item){
+            priceArray.push(parseFloat(item['price']));
+        });
+        var min_price = priceArray.min();
+        if(min_price>0){
+            $ProductPrice.val(priceArray.min());
+        }
+    }
+    Handsontable.hooks.add('afterChange', function() {
+        setMinPrice();
+    });
+    $batch_set_price.on('click',function(){
+        var price = $batch_set_price_val.val();
+        if(!isNaN(price)&&price!=''){
+            batch_set_val(price,'price');
+            $ProductPrice.val(price);
+        }else{
+            alert("请输入数字");
+        }
+    });
+    $batch_set_stcok.on('click',function(){
+        var stock = $batch_set_stock_val.val();
+        if(!isNaN(stock)&&stock!=''){
+            batch_set_val(stock,'stock');
+        }else{
+            alert("请输入数字");
+        }
+    });
+    function batch_set_val(value,filedName){
+        $.each(tableData,function(_,item){
+            item[filedName]=value;
+        });
+        specPriceTable = $spec_table.handsontable({
+            data: tableData,
+            colHeaders: true,
+            contextMenu: true,
+            mergeCells:true,
+            colHeaders:tableHeaders,
+            manualColumnResize: true,
+            manualRowResize: true,
+            colWidths:colWidths,
+            columns:columns
+        });
+    }
     function genTable(){
         initTable();
+        if(tableData.length>0){
+            $batch_setting.show();
+            $ProductPrice.attr('readonly','readonly');
+        }else{
+            $batch_setting.hide();
+            $ProductPrice.removeAttr('readonly');
+        }
+        //console.log(tableData);
         //var container = document.getElementById('hot');
         colWidths = Array.apply(null,new Array(columns.length)).map(Number.prototype.valueOf,120);
         specPriceTable = $spec_table.handsontable({
@@ -171,6 +237,7 @@ $(function(){
             colWidths:colWidths,
             columns:columns
         });
+        setMinPrice();
     }
     var $options = '<option value="0">请选择规格名称</option>';
     $.each(all_product_attrs,function(index,item){
@@ -182,8 +249,8 @@ $(function(){
         var before = me.attr('before-value');
         var currVal = me.val();
         if($.inArray(currVal,hasSelectAttr)<0){
-            hasSelectAttr = removeA(hasSelectAttr,before);
             if(currVal!=0){
+                hasSelectAttr = removeA(hasSelectAttr,before);
                 me.attr('before-value',currVal);
                 hasSelectAttr.push(currVal);
                 //clean tags

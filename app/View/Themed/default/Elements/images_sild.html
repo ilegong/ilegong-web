@@ -102,6 +102,12 @@
 ));
 }}
 
+<?php
+    $imageUrlPrefix='';
+    if(defined('SAE_MYSQL_DB')){
+        $imageUrlPrefix=$imageUrlPrefix;
+    }
+?>
 
 <div class="ban" id="demo1">
     <div class="ban2" id="ban_pic1">
@@ -117,7 +123,7 @@
             {{/if}}
             {{loop $Product['Uploadfile'] $uploadfile}}
             <li class="preview"><a><img
-                    src="{{$this->Html->url('http://51daifan-images.stor.sinaapp.com'.$uploadfile['Uploadfile']['mid_thumb'])}}"
+                    src="{{$this->Html->url($imageUrlPrefix.$uploadfile['Uploadfile']['mid_thumb'])}}"
                     onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'" alt="" width="400px" height="300px"/>
             </a>
             </li>
@@ -134,9 +140,9 @@
             <ul>
                 {{loop $Product['Uploadfile'] $uploadfile}}
                 <li><a href="javascript:;"><img
-                        name="{{$this->Html->url('http://51daifan-images.stor.sinaapp.com'.$uploadfile['Uploadfile']['mid_thumb'])}}"
+                        name="{{$this->Html->url($imageUrlPrefix.$uploadfile['Uploadfile']['mid_thumb'])}}"
                         alt="{{$Product['Product']['title']}}"
-                        src="{{$this->Html->url('http://51daifan-images.stor.sinaapp.com'.$uploadfile['Uploadfile']['thumb'])}}"
+                        src="{{$this->Html->url($imageUrlPrefix.$uploadfile['Uploadfile']['thumb'])}}"
                         width="80" height="60"/></a></li>
                 {{/loop}}
                 {{if count($Product['Uploadfile'])==0}}

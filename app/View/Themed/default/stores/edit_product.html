@@ -95,11 +95,28 @@ body{
     <div class="form-group">
         <div class="col-sm-9 controls col-sm-offset-2">
             <div id="spec_table">
-
             </div>
         </div>
     </div>
 
+    <div class="form-group" id="batch_setting">
+        <div class="col-sm-4 controls col-sm-offset-2">
+            <div class="input-group">
+                <input type="number" value="0" class="form-control" placeholder="输入价格" id="batch_set_price_val">
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" id="batch_set_price">批量设置价格</button>
+              </span>
+            </div><!-- /input-group -->
+        </div>
+        <div class="col-sm-4 controls">
+            <div class="input-group">
+                <input type="number" value="0" class="form-control" placeholder="输入库存" id="batch_set_stock_val">
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" id="batch_set_stock">批量设置库存</button>
+              </span>
+            </div><!-- /input-group -->
+        </div>
+    </div>
 	<div class="form-group">
 		<label class="col-sm-2 control-label" for="ProductName">商品描述</label>
 	</div>

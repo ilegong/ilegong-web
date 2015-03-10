@@ -872,8 +872,10 @@ class StoresController extends AppController
     public function save_product_spec($pid,$isEdit=false){
         $this->loadModel('ProductSpec');
         if($isEdit){
-            //delete before data
-            $this->ProductSpec->deleteAll(array('product_id'=>$pid));
+            $this->ProductSpec->updateAll(
+                array('deleted'=>1),
+                array('product_id'=>$pid)
+            );
         }
         $data = array();
         //todo product max spec is 3 move to bootstrap.php
@@ -883,7 +885,13 @@ class StoresController extends AppController
             if(!empty($p_attr)&&!empty($p_tag)&&$p_attr!='0'){
                 $tag_array = explode(',',$p_tag);
                 foreach($tag_array as $tag){
-                    $data[] = array('name'=>$tag,'product_id'=>$pid,'attr_id'=>$p_attr);
+                    if($isEdit){
+                        if(!$this->spec_is_in_database($pid,$tag,$p_attr)){
+                            $data[] = array('name'=>$tag,'product_id'=>$pid,'attr_id'=>$p_attr);
+                        }
+                    }else{
+                        $data[] = array('name'=>$tag,'product_id'=>$pid,'attr_id'=>$p_attr);
+                    }
                 }
             }
         }
@@ -892,12 +900,7 @@ class StoresController extends AppController
     //save spec group
     public function save_product_spec_gorup($pid,$isEdit=false){
         $this->loadModel('ProductSpecGroup');
-        //delete all before group
-        if($isEdit){
-            $this->ProductSpecGroup->deleteAll(array(
-                'product_id'=>$pid
-            ));
-        }
+        App::uses('CakeNumber', 'Utility');
         $specGroup = json_decode($_REQUEST['spec_table'],true);
         $specs = $this->get_product_spec($pid);
         $specs = Hash::combine($specs,'{n}.ProductSpec.id','{n}.ProductSpec');
@@ -911,7 +914,16 @@ class StoresController extends AppController
                     $tempSpecNames[]=$value;
                 }
             }
-            $saveData[]=array('product_id'=>$pid,'price'=>$item['price'],'stock'=>$item['stock'],'spec_ids'=>join(',',$tempSpecIds),'spec_names'=>join(',',$tempSpecNames));
+            $specIds = join(',',$tempSpecIds);
+            $specNames = join(',',$tempSpecNames);
+            $price = CakeNumber::precision($item['price'], 2);
+            if($isEdit){
+                if(!$this->spec_group_is_in_database($pid,$specIds,$specNames)){
+                    $saveData[]=array('product_id'=>$pid,'price'=>$price,'stock'=>$item['stock'],'spec_ids'=>$specIds,'spec_names'=>$specNames);
+                }
+            }else{
+                $saveData[]=array('product_id'=>$pid,'price'=>$price,'stock'=>$item['stock'],'spec_ids'=>$specIds,'spec_names'=>$specNames);
+            }
         }
         $this->ProductSpecGroup->saveAll($saveData);
     }
@@ -925,5 +937,34 @@ class StoresController extends AppController
         }
     }
 
+    public function spec_is_in_database($pid,$name,$atrrId){
+        $this->loadModel('ProductSpec');
+        $spec = $this->ProductSpec->find('first',array(
+            'conditions'=>array(
+                'name'=>$name,
+                'attr_id'=>$atrrId,
+                'product_id'=>$pid
+            )
+        ));
+        //把重复的规格删除标记为0
+        if(!empty($spec)){
+            $spec['ProductSpec']['deleted']=0;
+            $this->ProductSpec->save($spec['ProductSpec']);
+            return true;
+        }else{
+            return false;
+        }
+    }
 
+    public function spec_group_is_in_database($pid,$spec_ids,$spec_names){
+        $this->loadModel('ProductSpecGroup');
+        $specGroup = $this->ProductSpecGroup->find('first',array(
+            'conditions'=>array(
+                'spec_ids'=>$spec_ids,
+                'product_id'=>$pid,
+                'spec_names'=>$spec_names
+            )
+        ));
+        return !empty($specGroup);
+    }
 }

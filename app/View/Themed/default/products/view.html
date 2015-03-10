@@ -12,9 +12,9 @@
             {{/if}}
             <ul class="clearfix pt15">
                 <li class="title">价格:</li>
-                <li><strong class="price" id="product_price">￥{{$this->Number->precision($Product['Product']['price'], 2)}}</strong>
-                    {{if !empty($Product['Product']['original_price'])}}
-                    <span class="mar_price">¥{{$this->Number->precision($Product['Product']['original_price'], 2)}}</span>
+                <li><strong class="price" id="product_price">￥{{$this->Number->precision($price, 2)}}</strong>
+                    {{if $product_price_range}}
+                    <span class="mar_price">¥{{$product_price_range}}</span>
                     {{/if}}
                 </li>
             </ul>
