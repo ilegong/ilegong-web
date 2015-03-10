@@ -172,7 +172,10 @@ $(function(){
         $.each(data,function(_,item){
             priceArray.push(parseFloat(item['price']));
         });
-        $ProductPrice.val(priceArray.min());
+        var min_price = priceArray.min();
+        if(min_price>0){
+            $ProductPrice.val(priceArray.min());
+        }
     }
     Handsontable.hooks.add('afterChange', function() {
         setMinPrice();
