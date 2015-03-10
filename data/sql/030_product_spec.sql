@@ -29,6 +29,27 @@ CREATE TABLE `cake_product_spec_groups` (
 INSERT INTO `cake_product_attributes` (`id`,`name`,`deleted`) VALUES (1,'口味',0);
 INSERT INTO `cake_product_attributes` (`id`,`name`,`deleted`) VALUES (2,'尺寸',0);
 INSERT INTO `cake_product_attributes` (`id`,`name`,`deleted`) VALUES (3,'蛋糕口味',0);
+INSERT INTO `cake_product_attributes` (`id`,`name`,`deleted`) VALUES (4,'规格',0);
+INSERT INTO `cake_product_attributes` (`id`,`name`,`deleted`) VALUES (5,'水果到付日',0);
+
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (1,'榴莲',3,0,230);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (2,'芒果',3,0,230);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (3,'菠萝',3,0,230);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (4,'木瓜',3,0,230);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (5,'半奶13日自提',4,0,822);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (6,'全奶13日自提',4,0,822);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (7,'半奶15日自提',4,0,822);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (8,'全奶15日自提',4,0,822);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (9,'3月13日',5,0,657);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (10,'3月15日',5,0,657);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (11,'3月13日',5,0,639);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (12,'3月15日',5,0,639);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (13,'五香',1,0,383);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (14,'麻辣',1,0,383);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (15,'爆辣',1,0,383);
+
+
+
 
 
 
