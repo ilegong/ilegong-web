@@ -1,4 +1,4 @@
-{{$this->Html->css(array('/js/photoswipe/photoswipe.css','/js/photoswipe/default-skin/default-skin.css'))}}
+{{$this->Html->css(array('/js/photoswipe/photoswipe.css?v1','/js/photoswipe/default-skin/default-skin.css?v1'))}}
 {{$this->Html->script(array('/js/photoswipe/photoswipe.js','/js/photoswipe/photoswipe-ui-default.min.js'))}}
 <div id="comment_items" style="margin-top: 8px;">
 
@@ -122,7 +122,7 @@
     });
 </script>
 <!-- Root element of PhotoSwipe. Must have class pswp. -->
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="pswp" tabindex="999" role="dialog" aria-hidden="true">
 
     <!-- Background of PhotoSwipe.
          It's a separate element, as animating opacity is faster than rgba(). -->
