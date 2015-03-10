@@ -183,12 +183,20 @@ $(function(){
     });
     $batch_set_price.on('click',function(){
         var price = $batch_set_price_val.val();
-        batch_set_val(price,'price');
-        $ProductPrice.val(price);
+        if(!isNaN(price)){
+            batch_set_val(price,'price');
+            $ProductPrice.val(price);
+        }else{
+            alert("请输入数字");
+        }
     });
     $batch_set_stcok.on('click',function(){
         var stock = $batch_set_stock_val.val();
-        batch_set_val(stock,'stock');
+        if(!isNaN(stock)){
+            batch_set_val(stock,'stock');
+        }else{
+            alert("请输入数字");
+        }
     });
     function batch_set_val(value,filedName){
         $.each(tableData,function(_,item){
