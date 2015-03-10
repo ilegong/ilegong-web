@@ -909,12 +909,13 @@ class StoresController extends AppController
             }
             $specIds = join(',',$tempSpecIds);
             $specNames = join(',',$tempSpecNames);
+            $price = $this->Number->precision($item['price'], 2);
             if($isEdit){
                 if(!$this->spec_group_is_in_database($pid,$specIds,$specNames)){
-                    $saveData[]=array('product_id'=>$pid,'price'=>$item['price'],'stock'=>$item['stock'],'spec_ids'=>$specIds,'spec_names'=>$specNames);
+                    $saveData[]=array('product_id'=>$pid,'price'=>$price,'stock'=>$item['stock'],'spec_ids'=>$specIds,'spec_names'=>$specNames);
                 }
             }else{
-                $saveData[]=array('product_id'=>$pid,'price'=>$item['price'],'stock'=>$item['stock'],'spec_ids'=>$specIds,'spec_names'=>$specNames);
+                $saveData[]=array('product_id'=>$pid,'price'=>$price,'stock'=>$item['stock'],'spec_ids'=>$specIds,'spec_names'=>$specNames);
             }
         }
         $this->ProductSpecGroup->saveAll($saveData);
