@@ -26,8 +26,21 @@ class TuansController extends AppController{
         $this->set('tuan_leader_weixin',$teamInfo['Tuan']['leader_weixin']);
         $this->set('tuan_address',$teamInfo['Tuan']['address']);
         $this->set('hideNav',true);
-
-
+        if($this->is_weixin()){
+            $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
+            $pid = $teamInfo['Tuan']['pid'];
+            $this->prepare_wx_sharing($currUid, $pid);
+        }
+    }
+    protected function prepare_wx_sharing($currUid, $pid) {
+        $currUid = empty($currUid) ? 0 : $currUid;
+        $share_string = $currUid . '-' . time() . '-rebate-pid_' . $pid;
+        $share_code = authcode($share_string, 'ENCODE', 'SHARE_TID');
+        $oauthM = ClassRegistry::init('WxOauth');
+        $signPackage = $oauthM->getSignPackage();
+        $this->set('signPackage', $signPackage);
+        $this->set('share_string', urlencode($share_code));
+        $this->set('jWeixinOn', true);
     }
     public function lbs_map($teamId=''){
         $this->pageTitle =__('草莓自取点');
