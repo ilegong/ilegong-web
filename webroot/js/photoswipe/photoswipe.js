@@ -856,12 +856,13 @@ var publicMethods = {
 		
 		if(_options.modal) {
 			template.setAttribute('aria-hidden', 'false');
-			if(!_isFixedPosition) {
-				template.style.position = 'absolute';
-				template.style.top = framework.getScrollY() + 'px';
-			} else {
-				template.style.position = 'fixed';
-			}
+			//if(!_isFixedPosition) {
+			//	template.style.position = 'absolute';
+			//	template.style.top = framework.getScrollY() + 'px';
+			//} else {
+			//
+			//}
+            template.style.position = 'fixed';
 		}
 
 		if(_currentWindowScrollY === undefined) {

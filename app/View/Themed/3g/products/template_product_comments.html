@@ -1,5 +1,5 @@
 {{$this->Html->css(array('/js/photoswipe/photoswipe.css?v1','/js/photoswipe/default-skin/default-skin.css?v1'))}}
-{{$this->Html->script(array('/js/photoswipe/photoswipe.js','/js/photoswipe/photoswipe-ui-default.min.js'))}}
+{{$this->Html->script(array('/js/photoswipe/photoswipe.js?v1','/js/photoswipe/photoswipe-ui-default.min.js'))}}
 <div id="comment_items" style="margin-top: 8px;">
 
 </div>
@@ -21,7 +21,8 @@
             closeOnScroll: false,
             closeOnVerticalDrag: true,
             clickToCloseNonZoomable: true,
-            tapToClose: true
+            tapToClose: true,
+            showHideOpacity: true
         };
         var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
         gallery.init();
