@@ -900,6 +900,12 @@ class StoresController extends AppController
     //save spec group
     public function save_product_spec_gorup($pid,$isEdit=false){
         $this->loadModel('ProductSpecGroup');
+        if($isEdit){
+            $this->ProductSpecGroup->updateAll(
+                array('deleted'=>1),
+                array('product_id'=>$pid)
+            );
+        }
         App::uses('CakeNumber', 'Utility');
         $specGroup = json_decode($_REQUEST['spec_table'],true);
         $specs = $this->get_product_spec($pid);
@@ -965,6 +971,12 @@ class StoresController extends AppController
                 'spec_names'=>$spec_names
             )
         ));
-        return !empty($specGroup);
+        if(!empty($specGroup)){
+            $specGroup['ProductSpecGroup']['deleted']=0;
+            $this->ProductSpecGroup->save($specGroup['ProductSpecGroup']);
+            return true;
+        }else{
+            return false;
+        }
     }
 }

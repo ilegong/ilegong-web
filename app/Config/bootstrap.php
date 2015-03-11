@@ -736,7 +736,7 @@ class ProductSpeciality {
             Cache::write('all_product_attributes', $allAttrs);
         }
 
-        return $allAttrs;
+        return json_encode($allAttrs);
     }
 
 }
