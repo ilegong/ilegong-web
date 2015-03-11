@@ -7,31 +7,59 @@
  */
 
 class TuansController extends AppController{
-    public function lists(){
+
+    public function lists($pid=null){
         $this->pageTitle = '团购列表';
+        if($pid !=838){
+            $this->redirect('/tuans/lists/838');
+        }
         $tuan_info = $this->Tuan->find('all');
-        $this->set('tuans_info', $tuan_info);
+        $this->set('tuan_info',$tuan_info);
+
+        $this->loadModel('TuanBuying');
+        $date_Time = time();
+        $tuan_product_num = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
+        $tuan_product_info = $this->TuanBuying->find('all',array('conditions' => array('pid' => $pid,'end_time >' => $date_Time )));
+        $tuan_join_num = Hash::combine($tuan_product_info,'{n}.TuanBuying.tuan_id','{n}.TuanBuying');
+
+        $this->log('join_num'.json_encode($tuan_join_num));
+        $this->log('num'.json_encode($tuan_product_num));
+        $this->set('tuan_join_num',$tuan_join_num);
+        $this->set('tuan_product_num',$tuan_product_num[0][0]['sold_number']);
+
     }
-    public function detail($teamId=null){
-        $this->autoRender = true;
+
+    public function detail($tuan_id, $tuan_buy_id){
         $this->pageTitle = '草莓团购';
-        $teamInfo = $this->Tuan->find('first',array('conditions' => array('id' => $teamId)));
-//        $this->loadModel('Product');
-//        $proInfo = $this->Product->find('first',array('conditions' => array('id' => 838)));
-//        $this->set('Product',$proInfo);
-        $this->set('teamId',$teamId);
-        $this->set('sold_num',$teamInfo['Tuan']['sold_num']);
-        $this->set('tuan_name',$teamInfo['Tuan']['tuan_name']);
-        $this->set('tuan_leader_name',$teamInfo['Tuan']['leader_name']);
-        $this->set('tuan_leader_weixin',$teamInfo['Tuan']['leader_weixin']);
-        $this->set('tuan_address',$teamInfo['Tuan']['address']);
+        $tuan_info = $this->Tuan->find('first',array('conditions' => array('id' => $tuan_id)));
+        if(empty($tuan_info)){
+            $this->__message('该团不存在', '/tuans/mei_shi_tuan');
+        }
+        $this->loadModel('TuanBuying');
+        $tuan_b = $this->TuanBuying->find('first',array(
+            'conditions' => array('id' => $tuan_buy_id )
+        ));
+        if(strtotime($tuan_b['TuanBuying']['end_time']) < time()){
+            $this->set('exceed_time', true);
+        }
+        $consign_time = date('Y-m-d', strtotime($tuan_b['TuanBuying']['consign_time']));
+        $this->set('sold_num',$tuan_b['TuanBuying']['sold_num']);
+        $this->set('pid', $tuan_b['TuanBuying']['pid']);
+        $this->set('consign_time', $consign_time);
+        $this->set('tuan_id',$tuan_id);
+        $this->set('tuan_name',$tuan_info['Tuan']['tuan_name']);
+        $this->set('tuan_leader_name',$tuan_info['Tuan']['leader_name']);
+        $this->set('tuan_leader_weixin',$tuan_info['Tuan']['leader_weixin']);
+        $this->set('address',$tuan_info['Tuan']['address']);
+        $this->set('tuan_buy_id', $tuan_buy_id);
         $this->set('hideNav',true);
         if($this->is_weixin()){
             $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
-            $pid = $teamInfo['Tuan']['pid'];
+            $pid = $tuan_b['TuanBuying']['pid'];
             $this->prepare_wx_sharing($currUid, $pid);
         }
     }
+
     protected function prepare_wx_sharing($currUid, $pid) {
         $currUid = empty($currUid) ? 0 : $currUid;
         $share_string = $currUid . '-' . time() . '-rebate-pid_' . $pid;
@@ -42,13 +70,14 @@ class TuansController extends AppController{
         $this->set('share_string', urlencode($share_code));
         $this->set('jWeixinOn', true);
     }
-    public function lbs_map($teamId=''){
+
+    public function lbs_map($tuan_id=''){
         $this->pageTitle =__('草莓自取点');
-        $teamInfo = $this->Tuan->find('first',array('conditions' => array('id' => $teamId)));
-        $this->set('teamId',$teamId);
+        $teamInfo = $this->Tuan->find('first',array('conditions' => array('id' => $tuan_id)));
+        $this->set('tuan_id',$tuan_id);
         $this->set('name',$teamInfo['Tuan']['tuan_name']);
-        $this->set('location_1',$teamInfo['Tuan']['tuan_location_1']);
-        $this->set('location_2',$teamInfo['Tuan']['tuan_location_2']);
+        $this->set('location_long',$teamInfo['Tuan']['location_long']);
+        $this->set('location_lat',$teamInfo['Tuan']['location_lat']);
         $this->set('addr',$teamInfo['Tuan']['tuan_addr']);
         $this->log('teamInfo'.json_encode($teamInfo));
         $this->set('hideNav',true);
@@ -70,24 +99,45 @@ class TuansController extends AppController{
 
     }
 
-    public function join($pid, $tuan_id){
+    public function join($tuan_id, $tuan_buy_id){
         $this->pageTitle = '订单确认';
         if(empty($this->currentUser['id'])){
             $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
             return;
         }
-        $this->loadModel('Cart');
         $this->loadModel('Tuan');
         $tuan_info = $this->Tuan->findById($tuan_id);
+        if(empty($tuan_info)){
+            $this->__message('该团不存在', '/tuans/mei_shi_tuan');
+            return;
+        }
+        $this->loadModel('TuanBuying');
+        $tuan_b = $this->TuanBuying->find('first', array(
+            'conditions' => array('id' => $tuan_buy_id),
+            'fields' => array('pid', 'tuan_id', 'status', 'end_time')
+        ));
+        $current_time = strtotime($tuan_b['TuanBuying']['end_time']);
+        if(empty($tuan_b) && $tuan_b['TuanBuying']['tuan_id'] != $tuan_id && $current_time < time()){
+            $message = '该团购已到截止时间';
+            $url = '/tuans/mei_shi_tuan';
+            $this->__message($message, $url);
+            return;
+        }
+        $this->loadModel('Cart');
         $this->Cart->find('first');
         $uid =$this->currentUser['id'];
+        $user_condition = array(
+            'session_id'=>	$this->Session->id(),
+            'creator' => $uid
+        );
         $cond = array(
             'status' => CART_ITEM_STATUS_NEW,
             'order_id' => null,
             'num > 0',
-            'product_id' => $pid,
+            'product_id' => $tuan_b['TuanBuying']['pid'],
             'type' => CART_ITEM_TYPE_TUAN,
-            'creator' => $uid
+            'OR' => $user_condition
+
         );
         $Carts = $this->Cart->find('first', array(
             'conditions' => $cond));
@@ -97,6 +147,7 @@ class TuansController extends AppController{
         $this->set('cart_id', $Carts['Cart']['id']);
         $this->set('tuan_id', $tuan_id);
         $this->set('tuan_address', $tuan_info['Tuan']['address']);
+        $this->set('end_time', date('m-d', $current_time));
     }
 
     public function tuan_pay($orderId){
@@ -139,7 +190,10 @@ class TuansController extends AppController{
         $cart_info = $this->Cart->findById($cart_id);
         $creator = $cart_info['Cart']['creator'];
         $order_type = $cart_info['Cart']['type'];
-        if($creator != $uid){
+        if(empty($cart_info)){
+            $this->log("cart record not exist". $cart_id);
+            $res = array('success'=> false, 'info'=> '购物车记录为查询到');
+        }elseif($creator != $uid){
             $this->log("no right to this order, uid".$uid. "creator:".$creator);
             $res = array('success'=> false, 'info'=> '团购订单不属于你，请刷新重试');
         }elseif($order_type != CART_ITEM_TYPE_TUAN){
@@ -167,5 +221,39 @@ class TuansController extends AppController{
         }
         echo json_encode($res);
     }
+    function product_detail($pid){
+        if(empty($pid)){
+            return;
+        }
+        if($_GET['tuan_id'] && $_GET['tuan_buy_id']){
+            $url = '/tuans/detail/'. strval($_GET['tuan_id']) . '/' . strval($_GET['tuan_buy_id']) ;
+        }else{
+            $url = '/tuans/lists';
+        }
+        $fields = array('id','slug','name','content','created');
+        $this->loadModel('Product');
+        $Product =$this->Product->find('first', array(
+            'conditions' => array('id' => $pid),
+            'fields' => $fields
+        ));
+        $this->set('tuan_url', $url);
+        $this->pageTitle = mb_substr($Product['Product']['name'],0,13);
+        $this->set('Product',$Product);
+        $this->set('hideNav',true);
+    }
 
+    public function new_tuan(){
+        $this->pageTitle = '创建新团';
+    }
+
+    public function mei_shi_tuan(){
+        $this->pageTitle = '美食团';
+        $tuan_info = $this->Tuan->find('all');
+        $this->set('tuans_info', $tuan_info);
+    }
+
+    public function join_meishituan(){
+        $this->pageTitle = '加入美食团';
+    }
 }
+
