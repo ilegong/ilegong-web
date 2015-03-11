@@ -44,7 +44,8 @@ var framework = {
 		return el;
 	},
 	getScrollY: function() {
-		var yOffset = window.pageYOffset;
+        //custom top px
+		var yOffset = window.pageYOffset-40;
 		return yOffset !== undefined ? yOffset : document.documentElement.scrollTop;
 	},
 	unbind: function(target, type, listener) {
@@ -856,13 +857,12 @@ var publicMethods = {
 		
 		if(_options.modal) {
 			template.setAttribute('aria-hidden', 'false');
-			//if(!_isFixedPosition) {
-			//	template.style.position = 'absolute';
-			//	template.style.top = framework.getScrollY() + 'px';
-			//} else {
-			//
-			//}
-            template.style.position = 'fixed';
+			if(!_isFixedPosition) {
+				template.style.position = 'absolute';
+				template.style.top = framework.getScrollY() + 'px';
+			} else {
+                template.style.position = 'fixed';
+			}
 		}
 
 		if(_currentWindowScrollY === undefined) {
