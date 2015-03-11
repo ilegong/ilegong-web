@@ -1343,6 +1343,7 @@ function get_user_info_from_wx($open_id){
     $access_token = $wxOauthM->get_base_access_token();
     $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$access_token.'&openid='.$open_id;
     $content = gethtml(WX_HOST,$url);
+    $this->log('download avatar user info : '.$content);
     return json_decode($content,$content);
 }
 
