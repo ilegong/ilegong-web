@@ -14,6 +14,7 @@ class CurlDownloader {
     private $tmpPath='';
     private $responseStr=NULL;
     private $uploadFileName=NULL;
+    private $isDownloadWxHead=false;
 
     const DEFAULT_FNAME = 'remote.out';
 
@@ -74,9 +75,13 @@ class CurlDownloader {
 
     public function bodyCallback($ch, $string) {
         if (!$this->fp) {
-            trigger_error("No remote filename received, trying default",
-                E_USER_WARNING);
-            $this->remoteFileName = self::DEFAULT_FNAME;
+            if($this->isDownloadWxHead){
+                $this->remoteFileName = uniqid('wx_head_').'.jpg';
+            }else{
+                trigger_error("No remote filename received, trying default",
+                    E_USER_WARNING);
+                $this->remoteFileName = self::DEFAULT_FNAME;
+            }
             $this->responseStr=$string;
             $this->fp = fopen($this->remoteFileName, 'wb');
             if (!$this->fp)
@@ -111,5 +116,8 @@ class CurlDownloader {
     public function getUploadFileName(){
         return $this->uploadFileName;
     }
+    //下载头像标志
+    public function isDownloadHeadImg($flag=false){
+        $this->isDownloadWxHead=$flag;
+    }
 }
-?>

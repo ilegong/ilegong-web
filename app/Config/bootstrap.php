@@ -1186,10 +1186,14 @@ function convertWxName($text) {
  * @return int if created failed return 0
  */
 function createNewUserByWeixin($userInfo, $userModel) {
+    $download_url = download_photo_from_wx($userInfo['headimgurl']);
+    if(empty($download_url)){
+        $download_url=$userInfo['headimgurl'];
+    }
     if (!$userModel->save(array(
         'nickname' => convertWxName($userInfo['nickname']),
         'sex' => $userInfo['sex'] == 1 ? 0 : ($userInfo['sex'] == 2 ? 1 : null),
-        'image' => $userInfo['headimgurl'],
+        'image' => $download_url,
         'province' => $userInfo['province'],
         'city' => $userInfo['city'],
         'country' => $userInfo['country'],
@@ -1345,6 +1349,7 @@ function get_user_info_from_wx($open_id){
 function download_photo_from_wx($url){
     App::uses('CurlDownloader','Lib');
     $dl = new CurlDownloader($url);
+    $dl->isDownloadHeadImg(true);
     $dl->download();
     $download_url = '';
     if($dl->getFileName()!='remote.out'){
