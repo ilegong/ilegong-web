@@ -643,7 +643,7 @@ class ApiOrdersController extends AppController {
                             }
 
                             $data['total_price'] = $total_price;
-                            $data['total_all_price'] = $total_price + $ship_fee;
+                            $data['total_all_price'] = $total_price + max($ship_fee, 0);
                             $data['ship_fee'] = $ship_fee;
                             $data['brand_id'] = $brand_id;
                             $data['creator'] = $uid;
