@@ -50,7 +50,7 @@ class TuansController extends AppController{
         $this->set('tuan_name',$tuan_info['Tuan']['tuan_name']);
         $this->set('tuan_leader_name',$tuan_info['Tuan']['leader_name']);
         $this->set('tuan_leader_weixin',$tuan_info['Tuan']['leader_weixin']);
-        $this->set('address',$tuan_info['Tuan']['address']);
+        $this->set('tuan_address',$tuan_info['Tuan']['tuan_addr']);
         $this->set('tuan_buy_id', $tuan_buy_id);
         $this->set('hideNav',true);
         if($this->is_weixin()){
