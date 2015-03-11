@@ -48,26 +48,32 @@ class CurlDownloader {
             return $len;
         }
         list($name, $value) = explode(':', $string, 2);
-        if (strcasecmp($name, 'Content-Disposition') == 0) {
-            $parts = explode(';', $value);
-            if (count($parts) > 1) {
-                foreach ($parts AS $crumb) {
-                    if (strstr($crumb, '=')) {
-                        list($pname, $pval) = explode('=', $crumb);
-                        $pname = trim($pname);
-                        if (strcasecmp($pname, 'filename') == 0) {
-                            // Using basename to prevent path injection
-                            // in malicious headers.
-                            $this->uploadFileName=basename(
+        if($this->uploadFileName){
+            $this->uploadFileName = uniqid('wx_head_').'.jpg'
+            $this->remoteFileName = $this->tmpPath.$this->uploadFileName;
+        }else{
+            if (strcasecmp($name, 'Content-Disposition') == 0) {
+                $parts = explode(';', $value);
+                if (count($parts) > 1) {
+                    foreach ($parts AS $crumb) {
+                        if (strstr($crumb, '=')) {
+                            list($pname, $pval) = explode('=', $crumb);
+                            $pname = trim($pname);
+                            if (strcasecmp($pname, 'filename') == 0) {
+                                // Using basename to prevent path injection
+                                // in malicious headers.
+                                $this->uploadFileName=basename(
                                     $this->unquote(trim($pval)));
-                            $this->remoteFileName =$this->tmpPath.basename(
-                                $this->unquote(trim($pval)));
-                            $this->fp = fopen($this->remoteFileName, 'wb');
+                                $this->remoteFileName =$this->tmpPath.basename(
+                                        $this->unquote(trim($pval)));
+                                $this->fp = fopen($this->remoteFileName, 'wb');
+                            }
                         }
                     }
                 }
             }
         }
+
 
         $this->headers[$name] = trim($value);
         return $len;
@@ -75,13 +81,9 @@ class CurlDownloader {
 
     public function bodyCallback($ch, $string) {
         if (!$this->fp) {
-            if($this->isDownloadWxHead){
-                $this->remoteFileName = uniqid('wx_head_').'.jpg';
-            }else{
-                trigger_error("No remote filename received, trying default",
-                    E_USER_WARNING);
-                $this->remoteFileName = self::DEFAULT_FNAME;
-            }
+            trigger_error("No remote filename received, trying default",
+                E_USER_WARNING);
+            $this->remoteFileName = self::DEFAULT_FNAME;
             $this->responseStr=$string;
             $this->fp = fopen($this->remoteFileName, 'wb');
             if (!$this->fp)

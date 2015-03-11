@@ -148,6 +148,7 @@ class CronController extends AppController
     }
 
     function process_download_wx_photo($oathBinds) {
+        $this->log('download avatar length : '.(count($oathBinds)));
         $resultCount = 0;
         $this->loadModel('User');
         $this->loadModel('Oauthbind');
