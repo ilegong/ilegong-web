@@ -11,11 +11,17 @@ class TuansController extends AppController{
     public function lists($pid=null){
         $this->pageTitle = '团购列表';
         $tuan_info = $this->Tuan->find('all');
-        $this->set('tuans_info', $tuan_info);
+        $this->set('tuan_info',$tuan_info);
+
         $this->loadModel('TuanBuying');
-        $tuan_product_num = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_products  where pid = $pid");
-        $tuan_product_nums = $this->TuanBuying->find('all',array('conditions' => array('pid' => $pid)));
-        $this->log('num'.json_encode($tuan_product_nums));
+        $date_Time = time();
+        $tuan_product_num = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
+        $tuan_product_info = $this->TuanBuying->find('all',array('conditions' => array('pid' => $pid,'end_time >' => $date_Time )));
+        $tuan_join_num = Hash::combine($tuan_product_info,'{n}.TuanBuying.tuan_id','{n}.TuanBuying');
+
+        $this->log('join_num'.json_encode($tuan_join_num));
+        $this->log('num'.json_encode($tuan_product_num));
+        $this->set('tuan_join_num',$tuan_join_num);
         $this->set('tuan_product_num',$tuan_product_num[0][0]['sold_number']);
     }
 

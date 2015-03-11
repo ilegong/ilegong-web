@@ -1,6 +1,6 @@
 
 {{$this->Html->css(array('tuan.css'));}}
-<div class="classlist_v2" style="z-index:999">
+<div class="classlist_v2" style="z-index:999;font-size:13px;">
     <ul class="clearfix">
         <li><a href="/categories/mobileHome" id="return_label" class="back"></a></li>
         <li class="line"></li>
@@ -15,7 +15,7 @@
 <ul class="tuandetail_price clearfix">
     <li class="fl"><span>￥<strong>19.00</strong></span></li>
     <li class="fl"><s>￥29.00</s></li>
-    <li class="fr">已有{{$tuan_product_num}}人团购</li>
+    <li class="fr">已有{{$tuan_product_num>0?$tuan_product_num:0}}人团购</li>
 </ul>
 <ul class="tuandetail_more clearfix" onclick="to_detail();">
     <li class="fl">图文详情 (建议在Wifi下浏览)</li>
@@ -27,21 +27,22 @@
         <span>选择您附近的团</span>
         <a href="/tuans/new_tuan">位置不合适，发起新团？</a>
     </div>
+    {{loop $tuan_info  $tuan}}
     <ul class="clearfix">
-        {{loop $tuans_info $tuan}}
+
         <li><img src="/img/tuan/map1.gif" border="0"></li>
         <li>
-            <a href="/tuans/detail/{{$tuan['Tuan']['id']}}"><p>{{$tuan['Tuan']['tuan_name']}}</a>&nbsp;<span>团长:{{$tuan['Tuan']['leader_name']}}</span></p>
-            <s>团购截止3月11日22点</s>
+            <a href="/tuans/detail/{{$tuan['Tuan']['id']}}"><p>{{$tuan['Tuan']['tuan_name']}}&nbsp;<span>团长:{{$tuan['Tuan']['leader_name']}}</span></p></a>
+            <s>团购截止{{date('m-d-h',strtotime($tuan_join_num[$tuan['Tuan']['id']]['end_time']))}}</s>
             <dl class="clearfix">
                 <a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}"><dd><img src="/img/tuan/locat_icon.gif" border="0"></dd>
                 <dd>{{$tuan['Tuan']['address']}}</dd>
                 </a>
             </dl>
-            <s>已有{{$tuan['Tuan']['join_num']}}人参团</s>
+            <s>已有{{$tuan_join_num[$tuan['Tuan']['id']]['join_num']>0?$tuan_join_num[$tuan['Tuan']['id']]['join_num']:0}}人参团</s>
         </li>
-        {{/loop}}
     </ul>
+    {{/loop}}
 </div>
 <script>
     function to_detail(){

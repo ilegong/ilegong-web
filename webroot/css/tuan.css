@@ -32,31 +32,31 @@ input{ outline:none;}
 
 
 /*团购详情*/
-.tuandetail_banner{ position: relative;}
+.tuandetail_banner{ position: relative;margin-top: 36px;}
 .tuandetail_banner img{ width: 100%;}
 .tuandetail_banner p{ padding: 5px 10px; color: #ffffff; line-height: 20px; font-size: 0.9em; position: absolute; bottom: 0; z-index: 999;}
 .tuandetail_banner p span{ font-size: 1.5em;}
 .tuandetail_banner .bannerbg{ background-color: #000000; filter:alpha(opacity=40); -moz-opacity:0.4; opacity:0.4; position: absolute; bottom: 0; width: 100%; z-index: 1; width: 100%; height: 54px;}
-.tuandetail_price{ border-bottom: 1px #eeeeee solid; padding:8px 10px; font-size: 1em; color: #999999; background-color: #ffffff; margin-bottom: 10px;}
+.tuandetail_price{ border-bottom: 1px #eeeeee solid; padding:5px 10px; font-size: 1em; color: #999999; background-color: #ffffff; margin-bottom: 10px;}
 .tuandetail_price li.fl{ padding-right: 3px;}
 .tuandetail_price li.fl span{ color: #ffa200;}
 .tuandetail_price li.fl span strong{ font-size: 2em; font-weight: normal;}
-.tuandetail_price li.fl s,.tuandetail_price li.fr{ display: block; padding-top: 7px;}
+.tuandetail_price li.fl s,.tuandetail_price li.fr{ display: block; padding-top: 11px;}
 .tuandetail_more{ background-color: #ffffff; border-top: 1px #eeeeee solid; border-bottom: 1px #eeeeee solid; padding:10px 10px 9px 10px; line-height: 22px; font-size: 1em; color: #555555; margin-bottom: 10px;}
 .tuandetail_more img{ width: 0.5em; margin-top: 3px;}
 .tuandetail_adress{ background-color: #ffffff; border-top: 1px #eeeeee solid; padding-top:10px; margin-bottom: 10px;}
 .tuandetail_adress_title{ font-size: 1em; color: #555555; padding:0 10px;}
 .tuandetail_adress_title span{ display: block; float: left;}
 .tuandetail_adress_title a{ display: block; float: right; color: #ffa200;}
-.tuandetail_adress ul{ padding: 10px 10px 7px 10px; border-bottom: 1px #eeeeee solid;}
+.tuandetail_adress ul{ padding: 13px 10px 11px 10px; border-bottom: 1px #eeeeee solid; margin-bottom: 0;}
 .tuandetail_adress ul li{ float: left;}
 .tuandetail_adress ul li img{ border: 1px #dddddd solid; width: 8em;}
-.tuandetail_adress ul li p{  font-size: 1.2em; color: #333333; padding-left: 10px; padding-bottom: 8px;}
-.tuandetail_adress ul li p span{ color: #999999;}
+.tuandetail_adress ul li p{  font-size: 1.1em; font-weight: bold; color: #333333; padding-left: 10px; margin: 0;}
+.tuandetail_adress ul li p span{ color: #999999; font-weight: normal;}
 .tuandetail_adress ul li s{ font-size: 1em; color: #999999; padding-left: 10px; text-decoration: none;}
-.tuandetail_adress ul li dl{ padding-left: 10px;}
-.tuandetail_adress ul li dl dd{ font-size: 1em; color: #333333; float: left; line-height: 22px;}
-.tuandetail_adress ul li dl dd img{ width: 0.8em; border: 0; margin-top: 3px; margin-right: 3px;}
+.tuandetail_adress ul li dl{ padding-left: 10px; margin-bottom: 0;}
+.tuandetail_adress ul li dl dd{ font-size: 1em; color: #333333; float: left; line-height: 26px;}
+.tuandetail_adress ul li dl dd img{ width: 0.8em; border: 0; margin-right: 3px; margin-top: -4px;}
 
 
 /*团介绍页面*/
