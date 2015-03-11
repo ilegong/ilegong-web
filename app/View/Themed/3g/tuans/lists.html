@@ -1,6 +1,6 @@
 
 {{$this->Html->css(array('tuan.css'));}}
-<div class="classlist_v2" style="z-index:999;font-size:13px;">
+<div class="classlist_v2" style="z-index:999;">
     <ul class="clearfix">
         <li><a href="/categories/mobileHome" id="return_label" class="back"></a></li>
         <li class="line"></li>
@@ -30,7 +30,7 @@
     {{loop $tuan_info  $tuan}}
     <ul class="clearfix">
 
-        <li><img src="/img/tuan/map1.gif" border="0"></li>
+        <li><img src="/img/tuan/tuan-{{$tuan['Tuan']['id']}}.png" border="0"></li>
         <li>
             <a href="/tuans/detail/{{$tuan['Tuan']['id']}}/{{$tuan_join_num[$tuan['Tuan']['id']]['id']>0?$tuan_join_num[$tuan['Tuan']['id']]['id']:$tuan['Tuan']['id']}}"><p>{{$tuan['Tuan']['tuan_name']}}&nbsp;<span>团长:{{$tuan['Tuan']['leader_name']}}</span></p></a>
             <s>团购截止{{date('m-d-h',strtotime($tuan_join_num[$tuan['Tuan']['id']]['end_time']))}}</s>
@@ -49,5 +49,6 @@
         window.location.href="/products/product_detail/Tuan_Gou_Cao_Mei_Song_Suan_Nai_Bei_Jing_Xing_Shou_Hong_Yan_Cao_Mei_Dang_Tian.html?history=/";
     }
 </script>
+
 
 

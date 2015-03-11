@@ -1,8 +1,8 @@
 @charset "utf-8";
 /* CSS Document */
 
-body{ background-color:#f5f5f5;}
-*{ padding:0; margin:0; font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial; font-size:14px;}
+body{ background-color:#f5f5f5;font-size:14px;}
+*{ padding:0; margin:0; font-family: Helvetica, STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial;}
 ul li{ list-style:none;}
 .fl{ float:left;}
 .fr{ float:right;}
@@ -51,7 +51,7 @@ input{ outline:none;}
 .tuandetail_adress ul{ padding: 13px 10px 11px 10px; border-bottom: 1px #eeeeee solid; margin-bottom: 0;}
 .tuandetail_adress ul li{ float: left;}
 .tuandetail_adress ul li img{ border: 1px #dddddd solid; width: 8em;}
-.tuandetail_adress ul li p{  font-size: 1.1em; font-weight: bold; color: #333333; padding-left: 10px; margin: 0;}
+.tuandetail_adress ul li p{  font-size: 1em; font-weight: bold; color: #333333; padding-left: 10px; margin: 0;}
 .tuandetail_adress ul li p span{ color: #999999; font-weight: normal;}
 .tuandetail_adress ul li s{ font-size: 1em; color: #999999; padding-left: 10px; text-decoration: none;}
 .tuandetail_adress ul li dl{ padding-left: 10px; margin-bottom: 0;}
@@ -79,7 +79,19 @@ input{ outline:none;}
 .createtuan p span{ color: #ed8600; font-weight: bold; font-size: 1em;}
 
 
+.apple_share {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1030;
+    background-color: #000;
+}
 
+.apple_share.in {
+    opacity: .75;
+}
 
 
 
