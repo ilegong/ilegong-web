@@ -72,12 +72,13 @@
                 var name = $("#p_consignee_name").val();
                 var mobile = $("#p_consignee_mobile").val();
                 var cart_id = {{empty($cart_id)? 0: $cart_id}};
+                var tuan_buy_id = {{empty($tuan_buy_id)? 0: $tuan_buy_id}};
                 var tuan_id = {{empty($tuan_id)? 0: $tuan_id}};
                 jQuery.ajax({
                     type: "POST",
                     dataType: "json",
                     url: "/tuans/pre_order",
-                    data: {name: name, mobile: mobile, cart_id: cart_id, tuan_id: tuan_id },
+                    data: {name: name, mobile: mobile, cart_id: cart_id, tuan_buy_id: tuan_buy_id, tuan_id: tuan_id },
                     success: function (a) {
                         if (a.success) {
                             $("#confirm_next").attr('data-disable', 'true');

@@ -156,6 +156,7 @@ class TuansController extends AppController{
         $this->set('tuan_id', $tuan_id);
         $this->set('tuan_address', $tuan_info['Tuan']['address']);
         $this->set('end_time', date('m-d', $current_time));
+        $this->set('tuan_buy_id', $tuan_buy_id);
     }
 
     public function tuan_pay($orderId){
@@ -164,7 +165,7 @@ class TuansController extends AppController{
         $this->loadModel('Cart');
         $order_info = $this->Order->find('first', array(
             'conditions' =>array('id' => $orderId),
-            'fields' => array('total_all_price', 'created', 'id', 'consignee_address', 'consignee_name')
+            'fields' => array('total_all_price', 'created', 'id', 'consignee_address', 'consignee_name', 'member_id')
         ));
         $cart_info = $this->Cart->find('first', array(
             'conditions' =>array('order_id' => $orderId),
@@ -182,6 +183,7 @@ class TuansController extends AppController{
         $this->autoRender = false;
         $cart_id = $_POST['cart_id'];
         $tuan_id = $_POST['tuan_id'];
+        $tuan_buy_id = $_POST['tuan_buy_id'];
         $mobile = $_POST['mobile'];
         $name = $_POST['name'];
         $uid = $this->currentUser['id'];
@@ -223,7 +225,7 @@ class TuansController extends AppController{
             $area = '';
             $tuan_info = $this->Tuan->findById($tuan_id);
             $address = $tuan_info['Tuan']['address'];
-            $order = $this->Order->createTuanOrder($tuan_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id);
+            $order = $this->Order->createTuanOrder($tuan_buy_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id);
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
                 $res = array('success'=> false, 'info'=> '你已经支付过了');
             }else{

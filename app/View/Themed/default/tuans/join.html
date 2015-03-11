@@ -61,24 +61,25 @@
                 var name = $("#p_consignee_name").val();
                 var mobile = $("#p_consignee_mobile").val();
                 var cart_id = {{$cart_id}};
-            var tuan_id = {{$tuan_id}};
-        jQuery.ajax({
-            type: "POST",
-            dataType: "json",
-            url: "/tuans/pre_order",
-            data: {name: name, mobile: mobile, cart_id: cart_id, tuan_id: tuan_id },
-            success: function (a) {
-                if (a.success) {
-                    $("#confirm_next").attr('data-disable', 'true');
-                    window.location.href = '/tuans/tuan_pay/' + a.order_id + '?tuan_id={{$tuan_id}}';
-                } else {
-                    if(a.info){
-                        utils.alert(a.info);
-                    }else{
-                        utils.alert("结算出错，请刷新重试");
+                var tuan_buy_id = {{$tuan_buy_id}};
+                var tuan_id = {{empty($tuan_id)? 0: $tuan_id}};
+                jQuery.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "/tuans/pre_order",
+                    data: {name: name, mobile: mobile, cart_id: cart_id, tuan_buy_id: tuan_buy_id , tuan_id: tuan_id},
+                    success: function (a) {
+                        if (a.success) {
+                            $("#confirm_next").attr('data-disable', 'true');
+                            window.location.href = '/tuans/tuan_pay/' + a.order_id + '?tuan_id={{$tuan_id}}';
+                        } else {
+                            if(a.info){
+                                utils.alert(a.info);
+                            }else{
+                                utils.alert("结算出错，请刷新重试");
+                            }
+                        }
                     }
-                }
-            }
         });
     }
     });
