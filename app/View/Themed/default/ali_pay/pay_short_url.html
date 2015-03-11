@@ -25,13 +25,7 @@
             {{if $tip_info}}
                 <div class="alert alert-danger" role="alert">{{$tip_info}}</div>
             {{else}}
-                <div class="alert alert-success" role="alert">
-                    微信和支付宝正在掐架，请点击 右上角选项 -> 在浏览器打开 完成支付。
-                    <br/>
-                    因此带来的不便，敬请谅解。
-                </div>
-                <div class="text-center"><img src="{{$this->Html->assetUrl('/img/ailipayvswx.jpg')}}" width="60%"></div>
-
+                <img src="{{$this->Html->assetUrl('/img/zfb_wx.jpg')}}" width="100%">
                 <script>
                     function check_pay_url_status(){
                         $.getJSON('/ali_pay/pay_short_url/{{$uuid}}.json?action=check&r=' + Math.random(), function (data) {
@@ -44,7 +38,6 @@
                     }
                     setTimeout(check_pay_url_status, 2000);
                 </script>
-
             {{/if}}
             {{/if}}
         </div>
