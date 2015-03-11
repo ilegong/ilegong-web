@@ -158,6 +158,7 @@ class CronController extends AppController
                 $user_id = $item['Oauthbind']['user_id'];
                 $open_id = $item['Oauthbind']['oauth_openid'];
                 $extra_param =  $item['Oauthbind']['extra_param'];
+                $this->log('download wx bind extra_pram '.$extra_param);
                 if(empty($extra_param)){
                     $extra_param = array();
                 }else{
