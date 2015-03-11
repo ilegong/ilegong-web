@@ -1186,10 +1186,14 @@ function convertWxName($text) {
  * @return int if created failed return 0
  */
 function createNewUserByWeixin($userInfo, $userModel) {
+    $download_url = download_photo_from_wx($userInfo['headimgurl']);
+    if(empty($download_url)){
+        $download_url=$userInfo['headimgurl'];
+    }
     if (!$userModel->save(array(
         'nickname' => convertWxName($userInfo['nickname']),
         'sex' => $userInfo['sex'] == 1 ? 0 : ($userInfo['sex'] == 2 ? 1 : null),
-        'image' => $userInfo['headimgurl'],
+        'image' => $download_url,
         'province' => $userInfo['province'],
         'city' => $userInfo['city'],
         'country' => $userInfo['country'],
@@ -1315,4 +1319,57 @@ function send_weixin_message($post_data, $logObj = null) {
         }
     }
     return false;
+}
+
+function gethtml($from_url,$url){
+    $ch = curl_init();
+    //设置 来路，这个很重要 ，表示这个访问 是从 $form_url 这个链接点过去的。
+    curl_setopt($ch,CURLOPT_REFERER,$from_url);
+    //获取 的url地址
+    curl_setopt ($ch,CURLOPT_URL,$url);
+    //设置  返回原生的（Raw）输出
+    curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+    //发送POST请求 CURLOPT_CUSTOMREQUEST
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+    //模拟浏览器发送报文 ，这里模拟 IE6 浏览器访问
+    curl_setopt($ch,CURLOPT_USERAGENT,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)");
+    $res = curl_exec($ch);
+    curl_close ($ch);
+    return $res;
+}
+
+function get_user_info_from_wx($open_id){
+    $wxOauthM = ClassRegistry::init('WxOauth');
+    $access_token = $wxOauthM->get_base_access_token();
+    $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$access_token.'&openid='.$open_id;
+    $content = gethtml(WX_HOST,$url);
+    return json_decode($content,$content);
+}
+
+function download_photo_from_wx($url){
+    App::uses('CurlDownloader','Lib');
+    $dl = new CurlDownloader($url);
+    $dl->isDownloadHeadImg(true);
+    $dl->download();
+    $download_url = '';
+    if($dl->getFileName()!='remote.out'){
+        if(defined('SAE_MYSQL_DB')){
+            $stor = new SaeStorage();
+            $download_url = $stor->upload(SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME , $dl->getUploadFileName(), $dl->getFileName());
+            if(!$download_url){
+                //retry
+                $download_url = $stor->upload(SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME , $dl->getUploadFileName(), $dl->getFileName());
+            }
+            unlink($dl->getFileName());
+            if(!$download_url){
+                $this->log('download avatar upload file to sae errMsg');
+            }
+        } else {
+            copy($dl->getFileName(),WWW_ROOT.'files/wx-download/'.$dl->getFileName());
+            $download_url = '/files/wx-download/'.$dl->getFileName();
+            //delete temp file
+            unlink($dl->getFileName());
+        }
+    }
+    return $download_url;
 }

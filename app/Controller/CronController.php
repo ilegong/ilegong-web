@@ -51,6 +51,36 @@ class CronController extends AppController
         echo count($cron_ids);
     }
 
+    public function download_photo_from_wx_for_comment(){
+        $this->autoRender=false;
+        $commentModel = ClassRegistry::init('Comment');
+        $userIds = $commentModel->find('all',array(
+            'fields'=>array('DISTINCT user_id')
+        ));
+        $userIds = Hash::extract($userIds,'{n}.Comment.id');
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $wxUsers = $oauthBindModel->find('all', array(
+            'conditions'=>array(
+                'user_id'=>$userIds
+            )
+        ));
+        $result = $this->process_download_wx_photo($wxUsers);
+        echo $result;
+    }
+
+    public function download_photo_from_wx() {
+        $this->autoRender=false;
+        $start = $_REQUEST['start'];
+        $limit = $_REQUEST['limit'];
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $wxUsers = $oauthBindModel->find('all', array(
+            'limit' => $limit,
+            'offset' => $start
+        ));
+        $count = $this->process_download_wx_photo($wxUsers);
+        echo $count;
+    }
+
     public function send_ship_info(){
         $this->autoRender=false;
         $this->loadModel('Order');
@@ -81,7 +111,7 @@ class CronController extends AppController
                 $comName=current($ship_infos[$order['Order']['ship_type']]);
                 //http://www.kuaidi100.com/query?id=1&type=quanfengkuaidi&postid=710023594269&valicode=&temp=0.018777450546622276
                 $url = 'http://www.kuaidi100.com/query?id=&type='.trim($com).'&postid='.trim($order['Order']['ship_code']);
-                $contents = $this->gethtml($from_url,$url);
+                $contents = gethtml($from_url,$url);
                 $contentObject = json_decode($contents,true);
                 $orderId = $order['Order']['id'];
                 $userId = $order['Order']['creator'];
@@ -117,20 +147,38 @@ class CronController extends AppController
         echo 'success';
     }
 
-    function gethtml($from_url,$url){
-        $ch = curl_init();
-        //设置 来路，这个很重要 ，表示这个访问 是从 $form_url 这个链接点过去的。
-        curl_setopt($ch,CURLOPT_REFERER,$from_url);
-        //获取 的url地址
-        curl_setopt ($ch,CURLOPT_URL,$url);
-        //设置  返回原生的（Raw）输出
-        curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-        //发送POST请求 CURLOPT_CUSTOMREQUEST
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-        //模拟浏览器发送报文 ，这里模拟 IE6 浏览器访问
-        curl_setopt($ch,CURLOPT_USERAGENT,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)");
-        $res = curl_exec($ch);
-        curl_close ($ch);
-        return $res;
+    function process_download_wx_photo($oathBinds) {
+        $resultCount = 0;
+        $this->loadModel('User');
+        $this->loadModel('Oauthbind');
+        if (!empty($oathBinds)) {
+            foreach ($oathBinds as $item) {
+                $bindId = $item['Oauthbind']['id'];
+                $user_id = $item['Oauthbind']['user_id'];
+                $open_id = $item['Oauthbind']['oauth_openid'];
+                $extra_param =  $item['Oauthbind']['extra_param'];
+                if(empty($extra_param)){
+                    $extra_param = array();
+                }else{
+                    $extra_param = json_decode($extra_param,true);
+                }
+                $wx_user = get_user_info_from_wx($open_id);
+                $photo = $wx_user['headimgurl'];
+                if(!empty($photo)){
+                    $download_url = download_photo_from_wx($photo);
+                    if (!empty($download_url)) {
+                        $this->User->id = $user_id;
+                        if ($this->User->saveField('image', $download_url)) {
+                            $resultCount++;
+                            //todo add flag to oauthbind ?
+                            $extra_param['is_downLoad_photo']=true;
+                            $this->Oauthbind->id = $bindId;
+                            $this->Oauthbind->saveField('extra_param',json_encode($extra_param));
+                        }
+                    }
+                }
+            }
+        }
+        return $resultCount;
     }
 }
