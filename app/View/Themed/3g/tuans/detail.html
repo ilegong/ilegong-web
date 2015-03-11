@@ -1,8 +1,8 @@
-<div class="classlist_v2" style="z-index:999">
-    <ul class="clearfix">
-        <li><a href="/categories/tag/shuiguoganguo.html" id="return_label" class="back"></a></li>
+<div class="classlist_v2" style="z-index:1;">
+    <ul class="clearfix" onclick="javascript:history.go(-1)">
+        <li><a class="back"></a></li>
         <li class="line"></li>
-        <li><strong>商品详情</strong></li>
+        <li style="text-overflow: ellipsis;"><strong>商品详情</strong></li>
     </ul>
 </div>
 <div  class="container" style="margin-top: 2.5em; padding: 0">
@@ -27,7 +27,7 @@
                             <div class="p_details_title">全北京最新鲜的昌平兴寿红颜草莓，现采现送 400g/盒 20盒成团即送 团即送酸奶</div>
                             <ul class="p_details_price clearfix">
                                 <li class="fl price"><span>￥<font>19.00</font></span><em>29.00</em></li>
-                                <li class="fr stat"><a style="color: #333333"><span>已团购份数({{$sold_num}})</span></a></li>
+                                <li class="fr stat"><a style="color: #333333"><span>已团购份数({{$sold_num>0?$sold_num:0}})</span></a></li>
                             </ul>
                             <ul class="sales clearfix">
                                 <li>
@@ -40,7 +40,7 @@
                                 {{$tuan_name}}&nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_leader_name}}<br/>参团请加团长微信，微信号:{{$tuan_leader_weixin}}
                             </div>
                             <div class="clearfix tuanxq" style="margin-top: -1px;">
-                                <span class="fl">自提地点：{{$tuan_address}}</span>
+                                <span class="fl">自提地点：{{$address}}</span>
                                 <a class="fr" href="/tuans/lbs_map/{{$tuan_id}}">
                                     <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
                                 </a>

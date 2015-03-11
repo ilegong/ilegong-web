@@ -10,6 +10,9 @@ class TuansController extends AppController{
 
     public function lists($pid=null){
         $this->pageTitle = '团购列表';
+        if($pid !=838){
+            $this->redirect('/tuans/lists/838');
+        }
         $tuan_info = $this->Tuan->find('all');
         $this->set('tuan_info',$tuan_info);
 
@@ -23,6 +26,7 @@ class TuansController extends AppController{
         $this->log('num'.json_encode($tuan_product_num));
         $this->set('tuan_join_num',$tuan_join_num);
         $this->set('tuan_product_num',$tuan_product_num[0][0]['sold_number']);
+
     }
 
     public function detail($tuan_id, $tuan_buy_id){
@@ -46,7 +50,7 @@ class TuansController extends AppController{
         $this->set('tuan_name',$tuan_info['Tuan']['tuan_name']);
         $this->set('tuan_leader_name',$tuan_info['Tuan']['leader_name']);
         $this->set('tuan_leader_weixin',$tuan_info['Tuan']['leader_weixin']);
-        $this->set('tuan_address',$tuan_info['Tuan']['tuan_addr']);
+        $this->set('address',$tuan_info['Tuan']['address']);
         $this->set('tuan_buy_id', $tuan_buy_id);
         $this->set('hideNav',true);
         if($this->is_weixin()){
@@ -67,13 +71,13 @@ class TuansController extends AppController{
         $this->set('jWeixinOn', true);
     }
 
-    public function lbs_map($teamId=''){
+    public function lbs_map($tuan_id=''){
         $this->pageTitle =__('草莓自取点');
-        $teamInfo = $this->Tuan->find('first',array('conditions' => array('id' => $teamId)));
-        $this->set('teamId',$teamId);
+        $teamInfo = $this->Tuan->find('first',array('conditions' => array('id' => $tuan_id)));
+        $this->set('tuan_id',$tuan_id);
         $this->set('name',$teamInfo['Tuan']['tuan_name']);
-        $this->set('location_1',$teamInfo['Tuan']['location_long']);
-        $this->set('location_2',$teamInfo['Tuan']['location_lat']);
+        $this->set('location_long',$teamInfo['Tuan']['location_long']);
+        $this->set('location_lat',$teamInfo['Tuan']['location_lat']);
         $this->set('addr',$teamInfo['Tuan']['tuan_addr']);
         $this->log('teamInfo'.json_encode($teamInfo));
         $this->set('hideNav',true);

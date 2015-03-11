@@ -4,13 +4,13 @@
     @media (max-device-width: 800px){#golist{display: block!important;}}
 </style>
 <div class="container">
-  <div class="classlist_v2" style="z-index:1">
-    <ul class="clearfix" onclick="back('/tuans/detail/{{$teamId}}')">
-        <li><a class="back"></a></li>
-        <li class="line"></li>
-        <li style="text-overflow: ellipsis;"><strong>{{$name}}</strong></li>
-    </ul>
-  </div>
+    <div class="classlist_v2" style="z-index:1;position: inherit;">
+        <ul class="clearfix" onclick="javascript:history.go(-1)">
+            <li><a class="back"></a></li>
+            <li class="line"></li>
+            <li style="text-overflow: ellipsis;"><strong>{{$name}}</strong></li>
+        </ul>
+    </div>
 <lbs-map  id ="position">
     <lbs-poi  name="{{$name}}" location="{{$location_long}},{{$location_lat}}" addr="{{$addr}}" ></lbs-poi>
 </lbs-map>

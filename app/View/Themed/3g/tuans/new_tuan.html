@@ -1,9 +1,9 @@
 {{$this->Html->css(array('tuan.css'));}}
-<div class="classlist_v2" style="z-index:999;font-size:13px;position: inherit;">
-    <ul class="clearfix">
-    <li><a href="/tuans/lists/{{$pid}}" id="return_label" class="back"></a></li>
-    <li class="line"></li>
-    <li><strong>返回</strong></li>
+<div class="classlist_v2" style="z-index:1;position: inherit;">
+    <ul class="clearfix" onclick="javascript:history.go(-1)">
+        <li><a class="back"></a></li>
+        <li class="line"></li>
+        <li style="text-overflow: ellipsis;"><strong>返回</strong></li>
     </ul>
 </div>
 <div class="createtuan">

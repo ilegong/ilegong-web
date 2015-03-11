@@ -1,11 +1,12 @@
 {{$this->Html->css(array('tuan.css'));}}
-<div class="classlist_v2" style="z-index:999;position:inherit;font-size:13px;">
-    <ul class="clearfix">
-        <li><a href="/tuans/mei_shi_tuan" id="return_label" class="back"></a></li>
+<div class="classlist_v2" style="z-index:1;position: inherit;font-size:13px;">
+    <ul class="clearfix" onclick="javascript:history.go(-1)">
+        <li><a class="back"></a></li>
         <li class="line"></li>
-        <li><strong>返回</strong></li>
+        <li style="text-overflow: ellipsis;"><strong>返回</strong></li>
     </ul>
 </div>
+
 <div class="createtuan">
     <p class="createtuan_title">如何加入美食团?</p>
     <p>首先注定你要认识一个妹子——朋友说小妹，</p>
