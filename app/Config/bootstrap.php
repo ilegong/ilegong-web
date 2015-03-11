@@ -1360,10 +1360,6 @@ function download_photo_from_wx($url){
                 //retry
                 $download_url = $stor->upload(SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME , $dl->getUploadFileName(), $dl->getFileName());
             }
-            unlink($dl->getFileName());
-            if(!$download_url){
-                $this->log('download avatar upload file to sae errMsg');
-            }
         } else {
             copy($dl->getFileName(),WWW_ROOT.'files/wx-download/'.$dl->getFileName());
             $download_url = '/files/wx-download/'.$dl->getFileName();
