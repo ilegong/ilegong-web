@@ -51,6 +51,7 @@ class CurlDownloader {
         if($this->uploadFileName){
             $this->uploadFileName = uniqid('wx_head_').'.jpg';
             $this->remoteFileName = $this->tmpPath.$this->uploadFileName;
+            $this->fp = fopen($this->remoteFileName, 'wb');
         }else{
             if (strcasecmp($name, 'Content-Disposition') == 0) {
                 $parts = explode(';', $value);
