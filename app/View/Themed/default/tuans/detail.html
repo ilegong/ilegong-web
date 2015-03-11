@@ -175,7 +175,11 @@
                         <!--<img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>-->
                     <!--</a>-->
                 </div>
-                <div><span class="fl">送货日期：{{$consign_time}}</span></div>
+                <ul class="clearfix pt15">
+                    <li class="title">送货日期：</li>
+                    <li><strong class="price">{{$consign_time}}</strong>
+                    </li>
+                </ul>
                 <ul class="clearfix pt15">
                     <li class="title">价格:</li>
                     <li><strong class="price">￥19.00</strong>
@@ -204,7 +208,11 @@
                     </li>
                 </ul>
                 <div class="clearfix tb_action">
+                    {{if $exceed_time}}
+                    <a href="/tuans/detail/{{$tuan_id}}" class="fl tb_btn_buy">该团已截止</a>
+                    {{else}}
                     <a class="fl tb_btn_buy" item-id="838" href="javascript:void(0)" id="tuan_buy">立即购买</a>
+                    {{/if}}
                 </div>
             </div>
             <div class="recommend fl">
@@ -399,7 +407,7 @@
                     success:function(data){
                         if(data.success)
                         {
-                            window.location.href = '/tuans/join/'+ product_id+'/{{$teamId}}';
+                            window.location.href = '/tuans/join/{{$tuan_id}}/{{$tuan_buy_id}}';
                         }
                         else
                         {

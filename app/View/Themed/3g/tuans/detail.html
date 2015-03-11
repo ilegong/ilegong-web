@@ -269,7 +269,11 @@
         </li>
         <li class="fl" style="width:39%;">
             <div style="margin-right:3%;">
+                {{if $exceed_time}}
+                <a href="/tuans/detail/{{$tuan_id}}" class="btn_b pay_bg radius10">该团已截止</a>
+                {{else}}
                 <a id="tuan_buy" item-id="838" href="javascript:;" class="btn_b pay_bg radius10">立即购买</a>
+                {{/if}}
             </div>
         </li>
         <li class="fl" style="width:39%;">

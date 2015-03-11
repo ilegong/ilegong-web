@@ -149,8 +149,8 @@
         <span class="col-xs-6"><strong>收货人：{{$order['Order']['consignee_name']}}</strong></span>
         <span class="col-xs-6 text-right"><strong>{{$order['Order']['consignee_mobilephone']}}</strong></span>
         <span class="col-xs-10">收货地址：{{$order['Order']['consignee_area']}} {{$order['Order']['consignee_address']}}</span>
-            {{if $orderinfo['Order']['type'] == ORDER_TYPE_TUAN}}
-            <span class="col-xs-10">送货日期:{{$consign_time}}</span>
+            {{if $order['Order']['type'] == ORDER_TYPE_TUAN}}
+            <span class="col-xs-10">送货日期: {{$consign_time}}</span>
             {{/if}}
         <div class="clearfix"></div>
         </div>
@@ -172,7 +172,9 @@
         {{/if}}
 
 
-        {{if $orderinfo['Order']['type'] == ORDER_TYPE_TUAN}}
+        {{if $order['Order']['type'] == ORDER_TYPE_TUAN}}
+
+        <?php $cart = $Carts[0]; $p = $products[$cart['Cart']['product_id']]; ?>
         <div class="clearfix orderitem_item"><a href="/tuans/detail/{{$tuan_id}}/{{$tuan_buy_id}}">
             {{$this->Html->image($cart['Cart']['coverimg'], array(
             'class' => 'col-xs-3',

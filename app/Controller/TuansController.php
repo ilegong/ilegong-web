@@ -29,16 +29,24 @@ class TuansController extends AppController{
 
     }
 
-    public function detail($tuan_id, $tuan_buy_id){
+    public function detail($tuan_id, $tuan_buy_id=null){
         $this->pageTitle = '草莓团购';
         $tuan_info = $this->Tuan->find('first',array('conditions' => array('id' => $tuan_id)));
         if(empty($tuan_info)){
             $this->__message('该团不存在', '/tuans/mei_shi_tuan');
         }
         $this->loadModel('TuanBuying');
-        $tuan_b = $this->TuanBuying->find('first',array(
-            'conditions' => array('id' => $tuan_buy_id )
-        ));
+        if($tuan_buy_id == null){
+            $tuan_b = $this->TuanBuying->find('first',array(
+                'conditions' => array('tuan_id' => $tuan_id ),
+                'order' => array('TuanBuying.end_time DESC')
+            ));
+            $tuan_buy_id = $tuan_b['TuanBuying']['id'];
+        }else{
+            $tuan_b = $this->TuanBuying->find('first',array(
+                'conditions' => array('id' => $tuan_buy_id )
+            ));
+        }
         if(strtotime($tuan_b['TuanBuying']['end_time']) < time()){
             $this->set('exceed_time', true);
         }

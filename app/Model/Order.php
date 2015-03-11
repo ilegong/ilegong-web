@@ -149,9 +149,8 @@ class Order extends AppModel {
                     $gmM = ClassRegistry::init('GrouponMember');
                     $gmM->paid_done($memberId, $orderOwner, $type);
                 }elseif($type == ORDER_TYPE_TUAN){
-                    $gmM = ClassRegistry::init('Tuan');
+                    $gmM = ClassRegistry::init('TuanBuying');
                     $gmM->paid_done($memberId,$orderId);
-
                 } else {
                     foreach ($pid_list as $pid) {
                         clean_total_sold($pid);
