@@ -7,11 +7,18 @@
  */
 
 class TuansController extends AppController{
-    public function lists(){
+
+    public function lists($pid=null){
         $this->pageTitle = '团购列表';
         $tuan_info = $this->Tuan->find('all');
         $this->set('tuans_info', $tuan_info);
+        $this->loadModel('TuanProduct');
+        $tuan_product_num = $this->TuanProduct->query("select sum(sold_num) as sold_number from cake_tuan_products  where pid = $pid");
+        $tuan_product_nums = $this->TuanProduct->find('all',array('conditions' => array('pid' => $pid)));
+        $this->log('num'.json_encode($tuan_product_nums));
+        $this->set('tuan_product_num',$tuan_product_num[0][0]['sold_number']);
     }
+
     public function detail($teamId=null){
         $this->autoRender = true;
         $this->pageTitle = '草莓团购';
@@ -32,6 +39,7 @@ class TuansController extends AppController{
             $this->prepare_wx_sharing($currUid, $pid);
         }
     }
+
     protected function prepare_wx_sharing($currUid, $pid) {
         $currUid = empty($currUid) ? 0 : $currUid;
         $share_string = $currUid . '-' . time() . '-rebate-pid_' . $pid;
@@ -42,6 +50,7 @@ class TuansController extends AppController{
         $this->set('share_string', urlencode($share_code));
         $this->set('jWeixinOn', true);
     }
+
     public function lbs_map($teamId=''){
         $this->pageTitle =__('草莓自取点');
         $teamInfo = $this->Tuan->find('first',array('conditions' => array('id' => $teamId)));
@@ -168,4 +177,19 @@ class TuansController extends AppController{
         echo json_encode($res);
     }
 
+
+    public function new_tuan(){
+        $this->pageTitle = '创建新团';
+    }
+
+    public function mei_shi_tuan(){
+        $this->pageTitle = '美食团';
+        $tuan_info = $this->Tuan->find('all');
+        $this->set('tuans_info', $tuan_info);
+    }
+
+    public function join_meishituan(){
+        $this->pageTitle = '加入美食团';
+    }
 }
+

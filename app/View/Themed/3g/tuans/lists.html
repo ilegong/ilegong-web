@@ -1,20 +1,52 @@
-<ul class="sales clearfix">
-    {{loop $tuans_info $tuan}}
-    <li>
-        <a href="/tuans/detail/{{$tuan['Tuan']['id']}}">
-        <div class="clearfix tuanxq">
-            {{$tuan['Tuan']['tuan_name']}}&nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan['Tuan']['leader_name']}} <br>微信号:{{$tuan['Tuan']['leader_weixin']}}
-        </div>
-        </a>
-        <div class="clearfix tuanxq" style="margin-top: -1px;">
-            <span class="fl">{{$tuan['Tuan']['address']}}</span>
-            <a class="fr" href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}">
-                <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
-            </a>
-        </div>
-    </li>
-    {{/loop}}
+
+{{$this->Html->css(array('tuan.css'));}}
+<div class="classlist_v2" style="z-index:999">
+    <ul class="clearfix">
+        <li><a href="/categories/mobileHome" id="return_label" class="back"></a></li>
+        <li class="line"></li>
+        <li><strong>返回</strong></li>
+    </ul>
+</div>
+<div class="tuandetail_banner">
+    <p><span>北京兴寿红颜草莓—早上摘当天达</span><br>团购草莓送酸奶，自然熟透，科学除虫，无公害！</p>
+    <div class="bannerbg"></div>
+    <img src="/img/tuan/bannerdetail.jpg" border="0">
+</div>
+<ul class="tuandetail_price clearfix">
+    <li class="fl"><span>￥<strong>19.00</strong></span></li>
+    <li class="fl"><s>￥29.00</s></li>
+    <li class="fr">已有{{$tuan_product_num}}人团购</li>
+</ul>
+<ul class="tuandetail_more clearfix" onclick="to_detail();">
+    <li class="fl">图文详情 (建议在Wifi下浏览)</li>
+    <li class="fr"><img src="/img/tuan/more.png"></li>
 </ul>
 
+<div class="tuandetail_adress">
+    <div class="clearfix tuandetail_adress_title">
+        <span>选择您附近的团</span>
+        <a href="/tuans/new_tuan">位置不合适，发起新团？</a>
+    </div>
+    <ul class="clearfix">
+        {{loop $tuans_info $tuan}}
+        <li><img src="/img/tuan/map1.gif" border="0"></li>
+        <li>
+            <a href="/tuans/detail/{{$tuan['Tuan']['id']}}"><p>{{$tuan['Tuan']['tuan_name']}}</a>&nbsp;<span>团长:{{$tuan['Tuan']['leader_name']}}</span></p>
+            <s>团购截止3月11日22点</s>
+            <dl class="clearfix">
+                <a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}"><dd><img src="/img/tuan/locat_icon.gif" border="0"></dd>
+                <dd>{{$tuan['Tuan']['address']}}</dd>
+                </a>
+            </dl>
+            <s>已有{{$tuan['Tuan']['join_num']}}人参团</s>
+        </li>
+        {{/loop}}
+    </ul>
+</div>
+<script>
+    function to_detail(){
+        window.location.href="/products/product_detail/Tuan_Gou_Cao_Mei_Song_Suan_Nai_Bei_Jing_Xing_Shou_Hong_Yan_Cao_Mei_Dang_Tian.html?history=/";
+    }
+</script>
 
 

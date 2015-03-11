@@ -1,0 +1,29 @@
+{{$this->Html->css(array('tuan.css'))}}
+<div class="alltuan" style="position: relative;">
+    <a href="/tuans/new_tuan" class="alltuan_add">没有附近的团，申请创建自己的团队</a>
+    <div style="border-bottom: 1px #eeeeee solid; margin-top: 40px;">
+        <div class="alltuan_border">
+            {{loop $tuans_info $tuan}}
+            <ul class="clearfix">
+                <li><img src="/img/tuan/map1.gif" border="0"></li>
+                <li>
+                    <p>{{$tuan['Tuan']['tuan_name'] }}</p>
+                    <s>团长：<span>{{$tuan['Tuan']['leader_name']}}</span>&nbsp;&nbsp;成员：<span>99</span>人</s>
+                    <dl class="clearfix">
+                        <a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}"><dd><img src="/img/tuan/locat_icon.gif" border="0"></dd>
+                        <dd>{{$tuan['Tuan']['address']}}</dd>
+                        </a>
+                    </dl>
+                    <s>寻找最纯粹的美味</s>
+                </li>
+            </ul>
+
+            <div class="clearfix alltuan_btn">
+                <a href="/tuans/join_meishituan" class="fl">我要加入</a>
+                <a href="#X" class="fr">邀请小伙伴一起加入</a>
+            </div>
+            {{/loop}}
+        </div>
+
+    </div>
+</div>
