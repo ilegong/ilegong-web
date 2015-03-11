@@ -1,4 +1,3 @@
-{{if $teamId>0}}
 <div class="container main" style="position: relative">
 
     <div class="main details">
@@ -171,11 +170,12 @@
                     {{$tuan_name}}&nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_leader_name}}<br/>参团请加团长微信，微信号:{{$tuan_leader_weixin}}
                 </div>
                 <div class="clearfix tuanxq" style="margin-top: -1px;">
-                    <span class="fl">自提地点：<a href="/tuans/lbs_map/{{$teamId}}">{{$tuan_address}}</a></span>
+                    <span class="fl">自提地点：<a href="/tuans/lbs_map/{{$tuan_id}}">{{$tuan_address}}</a></span>
                     <!--<a class="fr" href="/tuans/lbs_map/{{$teamId}}">-->
                         <!--<img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>-->
                     <!--</a>-->
                 </div>
+                <div><span class="fl">送货日期：{{$consign_time}}</span></div>
                 <ul class="clearfix pt15">
                     <li class="title">价格:</li>
                     <li><strong class="price">￥19.00</strong>
@@ -382,7 +382,6 @@
         </div>
     </div>
 </div>
-{{/if}}
 <script>
     $(document).ready(function(){
         $('#tuan_buy').click(function(){

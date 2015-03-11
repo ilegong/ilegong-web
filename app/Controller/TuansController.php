@@ -50,7 +50,7 @@ class TuansController extends AppController{
         $this->set('tuan_name',$tuan_info['Tuan']['tuan_name']);
         $this->set('tuan_leader_name',$tuan_info['Tuan']['leader_name']);
         $this->set('tuan_leader_weixin',$tuan_info['Tuan']['leader_weixin']);
-        $this->set('tuan_address',$tuan_info['Tuan']['tuan_addr']);
+        $this->set('tuan_address',$tuan_info['Tuan']['address']);
         $this->set('tuan_buy_id', $tuan_buy_id);
         $this->set('hideNav',true);
         if($this->is_weixin()){
@@ -165,6 +165,9 @@ class TuansController extends AppController{
         $this->set('orderId', $orderId);
         $this->set('order', $order_info);
         $this->set('cart', $cart_info );
+        if($_GET['tuan_id']){
+            $this->set('tuan_id',$_GET['tuan_id'] );
+        }
     }
 
     public function pre_order() {

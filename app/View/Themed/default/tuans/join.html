@@ -70,7 +70,7 @@
             success: function (a) {
                 if (a.success) {
                     $("#confirm_next").attr('data-disable', 'true');
-                    window.location.href = '/tuans/tuan_pay/' + a.order_id;
+                    window.location.href = '/tuans/tuan_pay/' + a.order_id + '?tuan_id={{$tuan_id}}';
                 } else {
                     if(a.info){
                         utils.alert(a.info);
