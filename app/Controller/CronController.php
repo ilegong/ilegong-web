@@ -57,7 +57,7 @@ class CronController extends AppController
         $userIds = $commentModel->find('all',array(
             'fields'=>array('DISTINCT user_id')
         ));
-        $userIds = Hash::extract($userIds,'{n}.Comment.id');
+        $userIds = Hash::extract($userIds,'{n}.Comment.user_id');
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $wxUsers = $oauthBindModel->find('all', array(
             'conditions'=>array(
