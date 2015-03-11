@@ -131,6 +131,20 @@ class OrdersController extends AppController{
             'id' => $product_ids
         )));
 
+
+        $params = array();
+        foreach ($allP as $p) {
+            $pid = $p['Product']['id'];
+            $carts_of_p = $cart_by_pids[$pid];
+            if (!empty($carts_of_p)) {
+                foreach ($carts_of_p as $cp) {
+                    $specId = $cp['Cart']['specId'];
+                    $price = $p['Product']['price'];
+                    $params[cart_dict_key($pid, $specId)] = array('pid' => $pid, 'specId' => $specId, 'defaultPrice' => $price);
+                }
+            }
+        }
+
         $business = array();
         foreach($allP as $p) {
             if(!is_array($business[$p['Product']['brand_id']])) {
@@ -147,7 +161,6 @@ class OrdersController extends AppController{
             } else if ($limit_cur_user == 0 || ($limit_cur_user > 0 && $num > $limit_cur_user)) {
                 $this->__message($pName .__('购买超限，请从购物车中调整后再结算'), $error_back_url, 5);
             }
-
         }
 
         $pids = Hash::extract($allP, '{n}.Product.id');
@@ -169,6 +182,9 @@ class OrdersController extends AppController{
         $all_order_total = 0;
         $order_results = array();
 		$saveFailed = false;
+
+        $result = get_spec_by_pid_and_sid($params);
+
         foreach ($business as $brand_id => $products) {
 			$total_price = 0.0;
             foreach($products as $pro){
@@ -178,8 +194,9 @@ class OrdersController extends AppController{
                 if (!empty($pps)) {
                     foreach ($pps as $carts_of_p) {
                         $pp = $shipPromotionId ? $shipPromo->find_ship_promotion($pid, $shipPromotionId) : array();
+                        $price = $result[cart_dict_key($pid, $carts_of_p['Cart']['specId'])][0];
                         $num = $carts_of_p['Cart']['num'];
-                        list($itemPrice,) = calculate_price($pid, $pro['price'], $uid, $num, $carts_of_p['Cart']['id'], $pp);
+                        list($itemPrice,) = calculate_price($pid, $price, $uid, $num, $carts_of_p['Cart']['id'], $pp);
 
                         $total_price += $itemPrice * $num;
                     }

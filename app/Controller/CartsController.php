@@ -158,7 +158,7 @@ class CartsController extends AppController{
 
 		$total_price = 0;
 		foreach($Carts as $cart){
-			$total_price += $cart['Cart']['price']*$cart['Cart']['num'];
+            $total_price += $cart['Cart']['price'] * $cart['Cart']['num'];
 		}
 		$this->set('total_price',$total_price);
 		$this->set('Carts',$Carts);

@@ -45,37 +45,6 @@ class ProductSpecGroupComponent extends Component{
         return $result;
     }
 
-    /**
-     * param example array(array('pid'=>6,'specId'=>6,'defaultPrice'=>190).......)
-     * specId default 0
-     * result example array('pid-specId'=>price)
-     *
-     * @param $pidSidMap
-     * @return array
-     */
-    public function get_price_by_pid_and_sid($pidSidMap){
-        $productSpecGroup = ClassRegistry::init('ProductSpecGroup');
-        //有特惠价格或者商品没有specId 使用默认价格
-        $result = array();
-        foreach($pidSidMap as $item){
-            $sid = $item['sepcId'];
-            $pid = $item['pid'];
-            $price = $item['defaultPrice'];
-            if($sid!=0){
-                $specGroup = $productSpecGroup->find('first',array(
-                    'conditions'=>array(
-                        'id'=>$sid
-                    )
-                ));
-                if(!empty($specGroup)){
-                    $price = $specGroup['ProductSpecGroup']['price'];
-                }
-            }
-            $result[]=array($pid.'-'.$sid=>$price);
-        }
-        return $result;
-    }
-
     public function get_product_spec_json($pid){
         $productSpec = ClassRegistry::init('ProductSpec');
         $productAttrs = ProductSpeciality::get_product_attrs();

@@ -241,6 +241,15 @@ class BuyingComponent extends Component {
         $proM = ClassRegistry::init('Product');
         $shipPromo = ClassRegistry::init('ShipPromotion');
         $productByIds = $proM->find_published_products_by_ids($pids, array('Product.ship_fee'));
+
+        $params = array();
+        foreach($cartsByIds as $cid => $cartItem) {
+            $pid = $cartItem['pid'];
+            $params[] = array('pid' => $pid, 'specId' => $cartItem['specId'], 'defaultPrice' => $productByIds[$pid]['price']);
+        }
+
+        $result = get_spec_by_pid_and_sid($params);
+
         $numByPid = array();
         foreach ($cartsByIds as $cid => $cartItem) {
             $pid = $cartItem['product_id'];
@@ -249,7 +258,9 @@ class BuyingComponent extends Component {
             $num = $cartItem['num'];
             $numByPid[$pid] += $num;
 
-            list($itemPrice,) = calculate_price($pid, $productByIds[$pid]['price'], $uid, $num, $cartItem['id'], $pp);
+            $price = $result[cart_dict_key($pid, $cartItem['specId'])][0];
+
+            list($itemPrice,) = calculate_price($pid, $price, $uid, $num, $cartItem['id'], $pp);
 
             $totalPrices[$brand_id] += ($itemPrice * $num);
             $cart->add_product_item($brand_id, $cid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name'], $pid);
