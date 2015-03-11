@@ -572,7 +572,18 @@ class OrdersController extends AppController{
         $shareOffer = ClassRegistry::init('ShareOffer');
         $toShare = $shareOffer->query_gen_offer($orderinfo, $this->currentUser['id']);
         $canComment = $this->can_comment($status);
-
+        //tuan order view
+        if($orderinfo['Order']['type'] == ORDER_TYPE_TUAN){
+            $this->loadModel('TuanBuying');
+            $tuan_b = $this->TuanBuying->find('first', array(
+                'conditions' => array('id' => $orderinfo['Order']['member_id']),
+                'fields' => array('consign_time', 'tuan_id', 'id')
+            ));
+            $consign_time = date('m月d日', strtotime($tuan_b['TuanBuying']['consign_time']));
+            $this->set('consign_time', $consign_time);
+            $this->set('tuan_id', $tuan_b['TuanBuying']['tuan_id']);
+            $this->set('tuan_buy_id', $tuan_b['TuanBuying']['id']);
+        }
         $this->set(compact('toShare', 'canComment', 'no_more_money', 'order_id', 'order', 'has_expired_product_type', 'expired_pids'));
         $this->set('isMobile', $this->RequestHandler->isMobile());
         $this->set('ship_type', ShipAddress::ship_type_list());

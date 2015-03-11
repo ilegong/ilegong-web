@@ -1,4 +1,3 @@
-{{if $teamId>0&&$teamId<7}}
 <div class="classlist_v2" style="z-index:999">
     <ul class="clearfix">
         <li><a href="/categories/tag/shuiguoganguo.html" id="return_label" class="back"></a></li>
@@ -9,7 +8,7 @@
 <div  class="container" style="margin-top: 2.5em; padding: 0">
     <div  class="row" style="margin-left: 0;margin-right: 0;">
         <div  class="col-xs-12" style="padding: 0;">
-            <div   region_info="id=33&name=%E4%BA%A7%E5%93%81%E4%BF%A1%E6%81%AF%E5%B1%95%E7%A4%BA&portletid=&model=&rows=1&columns=1&cate_id=0&showphoto=0&showsummary=0&showpages=0&template=products%2F_view&conditions=&updated=2011-05-24+23%3A18%3A06&created=2011-05-24+23%3A11%3A57&portlet_tpl=notitle&custom_class=&creator_id=0&content=%7B%7Btemplate+products%2F_view%7D%7D&description=%E4%BA%A7%E5%93%81%E4%BF%A1%E6%81%AF%E9%A1%B5%EF%BC%8C%E4%BA%A7%E5%93%81%E4%BF%A1%E6%81%AF%E5%B1%95%E7%A4%BA&deleted=0&auto_receive_param=0" class="ui-widget ui-portlet " style="position:relative;">
+            <div class="ui-widget ui-portlet " style="position:relative;">
                 <div style="display:none;position:absolute;" class="clearfix ui-corner-top ui-widget-header ui-portlet-header">
                     <span class="title"><h3>产品信息展示</h3></span>
                     <span class="edit"></span>
@@ -42,9 +41,12 @@
                             </div>
                             <div class="clearfix tuanxq" style="margin-top: -1px;">
                                 <span class="fl">自提地点：{{$tuan_address}}</span>
-                                <a class="fr" href="/tuans/lbs_map/{{$teamId}}">
+                                <a class="fr" href="/tuans/lbs_map/{{$tuan_id}}">
                                     <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
                                 </a>
+                            </div>
+                            <div class="clearfix tuanxq" style="margin-top: -1px;">
+                                <span class="fl">送货日期：{{$consign_time}}</span>
                             </div>
                             <ul class="numbers clearfix b_line">
                             <li class="fl">
@@ -245,11 +247,8 @@
                         function to_brand(){
                             window.location.href="/b/peng_you_shuo";
                         }
-                        function to_shichi(){
-                            window.location.href="/products/view_shichi_comment/Tuan_Gou_Cao_Mei_Song_Suan_Nai_Bei_Jing_Xing_Shou_Hong_Yan_Cao_Mei_Dang_Tian.html?history=/";
-                        }
                         function to_detail(){
-                            window.location.href="/products/product_detail/Tuan_Gou_Cao_Mei_Song_Suan_Nai_Bei_Jing_Xing_Shou_Hong_Yan_Cao_Mei_Dang_Tian.html?history=/";
+                            window.location.href="/tuans/product_detail/{{$pid}}?tuan_id={{$tuan_id}}&tuan_buy_id={{$tuan_buy_id}}";
                         }
 
                     </script>
@@ -284,7 +283,7 @@
         </li>
     </ul>
 </div>
-{{/if}}
+
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'));}}
         <script>
             $(document).ready(function(){
@@ -303,7 +302,7 @@
                     success:function(data){
                         if(data.success)
                         {
-                            window.location.href = '/tuans/join/'+ product_id+'/{{$teamId}}';
+                            window.location.href = '/tuans/join/{{$tuan_id}}/{{$tuan_buy_id}}';
                         }
                         else
                         {
