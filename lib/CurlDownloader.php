@@ -48,7 +48,7 @@ class CurlDownloader {
             return $len;
         }
         list($name, $value) = explode(':', $string, 2);
-        if($this->uploadFileName){
+        if($this->isDownloadWxHead){
             $fileName = uniqid('wx_head_').'.jpg';
             $this->uploadFileName = $fileName;
             $this->remoteFileName = ($this->tmpPath).$fileName;
