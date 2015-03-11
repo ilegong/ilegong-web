@@ -31,7 +31,7 @@
     <ul class="clearfix">
 
         <li> <a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}"><img src="/img/tuan/tuan-{{$tuan['Tuan']['id']}}.png" border="0"></a></li>
-        <li>
+        <li style="max-width: 62%;">
             <a href="/tuans/detail/{{$tuan['Tuan']['id']}}/{{$tuan_join_num[$tuan['Tuan']['id']]['id']>0?$tuan_join_num[$tuan['Tuan']['id']]['id']:$tuan['Tuan']['id']}}"><p>{{$tuan['Tuan']['tuan_name']}}&nbsp;<span>团长:{{$tuan['Tuan']['leader_name']}}</span></p></a>
             <s>团购截止{{date('m-d-h',strtotime($tuan_join_num[$tuan['Tuan']['id']]['end_time']))}}</s>
             <dl class="clearfix">
