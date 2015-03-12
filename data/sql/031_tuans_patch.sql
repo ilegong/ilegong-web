@@ -1,4 +1,115 @@
 
+-- phpMyAdmin SQL Dump
+-- version 3.3.8.1
+-- http://www.phpmyadmin.net
+--
+-- Host: w.rdc.sae.sina.com.cn:3307
+-- Generation Time: Mar 12, 2015 at 10:30 AM
+-- Server version: 5.5.23
+-- PHP Version: 5.3.3
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Database: `app_51daifan`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cake_tuans`
+--
+
+CREATE TABLE IF NOT EXISTS `cake_tuans` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `address` varchar(80) NOT NULL DEFAULT '',
+  `leader_name` varchar(18) DEFAULT NULL,
+  `tuan_name` varchar(40) NOT NULL DEFAULT '',
+  `leader_id` int(11) DEFAULT '0',
+  `leader_weixin` varchar(20) NOT NULL DEFAULT '0',
+  `status` tinyint(11) DEFAULT '0',
+  `created` datetime DEFAULT NULL,
+  `location_long` double DEFAULT '0',
+  `location_lat` double DEFAULT '0',
+  `tuan_addr` varchar(255) DEFAULT '',
+  `tuan_desc` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+
+--
+-- Dumping data for table `cake_tuans`
+--
+
+INSERT INTO `cake_tuans` (`id`, `address`, `leader_name`, `tuan_name`, `leader_id`, `leader_weixin`, `status`, `created`, `location_long`, `location_lat`, `tuan_addr`, `tuan_desc`) VALUES
+(1, '搜狐媒体好邻居店', '潘婷', '搜狐媒体美食团    ', 0, 'pt8220707', 0, NULL, 116.33112, 39.989367, '中关村新科祥园甲2号楼1层03室', NULL),
+(3, '金宝街好邻居2分店', '燕子', '金宝街美食团', 0, 'pyshuo2015', 0, NULL, 116.429071, 39.921718, '北京市东城区金宝街临时3号', NULL),
+(4, '西三旗上奥世纪B座430', '浩子', '西三旗美食团', 0, 'pyshuo2015', 0, NULL, 116.336402, 40.06276, '北京市昌平区建材城西路 ', NULL),
+(5, '五道口搜狐网络大厦', '王谷丹', '五道口美食团', 0, 'pyshuo2015', 0, NULL, 116.339079, 39.999683, '北京市海淀区中关村东路1号	', NULL),
+(6, '苏州街好邻居6分店', '李慧敏', '中关村美食团', 0, 'pyshuo2015', 0, NULL, 116.312186, 39.985067, '中关村银科大厦—苏州街6店(海淀区苏州街28号)', NULL),
+(7, '好邻居木樨地店', '侯志嘉', '木樨地美食团', 0, 'pyshuo2015', 0, NULL, 116.345032, 39.913418, '西城区木樨地25号', NULL),
+(8, '好邻居便利店（建华南路分店）', 'Amy', '建华南路好邻居新鲜水果自体部落', 0, 'amyshen', 0, NULL, 116.316178, 40.047731, '建外大街建华南路11号商通大厦底商', NULL),
+(9, '联想新大厦好邻居', 'Haodm 喜乐', '联想新大厦好邻居美食团', 0, 'wxid_lelerita', 0, NULL, 116.34625, 39.91258, '海淀区上地创业路8号', NULL);
+
+-- phpMyAdmin SQL Dump
+-- version 3.3.8.1
+-- http://www.phpmyadmin.net
+--
+-- Host: w.rdc.sae.sina.com.cn:3307
+-- Generation Time: Mar 12, 2015 at 10:31 AM
+-- Server version: 5.5.23
+-- PHP Version: 5.3.3
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Database: `app_51daifan`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cake_tuan_buyings`
+--
+
+CREATE TABLE IF NOT EXISTS `cake_tuan_buyings` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `tuan_id` int(11) NOT NULL DEFAULT '0',
+  `pid` int(11) NOT NULL DEFAULT '0',
+  `join_num` int(11) DEFAULT '0',
+  `sold_num` int(11) DEFAULT '0',
+  `status` int(11) DEFAULT '0',
+  `end_time` datetime DEFAULT NULL,
+  `consign_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+
+--
+-- Dumping data for table `cake_tuan_buyings`
+--
+
+INSERT INTO `cake_tuan_buyings` (`id`, `tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES
+(1, 1, 838, 3, 5, 0, '2015-03-12 22:00:00', '2015-03-13 10:00:00'),
+(2, 3, 838, 1, 1, 0, '2015-03-12 22:00:00', '2015-03-13 10:00:00'),
+(3, 4, 838, 4, 21, 0, '2015-03-12 22:00:00', '2015-03-13 10:00:00'),
+(4, 5, 838, 16, 35, 0, '2015-03-12 22:00:00', '2015-03-13 10:00:00'),
+(5, 6, 838, 3, 11, 0, '2015-03-16 17:00:00', '2015-03-17 10:00:00'),
+(6, 7, 838, 0, 0, 0, '2015-03-16 17:00:00', '2015-03-17 10:00:00'),
+(7, 8, 838, 1, 2, 0, '2015-03-16 17:00:00', '2015-03-17 10:00:00'),
+(8, 9, 838, 0, 0, 0, '2015-03-16 17:00:00', '2015-03-17 10:00:00');
+
+
 UPDATE `cake_tuans` SET `address`='好邻居(建华南路分店)', `tuan_name`='建华南路好邻居' WHERE `id`='8';
 
 UPDATE `cake_tuans` SET `leader_name`='喜乐', `tuan_name`='联想新大厦美食团' WHERE `id`='9';
