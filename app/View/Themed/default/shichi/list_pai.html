@@ -155,7 +155,7 @@
                 } else {
                     utils.alert_one('您好，下单支付完成才算秒杀完成, 立即跳转结算', '去结算', function(){
                         addedCallback();
-                        window.location.href = '/orders/info?from=try&pid_list='+id+'&try='+tryId;
+                        window.location.href = '/orders/info?from=try&pid_list='+data.id+'&try='+tryId;
                     });
                 }
             });
