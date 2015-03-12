@@ -1284,7 +1284,7 @@ function friendlyDate($sTime, $type = 'normal', $alt = 'false') {
     }elseif($type=='ymd') {
         return date("Y-m-d", $sTime);
     }else if($type == 'chinese_m_d') {
-        return date('m月d日', $sTime);
+        return date('n月d日', $sTime);
     }else if($type == FFDATE_CH_MDW) {
         $weeks = array(
             '0' => '日',
@@ -1295,7 +1295,7 @@ function friendlyDate($sTime, $type = 'normal', $alt = 'false') {
             '5' => '五',
             '6' => '六',
             );
-        $s = date('m月d日', $sTime);
+        $s = date('n月d日', $sTime);
         return $s.'周'.$weeks[date('w', $sTime)];
     }else{
         if( $dTime < 60 ){

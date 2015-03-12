@@ -52,7 +52,7 @@ class TuansController extends AppController{
         if(strtotime($tuan_b['TuanBuying']['end_time']) < time()){
             $this->set('exceed_time', true);
         }
-        $consign_time = friendlyDateFromStr(FFDATE_CH_MDW, $tuan_b['TuanBuying']['consign_time']);
+        $consign_time = friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
         $this->set('sold_num',$tuan_b['TuanBuying']['sold_num']);
         $this->set('pid', $tuan_b['TuanBuying']['pid']);
         $this->set('consign_time', $consign_time);
