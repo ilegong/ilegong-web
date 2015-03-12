@@ -264,6 +264,7 @@ class TuansController extends AppController{
         $this->pageTitle = '美食团';
         $tuan_info = $this->Tuan->find('all');
         $this->set('tuans_info', $tuan_info);
+        $this->set('op_cate','mei_shi_tuan');
     }
 
     public function join_meishituan(){
