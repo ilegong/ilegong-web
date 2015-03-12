@@ -1397,7 +1397,7 @@ function get_spec_by_pid_and_sid($pidSidMap) {
     //有特惠价格或者商品没有specId 使用默认价格
     $result = array();
     foreach ($pidSidMap as $item) {
-        $sid = $item['sepcId'];
+        $sid = $item['specId'];
         $pid = $item['pid'];
         $price = $item['defaultPrice'];
         $spec_names = '';
@@ -1412,7 +1412,7 @@ function get_spec_by_pid_and_sid($pidSidMap) {
                 $spec_names = $specGroup['ProductSpecGroup']['spec_names'];
             }
         }
-        $result[] = array(cart_dict_key($pid, $sid) => array($price, $spec_names));
+        $result[cart_dict_key($pid, $sid)] = array($price, $spec_names);
     }
     return $result;
 }

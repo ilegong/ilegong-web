@@ -244,7 +244,7 @@ class BuyingComponent extends Component {
 
         $params = array();
         foreach($cartsByIds as $cid => $cartItem) {
-            $pid = $cartItem['pid'];
+            $pid = $cartItem['product_id'];
             $params[] = array('pid' => $pid, 'specId' => $cartItem['specId'], 'defaultPrice' => $productByIds[$pid]['price']);
         }
 
