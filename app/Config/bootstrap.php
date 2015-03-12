@@ -829,6 +829,17 @@ function product_link2($p, $defUri = '/') {
     }
 }
 
+function product_tuan_list_link($p,$defUri = '/'){
+    if (!empty($p)) {
+        $pp = empty($p['Product']) ? $p : $p['Product'];
+        $link = "/tuans/lists/" .$pp['id'] . "/". ".html";
+        Cache::write('link_pro_tuan_'.$pp['id'], $link);
+        return $link;
+    } else {
+        return $defUri;
+    }
+}
+
 function url_append($url, $name, $value) {
     if(strpos($url, '?') !== false) {
         return $url.'&'.urlencode($name).'='.urlencode($value);

@@ -112,13 +112,17 @@ class ProductsController extends AppController{
         $fields = array('id','slug','name','content','created');
         $this->set('hideNav',true);
         parent::view($slug,$fields);
-
-
         $pid = $this->current_data_id;
         $currUid = $this->currentUser['id'];
         $this->calculate_price_limitation($pid, $currUid);
         if ($this->is_weixin()) {
             $this->prepare_wx_sharing($currUid, $pid);
+        }
+        $from = $_REQUEST['from'];
+        if(!empty($from)){
+            if($from=='tuan_list'){
+                $this->set('from_tuan_list',true);
+            }
         }
     }
 
