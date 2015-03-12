@@ -35,6 +35,9 @@ const TAG_ID_ROUQIN_DANPIN = 17;
 const TAG_ID_XINXIANSHUIGUO = 18;
 const TAG_ID_XINPIN_SHICHI = 19;
 
+const FFDATE_CH_MDW = 'chinese_m_d_w';
+const FFDATE_CH_MD = 'chinese_m_d';
+
 $_display_tags_in_home = array(TAG_ID_CHULIANG, TAG_ID_ROUQIN_DANPIN, TAG_ID_XINPIN_SHICHI, TAG_ID_XINPIN_SHICHI);
 
 $_coupon_could_distribute = array(18483 => '新用户50返10元券', 18482 => '新用户100返20元券');
