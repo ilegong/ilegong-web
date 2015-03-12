@@ -924,7 +924,7 @@ class StoresController extends AppController
             $specNames = join(',',$tempSpecNames);
             $price = CakeNumber::precision($item['price'], 2);
             if($isEdit){
-                if(!$this->spec_group_is_in_database($pid,$specIds,$specNames)){
+                if(!$this->spec_group_is_in_database($pid,$specIds,$specNames,$price)){
                     $saveData[]=array('product_id'=>$pid,'price'=>$price,'stock'=>$item['stock'],'spec_ids'=>$specIds,'spec_names'=>$specNames);
                 }
             }else{
@@ -962,7 +962,7 @@ class StoresController extends AppController
         }
     }
 
-    public function spec_group_is_in_database($pid,$spec_ids,$spec_names){
+    public function spec_group_is_in_database($pid,$spec_ids,$spec_names,$price){
         $this->loadModel('ProductSpecGroup');
         $specGroup = $this->ProductSpecGroup->find('first',array(
             'conditions'=>array(
@@ -973,6 +973,7 @@ class StoresController extends AppController
         ));
         if(!empty($specGroup)){
             $specGroup['ProductSpecGroup']['deleted']=0;
+            $specGroup['ProductSpecGroup']['price']=$price;
             $this->ProductSpecGroup->save($specGroup['ProductSpecGroup']);
             return true;
         }else{
