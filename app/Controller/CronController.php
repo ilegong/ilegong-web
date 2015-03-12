@@ -85,7 +85,7 @@ class CronController extends AppController
         $this->autoRender=false;
         $this->loadModel('Order');
         $this->loadModel('Cart');
-        $start_date = date("Y-m-d",strtotime("-7 day"));
+        $start_date = date("Y-m-d",strtotime("-5 day"));
         $date = date('Y-m-d', time());
         $orders = $this->Order->find('all',array(
             'conditions'=>array(

@@ -123,7 +123,7 @@ class WeixinComponent extends Component
                 "url" => $this->get_order_query_url($order_id),
                 "topcolor" => "#FF0000",
                 "data" => array(
-                    "first" => array("value" => "亲，您的订单号为".$order_id."的最新物流信息: ".$msg),
+                    "first" => array("value" => "亲，您的订单号为".$order_id."的最新物流信息: ".$msg."如果你已经收货,请点击详情确认收货,可以获取积分(积分可以抵现)。"),
                     "keyword1" => array("value" => $ship_company),
                     "keyword2" => array("value" => $order_id),
                     "keyword3" => array("value" => $good_info),
