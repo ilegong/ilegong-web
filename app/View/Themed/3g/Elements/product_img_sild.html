@@ -7,10 +7,7 @@
     </div>
 </div>
 <?php
-    $imageUrlPrefix='';
-    if(defined('SAE_MYSQL_DB')){
-        $imageUrlPrefix=$imageUrlPrefix;
-    }
+    $imageUrlPrefix='http://51daifan-images.stor.sinaapp.com';
 ?>
 
 {{$this->Html->scriptStart(array('block' => 'scriptBottom'));}}
@@ -33,7 +30,7 @@ var ul = $indexBanner.find('ul');
 var swiper_wrapper = $indexBanner.find('div.swiper-wrapper');
 
 $.each(banners, function (idx, value) {
-$('<div class="swiper-slide"><a href="' + banner_links[idx] + '"><img src="' + value + '" border="0" /></a></div>').appendTo(swiper_wrapper);
+$('<div class="swiper-slide"><a href="' + banner_links[idx] + '"><img src="' + value + '" border="0"/></a></div>').appendTo(swiper_wrapper);
 $('<li/>').appendTo(ul);
 });
 
@@ -57,3 +54,13 @@ ul.find('li:first').addClass('cur');
 {{if count($Product['Uploadfile'])>1}}
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'), array('block' => 'scriptBottom'));}}
 {{/if}}
+
+<script>
+    $(document).ready(function() {
+        $("div.swiper-container img").error(function(){
+            var me = $(this);
+            var src = me.attr('src').replace('{{$imageUrlPrefix}}','');
+            $(this).attr('src', src);
+        });
+    });
+</script>
