@@ -8,7 +8,7 @@
         <ul class="clearfix" onclick="javascript:history.go(-1)">
             <li><a class="back"></a></li>
             <li class="line"></li>
-            <li style="text-overflow: ellipsis;"><strong>{{strlen($name)>14?substr($name,0,13):$name}}</strong></li>
+            <li style="text-overflow: ellipsis;"><strong>{{mb_strlen($name)>14?mb_substr($name,0,14):$name}}</strong></li>
         </ul>
     </div>
 <lbs-map  id ="position">
