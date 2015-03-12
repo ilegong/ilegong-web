@@ -113,3 +113,7 @@ INSERT INTO `cake_tuan_buyings` (`id`, `tuan_id`, `pid`, `join_num`, `sold_num`,
 UPDATE `cake_tuans` SET `address`='好邻居(建华南路分店)', `tuan_name`='建华南路好邻居' WHERE `id`='8';
 
 UPDATE `cake_tuans` SET `leader_name`='喜乐', `tuan_name`='联想新大厦美食团' WHERE `id`='9';
+
+
+INSERT INTO `cake_tuans` (`id`, `address`, `leader_name`, `tuan_name`, `leader_id`, `leader_weixin`, `status`, `location_long`, `location_lat`, `tuan_addr`) VALUES ('10', '工体东路好邻居', 'Eva', '工体东路美食团', '0', 'xiyingying7479', '0', '116.458039', '39.932453', '朝阳区工人体育场东路16号北门附近');
+INSERT INTO `cake_tuans` (`id`, `address`, `tuan_name`, `leader_id`, `leader_weixin`, `status`, `location_long`, `location_lat`, `tuan_addr`) VALUES ('11', '好邻居便利店(望京西园店)', '望京西园美食团', '0', ' Nancy Niu', '0', '116.474849', '40.008671', '广顺北大街望京西园二区222号楼星源国际公寓E座1楼2号');
