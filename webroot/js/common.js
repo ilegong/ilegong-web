@@ -154,8 +154,8 @@ var rs_callbacks = {
 	},
 	addtoCart:function(request, quick_buy_pid){
 		//handle for user not logged in
-		if (quick_buy_pid) {
-			window.location.href = '/orders/info?from=quick_buy&pid_list='+quick_buy_pid;
+		if (quick_buy_pid && request['id']) {
+			window.location.href = '/orders/info?from=quick_buy&pid_list='+request['id'];
 			return;
 		}
 		setTimeout(function(){
