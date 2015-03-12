@@ -5,15 +5,19 @@
         <div class="alltuan_border">
             {{loop $tuans_info $tuan}}
             <ul class="clearfix">
-                <li><img src="/img/tuan/tuan-{{$tuan['Tuan']['id']}}.png" border="0"></li>
+                <li>
+                    <a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}">
+                        <img src="/img/tuan/tuan-{{$tuan['Tuan']['id']}}.png" border="0">
+                    </a>
+                </li>
                 <li style="float:none;  padding-left:8em;" >
-                    <p>{{$tuan['Tuan']['tuan_name'] }}</p>
+                    <a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}"><p>{{$tuan['Tuan']['tuan_name'] }}</p></a>
                     <s>团长:<span>{{$tuan['Tuan']['leader_name']}}</span>&nbsp;&nbsp;成员:<span>99</span>人</s>
                     <a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}">
-                    <dl class="clearfix">
-                        <dd><img src="/img/tuan/locat_icon.gif" border="0"></dd>
-                        <dd>{{$tuan['Tuan']['address']}}</dd>
-                    </dl>
+                        <dl class="clearfix">
+                            <dd><img src="/img/tuan/locat_icon.gif" border="0"></dd>
+                            <dd>{{$tuan['Tuan']['address']}}</dd>
+                        </dl>
                     </a>
                     <s>寻找最纯粹的美味</s>
                 </li>
@@ -28,17 +32,16 @@
 
     </div>
 </div>
-        <script>
-          $(document).ready(function(){
-              $('#share').click(function(){
-                  var $share_div = $('<div class="apple_share fade in"><img src="/img/tuan/share.png" style="width:95%"></div>')
-                          .show().click(function(){
-                              $share_div.hide();
-                              $share_div.remove();
-                          });
-                  $('body').append($share_div);
-              })
+<script>
+  $(document).ready(function(){
+      $('#share').click(function(){
+          var $share_div = $('<div class="apple_share fade in"><img src="/img/tuan/share.png" style="width:95%"></div>')
+                  .show().click(function(){
+                      $share_div.hide();
+                      $share_div.remove();
+                  });
+          $('body').append($share_div);
+      });
+  })
 
-          })
-
-        </script>
+</script>
