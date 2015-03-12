@@ -1241,14 +1241,22 @@ $(document).ready(function () {
 		return true;
 	}
 
+
     function get_spec_group(){
         var $selected_spec = $('span.spec_item_selected[item-label!="SD"]');
         var all_spec = [];
         $.each($selected_spec,function(index,item){
             all_spec.push(($(item).text()).trim());
         });
-        var spec_group_str = all_spec.join(',');
-        var spec_group_data = product_spec_group[spec_group_str];
+        var spec_group_data = null;
+        $.each(product_spec_group,function(key,val){
+            var keyArray = key.split(',');
+            //规格组合是否一样
+            if($(keyArray).not(all_spec).length === 0 && $(all_spec).not(keyArray).length === 0){
+                spec_group_data = val;
+                return false;
+            }
+        });
         return spec_group_data;
     }
 
