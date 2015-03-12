@@ -103,10 +103,7 @@
 }}
 
 <?php
-    $imageUrlPrefix='';
-    if(defined('SAE_MYSQL_DB')){
-        $imageUrlPrefix=$imageUrlPrefix;
-    }
+    $imageUrlPrefix='http://51daifan-images.stor.sinaapp.com';
 ?>
 
 <div class="ban" id="demo1">
@@ -116,15 +113,15 @@
         <ul id="ShowPictureBox">
             {{if count($Product['Uploadfile'])==0}}
                 <li class="preview"><a><img
-                        src="{{$Product['Product']['coverimg']}}"
-                        onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'" alt="" width="400px" height="300px"/>
+                        src="{{$imageUrlPrefix.$Product['Product']['coverimg']}}"
+                        onerror="this.src='{{$Product['Product']['coverimg']}}'" alt="" width="400px" height="300px"/>
                 </a>
                 </li>
             {{/if}}
             {{loop $Product['Uploadfile'] $uploadfile}}
             <li class="preview"><a><img
                     src="{{$this->Html->url($imageUrlPrefix.$uploadfile['Uploadfile']['mid_thumb'])}}"
-                    onerror="this.src='{{$this->Html->url('/img/nophoto.gif')}}'" alt="" width="400px" height="300px"/>
+                    onerror="this.src='{{$uploadfile['Uploadfile']['mid_thumb']}}'" alt="" width="400px" height="300px"/>
             </a>
             </li>
             {{/loop}}
@@ -143,12 +140,14 @@
                         name="{{$this->Html->url($imageUrlPrefix.$uploadfile['Uploadfile']['mid_thumb'])}}"
                         alt="{{$Product['Product']['title']}}"
                         src="{{$this->Html->url($imageUrlPrefix.$uploadfile['Uploadfile']['thumb'])}}"
+                        onerror="{{$this->Html->url($uploadfile['Uploadfile']['thumb'])}}"
                         width="80" height="60"/></a></li>
                 {{/loop}}
                 {{if count($Product['Uploadfile'])==0}}
                     <a href="javascript:;"><img
                             alt="{{$Product['Product']['Product']['title']}}"
                             src="{{$Product['Product']['coverimg']}}"
+                            onerror="{{$this->Html->url($uploadfile['Uploadfile']['thumb'])}}"
                             width="80" height="60"/></a></li>
                 {{/if}}
             </ul>
