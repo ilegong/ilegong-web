@@ -164,6 +164,9 @@ class CronController extends AppController
                 }else{
                     $extra_param = json_decode($extra_param,true);
                 }
+                if($extra_param['is_downLoad_photo']){
+                    continue;
+                }
                 $wx_user = get_user_info_from_wx($open_id);
                 $this->log('download wx user info '.json_encode($wx_user));
                 $photo = $wx_user['headimgurl'];
