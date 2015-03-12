@@ -26,6 +26,7 @@ class TuansController extends AppController{
         $this->log('num'.json_encode($tuan_product_num));
         $this->set('tuan_join_num',$tuan_join_num);
         $this->set('tuan_product_num',$tuan_product_num[0][0]['sold_number']);
+        $this->set('hideNav',true);
 
     }
 

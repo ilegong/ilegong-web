@@ -1,19 +1,20 @@
-{{$this->Html->css(array('tuan.css'))}}
+{{$this->Html->css(array('tuan.css?v1'))}}
 <div class="alltuan" style="position: relative;">
     <a href="/tuans/new_tuan" class="alltuan_add">没有附近的团，申请创建自己的团队</a>
-    <div style="border-bottom: 1px #eeeeee solid; margin-top: 40px;">
+    <div style="margin-top: 40px;">
         <div class="alltuan_border">
             {{loop $tuans_info $tuan}}
             <ul class="clearfix">
                 <li><img src="/img/tuan/tuan-{{$tuan['Tuan']['id']}}.png" border="0"></li>
                 <li style="float:none;  padding-left:8em;" >
                     <p>{{$tuan['Tuan']['tuan_name'] }}</p>
-                    <s>团长：<span>{{$tuan['Tuan']['leader_name']}}</span>&nbsp;&nbsp;成员：<span>99</span>人</s>
+                    <s>团长:<span>{{$tuan['Tuan']['leader_name']}}</span>&nbsp;&nbsp;成员:<span>99</span>人</s>
+                    <a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}">
                     <dl class="clearfix">
-                        <a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}"><dd><img src="/img/tuan/locat_icon.gif" border="0"></dd>
+                        <dd><img src="/img/tuan/locat_icon.gif" border="0"></dd>
                         <dd>{{$tuan['Tuan']['address']}}</dd>
-                        </a>
                     </dl>
+                    </a>
                     <s>寻找最纯粹的美味</s>
                 </li>
             </ul>
