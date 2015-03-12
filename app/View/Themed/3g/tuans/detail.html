@@ -292,7 +292,8 @@
         <script>
             $(document).ready(function(){
             $('#tuan_buy').click(function(){
-                if(!sso.check_userlogin()){
+                var href = window.location.href;
+                if(!sso.check_userlogin({'referer':href})){
                     return false;
                 }else{
                 var product_id = $('#tuan_buy').attr('item-id');

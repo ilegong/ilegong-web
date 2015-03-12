@@ -38,7 +38,6 @@ class TuansController extends AppController{
             $this->__message('该团不存在', '/tuans/mei_shi_tuan');
         }
         $this->loadModel('TuanBuying');
-        $referer_link = '/tuans/detail/'.$tuan_id;
         if($tuan_buy_id == null){
             $tuan_b = $this->TuanBuying->find('first',array(
                 'conditions' => array('tuan_id' => $tuan_id ),
@@ -46,7 +45,6 @@ class TuansController extends AppController{
             ));
             $tuan_buy_id = $tuan_b['TuanBuying']['id'];
         }else{
-            $referer_link = $referer_link.'/'.$tuan_buy_id;
             $tuan_b = $this->TuanBuying->find('first',array(
                 'conditions' => array('id' => $tuan_buy_id )
             ));
@@ -65,7 +63,6 @@ class TuansController extends AppController{
         $this->set('tuan_address',$tuan_info['Tuan']['address']);
         $this->set('tuan_buy_id', $tuan_buy_id);
         $this->set('hideNav',true);
-        $this->set('referer_link',$referer_link);
         if($this->is_weixin()){
             $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
             $pid = $tuan_b['TuanBuying']['pid'];
