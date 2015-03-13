@@ -73,8 +73,8 @@
             <div class="clearfix tb_action">
                 <a  class="fl {{ (($total_left > 0 || $total_left == -1) && $afford_for_curr_user && $Product['Product']['published']) ? 'tb_btn_buy' : 'cart_btn_soldout'}}" item-id="{{$Product['Product']['id']}}" href="javascript:void(0)"
                    id="btn_quick_buy">{{ (($total_left > 0 || $total_left == -1) && $afford_for_curr_user && $Product['Product']['published']) ? '立即购买' : '已售完'}}</a>
-                <a class="fl {{ (($total_left > 0 || $total_left == -1) && $afford_for_curr_user && $Product['Product']['published']) ? 'tb_btn_basket' : 'cart_btn_soldout'}}" item-id="{{$Product['Product']['id']}}" href="javascript:void(0);"
-                   id="btn_add_cart">{{ (($total_left > 0 || $total_left == -1) && $afford_for_curr_user && $Product['Product']['published']) ? '加入购物车' : '已售完'}}</a>
+                <a class="fl {{  (($total_left > 0 || $total_left == -1) && $afford_for_curr_user && $Product['Product']['published'] && !$limit_ship) ? 'tb_btn_basket' : 'cart_btn_soldout'}}" item-id="{{$Product['Product']['id']}}" href="javascript:void(0);" reason="{{$limit_ship?'limit_ship':''}}"
+                   id="btn_add_cart">{{$limit_ship?'不支持购物车':'加入购物车'}}</a>
             </div>
         </div>
         <div class="recommend fl">
