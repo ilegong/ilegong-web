@@ -263,24 +263,20 @@
 <!--底部购买-->
 <div class="bottom_bg">
     <ul class="clearfix">
-        <li class="love fl">
+        <li class="love fl" style="width:25%;">
             <a href="#X" class="love_icon"></a>
             <!--<p>关注</p>-->
         </li>
-        <li class="fl" style="width:39%;">
+        <li class="fl" style="width:50%;">
             <div style="margin-right:3%;">
                 {{if $exceed_time}}
-                <a href="/tuans/detail/{{$tuan_id}}" class="btn_b pay_bg radius10">该团已截止</a>
+                <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
                 {{else}}
                 <a id="tuan_buy" item-id="838" href="javascript:;" class="btn_b pay_bg radius10">立即购买</a>
                 {{/if}}
             </div>
         </li>
-        <li class="fl" style="width:39%;">
-            <div style="margin-left:3%;">
-                <a id="btn_add_cart"  item-id="838" href="javascript:;" reason="limit_ship" class="btn_b cart_btn_soldout radius10">不支持购物车</a>
-            </div>
-        </li>
+
         <li class="shopping fr">
             <a href="/carts/listcart.html" style="position:relative; margin-top: 0.2em;" class="shopping_icon" id="cart_link"><div id="item-count" class="shopping_count"></div></a>
             <p>购物车</p>
