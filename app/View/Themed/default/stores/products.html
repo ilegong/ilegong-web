@@ -21,6 +21,7 @@
             $actions = ' ' . $this->Html->link('修改', array('action' => 'edit_product', $item['Product']['id']))
             .' | '.$this->Html->link('删除', array('action' => 'del_product', $item['Product']['id']))
             .' | '.$this->Html->link('查看', array('controller' => 'products', 'action' => 'view', $item['Product']['id']), array('target' => '_blank'))
+            .' | '.$this->Html->link('发货状态', array('action' => 'view_track', $item['Product']['id']))
             ;
         }
 
