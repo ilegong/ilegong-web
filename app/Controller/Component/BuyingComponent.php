@@ -79,10 +79,11 @@ class BuyingComponent extends Component {
                 }
             }
 
-            if ($success) {
-                $cartM->add_to_cart($product_id, $num, $specId, $type, $tryId, $uid, $sessionId, $prodTry, $shichituan);
-            }
             $returnInfo = array('success' => $success, 'reason' => $reason, 'not_comment_cnt' => intval($notCommentedCnt));
+            if ($success) {
+                $savedD = $cartM->add_to_cart($product_id, $num, $specId, $type, $tryId, $uid, $sessionId, $prodTry, $shichituan);
+                $returnInfo['id'] = $savedD['Cart']['id'];
+            }
         } else {
             $savedD = $cartM->add_to_cart($product_id, $num, $specId, $type, $tryId, $uid, $sessionId);
             if ($savedD) {
