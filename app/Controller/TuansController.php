@@ -53,13 +53,11 @@ class TuansController extends AppController{
         $current_time = time();
         if(strtotime($tuan_b['TuanBuying']['end_time']) < $current_time){
             $this->set('exceed_time', true);
-            $tuan_new_b = $this->TuanBuying->find('first',array(
-                'conditions' => array('tuan_id' => $tuan_b['TuanBuying']['tuan_id']),
-                'order' => array('TuanBuying.end_time DESC')
-            ));
-            if($tuan_new_b['TuanBuying']['id'] != $tuan_buy_id && strtotime($tuan_new_b['TuanBuying']['end_time']) > $current_time){
-                $this->set('new_tuan_buy', $tuan_new_b['TuanBuying']['id']);
-            }
+//            $tuan_new_b = $this->TuanBuying->find('first',array(
+//                'conditions' => array('tuan_id' => $tuan_b['TuanBuying']['tuan_id']),
+//                'order' => array('TuanBuying.end_time DESC')
+//            ));
+
         }
         $consign_time = friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
         $this->set('sold_num',$tuan_b['TuanBuying']['sold_num']);
