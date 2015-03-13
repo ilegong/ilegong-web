@@ -29,12 +29,12 @@
         <a href="/tuans/new_tuan">位置不合适，发起新团？</a>
     </div>
     {{loop $tuan_info  $tuan}}
-    <?php $tuan_link = '/tuans/detail/'.$tuan['Tuan']['id'].'/'.($tuan_join_num[$tuan['Tuan']['id']]['id']>0?$tuan_join_num[$tuan['Tuan']['id']]['id']:$tuan['Tuan']['id']); ?>
+    <?php $tuan_buy_link = '/tuans/detail/'. $tuan_buy[$tuan['Tuan']['id']]['id']; ?>
     <div>
         <ul class="clearfix">
             <li><a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}"><img src="/img/tuan/tuan-{{$tuan['Tuan']['id']}}.png" border="0" /></a></li>
             <li style="float: none; padding-left: 8em;">
-                <a href="{{$tuan_link}}">
+                <a href="{{$tuan_buy_link}}">
                     <p>{{$tuan['Tuan']['tuan_name']}}&nbsp;</p>
                     <s>团长:{{$tuan['Tuan']['leader_name']}}</s><br/>
                     <s>团购截止{{friendlyDateFromStr($tuan_join_num[$tuan['Tuan']['id']]['end_time'], FFDATE_CH_MD)}}</s><br/>
