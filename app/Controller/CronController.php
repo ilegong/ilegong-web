@@ -172,19 +172,10 @@ class CronController extends AppController
         $this->loadModel('CronFaildInfo');
         if (!empty($oathBinds)) {
             foreach ($oathBinds as $item) {
-                $bindId = $item['Oauthbind']['id'];
                 $user_id = $item['Oauthbind']['user_id'];
                 $open_id = $item['Oauthbind']['oauth_openid'];
                 $extra_param =  $item['Oauthbind']['extra_param'];
                 $this->log('download wx bind extra_pram '.$extra_param);
-                if(empty($extra_param)){
-                    $extra_param = array();
-                }else{
-                    $extra_param = json_decode($extra_param,true);
-                }
-                if($extra_param['is_downLoad_photo']){
-                    continue;
-                }
                 $wx_user = get_user_info_from_wx($open_id);
                 $this->log('download wx user info '.json_encode($wx_user));
                 $photo = $wx_user['headimgurl'];
@@ -198,14 +189,17 @@ class CronController extends AppController
                             $resultCount++;
                             //todo add flag to oauthbind ?
                             $extra_param['is_downLoad_photo']=true;
-                            $this->Oauthbind->id = $bindId;
-                            $this->Oauthbind->saveField('extra_param',json_encode($extra_param));
                         }else{
                             $this->CronFaildInfo->save(array(
                                 'info_id'=>$user_id,
                                 'type'=>'download_photo_from_wx'
                             ));
                         }
+                    }else{
+                        $this->CronFaildInfo->save(array(
+                            'info_id'=>$user_id,
+                            'type'=>'download_photo_from_wx'
+                        ));
                     }
                 }else{
                     $this->CronFaildInfo->save(array(
