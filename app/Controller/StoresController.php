@@ -923,12 +923,13 @@ class StoresController extends AppController
             $specIds = join(',',$tempSpecIds);
             $specNames = join(',',$tempSpecNames);
             $price = CakeNumber::precision($item['price'], 2);
+            $stock = $item['stock'];
             if($isEdit){
-                if(!$this->spec_group_is_in_database($pid,$specIds,$specNames,$price)){
-                    $saveData[]=array('product_id'=>$pid,'price'=>$price,'stock'=>$item['stock'],'spec_ids'=>$specIds,'spec_names'=>$specNames);
+                if(!$this->spec_group_is_in_database($pid,$specIds,$specNames,$price,$stock)){
+                    $saveData[]=array('product_id'=>$pid,'price'=>$price,'stock'=>$stock,'spec_ids'=>$specIds,'spec_names'=>$specNames);
                 }
             }else{
-                $saveData[]=array('product_id'=>$pid,'price'=>$price,'stock'=>$item['stock'],'spec_ids'=>$specIds,'spec_names'=>$specNames);
+                $saveData[]=array('product_id'=>$pid,'price'=>$price,'stock'=>$stock,'spec_ids'=>$specIds,'spec_names'=>$specNames);
             }
         }
         $this->ProductSpecGroup->saveAll($saveData);
@@ -962,7 +963,7 @@ class StoresController extends AppController
         }
     }
 
-    public function spec_group_is_in_database($pid,$spec_ids,$spec_names,$price){
+    public function spec_group_is_in_database($pid,$spec_ids,$spec_names,$price,$stock){
         $this->loadModel('ProductSpecGroup');
         $specGroup = $this->ProductSpecGroup->find('first',array(
             'conditions'=>array(
@@ -974,6 +975,7 @@ class StoresController extends AppController
         if(!empty($specGroup)){
             $specGroup['ProductSpecGroup']['deleted']=0;
             $specGroup['ProductSpecGroup']['price']=$price;
+            $specGroup['ProductSpecGroup']['stock']=$stock;
             $this->ProductSpecGroup->save($specGroup['ProductSpecGroup']);
             return true;
         }else{
