@@ -70,14 +70,26 @@ class CronController extends AppController
 
     public function download_photo_from_wx() {
         $this->autoRender=false;
-        $start = $_REQUEST['start'];
-        $limit = $_REQUEST['limit'];
+        $this->loadModel('DownloadLog');
+        $downloadLog = $this->DownloadLog->find('first',array(
+            'conditions'=>array(
+                'name'=>'download_photo_from_wx'
+            )
+        ));
+        $start = $downloadLog['DownloadLog']['tag'];
+        $start = intval($start);
+        $limit = ($_REQUEST['limit'])||0;
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $wxUsers = $oauthBindModel->find('all', array(
             'limit' => $limit,
             'offset' => $start
         ));
         $count = $this->process_download_wx_photo($wxUsers);
+        $logId=$downloadLog['DownloadLog']['id'];
+        $this->DownloadLog->update(array(
+            array('tag'=>$start+$limit),
+            array('id'=>$logId)
+        ));
         echo $count;
     }
 
@@ -152,6 +164,7 @@ class CronController extends AppController
         $resultCount = 0;
         $this->loadModel('User');
         $this->loadModel('Oauthbind');
+        $this->loadModel('CronFaildInfo');
         if (!empty($oathBinds)) {
             foreach ($oathBinds as $item) {
                 $bindId = $item['Oauthbind']['id'];
@@ -182,8 +195,18 @@ class CronController extends AppController
                             $extra_param['is_downLoad_photo']=true;
                             $this->Oauthbind->id = $bindId;
                             $this->Oauthbind->saveField('extra_param',json_encode($extra_param));
+                        }else{
+                            $this->CronFaildInfo->save(array(
+                                'info_id'=>$user_id,
+                                'type'=>'download_photo_from_wx'
+                            ));
                         }
                     }
+                }else{
+                    $this->CronFaildInfo->save(array(
+                        'info_id'=>$user_id,
+                        'type'=>'download_photo_from_wx'
+                    ));
                 }
             }
         }
