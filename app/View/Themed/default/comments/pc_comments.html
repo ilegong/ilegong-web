@@ -68,7 +68,7 @@
                         images+='<img width="600px" src="'+val+'"/>'
                     });
                 }
-                if (comment['rating'] === "5") {
+                if (comment['rating'] === "5"||comment['rating'] === "4") {
                     template += '<span class="radius5 c_good fl">好评</span>';
                     template += '<span class="time fr">' + comment['created'] + '</span>';
                     template += '</div>';
@@ -76,7 +76,7 @@
                     template += '</dl>';
                     good_comment += template;
                     good_comment_count += 1;
-                } else if (comment['rating'] === "3") {
+                } else if (comment['rating'] === "3"||comment['rating'] === "2") {
                     template += '<span class="radius5 c_middle fl">中评</span>';
                     template += '<span class="time fr">' + comment['created'] + '</span>';
                     template += '</div>';
