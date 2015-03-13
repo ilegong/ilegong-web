@@ -70,7 +70,7 @@ class Cart extends AppModel {
     /**
      * @param $product_id
      * @param int $num
-     * @param int $spec specified id for
+     * @param int $specId specified id for
      * @param int $type
      * @param int $try_id
      * @param null $uid
@@ -80,7 +80,7 @@ class Cart extends AppModel {
      * @throws Exception
      * @return mixed On success Model::$data if its not empty or true, false on failure
      */
-    public function add_to_cart($product_id, $num = 1, $spec = 0, $type = CART_ITEM_TYPE_NORMAL, $try_id = 0,
+    public function add_to_cart($product_id, $num = 1, $specId = 0, $type = CART_ITEM_TYPE_NORMAL, $try_id = 0,
                                 $uid = null, $sessionId=null, $prodTry = null, $shichituan = null) {
 
         $user_cond = $this->create_user_cond($uid, $sessionId);
@@ -90,6 +90,7 @@ class Cart extends AppModel {
                 'product_id' => $product_id,
                 'order_id' => null,
                 'try_id' => $try_id,
+                'specId' => $specId,
                 'OR' => $user_cond
             )));
 
@@ -104,23 +105,25 @@ class Cart extends AppModel {
         $proM = ClassRegistry::init('Product');
         $p = $proM->findById($product_id);
 
-        $data['Cart']['session_id'] = $sessionId;
-        $data['Cart']['coverimg'] = $p['Product']['coverimg'];
-        if ($prodTry) {
-            $name = $p['Product']['name'].'(试吃: '.$prodTry['ProductTry']['spec'].')';
-        } else {
-            $name = product_name_with_spec($p['Product']['name'], $spec, $p['Product']['specs']);
-        }
-        $data['Cart']['name'] = $name;
-
         if (!empty($prodTry)) {
             $price = calculate_try_price($prodTry['ProductTry']['price'], $uid, $shichituan);
+            $cart_name = $p['Product']['name'].'(试吃: '.$prodTry['ProductTry']['spec'].')';
         } else {
-            list($price, $special_id) = calculate_price($p['Product']['id'], $p['Product']['price'], $uid, $num);
+            $result = get_spec_by_pid_and_sid(array(
+                    array('pid' => $product_id, 'specId' => $specId, 'defaultPrice' => $p['Product']['price']),
+            ));
+            $spec_detail_arr = $result[cart_dict_key($product_id, $specId)];
+            $cart_name =  $p['Product']['name'] . (empty($spec_detail_arr[1])?'':'('.$spec_detail_arr[1].')');
+            list($price, $special_id) = calculate_price($p['Product']['id'], $spec_detail_arr[0], $uid, $num);
         }
+
+        $data['Cart']['session_id'] = $sessionId;
+        $data['Cart']['coverimg'] = $p['Product']['coverimg'];
+        $data['Cart']['name'] = $cart_name;
+
         $data['Cart']['price'] = $price;
         $data['Cart']['creator'] = $uid;
-        $data['Cart']['specId'] = $spec;
+        $data['Cart']['specId'] = $specId;
         $data['Cart']['type'] = $type;
         $data['Cart']['try_id'] = $try_id;
         if (!empty($special_id)) {

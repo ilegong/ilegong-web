@@ -154,8 +154,8 @@ var rs_callbacks = {
 	},
 	addtoCart:function(request, quick_buy_pid){
 		//handle for user not logged in
-		if (quick_buy_pid) {
-			window.location.href = '/orders/info?from=quick_buy&pid_list='+quick_buy_pid;
+		if (quick_buy_pid && request['id']) {
+			window.location.href = '/orders/info?from=quick_buy&pid_list='+request['id'];
 			return;
 		}
 		setTimeout(function(){
@@ -1216,15 +1216,17 @@ $(document).ready(function () {
 						if (spec_item_selected.size() < 1) {
 							utils.alert("请选择" + itemLabel);
 							return false;
-						}  else {
-							specId = _p_spec_m[$.trim(spec_item_selected.text())];
 						}
 					});
-					if (!specId) {
-						return false;
-					}
 				}
 			}
+            var spec_group_data = get_spec_group();
+            if(spec_group_data){
+                specId = spec_group_data['id']||0;
+            }
+            if (!specId) {
+                return false;
+            }
 		}
 
 		//special for cake
@@ -1235,10 +1237,28 @@ $(document).ready(function () {
 				return false;
 			}
 		}
-
 		addtoCart(pid, itemNum, specId || 0, quick_buy_pid, type, $price);
 		return true;
 	}
+
+
+    function get_spec_group(){
+        var $selected_spec = $('span.spec_item_selected[item-label!="SD"]');
+        var all_spec = [];
+        $.each($selected_spec,function(index,item){
+            all_spec.push(($(item).text()).trim());
+        });
+        var spec_group_data = null;
+        $.each(product_spec_group,function(key,val){
+            var keyArray = key.split(',');
+            //规格组合是否一样
+            if($(keyArray).not(all_spec).length === 0 && $(all_spec).not(keyArray).length === 0){
+                spec_group_data = val;
+                return false;
+            }
+        });
+        return spec_group_data;
+    }
 
 
 	$('span.spec_item').click(function (ev) {
@@ -1251,6 +1271,22 @@ $(document).ready(function () {
 		}
 		$this.toggleClass('spec_item_selected').toggleClass('cur');
 		$('span.spec_item[item-label="' + $this.attr('item-label') + '"]').not($this).removeClass('spec_item_selected').removeClass('cur');
+        //reset product price
+        var spec_group_data = get_spec_group();
+        if(spec_group_data){
+            var price = spec_group_data['price'];
+            price = parseFloat(price);
+            if(price&&price!=0&&price!='0'){
+                var $price_element = $('#product_price');
+                price = price.toFixed(2);
+                if($price_element.prop('tagName').toUpperCase()=='FONT'){
+                    $('#product_price').text(price);
+                }else{
+                    $('#product_price').text('¥ '+price);
+                }
+            }
+        }
+
 	});
 	$("#btn_add_cart").click(function(e){
 		var $this = $(this);

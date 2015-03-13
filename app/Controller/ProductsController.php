@@ -4,6 +4,8 @@ class ProductsController extends AppController{
     var $name = 'Products';
     public $brand = null;
 
+    public $components = array('ProductSpecGroup');
+
     public function beforeFilter(){
         parent::beforeFilter();
     }
@@ -219,19 +221,31 @@ class ProductsController extends AppController{
         $currUid = $this->currentUser['id'];
         list($price, $afford_for_curr_user, $left_cur_user, $total_left) = $this->calculate_price_limitation($pid, $currUid);
 
-        $specs_map = product_spec_map($this->viewdata['Product']['specs']);
+        //get specs from database
+        $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($this->viewdata['Product']['id'],'spec_names');
+        $this->set('product_spec_group',json_encode($product_spec_group));
+        $product_price_range = Hash::extract($product_spec_group,'{s}.price');
+        if(!empty($product_price_range)){
+            $min_product_price = min($product_price_range);
+            $max_product_price = max($product_price_range);
+            if($min_product_price!=$max_product_price){
+                $product_price_range = min($product_price_range).'-'.max($product_price_range);
+                $this->set('product_price_range',$product_price_range);
+            }
+        }
+        $specs_map = $this->ProductSpecGroup->get_product_spec_json($this->viewdata['Product']['id']);
         if (!empty($specs_map['map'])) {
             $str = '<script>var _p_spec_m = {';
             foreach($specs_map['map'] as $mid => $mvalue) {
-                $str .= '"'.$mvalue['name'].'":"'. $mid ."\",";
+                $str .= '"'.$mvalue.'":"'. $mid ."\",";
             }
             $str .= '};</script>';
             $this->set('product_spec_map', $str);
         }
         $this->set('specs_map', $specs_map);
+
         $this->setHasOfferBrandIds($this->viewdata['Product']['brand_id']);
         $this->set('hideNav', $this->RequestHandler->isMobile());
-
 
         $this->loadModel('OrderShichi');
         $order_shichi = $this->OrderShichi->find('first', array('conditions' => array('creator' => $currUid, 'data_id' => $pid))); //查找是否有试吃订单
@@ -246,7 +260,6 @@ class ProductsController extends AppController{
             $order_shichi_status = $order['Order']['status'];
             $this->set('order_shichi_status',$order_shichi_status);
         }
-
 
         $this->loadModel('Brand');
         $brand = $this->Brand->findById($brandId);

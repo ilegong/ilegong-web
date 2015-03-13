@@ -376,7 +376,8 @@ ul li{ list-style:none;}
 }
 .p_details_price .price span{ color:#ffa200;}
 .p_details_price .price span font{ font-size:1.667em;}
-.p_details_price .price em{ color:#999999; text-decoration:line-through; font-style:normal; padding-left: 0.3em;}
+/*text-decoration:line-through;*/
+.p_details_price .price em{ color:#999999; font-style:normal; padding-left: 0.3em;}
 .p_details_price .stat{ padding-top:0.5em;}
 
 .countdown{ float:left; width:1.083em; height:1.8em; line-height:1.8em; background-color:#4f4544; font-size:1em; color:#ffffff; text-align:center; margin-right:1px; -moz-border-radius:0.3em;/* Gecko browsers */-webkit-border-radius:0.3em;/* Webkit browsers */border-radius:0.3em;/* W3C syntax */}
