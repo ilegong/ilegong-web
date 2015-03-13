@@ -174,8 +174,6 @@ class CronController extends AppController
             foreach ($oathBinds as $item) {
                 $user_id = $item['Oauthbind']['user_id'];
                 $open_id = $item['Oauthbind']['oauth_openid'];
-                $extra_param =  $item['Oauthbind']['extra_param'];
-                $this->log('download wx bind extra_pram '.$extra_param);
                 $wx_user = get_user_info_from_wx($open_id);
                 $this->log('download wx user info '.json_encode($wx_user));
                 $photo = $wx_user['headimgurl'];
@@ -187,8 +185,6 @@ class CronController extends AppController
                         $this->User->id = $user_id;
                         if ($this->User->saveField('image', $download_url)) {
                             $resultCount++;
-                            //todo add flag to oauthbind ?
-                            $extra_param['is_downLoad_photo']=true;
                         }else{
                             $this->CronFaildInfo->save(array(
                                 'info_id'=>$user_id,
