@@ -70,6 +70,7 @@ class Order extends AppModel {
 
         $arr = array(
             'creator' => $uid,
+            'total_price' => $fee,
             'total_all_price' => $fee,
             'type' => $type,
             'brand_id' => $brand_id,

@@ -208,8 +208,10 @@
                     </li>
                 </ul>
                 <div class="clearfix tb_action">
-                    {{if $exceed_time}}
-                    <a href="/tuans/detail/{{$tuan_id}}" class="fl tb_btn_buy">该团已截止</a>
+                    {{if $new_tuan_buy}}
+                    <a href="/tuans/detail/{{$new_tuan_buy}}" class="fl tb_btn_buy">该团已截止</a>
+                    {{elseif $exceed_time}}
+                    <a href="javascript:void(0)" class="fl tb_btn_soldout">该团已截止</a>
                     {{else}}
                     <a class="fl tb_btn_buy" item-id="838" href="javascript:void(0)" id="tuan_buy">立即购买</a>
                     {{/if}}
