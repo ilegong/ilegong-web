@@ -39,17 +39,24 @@ INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) 
 INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (2,'芒果',3,0,230);
 INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (3,'菠萝',3,0,230);
 INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (4,'木瓜',3,0,230);
-INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (5,'半奶13日自提',4,0,822);
-INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (6,'全奶13日自提',4,0,822);
-INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (7,'半奶15日自提',4,0,822);
-INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (8,'全奶15日自提',4,0,822);
-INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (9,'3月13日',5,0,657);
-INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (10,'3月15日',5,0,657);
-INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (11,'3月13日',5,0,639);
-INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (12,'3月15日',5,0,639);
-INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (13,'五香',1,0,383);
-INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (14,'麻辣',1,0,383);
-INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (15,'爆辣',1,0,383);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (5,'五香',1,0,383);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (6,'麻辣',1,0,383);
+INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (7,'爆辣',1,0,383);
+
+
+INSERT INTO `cake_product_spec_groups` (`id`, `spec_ids`, `price`, `stock`, `deleted`, `spec_names`, `product_id`) VALUES ('1', '1', '150', '0', '0', '榴莲', '230');
+INSERT INTO `cake_product_spec_groups` (`id`, `spec_ids`, `price`, `stock`, `deleted`, `spec_names`, `product_id`) VALUES ('2', '2', '150', '0', '0', '芒果', '230');
+INSERT INTO `cake_product_spec_groups` (`id`, `spec_ids`, `price`, `stock`, `deleted`, `spec_names`, `product_id`) VALUES ('3', '3', '150', '0', '0', '菠萝', '230');
+INSERT INTO `cake_product_spec_groups` (`id`, `spec_ids`, `price`, `stock`, `deleted`, `spec_names`, `product_id`) VALUES ('4', '4', '150', '0', '0', '木瓜', '230');
+
+
+INSERT INTO `cake_product_spec_groups` (`id`, `spec_ids`, `price`, `stock`, `deleted`, `spec_names`, `product_id`) VALUES ('5', '5', '12', '0', '0', '五香', '383');
+INSERT INTO `cake_product_spec_groups` (`id`, `spec_ids`, `price`, `stock`, `deleted`, `spec_names`, `product_id`) VALUES ('6', '6', '12', '0', '0', '麻辣', '383');
+INSERT INTO `cake_product_spec_groups` (`id`, `spec_ids`, `price`, `stock`, `deleted`, `spec_names`, `product_id`) VALUES ('7', '7', '12', '0', '0', '爆辣', '383');
+
+
+
+
 
 
 
