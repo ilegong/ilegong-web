@@ -78,7 +78,10 @@ class CronController extends AppController
         ));
         $start = $downloadLog['DownloadLog']['tag'];
         $start = intval($start);
-        $limit = ($_REQUEST['limit'])||0;
+        $limit = $_REQUEST['limit'];
+        if($limit==null){
+            $limit=500;
+        }
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $wxUsers = $oauthBindModel->find('all', array(
             'limit' => $limit,
