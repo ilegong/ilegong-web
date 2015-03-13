@@ -13,7 +13,9 @@ class TuansController extends AppController{
         if($pid !=838){
             $this->redirect('/tuans/lists/838');
         }
-        $tuan_info = $this->Tuan->find('all');
+        $tuan_info = $this->Tuan->find('all', array(
+            'order' => array('Tuan.priority DESC')
+        ));
         $this->set('tuan_info',$tuan_info);
 
         $this->loadModel('TuanBuying');
