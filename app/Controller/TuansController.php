@@ -17,7 +17,7 @@ class TuansController extends AppController{
         $this->set('tuan_info',$tuan_info);
 
         $this->loadModel('TuanBuying');
-        $date_Time = time();
+        $date_Time = date('Y-m-d', time());;
         $tuan_product_num = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
         $tuan_product_info = $this->TuanBuying->find('all',array('conditions' => array('pid' => $pid,'end_time >' => $date_Time )));
         $tuan_join_num = Hash::combine($tuan_product_info,'{n}.TuanBuying.tuan_id','{n}.TuanBuying');
