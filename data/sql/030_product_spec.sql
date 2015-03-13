@@ -44,6 +44,7 @@ INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) 
 INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (7,'爆辣',1,0,383);
 
 
+
 INSERT INTO `cake_product_spec_groups` (`id`, `spec_ids`, `price`, `stock`, `deleted`, `spec_names`, `product_id`) VALUES ('1', '1', '150', '0', '0', '榴莲', '230');
 INSERT INTO `cake_product_spec_groups` (`id`, `spec_ids`, `price`, `stock`, `deleted`, `spec_names`, `product_id`) VALUES ('2', '2', '150', '0', '0', '芒果', '230');
 INSERT INTO `cake_product_spec_groups` (`id`, `spec_ids`, `price`, `stock`, `deleted`, `spec_names`, `product_id`) VALUES ('3', '3', '150', '0', '0', '菠萝', '230');

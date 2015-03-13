@@ -1275,8 +1275,10 @@ $(document).ready(function () {
         var spec_group_data = get_spec_group();
         if(spec_group_data){
             var price = spec_group_data['price'];
-            if(price&&price!='0'){
+            price = parseFloat(price);
+            if(price&&price!=0&&price!='0'){
                 var $price_element = $('#product_price');
+                price = price.toFixed(2);
                 if($price_element.prop('tagName').toUpperCase()=='FONT'){
                     $('#product_price').text(price);
                 }else{
