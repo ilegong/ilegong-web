@@ -34,6 +34,7 @@ INSERT INTO `cake_product_attributes` (`id`,`name`,`deleted`) VALUES (5,'种类'
 INSERT INTO `cake_product_attributes` (`id`,`name`,`deleted`) VALUES (6,'品种',0);
 INSERT INTO `cake_product_attributes` (`id`,`name`,`deleted`) VALUES (7,'数量',0);
 INSERT INTO `cake_product_attributes` (`id`,`name`,`deleted`) VALUES (8,'重量',0);
+INSERT INTO `cake_product_attributes` (`id`,`name`,`deleted`) VALUES (9,'到货日',0);
 
 INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (1,'榴莲',3,0,230);
 INSERT INTO `cake_product_specs` (`id`,`name`,`attr_id`,`deleted`,`product_id`) VALUES (2,'芒果',3,0,230);
