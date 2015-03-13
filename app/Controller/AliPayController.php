@@ -109,7 +109,7 @@ class AliPayController extends AppController {
             $type=ALI_PAY_TYPE_WAP;
         }
         $form = $this->WxPayment->wap_goToAliPayForm($order_id, $uid, $type);
-        if($this->RequestHandler->isMobile()){
+        if($this->is_weixin()){
             $AlipayCacheForm = ClassRegistry::init('AlipayCacheForm');
             $cache_form = $AlipayCacheForm->find('first',array(
                 'conditions'=>array(
