@@ -32,24 +32,24 @@ class TuansController extends AppController{
 
     }
 
-    public function detail($tuan_id, $tuan_buy_id=null){
-
+    public function detail($tuan_buy_id){
         $this->pageTitle = '草莓团购';
-        $tuan_info = $this->Tuan->find('first',array('conditions' => array('id' => $tuan_id)));
-        if(empty($tuan_info)){
-            $this->__message('该团不存在', '/tuans/mei_shi_tuan');
-        }
         $this->loadModel('TuanBuying');
         if($tuan_buy_id == null){
-            $tuan_b = $this->TuanBuying->find('first',array(
-                'conditions' => array('tuan_id' => $tuan_id ),
-                'order' => array('TuanBuying.end_time DESC')
-            ));
-            $tuan_buy_id = $tuan_b['TuanBuying']['id'];
+            $this->redirect('/tuans/mei_shi_tuan');
+            return;
         }else{
             $tuan_b = $this->TuanBuying->find('first',array(
-                'conditions' => array('id' => $tuan_buy_id )
+                'conditions' => array('id' => $tuan_buy_id)
             ));
+        }
+        if(empty($tuan_b)){
+            $this->__message('该团购不存在', '/tuans/mei_shi_tuan');
+            return;
+        }
+        $tuan_info = $this->Tuan->find('first',array('conditions' => array('id' => $tuan_b['TuanBuying']['tuan_id'])));
+        if(empty($tuan_info)){
+            $this->__message('该团不存在', '/tuans/mei_shi_tuan');
         }
         if(strtotime($tuan_b['TuanBuying']['end_time']) < time()){
             $this->set('exceed_time', true);
@@ -58,7 +58,7 @@ class TuansController extends AppController{
         $this->set('sold_num',$tuan_b['TuanBuying']['sold_num']);
         $this->set('pid', $tuan_b['TuanBuying']['pid']);
         $this->set('consign_time', $consign_time);
-        $this->set('tuan_id',$tuan_id);
+        $this->set('tuan_id',$tuan_b['TuanBuying']['tuan_id']);
         $this->set('tuan_name',$tuan_info['Tuan']['tuan_name']);
         $this->set('tuan_leader_name',$tuan_info['Tuan']['leader_name']);
         $this->set('tuan_leader_weixin',$tuan_info['Tuan']['leader_weixin']);
@@ -111,16 +111,10 @@ class TuansController extends AppController{
 
     }
 
-    public function join($tuan_id, $tuan_buy_id){
+    public function join($tuan_buy_id){
         $this->pageTitle = '订单确认';
         if(empty($this->currentUser['id'])){
             $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
-            return;
-        }
-        $this->loadModel('Tuan');
-        $tuan_info = $this->Tuan->findById($tuan_id);
-        if(empty($tuan_info)){
-            $this->__message('该团不存在', '/tuans/mei_shi_tuan');
             return;
         }
         $this->loadModel('TuanBuying');
@@ -129,10 +123,16 @@ class TuansController extends AppController{
             'fields' => array('pid', 'tuan_id', 'status', 'end_time')
         ));
         $current_time = strtotime($tuan_b['TuanBuying']['end_time']);
-        if(empty($tuan_b) && $tuan_b['TuanBuying']['tuan_id'] != $tuan_id && $current_time < time()){
+        if(empty($tuan_b) && $current_time < time()){
             $message = '该团购已到截止时间';
             $url = '/tuans/mei_shi_tuan';
             $this->__message($message, $url);
+            return;
+        }
+        $this->loadModel('Tuan');
+        $tuan_info = $this->Tuan->findById($tuan_b['TuanBuying']['tuan_id']);
+        if(empty($tuan_info)){
+            $this->__message('该团不存在', '/tuans/mei_shi_tuan');
             return;
         }
         $this->loadModel('Cart');
@@ -157,7 +157,7 @@ class TuansController extends AppController{
         $this->set('buy_count',$Carts['Cart']['num']);
         $this->set('total_price', $total_price);
         $this->set('cart_id', $Carts['Cart']['id']);
-        $this->set('tuan_id', $tuan_id);
+        $this->set('tuan_id', $tuan_info['Tuan']['id']);
         $this->set('tuan_address', $tuan_info['Tuan']['address']);
         $this->set('end_time', date('m-d', $current_time));
         $this->set('tuan_buy_id', $tuan_buy_id);
@@ -228,6 +228,10 @@ class TuansController extends AppController{
             $pid = $cart_info['Cart']['product_id'];
             $area = '';
             $tuan_info = $this->Tuan->findById($tuan_id);
+            if(empty($tuan_info)){
+                $this->log("can't find tuan".$tuan_id);
+                return;
+            }
             $address = $tuan_info['Tuan']['address'];
             $order = $this->Order->createTuanOrder($tuan_buy_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id);
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
