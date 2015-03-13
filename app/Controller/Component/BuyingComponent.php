@@ -127,7 +127,18 @@ class BuyingComponent extends Component {
             if (empty($pids)) {
                 throw new Exception("try type set but no pid found!");
             }
-            $pid = $pids[0];
+            $cartId = $pids[0];
+
+            $cartM = ClassRegistry::init('Cart');
+            $cartItem = $cartM->findById($cartId);
+            if (empty($cartItem)) {
+                throw new Exception("error to find try_cart_item: $cartId , $uid");
+            }
+
+
+            $pid = $cartItem['Cart']['product_id'];
+
+            $pids = array($pid);
 
             $tryId =$balanceCartIds['try'];
             $prodTryM = ClassRegistry::init('ProductTry');
@@ -145,12 +156,6 @@ class BuyingComponent extends Component {
             $products = $proM->find_products_by_ids($pid, array(), false);
             if (empty($products)) {
                 throw new Exception("cannot find the specified product: $pid");
-            }
-
-            $cartM = ClassRegistry::init('Cart');
-            $cartItem = $cartM->find_try_cart_item($pid, $uid);
-            if (empty($cartItem)) {
-                throw new Exception("error to find try_cart_item: $pid , $uid");
             }
 
             $cart = new OrderCartItem();
