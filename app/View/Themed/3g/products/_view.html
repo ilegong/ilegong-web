@@ -107,7 +107,7 @@
                 <li>
                     <span class="gray mr12" style="float:left;">快递:</span>
 			<span style="display: block;overflow: hidden;">
-                {{if $ship_by_item_num && $Product['Product']['ship_fee'] }}
+                {{if $ship_by_item_num && $Product['Product']['ship_fee']> 0}}
                     <span>每件{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}元</span>
                 {{else}}
                     {{if $Product['Product']['ship_fee']}} {{if $Product['Product']['ship_fee']==-1}}到付{{elseif $Product['Product']['ship_fee']==-2}}自提{{else}}￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}{{/if}} {{else}}<span>包邮</span>{{/if}}
