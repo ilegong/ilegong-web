@@ -56,6 +56,16 @@ INSERT INTO `cake_tuans` (`id`, `address`, `leader_name`, `tuan_name`, `leader_i
 (8, '好邻居便利店（建华南路分店）', 'Amy', '建华南路好邻居新鲜水果自体部落', 0, 'amyshen', 0, NULL, 116.316178, 40.047731, '建外大街建华南路11号商通大厦底商', NULL),
 (9, '联想新大厦好邻居', 'Haodm 喜乐', '联想新大厦好邻居美食团', 0, 'wxid_lelerita', 0, NULL, 116.34625, 39.91258, '海淀区上地创业路8号', NULL);
 
+UPDATE `cake_tuans` SET `address`='好邻居(建华南路分店)', `tuan_name`='建华南路好邻居' WHERE `id`='8';
+
+UPDATE `cake_tuans` SET `leader_name`='喜乐', `tuan_name`='联想新大厦美食团' WHERE `id`='9';
+
+
+INSERT INTO `cake_tuans` (`id`, `address`, `leader_name`, `tuan_name`, `leader_id`, `leader_weixin`, `status`, `location_long`, `location_lat`, `tuan_addr`) VALUES ('10', '工体东路好邻居', 'Eva', '工体东路美食团', '0', 'xiyingying7479', '0', '116.458039', '39.932453', '朝阳区工人体育场东路16号北门附近');
+INSERT INTO `cake_tuans` (`id`, `address`, `tuan_name`, `leader_id`, `leader_weixin`, `status`, `location_long`, `location_lat`, `tuan_addr`) VALUES ('11', '好邻居便利店(望京西园店)', '望京西园美食团', '0', ' Nancy Niu', '0', '116.474849', '40.008671', '广顺北大街望京西园二区222号楼星源国际公寓E座1楼2号');
+
+
+
 INSERT INTO `cake_tuans` (`id`, `address`, `leader_name`, `tuan_name`, `leader_id`, `leader_weixin`, `status`, `location_long`, `location_lat`, `tuan_addr`) VALUES ('12', '石景山', '李文艳', '石景山美食团', '0', 'pyshuo2015', '0', '116.210203', '39.924284', '石景山区八角东街65号融科创意中心');
 
 INSERT INTO `cake_tuans` (`id`, `address`, `leader_name`, `tuan_name`, `leader_id`, `leader_weixin`, `status`, `location_long`, `location_lat`, `tuan_addr`) VALUES ('13', '海淀桥', '羊羊', '海淀桥美食团', '0', 'pyshuo2015', '0', '116.311607', '39.987321', '海淀区海淀大街44号蓝格赛底商103门 ');
@@ -65,6 +75,8 @@ UPDATE `cake_tuans` SET `leader_name`='Nancy Niu' WHERE `id`='11';
 UPDATE `cake_tuans` SET `leader_weixin`='nancygirl2011' WHERE `id`='11';
 
 UPDATE `cake_tuans` SET `location_long`='116.212569', `tuan_addr`='石景山八角东路(西五环与长安街交汇处西北侧)' WHERE `id`='12';
+
+alter table `cake_tuans` add `priority` BIGINT(11) default 0;
 
 
 
@@ -130,14 +142,7 @@ INSERT INTO `cake_tuan_buyings` (`id`, `tuan_id`, `pid`, `join_num`, `sold_num`,
 INSERT INTO `cake_tuan_buyings` (`id`, `tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('13', '13', '838', '0', '0', '0', '2015-03-16 17:00:00', '2015-03-17 10:00:00');
 INSERT INTO `cake_tuan_buyings` (`id`, `tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('14', '3', '838', '0', '0', '0', '2015-03-19 17:00:00', '2015-03-20 10:00:00');
 INSERT INTO `cake_tuan_buyings` (`id`, `tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('15', '5', '838', '0', '0', '0', '2015-03-19 17:00:00', '2015-03-20 10:00:00');
+INSERT INTO `cake_tuan_buyings` (`id`, `tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('16', '12', '838', '0', '0', '0', '2015-03-19 17:00:00', '2015-03-20 10:00:00');
+INSERT INTO `cake_tuan_buyings` (`id`, `tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('17', '10', '838', '0', '0', '0', '2015-03-19 17:00:00', '2015-03-20 10:00:00');
+INSERT INTO `cake_tuan_buyings` (`id`, `tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('18', '11', '838', '0', '0', '0', '2015-03-19 17:00:00', '2015-03-20 10:00:00');
 
-
-
-
-UPDATE `cake_tuans` SET `address`='好邻居(建华南路分店)', `tuan_name`='建华南路好邻居' WHERE `id`='8';
-
-UPDATE `cake_tuans` SET `leader_name`='喜乐', `tuan_name`='联想新大厦美食团' WHERE `id`='9';
-
-
-INSERT INTO `cake_tuans` (`id`, `address`, `leader_name`, `tuan_name`, `leader_id`, `leader_weixin`, `status`, `location_long`, `location_lat`, `tuan_addr`) VALUES ('10', '工体东路好邻居', 'Eva', '工体东路美食团', '0', 'xiyingying7479', '0', '116.458039', '39.932453', '朝阳区工人体育场东路16号北门附近');
-INSERT INTO `cake_tuans` (`id`, `address`, `tuan_name`, `leader_id`, `leader_weixin`, `status`, `location_long`, `location_lat`, `tuan_addr`) VALUES ('11', '好邻居便利店(望京西园店)', '望京西园美食团', '0', ' Nancy Niu', '0', '116.474849', '40.008671', '广顺北大街望京西园二区222号楼星源国际公寓E座1楼2号');
