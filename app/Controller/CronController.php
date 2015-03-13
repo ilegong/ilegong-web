@@ -88,11 +88,8 @@ class CronController extends AppController
             'offset' => $start
         ));
         $count = $this->process_download_wx_photo($wxUsers);
-        $logId=$downloadLog['DownloadLog']['id'];
-        $this->DownloadLog->update(array(
-            array('tag'=>$start+$limit),
-            array('id'=>$logId)
-        ));
+        $this->DownloadLog->id=$downloadLog['DownloadLog']['id'];
+        $this->DownloadLog->saveField('tag',($start+$limit));
         echo $count;
     }
 
