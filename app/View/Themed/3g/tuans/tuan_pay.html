@@ -1,7 +1,7 @@
 {{$this->Html->css(array(
 'groupon.css',
 ))}}
-<p class="total_title"></p>
+<p class="total_title">{{$order['Order']['consignee_address']}} 团购</p>
 <div class="total_price">支付金额:
     <span>￥{{$order['Order']['total_all_price']}}</span>
 </div>

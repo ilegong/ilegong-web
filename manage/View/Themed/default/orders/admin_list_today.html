@@ -67,6 +67,7 @@
         <th>支付方式</th>
         <th>快递公司</th>
         <th>快递单号</th>
+        <th>备注</th>
     </tr>
     <tbody>
     {{loop $orders $order}}
@@ -123,6 +124,7 @@
             {{/if}}
         </td>
         <td>{{$order['Order']['ship_code']}}</td>
+        <td>{{$order['Order']['remark']}}</td>
     </tr>
     {{/loop}}
     </tbody>
