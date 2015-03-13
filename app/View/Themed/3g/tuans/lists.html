@@ -37,8 +37,8 @@
                 <a href="{{$tuan_buy_link}}">
                     <p>{{$tuan['Tuan']['tuan_name']}}&nbsp;</p>
                     <s>团长:{{$tuan['Tuan']['leader_name']}}</s><br/>
-                    <s>团购截止{{friendlyDateFromStr($tuan_join_num[$tuan['Tuan']['id']]['end_time'], FFDATE_CH_MD)}}</s><br/>
-                    <s>已有{{$tuan_join_num[$tuan['Tuan']['id']]['join_num']>0?$tuan_join_num[$tuan['Tuan']['id']]['sold_num']:0}}人参团</s>
+                    <s>团购截止{{friendlyDateFromStr($tuan_buy[$tuan['Tuan']['id']]['end_time'], FFDATE_CH_MD)}}</s><br/>
+                    <s>已有{{$tuan_buy[$tuan['Tuan']['id']]['join_num']>0?$tuan_buy[$tuan['Tuan']['id']]['sold_num']:0}}人参团</s>
                 </a>
             </li>
         </ul>
