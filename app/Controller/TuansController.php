@@ -287,7 +287,6 @@ class TuansController extends AppController{
         ));
         $this->set('tuan_info',$tuan_info);
         $this->set('tuan_buy',$tuan_buy);
-        $this->set('hideNav',true);
         $this->set('op_cate','mei_shi_tuan');
     }
 

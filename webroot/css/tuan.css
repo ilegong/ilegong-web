@@ -20,7 +20,7 @@ p {
 .radius5{ -moz-border-radius: 5px;/* Gecko browsers */-webkit-border-radius: 5px;/* Webkit browsers */border-radius:5px;/* W3C syntax */}
 
 /*返回*/
-.classlist {
+.classlist_tuan {
     height: 3em;
     line-height: 3em;
     width: 100%;
@@ -32,7 +32,7 @@ p {
     overflow: hidden;
 }
 
-.classlist ul {
+.classlist_tuan ul {
     font-size: 1em;
     color: #666666;
     width: 60%;
@@ -40,22 +40,22 @@ p {
     overflow: hidden;
 }
 
-.classlist ul li {
+.classlist_tuan ul li {
     float: left;
     font-size: 1.25em;
 }
 
-.classlist ul li .back {
+.classlist_tuan ul li .back {
     display: block;
     width: 0.5em;
     height: 1em;
     background: url(/img/mobilev1/pyshuo_icon.png) no-repeat -1.25em -16.875em;
     background-size: 25em 25em;
-    margin-top: 1em;
+    margin-top: 0.7em;
     margin-right: 0.833em;
 }
 
-.classlist ul li.line {
+.classlist_tuan ul li.line {
     height: 2.5em;
     width: 1px;
     border-right: 1px #dddddd solid;
