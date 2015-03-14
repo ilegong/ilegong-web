@@ -403,9 +403,9 @@ ul li{ list-style:none;}
 .cart ul li p{ font-size: 1em; color: #333333; padding-bottom: 5px; line-height: 16px;}
 .cart ul li s{ text-decoration: none; font-size: 0.9em; color: #666666; padding-bottom: 3px; display: block;}
 .cart_delete_a{ color: #999999; position: absolute; top: 15px; right: 10px; text-decoration: none;}
-.cartnumreduce{ width: 1.7em; height: 1.7em; background: url(/img/mobile/pyshuo_icon.png) -15.667em -3em; background-size: 20em 20em; display: block;}
+.cartnumreduce{ width: 1.7em; height: 1.7em; background: url(/img/mobile/pyshuo_icon.png?v1) -15.667em -3em; background-size: 20em 20em; display: block;}
 .cart ul li input{ float: left; height: 22px; width: 40px; border: 0; border-radius:0; border-top: 1px #dddddd solid; border-bottom: 1px #dddddd solid;}
-.cartnumadd{ width: 1.75em; height: 1.7em; background: url(/img/mobile/pyshuo_icon.png) -17.833em -3em; background-size: 20em 20em; display: block;}
+.cartnumadd{ width: 1.75em; height: 1.7em; background: url(/img/mobile/pyshuo_icon.png?v1) -17.833em -3em; background-size: 20em 20em; display: block;}
 .cart_pay{ background-color: #f1f1f1; border-top: 1px #dddddd solid; height: 44px; line-height: 44px; overflow: hidden; width: 100%; position: fixed; bottom: 0;}
 .cart_pay ul{ padding-left: 10px; color: #333333; font-size: 1.1em;}
 .cart_pay ul li strong{ color: #ffa93a;}
