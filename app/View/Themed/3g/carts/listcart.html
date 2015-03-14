@@ -38,7 +38,7 @@
 <script>
     $('document').ready(function(){
         $('#go_back').on('click',function(){
-            window.history.back();
+            window.location.href=document.referrer;
         });
         $('#submit_btn').click(function(){
             if(sso.check_userlogin({'referer' : '/carts/listcart.html'})){
