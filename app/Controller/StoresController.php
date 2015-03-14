@@ -9,7 +9,7 @@
 class StoresController extends AppController
 {
 
-    public $uses = array('Product', 'Brand', 'Order');
+    public $uses = array('Product', 'Brand', 'Order','OrderTrack','OrderTrackLog','TrackOrderMap');
 
     public $components = array('Paginator');
 
@@ -291,6 +291,41 @@ class StoresController extends AppController
         $this->Session->setFlash('删除成功');
 
         $this->redirect(array('action' => 'products'));
+    }
+
+    public function add_track_log(){
+
+    }
+
+    public function view_track($productId) {
+        $page = 1;
+        $pagesize = 30;
+        $cond = array('brand_id' => $this->brand['Brand']['id'],'product_id'=>$productId, 'deleted' => DELETED_NO);
+        $total = $this->OrderTrack->find('count', $cond);
+        $datalist = $this->OrderTrack->find('all', array(
+            'conditions' => $cond,
+            'fields' => array('id', 'date'),
+            'order' => 'date desc'
+        ));
+        foreach ($datalist as &$data) {
+            $trackId = $data['OrderTrackLog']['id'];
+            $orderCount = $this->TrackOrderMap->find('count', array(
+                'conditions' => array('track_id' => $trackId)
+            ));
+            $data['order_count']=$orderCount;
+            $lastLog = $this->OrderTrackLog->find('first', array(
+                'conditions' => array('track_id' => $trackId),
+                'order' => 'date desc'
+            ));
+            $data['last_log']=$lastLog['OrderTrackLog']['log'];
+        }
+        $productName = $_REQUEST['productname'];
+        $page_navi = getPageLinks($total, $pagesize, '/tracklog/mine', $page);
+        $this->set('product_id',$productId);
+        $this->set('datalist', $datalist);
+        $this->set('productName',$productName);
+        $this->set('priduct_id',$productId);
+        $this->set('page_navi', $page_navi);
     }
 
     public function products()
