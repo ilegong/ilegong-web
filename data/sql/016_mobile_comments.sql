@@ -27,3 +27,8 @@ ALTER TABLE `cake_comments`
 ADD COLUMN `buy_time` DATETIME NULL AFTER `order_id`;
 
 update cake_comments co,cake_orders orders set co.buy_time=orders.created where co.order_id=orders.id and co.buy_time is null;
+
+ALTER TABLE `cake_comments`
+ADD COLUMN `publish_time` DATETIME NULL AFTER `buy_time`;
+
+update cake_comments set publish_time=updated where status=1;

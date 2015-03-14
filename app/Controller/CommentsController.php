@@ -141,7 +141,7 @@ class CommentsController extends AppController {
         //'rating'=>array('1','5','3')
     	$comments = $this->Comment->find('all',array(
     		 'conditions' => array('Comment.type' => $model_name,'data_id'=>$id,'status'=>1,'is_shichi_vote'=>0,),
-    		 'order' => array('Comment.updated DESC'), //定义顺序的字符串或者数组
+    		 'order' => array('Comment.publish_time DESC'), //定义顺序的字符串或者数组
 		    'limit' => $pagesize, //整型
 		    'page' => $page, //整型
     	));
@@ -379,12 +379,11 @@ class CommentsController extends AppController {
         $this->pageTitle="添加评论";
         //TODO check user nick name
         if ($this->Session->check('Auth.User.id')) {
-            $mobileNum = $this->Session->read('Auth.User.mobilephone');
             $force = $_REQUEST['force'];
             //has bind mobile
             $uid = $this->currentUser['id'];
             $order= $this->get_order($orderId,$uid);
-            if ( true || /*$mobileNum||*/ $force || $order['Order']['is_comment'] == ORDER_COMMENTED) {
+            if ( true || $force || $order['Order']['is_comment'] == ORDER_COMMENTED) {
                 $products = $this->get_order_products($orderId,$uid);
                 $this->set("products",$products);
                 $this->set("order",$order);
@@ -408,8 +407,9 @@ class CommentsController extends AppController {
         $orderId = $this->data['Comment']['order_id'];
         $dataId = $this->data['Comment']['data_id'];
         $type_model = $this->data['Comment']['type'];
-        $status = $this->data['Comment']['status'];
         $this->data['Comment']['ip'] = $this->request->clientIp(false);
+        //check order
+
         $draftComment = $this->Comment->find('first',array(
             'conditions'=>array(
                 'data_id'=>$dataId,
@@ -417,10 +417,12 @@ class CommentsController extends AppController {
                 'order_id'=>$orderId
             )
         ));
-
-        if($draftComment){
+        if(!empty($draftComment)){
             $this->data['Comment']['updated'] = date('Y-m-d H:i:s');
             $this->data['Comment']['body'] = htmlspecialchars($this->data['Comment']['body']);
+            if($this->data['Comment']['status']=='1'){
+                $this->data['Comment']['publish_time']=date('Y-m-d H:i:s');
+            }
             $this->Comment->id=$draftComment['Comment']['id'];
             $comment = $this->Comment->save($this->request->data);
         }else{
@@ -432,7 +434,7 @@ class CommentsController extends AppController {
         }
         if($comment){
             //product add comment num
-            if($status=='1'){
+            if($comment['Comment']['status']=='1'){
                 $this->loadModel($type_model);
                 $this->{$type_model}->updateAll(
                     array('comment_nums' => 'comment_nums+1'),
