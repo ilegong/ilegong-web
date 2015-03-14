@@ -1,4 +1,4 @@
-<div class="classlist_v2">
+<div class="classlist_v2" style="z-index: 999">
     <ul class="clearfix">
         <li id="go_back"><a href="#X" class="back"></a></li>
         <li class="line"></li>
@@ -27,6 +27,7 @@
             </ul>
         {{/loop}}
     </div>
+    <div style="margin-top: 40px"></div>
     <div class="cart_pay">
         <ul class="clearfix">
             <li class="fl">总价:<strong id="total-price">￥{{$this->Number->precision($total_price, 2)}}</strong></li>
@@ -38,7 +39,11 @@
 <script>
     $('document').ready(function(){
         $('#go_back').on('click',function(){
-            window.location.href=document.referrer;
+            if(window.location.href!=document.referrer){
+                window.location.href=document.referrer;
+            }else{
+                window.location.href='/';
+            }
         });
         $('#submit_btn').click(function(){
             if(sso.check_userlogin({'referer' : '/carts/listcart.html'})){
