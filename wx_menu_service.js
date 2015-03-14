@@ -10,8 +10,8 @@
         "sub_button":[
             {
                 "type":"view",
-                "name":"组团购",
-                "url":"http://www.pyshuo.com/groupons/view.html?_sl=wx.sv.zt"
+                "name":"美食团",
+                "url":"http://www.tongshijia.com/tuans/mei_shi_tuan.html?_sl=wx.sv.mst"
             },
             {
                 "type":"view",
