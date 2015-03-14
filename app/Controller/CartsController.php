@@ -163,6 +163,7 @@ class CartsController extends AppController{
 		$this->set('total_price',$total_price);
 		$this->set('Carts',$Carts);
         $this->set('op_cate', OP_CATE_CATEGORIES);
+        $this->set('hideNav',true);
         $this->pageTitle = __('购物车');
 	}
 	
