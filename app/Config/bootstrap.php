@@ -329,6 +329,10 @@ function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null)
         }
     }
 
+    if (PRODUCT_ID_CAKE == $pid && special_cake_users($currUid)) {
+        return array($price - 20,);
+    }
+
 
     $cr = ClassRegistry::init('SpecialList');
     $specialLists = $cr->has_special_list($pid);
