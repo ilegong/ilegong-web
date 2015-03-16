@@ -29,10 +29,13 @@
         <a href="/tuans/new_tuan">位置不合适，发起新团？</a>
     </div>
     {{loop $tuan_info  $tuan}}
-    <?php $tuan_buy_link = '/tuans/detail/'. $tuan_buy[$tuan['Tuan']['id']]['id']; ?>
+    <?php $hash_no = $tuan['Tuan']['id'];
+        $tuan_buy_link = '/tuans/detail/'. $tuan_buy[$hash_no]['id'];
+        $location = $tuan['Tuan']['location_long'].','. $tuan['Tuan']['location_lat'];
+    ?>
     <div>
         <ul class="clearfix">
-            <li><a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}"><img src="/img/tuan/tuan-{{$tuan['Tuan']['id']}}.png" border="0" /></a></li>
+            <li><a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
             <li style="float: none; padding-left: 8em;">
                 <a href="{{$tuan_buy_link}}">
                     <p>{{$tuan['Tuan']['tuan_name']}}&nbsp;</p>
