@@ -136,6 +136,26 @@ class WeixinComponent extends Component
         return false;
     }
 
+    public function send_tuan_track_log($user_id,$msg,$order_id){
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
+        if ($user_weixin != false) {
+            $open_id = $user_weixin['oauth_openid'];
+            $post_data = array(
+                "touser" => $open_id,
+                "template_id" => $this->wx_message_template_ids["ORDER_SHIPPED"],
+//            "url" => $this->get_kuaidi_query_url($ship_type, $ship_code),
+                "url" => $this->get_order_query_url($order_id),
+                "topcolor" => "#FF0000",
+                "data" => array(
+                    "first" => array("value" => "亲，您的订单号为".$order_id."的最新信息: ".$msg."如果你已经收货,请点击详情确认收货,可以获取积分(积分可以抵现)。"),
+                    "remark" => array("value" => "点此查看详情", "color" => "#FF8800")
+                )
+            );
+            return $this->send_weixin_message($post_data);
+        }
+        return false;
+    }
 
     public function send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_no, $order = null)
     {
