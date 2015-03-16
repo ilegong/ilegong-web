@@ -451,12 +451,12 @@ class CommentsController extends AppController {
         $orderId = $_REQUEST['orderId'];
         $uid = $this->Session->read('Auth.User.id');
         $Order = ClassRegistry::init('Order');
-        $currentOrder = $Order->find('first',array(
-            'conditions'=>array(
-                'id'=>$orderId,
-                'is_comment'=>0,
-                'status'=>3,
-                'published'=>1
+        $currentOrder = $Order->find('first', array(
+            'conditions' => array(
+                'id' => $orderId,
+                'is_comment' => 0,
+                'status' => ORDER_STATUS_RECEIVED,
+                'published' => PUBLISH_YES,
             )
         ));
         if($currentOrder){
