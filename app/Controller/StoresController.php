@@ -9,7 +9,7 @@
 class StoresController extends AppController
 {
 
-    public $uses = array('Product', 'Brand', 'Order','OrderTrack','OrderTrackLog','TrackOrderMap');
+    public $uses = array('Product', 'Brand', 'Order','OrderTrack','OrderTrackLog','TrackOrderMap','Cart');
 
     public $components = array('Paginator','ProductSpecGroup');
 
@@ -309,7 +309,49 @@ class StoresController extends AppController
         $this->redirect(array('action' => 'products'));
     }
 
+    public function get_product_orders_by_date(){
+        $this->autoRender=false;
+        $product_id = $_REQUEST['product_id'];
+        $date = $_REQUEST['date'];
+        $end_date = date("Y-m-d",strtotime(date("Y-m-d", strtotime($date)) . " +1 day"));
+        $orders = $this->Order->find('all',array(
+            'conditions'=>array(
+                'status' => 1,
+                'deleted' => 0,
+                'created between ? and ?' => array($date,$end_date)
+            ),
+            'fields' => array(
+                'id','consignee_name','consignee_mobilephone','consignee_address'
+            )
+        ));
+        $result = array();
+        foreach($orders as $item){
+            $order_id = $item['Order']['id'];
+            $cart_product = $this->Cart->find('first',array(
+                'conditions'=>array(
+                    'order_id' => $order_id,
+                    'product_id' => $product_id
+                )
+            ));
+            if(!empty($cart_product)){
+                $result[] = $item;
+            }
+        }
+        if(!empty($result)){
+            $result = Hash::extract($result,'{n}.Order');
+        }
+        echo json_encode($result);
+    }
+
+
     public function add_track_log(){
+        $product_id = $_REQUEST['product_id'];
+        $this->set('product_id',$product_id);
+        $brand_id = $this->brand['Brand']['id'];
+        $this->set('brand_id',$brand_id);
+    }
+
+    public function edit_track_log($id){
 
     }
 
@@ -838,6 +880,9 @@ class StoresController extends AppController
         return $this->ShareOffer->find('first',array('conditions' => array('id' =>$id,'brand_id' => $brand_id)));
     }
 
+
+
+
     public function cake_dating($action) {
         $this->checkAccess();
         $this->pageTitle = '设置可选的发货日期';
@@ -1017,4 +1062,5 @@ class StoresController extends AppController
             return false;
         }
     }
+
 }
