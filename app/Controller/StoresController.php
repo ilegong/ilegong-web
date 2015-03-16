@@ -309,6 +309,7 @@ class StoresController extends AppController
         $this->redirect(array('action' => 'products'));
     }
 
+    //todo 排期上了之后根据排期加功能
     public function get_product_orders_by_date(){
         $this->autoRender=false;
         $product_id = $_REQUEST['product_id'];
@@ -343,22 +344,130 @@ class StoresController extends AppController
         echo json_encode($result);
     }
 
+    public function get_order_by_ids(){
+        $this->autoRender=false;
+        $ids = $_REQUEST['ids'];
+        $ids = explode(',',$ids);
+        $orders = $this->Order->find('all',array(
+            'conditions'=>array(
+                'status' => 1,
+                'deleted' => 0,
+                'id' => $ids
+            ),
+            'fields' => array(
+                'id','consignee_name','consignee_mobilephone','consignee_address'
+            )
+        ));
+        $orders = Hash::extract($orders,'{n}.Order');
+        echo json_encode($orders);
+    }
+
+    public function delete_order_track_map(){
+        $this->autoRender=false;
+        $order_id = $_REQUEST['order_id'];
+        $track_id = $_REQUEST['track_id'];
+        if($this->TrackOrderMap->deleteAll(array('track_id' => $track_id,'order_id' => $order_id),false)){
+            $result = array('success'=>true);
+        }else{
+            $result = array('success'=>false);
+        }
+        echo json_encode($result);
+    }
+
+    public function save_track($trackid=null){
+        $post_order_ids = $_REQUEST['order_ids'];
+        $post_logs = $_REQUEST['logs'];
+        if(!empty($trackid)){
+            $this->OrderTrack->id = $trackid;
+            $order_track = $this->OrderTrack->find('first',array(
+                'id' => $trackid
+            ));
+            $product_id = $order_track['OrderTrack']['product_id'];
+        }else{
+            $date = $_REQUEST['date'];
+            $order_track['date']=$date;
+            $product_id = $_REQUEST['product_id'];
+            $order_track['product_id']=$product_id;
+            $order_track = $this->OrderTrack->save($order_track);
+            //todo add fail
+            $trackid = $order_track['OrderTrack']['id'];
+        }
+        if($order_track){
+            $post_order_ids = json_decode($post_order_ids,true);
+            $track_order_map = array();
+            foreach($post_order_ids as $id){
+                $track_order_map[]=array('track_id'=>$trackid,'order_id'=>$id);
+            }
+            $this->TrackOrderMap->saveAll($track_order_map);
+            $post_logs = json_decode($post_logs,true);
+            $post_logs = array_reverse($post_logs);
+            $track_log = array();
+            foreach($post_logs as $log){
+                $track_log[]=array(
+                    'log' => $log,
+                    'track_id' => $trackid,
+                    'date' => date('Y-m-d h:i:s')
+                );
+            }
+            $this->OrderTrackLog->saveAll($track_log);
+        }
+        $p = $this->Product->find('first',array(
+            'conditions'=>array(
+                'id' => $product_id
+            )
+        ));
+        $p_name = $p['Product']['name'];
+        $this->redirect('/stores/view_track/'.$product_id.'.html?productname='.$p_name);
+    }
+
+    public function delete_track_log($id){
+        $this->OrderTrack->id=$id;
+        $this->OrderTrack->saveField('deleted',1);
+        $p_id = $_REQUEST['product_id'];
+        $p_name = $_REQUEST['product_name'];
+        $this->redirect('/stores/view_track/'.$p_id.'.html?productname='.$p_name);
+    }
 
     public function add_track_log(){
         $product_id = $_REQUEST['product_id'];
         $this->set('product_id',$product_id);
-        $brand_id = $this->brand['Brand']['id'];
-        $this->set('brand_id',$brand_id);
     }
 
     public function edit_track_log($id){
-
+        $date = $_REQUEST['date'];
+        $this->set('order_track_id',$id);
+        $this->set('date',$date);
+        $order_ids = $this->TrackOrderMap->find('all',array(
+            'conditions'=>array(
+                'track_id' => $id
+            )
+        ));
+        $order_ids = Hash::extract($order_ids,'{n}.TrackOrderMap.order_id');
+        $orders = $this->Order->find('all',array(
+            'conditions'=>array(
+                'id' => $order_ids,
+                'deleted' => 0,
+            ),
+            'fields' => array(
+                'id','consignee_name','consignee_mobilephone','consignee_address'
+            )
+        ));
+        $orders = Hash::extract($orders,'{n}.Order');
+        $this->set('orders',$orders);
+        $track_logs = $this->OrderTrackLog->find('all',array(
+            'conditions' => array(
+                'track_id' => $id
+            ),
+            'order' => 'date desc'
+        ));
+        $track_logs = Hash::extract($track_logs,'{n}.OrderTrackLog');
+        $this->set('track_logs',$track_logs);
     }
 
     public function view_track($productId) {
         $page = 1;
         $pagesize = 30;
-        $cond = array('brand_id' => $this->brand['Brand']['id'],'product_id'=>$productId, 'deleted' => DELETED_NO);
+        $cond = array('product_id'=>$productId, 'deleted' => DELETED_NO);
         $total = $this->OrderTrack->find('count', $cond);
         $datalist = $this->OrderTrack->find('all', array(
             'conditions' => $cond,
@@ -366,16 +475,17 @@ class StoresController extends AppController
             'order' => 'date desc'
         ));
         foreach ($datalist as &$data) {
-            $trackId = $data['OrderTrackLog']['id'];
+            $trackId = $data['OrderTrack']['id'];
             $orderCount = $this->TrackOrderMap->find('count', array(
                 'conditions' => array('track_id' => $trackId)
             ));
-            $data['order_count']=$orderCount;
+            $data['OrderTrack']['order_count']=$orderCount;
             $lastLog = $this->OrderTrackLog->find('first', array(
                 'conditions' => array('track_id' => $trackId),
                 'order' => 'date desc'
             ));
-            $data['last_log']=$lastLog['OrderTrackLog']['log'];
+            $data['OrderTrack']['last_log']=$lastLog['OrderTrackLog']['log'];
+            $data['OrderTrack']['date']= date('Y-m-d',strtotime($data['OrderTrack']['date']));
         }
         $productName = $_REQUEST['productname'];
         $page_navi = getPageLinks($total, $pagesize, '/tracklog/mine', $page);

@@ -66,17 +66,16 @@
 </style>
 <div class="container">
     <div class="row">
-        <form class="form-horizontal" method="post" action="/stores/save_track.html" id="post_form">
+        <form class="form-horizontal" method="post" action="/stores/save_track/{{$order_track_id}}" id="post_form">
             <fieldset>
                 <h1>增加发货信息</h1>
-                <input type="hidden" name="data[OrderTrack][id]"/>
+                <input type="hidden" id="track_id" value="{{$order_track_id}}"/>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">日期:</label>
                     <div class="col-sm-4">
-                        <input type="date" class="form-control" name="date" id="track_date">
+                        <input type="date" class="form-control" name="date" id="track_date" value="{{$date}}" readonly="readonly">
                     </div>
                 </div>
-                <input type="hidden" name="product_id" value="{{$product_id}}" id="product_id"/>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">订单:</label>
                     <div class="col-sm-10">
@@ -92,7 +91,15 @@
                                 </tr>
                             </thead>
                             <tbody id="order-table-data">
-
+                                {{loop $orders $order}}
+                                    <tr>
+                                        <td>{{$order['id']}}</td>
+                                        <td>{{$order['consignee_name']}}</td>
+                                        <td>{{$order['consignee_mobilephone']}}</td>
+                                        <td>{{$order['consignee_address']}}</td>
+                                        <td name="rm-row-remote" data-id="{{$order['id']}}"><a class="btn btn-primary btn-xs pull-right">删除</a></td>
+                                    </tr>
+                                {{/loop}}
                             </tbody>
                         </table>
                         <div class="form-group">
@@ -112,6 +119,9 @@
                                 <h3 class="panel-title">物流信息列表</h3>
                             </div>
                             <ul class="list-group" id="track_message_list">
+                                {{loop $track_logs $log}}
+                                    <a href="#" class="list-group-item">{{$log['log']}}</a>
+                                {{/loop}}
                                 <!--<a href="#" class="list-group-item">Cras justo odio</a>-->
                                 <!--<a href="http://www.jquery2dotnet.com/2013/12/cool-simple-css-drop-down-menu.html" class="list-group-item">Dapibus ac facilisis in</a>-->
                                 <!--<a href="#" class="list-group-item">Morbi leo risus</a>-->
