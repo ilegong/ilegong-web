@@ -1,27 +1,142 @@
+<style>
+    .panel > .list-group
+    {
+        margin-bottom: 0;
+    }
+    .panel > .list-group .list-group-item
+    {
+        border-width: 1px 0;
+    }
+    .panel > .list-group .list-group-item:first-child
+    {
+        border-top-right-radius: 0;
+        border-top-left-radius: 0;
+    }
+    .panel > .list-group .list-group-item:last-child
+    {
+        border-bottom: 0;
+    }
+    .panel-heading + .list-group .list-group-item:first-child
+    {
+        border-top-width: 0;
+    }
+    .panel-default .list-group-item.active
+    {
+        color: #000;
+        background-color: #DDD;
+        border-color: #DDD;
+    }
+    .panel-primary .list-group-item.active
+    {
+        color: #FFF;
+        background-color: #428BCA;
+        border-color: #428BCA;
+    }
+    .panel-success .list-group-item.active
+    {
+        color: #3C763D;
+        background-color: #DFF0D8;
+        border-color: #D6E9C6;
+    }
+    .panel-info .list-group-item.active
+    {
+        color: #31708F;
+        background-color: #D9EDF7;
+        border-color: #BCE8F1;
+    }
+    .panel-warning .list-group-item.active
+    {
+        color: #8A6D3B;
+        background-color: #FCF8E3;
+        border-color: #FAEBCC;
+    }
+    .panel-danger .list-group-item.active
+    {
+        color: #A94442;
+        background-color: #F2DEDE;
+        border-color: #EBCCD1;
+    }
+    .panel a.list-group-item.active:hover, a.list-group-item.active:focus
+    {
+        color: #000;
+        background-color: #DDD;
+        border-color: #DDD;
+    }
+
+</style>
 <div class="container">
     <div class="row">
-        <form class="form-horizontal">
+        <form class="form-horizontal" action="/s/save_track.html">
             <fieldset>
                 <h1>增加发货信息</h1>
+                <input type="hidden" name="data[OrderTrack][id]"/>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">日期:</label>
+                    <div class="col-sm-4">
+                        <input type="date" class="form-control" name="data[OrderTrack][date]" id="track_date">
+                    </div>
+                </div>
+                <input type="hidden" name="data[OrderTrack][order_count]" value="0"/>
+                <input type="hidden" name="data[OrderTrack][product_id]" value="{{$product_id}}" id="product_id"/>
+                <input type="hidden" name="data[OrderTrack][brand_id]" value="{{$brand_id}}"/>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">订单:</label>
                     <div class="col-sm-10">
-                        <input type="date" class="form-control">
+                        <table class="table">
+                            <caption>所选日期订单</caption>
+                            <thead>
+                                <tr>
+                                    <th>订单编号</th>
+                                    <th>收货人</th>
+                                    <th>手机号码</th>
+                                    <th>地址</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="order-table-data">
+
+                            </tbody>
+                        </table>
+                        <div class="input-group col-sm-3">
+                            <input type="text" class="form-control" placeholder="订单编号">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button">增加</button>
+                            </span>
+                        </div><!-- /input-group -->
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-sm-2 control-label">订单</label>
+                    <label class="col-sm-2 control-label">状态:</label>
                     <div class="col-sm-10">
-                        
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">物流信息列表</h3>
+                            </div>
+                            <ul class="list-group" id="track_message_list">
+                                <!--<a href="#" class="list-group-item">Cras justo odio</a>-->
+                                <!--<a href="http://www.jquery2dotnet.com/2013/12/cool-simple-css-drop-down-menu.html" class="list-group-item">Dapibus ac facilisis in</a>-->
+                                <!--<a href="#" class="list-group-item">Morbi leo risus</a>-->
+                                <!--<a href="#" class="list-group-item">Porta ac consectetur ac</a>-->
+                                <!--<a href="#" class="list-group-item">Vestibulum at eros</a>-->
+                            </ul>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-9">
+                                <textarea class="form-control" id="track_message" name="message" placeholder="填写物流信息" rows="3"></textarea>
+                            </div>
+                            <br/><br/>
+                            <button type="button" class="btn btn-primary" id="add_track_message">添加最新物流信息</button>
+                        </div>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-default">Sign in</button>
+                        <button type="submit" class="btn btn-success">保存</button>
                     </div>
                 </div>
             </fieldset>
         </form>
     </div>
 </div>
+
+{{$this->Html->script(array('/js/order_track_log.js?v1'))}}

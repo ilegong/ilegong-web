@@ -9,7 +9,7 @@
 class StoresController extends AppController
 {
 
-    public $uses = array('Product', 'Brand', 'Order','OrderTrack','OrderTrackLog','TrackOrderMap');
+    public $uses = array('Product', 'Brand', 'Order','OrderTrack','OrderTrackLog','TrackOrderMap','Cart');
 
     public $components = array('Paginator');
 
@@ -293,7 +293,49 @@ class StoresController extends AppController
         $this->redirect(array('action' => 'products'));
     }
 
+    public function get_product_orders_by_date(){
+        $this->autoRender=false;
+        $product_id = $_REQUEST['product_id'];
+        $date = $_REQUEST['date'];
+        $end_date = date("Y-m-d",strtotime(date("Y-m-d", strtotime($date)) . " +1 day"));
+        $orders = $this->Order->find('all',array(
+            'conditions'=>array(
+                'status' => 1,
+                'deleted' => 0,
+                'created between ? and ?' => array($date,$end_date)
+            ),
+            'fields' => array(
+                'id','consignee_name','consignee_mobilephone','consignee_address'
+            )
+        ));
+        $result = array();
+        foreach($orders as $item){
+            $order_id = $item['Order']['id'];
+            $cart_product = $this->Cart->find('first',array(
+                'conditions'=>array(
+                    'order_id' => $order_id,
+                    'product_id' => $product_id
+                )
+            ));
+            if(!empty($cart_product)){
+                $result[] = $item;
+            }
+        }
+        if(!empty($result)){
+            $result = Hash::extract($result,'{n}.Order');
+        }
+        echo json_encode($result);
+    }
+
+
     public function add_track_log(){
+        $product_id = $_REQUEST['product_id'];
+        $this->set('product_id',$product_id);
+        $brand_id = $this->brand['Brand']['id'];
+        $this->set('brand_id',$brand_id);
+    }
+
+    public function edit_track_log($id){
 
     }
 
@@ -797,7 +839,6 @@ class StoresController extends AppController
      */
 
     public function delete_share_offers($id) {
-
        $this->checkAccess();
        $brand_id = $this->brand['Brand']['id'];
        $datainfo = $this->find_share_offers_by_id_and_brandid($id,$brand_id);
@@ -808,7 +849,6 @@ class StoresController extends AppController
         $this->ShareOffer->updateAll(array('deleted' => DELETED_YES),array('id' => $id,'deleted' => DELETED_NO,'brand_id' => $brand_id));
         $this->Session->setFlash(__('删除成功'));
         $this->redirect(array('action' => 'share_offers'));
-
     }
 
     /*
@@ -821,6 +861,7 @@ class StoresController extends AppController
         $this->loadModel('ShareOffer');
         return $this->ShareOffer->find('first',array('conditions' => array('id' =>$id,'brand_id' => $brand_id)));
     }
+
 
 
 
@@ -878,4 +919,5 @@ class StoresController extends AppController
             $this->__message("您没有权限进行操作", '/stores/index');
         }
     }
+
 }
