@@ -68,6 +68,41 @@ class CronController extends AppController
         echo $result;
     }
 
+    public function download_photo_from_wx_by_product_id(){
+        $this->autoRender=false;
+        $productId= $_REQUEST['id'];
+        $commentModel = ClassRegistry::init('Comment');
+        $userIds = $commentModel->find('all',array(
+            'conditions'=>array(
+                'data_id'=>$productId
+            ),
+            'fields'=>array('DISTINCT user_id')
+        ));
+        $userIds = Hash::extract($userIds,'{n}.Comment.user_id');
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $wxUsers = $oauthBindModel->find('all', array(
+            'conditions'=>array(
+                'user_id'=>$userIds
+            )
+        ));
+        $count = $this->process_download_wx_photo($wxUsers);
+        echo $count;
+    }
+
+    public function download_photo_from_wx_by_user_id(){
+        $this->autoRender=false;
+        $userIds = $_REQUEST['ids'];
+        $userIds = explode(',',$userIds);
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $wxUsers = $oauthBindModel->find('all', array(
+            'conditions'=>array(
+                'user_id'=>$userIds
+            )
+        ));
+        $count = $this->process_download_wx_photo($wxUsers);
+        echo $count;
+    }
+
     public function download_photo_from_wx() {
         $this->autoRender=false;
         $this->loadModel('DownloadLog');

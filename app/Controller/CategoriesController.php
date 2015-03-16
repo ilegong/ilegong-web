@@ -93,7 +93,11 @@ class CategoriesController extends AppController {
         $this->set('_serialize', array('brands', 'data_list', 'sub_title'));
         $this->set('history',$_REQUEST['history']);
 
-
+        if($this->is_weixin()){
+            $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
+            $tag_id = $productTag['ProductTag']['id'];
+            $this->prepare_wx_sharing($currUid, $tag_id);
+        }
 
     }
 
@@ -740,6 +744,17 @@ class CategoriesController extends AppController {
             'limit'=>4
         ));
         return $banners;
+    }
+
+    protected function prepare_wx_sharing($currUid, $tag_id) {
+        $currUid = empty($currUid) ? 0 : $currUid;
+        $share_string = $currUid . '-' . time() . '-rebate-tag_id_' . $tag_id;
+        $share_code = authcode($share_string, 'ENCODE', 'SHARE_TID');
+        $oauthM = ClassRegistry::init('WxOauth');
+        $signPackage = $oauthM->getSignPackage();
+        $this->set('signPackage', $signPackage);
+        $this->set('share_string', urlencode($share_code));
+        $this->set('jWeixinOn', true);
     }
 
 }  

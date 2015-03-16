@@ -3,10 +3,13 @@
     <a href="/tuans/new_tuan" class="alltuan_add">没有附近的团，申请创建自己的团队</a>
     <div style="border-bottom: 1px #eeeeee solid; margin-top: 40px;">
         {{loop $tuan_info $tuan}}
-        <?php $tuan_buy_link = '/tuans/detail/'. $tuan_buy[$tuan['Tuan']['id']]['id']; ?>
+        <?php $hash_no = $tuan['Tuan']['id'];
+            $tuan_buy_link = '/tuans/detail/'. $tuan_buy[$hash_no]['id'];
+            $location = $tuan['Tuan']['location_long'].','. $tuan['Tuan']['location_lat'];
+            ?>
         <div class="alltuan_border">
             <ul class="clearfix">
-                <li><a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}"><img src="/img/tuan/tuan-{{$tuan['Tuan']['id']}}.png" border="0" /></a></li>
+                <li><a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
                 <li style=" float: none; padding-left: 8em;">
                     <a href="{{$tuan_buy_link}}">
                         <p>{{$tuan['Tuan']['tuan_name'] }}</p>
