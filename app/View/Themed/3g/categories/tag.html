@@ -108,39 +108,44 @@
             $footer.show();
         });
     });
+</script>
 
-    function search_source($flagTag) {
-        switch($flagTag)
+{{if $jWeixinOn}}
+<script>
+    function search_source($flag_tag) {
+        switch($flag_tag)
         {
-            case  $mobile_tag[3]['slug'] : return '/img/mobile/index/c1.jpg';break;
-            case  $mobile_tag[5]['slug'] : return '/img/mobile/index/c2.jpg';break;
-            case  $mobile_tag[8]['slug'] : return '/img/mobile/index/c3.jpg';break;
-            case  $mobile_tag[12]['slug']: return '/img/mobile/index/c4.jpg';break;
-            case  $mobile_tag[9]['slug'] : return '/img/mobile/index/c5.jpg';break;
-            case  $mobile_tag[6]['slug'] : return '/img/mobile/index/c6.jpg';break;
-            case  $mobile_tag[4]['slug'] : return '/img/mobile/index/c7.jpg';break;
-            case  $mobile_tag[10]['slug']: return '/img/mobile/index/c8.jpg';break;
-            default : return '';
-
+            case "{{$mobile_tag[3]['slug']}}" : return "http://51daifan.sinaapp.com/img/mobile/index/c1.jpg";break;
+            case "{{$mobile_tag[5]['slug']}}" : return "http://51daifan.sinaapp.com/img/mobile/index/c2.jpg";break;
+            case "{{$mobile_tag[8]['slug']}}" : return "http://51daifan.sinaapp.com/img/mobile/index/c3.jpg";break;
+            case "{{$mobile_tag[12]['slug']}}": return "http://51daifan.sinaapp.com/img/mobile/index/c4.jpg";break;
+            case "{{$mobile_tag[9]['slug']}}" : return "http://51daifan.sinaapp.com/img/mobile/index/c5.jpg";break;
+            case "{{$mobile_tag[6]['slug']}}" : return "http://51daifan.sinaapp.com/img/mobile/index/c6.jpg";break;
+            case "{{$mobile_tag[4]['slug']}}" : return "http://51daifan.sinaapp.com/img/mobile/index/c7.jpg";break;
+            case "{{$mobile_tag[10]['slug']}}": return "http://51daifan.sinaapp.com/img/mobile/index/c8.jpg";break;
         }
     }
 
     wx.ready(function(){
+        var share_string = '{{$share_string ? $share_string :"0"}}';
         var to_timeline_title = "{{$page_title}}";
         var to_friend_title = "{{$page_title}}";
-        var to_friend_link = document.URL.split('?')[0] + '&share_type=appMsg';
-        var to_timeline_link = document.URL.split('?')[0] + '&share_type=timeline';
-        var $img_source = search_source($flagTag);
-        var imgUrl = "{{$this->Html->assetUrl(small_thumb_link($img_source))}}";
+        var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
+        var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
+        var flag_tag = "{{$flagTag}}";
+        var img_source = search_source(flag_tag);
+        var imgUrl = img_source;
+        var desc = "快来抢购吧";
         wx.onMenuShareAppMessage({
             title: to_friend_title,
             link: to_friend_link,
+            desc: desc,
             imgUrl: imgUrl,
             success: function () {
                 // 用户确认分享后执行的回调函数
                 if(share_string != '0'){
                     setTimeout(500, function(){
-                        $.post('/wx_shares/log_share',{ share_type: "appMsg" });
+                        $.post('/wx_shares/log_share',{trstr: share_string,share_type: "appMsg" });
                     });
                 }
             }
@@ -152,15 +157,15 @@
             success: function () {
                 if(share_string != '0'){
                     setTimeout(500, function(){
-                        $.post('/wx_shares/log_share',{share_type: "timeline" });
+                        $.post('/wx_shares/log_share',{trstr: share_string,share_type: "timeline" });
                     });
                 }
             }
         });
     })
-
-
 </script>
+{{/if}}
+
 
 
 
