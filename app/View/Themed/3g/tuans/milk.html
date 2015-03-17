@@ -54,9 +54,9 @@
     <li class="fl">
         <span class="gray title mr12" style="float:left;">数量:</span>
                                 <span class="clearfix" style="display: block;overflow: hidden;">
-                            <div id="pamount_reduce" class="grew"  item-id="852">-</div>
-                            <input id="input_pamount"  item-id="852" size="3" value="1" class="num" name="shoppingnum" type="text"/>
-                            <div id="pamount_add" class="grew" item-id="852">+</div>
+                            <div id="product_num_red" class="grew"  item-id="852">-</div>
+                            <input id="input_pamount"  item-id="852" size="3" value="1" class="num" name="shoppingnum" type="text" readonly/>
+                            <div id="product_num_add" class="grew" item-id="852">+</div>
                             </span>
     </li>
 </ul>
@@ -364,6 +364,12 @@
 //etc..
         });
         ul.find('li:first').addClass('cur');
+        $('#product_num_red').on('click',function(){
+            utils.alert('仅限购买一份..');
+        });
+        $('#product_num_add').on('click',function(){
+            utils.alert('仅限购买一份..');
+        });
 //}, 1000);
     })
 
