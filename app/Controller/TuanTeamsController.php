@@ -63,22 +63,23 @@ class TuanTeamsController extends AppController{
 
     public function goods_lists(){
         $this->pageTitle = '团购商品';
-
         $this->loadModel('TuanBuying');
         $tuan_products = $this->TuanBuying->find('all',array('conditions' => array('pid !=' => null),'group' => array('pid')));
         $tuan_product_ids = Hash::extract($tuan_products,'{n}.TuanBuying.pid');
-//        $tuan_products = array();
         $this->loadModel('Product');
-        $tuan_products_info = $this->Product->find('all',array('conditions' => array('id' => $tuan_product_ids),'fields' => array('')));
 
+        $tuan_products_info = array();
         foreach($tuan_product_ids as $pid){
-        $tuan_products[$pid] = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
-
-
+        $tuan_products_info[$pid] = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
+        $tuan_product = $this->Product->find('first',array('conditions' => array('id' => $pid),'fields' => array('deleted','promote_name')));
+        $tuan_products_info[$pid]['status'] = $tuan_product['Product']['deleted'];
+        $tuan_products_info[$pid]['dec'] = $tuan_product['Product']['promote_name'];
         }
-        $this->log('tuan_products'.json_encode($tuan_products_info));
         $this->set('tuan_product_ids',$tuan_product_ids);
-        $this->set('tuan_products',$tuan_products);
+        $this->set('tuan_products_info',$tuan_products_info);
+
+        $this->log('tuan_products'.json_encode($tuan_products_info));
+
 //        $this->set('hideNav',true);
 
     }

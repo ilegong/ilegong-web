@@ -6,36 +6,18 @@
         <li>返回</li>
     </ul>
 </div>
-  <div class = "container">
+  <div class = "container" style="margin-top: 35px;">
       {{loop $tuan_product_ids $pid}}
-      <div class="goodlist">
+      <div class="goodlist {{if $tuan_products_info[$pid]['status'] == DELETED_YES}}tuan_cancel{{/if}}">
           <a href="/tuan_teams/lists/{{$pid}}">
+              {{if $tuan_products_info[$pid]['status']}}<s>团购已结束</s>{{/if}}
               <div><img src="/img/tuan_team/listgood-{{$pid}}.jpg"></div>
               <ul class="clearfix">
-                  <li class="fl">全北京最新鲜的昌平兴寿红颜草莓，现采现送</li>
-                  <li class="fr">{{$tuan_products[$pid][0][0]['sold_number']}}人参团</li>
+                  <li class="fl">{{$tuan_products_info[$pid]['dec']}}</li>
+                  <li class="fr">{{$tuan_products_info[$pid][0][0]['sold_number']}}人参团</li>
               </ul>
           </a>
       </div>
       {{/loop}}
-      <div class="goodlist tuan_cancel">
-          <a href="#X">
-              <s>团购已取消</s>
-              <div><img src="/img/tuan_team/listgood.jpg"></div>
-              <ul class="clearfix">
-                  <li class="fl">全北京最新鲜的昌平兴寿红颜草莓，现采现送</li>
-                  <li class="fr">11人参团</li>
-              </ul>
-          </a>
-      </div>
-      <div class="goodlist tuan_cancel">
-          <a href="#X">
-              <s>团购已完成</s>
-              <div><img src="/img/tuan_team/listgood.jpg"></div>
-              <ul class="clearfix">
-                  <li class="fl">全北京最新鲜的昌平兴寿红颜草莓，现采现送</li>
-                  <li class="fr">11人参团</li>
-              </ul>
-          </a>
-      </div>
   </div>
+
