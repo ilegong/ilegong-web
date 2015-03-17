@@ -60,6 +60,26 @@ class ProductsController extends AppController{
         parent::add();
     }
 
+
+    public function consignment(){
+        $this->checkAccess();
+        $this->pageTitle='商品排期';
+        $pagesize = intval(Configure::read($this->modelClass.'.pagesize'));
+        if(!$pagesize){
+            $pagesize = 15;
+        }
+
+        $total = $this->{$this->modelClass}->find('count', array('conditions' => array('brand_id' => $this->brand['Brand']['id'])));
+        $datalist = $this->{$this->modelClass}->find('all', array(
+            'conditions' => array('brand_id' => $this->brand['Brand']['id'],'published' => PUBLISH_YES, 'deleted' => DELETED_NO),
+            'fields'=>array('id','name','price','published','coverimg'),
+        ));
+
+        $page_navi = getPageLinks($total, $pagesize, '/products/consignment', $page);
+        $this->set('datalist',$datalist);
+        $this->set('page_navi', $page_navi);
+    }
+
     public function mine(){
         $this->checkAccess();
 

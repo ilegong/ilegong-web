@@ -1,0 +1,30 @@
+<div class="container">
+    <table class="table table-striped table-hover">
+    <?php
+        $tableHeaders =  $this->Html->tableHeaders(array(
+			'图片',
+            '名称',
+            '操作',
+        ));
+
+        echo '<thead>'.$tableHeaders.'</thead>';
+
+        $rows = array();
+        foreach ($datalist AS $item) {
+            $actions = ' ' . $this->Html->link('排期', array('controller'=>'stores','action' => 'consignment_dating','?' => array('p_id' => $item['Product']['id'])));
+
+            $rows[] = array(
+                $this->Html->image(
+		$this->Html->url($item['Product']['coverimg']),
+array('style'=>'max-width:100px;max-height:100px;')),
+                $item['Product']['name'],
+                $actions,
+            );
+        }
+        echo $this->Html->tableCells($rows);
+
+		echo '<thead>'.$tableHeaders.'</thead>';
+    ?>
+    </table>
+    {{$page_navi}}
+</div>

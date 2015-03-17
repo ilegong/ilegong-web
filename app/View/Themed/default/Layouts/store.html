@@ -113,6 +113,7 @@
 <div class="flash ui-wedget" id="fsUploadProgress" style="position:absolute;display:none;width:210px;top:80px;right:30px; z-index: 10000000;">
 </div>
 {{/if}}
+{{if !$is_mobile}}
 {{template menus/store_bootstrap}}
 <div id="header-breadcrumb" >
     <div class="container clearfix" >
@@ -120,7 +121,7 @@
     </div>
     <div  class="clear"></div>
 </div>
-
+{{/if}}
 <?php
     $flash_msg =  $this->Session->flash();
 if($flash_msg){

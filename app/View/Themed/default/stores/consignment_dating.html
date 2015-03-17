@@ -1,4 +1,11 @@
-<h1>{{$p_name}} 的排期</h1>
+{{if $is_mobile}}
+<nav>
+    <ul class="pager">
+        <li class="previous"><a href="/products/consignment"><span aria-hidden="true">&larr;</span>返回</a></li>
+    </ul>
+</nav>
+{{/if}}
+<h2>{{$p_name}} 的排期</h2>
 
 <div style="margin-top: 2em">
     <form class="form-inline" action="/stores/consignment_dating/add" method="post">
