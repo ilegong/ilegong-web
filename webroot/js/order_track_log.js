@@ -112,7 +112,7 @@ $(document).ready(function(){
             var log = $.trim($('span',$(item)).text());
             postLogs.push(log);
         });
-        $('#post_logs').val(JSON.stringify(postLogs));
+        $('#post_logs').val(postLogs.join('&@'));
     }
 
     if($select_date){
