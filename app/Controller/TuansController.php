@@ -255,7 +255,9 @@ class TuansController extends AppController{
         }
         if($_GET['tuan_id'] && $_GET['tuan_buy_id']){
             $url = '/tuans/detail/'. strval($_GET['tuan_id']) . '/' . strval($_GET['tuan_buy_id']) ;
-        }else{
+        }elseif ($_GET['product'] = 'milk' ){
+            $url = '/tuans/milk';
+        } else{
             $url = '/tuans/lists';
         }
         $fields = array('id','slug','name','content','created');
@@ -292,6 +294,58 @@ class TuansController extends AppController{
 
     public function join_meishituan(){
         $this->pageTitle = '加入美食团';
+    }
+
+    public function temp_order_submit() {
+        $this->autoRender = false;
+        $cart_id = $_POST['cart_id'];
+        $mobile = $_POST['mobile'];
+        $name = $_POST['name'];
+        $address = $_POST['address'];
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            $this->log("not login for tuan order:".$cart_id);
+            echo json_encode(array('success'=> false));
+            return;
+        }
+        if(empty($cart_id)){
+            $this->log("tuan cart id error:".$cart_id);
+            echo json_encode(array('success'=> false));
+            return;
+        }
+        $this->loadModel('Cart');
+        $this->loadModel('Order');
+        $cart_info = $this->Cart->findById($cart_id);
+        $creator = $cart_info['Cart']['creator'];
+        $order_type = $cart_info['Cart']['type'];
+        if(empty($cart_info)){
+            $this->log("cart record not exist". $cart_id);
+            $res = array('success'=> false, 'info'=> '购物车记录为查询到');
+        }elseif($creator != $uid){
+            $this->log("no right to this order, uid".$uid. "creator:".$creator);
+            $res = array('success'=> false, 'info'=> '团购订单不属于你，请刷新重试');
+        }elseif($order_type != CART_ITEM_TYPE_TUAN){
+            $res = array('success'=> false, 'info'=> '该订单不属于团购订单，请重试');
+        }else{
+            if(!empty($cart_info['Cart']['order_id'])){
+                $this->log("cart order id error,cart id".$cart_id);
+                return;
+            }
+            $total_price = $cart_info['Cart']['num'] * $cart_info['Cart']['price'];
+            if($total_price < 0 ){
+                $this->log("error tuan price, cart id".$cart_id);
+                return;
+            }
+            $pid = $cart_info['Cart']['product_id'];
+            $area = '';
+            $order = $this->Order->createTuanOrder(0, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id);
+            if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
+                $res = array('success'=> false, 'info'=> '你已经支付过了');
+            }else{
+                $res = array('success'=> true, 'order_id'=>$order['Order']['id']);
+            }
+        }
+        echo json_encode($res);
     }
 
     public function milk_order(){
