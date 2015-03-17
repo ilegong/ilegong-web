@@ -8,6 +8,7 @@ $(document).ready(function(){
     var $add_order = $('#add_order');
     var $order_ids = $('#order_ids');
     var $track_id = $('#track_id');
+    var $select_date = $('#select_date');
     var postLogs = [];
     var orderIds = [];
     if(!$track_date.attr('value')){
@@ -27,12 +28,18 @@ $(document).ready(function(){
     }
     //todo 排期功能上了之后  动态加载
     function getOrder(){
-        var date_val = $track_date.val();
+        var date_val = $select_date.val();
         var p_id = $product_id.val();
         var url = '/stores/get_product_orders_by_date.json';
-        var param = {'date':date_val,'product_id':p_id};
+        var param = {'date_id':date_val,'product_id':p_id};
         loadOrder(url,param);
     }
+
+    $select_date.on('change',function(){
+        var thisvalue = $select_date.find("option:selected").text();
+        $track_date.val(thisvalue);
+        getOrder();
+    });
 
     $add_track_message.on('click',function(){
         var msg = $.trim($track_message.val());
@@ -106,6 +113,10 @@ $(document).ready(function(){
             postLogs.push(log);
         });
         $('#post_logs').val(JSON.stringify(postLogs));
+    }
+
+    if($select_date){
+        getOrder();
     }
 
     $('#post_form').on('submit',function(){

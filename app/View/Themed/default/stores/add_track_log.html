@@ -69,11 +69,15 @@
         <form class="form-horizontal" method="post" action="/stores/save_track.html" id="post_form">
             <fieldset>
                 <h1>增加发货信息</h1>
-                <input type="hidden" name="data[OrderTrack][id]"/>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">日期:</label>
                     <div class="col-sm-4">
-                        <input type="date" class="form-control" name="date" id="track_date">
+                        <select class="form-control" id="select_date">
+                            {{loop $consignment_dates $item}}
+                                <option value="{{$item['ConsignmentDate']['id']}}">{{$item['ConsignmentDate']['send_date']}}</option>
+                            {{/loop}}
+                        </select>
+                        <input type="hidden" name="date" id="track_date">
                     </div>
                 </div>
                 <input type="hidden" name="product_id" value="{{$product_id}}" id="product_id"/>

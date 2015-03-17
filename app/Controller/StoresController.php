@@ -309,35 +309,28 @@ class StoresController extends AppController
     public function get_product_orders_by_date(){
         $this->autoRender=false;
         $product_id = $_REQUEST['product_id'];
-        $date = $_REQUEST['date'];
-        $end_date = date("Y-m-d",strtotime(date("Y-m-d", strtotime($date)) . " +1 day"));
-        $orders = $this->Order->find('all',array(
+        $date_id = $_REQUEST['date_id'];
+        $carts = $this->Cart->find('all',array(
             'conditions'=>array(
                 'status' => 1,
                 'deleted' => 0,
-                'created between ? and ?' => array($date,$end_date)
+                'consignment_date' => $date_id,
+                'product_id' => $product_id
             ),
             'fields' => array(
-                'id','consignee_name','consignee_mobilephone','consignee_address'
+                'id','','order_id'
             )
         ));
-        $result = array();
-        foreach($orders as $item){
-            $order_id = $item['Order']['id'];
-            $cart_product = $this->Cart->find('first',array(
-                'conditions'=>array(
-                    'order_id' => $order_id,
-                    'product_id' => $product_id
-                )
-            ));
-            if(!empty($cart_product)){
-                $result[] = $item;
-            }
+        $order_ids = Hash::extract($carts,'{n}.Cart.order_id');
+        $orders = $this->find('all',array(
+            'conditions' => array(
+                'id' => $order_ids
+            )
+        ));
+        if(!empty($orders)){
+            $orders = Hash::extract($orders,'{n}.Order');
         }
-        if(!empty($result)){
-            $result = Hash::extract($result,'{n}.Order');
-        }
-        echo json_encode($result);
+        echo json_encode($orders);
     }
 
     public function get_order_by_ids(){
@@ -428,6 +421,8 @@ class StoresController extends AppController
     public function add_track_log(){
         $product_id = $_REQUEST['product_id'];
         $this->set('product_id',$product_id);
+        $this->setConsignmentDate($product_id);
+
     }
 
     public function edit_track_log($id){
@@ -1229,6 +1224,15 @@ class StoresController extends AppController
                 $this->log('send track msg (track id='.$trackId.' order_id='.$order_id.') fail ');
             }
         }
+    }
+
+    function setConsignmentDate($pid){
+        $this->loadModel('ConsignmentDate');
+        $dates = $this->ConsignmentDate->find('all',array('conditions' => array(
+            'product_id' => $pid,
+            'published' => 1
+        )));
+        $this->set('consignment_dates',$dates);
     }
 
 }
