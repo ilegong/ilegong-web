@@ -318,19 +318,23 @@ class StoresController extends AppController
                 'product_id' => $product_id
             ),
             'fields' => array(
-                'id','','order_id'
+                'id','order_id'
             )
         ));
-        $order_ids = Hash::extract($carts,'{n}.Cart.order_id');
-        $orders = $this->find('all',array(
-            'conditions' => array(
-                'id' => $order_ids
-            )
-        ));
-        if(!empty($orders)){
-            $orders = Hash::extract($orders,'{n}.Order');
+        if(!empty($carts)){
+            $order_ids = Hash::extract($carts,'{n}.Cart.order_id');
+            $orders = $this->find('all',array(
+                'conditions' => array(
+                    'id' => $order_ids
+                )
+            ));
+            if(!empty($orders)){
+                $orders = Hash::extract($orders,'{n}.Order');
+            }
+            echo json_encode($orders);
+        }else{
+            echo json_encode(array());
         }
-        echo json_encode($orders);
     }
 
     public function get_order_by_ids(){
