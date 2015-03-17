@@ -357,7 +357,11 @@ class OrdersController extends AppController {
             }
         }
 
-        $this->Session->write(self::key_balance_pids(), json_encode($cidAttr));
+        //If came from info.html and with an action to info.html, don't reset balance pid list
+        if (empty($_GET['action'])) {
+            $this->Session->write(self::key_balance_pids(), json_encode($cidAttr));
+        }
+
         $this->Session->write(self::key_balanced_ship_promotion_id(), '');
 
 		$has_chosen_consignee = false;
