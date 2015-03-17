@@ -69,10 +69,11 @@ class CartsController extends AppController{
             $this->log('check_and_add:specId='.$specId.', type='.$type.', tryId='.$tryId.', uid='.$uid.',num='.$num.', product_id='.$product_id.', customized_price='.$customized_price.', returnInfo='.json_encode($returnInfo));
             if (!empty($returnInfo) && $returnInfo['success']) {
                 $cart_id = $returnInfo['id'];
-                if ($product_id == PRODUCT_ID_CAKE && $_REQUEST['dating'] && $cart_id) {
+                if ($_REQUEST['dating'] && $cart_id && $_REQUEST['dating_text']) {
                     $dating = trim($_REQUEST['dating']);
+                    $dating_text = trim($_REQUEST['dating_text']);
                     if ($dating) {
-                        $cartM->updateAll(array('name' => 'concat(name, "(' . $dating . ')")'), array('id' => $cart_id));
+                        $cartM->updateAll(array('consignment_date' => $dating,'name' => 'concat(name, "(' . $dating_text . ')")'), array('id' => $cart_id));
                     }
                 }
 
