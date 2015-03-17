@@ -30,7 +30,7 @@ $(document).ready(function(){
     function getOrder(){
         var date_val = $select_date.val();
         var p_id = $product_id.val();
-        var url = '/stores/get_product_orders_by_date.json';
+        var url = '/stores/get_product_orders_by_date';
         var param = {'date_id':date_val,'product_id':p_id};
         loadOrder(url,param);
     }
@@ -112,7 +112,7 @@ $(document).ready(function(){
             var log = $.trim($('span',$(item)).text());
             postLogs.push(log);
         });
-        $('#post_logs').val(postLogs.join('&@'));
+        $('#post_logs').val(JSON.stringify(postLogs));
     }
 
     if($select_date){

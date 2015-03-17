@@ -392,7 +392,7 @@ class StoresController extends AppController
                 $track_order_map[]=array('track_id'=>$trackid,'order_id'=>$id);
             }
             $this->TrackOrderMap->saveAll($track_order_map);
-            $post_logs = explode('&@',$post_logs);
+            $post_logs = json_decode($post_logs,true);
             $post_logs = array_reverse($post_logs);
             $track_log = array();
             foreach($post_logs as $log){
@@ -1218,11 +1218,22 @@ class StoresController extends AppController
                 'id','creator'
             )
         ));
-        $track_log = '您购买的('.$product['Product']['name'].')最新状态,'.$track_log;
+        $product_name = $product['Product']['name'];
+        $track_log = '您购买的('.$product_name.')最新状态,'.$track_log;
         foreach($orders as $item){
             $user_id = $item['Order']['creator'];
             $order_id = $item['Order']['id'];
-            if(!$this->Weixin->send_tuan_track_log($user_id,$track_log,$order_id)){
+            $cart = $this->Cart->find('first',array(
+                'conditions' => array(
+                    'order_id' => $order_id,
+                    'product_id' => $product_id
+                ),
+                'fields' => array(
+                    'num'
+                )
+            ));
+            $num = $cart['Cart']['num'];
+            if(!$this->Weixin->send_tuan_track_log($user_id,$track_log,$order_id,$product_name,$num)){
                 $this->log('send track msg (track id='.$trackId.' order_id='.$order_id.') fail ');
             }
         }

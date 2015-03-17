@@ -136,7 +136,7 @@ class WeixinComponent extends Component
         return false;
     }
 
-    public function send_tuan_track_log($user_id,$msg,$order_id){
+    public function send_tuan_track_log($user_id,$msg,$order_id,$good_info,$good_number){
         $oauthBindModel = ClassRegistry::init('Oauthbind');
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
         if ($user_weixin != false) {
@@ -148,7 +148,11 @@ class WeixinComponent extends Component
                 "url" => $this->get_order_query_url($order_id),
                 "topcolor" => "#FF0000",
                 "data" => array(
-                    "first" => array("value" => "亲，您的订单号为".$order_id."的最新信息: ".$msg."如果你已经收货,请点击详情确认收货,可以获取积分(积分可以抵现)。"),
+                    "first" => array("value" => "亲，您的订单号为".$order_id."的最新信息: ".$msg."。如果你已经收货,请点击详情确认收货,可以获取积分(积分可以抵现)。"),
+                    "keyword1" => array("value" => '自提'),
+                    "keyword2" => array("value" => '自提'),
+                    "keyword3" => array("value" => $good_info),
+                    "keyword4" => array("value" => '总数'.$good_number),
                     "remark" => array("value" => "点此查看详情", "color" => "#FF8800")
                 )
             );
