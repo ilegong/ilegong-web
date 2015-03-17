@@ -22,9 +22,9 @@
     <tr>
         <td>{{$date['ConsignmentDate']['send_date']}}</td>
         <td class="{{$date['ConsignmentDate']['published'] ? 'danger' : ''}}">{{$date['ConsignmentDate']['published'] ? '是' : '否'}}</td>
-        <td class="active"><a href="/stores/consignment_dating/publish.html?id={{$date['ConsignmentDate']['id']}}">允许排期</a>
-            | <a href="/stores/consignment_dating/unpublish.html?id={{$date['ConsignmentDate']['id']}}">停止排期</a>
-            | <a href="/stores/consignment_dating/delete.html?id={{$date['ConsignmentDate']['id']}}">删除</a>
+        <td class="active"><a href="/stores/consignment_dating/publish.html?id={{$date['ConsignmentDate']['id']&p_id={{$p_id}}">允许排期</a>
+            | <a href="/stores/consignment_dating/unpublish.html?id={{$date['ConsignmentDate']['id']}}&p_id={{$p_id}}">停止排期</a>
+            | <a href="/stores/consignment_dating/delete.html?id={{$date['ConsignmentDate']['id']}}&p_id={{$p_id}}">删除</a>
         </td>
     </tr>
 {{/loop}}
