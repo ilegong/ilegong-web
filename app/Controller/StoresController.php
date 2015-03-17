@@ -993,6 +993,9 @@ class StoresController extends AppController
     public function consignment_dating($action) {
         $this->checkAccess();
         $this->pageTitle = '设置可选的发货日期';
+        if($this->RequestHandler->isMobile()){
+            $this->set('is_mobile',true);
+        }
         $product_id = $_REQUEST['p_id'];
         $this->set('p_id',$product_id);
         $p = $this->Product->find('first',array(
@@ -1019,9 +1022,8 @@ class StoresController extends AppController
             $send_date = $_REQUEST['send_date'];
             $published = ($_REQUEST['published'] == PUBLISH_YES);
             if ($send_date) {
-
                 $found = $this->ConsignmentDate->find('first', array(
-                    'conditions' => array('send_date' => $send_date)
+                    'conditions' => array('send_date' => $send_date,'product_id' => $product_id)
                 ));
                 if (!empty($found)) {
                     setFlashError($this->Session, '发货日期已存在, 不能重复添加');
