@@ -242,7 +242,7 @@ class OrdersController extends AppController{
             $order_groupon_link = Hash::combine($groupon_members, '{n}.GrouponMember.id', '{n}.GrouponMember.groupon_id');
             if($groupon_member_lists){
                 $conditions[] = array('Order.member_id' => $groupon_member_lists);
-                $conditions['Order.type'] = array(ORDER_TYPE_GROUP, ORDER_TYPE_GROUP_FILL);
+                $conditions['Order.type'] = array(ORDER_TYPE_GROUP, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN);
                 $consignee_mobilephone = null;
             }else{
                 //团购订单暂时无人参团
