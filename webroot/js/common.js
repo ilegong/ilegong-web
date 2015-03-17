@@ -464,7 +464,8 @@ function addtoCart(id, num, spec, quick_buy_pid, type, customized_price)
 	if ($('span.spec_item[item-label="SD"]').size()>0) {
 		var cake_date_selected = $('span.spec_item_selected[item-label="SD"]');
 		if (cake_date_selected.size() >= 1) {
-			postdata['dating'] = cake_date_selected.text();
+            postdata['dating_text'] = cake_date_selected.text();
+			postdata['dating'] = cake_date_selected.data('val');
 		}
 	}
 
