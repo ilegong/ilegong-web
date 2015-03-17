@@ -102,13 +102,13 @@ class TuansController extends AppController{
         $this->set('hideNav',true);
     }
 
-    public function cart_info(){
+    public function cart_info($type){
         $this->autoRender = false;
         $this->loadModel('Cart');
         $product_id = intval($_REQUEST['product_id']);
         $product_num = intval($_REQUEST['product_num']);
         $uId = $this->currentUser['id'];
-        $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,0,5,0,$uId);
+        $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,0,$type,0,$uId);
         $this->log('cartInfo'.json_encode($cartInfo));
         if($cartInfo){
             echo json_encode(array('success' => true));
@@ -377,6 +377,31 @@ class TuansController extends AppController{
         $this->set('buy_count',$Carts['Cart']['num']);
         $this->set('total_price', $total_price);
         $this->set('cart_id', $Carts['Cart']['id']);
+    }
+
+    public function milk(){
+        $this->pageTitle = '酸奶团购';
+        $this->loadModel('Cart');
+        $con_cart = array('product_id' => PRODUCT_ID_MILK,'status' => 1, 'deleted' => 0,'type' => CART_ITEM_TYPE_MILK);
+        $mang_carts = $this->Cart->find('all',array('conditions' => $con_cart));
+        $mang_orderIds = Hash::extract($mang_carts,'{n}.Cart.order_id');
+
+        $this->loadModel('Order');
+        $con_order = array('id' => $mang_orderIds,'status' => ORDER_STATUS_PAID,'published' => PUBLISH_YES,'deleted' => DELETED_NO);
+        $mang_orders = $this->Order->find('all',array('conditions' => $con_order));
+        $mang_cartIds = Hash::extract($mang_orders,'{n}.Order.id');
+        $sold_num =0;
+        foreach($mang_cartIds as $order_id){
+           $mang_num = $this->Cart->find('first',array('conditions' => array('order_id' => $order_id,'product_id' => PRODUCT_ID_MILK),array('fields' => array('num'))));
+           $sold_num =$sold_num + $mang_num['Cart']['num'];
+        }
+        $this->set('sold_num',$sold_num);
+
+        if($this->is_weixin()){
+            $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
+            $this->prepare_wx_sharing($currUid, PRODUCT_ID_MILK);
+        }
+        $this->set('hideNav',true);
     }
 }
 

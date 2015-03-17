@@ -40,6 +40,7 @@ const PRODUCT_ID_RICE_10 = 231;
 const TRACK_TYPE_PRODUCT_RICE = 'rebate_231';
 const PRODUCT_ID_JD_HS_NZT = 484; //经典花生牛轧糖
 const PRODUCT_ID_MANGUO = 851;//海南空运芒果
+const PRODUCT_ID_MILK = 852;//酸奶
 
 const PRODUCT_ID_RICE_BRAND_10 = 13;
 
@@ -86,7 +87,8 @@ const CART_ITEM_TYPE_NORMAL = 1;
 const CART_ITEM_TYPE_QUICK_ORDER = 2;
 const CART_ITEM_TYPE_TRY = 3;
 const CART_ITEM_TYPE_GROUPON_PROM = 4;
-const CART_ITEM_TYPE_TUAN = 5;
+const CART_ITEM_TYPE_TUAN = 5;//团购加入购物车类型
+const CART_ITEM_TYPE_MILK = 6;//酸奶加入购物车类型，以便订单查询
 
 const SHICHI_STATUS_OK = 1;
 const SHICHI_STATUS_APPLY = 0;

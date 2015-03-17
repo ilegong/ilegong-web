@@ -310,7 +310,7 @@
                 $.ajax({
                     type:'post',
                     data: postdata,
-                    url:'/tuans/cart_info',
+                    url:'/tuans/cart_info/{{CART_ITEM_TYPE_TUAN}}',
                     success:function(data){
                         if(data.success)
                         {
