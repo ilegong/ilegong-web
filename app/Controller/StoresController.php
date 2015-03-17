@@ -1048,7 +1048,7 @@ class StoresController extends AppController
             $data['ConsignmentDate']['id'] = $id;
             $this->ConsignmentDate->save($data);
         }
-        $this->redirect('/stores/cake_dating/list?p_id='.$product_id);
+        $this->redirect('/stores/consignment_dating/list?p_id='.$product_id);
     }
 
     public function get_product_spec($pid){
