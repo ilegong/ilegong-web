@@ -1,3 +1,4 @@
+{{$this->Html->css(array('tuan.css?v2'));}}
 <div class="classlist_v2" style="z-index:999;">
     <ul class="clearfix">
         <li><a class="back" href="/tuans/lists.html"></a></li>
@@ -36,6 +37,17 @@
                                 </span>
                                 </li>
                             </ul>
+
+                        <div class="tuan_bar">
+                            <div>已团购<span id="sold_num" value="{{$sold_num>0?$sold_num:0}}">{{$sold_num>0?$sold_num:0}}</span>份</div>
+                            <div class="bar">
+                                <div class="bar_buy" id = "bar_buy"></div>
+                            </div>
+                            <ul class="clearfix">
+                                <li class="fl"><span id="bar_percent"></span></li>
+                                <li class="fr">目标20份</li>
+                            </ul>
+                        </div>
                             <div class="clearfix tuanxq">
                                 {{$tuan_name}}&nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_leader_name}}<br/>参团请加团长微信，微信号:{{$tuan_leader_weixin}}
                             </div>
@@ -44,9 +56,6 @@
                                 <a class="fr" href="/tuans/lbs_map/{{$tuan_id}}">
                                     <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
                                 </a>
-                            </div>
-                            <div class="clearfix tuanxq" style="margin-top: -1px;">
-                                <span class="fl">已团购份数({{$sold_num>0?$sold_num:0}})</span>
                             </div>
                             <ul class="numbers clearfix b_line">
                             <li class="fl">
@@ -317,8 +326,16 @@
                 }
             });
 
-
             })
+        </script>
+        <script>
+            $(document).ready(function(){
+                var sold_num = $('#sold_num').attr('value');
+                var sold_percent = (sold_num/20*100)>100?100:sold_num/20*100;
+                $('#bar_buy').css("width", sold_percent + "%");
+                $('#bar_percent').text(sold_percent + "%");
+
+            });
         </script>
         <script>
 
