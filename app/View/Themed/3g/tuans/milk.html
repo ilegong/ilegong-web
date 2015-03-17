@@ -388,12 +388,12 @@
 <script>
     wx.ready(function () {
         var share_string = '{{$share_string ? $share_string :"0"}}';
-        var to_timeline_title = "团购万得妙8个装原味酸奶送6个装黄桃酸奶1份  仅限北京！";
-        var to_friend_title = "团购万得妙8个装原味酸奶送6个装黄桃酸奶1份  仅限北京";
+        var to_timeline_title = "团购万得妙酸奶，只要买买买我们就送送送 限100份 北京 3月18号18点";
+        var to_friend_title = "团购万得妙酸奶，只要买买买我们就送送送 限100份 北京 3月18号18点";
         var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
         var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
         var imgUrl = "http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/b6be29400fc_0317.jpg";
-        var desc = "团购万得妙8个装原味酸奶送6个装黄桃酸奶1份  仅限北京！";
+        var desc = "团购万得妙酸奶，只要买买买我们就送送送 限100份 北京 3月18号18点";
         wx.onMenuShareAppMessage({
             title: to_friend_title,
             desc: desc,
