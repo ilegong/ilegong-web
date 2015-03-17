@@ -312,8 +312,8 @@ class StoresController extends AppController
         $date_id = $_REQUEST['date_id'];
         $carts = $this->Cart->find('all',array(
             'conditions'=>array(
-                'status' => 1,
-                'deleted' => 0,
+                'status' => CART_ITEM_STATUS_BALANCED,
+                'deleted' => DELETED_NO,
                 'consignment_date' => $date_id,
                 'product_id' => $product_id
             ),
