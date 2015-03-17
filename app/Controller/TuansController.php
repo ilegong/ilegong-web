@@ -250,6 +250,7 @@ class TuansController extends AppController{
         echo json_encode($res);
     }
     function product_detail($pid){
+        $this->pageTitle = '商品详情';
         if(empty($pid)){
             return;
         }
@@ -348,8 +349,34 @@ class TuansController extends AppController{
         echo json_encode($res);
     }
 
-    public function milk_order(){
+    public function milk_order($pid){
+        $this->pageTitle = '订单确认';
+        if(empty($this->currentUser['id'])){
+            $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
+            return;
+        }
+        $this->loadModel('Cart');
+        $this->Cart->find('first');
+        $uid =$this->currentUser['id'];
+        $user_condition = array(
+            'session_id'=>	$this->Session->id(),
+            'creator' => $uid
+        );
+        $cond = array(
+            'status' => CART_ITEM_STATUS_NEW,
+            'order_id' => null,
+            'num > 0',
+            'product_id' => $pid,
+            'type' => CART_ITEM_TYPE_MILK,
+            'OR' => $user_condition
 
+        );
+        $Carts = $this->Cart->find('first', array(
+            'conditions' => $cond));
+        $total_price = $Carts['Cart']['price'] * $Carts['Cart']['num'];
+        $this->set('buy_count',$Carts['Cart']['num']);
+        $this->set('total_price', $total_price);
+        $this->set('cart_id', $Carts['Cart']['id']);
     }
 }
 
