@@ -39,7 +39,7 @@
 
                 </select>
             </div>
-            <div style="max-height: 400px;overflow: auto; padding: 3px;">
+            <div style="max-height: 350px;overflow: auto; padding: 3px;">
                 <ul class="list-group checked-list-box" id="chose_items">
                 </ul>
             </div>
@@ -54,7 +54,7 @@
             <div class="p-list">
                 <table  class="table table-bordered">
                     <tbody>
-                    <tr><td>团购万得妙8个装原味酸奶送6个装黄桃酸奶1份 同一地址20份起团 仅限北京</td>
+                    <tr><td>团购万得妙8个装原味酸奶送6个装黄桃酸奶1份  仅限北京</td>
                         <td style="width: 80px; font-size: 0.8em">单价：19.90</td>
                         <td>×{{$buy_count}}</td>
                         <td>{{$this->Number->precision($total_price, 2)}} </td>
@@ -283,7 +283,7 @@
                 jQuery.ajax({
                     type: "POST",
                     dataType: "json",
-                    url: "/tuans/pre_order",
+                    url: "/tuans/temp_order_submit",
                     data: {"name": name, "mobile": mobile, "cart_id": cart_id,"address":address},
                     success: function (a) {
                         if (a.success) {

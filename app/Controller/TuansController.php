@@ -325,7 +325,7 @@ class TuansController extends AppController{
         }elseif($creator != $uid){
             $this->log("no right to this order, uid".$uid. "creator:".$creator);
             $res = array('success'=> false, 'info'=> '团购订单不属于你，请刷新重试');
-        }elseif($order_type != CART_ITEM_TYPE_TUAN){
+        }elseif($order_type != CART_ITEM_TYPE_MILK){
             $res = array('success'=> false, 'info'=> '该订单不属于团购订单，请重试');
         }else{
             if(!empty($cart_info['Cart']['order_id'])){

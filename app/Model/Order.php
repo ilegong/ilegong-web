@@ -59,7 +59,7 @@ class Order extends AppModel {
         }
     }
     public function createTuanOrder($memberId, $uid, $fee, $product_id, $type = ORDER_TYPE_TUAN, $area='', $address='', $mobile='', $name='', $cart_id) {
-        if ($type != ORDER_TYPE_TUAN) {
+        if ($type != ORDER_TYPE_TUAN && $type != ORDER_TYPE_MILK) {
             throw new CakeException("error order type:".$type);
         }
         $product = ClassRegistry::init('Product')->find('first', array(
