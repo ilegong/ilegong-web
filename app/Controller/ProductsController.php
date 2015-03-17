@@ -366,7 +366,6 @@ class ProductsController extends AppController{
 
 
 //        $this->loadModel('ProductProductTag');
-//        $nianhuo = $this->ProductProductTag->find('first', array(
 //                'conditions' => array(
 //                    'tag_id' => 20,
 //                    'product_id' => $pid
@@ -377,8 +376,10 @@ class ProductsController extends AppController{
 //            $this->set('in_nianhuo', true);
 //        }
 
-        if ($pid == PRODUCT_ID_CAKE) {
-            $this->set('cake_dates', cake_send_date());
+        $consignment_dates = consignment_send_date($pid);
+
+        if(!empty($consignment_dates)){
+            $this->set('consignment_dates', $consignment_dates);
         }
 
         $is_limit_ship = ClassRegistry::init('ShipPromotion')->is_limit_ship($pid);

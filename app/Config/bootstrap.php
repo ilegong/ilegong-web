@@ -1229,10 +1229,10 @@ function message_send($msg = null, $mobilephone = null) {
     return $res;
 }
 
-function cake_send_date() {
-    $cakeDateM = ClassRegistry::init('ConsignmentDate');
-    $send_dates = $cakeDateM->find('all', array(
-        'conditions' => array('published' => PUBLISH_YES),
+function consignment_send_date($p_id) {
+    $consignmentDateM = ClassRegistry::init('ConsignmentDate');
+    $send_dates = $consignmentDateM->find('all', array(
+        'conditions' => array('published' => PUBLISH_YES,'product_id' => $p_id),
         'order' => 'send_date',
         'field' => 'send_date',
         'limit' => 5,
@@ -1240,8 +1240,9 @@ function cake_send_date() {
     $rtn = array();
     foreach ($send_dates as $date) {
         $dt = DateTime::createFromFormat(FORMAT_DATE, $date['ConsignmentDate']['send_date']);
+        $id = $date['ConsignmentDate']['id'];
         if (!empty($dt)) {
-            $rtn[] = date(FORMAT_DATE_YUE_RI_HAN, $dt->getTimestamp());
+            $rtn[] = array('date' => date(FORMAT_DATE_YUE_RI_HAN, $dt->getTimestamp()), 'id' => $id);
         }
     }
     return $rtn;
