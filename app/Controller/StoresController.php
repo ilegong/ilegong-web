@@ -999,60 +999,56 @@ class StoresController extends AppController
         ));
         $p_name = $p['Product']['name'];
         $this->set('p_name',$p_name);
-        if ($this->brand['Brand']['id'] == BRAND_ID_CAKE) {
-            $this->loadModel('ConsignmentDate');
-            if ("list" == $action) {
-                $dates = $this->ConsignmentDate->find('all', array(
-                    'conditions' => array(
-                        'product_id' => $product_id
-                    ),
-                    'order' => 'send_date desc'
-                ));
-                $this->set('dates', $dates);
-                return;
-            }
-
-            if ("add" == $action) {
-                $this->ConsignmentDate->id = null;
-                $send_date = $_REQUEST['send_date'];
-                $published = ($_REQUEST['published'] == PUBLISH_YES);
-                if ($send_date) {
-
-                    $found = $this->ConsignmentDate->find('first', array(
-                        'conditions' => array('send_date' => $send_date)
-                    ));
-                    if (!empty($found)) {
-                        setFlashError($this->Session, '发货日期已存在, 不能重复添加');
-                    } else {
-                        $data = array();
-                        $data['ConsignmentDate']['send_date'] = $send_date;
-                        $data['ConsignmentDate']['published'] = $published;
-                        $data['ConsignmentDate']['product_id'] = $product_id;
-                        $this->ConsignmentDate->save($data);
-                    }
-                } else {
-                    setFlashError($this->Session, '发货日期不能为空');
-                }
-            } else if ("delete" == $action) {
-                $id = intval($_REQUEST['id']);
-                $this->ConsignmentDate->delete($id);
-            } else if ("publish" == $action) {
-                $id = intval($_REQUEST['id']);
-                $data = array();
-                $data['ConsignmentDate']['published'] = PUBLISH_YES;
-                $data['ConsignmentDate']['id'] = $id;
-                $this->ConsignmentDate->save($data);
-            } else if ("unpublish" == $action) {
-                $id = intval($_REQUEST['id']);
-                $data = array();
-                $data['ConsignmentDate']['published'] = PUBLISH_NO;
-                $data['ConsignmentDate']['id'] = $id;
-                $this->ConsignmentDate->save($data);
-            }
-            $this->redirect('/stores/cake_dating/list?p_id='.$product_id);
-        } else {
-            $this->__message("您没有权限进行操作", '/stores/index');
+        $this->loadModel('ConsignmentDate');
+        if ("list" == $action) {
+            $dates = $this->ConsignmentDate->find('all', array(
+                'conditions' => array(
+                    'product_id' => $product_id
+                ),
+                'order' => 'send_date desc'
+            ));
+            $this->set('dates', $dates);
+            return;
         }
+
+        if ("add" == $action) {
+            $this->ConsignmentDate->id = null;
+            $send_date = $_REQUEST['send_date'];
+            $published = ($_REQUEST['published'] == PUBLISH_YES);
+            if ($send_date) {
+
+                $found = $this->ConsignmentDate->find('first', array(
+                    'conditions' => array('send_date' => $send_date)
+                ));
+                if (!empty($found)) {
+                    setFlashError($this->Session, '发货日期已存在, 不能重复添加');
+                } else {
+                    $data = array();
+                    $data['ConsignmentDate']['send_date'] = $send_date;
+                    $data['ConsignmentDate']['published'] = $published;
+                    $data['ConsignmentDate']['product_id'] = $product_id;
+                    $this->ConsignmentDate->save($data);
+                }
+            } else {
+                setFlashError($this->Session, '发货日期不能为空');
+            }
+        } else if ("delete" == $action) {
+            $id = intval($_REQUEST['id']);
+            $this->ConsignmentDate->delete($id);
+        } else if ("publish" == $action) {
+            $id = intval($_REQUEST['id']);
+            $data = array();
+            $data['ConsignmentDate']['published'] = PUBLISH_YES;
+            $data['ConsignmentDate']['id'] = $id;
+            $this->ConsignmentDate->save($data);
+        } else if ("unpublish" == $action) {
+            $id = intval($_REQUEST['id']);
+            $data = array();
+            $data['ConsignmentDate']['published'] = PUBLISH_NO;
+            $data['ConsignmentDate']['id'] = $id;
+            $this->ConsignmentDate->save($data);
+        }
+        $this->redirect('/stores/cake_dating/list?p_id='.$product_id);
     }
 
     public function get_product_spec($pid){
