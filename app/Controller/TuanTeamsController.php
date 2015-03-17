@@ -60,5 +60,14 @@ class TuanTeamsController extends AppController{
     public function join_meishituan(){
         $this->pageTitle = '加入美食团';
     }
+
+    public function goods_lists(){
+        $this->pageTitle = '团购商品';
+
+        $this->loadModel('TuanBuying');
+        $tuan_products = $this->TuanBuying->find('all',array('conditions' => array()));
+        $this->set('hideNav',true);
+
+    }
 }
 

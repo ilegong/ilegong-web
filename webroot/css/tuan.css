@@ -134,10 +134,17 @@ ul,ol {
 .apple_share {position: fixed;  top: 0;  right: 0;  bottom: 0;  left: 0;  z-index: 1030;  background-color: #000;}
 .apple_share.in {opacity: .75; }
 
+/*全部团购商品*/
+.goodlist{ margin: 10px 10px 0 10px; position: relative;}
+.goodlist a{ text-decoration: none; color: #333333;}
+.goodlist s{ text-decoration: none; display: block; background-color: #000000; opacity:0.7; padding: 5px 0; width: 90px; text-align:center; color: #ffffff; position: absolute; top: 0; right: 0; z-index: 999;}
+.goodlist img{ width: 100%;}
+.tuan_cancel img{ width: 100%; opacity:0.3;}
+.tuan_cancel ul{ opacity:0.4;}
+.goodlist ul{ border: 1px #dddddd solid; border-top: 0; background-color: #ffffff; line-height: 35px; padding: 0 7px;}
+.goodlist ul li{ font-size: 1em;}
+.goodlist ul li.fr{ width: 75px; text-align: right; color: #999999;}
+.goodlist ul li.fl{ width:72%; white-space: nowrap;text-overflow:ellipsis; overflow:hidden;}
 
-.bar{ width: 100%; background-color: #f1f1f1; height: 10px; position: relative; margin: 3px 0;}
-.bar_buy{ background-color: #29ac0e; height: 10px; position: absolute; top: 0; left: 0;}
-.tuan_bar{ color: #999999; line-height: 18px;background: #ffffff;padding:10px;}
-.tuan_bar span{ color: #ffa200;}
 
 

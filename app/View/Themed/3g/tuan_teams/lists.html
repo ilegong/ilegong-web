@@ -1,0 +1,65 @@
+
+{{$this->Html->css(array('tuan.css?v2'));}}
+<div class="classlist_tuan">
+    <ul class="clearfix">
+        <li><a href="/categories/mobileHome" class="back"></a></li>
+        <li class="line"></li>
+        <li>返回</li>
+    </ul>
+</div>
+<div class="tuandetail_banner">
+    <a href="javascript:void(0)">
+        <p><span>北京兴寿红颜草莓—早上摘当天达</span><br/>团购草莓送酸奶，自然熟透，科学除虫，无公害！</p>
+        <div class="bannerbg"></div>
+        <img src="/img/tuan/bannerdetail.jpg" border="0"/>
+    </a>
+</div>
+<ul class="tuandetail_price clearfix">
+    <li class="fl"><span>￥<strong>19.00</strong></span></li>
+    <li class="fl"><s>￥29.00</s></li>
+    <li class="fr">已有{{$tuan_product_num>0?$tuan_product_num:0}}人参团</li>
+</ul>
+<ul class="tuandetail_more clearfix" onclick="to_detail();">
+    <li class="fl">图文详情 (建议在Wifi下浏览)</li>
+    <li class="fr"><img src="/img/tuan/more.png"/></li>
+</ul>
+<div class="tuandetail_adress">
+    <div class="clearfix tuandetail_adress_title">
+        <span>选择您附近的团</span>
+        <a href="/tuans/new_tuan">位置不合适，发起新团？</a>
+    </div>
+    {{loop $tuan_info  $tuan}}
+    <?php $hash_no = $tuan['Tuan']['id'];
+        $tuan_buy_link = '/tuans/detail/'. $tuan_buy[$hash_no]['id'];
+        $location = $tuan['Tuan']['location_long'].','. $tuan['Tuan']['location_lat'];
+    ?>
+    <div>
+        <ul class="clearfix">
+            <li><a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
+            <li style="float: none; padding-left: 8em;">
+                <a href="{{$tuan_buy_link}}">
+                    <p>{{$tuan['Tuan']['tuan_name']}}&nbsp;</p>
+                    <s>团长:{{$tuan['Tuan']['leader_name']}}</s><br/>
+                    <s>团购截止{{friendlyDateFromStr($tuan_buy[$tuan['Tuan']['id']]['end_time'], FFDATE_CH_MD)}}</s><br/>
+                    <s>已有{{$tuan_buy[$tuan['Tuan']['id']]['join_num']>0?$tuan_buy[$tuan['Tuan']['id']]['sold_num']:0}}人参团</s>
+                </a>
+            </li>
+        </ul>
+        <dl class="clearfix">
+            <a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}">
+                <dd><img src="/img/tuan/locat_icon.gif" border="0" /></dd>
+                <dd>{{$tuan['Tuan']['address']}}</dd>
+            </a>
+        </dl>
+    </div>
+    {{/loop}}
+</div>
+<script>
+    function to_detail(){
+        window.location.href="/products/product_detail/Tuan_Gou_Cao_Mei_Song_Suan_Nai_Bei_Jing_Xing_Shou_Hong_Yan_Cao_Mei_Dang_Tian.html?history=/&from=tuan_list";
+//        window.location.href = '/tuans/product_detail';
+    }
+</script>
+
+
+
