@@ -27,7 +27,7 @@
         <h2>收货人信息</h2>
         <p class="text-warning">具体地点：</p>
         <div id="specialShipPromotion" style="">
-            <div style="padding: 5px;">
+            <div style="padding: 3px;">
                 <select class="form-control" id="select_area">
                     <option value="1">东城区</option>
                     <option value="2">海淀区</option>
@@ -39,10 +39,11 @@
 
                 </select>
             </div>
-            <div style="max-height: 400px;overflow: auto; padding: 5px;">
+            <div style="max-height: 400px;overflow: auto; padding: 3px;">
                 <ul class="list-group checked-list-box" id="chose_items">
                 </ul>
             </div>
+            <br/><br/>
             <p class="text-warning">个人信息：</p>
             <input type="text" class="form-control" placeholder="收货人姓名" id="p_consignee_name" name="consignee_name">
             <input type="text" class="form-control" placeholder="手机号" id="p_consignee_mobile" name="consignee_mobilephone">
@@ -53,8 +54,8 @@
             <div class="p-list">
                 <table  class="table table-bordered">
                     <tbody>
-                    <tr><td>团购草莓送酸奶 昌平兴寿红颜草莓 现采现卖 400g/盒 20盒起团 截止{{$end_time}}晚10点</td>
-                        <td style="width: 80px; font-size: 0.8em">单价：19.00</td>
+                    <tr><td>团购万得妙8个装原味酸奶送6个装黄桃酸奶1份 同一地址20份起团 仅限北京</td>
+                        <td style="width: 80px; font-size: 0.8em">单价：19.90</td>
                         <td>×{{$buy_count}}</td>
                         <td>{{$this->Number->precision($total_price, 2)}} </td>
                     </tr>
@@ -101,6 +102,7 @@
                 {"shop_code":265,"shop_name":"美术馆后街店","address":"北京市东城区大佛寺东街1号","area_code":500,"lat":39.936165,"lon":116.415589},
                 {"shop_code":287,"shop_name":"安定门内店","address":"北京市东城区安定门内大街16号","area_code":500,"lat":39.954631,"lon":116.414941}],
         2:[{"shop_code":147,"shop_name":"羊坊路店","address":"海淀区羊坊店路3号","area_code":502,"lat":39.91126,"lon":116.32751},
+            {"shop_code":313,"shop_name":"北太平庄西店","address":"海淀区北太平庄路25号","area_code":502,"lat":39.978622,"lon":116.376216},
             {"shop_code":136,"shop_name":"大慧寺店","address":"海淀区魏公村大慧寺路5号","area_code":502,"lat":39.957206,"lon":116.332228},
             {"shop_code":135,"shop_name":"阜成路店","address":"海淀区白堆子立新9号楼前","area_code":502,"lat":39.929375,"lon":116.333818},
             {"shop_code":137,"shop_name":"增光路店","address":"海淀区增光路乙48号","area_code":502,"lat":39.933911,"lon":116.31828},
@@ -151,6 +153,7 @@
             {"shop_code":561,"shop_name":"万泉河店","address":"海淀区万泉河路68号紫金大厦1层","area_code":502,"lat":39.972615,"lon":116.314524},
             {"shop_code":830,"shop_name":"苏州街八一中学店","address":"海淀区苏州街19号一层","area_code":502,"lat":39.98493,"lon":116.312149}],
         3:[{"shop_code":116,"shop_name":"佟麟阁店","address":"西城区佟麟阁路91号","area_code":501,"lat":39.90687,"lon":116.374897},
+            {"shop_code":340,"shop_name":"安慧里店","address":"安慧桥往北,安慧里小区西门直行亚运村","area_code":503,"lat":39.996713,"lon":116.420768},
             {"shop_code":119,"shop_name":"德内南店","address":"西城区德内大街232号","area_code":501,"lat":39.944099,"lon":116.386256},
             {"shop_code":114,"shop_name":"半壁街店","address":"西城区前半壁街35号","area_code":501,"lat":39.944109,"lon":116.366064},
             {"shop_code":121,"shop_name":"甘家口店","address":"西城区阜外大街44号","area_code":501,"lat":39.92837,"lon":116.342501},
@@ -273,16 +276,15 @@
                     e.preventDefault();
                     return false;
                 }
+                var address = $.trim($('li.active').text());
                 var name = $("#p_consignee_name").val();
                 var mobile = $("#p_consignee_mobile").val();
                 var cart_id = {{empty($cart_id)? 0: $cart_id}};
-                var tuan_buy_id = {{empty($tuan_buy_id)? 0: $tuan_buy_id}};
-                var tuan_id = {{empty($tuan_id)? 0: $tuan_id}};
                 jQuery.ajax({
                     type: "POST",
                     dataType: "json",
                     url: "/tuans/pre_order",
-                    data: {name: name, mobile: mobile, cart_id: cart_id, tuan_buy_id: tuan_buy_id, tuan_id: tuan_id },
+                    data: {"name": name, "mobile": mobile, "cart_id": cart_id,"address":address},
                     success: function (a) {
                         if (a.success) {
                             $("#confirm_next").attr('data-disable', 'true');
@@ -323,14 +325,5 @@
             });
         }
         setData();
-        $('#get-checked-data').on('click', function(event) {
-            event.preventDefault();
-            var checkedItems = {}, counter = 0;
-            $("#check-list-box li.active").each(function(idx, li) {
-                checkedItems[counter] = $(li).text();
-                counter++;
-            });
-            $('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
-        });
     });
 </script>
