@@ -25,7 +25,8 @@
 
     <div class="orderinfo voffset3">
         <h2>收货人信息</h2>
-        <p class="text-warning">具体地点：</p>
+        <p class="text-warning">请选择自提点：</p>
+        <div class="alert alert-success" role="alert" style="padding: 3px;"><strong>客服电话: </strong>010-56245991</div>
         <div id="specialShipPromotion" style="">
             <div style="padding: 3px;">
                 <select class="form-control" id="select_area">
@@ -43,7 +44,7 @@
                 <ul class="list-group checked-list-box" id="chose_items">
                 </ul>
             </div>
-            <br/><br/>
+            <br/>
             <p class="text-warning">个人信息：</p>
             <input type="text" class="form-control" placeholder="收货人姓名" id="p_consignee_name" name="consignee_name">
             <input type="text" class="form-control" placeholder="手机号" id="p_consignee_mobile" name="consignee_mobilephone">
@@ -264,6 +265,10 @@
     $(document).ready(function(){
         $('#confirm_next').on('click',function(e){
             if($("#confirm_next").attr('data-disable') == 'false') {
+                if($('li.active').length==0){
+                    utils.alert("请选择自提点");
+                    return false;
+                }
                 if ($('#p_consignee_name').val() == "") {
                     utils.alert("请输入你的姓名");
                     e.preventDefault();
