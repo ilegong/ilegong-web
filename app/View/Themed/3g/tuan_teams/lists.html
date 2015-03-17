@@ -26,29 +26,29 @@
 <div class="tuandetail_adress">
     <div class="clearfix tuandetail_adress_title">
         <span>选择您附近的团</span>
-        <a href="/tuans/new_tuan">位置不合适，发起新团？</a>
+        <a href="/tuan_teams/new_tuan">位置不合适，发起新团？</a>
     </div>
     {{loop $tuan_info  $tuan}}
-    <?php $hash_no = $tuan['Tuan']['id'];
-        $tuan_buy_link = '/tuans/detail/'. $tuan_buy[$hash_no]['id'];
-        $location = $tuan['Tuan']['location_long'].','. $tuan['Tuan']['location_lat'];
+    <?php $hash_no = $tuan['TuanTeam']['id'];
+        $tuan_buy_link = '/tuan_teams/detail/'. $tuan_buy[$hash_no]['id'];
+        $location = $tuan['TuanTeam']['location_long'].','. $tuan['TuanTeam']['location_lat'];
     ?>
     <div>
         <ul class="clearfix">
-            <li><a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
+            <li><a href="/tuan_teams/lbs_map/{{$tuan['TuanTeam']['id']}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
             <li style="float: none; padding-left: 8em;">
                 <a href="{{$tuan_buy_link}}">
-                    <p>{{$tuan['Tuan']['tuan_name']}}&nbsp;</p>
-                    <s>团长:{{$tuan['Tuan']['leader_name']}}</s><br/>
-                    <s>团购截止{{friendlyDateFromStr($tuan_buy[$tuan['Tuan']['id']]['end_time'], FFDATE_CH_MD)}}</s><br/>
-                    <s>已有{{$tuan_buy[$tuan['Tuan']['id']]['join_num']>0?$tuan_buy[$tuan['Tuan']['id']]['sold_num']:0}}人参团</s>
+                    <p>{{$tuan['TuanTeam']['tuan_name']}}&nbsp;</p>
+                    <s>团长:{{$tuan['TuanTeam']['leader_name']}}</s><br/>
+                    <s>团购截止{{friendlyDateFromStr($tuan_buy[$tuan['TuanTeam']['id']]['end_time'], FFDATE_CH_MD)}}</s><br/>
+                    <s>已有{{$tuan_buy[$tuan['TuanTeam']['id']]['join_num']>0?$tuan_buy[$tuan['TuanTeam']['id']]['sold_num']:0}}人参团</s>
                 </a>
             </li>
         </ul>
         <dl class="clearfix">
-            <a href="/tuans/lbs_map/{{$tuan['Tuan']['id']}}">
-                <dd><img src="/img/tuan/locat_icon.gif" border="0" /></dd>
-                <dd>{{$tuan['Tuan']['address']}}</dd>
+            <a href="/tuan_teams/lbs_map/{{$tuan['TuanTeam']['id']}}">
+                <dd><img src="/img/tuan_team/locat_icon.gif" border="0" /></dd>
+                <dd>{{$tuan['TuanTeam']['address']}}</dd>
             </a>
         </dl>
     </div>

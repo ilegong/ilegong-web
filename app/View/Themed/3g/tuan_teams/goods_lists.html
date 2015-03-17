@@ -7,15 +7,17 @@
     </ul>
 </div>
   <div class = "container">
+      {{loop $tuan_product_ids $pid}}
       <div class="goodlist">
-          <a href="#X">
-              <div><img src="/img/tuan_team/listgood.jpg"></div>
+          <a href="/tuan_teams/lists/{{$pid}}">
+              <div><img src="/img/tuan_team/listgood-{{$pid}}.jpg"></div>
               <ul class="clearfix">
                   <li class="fl">全北京最新鲜的昌平兴寿红颜草莓，现采现送</li>
-                  <li class="fr">11人参团</li>
+                  <li class="fr">{{$tuan_products[$pid][0][0]['sold_number']}}人参团</li>
               </ul>
           </a>
       </div>
+      {{/loop}}
       <div class="goodlist tuan_cancel">
           <a href="#X">
               <s>团购已取消</s>

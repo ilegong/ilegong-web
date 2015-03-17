@@ -30,9 +30,9 @@ class TuanTeamsController extends AppController{
         $tuan_buy_info = $this->TuanBuying->find('all',array('conditions' => array('pid' => $pid,'end_time >' => $date_Time, 'status'=>0)));
         $tuan_buy = Hash::combine($tuan_buy_info,'{n}.TuanBuying.tuan_id','{n}.TuanBuying');
         $tuan_ids = Hash::extract($tuan_buy_info, '{n}.TuanBuying.tuan_id');
-        $tuan_info = $this->Tuan->find('all', array(
+        $tuan_info = $this->TuanTeam->find('all', array(
             'conditions' =>array('id'=>$tuan_ids),
-            'order' => array('Tuan.priority DESC')
+            'order' => array('TuanTeam.priority DESC')
         ));
         $this->set('tuan_info',$tuan_info);
         $this->log('num'.json_encode($tuan_product_num));
@@ -65,8 +65,21 @@ class TuanTeamsController extends AppController{
         $this->pageTitle = '团购商品';
 
         $this->loadModel('TuanBuying');
-        $tuan_products = $this->TuanBuying->find('all',array('conditions' => array()));
-        $this->set('hideNav',true);
+        $tuan_products = $this->TuanBuying->find('all',array('conditions' => array('pid !=' => null),'group' => array('pid')));
+        $tuan_product_ids = Hash::extract($tuan_products,'{n}.TuanBuying.pid');
+//        $tuan_products = array();
+        $this->loadModel('Product');
+        $tuan_products_info = $this->Product->find('all',array('conditions' => array('id' => $tuan_product_ids),'fields' => array('')));
+
+        foreach($tuan_product_ids as $pid){
+        $tuan_products[$pid] = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
+
+
+        }
+        $this->log('tuan_products'.json_encode($tuan_products_info));
+        $this->set('tuan_product_ids',$tuan_product_ids);
+        $this->set('tuan_products',$tuan_products);
+//        $this->set('hideNav',true);
 
     }
 }
