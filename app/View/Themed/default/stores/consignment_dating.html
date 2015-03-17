@@ -1,7 +1,7 @@
 <h1>{{$p_name}} 的排期</h1>
 
 <div style="margin-top: 2em">
-    <form class="form-inline" action="/stores/cake_dating/add" method="post">
+    <form class="form-inline" action="/stores/consignment_dating/add" method="post">
         <div class="form-group">
             <input type="hidden" name="p_id" value="{{$p_id}}">
             <label class="sr-only" for="send_date">指定日期</label>
@@ -20,11 +20,11 @@
     <tr><td>日期</td><td>是否在排期</td><td>操作</td></tr>
 {{loop $dates $key $date}}
     <tr>
-        <td>{{$date['CakeDate']['send_date']}}</td>
-        <td class="{{$date['CakeDate']['published'] ? 'danger' : ''}}">{{$date['CakeDate']['published'] ? '是' : '否'}}</td>
-        <td class="active"><a href="/stores/cake_dating/publish.html?id={{$date['CakeDate']['id']}}">允许排期</a>
-            | <a href="/stores/cake_dating/unpublish.html?id={{$date['CakeDate']['id']}}">停止排期</a>
-            | <a href="/stores/cake_dating/delete.html?id={{$date['CakeDate']['id']}}">删除</a>
+        <td>{{$date['ConsignmentDate']['send_date']}}</td>
+        <td class="{{$date['CakeDate']['published'] ? 'danger' : ''}}">{{$date['ConsignmentDate']['published'] ? '是' : '否'}}</td>
+        <td class="active"><a href="/stores/consignment_dating/publish.html?id={{$date['ConsignmentDate']['id']}}">允许排期</a>
+            | <a href="/stores/consignment_dating/unpublish.html?id={{$date['ConsignmentDate']['id']}}">停止排期</a>
+            | <a href="/stores/consignment_dating/delete.html?id={{$date['ConsignmentDate']['id']}}">删除</a>
         </td>
     </tr>
 {{/loop}}
