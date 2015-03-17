@@ -321,7 +321,7 @@
             var chose_address = ship_address[area_id];
             var $chose_item = '';
             $.each(chose_address,function(index,item){
-                $chose_item +=' <li class="list-group-item" data-style="button">'+item['address']+'</li>';
+                $chose_item +=' <li class="list-group-item" data-style="button">'+item['address']+' 好邻居便利店</li>';
             });
             $chose_items.html($chose_item);
             $('.list-group.checked-list-box .list-group-item').on('click',function(){
