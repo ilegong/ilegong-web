@@ -31,7 +31,9 @@ class WxSharesController extends AppController{
             }
             if($data_str[0] == 'pid'){
                 $data_type = 'product';
-            }else{
+            }elseif ($data_str[0] == 'tid'){
+                $data_type = 'tuan';
+            } else{
                 $this->log("WxShare: data type error");
                 exit();
             }

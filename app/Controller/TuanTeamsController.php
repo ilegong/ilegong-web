@@ -16,7 +16,49 @@ class TuanTeamsController extends AppController{
         $this->set('op_cate','mei_shi_tuan');
     }
     public function info($tuan_id){
-
+        $tuan_team = $this->TuanTeam->find('first', array(
+            'conditions' =>array('id'=> $tuan_id),
+        ));
+        if(empty($tuan_team)){
+            $message = '该团不存在';
+            $url = '/tuan_teams/mei_shi_tuan';
+            $this->__message($message, $url);
+            return;
+        }
+        $this->loadModel('TuanBuying');
+        $tuan_buyings = $this->TuanBuying->find('all', array(
+            'conditions' => array('tuan_id' => $tuan_id),
+            'order' => array('TuanBuying.end_time DESC'),
+        ));
+        $pids = array_unique(Hash::extract($tuan_buyings, '{n}.TuanBuying.pid'));
+        if(!empty($pids)){
+            $this->loadModel('Product');
+            $product_info = $this->Product->find('all', array(
+                'conditions' => array('id' => $pids),
+                'fields' => array('id',  'name', 'coverimg')
+            ));
+            $product_info = Hash::combine($product_info, '{n}.Product.id', '{n}.Product');
+            $this->set('product_info', $product_info);
+        }else{
+            $this->set('no_tuan_buy', true);
+        }
+        if($this->is_weixin()){
+            $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
+            $this->prepare_wx_sharing($currUid, $tuan_id);
+        }
+        $this->set('tuan_team', $tuan_team);
+        $this->set('tuan_buyings', $tuan_buyings);
+        $this->set('hideNav',true);
+    }
+    protected function prepare_wx_sharing($currUid, $tid) {
+        $currUid = empty($currUid) ? 0 : $currUid;
+        $share_string = $currUid . '-' . time() . '-rebate-tid_' . $tid;
+        $share_code = authcode($share_string, 'ENCODE', 'SHARE_TID');
+        $oauthM = ClassRegistry::init('WxOauth');
+        $signPackage = $oauthM->getSignPackage();
+        $this->set('signPackage', $signPackage);
+        $this->set('share_string', urlencode($share_code));
+        $this->set('jWeixinOn', true);
     }
 
     public function lists($pid=null){
@@ -44,15 +86,24 @@ class TuanTeamsController extends AppController{
 
     }
 
-    public function lbs_map($tuan_id=''){
+    public function lbs_map($tuan_id= null){
         $this->pageTitle =__('草莓自取点');
-        $teamInfo = $this->TuanTeam->find('first',array('conditions' => array('id' => $tuan_id)));
-        $this->set('tuan_id',$tuan_id);
-        $this->set('name',$teamInfo['TuanTeam']['tuan_name']);
-        $this->set('location_long',$teamInfo['TuanTeam']['location_long']);
-        $this->set('location_lat',$teamInfo['TuanTeam']['location_lat']);
-        $this->set('addr',$teamInfo['TuanTeam']['tuan_addr']);
+        if(empty($tuan_id)){
+            $location = $_GET['location'];
+            $name = $_GET['name'];
+            $addr = $_GET['addr'];
+            $this->set(compact('location', 'name', 'addr'));
+        }else{
+            $tuan_id = intval($tuan_id);
+            $teamInfo = $this->TuanTeam->find('first',array('conditions' => array('id' => $tuan_id)));
+            $location = $teamInfo['TuanTeam']['location_long'] . ',' . $teamInfo['TuanTeam']['location_lat'];
+            $this->set('tuan_id',$tuan_id);
+            $this->set('name',$teamInfo['TuanTeam']['tuan_name']);
+            $this->set('location', $location);
+            $this->set('addr',$teamInfo['TuanTeam']['tuan_addr']);
+        }
         $this->set('hideNav',true);
+
     }
 
     public function new_tuan(){

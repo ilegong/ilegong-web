@@ -1,0 +1,70 @@
+{{$this->Html->css(array('tuan.css?v2'))}}
+<?php $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'] ?>
+<div>
+    <img src="http://api.map.baidu.com/staticimage?width=400&height=150&center=
+    {{$location}}&zoom=16&markers={{$location}}&&markerStyles=l" border="0" /></a>
+</div>
+<div>
+    <span>{{$tuan_team['TuanTeam']['tuan_name']}}</span>  <span style="float:right">{{$tuan_team['TuanTeam']['leader_name']}}</span>
+    <a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
+        <p>{{$tuan_team['TuanTeam']['address']}}</p>
+    </a>
+    <p>{{if empty($tuan_team['TuanTeam']['tuan_desc'])}} 寻找最纯粹的美味 {{else}} {{$tuan_team['TuanTeam']['tuan_desc']}} {{/if}}</p>
+</div>
+<div>
+    <span>{{$tuan_team['TuanTeam']['member_num']}} </span> <span style="float:right">{{$tuan_team['TuanTeam']['leader_weixin']}}</span>
+</div>
+
+<a class="btn btn-warning">我要加入</a> <a id="tuan_share" class="btn btn-default">邀请小伙伴一起加入</a>
+{{if $jWeixinOn}}
+<script>
+    wx.ready(function () {
+        var share_string = '{{$share_string ? $share_string :"0"}}';
+        var to_timeline_title = "寻找最纯粹的美味，快来加入！";
+        var to_friend_title = "{{$tuan_team['TuanTeam']['tuan_name']}}" + "-朋友说美食团";
+        var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
+        var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
+        var imgUrl = "http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l";
+        var desc = "寻找最纯粹的美味，快来加入！";
+        wx.onMenuShareAppMessage({
+            title: to_friend_title,
+            desc: desc,
+            link: to_friend_link,
+            imgUrl: imgUrl,
+            success: function () {
+                // 用户确认分享后执行的回调函数
+                if(share_string != '0'){
+                    setTimeout(500, function(){
+                        $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
+                    });
+                }
+            }
+        });
+        wx.onMenuShareTimeline({
+            title: to_timeline_title,
+            link: to_timeline_link,
+            imgUrl: imgUrl,
+            success: function () {
+                if(share_string != '0'){
+                    setTimeout(500, function(){
+                        $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
+                    });
+                }
+            }
+        });
+    })
+</script>
+{{/if}}
+<script>
+    $(document).ready(function(){
+        $("#tuan_share").click(function(){
+            var $share_div = $('<div class="apple_share fade in"><img src="/img/tuan/share.png" style="width:95%"></div>')
+                    .show().click(function(){
+                        $share_div.hide();
+                        $share_div.remove();
+                    });
+            $('body').append($share_div);
+        });
+    })
+</script>
+
