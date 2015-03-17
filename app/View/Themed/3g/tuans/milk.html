@@ -24,29 +24,35 @@
         </div>
     </div>
 </div>
-<div class="p_details_title">团购万得妙酸奶，只要买买买我们就送送送 限北京3月18号18点</div>
+<div class="p_details_title">团购万得妙酸奶，只要买买买我们就送送送 限100份 北京 3月18号18点</div>
 <ul class="p_details_price clearfix">
     <li class="fl price"><span>￥<font>19.90</font></span></li>
+    <li class="fr stat">送货时间：<strong>3月19号</strong></li>
 </ul>
 <ul class="sales clearfix">
     <li>
         <span style="display: block;overflow: hidden; padding-bottom: 5px;">
             <span>买原味8连杯，送燕麦黄桃6连杯（买一赠一）！全北京最优惠，限100份，福利，速团！<br></span>
         </span>
-        <span style="display: block;overflow: hidden;">
-            <span>送货时间：<strong>3月19号</strong></span>
-        </span>
     </li>
 </ul>
 
 <div class="tuan_bar">
-    <div>已团购<span id="sold_num" value="{{$sold_num>0?$sold_num:0}}">{{$sold_num>0?$sold_num:0}}</span>份</div>
+    <div>
+        <ul class="clearfix">
+            <li class="fl">
+                已团购<span id="sold_num" value="{{$sold_num>0?$sold_num:0}}">{{$sold_num>0?$sold_num:0}}</span>份
+            </li>
+            <li class="fr">
+                剩余<span>{{100-$sold_num}}</span>份
+            </li>
+        </ul>
+    </div>
     <div class="bar">
         <div class="bar_buy" id = "bar_buy"></div>
     </div>
     <ul class="clearfix">
         <li class="fl"><span id="bar_percent"></span></li>
-        <li class="fr">仅限100份</li>
     </ul>
 </div>
 
