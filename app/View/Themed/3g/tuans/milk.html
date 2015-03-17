@@ -31,9 +31,9 @@
 </ul>
 <ul class="sales clearfix">
     <li>
-                                <span style="display: block;overflow: hidden;">
-                                <span>14元团购直供大使馆的安全8个装原文万得妙酸奶，即送6个装黄桃酸奶1份！合计每盒酸奶仅1元！团起来！！<br></span>
-                                </span>
+        <span style="display: block;overflow: hidden;">
+        <span>19.9元团购直供大使馆的安全8个装原文万得妙酸奶，即送6个装黄桃酸奶1份！团起来！！<br></span>
+        </span>
     </li>
 </ul>
 
@@ -68,7 +68,8 @@
         <li>
             <span class="gray mr12" style="float:left;">快递:</span>
 			<span style="display: block;overflow: hidden;">
-                <span>包邮</span>			</span>
+                <span>自提</span>
+            </span>
         </li>
     </ul>
     <ul class="clearfix">
@@ -119,7 +120,7 @@
                         }
                         //$commentItems.children().slice(0,5).show();
                     },
-                    url:"/comments/getlist/Product/838.json?pagesize=5",
+                    url:"/comments/getlist/Product/852.json?pagesize=5",
                     dataType:'json'
                 });
             }
@@ -373,12 +374,12 @@
 <script>
     wx.ready(function () {
         var share_string = '{{$share_string ? $share_string :"0"}}';
-        var to_timeline_title = "团购万得妙8个装原味酸奶送6个装黄桃酸奶1份 同一地址20份起团 仅限北京！";
-        var to_friend_title = "团购万得妙8个装原味酸奶送6个装黄桃酸奶1份 同一地址20份起团 仅限北京";
+        var to_timeline_title = "团购万得妙8个装原味酸奶送6个装黄桃酸奶1份  仅限北京！";
+        var to_friend_title = "团购万得妙8个装原味酸奶送6个装黄桃酸奶1份  仅限北京";
         var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
         var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
         var imgUrl = "http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/b6be29400fc_0317.jpg";
-        var desc = "团购万得妙8个装原味酸奶送6个装黄桃酸奶1份 同一地址20份起团 仅限北京！";
+        var desc = "团购万得妙8个装原味酸奶送6个装黄桃酸奶1份  仅限北京！";
         wx.onMenuShareAppMessage({
             title: to_friend_title,
             desc: desc,
