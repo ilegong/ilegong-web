@@ -1230,7 +1230,7 @@ function message_send($msg = null, $mobilephone = null) {
 }
 
 function cake_send_date() {
-    $cakeDateM = ClassRegistry::init('CakeDate');
+    $cakeDateM = ClassRegistry::init('ConsignmentDate');
     $send_dates = $cakeDateM->find('all', array(
         'conditions' => array('published' => PUBLISH_YES),
         'order' => 'send_date',
@@ -1239,7 +1239,7 @@ function cake_send_date() {
     ));
     $rtn = array();
     foreach ($send_dates as $date) {
-        $dt = DateTime::createFromFormat(FORMAT_DATE, $date['CakeDate']['send_date']);
+        $dt = DateTime::createFromFormat(FORMAT_DATE, $date['ConsignmentDate']['send_date']);
         if (!empty($dt)) {
             $rtn[] = date(FORMAT_DATE_YUE_RI_HAN, $dt->getTimestamp());
         }
