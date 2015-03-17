@@ -1,5 +1,10 @@
 {{$this->Html->css(array('tuan.css?v2'))}}
-<?php $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'] ?>
+<?php $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
+    $referer_link .= '&referer='.urlencode($referer.'?has_joined=success');
+?>
+
+
+
 <div>
     <img src="http://api.map.baidu.com/staticimage?width=400&height=150&center=
     {{$location}}&zoom=16&markers={{$location}}&&markerStyles=l" border="0" /></a>
@@ -14,8 +19,94 @@
 <div>
     <span>{{$tuan_team['TuanTeam']['member_num']}} </span> <span style="float:right">{{$tuan_team['TuanTeam']['leader_weixin']}}</span>
 </div>
+<a id="tuan_join" class="btn btn-warning">我要加入</a> <a id="tuan_share" class="btn btn-default">邀请小伙伴一起加入</a>
 
-<a class="btn btn-warning">我要加入</a> <a id="tuan_share" class="btn btn-default">邀请小伙伴一起加入</a>
+
+
+<div class="tuandetail">
+    <p><img src="images/map/map.jpg" /></p>
+    <div class="tuandetail_masg">
+        <ul class="clearfix">
+            <li class="fl">朝外SOHO爱营养美食团</li>
+            <li class="fr">团长: 小地主</li>
+        </ul>
+        <dl class="clearfix">
+            <dd><img src="images/locat_icon.gif" border="0" /></dd>
+            <dd style="float: none; padding-left: 12px;">朝外SOHO D座0180</dd>
+        </dl>
+        <p>找寻最纯粹的美味，让生活多点快乐的色彩！</p>
+    </div>
+    <ul class="clearfix tuandetail_member">
+        <li class="fl"><span>成员: 99人</span></li>
+        <li class="fr"><a class="p_more"></a></li>
+        <li class="fr">团长微信号hoiggoinrgon</li>
+    </ul>
+    <h1>参加的团购</h1>
+    <div class="goodlist">
+        <a href="#X">
+            <div><img src="images/pro/listgood.jpg" /></div>
+            <ul class="clearfix">
+                <li class="fl">全北京最新鲜的昌平兴寿红颜草莓，现采现送</li>
+                <li class="fr">11人参团</li>
+            </ul>
+        </a>
+    </div>
+    <div class="goodlist tuan_cancel">
+        <a href="#X">
+            <s>团购已取消</s>
+            <div><img src="images/pro/listgood.jpg" /></div>
+            <ul class="clearfix">
+                <li class="fl">全北京最新鲜的昌平兴寿红颜草莓，现采现送</li>
+                <li class="fr">11人参团</li>
+            </ul>
+        </a>
+    </div>
+    <div class="goodlist tuan_cancel">
+        <a href="#X">
+            <s>团购已完成</s>
+            <div><img src="images/pro/listgood.jpg" /></div>
+            <ul class="clearfix">
+                <li class="fl">全北京最新鲜的昌平兴寿红颜草莓，现采现送</li>
+                <li class="fr">11人参团</li>
+            </ul>
+        </a>
+    </div>
+    <div class="tuandetail_btnbg">
+        <dl class="clearfix">
+            <dt class="fl"><a href="#X">加入我们</a></dt>
+            <dt class="fr"><a href="#X">邀请小伙伴一起加入</a></dt>
+        </dl>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="joinModal" role="dialog">
+    <div class="layer_guanzhu radius10">
+        <div class="guanzhu_title">加入成功！</div>
+        <div>关注[朋友说]服务号, 接收组团消息!<br /></div>
+        <a href="{{$wx_follow_url}}" class="radius10">马上关注</a>
+    </div>
+</div>
+
+<div class="modal fade" id="authorizeModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">微信授权</h4>
+            </div>
+            <div class="modal-body">
+                <p>授权我们使用您的微信账号登录朋友说。</p>
+                <a id="wx_login_a1" href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" style="vertical-align: bottom">
+                    <img src="{{$this->Html->url('/img/Wechat-logo-315_315.png');}}" style="width:90px;height:90px">
+                </a>
+                <a id="wx_login_a2" href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" class="btn btn-success" style="vertical-align: bottom">使用微信授权</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 {{if $jWeixinOn}}
 <script>
     wx.ready(function () {
@@ -65,6 +156,31 @@
                     });
             $('body').append($share_div);
         });
+        $('#tuan_join').click(function(){
+            var tuan_id = {{$tuan_id}};
+            jQuery.ajax({
+                type: "POST",
+                dataType: "json",
+                url: "/tuan_teams/join",
+                data: {tuan_id: tuan_id},
+                success: function (a) {
+                    if (a.success) {
+                        $('#joinModal').modal('show');
+                    } else {
+                        if(a.type == 'error'){
+                            utils.alert('请求错误，请重试');
+                        }else{
+                            $('#authorizeModal').modal('show');
+                        }
+                    }
+                }
+            });
+        });
     })
 </script>
 
+{{if $new_join}}
+<script>
+    $('#joinModal').modal('show');
+</script>
+{{/if}}

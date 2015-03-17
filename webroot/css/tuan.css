@@ -146,5 +146,47 @@ ul,ol {
 .goodlist ul li.fr{ width: 75px; text-align: right; color: #999999;}
 .goodlist ul li.fl{ width:72%; white-space: nowrap;text-overflow:ellipsis; overflow:hidden;}
 
+/*团成员列表*/
+.memberlist{ padding: 15px 10px 0 10px;}
+.memberlist ul{ float: left; width: 23%; margin: 0 1%; padding-bottom: 15px; }
+.memberlist ul li{ line-height: 18px; text-align: center; width: 85%; margin: 0 auto; white-space: nowrap;text-overflow:ellipsis; overflow:hidden; color: #666666;}
+.memberlist img{ width:90%; border-radius: 5px;}
+
+
+/*团详情*/
+.tuandetail p{ margin: 0; padding:0;}
+.tuandetail p img{ width: 100%;}
+.tuandetail_masg{ background-color: #ffffff; border-bottom: 1px #eeeeee solid;}
+.tuandetail_masg dl{ margin: 0 10px; padding-bottom: 8px; border-bottom: 1px #eeeeee solid; border-bottom: 1px #eeeeee solid;}
+.tuandetail_masg dl dd{ font-size: 1em; color: #666666; float: left; line-height: 18px;}
+.tuandetail_masg dl dd img{ width: 0.8em; border: 0; margin-top: 1px; margin-right: 3px;}
+.tuandetail_masg dl dd span{ color: #666666;}
+.tuandetail_masg ul{ padding: 8px 10px 3px 10px;}
+.tuandetail_masg ul li{ font-size: 1em;}
+.tuandetail_masg ul li.fl{ font-size: 1.2em; color: #333333; font-weight: bold;}
+.tuandetail_masg ul li.fr{ color: #999999; line-height: 24px;}
+.tuandetail_masg p{ margin: 0; padding:10px; color: #999999; line-height: 18px;}
+.tuandetail_member{ background-color: #ffffff; border-bottom: 1px #eeeeee solid; border-top: 1px #eeeeee solid; margin-top: 10px; padding: 0 10px; line-height: 40px; color: #666666;}
+.p_more { margin-top: 11px; margin-left: 7px; display: block; width: 0.667em; height: 1.334em; background: url(/img/mobile/pyshuo_icon.png) 0 -16.875em no-repeat; background-size: 25em 25em;
+}
+.tuandetail_member span{ color: #333333;}
+.tuandetail h1{ font-size: 1.1em; color: #333333; margin: 0; padding: 10px 10px 0 10px;}
+.tuandetail_btnbg{ background-color: #f1f1f1; border-top: 1px #dddddd solid; padding: 4px 0; height: 36px; position: fixed; bottom: 0; left: 0;  width: 100%; z-index: 999;}
+.tuandetail_btnbg dl{ padding: 0 10px;}
+.tuandetail_btnbg a{ display: block; text-align: center; line-height: 34px; text-decoration: none; border-radius: 3px; font-size: 1.1em;}
+.tuandetail_btnbg dl dt.fl{ width: 29%;}
+.tuandetail_btnbg dl dt.fr{ width: 69%;}
+.tuandetail_btnbg dl dt.fl a{ background-color: #ff9000; border: 1px #ff9000 solid; color: #ffffff;}
+.tuandetail_btnbg dl dt.fr a{ border: 1px #ff9000 solid; color: #ff9000;}
+
+
+.layer_guanzhu{ width:85%; margin:0 auto; text-align:center; color:#999999; font-size:1em; line-height:1.4em; padding:1em 0.5em; background-color:#ffffff; position:fixed; top:50%; left:50%; margin-left:-45%; margin-top:-10%; -webkit-box-shadow:0 0 15px #730513;-moz-box-shadow:0 0 15px #730513;box-shadow:0 0 15px #730513; text-align:center;}
+.guanzhu_title{ font-size:1.15em; color:#333333; padding-bottom:0.8em;}
+.layer_guanzhu a{ display:block; width:5em; height:2em; line-height:2em; margin:0 auto; margin-top:1em; font-size:1em; color:#ff483a; border:2px #ff483a solid; text-decoration:none; text-align:center;}
+
+
+
+
+
 
 

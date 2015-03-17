@@ -46,9 +46,24 @@ class TuanTeamsController extends AppController{
             $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
             $this->prepare_wx_sharing($currUid, $tuan_id);
         }
+        $referer = Router::url($_SERVER['REQUEST_URI']);
+        if($_GET['has_joined'] == 'success'){
+            $uid = $this->currentUser['id'];
+            $this->loadModel('TuanMember');
+            $is_member = $this->TuanMember->hanAny(array('uid' => $uid, 'tuan_id' => $tuan_id));
+            if(!$is_member){
+                $data['tuan_id'] =  $tuan_id;
+                $data['uid'] = $uid;
+                $data['join_time'] = date('Y-m-d H:i:s');
+                $this->TuanMember->save($data);
+            }
+            $this->set('new_join', true);
+        }
+        $this->set('tuan_id', $tuan_id);
         $this->set('tuan_team', $tuan_team);
         $this->set('tuan_buyings', $tuan_buyings);
         $this->set('hideNav',true);
+        $this->set('referer', $referer);
     }
     protected function prepare_wx_sharing($currUid, $tid) {
         $currUid = empty($currUid) ? 0 : $currUid;
@@ -59,6 +74,37 @@ class TuanTeamsController extends AppController{
         $this->set('signPackage', $signPackage);
         $this->set('share_string', urlencode($share_code));
         $this->set('jWeixinOn', true);
+    }
+
+    public function join(){
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        $tuan_id = $_POST['tuan_id'];
+        if($tuan_id){
+            if(empty($uid)){
+                $is_oauth = false;
+            }else{
+                $this->loadModel('Oauthbinds');
+                $is_oauth = $this->Oauthbinds->hasAny(array('user_id' => $uid));
+            }
+            if($is_oauth){
+                $this->loadModel('TuanMember');
+                $is_member = $this->TuanMember->hanAny(array('uid' => $uid, 'tuan_id' => $tuan_id));
+                if(!$is_member){
+                    $data['tuan_id'] =  $tuan_id;
+                    $data['uid'] = $uid;
+                    $data['join_time'] = date('Y-m-d H:i:s');
+                    $this->TuanMember->save($data);
+                }
+                $res = array('success'=> true);
+
+            }else{
+                $res = array('success'=> false, 'type' => 'not_login' );
+            }
+        }else{
+            $res = array('success'=> false, 'type' =>  'error');
+        }
+        echo json_encode($res);
     }
 
     public function lists($pid=null){
@@ -85,7 +131,6 @@ class TuanTeamsController extends AppController{
         $this->set('hideNav',true);
 
     }
-
     public function lbs_map($tuan_id= null){
         $this->pageTitle =__('草莓自取点');
         if(empty($tuan_id)){
@@ -103,7 +148,6 @@ class TuanTeamsController extends AppController{
             $this->set('addr',$teamInfo['TuanTeam']['tuan_addr']);
         }
         $this->set('hideNav',true);
-
     }
 
     public function new_tuan(){
