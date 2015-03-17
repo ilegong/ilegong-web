@@ -58,6 +58,7 @@ class ApiOrdersController extends AppController {
                 'deleted' => DELETED_NO,
                 'status' => 0,
                 'order_id' => NULL,
+                'type' => CART_ITEM_TYPE_NORMAL,
                 'creator'=> $this->currentUser['id'],
             ),
             'fields' => array('id', 'name', 'product_id', 'num', 'name', 'price', 'coverimg', 'used_coupons','specId'),
@@ -445,7 +446,7 @@ class ApiOrdersController extends AppController {
             $uid = $this->currentUser['id'];
             $buyingCom = $this->Components->load('Buying');
             //FIXME: check pid list
-            $cartsByPid = $buyingCom->cartsByPid($pidList, $uid);
+            $cartsByPid = $buyingCom->cartsByIds($pidList, $uid);
             list($pids, $cart, $shipFee, $shipFees) = $buyingCom->createTmpCarts(0, $pidList, $uid);
 
             $products = $this->Product->find('all', array(
