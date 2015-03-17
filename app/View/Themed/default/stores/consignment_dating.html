@@ -1,8 +1,9 @@
-<h1>微微安蛋糕日期设置</h1>
+<h1>{{$p_name}} 的排期</h1>
 
 <div style="margin-top: 2em">
     <form class="form-inline" action="/stores/cake_dating/add" method="post">
         <div class="form-group">
+            <input type="hidden" name="p_id" value="{{$p_id}}">
             <label class="sr-only" for="send_date">指定日期</label>
             <input type="date" class="form-control" name="send_date" id="send_date" placeholder="Enter Date">
         </div>

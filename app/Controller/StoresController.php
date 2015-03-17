@@ -996,6 +996,14 @@ class StoresController extends AppController
         $this->checkAccess();
         $this->pageTitle = '设置可选的发货日期';
         $product_id = $_REQUEST['p_id'];
+        $this->set('p_id',$product_id);
+        $p = $this->Product->find('first',array(
+            'conditions' => array(
+                'id' => $product_id
+            )
+        ));
+        $p_name = $p['Product']['name'];
+        $this->set('p_name',$p_name);
         if ($this->brand['Brand']['id'] == BRAND_ID_CAKE) {
             $this->loadModel('ConsignmentDate');
             if ("list" == $action) {

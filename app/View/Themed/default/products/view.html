@@ -43,11 +43,11 @@
                 <?php } ?>
                 {{/if}}
             {{/if}}
-            {{if $Product['Product']['id'] == PRODUCT_ID_CAKE && !empty($cake_dates)}}
+            {{if !empty($consignment_dates)}}
             <ul class="clearfix guige">
                 <li class="title" style="padding-top:5px;">送货日期:</li>
                 <li style="width:296px;">
-                    <?php foreach($cake_dates as $date){?> <span class="spec_item" item-label="SD">{{$date}}</span><?php } ?>
+                    <?php foreach($consignment_dates as $date){?> <span class="spec_item" item-label="SD" data-val="{{$date['id']}}">{{$date['date']}}</span><?php } ?>
                 </li>
             </ul>
             {{/if}}
