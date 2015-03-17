@@ -177,7 +177,7 @@ class Order extends AppModel {
         }
 
         if ($only_normal_type) {
-            $cond['type'] = array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN);
+            $cond['type'] = array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN,ORDER_TYPE_MILK);
         }
 
         $orders = $this->find('all', array(
