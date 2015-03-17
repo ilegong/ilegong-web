@@ -293,5 +293,9 @@ class TuansController extends AppController{
     public function join_meishituan(){
         $this->pageTitle = '加入美食团';
     }
+
+    public function milk_order(){
+
+    }
 }
 
