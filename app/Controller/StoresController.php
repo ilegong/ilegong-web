@@ -396,7 +396,7 @@ class StoresController extends AppController
                 $track_order_map[]=array('track_id'=>$trackid,'order_id'=>$id);
             }
             $this->TrackOrderMap->saveAll($track_order_map);
-            $post_logs = explode('&@',$post_logs);
+            $post_logs = json_decode($post_logs,true);
             $post_logs = array_reverse($post_logs);
             $track_log = array();
             foreach($post_logs as $log){
@@ -414,6 +414,7 @@ class StoresController extends AppController
             )
         ));
         $p_name = $p['Product']['name'];
+        $this->send_track_log($trackid,$product_id);
         $this->redirect('/stores/view_track/'.$product_id.'.html?productname='.$p_name);
     }
 
@@ -641,7 +642,7 @@ class StoresController extends AppController
         }
 
         $cond = array('brand_id' => $brand_id,
-            'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN),
+            'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL),
             'NOT' => array(
             'status' => array(ORDER_STATUS_CANCEL)
         ));
@@ -1182,6 +1183,63 @@ class StoresController extends AppController
             return true;
         }else{
             return false;
+        }
+    }
+
+    function send_track_log($trackId,$product_id){
+        $order_ids = $this->TrackOrderMap->find('all',array(
+            'conditions' => array(
+                'track_id' => $trackId
+            ),
+            'fields' => array(
+                'order_id'
+            )
+        ));
+        $track_log = $this->OrderTrackLog->find('first',array(
+            'conditions' => array(
+                'track_id' => $trackId
+            ),
+            'fields' => array(
+                'log'
+            ),
+            'order' => 'date desc'
+        ));
+        $product = $this->Product->find('first',array(
+            'conditions' => array(
+                'id' => $product_id
+            ),
+            'fields' => array(
+                'name'
+            )
+        ));
+        $track_log = $track_log['OrderTrackLog']['log'];
+        $order_ids = Hash::extract($order_ids,'{n}.TrackOrderMap.order_id');
+        $orders = $this->Order->find('all',array(
+            'conditions' => array(
+                'id' => $order_ids
+            ),
+            'fields' => array(
+                'id','creator'
+            )
+        ));
+        $product_name = $product['Product']['name'];
+        $track_log = '您购买的('.$product_name.')最新状态,'.$track_log;
+        foreach($orders as $item){
+            $user_id = $item['Order']['creator'];
+            $order_id = $item['Order']['id'];
+            $cart = $this->Cart->find('first',array(
+                'conditions' => array(
+                    'order_id' => $order_id,
+                    'product_id' => $product_id
+                ),
+                'fields' => array(
+                    'num'
+                )
+            ));
+            $num = $cart['Cart']['num'];
+            if(!$this->Weixin->send_tuan_track_log($user_id,$track_log,$order_id,$product_name,$num)){
+                $this->log('send track msg (track id='.$trackId.' order_id='.$order_id.') fail ');
+            }
         }
     }
 
