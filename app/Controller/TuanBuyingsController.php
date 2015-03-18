@@ -10,9 +10,9 @@ class TuanBuyingsController extends AppController{
 
     public function detail($tuan_buy_id){
         $this->pageTitle = '草莓团购';
-        $this->loadModel('TuanBuying');
+        $this->loadModel('TuanTeam');
         if($tuan_buy_id == null){
-            $this->redirect('/tuans/mei_shi_tuan');
+            $this->redirect('/tuan_teams/mei_shi_tuan');
             return;
         }else{
             $tuan_b = $this->TuanBuying->find('first',array(
@@ -20,12 +20,12 @@ class TuanBuyingsController extends AppController{
             ));
         }
         if(empty($tuan_b)){
-            $this->__message('该团购不存在', '/tuans/mei_shi_tuan');
+            $this->__message('该团购不存在', '/tuan_teams/mei_shi_tuan');
             return;
         }
-        $tuan_info = $this->Tuan->find('first',array('conditions' => array('id' => $tuan_b['TuanBuying']['tuan_id'])));
+        $tuan_info = $this->TuanTeam->find('first',array('conditions' => array('id' => $tuan_b['TuanBuying']['tuan_id'])));
         if(empty($tuan_info)){
-            $this->__message('该团不存在', '/tuans/mei_shi_tuan');
+            $this->__message('该团不存在', '/tuan_teams/mei_shi_tuan');
         }
         $current_time = time();
         if(strtotime($tuan_b['TuanBuying']['end_time']) < $current_time){
@@ -43,10 +43,10 @@ class TuanBuyingsController extends AppController{
         $this->set('pid', $tuan_b['TuanBuying']['pid']);
         $this->set('consign_time', $consign_time);
         $this->set('tuan_id',$tuan_b['TuanBuying']['tuan_id']);
-        $this->set('tuan_name',$tuan_info['Tuan']['tuan_name']);
-        $this->set('tuan_leader_name',$tuan_info['Tuan']['leader_name']);
-        $this->set('tuan_leader_weixin',$tuan_info['Tuan']['leader_weixin']);
-        $this->set('tuan_address',$tuan_info['Tuan']['address']);
+        $this->set('tuan_name',$tuan_info['TuanTeam']['tuan_name']);
+        $this->set('tuan_leader_name',$tuan_info['TuanTeam']['leader_name']);
+        $this->set('tuan_leader_weixin',$tuan_info['TuanTeam']['leader_weixin']);
+        $this->set('tuan_address',$tuan_info['TuanTeam']['address']);
         $this->set('tuan_buy_id', $tuan_buy_id);
         $this->set('hideNav',true);
         if($this->is_weixin()){

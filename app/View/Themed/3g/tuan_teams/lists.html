@@ -20,7 +20,7 @@
     <li class="fr">已有{{$tuan_product_num>0?$tuan_product_num:0}}人参团</li>
 </ul>
 <ul class="tuandetail_more clearfix" onclick="to_detail();">
-    <li class="fl">图文详情 (建议在Wifi下浏览)</li>
+    <li class="fl">图文详情</li>
     <li class="fr"><img src="/img/tuan/more.png"/></li>
 </ul>
 <div class="tuandetail_adress">
@@ -30,7 +30,7 @@
     </div>
     {{loop $tuan_info  $tuan}}
     <?php $hash_no = $tuan['TuanTeam']['id'];
-        $tuan_buy_link = '/tuan_teams/detail/'. $tuan_buy[$hash_no]['id'];
+        $tuan_buy_link = '/tuan_buyings/detail/'. $tuan_buy[$hash_no]['id'];
         $location = $tuan['TuanTeam']['location_long'].','. $tuan['TuanTeam']['location_lat'];
     ?>
     <div>
@@ -47,7 +47,7 @@
         </ul>
         <dl class="clearfix">
             <a href="/tuan_teams/lbs_map/{{$tuan['TuanTeam']['id']}}">
-                <dd><img src="/img/tuan_team/locat_icon.gif" border="0" /></dd>
+                <dd><img src="/img/tuan/locat_icon.gif" border="0" /></dd>
                 <dd>{{$tuan['TuanTeam']['address']}}</dd>
             </a>
         </dl>

@@ -21,9 +21,9 @@ class TuanTeamsController extends AppController{
 
     public function lists($pid=null){
         $this->pageTitle = '团购列表';
-        if($pid !=838){
-            $this->redirect('/tuans/lists/838');
-        }
+//        if($pid !=838){
+//            $this->redirect('/tuans/lists/838');
+//        }
         $this->loadModel('TuanBuying');
         $date_Time = date('Y-m-d', time());
         $tuan_product_num = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
