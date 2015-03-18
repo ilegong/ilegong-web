@@ -10,7 +10,7 @@ class ApiOrdersController extends AppController {
     public $components = array('OAuth.OAuth', 'Session','ProductSpecGroup');
     public function beforeFilter() {
         parent::beforeFilter();
-        $allow_action = array('test','ping','cart_info','product_detail','store_list','product_content', 'store_content', 'store_story','_save_comment', 'home','articles');
+        $allow_action = array('test','ping','product_detail','store_list','product_content', 'store_content', 'store_story','_save_comment', 'home','articles');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action)  == false) {
             $this->currentUser = $this->OAuth->user();
