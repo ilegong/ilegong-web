@@ -93,7 +93,7 @@ class TuanBuyingsController extends AppController{
 
     }
 
-    public function join($tuan_buy_id){
+    public function balance($tuan_buy_id){
         $this->pageTitle = '订单确认';
         if(empty($this->currentUser['id'])){
             $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
@@ -143,6 +143,10 @@ class TuanBuyingsController extends AppController{
         $this->set('end_time', date('m-d', $current_time));
         $this->set('tuan_buy_id', $tuan_buy_id);
         $this->log('tuan_info'.json_encode($tuan_info));
+        $this->set('cart_info',$Carts);
+//        $this->loadModel('Product');
+//        $pro_info = $this->Product->find('first',array('conditions' => array('id' => $tuan_b['TuanBuying']['pid'],'deleted' => DELETED_NO)));
+//        $this->set('pro_info',$pro_info);
     }
 
     public function tuan_pay($orderId){
@@ -239,7 +243,7 @@ class TuanBuyingsController extends AppController{
             'conditions' => array('id' => $pid),
             'fields' => $fields
         ));
-        $this->set('tuan_url', $url);
+//        $this->set('tuan_url', $url);
         $this->pageTitle = mb_substr($Product['Product']['name'],0,13);
         $this->set('Product',$Product);
         $this->set('hideNav',true);
