@@ -182,6 +182,11 @@ class ProductsController extends AppController{
         }
         parent::view($slug,$fields);
         $pid = $this->current_data_id;
+
+        if ($pid == 852) {
+            $this->redirect('/tuans/milk');
+        }
+
         if($this->RequestHandler->isMobile()){
             $this->loadModel('Comment');
             //load shichi comment count
