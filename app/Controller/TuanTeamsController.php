@@ -50,7 +50,7 @@ class TuanTeamsController extends AppController{
         if($_GET['has_joined'] == 'success'){
             $uid = $this->currentUser['id'];
             $this->loadModel('TuanMember');
-            $is_member = $this->TuanMember->hanAny(array('uid' => $uid, 'tuan_id' => $tuan_id));
+            $is_member = $this->TuanMember->hasAny(array('uid' => $uid, 'tuan_id' => $tuan_id));
             if(!$is_member){
                 $data['tuan_id'] =  $tuan_id;
                 $data['uid'] = $uid;
