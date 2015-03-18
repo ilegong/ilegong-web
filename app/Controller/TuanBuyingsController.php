@@ -10,6 +10,7 @@ class TuanBuyingsController extends AppController{
 
     public function detail($tuan_buy_id){
         $this->pageTitle = '草莓团购';
+        $pid=$_GET['pid'];
         $this->loadModel('TuanTeam');
         if($tuan_buy_id == null){
             $this->redirect('/tuan_teams/mei_shi_tuan');
@@ -40,7 +41,7 @@ class TuanBuyingsController extends AppController{
         }
         $consign_time = friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
         $this->set('sold_num',$tuan_b['TuanBuying']['sold_num']);
-        $this->set('pid', $tuan_b['TuanBuying']['pid']);
+        $this->set('pid', $pid);
         $this->set('consign_time', $consign_time);
         $this->set('tuan_id',$tuan_b['TuanBuying']['tuan_id']);
         $this->set('tuan_name',$tuan_info['TuanTeam']['tuan_name']);
@@ -51,9 +52,12 @@ class TuanBuyingsController extends AppController{
         $this->set('hideNav',true);
         if($this->is_weixin()){
             $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
-            $pid = $tuan_b['TuanBuying']['pid'];
             $this->prepare_wx_sharing($currUid, $pid);
         }
+
+        $this->loadModel('Uploadfile');
+//        $con = array('conditions' => )
+//        $pro_upload = $this->Uploadfile->find('all',);
     }
 
     protected function prepare_wx_sharing($currUid, $pid) {

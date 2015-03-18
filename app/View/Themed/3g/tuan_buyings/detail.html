@@ -41,7 +41,7 @@
                             </div>
                             <div class="clearfix tuanxq" style="margin-top: -1px;">
                                 <span class="fl">自提地点：{{$tuan_address}}</span>
-                                <a class="fr" href="/tuans/lbs_map/{{$tuan_id}}">
+                                <a class="fr" href="/tuan_teams/lbs_map/{{$tuan_id}}">
                                     <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
                                 </a>
                             </div>
@@ -52,9 +52,9 @@
                             <li class="fl">
                                     <span class="gray title mr12" style="float:left;">数量:</span>
                                 <span class="clearfix" style="display: block;overflow: hidden;">
-                            <div id="pamount_reduce" class="grew"  item-id="838">-</div>
-                            <input id="input_pamount"  item-id="838" size="3" value="1" class="num" name="shoppingnum" type="text"/>
-                            <div id="pamount_add" class="grew" item-id="838">+</div>
+                            <div id="pamount_reduce" class="grew"  item-id="{{$pid}}">-</div>
+                            <input id="input_pamount"  item-id="{{$pid}}" size="3" value="1" class="num" name="shoppingnum" type="text"/>
+                            <div id="pamount_add" class="grew" item-id="{{$pid}}">+</div>
                             </span>
                             </li>
                             </ul>
@@ -82,7 +82,7 @@
                             </div>
                             <div class="all_line">
                                 <ul class="clearfix title" style="margin-bottom: 0;" onclick="to_detail();">
-                                    <li class="fl"><strong>图文详情</strong>(建议在Wifi下浏览)</li>
+                                    <li class="fl"><strong>图文详情</strong></li>
                                     <li class="fr"><a class="p_more"></a></li>
                                 </ul>
                             </div>
@@ -119,7 +119,7 @@
                                                     }
                                                     //$commentItems.children().slice(0,5).show();
                                                 },
-                                                url:"/comments/getlist/Product/838.json?pagesize=5",
+                                                url:"/comments/getlist/Product/{{$pid}}.json?pagesize=5",
                                                 dataType:'json'
                                             });
                                         }
@@ -270,11 +270,11 @@
         <li class="fl" style="width:50%;">
             <div style="margin-right:3%;">
                 {{if $new_tuan_buy}}
-                <a href="/tuans/detail/{{$new_tuan_buy}}" class="btn_b pay_bg radius10">该团已截止</a>
+                <a href="/tuan_buyings/detail/{{$new_tuan_buy}}" class="btn_b pay_bg radius10">该团已截止</a>
                 {{elseif $exceed_time}}
                 <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
                 {{else}}
-                <a id="tuan_buy" item-id="838" href="javascript:;" class="btn_b pay_bg radius10">立即购买</a>
+                <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg radius10">立即购买</a>
                 {{/if}}
             </div>
         </li>
@@ -301,7 +301,7 @@
                 $.ajax({
                     type:'post',
                     data: postdata,
-                    url:'/tuans/cart_info',
+                    url:'/tuan_buyings/cart_info',
                     success:function(data){
                         if(data.success)
                         {

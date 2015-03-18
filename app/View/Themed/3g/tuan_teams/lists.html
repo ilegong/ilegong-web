@@ -2,16 +2,16 @@
 {{$this->Html->css(array('tuan.css?v2'));}}
 <div class="classlist_tuan">
     <ul class="clearfix">
-        <li><a href="/categories/mobileHome" class="back"></a></li>
+        <li><a href="/tuan_teams/goods_lists" class="back"></a></li>
         <li class="line"></li>
         <li>返回</li>
     </ul>
 </div>
 <div class="tuandetail_banner">
     <a href="javascript:void(0)">
-        <p><span>北京兴寿红颜草莓—早上摘当天达</span><br/>团购草莓送酸奶，自然熟透，科学除虫，无公害！</p>
+        {{if $pid == 838}}<p><span>北京兴寿红颜草莓—早上摘当天达</span><br/>团购草莓送酸奶，自然熟透，科学除虫，无公害！</p>{{/if}}
         <div class="bannerbg"></div>
-        <img src="/img/tuan/bannerdetail.jpg" border="0"/>
+        <img src="/img/tuan/bannerdetail-{{$pid}}.jpg" border="0"/>
     </a>
 </div>
 <ul class="tuandetail_price clearfix">
@@ -37,7 +37,7 @@
         <ul class="clearfix">
             <li><a href="/tuan_teams/lbs_map/{{$tuan['TuanTeam']['id']}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
             <li style="float: none; padding-left: 8em;">
-                <a href="{{$tuan_buy_link}}">
+                <a href="{{$tuan_buy_link}}?pid={{$pid}}">
                     <p>{{$tuan['TuanTeam']['tuan_name']}}&nbsp;</p>
                     <s>团长:{{$tuan['TuanTeam']['leader_name']}}</s><br/>
                     <s>团购截止{{friendlyDateFromStr($tuan_buy[$tuan['TuanTeam']['id']]['end_time'], FFDATE_CH_MD)}}</s><br/>

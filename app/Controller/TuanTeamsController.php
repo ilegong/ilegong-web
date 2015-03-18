@@ -24,6 +24,7 @@ class TuanTeamsController extends AppController{
 //        if($pid !=838){
 //            $this->redirect('/tuans/lists/838');
 //        }
+
         $this->loadModel('TuanBuying');
         $date_Time = date('Y-m-d', time());
         $tuan_product_num = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
@@ -36,6 +37,7 @@ class TuanTeamsController extends AppController{
         ));
         $this->set('tuan_info',$tuan_info);
         $this->log('num'.json_encode($tuan_product_num));
+        $this->set('pid',$pid);
         $this->set('tuan_buy',$tuan_buy);
         $this->set('tuan_product_num',$tuan_product_num[0][0]['sold_number']);
         $this->set('hideNav',true);
