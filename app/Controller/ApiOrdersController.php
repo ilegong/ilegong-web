@@ -472,7 +472,7 @@ class ApiOrdersController extends AppController {
                 $items=$bi->items;
                 foreach($items as $index=>$i){
                     $product_id = $i->pid;
-                    $specialPromotions = $this->ShipPromotion->findShipPromotions($product_id);
+                    $specialPromotions = $this->ShipPromotion->findShipPromotions(array($product_id));
                     $i->specialPromotions = $specialPromotions;
                     $i->coverimg=$products[$product_id]['coverimg'];
                     $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($product_id);
