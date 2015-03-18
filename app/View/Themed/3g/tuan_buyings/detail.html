@@ -316,12 +316,12 @@
 <script>
     wx.ready(function () {
         var share_string = '{{$share_string ? $share_string :"0"}}';
-        var to_timeline_title = "从采摘到嘴边不超过8小时，19一盒，团还送万得秒酸奶，快来加入！";
-        var to_friend_title = "全北京最新鲜的红颜草莓团购-朋友说美食团";
+        var to_timeline_title = "{{$pro_info['Product']['name']}}";
+        var to_friend_title = "{{$pro_info['Product']['name']}}";
         var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
         var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
-        var imgUrl = "http://51daifan-images.stor.sinaapp.com/files/201503/thumb_s/0e3b03912ce_0309.jpg";
-        var desc = "从采摘到嘴边不超过8小时，19一盒，团还送万得秒酸奶，快来加入！";
+        var imgUrl = "{{$pro_info['Product']['coverimg']}}";
+        var desc = "{{$pro_info['Product']['promote_name']}}！";
         wx.onMenuShareAppMessage({
             title: to_friend_title,
             desc: desc,

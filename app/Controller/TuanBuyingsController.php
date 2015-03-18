@@ -10,7 +10,6 @@ class TuanBuyingsController extends AppController{
 
     public function detail($tuan_buy_id){
         $this->pageTitle = '团购详情';
-        $pid=$_GET['pid'];
         $this->loadModel('TuanTeam');
         if($tuan_buy_id == null){
             $this->redirect('/tuan_teams/mei_shi_tuan');
@@ -39,6 +38,7 @@ class TuanBuyingsController extends AppController{
                 $this->set('new_tuan_buy', $tuan_new_b['TuanBuying']['id']);
             }
         }
+        $pid=$tuan_b['TuanBuying']['pid'];
         $consign_time = friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
         $this->set('sold_num',$tuan_b['TuanBuying']['sold_num']);
         $this->set('pid', $pid);

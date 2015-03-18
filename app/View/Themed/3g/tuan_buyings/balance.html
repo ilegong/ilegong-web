@@ -33,7 +33,7 @@
                 <table  class="table table-bordered">
                     <tbody>
                     <tr><td>{{$cart_info['Cart']['name']}}</td>
-                        <td style="width: 80px; font-size: 0.8em">单价：{{$this->Html->precision($cart_info['Cart']['price'],2)}}</td>
+                        <td style="width: 80px; font-size: 0.8em">单价：{{$this->Number->precision($cart_info['Cart']['price'],2)}}</td>
                         <td>×{{$buy_count}}</td>
                         <td>{{$this->Number->precision($total_price, 2)}} </td>
                     </tr>
