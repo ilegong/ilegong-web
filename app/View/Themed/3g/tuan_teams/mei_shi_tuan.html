@@ -18,7 +18,7 @@
                 </li>
             </ul>
             <dl class="clearfix">
-                <a href="/tuan_teams/lbs_map/{{$tuan['TuanTeam']['id']}}">
+                <a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan['TuanTeam']['tuan_name']}}&addr={{$tuan['TuanTeam']['tuan_addr']}}">
                     <dd><img src="/img/tuan/locat_icon.gif" border="0" /></dd>
                     <dd>{{$tuan['TuanTeam']['address']}}</dd>
                 </a>
