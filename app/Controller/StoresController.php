@@ -396,10 +396,7 @@ class StoresController extends AppController
                 $track_order_map[]=array('track_id'=>$trackid,'order_id'=>$id);
             }
             $this->TrackOrderMap->saveAll($track_order_map);
-            $this->log('save track log : '.$post_logs);
             $post_logs = json_decode($post_logs,true);
-            $this->log('save track log : '.(join(' ',$post_logs)));
-            $post_logs = array_reverse($post_logs);
             $track_log = array();
             foreach($post_logs as $log){
                 $track_log[]=array(
