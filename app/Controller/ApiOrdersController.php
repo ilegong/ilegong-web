@@ -7,7 +7,7 @@
  */
 
 class ApiOrdersController extends AppController {
-    public $components = array('OAuth.OAuth', 'Session');
+    public $components = array('OAuth.OAuth', 'Session','ProductSpecGroup');
     public function beforeFilter() {
         parent::beforeFilter();
         $allow_action = array('test','ping','product_detail','store_list','product_content', 'store_content', 'store_story','_save_comment', 'home','articles');
@@ -182,6 +182,12 @@ class ApiOrdersController extends AppController {
                 unset($pro['Product']['views_count']);
                 unset($pro['Product']['cost_price']);
                 $pro['Product']['limit_ship']=$is_limit_ship;
+
+                //get specs from database
+                $specs_map = $this->ProductSpecGroup->get_product_spec_json($pid);
+                $pro['Product']['specs'] = json_encode($specs_map);
+                $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($pid,'spec_ids');
+                $pro['Product']['specs_group'] = json_encode($product_spec_group);
                 $brandM = ClassRegistry::init('Brand');
                 $brand = $brandM->findById($pro['Product']['brand_id']);
                 $this->set('brand', $brand);
