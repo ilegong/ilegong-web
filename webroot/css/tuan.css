@@ -19,48 +19,6 @@ p {
 }
 .radius5{ -moz-border-radius: 5px;/* Gecko browsers */-webkit-border-radius: 5px;/* Webkit browsers */border-radius:5px;/* W3C syntax */}
 
-/*返回*/
-.classlist_tuan {
-    height: 3em;
-    line-height: 3em;
-    width: 100%;
-    border-bottom: 1px #dddddd solid;
-    background-color: #f5f5f5;
-    position: fixed;
-    top: 0;
-    z-index: 999;
-    overflow: hidden;
-}
-
-.classlist_tuan ul {
-    font-size: 1em;
-    color: #666666;
-    width: 60%;
-    padding-left: 0.833em;
-    overflow: hidden;
-}
-
-.classlist_tuan ul li {
-    float: left;
-    font-size: 1.25em;
-}
-
-.classlist_tuan ul li .back {
-    display: block;
-    width: 0.5em;
-    height: 1em;
-    background: url(/img/mobilev1/pyshuo_icon.png) no-repeat -1.25em -16.875em;
-    background-size: 25em 25em;
-    margin-top: 0.7em;
-    margin-right: 0.833em;
-}
-
-.classlist_tuan ul li.line {
-    height: 2.5em;
-    width: 1px;
-    border-right: 1px #dddddd solid;
-    margin-right: 0.8em;
-}
 ul,ol {
     margin-bottom: 0;
 }
@@ -159,7 +117,7 @@ ul,ol {
 .tuandetail_masg{ background-color: #ffffff; border-bottom: 1px #eeeeee solid;}
 .tuandetail_masg dl{ margin: 0 10px; padding-bottom: 8px; border-bottom: 1px #eeeeee solid; border-bottom: 1px #eeeeee solid;}
 .tuandetail_masg dl dd{ font-size: 1em; color: #666666; float: left; line-height: 18px;}
-.tuandetail_masg dl dd img{ width: 0.8em; border: 0; margin-top: 1px; margin-right: 3px;}
+.tuandetail_masg dl dd img{ width: 0.8em; border: 0; margin-top: 1px; margin-right: 3px;vertical-align:baseline;}
 .tuandetail_masg dl dd span{ color: #666666;}
 .tuandetail_masg ul{ padding: 8px 10px 3px 10px;}
 .tuandetail_masg ul li{ font-size: 1em;}
@@ -171,7 +129,7 @@ ul,ol {
 }
 .tuandetail_member span{ color: #333333;}
 .tuandetail h1{ font-size: 1.1em; color: #333333; margin: 0; padding: 10px 10px 0 10px;}
-.tuandetail_btnbg{ background-color: #f1f1f1; border-top: 1px #dddddd solid; padding: 4px 0; height: 36px; position: fixed; bottom: 0; left: 0;  width: 100%; z-index: 999;}
+.tuandetail_btnbg{ background-color: #f1f1f1; border-top: 1px #dddddd solid; padding: 4px 0; height: 45px; position: fixed; bottom: 0; left: 0;  width: 100%; z-index: 999;}
 .tuandetail_btnbg dl{ padding: 0 10px;}
 .tuandetail_btnbg a{ display: block; text-align: center; line-height: 34px; text-decoration: none; border-radius: 3px; font-size: 1.1em;}
 .tuandetail_btnbg dl dt.fl{ width: 29%;}

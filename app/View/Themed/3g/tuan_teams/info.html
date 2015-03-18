@@ -2,79 +2,54 @@
 <?php $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
     $referer_link .= '&referer='.urlencode($referer.'?has_joined=success');
 ?>
-
-
-
-<div>
-    <img src="http://api.map.baidu.com/staticimage?width=400&height=150&center=
-    {{$location}}&zoom=16&markers={{$location}}&&markerStyles=l" border="0" /></a>
-</div>
-<div>
-    <span>{{$tuan_team['TuanTeam']['tuan_name']}}</span>  <span style="float:right">{{$tuan_team['TuanTeam']['leader_name']}}</span>
-    <a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
-        <p>{{$tuan_team['TuanTeam']['address']}}</p>
-    </a>
-    <p>{{if empty($tuan_team['TuanTeam']['tuan_desc'])}} 寻找最纯粹的美味 {{else}} {{$tuan_team['TuanTeam']['tuan_desc']}} {{/if}}</p>
-</div>
-<div>
-    <span>{{$tuan_team['TuanTeam']['member_num']}} </span> <span style="float:right">{{$tuan_team['TuanTeam']['leader_weixin']}}</span>
-</div>
-<a id="tuan_join" class="btn btn-warning">我要加入</a> <a id="tuan_share" class="btn btn-default">邀请小伙伴一起加入</a>
-
-
-
 <div class="tuandetail">
-    <p><img src="images/map/map.jpg" /></p>
+    <p><img src="http://api.map.baidu.com/staticimage?width=750&height=350&center=
+    {{$location}}&zoom=16&markers={{$location}}&&markerStyles=l" /></p>
     <div class="tuandetail_masg">
         <ul class="clearfix">
-            <li class="fl">朝外SOHO爱营养美食团</li>
-            <li class="fr">团长: 小地主</li>
+            <li class="fl">{{$tuan_team['TuanTeam']['tuan_name']}}</li>
+            <li class="fr">团长: {{$tuan_team['TuanTeam']['leader_name']}}</li>
         </ul>
         <dl class="clearfix">
-            <dd><img src="images/locat_icon.gif" border="0" /></dd>
-            <dd style="float: none; padding-left: 12px;">朝外SOHO D座0180</dd>
+            <a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
+                <dd><img src="/img/tuan/locat_icon.gif" border="0" /></dd>
+                <dd style="float: none; padding-left: 12px;">{{$tuan_team['TuanTeam']['address']}}</dd>
+            </a>
         </dl>
-        <p>找寻最纯粹的美味，让生活多点快乐的色彩！</p>
+        <p>{{if empty($tuan_team['TuanTeam']['tuan_desc'])}}找寻最纯粹的美味，让生活多点快乐的色彩！{{else}} {{$tuan_team['TuanTeam']['tuan_desc']}} {{/if}}</p>
     </div>
     <ul class="clearfix tuandetail_member">
-        <li class="fl"><span>成员: 99人</span></li>
-        <li class="fr"><a class="p_more"></a></li>
-        <li class="fr">团长微信号hoiggoinrgon</li>
+        <li class="fl"><span>成员: {{$tuan_team['TuanTeam']['member_num']}}人</span></li>
+        <li class="fr"><a class="p_more" href="/tuan_teams/memberlist/{{$tuan_id}}"></a></li>
+        <li class="fr">团长微信号{{$tuan_team['TuanTeam']['leader_weixin']}}</li>
     </ul>
     <h1>参加的团购</h1>
-    <div class="goodlist">
-        <a href="#X">
-            <div><img src="images/pro/listgood.jpg" /></div>
-            <ul class="clearfix">
-                <li class="fl">全北京最新鲜的昌平兴寿红颜草莓，现采现送</li>
-                <li class="fr">11人参团</li>
-            </ul>
-        </a>
-    </div>
-    <div class="goodlist tuan_cancel">
-        <a href="#X">
-            <s>团购已取消</s>
-            <div><img src="images/pro/listgood.jpg" /></div>
-            <ul class="clearfix">
-                <li class="fl">全北京最新鲜的昌平兴寿红颜草莓，现采现送</li>
-                <li class="fr">11人参团</li>
-            </ul>
-        </a>
-    </div>
-    <div class="goodlist tuan_cancel">
-        <a href="#X">
+    {{loop $tuan_buyings $tuan_buying}}
+    <?php $pid = $tuan_buying['TuanBuying']['pid'];
+    ?>
+    <div class="goodlist {{if $tuan_buying['TuanBuying']['status'] != 0}}tuan_cancel {{/if}}">
+        <a href="/tuan_buyings/detail/{{$tuan_buying['TuanBuying']['id']}}">
+            {{if $tuan_buying['TuanBuying']['status'] == 1}}
             <s>团购已完成</s>
-            <div><img src="images/pro/listgood.jpg" /></div>
+            {{elseif $tuan_buying['TuanBuying']['status'] == 2}}
+            <s>团购已取消</s>
+            {{/if}}
+            <div><img src="/img/tuan/pro/listgood_{{$pid}}.jpg" /></div>
             <ul class="clearfix">
-                <li class="fl">全北京最新鲜的昌平兴寿红颜草莓，现采现送</li>
-                <li class="fr">11人参团</li>
+                <li class="fl">{{$product_info[$pid]['name']}}</li>
+                <li class="fr">{{$tuan_buying['TuanBuying']['join_num']}}人参团</li>
             </ul>
         </a>
     </div>
+    {{/loop}}
+
+    <div style="margin-top: 80px"></div>
     <div class="tuandetail_btnbg">
         <dl class="clearfix">
-            <dt class="fl"><a href="#X">加入我们</a></dt>
-            <dt class="fr"><a href="#X">邀请小伙伴一起加入</a></dt>
+            {{if !$has_joined}}
+            <dt class="fl"><a id="tuan_join" href="javascript:void (0)">加入我们</a></dt>
+            {{/if}}
+            <dt class="fr"><a id="tuan_share" href="javascript:void (0)">邀请小伙伴一起加入</a></dt>
         </dl>
     </div>
 </div>

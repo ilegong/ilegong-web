@@ -1,0 +1,16 @@
+{{$this->Html->css(array('tuan.css'))}}
+<div class="classlist_v2">
+    <ul class="clearfix" onclick="javascript:history.go(-1)">
+        <li><a class="back"></a></li>
+        <li class="line"></li>
+        <li style="text-overflow: ellipsis;"><strong>返回</strong></li>
+    </ul>
+</div>
+<div class="memberlist clearfix" style="padding-top: 55px">
+    {{loop $member_info $member}}
+    <ul>
+        <li><img src="{{if empty($member['User']['image'])}} \img\mine_head.png {{else}} {{$member['User']['image']}} {{/if}}" /></li>
+        <li>{{$member['User']['nickname']}}</li>
+    </ul>
+    {{/loop}}
+</div>

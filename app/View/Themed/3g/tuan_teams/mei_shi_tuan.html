@@ -1,6 +1,6 @@
 {{$this->Html->css(array('tuan.css?v2'))}}
 <div class="alltuan" style="position: relative;">
-    <a href="/tuan_teams/new_tuan" class="alltuan_add">没有附近的团，申请创建自己的团队</a>
+    <a href="/tuan_teams/create" class="alltuan_add">没有附近的团，申请创建自己的团队</a>
     <div style="border-bottom: 1px #eeeeee solid; margin-top: 40px;">
         {{loop $tuan_teams $tuan}}
         <?php $tuan_link = '/tuan_teams/info/'. $tuan['TuanTeam']['id'];

@@ -59,6 +59,11 @@ class TuanTeamsController extends AppController{
             }
             $this->set('new_join', true);
         }
+        if($this->currentUser['id']){
+            $this->loadModel('TuanMember');
+            $has_joined = $this->TuanMember->hasAny(array('tuan_id' => $tuan_id, 'uid' => $this->currentUser['id']));
+            $this->set('has_joined', $has_joined);
+        }
         $this->set('tuan_id', $tuan_id);
         $this->set('tuan_team', $tuan_team);
         $this->set('tuan_buyings', $tuan_buyings);
@@ -84,8 +89,9 @@ class TuanTeamsController extends AppController{
             if(empty($uid)){
                 $is_oauth = false;
             }else{
-                $this->loadModel('Oauthbinds');
-                $is_oauth = $this->Oauthbinds->hasAny(array('user_id' => $uid));
+                $is_oauth = false;
+//                $this->loadModel('Oauthbinds');
+//                $is_oauth = $this->Oauthbinds->hasAny(array('user_id' => $uid));
             }
             if($is_oauth){
                 $this->loadModel('TuanMember');
@@ -150,12 +156,23 @@ class TuanTeamsController extends AppController{
         $this->set('hideNav',true);
     }
 
-    public function new_tuan(){
+    public function create(){
         $this->pageTitle = '创建新团';
     }
-
-    public function join_meishituan(){
-        $this->pageTitle = '加入美食团';
+    public function memberlist($tuan_id){
+        $this->pageTitle = '美食团成员';
+        $this->loadModel('TuanMember');
+        $uids = $this->TuanMember->find('list', array(
+            'conditions' => array('tuan_id' => $tuan_id),
+            'fields' => array('uid')
+        ));
+        $this->loadModel('User');
+        $member_info = $this->User->find('all', array(
+            'conditions' => array('id' =>$uids),
+            'fields' => array('nickname', 'image')
+        ));
+        $this->set('member_info', $member_info);
+        $this->set('hideNav',true);
     }
 
     public function goods_lists(){
