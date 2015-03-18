@@ -261,7 +261,7 @@ class TuansController extends AppController{
         }elseif ($_GET['product'] == 'milk' ){
             $url = '/tuans/milk';
         } elseif($_GET['tuan_id'] && $_GET['tuan_buy_id']&&$pid == PRODUCT_ID_MANGUO){
-            $url = '/tuans/detail/'. '/' . strval($_GET['tuan_buy_id']) ;
+            $url = '/tuans/detail/'. strval($_GET['tuan_buy_id']) ;
         }else{
             $url = '/tuans/lists';
         }
