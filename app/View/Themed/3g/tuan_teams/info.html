@@ -2,7 +2,14 @@
 <?php $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
     $referer_link .= '&referer='.urlencode($referer.'?has_joined=success');
 ?>
-<div class="tuandetail">
+<div class="classlist_v2">
+    <ul class="clearfix" >
+        <li><a class="back" href="/tuan_teams/mei_shi_tuan"></a></li>
+        <li class="line"></li>
+        <li style="text-overflow: ellipsis;"><strong>返回</strong></li>
+    </ul>
+</div>
+<div class="tuandetail" style="padding-top: 42px">
     <p><img src="http://api.map.baidu.com/staticimage?width=750&height=350&center=
     {{$location}}&zoom=16&markers={{$location}}&&markerStyles=l" /></p>
     <div class="tuandetail_masg">
@@ -46,9 +53,13 @@
     <div style="margin-top: 80px"></div>
     <div class="tuandetail_btnbg">
         <dl class="clearfix">
+            <dt class="fl">
             {{if !$has_joined}}
-            <dt class="fl"><a id="tuan_join" href="javascript:void (0)">加入我们</a></dt>
+                <a id="tuan_join"  href="javascript:void (0)">加入我们</a>
+            {{else}}
+                <a  style="background-color: #cccccc; border: 0"  href="javascript:void (0)">已加入</a>
             {{/if}}
+            </dt>
             <dt class="fr"><a id="tuan_share" href="javascript:void (0)">邀请小伙伴一起加入</a></dt>
         </dl>
     </div>

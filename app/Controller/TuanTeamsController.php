@@ -155,6 +155,7 @@ class TuanTeamsController extends AppController{
             'conditions' => array('id' =>$uids),
             'fields' => array('nickname', 'image')
         ));
+        $this->set('tuan_id',$tuan_id);
         $this->set('member_info', $member_info);
         $this->set('hideNav',true);
     }
