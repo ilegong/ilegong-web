@@ -331,7 +331,7 @@
         <script>
             $(document).ready(function(){
                 var sold_num = $('#sold_num').attr('value');
-                var sold_percent = (sold_num/20*100)>100?100:sold_num/20*100;
+                var sold_percent = (sold_num*5)>100?100:sold_num*5;
                 $('#bar_buy').css("width", sold_percent + "%");
                 $('#bar_percent').text(sold_percent + "%");
 
