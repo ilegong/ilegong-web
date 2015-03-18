@@ -4,7 +4,7 @@
 ?>
 <div class="classlist_v2">
     <ul class="clearfix" >
-        <li><a class="back" href="/tuan_teams/mei_shi_tuan"></a></li>
+        <li><a class="back" href="javascript:void (0)" onclick="tuan_info_back()"></a></li>
         <li class="line"></li>
         <li style="text-overflow: ellipsis;"><strong>返回</strong></li>
     </ul>
@@ -97,12 +97,12 @@
 <script>
     wx.ready(function () {
         var share_string = '{{$share_string ? $share_string :"0"}}';
-        var to_timeline_title = "寻找最纯粹的美味，快来加入！";
+        var to_timeline_title = "寻找最纯粹的美味，让生活多点快乐的色彩！";
         var to_friend_title = "{{$tuan_team['TuanTeam']['tuan_name']}}" + "-朋友说美食团";
         var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
         var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
         var imgUrl = "http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l";
-        var desc = "找寻最纯粹的美味，让生活多点快乐的色彩！";
+        var desc = "{{$tuan_team['TuanTeam']['tuan_name']}}, 找寻最纯粹的美味，让生活多点快乐的色彩！";
         wx.onMenuShareAppMessage({
             title: to_friend_title,
             desc: desc,
@@ -162,7 +162,10 @@
                 }
             });
         });
-    })
+    });
+    function tuan_info_back(){
+        window.location.href='/tuan_teams/mei_shi_tuan';
+    }
 </script>
 
 {{if $new_join}}
