@@ -327,7 +327,7 @@ class StoresController extends AppController
         ));
         if(!empty($carts)){
             $order_ids = Hash::extract($carts,'{n}.Cart.order_id');
-            $orders = $this->find('all',array(
+            $orders = $this->Order->find('all',array(
                 'conditions' => array(
                     'id' => $order_ids
                 )
@@ -468,7 +468,9 @@ class StoresController extends AppController
         $page = 1;
         $pagesize = 30;
         $cond = array('product_id'=>$productId, 'deleted' => DELETED_NO);
-        $total = $this->OrderTrack->find('count', $cond);
+        $total = $this->OrderTrack->find('count', array(
+            'conditions' => $cond
+        ));
         $datalist = $this->OrderTrack->find('all', array(
             'conditions' => $cond,
             'fields' => array('id', 'date'),
