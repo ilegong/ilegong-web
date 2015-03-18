@@ -515,6 +515,19 @@ class StoresController extends AppController
             'order' => 'updated desc'
         ));
 
+        $p_ids = Hash::extract($datalist,'{n}.Product.id');
+
+        $this->loadModel('ConsignmentDate');
+        $dates = $this->ConsignmentDate->find('all', array(
+            'conditions' => array(
+                'product_id' => $p_ids,
+                'published' => PUBLISH_YES
+            ),
+            'order' => 'send_date desc'
+        ));
+        $dates = Hash::combine($dates,'{n}.ConsignmentDate.product_id','{n}.ConsignmentDate');
+        $this->set('dates', $dates);
+
         $page_navi = getPageLinks($total, $pagesize, '/products/mine', $page);
         $this->set('datalist', $datalist);
         $this->set('page_navi', $page_navi);
@@ -1036,7 +1049,17 @@ class StoresController extends AppController
                 } else {
                     $data = array();
                     $data['ConsignmentDate']['send_date'] = $send_date;
-                    $data['ConsignmentDate']['published'] = $published;
+                    if($published == 1){
+                        $num = $this->ConsignmentDate->find('count', array(
+                            'conditions' => array('published' => PUBLISH_YES,'product_id' => $product_id)
+                        ));
+                        if($num>=5){
+                            $data['ConsignmentDate']['published'] = 0;
+                            setFlashError($this->Session, '在排期只能日期只能有五个,排期已经不允许排期');
+                        }else{
+                            $data['ConsignmentDate']['published'] = $published;
+                        }
+                    }
                     $data['ConsignmentDate']['product_id'] = $product_id;
                     $this->ConsignmentDate->save($data);
                 }
@@ -1047,11 +1070,19 @@ class StoresController extends AppController
             $id = intval($_REQUEST['id']);
             $this->ConsignmentDate->delete($id);
         } else if ("publish" == $action) {
-            $id = intval($_REQUEST['id']);
-            $data = array();
-            $data['ConsignmentDate']['published'] = PUBLISH_YES;
-            $data['ConsignmentDate']['id'] = $id;
-            $this->ConsignmentDate->save($data);
+            $num = $this->ConsignmentDate->find('count', array(
+                'conditions' => array('published' => PUBLISH_YES,'product_id' => $product_id)
+            ));
+            if($num>=5){
+                setFlashError($this->Session, '在排期只能日期只能有五个,排期已经不允许排期');
+            }else{
+                $id = intval($_REQUEST['id']);
+                $data = array();
+                $data['ConsignmentDate']['published'] = PUBLISH_YES;
+                $data['ConsignmentDate']['id'] = $id;
+                $this->ConsignmentDate->save($data);
+            }
+
         } else if ("unpublish" == $action) {
             $id = intval($_REQUEST['id']);
             $data = array();
