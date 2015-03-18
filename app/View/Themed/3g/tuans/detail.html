@@ -1,7 +1,7 @@
 {{$this->Html->css(array('tuan.css?v2'));}}
 <div class="classlist_v2" style="z-index:999;">
     <ul class="clearfix">
-        <li><a class="back" href="/tuans/lists.html"></a></li>
+        <li><a class="back" href="/tuans/lists/{{$pid}}.html"></a></li>
         <li class="line"></li>
         <li style="text-overflow: ellipsis;"><strong>团购详情</strong></li>
     </ul>
@@ -25,6 +25,7 @@
                                 </div>
                             </div>
                         </div>
+                        {{if $pid == PRODUCT_ID_CAOMEI}}
                             <div class="p_details_title">全北京最新鲜的昌平兴寿红颜草莓，现采现送 400g/盒 20盒成团即送 团即送酸奶</div>
                             <ul class="p_details_price clearfix">
                                 <li class="fl price"><span>￥<font>19.00</font></span></li>
@@ -37,6 +38,21 @@
                                 </span>
                                 </li>
                             </ul>
+                        {{/if}}
+                        {{if $pid == PRODUCT_ID_MANGUO}}
+                        <div class="p_details_title">海南空运红金龙芒果 贵妃芒果 10斤装 满50箱从海南果园空运至北京</div>
+                        <ul class="p_details_price clearfix">
+                            <li class="fl price"><span>￥<font>149.00</font></span></li>
+                            <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{$consign_time}}</b></span></a></li>
+                        </ul>
+                        <ul class="sales clearfix">
+                            <li>
+                                <span style="display: block;overflow: hidden;">
+                                <span>【满50箱方可成团，从海南空运】海南红金芒，也叫贵妃芒果，肉厚核薄、多汁少纤、营养丰富，是水果中的极品。<br></span>
+                                </span>
+                            </li>
+                        </ul>
+                        {{/if}}
 
                         <div class="tuan_bar">
                             <div>已团购<span id="sold_num" value="{{$sold_num>0?$sold_num:0}}">{{$sold_num>0?$sold_num:0}}</span>份</div>
@@ -45,7 +61,8 @@
                             </div>
                             <ul class="clearfix">
                                 <li class="fl"><span id="bar_percent"></span></li>
-                                <li class="fr">目标20份</li>
+                                {{if $pid == PRODUCT_ID_CAOMEI}}<li class="fr">目标20份</li>{{/if}}
+                                {{if $pid == PRODUCT_ID_MANGUO}}<li class="fr">目标50份</li>{{/if}}
                             </ul>
                         </div>
                             <div class="clearfix tuanxq">
@@ -61,9 +78,9 @@
                             <li class="fl">
                                     <span class="gray title mr12" style="float:left;">数量:</span>
                                 <span class="clearfix" style="display: block;overflow: hidden;">
-                            <div id="pamount_reduce" class="grew"  item-id="838">-</div>
-                            <input id="input_pamount"  item-id="838" size="3" value="1" class="num" name="shoppingnum" type="text"/>
-                            <div id="pamount_add" class="grew" item-id="838">+</div>
+                            <div id="pamount_reduce" class="grew"  item-id="{{$pid}}">-</div>
+                            <input id="input_pamount"  item-id="{{$pid}}" size="3" value="1" class="num" name="shoppingnum" type="text"/>
+                            <div id="pamount_add" class="grew" item-id="{{$pid}}">+</div>
                             </span>
                             </li>
                             </ul>
@@ -128,7 +145,7 @@
                                                     }
                                                     //$commentItems.children().slice(0,5).show();
                                                 },
-                                                url:"/comments/getlist/Product/838.json?pagesize=5",
+                                                url:"/comments/getlist/Product/{{$pid}}.json?pagesize=5",
                                                 dataType:'json'
                                             });
                                         }
@@ -283,7 +300,7 @@
                 {{elseif $exceed_time}}
                 <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
                 {{else}}
-                <a id="tuan_buy" item-id="838" href="javascript:;" class="btn_b pay_bg radius10">立即购买</a>
+                <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg radius10">立即购买</a>
                 {{/if}}
             </div>
         </li>
@@ -328,6 +345,7 @@
 
             })
         </script>
+        {{if $pid == PRODUCT_ID_CAOMEI}}
         <script>
             $(document).ready(function(){
                 var sold_num = $('#sold_num').attr('value');
@@ -337,17 +355,32 @@
 
             });
         </script>
+        {{/if}}
+        {{if $pid == PRODUCT_ID_MANGUO}}
+        <script>
+           $(document).ready(function(){
+                var sold_num = $('#sold_num').attr('value');
+                var sold_percent = (sold_num*2)>100?100:sold_num*2;
+                $('#bar_buy').css("width", sold_percent + "%");
+                $('#bar_percent').text(sold_percent + "%");
+
+            });
+         </script>
+        {{/if}}
+    {{if $pid == PRODUCT_ID_CAOMEI}}
         <script>
 
             //<![CDATA[
             $().ready(function(){
                 var banners = [];
                 var banner_links = [];
+
                 banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/b7294de12a6_0307.jpg');
                 banner_links.push('#');banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/646fba8bd46_0307.jpg');
                 banner_links.push('#');banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/d94df21975c_0307.jpg');
                 banner_links.push('#');banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/4dd65a241cf_0307.jpg');
                 banner_links.push('#');
+
 //$(banners).preload();
 
                 var $indexBanner = $('.index_banner');
@@ -379,6 +412,53 @@
             //]]>
 
         </script>
+        {{/if}}
+{{if $pid == PRODUCT_ID_MANGUO}}
+<script>
+
+    //<![CDATA[
+    $().ready(function(){
+        var banners = [];
+        var banner_links = [];
+
+        banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/cee86ae653c_0316.jpg');
+        banner_links.push('#');banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/d653bebe20e_0316.jpg');
+        banner_links.push('#');banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/02511317acf_0316.jpg');
+        banner_links.push('#');banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/76b641e89ee_0316.jpg');
+        banner_links.push('#');
+
+//$(banners).preload();
+
+        var $indexBanner = $('.index_banner');
+        var ul = $indexBanner.find('ul');
+        var swiper_wrapper = $indexBanner.find('div.swiper-wrapper');
+
+        $.each(banners, function (idx, value) {
+            $('<div class="swiper-slide"><a href="' + banner_links[idx] + '"><img src="' + value + '" border="0" /></a></div>').appendTo(swiper_wrapper);
+            $('<li/>').appendTo(ul);
+        });
+
+//setTimeout(function () {
+        var mySwiper = $indexBanner.swiper({
+            mode: 'horizontal',
+            loop: banners.length>1,
+            autoplay: 10000,
+            calculateHeight: true,
+            onSlideChangeStart: function (swiper) {
+                ul.find('li').removeClass('cur');
+                ul.find('li:nth-child(' + (swiper.activeLoopIndex % 4 + 1) + ')').toggleClass('cur');
+            }
+//etc..
+        });
+        ul.find('li:first').addClass('cur');
+//}, 1000);
+    })
+
+
+    //]]>
+
+</script>
+  {{/if}}
 
 {{if $jWeixinOn}}
 <script>

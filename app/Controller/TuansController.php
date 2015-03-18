@@ -10,9 +10,9 @@ class TuansController extends AppController{
 
     public function lists($pid=null){
         $this->pageTitle = '团购列表';
-        if($pid !=838){
-            $this->redirect('/tuans/lists/838');
-        }
+//        if($pid !=838){
+//            $this->redirect('/tuans/lists/838');
+//        }
         $this->loadModel('TuanBuying');
         $date_Time = date('Y-m-d', time());
         $tuan_product_num = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
@@ -23,6 +23,7 @@ class TuansController extends AppController{
             'conditions' =>array('id'=>$tuan_ids),
             'order' => array('Tuan.priority DESC')
         ));
+        $this->set('pid',$pid);
         $this->set('tuan_info',$tuan_info);
         $this->log('num'.json_encode($tuan_product_num));
         $this->set('tuan_buy',$tuan_buy);
@@ -32,7 +33,7 @@ class TuansController extends AppController{
     }
 
     public function detail($tuan_buy_id){
-        $this->pageTitle = '草莓团购';
+        $this->pageTitle = '团购详情';
         $this->loadModel('TuanBuying');
         if($tuan_buy_id == null){
             $this->redirect('/tuans/mei_shi_tuan');
@@ -91,7 +92,7 @@ class TuansController extends AppController{
     }
 
     public function lbs_map($tuan_id=''){
-        $this->pageTitle =__('草莓自取点');
+        $this->pageTitle =__('团购自取点');
         $teamInfo = $this->Tuan->find('first',array('conditions' => array('id' => $tuan_id)));
         $this->set('tuan_id',$tuan_id);
         $this->set('name',$teamInfo['Tuan']['tuan_name']);
@@ -168,6 +169,7 @@ class TuansController extends AppController{
         $this->set('tuan_address', $tuan_info['Tuan']['address']);
         $this->set('end_time', date('m-d', $current_time));
         $this->set('tuan_buy_id', $tuan_buy_id);
+        $this->set('pid',$tuan_b['TuanBuying']['pid']);
     }
 
     public function tuan_pay($orderId){
