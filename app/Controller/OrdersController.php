@@ -43,7 +43,7 @@ class OrdersController extends AppController {
     function beforeFilter() {
         parent::beforeFilter();
         if (empty($this->currentUser['id']) && array_search($this->request->params['action'], $this->customized_not_logged) === false) {
-            $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
+            $this->redirect($this->login_link());
         }
         $this->user_condition = array(
             'session_id' => $this->Session->id(),
@@ -1660,6 +1660,4 @@ class OrdersController extends AppController {
 
 
     }
-
-
 }

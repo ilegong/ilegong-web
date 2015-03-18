@@ -101,6 +101,9 @@ class AppController extends Controller {
     	}
 
     	$this->currentUser = $this->Session->read('Auth.User');
+        if (empty($this->currentUser) && $this->is_weixin()) {
+            $this->redirect($this->login_link());
+        }
     	$this->theme = Configure::read('Site.theme');
 
     	if($this->RequestHandler->isMobile()){
@@ -240,6 +243,13 @@ class AppController extends Controller {
 
     protected function nick_should_edited($nick) {
         return name_empty_or_weixin($nick);
+    }
+
+    /**
+     * @return string
+     */
+    protected function login_link() {
+        return '/users/login?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($_SERVER['REQUEST_URI']);
     }
 
     protected function _getParamVars($name,$default='') {
