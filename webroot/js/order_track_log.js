@@ -38,7 +38,7 @@ $(document).ready(function(){
     $select_date.on('change',function(){
         var thisvalue = $select_date.find("option:selected").text();
         $track_date.val(thisvalue);
-        $(this).html('');
+        $order_data.html('');
         getOrder();
     });
 
