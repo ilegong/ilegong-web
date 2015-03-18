@@ -5,7 +5,7 @@
         <li style="text-overflow: ellipsis;"><strong><?php echo mb_substr($Product['Product']['name'],0,13); ?></strong></li>
     </ul>
 </div>
-<div class="container" style="margin-top: 50px;padding-bottom:5em">
+<div class="container" style="margin-top: 50px;padding-bottom:5em;padding-left: 10px;padding-right: 10px;">
     <div class="Content-body">
         <div class="clear"></div>
         <?php echo $Product['Product']['content']; ?>
@@ -19,13 +19,13 @@
             <a href="#X" class="love_icon"></a>
             <!--<p>关注</p>-->
         </li>
-        <li class="fl" style="width:68%;">
-            <div style="margin-right:3%;">
+        <li class="fl" style="width:78%;">
+            <div>
                 <a onclick="back('buy')" class="btn_b pay_bg radius10">去购买</a>
             </div>
         </li>
         <li class="shopping fr">
-            <a href="/carts/listcart.html" style="position:relative; margin-top: 0.9em;" class="shopping_icon"><div id="item-count" class="shopping_count"></div></a>
+            <a href="/carts/listcart.html" style="position:relative; margin-top: 0.3em;" class="shopping_icon"><div id="item-count" class="shopping_count"></div></a>
             <p>购物车</p>
         </li>
     </ul>
