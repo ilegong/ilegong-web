@@ -460,8 +460,8 @@
 </script>
   {{/if}}
 
-{{if $jWeixinOn}}
-{{if $pid == PRODUCT_ID_CAOMEI}}
+
+{{if $pid == PRODUCT_ID_CAOMEI && $jWeixinOn }}
 <script>
     wx.ready(function () {
         var share_string = '{{$share_string ? $share_string :"0"}}';
@@ -500,7 +500,7 @@
     })
 </script>
  {{/if}}
-   {{$pid == PRODUCT_ID_MANGUO}}
+{{if $pid == PRODUCT_ID_MANGUO &&$jWeixinOn}}
 <script>
     wx.ready(function () {
         var share_string = '{{$share_string ? $share_string :"0"}}';
@@ -538,5 +538,4 @@
         });
     })
 </script>
-    {{/if}}
 {{/if}}
