@@ -174,8 +174,10 @@ $(function(){
             priceArray.push(parseFloat(item['price']));
         });
         var min_price = priceArray.min();
-        if(min_price>0){
-            $ProductPrice.val(priceArray.min());
+        if(!isNaN(min_price)){
+            if(min_price>0){
+                $ProductPrice.val(priceArray.min());
+            }
         }
     }
     Handsontable.hooks.add('afterChange', function() {
