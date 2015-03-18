@@ -1,19 +1,19 @@
-{{$this->Html->css(array('tuan.css?v3'));}}
-<div class="classlist_tuan">
+{{$this->Html->css(array('tuan.css'));}}
+<div class="classlist_v2">
     <ul class="clearfix">
         <li><a href="/categories/mobileHome" class="back"></a></li>
         <li class="line"></li>
         <li>返回</li>
     </ul>
 </div>
-  <div class = "container" style="margin-top: 35px;">
+  <div  style="margin-top: 40px;">
       {{loop $tuan_product_ids $pid}}
       <div class="goodlist {{if $tuan_products_info[$pid]['status'] == DELETED_YES}}tuan_cancel{{/if}}">
-          <a href="/tuan_teams/lists/{{$pid}}">
+          <a href="/tuan_buyings/goods_tuans/{{$pid}}">
               {{if $tuan_products_info[$pid]['status']}}<s>团购已结束</s>{{/if}}
-              <div><img src="/img/tuan_team/listgood-{{$pid}}.jpg"></div>
+              <div><img src="/img/tuan/pro/listgood_{{$pid}}.jpg"></div>
               <ul class="clearfix">
-                  <li class="fl">{{$tuan_products_info[$pid]['dec']}}</li>
+                  <li class="fl">{{$tuan_products_info[$pid]['name']}}</li>
                   <li class="fr">{{$tuan_products_info[$pid][0][0]['sold_number']}}人参团</li>
               </ul>
           </a>

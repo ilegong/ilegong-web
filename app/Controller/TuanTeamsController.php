@@ -114,30 +114,6 @@ class TuanTeamsController extends AppController{
         echo json_encode($res);
     }
 
-    public function lists($pid=null){
-        $this->pageTitle = '团购列表';
-//        if($pid !=838){
-//            $this->redirect('/tuans/lists/838');
-//        }
-
-        $this->loadModel('TuanBuying');
-        $date_Time = date('Y-m-d', time());
-        $tuan_product_num = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
-        $tuan_buy_info = $this->TuanBuying->find('all',array('conditions' => array('pid' => $pid,'end_time >' => $date_Time, 'status'=>0)));
-        $tuan_buy = Hash::combine($tuan_buy_info,'{n}.TuanBuying.tuan_id','{n}.TuanBuying');
-        $tuan_ids = Hash::extract($tuan_buy_info, '{n}.TuanBuying.tuan_id');
-        $tuan_info = $this->TuanTeam->find('all', array(
-            'conditions' =>array('id'=>$tuan_ids),
-            'order' => array('TuanTeam.priority DESC')
-        ));
-        $this->set('tuan_info',$tuan_info);
-        $this->log('num'.json_encode($tuan_product_num));
-        $this->set('pid',$pid);
-        $this->set('tuan_buy',$tuan_buy);
-        $this->set('tuan_product_num',$tuan_product_num[0][0]['sold_number']);
-        $this->set('hideNav',true);
-
-    }
     public function lbs_map($tuan_id= null){
         $this->pageTitle =__('自取点');
         if(empty($tuan_id)){
@@ -183,27 +159,6 @@ class TuanTeamsController extends AppController{
         $this->set('hideNav',true);
     }
 
-    public function goods_lists(){
-        $this->pageTitle = '团购商品';
-        $this->loadModel('TuanBuying');
-        $tuan_products = $this->TuanBuying->find('all',array('conditions' => array('pid !=' => null),'group' => array('pid')));
-        $tuan_product_ids = Hash::extract($tuan_products,'{n}.TuanBuying.pid');
-        $this->loadModel('Product');
 
-        $tuan_products_info = array();
-        foreach($tuan_product_ids as $pid){
-        $tuan_products_info[$pid] = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
-        $tuan_product = $this->Product->find('first',array('conditions' => array('id' => $pid),'fields' => array('deleted','promote_name')));
-        $tuan_products_info[$pid]['status'] = $tuan_product['Product']['deleted'];
-        $tuan_products_info[$pid]['dec'] = $tuan_product['Product']['promote_name'];
-        }
-        $this->set('tuan_product_ids',$tuan_product_ids);
-        $this->set('tuan_products_info',$tuan_products_info);
-
-        $this->log('tuan_products'.json_encode($tuan_products_info));
-
-//        $this->set('hideNav',true);
-
-    }
 }
 

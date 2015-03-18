@@ -238,29 +238,46 @@ class TuanBuyingsController extends AppController{
         $this->set('Product',$Product);
         $this->set('hideNav',true);
     }
-
-    public function new_tuan(){
-        $this->pageTitle = '创建新团';
+    public function goods(){
+        $this->pageTitle = '团购商品';
+        $tuan_products = $this->TuanBuying->find('all',array('conditions' => array('pid !=' => null),'group' => array('pid')));
+        $tuan_product_ids = Hash::extract($tuan_products,'{n}.TuanBuying.pid');
+        $this->loadModel('Product');
+        $tuan_products_info = array();
+        foreach($tuan_product_ids as $pid){
+            $tuan_products_info[$pid] = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
+            $tuan_product = $this->Product->find('first',array('conditions' => array('id' => $pid),'fields' => array('deleted','name')));
+            $tuan_products_info[$pid]['status'] = $tuan_product['Product']['deleted'];
+            $tuan_products_info[$pid]['name'] = $tuan_product['Product']['name'];
+        }
+        $this->set('tuan_product_ids',$tuan_product_ids);
+        $this->set('tuan_products_info',$tuan_products_info);
+        $this->log('tuan_products'.json_encode($tuan_products_info));
     }
 
-    public function mei_shi_tuan(){
-        $this->pageTitle = '美食团';
-        $this->loadModel('TuanBuying');
+    public function goods_tuans($pid=null){
+        $this->pageTitle = '团购列表';
+        $this->loadModel('TuanTeam');
         $date_Time = date('Y-m-d', time());
-        $tuan_buy_info = $this->TuanBuying->find('all',array('conditions' => array('end_time >' => $date_Time, 'status'=>0)));
+        $tuan_buy_num = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
+        $tuan_buy_info = $this->TuanBuying->find('all',array('conditions' => array('pid' => $pid,'end_time >' => $date_Time, 'status'=>0)));
         $tuan_buy = Hash::combine($tuan_buy_info,'{n}.TuanBuying.tuan_id','{n}.TuanBuying');
         $tuan_ids = Hash::extract($tuan_buy_info, '{n}.TuanBuying.tuan_id');
-        $tuan_info = $this->Tuan->find('all', array(
+        $tuan_info = $this->TuanTeam->find('all', array(
             'conditions' =>array('id'=>$tuan_ids),
-            'order' => array('Tuan.priority DESC')
+            'order' => array('TuanTeam.priority DESC')
         ));
+        $this->loadModel('Product');
+        $tuan_product = $this->Product->find('first', array(
+            'conditions' => array('id' => $pid),
+            'fields' => array('name', 'promote_name', 'price')
+        ));
+        $this->set('tuan_product', $tuan_product);
         $this->set('tuan_info',$tuan_info);
+        $this->set('pid',$pid);
         $this->set('tuan_buy',$tuan_buy);
-        $this->set('op_cate','mei_shi_tuan');
-    }
-
-    public function join_meishituan(){
-        $this->pageTitle = '加入美食团';
+        $this->set('tuan_buy_num',$tuan_buy_num[0][0]['sold_number']);
+        $this->set('hideNav',true);
     }
 }
 

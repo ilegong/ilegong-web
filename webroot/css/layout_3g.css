@@ -272,7 +272,7 @@ ul li{ list-style:none;}
 .classlist ul{ padding-left:1em; width:50%;}
 .classlist ul li{ float:left; font-size:1.25em; color:#29ac0e; }
 .classlist ul li.back{ width:0.5em; height:1em; background:url('/img/mobilev1/pyshuo_icon.png?xxz') no-repeat -1.25em -16.875em; background-size:25em 25em; margin-top:0.7em; margin-right:0.5em;}
-.classlist_v2 {height: 3em;line-height: 3em;width: 100%;border-bottom: 1px #dddddd solid;background-color: #f5f5f5;position: fixed;top: 0;}
+.classlist_v2 {height: 3em;line-height: 3em;width: 100%;border-bottom: 1px #dddddd solid;background-color: #f5f5f5;position: fixed;top: 0;z-index: 100;}
 .classlist_v2 ul{ padding-left:0.8em;  color:#666666;}
 .classlist_v2 ul li{ float:left;font-size:1.2em;}
 .classlist_v2 ul li a.back {display: block; width: 1.2em; height: 1.5em; background: url('/img/mobile/pyshuo_icon.png?xxz') no-repeat -1.5em -20.25em; background-size: 30em 30em; margin-top: 0.6em; margin-right: 0.7em; margin-left: 0.5em;}
