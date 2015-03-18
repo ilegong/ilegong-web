@@ -155,7 +155,7 @@
             {"shop_code":348,"shop_name":"清华东路三分店","address":"海淀区农业大学南门东200米路北海淀区清华东路11号2号幢一层西侧","area_code":502,"lat":40.007298,"lon":116.366127},
             {"shop_code":350,"shop_name":"大钟寺东路分店","address":"海淀区大钟寺东路京仪大厦底商海淀区大钟寺东路9号1幢1层101-1","area_code":502,"lat":39.977196,"lon":116.344837},
             {"shop_code":561,"shop_name":"万泉河店","address":"海淀区万泉河路68号紫金大厦1层","area_code":502,"lat":39.972615,"lon":116.314524},
-            {"shop_code":562,"shop_name":"电科院超市发店","address":"清河小营电科院旁边超市发","area_code":502,"lat":39.972615,"lon":116.314524},
+            {"shop_code":562,"shop_name":"电科院超市发店","address":"清河小营电科院旁边超市发","area_code":502,"lat":39.972615,"lon":116.314524,'not_shop':true},
             {"shop_code":830,"shop_name":"苏州街八一中学店","address":"海淀区苏州街19号一层","area_code":502,"lat":39.98493,"lon":116.312149}],
         3:[{"shop_code":116,"shop_name":"佟麟阁店","address":"西城区佟麟阁路91号","area_code":501,"lat":39.90687,"lon":116.374897},
             {"shop_code":340,"shop_name":"安慧里店","address":"安慧桥往北,安慧里小区西门直行亚运村","area_code":503,"lat":39.996713,"lon":116.420768},
@@ -260,7 +260,7 @@
             {"shop_code":221,"shop_name":"友谊医院店","address":"北京市宣武区永安路32号","area_code":505,"lat":39.892503,"lon":116.401073},
             {"shop_code":529,"shop_name":"白云桥店","address":"北京市宣武区莲花池东路16-7号（白云桥东南角）","area_code":505,"lat":39.904163,"lon":116.353846},
             {"shop_code":301,"shop_name":"万明店","address":"北京市宣武门万明路2号","area_code":505,"lat":39.895552,"lon":116.396402}],
-        8:[{"shop_code":208,"shop_name":"县城万科自提点","address":"金隅万科南门小超市(侯丽萍医院对面)","area_code":505,"lat":39.89244,"lon":116.394263}]
+        8:[{"shop_code":208,"shop_name":"县城万科自提点","address":"金隅万科南门小超市(侯丽萍医院对面)","area_code":505,"lat":39.89244,"lon":116.394263,'not_shop':true}]
     };
 
 
@@ -325,7 +325,11 @@
             var chose_address = ship_address[area_id];
             var $chose_item = '';
             $.each(chose_address,function(index,item){
-                $chose_item +=' <li class="list-group-item" data-style="button">'+item['address']+' 好邻居便利店</li>';
+                if(item['not_shop']){
+                    $chose_item +=' <li class="list-group-item" data-style="button">'+item['address']+'</li>';
+                }else{
+                    $chose_item +=' <li class="list-group-item" data-style="button">'+item['address']+' 好邻居便利店</li>';
+                }
             });
             $chose_items.html($chose_item);
             $('.list-group.checked-list-box .list-group-item').on('click',function(){
