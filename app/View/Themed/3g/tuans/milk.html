@@ -41,10 +41,10 @@
     <div>
         <ul class="clearfix">
             <li class="fl">
-                已团购<span id="sold_num" value="{{$sold_num>0?$sold_num:0}}">{{$sold_num>0?$sold_num:0}}</span>份
+                已团购<span id="sold_num" value="{{$sold_num>0?$sold_num:0}}">100</span>份
             </li>
             <li class="fr">
-                剩余<span>{{100-$sold_num}}</span>份
+                剩余<span>0</span>份
             </li>
         </ul>
     </div>
@@ -278,11 +278,7 @@
         </li>
         <li class="fl" style="width:50%;">
             <div style="margin-right:3%;">
-                {{if $sold_num>100}}
                 <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
-                {{else}}
-                <a id="tuan_buy" item-id="852" href="javascript:;" class="btn_b pay_bg radius10">立即购买</a>
-                {{/if}}
             </div>
         </li>
 
@@ -329,9 +325,9 @@
 <script>
     $(document).ready(function(){
         var sold_num = $('#sold_num').attr('value');
-        var sold_percent = sold_num>100?100:sold_num;
-        $('#bar_buy').css("width", sold_percent + "%");
-        $('#bar_percent').text(sold_percent + "%");
+        //var sold_percent = sold_num>100?100:sold_num;
+        $('#bar_buy').css("width", 100 + "%");
+        $('#bar_percent').text(100 + "%");
 
     });
 </script>
@@ -344,7 +340,7 @@
         banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/b6be29400fc_0317.jpg');
         banner_links.push('#');banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/1e5b293a0e6_0317.jpg');
         banner_links.push('#');banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/b6be29400fc_0317.jpg');
-        banner_links.push('#');banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/1e5b293a0e6_0317.jpg');
+        banner_links.push('#');banners.push('http://mmbiz.qpic.cn/mmbiz/UuGM2hE8WNG0qTeG3LcrYbstSLqyZdsjwicSyXnpBAH32q9zGM5F87ic4xY9h5PdnibL0pd12WaHpoZxoxrOJoZug/640?tp=webp&wxfrom=5');
         banner_links.push('#');
 //$(banners).preload();
 

@@ -39,6 +39,7 @@ const PRODUCT_ID_CAKE_FRUITS = 657;
 const PRODUCT_ID_RICE_10 = 231;
 const TRACK_TYPE_PRODUCT_RICE = 'rebate_231';
 const PRODUCT_ID_JD_HS_NZT = 484; //经典花生牛轧糖
+const PRODUCT_ID_CAOMEI = 838;//草莓
 const PRODUCT_ID_MANGUO = 851;//海南空运芒果
 const PRODUCT_ID_MILK = 852;//酸奶
 

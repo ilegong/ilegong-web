@@ -7,10 +7,10 @@
  */
 
 class ApiOrdersController extends AppController {
-    public $components = array('OAuth.OAuth', 'Session');
+    public $components = array('OAuth.OAuth', 'Session','ProductSpecGroup');
     public function beforeFilter() {
         parent::beforeFilter();
-        $allow_action = array('test','ping','product_detail','store_list','product_content', 'store_content', 'store_story','_save_comment', 'home','articles');
+        $allow_action = array('test','ping','cart_info','product_detail','store_list','product_content', 'store_content', 'store_story','_save_comment', 'home','articles');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action)  == false) {
             $this->currentUser = $this->OAuth->user();
@@ -182,6 +182,12 @@ class ApiOrdersController extends AppController {
                 unset($pro['Product']['views_count']);
                 unset($pro['Product']['cost_price']);
                 $pro['Product']['limit_ship']=$is_limit_ship;
+
+                //get specs from database
+                $specs_map = $this->ProductSpecGroup->get_product_spec_json($pid);
+                $pro['Product']['specs'] = json_encode($specs_map);
+                $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($pid,'spec_ids');
+                $pro['Product']['specs_group'] = json_encode($product_spec_group);
                 $brandM = ClassRegistry::init('Brand');
                 $brand = $brandM->findById($pro['Product']['brand_id']);
                 $this->set('brand', $brand);
@@ -436,6 +442,7 @@ class ApiOrdersController extends AppController {
         $success = false;
         $postStr = file_get_contents('php://input');;
         $data = json_decode(trim($postStr), true);
+        //$pidList 是cart id 列表
         $pidList = $data['pid_list'];
         $couponCode = $data['coupon_code'];
         //$addressId = $data['addressId'];
@@ -452,7 +459,7 @@ class ApiOrdersController extends AppController {
             $products = $this->Product->find('all', array(
                 'fields' => array('id', 'created', 'slug', 'published', 'deleted','specs','coverimg'),
                 'conditions'=>array(
-                    'id' => $pidList
+                    'id' => $pids
                 )));
 //            $product_specs = array();
 //            foreach ($products as $product) {
@@ -464,11 +471,14 @@ class ApiOrdersController extends AppController {
             foreach($bis as &$bi){
                 $items=$bi->items;
                 foreach($items as $index=>$i){
-                    $i->coverimg=$products[$index]['coverimg'];
-                    $specs = json_decode($products[$index]['specs'],true);
-                    $specId = intval($cartsByPid[$index]["specId"]);
+                    $product_id = $i->pid;
+                    $specialPromotions = $this->ShipPromotion->findShipPromotions($product_id);
+                    $i->specialPromotions = $specialPromotions;
+                    $i->coverimg=$products[$product_id]['coverimg'];
+                    $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($product_id);
+                    $specId = intval($cartsByPid[$product_id]["specId"]);
                     $i->specId=$specId;
-                    $i->spec=$specs['map'][$specId]['name'];
+                    $i->spec=$product_spec_group[$specId]['spec_names'];
                 }
             }
 
