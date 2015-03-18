@@ -77,12 +77,12 @@
                 jQuery.ajax({
                     type: "POST",
                     dataType: "json",
-                    url: "/tuans/pre_order",
+                    url: "/tuan_buyings/pre_order",
                     data: {name: name, mobile: mobile, cart_id: cart_id, tuan_buy_id: tuan_buy_id, tuan_id: tuan_id },
                     success: function (a) {
                         if (a.success) {
                             $("#confirm_next").attr('data-disable', 'true');
-                            window.location.href = '/tuans/tuan_pay/' + a.order_id;
+                            window.location.href = '/tuan_buyings/tuan_pay/' + a.order_id;
                         } else {
                             if(a.info){
                                 utils.alert(a.info);

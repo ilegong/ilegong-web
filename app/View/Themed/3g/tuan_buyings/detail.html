@@ -16,23 +16,16 @@
                 <div class="ui-corner-all ui-widget-content ui-portlet-content">
                     <div class="row voffset1" style="margin-left: 0;margin-right: 0;">
                         <div class="col-xs-12 col-md-6" style="padding: 0;">
-                        <div class="p_details_pic">
-                            <div class="index_banner swiper-container">
-                                <ul class="clearfix list-unstyled">
-                                </ul>
-                                <div class="swiper-wrapper">
-                                </div>
-                            </div>
-                        </div>
-                            <div class="p_details_title">全北京最新鲜的昌平兴寿红颜草莓，现采现送 400g/盒 20盒成团即送 团即送酸奶</div>
+                        {{template Elements/product_img_sild}}
+                            <div class="p_details_title">{{$pro_info['Product']['name']}}</div>
                             <ul class="p_details_price clearfix">
-                                <li class="fl price"><span>￥<font>19.00</font></span></li>
+                                <li class="fl price"><span>￥<font>{{$this->Number->precision($pro_info['Product']['price'],2)}}</font></span></li>
                                 <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{$consign_time}}</b></span></a></li>
                             </ul>
                             <ul class="sales clearfix">
                                 <li>
                                 <span style="display: block;overflow: hidden;">
-                                <span>当天采摘，当天送达，自然熟透，无碰损，科学除虫，无农药，孕妇宝宝水果佳品！<br></span>
+                                <span>{{$pro_info['Product']['promote_name']}}<br></span>
                                 </span>
                                 </li>
                             </ul>
@@ -248,7 +241,7 @@
                             window.location.href="/b/peng_you_shuo";
                         }
                         function to_detail(){
-                            window.location.href="/tuans/product_detail/{{$pid}}?tuan_id={{$tuan_id}}&tuan_buy_id={{$tuan_buy_id}}";
+                            window.location.href="/tuan_buyings/product_detail/{{$pid}}?tuan_id={{$tuan_id}}&tuan_buy_id={{$tuan_buy_id}}";
                         }
 
                     </script>
@@ -305,7 +298,7 @@
                     success:function(data){
                         if(data.success)
                         {
-                            window.location.href = '/tuans/join/{{$tuan_buy_id}}';
+                            window.location.href = '/tuan_buyings/join/{{$tuan_buy_id}};
                         }
                         else
                         {
@@ -316,51 +309,7 @@
                 });
                 }
             });
-
-
             })
-        </script>
-        <script>
-
-            //<![CDATA[
-            $().ready(function(){
-                var banners = [];
-                var banner_links = [];
-                banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/b7294de12a6_0307.jpg');
-                banner_links.push('#');banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/646fba8bd46_0307.jpg');
-                banner_links.push('#');banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/d94df21975c_0307.jpg');
-                banner_links.push('#');banners.push('http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/4dd65a241cf_0307.jpg');
-                banner_links.push('#');
-//$(banners).preload();
-
-                var $indexBanner = $('.index_banner');
-                var ul = $indexBanner.find('ul');
-                var swiper_wrapper = $indexBanner.find('div.swiper-wrapper');
-
-                $.each(banners, function (idx, value) {
-                    $('<div class="swiper-slide"><a href="' + banner_links[idx] + '"><img src="' + value + '" border="0" /></a></div>').appendTo(swiper_wrapper);
-                    $('<li/>').appendTo(ul);
-                });
-
-//setTimeout(function () {
-                var mySwiper = $indexBanner.swiper({
-                    mode: 'horizontal',
-                    loop: banners.length>1,
-                    autoplay: 10000,
-                    calculateHeight: true,
-                    onSlideChangeStart: function (swiper) {
-                        ul.find('li').removeClass('cur');
-                        ul.find('li:nth-child(' + (swiper.activeLoopIndex % 4 + 1) + ')').toggleClass('cur');
-                    }
-//etc..
-                });
-                ul.find('li:first').addClass('cur');
-//}, 1000);
-            })
-
-
-            //]]>
-
         </script>
 
 {{if $jWeixinOn}}
