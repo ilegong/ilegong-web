@@ -398,7 +398,7 @@ class StoresController extends AppController
             $this->TrackOrderMap->saveAll($track_order_map);
             $this->log('save track log : '.$post_logs);
             $post_logs = json_decode($post_logs,true);
-            var_dump($post_logs);
+            $this->log('save track log : '.(join(' ',$post_logs)));
             $post_logs = array_reverse($post_logs);
             $track_log = array();
             foreach($post_logs as $log){
