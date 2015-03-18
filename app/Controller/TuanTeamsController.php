@@ -64,6 +64,7 @@ class TuanTeamsController extends AppController{
             $has_joined = $this->TuanMember->hasAny(array('tuan_id' => $tuan_id, 'uid' => $this->currentUser['id']));
             $this->set('has_joined', $has_joined);
         }
+        $this->pageTitle = $tuan_team['TuanTeam']['tuan_name'];
         $this->set('tuan_id', $tuan_id);
         $this->set('tuan_team', $tuan_team);
         $this->set('tuan_buyings', $tuan_buyings);
@@ -138,7 +139,7 @@ class TuanTeamsController extends AppController{
 
     }
     public function lbs_map($tuan_id= null){
-        $this->pageTitle =__('草莓自取点');
+        $this->pageTitle =__('自取点');
         if(empty($tuan_id)){
             $location = $_GET['location'];
             $name = $_GET['name'];
@@ -166,6 +167,13 @@ class TuanTeamsController extends AppController{
             'conditions' => array('tuan_id' => $tuan_id),
             'fields' => array('uid')
         ));
+        $leader = $this->TuanTeam->find('first', array(
+            'conditions' => array('id' => $tuan_id),
+            'fields' => array('leader_id')
+        ));
+        if($leader){
+            $uids[] = $leader['TuanTeam']['leader_id'];
+        }
         $this->loadModel('User');
         $member_info = $this->User->find('all', array(
             'conditions' => array('id' =>$uids),
