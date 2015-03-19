@@ -1,5 +1,5 @@
 <div>
-    <form action="{{$this->Html->url('/admin/orders/list_today')}}"  method="get">
+    <form action="{{$this->Html->url('/admin/orders/list_today')}}"  method="get" onsubmit="valid();">
 
     起止日期:
     <input name="start_date" type="text" id="datepicker_start" value="{{$start_date}}">
@@ -37,6 +37,10 @@
 
     只显示我们发货的商家
         <input name="sent_by_us" type="checkbox" value="1" <?php if($_REQUEST['sent_by_us'] == 1) echo "checked"  ?> />
+    产品排期:
+        <input name="product_scheduling_date" id="product_scheduling_date" value="{{$product_scheduling_date}}">
+    产品ID:
+        <input name="product_id" id="product_id" value="{{$product_id}}">
 
         <input type="submit" value="查询" class="btn">
 
@@ -136,7 +140,10 @@
 //        start_date.datepicker("setDate","2013-10-8");
 
         var end_date=$( "#datepicker_end" ).datepicker({dateFormat: "yy-m-d"});
+
+        var product_scheduling_date = $('#product_scheduling_date').datepicker({dateFormat: "yy-m-d"});
 //        end_date.datepicker("setDate","2013-10-8");
+
     });
 </script>
 <script language="JavaScript">
@@ -179,6 +186,20 @@
     }
     function txChange2(){
         //alert("testfirefox");
+    }
+
+    function valid(){
+        var input1=document.getElementById("product_scheduling_date").value;
+        var input2=document.getElementById("product_id").value;
+        if(input1==""&&input2!=""){
+            alert("排期和产品ID必须同时为空或者不为空");
+            return false;
+        }
+        if(input1!=""&&input2==""){
+            alert("排期和产品ID必须同时为空或者不为空");
+            return false;
+        }
+        return true;
     }
 
 </script>

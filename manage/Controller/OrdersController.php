@@ -204,7 +204,20 @@ class OrdersController extends AppController{
         $consignee_name=!isset($_REQUEST['consignee_name'])?"":$_REQUEST['consignee_name'];
         $consignee_mobilephone=!isset($_REQUEST['consignee_mobilephone'])?"":$_REQUEST['consignee_mobilephone'];
 
+        $product_scheduling_date = $_REQUEST['product_scheduling_date'];
+        $product_id = $_REQUEST['product_id'];
+
+
         $this->loadModel('Brand');
+        $this->loadModel('ConsignmentDate');
+        $this->loadModel('Cart');
+        $c_date = $this->ConsignmentDate->find('first',array(
+            'conditions' => array(
+                'product_id' => $product_id,
+                'send_date' => $product_scheduling_date
+            )
+        ));
+
         $brands = $this->Brand->find('all',array(
             'conditions'=>array(
                 'deleted != 1',
@@ -219,6 +232,24 @@ class OrdersController extends AppController{
             'Order.created <"' . date("Y-m-d\TH:i:s", $end_date) . '"',
             'Order.type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN)
         );
+
+        if(!empty($c_date)){
+            $c_date_id = $c_date['ConsignmentDate']['id'];
+            $carts = $this->Cart->find('all',array(
+                'conditions' => array(
+                    'consignment_date' => $c_date_id,
+                    'product_id' => $product_id
+                ),
+                'fields' => array(
+                    'order_id'
+                )
+            ));
+            $order_ids = Hash::extract($carts,'{n}.Cart.order_id');
+            if(!empty($order_ids)){
+                $conditions['Order.id'] = $order_ids;
+            }
+        }
+
         if($_REQUEST['search_groupon'] === "1" && $_REQUEST['consignee_mobilephone']){
             $mobile_num = intval($_REQUEST['consignee_mobilephone']);
             $this->loadModel('Groupon');
