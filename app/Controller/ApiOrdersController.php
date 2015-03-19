@@ -202,7 +202,7 @@ class ApiOrdersController extends AppController {
                 ));
                 if(!empty($consign_dates)){
                     $consign_dates = Hash::extract($consign_dates,'{n}.ConsignmentDate');
-                    $pro['consign_dates'] = $consign_dates;
+                    $pro['Product']['consign_dates'] = $consign_dates;
                 }
                 $recommC = $this->Components->load('ProductRecom');
                 $recommends = $recommC->recommend($pid);
@@ -586,7 +586,7 @@ class ApiOrdersController extends AppController {
                 $address = $this->OrderConsignee->find('first', array(
                     'conditions' => array('id' => $addressId, 'creator' => $uid, 'deleted' => DELETED_NO)
                 ));
-                if (empty($address) || empty($address['OrderConsignee']['name'])
+                if ($addressId!=-1||empty($address) || empty($address['OrderConsignee']['name'])
                     || empty($address['OrderConsignee']['address'])
                     || empty($address['OrderConsignee']['mobilephone'])) {
                     $this->log('orders_balance: cannot find address:'.$addressId.', uid='.$uid);
@@ -605,14 +605,12 @@ class ApiOrdersController extends AppController {
                         }
                         $business[$p['Product']['brand_id']][] = $p['Product'];
                     }
-
                     $pids = Hash::extract($allP, '{n}.Product.id');
-
                     $tryId = 0;
-
-                    $this->loadModel('ShipSetting');
-                    $shipSettings = $this->ShipSetting->find_by_pids($pids, $provinceId);
-
+                    if(!empty($provinceId)){
+                        $this->loadModel('ShipSetting');
+                        $shipSettings = $this->ShipSetting->find_by_pids($pids, $provinceId);
+                    }
                     $new_order_ids = array();
                     foreach ($business as $brand_id => $products) {
                         $total_price = 0.0;
@@ -638,21 +636,20 @@ class ApiOrdersController extends AppController {
                                 $success = false;
                                 $reason[] = 'invalid_total_price';
                             }
-
                             $shipFeeContext = array();
                             $ship_fee = 0.0;
                             $ship_fees = array();
                             foreach($products as $pro) {
                                 $pid = $pro['id'];
                                 $pidShipSettings = array();
-                                foreach($shipSettings as $val){
-                                    if($val['ShipSetting']['product_id'] == $pid){
-                                        $pidShipSettings[] = $val;
-                                    }
-                                };
-
+                                if(!empty($shipSettings)){
+                                    foreach($shipSettings as $val){
+                                        if($val['ShipSetting']['product_id'] == $pid){
+                                            $pidShipSettings[] = $val;
+                                        }
+                                    };
+                                }
                                 $num = $Carts[$pid]['Cart']['num'];
-
                                 if ($tryId) {
                                     $ship_fees[$pid] = 0;
                                 } else {
