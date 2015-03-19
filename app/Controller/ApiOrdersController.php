@@ -114,6 +114,12 @@ class ApiOrdersController extends AppController {
                 'creator'=> $uid
             )));
         $product_ids = Hash::extract($Carts, '{n}.Cart.product_id');
+        $this->loadModel('Product');
+        $products = $this->Product->find('all', array(
+            'fields' => array('id', 'created', 'slug', 'published', 'deleted','specs'),
+            'conditions'=>array(
+                'id' => $product_ids
+            )));
         $num = 0;
         foreach ($Carts as $cart){
             $pid = $cart['Cart']['product_id'];
