@@ -586,9 +586,9 @@ class ApiOrdersController extends AppController {
                 $address = $this->OrderConsignee->find('first', array(
                     'conditions' => array('id' => $addressId, 'creator' => $uid, 'deleted' => DELETED_NO)
                 ));
-                if ($addressId!=-1||empty($address) || empty($address['OrderConsignee']['name'])
+                if ($addressId!=-1&&(empty($address) || empty($address['OrderConsignee']['name'])
                     || empty($address['OrderConsignee']['address'])
-                    || empty($address['OrderConsignee']['mobilephone'])) {
+                    || empty($address['OrderConsignee']['mobilephone']))) {
                     $this->log('orders_balance: cannot find address:'.$addressId.', uid='.$uid);
                     $success = false;
                     $reason[] = 'invalid_address';
