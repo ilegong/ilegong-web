@@ -678,14 +678,23 @@ class ApiOrdersController extends AppController {
                             $remark = $remarks[$brand_id];
                             $data['remark'] = empty($remark) ? "" : $remark;
 
-                            $data['consignee_id'] = $addressId;
-                            $data['consignee_name'] = $address['OrderConsignee']['name'];
-                            $data['consignee_area'] = $address['OrderConsignee']['area'];
-                            $data['consignee_address'] = $address['OrderConsignee']['address'];
-                            $data['consignee_mobilephone'] = $address['OrderConsignee']['mobilephone'];
-                            $data['consignee_telephone'] = $address['OrderConsignee']['telephone'];
-                            $data['consignee_email'] = $address['OrderConsignee']['email'];
-                            $data['consignee_postcode'] = $address['OrderConsignee']['postcode'];
+                            if($addressId!=-1){
+                                $data['consignee_id'] = $addressId;
+                                $data['consignee_name'] = $address['OrderConsignee']['name'];
+                                $data['consignee_area'] = $address['OrderConsignee']['area'];
+                                $data['consignee_address'] = $address['OrderConsignee']['address'];
+                                $data['consignee_mobilephone'] = $address['OrderConsignee']['mobilephone'];
+                                $data['consignee_telephone'] = $address['OrderConsignee']['telephone'];
+                                $data['consignee_email'] = $address['OrderConsignee']['email'];
+                                $data['consignee_postcode'] = $address['OrderConsignee']['postcode'];
+                            }else if($addressId==-1){
+                                $data['consignee_id'] = $addressId;
+                                $data['consignee_address'] = $data['detailedAddress'];
+                                $data['consignee_name'] = $data['username'];
+                                $data['consignee_mobilephone'] = $data['mobile'];
+                            }else{
+                                //error
+                            }
 
                             $this->Order->create();
 
