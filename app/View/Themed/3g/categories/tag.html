@@ -12,12 +12,6 @@
         padding: 0;
     }
 
-    /**
-     * Grid items
-     */
-    #tag-product-list li {
-        display: none; /** Hide items initially to avoid a flicker effect **/
-    }
 
     #tag-product-list li.inactive {
         visibility: hidden;
@@ -39,7 +33,7 @@
         {{if $tag['banner']}}
         <img src="{{$this->Html->assetUrl($tag['banner'])}}" style="width:100%"/>
         {{/if}}
-        <ul class="clearfix list-unstyled" style="padding-left:10px;position: relative;" id="tag-product-list">
+        <ul class="clearfix list-unstyled" style="padding-left: 10px;position: relative;" id="tag-product-list">
 	<?PHP if($total>0){ ?>
 	    <?PHP foreach($data_list as $item) {
 	    $full = true;
