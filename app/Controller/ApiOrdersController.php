@@ -171,6 +171,7 @@ class ApiOrdersController extends AppController {
     public function product_detail($pid) {
 
         if (!empty($pid)) {
+            $this -> loadModel('ConsignmentDate');
             $is_limit_ship = ClassRegistry::init('ShipPromotion')->is_limit_ship($pid);
             $productM = ClassRegistry::init('Product');
             $pro = $productM->findById($pid);
@@ -182,7 +183,6 @@ class ApiOrdersController extends AppController {
                 unset($pro['Product']['views_count']);
                 unset($pro['Product']['cost_price']);
                 $pro['Product']['limit_ship']=$is_limit_ship;
-
                 //get specs from database
                 $specs_map = $this->ProductSpecGroup->get_product_spec_json($pid);
                 $pro['Product']['specs'] = json_encode($specs_map);
@@ -191,13 +191,26 @@ class ApiOrdersController extends AppController {
                 $brandM = ClassRegistry::init('Brand');
                 $brand = $brandM->findById($pro['Product']['brand_id']);
                 $this->set('brand', $brand);
-
+                $consign_dates = $this->ConsignmentDate->find('all',array(
+                    'conditions' => array(
+                        'product_id' => $pid,
+                        'published' => PUBLISH_YES
+                    ),
+                    'fields' => array(
+                        'id', 'send_date'
+                    )
+                ));
+                if(!empty($consign_dates)){
+                    $consign_dates = Hash::extract($consign_dates,'{n}.ConsignmentDate');
+                    $pro['consign_dates'] = $consign_dates;
+                }
                 $recommC = $this->Components->load('ProductRecom');
                 $recommends = $recommC->recommend($pid);
 
                 $this->set('product',$pro);
                 $this->set('recommends', $recommends);
                 $this->set('brand', $brand);
+
 
                 $specialListM = ClassRegistry::init('SpecialList');
                 $specialLists = $specialListM->has_special_list($pid);
@@ -424,6 +437,12 @@ class ApiOrdersController extends AppController {
             }
 
             $info = $buyingCom->check_and_add($cartM, $type, $tryId, $uid, $num, $product_id, $specId, null);
+            $cartId = $info['id'];
+            $consign_date_id = $data['consign_data_id'];
+            $consign_date = $data['consign_data'];
+            if (!empty($consign_date_id) && !empty($cartId) && !empty($consign_date)) {
+                $cartM->updateAll(array('consignment_date' => $consign_date_id,'name' => 'concat(name, "(' . $consign_date . ')")'), array('id' => $cartId));
+            }
         } else {
             $info = array('success' => false, 'reason' => 'invalid_parameter');
         }
