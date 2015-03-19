@@ -423,10 +423,13 @@ class ApiOrdersController extends AppController {
         $buyingCom = $this->Components->load('Buying');
         $postStr = file_get_contents('php://input');;
         $data = json_decode(trim($postStr), true);
+
         if (!empty($data)) {
             $product_id = $data['product_id'];
             $num = $data['num'];
             $specId = $data['spec'];
+            $consign_date_id = $data['consign_date_id'];
+            $consign_date = $data['consign_date'];
             $type = $buyingCom->convert_cart_type($data['type']);
             $tryId = intval($data['try_id']);
             $uid = $this->currentUser['id'];
@@ -438,8 +441,6 @@ class ApiOrdersController extends AppController {
 
             $info = $buyingCom->check_and_add($cartM, $type, $tryId, $uid, $num, $product_id, $specId, null);
             $cartId = $info['id'];
-            $consign_date_id = $data['consign_data_id'];
-            $consign_date = $data['consign_data'];
             if (!empty($consign_date_id) && !empty($cartId) && !empty($consign_date)) {
                 $cartM->updateAll(array('consignment_date' => $consign_date_id,'name' => 'concat(name, "(' . $consign_date . ')")'), array('id' => $cartId));
             }
