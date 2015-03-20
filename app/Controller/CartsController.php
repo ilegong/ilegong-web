@@ -184,7 +184,7 @@ class CartsController extends AppController{
             $total_price += $cart['Cart']['price'] * $cart['Cart']['num'];
 		}
         $Carts = Hash::combine($Carts,'{n}.Cart.product_id','{n}.Cart');
-        $this->set('brand_infos',$brandInfos);
+        $this->set('brandInfos',$brandInfos);
         $this->set('product_brand_map',$map_result);
 		$this->set('total_price',$total_price);
 		$this->set('Carts',$Carts);
