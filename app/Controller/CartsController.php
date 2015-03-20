@@ -135,11 +135,9 @@ class CartsController extends AppController{
 					'status' => 0,
                     'type' => CART_ITEM_TYPE_NORMAL,
 					'order_id' => NULL,
-					'OR'=> $this->user_condition
-			)));
+					'OR'=> $this->user_condition)));
 
         $cartsDicts = dict_db_carts($dbCartItems);
-
         $poductModel = ClassRegistry::init('Product');
         if(!empty($_COOKIE['cart_products'])){
             $info = explode(',', $_COOKIE['cart_products']);
@@ -155,6 +153,10 @@ class CartsController extends AppController{
                 'OR'=> $this->user_condition
             )));
 
+        $product_ids = Hash::extract($Carts,'{n}.Cart.product_id');
+
+        
+
         //TODO: 此处修改通知用户购物车价格有变化！
 
 		$total_price = 0;
@@ -163,7 +165,6 @@ class CartsController extends AppController{
 		}
 		$this->set('total_price',$total_price);
 		$this->set('Carts',$Carts);
-        $this->set('op_cate', OP_CATE_CATEGORIES);
         $this->set('hideNav',true);
         $this->pageTitle = __('购物车');
 	}
