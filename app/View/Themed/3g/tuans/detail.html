@@ -366,7 +366,7 @@
                     target_number = 45;
                 {{/if}}
 
-                var sold_percent = round(sold_num / target_number * 100, 2);
+                var sold_percent = Math.round(sold_num / target_number * 100);
                 {{if sold_percent > 100 }}
                   sold_percent = 100; 
                 {{/if}}
