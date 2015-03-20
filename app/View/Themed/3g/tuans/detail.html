@@ -61,8 +61,14 @@
                             </div>
                             <ul class="clearfix">
                                 <li class="fl"><span id="bar_percent"></span></li>
-                                {{if $pid == PRODUCT_ID_CAOMEI}}<li class="fr">目标20份</li>{{/if}}
-                                {{if $pid == PRODUCT_ID_MANGUO}}<li class="fr">目标50份</li>{{/if}}
+                                {{if $tuan_buy_id==33}}
+                                    <li class="fr">目标100份</li>
+                                {{elseif $tuan_buy_id==34}}
+                                    <li class="fr">目标50份</li>
+                                {{else}}
+                                    {{if $pid == PRODUCT_ID_CAOMEI}}<li class="fr">目标20份</li>{{/if}}
+                                    {{if $pid == PRODUCT_ID_MANGUO}}<li class="fr">目标50份</li>{{/if}}
+                                {{/if}}
                             </ul>
                         </div>
                             <div class="clearfix tuanxq">
@@ -349,10 +355,15 @@
         <script>
             $(document).ready(function(){
                 var sold_num = $('#sold_num').attr('value');
-                var sold_percent = (sold_num*5)>100?100:sold_num*5;
+                {{if $tuan_buy_id==33}}
+                    var sold_percent = sold_num>100?100:sold_num;
+                {{elseif $tuan_buy_id==34}}
+                    var sold_percent = (sold_num*2)>100?100:sold_num*2;
+                {{else}}
+                    var sold_percent = (sold_num*5)>100?100:sold_num*5;
+                {{/if}}
                 $('#bar_buy').css("width", sold_percent + "%");
                 $('#bar_percent').text(sold_percent + "%");
-
             });
         </script>
         {{/if}}
