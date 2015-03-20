@@ -7,24 +7,34 @@
 </div>
 <form action="{{$this->Html->url('/orders/info?from=list_cart')}}" method="post">
     <div class="cart">
-        {{loop $Carts $cart}}
-            <ul class="clearfix">
-                <li class="fl"><a href="{{product_link($cart['Cart']['product_id'], 'javascript:;')}}"><img src="{{Router::url(small_thumb_link($cart['Cart']['coverimg']))}}" border="0" /></a></li>
-                <li style="overflow: hidden; display: block; padding-right: 35px; padding-left: 10px;">
-                    <p>{{$cart['Cart']['name']}}</p>
-                    <s>单价:￥{{$this->Number->precision($cart['Cart']['price'], 2)}}</s>
-                    <div class="clearfix">
-                        <a onclick="cart_edit_amount.reduce('#pamount-{{$cart['Cart']['id']}}')" class="cartnumreduce fl"></a>
-                        <input style="height: 1.7em;text-align: center;" type="text" disabled="disabled" size="3" id="pamount-{{$cart['Cart']['id']}}"
-                               data-id="{{$cart['Cart']['id']}}"
-                               data-price="{{$cart['Cart']['price']}}" class="cart-num-input"
-                               name="data[Cart][{{$cart['Cart']['id']}}][num]" value="{{$cart['Cart']['num']}}"/>
-                        <a onclick="cart_edit_amount.add('#pamount-{{$cart['Cart']['id']}}')" class="cartnumadd fl"></a>
-                    </div>
-                    <span style="display: none;" class="item-price" id="price-{{$cart['Cart']['id']}}">{{$this->Number->precision($cart['Cart']['price']*$cart['Cart']['num'], 2)}}</span>
-                </li>
-                <li><a href="{{Router::url('/carts/delete/'.$cart['Cart']['id'])}}" class="cart_delete_a">删除</a></li>
-            </ul>
+        {{loop $brandInfos $key $brand}}
+            <div>
+                <dl class="clearfix">
+                    <dd class="fl cart_select"><span></span></dd>
+                    <dd class="fl">{{$brand['name']}}</dd>
+                </dl>
+                {{loop $product_brand_map[$key] $p_id}}
+                    <ul class="clearfix">
+                        <li class="fl cart_select cart_select_cur"><span></span></li>
+                        <li class="fl"><a href="{{product_link($p_id, 'javascript:;')}}"><img src="{{Router::url(small_thumb_link($Carts[$p_id]['coverimg']))}}" border="0" /></a></li>
+                        <li style="overflow: hidden; display: block; padding-right: 35px; padding-left: 10px;">
+                            <a href="#X">
+                                <p>{{$Carts[$p_id]['name']}}</p>
+                                <s>单价:￥{{$this->Number->precision($Carts[$p_id]['price'], 2)}}</s>
+                                <div class="clearfix">
+                                    <a onclick="cart_edit_amount.reduce('#pamount-{{$cart['Cart']['id']}}')" class="cartnumreduce fl"></a>
+                                    <input style="height: 1.7em;text-align: center;" type="text" disabled="disabled" size="3" id="pamount-{{$Cart[$p_id]['id']}}"
+                                           data-id="{{$Cart[$p_id]['id']}}"
+                                           data-price="{{$Cart[$p_id]['price']}}" class="cart-num-input"
+                                           name="data[Cart][{{$Cart[$p_id]['id']}}][num]" value="{{$Cart[$p_id]['num']}}"/>
+                                    <a onclick="cart_edit_amount.add('#pamount-{{$Cart[$p_id]['id']}}')" class="cartnumadd fl"></a>
+                                </div>
+                            </a>
+                        </li>
+                        <li><a href="{{Router::url('/carts/delete/'.$Cart[$p_id]['id'])}}" class="cart_delete_a">删除</a></li>
+                    </ul>
+                {{/loop}}
+            </div>
         {{/loop}}
     </div>
     <div style="margin-top: 40px"></div>

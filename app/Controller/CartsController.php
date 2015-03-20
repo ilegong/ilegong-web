@@ -155,14 +155,37 @@ class CartsController extends AppController{
 
         $product_ids = Hash::extract($Carts,'{n}.Cart.product_id');
 
-        
 
+        $product_brand_map = $poductModel->find('all',array(
+            'conditions' => array(
+                'id' => $product_ids
+            ),
+            'fields' => array('id','brand_id')
+        ));
+        $brandM = ClassRegistry::init('Brand');
+        $brand_ids = Hash::extract($product_brand_map,'{n}.Product.brand_id');
+        $brandInfos = $brandM->find('all', array(
+            'conditions' => array('id' => $brand_ids, 'deleted' => DELETED_NO),
+            'fields' => array('id', 'name')
+        ));
+        $brandInfos = Hash::combine($brandInfos,'{n}.Brand.id','{n}.Brand');
+        $brand_product_map = Hash::combine($product_brand_map,'{n}.Product.id','{n}.Product.brand_id');
+        $map_result = array();
+        foreach($brand_product_map as $pid=>$bid){
+            if(empty($map_result[$bid])){
+                $map_result[$bid] = array($pid);
+            }else{
+                $map_result[$bid][] = $pid;
+            }
+        }
         //TODO: 此处修改通知用户购物车价格有变化！
-
 		$total_price = 0;
 		foreach($Carts as $cart){
             $total_price += $cart['Cart']['price'] * $cart['Cart']['num'];
 		}
+        $Carts = Hash::combine($Carts,'{n}.Cart.product_id','{n}.Cart');
+        $this->set('brand_infos',$brandInfos);
+        $this->set('product_brand_map',$map_result);
 		$this->set('total_price',$total_price);
 		$this->set('Carts',$Carts);
         $this->set('hideNav',true);
