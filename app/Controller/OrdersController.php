@@ -555,7 +555,7 @@ class OrdersController extends AppController {
                 }
             }
 
-            $this->set('show_pay', $orderinfo['Order']['type'] == ORDER_TYPE_DEF
+            $this->set('show_pay', ($orderinfo['Order']['type'] == ORDER_TYPE_DEF || $orderinfo['Order']['type']==ORDER_TYPE_TUAN)
                 && $afford
                 && $has_expired_product_type == 0
                 && $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
