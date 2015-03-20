@@ -357,12 +357,18 @@
         <script>
             $(document).ready(function(){
                 var sold_num = $('#sold_num').attr('value');
+                var target_number = 20;
                 {{if $tuan_buy_id==33}}
-                    var sold_percent = sold_num>100?100:sold_num;
+                    target_number = 100;
                 {{elseif $tuan_buy_id==34}}
-                    var sold_percent = (sold_num*2)>100?100:sold_num*2;
-                {{else}}
-                    var sold_percent = (sold_num*5)>100?100:sold_num*5;
+                    target_number = 50;
+                {{elseif $tuan_buy_id==36}}
+                    target_number = 45;
+                {{/if}}
+
+                var sold_percent = round(sold_num / target_number * 100, 2);
+                {{if sold_percent > 100 }}
+                  sold_percent = 100; 
                 {{/if}}
                 $('#bar_buy').css("width", sold_percent + "%");
                 $('#bar_percent').text(sold_percent + "%");
