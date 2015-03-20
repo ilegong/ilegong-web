@@ -23,8 +23,8 @@ class TuanBuyingsController extends AppController{
             $this->__message('该团购不存在', '/tuan_teams/mei_shi_tuan');
             return;
         }
-        $tuan_info = $this->TuanTeam->find('first',array('conditions' => array('id' => $tuan_b['TuanBuying']['tuan_id'])));
-        if(empty($tuan_info)){
+        $tuan_team = $this->TuanTeam->find('first',array('conditions' => array('id' => $tuan_b['TuanBuying']['tuan_id'])));
+        if(empty($tuan_team)){
             $this->__message('该团不存在', '/tuan_teams/mei_shi_tuan');
         }
         $current_time = time();
@@ -40,30 +40,32 @@ class TuanBuyingsController extends AppController{
         }
         $pid=$tuan_b['TuanBuying']['pid'];
         $consign_time = friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
-        $this->set('sold_num',$tuan_b['TuanBuying']['sold_num']);
-        $this->set('pid', $pid);
-        $this->set('consign_time', $consign_time);
+        $this->set(compact('pid', 'consign_time', 'tuan_buy_id', 'tuan_team'));
+        $this->set('sold_num',intval($tuan_b['TuanBuying']['sold_num']));
         $this->set('tuan_id',$tuan_b['TuanBuying']['tuan_id']);
-        $this->set('tuan_name',$tuan_info['TuanTeam']['tuan_name']);
-        $this->set('tuan_leader_name',$tuan_info['TuanTeam']['leader_name']);
-        $this->set('tuan_leader_weixin',$tuan_info['TuanTeam']['leader_weixin']);
-        $this->set('tuan_address',$tuan_info['TuanTeam']['address']);
-        $this->set('tuan_buy_id', $tuan_buy_id);
+        $target_num = max($tuan_b['TuanBuying']['target_num'], 1);
+        $this->set('target_num', $target_num);
         $this->set('hideNav',true);
         if($this->is_weixin()){
             $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
             $this->prepare_wx_sharing($currUid, $pid);
         }
-
+        $this->loadModel('Product');
         $this->loadModel('Uploadfile');
+        $Product = $this->Product->find('first',array('conditions' => array('id' => $pid,'deleted' => DELETED_NO)));
         $con = array('modelclass' => 'Product','fieldname' =>'photo','data_id' => $pid);
         $Product['Uploadfile']= $this->Uploadfile->find('all',array('conditions' => $con,'fields' => array('mid_thumb')));
-        $this->set('Product',$Product);
-        $this->log('uploadfile'.json_encode($Product['Uploadfile']));
-
-        $this->loadModel('Product');
-        $pro_info = $this->Product->find('first',array('conditions' => array('id' => $pid,'deleted' => DELETED_NO)));
-        $this->set('pro_info',$pro_info);
+        $this->set('Product', $Product);
+        $this->set('category_control_name', 'products');
+        $this->set('current_data_id', $pid);
+        if($this->RequestHandler->isMobile()){
+//            $comment_count = intval($Product['Product']['comment_nums']);
+//            $this->set('comment_count',$comment_count);
+            $this->set('limitCommentCount',COMMENT_LIMIT_IN_PRODUCT_VIEW);
+        }
+        $recommC = $this->Components->load('ProductRecom');
+        $recommends = $recommC->recommend($pid);
+        $this->set('items', $recommends);
     }
 
     protected function prepare_wx_sharing($currUid, $pid) {
