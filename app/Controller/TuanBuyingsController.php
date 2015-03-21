@@ -270,11 +270,14 @@ class TuanBuyingsController extends AppController{
     public function goods_tuans($pid=null){
         $this->pageTitle = '团购列表';
         $this->loadModel('TuanTeam');
-        $date_Time = date('Y-m-d', time());
+        $date_time = date('Y-m-d', time());
         $tuan_buy_num = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
-        $tuan_buy_info = $this->TuanBuying->find('all',array('conditions' => array('pid' => $pid,'end_time >' => $date_Time, 'status'=>0)));
+        $tuan_buy_info = $this->TuanBuying->find('all',array(
+            'conditions' => array('pid' => $pid, 'status'=>0),
+            'order' => array('TuanBuying.end_time')
+        ));
         $tuan_buy = Hash::combine($tuan_buy_info,'{n}.TuanBuying.tuan_id','{n}.TuanBuying');
-        $tuan_ids = Hash::extract($tuan_buy_info, '{n}.TuanBuying.tuan_id');
+        $tuan_ids = array_unique(Hash::extract($tuan_buy_info, '{n}.TuanBuying.tuan_id'));
         $tuan_info = $this->TuanTeam->find('all', array(
             'conditions' =>array('id'=>$tuan_ids),
             'order' => array('TuanTeam.priority DESC')

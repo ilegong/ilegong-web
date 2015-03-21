@@ -8,11 +8,11 @@
             ?>
         <div class="alltuan_border">
             <ul class="clearfix">
-                <li><a href="/tuan_teams/lbs_map/{{$tuan['TuanTeam']['id']}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
+                <li><a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan['TuanTeam']['tuan_name']}}&addr={{$tuan['TuanTeam']['tuan_addr']}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
                 <li style=" float: none; padding-left: 8em;">
                     <a href="{{$tuan_link}}">
                         <p>{{$tuan['TuanTeam']['tuan_name'] }}</p>
-                        <s>团长:<span>{{$tuan['TuanTeam']['leader_name']}}</span>&nbsp;&nbsp;成员:<span>99</span>人</s><br/>
+                        <s>团长:<span>{{$tuan['TuanTeam']['leader_name']}}</span>&nbsp;&nbsp;成员:<span>{{$tuan['TuanTeam']['member_num']}}</span>人</s><br/>
                         <s>寻找最纯粹的美味</s>
                     </a>
                 </li>
