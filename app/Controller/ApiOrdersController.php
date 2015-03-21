@@ -7,7 +7,7 @@
  */
 
 class ApiOrdersController extends AppController {
-    public $components = array('OAuth.OAuth', 'Session');
+    public $components = array('OAuth.OAuth', 'Session','ProductSpecGroup');
     public function beforeFilter() {
         parent::beforeFilter();
         $allow_action = array('test','ping','product_detail','store_list','product_content', 'store_content', 'store_story','_save_comment', 'home','articles');
@@ -58,6 +58,7 @@ class ApiOrdersController extends AppController {
                 'deleted' => DELETED_NO,
                 'status' => 0,
                 'order_id' => NULL,
+                'type' => CART_ITEM_TYPE_NORMAL,
                 'creator'=> $this->currentUser['id'],
             ),
             'fields' => array('id', 'name', 'product_id', 'num', 'name', 'price', 'coverimg', 'used_coupons','specId'),
@@ -119,13 +120,12 @@ class ApiOrdersController extends AppController {
             'conditions'=>array(
                 'id' => $product_ids
             )));
-        $product_spec = Hash::combine($products, '{n}.Product.id', '{n}.Product.specs');
         $num = 0;
         foreach ($Carts as $cart){
-            $value = $product_spec[$cart['Cart']['product_id']];
-            $spec_info = json_decode($value,true);
+            $pid = $cart['Cart']['product_id'];
+            $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($pid,'id');
             $specId = $cart['Cart']['specId'];
-            $Carts[$num]['Cart']['spec'] =  $spec_info['map'][$specId]['name'];
+            $Carts[$num]['Cart']['spec'] =  $product_spec_group[$specId]['spec_names'];
             $num ++;
         }
         $expired_pids = array();
@@ -170,6 +170,7 @@ class ApiOrdersController extends AppController {
     public function product_detail($pid) {
 
         if (!empty($pid)) {
+            $this -> loadModel('ConsignmentDate');
             $is_limit_ship = ClassRegistry::init('ShipPromotion')->is_limit_ship($pid);
             $productM = ClassRegistry::init('Product');
             $pro = $productM->findById($pid);
@@ -181,16 +182,34 @@ class ApiOrdersController extends AppController {
                 unset($pro['Product']['views_count']);
                 unset($pro['Product']['cost_price']);
                 $pro['Product']['limit_ship']=$is_limit_ship;
+                //get specs from database
+                $specs_map = $this->ProductSpecGroup->get_product_spec_json($pid);
+                $pro['Product']['specs'] = json_encode($specs_map);
+                $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($pid,'spec_ids');
+                $pro['Product']['specs_group'] = json_encode($product_spec_group);
                 $brandM = ClassRegistry::init('Brand');
                 $brand = $brandM->findById($pro['Product']['brand_id']);
                 $this->set('brand', $brand);
-
+                $consign_dates = $this->ConsignmentDate->find('all',array(
+                    'conditions' => array(
+                        'product_id' => $pid,
+                        'published' => PUBLISH_YES
+                    ),
+                    'fields' => array(
+                        'id', 'send_date'
+                    )
+                ));
+                if(!empty($consign_dates)){
+                    $consign_dates = Hash::extract($consign_dates,'{n}.ConsignmentDate');
+                    $pro['Product']['consign_dates'] = $consign_dates;
+                }
                 $recommC = $this->Components->load('ProductRecom');
                 $recommends = $recommC->recommend($pid);
 
                 $this->set('product',$pro);
                 $this->set('recommends', $recommends);
                 $this->set('brand', $brand);
+
 
                 $specialListM = ClassRegistry::init('SpecialList');
                 $specialLists = $specialListM->has_special_list($pid);
@@ -403,10 +422,13 @@ class ApiOrdersController extends AppController {
         $buyingCom = $this->Components->load('Buying');
         $postStr = file_get_contents('php://input');;
         $data = json_decode(trim($postStr), true);
+
         if (!empty($data)) {
             $product_id = $data['product_id'];
             $num = $data['num'];
             $specId = $data['spec'];
+            $consign_date_id = $data['consign_date_id'];
+            $consign_date = $data['consign_date'];
             $type = $buyingCom->convert_cart_type($data['type']);
             $tryId = intval($data['try_id']);
             $uid = $this->currentUser['id'];
@@ -417,6 +439,10 @@ class ApiOrdersController extends AppController {
             }
 
             $info = $buyingCom->check_and_add($cartM, $type, $tryId, $uid, $num, $product_id, $specId, null);
+            $cartId = $info['id'];
+            if (!empty($consign_date_id) && !empty($cartId) && !empty($consign_date)) {
+                $cartM->updateAll(array('consignment_date' => $consign_date_id,'name' => 'concat(name, "(' . $consign_date . ')")'), array('id' => $cartId));
+            }
         } else {
             $info = array('success' => false, 'reason' => 'invalid_parameter');
         }
@@ -435,6 +461,7 @@ class ApiOrdersController extends AppController {
         $success = false;
         $postStr = file_get_contents('php://input');;
         $data = json_decode(trim($postStr), true);
+        //$pidList 是cart id 列表
         $pidList = $data['pid_list'];
         $couponCode = $data['coupon_code'];
         //$addressId = $data['addressId'];
@@ -445,13 +472,13 @@ class ApiOrdersController extends AppController {
             $uid = $this->currentUser['id'];
             $buyingCom = $this->Components->load('Buying');
             //FIXME: check pid list
-            $cartsByPid = $buyingCom->cartsByPid($pidList, $uid);
+            $cartsByPid = $buyingCom->cartsByIds($pidList, $uid);
             list($pids, $cart, $shipFee, $shipFees) = $buyingCom->createTmpCarts(0, $pidList, $uid);
 
             $products = $this->Product->find('all', array(
                 'fields' => array('id', 'created', 'slug', 'published', 'deleted','specs','coverimg'),
                 'conditions'=>array(
-                    'id' => $pidList
+                    'id' => $pids
                 )));
 //            $product_specs = array();
 //            foreach ($products as $product) {
@@ -463,11 +490,14 @@ class ApiOrdersController extends AppController {
             foreach($bis as &$bi){
                 $items=$bi->items;
                 foreach($items as $index=>$i){
-                    $i->coverimg=$products[$index]['coverimg'];
-                    $specs = json_decode($products[$index]['specs'],true);
-                    $specId = intval($cartsByPid[$index]["specId"]);
+                    $product_id = $i->pid;
+                    $specialPromotions = $this->ShipPromotion->findShipPromotions(array($product_id));
+                    $i->specialPromotions = $specialPromotions;
+                    $i->coverimg=$products[$product_id]['coverimg'];
+                    $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($product_id);
+                    $specId = intval($cartsByPid[$product_id]["specId"]);
                     $i->specId=$specId;
-                    $i->spec=$specs['map'][$specId]['name'];
+                    $i->spec=$product_spec_group[$specId]['spec_names'];
                 }
             }
 
@@ -498,11 +528,11 @@ class ApiOrdersController extends AppController {
     public function balance() {
 
         $success = true;
-        $postStr = file_get_contents('php://input');;
+        $postStr = file_get_contents('php://input');
         $data = json_decode(trim($postStr), true);
         $pidList = $data['pid_list'];
         $addressId = $data['addressId'];
-        $couponCode = $data['coupon_code'];
+        //$couponCode = $data['coupon_code'];
         $remarks = $data['remarks'];
         if (!empty($pidList) && !empty($addressId)) {
 
@@ -556,9 +586,9 @@ class ApiOrdersController extends AppController {
                 $address = $this->OrderConsignee->find('first', array(
                     'conditions' => array('id' => $addressId, 'creator' => $uid, 'deleted' => DELETED_NO)
                 ));
-                if (empty($address) || empty($address['OrderConsignee']['name'])
+                if ($addressId!=-1&&(empty($address) || empty($address['OrderConsignee']['name'])
                     || empty($address['OrderConsignee']['address'])
-                    || empty($address['OrderConsignee']['mobilephone'])) {
+                    || empty($address['OrderConsignee']['mobilephone']))) {
                     $this->log('orders_balance: cannot find address:'.$addressId.', uid='.$uid);
                     $success = false;
                     $reason[] = 'invalid_address';
@@ -575,14 +605,12 @@ class ApiOrdersController extends AppController {
                         }
                         $business[$p['Product']['brand_id']][] = $p['Product'];
                     }
-
                     $pids = Hash::extract($allP, '{n}.Product.id');
-
                     $tryId = 0;
-
-                    $this->loadModel('ShipSetting');
-                    $shipSettings = $this->ShipSetting->find_by_pids($pids, $provinceId);
-
+                    if(!empty($provinceId)){
+                        $this->loadModel('ShipSetting');
+                        $shipSettings = $this->ShipSetting->find_by_pids($pids, $provinceId);
+                    }
                     $new_order_ids = array();
                     foreach ($business as $brand_id => $products) {
                         $total_price = 0.0;
@@ -608,21 +636,20 @@ class ApiOrdersController extends AppController {
                                 $success = false;
                                 $reason[] = 'invalid_total_price';
                             }
-
                             $shipFeeContext = array();
                             $ship_fee = 0.0;
                             $ship_fees = array();
                             foreach($products as $pro) {
                                 $pid = $pro['id'];
                                 $pidShipSettings = array();
-                                foreach($shipSettings as $val){
-                                    if($val['ShipSetting']['product_id'] == $pid){
-                                        $pidShipSettings[] = $val;
-                                    }
-                                };
-
+                                if(!empty($shipSettings)){
+                                    foreach($shipSettings as $val){
+                                        if($val['ShipSetting']['product_id'] == $pid){
+                                            $pidShipSettings[] = $val;
+                                        }
+                                    };
+                                }
                                 $num = $Carts[$pid]['Cart']['num'];
-
                                 if ($tryId) {
                                     $ship_fees[$pid] = 0;
                                 } else {
@@ -634,35 +661,42 @@ class ApiOrdersController extends AppController {
                             }
 
 
-                            $data = array();
+                            $order_data = array();
 
                             if (!$tryId) {
                                 //$ship_fee = ShipPromotion::calculateShipFeeByOrder($ship_fee, $brand_id, $total_price);
                             } else {
-                                $data['try_id'] = $tryId;
+                                $order_data['try_id'] = $tryId;
                             }
 
-                            $data['total_price'] = $total_price;
-                            $data['total_all_price'] = $total_price + max($ship_fee, 0);
-                            $data['ship_fee'] = $ship_fee;
-                            $data['brand_id'] = $brand_id;
-                            $data['creator'] = $uid;
+                            $order_data['total_price'] = $total_price;
+                            $order_data['total_all_price'] = $total_price + max($ship_fee, 0);
+                            $order_data['ship_fee'] = $ship_fee;
+                            $order_data['brand_id'] = $brand_id;
+                            $order_data['creator'] = $uid;
 
                             $remark = $remarks[$brand_id];
-                            $data['remark'] = empty($remark) ? "" : $remark;
+                            $order_data['remark'] = empty($remark) ? "" : $remark;
 
-                            $data['consignee_id'] = $addressId;
-                            $data['consignee_name'] = $address['OrderConsignee']['name'];
-                            $data['consignee_area'] = $address['OrderConsignee']['area'];
-                            $data['consignee_address'] = $address['OrderConsignee']['address'];
-                            $data['consignee_mobilephone'] = $address['OrderConsignee']['mobilephone'];
-                            $data['consignee_telephone'] = $address['OrderConsignee']['telephone'];
-                            $data['consignee_email'] = $address['OrderConsignee']['email'];
-                            $data['consignee_postcode'] = $address['OrderConsignee']['postcode'];
+                            if($addressId!=-1){
+                                $order_data['consignee_id'] = $addressId;
+                                $order_data['consignee_name'] = $address['OrderConsignee']['name'];
+                                $order_data['consignee_area'] = $address['OrderConsignee']['area'];
+                                $order_data['consignee_address'] = $address['OrderConsignee']['address'];
+                                $order_data['consignee_mobilephone'] = $address['OrderConsignee']['mobilephone'];
+                                $order_data['consignee_telephone'] = $address['OrderConsignee']['telephone'];
+                                $order_data['consignee_email'] = $address['OrderConsignee']['email'];
+                                $order_data['consignee_postcode'] = $address['OrderConsignee']['postcode'];
+                            }else{
+                                $order_data['consignee_id'] = $addressId;
+                                $order_data['consignee_address'] = $data['detailedAddress'];
+                                $order_data['consignee_name'] = $data['username'];
+                                $order_data['consignee_mobilephone'] = $data['mobile'];
+                            }
 
                             $this->Order->create();
 
-                            if($this->Order->save($data)){
+                            if($this->Order->save($order_data)){
                                 $order_id = $this->Order->getLastInsertID();
                                 if ($order_id) {
                                     array_push($new_order_ids, $order_id);

@@ -663,7 +663,7 @@ class UsersController extends AppController {
         $this->Session->setFlash(__('Logout Success', true).$synlogout);
         $referer = $this->referer();
         $this->log("Refer:".$referer);
-        $this->redirect($referer);
+        $this->redirect('/users/login.html');
     }
 
     function view($username) {

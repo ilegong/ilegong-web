@@ -29,6 +29,7 @@
         <hr/>
         <div class="o_show">
             <h4>朋友说</h4>
+            {{if $pid ==PRODUCT_ID_CAOMEI}}
             <div class="p-list">
                 <table  class="table table-bordered">
                     <tbody>
@@ -41,6 +42,21 @@
                 </table>
 
             </div>
+            {{/if}}
+            {{if $pid ==PRODUCT_ID_MANGUO}}
+            <div class="p-list">
+                <table  class="table table-bordered">
+                    <tbody>
+                    <tr><td>海南空运红金龙芒果 贵妃芒果 10斤装 满50箱从海南果园空运至北京 截止{{$end_time}}</td>
+                        <td style="width: 80px; font-size: 0.8em">单价：149.00</td>
+                        <td>×{{$buy_count}}</td>
+                        <td>{{$this->Number->precision($total_price, 2)}} </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            {{/if}}
         </div>
         <div>
             <ul class="pull-right list-unstyled">

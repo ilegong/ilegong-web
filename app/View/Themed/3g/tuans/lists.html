@@ -9,20 +9,29 @@
 </div>
 <div class="tuandetail_banner">
     <a href="javascript:void(0)">
-        <p><span>北京兴寿红颜草莓—早上摘当天达</span><br/>团购草莓送酸奶，自然熟透，科学除虫，无公害！</p>
+        {{if $pid == PRODUCT_ID_CAOMEI}}<p><span>北京兴寿红颜草莓—早上摘当天达</span><br/>团购草莓送酸奶，自然熟透，科学除虫，无公害！</p>{{/if}}
+        {{if $pid ==PRODUCT_ID_MANGUO}}<p><span>海南空运红金龙芒果 贵妃芒果 10斤装 从海南果园空运至北京</span></p>{{/if}}
         <div class="bannerbg"></div>
-        <img src="/img/tuan/bannerdetail.jpg" border="0"/>
+        {{if $pid == PRODUCT_ID_CAOMEI}}<img src="/img/tuan/bannerdetail.jpg" border="0"/>{{/if}}
+        {{if $pid == PRODUCT_ID_MANGUO}}<img src="http://51daifan-images.stor.sinaapp.com/files/201503/thumb_m/d653bebe20e_0316.jpg" border="0"/>{{/if}}
     </a>
 </div>
 <ul class="tuandetail_price clearfix">
+    {{if $pid == PRODUCT_ID_CAOMEI}}
     <li class="fl"><span>￥<strong>19.00</strong></span></li>
     <li class="fl"><s>￥29.00</s></li>
+    {{/if}}
+    {{if $pid == PRODUCT_ID_MANGUO}}
+    <li class="fl"><span>￥<strong>149.00</strong></span></li>
+    {{/if}}
     <li class="fr">已有{{$tuan_product_num>0?$tuan_product_num:0}}人参团</li>
 </ul>
+{{if $pid == PRODUCT_ID_CAOMEI}}
 <ul class="tuandetail_more clearfix" onclick="to_detail();">
-    <li class="fl">图文详情 (建议在Wifi下浏览)</li>
+  <li class="fl">图文详情</li>
     <li class="fr"><img src="/img/tuan/more.png"/></li>
 </ul>
+ {{/if}}
 <div class="tuandetail_adress">
     <div class="clearfix tuandetail_adress_title">
         <span>选择您附近的团</span>

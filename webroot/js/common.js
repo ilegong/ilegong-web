@@ -1322,7 +1322,7 @@ $(document).ready(function () {
 		if ($this.attr('customized-price')) {
 			$price = parseFloat($this.attr('customized-price'));
 		}
-		if(!addToCartWithSpec(itemId, itemNum, itemId, 0, $price)) {
+		if(!addToCartWithSpec(itemId, itemNum, itemId, 'quick_buy', $price)) {
 			return false;
 		}
 	});
@@ -1342,7 +1342,7 @@ $(document).ready(function () {
 			$price = parseFloat($this.attr('customized-price'));
 		}
 
-		if(!addToCartWithSpec(itemId, itemNum, itemId, 0, $price)) {
+		if(!addToCartWithSpec(itemId, itemNum, itemId, 'quick_buy', $price)) {
 			return false;
 		}
 	});

@@ -1,0 +1,344 @@
+<style>
+    /* CSS REQUIRED */
+    .state-icon {
+        left: -5px;
+    }
+    .list-group-item-primary {
+        color: rgb(255, 255, 255);
+        background-color: rgb(66, 139, 202);
+    }
+
+    /* DEMO ONLY - REMOVES UNWANTED MARGIN */
+    .list-group {
+        margin-bottom: 0px;
+    }
+</style>
+<div class="classlist_v2" style="z-index:1">
+    <ul class="clearfix" onclick="javascript:history.go(-1)">
+        <li><a class="back"></a></li>
+        <li class="line"></li>
+        <li style="text-overflow: ellipsis;"><strong>下单</strong></li>
+    </ul>
+</div>
+
+<div  class="container" style="margin-top: 2.5em">
+
+    <div class="orderinfo voffset3">
+        <h2>收货人信息</h2>
+        <p class="text-warning">请选择自提点：</p>
+        <div class="alert alert-success" role="alert" style="padding: 3px;"><strong>客服电话: </strong>010-56245991</div>
+        <div id="specialShipPromotion" style="">
+            <div style="padding: 3px;">
+                <select class="form-control" id="select_area">
+                    <option value="1">东城区</option>
+                    <option value="2">海淀区</option>
+                    <option value="3">西城区</option>
+                    <option value="4">朝阳区</option>
+                    <option value="5">丰台区</option>
+                    <option value="6">崇文区</option>
+                    <option value="7">宣武区</option>
+                    <option value="8">昌平区</option>
+
+                </select>
+            </div>
+            <br/>
+            <div style="max-height: 350px;overflow: auto; padding: 3px;">
+                <ul class="list-group checked-list-box" id="chose_items">
+                </ul>
+            </div>
+            <br/>
+            <p class="text-warning">个人信息：</p>
+            <input type="text" class="form-control" placeholder="收货人姓名" id="p_consignee_name" name="consignee_name">
+            <input type="text" class="form-control" placeholder="手机号" id="p_consignee_mobile" name="consignee_mobilephone">
+        </div>
+        <hr/>
+        <div class="o_show">
+            <h4>朋友说</h4>
+            <div class="p-list">
+                <table  class="table table-bordered">
+                    <tbody>
+                    <tr><td>团购万得妙8个装原味酸奶送6个装黄桃酸奶1份  仅限北京</td>
+                        <td style="width: 80px; font-size: 0.8em">单价：19.90</td>
+                        <td>×{{$buy_count}}</td>
+                        <td>{{$this->Number->precision($total_price, 2)}} </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <div>
+            <ul class="pull-right list-unstyled">
+                <li>总价<small>(含运费)</small>：<span id="total_price_span">
+                            {{$this->Number->precision($total_price, 2)}}   </span></li>
+                <li><a id="confirm_next" class="btn btn-warning" href="javascript:void(0)" data-disable="false">提交订单</a></li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+    var bj_areas=[
+        {"id":1,"name":"东城区"},
+        {"id":2,"name":"海淀区"},
+        {"id":3,"name":"西城区"},
+        {"id":4,"name":"朝阳区"},
+        {"id":5,"name":"丰台区"},
+        {"id":6,"name":"崇文区"},
+        {"id":7,"name":"宣武区"},
+        {"id":8,"name":"昌平区"},
+    ];
+    var ship_address = {
+        1: [{"shop_code":304,"shop_name":"张自忠路店","address":"东城区张自忠路2号","area_code":500,"lat":39.939621,"lon":116.422575},
+                {"shop_code":146,"shop_name":"兴化店","address":"东城区兴华西里2号楼南侧","area_code":500,"lat":39.965882,"lon":116.420416},
+                {"shop_code":311,"shop_name":"沙滩北街店","address":"东城区五四大街沙滩北街求是杂志社对面","area_code":500,"lat":39.931568,"lon":116.409818},
+                {"shop_code":333,"shop_name":"沙滩后街分店","address":"东城区沙滩后街53号","area_code":500,"lat":39.931855,"lon":116.408147},
+                {"shop_code":251,"shop_name":"金宝街金宝汇店","address":"东城区金宝街道路北侧一线临时建筑物","area_code":500,"lat":39.921722,"lon":116.430326},
+                {"shop_code":347,"shop_name":"东营房店","address":"东城区吉士口东路聚龙花园对面东城区东营房八条3号楼","area_code":500,"lat":39.936417,"lon":116.446781},
+                {"shop_code":331,"shop_name":"东四大街三分店","address":"东城区东四北大街43号首层","area_code":500,"lat":39.946084,"lon":116.42303},
+                {"shop_code":233,"shop_name":"朝内店","address":"东城区朝阳门内大街192号东单明珠首层西侧","area_code":500,"lat":39.929906,"lon":116.428979},
+                {"shop_code":349,"shop_name":"安定门二分店","address":"东城区安定门桥南300米路西东城区安定门内大街107号","area_code":500,"lat":39.952884,"lon":116.416095},
+                {"shop_code":328,"shop_name":"五四大街二分店","address":"北京市东城区沙滩北街甲2号五四大街甲31号","area_code":500,"lat":39.9307,"lon":116.411039},
+                {"shop_code":312,"shop_name":"美术馆东街店","address":"北京市东城区美术馆后街9号","area_code":500,"lat":39.936304,"lon":116.415629},
+                {"shop_code":290,"shop_name":"东四北店","address":"北京市东城区东四北大街146号","area_code":500,"lat":39.941014,"lon":116.423759},
+                {"shop_code":265,"shop_name":"美术馆后街店","address":"北京市东城区大佛寺东街1号","area_code":500,"lat":39.936165,"lon":116.415589},
+                {"shop_code":287,"shop_name":"安定门内店","address":"北京市东城区安定门内大街16号","area_code":500,"lat":39.954631,"lon":116.414941}],
+        2:[{"shop_code":147,"shop_name":"羊坊路店","address":"海淀区羊坊店路3号","area_code":502,"lat":39.91126,"lon":116.32751},
+            {"shop_code":313,"shop_name":"北太平庄西店","address":"海淀区北太平庄路25号","area_code":502,"lat":39.978622,"lon":116.376216},
+            {"shop_code":136,"shop_name":"大慧寺店","address":"海淀区魏公村大慧寺路5号","area_code":502,"lat":39.957206,"lon":116.332228},
+            {"shop_code":135,"shop_name":"阜成路店","address":"海淀区白堆子立新9号楼前","area_code":502,"lat":39.929375,"lon":116.333818},
+            {"shop_code":137,"shop_name":"增光路店","address":"海淀区增光路乙48号","area_code":502,"lat":39.933911,"lon":116.31828},
+            {"shop_code":199,"shop_name":"永定路店","address":"海淀区永定路63号","area_code":502,"lat":39.918919,"lon":116.270988},
+            {"shop_code":197,"shop_name":"海淀桥店","address":"海淀区海淀大街44号蓝格赛底商103门","area_code":502,"lat":39.989966,"lon":116.311451},
+            {"shop_code":191,"shop_name":"嘉豪国际","address":"海淀区车道沟西南角嘉豪国际大厦B座大堂内（周一至周六营业）","area_code":502,"lat":39.953643,"lon":116.298784},
+            {"shop_code":173,"shop_name":"文慧园店","address":"海淀区文慧园路10号，双汇超市对面","area_code":502,"lat":39.958261,"lon":116.369649},
+            {"shop_code":183,"shop_name":"厂洼店","address":"海淀区厂洼小区24号楼，北京电视台西门","area_code":502,"lat":39.964408,"lon":116.31311},
+            {"shop_code":155,"shop_name":"索家坟店","address":"海淀区积水潭桥往西400米,远洋风景往北300米路东","area_code":502,"lat":39.956995,"lon":116.365342},
+            {"shop_code":158,"shop_name":"满庭芳店","address":"海淀区联想桥外环往西,满庭芳园海淀南门往北20米,芳园街东路东.","area_code":502,"lat":39.973737,"lon":116.338559},
+            {"shop_code":163,"shop_name":"北洼东店","address":"海淀区北洼路42号院大门北侧，首都师大附中东门对面。","area_code":502,"lat":39.936299,"lon":116.308095},
+            {"shop_code":164,"shop_name":"交大东店","address":"海淀区北下关广通苑小区四号楼一层，嘉世堂药店旁","area_code":502,"lat":39.951798,"lon":116.356048},
+            {"shop_code":169,"shop_name":"科南店","address":"海淀区科学院南路55号，中关村中学正对面","area_code":502,"lat":39.984316,"lon":116.331498},
+            {"shop_code":174,"shop_name":"诚品店","address":"海淀区诚品建筑云慧里远流清园小区4号四季青桥东南角","area_code":502,"lat":39.952221,"lon":116.287734},
+            {"shop_code":351,"shop_name":"板井店","address":"海淀区板井村60号南29号平房-9","area_code":502,"lat":39.955163,"lon":116.295331},
+            {"shop_code":201,"shop_name":"白石桥店","address":"海淀区中关村南大街48-9平房","area_code":502,"lat":39.948923,"lon":116.332037},
+            {"shop_code":214,"shop_name":"魏公村店","address":"海淀区中关村南大街18号","area_code":502,"lat":39.960411,"lon":116.330573},
+            {"shop_code":219,"shop_name":"北京国际店","address":"北京市海淀区中关村大街甲A18号北京国际B1（周一至周六营业）","area_code":502,"lat":39.959402,"lon":116.331593},
+            {"shop_code":225,"shop_name":"友谊宾馆店","address":"海淀区中关村南大街1号友谊宾馆61711房间","area_code":502,"lat":39.97204,"lon":116.326571},
+            {"shop_code":227,"shop_name":"工商大学店","address":"海淀区阜成路23号","area_code":502,"lat":39.930628,"lon":116.322976},
+            {"shop_code":234,"shop_name":"海淀南店","address":"海淀区通惠寺3号七一棉织厂东一楼东侧","area_code":502,"lat":40.013152,"lon":116.485421},
+            {"shop_code":323,"shop_name":"丹棱街新店","address":"北京市海淀区中关村电子大厦负一层（周一至周五营业）","area_code":502,"lat":39.986092,"lon":116.318169},
+            {"shop_code":320,"shop_name":"学知轩店","address":"海淀区学清路16号学知轩一层西侧106号","area_code":502,"lat":40.018185,"lon":116.359619},
+            {"shop_code":244,"shop_name":"蓟门里店","address":"海淀区蓟门里小区北商业楼1幢号平房","area_code":502,"lat":39.976246,"lon":116.357564},
+            {"shop_code":238,"shop_name":"北洼南店","address":"北京市海淀区北洼路77号院","area_code":502,"lat":39.932184,"lon":116.307587},
+            {"shop_code":248,"shop_name":"四道口店","address":"北京市海淀区四道口路1号","area_code":502,"lat":39.968185,"lon":116.350196},
+            {"shop_code":255,"shop_name":"天秀店","address":"北京海淀区天秀路10号楼底商一层西侧","area_code":502,"lat":40.027074,"lon":116.283529},
+            {"shop_code":278,"shop_name":"人大店","address":"北京市海淀区中关村南大街1号院","area_code":502,"lat":39.974144,"lon":116.327008},
+            {"shop_code":345,"shop_name":"红联北村分店","address":"海淀区枫蓝国际公寓对面，海淀区红联北村市回收宿舍3号楼南侧平房","area_code":502,"lat":39.958625,"lon":116.364271},
+            {"shop_code":272,"shop_name":"马甸桥店","address":"北京市海淀区北太平庄邮信宿舍9门","area_code":502,"lat":39.975784,"lon":116.383046},
+            {"shop_code":263,"shop_name":"畅春园店","address":"北京市海淀区西苑草场5号","area_code":502,"lat":39.995206,"lon":116.311304},
+            {"shop_code":279,"shop_name":"理工大学店","address":"北京市海淀区中关村南大街5号102","area_code":502,"lat":39.96435,"lon":116.329293},
+            {"shop_code":344,"shop_name":"皂君庙分店","address":"海淀区皂君庙大钟寺派出所正对面海淀区皂君庙14号院一号楼1层101室","area_code":502,"lat":39.966212,"lon":116.343776},
+            {"shop_code":285,"shop_name":"苏州街工商店","address":"北京市海淀区苏州街49号一楼北侧111号","area_code":502,"lat":39.979466,"lon":116.312813},
+            {"shop_code":292,"shop_name":"花园路店","address":"北京市海淀区花园路C2号南1号","area_code":502,"lat":39.986685,"lon":116.372463},
+            {"shop_code":296,"shop_name":"西直门北店","address":"北京市海淀区西直门北大街47号院2号楼北侧一层","area_code":501,"lat":39.95324,"lon":116.362383},
+            {"shop_code":299,"shop_name":"学清农大店","address":"北京市海淀区农大东校区B105","area_code":502,"lat":40.011608,"lon":116.361065},
+            {"shop_code":307,"shop_name":"工商东校区店","address":"海淀区阜成路11号院高层学生公寓对面新建平房","area_code":502,"lat":39.931696,"lon":116.326385},
+            {"shop_code":315,"shop_name":"学院南路店","address":"海淀区大柳树路2号","area_code":502,"lat":39.963509,"lon":116.349387},
+            {"shop_code":316,"shop_name":"紫竹院路店","address":"海淀区紫竹院路车道沟粮店","area_code":502,"lat":39.951495,"lon":116.306968},
+            {"shop_code":319,"shop_name":"首都体育学院店","address":"北京市海淀区北三环西路11号院23号楼一层北侧","area_code":502,"lat":39.97491,"lon":116.358232},
+            {"shop_code":125,"shop_name":"北三环店","address":"海淀区北三环西路60号","area_code":502,"lat":39.970257,"lon":116.32179},
+            {"shop_code":330,"shop_name":"苏州街3分店","address":"北京市海淀区大河庄苑4号楼1层0104室","area_code":502,"lat":39.987307,"lon":116.31187},
+            {"shop_code":334,"shop_name":"苏州街五分店","address":"海淀区苏州街工商局一层苏州街工商店对面偏南","area_code":502,"lat":39.978948,"lon":116.313501},
+            {"shop_code":341,"shop_name":"四道口路二分店","address":"北京市海淀区四道口路净土寺32号东区41幢一层北部","area_code":502,"lat":39.955064,"lon":116.355083},
+            {"shop_code":348,"shop_name":"清华东路三分店","address":"海淀区农业大学南门东200米路北海淀区清华东路11号2号幢一层西侧","area_code":502,"lat":40.007298,"lon":116.366127},
+            {"shop_code":350,"shop_name":"大钟寺东路分店","address":"海淀区大钟寺东路京仪大厦底商海淀区大钟寺东路9号1幢1层101-1","area_code":502,"lat":39.977196,"lon":116.344837},
+            {"shop_code":561,"shop_name":"万泉河店","address":"海淀区万泉河路68号紫金大厦1层","area_code":502,"lat":39.972615,"lon":116.314524},
+            {"shop_code":562,"shop_name":"电科院超市发店","address":"清河小营电科院旁边超市发","area_code":502,"lat":39.972615,"lon":116.314524,'not_shop':true},
+            {"shop_code":562,"shop_name":"西三旗上奥世纪B座","address":"西三旗上奥世纪B座430","area_code":502,"lat":39.972615,"lon":116.314524,'not_shop':true},
+            {"shop_code":830,"shop_name":"苏州街八一中学店","address":"海淀区苏州街19号一层","area_code":502,"lat":39.98493,"lon":116.312149}],
+        3:[{"shop_code":116,"shop_name":"佟麟阁店","address":"西城区佟麟阁路91号","area_code":501,"lat":39.90687,"lon":116.374897},
+            {"shop_code":340,"shop_name":"安慧里店","address":"安慧桥往北,安慧里小区西门直行亚运村","area_code":503,"lat":39.996713,"lon":116.420768},
+            {"shop_code":119,"shop_name":"德内南店","address":"西城区德内大街232号","area_code":501,"lat":39.944099,"lon":116.386256},
+            {"shop_code":114,"shop_name":"半壁街店","address":"西城区前半壁街35号","area_code":501,"lat":39.944109,"lon":116.366064},
+            {"shop_code":121,"shop_name":"甘家口店","address":"西城区阜外大街44号","area_code":501,"lat":39.92837,"lon":116.342501},
+            {"shop_code":103,"shop_name":"西四店","address":"西城区西四北大街158号","area_code":501,"lat":39.933129,"lon":116.380035},
+            {"shop_code":118,"shop_name":"旧鼓楼店","address":"西城区小石桥胡同3号","area_code":501,"lat":39.952481,"lon":116.400045},
+            {"shop_code":109,"shop_name":"二龙路店","address":"西城区二龙路41号","area_code":501,"lat":39.916012,"lon":116.373353},
+            {"shop_code":112,"shop_name":"宇宙红店","address":"西城区百万庄南街4号","area_code":501,"lat":39.931903,"lon":116.34421},
+            {"shop_code":105,"shop_name":"展一店","address":"西城区展览路31号楼","area_code":501,"lat":39.931276,"lon":116.350293},
+            {"shop_code":102,"shop_name":"车西店","address":"西城区车公庄西口29号楼","area_code":501,"lat":39.937759,"lon":116.341047},
+            {"shop_code":110,"shop_name":"月北店","address":"西城区月坛北街11号楼7号","area_code":501,"lat":39.924323,"lon":116.352528},
+            {"shop_code":101,"shop_name":"中轴店","address":"西城区裕中东里2号楼","area_code":501,"lat":39.979206,"lon":116.398644},
+            {"shop_code":106,"shop_name":"小西天店","address":"西城区新外大街A18号","area_code":501,"lat":39.961306,"lon":116.378166},
+            {"shop_code":401,"shop_name":"榆树馆店","address":"西城区榆树馆15号","area_code":501,"lat":39.94284,"lon":116.351401},
+            {"shop_code":176,"shop_name":"阜外店","address":"西城区阜外大街37号","area_code":501,"lat":39.929138,"lon":116.346122},
+            {"shop_code":209,"shop_name":"冠英园店","address":"西城区西直门内大街132号","area_code":501,"lat":39.946345,"lon":116.371861},
+            {"shop_code":170,"shop_name":"百万庄店","address":"西城区百万庄大街31号院1号楼1门1层2号","area_code":501,"lat":39.934364,"lon":116.350088},
+            {"shop_code":416,"shop_name":"复中店","address":"西城区木樨地25号","area_code":501,"lat":39.913461,"lon":116.345005},
+            {"shop_code":417,"shop_name":"官园店","address":"西城区官园南里三区1-1","area_code":501,"lat":39.937975,"lon":116.366814},
+            {"shop_code":418,"shop_name":"辟才店","address":"西城区辟才胡同56号","area_code":501,"lat":39.920193,"lon":116.377419},
+            {"shop_code":419,"shop_name":"新外店","address":"西城区新外大街12号","area_code":501,"lat":39.965421,"lon":116.377787},
+            {"shop_code":420,"shop_name":"地安门店","address":"西城区地外大街178号","area_code":501,"lat":39.940582,"lon":116.402904},
+            {"shop_code":421,"shop_name":"万方园店","address":"西城区葱店胡同2号院1号楼","area_code":501,"lat":39.943645,"lon":116.36514},
+            {"shop_code":422,"shop_name":"西便门店","address":"西城区复兴门南大街1号","area_code":501,"lat":39.907359,"lon":116.362753},
+            {"shop_code":423,"shop_name":"三里河店","address":"西城区月坛南街37号","area_code":501,"lat":39.919879,"lon":116.353503},
+            {"shop_code":403,"shop_name":"灵境店","address":"西城区灵镜胡同1号楼","area_code":501,"lat":39.920853,"lon":116.386711},
+            {"shop_code":404,"shop_name":"月南店","address":"西城区月坛南街甲1号","area_code":501,"lat":39.91982,"lon":116.359306},
+            {"shop_code":405,"shop_name":"西什库店","address":"西城区西什库大街24号","area_code":501,"lat":39.93416,"lon":116.386686},
+            {"shop_code":406,"shop_name":"鼓楼西店","address":"西城区鼓楼大街93号","area_code":501,"lat":39.950309,"lon":116.395251},
+            {"shop_code":407,"shop_name":"宏大店","address":"西城区地外大街19号","area_code":501,"lat":39.945682,"lon":116.402319},
+            {"shop_code":409,"shop_name":"北新华店","address":"西城区北新华街88号","area_code":501,"lat":39.910356,"lon":116.39084},
+            {"shop_code":410,"shop_name":"白云里店","address":"西城区白云里丙1号","area_code":501,"lat":39.905357,"lon":116.353689},
+            {"shop_code":411,"shop_name":"月西店","address":"西城区月坛西街21号","area_code":501,"lat":39.922352,"lon":116.356126},
+            {"shop_code":412,"shop_name":"德内北店","address":"西城区德内大街169号","area_code":501,"lat":39.948195,"lon":116.385315},
+            {"shop_code":413,"shop_name":"赵登禹店","address":"西城区赵登禹路148号","area_code":501,"lat":39.934596,"lon":116.374054},
+            {"shop_code":414,"shop_name":"西安门店","address":"西城区西安门大街93号","area_code":501,"lat":39.928906,"lon":116.385107},
+            {"shop_code":415,"shop_name":"德胜门店","address":"西城区鼓楼西大街207号","area_code":501,"lat":39.954377,"lon":116.386878},
+            {"shop_code":211,"shop_name":"西四东店","address":"西城区西安门大街152号","area_code":501,"lat":39.928371,"lon":116.380402},
+            {"shop_code":223,"shop_name":"英蓝国际店","address":"北京市西城区金融大街7号英蓝国际金融中心B120（周一至周六营业）","area_code":501,"lat":39.926289,"lon":116.364326},
+            {"shop_code":222,"shop_name":"丰盛店","address":"西城区西四南大街111号","area_code":501,"lat":39.924936,"lon":116.380005},
+            {"shop_code":224,"shop_name":"新德东店","address":"北京西城区新德街东口","area_code":501,"lat":39.963915,"lon":116.384438},
+            {"shop_code":232,"shop_name":"民丰店","address":"西城区复兴门内大街45号北平房45-5","area_code":501,"lat":39.914741,"lon":116.37724},
+            {"shop_code":260,"shop_name":"棉花胡同店","address":"西城区新街口东街53号4幢号楼房一层","area_code":501,"lat":39.948421,"lon":116.38109},
+            {"shop_code":261,"shop_name":"西四北店","address":"西城区西四北大街5号平房","area_code":501,"lat":39.938001,"lon":116.38008},
+            {"shop_code":266,"shop_name":"德外店","address":"北京市西城区德外大街11号，德胜园区","area_code":501,"lat":39.966536,"lon":116.385493},
+            {"shop_code":270,"shop_name":"月坛北桥店","address":"北京市西城区阜成门南大街9号楼","area_code":501,"lat":39.924593,"lon":116.362562},
+            {"shop_code":280,"shop_name":"什刹海店","address":"北京市西城区地安门西大街47号5号房","area_code":501,"lat":39.94003,"lon":116.400289},
+            {"shop_code":288,"shop_name":"黄寺北店","address":"北京市西城区黄寺大街23号-4-6号","area_code":501,"lat":39.973086,"lon":116.391689},
+            {"shop_code":314,"shop_name":"积水潭北店","address":"西城区新街口外大街28-13","area_code":501,"lat":39.959436,"lon":116.378253},
+            {"shop_code":306,"shop_name":"西四东街店","address":"西城区西四东大街62号","area_code":501,"lat":39.929939,"lon":116.380553},
+            {"shop_code":305,"shop_name":"前门西大街店","address":"西城区前门西大街57号","area_code":501,"lat":39.90677,"lon":116.393358},
+            {"shop_code":308,"shop_name":"德胜东口店","address":"西城区德胜门内大街6号","area_code":501,"lat":39.954094,"lon":116.386649},
+            {"shop_code":154,"shop_name":"新南店","address":"西城区新街口南大街48号。新街口饭店往南200米路东。","area_code":501,"lat":39.94411,"lon":116.379719},
+            {"shop_code":166,"shop_name":"新德店","address":"西城区新外大街小西天东里7号，好邻居总部楼下","area_code":501,"lat":39.961568,"lon":116.378581},
+            {"shop_code":138,"shop_name":"北滨河店","address":"西城区北滨河路2号院","area_code":501,"lat":39.906494,"lon":116.359098},
+            {"shop_code":337,"shop_name":"展览馆路五分店","address":"北京市西城区展览馆路14号楼1层-7号","area_code":501,"lat":39.938186,"lon":116.353859},
+            {"shop_code":508,"shop_name":"木樨地店J","address":"西城区复兴门外大街甲22号","area_code":501,"lat":39.912755,"lon":116.346132}],
+        4:[{"shop_code":139,"shop_name":"永安里店","address":"朝阳区永安里灵通观1号","area_code":503,"lat":39.912164,"lon":116.45285},
+            {"shop_code":148,"shop_name":"北沙滩店","address":"朝阳区大屯路风林绿洲小区6号楼底商D单元S-F06-01D","area_code":503,"lat":40.008075,"lon":116.390495},
+            {"shop_code":150,"shop_name":"雅宝路店","address":"朝阳区外交部南街8号，京华豪园南座213-C。","area_code":503,"lat":39.923624,"lon":116.443117},
+            {"shop_code":178,"shop_name":"后现代店","address":"朝阳区百子湾16号后现代城5号楼B座102室","area_code":503,"lat":39.90611,"lon":116.491534},
+            {"shop_code":184,"shop_name":"红领巾店","address":"朝阳区延静东里甲3号商务学院综合楼一层","area_code":503,"lat":39.928626,"lon":116.494072},
+            {"shop_code":185,"shop_name":"望京医院店","address":"朝阳区望京中环南路5号","area_code":503,"lat":39.988666,"lon":116.48105},
+            {"shop_code":167,"shop_name":"白家庄店","address":"朝阳区白家庄路甲2号东楼，市80中学西侧。","area_code":503,"lat":39.934007,"lon":116.464494},
+            {"shop_code":327,"shop_name":"望京西园店","address":"朝阳区望京西园222楼星源公寓E座底商E-3号","area_code":503,"lat":40.008675,"lon":116.474847},
+            {"shop_code":326,"shop_name":"永安里中街店","address":"朝阳区建国门外大街永安里中街25号","area_code":503,"lat":39.911324,"lon":116.456232},
+            {"shop_code":243,"shop_name":"团结湖店","address":"朝阳区朝阳北路219号","area_code":503,"lat":39.92927,"lon":116.473282},
+            {"shop_code":233,"shop_name":"朝内店","address":"东城区朝阳门内大街192号东单明珠首层西侧","area_code":500,"lat":39.929906,"lon":116.428979},
+            {"shop_code":218,"shop_name":"塞洛城店","address":"朝阳区广渠东路33号沿海赛洛城底商","area_code":503,"lat":39.901627,"lon":116.511862},
+            {"shop_code":321,"shop_name":"工体南路店","address":"北京市朝阳区工体南路朝阳医院西侧","area_code":503,"lat":39.932487,"lon":116.45747},
+            {"shop_code":322,"shop_name":"七圣路分店","address":"北京市朝阳区光熙门北里甲31号","area_code":503,"lat":39.97395,"lon":116.442098},
+            {"shop_code":237,"shop_name":"定福庄店","address":"朝阳区定福庄北街7号楼西侧平房，北京文教用品厂内","area_code":503,"lat":39.923365,"lon":116.560246},
+            {"shop_code":239,"shop_name":"百子湾3店","address":"朝阳区百子湾路16号百子园14号楼B门101号","area_code":503,"lat":39.906244,"lon":116.491909},
+            {"shop_code":249,"shop_name":"广顺桥南店","address":"朝阳区利泽中一路1号望京科技大厦商铺","area_code":503,"lat":40.019631,"lon":116.476429},
+            {"shop_code":252,"shop_name":"慈云寺店","address":"朝阳区八里庄西里98号楼108号","area_code":503,"lat":39.921326,"lon":116.501081},
+            {"shop_code":275,"shop_name":"丽都店","address":"北京市朝阳区高家园小区311号","area_code":503,"lat":39.984957,"lon":116.486506},
+            {"shop_code":277,"shop_name":"东土城2店","address":"北京市朝阳区东土城路13号院1号楼","area_code":503,"lat":39.957714,"lon":116.438694},
+            {"shop_code":286,"shop_name":"财满街店","address":"朝阳区朝阳路69号楼1-1-1（5）号","area_code":503,"lat":39.923212,"lon":116.542551},
+            {"shop_code":284,"shop_name":"麦子西街店","address":"朝阳区枣营北里38号楼一层104","area_code":503,"lat":39.950494,"lon":116.475901},
+            {"shop_code":293,"shop_name":"广泽果岭店","address":"北京市朝阳区广泽路6号院13号楼","area_code":503,"lat":40.013152,"lon":116.485421},
+            {"shop_code":294,"shop_name":"广顺北店","address":"北京市朝阳区利泽西园102号楼","area_code":503,"lat":40.019329,"lon":116.473537},
+            {"shop_code":291,"shop_name":"酒仙桥路店","address":"北京市朝阳区酒仙桥路26号院1号楼A05号","area_code":503,"lat":39.972673,"lon":116.50127},
+            {"shop_code":298,"shop_name":"慧忠北路店","address":"北京市朝阳区慧忠北路慧忠里231楼鼓浪屿会所一层底商","area_code":503,"lat":40.004854,"lon":116.408649},
+            {"shop_code":297,"shop_name":"鼓外黄寺店","address":"朝阳区安外黄寺大街3号院","area_code":503,"lat":39.969729,"lon":116.403293},
+            {"shop_code":303,"shop_name":"外经贸店","address":"朝阳区太阳宫乡芍药居村甲3号","area_code":503,"lat":39.986458,"lon":116.437723},
+            {"shop_code":309,"shop_name":"安苑小关店","address":"朝阳区小关北街43号平房","area_code":503,"lat":39.987759,"lon":116.415675},
+            {"shop_code":317,"shop_name":"雅宝路二店","address":"朝阳区雅宝路7号2幢号一层","area_code":503,"lat":39.922303,"lon":116.443764},
+            {"shop_code":502,"shop_name":"光华桥店","address":"朝阳区光华路7号（周一至周五营业）","area_code":503,"lat":39.919788,"lon":116.460404},
+            {"shop_code":262,"shop_name":"百子湾5店","address":"朝阳区百子湾路16号百子园4号楼一层C单元101室","area_code":503,"lat":39.906404,"lon":116.490848},
+            {"shop_code":329,"shop_name":"亮马桥店","address":"北京市朝阳区亮马桥路56号","area_code":503,"lat":39.960016,"lon":116.479742},
+            {"shop_code":332,"shop_name":"左家庄店","address":"北京市朝阳区左家庄东里14号楼院","area_code":503,"lat":39.960224,"lon":116.45108},
+            {"shop_code":342,"shop_name":"八里庄北里店","address":"朝阳区八里庄北里1号院6号楼1层","area_code":503,"lat":39.929846,"lon":116.508063},
+            {"shop_code":343,"shop_name":"管庄分店","address":"朝阳区朝阳路管庄西里65号","area_code":503,"lat":39.918461,"lon":116.596154}],
+        5:[{"shop_code":161,"shop_name":"西站南路店","address":"丰台区西客站南路8号南广场往南过红绿灯直行300米路东","area_code":506,"lat":39.893183,"lon":116.327939},
+            {"shop_code":346,"shop_name":"刘家窑南里分店","address":"丰台区刘家窑路丰台区刘家窑南里甲一号","area_code":506,"lat":39.868292,"lon":116.423535}],
+        6:[{"shop_code":229,"shop_name":"都市馨园店","address":"崇文区兴隆都市馨园地上一层A101","area_code":504,"lat":39.901802,"lon":116.42174}],
+        7:[{"shop_code":208,"shop_name":"永安路店","address":"宣武区永安路104号G间","area_code":505,"lat":39.89244,"lon":116.394263},
+            {"shop_code":302,"shop_name":"鸭子桥北店","address":"宣武区南滨河31号","area_code":505,"lat":39.88646,"lon":116.355091},
+            {"shop_code":258,"shop_name":"广义街店","address":"宣武区广安门内大街311号院2号楼祥龙大厦首层","area_code":505,"lat":39.896673,"lon":116.363458},
+            {"shop_code":221,"shop_name":"友谊医院店","address":"北京市宣武区永安路32号","area_code":505,"lat":39.892503,"lon":116.401073},
+            {"shop_code":529,"shop_name":"白云桥店","address":"北京市宣武区莲花池东路16-7号（白云桥东南角）","area_code":505,"lat":39.904163,"lon":116.353846},
+            {"shop_code":301,"shop_name":"万明店","address":"北京市宣武门万明路2号","area_code":505,"lat":39.895552,"lon":116.396402}],
+        8:[{"shop_code":208,"shop_name":"县城万科自提点","address":"金隅万科南门小超市(侯丽萍医院对面)","area_code":505,"lat":39.89244,"lon":116.394263,'not_shop':true}]
+    };
+
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#confirm_next').on('click',function(e){
+            if($("#confirm_next").attr('data-disable') == 'false') {
+                if($('li.active').length==0){
+                    utils.alert("请选择自提点");
+                    return false;
+                }
+                if ($('#p_consignee_name').val() == "") {
+                    utils.alert("请输入你的姓名");
+                    e.preventDefault();
+                    $('#p_consignee_name').focus();
+                    return false;
+                }
+                if ($('#p_consignee_mobile').val().length != 11) {
+                    utils.alert("联系电话格式不正确");
+                    $('#p_consignee_mobile').focus();
+                    e.preventDefault();
+                    return false;
+                }
+                var address = $.trim($('li.active').text());
+                var name = $("#p_consignee_name").val();
+                var mobile = $("#p_consignee_mobile").val();
+                var cart_id = {{empty($cart_id)? 0: $cart_id}};
+                jQuery.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "/tuans/temp_order_submit",
+                    data: {"name": name, "mobile": mobile, "cart_id": cart_id,"address":address},
+                    success: function (a) {
+                        if (a.success) {
+                            $("#confirm_next").attr('data-disable', 'true');
+                            window.location.href = '/tuans/tuan_pay/' + a.order_id;
+                        } else {
+                            if(a.info){
+                                utils.alert(a.info);
+                            }else{
+                                utils.alert("结算出错，请刷新重试");
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    })
+</script>
+
+<script>
+    $(function () {
+        var $select_area = $('#select_area');
+        var $chose_items = $('#chose_items');
+        $select_area.on('change',function(){
+            setData();
+        });
+        function setData(){
+            var area_id = $select_area.val();
+            var chose_address = ship_address[area_id];
+            var $chose_item = '';
+            $.each(chose_address,function(index,item){
+                if(item['not_shop']){
+                    $chose_item +=' <li class="list-group-item" data-style="button">'+item['address']+'</li>';
+                }else{
+                    $chose_item +=' <li class="list-group-item" data-style="button">'+item['address']+' 好邻居便利店</li>';
+                }
+            });
+            $chose_items.html($chose_item);
+            $('.list-group.checked-list-box .list-group-item').on('click',function(){
+                var me = this;
+                $(me).siblings('li').removeClass('active');
+                $(me).addClass('active');
+            });
+        }
+        setData();
+    });
+</script>

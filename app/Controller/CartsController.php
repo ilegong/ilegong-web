@@ -148,7 +148,7 @@ class CartsController extends AppController{
         $Carts = $this->Cart->find('all',array(
             'conditions'=>array(
                 'status' => 0,
-                'type !='.CART_ITEM_TYPE_TRY,
+                'type' => CART_ITEM_TYPE_NORMAL,
                 'order_id' => NULL,
                 'OR'=> $this->user_condition
             )));

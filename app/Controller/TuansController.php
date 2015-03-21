@@ -10,9 +10,9 @@ class TuansController extends AppController{
 
     public function lists($pid=null){
         $this->pageTitle = '团购列表';
-        if($pid !=838){
-            $this->redirect('/tuans/lists/838');
-        }
+//        if($pid !=838){
+//            $this->redirect('/tuans/lists/838');
+//        }
         $this->loadModel('TuanBuying');
         $date_Time = date('Y-m-d', time());
         $tuan_product_num = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
@@ -23,6 +23,7 @@ class TuansController extends AppController{
             'conditions' =>array('id'=>$tuan_ids),
             'order' => array('Tuan.priority DESC')
         ));
+        $this->set('pid',$pid);
         $this->set('tuan_info',$tuan_info);
         $this->log('num'.json_encode($tuan_product_num));
         $this->set('tuan_buy',$tuan_buy);
@@ -32,7 +33,7 @@ class TuansController extends AppController{
     }
 
     public function detail($tuan_buy_id){
-        $this->pageTitle = '草莓团购';
+        $this->pageTitle = '团购详情';
         $this->loadModel('TuanBuying');
         if($tuan_buy_id == null){
             $this->redirect('/tuans/mei_shi_tuan');
@@ -91,7 +92,7 @@ class TuansController extends AppController{
     }
 
     public function lbs_map($tuan_id=''){
-        $this->pageTitle =__('草莓自取点');
+        $this->pageTitle =__('团购自取点');
         $teamInfo = $this->Tuan->find('first',array('conditions' => array('id' => $tuan_id)));
         $this->set('tuan_id',$tuan_id);
         $this->set('name',$teamInfo['Tuan']['tuan_name']);
@@ -102,13 +103,13 @@ class TuansController extends AppController{
         $this->set('hideNav',true);
     }
 
-    public function cart_info(){
+    public function cart_info($type){
         $this->autoRender = false;
         $this->loadModel('Cart');
         $product_id = intval($_REQUEST['product_id']);
         $product_num = intval($_REQUEST['product_num']);
         $uId = $this->currentUser['id'];
-        $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,0,5,0,$uId);
+        $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,0,$type,0,$uId);
         $this->log('cartInfo'.json_encode($cartInfo));
         if($cartInfo){
             echo json_encode(array('success' => true));
@@ -168,6 +169,7 @@ class TuansController extends AppController{
         $this->set('tuan_address', $tuan_info['Tuan']['address']);
         $this->set('end_time', date('m-d', $current_time));
         $this->set('tuan_buy_id', $tuan_buy_id);
+        $this->set('pid',$tuan_b['TuanBuying']['pid']);
     }
 
     public function tuan_pay($orderId){
@@ -250,11 +252,16 @@ class TuansController extends AppController{
         echo json_encode($res);
     }
     function product_detail($pid){
+        $this->pageTitle = '商品详情';
         if(empty($pid)){
             return;
         }
-        if($_GET['tuan_id'] && $_GET['tuan_buy_id']){
+        if($_GET['tuan_id'] && $_GET['tuan_buy_id']&&$pid == PRODUCT_ID_CAOMEI){
             $url = '/tuans/detail/'. strval($_GET['tuan_id']) . '/' . strval($_GET['tuan_buy_id']) ;
+        }elseif ($_GET['product'] == 'milk' ){
+            $url = '/tuans/milk';
+        } elseif($_GET['tuan_id'] && $_GET['tuan_buy_id']&&$pid == PRODUCT_ID_MANGUO){
+            $url = '/tuans/detail/'. strval($_GET['tuan_buy_id']) ;
         }else{
             $url = '/tuans/lists';
         }
@@ -292,6 +299,113 @@ class TuansController extends AppController{
 
     public function join_meishituan(){
         $this->pageTitle = '加入美食团';
+    }
+
+    public function temp_order_submit() {
+        $this->autoRender = false;
+        $cart_id = $_POST['cart_id'];
+        $mobile = $_POST['mobile'];
+        $name = $_POST['name'];
+        $address = $_POST['address'];
+        $uid = $this->currentUser['id'];
+        if (empty($uid)) {
+            $this->log("not login for tuan order:".$cart_id);
+            echo json_encode(array('success'=> false));
+            return;
+        }
+        if(empty($cart_id)){
+            $this->log("tuan cart id error:".$cart_id);
+            echo json_encode(array('success'=> false));
+            return;
+        }
+        $this->loadModel('Cart');
+        $this->loadModel('Order');
+        $cart_info = $this->Cart->findById($cart_id);
+        $creator = $cart_info['Cart']['creator'];
+        $order_type = $cart_info['Cart']['type'];
+        if(empty($cart_info)){
+            $this->log("cart record not exist". $cart_id);
+            $res = array('success'=> false, 'info'=> '购物车记录为查询到');
+        }elseif($creator != $uid){
+            $this->log("no right to this order, uid".$uid. "creator:".$creator);
+            $res = array('success'=> false, 'info'=> '团购订单不属于你，请刷新重试');
+        }elseif($order_type != CART_ITEM_TYPE_MILK){
+            $res = array('success'=> false, 'info'=> '该订单不属于团购订单，请重试');
+        }else{
+            if(!empty($cart_info['Cart']['order_id'])){
+                $this->log("cart order id error,cart id".$cart_id);
+                return;
+            }
+            $total_price = $cart_info['Cart']['num'] * $cart_info['Cart']['price'];
+            if($total_price < 0 ){
+                $this->log("error tuan price, cart id".$cart_id);
+                return;
+            }
+            $pid = $cart_info['Cart']['product_id'];
+            $area = '';
+            $order = $this->Order->createTuanOrder(0, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id);
+            if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
+                $res = array('success'=> false, 'info'=> '你已经支付过了');
+            }else{
+                $res = array('success'=> true, 'order_id'=>$order['Order']['id']);
+            }
+        }
+        echo json_encode($res);
+    }
+
+    public function milk_order($pid){
+        $this->pageTitle = '订单确认';
+        if(empty($this->currentUser['id'])){
+            $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
+            return;
+        }
+        $this->loadModel('Cart');
+        $this->Cart->find('first');
+        $uid =$this->currentUser['id'];
+        $user_condition = array(
+            'session_id'=>	$this->Session->id(),
+            'creator' => $uid
+        );
+        $cond = array(
+            'status' => CART_ITEM_STATUS_NEW,
+            'order_id' => null,
+            'num > 0',
+            'product_id' => $pid,
+            'type' => CART_ITEM_TYPE_MILK,
+            'OR' => $user_condition
+
+        );
+        $Carts = $this->Cart->find('first', array(
+            'conditions' => $cond));
+        $total_price = $Carts['Cart']['price'] * $Carts['Cart']['num'];
+        $this->set('buy_count',$Carts['Cart']['num']);
+        $this->set('total_price', $total_price);
+        $this->set('cart_id', $Carts['Cart']['id']);
+    }
+
+    public function milk(){
+        $this->pageTitle = '酸奶团购';
+        $this->loadModel('Cart');
+        $con_cart = array('product_id' => PRODUCT_ID_MILK,'status' => 1, 'deleted' => 0,'type' => CART_ITEM_TYPE_MILK);
+        $mang_carts = $this->Cart->find('all',array('conditions' => $con_cart));
+        $mang_orderIds = Hash::extract($mang_carts,'{n}.Cart.order_id');
+
+        $this->loadModel('Order');
+        $con_order = array('id' => $mang_orderIds,'status' => ORDER_STATUS_PAID,'published' => PUBLISH_YES,'deleted' => DELETED_NO);
+        $mang_orders = $this->Order->find('all',array('conditions' => $con_order));
+        $mang_cartIds = Hash::extract($mang_orders,'{n}.Order.id');
+        $sold_num =0;
+        foreach($mang_cartIds as $order_id){
+           $mang_num = $this->Cart->find('first',array('conditions' => array('order_id' => $order_id,'product_id' => PRODUCT_ID_MILK),array('fields' => array('num'))));
+           $sold_num =$sold_num + $mang_num['Cart']['num'];
+        }
+        $this->set('sold_num',$sold_num);
+
+        if($this->is_weixin()){
+            $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
+            $this->prepare_wx_sharing($currUid, PRODUCT_ID_MILK);
+        }
+        $this->set('hideNav',true);
     }
 }
 

@@ -66,6 +66,7 @@ INSERT INTO `cake_tuans` (`id`, `address`, `tuan_name`, `leader_id`, `leader_wei
 
 
 
+
 INSERT INTO `cake_tuans` (`id`, `address`, `leader_name`, `tuan_name`, `leader_id`, `leader_weixin`, `status`, `location_long`, `location_lat`, `tuan_addr`) VALUES ('12', '石景山', '李文艳', '石景山美食团', '0', 'pyshuo2015', '0', '116.210203', '39.924284', '石景山区八角东街65号融科创意中心');
 
 INSERT INTO `cake_tuans` (`id`, `address`, `leader_name`, `tuan_name`, `leader_id`, `leader_weixin`, `status`, `location_long`, `location_lat`, `tuan_addr`) VALUES ('13', '海淀桥', '羊羊', '海淀桥美食团', '0', 'pyshuo2015', '0', '116.311607', '39.987321', '海淀区海淀大街44号蓝格赛底商103门 ');
@@ -145,4 +146,22 @@ INSERT INTO `cake_tuan_buyings` (`id`, `tuan_id`, `pid`, `join_num`, `sold_num`,
 INSERT INTO `cake_tuan_buyings` (`id`, `tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('16', '12', '838', '0', '0', '0', '2015-03-19 17:00:00', '2015-03-20 10:00:00');
 INSERT INTO `cake_tuan_buyings` (`id`, `tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('17', '10', '838', '0', '0', '0', '2015-03-19 17:00:00', '2015-03-20 10:00:00');
 INSERT INTO `cake_tuan_buyings` (`id`, `tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('18', '11', '838', '0', '0', '0', '2015-03-19 17:00:00', '2015-03-20 10:00:00');
+
+
+
+
+INSERT INTO `cake_tuans` (`address`, `tuan_name`, `leader_name`, `leader_weixin`, `status`, `location_long`, `location_lat`, `tuan_addr`) VALUES ('北辰世纪中心A座', '京东北辰美食团', '叶小胖', 'yexiaopang002', '0', '116.394458', '40.006543', '北辰世纪中心A座');
+INSERT INTO `cake_tuans` (`address`, `tuan_name`, `leader_name`, `leader_weixin`, `status`, `location_long`, `location_lat`, `tuan_addr`) VALUES ('大兴区荣华中路朝林广场A座', '京东亦庄美食团', '叶小胖', 'yexiaopang002', '0', '116.512409', '39.799484', '大兴区荣华中路朝林广场A座');
+INSERT INTO `cake_tuans` (`address`, `tuan_name`, `leader_name`, `leader_weixin`, `status`, `location_long`, `location_lat`, `tuan_addr`) VALUES ('海淀区杏石口路65号益园文创基地C区11号楼', '京东杏石口美食团', '叶小胖', 'yexiaopang002', '0', '116.241019', '39.957172', '海淀区杏石口路65号益园文创基地C区11号楼');
+
+
+INSERT INTO `cake_tuan_buyings` (`tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('19', '838', '0', '0', '0', '2015-03-19 18:00:00', '2015-03-20 10:00:00');
+INSERT INTO `cake_tuan_buyings` (`tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('20', '838', '0', '0', '0', '2015-03-19 18:00:00', '2015-03-20 10:00:00');
+INSERT INTO `cake_tuan_buyings` (`tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('21', '838', '0', '0', '0', '2015-03-19 18:00:00', '2015-03-20 10:00:00');
+INSERT INTO `cake_tuan_buyings` (`tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('1', '838', '0', '0', '0', '2015-03-23 18:00:00', '2015-03-24 10:00:00');
+INSERT INTO `cake_tuan_buyings` (`tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('6', '838', '0', '0', '0', '2015-03-23 18:00:00', '2015-03-24 10:00:00');
+
+
+
+
 

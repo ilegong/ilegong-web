@@ -77,21 +77,21 @@ class AppController extends Controller {
     
     	// 无Session，且有Cookie登录信息时，解析cookie生成信息。否则忽略cookie，防止每次都要消耗性能解密cookie
     	// 其余时间使用session。
-    	if(!$this->Session->read('Auth.User.id') && isset($_COOKIE['SAECMS']) && $_COOKIE['SAECMS']['Auth']['User']){
-
-            $this->Cookie = $this->Components->load('Cookie',array('name' => 'SAECMS', 'time' => '+2 weeks'));
-            $user = $this->Cookie->read('Auth.User');
-
-    		if(is_array($user) && intval($user['id'])>0){
-    			$this->loadModel('User');
-    			$this->User->recursive = -1;
-    			$data = $this->User->find('first', array('conditions' => array('id' => $user['id'])));
-    			$this->Session->write('Auth.User',$data['User']);
-    		}
-    		else{
-    			$this->Cookie->delete('Auth.User');//删除解密错误的cookie信息
-    		}
-    	}
+//    	if(!$this->Session->read('Auth.User.id') && isset($_COOKIE['SAECMS']) && $_COOKIE['SAECMS']['Auth']['User']){
+//
+//            $this->Cookie = $this->Components->load('Cookie',array('name' => 'SAECMS', 'time' => '+2 weeks'));
+//            $user = $this->Cookie->read('Auth.User');
+//
+//    		if(is_array($user) && intval($user['id'])>0){
+//    			$this->loadModel('User');
+//    			$this->User->recursive = -1;
+//    			$data = $this->User->find('first', array('conditions' => array('id' => $user['id'])));
+//    			$this->Session->write('Auth.User',$data['User']);
+//    		}
+//    		else{
+//    			$this->Cookie->delete('Auth.User');//删除解密错误的cookie信息
+//    		}
+//    	}
 
     	if(!Configure::read('Site.status')){
     		$this->layout = 'maintain';
@@ -101,6 +101,9 @@ class AppController extends Controller {
     	}
 
     	$this->currentUser = $this->Session->read('Auth.User');
+        if (empty($this->currentUser) && $this->is_weixin() && 'users' != $this->request->params['controller']) {
+            $this->redirect($this->login_link());
+        }
     	$this->theme = Configure::read('Site.theme');
 
     	if($this->RequestHandler->isMobile()){
@@ -240,6 +243,13 @@ class AppController extends Controller {
 
     protected function nick_should_edited($nick) {
         return name_empty_or_weixin($nick);
+    }
+
+    /**
+     * @return string
+     */
+    protected function login_link() {
+        return '/users/login?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($_SERVER['REQUEST_URI']);
     }
 
     protected function _getParamVars($name,$default='') {

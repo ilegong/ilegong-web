@@ -202,6 +202,11 @@ class ProductsController extends AppController{
         }
         parent::view($slug,$fields);
         $pid = $this->current_data_id;
+
+        if ($pid == 852) {
+            $this->redirect('/tuans/milk');
+        }
+
         if($this->RequestHandler->isMobile()){
             $this->loadModel('Comment');
             //load shichi comment count
@@ -404,6 +409,25 @@ class ProductsController extends AppController{
         $this->track_share_click();
         if($this->is_weixin()){
             $this->prepare_wx_sharing($currUid, $pid);
+        }
+
+
+        if ($pid == PRODUCT_ID_MANGUO) {
+            $this->loadModel('Cart');
+            $con_cart = array('product_id' => $pid,'status' => 1, 'deleted' => 0);
+            $mang_carts = $this->Cart->find('all',array('conditions' => $con_cart));
+            $mang_orderIds = Hash::extract($mang_carts,'{n}.Cart.order_id');
+
+            $this->loadModel('Order');
+            $con_order = array('id' => $mang_orderIds,'status' => ORDER_STATUS_PAID,'published' => PUBLISH_YES,'deleted' => DELETED_NO);
+            $mang_orders = $this->Order->find('all',array('conditions' => $con_order));
+            $mang_cartIds = Hash::extract($mang_orders,'{n}.Order.id');
+            $sold_num =0;
+            foreach($mang_cartIds as $order_id){
+            $mang_num = $this->Cart->find('first',array('conditions' => array('order_id' => $order_id,'product_id' => $pid),array('fields' => array('num'))));
+            $sold_num =$sold_num + $mang_num['Cart']['num'];
+            }
+            $this->set('sold_num',$sold_num);
         }
     }
 

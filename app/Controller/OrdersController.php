@@ -43,7 +43,7 @@ class OrdersController extends AppController {
     function beforeFilter() {
         parent::beforeFilter();
         if (empty($this->currentUser['id']) && array_search($this->request->params['action'], $this->customized_not_logged) === false) {
-            $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
+            $this->redirect($this->login_link());
         }
         $this->user_condition = array(
             'session_id' => $this->Session->id(),
@@ -357,7 +357,11 @@ class OrdersController extends AppController {
             }
         }
 
-        $this->Session->write(self::key_balance_pids(), json_encode($cidAttr));
+        //If came from info.html and with an action to info.html, don't reset balance pid list
+        if (empty($_GET['action'])) {
+            $this->Session->write(self::key_balance_pids(), json_encode($cidAttr));
+        }
+
         $this->Session->write(self::key_balanced_ship_promotion_id(), '');
 
 		$has_chosen_consignee = false;
@@ -551,7 +555,7 @@ class OrdersController extends AppController {
                 }
             }
 
-            $this->set('show_pay', $orderinfo['Order']['type'] == ORDER_TYPE_DEF
+            $this->set('show_pay', ($orderinfo['Order']['type'] == ORDER_TYPE_DEF || $orderinfo['Order']['type']==ORDER_TYPE_TUAN)
                 && $afford
                 && $has_expired_product_type == 0
                 && $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
@@ -1342,7 +1346,7 @@ class OrdersController extends AppController {
         }
 
         $cond = array('brand_id' => $brand_ids,
-            'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL),
+            'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN),
             'NOT' => array(
             'status' => array(ORDER_STATUS_CANCEL)
         ));
@@ -1656,6 +1660,4 @@ class OrdersController extends AppController {
 
 
     }
-
-
 }

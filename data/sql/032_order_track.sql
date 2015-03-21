@@ -26,6 +26,7 @@ ALTER TABLE `cake_cake_dates` RENAME `cake_consignment_dates`;
 ALTER TABLE `cake_consignment_dates` ADD `product_id` INT(11);
 
 ALTER TABLE `cake_consignment_dates`
+
 CHANGE COLUMN `product_id` `product_id` INT(11) UNSIGNED NULL ;
 
 UPDATE `cake_consignment_dates` SET `product_id`=230;
