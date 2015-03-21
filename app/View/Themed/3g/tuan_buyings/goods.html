@@ -6,7 +6,7 @@
         <li>返回</li>
     </ul>
 </div>
-  <div  style="margin-top: 45px;">
+  <div  style="margin-top: 50px;">
       {{loop $tuan_product_ids $pid}}
       <div class="goodlist {{if $tuan_products_info[$pid]['status'] == DELETED_YES}}tuan_cancel{{/if}}">
           <a href="/tuan_buyings/goods_tuans/{{$pid}}">

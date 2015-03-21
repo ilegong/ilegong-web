@@ -265,6 +265,7 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_product_ids',$tuan_product_ids);
         $this->set('tuan_products_info',$tuan_products_info);
         $this->log('tuan_products'.json_encode($tuan_products_info));
+        $this->set('hideNav',true);
     }
 
     public function goods_tuans($pid=null){
