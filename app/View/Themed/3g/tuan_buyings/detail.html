@@ -1,5 +1,11 @@
+{{$this->Html->css(array('tuan.css?v2'));}}
 <?php   $current_model = 'Product';
-    $location = $tuan_['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
+    $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
+    if($sold_num >= $target_num){
+        $sold_percent = 100;
+    }else{
+        $sold_percent = round(($sold_num / $target_num * 100), 1);
+    }
 ?>
 <div class="classlist_v2" style="z-index:999;">
     <ul class="clearfix">
@@ -28,14 +34,13 @@
                         </li>
                     </ul>
 
-                    <? php $sold_percent = round($sold_num / $target_num * 100), 1); ?>
                     <div class="tuan_bar">
-                        <div>已团购<span id="sold_num" value="{{$sold_num}}">{{$sold_num}}</span>份</div>
+                        <div>已团购<span  value="{{$sold_num}}">{{$sold_num}}</span>份</div>
                         <div class="bar">
-                            <div class="bar_buy" id = "bar_buy" style="width:{{$sold_percent}} %"></div>
+                            <div class="bar_buy" id = "bar_buy" style={{"width:".$sold_percent."%;"}}></div>
                         </div>
                         <ul class="clearfix">
-                            <li class="fl"><span id="bar_percent">{{$sold_percent}}</span></li>
+                            <li class="fl"><span id="bar_percent">{{$sold_percent}}%</span></li>
                             <li class="fr">目标{{$target_num}}份</li>
                         </ul>
                     </div>
@@ -48,9 +53,6 @@
                         <a class="fr" href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
                             <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
                         </a>
-                    </div>
-                    <div class="clearfix tuanxq" style="margin-top: -1px;">
-                        <span class="fl">已团购份数({{$sold_num>0?$sold_num:0}})</span>
                     </div>
                     <ul class="numbers clearfix b_line">
                     <li class="fl">
