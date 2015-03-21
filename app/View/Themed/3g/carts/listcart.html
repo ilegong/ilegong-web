@@ -100,6 +100,10 @@
                 var c_id = me.data('cart');
                 cart_ids.push(c_id);
             });
+            if(cart_ids.length==0){
+                utils.alert('请选择结算产品。');
+                return false;
+            }
             $('#cart_ids').val(cart_ids.join(','));
         });
         function remove_limit(){
