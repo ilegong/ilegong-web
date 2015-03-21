@@ -225,6 +225,13 @@ class TuanBuyingsController extends AppController{
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
                 $res = array('success'=> false, 'info'=> '你已经支付过了');
             }else{
+                $tuanBuy = $this->TuanBuying->find('first', array(
+                    'conditions' => array('id' => $tuan_buy_id),
+                    'fields' => array('consign_time')
+                ));
+                $consign_time = friendlyDateFromStr($tuanBuy['TuanBuying']['consign_time'], FFDATE_CH_MD);
+                $cart_name = $cart_info['Cart']['name'] . ' 送货'. $consign_time;
+                $this->Cart->update(array('name' => '\'' . $cart_name . '\'' ), array('id' => $cart_id));
                 $res = array('success'=> true, 'order_id'=>$order['Order']['id']);
             }
         }
