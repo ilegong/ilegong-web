@@ -32,7 +32,7 @@
                             </a>
                         </li>
                         <span style="display: none;" class="item-price" id="price-{{$Carts[$p_id]['id']}}">{{$this->Number->precision($Carts[$p_id]['price']*$Carts[$p_id]['num'], 2)}}</span>
-                        <li><a href="{{Router::url('/carts/delete/'.$Cart[$p_id]['id'])}}" class="cart_delete_a">删除</a></li>
+                        <li><a href="{{Router::url('/carts/delete/'.$Carts[$p_id]['id'])}}" class="cart_delete_a">删除</a></li>
                     </ul>
                 {{/loop}}
             </div>
