@@ -107,7 +107,14 @@
             var tip_flag = $('li.cart_select_cur').length;
             me.toggleClass('cart_select_cur');
             if(me.data('limit')&&me.hasClass('cart_select_cur')){
-                $('li.cart_select_cur').removeClass('cart_select_cur');
+                var p_id = me.data('productid');
+                $.each($('li.cart_select_cur'),function(index,item){
+                    var $item = $(item);
+                    var item_p_id = $item.data('productid');
+                    if(item_p_id!=p_id){
+                        $item.removeClass('cart_select_cur');
+                    }
+                });
                 $('dd.cart_select_cur').removeClass('cart_select_cur');
                 me.addClass('cart_select_cur');
                 if(tip_flag > 0){
