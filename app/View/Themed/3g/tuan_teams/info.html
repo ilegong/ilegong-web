@@ -1,4 +1,4 @@
-{{$this->Html->css(array('tuan.css?v3'))}}
+{{$this->Html->css(array('tuan.css?v4'))}}
 <?php $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
     $referer_link .= '&referer='.urlencode($referer.'?has_joined=success');
 ?>
@@ -31,6 +31,7 @@
         <li class="fr">团长微信号{{$tuan_team['TuanTeam']['leader_weixin']}}</li>
     </ul>
     <h1>参加的团购</h1>
+    {{if !empty($tuan_buyings)}}
     {{loop $tuan_buyings $tuan_buying}}
     <?php $pid = $tuan_buying['TuanBuying']['pid'];
     ?>
@@ -49,6 +50,9 @@
         </a>
     </div>
     {{/loop}}
+    {{else}}
+    <div class="tuandetail_none">您还没有参加过团购，<a href="/tuan_buyings/goods">去团购</a></div>
+    {{/if}}
 
     <div style="margin-top: 80px"></div>
     <div class="tuandetail_btnbg">

@@ -148,7 +148,8 @@ ul,ol {
 .guanzhu_title{ font-size:1.15em; color:#333333; padding-bottom:0.8em;}
 .layer_guanzhu a{ display:block; width:5em; height:2em; line-height:2em; margin:0 auto; margin-top:1em; font-size:1em; color:#ff483a; border:2px #ff483a solid; text-decoration:none; text-align:center;}
 
-
+.tuandetail_none{ text-align: center; line-height: 55px; color: #999999;}
+.tuandetail_none a{ color: #e01d0e; text-align: none;}
 
 
 
