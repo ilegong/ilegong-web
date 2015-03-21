@@ -187,7 +187,7 @@ class CartsController extends AppController{
             $cart['Cart']['limit_ship'] = $this->ShipPromotion->is_limit_ship($p_id);
             $total_price += $cart['Cart']['price'] * $cart['Cart']['num'];
 		}
-        $Carts = Hash::combine($Carts,'{n}.Cart.product_id','{n}.Cart');
+        $Carts = Hash::combine($Carts,'{n}.Cart.id','{n}.Cart');
         $this->set('brandInfos',$brandInfos);
         $this->set('product_brand_map',$map_result);
 		$this->set('total_price',$total_price);
