@@ -174,15 +174,17 @@
 
         {{if $order['Order']['type'] == ORDER_TYPE_TUAN}}
 
-        <?php $cart = $Carts[0]; $p = $products[$cart['Cart']['product_id']]; ?>
-        <div class="clearfix orderitem_item"><a href="/tuans/detail/{{$tuan_buy_id}}">
+        <?php $cart = $Carts[0]; $p = $products[$cart['Cart']['product_id']];
+            $tuan_buy_id = $order['Order']['member_id'];
+         ?>
+        <div class="clearfix orderitem_item"><a href="/tuan_buyings/detail/{{$tuan_buy_id}}">
             {{$this->Html->image($cart['Cart']['coverimg'], array(
             'class' => 'col-xs-3',
             'style' => 'max-height:60px'
             ));}}
         </a>
             <div class="col-xs-6">
-                <a href="/tuans/detail/{{$tuan_buy_id}}">
+                <a href="/tuan_buyings/detail/{{$tuan_buy_id}}">
                     {{$cart['Cart']['name']}}
                 </a>
             </div>
