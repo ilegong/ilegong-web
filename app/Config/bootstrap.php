@@ -291,8 +291,8 @@ function calculate_try_price($priceInCent, $uid = 0, $shichituan = null) {
 }
 
 function special_cake_users($uid) {
-    return $uid == 699919
-    || $uid == 708029/*|| $uid == 632*/
+    return /*$uid == 699919
+    ||*/ $uid == 708029/*|| $uid == 632*/
         ; //Special user provided by Agnes(Li Hainan)
 }
 
