@@ -348,7 +348,7 @@ class OrdersController extends AppController {
 
         $cidAttr = array();
         if ($_GET['from'] == 'list_cart' || $_GET['from'] == 'quick_buy' || $_GET['from'] == 'try') {
-            $pidList = $_GET['pid_list'];
+            $pidList = $_REQUEST['pid_list'];
             if(!empty($pidList)){
                 $cidAttr = preg_split('/,/', $pidList);
                 if ($_GET['from'] == 'try') {

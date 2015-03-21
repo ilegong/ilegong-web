@@ -179,8 +179,12 @@ class CartsController extends AppController{
             }
         }
         //TODO: 此处修改通知用户购物车价格有变化！
+        $this->loadModel('ShipPromotion');
 		$total_price = 0;
-		foreach($Carts as $cart){
+		foreach($Carts as &$cart){
+            //check is ship promotion
+            $p_id = $cart['Cart']['product_id'];
+            $cart['Cart']['limit_ship'] = $this->ShipPromotion->is_limit_ship($p_id);
             $total_price += $cart['Cart']['price'] * $cart['Cart']['num'];
 		}
         $Carts = Hash::combine($Carts,'{n}.Cart.product_id','{n}.Cart');

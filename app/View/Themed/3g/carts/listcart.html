@@ -5,7 +5,7 @@
         <li>购物车</li>
     </ul>
 </div>
-<form action="{{$this->Html->url('/orders/info?from=list_cart')}}" method="post">
+<form action="{{$this->Html->url('/orders/info?from=list_cart')}}" method="post" id="order_info_form">
     <div class="cart">
         {{loop $brandInfos $key $brand}}
             <div>
@@ -15,7 +15,7 @@
                 </dl>
                 {{loop $product_brand_map[$key] $p_id}}
                     <ul class="clearfix">
-                        <li class="fl cart_select" name="product_select"><span></span></li>
+                        <li class="fl cart_select" name="product_select" data-cart="{{$Carts[$p_id]['id']}}" data-product="{{$Carts[$p_id]['name']}}" data-limit="{{$Carts[$p_id]['limit_ship']}}"><span></span></li>
                         <li class="fl"><a href="{{product_link($p_id, 'javascript:;')}}"><img src="{{Router::url(small_thumb_link($Carts[$p_id]['coverimg']))}}" border="0" /></a></li>
                         <li style="overflow: hidden; display: block; padding-right: 35px; padding-left: 10px;">
                             <a href="#X">
@@ -31,6 +31,7 @@
                                 </div>
                             </a>
                         </li>
+                        <span style="display: none;" class="item-price" id="price-{{$Carts[$p_id]['id']}}">{{$this->Number->precision($Carts[$p_id]['price']*$Carts[$p_id]['num'], 2)}}</span>
                         <li><a href="{{Router::url('/carts/delete/'.$Cart[$p_id]['id'])}}" class="cart_delete_a">删除</a></li>
                     </ul>
                 {{/loop}}
@@ -44,19 +45,87 @@
             <li class="fr"><a id="submit_btn" href="#X">结算</a></li>
         </ul>
     </div>
+    <input type="hidden" name="pid_list" id="cart_ids"/>
 </form>
 
 <script>
     $('document').ready(function(){
+        $('#order_info_form').on('submit',function(){
+            var $selectCart = $('li.cart_select_cur');
+            var cart_ids = [];
+            $.each($selectCart,function(index,item){
+                var me = $(item);
+                var c_id = me.data('cart');
+                cart_ids.push(c_id);
+            });
+            $('#cart_ids').val(cart_ids.join(','));
+        });
+
+        function remove_limit(){
+            var $limitCart = $('li[data-limit="1"].cart_select_cur');
+            $limitCart.removeClass('cart_select_cur');
+            $.each($limitCart,function(index,item){
+                var $item = $(item);
+                var selected = $('li.cart_select_cur',$item.parent().parent('div'));
+                if(selected.length>0){
+                    $('dd[name="brand_select"]',$item.parent().parent('div')).addClass('cart_select_cur');
+                }else{
+                    $('dd[name="brand_select"]',$item.parent().parent('div')).removeClass('cart_select_cur');
+                }
+            });
+        }
+
         $('dd[name="brand_select"]').on('click',function(){
             var me = $(this);
-            me.addClass('cart_select_cur');
-
+            me.toggleClass('cart_select_cur');
+            var $p_select = $('li[name="product_select"]',me.parent().parent('div'));
+            if(me.hasClass('cart_select_cur')){
+                $.each($p_select,function(index,item){
+                    var $item = $(item);
+                    var tip_flag = $('li.cart_select_cur').length;
+                    if($item.data('limit')){
+                        $('li.cart_select_cur').removeClass('cart_select_cur');
+                        $('dd.cart_select_cur').removeClass('cart_select_cur');
+                        $item.addClass('cart_select_cur');
+                        me.addClass('cart_select_cur');
+                        if(tip_flag>0){
+                            utils.alert($item.data('product')+',不能和其他商品一起结算,请分开结算.');
+                        }
+                        return false;
+                    }else{
+                        $item.addClass('cart_select_cur');
+                        remove_limit();
+                    }
+                });
+            }else{
+                $p_select.removeClass('cart_select_cur');
+            }
+            resetTotalPrice();
         });
+
         $('li[name="product_select"]').on('click',function(){
             var me = $(this);
-            me.addClass('cart_select_cur');
+            var tip_flag = $('li.cart_select_cur').length;
+            me.toggleClass('cart_select_cur');
+            if(me.data('limit')&&me.hasClass('cart_select_cur')){
+                $('li.cart_select_cur').removeClass('cart_select_cur');
+                $('dd.cart_select_cur').removeClass('cart_select_cur');
+                me.addClass('cart_select_cur');
+                if(tip_flag > 0){
+                    utils.alert(me.data('product')+',不能和其他商品一起结算,请分开结算.');
+                }
+            }else{
+                remove_limit();
+            }
+            var selected = $('li.cart_select_cur',me.parent().parent('div'));
+            if(selected.length>0){
+                $('dd[name="brand_select"]',me.parent().parent('div')).addClass('cart_select_cur');
+            }else{
+                $('dd[name="brand_select"]',me.parent().parent('div')).removeClass('cart_select_cur');
+            }
+            resetTotalPrice();
         });
+
         $('#go_back').on('click',function(){
             if(window.location.href!=document.referrer){
                 window.location.href=document.referrer;
@@ -70,13 +139,17 @@
             }
         });
 
-        function editCartNum(id, num) {
-            $('#price-' + id).html(utils.toFixed($('#pamount-' + id).data('price') * num, 2));
+        function resetTotalPrice(){
             var total_price = 0;
-            $('.item-price').each(function () {
+            $('.item-price',$('li.cart_select_cur').parent('ul')).each(function () {
                 total_price += parseFloat($(this).html());
             });
             $('#total-price').html(utils.toFixed(total_price, 2));
+        }
+
+        function editCartNum(id, num) {
+            $('#price-' + id).html(utils.toFixed($('#pamount-' + id).data('price') * num, 2));
+            resetTotalPrice();
             var url = BASEURL + '/carts/editCartNum/' + id + '/' + num;
             // var postdata = {'data[Cart][num]':num,'data[Cart][product_id]':id};
             if (!sso.check_userlogin({"callback": editCartNum, "callback_args": arguments}))
