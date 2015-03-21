@@ -56,6 +56,8 @@ class TuanTeamsController extends AppController{
                 $data['uid'] = $uid;
                 $data['join_time'] = date('Y-m-d H:i:s');
                 $this->TuanMember->save($data);
+                $this->TuanTeam->update(array('member_num' => 'member_num + 1'), array('id' => $tuan_id));
+                $tuan_team['TuanTeam']['member_num'] = $tuan_team['TuanTeam']['member_num'] + 1;
             }
             $this->set('new_join', true);
         }
@@ -102,6 +104,7 @@ class TuanTeamsController extends AppController{
                     $data['uid'] = $uid;
                     $data['join_time'] = date('Y-m-d H:i:s');
                     $this->TuanMember->save($data);
+
                 }
                 $res = array('success'=> true);
 

@@ -134,6 +134,9 @@
 {{/if}}
 <script>
     $(document).ready(function(){
+        {{if $new_join}}
+        $('#joinModal').modal('show');
+        {{/if}}
         $("#tuan_share").click(function(){
             var $share_div = $('<div class="apple_share fade in"><img src="/img/tuan/share.png" style="width:95%"></div>')
                     .show().click(function(){
@@ -168,8 +171,3 @@
     }
 </script>
 
-{{if $new_join}}
-<script>
-    $('#joinModal').modal('show');
-</script>
-{{/if}}

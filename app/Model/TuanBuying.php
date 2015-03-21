@@ -27,6 +27,8 @@ class TuanBuying extends AppModel {
             $data['uid'] = $uid;
             $data['join_time'] = date('Y-m-d H:i:s');
             $TuanMemberM->save($data);
+            $TuanTeamM = ClassRegistry::init('TuanTeam');
+            $TuanTeamM->update(array('member_num' => 'member_num + 1'), array('id' => $tuan_id));
         }
 //        $tuan_info = $this->find('first', array(
 //            'conditions' => array('id' => $memberId),
