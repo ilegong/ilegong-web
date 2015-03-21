@@ -95,7 +95,7 @@ ul,ol {
 /*团购进度条*/
 .bar{ width: 100%; background-color: #f1f1f1; height: 10px; position: relative; margin: 3px 0;}
 .bar_buy{ background-color: #29ac0e; height: 10px; position: absolute; top: 0; left: 0;}
-.tuan_bar{ color: #999999; line-height: 18px;}
+.tuan_bar{ color: #999999; line-height: 18px;padding:10px;background: #ffffff;}
 .tuan_bar span{ color: #ffa200;}
 
 /*全部团购商品*/
