@@ -15,7 +15,7 @@
                 </dl>
                 {{loop $product_brand_map[$key] $p_id}}
                     <ul class="clearfix">
-                        <li class="fl cart_select" name="product_select" data-cart="{{$Carts[$p_id]['id']}}" data-product="{{$Carts[$p_id]['name']}}" data-productId="{{$Carts[$p_id]['product_id']}}" data-limit="{{$Carts[$p_id]['limit_ship']}}"><span></span></li>
+                        <li class="fl cart_select" name="product_select" data-cart="{{$Carts[$p_id]['id']}}" data-product="{{$Carts[$p_id]['name']}}" data-productid="{{$Carts[$p_id]['product_id']}}" data-limit="{{$Carts[$p_id]['limit_ship']}}"><span></span></li>
                         <li class="fl"><a href="{{product_link($p_id, 'javascript:;')}}"><img src="{{Router::url(small_thumb_link($Carts[$p_id]['coverimg']))}}" border="0" /></a></li>
                         <li style="overflow: hidden; display: block; padding-right: 35px; padding-left: 10px;">
                             <a href="#X">
@@ -82,7 +82,7 @@
                     var $item = $(item);
                     var tip_flag = $('li.cart_select_cur').length;
                     if($item.data('limit')){
-                        var p_id = $item.data('productId');
+                        var p_id = $item.data('productid');
                         $('li.cart_select_cur').removeClass('cart_select_cur');
                         $('dd.cart_select_cur').removeClass('cart_select_cur');
                         $('li[data-productId="'+p_id+'"]').addClass('cart_select_cur');
