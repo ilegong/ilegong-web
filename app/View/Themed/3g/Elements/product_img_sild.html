@@ -43,7 +43,7 @@ autoplay: 10000,
 calculateHeight: true,
 onSlideChangeStart: function (swiper) {
 ul.find('li').removeClass('cur');
-ul.find('li:nth-child(' + (swiper.activeLoopIndex % (banners.length)) + ')').toggleClass('cur');
+ul.find('li:nth-child(' + (swiper.activeLoopIndex % (banners.length) + 1 )')').toggleClass('cur');
 }
 //etc..
 });
