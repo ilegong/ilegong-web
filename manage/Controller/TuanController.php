@@ -22,7 +22,39 @@ class TuanController extends AppController{
      * query tuan orders
      */
     public function admin_tuan_orders(){
-        
+        $team_id = $_REQUEST['team_id'];
+        $product_id = $_REQUEST['product_id'];
+        $time_type = $_REQUEST['time_type'];
+        $con_name = $_REQUEST['conn_name'];
+        $con_address = $_REQUEST['con_address'];
+        $con_phone = $_REQUEST['con_phone'];
+        $post_time = $_REQUEST['post_time'];
+        $query_tb = array();
+        if(!empty($team_id)){
+            $query_tb['tuan_id']=$team_id;
+        }
+        if($time_type==0){
+            $query_tb['end_time']=$post_time;
+        }else if($time_type==1){
+            $query_tb['consign_time']=$post_time;
+        }
+        if(!empty($product_id)){
+            $query_tb['pid'] = $product_id;
+        }
+        $tuan_buys = $this->TuanBuying->find('all',array(
+            'conditions' => $query_tb
+        ));
+        if(!empty($tuan_buy)){
+            $tb_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.id');
+            $orders = $this->Order->find('all',array(
+                'conditions' => array(
+                    'type' => 5,
+                    'member_id' => $tb_ids
+                )
+            ));
+            $orders = Hash::combine($orders,'{n}.Order.id','{n}.Order');
+            $this->set('orders',$orders);
+        }
     }
     /**
      * ajax delete tuan
@@ -59,4 +91,14 @@ class TuanController extends AppController{
         $results = array('838'=>'草莓');
         echo json_encode($results);
     }
+
+    /**
+     * ajax get teams
+     */
+    public function admin_tuan_teams(){
+        $this->autoRender=false;
+        $teams = $this->TuanTeam->find('all');
+        echo json_encode($teams);
+    }
+
 }
