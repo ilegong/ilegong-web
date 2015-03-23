@@ -21,10 +21,10 @@
             <div class="row voffset1" style="margin-left: 0;margin-right: 0;">
                 <div class="col-xs-12 col-md-6" style="padding: 0;">
                 {{template Elements/product_img_sild}}
-                    <div class="p_details_title">{{$Product['Product']['name']}}</div>
+                    <div class="p_details_title">{{$Product['Product']['name']}}--{{$tuan_team['TuanTeam']['tuan_name']}}</div>
                     <ul class="p_details_price clearfix">
                         <li class="fl price"><span>￥<font>{{$this->Number->precision($Product['Product']['price'],2)}}</font></span></li>
-                        <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{$consign_time}}</b></span></a></li>
+                        <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{empty($consign_time)?$consign_time:'成团后发货'}}</b></span></a></li>
                     </ul>
                     <ul class="sales clearfix">
                         <li>
@@ -48,12 +48,27 @@
                     <div class="clearfix tuanxq">
                         {{$tuan_team['TuanTeam']['tuan_name']}}&nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_team['TuanTeam']['leader_name']}}<br/>参团请加团长微信，微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}
                     </div>
+                    {{if $big_tuan}}
+
+                    <ul class="standard clearfix">
+                        <li>
+                            <span class="gray title mr12" style="float:left;">方式:</span>
+                            <span class="border">
+                                <span class="mr12 border cur tuan_way_selected" way-label="ziti">好邻居自提</span>
+                                <span class="mr12 border"  way-label="sf">顺丰到付</span>
+                            </span>
+                        </li>
+                    </ul>
+
+
+                    {{else}}
                     <div class="clearfix tuanxq" style="margin-top: -1px;">
                         <span class="fl">自提地点：{{$tuan_team['TuanTeam']['address']}}</span>
                         <a class="fr" href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
                             <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
                         </a>
                     </div>
+                    {{/if}}
                     <ul class="numbers clearfix b_line">
                     <li class="fl">
                             <span class="gray title mr12" style="float:left;">数量:</span>
@@ -73,7 +88,7 @@
                         <ul class="clearfix b_line">
                             <li>
                                 <span class="gray mr12" style="float:left;">快递:</span>
-                                <span style="display: block;overflow: hidden;"><span>自提</span>	</span>
+                                <span style="display: block;overflow: hidden;"><span id="consign_way">自提</span>	</span>
                             </li>
                         </ul>
                         <ul class="clearfix">
@@ -179,44 +194,60 @@
 </div>
 
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'));}}
-        <script>
-            $(document).ready(function(){
-            $('#tuan_buy').click(function(){
-                var href = window.location.href;
-                if(!sso.check_userlogin({'referer':href})){
-                    return false;
-                }else{
-                var product_id = $('#tuan_buy').attr('item-id');
-                var product_num = $('#input_pamount').val();
-                var postdata = {'product_id':product_id,'product_num':product_num};
-                utils.progress_notify('正在更新购物车');
-                $.ajax({
-                    type:'post',
-                    data: postdata,
-                    url:'/tuan_buyings/cart_info',
-                    success:function(data){
-                        if(data.success)
-                        {
+<script>
+    $(document).ready(function(){
+        $('#tuan_buy').click(function(){
+            var href = window.location.href;
+            if(!sso.check_userlogin({'referer':href})){
+                return false;
+            }else{
+            var product_id = $('#tuan_buy').attr('item-id');
+            var product_num = $('#input_pamount').val();
+            var way_type = 'normal';
+            {{if $big_tuan}}
+            way_type = $('.cur.tuan_way_selected').attr('way-label');
+            {{/if}}
+            var postdata = {'product_id':product_id,'product_num':product_num, way_type: way_type};
+            utils.progress_notify('正在更新购物车');
+            $.ajax({
+                type:'post',
+                data: postdata,
+                url:'/tuan_buyings/cart_info',
+                success:function(data){
+                    if(data.success) {
+                        if(data.direct == 'big_tuan_list'){
+                            window.location.href = '/tuan_buyings/big_tuan_balance/{{$tuan_buy_id}}';
+                        }else{
                             window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}';
                         }
-                        else
-                        {
-                            showErrorMessage(data.error);
-                        }
-                    },
-                    dataType:'json'
-                });
-                }
+                    }
+                    else {
+                        showErrorMessage(data.error);
+                    }
+                },
+                dataType:'json'
             });
-            })
-        </script>
+            }
+        });
+        $("[way-label]").click(function(){
+            var that = $(this);
+            that.toggleClass('cur').toggleClass('tuan_way_selected');
+            $("[way-label]").not(that).removeClass('cur').removeClass('tuan_way_selected');
+            if($('.cur.tuan_way_selected').attr('way-label') == 'sf'){
+                $('#consign_way').text('顺丰');
+            }else{
+                $('#consign_way').text('自提')
+            }
+        })
+    })
+</script>
 
 {{if $jWeixinOn}}
 <script>
     wx.ready(function () {
         var share_string = '{{$share_string ? $share_string :"0"}}';
-        var to_timeline_title = "{{$Product['Product']['name']}}";
-        var to_friend_title = "{{$Product['Product']['name']}}";
+        var to_timeline_title = "{{$Product['Product']['name']}}"+"--{{$tuan_team['TuanTeam']['tuan_name']}}"+"@朋友说";
+        var to_friend_title = "{{$Product['Product']['name']}}"+"--{{$tuan_team['TuanTeam']['tuan_name']}}"+"@朋友说";
         var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
         var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
         var imgUrl = "{{$Product['Product']['coverimg']}}";

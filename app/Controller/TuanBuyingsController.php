@@ -39,7 +39,7 @@ class TuanBuyingsController extends AppController{
             }
         }
         $pid=$tuan_b['TuanBuying']['pid'];
-        $consign_time = friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
+        $consign_time = empty($tuan_b['TuanBuying']['consign_time'])? '成团后发货' : friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
         $this->set(compact('pid', 'consign_time', 'tuan_buy_id', 'tuan_team'));
         $this->set('sold_num',intval($tuan_b['TuanBuying']['sold_num']));
         $this->set('tuan_id',$tuan_b['TuanBuying']['tuan_id']);
@@ -66,6 +66,9 @@ class TuanBuyingsController extends AppController{
         $recommC = $this->Components->load('ProductRecom');
         $recommends = $recommC->recommend($pid);
         $this->set('items', $recommends);
+        if($tuan_team['TuanTeam']['type'] == 1){
+            $this->set('big_tuan', true);
+        }
     }
 
     protected function prepare_wx_sharing($currUid, $pid) {
@@ -88,7 +91,11 @@ class TuanBuyingsController extends AppController{
         $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,0,5,0,$uId);
         $this->log('cartInfo'.json_encode($cartInfo));
         if($cartInfo){
-            echo json_encode(array('success' => true));
+            if($_POST['way_type'] == 'ziti'){
+                echo json_encode(array('success' => true, 'direct'=>'big_tuan_list'));
+            }else{
+                echo json_encode(array('success' => true, 'direct'=>'normal'));
+            }
         }else{
             echo json_encode(array('error' => false));
         }
@@ -146,9 +153,9 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_buy_id', $tuan_buy_id);
         $this->log('tuan_info'.json_encode($tuan_info));
         $this->set('cart_info',$Carts);
-//        $this->loadModel('Product');
-//        $pro_info = $this->Product->find('first',array('conditions' => array('id' => $tuan_b['TuanBuying']['pid'],'deleted' => DELETED_NO)));
-//        $this->set('pro_info',$pro_info);
+        if($tuan_info['TuanTeam']['type'] == 1){
+            $this->set('big_tuan', true);
+        }
     }
 
     public function tuan_pay($orderId){
@@ -220,7 +227,11 @@ class TuanBuyingsController extends AppController{
                 $this->log("can't find tuan".$tuan_id);
                 return;
             }
-            $address = $tuan_info['TuanTeam']['address'];
+            if($tuan_info['TuanTeam']['type'] == 1){
+                $address = $_POST['address'];
+            }else{
+                $address = $tuan_info['TuanTeam']['address'];
+            }
             $order = $this->Order->createTuanOrder($tuan_buy_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id);
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
                 $res = array('success'=> false, 'info'=> '你已经支付过了');
@@ -231,6 +242,9 @@ class TuanBuyingsController extends AppController{
                 ));
                 $consign_time = friendlyDateFromStr($tuanBuy['TuanBuying']['consign_time'], FFDATE_CH_MD);
                 $cart_name = $cart_info['Cart']['name'] . ' 送货'. $consign_time;
+                if($tuan_info['TuanTeam']['type'] == 1 && $_POST['way'] == 'sf'){
+                    $cart_name = $cart_name.'(顺丰到付)';
+                }
                 $this->Cart->update(array('name' => '\'' . $cart_name . '\'' ), array('id' => $cart_id));
                 $res = array('success'=> true, 'order_id'=>$order['Order']['id']);
             }
@@ -301,6 +315,9 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_buy',$tuan_buy);
         $this->set('tuan_buy_num',$tuan_buy_num[0][0]['sold_number']);
         $this->set('hideNav',true);
+    }
+    public function big_tuan_balance($tuan_buy_id){
+      $this->balance($tuan_buy_id);
     }
 }
 

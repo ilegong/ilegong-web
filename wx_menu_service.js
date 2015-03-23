@@ -11,7 +11,7 @@
             {
                 "type":"view",
                 "name":"美食团",
-                "url":"http://www.tongshijia.com/tuans/mei_shi_tuan.html?_sl=wx.sv.mst"
+                "url":"http://www.tongshijia.com/tuan_teams/mei_shi_tuan.html?_sl=wx.sv.mst"
             },
             {
                 "type":"view",
