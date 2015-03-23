@@ -4,44 +4,54 @@
 <form class="form-inline">
     <div style="padding-bottom: 10px;">
         <div class="form-group">
-            <select class="form-control" name="team_id">
+            <select class="form-control" name="team_id" value="{{$team_id}}">
                 <option value="-1">请选择团队</option>
                 <option value="1">京东北辰</option>
                 <option value="2">搜狐媒体</option>
             </select>
         </div>
         <div class="form-group" name="product_id">
-            <select class="form-control">
+            <select class="form-control" value="{{$product_id}}">
                 <option value="-1">选择商品</option>
                 <option value="838">草莓</option>
                 <option value="851">芒果</option>
             </select>
         </div>
         <div class="form-group">
-            <select class="form-control" name="time_type">
+            <select class="form-control" name="time_type" value="{{$time_type}}">
                 <option value="-1">选择时间</option>
                 <option value="0">截止时间</option>
                 <option value="1">发货时间</option>
             </select>
         </div>
         <div class="form-group">
-            <label class="sr-only" for="exampleInputPassword3">时间</label>
-            <input type="password" name="post_time" class="form-control" id="exampleInputPassword3" placeholder="输入时间">
+            <select class="form-control" name="order_type" value="{{$order_type}}">
+                <option value="-1">选择订单状态</option>
+                <option value="0">待支付</option>
+                <option value="1">待发货</option>
+                <option value="2">已发货</option>
+                <option value="4">已退款</option>
+                <option value="10">已作废</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="sr-only">时间</label>
+            <input type="password" name="post_time" class="form-control" placeholder="输入时间">
         </div>
     </div>
 
     <div style="padding-bottom: 10px;">
         <div class="form-group">
-            <label class="sr-only" for="exampleInputPassword3">收件人姓名</label>
-            <input type="text" class="form-control" name="con_name" placeholder="姓名">
+            <label class="sr-only">收件人姓名</label>
+            <input type="text" class="form-control" name="con_name" placeholder="姓名" value="{{$con_name}}">
         </div>
         <div class="form-group">
-            <label class="sr-only" for="exampleInputPassword3">收件人手机号</label>
-            <input type="text" class="form-control" name="con_phone" placeholder="手机号">
+            <label class="sr-only">收件人手机号</label>
+            <input type="text" class="form-control" name="con_phone" placeholder="手机号" value="{{$con_phone}}">
         </div>
         <div class="form-group">
-            <label class="sr-only" for="exampleInputPassword3">收货地址</label>
-            <input type="text" class="form-control" name="con_address" placeholder="收货地址">
+            <label class="sr-only">收货地址</label>
+            <input type="text" class="form-control" name="con_address" placeholder="收货地址" value="{{$con_address}}">
         </div>
         <button type="submit" class="btn btn-default fr">查看订单</button>
     </div>
@@ -94,14 +104,6 @@
             </tr>
         {{/loop}}
     </tbody>
-    <tfoot>
-        <tr>
-            <td>合计订单：</td>
-            <td>100</td>
-            <td>合计金额</td>
-            <td colspan="16">100</td>
-        </tr>
-    </tfoot>
 </table>
 
 <script>

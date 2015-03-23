@@ -29,6 +29,7 @@ class TuanController extends AppController{
         $con_address = $_REQUEST['con_address'];
         $con_phone = $_REQUEST['con_phone'];
         $post_time = $_REQUEST['post_time'];
+        $order_type = $_REQUEST['order_type'];
         $query_tb = array();
         if(!empty($team_id)){
             $query_tb['tuan_id']=$team_id;
@@ -46,15 +47,32 @@ class TuanController extends AppController{
         ));
         if(!empty($tuan_buy)){
             $tb_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.id');
-            $orders = $this->Order->find('all',array(
-                'conditions' => array(
-                    'type' => 5,
-                    'member_id' => $tb_ids
-                )
-            ));
+            if($order_type!=-1){
+                $orders = $this->Order->find('all',array(
+                    'conditions' => array(
+                        'type' => ORDER_TYPE_TUAN,
+                        'member_id' => $tb_ids,
+                        'status' => $order_type
+                    )
+                ));
+            }else{
+                $orders = $this->Order->find('all',array(
+                    'conditions' => array(
+                        'type' => ORDER_TYPE_TUAN,
+                        'member_id' => $tb_ids
+                    )
+                ));
+            }
             $orders = Hash::combine($orders,'{n}.Order.id','{n}.Order');
             $this->set('orders',$orders);
         }
+        $this->set('team_id',$team_id);
+        $this->set('product_id',$product_id);
+        $this->set('time_type',$time_type);
+        $this->set('conn_name',$con_name);
+        $this->set('con_address',$con_address);
+        $this->set('con_phone',$con_phone);
+        $this->set('post_time',$post_time);
     }
     /**
      * ajax delete tuan
