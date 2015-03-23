@@ -29,6 +29,7 @@ var $indexBanner = $('.index_banner');
 var ul = $indexBanner.find('ul');
 var swiper_wrapper = $indexBanner.find('div.swiper-wrapper');
 
+banners = banners.reverse();
 $.each(banners, function (idx, value) {
 $('<div class="swiper-slide"><a href="' + banner_links[idx] + '"><img src="' + value + '" border="0"/></a></div>').appendTo(swiper_wrapper);
 $('<li/>').appendTo(ul);
