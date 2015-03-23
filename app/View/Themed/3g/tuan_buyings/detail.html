@@ -1,4 +1,4 @@
-{{$this->Html->css(array('tuan.css?v3'));}}
+{{$this->Html->css(array('tuan.css?v5'));}}
 <?php   $current_model = 'Product';
     $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
     if($sold_num >= $target_num){
@@ -177,7 +177,7 @@
         <li class="fl" style="width:50%;">
             <div style="margin-right:3%;">
                 {{if $new_tuan_buy}}
-                <a href="/tuan_buyings/detail/{{$new_tuan_buy}}" class="btn_b pay_bg radius10">该团已截止</a>
+                <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
                 {{elseif $exceed_time}}
                 <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
                 {{else}}
