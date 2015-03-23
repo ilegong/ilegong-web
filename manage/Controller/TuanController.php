@@ -10,7 +10,7 @@ class TuanController extends AppController{
 
     var $name = 'Tuan';
 
-    var $uses = array('TuanTeam','TuanBuying','TuanTeam');
+    var $uses = array('TuanTeam','TuanBuying','Order');
 
     /**
      * index view
@@ -22,10 +22,7 @@ class TuanController extends AppController{
      * query tuan orders
      */
     public function admin_tuan_orders(){
-
-
-
-
+        
     }
     /**
      * ajax delete tuan
