@@ -1,11 +1,13 @@
 <script>
     wx.ready(function () {
+        var pro_link = "http://www.tongshijia.com/products/{{date('Ymd',strtotime($Product['Product']['created']))}}/{{$Product['Product']['slug']}}.html?history={{$history}}";
         var price_desc = "{{!empty($price)?' ('.$this->Number->precision($price, 2).'元)':''}}";
         var share_string = '{{$share_string ? $share_string :"0"}}';
         var to_timeline_title = "{{$Product['Product']['name']}}" + price_desc + "{{!empty($Product['Product'][promote_name])?'，'.$Product['Product'][promote_name]:''}}。" + "{{$special_desc}}";
         var to_friend_title = "{{$Product['Product']['name']}}" + price_desc;
-        var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
-        var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
+        var is_pro_detail = "{{$is_pro_detail}}";
+        var to_friend_link = is_pro_detail.replace("",'')?pro_link:document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
+        var to_timeline_link = is_pro_detail.replace("",'')?pro_link:document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
         var imgUrl = "{{$this->Html->assetUrl(small_thumb_link($Product['Product']['coverimg']))}}";
         var desc = "{{empty($Product['Product']['promote_name']) ? '' : $Product['Product']['promote_name'].'。'}}{{$special_desc}}";
         wx.onMenuShareAppMessage({
