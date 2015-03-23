@@ -204,10 +204,13 @@
             $('#pamount_reduce').on('click',function(e){
                 e.preventDefault();
                 utils.alert('每人限购一份。');
+                $('#input_pamount').val(1);
+
             });
             $('#pamount_add').on('click',function(e){
                 e.preventDefault();
                 utils.alert('每人限购一份。');
+                $('#input_pamount').val(1);
             });
         });
     </script>
