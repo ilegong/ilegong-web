@@ -53,6 +53,7 @@
             var middle_comment_count = 0;
             var bad_comment = '';
             var bad_comment_count = 0;
+            var all_comment = '';
             $.each(data, function (index, item) {
                 var comment = item['Comment'];
                 var template = '<dl class="clearfix">';
@@ -95,8 +96,8 @@
                     bad_comment += template;
                     bad_comment_count += 1;
                 }
+                all_comment += template;
             });
-            var all_comment = good_comment + middle_comment + bad_comment;
             $('#all_comment_content').html(all_comment===""?"<div style='padding-top: 15px'>暂无评价...</div>":all_comment);
             $('#good_comment_content').html(good_comment===""?"<div style='padding-top: 15px'>暂无评价...</div>":good_comment);
             $('#middle_comment_content').html(middle_comment===""?"<div style='padding-top: 15px'>暂无评价...</div>":middle_comment);
