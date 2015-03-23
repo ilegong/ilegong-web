@@ -78,9 +78,12 @@
                if(limit_pids.length==1){
                    $p_select.addClass('cart_select_cur');
                }else{
-                   $.each(limit_product,function(index,item){
-                       $(item).removeClass('cart_select_cur');
-                   });
+                   if(limit_product.length>0){
+                       $.each(limit_product,function(index,item){
+                           $(item).removeClass('cart_select_cur');
+                       });
+                       utils.alert('自提点产品不能和其他商品一起结算,请分开结算.');
+                   }
                }
                $.each($b_select,function(index,item){
                    var $item = $(item);
@@ -143,7 +146,7 @@
                         $item.addClass('cart_select_cur');
                         me.addClass('cart_select_cur');
                         if(tip_flag>0){
-                            utils.alert($item.data('product')+',不能和其他商品一起结算,请分开结算.');
+                            utils.alert('自提点产品不能和其他商品一起结算,请分开结算.');
                         }
                         return false;
                     }else{
@@ -175,7 +178,7 @@
                 me.addClass('cart_select_cur');
                 if(isTip){
                     if(tip_flag > 0){
-                        utils.alert(me.data('product')+',不能和其他商品一起结算,请分开结算.');
+                        utils.alert('自提点产品不能和其他商品一起结算,请分开结算.');
                     }
                 }
             }else{
