@@ -55,7 +55,9 @@
                             <span class="gray title mr12" style="float:left;">方式:</span>
                             <span class="border">
                                 <span class="mr12 border cur tuan_way_selected" way-label="ziti">好邻居自提</span>
+                                {{if $pid!=862}}
                                 <span class="mr12 border"  way-label="sf">顺丰到付</span>
+                                {{/if}}
                             </span>
                         </li>
                     </ul>
@@ -180,6 +182,8 @@
                 <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
                 {{elseif $exceed_time}}
                 <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
+                {{elseif $sold_num==10&&$pid==862}}
+                <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
                 {{else}}
                 <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg radius10">立即购买</a>
                 {{/if}}
@@ -194,6 +198,20 @@
 </div>
 
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'));}}
+{{if $pid==862}}
+    <script>
+        $(document).ready(function(){
+            $('#pamount_reduce').on('click',function(e){
+                e.preventDefault();
+                utils.alert('每人限购一份。');
+            });
+            $('#pamount_add').on('click',function(e){
+                e.preventDefault();
+                utils.alert('每人限购一份。');
+            });
+        });
+    </script>
+{{/if}}
 <script>
     $(document).ready(function(){
         $('#tuan_buy').click(function(){
