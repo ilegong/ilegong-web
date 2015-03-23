@@ -48,12 +48,27 @@
                     <div class="clearfix tuanxq">
                         {{$tuan_team['TuanTeam']['tuan_name']}}&nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_team['TuanTeam']['leader_name']}}<br/>参团请加团长微信，微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}
                     </div>
+                    {{if $big_tuan}}
+
+                    <ul class="standard clearfix">
+                        <li>
+                            <span class="gray title mr12" style="float:left;">方式:</span>
+                            <span class="border">
+                                <span class="mr12 border cur tuan_way_selected" way-label="sf">顺丰到付</span>
+                                <span class="mr12 border" way-label="ziti">好邻居自提</span>
+                            </span>
+                        </li>
+                    </ul>
+
+
+                    {{else}}
                     <div class="clearfix tuanxq" style="margin-top: -1px;">
                         <span class="fl">自提地点：{{$tuan_team['TuanTeam']['address']}}</span>
                         <a class="fr" href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
                             <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
                         </a>
                     </div>
+                    {{/if}}
                     <ul class="numbers clearfix b_line">
                     <li class="fl">
                             <span class="gray title mr12" style="float:left;">数量:</span>
@@ -179,37 +194,48 @@
 </div>
 
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'));}}
-        <script>
-            $(document).ready(function(){
-            $('#tuan_buy').click(function(){
-                var href = window.location.href;
-                if(!sso.check_userlogin({'referer':href})){
-                    return false;
-                }else{
-                var product_id = $('#tuan_buy').attr('item-id');
-                var product_num = $('#input_pamount').val();
-                var postdata = {'product_id':product_id,'product_num':product_num};
-                utils.progress_notify('正在更新购物车');
-                $.ajax({
-                    type:'post',
-                    data: postdata,
-                    url:'/tuan_buyings/cart_info',
-                    success:function(data){
-                        if(data.success)
-                        {
+<script>
+    $(document).ready(function(){
+        $('#tuan_buy').click(function(){
+            var href = window.location.href;
+            if(!sso.check_userlogin({'referer':href})){
+                return false;
+            }else{
+            var product_id = $('#tuan_buy').attr('item-id');
+            var product_num = $('#input_pamount').val();
+            var way_type = 'normal';
+            {{if $big_tuan}}
+            way_type = $('.cur.tuan_way_selected').attr('way-label');
+            {{/if}}
+            var postdata = {'product_id':product_id,'product_num':product_num, way_type: way_type};
+            utils.progress_notify('正在更新购物车');
+            $.ajax({
+                type:'post',
+                data: postdata,
+                url:'/tuan_buyings/cart_info',
+                success:function(data){
+                    if(data.success) {
+                        if(data.direct == 'big_tuan_list'){
+                            window.location.href = '/tuan_buyings/big_tuan_balance/{{$tuan_buy_id}}';
+                        }else{
                             window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}';
                         }
-                        else
-                        {
-                            showErrorMessage(data.error);
-                        }
-                    },
-                    dataType:'json'
-                });
-                }
+                    }
+                    else {
+                        showErrorMessage(data.error);
+                    }
+                },
+                dataType:'json'
             });
-            })
-        </script>
+            }
+        });
+        $("[way-label]").click(function(){
+            var that = $(this);
+            that.toggleClass('cur').toggleClass('tuan_way_selected');
+            $("[way-label]").not(that).removeClass('cur').removeClass('tuan_way_selected');
+        })
+    })
+</script>
 
 {{if $jWeixinOn}}
 <script>

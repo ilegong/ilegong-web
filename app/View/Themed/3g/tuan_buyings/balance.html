@@ -10,18 +10,24 @@
 
     <div class="orderinfo voffset3">
         <h2>收货人信息</h2>
+        {{if $big_tuan}}
+        <input type="text" class="form-control" placeholder="收货地址"  name="consignee_address">
+        <input type="text" class="form-control" placeholder="收货人姓名"  name="consignee_name">
+        <input type="text" class="form-control" placeholder="手机号"  name="consignee_mobilephone">
+        {{else}}
         <p class="text-warning">具体地点：</p>
         <div id="specialShipPromotion" style="">
-                <ul id="ul_special_promotion" class="list-group">
-                    <li item-id="25" item-addr-mark="1" class="list-group-item ">
-                        <p>{{$tuan_address}}</p>
-                   </li>
-                </ul>
-                <p class="text-warning">个人信息：</p>
-                <input type="text" class="form-control" placeholder="收货人姓名" id="p_consignee_name" name="consignee_name">
-                <input type="text" class="form-control" placeholder="手机号" id="p_consignee_mobile" name="consignee_mobilephone">
-                <input type="hidden" id="special_ship_promotion" name="ship_promotion" value="0">
+            <ul id="ul_special_promotion" class="list-group">
+                <li item-id="25" item-addr-mark="1" class="list-group-item ">
+                    <p>{{$tuan_address}}</p>
+                </li>
+            </ul>
+            <p class="text-warning">个人信息：</p>
+            <input type="text" class="form-control" placeholder="收货人姓名" id="p_consignee_name" name="consignee_name">
+            <input type="text" class="form-control" placeholder="手机号" id="p_consignee_mobile" name="consignee_mobilephone">
+            <input type="hidden" id="special_ship_promotion" name="ship_promotion" value="0">
         </div>
+        {{/if}}
 
         <div id="part_payTypeAndShipType"><!-- template orders/info_shiptype--></div>
 
@@ -57,20 +63,32 @@
     $(document).ready(function(){
         $('#confirm_next').on('click',function(e){
             if($("#confirm_next").attr('data-disable') == 'false') {
-                if ($('#p_consignee_name').val() == "") {
+                var address = '';
+                var way = 'normal';
+                var name = $("input[name='consignee_name']").val();
+                var mobile = $("input[name='consignee_mobilephone']").val();
+                if (name == "") {
                     utils.alert("请输入你的姓名");
                     e.preventDefault();
                     $('#p_consignee_name').focus();
                     return false;
                 }
-                if ($('#p_consignee_mobile').val().length != 11) {
+                if (mobile.length != 11) {
                     utils.alert("联系电话格式不正确");
                     $('#p_consignee_mobile').focus();
                     e.preventDefault();
                     return false;
                 }
-                var name = $("#p_consignee_name").val();
-                var mobile = $("#p_consignee_mobile").val();
+                {{if $big_tuan}}
+                address = $("input[name='consignee_address']").val();
+                way = 'sf';
+                if (address == "") {
+                    utils.alert("请输入地址");
+                    e.preventDefault();
+                    $('#p_consignee_name').focus();
+                    return false;
+                }
+                {{/if}}
                 var cart_id = {{empty($cart_id)? 0: $cart_id}};
                 var tuan_buy_id = {{empty($tuan_buy_id)? 0: $tuan_buy_id}};
                 var tuan_id = {{empty($tuan_id)? 0: $tuan_id}};
@@ -78,7 +96,7 @@
                     type: "POST",
                     dataType: "json",
                     url: "/tuan_buyings/pre_order",
-                    data: {name: name, mobile: mobile, cart_id: cart_id, tuan_buy_id: tuan_buy_id, tuan_id: tuan_id },
+                    data: {name: name, mobile: mobile, cart_id: cart_id, tuan_buy_id: tuan_buy_id, tuan_id: tuan_id, address:address, way:way },
                     success: function (a) {
                         if (a.success) {
                             $("#confirm_next").attr('data-disable', 'true');

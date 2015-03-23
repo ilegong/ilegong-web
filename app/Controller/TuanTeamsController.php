@@ -9,7 +9,7 @@ class TuanTeamsController extends AppController{
     public function mei_shi_tuan(){
         $this->pageTitle = '美食团';
         $tuan_teams = $this->TuanTeam->find('all', array(
-            'conditions' =>array('status'=> 0),
+            'conditions' =>array('status'=> 0, 'type' => 0),
             'order' => array('TuanTeam.priority DESC')
         ));
         $this->set('tuan_teams',$tuan_teams);
