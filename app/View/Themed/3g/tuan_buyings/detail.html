@@ -21,7 +21,7 @@
             <div class="row voffset1" style="margin-left: 0;margin-right: 0;">
                 <div class="col-xs-12 col-md-6" style="padding: 0;">
                 {{template Elements/product_img_sild}}
-                    <div class="p_details_title">{{$Product['Product']['name']}}</div>
+                    <div class="p_details_title">{{$Product['Product']['name']}}--{{$tuan_team['TuanTeam']['tuan_name']}}</div>
                     <ul class="p_details_price clearfix">
                         <li class="fl price"><span>￥<font>{{$this->Number->precision($Product['Product']['price'],2)}}</font></span></li>
                         <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{empty($consign_time)?$consign_time:'成团后发货'}}</b></span></a></li>
@@ -246,8 +246,8 @@
 <script>
     wx.ready(function () {
         var share_string = '{{$share_string ? $share_string :"0"}}';
-        var to_timeline_title = "{{$Product['Product']['name']}}";
-        var to_friend_title = "{{$Product['Product']['name']}}";
+        var to_timeline_title = "{{$Product['Product']['name']}}"+"--{{$tuan_team['TuanTeam']['tuan_name']}}"+"@朋友说";
+        var to_friend_title = "{{$Product['Product']['name']}}"+"--{{$tuan_team['TuanTeam']['tuan_name']}}"+"@朋友说";
         var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
         var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
         var imgUrl = "{{$Product['Product']['coverimg']}}";
