@@ -10,7 +10,7 @@
 <?php $name = $tuan_product['Product']['name'] ; $promote_name = $tuan_product['Product']['promote_name'] ?>
 <div class="tuandetail_banner">
     <a href="javascript:void(0)">
-        <p><span>{{mb_strlen($name)>14?mb_substr($name,0,14):$name}}</span><br/>{{mb_strlen($promote_name)>14?mb_substr($promote_name,0,14):$promote_name}}</p>
+        <p><span>{{mb_strlen($name)>17?mb_substr($name,0,17):$name}}</span><br/>{{mb_strlen($promote_name)>23?mb_substr($promote_name,0,23):$promote_name}}</p>
         <div class="bannerbg"></div>
         <img src="/img/tuan/bannerdetail-{{$pid}}.jpg" border="0"/>
     </a>
