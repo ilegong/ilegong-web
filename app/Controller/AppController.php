@@ -321,11 +321,8 @@ class AppController extends Controller {
         				'modelclass'=>$modelClass,
         				'data_id'=>${$modelClass}[$modelClass]['id']
         			),
-                'order'=> array(
-                        'sortorder DESC'
-                    )
-        		));
-    	
+                'order'=> array('sortorder DESC')
+        ));
         if(Configure::read($modelClass.'.view_nums')){// 记录访问次数
         	$this->{$modelClass}->updateAll(
         			array('views_count' => 'views_count+1'), 
