@@ -98,6 +98,7 @@
                });
                $b_select.removeClass('cart_select_cur');
            }
+           resetTotalPrice();
         });
         $('#order_info_form').on('submit',function(){
             var $selectCart = $('li.cart_select_cur');
