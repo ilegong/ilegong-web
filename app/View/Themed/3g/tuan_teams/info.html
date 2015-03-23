@@ -1,6 +1,6 @@
 {{$this->Html->css(array('tuan.css?v4'))}}
 <?php $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
-    $referer_link .= '&referer='.urlencode($referer.'?has_joined=success');
+    $referer_link .= '&scope=userinfo&referer='.urlencode($referer.'?has_joined=success');
 ?>
 <div class="classlist_v2">
     <ul class="clearfix" >
