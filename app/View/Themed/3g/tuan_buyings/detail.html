@@ -75,9 +75,9 @@
                     <li class="fl">
                             <span class="gray title mr12" style="float:left;">数量:</span>
                         <span class="clearfix" style="display: block;overflow: hidden;">
-                    <div id="pamount_reduce" class="grew"  item-id="{{$pid}}">-</div>
-                    <input id="input_pamount"  item-id="{{$pid}}" size="3" value="1" class="num" name="shoppingnum" type="text"/>
-                    <div id="pamount_add" class="grew" item-id="{{$pid}}">+</div>
+                    <div {{if $pid==862}}id="pamount_not_r"{{else}}id="pamount_reduce"{{/if}} class="grew"  item-id="{{$pid}}">-</div>
+                    <input id="input_pamount"  item-id="{{$pid}}" size="3" value="1" class="num" name="shoppingnum" type="text" {{if $pid==862}}readonly{{/if}}/>
+                    <div {{if $pid==862}}id="pamount_not_a"{{else}}id="pamount_add"{{/if}} class="grew" item-id="{{$pid}}">+</div>
                     </span>
                     </li>
                     </ul>
@@ -198,23 +198,19 @@
 </div>
 
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'));}}
-{{if $pid==862}}
+
     <script>
         $(document).ready(function(){
-            $('#pamount_reduce').on('click',function(e){
+            $('#pamount_not_r').on('click',function(e){
                 e.preventDefault();
                 utils.alert('每人限购一份。');
-                $('#input_pamount').val(1);
-
             });
-            $('#pamount_add').on('click',function(e){
+            $('#pamount_not_a').on('click',function(e){
                 e.preventDefault();
                 utils.alert('每人限购一份。');
-                $('#input_pamount').val(1);
             });
         });
     </script>
-{{/if}}
 <script>
     $(document).ready(function(){
         $('#tuan_buy').click(function(){
