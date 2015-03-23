@@ -307,7 +307,7 @@ class TuanBuyingsController extends AppController{
         $this->loadModel('Product');
         $tuan_product = $this->Product->find('first', array(
             'conditions' => array('id' => $pid),
-            'fields' => array('name', 'promote_name', 'price')
+            'fields' => array('name', 'promote_name', 'price','id')
         ));
         $this->set('tuan_product', $tuan_product);
         $this->set('tuan_info',$tuan_info);
