@@ -205,7 +205,7 @@ class CategoriesController extends AppController {
 //            array('img' => "/img/banner/banner_zutuangou.jpg", 'url' => "/groupons/view/gonggan.html?from=home", 'id' => 0),
         );
 
-        $mobileTagIds = array(3,5,8,12,9,6,4,10);
+        $mobileTagIds = array(3,5,8,12,9,6,4,10,11);
         $mobileTags = $this->findTagsByIds($mobileTagIds);
         $mobileTags = Hash::combine($mobileTags,'{n}.ProductTag.id','{n}.ProductTag');
         $this->set('mobile_tag',$mobileTags);

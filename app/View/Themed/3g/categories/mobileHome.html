@@ -1,0 +1,230 @@
+<style>
+    body{
+        background-color:#f5f5f5;
+    }
+    img {
+        max-width: 100% !important;
+    }
+
+    /*秒杀*/
+    .seckill{ margin-top:0.625em; background-color:#ffffff; border-bottom:1px #dddddd solid; border-top:1px #dddddd solid;}
+    .seckill ul {margin-bottom: 0}
+    .seckill ul li.title{ padding:0 0.6em 0 0.7em; border-bottom:1px #eeeeee solid; color:#29ac0e; font-size:1.25em;}
+    .seckill ul li dl{ margin-bottom: 0; padding:0.5em 0 0.5em 0; text-align:center; width:100%;}
+    .seckill ul li dl dt{ width:50%; float:left; position:relative;}
+    .seckill ul li dl dt img{ width:6em; height:4.5em;}
+    .seckill ul li dl dt span{ display:block; padding-top:0.6em; line-height:1.35em; width:3.75em; height:3.15em; right:0.625em; top:1.3em; position:absolute; background-color:#ff483a; text-align:center; color:#ffffff; -moz-border-radius:3.75em;/* Gecko browsers */-webkit-border-radius:3.75em;/* Webkit browsers */border-radius:3.75em;/* W3C syntax */}
+    .seckill ul li dl dt .tbtn{ display:block; width:7.917em; height:1.8em; line-height:1.8em; text-decoration:none; font-size:1em; text-align:center; margin:0 auto; margin-top:1em;}
+    .seckill ul li dl dt .seckill_btn{ background-color:#ffa531; color:#ffffff;}
+    .seckill ul li dl dt .end_btn{ background-color:#cccccc; color:#999999;}
+    .seckill ul li dl dt .sec_start{ background-color:#cccccc; color:#999999; font-size:0.9em}
+</style>
+<div class="index_banner swiper-container">
+    <ul class="clearfix list-unstyled">
+    </ul>
+    <div class="swiper-wrapper">
+    </div>
+</div>
+{{if !empty($tryings)}}
+<div class="seckill" style="margin-top: 0.3em">
+    <ul>
+        <a href="/shichi/list_pai.html">
+            <li class="title">试吃秒杀</li>
+        </a>
+        <li>
+            <dl class="clearfix"><?php $i = 0; foreach($tryings as $trying) { if ($i++>2) {break;} ?>
+                <dt><a href="/shichi/list_pai.html">
+                    <img src="{{$this->Html->assetUrl(small_thumb_link($trying['Product']['coverimg']))}}"/>
+                    <span>秒杀价<br/>{{$this->Number->precision(calculate_try_price($trying['ProductTry']['price']), 2)}}</span>
+                    {{if $trying['status'] == 'sec_kill'}}
+                    <a href="/shichi/list_pai.html" class="tbtn seckill_btn radius10"
+                       data-pid="{{$trying['Product']['id']}}">正在秒杀</a>
+                    {{elseif $trying['status'] == 'sec_end'}}<a class="tbtn end_btn radius10">已秒完</a>
+                    {{else}}
+                    <div class="clearfix" style="width:8.4em; margin:0 auto; ">
+                        <a data-start="{{strtotime($trying['ProductTry']['start_time']) - ($shichi_mem? 30 * 60 : 0)}}"
+                           data-pid="{{$trying['Product']['id']}}" class="tbtn radius10 sec_start">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
+                    </div>
+                    {{/if}}
+                </a>
+                </dt>
+                <?php } ?>
+            </dl>
+        </li>
+    </ul>
+</div>
+{{/if}}
+<ul class="clearfix index_nav">
+    <li>
+        <a href="/">
+            <div class="width85 clearfix">
+                <span class="dian"></span>
+                <span>团购优惠</span>
+            </div>
+        </a>
+    </li>
+    <li>
+        <a href="/scores/more_score">
+            <div class="width75 clearfix">
+                <span class="jifen"></span>
+                <span>领积分</span>
+            </div>
+        </a>
+    </li>
+    <li>
+        <a href="/orders/mine">
+            <div class="width85 clearfix">
+                <span class="order"></span>
+                <span>我的订单</span>
+            </div>
+        </a>
+    </li>
+</ul>
+<ul class="index_favor clearfix">
+    <li>
+        <div style="border-right:1px #eeeeee solid;">
+            <dl class="clearfix">
+                <dd class="fl" style="color: #ec4e4c"><a href="/tuan_buyings/goods_tuans/838">今日团购</a></dd>
+                <dd class="fr"><a href="/tuan_buyings/goods">全部团购</a></dd>
+            </dl>
+            <a><img src="{{$this->Html->assetUrl('/img/mobile/index/favor/favor01.jpg');}}"/></a>
+        </div>
+    </li>
+    <li>
+        <div>
+            <dl class="clearfix">
+                {{if empty($daily_special)}}
+                    <dd class="fl" style=" color: #29ac0e;">超值购</dd>
+                    <dd class="fr"><span>¥12.00</span>起</dd>
+                {{else}}
+                    <dd class="fl" style=" color: #29ac0e;">今日特价</dd>
+                {{/if}}
+            </dl>
+            {{if $daily_special}}
+            <a href="{{url_colored(product_link($daily_special['ProductSpecial']['product_id'], '/'), 'h5.home.dailyspecial')}}"
+               style="display:block;"><img
+                    src="{{'http://s.tongshijia.com/img/u/dailyspecials/'.$daily_special['ProductSpecial']['show_day'].'.jpg';}}"/></a>
+            {{else}}
+            <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $spec_tags[13]['slug'] ))}}"
+               style="display:block;"><img src="{{$this->Html->assetUrl('/img/mobile/index/favor/favor02.jpg');}}"/></a>
+            {{/if}}
+        </div>
+    </li>
+</ul>
+<div class="index_bao">
+    <h1>朋友说的爆款</h1>
+
+    <p><a href="{{url_colored('/products/20150120/you_ji_hong_yan_cao_mei_tuan_gou.html', 'h5.home.recom')}}"><img
+            src="{{$this->Html->assetUrl('/img/mobile/index/d4.jpg?v6')}}"/></a></p>
+
+    <p><a href="{{url_colored('/products/20150209/Bei_Jing_San.html', 'h5.home.recom')}}"><img
+            src="{{$this->Html->assetUrl('/img/mobile/index/d1.jpg?v5')}}"/></a></p>
+
+    <p><a href="{{url_colored('/products/20140120/niu_zha_su_da_bing_yuan_wei.html', 'h5.home.recom')}}"><img
+            src="{{$this->Html->assetUrl('/img/mobile/index/d5.jpg?v9')}}"/></a></p>
+
+    <p><a href="{{url_colored('/products/20140909/xi_yu_mei_nong_xin_jiang_mei_zao.html', 'h5.home.recom')}}"><img
+            src="{{$this->Html->assetUrl('/img/mobile/index/d6.jpg?v7')}}"/></a></p>
+
+    <p><a href="{{url_colored('/products/20141110/qi_xia_ping_guo_10jin_zhuang.html', 'h5.home.recom')}}"><img
+            src="{{$this->Html->assetUrl('/img/mobile/index/d3.jpg?v5')}}"/></a></p>
+
+    <p>
+        <a href="{{url_colored('/products/20150302/Dong_Bei_Wu_Chang_Dao_Hua_Xiang_Da_Mi_Wu_Chang_Dang_Di_Mi_Chang_Zhuan_Gong_Yue.html', 'h5.home.recom')}}"><img
+                src="{{$this->Html->assetUrl('/img/mobile/index/d2.jpg?v6')}}"/></a></p>
+</div>
+<div class="index_class">
+    <h1>朋友说的推荐</h1>
+    <ul class="clearfix">
+        <li>
+            <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $mobile_tag[3]['slug'] ))}}"><img
+                    src="{{$this->Html->assetUrl('/img/mobile/index/class01.jpg')}}"/><s>新鲜水果</s></a>
+        </li>
+        <li>
+            <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $mobile_tag[5]['slug'] ))}}"><img
+                    src="{{$this->Html->assetUrl('/img/mobile/index/class02.jpg')}}"/><s>休闲零食</s></a>
+        </li>
+        <li>
+            <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $mobile_tag[8]['slug'] ))}}"><img
+                    src="{{$this->Html->assetUrl('/img/mobile/index/class03.jpg')}}"/> <s>蛋糕甜点</s></a>
+        </li>
+        <li>
+            <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $mobile_tag[12]['slug'] ))}}"><img
+                    src="{{$this->Html->assetUrl('/img/mobile/index/class04.jpg')}}"/><s>南北干货</s></a>
+        </li>
+        <li>
+            <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $mobile_tag[9]['slug'] ))}}"><img
+                    src="{{$this->Html->assetUrl('/img/mobile/index/class05.jpg')}}"/><s>粮油副食</s></a>
+        </li>
+        <li>
+            <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $mobile_tag[6]['slug'] ))}}"><img
+                    src="{{$this->Html->assetUrl('/img/mobile/index/class06.jpg')}}"/><s>酒水茶饮</s></a>
+        </li>
+        <li>
+            <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag',  $mobile_tag[4]['slug'] ))}}"><img
+                    src="{{$this->Html->assetUrl('/img/mobile/index/class07.jpg')}}"/><s>肉禽蛋品</s></a>
+        </li>
+        <li>
+            <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $mobile_tag[10]['slug'] ))}}"><img
+                    src="{{$this->Html->assetUrl('/img/mobile/index/class08.jpg')}}"/><s>水产海鲜</s></a>
+        </li>
+        <li>
+            <a href="{{$this->Html->url(array('controller' => 'categories', 'action' => 'tag', $mobile_tag[11]['slug'] ))}}"><img
+                    src="{{$this->Html->assetUrl('/img/mobile/index/class09.jpg')}}"/><s>时令蔬菜</s></a>
+        </li>
+    </ul>
+</div>
+
+<script>
+    $(document).ready(function(){
+        var timerParentStyle = {'margin-top': '1em'};
+        var toTimer = $('.sec_start').first();
+        var countDiv = toTimer.parent();
+        var pid = toTimer.attr('data-pid');
+        utils.countDown(toTimer, function(){
+            countDiv.css(timerParentStyle);
+        }, function(){
+            var parent = countDiv.parent();
+            countDiv.remove();
+            parent.append('<a  href="/shichi/list_pai.html" class="tbtn seckill_btn radius10" data-pid='+pid+'>正在秒杀</a>');
+        });
+    });
+</script>
+{{$this->Html->scriptStart(array('block' => 'scriptBottom'));}}
+$().ready(function(){
+
+var banners = [];
+var banner_links = [];
+{{loop $bannerItems $key $banner}}
+banners.push('{{$this->Html->assetUrl($banner['mobile_image'])}}');
+banner_links.push('{{url_colored($this->Html->url($banner['detail_url']), "h5.home.banner")}}');
+{{/loop}}
+
+//$(banners).preload();
+
+var $indexBanner = $('.index_banner');
+var ul = $indexBanner.find('ul');
+var swiper_wrapper = $indexBanner.find('div.swiper-wrapper');
+
+$.each(banners, function (idx, value) {
+$('<div class="swiper-slide"><a href="' + banner_links[idx] + '"><img src="' + value + '" border="0" /></a></div>').appendTo(swiper_wrapper);
+$('<li/>').appendTo(ul);
+});
+
+//setTimeout(function () {
+var mySwiper = $indexBanner.swiper({
+mode: 'horizontal',
+loop: true,
+autoplay: 10000,
+calculateHeight: true,
+onSlideChangeStart: function (swiper) {
+ul.find('li').removeClass('cur');
+ul.find('li:nth-child(' + (swiper.activeLoopIndex % 4 + 1) + ')').toggleClass('cur');
+}
+//etc..
+});
+ul.find('li:first').addClass('cur');
+//}, 100);
+})
+{{$this->Html->scriptEnd();}}
+{{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'), array('block' => 'scriptBottom'));}}
