@@ -411,3 +411,33 @@ ul li{ list-style:none;}
 .cart_pay ul li strong{ color: #ffa93a;}
 .cart_pay ul li a{ display: block; height: 44px; line-height: 44px; width: 90px; text-align: center; font-size: 1.1em; background-color: #ffa531; color: #ffffff; text-decoration: none;}
 
+/*首页new*/
+.index_banner img{ width: 100%;}
+.index_nav{ background-color: #ffffff; border-bottom: 1px #eeeeee solid; margin-bottom: 10px;}
+.index_nav li{ float: left; width: 33%; padding: 10px 0;}
+.index_nav li a{ text-decoration: none; color: #333333; display: block; border-right:1px #eeeeee solid; font-size: 1em;}
+.index_nav li a span{ display: block; float: left; line-height: 1.5em;}
+.index_nav li a span.dian{ width: 1.5em; height: 1.5em; background: url(/img/mobile/pyshuo_icon.png?v1) -3.1em -23.1em; background-size: 25em 25em; margin-right: 5px;}
+.index_nav li a span.jifen{ width: 1.5em; height: 1.5em; background: url(/img/mobile/pyshuo_icon.png?v1) -5em -23.1em; background-size: 25em 25em; margin-right: 5px;}
+.index_nav li a span.order{ width: 1.5em; height: 1.5em; background: url(/img/mobile/pyshuo_icon.png?v1) -6.875em -23.1em; background-size: 25em 25em; margin-right: 5px;}
+.index_nav li a div.width85{ width: 85px; margin: 0 auto;}
+.index_nav li a div.width75{ width: 75px; margin: 0 auto;}
+.index_favor{ background-color: #ffffff; border-bottom: 1px #eeeeee solid; border-top: 1px #eeeeee solid; margin-bottom: 10px;}
+.index_favor li{ float: left; width: 50%;}
+.index_favor li div{ padding: 10px;}
+.index_favor li div img{ width: 100%;}
+.index_favor li div dl{ padding-bottom: 10px; line-height: 1.2em;}
+.index_favor li div dl a{ color: #666666;}
+.index_favor li div dl span{ color: #ffa200;}
+.index_favor li div dl dd.fl{ font-size:1.2em; font-weight: bold;}
+.index_favor li div dl dd.fr{ color: #666666;}
+.index_bao{ padding: 0 10px;}
+.index_bao h1,.index_class h1{ padding: 0; margin: 0; font-size: 1.2em; padding-bottom: 8px; color: #333333;}
+.index_bao p{ padding: 0; margin: 0;}
+.index_bao p img{ width: 100%; margin-bottom: 10px;}
+.index_class{ padding: 10px 5px; background-color: #ffffff; border-top: 1px #eeeeee solid; border-bottom: 1px #eeeeee solid; margin-bottom: 10px;}
+.index_class h1{ padding: 0 5px;}
+.index_class ul li{ float: left; width: 33.3%;}
+.index_class ul li a{ display: block; text-decoration: none; color: #666666; margin: 10px 5px 0 5px;}
+.index_class ul li a img{ width: 100%; border-radius: 10px;}
+.index_class ul li a s{ text-decoration: none; text-align: center; display: block; padding:4px 0;}
