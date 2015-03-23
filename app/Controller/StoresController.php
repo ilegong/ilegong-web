@@ -11,7 +11,7 @@ class StoresController extends AppController
 
     public $uses = array('Product', 'Brand', 'Order','OrderTrack','OrderTrackLog','TrackOrderMap','Cart');
 
-    public $components = array('Paginator','ProductSpecGroup');
+    public $components = array('Paginator','ProductSpecGroup','Weixin');
 
 
     /* lower case */
@@ -178,10 +178,6 @@ class StoresController extends AppController
                 $this->Product->create();
                 $p =$this->Product->save($this->data);
                 if ($p) {
-                    //save product spec
-                    $this->save_product_spec($p['Product']['id']);
-                    //get spec group
-                    $this->save_product_spec_gorup($p['Product']['id']);
                     //保存上传的附件；形如 data[Uploadfile][39][id] , data[Uploadfile][39][name]
                     if (isset($this->data['Uploadfile']) && is_array($this->data['Uploadfile'])) {
                         $this->loadModel('Uploadfile');
