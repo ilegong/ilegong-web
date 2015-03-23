@@ -61,10 +61,13 @@
             var $b_select = $('dd[name="brand_select"]');
            if(me.hasClass('cart_select_cur')){
                var limit_pids = [];
+               var limit_product = [];
                $.each($p_select,function(index,item){
                    var $item = $(item);
                    if(!$item.data('limit')){
                        $item.addClass('cart_select_cur');
+                   }else{
+                       limit_product.push(item);
                    }
                    var p_id = $item.data('productid');
                    if($.inArray(p_id,limit_pids)<0){
@@ -74,6 +77,10 @@
                //单一产品
                if(limit_pids.length==1){
                    $p_select.addClass('cart_select_cur');
+               }else{
+                   $.each(limit_product,function(index,item){
+                       $(item).removeClass('cart_select_cur');
+                   });
                }
                $.each($b_select,function(index,item){
                    var $item = $(item);
