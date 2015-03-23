@@ -166,7 +166,7 @@ class CartsController extends AppController{
         $brand_ids = Hash::extract($product_brand_map,'{n}.Product.brand_id');
         $brandInfos = $brandM->find('all', array(
             'conditions' => array('id' => $brand_ids, 'deleted' => DELETED_NO),
-            'fields' => array('id', 'name')
+            'fields' => array('id', 'name', 'slug')
         ));
         $brandInfos = Hash::combine($brandInfos,'{n}.Brand.id','{n}.Brand');
         $brand_product_map = Hash::combine($product_brand_map,'{n}.Product.id','{n}.Product.brand_id');
