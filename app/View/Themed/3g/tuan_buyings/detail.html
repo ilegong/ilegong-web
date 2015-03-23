@@ -46,8 +46,9 @@
                     </div>
 
                     <div class="clearfix tuanxq">
-                        {{$tuan_team['TuanTeam']['tuan_name']}}&nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_team['TuanTeam']['leader_name']}}<br/>参团请加团长微信，微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}
+                        {{if $pid==862}}朋友说蛋糕团购{{else}}{{$tuan_team['TuanTeam']['tuan_name']}}{{/if}}&nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_team['TuanTeam']['leader_name']}}<br/>参团请加团长微信，微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}
                     </div>
+
                     {{if $big_tuan}}
 
                     <ul class="standard clearfix">
