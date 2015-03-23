@@ -10,8 +10,10 @@
     </ul>
 </div>
 <div class="tuandetail" style="padding-top: 42px">
-    <p><img src="http://api.map.baidu.com/staticimage?width=750&height=350&center=
+    <a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
+        <p><img src="http://api.map.baidu.com/staticimage?width=750&height=350&center=
     {{$location}}&zoom=16&markers={{$location}}&&markerStyles=l" /></p>
+        </a>
     <div class="tuandetail_masg">
         <ul class="clearfix">
             <li class="fl">{{$tuan_team['TuanTeam']['tuan_name']}}</li>
