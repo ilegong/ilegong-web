@@ -49,8 +49,8 @@ ul.find('li:nth-child(' + (swiper.activeLoopIndex % (banners.length)) + ')').tog
 });
 ul.find('li:first').addClass('cur');
 //}, 1000);
+mySwiper.swipeNext();
 })
-mySwiper.slideTo(0);
 {{$this->Html->scriptEnd();}}
 {{if count($Product['Uploadfile'])>1}}
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'), array('block' => 'scriptBottom'));}}
