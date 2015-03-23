@@ -54,8 +54,8 @@
                         <li>
                             <span class="gray title mr12" style="float:left;">方式:</span>
                             <span class="border">
-                                <span class="mr12 border cur tuan_way_selected" way-label="sf">顺丰到付</span>
-                                <span class="mr12 border" way-label="ziti">好邻居自提</span>
+                                <span class="mr12 border cur tuan_way_selected" way-label="ziti">好邻居自提</span>
+                                <span class="mr12 border"  way-label="sf">顺丰到付</span>
                             </span>
                         </li>
                     </ul>
@@ -88,7 +88,7 @@
                         <ul class="clearfix b_line">
                             <li>
                                 <span class="gray mr12" style="float:left;">快递:</span>
-                                <span style="display: block;overflow: hidden;"><span>自提</span>	</span>
+                                <span style="display: block;overflow: hidden;"><span id="consign_way">自提</span>	</span>
                             </li>
                         </ul>
                         <ul class="clearfix">
@@ -233,6 +233,11 @@
             var that = $(this);
             that.toggleClass('cur').toggleClass('tuan_way_selected');
             $("[way-label]").not(that).removeClass('cur').removeClass('tuan_way_selected');
+            if($('.cur.tuan_way_selected').attr('way-label') == 'sf'){
+                $('#consign_way').text('顺丰');
+            }else{
+                $('#consign_way').text('自提')
+            }
         })
     })
 </script>
