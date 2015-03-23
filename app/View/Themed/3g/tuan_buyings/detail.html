@@ -21,7 +21,7 @@
             <div class="row voffset1" style="margin-left: 0;margin-right: 0;">
                 <div class="col-xs-12 col-md-6" style="padding: 0;">
                 {{template Elements/product_img_sild}}
-                    <div class="p_details_title">{{$Product['Product']['name']}}--{{$tuan_team['TuanTeam']['tuan_name']}}</div>
+                    <div class="p_details_title">{{$Product['Product']['name']}}</div>
                     <ul class="p_details_price clearfix">
                         <li class="fl price"><span>￥<font>{{$this->Number->precision($Product['Product']['price'],2)}}</font></span></li>
                         <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{empty($consign_time)?'成团后发货':$consign_time}}</b></span></a></li>
