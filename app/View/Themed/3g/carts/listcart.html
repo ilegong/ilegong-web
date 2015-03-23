@@ -27,7 +27,7 @@
                                         <p>{{$Carts[$p_id]['name']}}</p>
                                         <s>单价:￥{{$this->Number->precision($cart['price'], 2)}}</s>
                                         <div class="clearfix">
-                                            <a onclick="cart_edit_amount.reduce('#pamount-{{$Carts[$p_id]['id']}}')" class="cartnumreduce fl"></a>
+                                            <a onclick="cart_edit_amount.reduce('#pamount-{{$cart['id']}}')" class="cartnumreduce fl"></a>
                                             <input style="height: 1.7em;text-align: center;" type="text" disabled="disabled" size="3" id="pamount-{{$cart['id']}}"
                                                    data-id="{{$cart['id']}}"
                                                    data-price="{{$cart['price']}}" class="cart-num-input"
@@ -49,7 +49,7 @@
     <div style="margin-top: 40px"></div>
     <div class="cart_pay">
         <ul class="clearfix">
-            <li class="fl"><dd style="margin-top: 7px;" class="fl cart_select" name="select_all"><span></span></dd>总价:<strong id="total-price">￥{{$this->Number->precision($total_price, 2)}}</strong></li>
+            <li class="fl"><dd style="margin-top: 7px;" class="fl cart_select" name="select_all"><span></span></dd>总价:<strong id="total-price">￥0</strong></li>
             <li class="fr"><a id="submit_btn" href="#X">结算</a></li>
         </ul>
     </div>
