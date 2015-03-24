@@ -178,14 +178,16 @@
         </li>
         <li class="fl" style="width:50%;">
             <div style="margin-right:3%;">
-                {{if $new_tuan_buy}}
-                <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
-                {{elseif $exceed_time}}
-                <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
-                {{elseif $is_limit}}
-                <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
+                {{if $is_limit}}
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
                 {{else}}
-                <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg radius10">立即购买</a>
+                    {{if $new_tuan_buy}}
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
+                    {{elseif $exceed_time}}
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
+                    {{else}}
+                    <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg radius10">立即购买</a>
+                    {{/if}}
                 {{/if}}
             </div>
         </li>

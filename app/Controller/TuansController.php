@@ -66,7 +66,9 @@ class TuansController extends AppController{
         $sold_num = $tuan_b['TuanBuying']['sold_num'];
         $max_num = $tuan_b['TuanBuying']['max_num'];
         if($max_num>0){
-            $this->set('is_limit',$sold_num>=$max_num);
+            if($sold_num>=$max_num){
+                $this->set('is_limit',true);
+            }
         }
         $this->set('sold_num',$sold_num);
         $this->set('pid', $tuan_b['TuanBuying']['pid']);
