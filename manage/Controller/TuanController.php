@@ -31,7 +31,7 @@ class TuanController extends AppController{
         $post_time = $_REQUEST['post_time'];
         $order_type = $_REQUEST['order_type'];
         $query_tb = array();
-        if(!empty($team_id)){
+        if(!empty($team_id)&&$team_id!='-1'){
             $query_tb['tuan_id']=$team_id;
         }
         if($time_type==0){
