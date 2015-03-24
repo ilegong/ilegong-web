@@ -115,7 +115,7 @@ class TuanBuyingsController extends AppController{
         $current_time = strtotime($tuan_b['TuanBuying']['end_time']);
         $sold_num = $tuan_b['TuanBuying']['sold_num'];
         if($sold_num>=10&&$tuan_buy_id==47){
-            $message = '该团购已到截止时间';
+            $message = '该团购已经结束。';
             $url = '/';
             $this->__message($message, $url);
             return;
