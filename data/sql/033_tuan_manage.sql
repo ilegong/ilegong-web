@@ -41,3 +41,7 @@ ADD COLUMN `member_num` INT NULL DEFAULT 1 AFTER `priority`;
 
 ALTER TABLE `cake_orders`
 ADD COLUMN `tuan_buying_id` INT NULL DEFAULT 0 AFTER `is_comment`;
+
+ALTER TABLE `cake_tuan_buyings`
+ADD COLUMN `max_num` INT(11) NULL DEFAULT 0 AFTER `target_num`;
+

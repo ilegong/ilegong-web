@@ -114,11 +114,14 @@ class TuanBuyingsController extends AppController{
         ));
         $current_time = strtotime($tuan_b['TuanBuying']['end_time']);
         $sold_num = $tuan_b['TuanBuying']['sold_num'];
-        if($sold_num>=10&&$tuan_buy_id==47){
-            $message = '该团购已经结束。';
-            $url = '/';
-            $this->__message($message, $url);
-            return;
+        $max_num = $tuan_b['TuanBuying']['max_num'];
+        if($max_num>0){
+            if($sold_num>=$max_num){
+                $message = '该团购已经结束。';
+                $url = '/';
+                $this->__message($message, $url);
+                return;
+            }
         }
         if(empty($tuan_b) && $current_time < time()){
             $message = '该团购已到截止时间';
@@ -160,6 +163,7 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_buy_id', $tuan_buy_id);
         $this->log('tuan_info'.json_encode($tuan_info));
         $this->set('cart_info',$Carts);
+        $this->set('max_num',$max_num);
         if($tuan_info['TuanTeam']['type'] == 1){
             $this->set('big_tuan', true);
         }

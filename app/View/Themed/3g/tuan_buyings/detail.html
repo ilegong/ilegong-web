@@ -56,13 +56,10 @@
                             <span class="gray title mr12" style="float:left;">方式:</span>
                             <span class="border">
                                 <span class="mr12 border cur tuan_way_selected" way-label="ziti">好邻居自提</span>
-                                {{if $pid!=862}}
                                 <span class="mr12 border"  way-label="sf">顺丰到付</span>
-                                {{/if}}
                             </span>
                         </li>
                     </ul>
-
 
                     {{else}}
                     <div class="clearfix tuanxq" style="margin-top: -1px;">
@@ -76,9 +73,9 @@
                     <li class="fl">
                             <span class="gray title mr12" style="float:left;">数量:</span>
                         <span class="clearfix" style="display: block;overflow: hidden;">
-                    <div {{if $pid==862}}id="pamount_not_r"{{else}}id="pamount_reduce"{{/if}} class="grew"  item-id="{{$pid}}">-</div>
-                    <input id="input_pamount"  item-id="{{$pid}}" size="3" value="1" class="num" name="shoppingnum" type="text" {{if $pid==862}}readonly{{/if}}/>
-                    <div {{if $pid==862}}id="pamount_not_a"{{else}}id="pamount_add"{{/if}} class="grew" item-id="{{$pid}}">+</div>
+                    <div {{if $is_limit}}id="pamount_not_r"{{else}}id="pamount_reduce"{{/if}} class="grew"  item-id="{{$pid}}">-</div>
+                    <input id="input_pamount"  item-id="{{$pid}}" size="3" value="1" class="num" name="shoppingnum" type="text" {{if $is_limit}}readonly{{/if}}/>
+                    <div {{if $is_limit}}id="pamount_not_a"{{else}}id="pamount_add"{{/if}} class="grew" item-id="{{$pid}}">+</div>
                     </span>
                     </li>
                     </ul>
@@ -185,7 +182,7 @@
                 <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
                 {{elseif $exceed_time}}
                 <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
-                {{elseif $sold_num>=10&&$pid==862}}
+                {{elseif $is_limit}}
                 <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
                 {{else}}
                 <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg radius10">立即购买</a>
