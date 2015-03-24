@@ -25,6 +25,10 @@
             </select>
         </div>
         <div class="form-group">
+            <label class="sr-only">时间</label>
+            <input type="password" name="post_time" class="form-control" placeholder="输入时间">
+        </div>
+        <div class="form-group">
             <select class="form-control" name="order_type" value="{{$order_type}}">
                 <option value="-1">选择订单状态</option>
                 <option value="0">待支付</option>
@@ -33,10 +37,6 @@
                 <option value="4">已退款</option>
                 <option value="10">已作废</option>
             </select>
-        </div>
-        <div class="form-group">
-            <label class="sr-only">时间</label>
-            <input type="password" name="post_time" class="form-control" placeholder="输入时间">
         </div>
     </div>
 
@@ -60,14 +60,14 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <td>订单号</td><td>用户ID</td><td>订单状态</td><td>商家名称</td><td>商品</td><td>单价</td><td>数量</td><td>总价</td><td>创建时间</td><td>付款时间</td><td>截单时间</td><td>发货时间</td><td>收件人</td><td>团队名称</td><td>团队收件地址</td><td>电话</td><td>支付方式</td><td>备注</td>
+            <td>订单号</td><td>用户ID</td><td>订单状态</td><td>商品</td><td>总价</td><td>创建时间</td><td>付款时间</td><td>截单时间</td><td>发货时间</td><td>收件人</td><td>团队名称</td><td>团队收件地址</td><td>电话</td><td>支付方式</td><td>备注</td>
         </tr>
     </thead>
     <tbody>
         {{loop $orders $id $order}}
             <tr>
                 <td>{{$id}}</td>
-                <td>?</td>
+                <td>{{$order['creator']}}</td>
                 <td>
                     {{if $order['status']==0}}
                     待支付
@@ -80,23 +80,36 @@
                     {{elseif $order['status']==11}}待支付
                     {{/if}}
                 </td>
-                <td>?</td>
-                <td>?</td>
-                <td>?</td>
-
+                <td>
+                    {{loop $order_carts[$order['Order']['id']] $cart}}
+                        {{$cart['Cart']['name']}}*{{$cart['Cart']['num']}};
+                    {{/loop}}
+                </td>
                 <td>{{$order['total_price']}}</td>
                 <td>{{$order['created']}}</td>
                 <td>{{$order['pay_time']}}</td>
-                <td>?</td>
-                <td>?</td>
-
+                <td>
+                </td>
+                <td>
+                    {{$tuan_buys[$order['member_id']]['end_time']}}
+                </td>
                 <td>{{$order['consignee_name']}}</td>
-                <td>?</td>
-                <td>?</td>
-
+                <td>
+                    {{$tuan_buys[$order['member_id']]['consign_time']}}
+                </td>
+                <td>
+                    {{$tuans[$tuan_buys[$order['member_id']]['tuan_id']]['tuan_name']}}
+                </td>
+                <td>
+                    {{$tuans[$tuan_buys[$order['member_id']]['tuan_id']]['tuan_addr']}}
+                </td>
                 <td>{{$order['consignee_mobilephone']}}</td>
                 <td>
-                    ?
+                    {{if $order['trade_type']=='JSAPI'}}
+                    微信支付
+                    {{elseif $order['trade_type']=='ZFB'}}
+                    支付宝
+                    {{/if}}
                 </td>
                 <td>
                     {{$order['remark']}}
