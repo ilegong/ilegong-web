@@ -81,34 +81,35 @@ class TuanController extends AppController{
                     'fields' => array('Order.*', 'Pay.trade_type'),
                 ));
             }
-            $order_ids = Hash::extract($orders,'{n}.Order.id');
-            $carts = $this->Cart->find('all',array(
-                'conditions'=>array(
-                    'order_id' => $order_ids,
-                )));
+            if(!empty($orders)){
+                $order_ids = Hash::extract($orders,'{n}.Order.id');
+                $carts = $this->Cart->find('all',array(
+                    'conditions'=>array(
+                        'order_id' => $order_ids,
+                    )));
 
-            $order_carts = array();
-            foreach($carts as $c){
-                $c_order_id = $c['Cart']['order_id'];
-                if (!isset($order_carts[$c_order_id])) {
-                    $order_carts[$c_order_id] = array();
+                $order_carts = array();
+                foreach($carts as $c){
+                    $c_order_id = $c['Cart']['order_id'];
+                    if (!isset($order_carts[$c_order_id])) {
+                        $order_carts[$c_order_id] = array();
+                    }
+                    $order_carts[$c_order_id][] = $c;
                 }
-                $order_carts[$c_order_id][] = $c;
+                $orders = Hash::combine($orders,'{n}.Order.id','{n}.Order');
+                $this->set('orders',$orders);
+                $this->set('order_carts',$order_carts);
+                $tuan_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.tuan_id');
+                $tuans = $this->TuanTeam->find('all',array(
+                    'conditions' => array(
+                        'id' => $tuan_ids
+                    )
+                ));
+                $tuans = Hash::combine($tuans,'{n}.TuanTeam.id','{n}.TuanTeam');
+                $this->set('tuans',$tuans);
+                $tuan_buys = Hash::combine($tuan_buys,'{n}.TuanBuying.id','{n}.TuanBuying');
+                $this->set('tuan_buys',$tuan_buys);
             }
-            $orders = Hash::combine($orders,'{n}.Order.id','{n}.Order');
-            $this->set('orders',$orders);
-            $this->set('order_carts',$order_carts);
-            $tuan_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.tuan_id');
-            $tuanTeamM = ClassRegistry::init('TuanTeam');
-            $tuans = $this->$tuanTeamM->find('all',array(
-                'conditions' => array(
-                    'id' => $tuan_ids
-                )
-            ));
-            $tuans = Hash::combine($tuans,'{n}.TuanTeam.id','{n}.TuanTeam');
-            $this->set('tuans',$tuans);
-            $tuan_buys = Hash::combine($tuan_buys,'{n}.TuanBuying.id','{n}.TuanBuying');
-            $this->set('tuan_buys',$tuan_buys);
         }
         $this->set('team_id',$team_id);
         $this->set('product_id',$product_id);
