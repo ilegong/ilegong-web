@@ -46,7 +46,6 @@ class TuanController extends AppController{
             'conditions' => $query_tb
         ));
 
-
         if(!empty($tuan_buys)){
             $tb_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.id');
             $payNotifyModel = ClassRegistry::init('PayNotify');

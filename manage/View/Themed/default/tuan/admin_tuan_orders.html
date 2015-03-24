@@ -81,7 +81,7 @@
                     {{/if}}
                 </td>
                 <td>
-                    {{loop $order['Order']_carts[$order['Order']['Order']['id']] $cart}}
+                    {{loop $order_carts[$order['Order']['id']] $cart}}
                         {{$cart['Cart']['name']}}*{{$cart['Cart']['num']}};
                     {{/loop}}
                 </td>
