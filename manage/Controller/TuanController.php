@@ -46,7 +46,6 @@ class TuanController extends AppController{
             'conditions' => $query_tb
         ));
 
-
         if(!empty($tuan_buys)){
             $tb_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.id');
             $payNotifyModel = ClassRegistry::init('PayNotify');
@@ -64,9 +63,9 @@ class TuanController extends AppController{
             if($order_type!=-1){
                 $orders = $this->Order->find('all',array(
                     'conditions' => array(
-                        'type' => ORDER_TYPE_TUAN,
-                        'member_id' => $tb_ids,
-                        'status' => $order_type
+                        'Order.type' => ORDER_TYPE_TUAN,
+                        'Order.member_id' => $tb_ids,
+                        'Order.status' => $order_type
                     ),
                     'joins' => $join_conditions,
                     'fields' => array('Order.*', 'Pay.trade_type'),
@@ -96,7 +95,6 @@ class TuanController extends AppController{
                     }
                     $order_carts[$c_order_id][] = $c;
                 }
-                $orders = Hash::combine($orders,'{n}.Order.id','{n}.Order');
                 $this->set('orders',$orders);
                 $this->set('order_carts',$order_carts);
                 $tuan_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.tuan_id');
