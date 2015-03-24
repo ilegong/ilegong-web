@@ -10,7 +10,7 @@ class TuanController extends AppController{
 
     var $name = 'Tuan';
 
-    var $uses = array('TuanTeam','TuanBuying','Order');
+    var $uses = array('TuanTeam','TuanBuying','Order','Cart');
 
     /**
      * index view
