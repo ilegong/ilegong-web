@@ -96,7 +96,6 @@ class TuanController extends AppController{
                     }
                     $order_carts[$c_order_id][] = $c;
                 }
-                $orders = Hash::combine($orders,'{n}.Order.id','{n}.Order');
                 $this->set('orders',$orders);
                 $this->set('order_carts',$order_carts);
                 $tuan_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.tuan_id');

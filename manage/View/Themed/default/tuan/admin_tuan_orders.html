@@ -64,55 +64,55 @@
         </tr>
     </thead>
     <tbody>
-        {{loop $orders $id $order}}
+        {{loop $orders $order}}
             <tr>
-                <td>{{$id}}</td>
-                <td>{{$order['creator']}}</td>
+                <td>{{$order['Order']['id']}}</td>
+                <td>{{$order['Order']['creator']}}</td>
                 <td>
-                    {{if $order['status']==0}}
+                    {{if $order['Order']['status']==0}}
                     待支付
-                    {{elseif $order['status']==1}}
+                    {{elseif $order['Order']['status']==1}}
                     待发货
-                    {{elseif $order['status']==2}}已发货
-                    {{elseif $order['status']==3}}已收货
-                    {{elseif $order['status']==4}}已退款
-                    {{elseif $order['status']==10}}已作废
-                    {{elseif $order['status']==11}}待支付
+                    {{elseif $order['Order']['status']==2}}已发货
+                    {{elseif $order['Order']['status']==3}}已收货
+                    {{elseif $order['Order']['status']==4}}已退款
+                    {{elseif $order['Order']['status']==10}}已作废
+                    {{elseif $order['Order']['status']==11}}待支付
                     {{/if}}
                 </td>
                 <td>
-                    {{loop $order_carts[$order['Order']['id']] $cart}}
+                    {{loop $order['Order']_carts[$order['Order']['Order']['id']] $cart}}
                         {{$cart['Cart']['name']}}*{{$cart['Cart']['num']}};
                     {{/loop}}
                 </td>
-                <td>{{$order['total_price']}}</td>
-                <td>{{$order['created']}}</td>
-                <td>{{$order['pay_time']}}</td>
+                <td>{{$order['Order']['total_price']}}</td>
+                <td>{{$order['Order']['created']}}</td>
+                <td>{{$order['Order']['pay_time']}}</td>
                 <td>
+                    {{$tuan_buys[$order['Order']['member_id']]['end_time']}}
                 </td>
                 <td>
-                    {{$tuan_buys[$order['member_id']]['end_time']}}
+                    {{$tuan_buys[$order['Order']['member_id']]['consign_time']}}
                 </td>
-                <td>{{$order['consignee_name']}}</td>
+                <td>{{$order['Order']['consignee_name']}}</td>
                 <td>
-                    {{$tuan_buys[$order['member_id']]['consign_time']}}
-                </td>
-                <td>
-                    {{$tuans[$tuan_buys[$order['member_id']]['tuan_id']]['tuan_name']}}
+                    {{$tuans[$tuan_buys[$order['Order']['member_id']]['tuan_id']]['tuan_name']}}
                 </td>
                 <td>
-                    {{$tuans[$tuan_buys[$order['member_id']]['tuan_id']]['tuan_addr']}}
+                    {{$tuans[$tuan_buys[$order['Order']['member_id']]['tuan_id']]['tuan_addr']}}
                 </td>
-                <td>{{$order['consignee_mobilephone']}}</td>
+
+                <td>{{$order['Order']['consignee_mobilephone']}}</td>
+
                 <td>
-                    {{if $order['trade_type']=='JSAPI'}}
+                    {{if $order['Pay']['trade_type']=='JSAPI'}}
                     微信支付
-                    {{elseif $order['trade_type']=='ZFB'}}
+                    {{elseif $order['Pay']['trade_type']=='ZFB'}}
                     支付宝
                     {{/if}}
                 </td>
                 <td>
-                    {{$order['remark']}}
+                    {{$order['Order']['remark']}}
                 </td>
             </tr>
         {{/loop}}
