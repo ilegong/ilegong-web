@@ -63,9 +63,9 @@ class TuanController extends AppController{
             if($order_type!=-1){
                 $orders = $this->Order->find('all',array(
                     'conditions' => array(
-                        'type' => ORDER_TYPE_TUAN,
-                        'member_id' => $tb_ids,
-                        'status' => $order_type
+                        'Order.type' => ORDER_TYPE_TUAN,
+                        'Order.member_id' => $tb_ids,
+                        'Order.status' => $order_type
                     ),
                     'joins' => $join_conditions,
                     'fields' => array('Order.*', 'Pay.trade_type'),
