@@ -1,32 +1,243 @@
-<style>
-td {padding:3px 3px !important; }
-    .cart-num-input {
-        padding: 4px 1px;
-    }
-
-    .input-group-addon {
-        width: 0;
-    }
-
-    .cart-title img {
-        max-width: 6em;
-    }
-</style>
+<div class="container">
+    <form action="{{$this->Html->url('/orders/info?from=list_cart')}}" method="post" id="order_info_form">
+        <div class="cart">
+            <ul class="clearfix">
+                <li class="width150">
+                    <input type="checkbox" name="select_all"/>
+                    <label>全选</label>
+                </li>
+                <li class="width340">商品</li>
+                <li class="width105">单价(元)</li>
+                <li class="width105">数量</li>
+                <li class="width105">小计(元)</li>
+                <li>操作</li>
+            </ul>
+        </div>
+        <div>
+            {{if empty($brandInfos)}}
+            <div class="cart_none">购物车里还没有商品，<a href="/">去逛逛</a ></div>
+            {{else}}
+            {{loop $brandInfos $key $brand}}
+            <div class="cart-item">
+                <div class="cart_merchant">
+                    <dl class="clearfix">
+                        <dd><input type="checkbox" name="brand_select"/></dd>
+                        <dd><a href="/b/{{$brand['slug']}}">{{$brand['name']}}</a></dd>
+                    </dl>
+                </div>
+                {{loop $product_brand_map[$key] $p_id}}
+                {{loop $Carts $c_id $cart}}
+                {{if $cart['product_id']==$p_id}}
+                <div class="cart_commodity">
+                    <dl class="clearfix">
+                        <dd class="width150">
+                            <input type="checkbox" name="product_select" data-cart="{{$cart['id']}}" data-product="{{$cart['name']}}" data-productid="{{$cart['product_id']}}" data-limit="{{$cart['limit_ship']}}"/>
+                            <a href="{{product_link($p_id, 'javascript:;')}}"><img src="{{Router::url(small_thumb_link($cart['coverimg']))}}" border="0" /></a>
+                        </dd>
+                        <dd class="width340"><a href="{{product_link($p_id, 'javascript:;')}}">{{$cart['name']}}</a></dd>
+                        <dd class="width105 gray">￥{{$this->Number->precision($cart['price'], 2)}}</dd>
+                        <dd class="width105">
+                            <div class="clearfix cart_num">
+                                <a href="#X" class="cart_reduce" onclick="cart_edit_amount.reduce('#pamount-{{$cart['id']}}')">-</a>
+                                <input type="text" disabled="disabled" size="3" id="pamount-{{$cart['id']}}"
+                                       data-id="{{$cart['id']}}"
+                                       data-price="{{$cart['price']}}" class="cart-num-input"
+                                       name="data[Cart][{{$cart['id']}}][num]" value="{{$cart['num']}}" />
+                                <a href="#X" class="cart_reduce" onclick="cart_edit_amount.add('#pamount-{{$cart['id']}}')">+</a>
+                            </div>
+                        </dd>
+                        <span style="display: none;" class="item-price" id="price-{{$cart['id']}}">{{$this->Number->precision($cart['price']*$cart['num'], 2)}}</span>
+                        <dd class="width105 orange" id="price-{{$cart['id']}}">{{$this->Number->precision($cart['price']*$cart['num'], 2)}}</dd>
+                        <dd class="cart_commodity_detele"><a href="{{Router::url('/carts/delete/'.$cart['id'])}}">删除</a></dd>
+                    </dl>
+                </div>
+                {{/if}}
+                {{/loop}}
+                {{/loop}}
+            </div>
+            {{/loop}}
+            {{/if}}
+        </div>
+        {{if !empty($brandInfos)}}
+        <div class="cart_floatbar">
+            <ul class="clearfix">
+                <li class="fl allselect">
+                    <input type="checkbox" name="select_all" />
+                    <label>全选</label>
+                </li>
+                <!--<li class="fl"><a href="#X" class="allselect_delete">删除选中的商品</a></li>-->
+                <li class="fr"><a href="#X" class="cart_pay" id="submit_btn">去结算</a></li>
+                <li class="fr">总价(不含运费)：<span id="total-price">￥0.00</span></li>
+            </ul>
+        </div>
+        {{/if}}
+        <input type="hidden" name="pid_list" id="cart_ids"/>
+    </form>
+</div>
 <script>
-
-    $(document).ready(function() {
-
-        $('#submit_btn').click(function(){
-            return sso.check_userlogin({'referer' : '/carts/listcart.html'});
+    $('document').ready(function(){
+        $('input[name="select_all"]').on('click',function(){
+            var me = $(this);
+            var $p_select = $('input[name="product_select"]');
+            var $b_select = $('input[name="brand_select"]');
+            if(me.prop('checked')){
+                var limit_pids = [];
+                var limit_product = [];
+                $.each($p_select,function(index,item){
+                    var $item = $(item);
+                    if(!$item.data('limit')){
+                        $item.prop('checked',true);
+                    }else{
+                        limit_product.push(item);
+                    }
+                    var p_id = $item.data('productid');
+                    if($.inArray(p_id,limit_pids)<0){
+                        limit_pids.push(p_id);
+                    }
+                });
+                //单一产品
+                if(limit_pids.length==1){
+                    $p_select.prop('checked',true);
+                }else{
+                    if(limit_product.length>0){
+                        $.each(limit_product,function(index,item){
+                            $(item).prop('checked',false);
+                        });
+                        utils.alert('自提点产品不能和其他商品一起结算,请分开结算.');
+                    }
+                }
+                $.each($b_select,function(index,item){
+                    var $item = $(item);
+                    var selected = $('input[name="product_select"]:checked',$item.closest('div.cart-item'));
+                    if(selected.length>0){
+                        $item.prop('checked',true);
+                    }else{
+                        $item.prop('checked',false);
+                    }
+                });
+            }else{
+                $.each($p_select,function(index,item){
+                    var $item = $(item);
+                    $item.prop('checked',false);
+                });
+                $b_select.prop('checked',false);
+            }
+            resetTotalPrice();
+        });
+        $('#order_info_form').on('submit',function(){
+            var $selectCart = $('input[name="product_select"]:checked');
+            var cart_ids = [];
+            $.each($selectCart,function(index,item){
+                var me = $(item);
+                var c_id = me.data('cart');
+                cart_ids.push(c_id);
+            });
+            if(cart_ids.length==0){
+                utils.alert('请选择结算产品。');
+                return false;
+            }
+            $('#cart_ids').val(cart_ids.join(','));
+        });
+        function remove_limit(){
+            var $limitCart = $('input[data-limit="1"]:checked');
+            $limitCart.prop('checked',false);
+            $.each($limitCart,function(index,item){
+                var $item = $(item);
+                var selected = $('input[name="product_select"]:checked',$item.closest('div.cart-item'));
+                if(selected.length>0){
+                    $('input[name="brand_select"]',$item.closest('div.cart-item')).prop('checked',true);
+                }else{
+                    $('input[name="brand_select"]',$item.closest('div.cart-item')).prop('checked',false);
+                }
+            });
+        }
+        $('input[name="brand_select"]').on('click',function(){
+            var me = $(this);
+            //me.prop('checked',!me.prop('checked'));
+            var $p_select = $('input[name="product_select"]',me.closest('div.cart-item'));
+            if(me.prop('checked')){
+                $.each($p_select,function(index,item){
+                    var $item = $(item);
+                    var tip_flag = $('input[name="product_select"]:checked').length;
+                    if($item.data('limit')){
+                        var p_id = $item.data('productid');
+                        $('input[name="product_select"]:checked').prop('checked',false);
+                        $('input[name="brand_select"]:checked').prop('checked',false);
+                        $('input[data-productid="'+p_id+'"]').prop('checked',true);
+                        $item.prop('checked',true);
+                        me.prop('checked',false);
+                        if(tip_flag>0){
+                            utils.alert('自提点产品不能和其他商品一起结算,请分开结算.');
+                        }
+                        return false;
+                    }else{
+                        $item.prop('checked',true);
+                        remove_limit();
+                    }
+                });
+            }else{
+                $p_select.prop('checked',false);
+            }
+            resetTotalPrice();
+        });
+        $('input[name="product_select"]').on('click',function(){
+            var me = $(this);
+            var tip_flag = $('input[name="product_select"]:checked').length;
+            //me.prop('checked',!me.prop('checked'));
+            if(me.data('limit')&&me.prop('checked')){
+                var p_id = me.data('productid');
+                var isTip = false;
+                $.each($('input[name="product_select"]:checked'),function(index,item){
+                    var $item = $(item);
+                    var item_p_id = $item.data('productid');
+                    if(item_p_id!=p_id){
+                        $item.prop('checked',false);
+                        isTip = true;
+                    }
+                });
+                $('input[name="brand_select"]:checked').prop('checked',false);
+                me.prop('checked',true);
+                if(isTip){
+                    if(tip_flag > 0){
+                        utils.alert('自提点产品不能和其他商品一起结算,请分开结算.');
+                    }
+                }
+            }else{
+                remove_limit();
+            }
+            var selected = $('input[name="product_select"]:checked',me.closest('div.cart-item'));
+            if(selected.length>0){
+                $('input[name="brand_select"]',me.closest('div.cart-item')).prop('checked',true);
+            }else{
+                $('input[name="brand_select"]',me.closest('div.cart-item')).prop('checked',false);
+            }
+            resetTotalPrice();
         });
 
-        function editCartNum(id, num) {
-            $('#price-' + id).html(utils.toFixed($('#pamount-' + id).data('price') * num, 2));
+        $('#go_back').on('click',function(){
+            if(window.location.href!=document.referrer){
+                window.location.href=document.referrer;
+            }else{
+                window.location.href='/';
+            }
+        });
+        $('#submit_btn').click(function(){
+            if(sso.check_userlogin({'referer' : '/carts/listcart.html'})){
+                $('form').submit();
+            }
+        });
+
+        function resetTotalPrice(){
             var total_price = 0;
-            $('.item-price').each(function () {
+            $('.item-price',$('input[name="product_select"]:checked').closest('div.cart_commodity')).each(function () {
                 total_price += parseFloat($(this).html());
             });
             $('#total-price').html(utils.toFixed(total_price, 2));
+        }
+
+        function editCartNum(id, num) {
+            $('#price-' + id).html(utils.toFixed($('#pamount-' + id).data('price') * num, 2));
+            resetTotalPrice();
             var url = BASEURL + '/carts/editCartNum/' + id + '/' + num;
             // var postdata = {'data[Cart][num]':num,'data[Cart][product_id]':id};
             if (!sso.check_userlogin({"callback": editCartNum, "callback_args": arguments}))
@@ -62,48 +273,3 @@ td {padding:3px 3px !important; }
         };
     });
 </script>
-<div class="container">
-<form action="{{$this->Html->url('/orders/info?from=list_cart')}}" method="post">
-    <table class="table table-striped table-bordered table-hover">
-        <thead>
-        <tr>
-            <th>名称</th>
-            <th>价格</th>
-            <th>数量</th>
-            <th>合计</th>
-        </tr>
-        </thead>
-        {{loop $Carts $c_id $cart}}
-        <tr>
-            <td class="cart-title"><a href="{{product_link($cart['product_id'], 'javascript:;')}}">{{$cart['name']}}<br/>
-                {{$this->Html->image(Router::url(small_thumb_link($cart['coverimg'])))}}
-                </a>
-            </td>
-            <td>{{$this->Number->precision($cart['price'], 2)}}</td>
-            <td>
-                <div class="input-group">
-                    <span class="reduce input-group-addon"
-                          onclick="cart_edit_amount.reduce('#pamount-{{$cart['id']}}')">-</span>
-                    <input type="text" disabled="disabled" size="3" id="pamount-{{$cart['id']}}"
-                           data-id="{{$cart['id']}}"
-                           data-price="{{$cart['price']}}" class="cart-num-input"
-                           name="data[Cart][{{$cart['id']}}][num]" value="{{$cart['num']}}"/>
-                    <span class="add input-group-addon"
-                          onclick="cart_edit_amount.add('#pamount-{{$cart['id']}}')">+</span>
-                </div>
-            </td>
-            <td><span class="item-price" id="price-{{$cart['id']}}">{{$this->Number->precision($cart['price']*$cart['num'], 2)}}</span>
-                {{$this->Html->link(__('delete'),Router::url('/carts/delete/'.$cart['id']))}}
-            </td>
-        </tr>
-        {{/loop}}
-        <thead>
-        <tr>
-            <td colspan="4" style="text-align: right"><span id="total-price">总价：{{$this->Number->precision($total_price, 2)}}</span>
-                <input id="submit_btn" class="btn btn-warning" type="submit" value="结算"/></td>
-        </tr>
-        </thead>
-    </table>
-
-</form>
-</div>
