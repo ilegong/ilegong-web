@@ -113,6 +113,13 @@ class TuanBuyingsController extends AppController{
             'fields' => array('pid', 'tuan_id', 'status', 'end_time')
         ));
         $current_time = strtotime($tuan_b['TuanBuying']['end_time']);
+        $sold_num = $tuan_b['TuanBuying']['sold_num'];
+        if($sold_num>=10&&$tuan_buy_id==47){
+            $message = '该团购已到截止时间';
+            $url = '/';
+            $this->__message($message, $url);
+            return;
+        }
         if(empty($tuan_b) && $current_time < time()){
             $message = '该团购已到截止时间';
             $url = '/tuan_teams/mei_shi_tuan';
