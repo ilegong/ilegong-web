@@ -160,6 +160,7 @@ class TuanController extends AppController{
     public function admin_tuan_teams(){
         $this->autoRender=false;
         $teams = $this->TuanTeam->find('all');
+        $teams = Hash::extract($teams,'{n}.TuanTeam');
         echo json_encode($teams);
     }
 

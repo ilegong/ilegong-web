@@ -4,10 +4,8 @@
 <form class="form-inline">
     <div style="padding-bottom: 10px;">
         <div class="form-group">
-            <select class="form-control" name="team_id" value="{{$team_id}}">
+            <select class="form-control" name="team_id" id="team_id" value="{{$team_id}}">
                 <option value="-1">请选择团队</option>
-                <option value="1">京东北辰</option>
-                <option value="2">搜狐媒体</option>
             </select>
         </div>
         <div class="form-group" name="product_id">
@@ -15,6 +13,7 @@
                 <option value="-1">选择商品</option>
                 <option value="838">草莓</option>
                 <option value="851">芒果</option>
+                <option value="862">蛋糕</option>
             </select>
         </div>
         <div class="form-group">
@@ -120,7 +119,13 @@
 </table>
 
 <script>
-
-
-
+    $(document).ready(function(){
+        var $team_id = $('#team_id');
+        $.getJSON('/manage/admin/tuan/tuan_teams',function(data){
+            console.log(data);
+            $.each(data,function(index,item){
+                $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo($team_id);
+            });
+        });
+    });
 </script>
