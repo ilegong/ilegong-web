@@ -41,7 +41,14 @@ class TuanBuyingsController extends AppController{
         $pid=$tuan_b['TuanBuying']['pid'];
         $consign_time = empty($tuan_b['TuanBuying']['consign_time'])? '成团后发货' : friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
         $this->set(compact('pid', 'consign_time', 'tuan_buy_id', 'tuan_team'));
-        $this->set('sold_num',intval($tuan_b['TuanBuying']['sold_num']));
+        $sold_num = $tuan_b['TuanBuying']['sold_num'];
+        $max_num = $tuan_b['TuanBuying']['max_num'];
+        if($max_num>0){
+            if($sold_num>=$max_num){
+                $this->set('is_limit',true);
+            }
+        }
+        $this->set('sold_num',$sold_num);
         $this->set('tuan_id',$tuan_b['TuanBuying']['tuan_id']);
         $target_num = max($tuan_b['TuanBuying']['target_num'], 1);
         $this->set('target_num', $target_num);
