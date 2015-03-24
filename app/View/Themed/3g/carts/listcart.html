@@ -24,7 +24,7 @@
                                 <li class="fl"><a href="{{product_link($p_id, 'javascript:;')}}"><img src="{{Router::url(small_thumb_link($cart['coverimg']))}}" border="0" /></a></li>
                                 <li style="overflow: hidden; display: block; padding-right: 35px; padding-left: 10px;">
                                     <a href="#X">
-                                        <p>{{$Carts[$p_id]['name']}}</p>
+                                        <p>{{$cart['name']}}</p>
                                         <s>单价:￥{{$this->Number->precision($cart['price'], 2)}}</s>
                                         <div class="clearfix">
                                             <a onclick="cart_edit_amount.reduce('#pamount-{{$cart['id']}}')" class="cartnumreduce fl"></a>

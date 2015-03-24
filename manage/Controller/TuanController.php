@@ -47,7 +47,7 @@ class TuanController extends AppController{
         ));
 
 
-        if(!empty($tuan_buy)){
+        if(!empty($tuan_buys)){
             $tb_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.id');
             $payNotifyModel = ClassRegistry::init('PayNotify');
             $payNotifyModel->query("update cake_pay_notifies set order_id =  substring_index(substring_index(out_trade_no,'-',2),'-',-1) where status = 6");
