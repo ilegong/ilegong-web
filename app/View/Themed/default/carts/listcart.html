@@ -73,27 +73,27 @@ td {padding:3px 3px !important; }
             <th>合计</th>
         </tr>
         </thead>
-        {{loop $Carts $cart}}
+        {{loop $Carts $c_id $cart}}
         <tr>
-            <td class="cart-title"><a href="{{product_link($cart['Cart']['product_id'], 'javascript:;')}}">{{$cart['Cart']['name']}}<br/>
-                {{$this->Html->image(Router::url(small_thumb_link($cart['Cart']['coverimg'])))}}
+            <td class="cart-title"><a href="{{product_link($cart['product_id'], 'javascript:;')}}">{{$cart['name']}}<br/>
+                {{$this->Html->image(Router::url(small_thumb_link($cart['coverimg'])))}}
                 </a>
             </td>
-            <td>{{$this->Number->precision($cart['Cart']['price'], 2)}}</td>
+            <td>{{$this->Number->precision($cart['price'], 2)}}</td>
             <td>
                 <div class="input-group">
                     <span class="reduce input-group-addon"
-                          onclick="cart_edit_amount.reduce('#pamount-{{$cart['Cart']['id']}}')">-</span>
-                    <input type="text" disabled="disabled" size="3" id="pamount-{{$cart['Cart']['id']}}"
-                           data-id="{{$cart['Cart']['id']}}"
-                           data-price="{{$cart['Cart']['price']}}" class="cart-num-input"
-                           name="data[Cart][{{$cart['Cart']['id']}}][num]" value="{{$cart['Cart']['num']}}"/>
+                          onclick="cart_edit_amount.reduce('#pamount-{{$cart['id']}}')">-</span>
+                    <input type="text" disabled="disabled" size="3" id="pamount-{{$cart['id']}}"
+                           data-id="{{$cart['id']}}"
+                           data-price="{{$cart['price']}}" class="cart-num-input"
+                           name="data[Cart][{{$cart['id']}}][num]" value="{{$cart['num']}}"/>
                     <span class="add input-group-addon"
-                          onclick="cart_edit_amount.add('#pamount-{{$cart['Cart']['id']}}')">+</span>
+                          onclick="cart_edit_amount.add('#pamount-{{$cart['id']}}')">+</span>
                 </div>
             </td>
-            <td><span class="item-price" id="price-{{$cart['Cart']['id']}}">{{$this->Number->precision($cart['Cart']['price']*$cart['Cart']['num'], 2)}}</span>
-                {{$this->Html->link(__('delete'),Router::url('/carts/delete/'.$cart['Cart']['id']))}}
+            <td><span class="item-price" id="price-{{$cart['id']}}">{{$this->Number->precision($cart['price']*$cart['num'], 2)}}</span>
+                {{$this->Html->link(__('delete'),Router::url('/carts/delete/'.$cart['id']))}}
             </td>
         </tr>
         {{/loop}}
