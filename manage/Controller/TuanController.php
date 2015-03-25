@@ -115,6 +115,7 @@ class TuanController extends AppController{
         $this->set('conn_name',$con_name);
         $this->set('con_phone',$con_phone);
         $this->set('post_time',$post_time);
+        $this->set('order_type',$order_type);
     }
     /**
      * ajax delete tuan
