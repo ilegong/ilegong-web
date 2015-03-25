@@ -574,3 +574,24 @@ a:hover, a:focus {
 .bar_buy{ background-color: #29ac0e; height: 10px; position: absolute; top: 0; left: 0;}
 .tuan_bar{ color: #999999; line-height: 18px;background: #ffffff;padding:10px;}
 .tuan_bar span{ color: #ffa200;}
+
+/*团购下单*/
+.conordertuan{ padding: 0 10px; background-color: #ffffff; margin-bottom: 10px; border-bottom: 1px #eeeeee solid;}
+.conordertuan_tel{ display: block; width: 100%; text-decoration: none; background-color: #fae8b5; height: 30px; line-height: 30px; overflow: hidden; text-align: center; font-size: 1em; color: #ff483a; margin-top: 43px;}
+.conordertuan h1,.conordertuan_contact h1{ margin: 0; font-size: 1.15em; color: #333333; padding-top: 10px; padding-bottom: 10px;}
+.conordertuan_adress{ padding-left: 1px;}
+.conordertuan ul{ float: left; width: 25%;}
+.conordertuan ul li a{ display: block; border: 1px #dddddd solid; line-height: 35px; text-align: center; text-decoration: none; color:#333333; font-size: 1em; background-color: #ffffff; margin-top: -1px; margin-left: -1px;}
+.conordertuan ul li a.cur{ background-color: #29ac0e; color: #ffffff;}
+.conordertuan p{ color: #555555; line-height: 18px; padding: 10px 0; margin: 0;}
+.conordertuan p span{ color: #29ac0e; font-weight: bold;}
+.conordertuan_contact{ padding: 0 10px 5px 10px; background-color: #ffffff; margin-bottom: 10px; border-bottom: 1px #eeeeee solid; border-top: 1px #eeeeee solid;}
+.conordertuan_contact label{ border: 1px #dddddd solid; padding: 8px 10px; display: block; margin-bottom: 10px;}
+.conordertuan_contact label input{ border-radius: 0; line-height: 18px; font-size: 1em; width: 100%; border: 0; color: #555555;}
+.conordertuan_total{ text-align: right; border-bottom: 1px #eeeeee solid; margin: 0; padding: 0; margin-top: -10px; background-color: #ffffff; padding: 10px; color: #555555;}
+.conordertuan_total strong{ color: #ffa200;}
+/*团购地址列表*/
+.tuanadresslist{ padding-top: 43px;}
+.tuanadresslist p{ line-height: 18px; color: #555555; padding: 15px 10px; border-bottom: 1px #eeeeee solid; background-color: #ffffff;}
+
+

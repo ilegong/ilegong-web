@@ -191,7 +191,6 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_address', $tuan_info['TuanTeam']['tuan_addr']);
         $this->set('end_time', date('m-d', $current_time));
         $this->set('tuan_buy_id', $tuan_buy_id);
-        $this->log('tuan_info'.json_encode($tuan_info));
         $this->set('cart_info',$Carts);
         $this->set('max_num',$max_num);
         if($tuan_info['TuanTeam']['type'] == 1){
@@ -326,7 +325,6 @@ class TuanBuyingsController extends AppController{
         }
         $this->set('tuan_product_ids',$tuan_product_ids);
         $this->set('tuan_products_info',$tuan_products_info);
-        $this->log('tuan_products'.json_encode($tuan_products_info));
         $this->set('hideNav',true);
     }
 
@@ -358,7 +356,8 @@ class TuanBuyingsController extends AppController{
         $this->set('hideNav',true);
     }
     public function big_tuan_balance($tuan_buy_id){
-      $this->balance($tuan_buy_id);
+        $this->balance($tuan_buy_id);
+        $this->set('hideNav',true);
     }
 }
 
