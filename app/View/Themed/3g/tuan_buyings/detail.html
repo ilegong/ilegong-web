@@ -127,7 +127,7 @@
                     </div>
 
                     <div class="all_line" id="comment-div">
-                        <ul class="clearfix title" style="margin-bottom: 0;">
+                        <ul class="clearfix title" style="margin-bottom: 0;" {{if $comment_count>5}}onclick="to_comment();"{{/if}}>
                             <li class="xq_commenticon fl" style="padding-left: 0;"></li>
                             <li class="fl">口碑评论<span> {{$Product['Product']['comment_nums']}}</span></li>
                             {{if $comment_count>5}}
@@ -174,16 +174,23 @@
                 </div>
             </div>
 
-            <script>
+<script>
 
-                function to_brand(){
-                    window.location.href="/b/peng_you_shuo";
-                }
-                function to_detail(){
-                    window.location.href="/tuan_buyings/product_detail/{{$pid}}?tuan_id={{$tuan_id}}&tuan_buy_id={{$tuan_buy_id}}";
-                }
-
-            </script>
+    function to_brand(){
+        window.location.href="/b/peng_you_shuo";
+    }
+    function to_detail(){
+        window.location.href="/tuan_buyings/product_detail/{{$pid}}?tuan_id={{$tuan_id}}&tuan_buy_id={{$tuan_buy_id}}";
+    }
+    function to_comment(){
+        window.location.href="/products/product_comments/{{$Product['Product']['slug']}}.html?from=tuan&tuan_buy_id={{$tuan_buy_id}}";
+    }
+    $(document).ready(function(){
+        $('#view_all_comments').on('click',function(){
+            to_comment();
+        });
+    });
+</script>
         </div>
         <hr>
     </div>

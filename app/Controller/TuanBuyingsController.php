@@ -76,6 +76,12 @@ class TuanBuyingsController extends AppController{
             $this->set('product_spec_map', $str);
         }
         $this->set('specs_map', $specs_map);
+        //评论数量
+        if($this->RequestHandler->isMobile()){
+            $this->loadModel('Comment');
+            $comment_count = intval($Product['Product']['comment_nums']);
+            $this->set('comment_count',$comment_count);
+        }
         $con = array('modelclass' => 'Product','fieldname' =>'photo','data_id' => $pid);
         $Product['Uploadfile']= $this->Uploadfile->find('all',array('conditions' => $con,'fields' => array('mid_thumb')));
         $this->set('Product', $Product);

@@ -176,7 +176,16 @@ class ProductsController extends AppController{
         $fields = array('id','slug','name','content','created');
         $this->set('hideNav',true);
         parent::view($slug,$fields);
-
+        $from = $_REQUEST['from'];
+        $back_flag = 'back';
+        if(!empty($from)){
+            if($from=='tuan'){
+                $tb_id = $_REQUEST['tuan_buy_id'];
+                $this->set('tuan_buy_id',$tb_id);
+                $back_flag = 'tuan';
+            }
+        }
+        $this->set('back_flag',$back_flag);
         $pid = $this->current_data_id;
         $currUid = $this->currentUser['id'];
         $this->calculate_price_limitation($pid, $currUid);

@@ -461,7 +461,7 @@ class CommentsController extends AppController {
                 //update comment status 1
                 //update product comment count
                 $this->loadModel('Product');
-                $this->Comment->updateAll(array('status'=>1),array('order_id' => $orderId));
+                $this->Comment->updateAll(array('status'=>PUBLISH_YES),array('order_id' => $orderId));
                 $comments = $this->Comment->find('all',array(
                     'conditions' => array(
                         'order_id' => $orderId
@@ -472,7 +472,7 @@ class CommentsController extends AppController {
                     $count = $this->Comment->find('count',array(
                         'conditions' => array(
                             'data_id' => $data_id,
-                            'status' => 1
+                            'status' => PUBLISH_YES
                         )
                     ));
                     $this->Product->updateAll(

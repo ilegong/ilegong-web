@@ -212,14 +212,17 @@
     function to_shichi(){
         window.location.href="/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}";
     }
-    {{if $commet_count>5}}
-        function to_comment(){
-            window.location.href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}";
-        }
-    {{/if}}
+    function to_comment(){
+        window.location.href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}";
+    }
     function to_detail(){
         window.location.href="/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}";
     }
+    $(document).ready(function(){
+        $('#view_all_comments').on('click',function(){
+            to_comment();
+        });
+    });
 </script>
 
         {{if $Product['Product']['id'] == PRODUCT_ID_MANGUO}}
@@ -229,7 +232,6 @@
                 var sold_percent = (sold_num/50*100)>100?100:sold_num*2;
                 $('#bar_buy').css("width", sold_percent + "%");
                 $('#bar_percent').text(sold_percent + "%");
-
             });
         </script>
         {{/if}}

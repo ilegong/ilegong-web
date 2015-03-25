@@ -1,5 +1,5 @@
 <div class="classlist_v2" style="z-index:1">
-    <ul class="clearfix" onclick="back('back')">
+    <ul class="clearfix" onclick="back('{{$back_flag}}')">
         <li><a class="back"></a></li>
         <li class="line"></li>
         <li><strong>口碑评价</strong></li>
@@ -8,6 +8,21 @@
 <div class="container" style="margin-top: 41px;background-color: #ffffff;border-bottom: 1px #dddddd solid;padding: 0 0 5em;">
     {{template products/template_product_comments}}
 </div>
+{{if $back_flag=='tuan'}}
+<div class="bottom_bg">
+    <ul class="clearfix">
+        <li class="love fl">
+            <a href="#X" class="love_icon"></a>
+            <!--<p>关注</p>-->
+        </li>
+        <li class="fl" style="width:80%;">
+            <div style="margin-left:20%;">
+                <a onclick="back('tuan')" class="btn_b pay_bg radius10">去团购</a>
+            </div>
+        </li>
+    </ul>
+</div>
+{{else}}
 <div class="bottom_bg">
     <ul class="clearfix">
         <li class="love fl">
@@ -25,12 +40,15 @@
         </li>
     </ul>
 </div>
+{{/if}}
 <script>
     function back(flag){
         if (flag == 'buy') {
             window.location.href = "{{url_colored(url_append(product_link2($Product), 'history', $history), 'h5.product_comm.buy')}}";
         } else if (flag == 'back') {
             window.location.href = "{{url_colored(url_append(product_link2($Product), 'history', $history), 'h5.product_comm.back')}}"
+        }else if(flag =='tuan'){
+            window.location.href = '/tuan_buyings/detail/{{$tuan_buy_id}}';
         }
     }
 </script>
