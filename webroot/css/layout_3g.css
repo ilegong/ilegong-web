@@ -583,7 +583,7 @@ a:hover, a:focus {
 .conordertuan ul{ float: left; width: 25%;}
 .conordertuan ul li a{ display: block; border: 1px #dddddd solid; line-height: 35px; text-align: center; text-decoration: none; color:#333333; font-size: 1em; background-color: #ffffff; margin-top: -1px; margin-left: -1px;}
 .conordertuan ul li a.cur{ background-color: #29ac0e; color: #ffffff;}
-.conordertuan p{ color: #555555; line-height: 18px; padding: 10px 0; margin: 0;}
+.conordertuan p{ color: #555555; line-height: 18px; padding: 10px 0; margin-top:-10px;}
 .conordertuan p span{ color: #29ac0e; font-weight: bold;}
 .conordertuan_contact{ padding: 0 10px 5px 10px; background-color: #ffffff; margin-bottom: 10px; border-bottom: 1px #eeeeee solid; border-top: 1px #eeeeee solid;}
 .conordertuan_contact label{ border: 1px #dddddd solid; padding: 8px 10px; display: block; margin-bottom: 10px;}

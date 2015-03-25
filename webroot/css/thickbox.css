@@ -20,7 +20,7 @@ p { margin: 0 0 0 0; }
 }
 
 .TB_overlayBG {
-    background-color:#ccc;
+    /*background-color:#ccc;*/
     filter:alpha(opacity=75);
     -moz-opacity: 0.75;
     opacity: 0.75;

@@ -1,3 +1,6 @@
+<style>
+    .conordertuan ul li a.cur_on{ background-color: #eeeeee; color: #333333;}
+</style>
 <div class="classlist_v2" style="z-index:1">
     <ul class="clearfix" onclick="javascript:history.go(-1)">
         <li><a class="back"></a></li>
@@ -44,7 +47,7 @@
 </div>
 <div class="cart_pay">
     <ul class="clearfix">
-        <li class="fl" id="total-price-{{$cart_info['Cart']['id']}}">共<span>{{$buy_count}}</span>件商品，总金额<strong>￥{{$this->Number->precision($total_price, 2)}}</strong></li>
+        <li class="fl" id="total-price-{{$cart_info['Cart']['id']}}">共<span>{{$buy_count}}</span>件，总金额(含运费)<strong>￥{{$this->Number->precision($total_price, 2)}}</strong></li>
         <li class="fr"><a id="confirm_next" href="#X" data-disable="false">提交订单</a></li>
     </ul>
 </div>
@@ -65,7 +68,7 @@
     $(document).ready(function(){
         var areass = zitiAddress.getBeijingAreas;
         var choose_area='';
-        var height = $(window).height();
+        var height = $(window).height() + 5;
         var width = $(window).width();
         var conorder_url = '#TB_inline?inlineId=hiddenModalContent&modal=true&height=' + height + '&width=' + width;
         for(var i=0; i< areass.length; i++){
@@ -74,11 +77,11 @@
         $(".conordertuan_adress").html(choose_area);
         $(".thickbox").each(function(){
             var that = $(this);
-            that.on("click", function(){
+            that.on("click", function(e){
+                $('.thickbox').not(that).removeClass("cur");
                 var area_id = $(this).attr("area-id");
                 setData(area_id);
                 that.addClass("cur");
-                $('.thickbox').not(that).removeClass("cur");
             })
         });
         function setData(area_id){
@@ -185,4 +188,4 @@
     })
 </script>
 {{$this->Html->script(array('/js/thickbox.js'));}}
-{{$this->Html->css(array('thickbox.css' ));}}
+{{$this->Html->css(array('thickbox.css?ver1' ));}}
