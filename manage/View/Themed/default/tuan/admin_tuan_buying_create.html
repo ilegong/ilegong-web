@@ -1,0 +1,57 @@
+<div class="container">
+    <hr/>
+    <h1>创建团购</h1>
+    <hr/>
+    <form class="form-horizontal" method="post" action="/manage/admin/tuan/tuan_buying_create" id="TuanBuyingAdminTuanBuyingCreateForm" novalidate="novalidate" data-noajax="true">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">选择团</label>
+            <select class="col-sm-9 controls" name="data[TuanBuying][tuan_id]" id="team_id" value="{{$this->data[TuanBuying][tuan_id]}}">
+                <option value="-1">请选择团队</option>
+            </select>
+        </div>
+        <div class="form-group" name="product_id">
+            <label class="col-sm-2 control-label">团购商品</label>
+            <select class="col-sm-9 controls" value="{{$this->data[TuanBuying][pid]}}" name="data[TuanBuying][pid]">
+                <option value="-1">选择商品</option>
+                <option value="838">草莓</option>
+                <option value="851">芒果</option>
+                <option value="862">蛋糕</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">截止时间</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanBuying][end_time]" value="{{$this->data[TuanBuying][end_time]}}" class="form-inline" type="text" id="end_time" placeholder="2015-03-24 20:00:00">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">发货时间</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanBuying][consignee_time]" value="{{$this->data[TuanBuying][consign_time]}}" class="form-inline" type="text" id="consignee_time" placeholder="2015-03-25 20:00:00">
+                <p>发货时间一般比截止时间晚一天</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">目标份数</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanBuying][target_num]" value="{{$this->data[TuanBuying][target_num]}}" class="form-inline" type="text" id="target" placeholder="20">
+                <p>团购状态为0，表示进行中；1，表示已完成；2，表示已取消</p>
+            </div>
+
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12"><input class="btn btn-primary" type="submit" value="提交"></div>
+        </div>
+    </form>
+</div>
+        <script>
+            $(document).ready(function(){
+                var $team_id = $('#team_id');
+                $.getJSON('/manage/admin/tuan/tuan_teams',function(data){
+                    $.each(data,function(index,item){
+                        $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo($team_id);
+                    });
+                });
+            })
+        </script>

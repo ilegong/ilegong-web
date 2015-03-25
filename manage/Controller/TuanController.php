@@ -240,13 +240,39 @@ class TuanController extends AppController{
              $this->autoRender = false;
              if($this->TuanBuying->save($this->data)){
                  $this->Session->setFlash(__('团购状态修改成功',true));
-               $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_buyings'));
+                 $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_buyings'));
              }
-             setFlashError($this->Session, __('The Data could not be saved. Please, try again.'));
+            $this->Session->setFlash(__('The Data could not be saved. Please, try again.'));
          }else{
              $this->data = $data_info;
          }
          $this->set('id',$id);
+     }
+
+    /**
+     * create new tuan_buying
+     */
+     public function admin_tuan_buying_create(){
+         if(!empty($this->data)){
+             $this->data['TuanBuying']['join_num'] = 0;
+             $this->data['TuanBuying']['sold_num'] = 0;
+             $this->data['TuanBuying']['status'] = 0;
+             if($this->TuanBuying->save($this->data)){
+                 $this->Session->setFlash(__('创建团购成功',true));
+                 $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_buyings'));
+             }else{
+                $this->Session->setFlash(__('The Data could not be saved. Please, try again.'));
+             }
+         }else{
+               $this->Session->setFlash(__('The Data could not be null. Please, try again.'));
+         }
+     }
+
+    /**
+     * create new tuan_team
+     */
+     public function admin_tuan_team_create(){
+
      }
 
 }

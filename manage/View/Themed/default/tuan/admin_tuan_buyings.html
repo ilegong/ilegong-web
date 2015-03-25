@@ -38,12 +38,14 @@
         </select>
     </div>
 </div>
-    <div style="padding-bottom: 10px;">
-        <button type="submit" class="btn btn-default fr">查看团购</button>
+
+    <div>
+        <button type="submit"  class="btn btn-default fr">查看团购</button>
+        <a href="/manage/admin/tuan/tuan_buying_create" role="button" style="margin-right:10px;" class="btn btn-default fr">创建团购</a>
+        <!--<a href="/manage/admin/tuan/tuan_team_create" role="button" style="margin-right:10px;" class="btn btn-default fr">添加新团</a>-->
     </div>
 </form>
-
-<table class="table table-striped table-bordered table-hover table-condensed table-responsive">
+<table class="table table-striped table-bordered  table-condensed table-responsive">
     <thead>
     <tr>
           <td>团购ID</td><td>团名称</td><td>团购商品/团类别</td><td>参团人数</td><td>售出份数/团购目标</td><td>结束时间</td><td>发货时间</td><td>团购状态</td><td>操作</td>
@@ -51,15 +53,15 @@
     </thead>
     <tbody>
     {{loop $tuan_ids $tuan_id}}
-    <tr>
+    <tr style="background-color:{{if $tuan_team_info[$tuan_id]['TuanBuying']['status']==0}} #00FFFF{{elseif $tuan_team_info[$tuan_id]['TuanBuying']['status']==1}}#7FFFD4{{else}} #F5F5DC{{/if}}">
         <!--<td><input type="checkbox" name="checkbox"  data-id="{{$tuan_team_info['TuanBuying']['id']}}"/></td>-->
         <td>{{$tuan_team_info[$tuan_id]['TuanBuying']['id']}}</td>
         <td>{{$tuan_team_info[$tuan_id]['name']}}</td>
         <td>{{if $tuan_team_info[$tuan_id]['TuanBuying']['pid'] == PRODUCT_ID_CAOMEI}}草莓{{elseif $tuan_team_info[$tuan_id]['TuanBuying']['pid'] == PRODUCT_ID_MANGUO}}芒果{{else}}{{$tuan_team_info[$tuan_id]['TuanBuying']['pid']}}{{/if}}/{{$tuan_team_info[$tuan_id]['tuan_id']==26?大团:小团}}</td>
         <td>{{$tuan_team_info[$tuan_id]['TuanBuying']['join_num']}}</td>
-        <td>{{$tuan_team_info[$tuan_id]['TuanBuying']['sold_num']}}/{{$tuan_team_info[$tuan_id]['TuanBuying']['target_num']}}</td>
+        <td style="background-color:{{if $tuan_team_info[$tuan_id]['TuanBuying']['sold_num']<$tuan_team_info[$tuan_id]['TuanBuying']['target_num']}} #00FFFF{{/if}}">{{$tuan_team_info[$tuan_id]['TuanBuying']['sold_num']}}/{{$tuan_team_info[$tuan_id]['TuanBuying']['target_num']}}</td>
         <td>{{$tuan_team_info[$tuan_id]['TuanBuying']['end_time']}}</td>
-        <td>{{$tuan_team_info[$tuan_id]['TuanBuying']['consign_time']}}</td>
+        <td>{{if $tuan_team_info[$tuan_id]['TuanBuying']['status']==2}}已取消{{else}}{{date('Y-m-d',strtotime($tuan_team_info[$tuan_id]['TuanBuying']['consign_time']))}}{{/if}}</td>
         <td>{{if $tuan_team_info[$tuan_id]['TuanBuying']['status']==0}}进行中{{elseif $tuan_team_info[$tuan_id]['TuanBuying']['status']==1}}已完成{{else}}已取消{{/if}}</td>
         <td>{{if $tuan_team_info[$tuan_id]['TuanBuying']['status']==0}}
             <button type="button" id="tuan_down" class="btn-sm  pull-left  btn-primary" style="margin-right:10px;" data-id="{{$tuan_team_info[$tuan_id]['TuanBuying']['id']}}" value="1">完成</button>
