@@ -81,7 +81,7 @@ class Cart extends AppModel {
      * @return mixed On success Model::$data if its not empty or true, false on failure
      */
     public function add_to_cart($product_id, $num = 1, $specId = 0, $type = CART_ITEM_TYPE_NORMAL, $try_id = 0,
-                                $uid = null, $sessionId=null, $prodTry = null, $shichituan = null) {
+                                $uid = null, $sessionId=null, $prodTry = null, $shichituan = null,$tuan_buy_id=null) {
 
         $user_cond = $this->create_user_cond($uid, $sessionId);
 
@@ -114,7 +114,7 @@ class Cart extends AppModel {
             ));
             $spec_detail_arr = $result[cart_dict_key($product_id, $specId)];
             $cart_name =  $p['Product']['name'] . (empty($spec_detail_arr[1])?'':'('.$spec_detail_arr[1].')');
-            list($price, $special_id) = calculate_price($p['Product']['id'], $spec_detail_arr[0], $uid, $num);
+            list($price, $special_id) = calculate_price($p['Product']['id'], $spec_detail_arr[0], $uid, $num,0,null,$tuan_buy_id);
         }
 
         $data['Cart']['session_id'] = $sessionId;

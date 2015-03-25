@@ -1280,10 +1280,12 @@ $(document).ready(function () {
             if(price&&price!=0&&price!='0'){
                 var $price_element = $('#product_price');
                 price = price.toFixed(2);
-                if($price_element.prop('tagName').toUpperCase()=='FONT'){
-                    $('#product_price').text(price);
-                }else{
-                    $('#product_price').text('¥ '+price);
+                if($price_element.length>0){
+                    if($price_element.prop('tagName').toUpperCase()=='FONT'){
+                        $('#product_price').text(price);
+                    }else{
+                        $('#product_price').text('¥ '+price);
+                    }
                 }
             }
         }

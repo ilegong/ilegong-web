@@ -84,6 +84,10 @@ class TuanBuyingsController extends AppController{
         }
         $con = array('modelclass' => 'Product','fieldname' =>'photo','data_id' => $pid);
         $Product['Uploadfile']= $this->Uploadfile->find('all',array('conditions' => $con,'fields' => array('mid_thumb')));
+        $tuan_price = $tuan_b['TuanBuying']['tuan_price'];
+        if($tuan_price > 0){
+            $this->set('tuan_price',$tuan_price);
+        }
         $this->set('Product', $Product);
         $this->set('category_control_name', 'products');
         $this->set('current_data_id', $pid);
@@ -114,11 +118,12 @@ class TuanBuyingsController extends AppController{
     public function cart_info(){
         $this->autoRender = false;
         $this->loadModel('Cart');
+        $tuan_buy_id = intval($_REQUEST['tuan_buy_id']);
         $product_id = intval($_REQUEST['product_id']);
         $product_num = intval($_REQUEST['product_num']);
         $spec_id = intval($_REQUEST['spec_id']);
         $uId = $this->currentUser['id'];
-        $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,$spec_id,5,0,$uId);
+        $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,$spec_id,ORDER_TYPE_TUAN,0,$uId,null,  null, null,$tuan_buy_id);
         $this->log('cartInfo'.json_encode($cartInfo));
         if($cartInfo){
             if($_POST['way_type'] == 'ziti'){
@@ -166,7 +171,7 @@ class TuanBuyingsController extends AppController{
             return;
         }
         $this->loadModel('Cart');
-        $this->Cart->find('first');
+        //$this->Cart->find('first');
         $uid =$this->currentUser['id'];
         $user_condition = array(
             'session_id'=>	$this->Session->id(),
@@ -179,10 +184,11 @@ class TuanBuyingsController extends AppController{
             'product_id' => $tuan_b['TuanBuying']['pid'],
             'type' => CART_ITEM_TYPE_TUAN,
             'OR' => $user_condition
-
         );
         $Carts = $this->Cart->find('first', array(
-            'conditions' => $cond));
+            'conditions' => $cond,
+            'order' => 'id DESC'
+        ));
         $total_price = $Carts['Cart']['price'] * $Carts['Cart']['num'];
         $this->set('buy_count',$Carts['Cart']['num']);
         $this->set('total_price', $total_price);
