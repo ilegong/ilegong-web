@@ -327,6 +327,23 @@ class OrdersController extends AppController{
             'fields' => array('Order.*', 'Pay.trade_type'),
         ));
 
+        if ($order_status == -1) {
+            $conditions['Order.status'] = array(ORDER_STATUS_CANCEL, ORDER_STATUS_WAITING_PAY);
+            $orders_invalid = $this->Order->find('count', array(
+                'conditions' => $conditions,
+            ));
+            $this->set('orders_invalid', $orders_invalid);
+            if ($orders_invalid > 0) {
+                $r = $this->Order->find('all', array(
+                    'fields' => array('sum(Order.total_all_price)   AS total'),
+                    'conditions' => $conditions,
+                ));
+                if (!empty($r)) {
+                    $this->set('total_unpaid', $r[0][0]['total']);
+                }
+            }
+        }
+
         $ids = array();
         $total_money = 0;
         foreach($orders as $o){

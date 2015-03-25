@@ -47,7 +47,7 @@
     </form>
 </div>
 <div>
-    <h1>订单总计<span style="color: red">{{count($orders)}}</span>个，金额<span style="color: red">{{$total_money}}</span></h1>
+    <h1>订单总计<span style="color: red">{{count($orders)}}</span>个，金额<span style="color: red">{{$total_money}}</span> {{if $orders_invalid === 0 || $orders_invalid}}<small>（待支付/已取消：{{$orders_invalid}}个 {{$total_unpaid}}元)</small>{{/if}}</h1>
 </div>
 <br/>
 <table  class="table table-bordered">
