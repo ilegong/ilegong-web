@@ -471,7 +471,8 @@ class CommentsController extends AppController {
                     $data_id = $comment['Comment']['data_id'];
                     $count = $this->Comment->find('count',array(
                         'conditions' => array(
-                            'data_id' => $data_id
+                            'data_id' => $data_id,
+                            'status' => 1
                         )
                     ));
                     $this->Product->updateAll(

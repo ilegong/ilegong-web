@@ -973,14 +973,14 @@ class OrdersController extends AppController {
             $good_info = $this->get_order_good_info($order_id);
             $good = $good_info['good_info'];
 //            $good = substr($good,0,strlen($good)-2);
-//            $mobile_phone = $order_info['Order']['consignee_mobilephone'];
+            $mobile_phone1 = $order_info['Order']['consignee_mobilephone'];
             $this->loadModel('User');
             $user_info = $this->User->find('first',array('conditions' => array('id' => $order_info['Order']['creator']),'fields' => array('mobilephone')));
-            $mobile_phone = $order_info['Order']['consignee_mobilephone'] == $user_info['User']['mobilephone']?$user_info['User']['mobilephone']:null;
-            $this->log('mobile_phone'.json_encode($mobile_phone));
+            $mobile_phone2 = $order_info['Order']['consignee_mobilephone']==$user_info['User']['mobilephone']?null:$user_info['User']['mobilephone'];
             $brand_name = $brand['Brand']['name'];
             $msg = '您在['.$brand_name.']购买的['.$good.']已经发货，请关注微信pyshuo2014追踪物流信息';
-            message_send($msg,$mobile_phone);
+            $this->log('mobile_phone2'.json_encode($mobile_phone1).json_encode($mobile_phone2));
+            message_send($msg,$mobile_phone1);message_send($msg,$mobile_phone2);
             echo json_encode(array('order_id'=>$order_id,'msg'=>'订单状态已更新为“已发货”'));
             exit;
         } else if($status == ORDER_STATUS_WAITING_PAY){

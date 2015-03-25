@@ -370,6 +370,7 @@ class StoresController extends AppController
     public function save_track($trackid=null){
         $post_order_ids = $_REQUEST['order_ids'];
         $post_logs = $_REQUEST['logs'];
+        $is_first = false;
         if(!empty($trackid)){
             $this->OrderTrack->id = $trackid;
             $order_track = $this->OrderTrack->find('first',array(
@@ -377,6 +378,7 @@ class StoresController extends AppController
             ));
             $product_id = $order_track['OrderTrack']['product_id'];
         }else{
+            $is_first = true;
             $date = $_REQUEST['date'];
             $order_track['date']=$date;
             $product_id = $_REQUEST['product_id'];
@@ -409,7 +411,7 @@ class StoresController extends AppController
             )
         ));
         $p_name = $p['Product']['name'];
-        $this->send_track_log($trackid,$product_id);
+        $this->send_track_log($trackid,$product_id,$is_first);
         $this->redirect('/stores/view_track/'.$product_id.'.html?productname='.$p_name);
     }
 
@@ -1214,7 +1216,7 @@ class StoresController extends AppController
         }
     }
 
-    function send_track_log($trackId,$product_id){
+    function send_track_log($trackId,$product_id,$is_first){
         $order_ids = $this->TrackOrderMap->find('all',array(
             'conditions' => array(
                 'track_id' => $trackId
@@ -1242,6 +1244,9 @@ class StoresController extends AppController
         ));
         $track_log = $track_log['OrderTrackLog']['log'];
         $order_ids = Hash::extract($order_ids,'{n}.TrackOrderMap.order_id');
+        if($is_first){
+            $this->Order->updateAll(array('status'=>ORDER_STATUS_SHIPPED), array('id'=>$order_ids,'status'=>ORDER_STATUS_PAID));
+        }
         $orders = $this->Order->find('all',array(
             'conditions' => array(
                 'id' => $order_ids
@@ -1274,8 +1279,7 @@ class StoresController extends AppController
     function setConsignmentDate($pid){
         $this->loadModel('ConsignmentDate');
         $dates = $this->ConsignmentDate->find('all',array('conditions' => array(
-            'product_id' => $pid,
-            'published' => 1
+            'product_id' => $pid
         )));
         $this->set('consignment_dates',$dates);
     }
