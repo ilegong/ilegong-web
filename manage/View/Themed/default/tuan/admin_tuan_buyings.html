@@ -59,7 +59,7 @@
         <td>{{$tuan_team_info[$tuan_id]['name']}}</td>
         <td>{{if $tuan_team_info[$tuan_id]['TuanBuying']['pid'] == PRODUCT_ID_CAOMEI}}草莓{{elseif $tuan_team_info[$tuan_id]['TuanBuying']['pid'] == PRODUCT_ID_MANGUO}}芒果{{else}}{{$tuan_team_info[$tuan_id]['TuanBuying']['pid']}}{{/if}}/{{$tuan_team_info[$tuan_id]['tuan_id']==26?大团:小团}}</td>
         <td>{{$tuan_team_info[$tuan_id]['TuanBuying']['join_num']}}</td>
-        <td style="background-color:{{if $tuan_team_info[$tuan_id]['TuanBuying']['sold_num']<$tuan_team_info[$tuan_id]['TuanBuying']['target_num']}} #00FFFF{{/if}}">{{$tuan_team_info[$tuan_id]['TuanBuying']['sold_num']}}/{{$tuan_team_info[$tuan_id]['TuanBuying']['target_num']}}</td>
+        <td style="background-color:{{if $tuan_team_info[$tuan_id]['TuanBuying']['sold_num']<$tuan_team_info[$tuan_id]['TuanBuying']['target_num']}} #DA70D6{{/if}}">{{$tuan_team_info[$tuan_id]['TuanBuying']['sold_num']}}/{{$tuan_team_info[$tuan_id]['TuanBuying']['target_num']}}</td>
         <td>{{$tuan_team_info[$tuan_id]['TuanBuying']['end_time']}}</td>
         <td>{{if $tuan_team_info[$tuan_id]['TuanBuying']['status']==2}}已取消{{else}}{{date('Y-m-d',strtotime($tuan_team_info[$tuan_id]['TuanBuying']['consign_time']))}}{{/if}}</td>
         <td>{{if $tuan_team_info[$tuan_id]['TuanBuying']['status']==0}}进行中{{elseif $tuan_team_info[$tuan_id]['TuanBuying']['status']==1}}已完成{{else}}已取消{{/if}}</td>

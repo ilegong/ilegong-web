@@ -33,6 +33,7 @@
         <label class="col-sm-2 control-label">发货时间</label>
         <div class="col-sm-9 controls">
             {{$this->Form->input('consign_time',array('class'=>'form-inline','div'=>false,'label'=>false,))}}
+            <p>发货时间一般比截止时间晚一天</p>
         </div>
     </div>
     <div class="form-group">
@@ -45,6 +46,7 @@
             <label class="col-sm-2 control-label">团购状态</label>
             <div class="col-sm-9 controls">
                 {{$this->Form->input('status',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+                <p>团购状态为0，表示进行中；1，表示已完成；2，表示已取消</p>
             </div>
         </div>
 
