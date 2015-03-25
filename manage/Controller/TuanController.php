@@ -162,4 +162,91 @@ class TuanController extends AppController{
         echo json_encode($teams);
     }
 
+    /**
+     * show all tuan_buyings
+     */
+     public function admin_tuan_buyings(){
+
+         $team_id = $_REQUEST['team_id'];
+         $product_id = $_REQUEST['product_id'];
+         $time_type = $_REQUEST['time_type'];
+         $tuan_type = $_REQUEST['tuan_type'];
+         $post_time = $_REQUEST['post_time'];
+         $con = array();
+         if(!empty($team_id)&&$team_id!='-1'){
+             $con['tuan_id']=$team_id;
+         }
+         if($time_type==0){
+             $con['end_time']=$post_time;
+         }else if($time_type==1){
+             $con['consign_time']=$post_time;
+         }
+         if(!empty($product_id)&&$product_id!=-1){
+             $con['pid'] = $product_id;
+         }
+         if($tuan_type!=-1){
+             $con['status'] = $tuan_type;
+         }
+         $this->log('con'.json_encode($con));
+         if(!empty($con)){
+         $tuan_buyings = $this->TuanBuying->find('all',array(
+             'conditions' => $con
+         ));}else{
+         $tuan_buyings = $this->TuanBuying->find('all',array('conditions' => array('pid !=' => null)));
+         }
+         $tuan_ids = Hash::extract($tuan_buyings,'{n}.TuanBuying.id');
+         $tuan_team_info = array();
+         foreach($tuan_ids as $id){
+             $tuan_team_info[$id] = $this->TuanBuying->find('first',array('conditions' => array('id' => $id)));
+             $tuan_info = $this->TuanTeam->find('first',array('conditions' => array('id' => $tuan_team_info[$id]['TuanBuying']['tuan_id']),'fields' => array('tuan_name','id')));
+             $tuan_team_info[$id]['name'] = $tuan_info['TuanTeam']['tuan_name'];
+             $tuan_team_info[$id]['tuan_id'] = $tuan_info['TuanTeam']['id'];
+         }
+         $this->log('tuan_info'.json_encode($tuan_team_info));
+         $this->set('tuan_ids',$tuan_ids);
+         $this->set('tuan_team_info',$tuan_team_info);
+
+     }
+
+    /**
+     * set tuan_buying status
+     */
+     public function admin_tuan_buying_set(){
+         $this->autoRender = false;
+         if($this->request->is('post')){
+             $id = $_REQUEST['id'];
+             $val = $_REQUEST['val'];
+             $res = array();
+//             foreach($id as $tuan_buying_id){
+                 $this->TuanBuying->updateAll(array('status' => $val),array('id' => $id));
+                 $res [$tuan_buying_id] = array('success' => __('团购状态修改成功.', true));
+//             }
+             $this->log('status'.json_encode($res));
+             echo json_encode($res);
+         }
+     }
+
+    /**
+     * edit tuan_buying info
+     */
+     public function admin_tuan_buying_edit($id){
+         $data_info = $this->TuanBuying->find('first',array('conditions' => array('id' => $id)));
+         $this->log('data_info'.json_encode($data_info));
+         if (empty($data_info)) {
+             throw new ForbiddenException(__('该团不存在！'));
+         }
+         if(!empty($this->data)){
+             $this->data['TuanBuying']['id'] = $id;
+             $this->autoRender = false;
+             if($this->TuanBuying->save($this->data)){
+                 $this->Session->setFlash(__('团购状态修改成功',true));
+               $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_buyings'));
+             }
+             setFlashError($this->Session, __('The Data could not be saved. Please, try again.'));
+         }else{
+             $this->data = $data_info;
+         }
+         $this->set('id',$id);
+     }
+
 }

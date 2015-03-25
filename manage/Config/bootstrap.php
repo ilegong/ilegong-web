@@ -18,3 +18,6 @@ Configure::write('Hook.components.Miao','MiaoHook');
 
 define('COMMON_PATH', ROOT . DS . 'lib' . DS);
 include_once COMMON_PATH.'bootstrap.php';
+
+const PRODUCT_ID_CAOMEI = 838;//草莓
+const PRODUCT_ID_MANGUO = 851;//海南空运芒果

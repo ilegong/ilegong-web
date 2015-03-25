@@ -1,0 +1,122 @@
+{{$this->Html->css(array('bootstrap.min.css'));}}
+<hr/>
+<h1>团购管理</h1>
+<hr/>
+<form class="form-inline" method="get" action="/manage/admin/tuan/tuan_buyings">
+<div style="padding-bottom: 10px;">
+    <input type="hidden" name="noajax" value="true">
+    <div class="form-group">
+        <select class="form-control" name="team_id" id="team_id" value="{{$team_id}}">
+            <option value="-1">请选择团队</option>
+        </select>
+    </div>
+    <div class="form-group" name="product_id">
+        <select class="form-control" value="{{$product_id}}" name="product_id">
+            <option value="-1">选择商品</option>
+            <option value="838">草莓</option>
+            <option value="851">芒果</option>
+            <option value="862">蛋糕</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <select class="form-control" name="time_type" value="{{$time_type}}">
+            <option value="-1">选择时间</option>
+            <option value="0">截止时间</option>
+            <option value="1">发货时间</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label class="sr-only">时间</label>
+        <input type="text" name="post_time" class="form-control" placeholder="输入时间">
+    </div>
+    <div class="form-group">
+        <select class="form-control" name="tuan_type" value="{{$tuan_type}}">
+            <option value="-1">选择团购状态</option>
+            <option value="0">进行中</option>
+            <option value="1">已完成</option>
+            <option value="2">已取消</option>
+        </select>
+    </div>
+</div>
+    <div style="padding-bottom: 10px;">
+        <button type="submit" class="btn btn-default fr">查看团购</button>
+    </div>
+</form>
+
+<table class="table table-striped table-bordered table-hover table-condensed table-responsive">
+    <thead>
+    <tr>
+          <td>团购ID</td><td>团名称</td><td>团购商品/团类别</td><td>参团人数</td><td>售出份数/团购目标</td><td>结束时间</td><td>发货时间</td><td>团购状态</td><td>操作</td>
+    </tr>
+    </thead>
+    <tbody>
+    {{loop $tuan_ids $tuan_id}}
+    <tr>
+        <!--<td><input type="checkbox" name="checkbox"  data-id="{{$tuan_team_info['TuanBuying']['id']}}"/></td>-->
+        <td>{{$tuan_team_info[$tuan_id]['TuanBuying']['id']}}</td>
+        <td>{{$tuan_team_info[$tuan_id]['name']}}</td>
+        <td>{{if $tuan_team_info[$tuan_id]['TuanBuying']['pid'] == PRODUCT_ID_CAOMEI}}草莓{{elseif $tuan_team_info[$tuan_id]['TuanBuying']['pid'] == PRODUCT_ID_MANGUO}}芒果{{else}}{{$tuan_team_info[$tuan_id]['TuanBuying']['pid']}}{{/if}}/{{$tuan_team_info[$tuan_id]['tuan_id']==26?大团:小团}}</td>
+        <td>{{$tuan_team_info[$tuan_id]['TuanBuying']['join_num']}}</td>
+        <td>{{$tuan_team_info[$tuan_id]['TuanBuying']['sold_num']}}/{{$tuan_team_info[$tuan_id]['TuanBuying']['target_num']}}</td>
+        <td>{{$tuan_team_info[$tuan_id]['TuanBuying']['end_time']}}</td>
+        <td>{{$tuan_team_info[$tuan_id]['TuanBuying']['consign_time']}}</td>
+        <td>{{if $tuan_team_info[$tuan_id]['TuanBuying']['status']==0}}进行中{{elseif $tuan_team_info[$tuan_id]['TuanBuying']['status']==1}}已完成{{else}}已取消{{/if}}</td>
+        <td>{{if $tuan_team_info[$tuan_id]['TuanBuying']['status']==0}}
+            <button type="button" id="tuan_down" class="btn-sm  pull-left  btn-primary" style="margin-right:10px;" data-id="{{$tuan_team_info[$tuan_id]['TuanBuying']['id']}}" value="1">完成</button>
+            <button type="button" id="tuan_product_down" class="btn-sm  pull-left  btn-primary" style="margin-right:10px;"data-id="{{$tuan_team_info[$tuan_id]['TuanBuying']['id']}}" value="2">取消</button>
+            {{/if}}
+            <a role="button" class="btn-sm pull-left btn-primary" href="/manage/admin/tuan/tuan_buying_edit/{{$tuan_team_info[$tuan_id]['TuanBuying']['id']}}">编辑</a>
+        </td>
+    </tr>
+    {{/loop}}
+    </tbody>
+</table>
+        <div>
+            <h5>tips</h5>
+            <p>1.团购达到目标后，可以点击“完成”</p>
+            <p>2.团购未达到目标时，可以点击“取消”</p>
+        </div>
+        <script>
+            $(document).ready(function(){
+
+                var $team_id = $('#team_id');
+                $.getJSON('/manage/admin/tuan/tuan_teams',function(data){
+                    $.each(data,function(index,item){
+                        $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo($team_id);
+                    });
+                });
+
+                $('#tuan_down,#tuan_product_down').click(function(){
+                    var id = $(this).attr('data-id');
+                    var val=$(this).attr("value");
+
+                    if(confirm('确定编辑吗？')){
+                        if($(this).attr('id')== 'tuan_product_down'){
+                        confirm('团购取消后请及时退款哦');
+                       }
+                            var data={"id":id,"val":val};
+                            $.ajax({
+                                type:'post',
+                                success:function(data){
+                                    window.location.reload();
+                                    alert('状态修改成功');
+                                },
+                                error:function(e){alert(e);},
+                                url:"{{$this->Html->url(array('controller'=>'tuan','action'=>'admin_tuan_buying_set'))}}",
+                                data:data,
+                                dataType:'json'
+                            })
+                        }
+                    else{
+                        return false;
+                    }
+                });
+            });
+        </script>
+{{$this->Html->script(array(
+'vendor/jquery.ui.widget.js',
+'//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js',
+'//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js',
+'jquery.iframe-transport.js',
+));
+}}
