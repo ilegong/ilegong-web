@@ -1203,7 +1203,7 @@ $(document).ready(function () {
 	};
 
 	function addToCartWithSpec(pid, itemNum, quick_buy_pid, type, $price) {
-		var specId = '0';
+		var specId = '';
 		if (typeof(_p_spec_m) != 'undefined') {
 			if (_p_spec_m) {
 				var spec_labels = $('span.spec_label');
