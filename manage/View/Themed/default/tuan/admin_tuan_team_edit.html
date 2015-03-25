@@ -1,0 +1,61 @@
+<div class="container">
+    <hr/>
+    <h1>编辑团队信息</h1>
+    <hr/>
+    <form class="form-horizontal" method="post" action="/manage/admin/tuan/tuan_team_edit/{{$id}}" id="TuanTeamAdminTuanTeamEditForm" novalidate="novalidate" data-noajax="true">
+        <!--{{$this->Form->create('TuanTeam', array('url' =>'/admin/tuan/tuan_buying_edit/$id', 'class'=>'form-horizontal','role'=>'form'))}}-->
+        <div class="form-group">
+            <label class="col-sm-2 control-label">团队名称</label>
+            <div class="col-sm-9 controls">
+                {{$this->Form->input('tuan_name',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">团队leader</label>
+            <div class="col-sm-9 controls">
+                {{$this->Form->input('leader_name',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">团长微信</label>
+            <div class="col-sm-9 controls">
+                {{$this->Form->input('leader_weixin',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">自取点地址</label>
+            <div class="col-sm-9 controls">
+                {{$this->Form->input('address',array('class'=>'form-inline','div'=>false,'label'=>false,))}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">自取点具体地址</label>
+            <div class="col-sm-9 controls">
+                {{$this->Form->input('tuan_addr',array('class'=>'form-inline','div'=>false,'label'=>false,))}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">自取点经度</label>
+            <div class="col-sm-9 controls">
+                {{$this->Form->input('location_long',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">自取点纬度</label>
+            <div class="col-sm-9 controls">
+                {{$this->Form->input('location_lat',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">团队口号</label>
+            <div class="col-sm-9 controls">
+                {{$this->Form->input('tuan_desc',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12"><input class="btn btn-primary" type="submit" value="提交"></div>
+        </div>
+        <!--{{$this->Form->end();}}-->
+    </form>
+</div>

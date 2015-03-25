@@ -1,0 +1,51 @@
+{{$this->Html->css(array('bootstrap.min.css'));}}
+<hr/>
+<h1>团队管理</h1>
+<hr/>
+<form class="form-inline" method="get" action="/manage/admin/tuan/tuan_team">
+    <div style="padding-bottom: 10px;">
+        <input type="hidden" name="noajax" value="true">
+        <div class="form-group">
+            <select class="form-control" name="team_id" id="team_id" value="{{$team_id}}">
+                <option value="-1">请选择团队</option>
+            </select>
+        </div>
+    </div>
+    <div>
+        <button type="submit"  class="btn btn-default fr">查看团队</button>
+        <a href="/manage/admin/tuan/tuan_team_create" role="button" style="margin-right:10px;" class="btn btn-default fr">创建团队</a>
+    </div>
+</form>
+<table class="table table-striped table-bordered  table-condensed table-responsive">
+    <thead>
+    <tr>
+        <td>团队名称</td><td>团队leader</td><td>leader_wechat</td><td>自取点地址</td><td>自取点具体地址</td><td>自取点经度</td><td>自取点纬度</td><td>团队口号</td><td>团队权重</td><td>操作</td>
+    </tr>
+    </thead>
+    <tbody>
+    {{loop $tuan_teams $tuan_team}}
+    <tr>
+        <td>{{$tuan_team['TuanTeam']['tuan_name']}}</td>
+        <td>{{$tuan_team['TuanTeam']['leader_name']}}</td>
+        <td>{{$tuan_team['TuanTeam']['leader_weixin']}}</td>
+        <td>{{$tuan_team['TuanTeam']['address']}}</td>
+        <td>{{$tuan_team['TuanTeam']['tuan_addr']}}</td>
+        <td>{{$tuan_team['TuanTeam']['location_long']}}</td>
+        <td>{{$tuan_team['TuanTeam']['location_lat']}}</td>
+        <td>{{$tuan_team['TuanTeam']['tuan_desc']}}</td>
+        <td>{{$tuan_team['TuanTeam']['priority']}}</td>
+        <td><a role="button" class="btn-sm pull-left btn-primary" href="/manage/admin/tuan/tuan_team_edit/{{$tuan_team['TuanTeam']['id']}}">编辑</a></td>
+    </tr>
+    {{/loop}}
+    </tbody>
+</table>
+<script>
+    $(document).ready(function(){
+        var $team_id = $('#team_id');
+        $.getJSON('/manage/admin/tuan/tuan_teams',function(data){
+            $.each(data,function(index,item){
+                $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo($team_id);
+            });
+        });
+    })
+</script>

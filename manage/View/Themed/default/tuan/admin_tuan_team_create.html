@@ -1,0 +1,61 @@
+
+<div class="container">
+    <hr/>
+    <h1>创建团队</h1>
+    <hr/>
+    <form class="form-horizontal" method="post" action="/manage/admin/tuan/tuan_team_create" id="TuanTeamAdminTuanTeamCreateForm" novalidate="novalidate" data-noajax="true">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">团队名称</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanTeam][tuan_name]" value="{{$this->data[TuanTeam][tuan_name]}}" class="form-inline" type="text" id="tuan_name" placeholder="搜狐媒体美食团">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">团队leader</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanTeam][leader_name]" value="{{$this->data[TuanTeam][leader_name]}}" class="form-inline" type="text" id="leader_name" placeholder="朋友说小妹">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">团长微信</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanTeam][leader_weixin]" value="{{$this->data[TuanTeam][leader_weixin]}}" class="form-inline" type="text" id="leader_weixin" placeholder="pyshuo2015">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">自取点地址</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanTeam][address]" value="{{$this->data[TuanTeam][address]}}" class="form-inline" type="text" id="address" placeholder="搜狐媒体好邻居店">
+                <p>自取点地址不宜太长</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">自取点具体地址</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanTeam][tuan_addr]" value="{{$this->data[TuanTeam][tuan_addr]}}" class="form-inline" type="text" id="tuan_addr" placeholder="中关村新科祥园甲2号楼1层03室">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">自取点经度</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanTeam][location_long]" value="{{$this->data[TuanTeam][location_long]}}" class="form-inline" type="text" id="location_long" placeholder="116.339079">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">自取点纬度</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanTeam][location_lat]" value="{{$this->data[TuanTeam][location_lat]}}" class="form-inline" type="text" id="location_lat" placeholder="39.999683">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">团队口号</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanTeam][tuan_desc]" value="{{$this->data[TuanTeam][tuan_desc]}}" class="form-inline" type="text" id="tuan_desc" placeholder="热爱生活，寻找美味">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12"><input class="btn btn-primary" type="submit" value="提交"></div>
+        </div>
+    </form>
+</div>

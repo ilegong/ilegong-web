@@ -240,14 +240,16 @@ class TuanController extends AppController{
              $this->data['TuanBuying']['id'] = $id;
              $this->autoRender = false;
              if($this->TuanBuying->save($this->data)){
-                 $this->Session->setFlash(__('团购状态修改成功',true));
+                 $successinfo = array('success'=>__('Edit success',true));
                  $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_buyings'));
+             }else{
+             $successinfo = array('error'=>__('Edit error',true));
              }
-            $this->Session->setFlash(__('The Data could not be saved. Please, try again.'));
          }else{
              $this->data = $data_info;
          }
          $this->set('id',$id);
+//         echo json_encode($successinfo);
      }
 
     /**
@@ -259,21 +261,76 @@ class TuanController extends AppController{
              $this->data['TuanBuying']['sold_num'] = 0;
              $this->data['TuanBuying']['status'] = 0;
              if($this->TuanBuying->save($this->data)){
-                 $this->Session->setFlash(__('创建团购成功',true));
+                 $successinfo = array('success'=>__('create success',true));
                  $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_buyings'));
              }else{
-                $this->Session->setFlash(__('The Data could not be saved. Please, try again.'));
+                 $successinfo = array('error'=>__('create error',true));
              }
          }else{
-               $this->Session->setFlash(__('The Data could not be null. Please, try again.'));
+             $successinfo = array('success'=>__('the data can not be null',true));
          }
+//         echo json_encode($successinfo);
      }
-
     /**
-     * create new tuan_team
+     * show all tuan_team
+     */
+    public function admin_tuan_team(){
+
+        $team_id = $_REQUEST['team_id'];
+        $con = array();
+        if(!empty($team_id)&&$team_id!='-1'){
+            $con['id']=$team_id;
+        }
+        $this->log('con'.json_encode($con));
+        if(!empty($con)){
+            $tuan_teams = $this->TuanTeam->find('all',array(
+                'conditions' => $con
+            ));}else{
+            $tuan_teams = $this->TuanTeam->find('all');
+        }
+        $this->set('tuan_teams',$tuan_teams);
+    }
+    /**
+     * create a new tuan_team
      */
      public function admin_tuan_team_create(){
 
+         if(!empty($this->data)){
+             if($this->TuanTeam->save($this->data)){
+                 $successinfo = array('success'=>__('create success',true));
+                 $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_team'));
+             }else{
+                 $successinfo = array('error'=>__('create error',true));
+             }
+         }else{
+             $successinfo = array('success'=>__('the data can not be null',true));
+         }
+//         echo json_encode($successinfo);
+     }
+
+    /**
+     * edit a tuan_team
+     */
+     public function admin_tuan_team_edit($id){
+
+         $data_Info = $this->TuanTeam->find('first',array('conditions' => array('id' => $id)));
+         $this->log('data_info'.json_encode($data_Info));
+         if (empty($data_Info)) {
+             throw new ForbiddenException(__('该团队不存在！'));
+         }
+         if(!empty($this->data)){
+             $this->data['TuanTeam']['id'] = $id;
+             $this->autoRender = false;
+             if($this->TuanTeam->save($this->data)){
+                 $successinfo = array('success'=>__('edit success',true));
+                 $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_team'));
+             }
+             $successinfo = array('error'=>__('edit error',true));
+         }else{
+             $this->data = $data_Info;
+         }
+         $this->set('id',$id);
+//         echo json_encode($successinfo);
      }
 
 }
