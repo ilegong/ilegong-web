@@ -74,8 +74,9 @@ class DATABASE_CONFIG {
 				'datasource' => 'Database/Mysql',
 				'persistent' => false,
 				'host' => 'localhost',
+				'port' => '3306',
 				'login' => '51daifan',	// jieli
-				'password' => 'PGdvFePBenE4TtBb',	//zFY8smWUKcaLrUs5	
+				'password' => 'PGdvFePBenE4TtBb',	//zFY8smWUKcaLrUs5
 				'database' => $_SERVER["dbname"]? $_SERVER["dbname"] : '51daifan',
 				'prefix' => 'cake_',
 				'encoding'=>'utf8', 
@@ -84,6 +85,7 @@ class DATABASE_CONFIG {
 				'datasource' => 'Database/Mysql',
 				'persistent' => false,
 				'host' => 'localhost',
+				'port' => '3306',
 				'login' => '51daifan',
 				'password' => 'PGdvFePBenE4TtBb',
 				'database' => '51daifan',
