@@ -291,7 +291,7 @@ class TuanBuyingsController extends AppController{
     }
     public function goods(){
         $this->pageTitle = '团购商品';
-        $tuan_products = $this->TuanBuying->find('all',array('conditions' => array('pid !=' => null),'group' => array('pid')));
+        $tuan_products = $this->TuanBuying->find('all',array('conditions' => array("pid != " => 863),'group' => array('pid')));
         $tuan_product_ids = Hash::extract($tuan_products,'{n}.TuanBuying.pid');
         $this->loadModel('Product');
         $tuan_products_info = array();
