@@ -23,7 +23,7 @@
                 {{template Elements/product_img_sild}}
                     <div class="p_details_title">{{$Product['Product']['name']}}</div>
                     <ul class="p_details_price clearfix">
-                        <li class="fl price"><span>￥<font>{{$this->Number->precision($Product['Product']['price'],2)}}</font></span></li>
+                        <li class="fl price"><span>￥<font id="product_price">{{$this->Number->precision($Product['Product']['price'],2)}}</font></span></li>
                         <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{empty($consign_time)?'成团后发货':$consign_time}}</b></span></a></li>
                     </ul>
                     <ul class="sales clearfix">
@@ -49,8 +49,29 @@
                         {{if $pid==862}}朋友说蛋糕团购{{else}}{{$tuan_team['TuanTeam']['tuan_name']}}{{/if}}&nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_team['TuanTeam']['leader_name']}}<br/>参团请加团长微信，微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}
                     </div>
 
-                    {{if $big_tuan}}
+                    {{if $product_spec_map}}
+                    {{$product_spec_map}}
+                    <ul class="standard clearfix">
+                        {{if $specs_map && !empty($specs_map['choices'])}}
+                        <?php foreach($specs_map['choices'] as $label => $values) {
+                        if(!empty($label) && !empty($values)){
+                        ?>
+                        <li>
+                            <span class="gray title mr12 spec_label" style="float:left;">{{$label}}:</span>
+                            <span class="border" style="display: block;overflow: hidden;">
+                            <?php foreach($values as $vaLabel){?>
+                                <span class="mr12 border spec_item" item-label="{{$label}}">
+                                    {{$vaLabel}}
+                                </span>
+                                <?php } ?>
+                            </span>
+                        </li>
+                        <?php } } ?>
+                        {{/if}}
+                    </ul>
+                    {{/if}}
 
+                    {{if $big_tuan}}
                     <ul class="standard clearfix">
                         <li>
                             <span class="gray title mr12" style="float:left;">方式:</span>
@@ -60,7 +81,6 @@
                             </span>
                         </li>
                     </ul>
-
                     {{else}}
                     <div class="clearfix tuanxq" style="margin-top: -1px;">
                         <span class="fl">自提地点：{{$tuan_team['TuanTeam']['address']}}</span>
@@ -201,51 +221,101 @@
 
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'));}}
 
-    <script>
-        $(document).ready(function(){
-            $('#pamount_not_r').on('click',function(e){
-                e.preventDefault();
-                utils.alert('每人限购一份。');
-            });
-            $('#pamount_not_a').on('click',function(e){
-                e.preventDefault();
-                utils.alert('每人限购一份。');
-            });
-        });
-    </script>
 <script>
     $(document).ready(function(){
+        $('#pamount_not_r').on('click',function(e){
+            e.preventDefault();
+            utils.alert('每人限购一份。');
+        });
+        $('#pamount_not_a').on('click',function(e){
+            e.preventDefault();
+            utils.alert('每人限购一份。');
+        });
+    });
+</script>
+
+<script>
+    var product_spec_group = JSON.parse('{{$product_spec_group}}');
+</script>
+
+<script>
+    $(document).ready(function(){
+
+        function get_spec_group(){
+            var $selected_spec = $('span.spec_item_selected[item-label!="SD"]');
+            var all_spec = [];
+            $.each($selected_spec,function(index,item){
+                all_spec.push(($(item).text()).trim());
+            });
+            var spec_group_data = null;
+            $.each(product_spec_group,function(key,val){
+                var keyArray = key.split(',');
+                //规格组合是否一样
+                if($(keyArray).not(all_spec).length === 0 && $(all_spec).not(keyArray).length === 0){
+                    spec_group_data = val;
+                    return false;
+                }
+            });
+            return spec_group_data;
+        }
+
         $('#tuan_buy').click(function(){
             var href = window.location.href;
             if(!sso.check_userlogin({'referer':href})){
                 return false;
             }else{
-            var product_id = $('#tuan_buy').attr('item-id');
-            var product_num = $('#input_pamount').val();
-            var way_type = 'normal';
-            {{if $big_tuan}}
-            way_type = $('.cur.tuan_way_selected').attr('way-label');
-            {{/if}}
-            var postdata = {'product_id':product_id,'product_num':product_num, way_type: way_type};
-            utils.progress_notify('正在更新购物车');
-            $.ajax({
-                type:'post',
-                data: postdata,
-                url:'/tuan_buyings/cart_info',
-                success:function(data){
-                    if(data.success) {
-                        if(data.direct == 'big_tuan_list'){
-                            window.location.href = '/tuan_buyings/big_tuan_balance/{{$tuan_buy_id}}';
-                        }else{
-                            window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}';
+                var specId = '';
+                if (typeof(_p_spec_m) != 'undefined') {
+                    if (_p_spec_m) {
+                        var spec_labels = $('span.spec_label');
+                        if(spec_labels.length===0){
+                            spec_labels = $('li.spec_label');
+                        }
+                        if (spec_labels.size() > 0) {
+                            $.each(spec_labels, function (idx, val) {
+                                var itemLabel = $(val).text().replace(":","");
+                                var spec_item_selected = $('span.spec_item_selected[item-label="' + itemLabel + '"]');
+                                if (spec_item_selected.size() < 1) {
+                                    utils.alert("请选择" + itemLabel);
+                                    return false;
+                                }
+                            });
                         }
                     }
-                    else {
-                        showErrorMessage(data.error);
+                    var spec_group_data = get_spec_group();
+                    if(spec_group_data){
+                        specId = spec_group_data['id']||0;
                     }
-                },
-                dataType:'json'
-            });
+                    if (!specId) {
+                        return false;
+                    }
+                }
+                var product_id = $('#tuan_buy').attr('item-id');
+                var product_num = $('#input_pamount').val();
+                var way_type = 'normal';
+                {{if $big_tuan}}
+                way_type = $('.cur.tuan_way_selected').attr('way-label');
+                {{/if}}
+                var postdata = {"product_id":product_id,"product_num":product_num, "way_type": way_type,"spec_id":specId};
+                utils.progress_notify('正在更新购物车');
+                $.ajax({
+                    type:'post',
+                    data: postdata,
+                    url:'/tuan_buyings/cart_info',
+                    success:function(data){
+                        if(data.success) {
+                            if(data.direct == 'big_tuan_list'){
+                                window.location.href = '/tuan_buyings/big_tuan_balance/{{$tuan_buy_id}}';
+                            }else{
+                                window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}';
+                            }
+                        }
+                        else {
+                            showErrorMessage(data.error);
+                        }
+                    },
+                    dataType:'json'
+                });
             }
         });
         $("[way-label]").click(function(){

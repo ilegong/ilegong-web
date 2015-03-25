@@ -8,6 +8,8 @@
 class TuanBuyingsController extends AppController{
 
 
+    public $components = array('ProductSpecGroup');
+
     public function detail($tuan_buy_id){
         $this->pageTitle = '团购详情';
         $this->loadModel('TuanTeam');
@@ -60,6 +62,20 @@ class TuanBuyingsController extends AppController{
         $this->loadModel('Product');
         $this->loadModel('Uploadfile');
         $Product = $this->Product->find('first',array('conditions' => array('id' => $pid,'deleted' => DELETED_NO)));
+        //get specs from database
+        $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($pid,'spec_names');
+        $this->set('product_spec_group',json_encode($product_spec_group));
+        //product spec
+        $specs_map = $this->ProductSpecGroup->get_product_spec_json($pid);
+        if (!empty($specs_map['map'])) {
+            $str = '<script>var _p_spec_m = {';
+            foreach($specs_map['map'] as $mid => $mvalue) {
+                $str .= '"'.$mvalue.'":"'. $mid ."\",";
+            }
+            $str .= '};</script>';
+            $this->set('product_spec_map', $str);
+        }
+        $this->set('specs_map', $specs_map);
         $con = array('modelclass' => 'Product','fieldname' =>'photo','data_id' => $pid);
         $Product['Uploadfile']= $this->Uploadfile->find('all',array('conditions' => $con,'fields' => array('mid_thumb')));
         $this->set('Product', $Product);
@@ -94,8 +110,9 @@ class TuanBuyingsController extends AppController{
         $this->loadModel('Cart');
         $product_id = intval($_REQUEST['product_id']);
         $product_num = intval($_REQUEST['product_num']);
+        $spec_id = intval($_REQUEST['spec_id']);
         $uId = $this->currentUser['id'];
-        $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,0,5,0,$uId);
+        $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,$spec_id,5,0,$uId);
         $this->log('cartInfo'.json_encode($cartInfo));
         if($cartInfo){
             if($_POST['way_type'] == 'ziti'){
