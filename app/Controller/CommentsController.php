@@ -406,7 +406,6 @@ class CommentsController extends AppController {
         $uid = $this->Session->read('Auth.User.id');
         $orderId = $this->data['Comment']['order_id'];
         $dataId = $this->data['Comment']['data_id'];
-        $type_model = $this->data['Comment']['type'];
         $this->data['Comment']['ip'] = $this->request->clientIp(false);
         //check order
 
@@ -433,14 +432,6 @@ class CommentsController extends AppController {
             $comment = $this->Comment->save($this->data);
         }
         if($comment){
-            //product add comment num
-            if($comment['Comment']['status']=='1'){
-                $this->loadModel($type_model);
-                $this->{$type_model}->updateAll(
-                    array('comment_nums' => 'comment_nums+1'),
-                    array('id' => $dataId)
-                );
-            }
             $result = array('success'=>true,'msg'=>'添加评论成功');
         }else{
             $result = array('success'=>false,'msg'=>'添加评论失败');
@@ -467,6 +458,27 @@ class CommentsController extends AppController {
             $data = $Order->save(array('is_comment'=>1));
             if($data){
                 $result = array('success'=>true,'msg'=>'评论成功');
+                //update comment status 1
+                //update product comment count
+                $this->loadModel('Product');
+                $this->Comment->updateAll(array('status'=>1),array('order_id' => $orderId));
+                $comments = $this->Comment->find('all',array(
+                    'conditions' => array(
+                        'order_id' => $orderId
+                    )
+                ));
+                foreach($comments as $comment){
+                    $data_id = $comment['Comment']['data_id'];
+                    $count = $this->Comment->find('count',array(
+                        'conditions' => array(
+                            'data_id' => $data_id
+                        )
+                    ));
+                    $this->Product->updateAll(
+                        array('comment_nums' => $count),
+                        array('id' => $data_id)
+                    );
+                }
                 //add score log and set user score
                 $this->_set_user_comment_score($orderId,$uid);
             }else{
