@@ -1242,6 +1242,9 @@ class StoresController extends AppController
         ));
         $track_log = $track_log['OrderTrackLog']['log'];
         $order_ids = Hash::extract($order_ids,'{n}.TrackOrderMap.order_id');
+
+        $this->Order->updateAll(array('status'=>ORDER_STATUS_SHIPPED),array('id'=>$order_ids));
+
         $orders = $this->Order->find('all',array(
             'conditions' => array(
                 'id' => $order_ids
