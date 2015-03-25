@@ -165,7 +165,7 @@ class TuanBuyingsController extends AppController{
         $this->set('total_price', $total_price);
         $this->set('cart_id', $Carts['Cart']['id']);
         $this->set('tuan_id', $tuan_info['TuanTeam']['id']);
-        $this->set('tuan_address', $tuan_info['TuanTeam']['address']);
+        $this->set('tuan_address', $tuan_info['TuanTeam']['tuan_addr']);
         $this->set('end_time', date('m-d', $current_time));
         $this->set('tuan_buy_id', $tuan_buy_id);
         $this->log('tuan_info'.json_encode($tuan_info));
