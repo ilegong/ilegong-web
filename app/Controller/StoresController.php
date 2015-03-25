@@ -1279,8 +1279,7 @@ class StoresController extends AppController
     function setConsignmentDate($pid){
         $this->loadModel('ConsignmentDate');
         $dates = $this->ConsignmentDate->find('all',array('conditions' => array(
-            'product_id' => $pid,
-            'published' => 1
+            'product_id' => $pid
         )));
         $this->set('consignment_dates',$dates);
     }
