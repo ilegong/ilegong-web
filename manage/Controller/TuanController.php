@@ -26,7 +26,6 @@ class TuanController extends AppController{
         $product_id = $_REQUEST['product_id'];
         $time_type = $_REQUEST['time_type'];
         $con_name = $_REQUEST['conn_name'];
-        $con_address = $_REQUEST['con_address'];
         $con_phone = $_REQUEST['con_phone'];
         $post_time = $_REQUEST['post_time'];
         $order_type = $_REQUEST['order_type'];
@@ -60,26 +59,27 @@ class TuanController extends AppController{
                     'type' => 'LEFT',
                 )
             );
-            if($order_type!=-1){
-                $orders = $this->Order->find('all',array(
-                    'conditions' => array(
-                        'Order.type' => ORDER_TYPE_TUAN,
-                        'Order.member_id' => $tb_ids,
-                        'Order.status' => $order_type
-                    ),
-                    'joins' => $join_conditions,
-                    'fields' => array('Order.*', 'Pay.trade_type'),
-                ));
-            }else{
-                $orders = $this->Order->find('all',array(
-                    'conditions' => array(
-                        'type' => ORDER_TYPE_TUAN,
-                        'member_id' => $tb_ids
-                    ),
-                    'joins' => $join_conditions,
-                    'fields' => array('Order.*', 'Pay.trade_type'),
-                ));
+            $order_query_cond = array(
+                'Order.type' => ORDER_TYPE_TUAN,
+                'Order.member_id' => $tb_ids,
+            );
+
+            if(!empty($con_name)){
+                $order_query_cond['Order.consignee_name LIKE'] = '%'.$con_name.'%';
             }
+
+            if(!empty($con_phone)){
+                $order_query_cond['Order.consignee_mobilephone LIKE'] = '%'.$con_phone.'%';
+            }
+
+            if($order_type!=-1){
+                $order_query_cond['Order.status']=$order_type;
+            }
+            $orders = $this->Order->find('all',array(
+                'conditions' => $order_query_cond,
+                'joins' => $join_conditions,
+                'fields' => array('Order.*', 'Pay.trade_type'),
+            ));
             if(!empty($orders)){
                 $order_ids = Hash::extract($orders,'{n}.Order.id');
                 $carts = $this->Cart->find('all',array(
@@ -113,7 +113,6 @@ class TuanController extends AppController{
         $this->set('product_id',$product_id);
         $this->set('time_type',$time_type);
         $this->set('conn_name',$con_name);
-        $this->set('con_address',$con_address);
         $this->set('con_phone',$con_phone);
         $this->set('post_time',$post_time);
     }
