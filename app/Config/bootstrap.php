@@ -312,6 +312,7 @@ function promo_code_new_user($pids) {
  */
 function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null,$tuan_buy_id=null) {
 
+
     if (accept_user_price_pid($pid) && accept_user_price_pid_num($pid, $num) && !empty($cart_id)) {
         $userPrice = ClassRegistry::init('UserPrice');
         $up = $userPrice->find('first', array('conditions' => array(
@@ -332,10 +333,10 @@ function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null,
                 'id' => $tuan_buy_id
             )
         ));
-        $price = $tuanBuy['TuanBuying']['tuan_price'];
-        $price = floatval($price);
-        if($price>=0){
-            return array($price,);
+        $tuan_price = $tuanBuy['TuanBuying']['tuan_price'];
+        $tuan_price = floatval($tuan_price);
+        if($tuan_price>=0){
+            return array($tuan_price,);
         }
     }
 
