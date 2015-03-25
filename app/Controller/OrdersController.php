@@ -973,7 +973,11 @@ class OrdersController extends AppController {
             $good_info = $this->get_order_good_info($order_id);
             $good = $good_info['good_info'];
 //            $good = substr($good,0,strlen($good)-2);
-            $mobile_phone = $order_info['Order']['consignee_mobilephone'];
+//            $mobile_phone = $order_info['Order']['consignee_mobilephone'];
+            $this->loadModel('User');
+            $user_info = $this->User->find('first',array('conditions' => array('id' => $order_info['Order']['creator']),'fields' => array('mobilephone')));
+            $mobile_phone = $order_info['Order']['consignee_mobilephone'] == $user_info['User']['mobilephone']?$user_info['User']['mobilephone']:null;
+            $this->log('mobile_phone'.json_encode($mobile_phone));
             $brand_name = $brand['Brand']['name'];
             $msg = '您在['.$brand_name.']购买的['.$good.']已经发货，请关注微信pyshuo2014追踪物流信息';
             message_send($msg,$mobile_phone);
