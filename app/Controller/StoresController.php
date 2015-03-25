@@ -325,7 +325,8 @@ class StoresController extends AppController
             $order_ids = Hash::extract($carts,'{n}.Cart.order_id');
             $orders = $this->Order->find('all',array(
                 'conditions' => array(
-                    'id' => $order_ids
+                    'id' => $order_ids,
+                    'status' => ORDER_STATUS_PAID
                 )
             ));
             if(!empty($orders)){
