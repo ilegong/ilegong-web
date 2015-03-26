@@ -5,19 +5,14 @@
     <form class="form-horizontal" method="post" action="/manage/admin/tuan/tuan_buying_create" id="TuanBuyingAdminTuanBuyingCreateForm" novalidate="novalidate" data-noajax="true">
         <div class="form-group">
             <label class="col-sm-2 control-label">选择团</label>
-            <select class="col-sm-9 controls" name="data[TuanBuying][tuan_id]" id="team_id" value="{{$this->data[TuanBuying][tuan_id]}}">
+            <select class="col-sm-9 controls tuan-teams" name="data[TuanBuying][tuan_id]" value="{{$this->data[TuanBuying][tuan_id]}}">
                 <option value="-1">请选择团队</option>
             </select>
         </div>
         <div class="form-group" name="product_id">
             <label class="col-sm-2 control-label">团购商品</label>
-            <select class="col-sm-9 controls" value="{{$this->data[TuanBuying][pid]}}" name="data[TuanBuying][pid]">
+            <select class="col-sm-9 controls tuan-products" name="data[TuanBuying][pid]" value="{{$this->data[TuanBuying][pid]}}">
                 <option value="-1">选择商品</option>
-                <option value="838">草莓</option>
-                <option value="851">芒果</option>
-                <option value="862">蛋糕</option>
-                <option value="863">草莓863</option>
-                <option value="230">蛋糕230</option>
             </select>
         </div>
         <div class="form-group">
@@ -65,17 +60,9 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="col-sm-12"><input class="btn btn-primary" type="submit" value="提交"></div>
+            <div class="col-sm-12"><input class="btn btn-primary" type="submit" value="创建"></div>
         </div>
     </form>
 </div>
-        <script>
-            $(document).ready(function(){
-                var $team_id = $('#team_id');
-                $.getJSON('/manage/admin/tuan/tuan_teams',function(data){
-                    $.each(data,function(index,item){
-                        $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo($team_id);
-                    });
-                });
-            })
-        </script>
+
+{{$this->Html->script(array('manage/tuan_buyings/new.js'))}}

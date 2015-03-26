@@ -144,19 +144,14 @@ class TuanController extends AppController{
     public function admin_save_tuan_buying(){
 
     }
-    /**
-     * ajax get tuan products
-     */
-    public function admin_tuan_products(){
+
+    public function admin_api_tuan_products(){
         $this->autoRender=false;
-        $results = array('838'=>'草莓');
+        $results = array('838'=>'草莓', '851' => '芒果', '862'=>'蛋糕', '863' => '草莓863', '230' => '蛋糕230');
         echo json_encode($results);
     }
 
-    /**
-     * ajax get teams
-     */
-    public function admin_tuan_teams(){
+     public function admin_api_tuan_teams(){
         $this->autoRender=false;
         $teams = $this->TuanTeam->find('all');
         $teams = Hash::extract($teams,'{n}.TuanTeam');
@@ -282,7 +277,6 @@ class TuanController extends AppController{
      * show all tuan_team
      */
     public function admin_tuan_team(){
-
         $team_id = $_REQUEST['team_id'];
         $con = array();
         if(!empty($team_id)&&$team_id!='-1'){
