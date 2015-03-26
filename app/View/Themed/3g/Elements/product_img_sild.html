@@ -1,5 +1,5 @@
 <div class="p_details_pic">
-    <div class="index_banner swiper-container">
+    <div class="index_banner swiper-container hide">
         <ul class="clearfix list-unstyled">
         <?php
             $reversedUploadFiles = array_reverse($Product['Uploadfile']);
@@ -11,7 +11,7 @@
         <div class="swiper-wrapper">
         {{loop $reversedUploadFiles $key $uploadfile}}
             <div class="swiper-slide" style="width: 320px; height: 275px;">
-                <a href="#"><img {{if $key != 0}}class="hide"{{/if}} src="http://51daifan-images.stor.sinaapp.com/{{$uploadfile['Uploadfile']['mid_thumb']}}" border="0"></a>
+                <a href="#"><img src="http://51daifan-images.stor.sinaapp.com/{{$uploadfile['Uploadfile']['mid_thumb']}}" border="0"></a>
             </div>
         {{/loop}}
         </div>
@@ -26,6 +26,7 @@
         var $indexBanner = $('.index_banner');
         var ul = $indexBanner.find('ul');
         var sliderCount = Math.max($('.swiper-slide', $indexBanner).length, 1);
+        $indexBanner.removeClass('hide');
         var mySwiper = $indexBanner.swiper({
             mode: 'horizontal',
             loop: true,
@@ -37,6 +38,5 @@
                 ul.find('li:nth-child(' + (swiper.activeLoopIndex % sliderCount + 1 ) + ')').toggleClass('cur');
             }
         });
-        $('.swiper-slide a img', $indexBanner).removeClass('hide');
     });
 </script>
