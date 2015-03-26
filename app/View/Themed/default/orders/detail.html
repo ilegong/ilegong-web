@@ -37,19 +37,16 @@
     }
     $(document).ready(function(){
        $('#remind-deliver').click(function(){
-        var order_id = $(this).val();
+           var order_id = $(this).val();
            $.ajax({
                type:'post',
                success:function(data){
                     if(data==1|| data==3){
                    $('#remind-deliver').text('已提醒商家').prop('disabled','disabled');
-//                   $('#remind_deliver').html("商家已收到您的提醒啦").show(200).delay(1000).hide(300);
                       mobileTip('商家已收到您的提醒啦');
                     }else if(data==2){
-//                   $('#remind_deliver').html('您已经提醒过啦，请15分钟后再提醒').hide(1000);
                         mobileTip('您已经提醒过啦，请15分钟后再提醒');
                     }else {
-//                    $('#remind_deliver').html("提醒发货失败，请稍后再试").show(200).delay(1000).hide(300);
                         mobileTip('提醒发货失败，请稍后再试');
                     }
                },
@@ -57,8 +54,6 @@
                url:'/orders/remind_deliver/'+order_id,
               dataType:'json'
            })
-
-
        });
     });
 

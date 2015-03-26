@@ -1,0 +1,104 @@
+<div class="classlist_v2" style="z-index:1">
+    <ul class="clearfix">
+        <li><a href="/users/me" class="back"></a></li>
+        <li class="line"></li>
+        <li><strong>我的订单</strong></li>
+    </ul>
+</div>
+<div class="myorder_tab clearfix">
+    <ul style="margin-top: 0;margin-bottom: 0;">
+        <li><a id="check_all" href="#X" class="cur">全部</a></li>
+    </ul>
+    <ul style="margin-top: 0;margin-bottom: 0;">
+        <li><a id="check_should_pay" href="#X">待支付</a></li>
+    </ul>
+    <ul style="margin-top: 0;margin-bottom: 0;">
+        <li><a id="check_should_ship" href="#X">待发货</a></li>
+    </ul>
+    <ul style="margin-top: 0;margin-bottom: 0;">
+        <li style="border: 0;"><a  id="check_should_recived" href="#X">待收货/评价</a></li>
+    </ul>
+</div>
+<?php foreach(array( '-1' => 'all', 0 => 'wait_payment', 1 => 'wait_deliver', 2 => 'wait_receive') as $status => $order_type) { ?>
+<div class="myorder" style="margin-top: 0; padding-top: 0; margin-bottom: 44px;" id="orders-{{$order_type}}">
+    {{$this->element('my_orders', array(
+    'orders' => $orders,
+    'brands' => $brands,
+    'counts' => $counts,
+    'status' => $status
+    )); }}
+</div>
+<?php } ?>
+<script>
+    $(document).ready(function(){
+        $('div.myorder').hide();
+        var $tipInfoPanel = $('<div class="comment_tip_layer radius10" style="width:60%; left:50%; top:30%; margin-left:-30%; display: none;"></div>');
+        $('body').append(this.$tipInfoPanel);
+        var _tab_id_m = {
+            'comment': 'tab_wait_receive',
+            'waiting_pay': 'tab_wait_pay',
+            'paid': 'tab_wait_paid',
+            'shipped': 'tab_wait_receive'
+        };
+        var $order_all = $('#orders-all');
+        var $orders_payment = $('#orders-wait_payment');
+        var $orders_deliver = $('#orders-wait_deliver');
+        var $orders_receive = $('#orders-wait_receive');
+        {{if !empty($_GET['tab'])}}
+            $('#'+ _tab_id_m['{{$_GET["tab"]}}']).show();
+        {{else}}
+            $order_all.show();
+        {{/if}}
+        $('#check_all').on('click',function(){
+            show_order_tab($order_all);
+            set_cur($(this));
+        });
+        $('#check_should_pay').on('click',function(){
+            show_order_tab($orders_payment);
+            set_cur($(this));
+        });
+        $('#check_should_ship').on('click',function(){
+            show_order_tab($orders_deliver);
+            set_cur($(this));
+        });
+        $('#check_should_recived').on('click',function(){
+            show_order_tab($orders_receive);
+            set_cur($(this));
+        });
+
+        function show_order_tab($show_elm){
+            $('div.myorder').hide();
+            $show_elm.show();
+        }
+
+        function set_cur($element){
+            $('li a.cur').removeClass('cur');
+            $element.addClass('cur');
+        }
+        function mobileTip(msg,fadeInTime,fadeOutTime,callBack){
+            fadeInTime = fadeInTime?fadeInTime:1000;
+            fadeOutTime = fadeOutTime?fadeOutTime:3000;
+            callBack = callBack?callBack:function(){};
+            $tipInfoPanel.text(msg).fadeIn(fadeInTime).fadeOut(fadeOutTime,callBack);
+        }
+        $('a[name="remind-deliver"]').on('click',function(){
+            var order_id = $(this).data('val');
+            $.ajax({
+                type:'post',
+                success:function(data){
+                    if(data==1|| data==3){
+                        mobileTip('商家已收到您的提醒啦');
+                    }else if(data==2){
+                        mobileTip('您已经提醒过啦，请15分钟后再提醒');
+                    }else {
+                        mobileTip('提醒发货失败，请稍后再试');
+                    }
+                },
+                data:{},
+                url:'/orders/remind_deliver/'+order_id,
+                dataType:'json'
+            })
+        })
+    });
+</script>
+

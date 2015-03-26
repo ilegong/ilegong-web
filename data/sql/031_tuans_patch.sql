@@ -160,6 +160,9 @@ INSERT INTO `cake_tuan_buyings` (`tuan_id`, `pid`, `join_num`, `sold_num`, `stat
 INSERT INTO `cake_tuan_buyings` (`tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('21', '838', '0', '0', '0', '2015-03-19 18:00:00', '2015-03-20 10:00:00');
 INSERT INTO `cake_tuan_buyings` (`tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('1', '838', '0', '0', '0', '2015-03-23 18:00:00', '2015-03-24 10:00:00');
 INSERT INTO `cake_tuan_buyings` (`tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('6', '838', '0', '0', '0', '2015-03-23 18:00:00', '2015-03-24 10:00:00');
+INSERT INTO `cake_tuan_buyings` (`tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('15', '230', '0', '0', '0', '2015-03-29 18:00:00', '2015-03-30 10:00:00');
+INSERT INTO `cake_tuan_buyings` (`tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('25', '230', '0', '0', '0', '2015-03-29 18:00:00', '2015-03-31 10:00:00');
+INSERT INTO `cake_tuan_buyings` (`tuan_id`, `pid`, `join_num`, `sold_num`, `status`, `end_time`, `consign_time`) VALUES ('28', '230', '0', '0', '0', '2015-03-29 18:00:00', '2015-03-31 10:00:00');
 
 
 

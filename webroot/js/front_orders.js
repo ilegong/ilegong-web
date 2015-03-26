@@ -253,15 +253,21 @@ function confirm_order(order_id, status, creator){
 }
 
 //用户确认收货
-function orders_receive_3g(order_id,is_try){
+function orders_receive_3g(order_id,is_try,is_mobile){
     return ajaxAction(BASEURL+"/orders/confirm_receive/",{'order_id':order_id},null, function(){
         showSuccessMessage('您已确认收货', function(){
             if(is_try){
-                $('.order_item_action_'+order_id).html('<a class="btn-sm btn-primary" href="/orders/detail/'+order_id+'">详细</a>');
-
+                if(is_mobile){
+                    //$('.order_item_action_'+order_id).html('<a href="/orders/detail/"'+order_id+' class="btn_skin_gary">查看订单</a>');
+                }else{
+                    $('.order_item_action_'+order_id).html('<a class="btn-sm btn-primary" href="/orders/detail/'+order_id+'">详细</a>');
+                }
             }else{
-                $('.order_item_action_'+order_id).html('<a class="btn-sm btn-primary" href="/orders/detail/'+order_id+'">详细</a><a class="btn-sm btn-warning" href="/comments/add_comment/'+order_id+'">评论赢积分</a>');
-
+                if(is_mobile){
+                    $('.order_item_action_'+order_id).html('<a class="btn_skin_orange" href="/comments/add_comment/'+order_id+'.html?history=/orders/mine.html?tab=comment">评论赢积分</a>');
+                }else{
+                    $('.order_item_action_'+order_id).html('<a class="btn-sm btn-primary" href="/orders/detail/'+order_id+'">详细</a><a class="btn-sm btn-warning" href="/comments/add_comment/'+order_id+'">评论赢积分</a>');
+                }
             }
             $('.order-status-'+order_id).html('已收货');
             $('#orders-wait_receive').find('.order_item_'+order_id).remove();
@@ -275,10 +281,14 @@ function orders_receive_3g_detail(order_id,is_try, callback){
     });
 }
 
-function orders_undo(order_id) {
+function orders_undo(order_id,is_mobile) {
     return ajaxAction(BASEURL+"/orders/confirm_undo/",{'order_id':order_id},null, function(){
         showSuccessMessage('订单已取消', function(){
-            $('.order_item_action_'+order_id).html('<a class="btn-sm btn-primary" href="/orders/detail/'+order_id+'">详细</a>');
+            if(is_mobile){
+                $('.order_item_action_'+order_id).html('<a class="btn_skin_gary" href="javascript:;" onclick="bootbox.confirm(\'您确认要删除吗?\', function(result) {if(result){orders_remove('+order_id+');}})">删除订单</a>');
+            }else{
+                $('.order_item_action_'+order_id).html('<a class="btn-sm btn-primary" href="/orders/detail/'+order_id+'">详细</a>');
+            }
             $('.order-status-'+order_id).html('已取消');
             $('#orders-wait_payment').find('.order_item_'+order_id).remove();
         }, 2000);

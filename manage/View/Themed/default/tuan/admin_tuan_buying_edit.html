@@ -42,13 +42,31 @@
             {{$this->Form->input('target_num',array('class'=>'form-control','div'=>false,'label'=>false,))}}
         </div>
     </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label">团购状态</label>
-            <div class="col-sm-9 controls">
-                {{$this->Form->input('status',array('class'=>'form-control','div'=>false,'label'=>false,))}}
-                <p>团购状态为0，表示进行中；1，表示已完成；2，表示已取消</p>
-            </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">限制份数</label>
+        <div class="col-sm-9 controls">
+            {{$this->Form->input('max_num',array('class'=>'form-control','div'=>false,'label'=>false,))}}
         </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">每人限购份数</label>
+        <div class="col-sm-9 controls">
+            {{$this->Form->input('limit_buy_num',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">团购价格</label>
+        <div class="col-sm-9 controls">
+            {{$this->Form->input('tuan_price',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">团购状态</label>
+        <div class="col-sm-9 controls">
+            {{$this->Form->input('status',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+            <p>团购状态为0，表示进行中；1，表示已完成；2，表示已取消</p>
+        </div>
+    </div>
 
     <div class="form-group">
         <div class="col-sm-12"><input class="btn btn-primary" type="submit" value="提交"></div>
