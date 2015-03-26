@@ -1,11 +1,12 @@
 <div class="p_details_pic">
-    <div class="index_banner swiper-container hide">
+    <?php
+        $uploadFiles = $Product['Uploadfile'];
+        $reversedUploadFiles = array_reverse($uploadFiles);
+    ?>
+    <div class="index_banner swiper-container hide" data-slider-count="{{count($reversedUploadFiles)}}">
         <ul class="clearfix list-unstyled">
-        <?php
-            $reversedUploadFiles = array_reverse($Product['Uploadfile']);
-        ?>
         {{loop $reversedUploadFiles $key $uploadfile}}
-            <li {{if $key == 0}}class="cur"{{/if}}></li>
+            <li {{if $key == 0}}class="cur"{{/if}}  data-key="{{$key}}" data-uri="{{$uploadfile['Uploadfile']['mid_thumb']}}"></li>
         {{/loop}}
         </ul>
         <div class="swiper-wrapper">
@@ -25,17 +26,17 @@
     $(document).ready(function() {
         var $indexBanner = $('.index_banner');
         var ul = $indexBanner.find('ul');
-        var sliderCount = Math.max($('.swiper-slide', $indexBanner).length, 1);
+        var sliderCount = $indexBanner.data('slider-count');
         $indexBanner.removeClass('hide');
-        var mySwiper = $indexBanner.swiper({
+        var swiper = $indexBanner.swiper({
             mode: 'horizontal',
             loop: true,
+            loopedSlides: sliderCount,
             autoplay: 10000,
             calculateHeight: true,
             onSlideChangeStart: function (swiper) {
-                console.log("activeIndex: " + swiper.activeIndex);
                 ul.find('li').removeClass('cur');
-                ul.find('li:nth-child(' + (swiper.activeLoopIndex % sliderCount + 1 ) + ')').toggleClass('cur');
+                ul.find('li:nth-child(' + (swiper.activeLoopIndex % sliderCount + 1 ) + ')').addClass('cur');
             }
         });
     });
