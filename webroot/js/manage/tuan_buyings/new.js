@@ -12,4 +12,18 @@ $(function(){
             $('<option value="' + index + '">' + item + '</option>').appendTo(tuanProducts);
         });
     });
+    var tuanEndTime = $('.tuan-end-time');
+    var tuanTargetNum = $('.tuan-target-num');
+    $(".tuan-form").submit(function(e){
+        tuanTeams.parents('.form-group').toggleClass('has-error', tuanTeams.val() == -1);
+        tuanProducts.parents('.form-group').toggleClass('has-error', tuanProducts.val() == -1);
+        tuanEndTime.parents('.form-group').toggleClass('has-error', tuanEndTime.val() == '');
+        var targetNum = Number(tuanTargetNum.val());
+        tuanTargetNum.parents('.form-group').toggleClass('has-error', isNaN(targetNum) || targetNum < 1);
+
+        if(tuanTeams.val() == -1 || tuanProducts.val() == -1 || tuanEndTime.val() == '' || isNaN(targetNum) || targetNum < 1){
+            return false;
+        }
+        return true;
+    });
 })
