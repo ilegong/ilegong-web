@@ -93,9 +93,9 @@
                     <li class="fl">
                             <span class="gray title mr12" style="float:left;">数量:</span>
                         <span class="clearfix" style="display: block;overflow: hidden;">
-                    <div {{if $is_limit}}id="pamount_not_r"{{else}}id="pamount_reduce"{{/if}} class="grew"  item-id="{{$pid}}">-</div>
-                    <input id="input_pamount"  item-id="{{$pid}}" size="3" value="1" class="num" name="shoppingnum" type="text" {{if $is_limit}}readonly{{/if}}/>
-                    <div {{if $is_limit}}id="pamount_not_a"{{else}}id="pamount_add"{{/if}} class="grew" item-id="{{$pid}}">+</div>
+                    <div {{if $is_limit_num}}id="pamount_not_r"{{else}}id="pamount_reduce"{{/if}} class="grew"  item-id="{{$pid}}">-</div>
+                    <input id="input_pamount"  item-id="{{$pid}}" size="3" value="1" class="num" name="shoppingnum" type="text" {{if $is_limit_num}}readonly{{/if}}/>
+                    <div {{if $is_limit_num}}id="pamount_not_a"{{else}}id="pamount_add"{{/if}} class="grew" item-id="{{$pid}}">+</div>
                     </span>
                     </li>
                     </ul>

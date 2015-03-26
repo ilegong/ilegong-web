@@ -45,6 +45,12 @@ class TuanBuyingsController extends AppController{
         $this->set(compact('pid', 'consign_time', 'tuan_buy_id', 'tuan_team'));
         $sold_num = $tuan_b['TuanBuying']['sold_num'];
         $max_num = $tuan_b['TuanBuying']['max_num'];
+        $per_buy_num = $tuan_b['TuanBuying']['limit_buy_num'];
+        if($per_buy_num>0){
+            $this->set('is_limit_num',true);
+            //TODO limit buy num
+            $this->set('limit_num',$per_buy_num);
+        }
         if($max_num>0){
             if($sold_num>=$max_num){
                 $this->set('is_limit',true);

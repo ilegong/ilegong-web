@@ -48,4 +48,8 @@ ADD COLUMN `max_num` INT(11) NULL DEFAULT 0 AFTER `target_num`;
 ALTER TABLE `cake_tuan_buyings`
 ADD COLUMN `tuan_price` FLOAT NULL DEFAULT -1 AFTER `max_num`;
 
+ALTER TABLE `cake_tuan_buyings`
+ADD COLUMN `limit_buy_num` INT NULL DEFAULT 0 AFTER `tuan_price`;
+
+
 
