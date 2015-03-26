@@ -1,18 +1,17 @@
 <div class="p_details_pic">
     <?php
         $uploadFiles = $Product['Uploadfile'];
-        $reversedUploadFiles = array_reverse($uploadFiles);
     ?>
-    <div class="index_banner swiper-container hide" data-slider-count="{{count($reversedUploadFiles)}}">
+    <div class="index_banner swiper-container hide" data-slider-count="{{count($uploadFiles)}}">
         <ul class="clearfix list-unstyled">
-        {{loop $reversedUploadFiles $key $uploadfile}}
-            <li {{if $key == 0}}class="cur"{{/if}}  data-key="{{$key}}" data-uri="{{$uploadfile['Uploadfile']['mid_thumb']}}"></li>
+        {{loop $uploadFiles $key $uploadfile}}
+            <li {{if $key == 0}}class="cur"{{/if}}  data-key="{{$key}}" data-order="{{$uploadfile['Uploadfile']['sortorder']}}" data-uri="{{$uploadfile['Uploadfile']['mid_thumb']}}"></li>
         {{/loop}}
         </ul>
         <div class="swiper-wrapper">
-        {{loop $reversedUploadFiles $key $uploadfile}}
+        {{loop $uploadFiles $key $uploadfile}}
             <div class="swiper-slide" style="width: 320px; height: 275px;">
-                <a href="#"><img src="http://51daifan-images.stor.sinaapp.com/{{$uploadfile['Uploadfile']['mid_thumb']}}" border="0"></a>
+                <a href="#"><img src="http://51daifan-images.stor.sinaapp.com{{$uploadfile['Uploadfile']['mid_thumb']}}" border="0"></a>
             </div>
         {{/loop}}
         </div>
