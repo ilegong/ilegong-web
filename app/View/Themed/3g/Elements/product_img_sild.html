@@ -10,7 +10,9 @@
         </ul>
         <div class="swiper-wrapper">
         {{loop $reversedUploadFiles $key $uploadfile}}
-            <div class="swiper-slide" style="width: 320px; height: 275px;"><a href="#"><img src="http://51daifan-images.stor.sinaapp.com/{{$uploadfile['Uploadfile']['mid_thumb']}}" border="0"></a></div>
+            <div class="swiper-slide" style="width: 320px; height: 275px;">
+                <a href="#"><img {{if $key != 0}}class="hide"{{/if}} src="http://51daifan-images.stor.sinaapp.com/{{$uploadfile['Uploadfile']['mid_thumb']}}" border="0"></a>
+            </div>
         {{/loop}}
         </div>
     </div>
@@ -35,5 +37,6 @@
                 ul.find('li:nth-child(' + (swiper.activeLoopIndex % sliderCount + 1 ) + ')').toggleClass('cur');
             }
         });
+        $('.swiper-slide a img', $indexBanner).removeClass('hide');
     });
 </script>
