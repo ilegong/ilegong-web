@@ -1248,31 +1248,36 @@ class StoresController extends AppController
         if($is_first){
             $this->Order->updateAll(array('status'=>ORDER_STATUS_SHIPPED), array('id'=>$order_ids,'status'=>ORDER_STATUS_PAID));
         }
-        $orders = $this->Order->find('all',array(
-            'conditions' => array(
-                'id' => $order_ids
-            ),
-            'fields' => array(
-                'id','creator'
-            )
-        ));
-        $product_name = $product['Product']['name'];
-        $track_log = '您购买的('.$product_name.')最新状态,'.$track_log;
-        foreach($orders as $item){
-            $user_id = $item['Order']['creator'];
-            $order_id = $item['Order']['id'];
-            $cart = $this->Cart->find('first',array(
+        if(!empty($track_log)){
+            $orders = $this->Order->find('all',array(
                 'conditions' => array(
-                    'order_id' => $order_id,
-                    'product_id' => $product_id
+                    'id' => $order_ids
                 ),
                 'fields' => array(
-                    'num'
+                    'id','creator','consignee_mobilephone'
                 )
             ));
-            $num = $cart['Cart']['num'];
-            if(!$this->Weixin->send_tuan_track_log($user_id,$track_log,$order_id,$product_name,$num)){
-                $this->log('send track msg (track id='.$trackId.' order_id='.$order_id.') fail ');
+            $product_name = $product['Product']['name'];
+            $track_log = '您购买的('.$product_name.')最新状态,'.$track_log;
+            foreach($orders as $item){
+                $user_id = $item['Order']['creator'];
+                $order_id = $item['Order']['id'];
+                $order_mobile_phone = $item['Order']['consignee_mobilephone'];
+                $cart = $this->Cart->find('first',array(
+                    'conditions' => array(
+                        'order_id' => $order_id,
+                        'product_id' => $product_id
+                    ),
+                    'fields' => array(
+                        'num'
+                    )
+                ));
+                $num = $cart['Cart']['num'];
+                $msg = '您在[朋友说]购买的['.$product_name.']最新状态：'.$track_log.'。请关注微信公众号:pyshuo2014查看订单信息。';
+                message_send($msg,$order_mobile_phone);
+                if(!$this->Weixin->send_tuan_track_log($user_id,$track_log,$order_id,$product_name,$num)){
+                    $this->log('send track msg (track id='.$trackId.' order_id='.$order_id.') fail ');
+                }
             }
         }
     }
