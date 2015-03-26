@@ -89,7 +89,7 @@ class TuanBuyingsController extends AppController{
             $this->set('comment_count',$comment_count);
         }
         $con = array('modelclass' => 'Product','fieldname' =>'photo','data_id' => $pid);
-        $Product['Uploadfile']= $this->Uploadfile->find('all',array('conditions' => $con,'fields' => array('mid_thumb'),'order'=> array('sortorder DESC')));
+        $Product['Uploadfile']= $this->Uploadfile->find('all',array('conditions' => $con, 'order'=> array('sortorder DESC')));
         $tuan_price = $tuan_b['TuanBuying']['tuan_price'];
         if($tuan_price > 0){
             $this->set('tuan_price',$tuan_price);
