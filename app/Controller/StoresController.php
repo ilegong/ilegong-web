@@ -1272,9 +1272,11 @@ class StoresController extends AppController
                         'num'
                     )
                 ));
+                $user_info = $this->User->find('first',array('conditions' => array('id' => $user_id),'fields' => array('mobilephone')));
+                $mobile_phone = empty($user_info['User']['mobilephone'])?$order_mobile_phone:$user_info['User']['mobilephone'];
                 $num = $cart['Cart']['num'];
                 $msg = '您在[朋友说]购买的['.$product_name.']最新状态：'.$track_log.'。请关注微信公众号:pyshuo2014查看订单信息。';
-                message_send($msg,$order_mobile_phone);
+                message_send($msg,$mobile_phone);
                 if(!$this->Weixin->send_tuan_track_log($user_id,$track_log,$order_id,$product_name,$num)){
                     $this->log('send track msg (track id='.$trackId.' order_id='.$order_id.') fail ');
                 }
