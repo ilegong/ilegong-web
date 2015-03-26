@@ -253,6 +253,13 @@ class TuanController extends AppController{
      }
 
     /**
+     * show new tuan_buying
+     */
+     public function admin_tuan_buying_new(){
+
+     }
+
+    /**
      * create new tuan_buying
      */
      public function admin_tuan_buying_create(){
