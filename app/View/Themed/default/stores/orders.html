@@ -57,7 +57,7 @@
         <?php echo $this->Html->link('导出Excel', array('controller' => 'stores','action'=>'wait_paid_orders_export','plugin' => null),array('class'=>'btn btn-info pull-right')); ?>
         {{elseif $status==1}}
         {{loop $tags $tag}}
-            <a href="/s/wait_shipped_orders.html?mark_date={{$tag['mark_date']}}&mark_tip={{$tag['mark_tip']}}" class="btn btn-link">{{if $tag['mark_date'] == 'all'}}全部{{elseif $tag['mark_date'] == null}}没有标记{{else}}{{$tag['mark_date'].' '.$tag['mark_tip']}}{{/if}}<span class="badge">{{$tag['count']}}</span></a>&nbsp;&nbsp;
+            <a href="/s/wait_shipped_orders.html?mark_date={{$tag['mark_date']}}&mark_tip={{$tag['mark_tip']}}" class="btn btn-link">{{if $tag['mark_date'] == 'all'}}全部{{elseif $tag['mark_date'] == null}}没有标记{{else}}{{$tag['mark_date'].' '.$tag['mark_tip']}}{{/if}}<span style="color: red">({{$tag['count']}})</span></a>&nbsp;&nbsp;
         {{/loop}}
         <?php echo $this->Html->link('导出Excel', array('controller' => 'stores','action'=>'wait_shipped_orders_export','?' => array('mark_date' => $mark_date,'mark_tip' => $mark_tip) ,'plugin' => null),array('class'=>'btn btn-info pull-right')); ?>
         {{elseif $status==2}}
