@@ -81,16 +81,26 @@ class ProductsController extends AppController{
     }
 
     public function mine(){
-        $this->checkAccess();
+        //$this->checkAccess();
+        if(empty($this->currentUser['id'])){
+            $this->__message('您需要先登录才能操作','/users/login');
+        }
+        $this->loadModel('Brand');
+        $brands = $this->Brand->find('all',array('conditions'=>array(
+            'creator'=>$this->currentUser['id'],
+        )));
+        if(empty($brands)){
+            $this->__message('只有合作商家才能添加商品','/');
+        }
 
         $pagesize = intval(Configure::read($this->modelClass.'.pagesize'));
         if(!$pagesize){
             $pagesize = 15;
         }
-
-        $total = $this->{$this->modelClass}->find('count', array('conditions' => array('brand_id' => $this->brand['Brand']['id'])));
+        $brand_ids = Hash::extract($brands,'{n}.Brand.id');
+        $total = $this->{$this->modelClass}->find('count', array('conditions' => array('brand_id' => $brand_ids)));
         $datalist = $this->{$this->modelClass}->find('all', array(
-            'conditions' => array('brand_id' => $this->brand['Brand']['id']),
+            'conditions' => array('brand_id' => $brand_ids),
             'fields'=>array('id','name','price','published','coverimg'),
         ));
 
