@@ -36,13 +36,17 @@
     {{if !empty($tuan_buyings)}}
     {{loop $tuan_buyings $tuan_buying}}
     <?php $pid = $tuan_buying['TuanBuying']['pid'];
+        $unix_time = strtotime($tuan_buying['TuanBuying']['consign_time']);
+        $consign_time = empty($tuan_buying['TuanBuying']['consign_time'])? '成团后发货' : '送货: '.date('m-d', $unix_time);
     ?>
-    <div class="goodlist {{if $tuan_buying['TuanBuying']['status'] != 0}}tuan_cancel {{/if}}">
+    <div class="goodlist {{if $tuan_buying['TuanBuying']['status'] != 0 || $unix_time < time()}}tuan_cancel {{/if}}">
         <a href="/tuan_buyings/detail/{{$tuan_buying['TuanBuying']['id']}}">
             {{if $tuan_buying['TuanBuying']['status'] == 1}}
-            <s>团购已完成</s>
+            <s>团购已完成<br>{{$consign_time}}</s>
             {{elseif $tuan_buying['TuanBuying']['status'] == 2}}
             <s>团购已取消</s>
+            {{elseif $tuan_buying['TuanBuying']['status'] == 0}}
+            <s>{{$consign_time}}</s>
             {{/if}}
             <div><img src="/img/tuan/pro/listgood_{{$pid}}.jpg" /></div>
             <ul class="clearfix">
