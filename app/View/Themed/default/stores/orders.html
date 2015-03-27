@@ -56,8 +56,20 @@
         {{if $status==0}}
         <?php echo $this->Html->link('导出Excel', array('controller' => 'stores','action'=>'wait_paid_orders_export','plugin' => null),array('class'=>'btn btn-info pull-right')); ?>
         {{elseif $status==1}}
+        <br/>
+        <form class="form-inline">
+            <div class="form-group">
+                <label><h3>选择团</h3></label>
+                <select class="form-control" id="tuan_teams">
+                    <option value="-1">选择团</option>
+                    {{loop $tuanTeams $team}}
+                    <option value="{{$team['TuanTeam']['id']}}">{{$team['TuanTeam']['tuan_name']}}</option>
+                    {{/loop}}
+                </select>
+            </div>
+        </form>
         {{loop $tags $tag}}
-            <a href="/s/wait_shipped_orders.html?mark_date={{$tag['mark_date']}}&mark_tip={{$tag['mark_tip']}}" class="btn btn-link">{{if $tag['mark_date'] == 'all'}}全部{{elseif $tag['mark_date'] == null}}没有标记{{else}}{{$tag['mark_date'].' '.$tag['mark_tip']}}{{/if}}<span style="color: red">({{$tag['count']}})</span></a>&nbsp;&nbsp;
+            <a name="wait_shipped_orders" href="/s/wait_shipped_orders.html?mark_date={{$tag['mark_date']}}&mark_tip={{$tag['mark_tip']}}" class="btn btn-link">{{if $tag['mark_date'] == 'all'}}全部{{elseif $tag['mark_date'] == null}}没有标记{{else}}{{$tag['mark_date'].' '.$tag['mark_tip']}}{{/if}}<span style="color: red">({{$tag['count']}})</span></a>&nbsp;&nbsp;
         {{/loop}}
         <?php echo $this->Html->link('导出Excel', array('controller' => 'stores','action'=>'wait_shipped_orders_export','?' => array('mark_date' => $mark_date,'mark_tip' => $mark_tip) ,'plugin' => null),array('class'=>'btn btn-info pull-right')); ?>
         {{elseif $status==2}}
@@ -190,3 +202,18 @@
         {{/if}}
     </div>
 </div>
+<script>
+    $(document).ready(function(){
+        var $tuan_teams = $('#tuan_teams');
+        $tuan_teams.val('{{$tuan_id}}');
+        $('a[name="wait_shipped_orders"]').on('click',function(){
+            var tuan_id = $tuan_teams.val();
+            var me = $(this);
+            var href = me.attr('href');
+            href+='&tuan_id='+tuan_id;
+            me.attr('href',href);
+            window.location.href = href;
+            return false;
+        });
+    });
+</script>

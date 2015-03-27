@@ -664,6 +664,25 @@ class StoresController extends AppController
         $wait_ship_cond['status'] = array(ORDER_STATUS_PAID);
         $total_wait_ship_count = $this->Order->find('count', array('conditions' => $wait_ship_cond));
 
+
+        $tuan_id = $_REQUEST['tuan_id'];
+        if($tuan_id!=null&&$tuan_id!='-1'){
+            //load tuanbuy for query
+            $this->loadModel('TuanBuying');
+            $tbs = $this->TuanBuying->find('all',array(
+                'conditions' => array(
+                    'tuan_id' => $tuan_id
+                ),
+                'fields' => array(
+                    'id'
+                )
+            ));
+            $tb_ids = Hash::extract($tbs,'{n}.TuanBuying.id');
+            if(!empty($tb_ids)){
+                $cond['member_id'] = $tb_ids;
+            }
+            $this->set('tuan_id',$tuan_id);
+        }
         $mark_date = $_REQUEST['mark_date'];
         $mark_tip = $_REQUEST['mark_tip'];
         if($mark_date!=null&&$mark_date!="all"&&$mark_tip!=null&&$mark_tip!="all"){
@@ -672,6 +691,7 @@ class StoresController extends AppController
             $this->set('mark_date',$mark_date);
             $this->set('mark_tip',$mark_tip);
         }
+        //代发货订单
         if(in_array(ORDER_STATUS_PAID,$onlyStatus)){
             //load order tags
             $result  = $this->Order->query('SELECT ship_mark,mark_ship_date,count(mark_ship_date) AS total_count FROM cake_orders WHERE  brand_id='.$brand_id.' AND status='.ORDER_STATUS_PAID.' GROUP BY ship_mark,mark_ship_date');
@@ -696,7 +716,9 @@ class StoresController extends AppController
                 );
             }
             $this->set('tags',$tags);
-
+            $this->loadModel('TuanTeam');
+            $tuanTeams = $this->TuanTeam->find('all');
+            $this->set('tuanTeams',$tuanTeams);
         }
 
         $this->Paginator->settings = array(
