@@ -40,12 +40,12 @@
     ?>
     <div class="goodlist {{if $tuan_buying['TuanBuying']['status'] != 0 }}tuan_cancel {{/if}}">
         <a href="/tuan_buyings/detail/{{$tuan_buying['TuanBuying']['id']}}">
-            {{if $tuan_buying['TuanBuying']['status'] == 1}}
+            {{if $tuan_buying['TuanBuying']['status'] == 1 || $tuan_buying['TuanBuying']['status'] == 11}}
             <div class="tuan_cancel_condition">
-                <b>{{$consign_time}}发货</b><br/>
+                <b>{{$consign_time}}{{if $tuan_buying['TuanBuying']['status'] == 11}}已{{/if}}发货</b><br/>
                 <s>团购已完成</s>
             </div>
-            {{elseif $tuan_buying['TuanBuying']['status'] == 2}}
+            {{elseif $tuan_buying['TuanBuying']['status'] == 2 || $tuan_buying['TuanBuying']['status'] == 21 }}
             <div class="tuan_cancel_condition">
                 <s>团购已取消</s>
             </div>
