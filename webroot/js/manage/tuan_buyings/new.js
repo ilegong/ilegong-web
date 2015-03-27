@@ -7,7 +7,6 @@ $(function(){
     });
     var tuanProducts = $('.tuan-products');
     $.getJSON('/manage/admin/tuan/api_tuan_products',function(data){
-        console.log(data);
         $.each(data,function(index,item){
             $('<option value="' + index + '">' + item + '</option>').appendTo(tuanProducts);
         });

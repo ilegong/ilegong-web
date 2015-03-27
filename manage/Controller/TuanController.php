@@ -162,7 +162,6 @@ class TuanController extends AppController{
      * show all tuan_buyings
      */
      public function admin_tuan_buyings(){
-
          $team_id = $_REQUEST['team_id'];
          $product_id = $_REQUEST['product_id'];
          $time_type = $_REQUEST['time_type'];
@@ -185,23 +184,24 @@ class TuanController extends AppController{
          }
          $this->log('con'.json_encode($con));
          if(!empty($con)){
-         $tuan_buyings = $this->TuanBuying->find('all',array(
-             'conditions' => $con
-         ));}else{
-         $tuan_buyings = $this->TuanBuying->find('all',array('conditions' => array('pid !=' => null)));
+            $tuan_buyings = $this->TuanBuying->find('all',array(
+                'conditions' => $con
+            ));
+         }else{
+            $tuan_buyings = $this->TuanBuying->find('all',array('conditions' => array('pid !=' => null)));
          }
          $tuan_ids = Hash::extract($tuan_buyings,'{n}.TuanBuying.id');
-         $tuan_team_info = array();
-         foreach($tuan_ids as $id){
-             $tuan_team_info[$id] = $this->TuanBuying->find('first',array('conditions' => array('id' => $id)));
-             $tuan_info = $this->TuanTeam->find('first',array('conditions' => array('id' => $tuan_team_info[$id]['TuanBuying']['tuan_id']),'fields' => array('tuan_name','id')));
-             $tuan_team_info[$id]['name'] = $tuan_info['TuanTeam']['tuan_name'];
-             $tuan_team_info[$id]['tuan_id'] = $tuan_info['TuanTeam']['id'];
+         $tuan_teams = $this->TuanTeam->find('all', array('conditions' => array('id' => $tuan_ids), 'fields' => array('id', 'tuan_name')));
+         $tuan_teams = Hash::combine($tuan_teams, '{n}.TuanTeam.id', '{n}.TuanTeam');
+         $tuan_products = array('838'=>'草莓', '851' => '芒果', '862'=>'蛋糕', '863' => '草莓863', '230' => '蛋糕230');
+         foreach($tuan_buyings as &$tuan_buying){
+             $tuanBuying = $tuan_buying['TuanBuying'];
+             $tuan_buying['tuan_team'] = $tuan_teams[$tuanBuying['tuan_id']];
+             $tuan_buying['tuan_product'] = $tuan_products[$tuanBuying['pid']];
          }
-         $this->log('tuan_info'.json_encode($tuan_team_info));
-         $this->set('tuan_ids',$tuan_ids);
-         $this->set('tuan_team_info',$tuan_team_info);
-
+         $this->log($tuan_buyings);
+         $this->set('tuan_buyings', $tuan_buyings);
+//         $this->set('tuan_teams',$tuan_teams);
      }
 
     /**
@@ -215,7 +215,7 @@ class TuanController extends AppController{
              $res = array();
 //             foreach($id as $tuan_buying_id){
                  $this->TuanBuying->updateAll(array('status' => $val),array('id' => $id));
-                 $res [$tuan_buying_id] = array('success' => __('团购状态修改成功.', true));
+//                 $res [$tuan_buying_id] = array('success' => __('团购状态修改成功.', true));
 //             }
              $this->log('status'.json_encode($res));
              echo json_encode($res);
