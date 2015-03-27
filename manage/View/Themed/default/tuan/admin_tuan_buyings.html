@@ -37,8 +37,8 @@
     </div>
 
     <div>
-        <a href="/manage/admin/tuan/tuan_buying_new" role="button" style="margin-right:10px;" class="btn btn-default fr">创建团购</a>
-        <button type="submit"  class="btn btn-default fr">查看团购</button>
+        <a href="/manage/admin/tuan/tuan_buying_new" role="button" class="btn btn-default fr">创建团购</a>
+        <button type="submit" class="btn btn-default fr">查看团购</button>
         <!--<a href="/manage/admin/tuan/tuan_team_create" role="button" style="margin-right:10px;" class="btn btn-default fr">添加新团</a>-->
     </div>
 </form>
@@ -54,20 +54,13 @@
         $tuanBuying = $tuan_buying['TuanBuying'];
         $tuanTeam = $tuan_buying['tuan_team'];
         $tuanProduct = $tuan_buying['tuan_product'];
-        $tuanStatus = '进行中';
         if($tuanBuying['status'] == 0){
             $tuanStatus = '进行中';
         }
-        elseif($tuanBuying['status'] == 2){
+        elseif($tuanBuying['status'] == 2 || $tuanBuying['status'] == 2){
             $tuanStatus = '已取消';
         }
-        elseif($tuanBuying['status'] == 21){
-            $tuanStatus = '已取消';
-        }
-        elseif($tuanBuying['status'] == 1){
-            $tuanStatus = '已截止';
-        }
-        elseif($tuanBuying['status'] == 11){
+        elseif($tuanBuying['status'] == 1 || $tuanBuying['status'] == 11){
             $tuanStatus = '已截止';
         }
     ?>
@@ -91,8 +84,6 @@
                 团满发货
             {{elseif $tuanBuying['status']==1}}
                 预计发货({{date('n.j',strtotime($tuanBuying['consign_time']))}})
-            {{else}}
-                status: {{$tuanBuying['status']}}
             {{/if}}
         </td>
         <td>

@@ -13,6 +13,7 @@ $(function(){
         });
     });
 
+    var tuanBuyingForm = $('.tuan-buying-form');
     var tuanBuyingDue= $('.tuan-buying-due');
     var tuanBuyingCanceled= $('.tuan-buying-canceled');
     var tuanBuyingFinished = $('.tuan-buying-finished');
