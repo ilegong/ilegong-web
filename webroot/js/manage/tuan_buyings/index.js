@@ -13,6 +13,64 @@ $(function(){
         });
     });
 
+    var tuanBuyingDue= $('.tuan-buying-due');
+    var tuanBuyingCanceled= $('.tuan-buying-canceled');
+    var tuanBuyingFinished = $('.tuan-buying-finished');
+    var tuanBuyingRefunded = $('.tuan-buying-refunded');
+
+    tuanBuyingDue.click(function(){
+        if(!confirm('确定结束吗？')) {
+            return;
+        }
+        var tuanBuyingId = $(this).parents('tr').data('id');
+        $.post( "/manage/admin/tuan/api_tuan_buying_due", {id: tuanBuyingId}, function( data ) {
+            console.log('已设置为：团购截止！');
+        }).fail(function(){
+            console.log('设置团购截止失败！');
+        }).always(function(){
+            window.location.reload();
+        });
+    });
+    tuanBuyingCanceled.click(function(){
+        if(!confirm('确定取消吗？')) {
+            return;
+        }
+        var tuanBuyingId = $(this).parents('tr').data('id');
+        $.post( "/manage/admin/tuan/api_tuan_buying_canceled", {id: tuanBuyingId}, function( data ) {
+            console.log('已设置为：团购取消！');
+        }).fail(function(){
+            console.log('设置团购取消失败！');
+        }).always(function(){
+            window.location.reload();
+        });
+    });
+    tuanBuyingFinished.click(function(){
+        if(!confirm('确定发货完成了吗？')) {
+            return;
+        }
+        var tuanBuyingId = $(this).parents('tr').data('id');
+        $.post( "/manage/admin/tuan/api_tuan_buying_finished", {id: tuanBuyingId}, function( data ) {
+            console.log('已设置为：发货完成！');
+        }).fail(function(){
+            console.log('设置发货完成失败！');
+        }).always(function(){
+            window.location.reload();
+        });
+    });
+    tuanBuyingRefunded.click(function(){
+        if(!confirm('确定完成退款了吗？')) {
+            return;
+        }
+        var tuanBuyingId = $(this).parents('tr').data('id');
+        $.post( "/manage/admin/tuan/api_tuan_buying_refunded", {id: tuanBuyingId}, function( data ) {
+            console.log('已设置为：退款完成！');
+        }).fail(function(){
+            console.log('设置退款完成失败！');
+        }).always(function(){
+            window.location.reload();
+        });
+    });
+
     $('#tuan_down,#tuan_product_down').click(function(){
         var id = $(this).attr('data-id');
         var val=$(this).attr("value");

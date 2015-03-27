@@ -65,13 +65,13 @@
             $tuanStatus = '已取消';
         }
         elseif($tuanBuying['status'] == 1){
-            $tuanStatus = '已完成';
+            $tuanStatus = '已截止';
         }
         elseif($tuanBuying['status'] == 11){
-            $tuanStatus = '已完成';
+            $tuanStatus = '已截止';
         }
     ?>
-    <tr class="{{if $tuanBuying['status']==1}} warning {{elseif $tuanBuying['status']==11}} success {{elseif $tuanBuying['status']==2}} danger {{elseif $tuanBuying['status']==21}} active {{/if}}">
+    <tr data-id="{{$tuanBuying['id']}}" class="{{if $tuanBuying['status']==1}} warning {{elseif $tuanBuying['status']==11}} success {{elseif $tuanBuying['status']==2}} danger {{elseif $tuanBuying['status']==21}} active {{/if}}">
         <td>{{$tuanBuying['id']}}</td>
         <td>{{$tuanTeam['tuan_name']}}</td>
         <td>{{$tuanProduct}}/{{$tuanTeam['id']==26?大团:小团}}</td>
@@ -100,12 +100,12 @@
                 <a role="button" class="btn btn-sm btn-default" href="/manage/admin/tuan/tuan_buying_edit/{{$tuanBuying['id']}}">编辑...</a>
             {{/if}}
             {{if $tuanBuying['status']==0}}
-                <button type="button" id="tuan_down" class="btn btn-sm btn-warning" data-id="{{$tuanBuying['id']}}" value="1">完成</button>
-                <button type="button" id="tuan_product_down" class="btn btn-sm btn-danger" data-id="{{$tuanBuying['id']}}" value="2">取消</button>
+                <button type="button" class="btn btn-sm btn-warning tuan-buying-due" data-id="{{$tuanBuying['id']}}" value="1">完成</button>
+                <button type="button" class="btn btn-sm btn-danger tuan-buying-canceled" data-id="{{$tuanBuying['id']}}" value="2">取消</button>
             {{elseif $tuanBuying['status']==1}}
-                <button type="button" class="btn btn-sm btn-warning" data-id="{{$tuanBuying['id']}}" value="1">发货完成</button>
+                <button type="button" class="btn btn-sm btn-warning tuan-buying-finished" data-id="{{$tuanBuying['id']}}" value="1">发货完成</button>
             {{elseif $tuanBuying['status']==2}}
-                <button type="button" class="btn btn-sm btn-danger" data-id="{{$tuanBuying['id']}}" value="1">退款完成</button>
+                <button type="button" class="btn btn-sm btn-danger tuan-buying-refunded" data-id="{{$tuanBuying['id']}}" value="1">退款完成</button>
             {{/if}}
         </td>
     </tr>
@@ -113,11 +113,12 @@
     </tbody>
 </table>
 
-{{$this->Html->script(array(
-'vendor/jquery.ui.widget.js',
-'//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js',
-'//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js',
-'jquery.iframe-transport.js',
-'manage/tuan_buyings/index.js'
-));
+{{$this->Html->script(
+    array(
+        'vendor/jquery.ui.widget.js',
+        '//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js',
+        '//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js',
+        'jquery.iframe-transport.js',
+        'manage/tuan_buyings/index.js'
+    ));
 }}

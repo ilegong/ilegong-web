@@ -158,6 +158,26 @@ class TuanController extends AppController{
         echo json_encode($teams);
     }
 
+    public function admin_api_tuan_buying_due(){
+        $tuanBuyingId = $_REQUEST['id'];
+        $this->log('update tuan buying ' + $tuanBuyingId + ' status to ' + 1);
+        $this->TuanBuying->updateAll(array('status' => 1), array('id' => $tuanBuyingId));
+    }
+    public function admin_api_tuan_buying_canceled(){
+        $tuanBuyingId = $_REQUEST['id'];
+        $this->log('update tuan buying ' + $tuanBuyingId + ' status to ' + 2);
+        $this->TuanBuying->updateAll(array('status' => 2), array('id' => $tuanBuyingId));
+    }
+    public function admin_api_tuan_buying_finished(){
+        $tuanBuyingId = $_REQUEST['id'];
+        $this->log('update tuan buying ' + $tuanBuyingId + ' status to ' + 11);
+        $this->TuanBuying->updateAll(array('status' => 11), array('id' => $tuanBuyingId));
+    }
+    public function admin_api_tuan_buying_refunded(){
+        $tuanBuyingId = $_REQUEST['id'];
+        $this->log('update tuan buying ' + $tuanBuyingId + ' status to ' + 21);
+        $this->TuanBuying->updateAll(array('status' => 21), array('id' => $tuanBuyingId));
+    }
     /**
      * show all tuan_buyings
      */
