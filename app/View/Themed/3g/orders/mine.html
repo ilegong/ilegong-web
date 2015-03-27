@@ -35,10 +35,10 @@
         var $tipInfoPanel = $('<div class="comment_tip_layer radius10" style="width:60%; left:50%; top:30%; margin-left:-30%; display: none;"></div>');
         $('body').append(this.$tipInfoPanel);
         var _tab_id_m = {
-            'comment': 'tab_wait_receive',
-            'waiting_pay': 'tab_wait_pay',
-            'paid': 'tab_wait_paid',
-            'shipped': 'tab_wait_receive'
+            'comment': 'orders-wait_receive',
+            'waiting_pay': 'orders-wait_payment',
+            'paid': 'orders-wait_deliver',
+            'shipped': 'orders-wait_receive'
         };
         var $order_all = $('#orders-all');
         var $orders_payment = $('#orders-wait_payment');

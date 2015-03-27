@@ -41,7 +41,7 @@ $brand = $brands[$order['Order']['brand_id']];
             <p class="myorder_total">共{{$counts[$order['Order']['id']]}}件商品，合计:<strong>￥{{$this->Number->precision($order['Order']['total_all_price'], 2)}}</strong></p>
             <p class="myorder_operate clearfix order_item_action_{{$order['Order']['id']}}">
                 {{if $order['Order']['status']==2}}
-                    <a href="javascript:;" onclick="bootbox.confirm('您要确认收货吗？', function(result) {if(result){orders_receive_3g({{$order['Order']['id']}},{{$order['Order']['try_id']}})} })" class="btn_skin_orange">确认收货</a>
+                    <a href="javascript:;" onclick="bootbox.confirm('您要确认收货吗？', function(result) {if(result){orders_receive_3g({{$order['Order']['id']}},{{$order['Order']['try_id']}},true)} })" class="btn_skin_orange">确认收货</a>
                     <a class="btn_skin_gary" href="/orders/detail/{{$order['Order']['id']}}#ship">查看物流</a>
                 {{elseif $order['Order']['status'] == 10}}
                     <a class="btn_skin_gary" href="javascript:;" onclick="bootbox.confirm('您确认要删除吗？', function(result) {if(result){orders_remove({{$order['Order']['id']}})} })">删除订单</a>
