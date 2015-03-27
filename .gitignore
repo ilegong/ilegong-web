@@ -4,3 +4,4 @@ data/settings.php
 webroot/files/*
 .idea
 .svn
+*.iml
