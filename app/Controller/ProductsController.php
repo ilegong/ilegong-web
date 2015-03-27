@@ -92,12 +92,13 @@ class ProductsController extends AppController{
         if(empty($brands)){
             $this->__message('只有合作商家才能添加商品','/');
         }
+        $brand_ids = Hash::extract($brands,'{n}.Brand.id');
 
         $pagesize = intval(Configure::read($this->modelClass.'.pagesize'));
         if(!$pagesize){
             $pagesize = 15;
         }
-        $brand_ids = Hash::extract($brands,'{n}.Brand.id');
+
         $total = $this->{$this->modelClass}->find('count', array('conditions' => array('brand_id' => $brand_ids)));
         $datalist = $this->{$this->modelClass}->find('all', array(
             'conditions' => array('brand_id' => $brand_ids),
@@ -114,7 +115,19 @@ class ProductsController extends AppController{
 
         $this->checkAccess();
 
-        $datainfo = $this->{$this->modelClass}->find('first', array('conditions' => array('id' => $id, 'brand_id' => $this->brand['Brand']['id'])));
+        if(empty($this->currentUser['id'])){
+            $this->__message('您需要先登录才能操作','/users/login');
+        }
+        $this->loadModel('Brand');
+        $brands = $this->Brand->find('all',array('conditions'=>array(
+            'creator'=>$this->currentUser['id'],
+        )));
+        if(empty($brands)){
+            $this->__message('只有合作商家才能添加商品','/');
+        }
+        $brand_ids = Hash::extract($brands,'{n}.Brand.id');
+        
+        $datainfo = $this->{$this->modelClass}->find('first', array('conditions' => array('id' => $id, 'brand_id' => $brand_ids)));
         if (empty($datainfo)) {
             throw new ForbiddenException(__('You cannot edit this data'));
         }
