@@ -32,13 +32,11 @@ class TuanBuyingsController extends AppController{
         $current_time = time();
         if(strtotime($tuan_b['TuanBuying']['end_time']) < $current_time){
             $this->set('exceed_time', true);
-            $tuan_new_b = $this->TuanBuying->find('first',array(
-                'conditions' => array('tuan_id' => $tuan_b['TuanBuying']['tuan_id'], 'status' => 0),
-                'order' => array('TuanBuying.end_time DESC')
-            ));
-            if($tuan_new_b['TuanBuying']['id'] != $tuan_buy_id && strtotime($tuan_new_b['TuanBuying']['end_time']) > $current_time){
-                $this->set('new_tuan_buy', $tuan_new_b['TuanBuying']['id']);
-            }
+        }
+        if($tuan_b['TuanBuying']['status'] == 0){
+            $this->set('tuan_buy_status', 0);
+        }elseif($tuan_b['TuanBuying']['status'] == 2 || $tuan_b['TuanBuying']['status'] == 21 ){
+            $this->set('tuan_buy_status', 2);
         }
         $pid=$tuan_b['TuanBuying']['pid'];
         $consign_time = empty($tuan_b['TuanBuying']['consign_time'])? '成团后发货' : friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
@@ -346,7 +344,7 @@ class TuanBuyingsController extends AppController{
         $date_time = date('Y-m-d', time());
         $tuan_buy_num = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
         $tuan_buy_info = $this->TuanBuying->find('all',array(
-            'conditions' => array('pid' => $pid, 'status'=>0),
+            'conditions' => array('pid' => $pid, 'status'=>0, 'end_time >'=> $date_time),
             'order' => array('TuanBuying.end_time')
         ));
         $tuan_buy = Hash::combine($tuan_buy_info,'{n}.TuanBuying.tuan_id','{n}.TuanBuying');

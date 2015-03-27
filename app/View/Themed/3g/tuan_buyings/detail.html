@@ -208,11 +208,11 @@
                 {{if $is_limit}}
                     <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
                 {{else}}
-                    {{if $new_tuan_buy}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
+                    {{if $tuan_buy_status == 2}}
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已取消</a>
                     {{elseif $exceed_time}}
                     <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
-                    {{else}}
+                    {{elseif $tuan_buy_status == 0}}
                     <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg radius10">立即购买</a>
                     {{/if}}
                 {{/if}}
