@@ -1,4 +1,4 @@
-<div class="classlist_v2" style="z-index:999">
+<div class="classlist_v2" style="z-index:100">
     <ul class="clearfix">
         <li><a href="{{empty($_GET['history']) ? 'javascript:history.back(-1);':$_GET['history']}}" class="back"></a></li>
         <li class="line"></li>
@@ -72,6 +72,14 @@
         </div>
     </form>
 {{if $order['Order']['is_comment']==0}}
+<div class="tipslayer" style="display: none;z-index: 300">
+    <div class="tipslayer_word"><strong>您还没有上传图片!</strong><br/>上传真实商品图片有可能被评为精华评论，获得更多积分！</div>
+    <ul class="clearfix">
+        <li><a href="#X" id="submit_comment_no_pic">提交评价</a></li>
+        <li><a href="#X" id="to_upload_pic" style="border-left: 1px #dddddd solid;">上传图片</a></li>
+    </ul>
+</div>
+<div class="tipslayer_bg" style="display: none;z-index: 200"></div>
 <a href="javascript:;" id="submit_comment" class="comment_submit">提交评价</a>
 {{/if}}
 </div>
@@ -150,17 +158,17 @@
             $('div.upload-image').each(function (index, item) {
                 $(item).pyUpload();
             });
-
-            $('#submit_comment').on('click',function(e){
+            function showTipUploadImage(){
+                $('div.tipslayer_bg').show();
+                $('div.tipslayer').show();
+            }
+            function hideTipUploadImage(){
+                $('div.tipslayer_bg').hide();
+                $('div.tipslayer').hide();
+            }
+            $('#submit_comment_no_pic').on('click',function(e){
                 e.preventDefault();
-                if($(this).hasClass('comment_submit_disable')){
-                    Pyshuo.ui.utils.mobileShowTip('评论内容不能小于10个字..');
-                    return;
-                }
-                if($(this).attr('disabled')){
-                    return;
-                }
-                $(this).attr("disabled","disabled");
+                hideTipUploadImage();
                 //set status draft comment can show in view page
                 //async ?
                 $('input[data="data_status"]').each(function(index,item){
@@ -168,6 +176,37 @@
                 });
                 //set order is comment
                 submitComment();
+            });
+            $('#to_upload_pic').on('click',function(){
+                hideTipUploadImage();
+            });
+            $('#submit_comment').on('click',function(e){
+                e.preventDefault();
+                if($(this).hasClass('comment_submit_disable')){
+                    Pyshuo.ui.utils.mobileShowTip('评论内容不能小于10个字..');
+                    return;
+                }
+                //check image
+                var $input_pics = $('input[name="data[Comment][pictures]"]');
+                var flag = false;
+                $.each($input_pics,function(index,item){
+                    var value = $(item).val();
+                    if(value.length==0){
+                        flag = true;
+                        return false;
+                    }
+                });
+                if(flag){
+                    showTipUploadImage();
+                    return false;
+                }else{
+                    if($(this).attr('disabled')){
+                        return;
+                    }
+                    $(this).attr("disabled","disabled");
+                    $('#submit_comment_no_pic').trigger('click');
+                }
+
             });
             function formVaild(formData, jqForm, options){
                 var isValid = true;

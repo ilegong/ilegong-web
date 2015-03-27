@@ -87,6 +87,14 @@ ul li{ list-style:none;}
 .comment_submit_disable:hover{color: #ffffff;text-decoration: none}
 .comment_submit_disable:focus{color: #ffffff;text-decoration: none}
 .comment_csi{ padding:0 1em 5em 1em;}
+/*确定取消提示层样式*/
+.tipslayer { position: fixed; top: 40%; width: 80%; left: 50%; margin-left: -40%; background-color: #ffffff; z-index: 5; border-radius: 5px;}
+.tipslayer_word { font-size: 1em; color: #333333; padding: 1em 15px; text-align: center; line-height: 20px; color: #999999;}
+.tipslayer_word strong{ color: #555555; line-height: 35px;}
+.tipslayer ul li { width: 50%; float: left; text-align: center; line-height: 44px; border-top: 1px #dddddd solid; }
+.tipslayer ul li a { display: block; text-decoration: none; color: #29ac0e; text-align: center; font-size: 1.1em; }
+.tipslayer_bg{ width: 100%; height: 100%; background-attachment: fixed; background-color: #000000;filter:alpha(opacity=25);-moz-opacity:0.25; opacity:0.25; position: absolute; z-index: 4; top: 0; left: 0;}
+
 
 /*商品详情*/
 .p_details_pic{ position:relative;}
