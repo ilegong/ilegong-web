@@ -176,6 +176,9 @@ ul li{ list-style:none;}
     width: 3em;
     text-align: center;
     padding: 7px 10px;
+    border-radius: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
 }
 .numbers li span .grew {
     background-color: #eee;
