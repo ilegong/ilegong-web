@@ -56,7 +56,10 @@
         {{if $status==0}}
         <?php echo $this->Html->link('导出Excel', array('controller' => 'stores','action'=>'wait_paid_orders_export','plugin' => null),array('class'=>'btn btn-info pull-right')); ?>
         {{elseif $status==1}}
-        <?php echo $this->Html->link('导出Excel', array('controller' => 'stores','action'=>'wait_shipped_orders_export','plugin' => null),array('class'=>'btn btn-info pull-right')); ?>
+        {{loop $tags $tag}}
+            <a href="/s/wait_shipped_orders.html?mark_date={{$tag['mark_date']}}&mark_tip={{$tag['mark_tip']}}" class="btn btn-link">{{if $tag['mark_date'] == 'all'}}全部{{elseif $tag['mark_date'] == null}}没有标记{{else}}{{$tag['mark_date'].' '.$tag['mark_tip']}}{{/if}}<span class="badge">{{$tag['count']}}</span></a>&nbsp;&nbsp;
+        {{/loop}}
+        <?php echo $this->Html->link('导出Excel', array('controller' => 'stores','action'=>'wait_shipped_orders_export','?' => array('mark_date' => $mark_date,'mark_tip' => $mark_tip) ,'plugin' => null),array('class'=>'btn btn-info pull-right')); ?>
         {{elseif $status==2}}
         <?php echo $this->Html->link('导出Excel', array('controller' => 'stores','action'=>'shipped_orders_export','plugin' => null),array('class'=>'btn btn-info pull-right')); ?>
         {{elseif $status==3}}
@@ -64,7 +67,6 @@
         {{elseif $status==-1}}
         <?php echo $this->Html->link('导出Excel', array('controller' => 'stores','action'=>'orders_export','plugin' => null),array('class'=>'btn btn-info pull-right')); ?>
         {{/if}}
-
 
         <div class="table-responsive">
             {{loop $orders $order}}
@@ -113,24 +115,37 @@
                     <td>
                         <div id="order-status-{{$order['Order']['id']}}">
                             {{if $order['Order']['status']==0}}
-                            <font color="red">订单未支付</font>
+                                <font color="red">订单未支付</font>
                             {{elseif $order['Order']['status']==1}}
-                            <font color="red">订单待发货</font>
-                            <div class="well">
-                                <select id="ship-type-{{$order['Order']['id']}}">
-                                    <option value="">快递类型</option>
-                                    {{loop $ship_type $id $type}}
-                                    <option value="{{$id}}" {{$default_ship_id && $id==$default_ship_id?'selected':''}}>{{$type}}</option>
-                                    {{/loop}}
-                                </select>
-                                <input type="text" width="80px;" id="ship-code-{{$order['Order']['id']}}"
-                                       placeholder="快递单号">
-                                <button type="button" onclick="ship_order({{$order['Order']['id']}}, {{$creator}});"
-                                        class="btn btn-primary">订单已发货
-                                </button>
-                            </div>
-                            {{elseif $order['Order']['status']==2}}<font color="red">订单已发货</font>
-                            {{elseif $order['Order']['status']==3}}<font color="red">订单已签收</font>
+                                <font color="red">订单待发货</font>
+                                <div class="well">
+                                    <select id="ship-type-{{$order['Order']['id']}}">
+                                        <option value="">快递类型</option>
+                                        {{loop $ship_type $id $type}}
+                                        <option value="{{$id}}" {{$default_ship_id && $id==$default_ship_id?'selected':''}}>{{$type}}</option>
+                                        {{/loop}}
+                                    </select>
+                                    <input type="text" width="80px;" id="ship-code-{{$order['Order']['id']}}"
+                                           placeholder="快递单号">
+                                    <button type="button" onclick="ship_order({{$order['Order']['id']}}, {{$creator}});"
+                                            class="btn btn-primary btn-sm">订单已发货
+                                    </button>
+                                </div>
+                                <font color="red">标记订单</font>
+                                <div class="well">
+                                    <label>预发货日期 :</label>
+                                    <input type="date" id="mark-date-{{$order['Order']['id']}}" value="{{$order['Order']['mark_ship_date']?date('Y-m-d',strtotime($order['Order']['mark_ship_date'])):date('Y-m-d')}}">
+                                    <label>发货方式 :</label>
+                                    <input type="text" id="mark-tip-{{$order['Order']['id']}}"
+                                           placeholder="默认" value="{{$order['Order']['ship_mark']}}">
+                                    <button type="button" onclick="mark_order({{$order['Order']['id']}});"
+                                            class="btn btn-primary btn-sm">标记订单
+                                    </button>
+                                </div>
+                            {{elseif $order['Order']['status']==2}}
+                                <font color="red">订单已发货</font>
+                            {{elseif $order['Order']['status']==3}}
+                                <font color="red">订单已签收</font>
                             {{/if}}
                         </div>
 

@@ -653,7 +653,6 @@ class StoresController extends AppController
             $this->__message('只有合作商家才能查看商家订单，正在为您转向个人订单', '/orders/mine');
             return;
         }
-
         $cond = array('brand_id' => $brand_id,
             'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN, ORDER_TYPE_MILK),
             'NOT' => array(
@@ -661,9 +660,44 @@ class StoresController extends AppController
         ));
         $cond['status'] = $onlyStatus;
 
+        $mark_date = $_REQUEST['mark_date'];
+        $mark_tip = $_REQUEST['mark_tip'];
+        if($mark_date!=null&&$mark_date!="all"&&$mark_tip!=null&&$mark_tip!="all"){
+            $cond['mark_ship_date'] = $mark_date;
+            $cond['ship_mark'] = $mark_tip;
+            $this->set('mark_date',$mark_date);
+            $this->set('mark_tip',$mark_tip);
+        }
         $wait_ship_cond = $cond;
         $wait_ship_cond['status'] = array(ORDER_STATUS_PAID);
         $total_wait_ship_count = $this->Order->find('count', array('conditions' => $wait_ship_cond));
+
+        if(in_array(ORDER_STATUS_PAID,$onlyStatus)){
+            //load order tags
+            $result  = $this->Order->query('SELECT ship_mark,mark_ship_date,count(mark_ship_date) AS total_count FROM cake_orders WHERE  brand_id='.$brand_id.' AND status='.ORDER_STATUS_PAID.' GROUP BY ship_mark,mark_ship_date');
+            $tags = array();
+            //全部
+            $tags[] = array(
+                'mark_date' => "all",
+                'mark_tip' => "all",
+                'count' => $total_wait_ship_count
+            );
+            //标记
+            foreach($result as $order_mark){
+                $mark_date = $order_mark['cake_orders']['mark_ship_date'];
+                $mark_tip = $order_mark['cake_orders']['ship_mark'];
+                if($mark_date!=null){
+                    $mark_date = date(FORMAT_DATE,strtotime($mark_date));
+                }
+                $tags[] = array(
+                    'mark_date' => $mark_date,
+                    'mark_tip' => $mark_tip,
+                    'count' => $order_mark[0]['total_count']
+                );
+            }
+            $this->set('tags',$tags);
+
+        }
 
         $this->Paginator->settings = array(
             'conditions' => $cond,
@@ -728,9 +762,15 @@ class StoresController extends AppController
             'NOT' => array(
             'status' => array(ORDER_STATUS_CANCEL)
         ));
-
         $cond['status'] = $onlyStatus;
-
+        $mark_date = $_REQUEST['mark_date'];
+        $mark_tip = $_REQUEST['mark_tip'];
+        if($mark_date!=null&&$mark_date!="all"&&$mark_tip!=null&&$mark_tip!="all"){
+            $cond['mark_ship_date'] = $mark_date;
+            $cond['ship_mark'] = $mark_tip;
+            $this->set('mark_date',$mark_date);
+            $this->set('mark_tip',$mark_tip);
+        }
         $orders = $this->Order->find('all', array(
             'order' => 'id desc',
             'conditions' => $cond,

@@ -34,3 +34,8 @@ UPDATE `cake_consignment_dates` SET `product_id`=230;
 ALTER TABLE `cake_carts` ADD `consignment_date` INT(11);
 
 ALTER TABLE `cake_consignment_dates` DROP index `send_date`;
+
+ALTER TABLE `cake_orders`
+ADD COLUMN `mark_ship_date` DATETIME NULL AFTER `member_id`,
+ADD COLUMN `ship_mark` VARCHAR(200) NULL AFTER `mark_ship_date`;
+

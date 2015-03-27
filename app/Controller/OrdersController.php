@@ -888,6 +888,29 @@ class OrdersController extends AppController {
         }
     }
 
+    function set_mark_order(){
+        $this->autoRender=false;
+        $order_id = $_REQUEST['order_id'];
+        $mark_date = $_REQUEST['mark_date'];
+        $mark_tip = $_REQUEST['mark_tip'];
+        $order_info = $this->Order->find('first', array(
+            'conditions' => array('id' => $order_id),
+        ));
+        if(empty($order_info)){
+            echo json_encode(array('order_id' => $order_id,'msg' => '您不具备此订单的修改权限，请联系管理员。'));
+            exit;
+        }
+        $data = array();
+        $data['Order']['mark_ship_date'] = $mark_date;
+        $data['Order']['ship_mark'] = $mark_tip;
+        $this->Order->id = $order_id;
+        if($this->Order->save($data)){
+            echo json_encode(array('success' => true,'message' => '订单标记成功'));
+        }else{
+            echo json_encode(array('success' => false,'message' => '订单标记失败'));
+        }
+    }
+
 	/**
 	 * 商家设置订单的状态
 	 */

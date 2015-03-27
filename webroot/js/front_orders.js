@@ -242,6 +242,19 @@ function ship_order(order_id, creator){
     creator = creator || 0;
 	return ajaxAction(BASEURL+"/orders/set_status/"+creator,{'order_id':order_id,'status':2,'ship_code':$('#ship-code-'+order_id).val(),'ship_type':$('#ship-type-'+order_id).val()},null,'confirm_order_status');
 }
+//标记订单的发货日期与发货方式
+function mark_order(order_id){
+    if($('#mark-date-'+order_id).val()=="" || $('#mark-tip-'+order_id).val()==""){
+        alert("请输入预发货日期和发货方式！");
+        return false;
+    }
+    function callback(request){
+        console.log(request);
+        alert(request.msg);
+    }
+    return ajaxAction(BASEURL+"/orders/set_mark_order",{'order_id':order_id, 'mark_date':$('#mark-date-'+order_id).val(),'mark_tip':$('#mark-tip-'+order_id).val()},null,'callback');
+}
+
 //用户确认收货
 function confirm_receive(order_id){
 	return ajaxAction(BASEURL+"/orders/confirm_receive/",{'order_id':order_id},null,'confirm_order_status');
