@@ -9,7 +9,7 @@
 class StoresController extends AppController
 {
 
-    public $uses = array('Product', 'Brand', 'Order','OrderTrack','OrderTrackLog','TrackOrderMap','Cart');
+    public $uses = array('Product', 'Brand', 'Order','OrderTrack','OrderTrackLog','TrackOrderMap','Cart','User');
 
     public $components = array('Paginator','ProductSpecGroup','Weixin');
 
