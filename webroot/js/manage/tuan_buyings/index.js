@@ -18,6 +18,7 @@ $(function(){
     var tuanBuyingCanceled= $('.tuan-buying-canceled');
     var tuanBuyingFinished = $('.tuan-buying-finished');
     var tuanBuyingRefunded = $('.tuan-buying-refunded');
+    var tuanBuyingSendmsg = $('.tuan-buying-sendmsg');
 
     tuanBuyingDue.click(function(){
         if(!confirm('确定结束吗？')) {
@@ -69,6 +70,16 @@ $(function(){
             console.log('设置退款完成失败！');
         }).always(function(){
             window.location.reload();
+        });
+    });
+
+    tuanBuyingSendmsg.on('click',function(e){
+        if(!confirm('静哥,确定要发送模板消息吗?')){
+            return;
+        }
+        var tuanBuyingId = $(this).data('id');
+        $.getJSON('/cron/send_tuan_buy_create_msg',{'tuan_buy_id':tuanBuyingId},function(data){
+            alert(data['msg']);
         });
     });
 

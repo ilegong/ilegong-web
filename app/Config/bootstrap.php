@@ -1504,3 +1504,122 @@ function get_spec_by_pid_and_sid($pidSidMap) {
     }
     return $result;
 }
+
+function get_tuan_msg_element($tuan_buy_id){
+    $tuanBuyingM = ClassRegistry::init('TuanBuying');
+    $tuanTeamM = ClassRegistry::init('TuanTeam');
+    $productM = ClassRegistry::init('Product');
+    $tuanMemberM = ClassRegistry::init('TuanMember');
+    $tb = $tuanBuyingM->find('first',array(
+        'conditions' => $tuan_buy_id
+    ));
+    if(!empty($tb)) {
+        $tuan_id = $tb['TuanBuying']['tuan_id'];
+        $product_id = $tb['TuanBuying']['pid'];
+        $tt = $tuanTeamM->find('first', array(
+            'conditions' => array(
+                'id' => $tuan_id
+            )
+        ));
+        $p = $productM->find('first', array(
+            'conditions' => array(
+                'id' => $product_id
+            )
+        ));
+        $tuan_members = $tuanMemberM->find('all', array(
+            'conditions' => array(
+                'tuan_id' => $tuan_id
+            )
+        ));
+        $consign_time = $tb['TuanBuying']['consign_time'];
+        $consign_time = date(FORMAT_DATE,strtotime($consign_time));
+        $uids = Hash::extract($tuan_members,'{n}.TuanMember.uid');
+        $tuan_name = $tt['TuanTeam']['tuan_name'];
+        $product_name = $p['Product']['name'];
+        $tuan_leader = $tt['TuanTeam']['leader_weixin'];
+        $target_num = $tb['TuanBuying']['target_num'];
+        $sold_num = $tb['TuanBuying']['sold_num'];
+        return array(
+            'consign_time' => $consign_time,
+            'target_num' => $target_num,
+            'sold_num' => $sold_num,
+            'uids'=>$uids,
+            'tuan_name' => $tuan_name,
+            'product_name' => $product_name,
+            'tuan_leader' => $tuan_leader
+        );
+    }else{
+        return null;
+    }
+}
+
+function send_tuan_complete_msg($tuan_buy_id){
+    $msg_element = get_tuan_msg_element($tuan_buy_id);
+    if(!empty($msg_element)){
+        $consign_time = $msg_element['consign_time'];
+        $uids = $msg_element['uids'];
+        $tuan_name = $msg_element['tuan_name'];
+        $target_num = $msg_element['target_num'];
+        $product_name = $msg_element['product_name'];
+        $title = '您参加的'.$tuan_name.'团购成功,目标'.$target_num.'份，已经成团，吼吼。';
+        $tuan_leader = $msg_element['tuan_leader'];
+        $deatil_url = WX_HOST.'/tuan_buyings/detail/'.$tuan_buy_id;
+        $remark = '我们将在'.$consign_time.'给你送货，请留意后续消息！';
+        foreach($uids as $uid){
+            $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
+            //TODO log fail user id
+        }
+        return array('success' => true,'msg' => '推送模板消息成功');
+    }else{
+        return array('success' => false,'msg' => '该团购不存在,亲先创建..');
+    }
+}
+
+function send_tuan_buy_create_msg($tuan_buy_id){
+    $msg_element = get_tuan_msg_element($tuan_buy_id);
+    if(!empty($msg_element)){
+        $consign_time = $msg_element['consign_time'];
+        $uids = $msg_element['uids'];
+        $tuan_name = $msg_element['tuan_name'];
+        $title = '您参加的'.$tuan_name.'发起了一个新的团购';
+        $product_name = $msg_element['product_name'];
+        $product_name = $product_name.', '.$consign_time.'发货';
+        $tuan_leader = $msg_element['tuan_leader'];
+        $deatil_url = WX_HOST.'/tuan_buyings/detail/'.$tuan_buy_id;
+        $remark = '点击详情，赶快和小伙伴一起团起来！';
+        foreach($uids as $uid){
+            $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
+            //TODO log fail user id
+        }
+        return array('success' => true,'msg' => '推送模板消息成功');
+    }else{
+        return array('success' => false,'msg' => '该团购不存在,亲先创建..');
+    }
+}
+
+function send_tuan_buy_tip_msg(){
+    $tuanBuyingM = ClassRegistry::init('TuanBuying');
+    $result = array();
+    $tb_ids = $tuanBuyingM->query('SELECT id FROM cake_tuan_buyings where sold_num >= target_num and status=0');
+    $tb_ids = Hash::extract($tb_ids,'{n}.cake_tuan_buyings.id');
+    foreach($tb_ids as $tb_id){
+       $msg_element = get_tuan_msg_element($tb_id);
+        if(!empty($msg_element)){
+            $uids = $msg_element['uids'];
+            $tuan_name = $msg_element['tuan_name'];
+            $target_num = intval($msg_element['target_num']);
+            $sold_num = intval($msg_element['sold_num']);
+            $product_name = $msg_element['product_name'];
+            $title = '您参加的'.$tuan_name.',目标'.$target_num.'份，现在'.$sold_num.'，还差'.($target_num-$sold_num).'份，加油，加油!';
+            $tuan_leader = $msg_element['tuan_leader'];
+            $deatil_url = WX_HOST.'/tuan_buyings/detail/'.$tb_id;
+            $remark = '点击详情，赶紧邀请小伙伴们加入，享受成团优惠价！';
+            foreach($uids as $uid){
+                $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
+                //TODO log fail user id
+            }
+            return array('success' => true,'msg' => '推送模板消息成功');
+        }
+    }
+    return $result;
+}

@@ -283,10 +283,7 @@ class TuanBuyingsController extends AppController{
                 $address = $tuan_info['TuanTeam']['address'];
             }
             $order = $this->Order->createTuanOrder($tuan_buy_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id);
-            //TODO check and  add team
-            if($order){
-                $this->check_and_add_team($creator,$tuan_id);
-            }
+
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
                 $res = array('success'=> false, 'info'=> '你已经支付过了');
             }else{
@@ -371,41 +368,6 @@ class TuanBuyingsController extends AppController{
     public function big_tuan_balance($tuan_buy_id){
         $this->balance($tuan_buy_id);
         $this->set('hideNav',true);
-    }
-
-    function check_and_add_team($user_id,$tuan_id){
-        $this->loadModel('TuanMember');
-        $this->loadModel('TuanTeam');
-        $tm = $this->TuanMember->find('first',array(
-            'conditions' => array(
-                'tuan_id' => $tuan_id,
-                'uid' => $user_id
-            )
-        ));
-        if(empty($tm)){
-            $tm = array(
-                'tuan_id' => $tuan_id,
-                'uid' => $user_id,
-                'join_time' => date('Y-m-d H:i:s')
-            );
-            if(!$this->TuanMember->save($tm)){
-                //add error log
-                $this->loadModel('CronFaildInfo');
-                $this->CronFaildInfo->save(array(
-                    'info_id'=>$user_id.'-'.$tuan_id,
-                    'type'=>'add_user_to_tuan_team'
-                ));
-            }else{
-                //update tuan team member count
-                $this->TuanTeam->updateAll(array(
-                        'member_num'=>'member_num + 1'
-                    ),
-                    array(
-                        'id' => $tuan_id
-                    )
-                );
-            }
-        }
     }
 }
 

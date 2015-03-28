@@ -51,6 +51,20 @@ class CronController extends AppController
         echo count($cron_ids);
     }
 
+    public function send_tuan_buy_create_msg(){
+        $this->autoRender = false;
+        $tuan_buy_id = $_REQUEST['tuan_buy_id'];
+        $result = send_tuan_buy_create_msg($tuan_buy_id);
+        echo json_encode($result);
+    }
+
+    public function send_tuan_buy_tip_msg(){
+        $this->autoRender = false;
+        $result = send_tuan_buy_tip_msg();
+        echo json_encode($result);
+    }
+
+
     public function download_photo_from_wx_for_comment(){
         $this->autoRender=false;
         $commentModel = ClassRegistry::init('Comment');
