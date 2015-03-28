@@ -5,7 +5,7 @@
 </style>
 <div class="container">
     <div class="classlist_v2" style="z-index:1;position: inherit;">
-        <ul class="clearfix" onclick="javascript:history.go(-1)">
+        <ul class="clearfix" onclick="window.history.back();">
             <li><a class="back"></a></li>
             <li class="line"></li>
             <li style="text-overflow: ellipsis;"><strong>{{mb_strlen($name)>14?mb_substr($name,0,14):$name}}</strong></li>
