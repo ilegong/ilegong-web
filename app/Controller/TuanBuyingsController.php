@@ -347,16 +347,15 @@ class TuanBuyingsController extends AppController{
         $this->loadModel('TuanTeam');
         $date_time = date('Y-m-d', time());
         $tuan_buy_num = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
-        $tuan_buy_info = $this->TuanBuying->find('all',array(
+        $tuan_buyings = $this->TuanBuying->find('all',array(
             'conditions' => array('pid' => $pid, 'status'=>0, 'end_time >'=> $date_time),
             'order' => array('TuanBuying.end_time')
         ));
-        $tuan_buy = Hash::combine($tuan_buy_info,'{n}.TuanBuying.tuan_id','{n}.TuanBuying');
-        $tuan_ids = array_unique(Hash::extract($tuan_buy_info, '{n}.TuanBuying.tuan_id'));
+        $tuan_ids = array_unique(Hash::extract($tuan_buyings, '{n}.TuanBuying.tuan_id'));
         $tuan_info = $this->TuanTeam->find('all', array(
             'conditions' =>array('id'=>$tuan_ids),
-            'order' => array('TuanTeam.priority DESC')
         ));
+        $tuan_info = Hash::combine($tuan_info,'{n}.TuanTeam.id','{n}.TuanTeam');
         $this->loadModel('Product');
         $tuan_product = $this->Product->find('first', array(
             'conditions' => array('id' => $pid),
@@ -365,7 +364,7 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_product', $tuan_product);
         $this->set('tuan_info',$tuan_info);
         $this->set('pid',$pid);
-        $this->set('tuan_buy',$tuan_buy);
+        $this->set('tuan_buyings',$tuan_buyings);
         $this->set('tuan_buy_num',$tuan_buy_num[0][0]['sold_number']);
         $this->set('hideNav',true);
     }
