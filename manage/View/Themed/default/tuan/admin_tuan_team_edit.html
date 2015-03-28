@@ -2,36 +2,42 @@
     <hr/>
     <h1>编辑团队信息</h1>
     <hr/>
-    <form class="form-horizontal" method="post" action="/manage/admin/tuan/tuan_team_edit/{{$id}}" id="TuanTeamAdminTuanTeamEditForm" novalidate="novalidate" data-noajax="true">
+    <form class="form-horizontal tuanTeam-form" method="post" action="/manage/admin/tuan/tuan_team_edit/{{$id}}"  novalidate="novalidate" data-noajax="true">
         <!--{{$this->Form->create('TuanTeam', array('url' =>'/admin/tuan/tuan_buying_edit/$id', 'class'=>'form-horizontal','role'=>'form'))}}-->
         <div class="form-group">
             <label class="col-sm-2 control-label">团队名称</label>
             <div class="col-sm-9 controls">
                 {{$this->Form->input('tuan_name',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+                <div class="text-warning">示例：搜狐媒体美食团</div>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">团队leader</label>
+            <label class="col-sm-2 control-label">团长名字</label>
             <div class="col-sm-9 controls">
                 {{$this->Form->input('leader_name',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+                <div class="text-warning">示例：朋友说小妹</div>
+
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">团长微信</label>
+            <label class="col-sm-2 control-label">团长微信号</label>
             <div class="col-sm-9 controls">
                 {{$this->Form->input('leader_weixin',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+                <div class="text-warning">备注：团长微信号未知时可以填写pyshuo2015替代</div>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">自取点地址</label>
+            <label class="col-sm-2 control-label">显示地址</label>
             <div class="col-sm-9 controls">
-                {{$this->Form->input('address',array('class'=>'form-inline','div'=>false,'label'=>false,))}}
+                {{$this->Form->input('address',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+                <div class="text-warning">示例：搜狐媒体好邻居店</div>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">自取点具体地址</label>
+            <label class="col-sm-2 control-label">详细地址</label>
             <div class="col-sm-9 controls">
-                {{$this->Form->input('tuan_addr',array('class'=>'form-inline','div'=>false,'label'=>false,))}}
+                {{$this->Form->input('tuan_addr',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+                <div class="text-warning">示例：中关村新科祥园甲2号楼1层03室</div>
             </div>
         </div>
         <div class="form-group">
@@ -50,11 +56,19 @@
             <label class="col-sm-2 control-label">团队口号</label>
             <div class="col-sm-9 controls">
                 {{$this->Form->input('tuan_desc',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+                <div class="text-warning">备注：热爱生活，寻找美味</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">团队排序权值</label>
+            <div class="col-sm-9 controls">
+                {{$this->Form->input('priority',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+                <div class="text-warning">备注：默认为0，用于团购页面团队的排序，值越大，团队越靠前</div>
             </div>
         </div>
 
         <div class="form-group">
-            <div class="col-sm-12"><input class="btn btn-primary" type="submit" value="提交"></div>
+            <div class="col-sm-12 col-sm-offset-2"><input class="btn btn-primary" type="submit" value="提交"></div>
         </div>
         <!--{{$this->Form->end();}}-->
     </form>
