@@ -1597,6 +1597,29 @@ function send_tuan_buy_create_msg($tuan_buy_id){
     }
 }
 
+function send_tuan_buy_fail_msg($tuan_buy_id){
+    $msg_element = get_tuan_msg_element($tuan_buy_id);
+    if(!empty($msg_element)){
+        //$consign_time = $msg_element['consign_time'];
+        $uids = $msg_element['uids'];
+        $tuan_name = $msg_element['tuan_name'];
+        $target_num = intval($msg_element['target_num']);
+        $sold_num = intval($msg_element['sold_num']);
+        $product_name = $msg_element['product_name'];
+        $title = '呜呜,您参加的'.$tuan_name.'团购份数没有达到,目标'.$target_num.'份，现在只有'.$sold_num.'。';
+        $tuan_leader = $msg_element['tuan_leader'];
+        $deatil_url = WX_HOST.'/tuan_buyings/detail/'.$tuan_buy_id;
+        $remark = '我们将联系您退款或者延期，请留意后续消息！';
+        foreach($uids as $uid){
+            $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
+            //TODO log fail user id
+        }
+        return array('success' => true,'msg' => '推送模板消息成功');
+    }else{
+        return array('success' => false,'msg' => '该团购不存在,亲先创建..');
+    }
+}
+
 function send_tuan_buy_tip_msg(){
     $tuanBuyingM = ClassRegistry::init('TuanBuying');
     $result = array();

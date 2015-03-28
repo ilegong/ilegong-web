@@ -64,6 +64,13 @@ class CronController extends AppController
         echo json_encode($result);
     }
 
+    public function send_tuan_buy_fail_msg(){
+        $this->autoRender = false;
+        $tuan_buy_id = $_REQUEST['tuan_buy_id'];
+        $result = send_tuan_buy_fail_msg($tuan_buy_id);
+        echo json_encode($result);
+    }
+
 
     public function download_photo_from_wx_for_comment(){
         $this->autoRender=false;
