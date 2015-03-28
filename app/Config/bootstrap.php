@@ -1512,7 +1512,7 @@ function get_tuan_msg_element($tuan_buy_id){
     $tuanMemberM = ClassRegistry::init('TuanMember');
     $tb = $tuanBuyingM->find('first',array(
         'conditions' => array(
-            'id' => $tuan_buy_id
+            'id' => $tuan_buy_id,
         )
     ));
     if(!empty($tb)) {
@@ -1541,6 +1541,7 @@ function get_tuan_msg_element($tuan_buy_id){
         $tuan_leader = $tt['TuanTeam']['leader_name'];
         $target_num = $tb['TuanBuying']['target_num'];
         $sold_num = $tb['TuanBuying']['sold_num'];
+        $tb_status = intval($tb['TuanBuying']['status']);
         return array(
             'consign_time' => $consign_time,
             'target_num' => $target_num,
@@ -1548,7 +1549,8 @@ function get_tuan_msg_element($tuan_buy_id){
             'uids'=>$uids,
             'tuan_name' => $tuan_name,
             'product_name' => $product_name,
-            'tuan_leader' => $tuan_leader
+            'tuan_leader' => $tuan_leader,
+            'tuan_buy_status' => $tb_status
         );
     }else{
         return null;
