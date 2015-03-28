@@ -100,34 +100,66 @@ class CronController extends AppController
         echo json_encode($result);
     }
 
-    public function send_tuan_buy_tip_msg(){
-        $tuanBuyingM = ClassRegistry::init('TuanBuying');
-        $result = array();
-        $tb_ids = $tuanBuyingM->query('SELECT id FROM cake_tuan_buyings where sold_num >= target_num and status=0');
-        $tb_ids = Hash::extract($tb_ids,'{n}.cake_tuan_buyings.id');
-        foreach($tb_ids as $tb_id){
-            $msg_element = get_tuan_msg_element($tb_id);
-            if(!empty($msg_element)){
-                $uids = $msg_element['uids'];
-                $tuan_name = $msg_element['tuan_name'];
-                $target_num = intval($msg_element['target_num']);
-                $sold_num = intval($msg_element['sold_num']);
-                $product_name = $msg_element['product_name'];
-                $title = '您参加的'.$tuan_name.',目标'.$target_num.'份，现在'.$sold_num.'，还差'.($target_num-$sold_num).'份，加油，加油!';
-                $tuan_leader = $msg_element['tuan_leader'];
-                $deatil_url = WX_HOST.'/tuan_buyings/detail/'.$tb_id;
-                $remark = '点击详情，赶紧邀请小伙伴们加入，享受成团优惠价！';
-                foreach($uids as $uid){
-                    $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
-                    //TODO log fail user id
-                }
-                $result = array('success' => true,'msg' => '推送模板消息成功');
-            }else{
-                $result = array('success' => false,'msg' => '推送模板消息失败');
+    public function send_tuan_buy_tip_by_id_msg(){
+        $this->autoRender = false;
+        $tuan_buy_id = $_REQUEST['tuan_buy_id'];
+        $msg_element = get_tuan_msg_element($tuan_buy_id);
+        if(!empty($msg_element)){
+            $uids = $msg_element['uids'];
+            $tuan_name = $msg_element['tuan_name'];
+            $target_num = intval($msg_element['target_num']);
+            $sold_num = intval($msg_element['sold_num']);
+            $product_name = $msg_element['product_name'];
+            if($sold_num>=$target_num){
+                return array('success' => false,'msg' => '该团已满');
             }
+            $title = '您参加的'.$tuan_name.',目标'.$target_num.'份，现在'.$sold_num.'，还差'.($target_num-$sold_num).'份，加油，加油!';
+            $tuan_leader = $msg_element['tuan_leader'];
+            $deatil_url = WX_HOST.'/tuan_buyings/detail/'.$tuan_buy_id;
+            $remark = '点击详情，赶紧邀请小伙伴们加入，享受成团优惠价！';
+            foreach($uids as $uid){
+                $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
+                //TODO log fail user id
+            }
+            $result = array('success' => true,'msg' => '推送模板消息成功');
+        }else{
+            $result = array('success' => false,'msg' => '推送模板消息失败');
         }
         return $result;
     }
+
+    /**
+     * 给所有团提示
+     * @return array
+     */
+//    public function send_tuan_buy_tip_msg(){
+//        $tuanBuyingM = ClassRegistry::init('TuanBuying');
+//        $result = array();
+//        $tb_ids = $tuanBuyingM->query('SELECT id FROM cake_tuan_buyings where sold_num >= target_num and status=0');
+//        $tb_ids = Hash::extract($tb_ids,'{n}.cake_tuan_buyings.id');
+//        foreach($tb_ids as $tb_id){
+//            $msg_element = get_tuan_msg_element($tb_id);
+//            if(!empty($msg_element)){
+//                $uids = $msg_element['uids'];
+//                $tuan_name = $msg_element['tuan_name'];
+//                $target_num = intval($msg_element['target_num']);
+//                $sold_num = intval($msg_element['sold_num']);
+//                $product_name = $msg_element['product_name'];
+//                $title = '您参加的'.$tuan_name.',目标'.$target_num.'份，现在'.$sold_num.'，还差'.($target_num-$sold_num).'份，加油，加油!';
+//                $tuan_leader = $msg_element['tuan_leader'];
+//                $deatil_url = WX_HOST.'/tuan_buyings/detail/'.$tb_id;
+//                $remark = '点击详情，赶紧邀请小伙伴们加入，享受成团优惠价！';
+//                foreach($uids as $uid){
+//                    $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
+//                    //TODO log fail user id
+//                }
+//                $result = array('success' => true,'msg' => '推送模板消息成功');
+//            }else{
+//                $result = array('success' => false,'msg' => '推送模板消息失败');
+//            }
+//        }
+//        return $result;
+//    }
 
     public function send_tuan_buy_fail_msg(){
         $this->autoRender = false;

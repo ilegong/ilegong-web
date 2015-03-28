@@ -111,7 +111,7 @@ $(function(){
             return;
         }
         var tuanBuyingId = $(this).data('id');
-        $.getJSON('/cron/send_tuan_buy_tip_msg',{'tuan_buy_id':tuanBuyingId},function(data){
+        $.getJSON('/cron/send_tuan_buy_tip_by_id_msg',{'tuan_buy_id':tuanBuyingId},function(data){
             alert(data['msg']);
         });
     });
