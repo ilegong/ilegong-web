@@ -21,6 +21,9 @@ $(function(){
     var tuanBuyingSendmsg = $('.tuan-buying-sendmsg');
     var tuanbuyingcancelmsg = $('.tuan-buying-cancelmsg');
 
+    var tuanbuyingcompletemsg = $('.tuan-buying-completemsg');
+    var tuanbuyingtipmsg = $('.tuan-buying-tipmsg');
+
     tuanBuyingDue.click(function(){
         if(!confirm('确定结束吗？')) {
             return;
@@ -92,6 +95,27 @@ $(function(){
             alert(data['msg']);
         });
     });
+
+    tuanbuyingcompletemsg.on('click',function(e){
+        if(!confirm('静哥,确定要发送模板消息吗?')){
+            return;
+        }
+        var tuanBuyingId = $(this).data('id');
+        $.getJSON('/cron/send_tuan_buy_complete_msg',{'tuan_buy_id':tuanBuyingId},function(data){
+            alert(data['msg']);
+        });
+    });
+
+    tuanbuyingtipmsg.on('click',function(e){
+        if(!confirm('静哥,确定要发送模板消息吗?')){
+            return;
+        }
+        var tuanBuyingId = $(this).data('id');
+        $.getJSON('/cron/send_tuan_buy_tip_msg',{'tuan_buy_id':tuanBuyingId},function(data){
+            alert(data['msg']);
+        });
+    });
+
 
     $('#tuan_down,#tuan_product_down').click(function(){
         var id = $(this).attr('data-id');

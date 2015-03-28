@@ -76,6 +76,30 @@ class CronController extends AppController
         echo json_encode($result);
     }
 
+    public function send_tuan_buy_complete_msg(){
+        $this->autoRender = false;
+        $tuan_buy_id = $_REQUEST['tuan_buy_id'];
+        $msg_element = get_tuan_msg_element($tuan_buy_id);
+        if(!empty($msg_element)){
+            $consign_time = $msg_element['consign_time'];
+            $uids = $msg_element['uids'];
+            $tuan_name = $msg_element['tuan_name'];
+            $target_num = $msg_element['target_num'];
+            $product_name = $msg_element['product_name'];
+            $title = '您参加的'.$tuan_name.'团购成功,目标'.$target_num.'份，已经成团，吼吼。';
+            $tuan_leader = $msg_element['tuan_leader'];
+            $deatil_url = WX_HOST.'/tuan_buyings/detail/'.$tuan_buy_id;
+            $remark = '我们将在'.$consign_time.'给你送货，请留意后续消息！';
+            foreach($uids as $uid){
+                $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
+            }
+            $result = array('success' => true,'msg' => '推送模板消息成功');
+        }else{
+            $result = array('success' => false,'msg' => '该团购不存在,亲先创建..');
+        }
+        echo json_encode($result);
+    }
+
     public function send_tuan_buy_tip_msg(){
         $tuanBuyingM = ClassRegistry::init('TuanBuying');
         $result = array();
