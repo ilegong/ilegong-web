@@ -105,7 +105,7 @@ class ProductsController extends AppController{
             'fields'=>array('id','name','price','published','coverimg'),
         ));
 
-        $page_navi = getPageLinks($total, $pagesize, '/products/mine', $page);
+            $page_navi = getPageLinks($total, $pagesize, '/products/mine', $page);
         $this->set('datalist',$datalist);
         $this->set('page_navi', $page_navi);
     }
@@ -126,7 +126,7 @@ class ProductsController extends AppController{
             $this->__message('只有合作商家才能添加商品','/');
         }
         $brand_ids = Hash::extract($brands,'{n}.Brand.id');
-        
+
         $datainfo = $this->{$this->modelClass}->find('first', array('conditions' => array('id' => $id, 'brand_id' => $brand_ids)));
         if (empty($datainfo)) {
             throw new ForbiddenException(__('You cannot edit this data'));
