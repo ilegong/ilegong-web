@@ -1534,7 +1534,7 @@ function get_tuan_msg_element($tuan_buy_id){
             )
         ));
         $consign_time = $tb['TuanBuying']['consign_time'];
-        $consign_time = date(FORMAT_DATE,strtotime($consign_time));
+        $consign_time = friendlyDateFromStr($consign_time,FFDATE_CH_MD);
         $uids = Hash::extract($tuan_members,'{n}.TuanMember.uid');
         $tuan_name = $tt['TuanTeam']['tuan_name'];
         $product_name = $p['Product']['name'];
