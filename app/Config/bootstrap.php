@@ -1511,7 +1511,9 @@ function get_tuan_msg_element($tuan_buy_id){
     $productM = ClassRegistry::init('Product');
     $tuanMemberM = ClassRegistry::init('TuanMember');
     $tb = $tuanBuyingM->find('first',array(
-        'conditions' => $tuan_buy_id
+        'conditions' => array(
+            'id' => $tuan_buy_id
+        )
     ));
     if(!empty($tb)) {
         $tuan_id = $tb['TuanBuying']['tuan_id'];

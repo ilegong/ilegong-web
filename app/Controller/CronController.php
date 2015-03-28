@@ -59,14 +59,14 @@ class CronController extends AppController
             $consign_time = $msg_element['consign_time'];
             $uids = $msg_element['uids'];
             $tuan_name = $msg_element['tuan_name'];
-            $title = '您参加的'.$tuan_name.'发起了一个新的团购';
+            $title = '您参加的'.$tuan_name.',发起了一个新的团购。';
             $product_name = $msg_element['product_name'];
             $product_name = $product_name.', '.$consign_time.'发货';
             $tuan_leader = $msg_element['tuan_leader'];
             $deatil_url = WX_HOST.'/tuan_buyings/detail/'.$tuan_buy_id;
             $remark = '点击详情，赶快和小伙伴一起团起来！';
             foreach($uids as $uid){
-                $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
+                //$this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
                 //TODO log fail user id
             }
             $result = array('success' => true,'msg' => '推送模板消息成功');
