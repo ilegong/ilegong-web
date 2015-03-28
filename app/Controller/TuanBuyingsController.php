@@ -376,6 +376,7 @@ class TuanBuyingsController extends AppController{
 
     function check_and_add_team($user_id,$tuan_id){
         $this->loadModel('TuanMember');
+        $this->loadModel('TuanTeam');
         $tm = $this->TuanMember->find('first',array(
             'conditions' => array(
                 'tuan_id' => $tuan_id,
@@ -395,6 +396,15 @@ class TuanBuyingsController extends AppController{
                     'info_id'=>$user_id.'-'.$tuan_id,
                     'type'=>'add_user_to_tuan_team'
                 ));
+            }else{
+                //update tuan team member count
+                $this->TuanTeam->updateAll(array(
+                        'member_num'=>'member_num + 1'
+                    ),
+                    array(
+                        'id' => $tuan_id
+                    )
+                );
             }
         }
     }
