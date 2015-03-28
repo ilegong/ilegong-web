@@ -1538,7 +1538,7 @@ function get_tuan_msg_element($tuan_buy_id){
         $uids = Hash::extract($tuan_members,'{n}.TuanMember.uid');
         $tuan_name = $tt['TuanTeam']['tuan_name'];
         $product_name = $p['Product']['name'];
-        $tuan_leader = $tt['TuanTeam']['leader_weixin'];
+        $tuan_leader = $tt['TuanTeam']['leader_name'];
         $target_num = $tb['TuanBuying']['target_num'];
         $sold_num = $tb['TuanBuying']['sold_num'];
         return array(

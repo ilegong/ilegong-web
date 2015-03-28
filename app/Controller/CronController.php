@@ -66,7 +66,7 @@ class CronController extends AppController
             $deatil_url = WX_HOST.'/tuan_buyings/detail/'.$tuan_buy_id;
             $remark = '点击详情，赶快和小伙伴一起团起来！';
             foreach($uids as $uid){
-                //$this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
+                $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
                 //TODO log fail user id
             }
             $result = array('success' => true,'msg' => '推送模板消息成功');
