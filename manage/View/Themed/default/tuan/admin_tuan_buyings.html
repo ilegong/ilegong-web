@@ -94,6 +94,7 @@
                 <button type="button" class="btn btn-sm btn-warning tuan-buying-due" data-id="{{$tuanBuying['id']}}" value="1">完成</button>
                 <button type="button" class="btn btn-sm btn-danger tuan-buying-canceled" data-id="{{$tuanBuying['id']}}" value="2">取消</button>
                 <button type="button" class="btn btn-sm btn-info tuan-buying-sendmsg" data-id="{{$tuanBuying['id']}}">推送建团模板消息</button>
+                <button type="button" class="btn btn-sm btn-info tuan-buying-cancelmsg" data-id="{{$tuanBuying['id']}}">推送建团模板消息</button>
             {{elseif $tuanBuying['status']==1}}
                 <button type="button" class="btn btn-sm btn-warning tuan-buying-finished" data-id="{{$tuanBuying['id']}}" value="1">发货完成</button>
             {{elseif $tuanBuying['status']==2}}
