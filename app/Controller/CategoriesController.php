@@ -283,7 +283,7 @@ class CategoriesController extends AppController {
             return;
         }
 
-        $excludeProductIds = array(148,705,383,230,567,315,354,161,715,153);
+        $excludeProductIds = array(148,705,383,869,567,315,354,161,715,153);
 
         $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1);
         $conditions['Product' . '.recommend >='] = 0;
