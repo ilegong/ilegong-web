@@ -76,5 +76,19 @@ class UsersController extends AppController {
             $this->redirect(array('action' => 'index'));
         }
     }
+
+    function admin_to_add_score(){
+    }
+
+    function admin_do_add_score(){
+        $this->autoRender=false;
+        $uid = $_REQUEST['user_id'];
+        $score = $_REQUEST['score'];
+        if($this->User->updateAll(array('User.score'=>'User.score+'.$score),array('User.id' => $uid))){
+            echo json_encode(array('success'=>true,'msg'=>'更新成功'));
+        }else{
+            echo json_encode(array('success'=>false,'msg'=>'更新失败'));
+        }
+    }
 }
 ?>
