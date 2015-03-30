@@ -18,9 +18,9 @@
             success: function () {
                 // 用户确认分享后执行的回调函数
                 if(share_string != '0'){
-                    setTimeout(500, function(){
+                    setTimeout(function(){
                         $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
-                    });
+                    }, 500);
                 }
             }
         });
@@ -30,9 +30,9 @@
             imgUrl: imgUrl,
             success: function () {
                 if(share_string != '0'){
-                    setTimeout(500, function(){
+                    setTimeout(function(){
                         $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
-                    });
+                    }, 500);
                 }
             }
         });

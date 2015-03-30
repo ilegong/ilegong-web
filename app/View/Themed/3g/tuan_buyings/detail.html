@@ -46,7 +46,11 @@
                     </div>
 
                     <div class="clearfix tuanxq">
-                        {{if $pid==862}}朋友说蛋糕团购{{else}}{{$tuan_team['TuanTeam']['tuan_name']}}{{/if}}&nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_team['TuanTeam']['leader_name']}}<br/>参团请加团长微信，微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}
+                        <a href="/tuan_teams/info/{{$tuan_id}}" style="color: #666666">
+                            {{$tuan_team['TuanTeam']['tuan_name']}}
+                            &nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_team['TuanTeam']['leader_name']}}<br/>参团请加团长微信，微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}
+                        </a>
+                        <span>截止日期：<b>{{$end_time}}</b></span>
                     </div>
 
                     {{if $product_spec_map}}
@@ -356,9 +360,9 @@
             success: function () {
                 // 用户确认分享后执行的回调函数
                 if(share_string != '0'){
-                    setTimeout(500, function(){
+                    setTimeout(function(){
                         $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
-                    });
+                    }, 500);
                 }
             }
         });
@@ -368,9 +372,9 @@
             imgUrl: imgUrl,
             success: function () {
                 if(share_string != '0'){
-                    setTimeout(500, function(){
+                    setTimeout(function(){
                         $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
-                    });
+                    }, 500);
                 }
             }
         });

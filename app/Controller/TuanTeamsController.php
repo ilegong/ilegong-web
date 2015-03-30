@@ -44,7 +44,9 @@ class TuanTeamsController extends AppController{
         }
         if($this->is_weixin()){
             $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
-            $this->prepare_wx_sharing($currUid, $tuan_id);
+            $weixinJs = prepare_wx_share_log($currUid, 'tid', $tuan_id);
+            $this->set($weixinJs);
+            $this->set('jWeixinOn', true);
         }
         $referer = Router::url($_SERVER['REQUEST_URI']);
         if($_GET['has_joined'] == 'success'){
@@ -72,16 +74,6 @@ class TuanTeamsController extends AppController{
         $this->set('tuan_buyings', $tuan_buyings);
         $this->set('hideNav',true);
         $this->set('referer', $referer);
-    }
-    protected function prepare_wx_sharing($currUid, $tid) {
-        $currUid = empty($currUid) ? 0 : $currUid;
-        $share_string = $currUid . '-' . time() . '-rebate-tid_' . $tid;
-        $share_code = authcode($share_string, 'ENCODE', 'SHARE_TID');
-        $oauthM = ClassRegistry::init('WxOauth');
-        $signPackage = $oauthM->getSignPackage();
-        $this->set('signPackage', $signPackage);
-        $this->set('share_string', urlencode($share_code));
-        $this->set('jWeixinOn', true);
     }
 
     public function join(){

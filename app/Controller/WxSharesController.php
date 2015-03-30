@@ -34,8 +34,7 @@ class WxSharesController extends AppController{
             }elseif ($data_str[0] == 'tid'){
                 $data_type = 'tuan';
             } else{
-                $this->log("WxShare: data type error");
-                exit();
+                $data_type= substr(trim($data_str[0]), 0, 12);
             }
             $uid = intval($str[0]);
             $created = intval($str[1]);

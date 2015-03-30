@@ -39,8 +39,9 @@ class TuanBuyingsController extends AppController{
             $this->set('tuan_buy_status', 2);
         }
         $pid=$tuan_b['TuanBuying']['pid'];
+        $end_time =  friendlyDateFromStr($tuan_b['TuanBuying']['end_time'], FFDATE_CH_MD);
         $consign_time = empty($tuan_b['TuanBuying']['consign_time'])? '成团后发货' : friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
-        $this->set(compact('pid', 'consign_time', 'tuan_buy_id', 'tuan_team'));
+        $this->set(compact('pid', 'consign_time', 'tuan_buy_id', 'tuan_team', 'end_time'));
         $sold_num = $tuan_b['TuanBuying']['sold_num'];
         $max_num = $tuan_b['TuanBuying']['max_num'];
         $per_buy_num = $tuan_b['TuanBuying']['limit_buy_num'];
@@ -61,7 +62,9 @@ class TuanBuyingsController extends AppController{
         $this->set('hideNav',true);
         if($this->is_weixin()){
             $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
-            $this->prepare_wx_sharing($currUid, $pid);
+            $weixinJs = prepare_wx_share_log($currUid, 'pid', $pid);
+            $this->set($weixinJs);
+            $this->set('jWeixinOn', true);
         }
         $this->loadModel('Product');
         $this->loadModel('Uploadfile');
@@ -106,17 +109,6 @@ class TuanBuyingsController extends AppController{
         if($tuan_team['TuanTeam']['type'] == 1){
             $this->set('big_tuan', true);
         }
-    }
-
-    protected function prepare_wx_sharing($currUid, $pid) {
-        $currUid = empty($currUid) ? 0 : $currUid;
-        $share_string = $currUid . '-' . time() . '-rebate-pid_' . $pid;
-        $share_code = authcode($share_string, 'ENCODE', 'SHARE_TID');
-        $oauthM = ClassRegistry::init('WxOauth');
-        $signPackage = $oauthM->getSignPackage();
-        $this->set('signPackage', $signPackage);
-        $this->set('share_string', urlencode($share_code));
-        $this->set('jWeixinOn', true);
     }
 
     public function cart_info(){
