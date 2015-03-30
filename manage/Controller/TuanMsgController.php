@@ -9,6 +9,8 @@ class TuanMsgController extends AppController{
 
     var $name = "tuan_msg";
 
+    var $uses = array('TemplateMsgLog');
+
     public $components = array('Weixin');
 
     public function admin_send_tuan_buy_create_msg(){
@@ -38,6 +40,7 @@ class TuanMsgController extends AppController{
             $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
             //TODO log fail user id
         }
+        $this->save_msg_log(TUAN_CREATE_MSG,$tuan_buy_id);
         echo json_encode(array('success' => true,'msg' => '推送模板消息成功'));
     }
 
@@ -65,6 +68,7 @@ class TuanMsgController extends AppController{
         foreach($uids as $uid){
             $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
         }
+        $this->save_msg_log(TUAN_COMPLETE_MSG,$tuan_buy_id);
         echo json_encode(array('success' => true,'msg' => '推送模板消息成功'));
     }
 
@@ -97,7 +101,7 @@ class TuanMsgController extends AppController{
             $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
             //TODO log fail user id
         }
-
+        $this->save_msg_log(TUAN_TIP_MSG,$tuan_buy_id);
         echo json_encode(array('success' => true,'msg' => '推送模板消息成功'));
     }
 
@@ -127,6 +131,7 @@ class TuanMsgController extends AppController{
             $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
             //TODO log fail user id
         }
+        $this->save_msg_log(TUAN_CANCEL_MSG,$tuan_buy_id);
         echo json_encode(array('success' => true,'msg' => '推送模板消息成功'));
     }
 
@@ -163,5 +168,14 @@ class TuanMsgController extends AppController{
 //        }
 //        return $result;
 //    }
+
+    private function save_msg_log($type,$tb_id){
+        $msg_log = array(
+            'type' => $type,
+            'flag' => $tb_id,
+            'send_date' => date(FORMAT_DATE)
+        );
+        $this->TemplateMsgLog->save($msg_log);
+    }
 
 }
