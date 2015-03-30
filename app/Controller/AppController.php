@@ -143,6 +143,32 @@ class AppController extends Controller {
             $signPackage = $this->WxOauth->getSignPackage();
             $this->set('signPackage', $signPackage);
         }
+        //log weixin share
+        if($_GET['share_type'] && $_GET['trstr'] && !empty($this->currentUser)){
+            $share_type = $_GET['share_type'];
+            $trstr = $_GET['trstr'];
+            if($share_type != 'timeline' && $share_type != 'appMsg'){
+                $this->log("WxShare: type wrong");
+                return;
+            }
+            $type = $share_type == 'timeline' ? 1:0;
+            $decode_string = authcode($trstr, 'DECODE', 'SHARE_TID');
+            $str = explode('-',$decode_string);
+            $data_str = explode('_',$str[3]);
+            if($str[2] != 'rebate'){
+                $this->log("WxShare: PRODUCT_KEY WRONG");
+                return;
+            }
+            $data_type =$data_str[0];
+            $sharer = intval($str[0]);
+            $created = intval($str[1]);
+            $clicker = $this->currentUser['id'];
+            if($clicker != $sharer){
+                $this->loadModel('ShareTrackLog');
+                $data =array('sharer' => $sharer, 'clicker' => $clicker, 'share_time' => $created, 'click_time'=>time(), 'data_type' => $data_type, 'data_id' => intval($data_str[1]) , 'share_type' => $type);
+                $this->ShareTrackLog->save($data);
+            }
+        }
     }
 
     public function afterFilter() {
