@@ -182,7 +182,6 @@ class TuanController extends AppController{
      * show all tuan_buyings
      */
      public function admin_tuan_buyings(){
-         if(!empty($_REQUEST)){
          $team_id = $_REQUEST['team_id'];
          $product_id = $_REQUEST['product_id'];
          $time_type = $_REQUEST['time_type'];
@@ -192,16 +191,18 @@ class TuanController extends AppController{
          if(!empty($team_id)&&$team_id!='-1'){
              $con['tuan_id']=$team_id;
          }
+         if(!empty($time_type)&&$time_type!=-1){
          if($time_type==0){
              $con['end_time']=$post_time;
          }else if($time_type==1){
              $con['consign_time']=$post_time;
          }
+         }
          if(!empty($product_id)&&$product_id!=-1){
              $con['pid'] = $product_id;
          }
          if($tuan_type!=-1){
-             $con['status'] = $tuan_type;
+             $con['status'] = $tuan_type==null?0:$tuan_type;
          }
          $this->log('con'.json_encode($con));
          if(!empty($con)){
@@ -210,9 +211,6 @@ class TuanController extends AppController{
             ));
          }else{
             $tuan_buyings = $this->TuanBuying->find('all',array('conditions' => array('pid !=' => null,'status' => array(0,1,2))));
-         }
-         }else{
-            $tuan_buyings = $this->TuanBuying->find('all',array('conditions' => array('pid !=' => null,'status' => 0)));
          }
          $this->log('tuan_buyings'.json_encode($tuan_buyings));
          $tuan_ids = Hash::extract($tuan_buyings,'{n}.TuanBuying.tuan_id');
@@ -227,7 +225,12 @@ class TuanController extends AppController{
          }
          $this->log($tuan_buyings);
          $this->set('tuan_buyings', $tuan_buyings);
-//         $this->set('tuan_teams',$tuan_teams);
+         $this->set('team_id',$team_id);
+         $this->set('product_id',$product_id);
+         $this->set('time_type',$time_type);
+         $this->set('tuan_type',$tuan_type);
+         $this->set('post_time',$post_time);
+
      }
 
     /**
@@ -303,7 +306,7 @@ class TuanController extends AppController{
     /**
      * show all tuan_team
      */
-    public function admin_tuan_team(){
+    public function admin_tuan_teams(){
         $team_id = $_REQUEST['team_id'];
         $con = array();
         if(!empty($team_id)&&$team_id!='-1'){

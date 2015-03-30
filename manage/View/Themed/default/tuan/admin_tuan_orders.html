@@ -132,10 +132,10 @@
             $.each(data,function(index,item){
                 $('<option value="'+index+'">'+item+'</option>').appendTo($product_id);
             });
+            $product_id.val('{{$product_id}}');
         });
         function setVal(){
             $team_id.val('{{$team_id}}');
-            $product_id.val('{{$product_id}}');
             $time_type.val('{{$time_type}}');
             $order_type.val('{{$order_type}}');
         }
