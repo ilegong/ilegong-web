@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container" xmlns="http://www.w3.org/1999/html">
     <hr/>
     <h1>创建团队</h1>
     <hr/>
@@ -36,6 +36,11 @@
             <div class="col-sm-9 controls">
                 <input name="data[TuanTeam][tuan_addr]" value="{{$this->data[TuanTeam][tuan_addr]}}" class="form-control" type="text" id="tuan_addr" placeholder="中关村新科祥园甲2号楼1层03室">
                 <div class="text-warning">示例：中关村新科祥园甲2号楼1层03室</div>
+                <div>
+                    <button type="button" id="getPoint">自动拾取坐标</button>
+                    <a role="button" class="btn btn-default" href="http://api.map.baidu.com/lbsapi/getpoint/index.html">手动查找坐标</a>
+                    <div class="text-warning">备注：请填写完详细地址后再拾取坐标</div>
+                </div>
             </div>
         </div>
         <div class="form-group">

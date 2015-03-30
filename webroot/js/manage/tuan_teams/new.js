@@ -9,7 +9,7 @@ $(function(){
     var tuanAddress = $('#tuan_addr');
     var longtitud = $('#location_long');
     var latitud  = $('#location_lat');
-
+    var getPoint = $('#getPoint');
     $(".tuanTeam-form").submit(function(e){
         var invalidTuanName = tuanName.val()=='';
         tuanName.parents('.form-group').toggleClass('has-error',invalidTuanName);
@@ -31,4 +31,20 @@ $(function(){
         }
         return true;
     });
+
+    getPoint.click(function(){
+        var tuanAddress = $('#tuan_addr').val();
+        var location_lng = $('#location_long');
+        var location_lat = $('#location_lat');
+        var BaiDuPointUrl = 'http://api.map.baidu.com/geocoder/v2/?address='+ tuanAddress +'&output=json&ak=A1LHIfSqj7LRrmcbIBHmK7fC';
+        $.ajax({url:BaiDuPointUrl,type:'get',dataType:'JSONP',success:function(data){
+            if(data.status==0){
+                location_lng.val(data['result']['location']['lng']);
+                location_lat.val(data['result']['location']['lat'])
+            }
+        }
+    });
+    });
+
+
 });

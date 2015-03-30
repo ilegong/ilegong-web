@@ -382,7 +382,7 @@ class TuanController extends AppController{
          if(!empty($this->data)){
              if($this->TuanTeam->save($this->data)){
                  $successinfo = array('success'=>__('create success',true));
-                 $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_team'));
+                 $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_teams'));
              }else{
                  $successinfo = array('error'=>__('create error',true));
              }
@@ -407,7 +407,7 @@ class TuanController extends AppController{
              $this->autoRender = false;
              if($this->TuanTeam->save($this->data)){
                  $successinfo = array('success'=>__('edit success',true));
-                 $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_team'));
+                 $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_teams'));
              }
              $successinfo = array('error'=>__('edit error',true));
          }else{
