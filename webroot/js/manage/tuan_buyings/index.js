@@ -92,7 +92,7 @@ $(function(){
             return;
         }
         var tuanBuyingId = $(this).data('id');
-        $.getJSON('/cron/send_tuan_buy_create_msg',{'tuan_buy_id':tuanBuyingId},function(data){
+        $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_create_msg',{'tuan_buy_id':tuanBuyingId},function(data){
             alert(data['msg']);
         });
     });
@@ -101,7 +101,7 @@ $(function(){
             return;
         }
         var tuanBuyingId = $(this).data('id');
-        $.getJSON('/cron/send_tuan_buy_fail_msg',{'tuan_buy_id':tuanBuyingId},function(data){
+        $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_fail_msg',{'tuan_buy_id':tuanBuyingId},function(data){
             alert(data['msg']);
         });
     });
@@ -111,7 +111,7 @@ $(function(){
             return;
         }
         var tuanBuyingId = $(this).data('id');
-        $.getJSON('/cron/send_tuan_buy_complete_msg',{'tuan_buy_id':tuanBuyingId},function(data){
+        $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_complete_msg',{'tuan_buy_id':tuanBuyingId},function(data){
             alert(data['msg']);
         });
     });
@@ -121,7 +121,7 @@ $(function(){
             return;
         }
         var tuanBuyingId = $(this).data('id');
-        $.getJSON('/cron/send_tuan_buy_tip_by_id_msg',{'tuan_buy_id':tuanBuyingId},function(data){
+        $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_tip_by_id_msg',{'tuan_buy_id':tuanBuyingId},function(data){
             alert(data['msg']);
         });
     });
