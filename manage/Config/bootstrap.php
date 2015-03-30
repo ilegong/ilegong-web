@@ -9,6 +9,18 @@ if(php_sapi_name()==='cli' && empty($_GET)){
 	$_SERVER['SERVER_ADDR']='127.0.0.1';
 }
 
+const WX_HOST = 'www.tongshijia.com';
+const WX_JS_API_CALL_URL = 'http://www.tongshijia.com/wxPay/jsApiPay';
+const WX_NOTIFY_URL = 'http://www.tongshijia.com/wxPay/notify.html';
+const WX_SERVICE_ID_GOTO = 'http://mp.weixin.qq.com/s?__biz=MjM5MjY5ODAyOA==&mid=200757804&idx=1&sn=90b121983525298a4ac26ee8d6c0bc1c#rd';
+
+const ALI_HOST = 'www.tongshijia.com';
+
+const WX_API_PREFIX = 'https://api.weixin.qq.com';
+
+const WX_OAUTH_USERINFO = 'snsapi_userinfo';
+const WX_OAUTH_BASE = 'snsapi_base';
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');

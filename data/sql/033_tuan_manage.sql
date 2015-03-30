@@ -51,5 +51,14 @@ ADD COLUMN `tuan_price` FLOAT NULL DEFAULT -1 AFTER `max_num`;
 ALTER TABLE `cake_tuan_buyings`
 ADD COLUMN `limit_buy_num` INT NULL DEFAULT 0 AFTER `tuan_price`;
 
+-- 微信模板消息记录日志
+CREATE TABLE `cake_template_msg_logs` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `type` VARCHAR(60) NOT NULL,
+  `flag` VARCHAR(60) NOT NULL,
+  `send_date` DATETIME NOT NULL,
+  PRIMARY KEY (`id`));
+
+
 
 
