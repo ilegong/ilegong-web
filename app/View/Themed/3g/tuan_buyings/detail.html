@@ -44,14 +44,15 @@
                             <li class="fr">目标{{$target_num}}份</li>
                         </ul>
                     </div>
-
-                    <div class="clearfix tuanxq">
-                        <a href="/tuan_teams/info/{{$tuan_id}}" style="color: #666666">
-                            {{$tuan_team['TuanTeam']['tuan_name']}}
-                            &nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_team['TuanTeam']['leader_name']}}<br/>参团请加团长微信，微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}
-                        </a>
-                        <span>截止日期：<b>{{$end_time}}</b></span>
-                    </div>
+                    {{if !$big_tuan}}
+                        <div class="clearfix tuanxq">
+                            <a href="/tuan_teams/info/{{$tuan_id}}" style="color: #666666">
+                                {{$tuan_team['TuanTeam']['tuan_name']}}
+                                &nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_team['TuanTeam']['leader_name']}}<br/>参团请加团长微信，微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}
+                            </a>
+                            <span>截止日期：<b>{{$end_time}}</b></span>
+                        </div>
+                    {{/if}}
 
                     {{if $product_spec_map}}
                     {{$product_spec_map}}
@@ -76,15 +77,19 @@
                     {{/if}}
 
                     {{if $big_tuan}}
-                    <ul class="standard clearfix">
-                        <li>
-                            <span class="gray title mr12" style="float:left;">方式:</span>
-                            <span class="border">
-                                <span class="mr12 border cur tuan_way_selected" way-label="ziti">好邻居自提</span>
-                                <span class="mr12 border"  way-label="sf">顺丰到付</span>
-                            </span>
-                        </li>
-                    </ul>
+                        {{if $current_data_id=868}}
+                            <span class="mr12 border cur tuan_way_selected" style="display: none;"  way-label="baoyou">包邮</span>
+                        {{else}}
+                            <ul class="standard clearfix">
+                                <li>
+                                    <span class="gray title mr12" style="float:left;">方式:</span>
+                                    <span class="border">
+                                            <span class="mr12 border cur tuan_way_selected" way-label="ziti">好邻居自提</span>
+                                            <span class="mr12 border"  way-label="sf">顺丰到付</span>
+                                    </span>
+                                </li>
+                            </ul>
+                        {{/if}}
                     {{else}}
                     <div class="clearfix tuanxq" style="margin-top: -1px;">
                         <span class="fl">自提地点：{{$tuan_team['TuanTeam']['address']}}</span>

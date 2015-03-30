@@ -288,6 +288,9 @@ class TuanBuyingsController extends AppController{
                 if($tuan_info['TuanTeam']['type'] == 1 && $_POST['way'] == 'sf'){
                     $cart_name = $cart_name.'(顺丰到付)';
                 }
+                if($tuan_info['TuanTeam']['type'] == 1 && $_POST['way'] == 'baoyou'){
+                    $cart_name = $cart_name.'(包邮)';
+                }
                 $this->Cart->update(array('name' => '\'' . $cart_name . '\'' ), array('id' => $cart_id));
                 $res = array('success'=> true, 'order_id'=>$order['Order']['id']);
             }
