@@ -8,7 +8,7 @@
                 <option value="-1">请选择团队</option>
             </select>
         </div>
-        <div class="form-group" name="product_id">
+        <div class="form-group">
             <select class="form-control" name="product_id" id="product_id">
                 <option value="-1">选择商品</option>
                 <!--<option value="838">草莓</option>-->
@@ -130,9 +130,8 @@
         });
         $.getJSON('/manage/admin/tuan/api_tuan_products',function(data){
             $.each(data,function(index,item){
-                $('<option value="'+item['id']+'">'+item+'</option>').appendTo($product_id);
+                $('<option value="'+index+'">'+item+'</option>').appendTo($product_id);
             });
-            setVal();
         });
         function setVal(){
             $team_id.val('{{$team_id}}');
