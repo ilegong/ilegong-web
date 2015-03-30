@@ -8,50 +8,55 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">团购商品ID</label>
         <div class="col-sm-9 controls">
-            {{$this->Form->input('pid',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+            {{$this->Form->input('pid',array('class'=>'form-control','div'=>false,'label'=>false,'readonly' => 'readonly'))}}
+            <div class="text-warning">示例：'838'=>'草莓', '851' => '芒果', '862'=>'蛋糕', '863' => '草莓863', '230' => '蛋糕230'</div>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">参团人数</label>
         <div class="col-sm-9 controls">
-            {{$this->Form->input('join_num',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+            {{$this->Form->input('join_num',array('class'=>'form-control','div'=>false,'label'=>false,'readonly' => 'readonly'))}}
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">售出份数</label>
         <div class="col-sm-9 controls">
-            {{$this->Form->input('sold_num',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+            {{$this->Form->input('sold_num',array('class'=>'form-control','div'=>false,'label'=>false,'readonly' => 'readonly'))}}
         </div>
      </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">截止时间</label>
         <div class="col-sm-9 controls">
-            {{$this->Form->input('end_time',array('class'=>'form-inline','div'=>false,'label'=>false,))}}
+            <input name="data[TuanBuying][end_time]" value="{{$this->data[TuanBuying][end_time]}}" class="form-inline form-control tuan-end-time" type="text">
+            <div class="text-warning">一般为发货时间的前一天17：00</div>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">发货时间</label>
         <div class="col-sm-9 controls">
-            {{$this->Form->input('consign_time',array('class'=>'form-inline','div'=>false,'label'=>false,))}}
-            <p>发货时间一般比截止时间晚一天</p>
+            <input name="data[TuanBuying][consign_time]" value="{{$this->data[TuanBuying][consign_time]}}" class="form-inline form-control tuan-consign-time" type="text">
+            <div class="text-warning">发货时间为空，表示“团满发货”</div>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">目标份数</label>
         <div class="col-sm-9 controls">
             {{$this->Form->input('target_num',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+            <div class="text-warning">默认20份</div>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">限制份数</label>
         <div class="col-sm-9 controls">
             {{$this->Form->input('max_num',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+            <div class="text-warning">是否限制总份数，0为不限制</div>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">每人限购份数</label>
         <div class="col-sm-9 controls">
             {{$this->Form->input('limit_buy_num',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+            <div class="text-warning">0为不限制</div>
         </div>
     </div>
     <div class="form-group">
@@ -63,13 +68,16 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">团购状态</label>
         <div class="col-sm-9 controls">
-            {{$this->Form->input('status',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+            <input name="data[TuanBuying][status]" value="{{if $this->data[TuanBuying][status]==0}}进行中{{elseif $this->data[TuanBuying][status]==1}}已完成{{elseif $this->data[TuanBuying][status]==2}}已取消{{/if}}" class=" form-control " type="text" disabled="disabled">
             <p>团购状态为0，表示进行中；1，表示已完成；2，表示已取消</p>
         </div>
     </div>
 
     <div class="form-group">
-        <div class="col-sm-12"><input class="btn btn-primary" type="submit" value="提交"></div>
+
+        <div class="col-sm-12 col-sm-offset-2">
+            <a href="http://dev.tongshijia.com/manage/admin/tuan/tuan_buyings" class="btn btn-default">取消</a>
+            <input class="btn btn-primary" type="submit" value="编辑"></div>
     </div>
     <!--{{$this->Form->end();}}-->
         </form>

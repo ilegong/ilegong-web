@@ -2,7 +2,7 @@
 <hr/>
 <h1>团购管理</h1>
 <hr/>
-<form class="form-inline" method="get" action="/manage/admin/tuan/tuan_buyings">
+<form class="form-inline tuan_buyings-form" method="get" action="/manage/admin/tuan/tuan_buyings">
     <div style="padding-bottom: 10px;">
         <input type="hidden" name="noajax" value="true">
         <div class="form-group">
@@ -29,9 +29,16 @@
         <div class="form-group">
             <select class="form-control" name="tuan_type" value="{{$tuan_type}}">
                 <option value="-1">选择团购状态</option>
-                <option value="0">进行中</option>
+                <!--<optgroup label="常用">-->
+                <option value="0" selected="selected">进行中</option>
                 <option value="1">已完成</option>
                 <option value="2">已取消</option>
+                <!--</optgroup>-->
+                <!--<optgroup label=" 不常用">-->
+                <option disabled>-------</option>
+                <option value="11">已发货</option>
+                <option value="21">已退款</option>
+                <!--</optgroup>-->
             </select>
         </div>
     </div>

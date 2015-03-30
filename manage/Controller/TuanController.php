@@ -182,6 +182,7 @@ class TuanController extends AppController{
      * show all tuan_buyings
      */
      public function admin_tuan_buyings(){
+         if(!empty($_REQUEST)){
          $team_id = $_REQUEST['team_id'];
          $product_id = $_REQUEST['product_id'];
          $time_type = $_REQUEST['time_type'];
@@ -208,8 +209,12 @@ class TuanController extends AppController{
                 'conditions' => $con
             ));
          }else{
-            $tuan_buyings = $this->TuanBuying->find('all',array('conditions' => array('pid !=' => null)));
+            $tuan_buyings = $this->TuanBuying->find('all',array('conditions' => array('pid !=' => null,'status' => array(0,1,2))));
          }
+         }else{
+            $tuan_buyings = $this->TuanBuying->find('all',array('conditions' => array('pid !=' => null,'status' => 0)));
+         }
+         $this->log('tuan_buyings'.json_encode($tuan_buyings));
          $tuan_ids = Hash::extract($tuan_buyings,'{n}.TuanBuying.tuan_id');
          $tuan_teams = $this->TuanTeam->find('all', array('conditions' => array('id' => $tuan_ids), 'fields' => array('id', 'tuan_name')));
          $tuan_teams = Hash::combine($tuan_teams, '{n}.TuanTeam.id', '{n}.TuanTeam');
@@ -263,6 +268,7 @@ class TuanController extends AppController{
              }
          }else{
              $this->data = $data_info;
+             $this->log('data'.json_encode($this->data));
          }
          $this->set('id',$id);
 //         echo json_encode($successinfo);
