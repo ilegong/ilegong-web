@@ -323,7 +323,8 @@
                             if(data.direct == 'big_tuan_list'){
                                 window.location.href = '/tuan_buyings/big_tuan_balance/{{$tuan_buy_id}}';
                             }else{
-                                window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}';
+                                var way_type=data['way_type'];
+                                window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}?way_type='+way_type;
                             }
                         }
                         else {

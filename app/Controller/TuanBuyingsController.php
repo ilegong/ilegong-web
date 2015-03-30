@@ -125,7 +125,7 @@ class TuanBuyingsController extends AppController{
             if($_POST['way_type'] == 'ziti'){
                 echo json_encode(array('success' => true, 'direct'=>'big_tuan_list'));
             }else{
-                echo json_encode(array('success' => true, 'direct'=>'normal'));
+                echo json_encode(array('success' => true, 'direct'=>'normal','way_type'=>$_POST['way_type']));
             }
         }else{
             echo json_encode(array('error' => false));
@@ -186,6 +186,8 @@ class TuanBuyingsController extends AppController{
             'order' => 'id DESC'
         ));
         $total_price = $Carts['Cart']['price'] * $Carts['Cart']['num'];
+        $way_type = $_REQUEST['way_type'];
+        $this->set('way_type',$way_type);
         $this->set('buy_count',$Carts['Cart']['num']);
         $this->set('total_price', $total_price);
         $this->set('cart_id', $Carts['Cart']['id']);
