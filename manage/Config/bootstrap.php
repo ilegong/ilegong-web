@@ -21,6 +21,7 @@ const WX_API_PREFIX = 'https://api.weixin.qq.com';
 const WX_OAUTH_USERINFO = 'snsapi_userinfo';
 const WX_OAUTH_BASE = 'snsapi_base';
 
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');
@@ -34,7 +35,12 @@ $GLOBALS['hookvars']['submenu'] = array();
 Configure::write('Hook.helpers.Miao','MiaoHook');
 Configure::write('Hook.components.Miao','MiaoHook');
 
+define('WX_APPID', 'wxca7838dcade4709c');
+//ID for service account(DO NOT CHANGE)
 define('WX_APPID_SOURCE', 'wxca78');
+define('WX_SECRET', '79b787ec8f463eeb769540464c9277b2');
+define('WX_SERVICE_ID_NAME', '朋友说');
+define('WX_SERVICE_ID_NO', 'pyshuo2014');
 
 define('COMMON_PATH', ROOT . DS . 'lib' . DS);
 
@@ -56,13 +62,11 @@ function oauth_wx_source() {
 function send_weixin_message($post_data, $logObj = null) {
     $tries = 2;
     $wxOauthM = ClassRegistry::init('WxOauth');
-
     $wx_curl_option_defaults = array(
         CURLOPT_HEADER => false,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_TIMEOUT => 30
     );
-
     while ($tries-- > 0) {
         $access_token = $wxOauthM->get_base_access_token();
         if (!empty($access_token)) {
@@ -94,6 +98,7 @@ function send_weixin_message($post_data, $logObj = null) {
     }
     return false;
 }
+
 
 function get_tuan_msg_element($tuan_buy_id){
     $tuanBuyingM = ClassRegistry::init('TuanBuying');

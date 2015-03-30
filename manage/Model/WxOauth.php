@@ -9,7 +9,9 @@ App::uses('Model', 'Model');
  * Copy from app sync when change it
  */
 class WxOauth extends Model {
+
     public $useDbConfig = 'WxOauth';
+
     public $useTable = false;
 
     private $wx_curl_option_defaults = array(

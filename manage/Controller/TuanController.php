@@ -10,7 +10,7 @@ class TuanController extends AppController{
 
     var $name = 'Tuan';
 
-    var $uses = array('TuanTeam','TuanBuying','Order','Cart');
+    var $uses = array('TuanTeam','TuanBuying','Order','Cart','TemplateMsgLog');
 
     /**
      * index view
@@ -220,10 +220,14 @@ class TuanController extends AppController{
          $tuan_products = array('838'=>'草莓', '851' => '芒果', '862'=>'蛋糕', '863' => '草莓863', '230' => '蛋糕230');
          foreach($tuan_buyings as &$tuan_buying){
              $tuanBuying = $tuan_buying['TuanBuying'];
-             $tuan_buying['tuan_team'] = $tuan_teams[$tuanBuying['tuan_id']];
+             $tb_id = $tuanBuying['id'];
+             $tuan_buying['create_msg_status'] = $this->get_tb_msg_status(TUAN_CREATE_MSG,$tb_id);
+             $tuan_buying['cancel_msg_status'] = $this->get_tb_msg_status(TUAN_CANCEL_MSG,$tb_id);
+             $tuan_buying['complete_msg_status'] = $this->get_tb_msg_status(TUAN_COMPLETE_MSG,$tb_id);
+             $tuan_buying['tip_msg_status'] = $this->get_tb_msg_status(TUAN_TIP_MSG,$tb_id);
+             $tuan_buying['tuan_team'] = $tuan_teams[$tb_id];
              $tuan_buying['tuan_product'] = $tuan_products[$tuanBuying['pid']];
          }
-         $this->log($tuan_buyings);
          $this->set('tuan_buyings', $tuan_buyings);
          $this->set('team_id',$team_id);
          $this->set('product_id',$product_id);
@@ -233,6 +237,55 @@ class TuanController extends AppController{
 
      }
 
+    private function get_tb_msg_status($type,$tb_id){
+        $cond = array(
+            'flag' => $tb_id,
+            'type' => $type
+        );
+        if($type==TUAN_CREATE_MSG){
+            $tml = $this->TemplateMsgLog->find('first',array(
+                'conditions' => $cond
+            ));
+            if(!empty($tml)){
+                return '已发建团消息';
+            }else{
+                return 'true';
+            }
+        }
+        if($type==TUAN_CANCEL_MSG){
+            $tml = $this->TemplateMsgLog->find('first',array(
+                'conditions' => $cond
+            ));
+            if(!empty($tml)){
+                return '已发团取消消息';
+            }else{
+                return 'true';
+            }
+
+        }
+        if($type==TUAN_COMPLETE_MSG){
+            $tml = $this->TemplateMsgLog->find('first',array(
+                'conditions' => $cond
+            ));
+            if(!empty($tml)){
+                return '已发团完成消息';
+            }else{
+                return 'true';
+            }
+
+        }
+        if($type==TUAN_TIP_MSG){
+            $cond['date(send_date)']=date(FORMAT_DATE);
+            $tml = $this->TemplateMsgLog->find('first',array(
+                'conditions' => $cond
+            ));
+            if(!empty($tml)){
+                return '今天已发提示消息';
+            }else{
+                return 'true';
+            }
+        }
+    }
     /**
      * set tuan_buying status
      */

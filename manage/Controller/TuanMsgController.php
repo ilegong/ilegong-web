@@ -173,7 +173,7 @@ class TuanMsgController extends AppController{
         $msg_log = array(
             'type' => $type,
             'flag' => $tb_id,
-            'send_date' => date(FORMAT_DATE)
+            'send_date' => date(FORMAT_DATETIME)
         );
         $this->TemplateMsgLog->save($msg_log);
     }
