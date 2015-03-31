@@ -87,7 +87,7 @@
                 }
                 {{if $big_tuan}}
                 address = $("input[name='consignee_address']").val();
-                way = 'sf';
+                way = '{{$way_type}}';
                 if (address == "") {
                     utils.alert("请输入地址");
                     e.preventDefault();
