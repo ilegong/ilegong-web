@@ -147,7 +147,7 @@ class TuanController extends AppController{
 
     public function admin_api_tuan_products(){
         $this->autoRender=false;
-        $results = array('838'=>'草莓', '851' => '芒果', '862'=>'蛋糕', '863' => '草莓863', '230' => '蛋糕230','381'=>'牛肉干','868'=>'建平小米');
+        $results = array('838'=>'草莓', '851' => '芒果', '862'=>'好好蛋糕', '863' => '草莓863', '230' => '蛋糕230','381'=>'牛肉干','868'=>'建平小米');
         echo json_encode($results);
     }
 
@@ -217,7 +217,7 @@ class TuanController extends AppController{
          $tuan_teams = $this->TuanTeam->find('all', array('conditions' => array('id' => $tuan_ids), 'fields' => array('id', 'tuan_name')));
          $tuan_teams = Hash::combine($tuan_teams, '{n}.TuanTeam.id', '{n}.TuanTeam');
          $this->log('tuan_team'.json_encode($tuan_teams));
-         $tuan_products = array('838'=>'草莓', '851' => '芒果', '862'=>'蛋糕', '863' => '草莓863', '230' => '蛋糕230');
+         $tuan_products = array('838'=>'草莓', '851' => '芒果', '862'=>'好好蛋糕', '863' => '草莓863', '230' => '蛋糕230','381'=>'牛肉干','868'=>'建平小米');
          foreach($tuan_buyings as &$tuan_buying){
              $tuanBuying = $tuan_buying['TuanBuying'];
              $tb_id = $tuanBuying['id'];

@@ -8,7 +8,7 @@
 </div>
   <div  style="margin-top: 50px;">
       {{loop $tuan_product_ids $pid}}
-      {{if $pid!=862&&$pid!=230}}
+      {{if $pid!=230}}
       <div class="goodlist {{if $tuan_products_info[$pid]['status'] == DELETED_YES}}tuan_cancel{{/if}}">
           <a href="/tuan_buyings/goods_tuans/{{$pid}}">
               {{if $tuan_products_info[$pid]['status']}}<s>团购已结束</s>{{/if}}
