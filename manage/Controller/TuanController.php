@@ -221,11 +221,12 @@ class TuanController extends AppController{
          foreach($tuan_buyings as &$tuan_buying){
              $tuanBuying = $tuan_buying['TuanBuying'];
              $tb_id = $tuanBuying['id'];
+             $tuan_id = $tuanBuying['tuan_id'];
              $tuan_buying['create_msg_status'] = $this->get_tb_msg_status(TUAN_CREATE_MSG,$tb_id);
              $tuan_buying['cancel_msg_status'] = $this->get_tb_msg_status(TUAN_CANCEL_MSG,$tb_id);
              $tuan_buying['complete_msg_status'] = $this->get_tb_msg_status(TUAN_COMPLETE_MSG,$tb_id);
              $tuan_buying['tip_msg_status'] = $this->get_tb_msg_status(TUAN_TIP_MSG,$tb_id);
-             $tuan_buying['tuan_team'] = $tuan_teams[$tb_id];
+             $tuan_buying['tuan_team'] = $tuan_teams[$tuan_id];
              $tuan_buying['tuan_product'] = $tuan_products[$tuanBuying['pid']];
          }
          $this->set('tuan_buyings', $tuan_buyings);
