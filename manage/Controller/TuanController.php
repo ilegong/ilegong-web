@@ -147,7 +147,7 @@ class TuanController extends AppController{
 
     public function admin_api_tuan_products(){
         $this->autoRender=false;
-        $results = array('838'=>'草莓', '851' => '芒果', '862'=>'蛋糕', '863' => '草莓863', '230' => '蛋糕230','381'=>'牛肉干');
+        $results = array('838'=>'草莓', '851' => '芒果', '862'=>'蛋糕', '863' => '草莓863', '230' => '蛋糕230','381'=>'牛肉干','868'=>'建平小米');
         echo json_encode($results);
     }
 
