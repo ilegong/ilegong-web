@@ -60,7 +60,8 @@
         <th>订单状态</th>
         <th>商家名称</th>
         <th>商品</th>
-        <th>单价</th>
+        <th>份数</th>
+        <th>价格</th>
         <th>运费</th>
         <th>总价</th>
         <th>创建时间</th>
@@ -104,9 +105,10 @@
         </td>
         <td>
             {{loop $order_carts[$order['Order']['id']] $cart}}
-                {{$cart['Cart']['name']}}*{{$cart['Cart']['num']}};
+                {{$cart['Cart']['name']}}
             {{/loop}}
         </td>
+        <td>{{$cart['Cart']['num']}}</td>
         <td>{{$order['Order']['total_price']}}</td>
         <td>{{$order['Order']['ship_fee']}}</td>
         <td>{{$order['Order']['total_all_price']}}</td>
