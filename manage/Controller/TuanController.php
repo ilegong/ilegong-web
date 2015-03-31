@@ -374,6 +374,7 @@ class TuanController extends AppController{
             $tuan_teams = $this->TuanTeam->find('all');
         }
         $this->set('tuan_teams',$tuan_teams);
+        $this->set('team_id',$team_id);
     }
     /**
      * create a new tuan_team

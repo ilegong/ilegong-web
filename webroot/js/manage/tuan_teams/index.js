@@ -7,5 +7,6 @@ $(function(){
         $.each(data,function(index,item){
             $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo(tuanTeams);
         });
+        tuanTeams.val(tuanTeams.attr('data-team-id'));
     });
 });
