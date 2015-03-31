@@ -1556,6 +1556,72 @@ function get_tuan_msg_element($tuan_buy_id){
         return null;
     }
 }
+
+/**
+ * @param $user_id
+ * @param $title
+ * @param $product_name
+ * @param $tuan_leader_wx
+ * @param $remark
+ * @param $deatil_url
+ * @return bool
+ * 加入一个团购
+ */
+function send_join_tuan_buy_msg($user_id,$title,$product_name,$tuan_leader_wx,$remark,$deatil_url){
+    $oauthBindModel = ClassRegistry::init('Oauthbind');
+    $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
+    if ($user_weixin != false) {
+        $open_id = $user_weixin['oauth_openid'];
+        $post_data = array(
+            "touser" => $open_id,
+            "template_id" => 'P4iCqkiG7_s0SVwCSKyEuJ0NnLDgVNVCm2VQgSGdl-U',
+            "url" =>$deatil_url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => $title),
+                "Pingou_ProductName" => array("value" => $product_name),
+                "Weixin_ID" => array("value" => $tuan_leader_wx),
+                "Remark" => array("value" => $remark, "color" => "#FF8800")
+            )
+        );
+        return send_weixin_message($post_data);
+    }
+    return false;
+}
+
+/**
+ * @param $user_id
+ * @param $title
+ * @param $product_name
+ * @param $tuan_leader_wx
+ * @param $remark
+ * @param $deatil_url
+ * @return bool
+ * 团购提示信息
+ */
+function send_tuan_tip_msg($user_id,$title,$product_name,$tuan_leader_wx,$remark,$deatil_url){
+    $oauthBindModel = ClassRegistry::init('Oauthbind');
+    $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
+    if ($user_weixin != false) {
+        $open_id = $user_weixin['oauth_openid'];
+        $post_data = array(
+            "touser" => $open_id,
+            "template_id" => 'BYtgM4U84etw2qbOyyZzR4FO8a-ddvjy8sgBiAQy64U',
+            "url" =>$deatil_url,
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => $title),
+                "Pingou_ProductName" => array("value" => $product_name),
+                "Weixin_ID" => array("value" => $tuan_leader_wx),
+                "Remark" => array("value" => $remark, "color" => "#FF8800")
+            )
+        );
+        return send_weixin_message($post_data);
+    }
+    return false;
+
+}
+
 //weixin 分享签名
 function prepare_wx_share() {
     $oauthM = ClassRegistry::init('WxOauth');
