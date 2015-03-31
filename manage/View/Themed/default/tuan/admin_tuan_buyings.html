@@ -6,17 +6,17 @@
     <div style="padding-bottom: 10px;">
         <input type="hidden" name="noajax" value="true">
         <div class="form-group">
-            <select class="form-control tuan-teams"  name="team_id" value="{{$team_id}}">
+            <select class="form-control tuan-teams"  name="team_id" data-team-id="{{$team_id}}">
                 <option value="-1">请选择团队</option>
             </select>
         </div>
         <div class="form-group" name="product_id">
-            <select class="form-control tuan-products" value="{{$product_id}}" name="product_id">
+            <select class="form-control tuan-products" name="product_id" data-product-id="{{$product_id}}">
                 <option value="-1">选择商品</option>
             </select>
         </div>
         <div class="form-group">
-            <select class="form-control time-type" name="time_type" value="{{$time_type}}">
+            <select class="form-control time-type" name="time_type" data-time-type="{{$time_type}}">
                 <option value="-1">选择时间</option>
                 <option value="0">截止时间</option>
                 <option value="1">发货时间</option>
@@ -27,7 +27,7 @@
             <input type="text" name="post_time" class="form-control post-time" placeholder="输入时间">
         </div>
         <div class="form-group ">
-            <select class="form-control tuan-type" name="tuan_type" value="{{$tuan_type}}">
+            <select class="form-control tuan-type" name="tuan_type" data-tuan-type="{{$tuan_type}}">
                 <option value="-1">选择团购状态</option>
                 <!--<optgroup label="常用">-->
                 <option value="0" selected="selected">进行中</option>

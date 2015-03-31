@@ -1,19 +1,18 @@
 $(function(){
     var tuanTeams = $('.tuan-teams');
     var tuanProducts = $('.tuan-products');
-//    var timeType=$('.time-type');
-//    var tuanType=$('.tuan-type');
-//    function setVal(){
-//        tuanTeams.val('{{$team_id}}');
-//        tuanProducts.val('{{$product_id}}');
-//        timeType.val('{{$time_type}}');
-//        tuanType.val('{{$tuan_type}}');
-//    }
+    var timeType=$('.time-type');
+    var tuanType=$('.tuan-type');
+    function setVal(){
+        tuanTeams.val(tuanTeams.attr('data-team-id'));
+        timeType.val(timeType.attr('data-time-type'));
+        tuanType.val(tuanType.attr('data-tuan-type'));
+    }
     $.getJSON('/manage/admin/tuan/api_tuan_teams',function(data){
         $.each(data,function(index,item){
             $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo(tuanTeams);
         });
-//        setVal();
+        setVal();
     });
 
     $.getJSON('/manage/admin/tuan/api_tuan_products',function(data){
@@ -21,6 +20,7 @@ $(function(){
         $.each(data,function(index,item){
             $('<option value="' + index + '">' + item + '</option>').appendTo(tuanProducts);
         });
+        tuanProducts.val(tuanProducts.attr('data-product-id'));
     });
 
     var tuanBuyingForm = $('.tuan-buying-form');
