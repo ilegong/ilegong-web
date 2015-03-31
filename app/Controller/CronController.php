@@ -60,7 +60,7 @@ class CronController extends AppController
             $userIds = $this->Order->query('SELECT DISTINCT cos.creator FROM cake_orders cos, cake_carts ccs WHERE ccs.order_id = cos.id AND cos.status IN ( 1, 2, 3, 9 ) AND ccs.product_id IN (230,862,873) GROUP BY cos.consignee_mobilephone ORDER BY cos.created DESC LIMIT 0 , 200');
             $userIds = Hash::extract($userIds,'{n}.cos.creator');
             foreach($userIds as $uid){
-                //$this->Weixin->send_coupon_cake_msg($uid, $getCouponUrl);
+                $this->Weixin->send_coupon_cake_msg($uid, $getCouponUrl);
             }
         }else{
             $this->Weixin->send_coupon_cake_msg($userId, $getCouponUrl);
