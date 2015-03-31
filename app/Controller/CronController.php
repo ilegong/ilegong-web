@@ -57,8 +57,7 @@ class CronController extends AppController
         $getCouponUrl = WX_HOST.'/shortmessages/get_haohao_cake_coupon';
         if(empty($userId)){
             $this->loadModel('Order');
-            $this->loadModel('Cart');
-            $userIds = $this->Order->query('SELECT DISTINCT cos.creator FROM cake_orders cos,cake_carts ccs WHERE ccs.order_id=cos.id AND cos.status IN (1,2,3,9) AND ccs.product_id=230 GROUP BY cos.consignee_mobilephone');
+            $userIds = $this->Order->query('SELECT DISTINCT cos.creator FROM cake_orders cos, cake_carts ccs WHERE ccs.order_id = cos.id AND cos.status IN ( 1, 2, 3, 9 ) AND ccs.product_id IN (230,862,873) GROUP BY cos.consignee_mobilephone ORDER BY cos.created DESC LIMIT 0 , 200');
             $userIds = Hash::extract($userIds,'{n}.cos.creator');
             foreach($userIds as $uid){
                 $this->Weixin->send_coupon_cake_msg($uid, $getCouponUrl);
