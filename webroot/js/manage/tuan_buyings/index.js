@@ -107,6 +107,8 @@ $(function(){
     });
 
     tuanbuyingcompletemsg.on('click',function(e){
+        var tuanStatus = $(this).attr('data-tuanBuying-id');
+        if(tuanStatus == 1){
         if(!confirm('静哥,确定要发送模板消息吗?')){
             return;
         }
@@ -114,6 +116,9 @@ $(function(){
         $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_complete_msg',{'tuan_buy_id':tuanBuyingId},function(data){
             alert(data['msg']);
         });
+        }else{
+            alert('只有团购截止后，才能发送团购完成模版消息');
+        }
     });
 
     tuanbuyingtipmsg.on('click',function(e){
