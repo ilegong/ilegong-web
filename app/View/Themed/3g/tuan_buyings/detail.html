@@ -87,7 +87,11 @@
                                     <span class="gray title mr12" style="float:left;">方式:</span>
                                     <span class="border">
                                             <span class="mr12 border cur tuan_way_selected" way-label="ziti">好邻居自提</span>
-                                            <span class="mr12 border" way-label="sf">顺丰到付</span>
+                                            {{if $current_data_id==876}}
+                                                <span class="mr12 border" way-label="kddj" way-fee="10">快递到家(10元邮费)</span>
+                                            {{else}}
+                                                <span class="mr12 border" way-label="sf">顺丰到付</span>
+                                            {{/if}}
                                     </span>
                                 </li>
                             </ul>
@@ -314,7 +318,8 @@
                 {{if $big_tuan}}
                 way_type = $('.cur.tuan_way_selected').attr('way-label');
                 {{/if}}
-                var postdata = {"product_id":product_id,"product_num":product_num, "way_type": way_type,"spec_id":specId,'tuan_buy_id':'{{$tuan_buy_id}}'};
+                var way_fee = $('.cur.tuan_way_selected').attr('way-fee')||0;
+                var postdata = {"product_id":product_id,"product_num":product_num, "way_type": way_type,"spec_id":specId,"tuan_buy_id":'{{$tuan_buy_id}}',"way_fee":way_fee};
                 utils.progress_notify('正在更新购物车');
                 $.ajax({
                     type:'post',
@@ -326,7 +331,8 @@
                                 window.location.href = '/tuan_buyings/big_tuan_balance/{{$tuan_buy_id}}';
                             }else{
                                 var way_type=data['way_type'];
-                                window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}?way_type='+way_type;
+                                var way_fee = data['way_fee'];
+                                window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}?way_type='+way_type+'&way_fee'+way_fee;
                             }
                         }
                         else {

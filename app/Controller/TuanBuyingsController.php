@@ -125,7 +125,8 @@ class TuanBuyingsController extends AppController{
             if($_POST['way_type'] == 'ziti'){
                 echo json_encode(array('success' => true, 'direct'=>'big_tuan_list'));
             }else{
-                echo json_encode(array('success' => true, 'direct'=>'normal','way_type'=>$_POST['way_type']));
+                $ship_fee = floatval($_POST['way_fee']);
+                echo json_encode(array('success' => true, 'direct'=>'normal','way_type'=>$_POST['way_type'],'way_fee'=>$ship_fee));
             }
         }else{
             echo json_encode(array('error' => false));
@@ -185,7 +186,12 @@ class TuanBuyingsController extends AppController{
             'conditions' => $cond,
             'order' => 'id DESC'
         ));
+        $ship_fee = floatval($_REQUEST['way_fee']);
         $total_price = $Carts['Cart']['price'] * $Carts['Cart']['num'];
+        if($ship_fee>0){
+            $this->set('ship_fee',$ship_fee);
+            $total_price = $total_price+floatval($ship_fee);
+        }
         $way_type = $_REQUEST['way_type'];
         $this->set('way_type',$way_type);
         $this->set('buy_count',$Carts['Cart']['num']);
@@ -276,6 +282,10 @@ class TuanBuyingsController extends AppController{
             }else{
                 $address = $tuan_info['TuanTeam']['address'];
             }
+            if($_POST['way'] == 'kddj'&&$pid==876){
+                //蔬菜加10元邮费
+                $total_price = $total_price+10;
+            }
             $order = $this->Order->createTuanOrder($tuan_buy_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id);
 
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
@@ -292,6 +302,9 @@ class TuanBuyingsController extends AppController{
                 }
                 if($tuan_info['TuanTeam']['type'] == 1 && $_POST['way'] == 'baoyou'){
                     $cart_name = $cart_name.'(包邮)';
+                }
+                if($tuan_info['TuanTeam']['type'] == 1 && $_POST['way'] == 'kddj'){
+                    $cart_name = $cart_name.'(快递到家)';
                 }
                 $this->Cart->update(array('name' => '\'' . $cart_name . '\'' ), array('id' => $cart_id));
                 $res = array('success'=> true, 'order_id'=>$order['Order']['id']);

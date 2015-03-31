@@ -44,7 +44,7 @@
                     <tr><td>{{$cart_info['Cart']['name']}}</td>
                         <td style="width: 80px; font-size: 0.8em">单价：{{$this->Number->precision($cart_info['Cart']['price'],2)}}</td>
                         <td>×{{$buy_count}}</td>
-                        <td>{{$this->Number->precision($total_price, 2)}} </td>
+                        <td>{{$this->Number->precision($cart_info['Cart']['price']*$buy_count, 2)}} </td>
                     </tr>
                     </tbody>
                 </table>
@@ -53,7 +53,10 @@
         </div>
         <div>
             <ul class="pull-right list-unstyled">
-                <li>总价<small>{{if $big_tuan}}(不含运费){{else}}(含运费){{/if}}</small>：<span id="total_price_span">
+                {{if $ship_fee!=null}}
+                <li>邮费：<span id="ship_price_span">{{$this->Number->precision($ship_fee, 2)}}</span></li>
+                {{/if}}
+                <li>总价<small>{{if $big_tuan&&$ship_fee==null}}(不含运费){{else}}(含运费){{/if}}</small>：<span id="total_price_span">
                             {{$this->Number->precision($total_price, 2)}}                   </span></li>
                 <li><a id="confirm_next" class="btn btn-warning" href="javascript:void(0)" data-disable="false">提交订单</a></li>
             </ul>
