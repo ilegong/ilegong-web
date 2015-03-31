@@ -80,6 +80,12 @@ class WeixinComponent extends Component
         return ClassRegistry::init('WxOauth')->get_base_access_token();
     }
 
+    public function send_coupon_cake_msg($user_id, $coupon_url, $count=1, $store="购买吃货好好蛋糕的时候使用", $rule="有效期至2015年05月1日,不参与团购"){
+        $first_intro = "亲，恭喜您获得" . $count . "张优惠券";
+        $click_intro = "点击详情，获得的此优惠券。";
+        return $this->send_coupon_message_on_received($user_id, $store, $rule, $coupon_url, $first_intro, $click_intro);
+    }
+
     public function send_coupon_received_message($user_id, $count=1, $store="购买nana家大米时使用", $rule="有效期至2014年11月15日")
     {
             $coupon_url = $this->get_coupon_url();
