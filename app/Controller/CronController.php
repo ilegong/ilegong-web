@@ -52,6 +52,7 @@ class CronController extends AppController
     }
 
     public function send_cake_coupon_msg(){
+        $this->autoRender=false;
         $userId= $_REQUEST['user_id'];
         $getCouponUrl = WX_HOST.'/shortmessages/get_haohao_cake_coupon';
         if(empty($userId)){
@@ -65,6 +66,7 @@ class CronController extends AppController
         }else{
             $this->Weixin->send_coupon_cake_msg($userId, $getCouponUrl);
         }
+        echo json_encode(array('sucess'=>true));
     }
 
     public function download_photo_from_wx_for_comment(){
