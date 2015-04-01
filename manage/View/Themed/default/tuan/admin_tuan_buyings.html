@@ -112,6 +112,7 @@
                 {{/if}}
                 {{if $tuanBuying['sold_num']<$tuanBuying['target_num']}}
                     {{if $tuan_buying['tip_msg_status'] == 'true'}}
+                        <a href="/manage/admin/tuan_msg/to_send_tuan_delay_msg/{{$tuanBuying['id']}}" target="_blank" class="btn btn-sm btn-info tuan-buying-delayemsg" data-id="{{$tuanBuying['id']}}" data-tuanBuying-id="{{$tuanBuying['status']}}">延期消息</a>
                         <button type="button" class="btn btn-sm btn-info tuan-buying-tipmsg" data-id="{{$tuanBuying['id']}}">提示消息</button>
                     {{else}}
                         <span class="label label-info">{{$tuan_buying['tip_msg_status']}}</span>
@@ -126,7 +127,6 @@
                 <button type="button" class="btn btn-sm btn-warning tuan-buying-finished" data-id="{{$tuanBuying['id']}}" value="1">发货完成</button>
                 {{if $tuan_buying['complete_msg_status'] == 'true'}}
                     <button type="button" class="btn btn-sm btn-info tuan-buying-completemsg" data-id="{{$tuanBuying['id']}}" data-tuanBuying-id="{{$tuanBuying['status']}}">完成消息</button>
-                    <button type="button" class="btn btn-sm btn-info tuan-buying-delayemsg" data-id="{{$tuanBuying['id']}}" data-tuanBuying-id="{{$tuanBuying['status']}}">延期消息</button>
                 {{else}}
                     <span class="label label-info">{{$tuan_buying['complete_msg_status']}}</span>
                 {{/if}}

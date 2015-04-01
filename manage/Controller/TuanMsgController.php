@@ -136,7 +136,7 @@ class TuanMsgController extends AppController{
     }
 
     public function admin_to_send_tuan_delay_msg($tuan_buy_id){
-
+        $this->set('tuan_buy_id',$tuan_buy_id);
     }
 
     public function send_tuan_delay_msg(){
