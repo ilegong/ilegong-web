@@ -1520,6 +1520,11 @@ class OrdersController extends AppController {
 
         $all_applied_coupons = $this->_applied_coupons();
         $brand_applied_coupons = $this->_applied_coupons($brand_id);
+        if(in_array($coupon_item_id, $brand_applied_coupons)){
+            $coupon_type = $brand_id;
+        }else{
+            $coupon_type = 0;
+        }
         //TODO: 需要考虑各种券的一致性，排他性
         if ($applying) {
 
@@ -1537,7 +1542,7 @@ class OrdersController extends AppController {
                 if (empty($curr_coupon_item)) {
                     $reason = 'share_type_not_exists';
                 } else {
-                    $curr_coupon_item = $curr_coupon_item[0];
+                    $curr_coupon_item = array_shift($curr_coupon_item);
                     //这里必须安店面去限定
                     //要把没有查询到的couponItem去掉
                     if ($curr_coupon_item['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER
@@ -1556,9 +1561,9 @@ class OrdersController extends AppController {
 //            }
             }
         } else {
-            if (!empty($brand_applied_coupons)
-                && array_search($coupon_item_id, $brand_applied_coupons) !== false) {
-                $this->_remove_applied_coupons($brand_id, $coupon_item_id);
+            if (!empty($all_applied_coupons)
+                && array_search($coupon_item_id, $all_applied_coupons) !== false) {
+                $this->_remove_applied_coupons($coupon_type, $coupon_item_id);
                 $changed = true;
             }
         }
