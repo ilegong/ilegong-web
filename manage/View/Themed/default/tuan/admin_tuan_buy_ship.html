@@ -1,0 +1,37 @@
+<br/><br/>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-offset-3">
+            <ul class="nav nav-pills">
+                <li role="presentation" class="active"><a href="#">添加</a></li>
+            </ul>
+        </div>
+    </div>
+    <br/><br/>
+    <div class="row">
+        <input type="hidden" id="tuan_buy_id" value="{{$tuan_buy_id}}">
+        <div class="ship_item">
+            <div class="form-inline col-sm-10 col-sm-offset-3">
+                <input type="hidden" name="tuan_ship_id" value="">
+                <div class="form-group">
+                    <label for="ship_flag">快递标示</label>
+                    <input type="text" class="form-control" id="ship_flag">
+                </div>
+                <div class="form-group">
+                    <label for="ship_name">快递名称</label>
+                    <input type="text" class="form-control" id="ship_name">
+                </div>
+                <div class="form-group">
+                    <label for="ship_fee">快递费用</label>
+                    <input type="number" class="form-control" id="ship_fee">
+                </div>
+                <button class="btn btn-default">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+
+    });
+</script>

@@ -394,4 +394,8 @@ class TuanController extends AppController{
 //         echo json_encode($successinfo);
      }
 
+    public function admin_tuan_buy_ship($tuan_buy_id){
+        $this->set('tuan_buy_id',$tuan_buy_id);
+    }
+
 }
