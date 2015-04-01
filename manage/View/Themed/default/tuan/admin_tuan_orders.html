@@ -84,7 +84,7 @@
                 </td>
                 <td>
                     {{loop $order_carts[$order['Order']['id']] $cart}}
-                        {{$cart['Cart']['num']}};
+                        {{$cart['Cart']['num']}}
                     {{/loop}}
                 </td>
                 <td>{{$order['Order']['total_all_price']}}</td>
