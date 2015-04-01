@@ -173,9 +173,16 @@ class TuanController extends AppController{
         $this->TuanBuying->updateAll(array('status' => 2), array('id' => $tuanBuyingId));
     }
     public function admin_api_tuan_buying_finished(){
+//        $this->autoRender = false;
         $tuanBuyingId = $_REQUEST['id'];
         $this->log('update tuan buying ' + $tuanBuyingId + ' status to ' + 11);
         $this->TuanBuying->updateAll(array('status' => 11), array('id' => $tuanBuyingId));
+
+//        $this->loadModel('Order');
+//        $this->Order->updateAll(array('status' => 2),array('member_id' => $tuanBuyingId,'status' => 1));
+//        $successinfo = array('success'=>__('团购订单状态已修改为已发货',true));
+//        $this->log('successinfo'.json_encode($successinfo));
+//        echo json_encode($successinfo);
     }
     public function admin_api_tuan_buying_refunded(){
         $tuanBuyingId = $_REQUEST['id'];

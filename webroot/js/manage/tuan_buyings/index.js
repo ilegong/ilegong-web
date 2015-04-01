@@ -3,8 +3,9 @@ $(function(){
     var tuanProducts = $('.tuan-products');
     var timeType=$('.time-type');
     var tuanType=$('.tuan-type');
+    var leftSelectData = [];
+    var tuan_name = $('#tuan_name');
     function setVal(){
-        tuanTeams.val(tuanTeams.attr('data-team-id'));
         timeType.val(timeType.attr('data-time-type'));
         tuanType.val(tuanType.attr('data-tuan-type'));
     }
@@ -12,7 +13,8 @@ $(function(){
         $.each(data,function(index,item){
             $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo(tuanTeams);
         });
-        setVal();
+        search_tuanteam();
+        tuanTeams.val(tuanTeams.attr('data-team-id'));
     });
 
     $.getJSON('/manage/admin/tuan/api_tuan_products',function(data){
@@ -20,6 +22,7 @@ $(function(){
         $.each(data,function(index,item){
             $('<option value="' + index + '">' + item + '</option>').appendTo(tuanProducts);
         });
+        setVal();
         tuanProducts.val(tuanProducts.attr('data-product-id'));
     });
 
@@ -67,11 +70,15 @@ $(function(){
         var tuanBuyingId = $(this).parents('tr').data('id');
         $.post( "/manage/admin/tuan/api_tuan_buying_finished", {id: tuanBuyingId}, function( data ) {
             console.log('已设置为：发货完成！');
+//            $.getJSON('/manage/admin/tuan/api_tuan_buying_finished',function(data){
+//                alert(data.success);
+//            });
         }).fail(function(){
             console.log('设置发货完成失败！');
         }).always(function(){
             window.location.reload();
         });
+
     });
     tuanBuyingRefunded.click(function(){
         if(!confirm('确定完成退款了吗？')) {
@@ -157,4 +164,37 @@ $(function(){
             return false;
         }
     });
+
+    function search_tuanteam(){
+
+    String.prototype.Trim = function() {
+        return this.replace(/(^\s*)|(\s*$)/g, "");
+    };
+
+    $("select[name='team_id'] option").each(function(){
+        leftSelectData.push({'val':$(this).val(),'name':$(this).text()});
+    });
+    if(navigator.userAgent.indexOf("MSIE")>0){
+        tuan_name.on('onpropertychange',txChange);
+    }else{
+        tuan_name.on('input',txChange);
+    }
+    }
+    function txChange(){
+        var content= tuan_name.val().Trim();
+        tuanTeams.empty();
+        if(content == ''){
+            $.each(leftSelectData,function(index,value){
+                tuanTeams.append('<option value="'+value['val']+'">'+value['name']+'</option>');
+            });
+        }else{
+            var reg = new RegExp(content,'i');
+            $.each(leftSelectData,function(index,val){
+                if(reg.test(val['name'])){
+                    tuanTeams.append('<option selected="selected" value="'+val['val']+'">'+val['name']+'</option>');
+                }
+            })
+        }
+    }
+
 });
