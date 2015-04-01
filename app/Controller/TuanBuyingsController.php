@@ -295,8 +295,8 @@ class TuanBuyingsController extends AppController{
                     'conditions' => array('id' => $tuan_buy_id),
                     'fields' => array('consign_time')
                 ));
-                $consign_time = friendlyDateFromStr($tuanBuy['TuanBuying']['consign_time'], FFDATE_CH_MD);
-                $cart_name = $cart_info['Cart']['name'] . ' 送货'. $consign_time;
+                //$consign_time = friendlyDateFromStr($tuanBuy['TuanBuying']['consign_time'], FFDATE_CH_MD);
+                $cart_name = $cart_info['Cart']['name'];
                 if($tuan_info['TuanTeam']['type'] == 1 && $_POST['way'] == 'sf'){
                     $cart_name = $cart_name.'(顺丰到付)';
                 }
