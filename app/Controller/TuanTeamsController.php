@@ -62,6 +62,10 @@ class TuanTeamsController extends AppController{
                 $tuan_team['TuanTeam']['member_num'] = $tuan_team['TuanTeam']['member_num'] + 1;
             }
             $this->set('new_join', true);
+            $subscribe_status = user_subscribed_pys($uid);
+            if($subscribe_status != WX_STATUS_SUBSCRIBED){
+                $this->set('remind_subscribe', true);
+            }
         }
         if($this->currentUser['id']){
             $this->loadModel('TuanMember');
