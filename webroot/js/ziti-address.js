@@ -147,7 +147,7 @@ var zitiAddress = function(){
             {"shop_code":258,"shop_name":"广义街店","address":"宣武区广安门内大街311号院2号楼祥龙大厦首层","area_code":505,"lat":39.896673,"lon":116.363458},
             {"shop_code":221,"shop_name":"友谊医院店","address":"北京市宣武区永安路32号","area_code":505,"lat":39.892503,"lon":116.401073}],
         8:[
-            {"shop_code":999,"shop_name":"昌平自提","address":"昌平县城万科城东门世纪联华超市蔬菜水果铺","area_code":505,"lat":40.218246,"lon":116.243044}
+            {"shop_code":999,"shop_name":"昌平自提","address":"昌平县城万科城东门世纪联华超市蔬菜水果铺","area_code":505,"lat":40.218246,"lon":116.243044,"not_shop":true}
         ]
     };
     var getShipAddress = function(areaId){
