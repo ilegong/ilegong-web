@@ -1,6 +1,6 @@
 {{$this->Html->css(array('/js/photoswipe/photoswipe.css?v1','/js/photoswipe/default-skin/default-skin.css?v1'))}}
 {{$this->Html->script(array('/js/photoswipe/photoswipe.js?v2','/js/photoswipe/photoswipe-ui-default.min.js'))}}
-<div id="comment_items" style="margin-top: 8px;">
+<div id="comment_items" style="margin-top: 8px;display: none;">
 
 </div>
 {{if $comment_count>5}}
@@ -61,6 +61,9 @@
                 async:true,
                 type:'get',
                 success:function(request, xhr) {
+                    if(request.length>0){
+                        $commentItems.show();
+                    }
                     if(request.length>3){
                         $viewAllComments.show();
                     }
