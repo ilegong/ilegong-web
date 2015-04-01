@@ -1,6 +1,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-10">
+            <br/><br/><br/><br/>
             <div class="form-horizontal">
                 <input type="hidden" id="tuan_buy_id" value="{{$tuan_buy_id}}">
                 <div class="form-group">
@@ -23,10 +24,15 @@
 <script>
     $(document).ready(function(){
         var $tuan_buy_id = $('#tuan_buy_id');
-        var $send_tuan_buy_dealy_msg = $('#send_tuan_buy_dealy_msg');
+        var $msg_text = $('#msg_text');
         $('#send_tuan_buy_dealy_msg').on('click',function(e){
             e.preventDefault();
-
+            var tuan_buy_id = $tuan_buy_id.val();
+            var tip_msg = $msg_text.val();
+            $.post('/manage/admin/tuan_msg/send_tuan_delay_msg',{"tuan_buy_id":tuan_buy_id,"msg":tip_msg},function(data){
+                var result = JSON.parse(data);
+                alert(result['msg']);
+            });
         });
     });
 </script>

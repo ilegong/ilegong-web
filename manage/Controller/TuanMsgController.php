@@ -139,7 +139,7 @@ class TuanMsgController extends AppController{
         $this->set('tuan_buy_id',$tuan_buy_id);
     }
 
-    public function send_tuan_delay_msg(){
+    public function admin_send_tuan_delay_msg(){
         $this->autoRender=false;
         $tuan_buy_id = $_REQUEST['tuan_buy_id'];
         $tip_msg = $_REQUEST['msg'];
