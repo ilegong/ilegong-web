@@ -472,3 +472,7 @@ ul li{ list-style:none;}
 .myorder_total{ text-align: right; border-bottom: 1px #eeeeee solid; margin: 0; padding: 0; background-color: #ffffff; padding: 10px; color: #555555;}
 .myorder_total strong{ color: #ffa200;}
 .myorder_none{ text-align: center; position: absolute; top: 50%; font-size: 1em; color: #666666; width: 100%; font-size: 1.1em;}
+.standard .title {
+    padding-top: 0.9em;
+    line-height: 33px;
+}
