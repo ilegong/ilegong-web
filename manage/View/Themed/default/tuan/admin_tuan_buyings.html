@@ -97,6 +97,7 @@
         <td>
             {{if $tuanBuying['status']!=11 && $tuanBuying['status']!=21}}
                 <a role="button" class="btn btn-sm btn-default" href="/manage/admin/tuan/tuan_buying_edit/{{$tuanBuying['id']}}">编辑...</a>
+                <a role="button" class="btn btn-sm btn-default" href="#">编辑物流...</a>
             {{/if}}
             {{if $tuanBuying['status']==0}}
                 <button type="button" class="btn btn-sm btn-warning tuan-buying-due" data-id="{{$tuanBuying['id']}}" value="1">完成</button>
@@ -125,6 +126,7 @@
                 <button type="button" class="btn btn-sm btn-warning tuan-buying-finished" data-id="{{$tuanBuying['id']}}" value="1">发货完成</button>
                 {{if $tuan_buying['complete_msg_status'] == 'true'}}
                     <button type="button" class="btn btn-sm btn-info tuan-buying-completemsg" data-id="{{$tuanBuying['id']}}" data-tuanBuying-id="{{$tuanBuying['status']}}">完成消息</button>
+                    <button type="button" class="btn btn-sm btn-info tuan-buying-delayemsg" data-id="{{$tuanBuying['id']}}" data-tuanBuying-id="{{$tuanBuying['status']}}">延期消息</button>
                 {{else}}
                     <span class="label label-info">{{$tuan_buying['complete_msg_status']}}</span>
                 {{/if}}
