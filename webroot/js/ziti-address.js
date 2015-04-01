@@ -9,7 +9,8 @@ var zitiAddress = function(){
         {"id":4,"name":"朝阳区"},
         {"id":5,"name":"丰台区"},
         {"id":6,"name":"崇文区"},
-        {"id":7,"name":"宣武区"}
+        {"id":7,"name":"宣武区"},
+        {"id":8,"name":"昌平区"}
     ];
     var ship_address = {
         1: [{"shop_code":146,"shop_name":"好邻居兴化路店","address":"东城区兴华西里2号楼南侧"},
@@ -144,7 +145,10 @@ var zitiAddress = function(){
         7:[{"shop_code":208,"shop_name":"永安路店","address":"宣武区永安路104号G间","area_code":505,"lat":39.89244,"lon":116.394263},
             {"shop_code":302,"shop_name":"鸭子桥北店","address":"宣武区南滨河31号","area_code":505,"lat":39.88646,"lon":116.355091},
             {"shop_code":258,"shop_name":"广义街店","address":"宣武区广安门内大街311号院2号楼祥龙大厦首层","area_code":505,"lat":39.896673,"lon":116.363458},
-            {"shop_code":221,"shop_name":"友谊医院店","address":"北京市宣武区永安路32号","area_code":505,"lat":39.892503,"lon":116.401073}]
+            {"shop_code":221,"shop_name":"友谊医院店","address":"北京市宣武区永安路32号","area_code":505,"lat":39.892503,"lon":116.401073}],
+        8:[
+            {"shop_code":999,"shop_name":"昌平自提","address":"昌平县城万科城东门世纪联华超市蔬菜水果铺","area_code":505,"lat":40.218246,"lon":116.243044}
+        ]
     };
     var getShipAddress = function(areaId){
         return ship_address[areaId];
