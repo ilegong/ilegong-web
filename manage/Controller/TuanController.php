@@ -13,12 +13,6 @@ class TuanController extends AppController{
     var $uses = array('TuanTeam','TuanBuying','Order','Cart','TemplateMsgLog');
 
     /**
-     * index view
-     */
-    public function admin_view(){
-
-    }
-    /**
      * query tuan orders
      */
     public function admin_tuan_orders(){
@@ -117,34 +111,11 @@ class TuanController extends AppController{
         $this->set('post_time',$post_time);
         $this->set('order_type',$order_type);
     }
-    /**
-     * ajax delete tuan
-     * when delete casde tuan buying
-     */
-    public function admin_delete_tuan(){
 
-    }
-    /**
-     * ajax delete tuan buying
-     */
-    public function admin_delete_tuan_buying(){
-
-    }
 
     /**
-     *  ajax save tuan
+     * 团购功能列表
      */
-    public function admin_save_tuan(){
-
-    }
-
-    /**
-     * ajax save tuan buying
-     */
-    public function admin_save_tuan_buying(){
-
-    }
-
     public function admin_tuan_func_list(){
 
     }

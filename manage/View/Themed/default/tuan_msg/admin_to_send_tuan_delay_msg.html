@@ -1,0 +1,38 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-10">
+            <br/><br/><br/><br/>
+            <div class="form-horizontal">
+                <input type="hidden" id="tuan_buy_id" value="{{$tuan_buy_id}}">
+                <div class="form-group">
+                    <label for="msg_text" class="col-sm-2 control-label">消息</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" id="msg_text" rows="3">
+
+                        </textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button id="send_tuan_buy_dealy_msg" class="btn btn-default">发送</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        var $tuan_buy_id = $('#tuan_buy_id');
+        var $msg_text = $('#msg_text');
+        $('#send_tuan_buy_dealy_msg').on('click',function(e){
+            e.preventDefault();
+            var tuan_buy_id = $tuan_buy_id.val();
+            var tip_msg = $msg_text.val();
+            $.post('/manage/admin/tuan_msg/send_tuan_delay_msg',{"tuan_buy_id":tuan_buy_id,"msg":tip_msg},function(data){
+                var result = JSON.parse(data);
+                alert(result['msg']);
+            });
+        });
+    });
+</script>

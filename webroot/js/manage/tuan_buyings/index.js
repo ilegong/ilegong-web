@@ -36,6 +36,7 @@ $(function(){
 
     var tuanbuyingcompletemsg = $('.tuan-buying-completemsg');
     var tuanbuyingtipmsg = $('.tuan-buying-tipmsg');
+    var tuanbuyingdelaymsg = $('.tuan-buying-delayemsg');
 
     tuanBuyingDue.click(function(){
         if(!confirm('确定结束吗？')) {

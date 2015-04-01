@@ -58,6 +58,15 @@ CREATE TABLE `cake_template_msg_logs` (
   `flag` VARCHAR(60) NOT NULL,
   `send_date` DATETIME NOT NULL,
   PRIMARY KEY (`id`));
+-- 团购邮费设置
+CREATE TABLE `cake_tuan_buy_ships` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `tuan_buy_id` INT NOT NULL,
+  `ship_name` VARCHAR(60) NOT NULL,
+  `ship_fee` FLOAT NOT NULL DEFAULT 0,
+  `deleted` TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`));
+
 
 
 
