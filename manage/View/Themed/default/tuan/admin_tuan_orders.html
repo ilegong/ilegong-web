@@ -89,7 +89,7 @@
                     {{$tuan_buys[$order['Order']['member_id']]['end_time']}}
                 </td>
                 <td>
-                    {{$tuan_buys[$order['Order']['member_id']]['consign_time']}}
+                    {{friendlyDateFromStr($tuan_buys[$order['Order']['member_id']]['consign_time'], FFDATE_CH_MD)}}
                 </td>
                 <td>{{$order['Order']['consignee_name']}}</td>
                 <td>
