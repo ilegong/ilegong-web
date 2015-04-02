@@ -1,5 +1,5 @@
 
-{{$this->Html->css(array('tuan.css?v5'));}}
+{{$this->Html->css(array('tuan.css?v5.1'));}}
 <div class="classlist_v2">
     <ul class="clearfix">
         <li><a href="/tuan_buyings/goods" class="back"></a></li>
@@ -82,7 +82,7 @@
         $lbs_url = '/tuan_teams/lbs_map?location='. $location. '&name=' . $tuan['tuan_name'] .'&addr='.$tuan['tuan_addr'];
     ?>
     {{if $tuan_info[$tuan_id]['type']=='1'}}
-    <div id="new_tuan_tip_info" style="display: none;">
+    <div id="new_tuan_tip_info">
         <p class="tuandetail_p">位置不合适，怎么办？</p>
         <div class="tuandetail_btn clearfix">
             <a href="{{$tuan_buy_link}}" class="fl">直接去团购</a>
@@ -100,11 +100,9 @@
     }
     $(document).ready(function(){
         var $new_tuan_btn = $('#new_tuan_btn');
-        var $new_tuan_tip_info = $('#new_tuan_tip_info');
         $new_tuan_btn.on('click',function(e){
             e.preventDefault();
             $("html, body").animate({ scrollTop: $(document).height() }, 1000);
-            $new_tuan_tip_info.show();
         });
     });
 </script>

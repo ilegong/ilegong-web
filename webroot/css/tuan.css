@@ -25,7 +25,12 @@ ul,ol {
 
 /*全部团队*/
 .alltuan_add{ display: block; width: 100%; background-color: #fae8b5; height: 30px; line-height: 30px; overflow: hidden; text-align: center; font-size: 1em; color: #ff483a; position: fixed; top: 0;}
-.alltuan_border{ border-top: 1px #eeeeee solid; background-color: #ffffff; margin-bottom: 10px;}
+.alltuan_border {
+    border-top: 1px #eeeeee solid;
+    background-color: #ffffff;
+    margin-bottom: 10px;
+    border-bottom: 1px #eeeeee solid;
+}
 .alltuan ul{ padding: 10px 10px 5px 10px; background-color: #ffffff;}
 .alltuan ul li{ float: left;}
 .alltuan ul li img{ border: 1px #dddddd solid; width: 8em;vertical-align:baseline;}
