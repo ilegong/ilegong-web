@@ -109,6 +109,13 @@ class TuanBuyingsController extends AppController{
         if($tuan_team['TuanTeam']['type'] == 1){
             $this->set('big_tuan', true);
         }
+        $this->loadModel('TuanBuyShip');
+        $tuan_ships = $this->TuanBuyShip->find('all',array(
+            'conditions' => array(
+                'tuan_buy_id' => $tuan_buy_id
+            )
+        ));
+        $this->set('tuan_ships',$tuan_ships);
     }
 
     public function cart_info(){
@@ -249,6 +256,7 @@ class TuanBuyingsController extends AppController{
         $this->loadModel('Cart');
         $this->loadModel('Order');
         $this->loadModel('TuanTeam');
+        $this->loadModel('TuanBuyShip');
         $cart_info = $this->Cart->findById($cart_id);
         $creator = $cart_info['Cart']['creator'];
         $order_type = $cart_info['Cart']['type'];
@@ -282,12 +290,29 @@ class TuanBuyingsController extends AppController{
             }else{
                 $address = $tuan_info['TuanTeam']['address'];
             }
-            if($_POST['way'] == 'kddj'&&$pid==876){
-                //蔬菜加10元邮费
-                $total_price = $total_price+10;
+            $ship_way = $_POST['way'];
+            //big tuan
+            if($tuan_info['TuanTeam']['type'] == 1){
+                //cal
+                $tuan_buy_ship = $this->TuanBuyShip->find('first',array(
+                    'conditions' => array(
+                        'tuan_buy_id' => $tuan_buy_id,
+                        'ship_flag' => $ship_way
+                    )
+                ));
+                if(!empty($tuan_buy_ship)){
+                    //添加快递费用
+                    $ship_fee = $tuan_buy_ship['TuanBuyShip']['ship_fee'];
+                    if($ship_fee>0){
+                        $total_price = $total_price+$ship_fee;
+                    }
+                }else{
+                    $res = array('success'=> false, 'info'=> '该团订单需要选择一个送货方式');
+                    echo json_encode($res);
+                    return;
+                }
             }
             $order = $this->Order->createTuanOrder($tuan_buy_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id);
-
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
                 $res = array('success'=> false, 'info'=> '你已经支付过了');
             }else{
@@ -297,14 +322,8 @@ class TuanBuyingsController extends AppController{
 //                ));
                 //$consign_time = friendlyDateFromStr($tuanBuy['TuanBuying']['consign_time'], FFDATE_CH_MD);
                 $cart_name = $cart_info['Cart']['name'];
-                if($tuan_info['TuanTeam']['type'] == 1 && $_POST['way'] == 'sf'){
-                    $cart_name = $cart_name.'(顺丰到付)';
-                }
-                if($tuan_info['TuanTeam']['type'] == 1 && $_POST['way'] == 'baoyou'){
-                    $cart_name = $cart_name.'(包邮)';
-                }
-                if($tuan_info['TuanTeam']['type'] == 1 && $_POST['way'] == 'kddj'){
-                    $cart_name = $cart_name.'(快递到家)';
+                if($tuan_info['TuanTeam']['type'] == 1){
+                    $cart_name = $cart_name.'('.$tuan_buy_ship['TuanBuyShip']['ship_name'].')';
                 }
                 $this->Cart->update(array('name' => '\'' . $cart_name . '\'' ), array('id' => $cart_id));
                 $res = array('success'=> true, 'order_id'=>$order['Order']['id']);
@@ -334,7 +353,8 @@ class TuanBuyingsController extends AppController{
     }
     public function goods(){
         $this->pageTitle = '团购商品';
-        $tuan_products = $this->TuanBuying->find('all',array('conditions' => array("pid != " => 863),'group' => array('pid')));
+        $currentDate = date(FORMAT_DATETIME);
+        $tuan_products = $this->TuanBuying->find('all',array('conditions' => array("pid != " => 863,'status'=>0,'end_time > '=>$currentDate),'group' => array('pid')));
         $tuan_product_ids = Hash::extract($tuan_products,'{n}.TuanBuying.pid');
         $this->loadModel('Product');
         $tuan_products_info = array();
@@ -363,6 +383,15 @@ class TuanBuyingsController extends AppController{
             'conditions' =>array('id'=>$tuan_ids),
         ));
         $tuan_info = Hash::combine($tuan_info,'{n}.TuanTeam.id','{n}.TuanTeam');
+        //只有一个大团
+        if(count($tuan_buyings)==1){
+            $tuan_id = $tuan_buyings[0]['TuanBuying']['tuan_id'];
+            $tuan_buy_id = $tuan_buyings[0]['TuanBuying']['id'];
+            $tuan = $tuan_info[$tuan_id];
+            if($tuan['type']==1){
+                $this->redirect('/tuan_buyings/detail/'.$tuan_buy_id);
+            }
+        }
         $this->loadModel('Product');
         $tuan_product = $this->Product->find('first', array(
             'conditions' => array('id' => $pid),

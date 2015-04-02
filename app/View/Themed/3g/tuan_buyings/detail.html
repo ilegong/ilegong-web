@@ -23,7 +23,7 @@
                 {{template Elements/product_img_sild}}
                     <div class="p_details_title">{{$Product['Product']['name']}}</div>
                     <ul class="p_details_price clearfix">
-                        <li class="fl price"><span>￥<font {{if !$tuan_price}}id="product_price"{{/if}}>{{if $tuan_price}}{{$this->Number->precision($tuan_price,2)}}{{else}}{{$this->Number->precision($Product['Product']['price'],2)}}{{/if}}</font></span></li>
+                        <li class="fl price"><span>{{if $current_data_id==874}}尝鲜价 {{/if}}￥<font {{if !$tuan_price}}id="product_price"{{/if}}>{{if $tuan_price}}{{$this->Number->precision($tuan_price,2)}}{{else}}{{$this->Number->precision($Product['Product']['price'],2)}}{{/if}}</font></span></li>
                         <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{empty($consign_time)?'成团后发货':$consign_time}}</b></span></a></li>
                     </ul>
                     <ul class="sales clearfix">
@@ -33,7 +33,6 @@
                         </span>
                         </li>
                     </ul>
-
                     <div class="tuan_bar">
                         <div>已团购<span  value="{{$sold_num}}">{{$sold_num}}</span>份</div>
                         <div class="bar">
@@ -53,7 +52,6 @@
                             <span>截止日期：<b>{{$end_time}}</b></span>
                         </div>
                     {{/if}}
-
                     {{if $product_spec_map}}
                     {{$product_spec_map}}
                     <ul class="standard clearfix">
@@ -63,7 +61,7 @@
                         ?>
                         <li>
                             <span class="gray title mr12 spec_label" style="float:left;">{{$label}}:</span>
-                            <span class="border" style="display: block;overflow: hidden;">
+                            <span class="border" style="display: block;overflow: hidden;padding-bottom: 10px;">
                             <?php foreach($values as $vaLabel){?>
                                 <span class="mr12 border spec_item" item-label="{{$label}}">
                                     {{$vaLabel}}
@@ -75,34 +73,28 @@
                         {{/if}}
                     </ul>
                     {{/if}}
-
                     {{if $big_tuan}}
-                        {{if $current_data_id==868}}
-                            <span class="mr12 border cur tuan_way_selected" style="display: none;"  way-label="baoyou">包邮</span>
-                        {{elseif $current_data_id==873}}
-                            <span class="mr12 border cur tuan_way_selected" way-label="ziti" style="display: none;">好邻居自提</span>
-                        {{else}}
-                            <ul class="standard clearfix">
-                                <li>
-                                    <span class="gray title mr12" style="float:left;">方式:</span>
-                                    <span class="border">
-                                            <span class="mr12 border cur tuan_way_selected" way-label="ziti">好邻居自提</span>
-                                            {{if $current_data_id==876}}
-                                                <span class="mr12 border" way-label="kddj" way-fee="10">快递到家(10元邮费)</span>
-                                            {{else}}
-                                                <span class="mr12 border" way-label="sf">顺丰到付</span>
-                                            {{/if}}
-                                    </span>
-                                </li>
-                            </ul>
-                        {{/if}}
+                        <ul class="standard clearfix" id="select_tuan_ships">
+                            <li>
+                                <span class="gray title mr12" style="float:left;">方式:</span>
+                                <span class="border">
+                                    {{loop $tuan_ships $index $tuan_ship}}
+                                        {{if $index==0}}
+                                            <span class="mr12 border cur tuan_way_selected" way-label="{{$tuan_ship['TuanBuyShip']['ship_flag']}}" way-fee="{{$tuan_ship['TuanBuyShip']['ship_fee']}}">{{$tuan_ship['TuanBuyShip']['ship_name']}}</span>
+                                        {{else}}
+                                            <span class="mr12 border" way-label="{{$tuan_ship['TuanBuyShip']['ship_flag']}}" way-fee="{{$tuan_ship['TuanBuyShip']['ship_fee']}}">{{$tuan_ship['TuanBuyShip']['ship_name']}}</span>
+                                        {{/if}}
+                                    {{/loop}}
+                                </span>
+                            </li>
+                        </ul>
                     {{else}}
-                    <div class="clearfix tuanxq" style="margin-top: -1px;">
-                        <span class="fl">自提地点：{{$tuan_team['TuanTeam']['address']}}</span>
-                        <a class="fr" href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
-                            <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
-                        </a>
-                    </div>
+                        <div class="clearfix tuanxq" style="margin-top: -1px;">
+                            <span class="fl">自提地点：{{$tuan_team['TuanTeam']['address']}}</span>
+                            <a class="fr" href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
+                                <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
+                            </a>
+                        </div>
                     {{/if}}
                     <ul class="numbers clearfix b_line">
                     <li class="fl">
@@ -120,14 +112,12 @@
                         <li class="fr" style="margin-top: 0.3em;height: 1.634em;"><a class="p_more"></a></li>
                     </ul>
                     <div class="service">
-                        {{if !$big_tuan}}
                         <ul class="clearfix b_line">
                             <li>
                                 <span class="gray mr12" style="float:left;">快递:</span>
                                 <span style="display: block;overflow: hidden;"><span id="consign_way">自提</span>	</span>
                             </li>
                         </ul>
-                        {{/if}}
                         <ul class="clearfix">
                             <li>
                                 <span class="gray mr12" style="float:left;">服务:</span>
@@ -216,12 +206,12 @@
 <!--底部购买-->
 <div class="bottom_bg">
     <ul class="clearfix">
-        <li class="love fl" style="width:25%;">
+        <li class="love fl">
             <a href="#X" class="love_icon"></a>
             <!--<p>关注</p>-->
         </li>
-        <li class="fl" style="width:50%;">
-            <div style="margin-right:3%;">
+        <li class="fl" style="width:78%;">
+            <div>
                 {{if $is_limit}}
                     <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
                 {{else}}
@@ -264,6 +254,8 @@
 
 <script>
     $(document).ready(function(){
+
+        var $select_tuan_ships = $('#select_tuan_ships');
 
         function get_spec_group(){
             var $selected_spec = $('span.spec_item_selected[item-label!="SD"]');
@@ -317,10 +309,17 @@
                 var product_id = $('#tuan_buy').attr('item-id');
                 var product_num = $('#input_pamount').val();
                 var way_type = 'normal';
-                {{if $big_tuan}}
-                way_type = $('.cur.tuan_way_selected').attr('way-label');
-                {{/if}}
-                var way_fee = $('.cur.tuan_way_selected').attr('way-fee')||0;
+                var way_fee = 0;
+                if($select_tuan_ships.length>0){
+                    var $sleect_ship = $('.cur.tuan_way_selected');
+                    if($sleect_ship.length>0){
+                        way_type = $('.cur.tuan_way_selected').attr('way-label');
+                        way_fee = $('.cur.tuan_way_selected').attr('way-fee')||0;
+                    }else{
+                        utils.alert("请选择送货方式");
+                        return false;
+                    }
+                }
                 var postdata = {"product_id":product_id,"product_num":product_num, "way_type": way_type,"spec_id":specId,"tuan_buy_id":'{{$tuan_buy_id}}',"way_fee":way_fee};
                 utils.progress_notify('正在更新购物车');
                 $.ajax({
@@ -349,11 +348,8 @@
             var that = $(this);
             that.toggleClass('cur').toggleClass('tuan_way_selected');
             $("[way-label]").not(that).removeClass('cur').removeClass('tuan_way_selected');
-            if($('.cur.tuan_way_selected').attr('way-label') == 'sf'){
-                $('#consign_way').text('顺丰');
-            }else{
-                $('#consign_way').text('自提')
-            }
+            var ship_name = $('.cur.tuan_way_selected').text();
+            $('#consign_way').text(ship_name);
         })
     })
 </script>
