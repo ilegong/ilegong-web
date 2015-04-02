@@ -16,6 +16,7 @@ class TuanController extends AppController{
      * query tuan orders
      */
     public function admin_tuan_orders(){
+        $this->loadModel('ProductSpecGroup');
         $team_id = $_REQUEST['team_id'];
         $product_id = $_REQUEST['product_id'];
         $time_type = $_REQUEST['time_type'];
@@ -38,6 +39,17 @@ class TuanController extends AppController{
         $tuan_buys = $this->TuanBuying->find('all',array(
             'conditions' => $query_tb
         ));
+
+        $p_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.pid');
+
+        $spec_groups = $this->ProductSpecGroup->find('all',array(
+            'conditions' => array(
+                'product_id' => $p_ids
+            )
+        ));
+
+        $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
+
 
         if(!empty($tuan_buys)){
             $tb_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.id');
@@ -82,8 +94,10 @@ class TuanController extends AppController{
                     )));
 
                 $order_carts = array();
-                foreach($carts as $c){
+                foreach($carts as &$c){
                     $c_order_id = $c['Cart']['order_id'];
+                    $specId = $c['Cart']['specId'];
+                    $c['Cart']['spec_name'] = $spec_groups[$specId];
                     if (!isset($order_carts[$c_order_id])) {
                         $order_carts[$c_order_id] = array();
                     }

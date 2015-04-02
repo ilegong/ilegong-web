@@ -39,7 +39,8 @@ class TuanBuyingsController extends AppController{
             $this->set('tuan_buy_status', 2);
         }
         $pid=$tuan_b['TuanBuying']['pid'];
-        $end_time =  friendlyDateFromStr($tuan_b['TuanBuying']['end_time'], FFDATE_CH_MD);
+        //$end_time =  friendlyDateFromStr($tuan_b['TuanBuying']['end_time'], FORMAT_DATETIME);
+        $end_time = $tuan_b['TuanBuying']['end_time'];
         $consign_time = empty($tuan_b['TuanBuying']['consign_time'])? '成团后发货' : friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
         $this->set(compact('pid', 'consign_time', 'tuan_buy_id', 'tuan_team', 'end_time'));
         $sold_num = $tuan_b['TuanBuying']['sold_num'];
