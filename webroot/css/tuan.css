@@ -118,7 +118,11 @@ ul,ol {
 .tuan_cancel img{ width: 100%; opacity:0.7;}
 .tuan_cancel ul,.tuan_cancel p{ opacity:0.7;}
 .tuan_cancel_condition{ width: 100%; height: 50px; position: absolute; top: 30%; left: 0; z-index: 999; text-align: center; color: #ffffff; line-height: 25px;}
-.goodlist ul{ background-color: #ffffff; padding: 5px 10px 10px 10px; color: #555555;}
+.goodlist ul {
+    background-color: #ffffff;
+    padding: 10px;
+    color: #555555;
+}
 .goodlist ul li{ font-size: 1em;}
 .goodlist ul li.fr{ width: 75px; text-align: right; color: #999999;}
 .goodlist ul li.fl{ width:72%; white-space: nowrap;text-overflow:ellipsis; overflow:hidden;}
