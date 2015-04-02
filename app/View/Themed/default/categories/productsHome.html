@@ -9,7 +9,7 @@
             </ul>
         <div class="row classify_list">
         <div class="clearfix">
-        <a target="_blank" href="/{{$category_control_name}}/{{date('Ymd',strtotime($recommendProducts[$index]['Product']['created']))}}/{{$recommendProducts[$index]['Product']['slug']}}.html" class="tuijian" style="border: 0"><img src="/img/product-demo/product-recommend/classb{{$index+1}}.jpg" /></a>
+        <a target="_blank" href="/{{$category_control_name}}/{{date('Ymd',strtotime($recommendProducts[$index]['Product']['created']))}}/{{$recommendProducts[$index]['Product']['slug']}}.html" class="tuijian" style="border: 0"><img src="/img/product-demo/product-recommend/classb{{$index+1}}.jpg?v1" /></a>
 	    <?PHP
 	    $history = $this->Html->url(array('controller' => 'categories', 'action' => 'tag', $tagWithProduct['ProductTag']['slug'] ));
         $tag = $tagWithProduct['ProductTag'];
