@@ -367,9 +367,10 @@ class TuanBuyingsController extends AppController{
         //只有一个大团
         if(count($tuan_buyings)==1){
             $tuan_id = $tuan_buyings[0]['TuanBuying']['tuan_id'];
+            $tuan_buy_id = $tuan_buyings[0]['TuanBuying']['id'];
             $tuan = $tuan_info[$tuan_id];
             if($tuan['type']==1){
-                $this->redirect('/tuan_buyings/detail/'.$tuan_id);
+                $this->redirect('/tuan_buyings/detail/'.$tuan_buy_id);
             }
         }
         $this->loadModel('Product');
