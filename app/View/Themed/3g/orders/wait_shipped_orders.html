@@ -16,7 +16,7 @@ td {padding:5px 10px;}
 		<table  class="table table-bordered">
 		<tr>
 			<td>
-            订单号：{{$order['Order']['id']}}<br/>
+            订单号：{{$order['Order']['id']}}<br/>{{if $order['Order']['type'] == 5}}('团购订单'){{/if}}
             收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_area']}}{{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
 			总价：￥{{$order['Order']['total_price']}}<br/>
 			下单时间：{{$order['Order']['created']}}<br/>

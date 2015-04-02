@@ -8,6 +8,7 @@ $this->PhpExcel->createWorksheet()
 // define table cells
 $table = array(
     array('label' => __('订单号'),  'width' => 10,  'filter' => true),
+    array('label' => __('团购'),  'width' => 10,  'filter' => true),
     array('label' => __('客户姓名'), 'width' => 10, 'filter' => true),
     array('label' => __('下单时间'), 'width' => 22),
     array('label' => __('付款时间'), 'width' => 22),
@@ -26,8 +27,8 @@ $table = array(
 $this->PhpExcel->addTableHeader($table, array('name' => '宋体', 'bold' => true, 'size' => '16'));
 
 $add_header_flag = false;
-$fields = array('id', 'consignee_name', 'created','pay_time', 'goods','total_num', 'total_all_price', 'ship_fee', 'status', 'consignee_mobilephone', 'consignee_address', 'remark', 'business_remark');
-$header = array('订单号', '客户姓名', '下单时间', '支付时间', '商品', '件数', '总价', '运费', '状态', '联系电话', '收货地址', '订单备注','商家备注');
+$fields = array('id', 'type', 'consignee_name', 'created','pay_time', 'goods','total_num', 'total_all_price', 'ship_fee', 'status', 'consignee_mobilephone', 'consignee_address', 'remark', 'business_remark');
+$header = array('订单号', '团购', '客户姓名', '下单时间', '支付时间', '商品', '件数', '总价', '运费', '状态', '联系电话', '收货地址', '订单备注','商家备注');
 $order_status = array('待确认', '已支付', '已发货', '已收货', '已退款', '', '', '', '', '已完成', '已做废', '已确认', '已投诉');
 $page = 1;
 $pagesize = 500;
@@ -64,6 +65,8 @@ do {
                 $value =  $orderAbs;
             } else if($fieldName == 'total_num') {
                 $value =  $itemsCount;
+            } else if($fieldName == 'type') {
+                $value = $item['Order']['type'] == 5 ? '是' : '否';
             } else {
                 $value = $item['Order'][$fieldName];
                 if ($fieldName == 'status') {

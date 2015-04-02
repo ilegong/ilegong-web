@@ -86,6 +86,7 @@
                 <tr>
                     <td>
                         订单号：{{$order['Order']['id']}}<br/>
+                        团购：{{if $order['Order']['type'] == 5}}是{{else}}否{{/if}}<br/>
                         收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_area']}}{{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
                         总价：￥{{$order['Order']['total_price']}}<br/>
                         运费：￥{{$order['Order']['ship_fee']}}<br/>
