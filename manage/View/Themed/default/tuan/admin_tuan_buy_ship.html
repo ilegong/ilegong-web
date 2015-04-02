@@ -8,22 +8,40 @@
         </div>
     </div>
     <br/><br/>
-    <div class="row">
+    <div class="row" id="tuan_ship_items">
         <input type="hidden" id="tuan_buy_id" value="{{$tuan_buy_id}}">
-        <div class="ship_item">
+        <div class="item">
             <div class="form-inline col-sm-10 col-sm-offset-3">
                 <input type="hidden" name="tuan_ship_id" value="">
                 <div class="form-group">
-                    <label for="ship_flag">快递标示</label>
-                    <input type="text" class="form-control" id="ship_flag">
+                    <label>快递标示</label>
+                    <input type="text" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label for="ship_name">快递名称</label>
-                    <input type="text" class="form-control" id="ship_name">
+                    <label>快递名称</label>
+                    <input type="text" class="form-control">
                 </div>
                 <div class="form-group">
-                    <label for="ship_fee">快递费用</label>
-                    <input type="number" class="form-control" id="ship_fee">
+                    <label>快递费用</label>
+                    <input type="number" class="form-control">
+                </div>
+                <button class="btn btn-default">添加</button>
+            </div>
+        </div>
+        <div class="item">
+            <div class="form-inline col-sm-10 col-sm-offset-3">
+                <input type="hidden" name="tuan_ship_id" value="">
+                <div class="form-group">
+                    <label>快递标示</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>快递名称</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>快递费用</label>
+                    <input type="number" class="form-control">
                 </div>
                 <button class="btn btn-default">添加</button>
             </div>
