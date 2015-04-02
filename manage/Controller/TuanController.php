@@ -10,7 +10,7 @@ class TuanController extends AppController{
 
     var $name = 'Tuan';
 
-    var $uses = array('TuanTeam','TuanBuying','Order','Cart','TemplateMsgLog');
+    var $uses = array('TuanTeam','TuanBuying','Order','Cart','TemplateMsgLog','TuanBuyShip');
 
     /**
      * query tuan orders
@@ -396,6 +396,41 @@ class TuanController extends AppController{
 
     public function admin_tuan_buy_ship($tuan_buy_id){
         $this->set('tuan_buy_id',$tuan_buy_id);
+        $tuan_ships = $this->TuanBuyShip->find('all',array(
+            'conditions' => array(
+                'tuan_buy_id' => $tuan_buy_id
+            )
+        ));
+        $this->set('tuan_ships',$tuan_ships);
+    }
+
+    public function admin_add_tuan_buy_ship(){
+        $this->autoRender=false;
+        $tuan_buy_id = $_REQUEST['tuan_buy_id'];
+        $ship_flag = $_REQUEST['ship_flag'];
+        $ship_name = $_REQUEST['ship_name'];
+        $ship_fee = $_REQUEST['ship_fee'];
+        $tuan_ship = $this->TuanBuyShip->save(array(
+            'tuan_buy_id' => $tuan_buy_id,
+            'ship_flag' => $ship_flag,
+            'ship_name' => $ship_name,
+            'ship_fee' => $ship_fee
+        ));
+        if($tuan_ship){
+            $data_id = $tuan_ship['TuanShip']['id'];
+            echo json_encode(array('success'=>true,'msg'=>'添加成功','id'=>$data_id));
+        }else{
+            echo json_encode(array('success'=>false,'msg'=>'添加失败'));
+        }
+    }
+
+    public function admin_delete_tuan_buy_ship($id){
+        $this->autoRender=false;
+        if($this->TuanBuyShip->delete($id)){
+            echo json_encode(array('success'=>true,'msg'=>'删除成功'));
+        }else{
+            echo json_encode(array('success'=>false,'msg'=>'删除失败'));
+        }
     }
 
 }

@@ -3,53 +3,73 @@
     <div class="row">
         <div class="col-sm-10 col-sm-offset-3">
             <ul class="nav nav-pills">
-                <li role="presentation" class="active"><a href="#">添加</a></li>
+                <li role="presentation" class="active"><a id="add_ship_item" href="#">添加</a></li>
             </ul>
         </div>
     </div>
     <br/><br/>
     <div class="row" id="tuan_ship_items">
         <input type="hidden" id="tuan_buy_id" value="{{$tuan_buy_id}}">
-        <div class="item">
-            <div class="form-inline col-sm-10 col-sm-offset-3">
-                <input type="hidden" name="tuan_ship_id" value="">
-                <div class="form-group">
-                    <label>快递标示</label>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>快递名称</label>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>快递费用</label>
-                    <input type="number" class="form-control">
-                </div>
-                <button class="btn btn-default">添加</button>
-            </div>
-        </div>
-        <div class="item">
-            <div class="form-inline col-sm-10 col-sm-offset-3">
-                <input type="hidden" name="tuan_ship_id" value="">
-                <div class="form-group">
-                    <label>快递标示</label>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>快递名称</label>
-                    <input type="text" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>快递费用</label>
-                    <input type="number" class="form-control">
-                </div>
-                <button class="btn btn-default">添加</button>
-            </div>
-        </div>
+        {{loop $tuan_ships $tuan_ship}}
+            <div class="item"><div class="form-inline col-sm-10 col-sm-offset-3"><input type="hidden" name="tuan_ship_id" value="{{$tuan_ship['TuanBuyShip']['id']}}"><div class="form-group"> <label>快递标示</label> <input name="ship_flag" type="text" class="form-control" value="{{$tuan_ship['TuanBuyShip']['ship_flag']}}"> </div> <div class="form-group"> <label>快递名称</label> <input type="text" name="ship_name" class="form-control" value="{{$tuan_ship['TuanBuyShip']['ship_name']}}"> </div> <div class="form-group"> <label>快递费用</label><input name="ship_fee" type="number" class="form-control" value="{{$tuan_ship['TuanBuyShip']['ship_fee']}}"> </div> <button name="add_ship_btn" class="btn btn-default">添加</button> <button name="delete_ship_btn" class="btn btn-default">删除</button></div></div>
+        {{/loop}}
     </div>
 </div>
 <script>
     $(document).ready(function(){
-
+        var $tuan_ship_items = $('#tuan_ship_items');
+        var $add_template = $('<div class="item"><div class="form-inline col-sm-10 col-sm-offset-3"><input type="hidden" name="tuan_ship_id" value=""><div class="form-group"> <label>快递标示</label> <input name="ship_flag" type="text" class="form-control"> </div> <div class="form-group"> <label>快递名称</label> <input type="text" name="ship_name" class="form-control"> </div> <div class="form-group"> <label>快递费用</label><input name="ship_fee" type="number" class="form-control"> </div> <button name="add_ship_btn" class="btn btn-default">添加</button> <button name="delete_ship_btn" class="btn btn-default">删除</button></div></div>');
+        var $add_ship_item = $('#add_ship_item');
+        var tuan_buy_id = $('#tuan_buy_id').val();
+        var $add_ship_btn = $('button[name="add_ship_btn"]',$tuan_ship_items);
+        var $delete_ship_btn = $('button[name="delete_ship_btn"]',$tuan_ship_items);
+        $add_ship_item.on('click', function () {
+            $add_template.clone().appendTo($tuan_ship_items);
+            $add_ship_btn = $('button[name="add_ship_btn"]',$tuan_ship_items);
+            $delete_ship_btn = $('button[name="delete_ship_btn"]',$tuan_ship_items);
+            $add_ship_btn.on('click',function(){
+                var me = $(this);
+                handle_add(me);
+            });
+            $delete_ship_btn.on('click',function(){
+                var me = $(this);
+                handle_delete(me);
+            });
+        });
+        function handle_add($element){
+            var $template_form = $element.parents('div.item');
+            var $ship_id = $('input[name="tuan_ship_id"]',$template_form)
+            var ship_flag = $('input[name="ship_flag"]',$template_form).val();
+            var ship_name = $('input[name="ship_name"]',$template_form).val();
+            var ship_fee = $('input[name="ship_fee"]',$template_form).val();
+            var post_data = {
+                'tuan_buy_id' : tuan_buy_id,
+                'ship_flag' : ship_flag,
+                'ship_name' : ship_name,
+                'ship_fee' : ship_fee
+            };
+            $.post('/manage/admin/tuan/add_tuan_buy_ship',post_data,function(data){
+                var result = JSON.parse(data);
+                if(result['success']){
+                    var ship_id = data['id'];
+                    $ship_id.val(ship_id);
+                }
+                alert(result['msg']);
+            });
+        }
+        function handle_delete($element){
+            var $template_form = $element.parents('div.item');
+            var ship_id = $('input[name="tuan_ship_id"]',$template_form).val();
+            if(ship_id){
+                $.getJSON('/manage/admin/tuan/add_tuan_buy_ship',function(data){
+                    if(data['success']){
+                        $template_form.remove();
+                    }
+                    alert(data['msg']);
+                });
+            }else{
+                $template_form.remove();
+            }
+        }
     });
 </script>
