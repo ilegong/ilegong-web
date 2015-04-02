@@ -39,7 +39,7 @@
 <div class="tuandetail_adress">
     <div class="clearfix tuandetail_adress_title">
         <span>选择您附近的团</span>
-        <a {{if $hasBigTuan}}id="new_tuan_btn"{{else}}href="/tuan_teams/create"{{/if}}>位置不合适，发起新团？</a>
+        <a {{if $hasBigTuan}}id="new_tuan_btn"{{else}}href="/tuan_teams/create"{{/if}}>位置不合适，{{if $hasBigTuan}}怎么办？{{else}}发起新团？{{/if}}？</a>
     </div>
     {{loop $tuan_buyings  $tuan_buying}}
             <?php
