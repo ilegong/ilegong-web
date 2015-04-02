@@ -103,6 +103,7 @@
         var $new_tuan_tip_info = $('#new_tuan_tip_info');
         $new_tuan_btn.on('click',function(e){
             e.preventDefault();
+            $("html, body").animate({ scrollTop: $(document).height() }, 1000);
             $new_tuan_tip_info.show();
         });
     });
