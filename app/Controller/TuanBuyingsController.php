@@ -364,6 +364,14 @@ class TuanBuyingsController extends AppController{
             'conditions' =>array('id'=>$tuan_ids),
         ));
         $tuan_info = Hash::combine($tuan_info,'{n}.TuanTeam.id','{n}.TuanTeam');
+        //只有一个大团
+        if(count($tuan_buyings)==1){
+            $tuan_id = $tuan_buyings[0]['TuanBuying']['tuan_id'];
+            $tuan = $tuan_info[$tuan_id];
+            if($tuan['type']==1){
+                $this->redirect('/tuan_buyings/detail/'.$tuan_id);
+            }
+        }
         $this->loadModel('Product');
         $tuan_product = $this->Product->find('first', array(
             'conditions' => array('id' => $pid),
