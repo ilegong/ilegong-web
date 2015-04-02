@@ -75,7 +75,7 @@
     <tr data-id="{{$tuanBuying['id']}}" class="{{if $tuanBuying['status']==1}} warning {{elseif $tuanBuying['status']==11}} success {{elseif $tuanBuying['status']==2}} danger {{elseif $tuanBuying['status']==21}} active {{/if}}">
         <td>{{$tuanBuying['id']}}</td>
         <td>{{$tuanTeam['tuan_name']}}</td>
-        <td>{{$tuanProduct}}/{{$tuanTeam['id']==26?大团:小团}}</td>
+        <td>{{$tuanProduct}}/{{$tuanTeam['type']==1?大团:小团}}</td>
         <td>{{$tuanBuying['join_num']}}</td>
         <td class="{{if $tuanBuying['sold_num']<$tuanBuying['target_num']}} text-danger {{else}} text-success    {{/if}}">{{$tuanBuying['sold_num']}}/{{$tuanBuying['target_num']}}</td>
         <td>{{$tuanStatus}}({{date('n.j H:i',strtotime($tuanBuying['end_time']))}})</td>

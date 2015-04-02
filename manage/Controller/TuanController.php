@@ -189,7 +189,7 @@ class TuanController extends AppController{
          }
          $this->log('tuan_buyings'.json_encode($tuan_buyings));
          $tuan_ids = Hash::extract($tuan_buyings,'{n}.TuanBuying.tuan_id');
-         $tuan_teams = $this->TuanTeam->find('all', array('conditions' => array('id' => $tuan_ids), 'fields' => array('id', 'tuan_name')));
+         $tuan_teams = $this->TuanTeam->find('all', array('conditions' => array('id' => $tuan_ids), 'fields' => array('id', 'tuan_name','type')));
          $tuan_teams = Hash::combine($tuan_teams, '{n}.TuanTeam.id', '{n}.TuanTeam');
          $this->log('tuan_team'.json_encode($tuan_teams));
          $tuan_products = array('838'=>'草莓', '851' => '芒果', '862'=>'好好蛋糕', '863' => '草莓863', '230' => '蛋糕230','381'=>'牛肉干','868'=>'建平小米');
