@@ -71,6 +71,12 @@ ul,ol {
 .tuandetail_adress dl dd img{ width: 0.8em; border: 0; margin-top: 1px; margin-right: 3px;vertical-align:baseline;}
 .tuandetail_adress dl dd span{ color: #666666;}
 
+.tuandetail_p{ color: #666666; padding: 5px 0 10px 0; line-height: 20px; text-align: center;}
+.tuandetail_btn{ width: 220px; margin: 0 auto; margin-bottom: 20px;}
+.tuandetail_btn a{ display: block; width: 100px; border: 1px #ffa200 solid; border-radius: 3px; height: 35px; line-height: 35px; text-align: center; color: #ffa200; font-size: 1em; text-decoration: none;}
+
+
+
 /*团介绍页面*/
 .tuan_intro{ position: fixed; z-index: 10001; left: 0px; top: 0px; height: 100%; width: 100%; }
 .tuan_intro_bg { position: relative; width: 100%; height: 100%; max-width: 640px; margin: 0 auto; }
