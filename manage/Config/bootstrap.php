@@ -21,6 +21,8 @@ const WX_API_PREFIX = 'https://api.weixin.qq.com';
 const WX_OAUTH_USERINFO = 'snsapi_userinfo';
 const WX_OAUTH_BASE = 'snsapi_base';
 
+const ADD_SCORE_TUAN_LEADER=99;
+
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
@@ -78,7 +80,6 @@ function send_weixin_message($post_data, $logObj = null) {
             if (!empty($post_data)) {
                 $options[CURLOPT_POSTFIELDS] = json_encode($post_data);
             }
-
             curl_setopt_array($curl, ($options + $wx_curl_option_defaults));
             $json = curl_exec($curl);
             curl_close($curl);
