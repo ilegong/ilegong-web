@@ -1,0 +1,216 @@
+<div class="classlist_v2" style="z-index:1">
+    <ul class="clearfix">
+        <li><a href="/orders/mine" class="back"></a></li>
+        <li class="line"></li>
+        <li><strong>订单详情</strong></li>
+    </ul>
+</div>
+<script>
+    function mobileTip(msg,fadeInTime,fadeOutTime,callBack){
+        this.$tipInfoPanel = $('<div class="comment_tip_layer radius10" style="width:60%; left:50%; top:30%; margin-left:-30%; display: none;"></div>');
+        $('body').append(this.$tipInfoPanel);
+        fadeInTime = fadeInTime?fadeInTime:1000;
+        fadeOutTime = fadeOutTime?fadeOutTime:3000;
+        callBack = callBack?callBack:function(){
+        };
+        this.$tipInfoPanel.text(msg).fadeIn(fadeInTime).fadeOut(fadeOutTime,callBack);
+    }
+    $(document).ready(function(){
+        $('#remind-deliver').click(function(){
+            var order_id = $(this).val();
+            $.ajax({
+                type:'post',
+                success:function(data){
+                    if(data==1|| data==3){
+                        $('#remind-deliver').text('已提醒商家').prop('disabled','disabled');
+                        mobileTip('商家已收到您的提醒啦');
+                    }else if(data==2){
+                        mobileTip('您已经提醒过啦，请15分钟后再提醒');
+                    }else {
+                        mobileTip('提醒发货失败，请稍后再试');
+                    }
+                },
+                data:{},
+                url:'/orders/remind_deliver/'+order_id,
+                dataType:'json'
+            })
+        });
+    });
+</script>
+<div class="order_detail_state clearfix">
+    <span class="fl"><strong>订单状态: <s>{{if $order['Order']['status']==0}}等待付款
+        {{elseif $order['Order']['status']==1}}已支付
+        {{elseif $order['Order']['status']==2}}已发货
+        {{elseif $order['Order']['status']==3}}已收货
+        {{elseif $order['Order']['status']==4}}已退款
+        {{elseif $order['Order']['status']==9}}已完成
+        {{elseif $order['Order']['status']==10}}已取消
+        {{elseif $order['Order']['status']==11}}已确认有效
+        {{elseif $order['Order']['status']==12}}已投诉
+        {{/if}}</s></strong></span>
+    <span class="fr">订单号: {{$order['Order']['id']}}</span>
+</div>
+<div class="order_detail_address">
+    <span>收货信息</span>
+    <p>{{$order['Order']['consignee_name']}}  {{$order['Order']['consignee_mobilephone']}}</p>
+    <s>{{$order['Order']['consignee_area']}} {{$order['Order']['consignee_address']}}</s>
+</div>
+
+<div class="order_detail_address" style="margin-bottom: -1px;">
+    {{if $order['Order']['status']==2 || $order['Order']['status']==3}}
+    <ul class="clearfix order_detail_btn">
+        <li><a href="#X" class="mr5">查看物流</a></li>
+        <li><a href="#X" class="ml5">客服热线</a></li>
+    </ul>
+    {{else}}
+    <ul class="clearfix order_detail_btn">
+        <li style="width: 100%;"><a href="#X" class="ml5">客服热线</a></li>
+    </ul>
+    {{/if}}
+</div>
+<div class="myorder">
+    <dl class="clearfix" style="margin-bottom: 0;">
+        <dd class="fl"><a href="/brands/20141119/peng_you_shuo.html"><img src="http://51daifan-images.stor.sinaapp.com/files/201503/thumb_s/f6b318ac5a5_0318.jpg"></a></dd>
+        <dd class="fl"><a href="/brands/20141119/peng_you_shuo.html">朋友说</a></dd>
+        <dd class="fr"><a href="#X"><img src="images/detail/more.png"></a></dd>
+    </dl>
+    {{if $order['Order']['type'] == ORDER_TYPE_TUAN}}
+    <?php $cart = $Carts[0]; $p = $products[$cart['Cart']['product_id']];
+            $tuan_buy_id = $order['Order']['member_id'];
+         ?>
+    <ul class="clearfix" style="margin-bottom: 0;">
+        <li class="fl"><a href="/tuan_buyings/detail/{{$tuan_buy_id}}"><img src="$cart['Cart']['coverimg']" border="0"></a></li>
+        <li style="overflow: hidden; display: block; padding-left: 10px; padding-right: 65px;">
+            <a href="/tuan_buyings/detail/{{$tuan_buy_id}}">
+                <p>{{$cart['Cart']['name']}}</p>
+                <s>榴莲口味 4月2日送货</s>
+            </a>
+        </li>
+        <li class="fr">￥{{$this->Number->precision($cart['Cart']['price'], 2)}}<br>x{{$cart['Cart']['num']}}</li>
+    </ul>
+    {{elseif !empty($Carts)}}
+    {{loop $Carts $cart}}
+    <?php $p = $products[$cart['Cart']['product_id']]; ?>
+    <ul class="clearfix" style="margin-bottom: 0;">
+        <li class="fl"><a href="{{product_link2($p)}}"><img src="$cart['Cart']['coverimg']" border="0"></a></li>
+        <li style="overflow: hidden; display: block; padding-left: 10px; padding-right: 65px;">
+            <a href="{{product_link2($p)}}">
+                <p>{{$cart['Cart']['name']}}</p>
+                <s>榴莲口味 4月2日送货</s>
+            </a>
+        </li>
+        <li class="fr">￥{{$this->Number->precision($cart['Cart']['price'], 2)}}<br>x{{$cart['Cart']['num']}}</li>
+    </ul>
+    {{/loop}}
+    {{else}}
+    <span>订单中没有商品</span>
+    {{/if}}
+    <div class="order_detail_price">
+        {{if !empty($order['Order']['remark'])}}
+        <div class="clearfix">
+            <span class="fl">备注：</span>
+            <span class="fr">$order['Order']['remark']</span>
+        </div>
+        {{/if}}
+        <div class="clearfix">
+            <span class="fl">运费：</span>
+            <span class="fr">￥{{$this->Number->precision($order['Order']['ship_fee'], 2)}}</span>
+        </div>
+        <div class="clearfix">
+            <span class="fl">优惠券：</span>
+            <span class="fr">-￥{{$this->Number->precision(($order['Order']['coupon_total']+$order['Order']['global_coupon_total'])/100, 2)}}</span>
+        </div>
+        <div class="clearfix">
+            <span class="fl">实付款(含运费)：</span>
+            <span class="fr"><strong>￥{{$this->Number->precision($order['Order']['total_price'], 2)}}</strong></span>
+        </div>
+    </div>
+</div>
+<div class="order_detail_time">
+    <span>下单时间：{{$order['Order']['created']}}</span>
+    {{if $order['Order']['pay_time']}}
+    <span>支付时间：{{$order['Order']['pay_time']}}</span>
+    {{/if}}
+</div>
+<div class="order_detail_operate">
+    <ul class="clearfix">
+        <li class="fl">实付款:<span>￥{{$this->Number->precision($order['Order']['total_price'], 2)}}</span></li>
+        {{if $order['Order']['status']== ORDER_STATUS_PAID}}
+        <li class="fr">
+            <a href="#X" class="order_paybtn fl" id="remind-deliver"  value="{{$order['Order']['id']}}">提醒发货</a>
+        </li>
+        {{elseif $order['Order']['status']== ORDER_STATUS_SHIPPED}}
+        <li class="fr">
+            <a href="#X" class="order_paybtn fl" id="btn_confirm_receive"  value="{{$order['Order']['id']}}">确认收货</a>
+        </li>
+        {{elseif $order['Order']['status']== ORDER_STATUS_WAITING_PAY}}
+        <li class="fr">
+            <a href="#X" class="order_deletebtn fl">取消订单</a>
+            <a href="#X" class="order_paybtn fl">去支付</a>
+        </li>
+        {{elseif $order['Order']['status']== ORDER_STATUS_RECEIVED&&$order['Order']['try_id']==0}}
+        <li class="fr">
+            {{if $order['Order']['is_comment']==0}}
+            <a href="/comments/add_comment/{{$order['Order']['id']}}" class="order_paybtn fl"  value="{{$order['Order']['id']}}">评论赢积分</a>
+            {{else}}
+            <a href="/comments/add_comment/{{$order['Order']['id']}}" class="order_paybtn fl"  value="{{$order['Order']['id']}}">查看评论</a>
+            {{/if}}
+        </li>
+        {{/if}}
+    </ul>
+</div>
+{{if $need_attentions}}
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="comment_tanchubg_layer radius10">
+        <div>关注<span>[朋友说]</span>后, 可以查看订单状态!</div>
+        <ul class="clearfix">
+            <li class="fl"><a class="comment_bingbtn radius10" data-dismiss="modal" href="javascript:void(0)">稍后关注</a></li>
+            <li class="fr"><a class="comment_nobingbtn radius10" id="subscribe">关注</a></li>
+        </ul>
+    </div>
+</div>
+{{/if}}
+<span id="orderId" style="display: none">{{$order['Order']['id']}}</span>
+<script>
+    $(document).ready(function(){
+        var order_id = "{{$order['Order']['id']}}";
+        var order_try_id = "{{$order['Order']['try_id']}}";
+        var $myModal = $('#myModal');
+        if($myModal.size()>=1){
+            $('#subscribe').bind('click', function(){
+                var order_id = $('#orderId').text();
+                $.get("/weixin/save_subscribe_info?orderId="+order_id, function(data) {
+                    window.location.href = wx_follow_url;
+                });
+            });
+            $myModal.modal('show');
+        }
+        var $followSubscribe = $('#follow_subscribe');
+        if($followSubscribe.size()>=1){
+            $followSubscribe.bind('click', function(){
+                $.get("/weixin/save_subscribe_info?type=follow", function(data) {
+                    window.location.href = wx_follow_url;
+                });
+            });
+        }
+
+        var receiveBtn = $('#btn_confirm_receive');
+        receiveBtn.click(
+                function () {
+                    bootbox.confirm('您要确认收货吗？', function (result) {
+                        if (result) {
+                            orders_receive_3g_detail(order_id, order_try_id, function(data){
+                                var $orderShippedPanel = $('#order_shipped_panel');
+                                if (data.ok && order_try_id) {
+                                    $orderShippedPanel.html('<a class="btn btn-warning" href="/comments/add_comment/' + order_id + '.html">评论赢积分</a>');
+                                } else {
+                                    window.location.href = '/orders/detail/' + order_id + '.html';
+                                }
+                            });
+                        }
+                    })
+                }
+        );
+
+    })
+</script>

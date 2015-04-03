@@ -476,3 +476,30 @@ ul li{ list-style:none;}
     padding-top: 10px;
     line-height: 33px;
 }
+
+
+/*订单详情*/
+.order_detail_soldout{ display: block; color: #ff0000; font-size: 0.9em;}
+.order_detail_state{ padding: 10px; border-bottom: 1px #eeeeee solid; margin-bottom: 10px; background-color: #ffffff; margin-top: 43px;}
+.order_detail_state span{ display: block; line-height: 22px; color: #666666;}
+.order_detail_state span.fl{ font-size: 1.1em;}
+.order_detail_state span.fr{ font-size: 1em;}
+.order_detail_state span s{ text-decoration: none; color: #ffa200; font-weight: bold;}
+.order_detail_address{ border-bottom: 1px #eeeeee solid; border-top: 1px #eeeeee solid; background-color: #ffffff; padding: 12px 10px; font-size: 1em; line-height: 20px; color: #666666; margin-bottom: 10px;}
+.order_detail_address span{ color: #333333; font-size: 1.1em; font-weight: bold; display: block; padding-bottom: 5px;}
+.order_detail_address p{ padding: 0; padding-bottom: 3px;}
+.order_detail_address s{ text-decoration: none; line-height: 18px;}
+.order_detail_btn li{ float: left; width: 50%;}
+.order_detail_btn li a{ display: block; line-height: 36px; text-align: center; color: #333333; font-size: 1em; border-radius: 3px; border: 1px #dddddd solid; text-decoration: none; background-color: #ffffff;}
+.order_detail_btn li a.mr5{ margin-right: 5px;}
+.order_detail_btn li a.ml5{ margin-left: 5px;}
+.order_detail_price{ background-color: #ffffff; border-bottom: 1px #eeeeee solid; padding: 10px; line-height: 24px; color: #666666; margin-bottom: 10px;}
+.order_detail_price span{ display: block;}
+.order_detail_price span strong{ color: #ffa200;}
+.order_detail_operate{ height: 44px; line-height: 44px; background-color: #f1f1f1; border-top: 1px #dddddd solid; position: fixed; bottom: 0; width: 100%;}
+.order_detail_operate ul{ padding: 0 10px;}
+.order_detail_operate ul li.fl{ font-size: 1em; color: #666666;}
+.order_detail_operate ul li a{ line-height: 31px; border: 1px solid; margin-top: 5px; display: block; text-decoration: none; border-radius: 3px; width: 80px; text-align: center; margin-left: 7px;}
+.order_detail_operate ul li a.order_deletebtn{ color: #666666; border-color: #dddddd;}
+.order_detail_operate ul li a.order_paybtn{ color: #ffa200; border-color: #ffa200;}
+

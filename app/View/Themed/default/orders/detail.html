@@ -81,7 +81,7 @@
         {{elseif $has_reach_limit}}
             <div class="alert alert-info">您订单中待支付的商品已经超限啦</div>
         {{/if}}
-        {{if $order['Order']['status']==3&&$order['Order']['try_id']==0}}
+        {{if $order['Order']['status']==ORDER_STATUS_RECEIVED&&$order['Order']['try_id']==0}}
         <div class="panel panel-warning">
             <div class="panel-body">
                 <a class="btn btn-warning" href="/comments/add_comment/{{$order['Order']['id']}}">{{if $order['Order']['is_comment']==0}}评论赢积分{{else}}查看评论{{/if}}</a>
@@ -163,9 +163,7 @@
             <hr/>
         {{/if}}
 
-
         {{if $order['Order']['type'] == ORDER_TYPE_TUAN}}
-
         <?php $cart = $Carts[0]; $p = $products[$cart['Cart']['product_id']];
             $tuan_buy_id = $order['Order']['member_id'];
          ?>
@@ -200,7 +198,6 @@
             <a href="{{product_link2($p)}}">
                 {{$cart['Cart']['name']}}
             </a>
-
                 {{if $canComment&&$is_try}}
             <a href="{{product_link2($p)}}?{{$is_try?SPEC_PARAM_KEY_SHICHI_COMM  : SPEC_PARAM_KEY_COMM}}=1" style="display: inline-block" class="btn-sm btn-warning">
                 去评论
