@@ -64,11 +64,12 @@ class CategoriesController extends AppController {
         }
 
         $this->setHasOfferBrandIds();
-
+        //mobile show category ids
         $mobileTagIds = array(3,5,8,12,9,6,4,10);
         $mobileTags = $this->findTagsByIds($mobileTagIds);
         $mobileTags = Hash::combine($mobileTags,'{n}.ProductTag.id','{n}.ProductTag');
         $this->set('mobile_tag',$mobileTags);
+        //spec category ids
         $specTagIds = array(13,22,15);
         $specTags = $this->findTagsByIds($specTagIds);
         $specTags = Hash::combine($specTags,'{n}.ProductTag.id','{n}.ProductTag');
