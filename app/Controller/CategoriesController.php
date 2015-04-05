@@ -22,7 +22,10 @@ class CategoriesController extends AppController {
             $this->view();
             return;
         }
-        $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1);
+        //团购商品列表 不显示在分类页
+        //TODO set a filed to check is tuan product
+        $group_buy_product_ids = array(838, 851, 862, 863, 230 ,381,868,873,874,876,879);
+        $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1,'not'=>array('Product.id' => $group_buy_product_ids));
         $conditions['Product' . '.recommend >'] = 0;
 
         $join_conditions = array(

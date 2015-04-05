@@ -196,8 +196,7 @@ $pages_tpl = array(
 $source_appid_map = array();
 
 $order_after_paid_status = array(ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED);
-//团购商品列表
-$group_buy_product_ids = array();
+
 
 function oauth_wx_source() {
     return 'wx-' . WX_APPID_SOURCE;
