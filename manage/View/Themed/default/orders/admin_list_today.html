@@ -123,9 +123,9 @@
 
             <td>
                 {{if $cart['Cart']['type'] == 5}}
-                    {{friendlyDateFromStr($tuan_consign_times[$order['Order']['member_id']], FFDATE_CH_MD)}}
+                    {{date('m-d', strtotime($tuan_consign_times[$order['Order']['member_id']]))}}
                 {{elseif !empty($cart['Cart']['consignment_date'])}}
-                    {{$consign_dates[$cart['Cart']['consignment_date']]}}
+                    {{date('m-d', strtotime($consign_dates[$cart['Cart']['consignment_date']]))}}
                 {{/if}}
             </td>
         {{/if}}
