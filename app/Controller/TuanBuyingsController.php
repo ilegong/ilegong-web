@@ -70,6 +70,13 @@ class TuanBuyingsController extends AppController{
         $this->loadModel('Product');
         $this->loadModel('Uploadfile');
         $Product = $this->Product->find('first',array('conditions' => array('id' => $pid,'deleted' => DELETED_NO)));
+
+        $this->loadModel('Brand');
+        $brand = $this->Brand->find('first', array(
+            'conditions' => array('id', $Product['Product']['brand_id']),
+            'fields' => array('name', 'slug','coverimg')
+        ));
+        $this->set('brand',$brand);
         //get specs from database
         $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($pid,'spec_names');
         $this->set('product_spec_group',json_encode($product_spec_group));
