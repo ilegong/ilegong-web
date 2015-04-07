@@ -189,10 +189,19 @@ class TuanBuyingsController extends AppController{
         ));
         $ship_fee = floatval($_REQUEST['way_fee']);
         $total_price = $Carts['Cart']['price'] * $Carts['Cart']['num'];
-        if($ship_fee>0){
-            $this->set('ship_fee',$ship_fee);
-            $total_price = $total_price+floatval($ship_fee);
-        }
+        $this->set('ship_fee',$ship_fee);
+        $total_price = $total_price+floatval($ship_fee);
+        $pid = $tuan_b['TuanBuying']['pid'];
+        $this->loadModel('Product');
+        $this->loadModel('Brand');
+        $product_brand = $this->Product->find('first', array(
+            'conditions' => array('id' => $pid),
+            'fields' => array('brand_id')
+        ));
+        $brand = $this->Brand->find('first', array(
+            'conditions' => array('id', $product_brand['Product']['brand_id']),
+            'fields' => array('name', 'slug')
+        ));
         $way_type = $_REQUEST['way_type'];
         $this->set('way_type',$way_type);
         $this->set('buy_count',$Carts['Cart']['num']);
@@ -204,9 +213,11 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_buy_id', $tuan_buy_id);
         $this->set('cart_info',$Carts);
         $this->set('max_num',$max_num);
+        $this->set('brand', $brand['Brand']);
         if($tuan_info['TuanTeam']['type'] == 1){
             $this->set('big_tuan', true);
         }
+        $this->set('hideNav',true);
     }
 
     public function tuan_pay($orderId){
@@ -292,10 +303,6 @@ class TuanBuyingsController extends AppController{
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
                 $res = array('success'=> false, 'info'=> '你已经支付过了');
             }else{
-                $tuanBuy = $this->TuanBuying->find('first', array(
-                    'conditions' => array('id' => $tuan_buy_id),
-                    'fields' => array('consign_time')
-                ));
                 //$consign_time = friendlyDateFromStr($tuanBuy['TuanBuying']['consign_time'], FFDATE_CH_MD);
                 $cart_name = $cart_info['Cart']['name'];
                 if($tuan_info['TuanTeam']['type'] == 1 && $_POST['way'] == 'sf'){
