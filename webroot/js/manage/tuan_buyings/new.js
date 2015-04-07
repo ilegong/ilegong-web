@@ -1,4 +1,14 @@
 $(function(){
+    $('.form_datetime').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    });
     var tuanTeams = $('.tuan-teams');
     $.getJSON('/manage/admin/tuan/api_tuan_teams',function(data){
         $.each(data,function(index,item){
