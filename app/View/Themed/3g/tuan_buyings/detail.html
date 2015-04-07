@@ -115,8 +115,8 @@
                     </li>
                     </ul>
                     <ul class="clearfix shop_entrance" style="color: #29AC0E;padding: 4px 0.8em 5px 0.8em;" onclick="to_brand();">
-                        <li class="fl"><img src="http://51daifan-images.stor.sinaapp.com/files/201411/thumb_s/0e1309c1731_1119.jpg" border="0"></li>
-                        <li class="fl" style="color: #333333;">朋友说</li>
+                        <li class="fl"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0"></li>
+                        <li class="fl" style="color: #333333;">{{$brand['Brand']['name']}}</li>
                         <li class="fr" style="margin-top: 0.3em;height: 1.634em;"><a class="p_more"></a></li>
                     </ul>
                     <div class="service">
@@ -192,7 +192,7 @@
 <script>
 
     function to_brand(){
-        window.location.href="/b/peng_you_shuo";
+        window.location.href="/b/{{$brand['Brand']['slug']}}";
     }
     function to_detail(){
         window.location.href="/tuan_buyings/product_detail/{{$pid}}?tuan_id={{$tuan_id}}&tuan_buy_id={{$tuan_buy_id}}";
