@@ -65,6 +65,7 @@
         <th>价格</th>
         <th>运费</th>
         <th>总价</th>
+        <th>发货时间</th>
         <th>创建时间</th>
         <th>付款时间</th>
         <th>收件人</th>
@@ -114,10 +115,19 @@
             <td></td>
             <td></td>
             <td></td>
+            <td></td>
         {{else}}
             <td>{{$order['Order']['total_price']}}</td>
             <td>{{$order['Order']['ship_fee']}}</td>
             <td>{{$order['Order']['total_all_price']}}</td>
+
+            <td>
+                {{if $cart['Cart']['type'] == 5}}
+                    {{friendlyDateFromStr($tuan_consign_times[$order['Order']['member_id']], FFDATE_CH_MD)}}
+                {{elseif !empty($cart['Cart']['consignment_date'])}}
+                    {{$consign_dates[$cart['Cart']['consignment_date']]}}
+                {{/if}}
+            </td>
         {{/if}}
         <td>{{$order['Order']['created']}}</td>
         <td>{{$order['Order']['pay_time']}}</td>

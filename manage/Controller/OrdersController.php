@@ -357,14 +357,7 @@ class OrdersController extends AppController{
             'conditions'=>array(
                 'order_id' => $ids,
             )));
-        $spec_ids = Hash::extract($carts,'{n}.Cart.specId');
-        $this->loadModel('ProductSpecGroup');
-        $spec_groups = $this->ProductSpecGroup->find('all',array(
-            'conditions' => array(
-                'id' => $spec_ids
-            )
-        ));
-        $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
+
         $order_carts = array();
         foreach($carts as $c){
             $c_order_id = $c['Cart']['order_id'];
@@ -373,6 +366,35 @@ class OrdersController extends AppController{
             }
             $order_carts[$c_order_id][] = $c;
         }
+        $spec_ids = Hash::extract($carts,'{n}.Cart.specId');
+        $this->loadModel('ProductSpecGroup');
+        $spec_groups = $this->ProductSpecGroup->find('all',array(
+            'conditions' => array(
+                'id' => $spec_ids
+            )
+        ));
+        $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
+        $consign_ids = Hash::extract($carts,'{n}.Cart.consignment_date');
+        $this->loadModel('ConsignmentDate');
+        $consign_dates = $this->ConsignmentDate->find('all',array(
+            'conditions' => array(
+                'id' => $consign_ids
+            )
+        ));
+        $consign_dates = Hash::combine($consign_dates,'{n}.ConsignmentDate.id','{n}.ConsignmentDate.send_date');
+        $tuan_ids = array();
+        foreach($orders as $order){
+            if($order['Order']['type'] == ORDER_TYPE_TUAN){
+                if(!in_array($order['Order']['member_id'], $tuan_ids)){
+                    $tuan_ids[] = $order['Order']['member_id'];
+                }
+            }
+        }
+        $this->loadModel('TuanBuying');
+        $tuan_consign_times =$this->TuanBuying->find('list', array(
+            'conditions' => array('id' => $tuan_ids),
+            'fields' => array('id', 'consign_time')
+        ));
 
         $this->set('orders',$orders);
         $this->set('total_money',$total_money);
@@ -389,7 +411,8 @@ class OrdersController extends AppController{
         $this->set('consignee_mobilephone',$consignee_mobilephone);
         $this->set('product_scheduling_date',$product_scheduling_date);
         $this->set('product_id',$product_id);
-
+        $this->set('consign_dates', $consign_dates);
+        $this->set('tuan_consign_times', $tuan_consign_times);
     }
 
     private function get_day_start($start_day = ''){
