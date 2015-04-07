@@ -60,6 +60,7 @@
         <th>订单状态</th>
         <th>商家名称</th>
         <th>商品</th>
+        <th>规格</th>
         <th>份数</th>
         <th>价格</th>
         <th>运费</th>
@@ -76,9 +77,10 @@
     </tr>
     <tbody>
     {{loop $orders $order}}
+    {{loop  $order_carts[$order['Order']['id']] $index $cart}}
     <tr>
         {{if $order_groupon_link}}
-        <th>{{$order_groupon_link[$order['Order']['member_id']]}}</th>
+        <td>{{$order_groupon_link[$order['Order']['member_id']]}}</td>
         {{/if}}
         <td>{{$order['Order']['id']}}</td>
         <td>{{$order['Order']['creator']}}</td>
@@ -104,14 +106,19 @@
             {{/loop}}
         </td>
         <td>
-            {{loop $order_carts[$order['Order']['id']] $cart}}
-                {{$cart['Cart']['name']}}
-            {{/loop}}
+            {{$cart['Cart']['name']}}
         </td>
+        <td> </td>
         <td>{{$cart['Cart']['num']}}</td>
-        <td>{{$order['Order']['total_price']}}</td>
-        <td>{{$order['Order']['ship_fee']}}</td>
-        <td>{{$order['Order']['total_all_price']}}</td>
+        {{if $index > 0}}
+            <td></td>
+            <td></td>
+            <td></td>
+        {{else}}
+            <td>{{$order['Order']['total_price']}}</td>
+            <td>{{$order['Order']['ship_fee']}}</td>
+            <td>{{$order['Order']['total_all_price']}}</td>
+        {{/if}}
         <td>{{$order['Order']['created']}}</td>
         <td>{{$order['Order']['pay_time']}}</td>
         <td>{{$order['Order']['consignee_name']}}</td>
@@ -132,6 +139,7 @@
         <td>{{$order['Order']['ship_code']}}</td>
         <td>{{$order['Order']['remark']}}</td>
     </tr>
+    {{/loop}}
     {{/loop}}
     </tbody>
 </table>
