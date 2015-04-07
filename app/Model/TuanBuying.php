@@ -18,7 +18,6 @@ class TuanBuying extends AppModel {
         $this->updateAll(array('join_num' => 'join_num + 1', 'sold_num' => 'sold_num + ' . $sold_num), array('id' => $memberId));
         $tuan_buying = $this->find('first', array(
             'conditions' => array('id' => $memberId),
-            'fields' => array('tuan_id')
         ));
         $tuan_id = $tuan_buying['TuanBuying']['tuan_id'];
         $uid = $cart_info['Cart']['creator'];
