@@ -79,7 +79,7 @@
                     {{if $big_tuan}}
                         {{if $current_data_id==868}}
                             <span class="mr12 border cur tuan_way_selected" style="display: none;"  way-label="baoyou">包邮</span>
-                        {{elseif $current_data_id==873}}
+                        {{elseif $current_data_id==873||$current_data_id==883}}
                             <span class="mr12 border cur tuan_way_selected" way-label="ziti" style="display: none;">好邻居自提</span>
                         {{else}}
                             <ul class="standard clearfix">
@@ -129,7 +129,7 @@
                         <ul class="clearfix">
                             <li>
                                 <span class="gray mr12" style="float:left;">服务:</span>
-                                <span style="display: block;overflow: hidden;"><span>本商品由 朋友说 发货并提供售后服务。</span></span>
+                                <span style="display: block;overflow: hidden;"><span>本商品由 {{$brand['Brand']['name']}} 发货并提供售后服务。</span></span>
                             </li>
                         </ul>
                     </div>
