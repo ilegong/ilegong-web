@@ -37,6 +37,7 @@ $(function(){
     var tuanbuyingcompletemsg = $('.tuan-buying-completemsg');
     var tuanbuyingtipmsg = $('.tuan-buying-tipmsg');
     var tuanbuyingdelaymsg = $('.tuan-buying-delayemsg');
+    var tuanBuyingStartDeliver = $('.tuanbuying-start-deliver');
 
     tuanBuyingDue.click(function(){
         if(!confirm('确定结束吗？')) {
@@ -137,6 +138,17 @@ $(function(){
         $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_tip_by_id_msg',{'tuan_buy_id':tuanBuyingId},function(data){
             alert(data['msg']);
         });
+    });
+    tuanBuyingStartDeliver.on('click',function(){
+        if(!confirm('静哥，确定发送开始配送模版消息吗?')){
+            return;
+        }
+        var tuanBuyingId = $(this).data('id');
+        $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_start_deliver_msg',{'tuan_buying_id':tuanBuyingId},function(data){
+           alert(data.msg);
+
+        });
+        window.location.reload();
     });
 
 

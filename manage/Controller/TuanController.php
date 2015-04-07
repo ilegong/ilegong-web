@@ -222,6 +222,7 @@ class TuanController extends AppController{
              $tuan_buying['cancel_msg_status'] = $this->get_tb_msg_status(TUAN_CANCEL_MSG,$tb_id);
              $tuan_buying['complete_msg_status'] = $this->get_tb_msg_status(TUAN_COMPLETE_MSG,$tb_id);
              $tuan_buying['tip_msg_status'] = $this->get_tb_msg_status(TUAN_TIP_MSG,$tb_id);
+             $tuan_buying['start_deliver_msg_status'] = $this->get_tb_msg_status(TUAN_STARTDELIVER_MSG,$tb_id);
              $tuan_buying['tuan_team'] = $tuan_teams[$tuan_id];
              $tuan_buying['tuan_product'] = $tuan_products[$tuanBuying['pid']];
          }
@@ -278,6 +279,16 @@ class TuanController extends AppController{
             ));
             if(!empty($tml)){
                 return '今天已发提示消息';
+            }else{
+                return 'true';
+            }
+        }
+        if($type==TUAN_STARTDELIVER_MSG){
+            $tml = $this->TemplateMsgLog->find('first',array(
+               'conditions' => $cond
+            ));
+            if(!empty($tml)){
+                return '已发配送消息';
             }else{
                 return 'true';
             }
