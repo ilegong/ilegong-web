@@ -72,7 +72,7 @@ class TuanBuyingsController extends AppController{
         $this->loadModel('Brand');
         $Product = $this->Product->find('first',array('conditions' => array('id' => $pid,'deleted' => DELETED_NO)));
         $brand = $this->Brand->find('first', array(
-            'conditions' => array('id', $Product['Product']['brand_id']),
+            'conditions' => array('id'=>$Product['Product']['brand_id']),
             'fields' => array('name', 'slug','coverimg')
         ));
         $this->set('brand',$brand);
