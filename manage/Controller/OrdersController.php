@@ -357,7 +357,14 @@ class OrdersController extends AppController{
             'conditions'=>array(
                 'order_id' => $ids,
             )));
-
+        $spec_ids = Hash::extract($carts,'{n}.Cart.specId');
+        $this->loadModel('ProductSpecGroup');
+        $spec_groups = $this->ProductSpecGroup->find('all',array(
+            'conditions' => array(
+                'id' => $spec_ids
+            )
+        ));
+        $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
         $order_carts = array();
         foreach($carts as $c){
             $c_order_id = $c['Cart']['order_id'];
@@ -372,7 +379,7 @@ class OrdersController extends AppController{
         $this->set('order_carts',$order_carts);
         $this->set('ship_type',$this->ship_type);
         $this->set('brands',$brands);
-
+        $this->set('spec_groups', $spec_groups);
         $this->set('start_date',date("Y-m-d",$start_date));
         $this->set('end_date',date("Y-m-d",$end_date));
         $this->set('brand_id',$brand_id);

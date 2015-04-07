@@ -108,7 +108,7 @@
         <td>
             {{$cart['Cart']['name']}}
         </td>
-        <td> </td>
+        <td>{{$spec_groups[$cart['Cart']['specId']]}} </td>
         <td>{{$cart['Cart']['num']}}</td>
         {{if $index > 0}}
             <td></td>

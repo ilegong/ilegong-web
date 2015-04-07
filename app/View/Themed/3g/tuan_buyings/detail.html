@@ -24,7 +24,7 @@
                     <div class="p_details_title">{{$Product['Product']['name']}}</div>
                     <ul class="p_details_price clearfix">
                         <li class="fl price"><span>{{if $current_data_id==874}}尝鲜价 {{/if}}￥<font {{if !$tuan_price}}id="product_price"{{/if}}>{{if $tuan_price}}{{$this->Number->precision($tuan_price,2)}}{{else}}{{$this->Number->precision($Product['Product']['price'],2)}}{{/if}}</font></span></li>
-                        <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{empty($consign_time)?'成团后现摘':$consign_time}}</b></span></a></li>
+                        <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{empty($consign_time)?'成团后发货':$consign_time}}</b></span></a></li>
                     </ul>
                     <ul class="sales clearfix">
                         <li>
