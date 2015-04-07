@@ -749,7 +749,15 @@ class StoresController extends AppController
             }
             $order_carts[$order_id][] = $c;
         }
-
+        $spec_ids = Hash::extract($Carts,'{n}.Cart.specId');
+        $spec_ids = array_unique($spec_ids);
+        $this->loadModel('ProductSpecGroup');
+        $spec_groups = $this->ProductSpecGroup->find('all',array(
+            'conditions' => array(
+                'id' => $spec_ids
+            )
+        ));
+        $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
         $this->set('orders', $orders);
         $this->set('total_count', $total_count);
         $this->set('total_wait_ship_count', $total_wait_ship_count);
@@ -762,6 +770,7 @@ class StoresController extends AppController
             $this->set('status', $onlyStatus[0]);
         }
         $this->set('op_cate', 'orders');
+        $this->set('spec_groups', $spec_groups);
     }
 
     protected function __business_orders_export($onlyStatus = array())

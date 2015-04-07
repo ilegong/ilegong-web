@@ -108,6 +108,7 @@
                             <tr>
                                 <th width="50%">商品名称</th>
                                 <th>价格</th>
+                                <th>规格</th>
                                 <th>数量</th>
                                 <th>合计</th>
                             </tr>
@@ -116,6 +117,7 @@
                             <tr>
                                 <td>{{$cart['Cart']['name']}}</td>
                                 <td>￥{{$cart['Cart']['price']}}</td>
+                                <td>{{$spec_groups[$cart['Cart']['specId']]}}<br/></td>
                                 <td>{{$cart['Cart']['num']}}</td>
                                 <td>￥{{$cart['Cart']['price']*$cart['Cart']['num']}}</td>
                             </tr>
