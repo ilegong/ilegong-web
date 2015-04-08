@@ -1,4 +1,4 @@
-{{$this->Html->css(array('tuan.css?v6'))}}
+{{$this->Html->css(array('tuan.css?v7'))}}
 <?php $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
     $referer_link .= '&scope=userinfo&referer='.urlencode($referer.'?has_joined=success');
 ?>
@@ -10,14 +10,14 @@
     </ul>
 </div>
 <div class="tuandetail" style="padding-top: 42px">
-    <a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
-        <p><img src="http://api.map.baidu.com/staticimage?width=750&height=350&center=
-    {{$location}}&zoom=16&markers={{$location}}&&markerStyles=l" /></p>
-        </a>
+    <!--<a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">-->
+        <!--<p><img src="http://api.map.baidu.com/staticimage?width=750&height=350&center=-->
+    <!--{{$location}}&zoom=16&markers={{$location}}&&markerStyles=l" /></p>-->
+        <!--</a>-->
     <div class="tuandetail_masg" data-team-id="{{$tuan_id}}">
         <ul class="clearfix">
-            <li class="fl">{{$tuan_team['TuanTeam']['tuan_name']}}</li>
-            <li class="fr">团长: {{$tuan_team['TuanTeam']['leader_name']}}</li>
+            <li class="tuanname">{{$tuan_team['TuanTeam']['tuan_name']}}</li>
+            <li>团长: {{$tuan_team['TuanTeam']['leader_name']}}</li>
         </ul>
         <dl class="clearfix">
             <a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
@@ -25,12 +25,20 @@
                 <dd style="float: none; padding-left: 12px;">{{$tuan_team['TuanTeam']['address']}}</dd>
             </a>
         </dl>
-        <p>{{if empty($tuan_team['TuanTeam']['tuan_desc'])}}找寻最纯粹的美味，让生活多点快乐的色彩！{{else}} {{$tuan_team['TuanTeam']['tuan_desc']}} {{/if}}</p>
+        <!--<p>{{if empty($tuan_team['TuanTeam']['tuan_desc'])}}找寻最纯粹的美味，让生活多点快乐的色彩！{{else}} {{$tuan_team['TuanTeam']['tuan_desc']}} {{/if}}</p>-->
     </div>
     <ul class="clearfix tuandetail_member">
         <li class="fl"><span>成员: {{$tuan_team['TuanTeam']['member_num']}}人</span></li>
         <li class="fr"><a class="p_more" href="/tuan_teams/memberlist/{{$tuan_id}}"></a></li>
         <li class="fr">团长微信号{{$tuan_team['TuanTeam']['leader_weixin']}}</li>
+    </ul>
+    <ul class="clearfix tuandetail_order">
+        <li>
+            <a class="mr5" href="http://www.tongshijia.com/orders/mine">我的订单</a>
+        </li>
+        <li>
+            <a class="ml5" href="http://www.tongshijia.com/orders/mine.html?tab=comment">评价赢积分</a>
+        </li>
     </ul>
     <h1>参加的团购</h1>
     {{if !empty($tuan_buyings)}}

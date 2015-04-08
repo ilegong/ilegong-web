@@ -142,18 +142,22 @@ ul,ol {
 .tuandetail p{ margin: 0; padding:0;}
 .tuandetail p img{ width: 100%;}
 .tuandetail_masg{ background-color: #ffffff; border-bottom: 1px #eeeeee solid;}
-.tuandetail_masg dl{ margin: 0 10px; padding-bottom: 8px; border-bottom: 1px #eeeeee solid; border-bottom: 1px #eeeeee solid;}
+.tuandetail_masg dl{ padding: 0 10px 10px 10px;}
 .tuandetail_masg dl dd{ font-size: 1em; color: #666666; float: left; line-height: 18px;}
-.tuandetail_masg dl dd img{ width: 0.8em; border: 0; margin-top: 1px; margin-right: 3px;vertical-align:baseline;}
+.tuandetail_masg dl dd img{ width: 0.8em; border: 0; margin-top: 1px; margin-right: 3px;}
 .tuandetail_masg dl dd span{ color: #666666;}
-.tuandetail_masg ul{ padding: 8px 10px 3px 10px;}
+.tuandetail_masg ul{ padding: 10px; background-color: #ffa200; color: #ffffff; margin-bottom: 10px;}
+.tuandetail_masg ul li.tuanname{ font-size: 1.4em; font-weight: bold;}
 .tuandetail_masg ul li{ font-size: 1em;}
-.tuandetail_masg ul li.fl{ font-size: 1.2em; color: #333333; font-weight: bold;}
-.tuandetail_masg ul li.fr{ color: #999999; line-height: 24px;}
 .tuandetail_masg p{ margin: 0; padding:10px; color: #999999; line-height: 18px;}
 .tuandetail_member{ background-color: #ffffff; border-bottom: 1px #eeeeee solid; border-top: 1px #eeeeee solid; margin-top: 10px; padding: 0 10px; line-height: 40px; color: #666666;}
 .tuandetail .p_more { margin-top: 11px; margin-left: 7px; display: block; width: 0.667em; height: 1.334em; background: url(/img/mobile/pyshuo_icon.png) 0 -16.875em no-repeat; background-size: 25em 25em;
 }
+.tuandetail_order{ padding: 10px 10px 0 10px;}
+.tuandetail_order li{ width: 50%; float: left;}
+.tuandetail_order li a{ display: block; line-height: 36px; border:1px solid #dddddd; color: #333333; border-radius: 3px; background-color: #ffffff; text-align: center; text-decoration: none;}
+.mr5{ margin-right: 5px;}
+.ml5{ margin-left: 5px;}
 .tuandetail_member span{ color: #333333;}
 .tuandetail h1{ font-size: 1.1em; color: #333333; margin: 0; padding: 10px 10px 0 10px;}
 .tuandetail_btnbg{ background-color: #f1f1f1; border-top: 1px #dddddd solid; padding: 4px 0; height: 45px; position: fixed; bottom: 0; left: 0;  width: 100%; z-index: 999;}
