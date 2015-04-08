@@ -20,21 +20,7 @@ ALTER TABLE cake_tuan_products
         REFERENCES cake_products(id);
 
 -- '838'=>'草莓', '851' => '芒果', '862'=>'好好蛋糕', '863' => '草莓863', '230' => '蛋糕230','381'=>'牛肉干','868'=>'建平小米','873'=>'好好蛋糕大团','874'=>'海南出口金菠萝','876'=>'蔬菜单次试吃','879'=>'烟台苹果','883'=>'海南椰子冻奶酪','884'=>'释迦果'
-<<<<<<< HEAD
-INSERT INTO `cake_tuan_products`(`product_id`, `alias`, `tuan_price`) VALUES(838, '兴寿草莓', 19);
-INSERT INTO `cake_tuan_products`(`product_id`, `alias`, `tuan_price`) VALUES(851, '海南芒果', 19);
-INSERT INTO `cake_tuan_products`(`product_id`, `alias`, `tuan_price`) VALUES(862, '好好蛋糕', 19);
-INSERT INTO `cake_tuan_products`(`product_id`, `alias`, `tuan_price`) VALUES(863, '16元草莓' 19);
-INSERT INTO `cake_tuan_products`(`product_id`, `alias`, `tuan_price`) VALUES(230, '薇薇安蛋糕', 19);
-INSERT INTO `cake_tuan_products`(`product_id`, `alias`, `tuan_price`) VALUES(381, '饭二牛肉干' 19);
-INSERT INTO `cake_tuan_products`(`product_id`, `alias`, `tuan_price`) VALUES(868, '建平小米', 19);
-INSERT INTO `cake_tuan_products`(`product_id`, `alias`, `tuan_price`) VALUES(873, '好好蛋糕大团', 19);
-INSERT INTO `cake_tuan_products`(`product_id`, `alias`, `tuan_price`) VALUES(874, '海南出口金菠萝', 19);
-INSERT INTO `cake_tuan_products`(`product_id`, `alias`, `tuan_price`) VALUES(876, '蔬菜单次试吃', 19);
-INSERT INTO `cake_tuan_products`(`product_id`, `alias`, `tuan_price`) VALUES(879, '烟台苹果', 19);
-INSERT INTO `cake_tuan_products`(`product_id`, `alias`, `tuan_price`) VALUES(883, '海南椰子冻奶酪', 19);
-INSERT INTO `cake_tuan_products`(`product_id`, `alias`, `tuan_price`) VALUES(884, '海南释迦果', 19);
-=======
+
 INSERT INTO `cake_tuan_products` (`id`, `product_id`, `list_img`, `detail_img`, `alias`, `tuan_price`, `deleted`)
 VALUES
 	(1, 838, 'http://www.tongshijia.com/img/tuan/pro/listgood_838.jpg', 'http://www.tongshijia.com/img/tuan/bannerdetail-838.jpg', '草莓', 19, 0),
