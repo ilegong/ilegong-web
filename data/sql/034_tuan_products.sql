@@ -4,17 +4,16 @@ ALTER TABLE cake_tuan_products
 
 DROP TABLE IF EXISTS `cake_tuan_products`;
 
-ALTER TABLE cake_tuan_products
-        DROP FOREIGN KEY fk_cake_tuan_products_product_id;
-        CREATE TABLE `cake_tuan_products` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `product_id` INT(11) NOT NULL,
-  `tuan_price` FLOAT NOT NULL,
-  `list_img` VARCHAR(200) NOT NULL,
-  `detail_img` VARCHAR(200) NOT NULL,
-  `deleted` TINYINT NULL DEFAULT 0,
+CREATE TABLE `cake_tuan_products` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `list_img` varchar(200) NOT NULL,
+  `detail_img` varchar(200) NOT NULL,
+  `alias` varchar(100) DEFAULT NULL,
+  `tuan_price` float NOT NULL DEFAULT '0',
+  `deleted` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`id`)
-  ) ENGINE=InnoDB;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 ALTER TABLE cake_tuan_products
         ADD CONSTRAINT fk_cake_tuan_products_product_id
         FOREIGN KEY (product_id)
