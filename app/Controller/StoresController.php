@@ -823,7 +823,48 @@ class StoresController extends AppController
             }
             $order_carts[$order_id][] = $c;
         }
-
+        //查规格
+        $spec_ids = Hash::extract($Carts,'{n}.Cart.specId');
+        $spec_ids = array_unique($spec_ids);
+        if(count($spec_ids)!=1 || !empty($spec_ids[0])){
+            $this->loadModel('ProductSpecGroup');
+            $spec_groups = $this->ProductSpecGroup->find('all',array(
+                'conditions' => array(
+                    'id' => $spec_ids
+                )
+            ));
+            $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
+            $this->set('spec_groups', $spec_groups);
+        }
+        //查排期
+        $consign_ids = array_unique(Hash::extract($Carts,'{n}.Cart.consignment_date'));
+        if(count($consign_ids)!=1 || !empty($consign_ids[0])){
+            $this->loadModel('ConsignmentDate');
+            $consign_dates = $this->ConsignmentDate->find('all',array(
+                'conditions' => array(
+                    'id' => $consign_ids
+                )
+            ));
+            $consign_dates = Hash::combine($consign_dates,'{n}.ConsignmentDate.id','{n}.ConsignmentDate.send_date');
+            $this->set('consign_dates', $consign_dates);
+        }
+        //团购发货时间
+        $tuan_ids = array();
+        foreach($orders as $order){
+            if($order['Order']['type'] == ORDER_TYPE_TUAN){
+                if(!in_array($order['Order']['member_id'], $tuan_ids)){
+                    $tuan_ids[] = $order['Order']['member_id'];
+                }
+            }
+        }
+        if(!empty($tuan_ids)){
+            $this->loadModel('TuanBuying');
+            $tuan_consign_times =$this->TuanBuying->find('list', array(
+                'conditions' => array('id' => $tuan_ids),
+                'fields' => array('id', 'consign_time')
+            ));
+            $this->set('tuan_consign_times', $tuan_consign_times);
+        }
         $this->set('orders', $orders);
         $this->set('order_carts', $order_carts);
         $this->set('ship_type', ShipAddress::ship_type_list());

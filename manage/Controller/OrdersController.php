@@ -366,22 +366,30 @@ class OrdersController extends AppController{
             }
             $order_carts[$c_order_id][] = $c;
         }
-        $spec_ids = Hash::extract($carts,'{n}.Cart.specId');
-        $this->loadModel('ProductSpecGroup');
-        $spec_groups = $this->ProductSpecGroup->find('all',array(
-            'conditions' => array(
-                'id' => $spec_ids
-            )
-        ));
-        $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
-        $consign_ids = Hash::extract($carts,'{n}.Cart.consignment_date');
-        $this->loadModel('ConsignmentDate');
-        $consign_dates = $this->ConsignmentDate->find('all',array(
-            'conditions' => array(
-                'id' => $consign_ids
-            )
-        ));
-        $consign_dates = Hash::combine($consign_dates,'{n}.ConsignmentDate.id','{n}.ConsignmentDate.send_date');
+        //规格
+        $spec_ids = array_unique(Hash::extract($carts,'{n}.Cart.specId'));
+        if(count($spec_ids)!=1 || !empty($spec_ids[0])){
+            $this->loadModel('ProductSpecGroup');
+            $spec_groups = $this->ProductSpecGroup->find('all',array(
+                'conditions' => array(
+                    'id' => $spec_ids
+                )
+            ));
+            $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
+            $this->set('spec_groups', $spec_groups);
+        }
+        //排期
+        $consign_ids = array_unique(Hash::extract($carts,'{n}.Cart.consignment_date'));
+        if(count($consign_ids)!=1 || !empty($consign_ids[0])){
+            $this->loadModel('ConsignmentDate');
+            $consign_dates = $this->ConsignmentDate->find('all',array(
+                'conditions' => array(
+                    'id' => $consign_ids
+                )
+            ));
+            $consign_dates = Hash::combine($consign_dates,'{n}.ConsignmentDate.id','{n}.ConsignmentDate.send_date');
+            $this->set('consign_dates', $consign_dates);
+        }
         $tuan_ids = array();
         foreach($orders as $order){
             if($order['Order']['type'] == ORDER_TYPE_TUAN){
@@ -390,18 +398,19 @@ class OrdersController extends AppController{
                 }
             }
         }
-        $this->loadModel('TuanBuying');
-        $tuan_consign_times =$this->TuanBuying->find('list', array(
-            'conditions' => array('id' => $tuan_ids),
-            'fields' => array('id', 'consign_time')
-        ));
-
+        if(!empty($tuan_ids)){
+            $this->loadModel('TuanBuying');
+            $tuan_consign_times =$this->TuanBuying->find('list', array(
+                'conditions' => array('id' => $tuan_ids),
+                'fields' => array('id', 'consign_time')
+            ));
+            $this->set('tuan_consign_times', $tuan_consign_times);
+        }
         $this->set('orders',$orders);
         $this->set('total_money',$total_money);
         $this->set('order_carts',$order_carts);
         $this->set('ship_type',$this->ship_type);
         $this->set('brands',$brands);
-        $this->set('spec_groups', $spec_groups);
         $this->set('start_date',date("Y-m-d",$start_date));
         $this->set('end_date',date("Y-m-d",$end_date));
         $this->set('brand_id',$brand_id);
@@ -411,8 +420,6 @@ class OrdersController extends AppController{
         $this->set('consignee_mobilephone',$consignee_mobilephone);
         $this->set('product_scheduling_date',$product_scheduling_date);
         $this->set('product_id',$product_id);
-        $this->set('consign_dates', $consign_dates);
-        $this->set('tuan_consign_times', $tuan_consign_times);
     }
 
     private function get_day_start($start_day = ''){

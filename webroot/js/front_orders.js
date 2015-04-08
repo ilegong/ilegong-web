@@ -472,7 +472,7 @@ rs_callbacks.modify_order_price = function(request){
 function modify_price(order_id, status, creator,obj){
     var a =$("#order-price-" + order_id).val();
     if(!$.isNumeric(a)){
-        alert('输入的价格必须是数字');
+        bootbox.alert('输入的价格必须是数字');
         return false;
     }else{
         creator = creator || 0;
