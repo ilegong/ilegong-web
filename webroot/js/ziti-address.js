@@ -14,8 +14,9 @@ var zitiAddress = function(){
     ];
     var ship_address = {
         1: [{"shop_code":146,"shop_name":"好邻居兴化路店","address":"东城区兴华西里2号楼南侧"},
-            {"shop_code":251,"shop_name":"好邻居金宝街店","address":"东城区金宝街道路北侧一线临时建筑物"},
+            {"shop_code":251,"shop_name":"好邻居金宝街金宝汇店","address":"东城区金宝街道路北侧一线临时建筑物"},
             {"shop_code":265,"shop_name":"好邻居美术馆后街店","address":"北京市东城区大佛寺东街1号"},
+            {"shop_code":287,"shop_name":"好邻居安定门内店","address":"北京市东城区安定门内大街16号"},
             {"shop_code":290,"shop_name":"好邻居东四北店","address":"北京市东城区东四北大街146号"},
             {"shop_code":300,"shop_name":"好邻居东直南小店","address":"北京市东直门南小街20-1"},
             {"shop_code":304,"shop_name":"好邻居张自忠路店","address":"东城区张自忠路2号"},
@@ -39,7 +40,7 @@ var zitiAddress = function(){
             {"shop_code":173,"shop_name":"好邻居文慧园店","address":"海淀区文慧园路10号，双汇超市对面"},
             {"shop_code":183,"shop_name":"好邻居厂洼路店","address":"海淀区厂洼小区24号楼，北京电视台西门"},
             {"shop_code":191,"shop_name":"好邻居车道沟店","address":"海淀区车道沟西南角嘉豪国际大厦B座大堂内（周一至周六营业）"},
-            {"shop_code":199,"shop_name":"好邻居永定路店","address":"海淀区永定路航天二院4号门对面"},
+            {"shop_code":199,"shop_name":"好邻居永定路店","address":"海淀区永定路63号(武警总医院北200米)"},
             {"shop_code":201,"shop_name":"好邻居白石桥店","address":"海淀区中关村南大街4号线国图地铁站东北口"},
             {"shop_code":219,"shop_name":"好邻居中关村南大街店","address":"北京市海淀区中关村大街甲A18号北京国际B1（周一至周六营业）"},
             {"shop_code":225,"shop_name":"好邻居北三环东路店","address":"海淀区中关村南大街四通桥西南角"},
@@ -58,7 +59,6 @@ var zitiAddress = function(){
             {"shop_code":334,"shop_name":"苏州街五分店","address":"海淀区苏州街工商局一层苏州街工商店对面偏南"},
             {"shop_code":341,"shop_name":"四道口路二分店","address":"北京市海淀区四道口路净土寺32号东区41幢一层北部"},
             {"shop_code":344,"shop_name":"好邻居皂君庙店","address":"海淀区皂君庙大钟寺派出所正对面海淀区皂君庙14号院一号楼1层101室"},
-            {"shop_code":345,"shop_name":"好邻居红联北村店","address":"海淀区枫蓝国际公寓对面，海淀区红联北村市回收宿舍3号楼南侧平房"},
             {"shop_code":348,"shop_name":"好邻居清华东三","address":"海淀区农业大学南门东200米路北海淀区清华东路11号2号幢一层西侧"},
             {"shop_code":350,"shop_name":"好邻居大钟寺东路","address":"海淀区大钟寺东路京仪大厦底商海淀区大钟寺东路9号1幢1层101-1"},
             {"shop_code":351,"shop_name":"好邻居板井店","address":"海淀区车道沟桥进入板井路单行路直行300米路北"},
@@ -76,6 +76,7 @@ var zitiAddress = function(){
             {"shop_code":119,"shop_name":"好邻居德内大街店","address":"西城区德内大街232号"},
             {"shop_code":121,"shop_name":"好邻居甘家口店","address":"西城区阜外大街44号"},
             {"shop_code":138,"shop_name":"北滨河店","address":"西城区北滨河路2号院"},
+            {"shop_code":154,"shop_name":"新南店","address":"西城区新街口南大街48号(新街口饭店往南200米路东)"},
             {"shop_code":170,"shop_name":"好邻居百万庄店","address":"西城区百万庄大街31号院1号楼1门1层2号"},
             {"shop_code":176,"shop_name":"好邻居阜外大街店","address":"西城区阜外大街37号"},
             {"shop_code":211,"shop_name":"好邻居西四东店","address":"西城区西安门大街152号"},
@@ -120,6 +121,7 @@ var zitiAddress = function(){
             {"shop_code":237,"shop_name":"好邻居定福庄店","address":"朝阳区定福庄北街7号楼西侧平房，北京文教用品厂内"},
             {"shop_code":239,"shop_name":"好邻居百子湾三店","address":"朝阳区百子湾路16号百子园14号楼B门101号"},
             {"shop_code":243,"shop_name":"团结湖店","address":"朝阳区朝阳北路219号"},
+            {"shop_code":249,"shop_name":"好邻居广顺桥南店","address":"朝阳区利泽中一路1号望京科技大厦商铺"},
             {"shop_code":262,"shop_name":"百子湾5店","address":"朝阳区百子湾路16号百子园4号楼一层C单元101室"},
             {"shop_code":275,"shop_name":"好邻居丽都店","address":"北京市朝阳区高家园小区311号"},
             {"shop_code":277,"shop_name":"好邻居东土城2店","address":"北京市朝阳区东土城路13号院1号楼"},
@@ -143,9 +145,9 @@ var zitiAddress = function(){
             {"shop_code":346,"shop_name":"刘家窑南里分店","address":"丰台区刘家窑路丰台区刘家窑南里甲一号","area_code":506,"lat":39.868292,"lon":116.423535}],
         6:[{"shop_code":229,"shop_name":"都市馨园店","address":"崇文区兴隆都市馨园地上一层A101","area_code":504,"lat":39.901802,"lon":116.42174}],
         7:[{"shop_code":208,"shop_name":"永安路店","address":"宣武区永安路104号G间","area_code":505,"lat":39.89244,"lon":116.394263},
-            {"shop_code":302,"shop_name":"鸭子桥北店","address":"宣武区南滨河31号","area_code":505,"lat":39.88646,"lon":116.355091},
             {"shop_code":258,"shop_name":"广义街店","address":"宣武区广安门内大街311号院2号楼祥龙大厦首层","area_code":505,"lat":39.896673,"lon":116.363458},
-            {"shop_code":221,"shop_name":"友谊医院店","address":"北京市宣武区永安路32号","area_code":505,"lat":39.892503,"lon":116.401073}],
+            {"shop_code":221,"shop_name":"友谊医院店","address":"北京市宣武区永安路32号","area_code":505,"lat":39.892503,"lon":116.401073},
+            {"shop_code":302,"shop_name":"鸭子桥北店","address":"宣武区南滨河31号","area_code":505,"lat":39.88646,"lon":116.355091}],
         8:[
             {"shop_code":999,"shop_name":"昌平自提","address":"昌平县城万科城东门世纪联华超市蔬菜水果铺","area_code":505,"lat":40.218246,"lon":116.243044,"not_shop":true}
         ]
