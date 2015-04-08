@@ -103,10 +103,12 @@ class TuanBuyingsController extends AppController{
         }
         $con = array('modelclass' => 'Product','fieldname' =>'photo','data_id' => $pid);
         $Product['Uploadfile']= $this->Uploadfile->find('all',array('conditions' => $con, 'order'=> array('sortorder DESC')));
+        $original_price = $Product['Product']['original_price'];
         $tuan_price = $tuan_b['TuanBuying']['tuan_price'];
         if($tuan_price > 0){
             $this->set('tuan_price',$tuan_price);
         }
+        $this->set('original_price',$original_price);
         $this->set('Product', $Product);
         $this->set('category_control_name', 'products');
         $this->set('current_data_id', $pid);
@@ -395,7 +397,7 @@ class TuanBuyingsController extends AppController{
         $this->loadModel('Product');
         $tuan_product = $this->Product->find('first', array(
             'conditions' => array('id' => $pid),
-            'fields' => array('name', 'promote_name', 'price','id')
+            'fields' => array('name', 'promote_name', 'price','id','original_price')
         ));
         $this->set('tuan_product', $tuan_product);
         $this->set('tuan_info',$tuan_info);

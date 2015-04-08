@@ -27,8 +27,8 @@
     </a>
 </div>
 <ul class="tuandetail_price clearfix">
-    <li class="fl"><span>￥<strong>{{$tuan_product['Product']['price']}}</strong></span></li>
-    <li class="fl"><s>{{if $tuan_product['Product']['id'] == PRODUCT_ID_CAOMEI}}￥29.00{{/if}}</s></li>
+    <li class="fl"><span>￥<strong>{{$this->Number->precision($tuan_product['Product']['price'],2)}}</strong></span></li>
+    <li class="fl"><s>{{if $tuan_product['Product']['id'] == PRODUCT_ID_CAOMEI}}￥29.00{{else}}{{if $tuan_product['Product']['original_price']>0}}￥{{$this->Number->precision($tuan_product['Product']['original_price'],2)}}{{/if}}{{/if}}</s></li>
     <li class="fr">已有{{$tuan_buy_num>0?$tuan_buy_num:0}}人参团</li>
 </ul>
 <ul class="tuandetail_more clearfix" onclick="to_detail();">
