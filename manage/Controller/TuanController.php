@@ -136,9 +136,8 @@ class TuanController extends AppController{
 
     public function admin_api_tuan_products(){
         $this->autoRender=false;
-        $tuan_products = Hash::extract($this->TuanProduct->find('all'), '{n}.TuanProduct');
 
-        echo json_encode($tuan_products);
+        echo getTuanProductsAsJson();
     }
 
      public function admin_api_tuan_teams(){

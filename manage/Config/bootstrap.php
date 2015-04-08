@@ -166,3 +166,27 @@ function get_tuan_msg_element($tuan_buy_id,$flag=true){
         return null;
     }
 }
+
+/**
+ * 取全部团购商品
+ * @return mixed
+ */
+function getTuanProductsAsJson(){
+    $tuanProducts = Cache::read('tuan_products');
+    if(empty($tuanProducts)){
+        $tuanProductM = ClassRegistry::init('TuanProduct');
+        $tuanProducts = $tuanProductM->find('all',array(
+            'conditions' => array(
+                'deleted' => DELETED_NO
+            )
+        ));
+        $tuanProducts = json_encode($tuanProducts);
+        Cache::write('tuan_products',$tuanProducts);
+
+    }
+    return $tuanProducts;
+}
+
+function getTuanProducts(){
+    return json_decode(getTuanProductsAsJson(),true);
+}

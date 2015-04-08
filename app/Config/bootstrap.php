@@ -1636,3 +1636,24 @@ function prepare_wx_share_log($currUid, $date_type, $data_id){
     return array('signPackage' => $signPackage, 'share_string' => urlencode($share_code));
 }
 
+
+function getTuanProductsAsJson(){
+    $tuanProducts = Cache::read('tuan_products');
+    if(empty($tuanProducts)){
+        $tuanProductM = ClassRegistry::init('TuanProduct');
+        $tuanProducts = $tuanProductM->find('all',array(
+            'conditions' => array(
+                'deleted' => DELETED_NO
+            )
+        ));
+        $tuanProducts = json_encode($tuanProducts);
+        Cache::write('tuan_products',$tuanProducts);
+
+    }
+    return $tuanProducts;
+}
+
+function getTuanProducts(){
+    return json_decode(getTuanProductsAsJson(),true);
+}
+
