@@ -36,5 +36,4 @@ VALUES
 	(11, 883, 'http://www.tongshijia.com/img/tuan/pro/listgood_883.jpg', 'http://www.tongshijia.com/img/tuan/bannerdetail-883.jpg', '海南椰子冻奶酪', 29.9, 0),
 	(12, 884, 'http://www.tongshijia.com/img/tuan/pro/listgood_884.jpg', 'http://www.tongshijia.com/img/tuan/bannerdetail-884.jpg', '释迦果', 149, 0);
 
->>>>>>> 团购产品可以编辑价格 初始化数据
 
