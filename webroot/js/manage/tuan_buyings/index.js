@@ -140,15 +140,27 @@ $(function(){
         });
     });
     tuanBuyingStartDeliver.on('click',function(){
-        if(!confirm('静哥，确定发送开始配送模版消息吗?')){
-            return;
-        }
         var tuanBuyingId = $(this).data('id');
-        $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_start_deliver_msg',{'tuan_buying_id':tuanBuyingId},function(data){
-           alert(data.msg);
+       bootbox.confirm('静哥，确定发送开始配送模版消息吗?',function(e){
+           if(e){
+               bootbox.prompt({
+                   title:'请输入配送模版消息',
+                   value:'亲，您在***团购的***已经在路上了啦，请注意收货',
+                   callback:function(msg){
+                       var tuan_msg = msg;
+                       $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_start_deliver_msg',{'tuan_buying_id':tuanBuyingId,'deliver_msg':tuan_msg},function(data){
+                           bootbox.alert(data.msg,function(e){
+                                   window.location.reload();
+                           });
+                       });
+                   }
+               });
+           }else{
+               return;
+           }
+       });
 
-        });
-        window.location.reload();
+
     });
 
 

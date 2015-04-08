@@ -22,6 +22,7 @@ const WX_OAUTH_USERINFO = 'snsapi_userinfo';
 const WX_OAUTH_BASE = 'snsapi_base';
 
 const ADD_SCORE_TUAN_LEADER=99;
+const ORDER_STATUS_PAID=1;
 
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
@@ -102,11 +103,12 @@ function send_weixin_message($post_data, $logObj = null) {
 }
 
 
-function get_tuan_msg_element($tuan_buy_id){
+function get_tuan_msg_element($tuan_buy_id,$flag=true){
     $tuanBuyingM = ClassRegistry::init('TuanBuying');
     $tuanTeamM = ClassRegistry::init('TuanTeam');
     $productM = ClassRegistry::init('Product');
     $tuanMemberM = ClassRegistry::init('TuanMember');
+    $tuanOrderM = ClassRegistry::init('Order');
     $tb = $tuanBuyingM->find('first',array(
         'conditions' => array(
             'id' => $tuan_buy_id,
@@ -125,14 +127,25 @@ function get_tuan_msg_element($tuan_buy_id){
                 'id' => $product_id
             )
         ));
+        if($flag){                                        //flag is false, select all the tuan_members,otherwise we select tuan_members who have bought goods
+        $tuanOrders = $tuanOrderM->find('all',array(
+            'conditions' => array(
+                'member_id' => $tuan_buy_id,
+                'status' => ORDER_STATUS_PAID
+            )
+        ));
+         $uids = Hash::extract($tuanOrders,'{n}.Order.creator');
+        }else{
         $tuan_members = $tuanMemberM->find('all', array(
             'conditions' => array(
                 'tuan_id' => $tuan_id
             )
         ));
+         $uids = Hash::extract($tuan_members,'{n}.TuanMember.uid');
+        }
         $consign_time = $tb['TuanBuying']['consign_time'];
         $consign_time = friendlyDateFromStr($consign_time,FFDATE_CH_MD);
-        $uids = Hash::extract($tuan_members,'{n}.TuanMember.uid');
+
         $tuan_name = $tt['TuanTeam']['tuan_name'];
         $product_name = $p['Product']['name'];
         $tuan_leader = $tt['TuanTeam']['leader_name'];

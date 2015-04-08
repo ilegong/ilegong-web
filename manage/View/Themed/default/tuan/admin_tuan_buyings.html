@@ -1,4 +1,9 @@
 {{$this->Html->css(array('bootstrap.min.css'));}}
+        <style>
+            .fade.in{
+                opacity: 0.75;
+            }
+        </style>
 <hr/>
 <h1>团购管理</h1>
 <hr/>
@@ -132,14 +137,15 @@
             {{elseif $tuanBuying['status']==1}}
                 待发货({{date('n.j',strtotime($tuanBuying['consign_time']))}})
             {{if $tuan_buying['start_deliver_msg_status'] == 'true'}}
-            <button type="button" class="btn btn-sm btn-info tuanbuying-start-deliver" data-id="{{$tuanBuying['id']}}">开始配送</button>
+            <button type="button" class="btn btn-sm btn-info tuanbuying-start-deliver" data-id="{{$tuanBuying['id']}}">配送消息</button>
             {{else}}
             <span class="label label-info">{{$tuan_buying['start_deliver_msg_status']}}</span>
+            <button type="button" class="btn btn-sm btn-warning tuan-buying-finished" data-id="{{$tuanBuying['id']}}" value="1">发货完成</button>
             {{/if}}
 
             {{elseif $tuanBuying['status']==11}}
                 已发货({{date('n.j',strtotime($tuanBuying['consign_time']))}})
-            <button type="button" class="btn btn-sm btn-warning tuan-buying-finished" data-id="{{$tuanBuying['id']}}" value="1">发货完成</button>
+
             {{elseif $tuanBuying['consign_time']==null}}
                 团满发货
             {{elseif $tuanBuying['status']==1}}
@@ -173,6 +179,7 @@
         '//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js',
         '//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js',
         'jquery.iframe-transport.js',
-        'manage/tuan_buyings/index.js'
+        'manage/tuan_buyings/index.js',
+
     ));
 }}

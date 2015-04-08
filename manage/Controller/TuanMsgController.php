@@ -16,7 +16,7 @@ class TuanMsgController extends AppController{
     public function admin_send_tuan_buy_create_msg(){
         $this->autoRender = false;
         $tuan_buy_id = $_REQUEST['tuan_buy_id'];
-        $msg_element = get_tuan_msg_element($tuan_buy_id);
+        $msg_element = get_tuan_msg_element($tuan_buy_id,false);
         if(empty($msg_element)) {
             echo json_encode(array('success' => false,'msg' => '该团购不存在,亲先创建..'));
             return;
@@ -175,7 +175,12 @@ class TuanMsgController extends AppController{
     public function admin_send_tuan_buy_start_deliver_msg(){
         $this->autoRender = false;
         $tuan_buying_id = $_REQUEST['tuan_buying_id'];
+        $tuan_deliver_msg = $_REQUEST['deliver_msg'];
         $msg_element = get_tuan_msg_element($tuan_buying_id);
+        if(empty($tuan_deliver_msg)){
+            echo json_encode(array('success' => false,'msg' => '模版消息推送失败'));
+            return;
+        }
         if(empty($msg_element)){
             echo json_encode(array('success' => false,'msg' => '该团购不存在,亲先创建..'));
             return;
@@ -187,7 +192,7 @@ class TuanMsgController extends AppController{
         $uids = $msg_element['uids'];
         $product_name = $msg_element['product_name'];
         $tuan_name = $msg_element['tuan_name'];
-        $title = '亲，您在'.$tuan_name.'团购的['.$product_name.']已经在路上啦，请您注意收货';
+        $title = $tuan_deliver_msg;
         $tuan_leader = $msg_element['tuan_leader'];
         $remark = '点击查看团购详情';
         $detail_url = WX_HOST.'/tuan_buyings/detail/'.$tuan_buying_id;
