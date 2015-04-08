@@ -3,10 +3,10 @@
     $referer_link .= '&scope=userinfo&referer='.urlencode($referer.'?has_joined=success');
 ?>
 <div class="classlist_v2">
-    <ul class="clearfix" >
-        <li><a class="back" href="javascript:void (0)" onclick="window.history.back();"></a></li>
+    <ul class="clearfix">
+        <li><a class="back" href="javascript:void (0)" onclick=" goBack()"></a></li>
         <li class="line"></li>
-        <li style="text-overflow: ellipsis;"><strong>返回</strong></li>
+        <li style="text-overflow: ellipsis;"><strong>{{$tuan_team['TuanTeam']['tuan_name']}}</strong></li>
     </ul>
 </div>
 <div class="tuandetail" style="padding-top: 42px">
@@ -184,6 +184,15 @@
                 }
             });
         });
+
     });
+    function goBack(){
+        var refURL = document.referrer;
+        if (refURL != "http://www.tongshijia.com/tuan_teams/mei_shi_tuan"){
+            window.location.href = "http://www.tongshijia.com/tuan_teams/mei_shi_tuan";
+        }else{
+            window.history.back();
+        }
+    }
 </script>
 
