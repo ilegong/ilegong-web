@@ -56,9 +56,6 @@ define('TUAN_STARTDELIVER_MSG','tuan_startdeliver_msg');
 
 include_once COMMON_PATH.'bootstrap.php';
 
-const PRODUCT_ID_CAOMEI = 838;//草莓
-const PRODUCT_ID_MANGUO = 851;//海南空运芒果
-
 function oauth_wx_source() {
     return 'wx-' . WX_APPID_SOURCE;
 }

@@ -25,18 +25,6 @@
             </li>
         </ul>
         {{/if}}
-        {{if $Product['Product']['id'] == PRODUCT_ID_MANGUO}}
-        <div class="tuan_bar">
-            <div>已团购<span id="sold_num" value="{{$sold_num>0?$sold_num:0}}">{{$sold_num>0?$sold_num:0}}</span>份</div>
-            <div class="bar">
-                <div class="bar_buy" id = "bar_buy"></div>
-            </div>
-            <ul class="clearfix">
-                <li class="fl"><span id="bar_percent"></span></li>
-                <li class="fr">目标50份</li>
-            </ul>
-        </div>
-        {{/if}}
         {{if $ship_fixed||$ship_promo_nums||$ship_promo_amount||!empty($special_name)||$in_nianhuo||$total_left>0}}
         <ul class="sales clearfix">
             <li>
@@ -224,14 +212,3 @@
         });
     });
 </script>
-
-        {{if $Product['Product']['id'] == PRODUCT_ID_MANGUO}}
-        <script>
-            $(document).ready(function(){
-                var sold_num = $('#sold_num').attr('value');
-                var sold_percent = (sold_num/50*100)>100?100:sold_num*2;
-                $('#bar_buy').css("width", sold_percent + "%");
-                $('#bar_percent').text(sold_percent + "%");
-            });
-        </script>
-        {{/if}}
