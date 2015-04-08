@@ -61,7 +61,7 @@ do {
     $rows = count($orders);
     foreach ($orders as $item) {
 //        list($orderAbs, $itemsCount) = countGoodsAndNums($item, $order_carts);
-        foreach($order_carts[$item['Order']['id']] as $index => $cart){
+        foreach($order_carts[$item['Order']['id']] as $cart){
             $row = array();
             foreach ($fields as $fieldName) {
                 if ($fieldName == 'goods') {
@@ -80,16 +80,12 @@ do {
                         $date = $consign_dates[$cart['Cart']['consignment_date']];
                         $value = empty($date)?'': date('m-d', strtotime($date));
                     }
-                } else if($fieldName == 'status') {
-                    $value = $order_status[$item['Order'][$fieldName]];
-                } else {
-                    if($index == 0){
-                        $value = $item['Order'][$fieldName];
-                        if ($fieldName == 'consignee_address'){
-                            $value = $item['Order']['consignee_area'].$item['Order']['consignee_address'];
-                        }
-                    }else{
-                        $value = '';
+                }  else {
+                    $value = $item['Order'][$fieldName];
+                    if ($fieldName == 'consignee_address'){
+                        $value = $item['Order']['consignee_area'].$item['Order']['consignee_address'];
+                    }else if($fieldName == 'status') {
+                        $value = $order_status[$value];
                     }
                 }
                 $row[] = $value;
