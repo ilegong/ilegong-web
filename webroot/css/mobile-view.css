@@ -114,9 +114,10 @@ ul li{ list-style:none;}
     background: url(/img/mobile/pyshuo_icon.png) 0 -16.875em no-repeat;
     background-size: 25em 25em;
 }
+
 .p_details_price {
     font-size: 1em;
-    padding: 0 0.833em 0px 0.833em;
+    padding: 0 10px 5px 10px;
     color: #c0c0c0;
     border-bottom: 1px #eeeeee solid;
     background-color: #ffffff;

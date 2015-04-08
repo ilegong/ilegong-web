@@ -57,7 +57,7 @@ ul,ol {
 .tuandetail_price li.fl{ padding-right: 3px;}
 .tuandetail_price li.fl span{ color: #ffa200;}
 .tuandetail_price li.fl span strong{ font-size: 2em; font-weight: normal;}
-.tuandetail_price li.fl s,.tuandetail_price li.fr{ display: block; padding-top: 7px;}
+.tuandetail_price li.fl s,.tuandetail_price li.fr{ display: block; padding-top: 10px;}
 .tuandetail_more{ background-color: #ffffff; border-top: 1px #eeeeee solid; border-bottom: 1px #eeeeee solid; padding:10px 10px 9px 10px; line-height: 22px; font-size: 1em; color: #555555; margin-bottom: 10px;}
 .tuandetail_more img{ width: 0.5em; margin-top: 3px;}
 .tuandetail_adress{ background-color: #ffffff; border-top: 1px #eeeeee solid; padding-top:10px; margin-bottom: 10px;}

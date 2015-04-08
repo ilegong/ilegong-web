@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 {{$this->Html->css(array('tuan.css?v7'));}}
+=======
+{{$this->Html->css(array('tuan.css?v6.1'));}}
+>>>>>>> update tuan css
 <div class="classlist_v2">
     <ul class="clearfix">
         <li><a href="/categories/mobileHome" class="back"></a></li>
@@ -6,7 +10,7 @@
         <li>返回</li>
     </ul>
 </div>
-  <div  style="margin-top: 50px;">
+  <div  style="margin-top: 50px;margin-bottom: 10px;">
       {{loop $tuan_product_ids $pid}}
       <div class="goodlist {{if $tuan_products_info[$pid]['status'] == DELETED_YES}}tuan_cancel{{/if}}">
           <a href="/tuan_buyings/goods_tuans/{{$pid}}">
