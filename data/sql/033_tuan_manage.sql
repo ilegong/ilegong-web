@@ -66,17 +66,3 @@ CREATE TABLE `cake_tuan_buy_ships` (
   `ship_fee` FLOAT NOT NULL DEFAULT 0,
   `deleted` TINYINT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`));
-
--- 创建团购产品表
-CREATE TABLE `cake_tuan_products` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `product_id` INT NOT NULL,
-  `list_img` VARCHAR(200) NOT NULL,
-  `detail_img` VARCHAR(200) NOT NULL,
-  `deleted` TINYINT NULL DEFAULT 0,
-  PRIMARY KEY (`id`));
-
-
-
-
-
