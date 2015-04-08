@@ -42,7 +42,7 @@ VALUES
 	(3, 862, 'http://www.tongshijia.com/img/tuan/pro/listgood_862.jpg', 'http://www.tongshijia.com/img/tuan/bannerdetail-862.jpg', '好好蛋糕', 129, 0),
 	(4, 863, 'http://www.tongshijia.com/img/tuan/pro/listgood_863.jpg', 'http://www.tongshijia.com/img/tuan/bannerdetail-863.jpg', '草莓863', 19, 0),
 	(5, 381, 'http://www.tongshijia.com/img/tuan/pro/listgood_381.jpg', 'http://www.tongshijia.com/img/tuan/bannerdetail-381.jpg', '牛肉干', 22, 0),
-	(6, 868, 'http://www.tongshijia.com/img/tuan/pro/listgood_868.jpg', 'http://www.tongshijia.com/img/tuan/bannerdetail-868.jpg', '建平小米', 0, 0),
+	(6, 868, 'http://www.tongshijia.com/img/tuan/pro/listgood_868.jpg', 'http://www.tongshijia.com/img/tuan/bannerdetail-868.jpg', '建平小米', 32, 0),
 	(7, 873, 'http://www.tongshijia.com/img/tuan/pro/listgood_873.jpg', 'http://www.tongshijia.com/img/tuan/bannerdetail-873.jpg', '好好蛋糕大团', 168, 0),
 	(8, 874, 'http://www.tongshijia.com/img/tuan/pro/listgood_874.jpg', 'http://www.tongshijia.com/img/tuan/bannerdetail-874.jpg', '海南出口金菠萝', 128, 0),
 	(9, 876, 'http://www.tongshijia.com/img/tuan/pro/listgood_876.jpg', 'http://www.tongshijia.com/img/tuan/bannerdetail-876.jpg', '蔬菜单次试吃', 0, 0),
