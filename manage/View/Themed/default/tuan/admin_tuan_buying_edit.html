@@ -20,10 +20,10 @@
     <div class="form-group">
       <label for="consignment_type" class="col-sm-2 control-label">发货类型</label>
       <div class="col-sm-9">
-        <select class="form-control time-type" name="data[TuanBuying][type]" id="consignment_type">
-          <option value="0" {{if $tuanBuying['type'] == 0 }}selected = 'selected'{{/if}}>团满发货</option>
-          <option value="1" {{if $tuanBuying['type'] == 1 }}selected = 'selected'{{/if}}>团满准备发货</option>
-          <option value="2" {{if $tuanBuying['type'] == 2 }}selected = 'selected'{{/if}}>排期</option>
+        <select class="form-control time-type" name="data[TuanBuying][consignment_type]" id="consignment_type">
+          <option value="0" {{if $tuanBuying['consignment_type'] == 0 }}selected = 'selected'{{/if}}>团满发货</option>
+          <option value="1" {{if $tuanBuying['consignment_type'] == 1 }}selected = 'selected'{{/if}}>团满准备发货</option>
+          <option value="2" {{if $tuanBuying['consignment_type'] == 2 }}selected = 'selected'{{/if}}>排期</option>
         </select>
       </div>
     </div>

@@ -86,11 +86,11 @@
         <td>{{$tuanTeam['tuan_name']}}</td>
         <td>{{$tuanProduct}}/{{$tuanTeam['type']==1?大团:小团}}</td>
         <td>
-          {{if $tuanBuying['type'] == 0}}
+          {{if $tuanBuying['consignment_type'] == 0}}
             团满发货
-          {{elseif $tuanBuying['type'] == 1}}
+          {{elseif $tuanBuying['consignment_type'] == 1}}
             团满准备发货
-          {{elseif $tuanBuying['type'] == 2}}
+          {{elseif $tuanBuying['consignment_type'] == 2}}
             排期
           {{else}}
           {{/if}}</td>

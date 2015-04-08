@@ -53,11 +53,11 @@
                         {{$tuanProduct['tuan_price']}}
                     </td>
                     <td>
-                        {{if $tuanProduct['type'] == 0}}
+                        {{if $tuanProduct['consignment_type'] == 0}}
                           团满发货
-                        {{elseif $tuanProduct['type'] == 1}}
+                        {{elseif $tuanProduct['consignment_type'] == 1}}
                           团满准备发货
-                        {{elseif $tuanProduct['type'] == 2}}
+                        {{elseif $tuanProduct['consignment_type'] == 2}}
                           排期
                         {{else}}
                         {{/if}}
