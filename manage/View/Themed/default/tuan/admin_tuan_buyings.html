@@ -62,7 +62,7 @@
 <table class="table table-bordered  table-condensed table-responsive">
     <thead>
     <tr>
-        <td>团购ID</td><td>团名称</td><td>商品/类别</td><td>参团人数</td><td>售出份数/目标</td><td>创建时间</td><td>是否完成(截单时间)</td><td>是否延期</td><td>发货/退款</td><td>操作</td>
+        <td>团购ID</td><td>团名称</td><td>商品/类别</td><td>发货类型</td><td>参团人数</td><td>售出份数/目标</td><td>创建时间</td><td>是否完成(截单时间)</td><td>是否延期</td><td>发货/退款</td><td>操作</td>
     </tr>
     </thead>
     <tbody>
@@ -85,6 +85,15 @@
         <td>{{$tuanBuying['id']}}</td>
         <td>{{$tuanTeam['tuan_name']}}</td>
         <td>{{$tuanProduct}}/{{$tuanTeam['type']==1?大团:小团}}</td>
+        <td>
+          {{if $tuanBuying['type'] == 0}}
+            团满发货
+          {{elseif $tuanBuying['type'] == 1}}
+            团满准备发货
+          {{elseif $tuanBuying['type'] == 2}}
+            排期
+          {{else}}
+          {{/if}}</td>
         <td>{{$tuanBuying['join_num']}}</td>
         <td class="{{if $tuanBuying['sold_num']<$tuanBuying['target_num']}} text-danger {{else}} text-success    {{/if}}">{{$tuanBuying['sold_num']}}/{{$tuanBuying['target_num']}}</td>
         <td>{{$tuanBuying['created'] == ''?date('n.j H:i',strtotime($tuanBuying['end_time'])-2*24*60*60):date('n.j H:i',strtotime($tuanBuying['created']))}}
@@ -126,30 +135,29 @@
         <td>
             {{if $tuanBuying['status']==2}}
                 待退款
-            <button type="button" class="btn btn-sm btn-danger tuan-buying-refunded" data-id="{{$tuanBuying['id']}}" value="1">退款完成</button>
+              <button type="button" class="btn btn-sm btn-danger tuan-buying-refunded" data-id="{{$tuanBuying['id']}}" value="1">退款完成</button>
             {{if $tuan_buying['cancel_msg_status'] == 'true'}}
-            <button type="button" class="btn btn-sm btn-info tuan-buying-cancelmsg" data-id="{{$tuanBuying['id']}}">取消消息</button>
+              <button type="button" class="btn btn-sm btn-info tuan-buying-cancelmsg" data-id="{{$tuanBuying['id']}}">取消消息</button>
             {{else}}
-            <span class="label label-info">{{$tuan_buying['cancel_msg_status']}}</span>
+              <span class="label label-info">{{$tuan_buying['cancel_msg_status']}}</span>
             {{/if}}
             {{elseif $tuanBuying['status']==21}}
                 已退款
             {{elseif $tuanBuying['status']==1}}
                 待发货({{date('n.j',strtotime($tuanBuying['consign_time']))}})
-            {{if $tuan_buying['start_deliver_msg_status'] == 'true'}}
-            <button type="button" class="btn btn-sm btn-info tuanbuying-start-deliver" data-id="{{$tuanBuying['id']}}">配送消息</button>
-            {{else}}
-            <span class="label label-info">{{$tuan_buying['start_deliver_msg_status']}}</span>
-            <button type="button" class="btn btn-sm btn-warning tuan-buying-finished" data-id="{{$tuanBuying['id']}}" value="1">发货完成</button>
-            {{/if}}
-
+              {{if $tuan_buying['start_deliver_msg_status'] == 'true'}}
+                <button type="button" class="btn btn-sm btn-info tuanbuying-start-deliver" data-id="{{$tuanBuying['id']}}">配送消息</button>
+              {{else}}
+                <span class="label label-info">{{$tuan_buying['start_deliver_msg_status']}}</span>
+                <button type="button" class="btn btn-sm btn-warning tuan-buying-finished" data-id="{{$tuanBuying['id']}}" value="1">发货完成</button>
+              {{/if}}
             {{elseif $tuanBuying['status']==11}}
                 已发货({{date('n.j',strtotime($tuanBuying['consign_time']))}})
-
-            {{elseif $tuanBuying['consign_time']==null}}
-                团满发货
             {{elseif $tuanBuying['status']==1}}
+              {{if $tuanBuying['consign_time']==null}}
+              {{else}}
                 预计发货({{date('n.j',strtotime($tuanBuying['consign_time']))}})
+              {{/if}}
             {{/if}}
         </td>
         <td>
