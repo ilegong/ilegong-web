@@ -1,4 +1,7 @@
 <div class="container">
+    <ul class="nav nav-pills">
+        <li role="presentation"><a href="/manage/admin/tuan/add_tuan_products">添加</a></li>
+    </ul>
     <div class="row">
         <table class="table table-condensed">
             <thead>
@@ -7,16 +10,46 @@
                         id
                     </th>
                     <th>
-
+                        名称
                     </th>
                     <th>
-
+                        产品ID
                     </th>
                     <th>
-
+                        列表图片
+                    </th>
+                    <th>
+                        详情图片
+                    </th>
+                    <th>
+                        操作
                     </th>
                 </tr>
             </thead>
+            <tbody>
+                {{loop $datas $item}}
+                <tr>
+                    <td>
+                        {{$item['TuanProduct']['id']}}
+                    </td>
+                    <td>
+                        {{$item['TuanProduct']['name']}}
+                    </td>
+                    <td>
+                        {{$item['TuanProduct']['product_id']}}
+                    </td>
+                    <td>
+                        {{$item['TuanProduct']['list_img']}}
+                    </td>
+                    <td>
+                        {{$item['TuanProduct']['detail_img']}}
+                    </td>
+                    <td>
+                        <a class="btn btn-default" href="/manage/admin/tuan/edit_tuan_products/{{$item['TuanProduct']['id']}}" role="button">编辑</a> | <a class="btn btn-default" href="/manage/admin/tuan/delete_tuan_products/{{$item['TuanProduct']['id']}}" role="button">删除</a>
+                    </td>
+                </tr>
+                {{/loop}}
+            </tbody>
         </table>
     </div>
 </div>

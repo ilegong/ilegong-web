@@ -434,7 +434,7 @@ class TuanController extends AppController{
                  'deleted'=>DELETED_NO
              )
          ));
-         $this->set('tuan_products',$tuan_products);
+         $this->set('datas',$tuan_products);
      }
 
      public function admin_add_tuan_products(){
@@ -452,20 +452,38 @@ class TuanController extends AppController{
      public function admin_edit_tuan_products($id){
          $data_info  = $this->TuanProduct->find('first',array(
              'conditions' => array(
-                 'id'=>$id
+                 'id' => $id
              )
          ));
          if(!empty($data_info)){
-             $this->data['TuanProduct']['id'] = $id;
              if(!empty($this->data)){
+                 $this->data['TuanProduct']['id'] = $id;
                  if($this->TuanProduct->save($this->data)){
-
+                     $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_products'));
                  }
              }else{
-                 $this->data = $data_info;
+                 $this->set('data',$data_info);
              }
              $this->set('id',$id);
+         }else{
+             //error
          }
      }
+
+    public function admin_delete_tuan_products($id){
+        $data_info  = $this->TuanProduct->find('first',array(
+            'conditions' => array(
+                'id'=>$id
+            )
+        ));
+        if(!empty($data_info)){
+            if($this->TuanProduct->updateAll(array('deleted' => 1),array('id' => $id))){
+                $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_products'));
+            }
+        }else{
+            //error
+        }
+
+    }
 
 }

@@ -1,0 +1,36 @@
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal" method="post" action="/manage/admin/tuan/edit_tuan_products/{{$id}}" data-noajax="1">
+            <input type="hidden" value="{{$data['TuanProduct']['id']}}">
+            <div class="form-group">
+                <label for="product_name" class="col-sm-2 control-label">产品名称</label>
+                <div class="col-sm-10">
+                    <input type="text" value="{{$data['TuanProduct']['name']}}" name="data[TuanProduct][name]" class="form-control" id="product_name" placeholder="产品名字">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="product_id" class="col-sm-2 control-label">产品编号</label>
+                <div class="col-sm-10">
+                    <input type="number" value="{{$data['TuanProduct']['product_id']}}" name="data[TuanProduct][product_id]" class="form-control" id="product_id" placeholder="产品编号">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="list_url" class="col-sm-2 control-label">列表图片</label>
+                <div class="col-sm-10">
+                    <input type="text" value="{{$data['TuanProduct']['list_img']}}" name="data[TuanProduct][list_img]" class="form-control" id="list_url" placeholder="列表图片">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="detail_url" class="col-sm-2 control-label">详情图片</label>
+                <div class="col-sm-10">
+                    <input type="text" value="{{$data['TuanProduct']['detail_img']}}" name="data[TuanProduct][detail_img]" class="form-control" id="detail_url" placeholder="详情图片">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
