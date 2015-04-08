@@ -123,9 +123,12 @@ ul,ol {
     padding: 10px;
     color: #555555;
 }
+.goodlist a p{ margin: 0; padding: 10px 10px 0 10px; line-height: 16px; background-color: #ffffff; color: #666666;}
+.goodlist ul{ background-color: #ffffff; padding: 5px 10px 10px 10px; color: #555555; line-height: 20px;}
 .goodlist ul li{ font-size: 1em;}
-.goodlist ul li.fr{ width: 75px; text-align: right; color: #999999;}
-.goodlist ul li.fl{ width:72%; white-space: nowrap;text-overflow:ellipsis; overflow:hidden;}
+.goodlist ul li.fr{ text-align: right; color: #999999;}
+.goodlist ul li.fl span{ color:#acacac; text-decoration: line-through;}
+.goodlist ul li.fl strong{ font-size: 1.1em; color: #ffa200;}
 
 /*团成员列表*/
 .memberlist{ padding: 15px 10px 0 10px;}

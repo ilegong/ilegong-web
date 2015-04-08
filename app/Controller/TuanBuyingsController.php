@@ -362,9 +362,11 @@ class TuanBuyingsController extends AppController{
         $tuan_products_info = array();
         foreach($tuan_product_ids as $pid){
             $tuan_products_info[$pid] = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
-            $tuan_product = $this->Product->find('first',array('conditions' => array('id' => $pid),'fields' => array('deleted','name')));
+            $tuan_product = $this->Product->find('first',array('conditions' => array('id' => $pid),'fields' => array('deleted','name','original_price','price')));
             $tuan_products_info[$pid]['status'] = $tuan_product['Product']['deleted'];
             $tuan_products_info[$pid]['name'] = $tuan_product['Product']['name'];
+            $tuan_products_info[$pid]['price'] = $tuan_product['Product']['price'];
+            $tuan_products_info[$pid]['original_price'] = $tuan_product['Product']['original_price'];
         }
         $this->set('tuan_product_ids',$tuan_product_ids);
         $this->set('tuan_products_info',$tuan_products_info);

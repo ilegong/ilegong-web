@@ -1,4 +1,4 @@
-{{$this->Html->css(array('tuan.css?v6'));}}
+{{$this->Html->css(array('tuan.css?v7'));}}
 <div class="classlist_v2">
     <ul class="clearfix">
         <li><a href="/categories/mobileHome" class="back"></a></li>
@@ -12,8 +12,9 @@
           <a href="/tuan_buyings/goods_tuans/{{$pid}}">
               {{if $tuan_products_info[$pid]['status']}}<s>团购已结束</s>{{/if}}
               <div><img src="/img/tuan/pro/listgood_{{$pid}}.jpg"></div>
+              <p>{{$tuan_products_info[$pid]['name']}}</p>
               <ul class="clearfix">
-                  <li class="fl">{{$tuan_products_info[$pid]['name']}}</li>
+                  <li class="fl"><strong>{{$this->Number->precision($tuan_products_info[$pid]['price'],2)}}</strong>&nbsp;&nbsp;<span>{{if $tuan_products_info[$pid]['original_price']>0}}{{$this->Number->precision($tuan_products_info[$pid]['original_price'],2)}}{{/if}}</span></li>
                   <li class="fr">{{$tuan_products_info[$pid][0][0]['sold_number']}}人参团</li>
               </ul>
           </a>
