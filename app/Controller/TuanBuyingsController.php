@@ -65,6 +65,15 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_id',$tuan_b['TuanBuying']['tuan_id']);
         $target_num = max($tuan_b['TuanBuying']['target_num'], 1);
         $this->set('target_num', $target_num);
+        $tuan_buy_type = $tuan_b['TuanBuying']['type'];
+        if($tuan_buy_type==2){
+            //排期
+            $consignment_dates = consignment_send_date($pid);
+            if(!empty($consignment_dates)){
+                $this->set('consignment_dates', $consignment_dates);
+            }
+        }
+        $this->set('tuan_buy_type',$tuan_buy_type);
         $this->set('hideNav',true);
         if($this->is_weixin()){
             $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
@@ -136,6 +145,14 @@ class TuanBuyingsController extends AppController{
         $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,$spec_id,ORDER_TYPE_TUAN,0,$uId,null,  null, null,$tuan_buy_id);
         $this->log('cartInfo'.json_encode($cartInfo));
         if($cartInfo){
+            $consignment_date_id = intval($_REQUEST['consignment_date_id']);
+            $cart_id = $cartInfo['Cart']['id'];
+            if ($consignment_date_id!=0 && $cart_id) {
+                if ($consignment_date_id) {
+                    $cartM = ClassRegistry::init('Cart');
+                    $cartM->updateAll(array('consignment_date' => $consignment_date_id), array('id' => $cart_id));
+                }
+            }
             if($_POST['way_type'] == 'ziti'){
                 echo json_encode(array('success' => true, 'direct'=>'big_tuan_list'));
             }else{
@@ -356,6 +373,8 @@ class TuanBuyingsController extends AppController{
     public function goods(){
         $this->pageTitle = '团购商品';
         $currentDate = date(FORMAT_DATETIME);
+        $tuanProducts = getTuanProducts();
+        $tuanProducts = Hash::combine($tuanProducts,'{n}.TuanProduct.product_id','{n}.TuanProduct');
         $tuan_products = $this->TuanBuying->find('all',array('conditions' => array("pid != " => 863,'status'=>0,'end_time > '=>$currentDate),'group' => array('pid')));
         $tuan_product_ids = Hash::extract($tuan_products,'{n}.TuanBuying.pid');
         $this->loadModel('Product');
@@ -366,6 +385,7 @@ class TuanBuyingsController extends AppController{
             $tuan_products_info[$pid]['status'] = $tuan_product['Product']['deleted'];
             $tuan_products_info[$pid]['name'] = $tuan_product['Product']['name'];
             $tuan_products_info[$pid]['price'] = $tuan_product['Product']['price'];
+            $tuan_products_info[$pid]['list_img'] = $tuanProducts[$pid]['list_img'];
             $tuan_products_info[$pid]['original_price'] = $tuan_product['Product']['original_price'];
         }
         $this->set('tuan_product_ids',$tuan_product_ids);
@@ -401,6 +421,9 @@ class TuanBuyingsController extends AppController{
             'conditions' => array('id' => $pid),
             'fields' => array('name', 'promote_name', 'price','id','original_price')
         ));
+        $tuanProducts = getTuanProducts();
+        $tuanProducts = Hash::combine($tuanProducts,'{n}.TuanProduct.product_id','{n}.TuanProduct');
+        $this->set('detail_img',$tuanProducts[$pid]['detail_img']);
         $this->set('tuan_product', $tuan_product);
         $this->set('tuan_info',$tuan_info);
         $this->set('pid',$pid);

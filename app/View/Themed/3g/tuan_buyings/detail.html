@@ -25,7 +25,7 @@
                     <ul class="p_details_price clearfix">
                         <li class="fl price"><span>{{if $current_data_id==874}}尝鲜价 {{/if}}￥<font {{if !$tuan_price}}id="product_price"{{/if}}>{{if $tuan_price}}{{$this->Number->precision($tuan_price,2)}}{{else}}{{$this->Number->precision($Product['Product']['price'],2)}}{{/if}}</font></span></li>
                         <li class="fl original-price"><s style="margin-top: 7px;display: block;">{{if $original_price>0}}￥{{$this->Number->precision($original_price,2)}}{{/if}}</s></li>
-                        <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{empty($consign_time)?'成团后发货':$consign_time}}</b></span></a></li>
+                        {{if $tuan_buy_type!=2}}<li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{empty($consign_time)? $tuan_buy_type==0?'成团后发货':'团满准备发货':$consign_time}}</b></span></a></li>{{/if}}
                     </ul>
                     <ul class="sales clearfix">
                         <li>
@@ -34,7 +34,7 @@
                         </span>
                         </li>
                     </ul>
-
+                    {{if $tuan_buy_type!=2}}
                     <div class="tuan_bar">
                         <div>已团购<span  value="{{$sold_num}}">{{$sold_num}}</span>份</div>
                         <div class="bar">
@@ -45,6 +45,7 @@
                             <li class="fr">目标{{$target_num}}份</li>
                         </ul>
                     </div>
+                    {{/if}}
                     {{if !$big_tuan}}
                         <div class="clearfix tuanxq">
                             <a href="/tuan_teams/info/{{$tuan_id}}" style="color: #666666">
@@ -76,7 +77,22 @@
                         {{/if}}
                     </ul>
                     {{/if}}
-
+                    {{if $tuan_buy_type==2}}
+                    {{if !empty($consignment_dates)}}
+                    <ul class="standard clearfix">
+                        <li>
+                            <span class="gray title mr12" style="float:left;">送货日期:</span>
+                            <span class="border" style="display: block;overflow: hidden;">
+                            <?php foreach($consignment_dates as $date){?>
+                                <span class="mr12 border spec_item" item-label="SD" data-val="{{$date['id']}}">
+                                    {{$date['date']}}
+                                </span>
+                                <?php } ?>
+                            </span>
+                        </li>
+                    </ul>
+                    {{/if}}
+                    {{/if}}
                     {{if $big_tuan}}
                         {{if $current_data_id==868}}
                             <span class="mr12 border cur tuan_way_selected" style="display: none;"  way-label="baoyou">包邮</span>
@@ -264,6 +280,8 @@
 <script>
     $(document).ready(function(){
 
+        var $sd_date = $('span[item-label="sd"]');
+
         function get_spec_group(){
             var $selected_spec = $('span.spec_item_selected[item-label!="SD"]');
             var all_spec = [];
@@ -313,6 +331,20 @@
                         return false;
                     }
                 }
+                if ($('span.spec_item[item-label="SD"]').size()>0) {
+                    var cake_date_selected = $('span.spec_item_selected[item-label="SD"]');
+                    if (cake_date_selected.size() < 1) {
+                        utils.alert("请选择送货日期");
+                        return false;
+                    }
+                }
+                var consignment_date_id = 0;
+                if ($('span.spec_item[item-label="SD"]').size()>0) {
+                    var cake_date_selected = $('span.spec_item_selected[item-label="SD"]');
+                    if (cake_date_selected.size() >= 1) {
+                        consignment_date_id = cake_date_selected.data('val');
+                    }
+                }
                 var product_id = $('#tuan_buy').attr('item-id');
                 var product_num = $('#input_pamount').val();
                 var way_type = 'normal';
@@ -320,7 +352,7 @@
                 way_type = $('.cur.tuan_way_selected').attr('way-label');
                 {{/if}}
                 var way_fee = $('.cur.tuan_way_selected').attr('way-fee')||0;
-                var postdata = {"product_id":product_id,"product_num":product_num, "way_type": way_type,"spec_id":specId,"tuan_buy_id":'{{$tuan_buy_id}}',"way_fee":way_fee};
+                var postdata = {"product_id":product_id,"product_num":product_num, "way_type": way_type,"spec_id":specId,"consignment_date_id":consignment_date_id,"tuan_buy_id":'{{$tuan_buy_id}}',"way_fee":way_fee};
                 utils.progress_notify('正在更新购物车');
                 $.ajax({
                     type:'post',

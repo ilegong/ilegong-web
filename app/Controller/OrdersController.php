@@ -505,15 +505,16 @@ class OrdersController extends AppController {
                 'creator'=> $uid
             )));
         $product_ids = Hash::extract($Carts, '{n}.Cart.product_id');
-        $this->loadModel('Product');
-        $products = $this->Product->find_products_by_ids($product_ids, array('published', 'deleted'), false);
-
         $expired_pids = array();
-        foreach($product_ids as $pid) {
-            if (empty($products[$pid])
-                || $products[$pid]['published'] == PUBLISH_NO
-                || $products[$pid]['deleted'] == DELETED_YES) {
-                $expired_pids[] = $pid;
+        $this->loadModel('Product');
+        if($orderinfo['Order']['type']!=ORDER_TYPE_TUAN){
+            $products = $this->Product->find_products_by_ids($product_ids, array('published', 'deleted'), false);
+            foreach($product_ids as $pid) {
+                if (empty($products[$pid])
+                    || $products[$pid]['published'] == PUBLISH_NO
+                    || $products[$pid]['deleted'] == DELETED_YES) {
+                    $expired_pids[] = $pid;
+                }
             }
         }
 

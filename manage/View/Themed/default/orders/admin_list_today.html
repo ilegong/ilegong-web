@@ -119,6 +119,16 @@
             <td>{{$order['Order']['total_price']}}</td>
             <td>{{$order['Order']['ship_fee']}}</td>
             <td>{{$order['Order']['total_all_price']}}</td>
+<<<<<<< HEAD
+=======
+            <td>
+                {{if !empty($cart['Cart']['consignment_date'])}}
+                    {{date('m-d', strtotime($consign_dates[$cart['Cart']['consignment_date']]))}}
+                {{elseif $cart['Cart']['type'] == 5}}
+                    {{date('m-d', strtotime($tuan_consign_times[$order['Order']['member_id']]))}}
+                {{/if}}
+            </td>
+>>>>>>> 团购排期功能v1 优先显示产品排期在订单列表
         {{/if}}
         <td>
             {{if $cart['Cart']['type'] == 5}}

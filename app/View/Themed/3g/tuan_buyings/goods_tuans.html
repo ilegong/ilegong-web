@@ -23,7 +23,7 @@
     <a href="javascript:void(0)">
         <p><span>{{mb_strlen($name)>17?mb_substr($name,0,17):$name}}</span><br/>{{mb_strlen($promote_name)>23?mb_substr($promote_name,0,23):$promote_name}}</p>
         <div class="bannerbg"></div>
-        <img src="/img/tuan/bannerdetail-{{$pid}}.jpg?v1" border="0"/>
+        <img src="{{$detail_img}}" border="0"/>
     </a>
 </div>
 <ul class="tuandetail_price clearfix">

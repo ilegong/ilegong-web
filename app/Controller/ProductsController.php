@@ -26,29 +26,6 @@ class ProductsController extends AppController{
 
     }
 
-//    public function view() {
-//        parent::view();
-//
-//        $afford_for_curr_user = true;
-//        if ($this->current_data_id == ShipPromotion::QUNAR_PROMOTE_ID) {
-//            $ordersModel = ClassRegistry::init('Order');
-//            $order_ids = $ordersModel->find('list', array(
-//                'conditions' => array('brand_id' => ShipPromotion::QUNAR_PROMOTE_BRAND_ID, 'deleted' => 0),
-//                'fields' => array('id', 'id')
-//            ));
-//            if (!empty($order_ids)) {
-//                $cartModel = ClassRegistry::init('Cart');
-//                $c = $cartModel->find('count', array(
-//                    'conditions' => array('order_id' => $order_ids, 'product_id' => $this->current_data_id, 'deleted' => 0)
-//                ));
-//                if ($c > 0) {
-//                    $afford_for_curr_user = false;
-//                }
-//            }
-//        }
-//        $this->set('afford_for_curr_user', $afford_for_curr_user);
-//    }
-
 
     public function add(){
 
