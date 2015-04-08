@@ -19,7 +19,7 @@ $(function(){
     $.getJSON('/manage/admin/tuan/api_tuan_products',function(data){
         $.each(data,function(index,item){
             var tuan_product = item['TuanProduct'];
-            $('<option value="' + tuan_product['id'] + '">' + tuan_product['alias'] + '</option>').appendTo(tuanProducts);
+            $('<option value="' + tuan_product['product_id'] + '">' + tuan_product['alias'] + '</option>').appendTo(tuanProducts);
         });
     });
     var tuanEndTime = $('.tuan-end-time');

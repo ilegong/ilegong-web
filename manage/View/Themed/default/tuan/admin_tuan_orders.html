@@ -11,11 +11,6 @@
         <div class="form-group">
             <select class="form-control" name="product_id" id="product_id">
                 <option value="-1">选择商品</option>
-                <!--<option value="838">草莓</option>-->
-                <!--<option value="851">芒果</option>-->
-                <!--<option value="862">蛋糕</option>-->
-                <!--<option value="863">草莓863</option>-->
-                <!--<option value="230">蛋糕230</option>-->
             </select>
         </div>
         <div class="form-group">
@@ -133,6 +128,7 @@
         var $product_id = $('#product_id');
         var $time_type = $('#time_type');
         var $order_type = $('#order_type');
+        var tuanProducts = $('#product_id');
         $.getJSON('/manage/admin/tuan/api_tuan_teams',function(data){
             $.each(data,function(index,item){
                 $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo($team_id);
@@ -142,7 +138,7 @@
         $.getJSON('/manage/admin/tuan/api_tuan_products',function(data){
             $.each(data,function(index,item){
                 var tuan_product = item['TuanProduct'];
-                $('<option value="' + tuan_product['id'] + '">' + tuan_product['alias'] + '</option>').appendTo(tuanProducts);
+                $('<option value="' + tuan_product['product_id'] + '">' + tuan_product['alias'] + '</option>').appendTo(tuanProducts);
             });
             $product_id.val('{{$product_id}}');
         });
