@@ -65,7 +65,7 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_id',$tuan_b['TuanBuying']['tuan_id']);
         $target_num = max($tuan_b['TuanBuying']['target_num'], 1);
         $this->set('target_num', $target_num);
-        $tuan_buy_type = $tuan_b['TuanBuying']['type'];
+        $tuan_buy_type = $tuan_b['TuanBuying']['consignment_type'];
         if($tuan_buy_type==2){
             //排期
             $consignment_dates = consignment_send_date($pid);
