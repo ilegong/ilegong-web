@@ -113,13 +113,17 @@
                                 <th>合计</th>
                             </tr>
                             <tbody>
-                            {{loop $order_carts[$order['Order']['id']] $cart}}
+                            {{loop $order_carts[$order['Order']['id']] $index $cart}}
                             <tr>
                                 <td>{{$cart['Cart']['name']}}</td>
                                 <td>￥{{$cart['Cart']['price']}}</td>
                                 <td>{{$spec_groups[$cart['Cart']['specId']]}}<br/></td>
                                 <td>{{$cart['Cart']['num']}}</td>
-                                <td>￥{{$cart['Cart']['price']*$cart['Cart']['num']}}</td>
+                                {{if $index == 0}}
+                                <td>￥{{$order['Order']['total_price']}}</td>
+                                {{else}}
+                                <td>——</td>
+                                {{/if}}
                             </tr>
                             {{/loop}}
                             </tbody>
