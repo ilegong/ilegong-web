@@ -115,20 +115,26 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
         {{else}}
             <td>{{$order['Order']['total_price']}}</td>
             <td>{{$order['Order']['ship_fee']}}</td>
             <td>{{$order['Order']['total_all_price']}}</td>
-
-            <td>
-                {{if $cart['Cart']['type'] == 5}}
-                    {{date('m-d', strtotime($tuan_consign_times[$order['Order']['member_id']]))}}
-                {{elseif !empty($cart['Cart']['consignment_date'])}}
-                    {{date('m-d', strtotime($consign_dates[$cart['Cart']['consignment_date']]))}}
-                {{/if}}
-            </td>
         {{/if}}
+        <td>
+            {{if $cart['Cart']['type'] == 5}}
+                <?php
+                $date = $tuan_consign_times[$item['Order']['member_id']];
+                $value = empty($date)?'': date('m-d', strtotime($date));
+                ?>
+                {{$value}}
+            {{elseif !empty($cart['Cart']['consignment_date'])}}
+                <?php
+                $date = $consign_dates[$cart['Cart']['consignment_date']];
+                $value = empty($date)?'': date('m-d', strtotime($date));
+                ?>
+                {{$value}}
+            {{/if}}
+        </td>
         <td>{{$order['Order']['created']}}</td>
         <td>{{$order['Order']['pay_time']}}</td>
         <td>{{$order['Order']['consignee_name']}}</td>
