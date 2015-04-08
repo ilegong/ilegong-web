@@ -1,9 +1,11 @@
 <div class="container">
-    <ul class="nav nav-pills">
-        <li role="presentation"><a href="/manage/admin/tuan/add_tuan_products">添加</a></li>
+    <ul class="nav nav-pills pull-right">
+        <li role="presentation">
+          <a class="btn btn-primary" href="/manage/admin/tuan/add_tuan_products">添加团购商品</a>
+        </li>
     </ul>
     <div class="row">
-        <table class="table table-condensed">
+        <table class="table table-condensed table-striped">
             <thead>
                 <tr>
                     <th>
@@ -19,6 +21,9 @@
                         产品价格
                     </th>
                     <th>
+                        发货类型
+                    </th>
+                    <th>
                         列表图片
                     </th>
                     <th>
@@ -31,27 +36,40 @@
             </thead>
             <tbody>
                 {{loop $datas $item}}
+                <?php
+                  $tuanProduct = $item['TuanProduct'];
+                ?>
                 <tr>
                     <td>
-                        {{$item['TuanProduct']['id']}}
+                        {{$tuanProduct['id']}}
                     </td>
                     <td>
-                        {{$item['TuanProduct']['alias']}}
+                        {{$tuanProduct['alias']}}
                     </td>
                     <td>
-                        {{$item['TuanProduct']['product_id']}}
+                        {{$tuanProduct['product_id']}}
                     </td>
                     <td>
-                        {{$item['TuanProduct']['tuan_price']}}
+                        {{$tuanProduct['tuan_price']}}
                     </td>
                     <td>
-                        {{$item['TuanProduct']['list_img']}}
+                        {{if $tuanProduct['type'] == 0}}
+                          团满发货
+                        {{elseif $tuanProduct['type'] == 1}}
+                          团满准备发货
+                        {{elseif $tuanProduct['type'] == 2}}
+                          排期
+                        {{else}}
+                        {{/if}}
                     </td>
                     <td>
-                        {{$item['TuanProduct']['detail_img']}}
+                        {{$tuanProduct['list_img']}}
                     </td>
                     <td>
-                        <a class="btn btn-default" href="/manage/admin/tuan/edit_tuan_products/{{$item['TuanProduct']['id']}}" role="button">编辑</a> | <a class="btn btn-default" href="/manage/admin/tuan/delete_tuan_products/{{$item['TuanProduct']['id']}}" role="button">删除</a>
+                        {{$tuanProduct['detail_img']}}
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" href="/manage/admin/tuan/edit_tuan_products/{{$tuanProduct['id']}}" role="button">编辑</a> | <a class="btn btn-danger" href="/manage/admin/tuan/delete_tuan_products/{{$tuanProduct['id']}}" role="button">删除</a>
                     </td>
                 </tr>
                 {{/loop}}
