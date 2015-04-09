@@ -9,7 +9,7 @@ class TuanProductsController extends AppController{
 
     var $name = 'TuanProducts';
 
-    var $uses = array('TuanProduct');
+    var $uses = array('TuanProduct', 'Product');
 
     public function admin_index(){
         $tuan_products = $this->TuanProduct->find('all',array(
@@ -17,6 +17,19 @@ class TuanProductsController extends AppController{
                 'deleted'=>DELETED_NO
             )
         ));
+        $product_ids = Hash::extract($tuan_products, "{n}.TuanProduct.product_id");
+        $products = $this->Product->find('all', array(
+            'conditions' => array(
+                'id'=>$product_ids
+            ),
+            'fields' => array('id', 'name', 'price')
+        ));
+        $products = Hash::combine($products, '{n}.Product.id', '{n}.Product');
+
+        foreach($tuan_products as &$tuan_product){
+            $tuan_product['TuanProduct']['product'] = $products[$tuan_product['TuanProduct']['product_id']];
+        }
+
         $this->set('datas',$tuan_products);
     }
 

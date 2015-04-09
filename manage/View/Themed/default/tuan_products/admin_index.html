@@ -9,9 +9,9 @@
             <thead>
                 <tr>
                     <th>id</th>
-                    <th>名称</th>
                     <th>产品ID</th>
-                    <th>产品价格</th>
+                    <th>别名</th>
+                    <th>团购价格</th>
                     <th>发货类型</th>
                     <th>列表图片</th>
                     <th>详情图片</th>
@@ -34,7 +34,8 @@
                         {{$tuanProduct['product_id']}}
                     </td>
                     <td>
-                        {{$tuanProduct['tuan_price']}}
+                        <strong class="text-warning">{{$tuanProduct['tuan_price']}}</strong>
+                        <s class="text-muted">{{$tuanProduct['product']['price']}}</s>
                     </td>
                     <td>
                         {{if $tuanProduct['consignment_type'] == 0}}
