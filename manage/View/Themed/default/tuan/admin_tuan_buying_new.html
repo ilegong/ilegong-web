@@ -29,7 +29,18 @@
               <option value="1">团满准备发货</option>
               <option value="2">排期</option>
             </select>
+            <div class="text-warning">团满发货：如草莓、蛋糕，团满**份按发货时间送到</div>
+            <div class="text-warning">团满准备发货：如芒果、金菠萝，团满**份开始采摘，准备发货</div>
+            <div class="text-warning">排期：固定发货时间，如每周二四六</div>
           </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">团购价格</label>
+            <div class="col-sm-9 controls">
+              <input name="data[TuanBuying][tuan_price]" value="-1" class="form-control tuan-target-num" type="number" placeholder="-1">
+              <input class="form-control" size="16" type="text" value="" readonly>
+              <div class="text-warning">-1代表不设置，直接使用该团购商品的价格</div>
+            </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">截止时间</label>
@@ -59,7 +70,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">限制总数</label>
+            <label class="col-sm-2 control-label">限制总份数</label>
             <div class="col-sm-9 controls">
                 <input name="data[TuanBuying][max_num]" value="0" class="form-control" type="number" placeholder="0">
                 <div class="text-warning">是否限制总份数，0为不限制</div>
@@ -69,7 +80,7 @@
             <label class="col-sm-2 control-label">每人限购份数</label>
             <div class="col-sm-9 controls">
                 <input name="data[TuanBuying][limit_buy_num]" value="0" class="form-control" type="number" id="limit_buy_num" placeholder="0">
-                <div class="text-warning">0为不限制</div>
+                <div class="text-warning">是否限制每个人购买的分数，0为不限制</div>
             </div>
         </div>
         <div class="form-group">

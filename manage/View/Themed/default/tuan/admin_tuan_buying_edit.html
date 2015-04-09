@@ -25,7 +25,17 @@
           <option value="1" {{if $tuanBuying[consignment_type] == 1 }}selected = 'selected'{{/if}}>团满准备发货</option>
           <option value="2" {{if $tuanBuying[consignment_type] == 2 }}selected = 'selected'{{/if}}>排期</option>
         </select>
+        <div class="text-warning">团满发货：如草莓、蛋糕，团满**份按发货时间送到</div>
+        <div class="text-warning">团满准备发货：如芒果、金菠萝，团满**份开始采摘，准备发货</div>
+        <div class="text-warning">排期：固定发货时间，如每周二四六</div>
       </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">团购价格</label>
+        <div class="col-sm-9 controls">
+          {{$this->Form->input('tuan_price',array('class'=>'form-control','div'=>false,'label'=>false))}}
+          <div class="text-warning">-1代表不设置，直接使用该团购商品的价格</div>
+        </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">参团人数</label>
@@ -67,7 +77,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-2 control-label">限制份数</label>
+        <label class="col-sm-2 control-label">限制总份数</label>
         <div class="col-sm-9 controls">
             {{$this->Form->input('max_num',array('class'=>'form-control','div'=>false,'label'=>false,))}}
             <div class="text-warning">是否限制总份数，0为不限制</div>
@@ -77,20 +87,13 @@
         <label class="col-sm-2 control-label">每人限购份数</label>
         <div class="col-sm-9 controls">
             {{$this->Form->input('limit_buy_num',array('class'=>'form-control','div'=>false,'label'=>false,))}}
-            <div class="text-warning">0为不限制</div>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-2 control-label">团购价格</label>
-        <div class="col-sm-9 controls">
-            {{$this->Form->input('tuan_price',array('class'=>'form-control','div'=>false,'label'=>false,))}}
+            <div class="text-warning">是否限制每个人购买的分数，0为不限制</div>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">团购状态</label>
         <div class="col-sm-9 controls">
             <input name="data[TuanBuying][status]" value="{{if $tuanBuying[status]==0}}进行中{{elseif $tuanBuying[status]==1}}已完成{{elseif $tuanBuying[status]==2}}已取消{{/if}}" class=" form-control " type="text" disabled="disabled">
-            <p>团购状态为0，表示进行中；1，表示已完成；2，表示已取消</p>
         </div>
     </div>
 
