@@ -5,7 +5,7 @@ $(function(){
 
     var area = $('.conordertuan');
     var areaIds = $('.tuan-teams');
-    $.getJSON('/tuanteams/api_getArea',function(data){
+    $.getJSON('/tuan_teams/api_getArea',function(data){
         $.each(data,function(index,item){
             var areaId = item['id'];
             var isArea = areaIds.find('[data-county-id="'+areaId+'"]');
