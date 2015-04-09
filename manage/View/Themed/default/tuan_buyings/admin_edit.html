@@ -53,11 +53,10 @@
         <label class="col-sm-2 control-label">截止时间</label>
         <div class="col-sm-9 controls" data-date="{{$tuanBuying[end_time]}}" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_end_time">
             <div class="input-group date form_datetime">
-              <input class="form-control" size="16" type="text" value="{{$tuanBuying[end_time]}}" readonly>
+              <input class="form-control" size="16" type="text" value="{{$tuanBuying[end_time]}}" name="data[TuanBuying][end_time]">
               <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
               <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
             </div>
-            <input name="data[TuanBuying][end_time]" value="{{$tuanBuying[end_time]}}" class="form-inline form-control" type="hidden" id="tuan_end_time">
             <div class="text-warning">一般为发货时间的前一天17：00</div>
         </div>
     </div>
@@ -65,11 +64,10 @@
         <label class="col-sm-2 control-label">发货时间</label>
         <div class="col-sm-9 controls" data-date="{{$tuanBuying[consign_time]}}" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_consign_time">
             <div class="input-group date form_datetime" data-date="{{$tuanBuying[consign_time]}}" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_consign_time">
-              <input class="form-control" size="16" type="text" value="{{$tuanBuying[consign_time]}}" readonly>
+              <input class="form-control" size="16" type="text" value="{{$tuanBuying[consign_time]}}" name="data[TuanBuying][end_time]">
               <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
               <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
             </div>
-            <input id="tuan_consign_time" name="data[TuanBuying][consign_time]" value="{{$tuanBuying[consign_time]}}" class="form-inline form-control" type="hidden">
             <div class="text-warning">排期：不需要设置此值；团满发货或团满准备发货：不设置表示团满才会发货或准备发货</div>
         </div>
     </div>
