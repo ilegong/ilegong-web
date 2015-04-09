@@ -94,7 +94,13 @@ ul li{ list-style:none;}
 .tipslayer ul li { width: 50%; float: left; text-align: center; line-height: 44px; border-top: 1px #dddddd solid; }
 .tipslayer ul li a { display: block; text-decoration: none; color: #29ac0e; text-align: center; font-size: 1.1em; }
 .tipslayer_bg{ width: 100%; height: 100%; background-attachment: fixed; background-color: #000000;filter:alpha(opacity=25);-moz-opacity:0.25; opacity:0.25; position: absolute; z-index: 4; top: 0; left: 0;}
-
+/*支付提示层*/
+.tipslayer_close{ font-size: 20px; line-height: 28px; text-align:center; color: #666666; text-decoration: none; border-radius: 30px; width: 30px; height: 30px; background-color: #ffffff; border: 1px #999999 solid; position: absolute; top: -10px; right: -10px;}
+.conorderprice{ text-align: center; padding:15px 0 5px 0; font-size: 1.5em; color: #333333; font-weight: bold;}
+.conorder_btn{ width: 80%; margin: 0 auto; padding: 15px 0;}
+.conorder_btn a{ display: block; line-height: 35px; width: 45%; text-align: center; font-size: 1em; border: 1px solid; font-weight: bold; border-radius: 3px; text-decoration: none;}
+.conorder_btn a.weixin{ border-color: #29ac0e; color: #29ac0e;}
+.conorder_btn a.alipay{ border-color: #ffa200; color: #ffa200;}
 
 /*商品详情*/
 .p_details_pic{ position:relative;}
@@ -457,7 +463,7 @@ ul li{ list-style:none;}
 .myorder dl dd a{ color: #333333; text-decoration: none;}
 .myorder dl dd a img{ width: 1.7em; height: 1.7em; margin-right: 5px; border-radius: 3px;}
 .myorder dl dd.fr{ color: #ffa200;}
-
+.myorder dl dd.fr a img{ width: 0.5em; height: auto; margin-right: 0; border-radius: 0; margin-top: 5px;}
 .myorder ul{ border-bottom: 1px #eeeeee solid; padding: 12px 10px 10px 10px; margin-bottom: 0; position: relative; background-color: #ffffff;}
 .myorder ul li img{ width: 6em;}
 .myorder ul li a{ text-decoration: none;}

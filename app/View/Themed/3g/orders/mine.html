@@ -40,15 +40,16 @@
             'paid': 'orders-wait_deliver',
             'shipped': 'orders-wait_receive'
         };
+        var _tab_btn = {
+            'comment': '#check_should_recived',
+            'waiting_pay': '#check_should_pay',
+            'paid': '#check_should_ship',
+            'shipped': '#check_should_recived'
+        };
         var $order_all = $('#orders-all');
         var $orders_payment = $('#orders-wait_payment');
         var $orders_deliver = $('#orders-wait_deliver');
         var $orders_receive = $('#orders-wait_receive');
-        {{if !empty($_GET['tab'])}}
-            $('#'+ _tab_id_m['{{$_GET["tab"]}}']).show();
-        {{else}}
-            $order_all.show();
-        {{/if}}
         $('#check_all').on('click',function(){
             show_order_tab($order_all);
             set_cur($(this));
@@ -65,12 +66,10 @@
             show_order_tab($orders_receive);
             set_cur($(this));
         });
-
         function show_order_tab($show_elm){
             $('div.myorder').hide();
             $show_elm.show();
         }
-
         function set_cur($element){
             $('li a.cur').removeClass('cur');
             $element.addClass('cur');
@@ -98,7 +97,13 @@
                 url:'/orders/remind_deliver/'+order_id,
                 dataType:'json'
             })
-        })
+        });
+        {{if !empty($_GET['tab'])}}
+            //$('#'+ _tab_id_m['{{$_GET["tab"]}}']).show();
+            $(_tab_btn['{{$_GET["tab"]}}']).trigger('click');
+        {{else}}
+            $order_all.show();
+        {{/if}}
     });
 </script>
 

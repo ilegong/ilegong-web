@@ -1,0 +1,19 @@
+<div class="classlist_v2" style="z-index:1">
+    <ul class="clearfix">
+        <li><a href="/orders/detail/{{$order['Order']['id']}}" class="back"></a></li>
+        <li class="line"></li>
+        <li><strong>物流详情</strong></li>
+    </ul>
+</div>
+<div class="container" style="margin-top: 2.5em;">
+    <div class="row">
+        <ul class="list-group">
+            <li class="list-group-item">快递公司: {{$ship_type[$order['Order']['ship_type']]}}</li>
+            <li class="list-group-item">快递单号：{{$order['Order']['ship_code']}}</li>
+        </ul>
+        <div class="embed-responsive">
+            <iframe name="kuaidi100" class="embed-responsive-item" src="{{$shipdetail}}" width="100%" height="100%">
+            </iframe>
+        </div>
+    </div>
+</div>

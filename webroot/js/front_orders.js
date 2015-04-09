@@ -308,12 +308,22 @@ function orders_undo(order_id,is_mobile) {
     });
 }
 
+function orders_undo_3g(order_id,callback){
+    return ajaxAction(BASEURL+"/orders/confirm_undo/",{'order_id':order_id},null,function(data){
+        callback(data);
+    });
+}
+
 function orders_remove(order_id) {
     return ajaxAction(BASEURL+"/orders/confirm_remove/",{'order_id':order_id}, null, function(){
         showSuccessMessage('订单已删除', function(){
             $('.order_item_'+order_id).remove();
     }, 2000);
     });
+}
+
+function orders_remove_3g(order_id,callback){
+    return ajaxAction(BASEURL+"/orders/confirm_remove/",{'order_id':order_id}, null, callback);
 }
 
 

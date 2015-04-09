@@ -486,6 +486,20 @@ class OrdersController extends AppController {
         $this->set('op_cate', OP_CATE_CATEGORIES);
 	}
 
+    function ship_detail($orderId){
+        $uid = $this->currentUser['id'];
+        $orderinfo = $this->find_my_order_byId($orderId, $uid);
+        if(empty($orderinfo)){
+            $this->__message('订单不存在，或无权查看','/');
+        }
+        if ($orderinfo['Order']['ship_type']) {
+            $this->set('shipdetail', ShipAddress::get_ship_detail($orderinfo));
+        }
+        $this->set('ship_type', ShipAddress::ship_type_list());
+        $this->set('order',$orderinfo);
+        $this->set('hideNav', true);
+    }
+
     /**
      * Display and options for already submitted order
      * @Param int $order_id
@@ -498,7 +512,16 @@ class OrdersController extends AppController {
             $this->__message('订单不存在，或无权查看','/');
         }
 
+        $brandId = $orderinfo['Order']['brand_id'];
+        $this->loadModel('Brand');
+        $brand = $this->Brand->find('first',array(
+            'conditions' => array(
+                'id' => $brandId
+            )
+        ));
+        $this->set('brand',$brand);
         $this->loadModel('Cart');
+
         $Carts = $this->Cart->find('all', array(
             'conditions'=>array(
                 'order_id' => $orderId,
@@ -517,6 +540,8 @@ class OrdersController extends AppController {
                 }
             }
         }
+
+        $this->set('expired_pids',$expired_pids);
 
         if ($action == 'pay') {
             $this->set('paid_msg', htmlspecialchars($_GET['paid_msg']));
@@ -593,9 +618,7 @@ class OrdersController extends AppController {
         $shareOffer = ClassRegistry::init('ShareOffer');
         $toShare = $shareOffer->query_gen_offer($orderinfo, $this->currentUser['id']);
         $canComment = $this->can_comment($status);
-
         $this->set(compact('toShare', 'canComment', 'no_more_money', 'order_id', 'order', 'has_expired_product_type', 'expired_pids'));
-        $this->set('isMobile', $this->RequestHandler->isMobile());
         $this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('order', $orderinfo);
         $this->set('Carts',$Carts);
@@ -604,6 +627,8 @@ class OrdersController extends AppController {
         if ($orderinfo['Order']['ship_type']) {
             $this->set('shipdetail', ShipAddress::get_ship_detail($orderinfo));
         }
+        $this->set('ship_type', ShipAddress::ship_type_list());
+        $this->set('isMobile', $this->RequestHandler->isMobile());
         $this->set('hideNav', true);
     }
 

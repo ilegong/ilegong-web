@@ -168,7 +168,7 @@ define('PROFILE_NICK_LEN', 16);
 define('PROFILE_NICK_MIN_LEN', 2);
 define('MSG_API_KEY', 'api:key-fdb14217a00065ca1a47b8fcb597de0d'); //发短信密钥
 define('APP_REGISTER_MARK', 11); //APP注册用户标示
-
+define('SERVICE_LINE_PHONE','010-56245991');
 define('SERVICE_LINE', '<a href="tel:01056245991">010-56245991</a>');
 
 global $page_style;
