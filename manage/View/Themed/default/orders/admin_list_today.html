@@ -129,7 +129,7 @@
                 {{$value}}
             {{elseif $order['Order']['type'] == 5}}
             <?php
-                $date = $tuan_consign_times[$item['Order']['member_id']];
+                $date = $tuan_consign_times[$order['Order']['member_id']];
                 $value = empty($date)?'': date('m-d', strtotime($date));
                 ?>
             {{$value}}
