@@ -11,6 +11,7 @@
             <li class="list-group-item">快递公司: {{$ship_type[$order['Order']['ship_type']]}}</li>
             <li class="list-group-item">快递单号：{{$order['Order']['ship_code']}}</li>
         </ul>
+        <div class="alert alert-warning" role="alert">物流信息来自第三方网站</div>
         <div class="embed-responsive">
             <iframe name="kuaidi100" class="embed-responsive-item" src="{{$shipdetail}}" width="100%" height="100%">
             </iframe>
