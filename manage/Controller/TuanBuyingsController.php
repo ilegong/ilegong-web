@@ -200,7 +200,7 @@ class TuanBuyingsController extends AppController{
         $this->log('update tuan buying '.$id.': '.json_encode($this->data));
         $this->autoRender = false;
         if($this->TuanBuying->save($this->data)){
-            $this->redirect(array('controller' => 'tuanBuyings','action' => 'admin_tuan_buyings'));
+            $this->redirect(array('controller' => 'tuan_buyings','action' => 'index'));
         }
         $this->set('id',$id);
     }
@@ -214,7 +214,7 @@ class TuanBuyingsController extends AppController{
             $this->data['TuanBuying']['sold_num'] = 0;
             $this->data['TuanBuying']['status'] = 0;
             if($this->TuanBuying->save($this->data)){
-                $this->redirect(array('controller' => 'tuanBuyings','action' => 'admin_tuan_buyings'));
+                $this->redirect(array('controller' => 'tuan_buyings','action' => 'index'));
             }
         }
     }
