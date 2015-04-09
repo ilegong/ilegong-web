@@ -20,7 +20,7 @@ class TuanController extends AppController{
         $team_id = $_REQUEST['team_id'];
         $product_id = $_REQUEST['product_id'];
         $time_type = $_REQUEST['time_type'];
-        $con_name = $_REQUEST['conn_name'];
+        $con_name = $_REQUEST['con_name'];
         $con_phone = $_REQUEST['con_phone'];
         $post_time = $_REQUEST['post_time'];
         $order_type = $_REQUEST['order_type'];
@@ -151,10 +151,11 @@ class TuanController extends AppController{
         $this->set('team_id',$team_id);
         $this->set('product_id',$product_id);
         $this->set('time_type',$time_type);
-        $this->set('conn_name',$con_name);
+        $this->set('con_name',$con_name);
         $this->set('con_phone',$con_phone);
         $this->set('post_time',$post_time);
         $this->set('order_type',$order_type);
+        $this->set('order_id',$order_id);
     }
 
 
