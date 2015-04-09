@@ -116,6 +116,11 @@ class TuanBuyingsController extends AppController{
         $tuan_price = $tuan_b['TuanBuying']['tuan_price'];
         if($tuan_price > 0){
             $this->set('tuan_price',$tuan_price);
+        }else{
+            $tuan_product_price = getTuanProductPrice($pid);
+            if($tuan_product_price>0){
+                $this->set('tuan_product_price',$tuan_product_price);
+            }
         }
         $this->set('original_price',$original_price);
         $this->set('Product', $Product);
@@ -427,6 +432,10 @@ class TuanBuyingsController extends AppController{
         ));
         $tuanProducts = getTuanProducts();
         $tuanProducts = Hash::combine($tuanProducts,'{n}.TuanProduct.product_id','{n}.TuanProduct');
+        $tuan_product_price = getTuanProductPrice($pid);
+        if($tuan_product_price>0){
+            $this->set('tuan_product_price',$tuan_product_price);
+        }
         $this->set('detail_img',$tuanProducts[$pid]['detail_img']);
         $this->set('tuan_product', $tuan_product);
         $this->set('tuan_info',$tuan_info);

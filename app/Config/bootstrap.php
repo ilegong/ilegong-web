@@ -340,14 +340,7 @@ function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null,
     //优先级 second
     $tuan_product_id = $tuan_param['product_id'];
     if(!empty($tuan_product_id)){
-        $tuanProductM = ClassRegistry::init('TuanProduct');
-        $tuanProduct = $tuanProductM->find('first',array(
-            'conditions' => array(
-                'product_id' => $tuan_product_id
-            )
-        ));
-        $tuan_product_price = $tuanProduct['TuanProduct']['tuan_price'];
-        $tuan_product_price = floatval($tuan_product_price);
+        $tuan_product_price = getTuanProductPrice($tuan_product_id);
         if($tuan_product_price>=0){
             return array($tuan_product_price,);
         }
@@ -1669,5 +1662,10 @@ function getTuanProductsAsJson(){
 
 function getTuanProducts(){
     return json_decode(getTuanProductsAsJson(),true);
+}
+
+function getTuanProductPrice($pid){
+    $product_price_map = Hash::combine(getTuanProducts(),'{n}.TuanProduct.product_id','{n}.TuanProduct.tuan_price');
+    return floatval($product_price_map[$pid]);
 }
 
