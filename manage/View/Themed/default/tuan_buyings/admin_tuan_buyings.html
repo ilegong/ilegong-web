@@ -7,7 +7,7 @@
 <hr/>
 <h1>团购管理</h1>
 <hr/>
-<form class="form-inline tuan_buyings-form" method="get" action="/manage/admin/tuan/tuan_buyings">
+<form class="form-inline tuan_buyings-form" method="get" action="/manage/admin/tuanBuyings/tuan_buyings">
     <div style="padding-bottom: 10px;">
         <input type="hidden" name="noajax" value="true">
 
@@ -54,8 +54,8 @@
     </div>
 
     <div>
-        <a href="/manage/admin/tuan/tuan_buying_new" role="button" class="btn btn-default fr">创建团购</a>
-        <a href="/manage/admin/tuan/tuan_func_list" role="button" style="margin-right:10px;" class="btn btn-default fr">团购功能列表</a>
+        <a href="/manage/admin/tuanBuyings/tuan_buying_new" role="button" class="btn btn-default fr">创建团购</a>
+        <a href="/manage/admin/tuanBuyings/tuan_func_list" role="button" style="margin-right:10px;" class="btn btn-default fr">团购功能列表</a>
         <!--<a href="/manage/admin/tuan/tuan_team_create" role="button" style="margin-right:10px;" class="btn btn-default fr">添加新团</a>-->
     </div>
 </form>
@@ -171,7 +171,7 @@
         </td>
         <td>
             {{if $tuanBuying['status']!=11 && $tuanBuying['status']!=21}}
-                <a role="button" class="btn btn-sm btn-default" href="/manage/admin/tuan/tuan_buying_edit/{{$tuanBuying['id']}}">编辑...</a>
+                <a role="button" class="btn btn-sm btn-default" href="/manage/admin/tuanBuyings/tuan_buying_edit/{{$tuanBuying['id']}}">编辑...</a>
                 <a role="button" class="btn btn-sm btn-default" href="#">编辑物流...</a>
             {{/if}}
 

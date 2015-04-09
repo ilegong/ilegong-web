@@ -9,7 +9,7 @@ $(function(){
         timeType.val(timeType.attr('data-time-type'));
         tuanType.val(tuanType.attr('data-tuan-type'));
     }
-    $.getJSON('/manage/admin/tuan/api_tuan_teams',function(data){
+    $.getJSON('/manage/admin/tuanTeams/api_tuan_teams',function(data){
         $.each(data,function(index,item){
             $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo(tuanTeams);
         });
@@ -17,7 +17,7 @@ $(function(){
         tuanTeams.val(tuanTeams.attr('data-team-id'));
     });
 
-    $.getJSON('/manage/admin/tuan/api_tuan_products',function(data){
+    $.getJSON('/manage/admin/tuanProducts/api_tuan_products',function(data){
         tuanProducts.data('tuan-products', data);
         $.each(data,function(index,item){
             var tuan_product = item['TuanProduct'];
@@ -45,7 +45,7 @@ $(function(){
             return;
         }
         var tuanBuyingId = $(this).parents('tr').data('id');
-        $.post( "/manage/admin/tuan/api_tuan_buying_due", {id: tuanBuyingId}, function( data ) {
+        $.post( "/manage/admin/tuanBuyings/api_tuan_buying_due", {id: tuanBuyingId}, function( data ) {
             console.log('已设置为：团购截止！');
         }).fail(function(){
             console.log('设置团购截止失败！');
@@ -58,7 +58,7 @@ $(function(){
             return;
         }
         var tuanBuyingId = $(this).parents('tr').data('id');
-        $.post( "/manage/admin/tuan/api_tuan_buying_canceled", {id: tuanBuyingId}, function( data ) {
+        $.post( "/manage/admin/tuanBuyings/api_tuan_buying_canceled", {id: tuanBuyingId}, function( data ) {
             console.log('已设置为：团购取消！');
         }).fail(function(){
             console.log('设置团购取消失败！');
@@ -71,7 +71,7 @@ $(function(){
             return;
         }
         var tuanBuyingId = $(this).parents('tr').data('id');
-        $.post( "/manage/admin/tuan/api_tuan_buying_finished", {id: tuanBuyingId}, function( data ) {
+        $.post( "/manage/admin/tuanBuyings/api_tuan_buying_finished", {id: tuanBuyingId}, function( data ) {
             console.log('已设置为：发货完成！');
 //            $.getJSON('/manage/admin/tuan/api_tuan_buying_finished',function(data){
 //                alert(data.success);
@@ -88,7 +88,7 @@ $(function(){
             return;
         }
         var tuanBuyingId = $(this).parents('tr').data('id');
-        $.post( "/manage/admin/tuan/api_tuan_buying_refunded", {id: tuanBuyingId}, function( data ) {
+        $.post( "/manage/admin/tuanBuyings/api_tuan_buying_refunded", {id: tuanBuyingId}, function( data ) {
             console.log('已设置为：退款完成！');
         }).fail(function(){
             console.log('设置退款完成失败！');

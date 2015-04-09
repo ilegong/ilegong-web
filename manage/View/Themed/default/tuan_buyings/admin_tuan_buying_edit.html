@@ -7,7 +7,7 @@
       $tuanBuying = $this->data[TuanBuying];
     ?>
 
-    <form class="form-horizontal" method="post" action="/manage/admin/tuan/tuan_buying_edit/{{$id}}" id="TuanBuyingAdminTuanBuyingEditForm" novalidate="novalidate" data-noajax="true">
+    <form class="form-horizontal" method="post" action="/manage/admin/tuanBuyings/tuan_buying_edit/{{$id}}" id="TuanBuyingAdminTuanBuyingEditForm" novalidate="novalidate" data-noajax="true">
     <!--{{$this->Form->create('TuanBuying', array('url' =>'/admin/tuan/tuan_buying_edit/$id', 'class'=>'form-horizontal','role'=>'form'))}}-->
 
     <div class="form-group">
@@ -99,7 +99,7 @@
 
     <div class="form-group">
         <div class="col-sm-12 col-sm-offset-2">
-            <a href="/manage/admin/tuan/tuan_buyings" class="btn btn-default">取消</a>
+            <a href="/manage/admin/tuanBuyings/tuan_buyings" class="btn btn-default">取消</a>
             <input class="btn btn-primary" type="submit" value="保存">
         </div>
     </div>

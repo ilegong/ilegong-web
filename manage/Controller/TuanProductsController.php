@@ -69,4 +69,10 @@ class TuanProductsController extends AppController{
 
     }
 
+    public function admin_api_tuan_products(){
+        $this->autoRender=false;
+        echo getTuanProductsAsJson();
+    }
+
+
 }
