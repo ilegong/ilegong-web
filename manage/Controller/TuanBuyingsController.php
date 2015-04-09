@@ -35,7 +35,7 @@ class TuanBuyingsController extends AppController{
     /**
      * show all tuan_buyings
      */
-    public function admin_tuan_buyings(){
+    public function admin_index(){
         $team_id = $_REQUEST['team_id'];
         $product_id = $_REQUEST['product_id'];
         $time_type = $_REQUEST['time_type'];

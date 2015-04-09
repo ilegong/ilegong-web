@@ -11,7 +11,7 @@ class TuanProductsController extends AppController{
 
     var $uses = array('TuanProduct');
 
-    public function admin_tuan_products(){
+    public function admin_index(){
         $tuan_products = $this->TuanProduct->find('all',array(
             'conditions' => array(
                 'deleted'=>DELETED_NO
@@ -66,13 +66,10 @@ class TuanProductsController extends AppController{
         }else{
             //error
         }
-
     }
 
     public function admin_api_tuan_products(){
         $this->autoRender=false;
         echo getTuanProductsAsJson();
     }
-
-
 }
