@@ -190,7 +190,7 @@ class TuanBuyingsController extends AppController{
         $data_info = $this->TuanBuying->find('first',array('conditions' => array('id' => $id)));
         $this->log('data_info'.json_encode($data_info));
         if (empty($data_info)) {
-            throw new ForbiddenException(__('该团不存在！'));
+            throw new ForbiddenException(__('该团购不存在！'));
         }
         $this->data = $data_info;
         $this->set('id',$id);

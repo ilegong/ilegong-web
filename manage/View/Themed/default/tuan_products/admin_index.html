@@ -1,37 +1,21 @@
 <div class="container">
     <ul class="nav nav-pills pull-right">
         <li role="presentation">
-          <a class="btn btn-primary" href="/manage/admin/tuanProducts/add_tuan_products">添加团购商品</a>
+          <a class="btn btn-primary" href="/manage/admin/tuan_products/new">添加团购商品</a>
         </li>
     </ul>
     <div class="row">
         <table class="table table-condensed table-striped">
             <thead>
                 <tr>
-                    <th>
-                        id
-                    </th>
-                    <th>
-                        名称
-                    </th>
-                    <th>
-                        产品ID
-                    </th>
-                    <th>
-                        产品价格
-                    </th>
-                    <th>
-                        发货类型
-                    </th>
-                    <th>
-                        列表图片
-                    </th>
-                    <th>
-                        详情图片
-                    </th>
-                    <th>
-                        操作
-                    </th>
+                    <th>id</th>
+                    <th>名称</th>
+                    <th>产品ID</th>
+                    <th>产品价格</th>
+                    <th>发货类型</th>
+                    <th>列表图片</th>
+                    <th>详情图片</th>
+                    <th>操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -69,7 +53,7 @@
                         {{$tuanProduct['detail_img']}}
                     </td>
                     <td>
-                        <a class="btn btn-primary" href="/manage/admin/tuanProducts/edit_tuan_products/{{$tuanProduct['id']}}" role="button">编辑</a> | <a class="btn btn-danger" href="/manage/admin/tuanProducts/delete_tuan_products/{{$tuanProduct['id']}}" role="button">删除</a>
+                        <a class="btn btn-primary" href="/manage/admin/tuan_products/edit/{{$tuanProduct['id']}}" role="button">编辑</a> | <a class="btn btn-danger" href="/manage/admin/tuan_products/delete/{{$tuanProduct['id']}}" role="button">删除</a>
                     </td>
                 </tr>
                 {{/loop}}

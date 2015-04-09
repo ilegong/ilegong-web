@@ -4,7 +4,7 @@
           $tuanProduct = $data['TuanProduct'];
         ?>
 
-        <form class="form-horizontal" method="post" action="/manage/admin/tuanProducts/edit_tuan_products/{{$id}}" data-noajax="1">
+        <form class="form-horizontal" method="post" action="/manage/admin/tuan_products/update/{{$id}}" data-noajax="1">
             <input type="hidden" value="{{$tuanProduct['id']}}">
             <div class="form-group">
                 <label for="product_name" class="col-sm-2 control-label">产品名称</label>
@@ -48,7 +48,8 @@
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-default">保存</button>
+                    <a href="/manage/admin/tuan_products/index" class="btn btn-default">取消</a>
+                    <button type="submit" class="btn btn-primary">保存</button>
                 </div>
             </div>
         </form>
