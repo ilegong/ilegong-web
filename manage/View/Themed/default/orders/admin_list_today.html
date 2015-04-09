@@ -127,7 +127,7 @@
                 $value = empty($date)?'': date('m-d', strtotime($date));
                 ?>
                 {{$value}}
-            {{elseif $cart['Cart']['type'] == 5}}
+            {{elseif $order['Order']['type'] == 5}}
             <?php
                 $date = $tuan_consign_times[$item['Order']['member_id']];
                 $value = empty($date)?'': date('m-d', strtotime($date));
