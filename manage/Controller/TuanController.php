@@ -99,7 +99,7 @@ class TuanController extends AppController{
                         $this->set('total_unpaid', $r[0][0]['total']);
                     }
                 }
-                $order_query_cond['Order.status']=null;
+                unset($order_query_cond['Order.status']);
             }
 
             $orders = $this->Order->find('all',array(
