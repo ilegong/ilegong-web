@@ -158,8 +158,13 @@
                 <button type="button" class="btn btn-sm btn-info tuanbuying-start-deliver" data-product-name="{{$tuanProduct}}" data-id="{{$tuanBuying['id']}}">配送消息</button>
               {{else}}
                 <span class="label label-info">{{$tuan_buying['start_deliver_msg_status']}}</span>
-                <button type="button" class="btn btn-sm btn-warning tuan-buying-finished" data-id="{{$tuanBuying['id']}}" value="1">发货完成</button>
               {{/if}}
+              {{if $tuan_buying['notify_deliver_msg_status'] == 'true'}}
+                <button type="button" class="btn btn-sm btn-info tuanbuying-notify-deliver" data-tuanteam-address="{{$tuanTeam['address']}}" data-product-name="{{$tuanProduct}}" data-id="{{$tuanBuying['id']}}">到货消息</button>
+              {{else}}
+                <span class="label label-info">{{$tuan_buying['notify_deliver_msg_status']}}</span>
+              {{/if}}
+              <button type="button" class="btn btn-sm btn-warning tuan-buying-finished" data-id="{{$tuanBuying['id']}}" value="1">发货完成</button>
             {{elseif $tuanBuying['status']==11}}
                 已发货({{date('n.j',strtotime($tuanBuying['consign_time']))}})
             {{elseif $tuanBuying['status']==1}}

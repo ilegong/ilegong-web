@@ -52,6 +52,7 @@ define('TUAN_COMPLETE_MSG','tuan_complete_msg');
 define('TUAN_CANCEL_MSG','tuan_cancel_msg');
 define('TUAN_CREATE_MSG','tuan_create_msg');
 define('TUAN_STARTDELIVER_MSG','tuan_startdeliver_msg');
+define('TUAN_NOTIFYDELIVER_MSG','tuan_notifydeliver_msg');
 
 
 include_once COMMON_PATH.'bootstrap.php';

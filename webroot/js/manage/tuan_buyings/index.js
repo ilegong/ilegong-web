@@ -39,6 +39,7 @@ $(function(){
     var tuanbuyingtipmsg = $('.tuan-buying-tipmsg');
     var tuanbuyingdelaymsg = $('.tuan-buying-delayemsg');
     var tuanBuyingStartDeliver = $('.tuanbuying-start-deliver');
+    var tuanBuyingNotifyDeliver = $('.tuanbuying-notify-deliver');
 
     tuanBuyingDue.click(function(){
         if(!confirm('确定结束吗？')) {
@@ -160,7 +161,27 @@ $(function(){
                    }
                });
     });
-
+    tuanBuyingNotifyDeliver.on('click',function(){
+       var tuanBuyingId = $(this).data('id');
+       var tuanProduct = $(this).data('product-name');
+        var tuanTeamAddress = $(this).data('tuanteam-address');
+        bootbox.prompt({
+            title:'请输入到货通知模版消息',
+            value:'亲，您在***团购的'+tuanProduct+'已经为您送到'+tuanTeamAddress+'，请注意收货',
+            callback:function(msg){
+                if(msg!=null){
+                    var tuan_msg = msg;
+                    $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_notify_deliver_msg',{'tuan_buying_id':tuanBuyingId,'deliver_msg':tuan_msg},function(data){
+                        bootbox.alert(data.msg,function(e){
+                            window.location.reload();
+                        });
+                    });
+                }else{
+                    return;
+                }
+            }
+        });
+    });
 
     $('#tuan_down,#tuan_product_down').click(function(){
         var id = $(this).attr('data-id');

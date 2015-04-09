@@ -68,7 +68,7 @@ class TuanBuyingsController extends AppController{
         }
         $this->log('tuan_buyings'.json_encode($tuan_buyings));
         $tuan_ids = Hash::extract($tuan_buyings,'{n}.TuanBuying.tuan_id');
-        $tuan_teams = $this->TuanTeam->find('all', array('conditions' => array('id' => $tuan_ids), 'fields' => array('id', 'tuan_name','type')));
+        $tuan_teams = $this->TuanTeam->find('all', array('conditions' => array('id' => $tuan_ids), 'fields' => array('id', 'tuan_name','type','address')));
         $tuan_teams = Hash::combine($tuan_teams, '{n}.TuanTeam.id', '{n}.TuanTeam');
         $this->log('tuan_team'.json_encode($tuan_teams));
         $tuan_products = getTuanProducts();
@@ -82,8 +82,10 @@ class TuanBuyingsController extends AppController{
             $tuan_buying['complete_msg_status'] = $this->get_tb_msg_status(TUAN_COMPLETE_MSG,$tb_id);
             $tuan_buying['tip_msg_status'] = $this->get_tb_msg_status(TUAN_TIP_MSG,$tb_id);
             $tuan_buying['start_deliver_msg_status'] = $this->get_tb_msg_status(TUAN_STARTDELIVER_MSG,$tb_id);
+            $tuan_buying['notify_deliver_msg_status'] = $this->get_tb_msg_status(TUAN_NOTIFYDELIVER_MSG,$tb_id);
             $tuan_buying['tuan_team'] = $tuan_teams[$tuan_id];
             $tuan_buying['tuan_product'] = $tuan_products[$tuanBuying['pid']];
+
         }
         $this->set('tuan_buyings', $tuan_buyings);
         $this->set('team_id',$team_id);
@@ -154,6 +156,16 @@ class TuanBuyingsController extends AppController{
             ));
             if(!empty($tml)){
                 return '已发配送消息';
+            }else{
+                return 'true';
+            }
+        }
+        if($type==TUAN_NOTIFYDELIVER_MSG){
+            $tml = $this->TemplateMsgLog->find('first',array(
+                'conditions' => $cond
+            ));
+            if(!empty($tml)){
+                return '已发到货消息';
             }else{
                 return 'true';
             }
