@@ -1,7 +1,7 @@
 <div class="container">
     <ul class="nav nav-pills pull-right">
         <li role="presentation">
-          <a class="btn btn-primary" href="/manage/admin/tuan/add_tuan_products">添加团购商品</a>
+          <a class="btn btn-primary" href="/manage/admin/tuanProducts/add_tuan_products">添加团购商品</a>
         </li>
     </ul>
     <div class="row">
@@ -69,7 +69,7 @@
                         {{$tuanProduct['detail_img']}}
                     </td>
                     <td>
-                        <a class="btn btn-primary" href="/manage/admin/tuan/edit_tuan_products/{{$tuanProduct['id']}}" role="button">编辑</a> | <a class="btn btn-danger" href="/manage/admin/tuan/delete_tuan_products/{{$tuanProduct['id']}}" role="button">删除</a>
+                        <a class="btn btn-primary" href="/manage/admin/tuanProducts/edit_tuan_products/{{$tuanProduct['id']}}" role="button">编辑</a> | <a class="btn btn-danger" href="/manage/admin/tuanProducts/delete_tuan_products/{{$tuanProduct['id']}}" role="button">删除</a>
                     </td>
                 </tr>
                 {{/loop}}

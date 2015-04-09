@@ -426,65 +426,6 @@ class TuanController extends AppController{
          $this->set('id',$id);
 //         echo json_encode($successinfo);
      }
-    /**
-     * 团购产品列表
-     */
-     public function admin_tuan_products(){
-         $tuan_products = $this->TuanProduct->find('all',array(
-             'conditions' => array(
-                 'deleted'=>DELETED_NO
-             )
-         ));
-         $this->set('datas',$tuan_products);
-     }
 
-     public function admin_add_tuan_products(){
-        if(!empty($this->data)){
-            //add it
-            if($this->TuanProduct->save($this->data)){
-                //redirect
-                $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_products'));
-            }else{
-                //error
-            }
-        }
-     }
-
-     public function admin_edit_tuan_products($id){
-         $data_info  = $this->TuanProduct->find('first',array(
-             'conditions' => array(
-                 'id' => $id
-             )
-         ));
-         if(!empty($data_info)){
-             if(!empty($this->data)){
-                 $this->data['TuanProduct']['id'] = $id;
-                 if($this->TuanProduct->save($this->data)){
-                     $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_products'));
-                 }
-             }else{
-                 $this->set('data',$data_info);
-             }
-             $this->set('id',$id);
-         }else{
-             //error
-         }
-     }
-
-    public function admin_delete_tuan_products($id){
-        $data_info  = $this->TuanProduct->find('first',array(
-            'conditions' => array(
-                'id'=>$id
-            )
-        ));
-        if(!empty($data_info)){
-            if($this->TuanProduct->updateAll(array('deleted' => 1),array('id' => $id))){
-                $this->redirect(array('controller' => 'tuan','action' => 'admin_tuan_products'));
-            }
-        }else{
-            //error
-        }
-
-    }
 
 }
