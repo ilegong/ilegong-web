@@ -26,6 +26,7 @@ class TuanController extends AppController{
         $order_type = $_REQUEST['order_type'];
         $order_id = $_REQUEST['order_id'];
         $query_tb = array();
+        $should_count_nums = false;
         if(!empty($team_id)&&$team_id!='-1'){
             $query_tb['tuan_id']=$team_id;
         }
@@ -36,6 +37,8 @@ class TuanController extends AppController{
         }
         if(!empty($product_id)){
             $query_tb['pid'] = $product_id;
+            $should_count_nums = true;
+            $this->set('should_count_nums',$should_count_nums);
         }
         $tuan_buys = $this->TuanBuying->find('all',array(
             'conditions' => $query_tb
@@ -123,7 +126,13 @@ class TuanController extends AppController{
                     'conditions'=>array(
                         'order_id' => $order_ids,
                     )));
-
+                if($should_count_nums){
+                    $order_id_strs = '('.join(',',$order_ids).')';
+                    $product_count = $this->Cart->query('select sum(num) from cake_carts where order_id in '.$order_id_strs);
+                    $this->set('product_count',$product_count[0][0]['sum(num)']);
+                    $product_spec_map = $this->Cart->query('select specId,sum(num) from cake_carts where order_id in '.$order_id_strs.' group by specId');
+                    $this->set('product_spec_map',$product_spec_map);
+                }
                 $order_carts = array();
                 foreach($carts as &$c){
                     $c_order_id = $c['Cart']['order_id'];
@@ -148,6 +157,7 @@ class TuanController extends AppController{
                 $this->set('tuan_buys',$tuan_buys);
             }
         }
+        $this->set('spec_groups',$spec_groups);
         $this->set('team_id',$team_id);
         $this->set('product_id',$product_id);
         $this->set('time_type',$time_type);

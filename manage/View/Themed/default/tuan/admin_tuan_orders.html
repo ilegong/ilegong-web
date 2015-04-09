@@ -54,6 +54,14 @@
 <hr/>
 <div>
     <h1>订单总计<span style="color: red">{{count($orders)}}</span>个，金额<span style="color: red">{{$total_money}}</span> {{if $orders_invalid === 0 || $orders_invalid}}<small>（待支付/已取消：{{$orders_invalid}}个 {{$total_unpaid}}元)</small>{{/if}}</h1>
+    {{if $should_count_nums}}
+    <br/>
+    <h1>份数<span style="color: red">{{$product_count}}</span>
+        {{loop $product_spec_map $spec_map}}
+            &nbsp;&nbsp;&nbsp;{{$spec_groups[$spec_map['cake_carts']['specId']]?$spec_groups[$spec_map['cake_carts']['specId']]:'没有规格'}}&nbsp;&nbsp;<span style="color: red">{{$spec_map['0']['sum(num)']}}</span>
+        {{/loop}}
+    </h1>
+    {{/if}}
 </div>
 <hr/>
 <table class="table table-bordered">
