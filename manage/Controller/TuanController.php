@@ -24,14 +24,15 @@ class TuanController extends AppController{
         $con_phone = $_REQUEST['con_phone'];
         $post_time = $_REQUEST['post_time'];
         $order_type = $_REQUEST['order_type'];
+        $order_id = $_REQUEST['order_id'];
         $query_tb = array();
         if(!empty($team_id)&&$team_id!='-1'){
             $query_tb['tuan_id']=$team_id;
         }
         if($time_type==0){
-            $query_tb['end_time']=$post_time;
+            $query_tb['end_time > ']=$post_time;
         }else if($time_type==1){
-            $query_tb['consign_time']=$post_time;
+            $query_tb['consign_time > ']=$post_time;
         }
         if(!empty($product_id)){
             $query_tb['pid'] = $product_id;
@@ -77,16 +78,46 @@ class TuanController extends AppController{
             if(!empty($con_phone)){
                 $order_query_cond['Order.consignee_mobilephone LIKE'] = '%'.$con_phone.'%';
             }
+            if(!empty($order_id)){
+                $order_query_cond['Order.id']=$order_id;
+            }
 
             if($order_type!=-1){
                 $order_query_cond['Order.status']=$order_type;
+            }else{
+                $order_query_cond['Order.status'] = array(ORDER_STATUS_CANCEL, ORDER_STATUS_WAITING_PAY);
+                $orders_invalid = $this->Order->find('count', array(
+                    'conditions' => $order_query_cond,
+                ));
+                $this->set('orders_invalid', $orders_invalid);
+                if ($orders_invalid > 0) {
+                    $r = $this->Order->find('all', array(
+                        'fields' => array('sum(Order.total_all_price)   AS total'),
+                        'conditions' => $order_query_cond,
+                    ));
+                    if (!empty($r)) {
+                        $this->set('total_unpaid', $r[0][0]['total']);
+                    }
+                }
+                $order_query_cond['Order.status']=null;
             }
+
             $orders = $this->Order->find('all',array(
                 'conditions' => $order_query_cond,
                 'joins' => $join_conditions,
                 'fields' => array('Order.*', 'Pay.trade_type'),
             ));
+
             if(!empty($orders)){
+                $total_money = 0;
+                foreach($orders as $o){
+                    $ids[] = $o['Order']['id'];
+                    $o_status = $o['Order']['status'];
+                    if($o_status == 1 || $o_status == 2 || $o_status == 3 ){
+                        $total_money = $total_money + $o['Order']['total_all_price'];
+                    }
+                }
+                $this->set('total_money',$total_money);
                 $order_ids = Hash::extract($orders,'{n}.Order.id');
                 $carts = $this->Cart->find('all',array(
                     'conditions'=>array(

@@ -22,7 +22,7 @@
         </div>
         <div class="form-group">
             <label class="sr-only">时间</label>
-            <input type="text" name="post_time" class="form-control" placeholder="输入时间" value="{{$post_time}}">
+            <input type="text" name="post_time" class="form-control" placeholder="2014-07-01" value="{{$post_time}}">
         </div>
         <div class="form-group">
             <select class="form-control" name="order_type" id="order_type">
@@ -33,6 +33,10 @@
                 <option value="4">已退款</option>
                 <option value="10">已作废</option>
             </select>
+        </div>
+        <div class="form-group">
+            <label class="sr-only">订单ID</label>
+            <input type="text" name="order_id" class="form-control" value="{{$order_id}}" placeholder="订单ID">
         </div>
     </div>
 
@@ -48,6 +52,10 @@
         <button type="submit" class="btn btn-default fr">查看订单</button>
     </div>
 </form>
+<hr/>
+<div>
+    <h1>订单总计<span style="color: red">{{count($orders)}}</span>个，金额<span style="color: red">{{$total_money}}</span> {{if $orders_invalid === 0 || $orders_invalid}}<small>（待支付/已取消：{{$orders_invalid}}个 {{$total_unpaid}}元)</small>{{/if}}</h1>
+</div>
 <hr/>
 <table class="table table-bordered">
     <thead>
@@ -101,7 +109,6 @@
                     {{$tuans[$tuan_buys[$order['Order']['member_id']]['tuan_id']]['tuan_name']}}
                 </td>
                 <td>
-                    <!--{{$tuans[$tuan_buys[$order['Order']['member_id']]['tuan_id']]['tuan_addr']}}-->
                     {{$order['Order']['consignee_address']}}
                 </td>
 
