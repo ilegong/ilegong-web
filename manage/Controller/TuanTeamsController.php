@@ -13,9 +13,9 @@ class TuanTeamsController extends AppController{
 
 
     /**
-     * show all tuan_team
+     * show all tuan teams
      */
-    public function admin_tuan_teams(){
+    public function admin_index(){
         $team_id = $_REQUEST['team_id'];
         $con = array();
         if(!empty($team_id)&&$team_id!='-1'){
