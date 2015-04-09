@@ -42,136 +42,106 @@ $(function(){
     var tuanBuyingNotifyDeliver = $('.tuanbuying-notify-deliver');
 
     tuanBuyingDue.click(function(){
-        if(!confirm('确定结束吗？')) {
-            return;
-        }
         var tuanBuyingId = $(this).parents('tr').data('id');
-        $.post( "/manage/admin/tuanBuyings/api_tuan_buying_due", {id: tuanBuyingId}, function( data ) {
-            console.log('已设置为：团购截止！');
-        }).fail(function(){
-            console.log('设置团购截止失败！');
-        }).always(function(){
-            window.location.reload();
-        });
+            bootbox.confirm('确定结束团购吗？',function(e){
+                if(e){
+                    $.post( "/manage/admin/tuanBuyings/api_tuan_buying_due", {id: tuanBuyingId}, function( data ) {
+                        console.log('已设置为：团购截止！');
+                    }).fail(function(){
+                        console.log('设置团购截止失败！');
+                    }).always(function(){
+                        window.location.reload();
+                    });
+                }else{
+                    return;
+                }
+            });
     });
     tuanBuyingCanceled.click(function(){
-        if(!confirm('确定取消吗？')) {
-            return;
-        }
         var tuanBuyingId = $(this).parents('tr').data('id');
-        $.post( "/manage/admin/tuanBuyings/api_tuan_buying_canceled", {id: tuanBuyingId}, function( data ) {
-            console.log('已设置为：团购取消！');
-        }).fail(function(){
-            console.log('设置团购取消失败！');
-        }).always(function(){
-            window.location.reload();
-        });
+            bootbox.confirm('确定取消团购吗？',function(e){
+                if(e){
+                    $.post( "/manage/admin/tuanBuyings/api_tuan_buying_canceled", {id: tuanBuyingId}, function( data ) {
+                        console.log('已设置为：团购取消！');
+                    }).fail(function(){
+                        console.log('设置团购取消失败！');
+                    }).always(function(){
+                        window.location.reload();
+                    });
+                }else{
+                    return;
+                }
+            });
     });
     tuanBuyingFinished.click(function(){
-        if(!confirm('确定发货完成了吗？')) {
-            return;
-        }
         var tuanBuyingId = $(this).parents('tr').data('id');
-        $.post( "/manage/admin/tuanBuyings/api_tuan_buying_finished", {id: tuanBuyingId}, function( data ) {
-            console.log('已设置为：发货完成！');
-//            $.getJSON('/manage/admin/tuan/api_tuan_buying_finished',function(data){
-//                alert(data.success);
-//            });
-        }).fail(function(){
-            console.log('设置发货完成失败！');
-        }).always(function(){
-            window.location.reload();
-        });
-
+            bootbox.confirm('确定发货完成了吗？',function(e){
+                if(e){
+                    $.post( "/manage/admin/tuanBuyings/api_tuan_buying_finished", {id: tuanBuyingId}, function( data ) {
+                        console.log('已设置为：发货完成！');
+                    }).fail(function(){
+                        console.log('设置发货完成失败！');
+                    }).always(function(){
+                        window.location.reload();
+                    });
+                }else{
+                    return;
+                }
+            });
     });
     tuanBuyingRefunded.click(function(){
-        if(!confirm('确定完成退款了吗？')) {
-            return;
-        }
         var tuanBuyingId = $(this).parents('tr').data('id');
-        $.post( "/manage/admin/tuanBuyings/api_tuan_buying_refunded", {id: tuanBuyingId}, function( data ) {
-            console.log('已设置为：退款完成！');
-        }).fail(function(){
-            console.log('设置退款完成失败！');
-        }).always(function(){
-            window.location.reload();
-        });
+            bootbox.confirm('确定完成退款了吗？',function(e){
+                if(e){
+                    $.post( "/manage/admin/tuanBuyings/api_tuan_buying_refunded", {id: tuanBuyingId}, function( data ) {
+                        console.log('已设置为：退款完成！');
+                    }).fail(function(){
+                        console.log('设置退款完成失败！');
+                    }).always(function(){
+                        window.location.reload();
+                    });
+                }else{
+                    return;
+                }
+            })
     });
 
     tuanBuyingSendmsg.on('click',function(e){
-        if(!confirm('静哥,确定要发送模板消息吗?')){
-            return;
-        }
         var tuanBuyingId = $(this).data('id');
-        $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_create_msg',{'tuan_buy_id':tuanBuyingId},function(data){
-            alert(data['msg']);
-        });
+            bootbox.confirm('静哥,确定要发送建团模板消息吗?',function(e){
+                if(e){
+                    $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_create_msg',{'tuan_buy_id':tuanBuyingId},function(data){
+                        bootbox.alert(data['msg'],function(e){
+                            window.location.reload();
+                        });
+                    });
+                }else{
+                    return;
+                }
+            })
     });
     tuanbuyingcancelmsg.on('click',function(e){
-        if(!confirm('静哥,确定要发送取消团购模板消息吗?')){
-            return;
-        }
         var tuanBuyingId = $(this).data('id');
-        $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_fail_msg',{'tuan_buy_id':tuanBuyingId},function(data){
-            alert(data['msg']);
-        });
+            bootbox.confirm('静哥,确定要发送取消团购模板消息吗?',function(e){
+                if(e){
+                   $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_fail_msg',{'tuan_buy_id':tuanBuyingId},function(data){
+                        bootbox.alert(data['msg'],function(e){
+                            window.location.reload();
+                        });
+                   });
+                }else{
+                  return;
+                }
+            });
     });
 
     tuanbuyingcompletemsg.on('click',function(e){
         var tuanStatus = $(this).attr('data-tuanBuying-id');
+        var tuanBuyingId = $(this).data('id');
         if(tuanStatus == 1){
-        if(!confirm('静哥,确定要发送模板消息吗?')){
-            return;
-        }
-        var tuanBuyingId = $(this).data('id');
-        $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_complete_msg',{'tuan_buy_id':tuanBuyingId},function(data){
-            alert(data['msg']);
-        });
-        }else{
-            alert('只有团购截止后，才能发送团购完成模版消息');
-        }
-    });
-
-    tuanbuyingtipmsg.on('click',function(e){
-        if(!confirm('静哥,确定要发送模板消息吗?')){
-            return;
-        }
-        var tuanBuyingId = $(this).data('id');
-        $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_tip_by_id_msg',{'tuan_buy_id':tuanBuyingId},function(data){
-            alert(data['msg']);
-        });
-    });
-    tuanBuyingStartDeliver.on('click',function(){
-        var tuanBuyingId = $(this).data('id');
-        var tuanProduct = $(this).data('product-name');
-               bootbox.prompt({
-                   title:'请输入配送模版消息',
-                   value:'亲，您在***团购的'+tuanProduct+'已经在路上了啦，请注意收货',
-                   callback:function(msg){
-                       if(msg!=null){
-                       var tuan_msg = msg;
-                       $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_start_deliver_msg',{'tuan_buying_id':tuanBuyingId,'deliver_msg':tuan_msg},function(data){
-                           bootbox.alert(data.msg,function(e){
-                                   window.location.reload();
-                           });
-                       });
-                   }else{
-                       return;
-                       }
-                   }
-               });
-    });
-    tuanBuyingNotifyDeliver.on('click',function(){
-       var tuanBuyingId = $(this).data('id');
-       var tuanProduct = $(this).data('product-name');
-        var tuanTeamAddress = $(this).data('tuanteam-address');
-        bootbox.prompt({
-            title:'请输入到货通知模版消息',
-            value:'亲，您在***团购的'+tuanProduct+'已经为您送到'+tuanTeamAddress+'，请注意收货',
-            callback:function(msg){
-                if(msg!=null){
-                    var tuan_msg = msg;
-                    $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_notify_deliver_msg',{'tuan_buying_id':tuanBuyingId,'deliver_msg':tuan_msg},function(data){
+            bootbox.confirm('静哥,确定要发送团购完成模板消息吗?',function(e){
+                if(e){
+                    $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_complete_msg',{'tuan_buy_id':tuanBuyingId},function(data){
                         bootbox.alert(data.msg,function(e){
                             window.location.reload();
                         });
@@ -179,41 +149,98 @@ $(function(){
                 }else{
                     return;
                 }
-            }
-        });
-    });
-
-    $('#tuan_down,#tuan_product_down').click(function(){
-        var id = $(this).attr('data-id');
-        var val=$(this).attr("value");
-
-        if(confirm('确定编辑吗？')){
-            if($(this).attr('id')== 'tuan_product_down'){
-                confirm('团购取消后请及时退款哦');
-            }
-            var data={"id":id,"val":val};
-            $.ajax({
-                type:'post',
-                success:function(data){
-                    window.location.reload();
-                    alert('状态修改成功');
-                },
-                error:function(e){alert(e);},
-                url:"{{$this->Html->url(array('controller'=>'tuan','action'=>'admin_tuan_buying_set'))}}",
-                data:data,
-                dataType:'json'
-            })
-        }
-        else{
-            return false;
+            });
+        }else{
+            alert('只有团购截止后，才能发送团购完成模版消息');
         }
     });
+
+    tuanbuyingtipmsg.on('click',function(e){
+        var tuanBuyingId = $(this).data('id');
+            bootbox.confirm('静哥,确定要发送团购提示模板消息吗?',function(e){
+                if(e){
+                    $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_tip_by_id_msg',{'tuan_buy_id':tuanBuyingId},function(data){
+                        bootbox.alert(data.msg,function(e){
+                            window.location.reload();
+                        });
+                    });
+                }else{
+                    return;
+                }
+            });
+    });
+    tuanBuyingStartDeliver.on('click',function(){
+        var tuanBuyingId = $(this).data('id');
+        var tuanProduct = $(this).data('product-name');
+            bootbox.prompt({
+                title:'请输入配送模版消息',
+                value:'亲，您在***团购的'+tuanProduct+'已经在路上了啦，请注意收货',
+                callback:function(msg){
+                    if(msg!=null){
+                      var tuan_msg = msg;
+                      $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_start_deliver_msg',{'tuan_buying_id':tuanBuyingId,'deliver_msg':tuan_msg},function(data){
+                         bootbox.alert(data.msg,function(e){
+                              window.location.reload();
+                         });
+                      });
+                  }else{
+                      return;
+                     }
+                  }
+            });
+    });
+    tuanBuyingNotifyDeliver.on('click',function(){
+       var tuanBuyingId = $(this).data('id');
+       var tuanProduct = $(this).data('product-name');
+       var tuanTeamAddress = $(this).data('tuanteam-address');
+            bootbox.prompt({
+                title:'请输入到货通知模版消息',
+                value:'亲，您在***团购的'+tuanProduct+'已经为您送到'+tuanTeamAddress+'，请注意收货',
+                callback:function(msg){
+                    if(msg!=null){
+                        var tuan_msg = msg;
+                        $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_notify_deliver_msg',{'tuan_buying_id':tuanBuyingId,'deliver_msg':tuan_msg},function(data){
+                            bootbox.alert(data.msg,function(e){
+                                window.location.reload();
+                            });
+                        });
+                    }else{
+                        return;
+                    }
+                }
+            });
+    });
+
+//    $('#tuan_down,#tuan_product_down').click(function(){
+//        var id = $(this).attr('data-id');
+//        var val=$(this).attr("value");
+//        if(confirm('确定编辑吗？')){
+//            if($(this).attr('id')== 'tuan_product_down'){
+//                confirm('团购取消后请及时退款哦');
+//            }
+//            var data={"id":id,"val":val};
+//            $.ajax({
+//                type:'post',
+//                success:function(data){
+//                    window.location.reload();
+//                    alert('状态修改成功');
+//                },
+//                error:function(e){alert(e);},
+//                url:"{{$this->Html->url(array('controller'=>'tuan','action'=>'admin_tuan_buying_set'))}}",
+//                data:data,
+//                dataType:'json'
+//            })
+//        }
+//        else{
+//            return false;
+//        }
+//    });
 
     function search_tuanteam(){
 
     String.prototype.Trim = function() {
         return this.replace(/(^\s*)|(\s*$)/g, "");
-    };
+       };
 
     $("select[name='team_id'] option").each(function(){
         leftSelectData.push({'val':$(this).val(),'name':$(this).text()});
