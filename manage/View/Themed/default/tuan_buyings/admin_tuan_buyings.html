@@ -1,7 +1,7 @@
 {{$this->Html->css(array('bootstrap.min.css'));}}
         <style>
             .fade.in{
-                opacity: 0.75;
+                opacity: 0.70;
             }
         </style>
 <hr/>
@@ -155,7 +155,7 @@
             {{elseif $tuanBuying['status']==1}}
                 待发货({{date('n.j',strtotime($tuanBuying['consign_time']))}})
               {{if $tuan_buying['start_deliver_msg_status'] == 'true'}}
-                <button type="button" class="btn btn-sm btn-info tuanbuying-start-deliver" data-id="{{$tuanBuying['id']}}">配送消息</button>
+                <button type="button" class="btn btn-sm btn-info tuanbuying-start-deliver" data-product-name="{{$tuanProduct}}" data-id="{{$tuanBuying['id']}}">配送消息</button>
               {{else}}
                 <span class="label label-info">{{$tuan_buying['start_deliver_msg_status']}}</span>
                 <button type="button" class="btn btn-sm btn-warning tuan-buying-finished" data-id="{{$tuanBuying['id']}}" value="1">发货完成</button>

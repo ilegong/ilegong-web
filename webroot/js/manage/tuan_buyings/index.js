@@ -142,16 +142,21 @@ $(function(){
     });
     tuanBuyingStartDeliver.on('click',function(){
         var tuanBuyingId = $(this).data('id');
+        var tuanProduct = $(this).data('product-name');
                bootbox.prompt({
                    title:'请输入配送模版消息',
-                   value:'亲，您在***团购的***已经在路上了啦，请注意收货',
+                   value:'亲，您在***团购的'+tuanProduct+'已经在路上了啦，请注意收货',
                    callback:function(msg){
+                       if(msg!=null){
                        var tuan_msg = msg;
                        $.getJSON('/manage/admin/tuan_msg/send_tuan_buy_start_deliver_msg',{'tuan_buying_id':tuanBuyingId,'deliver_msg':tuan_msg},function(data){
                            bootbox.alert(data.msg,function(e){
                                    window.location.reload();
                            });
                        });
+                   }else{
+                       return;
+                       }
                    }
                });
     });
