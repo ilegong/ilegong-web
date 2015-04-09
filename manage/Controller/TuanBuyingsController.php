@@ -186,39 +186,29 @@ class TuanBuyingsController extends AppController{
         }
     }
 
-    /**
-     * edit tuan_buying info
-     */
-    public function admin_tuan_buying_edit($id){
+    public function admin_edit($id){
         $data_info = $this->TuanBuying->find('first',array('conditions' => array('id' => $id)));
         $this->log('data_info'.json_encode($data_info));
         if (empty($data_info)) {
             throw new ForbiddenException(__('该团不存在！'));
         }
-        if(!empty($this->data)){
-            $this->data['TuanBuying']['id'] = $id;
-            $this->autoRender = false;
-            if($this->TuanBuying->save($this->data)){
-                $this->redirect(array('controller' => 'tuanBuyings','action' => 'admin_tuan_buyings'));
-            }
-        }else{
-            $this->data = $data_info;
-            $this->log('data'.json_encode($this->data));
+        $this->data = $data_info;
+        $this->set('id',$id);
+    }
+
+    public function admin_update($id){
+        $this->log('update tuan buying '.$id.': '.json_encode($this->data));
+        $this->autoRender = false;
+        if($this->TuanBuying->save($this->data)){
+            $this->redirect(array('controller' => 'tuanBuyings','action' => 'admin_tuan_buyings'));
         }
         $this->set('id',$id);
     }
 
-    /**
-     * show new tuan_buying
-     */
-    public function admin_tuan_buying_new(){
-
+    public function admin_new(){
     }
 
-    /**
-     * create new tuan_buying
-     */
-    public function admin_tuan_buying_create(){
+    public function admin_create(){
         if(!empty($this->data)){
             $this->data['TuanBuying']['join_num'] = 0;
             $this->data['TuanBuying']['sold_num'] = 0;
@@ -228,5 +218,4 @@ class TuanBuyingsController extends AppController{
             }
         }
     }
-
 }

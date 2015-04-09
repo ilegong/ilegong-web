@@ -3,7 +3,7 @@
     <hr/>
     <h1>创建团购</h1>
     <hr/>
-    <form class="form-horizontal tuan-form" method="post" action="/manage/admin/tuanBuyings/tuan_buying_create" novalidate="novalidate" data-noajax="true">
+    <form class="form-horizontal tuan-form" method="post" action="/manage/admin/tuan_buyings/create" novalidate="novalidate" data-noajax="true">
         <div class="form-group">
             <label class="col-sm-2 control-label">团队</label>
             <div class="col-sm-9">
@@ -43,23 +43,27 @@
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">截止时间</label>
-            <div class="input-group date form_datetime col-sm-9" data-date="" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_end_time">
-                <input class="form-control" size="16" type="text" value="" readonly>
-                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+            <div class="col-sm-9" data-date="" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_end_time">
+                <div class="input-group date form_datetime" data-date="" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_end_time">
+                    <input class="form-control" size="16" type="text" value="" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+                <input id="tuan_end_time" name="data[TuanBuying][end_time]" class="form-inline form-control tuan-end-time" type="hidden">
+                <div class="text-warning">一般为发货时间的前一天17：00</div>
             </div>
-            <div class="text-warning">一般为发货时间的前一天17：00</div>
-            <input id="tuan_end_time" name="data[TuanBuying][end_time]" class="form-inline form-control tuan-end-time" type="hidden"><br/>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">发货时间</label>
-            <div class="input-group date form_datetime col-sm-9" data-date="" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_consign_time">
-                <input class="form-control" size="16" type="text" value="" readonly>
-                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+            <div class="col-sm-9" data-date="" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_consign_time">
+                <div class="input-group date form_datetime" data-date="" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_consign_time">
+                    <input class="form-control" size="16" type="text" value="" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+                <input type="hidden" id="tuan_consign_time" name="data[TuanBuying][consign_time]" value="{{$this->data[TuanBuying][consign_time]}}" />
+                <div class="text-warning">排期：不需要设置此值；团满发货或团满准备发货：不设置表示团满才会发货或准备发货</div>
             </div>
-            <div class="text-warning">发货时间为空，表示“团满发货”</div>
-            <input type="hidden" id="tuan_consign_time" name="data[TuanBuying][consign_time]" value="{{$this->data[TuanBuying][consign_time]}}" /><br/>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">目标份数</label>
@@ -84,7 +88,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-12 col-sm-offset-2">
-                <a href="/manage/admin/tuanBuyings/tuan_buyings" class="btn btn-default">取消</a>
+                <a href="/manage/admin/tuan_buyings/index" class="btn btn-default">取消</a>
                 <input type="submit" class="btn btn-danger" value="创建"/>
             </div>
         </div>

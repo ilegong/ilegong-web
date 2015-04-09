@@ -7,13 +7,13 @@
       $tuanBuying = $this->data[TuanBuying];
     ?>
 
-    <form class="form-horizontal" method="post" action="/manage/admin/tuanBuyings/tuan_buying_edit/{{$id}}" id="TuanBuyingAdminTuanBuyingEditForm" novalidate="novalidate" data-noajax="true">
-    <!--{{$this->Form->create('TuanBuying', array('url' =>'/admin/tuan/tuan_buying_edit/$id', 'class'=>'form-horizontal','role'=>'form'))}}-->
+    <form class="form-horizontal" method="post" action="/manage/admin/tuanBuyings/update/{{$id}}" id="TuanBuyingAdminTuanBuyingEditForm" novalidate="novalidate" data-noajax="true">
+      <input name="data[TuanBuying][id]" value="{{$id}}" type="hidden">
 
     <div class="form-group">
         <label class="col-sm-2 control-label">团购商品ID</label>
         <div class="col-sm-9 controls">
-            {{$this->Form->input('pid',array('class'=>'form-control','div'=>false,'label'=>false,'disabled' => 'disabled'))}}
+            <input type="text" class="form-control" name="data[TuanBuying][pid]" value="{{$tuanBuying[pid]}}" disabled="disabled"/>
             <div class="text-warning">示例：'838'=>'草莓', '851' => '芒果', '862'=>'蛋糕', '863' => '草莓863', '230' => '蛋糕230'</div>
         </div>
     </div>
@@ -33,41 +33,45 @@
     <div class="form-group">
         <label class="col-sm-2 control-label">团购价格</label>
         <div class="col-sm-9 controls">
-          {{$this->Form->input('tuan_price',array('class'=>'form-control tuan-price','div'=>false,'label'=>false))}}
+          <input type="text" class="form-control tuan-price" name="data[TuanBuying][tuan_price]" value="{{$tuanBuying[tuan_price]}}"/>
           <div class="text-warning">-1代表不设置，直接使用该团购商品的价格</div>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">参团人数</label>
         <div class="col-sm-9 controls">
-            {{$this->Form->input('join_num',array('class'=>'form-control','div'=>false,'label'=>false,'disabled' => 'disabled'))}}
+            <input type="text" class="form-control" name="data[TuanBuying][join_num]" value="{{$tuanBuying[join_num]}}" disabled="disabled"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">售出份数</label>
         <div class="col-sm-9 controls">
-            {{$this->Form->input('sold_num',array('class'=>'form-control','div'=>false,'label'=>false,'disabled' => 'disabled'))}}
+          <input type="text" class="form-control" name="data[TuanBuying][sold_num]" value="{{$tuanBuying[sold_num]}}" disabled="disabled"/>
         </div>
      </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">截止时间</label>
-        <div class="input-group date form_datetime col-sm-9" data-date="{{$tuanBuying[end_time]}}" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_end_time">
-            <input class="form-control" size="16" type="text" value="{{$tuanBuying[end_time]}}" readonly>
-            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-            <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+        <div class="col-sm-9 controls" data-date="{{$tuanBuying[end_time]}}" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_end_time">
+            <div class="input-group date form_datetime">
+              <input class="form-control" size="16" type="text" value="{{$tuanBuying[end_time]}}" readonly>
+              <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+              <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+            </div>
+            <input name="data[TuanBuying][end_time]" value="{{$tuanBuying[end_time]}}" class="form-inline form-control" type="hidden" id="tuan_end_time">
+            <div class="text-warning">一般为发货时间的前一天17：00</div>
         </div>
-        <div class="text-warning">一般为发货时间的前一天17：00</div>
-        <input name="data[TuanBuying][end_time]" value="{{$tuanBuying[end_time]}}" class="form-inline form-control" type="hidden" id="tuan_end_time"><br/>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">发货时间</label>
-        <div class="input-group date form_datetime col-sm-9" data-date="{{$tuanBuying[consign_time]}}" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_consign_time">
-            <input class="form-control" size="16" type="text" value="{{$tuanBuying[consign_time]}}" readonly>
-            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-            <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+        <div class="col-sm-9 controls" data-date="{{$tuanBuying[consign_time]}}" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_consign_time">
+            <div class="input-group date form_datetime" data-date="{{$tuanBuying[consign_time]}}" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_consign_time">
+              <input class="form-control" size="16" type="text" value="{{$tuanBuying[consign_time]}}" readonly>
+              <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+              <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+            </div>
+            <input id="tuan_consign_time" name="data[TuanBuying][consign_time]" value="{{$tuanBuying[consign_time]}}" class="form-inline form-control" type="hidden">
+            <div class="text-warning">排期：不需要设置此值；团满发货或团满准备发货：不设置表示团满才会发货或准备发货</div>
         </div>
-        <div class="text-warning">发货时间为空，表示“团满发货”</div>
-        <input id="tuan_consign_time" name="data[TuanBuying][consign_time]" value="{{$tuanBuying[consign_time]}}" class="form-inline form-control" type="hidden"><br/>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label">目标份数</label>
