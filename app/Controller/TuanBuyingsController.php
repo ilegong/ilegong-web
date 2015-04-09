@@ -142,7 +142,11 @@ class TuanBuyingsController extends AppController{
         $product_num = intval($_REQUEST['product_num']);
         $spec_id = intval($_REQUEST['spec_id']);
         $uId = $this->currentUser['id'];
-        $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,$spec_id,ORDER_TYPE_TUAN,0,$uId,null,  null, null,$tuan_buy_id);
+        $cart_tuan_param = array(
+            'tuan_buy_id' => $tuan_buy_id,
+            'product_id' => $product_id
+        );
+        $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,$spec_id,ORDER_TYPE_TUAN,0,$uId,null,  null, null,$cart_tuan_param);
         $this->log('cartInfo'.json_encode($cartInfo));
         if($cartInfo){
             $consignment_date_id = intval($_REQUEST['consignment_date_id']);

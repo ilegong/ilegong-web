@@ -307,8 +307,7 @@ function promo_code_new_user($pids) {
  * @param null $pp special price by ShipPromotion
  * @return array array of price && specialId
  */
-function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null,$tuan_buy_id=null) {
-
+function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null,$tuan_param=array()) {
 
     if (accept_user_price_pid($pid) && accept_user_price_pid_num($pid, $num) && !empty($cart_id)) {
         $userPrice = ClassRegistry::init('UserPrice');
@@ -323,6 +322,8 @@ function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null,
 
     }
 
+    $tuan_buy_id = $tuan_param['tuan_buy_id'];
+    //优先级 first
     if(!empty($tuan_buy_id)){
         $tuanBuyM = ClassRegistry::init('TuanBuying');
         $tuanBuy = $tuanBuyM->find('first',array(
@@ -334,6 +335,21 @@ function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null,
         $tuan_price = floatval($tuan_price);
         if($tuan_price>=0){
             return array($tuan_price,);
+        }
+    }
+    //优先级 second
+    $tuan_product_id = $tuan_param['product_id'];
+    if(!empty($tuan_product_id)){
+        $tuanProductM = ClassRegistry::init('TuanProduct');
+        $tuanProduct = $tuanProductM->find('first',array(
+            'conditions' => array(
+                'product_id' => $tuan_product_id
+            )
+        ));
+        $tuan_product_price = $tuanProduct['TuanProduct']['tuan_price'];
+        $tuan_product_price = floatval($tuan_product_price);
+        if($tuan_product_price>=0){
+            return array($tuan_product_price,);
         }
     }
 
