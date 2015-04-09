@@ -10,13 +10,13 @@ $(function(){
         showMeridian: 1
     });
     var tuanTeams = $('.tuan-teams');
-    $.getJSON('/manage/admin/tuan/api_tuan_teams',function(data){
+    $.getJSON('/manage/admin/tuanTeams/api_tuan_teams',function(data){
         $.each(data,function(index,item){
             $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo(tuanTeams);
         });
     });
     var tuanProducts = $('.tuan-products');
-    $.getJSON('/manage/admin/tuan/api_tuan_products',function(data){
+    $.getJSON('/manage/admin/tuanProducts/api_tuan_products',function(data){
         $.each(data,function(index,item){
             var tuan_product = item['TuanProduct'];
             $('<option value="' + tuan_product['product_id'] + '">' + tuan_product['alias'] + '</option>').appendTo(tuanProducts);
