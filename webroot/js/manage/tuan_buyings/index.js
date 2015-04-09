@@ -142,8 +142,6 @@ $(function(){
     });
     tuanBuyingStartDeliver.on('click',function(){
         var tuanBuyingId = $(this).data('id');
-       bootbox.confirm('静哥，确定发送开始配送模版消息吗?',function(e){
-           if(e){
                bootbox.prompt({
                    title:'请输入配送模版消息',
                    value:'亲，您在***团购的***已经在路上了啦，请注意收货',
@@ -156,12 +154,6 @@ $(function(){
                        });
                    }
                });
-           }else{
-               return;
-           }
-       });
-
-
     });
 
 
