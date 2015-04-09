@@ -160,5 +160,17 @@ class TuanTeamsController extends AppController{
     }
 
 
+    public function api_getArea(){
+        $this->autoRender = false;
+        $this->loadModel('Location');
+        $areaId = $this->Location->find('all',array(
+           'conditions' => array(
+               'parent_id' => 110100
+           )
+        ));
+        $areaId = Hash::extract($areaId,'{n}.Location');
+        echo json_encode($areaId);
+    }
+
 }
 

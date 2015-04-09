@@ -1,12 +1,15 @@
-{{$this->Html->css(array('tuan.css?v3'))}}
+{{$this->Html->css(array('tuan.css?v5'))}}
 <div class="alltuan" style="position: relative;">
     <a href="/tuan_teams/create" class="alltuan_add">没有附近的团，申请创建自己的团队</a>
     <div style="border-bottom: 1px #eeeeee solid; margin-top: 40px;">
+        <div class="clearfix conordertuan">
+        </div>
+        <div class="tuan-teams" data-county-id="tuan_teams">
         {{loop $tuan_teams $tuan}}
         <?php $tuan_link = '/tuan_teams/info/'. $tuan['TuanTeam']['id'];
             $location = $tuan['TuanTeam']['location_long'].','. $tuan['TuanTeam']['location_lat'];
             ?>
-        <div class="alltuan_border">
+        <div class="alltuan_border tuan-team" data-county-id="{{$tuan['TuanTeam']['county_id']}}">
             <ul class="clearfix">
                 <li><a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan['TuanTeam']['tuan_name']}}&addr={{$tuan['TuanTeam']['tuan_addr']}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
                 <li style=" float: none; padding-left: 8em;">
@@ -23,8 +26,9 @@
                     <dd style="float: none">{{$tuan['TuanTeam']['address']}}</dd>
                 </a>
             </dl>
-
         </div>
         {{/loop}}
+        </div>
     </div>
 </div>
+{{$this->Html->script(array('tuanteams/mei-shi-tuan.js',))}}

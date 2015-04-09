@@ -45,6 +45,14 @@ ul,ol {
 
 .alltuan_btn{ border-top: 1px #eeeeee solid; margin: 0 10px; padding: 8px 0;}
 .alltuan_btn a{ display: block; width: 48%; text-align:center; line-height: 30px; border-radius: 2px; font-size: 14px; color: #ed8600; border: 1px #ed8600 solid; text-decoration: none;}
+.conordertuan{ padding: 10px 0;}
+.conordertuan ul{ float: left; width: 25%; padding: 0;}
+.conordertuan ul li{ float: none;}
+.conordertuan ul li a{ display: block; border: 1px #dddddd solid; line-height: 35px; text-align: center; text-decoration: none; color:#333333; font-size: 1em; background-color: #ffffff; margin-top: -1px; margin-left: -1px;}
+.conordertuan ul li a.cur{ background-color: #29ac0e; color: #ffffff;}
+.conordertuan p{ color: #555555; line-height: 18px; padding: 10px 0; margin: 0;}
+.conordertuan p span{ color: #29ac0e; font-weight: bold;}
+
 
 
 /*团购详情*/
