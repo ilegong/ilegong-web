@@ -2,7 +2,7 @@
 <hr/>
 <h1>团队管理</h1>
 <hr/>
-<form class="form-inline" method="get" action="/manage/admin/tuanTeams/tuan_teams">
+<form class="form-inline" method="get" action="/manage/admin/tuan_teams/index">
     <div style="padding-bottom: 10px;">
         <input type="hidden" name="noajax" value="true">
         <div class="form-group">
@@ -16,7 +16,7 @@
         <button type="submit" style="margin-right:10px;"  class="btn btn-default">查看团队</button>
     </div>
     <div>
-        <a href="/manage/admin/tuanTeams/tuan_team_create" role="button" class="btn btn-default fr">创建团队</a>
+        <a href="/manage/admin/tuan_teams/new" role="button" class="btn btn-default fr">创建团队</a>
         <a href="/manage/admin/tuan/tuan_func_list" role="button" style="margin-left:10px;" class="btn btn-default fr">团购功能列表</a>
 
     </div>
@@ -39,7 +39,7 @@
         <td>{{$tuan_team['TuanTeam']['location_lat']}}</td>
         <td>{{$tuan_team['TuanTeam']['tuan_desc']}}</td>
         <td>{{$tuan_team['TuanTeam']['priority']}}</td>
-        <td><a role="button" class="btn-sm pull-left btn-default" href="/manage/admin/tuanTeams/tuan_team_edit/{{$tuan_team['TuanTeam']['id']}}">编辑</a></td>
+        <td><a role="button" class="btn-sm pull-left btn-default" href="/manage/admin/tuan_teams/edit/{{$tuan_team['TuanTeam']['id']}}">编辑</a></td>
     </tr>
     {{/loop}}
     </tbody>
