@@ -748,6 +748,7 @@ class StoresController extends AppController
             'conditions' => array(
                 'order_id' => $ids,
             )));
+        $this->log('carts for brand '.$creator.': '.json_encode($Carts));
         $order_carts = array();
         foreach ($Carts as $c) {
             $order_id = $c['Cart']['order_id'];
@@ -756,7 +757,7 @@ class StoresController extends AppController
             }
             $order_carts[$order_id][] = $c;
         }
-        $this->log('carts of orders for brand '.$creator.': '.json_decode($order_carts));
+        $this->log('order carts for brand '.$creator.': '.json_encode($order_carts));
 
         $this->log('query product spec groups for brand '.$creator);
 //        $spec_ids = Hash::extract($Carts,'{n}.Cart.specId');
