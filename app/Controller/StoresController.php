@@ -744,21 +744,23 @@ class StoresController extends AppController
         }
 
         $this->log('query carts for brand '.$creator.' with order ids: '.json_encode($ids));
-        $this->loadModel('Cart');
-        $Carts = $this->Cart->find('all', array(
-            'conditions' => array(
-                'order_id' => $ids,
-            )));
-        $this->log('carts for brand '.$creator.': '.json_encode($Carts));
         $order_carts = array();
-        foreach ($Carts as $c) {
-            $order_id = $c['Cart']['order_id'];
-            if (!isset($order_carts[$order_id])) {
-                $order_carts[$order_id] = array();
+        if(!empty($ids)){
+            $this->loadModel('Cart');
+            $Carts = $this->Cart->find('all', array(
+                'conditions' => array(
+                    'order_id' => $ids,
+                )));
+            $this->log('carts for brand '.$creator.': '.json_encode($Carts));
+            foreach ($Carts as $c) {
+                $order_id = $c['Cart']['order_id'];
+                if (!isset($order_carts[$order_id])) {
+                    $order_carts[$order_id] = array();
+                }
+                $order_carts[$order_id][] = $c;
             }
-            $order_carts[$order_id][] = $c;
+            $this->log('order carts for brand '.$creator.': '.json_encode($order_carts));
         }
-        $this->log('order carts for brand '.$creator.': '.json_encode($order_carts));
 
         $this->log('query product spec groups for brand '.$creator);
 //        $spec_ids = Hash::extract($Carts,'{n}.Cart.specId');
