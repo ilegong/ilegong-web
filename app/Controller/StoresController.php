@@ -666,8 +666,8 @@ class StoresController extends AppController
         $wait_ship_cond['status'] = array(ORDER_STATUS_PAID);
         $total_wait_ship_count = $this->Order->find('count', array('conditions' => $wait_ship_cond));
         $this->log('brand '.$creator.' has '.$total_count.' orders, and '.$total_wait_ship_count.' wait shipped orders');
-
         $tuan_id = $_REQUEST['tuan_id'];
+        $this->log('query orders for tuan '.$tuan_id);
         if($tuan_id!=null&&$tuan_id!='-1'){
             //load tuanbuy for query
             $this->loadModel('TuanBuying');
