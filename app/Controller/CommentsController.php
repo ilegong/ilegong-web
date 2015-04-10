@@ -139,6 +139,7 @@ class CommentsController extends AppController {
     	$this->autoRender = false;
     	$model_name = Inflector::classify($model_name);
         //'rating'=>array('1','5','3')
+        $id = $this->get_group_product_ids($id);
     	$comments = $this->Comment->find('all',array(
     		 'conditions' => array('Comment.type' => $model_name,'data_id'=>$id,'status'=>1,'is_shichi_vote'=>0,),
     		 'order' => array('Comment.publish_time DESC'), //定义顺序的字符串或者数组
@@ -588,6 +589,18 @@ class CommentsController extends AppController {
             $this->log("failed to add core for comment order ".$orderId." by user with ". $uid);
         }
 
+    }
+
+    private function get_group_product_ids($pid){
+        $egg_product = array(896, 818, 161);
+        $cake_product = array(877,869,862);
+        if(in_array($pid,$egg_product,true)){
+            return $egg_product;
+        }
+        if(in_array($pid,$cake_product,true)){
+            return $cake_product;
+        }
+        return $pid;
     }
 }
 ?>
