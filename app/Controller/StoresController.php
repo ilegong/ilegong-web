@@ -736,13 +736,14 @@ class StoresController extends AppController
         );
 
         $orders = $this->Paginator->paginate('Order');
+        $this->log('orders for brand '.$creator.' : '.json_encode($orders));
 
         $ids = array();
         foreach ($orders as $o) {
             $ids[] = $o['Order']['id'];
         }
 
-        $this->log('query carts of orders for brand '.$creator);
+        $this->log('query carts for brand '.$creator.' with order ids: '.json_encode($ids));
         $this->loadModel('Cart');
         $Carts = $this->Cart->find('all', array(
             'conditions' => array(
