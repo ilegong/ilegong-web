@@ -1672,11 +1672,11 @@ function getTuanProductPrice($pid){
 
 function get_group_product_ids($pid){
     $egg_product = array(896, 818, 161);
-    $cake_product = array(877,869,862);
-    if(in_array($pid,$egg_product,true)){
+    $cake_product = array(877, 869, 862);
+    if(in_array($pid,$egg_product)){
         return $egg_product;
     }
-    if(in_array($pid,$cake_product,true)){
+    if(in_array($pid,$cake_product)){
         return $cake_product;
     }
     return $pid;
