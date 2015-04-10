@@ -33,11 +33,19 @@ class TuanTeamsController extends AppController{
         $pids = array_unique(Hash::extract($tuan_buyings, '{n}.TuanBuying.pid'));
         if(!empty($pids)){
             $this->loadModel('Product');
+            $this->loadModel('TuanProduct');
+            $tuan_product_info = $this->TuanProduct->find('all',array(
+                'conditions' => array(
+                    'product_id' => $pids
+                )
+            ));
             $product_info = $this->Product->find('all', array(
                 'conditions' => array('id' => $pids),
                 'fields' => array('id',  'name', 'coverimg')
             ));
             $product_info = Hash::combine($product_info, '{n}.Product.id', '{n}.Product');
+            $tuan_product_info = Hash::combine($tuan_product_info,'{n}.TuanProduct.product_id','{n}.TuanProduct');
+            $this->set('tuan_product_info',$tuan_product_info);
             $this->set('product_info', $product_info);
         }else{
             $this->set('no_tuan_buy', true);
