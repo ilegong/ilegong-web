@@ -1,6 +1,3 @@
-/**
- * Created by algdev on 15/3/28.
- */
 $(function(){
     var tuanTeams = $('.tuanTeam');
     var tuan_name = $('#tuan_name');
@@ -11,6 +8,11 @@ $(function(){
         });
         search_tuanteam();
         tuanTeams.val(tuanTeams.attr('data-team-id'));
+    });
+
+    $('.tuan-team').click(function() {
+      var teamId = $(this).data('team-id');
+      location.href = "/manage/admin/tuan_buyings/index?team_id="+teamId;
     });
     function search_tuanteam(){
 

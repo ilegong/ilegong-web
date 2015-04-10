@@ -178,5 +178,4 @@ class TuanController extends AppController{
         $tuan_product_count = $this->TuanProduct->query('select count(*) as c from cake_tuan_products where deleted = 0');
         $this->set('tuan_product_count', $tuan_product_count[0][0]['c']);
     }
-
 }
