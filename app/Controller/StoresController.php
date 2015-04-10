@@ -642,6 +642,7 @@ class StoresController extends AppController
     {
         $creator = $this->currentUser['id'];
 
+        $this->log('query orders for brand '.$creator);
         $this->loadModel('Brand');
         $brand = $this->find_my_brand($creator);
         $this->checkAccess();
@@ -656,14 +657,15 @@ class StoresController extends AppController
         $cond = array('brand_id' => $brand_id,
             'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN, ORDER_TYPE_MILK),
             'NOT' => array(
-            'status' => array(ORDER_STATUS_CANCEL)
-        ));
+                'status' => array(ORDER_STATUS_CANCEL)
+            )
+        );
         $cond['status'] = $onlyStatus;
         $total_count = $this->Order->find('count', array('conditions' => $cond));
         $wait_ship_cond = $cond;
         $wait_ship_cond['status'] = array(ORDER_STATUS_PAID);
         $total_wait_ship_count = $this->Order->find('count', array('conditions' => $wait_ship_cond));
-
+        $this->log('brand '.$creator.' has '.$total_count.' orders, and '.$total_wait_ship_count.' wait shipped orders');
 
         $tuan_id = $_REQUEST['tuan_id'];
         if($tuan_id!=null&&$tuan_id!='-1'){
@@ -757,7 +759,10 @@ class StoresController extends AppController
                 'id' => $spec_ids
             )
         ));
-        $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
+        if(!empty($spec_groups)){
+            $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
+            $this->set('spec_groups', $spec_groups);
+        }
         $this->set('orders', $orders);
         $this->set('total_count', $total_count);
         $this->set('total_wait_ship_count', $total_wait_ship_count);
@@ -770,7 +775,6 @@ class StoresController extends AppController
             $this->set('status', $onlyStatus[0]);
         }
         $this->set('op_cate', 'orders');
-        $this->set('spec_groups', $spec_groups);
     }
 
     protected function __business_orders_export($onlyStatus = array())
