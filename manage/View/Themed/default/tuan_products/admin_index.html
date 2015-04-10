@@ -11,8 +11,8 @@
     <thead>
         <tr>
             <th>id</th>
-            <th>产品ID</th>
             <th>别名</th>
+            <th>商品ID</th>
             <th>团购价格</th>
             <th>发货类型</th>
             <th>列表图片</th>
@@ -25,16 +25,10 @@
         <?php
           $tuanProduct = $item['TuanProduct'];
         ?>
-        <tr class="tuan-product">
-            <td>
-                {{$tuanProduct['id']}}
-            </td>
-            <td>
-                {{$tuanProduct['alias']}}
-            </td>
-            <td>
-                {{$tuanProduct['product_id']}}
-            </td>
+        <tr class="tuan-product" data-product-id="{{$tuanProduct['product_id']}}">
+            <td>{{$tuanProduct['id']}}</td>
+            <td>{{$tuanProduct['alias']}}</td>
+            <td>{{$tuanProduct['product_id']}}</td>
             <td>
                 <strong class="text-warning">{{$tuanProduct['tuan_price']}}</strong>
                 <s class="text-muted">{{$tuanProduct['product']['price']}}</s>
@@ -49,12 +43,8 @@
                 {{else}}
                 {{/if}}
             </td>
-            <td>
-                <img src="{{$tuanProduct['list_img']}}"/>
-            </td>
-            <td>
-                <img src="{{$tuanProduct['detail_img']}}"/>
-            </td>
+            <td><img src="{{$tuanProduct['list_img']}}"/></td>
+            <td><img src="{{$tuanProduct['detail_img']}}"/></td>
             <td>
                 <a class="btn btn-primary margin-right-10" href="/manage/admin/tuan_products/edit/{{$tuanProduct['id']}}" role="button">编辑</a>
                 <a class="btn btn-danger" href="/manage/admin/tuan_products/delete/{{$tuanProduct['id']}}" role="button">删除</a>
@@ -63,3 +53,9 @@
         {{/loop}}
     </tbody>
 </table>
+
+{{$this->Html->script(
+array(
+'manage/tuan_products/index.js'
+));
+}}
