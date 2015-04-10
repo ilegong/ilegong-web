@@ -56,7 +56,6 @@
     <div>
         <a href="/manage/admin/tuan_buyings/new" role="button" class="btn btn-default fr">创建团购</a>
         <a href="/manage/admin/tuan/tuan_func_list" role="button" style="margin-right:10px;" class="btn btn-default fr">团购功能列表</a>
-        <!--<a href="/manage/admin/tuan/tuan_team_create" role="button" style="margin-right:10px;" class="btn btn-default fr">添加新团</a>-->
     </div>
 </form>
 <table class="table table-bordered  table-condensed table-responsive">
@@ -81,10 +80,10 @@
             $tuanStatus = '已截止';
         }
     ?>
-    <tr data-id="{{$tuanBuying['id']}}" class="{{if $tuanBuying['status']==1}} warning {{elseif $tuanBuying['status']==11}} success {{elseif $tuanBuying['status']==2}} danger {{elseif $tuanBuying['status']==21}} active {{/if}}">
+    <tr data-id="{{$tuanBuying['id']}}" data-product-name="{{$tuanProduct[alias]}}" class="{{if $tuanBuying['status']==1}} warning {{elseif $tuanBuying['status']==11}} success {{elseif $tuanBuying['status']==2}} danger {{elseif $tuanBuying['status']==21}} active {{/if}}">
         <td>{{$tuanBuying['id']}}</td>
         <td>{{$tuanTeam['tuan_name']}}</td>
-        <td>{{$tuanProduct}}/{{$tuanTeam['type']==1?大团:小团}}</td>
+        <td>{{$tuanProduct['alias']}}/{{$tuanTeam['type']==1?大团:小团}}</td>
         <td>
           {{if $tuanBuying['consignment_type'] == 0}}
             团满发货
@@ -95,13 +94,12 @@
           {{else}}
           {{/if}}</td>
         <td>
-          <!--{{if $tuanBuying['tuan_price'] >= 0}}-->
-            <span class="text-info">{{$tuanBuying['tuan_price']}}</span>
-          <!--{{elseif $tuanProduct['tuan_price'] >= 0 }}-->
-            <!--<span class="text-success">$tuanProduct['tuan_price']</span>-->
-          <!--{{else}}-->
-            <!--<span class="text-danger">$tuanProduct['tuan_price']</span>-->
-          <!--{{/if}}-->
+            {{if $tuanBuying['tuan_price'] > 0 }}
+                <strong class="text-warning">{{$tuanBuying['tuan_price']}}</strong>
+                <s class="text-muted">{{$tuanProduct['tuan_price']}}</s>
+            {{else}}
+                <strong class="text-muted">{{$tuanProduct['tuan_price']}}</strong>
+            {{/if}}
         </td>
         <td>{{$tuanBuying['join_num']}}</td>
         <td class="{{if $tuanBuying['sold_num']<$tuanBuying['target_num']}} text-danger {{else}} text-success    {{/if}}">{{$tuanBuying['sold_num']}}/{{$tuanBuying['target_num']}}</td>
@@ -155,12 +153,12 @@
             {{elseif $tuanBuying['status']==1}}
                 待发货({{date('n.j',strtotime($tuanBuying['consign_time']))}})
               {{if $tuan_buying['start_deliver_msg_status'] == 'true'}}
-                <button type="button" class="btn btn-sm btn-info tuanbuying-start-deliver" data-product-name="{{$tuanProduct}}" data-id="{{$tuanBuying['id']}}">配送消息</button>
+                <button type="button" class="btn btn-sm btn-info tuanbuying-start-deliver" data-id="{{$tuanBuying['id']}}">配送消息</button>
               {{else}}
                 <span class="label label-info">{{$tuan_buying['start_deliver_msg_status']}}</span>
               {{/if}}
               {{if $tuan_buying['notify_deliver_msg_status'] == 'true'}}
-                <button type="button" class="btn btn-sm btn-info tuanbuying-notify-deliver" data-tuanteam-address="{{$tuanTeam['address']}}" data-product-name="{{$tuanProduct}}" data-id="{{$tuanBuying['id']}}">到货消息</button>
+                <button type="button" class="btn btn-sm btn-info tuanbuying-notify-deliver" data-tuanteam-address="{{$tuanTeam['address']}}" data-id="{{$tuanBuying['id']}}">到货消息</button>
               {{else}}
                 <span class="label label-info">{{$tuan_buying['notify_deliver_msg_status']}}</span>
               {{/if}}

@@ -72,7 +72,7 @@ class TuanBuyingsController extends AppController{
         $tuan_teams = Hash::combine($tuan_teams, '{n}.TuanTeam.id', '{n}.TuanTeam');
         $this->log('tuan_team'.json_encode($tuan_teams));
         $tuan_products = getTuanProducts();
-        $tuan_products = Hash::combine($tuan_products,'{n}.TuanProduct.product_id','{n}.TuanProduct.alias');
+        $tuan_products = Hash::combine($tuan_products,'{n}.TuanProduct.product_id','{n}.TuanProduct');
         foreach($tuan_buyings as &$tuan_buying){
             $tuanBuying = $tuan_buying['TuanBuying'];
             $tb_id = $tuanBuying['id'];
