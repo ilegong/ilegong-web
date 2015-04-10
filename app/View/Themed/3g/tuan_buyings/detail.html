@@ -349,7 +349,12 @@
                 var product_num = $('#input_pamount').val();
                 var way_type = 'normal';
                 {{if $big_tuan}}
-                way_type = $('.cur.tuan_way_selected').attr('way-label');
+                    var select_way = $('.cur.tuan_way_selected');
+                    if(select_way.length>0){
+                        way_type = $('.cur.tuan_way_selected').attr('way-label');
+                    }else{
+                        utils.alert('请选择送货方式');
+                    }
                 {{/if}}
                 var way_fee = $('.cur.tuan_way_selected').attr('way-fee')||0;
                 var postdata = {"product_id":product_id,"product_num":product_num, "way_type": way_type,"spec_id":specId,"consignment_date_id":consignment_date_id,"tuan_buy_id":'{{$tuan_buy_id}}',"way_fee":way_fee};
@@ -380,13 +385,14 @@
             var that = $(this);
             that.toggleClass('cur').toggleClass('tuan_way_selected');
             $("[way-label]").not(that).removeClass('cur').removeClass('tuan_way_selected');
-            if($('.cur.tuan_way_selected').attr('way-label') == 'sf'){
-                $('#consign_way').text('顺丰');
+            var select_way = $('.cur.tuan_way_selected');
+            if(select_way.attr('way-label') == 'sf'){
+                $('#consign_way').text(select_way.text());
             }else{
-                $('#consign_way').text('自提')
+                $('#consign_way').text(select_way.text());
             }
         })
-    })
+    });
 </script>
 
 {{if $jWeixinOn}}
