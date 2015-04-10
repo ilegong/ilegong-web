@@ -36,27 +36,25 @@ class TuanBuyingsController extends AppController{
      * show all tuan_buyings
      */
     public function admin_index(){
-        $team_id = $_REQUEST['team_id'];
-        $product_id = $_REQUEST['product_id'];
-        $time_type = $_REQUEST['time_type'];
-        $tuan_status = $_REQUEST['tuan_status'];
-        $post_time = $_REQUEST['post_time'];
+        $team_id = isset($_REQUEST['team_id']) ? $_REQUEST['team_id'] : -1;
+        $product_id = isset($_REQUEST['product_id']) ? $_REQUEST['product_id'] : -1;
+        $status_type = isset($_REQUEST['status_type']) ? $_REQUEST['status_type'] : -1;
+        $tuan_status = isset($_REQUEST['tuan_status']) ? $_REQUEST['tuan_status'] : -1;
+        $this->log('tuan status: '.$tuan_status);
         $con = array();
-        if(!empty($team_id)&&$team_id!='-1'){
+        if($team_id != -1){
             $con['tuan_id']=$team_id;
         }
-        if(!empty($time_type)&&$time_type!=-1){
-            if($time_type==0){
-                $con['end_time']=$post_time;
-            }else if($time_type==1){
-                $con['consign_time']=$post_time;
-            }
-        }
-        if(!empty($product_id)&&$product_id!=-1){
+        if($product_id != -1){
             $con['pid'] = $product_id;
         }
-        if($tuan_status != -1){
-            $con['status'] = $tuan_status ==null ? 0 : $tuan_status;
+        if($status_type == -1){
+            if($tuan_status != -1){
+                $con['status'] = $tuan_status;
+            }
+        }
+        else{
+            $con['status'] = $status_type;
         }
         $this->log('con'.json_encode($con));
         if(!empty($con)){
@@ -90,9 +88,8 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_buyings', $tuan_buyings);
         $this->set('team_id',$team_id);
         $this->set('product_id',$product_id);
-        $this->set('time_type',$time_type);
+        $this->set('status_type',$status_type);
         $this->set('tuan_status',$tuan_status);
-        $this->set('post_time',$post_time);
     }
 
     /**

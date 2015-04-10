@@ -2,7 +2,7 @@
 <hr/>
 <h1>团购管理</h1>
 <hr/>
-<form class="form-inline tuan_buyings-form" method="get" action="/manage/admin/tuan_buyings/index">
+<form class="form-inline tuan-buyings-form" method="get" action="/manage/admin/tuan_buyings/index" data-status-type="{{$status_type}}" data-tuan-status="{{$tuan_status}}">
     <div style="padding-bottom: 10px;">
         <input type="hidden" name="noajax" value="true">
 
@@ -20,23 +20,23 @@
             </select>
         </div>
         <br/>
-        <!--<div class="form-group">-->
-          <!--<input type="radio" name="choice" value="hi呀" checked="checked"/>-->
-        <!--</div>-->
+        <div class="form-group">
+          <input type="radio" name="status_type" class="status-type" value="-1" checked="checked"/>
+        </div>
         <div class="form-group ">
-            <select class="form-control tuan-status" name="tuan_status" data-tuan-status="{{$tuan_status}}">
+            <select class="form-control tuan-status" name="tuan_status">
                 <option value="-1">选择团购状态</option>
                 <option value="0" selected="selected">进行中</option>
                 <option value="1">已完成</option>
                 <option value="2">已取消</option>
             </select>
         </div>
-        <!--<div class="form-group">-->
-          <!--<input type="radio" name="tuan_status" value="11">已发货</input>-->
-        <!--</div>-->
-        <!--<div class="form-group">-->
-          <!--<input type="radio" name="tuan_status" value="21">已退款</input>-->
-        <!--</div>-->
+        <div class="form-group">
+          <input type="radio" name="status_type" class="status-type" value="11">已发货</input>
+        </div>
+        <div class="form-group">
+          <input type="radio" name="status_type" class="status-type" value="21">已退款</input>
+        </div>
 
       <button type="submit" style="margin-left:10px;" class="btn btn-default">查看团购</button>
     </div>

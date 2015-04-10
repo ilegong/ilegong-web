@@ -6,16 +6,25 @@ $(function(){
     var leftSelectData = [];
     var tuan_name = $('#tuan_name');
     function setTuanStatus(){
-        var status = tuanStatus.data('tuan-status');
+        var tuanBuyingsForm = $('.tuan-buyings-form');
+        var statusType = tuanBuyingsForm.data('status-type');
+        var tStatus = tuanBuyingsForm.data('tuan-status');
         $("option", tuanStatus).each(function(){
-            if($(this).val() == status){
+            if($(this).val() == tStatus){
               $(this).attr('selected', 'selected');
             }
             else{
               $(this).removeAttr('selected');
             }
         })
-        tuanStatus.val(tuanStatus.attr('data-tuan-status'));
+        $(".status-type").each(function(){
+          if($(this).val() == statusType){
+            $(this).attr('checked', 'checked');
+          }
+          else{
+            $(this).removeAttr('checked');
+          }
+        });
     }
     $.getJSON('/manage/admin/tuanTeams/api_tuan_teams',function(data){
         $.each(data,function(index,item){
