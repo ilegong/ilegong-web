@@ -21,6 +21,7 @@
     <h1>联系信息</h1>
     <label><input type="text" id="p_consignee_name" placeholder="收货人姓名" value="{{$consignee_info['name']}}" /></label>
     <label><input type="text" id="p_consignee_mobile" placeholder="手机号" value="{{$consignee_info['mobilephone']}}" /></label>
+    <label><input type="text" id="p_consignee_address" placeholder="备注地址" value="" /></label>
 </div>
 <div class="cart" style="margin-top: 0; padding-top: 0; margin-bottom: 44px;">
     <div>
@@ -162,9 +163,13 @@
                 var address = $.trim($('#chose_address').text());
                 var name = $("#p_consignee_name").val();
                 var mobile = $("#p_consignee_mobile").val();
+                var mark_address = $.trim($('#p_consignee_address').val());
                 var cart_id = {{empty($cart_id)? 0: $cart_id}};
                 var tuan_buy_id = {{empty($tuan_buy_id)? 0: $tuan_buy_id}};
                 var tuan_id = {{empty($tuan_id)? 0: $tuan_id}};
+                if(mark_address&&mark_address.length>0){
+                    address = address+'('+mark_address+')';
+                }
                 jQuery.ajax({
                     type: "POST",
                     dataType: "json",
