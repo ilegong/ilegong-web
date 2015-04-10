@@ -104,12 +104,7 @@ class TuanBuyingsController extends AppController{
             $this->set('product_spec_map', $str);
         }
         $this->set('specs_map', $specs_map);
-        //评论数量
-        if($this->RequestHandler->isMobile()){
-            $this->loadModel('Comment');
-            $comment_count = intval($Product['Product']['comment_nums']);
-            $this->set('comment_count',$comment_count);
-        }
+       
         $con = array('modelclass' => 'Product','fieldname' =>'photo','data_id' => $pid);
         $Product['Uploadfile']= $this->Uploadfile->find('all',array('conditions' => $con, 'order'=> array('sortorder DESC')));
         $original_price = $Product['Product']['original_price'];
@@ -126,11 +121,26 @@ class TuanBuyingsController extends AppController{
         $this->set('Product', $Product);
         $this->set('category_control_name', 'products');
         $this->set('current_data_id', $pid);
-        if($this->RequestHandler->isMobile()){
-//            $comment_count = intval($Product['Product']['comment_nums']);
-//            $this->set('comment_count',$comment_count);
-            $this->set('limitCommentCount',COMMENT_LIMIT_IN_PRODUCT_VIEW);
-        }
+
+        $this->loadModel('Comment');
+        //load shichi comment count
+        $same_pids = get_group_product_ids($pid);
+        $shi_chi_comment_count = $this->Comment->find('count',array(
+            'conditions'=>array(
+                'data_id'=>$same_pids,
+                'status'=>1,
+                'is_shichi_vote'=>1
+            )
+        ));
+        $comment_count = $this->Comment->find('count',array(
+            'conditions'=>array(
+                'data_id'=>$same_pids,
+                'status'=>1
+            )
+        ));
+        $this->set('shi_chi_comment_count',$shi_chi_comment_count);
+        $this->set('comment_count',($comment_count-$shi_chi_comment_count));
+        $this->set('limitCommentCount',COMMENT_LIMIT_IN_PRODUCT_VIEW);
         $recommC = $this->Components->load('ProductRecom');
         $recommends = $recommC->recommend($pid);
         $this->set('items', $recommends);
