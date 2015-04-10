@@ -12,9 +12,9 @@
             <div class="alert alert-warning" role="alert" style="padding-bottom: 10px;margin-bottom:0;">提示：你选择了顺丰到付，参考价格25元。</div>
             {{/if}}
             <h1>收货人信息</h1>
-            <label><input type="text" name="consignee_address" placeholder="收货地址"></label>
-            <label><input type="text" name="consignee_name" placeholder="收货人姓名" /></label>
-            <label><input type="text" name="consignee_mobilephone" placeholder="手机号" /></label>
+            <label><input type="text" name="consignee_address" placeholder="收货地址" value="{{$consignee_info['address']}}"></label>
+            <label><input type="text" name="consignee_name" placeholder="收货人姓名"  value="{{$consignee_info['name']}}"/></label>
+            <label><input type="text" name="consignee_mobilephone" placeholder="手机号" value="{{$consignee_info['mobilephone']}}"/></label>
         </div>
     {{else}}
         <div class="conorder_ziti">
@@ -25,8 +25,8 @@
         </div>
         <div class="conordertuan_contact">
             <h1>收货人信息</h1>
-            <label><input type="text" name="consignee_name" placeholder="收货人姓名" /></label>
-            <label><input type="text" name="consignee_mobilephone" placeholder="手机号" /></label>
+            <label><input type="text" name="consignee_name" placeholder="收货人姓名" value="{{$consignee_info['name']}}" /></label>
+            <label><input type="text" name="consignee_mobilephone" placeholder="手机号" value="{{$consignee_info['mobilephone']}}" /></label>
         </div>
     {{/if}}
     <div class="cart" style="margin-top: 0; padding-top: 0;">

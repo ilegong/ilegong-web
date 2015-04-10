@@ -241,6 +241,14 @@ class TuanBuyingsController extends AppController{
             'conditions' => array('id', $product_brand['Product']['brand_id']),
             'fields' => array('name', 'slug')
         ));
+        $this->loadModel('OrderConsignees');
+        $consignee_info = $this->OrderConsignees->find('first', array(
+            'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN),
+            'fields' => array('name', 'address', 'mobilephone')
+        ));
+        if($consignee_info){
+            $this->set('consignee_info', $consignee_info['OrderConsignees']);
+        }
         $way_type = $_REQUEST['way_type'];
         $this->set('way_type',$way_type);
         $this->set('buy_count',$Carts['Cart']['num']);
@@ -328,8 +336,11 @@ class TuanBuyingsController extends AppController{
                 $this->log("can't find tuan".$tuan_id);
                 return;
             }
+            $this->loadModel('OrderConsignees');
+            $consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN);
             if($tuan_info['TuanTeam']['type'] == 1){
                 $address = $_POST['address'];
+                $consignees['address'] = $address;
             }else{
                 $address = $tuan_info['TuanTeam']['address'];
             }
@@ -337,8 +348,17 @@ class TuanBuyingsController extends AppController{
                 //蔬菜加10元邮费
                 $total_price = $total_price+10;
             }
+            $tuan_consignees = $this->OrderConsignees->find('first', array(
+                'conditions' => array('status' => STATUS_CONSIGNEES_TUAN, 'creator' => $uid),
+                'fields' => array('id')
+            ));
+            if($tuan_consignees){
+                $consignees['id'] = $tuan_consignees['OrderConsignees']['id'];
+            }else {
+                $consignees['creator'] = $uid;
+            }
+            $this->OrderConsignees->save($consignees);
             $order = $this->Order->createTuanOrder($tuan_buy_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id);
-
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
                 $res = array('success'=> false, 'info'=> '你已经支付过了');
             }else{
