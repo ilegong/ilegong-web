@@ -756,6 +756,7 @@ class StoresController extends AppController
             }
             $order_carts[$order_id][] = $c;
         }
+        $this->log('carts of orders for brand '.$creator.': '.json_decode($order_carts));
 
         $this->log('query product spec groups for brand '.$creator);
 //        $spec_ids = Hash::extract($Carts,'{n}.Cart.specId');
