@@ -668,7 +668,8 @@ class StoresController extends AppController
     {
         $creator = $this->currentUser['id'];
         $this->checkAccess();
-        if (!empty($this->$brand)) {
+        $brand = $this->brand;
+        if (!empty($brand)) {
             $brand_id = $brand['Brand']['id'];
             $this->set('is_business', true);
         } else {
@@ -808,14 +809,15 @@ class StoresController extends AppController
     {
         $creator = $this->currentUser['id'];
         $this->checkAccess();
-        if (!empty($this->$brand)) {
+        $brand = $this->brand;
+        if (!empty($brand)) {
             $this->set('is_business', true);
         } else {
             $this->__message('只有合作商家才能查看商家订单，正在为您转向个人订单', '/orders/mine');
             return;
         }
 
-        $cond = array('brand_id' => $brand['Brand']['id'],
+        $cond = array('brand_id' => $this->brand['Brand']['id'],
             'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN, ORDER_TYPE_MILK),
             'NOT' => array(
             'status' => array(ORDER_STATUS_CANCEL)
