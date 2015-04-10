@@ -9,7 +9,7 @@ class TuanMsgController extends AppController{
 
     var $name = "tuan_msg";
 
-    var $uses = array('TemplateMsgLog');
+    var $uses = array('TuanBuyingMessages');
 
     public $components = array('Weixin');
 
@@ -273,7 +273,7 @@ class TuanMsgController extends AppController{
             'flag' => $tb_id,
             'send_date' => date(FORMAT_DATETIME)
         );
-        $this->TemplateMsgLog->save($msg_log);
+        $this->TuanBuyingMessages->save($msg_log);
     }
 
 }

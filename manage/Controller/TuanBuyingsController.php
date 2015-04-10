@@ -10,7 +10,7 @@ class TuanBuyingsController extends AppController{
 
     var $name = 'TuanBuyings';
 
-    var $uses = array('TuanTeam','TuanBuying','Order','Cart','TemplateMsgLog','TuanProduct');
+    var $uses = array('TuanTeam','TuanBuying','Order','Cart','TuanBuyingMessages','TuanProduct');
 
     public function admin_api_tuan_buying_due(){
         $tuanBuyingId = $_REQUEST['id'];
@@ -108,7 +108,7 @@ class TuanBuyingsController extends AppController{
             'type' => $type
         );
         if($type==TUAN_CREATE_MSG){
-            $tml = $this->TemplateMsgLog->find('first',array(
+            $tml = $this->TuanBuyingMessages->find('first',array(
                 'conditions' => $cond
             ));
             if(!empty($tml)){
@@ -118,7 +118,7 @@ class TuanBuyingsController extends AppController{
             }
         }
         if($type==TUAN_CANCEL_MSG){
-            $tml = $this->TemplateMsgLog->find('first',array(
+            $tml = $this->TuanBuyingMessages->find('first',array(
                 'conditions' => $cond
             ));
             if(!empty($tml)){
@@ -129,7 +129,7 @@ class TuanBuyingsController extends AppController{
 
         }
         if($type==TUAN_COMPLETE_MSG){
-            $tml = $this->TemplateMsgLog->find('first',array(
+            $tml = $this->TuanBuyingMessages->find('first',array(
                 'conditions' => $cond
             ));
             if(!empty($tml)){
@@ -141,7 +141,7 @@ class TuanBuyingsController extends AppController{
         }
         if($type==TUAN_TIP_MSG){
             $cond['date(send_date)']=date(FORMAT_DATE);
-            $tml = $this->TemplateMsgLog->find('first',array(
+            $tml = $this->TuanBuyingMessages->find('first',array(
                 'conditions' => $cond
             ));
             if(!empty($tml)){
@@ -151,7 +151,7 @@ class TuanBuyingsController extends AppController{
             }
         }
         if($type==TUAN_STARTDELIVER_MSG){
-            $tml = $this->TemplateMsgLog->find('first',array(
+            $tml = $this->TuanBuyingMessages->find('first',array(
                 'conditions' => $cond
             ));
             if(!empty($tml)){
@@ -161,7 +161,7 @@ class TuanBuyingsController extends AppController{
             }
         }
         if($type==TUAN_NOTIFYDELIVER_MSG){
-            $tml = $this->TemplateMsgLog->find('first',array(
+            $tml = $this->TuanBuyingMessages->find('first',array(
                 'conditions' => $cond
             ));
             if(!empty($tml)){
