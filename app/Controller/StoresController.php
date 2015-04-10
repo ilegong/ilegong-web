@@ -685,6 +685,7 @@ class StoresController extends AppController
             }
             $this->set('tuan_id',$tuan_id);
         }
+
         $mark_date = $_REQUEST['mark_date'];
         $mark_tip = $_REQUEST['mark_tip'];
         if($mark_date!=null&&$mark_date!="all"&&$mark_tip!=null&&$mark_tip!="all"){
@@ -694,6 +695,7 @@ class StoresController extends AppController
             $this->set('mark_tip',$mark_tip);
         }
         //代发货订单
+        $this->log('query paid orders for brand '.$creator);
         if(in_array(ORDER_STATUS_PAID,$onlyStatus)){
             //load order tags
             $result  = $this->Order->query('SELECT ship_mark,mark_ship_date,count(mark_ship_date) AS total_count FROM cake_orders WHERE  brand_id='.$brand_id.' AND status='.ORDER_STATUS_PAID.' GROUP BY ship_mark,mark_ship_date');
@@ -723,6 +725,7 @@ class StoresController extends AppController
             $this->set('tuanTeams',$tuanTeams);
         }
 
+        $this->log('query paginated orders for brand '.$creator);
         $this->Paginator->settings = array(
             'conditions' => $cond,
             'limit' => 15,
@@ -733,11 +736,12 @@ class StoresController extends AppController
 
         $orders = $this->Paginator->paginate('Order');
 
-
         $ids = array();
         foreach ($orders as $o) {
             $ids[] = $o['Order']['id'];
         }
+
+        $this->log('query carts of orders for brand '.$creator);
         $this->loadModel('Cart');
         $Carts = $this->Cart->find('all', array(
             'conditions' => array(
@@ -751,6 +755,8 @@ class StoresController extends AppController
             }
             $order_carts[$order_id][] = $c;
         }
+
+        $this->log('query product spec groups for brand '.$creator);
         $spec_ids = Hash::extract($Carts,'{n}.Cart.specId');
         $spec_ids = array_unique($spec_ids);
         $this->loadModel('ProductSpecGroup');
@@ -763,6 +769,8 @@ class StoresController extends AppController
             $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
             $this->set('spec_groups', $spec_groups);
         }
+
+        $this->log('finished querying orders for brand '.$creator);
         $this->set('orders', $orders);
         $this->set('total_count', $total_count);
         $this->set('total_wait_ship_count', $total_wait_ship_count);
