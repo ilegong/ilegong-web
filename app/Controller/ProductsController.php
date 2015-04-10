@@ -232,7 +232,7 @@ class ProductsController extends AppController{
                 'status'=>1
             )
         ));
-        
+        $this->log('pid'.$pid.'pids'.json_encode($same_pids).'cc'.$comment_count);
         $this->set('shi_chi_comment_count',$shi_chi_comment_count);
         $this->set('comment_count',($comment_count-$shi_chi_comment_count));
 
