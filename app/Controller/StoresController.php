@@ -19,13 +19,6 @@ class StoresController extends AppController
 
     public $brand = null;
 
-    public $is_admin = false;
-
-    public $admin_params = '';
-
-    public $admin_brand_id='';
-
-
     private function checkAccess($refuse_redirect = true)
     {
 
@@ -39,18 +32,17 @@ class StoresController extends AppController
         //if user is chaopeng and xiaoqing as super user
         if($this->currentUser['id']==633345||$this->currentUser['id']==5081){
             $brand_id = $_REQUEST['brand_id'];
+            if(empty($brand_id)){
+                $brand_id = $this->Session->read('admin_brand_id');
+            }
             if(!empty($brand_id)){
                 $this->brand = $this->find_brand_by_id($brand_id);
                 if(empty($this->brand)){
                     $this->__message('商家ID有误', '/');
                     return false;
                 }
-                //is admin user login
-                $this->is_admin = true;
-                $this->admin_brand_id = $brand_id;
-                $this->admin_params = '?brand_id='.$brand_id;
-                $this->set('is_admin',$this->is_admin);
-                $this->set('admin_brand_id',$this->admin_brand_id);
+                //admin user write admin brand id
+                $this->Session->write('admin_brand_id',$brand_id);
                 return true;
             }else{
                 $this->__message('商家ID有误', '/');
@@ -103,11 +95,7 @@ class StoresController extends AppController
             } else {
                 $this->Brand->updateAll(array('weixin_id' => '\'' . $weixin_id . '\'', 'notice' => '\'' . addslashes(htmlspecialchars($notice)) . '\''), array('id' => $brandId));
                 $this->Session->setFlash('保存成功');
-                if($this->is_admin){
-                    $this->redirect('/s/profile'.$this->admin_params);
-                }else{
-                    $this->redirect('/s/profile');
-                }
+                $this->redirect('/s/profile');
             }
             $this->set_profile_info($weixin_id, $notice);
         } else {
@@ -127,13 +115,8 @@ class StoresController extends AppController
             $this->Brand->set('content', $story);
             $this->Brand->save();
             $this->Session->setFlash('保存成功');
-            if($this->is_admin){
-                $this->redirect(array('action' => 'my_story', $brandId,'?' => array(
-                    'brand_id' => $this->admin_brand_id
-                )));
-            }else{
-                $this->redirect(array('action' => 'my_story', $brandId));
-            }
+
+            $this->redirect(array('action' => 'my_story', $brandId));
         } else {
             $this->data = $this->brand;; //加载数据到表单中
         }
@@ -144,17 +127,15 @@ class StoresController extends AppController
     public function index()
     {
         $this->checkAccess();
-        $uid = $this->currentUser['id'];
         if (!empty($this->brand)) {
             $this->set('brand', $this->brand);
+            $uid = $this->currentUser['id'];
             if ($uid == $this->brand['Brand']['creator']) {
                 $this->loadModel('Oauthbind');
                 $bind = $this->Oauthbind->findWxServiceBindByUid($uid);
                 if (empty($bind)) {
                     $this->set('should_bind', true);
                 }
-            }else{
-                $this->redirect('/');
             }
         } else {
             $this->redirect('/');
@@ -224,13 +205,8 @@ class StoresController extends AppController
                         }
                     }
                     $this->Session->setFlash(__('The Data has been saved'));
-                    if($this->is_admin){
-                        $this->redirect(array('action' => 'products','?' => array(
-                            'brand_id' => $this->admin_brand_id
-                        )));
-                    }else{
-                        $this->redirect(array('action' => 'products'));
-                    }
+
+                    $this->redirect(array('action' => 'products'));
                 } else {
                     setFlashError($this->Session, __('The Data could not be saved. Please, try again.'));
                 }
@@ -303,13 +279,7 @@ class StoresController extends AppController
             $successinfo = array('success' => __('Edit success'), 'actions' => array('OK' => 'closedialog'));
             //echo json_encode($successinfo);
             //return ;
-            if($this->is_admin){
-                $this->redirect(array('action' => 'edit_product', $id, '?'=>array(
-                    'brand_id' => $this->admin_brand_id
-                )));
-            }else{
-                $this->redirect(array('action' => 'edit_product', $id));
-            }
+            $this->redirect(array('action' => 'edit_product', $id));
         } else {
             //get specs
             $this->set('product_attrs',ProductSpeciality::get_product_attrs());
@@ -477,11 +447,7 @@ class StoresController extends AppController
         $this->OrderTrack->saveField('deleted',1);
         $p_id = $_REQUEST['product_id'];
         $p_name = $_REQUEST['product_name'];
-        if($this->is_admin){
-            $this->redirect('/stores/view_track/'.$p_id.'.html?productname='.$p_name.'&brand_id='.$this->admin_brand_id);
-        }else{
-            $this->redirect('/stores/view_track/'.$p_id.'.html?productname='.$p_name);
-        }
+        $this->redirect('/stores/view_track/'.$p_id.'.html?productname='.$p_name);
     }
 
     public function add_track_log(){
