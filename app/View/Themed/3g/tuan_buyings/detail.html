@@ -354,6 +354,7 @@
                         way_type = $('.cur.tuan_way_selected').attr('way-label');
                     }else{
                         utils.alert('请选择送货方式');
+                        return false;
                     }
                 {{/if}}
                 var way_fee = $('.cur.tuan_way_selected').attr('way-fee')||0;
