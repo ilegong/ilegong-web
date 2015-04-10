@@ -39,7 +39,7 @@ class TuanBuyingsController extends AppController{
         $team_id = $_REQUEST['team_id'];
         $product_id = $_REQUEST['product_id'];
         $time_type = $_REQUEST['time_type'];
-        $tuan_type = $_REQUEST['tuan_type'];
+        $tuan_status = $_REQUEST['tuan_status'];
         $post_time = $_REQUEST['post_time'];
         $con = array();
         if(!empty($team_id)&&$team_id!='-1'){
@@ -55,8 +55,8 @@ class TuanBuyingsController extends AppController{
         if(!empty($product_id)&&$product_id!=-1){
             $con['pid'] = $product_id;
         }
-        if($tuan_type!=-1){
-            $con['status'] = $tuan_type==null?0:$tuan_type;
+        if($tuan_status != -1){
+            $con['status'] = $tuan_status ==null ? 0 : $tuan_status;
         }
         $this->log('con'.json_encode($con));
         if(!empty($con)){
@@ -91,9 +91,8 @@ class TuanBuyingsController extends AppController{
         $this->set('team_id',$team_id);
         $this->set('product_id',$product_id);
         $this->set('time_type',$time_type);
-        $this->set('tuan_type',$tuan_type);
+        $this->set('tuan_status',$tuan_status);
         $this->set('post_time',$post_time);
-
     }
 
     /**

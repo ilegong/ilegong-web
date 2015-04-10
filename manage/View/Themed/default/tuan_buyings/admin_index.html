@@ -1,9 +1,4 @@
 {{$this->Html->css(array('bootstrap.min.css'));}}
-        <style>
-            .fade.in{
-                opacity: 0.70;
-            }
-        </style>
 <hr/>
 <h1>团购管理</h1>
 <hr/>
@@ -24,33 +19,26 @@
                 <option value="-1">选择商品</option>
             </select>
         </div>
-        <div class="form-group">
-            <select class="form-control time-type" name="time_type" data-time-type="{{$time_type}}">
-                <option value="-1">选择时间</option>
-                <option value="0">截止时间</option>
-                <option value="1">发货时间</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label class="sr-only">时间</label>
-            <input type="text" name="post_time" class="form-control post-time" placeholder="输入时间">
-        </div>
+        <br/>
+        <!--<div class="form-group">-->
+          <!--<input type="radio" name="choice" value="hi呀" checked="checked"/>-->
+        <!--</div>-->
         <div class="form-group ">
-            <select class="form-control tuan-type" name="tuan_type" data-tuan-type="{{$tuan_type}}">
+            <select class="form-control tuan-status" name="tuan_status" data-tuan-status="{{$tuan_status}}">
                 <option value="-1">选择团购状态</option>
-                <!--<optgroup label="常用">-->
                 <option value="0" selected="selected">进行中</option>
                 <option value="1">已完成</option>
                 <option value="2">已取消</option>
-                <!--</optgroup>-->
-                <!--<optgroup label=" 不常用">-->
-                <option disabled>-------</option>
-                <option value="11">已发货</option>
-                <option value="21">已退款</option>
-                <!--</optgroup>-->
             </select>
         </div>
-        <button type="submit" style="margin-left:10px;" class="btn btn-default">查看团购</button>
+        <!--<div class="form-group">-->
+          <!--<input type="radio" name="tuan_status" value="11">已发货</input>-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+          <!--<input type="radio" name="tuan_status" value="21">已退款</input>-->
+        <!--</div>-->
+
+      <button type="submit" style="margin-left:10px;" class="btn btn-default">查看团购</button>
     </div>
 
     <div>

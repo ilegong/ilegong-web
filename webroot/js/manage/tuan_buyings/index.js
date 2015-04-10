@@ -1,13 +1,21 @@
 $(function(){
     var tuanTeams = $('.tuan-teams');
     var tuanProducts = $('.tuan-products');
-    var timeType=$('.time-type');
-    var tuanType=$('.tuan-type');
+
+    var tuanStatus=$('.tuan-status');
     var leftSelectData = [];
     var tuan_name = $('#tuan_name');
-    function setVal(){
-        timeType.val(timeType.attr('data-time-type'));
-        tuanType.val(tuanType.attr('data-tuan-type'));
+    function setTuanStatus(){
+        var status = tuanStatus.data('tuan-status');
+        $("option", tuanStatus).each(function(){
+            if($(this).val() == status){
+              $(this).attr('selected', 'selected');
+            }
+            else{
+              $(this).removeAttr('selected');
+            }
+        })
+        tuanStatus.val(tuanStatus.attr('data-tuan-status'));
     }
     $.getJSON('/manage/admin/tuanTeams/api_tuan_teams',function(data){
         $.each(data,function(index,item){
@@ -26,6 +34,7 @@ $(function(){
         setVal();
         tuanProducts.val(tuanProducts.attr('data-product-id'));
     });
+    setTuanStatus();
 
     var tuanBuyingForm = $('.tuan-buying-form');
     var tuanBuyingDue= $('.tuan-buying-due');
