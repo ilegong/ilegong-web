@@ -202,3 +202,39 @@ div.breadcrumb { margin: 0px 0px 20px 0px; }
     background-repeat: no-repeat;
     min-height: 18px;
 }
+
+.section-container{
+  display: block;
+  width: 200px;
+  height: 200px;
+  border: 1px solid #eee;
+  border-radius: 50%;
+  text-align: center;
+  color: inherit;
+  padding-top: 30%;
+}
+.section-container h2{
+  display: inline-block;
+  border: 0;
+  margin: 0;
+}
+.section-container:hover{
+  text-decoration: none;
+  color: inherit;
+}
+.bg-primary {
+  color: #fff;
+  background-color: #337ab7;
+}
+.bg-success{
+  background-color: #dff0d8;
+}
+.bg-info{
+  background-color: #d9edf7;
+}
+.bg-warning {
+  background-color: #fcf8e3;
+}
+.padding-bottom-10{
+  padding-bottom: 10px !important;
+}

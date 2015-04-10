@@ -173,7 +173,10 @@ class TuanController extends AppController{
      * 团购功能列表
      */
     public function admin_tuan_func_list(){
-
+        $tuan_team_count = $this->TuanTeam->query('select count(*) as c from cake_tuan_teams');
+        $this->set('tuan_team_count', $tuan_team_count[0][0]['c']);
+        $tuan_product_count = $this->TuanProduct->query('select count(*) as c from cake_tuan_products where deleted = 0');
+        $this->set('tuan_product_count', $tuan_product_count[0][0]['c']);
     }
 
 }

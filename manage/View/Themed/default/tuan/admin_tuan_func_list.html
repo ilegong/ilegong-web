@@ -1,18 +1,45 @@
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">团购功能列表</h3>
-                </div>
-                <ul class="list-group">
-                    <a href="/manage/admin/tuan/tuan_orders" target="_blank" class="list-group-item">团购订单</a>
-                    <a href="/manage/admin/tuan_teams/index" target="_blank" class="list-group-item">团队管理</a>
-                    <a href="/manage/admin/tuan_buyings/index" target="_blank" class="list-group-item">团购管理</a>
-                    <a href="/manage/admin/tuan_products/index" target="_blank" class="list-group-item">团购商品管理</a>
-                    <a href="/manage/admin/users/to_add_score" target="_blank" class="list-group-item">加积分</a>
-                </ul>
-            </div>
+    <div class="row padding-bottom-10">
+      <div class="col-sm-9 col-md-10">
+        <h1 class="page-header">团购管理后台</h1>
+
+        <div class="row placeholders">
+          <div class="col-xs-6 col-sm-3 placeholder">
+            <a href="/manage/admin/tuan_teams/index" class="section-container bg-success">
+              <h2 class="">团队</h2><br/>
+              <span class="">{{$tuan_team_count}}支</span>
+            </a>
+          </div>
+          <div class="col-xs-6 col-sm-3 placeholder">
+            <a href="/manage/admin/tuan_products/index" class="section-container bg-info">
+                <h2 class="">商品</h2><br/>
+                <span class="">{{$tuan_product_count}}个</span>
+            </a>
+          </div>
         </div>
+      </div>
     </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="panel panel-info">
+          <ul class="list-group">
+            <a href="/manage/admin/tuan/tuan_orders" target="_blank" class="list-group-item">团购订单</a>
+            <a href="/manage/admin/tuan_buyings/index" target="_blank" class="list-group-item">团购管理</a>
+            <a href="/manage/admin/users/to_add_score" target="_blank" class="list-group-item">加积分</a>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  <!--<div class="row">-->
+        <!--<h2 class="sub-header text-danger">过期的团购</h2>-->
+        <!--<div class="table-responsive">-->
+          <!--<table class="table table-striped">-->
+            <!--<thead>-->
+            <!--</thead>-->
+            <!--<tbody>-->
+            <!--</tbody>-->
+          <!--</table>-->
+        <!--</div>-->
+    <!--</div>-->
 </div>
