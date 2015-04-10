@@ -667,11 +667,8 @@ class StoresController extends AppController
     protected function __business_orders($onlyStatus = array())
     {
         $creator = $this->currentUser['id'];
-//        $this->loadModel('Brand');
-//        $brand = $this->find_my_brand($creator);
         $this->checkAccess();
-
-        if (!empty($brand)) {
+        if (!empty($this->$brand)) {
             $brand_id = $brand['Brand']['id'];
             $this->set('is_business', true);
         } else {
@@ -810,11 +807,8 @@ class StoresController extends AppController
     protected function __business_orders_export($onlyStatus = array())
     {
         $creator = $this->currentUser['id'];
-
-        $this->loadModel('Brand');
-        $brand = $this->find_my_brand($creator);
-
-        if (!empty($brand)) {
+        $this->checkAccess();
+        if (!empty($this->$brand)) {
             $this->set('is_business', true);
         } else {
             $this->__message('只有合作商家才能查看商家订单，正在为您转向个人订单', '/orders/mine');
