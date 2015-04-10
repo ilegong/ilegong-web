@@ -642,7 +642,6 @@ class StoresController extends AppController
     {
         $creator = $this->currentUser['id'];
 
-        $this->log('query orders for brand '.$creator);
         $this->loadModel('Brand');
         $brand = $this->find_my_brand($creator);
         $this->checkAccess();
@@ -665,10 +664,8 @@ class StoresController extends AppController
         $wait_ship_cond = $cond;
         $wait_ship_cond['status'] = array(ORDER_STATUS_PAID);
         $total_wait_ship_count = $this->Order->find('count', array('conditions' => $wait_ship_cond));
-        $this->log('brand '.$creator.' has '.$total_count.' orders, and '.$total_wait_ship_count.' wait shipped orders');
 
         $tuan_id = $_REQUEST['tuan_id'];
-        $this->log('query orders for tuan '.$tuan_id);
         if($tuan_id!=null&&$tuan_id!='-1'){
             //load tuanbuy for query
             $this->loadModel('TuanBuying');
@@ -696,7 +693,6 @@ class StoresController extends AppController
             $this->set('mark_tip',$mark_tip);
         }
         //代发货订单
-        $this->log('query paid orders for brand '.$creator);
         if(in_array(ORDER_STATUS_PAID,$onlyStatus)){
             //load order tags
             $result  = $this->Order->query('SELECT ship_mark,mark_ship_date,count(mark_ship_date) AS total_count FROM cake_orders WHERE  brand_id='.$brand_id.' AND status='.ORDER_STATUS_PAID.' GROUP BY ship_mark,mark_ship_date');
@@ -726,7 +722,6 @@ class StoresController extends AppController
             $this->set('tuanTeams',$tuanTeams);
         }
 
-        $this->log('query paginated orders for brand '.$creator);
         $this->Paginator->settings = array(
             'conditions' => $cond,
             'limit' => 15,
@@ -736,14 +731,12 @@ class StoresController extends AppController
         );
 
         $orders = $this->Paginator->paginate('Order');
-        $this->log('orders for brand '.$creator.' : '.json_encode($orders));
 
         $ids = array();
         foreach ($orders as $o) {
             $ids[] = $o['Order']['id'];
         }
 
-        $this->log('query carts for brand '.$creator.' with order ids: '.json_encode($ids));
         $order_carts = array();
         if(!empty($ids)){
             $this->loadModel('Cart');
@@ -751,7 +744,6 @@ class StoresController extends AppController
                 'conditions' => array(
                     'order_id' => $ids,
                 )));
-            $this->log('carts for brand '.$creator.': '.json_encode($Carts));
             foreach ($Carts as $c) {
                 $order_id = $c['Cart']['order_id'];
                 if (!isset($order_carts[$order_id])) {
@@ -759,24 +751,23 @@ class StoresController extends AppController
                 }
                 $order_carts[$order_id][] = $c;
             }
-            $this->log('order carts for brand '.$creator.': '.json_encode($order_carts));
+
+            $spec_ids = Hash::extract($Carts,'{n}.Cart.specId');
+            $spec_ids = array_unique($spec_ids);
+            if(!empty($spec_ids)){
+                $this->loadModel('ProductSpecGroup');
+                $spec_groups = $this->ProductSpecGroup->find('all',array(
+                    'conditions' => array(
+                        'id' => $spec_ids
+                    )
+                ));
+                if(!empty($spec_groups)){
+                    $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
+                    $this->set('spec_groups', $spec_groups);
+                }
+            }
         }
 
-        $this->log('query product spec groups for brand '.$creator);
-//        $spec_ids = Hash::extract($Carts,'{n}.Cart.specId');
-//        $spec_ids = array_unique($spec_ids);
-//        $this->loadModel('ProductSpecGroup');
-//        $spec_groups = $this->ProductSpecGroup->find('all',array(
-//            'conditions' => array(
-//                'id' => $spec_ids
-//            )
-//        ));
-//        if(!empty($spec_groups)){
-//            $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
-//            $this->set('spec_groups', $spec_groups);
-//        }
-
-        $this->log('set orders to view for brand '.$creator);
         $this->set('orders', $orders);
         $this->set('total_count', $total_count);
         $this->set('total_wait_ship_count', $total_wait_ship_count);
@@ -789,7 +780,6 @@ class StoresController extends AppController
             $this->set('status', $onlyStatus[0]);
         }
         $this->set('op_cate', 'orders');
-        $this->log('finished querying orders for brand '.$creator);
     }
 
     protected function __business_orders_export($onlyStatus = array())
