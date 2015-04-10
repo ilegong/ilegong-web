@@ -1670,3 +1670,15 @@ function getTuanProductPrice($pid){
     return floatval($product_price_map[$pid]);
 }
 
+function get_group_product_ids($pid){
+    $egg_product = array(896, 818, 161);
+    $cake_product = array(877,869,862);
+    if(in_array($pid,$egg_product,true)){
+        return $egg_product;
+    }
+    if(in_array($pid,$cake_product,true)){
+        return $cake_product;
+    }
+    return $pid;
+}
+

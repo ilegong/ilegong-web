@@ -216,19 +216,27 @@ class ProductsController extends AppController{
             $this->redirect('/tuans/milk');
         }
 
+        $this->loadModel('Comment');
+        //load shichi comment count
+        $same_pids = get_group_product_ids($pid);
+        $shi_chi_comment_count = $this->Comment->find('count',array(
+            'conditions'=>array(
+                'data_id'=>$same_pids,
+                'status'=>1,
+                'is_shichi_vote'=>1
+            )
+        ));
+        $comment_count = $this->Comment->find('count',array(
+            'conditions'=>array(
+                'data_id'=>$same_pids,
+                'status'=>1
+            )
+        ));
+        
+        $this->set('shi_chi_comment_count',$shi_chi_comment_count);
+        $this->set('comment_count',($comment_count-$shi_chi_comment_count));
+
         if($this->RequestHandler->isMobile()){
-            $this->loadModel('Comment');
-            //load shichi comment count
-            $shi_chi_comment_count = $this->Comment->find('count',array(
-                'conditions'=>array(
-                    'data_id'=>$pid,
-                    'status'=>1,
-                    'is_shichi_vote'=>1
-                )
-            ));
-            $comment_count = intval($this->viewdata['Product']['comment_nums']);
-            $this->set('shi_chi_comment_count',$shi_chi_comment_count);
-            $this->set('comment_count',($comment_count-$shi_chi_comment_count));
             $this->set('limitCommentCount',COMMENT_LIMIT_IN_PRODUCT_VIEW);
         }
         if ($pid == PRODUCT_ID_RICE_10) {
