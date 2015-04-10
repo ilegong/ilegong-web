@@ -758,18 +758,18 @@ class StoresController extends AppController
         }
 
         $this->log('query product spec groups for brand '.$creator);
-        $spec_ids = Hash::extract($Carts,'{n}.Cart.specId');
-        $spec_ids = array_unique($spec_ids);
-        $this->loadModel('ProductSpecGroup');
-        $spec_groups = $this->ProductSpecGroup->find('all',array(
-            'conditions' => array(
-                'id' => $spec_ids
-            )
-        ));
-        if(!empty($spec_groups)){
-            $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
-            $this->set('spec_groups', $spec_groups);
-        }
+//        $spec_ids = Hash::extract($Carts,'{n}.Cart.specId');
+//        $spec_ids = array_unique($spec_ids);
+//        $this->loadModel('ProductSpecGroup');
+//        $spec_groups = $this->ProductSpecGroup->find('all',array(
+//            'conditions' => array(
+//                'id' => $spec_ids
+//            )
+//        ));
+//        if(!empty($spec_groups)){
+//            $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
+//            $this->set('spec_groups', $spec_groups);
+//        }
 
         $this->log('set orders to view for brand '.$creator);
         $this->set('orders', $orders);
