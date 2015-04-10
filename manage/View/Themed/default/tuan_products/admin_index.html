@@ -1,64 +1,65 @@
-<div class="container">
-    <ul class="nav nav-pills pull-right">
-        <li role="presentation">
-          <a class="btn btn-primary" href="/manage/admin/tuan_products/new">添加团购商品</a>
-        </li>
-    </ul>
-    <div class="row">
-        <table class="table table-condensed table-striped">
-            <thead>
-                <tr>
-                    <th>id</th>
-                    <th>产品ID</th>
-                    <th>别名</th>
-                    <th>团购价格</th>
-                    <th>发货类型</th>
-                    <th>列表图片</th>
-                    <th>详情图片</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                {{loop $datas $item}}
-                <?php
-                  $tuanProduct = $item['TuanProduct'];
-                ?>
-                <tr>
-                    <td>
-                        {{$tuanProduct['id']}}
-                    </td>
-                    <td>
-                        {{$tuanProduct['alias']}}
-                    </td>
-                    <td>
-                        {{$tuanProduct['product_id']}}
-                    </td>
-                    <td>
-                        <strong class="text-warning">{{$tuanProduct['tuan_price']}}</strong>
-                        <s class="text-muted">{{$tuanProduct['product']['price']}}</s>
-                    </td>
-                    <td>
-                        {{if $tuanProduct['consignment_type'] == 0}}
-                          团满发货
-                        {{elseif $tuanProduct['consignment_type'] == 1}}
-                          团满准备发货
-                        {{elseif $tuanProduct['consignment_type'] == 2}}
-                          排期
-                        {{else}}
-                        {{/if}}
-                    </td>
-                    <td>
-                        {{$tuanProduct['list_img']}}
-                    </td>
-                    <td>
-                        {{$tuanProduct['detail_img']}}
-                    </td>
-                    <td>
-                        <a class="btn btn-primary" href="/manage/admin/tuan_products/edit/{{$tuanProduct['id']}}" role="button">编辑</a> | <a class="btn btn-danger" href="/manage/admin/tuan_products/delete/{{$tuanProduct['id']}}" role="button">删除</a>
-                    </td>
-                </tr>
-                {{/loop}}
-            </tbody>
-        </table>
-    </div>
-</div>
+<hr/>
+<h1>团购商品管理</h1>
+<hr/>
+
+<ul class="nav nav-pills pull-right">
+    <li role="presentation">
+      <a class="btn btn-primary" href="/manage/admin/tuan_products/new">添加团购商品</a>
+    </li>
+</ul>
+<table class="table table-striped table-bordered table-condensed table-hover table-clickable">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>产品ID</th>
+            <th>别名</th>
+            <th>团购价格</th>
+            <th>发货类型</th>
+            <th>列表图片</th>
+            <th>详情图片</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{loop $datas $item}}
+        <?php
+          $tuanProduct = $item['TuanProduct'];
+        ?>
+        <tr class="tuan-product">
+            <td>
+                {{$tuanProduct['id']}}
+            </td>
+            <td>
+                {{$tuanProduct['alias']}}
+            </td>
+            <td>
+                {{$tuanProduct['product_id']}}
+            </td>
+            <td>
+                <strong class="text-warning">{{$tuanProduct['tuan_price']}}</strong>
+                <s class="text-muted">{{$tuanProduct['product']['price']}}</s>
+            </td>
+            <td>
+                {{if $tuanProduct['consignment_type'] == 0}}
+                  团满发货
+                {{elseif $tuanProduct['consignment_type'] == 1}}
+                  团满准备发货
+                {{elseif $tuanProduct['consignment_type'] == 2}}
+                  排期
+                {{else}}
+                {{/if}}
+            </td>
+            <td>
+                <img src="{{$tuanProduct['list_img']}}"/>
+            </td>
+            <td>
+                <img src="{{$tuanProduct['detail_img']}}"/>
+            </td>
+            <td>
+                <a class="btn btn-primary margin-right-10" href="/manage/admin/tuan_products/edit/{{$tuanProduct['id']}}" role="button">编辑</a>
+                <a class="btn btn-danger" href="/manage/admin/tuan_products/delete/{{$tuanProduct['id']}}" role="button">删除</a>
+            </td>
+        </tr>
+        {{/loop}}
+    </tbody>
+</table>
