@@ -20,7 +20,7 @@
       <a href="/manage/admin/tuan_teams/new" role="button" class="btn btn-primary">创建团队</a>
     </div>
 </form>
-<table class="table table-striped table-bordered  table-condensed table-hover">
+<table class="table table-striped table-bordered table-condensed table-hover">
     <thead>
     <tr>
         <th>团队</th><th>团长</th><th>显示地址</th><th>详细地址</th><th>团队口号</th><th>排序权值</th><th>操作</th>
@@ -28,7 +28,7 @@
     </thead>
     <tbody>
     {{loop $tuan_teams $index  $tuan_team}}
-    <tr class="tuan-team">
+    <tr class="tuan-team" data-user-id="" data->
         <td>
           {{$tuan_team['TuanTeam']['tuan_name']}}(
           {{if $tuan_team['TuanTeam']['tuan_buying_count'] > 0}}
@@ -40,13 +40,15 @@
           {{/if}}
           )
         </td>
-        <td>{{$tuan_team['TuanTeam']['leader_name']}}({{$tuan_team['TuanTeam']['leader_weixin']}})</td>
+        <td>
+            {{$tuan_team['TuanTeam']['leader_name']}}({{$tuan_team['TuanTeam']['leader_weixin']}})
+        </td>
         <td>{{$tuan_team['TuanTeam']['address']}}</td>
         <td>{{$tuan_team['TuanTeam']['tuan_addr']}}</td>
         <td>{{$tuan_team['TuanTeam']['tuan_desc']}}</td>
         <td>{{$tuan_team['TuanTeam']['priority']}}</td>
         <td>
-          <a role="button" class="btn btn-primary" href="/manage/admin/tuan_teams/edit/{{$tuan_team['TuanTeam']['id']}}">编辑</a>
+            <a class="btn btn-primary" href="/manage/admin/tuan_teams/edit/{{$tuan_team['TuanTeam']['id']}}">编辑</a>
         </td>
     </tr>
     {{/loop}}

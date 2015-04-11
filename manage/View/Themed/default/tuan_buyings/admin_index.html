@@ -68,7 +68,7 @@
             $tuanStatus = '已截止';
         }
     ?>
-    <tr data-id="{{$tuanBuying['id']}}" data-product-name="{{$tuanProduct[alias]}}" class="{{if $tuanBuying['status']==1}} warning {{elseif $tuanBuying['status']==11}} success {{elseif $tuanBuying['status']==2}} danger {{elseif $tuanBuying['status']==21}} active {{/if}}">
+    <tr data-id="{{$tuanBuying['id']}}" data-leader-name="{{$tuanTeam['leader_name']}}" data-leader-id="{{$tuanTeam['leader_id']}}" data-product-name="{{$tuanProduct[alias]}}" class="{{if $tuanBuying['status']==1}} warning {{elseif $tuanBuying['status']==11}} success {{elseif $tuanBuying['status']==2}} danger {{elseif $tuanBuying['status']==21}} active {{/if}}">
         <td>{{$tuanBuying['id']}}</td>
         <td>{{$tuanTeam['tuan_name']}}</td>
         <td>{{$tuanProduct['alias']}}/{{$tuanTeam['type']==1?大团:小团}}</td>
@@ -153,6 +153,12 @@
               <button type="button" class="btn btn-sm btn-warning tuan-buying-finished" data-id="{{$tuanBuying['id']}}" value="1">发货完成</button>
             {{elseif $tuanBuying['status']==11}}
                 已发货({{date('n.j',strtotime($tuanBuying['consign_time']))}})
+                {{if $tuan_team['TuanTeam']['leader_weixin'] != 'pyshuo2015'}}
+                    <button class="btn btn-primary add-points">加积分...</button>
+                {{else}}
+                    <span class="text-muted">小妹，不需要加积分</span>
+                {{/if}}
+
             {{elseif $tuanBuying['status']==1}}
               {{if $tuanBuying['consign_time']==null}}
               {{else}}

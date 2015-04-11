@@ -40,7 +40,6 @@ $(function(){
             var tuan_product = item['TuanProduct'];
             $('<option value="' + tuan_product['product_id'] + '">' + tuan_product['alias'] + '</option>').appendTo(tuanProducts);
         });
-        setVal();
         tuanProducts.val(tuanProducts.attr('data-product-id'));
     });
     setTuanStatus();
@@ -227,6 +226,78 @@ $(function(){
                     }
                 }
             });
+    });
+
+    var addPoints = function(leaderId, tuanBuyingId, points, reason){
+      $.post('/manage/admin/users/do_add_score',{"user_id":leaderId, "score": points, "score_reason":reason, "tuan_buy_ids":tuanBuyingId},function(data){
+        var result = JSON.parse(data);
+        if(result['success']){
+          alert(result['msg']);
+        }else{
+          alert(result['msg']);
+        }
+      });
+    }
+    $('.add-points').on('click',function(e){
+      var tuanBuying = $(this).parents('tr');
+      var leaderName = tuanBuying.data('leader-name');
+      var leaderId = tuanBuying.data('leader-id');
+      var tuanBuyingId = tuanBuying.data('id');
+      var dialogMessage = '<div class="form-horizontal" method="post">' +
+        '  <div class="form-group">' +
+        '      <label for="box-tuan-buying-id" class="col-sm-2 control-label">团购ID</label>' +
+        '      <div class="col-sm-10">' +
+        '          <input id="box-tuan-buying-id" class="form-control" value="' + tuanBuyingId + '" readonly="readonly">' +
+        '      </div>' +
+        '  </div>' +
+        '  <div class="form-group">' +
+        '      <label for="box-user-id" class="col-sm-2 control-label">团长</label>' +
+        '      <div class="col-sm-10">' +
+        '          <input class="form-control" value="' + leaderName + '" disabled="disabled">' +
+        '      </div>' +
+        '  </div>' +
+        '  <div class="form-group">' +
+        '      <label for="box-leader-id" class="col-sm-2 control-label">团长ID</label>' +
+        '      <div class="col-sm-10">' +
+        '          <input type="number" class="form-control" id="box-leader-id" placeholder="' + leaderId + '" value="' + leaderId + '">' +
+        '      </div>' +
+        '  </div>' +
+        '  <div class="form-group">' +
+        '      <label for="box-points" class="col-sm-2 control-label">积分</label>' +
+        '      <div class="col-sm-10">' +
+        '          <input type="number" class="form-control" id="box-points" placeholder="要加的积分">' +
+        '      </div>' +
+        '  </div>' +
+        '  <div class="form-group">' +
+        '      <label for="box-reason" class="col-sm-2 control-label">添加原因</label>' +
+        '      <div class="col-sm-10">' +
+        '          <textarea id="box-reason" class="form-control" rows="3"></textarea>' +
+        '      </div>' +
+        '  </div>'+
+        '</div>';
+      bootbox.dialog({
+          title: "团长积分",
+          message: dialogMessage,
+          buttons: {
+            cancel: {
+              label: "取消",
+              className: "btn btn-default",
+              callback: function () {}
+            },
+            success: {
+              label: "添加",
+              className: "btn btn-danger",
+              callback: function () {
+                var leaderId = $('#box-leader-id').val();
+                var points = $('#box-points').val();
+                var tuanBuyingId = $('#box-tuan-buying-id').val();
+                var reason = $('#box-reason').val();
+                addPoints(leaderId, tuanBuyingId, points, reason);
+              }
+            }
+          }
+        }
+      );
     });
 
 //    $('#tuan_down,#tuan_product_down').click(function(){

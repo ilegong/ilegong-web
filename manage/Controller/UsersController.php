@@ -87,6 +87,32 @@ class UsersController extends AppController {
         $score = $_REQUEST['score'];
         $score_reason = $_REQUEST['score_reason'];
         $this->loadModel('Score');
+        if($score <= 0){
+            echo json_encode(array('success'=>false,'msg'=>'积分不能小于等于0'));
+            return;
+        }
+
+        $user = $this->User->find('first',array(
+            'conditions' => array(
+                'User.id'=>$uid
+            ),
+            'recursive' => 1
+        ));
+        if(is_null($user) || is_null($user['User'])){
+            echo json_encode(array('success'=>false,'msg'=>'请输入正确的团长ID'));
+            return;
+        }
+
+        $this->loadModel('TuanTeam');
+        $this->loadModel('TuanBuying');
+        $tuanBuyings = $this->TuanBuying->find('all',array('conditions' => array('id' => $tuan_buy_ids)));
+        $tuan_team_ids = Hash::extract($tuanBuyings, "{n}.TuanBuying.tuan_id");
+        $tuan_team_ids = array_unique($tuan_team_ids);
+        $this->log('update leader id to '.$uid.' for team '.json_encode($tuan_team_ids));
+        $this->TuanTeam->updateAll(array('leader_id'=>$uid), array('id'=>$tuan_team_ids));
+
+        $this->log('add points '.$score.' for leader '.$uid);
+
         $add_score_log = $this->Score->save(array(
             'user_id' => $uid,
             'reason' => ADD_SCORE_TUAN_LEADER,
@@ -96,21 +122,16 @@ class UsersController extends AppController {
             'order_id' => empty($orderId) ? 0 : $orderId,
         ));
         if($add_score_log){
-            $user = $this->User->find('first',array(
-                'conditions' => array(
-                    'User.id'=>$uid
-                ),
-                'recursive' => 1
-            ));
             $old_score = $user['User']['score'];
-            $this->send_score_msg($uid,$score_reason,'增加',$score);
             if($this->User->updateAll(array('User.score'=>'User.score+'.$score),array('User.score'=>$old_score,'User.id' => $uid))){
-                echo json_encode(array('success'=>true,'msg'=>'更新成功'));
+                $this->send_score_msg($uid,$score_reason,'增加',$score);
+                echo json_encode(array('success'=>true,'msg'=>'添加成功'));
             }else{
-                echo json_encode(array('success'=>false,'msg'=>'更新失败'));
+                $this->log("failed to add points ".$score." for leader ".$uid);
+                echo json_encode(array('success'=>false,'msg'=>'添加失败，请重试'));
             }
         }else{
-            echo json_encode(array('success'=>false,'msg'=>'更新失败'));
+            echo json_encode(array('success'=>false,'msg'=>'添加失败，请重试'));
         }
     }
 
