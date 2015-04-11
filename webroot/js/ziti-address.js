@@ -149,7 +149,11 @@ var zitiAddress = function(){
             {"shop_code":221,"shop_name":"友谊医院店","address":"北京市宣武区永安路32号","area_code":505,"lat":39.892503,"lon":116.401073},
             {"shop_code":302,"shop_name":"鸭子桥北店","address":"宣武区南滨河31号","area_code":505,"lat":39.88646,"lon":116.355091}],
         8:[
-            {"shop_code":999,"shop_name":"昌平自提","address":"昌平县城万科城东门世纪联华超市蔬菜水果铺","area_code":505,"lat":40.218246,"lon":116.243044,"not_shop":true}
+            {"shop_code":999,"shop_name":"万科小区","address":"昌平县城万科城东门世纪联华超市蔬菜水果铺","area_code":505,"lat":40.218246,"lon":116.243044,"not_shop":true},
+            {"shop_code":999,"shop_name":"佳莲小区","address":"昌平区中山口路21号底商万姐商店	","area_code":505,"lat":40.23553,"lon":116.247147,"not_shop":true},
+            {"shop_code":999,"shop_name":"国泰清秀园阳光","address":"昌平区国泰商场西侧胡同走100m","area_code":505,"lat":40.226406,"lon":116.25076,"not_shop":true},
+            {"shop_code":999,"shop_name":"宁馨苑畅春阁","address":"昌平区宁馨苑小区北门往里50m路东","area_code":505,"lat":40.226,"lon":116.266018,"not_shop":true},
+            {"shop_code":999,"shop_name":"西关三角地","address":"昌平区西关三角地政府街西路南侧","area_code":505,"lat":40.226227,"lon":116.229773,"not_shop":true}
         ]
     };
     var getShipAddress = function(areaId){
