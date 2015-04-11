@@ -353,6 +353,7 @@ class TuanBuyingsController extends AppController{
                 if($_POST['way'] != 'ziti'){
                     $consignees['address'] = $p_address;
                 }
+                $address = $p_address;
             }else{
                 $address = $tuan_info['TuanTeam']['address'];
                 if(!empty($p_address)){
