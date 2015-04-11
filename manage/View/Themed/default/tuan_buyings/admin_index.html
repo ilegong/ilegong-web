@@ -153,10 +153,10 @@
               <button type="button" class="btn btn-sm btn-warning tuan-buying-finished" data-id="{{$tuanBuying['id']}}" value="1">发货完成</button>
             {{elseif $tuanBuying['status']==11}}
                 已发货({{date('n.j',strtotime($tuanBuying['consign_time']))}})
-                {{if $tuan_team['TuanTeam']['leader_weixin'] != 'pyshuo2015'}}
-                    <button class="btn btn-primary add-points">加积分...</button>
-                {{else}}
-                    <span class="text-muted">小妹，不需要加积分</span>
+                <button class="btn btn-primary add-points">加积分...</button>
+
+                {{loop $tuan_buying_scores $index $tuan_buying_score}}
+                    <span class="text-success"></span>
                 {{/if}}
 
             {{elseif $tuanBuying['status']==1}}
