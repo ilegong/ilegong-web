@@ -154,11 +154,6 @@
             {{elseif $tuanBuying['status']==11}}
                 已发货({{date('n.j',strtotime($tuanBuying['consign_time']))}})
                 <button class="btn btn-primary add-points">加积分...</button>
-
-                {{loop $tuan_buying_scores $index $tuan_buying_score}}
-                    <span class="text-success"></span>
-                {{/if}}
-
             {{elseif $tuanBuying['status']==1}}
               {{if $tuanBuying['consign_time']==null}}
               {{else}}
