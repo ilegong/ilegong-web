@@ -57,7 +57,7 @@ $(function(){
         if(navigator.userAgent.indexOf("MSIE")>0){
             tuan_name.on('onpropertychange',txChange);
         }else{
-            tuan_name.on('input',txChange);
+            tuan_name.on('change',txChange);
         }
     }
     function txChange(){
