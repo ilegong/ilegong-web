@@ -353,11 +353,14 @@ class OrdersController extends AppController{
                 $total_money = $total_money + $o['Order']['total_all_price'];
             }
         }
-        $carts = $this->Cart->find('all',array(
-            'conditions'=>array(
-                'order_id' => $ids,
-            )));
-
+        $carts = array();
+        $this->log('order ids '.json_encode($ids));
+        if(!empty($ids)){
+            $carts = $this->Cart->find('all',array(
+                'conditions'=>array(
+                    'order_id' => $ids,
+                )));
+        }
         $order_carts = array();
         foreach($carts as $c){
             $c_order_id = $c['Cart']['order_id'];
