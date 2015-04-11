@@ -1,56 +1,88 @@
 <hr/>
 <h1>团购订单管理</h1>
 <hr/>
-<form class="form-inline" method="post" action="/manage/admin/tuan/tuan_orders" data-noajax="true">
+<ul class="nav nav-tabs">
+  <li role="presentation" class="active"><a href="#general">Home</a></li>
+  <li role="presentation"><a href="#nameOrMobile">姓名手机号查询</a></li>
+  <li role="presentation"><a href="#orderId">订单ID查询</a></li>
+</ul>
+<div id="general">
+  <form class="form-inline" method="post" action="/manage/admin/tuan/tuan_orders" data-noajax="true">
+      <div style="padding-bottom: 10px;">
+          <div class="form-group">
+              <select class="form-control" name="team_id" id="team_id">
+                  <option value="-1">请选择团队</option>
+              </select>
+          </div>
+          <div class="form-group">
+              <select class="form-control" name="product_id" id="product_id">
+                  <option value="-1">选择商品</option>
+              </select>
+          </div>
+          <div class="form-group">
+              <select class="form-control" name="time_type" id="time_type">
+                  <option value="-1">选择时间</option>
+                  <option value="0">截止时间</option>
+                  <option value="1">发货时间</option>
+              </select>
+          </div>
+          <div class="form-group">
+              <label class="sr-only">时间</label>
+              <input type="text" name="post_time" class="form-control" placeholder="2014-07-01" value="{{$post_time}}">
+          </div>
+          <div class="form-group">
+              <select class="form-control" name="order_type" id="order_type">
+                  <option value="-1">选择订单状态</option>
+                  <option value="0">待支付</option>
+                  <option value="1">待发货</option>
+                  <option value="2">已发货</option>
+                  <option value="4">已退款</option>
+                  <option value="10">已作废</option>
+              </select>
+          </div>
+      </div>
+  </form>
+</div>
+<div id="nameOrMobile">
+  <form class="form-inline" method="post" action="/manage/admin/tuan/tuan_orders" data-noajax="true">
     <div style="padding-bottom: 10px;">
-        <div class="form-group">
-            <select class="form-control" name="team_id" id="team_id">
-                <option value="-1">请选择团队</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <select class="form-control" name="product_id" id="product_id">
-                <option value="-1">选择商品</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <select class="form-control" name="time_type" id="time_type">
-                <option value="-1">选择时间</option>
-                <option value="0">截止时间</option>
-                <option value="1">发货时间</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label class="sr-only">时间</label>
-            <input type="text" name="post_time" class="form-control" placeholder="2014-07-01" value="{{$post_time}}">
-        </div>
-        <div class="form-group">
-            <select class="form-control" name="order_type" id="order_type">
-                <option value="-1">选择订单状态</option>
-                <option value="0">待支付</option>
-                <option value="1">待发货</option>
-                <option value="2">已发货</option>
-                <option value="4">已退款</option>
-                <option value="10">已作废</option>
-            </select>
-        </div>
+      <div class="form-group">
+        <label class="sr-only">收件人姓名</label>
+        <input type="text" class="form-control" name="con_name" placeholder="姓名" value="{{$con_name}}">
+      </div>
+      <div class="form-group">
+        <label class="sr-only">收件人手机号</label>
+        <input type="text" class="form-control" name="con_phone" placeholder="手机号" value="{{$con_phone}}">
+      </div>
+      <div class="form-group">
+        <label class="sr-only">订单ID</label>
+        <input type="text" name="order_id" class="form-control" value="{{$order_id}}" placeholder="订单ID">
+      </div>
+      <button type="submit" class="btn btn-primary text-center">查看订单</button>
     </div>
+  </form>
+</div>
+
+<div id="orderId">
+  <form class="form-inline" method="post" action="/manage/admin/tuan/tuan_orders" data-noajax="true">
     <div style="padding-bottom: 10px;">
-        <div class="form-group">
-            <label class="sr-only">收件人姓名</label>
-            <input type="text" class="form-control" name="con_name" placeholder="姓名" value="{{$con_name}}">
-        </div>
-        <div class="form-group">
-            <label class="sr-only">收件人手机号</label>
-            <input type="text" class="form-control" name="con_phone" placeholder="手机号" value="{{$con_phone}}">
-        </div>
-        <div class="form-group">
-            <label class="sr-only">订单ID</label>
-            <input type="text" name="order_id" class="form-control" value="{{$order_id}}" placeholder="订单ID">
-        </div>
-        <button type="submit" class="btn btn-primary text-center">查看订单</button>
+      <div class="form-group">
+        <label class="sr-only">收件人姓名</label>
+        <input type="text" class="form-control" name="con_name" placeholder="姓名" value="{{$con_name}}">
+      </div>
+      <div class="form-group">
+        <label class="sr-only">收件人手机号</label>
+        <input type="text" class="form-control" name="con_phone" placeholder="手机号" value="{{$con_phone}}">
+      </div>
+      <div class="form-group">
+        <label class="sr-only">订单ID</label>
+        <input type="text" name="order_id" class="form-control" value="{{$order_id}}" placeholder="订单ID">
+      </div>
+      <button type="submit" class="btn btn-primary text-center">查看订单</button>
     </div>
-</form>
+  </form>
+</div>
+
 <hr/>
 <div>
     <h1>订单总计<span style="color: red">{{count($orders)}}</span>个，金额<span style="color: red">{{$total_money}}</span> {{if $orders_invalid === 0 || $orders_invalid}}<small>（待支付/已取消：{{$orders_invalid}}个 {{$total_unpaid}}元)</small>{{/if}}</h1>
