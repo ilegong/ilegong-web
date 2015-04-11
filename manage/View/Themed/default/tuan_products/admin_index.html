@@ -43,8 +43,8 @@
                 {{else}}
                 {{/if}}
             </td>
-            <td><img src="{{$tuanProduct['list_img']}}"/></td>
-            <td><img src="{{$tuanProduct['detail_img']}}"/></td>
+            <td><img style="max-width: 200px;" src="{{$tuanProduct['list_img']}}"/></td>
+            <td><img style="max-height: 90px;" src="{{$tuanProduct['detail_img']}}"/></td>
             <td>
                 <a class="btn btn-primary margin-right-10" href="/manage/admin/tuan_products/edit/{{$tuanProduct['id']}}" role="button">编辑</a>
                 <a class="btn btn-danger" href="/manage/admin/tuan_products/delete/{{$tuanProduct['id']}}" role="button">删除</a>
