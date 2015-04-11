@@ -61,7 +61,15 @@ $('#confirm_next').on('click',function(e){
     var zitiChoice = $("#chose_address").length ? $("#chose_address").text(): "not";
     var remarkAddress = $("input[name='consignee_remark_address']").val()||"";
     var address = $("input[name='consignee_address']").val() || $("#chose_address").text();
-    address = address + remarkAddress;
+    if(address.trim()){
+        address = address + remarkAddress;
+    }else{
+        if(remarkAddress.trim()){
+            address = remarkAddress;
+        }else{
+            address = '';
+        }
+    }
     var name = $("input[name='consignee_name']").val();
     var mobile = $("input[name='consignee_mobilephone']").val();
     if (addressInput != "not" && address == "") {

@@ -348,13 +348,16 @@ class TuanBuyingsController extends AppController{
             }
             $this->loadModel('OrderConsignees');
             $consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN);
+            $p_address = $_POST['address'];
             if($tuan_info['TuanTeam']['type'] == 1){
-                $address = $_POST['address'];
                 if($_POST['way'] != 'ziti'){
-                    $consignees['address'] = $address;
+                    $consignees['address'] = $p_address;
                 }
             }else{
                 $address = $tuan_info['TuanTeam']['address'];
+                if(!empty($p_address)){
+                    $address = $address.$p_address;
+                }
             }
             if($_POST['way'] == 'kddj'&&$pid==876){
                 //蔬菜加10元邮费
