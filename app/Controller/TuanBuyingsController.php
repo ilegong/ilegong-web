@@ -436,7 +436,7 @@ class TuanBuyingsController extends AppController{
         if(empty($pid)){
             return;
         }
-        $tuan_buy_id = $_REQUEST('tuan_buy_id');
+        $tuan_buy_id = $_REQUEST['tuan_buy_id'];
         $fields = array('id','slug','name','content','created');
         $this->loadModel('Product');
         $Product =$this->Product->find('first', array(
@@ -444,6 +444,7 @@ class TuanBuyingsController extends AppController{
             'fields' => $fields
         ));
         $this->pageTitle = mb_substr($Product['Product']['name'],0,13);
+        $this->set('pid',$pid);
         $this->set('tuan_buy_id',$tuan_buy_id);
         $this->set('Product',$Product);
         $this->set('hideNav',true);
