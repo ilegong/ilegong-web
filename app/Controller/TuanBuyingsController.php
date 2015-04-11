@@ -436,19 +436,15 @@ class TuanBuyingsController extends AppController{
         if(empty($pid)){
             return;
         }
-//        if($_GET['tuan_id'] && $_GET['tuan_buy_id'] && $_GET['pid']){
-//            $url = '/tuan_buyings/detail/'. strval($_GET['tuan_id']) . '/' . strval($_GET['tuan_buy_id']) ;
-//        }else{
-//            $url = '/tuan_teams/lists';
-//        }
+        $tuan_buy_id = $_REQUEST('tuan_buy_id');
         $fields = array('id','slug','name','content','created');
         $this->loadModel('Product');
         $Product =$this->Product->find('first', array(
             'conditions' => array('id' => $pid),
             'fields' => $fields
         ));
-//        $this->set('tuan_url', $url);
         $this->pageTitle = mb_substr($Product['Product']['name'],0,13);
+        $this->set('tuan_buy_id',$tuan_buy_id);
         $this->set('Product',$Product);
         $this->set('hideNav',true);
     }
