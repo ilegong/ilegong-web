@@ -1,6 +1,3 @@
-<style>
-    .conordertuan ul li a.cur_on{ background-color: #eeeeee; color: #333333;}
-</style>
 <div class="classlist_v2" style="z-index:1">
     <ul class="clearfix" onclick="window.history.back();">
         <li><a class="back"></a></li>
@@ -17,40 +14,43 @@
     </div>
     <P><span>已选自提点：<span id="chose_address" style="color:#333333"></span></span></P>
 </div>
-<div class="conordertuan_contact">
-    <h1>联系信息</h1>
-    <label><input type="text" id="p_consignee_name" placeholder="收货人姓名" value="{{$consignee_info['name']}}" /></label>
-    <label><input type="text" id="p_consignee_mobile" placeholder="手机号" value="{{$consignee_info['mobilephone']}}" /></label>
-    <label><input type="text" id="p_consignee_address" placeholder="备注地址" value="" /></label>
-</div>
-<div class="cart" style="margin-top: 0; padding-top: 0; margin-bottom: 44px;">
-    <div>
-        <dl class="clearfix" style="margin-bottom: 0;border-top: 0">
-            <dd class="fl">朋友说</dd>
-        </dl>
-        <ul class="clearfix">
-            <li class="fl"><a href="/tuan_buyings/detail/{{$tuan_buy_id}}"><img src="{{$cart_info['Cart']['coverimg']}}" border="0" /></a></li>
-            <li style="overflow: hidden; display: block; padding-left: 10px;">
-                <a href="#X">
-                    <p>{{$cart_info['Cart']['name']}}</p>
-                    <s>单价:￥{{$this->Number->precision($cart_info['Cart']['price'],2)}}</s>
-                    <div class="clearfix">
-                        <a onclick="cart_edit_amount.reduce('#pamount-{{$cart_info['Cart']['id']}}')" class="cartnumreduce fl"></a>
-                        <input type="text" value="{{$buy_count}}" id="pamount-{{$cart_info['Cart']['id']}}" data-id="{{$cart_info['Cart']['id']}}" disabled="disabled"
-                               data-price="{{$cart_info['Cart']['price']}}"/>
-                        <a onclick="cart_edit_amount.add('#pamount-{{$cart_info['Cart']['id']}}')" class="cartnumadd fl"></a>
-                    </div>
-                </a>
-            </li>
-        </ul>
-        <!--<p class="conordertuan_total" id="price-{{$cart_info['Cart']['id']}}">共<span>{{$buy_count}}</span>件商品，合计(含运费):<strong>￥{{$this->Number->precision($total_price, 2)}}</strong></p>-->
+<div class="tuan_balance" data-ship-way="ziti" data-tuanbuy-id="{{$tuan_buy_id}}" data-tuanteam-id="{{$tuan_id}}">
+    <div class="conordertuan_contact">
+        <h1>联系信息</h1>
+        <label><input type="text" name="consignee_name" placeholder="收货人姓名" value="{{$consignee_info['name']}}" /></label>
+        <label><input type="text" name="consignee_mobilephone" placeholder="手机号" value="{{$consignee_info['mobilephone']}}" /></label>
+        <label><input type="text" name="consignee_remark_address" placeholder="备注地址" value="" /></label>
     </div>
-</div>
-<div class="cart_pay">
-    <ul class="clearfix">
-        <li class="fl" id="total-price-{{$cart_info['Cart']['id']}}">共<span>{{$buy_count}}</span>件，总金额(含运费)<strong>￥{{$this->Number->precision($total_price, 2)}}</strong></li>
-        <li class="fr"><a id="confirm_next" href="#X" data-disable="false">提交订单</a></li>
-    </ul>
+    <div class="cart" style="margin-top: 0; padding-top: 0; margin-bottom: 44px;">
+        <div>
+            <dl class="clearfix" style="margin-bottom: 0;border-top: 0">
+                <dd class="fl">朋友说</dd>
+            </dl>
+            <ul class="clearfix">
+                <li class="fl"><a href="/tuan_buyings/detail/{{$tuan_buy_id}}"><img src="{{$cart_info['Cart']['coverimg']}}" border="0" /></a></li>
+                <li style="overflow: hidden; display: block; padding-left: 10px;">
+                    <a href="#X">
+                        <p>{{$cart_info['Cart']['name']}}</p>
+                        <s>单价:￥{{$this->Number->precision($cart_info['Cart']['price'],2)}}</s>
+                        <div class="clearfix">
+                            <a  class="cartnumreduce fl"></a>
+                            <input type="text" value="{{$buy_count}}" id="pamount-{{$cart_info['Cart']['id']}}" data-id="{{$cart_info['Cart']['id']}}" disabled="disabled"
+                                   data-price="{{$cart_info['Cart']['price']}}" name="shopCart"/>
+                            <a  class="cartnumadd fl"></a>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="cart_pay">
+        <ul class="clearfix">
+            <li class="fl" style="font-size: 90%">共<span data-count="{{$buy_count}}">{{$buy_count}}</span>件，总金额(含运费)
+                <strong data-total-price="{{$$total_price}}">￥{{$this->Number->precision($total_price, 2)}}</strong>
+            </li>
+            <li class="fr"><a id="confirm_next" href="#X" data-disable="false">提交订单</a></li>
+        </ul>
+    </div>
 </div>
 <div id="hiddenModalContent" style="display:none">
     <div class="classlist_v2">
@@ -60,137 +60,14 @@
             <li><strong>下单</strong></li>
         </ul>
     </div>
-    <div id="area_list" class="tuanadresslist">
-
-    </div>
+    <div id="area_list" class="tuanadresslist">  </div>
 </div>
-{{$this->Html->script(array('/js/ziti-address.js?v2.1'));}}
-<script type="text/javascript">
-    $(document).ready(function(){
-        var areass = zitiAddress.getBeijingAreas;
-        var choose_area='';
-        var height = $(window).height() + 5;
-        var width = $(window).width();
-        var conorder_url = '#TB_inline?inlineId=hiddenModalContent&modal=true&height=' + height + '&width=' + width;
-        for(var i=0; i< areass.length; i++){
-            choose_area += '<ul><li><a href="'+ conorder_url +'" class="thickbox" area-id="' +areass[i].id + '">' + areass[i].name + '</a></li> </ul>';
-        }
-        $(".conordertuan_adress").html(choose_area);
-        $(".thickbox").each(function(){
-            var that = $(this);
-            that.on("click", function(e){
-                $('.thickbox').not(that).removeClass("cur");
-                var area_id = $(this).attr("area-id");
-                setData(area_id);
-                that.addClass("cur");
-            })
-        });
-        function setData(area_id){
-            var chose_address = zitiAddress.getShipAddress(area_id);
-            var $chose_item = '';
-            $.each(chose_address,function(index,item){
-                if(item['not_shop']){
-                    $chose_item +=' <p>'+item['address']+'</p>';
-                }else{
-                    $chose_item +=' <p>'+item['address']+' 好邻居便利店</p>';
-                }
-            });
-            $("#area_list").html($chose_item);
-            $("#area_list p").each(function(){
-                var that =$(this);
-                that.on("click",function(){
-                    that.css("background-color","#eeeeee");
-                    $("#chose_address").html(that.text());
-                    tb_remove();
-                })
-            });
-        }
-        function editCartNum(id, num) {
-            var total_price = "￥"+utils.toFixed($('#pamount-' + id).data('price') * num, 2);
-//            $('#price-' + id + ' strong').html(total_price);
-//            $('#price-' + id + ' span').html(num);
-            $('#total-price-' + id + ' strong').html(total_price);
-            $('#total-price-' + id + ' span').html(num);
-//            resetTotalPrice();
-            var url = BASEURL + '/carts/editCartNum/' + id + '/' + num;
-            if (!sso.check_userlogin({"callback": editCartNum, "callback_args": arguments}))
-                return false;
-            ajaxAction(url, null, null, function (data) {
-                if (data && data.success) {
-                    if (typeof(updateCartItemCount) === 'function') {
-                        updateCartItemCount();
-                    }
-                }
-            }, {'id': id, 'num': num});
-            return false;
-        }
-        cart_edit_amount = {
-            modify: function (obj) {
-                editAmount.modify(obj);
-            },
-            amount: function (obj, mode) {
-                editAmount.amount(obj, mode);
-            },
-            reduce: function (obj) {
-                editAmount.reduce(obj, function (obj) {
-                    editCartNum($(obj).data('id'), $(obj).val());
-                });
-            },
-            add: function (obj) {
-                editAmount.add(obj, function (obj) {
-                    editCartNum($(obj).data('id'), $(obj).val());
-                });
-            }
-        };
-        $('#confirm_next').on('click',function(e){
-            if($("#confirm_next").attr('data-disable') == 'false') {
-                if($("#chose_address").text().length == 0){
-                    utils.alert("请选择你的自提点");
-                    return false;
-                }
-                if ($('#p_consignee_name').val() == "") {
-                    utils.alert("请输入你的姓名");
-                    e.preventDefault();
-                    $('#p_consignee_name').focus();
-                    return false;
-                }
-                if ($('#p_consignee_mobile').val().length != 11) {
-                    utils.alert("联系电话格式不正确");
-                    $('#p_consignee_mobile').focus();
-                    e.preventDefault();
-                    return false;
-                }
-                var address = $.trim($('#chose_address').text());
-                var name = $("#p_consignee_name").val();
-                var mobile = $("#p_consignee_mobile").val();
-                var mark_address = $.trim($('#p_consignee_address').val());
-                var cart_id = {{empty($cart_id)? 0: $cart_id}};
-                var tuan_buy_id = {{empty($tuan_buy_id)? 0: $tuan_buy_id}};
-                var tuan_id = {{empty($tuan_id)? 0: $tuan_id}};
-                if(mark_address&&mark_address.length>0){
-                    address = address+'('+mark_address+')';
-                }
-                jQuery.ajax({
-                    type: "POST",
-                    dataType: "json",
-                    url: "/tuan_buyings/pre_order",
-                    data: {"name": name, "mobile": mobile, "cart_id": cart_id,"address":address, "tuan_id":tuan_id, "tuan_buy_id":tuan_buy_id},
-                    success: function (a) {
-                        if (a.success) {
-                            $("#confirm_next").attr('data-disable', 'true');
-                            window.location.href = '/tuan_buyings/tuan_pay/' + a.order_id;
-                        } else {
-                            if(a.info){
-                                utils.alert(a.info);
-                            }else{
-                                utils.alert("结算出错，请刷新重试");
-                            }
-                        }
-                    }
-                });
-            }
-        });
-    })
+{{$this->Html->script(array('/js/ziti-address.js?v2.1', '/js/tuan/balance.js?v1'));}}
+<script>
+    var bigBuy = zitiObj(zitiAddress.getBeijingAreas, $(window).height() + 5,$(window).width());
+    var elements = bigBuy.generateZitiArea();
+    $(".conordertuan_adress").html(elements);
+    bigBuy.bindThickbox();
 </script>
 {{$this->Html->script(array('/js/thickbox.js'));}}
 {{$this->Html->css(array('thickbox.css?ver1' ));}}

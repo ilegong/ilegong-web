@@ -350,7 +350,9 @@ class TuanBuyingsController extends AppController{
             $consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN);
             if($tuan_info['TuanTeam']['type'] == 1){
                 $address = $_POST['address'];
-                $consignees['address'] = $address;
+                if($_POST['way'] != 'ziti'){
+                    $consignees['address'] = $address;
+                }
             }else{
                 $address = $tuan_info['TuanTeam']['address'];
             }
