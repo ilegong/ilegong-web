@@ -10,6 +10,12 @@ class TuanBuyingsController extends AppController{
 
     public $components = array('ProductSpecGroup');
 
+    private static function key_balance_pids() {
+        return "Balance.balance.pids";
+    }
+    public static function key_balanced_scores() {
+        return "Balance.apply_scores";
+    }
     public function detail($tuan_buy_id){
         $this->pageTitle = '团购详情';
         $this->loadModel('TuanTeam');
@@ -178,6 +184,8 @@ class TuanBuyingsController extends AppController{
                 $ship_fee = floatval($_POST['way_fee']);
                 echo json_encode(array('success' => true, 'direct'=>'normal','way_type'=>$_POST['way_type'],'way_fee'=>$ship_fee));
             }
+            $cart_array = array(0 => strval($cart_id));
+            $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
         }else{
             echo json_encode(array('error' => false));
         }
@@ -259,6 +267,12 @@ class TuanBuyingsController extends AppController{
         if($consignee_info){
             $this->set('consignee_info', $consignee_info['OrderConsignees']);
         }
+        //积分统计
+        $this->loadModel('User');
+        $score = $this->User->get_score($uid, true);
+        $could_score_money = cal_score_money($score, $total_price);
+        $this->set('score_usable', $could_score_money * 100);
+
         $way_type = $_REQUEST['way_type'];
         $this->set('way_type',$way_type);
         $this->set('buy_count',$Carts['Cart']['num']);
@@ -375,6 +389,29 @@ class TuanBuyingsController extends AppController{
             }
             $this->OrderConsignees->save($consignees);
             $order = $this->Order->createTuanOrder($tuan_buy_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id);
+            $order_id = $order['Order']['id'];
+            $score_consumed = 0;
+            $spent_on_order = intval($this->Session->read(self::key_balanced_scores()));
+            $order_id_spents = array();
+            if($spent_on_order > 0 ) {
+                $reduced = $spent_on_order / 100;
+                $toUpdate = array('applied_score' => $spent_on_order,
+                    'total_all_price' => 'if(total_all_price - ' . $reduced .' < 0, 0, total_all_price - ' . $reduced .')');
+                if($this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY))){
+                    $this->log('apply user score=' . $spent_on_order . ' to order-id=' . $order_id . ' successfully');
+                    $score_consumed += $spent_on_order;
+                    $order_id_spents[$order_id] = $spent_on_order;
+                }
+            }
+            if ($score_consumed > 0) {
+                $scoreM = ClassRegistry::init('Score');
+                $scoreM->spent_score_by_order($uid, $score_consumed, $order_id_spents);
+                $this->loadModel('User');
+                $this->User->add_score($uid, -$score_consumed);
+            }
+            // 注意必须清除key_balanced_scores
+            $this->Session->write(self::key_balanced_scores(), '');
+
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
                 $res = array('success'=> false, 'info'=> '你已经支付过了');
             }else{

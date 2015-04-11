@@ -1,9 +1,11 @@
 /**
  * Created by ldy on 15/4/10.
  */
+var priceDom = $(".conordertuan_total strong");
+var totalPriceDom = $(".cart_pay .fl strong");
+var CartDomName = "input[name='shopCart']";
 function editCartNum(id, num) {
-    var priceDom = $(".conordertuan_total strong");
-    var totalPriceDom = $(".cart_pay .fl strong");
+    $('.shop_jifen_used').html("");
     var cartPrice = $('#pamount-' + id).data('price') * num;
     priceDom.data("goodsPrice", cartPrice);
     var ship_fee = $(".ship_fee").data("shipFee") || 0;
@@ -25,7 +27,6 @@ function editCartNum(id, num) {
     }, {'id': id, 'num': num});
     return false;
 }
-var CartDomName = "input[name='shopCart']";
 $(".cartnumreduce").on('click', function(){
     editAmount.reduce(CartDomName, function (CartDomName) {
         editCartNum($(CartDomName).data('id'), $(CartDomName).val());
@@ -43,9 +44,22 @@ $('.shop_jifen_used').click(function(){
     }else{
         that.html("<i></i>");
     }
-    $.post('/orders/apply_score.json', {'use' : that.html()=="<i></i>", 'score':$(".use_score").first().text()}, function(data){
+    var balance_use_score = $(".balance_use_score");
+    $.post('/orders/apply_score.json', {'use' : that.html()=="<i></i>", 'score':priceDom.data("goodsPrice")*100/2}, function(data){
         if (data && data.success) {
-            console.log(data.score_usable);
+            console.log(data);
+            var scoreMoney = data.score_money;
+            if(data.score_used){
+                scoreMoney = - data.score_money;
+            }
+            var goodsPrice = priceDom.data("goodsPrice");
+            var totalPrice = totalPriceDom.data("totalPrice");
+            priceDom.data("goodsPrice", goodsPrice + scoreMoney);
+            totalPriceDom.data("totalPrice", totalPrice + scoreMoney);
+            priceDom.text("￥"+ utils.toFixed(priceDom.data("goodsPrice"), 2));
+            totalPriceDom.text("￥"+ utils.toFixed(totalPriceDom.data("totalPrice"), 2));
+            balance_use_score.text(data.score_usable);
+            balance_use_score.next('span').text(utils.toFixed(data.score_money,2));
         } else {
             utils.alert('使用积分失败', function(){}, 1000);
         }
