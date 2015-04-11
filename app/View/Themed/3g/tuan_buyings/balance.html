@@ -5,7 +5,7 @@
         <li style="text-overflow: ellipsis;"><strong>订单</strong></li>
     </ul>
 </div>
-<div>
+<div class="tuan_balance" data-ship-way="{{$way_type}}" data-tuanbuy-id="{{$tuan_buy_id}}" data-tuanteam-id="{{$tuan_id}}">
     {{if $big_tuan}}
         <div class="conordertuan_contact" style="padding-top: 50px;">
             {{if $way_type=='sf'}}
@@ -50,104 +50,22 @@
                 </li>
             </ul>
 
-            <p class="conordertuan_total">共<span data-count="buy_count">{{$buy_count}}</span>件商品，合计:<strong data-price="goods_price">￥{{$this->Number->precision($cart_info['Cart']['price']*$buy_count, 2)}}</strong>
-                {{if $ship_fee != 0}}，运费：￥<span class="ship_fee">{{$this->Number->precision($ship_fee, 2)}}</span>{{/if}}</p>
+            <p class="conordertuan_total">共<span data-count="{{$buy_count}}">{{$buy_count}}</span>件商品，合计:
+                <strong data-goods-price="{{$cart_info['Cart']['price']*$buy_count}}">￥{{$this->Number->precision($cart_info['Cart']['price']*$buy_count, 2)}}</strong>
+                {{if $ship_fee != 0}}，运费：￥<span class="ship_fee" data-ship-fee="{{$ship_fee}}">{{$this->Number->precision($ship_fee, 2)}}</span>{{/if}}</p>
         </div>
     </div>
     <div class="cart_pay">
         <ul class="clearfix">
-            <li class="fl">共<span data-count="buy_count">{{$buy_count}}</span>件商品，总金额<strong data-price="total_price">￥{{$this->Number->precision($total_price, 2)}}</strong></li>
+            <li class="fl">共<span data-count="{{$buy_count}}">{{$buy_count}}</span>件商品，总金额
+                <strong data-total-price="{{$$total_price}}">￥{{$this->Number->precision($total_price, 2)}}</strong>
+            </li>
             <li class="fr"><a id="confirm_next"  href="javascript:void(0)" data-disable="false">提交订单</a></li>
         </ul>
     </div>
 </div>
 
+<script type="text/javascript" src="/js/tuan/balance.js?v1" async="async"></script>
 
-<script type="text/javascript">
-    $(document).ready(function(){
-        function editCartNum(id, num) {
-            var origin_price = $('#pamount-' + id).data('price') * num;
-            var goods_price = "￥"+ utils.toFixed(origin_price, 2);
-            var ship_fee = parseFloat($(".ship_fee").text());
-            ship_fee = isNaN(ship_fee)?0:ship_fee;
-            var total_price = "￥"+ utils.toFixed(origin_price +ship_fee, 2);
-            $("[data-price ='goods_price']").html(goods_price);
-            $("[data-price ='total_price']").html (total_price );
-            $("[data-count ='buy_count']").html(num);
-            var url = BASEURL + '/carts/editCartNum/' + id + '/' + num;
-            if (!sso.check_userlogin({"callback": editCartNum, "callback_args": arguments}))
-                return false;
-            ajaxAction(url, null, null, function (data) {
-                if (data && data.success) {
-                    if (typeof(updateCartItemCount) === 'function') {
-                        updateCartItemCount();
-                    }
-                }
-            }, {'id': id, 'num': num});
-            return false;
-        }
-        var obj = "input[name='shopCart']";
-        $(".cartnumreduce").on('click', function(){
-            editAmount.reduce(obj, function (obj) {
-                editCartNum($(obj).data('id'), $(obj).val());
-            });
-        });
-        $(".cartnumadd").on('click', function(){
-            editAmount.add(obj, function (obj) {
-                editCartNum($(obj).data('id'), $(obj).val());
-            });
-        });
 
-        $('#confirm_next').on('click',function(e){
-            if($("#confirm_next").attr('data-disable') == 'false') {
-                var address = '';
-                var way = 'normal';
-                var name = $("input[name='consignee_name']").val();
-                var mobile = $("input[name='consignee_mobilephone']").val();
-                if (name == "") {
-                    utils.alert("请输入你的姓名");
-                    e.preventDefault();
-                    $('#p_consignee_name').focus();
-                    return false;
-                }
-                if (mobile.length != 11) {
-                    utils.alert("联系电话格式不正确");
-                    $('#p_consignee_mobile').focus();
-                    e.preventDefault();
-                    return false;
-                }
-                {{if $big_tuan}}
-                address = $("input[name='consignee_address']").val();
-                way = '{{$way_type}}';
-                if (address == "") {
-                    utils.alert("请输入地址");
-                    e.preventDefault();
-                    $('#p_consignee_name').focus();
-                    return false;
-                }
-                {{/if}}
-                var cart_id = {{empty($cart_id)? 0: $cart_id}};
-                var tuan_buy_id = {{empty($tuan_buy_id)? 0: $tuan_buy_id}};
-                var tuan_id = {{empty($tuan_id)? 0: $tuan_id}};
-                jQuery.ajax({
-                    type: "POST",
-                    dataType: "json",
-                    url: "/tuan_buyings/pre_order",
-                    data: {name: name, mobile: mobile, cart_id: cart_id, tuan_buy_id: tuan_buy_id, tuan_id: tuan_id, address:address, way:way },
-                    success: function (a) {
-                        if (a.success) {
-                            $("#confirm_next").attr('data-disable', 'true');
-                            window.location.href = '/tuan_buyings/tuan_pay/' + a.order_id;
-                        } else {
-                            if(a.info){
-                                utils.alert(a.info);
-                            }else{
-                                utils.alert("结算出错，请刷新重试");
-                            }
-                        }
-                    }
-                });
-            }
-        });
-    })
-</script>
+
