@@ -21,7 +21,7 @@
         <label><input type="text" name="consignee_mobilephone" placeholder="手机号" value="{{$consignee_info['mobilephone']}}" /></label>
         <label><input type="text" name="consignee_remark_address" placeholder="备注地址" value="" /></label>
     </div>
-    <div class="cart" style="margin-top: 0; padding-top: 0; margin-bottom: 44px;">
+    <div class="cart" style="margin-top: 0; padding-top: 0;">
         <div>
             <dl class="clearfix" style="margin-bottom: 0;border-top: 0">
                 <dd class="fl">朋友说</dd>
@@ -43,6 +43,12 @@
             </ul>
         </div>
     </div>
+    <div class="shop_jifen" style="margin-bottom: 44px;">
+        <ul class="clearfix" style=" border: 0;">
+            <li class="fl" data-score="{{$score_usable}}">可用<span class="balance_use_score">{{$score_usable}}</span>积分抵用<span>{{$this->Number->precision($score_usable/100, 2)}}</span>元</li>
+            <li class="fr shop_jifen_used radius10"></li>
+        </ul>
+    </div>
     <div class="cart_pay">
         <ul class="clearfix">
             <li class="fl" style="font-size: 90%">共<span data-count="{{$buy_count}}">{{$buy_count}}</span>件，总金额(含运费)
@@ -62,7 +68,7 @@
     </div>
     <div id="area_list" class="tuanadresslist">  </div>
 </div>
-{{$this->Html->script(array('/js/ziti-address.js?v2.1', '/js/tuan/balance.js?v4'));}}
+{{$this->Html->script(array('/js/ziti-address.js?v2.1', '/js/tuan/balance.js?v5'));}}
 <script>
     var bigBuy = zitiObj(zitiAddress.getBeijingAreas, $(window).height() + 5,$(window).width());
     var elements = bigBuy.generateZitiArea();

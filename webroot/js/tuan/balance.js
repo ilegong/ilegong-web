@@ -45,7 +45,7 @@ $('.shop_jifen_used').click(function(){
         that.html("<i></i>");
     }
     var balance_use_score = $(".balance_use_score");
-    $.post('/orders/apply_score.json', {'use' : that.html()=="<i></i>", 'score':priceDom.data("goodsPrice")*100/2}, function(data){
+    $.post('/orders/apply_score.json', {'use' : that.html()=="<i></i>", 'score':totalPriceDom.data("totalPrice")*100/2}, function(data){
         if (data && data.success) {
             console.log(data);
             var scoreMoney = data.score_money;
