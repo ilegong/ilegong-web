@@ -10,7 +10,8 @@ var zitiAddress = function(){
         {"id":5,"name":"丰台区"},
         {"id":6,"name":"崇文区"},
         {"id":7,"name":"宣武区"},
-        {"id":8,"name":"昌平区"}
+        {"id":8,"name":"昌平区"},
+        {"id":9,"name":"大兴区"}
     ];
     var ship_address = {
         1: [{"shop_code":146,"shop_name":"好邻居兴化路店","address":"东城区兴华西里2号楼南侧"},
@@ -154,10 +155,12 @@ var zitiAddress = function(){
             {"shop_code":999,"shop_name":"国泰清秀园阳光","address":"昌平区国泰商场西侧胡同走100m","area_code":505,"lat":40.226406,"lon":116.25076,"not_shop":true},
             {"shop_code":999,"shop_name":"宁馨苑畅春阁","address":"昌平区宁馨苑小区北门往里50m路东","area_code":505,"lat":40.226,"lon":116.266018,"not_shop":true},
             {"shop_code":999,"shop_name":"西关三角地","address":"昌平区西关三角地政府街西路南侧","area_code":505,"lat":40.226227,"lon":116.229773,"not_shop":true},
-
             {"shop_code":999,"shop_name":"望都新地","address":"昌平区望都新地小区","area_code":505,"lat":40.118888,"lon":116.421711,"not_shop":true},
             {"shop_code":999,"shop_name":"领秀小区","address":"昌平区领秀超市","area_code":505,"lat":40.103176,"lon":116.309779,"not_shop":true},
             {"shop_code":999,"shop_name":"拓然佳苑小区","address":"昌平区拓然家苑小区","area_code":505,"lat":40.205174,"lon":116.243894,"not_shop":true}
+        ],
+        9:[
+            {"shop_code":999,"shop_name":"踏歌自提","address":"北京市大兴区黄村镇太福庄段临15号","area_code":505,"lat":39.713138,"lon":116.295997,"not_shop":true},
         ]
     };
     var getShipAddress = function(areaId){
