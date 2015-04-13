@@ -207,6 +207,7 @@ class TuanBuyingsController extends AppController{
             $this->data['TuanBuying']['join_num'] = 0;
             $this->data['TuanBuying']['sold_num'] = 0;
             $this->data['TuanBuying']['status'] = 0;
+            //todo created fields missing
             if($this->TuanBuying->save($this->data)){
                 $this->redirect(array('controller' => 'tuan_buyings','action' => 'index'));
             }
