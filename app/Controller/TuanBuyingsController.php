@@ -374,9 +374,15 @@ class TuanBuyingsController extends AppController{
                     $address = $address.$p_address;
                 }
             }
-            if($_POST['way'] == 'kddj'&&$pid==876){
-                //蔬菜加10元邮费
-                $total_price = $total_price+10;
+            if($_POST['way'] == 'kddj'){
+                if($pid==876){
+                    //蔬菜加10元邮费
+                    $total_price = $total_price+10;
+                }
+                if($pid==879){
+                    //蔬菜加10元邮费
+                    $total_price = $total_price+13;
+                }
             }
             $tuan_consignees = $this->OrderConsignees->find('first', array(
                 'conditions' => array('status' => STATUS_CONSIGNEES_TUAN, 'creator' => $uid),
