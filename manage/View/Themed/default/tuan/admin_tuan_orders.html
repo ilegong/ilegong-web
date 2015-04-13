@@ -142,7 +142,21 @@
                     {{$tuan_buys[$order['Order']['member_id']]['end_time']}}
                 </td>
                 <td>
-                    {{friendlyDateFromStr($tuan_buys[$order['Order']['member_id']]['consign_time'], FFDATE_CH_MD)}}
+                    {{loop $order_carts[$order['Order']['id']] $cart}}
+                        {{if !empty($cart['Cart']['consignment_date'])}}
+                            <?php
+                                $date = $consign_dates[$cart['Cart']['consignment_date']];
+                                $consign_time = empty($date)?'': date('m-d', strtotime($date));
+                            ?>
+                            {{$consign_time}}
+                        {{elseif $order['Order']['type'] == 5}}
+                            <?php
+                                $date = $tuan_buys[$order['Order']['member_id']]['consign_time'];
+                                $consign_time = empty($date)?'': date('m-d', strtotime($date));
+                            ?>
+                            {{$consign_time}}
+                        {{/if}}
+                    {{/loop}}
                 </td>
                 <td>{{$order['Order']['consignee_name']}}</td>
                 <td>

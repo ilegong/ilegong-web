@@ -155,6 +155,18 @@ class TuanController extends AppController{
                 $this->set('tuans',$tuans);
                 $tuan_buys = Hash::combine($tuan_buys,'{n}.TuanBuying.id','{n}.TuanBuying');
                 $this->set('tuan_buys',$tuan_buys);
+                //排期
+                $consign_ids = array_unique(Hash::extract($carts,'{n}.Cart.consignment_date'));
+                if(count($consign_ids)!=1 || !empty($consign_ids[0])){
+                    $this->loadModel('ConsignmentDate');
+                    $consign_dates = $this->ConsignmentDate->find('all',array(
+                        'conditions' => array(
+                            'id' => $consign_ids
+                        )
+                    ));
+                    $consign_dates = Hash::combine($consign_dates,'{n}.ConsignmentDate.id','{n}.ConsignmentDate.send_date');
+                    $this->set('consign_dates', $consign_dates);
+                }
             }
         }
         $this->set('spec_groups',$spec_groups);
