@@ -60,8 +60,8 @@
             <a href="/tuan_buyings/detail/{{$tuan_buy_id}}">
                 <p>{{$cart['Cart']['name']}}</p>
                 <!--<s>榴莲口味 4月2日送货</s>-->
-                {{if $tuan_expired}}
-                    <label class="order_detail_soldout">(您的团购结束)<br>(订单已经失效)</label>
+                {{if $tuan_expired&&$order['Order']['status']== ORDER_STATUS_WAITING_PAY}}
+                    <label class="order_detail_soldout">(您的团购结束)<br>(订单不能支付)</label>
                 {{/if}}
             </a>
         </li>
