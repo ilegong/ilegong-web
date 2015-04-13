@@ -204,18 +204,17 @@ class ProductsController extends AppController{
                 }
             }
         }
-
         if($this->RequestHandler->isMobile()){
             $fields=array('id','user_id','name','coverimg','slug','color','material','manufacturer','price','special','manual','remoteurl','status','deleted','priority','views_count','saled','storage','seotitle',
                 'seodescription','seokeywords', 'created', 'updated', 'published', 'brand_id', 'photo', 'cate_id', 'end_time', 'promote_name', 'comment_nums', 'recommend', 'ship_fee', 'original_price', 'cost_price', 'specs', 'sort_in_store',);
         }
         parent::view($slug,$fields);
         $pid = $this->current_data_id;
-
-        if ($pid == 852) {
-            $this->redirect('/tuans/milk');
+        $tuanProducts = getTuanProducts();
+        $tuan_product_not_show_ids = Hash::combine($tuanProducts, '{n}.TuanProduct.product_id', '{n}.TuanProduct.general_show');
+        if(array_key_exists($pid ,$tuan_product_not_show_ids) && $tuan_product_not_show_ids[$pid] == 0){
+            $this->redirect('/tuan_buyings/goods_tuans/'.$pid);
         }
-
         $this->loadModel('Comment');
         //load shichi comment count
         $same_pids = get_group_product_ids($pid);
