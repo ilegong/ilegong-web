@@ -67,7 +67,11 @@ var zitiAddress = function(){
             {"shop_code":561,"shop_name":"好邻居万泉河店","address":"海淀区万泉河路68号紫金大厦1层"},
             {"shop_code":830,"shop_name":"好邻居苏州街6店","address":"海淀区苏州街19号一层"},
             {"shop_code":562,"shop_name":"电科院超市发店","address":"清河小营电科院旁边超市发","area_code":502,"lat":39.972615,"lon":116.314524,'not_shop':true},
-            {"shop_code":562,"shop_name":"西三旗上奥世纪B座","address":"西三旗上奥世纪B座430","area_code":502,"lat":39.972615,"lon":116.314524,'not_shop':true}],
+            {"shop_code":562,"shop_name":"西三旗上奥世纪B座","address":"西三旗上奥世纪B座430","area_code":502,"lat":39.972615,"lon":116.314524,'not_shop':true},
+            {"shop_code":562,"shop_name":"西三旗育新小区北门超市","address":"西三旗育新小区北门超市","area_code":502,"lat":40.06509,"lon":116.351228,'not_shop':true},
+            {"shop_code":562,"shop_name":"西三旗知本时代御享果蔬店","address":"西三旗知本时代御享果蔬店","area_code":502,"lat":40.068385,"lon":116.365372,'not_shop':true},
+            {"shop_code":562,"shop_name":"西三旗富力桃园世纪华联超市","address":"西三旗富力桃园世纪华联超市","area_code":502,"lat":40.068675,"lon":116.384685,'not_shop':true}
+        ],
         3:[{"shop_code":102,"shop_name":"好邻居车公庄店","address":"西城区车公庄西口29号楼"},
             {"shop_code":103,"shop_name":"好邻居西四店","address":"西城区西四北大街158号"},
             {"shop_code":109,"shop_name":"好邻居二龙路店","address":"西城区二龙路41号"},
