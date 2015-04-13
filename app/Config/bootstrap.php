@@ -1496,7 +1496,6 @@ function get_spec_by_pid_and_sid($pidSidMap) {
         $sid = $item['specId'];
         $pid = $item['pid'];
         $price = $item['defaultPrice'];
-        $published = $item['published'];
         $spec_names = '';
         if ($sid != 0) {
             $specGroup = $productSpecGroup->find('first', array(
@@ -1506,9 +1505,7 @@ function get_spec_by_pid_and_sid($pidSidMap) {
             ));
             if (!empty($specGroup)) {
                 //no published use default price
-                if($published){
-                    $price = $specGroup['ProductSpecGroup']['price'];
-                }
+                $price = $specGroup['ProductSpecGroup']['price'];
                 $spec_names = $specGroup['ProductSpecGroup']['spec_names'];
             }
         }
