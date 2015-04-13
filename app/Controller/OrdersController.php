@@ -129,7 +129,8 @@ class OrdersController extends AppController {
         $uid = $this->currentUser['id'];
 
         $allP = $this->Product->find('all', array('conditions' => array(
-            'id' => $product_ids
+            'id' => $product_ids,
+            'published' => PUBLISH_YES
         )));
 
 
@@ -542,6 +543,19 @@ class OrdersController extends AppController {
         }
 
         $this->set('expired_pids',$expired_pids);
+
+        if($orderinfo['Order']['type']==ORDER_TYPE_TUAN){
+            $this->loadModel('TuanBuying');
+            $tuan_buy = $this->TuanBuying->find('first',array(
+                'conditions' => array(
+                    'id' => $orderinfo['Order']['member_id']
+                )
+            ));
+            //tuan can't buy
+            if($tuan_buy['TuanBuying']['status']!=0){
+                $this->set('tuan_expired',true);
+            }
+        }
 
         if ($action == 'pay') {
             $this->set('paid_msg', htmlspecialchars($_GET['paid_msg']));

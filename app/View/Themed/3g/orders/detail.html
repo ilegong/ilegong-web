@@ -60,6 +60,9 @@
             <a href="/tuan_buyings/detail/{{$tuan_buy_id}}">
                 <p>{{$cart['Cart']['name']}}</p>
                 <!--<s>榴莲口味 4月2日送货</s>-->
+                {{if $tuan_expired}}
+                    <label class="order_detail_soldout">(您的团购结束)<br>(订单已经失效)</label>
+                {{/if}}
             </a>
         </li>
         <li class="fr">￥{{$this->Number->precision($cart['Cart']['price'], 2)}}<br>x{{$cart['Cart']['num']}}</li>
@@ -74,13 +77,13 @@
                 <p>{{$cart['Cart']['name']}}</p>
                 <!--<s>榴莲口味 4月2日送货</s>-->
                 {{if in_array($cart['Cart']['product_id'],$expired_pids)}}
-                    <label class="order_detail_soldout">(该商品已下架)</label>
+                    <label class="order_detail_soldout">(该商品已下架)<br>(订单已经失效)</label>
                 {{/if}}
                 {{if $order['Order']['try_id']==1}}
                     {{if $has_sold_out}}
-                    <label class="order_detail_soldout">(您订单中待支付的商品已经售完啦)</label>
+                    <label class="order_detail_soldout">(您订单中待支付的商品已经售完啦)<br>(订单已经失效)</label>
                     {{elseif $has_reach_limit}}
-                    <label class="order_detail_soldout">(您订单中待支付的商品已经超限啦)</label>
+                    <label class="order_detail_soldout">(您订单中待支付的商品已经超限)<br>(订单已经失效)</label>
                     {{/if}}
                 {{/if}}
             </a>
@@ -139,7 +142,9 @@
         {{elseif $order['Order']['status']== ORDER_STATUS_WAITING_PAY}}
         <li class="fr">
             <a href="#X" id="cancel_order" class="order_deletebtn fl">取消订单</a>
-            <a href="#X" id="pay_order" class="order_paybtn fl">去支付</a>
+            {{if !$has_expired_product_type&&!$tuan_expired}}
+                <a href="#X" id="pay_order" class="order_paybtn fl">去支付</a>
+            {{/if}}
         </li>
         {{elseif $order['Order']['status']== ORDER_STATUS_CANCEL}}
         <li class="fr">

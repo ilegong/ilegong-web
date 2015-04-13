@@ -246,12 +246,22 @@ class BuyingComponent extends Component {
 
         $proM = ClassRegistry::init('Product');
         $shipPromo = ClassRegistry::init('ShipPromotion');
-        $productByIds = $proM->find_published_products_by_ids($pids, array('Product.ship_fee'));
+        //only not publish product brand show problem
+        //$productByIds = $proM->find_published_products_by_ids($pids, array('Product.ship_fee'));
+        $productByIds = $proM->find_products_by_ids($pids, array('Product.ship_fee'),false);
 
         $params = array();
         foreach($cartsByIds as $cid => $cartItem) {
             $pid = $cartItem['product_id'];
-            $params[] = array('pid' => $pid, 'specId' => $cartItem['specId'], 'defaultPrice' => $productByIds[$pid]['price']);
+            //no publish product default price 0
+            if($productByIds[$pid]['published']==0){
+                $defaultPrice = 0;
+                $published = false;
+            }else{
+                $defaultPrice = $productByIds[$pid]['price'];
+                $published = true;
+            }
+            $params[] = array('pid' => $pid, 'specId' => $cartItem['specId'], 'defaultPrice' => $defaultPrice, 'published'=>$published);
         }
 
         $result = get_spec_by_pid_and_sid($params);
@@ -263,13 +273,16 @@ class BuyingComponent extends Component {
             $pp = $shipPromotionId ? $shipPromo->find_ship_promotion($pid, $shipPromotionId) : array();
             $num = $cartItem['num'];
             $numByPid[$pid] += $num;
-
+            $published = true;
+            if($productByIds[$pid]['published']==0){
+                $published = false;
+            }
             $price = $result[cart_dict_key($pid, $cartItem['specId'])][0];
 
             list($itemPrice,) = calculate_price($pid, $price, $uid, $num, $cartItem['id'], $pp);
 
             $totalPrices[$brand_id] += ($itemPrice * $num);
-            $cart->add_product_item($brand_id, $cid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name'], $pid);
+            $cart->add_product_item($brand_id, $cid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name'], $pid, $published);
         }
 
 

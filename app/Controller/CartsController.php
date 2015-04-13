@@ -160,8 +160,10 @@ class CartsController extends AppController{
             'conditions' => array(
                 'id' => $product_ids
             ),
-            'fields' => array('id','brand_id')
+            'fields' => array('id','brand_id','published')
         ));
+        $product_published_map = Hash::combine($product_brand_map,'{n}.Product.id','{n}.Product.published');
+        $this->set('product_published_map',$product_published_map);
         $brandM = ClassRegistry::init('Brand');
         $brand_ids = Hash::extract($product_brand_map,'{n}.Product.brand_id');
         $brandInfos = $brandM->find('all', array(

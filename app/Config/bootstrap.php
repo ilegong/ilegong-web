@@ -402,13 +402,14 @@ class ProductCartItem extends Object {
     public $price;
     public $name;
 
-    public function __construct($cartId, $itemPrice, $num, $used_coupons, $name, $pid) {
+    public function __construct($cartId, $itemPrice, $num, $used_coupons, $name, $pid, $published=true) {
         $this->cartId = $cartId;
         $this->pid = $pid;
         $this->price = $itemPrice;
         $this->num = $num;
         $this->name = $name;
         $this->used_coupons = $used_coupons;
+        $this->published = $published;
     }
 
     public function total_price() {
@@ -488,13 +489,13 @@ class OrderCartItem {
      */
     public $brandItems = array();
 
-    public function add_product_item($brand_id, $cartId, $itemPrice, $num, $used_coupons, $name, $pid) {
+    public function add_product_item($brand_id, $cartId, $itemPrice, $num, $used_coupons, $name, $pid, $published=true) {
         $brandItem = $this->brandItems[$brand_id];
         if (empty($brandItem)) {
             $brandItem = new BrandCartItem($brand_id);
             $this->brandItems[$brand_id] = $brandItem;
         }
-        $brandItem->add_product_item(new ProductCartItem($cartId, $itemPrice, $num, $used_coupons, $name, $pid));
+        $brandItem->add_product_item(new ProductCartItem($cartId, $itemPrice, $num, $used_coupons, $name, $pid,$published));
     }
 
     public function find_product_item($cartId) {
@@ -1495,6 +1496,7 @@ function get_spec_by_pid_and_sid($pidSidMap) {
         $sid = $item['specId'];
         $pid = $item['pid'];
         $price = $item['defaultPrice'];
+        $published = $item['published'];
         $spec_names = '';
         if ($sid != 0) {
             $specGroup = $productSpecGroup->find('first', array(
@@ -1503,7 +1505,10 @@ function get_spec_by_pid_and_sid($pidSidMap) {
                 )
             ));
             if (!empty($specGroup)) {
-                $price = $specGroup['ProductSpecGroup']['price'];
+                //no published use default price
+                if($published){
+                    $price = $specGroup['ProductSpecGroup']['price'];
+                }
                 $spec_names = $specGroup['ProductSpecGroup']['spec_names'];
             }
         }
