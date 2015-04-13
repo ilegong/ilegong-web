@@ -52,7 +52,9 @@
                                 {{$tuan_team['TuanTeam']['tuan_name']}}
                                 &nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_team['TuanTeam']['leader_name']}}<br/>参团请加团长微信，微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}
                             </a>
+                            {{if $tuan_buy_type!=2}}
                             <span>截止日期：<b>{{$end_time}}</b></span>
+                            {{/if}}
                         </div>
                     {{/if}}
 
