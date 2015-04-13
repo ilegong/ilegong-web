@@ -23,10 +23,8 @@ class CategoriesController extends AppController {
             return;
         }
         //团购商品列表 不显示在分类页
-        //TODO set a filed to check is tuan product
-        $tuanProducts = getTuanProducts();
-        $group_buy_product_ids = Hash::extract($tuanProducts,'{n}.TuanProduct.product_id');
-        $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1,'not'=>array('Product.id' => $group_buy_product_ids));
+
+        $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1);
         $conditions['Product' . '.recommend >'] = 0;
 
         $join_conditions = array(
