@@ -80,6 +80,8 @@
             <div class="alert alert-info">您订单中待支付的商品已经售完啦</div>
         {{elseif $has_reach_limit}}
             <div class="alert alert-info">您订单中待支付的商品已经超限啦</div>
+        {{elseif $tuan_expired}}
+            <div class="alert alert-info">您购买的商品团购已经结束</div>
         {{/if}}
         {{if $order['Order']['status']==ORDER_STATUS_RECEIVED&&$order['Order']['try_id']==0}}
         <div class="panel panel-warning">

@@ -552,7 +552,8 @@ class OrdersController extends AppController {
                 )
             ));
             //tuan can't buy
-            if($tuan_buy['TuanBuying']['status']!=0){
+            $tuan_expired = $tuan_buy['TuanBuying']['status'];
+            if($tuan_expired!=0){
                 $this->set('tuan_expired',true);
             }
         }
@@ -598,6 +599,7 @@ class OrdersController extends AppController {
             $this->set('show_pay', ($orderinfo['Order']['type'] == ORDER_TYPE_DEF || $orderinfo['Order']['type']==ORDER_TYPE_TUAN)
                 && $afford
                 && $has_expired_product_type == 0
+                && $tuan_expired !=0
                 && $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
                 && ($display_status != PAID_DISPLAY_PENDING && $display_status != PAID_DISPLAY_SUCCESS));
         }
