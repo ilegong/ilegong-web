@@ -16,7 +16,7 @@
                 <div class="col-xs-9">
                     <input  class="form-control" style="display: inline; width: 40%" type="text" id="J_CheckCodeInput"
                             value="" placeholder="验证码">
-                    {{$this->Html->image(array('controller' => 'Check','action'=>'captcha'), array('id'=> "image_code", 'alt' => "看不清楚，换一张", 'style' => "width: 55%"))}}
+                    {{$this->Html->image(array('controller' => 'check','action'=>'captcha'), array('id'=> "image_code", 'alt' => "看不清楚，换一张", 'style' => "width: 55%"))}}
                     <div id="checkInfo"></div>
                 </div>
 

@@ -101,7 +101,7 @@ class AppController extends Controller {
     	}
 
     	$this->currentUser = $this->Session->read('Auth.User');
-        if (empty($this->currentUser) && $this->is_weixin() && 'users' != $this->request->params['controller']) {
+        if (empty($this->currentUser) && $this->is_weixin() && !in_array($this->request->params['controller'], array('users', 'check'))) {
             $this->redirect($this->login_link());
         }
     	$this->theme = Configure::read('Site.theme');
