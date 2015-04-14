@@ -390,7 +390,7 @@ class OrdersController extends AppController {
 
         $balance_cids = $this->specified_balance_pids();
 
-        list($pids, $cart, $shipFee) = $this->Buying->createTmpCarts($shipPromotionId, $balance_cids, $uid, $sessionId);
+        list($pids, $cart, $shipFee, ,$product_info) = $this->Buying->createTmpCarts($shipPromotionId, $balance_cids, $uid, $sessionId);
         if (empty($balance_cids)) {
             $balance_cids = $cart->list_cart_id();
             $this->Session->write(self::key_balance_pids(), json_encode($balance_cids));
@@ -444,7 +444,8 @@ class OrdersController extends AppController {
         $brand_ids = array_keys($cart->brandItems);
         if (!empty($brand_ids)) {
             $this->loadModel('Brand');
-            $brands = $this->Brand->find('list', array('conditions' => array('id' => $brand_ids), 'fields' => array('id', 'name')));
+            $brands = $this->Brand->find('all', array('conditions' => array('id' => $brand_ids), 'fields' => array('id', 'name', 'coverimg')));
+            $brands = Hash::combine($brands, '{n}.Brand.id', '{n}.Brand');
         } else {
             $brands = array();
         }
@@ -459,7 +460,7 @@ class OrdersController extends AppController {
         }
 
 		$total_price = $cart->total_price();
-        $this->set(compact('total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'flash_msg', 'total_reduced'));
+        $this->set(compact('total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'flash_msg', 'total_reduced', 'product_info'));
 		$this->set('has_chosen_consignee', $has_chosen_consignee);
 		$this->set('total_consignee', $total_consignee);
 		$this->set('consignees', $consignees);
@@ -485,6 +486,7 @@ class OrdersController extends AppController {
         }
         $this->pageTitle = __('订单确认');
         $this->set('op_cate', OP_CATE_CATEGORIES);
+        $this->set('hideNav', true);
 	}
 
     function ship_detail($orderId){

@@ -1,0 +1,65 @@
+<div class="classlist_v2" style="z-index:1">
+    <ul class="clearfix" onclick="window.history.back();">
+        <li><a class="back"></a></li>
+        <li class="line"></li>
+        <li style="text-overflow: ellipsis;"><strong>结算</strong></li>
+    </ul>
+</div>
+<div class="address clearfix" style="position:relative;">
+    <span style="display:block;" class="fl">送至&nbsp;&nbsp;<a class="moreicon" href="#X"></a></span>
+    <span style="display:block;" class="fl"><a class="moreicon" href="#X"></a></span>
+    <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">北京市朝阳区慈云寺东区国际3号楼2单元1203室<br />Alice  13800000000</span>
+    <a href="#X" class="address_addbtn" style=" display: none;">添加收货地址</a>
+</div>
+<div class="cart" style="margin-top: 0; padding-top: 0;">
+    <div>
+        {{loop $cart->brandItems $brandItem}}
+            <div class="clearfix order_shop_head">
+                <span><img class="radius5" src="{{$this->Html->assetUrl(small_thumb_link($brands[$brandItem->id]['coverimg']))}}" /></span>
+                <span>{{$brands[$brandItem->id]['name']}}</span>
+            </div>
+            {{loop $brandItem->items $cid $item}}
+                <div>
+                    <ul class="clearfix" style="margin-bottom: 0;">
+                        <li class="fl"><a href="{{product_link2($product_info[$item->pid])}}"><img src="{{$this->Html->assetUrl(small_thumb_link($item->img))}}" border="0" /></a></li>
+                        <li style="overflow: hidden; display: block; padding-left: 10px;">
+                            <p>{{$item->name}}{{if !$item->published}} 该商品已经下架{{/if}}</p>
+                            <s>单价:￥{{$this->Number->precision($item->price, 2)}}</s>
+                            <s><span>口味：榴莲</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>4月4日送货</span></s>
+                            <div class="clearfix">
+                                <a href="#X" class="cartnumreduce fl"></a>
+                                <input type="text" value="{{$item->num}}" />
+                                <a href="#X" class="cartnumadd fl"></a>
+                            </div>
+                        </li>
+                    </ul>
+                    <a href="#X" class="favor" style="position:relative;">
+                        <span style="display:block;" class="fl">商品优惠&nbsp;&nbsp;<span class="moreicon" style="right:10px;" href="#X"></span></span>
+                        <span style="overflow:hidden; display:block; color: #acacac;">您有优惠券可使用(3)</span>
+                    </a>
+                </div>
+            {{/loop}}
+                <a href="#X" class="favor" style="position:relative;">
+                    <span style="display:block;" class="fl">快递&nbsp;&nbsp;<span class="moreicon" style="right:10px;" href="#X"></span></span>
+                    <span style="overflow:hidden; display:block; color:#999999;">18.00元</span>
+                </a>
+                <div class="clearfix leave_words">
+                    <input name="" type="text" placeholder="给卖家留言:" />
+                </div>
+                <p class="conordertuan_total">共1件商品，合计:<strong>￥308.00</strong></p>
+        {{/loop}}
+    </div>
+
+</div>
+<div class="shop_jifen" style="margin-bottom: 35px;">
+    <ul class="clearfix" style=" border: 0;">
+        <li class="fl">可用125积分抵用1.25元</li>
+        <li class="fr shop_jifen_used radius10"><i></i></li>
+    </ul>
+</div>
+<div class="cart_pay">
+    <ul class="clearfix">
+        <li class="fl">共1件商品，总金额<strong>￥308.00</strong></li>
+        <li class="fr"><a href="#X">提交订单</a></li>
+    </ul>
+</div>

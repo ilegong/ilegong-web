@@ -162,15 +162,15 @@ class BuyingComponent extends Component {
             $cart = new OrderCartItem();
             $cart->is_try = true;
             $brand_id = $products[0]['Product']['brand_id'];
-            $cart->add_product_item($brand_id, $cartItem['Cart']['id'], calculate_try_price($prodTry['ProductTry']['price'], $uid), 1, array(), $cartItem['Cart']['name'], $pid);
+            $cart->add_product_item($brand_id, $cartItem['Cart']['id'], calculate_try_price($prodTry['ProductTry']['price'], $uid), 1, array(), $cartItem['Cart']['name'], $pid, $cartItem['Cart']['coverimg']);
             $shipFee = 0;
             $shipFees = array($brand_id => $shipFee);
         } else {
             $cartsDict = $this->cartsByIds($balanceCartIds, $uid, $sessionId);
             $pids = array_unique(Hash::extract($cartsDict, '{n}.product_id'));
-            list($cart, $shipFee, $shipFees) = $this->applyPromoToCart($cartsDict, $shipPromotionId, $uid);
+            list($cart, $shipFee, $shipFees, $product_info) = $this->applyPromoToCart($cartsDict, $shipPromotionId, $uid);
         }
-        return array($pids, $cart, $shipFee, $shipFees);
+        return array($pids, $cart, $shipFee, $shipFees, $product_info);
     }
 
     /**
@@ -250,7 +250,6 @@ class BuyingComponent extends Component {
         //only not publish product brand show problem
         //$productByIds = $proM->find_published_products_by_ids($pids, array('Product.ship_fee'));
         $productByIds = $proM->find_products_by_ids($pids, array('Product.ship_fee'),false);
-
         $params = array();
         foreach($cartsByIds as $cid => $cartItem) {
             $pid = $cartItem['product_id'];
@@ -283,9 +282,8 @@ class BuyingComponent extends Component {
             list($itemPrice,) = calculate_price($pid, $price, $uid, $num, $cartItem['id'], $pp);
 
             $totalPrices[$brand_id] += ($itemPrice * $num);
-            $cart->add_product_item($brand_id, $cid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name'], $pid, $published);
+            $cart->add_product_item($brand_id, $cid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name'], $pid, $published,$cartItem['coverimg'] );
         }
-
 
         $shipSM = ClassRegistry::init('ShipSetting');
         $shipSettings = $shipSM->find_by_pids($pids, null);
@@ -323,7 +321,7 @@ class BuyingComponent extends Component {
             $shipFee += $ship;
         }
 
-        return array($cart, $shipFee, $shipFees);
+        return array($cart, $shipFee, $shipFees,$productByIds );
     }
 
     function confirm_receive($uid, $order_id){

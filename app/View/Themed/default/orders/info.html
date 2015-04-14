@@ -84,7 +84,7 @@ a.coupon_applied .glyphicon {
 
 		<div class="o_show">
             {{loop $cart->brandItems $brandItem}}
-		<h4>分享人：{{$brands[$brandItem->id]}}</h4>
+		<h4>分享人：{{$brands[$brandItem->id]['name']}}</h4>
 		<div class="p-list">
 			<table  class="table table-bordered">
 			<tbody>

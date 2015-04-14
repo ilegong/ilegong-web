@@ -402,8 +402,9 @@ class ProductCartItem extends Object {
     public $num;
     public $price;
     public $name;
+    public $img;
 
-    public function __construct($cartId, $itemPrice, $num, $used_coupons, $name, $pid, $published=true) {
+    public function __construct($cartId, $itemPrice, $num, $used_coupons, $name, $pid, $published=true, $cartImg=null) {
         $this->cartId = $cartId;
         $this->pid = $pid;
         $this->price = $itemPrice;
@@ -411,6 +412,7 @@ class ProductCartItem extends Object {
         $this->name = $name;
         $this->used_coupons = $used_coupons;
         $this->published = $published;
+        $this->img = $cartImg;
     }
 
     public function total_price() {
@@ -490,13 +492,13 @@ class OrderCartItem {
      */
     public $brandItems = array();
 
-    public function add_product_item($brand_id, $cartId, $itemPrice, $num, $used_coupons, $name, $pid, $published=true) {
+    public function add_product_item($brand_id, $cartId, $itemPrice, $num, $used_coupons, $name, $pid, $published=true, $cartImg=null) {
         $brandItem = $this->brandItems[$brand_id];
         if (empty($brandItem)) {
             $brandItem = new BrandCartItem($brand_id);
             $this->brandItems[$brand_id] = $brandItem;
         }
-        $brandItem->add_product_item(new ProductCartItem($cartId, $itemPrice, $num, $used_coupons, $name, $pid,$published));
+        $brandItem->add_product_item(new ProductCartItem($cartId, $itemPrice, $num, $used_coupons, $name, $pid,$published, $cartImg));
     }
 
     public function find_product_item($cartId) {
