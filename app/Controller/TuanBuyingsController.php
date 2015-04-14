@@ -371,7 +371,7 @@ class TuanBuyingsController extends AppController{
             }else{
                 $address = $tuan_info['TuanTeam']['tuan_addr'];
                 if(!empty($p_address)){
-                    $address = $address.$p_address;
+                    $address = $address.'['.$p_address.']';
                 }
             }
             //TODO to set
