@@ -362,7 +362,7 @@ class StoresController extends AppController
     public function get_order_by_ids(){
         $this->autoRender=false;
         $ids = $_REQUEST['ids'];
-        $ids = explode(',',$ids);
+        $ids = preg_split('/(,|\n)/',$ids);
         $orders = $this->Order->find('all',array(
             'conditions'=>array(
                 'status' => 1,
