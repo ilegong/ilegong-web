@@ -182,9 +182,11 @@
                                 $date = $tuan_buys[$order['Order']['member_id']]['consign_time'];
                                 $consign_time = empty($date)?'': date('m-d', strtotime($date));
                             ?>
-                            {{$consign_time}}
-                        {{else}}
-                            团满发货
+                            {{if empty($consign_time)}}
+                                团满发货
+                            {{else}}
+                                {{$consign_time}}
+                            {{/if}}
                         {{/if}}
                     {{/loop}}
                 </td>
