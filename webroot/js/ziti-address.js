@@ -155,13 +155,13 @@ var zitiAddress = function(){
             {"shop_code":302,"shop_name":"鸭子桥北店","address":"宣武区南滨河31号","area_code":505,"lat":39.88646,"lon":116.355091}],
         8:[
             {"shop_code":999,"shop_name":"万科小区","address":"昌平县城万科城东门世纪联华超市蔬菜水果铺","area_code":505,"lat":40.218246,"lon":116.243044,"not_shop":true},
-            {"shop_code":999,"shop_name":"佳莲小区","address":"昌平区中山口路21号底商万姐商店	","area_code":505,"lat":40.23553,"lon":116.247147,"not_shop":true},
+            {"shop_code":999,"shop_name":"佳莲小区","address":"昌平区中山口路21号妇幼保健医院东面佳莲小区底商万姐商店","area_code":505,"lat":40.23553,"lon":116.247147,"not_shop":true},
             {"shop_code":999,"shop_name":"国泰清秀园阳光","address":"昌平区国泰商场西侧胡同走100m","area_code":505,"lat":40.226406,"lon":116.25076,"not_shop":true},
             {"shop_code":999,"shop_name":"宁馨苑畅春阁","address":"昌平区宁馨苑小区北门往里50m路东","area_code":505,"lat":40.226,"lon":116.266018,"not_shop":true},
             {"shop_code":999,"shop_name":"西关三角地","address":"昌平区西关三角地政府街西路南侧","area_code":505,"lat":40.226227,"lon":116.229773,"not_shop":true},
-            {"shop_code":999,"shop_name":"望都新地","address":"昌平区望都新地小区","area_code":505,"lat":40.118888,"lon":116.421711,"not_shop":true},
-            {"shop_code":999,"shop_name":"领秀小区","address":"昌平区领秀超市","area_code":505,"lat":40.103176,"lon":116.309779,"not_shop":true},
-            {"shop_code":999,"shop_name":"拓然佳苑小区","address":"昌平区拓然家苑小区","area_code":505,"lat":40.205174,"lon":116.243894,"not_shop":true}
+            {"shop_code":999,"shop_name":"望都新地","address":"昌平区北七家镇物美停车场内红花郎烟酒专卖","area_code":505,"lat":40.118888,"lon":116.421711,"not_shop":true},
+            {"shop_code":999,"shop_name":"领秀小区","address":"昌平区朱辛庄中路领秀慧谷A区外领秀超市","area_code":505,"lat":40.103176,"lon":116.309779,"not_shop":true},
+            {"shop_code":999,"shop_name":"拓然佳苑小区","address":"昌平区科技园区白浮泉路12-2圆通快递","area_code":505,"lat":40.205174,"lon":116.243894,"not_shop":true}
         ],
         9:[
             {"shop_code":999,"shop_name":"踏歌自提","address":"北京市大兴区黄村镇太福庄段临15号","area_code":505,"lat":39.713138,"lon":116.295997,"not_shop":true},
