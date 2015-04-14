@@ -27,7 +27,7 @@
                 <dd class="fl">朋友说</dd>
             </dl>
             <ul class="clearfix">
-                <li class="fl"><a href="/tuan_buyings/detail/{{$tuan_buy_id}}"><img src="{{$cart_info['Cart']['coverimg']}}" border="0" /></a></li>
+                <li class="fl"><a href="/tuan_buyings/detail/{{$tuan_buy_id}}"><img src="{{$this->Html->assetUrl(small_thumb_link($cart_info['Cart']['coverimg']))}}" border="0" /></a></li>
                 <li style="overflow: hidden; display: block; padding-left: 10px;">
                     <a href="#X">
                         <p>{{$cart_info['Cart']['name']}}</p>
