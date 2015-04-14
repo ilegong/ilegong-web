@@ -162,7 +162,7 @@ class BuyingComponent extends Component {
             $cart = new OrderCartItem();
             $cart->is_try = true;
             $brand_id = $products[0]['Product']['brand_id'];
-            $cart->add_product_item($brand_id, $cartItem['Cart']['id'], calculate_try_price($prodTry['ProductTry']['price'], $uid), 1, array(), $cartItem['Cart']['name'], $pid, $cartItem['Cart']['coverimg']);
+            $cart->add_product_item($brand_id, $cartItem['Cart'], calculate_try_price($prodTry['ProductTry']['price'], $uid), 1, array());
             $shipFee = 0;
             $shipFees = array($brand_id => $shipFee);
         } else {
@@ -170,7 +170,7 @@ class BuyingComponent extends Component {
             $pids = array_unique(Hash::extract($cartsDict, '{n}.product_id'));
             list($cart, $shipFee, $shipFees, $product_info) = $this->applyPromoToCart($cartsDict, $shipPromotionId, $uid);
         }
-        return array($pids, $cart, $shipFee, $shipFees, $product_info);
+        return array($pids, $cart, $shipFee, $shipFees, $product_info, $cartsDict);
     }
 
     /**
@@ -282,7 +282,7 @@ class BuyingComponent extends Component {
             list($itemPrice,) = calculate_price($pid, $price, $uid, $num, $cartItem['id'], $pp);
 
             $totalPrices[$brand_id] += ($itemPrice * $num);
-            $cart->add_product_item($brand_id, $cid, $itemPrice, $num, $cartItem['used_coupons'], $cartItem['name'], $pid, $published,$cartItem['coverimg'] );
+            $cart->add_product_item($brand_id, $cartItem, $itemPrice, $num, $cartItem['used_coupons'], $published);
         }
 
         $shipSM = ClassRegistry::init('ShipSetting');

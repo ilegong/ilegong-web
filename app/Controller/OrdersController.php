@@ -390,7 +390,7 @@ class OrdersController extends AppController {
 
         $balance_cids = $this->specified_balance_pids();
 
-        list($pids, $cart, $shipFee, ,$product_info) = $this->Buying->createTmpCarts($shipPromotionId, $balance_cids, $uid, $sessionId);
+        list($pids, $cart, $shipFee, ,$product_info, $cartsDict) = $this->Buying->createTmpCarts($shipPromotionId, $balance_cids, $uid, $sessionId);
         if (empty($balance_cids)) {
             $balance_cids = $cart->list_cart_id();
             $this->Session->write(self::key_balance_pids(), json_encode($balance_cids));
@@ -475,6 +475,10 @@ class OrdersController extends AppController {
         $this->set('score_usable', $could_score_money * 100);
         $this->set('score_money', $could_score_money);
 
+        $spec_ids = array_unique(Hash::extract($cartsDict,'{n}.specId'));
+        $this->set('spec_group',search_spec($spec_ids));
+        $consign_ids = array_unique(Hash::extract($cartsDict,'{n}.consignment_date'));
+        $this->set('consign_dates',search_consignment_date($consign_ids));
         $shipPromotions = $this->ShipPromotion->findShipPromotions($pids, $brand_ids);
         if ($shipPromotions && !empty($shipPromotions)) {
             $this->set('specialShipPromotionId', $shipPromotionId);

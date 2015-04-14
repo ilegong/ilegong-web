@@ -404,15 +404,17 @@ class ProductCartItem extends Object {
     public $name;
     public $img;
 
-    public function __construct($cartId, $itemPrice, $num, $used_coupons, $name, $pid, $published=true, $cartImg=null) {
-        $this->cartId = $cartId;
-        $this->pid = $pid;
+    public function __construct($cartItem, $itemPrice, $num, $used_coupons, $pid, $published=true) {
+        $this->cartId = $cartItem['id'];
+        $this->pid = $cartItem['product_id'];
         $this->price = $itemPrice;
         $this->num = $num;
-        $this->name = $name;
+        $this->name = $cartItem['name'];
         $this->used_coupons = $used_coupons;
         $this->published = $published;
-        $this->img = $cartImg;
+        $this->img = $cartItem['coverimg'];
+        $this->specId = $cartItem['specId'];
+        $this->consignment_date = $cartItem['consignment_date'];
     }
 
     public function total_price() {
@@ -492,13 +494,13 @@ class OrderCartItem {
      */
     public $brandItems = array();
 
-    public function add_product_item($brand_id, $cartId, $itemPrice, $num, $used_coupons, $name, $pid, $published=true, $cartImg=null) {
+    public function add_product_item($brand_id, $cartItem, $itemPrice, $num, $used_coupons,$published=true) {
         $brandItem = $this->brandItems[$brand_id];
         if (empty($brandItem)) {
             $brandItem = new BrandCartItem($brand_id);
             $this->brandItems[$brand_id] = $brandItem;
         }
-        $brandItem->add_product_item(new ProductCartItem($cartId, $itemPrice, $num, $used_coupons, $name, $pid,$published, $cartImg));
+        $brandItem->add_product_item(new ProductCartItem($cartItem, $itemPrice, $num, $used_coupons,$published));
     }
 
     public function find_product_item($cartId) {
@@ -1686,3 +1688,27 @@ function get_group_product_ids($pid){
     return $pid;
 }
 
+function search_spec($spec_ids){
+    if(count($spec_ids)!=1 || !empty($spec_ids[0])){
+        $specM = ClassRegistry::init('ProductSpecGroup');
+        $spec_groups = $specM->find('all',array(
+            'conditions' => array(
+                'id' => $spec_ids
+            )
+        ));
+        return Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
+    }
+    return null;
+}
+function search_consignment_date($consign_ids){
+    if(count($consign_ids)!=1 || !empty($consign_ids[0])){
+        $consignM =ClassRegistry::init('ConsignmentDate');
+        $consign_dates = $consignM->find('all',array(
+            'conditions' => array(
+                'id' => $consign_ids
+            )
+        ));
+        return  Hash::combine($consign_dates,'{n}.ConsignmentDate.id','{n}.ConsignmentDate.send_date');
+    }
+    return null;
+}
