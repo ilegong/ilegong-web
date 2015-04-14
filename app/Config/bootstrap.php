@@ -1658,7 +1658,6 @@ function getTuanProductsAsJson(){
         ));
         $tuanProducts = json_encode($tuanProducts);
         Cache::write('tuan_products',$tuanProducts);
-
     }
     return $tuanProducts;
 }
