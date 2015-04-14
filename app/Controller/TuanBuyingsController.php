@@ -374,6 +374,7 @@ class TuanBuyingsController extends AppController{
                     $address = $address.$p_address;
                 }
             }
+            //TODO to set
             if($_POST['way'] == 'kddj'){
                 if($pid==876){
                     //蔬菜加10元邮费
