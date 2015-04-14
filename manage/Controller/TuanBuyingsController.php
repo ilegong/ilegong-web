@@ -216,7 +216,7 @@ class TuanBuyingsController extends AppController{
 
     public function admin_set_status(){
         $this->autoRender = false;
-        $tuan_orderIds = explode(',',trim($_REQUEST['tuan_orderid']));
+        $tuan_orderIds = preg_split('/(,|\n)/',trim($_REQUEST['tuan_orderid']));
         $tuan_orderstatus = $_REQUEST['order_status'];
         $order_info = $this->Order->find('all',array('conditions' => array('id' => $tuan_orderIds,'status !='=> 2)));
         $this->log('order_info'.json_encode($order_info));
