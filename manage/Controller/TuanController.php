@@ -25,7 +25,6 @@ class TuanController extends AppController{
         $post_time = $_REQUEST['post_time'];
         $order_type = $_REQUEST['order_type'];
         $order_id = $_REQUEST['order_id'];
-        $tuan_buy_id = $_REQUEST['tuan_buy_id'];
         $con_address = $_REQUEST['con_address'];
         $query_tb = array();
         $should_count_nums = false;
@@ -44,9 +43,6 @@ class TuanController extends AppController{
             $this->set('should_count_nums',$should_count_nums);
         }
 
-        if(!empty($tuan_buy_id)){
-            $query_tb['id'] = $tuan_buy_id;
-        }
         $tuan_buys = $this->TuanBuying->find('all',array(
             'conditions' => $query_tb
         ));
@@ -191,7 +187,6 @@ class TuanController extends AppController{
         $this->set('post_time',$post_time);
         $this->set('order_type',$order_type);
         $this->set('order_id',$order_id);
-        $this->set('tuan_buy_id',$tuan_buy_id);
         $this->set('con_address',$con_address);
     }
 
