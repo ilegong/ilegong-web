@@ -76,7 +76,7 @@ class TuanController extends AppController{
             $order_query_cond = array(
                 'Order.type' => ORDER_TYPE_TUAN,
                 'Order.member_id' => $tb_ids,
-                'Order.consignee_address LIKE' => $con_address
+                'Order.consignee_address LIKE' => '%'.$con_address.'%'
             );
 
             if(!empty($con_name)){
