@@ -468,16 +468,24 @@ class TuanBuyingsController extends AppController{
         $tuan_product_ids = Hash::extract($tuan_product_ids,'{n}.TuanBuying.pid');
         $this->loadModel('Product');
         $tuan_products_info = array();
-        foreach($tuan_product_ids as $pid){
+        $tuan_productId = array();
+        $tuan_product = $this->Product->find('all',array(
+            'conditions' => array('id' => $tuan_product_ids),
+            'fields' => array('deleted','name','original_price','price','priority','id'),
+            'order' => 'Product.priority desc'
+        ));
+//        $tuan_product = Hash::combine($tuan_product,'{n}.Product.id','{n}.Product');
+        foreach($tuan_product as $tuanProduct){
+            $pid = $tuanProduct['Product']['id'];
             $tuan_products_info[$pid] = $this->TuanBuying->query("select sum(sold_num) as sold_number from cake_tuan_buyings  where pid = $pid");
-            $tuan_product = $this->Product->find('first',array('conditions' => array('id' => $pid),'fields' => array('deleted','name','original_price','price')));
-            $tuan_products_info[$pid]['status'] = $tuan_product['Product']['deleted'];
-            $tuan_products_info[$pid]['name'] = $tuan_product['Product']['name'];
-            $tuan_products_info[$pid]['price'] = $tuan_product['Product']['price'];
+            $tuan_products_info[$pid]['status'] = $tuanProduct['Product']['deleted'];
+            $tuan_products_info[$pid]['name'] = $tuanProduct['Product']['name'];
+            $tuan_products_info[$pid]['price'] = $tuanProduct['Product']['price'];
             $tuan_products_info[$pid]['list_img'] = $tuanProducts[$pid]['list_img'];
-            $tuan_products_info[$pid]['original_price'] = $tuan_product['Product']['original_price'];
+            $tuan_products_info[$pid]['original_price'] = $tuanProduct['Product']['original_price'];
+            $tuan_productId[$pid] = $pid;
         }
-        $this->set('tuan_product_ids',$tuan_product_ids);
+        $this->set('tuan_product_ids',$tuan_productId);
         $this->set('tuan_products_info',$tuan_products_info);
         $this->set('hideNav',true);
     }
