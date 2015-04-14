@@ -29,17 +29,6 @@
           <br/>
           <br/>
           <div class="form-group">
-              <select class="form-control" name="time_type" id="time_type">
-                  <option value="-1">选择时间</option>
-                  <option value="0">截止时间</option>
-                  <option value="1">发货时间</option>
-              </select>
-          </div>
-          <div class="form-group">
-              <label class="sr-only">时间</label>
-              <input type="text" name="post_time" class="form-control" placeholder="2014-07-01" value="{{$post_time}}">
-          </div>
-          <div class="form-group">
               <select class="form-control" name="order_type" id="order_type">
                   <option value="-1">选择订单状态</option>
                   <option value="0">待支付</option>
@@ -216,7 +205,6 @@
     $(document).ready(function(){
         var $team_id = $('#team_id');
         var $product_id = $('#product_id');
-        var $time_type = $('#time_type');
         var $order_type = $('#order_type');
         var tuanProducts = $('#product_id');
         var tuan_name = $('#tuan_name');
@@ -240,7 +228,6 @@
         });
         function setVal(){
             $team_id.val('{{$team_id}}');
-            $time_type.val('{{$time_type}}');
             $order_type.val('{{$order_type}}');
         }
 

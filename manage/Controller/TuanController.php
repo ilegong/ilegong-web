@@ -19,10 +19,8 @@ class TuanController extends AppController{
         $this->loadModel('ProductSpecGroup');
         $team_id = $_REQUEST['team_id'];
         $product_id = $_REQUEST['product_id'];
-        $time_type = $_REQUEST['time_type'];
         $con_name = $_REQUEST['con_name'];
         $con_phone = $_REQUEST['con_phone'];
-        $post_time = $_REQUEST['post_time'];
         $order_type = $_REQUEST['order_type'];
         $order_id = $_REQUEST['order_id'];
         $con_address = $_REQUEST['con_address'];
@@ -30,11 +28,6 @@ class TuanController extends AppController{
         $should_count_nums = false;
         if(!empty($team_id)&&$team_id!='-1'){
             $query_tb['tuan_id']=$team_id;
-        }
-        if($time_type==0){
-            $query_tb['end_time > ']=$post_time;
-        }else if($time_type==1){
-            $query_tb['consign_time > ']=$post_time;
         }
 
         if(!empty($product_id)){
@@ -181,10 +174,10 @@ class TuanController extends AppController{
         $this->set('spec_groups',$spec_groups);
         $this->set('team_id',$team_id);
         $this->set('product_id',$product_id);
-        $this->set('time_type',$time_type);
+        //$this->set('time_type',$time_type);
         $this->set('con_name',$con_name);
         $this->set('con_phone',$con_phone);
-        $this->set('post_time',$post_time);
+        //$this->set('post_time',$post_time);
         $this->set('order_type',$order_type);
         $this->set('order_id',$order_id);
         $this->set('con_address',$con_address);
