@@ -462,7 +462,7 @@ class TuanBuyingsController extends AppController{
         $tuanProducts = getTuanProducts();
         $tuanProducts = Hash::combine($tuanProducts,'{n}.TuanProduct.product_id','{n}.TuanProduct');
         $exclude_pids = array(863,900);
-        $tuan_product_ids = $this->TuanBuying->find('all',array('conditions' => array("pid != " => $exclude_pids,'status'=>0,'end_time > '=>$currentDate),'order' => array('pid DESC'),'group' => array('pid')));
+        $tuan_product_ids = $this->TuanBuying->find('all',array('conditions' => array("pid != " => $exclude_pids,'status'=>0,'end_time > '=>$currentDate),'group' => array('pid')));
         $tuan_product_ids = Hash::extract($tuan_product_ids,'{n}.TuanBuying.pid');
         $this->loadModel('Product');
         $tuan_products_info = array();
