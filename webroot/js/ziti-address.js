@@ -71,7 +71,7 @@ var zitiAddress = function(){
             {"shop_code":999,"shop_name":"西三旗育新小区北门超市","address":"西三旗育新小区北门超市","area_code":502,"lat":40.06509,"lon":116.351228,'not_shop':true},
             {"shop_code":999,"shop_name":"西三旗知本时代御享果蔬店","address":"西三旗知本时代御享果蔬店","area_code":502,"lat":40.068385,"lon":116.365372,'not_shop':true},
             {"shop_code":999,"shop_name":"西三旗富力桃园世纪华联超市","address":"西三旗富力桃园世纪华联超市","area_code":502,"lat":40.068675,"lon":116.384685,'not_shop':true},
-            {"shop_code":999,"shop_name":"当代城市花园东门对面焙好味面包坊","address":"安宁庄西路安宁华庭3区上林溪底商","area_code":502,"lat":40.050175,"lon":116.329055,'not_shop':true}
+            {"shop_code":999,"shop_name":"当代城市花园东门对面焙好味面包坊","address":"安宁庄西路安宁华庭3区上林溪底商焙好味面包坊","area_code":502,"lat":40.050175,"lon":116.329055,'not_shop':true}
         ],
         3:[{"shop_code":102,"shop_name":"好邻居车公庄店","address":"西城区车公庄西口29号楼"},
             {"shop_code":103,"shop_name":"好邻居西四店","address":"西城区西四北大街158号"},
