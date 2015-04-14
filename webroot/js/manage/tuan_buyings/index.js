@@ -326,19 +326,17 @@ $(function(){
 //    });
 
     function search_tuanteam(){
-
-    String.prototype.Trim = function() {
-        return this.replace(/(^\s*)|(\s*$)/g, "");
-       };
-
-    $("select[name='team_id'] option").each(function(){
-        leftSelectData.push({'val':$(this).val(),'name':$(this).text()});
-    });
-    if(navigator.userAgent.indexOf("MSIE")>0){
-        tuan_name.on('onpropertychange',txChange);
-    }else{
-        tuan_name.on('input',txChange);
-    }
+        String.prototype.Trim = function() {
+            return this.replace(/(^\s*)|(\s*$)/g, "");
+           };
+        $("select[name='team_id'] option").each(function(){
+            leftSelectData.push({'val':$(this).val(),'name':$(this).text()});
+        });
+        if(navigator.userAgent.indexOf("MSIE")>0){
+            tuan_name.on('onpropertychange',txChange);
+        }else{
+            tuan_name.on('input',txChange);
+        }
     }
     function txChange(){
         var content= tuan_name.val().Trim();

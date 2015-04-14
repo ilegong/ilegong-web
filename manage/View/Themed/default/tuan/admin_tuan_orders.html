@@ -13,9 +13,15 @@
               <input type="text" name="tuan_buy_id" class="form-control" placeholder="团购ID" value="{{$tuan_buy_id}}">
           </div>
           <div class="form-group">
+              <input type="text" class="form-control" placeholder="搜索团队" id="tuan_name">
+          </div>
+          <div class="form-group">
               <select class="form-control" name="team_id" id="team_id">
                   <option value="-1">请选择团队</option>
               </select>
+          </div>
+          <div class="form-group">
+              <input type="text" class="form-control" placeholder="搜索商品" id="tuan_product">
           </div>
           <div class="form-group">
               <select class="form-control" name="product_id" id="product_id">
@@ -198,11 +204,16 @@
         var $time_type = $('#time_type');
         var $order_type = $('#order_type');
         var tuanProducts = $('#product_id');
+        var tuan_name = $('#tuan_name');
+        var tuan_product = $('#tuan_product');
+        var leftTeamSelectData = [];
+        var leftProductSelectData = [];
         $.getJSON('/manage/admin/tuanTeams/api_tuan_teams',function(data){
             $.each(data,function(index,item){
                 $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo($team_id);
             });
             setVal();
+            search_tuanteam();
         });
         $.getJSON('/manage/admin/tuanProducts/api_tuan_products',function(data){
             $.each(data,function(index,item){
@@ -210,11 +221,72 @@
                 $('<option value="' + tuan_product['product_id'] + '">' + tuan_product['alias'] + '</option>').appendTo(tuanProducts);
             });
             $product_id.val('{{$product_id}}');
+            search_product();
         });
         function setVal(){
             $team_id.val('{{$team_id}}');
             $time_type.val('{{$time_type}}');
             $order_type.val('{{$order_type}}');
         }
+
+        String.prototype.Trim = function() {
+            return this.replace(/(^\s*)|(\s*$)/g, "");
+        };
+
+        function search_product(){
+            $("option",$product_id).each(function(){
+                leftProductSelectData.push({'val':$(this).val(),'name':$(this).text()});
+            });
+            if(navigator.userAgent.indexOf("MSIE")>0){
+                tuan_product.on('onpropertychange',productChange);
+            }else{
+                tuan_product.on('input',productChange);
+            }
+        }
+
+        function search_tuanteam(){
+            $("option",$team_id).each(function(){
+                leftTeamSelectData.push({'val':$(this).val(),'name':$(this).text()});
+            });
+            if(navigator.userAgent.indexOf("MSIE")>0){
+                tuan_name.on('onpropertychange',tuanNameChange);
+            }else{
+                tuan_name.on('input',tuanNameChange);
+            }
+        }
+        function tuanNameChange(){
+            var content= tuan_name.val().Trim();
+            $team_id.empty();
+            if(content == ''){
+                $.each(leftTeamSelectData,function(index,value){
+                    $team_id.append('<option value="'+value['val']+'">'+value['name']+'</option>');
+                });
+            }else{
+                var reg = new RegExp(content,'i');
+                $.each(leftTeamSelectData,function(index,val){
+                    if(reg.test(val['name'])){
+                        $team_id.append('<option selected="selected" value="'+val['val']+'">'+val['name']+'</option>');
+                    }
+                })
+            }
+        }
+
+        function productChange(){
+            var content= tuan_product.val().Trim();
+            $product_id.empty();
+            if(content == ''){
+                $.each(leftProductSelectData,function(index,value){
+                    $product_id.append('<option value="'+value['val']+'">'+value['name']+'</option>');
+                });
+            }else{
+                var reg = new RegExp(content,'i');
+                $.each(leftProductSelectData,function(index,val){
+                    if(reg.test(val['name'])){
+                        $product_id.append('<option selected="selected" value="'+val['val']+'">'+val['name']+'</option>');
+                    }
+                })
+            }
+        }
+
     });
 </script>
