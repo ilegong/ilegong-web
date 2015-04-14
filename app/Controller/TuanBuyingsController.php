@@ -273,12 +273,14 @@ class TuanBuyingsController extends AppController{
         $could_score_money = cal_score_money($score, $total_price);
         $this->set('score_usable', $could_score_money * 100);
 
+        $tuan_id = $tuan_info['TuanTeam']['id'];
         $way_type = $_REQUEST['way_type'];
         $this->set('way_type',$way_type);
         $this->set('buy_count',$Carts['Cart']['num']);
         $this->set('total_price', $total_price);
         $this->set('cart_id', $Carts['Cart']['id']);
-        $this->set('tuan_id', $tuan_info['TuanTeam']['id']);
+        $this->set('tuan_id', $tuan_id);
+        $this->set('can_mark_address',$this->can_mark_address($tuan_id));
         $this->set('tuan_address', $tuan_info['TuanTeam']['tuan_addr']);
         $this->set('end_time', date('m-d', $current_time));
         $this->set('tuan_buy_id', $tuan_buy_id);
@@ -525,6 +527,11 @@ class TuanBuyingsController extends AppController{
     public function big_tuan_balance($tuan_buy_id){
         $this->balance($tuan_buy_id);
         $this->set('hideNav',true);
+    }
+
+    private function can_mark_address($tuan_id){
+        $mark_address_tuan_ids = array(15,25,28,41,43,45,46,47,48,58,60,66);
+        return in_array($tuan_id,$mark_address_tuan_ids);
     }
 }
 
