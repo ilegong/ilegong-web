@@ -444,7 +444,7 @@ class OrdersController extends AppController {
         $brand_ids = array_keys($cart->brandItems);
         if (!empty($brand_ids)) {
             $this->loadModel('Brand');
-            $brands = $this->Brand->find('all', array('conditions' => array('id' => $brand_ids), 'fields' => array('id', 'name', 'coverimg')));
+            $brands = $this->Brand->find('all', array('conditions' => array('id' => $brand_ids), 'fields' => array('id', 'name', 'coverimg', 'created', 'slug')));
             $brands = Hash::combine($brands, '{n}.Brand.id', '{n}.Brand');
         } else {
             $brands = array();

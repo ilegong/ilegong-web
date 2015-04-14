@@ -15,8 +15,10 @@
     <div>
         {{loop $cart->brandItems $brandItem}}
             <div class="clearfix order_shop_head">
-                <span><img class="radius5" src="{{$this->Html->assetUrl(small_thumb_link($brands[$brandItem->id]['coverimg']))}}" /></span>
-                <span>{{$brands[$brandItem->id]['name']}}</span>
+                <a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$brandItem->id]['created'])).'/'.$brands[$brandItem->id]['slug'].'.html')}}">
+                    <span><img class="radius5" src="{{$this->Html->assetUrl(small_thumb_link($brands[$brandItem->id]['coverimg']))}}" /></span>
+                    <span>{{$brands[$brandItem->id]['name']}}</span>
+                </a>
             </div>
             {{loop $brandItem->items $cid $item}}
                 <div>
