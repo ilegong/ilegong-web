@@ -24,14 +24,14 @@ class TuanController extends AppController{
         $order_type = $_REQUEST['order_type'];
         $order_id = $_REQUEST['order_id'];
         $con_address = $_REQUEST['con_address'];
-        $stat_datetime = $_REQUEST['stat_datetime'];
+        $start_stat_datetime = $_REQUEST['start_stat_datetime'];
+        $end_stat_datetime = $_REQUEST['end_stat_datetime'];
         $query_tb = array();
         $should_count_nums = false;
         if(!empty($team_id)&&$team_id!='-1'){
             $query_tb['tuan_id']=$team_id;
         }
-
-        if(!empty($product_id)){
+        if($product_id!=-1){
             $query_tb['pid'] = $product_id;
             $should_count_nums = true;
             $this->set('should_count_nums',$should_count_nums);
@@ -73,9 +73,14 @@ class TuanController extends AppController{
             )
         );
 
-        if(!empty($stat_datetime)){
-            $order_query_cond['Order.created <'] = $stat_datetime;
+        if(!empty($start_stat_datetime)){
+            $order_query_cond['Order.created <'] = $end_stat_datetime;
         }
+
+        if(!empty($end_stat_datetime)){
+            $order_query_cond['Order.created >'] = $end_stat_datetime;
+        }
+
         if(!empty($con_address)){
             $order_query_cond['Order.consignee_address LIKE'] = '%'.$con_address.'%';
         }
@@ -174,15 +179,13 @@ class TuanController extends AppController{
                 $this->set('consign_dates', $consign_dates);
             }
         }
-
         $this->set('spec_groups',$spec_groups);
         $this->set('team_id',$team_id);
         $this->set('product_id',$product_id);
-        $this->set('stat_datetime',$stat_datetime);
-        //$this->set('time_type',$time_type);
+        $this->set('start_stat_datetime',$start_stat_datetime);
+        $this->set('end_stat_datetime',$end_stat_datetime);
         $this->set('con_name',$con_name);
         $this->set('con_phone',$con_phone);
-        //$this->set('post_time',$post_time);
         $this->set('order_type',$order_type);
         $this->set('order_id',$order_id);
         $this->set('con_address',$con_address);
