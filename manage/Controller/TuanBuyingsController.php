@@ -206,11 +206,16 @@ class TuanBuyingsController extends AppController{
         if(!empty($this->data)){
             $this->data['TuanBuying']['join_num'] = 0;
             $this->data['TuanBuying']['sold_num'] = 0;
-            $this->data['TuanBuying']['status'] = 0;
+            $this->data['TuanBuying']['stTuanBuyingMessagesatus'] = 0;
             //todo created fields missing
+            App::import('Controller','TuanMsg');
+            $tuanMsgController = new TuanMsgController;
             if($this->TuanBuying->save($this->data)){
+                $tuanBuyId = $this->TuanBuying->getLastInsertID();
+                $tuanMsgController->admin_send_tuan_buy_create_msg($tuanBuyId);
                 $this->redirect(array('controller' => 'tuan_buyings','action' => 'index'));
             }
+
         }
     }
 

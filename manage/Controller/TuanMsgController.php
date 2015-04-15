@@ -13,9 +13,9 @@ class TuanMsgController extends AppController{
 
     public $components = array('Weixin');
 
-    public function admin_send_tuan_buy_create_msg(){
+    public function admin_send_tuan_buy_create_msg($tuanBuyId=null){
         $this->autoRender = false;
-        $tuan_buy_id = $_REQUEST['tuan_buy_id'];
+        $tuan_buy_id = $tuanBuyId?$tuanBuyId:$_REQUEST['tuan_buy_id'];
         $msg_element = get_tuan_msg_element($tuan_buy_id,false);
         if(empty($msg_element)) {
             echo json_encode(array('success' => false,'msg' => '该团购不存在,亲先创建..'));
