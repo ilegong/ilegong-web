@@ -3,12 +3,22 @@ $(function(){
     var tuanProducts = $('.tuan-products');
 
     var tuanStatus=$('.tuan-status');
+    var tuanType = $('.tuan-type');
     var leftSelectData = [];
     var tuan_name = $('#tuan_name');
     function setTuanStatus(){
         var tuanBuyingsForm = $('.tuan-buyings-form');
         var statusType = tuanBuyingsForm.data('status-type');
         var tStatus = tuanBuyingsForm.data('tuan-status');
+        var tType = tuanBuyingsForm.data('tuan-type');
+        $("option",tuanType).each(function(){
+            if($(this).val() == tType){
+                $(this).attr('selected', 'selected');
+            }
+            else{
+                $(this).removeAttr('selected');
+            }
+        });
         $("option", tuanStatus).each(function(){
             if($(this).val() == tStatus){
               $(this).attr('selected', 'selected');
@@ -16,7 +26,7 @@ $(function(){
             else{
               $(this).removeAttr('selected');
             }
-        })
+        });
         $(".status-type").each(function(){
           if($(this).val() == statusType){
             $(this).attr('checked', 'checked');

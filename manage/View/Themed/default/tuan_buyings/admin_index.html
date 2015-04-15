@@ -2,7 +2,7 @@
 <hr/>
 <h1>团购管理</h1>
 <hr/>
-<form class="form-inline tuan-buyings-form" method="get" action="/manage/admin/tuan_buyings/index" data-status-type="{{$status_type}}" data-tuan-status="{{$tuan_status}}">
+<form class="form-inline tuan-buyings-form" method="get" action="/manage/admin/tuan_buyings/index" data-status-type="{{$status_type}}" data-tuan-status="{{$tuan_status}}" data-tuan-type="{{$cons_type}}">
     <div style="padding-bottom: 10px;">
         <input type="hidden" name="noajax" value="true">
 
@@ -20,7 +20,7 @@
             </select>
         </div>
         <div class="form-group">
-            <select class="form-control" name="cons_type">
+            <select class="form-control tuan-type" name="cons_type">
                 <option value="-1">选择发货方式</option>
                 <option value="0">团满发货</option>
                 <option value="1">团满准备发货</option>
@@ -196,7 +196,7 @@
         '//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js',
         '//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js',
         'jquery.iframe-transport.js',
-        'manage/tuan_buyings/index.js',
+        'manage/tuan_buyings/index.js?v1',
 
     ));
 }}

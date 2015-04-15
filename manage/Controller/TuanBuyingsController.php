@@ -87,6 +87,7 @@ class TuanBuyingsController extends AppController{
             $tuan_buying['tuan_product'] = $tuan_products[$tuanBuying['pid']];
 
         }
+        $this->set('cons_type',$cons_type);
         $this->set('tuan_buyings', $tuan_buyings);
         $this->set('team_id',$team_id);
         $this->set('product_id',$product_id);
