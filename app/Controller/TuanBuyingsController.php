@@ -321,6 +321,7 @@ class TuanBuyingsController extends AppController{
         $mobile = $_POST['mobile'];
         $name = $_POST['name'];
         $uid = $this->currentUser['id'];
+        $way = $_POST['way'];
         if (empty($uid)) {
             $this->log("not login for tuan order:".$cart_id);
             echo json_encode(array('success'=> false));
@@ -377,7 +378,7 @@ class TuanBuyingsController extends AppController{
                 }
             }
             //TODO to set
-            if($_POST['way'] == 'kddj'){
+            if($way == 'kddj'){
                 if($pid==876){
                     //蔬菜加10元邮费
                     $total_price = $total_price+10;
@@ -397,7 +398,7 @@ class TuanBuyingsController extends AppController{
                 $consignees['creator'] = $uid;
             }
             $this->OrderConsignees->save($consignees);
-            $order = $this->Order->createTuanOrder($tuan_buy_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id);
+            $order = $this->Order->createTuanOrder($tuan_buy_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way);
             $order_id = $order['Order']['id'];
             $score_consumed = 0;
             $spent_on_order = intval($this->Session->read(self::key_balanced_scores()));
@@ -426,13 +427,13 @@ class TuanBuyingsController extends AppController{
             }else{
                 //$consign_time = friendlyDateFromStr($tuanBuy['TuanBuying']['consign_time'], FFDATE_CH_MD);
                 $cart_name = $cart_info['Cart']['name'];
-                if($tuan_info['TuanTeam']['type'] == 1 && $_POST['way'] == 'sf'){
+                if($tuan_info['TuanTeam']['type'] == 1 && $way == 'sf'){
                     $cart_name = $cart_name.'(顺丰到付)';
                 }
-                if($tuan_info['TuanTeam']['type'] == 1 && $_POST['way'] == 'baoyou'){
+                if($tuan_info['TuanTeam']['type'] == 1 && $way == 'baoyou'){
                     $cart_name = $cart_name.'(包邮)';
                 }
-                if($tuan_info['TuanTeam']['type'] == 1 && $_POST['way'] == 'kddj'){
+                if($tuan_info['TuanTeam']['type'] == 1 && $way == 'kddj'){
                     $cart_name = $cart_name.'(快递到家)';
                 }
                 $this->Cart->update(array('name' => '\'' . $cart_name . '\'' ), array('id' => $cart_id));

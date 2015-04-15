@@ -10,7 +10,7 @@ class TuanController extends AppController{
 
     var $name = 'Tuan';
 
-    var $uses = array('TuanTeam','TuanBuying','Order','Cart','TuanBuyingMessages','TuanProduct');
+    var $uses = array('TuanTeam','TuanBuying','Order','Cart','TuanBuyingMessages','TuanProduct','ConsignmentDate');
 
     /**
      * query tuan orders
@@ -26,8 +26,14 @@ class TuanController extends AppController{
         $con_address = $_REQUEST['con_address'];
         $start_stat_datetime = $_REQUEST['start_stat_datetime'];
         $end_stat_datetime = $_REQUEST['end_stat_datetime'];
+        $tuan_con_date = $_REQUEST['tuan_con_date'];
+        $product_con_date = $_REQUEST['product_con_date'];
         $query_tb = array();
         $should_count_nums = false;
+
+        if(!empty($tuan_con_date)){
+            $query_tb['DATE(consign_time)'] = $tuan_con_date;
+        }
         if(!empty($team_id)&&$team_id!='-1'){
             $query_tb['tuan_id']=$team_id;
         }
@@ -61,6 +67,7 @@ class TuanController extends AppController{
         }
 
         $payNotifyModel = ClassRegistry::init('PayNotify');
+        //??why
         $payNotifyModel->query("update cake_pay_notifies set order_id =  substring_index(substring_index(out_trade_no,'-',2),'-',-1) where status = 6");
         $join_conditions = array(
             array(
@@ -72,6 +79,31 @@ class TuanController extends AppController{
                 'type' => 'LEFT',
             )
         );
+
+        if(!empty($product_con_date)&&!empty($product_id)){
+            $conDate = $this->ConsignmentDate->find('first',array(
+                'conditions' => array(
+                    'product_id' => $product_id,
+                    'send_date' => $product_con_date
+                )
+            ));
+            if(!empty($conDate)){
+                $conDateId = $conDate['ConsignmentDate']['id'];
+                $cartOrderIds = $this->Cart->find('all',array(
+                    'conditions' => array(
+                        'product_id' => $product_id,
+                        'consignment_date' => $conDateId
+                    ),
+                    'fields' => array(
+                        'order_id'
+                    )
+                ));
+                if(!empty($cartOrderIds)){
+                    $cartOrderIds = Hash::extract($cartOrderIds,'{n}.Cart.order_id');
+                    $order_query_cond['Order.id'] = $cartOrderIds;
+                }
+            }
+        }
 
         if(!empty($start_stat_datetime)){
             $order_query_cond['Order.created <'] = $end_stat_datetime;
@@ -137,6 +169,7 @@ class TuanController extends AppController{
                 'conditions'=>array(
                     'order_id' => $order_ids,
                 )));
+            //显示规格数量
             if($should_count_nums){
                 $order_id_strs = '('.join(',',$order_ids).')';
                 $product_count = $this->Cart->query('select sum(num) from cake_carts where order_id in '.$order_id_strs);

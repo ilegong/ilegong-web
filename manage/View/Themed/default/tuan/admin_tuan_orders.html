@@ -46,20 +46,32 @@
           <br/>
           <br/>
           <div class="form-group">
+              <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$tuan_con_date}}" placeholder="团购发货日期" name="tuan_con_date">
+          </div>
+          <div class="form-group">
+              <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$product_con_date}}" placeholder="产品排期" name="product_con_date">
+          </div>
+          <div class="form-group">
               <input type="text" name="con_address" class="form-control" placeholder="地址" value="{{$con_address}}">
           </div>
           <div class="form-group">
-              <label class="sr-only">收件人姓名</label>
               <input type="text" class="form-control" name="con_name" placeholder="姓名" value="{{$con_name}}">
           </div>
           <div class="form-group">
-              <label class="sr-only">收件人手机号</label>
               <input type="text" class="form-control" name="con_phone" placeholder="手机号" value="{{$con_phone}}">
           </div>
           <div class="form-group">
-              <label class="sr-only">订单ID</label>
               <input type="text" name="order_id" class="form-control" value="{{$order_id}}" placeholder="订单ID">
           </div>
+          <div class="form-group">
+              <div class="checkbox">
+                  <label>
+                      <input name="export" type="checkbox"> 导出订单
+                  </label>
+              </div>
+          </div>
+          <br/>
+          <br/>
           <button type="submit" class="btn btn-primary text-center">查看订单</button>
       </div>
   </form>
@@ -104,6 +116,7 @@
     <!--</div>-->
   <!--</form>-->
 <!--</div>-->
+
 <hr/>
 <div>
     <h1>订单总计<span style="color: red">{{count($orders)}}</span>个，金额<span style="color: red">{{$total_money}}</span> {{if $orders_invalid === 0 || $orders_invalid}}<small>（待支付/已取消：{{$orders_invalid}}个 {{$total_unpaid}}元)</small>{{/if}}</h1>
@@ -120,7 +133,7 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <td>订单号</td><td>用户ID</td><td>订单状态</td><td>商品</td><td>规格</td><td>份数</td><td>总价</td><td>创建时间</td><td>付款时间</td><td>截单时间</td><td>发货时间</td><td>收件人</td><td>团队名称</td><td>收件地址</td><td>电话</td><td>支付方式</td><td>备注</td>
+            <td>订单号</td><td>用户ID</td><td>订单状态</td><td>商品</td><td>规格</td><td>份数</td><td>总价</td><td>创建时间</td><td>付款时间</td><td>截单时间</td><td>配送方式</td><td>发货时间</td><td>收件人</td><td>团队名称</td><td>收件地址</td><td>电话</td><td>支付方式</td><td>备注</td>
         </tr>
     </thead>
     <tbody>
@@ -160,6 +173,17 @@
                 <td>{{$order['Order']['pay_time']}}</td>
                 <td>
                     {{$tuan_buys[$order['Order']['member_id']]['end_time']}}
+                </td>
+                <td>
+                    {{if $order['Order']['ship_type']=='ziti'}}
+                        自提
+                    {{elseif $order['Order']['ship_type']=='sf'}}
+                        顺风到付
+                    {{elseif $order['Order']['ship_type']=='kddj'}}
+                        快递到家
+                    {{else}}
+                        没有标注
+                    {{/if}}
                 </td>
                 <td>
                     {{loop $order_carts[$order['Order']['id']] $cart}}
@@ -217,10 +241,22 @@
         var tuan_product = $('#tuan_product');
         var start_stat_date = $('input[name="start_stat_datetime"]');
         var end_stat_date = $('input[name="end_stat_datetime"]');
+        var tuan_con_date = $('input[name="tuan_con_date"]');
+        var product_con_date = $('input[name="product_con_date"]');
         var leftTeamSelectData = [];
         var leftProductSelectData = [];
-        start_stat_date.datetimepicker();
-        end_stat_date.datetimepicker();
+        start_stat_date.datetimepicker({
+            format: 'yyyy-mm-dd hh:ii'
+        });
+        end_stat_date.datetimepicker({
+            format: 'yyyy-mm-dd hh:ii'
+        });
+        tuan_con_date.datetimepicker({
+            format: 'yyyy-mm-dd'
+        });
+        product_con_date.datetimepicker({
+                format: 'yyyy-mm-dd'
+        });
         $.getJSON('/manage/admin/tuanTeams/api_tuan_teams',function(data){
             $.each(data,function(index,item){
                 $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo($team_id);
