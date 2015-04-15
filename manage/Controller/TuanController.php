@@ -222,6 +222,8 @@ class TuanController extends AppController{
         $this->set('order_type',$order_type);
         $this->set('order_id',$order_id);
         $this->set('con_address',$con_address);
+        $this->set('tuan_con_date',$tuan_con_date);
+        $this->set('product_con_date',$product_con_date);
     }
 
 
