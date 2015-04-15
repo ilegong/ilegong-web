@@ -40,6 +40,7 @@ class TuanBuyingsController extends AppController{
         $product_id = isset($_REQUEST['product_id']) ? $_REQUEST['product_id'] : -1;
         $status_type = isset($_REQUEST['status_type']) ? $_REQUEST['status_type'] : -1;
         $tuan_status = isset($_REQUEST['tuan_status']) ? $_REQUEST['tuan_status'] : -1;
+        $cons_type = isset($_REQUEST['cons_type'])? $_REQUEST['cons_type']:-1;
         $this->log('tuan status: '.$tuan_status);
         $con = array();
         if($team_id != -1){
@@ -47,6 +48,9 @@ class TuanBuyingsController extends AppController{
         }
         if($product_id != -1){
             $con['pid'] = $product_id;
+        }
+        if($cons_type!=-1){
+            $con['consignment_type'] = $cons_type;
         }
         if($status_type == -1){
             if($tuan_status != -1){
