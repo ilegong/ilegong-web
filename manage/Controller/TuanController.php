@@ -105,11 +105,11 @@ class TuanController extends AppController{
             }
         }
 
-        if(!empty($start_stat_datetime)){
+        if(!empty($end_stat_datetime)){
             $order_query_cond['Order.created <'] = $end_stat_datetime;
         }
 
-        if(!empty($end_stat_datetime)){
+        if(!empty($start_stat_datetime)){
             $order_query_cond['Order.created >'] = $start_stat_datetime;
         }
 
