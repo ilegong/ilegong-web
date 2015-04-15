@@ -8,19 +8,22 @@
 <div class="address clearfix" style="position:relative;">
     <span style="display:block;" class="fl">送至&nbsp;&nbsp;<a class="moreicon" href="#X"></a></span>
     <span style="display:block;" class="fl"><a class="moreicon" href="#X"></a></span>
-    <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">北京市朝阳区慈云寺东区国际3号楼2单元1203室<br />Alice  13800000000</span>
+    <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}<br />
+        {{$this->Session->read('OrderConsignee.name')}} &nbsp; {{$this->Session->read('OrderConsignee.mobilephone')}}</span>
     <a href="#X" class="address_addbtn" style=" display: none;">添加收货地址</a>
 </div>
 <div class="cart" style="margin-top: 0; padding-top: 0;">
     <div>
+        <?php $total_num = 0;?>
         {{loop $cart->brandItems $brandItem}}
             <div class="clearfix order_shop_head">
                 <a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$brandItem->id]['created'])).'/'.$brands[$brandItem->id]['slug'].'.html')}}">
                     <span><img class="radius5" src="{{$this->Html->assetUrl(small_thumb_link($brands[$brandItem->id]['coverimg']))}}" /></span>
                     <span>{{$brands[$brandItem->id]['name']}}</span>
                 </a>
-            </div>
+        </div>
             {{loop $brandItem->items $cid $item}}
+                <?php $total_num += $item->num; ?>
                 <div>
                     <ul class="clearfix" style="margin-bottom: 0;">
                         <li class="fl"><a href="{{product_link2($product_info[$item->pid])}}"><img src="{{$this->Html->assetUrl(small_thumb_link($item->img))}}" border="0" /></a></li>
@@ -46,27 +49,29 @@
                     </a>
                 </div>
             {{/loop}}
-                <a href="#X" class="favor" style="position:relative;">
-                    <span style="display:block;" class="fl">快递&nbsp;&nbsp;<span class="moreicon" style="right:10px;" href="#X"></span></span>
-                    <span style="overflow:hidden; display:block; color:#999999;">18.00元</span>
-                </a>
                 <div class="clearfix leave_words">
                     <input name="" type="text" placeholder="给卖家留言:" />
                 </div>
                 <p class="conordertuan_total">共1件商品，合计:<strong>￥308.00</strong></p>
         {{/loop}}
+        {{if $shipFee>0}}
+        <a href="#X" class="favor" style="position:relative;">
+            <span style="display:block;" class="fl">运费&nbsp;&nbsp;<span class="moreicon" style="right:10px;" href="#X"></span></span>
+            <span style="overflow:hidden; display:block; color:#999999;">{{$this->Number->precision($shipFee, 2)}}元</span>
+        </a>
+        {{/if}}
     </div>
 
 </div>
 <div class="shop_jifen" style="margin-bottom: 35px;">
     <ul class="clearfix" style=" border: 0;">
-        <li class="fl">可用125积分抵用1.25元</li>
+        <li class="fl">可用{{$score_usable}}积分抵用{{$this->Number->precision($score_usable/100, 2)}}元</li>
         <li class="fr shop_jifen_used radius10"><i></i></li>
     </ul>
 </div>
 <div class="cart_pay">
     <ul class="clearfix">
-        <li class="fl">共1件商品，总金额<strong>￥308.00</strong></li>
+        <li class="fl">共{{$total_num}}件商品，总金额<strong>{{$this->Number->precision($cart->total_price() + ($shipFee > 0?$shipFee:0), 2)}}</strong></li>
         <li class="fr"><a href="#X">提交订单</a></li>
     </ul>
 </div>
