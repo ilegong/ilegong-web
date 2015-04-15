@@ -10,7 +10,8 @@ class TuanBuyingsController extends AppController{
 
     var $name = 'TuanBuyings';
 
-    var $uses = array('TuanTeam','TuanBuying','Order','Cart','TuanBuyingMessages','TuanProduct');
+    var $uses = array('TuanTeam','TuanBuying','Order','Cart','TuanBuyingMessages','TuanProduct','TuanMsg');
+    public $components = array('Weixin');
 
     public function admin_api_tuan_buying_due(){
         $tuanBuyingId = $_REQUEST['id'];
@@ -208,20 +209,25 @@ class TuanBuyingsController extends AppController{
     }
 
     public function admin_create(){
+        $tuanTeamIds = $_REQUEST['team_ids'];
+        $tuanTeamIds = explode(',',$tuanTeamIds);
+        App::import('Controller','TuanMsg');
+
         if(!empty($this->data)){
+          foreach($tuanTeamIds as $tuanTeamId){
+            $this->data['TuanBuying']['tuan_id'] = $tuanTeamId;
             $this->data['TuanBuying']['join_num'] = 0;
             $this->data['TuanBuying']['sold_num'] = 0;
             $this->data['TuanBuying']['stTuanBuyingMessagesatus'] = 0;
             //todo created fields missing
-            App::import('Controller','TuanMsg');
-            $tuanMsgController = new TuanMsgController;
+            $this->TuanBuying->create();
             if($this->TuanBuying->save($this->data)){
                 $tuanBuyId = $this->TuanBuying->getLastInsertID();
-                $tuanMsgController->admin_send_tuan_buy_create_msg($tuanBuyId);
-                $this->redirect(array('controller' => 'tuan_buyings','action' => 'index'));
+                $this->admin_send_tuan_buy_create_msg($tuanBuyId);
             }
-
+          }
         }
+        $this->redirect(array('controller' => 'tuan_buyings','action' => 'index'));
     }
 
     public function admin_set_status(){
@@ -241,5 +247,43 @@ class TuanBuyingsController extends AppController{
     }
     public function admin_set_order_status(){
 
+    }
+
+    public function admin_send_tuan_buy_create_msg($tuanBuyId){
+        $this->autoRender = false;
+        $msg_element = get_tuan_msg_element($tuanBuyId,false);
+        if(empty($msg_element)) {
+            echo json_encode(array('success' => false,'msg' => '该团购不存在,亲先创建..'));
+            return;
+        }
+        if($msg_element['tuan_buy_status']!=0){
+            echo json_encode(array('success' => false,'msg' => '只有进行中的团购才能推送该消息.'));
+            return;
+        }
+        $consign_time = $msg_element['consign_time'];
+        $uids = $msg_element['uids'];
+        $tuan_name = $msg_element['tuan_name'];
+        $title = '您参加的'.$tuan_name.',发起了一个新的团购。';
+        $product_name = $msg_element['product_name'];
+        $product_name = $product_name.', '.$consign_time.'发货';
+        $tuan_leader = $msg_element['tuan_leader'];
+        $deatil_url = WX_HOST.'/tuan_buyings/detail/'.$tuanBuyId;
+        $remark = '点击详情，赶快和小伙伴一起团起来！';
+        foreach($uids as $uid){
+            $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
+            //TODO log fail user id
+        }
+        $this->save_msg_log(TUAN_CREATE_MSG,$tuanBuyId);
+//        echo json_encode(array('success' => true,'msg' => '推送模板消息成功'));
+    }
+
+    private function save_msg_log($type,$tb_id){
+        $msg_log = array(
+            'type' => $type,
+            'flag' => $tb_id,
+            'send_date' => date(FORMAT_DATETIME)
+        );
+        $this->TuanBuyingMessages->create();
+        $this->TuanBuyingMessages->save($msg_log);
     }
 }

@@ -4,16 +4,22 @@
     <h1>创建团购</h1>
     <hr/>
     <form class="form-horizontal tuan-form" method="post" action="/manage/admin/tuan_buyings/create" novalidate="novalidate" data-noajax="true">
+        <!--<div class="form-group">-->
+            <!--<label class="col-sm-2 control-label">团队</label>-->
+            <!--<div class="col-sm-9">-->
+                <!--<input type="text" name="tuan_name" id="tuan_name" class="form-control col-sm-3" style="width:35%;" placeholder="搜索团队">&nbsp;&nbsp;&nbsp;-->
+                <!--<select class="controls form-control tuan-teams col-sm-5" name="data[TuanBuying][tuan_id]" style="width:58%;margin-left: 10px;" value="{{$this->data[TuanBuying][tuan_id]}}">-->
+                    <!--<option value="-1">请选择团队</option>-->
+                <!--</select>-->
+                <!--<br/><br/><br/>-->
+                <!--<div class="text-warning">选择"朋友说美食团"，表示发起一个大团</div>-->
+            <!--</div>-->
+        <!--</div>-->
         <div class="form-group">
             <label class="col-sm-2 control-label">团队</label>
-            <div class="col-sm-9">
-                <input type="text" name="tuan_name" id="tuan_name" class="form-control col-sm-3" style="width:35%;" placeholder="搜索团队">&nbsp;&nbsp;&nbsp;
-                <select class="controls form-control tuan-teams col-sm-5" name="data[TuanBuying][tuan_id]" style="width:58%;margin-left: 10px;" value="{{$this->data[TuanBuying][tuan_id]}}">
-                    <option value="-1">请选择团队</option>
-                </select>
-                <br/><br/><br/>
-                <div class="text-warning">选择"朋友说美食团"，表示发起一个大团</div>
+            <div class="col-sm-9 controls tuan-teams-list">
             </div>
+            <input type="hidden" name="team_ids" id="team_ids">
         </div>
         <div class="form-group" name="product_id">
             <label class="col-sm-2 control-label">商品</label>
@@ -95,4 +101,4 @@
     </form>
 </div>
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
-{{$this->Html->script(array('manage/tuan_buyings/new.js?v1'))}}
+{{$this->Html->script(array('manage/tuan_buyings/new.js?v2'))}}

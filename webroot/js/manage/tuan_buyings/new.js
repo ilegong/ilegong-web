@@ -12,6 +12,7 @@ $(function(){
     var tuanTeams = $('.tuan-teams');
     var leftSelectData = [];
     var tuan_name = $('#tuan_name');
+    var team_ids = $('#team_ids');
     $.getJSON('/manage/admin/tuanTeams/api_tuan_teams',function(data){
         $.each(data,function(index,item){
             $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo(tuanTeams);
@@ -26,11 +27,27 @@ $(function(){
             $('<option value="' + tuan_product['product_id'] + '">' + tuan_product['alias'] + '</option>').appendTo(tuanProducts);
         });
     });
+
+    var tuanTeamList = $('.tuan-teams-list');
+    $.getJSON('/manage/admin/tuanTeams/api_tuan_teams',function(data){
+        $.each(data,function(index,item){
+            if((index+1)%6==0){
+                $('<input type="checkbox" value="'+item['id']+'"name="team_id">'+ item['tuan_name'] + '</input>'+'</br>').appendTo(tuanTeamList);
+            }else{
+                $('<input type="checkbox" value="'+item['id']+'"name="team_id">'+ item['tuan_name'] + '</input>').appendTo(tuanTeamList);
+            }
+        });
+    });
     var tuanEndTime = $('.tuan-end-time');
     var tuanTargetNum = $('.tuan-target-num');
     $(".tuan-form").submit(function(e){
-        var invalidTuanTeam = tuanTeams.val() == -1;
-        tuanTeams.parents('.form-group').toggleClass('has-error', invalidTuanTeam);
+//        var invalidTuanTeam = tuanTeams.val() == -1;
+//        tuanTeams.parents('.form-group').toggleClass('has-error', invalidTuanTeam);
+        var tuanTeamId = new Array();
+        $("input[type='checkbox']:checked").each(function(){
+            tuanTeamId.push($(this).val());
+        });
+        team_ids.val(tuanTeamId);
         var invalidTuanProduct = tuanProducts.val() == -1;
         tuanProducts.parents('.form-group').toggleClass('has-error', invalidTuanProduct);
         var invalidTuanEndTime = tuanEndTime.val() == '';
@@ -39,9 +56,14 @@ $(function(){
         var invalidTargetNum = isNaN(targetNum) || targetNum < 1;
         tuanTargetNum.parents('.form-group').toggleClass('has-error', invalidTargetNum);
 
-        if(invalidTuanTeam || invalidTuanProduct || invalidTuanEndTime || invalidTargetNum){
+        if(invalidTuanProduct || invalidTuanEndTime || invalidTargetNum){
             return false;
         }
+//        $.post('/manage/admin/tuanBuyings/create',{'tuanTeamId':tuanTeamId},function(data){
+//           if(data.success){
+//               bootbox.alert('团队创建成功');
+//           }
+//        });
         return true;
     });
 
