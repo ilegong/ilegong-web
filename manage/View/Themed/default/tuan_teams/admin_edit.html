@@ -42,6 +42,14 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-2 control-label">团队所属区域</label>
+            <div class="col-sm-9">
+                <input type="hidden"  id="county_id" value="{{$this->data[TuanTeam][county_id]}}">
+                <select class="form-control county-type" name="data[TuanTeam][county_id]">
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-2 control-label">显示地址</label>
             <div class="col-sm-9 controls">
                 <input type="text" class="form-control" name="data[TuanTeam][address]" value="{{$tuanTeam[address]}}"/>
@@ -90,3 +98,5 @@
         <!--{{$this->Form->end();}}-->
     </form>
 </div>
+
+{{$this->Html->script(array('manage/tuan_teams/edit.js'))}}

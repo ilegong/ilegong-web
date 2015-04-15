@@ -9,7 +9,7 @@ class TuanTeamsController extends AppController{
 
     var $name = 'TuanTeams';
 
-    var $uses = array('TuanTeam', 'TuanBuying');
+    var $uses = array('TuanTeam', 'TuanBuying', 'Location');
 
 
     /**
@@ -77,6 +77,19 @@ class TuanTeamsController extends AppController{
         $teams = $this->TuanTeam->find('all');
         $teams = Hash::extract($teams,'{n}.TuanTeam');
         echo json_encode($teams);
+    }
+
+    public function admin_api_tuan_county(){
+        $this->autoRender = false;
+        $county_ids = $this->Location->find('all',array(
+            'conditions' => array(
+                'parent_id' => 110100
+            )
+        ));
+        $county_ids = Hash::extract($county_ids,'{n}.Location');
+        echo json_encode($county_ids);
+
+
     }
 
 }

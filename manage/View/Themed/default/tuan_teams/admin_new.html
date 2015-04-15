@@ -38,6 +38,12 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-2 control-label">团队所属区域</label>
+            <select class="controls form-control tuan-teams col-sm-5" name="data[TuanTeam][county_id]" style="width:74%;margin-left: 9px;" value="{{$this->data[TuanTeam][county_id]}}">
+                <option value="-1">请选择区域</option>
+            </select>
+        </div>
+        <div class="form-group">
             <label class="col-sm-2 control-label">显示地址</label>
             <div class="col-sm-9 controls">
                 <input name="data[TuanTeam][address]" value="{{$this->data[TuanTeam][address]}}" class="form-control" type="text" id="address" placeholder="搜狐媒体好邻居店">
