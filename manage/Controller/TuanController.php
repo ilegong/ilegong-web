@@ -152,6 +152,7 @@ class TuanController extends AppController{
             'conditions' => $order_query_cond,
             'joins' => $join_conditions,
             'fields' => array('Order.*', 'Pay.trade_type'),
+            'order' => 'Order.consignee_address DESC'
         ));
 
         if(!empty($orders)){
@@ -168,7 +169,8 @@ class TuanController extends AppController{
             $carts = $this->Cart->find('all',array(
                 'conditions'=>array(
                     'order_id' => $order_ids,
-                )));
+                )
+            ));
             //显示规格数量
             if($should_count_nums){
                 $order_id_strs = '('.join(',',$order_ids).')';
@@ -202,7 +204,6 @@ class TuanController extends AppController{
             //排期
             $consign_ids = array_unique(Hash::extract($carts,'{n}.Cart.consignment_date'));
             if(count($consign_ids)!=1 || !empty($consign_ids[0])){
-                $this->loadModel('ConsignmentDate');
                 $consign_dates = $this->ConsignmentDate->find('all',array(
                     'conditions' => array(
                         'id' => $consign_ids
