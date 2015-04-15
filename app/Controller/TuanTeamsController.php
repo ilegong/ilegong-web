@@ -27,7 +27,7 @@ class TuanTeamsController extends AppController{
         }
         $this->loadModel('TuanBuying');
         $tuan_buyings = $this->TuanBuying->find('all', array(
-            'conditions' => array('tuan_id' => $tuan_id),
+            'conditions' => array('tuan_id' => $tuan_id,'status'=>0),
             'order' => array('TuanBuying.end_time DESC'),
         ));
         $pids = array_unique(Hash::extract($tuan_buyings, '{n}.TuanBuying.pid'));
