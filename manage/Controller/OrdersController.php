@@ -3,6 +3,10 @@
 class OrdersController extends AppController{
 	
 	var $name = 'Orders';
+
+    public function admin_order_remark(){
+
+    }
 	
 	public function admin_view($id){
 		$this->loadModel('Cart');
