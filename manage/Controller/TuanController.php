@@ -91,35 +91,37 @@ class TuanController extends AppController{
             )
         );
         //query cons date
-        if(!empty($product_con_date)&&($product_id != -1||$query_product_id != -1)){
+        if($product_id != -1||$query_product_id != -1){
             $pid = -1;
             if($product_id != -1){
                 $pid = $product_id;
             }elseif($query_product_id != -1){
                 $pid = $query_product_id;
             }
-            $conDate = $this->ConsignmentDate->find('first',array(
-                'conditions' => array(
-                    'product_id' => $pid,
-                    'send_date' => $product_con_date
-                )
-            ));
-            if(!empty($conDate)){
-                $conDateId = $conDate['ConsignmentDate']['id'];
-                $cartOrderIds = $this->Cart->find('all',array(
+            if(!empty($product_con_date)){
+                $conDate = $this->ConsignmentDate->find('first',array(
                     'conditions' => array(
                         'product_id' => $pid,
-                        'consignment_date' => $conDateId
-                    ),
-                    'fields' => array(
-                        'order_id'
+                        'send_date' => $product_con_date
                     )
                 ));
+                if(!empty($conDate)){
+                    $conDateId = $conDate['ConsignmentDate']['id'];
+                    $cartOrderIds = $this->Cart->find('all',array(
+                        'conditions' => array(
+                            'product_id' => $pid,
+                            'consignment_date' => $conDateId
+                        ),
+                        'fields' => array(
+                            'order_id'
+                        )
+                    ));
+                }
             }else{
                 //查询产品的ID
                 $cartOrderIds = $this->Cart->find('all',array(
                     'conditions' => array(
-                        'product_id' => $query_product_id
+                        'product_id' => $pid
                     ),
                     'fields' => array(
                         'order_id'
