@@ -47,12 +47,18 @@ class TuanBuyingsController extends AppController{
         $pid=$tuan_b['TuanBuying']['pid'];
         //$end_time =  friendlyDateFromStr($tuan_b['TuanBuying']['end_time'], FORMAT_DATETIME);
         $end_time = $tuan_b['TuanBuying']['end_time'];
-        //芒果
-        if($pid==851){
-            $consign_time = empty($tuan_b['TuanBuying']['consign_time'])? '成团后现摘' : friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
+
+        if(empty($tuan_b['TuanBuying']['consign_time'])){
+            if($tuan_b['TuanBuying']['consignment_type']==0){
+                $consign_time = '成团后发货';
+            }
+            if($tuan_b['TuanBuying']['consignment_type']==1){
+                $consign_time = '成团后现摘';
+            }
         }else{
-            $consign_time = empty($tuan_b['TuanBuying']['consign_time'])? '成团后发货' : friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
+            $consign_time = friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
         }
+
         $this->set(compact('pid', 'consign_time', 'tuan_buy_id', 'tuan_team', 'end_time'));
         $sold_num = $tuan_b['TuanBuying']['sold_num'];
         $max_num = $tuan_b['TuanBuying']['max_num'];
