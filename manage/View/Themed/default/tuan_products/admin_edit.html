@@ -5,7 +5,7 @@
         ?>
 
         <form class="form-horizontal" method="post" action="/manage/admin/tuan_products/update/{{$id}}" data-noajax="1">
-            <input type="hidden" value="{{$tuanProduct['id']}}">
+            <input type="hidden" value="{{$tuanProduct['id']}}" name="data[TuanProduct][id]">
             <div class="form-group">
                 <label for="product_id" class="col-sm-2 control-label">产品编号</label>
                 <div class="col-sm-10">
