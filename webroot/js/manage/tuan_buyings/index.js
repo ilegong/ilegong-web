@@ -6,6 +6,14 @@ $(function(){
     var tuanType = $('.tuan-type');
     var leftSelectData = [];
     var tuan_name = $('#tuan_name');
+
+    var $check_all_tb = $('#check_all_tb');
+
+    $check_all_tb.click(function(e){
+        var table= $(e.target).closest('table');
+        $('td input:checkbox',table).prop('checked',this.checked);
+    });
+
     function setTuanStatus(){
         var tuanBuyingsForm = $('.tuan-buyings-form');
         var statusType = tuanBuyingsForm.data('status-type');

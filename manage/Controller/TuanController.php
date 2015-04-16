@@ -31,33 +31,31 @@ class TuanController extends AppController{
         $product_con_date = $_REQUEST['product_con_date'];
         $query_tb = array();
         $should_count_nums = false;
-
         if(!empty($tuan_con_date)){
             $query_tb['DATE(consign_time)'] = $tuan_con_date;
         }
         if(!empty($team_id)&&$team_id != -1){
             $query_tb['tuan_id']=$team_id;
         }
+
         if($product_id != -1){
             $query_tb['pid'] = $product_id;
             $should_count_nums = true;
             $this->set('should_count_nums',$should_count_nums);
         }
 
-
         $tuan_buys = $this->TuanBuying->find('all',array(
             'conditions' => $query_tb
         ));
 
-        if(empty($tuan_buys)){
+        if(!empty($tuan_buys)){
             $p_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.pid');
-        }else{
-            //统计规格
-            if($query_product_id!=-1){
-                $should_count_nums = true;
-                $this->set('should_count_nums',$should_count_nums);
-                $p_ids = array($query_product_id);
-            }
+        }
+        //统计规格
+        if($query_product_id!=-1){
+            $should_count_nums = true;
+            $this->set('should_count_nums',$should_count_nums);
+            $p_ids = array($query_product_id);
         }
 
         $spec_groups = $this->ProductSpecGroup->find('all',array(
@@ -131,6 +129,22 @@ class TuanController extends AppController{
             if(!empty($cartOrderIds)){
                 $cartOrderIds = Hash::extract($cartOrderIds,'{n}.Cart.order_id');
                 $order_query_cond['Order.id'] = $cartOrderIds;
+            }
+        }else{
+            if(!empty($p_ids)){
+                //查询产品的ID
+                $cartOrderIds = $this->Cart->find('all',array(
+                    'conditions' => array(
+                        'product_id' => $p_ids
+                    ),
+                    'fields' => array(
+                        'order_id'
+                    )
+                ));
+                if(!empty($cartOrderIds)){
+                    $cartOrderIds = Hash::extract($cartOrderIds,'{n}.Cart.order_id');
+                    $order_query_cond['Order.id'] = $cartOrderIds;
+                }
             }
         }
 
