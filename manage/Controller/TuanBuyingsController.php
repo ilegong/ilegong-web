@@ -171,6 +171,12 @@ class TuanBuyingsController extends AppController{
             }
         }
     }
+
+    public function admin_batch_set_status(){
+        $this->autoRender = false;
+
+    }
+
     /**
      * set tuan_buying status
      */

@@ -246,7 +246,7 @@ class TuanController extends AppController{
         $this->set('team_id',$team_id);
         $this->set('product_id',$product_id);
         if(empty($start_stat_datetime)){
-            $start_stat_datetime = date('Y-m-d H:i',strtotime('-14 days'));
+            $start_stat_datetime = date('Y-m-d H:i',strtotime('-7 days'));
         }
         $this->set('start_stat_datetime',$start_stat_datetime);
         if(empty($end_stat_datetime)){

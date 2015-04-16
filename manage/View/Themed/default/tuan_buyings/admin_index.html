@@ -57,7 +57,7 @@
 <table class="table table-bordered table-condensed table-responsive">
     <thead>
     <tr>
-        <td>团购ID</td><td>团名称</td><td>商品/类别</td><td>发货类型</td><td>团购价</td><td>参团人数</td><td>售出份数/目标</td><td>创建时间</td><td>是否完成(截单时间)</td><td>是否延期</td><td>发货/退款</td><td>操作</td>
+        <td>选择</td><td>团购ID</td><td>团名称</td><td>商品/类别</td><td>发货类型</td><td>团购价</td><td>参团人数</td><td>售出份数/目标</td><td>创建时间</td><td>是否完成(截单时间)</td><td>是否延期</td><td>发货/退款</td><td>操作</td>
     </tr>
     </thead>
     <tbody>
@@ -77,6 +77,7 @@
         }
     ?>
     <tr data-id="{{$tuanBuying['id']}}" data-leader-name="{{$tuanTeam['leader_name']}}" data-leader-id="{{$tuanTeam['leader_id']}}" data-product-name="{{$tuanProduct[alias]}}" class="{{if $tuanBuying['status']==1}} warning {{elseif $tuanBuying['status']==11}} success {{elseif $tuanBuying['status']==2}} danger {{elseif $tuanBuying['status']==21}} active {{/if}}">
+        <td><input type="checkbox" value="{{$tuanBuying['id']}}" name="check_tuan_buy_id"></td>
         <td>{{$tuanBuying['id']}}</td>
         <td>{{$tuanTeam['tuan_name']}}</td>
         <td>{{$tuanProduct['alias']}}/{{$tuanTeam['type']==1?大团:小团}}</td>
