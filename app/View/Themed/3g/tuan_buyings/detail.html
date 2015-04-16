@@ -246,6 +246,8 @@
                 {{else}}
                     {{if $tuan_buy_status == 2}}
                     <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已取消</a>
+                    {{if $tuan_buy_status == 1}}
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已完成</a>
                     {{elseif $exceed_time}}
                     <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
                     {{elseif $tuan_buy_status == 0}}

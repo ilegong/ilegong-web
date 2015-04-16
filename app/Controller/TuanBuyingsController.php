@@ -36,24 +36,30 @@ class TuanBuyingsController extends AppController{
             $this->__message('该团不存在', '/tuan_teams/mei_shi_tuan');
         }
         $current_time = time();
+        $exceed_time = false;
         if(strtotime($tuan_b['TuanBuying']['end_time']) < $current_time){
-            $this->set('exceed_time', true);
+            $exceed_time = true;
         }
+        $this->set('exceed_time', $exceed_time);
+        $tuan_buy_status = 0;
         if($tuan_b['TuanBuying']['status'] == 0){
-            $this->set('tuan_buy_status', 0);
-        }elseif($tuan_b['TuanBuying']['status'] == 2 || $tuan_b['TuanBuying']['status'] == 21 ){
-            $this->set('tuan_buy_status', 2);
+            $tuan_buy_status = 0;
+        }elseif($tuan_b['TuanBuying']['status'] == 2 || $tuan_b['TuanBuying']['status'] == 21){
+            $tuan_buy_status = 2;
+        }elseif($tuan_b['TuanBuying']['status']==11 || $tuan_b['TuanBuying']['status']==1){
+            $tuan_buy_status = 1;
         }
+        $this->set('tuan_buy_status', $tuan_buy_status);
         $pid=$tuan_b['TuanBuying']['pid'];
-        //$end_time =  friendlyDateFromStr($tuan_b['TuanBuying']['end_time'], FORMAT_DATETIME);
         $end_time = $tuan_b['TuanBuying']['end_time'];
-
+        $tuan_buy_type = $tuan_b['TuanBuying']['consignment_type'];
+        //根据发货类型显示
         if(empty($tuan_b['TuanBuying']['consign_time'])){
-            if($tuan_b['TuanBuying']['consignment_type']==0){
-                $consign_time = '成团后发货';
+            if($tuan_buy_type==0){
+                $consign_time='成团后发货';
             }
-            if($tuan_b['TuanBuying']['consignment_type']==1){
-                $consign_time = '成团后现摘';
+            if($tuan_buy_type==1){
+                $consign_time='成团后现摘';
             }
         }else{
             $consign_time = friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
@@ -77,7 +83,6 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_id',$tuan_b['TuanBuying']['tuan_id']);
         $target_num = max($tuan_b['TuanBuying']['target_num'], 1);
         $this->set('target_num', $target_num);
-        $tuan_buy_type = $tuan_b['TuanBuying']['consignment_type'];
         if($tuan_buy_type==2){
             //排期
             $consignment_dates = consignment_send_date($pid);
