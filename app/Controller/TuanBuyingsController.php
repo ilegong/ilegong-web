@@ -47,7 +47,7 @@ class TuanBuyingsController extends AppController{
             $tuan_buy_status = 0;
         }elseif($tuan_b['TuanBuying']['status'] == 2 || $tuan_b['TuanBuying']['status'] == 21){
             $tuan_buy_status = 2;
-        }elseif($tuan_b['TuanBuying']['status']==11 || $tuan_b['TuanBuying']['status']==1){
+        }elseif($tuan_b['TuanBuying']['status'] == 11 || $tuan_b['TuanBuying']['status'] == 1){
             $tuan_buy_status = 1;
         }
         $this->set('tuan_buy_status', $tuan_buy_status);
@@ -57,7 +57,8 @@ class TuanBuyingsController extends AppController{
                 'conditions' => array(
                     'pid' => $tuan_b['TuanBuying']['pid'],
                     'status' => 0,
-                    'end_time >' => date('Y-m-d H:i')
+                    'end_time >' => date('Y-m-d H:i'),
+                    'tuan_id' => $tuan_b['TuanBuying']['tuan_id']
                 ),
                 'order' => array('id DESC')
             ));
