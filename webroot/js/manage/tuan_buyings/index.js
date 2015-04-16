@@ -9,10 +9,17 @@ $(function(){
 
     var $check_all_tb = $('#check_all_tb');
 
+    var $batch_complete = $('#batch_complete');
+
+    var $batch_cancel = $('#batch_cancel');
+
+
     $check_all_tb.click(function(e){
         var table= $(e.target).closest('table');
         $('td input:checkbox',table).prop('checked',this.checked);
     });
+
+
 
     function setTuanStatus(){
         var tuanBuyingsForm = $('.tuan-buyings-form');

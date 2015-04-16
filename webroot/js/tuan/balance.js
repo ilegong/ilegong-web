@@ -4,6 +4,7 @@
 var priceDom = $(".conordertuan_total strong");
 var totalPriceDom = $(".cart_pay .fl strong");
 var CartDomName = "input[name='shopCart']";
+var shopName = '';
 function editCartNum(id, num) {
     $('.shop_jifen_used').html("");
     var cartPrice = $('#pamount-' + id).data('price') * num;
@@ -117,7 +118,7 @@ $('#confirm_next').on('click',function(e){
         type: "POST",
         dataType: "json",
         url: "/tuan_buyings/pre_order",
-        data: {name: name, mobile: mobile, cart_id: cart_id, tuan_buy_id: tuan_buy_id, tuan_id: tuan_id, address:address, way:way },
+        data: {name: name, mobile: mobile, cart_id: cart_id, tuan_buy_id: tuan_buy_id, tuan_id: tuan_id, address:address, way:way ,shop_name:shopName},
         success: function (a) {
             if (a.success) {
                 $("#confirm_next").attr('data-disable', 'true');
@@ -161,7 +162,7 @@ function setData(area_id){
     var $chose_item = '';
     $.each(chose_address,function(index,item){
         if(item['not_shop']){
-            $chose_item +=' <p>'+item['address']+'</p>';
+            $chose_item +=' <p data-shop-name="'+item['shop_name']+'">'+item['address']+'</p>';
         }else{
             $chose_item +=' <p>'+item['address']+' 好邻居便利店</p>';
         }
@@ -172,6 +173,7 @@ function setData(area_id){
         that.on("click",function(){
             that.css("background-color","#eeeeee");
             $("#chose_address").html(that.text());
+            shopName = that.data('shop-name');
             tb_remove();
         })
     });

@@ -347,6 +347,7 @@ class TuanBuyingsController extends AppController{
         $tuan_buy_id = $_POST['tuan_buy_id'];
         $mobile = $_POST['mobile'];
         $name = $_POST['name'];
+        $shop_name = $_POST['shop_name'];
         $uid = $this->currentUser['id'];
         $way = $_POST['way'];
         if (empty($uid)) {
@@ -425,7 +426,7 @@ class TuanBuyingsController extends AppController{
                 $consignees['creator'] = $uid;
             }
             $this->OrderConsignees->save($consignees);
-            $order = $this->Order->createTuanOrder($tuan_buy_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way);
+            $order = $this->Order->createTuanOrder($tuan_buy_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, $shop_name);
             $order_id = $order['Order']['id'];
             $score_consumed = 0;
             $spent_on_order = intval($this->Session->read(self::key_balanced_scores()));
