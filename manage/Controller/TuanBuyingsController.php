@@ -174,7 +174,12 @@ class TuanBuyingsController extends AppController{
 
     public function admin_batch_set_status(){
         $this->autoRender = false;
-
+        $res = array();
+        $tuan_buy_ids = $_REQUEST['tuan_buy_ids'];
+        $status = $_REQUEST['status'];
+        $tuan_buy_ids = explode(',',$tuan_buy_ids);
+        $this->TuanBuying->updateAll(array('status' => $status),array('id' => $tuan_buy_ids));
+        echo json_encode($res);
     }
 
     /**
