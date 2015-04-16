@@ -178,12 +178,13 @@
                     {{$tuan_buys[$order['Order']['member_id']]['end_time']}}
                 </td>
                 <td>
-                    {{if $order['Order']['ship_type']=='ziti'}}
+                    {{if $order['Order']['ship_mark']=='ziti'}}
                         自提
-                    {{elseif $order['Order']['ship_type']=='sf'}}
+                    {{elseif $order['Order']['ship_mark']=='sf'}}
                         顺风到付
-                    {{elseif $order['Order']['ship_type']=='kddj'}}
+                    {{elseif $order['Order']['ship_mark']=='kddj'}}
                         快递到家
+                    {{elseif $order['Order']['ship_mark']=='normal'}}
                     {{else}}
                         没有标注
                     {{/if}}
