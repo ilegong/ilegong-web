@@ -41,6 +41,7 @@ class TuanBuyingsController extends AppController{
             $exceed_time = true;
         }
         $this->set('exceed_time', $exceed_time);
+        //团购的状态
         $tuan_buy_status = 0;
         if($tuan_b['TuanBuying']['status'] == 0){
             $tuan_buy_status = 0;
@@ -50,6 +51,21 @@ class TuanBuyingsController extends AppController{
             $tuan_buy_status = 1;
         }
         $this->set('tuan_buy_status', $tuan_buy_status);
+        //tuan exceed redirect to a availble
+        if($exceed_time||$tuan_buy_status!=0){
+            $available_tuan = $this->TuanBuying->find('first',array(
+                'conditions' => array(
+                    'pid' => $tuan_b['TuanBuying']['pid'],
+                    'status' => 0,
+                    'end_time >' => date('Y-m-d H:i')
+                ),
+                'order' => array('id DESC')
+            ));
+            if(!empty($available_tuan)){
+                $available_tuan_id = $available_tuan['TuanBuying']['id'];
+                $this->redirect('/tuan_buyings/detail/'.$available_tuan_id);
+            }
+        }
         $pid=$tuan_b['TuanBuying']['pid'];
         $end_time = $tuan_b['TuanBuying']['end_time'];
         $tuan_buy_type = $tuan_b['TuanBuying']['consignment_type'];
@@ -64,7 +80,6 @@ class TuanBuyingsController extends AppController{
         }else{
             $consign_time = friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
         }
-
         $this->set(compact('pid', 'consign_time', 'tuan_buy_id', 'tuan_team', 'end_time'));
         $sold_num = $tuan_b['TuanBuying']['sold_num'];
         $max_num = $tuan_b['TuanBuying']['max_num'];
