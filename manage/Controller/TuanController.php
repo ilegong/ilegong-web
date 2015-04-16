@@ -19,6 +19,7 @@ class TuanController extends AppController{
         $this->loadModel('ProductSpecGroup');
         $team_id = $_REQUEST['team_id'];
         $product_id = $_REQUEST['product_id'];
+        $query_product_id = empty($_REQUEST['query_product_id'])? -1 : $_REQUEST['query_product_id'];
         $con_name = $_REQUEST['con_name'];
         $con_phone = $_REQUEST['con_phone'];
         $order_type = $_REQUEST['order_type'];
@@ -34,20 +35,30 @@ class TuanController extends AppController{
         if(!empty($tuan_con_date)){
             $query_tb['DATE(consign_time)'] = $tuan_con_date;
         }
-        if(!empty($team_id)&&$team_id!='-1'){
+        if(!empty($team_id)&&$team_id != -1){
             $query_tb['tuan_id']=$team_id;
         }
-        if($product_id!=-1){
+        if($product_id != -1){
             $query_tb['pid'] = $product_id;
             $should_count_nums = true;
             $this->set('should_count_nums',$should_count_nums);
         }
 
+
         $tuan_buys = $this->TuanBuying->find('all',array(
             'conditions' => $query_tb
         ));
 
-        $p_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.pid');
+        if(empty($tuan_buys)){
+            $p_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.pid');
+        }else{
+            //统计规格
+            if($query_product_id!=-1){
+                $should_count_nums = true;
+                $this->set('should_count_nums',$should_count_nums);
+                $p_ids = array($query_product_id);
+            }
+        }
 
         $spec_groups = $this->ProductSpecGroup->find('all',array(
             'conditions' => array(
@@ -60,7 +71,7 @@ class TuanController extends AppController{
         $order_query_cond = array(
             'Order.type' => ORDER_TYPE_TUAN
         );
-
+        //add tuan_buys member id
         if(!empty($tuan_buys)){
             $tb_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.id');
             $order_query_cond['Order.member_id'] = $tb_ids;
@@ -79,11 +90,17 @@ class TuanController extends AppController{
                 'type' => 'LEFT',
             )
         );
-
-        if(!empty($product_con_date)&&!empty($product_id)){
+        //query cons date
+        if(!empty($product_con_date)&&($product_id != -1||$query_product_id != -1)){
+            $pid = -1;
+            if($product_id != -1){
+                $pid = $product_id;
+            }elseif($query_product_id != -1){
+                $pid = $query_product_id;
+            }
             $conDate = $this->ConsignmentDate->find('first',array(
                 'conditions' => array(
-                    'product_id' => $product_id,
+                    'product_id' => $pid,
                     'send_date' => $product_con_date
                 )
             ));
@@ -91,17 +108,27 @@ class TuanController extends AppController{
                 $conDateId = $conDate['ConsignmentDate']['id'];
                 $cartOrderIds = $this->Cart->find('all',array(
                     'conditions' => array(
-                        'product_id' => $product_id,
+                        'product_id' => $pid,
                         'consignment_date' => $conDateId
                     ),
                     'fields' => array(
                         'order_id'
                     )
                 ));
-                if(!empty($cartOrderIds)){
-                    $cartOrderIds = Hash::extract($cartOrderIds,'{n}.Cart.order_id');
-                    $order_query_cond['Order.id'] = $cartOrderIds;
-                }
+            }else{
+                //查询产品的ID
+                $cartOrderIds = $this->Cart->find('all',array(
+                    'conditions' => array(
+                        'product_id' => $query_product_id
+                    ),
+                    'fields' => array(
+                        'order_id'
+                    )
+                ));
+            }
+            if(!empty($cartOrderIds)){
+                $cartOrderIds = Hash::extract($cartOrderIds,'{n}.Cart.order_id');
+                $order_query_cond['Order.id'] = $cartOrderIds;
             }
         }
 
