@@ -13,6 +13,8 @@ class TuanBuyingsController extends AppController{
     var $uses = array('TuanTeam','TuanBuying','Order','Cart','TuanBuyingMessages','TuanProduct','TuanMsg');
     public $components = array('Weixin');
 
+    var $msg_uid = array();
+
     public function admin_api_tuan_buying_due(){
         $tuanBuyingId = $_REQUEST['id'];
         $this->log('update tuan buying ' + $tuanBuyingId + ' status to ' + 1);
@@ -285,11 +287,15 @@ class TuanBuyingsController extends AppController{
         $deatil_url = WX_HOST.'/tuan_buyings/detail/'.$tuanBuyId;
         $remark = '点击详情，赶快和小伙伴一起团起来！';
         foreach($uids as $uid){
-            $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
-            //TODO log fail user id
+            //if user has receive msg
+            if(!in_array($uid,$this->msg_uid)){
+                //TODO log fail user id
+                if($this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url)){
+                    $this->msg_uid[] = $uid;
+                }
+            }
         }
         $this->save_msg_log(TUAN_CREATE_MSG,$tuanBuyId);
-//        echo json_encode(array('success' => true,'msg' => '推送模板消息成功'));
     }
 
     private function save_msg_log($type,$tb_id){

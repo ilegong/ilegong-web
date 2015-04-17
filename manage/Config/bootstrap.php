@@ -132,6 +132,7 @@ function get_tuan_msg_element($tuan_buy_id,$flag=true){
                 'status' => ORDER_STATUS_PAID
             )
         ));
+         //cache it
          $uids = Hash::extract($tuanOrders,'{n}.Order.creator');
         }else{
         $tuan_members = $tuanMemberM->find('all', array(
@@ -139,6 +140,7 @@ function get_tuan_msg_element($tuan_buy_id,$flag=true){
                 'tuan_id' => $tuan_id
             )
         ));
+         //cache it
          $uids = Hash::extract($tuan_members,'{n}.TuanMember.uid');
         }
         $consign_time = $tb['TuanBuying']['consign_time'];
