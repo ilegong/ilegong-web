@@ -46,9 +46,8 @@
                 {{elseif $trying['status'] == 'sec_end'}}
                     <a class="tuan_bar_btn">已秒完</a>
                 {{else}}
-                    <a data-start="{{strtotime($trying['ProductTry']['start_time']) - ($shichi_mem? 30 * 60 : 0)}}" data-pid="{{$trying['Product']['id']}}" href="#X" class="tuan_bar_btn">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
+                    <a data-start="{{strtotime($trying['ProductTry']['start_time']) - ($shichi_mem? 30 * 60 : 0)}}" data-pid="{{$trying['Product']['id']}}" href="#X" class="tuan_bar_btn sec_start">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
                 {{/if}}
-
                 <div class="fr" style="width:48%; margin-top:4px;">
                     <?php $limit_num = $trying['ProductTry']['limit_num'];
                         $sold_num = $trying['ProductTry']['sold_num'];
@@ -108,6 +107,24 @@
     <em>如您有任何问题可随时招呼【朋友说小妹】，小妹微信二维码如下</em>
     <em><img src="{{$this->Html->assetUrl('/img/tuan/detail/xiaomei.jpg')}}"/></em>
 </div>
+{{$this->Html->script(array(
+'http://libs.baidu.com/jquery/1.9.1/jquery.min.js',
+'/js/common.js'));}}
+<script>
+    $(document).ready(function(){
+        var timerParentStyle = {'margin-top': '1em'};
+        var toTimer = $('.sec_start').first();
+        var countDiv = toTimer.parent();
+        var pid = toTimer.attr('data-pid');
+        utils.countDown(toTimer, function(){
+            countDiv.css(timerParentStyle);
+        }, function(){
+            var parent = countDiv.parent();
+            countDiv.remove();
+            parent.append('<a href="/shichi/list_pai.html?tuan_id={{$tuan_id}}" class="tuan_bar_btn" data-pid='+pid+'>正在秒杀</a>');
+        });
+    });
+</script>
 {{if $jWeixinOn}}
 <script>
     wx.ready(function () {
