@@ -403,7 +403,6 @@ input {
 
 .tuandetail_good a {
     display: block;
-    background-color: #ffffff;
     width: 50%;
     float: left;
     text-decoration: none;
@@ -434,5 +433,7 @@ input {
     border-bottom: 0;
     background: #fff;
 }
+
+.tuandetail .adress span img{ width:80%;}
 
 
