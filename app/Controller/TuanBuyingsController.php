@@ -220,6 +220,7 @@ class TuanBuyingsController extends AppController{
     }
 
     public function balance_tuan_sec_kill(){
+        $this->pageTitle='订单确认';
         $tuan_id = $_REQUEST['tuan_id'];
         $cart_id = $_REQUEST['pid_list'];
         $try_id = $_REQUEST['try'];
@@ -319,7 +320,6 @@ class TuanBuyingsController extends AppController{
             return;
         }
         $this->loadModel('Cart');
-        //$this->Cart->find('first');
         $uid =$this->currentUser['id'];
         $user_condition = array(
             'session_id'=>	$this->Session->id(),
@@ -410,7 +410,9 @@ class TuanBuyingsController extends AppController{
         $this->autoRender = false;
         $cart_id = $_POST['cart_id'];
         $tuan_id = $_POST['tuan_id'];
-        $tuan_buy_id = $_POST['tuan_buy_id'];
+        //tuan sec
+        $tuan_sec = $_POST['tuan_sec'];
+        $member_id = $_POST['member_id'];
         $mobile = $_POST['mobile'];
         $name = $_POST['name'];
         $shop_name = $_POST['shop_name'];
@@ -438,7 +440,7 @@ class TuanBuyingsController extends AppController{
         }elseif($creator != $uid){
             $this->log("no right to this order, uid".$uid. "creator:".$creator);
             $res = array('success'=> false, 'info'=> '团购订单不属于你，请刷新重试');
-        }elseif($order_type != CART_ITEM_TYPE_TUAN){
+        }elseif($order_type != CART_ITEM_TYPE_TUAN&&$order_type != CART_ITEM_TYPE_TUAN_SEC){
             $res = array('success'=> false, 'info'=> '该订单不属于团购订单，请重试');
         }else{
             if(!empty($cart_info['Cart']['order_id'])){
@@ -492,7 +494,12 @@ class TuanBuyingsController extends AppController{
                 $consignees['creator'] = $uid;
             }
             $this->OrderConsignees->save($consignees);
-            $order = $this->Order->createTuanOrder($tuan_buy_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, $shop_name);
+            if($tuan_sec=='true'){
+                //remark order sec kill
+                $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, '秒杀');
+            }else{
+                $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, $shop_name);
+            }
             $order_id = $order['Order']['id'];
             $score_consumed = 0;
             $spent_on_order = intval($this->Session->read(self::key_balanced_scores()));
@@ -536,6 +543,7 @@ class TuanBuyingsController extends AppController{
         }
         echo json_encode($res);
     }
+
     function product_detail($pid){
         if(empty($pid)){
             return;

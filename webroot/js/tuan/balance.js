@@ -110,15 +110,25 @@ $('#confirm_next').on('click',function(e){
 
     var cart_id = $("input[name='shopCart']").data("id") || false;
     var tuan_buy_id = balanceDom.data("tuanbuyId") || false;
+    var try_id = balanceDom.data('tryId')||false;
     var tuan_id = balanceDom.data("tuanteamId") || false;
-    if(!(cart_id && tuan_buy_id && tuan_id)){
+    var tuan_sec = balanceDom.data("tuanSec")||false;
+    var member_id = '';
+    if(tuan_buy_id){
+       member_id = tuan_buy_id;
+    }
+    if(try_id){
+        member_id = try_id;
+    }
+    if(!(cart_id && member_id && tuan_id)){
+        utils.alert('订单有误,请重新下单');
         return false;
     }
     jQuery.ajax({
         type: "POST",
         dataType: "json",
         url: "/tuan_buyings/pre_order",
-        data: {name: name, mobile: mobile, cart_id: cart_id, tuan_buy_id: tuan_buy_id, tuan_id: tuan_id, address:address, way:way ,shop_name:shopName},
+        data: {name: name, mobile: mobile, cart_id: cart_id, member_id: member_id, tuan_id: tuan_id, address:address, way:way ,shop_name:shopName, tuan_sec:tuan_sec},
         success: function (a) {
             if (a.success) {
                 $("#confirm_next").attr('data-disable', 'true');
