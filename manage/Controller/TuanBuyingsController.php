@@ -176,7 +176,7 @@ class TuanBuyingsController extends AppController{
         $this->autoRender = false;
         $res = array();
         $tuan_buy_ids = $_REQUEST['tuan_buy_ids'];
-        $status = $_REQUEST['status'];
+        $status = intval($_REQUEST['status']);
         $tuan_buy_ids = explode(',',$tuan_buy_ids);
         if($this->TuanBuying->updateAll(array('status' => $status),array('id' => $tuan_buy_ids))){
             $res['success'] = true;

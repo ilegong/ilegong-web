@@ -25,7 +25,7 @@ $(function(){
 
     $batch_cancel.on('click',function(e){
         var $tb_ids = getAllCheckTbId();
-        $.post('/manage/admin/tuanBuyings/batch_set_status',{'ids':$tb_ids,'val':2},function(data){
+        $.post('/manage/admin/tuanBuyings/batch_set_status',{'tuan_buy_ids':$tb_ids,'status':2},function(data){
             if(data.success){
                 alert('更新成功');
                 location.reload();
@@ -37,7 +37,7 @@ $(function(){
 
     $batch_complete.on('click',function(e){
         var $tb_ids = getAllCheckTbId();
-        $.post('/manage/admin/tuanBuyings/batch_set_status',{'ids':$tb_ids,'val':1},function(data){
+        $.post('/manage/admin/tuanBuyings/batch_set_status',{'tuan_buy_ids':$tb_ids,'status':1},function(data){
             if(data.success){
                 alert('更新成功');
                 location.reload();

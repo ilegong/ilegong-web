@@ -64,7 +64,8 @@ class TuanTeamsController extends AppController{
             ));
             $product_info = $this->Product->find('all', array(
                 'conditions' => array('id' => $pids),
-                'fields' => array('id',  'name', 'coverimg')
+                'fields' => array('id',  'name', 'coverimg'),
+                'order' => array('recommend DESC')
             ));
             $product_info = Hash::combine($product_info, '{n}.Product.id', '{n}.Product');
             $tuan_product_info = Hash::combine($tuan_product_info,'{n}.TuanProduct.product_id','{n}.TuanProduct');
