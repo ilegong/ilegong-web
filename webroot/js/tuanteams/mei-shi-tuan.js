@@ -17,10 +17,9 @@ $(function(){
             data: {tuan_id: tuan_id},
             success: function (a) {
                 if (a['success']) {
-                    me.removeClass('alltuan_addbtn').addClass('alltuan_curbtn').text('已经加入');
-                    var $member_num  = $('span[name="member_num"]',me.parent());
-                    $member_num.text(parseInt($member_num.text())+1);
-                    $tipInfoPanel.text('加入团队成功').fadeIn(1000).fadeOut(2000);
+                    $tipInfoPanel.text('加入团队成功').fadeIn(1000).fadeOut(2000,function(){
+                        location.reload();
+                    });
                 } else {
                     if(a['type'] == 'error'){
                         utils.alert('请求错误，请重试');
