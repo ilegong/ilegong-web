@@ -56,8 +56,8 @@ class TuanTeamsController extends AppController{
         ));
 
         $pids = array_unique(Hash::extract($tuan_buyings, '{n}.TuanBuying.pid'));
+        $this->loadModel('Product');
         if(!empty($pids)){
-            $this->loadModel('Product');
             $this->loadModel('TuanProduct');
             $tuan_product_infos = $this->TuanProduct->find('all',array(
                 'conditions' => array(
@@ -82,12 +82,22 @@ class TuanTeamsController extends AppController{
         $this->loadModel('ProductTry');
         $tryings = $this->ProductTry->find_trying(2);
         if (!empty($tryings)) {
-            $tryProducts = $this->Product->find_products_by_ids(Hash::extract($tryings, '{n}.ProductTry.product_id'), array(), false);
+            $try_pids = Hash::extract($tryings, '{n}.ProductTry.product_id');
+            $this->loadModel('TuanProdut');
+            $t_products = $this->TuanProduct->find('all',array(
+                'conditions' => array(
+                    'product_id' => $try_pids
+                )
+            ));
+            $t_products = Hash::combine($t_products,'{n}.TuanProduct.product_id','{n}.TuanProduct');
+            $tryProducts = $this->Product->find_products_by_ids($try_pids, array(), false);
             if (!empty($tryProducts)) {
                 foreach($tryings as &$trying) {
-                    $prod = $tryProducts[$trying['ProductTry']['product_id']];
+                    $pid = $trying['ProductTry']['product_id'];
+                    $prod = $tryProducts[$pid];
                     if (!empty($prod)) {
                         $trying['Product'] = $prod;
+                        $trying['image'] = $t_products[$pid]['list_img'];
                     } else {
                         unset($trying);
                     }
@@ -101,6 +111,7 @@ class TuanTeamsController extends AppController{
             $this->set($weixinJs);
             $this->set('jWeixinOn', true);
         }
+        $this->set('tryings',$tryings);
         $this->set('tuan_id', $tuan_id);
         $this->set('tuan_team', $tuan_team);
         $this->set('tuan_buyings', $tuan_buyings);

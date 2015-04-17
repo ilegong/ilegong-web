@@ -219,6 +219,72 @@ class TuanBuyingsController extends AppController{
 
     }
 
+    public function balance_tuan_sec_kill(){
+        $tuan_id = $_REQUEST['tuan_id'];
+        $cart_id = $_REQUEST['pid_list'];
+        $try_id = $_REQUEST['try'];
+        $from = $_REQUEST['from'];
+        if($from!='tuan_sec'){
+            $this->__message('请求出错', '/shichi/list_pai.html?tuan_id='.$tuan_id);
+            return;
+        }
+        //TODO check form
+        $uid = $this->currentUser['id'];
+        if(empty($uid)){
+            $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
+            return;
+        }
+        $this->loadModel('TuanTeam');
+        $team = $this->TuanTeam->find('first',array(
+            'conditions' => array(
+                'id' => $tuan_id
+            )
+        ));
+        //TODO check $team
+        if(empty($team)){
+            $this->__message('该团不存在', '/tuan_teams/mei_shi_tuan');
+            return;
+        }
+        $this->loadModel('Cart');
+        $Carts = $this->Cart->find('first', array(
+            'conditions' => array(
+                'id' => $cart_id
+            ),
+        ));
+        $pid = $Carts['Cart']['product_id'];
+        $total_price = $Carts['Cart']['price'] * $Carts['Cart']['num'];
+        $this->loadModel('Product');
+        $this->loadModel('Brand');
+        $product_brand = $this->Product->find('first', array(
+            'conditions' => array('id' => $pid),
+            'fields' => array('brand_id')
+        ));
+        $brand = $this->Brand->find('first', array(
+            'conditions' => array('id' => $product_brand['Product']['brand_id']),
+            'fields' => array('name', 'slug')
+        ));
+        $this->loadModel('OrderConsignees');
+        $consignee_info = $this->OrderConsignees->find('first', array(
+            'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN),
+            'fields' => array('name', 'address', 'mobilephone')
+        ));
+        if($consignee_info){
+            $this->set('consignee_info', $consignee_info['OrderConsignees']);
+        }
+        $this->set('try_id',$try_id);
+        $this->set('way_type','ziti');
+        $this->set('buy_count',$Carts['Cart']['num']);
+        $this->set('total_price', $total_price);
+        $this->set('cart_id', $Carts['Cart']['id']);
+        $this->set('tuan_id', $tuan_id);
+        $this->set('can_mark_address',$this->can_mark_address($tuan_id));
+        $this->set('tuan_address', $team['TuanTeam']['tuan_addr']);
+        $this->set('tuan_buy_id', $tuan_buy_id);
+        $this->set('cart_info',$Carts);
+        $this->set('brand', $brand['Brand']);
+        $this->set('hideNav',true);
+    }
+
     public function balance($tuan_buy_id){
         $this->pageTitle = '订单确认';
         if(empty($this->currentUser['id'])){
@@ -283,7 +349,7 @@ class TuanBuyingsController extends AppController{
             'fields' => array('brand_id')
         ));
         $brand = $this->Brand->find('first', array(
-            'conditions' => array('id'=> $product_brand['Product']['brand_id']),
+            'conditions' => array('id' => $product_brand['Product']['brand_id']),
             'fields' => array('name', 'slug')
         ));
         $this->loadModel('OrderConsignees');

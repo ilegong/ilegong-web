@@ -25,6 +25,7 @@ class ShichiController extends AppController {
     public function list_pai(){
         $this->loadModel('ProductTry');
         $tryings = $this->ProductTry->find_trying(20);
+        $tuan_id = $_REQUEST['tuan_id'];
         if (!empty($tryings)) {
             $tryProducts = $this->Product->find_products_by_ids(Hash::extract($tryings, '{n}.ProductTry.product_id'), array(), false);
             if (!empty($tryProducts)) {
@@ -38,14 +39,15 @@ class ShichiController extends AppController {
                 }
             }
         }
-
-        $uid = $this->currentUser['id'];
-        $this->loadModel('Shichituan');
-        $shichituan = $this->Shichituan->find_in_period($uid, get_shichituan_period());
-        $is_shichi =  (!empty($shichituan) || $shichituan);
-
-        $this->set('shichi_mem', $is_shichi);
-        $this->set('shichiTuan', $shichituan);
+        if(empty($tuan_id)){
+            $uid = $this->currentUser['id'];
+            $this->loadModel('Shichituan');
+            $shichituan = $this->Shichituan->find_in_period($uid, get_shichituan_period());
+            $is_shichi =  (!empty($shichituan) || $shichituan);
+            $this->set('shichi_mem', $is_shichi);
+            $this->set('shichiTuan', $shichituan);
+        }
+        $this->set('tuan_id',$tuan_id);
         $this->set('tryings', $tryings);
         $this->pageTitle = '试吃秒杀';
     }

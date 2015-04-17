@@ -20,7 +20,9 @@ class BuyingComponent extends Component {
             return CART_ITEM_TYPE_TRY;
         } else if ($typeStr == 'quick_buy') {
             return CART_ITEM_TYPE_QUICK_ORDER;
-        }  else {
+        } else if ($typeStr == 'tuan_sec'){
+            return CART_ITEM_TYPE_TUAN_SEC;
+        } else {
             return CART_ITEM_TYPE_NORMAL;
         }
     }
@@ -39,7 +41,7 @@ class BuyingComponent extends Component {
      * @throws CakeException
      */
     public function check_and_add($cartM, $type, $tryId, $uid, $num, $product_id, $specId, $sessionId) {
-        if ($type == CART_ITEM_TYPE_TRY) {
+        if ($type == CART_ITEM_TYPE_TRY||$type==CART_ITEM_TYPE_TUAN_SEC) {
             $success = true;
             $reason = '';
             if (!$tryId) {
@@ -61,8 +63,7 @@ class BuyingComponent extends Component {
                         $success = false;
                         $reason = 'already_buy';
                     }
-
-                    if ($success) {
+                    if ($success&&($type==CART_ITEM_TYPE_TRY)) {
                         $sctM = ClassRegistry::init('Shichituan');
                         $shichituan = $sctM->find_in_period($uid, get_shichituan_period());
                         $parallelCnt = (!empty($shichituan)) ? 2 : 1;

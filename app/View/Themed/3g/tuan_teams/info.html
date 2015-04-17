@@ -22,19 +22,37 @@
 {{if !empty($tryings)}}
 <div class="tuandetail_seckill clearfix">
     <?php $i = 0; foreach($tryings as $trying) { if ($i++>2) {break;} ?>
-        <span><img src="{{$this->Html->assetUrl(small_thumb_link($trying['Product']['coverimg']))}}"/></span>
+        <span><img src="{{$this->Html->assetUrl(small_thumb_link($trying['image']))}}"/></span>
         <span>
             <h1>{{$trying['Product']['name']}}</h1>
             <em>秒杀价：<strong>¥{{$this->Number->precision(calculate_try_price($trying['ProductTry']['price']), 2)}}</strong></em>
             <div class="tuan_bar clearfix" style="padding:5px 10px 12px 10px;">
-                <a data-start="{{strtotime($trying['ProductTry']['start_time']) - ($shichi_mem? 30 * 60 : 0)}}" data-pid="{{$trying['Product']['id']}}" href="#X" class="tuan_bar_btn">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
+                {{if $trying['status'] == 'sec_kill'}}
+                    <a  href="/shichi/list_pai.html?tuan_id={{$tuan_id}}" class="tuan_bar_btn" data-pid="{{$trying['Product']['id']}}">正在秒杀</a>
+                {{elseif $trying['status'] == 'sec_end'}}
+                    <a class="tuan_bar_btn">已秒完</a>
+                {{else}}
+                    <a data-start="{{strtotime($trying['ProductTry']['start_time']) - ($shichi_mem? 30 * 60 : 0)}}" data-pid="{{$trying['Product']['id']}}" href="#X" class="tuan_bar_btn">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
+                {{/if}}
+
                 <div class="fr" style="width:48%; margin-top:4px;">
+                    <?php $limit_num = $trying['ProductTry']['limit_num'];
+                        $sold_num = $trying['ProductTry']['sold_num'];
+                        if($sold_num >= $limit_num){
+                            $sold_num = $limit_num;
+                        }
+                        if($sold_num >= $target_num){
+                            $sold_percent = 100;
+                        }else{
+                            $sold_percent = round(($sold_num / $target_num * 100), 1);
+                        }
+                    ?>
                     <div class="bar">
-                        <div class="bar_buy" id="bar_buy" style="width:20%;"></div>
+                        <div class="bar_buy" id="bar_buy" style="width:{{$sold_percent}}%;"></div>
                     </div>
                     <ul class="clearfix">
-                        <li class="fl">已秒<span style=" display:inline;">5</span>份</li>
-                        <li class="fr">共30份</li>
+                        <li class="fl">已秒<span style="display:inline;">{{$sold_num}}</span>份</li>
+                        <li class="fr">共{{$limit_num}}份</li>
                     </ul>
                 </div>
                 <b>秒杀</b>

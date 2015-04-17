@@ -33,7 +33,9 @@
     .seckill_rule .close{ display:block; background:url(/img/mobilev1/pyshuo_icon.png) 0 -20.25em no-repeat; background-size:25em 25em; width:2.5em; height:2.6em; position:absolute; right:-0.7em; top:-0.7em;}
 </style>
 <div class="seckill_banner"><img src="{{$this->Html->assetUrl('/img/mobilev1/flash_shichi_banner.jpg')}}" /></div>
+{{if empty($tuan_id)}}
 <div class="seckill_tip">请设置好默认收货地址, 以便更快秒杀!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<!--a href="#X">秒杀规则</a--></div>
+{{/if}}
 {{loop $tryings $key $trying}}
 <div class="seckill_list">
     <ul class="clearfix list-unstyled" style="position:relative;">
@@ -52,7 +54,6 @@
                     <span class="btn">立即秒杀</span>
                     {{/if}}
                 </a>
-
             </div>
             {{if $trying['status'] == 'sec_unstarted' }}
             <div class="clearfix countdown_div">
@@ -60,7 +61,6 @@
                     <span>还剩{{date('d',strtotime($trying['ProductTry']['start_time']))- date('d',time())}}天</span><br>
                     <span class="radius10 sec_start" data-start="{{strtotime($trying['ProductTry']['start_time']) - ($shichi_mem? 30 * 60 : 0)}}" data-pid="{{$trying['Product']['id']}} ">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}</span>
                 </a>
-
             </div>
             {{/if}}
 
@@ -76,6 +76,13 @@
 </div>
 <script>
     $(document).ready(function(){
+
+        var cartType = 'try';
+
+        {{if !empty($tuan_id)}}
+            cartType = 'tuan_sec';
+        {{/if}}
+
         var timerParentStyle = {'margin-left': '1em'};
         var toTimer = $('.sec_start').first();
         var countDiv = toTimer.parent();
@@ -112,7 +119,7 @@
             }
             var $pid = buyBtn.attr('data-pid');
             var tryId = buyBtn.attr('data-tryId');
-            quick_buy_try($pid, 1, 0, tryId, 'try', function(){
+            quick_buy_try($pid, 1, 0, tryId, cartType, function(){
                 buyBtn.removeClass('seckill_btn').addClass('sec_end');
             }, function(){
                 //
@@ -148,14 +155,19 @@
                     } else if (data.reason == 'sold_out') {
                         utils.alert_one('抱歉：已经被秒完', '知道了', function(){ if (typeof(soldOutCallback) == 'function'){ soldOutCallback()} });
                     } else if (data.reason == 'already_buy') {
-                        utils.alert_one('抱歉：您已经秒过啦', '关闭', function(){ });
+                        utils.alert_one('抱歉：您已经秒过啦', '关闭', function(){});
                     } else if (data.reason = 'not_comment') {
                         utils.alert_one('抱歉：您有' + data.not_comment_cnt + '个试吃商品还没有反馈，请先完成反馈再秒杀');
                     }
                 } else {
                     utils.alert_one('您好，下单支付完成才算秒杀完成, 立即跳转结算', '去结算', function(){
                         addedCallback();
-                        window.location.href = '/orders/info?from=try&pid_list='+data.id+'&try='+tryId;
+                        if(cartType=='try'){
+                            window.location.href = '/orders/info?from=try&pid_list='+data.id+'&try='+tryId;
+                        }
+                        if(cartType=='tuan_sec'){
+                            window.location.href = '/tuan_buyings/balance_tuan_sec_kill?from=tuan_sec&pid_list='+data.id+'&try='+tryId+'&tuan_id={{$tuan_id}}';
+                        }
                     });
                 }
             });
