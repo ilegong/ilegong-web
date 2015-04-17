@@ -1,133 +1,89 @@
-{{$this->Html->css(array('tuan.css?v7'))}}
-<?php $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
-    $referer_link .= '&scope=userinfo&referer='.urlencode($referer.'?has_joined=success');
-?>
-<div class="classlist_v2">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{{$tuan_team['TuanTeam']['tuan_name']}}</title>
+    {{$this->Html->css(array('tuan-detail.css'))}}
+</head>
+<body style="background-color:#f5f5f5;">
+<div class="tuandetail_nav">
     <ul class="clearfix">
-        <li><a class="back" href="javascript:void (0)" onclick=" goBack()"></a></li>
-        <li class="line"></li>
-        <li style="text-overflow: ellipsis;"><strong>{{$tuan_team['TuanTeam']['tuan_name']}}</strong></li>
+        <li class="fl"><a href="/"><img src="{{$this->Html->assetUrl('/img/tuan/detail/logo.png')}}"/></a></li>
+        <!--<li class="fr"><a href="#X">收藏</a></li>-->
+        <li class="fr"><a href="/orders/mine">我的订单</a></li>
+        <li class="fr"><a href="/scores/more_score">领积分</a></li>
     </ul>
 </div>
-<div class="tuandetail" style="padding-top: 42px">
-    <!--<a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">-->
-        <!--<p><img src="http://api.map.baidu.com/staticimage?width=750&height=350&center=-->
-    <!--{{$location}}&zoom=16&markers={{$location}}&&markerStyles=l" /></p>-->
-        <!--</a>-->
-    <div class="tuandetail_masg" data-team-id="{{$tuan_id}}">
-        <ul class="clearfix">
-            <li class="tuanname">{{$tuan_team['TuanTeam']['tuan_name']}}</li>
-            <li>团长: {{$tuan_team['TuanTeam']['leader_name']}}</li>
-        </ul>
-        <dl class="clearfix">
-            <a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
-                <dd><img src="/img/tuan/locat_icon.gif" border="0" /></dd>
-                <dd style="float: none; padding-left: 12px;">{{$tuan_team['TuanTeam']['address']}}</dd>
-            </a>
-        </dl>
-        <!--<p>{{if empty($tuan_team['TuanTeam']['tuan_desc'])}}找寻最纯粹的美味，让生活多点快乐的色彩！{{else}} {{$tuan_team['TuanTeam']['tuan_desc']}} {{/if}}</p>-->
-    </div>
-    <ul class="clearfix tuandetail_member">
-        <li class="fl"><span>成员: {{$tuan_team['TuanTeam']['member_num']}}人</span></li>
-        <li class="fr"><a class="p_more" href="/tuan_teams/memberlist/{{$tuan_id}}"></a></li>
-        <li class="fr">团长微信号{{$tuan_team['TuanTeam']['leader_weixin']}}</li>
-    </ul>
-    <ul class="clearfix tuandetail_order">
-        <li>
-            <a class="mr5" href="http://www.tongshijia.com/orders/mine">我的订单</a>
-        </li>
-        <li>
-            <a class="ml5" href="http://www.tongshijia.com/orders/mine.html?tab=comment">评价赢积分</a>
-        </li>
-    </ul>
-    <h1>参加的团购</h1>
-    {{if !empty($tuan_buyings)}}
-    {{loop $tuan_buyings $tuan_buying}}
-    <?php $pid = $tuan_buying['TuanBuying']['pid'];
-        $consign_time = empty($tuan_buying['TuanBuying']['consign_time'])? '成团后' : friendlyDateFromStr($tuan_buying['TuanBuying']['consign_time'], FFDATE_CH_MD);
-    ?>
-    <div class="goodlist {{if $tuan_buying['TuanBuying']['status'] != 0 }}tuan_cancel {{/if}}">
-        <a href="/tuan_buyings/detail/{{$tuan_buying['TuanBuying']['id']}}">
-            {{if $tuan_buying['TuanBuying']['status'] == 1 || $tuan_buying['TuanBuying']['status'] == 11}}
-            <div class="tuan_cancel_condition">
-                <b>{{$consign_time}}{{if $tuan_buying['TuanBuying']['status'] == 11}}已{{/if}}发货</b><br/>
-                <s>团购已完成</s>
+<div class="tuandetail_name">
+    <strong>{{$tuan_team['TuanTeam']['tuan_name']}}</strong>
+    <em>健康&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;营养&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;实惠</em>
+</div>
+{{if !empty($tryings)}}
+<div class="tuandetail_seckill clearfix">
+    <?php $i = 0; foreach($tryings as $trying) { if ($i++>2) {break;} ?>
+        <span><img src="{{$this->Html->assetUrl(small_thumb_link($trying['Product']['coverimg']))}}"/></span>
+        <span>
+            <h1>{{$trying['Product']['name']}}</h1>
+            <em>秒杀价：<strong>¥{{$this->Number->precision(calculate_try_price($trying['ProductTry']['price']), 2)}}</strong></em>
+            <div class="tuan_bar clearfix" style="padding:5px 10px 12px 10px;">
+                <a data-start="{{strtotime($trying['ProductTry']['start_time']) - ($shichi_mem? 30 * 60 : 0)}}" data-pid="{{$trying['Product']['id']}}" href="#X" class="tuan_bar_btn">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
+                <div class="fr" style="width:48%; margin-top:4px;">
+                    <div class="bar">
+                        <div class="bar_buy" id="bar_buy" style="width:20%;"></div>
+                    </div>
+                    <ul class="clearfix">
+                        <li class="fl">已秒<span style=" display:inline;">5</span>份</li>
+                        <li class="fr">共30份</li>
+                    </ul>
+                </div>
+                <b>秒杀</b>
             </div>
-            {{elseif $tuan_buying['TuanBuying']['status'] == 2 || $tuan_buying['TuanBuying']['status'] == 21 }}
-            <div class="tuan_cancel_condition">
-                <s>团购已取消</s>
+        </span>
+    <?php } ?>
+</div>
+{{/if}}
+<div class="clearfix tuandetail_good">
+    {{loop $product_infos $pid $product}}
+        <?php
+            $t_product = $tuan_product_infos[$pid];
+            $t_buying = $tb_product_map[$pid];
+            $price = $product['price'];
+            if($t_product['price']>0){
+                $price = $t_product['price'];
+            }
+            if($t_buying['tuan_price']>0){
+                $price = $t_buying['tuan_price'];
+            }
+        ?>
+        <a href="/tuan_buyings/detail/{{$t_buying['id']}}">
+            <div class="tuandetail_img"><img src="{{$this->Html->assetUrl(small_thumb_link($product['coverimg']))}}"/></div>
+            <div class="tuandetail_title">
+                <span>{{$product['name']}}</span>
+                <em><strong>¥{{$price}}</strong>&nbsp;{{if !empty($product['original_price'])}}<font>¥{{$this->Number->precision($product['original_price'], 2)}}</font>{{/if}}</em>
             </div>
-
+            {{if $t_buying['consignment_type']!=2}}
+                <b>团购</b>
             {{/if}}
-
-            <div><img src="{{$tuan_product_info[$pid]['list_img']}}" /></div>
-            <p>{{$product_info[$pid]['name']}}</p >
-            <ul class="clearfix">
-                <li class="fl"><strong>{{$consign_time}}发货</strong></li>
-                <li class="fr">{{$tuan_buying['TuanBuying']['join_num']}}人参团</li>
-            </ul>
         </a>
-
-
-    </div>
     {{/loop}}
-    {{else}}
-    <div class="tuandetail_none">您还没有参加过团购，<a href="/tuan_buyings/goods">去团购</a></div>
-    {{/if}}
-
-    <div style="margin-top: 80px"></div>
-    <div class="tuandetail_btnbg">
-        <dl class="clearfix">
-            <dt class="fl">
-            {{if !$has_joined}}
-                <a id="tuan_join"  href="javascript:void (0)">加入我们</a>
-            {{else}}
-                <a  style="background-color: #cccccc; border: 0"  href="javascript:void (0)">已加入</a>
-            {{/if}}
-            </dt>
-            <dt class="fr"><a id="tuan_share" href="javascript:void (0)">邀请小伙伴一起加入</a></dt>
-        </dl>
-    </div>
 </div>
-
-
-
-<div class="modal fade {{if $new_join}}new-join-show{{/if}}" id="joinModal" role="dialog">
-    <div class="layer_guanzhu radius10">
-        <div class="guanzhu_title">加入成功！</div>
-        {{if $remind_subscribe}}
-        <div>关注[朋友说]服务号, 接收组团消息!<br /></div>
-        <a href="{{$wx_follow_url}}" class="radius10">马上关注</a>
-        {{/if}}
-    </div>
+<div class="tuandetail_tips">
+    <p>Tips:小贴士</p>
+    <span>1、统一配送至：朝阳区朝外朝阳区朝外朝阳区朝外SOHO爱营养</span>
+    <em>统一配送是为了保证商品的品质、降低物流成本，让利给您！</em>
+    <span>2、贴心小管家</span>
+    <em>如您有任何问题可随时招呼【朋友说小妹】，小妹微信二维码如下</em>
+    <em><img src="{{$this->Html->assetUrl('/img/tuan/detail/xiaomei.jpg')}}"/></em>
 </div>
-
-<div class="modal fade" id="authorizeModal" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">微信授权</h4>
-            </div>
-            <div class="modal-body">
-                <p>授权我们使用您的微信账号登录朋友说。</p>
-                <a id="wx_login_a1" href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" style="vertical-align: bottom">
-                    <img src="{{$this->Html->url('/img/Wechat-logo-315_315.png');}}" style="width:90px;height:90px">
-                </a>
-                <a id="wx_login_a2" href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" class="btn btn-success" style="vertical-align: bottom">使用微信授权</a>
-            </div>
-        </div>
-    </div>
-</div>
-
 {{if $jWeixinOn}}
 <script>
     wx.ready(function () {
         var share_string = '{{$share_string ? $share_string :"0"}}';
         var to_timeline_title = "寻找最纯粹的美味，让生活多点快乐的色彩！";
         var to_friend_title = "{{$tuan_team['TuanTeam']['tuan_name']}}" + "-朋友说美食团";
-        var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
-        var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
+        var to_friend_link = document.URL.split('?')[0] + '?trstr=' + share_string + '&share_type=appMsg';
+        var to_timeline_link = document.URL.split('?')[0] + '?trstr=' + share_string + '&share_type=timeline';
         var imgUrl = "http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l";
         var desc = "{{$tuan_team['TuanTeam']['tuan_name']}}, 找寻最纯粹的美味，让生活多点快乐的色彩！";
         wx.onMenuShareAppMessage({
@@ -137,9 +93,9 @@
             imgUrl: imgUrl,
             success: function () {
                 // 用户确认分享后执行的回调函数
-                if(share_string != '0'){
-                    setTimeout(function(){
-                        $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
+                if (share_string != '0') {
+                    setTimeout(function () {
+                        $.post('/wx_shares/log_share', {trstr: share_string, share_type: "appMsg"});
                     }, 500);
                 }
             }
@@ -149,9 +105,9 @@
             link: to_timeline_link,
             imgUrl: imgUrl,
             success: function () {
-                if(share_string != '0'){
-                    setTimeout(function(){
-                        $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
+                if (share_string != '0') {
+                    setTimeout(function () {
+                        $.post('/wx_shares/log_share', {trstr: share_string, share_type: "timeline"});
                     }, 500);
                 }
             }
@@ -159,48 +115,7 @@
     })
 </script>
 {{/if}}
-<script>
-    $(document).ready(function(){
-        if($(".new-join-show").length > 0){
-            $('#joinModal').modal('show');
-        }
-        $("#tuan_share").click(function(){
-            var $share_div = $('<div class="apple_share fade in"><img src="/img/tuan/share.png" style="width:95%"></div>')
-                    .show().click(function(){
-                        $share_div.hide();
-                        $share_div.remove();
-                    });
-            $('body').append($share_div);
-        });
-        $('#tuan_join').click(function(){
-            var tuan_id = $(".tuandetail_masg").data().teamId;
-            jQuery.ajax({
-                type: "POST",
-                dataType: "json",
-                url: "/tuan_teams/join",
-                data: {tuan_id: tuan_id},
-                success: function (a) {
-                    if (a.success) {
-                        $('#joinModal').modal('show');
-                    } else {
-                        if(a.type == 'error'){
-                            utils.alert('请求错误，请重试');
-                        }else{
-                            $('#authorizeModal').modal('show');
-                        }
-                    }
-                }
-            });
-        });
+</body>
+</html>
 
-    });
-    function goBack(){
-        var refURL = document.referrer;
-        if (refURL != "http://www.tongshijia.com/tuan_teams/mei_shi_tuan.html"){
-            window.location.href = "http://www.tongshijia.com/categories/mobileHome.html";
-        }else{
-            window.history.back();
-        }
-    }
-</script>
 

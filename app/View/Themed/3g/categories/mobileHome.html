@@ -5,19 +5,6 @@
     img {
         max-width: 100% !important;
     }
-
-    /*秒杀*/
-    .seckill{ margin-top:0.625em; background-color:#ffffff; border-bottom:1px #dddddd solid; border-top:1px #dddddd solid;}
-    .seckill ul {margin-bottom: 0}
-    .seckill ul li.title{ padding:0 0.6em 0 0.7em; border-bottom:1px #eeeeee solid; color:#29ac0e; font-size:1.25em;}
-    .seckill ul li dl{ margin-bottom: 0; padding:0.5em 0 0.5em 0; text-align:center; width:100%;}
-    .seckill ul li dl dt{ width:50%; float:left; position:relative;}
-    .seckill ul li dl dt img{ width:6em; height:4.5em;}
-    .seckill ul li dl dt span{ display:block; padding-top:0.6em; line-height:1.35em; width:3.75em; height:3.15em; right:0.625em; top:1.3em; position:absolute; background-color:#ff483a; text-align:center; color:#ffffff; -moz-border-radius:3.75em;/* Gecko browsers */-webkit-border-radius:3.75em;/* Webkit browsers */border-radius:3.75em;/* W3C syntax */}
-    .seckill ul li dl dt .tbtn{ display:block; width:7.917em; height:1.8em; line-height:1.8em; text-decoration:none; font-size:1em; text-align:center; margin:0 auto; margin-top:1em;}
-    .seckill ul li dl dt .seckill_btn{ background-color:#ffa531; color:#ffffff;}
-    .seckill ul li dl dt .end_btn{ background-color:#cccccc; color:#999999;}
-    .seckill ul li dl dt .sec_start{ background-color:#cccccc; color:#999999; font-size:0.9em}
 </style>
 <div class="index_banner swiper-container">
     <ul class="clearfix list-unstyled">
@@ -25,35 +12,6 @@
     <div class="swiper-wrapper">
     </div>
 </div>
-{{if !empty($tryings)}}
-<div class="seckill" style="margin-top: 0.3em">
-    <ul>
-        <a href="/shichi/list_pai.html">
-            <li class="title">试吃秒杀</li>
-        </a>
-        <li>
-            <dl class="clearfix" style="margin-bottom: 0px"><?php $i = 0; foreach($tryings as $trying) { if ($i++>2) {break;} ?>
-                <dt><a href="/shichi/list_pai.html">
-                    <img src="{{$this->Html->assetUrl(small_thumb_link($trying['Product']['coverimg']))}}"/>
-                    <span>秒杀价<br/>{{$this->Number->precision(calculate_try_price($trying['ProductTry']['price']), 2)}}</span>
-                    {{if $trying['status'] == 'sec_kill'}}
-                    <a href="/shichi/list_pai.html" class="tbtn seckill_btn radius10"
-                       data-pid="{{$trying['Product']['id']}}">正在秒杀</a>
-                    {{elseif $trying['status'] == 'sec_end'}}<a class="tbtn end_btn radius10">已秒完</a>
-                    {{else}}
-                    <div class="clearfix" style="width:8.4em; margin:0 auto; ">
-                        <a data-start="{{strtotime($trying['ProductTry']['start_time']) - ($shichi_mem? 30 * 60 : 0)}}"
-                           data-pid="{{$trying['Product']['id']}}" class="tbtn radius10 sec_start">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
-                    </div>
-                    {{/if}}
-                </a>
-                </dt>
-                <?php } ?>
-            </dl>
-        </li>
-    </ul>
-</div>
-{{/if}}
 <ul class="clearfix index_nav">
     <li>
         <a href="/tuan_buyings/goods">

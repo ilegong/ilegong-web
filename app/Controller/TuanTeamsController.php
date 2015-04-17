@@ -30,15 +30,14 @@ class TuanTeamsController extends AppController{
             $this->set('my_tuan_ids',$my_tuan_ids);
             $left_tuan_ids = array_diff($left_tuan_ids,$my_tuan_ids);
         }
-        $referer = Router::url($_SERVER['REQUEST_URI']);
         $tuan_teams = Hash::combine($tuan_teams,'{n}.TuanTeam.id','{n}.TuanTeam');
         $this->set('left_tuan_ids',$left_tuan_ids);
         $this->set('tuan_teams',$tuan_teams);
         $this->set('op_cate','mei_shi_tuan');
-        $this->set('referer', $referer);
     }
 
     public function info($tuan_id){
+        $this->layout=false;
         $tuan_team = $this->TuanTeam->find('first', array(
             'conditions' =>array('id'=> $tuan_id),
         ));
@@ -49,67 +48,63 @@ class TuanTeamsController extends AppController{
             return;
         }
         $this->loadModel('TuanBuying');
+
+        //get buying tuan
         $tuan_buyings = $this->TuanBuying->find('all', array(
             'conditions' => array('tuan_id' => $tuan_id,'status'=>0),
             'order' => array('TuanBuying.end_time DESC'),
         ));
+
         $pids = array_unique(Hash::extract($tuan_buyings, '{n}.TuanBuying.pid'));
         if(!empty($pids)){
             $this->loadModel('Product');
             $this->loadModel('TuanProduct');
-            $tuan_product_info = $this->TuanProduct->find('all',array(
+            $tuan_product_infos = $this->TuanProduct->find('all',array(
                 'conditions' => array(
                     'product_id' => $pids
                 )
             ));
-            $product_info = $this->Product->find('all', array(
+            $product_infos = $this->Product->find('all', array(
                 'conditions' => array('id' => $pids),
-                'fields' => array('id',  'name', 'coverimg'),
+                'fields' => array('id', 'name', 'coverimg', 'price', 'original_price'),
                 'order' => array('recommend DESC')
             ));
-            $product_info = Hash::combine($product_info, '{n}.Product.id', '{n}.Product');
-            $tuan_product_info = Hash::combine($tuan_product_info,'{n}.TuanProduct.product_id','{n}.TuanProduct');
-            $this->set('tuan_product_info',$tuan_product_info);
-            $this->set('product_info', $product_info);
+            $product_infos = Hash::combine($product_infos, '{n}.Product.id', '{n}.Product');
+            $tuan_product_infos = Hash::combine($tuan_product_infos,'{n}.TuanProduct.product_id','{n}.TuanProduct');
+            $this->set('tuan_product_infos',$tuan_product_infos);
+            $this->set('product_infos', $product_infos);
+            $tb_product_map = Hash::combine($tuan_buyings,'{n}.TuanBuying.pid','{n}.TuanBuying');
+            $this->set('tb_product_map',$tb_product_map);
         }else{
             $this->set('no_tuan_buy', true);
         }
+        //add sec kill
+        $this->loadModel('ProductTry');
+        $tryings = $this->ProductTry->find_trying(2);
+        if (!empty($tryings)) {
+            $tryProducts = $this->Product->find_products_by_ids(Hash::extract($tryings, '{n}.ProductTry.product_id'), array(), false);
+            if (!empty($tryProducts)) {
+                foreach($tryings as &$trying) {
+                    $prod = $tryProducts[$trying['ProductTry']['product_id']];
+                    if (!empty($prod)) {
+                        $trying['Product'] = $prod;
+                    } else {
+                        unset($trying);
+                    }
+                }
+            }
+        }
+
         if($this->is_weixin()){
             $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
             $weixinJs = prepare_wx_share_log($currUid, 'tid', $tuan_id);
             $this->set($weixinJs);
             $this->set('jWeixinOn', true);
         }
-        $referer = Router::url($_SERVER['REQUEST_URI']);
-        if($_GET['has_joined'] == 'success'){
-            $uid = $this->currentUser['id'];
-            $this->loadModel('TuanMember');
-            $is_member = $this->TuanMember->hasAny(array('uid' => $uid, 'tuan_id' => $tuan_id));
-            if(!$is_member){
-                $data['tuan_id'] =  $tuan_id;
-                $data['uid'] = $uid;
-                $data['join_time'] = date('Y-m-d H:i:s');
-                $this->TuanMember->save($data);
-                $this->TuanTeam->update(array('member_num' => 'member_num + 1'), array('id' => $tuan_id));
-                $tuan_team['TuanTeam']['member_num'] = $tuan_team['TuanTeam']['member_num'] + 1;
-            }
-            $this->set('new_join', true);
-            $subscribe_status = user_subscribed_pys($uid);
-            if($subscribe_status != WX_STATUS_SUBSCRIBED){
-                $this->set('remind_subscribe', true);
-            }
-        }
-        if($this->currentUser['id']){
-            $this->loadModel('TuanMember');
-            $has_joined = $this->TuanMember->hasAny(array('tuan_id' => $tuan_id, 'uid' => $this->currentUser['id']));
-            $this->set('has_joined', $has_joined);
-        }
-        $this->pageTitle = $tuan_team['TuanTeam']['tuan_name'];
         $this->set('tuan_id', $tuan_id);
         $this->set('tuan_team', $tuan_team);
         $this->set('tuan_buyings', $tuan_buyings);
         $this->set('hideNav',true);
-        $this->set('referer', $referer);
     }
 
     public function join(){
