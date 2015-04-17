@@ -283,7 +283,7 @@ class TuanBuyingsController extends AppController{
             'fields' => array('brand_id')
         ));
         $brand = $this->Brand->find('first', array(
-            'conditions' => array('id', $product_brand['Product']['brand_id']),
+            'conditions' => array('id'=> $product_brand['Product']['brand_id']),
             'fields' => array('name', 'slug')
         ));
         $this->loadModel('OrderConsignees');
