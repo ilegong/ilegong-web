@@ -30,7 +30,7 @@
     </ul>
     <a class="clearfix adress" href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
         <span class="fl"><img src="{{$this->Html->assetUrl('/img/tuan/detail/locat_icon.gif')}}" border="0" /></span>
-        <span style="float: none; padding-left: 20px;">配送至: {{$tuan_team['TuanTeam']['tuan_addr']}}</span>
+        <span style="float: none; padding-left: 20px;line-height: 18px;">配送至: {{$tuan_team['TuanTeam']['tuan_addr']}}</span>
     </a>
 </div>
 {{if !empty($tryings)}}
