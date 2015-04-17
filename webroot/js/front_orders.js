@@ -508,8 +508,8 @@ function chose_Consignee(){
     $('#edit_type').val('select');
     $('#consignee_addr').hide();
 }
-var infoToBalance = function(self){
-    var setRemark = function(){
+var infoToBalance = function(){
+    var setRemark = function(self){
         var link = self.attr("href");
         var params = (link.indexOf("?")>-1)?"&":"?";
         $("input[name^='remark']").each(function(){
@@ -529,13 +529,42 @@ var infoToBalance = function(self){
         }
         return true;
     };
+    var editCartNum = function(id, num) {
+        var url = BASEURL + '/carts/editCartNum/' + id + '/' + num;
+        if (!sso.check_userlogin({"callback": editCartNum, "callback_args": arguments}))
+            return false;
+        ajaxAction(url, null, null, function (data) {
+            if (data && data.success) {
+                if (typeof(updateCartItemCount) === 'function') {
+                    updateCartItemCount();
+                }
+            }
+        }, {'id': id, 'num': num});
+        return false;
+    };
     return{
-        submitOrder : function(){
+        submitOrder : function(self){
             if(checkAddress()){
-                setRemark();
+                setRemark(self);
                 return true;
             }
             return false;
+        },
+        cartBind: function(){
+            $(".cart-num-input").each(function(){
+                var that = this;
+                ($(that).prev("a")).on('click', function(){
+                    editAmount.reduce(that, function (that) {
+                        editCartNum($(that).data('id'), $(that).val());
+                    });
+
+                });
+                ($(that).next("a")).on('click', function(){
+                    editAmount.add(that, function (that) {
+                        editCartNum($(that).data('id'), $(that).val());
+                    });
+                });
+            });
         }
     }
 };

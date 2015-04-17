@@ -16,14 +16,15 @@
     <div>
         <?php $total_num = 0;?>
         {{loop $cart->brandItems $brandItem}}
+        <?php $brand_price = 0; $brand_goods_num = 0; ?>
             <div class="clearfix order_shop_head">
                 <a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$brandItem->id]['created'])).'/'.$brands[$brandItem->id]['slug'].'.html')}}">
                     <span><img class="radius5" src="{{$this->Html->assetUrl(small_thumb_link($brands[$brandItem->id]['coverimg']))}}" /></span>
                     <span>{{$brands[$brandItem->id]['name']}}</span>
                 </a>
-        </div>
+            </div>
             {{loop $brandItem->items $cid $item}}
-                <?php $total_num += $item->num; ?>
+                <?php $total_num += $item->num; $brand_price += $item->num*$item->price; $brand_goods_num += $item->num;  ?>
                 <div>
                     <ul class="clearfix" style="margin-bottom: 0;">
                         <li class="fl"><a href="{{product_link2($product_info[$item->pid])}}"><img src="{{$this->Html->assetUrl(small_thumb_link($item->img))}}" border="0" /></a></li>
@@ -38,7 +39,7 @@
                             </span></s>
                             <div class="clearfix">
                                 <a href="#X" class="cartnumreduce fl"></a>
-                                <input type="text" value="{{$item->num}}" />
+                                <input type="text" class="cart-num-input" data-id="{{$item->cartId}}" value="{{$item->num}}" disabled="disabled"/>
                                 <a href="#X" class="cartnumadd fl"></a>
                             </div>
                         </li>
@@ -52,7 +53,7 @@
                 <div class="clearfix leave_words">
                     <input name={{"remark_".$brandItem->id}} type="text" placeholder="给卖家留言:" />
                 </div>
-                <p class="conordertuan_total">共1件商品，合计:<strong>￥308.00</strong></p>
+                <p class="conordertuan_total">共{{$brand_goods_num}}件商品，合计:<strong>￥{{$this->Number->precision($brand_price,2)}}</strong></p>
         {{/loop}}
         {{if $shipFee>0}}
         <a href="#X" class="favor" style="position:relative;">
@@ -76,21 +77,22 @@
     </ul>
 </div>
 <script>
-    (function (){
+    $(document).ready(function(){
+        var info = infoToBalance();
         var height =  $(window).height() + 5;
         var width = $(window).width();
         var url = "/orders/edit_consignee?height=" + height + "&width=" + width + "&modal=true";
         $(".new_address").addClass("thickbox").attr("href",url);
-
-        $(".cart_pay .fr a").on("click", function(e){
+        var cart_pay_self = $(".cart_pay .fr a");
+        info.cartBind();
+        cart_pay_self.on("click", function(e){
             var self  = $(this);
-            var info = infoToBalance(self);
-            if(!info.submitOrder()){
+            if(!info.submitOrder(self)){
                 e.preventDefault();
                 return false;
             }
         })
-    })();
+    })
 </script>
 {{$this->Html->script(array('/js/thickbox.js'));}}
 {{$this->Html->css(array('thickbox.css?ver1' ));}}
