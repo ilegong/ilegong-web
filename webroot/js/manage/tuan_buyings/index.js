@@ -13,13 +13,44 @@ $(function(){
 
     var $batch_cancel = $('#batch_cancel');
 
+    function getAllCheckTbId(){
+        var $checkboxes = $('td input:checkbox:checked',$('table'));
+        var $tb_ids = [];
+        $.each($checkboxes,function(index,item){
+            var $item = $(item);
+            $tb_ids.push($item.val());
+        });
+        return $tb_ids.join(',');
+    }
+
+    $batch_cancel.on('click',function(e){
+        var $tb_ids = getAllCheckTbId();
+        $.post('/manage/admin/tuanBuyings/batch_set_status',{'ids':$tb_ids,'val':2},function(data){
+            if(data.success){
+                alert('更新成功');
+                location.reload();
+            }else{
+                alert('更新失败');
+            }
+        },'json');
+    });
+
+    $batch_complete.on('click',function(e){
+        var $tb_ids = getAllCheckTbId();
+        $.post('/manage/admin/tuanBuyings/batch_set_status',{'ids':$tb_ids,'val':1},function(data){
+            if(data.success){
+                alert('更新成功');
+                location.reload();
+            }else{
+                alert('更新失败');
+            }
+        },'json');
+    });
 
     $check_all_tb.click(function(e){
         var table= $(e.target).closest('table');
         $('td input:checkbox',table).prop('checked',this.checked);
     });
-
-
 
     function setTuanStatus(){
         var tuanBuyingsForm = $('.tuan-buyings-form');
