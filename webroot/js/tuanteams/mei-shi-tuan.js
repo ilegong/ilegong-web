@@ -45,7 +45,7 @@ $(function(){
         $('.county').on('click',function(){
             var countyId = $(this).data('county-id');
             if(countyId=='all'){
-                $(".tuan-team").show();
+                $(".tuan-team").removeClass('hide');
             }else{
                 $(".tuan-team").each(function(){
                     $(this).toggleClass('hide', $(this).data("county-id") != countyId);
