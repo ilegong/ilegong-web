@@ -677,7 +677,7 @@ class StoresController extends AppController
             return;
         }
         $cond = array('brand_id' => $brand_id,
-            'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN, ORDER_TYPE_MILK),
+            'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC),
             'NOT' => array(
                 'status' => array(ORDER_STATUS_CANCEL)
             )
@@ -818,7 +818,7 @@ class StoresController extends AppController
         }
 
         $cond = array('brand_id' => $this->brand['Brand']['id'],
-            'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN, ORDER_TYPE_MILK),
+            'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC),
             'NOT' => array(
             'status' => array(ORDER_STATUS_CANCEL)
         ));
