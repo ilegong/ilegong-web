@@ -6,15 +6,36 @@
  * Time: 下午6:29
  */
 class TuanTeamsController extends AppController{
+
     public function mei_shi_tuan(){
         $this->pageTitle = '美食团';
+        $current_user_id = $this->currentUser['id'];
+        $this->loadModel('TuanMember');
+        //user is login
+        if(!empty($current_user_id)){
+            $my_tuans = $this->TuanMember->find('all',array(
+                'conditions' => array(
+                    'uid' => $current_user_id
+                ),
+                'order' => 'join_time DESC'
+            ));
+            $my_tuan_ids = Hash::extract($my_tuans,'{n}.TuanMembers.tuan_id');
+        }
         $tuan_teams = $this->TuanTeam->find('all', array(
             'conditions' =>array('status'=> 0, 'type' => 0),
             'order' => array('TuanTeam.priority DESC')
         ));
+        $left_tuan_ids = Hash::extract($tuan_teams,'{n}.TuanTeam.id');
+        if(!empty($my_tuan_ids)){
+            $this->set('my_tuan_ids',$my_tuan_ids);
+            $left_tuan_ids = array_diff($left_tuan_ids,$my_tuan_ids);
+        }
+        $tuan_teams = Hash::combine($tuan_teams,'{n}.TuanTeam.id','{n}.TuanTeam');
+        $this->set('left_tuan_ids',$left_tuan_ids);
         $this->set('tuan_teams',$tuan_teams);
         $this->set('op_cate','mei_shi_tuan');
     }
+
     public function info($tuan_id){
         $tuan_team = $this->TuanTeam->find('first', array(
             'conditions' =>array('id'=> $tuan_id),

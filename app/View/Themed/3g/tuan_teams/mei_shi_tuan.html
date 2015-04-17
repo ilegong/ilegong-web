@@ -5,28 +5,57 @@
         <div class="clearfix conordertuan" style="padding:0;border-bottom: 0;">
         </div>
         <div class="tuan-teams" data-county-id="tuan_teams">
-        {{loop $tuan_teams $tuan}}
-        <?php $tuan_link = '/tuan_teams/info/'. $tuan['TuanTeam']['id'];
-            $location = $tuan['TuanTeam']['location_long'].','. $tuan['TuanTeam']['location_lat'];
-            ?>
-        <div class="alltuan_border tuan-team" data-county-id="{{$tuan['TuanTeam']['county_id']}}">
-            <ul class="clearfix">
-                <li><a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan['TuanTeam']['tuan_name']}}&addr={{$tuan['TuanTeam']['tuan_addr']}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
-                <li style=" float: none; padding-left: 8em;">
-                    <a href="{{$tuan_link}}">
-                        <p>{{$tuan['TuanTeam']['tuan_name'] }}</p>
-                        <s>团长:<span>{{$tuan['TuanTeam']['leader_name']}}</span>&nbsp;&nbsp;成员:<span>{{$tuan['TuanTeam']['member_num']}}</span>人</s><br/>
-                        <s>寻找最纯粹的美味</s>
+        {{if !empty($my_tuan_ids)}}
+            {{loop $my_tuan_ids $id}}
+                <?php
+                    $tuan = $tuan_teams[$id];
+                    $tuan_link = '/tuan_teams/info/'. $tuan['id'];
+                    $location = $tuan['location_long'].','. $tuan['location_lat'];
+                ?>
+                <div class="alltuan_border tuan-team" data-county-id="{{$tuan['county_id']}}">
+                    <ul class="clearfix">
+                        <li><a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan['tuan_name']}}&addr={{$tuan['tuan_addr']}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
+                        <li style=" float: none; padding-left: 8em;">
+                            <a href="{{$tuan_link}}">
+                                <p>{{$tuan['tuan_name'] }}</p>
+                                <s>团长:<span>{{$tuan['leader_name']}}</span>&nbsp;&nbsp;成员:<span>{{$tuan['member_num']}}</span>人</s><br/>
+                                <s>寻找最纯粹的美味</s>
+                            </a>
+                        </li>
+                    </ul>
+                    <dl class="clearfix">
+                        <a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan['tuan_name']}}&addr={{$tuan['tuan_addr']}}">
+                            <dd><img src="/img/tuan/locat_icon.gif" border="0" /></dd>
+                            <dd style="float: none">{{$tuan['address']}}</dd>
+                        </a>
+                    </dl>
+                </div>
+            {{/loop}}
+        {{/if}}
+        {{loop $left_tuan_ids $id}}
+                <?php
+                    $tuan = $tuan_teams[$id];
+                    $tuan_link = '/tuan_teams/info/'. $tuan['id'];
+                    $location = $tuan['location_long'].','. $tuan['location_lat'];
+                ?>
+            <div class="alltuan_border tuan-team" data-county-id="{{$tuan['county_id']}}">
+                <ul class="clearfix">
+                    <li><a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan['tuan_name']}}&addr={{$tuan['tuan_addr']}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
+                    <li style=" float: none; padding-left: 8em;">
+                        <a href="{{$tuan_link}}">
+                            <p>{{$tuan['tuan_name'] }}</p>
+                            <s>团长:<span>{{$tuan['leader_name']}}</span>&nbsp;&nbsp;成员:<span>{{$tuan['member_num']}}</span>人</s><br/>
+                            <s>寻找最纯粹的美味</s>
+                        </a>
+                    </li>
+                </ul>
+                <dl class="clearfix">
+                    <a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan['tuan_name']}}&addr={{$tuan['tuan_addr']}}">
+                        <dd><img src="/img/tuan/locat_icon.gif" border="0" /></dd>
+                        <dd style="float: none">{{$tuan['address']}}</dd>
                     </a>
-                </li>
-            </ul>
-            <dl class="clearfix">
-                <a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan['TuanTeam']['tuan_name']}}&addr={{$tuan['TuanTeam']['tuan_addr']}}">
-                    <dd><img src="/img/tuan/locat_icon.gif" border="0" /></dd>
-                    <dd style="float: none">{{$tuan['TuanTeam']['address']}}</dd>
-                </a>
-            </dl>
-        </div>
+                </dl>
+            </div>
         {{/loop}}
         </div>
     </div>
