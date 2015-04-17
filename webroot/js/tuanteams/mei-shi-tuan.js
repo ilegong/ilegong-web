@@ -34,12 +34,14 @@ $(function(){
     });
 
     $.getJSON('/tuan_teams/api_getArea',function(data){
+        var areas = data['areas'];
+        var count_result = data['count_result'];
         $('<ul class="clearfix"><li><a href="#X" class="county cur" data-county-id="all">全部</a></li></ul>').appendTo(area);
-        $.each(data,function(index,item){
-            var areaId = item['id'];
-            var isArea = areaIds.find('[data-county-id="'+areaId+'"]');
-            if(isArea.length){
-            $('<ul class="clearfix"><li><a href="#X" class="county" data-county-id="'+item['id']+'">'+ item['name']+ '区</a></li></ul>').appendTo(area);
+        $.each(count_result,function(index,item){
+            var areaId = item['area_id'];
+            var area_item = areas[areaId];
+            if(area_item){
+                $('<ul class="clearfix"><li><a href="#X" class="county" data-county-id="'+area_item['id']+'">'+ area_item['name']+ '区</a></li></ul>').appendTo(area);
             }
         });
         $('.county').on('click',function(){

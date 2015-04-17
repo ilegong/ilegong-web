@@ -202,11 +202,19 @@ class TuanTeamsController extends AppController{
         $areaId = $this->Location->find('all',array(
            'conditions' => array(
                'parent_id' => 110100
-           )
+           ),
         ));
-        $areaId = Hash::extract($areaId,'{n}.Location');
-        echo json_encode($areaId);
+        $team_count_area_map = $this->Location->query('select county_id, count(*) t_count from cake_tuan_teams group by county_id');
+        $count_result = array();
+        foreach($team_count_area_map as $ta_map){
+            $count_result[] = array('area_id' => $ta_map['cake_tuan_teams']['county_id'],'count'=>$ta_map['0']['t_count']);
+        }
+        $count_result = Set::sort($count_result,'{n}.count','DESC');
+        $areaId = Hash::combine($areaId,'{n}.Location.id','{n}.Location');
+        $json_result = array('areas' => $areaId,'count_result' => $count_result);
+        echo json_encode($json_result);
     }
+
 
 }
 

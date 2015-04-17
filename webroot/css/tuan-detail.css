@@ -28,7 +28,13 @@ ul li{ list-style:none;}
 .tuandetail_good a .tuandetail_img{ margin-right:10px; border:1px #eeeeee solid; border-top:0;}
 .tuandetail_good a .tuandetail_img img{ width:100%;}
 .tuandetail_title{ background-color:#ffffff; color:#333333; padding:5px 8px; margin-right:10px; border:1px #eeeeee solid; border-top:0;}
-.tuandetail_title span{ display:block; line-height:14px; font-size:0.9em;}
+.tuandetail_title span {
+    display: block;
+    line-height: 14px;
+    font-size: 0.9em;
+    max-height: 28px;
+    overflow: hidden;
+}
 .tuandetail_title em{ display:block; color:#cccccc; font-style:normal; padding-top:5px;}
 .tuandetail_title em strong{ color:#ff9000;}
 .tuandetail_title em font{ font-size:0.9em; text-decoration:line-through;}
