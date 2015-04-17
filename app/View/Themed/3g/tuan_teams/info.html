@@ -24,7 +24,7 @@
     <?php $i = 0; foreach($tryings as $trying) { if ($i++>2) {break;} ?>
         <span><img src="{{$this->Html->assetUrl(small_thumb_link($trying['image']))}}"/></span>
         <span>
-            <h1>{{$trying['ProductTry']['name']}} {{$trying['ProductTry']['spec']}}</h1>
+            <h1>{{$trying['ProductTry']['product_name']}} {{$trying['ProductTry']['spec']}}</h1>
             <em>秒杀价：<strong>¥{{$this->Number->precision(calculate_try_price($trying['ProductTry']['price']), 2)}}</strong></em>
             <div class="tuan_bar clearfix" style="padding:5px 10px 12px 10px;">
                 {{if $trying['status'] == 'sec_kill'}}
