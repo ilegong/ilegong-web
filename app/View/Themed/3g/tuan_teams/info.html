@@ -25,7 +25,7 @@
     <ul class="clearfix tuandetail_member">
         <li class="fl"><span>团长:{{$tuan_team['TuanTeam']['leader_name']}}</span></li>
         <li class="fl">&nbsp;&nbsp;微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}</li>
-        <li class="fr"><a class="p_more"></a></li>
+        <li class="fr"><a class="p_more" href="/tuan_teams/memberlist/{{$tuan_team['TuanTeam']['id']}}"></a></li>
         <li class="fr">{{$tuan_team['TuanTeam']['member_num']}}人</li>
     </ul>
     <a class="clearfix adress" href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
