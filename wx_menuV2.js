@@ -23,25 +23,9 @@
         ]
     },
     {
-        "name":"试吃团",
-        "sub_button":[
-            {"type": "view",
-                "name": "每期报道",
-                "url": "http://www.pyshuo.com/shichituan.html"
-            },
-            {"type": "view",
-                "name": "吃货聚会",
-                "url": "http://www.pyshuo.com/subscripts/chi_huo_ju_hui.html"
-            },
-            {"type": "view",
-                "name": "加入试吃",
-                "url": "http://www.pyshuo.com/users/wx_menu_point?referer_key=CLICK_URL_SHICHI_APPLY&do_wx_auth_if_not_log_in=1"
-            },
-            {"type": "view",
-                "name": "吃货集中营",
-                "url": "http://wsq.qq.com/reflow/177650290"
-            }
-        ]
+        "type":"view",
+        "name":"美食团",
+        "url":"http://www.tongshijia.com/tuan_teams/mei_shi_tuan.html?_sl=wx.sv.mst"
     },
     {
         "name":"线上活动",
