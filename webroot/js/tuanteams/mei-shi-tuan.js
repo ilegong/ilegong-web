@@ -34,6 +34,7 @@ $(function(){
     });
 
     $.getJSON('/tuan_teams/api_getArea',function(data){
+        $('<ul class="clearfix"><li><a href="#X" class="county cur" data-county-id="all">全部</a></li></ul>').appendTo(area);
         $.each(data,function(index,item){
             var areaId = item['id'];
             var isArea = areaIds.find('[data-county-id="'+areaId+'"]');
@@ -43,9 +44,13 @@ $(function(){
         });
         $('.county').on('click',function(){
             var countyId = $(this).data('county-id');
-            $(".tuan-team").each(function(){
-                $(this).toggleClass('hide', $(this).data("county-id") != countyId);
-            });
+            if(countyId=='all'){
+                $(".tuan-team").show();
+            }else{
+                $(".tuan-team").each(function(){
+                    $(this).toggleClass('hide', $(this).data("county-id") != countyId);
+                });
+            }
             $('.county').removeClass('cur');
             $(this).addClass('cur');
         });
