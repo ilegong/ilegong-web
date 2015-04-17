@@ -5,7 +5,7 @@
         <li style="text-overflow: ellipsis;"><strong>结算</strong></li>
     </ul>
 </div>
-<div class="address clearfix" style="position:relative;">
+<div class="address clearfix" style="position:relative;" data-address-choice="{{$has_chosen_consignee}}">
     <span style="display:block;" class="fl">送至&nbsp;&nbsp;<a class="moreicon" href="#X"></a></span>
     <span style="display:block;" class="fl"><a class="moreicon new_address" href="#X"></a></span>
     <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}<br />
@@ -50,7 +50,7 @@
                 </div>
             {{/loop}}
                 <div class="clearfix leave_words">
-                    <input name="" type="text" placeholder="给卖家留言:" />
+                    <input name={{"remark_".$brandItem->id}} type="text" placeholder="给卖家留言:" />
                 </div>
                 <p class="conordertuan_total">共1件商品，合计:<strong>￥308.00</strong></p>
         {{/loop}}
@@ -72,7 +72,7 @@
 <div class="cart_pay">
     <ul class="clearfix">
         <li class="fl">共{{$total_num}}件商品，总金额<strong>{{$this->Number->precision($cart->total_price() + ($shipFee > 0?$shipFee:0), 2)}}</strong></li>
-        <li class="fr"><a href="#X">提交订单</a></li>
+        <li class="fr"><a href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a></li>
     </ul>
 </div>
 <script>
@@ -81,6 +81,15 @@
         var width = $(window).width();
         var url = "/orders/edit_consignee?height=" + height + "&width=" + width + "&modal=true";
         $(".new_address").addClass("thickbox").attr("href",url);
+
+        $(".cart_pay .fr a").on("click", function(e){
+            var self  = $(this);
+            var info = infoToBalance(self);
+            if(!info.submitOrder()){
+                e.preventDefault();
+                return false;
+            }
+        })
     })();
 </script>
 {{$this->Html->script(array('/js/thickbox.js'));}}

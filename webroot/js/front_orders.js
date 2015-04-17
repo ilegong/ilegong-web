@@ -508,3 +508,34 @@ function chose_Consignee(){
     $('#edit_type').val('select');
     $('#consignee_addr').hide();
 }
+var infoToBalance = function(self){
+    var setRemark = function(){
+        var link = self.attr("href");
+        var params = (link.indexOf("?")>-1)?"&":"?";
+        $("input[name^='remark']").each(function(){
+            var input_name=$(this).attr("name");
+            var input_value=$(this).val();
+            if(input_value!=""){
+                params = params+input_name+"="+input_value+"&";
+            }
+        });
+        params=params.substring(0,params.length-1);
+        self.attr("href",link+params);
+    };
+    var checkAddress = function(){
+        if($(".address").data("addressChoice")!=1){
+            utils.alert("请编辑收货信息");
+            return false;
+        }
+        return true;
+    };
+    return{
+        submitOrder : function(){
+            if(checkAddress()){
+                setRemark();
+                return true;
+            }
+            return false;
+        }
+    }
+};
