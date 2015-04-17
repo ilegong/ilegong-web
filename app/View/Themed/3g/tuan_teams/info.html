@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimal-ui">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>{{$tuan_team['TuanTeam']['tuan_name']}}</title>
-    {{$this->Html->css(array('tuan-detail.css?v1'))}}
+    {{$this->Html->css(array('tuan-detail.css?v2'))}}
 </head>
 <body style="background-color:#f5f5f5;">
 <div class="tuandetail_nav">
@@ -15,9 +15,23 @@
         <li class="fr"><a href="/scores/more_score">领积分</a></li>
     </ul>
 </div>
-<div class="tuandetail_name">
-    <strong>{{$tuan_team['TuanTeam']['tuan_name']}}</strong>
-    <em>健康&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;营养&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;实惠</em>
+<?php $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
+?>
+<div class="tuandetail">
+    <div class="tuandetail_name">
+        <strong>{{$tuan_team['TuanTeam']['tuan_name']}}</strong>
+        <em>健康&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;营养&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;实惠</em>
+    </div>
+    <ul class="clearfix tuandetail_member">
+        <li class="fl"><span>团长:{{$tuan_team['TuanTeam']['leader_name']}}</span></li>
+        <li class="fl">&nbsp;&nbsp;微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}</li>
+        <li class="fr"><a class="p_more"></a></li>
+        <li class="fr">{{$tuan_team['TuanTeam']['member_num']}}人</li>
+    </ul>
+    <a class="clearfix adress" href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
+        <span class="fl"><img src="{{$this->Html->assetUrl('/img/tuan/detail/locat_icon.gif')}}" border="0" /></span>
+        <span style="float: none; padding-left: 20px;">配送至: {{$tuan_team['TuanTeam']['tuan_addr']}}</span>
+    </a>
 </div>
 {{if !empty($tryings)}}
 <div class="tuandetail_seckill clearfix">
