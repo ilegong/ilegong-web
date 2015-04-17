@@ -42,6 +42,10 @@ ul,ol {
 .alltuan dl dd{ font-size: 1em; color: #333333; float: left; line-height: 18px;}
 .alltuan dl dd img{ width: 0.8em; border: 0; margin-top: 1px; margin-right: 3px;vertical-align:baseline;}
 
+.alltuan_addbtn{ display: block; width: 48%; text-align: center; line-height: 26px; border-radius: 2px; font-size: 14px; color: #ed8600; border: 1px #ed8600 solid; text-decoration: none; margin-left: 13px; margin-top: 7px;}
+.alltuan_addbtn:hover{color: #ed8600;}
+.alltuan_curbtn{ display: block; width: 48%; text-align: center; line-height: 26px; border-radius: 2px; font-size: 14px; color: #ffffff; background-color: #ed8600; border: 1px #ed8600 solid; text-decoration: none; margin-left: 13px; margin-top: 7px;}
+.alltuan_curbtn:hover{color: #ffffff;}
 
 .alltuan_btn{ border-top: 1px #eeeeee solid; margin: 0 10px; padding: 8px 0;}
 .alltuan_btn a{ display: block; width: 48%; text-align:center; line-height: 30px; border-radius: 2px; font-size: 14px; color: #ed8600; border: 1px #ed8600 solid; text-decoration: none;}

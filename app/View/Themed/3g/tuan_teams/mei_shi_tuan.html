@@ -1,4 +1,7 @@
 {{$this->Html->css(array('tuan.css?v5'))}}
+<?php $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
+    $referer_link .= '&scope=userinfo&referer='.urlencode($referer.'?has_joined=success');
+?>
 <div class="alltuan" style="position: relative;">
     <a href="/tuan_teams/create" class="alltuan_add">没有附近的团，申请创建自己的团队</a>
     <div style="margin-top: 40px;">
@@ -14,12 +17,12 @@
                 ?>
                 <div class="alltuan_border tuan-team" data-county-id="{{$tuan['county_id']}}">
                     <ul class="clearfix">
-                        <li><a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan['tuan_name']}}&addr={{$tuan['tuan_addr']}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
+                        <li><a href="{{$tuan_link}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
                         <li style=" float: none; padding-left: 8em;">
                             <a href="{{$tuan_link}}">
                                 <p>{{$tuan['tuan_name'] }}</p>
-                                <s>团长:<span>{{$tuan['leader_name']}}</span>&nbsp;&nbsp;成员:<span>{{$tuan['member_num']}}</span>人</s><br/>
-                                <s>寻找最纯粹的美味</s>
+                                <s>团长:<span>{{$tuan['leader_name']}}</span>&nbsp;&nbsp;成员:<span name="member_num">{{$tuan['member_num']}}</span>人</s><br/>
+                                <a href="#X" class="alltuan_curbtn">已加入</a><br/>
                             </a>
                         </li>
                     </ul>
@@ -40,12 +43,12 @@
                 ?>
             <div class="alltuan_border tuan-team" data-county-id="{{$tuan['county_id']}}">
                 <ul class="clearfix">
-                    <li><a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan['tuan_name']}}&addr={{$tuan['tuan_addr']}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
+                    <li><a href="{{$tuan_link}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
                     <li style=" float: none; padding-left: 8em;">
                         <a href="{{$tuan_link}}">
-                            <p>{{$tuan['tuan_name'] }}</p>
+                            <p>{{$tuan['tuan_name']}}</p>
                             <s>团长:<span>{{$tuan['leader_name']}}</span>&nbsp;&nbsp;成员:<span>{{$tuan['member_num']}}</span>人</s><br/>
-                            <s>寻找最纯粹的美味</s>
+                            <a href="#X" class="alltuan_addbtn" name="join_tuan" data-tuan-id="{{$id}}">我要加入</a><br/>
                         </a>
                     </li>
                 </ul>
@@ -60,4 +63,5 @@
         </div>
     </div>
 </div>
+
 {{$this->Html->script(array('tuanteams/mei-shi-tuan.js',))}}

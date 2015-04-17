@@ -19,7 +19,7 @@ class TuanTeamsController extends AppController{
                 ),
                 'order' => 'join_time DESC'
             ));
-            $my_tuan_ids = Hash::extract($my_tuans,'{n}.TuanMembers.tuan_id');
+            $my_tuan_ids = Hash::extract($my_tuans,'{n}.TuanMember.tuan_id');
         }
         $tuan_teams = $this->TuanTeam->find('all', array(
             'conditions' =>array('status'=> 0, 'type' => 0),
@@ -30,10 +30,12 @@ class TuanTeamsController extends AppController{
             $this->set('my_tuan_ids',$my_tuan_ids);
             $left_tuan_ids = array_diff($left_tuan_ids,$my_tuan_ids);
         }
+        $referer = Router::url($_SERVER['REQUEST_URI']);
         $tuan_teams = Hash::combine($tuan_teams,'{n}.TuanTeam.id','{n}.TuanTeam');
         $this->set('left_tuan_ids',$left_tuan_ids);
         $this->set('tuan_teams',$tuan_teams);
         $this->set('op_cate','mei_shi_tuan');
+        $this->set('referer', $referer);
     }
 
     public function info($tuan_id){
@@ -117,22 +119,20 @@ class TuanTeamsController extends AppController{
             if(empty($uid)){
                 $is_oauth = false;
             }else{
-                $is_oauth = false;
-//                $this->loadModel('Oauthbinds');
-//                $is_oauth = $this->Oauthbinds->hasAny(array('user_id' => $uid));
+                $is_oauth = true;
             }
             if($is_oauth){
                 $this->loadModel('TuanMember');
-                $is_member = $this->TuanMember->hanAny(array('uid' => $uid, 'tuan_id' => $tuan_id));
+                $is_member = $this->TuanMember->hasAny(array('uid' => $uid, 'tuan_id' => $tuan_id));
                 if(!$is_member){
                     $data['tuan_id'] =  $tuan_id;
                     $data['uid'] = $uid;
                     $data['join_time'] = date('Y-m-d H:i:s');
-                    $this->TuanMember->save($data);
-
+                    if($this->TuanMember->save($data)){
+                        $this->TuanTeam->update(array('member_num' => 'member_num + 1'), array('id' => $tuan_id));
+                    }
                 }
                 $res = array('success'=> true);
-
             }else{
                 $res = array('success'=> false, 'type' => 'not_login' );
             }
