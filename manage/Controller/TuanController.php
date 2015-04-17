@@ -67,7 +67,7 @@ class TuanController extends AppController{
         $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
 
         $order_query_cond = array(
-            'Order.type' => ORDER_TYPE_TUAN
+            'Order.type' => array(ORDER_TYPE_TUAN_SEC,ORDER_TYPE_TUAN,ORDER_TYPE_DEF)
         );
         //add tuan_buys member id
         if(!empty($tuan_buys)){
