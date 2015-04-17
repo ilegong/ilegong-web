@@ -41,13 +41,15 @@
             <h1>{{$trying['ProductTry']['product_name']}} {{$trying['ProductTry']['spec']}}</h1>
             <em>秒杀价：<strong>¥{{$this->Number->precision(calculate_try_price($trying['ProductTry']['price']), 2)}}</strong></em>
             <div class="tuan_bar clearfix" style="padding:5px 10px 12px 10px;">
-                {{if $trying['status'] == 'sec_kill'}}
+                <div>
+                    {{if $trying['status'] == 'sec_kill'}}
                     <a  href="/shichi/list_pai.html?tuan_id={{$tuan_id}}" class="tuan_bar_btn" data-pid="{{$trying['Product']['id']}}">正在秒杀</a>
-                {{elseif $trying['status'] == 'sec_end'}}
+                    {{elseif $trying['status'] == 'sec_end'}}
                     <a class="tuan_bar_btn">已秒完</a>
-                {{else}}
+                    {{else}}
                     <a data-start="{{strtotime($trying['ProductTry']['start_time']) - ($shichi_mem? 30 * 60 : 0)}}" data-pid="{{$trying['Product']['id']}}" href="#X" class="tuan_bar_btn sec_start">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
-                {{/if}}
+                    {{/if}}
+                </div>
                 <div class="fr" style="width:48%; margin-top:4px;">
                     <?php $limit_num = $trying['ProductTry']['limit_num'];
                         $sold_num = $trying['ProductTry']['sold_num'];
