@@ -392,7 +392,7 @@ class TuanBuyingsController extends AppController{
         $this->loadModel('Cart');
         $order_info = $this->Order->find('first', array(
             'conditions' =>array('id' => $orderId),
-            'fields' => array('total_all_price', 'created', 'id', 'consignee_address', 'consignee_name', 'member_id')
+            'fields' => array('total_all_price', 'created', 'id', 'consignee_address', 'consignee_name', 'member_id','type')
         ));
         $cart_info = $this->Cart->find('first', array(
             'conditions' =>array('order_id' => $orderId),
