@@ -7,10 +7,10 @@
 </div>
 <div class="address clearfix" style="position:relative;">
     <span style="display:block;" class="fl">送至&nbsp;&nbsp;<a class="moreicon" href="#X"></a></span>
-    <span style="display:block;" class="fl"><a class="moreicon" href="#X"></a></span>
+    <span style="display:block;" class="fl"><a class="moreicon new_address" href="#X"></a></span>
     <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}<br />
         {{$this->Session->read('OrderConsignee.name')}} &nbsp; {{$this->Session->read('OrderConsignee.mobilephone')}}</span>
-    <a href="#X" class="address_addbtn" style=" display: none;">添加收货地址</a>
+    <a href="#X" class="address_addbtn new_address" {{if $total_consignee > 0}}style=" display: none;"{{/if}}>添加收货地址</a>
 </div>
 <div class="cart" style="margin-top: 0; padding-top: 0;">
     <div>
@@ -75,3 +75,13 @@
         <li class="fr"><a href="#X">提交订单</a></li>
     </ul>
 </div>
+<script>
+    (function (){
+        var height =  $(window).height() + 5;
+        var width = $(window).width();
+        var url = "/orders/edit_consignee?height=" + height + "&width=" + width + "&modal=true";
+        $(".new_address").addClass("thickbox").attr("href",url);
+    })();
+</script>
+{{$this->Html->script(array('/js/thickbox.js'));}}
+{{$this->Html->css(array('thickbox.css?ver1' ));}}

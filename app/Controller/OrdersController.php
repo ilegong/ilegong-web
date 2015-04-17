@@ -397,7 +397,7 @@ class OrdersController extends AppController {
         }
 
         $consignees = $this->OrderConsignee->find('all',array(
-            'conditions'=>array('creator'=> $uid),
+            'conditions'=>array('creator'=> $uid, 'status !=' => STATUS_CONSIGNEES_TUAN),
             'order' => 'status desc',
         ));
         $total_consignee = count($consignees);
@@ -474,11 +474,12 @@ class OrdersController extends AppController {
         $could_score_money = cal_score_money($score, $total_price);
         $this->set('score_usable', $could_score_money * 100);
         $this->set('score_money', $could_score_money);
-
-        $spec_ids = array_unique(Hash::extract($cartsDict,'{n}.specId'));
-        $this->set('spec_group',search_spec($spec_ids));
-        $consign_ids = array_unique(Hash::extract($cartsDict,'{n}.consignment_date'));
-        $this->set('consign_dates',search_consignment_date($consign_ids));
+        if($cartsDict){
+            $spec_ids = array_unique(Hash::extract($cartsDict,'{n}.specId'));
+            $this->set('spec_group',search_spec($spec_ids));
+            $consign_ids = array_unique(Hash::extract($cartsDict,'{n}.consignment_date'));
+            $this->set('consign_dates',search_consignment_date($consign_ids));
+        }
         $shipPromotions = $this->ShipPromotion->findShipPromotions($pids, $brand_ids);
         if ($shipPromotions && !empty($shipPromotions)) {
             $this->set('specialShipPromotionId', $shipPromotionId);

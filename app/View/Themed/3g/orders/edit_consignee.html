@@ -1,6 +1,6 @@
 <div id="edit_consignee" class="o_write">
 <h2>收货人信息&nbsp;</h2>
-<form action="{{$this->Html->url('/orders/info_consignee')}}" class="form-horizontal"  onsubmit="return ajaxeSubmitForm(this);" method="post">
+<form action="{{$this->Html->url('/orders/info_consignee')}}" class="form-horizontal address-form"  onsubmit="return ajaxeSubmitForm(this);" method="post">
 	<div class="middle">
 		<div id="addressListPanel"><div class="cydz"><b>常用地址</b></div>
 			<table  class="table table-bordered"><tbody>
@@ -89,6 +89,12 @@
 					e.preventDefault();
 					return false;
 				}
+            }
+        });
+        $('.address-form').on("submit", function(){
+            if(typeof(tb_remove)=="function"){
+                tb_remove();
+                location.reload();
             }
         })
     });
