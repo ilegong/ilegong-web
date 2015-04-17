@@ -436,4 +436,7 @@ input {
 
 .tuandetail .adress span img{ width:80%;}
 
+.countdown{ float:left; width:1.083em; height:1.8em; line-height:1.8em; background-color:#4f4544; font-size:1em; color:#ffffff; text-align:center; margin-right:1px; -moz-border-radius:0.3em;/* Gecko browsers */-webkit-border-radius:0.3em;/* Webkit browsers */border-radius:0.3em;/* W3C syntax */}
+
+
 
