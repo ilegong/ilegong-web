@@ -35,7 +35,8 @@
 </div>
 {{if !empty($tryings)}}
 <div class="tuandetail_seckill clearfix">
-    <?php $i = 0; foreach($tryings as $trying) { if ($i++>2) {break;} ?>
+    <?php $i = 0; foreach($tryings as $trying) {
+        if ($i++>2) {break;} ?>
         <span><img src="{{$this->Html->assetUrl(small_thumb_link($trying['image']))}}"/></span>
         <span>
             <h1>{{$trying['ProductTry']['product_name']}} {{$trying['ProductTry']['spec']}}</h1>
