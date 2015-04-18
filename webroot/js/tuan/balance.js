@@ -70,6 +70,7 @@ $('#confirm_next').on('click',function(e){
     if($("#confirm_next").data("disable") == 'true') {
         return false;
     }
+    var is_try = false;
     var balanceDom = $(".tuan_balance");
     var way = balanceDom.data("shipWay") || "";
     var addressInput = $("input[name='consignee_address']").length || "not";
@@ -119,6 +120,7 @@ $('#confirm_next').on('click',function(e){
     }
     if(try_id){
         member_id = try_id;
+        is_try = true;
     }
     if(!(cart_id && member_id && tuan_id)){
         utils.alert('订单有误,请重新下单');
@@ -132,7 +134,11 @@ $('#confirm_next').on('click',function(e){
         success: function (a) {
             if (a.success) {
                 $("#confirm_next").attr('data-disable', 'true');
-                window.location.href = '/tuan_buyings/tuan_pay/' + a.order_id;
+                if(is_try){
+                    window.location.href = '/orders/detail/'+ a.order_id+'/pay';
+                }else{
+                    window.location.href = '/tuan_buyings/tuan_pay/' + a.order_id;
+                }
             } else {
                 if(a.info){
                     utils.alert(a.info);
