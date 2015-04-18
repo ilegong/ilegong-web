@@ -393,7 +393,7 @@ class TuanBuyingsController extends AppController{
             'conditions' =>array('id' => $orderId),
             'fields' => array('total_all_price', 'created', 'id', 'consignee_address', 'consignee_name', 'member_id','type','try_id')
         ));
-        if($order_info['Order']['type']==ORDER_TYPE_TUAN_SEC||$order_info['Order']['try_id']>0){
+        if($order_info['Order']['type'] == ORDER_TYPE_TUAN_SEC||$order_info['Order']['try_id'] > 0){
             $this->__message('只支持团购订单结算', '/orders/mine.html?tab=waiting_pay');
             return;
         }
