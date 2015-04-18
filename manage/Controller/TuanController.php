@@ -18,7 +18,7 @@ class TuanController extends AppController{
     public function admin_tuan_orders(){
         $this->loadModel('ProductSpecGroup');
         $team_id = $_REQUEST['team_id'];
-        $product_id = $_REQUEST['product_id'];
+        $product_id = empty($_REQUEST['product_id'])?-1 : $_REQUEST['product_id'];
         $query_product_id = empty($_REQUEST['query_product_id'])? -1 : $_REQUEST['query_product_id'];
         $con_name = $_REQUEST['con_name'];
         $con_phone = $_REQUEST['con_phone'];
@@ -38,18 +38,19 @@ class TuanController extends AppController{
             $query_tb['tuan_id']=$team_id;
         }
 
-        if($product_id != -1){
+        if(!empty($product_id)&&$product_id != -1){
             $query_tb['pid'] = $product_id;
             $should_count_nums = true;
             $this->set('should_count_nums',$should_count_nums);
         }
+        if(!empty($query_tb)){
+            $tuan_buys = $this->TuanBuying->find('all',array(
+                'conditions' => $query_tb
+            ));
 
-        $tuan_buys = $this->TuanBuying->find('all',array(
-            'conditions' => $query_tb
-        ));
-
-        if(!empty($tuan_buys)){
-            $p_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.pid');
+            if(!empty($tuan_buys)){
+                $p_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.pid');
+            }
         }
         //统计规格
         if($query_product_id!=-1){
@@ -234,16 +235,18 @@ class TuanController extends AppController{
             }
             $this->set('orders',$orders);
             $this->set('order_carts',$order_carts);
-            $tuan_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.tuan_id');
-            $tuans = $this->TuanTeam->find('all',array(
-                'conditions' => array(
-                    'id' => $tuan_ids
-                )
-            ));
-            $tuans = Hash::combine($tuans,'{n}.TuanTeam.id','{n}.TuanTeam');
-            $this->set('tuans',$tuans);
-            $tuan_buys = Hash::combine($tuan_buys,'{n}.TuanBuying.id','{n}.TuanBuying');
-            $this->set('tuan_buys',$tuan_buys);
+            if(!empty($tuan_buys)){
+                $tuan_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.tuan_id');
+                $tuans = $this->TuanTeam->find('all',array(
+                    'conditions' => array(
+                        'id' => $tuan_ids
+                    )
+                ));
+                $tuans = Hash::combine($tuans,'{n}.TuanTeam.id','{n}.TuanTeam');
+                $this->set('tuans',$tuans);
+                $tuan_buys = Hash::combine($tuan_buys,'{n}.TuanBuying.id','{n}.TuanBuying');
+                $this->set('tuan_buys',$tuan_buys);
+            }
             //排期
             $consign_ids = array_unique(Hash::extract($carts,'{n}.Cart.consignment_date'));
             if(count($consign_ids)!=1 || !empty($consign_ids[0])){
