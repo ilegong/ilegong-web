@@ -27,22 +27,22 @@ $(function(){
             $('<option value="' + tuan_product['product_id'] + '">' + tuan_product['alias'] + '</option>').appendTo(tuanProducts);
         });
     });
-
     var tuanTeamList = $('.tuan-teams-list');
     $.getJSON('/manage/admin/tuanTeams/api_tuan_teams',function(data){
-        $.each(data,function(index,item){
-            if((index+1)%6==0){
-                $('<input type="checkbox" value="'+item['id']+'"name="team_id">'+ item['tuan_name'] + '</input>'+'</br>').appendTo(tuanTeamList);
-            }else{
-                $('<input type="checkbox" value="'+item['id']+'"name="team_id">'+ item['tuan_name'] + '</input>').appendTo(tuanTeamList);
-            }
+        $.each(tuanAreas,function(Index,Item){
+            var tuan_area =  $('<p class="tuan-area"  value="'+ Item['id']+'"><strong>'+ Item['name']+'</strong></p>');
+            tuan_area.appendTo(tuanTeamList).css('color','red').hide();
+          $.each(data,function(index,item){
+                if(item['county_id'] == Item['id']){
+                    $('<input type="checkbox"  data-id="'+item['county_id'] +'" value="'+item['id']+'"name="team_id">'+ item['tuan_name'] + '</input>').appendTo(tuanTeamList);
+                    tuan_area.show();
+                }
+            });
         });
     });
     var tuanEndTime = $('.tuan-end-time');
     var tuanTargetNum = $('.tuan-target-num');
     $(".tuan-form").submit(function(e){
-//        var invalidTuanTeam = tuanTeams.val() == -1;
-//        tuanTeams.parents('.form-group').toggleClass('has-error', invalidTuanTeam);
         var tuanTeamId = new Array();
         $("input[type='checkbox']:checked").each(function(){
             tuanTeamId.push($(this).val());
@@ -59,11 +59,6 @@ $(function(){
         if(invalidTuanProduct || invalidTuanEndTime || invalidTargetNum){
             return false;
         }
-//        $.post('/manage/admin/tuanBuyings/create',{'tuanTeamId':tuanTeamId},function(data){
-//           if(data.success){
-//               bootbox.alert('团队创建成功');
-//           }
-//        });
         return true;
     });
 
