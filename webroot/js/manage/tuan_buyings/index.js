@@ -12,6 +12,8 @@ $(function(){
     var $batch_complete = $('#batch_complete');
 
     var $batch_cancel = $('#batch_cancel');
+    var batch_message = $('#batch_message');
+    var batch_deliver = $('#batch_deliver');
 
     function getAllCheckTbId(){
         var $checkboxes = $('td input:checkbox:checked',$('table'));
@@ -25,28 +27,52 @@ $(function(){
 
     $batch_cancel.on('click',function(e){
         var $tb_ids = getAllCheckTbId();
+        if($tb_ids.length==0){
+            bootbox.alert('您没有选中任何项！')
+            return;
+        }
         $.post('/manage/admin/tuanBuyings/batch_set_status',{'tuan_buy_ids':$tb_ids,'status':2},function(data){
             if(data.success){
-                alert('更新成功');
+                bootbox.alert('更新成功');
                 location.reload();
             }else{
-                alert('更新失败');
+                bootbox.alert('更新失败');
             }
         },'json');
     });
 
     $batch_complete.on('click',function(e){
         var $tb_ids = getAllCheckTbId();
+        if($tb_ids.length==0){
+            bootbox.alert('您没有选中任何项！')
+            return;
+        }
         $.post('/manage/admin/tuanBuyings/batch_set_status',{'tuan_buy_ids':$tb_ids,'status':1},function(data){
             if(data.success){
-                alert('更新成功');
+                bootbox.alert('更新成功');
                 location.reload();
             }else{
-                alert('更新失败');
+                bootbox.alert('更新失败');
             }
         },'json');
     });
 
+    batch_deliver.on('click',function(e){
+       var tb_ids = getAllCheckTbId();
+        if(tb_ids.length==0){
+            bootbox.alert('您没有选中任何项！')
+            return;
+        }
+        $.post('/manage/admin/tuanBuyings/batch_set_status',{'tuan_buy_ids':tb_ids,'status':11},function(data){
+            if(data.success){
+                bootbox.alert('更新成功',function(e){
+                    location.reload();
+                });
+            }else{
+                bootbox.alert('更新失败',function(){});
+            }
+        },'json');
+    });
     $check_all_tb.click(function(e){
         var table= $(e.target).closest('table');
         $('td input:checkbox',table).prop('checked',this.checked);
@@ -355,31 +381,58 @@ $(function(){
         }
       );
     });
+     var batchSendMessage = function(tuanBuyingId,msg){
+         $.post('/manage/admin/tuan_msg/send_message',{'tuanBuyingId':tuanBuyingId,'msg':msg},function(data){
+             var result = JSON.parse(data);
+             if(result.success){
+                 bootbox.alert(result.msg);
+             }else{
+                 bootbox.alert(result.msg);
+             }
+         });
+     }
 
-//    $('#tuan_down,#tuan_product_down').click(function(){
-//        var id = $(this).attr('data-id');
-//        var val=$(this).attr("value");
-//        if(confirm('确定编辑吗？')){
-//            if($(this).attr('id')== 'tuan_product_down'){
-//                confirm('团购取消后请及时退款哦');
-//            }
-//            var data={"id":id,"val":val};
-//            $.ajax({
-//                type:'post',
-//                success:function(data){
-//                    window.location.reload();
-//                    alert('状态修改成功');
-//                },
-//                error:function(e){alert(e);},
-//                url:"{{$this->Html->url(array('controller'=>'tuan','action'=>'admin_tuan_buying_set'))}}",
-//                data:data,
-//                dataType:'json'
-//            })
-//        }
-//        else{
-//            return false;
-//        }
-//    });
+    batch_message.on('click',function(){
+        var tuanTeamId = getAllCheckTbId();
+        if(tuanTeamId.length==0){
+            bootbox.alert('您没有选中任何项！')
+            return;
+        }
+        var dialogMessage = '<div class="form-horizontal" method="post">' +
+            '  <div class="form-group">' +
+            '      <label for="box-tuan-buying-id" class="col-sm-2 control-label">团购</label>' +
+            '      <div class="col-sm-10">' +
+            '          <input class="form-control" id="box-tuan-buying-id" value="' + tuanTeamId + '" disabled="disabled">' +
+            '      </div>' +
+            '  </div>' +
+            '  <div class="form-group">' +
+            '      <label for="box-reason" class="col-sm-2 control-label">短信内容</label>' +
+            '      <div class="col-sm-10">' +
+            '          <textarea id="box-txtarea" class="form-control" rows="3" placeholder="亲，您在***团购的***已经为您送到******，请您注意查收"></textarea>' +
+            '      </div>' +
+            '  </div>'+
+            '</div>';
+        bootbox.dialog({
+                title: "批量发送短信",
+                message: dialogMessage,
+                buttons: {
+                    cancel: {
+                        label: "取消",
+                        className: "btn btn-default",
+                        callback: function () {}
+                    },
+                    success: {
+                        label: "发送",
+                        className: "btn btn-danger",
+                        callback: function () {
+                            var msg = $('#box-txtarea').val();
+                            batchSendMessage(tuanTeamId,msg);
+                        }
+                    }
+                }
+            }
+        );
+    });
 
     function search_tuanteam(){
         String.prototype.Trim = function() {
@@ -410,5 +463,7 @@ $(function(){
             })
         }
     }
+
+
 
 });

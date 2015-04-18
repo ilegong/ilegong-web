@@ -46,11 +46,14 @@
           <input type="radio" name="status_type" class="status-type" value="21">已退款</input>
         </div>
       <button type="submit" style="margin-left:10px;" class="btn btn-default">查看团购</button>
+
     </div>
     <hr/>
     <div>
         <a class="btn btn-danger fl" id="batch_cancel" href="#">批量取消</a>&nbsp;&nbsp;&nbsp;
-        <a class="btn btn-success fl" id="batch_complete" href="#">批量完成</a>&nbsp;&nbsp;&nbsp;
+        <a class="btn btn-success fl" id="batch_complete"  style="margin-left:10px;" href="#">批量完成</a>&nbsp;&nbsp;&nbsp;
+        <a  class="btn btn-primary fl" id= "batch_message" style="margin-left:10px;" href="#">批量短信</a>
+        <a  class="btn  btn-primary fl" id="batch_deliver" style="margin-left:10px;" href="#">批量发货</a>
         <a href="/manage/admin/tuan_buyings/new" role="button" class="btn btn-default fr">创建团购</a>&nbsp;&nbsp;
         <a href="/manage/admin/tuan/tuan_func_list" role="button" style="margin-right:10px;" class="btn btn-default fr">团购功能列表</a>
     </div>
@@ -79,7 +82,7 @@
         }
     ?>
     <tr data-id="{{$tuanBuying['id']}}" data-leader-name="{{$tuanTeam['leader_name']}}" data-leader-id="{{$tuanTeam['leader_id']}}" data-product-name="{{$tuanProduct[alias]}}" class="{{if $tuanBuying['status']==1}} warning {{elseif $tuanBuying['status']==11}} success {{elseif $tuanBuying['status']==2}} danger {{elseif $tuanBuying['status']==21}} active {{/if}}">
-        <td><input type="checkbox" value="{{$tuanBuying['id']}}" name="check_tuan_buy_id"></td>
+        <td><input type="checkbox" value="{{$tuanBuying['id']}}" name="check_tuan_buy_id" data-id="{{$tuanBuying['status']}}"></td>
         <td>{{$tuanBuying['id']}}</td>
         <td>{{$tuanTeam['tuan_name']}}</td>
         <td>{{$tuanProduct['alias']}}/{{$tuanTeam['type']==1?大团:小团}}</td>

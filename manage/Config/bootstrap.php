@@ -23,6 +23,8 @@ const WX_OAUTH_BASE = 'snsapi_base';
 
 const ADD_SCORE_TUAN_LEADER=99;
 const ORDER_STATUS_PAID=1;
+const ORDER_TUANGOU=5;
+define('MSG_API_KEY', 'api:key-fdb14217a00065ca1a47b8fcb597de0d'); //发短信密钥
 
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
@@ -129,11 +131,13 @@ function get_tuan_msg_element($tuan_buy_id,$flag=true){
         $tuanOrders = $tuanOrderM->find('all',array(
             'conditions' => array(
                 'member_id' => $tuan_buy_id,
-                'status' => ORDER_STATUS_PAID
+                'status' => ORDER_STATUS_PAID,
+                'type' => ORDER_TUANGOU,
             )
         ));
          //cache it
          $uids = Hash::extract($tuanOrders,'{n}.Order.creator');
+         $mobilephones = Hash::extract($tuanOrders,'{n}.Order.consignee_mobilephone');
         }else{
         $tuan_members = $tuanMemberM->find('all', array(
             'conditions' => array(
@@ -142,11 +146,13 @@ function get_tuan_msg_element($tuan_buy_id,$flag=true){
         ));
          //cache it
          $uids = Hash::extract($tuan_members,'{n}.TuanMember.uid');
+         $mobilephones = '';
         }
         $consign_time = $tb['TuanBuying']['consign_time'];
         $consign_time = friendlyDateFromStr($consign_time,FFDATE_CH_MD);
 
         $tuan_name = $tt['TuanTeam']['tuan_name'];
+        $tuan_addr = $tt['TuanTeam']['tuan_addr'];
         $product_name = $p['Product']['name'];
         $tuan_leader = $tt['TuanTeam']['leader_name'];
         $target_num = $tb['TuanBuying']['target_num'];
@@ -160,7 +166,9 @@ function get_tuan_msg_element($tuan_buy_id,$flag=true){
             'tuan_name' => $tuan_name,
             'product_name' => $product_name,
             'tuan_leader' => $tuan_leader,
-            'tuan_buy_status' => $tb_status
+            'tuan_buy_status' => $tb_status,
+            'consignee_mobilephones' => $mobilephones,
+            'tuan_addr' => $tuan_addr
         );
     }else{
         return null;
@@ -189,4 +197,20 @@ function getTuanProductsAsJson(){
 
 function getTuanProducts(){
     return json_decode(getTuanProductsAsJson(),true);
+}
+
+function message_send($msg = null, $mobilephone = null) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "http://sms-api.luosimao.com/v1/send.json");
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    curl_setopt($ch, CURLOPT_USERPWD, MSG_API_KEY);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, array('mobile' => $mobilephone, 'message' => $msg . '【朋友说】'));
+    $res = curl_exec($ch);
+    //{"error":0,"msg":"ok"}
+    curl_close($ch);
+    return $res;
 }

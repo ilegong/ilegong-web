@@ -230,7 +230,26 @@ class TuanMsgController extends AppController{
             $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$detail_url);
         }
         $this->save_msg_log(TUAN_NOTIFYDELIVER_MSG,$tuan_buying_id);
-        echo json_encode(array('success' => false,'msg' => '推送模板消息成功'));
+        echo json_encode(array('success' => true,'msg' => '推送模板消息成功'));
+    }
+
+    public function admin_send_message(){
+        $this->autoRender = false;
+        $tuanBuyingId = preg_split('/,/',$_REQUEST['tuanBuyingId']);
+        $tuan_msg = $_REQUEST['msg'];
+        foreach($tuanBuyingId as $tuanBuying_id){
+            $msg_element = get_tuan_msg_element($tuanBuying_id);
+            $product_name = $msg_element['product_name'];
+            $tuan_name = $msg_element['tuan_name'];
+            $tuan_addr = $msg_element['tuan_addr'];
+            $title = '亲，您在'.$tuan_name.'团购的'.$product_name.'已经为您送到'.$tuan_addr.'已经发货啦，请您注意查收';
+            $msg = $tuan_msg?$tuan_msg:$title;
+            $consignee_phones = $msg_element['consignee_mobilephones'];
+            foreach($consignee_phones as $consignee_phone){
+                message_send($msg,$consignee_phone);
+            }
+        }
+        echo json_encode(array('success' => true,'msg' => '短信发送成功'));
     }
 
 
