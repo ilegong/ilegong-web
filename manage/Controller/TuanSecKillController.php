@@ -32,33 +32,49 @@ class TuanSecKillController extends AppController{
 
         $query_cond['start_time >='] = $start_time;
 
-        $query_cond['end_time <'] = $end_time;
+        $query_cond['start_time <'] = $end_time;
 
         $datas = $this->ProductTry->find('all',array(
             'conditions' => $query_cond,
             'order' => 'start_time DESC',
         ));
         $this->set('datas',$datas);
+        $this->set('tuan_id',$tuan_id);
+        $this->set('product_id',$product_id);
+        $this->set('start_time',$start_time);
+        $this->set('end_time',$end_time);
     }
 
     public function admin_new(){
-
     }
 
     public function admin_add(){
-
+        if($this->ProductTry->save($this->data)){
+            $this->redirect(array('controller'=>'tuanSecKill','action'=>'index'));
+        }
     }
 
-    public function admin_edit(){
-
+    public function admin_edit($id){
+        $data_info = $this->ProductTry->find('first',array('conditions' => array('id' => $id)));
+        if (empty($data_info)) {
+            throw new ForbiddenException(__('该秒杀不存在！'));
+        }
+        $this->data = $data_info;
+        $this->set('id',$id);
     }
 
-    public function admin_update(){
-
+    public function admin_update($id){
+        $this->autoRender = false;
+        if($this->ProductTry->save($this->data)){
+            $this->redirect(array('controller' => 'tuanSecKill','action' => 'index'));
+        }
+        $this->set('id',$id);
     }
 
-    public function admin_delete(){
-
+    public function admin_delete($id){
+        if($this->ProductTry->updateAll(array('status'=>0),array('id'=>$id))){
+            $this->redirect(array('controller' => 'tuanSecKill','action' => 'index'));
+        }
     }
 
 }
