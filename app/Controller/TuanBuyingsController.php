@@ -280,7 +280,6 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_id', $tuan_id);
         $this->set('can_mark_address',$this->can_mark_address($tuan_id));
         $this->set('tuan_address', $team['TuanTeam']['tuan_addr']);
-        $this->set('tuan_buy_id', $tuan_buy_id);
         $this->set('cart_info',$Carts);
         $this->set('brand', $brand['Brand']);
         $this->set('hideNav',true);

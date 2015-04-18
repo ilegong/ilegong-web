@@ -68,21 +68,46 @@ class Order extends AppModel {
         ));
         $brand_id = empty($product)? 0 : $product['Product']['brand_id'];
 
-        $arr = array(
-            'creator' => $uid,
-            'total_price' => $fee,
-            'total_all_price' => $fee,
-            'type' => $type,
-            'brand_id' => $brand_id,
-            'member_id' => $memberId,
-            'consignee_area' => $area,
-            'consignee_name' => $name,
-            'consignee_address' => $address,
-            'consignee_mobilephone' => $mobile,
-            'ship_mark' => $ship_mark,
-            'status' => ORDER_STATUS_WAITING_PAY,
-            'remark' => $shop_name
-        );
+        if($type==ORDER_TYPE_TUAN_SEC){
+            $arr = array(
+                'creator' => $uid,
+                'total_price' => $fee,
+                'total_all_price' => $fee,
+                'type' => $type,
+                'brand_id' => $brand_id,
+                'try_id' => $memberId,
+                'consignee_area' => $area,
+                'consignee_name' => $name,
+                'consignee_address' => $address,
+                'consignee_mobilephone' => $mobile,
+                'ship_mark' => $ship_mark,
+                'status' => ORDER_STATUS_WAITING_PAY,
+                'remark' => $shop_name
+            );
+        }
+
+        if($type==ORDER_TYPE_TUAN){
+            $arr = array(
+                'creator' => $uid,
+                'total_price' => $fee,
+                'total_all_price' => $fee,
+                'type' => $type,
+                'brand_id' => $brand_id,
+                'member_id' => $memberId,
+                'consignee_area' => $area,
+                'consignee_name' => $name,
+                'consignee_address' => $address,
+                'consignee_mobilephone' => $mobile,
+                'ship_mark' => $ship_mark,
+                'status' => ORDER_STATUS_WAITING_PAY,
+                'remark' => $shop_name
+            );
+        }
+
+        if(empty($arr)){
+            return null;
+        }
+
         $order = $this->save($arr);
         if (!empty($order)) {
             $cartM = ClassRegistry::init('Cart');
