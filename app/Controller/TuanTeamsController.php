@@ -86,6 +86,7 @@ class TuanTeamsController extends AppController{
         $this->loadModel('ProductTry');
         $tryings = $this->ProductTry->find_trying(2);
         if (!empty($tryings)) {
+            $trying_result = array();
             $try_pids = Hash::extract($tryings, '{n}.ProductTry.product_id');
             $this->loadModel('TuanProduct');
             $t_products = $this->TuanProduct->find('all',array(
@@ -104,13 +105,15 @@ class TuanTeamsController extends AppController{
                         $trying['Product'] = $prod;
                         $trying['image'] = $t_products[$pid]['list_img'];
                         if(!empty($try_tuan_id)&&$try_tuan_id!=$tuan_id){
-                            unset($trying);
+                            continue;
                         }
+                        $trying_result[] = $trying;
                     } else {
                         unset($trying);
                     }
                 }
             }
+            $tryings = $trying_result;
         }
 
         if($this->is_weixin()){
