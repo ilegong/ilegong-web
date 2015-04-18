@@ -575,14 +575,14 @@ class OrdersController extends AppController {
             if ($try_id > 0) {
                 list($afford, $user_left, $total_left) = afford_product_try($try_id, $uid);
                 $total_items = array_sum(Hash::extract($Carts, '{n}.Cart.num'));
-
                 if ($total_left == 0 || ($total_left > 0 && $total_left < $total_items)) {
                     $this->set('has_sold_out', true);
+                    $afford = false;
                 } else if ($user_left == 0 || ($user_left > 0 && $user_left < $total_items)) {
                     $this->set('has_reach_limit', true);
+                    $afford = false;
                 }
             }
-
             if ($afford && $has_expired_product_type == 0 && $no_more_money && $action == 'pay_direct') {
                 if ($orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
                     $this->Order->id = $orderinfo['Order']['id'];
@@ -596,7 +596,7 @@ class OrdersController extends AppController {
                 }
             }
 
-            $this->set('show_pay', ($orderinfo['Order']['type'] == ORDER_TYPE_DEF || $orderinfo['Order']['type']==ORDER_TYPE_TUAN)
+            $this->set('show_pay', ($orderinfo['Order']['type'] == ORDER_TYPE_DEF || $orderinfo['Order']['type']==ORDER_TYPE_TUAN || $orderinfo['Order']['type']==ORDER_TYPE_TUAN_SEC)
                 && $afford
                 && $has_expired_product_type == 0
                 && $tuan_expired !=0

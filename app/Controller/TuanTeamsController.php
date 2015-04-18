@@ -83,7 +83,7 @@ class TuanTeamsController extends AppController{
         $tryings = $this->ProductTry->find_trying(2);
         if (!empty($tryings)) {
             $try_pids = Hash::extract($tryings, '{n}.ProductTry.product_id');
-            $this->loadModel('TuanProdut');
+            $this->loadModel('TuanProduct');
             $t_products = $this->TuanProduct->find('all',array(
                 'conditions' => array(
                     'product_id' => $try_pids
