@@ -29,6 +29,7 @@ class TuanController extends AppController{
         $end_stat_datetime = $_REQUEST['end_stat_datetime'];
         $tuan_con_date = $_REQUEST['tuan_con_date'];
         $product_con_date = $_REQUEST['product_con_date'];
+        $only_tuan_order = $_REQUEST['only_tuan_order'];
         $query_tb = array();
         $should_count_nums = false;
         if(!empty($tuan_con_date)){
@@ -70,12 +71,13 @@ class TuanController extends AppController{
         $order_query_cond = array(
             'Order.type' => array(ORDER_TYPE_TUAN_SEC,ORDER_TYPE_TUAN,ORDER_TYPE_DEF)
         );
-        //add tuan_buys member id
-        if(!empty($tuan_buys)){
-            $tb_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.id');
-            $order_query_cond['Order.member_id'] = $tb_ids;
+        if($only_tuan_order=='1'){
+            //add tuan_buys member id
+            if(!empty($tuan_buys)){
+                $tb_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.id');
+                $order_query_cond['Order.member_id'] = $tb_ids;
+            }
         }
-
         $payNotifyModel = ClassRegistry::init('PayNotify');
         //??why
         $payNotifyModel->query("update cake_pay_notifies set order_id =  substring_index(substring_index(out_trade_no,'-',2),'-',-1) where status = 6");
