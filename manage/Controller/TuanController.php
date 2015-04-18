@@ -151,6 +151,13 @@ class TuanController extends AppController{
             }
         }
 
+        if(empty($start_stat_datetime)){
+            $start_stat_datetime = date('Y-m-d H:i',strtotime('-7 days'));
+        }
+        if(empty($end_stat_datetime)){
+            $end_stat_datetime = date('Y-m-d H:i',strtotime('+1 hours'));
+        }
+
         if(!empty($end_stat_datetime)){
             $order_query_cond['Order.created <'] = $end_stat_datetime;
         }
@@ -264,13 +271,7 @@ class TuanController extends AppController{
         $this->set('spec_groups',$spec_groups);
         $this->set('team_id',$team_id);
         $this->set('product_id',$product_id);
-        if(empty($start_stat_datetime)){
-            $start_stat_datetime = date('Y-m-d H:i',strtotime('-7 days'));
-        }
         $this->set('start_stat_datetime',$start_stat_datetime);
-        if(empty($end_stat_datetime)){
-            $end_stat_datetime = date('Y-m-d H:i',strtotime('+1 hours'));
-        }
         $this->set('end_stat_datetime',$end_stat_datetime);
         $this->set('con_name',$con_name);
         $this->set('con_phone',$con_phone);

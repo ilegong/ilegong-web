@@ -1675,7 +1675,7 @@ function getTuanProductPrice($pid){
     $product_price_map = Hash::combine(getTuanProducts(),'{n}.TuanProduct.product_id','{n}.TuanProduct.tuan_price');
     return floatval($product_price_map[$pid]);
 }
-
+//同类商品评论共享
 function get_group_product_ids($pid){
     $egg_product = array(896, 818, 161);
     $cake_product = array(877, 869, 862);

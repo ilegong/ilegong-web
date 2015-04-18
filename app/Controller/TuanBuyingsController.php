@@ -643,6 +643,8 @@ class TuanBuyingsController extends AppController{
         $this->set('hideNav',true);
     }
 
+    //可以备注的地址
+    //TODO 昌平的的团可以备注地址
     private function can_mark_address($tuan_id){
         $mark_address_tuan_ids = array(15,25,28,41,43,45,46,47,48,58,60,66);
         return in_array($tuan_id,$mark_address_tuan_ids);

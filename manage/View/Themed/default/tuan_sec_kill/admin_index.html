@@ -1,6 +1,22 @@
 <hr/>
+{{$this->Html->css(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css'))}}
 <h1>团购商品管理</h1>
 <hr/>
+<form class="form-inline" data-noajax="true" method="post" action="/manage/admin/tuanSecKill/index">
+    <div class="form-group">
+        <input type="text" name="product_id" class="form-control" id="product_id" placeholder="产品ID">
+    </div>
+    <div class="form-group">
+        <input type="text" name="tuan_id" class="form-control" id="tuan_id" placeholder="团队ID">
+    </div>
+    <div class="form-group">
+        <input type="text" name="start_time" class="form-control datetime" id="start_time" placeholder="开始时间">
+    </div>
+    <div class="form-group">
+        <input type="text" name="end_time" class="form-control datetime" id="end_time" placeholder="结束时间">
+    </div>
+    <button type="submit" class="btn btn-default">查询</button>
+</form>
 <a class="btn btn-primary fr" href="/manage/admin/tuanSecKill/new">添加秒杀商品</a>
 <hr/>
 <br/><br/>
@@ -22,9 +38,9 @@
     <tbody>
         {{loop $datas $item}}
         <?php
-          $tryProduct = $item['TryProduct'];
+          $tryProduct = $item['ProductTry'];
         ?>
-        <tr data-product-id="{{$tryProduct['product_id']}}">
+        <tr data-id="{{$tryProduct['id']}}">
             <td>{{$tryProduct['id']}}</td>
             <td>{{$tryProduct['product_id']}}</td>
             <td>{{$tryProduct['start_time']}}</td>
@@ -48,3 +64,18 @@
         {{/loop}}
     </tbody>
 </table>
+{{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
+<script>
+    $(function(){
+        $('input.datetime').datetimepicker({
+            language:  'zh-CN',
+            weekStart: 1,
+            todayBtn:  1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
+    });
+</script>
