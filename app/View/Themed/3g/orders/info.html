@@ -117,7 +117,7 @@
         cartInfo.couponUse();
         cart_pay_self.on("click", function(e){
             var self  = $(this);
-            if(!info.submitOrder(self)){
+            if(!cartInfo.submitOrder(self)){
                 e.preventDefault();
                 return false;
             }
