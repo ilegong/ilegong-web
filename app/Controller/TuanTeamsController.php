@@ -97,7 +97,7 @@ class TuanTeamsController extends AppController{
             $tryProducts = $this->Product->find_products_by_ids($try_pids, array(), false);
             if (!empty($tryProducts)) {
                 foreach($tryings as &$trying) {
-                    $try_tuan_id = $tryings['ProductTry']['tuan_id'];
+                    $try_tuan_id = $trying['ProductTry']['tuan_id'];
                     $pid = $trying['ProductTry']['product_id'];
                     $prod = $tryProducts[$pid];
                     if (!empty($prod)) {
