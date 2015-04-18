@@ -39,7 +39,8 @@
                             </span></s>
                             <div class="clearfix">
                                 <a href="#X" class="cartnumreduce fl"></a>
-                                <input type="text" class="cart-num-input" data-id="{{$item->cartId}}" value="{{$item->num}}" disabled="disabled"/>
+                                <input type="text" class="cart-num-input" data-id="{{$item->cartId}}" data-price="{{$item->price}}" data-brand-id="{{$brandItem->id}}"
+                                       data-num="{{$item->num}}" value="{{$item->num}}" disabled="disabled"/>
                                 <a href="#X" class="cartnumadd fl"></a>
                             </div>
                         </li>
@@ -53,7 +54,8 @@
                 <div class="clearfix leave_words">
                     <input name={{"remark_".$brandItem->id}} type="text" placeholder="给卖家留言:" />
                 </div>
-                <p class="conordertuan_total">共{{$brand_goods_num}}件商品，合计:<strong>￥{{$this->Number->precision($brand_price,2)}}</strong></p>
+                <p class="conordertuan_total" data-brand-id="{{$brandItem->id}}">共<span data-brand-num="{{$brand_goods_num}}">{{$brand_goods_num}}</span>件商品，合计:
+                    <strong data-brand-price="{{$brand_price}}">￥{{$this->Number->precision($brand_price,2)}}</strong></p>
         {{/loop}}
         {{if $shipFee>0}}
         <a href="#X" class="favor" style="position:relative;">
@@ -66,25 +68,26 @@
 </div>
 <div class="shop_jifen" style="margin-bottom: 35px;">
     <ul class="clearfix" style=" border: 0;">
-        <li class="fl">可用{{$score_usable}}积分抵用{{$this->Number->precision($score_usable/100, 2)}}元</li>
-        <li class="fr shop_jifen_used radius10"><i></i></li>
+        <li class="fl">可用<span class="balance_use_score">{{$score_usable}}</span>积分抵用<span>{{$this->Number->precision($score_usable/100, 2)}}</span>元</li>
+        <li class="fr shop_jifen_used radius10"></li>
     </ul>
 </div>
 <div class="cart_pay">
     <ul class="clearfix">
-        <li class="fl">共{{$total_num}}件商品，总金额<strong>{{$this->Number->precision($cart->total_price() + ($shipFee > 0?$shipFee:0), 2)}}</strong></li>
+        <li class="fl">共<span class="total_num_info">{{$total_num}}</span>件商品，总金额<strong class="total_price_info">{{$this->Number->precision($cart->total_price() + ($shipFee > 0?$shipFee:0), 2)}}</strong></li>
         <li class="fr"><a href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a></li>
     </ul>
 </div>
 <script>
     $(document).ready(function(){
-        var info = infoToBalance();
+        var cartInfo = infoToBalance();
         var height =  $(window).height() + 5;
         var width = $(window).width();
         var url = "/orders/edit_consignee?height=" + height + "&width=" + width + "&modal=true";
         $(".new_address").addClass("thickbox").attr("href",url);
         var cart_pay_self = $(".cart_pay .fr a");
-        info.cartBind();
+        cartInfo.cartEdit();
+        cartInfo.scoreUse();
         cart_pay_self.on("click", function(e){
             var self  = $(this);
             if(!info.submitOrder(self)){

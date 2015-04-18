@@ -529,8 +529,28 @@ var infoToBalance = function(){
         }
         return true;
     };
+    var totalPriceDom= $(".total_price_info");
     var editCartNum = function(id, num) {
-        var url = BASEURL + '/carts/editCartNum/' + id + '/' + num;
+        var cartDom = $("input[data-id="+ id +"]");
+        var brandId = cartDom.data("brandId");
+        var cartNum = cartDom.data("num");
+        var goodsPrice = cartDom.data("price");
+        var intnum =parseInt(num);
+        cartDom.data("num",num);
+        var brandTotal = $(".conordertuan_total[data-brand-id="+ brandId + "]");
+        var originPrice = brandTotal.children('strong').data("brandPrice");
+        var originNum = brandTotal.children('span').data("brandNum");
+        var brandPriceDom = brandTotal.children('strong');
+        var brandNumDom = brandTotal.children("span");
+        brandPriceDom.data("brandPrice", originPrice + goodsPrice*(intnum - cartNum));
+        brandNumDom.data("brandNum", originNum - cartNum + intnum);
+        brandPriceDom.text("￥"+ utils.toFixed(brandPriceDom.data("brandPrice"),2));
+        brandNumDom.text(brandNumDom.data("brandNum"));
+        var totalNum = parseInt($(".total_num_info").text());
+        $(".total_num_info").text(totalNum - cartNum + intnum);
+        var totalPrice = parseFloat(totalPriceDom.text());
+        totalPriceDom.text(utils.toFixed(totalPrice + goodsPrice*(intnum - cartNum)));
+        var url = BASEURL + '/carts/editCartNum/' + id + '/' + intnum;
         if (!sso.check_userlogin({"callback": editCartNum, "callback_args": arguments}))
             return false;
         ajaxAction(url, null, null, function (data) {
@@ -550,7 +570,7 @@ var infoToBalance = function(){
             }
             return false;
         },
-        cartBind: function(){
+        cartEdit: function(){
             $(".cart-num-input").each(function(){
                 var that = this;
                 ($(that).prev("a")).on('click', function(){
@@ -564,6 +584,31 @@ var infoToBalance = function(){
                         editCartNum($(that).data('id'), $(that).val());
                     });
                 });
+            });
+        },
+        scoreUse: function(){
+            $('.shop_jifen_used').click(function(){
+                var that = $(this);
+                if(that.html()=="<i></i>"){
+                    that.html("");
+                }else{
+                    that.html("<i></i>");
+                }
+                var balance_use_score = $(".balance_use_score");
+                var totalPrice = parseFloat(totalPriceDom.text()) || 0;
+                $.post('/orders/apply_score.json', {'use' : that.html()=="<i></i>", 'score':totalPrice*100/2}, function(data){
+                    if (data && data.success) {
+                        var scoreMoney = data.score_money;
+                        if(data.score_used){
+                            scoreMoney = - data.score_money;
+                        }
+                        balance_use_score.text(data.score_usable);
+                        balance_use_score.next('span').text(utils.toFixed(data.score_money,2));
+                        totalPriceDom.text(totalPrice + scoreMoney);
+                    } else {
+                        utils.alert('使用积分失败', function(){}, 1000);
+                    }
+                }, 'json');
             });
         }
     }
