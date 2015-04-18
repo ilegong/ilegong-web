@@ -7,6 +7,9 @@ $(function(){
     var area = $('.conordertuan');
     var areaIds = $('.tuan-teams');
     var $join_tuan = $('a.alltuan_addbtn');
+    var $area_id = $('#area_id',areaIds);
+    var area_id = $area_id.val();
+
     $join_tuan.on('click',function(){
         var me = $(this);
         var tuan_id = me.data('tuan-id');
@@ -33,30 +36,27 @@ $(function(){
         });
     });
 
-    $.getJSON('/tuan_teams/api_getArea',function(data){
-        var areas = data['areas'];
-        var count_result = data['count_result'];
-        $('<ul class="clearfix"><li><a href="#X" class="county cur" data-county-id="all">全部</a></li></ul>').appendTo(area);
-        $.each(count_result,function(index,item){
-            var areaId = item['area_id'];
-            var area_item = areas[areaId];
-            if(area_item){
-                $('<ul class="clearfix"><li><a href="#X" class="county" data-county-id="'+area_item['id']+'">'+ area_item['name']+ '区</a></li></ul>').appendTo(area);
-            }
-        });
-        $('.county').on('click',function(){
-            var countyId = $(this).data('county-id');
-            if(countyId=='all'){
-                $(".tuan-team").removeClass('hide');
-            }else{
-                $(".tuan-team").each(function(){
-                    $(this).toggleClass('hide', $(this).data("county-id") != countyId);
-                });
-            }
-            $('.county').removeClass('cur');
-            $(this).addClass('cur');
-        });
+    $('<ul class="clearfix"><li><a href="#X" class="county cur" data-county-id="all">全部</a></li></ul>').appendTo(area);
+    $.each(tuanAreas,function(index,item){
+        var areaId = item['id'];
+        if($('div[data-county-id="'+areaId+'"]',areaIds).length>0){
+            $('<ul class="clearfix"><li><a href="#X" class="county" data-county-id="'+item['id']+'">'+ item['name']+ '</a></li></ul>').appendTo(area);
+        }
     });
-
+    $('.county').on('click',function(){
+        var countyId = $(this).data('county-id');
+        if(countyId=='all'){
+            $(".tuan-team").removeClass('hide');
+        }else{
+            $(".tuan-team").each(function(){
+                $(this).toggleClass('hide', $(this).data("county-id") != countyId);
+            });
+        }
+        $('.county').removeClass('cur');
+        $(this).addClass('cur');
+    });
+    if(area_id&&area_id!='null'&&area_id.length>0){
+        $('a[data-county-id="'+area_id+'"]').trigger('click');
+    }
 });
 

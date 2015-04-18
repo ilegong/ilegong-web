@@ -7,7 +7,7 @@
     <div style="margin-top: 40px;">
         <div class="clearfix conordertuan" style="padding:0;border-bottom: 0;">
         </div>
-        <div class="tuan-teams" data-county-id="tuan_teams">
+        <div class="tuan-teams" data-county-id="tuan_teams"><input type="hidden" value="{{$area_id}}" id="area_id">
         {{if !empty($my_tuan_ids)}}
             {{loop $my_tuan_ids $id}}
                 <?php
@@ -66,4 +66,4 @@
     </div>
 </div>
 
-{{$this->Html->script(array('tuanteams/mei-shi-tuan.js?v3',))}}
+{{$this->Html->script(array('/js/tuan-area.js','tuanteams/mei-shi-tuan.js?v5',))}}

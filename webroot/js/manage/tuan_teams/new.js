@@ -11,12 +11,9 @@ $(function(){
     var latitud  = $('#location_lat');
     var getPoint = $('#getPoint');
     var getCountyId = $('.tuan-teams');
-    $.getJSON('/manage/admin/tuanTeams/api_tuan_county',function(data){
-        $.each(data,function(index,item){
-            $('<option value="'+item['id']+'">'+item['name']+'区</option>').appendTo(getCountyId);
-        })
+    $.each(tuanAreas,function(index,item){
+        $('<option value="'+item['id']+'">'+item['name']+'</option>').appendTo(getCountyId);
     });
-
     $(".tuanTeam-form").submit(function(e){
         var invalidTuanName = tuanName.val()=='';
         tuanName.parents('.form-group').toggleClass('has-error',invalidTuanName);

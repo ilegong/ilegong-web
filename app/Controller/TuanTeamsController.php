@@ -9,6 +9,7 @@ class TuanTeamsController extends AppController{
 
     public function mei_shi_tuan(){
         $this->pageTitle = '美食团';
+        $area_id = $_REQUEST['area_id'];
         $current_user_id = $this->currentUser['id'];
         $this->loadModel('TuanMember');
         //user is login
@@ -34,6 +35,9 @@ class TuanTeamsController extends AppController{
         $this->set('left_tuan_ids',$left_tuan_ids);
         $this->set('tuan_teams',$tuan_teams);
         $this->set('op_cate','mei_shi_tuan');
+        if(!empty($area_id)){
+            $this->set('area_id',$area_id);
+        }
     }
 
     public function info($tuan_id){
