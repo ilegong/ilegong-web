@@ -46,7 +46,11 @@
           <div class="form-group">
               <div class="checkbox">
                   <label>
+                      {{if $only_tuan_order=='1'}}
+                      <input name="only_tuan_order" value="1" type="checkbox" checked="checked"> 只查团购订单
+                      {{else}}
                       <input name="only_tuan_order" value="1" type="checkbox"> 只查团购订单
+                      {{/if}}
                   </label>
               </div>
           </div>

@@ -280,6 +280,7 @@ class TuanController extends AppController{
         $this->set('tuan_con_date',$tuan_con_date);
         $this->set('product_con_date',$product_con_date);
         $this->set('query_product_id',$query_product_id);
+        $this->set('only_tuan_order',$only_tuan_order);
     }
 
 
