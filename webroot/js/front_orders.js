@@ -549,7 +549,7 @@ var infoToBalance = function(){
         var totalNum = parseInt($(".total_num_info").text());
         $(".total_num_info").text(totalNum - cartNum + intnum);
         var totalPrice = parseFloat(totalPriceDom.text());
-        totalPriceDom.text(utils.toFixed(totalPrice + goodsPrice*(intnum - cartNum)));
+        totalPriceDom.text(utils.toFixed(totalPrice + goodsPrice*(intnum - cartNum), 2));
         var url = BASEURL + '/carts/editCartNum/' + id + '/' + intnum;
         if (!sso.check_userlogin({"callback": editCartNum, "callback_args": arguments}))
             return false;
@@ -604,9 +604,36 @@ var infoToBalance = function(){
                         }
                         balance_use_score.text(data.score_usable);
                         balance_use_score.next('span').text(utils.toFixed(data.score_money,2));
-                        totalPriceDom.text(totalPrice + scoreMoney);
+                        totalPriceDom.text(utils.toFixed(totalPrice + scoreMoney, 2));
                     } else {
                         utils.alert('使用积分失败', function(){}, 1000);
+                    }
+                }, 'json');
+            });
+        },
+        couponUse: function(){
+            $('li > a.coupon').click(function () {
+                var that = $(this);
+                var brandId = that.attr('data-brandId');
+                var coupon_item_id = that.attr('data-coupon_item_id');
+                var checkbox = $("[data-coupon_item_id='" + coupon_item_id + "'] > input[type=checkbox]");
+                checkbox.prop("checked", !checkbox.prop("checked"));
+                var action = (checkbox.prop("checked") == false )? 'unapply' : 'apply';
+                $.post('/orders/apply_coupon.json', {'brand_id': brandId, 'coupon_item_id': coupon_item_id, 'action': action}, function (data) {
+                    if (data) {
+                        console.log(data);
+                        if (data.changed) {
+                            totalPriceDom.text(utils.toFixed(data.total_price, 2));
+                        } else {
+                            if (data.reason == 'not_login') {
+                                utils.alert('您长时间未操作，请重新登录', function () {
+                                    window.location.href = '/users/login?refer=' + encodeURIComponent('/carts/listcart');
+                                });
+                            } else if (data.reason == 'share_type_coupon_exceed') {
+                                checkbox.prop("checked", !checkbox.prop("checked"));
+                                utils.alert('优惠券使用超出限制');
+                            }
+                        }
                     }
                 }, 'json');
             });

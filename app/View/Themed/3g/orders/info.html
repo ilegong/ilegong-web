@@ -7,10 +7,10 @@
 </div>
 <div class="address clearfix" style="position:relative;" data-address-choice="{{$has_chosen_consignee}}">
     <span style="display:block;" class="fl">送至&nbsp;&nbsp;<a class="moreicon" href="#X"></a></span>
-    <span style="display:block;" class="fl"><a class="moreicon new_address" href="#X"></a></span>
+    <span style="display:block;" class="fl"><a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
     <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}<br />
         {{$this->Session->read('OrderConsignee.name')}} &nbsp; {{$this->Session->read('OrderConsignee.mobilephone')}}</span>
-    <a href="#X" class="address_addbtn new_address" {{if $total_consignee > 0}}style=" display: none;"{{/if}}>添加收货地址</a>
+    <a href="/orders/edit_consignee?modal=true" class="address_addbtn new_address thickbox" {{if $total_consignee > 0}}style=" display: none;"{{/if}}>添加收货地址</a>
 </div>
 <div class="cart" style="margin-top: 0; padding-top: 0;">
     <div>
@@ -45,17 +45,39 @@
                             </div>
                         </li>
                     </ul>
-                    <a href="#X" class="favor" style="position:relative;">
-                        <span style="display:block;" class="fl">商品优惠&nbsp;&nbsp;<span class="moreicon" style="right:10px;" href="#X"></span></span>
-                        <span style="overflow:hidden; display:block; color: #acacac;">您有优惠券可使用(3)</span>
-                    </a>
+
                 </div>
             {{/loop}}
-                <div class="clearfix leave_words">
-                    <input name={{"remark_".$brandItem->id}} type="text" placeholder="给卖家留言:" />
+            <?php $coupons = $coupons_of_products[$brandItem->id];?>
+            {{if !empty($coupons)}}
+                <div id="hiddenModalContent_{{$brandItem->id}}" style="display:none">
+                    <div class="classlist_v2">
+                        <ul class="clearfix">
+                            <li><a onclick="tb_remove()" class="back"></a></li>
+                            <li class="line"></li>
+                            <li><strong>返回</strong></li>
+                        </ul>
+                    </div>
+                    <ul class="tuanadresslist">
+                        {{loop $coupons $coupon}}
+                            <li><a data-coupon_item_id="{{$coupon['CouponItem']['id']}}" data-brandId="{{$brandItem->id}}" class="coupon" href="javascript:"><input type="checkbox" disabled>
+                                {{$coupon['Coupon']['name']}} <span style="color: red">{{$this->Number->precision($coupon['Coupon']['reduced_price']/100, 2)}}</span> {{if $coupon['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER}}(红包券，每件商品可使一张，本单本店共{{$brandItem->total_num()}}件){{/if}}
+                                <span class="glyphicon glyphicon-ok" style="display: none"></span></a><span class="applied_result"></span>
+                            </li>
+                        {{/loop}}
+                    </ul>
                 </div>
-                <p class="conordertuan_total" data-brand-id="{{$brandItem->id}}">共<span data-brand-num="{{$brand_goods_num}}">{{$brand_goods_num}}</span>件商品，合计:
-                    <strong data-brand-price="{{$brand_price}}">￥{{$this->Number->precision($brand_price,2)}}</strong></p>
+
+                <a href="#TB_inline?&inlineId=hiddenModalContent_{{$brandItem->id}}&modal=true" class="favor thickbox" style="position:relative;">
+                    <span style="display:block;" class="fl">商品优惠&nbsp;&nbsp;<span class="moreicon" style="right:10px;" href="#X"></span></span>
+                    <span style="overflow:hidden; display:block; color: #acacac;">您有优惠券可使用({{count($coupons)}})</span>
+                </a>
+            {{/if}}
+            <div class="clearfix leave_words">
+                <input name={{"remark_".$brandItem->id}} type="text" placeholder="给卖家留言:" />
+            </div>
+            <p class="conordertuan_total" data-brand-id="{{$brandItem->id}}">共<span data-brand-num="{{$brand_goods_num}}">{{$brand_goods_num}}</span>件商品，合计:
+                <strong data-brand-price="{{$brand_price}}">￥{{$this->Number->precision($brand_price,2)}}</strong></p>
         {{/loop}}
         {{if $shipFee>0}}
         <a href="#X" class="favor" style="position:relative;">
@@ -64,7 +86,6 @@
         </a>
         {{/if}}
     </div>
-
 </div>
 <div class="shop_jifen" style="margin-bottom: 35px;">
     <ul class="clearfix" style=" border: 0;">
@@ -72,7 +93,7 @@
         <li class="fr shop_jifen_used radius10"></li>
     </ul>
 </div>
-<div class="cart_pay">
+<div class="cart_pay" style="z-index: 101;">
     <ul class="clearfix">
         <li class="fl">共<span class="total_num_info">{{$total_num}}</span>件商品，总金额<strong class="total_price_info">{{$this->Number->precision($cart->total_price() + ($shipFee > 0?$shipFee:0), 2)}}</strong></li>
         <li class="fr"><a href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a></li>
@@ -83,11 +104,17 @@
         var cartInfo = infoToBalance();
         var height =  $(window).height() + 5;
         var width = $(window).width();
-        var url = "/orders/edit_consignee?height=" + height + "&width=" + width + "&modal=true";
-        $(".new_address").addClass("thickbox").attr("href",url);
+        var addressUrl = $(".new_address.thickbox").attr("href") + "&height=" + height + "&width=" + width;;
+        $(".new_address.thickbox").attr("href", addressUrl);
+        $(".favor.thickbox").each(function(){
+            var url = $(this).attr("href");
+            url = url + "&height=" + (height-44) + "&width=" + width;
+            $(this).attr("href", url);
+        });
         var cart_pay_self = $(".cart_pay .fr a");
         cartInfo.cartEdit();
         cartInfo.scoreUse();
+        cartInfo.couponUse();
         cart_pay_self.on("click", function(e){
             var self  = $(this);
             if(!info.submitOrder(self)){
