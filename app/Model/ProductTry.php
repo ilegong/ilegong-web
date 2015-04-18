@@ -15,7 +15,7 @@ class ProductTry extends AppModel {
                 'start_time >= date_format(now(), "%Y-%m-%d 00:00:00")',
             ),
             'limit' => $limit,
-            'order' => 'start_time asc'
+            'order' => 'start_time DESC'
         ));
 
         foreach($tries as &$trying) {
