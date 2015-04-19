@@ -264,7 +264,12 @@ input {
     text-align: center;
     margin-top: 2px;
 }
-
+.tuan_bar_btn:hover{
+    color: #ffffff;
+}
+.tuan_bar_btn:visited{
+    color: #ffffff;
+}
 .tuandetail_tips {
     padding: 10px 10px 20px 10px;
 }

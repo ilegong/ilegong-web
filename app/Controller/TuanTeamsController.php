@@ -41,7 +41,6 @@ class TuanTeamsController extends AppController{
     }
 
     public function info($tuan_id){
-        $this->layout=false;
         $tuan_team = $this->TuanTeam->find('first', array(
             'conditions' =>array('id'=> $tuan_id),
         ));
@@ -51,6 +50,7 @@ class TuanTeamsController extends AppController{
             $this->__message($message, $url);
             return;
         }
+        $this->pageTitle = $tuan_team['TuanTeam']['tuan_name'];
         $this->loadModel('TuanBuying');
 
         //get buying tuan
