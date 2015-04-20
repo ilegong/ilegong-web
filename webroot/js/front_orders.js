@@ -563,6 +563,7 @@ var infoToBalance = function(){
         }, {'id': id, 'num': num});
         if(proNum > intnum){
             var couponDom = $(".coupon :checked").first().parent('a');
+            alert(couponDom.length);
             if(couponDom.length <= 0){
                 return false;
             }
@@ -574,7 +575,6 @@ var infoToBalance = function(){
                 }
             });
         }
-        return false;
     };
     return{
         submitOrder : function(self){
