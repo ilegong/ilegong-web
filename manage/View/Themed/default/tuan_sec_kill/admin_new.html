@@ -1,8 +1,10 @@
 {{$this->Html->css(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css'))}}
+<ol class="breadcrumb">
+    <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+    <li><a href="/manage/admin/tuanSecKill/index">秒杀管理</a></li>
+    <li class="active">创建秒杀</li>
+</ol>
 <div class="container">
-    <hr/>
-    <h1>添加秒杀商品</h1>
-    <hr/>
     <div class="row">
         <form class="form-horizontal" method="post" action="/manage/admin/tuanSecKill/create" data-noajax="1">
             <div class="form-group">

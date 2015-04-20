@@ -1,7 +1,9 @@
-<hr/>
 {{$this->Html->css(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css','bootstrap.min.css'))}}
-<h1>秒杀商品管理</h1>
-<hr/>
+<ol class="breadcrumb">
+    <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+    <li class="active">秒杀管理</li>
+</ol>
+
 <form class="form-inline" data-noajax="true" method="get" action="/manage/admin/tuanSecKill/index">
     <input type="hidden" name="noajax" value="true">
     <div class="form-group">
@@ -19,8 +21,6 @@
     <button type="submit" class="btn btn-default">查询</button>
 </form>
 <a class="btn btn-default fr" href="/manage/admin/tuanSecKill/new">创建秒杀</a>
-<a href="/manage/admin/tuan/tuan_func_list" role="button" style="margin-right:10px;" class="btn btn-default fr">团购功能列表</a>
-
 <hr/>
 <br/><br/>
 <table class="table table-bordered table-condensed table-responsive">
