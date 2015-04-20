@@ -57,7 +57,7 @@ class TuanBuyingsController extends AppController{
         }
         if($status_type == -1){
             if($tuan_status == -1){
-                $con['status'] = [0, 1, 2];
+                $con['status'] = array(0, 1, 2);
             }else{
                 $con['status'] = $tuan_status;
             }
@@ -66,13 +66,9 @@ class TuanBuyingsController extends AppController{
             $con['status'] = $status_type;
         }
         $this->log('query tuan buyings with condition: '.json_encode($con));
-//        if(!empty($con)){
-            $tuan_buyings = $this->TuanBuying->find('all',array(
-                'conditions' => $con
-            ));
-//        }else{
-//            $tuan_buyings = $this->TuanBuying->find('all',array('conditions' => array('pid !=' => null,'status' => array(0,1,2))));
-//        }
+        $tuan_buyings = $this->TuanBuying->find('all',array(
+            'conditions' => $con
+        ));
         $tuan_ids = Hash::extract($tuan_buyings,'{n}.TuanBuying.tuan_id');
         $tuan_teams = $this->TuanTeam->find('all', array('conditions' => array('id' => $tuan_ids)));
         $tuan_teams = Hash::combine($tuan_teams, '{n}.TuanTeam.id', '{n}.TuanTeam');
