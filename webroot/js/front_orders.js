@@ -536,6 +536,7 @@ var infoToBalance = function(){
         var cartNum = cartDom.data("num");
         var goodsPrice = cartDom.data("price");
         var intnum =parseInt(num);
+        var proNum = cartDom.data("num");
         cartDom.data("num",num);
         var brandTotal = $(".conordertuan_total[data-brand-id="+ brandId + "]");
         var originPrice = brandTotal.children('strong').data("brandPrice");
@@ -560,6 +561,19 @@ var infoToBalance = function(){
                 }
             }
         }, {'id': id, 'num': num});
+        if(proNum > num){
+            var couponDom = $(".coupon :checked").first().parent('a');
+            if(couponDom.length <= 0){
+                return false;
+            }
+            var couponItemId = couponDom.data("coupon_item_id");
+            $.post('/orders/apply_coupon.json', {'brand_id': brandId, 'coupon_item_id': couponItemId, 'action': 'unapply'}, function (data){
+                if (data.changed) {
+                    totalPriceDom.text(utils.toFixed(data.total_price, 2));
+                    couponDom.children(':checkbox').prop("checked", !couponDom.children(':checkbox').prop("checked"));
+                }
+            });
+        }
         return false;
     };
     return{
@@ -621,7 +635,7 @@ var infoToBalance = function(){
                 var action = (checkbox.prop("checked") == false )? 'unapply' : 'apply';
                 $.post('/orders/apply_coupon.json', {'brand_id': brandId, 'coupon_item_id': coupon_item_id, 'action': action}, function (data) {
                     if (data) {
-                        console.log(data);
+                        //console.log(data);
                         if (data.changed) {
                             totalPriceDom.text(utils.toFixed(data.total_price, 2));
                         } else {
