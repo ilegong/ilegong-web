@@ -4,7 +4,7 @@
 
     *{-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}
     body,h1,h2,p,ul,li{ margin:0; padding:0; font-family:Helvetica,STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial;}
-    body{ background-color:#ec3925;}
+    body{ background-color:#ec3925 !important;}
     ul li{ list-style:none;}
     .clearfix{*zoom:1;}
     .clearfix:after{content: ".";display: block;height: 0;clear: both; visibility: hidden;}
@@ -16,7 +16,7 @@
         /*发红包人*/
     .packet1{ text-align:center; position:relative; background-color:#fea501;}
     .packet1 img,.record_title img{ width:100%;}
-    .packet1 h2{ width:100%; text-align:center; font-size:5em; color:#ffffff; position:absolute; top:40%; font-weight:normal;}
+    .packet1 h2 { width: 100%; text-align: center; font-size: 300%; color: #ffffff; position: absolute; top: 40%; font-weight: normal; }
     .title_owner{ padding-top:0.8em; text-align:center; background-color:#fea501;}
     .title_owner h2{ font-size:1.25em; color:#ffffff; font-weight:normal; padding-bottom:0.5em; text-align:center;}
     .title_owner p{ font-size:0.833em; color:#feff87; line-height:1.3em; padding:0 1em 1.5em 1em;}
@@ -25,7 +25,7 @@
     .title_owner a.usable{ background-color:#ec3925; color:#ffffff;}
     .title_owner a.usable:active{ background-color:#db2400; text-decoration:none;}
     .tips{ background-color:#fea501;}
-    .tips p{ padding-top:1.5em; font-size:0.75em; text-align:center; color:#feff87;}
+    .tips p { padding-top: 1em; font-size: 1em; text-align: center; color: #feff87; }
     .count{ color:#ffffff; font-size:1em; text-align:center; padding:0.2em 0 1em 0;}
     .count span{ background-color:#ec3925; -moz-border-radius:0.417em; -webkit-border-radius:0.417em; border-radius:0.417em;}
         /*抢包人*/
@@ -45,7 +45,7 @@
     .record .name{ color:#ffffff; padding-right:0.5em; line-height:2em;}
     .record .time{ color:#ffafa6; line-height:2em;}
     .record .usebtn{ width:7em;}
-    .record .usebtn a{ color:#f7b0a8; display:block; padding:0.2em 0; width:5em; text-align:center; text-decoration:none; border:1px #f7b0a8 solid;}
+    .record .usebtn a { color: #ffffff; display: block; padding: 0.2em 0; width: 5em; text-align: center; text-decoration: none; border: 1px #ffffff solid; }
     .record .usebtn a:active{ background-color:#db2400; border:0; color:#ffffff; text-decoration:none; border:1px #db2400 solid;}
     .record .money{ color:#feff87; line-height:2em;}
 
@@ -71,10 +71,11 @@
 {{/if}}
 {{/if}}
 {{/loop}}
-<?php if(empty($my_hongbao)){$my_hongbao = $sharedOffer['SharedOffer']['total_number']; } ?>
 <div id="share_remark_div"></div>
 <div class="packet1">
-    {{if !$expired}}
+    {{if empty($my_hongbao)}}
+        <h2>{{$this->Number->precision($sharedOffer['SharedOffer']['total_number']/100, 2)}}元</h2>
+    {{elseif !$expired}}
     <h2>{{$this->Number->precision($my_hongbao['number']/100, 2)}}元</h2>
     {{elseif $noMore}}
     <h2>已抢完</h2>
