@@ -101,7 +101,11 @@
 {{if !$isOwner && ($just_accepted || $accepted)}}
     <div class="title_owner">
         <h2>使用红包, 购买{{$sharedOffer['ShareOffer']['name']}}时直接抵现金</h2>
+        {{if $noMore}}
+        <a href="javascript:;" class="usable radius10">红包已发完</a>
+        {{else}}
         <a href="javascript:;" id="share_to_friend" class="usable radius10">转发给朋友</a>
+        {{/if}}
     </div>
 {{/if}}
 
