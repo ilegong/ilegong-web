@@ -35,6 +35,7 @@
             <th>秒杀价格(分)</th>
             <th>状态</th>
             <th>团队ID</th>
+            <th>发货时间</th>
             <th>操作</th>
         </tr>
     </thead>
@@ -59,6 +60,7 @@
                 {{/if}}
             </td>
             <td>{{$tryProduct['tuan_id']}}</td>
+            <td>{{$tryProduct['consignment_date']}}</td>
             <td>
                 {{if $tryProduct['status'] == 1}}
                 <a class="btn btn-primary margin-right-10" href="/manage/admin/tuanSecKill/edit/{{$tryProduct['id']}}" role="button">编辑</a>
