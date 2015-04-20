@@ -178,9 +178,10 @@ function setData(area_id){
     var $chose_item = '';
     $.each(chose_address,function(index,item){
         if(item['not_shop']){
-            $chose_item +=' <p data-shop-name="'+item['shop_name']+'">'+item['address']+'</p>';
+            $chose_item +=' <p>'+item['address']+'</p>';
         }else{
-            $chose_item +=' <p>'+item['address']+' 好邻居便利店</p>';
+            // 有商店
+            $chose_item +=' <p data-shop-name="'+item['shop_name']+'">'+item['address']+' 好邻居便利店</p>';
         }
     });
     $("#area_list").html($chose_item);
