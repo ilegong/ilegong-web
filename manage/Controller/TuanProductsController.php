@@ -74,6 +74,7 @@ class TuanProductsController extends AppController{
         ));
         if(!empty($data_info)){
             if($this->TuanProduct->updateAll(array('deleted' => 1),array('id' => $id))){
+                Cache::delete('tuan_products');
                 $this->redirect(array('controller' => 'tuan_products','action' => 'index'));
             }
         }else{
