@@ -614,7 +614,7 @@ a:hover, a:focus {
 .conorder_ziti dl{ border: 1px #eeeeee solid; border-top: 0; background-color: #ffffff;}
 .conorder_ziti dl dd{ padding: 10px; line-height: 18px; color: #555555; border-top: 1px #eeeeee solid;}
 .conorder_ziti dl dd.cur{ background-color: #29ac0e; color: #ffffff;}
-.shop_jifen { padding:10px; border-bottom: 1px #dddddd solid; font-size: 1em; color: #333333; line-height: 2em; }
+.shop_jifen { padding: 10px; border-top: 1px #eeeeee solid;border-bottom: 1px #eeeeee solid;font-size: 1em; color: #333333;line-height: 2em;background-color: #ffffff;}
 .shop_jifen ul { overflow: hidden;}
 .shop_jifen_unused { border: 1px #999999 solid; width: 1.8em; height: 1.8em; border-radius: 5px;}
 .shop_jifen_used { border: 1px #29ac0e solid; width: 1.8em; height: 1.8em; position: relative; border-radius: 5px;}
