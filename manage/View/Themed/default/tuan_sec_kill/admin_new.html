@@ -8,66 +8,77 @@
             <div class="form-group">
                 <label for="product_id" class="col-sm-2 control-label">商品ID</label>
                 <div class="col-sm-9">
-                    <input type="number" name="data[TryProduct][product_id]" class="form-control" id="product_id" placeholder="产品编号">
-                    <div class="text-warning">该商品价格为：TODO元</div>
+                    <input type="number" name="data[ProductTry][product_id]" class="form-control" id="product_id" placeholder="产品编号">
+                    <div class="text-warning">秒杀商品的ID，例：838</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="spec" class="col-sm-2 control-label">商品名称</label>
+                <div class="col-sm-9">
+                    <input type="text" name="data[ProductTry][product_name]" class="form-control" id="pro_name" placeholder="商品名称">
+                    <div class="text-warning">示例：草莓</div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="spec" class="col-sm-2 control-label">商品规格</label>
                 <div class="col-sm-9">
-                    <input type="text" name="data[TryProduct][spec]" class="form-control" id="spec" placeholder="商品规格">
+                    <input type="text" name="data[ProductTry][spec]" class="form-control" id="spec" placeholder="商品规格">
+                    <div class="text-warning">示例：100g,一盒</div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="start_time" class="col-sm-2 control-label">秒杀时间</label>
                 <div class="col-sm-9">
-                    <input type="text" name="data[TryProduct][start_time]" class="form-control datetime" id="start_time" placeholder="秒杀时间">
+                    <input type="text" name="data[ProductTry][start_time]" class="form-control datetime" id="start_time" placeholder="秒杀时间">
+                    <div class="text-warning">秒杀开始时间</div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="price" class="col-sm-2 control-label">秒杀价格</label>
                 <div class="col-sm-9">
-                    <input type="number" name="data[TryProduct][price]" class="form-control" id="price" placeholder="秒杀价格">
+                    <input type="number" name="data[ProductTry][price]" class="form-control" id="price" placeholder="秒杀价格">
                     <div class="text-warning">单位是分</div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="limit_num" class="col-sm-2 control-label">秒杀份数</label>
                 <div class="col-sm-9">
-                    <input type="number" name="data[TryProduct][limit_num]" class="form-control" id="limit_num" placeholder="秒杀份数">
+                    <input type="number" name="data[ProductTry][limit_num]" class="form-control" id="limit_num" placeholder="秒杀份数">
                 </div>
             </div>
-            <div class="form-group">
-                <label for="sold_num" class="col-sm-2 control-label">售出份数</label>
-                <div class="col-sm-9">
-                    <input type="number" name="data[TryProduct][sold_num]" class="form-control" id="sold_num" placeholder="售出份数">
-                </div>
-            </div>
+            <!--<div class="form-group">-->
+                <!--<label for="sold_num" class="col-sm-2 control-label">售出份数</label>-->
+                <!--<div class="col-sm-9">-->
+                    <!--<input type="number" name="data[ProductTry][sold_num]" class="form-control" id="sold_num" placeholder="售出份数">-->
+                <!--</div>-->
+            <!--</div>-->
             <div class="form-group">
                 <label for="tuan_id" class="col-sm-2 control-label">团队ID</label>
                 <div class="col-sm-9">
-                    <input type="text" name="data[TryProduct][tuan_id]" class="form-control" id="tuan_id" placeholder="团队ID">
+                    <input type="text" name="data[ProductTry][tuan_id]" class="form-control" id="tuan_id" placeholder="团队ID">
+                    <div class="text-warning">有团队ID时，该秒杀只在该团队进行；否则在全部团队显示</div>
                 </div>
             </div>
             <div class="form-group">
                 <label for="consignment_date" class="col-sm-2 control-label">发货日期</label>
                 <div class="col-sm-9">
-                    <input type="text" name="data[TryProduct][consignment_date]" class="form-control datetime" id="consignment_date" placeholder="发货日期">
+                    <input type="text" name="data[ProductTry][consignment_date]" class="form-control datetime" id="consignment_date" placeholder="发货日期">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">状态</label>
                 <div class="col-sm-9">
                     <label class="radio-inline">
-                        <input type="radio" name="data[TryProduct][status]" value="1" checked="checked"> 可用
+                        <input type="radio" name="data[ProductTry][status]" value="1" checked="checked"> 可用
                     </label>
                     <label class="radio-inline">
-                        <input type="radio" name="data[TryProduct][status]" value="0"> 不可用
+                        <input type="radio" name="data[ProductTry][status]" value="0"> 不可用
                     </label>
                 </div>
             </div>
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-9">
+                    <a href="/manage/admin/tuanSecKill/index" class="btn btn-default">取消</a>
                     <button type="submit" class="btn btn-primary">保存</button>
                 </div>
             </div>
