@@ -37,6 +37,7 @@ class TuanProductsController extends AppController{
     }
     public function admin_create(){
         if($this->TuanProduct->save($this->data)){
+            Cache::delete('tuan_products');
             $this->redirect(array('controller' => 'tuan_products','action' => 'index'));
         }else{
             //error
@@ -60,6 +61,7 @@ class TuanProductsController extends AppController{
         $this->log('update tuan product '.$id.': '.json_encode($this->data));
         $this->autoRender = false;
         if($this->TuanProduct->save($this->data)){
+            Cache::delete('tuan_products');
             $this->redirect(array('controller' => 'tuan_products','action' => 'index'));
         }
         $this->set('id',$id);
