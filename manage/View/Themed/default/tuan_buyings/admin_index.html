@@ -1,7 +1,9 @@
 {{$this->Html->css(array('bootstrap.min.css'));}}
-<hr/>
-<h1>团购管理</h1>
-<hr/>
+<ol class="breadcrumb">
+  <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+  <li class="active">团购管理</li>
+</ol>
+
 <form class="form-inline tuan-buyings-form" method="get" action="/manage/admin/tuan_buyings/index" data-status-type="{{$status_type}}" data-tuan-status="{{$tuan_status}}" data-tuan-type="{{$cons_type}}">
     <div style="padding-bottom: 10px;">
         <input type="hidden" name="noajax" value="true">

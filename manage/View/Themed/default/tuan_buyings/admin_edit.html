@@ -1,8 +1,11 @@
 {{$this->Html->css(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css'))}}
+<ol class="breadcrumb">
+  <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+  <li><a href="/manage/admin/tuan_products/index">团购管理</a></li>
+  <li class="active">编辑团购</li>
+</ol>
+
 <div class="container">
-    <hr/>
-    <h1>编辑团购信息</h1>
-    <hr/>
     <?php
       $tuanBuying = $this->data[TuanBuying];
     ?>

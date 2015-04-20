@@ -1,7 +1,9 @@
 {{$this->Html->css(array('bootstrap.min.css'));}}
-<hr/>
-<h1>团队管理</h1>
-<hr/>
+<ol class="breadcrumb">
+  <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+  <li class="active">团队管理</li>
+</ol>
+
 <form class="form-inline" method="get" action="/manage/admin/tuan_teams/index">
     <div style="padding-bottom: 10px;">
         <input type="hidden" name="noajax" value="true">
@@ -16,7 +18,6 @@
         <button type="submit" style="margin-right:10px;"  class="btn btn-primary">查看团队</button>
     </div>
     <div class="pull-right">
-      <a href="/manage/admin/tuan/tuan_func_list" role="button" class="btn btn-primary margin-right-10">团购功能列表</a>
       <a href="/manage/admin/tuan_teams/new" role="button" class="btn btn-primary">创建团队</a>
     </div>
 </form>

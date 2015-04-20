@@ -1,8 +1,11 @@
 {{$this->Html->css(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css'))}}
+<ol class="breadcrumb">
+  <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+  <li><a href="/manage/admin/tuan_products/index">团购管理</a></li>
+  <li class="active">新建团购</li>
+</ol>
+
 <div class="container">
-    <hr/>
-    <h1>创建团购</h1>
-    <hr/>
     <form class="form-horizontal tuan-form" method="post" action="/manage/admin/tuan_buyings/create" novalidate="novalidate" data-noajax="true">
         <!--<div class="form-group">-->
             <!--<label class="col-sm-2 control-label">团队</label>-->
