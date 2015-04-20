@@ -63,9 +63,24 @@
     }
 
 </style>
+{{loop $slices $idx $slice}}
+{{if $slice['SharedSlice']['accept_user']}}
+{{if $slice['SharedSlice']['accept_user'] == $uid}}
+    <?php $my_hongbao = $slice['SharedSlice'];
+    ?>
+{{/if}}
+{{/if}}
+{{/loop}}
+<?php if(empty($my_hongbao)){$my_hongbao = $sharedOffer['SharedOffer']['total_number']; } ?>
 <div id="share_remark_div"></div>
 <div class="packet1">
-    <h2>{{$this->Number->precision($sharedOffer['SharedOffer']['total_number']/100, 2)}}元</h2>
+    {{if !$expired}}
+    <h2>{{$this->Number->precision($my_hongbao['number']/100, 2)}}元</h2>
+    {{elseif $noMore}}
+    <h2>已抢完</h2>
+    {{else}}
+    <p>已过期</p>
+    {{/if}}
     <img id="red_offer_png" src="{{$this->Html->assetUrl('/img/sharing/packet1.png')}}" border="0"/>
 </div>
 
