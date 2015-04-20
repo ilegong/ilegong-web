@@ -561,7 +561,7 @@ var infoToBalance = function(){
                 }
             }
         }, {'id': id, 'num': num});
-        if(proNum > num){
+        if(proNum > intnum){
             var couponDom = $(".coupon :checked").first().parent('a');
             if(couponDom.length <= 0){
                 return false;
