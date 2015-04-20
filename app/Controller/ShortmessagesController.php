@@ -3,6 +3,7 @@
 class ShortmessagesController extends AppController {
 
     var $name = 'Shortmessages';
+    var $components  = array('Weixin');
 
 	function admin_add()
 	{
@@ -59,7 +60,7 @@ class ShortmessagesController extends AppController {
             $this->redirect('/users/my_coupons');
         }
     }
-    public function get_haobao(){
+    public function get_hongbao(){
         if (empty($this->currentUser['id']) && $this->is_weixin()) {
             $ref = Router::url($_SERVER['REQUEST_URI']);
             $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
@@ -86,6 +87,7 @@ class ShortmessagesController extends AppController {
         $this->loadModel('SharedOffer');
         if(!$this->SharedOffer->hasAny(array('uid' => $uid, 'share_offer_id'=>$shareOfferId))){
             $this->ShareOffer->add_shared_slices($uid,$shareOfferId,$toShareNum);
+            $this->Weixin->send_packet_received_message($uid, 100, $store_offer['ShareOffer']['name']);
         }
         $this->redirect('/users/my_offers');
     }
