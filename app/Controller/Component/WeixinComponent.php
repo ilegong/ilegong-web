@@ -90,7 +90,7 @@ class WeixinComponent extends Component
     {
             $coupon_url = $this->get_coupon_url();
             $first_intro = "亲，恭喜您获得" . $count . "张优惠券";
-            $click_intro = "点击详情，查询获得的优惠券。";
+            $click_intro = "点击详情，立即购买。";
 
         return $this->send_coupon_message_on_received($user_id, $store, $rule, $coupon_url, $first_intro, $click_intro);
     }
