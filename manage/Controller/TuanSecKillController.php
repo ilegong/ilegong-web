@@ -17,7 +17,7 @@ class TuanSecKillController extends AppController{
         $product_id = $_REQUEST['product_id'];
         $start_time = $_REQUEST['start_time'];
         $end_time = $_REQUEST['end_time'];
-        $status_type = $_REQUEST['status_type'];
+//        $status_type = $_REQUEST['status_type'];
         if(empty($start_time)){
             $start_time = date('Y-m-d H:i',strtotime('-7 days'));
         }
@@ -30,7 +30,7 @@ class TuanSecKillController extends AppController{
         if(!empty($product_id)){
             $query_cond['product_id'] = $product_id;
         }
-        $query_cond['status'] = $status_type;
+//        $query_cond['status'] = $status_type;
         $query_cond['start_time >='] = $start_time;
         $query_cond['start_time <'] = $end_time;
         $this->log('query_cond'.json_encode($query_cond));
@@ -43,7 +43,7 @@ class TuanSecKillController extends AppController{
         $this->set('product_id',$product_id);
         $this->set('start_time',$start_time);
         $this->set('end_time',$end_time);
-        $this->set('status',$status_type);
+//        $this->set('status',$status_type);
     }
 
     public function admin_new(){

@@ -16,13 +16,6 @@
     <div class="form-group">
         <input type="text" name="end_time" class="form-control datetime" id="end_time" value="{{$end_time}}" placeholder="结束时间">
     </div>
-    <div class="form-group">
-        <input type="radio" name="status_type" class="status-type" value="1" {{if $status == 1}}checked="checked"{{/if}}>秒杀中</input>
-    </div>
-    <div class="form-group">
-        <input type="radio" name="status_type" class="status-type" value="0" {{if $status == 0}}checked="checked"{{/if}}>已秒杀</input>
-    </div>
-
     <button type="submit" class="btn btn-default">查询</button>
 </form>
 <a class="btn btn-default fr" href="/manage/admin/tuanSecKill/new">创建秒杀</a>
@@ -40,7 +33,7 @@
             <th>限制份数</th>
             <th>售出份数</th>
             <th>秒杀价格(分)</th>
-            <!--<th>状态</th>-->
+            <th>状态</th>
             <th>团队ID</th>
             <th>操作</th>
         </tr>
@@ -58,13 +51,13 @@
             <td>{{$tryProduct['limit_num']}}</td>
             <td>{{$tryProduct['sold_num']}}</td>
             <td>{{$tryProduct['price']}}</td>
-            <!--<td>-->
-                <!--{{if $tryProduct['status'] == 1}}-->
-                  <!--可用-->
-                <!--{{else}}-->
-                  <!--不可用-->
-                <!--{{/if}}-->
-            <!--</td>-->
+            <td>
+                {{if $tryProduct['status'] == 1}}
+                  可用
+                {{else}}
+                  不可用
+                {{/if}}
+            </td>
             <td>{{$tryProduct['tuan_id']}}</td>
             <td>
                 {{if $tryProduct['status'] == 1}}
