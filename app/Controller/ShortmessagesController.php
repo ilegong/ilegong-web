@@ -59,6 +59,35 @@ class ShortmessagesController extends AppController {
             $this->redirect('/users/my_coupons');
         }
     }
-
+    public function get_haobao(){
+        if (empty($this->currentUser['id']) && $this->is_weixin()) {
+            $ref = Router::url($_SERVER['REQUEST_URI']);
+            $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
+            exit();
+        }
+        $uid = $this->currentUser['id'];
+        if(empty($uid)){
+            $this->redirect('/users/login');
+            exit();
+        }
+        $cond = array('brand_id' => 98,'deleted' => DELETED_NO);
+        $this->loadModel('ShareOffer');
+        $store_offer = $this->ShareOffer->find('first',array(
+            'conditions' =>$cond,
+            'order' =>'created desc',
+            'fields' => array('id','name','introduct','deleted','start','end','valid_days','avg_number','is_default'))
+        );
+        if(empty($store_offer)){
+            $this->redirect('/');
+            exit();
+        }
+        $shareOfferId = $store_offer['ShareOffer']['id'];
+        $toShareNum = $store_offer['ShareOffer']['avg_number'] * 8;
+        $this->loadModel('SharedOffer');
+        if(!$this->SharedOffer->hasAny(array('uid' => $uid, 'share_offer_id'=>$shareOfferId))){
+            $this->ShareOffer->add_shared_slices($uid,$shareOfferId,$toShareNum);
+        }
+        $this->redirect('/users/my_offers');
+    }
 }
 ?>
