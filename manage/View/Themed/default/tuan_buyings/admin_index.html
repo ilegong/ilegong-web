@@ -37,7 +37,7 @@
             <select class="form-control tuan-status" name="tuan_status">
                 <option value="-1">选择团购状态</option>
                 <option value="0" selected="selected">进行中</option>
-                <option value="1">已完成</option>
+                <option value="1">已截单</option>
                 <option value="2">已取消</option>
             </select>
         </div>
@@ -53,18 +53,17 @@
     <hr/>
     <div>
         <a class="btn btn-danger fl" id="batch_cancel" href="#">批量取消</a>&nbsp;&nbsp;&nbsp;
-        <a class="btn btn-success fl" id="batch_complete"  style="margin-left:10px;" href="#">批量完成</a>&nbsp;&nbsp;&nbsp;
+        <a class="btn btn-success fl" id="batch_complete"  style="margin-left:10px;" href="#">批量截单</a>&nbsp;&nbsp;&nbsp;
         <a  class="btn btn-primary fl" id= "batch_message" style="margin-left:10px;" href="#">批量短信</a>
         <a  class="btn  btn-primary fl" id="batch_deliver" style="margin-left:10px;" href="#">批量发货</a>
         <a href="/manage/admin/tuan_buyings/new" role="button" class="btn btn-default fr">创建团购</a>&nbsp;&nbsp;
-        <a href="/manage/admin/tuan/tuan_func_list" role="button" style="margin-right:10px;" class="btn btn-default fr">团购功能列表</a>
     </div>
     <hr/>
 </form>
 <table class="table table-bordered table-condensed table-responsive">
     <thead>
     <tr>
-        <td>选择<input type="checkbox" value="0" id="check_all_tb"></td><td>团购ID</td><td>团名称</td><td>商品/类别</td><td>发货类型</td><td>团购价</td><td>参团人数</td><td>售出份数/目标</td><td>创建时间</td><td>是否完成(截单时间)</td><td>是否延期</td><td>发货/退款</td><td>操作</td>
+        <td>选择<input type="checkbox" value="0" id="check_all_tb"></td><td>团购ID</td><td>团名称</td><td>商品/类别</td><td>发货类型</td><td>团购价</td><td>参团人数</td><td>售出份数/目标</td><td>创建时间</td><td>是否截单(截单时间)</td><td>是否延期</td><td>发货/退款</td><td>操作</td>
     </tr>
     </thead>
     <tbody>
@@ -120,11 +119,11 @@
         </td>
         <td>{{$tuanStatus}}({{date('n.j H:i',strtotime($tuanBuying['end_time']))}})
             {{if $tuanBuying['status']==0}}
-            <button type="button" class="btn btn-sm btn-warning tuan-buying-due" data-id="{{$tuanBuying['id']}}" value="1">完成</button>
+            <button type="button" class="btn btn-sm btn-warning tuan-buying-due" data-id="{{$tuanBuying['id']}}" value="1">截单</button>
             <button type="button" class="btn btn-sm btn-danger tuan-buying-canceled" data-id="{{$tuanBuying['id']}}" value="2">取消</button>
             {{elseif $tuanBuying['status'] == 1}}
             {{if $tuan_buying['complete_msg_status'] == 'true'}}
-            <button type="button" class="btn btn-sm btn-info tuan-buying-completemsg" data-id="{{$tuanBuying['id']}}" data-tuanBuying-id="{{$tuanBuying['status']}}">完成消息</button>
+            <button type="button" class="btn btn-sm btn-info tuan-buying-completemsg" data-id="{{$tuanBuying['id']}}" data-tuanBuying-id="{{$tuanBuying['status']}}">截单消息</button>
             {{else}}
             <span class="label label-info">{{$tuan_buying['complete_msg_status']}}</span>
             {{/if}}
@@ -182,16 +181,6 @@
                 <a role="button" class="btn btn-sm btn-default" href="/manage/admin/tuan_buyings/edit/{{$tuanBuying['id']}}">编辑...</a>
                 <a role="button" class="btn btn-sm btn-default" href="#">编辑物流...</a>
             {{/if}}
-
-            <!--{{if $tuanBuying['status']==0}}-->
-            <!--{{elseif $tuanBuying['status']==1}}-->
-
-                <!--{{if $tuan_buying['complete_msg_status'] == 'true'}}-->
-                    <!--<button type="button" class="btn btn-sm btn-info tuan-buying-completemsg" data-id="{{$tuanBuying['id']}}" data-tuanBuying-id="{{$tuanBuying['status']}}">完成消息</button>-->
-                <!--{{else}}-->
-                    <!--<span class="label label-info">{{$tuan_buying['complete_msg_status']}}</span>-->
-                <!--{{/if}}-->
-            <!--{{/if}}-->
         </td>
     </tr>
     {{/loop}}
