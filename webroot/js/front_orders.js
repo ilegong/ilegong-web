@@ -563,20 +563,16 @@ var infoToBalance = function(){
         }, {'id': id, 'num': num});
         if(proNum > intnum){
             var couponDom = $(".coupon :checked").first().parent('a');
-            alert(couponDom.html());
-            alert(couponDom.length);
             if(couponDom.length <= 0){
                 return false;
             }
             var couponItemId = couponDom.data("coupon_item_id");
-            alert(couponItemId);
             $.post('/orders/apply_coupon.json', {'brand_id': brandId, 'coupon_item_id': couponItemId, 'action': 'unapply'}, function (data){
                 if (data.changed) {
-                    alert(data.changed);
                     totalPriceDom.text(utils.toFixed(data.total_price, 2));
                     couponDom.children(':checkbox').prop("checked", !couponDom.children(':checkbox').prop("checked"));
                 }
-            });
+            }, 'json');
         }
     };
     return{
