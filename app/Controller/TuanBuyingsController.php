@@ -207,10 +207,10 @@ class TuanBuyingsController extends AppController{
                 }
             }
             if($_POST['way_type'] == 'ziti'){
-                echo json_encode(array('success' => true, 'direct'=>'big_tuan_list'));
+                echo json_encode(array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id']));
             }else{
                 $ship_fee = floatval($_POST['way_fee']);
-                echo json_encode(array('success' => true, 'direct'=>'normal','way_type'=>$_POST['way_type'],'way_fee'=>$ship_fee));
+                echo json_encode(array('success' => true, 'direct'=>'normal','way_type'=>$_POST['way_type'],'way_fee'=>$ship_fee, 'cart_id'=>$cartInfo['Cart']['id']));
             }
             $cart_array = array(0 => strval($cart_id));
             $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
@@ -286,12 +286,34 @@ class TuanBuyingsController extends AppController{
         $this->set('hideNav',true);
     }
 
-    public function balance($tuan_buy_id){
+    public function balance($tuan_buy_id, $cart_id){
         $this->pageTitle = '订单确认';
         if(empty($this->currentUser['id'])){
             $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
             return;
         }
+
+        $uid =$this->currentUser['id'];
+        $user_condition = array(
+            'session_id'=>	$this->Session->id(),
+            'creator' => $uid
+        );
+        $cond = array(
+            'id' => $cart_id,
+            'OR' => $user_condition
+        );
+        $this->loadModel('Cart');
+        $Carts = $this->Cart->find('first', array(
+            'conditions' => $cond,
+            'order' => 'id DESC'
+        ));
+        if(empty($Carts)){
+            $message = '结算失败，请重试';
+            $url = '/';
+            $this->__message($message, $url);
+            return;
+        }
+
         $tuan_b = $this->TuanBuying->find('first', array(
             'conditions' => array('id' => $tuan_buy_id),
             'fields' => array('pid', 'tuan_id', 'status', 'end_time')
@@ -319,24 +341,7 @@ class TuanBuyingsController extends AppController{
             $this->__message('该团不存在', '/tuan_teams/mei_shi_tuan');
             return;
         }
-        $this->loadModel('Cart');
-        $uid =$this->currentUser['id'];
-        $user_condition = array(
-            'session_id'=>	$this->Session->id(),
-            'creator' => $uid
-        );
-        $cond = array(
-            'status' => CART_ITEM_STATUS_NEW,
-            'order_id' => null,
-            'num > 0',
-            'product_id' => $tuan_b['TuanBuying']['pid'],
-            'type' => CART_ITEM_TYPE_TUAN,
-            'OR' => $user_condition
-        );
-        $Carts = $this->Cart->find('first', array(
-            'conditions' => $cond,
-            'order' => 'id DESC'
-        ));
+
         $ship_fee = floatval($_REQUEST['way_fee']);
         $total_price = $Carts['Cart']['price'] * $Carts['Cart']['num'];
         $this->set('ship_fee',$ship_fee);
@@ -639,8 +644,8 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_buy_num',$tuan_buy_num[0][0]['sold_number']);
         $this->set('hideNav',true);
     }
-    public function big_tuan_balance($tuan_buy_id){
-        $this->balance($tuan_buy_id);
+    public function big_tuan_balance($tuan_buy_id, $cart_id){
+        $this->balance($tuan_buy_id, $cart_id);
         $this->set('hideNav',true);
     }
 

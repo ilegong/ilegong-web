@@ -117,6 +117,7 @@ class Cart extends AppModel {
             $spec_detail_arr = $result[cart_dict_key($product_id, $specId)];
             $cart_name =  $p['Product']['name'] . (empty($spec_detail_arr[1])?'':'('.$spec_detail_arr[1].')');
             $this->log('add product to cart for user '.$uid.', spec name: '.$spec_detail_arr[1]);
+            $this->log('add product to cart for user '.$uid.', cart name: '.$cart_name);
             list($price, $special_id) = calculate_price($p['Product']['id'], $spec_detail_arr[0], $uid, $num,0,null,$tuan_param);
         }
 
