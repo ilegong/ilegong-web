@@ -212,6 +212,7 @@ input {
     font-size: 1em;
     font-weight: normal;
     padding: 10px 0 5px 10px;
+    margin: 0;
 }
 
 .tuandetail_seckill span em {

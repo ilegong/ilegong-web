@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    {{$this->Html->css(array('tuan-detail.css?v6'))}}
+    {{$this->Html->css(array('tuan-detail.css?v7'))}}
 </head>
 <body style="background-color:#f5f5f5;">
 <div class="tuandetail_nav">
@@ -19,7 +19,7 @@
         <strong>{{$tuan_team['TuanTeam']['tuan_name']}}</strong>
         <em>健康&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;营养&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;实惠</em>
     </div>
-    <ul class="clearfix tuandetail_member">
+    <ul class="clearfix tuandetail_member" style="margin-bottom: 0;">
         <li class="fl"><span>团长:{{$tuan_team['TuanTeam']['leader_name']}}</span></li>
         <li class="fl">&nbsp;&nbsp;微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}</li>
         <li class="fr"><a class="p_more" href="/tuan_teams/memberlist/{{$tuan_team['TuanTeam']['id']}}"></a></li>
@@ -46,7 +46,7 @@
                     <a data-try-id="{{$trying['ProductTry']['id']}}" data-tuan-id="{{$tuan_id}}"
                        class="tuan_bar_btn doing" data-pid="{{$trying['Product']['id']}}">正在秒杀</a>
                     {{elseif $trying['status'] == 'sec_end'}}
-                    <a class="tuan_bar_btn done">已秒完</a>
+                    <a class="tuan_bar_btn done" style="background-color: #cccccc;">已秒完</a>
                     {{else}}
                     <a data-start="{{strtotime($trying['ProductTry']['start_time']) - ($shichi_mem? 30 * 60 : 0)}}"
                        data-pid="{{$trying['Product']['id']}}" href="#X" class="tuan_bar_btn sec_start">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
