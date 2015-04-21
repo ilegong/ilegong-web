@@ -71,12 +71,13 @@ class TuanController extends AppController{
         $order_query_cond = array(
             'Order.type' => array(ORDER_TYPE_TUAN_SEC,ORDER_TYPE_TUAN,ORDER_TYPE_DEF)
         );
+        //add tuan_buys member id
+        if(!empty($tuan_buys)){
+            $tb_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.id');
+            $order_query_cond['Order.member_id'] = $tb_ids;
+        }
         if($only_tuan_order=='1'){
-            //add tuan_buys member id
-            if(!empty($tuan_buys)){
-                $tb_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.id');
-                $order_query_cond['Order.member_id'] = $tb_ids;
-            }
+            $order_query_cond['Order.type'] =  ORDER_TYPE_TUAN;
         }
         $payNotifyModel = ClassRegistry::init('PayNotify');
         //??why
