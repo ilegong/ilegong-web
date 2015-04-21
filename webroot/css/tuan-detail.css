@@ -166,7 +166,7 @@ input {
     display: block;
     line-height: 14px;
     font-size: 0.9em;
-    max-height: 28px;
+    height: 28px;
     overflow: hidden;
 }
 
