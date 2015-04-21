@@ -186,7 +186,8 @@ function getTuanProductsAsJson(){
         $tuanProducts = $tuanProductM->find('all',array(
             'conditions' => array(
                 'deleted' => DELETED_NO
-            )
+            ),
+            'order' => 'priority desc'
         ));
         $tuanProducts = json_encode($tuanProducts);
         Cache::write('tuan_products',$tuanProducts);
