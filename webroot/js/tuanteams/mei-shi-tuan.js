@@ -20,7 +20,7 @@ $(function(){
             data: {tuan_id: tuan_id},
             success: function (a) {
                 if (a['success']) {
-                    $tipInfoPanel.text('加入团队成功').fadeIn(1000).fadeOut(2000,function(){
+                    $tipInfoPanel.text('加入团队成功').fadeIn(300).fadeOut(1000,function(){
                         location.reload();
                     });
                 } else {

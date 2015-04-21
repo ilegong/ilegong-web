@@ -22,7 +22,7 @@
                             <li style=" float: none; padding-left: 8em;">
                                 <a href="{{$tuan_link}}">
                                     <p>{{$tuan['tuan_name'] }}</p>
-                                    <s>团长:<span>{{$tuan['leader_name']}}</span>&nbsp;&nbsp;成员:<span name="member_num">{{$tuan['member_num']}}</span>人</s><br/>
+                                    <s>团长:<span>{{$tuan['leader_name']}}</span>&nbsp;&nbsp;成员:<span name="member_num">{{$tuan['member_num']-1}}</span>人</s><br/>
                                     <a href="#X" class="alltuan_curbtn">已加入</a><br/>
                                 </a>
                             </li>
@@ -66,4 +66,4 @@
     </div>
 </div>
 
-{{$this->Html->script(array('/js/tuan-area.js?v2','tuanteams/mei-shi-tuan.js?v5',))}}
+{{$this->Html->script(array('/js/tuan-area.js?v2','tuanteams/mei-shi-tuan.js?v6',))}}
