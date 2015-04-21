@@ -122,6 +122,19 @@ class TuanTeamsController extends AppController{
             $this->set($weixinJs);
             $this->set('jWeixinOn', true);
         }
+
+        $current_user_id = $this->currentUser['id'];
+        $this->loadModel('TuanMember');
+        //user is login
+        if(!empty($current_user_id)){
+            $is_join = $this->TuanMember->find('all',array(
+                'conditions' => array(
+                    'uid' => $current_user_id,
+                    'tuan_id' => $tuan_id
+                )
+            ));
+        }
+        $this->set('is_join',$is_join);
         $this->set('tryings',$tryings);
         $this->set('tuan_id', $tuan_id);
         $this->set('tuan_team', $tuan_team);

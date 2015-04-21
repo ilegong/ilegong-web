@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    {{$this->Html->css(array('tuan-detail.css?v8'))}}
+    {{$this->Html->css(array('tuan-detail.css?v9'))}}
 </head>
 <body style="background-color:#f5f5f5;">
 <div class="tuandetail_nav">
@@ -104,6 +104,14 @@
     </a>
     {{/loop}}
 </div>
+<dl class="tuanherf clearfix">
+    <dd class="fl"><a href="/categories/mobileHome.html">朋友说首页</a></dd>
+    {{if empty($is_join)}}
+    <dd class="fl"><a href="#X" class="alltuan_addbtn" name="join_tuan" data-tuan-id="{{$tuan_id}}">我要加入团</a ></dd>
+    {{else}}
+    <dd class="fl"><a href="#X" class="alltuan_curbtn">已加入</a><br/></dd>
+    {{/if}}
+</dl>
 <div class="tuandetail_tips">
     <p>Tips:小贴士</p>
     <span>1、统一配送至：{{$tuan_team['TuanTeam']['tuan_addr']}}</span>
@@ -112,6 +120,7 @@
     <em>如您有任何问题可随时招呼【朋友说小妹】，小妹微信二维码如下</em>
     <em><img src="{{$this->Html->assetUrl('/img/tuan/detail/xiaomei.jpg')}}"/></em>
 </div>
+{{$this->Html->script(array('tuanteams/mei-shi-tuan.js?v6',))}}
 <script>
     $(document).ready(function () {
         var BASEURL = "{{APP_SUB_DIR}}";
