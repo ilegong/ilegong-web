@@ -29,8 +29,7 @@ class StoresController extends AppController
             }
         }
 
-        //if user is chaopeng and xiaoqing as super user
-        if($this->currentUser['id']==633345||$this->currentUser['id']==5081||$this->currentUser['id']==701166){
+        if ($this->is_admin($this->currentUser['id'])) {
             $brand_id = $_REQUEST['brand_id'];
             if(empty($brand_id)){
                 $brand_id = $this->Session->read('admin_brand_id');
