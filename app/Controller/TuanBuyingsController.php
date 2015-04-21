@@ -575,7 +575,7 @@ class TuanBuyingsController extends AppController{
         $currentDate = date(FORMAT_DATETIME);
         $tuanProducts = getTuanProducts();
         $tuanProducts = Hash::combine($tuanProducts,'{n}.TuanProduct.product_id','{n}.TuanProduct');
-        $exclude_pids = array(863,900);
+        $exclude_pids = array(863,900, 907);
         $tuan_product_ids = $this->TuanBuying->find('all',array('conditions' => array("pid != " => $exclude_pids,'status'=>0,'end_time > '=>$currentDate),'group' => array('pid')));
         $tuan_product_ids = Hash::extract($tuan_product_ids,'{n}.TuanBuying.pid');
         $this->loadModel('Product');
