@@ -1,3 +1,4 @@
+{{$this->Html->css('bootstrap.min.css')}}
 <style>
 td {padding:5px 10px;}
 </style>
@@ -78,11 +79,19 @@ td {padding:5px 10px;}
 		</table>
 		{{/loop}}
             {{template Elements/alert_for_business_user}}
+            <div class="pagination">
+                <div class="row">
+                    {{$this->Paginator->first('首页 | ')}}
+                    {{$this->Paginator->prev('上页 | ')}}
+                    {{$this->Paginator->next('下页 | ')}}
+                    {{$this->Paginator->last('尾页')}}
+                </div>
+                <div class="row">{{$this->Paginator->numbers();}}</div>
+                <div class="row">{{$this->paginator->counter(' {:page}/{:pages}');}}</div>
+            </div>
+
 		</div>
-			
+
 			
 	</div>
 </div>
-<script>
-
-</script>

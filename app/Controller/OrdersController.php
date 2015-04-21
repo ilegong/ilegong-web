@@ -6,7 +6,7 @@ class OrdersController extends AppController {
 
     var $user_condition = array();
 
-    public $components = array('Weixin', 'Buying');
+    public $components = array('Weixin', 'Buying','Paginator');
 
     var $customized_not_logged = array('apply_coupon');
 
@@ -1432,10 +1432,12 @@ class OrdersController extends AppController {
             $cond['status'] = $onlyStatus;
         }
 
-        $orders = $this->Order->find('all', array(
-            'order' => 'id desc',
+
+        $this->Paginator->settings = array('limit' => 20,
             'conditions' => $cond,
-        ));
+            'order' => 'Order.id desc'
+        );
+        $orders = $this->Paginator->paginate();
         $ids = array();
         foreach ($orders as $o) {
             $ids[] = $o['Order']['id'];
