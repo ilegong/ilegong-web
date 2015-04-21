@@ -17,7 +17,7 @@ class TuanSecKillController extends AppController{
         $product_id = $_REQUEST['product_id'];
         $start_time = $_REQUEST['start_time'];
         $end_time = $_REQUEST['end_time'];
-//        $status_type = $_REQUEST['status_type'];
+
         if(empty($start_time)){
             $start_time = date('Y-m-d H:i',strtotime('-7 days'));
         }
@@ -30,9 +30,10 @@ class TuanSecKillController extends AppController{
         if(!empty($product_id)){
             $query_cond['product_id'] = $product_id;
         }
-//        $query_cond['status'] = $status_type;
+
         $query_cond['start_time >='] = $start_time;
         $query_cond['start_time <'] = $end_time;
+        $query_cond['deleted = '] = DELETED_NO;
         $this->log('query_cond'.json_encode($query_cond));
         $datas = $this->ProductTry->find('all',array(
             'conditions' => $query_cond,
@@ -43,7 +44,6 @@ class TuanSecKillController extends AppController{
         $this->set('product_id',$product_id);
         $this->set('start_time',$start_time);
         $this->set('end_time',$end_time);
-//        $this->set('status',$status_type);
     }
 
     public function admin_new(){
@@ -76,9 +76,8 @@ class TuanSecKillController extends AppController{
     }
 
     public function admin_delete($id){
-        if($this->ProductTry->updateAll(array('status'=>0),array('id'=>$id))){
+        if($this->ProductTry->updateAll(array('deleted'=>1),array('id'=>$id))){
             $this->redirect(array('controller' => 'tuanSecKill','action' => 'index'));
         }
     }
-
 }

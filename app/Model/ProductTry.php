@@ -13,6 +13,7 @@ class ProductTry extends AppModel {
         $tomorrow = date('Y-m-d',strtotime('+1 day',strtotime($today)));
         $tries = $this->find('all', array(
             'conditions' => array(
+                'deleted' => DELETED_NO,
                 'status' => PRODUCT_TRY_ING,
                 'start_time >=' => $today,
                 'start_time <' => $tomorrow
