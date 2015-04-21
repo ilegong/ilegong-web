@@ -16,6 +16,7 @@
             <th>商品ID</th>
             <th>团购价格</th>
             <th>发货类型</th>
+            <th>优先级</th>
             <th>列表图片</th>
             <th>详情图片</th>
             <th>操作</th>
@@ -44,6 +45,7 @@
                 {{else}}
                 {{/if}}
             </td>
+            <td>{{$tuanProduct['priority']}}</td>
             <td><img style="max-width: 200px;" src="{{$tuanProduct['list_img']}}"/></td>
             <td><img style="max-height: 90px;" src="{{$tuanProduct['detail_img']}}"/></td>
             <td>
