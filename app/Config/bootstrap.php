@@ -1652,8 +1652,8 @@ function prepare_wx_share_log($currUid, $date_type, $data_id){
 }
 
 function getTuanProductsAsJson(){
-    $tuanProducts = Cache::read('tuan_products');
-    if(empty($tuanProducts)){
+//    $tuanProducts = Cache::read('tuan_products');
+//    if(empty($tuanProducts)){
         $tuanProductM = ClassRegistry::init('TuanProduct');
         $tuanProducts = $tuanProductM->find('all',array(
             'conditions' => array(
@@ -1662,8 +1662,8 @@ function getTuanProductsAsJson(){
             'order' => 'priority desc'
         ));
         $tuanProducts = json_encode($tuanProducts);
-        Cache::write('tuan_products',$tuanProducts);
-    }
+//        Cache::write('tuan_products',$tuanProducts);
+//    }
     return $tuanProducts;
 }
 
