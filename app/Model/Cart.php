@@ -83,7 +83,6 @@ class Cart extends AppModel {
     public function add_to_cart($product_id, $num = 1, $specId = 0, $type = CART_ITEM_TYPE_NORMAL, $try_id = 0,
                                 $uid = null, $sessionId=null, $prodTry = null, $shichituan = null,$tuan_param=array()) {
 
-        $this->log('add product to cart for user '.$uid.': '.$product_id.', '.$specId);
         $user_cond = $this->create_user_cond($uid, $sessionId);
 
         $Carts = $this->find('first', array(
@@ -96,7 +95,6 @@ class Cart extends AppModel {
             )));
 
         $data = array();
-        $this->log('add product to cart for user '.$uid.', cart already exists: '.$Carts['Cart']['id']);
         if (!empty($Carts)) {
             $data['Cart']['id'] = $Carts['Cart']['id'];
         }
@@ -116,8 +114,6 @@ class Cart extends AppModel {
             ));
             $spec_detail_arr = $result[cart_dict_key($product_id, $specId)];
             $cart_name =  $p['Product']['name'] . (empty($spec_detail_arr[1])?'':'('.$spec_detail_arr[1].')');
-            $this->log('add product to cart for user '.$uid.', spec name: '.$spec_detail_arr[1]);
-            $this->log('add product to cart for user '.$uid.', cart name: '.$cart_name);
             list($price, $special_id) = calculate_price($p['Product']['id'], $spec_detail_arr[0], $uid, $num,0,null,$tuan_param);
         }
 
@@ -134,7 +130,6 @@ class Cart extends AppModel {
             $data['Cart']['applied_special'] = $special_id;
         }
 
-        $this->log('add product to cart for user '.$uid.' finished');
         return $this->save($data);
     }
 
