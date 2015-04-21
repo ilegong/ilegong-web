@@ -10,7 +10,7 @@ class TuanController extends AppController{
 
     var $name = 'Tuan';
 
-    var $uses = array('TuanTeam','TuanBuying','Order','Cart','TuanBuyingMessages','TuanProduct','ConsignmentDate', 'ProductTry');
+    var $uses = array('TuanTeam','TuanBuying','Order','Cart','TuanBuyingMessages','TuanProduct','ConsignmentDate', 'ProductTry', 'Brand');
 
     /**
      * query tuan orders
@@ -296,5 +296,7 @@ class TuanController extends AppController{
         $this->set('tuan_product_count', $tuan_product_count[0][0]['c']);
         $seckill_product_count = $this->ProductTry->query('select count(*) as c from cake_product_tries where deleted = 0');
         $this->set('seckill_product_count', $seckill_product_count[0][0]['c']);
+        $brand_count = $this->Brand->query('select count(*) as c from cake_brands where deleted = 0');
+        $this->set('brand_count', $brand_count[0][0]['c']);
     }
 }

@@ -47,7 +47,6 @@ class BrandsController extends AppController {
     }
 
     public function brands_admin() {
-
         $toLogin = '/users/login?referer=' .Router::url('/brands/brands_admin');
         if(empty($this->currentUser['id'])){
             $this->redirect($toLogin);
