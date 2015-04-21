@@ -238,7 +238,7 @@ class TuanBuyingsController extends AppController{
             $this->TuanBuying->create();
             if($this->TuanBuying->save($this->data)){
                 $tuanBuyId = $this->TuanBuying->getLastInsertID();
-                $this->admin_send_tuan_buy_create_msg($tuanBuyId);
+//                $this->admin_send_tuan_buy_create_msg($tuanBuyId);
             }
           }
         }
