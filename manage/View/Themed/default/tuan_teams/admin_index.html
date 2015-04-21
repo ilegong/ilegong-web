@@ -38,7 +38,7 @@
                 <a href="/manage/admin/tuan_buyings/index?team_id={{$tuan_team['TuanTeam']['id']}}">{{$tuan_team['TuanTeam']['tuan_buying_count']}}个团购</a>
               </span>
           {{else}}
-            <span class="text-muted">暂无团购</span>
+            <a href="/manage/admin/tuan_buyings/index?team_id={{$tuan_team['TuanTeam']['id']}}">无进行中的团购</a>
           {{/if}}
           )
         </td>

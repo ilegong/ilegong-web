@@ -29,7 +29,7 @@ class TuanTeamsController extends AppController{
         }else{
             $tuan_teams = $this->TuanTeam->find('all');
         }
-        $tuan_buyings_count = $this->TuanBuying->query('select tuan_id as id, count(tuan_id) as c from cake_tuan_buyings group by tuan_id;');
+        $tuan_buyings_count = $this->TuanBuying->query('select tuan_id as id, count(tuan_id) as c from cake_tuan_buyings WHERE STATUS IN ( 0, 1, 2 ) group by tuan_id;');
         $tuan_buyings_count = Hash::combine($tuan_buyings_count, '{n}.cake_tuan_buyings.id', '{n}.0.c');
         foreach($tuan_teams as &$tuan_team){
             $tuan_buying_count = $tuan_buyings_count[$tuan_team['TuanTeam']['id']];
