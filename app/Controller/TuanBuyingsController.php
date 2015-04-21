@@ -226,7 +226,7 @@ class TuanBuyingsController extends AppController{
         $try_id = $_REQUEST['try'];
         $from = $_REQUEST['from'];
         if($from!='tuan_sec'){
-            $this->__message('请求出错', '/shichi/list_pai.html?tuan_id='.$tuan_id);
+            $this->__message('请求出错', '/tuan_teams/info/'.$tuan_id);
             return;
         }
         //TODO check form

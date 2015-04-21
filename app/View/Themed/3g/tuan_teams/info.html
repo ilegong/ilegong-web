@@ -174,7 +174,7 @@
             ajaxAction(url, postdata, null, function (data) {
                 if (data.success == false) {
                     if (data.reason == 'not_login') {
-                        window.location.href = '/users/login.html?referer=' + encodeURIComponent('/shichi/list_pai.html');
+                        window.location.href = '/users/login.html?referer=' + encodeURIComponent("/tuan_teams/info/{{$tuan_id}}");
                         return false;
                     } else if (data.reason == 'sold_out') {
                         utils.alert_one('抱歉：已经被秒完', '知道了', function () {
