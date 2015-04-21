@@ -446,6 +446,6 @@ input {
 .colon{ color:#4f4544; height:1.8em; line-height:1em; float:left; margin-right:2px;}
 
 
-.tuanherf{ text-align: center; font-size: 1em; line-height: 30px; padding-left: 10px; margin: 0 auto; margin-bottom: 10px; margin-top: 10px;}
+.tuanherf {text-align:center;font-size: 1em;line-height: 30px;padding-left: 10px;margin: 0 auto;}
 .tuanherf dd{ float: left; display: block; width: 50%;}
 .tuanherf dd a{ display: block; margin-right: 10px; border-radius: 3px; line-height: 40px; text-decoration: none; color: #333333; border: 1px #dddddd solid; background-color: #ffffff;}
