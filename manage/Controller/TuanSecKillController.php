@@ -18,11 +18,12 @@ class TuanSecKillController extends AppController{
         $start_time = $_REQUEST['start_time'];
         $end_time = $_REQUEST['end_time'];
 
-        if(empty($start_time)){
-            $start_time = date('Y-m-d H:i',strtotime('-7 days'));
+        $query_cond['deleted = '] = DELETED_NO;
+        if(!empty($start_time)){
+            $query_cond['start_time >='] = $start_time;
         }
-        if(empty($end_time)){
-            $end_time = date('Y-m-d H:i',strtotime('+1 hours'));
+        if(!empty($end_time)){
+            $query_cond['start_time <'] = $end_time;
         }
         if(!empty($tuan_id)){
             $query_cond['tuan_id'] = $tuan_id;
@@ -31,9 +32,6 @@ class TuanSecKillController extends AppController{
             $query_cond['product_id'] = $product_id;
         }
 
-        $query_cond['start_time >='] = $start_time;
-        $query_cond['start_time <'] = $end_time;
-        $query_cond['deleted = '] = DELETED_NO;
         $this->log('query_cond'.json_encode($query_cond));
         $datas = $this->ProductTry->find('all',array(
             'conditions' => $query_cond,
