@@ -10,12 +10,13 @@ class ProductTry extends AppModel {
 
     public function find_trying($limit = 2) {
         $today = date('Y-m-d');
+        $yesterday = date('Y-m-d',strtotime('-1 day',strtotime($today)));
         $tomorrow = date('Y-m-d',strtotime('+1 day',strtotime($today)));
         $tries = $this->find('all', array(
             'conditions' => array(
                 'deleted' => DELETED_NO,
                 'status' => PRODUCT_TRY_ING,
-                'start_time >=' => $today,
+                'start_time >=' => $yesterday,
                 'start_time <' => $tomorrow
             ),
             'limit' => $limit,
