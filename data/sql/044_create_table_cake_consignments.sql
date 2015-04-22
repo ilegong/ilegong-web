@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS `cake_consignments`;
 
-CREATE TABLE `cake_consignments` (
+CREATE TABLE IF NOT EXISTS `cake_consignments` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
   `created` datetime DEFAULT NULL,
