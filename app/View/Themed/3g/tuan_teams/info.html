@@ -205,10 +205,10 @@
                         utils.alert_one('抱歉：您有' + data.not_comment_cnt + '个试吃商品还没有反馈，请先完成反馈再秒杀');
                     }
                 } else {
-                    utils.alert_one('您好，下单支付完成才算秒杀完成, 立即跳转结算', '去结算', function () {
+//                    utils.alert_one('您好，下单支付完成才算秒杀完成, 立即跳转结算', '去结算', function () {
                         addedCallback();
                         window.location.href = '/tuan_buyings/balance_tuan_sec_kill?from=tuan_sec&pid_list=' + data.id + '&try=' + tryId + '&tuan_id={{$tuan_id}}';
-                    });
+//                    });
                 }
             });
             return false;
