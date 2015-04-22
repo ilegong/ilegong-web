@@ -44,6 +44,7 @@ class BuyingComponent extends Component {
         if ($type == CART_ITEM_TYPE_TRY||$type==CART_ITEM_TYPE_TUAN_SEC) {
             $success = true;
             $reason = '';
+
             if (!$tryId) {
                 $success = false;
                 $reason = 'no_try_id';
@@ -52,6 +53,25 @@ class BuyingComponent extends Component {
                     $success = false;
                     $reason = 'not_login';
                 } else {
+                    $cart_info = $cartM->find('first',array(
+                        'conditions' => array(
+                            'creator' => $uid,
+                            'try_id' => $tryId,
+                            'type' => CART_ITEM_TYPE_TUAN_SEC,
+                            'order_id !='=> null
+                        ))
+                    );
+                    $orderM = ClassRegistry::init('Order');
+                    if(!empty($cart_info)){
+                    $order_info = $orderM->find('first',array('conditions' => array('id' => $cart_info['Cart']['order_id'])));
+                    if($order_info['Order']['status']==0){
+                        $success = false;
+                        $reason = 'already_seckill_nopaid';
+                    }else if($order_info['Order']['status']==1){
+                        $success = false;
+                        $reason = 'already_seckill_paid';
+                    }
+                    }
                     $tryM = ClassRegistry::init('ProductTry');
                     $prodTry = $tryM->findById($tryId);
                     list($afford, $my_limit, $total_left) = afford_product_try($tryId, $uid, $prodTry);

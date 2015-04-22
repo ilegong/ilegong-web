@@ -185,7 +185,14 @@
                     if (data.reason == 'not_login') {
                         window.location.href = '/users/login.html?referer=' + encodeURIComponent("/tuan_teams/info/{{$tuan_id}}");
                         return false;
-                    } else if (data.reason == 'sold_out') {
+                    } else if (data.reason == 'already_seckill_nopaid') {
+                        utils.alert_one('抱歉：您还未支付哦,请前去支付', '去支付', function () {
+                            window.location.href = '/orders/mine';
+                        });
+                    }else if (data.reason == 'already_seckill_paid'){
+                        utils.alert_one('抱歉：限购一份哦，您已经秒过啦', '知道啦', function () {
+                        });
+                    }else if (data.reason == 'sold_out') {
                         utils.alert_one('抱歉：已经被秒完', '知道了', function () {
                             if (typeof(soldOutCallback) == 'function') {
                                 soldOutCallback()
