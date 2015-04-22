@@ -63,7 +63,7 @@
 <table class="table table-bordered table-condensed table-responsive">
     <thead>
     <tr>
-        <td>选择<input type="checkbox" value="0" id="check_all_tb"></td><td>团购ID</td><td>团名称</td><td>商品/类别</td><td>发货类型</td><td>团购价</td><td>参团人数</td><td>售出份数/目标</td><td>创建时间</td><td>是否截单(截单时间)</td><td>是否延期</td><td>发货/退款</td><td>操作</td>
+        <td>选择<input type="checkbox" value="0" id="check_all_tb"></td><td>团购ID</td><td>团名称</td><td>商品/类别</td><td>发货类型</td><td>团购价</td><td>是否发布</td><td>参团人数</td><td>售出份数/目标</td><td>创建时间</td><td>是否截单(截单时间)</td><td>是否延期</td><td>发货/退款</td><td>操作</td>
     </tr>
     </thead>
     <tbody>
@@ -104,6 +104,7 @@
                 <strong class="text-muted">{{$tuanProduct['tuan_price']}}</strong>
             {{/if}}
         </td>
+        <td>{{$tuanBuying['published'] == 0 ? '否' : ''}}</td>
         <td>{{$tuanBuying['join_num']}}</td>
         <td class="{{if $tuanBuying['sold_num']<$tuanBuying['target_num']}} text-danger {{else}} text-success    {{/if}}">{{$tuanBuying['sold_num']}}/{{$tuanBuying['target_num']}}</td>
         <td>{{$tuanBuying['created'] == ''?date('n.j H:i',strtotime($tuanBuying['end_time'])-2*24*60*60):date('n.j H:i',strtotime($tuanBuying['created']))}}

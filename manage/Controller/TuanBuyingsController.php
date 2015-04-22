@@ -214,6 +214,12 @@ class TuanBuyingsController extends AppController{
     public function admin_update($id){
         $this->log('update tuan buying '.$id.': '.json_encode($this->data));
         $this->autoRender = false;
+        if($this->data['TuanBuying']['published'] == 'on'){
+            $this->data['TuanBuying']['published'] = 1;
+        }
+        else{
+            $this->data['TuanBuying']['published'] = 0;
+        }
         if($this->TuanBuying->save($this->data)){
             $this->redirect(array('controller' => 'tuan_buyings','action' => 'index'));
         }
