@@ -55,11 +55,11 @@ class TuanTeamsController extends AppController{
 
         //get buying tuan
         $tuan_buyings = $this->TuanBuying->find('all', array(
-            'conditions' => array('tuan_id' => $tuan_id,'status'=>0),
+            'conditions' => array('tuan_id' => $tuan_id,'status'=>0, 'published'=>1),
             'order' => array('TuanBuying.end_time DESC'),
         ));
-
         $pids = array_unique(Hash::extract($tuan_buyings, '{n}.TuanBuying.pid'));
+
         $this->loadModel('Product');
         if(!empty($pids)){
             $this->loadModel('TuanProduct');
@@ -74,6 +74,7 @@ class TuanTeamsController extends AppController{
                 'fields' => array('id', 'name', 'coverimg', 'price', 'original_price'),
                 'order' => array('recommend DESC')
             ));
+
             $product_infos = Hash::combine($product_infos, '{n}.Product.id', '{n}.Product');
             $tuan_product_infos = Hash::combine($tuan_product_infos,'{n}.TuanProduct.product_id','{n}.TuanProduct');
             $this->set('tuan_product_infos',$tuan_product_infos);
