@@ -214,7 +214,7 @@ class TuanBuyingsController extends AppController{
     public function admin_update($id){
         $this->log('update tuan buying '.$id.': '.json_encode($this->data));
         $this->autoRender = false;
-        if($this->data['TuanBuying']['published'] == 'on'){
+        if($this->data['TuanBuying']['published'] == 1){
             $this->data['TuanBuying']['published'] = 1;
         }
         else{
@@ -235,18 +235,25 @@ class TuanBuyingsController extends AppController{
         App::import('Controller','TuanMsg');
 
         if(!empty($this->data)){
-          foreach($tuanTeamIds as $tuanTeamId){
-            $this->data['TuanBuying']['tuan_id'] = $tuanTeamId;
-            $this->data['TuanBuying']['join_num'] = 0;
-            $this->data['TuanBuying']['sold_num'] = 0;
-            $this->data['TuanBuying']['stTuanBuyingMessagesatus'] = 0;
-            //todo created fields missing
-            $this->TuanBuying->create();
-            if($this->TuanBuying->save($this->data)){
-                $tuanBuyId = $this->TuanBuying->getLastInsertID();
-//                $this->admin_send_tuan_buy_create_msg($tuanBuyId);
+            if($this->data['TuanBuying']['published'] == 1){
+                $this->data['TuanBuying']['published'] = 1;
             }
-          }
+            else{
+                $this->data['TuanBuying']['published'] = 0;
+            }
+            foreach($tuanTeamIds as $tuanTeamId){
+                $this->data['TuanBuying']['tuan_id'] = $tuanTeamId;
+                $this->data['TuanBuying']['join_num'] = 0;
+                $this->data['TuanBuying']['sold_num'] = 0;
+                $this->data['TuanBuying']['stTuanBuyingMessagesatus'] = 0;
+                //todo created fields missing
+                $this->log("create tuan buying for team ".$tuanTeamId.": ".json_encode($this->data));
+                $this->TuanBuying->create();
+                if($this->TuanBuying->save($this->data)){
+                    $tuanBuyId = $this->TuanBuying->getLastInsertID();
+                //                $this->admin_send_tuan_buy_create_msg($tuanBuyId);
+                }
+            }
         }
         $this->redirect(array('controller' => 'tuan_buyings','action' => 'index'));
     }

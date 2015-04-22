@@ -34,7 +34,7 @@ $(function(){
             tuan_area.appendTo(tuanTeamList).css('color','red').hide();
           $.each(data,function(index,item){
                 if(item['county_id'] == Item['id']){
-                    $('<input type="checkbox"  data-id="'+item['county_id'] +'" value="'+item['id']+'"name="team_id">'+ item['tuan_name'] + '</input>').appendTo(tuanTeamList);
+                    $('<input type="checkbox" class="tuan-team" data-id="'+item['county_id'] +'" value="'+item['id']+'"name="team_id">'+ item['tuan_name'] + '</input>').appendTo(tuanTeamList);
                     tuan_area.show();
                 }
             });
@@ -44,7 +44,7 @@ $(function(){
     var tuanTargetNum = $('.tuan-target-num');
     $(".tuan-form").submit(function(e){
         var tuanTeamId = new Array();
-        $("input[type='checkbox']:checked").each(function(){
+        $(".tuan-team[type='checkbox']:checked").each(function(){
             tuanTeamId.push($(this).val());
         });
         team_ids.val(tuanTeamId);
