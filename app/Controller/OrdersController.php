@@ -838,7 +838,8 @@ class OrdersController extends AppController {
     }
 
 	function business($creator=0){
-        $this->__business_orders($creator);
+        $order_Id = $_REQUEST['order-id'];
+        $this->__business_orders($creator,array(),$order_Id);
 	}
 
     function tobe_shipped_orders($creator=0){
@@ -1406,9 +1407,8 @@ class OrdersController extends AppController {
      * @param $creator
      * @param array $onlyStatus if not empty, only the specified status will be kept
      */
-    protected function __business_orders($creator, $onlyStatus = array()) {
+    protected function __business_orders($creator, $onlyStatus = array(),$order_Id = null) {
         $creator = $this->authAndGetCreator($creator);
-
         $this->loadModel('Brand');
         $brands = $this->Brand->find('list', array('conditions' => array(
             'creator' => $creator,
@@ -1421,18 +1421,17 @@ class OrdersController extends AppController {
             $this->__message('只有合作商家才能查看商家订单，正在为您转向个人订单', '/orders/mine');
             return;
         }
-
         $cond = array('brand_id' => $brand_ids,
             'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN),
             'NOT' => array(
             'status' => array(ORDER_STATUS_CANCEL)
         ));
-
         if (!empty($onlyStatus)) {
             $cond['status'] = $onlyStatus;
         }
-
-
+        if(!empty($order_Id)){
+            $cond['id'] = $order_Id;
+        }
         $this->Paginator->settings = array('limit' => 100,
             'conditions' => $cond,
             'order' => 'Order.id desc'
