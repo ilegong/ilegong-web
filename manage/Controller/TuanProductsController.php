@@ -15,7 +15,8 @@ class TuanProductsController extends AppController{
         $tuan_products = $this->TuanProduct->find('all',array(
             'conditions' => array(
                 'deleted'=>DELETED_NO
-            )
+            ),
+            'order' => 'priority DESC'
         ));
         $product_ids = Hash::extract($tuan_products, "{n}.TuanProduct.product_id");
         $products = $this->Product->find('all', array(

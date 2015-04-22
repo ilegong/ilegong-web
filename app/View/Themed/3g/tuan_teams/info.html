@@ -79,9 +79,9 @@
 </div>
 {{/if}}
 <div class="clearfix tuandetail_good">
-    {{loop $product_infos $pid $product}}
+    {{loop $tuan_product_infos $pid $t_product}}
     <?php
-            $t_product = $tuan_product_infos[$pid];
+            $product = $product_infos[$pid];
             $t_buying = $tb_product_map[$pid];
             $price = $product['price'];
             if($t_product['price']>0){
