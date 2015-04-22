@@ -9,7 +9,7 @@
 ?>
 <div class="classlist_v2" style="z-index:999;">
     <ul class="clearfix">
-        <li><a class="back" onclick="window.history.back();"></a></li>
+        <li><a class="back" onclick="goBack()"></a></li>
         <li class="line"></li>
         <li style="text-overflow: ellipsis;"><strong>团购详情</strong></li>
     </ul>
@@ -279,6 +279,17 @@
             utils.alert('每人限购一份。');
         });
     });
+
+    function goBack(){
+        var refer = document.referrer;
+        var href_1 = "/tuan_buyings/goods_tuans/";
+        var href_2 = "/tuan_teams/info/";
+        if (refer.indexOf(href_1)<0&&refer.indexOf(href_2)<0){
+            window.location.href = '/categories/mobileHome.html';
+        }else{
+            window.history.back();
+        }
+    }
 </script>
 
 <script>
@@ -402,6 +413,7 @@
             }
         })
     });
+
 </script>
 
 {{if $jWeixinOn}}
