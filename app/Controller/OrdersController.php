@@ -1433,7 +1433,7 @@ class OrdersController extends AppController {
         }
 
 
-        $this->Paginator->settings = array('limit' => 20,
+        $this->Paginator->settings = array('limit' => 100,
             'conditions' => $cond,
             'order' => 'Order.id desc'
         );
