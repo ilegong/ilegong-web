@@ -840,6 +840,7 @@ class OrdersController extends AppController {
 	function business($creator=0){
         $order_Id = $_REQUEST['order-id'];
         $this->__business_orders($creator,array(),$order_Id);
+        $this->set('creator',$creator);
 	}
 
     function tobe_shipped_orders($creator=0){

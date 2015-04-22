@@ -17,7 +17,7 @@ td {padding:5px 10px;}
 		</ul>
 		{{/if}}
 		<h2>商家订单</h2>
-            <form class="form-inline tuan-buyings-form" method="get" action="/orders/business">
+            <form class="form-inline tuan-buyings-form" method="get" action="/orders/business/{{$creator}}">
                 <input type="hidden" name="noajax" value="true">
                 <div class="form-group">
                 <input type="text" name="order-id" id="order-id" class="form-control" placeholder="搜索订单号">
