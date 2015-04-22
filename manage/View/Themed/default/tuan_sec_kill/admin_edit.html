@@ -11,7 +11,7 @@
           $productTry = $this->data['ProductTry'];
         ?>
 
-        <form class="form-horizontal" method="post" action="/manage/admin/tuanSecKill/update/{{$id}}" data-noajax="true" novalidate="novalidate">
+        <form class="form-horizontal sec-kill-form" method="post" action="/manage/admin/tuanSecKill/update/{{$id}}" data-noajax="true" novalidate="novalidate">
             <div class="form-group">
                 <label for="product_id" class="col-sm-2 control-label">商品ID</label>
                 <div class="col-sm-9">
@@ -68,6 +68,7 @@
                 <label for="consignment_date" class="col-sm-2 control-label">发货日期</label>
                 <div class="col-sm-9">
                     <input type="text" name="data[ProductTry][consignment_date]" value="{{$productTry['consignment_date']}}" class="form-control datetime" id="consignment_date" placeholder="发货日期">
+                    <div class="text-danger">!!!非常重要，为了统计订单方便，请务必设置发货日期!!!</div>
                 </div>
             </div>
             <div class="form-group">
@@ -90,4 +91,4 @@
         </form>
     </div>
 </div>
-{{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js','/js/manage/tuan_sec_kill/tuan_sec_kill.js'))}}
+{{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js','/js/manage/tuan_sec_kill/edit.js'))}}
