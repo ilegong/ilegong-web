@@ -8,7 +8,6 @@ class BrandsController extends AppController {
     public function admin_index() {
         $brands = $this->Brand->find('all',
             array('conditions'=>array(
-                'deleted'=> DELETED_NO,
             ))
         );
         $this->set('brands', $brands);

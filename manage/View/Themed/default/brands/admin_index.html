@@ -12,6 +12,7 @@
     </thead>
     <tbody>
     {{loop $brands $index $brand}}
+    {{if $brand['Brand']['deleted'] == 0}}
     <tr class="brand">
       <td>{{$brand['Brand']['id']}}</td>
       <td>{{$brand['Brand']['name']}}</td>
@@ -36,6 +37,8 @@
         <a class="btn btn-primary" href="/s/index?brand_id={{$brand['Brand']['id']}}">登录</a>
       </td>
     </tr>
+    {{else}}
+    {{/if}}
     {{/loop}}
     </tbody>
   </table>
