@@ -66,7 +66,8 @@ class TuanTeamsController extends AppController{
             $tuan_product_infos = $this->TuanProduct->find('all',array(
                 'conditions' => array(
                     'product_id' => $pids
-                )
+                ),
+                'order' => 'priority desc'
             ));
             $product_infos = $this->Product->find('all', array(
                 'conditions' => array('id' => $pids),

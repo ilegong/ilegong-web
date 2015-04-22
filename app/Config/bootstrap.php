@@ -716,7 +716,7 @@ class ProductCategory {
             $productCategoryList = $productCategoryModel->find('all', array('conditions' => array(
                 'show_in_home' => 1,
                 'published' => 1
-            ),
+                ),
                 'order' => 'priority desc'
             ));
             $conditions = array('Product' . '.deleted' => 0, 'Product' . '.published' => 1);
