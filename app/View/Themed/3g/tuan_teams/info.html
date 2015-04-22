@@ -43,8 +43,8 @@
             <div class="tuan_bar clearfix" style="padding:5px 10px 12px 10px;">
                 <div>
                     {{if $trying['status'] == 'sec_kill'}}
-                    <a data-try-id="{{$trying['ProductTry']['id']}}" data-tuan-id="{{$tuan_id}}"
-                       class="tuan_bar_btn doing" data-pid="{{$trying['Product']['id']}}">正在秒杀</a>
+                    <a class="tuan_bar_btn doing" data-try-id="{{$trying['ProductTry']['id']}}" data-tuan-id="{{$tuan_id}}"
+                       data-pid="{{$trying['Product']['id']}}" data-send-date="{{$trying['ProductTry']['consignment_date']}}">正在秒杀</a>
                     {{elseif $trying['status'] == 'sec_end'}}
                     <a class="tuan_bar_btn done" style="background-color: #cccccc;">已秒完</a>
                     {{else}}
@@ -144,7 +144,8 @@
             }
             var $pid = buyBtn.attr('data-pid');
             var tryId = buyBtn.attr('data-try-id');
-            quick_buy_try($pid, 1, 0, tryId, cartType, function () {
+            var sendDate = buyBtn.attr('data-send-date');
+            quick_buy_try($pid, 1, 0, tryId, cartType, sendDate, function () {
                 buyBtn.removeClass('doing').addClass('done');
             }, function () {
                 //
@@ -170,7 +171,7 @@
          * @param addedCallback
          * @return
          */
-        function quick_buy_try(id, num, spec, tryId, type, soldOutCallback, addedCallback) {
+        function quick_buy_try(id, num, spec, tryId, type, sendDate, soldOutCallback, addedCallback) {
             type = type || 'normal';
             var url = BASEURL + '/carts/add';
             var postdata = {
@@ -178,6 +179,7 @@
                 'data[Cart][product_id]': id,
                 'data[Cart][spec]': spec,
                 'data[Cart][type]': type,
+                'data[Cart][send_date]': sendDate,
                 'try_id': tryId
             };
             ajaxAction(url, postdata, null, function (data) {

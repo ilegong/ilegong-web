@@ -69,14 +69,13 @@ class CartsController extends AppController{
             $this->log('check_and_add:specId='.$specId.', type='.$type.', tryId='.$tryId.', uid='.$uid.',num='.$num.', product_id='.$product_id.', customized_price='.$customized_price.', returnInfo='.json_encode($returnInfo));
             if (!empty($returnInfo) && $returnInfo['success']) {
                 $cart_id = $returnInfo['id'];
-                if ($_REQUEST['dating'] && $cart_id && $_REQUEST['dating_text']) {
-                    $dating = trim($_REQUEST['dating']);
-                    $dating_text = trim($_REQUEST['dating_text']);
-                    if ($dating) {
-                        $cartM->updateAll(array('consignment_date' => $dating,'name' => 'concat(name, "(' . $dating_text . ')")'), array('id' => $cart_id));
+                if ($this->data['Cart']['send_date'] && $cart_id) {
+                    $send_date = trim($this->data['Cart']['send_date']);
+                    if ($send_date) {
+                        $this->log('update send_date to '.$send_date.' for cart '.$cart_id);
+                        $cartM->updateAll(array('send_date' => $send_date), array('id' => $cart_id));
                     }
                 }
-
 
                 if (accept_user_price($product_id, $customized_price)) {
                     if (empty($uid)) {
