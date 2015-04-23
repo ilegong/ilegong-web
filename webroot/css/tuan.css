@@ -144,9 +144,9 @@ ul,ol {
 
 /*团成员列表*/
 .memberlist{ padding: 15px 10px 0 10px;}
-.memberlist ul{ float: left; width: 23%; margin: 0 1%; padding-bottom: 15px; }
-.memberlist ul li{ line-height: 18px; text-align: center; width: 85%; margin: 0 auto; white-space: nowrap;text-overflow:ellipsis; overflow:hidden; color: #666666;}
-.memberlist img{ width:90%; border-radius: 5px;}
+.memberlist{float: left;width: 25%;padding-bottom: 15px;}
+.memberlist ul li{ line-height: 18px;text-align: center;margin: 0 auto;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;color: #666666;}
+.memberlist img{ width:80%; border-radius: 5px;}
 
 
 /*团详情*/

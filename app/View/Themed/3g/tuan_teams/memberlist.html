@@ -1,4 +1,4 @@
-{{$this->Html->css(array('tuan.css?v3'))}}
+{{$this->Html->css(array('tuan.css?v4'))}}
 <div class="classlist_v2">
     <ul class="clearfix" >
         <li><a class="back" onclick="window.history.back();"></a></li>
@@ -10,7 +10,7 @@
     {{loop $member_info $member}}
     <ul>
         <li><img src="{{if empty($member['User']['image'])}} \img\mine_head.png {{else}} {{$member['User']['image']}} {{/if}}" /></li>
-        <li>{{$member['User']['nickname']}}</li>
+        <li><div style="text-align: center; width: 80%; margin: 0 auto;">{{$member['User']['nickname']}}</div></li>
     </ul>
     {{/loop}}
 </div>
