@@ -23,7 +23,7 @@ $(document).ready(function() {
 			}
 		}
 	});
-
+try{
   $('.datetime').datetimepicker({
     language:  'zh-CN',
     weekStart: 1,
@@ -34,6 +34,9 @@ $(document).ready(function() {
     forceParse: 0,
     showMeridian: 1
   });
+}catch(e){
+
+}
 });
 function page_loaded()
 {
