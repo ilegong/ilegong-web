@@ -42,14 +42,7 @@ class TuanBuyingsController extends AppController{
         }
         $this->set('exceed_time', $exceed_time);
         //团购的状态
-        $tuan_buy_status = 0;
-        if($tuan_b['TuanBuying']['status'] == 0){
-            $tuan_buy_status = 0;
-        }elseif($tuan_b['TuanBuying']['status'] == 2 || $tuan_b['TuanBuying']['status'] == 21){
-            $tuan_buy_status = 2;
-        }elseif($tuan_b['TuanBuying']['status'] == 11 || $tuan_b['TuanBuying']['status'] == 1){
-            $tuan_buy_status = 1;
-        }
+        $tuan_buy_status = $tuan_b['TuanBuying']['status'];
         $this->set('tuan_buy_status', $tuan_buy_status);
         //tuan exceed redirect to a availble
         if($exceed_time||$tuan_buy_status!=0){
@@ -71,17 +64,10 @@ class TuanBuyingsController extends AppController{
         $end_time = $tuan_b['TuanBuying']['end_time'];
         $tuan_buy_type = $tuan_b['TuanBuying']['consignment_type'];
         //根据发货类型显示
-        if(empty($tuan_b['TuanBuying']['consign_time'])){
-            if($tuan_buy_type==0){
-                $consign_time='成团后发货';
-            }
-            if($tuan_buy_type==1){
-                $consign_time='成团后现摘';
-            }
-        }else{
-            $consign_time = friendlyDateFromStr($tuan_b['TuanBuying']['consign_time'], FFDATE_CH_MD);
-        }
-        $this->set(compact('pid', 'consign_time', 'tuan_buy_id', 'tuan_team', 'end_time'));
+        $consign_time = $tuan_b['TuanBuying']['consign_time'];
+        $consign_time_text = $tuan_buy_type != 2 ? (empty($consign_time) ? ($tuan_buy_type == 0 ? "成团后发货" : "团满准备发货") : friendlyDateFromStr($consign_time, FFDATE_CH_MD)) : '请选择发货时间';
+        $this->set(compact('pid', 'consign_time', 'consign_time_text', 'tuan_buy_id', 'tuan_team', 'end_time'));
+
         $sold_num = $tuan_b['TuanBuying']['sold_num'];
         $max_num = $tuan_b['TuanBuying']['max_num'];
         $per_buy_num = $tuan_b['TuanBuying']['limit_buy_num'];
@@ -198,13 +184,18 @@ class TuanBuyingsController extends AppController{
         $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,$spec_id,ORDER_TYPE_TUAN,0,$uId, $sessionId,  null, null,$cart_tuan_param);
         $this->log('cartInfo'.json_encode($cartInfo));
         if($cartInfo){
-            $consignment_date_id = intval($_REQUEST['consignment_date_id']);
             $cart_id = $cartInfo['Cart']['id'];
+            $consignment_date_id = intval($_REQUEST['consignment_date_id']);
             if ($consignment_date_id!=0 && $cart_id) {
                 if ($consignment_date_id) {
                     $cartM = ClassRegistry::init('Cart');
                     $cartM->updateAll(array('consignment_date' => $consignment_date_id), array('id' => $cart_id));
                 }
+            }
+            $send_date = $_REQUEST['send_date'];
+            if (!empty($send_date) && $cart_id) {
+                $cartM = ClassRegistry::init('Cart');
+                $cartM->updateAll(array('send_date' => "'".$send_date."'"), array('id' => $cart_id));
             }
             if($_POST['way_type'] == 'ziti'){
                 echo json_encode(array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id']));
@@ -217,7 +208,6 @@ class TuanBuyingsController extends AppController{
         }else{
             echo json_encode(array('error' => false));
         }
-
     }
 
     public function balance_tuan_sec_kill(){
