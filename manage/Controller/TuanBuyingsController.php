@@ -231,6 +231,7 @@ class TuanBuyingsController extends AppController{
 
     public function admin_create(){
         $tuanTeamIds = $_REQUEST['team_ids'];
+        $this->log('tuanTeamIds'.$tuanTeamIds);
         $tuanTeamIds = explode(',',$tuanTeamIds);
         App::import('Controller','TuanMsg');
 
