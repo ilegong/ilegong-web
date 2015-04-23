@@ -45,7 +45,8 @@ td {padding:5px 10px;}
 			{{elseif $order['Order']['status']==3}}<font color="red">订单已收货</font>
 			
 			{{elseif $order['Order']['status']==4}}<font color="red">订单已退款</font>
-			
+			{{elseif $order['Order']['status']==14}}<font color="red">订单退款中</font>
+
 			{{elseif $order['Order']['status']==9}}<font color="red">订单已完成</font>
 			{{elseif $order['Order']['status']==10}}<font color="red">订单已作废</font>
 			{{elseif $order['Order']['status']==11}}<font color="red">订单已确认</font>

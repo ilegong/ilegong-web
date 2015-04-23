@@ -286,6 +286,7 @@ class CommentsController extends AppController {
                             if ($status != ORDER_STATUS_CANCEL
 //                                && $status != ORDER_STATUS_WAITING_PAY
                                 && $status != ORDER_STATUS_RETURN_MONEY
+                                && $status != ORDER_STATUS_RETURNING_MONEY
                                 ) {
                                 $has_valid++;
                             } else {
