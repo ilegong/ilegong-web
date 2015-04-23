@@ -538,7 +538,7 @@ class OrdersController extends AppController {
         $product_ids = Hash::extract($Carts, '{n}.Cart.product_id');
         $expired_pids = array();
         $this->loadModel('Product');
-        if($orderinfo['Order']['type']!=ORDER_TYPE_TUAN){
+        if($orderinfo['Order']['type'] != ORDER_TYPE_TUAN && $orderinfo['Order']['type'] != ORDER_TYPE_TUAN_SEC){
             $products = $this->Product->find_products_by_ids($product_ids, array('published', 'deleted'), false);
             foreach($product_ids as $pid) {
                 if (empty($products[$pid])

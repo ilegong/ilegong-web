@@ -76,7 +76,7 @@
             <a href="{{product_link2($p)}}">
                 <p>{{$cart['Cart']['name']}}</p>
                 <!--<s>榴莲口味 4月2日送货</s>-->
-                {{if in_array($cart['Cart']['product_id'],$expired_pids)}}
+                {{if in_array($cart['Cart']['product_id'], $expired_pids)}}
                     <label class="order_detail_soldout">(该商品已下架)<br>(订单已经失效)</label>
                 {{/if}}
                 {{if $order['Order']['try_id']>0}}
