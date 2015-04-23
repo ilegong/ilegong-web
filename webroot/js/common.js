@@ -454,18 +454,19 @@ function addtoCart(id, num, spec, quick_buy_pid, type, customized_price)
 {
 	type = type || 'normal';
 	var url = BASEURL + '/carts/add';
-	var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec, 'data[Cart][type]': type};
+  var sendDate = $('span.spec_item_selected[item-label="SD"]').data('send-date');
+	var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec, 'data[Cart][type]': type, 'data[Cart][send_date]': sendDate};
 
 	if (customized_price) {
 		postdata['data[Cart][customized_price]'] = customized_price;
 	}
 
-	//special for cake
+	//special for products that has consignment dates
 	if ($('span.spec_item[item-label="SD"]').size()>0) {
 		var cake_date_selected = $('span.spec_item_selected[item-label="SD"]');
 		if (cake_date_selected.size() >= 1) {
-            postdata['dating_text'] = cake_date_selected.text();
-			postdata['dating'] = cake_date_selected.data('val');
+        postdata['dating_text'] = cake_date_selected.text();
+			  postdata['dating'] = cake_date_selected.data('val');
 		}
 	}
 
