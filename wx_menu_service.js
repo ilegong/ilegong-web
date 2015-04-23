@@ -6,20 +6,9 @@
         "url":"http://www.pyshuo.com/users/wx_menu_point?referer_key=CLICK_URL_TECHAN&from=service&_sl=wx.sv.home"
     },
     {
-        "name":"特惠活动",
-        "sub_button":[
-            {
-                "type":"view",
-                "name":"美食团",
-                "url":"http://www.tongshijia.com/tuan_teams/mei_shi_tuan.html?_sl=wx.sv.mst"
-            },
-            {
-                "type":"view",
-                "name":"摇一摇",
-                "url":"http://www.pyshuo.com/t/ag.html?_sl=wx.sv.yy"
-            }
-        ]
-
+        "type":"view",
+        "name":"美食团",
+        "url":"http://www.tongshijia.com/tuan_teams/mei_shi_tuan.html?_sl=wx.sv.mst"
     },
     {
         "name":"个人中心",
