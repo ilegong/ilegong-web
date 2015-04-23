@@ -1271,7 +1271,7 @@ function consignment_send_date($p_id) {
         $dt = DateTime::createFromFormat(FORMAT_DATE, $date['ConsignmentDate']['send_date']);
         $id = $date['ConsignmentDate']['id'];
         if (!empty($dt)) {
-            $rtn[] = array('date' => date(FORMAT_DATE_YUE_RI_HAN, $dt->getTimestamp()), 'id' => $id);
+            $rtn[] = array('send_date' => $date['ConsignmentDate']['send_date'], 'date' => date(FORMAT_DATE_YUE_RI_HAN, $dt->getTimestamp()), 'id' => $id);
         }
     }
     return $rtn;

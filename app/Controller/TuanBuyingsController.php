@@ -112,6 +112,7 @@ class TuanBuyingsController extends AppController{
         //get specs from database
         $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($pid,'spec_names');
         $this->set('product_spec_group',json_encode($product_spec_group));
+
         //product spec
         $specs_map = $this->ProductSpecGroup->get_product_spec_json($pid);
         if (!empty($specs_map['map'])) {
@@ -123,7 +124,8 @@ class TuanBuyingsController extends AppController{
             $this->set('product_spec_map', $str);
         }
         $this->set('specs_map', $specs_map);
-       
+        $this->log($specs_map);
+
         $con = array('modelclass' => 'Product','fieldname' =>'photo','data_id' => $pid);
         $Product['Uploadfile']= $this->Uploadfile->find('all',array('conditions' => $con, 'order'=> array('sortorder DESC')));
         $original_price = $Product['Product']['original_price'];

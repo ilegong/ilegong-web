@@ -61,7 +61,6 @@
                     {{/if}}
 
                     {{if $product_spec_map}}
-                    {{$product_spec_map}}
                     <ul class="standard clearfix">
                         {{if $specs_map && !empty($specs_map['choices'])}}
                         <?php foreach($specs_map['choices'] as $label => $values) {
@@ -88,7 +87,7 @@
                             <span class="gray title mr12" style="float:left;">送货日期:</span>
                             <span class="border" style="display: block;overflow: hidden;">
                             <?php foreach($consignment_dates as $date){?>
-                                <span class="mr12 border spec_item" item-label="SD" data-val="{{$date['id']}}">
+                                <span class="mr12 border spec_item" item-label="SD" data-val="{{$date['send_date']}}" data-send-date="{{$date['send_date']}}">
                                     {{$date['date']}}
                                 </span>
                                 <?php } ?>
@@ -359,11 +358,14 @@
                         return false;
                     }
                 }
+
+                var send_date = $(this).data('send-date');
                 var consignment_date_id = 0;
                 if ($('span.spec_item[item-label="SD"]').size()>0) {
                     var cake_date_selected = $('span.spec_item_selected[item-label="SD"]');
                     if (cake_date_selected.size() >= 1) {
                         consignment_date_id = cake_date_selected.data('val');
+                        send_date = cake_date_selected.data('send-date');
                     }
                 }
                 var product_id = $('#tuan_buy').attr('item-id');
@@ -379,7 +381,6 @@
                     }
                 {{/if}}
                 var way_fee = $('.cur.tuan_way_selected').attr('way-fee')||0;
-                var send_date = $(this).data('send-date');
                 var postdata = {"product_id":product_id,"product_num":product_num, "way_type": way_type,"spec_id":specId, "send_date": send_date,"consignment_date_id":consignment_date_id,"tuan_buy_id":'{{$tuan_buy_id}}',"way_fee":way_fee};
                 utils.progress_notify('正在更新购物车');
                 $.ajax({
