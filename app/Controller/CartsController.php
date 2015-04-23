@@ -73,7 +73,13 @@ class CartsController extends AppController{
                 if ($send_date && $cart_id) {
                     $cartM->updateAll(array('send_date' => "'".$send_date."'"), array('id' => $cart_id));
                 }
-
+                if ($_REQUEST['dating'] && $cart_id && $_REQUEST['dating_text']) {
+                    $dating = trim($_REQUEST['dating']);
+                    $dating_text = trim($_REQUEST['dating_text']);
+                    if ($dating) {
+                        $cartM->updateAll(array('consignment_date' => $dating,'name' => 'concat(name, "(' . $dating_text . ')")'), array('id' => $cart_id));
+                    }
+                }
                 if (accept_user_price($product_id, $customized_price)) {
                     if (empty($uid)) {
                         $returnInfo['success']  = false;

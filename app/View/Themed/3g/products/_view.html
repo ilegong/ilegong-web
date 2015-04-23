@@ -72,7 +72,7 @@
                 <span class="gray title mr12" style="float:left;">送货日期:</span>
                         <span class="border" style="display: block;overflow: hidden;">
                         <?php foreach($consignment_dates as $date){?>
-                            <span class="mr12 border spec_item" item-label="SD" data-val="{{$date['id']}}">
+                            <span class="mr12 border spec_item" item-label="SD" data-val="{{$date['id']}}" data-send-date="{{$date['send_date']}}">
                                 {{$date['date']}}
                             </span>
                             <?php } ?>
