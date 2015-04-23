@@ -49,7 +49,7 @@ $(function(){
         $(".tuan-team[type='checkbox']:checked").each(function(){
             tuanTeamId.push($(this).val());
         });
-        team_ids.val(tuanTeamId);
+        team_ids.val(tuanTeamId.join(','));
         var invalidTuanProduct = tuanProducts.val() == -1;
         tuanProducts.parents('.form-group').toggleClass('has-error', invalidTuanProduct);
         var invalidTuanEndTime = tuanEndTime.val() == '';
