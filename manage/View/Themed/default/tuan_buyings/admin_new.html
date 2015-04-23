@@ -1,12 +1,12 @@
 {{$this->Html->css(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css'))}}
 <ol class="breadcrumb">
   <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
-  <li><a href="/manage/admin/tuan_products/index">团购管理</a></li>
+  <li><a href="/manage/admin/tuan_buyings/index">团购管理</a></li>
   <li class="active">新建团购</li>
 </ol>
 
 <div class="container">
-    <form class="form-horizontal tuan-form" method="post" action="/manage/admin/tuan_buyings/create" novalidate="novalidate" data-noajax="true">
+    <form class="form-horizontal tuan-buying-form" method="post" action="/manage/admin/tuan_buyings/create" novalidate="novalidate" data-noajax="true">
         <!--<div class="form-group">-->
             <!--<label class="col-sm-2 control-label">团队</label>-->
             <!--<div class="col-sm-9">-->
@@ -74,11 +74,11 @@
             <label class="col-sm-2 control-label">发货时间</label>
             <div class="col-sm-9" data-date="" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_consign_time">
                 <div class="input-group date form_datetime" data-date="" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_consign_time">
-                    <input class="form-control" size="16" type="text" value="" name="data[TuanBuying][consign_time]" id="tuan_consign_time">
+                    <input class="form-control consignment-time" size="16" type="text" value="" name="data[TuanBuying][consign_time]" id="tuan_consign_time">
                     <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
                     <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                 </div>
-                <div class="text-warning">排期：不需要设置此值；团满发货或团满准备发货：不设置表示团满才会发货或准备发货</div>
+                <div class="text-danger">!!!排期：不需要设置此值；团满发货或团满采摘：请务必设置此值!!!</div>
             </div>
         </div>
         <div class="form-group">

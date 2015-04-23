@@ -42,7 +42,9 @@ $(function(){
     });
     var tuanEndTime = $('.tuan-end-time');
     var tuanTargetNum = $('.tuan-target-num');
-    $(".tuan-form").submit(function(e){
+    var consignmentType = $('.consignment-type');
+    var consignmentTime = $('.consignment-time');
+    $(".tuan-buying-form").submit(function(e){
         var tuanTeamId = new Array();
         $(".tuan-team[type='checkbox']:checked").each(function(){
             tuanTeamId.push($(this).val());
@@ -55,8 +57,10 @@ $(function(){
         var targetNum = Number(tuanTargetNum.val());
         var invalidTargetNum = isNaN(targetNum) || targetNum < 1;
         tuanTargetNum.parents('.form-group').toggleClass('has-error', invalidTargetNum);
+        var invalidConsignmentTime = (consignmentType.val() == 0 || consignmentType.val() == 1) && consignmentTime.val() == '';
+        consignmentTime.parents('.form-group').toggleClass('has-error', invalidConsignmentTime);
 
-        if(invalidTuanProduct || invalidTuanEndTime || invalidTargetNum){
+        if(invalidTuanProduct || invalidTuanEndTime || invalidTargetNum || invalidConsignmentTime){
             return false;
         }
         return true;
