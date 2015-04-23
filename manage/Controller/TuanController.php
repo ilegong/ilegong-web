@@ -299,4 +299,64 @@ class TuanController extends AppController{
         $brand_count = $this->Brand->query('select count(*) as c from cake_brands where deleted = 0');
         $this->set('brand_count', $brand_count[0][0]['c']);
     }
+
+
+    function admin_send_date() {
+        $tuan_buyings = $this->TuanBuying->find('all', array(
+            'conditions' => array(
+                'consignment_type' => 0
+            ),
+            'fields' => array("id", "consignment_type", "consign_time")
+        ));
+        $tb_ids = Hash::extract($tuan_buyings, "{n}.TuanBuying.id");
+        $this->log('tuan buying ids: '.count($tb_ids));
+
+        $orders = $this->Order->find('all', array(
+           'conditions' => array(
+               'type'=>5,
+               'member_id' => $tb_ids
+           ),
+           'fields' => array("id", "member_id")
+        ));
+        $order_ids = Hash::extract($orders, "{n}.Order.id");
+        $this->log('order ids: '.count($order_ids));
+
+        $carts = $this->Cart->find('all',array(
+            'conditions' => array("order_id"=>$order_ids),
+            'fields' => array("id", "consignment_date", "send_date")
+        ));
+        $this->log('cart ids: '.count(Hash::extract($carts, "{n}.Cart.id")));
+
+        $noConsignmentDates = array();
+        $unmatched = array();
+        $toBeUpdated = array();
+        $alreadyUpdated = array();
+        foreach($carts as &$cart){
+            $consignmentDate = $this->ConsignmentDate->find("first", array(
+                "conditions" => array(
+                    "id" => $cart['Cart']['consignment_date']
+                )
+            ));
+            if(empty($consignmentDate)){
+                $noConsignmentDates[] = $cart['Cart']['id'];
+            }
+            else{
+                if(empty($cart['Cart']['send_date'])){
+                    $toBeUpdated[] = $cart['Cart']['id'];
+                }
+                else{
+                    if($consignmentDate['ConsignmentDate']['send_date'] == $cart['Cart']['send_date']){
+                        $alreadyUpdated = $cart['Cart']['id'];
+                    }
+                    else{
+                        $unmatched = $cart['Cart']['id'];
+                    }
+                }
+            }
+        }
+        $this->set('noConsignmentDates', $noConsignmentDates);
+        $this->set('unmatched', $unmatched);
+        $this->set('toBeUpdated', $toBeUpdated);
+        $this->set('alreadyUpdated', $alreadyUpdated);
+    }
 }
