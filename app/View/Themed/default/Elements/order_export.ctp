@@ -12,6 +12,7 @@ $table = array(
     array('label' => __('客户姓名'), 'width' => 10, 'filter' => true),
     array('label' => __('下单时间'), 'width' => 22),
     array('label' => __('付款时间'), 'width' => 22),
+    array('label' => __('发货时间'), 'width' => 22),
     array('label' => __('商品'), 'width' => 40, 'wrap' => true),
     array('label' => __('件数'), 'width' => 6),
     array('label' => __('规格'), 'width' => 8),
@@ -29,9 +30,9 @@ $table = array(
 $this->PhpExcel->addTableHeader($table, array('name' => '宋体', 'bold' => true, 'size' => '16'));
 
 $add_header_flag = false;
-$fields = array('id', 'type', 'consignee_name', 'created','pay_time', 'goods','num', 'spec', 'consign_date','total_all_price', 'ship_fee', 'status', 'consignee_mobilephone', 'consignee_address', 'remark', 'business_remark');
-$header = array('订单号', '团购', '客户姓名', '下单时间', '支付时间', '商品', '件数', '规格', '排期', '总价', '运费', '状态', '联系电话', '收货地址', '订单备注','商家备注');
-$order_status = array('待确认', '已支付', '已发货', '已收货', '已退款', '', '', '', '', '已完成', '已做废', '已确认', '已投诉');
+$fields = array('id', 'type', 'consignee_name', 'created','pay_time', 'send_date', 'goods','num', 'spec', 'consign_date','total_all_price', 'ship_fee', 'status', 'consignee_mobilephone', 'consignee_address', 'remark', 'business_remark');
+$header = array('订单号', '团购', '客户姓名', '下单时间', '支付时间', '发货时间', '商品', '件数', '规格', '排期', '总价', '运费', '状态', '联系电话', '收货地址', '订单备注','商家备注');
+$order_status = array('待确认', '已支付', '已发货', '已收货', '已退款', '', '', '', '', '已完成', '已做废', '已确认', '已投诉', '', '退款中');
 $page = 1;
 $pagesize = 500;
 /**
@@ -69,7 +70,7 @@ do {
                 } else if($fieldName == 'num') {
                     $value =  $cart['Cart']['num'];
                 } else if($fieldName == 'type') {
-                    $value = $item['Order']['type'] == 5 ? '是' : '否';
+                    $value = $item['Order']['type'] == 5 ? '团购' : ($item['Order']['type'] == 6 ? '秒杀' : '否');
                 }else if($fieldName == 'spec') {
                     $value = $spec_groups[$cart['Cart']['specId']];
                 }else if($fieldName == 'consign_date'){

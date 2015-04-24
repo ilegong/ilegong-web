@@ -86,7 +86,7 @@
                 <tr>
                     <td>
                         订单号：{{$order['Order']['id']}}<br/>
-                        团购：{{if $order['Order']['type'] == 5}}是{{else}}否{{/if}}<br/>
+                        团购：{{$order['Order']['type'] == 5 ? "团购" : ($order['Order']['type'] == 6 ? "秒杀" : "否")}}<br/>
                         收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_area']}}{{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
                         总价：￥{{$order['Order']['total_price']}}<br/>
                         运费：￥{{$order['Order']['ship_fee']}}<br/>
@@ -107,6 +107,9 @@
                         <table class="table table-bordered">
                             <tr>
                                 <th width="50%">商品名称</th>
+                                {{if !empty($cart['Cart']['send_date'])}}
+                                  <th>发货时间</th>
+                                {{/if}}
                                 <th>价格</th>
                                 <th>规格</th>
                                 <th>数量</th>
@@ -116,6 +119,9 @@
                             {{loop $order_carts[$order['Order']['id']] $index $cart}}
                             <tr>
                                 <td>{{$cart['Cart']['name']}}</td>
+                                {{if !empty($cart['Cart']['send_date'])}}
+                                  <td>{{$cart['Cart']['send_date']}}</td>
+                                {{/if}}
                                 <td>￥{{$cart['Cart']['price']}}</td>
                                 <td>{{$spec_groups[$cart['Cart']['specId']]}}<br/></td>
                                 <td>{{$cart['Cart']['num']}}</td>
