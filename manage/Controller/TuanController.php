@@ -301,10 +301,10 @@ class TuanController extends AppController{
     }
 
 
-    function admin_send_date() {
+    function admin_send_date($type) {
         $tuan_buyings = $this->TuanBuying->find('all', array(
             'conditions' => array(
-                'consignment_type' => 0
+                'consignment_type' => $type
             ),
             'fields' => array("id", "consignment_type", "consign_time")
         ));
