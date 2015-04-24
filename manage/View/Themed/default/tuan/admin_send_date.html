@@ -1,6 +1,33 @@
-<h2>To be updated</h2>
 <ul>
-  {{loop $toBeUpdated $index $e}}
+  <li>"tb_ids": {{count($tb_ids)}}</li>
+  <li>"order_ids": {{count($order_ids)}}</li>
+  <li>"cart_ids": {{count($cart_ids)}}</li>
+</ul>
+
+<h2>noConsignmentDatesOfCart</h2>
+<ul>
+  {{loop $noConsignmentDatesOfCart $index $e}}
+  <li>{{$e}}</li>
+  {{/loop}}
+</ul>
+
+<h2>noOrdersOfCart</h2>
+<ul>
+  {{loop $noOrdersOfCart $index $e}}
+  <li>{{$e}}</li>
+  {{/loop}}
+</ul>
+
+<h2>noTuanBuyingsOfOrder</h2>
+<ul>
+  {{loop $noTuanBuyingsOfOrder $index $e}}
+  <li>{{$e}}</li>
+  {{/loop}}
+</ul>
+
+<h2>unmatched</h2>
+<ul>
+  {{loop $unmatched $index $e}}
   <li>{{$e}}</li>
   {{/loop}}
 </ul>
@@ -12,16 +39,9 @@
   {{/loop}}
 </ul>
 
-<h2>no consignment dates</h2>
+<h2>to be updated</h2>
 <ul>
-  {{loop $noConsignmentDates $index $e}}
-  <li>{{$e}}</li>
-  {{/loop}}
-</ul>
-
-<h2>unmatched</h2>
-<ul>
-  {{loop $unmatched $index $e}}
+  {{loop $toBeUpdated $index $e}}
   <li>{{$e}}</li>
   {{/loop}}
 </ul>
