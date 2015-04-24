@@ -82,6 +82,12 @@
 
         <div class="table-responsive">
             {{loop $orders $order}}
+            <?php $showSendDateColumn = ($order['Order']['type'] == 5 || $order['Order']['type'] == 6); ?>
+            {{loop $order_carts[$order['Order']['id']] $index $cart}}
+              {{if !empty($cart['Cart']['send_date'])}}
+                <?php $showSendDateColumn = true; ?>
+              {{/if}}
+            {{/loop}}
             <table class="table table-bordered">
                 <tr>
                     <td>
@@ -111,7 +117,9 @@
                                 <th>规格</th>
                                 <th>数量</th>
                                 <th>合计</th>
-                                <th></th>
+                                {{if $showSendDateColumn}}
+                                  <th>到货日期</th>
+                                {{/if}}
                             </tr>
                             <tbody>
                             {{loop $order_carts[$order['Order']['id']] $index $cart}}
@@ -125,11 +133,11 @@
                                 {{else}}
                                 <td>——</td>
                                 {{/if}}
-                                <td>
-                                  {{if !empty($cart['Cart']['send_date'])}}
-                                    到货日期：{{$cart['Cart']['send_date']}}
-                                  {{/if}}
-                                </td>
+                                {{if $showSendDateColumn}}
+                                  <td>
+                                    {{$cart['Cart']['send_date']}}
+                                  </td>
+                                {{/if}}
                             </tr>
                             {{/loop}}
                             </tbody>

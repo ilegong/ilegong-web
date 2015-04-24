@@ -15,7 +15,7 @@ $table = array(
     array('label' => __('商品'), 'width' => 40, 'wrap' => true),
     array('label' => __('件数'), 'width' => 6),
     array('label' => __('规格'), 'width' => 8),
-    array('label' => __('排期'), 'width' => 8),
+    array('label' => __('到货日期'), 'width' => 8),
     array('label' => __('总价(含运费)'), 'width' => 6),
     array('label' => __('运费'), 'width' => 6),
     array('label' => __('状态'), 'width' => 8),
