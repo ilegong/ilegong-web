@@ -61,6 +61,7 @@
                     {{/if}}
 
                     {{if $product_spec_map}}
+                    {{$product_spec_map}}
                     <ul class="standard clearfix">
                         {{if $specs_map && !empty($specs_map['choices'])}}
                         <?php foreach($specs_map['choices'] as $label => $values) {
