@@ -196,13 +196,7 @@
                 </td>
                 <td>
                   {{if $order['Order']['type'] == 5}}
-                    {{if $tuan_buying['TuanBuying']['consignment_type'] == 0}}
-                      团满发货
-                    {{elseif $tuan_buying['TuanBuying']['consignment_type'] == 1}}
-                      团满采摘
-                    {{else}}
-                      排期
-                    {{/if}}
+                    团购
                   {{elseif $order['Order']['type'] == 6}}
                     秒杀
                   {{elseif $order['Order']['type'] == 1}}
