@@ -310,7 +310,7 @@ class TuanController extends AppController{
         ));
         $tb_ids = Hash::extract($tuan_buyings, "{n}.TuanBuying.id");
         $tuan_buyings = Hash::combine($tuan_buyings, "{n}.TuanBuying.id", "{n}.TuanBuying");
-        $this->log('tuan buying ids: '.count($tb_ids));
+        $this->log('tuan buyings: '.json_encode($tuan_buyings));
 
         $orders = $this->Order->find('all', array(
            'conditions' => array(
@@ -321,14 +321,14 @@ class TuanController extends AppController{
         ));
         $order_ids = Hash::extract($orders, "{n}.Order.id");
         $orders = Hash::combine($orders, "{n}.Order.id", "{n}.Order");
-        $this->log('order ids: '.count($order_ids));
+        $this->log('orders: '.json_encode($orders));
 
         $carts = $this->Cart->find('all',array(
             'conditions' => array("order_id"=>$order_ids),
-            'fields' => array("id", "consignment_date", "send_date")
+            'fields' => array("id", "consignment_date", "send_date", "order_id")
         ));
         $cart_ids = Hash::extract($carts, "{n}.Cart.id");
-        $this->log('cart ids: '.count($cart_ids));
+        $this->log('carts: '.json_encode($carts));
 
         $noConsignmentDatesOfCart = array();
         $noOrdersOfCart = array();
@@ -339,19 +339,19 @@ class TuanController extends AppController{
         foreach($carts as &$cart){
             if(empty($cart['Cart']['consignment_date'])){
                 // find consignment_date by member_id(tuan_buying)
-                $order = $orders['Order'][$cart['Cart']['order_id']];
+                $order = $orders[$cart['Cart']['order_id']];
                 if(empty($order)){
                     $noOrdersOfCart[] = $cart['Cart']['id'];
                 }
                 else{
-                    $tuan_buying = $tuan_buyings['TuanBuying'][$cart['Cart']['member_id']];
+                    $tuan_buying = $tuan_buyings[$order['member_id']];
                     if(empty($tuan_buying)){
-                        $noTuanBuyingsOfOrder[] = $cart['Cart']['id'];
+                        $noTuanBuyingsOfOrder[] = $cart['Cart']['id'].", ".json_encode($order);
                     }
                     else{
-                        $send_date = $tuan_buying['TuanBuying']['consign_time'];
+                        $send_date = $tuan_buying['consign_time'];
                         if(empty($send_date)){
-                            $noSendDateOfTuanBuying[] = $cart['Cart']['id'];
+                            $noSendDateOfTuanBuying[] = $cart['Cart']['id'].", ".$order['id'].", ".$tuan_buying['id'];
                         }
                         else{
                             if(!empty($cart['Cart']['send_date'])){
@@ -359,7 +359,8 @@ class TuanController extends AppController{
                                     $alreadyUpdated[] = $cart['Cart']['id'];
                                 }
                                 else{
-                                    $unmatched[] = $cart['Cart']['id']." send_date: ".$cart['Cart']['send_date'].", ".$send_date;
+                                    $unmatched[] = $cart['Cart']['id'];
+                                    $unmatched[$cart['Cart']['id']] = "cart ".$cart['Cart']['id'].", send_date: ".$cart['Cart']['send_date'].", TuanBuying.consign_time: ".$send_date;
                                 }
                             }
                             else{
@@ -381,29 +382,15 @@ class TuanController extends AppController{
                 }
                 else{
                     if(!empty($cart['Cart']['send_date'])){
-                        if($cart['Cart']['send_date'] == $consignmentDate['ConsignmentDate']['consignment_date']){
+                        if($cart['Cart']['send_date'] == $consignmentDate['ConsignmentDate']['send_date']){
                             $alreadyUpdated[] = $cart['Cart']['id'];
                         }
                         else{
-                            $unmatched[] = $cart['Cart']['id']." send_date: ".$cart['Cart']['send_date'].", ".$consignmentDate['ConsignmentDate']['consignment_date'];
+                            $unmatched[$cart['Cart']['id']] = "cart ".$cart['Cart']['id'].", send_date: ".$cart['Cart']['send_date'].", Cart.consignment_date: ".$cart['Cart']['consignment_date'].", ConsignmentDate.consignment_date: ".$consignmentDate['ConsignmentDate']['send_date'];
                         }
                     }
                     else{
                         $toBeUpdated[] = $cart['Cart']['id'];
-                    }
-                }
-            }
-
-            if(!empty($consignmentDate)){
-                if(empty($cart['Cart']['send_date'])){
-                    $toBeUpdated[] = $cart['Cart']['id'];
-                }
-                else{
-                    if($consignmentDate['ConsignmentDate']['send_date'] == $cart['Cart']['send_date']){
-                        $alreadyUpdated = $cart['Cart']['id'];
-                    }
-                    else{
-                        $unmatched = $cart['Cart']['id'];
                     }
                 }
             }
