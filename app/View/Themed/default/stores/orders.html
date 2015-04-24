@@ -111,7 +111,7 @@
                                 <th>规格</th>
                                 <th>数量</th>
                                 <th>合计</th>
-                                <th></th>
+                                <th>排期</th>
                             </tr>
                             <tbody>
                             {{loop $order_carts[$order['Order']['id']] $index $cart}}
@@ -126,9 +126,7 @@
                                 <td>——</td>
                                 {{/if}}
                                 <td>
-                                  {{if !empty($cart['Cart']['send_date'])}}
-                                    发货时间：{{$cart['Cart']['send_date']}}
-                                  {{/if}}
+                                    {{$cart['Cart']['send_date']}}
                                 </td>
                             </tr>
                             {{/loop}}
