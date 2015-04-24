@@ -126,6 +126,12 @@
     {{if $order['Order']['pay_time']}}
     <span>支付时间：{{$order['Order']['pay_time']}}</span>
     {{/if}}
+    {{if $order['Order']['status'] == 1}}
+      {{if $order['Order']['type'] == 5 || $order['Order']['type'] == 6}}
+      <br/>
+      <span>预计发货：{{$cart['Cart']['send_date']}}</span>
+      {{/if}}
+    {{/if}}
 </div>
 <div style="height: 50px;">
 </div>

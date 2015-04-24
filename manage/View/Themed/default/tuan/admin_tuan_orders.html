@@ -150,11 +150,19 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <td>订单号</td><td>用户ID</td><td>订单状态</td><td>商品</td><td>规格</td><td>份数</td><td>总价</td><td>创建时间</td><td>付款时间</td><td>截单时间</td><td>配送方式</td><td>发货时间</td><td>收件人</td><td>团队名称</td><td>收件地址</td><td>电话</td><td>支付方式</td><td>备注</td>
+            <td>订单号</td><td>用户ID</td><td>订单状态</td><td>商品</td><td>规格</td><td>份数</td><td>总价</td><td>创建时间</td><td>付款时间</td><td>截单时间</td><td>类型</td><td>配送方式</td><td>发货时间</td><td>收件人</td><td>团队名称</td><td>收件地址</td><td>电话</td><td>支付方式</td><td>备注</td>
         </tr>
     </thead>
     <tbody>
         {{loop $orders $order}}
+          <?php
+              $tuan_buying = $tuan_buys[$order['Order']['member_id']];
+          ?>
+          {{loop $order_carts[$order['Order']['id']] $index $cart}}
+            <?php
+              $date = $consign_dates[$cart['Cart']['consignment_date']];
+              $consign_time = empty($date)?'': date('m-d', strtotime($date));
+            ?>
             <tr>
                 <td>{{$order['Order']['id']}}</td>
                 <td>{{$order['Order']['creator']}}</td>
@@ -172,25 +180,34 @@
                     {{/if}}
                 </td>
                 <td>
-                    {{loop $order_carts[$order['Order']['id']] $cart}}
-                        {{$cart['Cart']['name']}}
-                    {{/loop}}
+                    {{$cart['Cart']['name']}}
                 </td>
                 <td>
-                    {{loop $order_carts[$order['Order']['id']] $cart}}
                     {{$cart['Cart']['spec_name']}}
-                    {{/loop}}
                 </td>
                 <td>
-                    {{loop $order_carts[$order['Order']['id']] $cart}}
-                        {{$cart['Cart']['num']}}
-                    {{/loop}}
+                    {{$cart['Cart']['num']}}
                 </td>
-                <td>{{$order['Order']['total_all_price']}}</td>
+                <td>{{if $index == 0}}{{$order['Order']['total_all_price']}}{{else}}'同上'{{/if}}</td>
                 <td>{{$order['Order']['created']}}</td>
                 <td>{{$order['Order']['pay_time']}}</td>
                 <td>
                     {{$tuan_buys[$order['Order']['member_id']]['end_time']}}
+                </td>
+                <td>
+                  {{if $order['Order']['type'] == 5}}
+                    {{if $tuan_buying['TuanBuying']['consignment_type'] == 0}}
+                      团满发货
+                    {{elseif $tuan_buying['TuanBuying']['consignment_type'] == 1}}
+                      团满采摘
+                    {{else}}
+                      排期
+                    {{/if}}
+                  {{elseif $order['Order']['type'] == 6}}
+                    秒杀
+                  {{elseif $order['Order']['type'] == 1}}
+                    普通
+                  {{/if}}
                 </td>
                 <td>
                     {{if $order['Order']['ship_mark']=='ziti'}}
@@ -206,25 +223,7 @@
                     {{/if}}
                 </td>
                 <td>
-                    {{loop $order_carts[$order['Order']['id']] $cart}}
-                        {{if !empty($cart['Cart']['consignment_date'])}}
-                            <?php
-                                $date = $consign_dates[$cart['Cart']['consignment_date']];
-                                $consign_time = empty($date)?'': date('m-d', strtotime($date));
-                            ?>
-                            {{$consign_time}}
-                        {{elseif $order['Order']['type'] == 5}}
-                            <?php
-                                $date = $tuan_buys[$order['Order']['member_id']]['consign_time'];
-                                $consign_time = empty($date)?'': date('m-d', strtotime($date));
-                            ?>
-                            {{if empty($consign_time)}}
-                                团满发货
-                            {{else}}
-                                {{$consign_time}}
-                            {{/if}}
-                        {{/if}}
-                    {{/loop}}
+                   {{$consign_time}}({{$cart['Cart']['send_date']}})
                 </td>
                 <td>{{$order['Order']['consignee_name']}}</td>
                 <td>
@@ -247,6 +246,7 @@
                     {{$order['Order']['remark']}}
                 </td>
             </tr>
+          {{/loop}}
         {{/loop}}
     </tbody>
 </table>

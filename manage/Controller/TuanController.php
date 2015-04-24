@@ -202,6 +202,7 @@ class TuanController extends AppController{
             unset($order_query_cond['Order.status']);
         }
 
+        $this->log('query orders with conditions: '.json_encode($order_query_cond));
         $orders = $this->Order->find('all',array(
             'conditions' => $order_query_cond,
             'joins' => $join_conditions,
