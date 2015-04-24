@@ -155,17 +155,15 @@ class OrdersController extends AppController {
             $business[$p['Product']['brand_id']][] = $p['Product'];
             $pid = $p['Product']['id'];
             $num = $nums[$pid];
-            list($afford_for_curr_user, $limit_cur_user) = $tryId ? afford_product_try($tryId, $uid) : AppController::__affordToUser($pid, $uid);
+            list($afford_for_curr_user, $limit_cur_user,,$least_num) = $tryId ? afford_product_try($tryId, $uid) : AppController::__affordToUser($pid, $uid);
             $pName = $p['Product']['name'];
             if (!$afford_for_curr_user) {
-                if($limit_cur_user > 0 && $num < $limit_cur_user){
-                    $this->__message($pName .'购买件数少于'.$limit_cur_user, $error_back_url, 3);
-                }else{
-                    $this->__message($pName .__('已售罄或您已经购买超限，请从购物车中调整后再结算'), $error_back_url, 5);
-                }
+                $this->__message($pName .__('已售罄或您已经购买超限，请从购物车中调整后再结算'), $error_back_url, 5);
                 return;
             } else if ($limit_cur_user == 0 || ($limit_cur_user > 0 && $num > $limit_cur_user)) {
                 $this->__message($pName .__('购买超限，请从购物车中调整后再结算'), $error_back_url, 5);
+            } else if ($least_num > 1 && $num < $least_num){
+                $this->__message('购买件数少于'.$least_num, '/', 3);
             }
         }
 

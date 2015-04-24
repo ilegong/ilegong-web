@@ -576,15 +576,16 @@ class AppController extends Controller {
         if ($pid == ShipPromotion::QUNAR_PROMOTE_ID) {
             $afford_for_curr_user = false;
             return array($afford_for_curr_user, 0);
-//        }elseif($pid == 877){ //好好蛋糕，满5起送
-//            $afford_for_curr_user = false;
-//            return array($afford_for_curr_user, 5);
+
         } else {
             list($total_limit, $brand_id, $limit_cur_user) = ClassRegistry::init('ShipPromotion')->findNumberLimitedPromo($pid);
             list($afford_for_curr_user, $limit_cur_user, $total_left) = calculate_afford($pid, $currUid, $total_limit, $limit_cur_user);
         }
-
-        return array($afford_for_curr_user, $limit_cur_user, $total_left);
+        $least_num = 1;
+        if($pid == 877) { //好好蛋糕，满5起送
+            $least_num = 5;
+        }
+        return array($afford_for_curr_user, $limit_cur_user, $total_left,$least_num);
     }
 
 
