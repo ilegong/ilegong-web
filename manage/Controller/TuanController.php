@@ -364,6 +364,7 @@ class TuanController extends AppController{
                                 }
                             }
                             else{
+                                $this->Cart->updateAll(array("send_date" => "'".$send_date."'"),array('id' => $cart['Cart']['id']));
                                 $toBeUpdated[] = $cart['Cart']['id'];
                             }
                         }
@@ -390,6 +391,7 @@ class TuanController extends AppController{
                         }
                     }
                     else{
+                        $this->Cart->updateAll(array('send_date' => "'".$consignmentDate['ConsignmentDate']['send_date']."'"),array('id' => $cart['Cart']['id']));
                         $toBeUpdated[] = $cart['Cart']['id'];
                     }
                 }
