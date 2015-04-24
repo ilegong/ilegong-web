@@ -1405,7 +1405,7 @@ class StoresController extends AppController
                 )
             ));
             $product_name = $product['Product']['name'];
-            $msg = '您在[朋友说]购买的['.$product_name.']最新状态：'.$track_log.'。请关注微信公众号:pyshuo2014查看订单信息。';
+            $msg = $track_log;
             $track_log_msg = '您购买的('.$product_name.')最新状态,'.$track_log;
             foreach($orders as $item){
                 $user_id = $item['Order']['creator'];
