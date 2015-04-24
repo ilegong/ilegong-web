@@ -308,6 +308,7 @@ class TuanController extends AppController{
             ));
             $tuan_buys = Hash::combine($tuan_buys,'{n}.TuanBuying.id','{n}.TuanBuying');
         }
+        $this->log('tuan buyings: '.json_encode($tuan_buys));
 
         $p_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.pid');
         $spec_groups = $this->ProductSpecGroup->find('all',array(
@@ -317,15 +318,17 @@ class TuanController extends AppController{
         ));
         $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
 
+        //TODO: cannot find $carts for order id 22330
         $carts = array();
         if(!empty($orders)){
-            $this->log('will query order carts: '.json_encode(Hash::extract($orders, "{n}.Order.id")));
+            $this->log('will query carts: '.json_encode(Hash::extract($orders, "{n}.Order.id")));
             $carts = $this->Cart->find('all', array(
                 'conditions' => array(
                     'order_id' => Hash::extract($orders, "{n}.Order.id")
                 ),
             ));
         }
+        $this->log('carts: '.json_encode($carts));
 
         $order_carts = array();
         foreach($carts as &$c){
@@ -337,6 +340,8 @@ class TuanController extends AppController{
             }
             $order_carts[$c_order_id][] = $c;
         }
+        $this->log('order carts: '.json_encode($order_carts));
+
         //排期
         $consign_ids = array_unique(Hash::extract($order_carts,'{n}.Cart.consignment_date'));
         if(count($consign_ids)!=1 || !empty($consign_ids[0])){
