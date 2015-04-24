@@ -163,7 +163,7 @@ class OrdersController extends AppController {
             } else if ($limit_cur_user == 0 || ($limit_cur_user > 0 && $num > $limit_cur_user)) {
                 $this->__message($pName .__('购买超限，请从购物车中调整后再结算'), $error_back_url, 5);
             } else if ($least_num > 1 && $num < $least_num){
-                $this->__message('购买件数少于'.$least_num, '/', 3);
+                $this->__message('该商品满'.$least_num.'起送', '/', 3);
             }
         }
 
