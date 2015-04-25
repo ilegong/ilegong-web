@@ -311,6 +311,7 @@ class TuanController extends AppController
     {
         $product_id = $_REQUEST['product_id'];
         $order_type = $_REQUEST['order_type'];
+        $send_date = $_REQUEST['send_date'];
 
         $conditions = array();
         if (!empty($product_id) && $product_id != -1) {
@@ -318,11 +319,15 @@ class TuanController extends AppController
             if ($order_type != -1) {
                 $conditions['Order.status'] = $order_type;
             }
+            if (!empty($send_date)) {
+                $conditions['DATE(send_date)'] = $send_date;
+            }
         }
 
         $this->_query_orders($conditions, 'Order.created DESC');
 
         $this->set('product_id', $product_id);
+        $this->set('send_date', $send_date);
         $this->set('order_type', $order_type);
         $this->set('query_type', 'byProduct');
         $this->render("admin_tuan_orders");
@@ -466,6 +471,7 @@ class TuanController extends AppController
                 'type' => 'LEFT'
             )
         );
+        $this->log('query order conditions: ' . json_encode($conditions));
 
         $orders = array();
         if (!empty($conditions)) {
