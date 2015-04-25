@@ -78,4 +78,14 @@ class TuanSecKillController extends AppController{
             $this->redirect(array('controller' => 'tuanSecKill','action' => 'index'));
         }
     }
+    public function admin_api_tuan_seckills(){
+        $this->autoRender=false;
+
+        $tuan_seckills = $this->ProductTry->find('all',array(
+            'conditions' => array(
+                'deleted' => DELETED_NO
+            )
+        ));
+        echo json_encode($tuan_seckills);
+    }
 }

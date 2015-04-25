@@ -1,15 +1,11 @@
 $(document).ready(function(){
-  var tuanTeamSearch = $('.tuan-team-search');
   var tuanTeams = $('.tuan-teams');
-  var tuanProductSearch = $('.tuan-product-search');
   var tuanProducts = $('.tuan-products');
-  var tuan_name = $('#tuan_name');
+  var tuanSecKills = $('.tuan-seckills');
   var start_stat_date = $('input[name="start_stat_datetime"]');
   var end_stat_date = $('input[name="end_stat_datetime"]');
   var tuan_con_date = $('input[name="tuan_con_date"]');
   var product_con_date = $('input[name="product_con_date"]');
-  var leftTeamSelectData = [];
-  var leftProductSelectData = [];
   start_stat_date.datetimepicker({
     format: 'yyyy-mm-dd hh:ii'
   });
@@ -23,72 +19,63 @@ $(document).ready(function(){
     format: 'yyyy-mm-dd'
   });
   $.getJSON('/manage/admin/tuanTeams/api_tuan_teams',function(data){
+    var values = [{'val': -1, 'name': '请选择团队'}];
     $.each(data,function(index,item){
       $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo(tuanTeams);
-      leftTeamSelectData.push({'val': item['id'], 'name': item['tuan_name']});
+      values.push({'val': item['id'], 'name': item['tuan_name']});
     });
+
     setSelectBoxValue(tuanTeams);
-    search_tuanteam();
+    initSearchBox($('.tuan-teams-search'), values);
   });
   $.getJSON('/manage/admin/tuanProducts/api_tuan_products',function(data){
+    var values = [{'val': -1, 'name': '请选择商品'}];
     $.each(data,function(index,item){
       var tuan_product = item['TuanProduct'];
       $('<option value="' + tuan_product['product_id'] + '">' + tuan_product['alias'] + '</option>').appendTo(tuanProducts);
-      leftProductSelectData.push({'val': tuan_product['product_id'], 'name': tuan_product['alias']});
+      values.push({'val': tuan_product['product_id'], 'name': tuan_product['alias']});
     });
+
     setSelectBoxValue(tuanProducts);
-    search_product();
+    initSearchBox($('.tuan-product-search'), values);
+  });
+  $.getJSON('/manage/admin/tuanSecKill/api_tuan_seckills',function(data){
+    var values = [{'val': -1, 'name': '请选择商品'}];
+    $.each(data,function(index,item){
+      var tuan_seckill = item['ProductTry'];
+      if(tuan_seckill['deleted'] == 0){
+        var name = tuan_seckill['product_name'] + '(' + tuan_seckill['spec'] + ')';
+        $('<option value="' + tuan_seckill['id'] + '">' + name + '</option>').appendTo(tuanSecKills);
+        values.push({'val': tuan_seckill['id'], 'name': name});
+      }
+    });
+
+    setSelectBoxValue(tuanSecKills);
+    initSearchBox($('.tuan-seckill-search'), values);
   });
 
   String.prototype.Trim = function() {
     return this.replace(/(^\s*)|(\s*$)/g, "");
   };
 
-  function search_product(){
+  function initSearchBox(searchBox, values){
     if(navigator.userAgent.indexOf("MSIE")>0){
-      tuanProductSearch.on('onpropertychange', function(){productChange($(this))});
+      searchBox.on('onpropertychange',function(){onSearchBoxChanged($(this), values)});
     }else{
-      tuanProductSearch.on('input', function(){productChange($(this))});
+      searchBox.on('input',function(){onSearchBoxChanged($(this), values)});
     }
   }
-
-  function search_tuanteam(){
-    if(navigator.userAgent.indexOf("MSIE")>0){
-      tuanTeamSearch.on('onpropertychange',function(){tuanNameChange($(this))});
-    }else{
-      tuanTeamSearch.on('input',function(){tuanNameChange($(this))});
-    }
-  }
-  function tuanNameChange(searchBox){
+  function onSearchBoxChanged(searchBox, values){
     var content= searchBox.val().Trim();
     var selector = $("#" + searchBox.data('search-for'));
     selector.empty();
     if(content == ''){
-      $.each(leftTeamSelectData,function(index,value){
+      $.each(values,function(index,value){
         selector.append('<option value="'+value['val']+'">'+value['name']+'</option>');
       });
     }else{
       var reg = new RegExp(content,'i');
-      $.each(leftTeamSelectData,function(index,val){
-        if(reg.test(val['name'])){
-          selector.append('<option selected="selected" value="'+val['val']+'">'+val['name']+'</option>');
-        }
-      })
-    }
-  }
-
-  function productChange(searchBox){
-    var content= searchBox.val().Trim();
-    var selector = $("#" + searchBox.data('search-for'));
-    selector.empty();
-
-    if(content == ''){
-      $.each(leftProductSelectData,function(index,value){
-        selector.append('<option value="'+value['val']+'">'+value['name']+'</option>');
-      });
-    }else{
-      var reg = new RegExp(content,'i');
-      $.each(leftProductSelectData,function(index,val){
+      $.each(values,function(index,val){
         if(reg.test(val['name'])){
           selector.append('<option selected="selected" value="'+val['val']+'">'+val['name']+'</option>');
         }

@@ -380,6 +380,40 @@ class TuanController extends AppController
         $this->render("admin_tuan_orders");
     }
 
+    public function admin_query_by_sec_kill()
+    {
+        $seckill_product_id = $_REQUEST['seckill_product_id'];
+        $order_type = $_REQUEST['order_type'];
+        $send_date_start = $_REQUEST['send_date_start'];
+        $send_date_end = $_REQUEST['send_date_end'];
+
+        $conditions = array();
+        if (!empty($seckill_product_id) && $seckill_product_id != -1) {
+//            $conditions['Cart.try_id'] = $seckill_product_id;
+            $conditions['Order.type'] = ORDER_TYPE_TUAN_SEC;
+            if ($order_type != -1) {
+                $conditions['Order.status'] = $order_type;
+            }
+            if (empty($send_date_start)) {
+                $send_date_start = date('Y-m-d', strtotime('-2 days'));
+            }
+            if (empty($send_date_end)) {
+                $send_date_end = date('Y-m-d', strtotime('+5 days'));
+            }
+            $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
+            $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
+        }
+
+        $this->_query_orders($conditions, 'Order.created DESC');
+
+        $this->set('seckill_product_id', $seckill_product_id);
+        $this->set('send_date_start', $send_date_start);
+        $this->set('send_date_end', $send_date_end);
+        $this->set('order_type', $order_type);
+        $this->set('query_type', 'bySecKill');
+        $this->render("admin_tuan_orders");
+    }
+
     /**
      * 团购功能列表
      */
