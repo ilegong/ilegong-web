@@ -307,6 +307,26 @@ class TuanController extends AppController
         $this->render("admin_tuan_orders");
     }
 
+    public function admin_query_by_product()
+    {
+        $product_id = $_REQUEST['product_id'];
+        $order_type = $_REQUEST['order_type'];
+
+        $conditions = array();
+        if (!empty($product_id) && $product_id != -1) {
+            $conditions['Cart.product_id'] = $product_id;
+            if ($order_type != -1) {
+                $conditions['Order.status'] = $order_type;
+            }
+        }
+
+        $this->_query_orders($conditions, 'Order.created DESC');
+
+        $this->set('product_id', $product_id);
+        $this->set('order_type', $order_type);
+        $this->set('query_type', 'byProduct');
+        $this->render("admin_tuan_orders");
+    }
 
     /**
      * 团购功能列表
@@ -436,6 +456,14 @@ class TuanController extends AppController
                     'Pay.order_id = Order.id'
                 ),
                 'type' => 'LEFT',
+            ),
+            array(
+                'table' => 'carts',
+                'alias' => 'Cart',
+                'conditions' => array(
+                    'Cart.order_id = Order.id'
+                ),
+                'type' => 'LEFT'
             )
         );
 
@@ -444,11 +472,12 @@ class TuanController extends AppController
             $orders = $this->Order->find('all', array(
                 'conditions' => $conditions,
                 'joins' => $join_conditions,
-                'fields' => array('Order.*', 'Pay.trade_type'),
+                'fields' => array('Order.*', 'Pay.trade_type', 'Cart.product_id', 'Cart.send_date'),
                 'order' => $order_by
             ));
         }
-        $this->log('orders: ' . json_encode($orders));
+        $order_ids = Hash::extract($orders, "{n}.Order.id");
+        $this->log('order ids: ' . json_encode($order_ids));
 
         $tuan_buys = array();
         $tuan_buying_ids = array_diff(Hash::extract($orders, "{n}.Order.member_id"), array(0));
@@ -474,11 +503,11 @@ class TuanController extends AppController
         }
 
         $carts = array();
-        if (!empty($orders)) {
-            $this->log('will query carts: ' . json_encode(Hash::extract($orders, "{n}.Order.id")));
+        if (!empty($order_ids)) {
+            $this->log('will query carts: ' . json_encode($order_ids));
             $carts = $this->Cart->find('all', array(
                 'conditions' => array(
-                    'order_id' => Hash::extract($orders, "{n}.Order.id")
+                    'order_id' => $order_ids
                 ),
             ));
         }
@@ -507,6 +536,16 @@ class TuanController extends AppController
             $consign_dates = Hash::combine($consign_dates, '{n}.ConsignmentDate.id', '{n}.ConsignmentDate.send_date');
         }
 
+        // product count
+        $product_count = 0;
+        if(!empty($order_ids)){
+            $order_id_strs = '(' . join(',', $order_ids) . ')';
+            $result = $this->Cart->query('select sum(num) from cake_carts where order_id in ' . $order_id_strs);
+            $product_count =  $result[0][0]['sum(num)'];
+        }
+
+        $this->set('should_count_nums', true);
+        $this->set('product_count', $product_count);
         $this->set('orders', $orders);
         $this->set('tuan_buys', $tuan_buys);
         $this->set('order_carts', $order_carts);

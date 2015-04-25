@@ -8,6 +8,7 @@
   <li role="presentation"><a data-tab="general">订单查询</a></li>
   <li role="presentation"><a data-tab="byOrderId">订单ID查询</a></li>
   <li role="presentation"><a data-tab="byUser">根据用户查询</a></li>
+  <li role="presentation"><a data-tab="byProduct">根据商品查询</a></li>
 </ul>
 <div class="tab-content">
   <div id="general" class="tab-pane active">
@@ -17,20 +18,20 @@
           <input type="text" class="form-control" placeholder="搜索团队" id="tuan_name">
         </div>
         <div class="form-group">
-          <select class="form-control" name="team_id" id="team_id">
+          <select class="form-control tuan-teams" name="team_id" data-value="{{$team_id}}">
             <option value="-1">请选择团队</option>
           </select>
         </div>
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="搜索商品" id="tuan_product">
+          <input type="text" class="form-control tuan-product-search" data-search-for="tuanProducts2" placeholder="搜索商品">
         </div>
         <div class="form-group">
-          <select class="form-control" name="product_id" id="product_id">
+          <select class="form-control tuan-products" name="product_id" id="tuanProducts2" data-value="{{$product_id}}">
             <option value="-1">选择商品</option>
           </select>
         </div>
         <div class="form-group">
-          <select class="form-control" name="order_type" id="order_type">
+          <select class="form-control order-types" name="order_type" data-value="{{$order_type}}" id="order_type">
             <option value="-1">选择订单状态</option>
             <option value="0">待支付</option>
             <option value="1">待发货</option>
@@ -78,6 +79,7 @@
     </form>
   </div>
   <div id="byOrderId" class="tab-pane">
+    <div class="text-danger">该功能还在试用，发现任何问题及时联系开发</div>
     <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_order_id" data-noajax="true">
       <div style="padding-bottom: 10px;padding-top: 10px;">
         <div class="form-group">
@@ -90,6 +92,7 @@
     </form>
   </div>
   <div id="byUser" class="tab-pane">
+    <div class="text-danger">该功能还在试用，发现任何问题及时联系开发</div>
     <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_user" data-noajax="true">
       <div style="padding-bottom: 10px;padding-top: 10px;">
         <div class="form-group">
@@ -104,27 +107,36 @@
       </div>
     </form>
   </div>
+  <div id="byProduct" class="tab-pane">
+    <div class="text-danger">该功能还在试用，发现任何问题及时联系开发</div>
+    <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_product" data-noajax="true">
+      <div style="padding-bottom: 10px;padding-top: 10px;">
+        <div class="form-group">
+          <input type="text" class="form-control tuan-product-search" data-search-for="tuanProduct1" placeholder="搜索商品">
+        </div>
+        <div class="form-group">
+          <select class="form-control tuan-products" name="product_id" id="tuanProduct1" data-value="{{$product_id}}">
+            <option value="-1">选择商品</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <select class="form-control order-types" data-value="{{order_type}}" name="order_type">
+            <option value="-1">选择订单状态</option>
+            <option value="0">待支付</option>
+            <option value="1">待发货</option>
+            <option value="2">已发货</option>
+            <option value="4">已退款</option>
+            <option value="10">已作废</option>
+            <option value="14">退款中</option>
+          </select>
+        </div>
+        <br/>
+        <br/>
+        <button type="submit" class="btn btn-primary text-center">查看订单</button>
+      </div>
+    </form>
+  </div>
 </div>
-
-<!--<div id="nameOrMobile">-->
-  <!--<form class="form-inline" method="post" action="/manage/admin/tuan/tuan_orders" data-noajax="true">-->
-    <!--<div style="padding-bottom: 10px;">-->
-      <!--<div class="form-group">-->
-        <!--<label class="sr-only">收件人姓名</label>-->
-        <!--<input type="text" class="form-control" name="con_name" placeholder="姓名" value="{{$con_name}}">-->
-      <!--</div>-->
-      <!--<div class="form-group">-->
-        <!--<label class="sr-only">收件人手机号</label>-->
-        <!--<input type="text" class="form-control" name="con_phone" placeholder="手机号" value="{{$con_phone}}">-->
-      <!--</div>-->
-      <!--<div class="form-group">-->
-        <!--<label class="sr-only">订单ID</label>-->
-        <!--<input type="text" name="order_id" class="form-control" value="{{$order_id}}" placeholder="订单ID">-->
-      <!--</div>-->
-      <!--<button type="submit" class="btn btn-primary text-center">查看订单</button>-->
-    <!--</div>-->
-  <!--</form>-->
-<!--</div>-->
 
 <hr/>
 <div>
@@ -238,124 +250,4 @@
     </tbody>
 </table>
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
-<script>
-    $(document).ready(function(){
-        var $team_id = $('#team_id');
-        var $product_id = $('#product_id');
-        var $order_type = $('#order_type');
-        var tuanProducts = $('#product_id');
-        var tuan_name = $('#tuan_name');
-        var tuan_product = $('#tuan_product');
-        var start_stat_date = $('input[name="start_stat_datetime"]');
-        var end_stat_date = $('input[name="end_stat_datetime"]');
-        var tuan_con_date = $('input[name="tuan_con_date"]');
-        var product_con_date = $('input[name="product_con_date"]');
-        var leftTeamSelectData = [];
-        var leftProductSelectData = [];
-        start_stat_date.datetimepicker({
-            format: 'yyyy-mm-dd hh:ii'
-        });
-        end_stat_date.datetimepicker({
-            format: 'yyyy-mm-dd hh:ii'
-        });
-        tuan_con_date.datetimepicker({
-            format: 'yyyy-mm-dd'
-        });
-        product_con_date.datetimepicker({
-                format: 'yyyy-mm-dd'
-        });
-        $.getJSON('/manage/admin/tuanTeams/api_tuan_teams',function(data){
-            $.each(data,function(index,item){
-                $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo($team_id);
-            });
-            setVal();
-            search_tuanteam();
-        });
-        $.getJSON('/manage/admin/tuanProducts/api_tuan_products',function(data){
-            $.each(data,function(index,item){
-                var tuan_product = item['TuanProduct'];
-                $('<option value="' + tuan_product['product_id'] + '">' + tuan_product['alias'] + '</option>').appendTo(tuanProducts);
-            });
-            $product_id.val('{{$product_id}}');
-            search_product();
-        });
-        function setVal(){
-            $team_id.val('{{$team_id}}');
-            $order_type.val('{{$order_type}}');
-        }
-
-        String.prototype.Trim = function() {
-            return this.replace(/(^\s*)|(\s*$)/g, "");
-        };
-
-        function search_product(){
-            $("option",$product_id).each(function(){
-                leftProductSelectData.push({'val':$(this).val(),'name':$(this).text()});
-            });
-            if(navigator.userAgent.indexOf("MSIE")>0){
-                tuan_product.on('onpropertychange',productChange);
-            }else{
-                tuan_product.on('input',productChange);
-            }
-        }
-
-        function search_tuanteam(){
-            $("option",$team_id).each(function(){
-                leftTeamSelectData.push({'val':$(this).val(),'name':$(this).text()});
-            });
-            if(navigator.userAgent.indexOf("MSIE")>0){
-                tuan_name.on('onpropertychange',tuanNameChange);
-            }else{
-                tuan_name.on('input',tuanNameChange);
-            }
-        }
-        function tuanNameChange(){
-            var content= tuan_name.val().Trim();
-            $team_id.empty();
-            if(content == ''){
-                $.each(leftTeamSelectData,function(index,value){
-                    $team_id.append('<option value="'+value['val']+'">'+value['name']+'</option>');
-                });
-            }else{
-                var reg = new RegExp(content,'i');
-                $.each(leftTeamSelectData,function(index,val){
-                    if(reg.test(val['name'])){
-                        $team_id.append('<option selected="selected" value="'+val['val']+'">'+val['name']+'</option>');
-                    }
-                })
-            }
-        }
-
-        function productChange(){
-            var content= tuan_product.val().Trim();
-            $product_id.empty();
-            if(content == ''){
-                $.each(leftProductSelectData,function(index,value){
-                    $product_id.append('<option value="'+value['val']+'">'+value['name']+'</option>');
-                });
-            }else{
-                var reg = new RegExp(content,'i');
-                $.each(leftProductSelectData,function(index,val){
-                    if(reg.test(val['name'])){
-                        $product_id.append('<option selected="selected" value="'+val['val']+'">'+val['name']+'</option>');
-                    }
-                })
-            }
-        }
-
-        $(".nav-tabs a").click(function(){
-            var tab = $(this).data('tab');
-            activateTab(tab);
-        });
-
-        function activateTab(tab){
-          $(".nav-tabs a").parents('li').removeClass('active');
-          $(".nav-tabs a[data-tab=" + tab + "]").parents('li').addClass('active');
-
-          $('.tab-pane').removeClass('active');
-          $('#' + tab).addClass('active');
-        };
-
-        activateTab($('.nav-tabs').data('query-type'));
-    });
-</script>
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v1'))}}
