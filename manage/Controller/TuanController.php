@@ -333,6 +333,39 @@ class TuanController extends AppController
         $this->render("admin_tuan_orders");
     }
 
+    public function admin_query_by_tuan_team()
+    {
+        $team_id = $_REQUEST['team_id'];
+        $order_type = $_REQUEST['order_type'];
+        $send_date = $_REQUEST['send_date'];
+
+        $conditions = array();
+        if (!empty($team_id) && $team_id != -1) {
+            $tuan_buyings = $this->TuanBuying->find('all', array(
+               'conditions' => array(
+                   'tuan_id' => $team_id
+               ),
+                'fields' => array('id')
+            ));
+            $conditions['Order.type'] = [ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC];
+            $conditions['Order.member_id'] = Hash::extract($tuan_buyings, "{n}.TuanBuying.id");
+            if ($order_type != -1) {
+                $conditions['Order.status'] = $order_type;
+            }
+            if (!empty($send_date)) {
+                $conditions['DATE(send_date)'] = $send_date;
+            }
+        }
+
+        $this->_query_orders($conditions, 'Order.created DESC');
+
+        $this->set('team_id', $team_id);
+        $this->set('send_date', $send_date);
+        $this->set('order_type', $order_type);
+        $this->set('query_type', 'byTuanTeam');
+        $this->render("admin_tuan_orders");
+    }
+
     /**
      * 团购功能列表
      */

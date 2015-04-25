@@ -1,4 +1,5 @@
 $(document).ready(function(){
+  var tuanTeamSearch = $('.tuan-team-search');
   var tuanTeams = $('.tuan-teams');
   var tuanProductSearch = $('.tuan-product-search');
   var tuanProducts = $('.tuan-products');
@@ -24,6 +25,7 @@ $(document).ready(function(){
   $.getJSON('/manage/admin/tuanTeams/api_tuan_teams',function(data){
     $.each(data,function(index,item){
       $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo(tuanTeams);
+      leftTeamSelectData.push({'val': item['id'], 'name': item['tuan_name']});
     });
     setSelectBoxValue(tuanTeams);
     search_tuanteam();
@@ -32,6 +34,7 @@ $(document).ready(function(){
     $.each(data,function(index,item){
       var tuan_product = item['TuanProduct'];
       $('<option value="' + tuan_product['product_id'] + '">' + tuan_product['alias'] + '</option>').appendTo(tuanProducts);
+      leftProductSelectData.push({'val': tuan_product['product_id'], 'name': tuan_product['alias']});
     });
     setSelectBoxValue(tuanProducts);
     search_product();
@@ -42,9 +45,6 @@ $(document).ready(function(){
   };
 
   function search_product(){
-    $("option", tuanProducts).each(function(){
-      leftProductSelectData.push({'val':$(this).val(),'name':$(this).text()});
-    });
     if(navigator.userAgent.indexOf("MSIE")>0){
       tuanProductSearch.on('onpropertychange', function(){productChange($(this))});
     }else{
@@ -53,27 +53,25 @@ $(document).ready(function(){
   }
 
   function search_tuanteam(){
-    $("option", tuanTeams).each(function(){
-      leftTeamSelectData.push({'val':$(this).val(),'name':$(this).text()});
-    });
     if(navigator.userAgent.indexOf("MSIE")>0){
-      tuan_name.on('onpropertychange',tuanNameChange);
+      tuanTeamSearch.on('onpropertychange',function(){tuanNameChange($(this))});
     }else{
-      tuan_name.on('input',tuanNameChange);
+      tuanTeamSearch.on('input',function(){tuanNameChange($(this))});
     }
   }
-  function tuanNameChange(){
-    var content= tuan_name.val().Trim();
-    tuanTeams.empty();
+  function tuanNameChange(searchBox){
+    var content= searchBox.val().Trim();
+    var selector = $("#" + searchBox.data('search-for'));
+    selector.empty();
     if(content == ''){
       $.each(leftTeamSelectData,function(index,value){
-        tuanTeams.append('<option value="'+value['val']+'">'+value['name']+'</option>');
+        selector.append('<option value="'+value['val']+'">'+value['name']+'</option>');
       });
     }else{
       var reg = new RegExp(content,'i');
       $.each(leftTeamSelectData,function(index,val){
         if(reg.test(val['name'])){
-          tuanTeams.append('<option selected="selected" value="'+val['val']+'">'+val['name']+'</option>');
+          selector.append('<option selected="selected" value="'+val['val']+'">'+val['name']+'</option>');
         }
       })
     }
@@ -81,17 +79,18 @@ $(document).ready(function(){
 
   function productChange(searchBox){
     var content= searchBox.val().Trim();
-    var filterTuanProducts = $("#" + searchBox.data('search-for'));
-    filterTuanProducts.empty();
+    var selector = $("#" + searchBox.data('search-for'));
+    selector.empty();
+
     if(content == ''){
       $.each(leftProductSelectData,function(index,value){
-        filterTuanProducts.append('<option value="'+value['val']+'">'+value['name']+'</option>');
+        selector.append('<option value="'+value['val']+'">'+value['name']+'</option>');
       });
     }else{
       var reg = new RegExp(content,'i');
       $.each(leftProductSelectData,function(index,val){
         if(reg.test(val['name'])){
-          filterTuanProducts.append('<option selected="selected" value="'+val['val']+'">'+val['name']+'</option>');
+          selector.append('<option selected="selected" value="'+val['val']+'">'+val['name']+'</option>');
         }
       })
     }
