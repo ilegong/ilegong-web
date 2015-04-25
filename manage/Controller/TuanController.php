@@ -22,7 +22,6 @@ class TuanController extends AppController{
         $con_name = $_REQUEST['con_name'];
         $con_phone = $_REQUEST['con_phone'];
         $order_type = $_REQUEST['order_type'];
-        $order_id = $_REQUEST['order_id'];
         $con_address = $_REQUEST['con_address'];
         $start_stat_datetime = $_REQUEST['start_stat_datetime'];
         $end_stat_datetime = $_REQUEST['end_stat_datetime'];
@@ -177,9 +176,6 @@ class TuanController extends AppController{
         if(!empty($con_phone)){
             $order_query_cond['Order.consignee_mobilephone LIKE'] = '%'.$con_phone.'%';
         }
-        if(!empty($order_id)){
-            $order_query_cond['Order.id']=$order_id;
-        }
 
         if($order_type!=-1){
             $order_query_cond['Order.status']=$order_type;
@@ -277,7 +273,6 @@ class TuanController extends AppController{
         $this->set('con_name',$con_name);
         $this->set('con_phone',$con_phone);
         $this->set('order_type',$order_type);
-        $this->set('order_id',$order_id);
         $this->set('con_address',$con_address);
         $this->set('tuan_con_date',$tuan_con_date);
         $this->set('product_con_date',$product_con_date);
@@ -298,65 +293,7 @@ class TuanController extends AppController{
         ));
         $this->log('orders: '.json_encode($orders));
 
-        $tuan_buys = array();
-        $tuan_buying_ids = array_diff(Hash::extract($orders, "{n}.Order.member_id"), array(0));
-        if(!empty($tuan_buying_ids)){
-            $tuan_buys = $this->TuanBuying->find('all', array(
-                'conditions' => array(
-                    'id' => $tuan_buying_ids
-                )
-            ));
-            $tuan_buys = Hash::combine($tuan_buys,'{n}.TuanBuying.id','{n}.TuanBuying');
-        }
-        $this->log('tuan buyings: '.json_encode($tuan_buys));
-
-        $p_ids = Hash::extract($tuan_buys,'{n}.TuanBuying.pid');
-        $spec_groups = $this->ProductSpecGroup->find('all',array(
-            'conditions' => array(
-                'product_id' => $p_ids
-            )
-        ));
-        $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
-
-        //TODO: cannot find $carts for order id 22330
-        $carts = array();
-        if(!empty($orders)){
-            $this->log('will query carts: '.json_encode(Hash::extract($orders, "{n}.Order.id")));
-            $carts = $this->Cart->find('all', array(
-                'conditions' => array(
-                    'order_id' => Hash::extract($orders, "{n}.Order.id")
-                ),
-            ));
-        }
-        $this->log('carts: '.json_encode($carts));
-
-        $order_carts = array();
-        foreach($carts as &$c){
-            $c_order_id = $c['Cart']['order_id'];
-            $specId = $c['Cart']['specId'];
-            $c['Cart']['spec_name'] = $spec_groups[$specId];
-            if (!isset($order_carts[$c_order_id])) {
-                $order_carts[$c_order_id] = array();
-            }
-            $order_carts[$c_order_id][] = $c;
-        }
-        $this->log('order carts: '.json_encode($order_carts));
-
-        //排期
-        $consign_ids = array_unique(Hash::extract($order_carts,'{n}.Cart.consignment_date'));
-        if(count($consign_ids)!=1 || !empty($consign_ids[0])){
-            $consign_dates = $this->ConsignmentDate->find('all',array(
-                'conditions' => array(
-                    'id' => $consign_ids
-                )
-            ));
-            $consign_dates = Hash::combine($consign_dates,'{n}.ConsignmentDate.id','{n}.ConsignmentDate.send_date');
-            $this->set('consign_dates', $consign_dates);
-        }
-
-        $this->set('orders', $orders);
-        $this->set('tuan_buys', $tuan_buys);
-        $this->set('order_carts', $order_carts);
+        $this->_query_more($orders);
 
         $this->set('order_id', $order_id);
         $this->set('query_type', 'byOrderId');
@@ -486,5 +423,68 @@ class TuanController extends AppController{
         $this->set('unmatched', $unmatched);
         $this->set('toBeUpdated', $toBeUpdated);
         $this->set('alreadyUpdated', $alreadyUpdated);
+    }
+
+    public function _query_more($orders)
+    {
+        $tuan_buys = array();
+        $tuan_buying_ids = array_diff(Hash::extract($orders, "{n}.Order.member_id"), array(0));
+        if (!empty($tuan_buying_ids)) {
+            $tuan_buys = $this->TuanBuying->find('all', array(
+                'conditions' => array(
+                    'id' => $tuan_buying_ids
+                )
+            ));
+            $tuan_buys = Hash::combine($tuan_buys, '{n}.TuanBuying.id', '{n}.TuanBuying');
+        }
+        $this->log('tuan buyings: ' . json_encode($tuan_buys));
+
+        $p_ids = Hash::extract($tuan_buys, '{n}.TuanBuying.pid');
+        $spec_groups = $this->ProductSpecGroup->find('all', array(
+            'conditions' => array(
+                'product_id' => $p_ids
+            )
+        ));
+        $spec_groups = Hash::combine($spec_groups, '{n}.ProductSpecGroup.id', '{n}.ProductSpecGroup.spec_names');
+
+        $carts = array();
+        if (!empty($orders)) {
+            $this->log('will query carts: ' . json_encode(Hash::extract($orders, "{n}.Order.id")));
+            $carts = $this->Cart->find('all', array(
+                'conditions' => array(
+                    'order_id' => Hash::extract($orders, "{n}.Order.id")
+                ),
+            ));
+        }
+        $this->log('carts: ' . json_encode($carts));
+
+        $order_carts = array();
+        foreach ($carts as &$c) {
+            $c_order_id = $c['Cart']['order_id'];
+            $specId = $c['Cart']['specId'];
+            $c['Cart']['spec_name'] = $spec_groups[$specId];
+            if (!isset($order_carts[$c_order_id])) {
+                $order_carts[$c_order_id] = array();
+            }
+            $order_carts[$c_order_id][] = $c;
+        }
+
+        //排期
+        $consign_ids = array_unique(Hash::extract($order_carts, '{n}.Cart.consignment_date'));
+        $consign_dates = array();
+        if (count($consign_ids) != 1 || !empty($consign_ids[0])) {
+            $consign_dates = $this->ConsignmentDate->find('all', array(
+                'conditions' => array(
+                    'id' => $consign_ids
+                )
+            ));
+            $consign_dates = Hash::combine($consign_dates, '{n}.ConsignmentDate.id', '{n}.ConsignmentDate.send_date');
+        }
+
+        $this->set('orders', $orders);
+        $this->set('tuan_buys', $tuan_buys);
+        $this->set('order_carts', $order_carts);
+        $this->set('consign_dates', $consign_dates);
+        return $c;
     }
 }
