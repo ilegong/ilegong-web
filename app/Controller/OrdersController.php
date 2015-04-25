@@ -608,11 +608,23 @@ class OrdersController extends AppController {
             $this->set('show_pay', ($orderinfo['Order']['type'] == ORDER_TYPE_DEF || $orderinfo['Order']['type']==ORDER_TYPE_TUAN || $orderinfo['Order']['type']==ORDER_TYPE_TUAN_SEC)
                 && $afford
                 && $has_expired_product_type == 0
-                && (empty($tuan_expired)||$tuan_expired !=0)
+                && (empty($tuan_expired)||$tuan_expired ==0)
                 && $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
                 && ($display_status != PAID_DISPLAY_PENDING && $display_status != PAID_DISPLAY_SUCCESS));
         }
-
+        $this->loadModel('ConsignmentDate');
+        foreach($Carts as $cart){
+            $consignment_id = $cart['Cart']['consignment_date'];
+            if($consignment_id){
+                $consignment_date = $this->ConsignmentDate->find('first', array(
+                    'conditions' => array('id'=>$consignment_id )
+                ));
+                if($consignment_date['ConsignmentDate']['published'] == 0){
+                    $this->set('show_pay', false);
+                    break;
+                }
+            }
+        }
         if ($action == 'paid') {
             $this->log("paid done: $orderId, msg:". $_GET['msg']);
             //:orders/detail/1118/paid?tradeNo=wxca78-1118-1414580077&msg=ok
