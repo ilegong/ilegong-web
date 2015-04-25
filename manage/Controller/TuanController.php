@@ -347,7 +347,7 @@ class TuanController extends AppController
                ),
                 'fields' => array('id')
             ));
-            $conditions['Order.type'] = [ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC];
+            $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
             $conditions['Order.member_id'] = Hash::extract($tuan_buyings, "{n}.TuanBuying.id");
             if ($order_type != -1) {
                 $conditions['Order.status'] = $order_type;
