@@ -83,7 +83,8 @@
                     e.preventDefault();
                     return false;
                 }
-				if ($('#consignee_mobilephone').val().length != 11) {
+                var mobile = $('#consignee_mobilephone').val().replace(/\s+$/,"");
+				if (mobile.length != 11) {
 					$('#consignee_mobilephone').focus();
 					utils.alert("联系电话格式不正确");
 					e.preventDefault();

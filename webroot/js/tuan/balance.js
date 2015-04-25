@@ -87,7 +87,7 @@ $('#confirm_next').on('click',function(e){
         }
     }
     var name = $("input[name='consignee_name']").val();
-    var mobile = $("input[name='consignee_mobilephone']").val();
+    var mobile = $("input[name='consignee_mobilephone']").val().replace(/\s+$/,"");
     if (addressInput != "not" && address == "") {
         utils.alert("请输入地址");
         e.preventDefault();
