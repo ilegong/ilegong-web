@@ -1,0 +1,26 @@
+<div class="tuijianlist_banner">
+    <h1>您推荐成功<span>3</span>个好友<br/>将获得<span>3</span>份价值<span>10元</span>的酸奶或鸡蛋</h1>
+    <em>酸奶和鸡蛋可任意选喔~~</em>
+</div>
+<ul class="tuijianlist">
+    {{loop $refers $k $refer}}
+    <li class="clearfix">
+        <span class="fl"><img src="{{$this->Html->assetUrl(!empty($m_users[$refer['User']['id']]['image'])? $m_users[$refer['User']['id']]['image']:'/img/mine_head.png')}}"/></span>
+        <div class="tuijian_title">
+            <div class="tuijian_title_style clearfix">
+                <em class="fl">$m_users[$refer['User']['id']]['nickname']</em>
+                <b>点击了您分享的链接</b>
+            </div>
+        </div>
+    </li>
+    {{/loop}}
+    <!--li class="clearfix">
+        <span class="fl"><img src="images/tuijian_good.jpg" /></span>
+        <div class="tuijian_title">
+            <div class="tuijian_title_style clearfix">
+                <em class="fl">Amy</em>
+                <b>通过您分享的链接购买了【朋友说】的商品</b>
+            </div>
+        </div>
+    </li-->
+</ul>

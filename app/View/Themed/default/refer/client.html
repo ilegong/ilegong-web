@@ -1,0 +1,52 @@
+{{$this->Html->css('/css/refer_css.css')}}
+<h1>{{$ref_user['nickname']}}向您推荐了朋友说：分享健康美食的平台。<a href="/">完成注册</a></h1>
+<div class="tuijian" style="border-bottom: 0; margin-top: 0;">
+    <h1>{{$ref_user['nickname']}}在 朋友说 买过什么</h1>
+    {{loop $product_comments $key $item}}
+    <ul class="clearfix">
+        <li class="fl"><img src="{{$this->Html->assetUrl(!empty($ref_user['image'])? $ref_user['image']:'/img/mine_head.png')}}"/></li>
+        <li style="padding-left: 40px;">
+            <em>{{$ref_user['nickname']}}</em>
+            <p>{{$item[body]}}</p>
+            {{if $item['images']}}
+            <div class="clearfix tuijian_good_img">
+                <?PHP foreach($item['images'] as $img) { ?>
+                <a href="#X">{{$this->Html->image($img)}}</a>
+                <?PHP } ?>
+            </div>
+            {{/if}}
+            <a href="{{product_link2($item['prod'])}}" class="clearfix tuijian_good" style="position: relative;">
+                <span class="fl">{{$this->Html->image(small_thumb_link($item['prod']['coverimg']))}}</span>
+                <div class="tuijian_title">
+                    <div class="tuijian_title_style">{{$item['prod']['name']}}</div>
+                </div>
+            </a>
+        </li>
+    </ul>
+    {{/loop}}
+</div>
+<div class="tuijian_friend">
+   <?php /*
+    <h1>看看朋友们怎么说</h1>
+    <div class="tuijian_memberlist clearfix">
+        {{loop $recommends $k $recom}}
+        <ul>
+            <li><img src="images/head01.jpg" /></li>
+            <li><div class="tuijian_memberlist_name">朋友说-鹏鹏</div></li>
+        </ul>
+        {{/loop}}
+    </div>
+    */ ?>
+    <div class="clearfix tuandetail_good">
+        {{loop $recommends $k $recom}}
+        <a href="{{product_link2($recom)}}">
+            <div class="tuandetail_img">{{$this->Html->image(small_thumb_link($recom['coverimg']))}}</div>
+            <div class="tuandetail_title">
+                <span>{{$recom['name']}}</span>
+                <em><strong>¥{{$this->Number->precision($recom['price'], 2)}}</strong>&nbsp;<font>¥{{$this->Number->precision($recom['original_price'], 2)}}</font></em>
+            </div>
+            <!--<b>团购</b>-->
+        </a>
+        {{/loop}}
+    </div>
+</div>
