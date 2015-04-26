@@ -12,8 +12,8 @@
     <thead>
         <tr>
             <th>id</th>
-            <th>别名</th>
-            <th>商品ID</th>
+            <th>团购别名</th>
+            <th>普通商品</th>
             <th>团购价格</th>
             <th>发货类型</th>
             <th>优先级</th>
@@ -23,17 +23,21 @@
         </tr>
     </thead>
     <tbody>
-        {{loop $datas $item}}
+        {{loop $tuan_products $item}}
         <?php
           $tuanProduct = $item['TuanProduct'];
+          $product = $products[$tuanProduct['product_id']];
         ?>
         <tr class="tuan-product" data-product-id="{{$tuanProduct['product_id']}}">
             <td>{{$tuanProduct['id']}}</td>
             <td>{{$tuanProduct['alias']}}</td>
-            <td>{{$tuanProduct['product_id']}}</td>
+            <td>{{$tuanProduct['product_id']}}({{$product['name']}},
+              {{if $product['published'] == 1}}已下架{{else}}<strong class="text-danger">未下架</strong>{{/if}}
+              {{if $product['deleted'] == 1}}, <strong class="text-danger">已删除</strong>{{/if}})
+            </td>
             <td>
                 <strong class="text-warning">{{$tuanProduct['tuan_price']}}</strong>
-                <s class="text-muted">{{$tuanProduct['product']['price']}}</s>
+                <s class="text-muted">{{$product['price']}}</s>
             </td>
             <td>
                 {{if $tuanProduct['consignment_type'] == 0}}

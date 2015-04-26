@@ -19,19 +19,18 @@ class TuanProductsController extends AppController{
             'order' => 'priority DESC'
         ));
         $product_ids = Hash::extract($tuan_products, "{n}.TuanProduct.product_id");
+
         $products = $this->Product->find('all', array(
             'conditions' => array(
-                'id'=>$product_ids
+                'id'=> $product_ids
             ),
-            'fields' => array('id', 'name', 'price')
+            'fields' => array('id', 'name', 'price', 'deleted', 'published')
         ));
+
         $products = Hash::combine($products, '{n}.Product.id', '{n}.Product');
 
-        foreach($tuan_products as &$tuan_product){
-            $tuan_product['TuanProduct']['product'] = $products[$tuan_product['TuanProduct']['product_id']];
-        }
-
-        $this->set('datas',$tuan_products);
+        $this->set('tuan_products', $tuan_products);
+        $this->set('products', $products);
     }
 
     public function admin_new(){
