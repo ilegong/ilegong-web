@@ -30,7 +30,17 @@
         ?>
         <tr class="tuan-product" data-product-id="{{$tuanProduct['product_id']}}">
             <td>{{$tuanProduct['id']}}</td>
-            <td>{{$tuanProduct['alias']}}</td>
+            <td>
+              {{$tuanProduct['alias']}}(
+              {{if $tuan_buyings_count[$tuanProduct['product_id']] > 0}}
+              <span class="text-success">
+                <a href="/manage/admin/tuan_buyings/index?product_id={{$tuanProduct['product_id']}}">{{$tuan_buyings_count[$tuanProduct['product_id']]}}个团购</a>
+              </span>
+              {{else}}
+                <a href="/manage/admin/tuan_buyings/index?product_id={{$tuanProduct['product_id']}}">无进行中的团购</a>
+              {{/if}}
+              )
+            </td>
             <td>{{$tuanProduct['product_id']}}({{$product['name']}},
               {{if $product['published'] == 1}}已下架{{else}}<strong class="text-danger">未下架</strong>{{/if}}
               {{if $product['deleted'] == 1}}, <strong class="text-danger">已删除</strong>{{/if}})

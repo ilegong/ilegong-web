@@ -9,7 +9,7 @@ class TuanProductsController extends AppController{
 
     var $name = 'TuanProducts';
 
-    var $uses = array('TuanProduct', 'Product');
+    var $uses = array('TuanProduct', 'Product', 'TuanBuying');
 
     public function admin_index(){
         $tuan_products = $this->TuanProduct->find('all',array(
@@ -26,9 +26,12 @@ class TuanProductsController extends AppController{
             ),
             'fields' => array('id', 'name', 'price', 'deleted', 'published')
         ));
-
         $products = Hash::combine($products, '{n}.Product.id', '{n}.Product');
 
+        $tuan_buyings_count = $this->TuanBuying->query('select pid as id, count(pid) as c from cake_tuan_buyings WHERE STATUS IN ( 0, 1, 2 ) group by pid;');
+        $tuan_buyings_count = Hash::combine($tuan_buyings_count, '{n}.cake_tuan_buyings.id', '{n}.0.c');
+
+        $this->set('tuan_buyings_count', $tuan_buyings_count);
         $this->set('tuan_products', $tuan_products);
         $this->set('products', $products);
     }
