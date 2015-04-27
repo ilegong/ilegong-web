@@ -310,6 +310,7 @@ class TuanController extends AppController
     public function admin_query_by_product()
     {
         $product_id = $_REQUEST['product_id'];
+        $order_status = $_REQUEST['order_status'];
         $order_type = $_REQUEST['order_type'];
         $send_date_start = $_REQUEST['send_date_start'];
         $send_date_end = $_REQUEST['send_date_end'];
@@ -317,8 +318,14 @@ class TuanController extends AppController
         $conditions = array();
         if (!empty($product_id) && $product_id != -1) {
             $conditions['Cart.product_id'] = $product_id;
-            if ($order_type != -1) {
-                $conditions['Order.status'] = $order_type;
+            if ($order_type == -1) {
+                $conditions['Order.type'] = array(ORDER_TYPE_DEF, ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
+            }
+            else{
+                $conditions['Order.type'] = $order_type;
+            }
+            if ($order_status != -1) {
+                $conditions['Order.status'] = $order_status;
             }
             if (empty($send_date_start)) {
                 $send_date_start = date('Y-m-d', strtotime('-2 days'));
@@ -335,6 +342,7 @@ class TuanController extends AppController
         $this->set('product_id', $product_id);
         $this->set('send_date_start', $send_date_start);
         $this->set('send_date_end', $send_date_end);
+        $this->set('order_status', $order_status);
         $this->set('order_type', $order_type);
         $this->set('query_type', 'byProduct');
         $this->render("admin_tuan_orders");
@@ -343,7 +351,7 @@ class TuanController extends AppController
     public function admin_query_by_tuan_team()
     {
         $team_id = $_REQUEST['team_id'];
-        $order_type = $_REQUEST['order_type'];
+        $order_status = $_REQUEST['order_status'];
         $send_date_start = $_REQUEST['send_date_start'];
         $send_date_end = $_REQUEST['send_date_end'];
 
@@ -357,8 +365,8 @@ class TuanController extends AppController
             ));
             $conditions['Order.type'] = ORDER_TYPE_TUAN;
             $conditions['Order.member_id'] = Hash::extract($tuan_buyings, "{n}.TuanBuying.id");
-            if ($order_type != -1) {
-                $conditions['Order.status'] = $order_type;
+            if ($order_status != -1) {
+                $conditions['Order.status'] = $order_status;
             }
             if (empty($send_date_start)) {
                 $send_date_start = date('Y-m-d', strtotime('-2 days'));
@@ -375,42 +383,8 @@ class TuanController extends AppController
         $this->set('team_id', $team_id);
         $this->set('send_date_start', $send_date_start);
         $this->set('send_date_end', $send_date_end);
-        $this->set('order_type', $order_type);
+        $this->set('order_status', $order_status);
         $this->set('query_type', 'byTuanTeam');
-        $this->render("admin_tuan_orders");
-    }
-
-    public function admin_query_by_sec_kill()
-    {
-        $seckill_product_id = $_REQUEST['seckill_product_id'];
-        $order_type = $_REQUEST['order_type'];
-        $send_date_start = $_REQUEST['send_date_start'];
-        $send_date_end = $_REQUEST['send_date_end'];
-
-        $conditions = array();
-        if (!empty($seckill_product_id) && $seckill_product_id != -1) {
-//            $conditions['Cart.try_id'] = $seckill_product_id;
-            $conditions['Order.type'] = ORDER_TYPE_TUAN_SEC;
-            if ($order_type != -1) {
-                $conditions['Order.status'] = $order_type;
-            }
-            if (empty($send_date_start)) {
-                $send_date_start = date('Y-m-d', strtotime('-2 days'));
-            }
-            if (empty($send_date_end)) {
-                $send_date_end = date('Y-m-d', strtotime('+5 days'));
-            }
-            $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
-            $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
-        }
-
-        $this->_query_orders($conditions, 'Order.created DESC');
-
-        $this->set('seckill_product_id', $seckill_product_id);
-        $this->set('send_date_start', $send_date_start);
-        $this->set('send_date_end', $send_date_end);
-        $this->set('order_type', $order_type);
-        $this->set('query_type', 'bySecKill');
         $this->render("admin_tuan_orders");
     }
 
@@ -428,7 +402,6 @@ class TuanController extends AppController
         $brand_count = $this->Brand->query('select count(*) as c from cake_brands where deleted = 0');
         $this->set('brand_count', $brand_count[0][0]['c']);
     }
-
 
     function admin_send_date($type)
     {

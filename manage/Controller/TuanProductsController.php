@@ -9,7 +9,7 @@ class TuanProductsController extends AppController{
 
     var $name = 'TuanProducts';
 
-    var $uses = array('TuanProduct', 'Product', 'TuanBuying');
+    var $uses = array('TuanProduct', 'Product', 'TuanBuying', 'ProductTry');
 
     public function admin_index(){
         $tuan_products = $this->TuanProduct->find('all',array(
@@ -90,5 +90,40 @@ class TuanProductsController extends AppController{
     public function admin_api_tuan_products(){
         $this->autoRender=false;
         echo getTuanProductsAsJson();
+    }
+
+    public function admin_api_products(){
+        $this->autoRender=false;
+
+        $tuan_products = $this->TuanProduct->find('all',array(
+            'conditions' => array(
+                'deleted' => DELETED_NO
+            ),
+            'order' => 'priority desc'
+        ));
+
+        $tuanSecKills = $this->ProductTry->find('all',array(
+            'conditions' => array(
+                'deleted' => DELETED_NO
+            )
+        ));
+        $tuanSecKills = Hash::combine($tuanSecKills, "{n}.ProductTry.product_id", "{n}");
+
+        $products = Hash::combine($tuan_products, "{n}.TuanProduct.product_id", "{n}");
+        foreach($products as $product_id => &$product){
+            $product['isTuanProduct'] = true;
+            if(!empty($tuanSecKills[$product_id])){
+                $product['ProductTry'] = $tuanSecKills[$product_id];
+                $product['isProductTry'] = true;
+            }
+        }
+        foreach($tuanSecKills as $product_id => &$tuanSecKill){
+            if(empty($products[$product_id])){
+                $product['isProductTry'] = true;
+                $products[$product_id] = $tuanSecKill;
+            }
+        }
+
+        echo json_encode($products);
     }
 }

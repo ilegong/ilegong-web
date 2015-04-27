@@ -1,7 +1,7 @@
 $(document).ready(function(){
   var tuanTeams = $('.tuan-teams');
   var tuanProducts = $('.tuan-products');
-  var tuanSecKills = $('.tuan-seckills');
+  var products = $('.products');
   var start_stat_date = $('input[name="start_stat_datetime"]');
   var end_stat_date = $('input[name="end_stat_datetime"]');
   var tuan_con_date = $('input[name="tuan_con_date"]');
@@ -39,19 +39,26 @@ $(document).ready(function(){
     setSelectBoxValue(tuanProducts);
     initSearchBox($('.tuan-product-search'), values);
   });
-  $.getJSON('/manage/admin/tuanSecKill/api_tuan_seckills',function(data){
+  $.getJSON('/manage/admin/tuanProducts/api_products',function(data){
     var values = [{'val': -1, 'name': '请选择商品'}];
-    $.each(data,function(index,item){
-      var tuan_seckill = item['ProductTry'];
-      if(tuan_seckill['deleted'] == 0){
-        var name = tuan_seckill['product_name'] + '(' + tuan_seckill['spec'] + ')';
-        $('<option value="' + tuan_seckill['id'] + '">' + name + '</option>').appendTo(tuanSecKills);
-        values.push({'val': tuan_seckill['id'], 'name': name});
+    $.each(data,function(productId, item){
+      var name = item['isTuanProduct'] ? item['TuanProduct']['alias'] : item['ProductTry']['product_name'] + '(' + item['ProductTry']['spec'] + ')';
+      if(item['isTuanProduct'] && item['isProductTry']){
+        name = name + "[团，秒]";
       }
+      else if (item['isTuanProduct']){
+        name = name + "[团]";
+      }
+      else if(item['isProductTry']){
+        name = name + "[秒]";
+      }
+
+      $('<option value="' + productId + '">' + name + '</option>').appendTo(products);
+      values.push({'val': productId, 'name': name});
     });
 
-    setSelectBoxValue(tuanSecKills);
-    initSearchBox($('.tuan-seckill-search'), values);
+    setSelectBoxValue(products);
+    initSearchBox($('.product-search'), values);
   });
 
   String.prototype.Trim = function() {
@@ -108,5 +115,5 @@ $(document).ready(function(){
     });
   }
   activateTab($('.nav-tabs').data('query-type'));
-  setSelectBoxValue($('.order-types'));
+  setSelectBoxValue($('.order-status'));
 });
