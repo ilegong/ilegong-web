@@ -394,6 +394,7 @@ class TuanController extends AppController
         $this->_query_orders($conditions, 'Order.created DESC');
 
         $this->set('team_id', $team_id);
+        $this->set('tuan_buying_id', $tuan_buying_id);
         $this->set('send_date_start', $send_date_start);
         $this->set('send_date_end', $send_date_end);
         $this->set('order_status', $order_status);
