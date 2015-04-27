@@ -103,14 +103,14 @@
         <div class="tuan_bar clearfix" style="padding:5px 10px 12px 10px;">
             <div>
               {{if $is_limit}}
-                <a href="javascript:void(0)" class="tuan_bar_btn done">该团已截止</a>
+                <a href="javascript:void(0)" class="tuan_bar_btn done" style="background-color: #ccc">该团已截止</a>
               {{else}}
                 {{if $tuan_buy_status == 2 || $tuan_buy_status == 21}}
-                <a href="javascript:void(0)" class="tuan_bar_btn done cart_btn_soldout">该团已取消</a>
+                <a href="javascript:void(0)" class="tuan_bar_btn done" style="background-color: #ccc">该团已取消</a>
                 {{elseif $tuan_buy_status == 1 || $tuan_buy_status == 11}}
-                <a href="javascript:void(0)" class="tuan_bar_btn done cart_btn_soldout">该团已完成</a>
+                <a href="javascript:void(0)" class="tuan_bar_btn done" style="background-color: #ccc">该团已完成</a>
                 {{elseif $exceed_time}}
-                <a href="javascript:void(0)" class="tuan_bar_btn done cart_btn_soldout">该团已截止</a>
+                <a href="javascript:void(0)" class="tuan_bar_btn done" style="background-color: #ccc">该团已截止</a>
                 {{elseif $tuan_buy_status == 0}}
                 <a href="/tuan_buyings/detail/{{$t_buying['id']}}" class="tuan_bar_btn doing">立即购买</a>
                 {{/if}}
@@ -126,7 +126,7 @@
                       {{if $t_buying['max_num'] > 0}}
                         限售{{$t_buying['max_num']}}份
                       {{else}}
-                        {{$t_buying['target_num']}}份起团
+                        目标{{$t_buying['target_num']}}份
                       {{/if}}
                     </li>
                 </ul>
