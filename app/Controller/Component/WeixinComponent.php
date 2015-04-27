@@ -360,6 +360,7 @@ class WeixinComponent extends Component
 
     public static function get_order_good_info($order_info){
         $good_info ='';$number = 0;
+        $send_date='';
         $ship_info = $order_info['Order']['consignee_name'].','.$order_info['Order']['consignee_address'].','.$order_info['Order']['consignee_mobilephone'];
         $cartModel = ClassRegistry::init('Cart');
         $carts = $cartModel->find('all',array(
@@ -367,6 +368,9 @@ class WeixinComponent extends Component
         foreach($carts as $cart){
             $good_info = $good_info.$cart['Cart']['name'].'x'.$cart['Cart']['num'].';';
             $number +=$cart['Cart']['num'];
+            if(!empty($cart['Cart']['send_date'])){
+                $send_date=$cart['Cart']['send_date'];
+            }
         }
         $pids = Hash::extract($carts, '{n}.Cart.product_id');
 
@@ -376,7 +380,7 @@ class WeixinComponent extends Component
                 'id' => $order_info['Order']['brand_id']
             )
         ));
-        return array("good_info"=>$good_info,"ship_info"=>$ship_info, 'pid_list' => $pids, 'brand_info' => $brand,'good_num' => $number);
+        return array("good_info"=>$good_info,"ship_info"=>$ship_info, 'pid_list' => $pids, 'brand_info' => $brand,'good_num' => $number, "send_date"=>$send_date);
     }
 
     /**
@@ -399,6 +403,7 @@ class WeixinComponent extends Component
         $good_num = $good['good_num'];
         $order_consinessname = $order['Order']['consignee_name'];
         $brandId = $order['Order']['brand_id'];
+        $send_date = $good['send_date'];
 
         if ($user_weixin != false) {
             $open_id = $user_weixin['oauth_openid'];
@@ -489,6 +494,8 @@ class WeixinComponent extends Component
                     $seller_weixin = '';
                 }
 
+            } elseif($order['Order']['type'] == ORDER_TYPE_TUAN && $order['Order']['ship_mark'] == 'ziti'){
+                $this->send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_id, $order, $send_date);
             }  else {
                 $this->send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_id, $order);
             }
@@ -584,4 +591,21 @@ class WeixinComponent extends Component
         return false;
     }
 
+    public function send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_no, $order = null, $send_date) {
+        $post_data = array(
+            "touser" => $open_id,
+            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "url" => $this->get_order_query_url($order_no),
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => "亲，您的订单已完成付款，到货时间是".$send_date."，自提地点是".$order['Order']['address']."，请留意当天到店取货收到的提货码提醒。"),
+                "orderProductPrice" => array("value" => $price),
+                "orderProductName" => array("value" => $good_info),
+                "orderAddress" => array("value" => empty($ship_info)?'':$ship_info),
+                "orderName" => array("value" => $order_no),
+                "remark" => array("value" => "点击查看订单详情", "color" => "#FF8800")
+            )
+        );
+        return $this->send_weixin_message($post_data);
+    }
 }

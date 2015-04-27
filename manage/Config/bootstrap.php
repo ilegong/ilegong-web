@@ -163,6 +163,7 @@ function get_tuan_msg_element($tuan_buy_id,$flag=true){
             'target_num' => $target_num,
             'sold_num' => $sold_num,
             'uids'=>$uids,
+            'team_id' => $tt['TuanTeam']['id'],
             'tuan_name' => $tuan_name,
             'product_name' => $product_name,
             'tuan_leader' => $tuan_leader,

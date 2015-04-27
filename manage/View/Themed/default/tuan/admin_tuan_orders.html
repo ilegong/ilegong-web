@@ -8,9 +8,8 @@
   <li role="presentation"><a data-tab="general">订单查询</a></li>
   <li role="presentation"><a data-tab="byOrderId">订单ID查询</a></li>
   <li role="presentation"><a data-tab="byUser">根据用户查询</a></li>
-  <li role="presentation"><a data-tab="byProduct">根据商品查询</a></li>
-  <li role="presentation"><a data-tab="byTuanTeam">团购订单查询</a></li>
-  <li role="presentation"><a data-tab="bySecKill">秒杀订单查询</a></li>
+  <li role="presentation"><a data-tab="byTuanTeam">按团队查询</a></li>
+  <li role="presentation"><a data-tab="byProduct">按商品查询</a></li>
 </ul>
 <div class="tab-content">
   <div id="general" class="tab-pane active">
@@ -25,15 +24,15 @@
           </select>
         </div>
         <div class="form-group">
-          <input type="text" class="form-control tuan-product-search" data-search-for="tuanProducts2" placeholder="搜索商品">
+          <input type="text" class="form-control tuan-product-search" data-search-for="tuanProducts" placeholder="搜索商品">
         </div>
         <div class="form-group">
-          <select class="form-control tuan-products" name="product_id" id="tuanProducts2" data-value="{{$product_id}}">
+          <select class="form-control tuan-products" name="product_id" id="tuanProducts" data-value="{{$product_id}}">
             <option value="-1">选择商品</option>
           </select>
         </div>
         <div class="form-group">
-          <select class="form-control order-types" name="order_type" data-value="{{$order_type}}" id="order_type">
+          <select class="form-control order-status" name="order_status" data-value="{{$order_status}}">
             <option value="-1">选择订单状态</option>
             <option value="0">待支付</option>
             <option value="1">待发货</option>
@@ -81,7 +80,7 @@
     </form>
   </div>
   <div id="byOrderId" class="tab-pane">
-    <div class="text-danger">该功能还在试用，发现任何问题及时联系开发</div>
+    <strong class="text-danger">该功能还在试用，发现任何问题及时联系开发</strong>
     <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_order_id" data-noajax="true">
       <div style="padding-bottom: 10px;padding-top: 10px;">
         <div class="form-group">
@@ -94,7 +93,7 @@
     </form>
   </div>
   <div id="byUser" class="tab-pane">
-    <div class="text-danger">该功能还在试用，发现任何问题及时联系开发</div>
+    <strong class="text-danger">该功能还在试用，发现任何问题及时联系开发</strong>
     <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_user" data-noajax="true">
       <div style="padding-bottom: 10px;padding-top: 10px;">
         <div class="form-group">
@@ -103,6 +102,17 @@
         <div class="form-group">
           <input type="text" class="form-control" name="con_phone" placeholder="手机号" value="{{$con_phone}}">
         </div>
+        <div class="form-group">
+          <select class="form-control order-status" data-value="{{order_status}}" name="order_status">
+            <option value="-1">选择订单状态</option>
+            <option value="0">待支付</option>
+            <option value="1">待发货</option>
+            <option value="2">已发货</option>
+            <option value="4">已退款</option>
+            <option value="10">已作废</option>
+            <option value="14">退款中</option>
+          </select>
+        </div>
         <br/>
         <br/>
         <button type="submit" class="btn btn-primary text-center">查看订单</button>
@@ -110,15 +120,23 @@
     </form>
   </div>
   <div id="byProduct" class="tab-pane">
-    <div class="text-danger">该功能还在试用，发现任何问题及时联系开发</div>
+    <strong class="text-danger">该功能还在试用，发现任何问题及时联系开发</strong>
     <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_product" data-noajax="true">
       <div style="padding-bottom: 10px;padding-top: 10px;">
         <div class="form-group">
-          <input type="text" class="form-control tuan-product-search" data-search-for="tuanProduct1" placeholder="搜索商品">
+          <input type="text" class="form-control product-search" data-search-for="product1" placeholder="搜索商品">
         </div>
         <div class="form-group">
-          <select class="form-control tuan-products" name="product_id" id="tuanProduct1" data-value="{{$product_id}}">
+          <select class="form-control products" name="product_id" id="product1" data-value="{{$product_id}}">
             <option value="-1">选择商品</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <select class="form-control order-types" data-value="{{order_type}}" name="order_type">
+            <option value="-1">选择订单类型</option>
+            <option value="1">只查普通</option>
+            <option value="5">只查团购</option>
+            <option value="6">只查秒杀</option>
           </select>
         </div>
         <div class="form-group">
@@ -128,7 +146,7 @@
           <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$send_date_end}}" placeholder="发货日期(如2015-5-1)" name="send_date_end">
         </div>
         <div class="form-group">
-          <select class="form-control order-types" data-value="{{order_type}}" name="order_type">
+          <select class="form-control order-status" data-value="{{order_status}}" name="order_status">
             <option value="-1">选择订单状态</option>
             <option value="0">待支付</option>
             <option value="1">待发货</option>
@@ -145,50 +163,20 @@
     </form>
   </div>
   <div id="byTuanTeam" class="tab-pane">
-    <div class="text-danger">该功能还在试用，发现任何问题及时联系开发</div>
+    <strong class="text-danger">按团队，只能查询团购订单，无法查询秒杀订单</strong>
     <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_tuan_team" data-noajax="true">
       <div style="padding-bottom: 10px;padding-top: 10px;">
         <div class="form-group">
           <input type="text" class="form-control tuan-team-search" placeholder="搜索团队" data-search-for="tuanTeam2">
         </div>
         <div class="form-group">
-          <select class="form-control tuan-teams" name="team_id" id="tuanTeam2" data-value="{{$team_id}}">
+          <select class="form-control tuan-teams" name="team_id" data-value="{{$team_id}}">
             <option value="-1">请选择团队</option>
           </select>
         </div>
         <div class="form-group">
-          <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$send_date_start}}" placeholder="发货日期(如2015-5-1)" name="send_date_start">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$send_date_end}}" placeholder="发货日期(如2015-5-1)" name="send_date_end">
-        </div>
-        <div class="form-group">
-          <select class="form-control order-types" data-value="{{order_type}}" name="order_type">
-            <option value="-1">选择订单状态</option>
-            <option value="0">待支付</option>
-            <option value="1">待发货</option>
-            <option value="2">已发货</option>
-            <option value="4">已退款</option>
-            <option value="10">已作废</option>
-            <option value="14">退款中</option>
-          </select>
-        </div>
-        <br/>
-        <br/>
-        <button type="submit" class="btn btn-primary text-center">查看订单</button>
-      </div>
-    </form>
-  </div>
-  <div id="bySecKill" class="tab-pane">
-    <div class="text-danger">该功能还在试用，发现任何问题及时联系开发</div>
-    <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_sec_kill" data-noajax="true">
-      <div style="padding-bottom: 10px;padding-top: 10px;">
-        <div class="form-group">
-          <input type="text" class="form-control tuan-seckill-search" placeholder="搜索商品" data-search-for="tuanSecKills">
-        </div>
-        <div class="form-group">
-          <select class="form-control tuan-seckills" name="seckill_product_id" id="tuanSecKills" data-value="{{$seckill_product_id}}">
-            <option value="-1">请选择秒杀商品</option>
+          <select class="form-control tuan-buyings" name="tuan_buying_id" data-value="{{$tuan_buying_id}}">
+            <option value="-1">请选择团购</option>
           </select>
         </div>
         <div class="form-group">
@@ -198,7 +186,7 @@
           <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$send_date_end}}" placeholder="发货日期(如2015-5-1)" name="send_date_end">
         </div>
         <div class="form-group">
-          <select class="form-control order-types" data-value="{{order_type}}" name="order_type">
+          <select class="form-control order-status" data-value="{{order_status}}" name="order_status">
             <option value="-1">选择订单状态</option>
             <option value="0">待支付</option>
             <option value="1">待发货</option>

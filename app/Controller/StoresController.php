@@ -556,6 +556,7 @@ class StoresController extends AppController
         $this->set('datalist', $datalist);
         $this->set('page_navi', $page_navi);
         $this->set('op_cate', 'products');
+        $this->set('brand_id', $this->brand['Brand']['id']);
     }
 
     /**

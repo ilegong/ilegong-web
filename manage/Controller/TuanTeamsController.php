@@ -9,7 +9,7 @@ class TuanTeamsController extends AppController{
 
     var $name = 'TuanTeams';
 
-    var $uses = array('TuanTeam', 'TuanBuying', 'Location');
+    var $uses = array('TuanTeam', 'TuanBuying', 'Location', 'TuanProduct');
 
 
     /**
@@ -74,9 +74,28 @@ class TuanTeamsController extends AppController{
 
     public function admin_api_tuan_teams(){
         $this->autoRender=false;
-        $teams = $this->TuanTeam->find('all');
-        $teams = Hash::extract($teams,'{n}.TuanTeam');
-        echo json_encode($teams);
+        $tuan_teams = $this->TuanTeam->find('all');
+        $tuan_teams = Hash::combine($tuan_teams, "{n}.TuanTeam.id", "{n}");
+
+        $tuan_buyings = $this->TuanBuying->find('all');
+
+        $product_ids = array_unique(Hash::extract($tuan_buyings, "{n}.TuanBuying.pid"));
+        $tuan_products = $this->TuanProduct->find('all', array(
+            'conditions' => array(
+                'product_id' => $product_ids
+            )
+        ));
+        $tuan_products = Hash::combine($tuan_products, "{n}.TuanProduct.product_id", "{n}.TuanProduct");
+
+        foreach($tuan_buyings as &$tuan_buying){
+            $tuan_buying['TuanProduct'] = $tuan_products[$tuan_buying['TuanBuying']['pid']];
+            $team_id = $tuan_buying['TuanBuying']['tuan_id'];
+            if(!empty($tuan_teams[$team_id])){
+                $tuan_teams[$team_id]['TuanBuyings'][$tuan_buying['TuanBuying']['id']] = $tuan_buying;
+            }
+        }
+
+        echo json_encode($tuan_teams);
     }
 
     public function admin_api_tuan_county(){
@@ -88,8 +107,5 @@ class TuanTeamsController extends AppController{
         ));
         $county_ids = Hash::extract($county_ids,'{n}.Location');
         echo json_encode($county_ids);
-
-
     }
-
 }

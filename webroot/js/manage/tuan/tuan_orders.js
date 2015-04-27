@@ -1,7 +1,5 @@
 $(document).ready(function(){
-  var tuanTeams = $('.tuan-teams');
-  var tuanProducts = $('.tuan-products');
-  var tuanSecKills = $('.tuan-seckills');
+  var products = $('.products');
   var start_stat_date = $('input[name="start_stat_datetime"]');
   var end_stat_date = $('input[name="end_stat_datetime"]');
   var tuan_con_date = $('input[name="tuan_con_date"]');
@@ -19,39 +17,54 @@ $(document).ready(function(){
     format: 'yyyy-mm-dd'
   });
   $.getJSON('/manage/admin/tuanTeams/api_tuan_teams',function(data){
+    var tuanTeamsBox = $('.tuan-teams');
+
     var values = [{'val': -1, 'name': '请选择团队'}];
-    $.each(data,function(index,item){
-      $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo(tuanTeams);
-      values.push({'val': item['id'], 'name': item['tuan_name']});
+    $.each(data,function(teamId, item){
+      var tuanTeam = item['TuanTeam'];
+      var ele = $('<option value="' + teamId + '">' + tuanTeam['tuan_name']+'</option>');
+      ele.appendTo(tuanTeamsBox);
+      ele.data('TuanBuyings', item['TuanBuyings']);
+      values.push({'val': teamId, 'name': tuanTeam['tuan_name']});
     });
 
-    setSelectBoxValue(tuanTeams);
+    setSelectBoxValue(tuanTeamsBox);
     initSearchBox($('.tuan-teams-search'), values);
+    tuanTeamsBox.each(function(){
+      updateTuanBuyingSelectBox($("option:selected", $(this)));
+    })
   });
   $.getJSON('/manage/admin/tuanProducts/api_tuan_products',function(data){
     var values = [{'val': -1, 'name': '请选择商品'}];
     $.each(data,function(index,item){
       var tuan_product = item['TuanProduct'];
-      $('<option value="' + tuan_product['product_id'] + '">' + tuan_product['alias'] + '</option>').appendTo(tuanProducts);
+      $('<option value="' + tuan_product['product_id'] + '">' + tuan_product['alias'] + '</option>').appendTo($('.tuan-products'));
       values.push({'val': tuan_product['product_id'], 'name': tuan_product['alias']});
     });
 
-    setSelectBoxValue(tuanProducts);
+    setSelectBoxValue($('.tuan-products'));
     initSearchBox($('.tuan-product-search'), values);
   });
-  $.getJSON('/manage/admin/tuanSecKill/api_tuan_seckills',function(data){
+  $.getJSON('/manage/admin/tuanProducts/api_products',function(data){
     var values = [{'val': -1, 'name': '请选择商品'}];
-    $.each(data,function(index,item){
-      var tuan_seckill = item['ProductTry'];
-      if(tuan_seckill['deleted'] == 0){
-        var name = tuan_seckill['product_name'] + '(' + tuan_seckill['spec'] + ')';
-        $('<option value="' + tuan_seckill['id'] + '">' + name + '</option>').appendTo(tuanSecKills);
-        values.push({'val': tuan_seckill['id'], 'name': name});
+    $.each(data,function(productId, item){
+      var name = item['isTuanProduct'] ? item['TuanProduct']['alias'] : item['ProductTry']['product_name'] + '(' + item['ProductTry']['spec'] + ')';
+      if(item['isTuanProduct'] && item['isProductTry']){
+        name = name + "[团，秒]";
       }
+      else if (item['isTuanProduct']){
+        name = name + "[团]";
+      }
+      else if(item['isProductTry']){
+        name = name + "[秒]";
+      }
+
+      $('<option value="' + productId + '">' + name + '</option>').appendTo(products);
+      values.push({'val': productId, 'name': name});
     });
 
-    setSelectBoxValue(tuanSecKills);
-    initSearchBox($('.tuan-seckill-search'), values);
+    setSelectBoxValue(products);
+    initSearchBox($('.product-search'), values);
   });
 
   String.prototype.Trim = function() {
@@ -83,6 +96,10 @@ $(document).ready(function(){
     }
   }
 
+  $('.tuan-teams').on('change', function(){
+    updateTuanBuyingSelectBox($("option:selected", $(this)));
+  });
+
   $(".nav-tabs a").click(function(){
     var tab = $(this).data('tab');
     activateTab(tab);
@@ -107,6 +124,33 @@ $(document).ready(function(){
       }
     });
   }
+  function updateTuanBuyingSelectBox(selectedTuanTeam){
+    var tuanBuyingsBox = $('.tuan-buyings');
+    tuanBuyingsBox.empty();
+    $('<option value="">请选择团购</option>').appendTo(tuanBuyingsBox);
+    if(selectedTuanTeam.length <= 0 || typeof(selectedTuanTeam.data('TuanBuyings')) == 'undefined'){
+      return;
+    }
+
+    $.each(selectedTuanTeam.data('TuanBuyings'),function(index,item){
+      var tuanBuying = item['TuanBuying'];
+      var tuanProduct = item['TuanProduct'];
+      if(tuanBuying['status'] == 11 || tuanBuying['status'] == 21){
+        return;
+      }
+      var consignmentType = tuanProduct['consignment_type'] == 0 ? '团满发货' : (tuanProduct['consignment_type'] == 1 ? '团满准备发货' : '排期')
+      var status = '进行中'
+      if(tuanBuying['status'] == 1){
+        status = '已截单';
+      }
+      else if(tuanBuying['status'] == 2){
+        status = '已取消';
+      }
+      var name = tuanProduct['alias'] + "(" + consignmentType + ", " + status + ")";
+
+      $('<option value="' + tuanBuying['id'] + '">' + name + '</option>').appendTo(tuanBuyingsBox);
+    });
+  }
   activateTab($('.nav-tabs').data('query-type'));
-  setSelectBoxValue($('.order-types'));
+  setSelectBoxValue($('.order-status'));
 });

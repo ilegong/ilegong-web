@@ -34,7 +34,7 @@ class TuanMsgController extends AppController{
         $product_name = $msg_element['product_name'];
         $product_name = $product_name.', '.$consign_time.'发货';
         $tuan_leader = $msg_element['tuan_leader'];
-        $deatil_url = WX_HOST.'/tuan_buyings/detail/'.$tuan_buy_id;
+        $deatil_url = WX_HOST.'/tuan_teams/info/'.$msg_element['team_id'];
         $remark = '点击详情，赶快和小伙伴一起团起来！';
         foreach($uids as $uid){
             $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
