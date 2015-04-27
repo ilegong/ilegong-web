@@ -357,6 +357,8 @@ class OrdersController extends AppController {
                 if ($_GET['from'] == 'try') {
                     $cidAttr['try'] = $_GET['try'];
                 }
+            }else{
+                $cidAttr = json_decode($this->Session->read(self::key_balance_pids()), true);
             }
         }
 
