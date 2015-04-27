@@ -170,8 +170,13 @@
           <input type="text" class="form-control tuan-team-search" placeholder="搜索团队" data-search-for="tuanTeam2">
         </div>
         <div class="form-group">
-          <select class="form-control tuan-teams" name="team_id" id="tuanTeam2" data-value="{{$team_id}}">
+          <select class="form-control tuan-teams" name="team_id" data-value="{{$team_id}}">
             <option value="-1">请选择团队</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <select class="form-control tuan-buyings" name="tuan_buying_id" data-value="{{$tuan_buying_id}}">
+            <option value="-1">请选择团购</option>
           </select>
         </div>
         <div class="form-group">

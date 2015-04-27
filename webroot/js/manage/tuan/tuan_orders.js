@@ -90,6 +90,38 @@ $(document).ready(function(){
     }
   }
 
+  $('.tuan-teams').on('change', function(value){
+    var teamId = $(this).val();
+    var tuanBuyings = $('.tuan-buyings');
+    tuanBuyings.empty();
+    $.getJSON('/manage/admin/tuanBuyings/api_tuan_buyings/' + teamId,function(data){
+      $.each(data,function(index,item){
+        var tuanBuying = item['TuanBuying'];
+        var product = item['Product'];
+        if(tuanBuying['status'] == 11 || tuanBuying['status'] == 21){
+          return;
+        }
+        var consignmentType = product['consignment_type'] == 0 ? '团满发货' : (product['consignment_type'] == 1 ? '团满准备发货' : '排期')
+        var status = '进行中'
+        if(tuanBuying['status'] == 1){
+          status = '已截单';
+        }
+        else if(tuanBuying['status'] == 2){
+          status = '已取消';
+        }
+        else if(tuanBuying['status'] == 11){
+          status = '已完成';
+        }
+        else if(tuanBuying['status'] == 21){
+          status = '已退款';
+        }
+        var name = product['alias'] + "(" + consignmentType + ", " + status + ")";
+
+        $('<option value="' + tuanBuying['id'] + '">' + name + '</option>').appendTo(tuanBuyings);
+      });
+    });
+  });
+
   $(".nav-tabs a").click(function(){
     var tab = $(this).data('tab');
     activateTab(tab);

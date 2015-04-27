@@ -35,6 +35,29 @@ class TuanBuyingsController extends AppController{
         $this->log('update tuan buying ' + $tuanBuyingId + ' status to ' + 21);
         $this->TuanBuying->updateAll(array('status' => 21), array('id' => $tuanBuyingId));
     }
+    public function admin_api_tuan_buyings($team_id){
+        $this->autoRender = false;
+
+        $tuan_buyings = $this->TuanBuying->find('all', array(
+            'conditions' => array(
+                'tuan_id' => $team_id
+            )
+        ));
+
+        $product_ids = array_unique(Hash::extract($tuan_buyings, "{n}.TuanBuying.pid"));
+        $tuan_products = $this->TuanProduct->find('all', array(
+            'conditions' => array(
+                'product_id' => $product_ids
+            )
+        ));
+        $tuan_products = Hash::combine($tuan_products, "{n}.TuanProduct.product_id", "{n}.TuanProduct");
+        $this->log($tuan_products);
+
+        foreach($tuan_buyings as &$tuan_buying){
+            $tuan_buying['Product'] = $tuan_products[$tuan_buying['TuanBuying']['pid']];
+        }
+        echo json_encode($tuan_buyings);
+    }
     /**
      * show all tuan_buyings
      */

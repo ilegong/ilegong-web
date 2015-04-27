@@ -359,20 +359,25 @@ class TuanController extends AppController
     public function admin_query_by_tuan_team()
     {
         $team_id = $_REQUEST['team_id'];
+        $tuan_buying_id = $_REQUEST['tuan_buying_id'];
         $order_status = $_REQUEST['order_status'];
         $send_date_start = $_REQUEST['send_date_start'];
         $send_date_end = $_REQUEST['send_date_end'];
 
         $conditions = array();
         if (!empty($team_id) && $team_id != -1) {
-            $tuan_buyings = $this->TuanBuying->find('all', array(
-               'conditions' => array(
-                   'tuan_id' => $team_id
-               ),
-                'fields' => array('id')
-            ));
             $conditions['Order.type'] = ORDER_TYPE_TUAN;
-            $conditions['Order.member_id'] = Hash::extract($tuan_buyings, "{n}.TuanBuying.id");
+
+            if($tuan_buying_id != -1){
+                $conditions['Order.member_id'] = $tuan_buying_id;
+            }
+            else{
+                $tuan_buyings = $this->TuanBuying->find('all', array(
+                    'conditions' => array('tuan_id' => $team_id),
+                    'fields' => array('id')
+                ));
+                $conditions['Order.member_id'] = Hash::extract($tuan_buyings, "{n}.TuanBuying.id");
+            }
             if ($order_status != -1) {
                 $conditions['Order.status'] = $order_status;
             }
