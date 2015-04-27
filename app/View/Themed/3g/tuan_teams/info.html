@@ -35,7 +35,7 @@
 <div class="tuandetail_seckill clearfix">
     <?php $i = 0; foreach($tryings as $trying) {
         if ($i++>=2) {break;} ?>
-    <span><img src="{{$this->Html->assetUrl(small_thumb_link($trying['image']))}}"/></span>
+        <span><img src="{{$this->Html->assetUrl(small_thumb_link($trying['image']))}}"/></span>
         <span>
             <h1>{{$trying['ProductTry']['product_name']}} {{$trying['ProductTry']['spec']}}</h1>
             <em>秒杀价：<strong>¥{{$this->Number->precision(calculate_try_price($trying['ProductTry']['price']),
@@ -78,18 +78,72 @@
     <?php } ?>
 </div>
 {{/if}}
+
+{{loop $tuan_product_infos $pid $t_product}}
+  <?php
+      $product = $product_infos[$pid];
+      if ($t_product['priority'] < 1000) {continue;}
+      $t_buying = $tb_product_map[$pid];
+      $price = $t_buying['tuan_price'] > 0 ? $t_buying['tuan_price'] : ($t_product['price'] > 0 ? $t_product['price'] : $product['price']);
+      $sold_num = $t_buying['sold_num'];
+      if($t_buying['max_num'] > 0){
+        $is_limit = $sold_num > $t_buying['max_num'];
+        $sold_percent = $sold_num >= $t_buying['max_num'] ? 100 : round(($sold_num / $t_buying['max_num'] * 100), 1);
+      }
+      else{
+        $sold_percent = $sold_num >= $t_buying['target_num'] ? 100 : round(($sold_num / $t_buying['target_num'] * 100), 1);
+      }
+      $exceed_time = strtotime($t_buying['end_time']) < time();
+  ?>
+<div class="tuandetail_seckill clearfix">
+    <span><a href="/tuan_buyings/detail/{{$t_buying['id']}}"><img class="profile" src="{{$this->Html->assetUrl(small_thumb_link($t_product['list_img']))}}"/></a></span>
+    <span>
+        <h1>{{$product['name']}}</h1>
+        <em>团购价：<strong>¥{{$price}}</strong>{{if !empty($product['original_price'])}}<s>¥{{$product['original_price']}}</s>{{/if}}</em>
+        <div class="tuan_bar clearfix" style="padding:5px 10px 12px 10px;">
+            <div>
+              {{if $is_limit}}
+                <a href="javascript:void(0)" class="tuan_bar_btn done">该团已截止</a>
+              {{else}}
+                {{if $tuan_buy_status == 2 || $tuan_buy_status == 21}}
+                <a href="javascript:void(0)" class="tuan_bar_btn done cart_btn_soldout">该团已取消</a>
+                {{elseif $tuan_buy_status == 1 || $tuan_buy_status == 11}}
+                <a href="javascript:void(0)" class="tuan_bar_btn done cart_btn_soldout">该团已完成</a>
+                {{elseif $exceed_time}}
+                <a href="javascript:void(0)" class="tuan_bar_btn done cart_btn_soldout">该团已截止</a>
+                {{elseif $tuan_buy_status == 0}}
+                <a href="/tuan_buyings/detail/{{$t_buying['id']}}" class="tuan_bar_btn doing">立即购买</a>
+                {{/if}}
+              {{/if}}
+            </div>
+            <div class="fr" style="width:48%; margin-top:4px;">
+                <div class="bar">
+                    <div class="bar_buy" id="bar_buy" style="width:{{$sold_percent}}%;"></div>
+                </div>
+                <ul class="clearfix">
+                    <li class="fl">已团<span style="display:inline;">{{$sold_num}}</span>份</li>
+                    <li class="fr">
+                      {{if $t_buying['max_num'] > 0}}
+                        限售{{$t_buying['max_num']}}份
+                      {{else}}
+                        {{$t_buying['target_num']}}份起团
+                      {{/if}}
+                    </li>
+                </ul>
+            </div>
+            <b>团购</b>
+        </div>
+    </span>
+</div>
+{{/loop}}
+
 <div class="clearfix tuandetail_good">
     {{loop $tuan_product_infos $pid $t_product}}
     <?php
-            $product = $product_infos[$pid];
-            $t_buying = $tb_product_map[$pid];
-            $price = $product['price'];
-            if($t_product['price']>0){
-    $price = $t_product['price'];
-    }
-    if($t_buying['tuan_price']>0){
-    $price = $t_buying['tuan_price'];
-    }
+        $product = $product_infos[$pid];
+        if ($t_product['priority'] >= 1000) {continue;}
+        $t_buying = $tb_product_map[$pid];
+        $price = $t_buying['tuan_price'] > 0 ? $t_buying['tuan_price'] : ($t_product['price'] > 0 ? $t_product['price'] : $product['price']);
     ?>
     <a href="/tuan_buyings/detail/{{$t_buying['id']}}">
         <div class="tuandetail_img"><img src="{{$this->Html->assetUrl(small_thumb_link($product['coverimg']))}}"/></div>
