@@ -290,19 +290,27 @@ class TuanController extends AppController
     {
         $con_name = $_REQUEST['con_name'];
         $con_phone = $_REQUEST['con_phone'];
+        $order_status = $_REQUEST['order_status'];
 
         $conditions = array();
         if (!empty($con_name)) {
             $conditions['Order.consignee_name'] = $con_name;
+            if ($order_status != -1) {
+                $conditions['Order.status'] = $order_status;
+            }
         }
         if (!empty($con_phone)) {
             $conditions['Order.consignee_mobilephone'] = $con_phone;
+            if ($order_status != -1) {
+                $conditions['Order.status'] = $order_status;
+            }
         }
 
         $this->_query_orders($conditions, 'Order.created DESC');
 
         $this->set('con_name', $con_name);
         $this->set('con_phone', $con_phone);
+        $this->set('order_status', $order_status);
         $this->set('query_type', 'byUser');
         $this->render("admin_tuan_orders");
     }
