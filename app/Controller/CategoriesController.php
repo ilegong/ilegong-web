@@ -226,7 +226,7 @@ class CategoriesController extends AppController {
         );
 
         $this->loadModel('ProductTry');
-        $tryings = $this->ProductTry->find_trying(2);
+        $tryings = $this->ProductTry->find_trying();
         if (!empty($tryings)) {
             $tryProducts = $this->Product->find_products_by_ids(Hash::extract($tryings, '{n}.ProductTry.product_id'), array(), false);
             if (!empty($tryProducts)) {

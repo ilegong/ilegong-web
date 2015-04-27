@@ -85,7 +85,7 @@ class TuanTeamsController extends AppController{
         }
         //add sec kill
         $this->loadModel('ProductTry');
-        $tryings = $this->ProductTry->find_trying(2);
+        $tryings = $this->ProductTry->find_trying();
         if (!empty($tryings)) {
             $trying_result = array();
             $try_pids = Hash::extract($tryings, '{n}.ProductTry.product_id');

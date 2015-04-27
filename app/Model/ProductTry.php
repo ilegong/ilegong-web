@@ -8,7 +8,7 @@
 
 class ProductTry extends AppModel {
 
-    public function find_trying($limit = 2) {
+    public function find_trying() {
         $today = date('Y-m-d');
         $tomorrow = date('Y-m-d',strtotime('+1 day',strtotime($today)));
         $tries = $this->find('all', array(
@@ -18,7 +18,6 @@ class ProductTry extends AppModel {
                 'start_time >=' => $today,
                 'start_time <' => $tomorrow
             ),
-            'limit' => $limit,
             'order' => 'start_time DESC'
         ));
 

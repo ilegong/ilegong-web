@@ -24,7 +24,7 @@ class ShichiController extends AppController {
 
     public function list_pai(){
         $this->loadModel('ProductTry');
-        $tryings = $this->ProductTry->find_trying(20);
+        $tryings = $this->ProductTry->find_trying();
         $tuan_id = $_REQUEST['tuan_id'];
         if (!empty($tryings)) {
             $tryProducts = $this->Product->find_products_by_ids(Hash::extract($tryings, '{n}.ProductTry.product_id'), array(), false);
