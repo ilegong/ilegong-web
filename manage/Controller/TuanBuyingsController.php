@@ -319,4 +319,10 @@ class TuanBuyingsController extends AppController{
         $this->TuanBuyingMessages->create();
         $this->TuanBuyingMessages->save($msg_log);
     }
+    public function admin_send(){
+
+    }
+    public function send_wx_fecth_code(){
+
+    }
 }
