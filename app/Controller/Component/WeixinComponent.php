@@ -496,7 +496,9 @@ class WeixinComponent extends Component
 
             } elseif($order['Order']['type'] == ORDER_TYPE_TUAN && $order['Order']['ship_mark'] == 'ziti'){
                 $this->send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_id, $order, $send_date);
-            } else {
+            } elseif($order['Order']['type'] == ORDER_TYPE_TUAN_SEC){
+
+            }  else {
                 $this->send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_id, $order);
             }
 
