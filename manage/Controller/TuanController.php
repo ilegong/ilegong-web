@@ -276,7 +276,7 @@ class TuanController extends AppController
 
         $conditions = array();
         if (!empty($order_id)) {
-            $conditions['order_id'] = $order_id;
+            $conditions['Order.id'] = $order_id;
         }
 
         $this->_query_orders($conditions, 'Order.consignee_address DESC');
