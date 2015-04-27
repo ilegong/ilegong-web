@@ -391,7 +391,7 @@
                     success:function(data){
                         if(data.success) {
                             if(data.direct == 'big_tuan_list'){
-                                window.location.href = '/tuan_buyings/big_tuan_balance/{{$tuan_buy_id}}/' + data.cart_id + '?way_type=ziti';
+                                window.location.href = '/tuan_buyings/big_tuan_balance/{{$tuan_buy_id}}/' + data.cart_id + '';
                             }else{
                                 var way_type=data['way_type'];
                                 var way_fee = data['way_fee'];
