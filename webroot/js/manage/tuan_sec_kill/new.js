@@ -5,7 +5,8 @@ $(function(){
         $.each(tuanAreas,function(Index,Item){
             var tuan_area =  $('<p class="tuan-area"  value="'+ Item['id']+'"><strong>'+ Item['name']+'</strong></p>');
             tuan_area.appendTo(tuanTeamList).css('color','red').hide();
-            $.each(data,function(index,item){
+            $.each(data,function(index,items){
+                var item = items['TuanTeam'];
                 if(item['county_id'] == Item['id']){
                     $('<input type="checkbox" class="tuan-team" data-id="'+item['county_id'] +'" value="'+item['id']+'"name="team_id">'+ item['tuan_name'] + '</input>').appendTo(tuanTeamList);
                     tuan_area.show();
