@@ -62,18 +62,19 @@ class TuanBuyingsController extends AppController{
      * show all tuan_buyings
      */
     public function admin_index(){
-        $expired = $_REQUEST['expired'];
+        $expired = isset($_REQUEST['expired']) ? $_REQUEST['status_type'] : false;
+        $status_type = isset($_REQUEST['status_type']) ? $_REQUEST['status_type'] : -1;
+        $team_id = isset($_REQUEST['team_id']) ? $_REQUEST['team_id'] : -1;
+        $product_id = isset($_REQUEST['product_id']) ? $_REQUEST['product_id'] : -1;
+        $tuan_status = isset($_REQUEST['tuan_status']) ? $_REQUEST['tuan_status'] : -1;
+        $cons_type = isset($_REQUEST['cons_type'])? $_REQUEST['cons_type']:-1;
+
         $con = array();
         if($expired){
             $con['end_time <= '] = time();
             $con['status'] = array(0, 1, 2);
         }
         else{
-            $team_id = isset($_REQUEST['team_id']) ? $_REQUEST['team_id'] : -1;
-            $product_id = isset($_REQUEST['product_id']) ? $_REQUEST['product_id'] : -1;
-            $status_type = isset($_REQUEST['status_type']) ? $_REQUEST['status_type'] : -1;
-            $tuan_status = isset($_REQUEST['tuan_status']) ? $_REQUEST['tuan_status'] : -1;
-            $cons_type = isset($_REQUEST['cons_type'])? $_REQUEST['cons_type']:-1;
             if($team_id != -1){
                 $con['tuan_id']=$team_id;
             }
