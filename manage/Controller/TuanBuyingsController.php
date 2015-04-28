@@ -345,7 +345,70 @@ class TuanBuyingsController extends AppController{
     public function admin_send(){
 
     }
-    public function send_wx_fecth_code(){
-
+    public function admin_send_wx_fecth_code(){
+        $this->autoRender = false;
+        $data=$_POST;
+        if(empty($data)){
+            return false;
+        }
+        $ids = array_keys($data);
+        $orderM = ClassRegistry::init('Order');
+        $tuanBuyM= ClassRegistry::init('TuanBuying');
+        $orders = $orderM->find('all', array(
+            'conditions' => array('id'=> $ids, 'type'=>array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC)),
+        ));
+        $tuan_buy_ids = array_unique(Hash::extract($orders, '{n}.Order.member_id'));
+        $products = $tuanBuyM->find('all', array(
+            'conditions' => array('TuanBuying.id'=>$tuan_buy_ids),
+            'joins' =>array(
+                array(
+                    'table' => 'tuan_products',
+                    'alias' => 'TuanProduct',
+                    'type' => 'inner',
+                    'conditions' => array(
+                        'TuanProduct.product_id = TuanBuying.pid',
+                    )
+                )
+            ),
+            'fields' => array('TuanBuying.id', 'TuanProduct.alias')
+        ));
+        $alias = Hash::combine($products, '{n}.TuanBuying.id', '{n}.TuanProduct.alias');
+        $order_info = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
+        $uids = Hash::extract($orders, '{n}.Order.creator');
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $r = $oauthBindModel->find('list', array(
+            'conditions' => array( 'user_id' => $uids, 'source' => oauth_wx_source()),
+            'fields' => array('user_id','oauth_openid')
+        ));
+        $success= [];
+        $fail = [];
+        foreach($order_info as $key => $value){
+            $order_id = $key;
+            $tuan_buy_id =  $value['member_id'];
+            $product_alias = $alias[$tuan_buy_id];
+            $post_data = array(
+                "touser" => $r[$value['creator']],
+                "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
+                "url" => WX_HOST . '/orders/detail/' . $order_id,
+                "topcolor" => "#FF0000",
+                "data" => array(
+                    "first" => array("value" => "亲，您订购的".$product_alias."已经到达自提点，提货码：".$data[$order_id]."，生鲜娇贵，请尽快取货哈。"),
+                    "keyword1" => array("value" => $order_id),
+                    "keyword2" => array("value" => '好邻居便利店'),
+                    "keyword3" => array("value" => $value['consignee_address']),
+                    "remark" => array("value" => "感谢您的支持，现场提货遇到任何问题请拨打电话：4000-508-528", "color" => "#FF8800")
+                )
+            );
+            if(send_weixin_message($post_data)){
+                $success[]=$order_id;
+            }else{
+                $fail[] = $order_id;
+            }
+        }
+        if(empty($fail)){
+            echo json_encode(array('success' => true, 'res' => $success));
+        }else{
+            echo json_encode(array('success' => false, 'res' => $fail));
+        }
     }
 }
