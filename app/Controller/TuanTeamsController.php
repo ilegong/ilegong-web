@@ -85,6 +85,7 @@ class TuanTeamsController extends AppController{
         }
         //add sec kill
         $this->loadModel('ProductTry');
+        $ProductTuanTryM = ClassRegistry::init('ProductTuanTry');
         $tryings = $this->ProductTry->find_trying();
         if (!empty($tryings)) {
             $trying_result = array();
@@ -99,14 +100,24 @@ class TuanTeamsController extends AppController{
             $tryProducts = $this->Product->find_products_by_ids($try_pids, array(), false);
             if (!empty($tryProducts)) {
                 foreach($tryings as &$trying) {
-                    $try_tuan_id = $trying['ProductTry']['tuan_id'];
+//                    $try_tuan_id = $trying['ProductTry']['tuan_id'];
+
+                    $try_id = $trying['ProductTry']['id'];
+                    $global_show = $trying['ProductTry']['global_show'];
                     $pid = $trying['ProductTry']['product_id'];
                     $prod = $tryProducts[$pid];
                     if (!empty($prod)) {
                         $trying['Product'] = $prod;
                         $trying['image'] = $t_products[$pid]['list_img'];
-                        if(!empty($try_tuan_id)&&$try_tuan_id!=$tuan_id){
-                            continue;
+//                        if(!empty($try_tuan_id)&&$try_tuan_id!=$tuan_id){
+//                            continue;
+//                        }
+                        if($global_show== '0'){
+                            $product_tuan_try = $ProductTuanTryM->find('all',array('conditions' => array('try_id' => $try_id)));
+                            $product_tuan_tryIds = Hash::extract($product_tuan_try,'{n}.ProductTuanTry.team_id');
+                            if(!empty($product_tuan_tryIds)&&!in_array($tuan_id,$product_tuan_tryIds)){
+                                continue;
+                            }
                         }
                         $trying_result[] = $trying;
                     } else {

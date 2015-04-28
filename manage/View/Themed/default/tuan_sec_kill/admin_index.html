@@ -59,7 +59,7 @@
                   不可用
                 {{/if}}
             </td>
-            <td>{{$tryProduct['tuan_id']}}</td>
+            <td>{{if !empty($item['team_ids'])}}{{$item['team_ids']}}{{else}}全部团队{{/if}}</td>
             <td>{{$tryProduct['consignment_date']}}</td>
             <td>
                 {{if $tryProduct['status'] == 1}}
