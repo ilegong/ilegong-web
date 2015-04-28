@@ -495,7 +495,9 @@ class WeixinComponent extends Component
                 }
 
             } elseif($order['Order']['type'] == ORDER_TYPE_TUAN && $order['Order']['ship_mark'] == 'ziti'){
-                $this->send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_id, $order, $send_date);
+                $this->send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_id, $order, $send_date, 'ziti');
+            } elseif($order['Order']['type'] == ORDER_TYPE_TUAN && $order['Order']['ship_mark'] == 'sf'){
+                $this->send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_id, $order, $send_date, 'sf');
             }  else {
                 $this->send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_id, $order);
             }
@@ -591,10 +593,16 @@ class WeixinComponent extends Component
         return false;
     }
 
-    public function send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_no, $order = null, $send_date) {
-        $tail = '';
-        if(preg_match("/好邻居/",$order['Order']['address'])){
-            $tail ='，请留意当天到店取货收到的提货码提醒。';
+    public function send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_no, $order = null, $send_date, $ship_way) {
+        if($ship_way == 'sf'){
+            $tail = '，发货时间是'.$send_date.'。';
+        }else{
+            $template= ",到货时间是".$send_date."，自提地点是".$order['Order']['address'];
+            if(preg_match("/好邻居/",$order['Order']['address'])){
+                $tail = $template.'，请留意当天到店取货收到的提货码提醒。';
+            }else{
+                $tail = $template. '，请留意当天到店取货提醒。';
+            }
         }
         $post_data = array(
             "touser" => $open_id,
@@ -602,7 +610,7 @@ class WeixinComponent extends Component
             "url" => $this->get_order_query_url($order_no),
             "topcolor" => "#FF0000",
             "data" => array(
-                "first" => array("value" => "亲，您的订单已完成付款，到货时间是".$send_date."，自提地点是".$order['Order']['address'].$tail),
+                "first" => array("value" => "亲，您的订单已完成付".$tail),
                 "orderProductPrice" => array("value" => $price),
                 "orderProductName" => array("value" => $good_info),
                 "orderAddress" => array("value" => empty($ship_info)?'':$ship_info),
