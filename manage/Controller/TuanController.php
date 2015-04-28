@@ -340,8 +340,13 @@ class TuanController extends AppController
             if (empty($send_date_end)) {
                 $send_date_end = date('Y-m-d', strtotime('+5 days'));
             }
-            $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
-            $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
+            $conditions['OR'] = array(
+                array(
+                    'DATE(Cart.send_date) >= ' => $send_date_start,
+                    'DATE(Cart.send_date) <= ' =>  $send_date_end
+                ),
+                'Cart.send_date is null'
+            );
         }
 
         $this->_query_orders($conditions, 'Order.created DESC');

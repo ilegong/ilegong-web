@@ -154,4 +154,5 @@ $(document).ready(function(){
   }
   activateTab($('.nav-tabs').data('query-type'));
   setSelectBoxValue($('.order-status'));
+  setSelectBoxValue($('.order-types'));
 });
