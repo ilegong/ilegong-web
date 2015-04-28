@@ -62,33 +62,39 @@ class TuanBuyingsController extends AppController{
      * show all tuan_buyings
      */
     public function admin_index(){
-        $team_id = isset($_REQUEST['team_id']) ? $_REQUEST['team_id'] : -1;
-        $product_id = isset($_REQUEST['product_id']) ? $_REQUEST['product_id'] : -1;
-        $status_type = isset($_REQUEST['status_type']) ? $_REQUEST['status_type'] : -1;
-        $tuan_status = isset($_REQUEST['tuan_status']) ? $_REQUEST['tuan_status'] : -1;
-        $cons_type = isset($_REQUEST['cons_type'])? $_REQUEST['cons_type']:-1;
-        $this->log('tuan status: '.$tuan_status);
+        $expired = $_REQUEST['expired'];
         $con = array();
-        if($team_id != -1){
-            $con['tuan_id']=$team_id;
-        }
-        if($product_id != -1){
-            $con['pid'] = $product_id;
-        }
-        if($cons_type!=-1){
-            $con['consignment_type'] = $cons_type;
-        }
-        if($status_type == -1){
-            if($tuan_status == -1){
-                $con['status'] = array(0, 1, 2);
-            }else{
-                $con['status'] = $tuan_status;
-            }
+        if($expired){
+            $con['end_time <= '] = time();
+            $con['status'] = array(0, 1, 2);
         }
         else{
-            $con['status'] = $status_type;
+            $team_id = isset($_REQUEST['team_id']) ? $_REQUEST['team_id'] : -1;
+            $product_id = isset($_REQUEST['product_id']) ? $_REQUEST['product_id'] : -1;
+            $status_type = isset($_REQUEST['status_type']) ? $_REQUEST['status_type'] : -1;
+            $tuan_status = isset($_REQUEST['tuan_status']) ? $_REQUEST['tuan_status'] : -1;
+            $cons_type = isset($_REQUEST['cons_type'])? $_REQUEST['cons_type']:-1;
+            if($team_id != -1){
+                $con['tuan_id']=$team_id;
+            }
+            if($product_id != -1){
+                $con['pid'] = $product_id;
+            }
+            if($cons_type!=-1){
+                $con['consignment_type'] = $cons_type;
+            }
+            if($status_type == -1){
+                if($tuan_status == -1){
+                    $con['status'] = array(0, 1, 2);
+                }else{
+                    $con['status'] = $tuan_status;
+                }
+            }
+            else{
+                $con['status'] = $status_type;
+            }
         }
-        $this->log('query tuan buyings with condition: '.json_encode($con));
+
         $tuan_buyings = $this->TuanBuying->find('all',array(
             'conditions' => $con
         ));
