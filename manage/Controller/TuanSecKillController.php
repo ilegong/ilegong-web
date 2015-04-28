@@ -92,11 +92,11 @@ class TuanSecKillController extends AppController{
         if (empty($data_info)) {
             throw new ForbiddenException(__('该秒杀不存在！'));
         }
-        $this->loadModel('ProductTuanTries');
-        $teamIds = $this->ProductTuanTries->find('all',array(
+        $this->loadModel('ProductTuanTry');
+        $teamIds = $this->ProductTuanTry->find('all',array(
             'conditions' =>array('try_id' => $id)
         ));
-        $teamIds = implode(',', Hash::extract($teamIds,'{n}.ProductTuanTries.team_id'));
+        $teamIds = implode(',', Hash::extract($teamIds,'{n}.ProductTuanTry.team_id'));
         $this->set('teamIds',$teamIds);
         $this->data = $data_info;
         $this->log('datainfo'.json_encode($data_info));
@@ -106,10 +106,53 @@ class TuanSecKillController extends AppController{
     public function admin_update($id){
         $this->log('update product_try '.$id.': '.json_encode($this->data));
         $this->autoRender = false;
-//        $teamIds = explode(',',$_REQUEST['team_ids']);
-//        $this->loadModel('ProductTuanTries');
-//        $this->ProductTuanTry->delete($id);
-//        $this->ProductTuanTries->save();
+        $teamIds = explode(',',$_REQUEST['team_ids']);
+        $this->loadModel('ProductTuanTry');
+        $team_ids = $this->ProductTuanTry->find('all',array('conditions' => array('try_id' => $id)));
+        $team_ids = Hash::extract($team_ids,'{n}.ProductTuanTry.team_id');
+
+        if(!empty($team_ids)){       //already have sec_kill,and have three conditions:add a new team,delete a team,do nothing
+          if(count($teamIds)>count($team_ids)){  //team num isn't equal to exist
+           foreach($teamIds as $teamId){
+            $inx = array_search($teamId,$team_ids);
+            if($inx===false){
+             $this->log('a new team id:'.$teamId.' is added to this sec_kill');
+                $this->data['ProductTuanTry']['try_id'] = $id;
+                $this->data['ProductTuanTry']['team_id'] = $teamId;
+                $this->ProductTuanTry->create();
+                $this->ProductTuanTry->save($this->data);
+            }
+        }
+        }else{
+              $i=0;
+             foreach($team_ids as $key=>$team_id){
+                   $inx = array_search($team_id,$teamIds);
+                    if($inx===false){
+                        $this->log('a team id:'.$team_id.' is deleted from this sec_kill');
+                        $tuan_try_info = $this->ProductTuanTry->find('first',array('conditions' => array('try_id' => $id,'team_id' => $team_id)));
+                        $this->ProductTuanTry->delete($tuan_try_info['ProductTuanTry']['id']);
+                        $this->ProductTuanTry->create();
+                        $this->data['ProductTuanTry']['try_id'] = $id;
+                        $this->data['ProductTuanTry']['team_id'] = $teamIds[$key];
+                        $this->ProductTuanTry->save($this->data);
+                        $i++;
+                   }
+             }
+              if($i==count($team_ids)){
+                  $this->ProductTry->updateAll(array('global_show' => 1),array('id' => $id));
+              }
+          }
+        }else{                      //have no sec_kill,and only have one condition:add a new team
+            if(!empty($teamIds)){
+                $this->ProductTry->updateAll(array('global_show' => 0),array('id' => $id));
+                foreach($teamIds as $teamId){
+                    $this->ProductTuanTry->create();
+                    $this->data['ProductTuanTry']['try_id'] = $id;
+                    $this->data['ProductTuanTry']['team_id'] = $teamId;
+                    $this->ProductTuanTry->save($this->data);
+                }
+            }
+        }
         $this->data['ProductTry']['id'] = $id;
         if($this->ProductTry->save($this->data)){
             $this->redirect(array('controller' => 'tuanSecKill','action' => 'index'));

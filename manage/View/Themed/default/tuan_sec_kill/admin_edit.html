@@ -64,13 +64,13 @@
                     <!--<div class="text-warning">有团队ID时，该秒杀只在该团队进行；否则在全部团队显示</div>-->
                 <!--</div>-->
             <!--</div>-->
-            <!--<div class="form-group" id="tuan-team">-->
-                <!--<label class="col-sm-2 control-label">团队</label>-->
-                <!--<div class="col-sm-9 controls tuan-teams-list">-->
-                <!--</div>-->
-                <!--<input type="hidden" name="team_ids" id="team_ids">-->
-                <!--<input type="hidden" name="teamIds" id="teamIds" value="{{$teamIds}}">-->
-            <!--</div>-->
+            <div class="form-group" id="tuan-team">
+                <label class="col-sm-2 control-label">团队</label>
+                <div class="col-sm-9 controls tuan-teams-list">
+                </div>
+                <input type="hidden" name="team_ids" id="team_ids">
+                <input type="hidden" name="teamIds" id="teamIds" value="{{$teamIds}}">
+            </div>
             <div class="form-group">
                 <label for="consignment_date" class="col-sm-2 control-label">发货日期</label>
                 <div class="col-sm-9">
@@ -101,7 +101,7 @@
 {{$this->Html->script(array(
 '/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js',
 '/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js',
-'/js/manage/tuan_sec_kill/edit.js?V2',
+'/js/manage/tuan_sec_kill/edit.js?V2.1',
 '/js/tuan-area.js',
 '/js/bootstrap.min.js'
 ))}}
