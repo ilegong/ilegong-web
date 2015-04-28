@@ -411,6 +411,30 @@ class TuanController extends AppController
         $this->render("admin_tuan_orders");
     }
 
+    public function admin_query_empty_send_date()
+    {
+        $order_type = !empty($_REQUEST['order_type']) ? $_REQUEST['order_type'] : -1;
+        $order_status = !empty($_REQUEST['order_status']) ?  $_REQUEST['order_status']: -1;
+
+        $conditions = array();
+        $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
+
+        if ($order_type != -1) {
+            $conditions['Order.type'] = $order_type;
+        }
+        if ($order_status != -1) {
+            $conditions['Order.status'] = $order_status;
+        }
+        $conditions[] = 'Cart.send_date is null';
+
+        $this->_query_orders($conditions, 'Order.created DESC', 100);
+
+        $this->set('order_type', $order_type);
+        $this->set('order_status', $order_status);
+        $this->set('query_type', 'emptySendDate');
+        $this->render("admin_tuan_orders");
+    }
+
     /**
      * 团购功能列表
      */
@@ -530,7 +554,7 @@ class TuanController extends AppController
         $this->set('alreadyUpdated', $alreadyUpdated);
     }
 
-    public function _query_orders($conditions, $order_by)
+    public function _query_orders($conditions, $order_by, $limit = null)
     {
         $this->PayNotify->query("update cake_pay_notifies set order_id =  substring_index(substring_index(out_trade_no,'-',2),'-',-1) where status = 6 and order_id is NULL");
         $join_conditions = array(
@@ -555,12 +579,16 @@ class TuanController extends AppController
 
         $orders = array();
         if (!empty($conditions)) {
-            $orders = $this->Order->find('all', array(
+            $params = array(
                 'conditions' => $conditions,
                 'joins' => $join_conditions,
                 'fields' => array('Order.*', 'Pay.trade_type', 'Cart.product_id', 'Cart.try_id', 'Cart.send_date'),
                 'order' => $order_by
-            ));
+            );
+            if(!empty($limit)){
+                $params['limit'] = $limit;
+            }
+            $orders = $this->Order->find('all', $params);
         }
         $order_ids = Hash::extract($orders, "{n}.Order.id");
         $this->log('order ids: ' . json_encode($order_ids));
