@@ -29,7 +29,7 @@ $(document).ready(function(){
     });
 
     setSelectBoxValue(tuanTeamsBox);
-    initSearchBox($('.tuan-teams-search'), values);
+    initSearchBox($('.tuan-team-search'), values);
     tuanTeamsBox.each(function(){
       updateTuanBuyingSelectBox($("option:selected", $(this)));
     })
