@@ -357,9 +357,9 @@ class TuanController extends AppController
 
     public function admin_query_by_tuan_team()
     {
-        $team_id = $_REQUEST['team_id'];
-        $tuan_buying_id = $_REQUEST['tuan_buying_id'];
-        $order_status = $_REQUEST['order_status'];
+        $team_id = !empty($_REQUEST['team_id']) ? $_REQUEST['team_id'] : -1;
+        $tuan_buying_id = !empty($_REQUEST['tuan_buying_id']) ? $_REQUEST['tuan_buying_id'] : -1;
+        $order_status = !empty($_REQUEST['order_status']) ?  $_REQUEST['order_status']: -1;
 
         $conditions = array();
         if (!empty($team_id) && $team_id != -1) {
@@ -381,14 +381,20 @@ class TuanController extends AppController
                 if (empty($send_date_end)) {
                     $send_date_end = date('Y-m-d', strtotime('+5 days'));
                 }
-                $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
-                $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
+                $conditions['OR'] = array(
+                    array(
+                        'DATE(Cart.send_date) >= ' => $send_date_start,
+                        'DATE(Cart.send_date) <= ' =>  $send_date_end
+                    ),
+                    'Cart.send_date is null'
+                );
             }
             if ($order_status != -1) {
                 $conditions['Order.status'] = $order_status;
             }
         }
 
+        $this->log('querh order conditions: '.json_encode($conditions));
         $this->_query_orders($conditions, 'Order.created DESC');
 
         $this->set('team_id', $team_id);
