@@ -362,13 +362,17 @@ class TuanBuyingsController extends AppController{
     public function admin_send(){
 
     }
-    public function admin_send_wx_fecth_code(){
+    public function admin_send_wx_fetch_msg($type = null){
         $this->autoRender = false;
         $data=$_POST;
         if(empty($data)){
             return false;
         }
-        $ids = array_keys($data);
+        if($type == 'normal'){
+            $ids = $data['ids'];
+        }else{
+            $ids = array_keys($data);
+        }
         $orderM = ClassRegistry::init('Order');
         $tuanBuyM= ClassRegistry::init('TuanBuying');
         $orders = $orderM->find('all', array(
@@ -416,6 +420,15 @@ class TuanBuyingsController extends AppController{
                     "remark" => array("value" => "感谢您的支持，现场提货遇到任何问题请拨打电话：4000-508-528", "color" => "#FF8800")
                 )
             );
+            if($type == 'normal'){
+                $post_data['data'] =  array(
+                    "first" => array("value" => "亲，您订购的".$product_alias."已经到达自提点，生鲜娇贵，请尽快取货哈。"),
+                    "keyword1" => array("value" => $order_id),
+                    "keyword2" => array("value" => ''),
+                    "keyword3" => array("value" => $value['consignee_address']),
+                    "remark" => array("value" => "感谢您的支持", "color" => "#FF8800")
+                );
+            }
             if(send_weixin_message($post_data)){
                 $success[]=$order_id;
             }else{
