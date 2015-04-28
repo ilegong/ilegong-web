@@ -71,7 +71,7 @@ class TuanBuyingsController extends AppController{
 
         $con = array();
         if($expired){
-            $con['end_time <= '] = time();
+            $con['end_time <= '] = date("Y-m-d H:i:s");
             $con['status'] = array(0, 1, 2);
         }
         else{
