@@ -414,7 +414,7 @@ class TuanController extends AppController
         $brand_count = $this->Brand->query('select count(*) as c from cake_brands where deleted = 0');
         $this->set('brand_count', $brand_count[0][0]['c']);
 
-        $expired_tuan_buying_count = $this->TuanBuying->query('select count(*) as c from cake_tuan_buyings where end_time < now() and status in (0, 1, 2)');
+        $expired_tuan_buying_count = $this->TuanBuying->query('select count(*) as c from cake_tuan_buyings where end_time < now() and status = 0');
         $this->set('expired_tuan_buying_count', $expired_tuan_buying_count[0][0]['c']);
     }
 
