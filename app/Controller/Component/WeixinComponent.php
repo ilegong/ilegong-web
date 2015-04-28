@@ -592,13 +592,17 @@ class WeixinComponent extends Component
     }
 
     public function send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_no, $order = null, $send_date) {
+        $tail = '';
+        if(preg_match("/好邻居/",$order['Order']['address'])){
+            $tail ='，请留意当天到店取货收到的提货码提醒。';
+        }
         $post_data = array(
             "touser" => $open_id,
             "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
             "url" => $this->get_order_query_url($order_no),
             "topcolor" => "#FF0000",
             "data" => array(
-                "first" => array("value" => "亲，您的订单已完成付款，到货时间是".$send_date."，自提地点是".$order['Order']['address']."，请留意当天到店取货收到的提货码提醒。"),
+                "first" => array("value" => "亲，您的订单已完成付款，到货时间是".$send_date."，自提地点是".$order['Order']['address'].$tail),
                 "orderProductPrice" => array("value" => $price),
                 "orderProductName" => array("value" => $good_info),
                 "orderAddress" => array("value" => empty($ship_info)?'':$ship_info),
