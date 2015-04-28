@@ -390,8 +390,8 @@ class TuanBuyingsController extends AppController{
             'conditions' => array( 'user_id' => $uids, 'source' => oauth_wx_source()),
             'fields' => array('user_id','oauth_openid')
         ));
-        $success= [];
-        $fail = [];
+        $success = array();
+        $fail = array();
         foreach($order_info as $key => $value){
             $order_id = $key;
             $tuan_buy_id =  $value['member_id'];
