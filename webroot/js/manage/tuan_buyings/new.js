@@ -14,8 +14,10 @@ $(function(){
     var tuan_name = $('#tuan_name');
     var team_ids = $('#team_ids');
     $.getJSON('/manage/admin/tuanTeams/api_tuan_teams',function(data){
-        $.each(data,function(index,item){
-            $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo(tuanTeams);
+        $.each(data,function(teamId, item){
+          var tuanTeam = item['TuanTeam'];
+          var ele = $('<option value="' + teamId + '">' + tuanTeam['tuan_name']+'</option>');
+          ele.appendTo(tuanTeams);
         });
         search_tuanteam();
         tuanTeams.val(tuanTeams.attr('data-team-id'));
@@ -32,9 +34,10 @@ $(function(){
         $.each(tuanAreas,function(Index,Item){
             var tuan_area =  $('<p class="tuan-area"  value="'+ Item['id']+'"><strong>'+ Item['name']+'</strong></p>');
             tuan_area.appendTo(tuanTeamList).css('color','red').hide();
-          $.each(data,function(index,item){
-                if(item['county_id'] == Item['id']){
-                    $('<input type="checkbox" class="tuan-team" data-id="'+item['county_id'] +'" value="'+item['id']+'"name="team_id">'+ item['tuan_name'] + '</input>').appendTo(tuanTeamList);
+            $.each(data,function(teamId, item){
+                var tuanTeam = item['TuanTeam'];
+                if(tuanTeam['county_id'] == Item['id']){
+                    $('<input type="checkbox" class="tuan-team" data-id="' + tuanTeam['county_id'] + '" value="' + teamId + '"name="team_id">'+ tuanTeam['tuan_name'] + '</input>').appendTo(tuanTeamList);
                     tuan_area.show();
                 }
             });

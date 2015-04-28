@@ -6,8 +6,10 @@ $(function(){
     var tuan_name = $('#tuan_name');
     var leftSelectData = [];
     $.getJSON('/manage/admin/tuan_teams/api_tuan_teams',function(data){
-        $.each(data,function(index,item){
-            $('<option value="'+item['id']+'">'+item['tuan_name']+'</option>').appendTo(tuanTeams);
+        $.each(data,function(teamId, item){
+            var tuanTeam = item['TuanTeam'];
+            var ele = $('<option value="' + teamId + '">' + tuanTeam['tuan_name']+'</option>');
+            ele.appendTo(tuanTeams);
         });
         search_tuanteam();
         tuanTeams.val(tuanTeams.attr('data-team-id'));
