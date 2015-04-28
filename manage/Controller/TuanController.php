@@ -328,8 +328,7 @@ class TuanController extends AppController
             $conditions['Cart.product_id'] = $product_id;
             if ($order_type == -1) {
                 $conditions['Order.type'] = array(ORDER_TYPE_DEF, ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
-            }
-            else{
+            } else {
                 $conditions['Order.type'] = $order_type;
             }
             if ($order_status != -1) {
@@ -361,34 +360,33 @@ class TuanController extends AppController
         $team_id = $_REQUEST['team_id'];
         $tuan_buying_id = $_REQUEST['tuan_buying_id'];
         $order_status = $_REQUEST['order_status'];
-        $send_date_start = $_REQUEST['send_date_start'];
-        $send_date_end = $_REQUEST['send_date_end'];
 
         $conditions = array();
         if (!empty($team_id) && $team_id != -1) {
             $conditions['Order.type'] = ORDER_TYPE_TUAN;
 
-            if($tuan_buying_id != -1){
+            if ($tuan_buying_id != -1) {
                 $conditions['Order.member_id'] = $tuan_buying_id;
-            }
-            else{
+            } else {
                 $tuan_buyings = $this->TuanBuying->find('all', array(
                     'conditions' => array('tuan_id' => $team_id),
                     'fields' => array('id')
                 ));
                 $conditions['Order.member_id'] = Hash::extract($tuan_buyings, "{n}.TuanBuying.id");
+                $send_date_start = $_REQUEST['send_date_start'];
+                $send_date_end = $_REQUEST['send_date_end'];
+                if (empty($send_date_start)) {
+                    $send_date_start = date('Y-m-d', strtotime('-2 days'));
+                }
+                if (empty($send_date_end)) {
+                    $send_date_end = date('Y-m-d', strtotime('+5 days'));
+                }
+                $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
+                $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
             }
             if ($order_status != -1) {
                 $conditions['Order.status'] = $order_status;
             }
-            if (empty($send_date_start)) {
-                $send_date_start = date('Y-m-d', strtotime('-2 days'));
-            }
-            if (empty($send_date_end)) {
-                $send_date_end = date('Y-m-d', strtotime('+5 days'));
-            }
-            $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
-            $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
         }
 
         $this->_query_orders($conditions, 'Order.created DESC');
@@ -612,10 +610,10 @@ class TuanController extends AppController
 
         // product count
         $product_count = 0;
-        if(!empty($order_ids)){
+        if (!empty($order_ids)) {
             $order_id_strs = '(' . join(',', $order_ids) . ')';
             $result = $this->Cart->query('select sum(num) from cake_carts where order_id in ' . $order_id_strs);
-            $product_count =  $result[0][0]['sum(num)'];
+            $product_count = $result[0][0]['sum(num)'];
         }
 
         $this->set('should_count_nums', true);

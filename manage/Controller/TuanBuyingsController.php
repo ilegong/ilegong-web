@@ -92,11 +92,19 @@ class TuanBuyingsController extends AppController{
         $tuan_buyings = $this->TuanBuying->find('all',array(
             'conditions' => $con
         ));
+
         $tuan_ids = Hash::extract($tuan_buyings,'{n}.TuanBuying.tuan_id');
         $tuan_teams = $this->TuanTeam->find('all', array('conditions' => array('id' => $tuan_ids)));
         $tuan_teams = Hash::combine($tuan_teams, '{n}.TuanTeam.id', '{n}.TuanTeam');
         $tuan_products = getTuanProducts();
         $tuan_products = Hash::combine($tuan_products,'{n}.TuanProduct.product_id','{n}.TuanProduct');
+
+        if(!empty($tuan_buyings)){
+            $tuan_buying_id_strs = join(',', Hash::extract($tuan_buyings, "{n}.TuanBuying.id"));
+            $paid_orders_count = $this->Order->query('select member_id as member_id, count(member_id) as c from cake_orders WHERE STATUS = 1 and type = 5 and member_id in ('.$tuan_buying_id_strs.') group by member_id;');
+            $paid_orders_count = Hash::combine($paid_orders_count, '{n}.cake_orders.member_id', '{n}.0.c');
+        }
+
         foreach($tuan_buyings as &$tuan_buying){
             $tuanBuying = $tuan_buying['TuanBuying'];
             $tb_id = $tuanBuying['id'];
@@ -110,7 +118,9 @@ class TuanBuyingsController extends AppController{
             $tuan_buying['tuan_team'] = $tuan_teams[$tuan_id];
             $tuan_buying['tuan_product'] = $tuan_products[$tuanBuying['pid']];
 
+            $tuan_buying['paid_orders_count'] = $paid_orders_count[$tb_id] ?: 0;
         }
+
         $this->set('cons_type',$cons_type);
         $this->set('tuan_buyings', $tuan_buyings);
         $this->set('team_id',$team_id);

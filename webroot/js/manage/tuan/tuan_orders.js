@@ -150,6 +150,7 @@ $(document).ready(function(){
 
       $('<option value="' + tuanBuying['id'] + '">' + name + '</option>').appendTo(tuanBuyingsBox);
     });
+    setSelectBoxValue(tuanBuyingsBox);
   }
   activateTab($('.nav-tabs').data('query-type'));
   setSelectBoxValue($('.order-status'));
