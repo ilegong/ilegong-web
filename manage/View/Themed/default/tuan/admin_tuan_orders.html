@@ -233,7 +233,7 @@
               $date = $consign_dates[$cart['Cart']['consignment_date']];
               $consign_time = empty($date)?'': date('m-d', strtotime($date));
             ?>
-            <tr>
+            <tr {{if empty($cart['Cart']['send_date'])}}class="bg-warning"{{/if}}>
                 <td>{{$order['Order']['id']}}</td>
                 <td>{{$order['Order']['creator']}}</td>
                 <td>
