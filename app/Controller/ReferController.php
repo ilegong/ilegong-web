@@ -35,6 +35,8 @@ class ReferController extends AppController {
 
         $product_comments = $this->build_comments($uid);
         $this->set('product_comments', $product_comments);
+
+        $this->pageTitle = $this->currentUser['nickname']. '向您推荐了【朋友说】';
     }
 
     public function accept() {
@@ -119,7 +121,7 @@ class ReferController extends AppController {
      */
     private function build_comments($uid) {
         $product_comments = $this->Comment->find('all', array(
-            'conditions' => array('user_id' => $uid, 'rating >' => 3, 'type' => 'Product'),
+            'conditions' => array('user_id' => $uid, 'rating >' => 3, 'published' => PUBLISH_YES, 'type' => 'Product'),
             'order' => 'created desc',
         ));
 
