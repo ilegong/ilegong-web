@@ -39,8 +39,8 @@
           <div class="col-xs-6 col-sm-3 placeholder">
             <div class="section-container bg-warning">
               <h2 class="title"><a target="_parent" href="/manage/admin/tuan/tuan_orders">查看订单</a></h2><br/>
-              <span class=""><a target="_parent" href="/manage/admin/tuan/query_empty_send_date?order_status=1">{{$invalid_orders_count}}个团/秒无发货时间</a></span> <br/>
-              <span class=""><a target="_parent" href="">{{$paid_not_sent_count}}订单过期未发货</a></span>
+              <span class=""><a target="_parent" href="/manage/admin/tuan/query_empty_send_date?order_status=1">{{$empty_send_date_count}}个团/秒无发货时间</a></span> <br/>
+              <span class=""><a target="_parent" href="/manage/admin/tuan/query_paid_not_send">{{$paid_not_sent_count}}订单过期未发货</a></span>
             </div>
           </div>
         </div>

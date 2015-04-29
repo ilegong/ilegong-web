@@ -10,8 +10,8 @@
   <li role="presentation"><a data-tab="byUser" href="/manage/admin/tuan/query_by_user">根据用户查询</a></li>
   <li role="presentation"><a data-tab="byTuanTeam" href="/manage/admin/tuan/query_by_tuan_team">按团队查询</a></li>
   <li role="presentation"><a data-tab="byProduct" href="/manage/admin/tuan/query_by_product">按商品查询</a></li>
-  <li role="presentation"><a data-tab="emptySendDate" href="/manage/admin/tuan/query_empty_send_date?order_status=1">无发货时间订单</a></li>
-  <li role="presentation"><a data-tab="emptySendDate" href="/manage/admin/tuan/query_paid_not_send">到期未发货</a></li>
+  <li role="presentation"><a data-tab="emptySendDate" href="/manage/admin/tuan/query_empty_send_date?order_status=1">!!!无发货时间</a></li>
+  <li role="presentation"><a data-tab="paidNotSend" href="/manage/admin/tuan/query_paid_not_send">!!!到期未发货</a></li>
 </ul>
 <div class="tab-content">
   <div id="general" class="tab-pane active">
@@ -205,31 +205,7 @@
     </form>
   </div>
   <div id="emptySendDate" class="tab-pane">
-    <strong class="text-danger">只能查询团购、秒杀，排期普通商品无法查询；最多查询100条</strong>
-    <form class="form-inline" method="post" action="/manage/admin/tuan/query_empty_send_date" data-noajax="true">
-        <div class="form-group">
-          <select class="form-control order-types" data-value="{{$order_type}}" name="order_type">
-            <option value="-1">选择订单类型</option>
-            <option value="5">只查团购</option>
-            <option value="6">只查秒杀</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <select class="form-control order-status" data-value="{{order_status}}" name="order_status">
-            <option value="-1">选择订单状态</option>
-            <option value="0">待支付</option>
-            <option value="1" selected='selected'>待发货</option>
-            <option value="2">已发货</option>
-            <option value="4">已退款</option>
-            <option value="10">已作废</option>
-            <option value="14">退款中</option>
-          </select>
-        </div>
-        <br/>
-        <br/>
-        <button type="submit" class="btn btn-primary text-center">查看订单</button>
-      </div>
-    </form>
+    <strong class="text-danger">只能查询团购、秒杀，排期普通商品无法查询</strong>
   </div>
   <div id="paidNotSend" class="tab-pane">
     <strong class="text-danger">到了发货时间，仍未发货的订单</strong>
