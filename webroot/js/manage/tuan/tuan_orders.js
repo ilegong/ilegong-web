@@ -4,6 +4,8 @@ $(document).ready(function(){
   var end_stat_date = $('input[name="end_stat_datetime"]');
   var tuan_con_date = $('input[name="tuan_con_date"]');
   var product_con_date = $('input[name="product_con_date"]');
+  var mainContent = $('#mainContent');
+  mainContent.height(250);
   start_stat_date.datetimepicker({
     format: 'yyyy-mm-dd hh:ii'
   });
