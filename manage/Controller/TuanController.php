@@ -451,6 +451,9 @@ class TuanController extends AppController
 
         $expired_tuan_buying_count = $this->TuanBuying->query('select count(*) as c from cake_tuan_buyings where end_time < now() and status = 0');
         $this->set('expired_tuan_buying_count', $expired_tuan_buying_count[0][0]['c']);
+
+        $invalid_orders_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date is null and o.type in (5, 6) and o.status = 1');
+        $this->set('invalid_orders_count', $invalid_orders_count[0][0]['ct']);
     }
 
     function admin_send_date($type)
