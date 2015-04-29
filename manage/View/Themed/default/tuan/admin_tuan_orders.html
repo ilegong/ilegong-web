@@ -11,6 +11,7 @@
   <li role="presentation"><a data-tab="byTuanTeam" href="/manage/admin/tuan/query_by_tuan_team">按团队查询</a></li>
   <li role="presentation"><a data-tab="byProduct" href="/manage/admin/tuan/query_by_product">按商品查询</a></li>
   <li role="presentation"><a data-tab="emptySendDate" href="/manage/admin/tuan/query_empty_send_date?order_status=1">无发货时间订单</a></li>
+  <li role="presentation"><a data-tab="emptySendDate" href="/manage/admin/tuan/query_paid_not_send">到期未发货</a></li>
 </ul>
 <div class="tab-content">
   <div id="general" class="tab-pane active">
@@ -229,6 +230,9 @@
         <button type="submit" class="btn btn-primary text-center">查看订单</button>
       </div>
     </form>
+  </div>
+  <div id="paidNotSend" class="tab-pane">
+    <strong class="text-danger">到了发货时间，仍未发货的订单</strong>
   </div>
 </div>
 

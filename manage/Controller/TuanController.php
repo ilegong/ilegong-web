@@ -443,6 +443,17 @@ class TuanController extends AppController
         $this->render("admin_tuan_orders");
     }
 
+    public function admin_query_paid_not_send()
+    {
+        $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
+        $conditions['Order.status'] = ORDER_STATUS_PAID;
+        $conditions['DATE(Cart.send_date) <'] = date('Y-m-d');
+        $this->_query_orders($conditions, 'Order.created DESC', 20);
+
+        $this->set('query_type', 'paidNotSend');
+        $this->render("admin_tuan_orders");
+    }
+
     /**
      * 团购功能列表
      */

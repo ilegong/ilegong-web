@@ -6,25 +6,25 @@
         <div class="row placeholders">
           <div class="col-xs-6 col-sm-3 placeholder">
             <a href="/manage/admin/brands/index" target="_parent" class="section-container bg-success">
-              <h2 class="">商家</h2><br/>
+              <h2 class="title">商家</h2><br/>
               <span class="">{{$brand_count}}个</span>
             </a>
           </div>
           <div class="col-xs-6 col-sm-3 placeholder">
             <a href="/manage/admin/tuan_teams/index" target="_parent" class="section-container bg-success">
-              <h2 class="">团队</h2><br/>
+              <h2 class="title">团队</h2><br/>
               <span class="">{{$tuan_team_count}}支</span>
             </a>
           </div>
           <div class="col-xs-6 col-sm-3 placeholder">
             <a href="/manage/admin/tuan_products/index" target="_parent" class="section-container bg-info">
-                <h2 class="">团购商品</h2><br/>
+                <h2 class="title">团购商品</h2><br/>
                 <span class="">{{$tuan_product_count}}个</span>
             </a>
           </div>
           <div class="col-xs-6 col-sm-3 placeholder">
             <a href="/manage/admin/tuanSecKill/index" target="_parent" class="section-container bg-info">
-                <h2 class="">秒杀商品</h2><br/>
+                <h2 class="title">秒杀商品</h2><br/>
                 <span class="">{{$seckill_product_count}}个</span>
             </a>
           </div>
@@ -32,15 +32,16 @@
         <div class="row placeholders">
           <div class="col-xs-6 col-sm-3 placeholder">
             <a href="/manage/admin/tuan_buyings/index?expired=true&&status_type=-1" target="_parent" class="section-container bg-warning">
-              <h2 class="">团购管理</h2><br/>
+              <h2 class="title">团购管理</h2><br/>
               <span class="">{{$expired_tuan_buying_count}}个过期未截单</span>
             </a>
           </div>
           <div class="col-xs-6 col-sm-3 placeholder">
-            <a href="/manage/admin/tuan/tuan_orders" target="_parent" class="section-container bg-warning">
-              <h2 class="">查看订单</h2><br/>
-              <span class="">{{$invalid_orders_count}}个团/秒无发货时间</span>
-            </a>
+            <div class="section-container bg-warning">
+              <h2 class="title"><a target="_parent" href="/manage/admin/tuan/tuan_orders">查看订单</a></h2><br/>
+              <span class=""><a target="_parent" href="/manage/admin/tuan/query_empty_send_date?order_status=1">{{$invalid_orders_count}}个团/秒无发货时间</a></span> <br/>
+              <span class=""><a target="_parent" href="">{{$paid_not_sent_count}}订单过期未发货</a></span>
+            </div>
           </div>
         </div>
       </div>

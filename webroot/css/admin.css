@@ -212,14 +212,14 @@ div.breadcrumb { margin: 0px 0px 20px 0px; }
   border-radius: 50%;
   text-align: center;
   color: inherit;
-  padding-top: 30%;
+  padding-top: 20%;
 }
-.section-container h2{
+.section-container .title{
   display: inline-block;
   border: 0;
-  margin: 0;
+  margin: 0 0 10px 0;
 }
-.section-container:hover{
+.section-container a, .section-container a:hover{
   text-decoration: none;
   color: inherit;
 }
