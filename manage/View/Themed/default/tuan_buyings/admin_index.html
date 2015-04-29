@@ -47,7 +47,8 @@
         <div class="form-group">
           <input type="radio" name="status_type" class="status-type" value="21">已退款</input>
         </div>
-      <button type="submit" style="margin-left:10px;" class="btn btn-default">查看团购</button>
+        <button type="submit" style="margin-left:10px;" class="btn btn-primary">查看团购</button>
+        <a href="/manage/admin/tuan_buyings/index?expired=true&&status_type=-1" style="margin-left:10px;" class="btn btn-warning">查看过期的团购</a>
 
     </div>
     <hr/>
@@ -56,7 +57,8 @@
         <a class="btn btn-success fl" id="batch_complete"  style="margin-left:10px;" href="#">批量截单</a>&nbsp;&nbsp;&nbsp;
         <a  class="btn btn-primary fl" id= "batch_message" style="margin-left:10px;" href="#">批量短信</a>
         <a  class="btn  btn-primary fl" id="batch_deliver" style="margin-left:10px;" href="#">批量发货</a>
-        <a href="/manage/admin/tuan_buyings/new" role="button" class="btn btn-default fr">创建团购</a>&nbsp;&nbsp;
+        <a  class="btn  btn-primary fl" style="margin-left:10px;" href="/manage/admin/tuan_buyings/send">发提货码</a>
+        <a href="/manage/admin/tuan_buyings/new" role="button" class="btn btn-primary fr">创建团购</a>&nbsp;&nbsp;
     </div>
     <hr/>
 </form>
@@ -75,17 +77,33 @@
         if($tuanBuying['status'] == 0){
             $tuanStatus = '进行中';
         }
-        elseif($tuanBuying['status'] == 2 || $tuanBuying['status'] == 2){
+        elseif($tuanBuying['status'] == 1){
+            $tuanStatus = '已截单';
+        }
+        elseif($tuanBuying['status'] == 2){
             $tuanStatus = '已取消';
         }
-        elseif($tuanBuying['status'] == 1 || $tuanBuying['status'] == 11){
-            $tuanStatus = '已截止';
+        elseif($tuanBuying['status'] == 11){
+            $tuanStatus = '已完成';
         }
+        elseif($tuanBuying['status'] == 21){
+            $tuanStatus = '已退款';
+        }
+        $link = "/manage/admin/tuan/query_by_tuan_team?team_id=".$tuanTeam['id']."&&tuan_buying_id=".$tuanBuying['id'];
     ?>
     <tr data-id="{{$tuanBuying['id']}}" data-leader-name="{{$tuanTeam['leader_name']}}" data-leader-id="{{$tuanTeam['leader_id']}}" data-product-name="{{$tuanProduct[alias]}}" class="{{if $tuanBuying['status']==1}} warning {{elseif $tuanBuying['status']==11}} success {{elseif $tuanBuying['status']==2}} danger {{elseif $tuanBuying['status']==21}} active {{/if}}">
         <td><input type="checkbox" value="{{$tuanBuying['id']}}" name="check_tuan_buy_id" data-id="{{$tuanBuying['status']}}"></td>
         <td>{{$tuanBuying['id']}}</td>
-        <td>{{$tuanTeam['tuan_name']}}</td>
+        <td>
+          {{$tuanTeam['tuan_name']}} <br/>
+          (<a href="{{$link}}">
+            {{if $tuan_buying['paid_orders_count'] > 0}}
+              {{$tuan_buying['paid_orders_count']}}个待发货
+            {{else}}
+              无待发货
+            {{/if}}
+          </a>)
+        </td>
         <td>{{$tuanProduct['alias']}}/{{$tuanTeam['type']==1?大团:小团}}</td>
         <td>
           {{if $tuanBuying['consignment_type'] == 0}}

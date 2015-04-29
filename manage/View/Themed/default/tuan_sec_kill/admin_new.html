@@ -54,12 +54,27 @@
                     <!--<input type="number" name="data[ProductTry][sold_num]" class="form-control" id="sold_num" placeholder="售出份数">-->
                 <!--</div>-->
             <!--</div>-->
+            <!--<div class="form-group">-->
+                <!--<label for="tuan_id" class="col-sm-2 control-label">团队ID</label>-->
+                <!--<div class="col-sm-9">-->
+                    <!--<input type="text" name="data[ProductTry][tuan_id]" class="form-control" id="tuan_id" placeholder="团队ID">-->
+                    <!--<div class="text-warning">有团队ID时，该秒杀只在该团队进行；否则在全部团队显示</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
             <div class="form-group">
-                <label for="tuan_id" class="col-sm-2 control-label">团队ID</label>
-                <div class="col-sm-9">
-                    <input type="text" name="data[ProductTry][tuan_id]" class="form-control" id="tuan_id" placeholder="团队ID">
-                    <div class="text-warning">有团队ID时，该秒杀只在该团队进行；否则在全部团队显示</div>
+                <label class="col-sm-2 control-label">是否选择团队</label>
+                <div class="col-sm-9 control">
+                    <input type="checkbox" name="golbal-show" data-toggle="collapse" data-target="#tuan-team" aria-expanded="false" aria-controls="tuan-team">
+                    <div class="text-warning">选择团队时，该秒杀只在所选团队进行；否则在全部团队显示</div>
                 </div>
+            </div>
+            <div class="form-group collapse" id="tuan-team">
+                <label class="col-sm-2 control-label">团队</label>
+                <div class="col-sm-9 controls tuan-teams-list">
+                </div>
+                <input type="hidden" name="team_ids" id="team_ids">
+
             </div>
             <div class="form-group">
                 <label for="consignment_date" class="col-sm-2 control-label">发货日期</label>
@@ -88,5 +103,11 @@
         </form>
     </div>
 </div>
-{{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js','/js/manage/tuan_sec_kill/new.js'))}}
+{{$this->Html->script(array(
+'/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js',
+'/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js',
+'/js/manage/tuan_sec_kill/new.js?V2.5',
+'/js/tuan-area.js',
+'/js/bootstrap.min.js'
+))}}
 

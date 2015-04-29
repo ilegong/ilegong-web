@@ -62,41 +62,56 @@ class TuanBuyingsController extends AppController{
      * show all tuan_buyings
      */
     public function admin_index(){
+        $expired = isset($_REQUEST['expired']) ? $_REQUEST['status_type'] : false;
+        $status_type = isset($_REQUEST['status_type']) ? $_REQUEST['status_type'] : -1;
         $team_id = isset($_REQUEST['team_id']) ? $_REQUEST['team_id'] : -1;
         $product_id = isset($_REQUEST['product_id']) ? $_REQUEST['product_id'] : -1;
-        $status_type = isset($_REQUEST['status_type']) ? $_REQUEST['status_type'] : -1;
         $tuan_status = isset($_REQUEST['tuan_status']) ? $_REQUEST['tuan_status'] : -1;
         $cons_type = isset($_REQUEST['cons_type'])? $_REQUEST['cons_type']:-1;
-        $this->log('tuan status: '.$tuan_status);
+
         $con = array();
-        if($team_id != -1){
-            $con['tuan_id']=$team_id;
-        }
-        if($product_id != -1){
-            $con['pid'] = $product_id;
-        }
-        if($cons_type!=-1){
-            $con['consignment_type'] = $cons_type;
-        }
-        if($status_type == -1){
-            if($tuan_status == -1){
-                $con['status'] = array(0, 1, 2);
-            }else{
-                $con['status'] = $tuan_status;
-            }
+        if($expired){
+            $con['end_time <= '] = date("Y-m-d H:i:s");
+            $con['status'] = 0;
         }
         else{
-            $con['status'] = $status_type;
+            if($team_id != -1){
+                $con['tuan_id']=$team_id;
+            }
+            if($product_id != -1){
+                $con['pid'] = $product_id;
+            }
+            if($cons_type!=-1){
+                $con['consignment_type'] = $cons_type;
+            }
+            if($status_type == -1){
+                if($tuan_status == -1){
+                    $con['status'] = array(0, 1, 2);
+                }else{
+                    $con['status'] = $tuan_status;
+                }
+            }
+            else{
+                $con['status'] = $status_type;
+            }
         }
-        $this->log('query tuan buyings with condition: '.json_encode($con));
+
         $tuan_buyings = $this->TuanBuying->find('all',array(
             'conditions' => $con
         ));
+
         $tuan_ids = Hash::extract($tuan_buyings,'{n}.TuanBuying.tuan_id');
         $tuan_teams = $this->TuanTeam->find('all', array('conditions' => array('id' => $tuan_ids)));
         $tuan_teams = Hash::combine($tuan_teams, '{n}.TuanTeam.id', '{n}.TuanTeam');
         $tuan_products = getTuanProducts();
         $tuan_products = Hash::combine($tuan_products,'{n}.TuanProduct.product_id','{n}.TuanProduct');
+
+        if(!empty($tuan_buyings)){
+            $tuan_buying_id_strs = join(',', Hash::extract($tuan_buyings, "{n}.TuanBuying.id"));
+            $paid_orders_count = $this->Order->query('select member_id as member_id, count(member_id) as c from cake_orders WHERE STATUS = 1 and type = 5 and member_id in ('.$tuan_buying_id_strs.') group by member_id;');
+            $paid_orders_count = Hash::combine($paid_orders_count, '{n}.cake_orders.member_id', '{n}.0.c');
+        }
+
         foreach($tuan_buyings as &$tuan_buying){
             $tuanBuying = $tuan_buying['TuanBuying'];
             $tb_id = $tuanBuying['id'];
@@ -110,7 +125,9 @@ class TuanBuyingsController extends AppController{
             $tuan_buying['tuan_team'] = $tuan_teams[$tuan_id];
             $tuan_buying['tuan_product'] = $tuan_products[$tuanBuying['pid']];
 
+            $tuan_buying['paid_orders_count'] = $paid_orders_count[$tb_id] ?: 0;
         }
+
         $this->set('cons_type',$cons_type);
         $this->set('tuan_buyings', $tuan_buyings);
         $this->set('team_id',$team_id);
@@ -345,7 +362,83 @@ class TuanBuyingsController extends AppController{
     public function admin_send(){
 
     }
-    public function send_wx_fecth_code(){
-
+    public function admin_send_wx_fetch_msg($type = null){
+        $this->autoRender = false;
+        $data=$_POST;
+        if(empty($data)){
+            return false;
+        }
+        if($type == 'normal'){
+            $ids = $data['ids'];
+        }else{
+            $ids = array_keys($data);
+        }
+        $orderM = ClassRegistry::init('Order');
+        $tuanBuyM= ClassRegistry::init('TuanBuying');
+        $orders = $orderM->find('all', array(
+            'conditions' => array('id'=> $ids, 'type'=>array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC)),
+        ));
+        $tuan_buy_ids = array_unique(Hash::extract($orders, '{n}.Order.member_id'));
+        $products = $tuanBuyM->find('all', array(
+            'conditions' => array('TuanBuying.id'=>$tuan_buy_ids),
+            'joins' =>array(
+                array(
+                    'table' => 'tuan_products',
+                    'alias' => 'TuanProduct',
+                    'type' => 'inner',
+                    'conditions' => array(
+                        'TuanProduct.product_id = TuanBuying.pid',
+                    )
+                )
+            ),
+            'fields' => array('TuanBuying.id', 'TuanProduct.alias')
+        ));
+        $alias = Hash::combine($products, '{n}.TuanBuying.id', '{n}.TuanProduct.alias');
+        $order_info = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
+        $uids = Hash::extract($orders, '{n}.Order.creator');
+        $oauthBindModel = ClassRegistry::init('Oauthbind');
+        $r = $oauthBindModel->find('list', array(
+            'conditions' => array( 'user_id' => $uids, 'source' => oauth_wx_source()),
+            'fields' => array('user_id','oauth_openid')
+        ));
+        $success = array();
+        $fail = array();
+        foreach($order_info as $key => $value){
+            $order_id = $key;
+            $tuan_buy_id =  $value['member_id'];
+            $product_alias = $alias[$tuan_buy_id];
+            $post_data = array(
+                "touser" => $r[$value['creator']],
+                "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
+                "url" => WX_HOST . '/orders/detail/' . $order_id,
+                "topcolor" => "#FF0000",
+                "data" => array(
+                    "first" => array("value" => "亲，您订购的".$product_alias."已经到达自提点，提货码：".$data[$order_id]."，生鲜娇贵，请尽快取货哈。"),
+                    "keyword1" => array("value" => $order_id),
+                    "keyword2" => array("value" => '好邻居便利店'),
+                    "keyword3" => array("value" => $value['consignee_address']),
+                    "remark" => array("value" => "感谢您的支持，现场提货遇到任何问题请拨打电话：4000-508-528", "color" => "#FF8800")
+                )
+            );
+            if($type == 'normal'){
+                $post_data['data'] =  array(
+                    "first" => array("value" => "亲，您订购的".$product_alias."已经到达自提点，生鲜娇贵，请尽快取货哈。"),
+                    "keyword1" => array("value" => $order_id),
+                    "keyword2" => array("value" => ''),
+                    "keyword3" => array("value" => $value['consignee_address']),
+                    "remark" => array("value" => "感谢您的支持", "color" => "#FF8800")
+                );
+            }
+            if(send_weixin_message($post_data)){
+                $success[]=$order_id;
+            }else{
+                $fail[] = $order_id;
+            }
+        }
+        if(empty($fail)){
+            echo json_encode(array('success' => true, 'res' => $success));
+        }else{
+            echo json_encode(array('success' => false, 'res' => $fail));
+        }
     }
 }

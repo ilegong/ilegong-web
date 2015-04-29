@@ -1,0 +1,136 @@
+
+<div role="tabpanel">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#haolinju" aria-controls="haolinjun" role="tab" data-toggle="tab">发好邻居提货码</a></li>
+        <li role="presentation"><a href="#normal" aria-controls="normal" role="tab" data-toggle="tab">发自提点消息</a></li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="haolinju">
+            <div style="margin-top: 20px">
+                <div style="padding-left: 25%; padding-right: 25%">
+                    <table class="table">
+                        <caption><strong>提货对应表</strong></caption>
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>订单号</th>
+                            <th>提货码</th>
+                        </tr>
+                        </thead>
+                        <tbody id="order-table-data" data-code="">
+                        </tbody>
+                    </table>
+                </div>
+                <form class="form-horizontal" style="padding-left: 20%;padding-right: 20%">
+                    <div class="form-group">
+                        <label  style="font-size: large">订单号</label>
+                        <textarea class="form-control order_ids"  placeholder="订单号,使用英文逗号分隔或换行分隔" rows="3"></textarea>
+                    </div>
+                    <div class="form-group" aria-controls="haolinjun">
+                        <label for="fetch_codes" style="font-size: large">提货码</label>
+                        <textarea class="form-control" id="fetch_codes"  placeholder="提货码,使用英文逗号分隔或换行分隔，与上订单号顺序对应" rows="4"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-primary add_fetch_info">添加</button>
+                    <button type="button" class="btn btn-warning clear_content">清除</button>
+                    <button type="button" class="btn btn-success send_fetch_code" style="float:right">发送</button>
+                </form>
+                <strong style="font-size: large">示例</strong>
+                <pre>
+                亲，您订购的榴莲酥x1已经到达自提点，提货码：814353422，生鲜娇贵，请尽快取货哈。
+                订单号：2088213241
+                取货门店：师大分店
+                地址：广州市天河区五山路XXX号
+                感谢您的支持，现场提货遇到任何问题请拨打电话：4000-508-528
+                </pre>
+            </div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="normal">
+            <div style="margin-top: 20px">
+                <form class="form-horizontal" style="padding-left: 20%;padding-right: 20%">
+                    <div class="form-group">
+                        <label  style="font-size: large">订单号</label>
+                        <textarea class="form-control normal order_ids"  placeholder="订单号,使用英文逗号分隔或换行分隔" rows="3"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-warning clear_content">清除</button>
+                    <button type="button" class="btn btn-success normal_send" style="float:right">发送</button>
+                </form>
+                <strong style="font-size: large">示例</strong>
+                <pre>
+                亲，您订购的榴莲酥x1已经到达自提点，生鲜娇贵，请尽快取货哈。
+                订单号：2088213241
+                取货门店：乐迪超市
+                地址：广州市天河区五山路XXX号
+                感谢您的支持，自提点电话：67866666
+                </pre>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        var table_data = $('#order-table-data');
+        $('.add_fetch_info').on('click', function(){
+            table_data.data('code','');
+            table_data.html("");
+            var order_ids =  $('.order_ids').val().split(/\n+|\s+,\s+/);
+            var fetch_codes = $('#fetch_codes').val().split(/\n+|\s+,\s+/);
+            var id_code = {};
+            var temp_code = '';
+            for(var i=0; i < order_ids.length; i++){
+                if(typeof fetch_codes[i] == "undefined"){
+                    id_code[order_ids[i]]= temp_code;
+                }else{
+                    id_code[order_ids[i]]= fetch_codes[i];
+                    temp_code = fetch_codes[i];
+                }
+            }
+            var num = 0;
+            for(var id in id_code){
+                num++;
+                var code = id_code[id];
+                if(typeof id_code[id] == "undefined"){
+                    code = '<p class="text-danger">错误</p>';
+                }
+                table_data.append('<tr> <th scope="row">'+ num +'</th> <td>'+ id +'</td> <td>'+ code +'</td> </tr>')
+            }
+            table_data.data('code', id_code);
+        });
+        $('.send_fetch_code').on('click',function(){
+           if(table_data.data('code')==''){
+               utils.alert("请添加相应的订单号");
+               return false;
+           }else{
+               var send_data = table_data.data('code');
+               $.post('/manage/admin/tuan_buyings/send_wx_fetch_msg', send_data, function(e){
+                    if(e.success){
+                        utils.alert('发送成功:'+ e.res);
+                    }else{
+                        utils.alert('发送失败:'+ e.res)
+                    }
+               }, 'json')
+           }
+        });
+        $('.clear_content').on('click', function(){
+            table_data.data('code','');
+            table_data.html("");
+            $('.order_ids').val('');
+            $('#fetch_codes').val('');
+            $('#phone_num').val('');
+        });
+        $('.normal_send').on('click', function(){
+            var order_ids = $('.normal.order_ids').val().split(/\n+|\s+,\s+/);
+            $.post('/manage/admin/tuan_buyings/send_wx_fetch_msg/normal', {'ids': order_ids}, function(e){
+                if(e.success){
+                    utils.alert('发送成功:'+ e.res);
+                }else{
+                    utils.alert('发送失败:'+ e.res)
+                }
+            },'json')
+        })
+    })
+</script>

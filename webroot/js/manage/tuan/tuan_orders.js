@@ -4,6 +4,8 @@ $(document).ready(function(){
   var end_stat_date = $('input[name="end_stat_datetime"]');
   var tuan_con_date = $('input[name="tuan_con_date"]');
   var product_con_date = $('input[name="product_con_date"]');
+  var mainContent = $('#mainContent');
+  mainContent.height(250);
   start_stat_date.datetimepicker({
     format: 'yyyy-mm-dd hh:ii'
   });
@@ -29,7 +31,7 @@ $(document).ready(function(){
     });
 
     setSelectBoxValue(tuanTeamsBox);
-    initSearchBox($('.tuan-teams-search'), values);
+    initSearchBox($('.tuan-team-search'), values);
     tuanTeamsBox.each(function(){
       updateTuanBuyingSelectBox($("option:selected", $(this)));
     })
@@ -150,7 +152,9 @@ $(document).ready(function(){
 
       $('<option value="' + tuanBuying['id'] + '">' + name + '</option>').appendTo(tuanBuyingsBox);
     });
+    setSelectBoxValue(tuanBuyingsBox);
   }
   activateTab($('.nav-tabs').data('query-type'));
   setSelectBoxValue($('.order-status'));
+  setSelectBoxValue($('.order-types'));
 });

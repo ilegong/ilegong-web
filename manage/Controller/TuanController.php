@@ -328,8 +328,7 @@ class TuanController extends AppController
             $conditions['Cart.product_id'] = $product_id;
             if ($order_type == -1) {
                 $conditions['Order.type'] = array(ORDER_TYPE_DEF, ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
-            }
-            else{
+            } else {
                 $conditions['Order.type'] = $order_type;
             }
             if ($order_status != -1) {
@@ -341,8 +340,13 @@ class TuanController extends AppController
             if (empty($send_date_end)) {
                 $send_date_end = date('Y-m-d', strtotime('+5 days'));
             }
-            $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
-            $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
+            $conditions['OR'] = array(
+                array(
+                    'DATE(Cart.send_date) >= ' => $send_date_start,
+                    'DATE(Cart.send_date) <= ' =>  $send_date_end
+                ),
+                'Cart.send_date is null'
+            );
         }
 
         $this->_query_orders($conditions, 'Order.created DESC');
@@ -358,39 +362,44 @@ class TuanController extends AppController
 
     public function admin_query_by_tuan_team()
     {
-        $team_id = $_REQUEST['team_id'];
-        $tuan_buying_id = $_REQUEST['tuan_buying_id'];
-        $order_status = $_REQUEST['order_status'];
-        $send_date_start = $_REQUEST['send_date_start'];
-        $send_date_end = $_REQUEST['send_date_end'];
+        $team_id = !empty($_REQUEST['team_id']) ? $_REQUEST['team_id'] : -1;
+        $tuan_buying_id = !empty($_REQUEST['tuan_buying_id']) ? $_REQUEST['tuan_buying_id'] : -1;
+        $order_status = !empty($_REQUEST['order_status']) ?  $_REQUEST['order_status']: -1;
 
         $conditions = array();
         if (!empty($team_id) && $team_id != -1) {
             $conditions['Order.type'] = ORDER_TYPE_TUAN;
 
-            if($tuan_buying_id != -1){
+            if ($tuan_buying_id != -1) {
                 $conditions['Order.member_id'] = $tuan_buying_id;
-            }
-            else{
+            } else {
                 $tuan_buyings = $this->TuanBuying->find('all', array(
                     'conditions' => array('tuan_id' => $team_id),
                     'fields' => array('id')
                 ));
                 $conditions['Order.member_id'] = Hash::extract($tuan_buyings, "{n}.TuanBuying.id");
+                $send_date_start = $_REQUEST['send_date_start'];
+                $send_date_end = $_REQUEST['send_date_end'];
+                if (empty($send_date_start)) {
+                    $send_date_start = date('Y-m-d', strtotime('-2 days'));
+                }
+                if (empty($send_date_end)) {
+                    $send_date_end = date('Y-m-d', strtotime('+5 days'));
+                }
+                $conditions['OR'] = array(
+                    array(
+                        'DATE(Cart.send_date) >= ' => $send_date_start,
+                        'DATE(Cart.send_date) <= ' =>  $send_date_end
+                    ),
+                    'Cart.send_date is null'
+                );
             }
             if ($order_status != -1) {
                 $conditions['Order.status'] = $order_status;
             }
-            if (empty($send_date_start)) {
-                $send_date_start = date('Y-m-d', strtotime('-2 days'));
-            }
-            if (empty($send_date_end)) {
-                $send_date_end = date('Y-m-d', strtotime('+5 days'));
-            }
-            $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
-            $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
         }
 
+        $this->log('querh order conditions: '.json_encode($conditions));
         $this->_query_orders($conditions, 'Order.created DESC');
 
         $this->set('team_id', $team_id);
@@ -399,6 +408,30 @@ class TuanController extends AppController
         $this->set('send_date_end', $send_date_end);
         $this->set('order_status', $order_status);
         $this->set('query_type', 'byTuanTeam');
+        $this->render("admin_tuan_orders");
+    }
+
+    public function admin_query_empty_send_date()
+    {
+        $order_type = !empty($_REQUEST['order_type']) ? $_REQUEST['order_type'] : -1;
+        $order_status = !empty($_REQUEST['order_status']) ?  $_REQUEST['order_status']: -1;
+
+        $conditions = array();
+        $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
+
+        if ($order_type != -1) {
+            $conditions['Order.type'] = $order_type;
+        }
+        if ($order_status != -1) {
+            $conditions['Order.status'] = $order_status;
+        }
+        $conditions[] = 'Cart.send_date is null';
+
+        $this->_query_orders($conditions, 'Order.created DESC', 20);
+
+        $this->set('order_type', $order_type);
+        $this->set('order_status', $order_status);
+        $this->set('query_type', 'emptySendDate');
         $this->render("admin_tuan_orders");
     }
 
@@ -415,6 +448,12 @@ class TuanController extends AppController
         $this->set('seckill_product_count', $seckill_product_count[0][0]['c']);
         $brand_count = $this->Brand->query('select count(*) as c from cake_brands where deleted = 0');
         $this->set('brand_count', $brand_count[0][0]['c']);
+
+        $expired_tuan_buying_count = $this->TuanBuying->query('select count(*) as c from cake_tuan_buyings where end_time < now() and status = 0');
+        $this->set('expired_tuan_buying_count', $expired_tuan_buying_count[0][0]['c']);
+
+        $invalid_orders_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date is null and o.type in (5, 6) and o.status = 1');
+        $this->set('invalid_orders_count', $invalid_orders_count[0][0]['ct']);
     }
 
     function admin_send_date($type)
@@ -518,7 +557,7 @@ class TuanController extends AppController
         $this->set('alreadyUpdated', $alreadyUpdated);
     }
 
-    public function _query_orders($conditions, $order_by)
+    public function _query_orders($conditions, $order_by, $limit = null)
     {
         $this->PayNotify->query("update cake_pay_notifies set order_id =  substring_index(substring_index(out_trade_no,'-',2),'-',-1) where status = 6 and order_id is NULL");
         $join_conditions = array(
@@ -539,17 +578,25 @@ class TuanController extends AppController
                 'type' => 'LEFT'
             )
         );
-        $this->log('query order conditions: ' . json_encode($conditions));
 
         $orders = array();
         if (!empty($conditions)) {
-            $orders = $this->Order->find('all', array(
+            $params = array(
                 'conditions' => $conditions,
                 'joins' => $join_conditions,
                 'fields' => array('Order.*', 'Pay.trade_type', 'Cart.product_id', 'Cart.try_id', 'Cart.send_date'),
                 'order' => $order_by
-            ));
+            );
+            if(!empty($limit)){
+                $params['limit'] = $limit;
+            }
+            $this->log('query order conditions: ' . json_encode($params));
+            $orders = $this->Order->find('all', $params);
         }
+        else{
+            $this->log('order condition is empty: ' . json_encode($conditions));
+        }
+
         $order_ids = Hash::extract($orders, "{n}.Order.id");
         $this->log('order ids: ' . json_encode($order_ids));
 
@@ -612,10 +659,10 @@ class TuanController extends AppController
 
         // product count
         $product_count = 0;
-        if(!empty($order_ids)){
+        if (!empty($order_ids)) {
             $order_id_strs = '(' . join(',', $order_ids) . ')';
             $result = $this->Cart->query('select sum(num) from cake_carts where order_id in ' . $order_id_strs);
-            $product_count =  $result[0][0]['sum(num)'];
+            $product_count = $result[0][0]['sum(num)'];
         }
 
         $this->set('should_count_nums', true);
