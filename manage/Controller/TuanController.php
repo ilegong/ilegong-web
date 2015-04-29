@@ -256,6 +256,13 @@ class TuanController extends AppController
                 $this->set('consign_dates', $consign_dates);
             }
         }
+
+        $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date is null and o.type in (5, 6) and o.status in (0, 1) and DATE(o.created) > '.date('Y-m-d', strtotime('-31 days')));
+        $this->set('empty_send_date_count', $empty_send_date_count[0][0]['ct']);
+
+        $paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date <= now() and o.status = 1');
+        $this->set('paid_not_sent_count', $paid_not_sent_count[0][0]['ct']);
+
         $this->set('spec_groups', $spec_groups);
         $this->set('team_id', $team_id);
         $this->set('product_id', $product_id);
@@ -665,6 +672,12 @@ class TuanController extends AppController
             $result = $this->Cart->query('select sum(num) from cake_carts where order_id in ' . $order_id_strs);
             $product_count = $result[0][0]['sum(num)'];
         }
+
+        $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date is null and o.type in (5, 6) and o.status in (0, 1) and DATE(o.created) > '.date('Y-m-d', strtotime('-31 days')));
+        $this->set('empty_send_date_count', $empty_send_date_count[0][0]['ct']);
+
+        $paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date <= now() and o.status = 1');
+        $this->set('paid_not_sent_count', $paid_not_sent_count[0][0]['ct']);
 
         $this->set('should_count_nums', true);
         $this->set('product_count', $product_count);

@@ -10,8 +10,18 @@
   <li role="presentation"><a data-tab="byUser" href="/manage/admin/tuan/query_by_user">根据用户查询</a></li>
   <li role="presentation"><a data-tab="byTuanTeam" href="/manage/admin/tuan/query_by_tuan_team">按团队查询</a></li>
   <li role="presentation"><a data-tab="byProduct" href="/manage/admin/tuan/query_by_product">按商品查询</a></li>
-  <li role="presentation"><a data-tab="emptySendDate" href="/manage/admin/tuan/query_empty_send_date">!!!无发货时间</a></li>
-  <li role="presentation"><a data-tab="paidNotSend" href="/manage/admin/tuan/query_paid_not_send">!!!到期未发货</a></li>
+  <li role="presentation">
+    <a data-tab="emptySendDate" href="/manage/admin/tuan/query_empty_send_date">
+      !!!无发货时间
+      <span {{if $empty_send_date_count > 0}}class="text-danger"{{/if}}>({{$empty_send_date_count}})</span>
+    </a>
+  </li>
+  <li role="presentation">
+    <a data-tab="paidNotSend" href="/manage/admin/tuan/query_paid_not_send">
+      !!!到期未发货
+      <span {{if $paid_not_sent_count > 0}}class="text-danger"{{/if}}>({{$paid_not_sent_count}})</span>
+    </a>
+  </li>
 </ul>
 <div class="tab-content">
   <div id="general" class="tab-pane active">
