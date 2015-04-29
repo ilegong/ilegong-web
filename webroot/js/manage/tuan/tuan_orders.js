@@ -98,10 +98,6 @@ $(document).ready(function(){
     }
   }
 
-  $('.tuan-teams').on('change', function(){
-    updateTuanBuyingSelectBox($("option:selected", $(this)));
-  });
-
   $(".nav-tabs a").click(function(){
     var tab = $(this).data('tab');
     activateTab(tab);
@@ -129,7 +125,7 @@ $(document).ready(function(){
   function updateTuanBuyingSelectBox(selectedTuanTeam){
     var tuanBuyingsBox = $('.tuan-buyings');
     tuanBuyingsBox.empty();
-    $('<option value="">请选择团购</option>').appendTo(tuanBuyingsBox);
+    $('<option value="-1">请选择团购</option>').appendTo(tuanBuyingsBox);
     if(selectedTuanTeam.length <= 0 || typeof(selectedTuanTeam.data('TuanBuyings')) == 'undefined'){
       return;
     }
@@ -154,7 +150,40 @@ $(document).ready(function(){
     });
     setSelectBoxValue(tuanBuyingsBox);
   }
+
+  function setupByTuanTeamForm(){
+    var form = $('.form-by-tuan-team');
+    var tuanTeamsBox = $('.tuan-teams', form);
+    var tuanBuyingsbox = $('.tuan-buyings', form);
+    var sendDateStart = $('.send-date-start', form);
+    var sendDateEnd = $('.send-date-end', form);
+    sendDateEnd.attr('disabled', 'disabled');
+    tuanTeamsBox.on('change', function(){
+      updateTuanBuyingSelectBox($("option:selected", $(this)));
+      updateSendDateInput();
+    });
+    tuanBuyingsbox.on('change', function(){
+      updateSendDateInput();
+    });
+    function updateSendDateInput(){
+      if(tuanTeamsBox.val() == -1){
+        sendDateStart.removeAttr('disabled');
+        sendDateEnd.attr('disabled', 'disabled');
+      }
+      else{
+        if(tuanBuyingsbox.val() == -1){
+          sendDateStart.removeAttr('disabled');
+          sendDateEnd.removeAttr('disabled');
+        }
+        else{
+          sendDateStart.attr('disabled', 'disabled');
+          sendDateEnd.attr('disabled', 'disabled');
+        }
+      }
+    }
+  }
   activateTab($('.nav-tabs').data('query-type'));
   setSelectBoxValue($('.order-status'));
   setSelectBoxValue($('.order-types'));
+  setupByTuanTeamForm();
 });

@@ -343,7 +343,7 @@ class TuanController extends AppController
             $conditions['OR'] = array(
                 array(
                     'DATE(Cart.send_date) >= ' => $send_date_start,
-                    'DATE(Cart.send_date) <= ' =>  $send_date_end
+                    'DATE(Cart.send_date) <= ' => $send_date_end
                 ),
                 'Cart.send_date is null'
             );
@@ -364,12 +364,21 @@ class TuanController extends AppController
     {
         $team_id = !empty($_REQUEST['team_id']) ? $_REQUEST['team_id'] : -1;
         $tuan_buying_id = !empty($_REQUEST['tuan_buying_id']) ? $_REQUEST['tuan_buying_id'] : -1;
-        $order_status = !empty($_REQUEST['order_status']) ?  $_REQUEST['order_status']: -1;
+        $order_status = !empty($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
 
-        $conditions = array();
-        if (!empty($team_id) && $team_id != -1) {
-            $conditions['Order.type'] = ORDER_TYPE_TUAN;
-
+        $conditions = array('Order.type' => ORDER_TYPE_TUAN);
+        $order_by = 'Order.created DESC';
+        if ($team_id == -1) {
+            $send_date_start = $_REQUEST['send_date_start'];
+            if (empty($send_date_start)) {
+                $send_date_start = date('Y-m-d', strtotime('+1 days'));
+            }
+            $conditions['OR'] = array(
+                'DATE(Cart.send_date)' => $send_date_start,
+                'Cart.send_date is null'
+            );
+            $order_by = "Order.consignee_address ASC";
+        } else {
             if ($tuan_buying_id != -1) {
                 $conditions['Order.member_id'] = $tuan_buying_id;
             } else {
@@ -389,18 +398,17 @@ class TuanController extends AppController
                 $conditions['OR'] = array(
                     array(
                         'DATE(Cart.send_date) >= ' => $send_date_start,
-                        'DATE(Cart.send_date) <= ' =>  $send_date_end
+                        'DATE(Cart.send_date) <= ' => $send_date_end
                     ),
                     'Cart.send_date is null'
                 );
             }
-            if ($order_status != -1) {
-                $conditions['Order.status'] = $order_status;
-            }
+        }
+        if ($order_status != -1) {
+            $conditions['Order.status'] = $order_status;
         }
 
-        $this->log('querh order conditions: '.json_encode($conditions));
-        $this->_query_orders($conditions, 'Order.created DESC');
+        $this->_query_orders($conditions, $order_by);
 
         $this->set('team_id', $team_id);
         $this->set('tuan_buying_id', $tuan_buying_id);
@@ -414,9 +422,10 @@ class TuanController extends AppController
     public function admin_query_empty_send_date()
     {
         $order_type = !empty($_REQUEST['order_type']) ? $_REQUEST['order_type'] : -1;
-        $order_status = !empty($_REQUEST['order_status']) ?  $_REQUEST['order_status']: -1;
+        $order_status = !empty($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
 
-        $conditions = array();
+        $conditions = array('Cart.send_date is null');
+        $conditions['DATE(Order.created) > '] = date('Y-m-d', strtotime('-31 days'));
         $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
 
         if ($order_type != -1) {
@@ -425,7 +434,6 @@ class TuanController extends AppController
         if ($order_status != -1) {
             $conditions['Order.status'] = $order_status;
         }
-        $conditions[] = 'Cart.send_date is null';
 
         $this->_query_orders($conditions, 'Order.created DESC', 20);
 
@@ -587,13 +595,12 @@ class TuanController extends AppController
                 'fields' => array('Order.*', 'Pay.trade_type', 'Cart.product_id', 'Cart.try_id', 'Cart.send_date'),
                 'order' => $order_by
             );
-            if(!empty($limit)){
+            if (!empty($limit)) {
                 $params['limit'] = $limit;
             }
             $this->log('query order conditions: ' . json_encode($params));
             $orders = $this->Order->find('all', $params);
-        }
-        else{
+        } else {
             $this->log('order condition is empty: ' . json_encode($conditions));
         }
 
