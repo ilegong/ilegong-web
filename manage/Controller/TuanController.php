@@ -427,7 +427,7 @@ class TuanController extends AppController
         }
         $conditions[] = 'Cart.send_date is null';
 
-        $this->_query_orders($conditions, 'Order.created DESC', 100);
+        $this->_query_orders($conditions, 'Order.created DESC', 20);
 
         $this->set('order_type', $order_type);
         $this->set('order_status', $order_status);
@@ -578,7 +578,6 @@ class TuanController extends AppController
                 'type' => 'LEFT'
             )
         );
-        $this->log('query order conditions: ' . json_encode($conditions));
 
         $orders = array();
         if (!empty($conditions)) {
@@ -591,8 +590,13 @@ class TuanController extends AppController
             if(!empty($limit)){
                 $params['limit'] = $limit;
             }
+            $this->log('query order conditions: ' . json_encode($params));
             $orders = $this->Order->find('all', $params);
         }
+        else{
+            $this->log('order condition is empty: ' . json_encode($conditions));
+        }
+
         $order_ids = Hash::extract($orders, "{n}.Order.id");
         $this->log('order ids: ' . json_encode($order_ids));
 
