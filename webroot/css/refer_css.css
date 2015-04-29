@@ -35,7 +35,9 @@ input{ outline:none;}
 .tuijian_title_style{vertical-align:middle;display:table-cell; color: #333333;}
 .tuijian_title_style span{ float: left;}
 .tuijian_title_style span.fl{ color: #c73c3c; padding-right: 5px;}
-.tuijian_comment{ display: block; height: 40px; line-height: 40px; border-bottom: 1px #eeeeee solid; text-align: center; color: #c73c3c; text-decoration: none; font-weight: bold;}
+.tuijian_title a{ display: block; width: 50px; background-color: #c73c3c; color: #ffffff; height: 30px; line-height: 30px; border-radius: 3px; text-align: center; text-decoration: none;}
+.tuijian_title a.disable{ background-color: #acacac; color: #ffffff;}
+.tuijian_comment{ display: block; height: 40px; line-height: 40px; border-bottom: 1px #eeeeee solid; text-align: center; color: #c73c3c; text-decoration: none; font-weight: bold; margin-bottom: 44px;}
 .tuijian_friend{ padding: 10px 0;}
 .tuijian_friend h1{ padding: 0; margin: 0; text-align: center; font-size: 1.5em; color: #c73c3c; padding-top: 5px;}
 .tuijian_memberlist{ padding: 10px 10px 0 10px;}
@@ -43,17 +45,22 @@ input{ outline:none;}
 .tuijian_memberlist ul li{ line-height: 18px; text-align: center; margin: 0 auto; white-space: nowrap;text-overflow:ellipsis; overflow:hidden; color: #666666;}
 .tuijian_memberlist img{ width:70%; border-radius: 5px;}
 .tuijian_memberlist_name{width:75%; text-align:center;margin: 0 auto;overflow: hidden; font-size: 0.9em;white-space: nowrap; text-overflow: ellipsis;}
+.tuijian_btn{ height: 44px; line-height: 44px; text-align: center; font-size: 1.1em; font-weight: bold; background-color:#c73c3c; width: 100%; text-decoration: none; color: #ffffff; display: block; position: fixed; bottom: 0; left: 0; z-index: 2;}
+.tuijian_login{ font-size: 1em; text-align: left; color: #333333; line-height: 20px; padding: 10px 10px 15px 10px;}
+.tuijian_login a{ display: block; width: 100px; margin: 0 auto; line-height: 30px; height: 30px; text-align: center; background-color: #c73c3c; color: #ffffff; border-radius: 3px; text-decoration: none; margin-top: 5px;}
 /*推荐商品*/
 .tuandetail_good{ padding:10px 0 0 10px;}
 .tuandetail_good a{ display:block; text-decoration:none; color:#333333; float:left; width:50%; margin-bottom:10px; position:relative;}
 .tuandetail_good a b,.tuandetail_seckill b{ display:block; border-radius:40px; width:40px; height:40px; line-height:40px; background-color:#EC4E4C; color:#ffffff; font-size:15px; text-align:center; position:absolute; left:1px; top:1px;}
-.tuandetail_good a .tuandetail_img{ margin-right:10px; border:1px #eeeeee solid; border-top:0;}
+.tuandetail_good a .tuandetail_img{ margin-right:10px; border:1px #eeeeee solid; border-bottom:0;}
 .tuandetail_good a .tuandetail_img img{ width:100%;}
 .tuandetail_title{ background-color:#ffffff; color:#333333; padding:5px 8px; margin-right:10px; border:1px #eeeeee solid; border-top:0;}
 .tuandetail_title span{ display:block; line-height:14px; font-size:0.9em;}
 .tuandetail_title em{ display:block; color:#cccccc; font-style:normal; padding-top:5px;}
 .tuandetail_title em strong{ color:#ff9000;}
 .tuandetail_title em font{ font-size:0.9em; text-decoration:line-through;}
+.tuandetail_exchange{ text-align: center; font-size: 1.4em; color: #333333; font-weight: bold; padding: 15px 0; border-bottom: 1px #eeeeee solid; color: #c73c3c; background-color: #ffffff;}
+.tuandetail_usebtn{ display: block; line-height: 35px; text-align: center; background-color: #ffffff; color: #c73c3c; font-size: 1em; font-weight: bold; margin-right: 10px; border: 1px #eeeeee solid; border-top: 0;}
 /*我的推荐列表*/
 .tuijianlist_banner{ background-color: #c73c3c; color: #ffffff; padding: 15px 0;}
 .tuijianlist_banner h1{ padding:0; margin: 0; text-align: center; font-size: 1.4em; line-height: 30px;}
@@ -62,6 +69,7 @@ input{ outline:none;}
 .tuijianlist li{ padding: 10px; border-bottom: 1px #eeeeee solid; background-color: #ffffff;}
 .tuijianlist em{ color: #c73c3c; padding-right: 5px;}
 .tuijianlist b{ font-weight: normal;}
-
-
+/*提示框*/
+.tipslayer_bg{ width: 100%; height: 100%; background-attachment: fixed; background-color: #000000;filter:alpha(opacity=25);-moz-opacity:0.25; opacity:0.25; position: fixed; z-index: 4; top: 0; left: 0;}
+.tipslayer_share{ width: 100%; background-color: #ffffff; color:#c73c3c; position: fixed; z-index: 5; left: 0; top: 0; text-align: center; font-weight: bold; padding: 40px 0;}
 

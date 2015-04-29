@@ -1,7 +1,19 @@
 {{$this->Html->css('/css/refer_css.css')}}
-<h1>{{$ref_user['nickname']}}向您推荐了朋友说：分享健康美食的平台。<a href="/">完成注册</a></h1>
+<div class="tuijian_login">{{$ref_user['nickname']}}向您推荐了【朋友说】{{if !empty($old_refer_name)}}(您已经接受了{{$old_refer_name}}的邀请){{/if}}
+    {{if !$reg_done}}
+    {{if $referred}}
+    您已经接受过{{$old_refer_name}}的邀请，<a href="/">去看看</a>。
+    {{else}}
+    {{if !$phone_bind}}
+    <a href="javascript:;" class="accept_done">接受邀请注册</a>
+    {{elseif $receive_cnt <= 0}}
+    <a href="/">完成第一单</a>
+    {{/if}}
+    {{/if}}
+    {{/if}}
+</div>
 <div class="tuijian" style="border-bottom: 0; margin-top: 0;">
-    <h1>{{$ref_user['nickname']}}在 朋友说 买过什么</h1>
+    <h1>{{$ref_user['nickname']}}在【朋友说】买过什么</h1>
     {{loop $product_comments $key $item}}
     <ul class="clearfix">
         <li class="fl"><img src="{{$this->Html->assetUrl(!empty($ref_user['image'])? $ref_user['image']:'/img/mine_head.png')}}"/></li>
@@ -26,17 +38,6 @@
     {{/loop}}
 </div>
 <div class="tuijian_friend">
-   <?php /*
-    <h1>看看朋友们怎么说</h1>
-    <div class="tuijian_memberlist clearfix">
-        {{loop $recommends $k $recom}}
-        <ul>
-            <li><img src="images/head01.jpg" /></li>
-            <li><div class="tuijian_memberlist_name">朋友说-鹏鹏</div></li>
-        </ul>
-        {{/loop}}
-    </div>
-    */ ?>
     <div class="clearfix tuandetail_good">
         {{loop $recommends $k $recom}}
         <a href="{{product_link2($recom)}}">
@@ -50,3 +51,31 @@
         {{/loop}}
     </div>
 </div>
+
+<div class="tuijian_login">
+    {{if !$reg_done}}
+    {{if $referred}}
+        您已经接受过{{$old_refer_name}}的邀请，<a href="/">去看看</a>。
+    {{else}}
+        {{if !$phone_bind}}
+            <a href="javascript:;" class="accept_done">接受邀请注册</a>
+        {{elseif $receive_cnt <= 0}}
+            <a href="/">完成第一单</a>
+        {{/if}}
+    {{/if}}
+    {{/if}}
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        $('.accept_done').click(function(){
+            $.post('/refer/accept.html', {'uid': '{{$ref_user["id"]}}'}, function (data) {
+                var $result = JSON.parse(data);
+                if ($result['success'] === true) {
+                    window.location.href='/users/to_bind_mobile?ref_url='+encodeURIComponent('/refer/client/{{$ref_user["id"]}}.html')+'&reason='+encodeURIComponent('绑定手机号完成注册');
+                }
+            });
+        });
+    });
+</script>

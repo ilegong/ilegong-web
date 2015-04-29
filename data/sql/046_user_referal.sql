@@ -13,3 +13,8 @@ CREATE TABLE `cake_user_refers` (
   KEY `idx_from` (`from`),
   KEY `idx_to` (`to`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+alter table cake_user_refers add bind_done tinyint default 0;
+alter table cake_user_refers add first_order_done tinyint default 0;
+alter table cake_user_refers add first_comment_done tinyint default 0;
+alter table cake_user_refers add got_notify tinyint default 0;

@@ -28,6 +28,10 @@ const SCORE_ORDER_SPENT_UNDO = 6; //取消/退款等，返回使用的积分
 
 const SCORE_ORDER_SPENT_CANCEL = 5; //退款取消已经发放的积分
 
+const SCORE_REFERRAL_BIND_OK = 7; //推荐人推荐某人绑定后得到的积分
+const SCORE_REFERRAL_BIND_OK_TO = 8; //推荐人推荐某人某人绑定后，被推荐人得到积分
+const SCORE_REFERRAL_FIRST_ORDER = 9; //推荐人推荐某人完成首单
+
 const SPEICAL_LIST_DAILY_ID = 4;
 
 const ASSET_SXA_DOMAIN = 's.tongshijia.com';

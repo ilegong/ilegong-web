@@ -9,7 +9,7 @@
 class ReferController extends AppController {
 
 
-    var $uses = array('Refer', 'Comment');
+    var $uses = array('UserRefer', 'Comment');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -27,8 +27,36 @@ class ReferController extends AppController {
             $uid = $this->currentUser['id'];
         }
 
+        $userRefers = $this->UserRefer->find('all', array(
+            'conditions' => array('from' => $this->currentUser['id'], 'deleted' => DELETED_NO),
+        ));
+
+        $this->set('total_refers', count($userRefers));
+
         $product_comments = $this->build_comments($uid);
         $this->set('product_comments', $product_comments);
+    }
+
+    public function accept() {
+        $this->autoRender = false;
+        //todo:检查是否可以接受邀请，并且必须用 POST
+        $success = false;
+        $uid = $_POST['uid'];
+        if ($uid) {
+
+            $referred = $this->find_be_referred_for_me($this->currentUser['id']);
+            if (empty($referred)) {
+                $data = array();
+                $data['UserRefer']['from'] = $uid;
+                $data['UserRefer']['to'] = $this->currentUser['id'];
+                $this->UserRefer->save($data);
+                $success = true;
+            } else {
+                $success = true;
+            }
+        }
+
+        echo json_encode(array('success' => $success));
     }
 
     public function client($uid) {
@@ -39,6 +67,23 @@ class ReferController extends AppController {
         }
         $this->set('ref_user', $user['User']);
 
+        $phone_binded = !empty($this->currentUser['mobilephone']);
+        $mOrder = ClassRegistry::init('Order');
+        $received_cnt = $mOrder->count_received_order($this->currentUser['id']);
+        $reg_done = $phone_binded && $received_cnt > 0;
+        $this->set('reg_done', $reg_done);
+        $this->set('received_cnt', $received_cnt);
+        $this->set('phone_bind', $phone_binded);
+
+        if (!$phone_binded || $received_cnt <= 0) {
+            $referred = $this->find_be_referred_for_me($uid);
+            if (!empty($referred)) {
+                $this->set('referred', $referred);
+                $old_ref_user = $this->User->findById($referred['UserRefer']['from']);
+                $this->set('$old_refer_name', $old_ref_user['User']['nickname']);
+            }
+        }
+
         $product_comments = $this->build_comments($uid);
         $this->set('product_comments', $product_comments);
 
@@ -47,13 +92,19 @@ class ReferController extends AppController {
         $this->set('recommends', $recommends);
     }
 
+    public function add_got_notify() {
+        $refer_id = $_GET['refer_id'];
+        $this->UserRefer->updateAll(array('got_notify' => 1), array('id' => $refer_id, 'bind_done' => 1, 'first_order_done' => 1));
+    }
+
     public function my_refer() {
         $uid = $this->currentUser['id'];
         $this->loadModel('UserRefer');
-        $refers = $this->UserRefer->find('all', array('conditions' => array('to' => $uid, 'deleted' => DELETED_NO)));
+        $refers = $this->UserRefer->find('all', array('conditions' => array('from' => $uid, 'deleted' => DELETED_NO)));
         $this->set('refers', $refers);
-        $uid_list = Hash::extract($refers, '{n}.User.id');
+        $uid_list = Hash::extract($refers, '{n}.UserRefer.to');
         if (!empty($uid_list)) {
+            $this->loadModel('User');
             $users = $this->User->find('all', array(
                 'conditions' => array('id' => $uid_list),
             ));
@@ -102,6 +153,18 @@ class ReferController extends AppController {
             unset($item['pictures']);
         }
         return $product_comments;
+    }
+
+    /**
+     * @param $uid
+     * @return mixed
+     */
+    private function find_be_referred_for_me($uid) {
+        $referred = $this->UserRefer->find('first', array('conditions' => array(
+            'to' => $uid,
+            'deleted' => DELETED_NO,
+        )));
+        return $referred;
     }
 
 }

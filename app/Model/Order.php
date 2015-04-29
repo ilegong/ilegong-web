@@ -268,6 +268,12 @@ class Order extends AppModel {
         ));
     }
 
+    public function count_received_order($uid) {
+        return $this->find('count', array(
+            'conditions' => array('creator' => $uid, 'status' => array(ORDER_STATUS_RECEIVED)),
+        ));
+    }
+
     public function count_to_confirm_received($uid) {
         $result = $this->query('select count(1) as cnt, ifnull(sum(floor(total_all_price)), 0) as total_price from cake_orders where status='.ORDER_STATUS_SHIPPED.' and creator='.$uid.' and deleted='.DELETED_NO.' and published='.PUBLISH_YES);
         return array($result[0][0]['cnt'], $result[0][0]['total_price']);
@@ -327,6 +333,10 @@ class Order extends AppModel {
                         $userM = ClassRegistry::init('User');
                         $userM->add_score($creator, $rtn['Score']['score']);
                     }
+
+                    $urM = ClassRegistry::init('UserRefer');
+
+
                 }
             } else if ($origStatus == ORDER_STATUS_WAITING_PAY && $toStatus == ORDER_STATUS_CANCEL) {
                 $order = $this->findById($order_id);

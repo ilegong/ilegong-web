@@ -1,5 +1,6 @@
 {{$this->Html->css('/css/refer_css.css')}}
 <div class="tuijian_banner">{{$this->Html->image("/img/refer/banner.gif")}}</div>
+       {{if $total_refers>0}} <h1><a href="/refer/my_refer.html">{{$total_refers}}位新用户接受了您的推荐</a></h1>{{/if}}
 <div class="tuijian">
     <h1>推荐流程</h1>
     {{$this->Html->image("/img/refer/process1.gif")}}<br/>
@@ -12,7 +13,7 @@
         <dl class="clearfix">
             <dd><strong>推荐人满足的条件：</strong><br/>订单数≥3、评论数≥3，才可以推荐好友喔~~</dd>
             {{if count($product_comments) < 3}}
-            <dd><span style="display: block; float: left;">您还需评价{{3-count($product_comments)}}个订单，才可以邀请好友喔~~</span><a href="/orders/mine.html?tab=comment">去评价</a></dd>
+            <dd><span style="display: block; float: left;">您还需评价{{3-count($product_comments)}}个订单，才可以邀请好友</span><a href="/orders/mine.html?tab=comment">去评价</a></dd>
             {{/if}}
         </dl>
         <dl class="clearfix">
@@ -49,12 +50,31 @@
         </li>
     </ul>
     {{/loop}}
+
     <a href="/orders/mine.html?tab=comment" class="tuijian_comment">去评价赢积分</a>
 </div>
+
+{{if count($product_comments) >= 3}}
+<a href="#X" class="tuijian_btn">马上邀请</a>
+{{/if}}
+
+<!--分享提示层-->
+<div class="tipslayer_share" style="display: none;"><div style="width: 90%; margin: 0 auto; font-size: 1.3em;">点击右上角“…”，分享给好友或朋友圈。</div></div>
+<div class="tipslayer_bg" style="display: none"></div>
 
 {{$this->Html->css(array('/js/photoswipe/photoswipe.css?v1','/js/photoswipe/default-skin/default-skin.css?v1'))}}
 {{$this->Html->script(array('/js/photoswipe/photoswipe.js?v2','/js/photoswipe/photoswipe-ui-default.min.js'))}}
 <script>
+
+    $(document).ready(function(){
+        $('.tuijian_btn').click(function(){
+            var tls = $('.tipslayer_share, .tipslayer_bg');
+            tls.show().click(function(){
+                tls.hide();
+            });
+        });
+    });
+
     var openPhotoSwipe = function(items) {
         var pswpElement = document.querySelectorAll('.pswp')[0];
 
