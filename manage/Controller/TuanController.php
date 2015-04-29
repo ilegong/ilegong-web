@@ -366,19 +366,20 @@ class TuanController extends AppController
         $tuan_buying_id = !empty($_REQUEST['tuan_buying_id']) ? $_REQUEST['tuan_buying_id'] : -1;
         $order_status = !empty($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
 
-        $conditions = array('Order.type' => ORDER_TYPE_TUAN);
+        $conditions = array();
         $order_by = 'Order.created DESC';
         if ($team_id == -1) {
             $send_date_start = $_REQUEST['send_date_start'];
-            if (empty($send_date_start)) {
-                $send_date_start = date('Y-m-d', strtotime('+1 days'));
+            if (!empty($send_date_start)) {
+                $conditions['Order.type'] = ORDER_TYPE_TUAN;
+                $conditions['DATE(Cart.send_date)'] = $send_date_start;
+                $order_by = "Order.consignee_address ASC";
             }
-            $conditions['OR'] = array(
-                'DATE(Cart.send_date)' => $send_date_start,
-                'Cart.send_date is null'
-            );
-            $order_by = "Order.consignee_address ASC";
+            if ($order_status != -1) {
+                $conditions['Order.status'] = $order_status;
+            }
         } else {
+            $conditions['Order.type'] = ORDER_TYPE_TUAN;
             if ($tuan_buying_id != -1) {
                 $conditions['Order.member_id'] = $tuan_buying_id;
             } else {
@@ -395,17 +396,12 @@ class TuanController extends AppController
                 if (empty($send_date_end)) {
                     $send_date_end = date('Y-m-d', strtotime('+5 days'));
                 }
-                $conditions['OR'] = array(
-                    array(
-                        'DATE(Cart.send_date) >= ' => $send_date_start,
-                        'DATE(Cart.send_date) <= ' => $send_date_end
-                    ),
-                    'Cart.send_date is null'
-                );
+                $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
+                $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
             }
-        }
-        if ($order_status != -1) {
-            $conditions['Order.status'] = $order_status;
+            if ($order_status != -1) {
+                $conditions['Order.status'] = $order_status;
+            }
         }
 
         $this->_query_orders($conditions, $order_by);
