@@ -1,4 +1,4 @@
-CREATE TABLE `cake_user_refers` (
+CREATE TABLE `cake_refers` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `step` int(11) NOT NULL DEFAULT '0',
   `from` bigint(20) NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE `cake_user_refers` (
   KEY `idx_to` (`to`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-alter table cake_user_refers add bind_done tinyint default 0;
-alter table cake_user_refers add first_order_done tinyint default 0;
-alter table cake_user_refers add first_comment_done tinyint default 0;
-alter table cake_user_refers add got_notify tinyint default 0;
+alter table cake_refers add bind_done tinyint default 0;
+alter table cake_refers add first_order_done tinyint default 0;
+alter table cake_refers add first_comment_done tinyint default 0;
+alter table cake_refers add got_notify tinyint default 0;

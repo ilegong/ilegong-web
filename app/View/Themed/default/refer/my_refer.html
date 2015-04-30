@@ -11,22 +11,22 @@
         <span class="fl"><img src="{{$this->Html->assetUrl(!empty($m_users[$refer['User']['id']]['image'])? $m_users[$refer['User']['id']]['image']:'/img/mine_head.png')}}"/></span>
         <div class="tuijian_title">
             <div class="tuijian_title_style clearfix">
-                <em class="fl">{{$m_users[$refer['UserRefer']['to']]['nickname']}}</em>
+                <em class="fl">{{$m_users[$refer['Refer']['to']]['nickname']}}</em>
                 <b>
-                    {{if $refer['UserRefer']['bind_done'] && $refer['UserRefer']['first_order_done']}}完成注册，第一单收货完成
-                    {{elseif $refer['UserRefer']['bind_done']}}完成了注册，等待完成第一单
-                    {{elseif $refer['UserRefer']['first_order_done']}}完成了第一单，还没有完成注册
+                    {{if $refer['Refer']['bind_done'] && $refer['Refer']['first_order_done']}}完成注册，第一单收货完成
+                    {{elseif $refer['Refer']['bind_done']}}完成了注册，等待完成第一单
+                    {{elseif $refer['Refer']['first_order_done']}}完成了第一单，还没有完成注册
                     {{else}}
                         等待绑定手机号完成注册
                     {{/if}}
                 </b>
             </div>
-            {{if $refer['UserRefer']['gift_got'] == 1}}<a class="disable">已领取</a>
-            {{elseif $refer['UserRefer']['gift_got'] == 0 && $refer['UserRefer']['bind_done'] == 1 && $refer['UserRefer']['first_order_done'] == 1}}
+            {{if $refer['Refer']['gift_got'] == 1}}<a class="disable">已领取</a>
+            {{elseif $refer['Refer']['gift_got'] == 0 && $refer['Refer']['bind_done'] == 1 && $refer['Refer']['first_order_done'] == 1}}
 
-            {{if $refer['UserRefer']['got_notify'] == 1}} <a class="disable">待确认配货</a>
+            {{if $refer['Refer']['got_notify'] == 1}} <a class="disable">待确认配货</a>
             {{else}}
-                <a refer_id="{{$refer['UserRefer']['id']}}" href="#X">领取</a>
+                <a refer_id="{{$refer['Refer']['id']}}" href="#X">领取</a>
             {{/if}}
 
             {{/if}}

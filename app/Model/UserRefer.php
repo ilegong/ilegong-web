@@ -6,7 +6,9 @@
  * Time: 4:10 PM
  */
 
-class UserRefer extends AppModel {
+class Refer extends AppModel {
+
+    var $
 
     public function  be_referred_and_new($uid) {
 
@@ -35,11 +37,11 @@ class UserRefer extends AppModel {
         ));
 
         if (!empty($ref)) {
-            $result = $this->updateAll(array('bind_done' => 1, ), array('to' => $uid, 'id' => $ref['UserRefer']['id']));
+            $result = $this->updateAll(array('bind_done' => 1, ), array('to' => $uid, 'id' => $ref['Refer']['id']));
             if ($result)  {
                 $scoreM = ClassRegistry::init('Score');
                 //默认给100积分
-                $scoreM->add_score_by_refer_bind(100, $uid, $nickname, $ref['UserRefer']['from']);
+                $scoreM->add_score_by_refer_bind(100, $uid, $nickname, $ref['Refer']['from']);
             } else {
                 $this->log('error to update update_referred_bind');
             }
@@ -49,14 +51,14 @@ class UserRefer extends AppModel {
     public function update_referred_new_order($uid) {
         $ref = $this->find_first_refer_to_uid($uid);
         $this->log("debug: find_first_refer_to_uid ".json_encode($ref));
-        if (!empty($ref) && $ref['UserRefer']['first_order_done'] != 1) {
+        if (!empty($ref) && $ref['Refer']['first_order_done'] != 1) {
             $this->log("debug: execute update all...");
-            $result = $this->updateAll(array('first_order_done' => 1, ), array('first_order_done' => 0, 'to' => $uid, 'id' => $ref['UserRefer']['id']));
+            $result = $this->updateAll(array('first_order_done' => 1, ), array('first_order_done' => 0, 'to' => $uid, 'id' => $ref['Refer']['id']));
             $this->log("debug: execute update all...done:".$result);
             if ($result)  {
                 $scoreM = ClassRegistry::init('Score');
                 //默认给10积分
-                $scoreM->add_score_by_refer_accept_order(10, $uid, '', $ref['UserRefer']['from']);
+                $scoreM->add_score_by_refer_accept_order(10, $uid, '', $ref['Refer']['from']);
             } else {
                 $this->log('error to update update_referred_new_order');
             }

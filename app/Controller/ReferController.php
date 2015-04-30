@@ -9,7 +9,7 @@
 class ReferController extends AppController {
 
 
-    var $uses = array('UserRefer', 'Comment');
+    var $uses = array('Refer', 'Comment');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -30,7 +30,7 @@ class ReferController extends AppController {
             $this->redirect('/refer/client/'.$uid.'.html');
         }
 
-        $userRefers = $this->UserRefer->find('all', array(
+        $userRefers = $this->Refer->find('all', array(
             'conditions' => array('from' => $this->currentUser['id'], 'deleted' => DELETED_NO),
         ));
 
@@ -52,9 +52,9 @@ class ReferController extends AppController {
             $referred = $this->find_be_referred_for_me($this->currentUser['id']);
             if (empty($referred)) {
                 $data = array();
-                $data['UserRefer']['from'] = $uid;
-                $data['UserRefer']['to'] = $this->currentUser['id'];
-                $this->UserRefer->save($data);
+                $data['Refer']['from'] = $uid;
+                $data['Refer']['to'] = $this->currentUser['id'];
+                $this->Refer->save($data);
                 $success = true;
             } else {
                 $success = true;
@@ -85,7 +85,7 @@ class ReferController extends AppController {
             $referred = $this->find_be_referred_for_me($uid);
             if (!empty($referred)) {
                 $this->set('referred', $referred);
-                $old_ref_user = $this->User->findById($referred['UserRefer']['from']);
+                $old_ref_user = $this->User->findById($referred['Refer']['from']);
                 $this->set('$old_refer_name', $old_ref_user['User']['nickname']);
             }
         }
@@ -100,15 +100,15 @@ class ReferController extends AppController {
 
     public function add_got_notify() {
         $refer_id = $_GET['refer_id'];
-        $this->UserRefer->updateAll(array('got_notify' => 1), array('id' => $refer_id, 'bind_done' => 1, 'first_order_done' => 1));
+        $this->Refer->updateAll(array('got_notify' => 1), array('id' => $refer_id, 'bind_done' => 1, 'first_order_done' => 1));
     }
 
     public function my_refer() {
         $uid = $this->currentUser['id'];
-        $this->loadModel('UserRefer');
-        $refers = $this->UserRefer->find('all', array('conditions' => array('from' => $uid, 'deleted' => DELETED_NO)));
+        $this->loadModel('Refer');
+        $refers = $this->Refer->find('all', array('conditions' => array('from' => $uid, 'deleted' => DELETED_NO)));
         $this->set('refers', $refers);
-        $uid_list = Hash::extract($refers, '{n}.UserRefer.to');
+        $uid_list = Hash::extract($refers, '{n}.Refer.to');
         if (!empty($uid_list)) {
             $this->loadModel('User');
             $users = $this->User->find('all', array(
@@ -168,7 +168,7 @@ class ReferController extends AppController {
      * @return mixed
      */
     private function find_be_referred_for_me($uid) {
-        $referred = $this->UserRefer->find('first', array('conditions' => array(
+        $referred = $this->Refer->find('first', array('conditions' => array(
             'to' => $uid,
             'deleted' => DELETED_NO,
         )));

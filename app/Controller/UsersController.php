@@ -1140,7 +1140,7 @@ class UsersController extends AppController {
                     $this->Session->write('Auth.User.mobilephone',$mobile_num);
                     $res = array('success'=> true, 'msg'=>'你的账号和手机号绑定成功');
 
-                    $urM = ClassRegistry::init('UserRefer');
+                    $urM = ClassRegistry::init('Refer');
                     if($urM->be_referred_and_new($this->currentUser['id'])) {
                         $urM->update_referred_bind($this->currentUser['id'], $this->currentUser['nickname']);
                         $res['referred'] = true;
