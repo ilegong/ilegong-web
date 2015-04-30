@@ -19,13 +19,16 @@ class ReferController extends AppController {
             $this->redirect('/users/login.html?force_login=1&auto_weixin='.$this->is_weixin().'&referer=' . urlencode($ref));
         }
 
-        $this->set('hideNav', true);
+//        $this->set('hideNav', true);
+        $this->pageTitle = $this->currentUser['nickname']. '向您推荐了【朋友说】, 朋友间分享健康美食的平台';
     }
 
     public function index($uid = 0) {
         if (!$uid) {
             $uid = $this->currentUser['id'];
             $this->redirect('/refer/index/'.$this->currentUser['id'].'.html');
+        } else if ($uid != $this->currentUser['id']) {
+            $this->redirect('/refer/client/'.$uid.'.html');
         }
 
         $userRefers = $this->UserRefer->find('all', array(
@@ -36,8 +39,6 @@ class ReferController extends AppController {
 
         $product_comments = $this->build_comments($uid);
         $this->set('product_comments', $product_comments);
-
-        $this->pageTitle = $this->currentUser['nickname']. '向您推荐了【朋友说】';
     }
 
     public function accept() {
@@ -114,6 +115,8 @@ class ReferController extends AppController {
             $m_users = Hash::combine($users, '{n}.User.id', '{n}.User');
             $this->set('m_users', $m_users);
         }
+
+        $this->pageTitle = '我推荐的用户';
     }
 
     /**
