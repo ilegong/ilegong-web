@@ -31,7 +31,7 @@ class ReferController extends AppController {
         }
 
         $userRefers = $this->Refer->find('all', array(
-            'conditions' => array('from' => $this->currentUser['id'], 'deleted' => DELETED_NO),
+            'conditions' => array('from' => $uid, 'deleted' => DELETED_NO),
         ));
 
         $this->set('total_refers', count($userRefers));
