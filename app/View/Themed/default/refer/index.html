@@ -7,21 +7,21 @@
     {{$this->Html->image("/img/refer/process2.gif")}}<br/>
     {{$this->Html->image("/img/refer/process3.gif")}}
 </div>
-<div class="tuijian">
+<div class="tuijian" id="div_tuijian_rules">
     <h1>推荐规则</h1>
     <div class="tuijian_padding">
         <dl class="clearfix">
-            <dd><strong>推荐人满足的条件：</strong><br/>订单数≥3、评论数≥3，才可以推荐好友喔~~</dd>
+            <dd><strong>1. 推荐人满足的条件：</strong><br/>订单数≥3、评论数≥3，才可以推荐好友喔~~</dd>
             {{if count($product_comments) < 3}}
             <dd><span style="display: block; float: left;">您还需评价{{3-count($product_comments)}}个订单，才可以邀请好友</span><a href="/orders/mine.html?tab=comment">去评价</a></dd>
             {{/if}}
         </dl>
         <dl class="clearfix">
-            <dd><strong>被推荐人是首次在【朋友说】下单</strong></dd>
+            <dd><strong>2. 被推荐人是首次在【朋友说】下单，完成注册</strong></dd>
         </dl>
         <dl class="clearfix">
-            <dd><strong>被推荐人自提地区：</strong></dd>
-            <dd>回龙观、天通苑、北苑、西三旗、昌平县城、沙河等地区</dd>
+            <dd><strong>3. 被推荐人自提地区：</strong></dd>
+            <dd>回龙观、天通苑、北苑、西三旗、昌平县城、沙河、顺义县城等地</dd>
         </dl>
     </div>
 </div>
@@ -55,7 +55,7 @@
 </div>
 
 {{if count($product_comments) >= 3}}
-<a href="#X" class="tuijian_btn">马上邀请</a>
+<a href="javascript:;" class="tuijian_btn">马上邀请</a>
 {{/if}}
 
 <!--分享提示层-->

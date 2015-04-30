@@ -121,7 +121,7 @@ class ReferController extends AppController {
      */
     private function build_comments($uid) {
         $product_comments = $this->Comment->find('all', array(
-            'conditions' => array('user_id' => $uid, 'rating >' => 3, 'published' => PUBLISH_YES, 'type' => 'Product'),
+            'conditions' => array('user_id' => $uid, 'rating >' => 3, 'type' => 'Product'),
             'order' => 'created desc',
         ));
 
