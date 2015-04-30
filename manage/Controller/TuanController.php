@@ -256,6 +256,13 @@ class TuanController extends AppController
                 $this->set('consign_dates', $consign_dates);
             }
         }
+
+        $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date is null and o.type in (5, 6) and o.status in (0, 1) and DATE(o.created) > '.date('Y-m-d', strtotime('-31 days')));
+        $this->set('empty_send_date_count', $empty_send_date_count[0][0]['ct']);
+
+        $paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date <= now() and o.status = 1');
+        $this->set('paid_not_sent_count', $paid_not_sent_count[0][0]['ct']);
+
         $this->set('spec_groups', $spec_groups);
         $this->set('team_id', $team_id);
         $this->set('product_id', $product_id);
@@ -340,13 +347,8 @@ class TuanController extends AppController
             if (empty($send_date_end)) {
                 $send_date_end = date('Y-m-d', strtotime('+5 days'));
             }
-            $conditions['OR'] = array(
-                array(
-                    'DATE(Cart.send_date) >= ' => $send_date_start,
-                    'DATE(Cart.send_date) <= ' =>  $send_date_end
-                ),
-                'Cart.send_date is null'
-            );
+            $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
+            $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
         }
 
         $this->_query_orders($conditions, 'Order.created DESC');
@@ -364,12 +366,22 @@ class TuanController extends AppController
     {
         $team_id = !empty($_REQUEST['team_id']) ? $_REQUEST['team_id'] : -1;
         $tuan_buying_id = !empty($_REQUEST['tuan_buying_id']) ? $_REQUEST['tuan_buying_id'] : -1;
-        $order_status = !empty($_REQUEST['order_status']) ?  $_REQUEST['order_status']: -1;
+        $order_status = !empty($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
 
         $conditions = array();
-        if (!empty($team_id) && $team_id != -1) {
+        $order_by = 'Order.created DESC';
+        if ($team_id == -1) {
+            $send_date_start = $_REQUEST['send_date_start'];
+            if (!empty($send_date_start)) {
+                $conditions['Order.type'] = ORDER_TYPE_TUAN;
+                $conditions['DATE(Cart.send_date)'] = $send_date_start;
+                $order_by = "Order.consignee_address ASC";
+            }
+            if ($order_status != -1) {
+                $conditions['Order.status'] = $order_status;
+            }
+        } else {
             $conditions['Order.type'] = ORDER_TYPE_TUAN;
-
             if ($tuan_buying_id != -1) {
                 $conditions['Order.member_id'] = $tuan_buying_id;
             } else {
@@ -386,21 +398,15 @@ class TuanController extends AppController
                 if (empty($send_date_end)) {
                     $send_date_end = date('Y-m-d', strtotime('+5 days'));
                 }
-                $conditions['OR'] = array(
-                    array(
-                        'DATE(Cart.send_date) >= ' => $send_date_start,
-                        'DATE(Cart.send_date) <= ' =>  $send_date_end
-                    ),
-                    'Cart.send_date is null'
-                );
+                $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
+                $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
             }
             if ($order_status != -1) {
                 $conditions['Order.status'] = $order_status;
             }
         }
 
-        $this->log('querh order conditions: '.json_encode($conditions));
-        $this->_query_orders($conditions, 'Order.created DESC');
+        $this->_query_orders($conditions, $order_by);
 
         $this->set('team_id', $team_id);
         $this->set('tuan_buying_id', $tuan_buying_id);
@@ -413,25 +419,25 @@ class TuanController extends AppController
 
     public function admin_query_empty_send_date()
     {
-        $order_type = !empty($_REQUEST['order_type']) ? $_REQUEST['order_type'] : -1;
-        $order_status = !empty($_REQUEST['order_status']) ?  $_REQUEST['order_status']: -1;
-
-        $conditions = array();
+        $conditions = array('Cart.send_date is null');
+        $conditions['DATE(Order.created) > '] = date('Y-m-d', strtotime('-31 days'));
+        $conditions['Order.status'] = array(0, 1);
         $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
 
-        if ($order_type != -1) {
-            $conditions['Order.type'] = $order_type;
-        }
-        if ($order_status != -1) {
-            $conditions['Order.status'] = $order_status;
-        }
-        $conditions[] = 'Cart.send_date is null';
+        $this->_query_orders($conditions, 'Order.created DESC', 10);
 
-        $this->_query_orders($conditions, 'Order.created DESC', 20);
-
-        $this->set('order_type', $order_type);
-        $this->set('order_status', $order_status);
         $this->set('query_type', 'emptySendDate');
+        $this->render("admin_tuan_orders");
+    }
+
+    public function admin_query_paid_not_send()
+    {
+        $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
+        $conditions['Order.status'] = ORDER_STATUS_PAID;
+        $conditions['DATE(Cart.send_date) <'] = date('Y-m-d');
+        $this->_query_orders($conditions, 'Order.created DESC');
+
+        $this->set('query_type', 'paidNotSend');
         $this->render("admin_tuan_orders");
     }
 
@@ -452,8 +458,11 @@ class TuanController extends AppController
         $expired_tuan_buying_count = $this->TuanBuying->query('select count(*) as c from cake_tuan_buyings where end_time < now() and status = 0');
         $this->set('expired_tuan_buying_count', $expired_tuan_buying_count[0][0]['c']);
 
-        $invalid_orders_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date is null and o.type in (5, 6) and o.status = 1');
-        $this->set('invalid_orders_count', $invalid_orders_count[0][0]['ct']);
+        $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date is null and o.type in (5, 6) and o.status in (0, 1) and DATE(o.created) > '.date('Y-m-d', strtotime('-31 days')));
+        $this->set('empty_send_date_count', $empty_send_date_count[0][0]['ct']);
+
+        $paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date <= now() and o.status = 1');
+        $this->set('paid_not_sent_count', $paid_not_sent_count[0][0]['ct']);
     }
 
     function admin_send_date($type)
@@ -575,7 +584,7 @@ class TuanController extends AppController
                 'conditions' => array(
                     'Cart.order_id = Order.id'
                 ),
-                'type' => 'LEFT'
+                'type' => 'INNER'
             )
         );
 
@@ -587,13 +596,12 @@ class TuanController extends AppController
                 'fields' => array('Order.*', 'Pay.trade_type', 'Cart.product_id', 'Cart.try_id', 'Cart.send_date'),
                 'order' => $order_by
             );
-            if(!empty($limit)){
+            if (!empty($limit)) {
                 $params['limit'] = $limit;
             }
             $this->log('query order conditions: ' . json_encode($params));
             $orders = $this->Order->find('all', $params);
-        }
-        else{
+        } else {
             $this->log('order condition is empty: ' . json_encode($conditions));
         }
 
@@ -664,6 +672,12 @@ class TuanController extends AppController
             $result = $this->Cart->query('select sum(num) from cake_carts where order_id in ' . $order_id_strs);
             $product_count = $result[0][0]['sum(num)'];
         }
+
+        $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date is null and o.type in (5, 6) and o.status in (0, 1) and DATE(o.created) > '.date('Y-m-d', strtotime('-31 days')));
+        $this->set('empty_send_date_count', $empty_send_date_count[0][0]['ct']);
+
+        $paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date <= now() and o.status = 1');
+        $this->set('paid_not_sent_count', $paid_not_sent_count[0][0]['ct']);
 
         $this->set('should_count_nums', true);
         $this->set('product_count', $product_count);
