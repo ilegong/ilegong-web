@@ -336,8 +336,12 @@ class Order extends AppModel {
 
                     $urM = ClassRegistry::init('UserRefer');
                     $this->log("debug: before update_referred_new_order");
-                    $urM->test();
-                    $urM->update_referred_new_order($creator);
+                    try {
+                        $urM->test();
+                        $urM->update_referred_new_order($creator);
+                    }catch (Exception $e){
+                        $this->log("error:".$e);
+                    }
                     $this->log("debug: end update_referred_new_order");
                 }
             } else if ($origStatus == ORDER_STATUS_WAITING_PAY && $toStatus == ORDER_STATUS_CANCEL) {
