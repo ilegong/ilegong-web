@@ -625,7 +625,6 @@ class TuanController extends AppController
             ));
             $tuan_buys = Hash::combine($tuan_buys, '{n}.TuanBuying.id', '{n}.TuanBuying');
         }
-        $this->log('tuan buyings: ' . json_encode($tuan_buys));
 
         $tuans = array();
         if (!empty($tuan_buys)) {
@@ -637,7 +636,6 @@ class TuanController extends AppController
             ));
             $tuans = Hash::combine($tuans, '{n}.TuanTeam.id', '{n}.TuanTeam');
         }
-        $this->log("tuan teams: ".json_encode($tuans));
 
         $p_ids = Hash::extract($tuan_buys, '{n}.pid');
         $this->log("pids: ".json_encode($p_ids));
@@ -650,7 +648,6 @@ class TuanController extends AppController
             ));
             $spec_groups = Hash::combine($spec_groups, '{n}.ProductSpecGroup.id', '{n}.ProductSpecGroup.spec_names');
         }
-        $this->log("spec groups: ".json_encode($spec_groups));
 
         $carts = array();
         if (!empty($order_ids)) {
@@ -661,7 +658,6 @@ class TuanController extends AppController
                 ),
             ));
         }
-        $this->log('carts: ' . json_encode($carts));
 
         $order_carts = array();
         foreach ($carts as &$c) {
