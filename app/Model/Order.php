@@ -334,7 +334,9 @@ class Order extends AppModel {
                         $userM->add_score($creator, $rtn['Score']['score']);
 
                         $urM = ClassRegistry::init('UserRefer');
+                        $this->log("debug: before update_referred_new_order");
                         $urM->update_referred_new_order($creator);
+                        $this->log("debug: end update_referred_new_order");
                     }
 
                 }
