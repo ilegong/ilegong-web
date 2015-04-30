@@ -54,7 +54,7 @@
     </ul>
     <img src="{{$this->Html->assetUrl('/img/mobilev1/mine_bg.jpg')}}" />
 </div>
-<!--<a href="/refer/index.html"><img src="{{$this->Html->assetUrl('/img/refer/banner.gif')}}" width="100%"/></a>-->
+<a href="/refer/index/{{$CurrentUser['id']}}.html"><img src="{{$this->Html->assetUrl('/img/refer/banner.gif')}}" width="100%"/></a>
 {{if $CurrentUser['is_business']}}
 <div class="mine">
     <a href="{{$this->Html->url(array('controller' => 'orders','action'=>'wait_shipped_orders','plugin' => null ,))}}" class="clearfix">
