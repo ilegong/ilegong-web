@@ -234,7 +234,7 @@ class OrdersController extends AppController{
         $conditions = array(
             'Order.created >"' . date("Y-m-d\TH:i:s", $start_date) . '"',
             'Order.created <"' . date("Y-m-d\TH:i:s", $end_date) . '"',
-            'Order.type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN)
+            'Order.type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC)
         );
 
         if(!empty($product_scheduling_date)&&!empty($product_id)){
@@ -279,7 +279,7 @@ class OrdersController extends AppController{
             $order_groupon_link = Hash::combine($groupon_members, '{n}.GrouponMember.id', '{n}.GrouponMember.groupon_id');
             if($groupon_member_lists){
                 $conditions[] = array('Order.member_id' => $groupon_member_lists);
-                $conditions['Order.type'] = array(ORDER_TYPE_GROUP, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN);
+                $conditions['Order.type'] = array(ORDER_TYPE_GROUP, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
                 $consignee_mobilephone = null;
             }else{
                 //团购订单暂时无人参团
