@@ -141,7 +141,11 @@ class ReferController extends AppController {
             $prods = $this->Product->find_products_by_ids($pids);
         }
 
+        $product_comments_n = array();
         foreach ($product_comments as &$item) {
+
+            $prod = $prods[$item['data_id']];
+
             $item['buy_time'] = friendlyDateFromStr($item['buy_time'], 'ymd');
             if ($item['pictures']) {
                 $images = array();
@@ -156,11 +160,14 @@ class ReferController extends AppController {
                 }
             }
 
-            $item['prod'] = $prods[$item['data_id']];
+            $item['prod'] = $prod;
+            if ($prod['published'] == PUBLISH_YES) {
+                $product_comments_n[] = $item;
+            }
 
             unset($item['pictures']);
         }
-        return $product_comments;
+        return $product_comments_n;
     }
 
     /**
