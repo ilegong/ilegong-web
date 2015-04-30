@@ -619,7 +619,8 @@ class TuanController extends AppController
         }
         $this->log('tuan buyings: ' . json_encode($tuan_buys));
 
-        $p_ids = Hash::extract($tuan_buys, '{n}.TuanBuying.pid');
+        $p_ids = Hash::extract($tuan_buys, '{n}.pid');
+        $this->log("pids: ".json_encode($p_ids));
         $spec_groups = array();
         if (!empty($p_ids)) {
             $spec_groups = $this->ProductSpecGroup->find('all', array(
@@ -629,6 +630,7 @@ class TuanController extends AppController
             ));
             $spec_groups = Hash::combine($spec_groups, '{n}.ProductSpecGroup.id', '{n}.ProductSpecGroup.spec_names');
         }
+        $this->log("spec groups: ".json_encode($spec_groups));
 
         $carts = array();
         if (!empty($order_ids)) {
