@@ -335,7 +335,7 @@ class Order extends AppModel {
                     }
 
                     $urM = ClassRegistry::init('UserRefer');
-
+                    $urM->update_referred_new_order($creator);
 
                 }
             } else if ($origStatus == ORDER_STATUS_WAITING_PAY && $toStatus == ORDER_STATUS_CANCEL) {
