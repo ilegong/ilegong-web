@@ -288,7 +288,8 @@ class TuanController extends AppController
     {
         $con_name = $_REQUEST['con_name'];
         $con_phone = $_REQUEST['con_phone'];
-        $order_status = $_REQUEST['order_status'];
+        $con_creator = $_REQUEST['con_creator'];
+        $order_status = empty($_REQUEST['order_status']) ? -1 : $_REQUEST['order_status'];
 
         $conditions = array();
         if (!empty($con_name)) {
@@ -303,11 +304,18 @@ class TuanController extends AppController
                 $conditions['Order.status'] = $order_status;
             }
         }
+        if (!empty($con_creator)) {
+            $conditions['Order.creator'] = $con_creator;
+            if ($order_status != -1) {
+                $conditions['Order.status'] = $order_status;
+            }
+        }
 
         $this->_query_orders($conditions, 'Order.created DESC');
 
         $this->set('con_name', $con_name);
         $this->set('con_phone', $con_phone);
+        $this->set('con_creator', $con_creator);
         $this->set('order_status', $order_status);
         $this->set('query_type', 'byUser');
         $this->render("admin_tuan_orders");
@@ -316,8 +324,8 @@ class TuanController extends AppController
     public function admin_query_by_product()
     {
         $product_id = $_REQUEST['product_id'];
-        $order_status = $_REQUEST['order_status'];
-        $order_type = $_REQUEST['order_type'];
+        $order_status = empty($_REQUEST['order_status']) ? -1 : $_REQUEST['order_status'];
+        $order_type = empty($_REQUEST['order_type']) ? -1 : $_REQUEST['order_type'];
         $send_date_start = $_REQUEST['send_date_start'];
         $send_date_end = $_REQUEST['send_date_end'];
 
