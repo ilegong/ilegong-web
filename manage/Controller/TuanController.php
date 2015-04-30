@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: shichaopeng
- * Date: 3/19/15
- * Time: 20:26
- */
-
 class TuanController extends AppController
 {
 
@@ -192,7 +185,7 @@ class TuanController extends AppController
         $orders = $this->Order->find('all', array(
             'conditions' => $order_query_cond,
             'joins' => $join_conditions,
-            'fields' => array('Order.*', 'Pay.trade_type'),
+            'fields' => array('Order.*', 'Pay.trade_type', 'Pay.out_trade_no'),
             'order' => 'Order.consignee_address DESC'
         ));
 
@@ -599,7 +592,7 @@ class TuanController extends AppController
             $params = array(
                 'conditions' => $conditions,
                 'joins' => $join_conditions,
-                'fields' => array('Order.*', 'Pay.trade_type', 'Cart.product_id', 'Cart.try_id', 'Cart.send_date'),
+                'fields' => array('Order.*', 'Pay.trade_type', 'Pay.out_trade_no', 'Cart.product_id', 'Cart.try_id', 'Cart.send_date'),
                 'order' => $order_by
             );
             if (!empty($limit)) {
