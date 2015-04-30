@@ -24,6 +24,10 @@ class UserRefer extends AppModel {
         return false;
     }
 
+    public function test() {
+        $this->log("execute test");
+    }
+
     public function update_referred_bind($uid, $nickname) {
         $ref = $this->find('first', array(
             'conditions' => array('to' => $uid, 'deleted' => DELETED_NO),
@@ -44,7 +48,7 @@ class UserRefer extends AppModel {
 
     public function update_referred_new_order($uid) {
         $ref = $this->find_first_refer_to_uid($uid);
-        $this->log("debug: find_first_refer_to_uid".json_encode($ref));
+        $this->log("debug: find_first_refer_to_uid ".json_encode($ref));
         if (!empty($ref) && $ref['UserRefer']['first_order_done'] != 1) {
             $this->log("debug: execute update all...");
             $result = $this->updateAll(array('first_order_done' => 1, ), array('first_order_done' => 0, 'to' => $uid, 'id' => $ref['UserRefer']['id']));

@@ -336,6 +336,7 @@ class Order extends AppModel {
 
                     $urM = ClassRegistry::init('UserRefer');
                     $this->log("debug: before update_referred_new_order");
+                    $urM->test();
                     $urM->update_referred_new_order($creator);
                     $this->log("debug: end update_referred_new_order");
                 }
