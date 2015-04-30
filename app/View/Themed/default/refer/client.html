@@ -15,7 +15,7 @@
 <a class="mytuijian_a" href="/refer/index/{{$CurrentUser['id']}}.html">恭喜，您不是新用户啦， 去推荐朋友拿礼品吧！</a>
 {{/if}}
 <div class="tuijian" style="border-bottom: 0; margin-top: 0;">
-    <h1>{{$ref_user['nickname']}}在【朋友说】买过什么</h1>
+    <h1>{{$ref_user['nickname']}}买过什么</h1>
     {{loop $product_comments $key $item}}
     <ul class="clearfix">
         <li class="fl"><img src="{{$this->Html->assetUrl(!empty($ref_user['image'])? $ref_user['image']:'/img/mine_head.png')}}"/></li>
