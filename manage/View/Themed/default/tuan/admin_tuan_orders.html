@@ -11,9 +11,9 @@
   <li role="presentation"><a data-tab="byTuanTeam" href="/manage/admin/tuan/query_by_tuan_team">按团队查询</a></li>
   <li role="presentation"><a data-tab="byProduct" href="/manage/admin/tuan/query_by_product">按商品查询</a></li>
   <li role="presentation">
-    <a data-tab="emptySendDate" href="/manage/admin/tuan/query_empty_send_date">
+    <a data-tab="emptySendDate" href="/manage/admin/tuan/query_b2c_empty_send_date">
       !!!B2C无发货时间
-      <span {{if $empty_send_date_count > 0}}class="text-danger"{{/if}}>({{$empty_send_date_count}})</span>
+      <span {{if $b2c_empty_send_date_count > 0}}class="text-danger"{{/if}}>({{$b2c_empty_send_date_count}})</span>
     </a>
   </li>
   <li role="presentation">
@@ -257,7 +257,7 @@
               $date = $consign_dates[$cart['Cart']['consignment_date']];
               $consign_time = empty($date)?'': date('m-d', strtotime($date));
             ?>
-            <tr {{if empty($cart['Cart']['send_date'])}}class="bg-warning"{{/if}}>
+            <tr>
                 <td>{{$order['Order']['id']}}</td>
                 <td>{{$order['Order']['creator']}}</td>
                 <td>
