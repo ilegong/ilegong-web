@@ -8,8 +8,6 @@
 
 class Refer extends AppModel {
 
-    var $
-
     public function  be_referred_and_new($uid) {
 
         $ref = $this->find_first_refer_to_uid($uid);
