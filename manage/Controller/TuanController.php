@@ -694,6 +694,28 @@ class TuanController extends AppController
             $product_count = $result[0][0]['sum(num)'];
         }
 
+        // brands
+        if (!empty($p_ids)) {
+            $join_conditions = array(
+                array(
+                    'table' => 'products',
+                    'alias' => 'Product',
+                    'conditions' => array(
+                        'Product.brand_id = Brand.id'
+                    ),
+                    'type' => 'INNER',
+                )
+            );
+            $brands = $this->Brand->find('all', array(
+                'conditions' => array(
+                    "Product.id" => $p_ids
+                ),
+                'joins' => $join_conditions,
+                'fields' => array('Brand.id', 'Brand.name', 'Product.id', 'Product.name')
+            ));
+            $brands = Hash::combine($brands, '{n}.Product.id', '{n}');
+        }
+
         $conditions['Order.type'] = ORDER_TYPE_DEF;
         $conditions['Order.status'] = ORDER_STATUS_PAID;
         $conditions['DATE(Order.updated) <'] = date('Y-m-d H:i:s');
@@ -708,6 +730,7 @@ class TuanController extends AppController
         $this->set('tuan_buys', $tuan_buys);
         $this->set('tuans', $tuans);
         $this->set('order_carts', $order_carts);
+        $this->set('brands', $brands);
         $this->set('consign_dates', $consign_dates);
         return $c;
     }
