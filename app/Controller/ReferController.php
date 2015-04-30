@@ -19,8 +19,7 @@ class ReferController extends AppController {
             $this->redirect('/users/login.html?force_login=1&auto_weixin='.$this->is_weixin().'&referer=' . urlencode($ref));
         }
 
-//        $this->set('hideNav', true);
-        $this->pageTitle = $this->currentUser['nickname']. '向您推荐了【朋友说】, 朋友间分享健康美食的平台';
+        $this->set('hideNav', true);
     }
 
     public function index($uid = 0) {
@@ -39,6 +38,8 @@ class ReferController extends AppController {
 
         $product_comments = $this->build_comments($uid);
         $this->set('product_comments', $product_comments);
+
+        $this->pageTitle = $this->currentUser['nickname']. '向您推荐了【朋友说】, 朋友间分享健康美食的平台';
     }
 
     public function accept() {
@@ -70,6 +71,7 @@ class ReferController extends AppController {
             $this->redirect('/');
         }
         $this->set('ref_user', $user['User']);
+        $this->pageTitle = $user['User']['nickname'].'向您推荐了【朋友说】, 朋友间分享健康美食的平台';
 
         $phone_binded = !empty($this->currentUser['mobilephone']);
         $mOrder = ClassRegistry::init('Order');

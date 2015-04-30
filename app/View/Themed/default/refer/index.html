@@ -1,6 +1,6 @@
 {{$this->Html->css('/css/refer_css.css')}}
 <div class="tuijian_banner">{{$this->Html->image("/img/refer/banner.gif")}}</div>
-       {{if $total_refers>0}} <h1><a href="/refer/my_refer.html">{{$total_refers}}位新用户接受了您的推荐</a></h1>{{/if}}
+       {{if $total_refers>0}}<a class="mytuijian_a" href="/refer/my_refer.html">{{$total_refers}}位新用户接受了您的推荐</a>{{/if}}
 <div class="tuijian">
     <h1>推荐流程</h1>
     {{$this->Html->image("/img/refer/process1.gif")}}<br/>
