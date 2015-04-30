@@ -332,13 +332,12 @@ class Order extends AppModel {
                     if (!empty($rtn)) {
                         $userM = ClassRegistry::init('User');
                         $userM->add_score($creator, $rtn['Score']['score']);
-
-                        $urM = ClassRegistry::init('UserRefer');
-                        $this->log("debug: before update_referred_new_order");
-                        $urM->update_referred_new_order($creator);
-                        $this->log("debug: end update_referred_new_order");
                     }
 
+                    $urM = ClassRegistry::init('UserRefer');
+                    $this->log("debug: before update_referred_new_order");
+                    $urM->update_referred_new_order($creator);
+                    $this->log("debug: end update_referred_new_order");
                 }
             } else if ($origStatus == ORDER_STATUS_WAITING_PAY && $toStatus == ORDER_STATUS_CANCEL) {
                 $order = $this->findById($order_id);
