@@ -5,20 +5,20 @@
     <h1>推荐规则</h1>
     <div class="tuijian_padding">
         <dl class="clearfix">
-            <dd><strong>1. 推荐人满足的条件：</strong><br/>订单数≥3、评论数≥3，才可以推荐好友喔~~</dd>
+            <dd><strong>1. 推荐人满足的条件：</strong><br/>订单数≥3、评论数≥3，就可以推荐好友获得礼品</dd>
             {{if count($product_comments) < 3}}
             <dd><span style="display: block; float: left;">您还需评价{{3-count($product_comments)}}个订单，才可以邀请好友</span><a href="/orders/mine.html?tab=comment">去评价</a></dd>
             {{/if}}
         </dl>
         <dl class="clearfix">
-            <dd><strong>2. 被推荐人是首次在【朋友说】下单，完成注册</strong></dd>
+            <dd><strong>2. 被推荐人是完成注册推荐人获得100积分，被推荐人首次在【朋友说】下单完成收货，被推荐人获得10元柴鸡蛋/酸奶</strong></dd>
         </dl>
         <dl class="clearfix">
             <dd><strong>3. 被推荐人自提地区：</strong></dd>
             <dd>回龙观、天通苑、北苑、西三旗、昌平县城、沙河、顺义县城等地</dd>
         </dl>
         <dl class="clearfix">
-            <dd><strong>3. 邀请被推荐人加入至少一个微信美食群</strong></dd>
+            <dd><strong>4. 邀请被推荐人加入至少一个微信美食群</strong></dd>
         </dl>
     </div>
 </div>
