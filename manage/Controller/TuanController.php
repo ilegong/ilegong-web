@@ -288,7 +288,8 @@ class TuanController extends AppController
     {
         $con_name = $_REQUEST['con_name'];
         $con_phone = $_REQUEST['con_phone'];
-        $order_status = $_REQUEST['order_status'];
+        $con_creator = $_REQUEST['con_creator'];
+        $order_status = empty($_REQUEST['order_status']) ? -1 : $_REQUEST['order_status'];
 
         $conditions = array();
         if (!empty($con_name)) {
@@ -303,11 +304,18 @@ class TuanController extends AppController
                 $conditions['Order.status'] = $order_status;
             }
         }
+        if (!empty($con_creator)) {
+            $conditions['Order.creator'] = $con_creator;
+            if ($order_status != -1) {
+                $conditions['Order.status'] = $order_status;
+            }
+        }
 
         $this->_query_orders($conditions, 'Order.created DESC');
 
         $this->set('con_name', $con_name);
         $this->set('con_phone', $con_phone);
+        $this->set('con_creator', $con_creator);
         $this->set('order_status', $order_status);
         $this->set('query_type', 'byUser');
         $this->render("admin_tuan_orders");
@@ -316,8 +324,8 @@ class TuanController extends AppController
     public function admin_query_by_product()
     {
         $product_id = $_REQUEST['product_id'];
-        $order_status = $_REQUEST['order_status'];
-        $order_type = $_REQUEST['order_type'];
+        $order_status = empty($_REQUEST['order_status']) ? -1 : $_REQUEST['order_status'];
+        $order_type = empty($_REQUEST['order_type']) ? -1 : $_REQUEST['order_type'];
         $send_date_start = $_REQUEST['send_date_start'];
         $send_date_end = $_REQUEST['send_date_end'];
 
@@ -619,7 +627,20 @@ class TuanController extends AppController
         }
         $this->log('tuan buyings: ' . json_encode($tuan_buys));
 
-        $p_ids = Hash::extract($tuan_buys, '{n}.TuanBuying.pid');
+        $tuans = array();
+        if (!empty($tuan_buys)) {
+            $tuan_ids = Hash::extract($tuan_buys, '{n}.tuan_id');
+            $tuans = $this->TuanTeam->find('all', array(
+                'conditions' => array(
+                    'id' => $tuan_ids
+                )
+            ));
+            $tuans = Hash::combine($tuans, '{n}.TuanTeam.id', '{n}.TuanTeam');
+        }
+        $this->log("tuan teams: ".json_encode($tuans));
+
+        $p_ids = Hash::extract($tuan_buys, '{n}.pid');
+        $this->log("pids: ".json_encode($p_ids));
         $spec_groups = array();
         if (!empty($p_ids)) {
             $spec_groups = $this->ProductSpecGroup->find('all', array(
@@ -629,6 +650,7 @@ class TuanController extends AppController
             ));
             $spec_groups = Hash::combine($spec_groups, '{n}.ProductSpecGroup.id', '{n}.ProductSpecGroup.spec_names');
         }
+        $this->log("spec groups: ".json_encode($spec_groups));
 
         $carts = array();
         if (!empty($order_ids)) {
@@ -684,6 +706,7 @@ class TuanController extends AppController
         $this->set('product_count', $product_count);
         $this->set('orders', $orders);
         $this->set('tuan_buys', $tuan_buys);
+        $this->set('tuans', $tuans);
         $this->set('order_carts', $order_carts);
         $this->set('consign_dates', $consign_dates);
         return $c;
