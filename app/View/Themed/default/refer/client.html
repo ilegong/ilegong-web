@@ -1,6 +1,6 @@
 {{$this->Html->css('/css/refer_css.css')}}
+{{if !$reg_done}}
 <div class="tuijian_login">{{$ref_user['nickname']}}向您推荐了【朋友说】{{if !empty($old_refer_name)}}(您已经接受了{{$old_refer_name}}的邀请){{/if}}
-    {{if !$reg_done}}
     {{if $referred}}
     您已经接受过{{$old_refer_name}}的邀请，<a href="/">去看看</a>。
     {{else}}
@@ -10,8 +10,10 @@
     <a href="/">完成第一单</a>
     {{/if}}
     {{/if}}
-    {{/if}}
 </div>
+{{else}}
+<a class="mytuijian_a" href="/refer/index/{{$CurrentUser['id']}}.html">恭喜，您不是新用户啦， 去推荐朋友拿礼品吧！</a>
+{{/if}}
 <div class="tuijian" style="border-bottom: 0; margin-top: 0;">
     <h1>{{$ref_user['nickname']}}在【朋友说】买过什么</h1>
     {{loop $product_comments $key $item}}
