@@ -332,10 +332,10 @@ class Order extends AppModel {
                     if (!empty($rtn)) {
                         $userM = ClassRegistry::init('User');
                         $userM->add_score($creator, $rtn['Score']['score']);
-                    }
 
-                    $urM = ClassRegistry::init('UserRefer');
-                    $urM->update_referred_new_order($creator);
+                        $urM = ClassRegistry::init('UserRefer');
+                        $urM->update_referred_new_order($creator);
+                    }
 
                 }
             } else if ($origStatus == ORDER_STATUS_WAITING_PAY && $toStatus == ORDER_STATUS_CANCEL) {
