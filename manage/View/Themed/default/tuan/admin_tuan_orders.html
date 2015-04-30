@@ -12,14 +12,20 @@
   <li role="presentation"><a data-tab="byProduct" href="/manage/admin/tuan/query_by_product">按商品查询</a></li>
   <li role="presentation">
     <a data-tab="emptySendDate" href="/manage/admin/tuan/query_empty_send_date">
-      !!!无发货时间
+      !!!B2C无发货时间
       <span {{if $empty_send_date_count > 0}}class="text-danger"{{/if}}>({{$empty_send_date_count}})</span>
     </a>
   </li>
   <li role="presentation">
-    <a data-tab="paidNotSend" href="/manage/admin/tuan/query_paid_not_send">
-      !!!到期未发货
-      <span {{if $paid_not_sent_count > 0}}class="text-danger"{{/if}}>({{$paid_not_sent_count}})</span>
+    <a data-tab="b2cPaidNotSend" href="/manage/admin/tuan/query_b2c_paid_not_send">
+      !!!B2C未发货
+      <span {{if $b2c_paid_not_sent_count > 0}}class="text-danger"{{/if}}>({{$b2c_paid_not_sent_count}})</span>
+    </a>
+  </li>
+  <li role="presentation">
+    <a data-tab="c2cPaidNotSend" href="/manage/admin/tuan/query_c2c_paid_not_send">
+      !!!C2C未发货
+      <span {{if $c2c_paid_not_sent_count > 0}}class="text-danger"{{/if}}>({{$c2c_paid_not_sent_count}})</span>
     </a>
   </li>
 </ul>

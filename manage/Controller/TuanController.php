@@ -430,14 +430,24 @@ class TuanController extends AppController
         $this->render("admin_tuan_orders");
     }
 
-    public function admin_query_paid_not_send()
+    public function admin_query_b2c_paid_not_send()
     {
         $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
         $conditions['Order.status'] = ORDER_STATUS_PAID;
         $conditions['DATE(Cart.send_date) <'] = date('Y-m-d');
         $this->_query_orders($conditions, 'Order.created DESC');
 
-        $this->set('query_type', 'paidNotSend');
+        $this->set('query_type', 'b2cPaidNotSend');
+        $this->render("admin_tuan_orders");
+    }
+
+    public function admin_query_c2c_paid_not_send()
+    {
+        $conditions['Order.type'] = ORDER_TYPE_DEF;
+        $conditions['Order.status'] = ORDER_STATUS_PAID;
+        $this->_query_orders($conditions, 'Order.updated');
+
+        $this->set('query_type', 'c2cPaidNotSend');
         $this->render("admin_tuan_orders");
     }
 
@@ -461,8 +471,11 @@ class TuanController extends AppController
         $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date is null and o.type in (5, 6) and o.status in (0, 1) and DATE(o.created) > '.date('Y-m-d', strtotime('-31 days')));
         $this->set('empty_send_date_count', $empty_send_date_count[0][0]['ct']);
 
-        $paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date <= now() and o.status = 1');
-        $this->set('paid_not_sent_count', $paid_not_sent_count[0][0]['ct']);
+        $b2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date < CURDATE() and o.status = 1');
+        $this->set('b2c_paid_not_sent_count', $b2c_paid_not_sent_count[0][0]['ct']);
+
+        $c2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on o.id = c.order_id where o.status = 1 and o.type = 1');
+        $this->set('c2c_paid_not_sent_count', $c2c_paid_not_sent_count[0][0]['ct']);
     }
 
     function admin_send_date($type)
@@ -676,8 +689,15 @@ class TuanController extends AppController
         $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date is null and o.type in (5, 6) and o.status in (0, 1) and DATE(o.created) > '.date('Y-m-d', strtotime('-31 days')));
         $this->set('empty_send_date_count', $empty_send_date_count[0][0]['ct']);
 
-        $paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date <= now() and o.status = 1');
-        $this->set('paid_not_sent_count', $paid_not_sent_count[0][0]['ct']);
+        $b2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date <= now() and o.status = 1');
+        $this->set('b2c_paid_not_sent_count', $b2c_paid_not_sent_count[0][0]['ct']);
+
+        $conditions['Order.type'] = ORDER_TYPE_DEF;
+        $conditions['Order.status'] = ORDER_STATUS_PAID;
+        $conditions['DATE(Order.updated) <'] = date('Y-m-d H:i:s');
+
+        $c2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on o.id = c.order_id where o.status = 1 and o.type = 1');
+        $this->set('c2c_paid_not_sent_count', $c2c_paid_not_sent_count[0][0]['ct']);
 
         $this->set('should_count_nums', true);
         $this->set('product_count', $product_count);
