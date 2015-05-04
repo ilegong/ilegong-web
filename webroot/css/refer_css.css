@@ -75,3 +75,7 @@ input{ outline:none;}
 .mytuijian_a{ color: #c73c3c; text-decoration: none; text-align: center; padding-top: 10px; display: block;}
 .tuijianlist{padding-top:10px;}
 
+.tuijian_bg{ background-color: #c73c3c; color: #ffffff; padding: 5%; font-size: 1em; text-align: center; line-height: 25px; margin-bottom: 10px;}
+.tuijian_bg strong{ font-size: 1.2em;}
+.tuijian_bg a{ display: block; background-color: #ffffff; line-height: 35px; width: 50%; margin: 0 auto; border-radius: 3px; color: #c73c3c; text-decoration: none; margin-top: 10px; font-weight: bold; font-size: 1.1em;}
+
