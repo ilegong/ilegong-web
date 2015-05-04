@@ -15,6 +15,11 @@
         "sub_button":[
             {
                 "type":"view",
+                "name":"个人中心",
+                "url":"http://www.pyshuo.com/users/me.html?from=service&_sl=wx.sv.uc"
+            },
+            {
+                "type":"view",
                 "name":"我的订单",
                 "url":"http://www.pyshuo.com/users/wx_menu_point?referer_key=CLICK_URL_MINE&do_wx_auth_if_not_log_in=1&from=service&_sl=wx.sv.orders"
             },
@@ -32,11 +37,6 @@
                 "type":"view",
                 "name":"售后服务",
                 "url":"http://www.pyshuo.com/users/wx_menu_point?referer_key=CLICK_URL_SALE_AFTER_SAIL&from=service&_sl=wx.sv.sv"
-            },
-            {
-                "type":"view",
-                "name":"个人中心",
-                "url":"http://www.pyshuo.com/users/me.html?from=service&_sl=wx.sv.uc"
             }
         ]
     }
