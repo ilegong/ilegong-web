@@ -54,9 +54,15 @@ class Refer extends AppModel {
             $result = $this->updateAll(array('first_order_done' => 1, ), array('first_order_done' => 0, 'to' => $uid, 'id' => $ref['Refer']['id']));
             $this->log("debug: execute update all...done:".$result);
             if ($result)  {
+                try {
+                    $userM = ClassRegistry::init('User');
+                    $user = $userM->findById($uid);
+                }catch (Exception $e) {
+                    $this->log('error to update_referred_new_order for find user: uid='.$uid);
+                }
                 $scoreM = ClassRegistry::init('Score');
                 //默认给10积分
-                $scoreM->add_score_by_refer_accept_order(10, $uid, '', $ref['Refer']['from']);
+                $scoreM->add_score_by_refer_accept_order(10, $uid, empty($user)?'':$user['User']['nickname'], $ref['Refer']['from']);
             } else {
                 $this->log('error to update update_referred_new_order');
             }
