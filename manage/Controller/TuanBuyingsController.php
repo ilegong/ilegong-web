@@ -375,10 +375,12 @@ class TuanBuyingsController extends AppController{
         }
         $orderM = ClassRegistry::init('Order');
         $tuanBuyM= ClassRegistry::init('TuanBuying');
+        $offlineStoreM = ClassRegistry::init('OfflineStore');
         $orders = $orderM->find('all', array(
-            'conditions' => array('id'=> $ids, 'type'=>array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC)),
+            'conditions' => array('id'=> $ids, 'type'=>ORDER_TYPE_TUAN),
         ));
         $tuan_buy_ids = array_unique(Hash::extract($orders, '{n}.Order.member_id'));
+        $consignee_ids = array_unique(Hash::extract($orders, '{n}.Order.consignee_id'));
         $products = $tuanBuyM->find('all', array(
             'conditions' => array('TuanBuying.id'=>$tuan_buy_ids),
             'joins' =>array(
@@ -394,6 +396,10 @@ class TuanBuyingsController extends AppController{
             'fields' => array('TuanBuying.id', 'TuanProduct.alias')
         ));
         $alias = Hash::combine($products, '{n}.TuanBuying.id', '{n}.TuanProduct.alias');
+        $offline_stores = $offlineStoreM->find('all', array(
+            'conditions' => array('id'=>$consignee_ids)
+        ));
+        $store_info = Hash::combine($offline_stores, '{n}.OfflineStore.id', '{n}.OfflineStore');
         $order_info = Hash::combine($orders, '{n}.Order.id', '{n}.Order');
         $uids = Hash::extract($orders, '{n}.Order.creator');
         $oauthBindModel = ClassRegistry::init('Oauthbind');
@@ -407,6 +413,9 @@ class TuanBuyingsController extends AppController{
             $order_id = $key;
             $tuan_buy_id =  $value['member_id'];
             $product_alias = $alias[$tuan_buy_id];
+            $store= empty($value['consignee_id'])?null:$store_info[$value['consignee_id']];
+            $store_alias = empty($store)?'':$store['alias'];
+            $store_phone = empty($store)?'':'，自提点电话：'.$store['phone'];
             $post_data = array(
                 "touser" => $r[$value['creator']],
                 "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
@@ -415,7 +424,7 @@ class TuanBuyingsController extends AppController{
                 "data" => array(
                     "first" => array("value" => "亲，您订购的".$product_alias."已经到达自提点，提货码：".$data[$order_id]."，生鲜娇贵，请尽快取货哈。"),
                     "keyword1" => array("value" => $order_id),
-                    "keyword2" => array("value" => '好邻居便利店'),
+                    "keyword2" => array("value" => $store_alias),
                     "keyword3" => array("value" => $value['consignee_address']),
                     "remark" => array("value" => "感谢您的支持，现场提货遇到任何问题请拨打电话：4000-508-528", "color" => "#FF8800")
                 )
@@ -424,9 +433,9 @@ class TuanBuyingsController extends AppController{
                 $post_data['data'] =  array(
                     "first" => array("value" => "亲，您订购的".$product_alias."已经到达自提点，生鲜娇贵，请尽快取货哈。"),
                     "keyword1" => array("value" => $order_id),
-                    "keyword2" => array("value" => ''),
+                    "keyword2" => array("value" => $store_alias),
                     "keyword3" => array("value" => $value['consignee_address']),
-                    "remark" => array("value" => "感谢您的支持", "color" => "#FF8800")
+                    "remark" => array("value" => "感谢您的支持".$store_phone, "color" => "#FF8800")
                 );
             }
             if(send_weixin_message($post_data)){
