@@ -494,10 +494,8 @@ class WeixinComponent extends Component
                     $seller_weixin = '';
                 }
 
-            } elseif($order['Order']['type'] == ORDER_TYPE_TUAN && $order['Order']['ship_mark'] == 'ziti'){
-                $this->send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_id, $order, $send_date, 'ziti');
-            } elseif($order['Order']['type'] == ORDER_TYPE_TUAN && $order['Order']['ship_mark'] == 'sf'){
-                $this->send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_id, $order, $send_date, 'sf');
+            } elseif($order['Order']['type'] == ORDER_TYPE_TUAN){
+                $this->send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_id, $order, $send_date);
             }  else {
                 $this->send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_id, $order);
             }
@@ -593,12 +591,17 @@ class WeixinComponent extends Component
         return false;
     }
 
-    public function send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_no, $order = null, $send_date, $ship_way) {
+    public function send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_no, $order = null, $send_date) {
+        $ship_way = $order['Order']['ship_mark'];
         if($ship_way == 'sf'){
             $tail = '，发货时间是'.$send_date.'。';
         }else{
             $template= ",到货时间是".$send_date."，自提地点是".$order['Order']['address'];
-            if(preg_match("/好邻居/",$order['Order']['address'])){
+            $offlineStoreM = ClassRegistry::init('OfflineStore');
+            $offline_store = $offlineStoreM->find('first', array(
+                'conditions' => array('id' => $order['Order']['consignee_id'])
+            ));
+            if($offline_store['OfflineStore']['type'] == 0){
                 $tail = $template.'，请留意当天到店取货收到的提货码提醒。';
             }else{
                 $tail = $template. '，请留意当天到店取货提醒。';
