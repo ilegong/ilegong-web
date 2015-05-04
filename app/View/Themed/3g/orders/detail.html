@@ -60,7 +60,7 @@
         <li style="overflow: hidden; display: block; padding-left: 10px; padding-right: 65px;">
             <a href="/tuan_buyings/detail/{{$tuan_buy_id}}">
                 <p>{{$cart['Cart']['name']}}</p>
-                {{if $order['Order']['status'] == ORDER_STATUS_PAID && !empty($cart['Cart']['send_date'])}}
+                {{if !empty($cart['Cart']['send_date'])}}
                     <s>{{date('m月d日', strtotime($cart['Cart']['send_date']))}}到货</s>
                 {{/if}}
                 {{if $tuan_expired&&$order['Order']['status']== ORDER_STATUS_WAITING_PAY}}
@@ -78,7 +78,7 @@
         <li style="overflow: hidden; display: block; padding-left: 10px; padding-right: 65px;">
             <a href="{{product_link2($p)}}">
                 <p>{{$cart['Cart']['name']}}</p>
-                {{if $order['Order']['status'] == ORDER_STATUS_PAID && !empty($cart['Cart']['send_date'])}}
+                {{if !empty($cart['Cart']['send_date'])}}
                     <s>{{date('m月d日', strtotime($cart['Cart']['send_date']))}}到货</s>
                 {{/if}}
                 {{if in_array($cart['Cart']['product_id'], $expired_pids)}}
