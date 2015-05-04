@@ -155,8 +155,8 @@ var zitiObj = function(area,height, width){
     var choose_area='';
     return {
         generateZitiArea: function(){
-            for(var i=0; i< area.length; i++){
-                choose_area += '<ul><li><a href="'+ conorder_url +'" class="thickbox" area-id="' +area[i].id + '">' + area[i].name + '</a></li> </ul>';
+            for(var addr in area){
+                choose_area += '<ul><li><a style="display: none" href="'+ conorder_url +'" class="thickbox" area-id="' +addr + '">' + area[addr] + '</a></li> </ul>';
             }
             return choose_area;
         },
@@ -177,12 +177,7 @@ function setData(area_id){
     var chose_address = zitiAddress.getShipAddress(area_id);
     var $chose_item = '';
     $.each(chose_address,function(index,item){
-        if(item['not_shop']){
-            $chose_item +=' <p>'+item['address']+'</p>';
-        }else{
-            // 有商店
-            $chose_item +=' <p data-shop-name="'+item['shop_name']+'">'+item['address']+' 好邻居便利店</p>';
-        }
+        $chose_item +=' <p data-shop-name="'+item['alias']+'">'+item['name']+'</p>';
     });
     $("#area_list").html($chose_item);
     $("#area_list p").each(function(){
