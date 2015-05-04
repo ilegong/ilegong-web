@@ -46,8 +46,8 @@ input{ outline:none;}
 .tuijian_memberlist img{ width:70%; border-radius: 5px;}
 .tuijian_memberlist_name{width:75%; text-align:center;margin: 0 auto;overflow: hidden; font-size: 0.9em;white-space: nowrap; text-overflow: ellipsis;}
 .tuijian_btn{ height: 44px; line-height: 44px; text-align: center; font-size: 1.1em; font-weight: bold; background-color:#c73c3c; width: 100%; text-decoration: none; color: #ffffff; display: block; position: fixed; bottom: 0; left: 0; z-index: 2;}
-.tuijian_login{ font-size: 1em; text-align: left; color: #333333; line-height: 20px; padding: 10px 10px 15px 10px;}
-.tuijian_login a{ display: block; width: 100px; margin: 0 auto; line-height: 30px; height: 30px; text-align: center; background-color: #c73c3c; color: #ffffff; border-radius: 3px; text-decoration: none; margin-top: 5px;}
+.tuijian_login { font-size: 1em;font-weight: bold; text-align:center; color: #ffffff; line-height: 20px; padding: 20% 5%; background-color: #29ac0e;}
+.tuijian_login_a{ display: block; margin: 10px; line-height: 44px; text-align: center; background-color: #29ac0e; color: #ffffff; border-radius: 3px; text-decoration: none; font-size: 1.1em; font-weight: bold;}
 /*推荐商品*/
 .tuandetail_good{ padding:10px 0 0 10px;}
 .tuandetail_good a{ display:block; text-decoration:none; color:#333333; float:left; width:50%; margin-bottom:10px; position:relative;}
