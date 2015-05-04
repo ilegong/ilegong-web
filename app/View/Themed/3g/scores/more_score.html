@@ -39,10 +39,12 @@
             <a href="#X">去关注</a>
         </li>
         {{/if}}
-        <!--<li>-->
-            <!--<span>告诉朋友积分可抵现金,<br/>获得<label>5</label>个积分</span>-->
-            <!--<a href="#X">去分享</a>-->
-        <!--</li>-->
+        {{if $can_recommend}}
+        <li>
+            <span>推荐好友注册【朋友说】,<br/>获得<label>100</label>个积分</span>
+            <a href="/refer/index/{{$CurrentUser['id']}}.html?_sl=refer_index">去推荐</a>
+        </li>
+        {{/if}}
     </ul>
 </div>
 {{if !empty($rank_list)}}
