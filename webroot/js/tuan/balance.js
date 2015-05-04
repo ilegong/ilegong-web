@@ -72,11 +72,12 @@ $('#confirm_next').on('click',function(e){
     }
     var is_try = false;
     var balanceDom = $(".tuan_balance");
+    var choseAddress = $("#chose_address");
     var way = balanceDom.data("shipWay") || "";
     var addressInput = $("input[name='consignee_address']").length || "not";
-    var zitiChoice = $("#chose_address").length ? $("#chose_address").text(): "not";
+    var zitiChoice =choseAddress.length ? choseAddress.text(): "not";
     var remarkAddress = $("input[name='consignee_remark_address']").val()||"";
-    var address = $("input[name='consignee_address']").val() || $("#chose_address").text();
+    var address = $("input[name='consignee_address']").val() || choseAddress.text();
     if(address.trim()){
         address = address + '['+remarkAddress+']';
     }else{
@@ -94,7 +95,7 @@ $('#confirm_next').on('click',function(e){
         return false;
     }
     if(zitiChoice != "not" && zitiChoice.length <= 0){
-        utils.alert("请输入自提地址");
+        utils.alert("请选择自提地址");
         e.preventDefault();
         return false;
     }
@@ -115,6 +116,7 @@ $('#confirm_next').on('click',function(e){
     var tuan_id = balanceDom.data("tuanteamId") || false;
     var tuan_sec = balanceDom.data("tuanSec")||false;
     var member_id = '';
+    var shop_id =  choseAddress.data('shopId')||0;
     if(tuan_buy_id){
        member_id = tuan_buy_id;
     }
@@ -130,7 +132,7 @@ $('#confirm_next').on('click',function(e){
         type: "POST",
         dataType: "json",
         url: "/tuan_buyings/pre_order",
-        data: {name: name, mobile: mobile, cart_id: cart_id, member_id: member_id, tuan_id: tuan_id, address:address, way:way ,shop_name:shopName, tuan_sec:tuan_sec},
+        data: {name: name, mobile: mobile, cart_id: cart_id, member_id: member_id, tuan_id: tuan_id, address:address, way:way ,shop_name:shopName, tuan_sec:tuan_sec , shop_id: shop_id},
         success: function (a) {
             if (a.success) {
                 $("#confirm_next").attr('data-disable', 'true');
@@ -177,14 +179,14 @@ function setData(area_id){
     var chose_address = zitiAddress.getShipAddress(area_id);
     var $chose_item = '';
     $.each(chose_address,function(index,item){
-        $chose_item +=' <p data-shop-name="'+item['alias']+'">'+item['name']+'</p>';
+        $chose_item +=' <p data-shop-id="'+ item['id'] +'" data-shop-name="'+item['alias']+'">'+item['name']+'</p>';
     });
     $("#area_list").html($chose_item);
     $("#area_list p").each(function(){
         var that =$(this);
         that.on("click",function(){
             that.css("background-color","#eeeeee");
-            $("#chose_address").html(that.text());
+            $("#chose_address").html(that.text()).data('shopId', that.data('shopId'));
             shopName = that.data('shop-name');
             tb_remove();
         })

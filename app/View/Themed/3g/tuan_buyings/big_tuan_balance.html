@@ -12,7 +12,7 @@
     <div class="clearfix conordertuan_adress">
 
     </div>
-    <P><span>已选自提点：<span id="chose_address" style="color:#333333"></span></span></P>
+    <P><span>已选自提点：<span id="chose_address" data-shop-id="" style="color:#333333"></span></span></P>
 </div>
 <div class="tuan_balance" data-ship-way="ziti" data-tuanbuy-id="{{$tuan_buy_id}}" data-tuanteam-id="{{$tuan_id}}">
     <div class="conordertuan_contact">
@@ -70,7 +70,7 @@
     </div>
     <div id="area_list" class="tuanadresslist">  </div>
 </div>
-{{$this->Html->script(array('/js/ziti-address.js?v3.0', '/js/tuan/balance.js?v9'));}}
+{{$this->Html->script(array('/js/ziti-address.js?v3.0', '/js/tuan/balance.js?v9.1'));}}
 <script>
     $(document).ready(function(){
         var bigBuy = zitiObj(zitiAddress.getBeijingAreas, $(window).height() + 5,$(window).width());
