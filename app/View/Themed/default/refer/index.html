@@ -1,6 +1,12 @@
 {{$this->Html->css('/css/refer_css.css')}}
 <div class="tuijian_banner">{{$this->Html->image("/img/refer/banner.gif")}}</div>
        {{if $total_refers>0}}<a class="mytuijian_a" href="/refer/my_refer.html">{{$total_refers}}位新用户接受了您的推荐</a>{{/if}}
+<div class="tuijian">
+    <h1>推荐流程</h1>
+    {{$this->Html->image("/img/refer/process1.gif")}}<br/>
+    {{$this->Html->image("/img/refer/process2.gif")}}<br/>
+    {{$this->Html->image("/img/refer/process3.gif")}}
+</div>
 <div class="tuijian" id="div_tuijian_rules">
     <h1>推荐规则</h1>
     <div class="tuijian_padding">
@@ -21,12 +27,6 @@
             <dd><strong>4. 邀请被推荐人加入至少一个微信美食群</strong></dd>
         </dl>
     </div>
-</div>
-<div class="tuijian">
-    <h1>推荐流程</h1>
-    {{$this->Html->image("/img/refer/process1.gif")}}<br/>
-    {{$this->Html->image("/img/refer/process2.gif")}}<br/>
-    {{$this->Html->image("/img/refer/process3.gif")}}
 </div>
 <div class="tuijian" style="border-bottom: 0;">
     <h1>您的购买评价</h1>
