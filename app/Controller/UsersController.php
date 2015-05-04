@@ -704,6 +704,10 @@ class UsersController extends AppController {
         $this->loadModel('Shichituan');
         $result = $this->Shichituan->findByUser_id($uid,array('Shichituan.shichi_id','Shichituan.status','Shichituan.pictures','Shichituan.period'),'Shichituan.shichi_id DESC');
         $this->set('result',$result);
+
+        $mOrder = ClassRegistry::init('Order');
+        $received_cnt = $mOrder->count_received_order($this->currentUser['id']);
+        $this->set('received_cnt', $received_cnt);
     }
 
     /**
