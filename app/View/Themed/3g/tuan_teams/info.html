@@ -131,7 +131,9 @@
                     </li>
                 </ul>
             </div>
-            <b>团购</b>
+            {{if $t_buying['consignment_type']!=2}}
+              <b>团购</b>
+            {{/if}}
         </div>
     </span>
 </div>
@@ -153,7 +155,7 @@
                 2)}}</font>{{/if}}</em>
         </div>
         {{if $t_buying['consignment_type']!=2}}
-        <b>团购</b>
+          <b>团购</b>
         {{/if}}
     </a>
     {{/loop}}
