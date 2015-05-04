@@ -613,7 +613,16 @@ class TuanController extends AppController
         }
 
         $order_ids = Hash::extract($orders, "{n}.Order.id");
-        $this->log('order ids: ' . json_encode($order_ids));
+
+        $carts = array();
+        if (!empty($order_ids)) {
+            $this->log('will query carts: ' . json_encode($order_ids));
+            $carts = $this->Cart->find('all', array(
+                'conditions' => array(
+                    'order_id' => $order_ids
+                ),
+            ));
+        }
 
         $tuan_buys = array();
         $tuan_buying_ids = array_diff(Hash::extract($orders, "{n}.Order.member_id"), array(0));
@@ -637,8 +646,7 @@ class TuanController extends AppController
             $tuans = Hash::combine($tuans, '{n}.TuanTeam.id', '{n}.TuanTeam');
         }
 
-        $p_ids = Hash::extract($tuan_buys, '{n}.pid');
-        $this->log("pids: ".json_encode($p_ids));
+        $p_ids = Hash::extract($carts, '{n}.Cart.product_id');
         $spec_groups = array();
         if (!empty($p_ids)) {
             $spec_groups = $this->ProductSpecGroup->find('all', array(
@@ -647,16 +655,6 @@ class TuanController extends AppController
                 )
             ));
             $spec_groups = Hash::combine($spec_groups, '{n}.ProductSpecGroup.id', '{n}.ProductSpecGroup.spec_names');
-        }
-
-        $carts = array();
-        if (!empty($order_ids)) {
-            $this->log('will query carts: ' . json_encode($order_ids));
-            $carts = $this->Cart->find('all', array(
-                'conditions' => array(
-                    'order_id' => $order_ids
-                ),
-            ));
         }
 
         $order_carts = array();
