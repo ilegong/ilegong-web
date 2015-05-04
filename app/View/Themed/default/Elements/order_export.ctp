@@ -18,6 +18,7 @@ $table = array(
     array('label' => __('到货日期'), 'width' => 8),
     array('label' => __('总价(含运费)'), 'width' => 6),
     array('label' => __('运费'), 'width' => 6),
+    array('label' => __('使用积分'), 'width' => 6),
     array('label' => __('状态'), 'width' => 8),
     array('label' => __('联系电话'), 'width' => 12),
     array('label' => __('收货地址'), 'width' => 40, 'wrap' => true),
@@ -29,8 +30,8 @@ $table = array(
 $this->PhpExcel->addTableHeader($table, array('name' => '宋体', 'bold' => true, 'size' => '16'));
 
 $add_header_flag = false;
-$fields = array('id', 'type', 'consignee_name', 'created','pay_time', 'goods','num', 'spec', 'send_date', 'total_all_price', 'ship_fee', 'status', 'consignee_mobilephone', 'consignee_address', 'remark', 'business_remark');
-$header = array('订单号', '团购', '客户姓名', '下单时间', '支付时间', '商品', '件数', '规格', '到货时间', '总价', '运费', '状态', '联系电话', '收货地址', '订单备注','商家备注');
+$fields = array('id', 'type', 'consignee_name', 'created','pay_time', 'goods','num', 'spec', 'send_date', 'total_all_price', 'ship_fee', 'applied_score', 'status', 'consignee_mobilephone', 'consignee_address', 'remark', 'business_remark');
+$header = array('订单号', '团购', '客户姓名', '下单时间', '支付时间', '商品', '件数', '规格', '到货时间', '总价', '运费', '使用积分', '状态', '联系电话', '收货地址', '订单备注','商家备注');
 $order_status = array('待确认', '已支付', '已发货', '已收货', '已退款', '', '', '', '', '已完成', '已做废', '已确认', '已投诉', '', '退款中');
 $page = 1;
 $pagesize = 500;
@@ -56,7 +57,9 @@ do {
                          } else if($fieldName == 'consignee_address'){
                              $value = $item['Order']['consignee_area'].$item['Order']['consignee_address'];
                          } else if($fieldName == 'status'){
-                             $value = $order_status[$value];
+                             $value = $order_status[$item['Order']['status']];
+                         } else if($fieldName == 'applied_score'){
+                             $value = $item['Order']['applied_score'] / 100.0;
                          }else {
                              $value = $item['Order'][$fieldName];
                          }
