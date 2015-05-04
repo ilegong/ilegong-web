@@ -128,14 +128,11 @@
     {{if $referred}}
     您已经接受过{{$old_refer_name}}的邀请，<a href="/">去看看</a>。
     {{else}}
-    {{if !$phone_bind}}
-    <a href="javascript:;" class="tuijian_login_a" class="accept_done">接受邀请马上注册</a>
-    {{elseif $receive_cnt <= 0}}
-    <a href="/">完成第一单</a>
-    {{/if}}
-    {{/if}}
-    {{else}}
-    <div class="tuijian_bg"><strong>推荐好友下单成功</strong><br/>即可获得价值10元柴鸡蛋或酸奶！<br/><a href="/refer/index/{{$CurrentUser['id']}}.html">去推荐</a ></div>
+        {{if !$phone_bind}}
+        <a href="javascript:;" class="tuijian_login_a" class="accept_done">接受邀请马上注册</a>
+        {{elseif $receive_cnt <= 0}}
+        <a href="/">完成第一单</a>
+        {{/if}}
     {{/if}}
 {{else}}
 <div class="tuijian_bg"><strong>推荐好友下单成功</strong><br/>即可获得价值10元柴鸡蛋或酸奶！<br/><a href="/refer/index/{{$CurrentUser['id']}}.html">去推荐</a ></div>
