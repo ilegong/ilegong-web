@@ -8,7 +8,7 @@
 <ul class="tuijianlist">
     {{loop $refers $k $refer}}
     <li class="clearfix">
-        <span class="fl"><img src="{{$this->Html->assetUrl(!empty($m_users[$refer['Refer']['to']]['image'])? $m_users[$refer['User']['id']]['image']:'/img/mine_head.png')}}"/></span>
+        <span class="fl"><img src="{{$this->Html->assetUrl(!empty($m_users[$refer['Refer']['to']]['image'])? $m_users[$refer['Refer']['to']]['image']:'/img/mine_head.png')}}"/></span>
         <div class="tuijian_title">
             <div class="tuijian_title_style clearfix">
                 <em class="fl">{{$m_users[$refer['Refer']['to']]['nickname']}}</em>
