@@ -732,27 +732,31 @@ class TuanController extends AppController
         return $c;
     }
     public function admin_query_by_offline_store(){
+        $store_id = !empty($_REQUEST['store_id']) ? $_REQUEST['store_id'] : -1;
+        $order_status = !empty($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
+        $send_date = $_REQUEST['send_date'];
         if($this->request->is('post')) {
-            $store_id = !empty($_REQUEST['store_id']) ? $_REQUEST['store_id'] : -1;
-            $order_status = !empty($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
             $conditions = array();
             $order_by = 'Order.consignee_id DESC, Cart.product_id';
             $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
             if ($order_status != -1) {
                 $conditions['Order.status'] = $order_status;
             }
-            $send_date = $_REQUEST['send_date'];
             if (!empty($send_date)) {
                 $conditions['DATE(Cart.send_date)'] = $send_date;
             }
             if ($store_id != -1) {
                 $store_ids = explode(",", $store_id);
                 $conditions['Order.consignee_id'] = $store_ids;
+                $this->loadModel('OfflineStore');
+                $store_info = $this->OfflineStore->find('first', array(
+                    'conditions'=> array('id' => $store_ids[0])
+                ));
+                if($store_info['OfflineStore']['type']==1 && $order_status == 1){
+                    $this->set('msg_ready', true);
+                }
             }
             $this->_query_orders($conditions, $order_by);
-        }
-        if($store_id != -1){
-            $this->set('msg_ready', true);
         }
         $this->set('store_id', $store_id);
         $this->set('send_date', $send_date);

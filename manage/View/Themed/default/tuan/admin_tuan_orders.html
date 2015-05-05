@@ -248,7 +248,7 @@
         </form>
     </div>
     <div id="byOfflineStore" class="tab-pane">
-        <form class="form-inline form-by-tuan-team" method="post" action="/manage/admin/tuan/query_by_offline_store"
+        <form class="form-inline form-by-offline-store" method="post" action="/manage/admin/tuan/query_by_offline_store"
               data-noajax="true">
             <div style="padding-bottom: 10px;padding-top: 10px;">
                 <div class="form-group">
@@ -258,7 +258,7 @@
                 </div>
                 <div class="form-group">
                     <input type="text" class="form-control ziti-date-start" data-date-format="yyyy-mmm-dd"
-                           value="{{$send_date}}" placeholder="日期(如2015-5-1)" name="ziti_date">
+                           value="{{$send_date}}" placeholder="日期(如2015-5-1)" name="send_date">
                 </div>
                 <div class="form-group">
                     <select class="form-control order-status" data-value="{{order_status}}" name="order_status">
@@ -276,6 +276,9 @@
                 <button type="submit" class="btn btn-primary text-center">查看订单</button>
             </div>
         </form>
+        {{if $msg_ready}}
+        <button  class="btn btn-success offline_store_msg">修改状态发到货消息</button>
+        {{/if}}
     </div>
     <div id="emptySendDate" class="tab-pane">
         <strong class="text-danger">只能查询团购、秒杀，排期普通商品无法查询</strong>
@@ -303,6 +306,7 @@
 <table class="table table-bordered">
     <thead>
     <tr>
+        {{if $msg_ready}}<td><input type="checkbox" value="0" id="check_all_tb"></td>{{/if}}
         <td>订单号</td>
         <td>用户ID</td>
         <td>订单状态</td>
@@ -317,7 +321,7 @@
         <td>配送方式</td>
         <td>发货时间</td>
         <td>收件人</td>
-        <td>团队名称</td>
+<td>团队名称</td>
         <td>收件地址</td>
         <td>电话</td>
         <td>支付方式</td>
@@ -338,6 +342,7 @@
               $brand = $brands[$cart['Cart']['product_id']];
             ?>
     <tr>
+        {{if $msg_ready}}<td><input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids"></td>{{/if}}
         <td>{{$order['Order']['id']}}</td>
         <td><a href="/manage/admin/tuan/query_by_user?con_creator={{$order['Order']['creator']}}">{{$order['Order']['creator']}}</a>
         </td>

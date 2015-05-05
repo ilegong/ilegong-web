@@ -199,4 +199,24 @@ $(document).ready(function(){
   setSelectBoxValue($('.order-status'));
   setSelectBoxValue($('.order-types'));
   setupByTuanTeamForm();
+    $('#check_all_tb').click(function(e){
+        var table= $(e.target).closest('table');
+        $('td input:checkbox',table).prop('checked',this.checked);
+    });
+    function getAllCheckTbId(){
+        var $checkboxes = $('td input:checkbox:checked',$('table tbody'));
+        var $tb_ids = [];
+        $.each($checkboxes,function(index,item){
+            var $item = $(item);
+            $tb_ids.push($item.val());
+        });
+        return $tb_ids;
+    }
+    $('.offline_store_msg').click(function(){
+        var tb_ids = getAllCheckTbId();
+        $.post('/manage/admin/tuan_buyings/send_wx_fetch_msg/normal', {"ids":tb_ids}, function(){
+
+        }, 'post')
+    })
+
 });
