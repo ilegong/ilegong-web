@@ -1,17 +1,17 @@
 <ol class="breadcrumb">
   <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
   <li><a href="/manage/admin/offline_stores/index">自提点管理</a></li>
-  <li class="active">编辑自提点</li>
+  <li class="active">新建自提点</li>
 </ol>
 
 <div class="container">
-  <form class="form-horizontal offline-store" method="post" action="/manage/admin/offline_stores/update/{{$offline_store[OfflineStore][id]}}" novalidate="novalidate" data-noajax="true">
+  <form class="form-horizontal offline-store" method="post" action="/manage/admin/offline_stores/create" novalidate="novalidate" data-noajax="true">
     <input type="hidden" name="data[OfflineStore][id]" value="{{$offline_store[OfflineStore][id]}}">
 
     <div class="form-group">
       <label class="col-sm-2 control-label">区域</label>
       <div class="col-sm-9">
-        <select class="form-control area-id" name="data[OfflineStore][area_id]" data-value="{{$offline_store[OfflineStore][area_id]}}">
+        <select class="form-control area-id" name="data[OfflineStore][area_id]">
         </select>
       </div>
     </div>
@@ -19,13 +19,13 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">类型</label>
       <div class="col-sm-7">
-        <select class="form-control type" name="data[OfflineStore][type]" data-value="{{$offline_store[OfflineStore][type]}}">
+        <select class="form-control type" name="data[OfflineStore][type]" data-value="1">
           <option value="0">好邻居</option>
           <option value="1">自有</option>
         </select>
       </div>
       <div class="col-sm-2">
-        <input type="text" class="form-control shop-no" name="data[OfflineStore][shop_no]" value="{{$offline_store[OfflineStore][shop_no]}}" placeholder="好邻居店号"/>
+        <input type="text" class="form-control shop-no" name="data[OfflineStore][shop_no]" value="0" placeholder="好邻居店号"/>
       </div>
     </div>
     <div class="form-group">
@@ -55,13 +55,15 @@
     <div class="form-group">
       <label class="col-sm-2 control-label">自取点经度</label>
       <div class="col-sm-9 controls">
-        <input type="text" class="form-control" name="data[OfflineStore][location_long]" value="{{$offline_store[OfflineStore][location_long]}}"/>
+        <input type="text" class="form-control" name="data[OfflineStore][location_long]" value="{{$offline_store[OfflineStore][location_long]}}" placeholder="请输入经度"/>
+        <div class="text-warning"><a href="http://api.map.baidu.com/lbsapi/getpoint/index.html" target="_blank">点击查询经纬度</a></div>
       </div>
     </div>
     <div class="form-group">
       <label class="col-sm-2 control-label">自取点纬度</label>
       <div class="col-sm-9 controls">
-        <input type="text" class="form-control" name="data[OfflineStore][location_lat]" value="{{$offline_store[OfflineStore][location_lat]}}"/>
+        <input type="text" class="form-control" name="data[OfflineStore][location_lat]" value="{{$offline_store[OfflineStore][location_lat]}}" placeholder="请输入纬度"/>
+        <div class="text-warning"><a href="http://api.map.baidu.com/lbsapi/getpoint/index.html" target="_blank">点击查询经纬度</a></div>
       </div>
     </div>
 
