@@ -273,6 +273,9 @@ class TuanBuyingsController extends AppController{
         $tuanTeamIds = $_REQUEST['team_ids'];
         $this->log('tuanTeamIds'.$tuanTeamIds);
         $tuanTeamIds = explode(',',$tuanTeamIds);
+        $tuanProductIds = $_REQUEST['tuan_products'];
+        $this->log('tuanProductIds'.$tuanProductIds);
+        $tuanProductIds = explode(',',$tuanProductIds);
         App::import('Controller','TuanMsg');
 
         if(!empty($this->data)){
@@ -283,16 +286,19 @@ class TuanBuyingsController extends AppController{
                 $this->data['TuanBuying']['published'] = 0;
             }
             foreach($tuanTeamIds as $tuanTeamId){
-                $this->data['TuanBuying']['tuan_id'] = $tuanTeamId;
-                $this->data['TuanBuying']['join_num'] = 0;
-                $this->data['TuanBuying']['sold_num'] = 0;
-                $this->data['TuanBuying']['stTuanBuyingMessagesatus'] = 0;
-                //todo created fields missing
-                $this->log("create tuan buying for team ".$tuanTeamId.": ".json_encode($this->data));
-                $this->TuanBuying->create();
-                if($this->TuanBuying->save($this->data)){
-                    $tuanBuyId = $this->TuanBuying->getLastInsertID();
-                //                $this->admin_send_tuan_buy_create_msg($tuanBuyId);
+                foreach($tuanProductIds as $tuanProductId){
+                    $this->data['TuanBuying']['pid'] = $tuanProductId;
+                    $this->data['TuanBuying']['tuan_id'] = $tuanTeamId;
+                    $this->data['TuanBuying']['join_num'] = 0;
+                    $this->data['TuanBuying']['sold_num'] = 0;
+                    $this->data['TuanBuying']['stTuanBuyingMessagesatus'] = 0;
+                    //todo created fields missing
+                    $this->log("create tuan buying product .$tuanProductId.'for team ".$tuanTeamId.": ".json_encode($this->data));
+                    $this->TuanBuying->create();
+                    if($this->TuanBuying->save($this->data)){
+                        $tuanBuyId = $this->TuanBuying->getLastInsertID();
+                        //                $this->admin_send_tuan_buy_create_msg($tuanBuyId);
+                    }
                 }
             }
         }
