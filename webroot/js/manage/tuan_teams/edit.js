@@ -12,7 +12,7 @@ $(function(){
     $.getJSON('/manage/admin/tuan_buyings/api_offline_stores',function(data){
         for(var category in data){
             var categoryName = category == 0 ? '好邻居' : '自有自提点';
-            $('<optgroup label="--------"><option value="" class="store_'+ category +'">' + categoryName + '</option>').appendTo(offlineStoreBox );
+            $('<optgroup label="--------' + categoryName + '"></optgroup>').appendTo(offlineStoreBox );
             for(var offlineStoreId in data[category]){
                 $('<option value="' + offlineStoreId + '">' + data[category][offlineStoreId].name + '</option>').appendTo(offlineStoreBox);
             }

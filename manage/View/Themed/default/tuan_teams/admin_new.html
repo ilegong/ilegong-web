@@ -78,10 +78,10 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">团队口号</label>
+            <label class="col-sm-2 control-label">自提点</label>
             <div class="col-sm-9 controls">
-                <input name="data[TuanTeam][tuan_desc]" value="{{$this->data[TuanTeam][tuan_desc]}}" class="form-control" type="text" id="tuan_desc" placeholder="热爱生活，寻找美味">
-                <div class="text-warning">备注：热爱生活，寻找美味</div>
+                <select name="data[TuanTeam][offline_store_id]" class="form-control offline-store" data-value="{{$tuanTeam[offline_store_id]}}">
+                </select>
             </div>
         </div>
         <div class="form-group">
