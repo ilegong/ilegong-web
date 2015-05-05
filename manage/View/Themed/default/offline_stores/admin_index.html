@@ -29,7 +29,7 @@
 <table class="table table-striped table-bordered table-condensed table-hover">
     <thead>
     <tr>
-        <th>编号</th><th>区域</th><th>类型</th><th>显示地址</th><th>详细地址</th><th>联系人</th><th>团队</th>
+        <th>编号</th><th>区域</th><th>类型</th><th>显示地址</th><th>详细地址</th><th>联系人</th><th>美食团</th>
     </tr>
     </thead>
     <tbody>
@@ -50,6 +50,7 @@
             {{$offline_store['OfflineStore']['owner_name']}}({{$offline_store['OfflineStore']['owner_phone']}})
         </td>
         <td>
+          {{$offline_store['OfflineStore']['tuan_team_count']}}支
         </td>
     </tr>
     {{/loop}}
