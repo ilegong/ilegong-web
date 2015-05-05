@@ -215,7 +215,7 @@ class ProductsController extends AppController{
         if(array_key_exists($pid ,$tuan_product_not_show_ids) && $tuan_product_not_show_ids[$pid] == 0){
             $this->loadModel('TuanBuying');
             $big_tuan = $this->TuanBuying->find('first', array(
-                'conditions' => array('pid' => $pid, 'tuan_id'=>34, 'published' => 1)
+                'conditions' => array('pid' => $pid, 'tuan_id'=>34, 'status'=> 0, 'published' => 1)
             ));
             if(!empty($big_tuan)){
                 $this->redirect('/tuan_buyings/detail/'.$big_tuan['TuanBuying']['id']);
