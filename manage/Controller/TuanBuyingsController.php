@@ -415,7 +415,7 @@ class TuanBuyingsController extends AppController{
             $product_alias = $alias[$tuan_buy_id];
             $store= empty($value['consignee_id'])?null:$store_info[$value['consignee_id']];
             $store_alias = empty($store)?'':$store['alias'];
-            $store_phone = empty($store)?'':'，自提点电话：'.$store['phone'];
+            $store_phone = empty($store)?'':'，自提点电话：'.$store['owner_phone'];
             $post_data = array(
                 "touser" => $r[$value['creator']],
                 "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
