@@ -466,6 +466,17 @@ $(function(){
         }
     }
 
-
+    $(window).scroll(function(){
+        var t = $(window).scrollTop();
+        //alert(t);
+        if(t>0)
+        {
+            $('#top').show();
+        }
+        else
+        {
+            $('#top').hide();
+        }
+    });
 
 });

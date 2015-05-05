@@ -23,7 +23,7 @@ class TuanTeamsController extends AppController{
             $my_tuan_ids = Hash::extract($my_tuans,'{n}.TuanMember.tuan_id');
         }
         $tuan_teams = $this->TuanTeam->find('all', array(
-            'conditions' =>array('status'=> 0, 'type' => 0),
+            'conditions' =>array('published'=> PUBLISH_YES, 'type' => 0),
             'order' => array('TuanTeam.priority DESC')
         ));
         $left_tuan_ids = Hash::extract($tuan_teams,'{n}.TuanTeam.id');
@@ -42,7 +42,10 @@ class TuanTeamsController extends AppController{
 
     public function info($tuan_id){
         $tuan_team = $this->TuanTeam->find('first', array(
-            'conditions' =>array('id'=> $tuan_id),
+            'conditions' =>array(
+                'id'=> $tuan_id,
+                'published' => PUBLISH_YES
+            ),
         ));
         if(empty($tuan_team)){
             $message = '该团不存在';
@@ -194,10 +197,10 @@ class TuanTeamsController extends AppController{
             $this->set(compact('location', 'name', 'addr'));
         }else{
             $tuan_id = intval($tuan_id);
-            $teamInfo = $this->TuanTeam->find('first',array('conditions' => array('id' => $tuan_id)));
+            $teamInfo = $this->TuanTeam->find('first',array('conditions' => array('id' => $tuan_id, 'published' => PUBLISH_YES)));
             $location = $teamInfo['TuanTeam']['location_long'] . ',' . $teamInfo['TuanTeam']['location_lat'];
-            $this->set('tuan_id',$tuan_id);
-            $this->set('name',$teamInfo['TuanTeam']['tuan_name']);
+            $this->set('tuan_id', $tuan_id);
+            $this->set('name', $teamInfo['TuanTeam']['tuan_name']);
             $this->set('location', $location);
             $this->set('addr',$teamInfo['TuanTeam']['tuan_addr']);
         }

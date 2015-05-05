@@ -5,230 +5,287 @@
 </ol>
 
 <ul class="nav nav-tabs" data-query-type="{{$query_type}}">
-  <li role="presentation"><a data-tab="general" href="/manage/admin/tuan/tuan_orders">订单查询</a></li>
-  <li role="presentation"><a data-tab="byOrderId" href="/manage/admin/tuan/query_by_order_id">订单ID查询</a></li>
-  <li role="presentation"><a data-tab="byUser" href="/manage/admin/tuan/query_by_user">根据用户查询</a></li>
-  <li role="presentation"><a data-tab="byTuanTeam" href="/manage/admin/tuan/query_by_tuan_team">按团队查询</a></li>
-  <li role="presentation"><a data-tab="byProduct" href="/manage/admin/tuan/query_by_product">按商品查询</a></li>
-  <li role="presentation">
-    <a data-tab="emptySendDate" href="/manage/admin/tuan/query_b2c_empty_send_date">
-      !!!B2C无发货时间
-      <span {{if $b2c_empty_send_date_count > 0}}class="text-danger"{{/if}}>({{$b2c_empty_send_date_count}})</span>
-    </a>
-  </li>
-  <li role="presentation">
-    <a data-tab="b2cPaidNotSend" href="/manage/admin/tuan/query_b2c_paid_not_send">
-      !!!B2C未发货
-      <span {{if $b2c_paid_not_sent_count > 0}}class="text-danger"{{/if}}>({{$b2c_paid_not_sent_count}})</span>
-    </a>
-  </li>
-  <li role="presentation">
-    <a data-tab="c2cPaidNotSend" href="/manage/admin/tuan/query_c2c_paid_not_send">
-      !!!C2C未发货
-      <span {{if $c2c_paid_not_sent_count > 0}}class="text-danger"{{/if}}>({{$c2c_paid_not_sent_count}})</span>
-    </a>
-  </li>
+    <li role="presentation"><a data-tab="general" href="/manage/admin/tuan/tuan_orders">订单查询</a></li>
+    <li role="presentation"><a data-tab="byOrderId" href="/manage/admin/tuan/query_by_order_id">订单ID查询</a></li>
+    <li role="presentation"><a data-tab="byUser" href="/manage/admin/tuan/query_by_user">根据用户查询</a></li>
+    <li role="presentation"><a data-tab="byTuanTeam" href="/manage/admin/tuan/query_by_tuan_team">按团队查询</a></li>
+    <li role="presentation"><a data-tab="byProduct" href="/manage/admin/tuan/query_by_product">按商品查询</a></li>
+    <li role="presentation"><a data-tab="byOfflineStore"
+                               href="/manage/admin/tuan/query_by_offline_store">按自提点查询(尚未上线)</a></li>
+    <li role="presentation">
+        <a data-tab="emptySendDate" href="/manage/admin/tuan/query_b2c_empty_send_date">
+            !!!B2C无发货时间
+            <span {{if $b2c_empty_send_date_count> 0}}class="text-danger"{{/if}}>({{$b2c_empty_send_date_count}})</span>
+        </a>
+    </li>
+    <li role="presentation">
+        <a data-tab="b2cPaidNotSend" href="/manage/admin/tuan/query_b2c_paid_not_send">
+            !!!B2C未发货
+            <span {{if $b2c_paid_not_sent_count> 0}}class="text-danger"{{/if}}>({{$b2c_paid_not_sent_count}})</span>
+        </a>
+    </li>
+    <li role="presentation">
+        <a data-tab="c2cPaidNotSend" href="/manage/admin/tuan/query_c2c_paid_not_send">
+            !!!C2C未发货
+            <span {{if $c2c_paid_not_sent_count> 0}}class="text-danger"{{/if}}>({{$c2c_paid_not_sent_count}})</span>
+        </a>
+    </li>
 </ul>
 <div class="tab-content">
-  <div id="general" class="tab-pane active">
-    <form class="form-inline" method="post" action="/manage/admin/tuan/tuan_orders" data-noajax="true">
-      <div style="padding-bottom: 10px;padding-top: 10px;">
-        <div class="form-group">
-          <input type="text" class="form-control tuan-team-search" placeholder="搜索团队" data-search-for="tuanTeam1">
-        </div>
-        <div class="form-group">
-          <select class="form-control tuan-teams" name="team_id" id="tuanTeam1" data-value="{{$team_id}}">
-            <option value="-1">请选择团队</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control tuan-product-search" data-search-for="tuanProducts" placeholder="搜索商品">
-        </div>
-        <div class="form-group">
-          <select class="form-control tuan-products" name="product_id" id="tuanProducts" data-value="{{$product_id}}">
-            <option value="-1">选择商品</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <select class="form-control order-status" name="order_status" data-value="{{$order_status}}">
-            <option value="-1">选择订单状态</option>
-            <option value="0">待支付</option>
-            <option value="1">待发货</option>
-            <option value="2">已发货</option>
-            <option value="4">已退款</option>
-            <option value="10">已作废</option>
-            <option value="14">退款中</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" data-date-format="yyyy-mm-dd hh:ii" value="{{$start_stat_datetime}}" placeholder="开始统计日期" name="start_stat_datetime">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" data-date-format="yyyy-mm-dd hh:ii" value="{{$end_stat_datetime}}" placeholder="结束统计日期" name="end_stat_datetime">
-        </div>
-        <div class="form-group">
-          <div class="checkbox">
-            <label>
-              {{if $only_tuan_order=='1'}}
-              <input name="only_tuan_order" value="1" type="checkbox" checked="checked"> 只查团购订单
-              {{else}}
-              <input name="only_tuan_order" value="1" type="checkbox"> 只查团购订单
-              {{/if}}
-            </label>
-          </div>
-        </div>
-        <br/>
-        <br/>
-        <div class="form-group">
-          <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$tuan_con_date}}" placeholder="团购发货日期" name="tuan_con_date">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$product_con_date}}" placeholder="产品排期" name="product_con_date">
-        </div>
-        <div class="form-group">
-          <input type="text" name="con_address" class="form-control" placeholder="地址" value="{{$con_address}}">
-        </div>
-        <div class="form-group">
-          <input type="text" name="query_product_id" class="form-control" value="{{$query_product_id}}" placeholder="商品ID">
-        </div>
-        <br/>
-        <br/>
-        <button type="submit" class="btn btn-primary text-center">查看订单</button>
-      </div>
-    </form>
-  </div>
-  <div id="byOrderId" class="tab-pane">
-    <strong class="text-danger">该功能还在试用，发现任何问题及时联系开发</strong>
-    <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_order_id" data-noajax="true">
-      <div style="padding-bottom: 10px;padding-top: 10px;">
-        <div class="form-group">
-          <input type="text" name="order_id" class="form-control" value="{{$order_id}}" placeholder="订单ID">
-        </div>
-        <br/>
-        <br/>
-        <button type="submit" class="btn btn-primary text-center">查看订单</button>
-      </div>
-    </form>
-  </div>
-  <div id="byUser" class="tab-pane">
-    <strong class="text-danger">该功能还在试用，发现任何问题及时联系开发</strong>
-    <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_user" data-noajax="true">
-      <div style="padding-bottom: 10px;padding-top: 10px;">
-        <div class="form-group">
-          <input type="text" class="form-control" name="con_name" placeholder="姓名" value="{{$con_name}}">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" name="con_phone" placeholder="手机号" value="{{$con_phone}}">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" name="con_creator" placeholder="用户ID" value="{{$con_creator}}">
-        </div>
-        <div class="form-group">
-          <select class="form-control order-status" data-value="{{order_status}}" name="order_status">
-            <option value="-1">选择订单状态</option>
-            <option value="0">待支付</option>
-            <option value="1">待发货</option>
-            <option value="2">已发货</option>
-            <option value="4">已退款</option>
-            <option value="10">已作废</option>
-            <option value="14">退款中</option>
-          </select>
-        </div>
-        <br/>
-        <br/>
-        <button type="submit" class="btn btn-primary text-center">查看订单</button>
-      </div>
-    </form>
-  </div>
-  <div id="byProduct" class="tab-pane">
-    <strong class="text-danger">该功能还在试用，发现任何问题及时联系开发</strong>
-    <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_product" data-noajax="true">
-      <div style="padding-bottom: 10px;padding-top: 10px;">
-        <div class="form-group">
-          <input type="text" class="form-control product-search" data-search-for="product1" placeholder="搜索商品">
-        </div>
-        <div class="form-group">
-          <select class="form-control products" name="product_id" id="product1" data-value="{{$product_id}}">
-            <option value="-1">选择商品</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <select class="form-control order-types" data-value="{{$order_type}}" name="order_type">
-            <option value="-1">选择订单类型</option>
-            <option value="1">只查普通</option>
-            <option value="5">只查团购</option>
-            <option value="6">只查秒杀</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$send_date_start}}" placeholder="发货日期(如2015-5-1)" name="send_date_start">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$send_date_end}}" placeholder="发货日期(如2015-5-1)" name="send_date_end">
-        </div>
-        <div class="form-group">
-          <select class="form-control order-status" data-value="{{order_status}}" name="order_status">
-            <option value="-1">选择订单状态</option>
-            <option value="0">待支付</option>
-            <option value="1">待发货</option>
-            <option value="2">已发货</option>
-            <option value="4">已退款</option>
-            <option value="10">已作废</option>
-            <option value="14">退款中</option>
-          </select>
-        </div>
-        <br/>
-        <br/>
-        <button type="submit" class="btn btn-primary text-center">查看订单</button>
-      </div>
-    </form>
-  </div>
-  <div id="byTuanTeam" class="tab-pane">
-    <strong class="text-danger">注意：只能查询团购订单，无法查询秒杀订单</strong>
-    <form class="form-inline form-by-tuan-team" method="post" action="/manage/admin/tuan/query_by_tuan_team" data-noajax="true">
-      <div style="padding-bottom: 10px;padding-top: 10px;">
-        <div class="form-group">
-          <input type="text" class="form-control tuan-team-search" placeholder="搜索团队" data-search-for="tuanTeam2">
-        </div>
-        <div class="form-group">
-          <select class="form-control tuan-teams" name="team_id" id="tuanTeam2" data-value="{{$team_id}}">
-            <option value="-1">请选择团队</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <select class="form-control tuan-buyings" name="tuan_buying_id" data-value="{{$tuan_buying_id}}">
-            <option value="-1">请选择团购</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control send-date-start" data-date-format="yyyy-mmm-dd" value="{{$send_date_start}}" placeholder="发货日期(如2015-5-1)" name="send_date_start">
-        </div>
-        <div class="form-group">
-          <input type="text" class="form-control send-date-end" data-date-format="yyyy-mmm-dd" value="{{$send_date_end}}" placeholder="发货日期(如2015-5-1)" name="send_date_end">
-        </div>
-        <div class="form-group">
-          <select class="form-control order-status" data-value="{{order_status}}" name="order_status">
-            <option value="-1">选择订单状态</option>
-            <option value="0">待支付</option>
-            <option value="1">待发货</option>
-            <option value="2">已发货</option>
-            <option value="4">已退款</option>
-            <option value="10">已作废</option>
-            <option value="14">退款中</option>
-          </select>
-        </div>
-        <br/>
-        <br/>
-        <button type="submit" class="btn btn-primary text-center">查看订单</button>
-      </div>
-    </form>
-  </div>
-  <div id="emptySendDate" class="tab-pane">
-    <strong class="text-danger">只能查询团购、秒杀，排期普通商品无法查询</strong>
-  </div>
-  <div id="paidNotSend" class="tab-pane">
-    <strong class="text-danger">到了发货时间，仍未发货的订单</strong>
-  </div>
+    <div id="general" class="tab-pane active">
+        <form class="form-inline" method="post" action="/manage/admin/tuan/tuan_orders" data-noajax="true">
+            <div style="padding-bottom: 10px;padding-top: 10px;">
+                <div class="form-group">
+                    <input type="text" class="form-control tuan-team-search" placeholder="搜索团队"
+                           data-search-for="tuanTeam1">
+                </div>
+                <div class="form-group">
+                    <select class="form-control tuan-teams" name="team_id" id="tuanTeam1" data-value="{{$team_id}}">
+                        <option value="-1">请选择团队</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control tuan-product-search" data-search-for="tuanProducts"
+                           placeholder="搜索商品">
+                </div>
+                <div class="form-group">
+                    <select class="form-control tuan-products" name="product_id" id="tuanProducts"
+                            data-value="{{$product_id}}">
+                        <option value="-1">选择商品</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select class="form-control order-status" name="order_status" data-value="{{$order_status}}">
+                        <option value="-1">选择订单状态</option>
+                        <option value="0">待支付</option>
+                        <option value="1">待发货</option>
+                        <option value="2">已发货</option>
+                        <option value="4">已退款</option>
+                        <option value="10">已作废</option>
+                        <option value="14">退款中</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" data-date-format="yyyy-mm-dd hh:ii"
+                           value="{{$start_stat_datetime}}" placeholder="开始统计日期" name="start_stat_datetime">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" data-date-format="yyyy-mm-dd hh:ii"
+                           value="{{$end_stat_datetime}}" placeholder="结束统计日期" name="end_stat_datetime">
+                </div>
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            {{if $only_tuan_order=='1'}}
+                            <input name="only_tuan_order" value="1" type="checkbox" checked="checked"> 只查团购订单
+                            {{else}}
+                            <input name="only_tuan_order" value="1" type="checkbox"> 只查团购订单
+                            {{/if}}
+                        </label>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+
+                <div class="form-group">
+                    <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$tuan_con_date}}"
+                           placeholder="团购发货日期" name="tuan_con_date">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$product_con_date}}"
+                           placeholder="产品排期" name="product_con_date">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="con_address" class="form-control" placeholder="地址"
+                           value="{{$con_address}}">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="query_product_id" class="form-control" value="{{$query_product_id}}"
+                           placeholder="商品ID">
+                </div>
+                <br/>
+                <br/>
+                <button type="submit" class="btn btn-primary text-center">查看订单</button>
+            </div>
+        </form>
+    </div>
+    <div id="byOrderId" class="tab-pane">
+        <strong class="text-danger">该功能还在试用，发现任何问题及时联系开发</strong>
+
+        <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_order_id" data-noajax="true">
+            <div style="padding-bottom: 10px;padding-top: 10px;">
+                <div class="form-group">
+                    <input type="text" name="order_id" class="form-control" value="{{$order_id}}" placeholder="订单ID">
+                </div>
+                <br/>
+                <br/>
+                <button type="submit" class="btn btn-primary text-center">查看订单</button>
+            </div>
+        </form>
+    </div>
+    <div id="byUser" class="tab-pane">
+        <strong class="text-danger">该功能还在试用，发现任何问题及时联系开发</strong>
+
+        <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_user" data-noajax="true">
+            <div style="padding-bottom: 10px;padding-top: 10px;">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="con_name" placeholder="姓名" value="{{$con_name}}">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="con_phone" placeholder="手机号" value="{{$con_phone}}">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" name="con_creator" placeholder="用户ID"
+                           value="{{$con_creator}}">
+                </div>
+                <div class="form-group">
+                    <select class="form-control order-status" data-value="{{order_status}}" name="order_status">
+                        <option value="-1">选择订单状态</option>
+                        <option value="0">待支付</option>
+                        <option value="1">待发货</option>
+                        <option value="2">已发货</option>
+                        <option value="4">已退款</option>
+                        <option value="10">已作废</option>
+                        <option value="14">退款中</option>
+                    </select>
+                </div>
+                <br/>
+                <br/>
+                <button type="submit" class="btn btn-primary text-center">查看订单</button>
+            </div>
+        </form>
+    </div>
+    <div id="byProduct" class="tab-pane">
+        <strong class="text-danger">该功能还在试用，发现任何问题及时联系开发</strong>
+
+        <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_product" data-noajax="true">
+            <div style="padding-bottom: 10px;padding-top: 10px;">
+                <div class="form-group">
+                    <input type="text" class="form-control product-search" data-search-for="product1"
+                           placeholder="搜索商品">
+                </div>
+                <div class="form-group">
+                    <select class="form-control products" name="product_id" id="product1" data-value="{{$product_id}}">
+                        <option value="-1">选择商品</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select class="form-control order-types" data-value="{{$order_type}}" name="order_type">
+                        <option value="-1">选择订单类型</option>
+                        <option value="1">只查普通</option>
+                        <option value="5">只查团购</option>
+                        <option value="6">只查秒杀</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$send_date_start}}"
+                           placeholder="发货日期(如2015-5-1)" name="send_date_start">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$send_date_end}}"
+                           placeholder="发货日期(如2015-5-1)" name="send_date_end">
+                </div>
+                <div class="form-group">
+                    <select class="form-control order-status" data-value="{{order_status}}" name="order_status">
+                        <option value="-1">选择订单状态</option>
+                        <option value="0">待支付</option>
+                        <option value="1">待发货</option>
+                        <option value="2">已发货</option>
+                        <option value="4">已退款</option>
+                        <option value="10">已作废</option>
+                        <option value="14">退款中</option>
+                    </select>
+                </div>
+                <br/>
+                <br/>
+                <button type="submit" class="btn btn-primary text-center">查看订单</button>
+            </div>
+        </form>
+    </div>
+    <div id="byTuanTeam" class="tab-pane">
+        <strong class="text-danger">注意：只能查询团购订单，无法查询秒杀订单</strong>
+
+        <form class="form-inline form-by-tuan-team" method="post" action="/manage/admin/tuan/query_by_tuan_team"
+              data-noajax="true">
+            <div style="padding-bottom: 10px;padding-top: 10px;">
+                <div class="form-group">
+                    <input type="text" class="form-control tuan-team-search" placeholder="搜索团队"
+                           data-search-for="tuanTeam2">
+                </div>
+                <div class="form-group">
+                    <select class="form-control tuan-teams" name="team_id" id="tuanTeam2" data-value="{{$team_id}}">
+                        <option value="-1">请选择团队</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <select class="form-control tuan-buyings" name="tuan_buying_id" data-value="{{$tuan_buying_id}}">
+                        <option value="-1">请选择团购</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control send-date-start" data-date-format="yyyy-mmm-dd"
+                           value="{{$send_date_start}}" placeholder="发货日期(如2015-5-1)" name="send_date_start">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control send-date-end" data-date-format="yyyy-mmm-dd"
+                           value="{{$send_date_end}}" placeholder="发货日期(如2015-5-1)" name="send_date_end">
+                </div>
+                <div class="form-group">
+                    <select class="form-control order-status" data-value="{{order_status}}" name="order_status">
+                        <option value="-1">选择订单状态</option>
+                        <option value="0">待支付</option>
+                        <option value="1">待发货</option>
+                        <option value="2">已发货</option>
+                        <option value="4">已退款</option>
+                        <option value="10">已作废</option>
+                        <option value="14">退款中</option>
+                    </select>
+                </div>
+                <br/>
+                <br/>
+                <button type="submit" class="btn btn-primary text-center">查看订单</button>
+            </div>
+        </form>
+    </div>
+    <div id="byOfflineStore" class="tab-pane">
+        <form class="form-inline form-by-offline-store" method="post" action="/manage/admin/tuan/query_by_offline_store"
+              data-noajax="true">
+            <div style="padding-bottom: 10px;padding-top: 10px;">
+                <div class="form-group">
+                    <select class="form-control offline_store" name="store_id" id="offline_store_id" data-value="{{$store_id}}">
+                        <option value="-1">请选择自提点</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control ziti-date-start" data-date-format="yyyy-mmm-dd"
+                           value="{{$send_date}}" placeholder="日期(如2015-5-1)" name="send_date">
+                </div>
+                <div class="form-group">
+                    <select class="form-control order-status" data-value="{{order_status}}" name="order_status">
+                        <option value="-1">选择订单状态</option>
+                        <option value="0">待支付</option>
+                        <option value="1">待发货</option>
+                        <option value="2">已发货</option>
+                        <option value="4">已退款</option>
+                        <option value="10">已作废</option>
+                        <option value="14">退款中</option>
+                    </select>
+                </div>
+                <br/>
+                <br/>
+                <button type="submit" class="btn btn-primary text-center">查看订单</button>
+            </div>
+        </form>
+        {{if $msg_ready}}
+        <button  class="btn btn-success pull-right offline_store_msg">修改状态发到货消息</button>
+        {{/if}}
+    </div>
+    <div id="emptySendDate" class="tab-pane">
+        <strong class="text-danger">只能查询团购、秒杀，排期普通商品无法查询</strong>
+    </div>
+    <div id="paidNotSend" class="tab-pane">
+        <strong class="text-danger">到了发货时间，仍未发货的订单</strong>
+    </div>
 </div>
 
 <hr/>
@@ -236,9 +293,11 @@
     <h1>订单总计<span style="color: red">{{count($orders)}}</span>个，金额<span style="color: red">{{$total_money}}</span></h1>
     {{if $should_count_nums}}
     <br/>
+
     <h1>份数<span style="color: red">{{$product_count}}</span>
         {{loop $product_spec_map $spec_map}}
-            &nbsp;&nbsp;&nbsp;{{$spec_groups[$spec_map['cake_carts']['specId']]?$spec_groups[$spec_map['cake_carts']['specId']]:'没有规格'}}&nbsp;&nbsp;<span style="color: red">{{$spec_map['0']['sum(num)']}}</span>
+        &nbsp;&nbsp;&nbsp;{{$spec_groups[$spec_map['cake_carts']['specId']]?$spec_groups[$spec_map['cake_carts']['specId']]:'没有规格'}}&nbsp;&nbsp;<span
+                style="color: red">{{$spec_map['0']['sum(num)']}}</span>
         {{/loop}}
     </h1>
     {{/if}}
@@ -246,105 +305,127 @@
 <hr/>
 <table class="table table-bordered">
     <thead>
-        <tr>
-            <td>订单号</td><td>用户ID</td><td>订单状态</td><td>店家</td><td>商品</td><td>规格</td><td>份数</td><td>总价</td><td>创建时间</td><td>付款时间</td><td>类型</td><td>配送方式</td><td>发货时间</td><td>收件人</td><td>团队名称</td><td>收件地址</td><td>电话</td><td>支付方式</td><td>交易号</td><td>备注</td>
-        </tr>
+    <tr>
+        {{if $msg_ready}}<td><input type="checkbox" value="0" id="check_all_tb"></td>{{/if}}
+        <td>订单号</td>
+        <td>用户ID</td>
+        <td>订单状态</td>
+        <td>店家</td>
+        <td>商品</td>
+        <td>规格</td>
+        <td>份数</td>
+        <td>总价</td>
+        <td>创建时间</td>
+        <td>付款时间</td>
+        <td>类型</td>
+        <td>配送方式</td>
+        <td>发货时间</td>
+        <td>收件人</td>
+<td>团队名称</td>
+        <td>收件地址</td>
+        <td>电话</td>
+        <td>支付方式</td>
+        <td>交易号</td>
+        <td>备注</td>
+    </tr>
     </thead>
     <tbody>
-        {{loop $orders $order}}
-          <?php
+    {{loop $orders $order}}
+    <?php
               $tuan_buying = $tuan_buys[$order['Order']['member_id']];
               $tuan = $tuans[$tuan_buying['tuan_id']];
           ?>
-          {{loop $order_carts[$order['Order']['id']] $index $cart}}
-            <?php
+    {{loop $order_carts[$order['Order']['id']] $index $cart}}
+    <?php
               $date = $consign_dates[$cart['Cart']['consignment_date']];
               $consign_time = empty($date)?'': date('m-d', strtotime($date));
               $brand = $brands[$cart['Cart']['product_id']];
             ?>
-            <tr>
-                <td>{{$order['Order']['id']}}</td>
-                <td><a href="/manage/admin/tuan/query_by_user?con_creator={{$order['Order']['creator']}}">{{$order['Order']['creator']}}</a></td>
-                <td>
-                    {{if $order['Order']['status']==0}}
-                    待支付
-                    {{elseif $order['Order']['status']==1}}
-                    待发货
-                    {{elseif $order['Order']['status']==2}}已发货
-                    {{elseif $order['Order']['status']==3}}已收货
-                    {{elseif $order['Order']['status']==4}}已退款
-                    {{elseif $order['Order']['status']==9}}已完成
-                    {{elseif $order['Order']['status']==10}}已作废
-                    {{elseif $order['Order']['status']==11}}待支付
-                    {{elseif $order['Order']['status']==14}}退款中
-                    {{/if}}
-                </td>
-                <td>{{$brand['Brand']['name']}}</td>
-                <td>
-                    <a href="/manage/admin/tuan/query_by_product?product_id={{$cart['Cart']['product_id']}}">{{$cart['Cart']['name']}}</a>
-                </td>
-                <td>
-                    {{$cart['Cart']['spec_name']}}
-                </td>
-                <td>
-                    {{$cart['Cart']['num']}}
-                </td>
-                <td>{{if $index == 0}}{{$order['Order']['total_all_price']}}{{else}}'同上'{{/if}}</td>
-                <td>{{$order['Order']['created']}}</td>
-                <td>{{$order['Order']['pay_time']}}</td>
-                <td>
-                  {{if $order['Order']['type'] == 5}}
-                    团购
-                  {{elseif $order['Order']['type'] == 6}}
-                    秒杀
-                  {{elseif $order['Order']['type'] == 1}}
-                    普通
-                  {{/if}}
-                </td>
-                <td>
-                    {{if $order['Order']['ship_mark']=='ziti'}}
-                        自提
-                    {{elseif $order['Order']['ship_mark']=='sf'}}
-                        顺风到付
-                    {{elseif $order['Order']['ship_mark']=='kddj'}}
-                        快递到家
-                    {{elseif $order['Order']['ship_mark']=='normal'}}
-                        自提
-                    {{else}}
-                        没有标注
-                    {{/if}}
-                </td>
-                <td>
-                   {{$consign_time}}({{$cart['Cart']['send_date']}})
-                </td>
-                <td>{{$order['Order']['consignee_name']}}</td>
-                <td>
-                  <a href="/manage/admin/tuan_buyings/index?team_id={{$tuan['id']}}">{{$tuan['tuan_name']}}</a>
-                </td>
-                <td>
-                    {{$order['Order']['consignee_address']}}
-                </td>
+    <tr>
+        {{if $msg_ready}}<td><input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids"></td>{{/if}}
+        <td>{{$order['Order']['id']}}</td>
+        <td><a href="/manage/admin/tuan/query_by_user?con_creator={{$order['Order']['creator']}}">{{$order['Order']['creator']}}</a>
+        </td>
+        <td>
+            {{if $order['Order']['status']==0}}
+            待支付
+            {{elseif $order['Order']['status']==1}}
+            待发货
+            {{elseif $order['Order']['status']==2}}已发货
+            {{elseif $order['Order']['status']==3}}已收货
+            {{elseif $order['Order']['status']==4}}已退款
+            {{elseif $order['Order']['status']==9}}已完成
+            {{elseif $order['Order']['status']==10}}已作废
+            {{elseif $order['Order']['status']==11}}待支付
+            {{elseif $order['Order']['status']==14}}退款中
+            {{/if}}
+        </td>
+        <td>{{$brand['Brand']['name']}}</td>
+        <td>
+            <a href="/manage/admin/tuan/query_by_product?product_id={{$cart['Cart']['product_id']}}">{{$cart['Cart']['name']}}</a>
+        </td>
+        <td>
+            {{$cart['Cart']['spec_name']}}
+        </td>
+        <td>
+            {{$cart['Cart']['num']}}
+        </td>
+        <td>{{if $index == 0}}{{$order['Order']['total_all_price']}}{{else}}'同上'{{/if}}</td>
+        <td>{{$order['Order']['created']}}</td>
+        <td>{{$order['Order']['pay_time']}}</td>
+        <td>
+            {{if $order['Order']['type'] == 5}}
+            团购
+            {{elseif $order['Order']['type'] == 6}}
+            秒杀
+            {{elseif $order['Order']['type'] == 1}}
+            普通
+            {{/if}}
+        </td>
+        <td>
+            {{if $order['Order']['ship_mark']=='ziti'}}
+            自提
+            {{elseif $order['Order']['ship_mark']=='sf'}}
+            顺风到付
+            {{elseif $order['Order']['ship_mark']=='kddj'}}
+            快递到家
+            {{elseif $order['Order']['ship_mark']=='normal'}}
+            自提
+            {{else}}
+            没有标注
+            {{/if}}
+        </td>
+        <td>
+            {{$consign_time}}({{$cart['Cart']['send_date']}})
+        </td>
+        <td>{{$order['Order']['consignee_name']}}</td>
+        <td>
+            <a href="/manage/admin/tuan_buyings/index?team_id={{$tuan['id']}}">{{$tuan['tuan_name']}}</a>
+        </td>
+        <td>
+            {{$order['Order']['consignee_address']}}
+        </td>
 
-                <td>{{$order['Order']['consignee_mobilephone']}}</td>
+        <td>{{$order['Order']['consignee_mobilephone']}}</td>
 
-                <td>
-                    {{if $order['Pay']['trade_type']=='JSAPI'}}
-                    微信支付
-                    {{elseif $order['Pay']['trade_type']=='ZFB'}}
-                    支付宝
-                    {{/if}}
-                </td>
-                <td>
-                    {{$order['Pay']['out_trade_no']}}
-                </td>
-                <td>
-                    {{$order['Order']['remark']}}
-                </td>
-            </tr>
-          {{/loop}}
-        {{/loop}}
+        <td>
+            {{if $order['Pay']['trade_type']=='JSAPI'}}
+            微信支付
+            {{elseif $order['Pay']['trade_type']=='ZFB'}}
+            支付宝
+            {{/if}}
+        </td>
+        <td>
+            {{$order['Pay']['out_trade_no']}}
+        </td>
+        <td>
+            {{$order['Order']['remark']}}
+        </td>
+    </tr>
+    {{/loop}}
+    {{/loop}}
     </tbody>
 </table>
 
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
-{{$this->Html->script(array('manage/tuan/tuan_orders.js?v3'))}}
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v4'))}}

@@ -58,6 +58,15 @@ class TuanBuyingsController extends AppController{
         }
         echo json_encode($tuan_buyings);
     }
+    public function admin_api_offline_stores(){
+        $this->autoRender=false;
+        $offlineStoreM = ClassRegistry::init('OfflineStore');
+        $offline_stores = $offlineStoreM->find('all', array(
+            'conditions'=>array('deleted'=>0)
+        ));
+        $offline_stores= Hash::combine($offline_stores , "{n}.OfflineStore.id", "{n}.OfflineStore", "{n}.OfflineStore.type");
+        echo json_encode($offline_stores);
+    }
     /**
      * show all tuan_buyings
      */
@@ -273,6 +282,9 @@ class TuanBuyingsController extends AppController{
         $tuanTeamIds = $_REQUEST['team_ids'];
         $this->log('tuanTeamIds'.$tuanTeamIds);
         $tuanTeamIds = explode(',',$tuanTeamIds);
+        $tuanProductIds = $_REQUEST['tuan_products'];
+        $this->log('tuanProductIds'.$tuanProductIds);
+        $tuanProductIds = explode(',',$tuanProductIds);
         App::import('Controller','TuanMsg');
 
         if(!empty($this->data)){
@@ -283,16 +295,19 @@ class TuanBuyingsController extends AppController{
                 $this->data['TuanBuying']['published'] = 0;
             }
             foreach($tuanTeamIds as $tuanTeamId){
-                $this->data['TuanBuying']['tuan_id'] = $tuanTeamId;
-                $this->data['TuanBuying']['join_num'] = 0;
-                $this->data['TuanBuying']['sold_num'] = 0;
-                $this->data['TuanBuying']['stTuanBuyingMessagesatus'] = 0;
-                //todo created fields missing
-                $this->log("create tuan buying for team ".$tuanTeamId.": ".json_encode($this->data));
-                $this->TuanBuying->create();
-                if($this->TuanBuying->save($this->data)){
-                    $tuanBuyId = $this->TuanBuying->getLastInsertID();
-                //                $this->admin_send_tuan_buy_create_msg($tuanBuyId);
+                foreach($tuanProductIds as $tuanProductId){
+                    $this->data['TuanBuying']['pid'] = $tuanProductId;
+                    $this->data['TuanBuying']['tuan_id'] = $tuanTeamId;
+                    $this->data['TuanBuying']['join_num'] = 0;
+                    $this->data['TuanBuying']['sold_num'] = 0;
+                    $this->data['TuanBuying']['stTuanBuyingMessagesatus'] = 0;
+                    //todo created fields missing
+                    $this->log("create tuan buying product .$tuanProductId.'for team ".$tuanTeamId.": ".json_encode($this->data));
+                    $this->TuanBuying->create();
+                    if($this->TuanBuying->save($this->data)){
+                        $tuanBuyId = $this->TuanBuying->getLastInsertID();
+                        //                $this->admin_send_tuan_buy_create_msg($tuanBuyId);
+                    }
                 }
             }
         }
@@ -415,7 +430,7 @@ class TuanBuyingsController extends AppController{
             $product_alias = $alias[$tuan_buy_id];
             $store= empty($value['consignee_id'])?null:$store_info[$value['consignee_id']];
             $store_alias = empty($store)?'':$store['alias'];
-            $store_phone = empty($store)?'':'，自提点电话：'.$store['phone'];
+            $store_phone = empty($store)?'':'，自提点电话：'.$store['owner_phone'];
             $post_data = array(
                 "touser" => $r[$value['creator']],
                 "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',

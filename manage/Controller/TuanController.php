@@ -4,7 +4,7 @@ class TuanController extends AppController
 
     var $name = 'Tuan';
 
-    var $uses = array('TuanTeam', 'TuanBuying', 'Order', 'Cart', 'TuanBuyingMessages', 'TuanProduct', 'ConsignmentDate', 'ProductTry', 'Brand', 'ProductSpecGroup', 'PayNotify');
+    var $uses = array('TuanTeam', 'TuanBuying', 'Order', 'Cart', 'TuanBuyingMessages', 'TuanProduct', 'ConsignmentDate', 'ProductTry', 'Brand', 'ProductSpecGroup', 'PayNotify', 'OfflineStore');
 
     /**
      * query tuan orders
@@ -455,15 +455,18 @@ class TuanController extends AppController
      */
     public function admin_tuan_func_list()
     {
-        $tuan_team_count = $this->TuanTeam->query('select count(*) as c from cake_tuan_teams');
-        $this->set('tuan_team_count', $tuan_team_count[0][0]['c']);
+        $brand_count = $this->Brand->query('select count(*) as c from cake_brands where deleted = 0');
+        $this->set('brand_count', $brand_count[0][0]['c']);
         $tuan_product_count = $this->TuanProduct->query('select count(*) as c from cake_tuan_products where deleted = 0');
         $this->set('tuan_product_count', $tuan_product_count[0][0]['c']);
         $seckill_product_count = $this->ProductTry->query('select count(*) as c from cake_product_tries where deleted = 0');
         $this->set('seckill_product_count', $seckill_product_count[0][0]['c']);
-        $brand_count = $this->Brand->query('select count(*) as c from cake_brands where deleted = 0');
-        $this->set('brand_count', $brand_count[0][0]['c']);
 
+        $tuan_team_count = $this->TuanTeam->query('select count(*) as c from cake_tuan_teams');
+        $this->set('tuan_team_count', $tuan_team_count[0][0]['c']);
+        $offline_stores_count = $this->OfflineStore->query('select count(*) as c from cake_offline_stores where deleted = 0');
+        $this->set('offline_stores_count', $offline_stores_count[0][0]['c']);
+        $this->log('offline stores count: '.$offline_stores_count[0][0]['c']);
         $expired_tuan_buying_count = $this->TuanBuying->query('select count(*) as c from cake_tuan_buyings where end_time < now() and status = 0');
         $this->set('expired_tuan_buying_count', $expired_tuan_buying_count[0][0]['c']);
 
@@ -728,7 +731,39 @@ class TuanController extends AppController
         $this->set('consign_dates', $consign_dates);
         return $c;
     }
-
+    public function admin_query_by_offline_store(){
+        $store_id = !empty($_REQUEST['store_id']) ? $_REQUEST['store_id'] : -1;
+        $order_status = !empty($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
+        $send_date = $_REQUEST['send_date'];
+        if($this->request->is('post')) {
+            $conditions = array();
+            $order_by = 'Order.consignee_id DESC, Cart.product_id';
+            $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
+            if ($order_status != -1) {
+                $conditions['Order.status'] = $order_status;
+            }
+            if (!empty($send_date)) {
+                $conditions['DATE(Cart.send_date)'] = $send_date;
+            }
+            if ($store_id != -1) {
+                $store_ids = explode(",", $store_id);
+                $conditions['Order.consignee_id'] = $store_ids;
+                $this->loadModel('OfflineStore');
+                $store_info = $this->OfflineStore->find('first', array(
+                    'conditions'=> array('id' => $store_ids[0])
+                ));
+                if($store_info['OfflineStore']['type']==1 && $order_status == 1){
+                    $this->set('msg_ready', true);
+                }
+            }
+            $this->_query_orders($conditions, $order_by);
+        }
+        $this->set('store_id', $store_id);
+        $this->set('send_date', $send_date);
+        $this->set('order_status', $order_status);
+        $this->set('query_type', 'byOfflineStore');
+        $this->render("admin_tuan_orders");
+    }
     public function _query_bc2_paid_not_send_count(){
         $b2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where o.type in (5, 6) and o.status = 1 and c.send_date < CURDATE()');
         return $b2c_paid_not_sent_count[0][0]['ct'];

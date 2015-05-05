@@ -68,6 +68,19 @@ $(document).ready(function(){
     setSelectBoxValue(products);
     initSearchBox($('.product-search'), values);
   });
+    $.getJSON('/manage/admin/tuanBuyings/api_offline_stores', function(data){
+        var menu = {0:'所有好邻居自提点', 1: '所有自有自提点'};
+        var offlineStoreBox = $('.offline_store');
+        for(var category in data){
+            $('<optgroup label="--------"><option value="" class="store_'+ category +'">' + menu[category] + '</option>').appendTo(offlineStoreBox );
+            for(var addressId in data[category]){
+                $('<option value="' + addressId + '">' + data[category][addressId].name + '</option>').appendTo(offlineStoreBox);
+                var val =  $('.store_'+ category).val();
+                $('.store_'+ category).val(addressId + ','+val);
+            }
+        }
+        setSelectBoxValue(offlineStoreBox);
+    });
 
   String.prototype.Trim = function() {
     return this.replace(/(^\s*)|(\s*$)/g, "");
@@ -186,4 +199,30 @@ $(document).ready(function(){
   setSelectBoxValue($('.order-status'));
   setSelectBoxValue($('.order-types'));
   setupByTuanTeamForm();
+    $('#check_all_tb').click(function(e){
+        var table= $(e.target).closest('table');
+        $('td input:checkbox',table).prop('checked',this.checked);
+    });
+    function getAllCheckTbId(){
+        var $checkboxes = $('td input:checkbox:checked',$('table tbody'));
+        var $tb_ids = [];
+        $.each($checkboxes,function(index,item){
+            var $item = $(item);
+            $tb_ids.push($item.val());
+        });
+        return $tb_ids;
+    }
+    $('.offline_store_msg').click(function(){
+        var tb_ids = getAllCheckTbId();
+        $.post('/manage/admin/tuan_buyings/send_wx_fetch_msg/normal', {"ids":tb_ids}, function(data){
+            var success_ids = (data.res).join(',');
+            if(data.success){
+                $.post('/manage/admin/tuan_buyings/set_status', {tuan_orderid: success_ids, order_status:2}, function(edata){
+                    utils.alert(edata.msg)
+                    location.reload();
+                },'json')
+            }
+        }, 'json')
+    })
+
 });

@@ -35,10 +35,14 @@
                         <p>{{$cart_info['Cart']['name']}}</p>
                         <s>单价:￥{{$this->Number->precision($cart_info['Cart']['price'],2)}}</s>
                         <div class="clearfix">
+                            {{if $cart_info['Cart']['product_id'] != 962}}
                             <a  class="cartnumreduce fl"></a>
+                            {{/if}}
                             <input type="text" value="{{$buy_count}}" id="pamount-{{$cart_info['Cart']['id']}}" data-id="{{$cart_info['Cart']['id']}}" disabled="disabled"
                                    data-price="{{$cart_info['Cart']['price']}}" name="shopCart"/>
+                            {{if $cart_info['Cart']['product_id'] != 962}}
                             <a  class="cartnumadd fl"></a>
+                            {{/if}}
                         </div>
                     </a>
                 </li>

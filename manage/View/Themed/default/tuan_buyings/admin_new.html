@@ -24,12 +24,18 @@
             </div>
             <input type="hidden" name="team_ids" id="team_ids">
         </div>
-        <div class="form-group" name="product_id">
+        <!--<div class="form-group" name="product_id">-->
+            <!--<label class="col-sm-2 control-label">商品</label>-->
+            <!--<div class="col-sm-9">-->
+                <!--<select class="controls form-control tuan-products" name="data[TuanBuying][pid]" value="{{$this->data[TuanBuying][pid]}}">-->
+                    <!--<option value="-1">选择商品</option>-->
+                <!--</select>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="form-group">
             <label class="col-sm-2 control-label">商品</label>
-            <div class="col-sm-9">
-                <select class="controls form-control tuan-products" name="data[TuanBuying][pid]" value="{{$this->data[TuanBuying][pid]}}">
-                    <option value="-1">选择商品</option>
-                </select>
+            <div class="col-sm-9 tuan-products-list">
+                <input type="hidden" name="tuan_products" id="tuan_products">
             </div>
         </div>
         <div class="form-group">

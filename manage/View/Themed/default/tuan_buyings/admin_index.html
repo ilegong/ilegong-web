@@ -1,4 +1,4 @@
-{{$this->Html->css(array('bootstrap.min.css'));}}
+{{$this->Html->css(array('bootstrap.min.css','ui-customer.css?v3'));}}
 <ol class="breadcrumb">
   <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
   <li class="active">团购管理</li>
@@ -204,7 +204,7 @@
     {{/loop}}
     </tbody>
 </table>
-
+<a href="javascript:scroll(0,0)" class="returnTop" id="top" style="display: none;"><img src="{{$this->Html->assetUrl('/img/common/returnTop.png')}}" /></a>
 {{$this->Html->script(
     array(
         'vendor/jquery.ui.widget.js',

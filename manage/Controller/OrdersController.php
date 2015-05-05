@@ -3,6 +3,7 @@
 class OrdersController extends AppController{
 	
 	var $name = 'Orders';
+    public $components = array('Weixin');
 
     public function admin_order_remark(){
 
@@ -464,4 +465,70 @@ class OrdersController extends AppController{
         110=>'全一',
         111=>'宅急送'
     );
+
+
+    public function admin_send_refund_notify(){
+        $this->autoRender = false;
+        $this->loadModel('User');
+        $this->loadModel('Cart');
+        $orderId = $_REQUEST['orderId'];
+        $refundMoney = $_REQUEST['refundMoney'];
+        $refundMark = $_REQUEST['refundMark'];
+        $creator = $_REQUEST['creator'];
+        $userInfo = $this->User->find('first',array('conditions' => array('id' => $creator)));
+        $cartInfo = $this->Cart->find('all',array('conditions' => array('order_id' => $orderId)));
+        $this->loadModel('RefundLog');
+        $this->loadModel('PayLog');
+        $PayLogInfo = $this->PayLog->find('first',array(
+            'conditions' => array(
+                'order_id' => $orderId,
+                'status' => 2
+            )
+            ));
+        $product_name = null;
+        foreach($cartInfo as $cartinfo){
+            $product_name = $product_name.$cartinfo['Cart']['name'].'*'.$cartinfo['Cart']['num'].'  ';
+        }
+        if($PayLogInfo['PayLog']['trade_type'] == 'JSAPI'){
+            $trade_type = '微信支付';
+        }else if ($PayLogInfo['PayLog']['trade_type'] == 'ZFB'){
+            $trade_type = '支付宝';
+        }else{
+            $trade_type = '支付';
+        }
+        $title = '亲，您有一笔'.$refundMoney.'元的退款已经退至您的'.$trade_type.'账户，预计3-15个工作日到账，请您及时查看"';
+        $phone = $userInfo['User']['mobilephone'];
+        $msg = $title;
+        $detail_url = WX_HOST.'/orders/detail/'.$orderId;
+        $remark = '点击查看订单，如有问题，请联系客服!';
+        if (message_send($msg,$phone)){
+            $flag_1 = true;
+        }else{
+            $flag_1 = false;
+        }
+        if($this->Weixin->send_refund_order_notify($creator,$title,$product_name,$refundMoney,$detail_url,$orderId,$remark)){
+            $flag_2 = true;
+        }else{
+            $flag_2 = false;
+        }
+        if($flag_1||$flag_2){
+            $data['RefundLog']['order_id'] = $orderId;
+            $data['RefundLog']['refund_fee'] = intval(intval($refundMoney)*1000/10);
+            $data['RefundLog']['trade_type'] = $PayLogInfo['PayLog']['trade_type'];
+            $data['RefundLog']['remark'] = $refundMark;
+            $this->RefundLog->save($data);
+            $returnInfo  = array('success' => true,'msg' =>'退款通知发送成功');
+        }else{
+            $returnInfo  = array('success' => false,'msg' =>'退款通知发送失败，请重试');
+        }
+        echo json_encode($returnInfo);
+    }
+    public function  admin_compute_refund_money(){
+        $this->autoRender = false;
+        $orderId = $_REQUEST['orderId'];
+        $this->loadModel('RefundLog');
+        $refund_money = $this->RefundLog->query('select sum(refund_fee) as refund_money from cake_refund_logs where order_id ='.$orderId.'');
+        $refund_money = $refund_money[0][0]['refund_money'];
+        echo json_encode($refund_money/100);
+    }
 }

@@ -71,7 +71,7 @@ class ShortmessagesController extends AppController {
             $this->redirect('/users/login');
             exit();
         }
-        $cond = array('brand_id' => 193,'deleted' => DELETED_NO);
+        $cond = array('brand_id' => 92,'deleted' => DELETED_NO);
         $this->loadModel('ShareOffer');
         $store_offer = $this->ShareOffer->find('first',array(
             'conditions' =>$cond,
