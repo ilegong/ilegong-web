@@ -213,7 +213,15 @@ class ProductsController extends AppController{
         $tuanProducts = getTuanProducts();
         $tuan_product_not_show_ids = Hash::combine($tuanProducts, '{n}.TuanProduct.product_id', '{n}.TuanProduct.general_show');
         if(array_key_exists($pid ,$tuan_product_not_show_ids) && $tuan_product_not_show_ids[$pid] == 0){
-            $this->redirect('/tuan_buyings/goods_tuans/'.$pid);
+            $this->loadModel('TuanBuying');
+            $big_tuan = $this->TuanBuying->find('first', array(
+                'conditions' => array('pid' => $pid, 'tuan_id'=>34, 'published' => 1)
+            ));
+            if(!empty($big_tuan)){
+                $this->redirect('/tuan_buyings/detail/'.$big_tuan['TuanBuying']['id']);
+            }else{
+                $this->redirect('/tuan_buyings/goods_tuans/'.$pid);
+            }
         }
         $this->loadModel('Comment');
         //load shichi comment count
