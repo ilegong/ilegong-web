@@ -728,7 +728,35 @@ class TuanController extends AppController
         $this->set('consign_dates', $consign_dates);
         return $c;
     }
-
+    public function admin_query_by_offline_store(){
+        if($this->request->is('post')) {
+            $store_id = !empty($_REQUEST['store_id']) ? $_REQUEST['store_id'] : -1;
+            $order_status = !empty($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
+            $conditions = array();
+            $order_by = 'Order.consignee_id DESC, Cart.product_id';
+            $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
+            if ($order_status != -1) {
+                $conditions['Order.status'] = $order_status;
+            }
+            $send_date = $_REQUEST['send_date'];
+            if (!empty($send_date)) {
+                $conditions['DATE(Cart.send_date)'] = $send_date;
+            }
+            if ($store_id != -1) {
+                $store_ids = explode(",", $store_id);
+                $conditions['Order.consignee_id'] = $store_ids;
+            }
+            $this->_query_orders($conditions, $order_by);
+        }
+        if($store_id != -1){
+            $this->set('msg_ready', true);
+        }
+        $this->set('store_id', $store_id);
+        $this->set('send_date', $send_date);
+        $this->set('order_status', $order_status);
+        $this->set('query_type', 'byOfflineStore');
+        $this->render("admin_tuan_orders");
+    }
     public function _query_bc2_paid_not_send_count(){
         $b2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where o.type in (5, 6) and o.status = 1 and c.send_date < CURDATE()');
         return $b2c_paid_not_sent_count[0][0]['ct'];

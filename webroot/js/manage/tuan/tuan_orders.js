@@ -68,6 +68,19 @@ $(document).ready(function(){
     setSelectBoxValue(products);
     initSearchBox($('.product-search'), values);
   });
+    $.getJSON('/manage/admin/tuanBuyings/api_offline_stores', function(data){
+        var menu = {0:'所有好邻居自提点', 1: '所有自有自提点'};
+        var offlineStoreBox = $('.offline_store');
+        for(var category in data){
+            $('<optgroup label="--------"><option value="" class="store_'+ category +'">' + menu[category] + '</option>').appendTo(offlineStoreBox );
+            for(var addressId in data[category]){
+                $('<option value="' + addressId + '">' + data[category][addressId].name + '</option>').appendTo(offlineStoreBox);
+                var val =  $('.store_'+ category).val();
+                $('.store_'+ category).val(addressId + ','+val);
+            }
+        }
+        setSelectBoxValue(offlineStoreBox);
+    });
 
   String.prototype.Trim = function() {
     return this.replace(/(^\s*)|(\s*$)/g, "");
