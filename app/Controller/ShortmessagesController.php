@@ -80,7 +80,7 @@ class ShortmessagesController extends AppController {
         $this->loadModel('ShareOffer');
         $store_offer = $this->ShareOffer->find('first',array(
             'conditions' =>$cond,
-            'order' =>'created',
+            'order' =>'created desc',
             'fields' => array('id','name','introduct','deleted','start','end','valid_days','avg_number','is_default'))
         );
         $this->log('hongbao'. $store_offer['ShareOffer']['id']);
