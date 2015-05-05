@@ -1,0 +1,63 @@
+<ol class="breadcrumb">
+  <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+  <li><a href="/manage/admin/offline_stores/index">自提点管理</a></li>
+  <li class="active">编辑自提点</li>
+</ol>
+
+<div class="container">
+  <form class="form-horizontal offline-store" method="post" action="/manage/admin/offline_stores/update/{{$offline_store[OfflineStore][id]}}" novalidate="novalidate" data-noajax="true">
+    <input type="hidden" name="data[OfflineStore][id]" value="{{$offline_store[OfflineStore][id]}}">
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">区域</label>
+      <div class="col-sm-9">
+        <select class="form-control area-id" name="data[OfflineStore][area_id]" data-value="{{$offline_store[OfflineStore][area_id]}}">
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">类型</label>
+      <div class="col-sm-7">
+        <select class="form-control type" name="data[OfflineStore][type]" data-value="{{$offline_store[OfflineStore][type]}}">
+          <option value="0">好邻居</option>
+          <option value="1">自有</option>
+        </select>
+      </div>
+      <div class="col-sm-2">
+        <input type="text" class="form-control shop-no" name="data[OfflineStore][shop_no]" value="{{$offline_store[OfflineStore][shop_no]}}" placeholder="好邻居店号"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">联系人</label>
+      <div class="col-sm-9 controls">
+        <input type="text" class="form-control" name="data[OfflineStore][owner_name]" value="{{$offline_store[OfflineStore][owner_name]}}" placeholder="联系人姓名"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">电话</label>
+      <div class="col-sm-9 controls">
+        <input type="text" name="data[OfflineStore][owner_phone]" value="{{$offline_store[OfflineStore][owner_phone]}}" class="form-control" placeholder="联系人电话">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">自取点经度</label>
+      <div class="col-sm-9 controls">
+        <input type="text" class="form-control" name="data[OfflineStore][location_long]" value="{{$offline_store[OfflineStore][location_long]}}"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="col-sm-2 control-label">自取点纬度</label>
+      <div class="col-sm-9 controls">
+        <input type="text" class="form-control" name="data[OfflineStore][location_lat]" value="{{$offline_store[OfflineStore][location_lat]}}"/>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-sm-12 col-sm-offset-2">
+        <a href="/manage/admin/offline_stores/index" class="btn btn-default">取消</a>
+        <input class="btn btn-primary" type="submit" value="提交"></div>
+    </div>
+  </form>
+</div>
+{{$this->Html->script(array('/js/tuan-area.js', 'manage/offline_stores/edit.js'))}}

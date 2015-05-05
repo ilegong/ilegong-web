@@ -1,6 +1,3 @@
-/**
- * Created by algdev on 15/4/15.
- */
 $(function(){
     var getCountyId = $('.county-type');
     var county_id = $('#county_id').val();
