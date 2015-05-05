@@ -4,7 +4,7 @@ class TuanController extends AppController
 
     var $name = 'Tuan';
 
-    var $uses = array('TuanTeam', 'TuanBuying', 'Order', 'Cart', 'TuanBuyingMessages', 'TuanProduct', 'ConsignmentDate', 'ProductTry', 'Brand', 'ProductSpecGroup', 'PayNotify');
+    var $uses = array('TuanTeam', 'TuanBuying', 'Order', 'Cart', 'TuanBuyingMessages', 'TuanProduct', 'ConsignmentDate', 'ProductTry', 'Brand', 'ProductSpecGroup', 'PayNotify', 'OfflineStore');
 
     /**
      * query tuan orders
@@ -455,15 +455,18 @@ class TuanController extends AppController
      */
     public function admin_tuan_func_list()
     {
-        $tuan_team_count = $this->TuanTeam->query('select count(*) as c from cake_tuan_teams');
-        $this->set('tuan_team_count', $tuan_team_count[0][0]['c']);
+        $brand_count = $this->Brand->query('select count(*) as c from cake_brands where deleted = 0');
+        $this->set('brand_count', $brand_count[0][0]['c']);
         $tuan_product_count = $this->TuanProduct->query('select count(*) as c from cake_tuan_products where deleted = 0');
         $this->set('tuan_product_count', $tuan_product_count[0][0]['c']);
         $seckill_product_count = $this->ProductTry->query('select count(*) as c from cake_product_tries where deleted = 0');
         $this->set('seckill_product_count', $seckill_product_count[0][0]['c']);
-        $brand_count = $this->Brand->query('select count(*) as c from cake_brands where deleted = 0');
-        $this->set('brand_count', $brand_count[0][0]['c']);
 
+        $tuan_team_count = $this->TuanTeam->query('select count(*) as c from cake_tuan_teams');
+        $this->set('tuan_team_count', $tuan_team_count[0][0]['c']);
+        $offline_stores_count = $this->OfflineStore->query('select count(*) as c from cake_offline_stores where deleted = 0');
+        $this->set('offline_stores_count', $offline_stores_count[0][0]['c']);
+        $this->log('offline stores count: '.$offline_stores_count[0][0]['c']);
         $expired_tuan_buying_count = $this->TuanBuying->query('select count(*) as c from cake_tuan_buyings where end_time < now() and status = 0');
         $this->set('expired_tuan_buying_count', $expired_tuan_buying_count[0][0]['c']);
 

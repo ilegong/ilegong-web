@@ -9,13 +9,13 @@ CREATE TABLE IF NOT EXISTS `cake_offline_stores` (
   `type` smallint(3) NOT NULL DEFAULT '0',
   `owner_name` varchar(32) DEFAULT NULL,
   `owner_phone` varchar(20) DEFAULT NULL,
-  `delete` tinyint(1) NOT NULL DEFAULT '0',
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
   `location_long` double NOT NULL DEFAULT '0',
   `location_lat` double NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO `cake_offline_stores` (`id`, `shop_no`, `area_id`, `alias`, `name`, `type`, `owner_name`, `owner_phone`, `delete`, `location_long`, `location_lat`) VALUES
+INSERT INTO `cake_offline_stores` (`id`, `shop_no`, `area_id`, `alias`, `name`, `type`, `owner_name`, `owner_phone`, `deleted`, `location_long`, `location_lat`) VALUES
 (1, 0, 110108, '百度二店', '北京海淀区上地东路一号院鹏寰大厦（好邻居-百度二店）', 0, NULL, NULL, 0, 116.308402, 40.061414),
 (2, 830, 110108, '苏州街6店', '北京海淀区苏州街28号银科大厦好邻居(苏州街6店)', 0, NULL, NULL, 0, 116.312186, 39.985067),
 (3, 275, 110105, '丽都店', '北京市朝阳区高家园小区311号好邻居便利店', 0, NULL, NULL, 0, 116.486509, 39.984958),
