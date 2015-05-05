@@ -24,7 +24,7 @@
 <table class="table table-striped table-bordered table-condensed table-hover">
     <thead>
     <tr>
-        <th>编号</th><th>团队</th><th>团长</th><th>显示地址</th><th>详细地址</th><th>团队口号</th><th>排序权值</th><th>操作</th>
+        <th>编号</th><th>团队</th><th>团长</th><th>显示地址</th><th>详细地址</th><th>自提点</th><th>排序权值</th><th>操作</th>
     </tr>
     </thead>
     <tbody>
@@ -47,7 +47,7 @@
         </td>
         <td>{{$tuan_team['TuanTeam']['address']}}</td>
         <td>{{$tuan_team['TuanTeam']['tuan_addr']}}</td>
-        <td>{{$tuan_team['TuanTeam']['tuan_desc']}}</td>
+        <td>{{$offline_stores[$tuan_team['TuanTeam']['offline_store_id']]['OfflineStore']['alias']}}</td>
         <td>{{$tuan_team['TuanTeam']['priority']}}</td>
         <td>
             <a class="btn btn-primary" href="/manage/admin/tuan_teams/edit/{{$tuan_team['TuanTeam']['id']}}">编辑</a>

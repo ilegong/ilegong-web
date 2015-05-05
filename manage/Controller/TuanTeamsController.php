@@ -9,7 +9,7 @@ class TuanTeamsController extends AppController{
 
     var $name = 'TuanTeams';
 
-    var $uses = array('TuanTeam', 'TuanBuying', 'Location', 'TuanProduct');
+    var $uses = array('TuanTeam', 'TuanBuying', 'Location', 'TuanProduct', 'OfflineStore');
 
 
     /**
@@ -40,7 +40,15 @@ class TuanTeamsController extends AppController{
             $tuan_team['TuanTeam']['tuan_buying_count'] = $tuan_buying_count;
         }
 
-        $this->set('tuan_teams',$tuan_teams);
+        $offline_stores = $this->OfflineStore->find('all',array(
+            'conditions' => array(
+                'deleted' => 0
+            )
+        ));
+        $offline_stores = Hash::combine($offline_stores, '{n}.OfflineStore.id', '{n}');
+
+        $this->set('tuan_teams', $tuan_teams);
+        $this->set('offline_stores', $offline_stores);
         $this->set('team_id',$team_id);
     }
 
