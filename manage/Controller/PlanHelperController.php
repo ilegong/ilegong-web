@@ -69,7 +69,7 @@ class PlanHelperController extends AppController
 
         $data = array();
 
-        $data['Order']['creator'] = 0;
+        $data['Order']['creator'] = $user['User']['id'];
         $data['Order']['status'] = 2;
         $data['Order']['created'] = $date;
         $data['Order']['updated'] = $date;
