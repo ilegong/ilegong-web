@@ -18,7 +18,7 @@ class TuanTeamsController extends AppController{
     public function admin_index(){
         $team_id = $_REQUEST['team_id'];
         $con = array(
-            'published' => PUBLISH_YES
+            'published' => 1
         );
         if(!empty($team_id)&&$team_id!='-1'){
             $con['id']=$team_id;

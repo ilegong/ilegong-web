@@ -6,19 +6,21 @@ class PlanHelperController extends AppController
 
     var $uses = array('User', 'TuanTeam', 'TuanBuying', 'Order', 'Cart');
 
-    public function admin_modify_order()
+    public function admin_order()
     {
         $user_id = $_REQUEST['user_id'];
         $tuan_buying_id = $_REQUEST['tuan_buying_id'];
+        $num = isset($_REQUEST['num']) ? $_REQUEST['num'] : 0;
+
         if(!($user_id >= 810163 || $user_id <= 810223) && !($user_id >= 810096 || $user_id <= 810158)){
             throw new Exception("invalid user id ".$user_id);
         }
-        $user = $this->User->query('first', array(
+        $user = $this->User->find('first', array(
             conditions => array(
                 'id' => $user_id
             )
         ));
-        $tuan_buying = $this->TuanBuying->query('first', array(
+        $tuan_buying = $this->TuanBuying->find('first', array(
             conditions => array(
                 'id' => $tuan_buying_id
             )
@@ -48,7 +50,13 @@ class PlanHelperController extends AppController
             )
         ));
 
-        $order_id = $this->_insert_order($user, $product, $num, $tuan_buying, $offline_store);
+        $this->log("user: ".json_encode($user));
+        $this->log("product: ".json_encode($product));
+        $this->log("num: ".json_encode($num));
+        $this->log("tuan buying: ".json_encode($tuan_buying));
+        $this->log("offline store: ".json_encode($offline_store));
+
+//        $order_id = $this->_insert_order($user, $product, $num, $tuan_buying, $offline_store);
     }
 
     function _insert_order($user, $product, $num, $tuan_buying, $offline_store){
@@ -73,7 +81,8 @@ class PlanHelperController extends AppController
         $this->Order->save($data);
         return $this->Order->getLastInsertID();
     }
-    function _insert_cart($user, $product, num, $order_id, $tuan_buying){
+
+    function _insert_cart($user, $product, $num, $tuan_buying, $offline_store, $order_id){
         $date = date('Y-m-d H:i:s');
         $data = array();
         $data['Cart']['name'] = $product['Product']['name'];
@@ -82,7 +91,7 @@ class PlanHelperController extends AppController
         $data['Cart']['type'] = 5;
         $data['Cart']['status'] = 2;
         $data['Cart']['product_id'] = $product['Product']['id'];
-        $data['Cart']['price'] = $product['Product']['price'] * num;
+        $data['Cart']['price'] = $product['Product']['price'] * $num;
         $data['Cart']['num'] = 1;
         $data['Cart']['session_id'] = $this->Session->id();
         $data['Cart']['created'] = $date;
