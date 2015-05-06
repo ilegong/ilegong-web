@@ -8,18 +8,18 @@ $(document).ready(function () {
         return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$1,');
     };
     //date
-    Date.prototype.yyyymmdd = function() {
+    Date.prototype.yyyymmdd = function () {
         var yyyy = this.getFullYear().toString();
-        var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
-        var dd  = this.getDate().toString();
-        return yyyy + (mm[1]?mm:"0"+mm[0]) + (dd[1]?dd:"0"+dd[0]); // padding
+        var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
+        var dd = this.getDate().toString();
+        return yyyy + (mm[1] ? mm : "0" + mm[0]) + (dd[1] ? dd : "0" + dd[0]); // padding
     };
     $('div.menue ul li').on('click', function () {
         var me = $(this);
         $('div.menue ul li.cur').removeClass('cur');
         me.addClass('cur');
         var tagId = me.data('id');
-        if(tagId!=currentTagId){
+        if (tagId != currentTagId) {
             currentTagId = tagId;
             $productsContent.html('');
             loadDatas(tagId);
@@ -40,7 +40,7 @@ $(document).ready(function () {
         var mapBrands = datas['mapBrands'];
         $.each(data_list, function (index, item) {
             var brand = mapBrands[item['brand_id']];
-            $productsContent.append(genGoodItemDom(item,brand));
+            $productsContent.append(genGoodItemDom(item, brand));
         });
     }
 
@@ -54,14 +54,18 @@ $(document).ready(function () {
             originPrice = 0;
         }
         var productDate = new Date(good['created']);
-        var goodUrl = '/products/'+productDate.yyyymmdd()+'/'+good['slug']+'.html?history=/&amp;_sl=h5.cate.list';
+        var goodUrl = '/products/' + productDate.yyyymmdd() + '/' + good['slug'] + '.html?history=/&amp;_sl=h5.cate.list';
         var brandDate = new Date(brand['Brand']['created']);
-        var brandUrl = '/brands/'+brandDate.yyyymmdd()+'/'+brand['Brand']['slug']+'.html';
-        var goodHtml = '<div class="good"> <a href="'+goodUrl+'" class="xq"> <p>仅限<br/>北京</p> <img src="' + good['coverimg'] + '"/> <div class="title">' + good['name'] + '</div> <div class="price"><strong>' + price + '</strong>';
+        var brandUrl = '/brands/' + brandDate.yyyymmdd() + '/' + brand['Brand']['slug'] + '.html';
+        var goodHtml = '<div class="good"> <a href="' + goodUrl + '" class="xq">';
+        if(good['limit_area']==1){
+            goodHtml+='< p > 仅限 < br / > 北京 < / p > ';
+        }
+        goodHtml += '<img src="' + good['coverimg'] + '"/> <div class="title">' + good['name'] + '</div> <div class="price"><strong>' + price + '</strong>';
         if (originPrice > 0) {
             goodHtml += '&nbsp;<label>' + originPrice + '</label>'
         }
-        goodHtml += '</div> </a> <s class="clearfix"> <a href="'+brandUrl+'" class="fl"><span class="phead fl"><img src="' + brand['Brand']['coverimg'] + '"/></span><span class="txt fl">' + brand['Brand']['name'] + '</span></a> <a href="'+goodUrl+'" class="fr btn radius5">立即购买</a> </s> </div>';
+        goodHtml += '</div> </a> <s class="clearfix"> <a href="' + brandUrl + '" class="fl"><span class="phead fl"><img src="' + brand['Brand']['coverimg'] + '"/></span><span class="txt fl">' + brand['Brand']['name'] + '</span></a> <a href="' + goodUrl + '" class="fr btn radius5">立即购买</a> </s> </div>';
         return goodHtml;
     }
 });
