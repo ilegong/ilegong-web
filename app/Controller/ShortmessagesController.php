@@ -71,7 +71,7 @@ class ShortmessagesController extends AppController {
             $this->redirect('/users/login');
             exit();
         }
-        if($type = 'pyshuo'){
+        if($type == 'pyshuo'){
             $brand_id = 92;
         }else{
             $brand_id = 193;
