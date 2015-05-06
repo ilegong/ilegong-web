@@ -4,14 +4,17 @@ class PlanHelperController extends AppController
 
     var $name = 'PlanHelper';
 
-    var $uses = array('User', 'TuanTeam', 'TuanBuying', 'Order', 'Cart');
+    var $uses = array('User', 'TuanTeam', 'TuanBuying', 'Order', 'Cart', 'Product', 'OfflineStore');
 
     public function admin_order()
     {
+        $this->autoRender = false;
+
         $user_id = $_REQUEST['user_id'];
         $tuan_buying_id = $_REQUEST['tuan_buying_id'];
-        $num = isset($_REQUEST['num']) ? $_REQUEST['num'] : 0;
+        $num = isset($_REQUEST['num']) ? $_REQUEST['num'] : 1;
 
+        $this->log("plan helper is to create order for ".$user_id." and tuan buying ".$tuan_buying_id." with num ".$num);
         if(!($user_id >= 810163 || $user_id <= 810223) && !($user_id >= 810096 || $user_id <= 810158)){
             throw new Exception("invalid user id ".$user_id);
         }
@@ -20,6 +23,7 @@ class PlanHelperController extends AppController
                 'id' => $user_id
             )
         ));
+
         $tuan_buying = $this->TuanBuying->find('first', array(
             conditions => array(
                 'id' => $tuan_buying_id
@@ -49,14 +53,16 @@ class PlanHelperController extends AppController
                 'id' => $tuan_team['TuanTeam']['offline_store_id']
             )
         ));
+        if(empty($offline_store)){
+            throw new Exception('offline store does not exist: '. $tuan_buying_id);
+        }
 
-        $this->log("user: ".json_encode($user));
-        $this->log("product: ".json_encode($product));
-        $this->log("num: ".json_encode($num));
-        $this->log("tuan buying: ".json_encode($tuan_buying));
-        $this->log("offline store: ".json_encode($offline_store));
+        $order_id = $this->_insert_order($user, $product, $num, $tuan_buying, $offline_store);
+        $this->log("plan helper create order successfully: ".$order_id);
+        $cart_id = $this->_insert_cart($user, $product, $num, $tuan_buying, $offline_store, $order_id);
+        $this->log("plan helper create cart successfully: ".$cart_id);
 
-//        $order_id = $this->_insert_order($user, $product, $num, $tuan_buying, $offline_store);
+        echo json_encode(array("order_id" => $order_id, "cart_id" => $cart_id));
     }
 
     function _insert_order($user, $product, $num, $tuan_buying, $offline_store){
