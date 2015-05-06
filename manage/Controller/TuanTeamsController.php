@@ -17,17 +17,20 @@ class TuanTeamsController extends AppController{
      */
     public function admin_index(){
         $team_id = $_REQUEST['team_id'];
-        $con = array();
+        $con = array(
+            'published' => PUBLISH_YES
+        );
         if(!empty($team_id)&&$team_id!='-1'){
             $con['id']=$team_id;
         }
-        $this->log('con'.json_encode($con));
         if(!empty($con)){
             $tuan_teams = $this->TuanTeam->find('all',array(
                 'conditions' => $con
             ));
         }else{
-            $tuan_teams = $this->TuanTeam->find('all');
+            $tuan_teams = $this->TuanTeam->find('all', array(
+                'conditions' => $con
+            ));
         }
         $tuan_buyings_count = $this->TuanBuying->query('select tuan_id as id, count(tuan_id) as c from cake_tuan_buyings WHERE STATUS IN ( 0, 1, 2 ) group by tuan_id;');
         $tuan_buyings_count = Hash::combine($tuan_buyings_count, '{n}.cake_tuan_buyings.id', '{n}.0.c');
