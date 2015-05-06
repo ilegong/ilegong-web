@@ -498,9 +498,9 @@ class TuanBuyingsController extends AppController{
             $offline_store_id = empty($tuan_info['TuanTeam']['offline_store_id'])?0:$tuan_info['TuanTeam']['offline_store_id'];
             if($tuan_sec=='true'){
                 //remark order sec kill
-                $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, '秒杀', $offline_store_id);
+                $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, '秒杀');
             }else{
-                $shop_id= 0;
+                $shop_id= $offline_store_id;
                 if(!empty($_POST['shop_id'])){
                    $shop_id= $_POST['shop_id'];
                 }
