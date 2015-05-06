@@ -324,6 +324,9 @@
 <td>团队名称</td>
         <td>收件地址</td>
         <td>电话</td>
+        {{if $code_ready}}
+        <td>提货码</td>
+        {{/if}}
         <td>支付方式</td>
         <td>交易号</td>
         <td>备注</td>
@@ -341,7 +344,7 @@
               $consign_time = empty($date)?'': date('m-d', strtotime($date));
               $brand = $brands[$cart['Cart']['product_id']];
             ?>
-    <tr>
+    <tr data-order-id = {{$order['Order']['id']}}>
         {{if $msg_ready}}<td><input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids"></td>{{/if}}
         <td>{{$order['Order']['id']}}</td>
         <td><a href="/manage/admin/tuan/query_by_user?con_creator={{$order['Order']['creator']}}">{{$order['Order']['creator']}}</a>
@@ -407,7 +410,9 @@
         </td>
 
         <td>{{$order['Order']['consignee_mobilephone']}}</td>
-
+        {{if $code_ready}}
+            <td><input type="text" name="code_{{$order['Order']['id']}}"><button type="button" class="send_code">发提货码</button></td>
+        {{/if}}
         <td>
             {{if $order['Pay']['trade_type']=='JSAPI'}}
             微信支付
@@ -428,4 +433,4 @@
 </table>
 
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
-{{$this->Html->script(array('manage/tuan/tuan_orders.js?v4'))}}
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v4.5'))}}

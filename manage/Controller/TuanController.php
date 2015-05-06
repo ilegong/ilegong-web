@@ -754,6 +754,8 @@ class TuanController extends AppController
                 ));
                 if($store_info['OfflineStore']['type']==1 && $order_status == 1){
                     $this->set('msg_ready', true);
+                }elseif($store_info['OfflineStore']['type'] == 0 && $order_status == 1){
+                    $this->set('code_ready',true);
                 }
             }
             $this->_query_orders($conditions, $order_by);

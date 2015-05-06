@@ -218,11 +218,27 @@ $(document).ready(function(){
             var success_ids = (data.res).join(',');
             if(data.success){
                 $.post('/manage/admin/tuan_buyings/set_status', {tuan_orderid: success_ids, order_status:2}, function(edata){
-                    utils.alert(edata.msg)
+                    utils.alert(edata.msg);
                     location.reload();
                 },'json')
             }
         }, 'json')
+    });
+    $('.send_code').click(function(){
+        var codeDom = $(this).prev('input');
+        var orderId = codeDom.attr('name').split('_')[1];
+        var code = codeDom.val();
+        var obj = {};
+        obj[orderId]=code;
+        $.post('/manage/admin/tuan_buyings/send_wx_fetch_msg',obj , function(data){
+            var success_ids = (data.res).join(',');
+            if(data.success){
+                $.post('/manage/admin/tuan_buyings/set_status', {tuan_orderid: success_ids, order_status:2}, function(edata){
+                    utils.alert(edata.msg);
+                    $('.table-bordered tbody tr').remove('[data-order-id='+ orderId +']');
+                },'json')
+            }
+        },'json')
     })
 
 });
