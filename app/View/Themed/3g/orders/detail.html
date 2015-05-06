@@ -158,9 +158,9 @@
         {{elseif $order['Order']['status']== ORDER_STATUS_RECEIVED}}
         <li class="fr">
             {{if $order['Order']['is_comment']==0}}
-            <a href="/comments/add_comment/{{$order['Order']['id']}}" class="order_paybtn fl"  value="{{$order['Order']['id']}}">评论赢积分</a>
+                <a href="/comments/add_comment/{{$order['Order']['id']}}" class="order_paybtn fl"  value="{{$order['Order']['id']}}">评论赢积分</a>
             {{else}}
-            <a href="/comments/add_comment/{{$order['Order']['id']}}" class="order_paybtn fl"  value="{{$order['Order']['id']}}">查看评论</a>
+                <a href="/comments/add_comment/{{$order['Order']['id']}}" class="order_paybtn fl"  value="{{$order['Order']['id']}}">查看评论</a>
             {{/if}}
         </li>
         {{/if}}
