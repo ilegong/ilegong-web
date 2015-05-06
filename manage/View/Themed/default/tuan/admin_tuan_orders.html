@@ -30,6 +30,12 @@
             <span {{if $c2c_paid_not_sent_count> 0}}class="text-danger"{{/if}}>({{$c2c_paid_not_sent_count}})</span>
         </a>
     </li>
+    <li role="presentation">
+        <a data-tab="ordersToday" href="/manage/admin/tuan/query_orders_today">
+            !!!今日订单
+            <span {{if $orders_today_count> 0}}class="text-danger"{{/if}}>({{$orders_today_count}})</span>
+        </a>
+    </li>
 </ul>
 <div class="tab-content">
     <div id="general" class="tab-pane active">
@@ -110,7 +116,7 @@
         </form>
     </div>
     <div id="byOrderId" class="tab-pane">
-        <strong class="text-danger">该功能还在试用，发现任何问题及时联系开发</strong>
+        <strong class="text-danger">团、秒、普通商品均可</strong>
 
         <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_order_id" data-noajax="true">
             <div style="padding-bottom: 10px;padding-top: 10px;">
@@ -124,7 +130,7 @@
         </form>
     </div>
     <div id="byUser" class="tab-pane">
-        <strong class="text-danger">该功能还在试用，发现任何问题及时联系开发</strong>
+        <strong class="text-danger">团、秒、普通商品均可</strong>
 
         <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_user" data-noajax="true">
             <div style="padding-bottom: 10px;padding-top: 10px;">
@@ -156,7 +162,7 @@
         </form>
     </div>
     <div id="byProduct" class="tab-pane">
-        <strong class="text-danger">该功能还在试用，发现任何问题及时联系开发</strong>
+        <strong class="text-danger">请输入订单号，团、秒、普通商品均可</strong>
 
         <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_product" data-noajax="true">
             <div style="padding-bottom: 10px;padding-top: 10px;">
@@ -283,8 +289,14 @@
     <div id="emptySendDate" class="tab-pane">
         <strong class="text-danger">只能查询团购、秒杀，排期普通商品无法查询</strong>
     </div>
-    <div id="paidNotSend" class="tab-pane">
-        <strong class="text-danger">到了发货时间，仍未发货的订单</strong>
+    <div id="b2cPaidNotSend" class="tab-pane">
+        <strong class="text-danger">B2C，到了发货时间，仍未发货的订单</strong>
+    </div>
+    <div id="c2cPaidNotSend" class="tab-pane">
+        <strong class="text-danger">C2C，昨日以前支付，仍未发货的订单</strong>
+    </div>
+    <div id="ordersToday" class="tab-pane">
+        <strong class="text-danger">今日已经支付的订单</strong>
     </div>
 </div>
 

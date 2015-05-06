@@ -251,8 +251,9 @@ class TuanController extends AppController
         }
 
         $this->set('b2c_empty_send_date_count', $this->_query_b2c_empty_send_date());
-        $this->set('b2c_paid_not_sent_count', $this->_query_bc2_paid_not_send_count());
+        $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
+        $this->set('orders_today_count', $this->_query_orders_today_count());
 
         $this->set('spec_groups', $spec_groups);
         $this->set('team_id', $team_id);
@@ -442,11 +443,21 @@ class TuanController extends AppController
 
     public function admin_query_c2c_paid_not_send()
     {
+        $conditions = array("Order.pay_time < CURDATE()");
         $conditions['Order.type'] = ORDER_TYPE_DEF;
         $conditions['Order.status'] = ORDER_STATUS_PAID;
         $this->_query_orders($conditions, 'Order.updated');
 
         $this->set('query_type', 'c2cPaidNotSend');
+        $this->render("admin_tuan_orders");
+    }
+
+    public function admin_query_orders_today()
+    {
+        $conditions = array("Order.pay_time >= CURDATE()");
+        $this->_query_orders($conditions, 'Order.updated');
+
+        $this->set('query_type', 'ordersToday');
         $this->render("admin_tuan_orders");
     }
 
@@ -471,7 +482,7 @@ class TuanController extends AppController
         $this->set('expired_tuan_buying_count', $expired_tuan_buying_count[0][0]['c']);
 
         $this->set('b2c_empty_send_date_count', $this->_query_b2c_empty_send_date());
-        $this->set('b2c_paid_not_sent_count', $this->_query_bc2_paid_not_send_count());
+        $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
     }
 
@@ -718,8 +729,9 @@ class TuanController extends AppController
         $conditions['DATE(Order.updated) <'] = date('Y-m-d H:i:s');
 
         $this->set('b2c_empty_send_date_count', $this->_query_b2c_empty_send_date());
-        $this->set('b2c_paid_not_sent_count', $this->_query_bc2_paid_not_send_count());
+        $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
+        $this->set('orders_today_count', $this->_query_orders_today_count());
 
         $this->set('should_count_nums', true);
         $this->set('product_count', $product_count);
@@ -766,18 +778,23 @@ class TuanController extends AppController
         $this->set('query_type', 'byOfflineStore');
         $this->render("admin_tuan_orders");
     }
-    public function _query_bc2_paid_not_send_count(){
+    public function _query_b2c_paid_not_send_count(){
         $b2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where o.type in (5, 6) and o.status = 1 and c.send_date < CURDATE()');
         return $b2c_paid_not_sent_count[0][0]['ct'];
     }
 
     public function _query_c2c_paid_not_send_count(){
-        $c2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on o.id = c.order_id where o.type = 1 and o.status = 1');
+        $c2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on o.id = c.order_id where o.type = 1 and o.status = 1 and o.pay_time < CURDATE()');
         return $c2c_paid_not_sent_count[0][0]['ct'];
     }
 
     public function _query_b2c_empty_send_date(){
         $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where c.send_date is null and o.type in (5, 6) and o.status in (0, 1) and DATE(o.created) > '.date('Y-m-d', strtotime('-31 days')));
+        return $empty_send_date_count[0][0]['ct'];
+    }
+
+    public function _query_orders_today_count(){
+        $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where o.pay_time > CURDATE()');
         return $empty_send_date_count[0][0]['ct'];
     }
 }
