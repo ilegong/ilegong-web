@@ -58,34 +58,41 @@ class PlanHelperController extends AppController
         }
 
         $order_id = $this->_insert_order($user, $product, $num, $tuan_buying, $offline_store);
-        $this->log("plan helper create order successfully: ".$order_id);
         $cart_id = $this->_insert_cart($user, $product, $num, $tuan_buying, $offline_store, $order_id);
-        $this->log("plan helper create cart successfully: ".$cart_id);
+        $this->log("plan helper create order successfully: ".$order_id.", ".$cart_id);
 
         echo json_encode(array("order_id" => $order_id, "cart_id" => $cart_id));
     }
 
     function _insert_order($user, $product, $num, $tuan_buying, $offline_store){
-        $date = date('Y-m-d H:i:s', "+17 seconds");
+        $date = date('Y-m-d H:i:s', strtotime("+17 seconds"));
 
         $data = array();
-        $data['Order']['creator'] = $user['User']['id'];
+
+        $data['Order']['creator'] = 0;
         $data['Order']['status'] = 2;
         $data['Order']['created'] = $date;
         $data['Order']['updated'] = $date;
-        $data['Order']['pay_time'] = date('Y-m-d H:i:s', "+52 seconds");
-        $data['Order']['consignee_name'] = $user['User']['nickname'];
+        $data['Order']['pay_time'] = date('Y-m-d H:i:s', strtotime("+59 seconds"));
+        $data['Order']['consignee_name'] = empty($user['User']['nickname']) ? '李嘉' : $user['User']['nickname'];
+        $data['Order']['consignee_mobilephone'] = empty($user['User']['mobilephone']) ? '17910808972' : $user['User']['mobilephone'];
+        $data['Order']['consignee_id'] = $offline_store['OfflineStore']['id'];
         $data['Order']['consignee_address'] = $offline_store['OfflineStore']['name'];
-        $data['Order']['consignee_mobilephone'] = $user['User']['mobilephone'];
         $data['Order']['coverimg'] = $product['Product']['coverimg'];
         $data['Order']['total_price'] = $product['Product']['price'] * $num;
         $data['Order']['total_all_price'] = $product['Product']['price'] * $num;
-        $data['Order']['brand_id'] = 92;
+        $data['Order']['brand_id'] = $product['Product']['brand_id'];
         $data['Order']['member_id'] = $tuan_buying['TuanBuying']['id'];
         $data['Order']['type'] = 5;
 
-        $this->Order->save($data);
-        return $this->Order->getLastInsertID();
+        if($this->Order->save($data)){
+            return $this->Order->getLastInsertID();
+        }
+        else{
+            $this->log($this->Order->validationErrors); //show validationErrors
+
+            throw new Exception("plan helper create order failed");
+        }
     }
 
     function _insert_cart($user, $product, $num, $tuan_buying, $offline_store, $order_id){
@@ -97,6 +104,7 @@ class PlanHelperController extends AppController
         $data['Cart']['type'] = 5;
         $data['Cart']['status'] = 2;
         $data['Cart']['product_id'] = $product['Product']['id'];
+        $data['Cart']['coverimg'] = $product['Product']['coverimg'];
         $data['Cart']['price'] = $product['Product']['price'] * $num;
         $data['Cart']['num'] = 1;
         $data['Cart']['session_id'] = $this->Session->id();
@@ -105,7 +113,12 @@ class PlanHelperController extends AppController
         $data['Cart']['modified'] = $date;
         $data['Cart']['send_date'] = $tuan_buying['TuanBuying']['consign_time'];
 
-        $this->Cart->save($data);
-        return $this->Cart->getLastInsertID();
+        if($this->Cart->save($data)){
+            return $this->Cart->getLastInsertID();
+        }
+        else{
+            $this->log($this->Cart->validationErrors); //show validationErrors
+            throw new Exception("plan helper create cart failed");
+        }
     }
 }
