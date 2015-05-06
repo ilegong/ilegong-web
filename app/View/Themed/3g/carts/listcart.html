@@ -20,7 +20,7 @@
                         {{loop $Carts $c_id $cart}}
                             {{if $cart['product_id']==$p_id}}
                             <ul class="clearfix" style="margin-bottom: 0;">
-                                <li class="fl cart_select" name="product_select" data-cart="{{$cart['id']}}" data-product="{{$cart['name']}}" data-productid="{{$cart['product_id']}}" data-limit="{{$cart['limit_ship']}}"><span></span></li>
+                                <li class="fl {{if $product_published_map[$p_id]==1}}cart_select{{else}}cart_no_select{{/if}}" data-published="{{$product_published_map[$p_id]}}" name="{{if $product_published_map[$p_id]==1}}product_select{{else}}product_no_select{{/if}}" data-cart="{{$cart['id']}}" data-product="{{$cart['name']}}" data-productid="{{$cart['product_id']}}" data-limit="{{$cart['limit_ship']}}"><span></span></li>
                                 <li class="fl"><a style="float: left;" href="{{product_link($p_id, 'javascript:;')}}"><img src="{{Router::url(small_thumb_link($cart['coverimg']))}}" border="0" /></a></li>
                                 <li style="overflow: hidden; display: block; padding-right: 35px; padding-left: 10px;">
                                     <a href="#X">
@@ -163,6 +163,11 @@
             }
             resetTotalPrice();
         });
+
+        $('li[name="product_no_select"]').on('click',function(){
+            utils.alert('该商品已经下架,不能进行结算,请联系客服');
+        });
+
         $('li[name="product_select"]').on('click',function(){
             var me = $(this);
             var tip_flag = $('li.cart_select_cur').length;

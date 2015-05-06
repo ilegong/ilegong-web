@@ -84,15 +84,16 @@ a.coupon_applied .glyphicon {
 
 		<div class="o_show">
             {{loop $cart->brandItems $brandItem}}
-		<h4>分享人：{{$brands[$brandItem->id]}}</h4>
+		<h4>分享人：{{$brands[$brandItem->id]['name']}}</h4>
 		<div class="p-list">
 			<table  class="table table-bordered">
 			<tbody>
             {{loop $brandItem->items $cid $item}}
-			<tr><td>{{$item->name}}</td>
-			<td style="width: 80px; font-size: 0.8em">单价：{{$this->Number->precision($item->price, 2)}}</td>
-			<td>×{{$item->num}}</td>
-			<td>{{$this->Number->precision($item->price*$item->num, 2)}}</td>
+			<tr>
+                <td>{{$item->name}} {{if !$item->published}}<span style="color: red">该商品已经下架</span>{{/if}}</td>
+			    <td style="width: 80px; font-size: 0.8em">单价：{{$this->Number->precision($item->price, 2)}}</td>
+			    <td>×{{$item->num}}</td>
+			    <td>{{$this->Number->precision($item->price*$item->num, 2)}}</td>
 			</tr>
 			{{/loop}}
 			</tbody>

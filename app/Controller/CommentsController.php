@@ -139,8 +139,9 @@ class CommentsController extends AppController {
     	$this->autoRender = false;
     	$model_name = Inflector::classify($model_name);
         //'rating'=>array('1','5','3')
+        $p_ids = get_group_product_ids($id);
     	$comments = $this->Comment->find('all',array(
-    		 'conditions' => array('Comment.type' => $model_name,'data_id'=>$id,'status'=>1,'is_shichi_vote'=>0,),
+    		 'conditions' => array('Comment.type' => $model_name,'data_id'=>$p_ids,'status'=>1,'is_shichi_vote'=>0,),
     		 'order' => array('Comment.publish_time DESC'), //定义顺序的字符串或者数组
 		    'limit' => $pagesize, //整型
 		    'page' => $page, //整型
@@ -285,6 +286,7 @@ class CommentsController extends AppController {
                             if ($status != ORDER_STATUS_CANCEL
 //                                && $status != ORDER_STATUS_WAITING_PAY
                                 && $status != ORDER_STATUS_RETURN_MONEY
+                                && $status != ORDER_STATUS_RETURNING_MONEY
                                 ) {
                                 $has_valid++;
                             } else {
@@ -589,5 +591,6 @@ class CommentsController extends AppController {
         }
 
     }
+
 }
 ?>

@@ -31,7 +31,7 @@
                 <div class="cart_commodity">
                     <dl class="clearfix">
                         <dd class="width150">
-                            <input type="checkbox" name="product_select" data-cart="{{$cart['id']}}" data-product="{{$cart['name']}}" data-productid="{{$cart['product_id']}}" data-limit="{{$cart['limit_ship']}}"/>
+                            <input type="checkbox" name="{{if $product_published_map[$p_id]==1}}product_select{{else}}product_no_select{{/if}}" data-cart="{{$cart['id']}}" data-product="{{$cart['name']}}" data-productid="{{$cart['product_id']}}" data-limit="{{$cart['limit_ship']}}"/>
                             <a href="{{product_link($p_id, 'javascript:;')}}"><img src="{{Router::url(small_thumb_link($cart['coverimg']))}}" border="0" /></a>
                         </dd>
                         <dd class="width340"><a href="{{product_link($p_id, 'javascript:;')}}">{{$cart['name']}}</a></dd>
@@ -179,6 +179,11 @@
                 $p_select.prop('checked',false);
             }
             resetTotalPrice();
+        });
+        $('input[name="product_no_select"]').on('click',function(){
+            var me = $(this);
+            me.prop('checked',false);
+            utils.alert('该商品已经下架,不能进行结算,请联系客服');
         });
         $('input[name="product_select"]').on('click',function(){
             var me = $(this);

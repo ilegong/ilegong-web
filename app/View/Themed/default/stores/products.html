@@ -22,7 +22,7 @@
             .' | '.$this->Html->link('删除', array('action' => 'del_product', $item['Product']['id']))
             .' | '.$this->Html->link('查看', array('controller' => 'products', 'action' => 'view', $item['Product']['id']), array('target' => '_blank'))
             .' | '.$this->Html->link('排期', array('action' => 'consignment_dating', 'list' ,'?' => array('p_id' => $item['Product']['id'])), array('target' => '_blank'));
-            if(!empty($dates[$item['Product']['id']])){
+            if(!empty($dates[$item['Product']['id']]) || $brand_id == 92){
                 $actions = $actions.' | '.$this->Html->link('发货状态', array('action' => 'view_track', $item['Product']['id'],'?'=>array('productname'=>$item['Product']['name'])));
             }
         }

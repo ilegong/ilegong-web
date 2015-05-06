@@ -24,7 +24,7 @@
             <!--</ul>-->
             <ul class="clearfix">
                 <li class="title">累计评价:</li>
-                <li class="green">已有{{$Product['Product']['comment_nums']}}人评价</li>
+                <li class="green">已有{{$comment_count}}人评价</li>
             </ul>
             <ul class="clearfix">
                 <li class="title">服务:</li>
@@ -47,7 +47,7 @@
             <ul class="clearfix guige">
                 <li class="title" style="padding-top:5px;">送货日期:</li>
                 <li style="width:296px;">
-                    <?php foreach($consignment_dates as $date){?> <span class="spec_item" item-label="SD" data-val="{{$date['id']}}">{{$date['date']}}</span><?php } ?>
+                    <?php foreach($consignment_dates as $date){?> <span class="spec_item" item-label="SD" data-val="{{$date['id']}}" data-send-date="{{$date['send_date']}}">{{$date['date']}}</span><?php } ?>
                 </li>
             </ul>
             {{/if}}

@@ -22,7 +22,21 @@ $(document).ready(function() {
 				$(this).parents('div:first').find('input:checkbox').removeAttr('checked');
 			}
 		}
-	})
+	});
+try{
+  $('.datetime').datetimepicker({
+    language:  'zh-CN',
+    weekStart: 1,
+    todayBtn:  1,
+    autoclose: 1,
+    todayHighlight: 1,
+    startView: 2,
+    forceParse: 0,
+    showMeridian: 1
+  });
+}catch(e){
+
+}
 });
 function page_loaded()
 {
@@ -485,3 +499,21 @@ function generateSlug(obj,selector){
 		ajaxAction(url,{'word':obj.value},null,'generateSlug',selector);
 	}
 }
+
+var iUtils = function () {
+    var initSelectBox = function (selectBox) {
+        var value = selectBox.data('value');
+        $("option", selectBox).each(function(){
+            if($(this).val() == value){
+                $(this).attr('selected', 'selected');
+            }
+            else{
+                $(this).removeAttr('selected');
+            }
+        });
+    }
+    return {
+        initSelectBox: initSelectBox
+    }
+}();
+

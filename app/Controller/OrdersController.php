@@ -6,7 +6,7 @@ class OrdersController extends AppController {
 
     var $user_condition = array();
 
-    public $components = array('Weixin', 'Buying');
+    public $components = array('Weixin', 'Buying','Paginator');
 
     var $customized_not_logged = array('apply_coupon');
 
@@ -129,7 +129,8 @@ class OrdersController extends AppController {
         $uid = $this->currentUser['id'];
 
         $allP = $this->Product->find('all', array('conditions' => array(
-            'id' => $product_ids
+            'id' => $product_ids,
+            'published' => PUBLISH_YES
         )));
 
 
@@ -154,13 +155,15 @@ class OrdersController extends AppController {
             $business[$p['Product']['brand_id']][] = $p['Product'];
             $pid = $p['Product']['id'];
             $num = $nums[$pid];
-            list($afford_for_curr_user, $limit_cur_user) = $tryId ? afford_product_try($tryId, $uid) : AppController::__affordToUser($pid, $uid);
+            list($afford_for_curr_user, $limit_cur_user,,$least_num) = $tryId ? afford_product_try($tryId, $uid) : AppController::__affordToUser($pid, $uid);
             $pName = $p['Product']['name'];
             if (!$afford_for_curr_user) {
                 $this->__message($pName .__('已售罄或您已经购买超限，请从购物车中调整后再结算'), $error_back_url, 5);
                 return;
             } else if ($limit_cur_user == 0 || ($limit_cur_user > 0 && $num > $limit_cur_user)) {
                 $this->__message($pName .__('购买超限，请从购物车中调整后再结算'), $error_back_url, 5);
+            } else if ($least_num > 1 && $num < $least_num){
+                $this->__message('该商品满'.$least_num.'起送', '/', 3);
             }
         }
 
@@ -354,6 +357,8 @@ class OrdersController extends AppController {
                 if ($_GET['from'] == 'try') {
                     $cidAttr['try'] = $_GET['try'];
                 }
+            }else{
+                $cidAttr = json_decode($this->Session->read(self::key_balance_pids()), true);
             }
         }
 
@@ -389,14 +394,14 @@ class OrdersController extends AppController {
 
         $balance_cids = $this->specified_balance_pids();
 
-        list($pids, $cart, $shipFee) = $this->Buying->createTmpCarts($shipPromotionId, $balance_cids, $uid, $sessionId);
+        list($pids, $cart, $shipFee, ,$product_info, $cartsDict) = $this->Buying->createTmpCarts($shipPromotionId, $balance_cids, $uid, $sessionId);
         if (empty($balance_cids)) {
             $balance_cids = $cart->list_cart_id();
             $this->Session->write(self::key_balance_pids(), json_encode($balance_cids));
         }
 
         $consignees = $this->OrderConsignee->find('all',array(
-            'conditions'=>array('creator'=> $uid),
+            'conditions'=>array('creator'=> $uid, 'status !=' => STATUS_CONSIGNEES_TUAN),
             'order' => 'status desc',
         ));
         $total_consignee = count($consignees);
@@ -443,7 +448,8 @@ class OrdersController extends AppController {
         $brand_ids = array_keys($cart->brandItems);
         if (!empty($brand_ids)) {
             $this->loadModel('Brand');
-            $brands = $this->Brand->find('list', array('conditions' => array('id' => $brand_ids), 'fields' => array('id', 'name')));
+            $brands = $this->Brand->find('all', array('conditions' => array('id' => $brand_ids), 'fields' => array('id', 'name', 'coverimg', 'created', 'slug')));
+            $brands = Hash::combine($brands, '{n}.Brand.id', '{n}.Brand');
         } else {
             $brands = array();
         }
@@ -458,7 +464,7 @@ class OrdersController extends AppController {
         }
 
 		$total_price = $cart->total_price();
-        $this->set(compact('total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'flash_msg', 'total_reduced'));
+        $this->set(compact('total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'flash_msg', 'total_reduced', 'product_info'));
 		$this->set('has_chosen_consignee', $has_chosen_consignee);
 		$this->set('total_consignee', $total_consignee);
 		$this->set('consignees', $consignees);
@@ -472,7 +478,12 @@ class OrdersController extends AppController {
         $could_score_money = cal_score_money($score, $total_price);
         $this->set('score_usable', $could_score_money * 100);
         $this->set('score_money', $could_score_money);
-
+        if($cartsDict){
+            $spec_ids = array_unique(Hash::extract($cartsDict,'{n}.specId'));
+            $this->set('spec_group',search_spec($spec_ids));
+            $consign_ids = array_unique(Hash::extract($cartsDict,'{n}.consignment_date'));
+            $this->set('consign_dates',search_consignment_date($consign_ids));
+        }
         $shipPromotions = $this->ShipPromotion->findShipPromotions($pids, $brand_ids);
         if ($shipPromotions && !empty($shipPromotions)) {
             $this->set('specialShipPromotionId', $shipPromotionId);
@@ -484,7 +495,22 @@ class OrdersController extends AppController {
         }
         $this->pageTitle = __('订单确认');
         $this->set('op_cate', OP_CATE_CATEGORIES);
+        $this->set('hideNav', true);
 	}
+
+    function ship_detail($orderId){
+        $uid = $this->currentUser['id'];
+        $orderinfo = $this->find_my_order_byId($orderId, $uid);
+        if(empty($orderinfo)){
+            $this->__message('订单不存在，或无权查看','/');
+        }
+        if ($orderinfo['Order']['ship_type']) {
+            $this->set('shipdetail', ShipAddress::get_ship_detail($orderinfo));
+        }
+        $this->set('ship_type', ShipAddress::ship_type_list());
+        $this->set('order',$orderinfo);
+        $this->set('hideNav', true);
+    }
 
     /**
      * Display and options for already submitted order
@@ -498,22 +524,48 @@ class OrdersController extends AppController {
             $this->__message('订单不存在，或无权查看','/');
         }
 
+        $brandId = $orderinfo['Order']['brand_id'];
+        $this->loadModel('Brand');
+        $brand = $this->Brand->find('first',array(
+            'conditions' => array(
+                'id' => $brandId
+            )
+        ));
+        $this->set('brand',$brand);
         $this->loadModel('Cart');
+
         $Carts = $this->Cart->find('all', array(
             'conditions'=>array(
                 'order_id' => $orderId,
                 'creator'=> $uid
             )));
         $product_ids = Hash::extract($Carts, '{n}.Cart.product_id');
-        $this->loadModel('Product');
-        $products = $this->Product->find_products_by_ids($product_ids, array('published', 'deleted'), false);
-
         $expired_pids = array();
-        foreach($product_ids as $pid) {
-            if (empty($products[$pid])
-                || $products[$pid]['published'] == PUBLISH_NO
-                || $products[$pid]['deleted'] == DELETED_YES) {
-                $expired_pids[] = $pid;
+        $this->loadModel('Product');
+        if($orderinfo['Order']['type'] != ORDER_TYPE_TUAN && $orderinfo['Order']['type'] != ORDER_TYPE_TUAN_SEC){
+            $products = $this->Product->find_products_by_ids($product_ids, array('published', 'deleted'), false);
+            foreach($product_ids as $pid) {
+                if (empty($products[$pid])
+                    || $products[$pid]['published'] == PUBLISH_NO
+                    || $products[$pid]['deleted'] == DELETED_YES) {
+                    $expired_pids[] = $pid;
+                }
+            }
+        }
+
+        $this->set('expired_pids',$expired_pids);
+
+        if($orderinfo['Order']['type']==ORDER_TYPE_TUAN){
+            $this->loadModel('TuanBuying');
+            $tuan_buy = $this->TuanBuying->find('first',array(
+                'conditions' => array(
+                    'id' => $orderinfo['Order']['member_id']
+                )
+            ));
+            //tuan can't buy
+            $tuan_expired = $tuan_buy['TuanBuying']['status'];
+            if($tuan_expired!=0){
+                $this->set('tuan_expired',true);
             }
         }
 
@@ -534,14 +586,14 @@ class OrdersController extends AppController {
             if ($try_id > 0) {
                 list($afford, $user_left, $total_left) = afford_product_try($try_id, $uid);
                 $total_items = array_sum(Hash::extract($Carts, '{n}.Cart.num'));
-
                 if ($total_left == 0 || ($total_left > 0 && $total_left < $total_items)) {
                     $this->set('has_sold_out', true);
+                    $afford = false;
                 } else if ($user_left == 0 || ($user_left > 0 && $user_left < $total_items)) {
                     $this->set('has_reach_limit', true);
+                    $afford = false;
                 }
             }
-
             if ($afford && $has_expired_product_type == 0 && $no_more_money && $action == 'pay_direct') {
                 if ($orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
                     $this->Order->id = $orderinfo['Order']['id'];
@@ -555,13 +607,26 @@ class OrdersController extends AppController {
                 }
             }
 
-            $this->set('show_pay', ($orderinfo['Order']['type'] == ORDER_TYPE_DEF || $orderinfo['Order']['type']==ORDER_TYPE_TUAN)
+            $this->set('show_pay', ($orderinfo['Order']['type'] == ORDER_TYPE_DEF || $orderinfo['Order']['type']==ORDER_TYPE_TUAN || $orderinfo['Order']['type']==ORDER_TYPE_TUAN_SEC)
                 && $afford
                 && $has_expired_product_type == 0
+                && (empty($tuan_expired)||$tuan_expired ==0)
                 && $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
                 && ($display_status != PAID_DISPLAY_PENDING && $display_status != PAID_DISPLAY_SUCCESS));
         }
-
+        $this->loadModel('ConsignmentDate');
+        foreach($Carts as $cart){
+            $consignment_id = $cart['Cart']['consignment_date'];
+            if($consignment_id){
+                $consignment_date = $this->ConsignmentDate->find('first', array(
+                    'conditions' => array('id'=>$consignment_id )
+                ));
+                if($consignment_date['ConsignmentDate']['published'] == 0){
+                    $this->set('show_pay', false);
+                    break;
+                }
+            }
+        }
         if ($action == 'paid') {
             $this->log("paid done: $orderId, msg:". $_GET['msg']);
             //:orders/detail/1118/paid?tradeNo=wxca78-1118-1414580077&msg=ok
@@ -592,9 +657,7 @@ class OrdersController extends AppController {
         $shareOffer = ClassRegistry::init('ShareOffer');
         $toShare = $shareOffer->query_gen_offer($orderinfo, $this->currentUser['id']);
         $canComment = $this->can_comment($status);
-
         $this->set(compact('toShare', 'canComment', 'no_more_money', 'order_id', 'order', 'has_expired_product_type', 'expired_pids'));
-        $this->set('isMobile', $this->RequestHandler->isMobile());
         $this->set('ship_type', ShipAddress::ship_type_list());
         $this->set('order', $orderinfo);
         $this->set('Carts',$Carts);
@@ -603,6 +666,8 @@ class OrdersController extends AppController {
         if ($orderinfo['Order']['ship_type']) {
             $this->set('shipdetail', ShipAddress::get_ship_detail($orderinfo));
         }
+        $this->set('ship_type', ShipAddress::ship_type_list());
+        $this->set('isMobile', $this->RequestHandler->isMobile());
         $this->set('hideNav', true);
     }
 
@@ -789,7 +854,9 @@ class OrdersController extends AppController {
     }
 
 	function business($creator=0){
-        $this->__business_orders($creator);
+        $order_Id = $_REQUEST['order-id'];
+        $this->__business_orders($creator,array(),$order_Id);
+        $this->set('creator',$creator);
 	}
 
     function tobe_shipped_orders($creator=0){
@@ -1120,7 +1187,8 @@ class OrdersController extends AppController {
 		// 常用地址列表，及收件人信息编辑表单
 		$this->loadModel('OrderConsignee');
 		$consignees = $this->OrderConsignee->find('all',array(
-			'conditions'=>array('creator'=>$this->currentUser['id']),'order' => 'status desc',
+			'conditions'=>array('creator'=>$this->currentUser['id'], 'status !=' => STATUS_CONSIGNEES_TUAN),
+            'order' => 'status desc',
 		));
 		$total_consignee = count($consignees);
 		$this->set('total_consignee',$total_consignee);
@@ -1356,9 +1424,8 @@ class OrdersController extends AppController {
      * @param $creator
      * @param array $onlyStatus if not empty, only the specified status will be kept
      */
-    protected function __business_orders($creator, $onlyStatus = array()) {
+    protected function __business_orders($creator, $onlyStatus = array(),$order_Id = null) {
         $creator = $this->authAndGetCreator($creator);
-
         $this->loadModel('Brand');
         $brands = $this->Brand->find('list', array('conditions' => array(
             'creator' => $creator,
@@ -1371,21 +1438,22 @@ class OrdersController extends AppController {
             $this->__message('只有合作商家才能查看商家订单，正在为您转向个人订单', '/orders/mine');
             return;
         }
-
         $cond = array('brand_id' => $brand_ids,
             'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN),
             'NOT' => array(
             'status' => array(ORDER_STATUS_CANCEL)
         ));
-
         if (!empty($onlyStatus)) {
             $cond['status'] = $onlyStatus;
         }
-
-        $orders = $this->Order->find('all', array(
-            'order' => 'id desc',
+        if(!empty($order_Id)){
+            $cond['id'] = $order_Id;
+        }
+        $this->Paginator->settings = array('limit' => 100,
             'conditions' => $cond,
-        ));
+            'order' => 'Order.id desc'
+        );
+        $orders = $this->Paginator->paginate();
         $ids = array();
         foreach ($orders as $o) {
             $ids[] = $o['Order']['id'];
@@ -1520,6 +1588,11 @@ class OrdersController extends AppController {
 
         $all_applied_coupons = $this->_applied_coupons();
         $brand_applied_coupons = $this->_applied_coupons($brand_id);
+        if(in_array($coupon_item_id, $brand_applied_coupons)){
+            $coupon_type = $brand_id;
+        }else{
+            $coupon_type = 0;
+        }
         //TODO: 需要考虑各种券的一致性，排他性
         if ($applying) {
 
@@ -1537,7 +1610,7 @@ class OrdersController extends AppController {
                 if (empty($curr_coupon_item)) {
                     $reason = 'share_type_not_exists';
                 } else {
-                    $curr_coupon_item = $curr_coupon_item[0];
+                    $curr_coupon_item = array_shift($curr_coupon_item);
                     //这里必须安店面去限定
                     //要把没有查询到的couponItem去掉
                     if ($curr_coupon_item['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER
@@ -1556,9 +1629,9 @@ class OrdersController extends AppController {
 //            }
             }
         } else {
-            if (!empty($brand_applied_coupons)
-                && array_search($coupon_item_id, $brand_applied_coupons) !== false) {
-                $this->_remove_applied_coupons($brand_id, $coupon_item_id);
+            if (!empty($all_applied_coupons)
+                && array_search($coupon_item_id, $all_applied_coupons) !== false) {
+                $this->_remove_applied_coupons($coupon_type, $coupon_item_id);
                 $changed = true;
             }
         }

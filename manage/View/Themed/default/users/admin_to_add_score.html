@@ -16,6 +16,18 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="tuan_buy_ids" class="col-sm-2 control-label">团购ID(使用英文逗号分隔)</label>
+                    <div class="col-sm-10">
+                        <input id="tuan_buy_ids" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="score_reason" class="col-sm-2 control-label">添加积分原因</label>
+                    <div class="col-sm-10">
+                        <textarea id="score_reason" class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
                         <button id="add_score" class="btn btn-default">添加</button>
                     </div>
@@ -29,7 +41,9 @@
         $('#add_score').on('click',function(){
             var user_id = $('#user_id').val();
             var score = $('#score').val();
-            $.post('/manage/admin/users/do_add_score',{"user_id":user_id,"score":score},function(data){
+            var score_reason = $('#score_reason').val();
+            var tuan_buy_ids = $('#tuan_buy_ids').val();
+            $.post('/manage/admin/users/do_add_score',{"user_id":user_id,"score":score,"score_reason":score_reason,"tuan_buy_ids":tuan_buy_ids},function(data){
                 var result = JSON.parse(data);
                 if(result['success']){
                     alert(result['msg']);

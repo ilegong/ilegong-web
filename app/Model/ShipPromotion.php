@@ -210,6 +210,12 @@ class ShipPromotion extends AppModel {
             )
         ),
 
+        877=>array(
+            'limit_ship' => true, 'items' => array(
+                array('id'=>79,'time' => '', 'least_num' => 5,  'address' => '购满5个蛋糕（含），送到指定地点(限北京城区)', 'need_address_remark' => true)
+            )
+        ),
+
         863 => array('limit_ship' => true,
             'items' => array(
                 array('id' => 82, 'time' => '', 'least_num' => 20,  'address' => '团购满20盒（含），送到昌平县城指定地点', 'need_address_remark' => true),

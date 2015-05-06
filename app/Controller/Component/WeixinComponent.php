@@ -90,7 +90,7 @@ class WeixinComponent extends Component
     {
             $coupon_url = $this->get_coupon_url();
             $first_intro = "亲，恭喜您获得" . $count . "张优惠券";
-            $click_intro = "点击详情，查询获得的优惠券。";
+            $click_intro = "点击详情，立即购买。";
 
         return $this->send_coupon_message_on_received($user_id, $store, $rule, $coupon_url, $first_intro, $click_intro);
     }
@@ -360,6 +360,7 @@ class WeixinComponent extends Component
 
     public static function get_order_good_info($order_info){
         $good_info ='';$number = 0;
+        $send_date='';
         $ship_info = $order_info['Order']['consignee_name'].','.$order_info['Order']['consignee_address'].','.$order_info['Order']['consignee_mobilephone'];
         $cartModel = ClassRegistry::init('Cart');
         $carts = $cartModel->find('all',array(
@@ -367,6 +368,9 @@ class WeixinComponent extends Component
         foreach($carts as $cart){
             $good_info = $good_info.$cart['Cart']['name'].'x'.$cart['Cart']['num'].';';
             $number +=$cart['Cart']['num'];
+            if(!empty($cart['Cart']['send_date'])){
+                $send_date=$cart['Cart']['send_date'];
+            }
         }
         $pids = Hash::extract($carts, '{n}.Cart.product_id');
 
@@ -376,7 +380,7 @@ class WeixinComponent extends Component
                 'id' => $order_info['Order']['brand_id']
             )
         ));
-        return array("good_info"=>$good_info,"ship_info"=>$ship_info, 'pid_list' => $pids, 'brand_info' => $brand,'good_num' => $number);
+        return array("good_info"=>$good_info,"ship_info"=>$ship_info, 'pid_list' => $pids, 'brand_info' => $brand,'good_num' => $number, "send_date"=>$send_date);
     }
 
     /**
@@ -399,6 +403,7 @@ class WeixinComponent extends Component
         $good_num = $good['good_num'];
         $order_consinessname = $order['Order']['consignee_name'];
         $brandId = $order['Order']['brand_id'];
+        $send_date = $good['send_date'];
 
         if ($user_weixin != false) {
             $open_id = $user_weixin['oauth_openid'];
@@ -489,6 +494,8 @@ class WeixinComponent extends Component
                     $seller_weixin = '';
                 }
 
+            } elseif($order['Order']['type'] == ORDER_TYPE_TUAN){
+                $this->send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_id, $order, $send_date);
             }  else {
                 $this->send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_id, $order);
             }
@@ -584,4 +591,36 @@ class WeixinComponent extends Component
         return false;
     }
 
+    public function send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_no, $order = null, $send_date) {
+        $ship_way = $order['Order']['ship_mark'];
+        if($ship_way == 'sf'){
+            $tail = '，发货时间是'.$send_date.'。';
+        }else{
+            $template= ",到货时间是".$send_date."，自提地点是".$order['Order']['address'];
+            $offlineStoreM = ClassRegistry::init('OfflineStore');
+            $offline_store = $offlineStoreM->find('first', array(
+                'conditions' => array('id' => $order['Order']['consignee_id'])
+            ));
+            if($offline_store['OfflineStore']['type'] == 0){
+                $tail = $template.'，请留意当天到店取货收到的提货码提醒。';
+            }else{
+                $tail = $template. '，请留意当天到店取货提醒。';
+            }
+        }
+        $post_data = array(
+            "touser" => $open_id,
+            "template_id" => $this->wx_message_template_ids["ORDER_PAID"],
+            "url" => $this->get_order_query_url($order_no),
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => "亲，您的订单已完成付".$tail),
+                "orderProductPrice" => array("value" => $price),
+                "orderProductName" => array("value" => $good_info),
+                "orderAddress" => array("value" => empty($ship_info)?'':$ship_info),
+                "orderName" => array("value" => $order_no),
+                "remark" => array("value" => "点击查看订单详情", "color" => "#FF8800")
+            )
+        );
+        return $this->send_weixin_message($post_data);
+    }
 }

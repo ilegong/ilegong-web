@@ -1,0 +1,66 @@
+<ol class="breadcrumb">
+  <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+  <li><a href="/manage/admin/tuan_products/index">商品管理</a></li>
+  <li class="active">新建商品</li>
+</ol>
+
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal" method="post" action="/manage/admin/tuan_products/create" data-noajax="1">
+            <div class="form-group">
+                <label for="product_id" class="col-sm-2 control-label">选择商品</label>
+                <div class="col-sm-9">
+                    <input type="number" name="data[TuanProduct][product_id]" class="form-control" id="product_id" placeholder="产品编号">
+                    <div class="text-warning">该商品价格为：TODO元</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="product_name" class="col-sm-2 control-label">别名</label>
+                <div class="col-sm-9">
+                    <input type="text" name="data[TuanProduct][alias]" class="form-control" id="product_name" placeholder="产品名字">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="tuan_price" class="col-sm-2 control-label">团购价格</label>
+                <div class="col-sm-9">
+                    <input type="text" name="data[TuanProduct][tuan_price]" class="form-control" id="tuan_price" placeholder="价格">
+                </div>
+            </div>
+            <div class="form-group">
+              <label for="consignment_type" class="col-sm-2 control-label">发货类型</label>
+              <div class="col-sm-9">
+                <select class="form-control consignment-type" name="data[TuanBuying][consignment_type]" id="consignment_type">
+                  <option value="0">团满发货</option>
+                  <option value="1">团满准备发货</option>
+                  <option value="2">排期</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="priority" class="col-sm-2 control-label">优先级</label>
+              <div class="col-sm-9">
+                <input type="text" name="data[TuanProduct][priority]" class="form-control" id="priority" placeholder="0" value="0">
+              </div>
+            </div>
+            <div class="form-group">
+                <label for="list_url" class="col-sm-2 control-label">列表图片</label>
+                <div class="col-sm-9">
+                    <input type="text" name="data[TuanProduct][list_img]" class="form-control" id="list_url" placeholder="列表图片">
+                    <p class="alert alert-success" role="alert">大小为600X260</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="detail_url" class="col-sm-2 control-label">详情图片</label>
+                <div class="col-sm-9">
+                    <input type="text" name="data[TuanProduct][detail_img]" class="form-control" id="detail_url" placeholder="详情图片">
+                    <p class="alert alert-success" role="alert">大小为600X445</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-9">
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

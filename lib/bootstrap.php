@@ -10,7 +10,8 @@ const ORDER_TYPE_GROUP = 2;
 const ORDER_TYPE_GROUP_FILL = 4; //团购补充素有剩下的
 const ORDER_TYPE_PARENT = 3;
 const ORDER_TYPE_TUAN = 5; //团长团购
-const ORDER_TYPE_MILK = 6;
+//change milk order to tuan sec kill
+const ORDER_TYPE_TUAN_SEC = 6;
 
 const ALI_PAY_TYPE_WAP = "wap";
 const ALI_PAY_TYPE_WAPAPP = "wapapp";
@@ -26,6 +27,10 @@ const SCORE_ORDER_SPENT = 4;
 const SCORE_ORDER_SPENT_UNDO = 6; //取消/退款等，返回使用的积分
 
 const SCORE_ORDER_SPENT_CANCEL = 5; //退款取消已经发放的积分
+
+const SCORE_REFERRAL_BIND_OK = 7; //推荐人推荐某人绑定后得到的积分
+const SCORE_REFERRAL_BIND_OK_TO = 8; //推荐人推荐某人某人绑定后，被推荐人得到积分
+const SCORE_REFERRAL_FIRST_ORDER = 9; //推荐人推荐某人完成首单
 
 const SPEICAL_LIST_DAILY_ID = 4;
 
@@ -45,13 +50,15 @@ $_coupon_could_distribute = array(18483 => '新用户50返10元券', 18482 => '�
 
 function is_admin_uid($uid) {
 
-    $_admin_uids = array('753', '632', '658', '146', '8', '141'
-    , '818' //罗武林
+    $_admin_uids = array(
+    '632' // liu zhaoren
+    , '8' // ronghao
+    , '141' //yxg
     , '819' //高静静
-    , '755'
-    , '773'
-    , '544307' //ronghao
+    , '755' //高静静
     , '701166' //刘丹
+    , '5081'   //张晓庆
+    , '633345' //师超鹏
     );
     return $uid && false !== array_search($uid, $_admin_uids, true);
 }

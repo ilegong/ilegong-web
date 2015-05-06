@@ -74,6 +74,7 @@ class CouponItem extends AppModel {
                             $availCoupons[$brandItem->id][] = $coupon;
                         }
                     }
+                    break;
                 }
             }
         }

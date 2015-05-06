@@ -104,7 +104,7 @@
                         </table>
                         <div class="form-group">
                             <div class="col-md-9">
-                                <textarea class="form-control" id="order_ids" name="message" placeholder="订单号,使用英文逗号分隔" rows="3"></textarea>
+                                <textarea class="form-control" id="order_ids" name="message" placeholder="订单号,使用英文逗号分隔或换行分隔" rows="3"></textarea>
                             </div>
                             <br/><br/>
                             <button type="button" class="btn btn-primary" id="add_order">添加订单号</button>
@@ -122,11 +122,6 @@
                                 {{loop $track_logs $log}}
                                     <a href="#" class="list-group-item">{{$log['log']}}</a>
                                 {{/loop}}
-                                <!--<a href="#" class="list-group-item">Cras justo odio</a>-->
-                                <!--<a href="http://www.jquery2dotnet.com/2013/12/cool-simple-css-drop-down-menu.html" class="list-group-item">Dapibus ac facilisis in</a>-->
-                                <!--<a href="#" class="list-group-item">Morbi leo risus</a>-->
-                                <!--<a href="#" class="list-group-item">Porta ac consectetur ac</a>-->
-                                <!--<a href="#" class="list-group-item">Vestibulum at eros</a>-->
                             </ul>
                         </div>
                         <div class="form-group">

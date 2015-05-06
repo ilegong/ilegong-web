@@ -1,8 +1,11 @@
+<ol class="breadcrumb">
+  <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+  <li><a href="/manage/admin/tuan_teams/index">团队管理</a></li>
+  <li class="active">新建团队</li>
+</ol>
+
 <div class="container" xmlns="http://www.w3.org/1999/html">
-    <hr/>
-    <h1>创建团队</h1>
-    <hr/>
-    <form class="form-horizontal tuanTeam-form" method="post" action="/manage/admin/tuan/tuan_team_create"  novalidate="novalidate" data-noajax="true">
+    <form class="form-horizontal tuanTeam-form" method="post" action="/manage/admin/tuan_teams/create"  novalidate="novalidate" data-noajax="true">
         <div class="form-group">
             <label class="col-sm-2 control-label">团队名称</label>
             <div class="col-sm-9 controls select">
@@ -23,6 +26,25 @@
                 <input name="data[TuanTeam][leader_weixin]" value="{{$this->data[TuanTeam][leader_weixin]}}" class="form-control" type="text" id="leader_weixin" placeholder="pyshuo2015">
                 <div class="text-warning">备注：团长微信号未知时可以填写pyshuo2015替代</div>
             </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">自提点负责人</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanTeam][principal]" value="{{$this->data[TuanTeam][principal]}}" class="form-control" type="text" id="principal" placeholder="张三">
+                <div class="text-warning">备注：负责人要添加方便我们工作人员对接</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">负责人手机号码</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanTeam][principal_phone]" value="{{$this->data[TuanTeam][principal_phone]}}" class="form-control" type="text" id="principal_phone" placeholder="182xxxxxxxx">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">团队所属区域</label>
+            <select class="controls form-control tuan-teams col-sm-5" name="data[TuanTeam][county_id]" style="width:74%;margin-left: 9px;" value="{{$this->data[TuanTeam][county_id]}}">
+                <option value="-1">请选择区域</option>
+            </select>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">显示地址</label>
@@ -56,10 +78,10 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">团队口号</label>
+            <label class="col-sm-2 control-label">自提点</label>
             <div class="col-sm-9 controls">
-                <input name="data[TuanTeam][tuan_desc]" value="{{$this->data[TuanTeam][tuan_desc]}}" class="form-control" type="text" id="tuan_desc" placeholder="热爱生活，寻找美味">
-                <div class="text-warning">备注：热爱生活，寻找美味</div>
+                <select name="data[TuanTeam][offline_store_id]" class="form-control offline-store" data-value="{{$tuanTeam[offline_store_id]}}">
+                </select>
             </div>
         </div>
         <div class="form-group">
@@ -70,11 +92,17 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-2 control-label">备注</label>
+            <div class="col-sm-9 controls">
+                <textarea class="form-control" name="data[TuanTeam][remark]">{{$tuanTeam['remark']}}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
             <div class="col-sm-12 col-sm-offset-2">
-                <a href="http://dev.tongshijia.com/manage/admin/tuan/tuan_teams" class="btn btn-default">取消</a>
+                <a href="/manage/admin/tuan_teams/tuan_teams" class="btn btn-default">取消</a>
                 <input class="btn btn-primary" type="submit" value="创建"></div>
         </div>
     </form>
 </div>
 
-{{$this->Html->script(array('manage/tuan_teams/new.js'))}}
+{{$this->Html->script(array('/js/tuan-area.js','manage/tuan_teams/new.js'))}}

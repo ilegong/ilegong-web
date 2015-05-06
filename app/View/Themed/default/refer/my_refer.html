@@ -1,0 +1,61 @@
+{{$this->Html->css('/css/refer_css.css?v1')}}
+<div class="tuijianlist_banner">
+    <h1>每推荐成功<span>1</span>个好友<br/>可兑换<span>1</span>份价值<span>10元</span>的酸奶或鸡蛋</h1>
+    <em>酸奶和鸡蛋可任意选喔~~</em>
+</div>
+<a class="mytuijian_a" href="/refer/index/{{$ref_user['id']}}.html#div_tuijian_rules">
+    推荐符合规则的新用户才能获得奖励，点击查看</a>
+<ul class="tuijianlist">
+    {{loop $refers $k $refer}}
+    <li class="clearfix">
+        <span class="fl"><img src="{{$this->Html->assetUrl(!empty($m_users[$refer['Refer']['to']]['image'])? $m_users[$refer['Refer']['to']]['image']:'/img/mine_head.png')}}"/></span>
+        <div class="tuijian_title">
+            <div class="tuijian_title_style clearfix">
+                <em class="fl">{{$m_users[$refer['Refer']['to']]['nickname']}}</em>
+                <b>
+                    {{if $refer['Refer']['bind_done'] && $refer['Refer']['first_order_done']}}完成注册，第一单收货完成
+                    {{elseif $refer['Refer']['bind_done']}}完成了注册，等待完成第一单
+                    {{elseif $refer['Refer']['first_order_done']}}完成了第一单，还没有完成注册
+                    {{else}}
+                        等待绑定手机号完成注册
+                    {{/if}}
+                </b>
+            </div>
+            {{if $refer['Refer']['gift_got'] == 1}}<a class="disable">已领取</a>
+            {{elseif $refer['Refer']['gift_got'] == 0 && $refer['Refer']['bind_done'] == 1 && $refer['Refer']['first_order_done'] == 1}}
+
+            {{if $refer['Refer']['got_notify'] == 1}} <a class="disable">待确认配货</a>
+            {{else}}
+                <a refer_id="{{$refer['Refer']['id']}}" href="#X">领取</a>
+            {{/if}}
+
+            {{/if}}
+        </div>
+    </li>
+    {{/loop}}
+    <!--li class="clearfix">
+        <span class="fl"><img src="images/tuijian_good.jpg" /></span>
+        <div class="tuijian_title">
+            <div class="tuijian_title_style clearfix">
+                <em class="fl">Amy</em>
+                <b>通过您分享的链接购买了【朋友说】的商品</b>
+            </div>
+        </div>
+    </li-->
+</ul>
+
+        <script>
+            $(document).ready(function(){
+                $('a[refer_id]').click(function(){
+                    var aBtn = $(this);
+                    if (aBtn.hasClass("disable")) {
+                        return;
+                    }
+                    var $refer_id = aBtn.attr('refer_id');
+                    $.post('/refer/add_got_notify?refer_id=' + $refer_id +'&'+ Math.random(), {}, function(data){
+                        aBtn.addClass("disable").text('待确认配货');
+                    });
+                    window.alert('正在确认中，请等待发货通知');
+                });
+            });
+        </script>

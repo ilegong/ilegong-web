@@ -3,7 +3,7 @@
         {{template Elements/product_img_sild}}
         <div class="p_details_title">{{$Product['Product']['name']}}</div>
         <ul class="p_details_price clearfix">
-            <li class="fl price"><span>￥<font id="product_price">{{$this->Number->precision($price, 2)}}</font></span>{{if $product_price_range}}<em>{{$product_price_range}}</em>{{/if}}</li>
+            <li class="fl price"><span>{{if $Product['Product']['id']==871}}预售价{{/if}}￥<font id="product_price">{{$this->Number->precision($price, 2)}}</font></span>{{if $product_price_range}}<em>{{$product_price_range}}</em>{{/if}}</li>
             <li class="fr stat"><a {{if $comment_count>0}}href="#comment-div"{{/if}} style="color: #333333">评价<span>({{$comment_count}})</span></a></li>
         </ul>
         {{if $hasOfferBrandIds && array_key_exists($Product['Product']['brand_id'], $hasOfferBrandIds)}}
@@ -24,18 +24,6 @@
                 </span>
             </li>
         </ul>
-        {{/if}}
-        {{if $Product['Product']['id'] == PRODUCT_ID_MANGUO}}
-        <div class="tuan_bar">
-            <div>已团购<span id="sold_num" value="{{$sold_num>0?$sold_num:0}}">{{$sold_num>0?$sold_num:0}}</span>份</div>
-            <div class="bar">
-                <div class="bar_buy" id = "bar_buy"></div>
-            </div>
-            <ul class="clearfix">
-                <li class="fl"><span id="bar_percent"></span></li>
-                <li class="fr">目标50份</li>
-            </ul>
-        </div>
         {{/if}}
         {{if $ship_fixed||$ship_promo_nums||$ship_promo_amount||!empty($special_name)||$in_nianhuo||$total_left>0}}
         <ul class="sales clearfix">
@@ -84,7 +72,7 @@
                 <span class="gray title mr12" style="float:left;">送货日期:</span>
                         <span class="border" style="display: block;overflow: hidden;">
                         <?php foreach($consignment_dates as $date){?>
-                            <span class="mr12 border spec_item" item-label="SD" data-val="{{$date['id']}}">
+                            <span class="mr12 border spec_item" item-label="SD" data-val="{{$date['id']}}" data-send-date="{{$date['send_date']}}">
                                 {{$date['date']}}
                             </span>
                             <?php } ?>
@@ -224,14 +212,3 @@
         });
     });
 </script>
-
-        {{if $Product['Product']['id'] == PRODUCT_ID_MANGUO}}
-        <script>
-            $(document).ready(function(){
-                var sold_num = $('#sold_num').attr('value');
-                var sold_percent = (sold_num/50*100)>100?100:sold_num*2;
-                $('#bar_buy').css("width", sold_percent + "%");
-                $('#bar_percent').text(sold_percent + "%");
-            });
-        </script>
-        {{/if}}

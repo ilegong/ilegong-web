@@ -1,0 +1,219 @@
+{{$this->Html->css(array('bootstrap.min.css','ui-customer.css?v3'));}}
+<ol class="breadcrumb">
+  <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+  <li class="active">团购管理</li>
+</ol>
+
+<form class="form-inline tuan-buyings-form" method="get" action="/manage/admin/tuan_buyings/index" data-status-type="{{$status_type}}" data-tuan-status="{{$tuan_status}}" data-tuan-type="{{$cons_type}}">
+    <div style="padding-bottom: 10px;">
+        <input type="hidden" name="noajax" value="true">
+
+        <div class="form-group">
+            <input type="text" name="tuan_name" id="tuan_name" class="form-control" placeholder="搜索团队">
+        </div>
+        <div class="form-group">
+            <select class="form-control tuan-teams"  name="team_id" data-team-id="{{$team_id}}">
+                <option value="-1">请选择团队</option>
+            </select>
+        </div>
+        <div class="form-group" name="product_id">
+            <select class="form-control tuan-products" name="product_id" data-product-id="{{$product_id}}">
+                <option value="-1">选择商品</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select class="form-control tuan-type" name="cons_type">
+                <option value="-1">选择发货方式</option>
+                <option value="0">团满发货</option>
+                <option value="1">团满准备发货</option>
+                <option value="2">排期</option>
+            </select>
+        </div>
+        <br/>
+        <div class="form-group">
+          <input type="radio" name="status_type" class="status-type" value="-1" checked="checked"/>
+        </div>
+        <div class="form-group ">
+            <select class="form-control tuan-status" name="tuan_status">
+                <option value="-1">选择团购状态</option>
+                <option value="0" selected="selected">进行中</option>
+                <option value="1">已截单</option>
+                <option value="2">已取消</option>
+            </select>
+        </div>
+        <div class="form-group">
+          <input type="radio" name="status_type" class="status-type" value="11">已发货</input>
+        </div>
+        <div class="form-group">
+          <input type="radio" name="status_type" class="status-type" value="21">已退款</input>
+        </div>
+        <button type="submit" style="margin-left:10px;" class="btn btn-primary">查看团购</button>
+        <a href="/manage/admin/tuan_buyings/index?expired=true&&status_type=-1" style="margin-left:10px;" class="btn btn-warning">查看过期的团购</a>
+
+    </div>
+    <hr/>
+    <div>
+        <a class="btn btn-danger fl" id="batch_cancel" href="#">批量取消</a>&nbsp;&nbsp;&nbsp;
+        <a class="btn btn-success fl" id="batch_complete"  style="margin-left:10px;" href="#">批量截单</a>&nbsp;&nbsp;&nbsp;
+        <a  class="btn btn-primary fl" id= "batch_message" style="margin-left:10px;" href="#">批量短信</a>
+        <a  class="btn  btn-primary fl" id="batch_deliver" style="margin-left:10px;" href="#">批量发货</a>
+        <a href="/manage/admin/tuan_buyings/new" role="button" class="btn btn-primary fr">创建团购</a>&nbsp;&nbsp;
+    </div>
+    <hr/>
+</form>
+<table class="table table-bordered table-condensed table-responsive">
+    <thead>
+    <tr>
+        <td>选择<input type="checkbox" value="0" id="check_all_tb"></td><td>团购ID</td><td>团名称</td><td>商品/类别</td><td>发货类型</td><td>团购价</td><td>是否发布</td><td>参团人数</td><td>售出份数/目标</td><td>创建时间</td><td>是否截单(截单时间)</td><td>是否延期</td><td>发货/退款</td><td>操作</td>
+    </tr>
+    </thead>
+    <tbody>
+    {{loop $tuan_buyings $index $tuan_buying}}
+    <?php
+        $tuanBuying = $tuan_buying['TuanBuying'];
+        $tuanTeam = $tuan_buying['tuan_team'];
+        $tuanProduct = $tuan_buying['tuan_product'];
+        if($tuanBuying['status'] == 0){
+            $tuanStatus = '进行中';
+        }
+        elseif($tuanBuying['status'] == 1){
+            $tuanStatus = '已截单';
+        }
+        elseif($tuanBuying['status'] == 2){
+            $tuanStatus = '已取消';
+        }
+        elseif($tuanBuying['status'] == 11){
+            $tuanStatus = '已完成';
+        }
+        elseif($tuanBuying['status'] == 21){
+            $tuanStatus = '已退款';
+        }
+        $link = "/manage/admin/tuan/query_by_tuan_team?team_id=".$tuanTeam['id']."&&tuan_buying_id=".$tuanBuying['id'];
+    ?>
+    <tr data-id="{{$tuanBuying['id']}}" data-leader-name="{{$tuanTeam['leader_name']}}" data-leader-id="{{$tuanTeam['leader_id']}}" data-product-name="{{$tuanProduct[alias]}}" class="{{if $tuanBuying['status']==1}} warning {{elseif $tuanBuying['status']==11}} success {{elseif $tuanBuying['status']==2}} danger {{elseif $tuanBuying['status']==21}} active {{/if}}">
+        <td><input type="checkbox" value="{{$tuanBuying['id']}}" name="check_tuan_buy_id" data-id="{{$tuanBuying['status']}}"></td>
+        <td>{{$tuanBuying['id']}}</td>
+        <td>
+          {{$tuanTeam['tuan_name']}} <br/>
+          (<a href="{{$link}}">
+            {{if $tuan_buying['paid_orders_count'] > 0}}
+              {{$tuan_buying['paid_orders_count']}}个待发货
+            {{else}}
+              无待发货
+            {{/if}}
+          </a>)
+        </td>
+        <td>{{$tuanProduct['alias']}}/{{$tuanTeam['type']==1?大团:小团}}</td>
+        <td>
+          {{if $tuanBuying['consignment_type'] == 0}}
+            团满发货
+          {{elseif $tuanBuying['consignment_type'] == 1}}
+            团满准备发货
+          {{elseif $tuanBuying['consignment_type'] == 2}}
+            排期
+          {{else}}
+          {{/if}}</td>
+        <td>
+            {{if $tuanBuying['tuan_price'] > 0 }}
+                <strong class="text-warning">{{$tuanBuying['tuan_price']}}</strong>
+                <s class="text-muted">{{$tuanProduct['tuan_price']}}</s>
+            {{else}}
+                <strong class="text-muted">{{$tuanProduct['tuan_price']}}</strong>
+            {{/if}}
+        </td>
+        <td>{{$tuanBuying['published'] == 0 ? '否' : ''}}</td>
+        <td>{{$tuanBuying['join_num']}}</td>
+        <td class="{{if $tuanBuying['sold_num']<$tuanBuying['target_num']}} text-danger {{else}} text-success    {{/if}}">{{$tuanBuying['sold_num']}}/{{$tuanBuying['target_num']}}</td>
+        <td>{{$tuanBuying['created'] == ''?date('n.j H:i',strtotime($tuanBuying['end_time'])-2*24*60*60):date('n.j H:i',strtotime($tuanBuying['created']))}}
+            {{if $tuanBuying['status'] == 0}}
+            {{if $tuan_buying['create_msg_status'] == 'true'}}
+            <button type="button" class="btn btn-sm btn-info tuan-buying-sendmsg" data-id="{{$tuanBuying['id']}}">建团消息</button>
+            {{else}}
+            <span class="label label-info">{{$tuan_buying['create_msg_status']}}</span>
+            {{/if}}
+            {{else}}
+            <span class="label label-info">已发建团消息</span>
+            {{/if}}
+        </td>
+        <td>{{$tuanStatus}}({{date('n.j H:i',strtotime($tuanBuying['end_time']))}})
+            {{if $tuanBuying['status']==0}}
+            <button type="button" class="btn btn-sm btn-warning tuan-buying-due" data-id="{{$tuanBuying['id']}}" value="1">截单</button>
+            <button type="button" class="btn btn-sm btn-danger tuan-buying-canceled" data-id="{{$tuanBuying['id']}}" value="2">取消</button>
+            {{elseif $tuanBuying['status'] == 1}}
+            {{if $tuan_buying['complete_msg_status'] == 'true'}}
+            <button type="button" class="btn btn-sm btn-info tuan-buying-completemsg" data-id="{{$tuanBuying['id']}}" data-tuanBuying-id="{{$tuanBuying['status']}}">截单消息</button>
+            {{else}}
+            <span class="label label-info">{{$tuan_buying['complete_msg_status']}}</span>
+            {{/if}}
+            {{/if}}
+        </td>
+        <td>{{if $tuanBuying['status'] == 0}}
+            {{if $tuanBuying['sold_num']<$tuanBuying['target_num']}}
+            {{if $tuan_buying['tip_msg_status'] == 'true'}}
+            <a href="/manage/admin/tuan_msg/to_send_tuan_delay_msg/{{$tuanBuying['id']}}" target="_blank" class="btn btn-sm btn-info tuan-buying-delayemsg" data-id="{{$tuanBuying['id']}}" data-tuanBuying-id="{{$tuanBuying['status']}}">延期消息</a>
+            <button type="button" class="btn btn-sm btn-info tuan-buying-tipmsg" data-id="{{$tuanBuying['id']}}">提示消息</button>
+            {{else}}
+            <span class="label label-info">{{$tuan_buying['tip_msg_status']}}</span>
+            {{/if}}
+            {{else}}否
+            {{/if}}
+            {{else}}否
+            {{/if}}
+        </td>
+        <td>
+            {{if $tuanBuying['status']==2}}
+                待退款
+              <button type="button" class="btn btn-sm btn-danger tuan-buying-refunded" data-id="{{$tuanBuying['id']}}" value="1">退款完成</button>
+            {{if $tuan_buying['cancel_msg_status'] == 'true'}}
+              <button type="button" class="btn btn-sm btn-info tuan-buying-cancelmsg" data-id="{{$tuanBuying['id']}}">取消消息</button>
+            {{else}}
+              <span class="label label-info">{{$tuan_buying['cancel_msg_status']}}</span>
+            {{/if}}
+            {{elseif $tuanBuying['status']==21}}
+                已退款
+            {{elseif $tuanBuying['status']==1}}
+                待发货({{date('n.j',strtotime($tuanBuying['consign_time']))}})
+              {{if $tuan_buying['start_deliver_msg_status'] == 'true'}}
+                <button type="button" class="btn btn-sm btn-info tuanbuying-start-deliver" data-id="{{$tuanBuying['id']}}">配送消息</button>
+              {{else}}
+                <span class="label label-info">{{$tuan_buying['start_deliver_msg_status']}}</span>
+              {{/if}}
+              {{if $tuan_buying['notify_deliver_msg_status'] == 'true'}}
+                <button type="button" class="btn btn-sm btn-info tuanbuying-notify-deliver" data-tuanteam-address="{{$tuanTeam['address']}}" data-id="{{$tuanBuying['id']}}">到货消息</button>
+              {{else}}
+                <span class="label label-info">{{$tuan_buying['notify_deliver_msg_status']}}</span>
+              {{/if}}
+              <button type="button" class="btn btn-sm btn-warning tuan-buying-finished" data-id="{{$tuanBuying['id']}}" value="1">发货完成</button>
+            {{elseif $tuanBuying['status']==11}}
+                已发货({{date('n.j',strtotime($tuanBuying['consign_time']))}})
+                <button class="btn btn-primary add-points">加积分...</button>
+            {{elseif $tuanBuying['status']==1}}
+              {{if $tuanBuying['consign_time']==null}}
+              {{else}}
+                预计发货({{date('n.j',strtotime($tuanBuying['consign_time']))}})
+              {{/if}}
+            {{/if}}
+        </td>
+        <td>
+            {{if $tuanBuying['status']!=11 && $tuanBuying['status']!=21}}
+                <a role="button" class="btn btn-sm btn-default" href="/manage/admin/tuan_buyings/edit/{{$tuanBuying['id']}}">编辑...</a>
+                <a role="button" class="btn btn-sm btn-default" href="#">编辑物流...</a>
+            {{/if}}
+        </td>
+    </tr>
+    {{/loop}}
+    </tbody>
+</table>
+<a href="javascript:scroll(0,0)" class="returnTop" id="top" style="display: none;"><img src="{{$this->Html->assetUrl('/img/common/returnTop.png')}}" /></a>
+{{$this->Html->script(
+    array(
+        'vendor/jquery.ui.widget.js',
+        '//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js',
+        '//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js',
+        'jquery.iframe-transport.js',
+        'manage/tuan_buyings/index.js?v5',
+       '/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js',
+       '/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'
+
+    ));
+}}

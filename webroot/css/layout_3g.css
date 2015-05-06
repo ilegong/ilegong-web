@@ -156,7 +156,12 @@ ul.tags_menu {
     padding-left: 10px; padding-right: 10px;
 }
 
-
+dl {
+    margin-bottom: 0;
+}
+p {
+     margin-bottom: 0;
+}
 /* New UI version */
 footer {
     font-size: 0.833em;
@@ -526,7 +531,16 @@ a:hover, a:focus {
     z-index: 3;
 }
 
-
+/*确认订单*/
+.address { border-bottom: 1px #eeeeee solid; background-color: #ffffff; padding: 10px; margin-top: 43px; margin-bottom: 10px; line-height: 1.5em; color: #29ac0e; font-size: 1em; }
+.address_addbtn{ display: block; border: 1px #29ac0e solid; border-radius: 3px; width: 110px; height: 30px; line-height: 30px; color: #29ac0e; font-size: 1em; text-decoration: none; font-weight: bold; text-align: center;}
+.moreicon { position: absolute; top: 50%; margin-top: -0.7em; right: 0.6em; display: block; width: 0.667em; height: 1.334em; background: url(/img/mobile/pyshuo_icon.png) 0 -16.875em no-repeat; background-size: 25em 25em; }
+.order_shop_head{ line-height: 24px; text-decoration: none; padding: 9px 10px; background-color: #ffffff; border-top: 1px #eeeeee solid; border-bottom: 1px #eeeeee solid;}
+.order_shop_head img{ width: 1.7em; height: 1.7em; margin-right: 5px; border-radius: 3px;}
+.order_shop_head span{ display: block; float: left;}
+.favor{ display: block; text-decoration: none; font-size: 1em; border-bottom: 1px #eeeeee solid; color: #333333; padding: 12px 10px; background-color: #ffffff;}
+.leave_words{ padding: 9px 10px; background-color: #ffffff; border-bottom: 1px #eeeeee solid;}
+.leave_words input{ width: 100%;  line-height: 20px; padding: 5px 0; border: 0; border-radius: 3px; background: #eeeeee; font-size: 1em; font-weight: normal; color: #666666; text-indent: 5px; vertical-align: middle; -webkit-appearance: none; border: 1px #dddddd solid;}
 
 /*积分明细*/
 .jifen_detail{ margin-top: 43px;}
@@ -579,8 +593,8 @@ a:hover, a:focus {
 .conordertuan{ padding: 0 10px; background-color: #ffffff; margin-bottom: 10px; border-bottom: 1px #eeeeee solid;}
 .conordertuan_tel{ display: block; width: 100%; text-decoration: none; background-color: #fae8b5; height: 30px; line-height: 30px; overflow: hidden; text-align: center; font-size: 1em; color: #ff483a; margin-top: 43px;}
 .conordertuan h1,.conordertuan_contact h1{ margin: 0; font-size: 1.15em; color: #333333; padding-top: 10px; padding-bottom: 10px;}
-.conordertuan_adress{ padding-left: 1px;}
-.conordertuan ul{ float: left; width: 25%;}
+.conordertuan_adress { padding-left: 1px;margin-bottom: 10px;}
+.conordertuan ul {float: left;width: 25%;margin-bottom: 0;}
 .conordertuan ul li a{ display: block; border: 1px #dddddd solid; line-height: 35px; text-align: center; text-decoration: none; color:#333333; font-size: 1em; background-color: #ffffff; margin-top: -1px; margin-left: -1px;}
 .conordertuan ul li a.cur{ background-color: #29ac0e; color: #ffffff;}
 .conordertuan p{ color: #555555; line-height: 18px; padding: 10px 0; margin-top:-10px;}
@@ -594,4 +608,14 @@ a:hover, a:focus {
 .tuanadresslist{ padding-top: 43px;}
 .tuanadresslist p{ line-height: 18px; color: #555555; padding: 15px 10px; border-bottom: 1px #eeeeee solid; background-color: #ffffff;}
 
-
+/*自提点下单*/
+.conorder_ziti{ margin-bottom: 10px; margin-top: 43px;}
+.conorder_ziti h1{ margin: 0; font-size: 1.15em; color: #333333; padding: 13px 0 7px 10px;}
+.conorder_ziti dl{ border: 1px #eeeeee solid; border-top: 0; background-color: #ffffff;}
+.conorder_ziti dl dd{ padding: 10px; line-height: 18px; color: #555555; border-top: 1px #eeeeee solid;}
+.conorder_ziti dl dd.cur{ background-color: #29ac0e; color: #ffffff;}
+.shop_jifen { padding: 10px; border-top: 1px #eeeeee solid;border-bottom: 1px #eeeeee solid;font-size: 1em; color: #333333;line-height: 2em;background-color: #ffffff;}
+.shop_jifen ul { overflow: hidden;margin-bottom: 0px;}
+.shop_jifen_unused { border: 1px #999999 solid; width: 1.8em; height: 1.8em; border-radius: 5px;}
+.shop_jifen_used { border: 1px #29ac0e solid; width: 1.8em; height: 1.8em; position: relative; border-radius: 5px;}
+.shop_jifen_used i { display: block; width: 1.067em; height: 0.734em; position: absolute; top: 7px; left: 6px; background: url(/img/mobile/pyshuo_icon.png) -2.666em -14.333em no-repeat; background-size: 20em 20em; }

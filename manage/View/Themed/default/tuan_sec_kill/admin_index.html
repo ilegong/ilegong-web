@@ -1,0 +1,76 @@
+{{$this->Html->css(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css','bootstrap.min.css'))}}
+<ol class="breadcrumb">
+    <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+    <li class="active">秒杀管理</li>
+</ol>
+
+<form class="form-inline" data-noajax="true" method="get" action="/manage/admin/tuanSecKill/index">
+    <input type="hidden" name="noajax" value="true">
+    <div class="form-group">
+        <input type="text" name="product_id" class="form-control" id="product_id" value="{{$product_id}}" placeholder="产品ID">
+    </div>
+    <div class="form-group">
+        <input type="text" name="tuan_id" class="form-control" id="tuan_id" value="{{$tuan_id}}" placeholder="团队ID">
+    </div>
+    <div class="form-group">
+        <input type="text" name="start_time" class="form-control datetime" id="start_time" value="{{$start_time}}" placeholder="开始时间">
+    </div>
+    <div class="form-group">
+        <input type="text" name="end_time" class="form-control datetime" id="end_time" value="{{$end_time}}" placeholder="结束时间">
+    </div>
+    <button type="submit" class="btn btn-default">查询</button>
+</form>
+<a class="btn btn-default fr" href="/manage/admin/tuanSecKill/new">创建秒杀</a>
+<hr/>
+<br/><br/>
+<table class="table table-bordered table-condensed table-responsive" style="table-layout: fixed;">
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>商品</th>
+            <th>秒杀时间</th>
+            <th>规格</th>
+            <th>限制份数</th>
+            <th>售出份数</th>
+            <th>秒杀价格(分)</th>
+            <th>状态</th>
+            <th>团队ID</th>
+            <th>发货时间</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{loop $datas $item}}
+        <?php
+          $tryProduct = $item['ProductTry'];
+        ?>
+        <tr data-id="{{$tryProduct['id']}}">
+            <td>{{$tryProduct['id']}}</td>
+            <td>{{$tryProduct['product_id']}}/{{$tryProduct['product_name']}}</td>
+            <td>{{$tryProduct['start_time']}}</td>
+            <td>{{$tryProduct['spec']}}</td>
+            <td>{{$tryProduct['limit_num']}}</td>
+            <td>{{$tryProduct['sold_num']}}</td>
+            <td>{{$tryProduct['price']}}</td>
+            <td>
+                {{if $tryProduct['status'] == 1}}
+                  可用
+                {{else}}
+                  不可用
+                {{/if}}
+            </td>
+            <td style="word-wrap: break-word;">{{if !empty($item['team_ids'])}}{{$item['team_ids']}}{{else}}全部团队{{/if}}</td>
+            <td>{{$tryProduct['consignment_date']}}</td>
+            <td>
+                {{if $tryProduct['status'] == 1}}
+                <a class="btn btn-primary margin-right-10" href="/manage/admin/tuanSecKill/edit/{{$tryProduct['id']}}" role="button">编辑</a>
+                <a class="btn btn-danger" href="/manage/admin/tuanSecKill/delete/{{$tryProduct['id']}}" role="button">删除</a>
+                {{elseif $tryProduct['status'] == 0}}
+                <a class="btn btn-primary margin-right-10" href="/manage/admin/tuanSecKill/edit/{{$tryProduct['id']}}" role="button">编辑</a>
+                {{/if}}
+            </td>
+        </tr>
+        {{/loop}}
+    </tbody>
+</table>
+{{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}

@@ -929,7 +929,7 @@ class ApiOrdersController extends AppController {
             $imgNum ++;
         }
         $productTryM = ClassRegistry::init('ProductTry');
-        $tryingItems = $productTryM->find_trying(2);
+        $tryingItems = $productTryM->find_trying();
         $info = array('bannerItems' => $bannerItems, 'tryingItems' => $tryingItems, 'specTagItems' => $specTagItems, 'mainTagItems' => $mainTagItems, 'hotItems' => $hotItems);
         $this->set('info', $info);
         $this->set('_serialize','info');

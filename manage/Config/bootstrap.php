@@ -21,6 +21,11 @@ const WX_API_PREFIX = 'https://api.weixin.qq.com';
 const WX_OAUTH_USERINFO = 'snsapi_userinfo';
 const WX_OAUTH_BASE = 'snsapi_base';
 
+const ADD_SCORE_TUAN_LEADER=99;
+const ORDER_STATUS_PAID=1;
+const ORDER_TUANGOU=5;
+define('MSG_API_KEY', 'api:key-fdb14217a00065ca1a47b8fcb597de0d'); //发短信密钥
+
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
@@ -48,12 +53,11 @@ define('TUAN_TIP_MSG','tuan_tip_msg');
 define('TUAN_COMPLETE_MSG','tuan_complete_msg');
 define('TUAN_CANCEL_MSG','tuan_cancel_msg');
 define('TUAN_CREATE_MSG','tuan_create_msg');
+define('TUAN_STARTDELIVER_MSG','tuan_startdeliver_msg');
+define('TUAN_NOTIFYDELIVER_MSG','tuan_notifydeliver_msg');
 
 
 include_once COMMON_PATH.'bootstrap.php';
-
-const PRODUCT_ID_CAOMEI = 838;//草莓
-const PRODUCT_ID_MANGUO = 851;//海南空运芒果
 
 function oauth_wx_source() {
     return 'wx-' . WX_APPID_SOURCE;
@@ -78,7 +82,6 @@ function send_weixin_message($post_data, $logObj = null) {
             if (!empty($post_data)) {
                 $options[CURLOPT_POSTFIELDS] = json_encode($post_data);
             }
-
             curl_setopt_array($curl, ($options + $wx_curl_option_defaults));
             $json = curl_exec($curl);
             curl_close($curl);
@@ -100,11 +103,12 @@ function send_weixin_message($post_data, $logObj = null) {
 }
 
 
-function get_tuan_msg_element($tuan_buy_id){
+function get_tuan_msg_element($tuan_buy_id,$flag=true){
     $tuanBuyingM = ClassRegistry::init('TuanBuying');
     $tuanTeamM = ClassRegistry::init('TuanTeam');
     $productM = ClassRegistry::init('Product');
     $tuanMemberM = ClassRegistry::init('TuanMember');
+    $tuanOrderM = ClassRegistry::init('Order');
     $tb = $tuanBuyingM->find('first',array(
         'conditions' => array(
             'id' => $tuan_buy_id,
@@ -123,15 +127,32 @@ function get_tuan_msg_element($tuan_buy_id){
                 'id' => $product_id
             )
         ));
+        if($flag){                                        //flag is false, select all the tuan_members,otherwise we select tuan_members who have bought goods
+        $tuanOrders = $tuanOrderM->find('all',array(
+            'conditions' => array(
+                'member_id' => $tuan_buy_id,
+                'status' => ORDER_STATUS_PAID,
+                'type' => ORDER_TUANGOU,
+            )
+        ));
+         //cache it
+         $uids = Hash::extract($tuanOrders,'{n}.Order.creator');
+         $mobilephones = Hash::extract($tuanOrders,'{n}.Order.consignee_mobilephone');
+        }else{
         $tuan_members = $tuanMemberM->find('all', array(
             'conditions' => array(
                 'tuan_id' => $tuan_id
             )
         ));
+         //cache it
+         $uids = Hash::extract($tuan_members,'{n}.TuanMember.uid');
+         $mobilephones = '';
+        }
         $consign_time = $tb['TuanBuying']['consign_time'];
         $consign_time = friendlyDateFromStr($consign_time,FFDATE_CH_MD);
-        $uids = Hash::extract($tuan_members,'{n}.TuanMember.uid');
+
         $tuan_name = $tt['TuanTeam']['tuan_name'];
+        $tuan_addr = $tt['TuanTeam']['tuan_addr'];
         $product_name = $p['Product']['name'];
         $tuan_leader = $tt['TuanTeam']['leader_name'];
         $target_num = $tb['TuanBuying']['target_num'];
@@ -142,12 +163,56 @@ function get_tuan_msg_element($tuan_buy_id){
             'target_num' => $target_num,
             'sold_num' => $sold_num,
             'uids'=>$uids,
+            'team_id' => $tt['TuanTeam']['id'],
             'tuan_name' => $tuan_name,
             'product_name' => $product_name,
             'tuan_leader' => $tuan_leader,
-            'tuan_buy_status' => $tb_status
+            'tuan_buy_status' => $tb_status,
+            'consignee_mobilephones' => $mobilephones,
+            'tuan_addr' => $tuan_addr
         );
     }else{
         return null;
     }
+}
+
+/**
+ * 取全部团购商品
+ * @return mixed
+ */
+function getTuanProductsAsJson(){
+    $tuanProducts = Cache::read('tuan_products');
+    if(empty($tuanProducts)){
+        $tuanProductM = ClassRegistry::init('TuanProduct');
+        $tuanProducts = $tuanProductM->find('all',array(
+            'conditions' => array(
+                'deleted' => DELETED_NO
+            ),
+            'order' => 'priority desc'
+        ));
+        $tuanProducts = json_encode($tuanProducts);
+        Cache::write('tuan_products',$tuanProducts);
+
+    }
+    return $tuanProducts;
+}
+
+function getTuanProducts(){
+    return json_decode(getTuanProductsAsJson(),true);
+}
+
+function message_send($msg = null, $mobilephone = null) {
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "http://sms-api.luosimao.com/v1/send.json");
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_HEADER, FALSE);
+    curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    curl_setopt($ch, CURLOPT_USERPWD, MSG_API_KEY);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, array('mobile' => $mobilephone, 'message' => $msg . '【朋友说】'));
+    $res = curl_exec($ch);
+    //{"error":0,"msg":"ok"}
+    curl_close($ch);
+    return $res;
 }

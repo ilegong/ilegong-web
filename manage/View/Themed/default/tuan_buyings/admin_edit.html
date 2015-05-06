@@ -1,0 +1,122 @@
+{{$this->Html->css(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css'))}}
+<ol class="breadcrumb">
+  <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+  <li><a href="/manage/admin/tuan_products/index">团购管理</a></li>
+  <li class="active">编辑团购</li>
+</ol>
+
+<div class="container">
+    <?php
+      $tuanBuying = $this->data[TuanBuying];
+    ?>
+
+    <form class="form-horizontal tuan-buying-form" method="post" action="/manage/admin/tuanBuyings/update/{{$id}}" novalidate="novalidate" data-noajax="true">
+        <input name="data[TuanBuying][id]" value="{{$id}}" type="hidden">
+
+        <div class="form-group">
+            <label class="col-sm-2 control-label">团购商品ID</label>
+            <div class="col-sm-9 controls">
+                <input type="text" class="form-control" name="data[TuanBuying][pid]" value="{{$tuanBuying[pid]}}" disabled="disabled"/>
+                <div class="text-warning">示例：'838'=>'草莓', '851' => '芒果', '862'=>'蛋糕', '863' => '草莓863', '230' => '蛋糕230'</div>
+            </div>
+        </div>
+        <div class="form-group">
+          <label for="consignment_type" class="col-sm-2 control-label">发货类型</label>
+          <div class="col-sm-9">
+            <select class="form-control consignment-type" name="data[TuanBuying][consignment_type]" id="consignment_type">
+              <option value="0" {{if $tuanBuying[consignment_type] == 0 }}selected = 'selected'{{/if}}>团满发货</option>
+              <option value="1" {{if $tuanBuying[consignment_type] == 1 }}selected = 'selected'{{/if}}>团满准备发货</option>
+              <option value="2" {{if $tuanBuying[consignment_type] == 2 }}selected = 'selected'{{/if}}>排期</option>
+            </select>
+            <div class="text-warning">团满发货：如草莓、蛋糕，团满**份按发货时间送到</div>
+            <div class="text-warning">团满准备发货：如芒果、金菠萝，团满**份开始采摘，准备发货</div>
+            <div class="text-warning">排期：固定发货时间，如每周二四六</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-sm-2 control-label">是否发布</label>
+          <div class="col-sm-9 controls">
+            <input type="checkbox" name="data[TuanBuying][published]" {{if $tuanBuying[published] == 1}}checked='checked'{{/if}} value="1"/>
+            <div class="text-warning">不发布，则不显示在美食团的列表页面</div>
+          </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">团购价格</label>
+            <div class="col-sm-9 controls">
+              <input type="text" class="form-control tuan-price" name="data[TuanBuying][tuan_price]" value="{{$tuanBuying[tuan_price]}}"/>
+              <div class="text-warning">-1代表不设置，直接使用该团购商品的价格</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">参团人数</label>
+            <div class="col-sm-9 controls">
+                <input type="text" class="form-control" name="data[TuanBuying][join_num]" value="{{$tuanBuying[join_num]}}" disabled="disabled"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">售出份数</label>
+            <div class="col-sm-9 controls">
+              <input type="text" class="form-control" name="data[TuanBuying][sold_num]" value="{{$tuanBuying[sold_num]}}" disabled="disabled"/>
+            </div>
+         </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">截止时间</label>
+            <div class="col-sm-9 controls" data-date="{{$tuanBuying[end_time]}}" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_end_time">
+                <div class="input-group date form_datetime">
+                  <input class="form-control tuan-end-time" size="16" type="text" value="{{$tuanBuying[end_time]}}" name="data[TuanBuying][end_time]" id="tuan_end_time">
+                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+                <div class="text-warning">一般为发货时间的前一天17：00</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">发货时间</label>
+            <div class="col-sm-9 controls" data-date="{{$tuanBuying[consign_time]}}" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_consign_time">
+                <div class="input-group date form_datetime" data-date="{{$tuanBuying[consign_time]}}" data-date-format="yyyy-mm-dd hh:ii:ss" data-link-field="tuan_consign_time">
+                  <input class="form-control consignment-time" size="16" type="text" value="{{$tuanBuying[consign_time]}}" name="data[TuanBuying][consign_time]" id="tuan_consign_time">
+                  <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                  <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
+                <div class="text-danger">!!!排期：不需要设置此值；团满发货或团满采摘：请务必设置此值!!!</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">目标份数</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanBuying][target_num]" value="{{$tuanBuying[target_num]}}" class="form-control tuan-target-num" type="text">
+                <div class="text-warning">默认20份</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">限制总份数</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanBuying][max_num]" value="{{$tuanBuying[max_num]}}" class="form-control" type="text">
+                <div class="text-warning">是否限制总份数，0为不限制</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">每人限购份数</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanBuying][limit_buy_num]" value="{{$tuanBuying[limit_buy_num]}}" class="form-control" type="text">
+                <div class="text-warning">是否限制每个人购买的分数，0为不限制</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">团购状态</label>
+            <div class="col-sm-9 controls">
+                <input name="data[TuanBuying][status]" value="{{if $tuanBuying[status]==0}}进行中{{elseif $tuanBuying[status]==1}}已完成{{elseif $tuanBuying[status]==2}}已取消{{/if}}" class=" form-control " type="text" disabled="disabled">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12 col-sm-offset-2">
+                <a href="/manage/admin/tuanBuyings/tuan_buyings" class="btn btn-default">取消</a>
+                <input class="btn btn-primary" type="submit" value="保存">
+            </div>
+        </div>
+        <!--{{$this->Form->end();}}-->
+    </form>
+</div>
+{{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
+{{$this->Html->script(array('manage/tuan_buyings/edit.js?v3'))}}

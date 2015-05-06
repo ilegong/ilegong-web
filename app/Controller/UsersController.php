@@ -704,6 +704,10 @@ class UsersController extends AppController {
         $this->loadModel('Shichituan');
         $result = $this->Shichituan->findByUser_id($uid,array('Shichituan.shichi_id','Shichituan.status','Shichituan.pictures','Shichituan.period'),'Shichituan.shichi_id DESC');
         $this->set('result',$result);
+
+        $mOrder = ClassRegistry::init('Order');
+        $received_cnt = $mOrder->count_received_order($this->currentUser['id']);
+        $this->set('received_cnt', $received_cnt);
     }
 
     /**
@@ -1114,6 +1118,7 @@ class UsersController extends AppController {
         $current_post_num = $this->Session->read('current_register_phone');
         $codeLog = json_decode($msgCode, true);
         $user_info= array();
+        $res = array();
         if ($codeLog && is_array($codeLog) && $codeLog['code'] == $readCode && (time() - $codeLog['time'] < 30 * 60)) {
             $user_info['User']['mobilephone'] = $mobile_num;
             $user_info['User']['id'] = $this->currentUser['id'];
@@ -1138,6 +1143,13 @@ class UsersController extends AppController {
                 if ($this->User->save($user_info)) {
                     $this->Session->write('Auth.User.mobilephone',$mobile_num);
                     $res = array('success'=> true, 'msg'=>'你的账号和手机号绑定成功');
+
+                    $urM = ClassRegistry::init('Refer');
+                    if($urM->be_referred_and_new($this->currentUser['id'])) {
+                        $urM->update_referred_bind($this->currentUser['id'], $this->currentUser['nickname']);
+                        $res['referred'] = true;
+                    }
+
                 } else {
                     $res = array('success'=> false, 'msg'=>'绑定失败，数据库忙');
                 }
@@ -1162,10 +1174,10 @@ class UsersController extends AppController {
         $userNickName = $this->Session->read('Auth.User.nickname');
         $orderId = $_REQUEST['order_id'];
         $from = $_REQUEST['from'];
-        $this->set('userId',$userId);
-        $this->set('nickname',$userNickName);
-        $this->set('orderId',$orderId);
-        $this->set('from',$from);
+        $this->set('userId', $userId);
+        $this->set('nickname', $userNickName);
+        $this->set('orderId', $orderId);
+        $this->set('from', $from);
         $short_intro = $_REQUEST['reason'];
         $ref_url = $_REQUEST['ref'];
 

@@ -58,8 +58,8 @@ class Order extends AppModel {
 
         }
     }
-    public function createTuanOrder($memberId, $uid, $fee, $product_id, $type = ORDER_TYPE_TUAN, $area='', $address='', $mobile='', $name='', $cart_id) {
-        if ($type != ORDER_TYPE_TUAN && $type != ORDER_TYPE_MILK) {
+    public function createTuanOrder($memberId, $uid, $fee, $product_id, $type = ORDER_TYPE_TUAN, $area='', $address='', $mobile='', $name='', $cart_id,$ship_mark,$shop_name, $shop_id=0) {
+        if ($type != ORDER_TYPE_TUAN && $type != ORDER_TYPE_TUAN_SEC) {
             throw new CakeException("error order type:".$type);
         }
         $product = ClassRegistry::init('Product')->find('first', array(
@@ -68,19 +68,47 @@ class Order extends AppModel {
         ));
         $brand_id = empty($product)? 0 : $product['Product']['brand_id'];
 
-        $arr = array(
-            'creator' => $uid,
-            'total_price' => $fee,
-            'total_all_price' => $fee,
-            'type' => $type,
-            'brand_id' => $brand_id,
-            'member_id' => $memberId,
-            'consignee_area' => $area,
-            'consignee_name' => $name,
-            'consignee_address' => $address,
-            'consignee_mobilephone' => $mobile,
-            'status' => ORDER_STATUS_WAITING_PAY
-        );
+        if($type==ORDER_TYPE_TUAN_SEC){
+            $arr = array(
+                'creator' => $uid,
+                'total_price' => $fee,
+                'total_all_price' => $fee,
+                'type' => $type,
+                'brand_id' => $brand_id,
+                'try_id' => $memberId,
+                'consignee_area' => $area,
+                'consignee_name' => $name,
+                'consignee_address' => $address,
+                'consignee_mobilephone' => $mobile,
+                'ship_mark' => $ship_mark,
+                'status' => ORDER_STATUS_WAITING_PAY,
+                'remark' => $shop_name
+            );
+        }
+
+        if($type==ORDER_TYPE_TUAN){
+            $arr = array(
+                'creator' => $uid,
+                'total_price' => $fee,
+                'total_all_price' => $fee,
+                'type' => $type,
+                'brand_id' => $brand_id,
+                'member_id' => $memberId,
+                'consignee_id' => $shop_id,
+                'consignee_area' => $area,
+                'consignee_name' => $name,
+                'consignee_address' => $address,
+                'consignee_mobilephone' => $mobile,
+                'ship_mark' => $ship_mark,
+                'status' => ORDER_STATUS_WAITING_PAY,
+                'remark' => $shop_name
+            );
+        }
+
+        if(empty($arr)){
+            return null;
+        }
+
         $order = $this->save($arr);
         if (!empty($order)) {
             $cartM = ClassRegistry::init('Cart');
@@ -177,7 +205,7 @@ class Order extends AppModel {
         }
 
         if ($only_normal_type) {
-            $cond['type'] = array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN,ORDER_TYPE_MILK);
+            $cond['type'] = array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN,ORDER_TYPE_TUAN_SEC);
         }
 
         $orders = $this->find('all', array(
@@ -241,6 +269,12 @@ class Order extends AppModel {
         ));
     }
 
+    public function count_received_order($uid) {
+        return $this->find('count', array(
+            'conditions' => array('creator' => $uid, 'status' => array(ORDER_STATUS_RECEIVED)),
+        ));
+    }
+
     public function count_to_confirm_received($uid) {
         $result = $this->query('select count(1) as cnt, ifnull(sum(floor(total_all_price)), 0) as total_price from cake_orders where status='.ORDER_STATUS_SHIPPED.' and creator='.$uid.' and deleted='.DELETED_NO.' and published='.PUBLISH_YES);
         return array($result[0][0]['cnt'], $result[0][0]['total_price']);
@@ -300,6 +334,16 @@ class Order extends AppModel {
                         $userM = ClassRegistry::init('User');
                         $userM->add_score($creator, $rtn['Score']['score']);
                     }
+
+                    $urM = ClassRegistry::init('Refer');
+                    $this->log("debug: before update_referred_new_order");
+                    try {
+                        $urM->test();
+                        $urM->update_referred_new_order($creator);
+                    }catch (Exception $e){
+                        $this->log("error:".$e);
+                    }
+                    $this->log("debug: end update_referred_new_order");
                 }
             } else if ($origStatus == ORDER_STATUS_WAITING_PAY && $toStatus == ORDER_STATUS_CANCEL) {
                 $order = $this->findById($order_id);

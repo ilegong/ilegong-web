@@ -39,9 +39,6 @@ const PRODUCT_ID_CAKE_FRUITS = 657;
 const PRODUCT_ID_RICE_10 = 231;
 const TRACK_TYPE_PRODUCT_RICE = 'rebate_231';
 const PRODUCT_ID_JD_HS_NZT = 484; //经典花生牛轧糖
-const PRODUCT_ID_CAOMEI = 838;//草莓
-const PRODUCT_ID_MANGUO = 851;//海南空运芒果
-const PRODUCT_ID_MILK = 852;//酸奶
 
 const PRODUCT_ID_RICE_BRAND_10 = 13;
 
@@ -64,7 +61,7 @@ const COUPON_TYPE_TYPE_MAN_JIAN = 3;
 
 const ERROR_CODE_USER_DUP_MOBILE = 801;
 
-const VAL_PRODUCT_NAME_MAX_LEN = 30; //商品名称的最大长度
+const VAL_PRODUCT_NAME_MAX_LEN = 60; //商品名称的最大长度
 
 CONST PUBLISH_YES = 1;
 CONST PUBLISH_NO = 0;
@@ -89,7 +86,7 @@ const CART_ITEM_TYPE_QUICK_ORDER = 2;
 const CART_ITEM_TYPE_TRY = 3;
 const CART_ITEM_TYPE_GROUPON_PROM = 4;
 const CART_ITEM_TYPE_TUAN = 5;//团购加入购物车类型
-const CART_ITEM_TYPE_MILK = 6;//酸奶加入购物车类型，以便订单查询
+const CART_ITEM_TYPE_TUAN_SEC = 6;
 
 const SHICHI_STATUS_OK = 1;
 const SHICHI_STATUS_APPLY = 0;
@@ -129,6 +126,7 @@ define('ORDER_STATUS_CONFIRMED', 11); //已确认有效，不要再用
 define('ORDER_STATUS_TOUSU', 12); //已投诉， 不要再用，投诉走其他流程
 
 define('ORDER_STATUS_COMMENT', 16); //待评价
+define('ORDER_STATUS_RETURNING_MONEY',14);//退款中
 
 define('ON_SHELVE', PUBLISH_YES); //已上架
 define('OFF_SHELVE', PUBLISH_NO); //下架
@@ -145,7 +143,8 @@ const TYPE_MUL_NUMS = 4; //每件相乘
 
 const STATUS_GROUP_MEM_PAID = 1;
 const STATUS_GROUP_REACHED = 1;
-
+//团购地址地址
+const STATUS_CONSIGNEES_TUAN = 2;
 define('CATEGORY_ID_TECHAN', 114);
 
 define('PAYLOG_STATUS_NEW', 0);
@@ -172,7 +171,7 @@ define('PROFILE_NICK_LEN', 16);
 define('PROFILE_NICK_MIN_LEN', 2);
 define('MSG_API_KEY', 'api:key-fdb14217a00065ca1a47b8fcb597de0d'); //发短信密钥
 define('APP_REGISTER_MARK', 11); //APP注册用户标示
-
+define('SERVICE_LINE_PHONE','010-56245991');
 define('SERVICE_LINE', '<a href="tel:01056245991">010-56245991</a>');
 
 global $page_style;
@@ -197,6 +196,7 @@ $source_appid_map = array();
 
 $order_after_paid_status = array(ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED);
 
+
 function oauth_wx_source() {
     return 'wx-' . WX_APPID_SOURCE;
 }
@@ -215,6 +215,8 @@ function oauth_wx_goto($refer_key, $host3g) {
             return "http://$host3g/users/my_offers.html";
         case "CLICK_URL_SHICHI_APPLY":
             return "http://$host3g/shichituans/apply.html";
+        case "CLICK_URL_REFER":
+            return "http://$host3g/refer/index.html";
         default:
     }
     return "$host3g";
@@ -310,8 +312,7 @@ function promo_code_new_user($pids) {
  * @param null $pp special price by ShipPromotion
  * @return array array of price && specialId
  */
-function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null,$tuan_buy_id=null) {
-
+function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null,$tuan_param=array()) {
 
     if (accept_user_price_pid($pid) && accept_user_price_pid_num($pid, $num) && !empty($cart_id)) {
         $userPrice = ClassRegistry::init('UserPrice');
@@ -326,6 +327,8 @@ function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null,
 
     }
 
+    $tuan_buy_id = $tuan_param['tuan_buy_id'];
+    //优先级 first
     if(!empty($tuan_buy_id)){
         $tuanBuyM = ClassRegistry::init('TuanBuying');
         $tuanBuy = $tuanBuyM->find('first',array(
@@ -337,6 +340,14 @@ function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null,
         $tuan_price = floatval($tuan_price);
         if($tuan_price>=0){
             return array($tuan_price,);
+        }
+    }
+    //优先级 second
+    $tuan_product_id = $tuan_param['product_id'];
+    if(!empty($tuan_product_id)){
+        $tuan_product_price = getTuanProductPrice($tuan_product_id);
+        if($tuan_product_price>=0){
+            return array($tuan_product_price,);
         }
     }
 
@@ -394,14 +405,19 @@ class ProductCartItem extends Object {
     public $num;
     public $price;
     public $name;
+    public $img;
 
-    public function __construct($cartId, $itemPrice, $num, $used_coupons, $name, $pid) {
-        $this->cartId = $cartId;
-        $this->pid = $pid;
+    public function __construct($cartItem, $itemPrice, $num, $used_coupons, $pid, $published=true) {
+        $this->cartId = $cartItem['id'];
+        $this->pid = $cartItem['product_id'];
         $this->price = $itemPrice;
         $this->num = $num;
-        $this->name = $name;
+        $this->name = $cartItem['name'];
         $this->used_coupons = $used_coupons;
+        $this->published = $published;
+        $this->img = $cartItem['coverimg'];
+        $this->specId = $cartItem['specId'];
+        $this->consignment_date = $cartItem['consignment_date'];
     }
 
     public function total_price() {
@@ -481,13 +497,13 @@ class OrderCartItem {
      */
     public $brandItems = array();
 
-    public function add_product_item($brand_id, $cartId, $itemPrice, $num, $used_coupons, $name, $pid) {
+    public function add_product_item($brand_id, $cartItem, $itemPrice, $num, $used_coupons,$published=true) {
         $brandItem = $this->brandItems[$brand_id];
         if (empty($brandItem)) {
             $brandItem = new BrandCartItem($brand_id);
             $this->brandItems[$brand_id] = $brandItem;
         }
-        $brandItem->add_product_item(new ProductCartItem($cartId, $itemPrice, $num, $used_coupons, $name, $pid));
+        $brandItem->add_product_item(new ProductCartItem($cartItem, $itemPrice, $num, $used_coupons,$published));
     }
 
     public function find_product_item($cartId) {
@@ -703,7 +719,7 @@ class ProductCategory {
             $productCategoryList = $productCategoryModel->find('all', array('conditions' => array(
                 'show_in_home' => 1,
                 'published' => 1
-            ),
+                ),
                 'order' => 'priority desc'
             ));
             $conditions = array('Product' . '.deleted' => 0, 'Product' . '.published' => 1);
@@ -1257,7 +1273,7 @@ function consignment_send_date($p_id) {
         $dt = DateTime::createFromFormat(FORMAT_DATE, $date['ConsignmentDate']['send_date']);
         $id = $date['ConsignmentDate']['id'];
         if (!empty($dt)) {
-            $rtn[] = array('date' => date(FORMAT_DATE_YUE_RI_HAN, $dt->getTimestamp()), 'id' => $id);
+            $rtn[] = array('send_date' => $date['ConsignmentDate']['send_date'], 'date' => date(FORMAT_DATE_YUE_RI_HAN, $dt->getTimestamp()), 'id' => $id);
         }
     }
     return $rtn;
@@ -1496,6 +1512,7 @@ function get_spec_by_pid_and_sid($pidSidMap) {
                 )
             ));
             if (!empty($specGroup)) {
+                //no published use default price
                 $price = $specGroup['ProductSpecGroup']['price'];
                 $spec_names = $specGroup['ProductSpecGroup']['spec_names'];
             }
@@ -1637,3 +1654,68 @@ function prepare_wx_share_log($currUid, $date_type, $data_id){
     return array('signPackage' => $signPackage, 'share_string' => urlencode($share_code));
 }
 
+function getTuanProductsAsJson(){
+//    $tuanProducts = Cache::read('tuan_products');
+//    if(empty($tuanProducts)){
+        $tuanProductM = ClassRegistry::init('TuanProduct');
+        $tuanProducts = $tuanProductM->find('all',array(
+            'conditions' => array(
+                'deleted' => DELETED_NO
+            ),
+            'order' => 'priority desc'
+        ));
+        $tuanProducts = json_encode($tuanProducts);
+//        Cache::write('tuan_products',$tuanProducts);
+//    }
+    return $tuanProducts;
+}
+
+function getTuanProducts(){
+    return json_decode(getTuanProductsAsJson(),true);
+}
+
+function getTuanProductPrice($pid){
+    $product_price_map = Hash::combine(getTuanProducts(),'{n}.TuanProduct.product_id','{n}.TuanProduct.tuan_price');
+    return floatval($product_price_map[$pid]);
+}
+//同类商品评论共享
+function get_group_product_ids($pid){
+    $egg_product = array(896, 818, 161);
+    $cake_product = array(877, 869, 862);
+    $comosus_product = array(925,905,851);
+    if(in_array($pid,$egg_product)){
+        return $egg_product;
+    }
+    if(in_array($pid,$cake_product)){
+        return $cake_product;
+    }
+    if(in_array($pid,$comosus_product)){
+        return $comosus_product;
+    }
+    return $pid;
+}
+
+function search_spec($spec_ids){
+    if(count($spec_ids)!=1 || !empty($spec_ids[0])){
+        $specM = ClassRegistry::init('ProductSpecGroup');
+        $spec_groups = $specM->find('all',array(
+            'conditions' => array(
+                'id' => $spec_ids
+            )
+        ));
+        return Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
+    }
+    return null;
+}
+function search_consignment_date($consign_ids){
+    if(count($consign_ids)!=1 || !empty($consign_ids[0])){
+        $consignM =ClassRegistry::init('ConsignmentDate');
+        $consign_dates = $consignM->find('all',array(
+            'conditions' => array(
+                'id' => $consign_ids
+            )
+        ));
+        return  Hash::combine($consign_dates,'{n}.ConsignmentDate.id','{n}.ConsignmentDate.send_date');
+    }
+    return null;
+}

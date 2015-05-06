@@ -6,18 +6,46 @@
  * Time: 下午6:29
  */
 class TuanTeamsController extends AppController{
+
     public function mei_shi_tuan(){
         $this->pageTitle = '美食团';
+        $area_id = $_REQUEST['area_id'];
+        $current_user_id = $this->currentUser['id'];
+        $this->loadModel('TuanMember');
+        //user is login
+        if(!empty($current_user_id)){
+            $my_tuans = $this->TuanMember->find('all',array(
+                'conditions' => array(
+                    'uid' => $current_user_id
+                ),
+                'order' => 'join_time DESC'
+            ));
+            $my_tuan_ids = Hash::extract($my_tuans,'{n}.TuanMember.tuan_id');
+        }
         $tuan_teams = $this->TuanTeam->find('all', array(
-            'conditions' =>array('status'=> 0, 'type' => 0),
+            'conditions' =>array('published'=> PUBLISH_YES, 'type' => 0),
             'order' => array('TuanTeam.priority DESC')
         ));
+        $left_tuan_ids = Hash::extract($tuan_teams,'{n}.TuanTeam.id');
+        if(!empty($my_tuan_ids)){
+            $this->set('my_tuan_ids',$my_tuan_ids);
+            $left_tuan_ids = array_diff($left_tuan_ids,$my_tuan_ids);
+        }
+        $tuan_teams = Hash::combine($tuan_teams,'{n}.TuanTeam.id','{n}.TuanTeam');
+        $this->set('left_tuan_ids',$left_tuan_ids);
         $this->set('tuan_teams',$tuan_teams);
         $this->set('op_cate','mei_shi_tuan');
+        if(!empty($area_id)){
+            $this->set('area_id',$area_id);
+        }
     }
+
     public function info($tuan_id){
         $tuan_team = $this->TuanTeam->find('first', array(
-            'conditions' =>array('id'=> $tuan_id),
+            'conditions' =>array(
+                'id'=> $tuan_id,
+                'published' => PUBLISH_YES
+            ),
         ));
         if(empty($tuan_team)){
             $message = '该团不存在';
@@ -25,55 +53,108 @@ class TuanTeamsController extends AppController{
             $this->__message($message, $url);
             return;
         }
+        $this->pageTitle = $tuan_team['TuanTeam']['tuan_name'];
         $this->loadModel('TuanBuying');
+
+        //get buying tuan
         $tuan_buyings = $this->TuanBuying->find('all', array(
-            'conditions' => array('tuan_id' => $tuan_id),
+            'conditions' => array('tuan_id' => $tuan_id,'status'=>0, 'published'=>1),
             'order' => array('TuanBuying.end_time DESC'),
         ));
         $pids = array_unique(Hash::extract($tuan_buyings, '{n}.TuanBuying.pid'));
+
+        $this->loadModel('Product');
         if(!empty($pids)){
-            $this->loadModel('Product');
-            $product_info = $this->Product->find('all', array(
-                'conditions' => array('id' => $pids),
-                'fields' => array('id',  'name', 'coverimg')
+            $this->loadModel('TuanProduct');
+            $tuan_product_infos = $this->TuanProduct->find('all',array(
+                'conditions' => array(
+                    'product_id' => $pids
+                ),
+                'order' => 'priority desc'
             ));
-            $product_info = Hash::combine($product_info, '{n}.Product.id', '{n}.Product');
-            $this->set('product_info', $product_info);
+            $product_infos = $this->Product->find('all', array(
+                'conditions' => array('id' => $pids),
+                'fields' => array('id', 'name', 'coverimg', 'price', 'original_price')
+            ));
+
+            $product_infos = Hash::combine($product_infos, '{n}.Product.id', '{n}.Product');
+            $tuan_product_infos = Hash::combine($tuan_product_infos,'{n}.TuanProduct.product_id','{n}.TuanProduct');
+            $this->set('tuan_product_infos',$tuan_product_infos);
+            $this->set('product_infos', $product_infos);
+            $tb_product_map = Hash::combine($tuan_buyings,'{n}.TuanBuying.pid','{n}.TuanBuying');
+            $this->set('tb_product_map',$tb_product_map);
         }else{
             $this->set('no_tuan_buy', true);
         }
+        //add sec kill
+        $this->loadModel('ProductTry');
+        $ProductTuanTryM = ClassRegistry::init('ProductTuanTry');
+        $tryings = $this->ProductTry->find_trying();
+        if (!empty($tryings)) {
+            $trying_result = array();
+            $try_pids = Hash::extract($tryings, '{n}.ProductTry.product_id');
+            $this->loadModel('TuanProduct');
+            $t_products = $this->TuanProduct->find('all',array(
+                'conditions' => array(
+                    'product_id' => $try_pids
+                )
+            ));
+            $t_products = Hash::combine($t_products,'{n}.TuanProduct.product_id','{n}.TuanProduct');
+            $tryProducts = $this->Product->find_products_by_ids($try_pids, array(), false);
+            if (!empty($tryProducts)) {
+                foreach($tryings as &$trying) {
+//                    $try_tuan_id = $trying['ProductTry']['tuan_id'];
+
+                    $try_id = $trying['ProductTry']['id'];
+                    $global_show = $trying['ProductTry']['global_show'];
+                    $pid = $trying['ProductTry']['product_id'];
+                    $prod = $tryProducts[$pid];
+                    if (!empty($prod)) {
+                        $trying['Product'] = $prod;
+                        $trying['image'] = $t_products[$pid]['list_img'];
+//                        if(!empty($try_tuan_id)&&$try_tuan_id!=$tuan_id){
+//                            continue;
+//                        }
+                        if($global_show== '0'){
+                            $product_tuan_try = $ProductTuanTryM->find('all',array('conditions' => array('try_id' => $try_id)));
+                            $product_tuan_tryIds = Hash::extract($product_tuan_try,'{n}.ProductTuanTry.team_id');
+                            if(!empty($product_tuan_tryIds)&&!in_array($tuan_id,$product_tuan_tryIds)){
+                                continue;
+                            }
+                        }
+                        $trying_result[] = $trying;
+                    } else {
+                        unset($trying);
+                    }
+                }
+            }
+            $tryings = $trying_result;
+        }
+
         if($this->is_weixin()){
             $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
             $weixinJs = prepare_wx_share_log($currUid, 'tid', $tuan_id);
             $this->set($weixinJs);
             $this->set('jWeixinOn', true);
         }
-        $referer = Router::url($_SERVER['REQUEST_URI']);
-        if($_GET['has_joined'] == 'success'){
-            $uid = $this->currentUser['id'];
-            $this->loadModel('TuanMember');
-            $is_member = $this->TuanMember->hasAny(array('uid' => $uid, 'tuan_id' => $tuan_id));
-            if(!$is_member){
-                $data['tuan_id'] =  $tuan_id;
-                $data['uid'] = $uid;
-                $data['join_time'] = date('Y-m-d H:i:s');
-                $this->TuanMember->save($data);
-                $this->TuanTeam->update(array('member_num' => 'member_num + 1'), array('id' => $tuan_id));
-                $tuan_team['TuanTeam']['member_num'] = $tuan_team['TuanTeam']['member_num'] + 1;
-            }
-            $this->set('new_join', true);
+
+        $current_user_id = $this->currentUser['id'];
+        $this->loadModel('TuanMember');
+        //user is login
+        if(!empty($current_user_id)){
+            $is_join = $this->TuanMember->find('all',array(
+                'conditions' => array(
+                    'uid' => $current_user_id,
+                    'tuan_id' => $tuan_id
+                )
+            ));
         }
-        if($this->currentUser['id']){
-            $this->loadModel('TuanMember');
-            $has_joined = $this->TuanMember->hasAny(array('tuan_id' => $tuan_id, 'uid' => $this->currentUser['id']));
-            $this->set('has_joined', $has_joined);
-        }
-        $this->pageTitle = $tuan_team['TuanTeam']['tuan_name'];
+        $this->set('is_join',$is_join);
+        $this->set('tryings',$tryings);
         $this->set('tuan_id', $tuan_id);
         $this->set('tuan_team', $tuan_team);
         $this->set('tuan_buyings', $tuan_buyings);
         $this->set('hideNav',true);
-        $this->set('referer', $referer);
     }
 
     public function join(){
@@ -84,22 +165,20 @@ class TuanTeamsController extends AppController{
             if(empty($uid)){
                 $is_oauth = false;
             }else{
-                $is_oauth = false;
-//                $this->loadModel('Oauthbinds');
-//                $is_oauth = $this->Oauthbinds->hasAny(array('user_id' => $uid));
+                $is_oauth = true;
             }
             if($is_oauth){
                 $this->loadModel('TuanMember');
-                $is_member = $this->TuanMember->hanAny(array('uid' => $uid, 'tuan_id' => $tuan_id));
+                $is_member = $this->TuanMember->hasAny(array('uid' => $uid, 'tuan_id' => $tuan_id));
                 if(!$is_member){
                     $data['tuan_id'] =  $tuan_id;
                     $data['uid'] = $uid;
                     $data['join_time'] = date('Y-m-d H:i:s');
-                    $this->TuanMember->save($data);
-
+                    if($this->TuanMember->save($data)){
+                        $this->TuanTeam->update(array('member_num' => 'member_num + 1'), array('id' => $tuan_id));
+                    }
                 }
                 $res = array('success'=> true);
-
             }else{
                 $res = array('success'=> false, 'type' => 'not_login' );
             }
@@ -118,10 +197,10 @@ class TuanTeamsController extends AppController{
             $this->set(compact('location', 'name', 'addr'));
         }else{
             $tuan_id = intval($tuan_id);
-            $teamInfo = $this->TuanTeam->find('first',array('conditions' => array('id' => $tuan_id)));
+            $teamInfo = $this->TuanTeam->find('first',array('conditions' => array('id' => $tuan_id, 'published' => PUBLISH_YES)));
             $location = $teamInfo['TuanTeam']['location_long'] . ',' . $teamInfo['TuanTeam']['location_lat'];
-            $this->set('tuan_id',$tuan_id);
-            $this->set('name',$teamInfo['TuanTeam']['tuan_name']);
+            $this->set('tuan_id', $tuan_id);
+            $this->set('name', $teamInfo['TuanTeam']['tuan_name']);
             $this->set('location', $location);
             $this->set('addr',$teamInfo['TuanTeam']['tuan_addr']);
         }
@@ -153,6 +232,26 @@ class TuanTeamsController extends AppController{
         $this->set('tuan_id',$tuan_id);
         $this->set('member_info', $member_info);
         $this->set('hideNav',true);
+    }
+
+
+    public function api_getArea(){
+        $this->autoRender = false;
+        $this->loadModel('Location');
+        $areaId = $this->Location->find('all',array(
+           'conditions' => array(
+               'parent_id' => 110100
+           ),
+        ));
+        $team_count_area_map = $this->Location->query('select county_id, count(*) t_count from cake_tuan_teams group by county_id');
+        $count_result = array();
+        foreach($team_count_area_map as $ta_map){
+            $count_result[] = array('area_id' => $ta_map['cake_tuan_teams']['county_id'],'count'=>$ta_map['0']['t_count']);
+        }
+        $count_result = Set::sort($count_result,'{n}.count','DESC');
+        $areaId = Hash::combine($areaId,'{n}.Location.id','{n}.Location');
+        $json_result = array('areas' => $areaId,'count_result' => $count_result);
+        echo json_encode($json_result);
     }
 
 

@@ -15,7 +15,7 @@ $brand = $brands[$order['Order']['brand_id']];
             <dl class="clearfix" style="margin-bottom: 0;">
                 <dd class="fl"><a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brand['Brand']['created'])).'/'.$brand['Brand']['slug'].'.html')}}"><img src="{{small_thumb_link($brand['Brand']['coverimg'])}}" /></a></dd>
                 <dd class="fl"><a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brand['Brand']['created'])).'/'.$brand['Brand']['slug'].'.html')}}">{{$brand['Brand']['name']}}</a></dd>
-                <dd class="fr">{{if $order['Order']['status']==0}}等待付款
+                <dd class="fr order-status-{{$order['Order']['id']}}">{{if $order['Order']['status']==0}}等待付款
                     {{elseif $order['Order']['status']==1}}已支付
                     {{elseif $order['Order']['status']==2}}已发货
                     {{elseif $order['Order']['status']==3}}已收货
@@ -24,6 +24,7 @@ $brand = $brands[$order['Order']['brand_id']];
                     {{elseif $order['Order']['status']==10}}已取消
                     {{elseif $order['Order']['status']==11}}已确认有效
                     {{elseif $order['Order']['status']==12}}已投诉
+                    {{elseif $order['Order']['status']==14}}退款中
                     {{/if}}</dd>
             </dl>
 

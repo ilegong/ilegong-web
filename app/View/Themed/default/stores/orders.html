@@ -82,10 +82,17 @@
 
         <div class="table-responsive">
             {{loop $orders $order}}
+            <?php $showSendDateColumn = ($order['Order']['type'] == 5 || $order['Order']['type'] == 6); ?>
+            {{loop $order_carts[$order['Order']['id']] $index $cart}}
+              {{if !empty($cart['Cart']['send_date'])}}
+                <?php $showSendDateColumn = true; ?>
+              {{/if}}
+            {{/loop}}
             <table class="table table-bordered">
                 <tr>
                     <td>
                         订单号：{{$order['Order']['id']}}<br/>
+                        团购：{{$order['Order']['type'] == 5 ? "团购" : ($order['Order']['type'] == 6 ? "秒杀" : "否")}}<br/>
                         收货人：{{$order['Order']['consignee_name']}}，{{$order['Order']['consignee_area']}}{{$order['Order']['consignee_address']}}，{{$order['Order']['consignee_mobilephone']}}<br/>
                         总价：￥{{$order['Order']['total_price']}}<br/>
                         运费：￥{{$order['Order']['ship_fee']}}<br/>
@@ -107,16 +114,30 @@
                             <tr>
                                 <th width="50%">商品名称</th>
                                 <th>价格</th>
+                                <th>规格</th>
                                 <th>数量</th>
                                 <th>合计</th>
+                                {{if $showSendDateColumn}}
+                                  <th>到货日期</th>
+                                {{/if}}
                             </tr>
                             <tbody>
-                            {{loop $order_carts[$order['Order']['id']] $cart}}
+                            {{loop $order_carts[$order['Order']['id']] $index $cart}}
                             <tr>
                                 <td>{{$cart['Cart']['name']}}</td>
                                 <td>￥{{$cart['Cart']['price']}}</td>
+                                <td>{{$spec_groups[$cart['Cart']['specId']]}}<br/></td>
                                 <td>{{$cart['Cart']['num']}}</td>
-                                <td>￥{{$cart['Cart']['price']*$cart['Cart']['num']}}</td>
+                                {{if $index == 0}}
+                                <td>￥{{$order['Order']['total_price']}}</td>
+                                {{else}}
+                                <td>——</td>
+                                {{/if}}
+                                {{if $showSendDateColumn}}
+                                  <td>
+                                    {{$cart['Cart']['send_date']}}
+                                  </td>
+                                {{/if}}
                             </tr>
                             {{/loop}}
                             </tbody>

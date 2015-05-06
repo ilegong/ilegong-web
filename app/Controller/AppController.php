@@ -101,9 +101,10 @@ class AppController extends Controller {
     	}
 
     	$this->currentUser = $this->Session->read('Auth.User');
-        if (empty($this->currentUser) && $this->is_weixin() && 'users' != $this->request->params['controller']) {
-            $this->redirect($this->login_link());
-        }
+//      remove  auto login
+//        if (empty($this->currentUser) && $this->is_weixin() && !in_array($this->request->params['controller'], array('users', 'check'))) {
+//            $this->redirect($this->login_link());
+//        }
     	$this->theme = Configure::read('Site.theme');
 
     	if($this->RequestHandler->isMobile()){
@@ -575,12 +576,16 @@ class AppController extends Controller {
         if ($pid == ShipPromotion::QUNAR_PROMOTE_ID) {
             $afford_for_curr_user = false;
             return array($afford_for_curr_user, 0);
+
         } else {
             list($total_limit, $brand_id, $limit_cur_user) = ClassRegistry::init('ShipPromotion')->findNumberLimitedPromo($pid);
             list($afford_for_curr_user, $limit_cur_user, $total_left) = calculate_afford($pid, $currUid, $total_limit, $limit_cur_user);
         }
-
-        return array($afford_for_curr_user, $limit_cur_user, $total_left);
+        $least_num = 1;
+        if($pid == 877) { //好好蛋糕，满5起送
+            $least_num = 5;
+        }
+        return array($afford_for_curr_user, $limit_cur_user, $total_left,$least_num);
     }
 
 

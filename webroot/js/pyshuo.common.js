@@ -1,9 +1,7 @@
 Pyshuo={};
 Pyshuo.ui={};
 Pyshuo.ui.utils={
-
     $tipInfoPanel:null,
-
     saveToLocalStorage:function(key,value){
         if(this.storage){
             this.storage[key]=value;

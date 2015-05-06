@@ -60,10 +60,12 @@
         <th>订单状态</th>
         <th>商家名称</th>
         <th>商品</th>
+        <th>规格</th>
         <th>份数</th>
         <th>价格</th>
         <th>运费</th>
         <th>总价</th>
+        <th>发货时间</th>
         <th>创建时间</th>
         <th>付款时间</th>
         <th>收件人</th>
@@ -76,9 +78,10 @@
     </tr>
     <tbody>
     {{loop $orders $order}}
+    {{loop  $order_carts[$order['Order']['id']] $index $cart}}
     <tr>
         {{if $order_groupon_link}}
-        <th>{{$order_groupon_link[$order['Order']['member_id']]}}</th>
+        <td>{{$order_groupon_link[$order['Order']['member_id']]}}</td>
         {{/if}}
         <td>{{$order['Order']['id']}}</td>
         <td>{{$order['Order']['creator']}}</td>
@@ -92,6 +95,7 @@
             {{elseif $order['Order']['status']==4}}<font color="red">已退款</font>
             {{elseif $order['Order']['status']==10}}<font color="red">已作废</font>
             {{elseif $order['Order']['status']==11}}<font color="red">待支付</font>
+            {{elseif $order['Order']['status']==14}}<font color="red">退款中</font>
 
             {{/if}}
             {{if $order['Order']['type'] ==ORDER_TYPE_TUAN}}(团购{{$order['Order']['member_id']}}){{/if}}
@@ -104,14 +108,34 @@
             {{/loop}}
         </td>
         <td>
-            {{loop $order_carts[$order['Order']['id']] $cart}}
-                {{$cart['Cart']['name']}}
-            {{/loop}}
+            {{$cart['Cart']['name']}}
         </td>
+        <td>{{$spec_groups[$cart['Cart']['specId']]}} </td>
         <td>{{$cart['Cart']['num']}}</td>
-        <td>{{$order['Order']['total_price']}}</td>
-        <td>{{$order['Order']['ship_fee']}}</td>
-        <td>{{$order['Order']['total_all_price']}}</td>
+        {{if $index > 0}}
+            <td></td>
+            <td></td>
+            <td></td>
+        {{else}}
+            <td>{{$order['Order']['total_price']}}</td>
+            <td>{{$order['Order']['ship_fee']}}</td>
+            <td>{{$order['Order']['total_all_price']}}</td>
+        {{/if}}
+        <td>
+            {{if !empty($cart['Cart']['consignment_date'])}}
+                <?php
+                $date = $consign_dates[$cart['Cart']['consignment_date']];
+                $value = empty($date)?'': date('m-d', strtotime($date));
+                ?>
+                {{$value}}
+            {{elseif $order['Order']['type'] == 5}}
+            <?php
+                $date = $tuan_consign_times[$order['Order']['member_id']];
+                $value = empty($date)?'': date('m-d', strtotime($date));
+                ?>
+            {{$value}}
+            {{/if}}
+        </td>
         <td>{{$order['Order']['created']}}</td>
         <td>{{$order['Order']['pay_time']}}</td>
         <td>{{$order['Order']['consignee_name']}}</td>
@@ -132,6 +156,7 @@
         <td>{{$order['Order']['ship_code']}}</td>
         <td>{{$order['Order']['remark']}}</td>
     </tr>
+    {{/loop}}
     {{/loop}}
     </tbody>
 </table>

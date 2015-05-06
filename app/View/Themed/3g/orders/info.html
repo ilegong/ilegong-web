@@ -1,0 +1,130 @@
+<div class="classlist_v2" style="z-index:1">
+    <ul class="clearfix" onclick="window.history.back();">
+        <li><a class="back"></a></li>
+        <li class="line"></li>
+        <li style="text-overflow: ellipsis;"><strong>结算</strong></li>
+    </ul>
+</div>
+<div class="address clearfix" style="position:relative;" data-address-choice="{{$has_chosen_consignee}}">
+    <span style="display:block;" class="fl">送至&nbsp;&nbsp;<a class="moreicon" href="#X"></a></span>
+    <span style="display:block;" class="fl"><a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
+    <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}<br />
+        {{$this->Session->read('OrderConsignee.name')}} &nbsp; {{$this->Session->read('OrderConsignee.mobilephone')}}</span>
+    <a href="/orders/edit_consignee?modal=true" class="address_addbtn new_address thickbox" {{if $total_consignee > 0}}style=" display: none;"{{/if}}>添加收货地址</a>
+</div>
+<div class="cart" style="margin-top: 0; padding-top: 0;">
+    <div>
+        <?php $total_num = 0;?>
+        {{loop $cart->brandItems $brandItem}}
+        <?php $brand_price = 0; $brand_goods_num = 0; ?>
+            <div class="clearfix order_shop_head">
+                <a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$brandItem->id]['created'])).'/'.$brands[$brandItem->id]['slug'].'.html')}}">
+                    <span><img class="radius5" src="{{$this->Html->assetUrl(small_thumb_link($brands[$brandItem->id]['coverimg']))}}" /></span>
+                    <span>{{$brands[$brandItem->id]['name']}}</span>
+                </a>
+            </div>
+            {{loop $brandItem->items $cid $item}}
+                <?php $total_num += $item->num; $brand_price += $item->num*$item->price; $brand_goods_num += $item->num;  ?>
+                <div>
+                    <ul class="clearfix" style="margin-bottom: 0;">
+                        <li class="fl"><a href="{{product_link2($product_info[$item->pid])}}"><img src="{{$this->Html->assetUrl(small_thumb_link($item->img))}}" border="0" /></a></li>
+                        <li style="overflow: hidden; display: block; padding-left: 10px;">
+                            <p>{{$item->name}}{{if !$item->published}} 该商品已经下架{{/if}}</p>
+                            <s>单价:￥{{$this->Number->precision($item->price, 2)}}</s>
+                            <s>
+                              <span>{{if $item->specId}}口味：{{$spec_group[$item->specId]}}{{/if}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                              <span>
+                                {{if $item->consignment_date}}
+                                    {{empty($consign_dates[$item->consignment_date])?'': date('m月d日', strtotime($consign_dates[$item->consignment_date])).'到货';}}
+                                {{/if}}
+                              </span>
+                            </s>
+                            <div class="clearfix">
+                                <a href="#X" class="cartnumreduce fl"></a>
+                                <input type="text" class="cart-num-input" data-id="{{$item->cartId}}" data-price="{{$item->price}}" data-brand-id="{{$brandItem->id}}"
+                                       data-num="{{$item->num}}" value="{{$item->num}}" disabled="disabled"/>
+                                <a href="#X" class="cartnumadd fl"></a>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+            {{/loop}}
+            <?php $coupons = $coupons_of_products[$brandItem->id];?>
+            {{if !empty($coupons)}}
+                <div id="hiddenModalContent_{{$brandItem->id}}" style="display:none">
+                    <div class="classlist_v2">
+                        <ul class="clearfix">
+                            <li><a onclick="tb_remove()" class="back"></a></li>
+                            <li class="line"></li>
+                            <li><strong>返回</strong></li>
+                        </ul>
+                    </div>
+                    <ul style="padding-top: 60px;">
+                        {{loop $coupons $coupon}}
+                            <li style="padding-bottom: 10px;"><a data-coupon_item_id="{{$coupon['CouponItem']['id']}}" data-brandId="{{$brandItem->id}}" class="coupon" href="javascript:"><input type="checkbox" readonly>
+                                {{$coupon['Coupon']['name']}} <span style="color: red">{{$this->Number->precision($coupon['Coupon']['reduced_price']/100, 2)}}</span> {{if $coupon['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER}}(红包券，每件商品可使一张，本单本店共{{$brandItem->total_num()}}件){{/if}}
+                                <span class="glyphicon glyphicon-ok" style="display: none"></span></a><span class="applied_result"></span>
+                            </li>
+                        {{/loop}}
+                    </ul>
+                </div>
+
+                <a href="#TB_inline?&inlineId=hiddenModalContent_{{$brandItem->id}}&modal=true" class="favor thickbox" style="position:relative;">
+                    <span style="display:block;" class="fl">商品优惠&nbsp;&nbsp;<span class="moreicon" style="right:10px;" href="#X"></span></span>
+                    <span style="overflow:hidden; display:block; color: #acacac;">您有优惠券可使用({{count($coupons)}})</span>
+                </a>
+            {{/if}}
+            <div class="clearfix leave_words">
+                <input name={{"remark_".$brandItem->id}} type="text" placeholder="给卖家留言:" />
+            </div>
+            <p class="conordertuan_total" data-brand-id="{{$brandItem->id}}">共<span data-brand-num="{{$brand_goods_num}}">{{$brand_goods_num}}</span>件商品，合计:
+                <strong data-brand-price="{{$brand_price}}">￥{{$this->Number->precision($brand_price,2)}}</strong></p>
+        {{/loop}}
+        {{if $shipFee>0}}
+        <a href="#X" class="favor" style="position:relative;">
+            <span style="display:block;" class="fl">运费&nbsp;&nbsp;<span class="moreicon" style="right:10px;" href="#X"></span></span>
+            <span style="overflow:hidden; display:block; color:#999999;">{{$this->Number->precision($shipFee, 2)}}元</span>
+        </a>
+        {{/if}}
+    </div>
+</div>
+<div class="shop_jifen" style="margin-bottom: 35px;">
+    <ul class="clearfix" style=" border: 0;">
+        <li class="fl">可用<span class="balance_use_score">{{$score_usable}}</span>积分抵用<span>{{$this->Number->precision($score_usable/100, 2)}}</span>元</li>
+        <li class="fr shop_jifen_used radius10"></li>
+    </ul>
+</div>
+<div class="cart_pay" style="z-index: 101;">
+    <ul class="clearfix">
+        <li class="fl">共<span class="total_num_info">{{$total_num}}</span>件商品，总金额<strong class="total_price_info">{{$this->Number->precision($cart->total_price() + ($shipFee > 0?$shipFee:0), 2)}}</strong></li>
+        <li class="fr"><a href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a></li>
+    </ul>
+</div>
+<script>
+    $(document).ready(function(){
+        var cartInfo = infoToBalance();
+        var height =  $(window).height() + 5;
+        var width = $(window).width();
+        var addressUrl = $(".new_address.thickbox").attr("href") + "&height=" + height + "&width=" + width;;
+        $(".new_address.thickbox").attr("href", addressUrl);
+        $(".favor.thickbox").each(function(){
+            var url = $(this).attr("href");
+            url = url + "&height=" + (height-44) + "&width=" + width;
+            $(this).attr("href", url);
+        });
+        var cart_pay_self = $(".cart_pay .fr a");
+        cartInfo.cartEdit();
+        cartInfo.scoreUse();
+        cartInfo.couponUse();
+        cart_pay_self.on("click", function(e){
+            var self  = $(this);
+            if(!cartInfo.submitOrder(self)){
+                e.preventDefault();
+                return false;
+            }
+        })
+    })
+</script>
+{{$this->Html->script(array('/js/thickbox.js'));}}
+{{$this->Html->css(array('thickbox.css?ver1' ));}}

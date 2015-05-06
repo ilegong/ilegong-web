@@ -25,7 +25,12 @@ ul,ol {
 
 /*全部团队*/
 .alltuan_add{ display: block; width: 100%; background-color: #fae8b5; height: 30px; line-height: 30px; overflow: hidden; text-align: center; font-size: 1em; color: #ff483a; position: fixed; top: 0;}
-.alltuan_border{ border-top: 1px #eeeeee solid; background-color: #ffffff; margin-bottom: 10px;}
+.alltuan_border {
+    border-top: 1px #eeeeee solid;
+    background-color: #ffffff;
+    margin-bottom: 10px;
+    border-bottom: 1px #eeeeee solid;
+}
 .alltuan ul{ padding: 10px 10px 5px 10px; background-color: #ffffff;}
 .alltuan ul li{ float: left;}
 .alltuan ul li img{ border: 1px #dddddd solid; width: 8em;vertical-align:baseline;}
@@ -37,9 +42,21 @@ ul,ol {
 .alltuan dl dd{ font-size: 1em; color: #333333; float: left; line-height: 18px;}
 .alltuan dl dd img{ width: 0.8em; border: 0; margin-top: 1px; margin-right: 3px;vertical-align:baseline;}
 
+.alltuan_addbtn{ display: block; width: 48%; text-align: center; line-height: 26px; border-radius: 2px; font-size: 14px; color: #ed8600; border: 1px #ed8600 solid; text-decoration: none; margin-left: 13px; margin-top: 7px;}
+.alltuan_addbtn:hover{color: #ed8600;}
+.alltuan_curbtn{ display: block; width: 48%; text-align: center; line-height: 26px; border-radius: 2px; font-size: 14px; color: #ffffff; background-color: #ed8600; border: 1px #ed8600 solid; text-decoration: none; margin-left: 13px; margin-top: 7px;}
+.alltuan_curbtn:hover{color: #ffffff;}
 
 .alltuan_btn{ border-top: 1px #eeeeee solid; margin: 0 10px; padding: 8px 0;}
 .alltuan_btn a{ display: block; width: 48%; text-align:center; line-height: 30px; border-radius: 2px; font-size: 14px; color: #ed8600; border: 1px #ed8600 solid; text-decoration: none;}
+.conordertuan{ padding: 10px 0;}
+.conordertuan ul{ float: left; width: 25%; padding: 0;}
+.conordertuan ul li{ float: none;}
+.conordertuan ul li a{ display: block; border: 1px #dddddd solid; line-height: 35px; text-align: center; text-decoration: none; color:#333333; font-size: 1em; background-color: #ffffff; margin-top: -1px; margin-left: -1px;}
+.conordertuan ul li a.cur{ background-color: #29ac0e; color: #ffffff;}
+.conordertuan p{ color: #555555; line-height: 18px; padding: 10px 0; margin: 0;}
+.conordertuan p span{ color: #29ac0e; font-weight: bold;}
+
 
 
 /*团购详情*/
@@ -52,7 +69,7 @@ ul,ol {
 .tuandetail_price li.fl{ padding-right: 3px;}
 .tuandetail_price li.fl span{ color: #ffa200;}
 .tuandetail_price li.fl span strong{ font-size: 2em; font-weight: normal;}
-.tuandetail_price li.fl s,.tuandetail_price li.fr{ display: block; padding-top: 7px;}
+.tuandetail_price li.fl s,.tuandetail_price li.fr{ display: block; padding-top: 10px;}
 .tuandetail_more{ background-color: #ffffff; border-top: 1px #eeeeee solid; border-bottom: 1px #eeeeee solid; padding:10px 10px 9px 10px; line-height: 22px; font-size: 1em; color: #555555; margin-bottom: 10px;}
 .tuandetail_more img{ width: 0.5em; margin-top: 3px;}
 .tuandetail_adress{ background-color: #ffffff; border-top: 1px #eeeeee solid; padding-top:10px; margin-bottom: 10px;}
@@ -70,6 +87,12 @@ ul,ol {
 .tuandetail_adress dl dd{ font-size: 1em; color: #333333; float: left; line-height: 18px;}
 .tuandetail_adress dl dd img{ width: 0.8em; border: 0; margin-top: 1px; margin-right: 3px;vertical-align:baseline;}
 .tuandetail_adress dl dd span{ color: #666666;}
+
+.tuandetail_p{ color: #666666; padding: 5px 0 10px 0; line-height: 20px; text-align: center;}
+.tuandetail_btn{ width: 220px; margin: 0 auto; margin-bottom: 20px;}
+.tuandetail_btn a{ display: block; width: 100px; border: 1px #ffa200 solid; border-radius: 3px; height: 35px; line-height: 35px; text-align: center; color: #ffa200; font-size: 1em; text-decoration: none;}
+
+
 
 /*团介绍页面*/
 .tuan_intro{ position: fixed; z-index: 10001; left: 0px; top: 0px; height: 100%; width: 100%; }
@@ -107,16 +130,23 @@ ul,ol {
 .tuan_cancel img{ width: 100%; opacity:0.7;}
 .tuan_cancel ul,.tuan_cancel p{ opacity:0.7;}
 .tuan_cancel_condition{ width: 100%; height: 50px; position: absolute; top: 30%; left: 0; z-index: 999; text-align: center; color: #ffffff; line-height: 25px;}
-.goodlist ul{ background-color: #ffffff; padding: 5px 10px 10px 10px; color: #555555;}
+.goodlist ul {
+    background-color: #ffffff;
+    padding: 10px;
+    color: #555555;
+}
+.goodlist a p{ margin: 0; padding: 10px 10px 0 10px; line-height: 16px; background-color: #ffffff; color: #666666;}
+.goodlist ul{ background-color: #ffffff; padding: 5px 10px 10px 10px; color: #555555; line-height: 20px;}
 .goodlist ul li{ font-size: 1em;}
-.goodlist ul li.fr{ width: 75px; text-align: right; color: #999999;}
-.goodlist ul li.fl{ width:72%; white-space: nowrap;text-overflow:ellipsis; overflow:hidden;}
+.goodlist ul li.fr{ text-align: right; color: #999999;}
+.goodlist ul li.fl span{ color:#acacac; text-decoration: line-through;}
+.goodlist ul li.fl strong{ font-size: 1.1em; color: #ffa200;}
 
 /*团成员列表*/
 .memberlist{ padding: 15px 10px 0 10px;}
-.memberlist ul{ float: left; width: 23%; margin: 0 1%; padding-bottom: 15px; }
-.memberlist ul li{ line-height: 18px; text-align: center; width: 85%; margin: 0 auto; white-space: nowrap;text-overflow:ellipsis; overflow:hidden; color: #666666;}
-.memberlist img{ width:90%; border-radius: 5px;}
+.memberlist ul{float: left;width: 25%;padding-bottom: 15px;}
+.memberlist ul li{ line-height: 18px;text-align: center;margin: 0 auto;white-space: nowrap;text-overflow: ellipsis;overflow: hidden;color: #666666;}
+.memberlist img{ width:80%; border-radius: 5px;}
 
 
 /*团详情*/
@@ -124,18 +154,22 @@ ul,ol {
 .tuandetail p{ margin: 0; padding:0;}
 .tuandetail p img{ width: 100%;}
 .tuandetail_masg{ background-color: #ffffff; border-bottom: 1px #eeeeee solid;}
-.tuandetail_masg dl{ margin: 0 10px; padding-bottom: 8px; border-bottom: 1px #eeeeee solid; border-bottom: 1px #eeeeee solid;}
+.tuandetail_masg dl{ padding: 0 10px 10px 10px;}
 .tuandetail_masg dl dd{ font-size: 1em; color: #666666; float: left; line-height: 18px;}
-.tuandetail_masg dl dd img{ width: 0.8em; border: 0; margin-top: 1px; margin-right: 3px;vertical-align:baseline;}
+.tuandetail_masg dl dd img{ width: 0.8em; border: 0; margin-top: 1px; margin-right: 3px;}
 .tuandetail_masg dl dd span{ color: #666666;}
-.tuandetail_masg ul{ padding: 8px 10px 3px 10px;}
+.tuandetail_masg ul{ padding: 10px; background-color: #ffa200; color: #ffffff; margin-bottom: 10px;}
+.tuandetail_masg ul li.tuanname{ font-size: 1.4em; font-weight: bold;}
 .tuandetail_masg ul li{ font-size: 1em;}
-.tuandetail_masg ul li.fl{ font-size: 1.2em; color: #333333; font-weight: bold;}
-.tuandetail_masg ul li.fr{ color: #999999; line-height: 24px;}
 .tuandetail_masg p{ margin: 0; padding:10px; color: #999999; line-height: 18px;}
 .tuandetail_member{ background-color: #ffffff; border-bottom: 1px #eeeeee solid; border-top: 1px #eeeeee solid; margin-top: 10px; padding: 0 10px; line-height: 40px; color: #666666;}
 .tuandetail .p_more { margin-top: 11px; margin-left: 7px; display: block; width: 0.667em; height: 1.334em; background: url(/img/mobile/pyshuo_icon.png) 0 -16.875em no-repeat; background-size: 25em 25em;
 }
+.tuandetail_order{ padding: 10px 10px 0 10px;}
+.tuandetail_order li{ width: 50%; float: left;}
+.tuandetail_order li a{ display: block; line-height: 36px; border:1px solid #dddddd; color: #333333; border-radius: 3px; background-color: #ffffff; text-align: center; text-decoration: none;}
+.mr5{ margin-right: 5px;}
+.ml5{ margin-left: 5px;}
 .tuandetail_member span{ color: #333333;}
 .tuandetail h1{ font-size: 1.1em; color: #333333; margin: 0; padding: 10px 10px 0 10px;}
 .tuandetail_btnbg{ background-color: #f1f1f1; border-top: 1px #dddddd solid; padding: 4px 0; height: 45px; position: fixed; bottom: 0; left: 0;  width: 100%; z-index: 999;}

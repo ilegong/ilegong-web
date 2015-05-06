@@ -1,0 +1,72 @@
+<ol class="breadcrumb">
+  <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+  <li><a href="/manage/admin/tuan_products/index">商品管理</a></li>
+  <li class="active">编辑商品</li>
+</ol>
+
+<div class="container">
+    <div class="row">
+        <?php
+          $tuanProduct = $data['TuanProduct'];
+        ?>
+
+        <form class="form-horizontal" method="post" action="/manage/admin/tuan_products/update/{{$id}}" data-noajax="1">
+            <input type="hidden" value="{{$tuanProduct['id']}}" name="data[TuanProduct][id]">
+            <div class="form-group">
+                <label for="product_id" class="col-sm-2 control-label">产品编号</label>
+                <div class="col-sm-10">
+                    <input type="number" value="{{$tuanProduct['product_id']}}" name="data[TuanProduct][product_id]" class="form-control" id="product_id" disabled="disabled">
+                    <div class="text-warning">该商品价格为：TODO元</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="product_name" class="col-sm-2 control-label">产品名称</label>
+                <div class="col-sm-10">
+                  <input type="text" value="{{$tuanProduct['alias']}}" name="data[TuanProduct][alias]" class="form-control" id="product_name" placeholder="产品名字">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="tuan_price" class="col-sm-2 control-label">团购价格</label>
+                <div class="col-sm-10">
+                    <input type="text" value="{{$tuanProduct['tuan_price']}}" name="data[TuanProduct][tuan_price]" class="form-control" id="tuan_price" placeholder="价格">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="consignment_type" class="col-sm-2 control-label">发货类型</label>
+                <div class="col-sm-10">
+                  <select class="form-control time-type" name="data[TuanProduct][consignment_type]" id="consignment_type">
+                    <option value="0" {{if $tuanProduct['consignment_type'] == 0 }}selected = 'selected'{{/if}}>团满发货</option>
+                    <option value="1" {{if $tuanProduct['consignment_type'] == 1 }}selected = 'selected'{{/if}}>团满准备发货</option>
+                    <option value="2" {{if $tuanProduct['consignment_type'] == 2 }}selected = 'selected'{{/if}}>排期</option>
+                  </select>
+                </div>
+            </div>
+            <div class="form-group">
+              <label for="priority" class="col-sm-2 control-label">优先级</label>
+              <div class="col-sm-10">
+                <input type="text" value="{{$tuanProduct['priority']}}" name="data[TuanProduct][priority]" class="form-control" id="priority" placeholder="0">
+              </div>
+            </div>
+            <div class="form-group">
+                <label for="list_url" class="col-sm-2 control-label">列表图片</label>
+                <div class="col-sm-10">
+                    <input type="text" value="{{$tuanProduct['list_img']}}" name="data[TuanProduct][list_img]" class="form-control" id="list_url" placeholder="列表图片">
+                    <p class="alert alert-success" role="alert">大小为600X260</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="detail_url" class="col-sm-2 control-label">详情图片</label>
+                <div class="col-sm-10">
+                    <input type="text" value="{{$tuanProduct['detail_img']}}" name="data[TuanProduct][detail_img]" class="form-control" id="detail_url" placeholder="详情图片">
+                    <p class="alert alert-success" role="alert">大小为600X445</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <a href="/manage/admin/tuan_products/index" class="btn btn-default">取消</a>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

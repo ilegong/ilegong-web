@@ -1,0 +1,1 @@
+ALTER TABLE `cake_product_tries` MODIFY consignment_date date NOT NULL;

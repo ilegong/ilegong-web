@@ -223,7 +223,7 @@
 
 <script>
     jQuery.validator.addMethod("isIdCard", function (value, element) {
-        return (value.length == 18 && /^(\d+){18}$/.test(value)) ;
+        return (value.length == 18 && /^(\d+){17}([0-9]||[X])$/.test(value)) ;
     }, "");
     $("#OpenstoreAddForm").validate({
         //规则制定根据字段的id属性

@@ -3,6 +3,11 @@
 class OrdersController extends AppController{
 	
 	var $name = 'Orders';
+    public $components = array('Weixin');
+
+    public function admin_order_remark(){
+
+    }
 	
 	public function admin_view($id){
 		$this->loadModel('Cart');
@@ -230,7 +235,7 @@ class OrdersController extends AppController{
         $conditions = array(
             'Order.created >"' . date("Y-m-d\TH:i:s", $start_date) . '"',
             'Order.created <"' . date("Y-m-d\TH:i:s", $end_date) . '"',
-            'Order.type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN)
+            'Order.type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC)
         );
 
         if(!empty($product_scheduling_date)&&!empty($product_id)){
@@ -275,7 +280,7 @@ class OrdersController extends AppController{
             $order_groupon_link = Hash::combine($groupon_members, '{n}.GrouponMember.id', '{n}.GrouponMember.groupon_id');
             if($groupon_member_lists){
                 $conditions[] = array('Order.member_id' => $groupon_member_lists);
-                $conditions['Order.type'] = array(ORDER_TYPE_GROUP, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN);
+                $conditions['Order.type'] = array(ORDER_TYPE_GROUP, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
                 $consignee_mobilephone = null;
             }else{
                 //团购订单暂时无人参团
@@ -353,11 +358,14 @@ class OrdersController extends AppController{
                 $total_money = $total_money + $o['Order']['total_all_price'];
             }
         }
-        $carts = $this->Cart->find('all',array(
-            'conditions'=>array(
-                'order_id' => $ids,
-            )));
-
+        $carts = array();
+        $this->log('order ids '.json_encode($ids));
+        if(!empty($ids)){
+            $carts = $this->Cart->find('all',array(
+                'conditions'=>array(
+                    'order_id' => $ids,
+                )));
+        }
         $order_carts = array();
         foreach($carts as $c){
             $c_order_id = $c['Cart']['order_id'];
@@ -366,13 +374,51 @@ class OrdersController extends AppController{
             }
             $order_carts[$c_order_id][] = $c;
         }
-
+        //规格
+        $spec_ids = array_unique(Hash::extract($carts,'{n}.Cart.specId'));
+        if(count($spec_ids)!=1 || !empty($spec_ids[0])){
+            $this->loadModel('ProductSpecGroup');
+            $spec_groups = $this->ProductSpecGroup->find('all',array(
+                'conditions' => array(
+                    'id' => $spec_ids
+                )
+            ));
+            $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
+            $this->set('spec_groups', $spec_groups);
+        }
+        //排期
+        $consign_ids = array_unique(Hash::extract($carts,'{n}.Cart.consignment_date'));
+        if(count($consign_ids)!=1 || !empty($consign_ids[0])){
+            $this->loadModel('ConsignmentDate');
+            $consign_dates = $this->ConsignmentDate->find('all',array(
+                'conditions' => array(
+                    'id' => $consign_ids
+                )
+            ));
+            $consign_dates = Hash::combine($consign_dates,'{n}.ConsignmentDate.id','{n}.ConsignmentDate.send_date');
+            $this->set('consign_dates', $consign_dates);
+        }
+        $tuan_ids = array();
+        foreach($orders as $order){
+            if($order['Order']['type'] == ORDER_TYPE_TUAN){
+                if(!in_array($order['Order']['member_id'], $tuan_ids)){
+                    $tuan_ids[] = $order['Order']['member_id'];
+                }
+            }
+        }
+        if(!empty($tuan_ids)){
+            $this->loadModel('TuanBuying');
+            $tuan_consign_times =$this->TuanBuying->find('list', array(
+                'conditions' => array('id' => $tuan_ids),
+                'fields' => array('id', 'consign_time')
+            ));
+            $this->set('tuan_consign_times', $tuan_consign_times);
+        }
         $this->set('orders',$orders);
         $this->set('total_money',$total_money);
         $this->set('order_carts',$order_carts);
         $this->set('ship_type',$this->ship_type);
         $this->set('brands',$brands);
-
         $this->set('start_date',date("Y-m-d",$start_date));
         $this->set('end_date',date("Y-m-d",$end_date));
         $this->set('brand_id',$brand_id);
@@ -382,7 +428,6 @@ class OrdersController extends AppController{
         $this->set('consignee_mobilephone',$consignee_mobilephone);
         $this->set('product_scheduling_date',$product_scheduling_date);
         $this->set('product_id',$product_id);
-
     }
 
     private function get_day_start($start_day = ''){
@@ -420,4 +465,70 @@ class OrdersController extends AppController{
         110=>'全一',
         111=>'宅急送'
     );
+
+
+    public function admin_send_refund_notify(){
+        $this->autoRender = false;
+        $this->loadModel('User');
+        $this->loadModel('Cart');
+        $orderId = $_REQUEST['orderId'];
+        $refundMoney = $_REQUEST['refundMoney'];
+        $refundMark = $_REQUEST['refundMark'];
+        $creator = $_REQUEST['creator'];
+        $userInfo = $this->User->find('first',array('conditions' => array('id' => $creator)));
+        $cartInfo = $this->Cart->find('all',array('conditions' => array('order_id' => $orderId)));
+        $this->loadModel('RefundLog');
+        $this->loadModel('PayLog');
+        $PayLogInfo = $this->PayLog->find('first',array(
+            'conditions' => array(
+                'order_id' => $orderId,
+                'status' => 2
+            )
+            ));
+        $product_name = null;
+        foreach($cartInfo as $cartinfo){
+            $product_name = $product_name.$cartinfo['Cart']['name'].'*'.$cartinfo['Cart']['num'].'  ';
+        }
+        if($PayLogInfo['PayLog']['trade_type'] == 'JSAPI'){
+            $trade_type = '微信支付';
+        }else if ($PayLogInfo['PayLog']['trade_type'] == 'ZFB'){
+            $trade_type = '支付宝';
+        }else{
+            $trade_type = '支付';
+        }
+        $title = '亲，您有一笔'.$refundMoney.'元的退款已经退至您的'.$trade_type.'账户，预计3-15个工作日到账，请您及时查看"';
+        $phone = $userInfo['User']['mobilephone'];
+        $msg = $title;
+        $detail_url = WX_HOST.'/orders/detail/'.$orderId;
+        $remark = '点击查看订单，如有问题，请联系客服!';
+        if (message_send($msg,$phone)){
+            $flag_1 = true;
+        }else{
+            $flag_1 = false;
+        }
+        if($this->Weixin->send_refund_order_notify($creator,$title,$product_name,$refundMoney,$detail_url,$orderId,$remark)){
+            $flag_2 = true;
+        }else{
+            $flag_2 = false;
+        }
+        if($flag_1||$flag_2){
+            $data['RefundLog']['order_id'] = $orderId;
+            $data['RefundLog']['refund_fee'] = intval(intval($refundMoney)*1000/10);
+            $data['RefundLog']['trade_type'] = $PayLogInfo['PayLog']['trade_type'];
+            $data['RefundLog']['remark'] = $refundMark;
+            $this->RefundLog->save($data);
+            $returnInfo  = array('success' => true,'msg' =>'退款通知发送成功');
+        }else{
+            $returnInfo  = array('success' => false,'msg' =>'退款通知发送失败，请重试');
+        }
+        echo json_encode($returnInfo);
+    }
+    public function  admin_compute_refund_money(){
+        $this->autoRender = false;
+        $orderId = $_REQUEST['orderId'];
+        $this->loadModel('RefundLog');
+        $refund_money = $this->RefundLog->query('select sum(refund_fee) as refund_money from cake_refund_logs where order_id ='.$orderId.'');
+        $refund_money = $refund_money[0][0]['refund_money'];
+        echo json_encode($refund_money/100);
+    }
 }

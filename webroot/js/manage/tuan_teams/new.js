@@ -1,4 +1,4 @@
-/**
+    /**
  * Created by algdev on 15/3/28.
  */
 $(function(){
@@ -10,6 +10,22 @@ $(function(){
     var longtitud = $('#location_long');
     var latitud  = $('#location_lat');
     var getPoint = $('#getPoint');
+    var getCountyId = $('.tuan-teams');
+    var offlineStoreBox = $('.offline-store');
+    $.each(tuanAreas,function(index,item){
+        $('<option value="'+item['id']+'">'+item['name']+'</option>').appendTo(getCountyId);
+    });
+    $.getJSON('/manage/admin/tuan_buyings/api_offline_stores',function(data){
+        for(var category in data){
+            var categoryName = category == 0 ? '好邻居' : '自有自提点';
+            $('<optgroup label="--------' + categoryName + '"></optgroup>').appendTo(offlineStoreBox );
+            for(var offlineStoreId in data[category]){
+                $('<option value="' + offlineStoreId + '">' + data[category][offlineStoreId].name + '</option>').appendTo(offlineStoreBox);
+            }
+        }
+        iUtils.initSelectBox(offlineStoreBox);
+    });
+
     $(".tuanTeam-form").submit(function(e){
         var invalidTuanName = tuanName.val()=='';
         tuanName.parents('.form-group').toggleClass('has-error',invalidTuanName);
@@ -45,6 +61,4 @@ $(function(){
         }
     });
     });
-
-
 });

@@ -308,12 +308,22 @@ function orders_undo(order_id,is_mobile) {
     });
 }
 
+function orders_undo_3g(order_id,callback){
+    return ajaxAction(BASEURL+"/orders/confirm_undo/",{'order_id':order_id},null,function(data){
+        callback(data);
+    });
+}
+
 function orders_remove(order_id) {
     return ajaxAction(BASEURL+"/orders/confirm_remove/",{'order_id':order_id}, null, function(){
         showSuccessMessage('订单已删除', function(){
             $('.order_item_'+order_id).remove();
     }, 2000);
     });
+}
+
+function orders_remove_3g(order_id,callback){
+    return ajaxAction(BASEURL+"/orders/confirm_remove/",{'order_id':order_id}, null, callback);
 }
 
 
@@ -472,7 +482,7 @@ rs_callbacks.modify_order_price = function(request){
 function modify_price(order_id, status, creator,obj){
     var a =$("#order-price-" + order_id).val();
     if(!$.isNumeric(a)){
-        alert('输入的价格必须是数字');
+        bootbox.alert('输入的价格必须是数字');
         return false;
     }else{
         creator = creator || 0;
@@ -498,3 +508,148 @@ function chose_Consignee(){
     $('#edit_type').val('select');
     $('#consignee_addr').hide();
 }
+var infoToBalance = function(){
+    var setRemark = function(self){
+        var link = self.attr("href");
+        var params = (link.indexOf("?")>-1)?"&":"?";
+        $("input[name^='remark']").each(function(){
+            var input_name=$(this).attr("name");
+            var input_value=$(this).val();
+            if(input_value!=""){
+                params = params+input_name+"="+input_value+"&";
+            }
+        });
+        params=params.substring(0,params.length-1);
+        self.attr("href",link+params);
+    };
+    var checkAddress = function(){
+        if($(".address").data("addressChoice")!=1){
+            utils.alert("请编辑收货信息");
+            return false;
+        }
+        return true;
+    };
+    var totalPriceDom= $(".total_price_info");
+    var editCartNum = function(id, num) {
+        var cartDom = $("input[data-id="+ id +"]");
+        var brandId = cartDom.data("brandId");
+        var cartNum = cartDom.data("num");
+        var goodsPrice = cartDom.data("price");
+        var intnum =parseInt(num);
+        var proNum = cartDom.data("num");
+        cartDom.data("num",num);
+        var brandTotal = $(".conordertuan_total[data-brand-id="+ brandId + "]");
+        var originPrice = brandTotal.children('strong').data("brandPrice");
+        var originNum = brandTotal.children('span').data("brandNum");
+        var brandPriceDom = brandTotal.children('strong');
+        var brandNumDom = brandTotal.children("span");
+        brandPriceDom.data("brandPrice", originPrice + goodsPrice*(intnum - cartNum));
+        brandNumDom.data("brandNum", originNum - cartNum + intnum);
+        brandPriceDom.text("￥"+ utils.toFixed(brandPriceDom.data("brandPrice"),2));
+        brandNumDom.text(brandNumDom.data("brandNum"));
+        var totalNum = parseInt($(".total_num_info").text());
+        $(".total_num_info").text(totalNum - cartNum + intnum);
+        var totalPrice = parseFloat(totalPriceDom.text());
+        totalPriceDom.text(utils.toFixed(totalPrice + goodsPrice*(intnum - cartNum), 2));
+        var url = BASEURL + '/carts/editCartNum/' + id + '/' + intnum;
+        if (!sso.check_userlogin({"callback": editCartNum, "callback_args": arguments}))
+            return false;
+        ajaxAction(url, null, null, function (data) {
+            if (data && data.success) {
+                if (typeof(updateCartItemCount) === 'function') {
+                    updateCartItemCount();
+                }
+            }
+        }, {'id': id, 'num': num});
+        if(proNum > intnum){
+            var couponDom = $(".coupon :checked").first().parent('a');
+            if(couponDom.length <= 0){
+                return false;
+            }
+            var couponItemId = couponDom.data("coupon_item_id");
+            $.post('/orders/apply_coupon.json', {'brand_id': brandId, 'coupon_item_id': couponItemId, 'action': 'unapply'}, function (data){
+                if (data.changed) {
+                    totalPriceDom.text(utils.toFixed(data.total_price, 2));
+                    couponDom.children(':checkbox').prop("checked", !couponDom.children(':checkbox').prop("checked"));
+                }
+            }, 'json');
+        }
+    };
+    return{
+        submitOrder : function(self){
+            if(checkAddress()){
+                setRemark(self);
+                return true;
+            }
+            return false;
+        },
+        cartEdit: function(){
+            $(".cart-num-input").each(function(){
+                var that = this;
+                ($(that).prev("a")).on('click', function(){
+                    editAmount.reduce(that, function (that) {
+                        editCartNum($(that).data('id'), $(that).val());
+                    });
+
+                });
+                ($(that).next("a")).on('click', function(){
+                    editAmount.add(that, function (that) {
+                        editCartNum($(that).data('id'), $(that).val());
+                    });
+                });
+            });
+        },
+        scoreUse: function(){
+            $('.shop_jifen_used').click(function(){
+                var that = $(this);
+                if(that.html()=="<i></i>"){
+                    that.html("");
+                }else{
+                    that.html("<i></i>");
+                }
+                var balance_use_score = $(".balance_use_score");
+                var totalPrice = parseFloat(totalPriceDom.text()) || 0;
+                $.post('/orders/apply_score.json', {'use' : that.html()=="<i></i>", 'score':totalPrice*100/2}, function(data){
+                    if (data && data.success) {
+                        var scoreMoney = data.score_money;
+                        if(data.score_used){
+                            scoreMoney = - data.score_money;
+                        }
+                        balance_use_score.text(data.score_usable);
+                        balance_use_score.next('span').text(utils.toFixed(data.score_money,2));
+                        totalPriceDom.text(utils.toFixed(totalPrice + scoreMoney, 2));
+                    } else {
+                        utils.alert('使用积分失败', function(){}, 1000);
+                    }
+                }, 'json');
+            });
+        },
+        couponUse: function(){
+            $('li > a.coupon').click(function () {
+                var that = $(this);
+                var brandId = that.attr('data-brandId');
+                var coupon_item_id = that.attr('data-coupon_item_id');
+                var checkbox = $("[data-coupon_item_id='" + coupon_item_id + "'] > input[type=checkbox]");
+                checkbox.prop("checked", !checkbox.prop("checked"));
+                var action = (checkbox.prop("checked") == false )? 'unapply' : 'apply';
+                $.post('/orders/apply_coupon.json', {'brand_id': brandId, 'coupon_item_id': coupon_item_id, 'action': action}, function (data) {
+                    if (data) {
+                        //console.log(data);
+                        if (data.changed) {
+                            totalPriceDom.text(utils.toFixed(data.total_price, 2));
+                        } else {
+                            if (data.reason == 'not_login') {
+                                utils.alert('您长时间未操作，请重新登录', function () {
+                                    window.location.href = '/users/login?refer=' + encodeURIComponent('/carts/listcart');
+                                });
+                            } else if (data.reason == 'share_type_coupon_exceed') {
+                                checkbox.prop("checked", !checkbox.prop("checked"));
+                                utils.alert('优惠券使用超出限制');
+                            }
+                        }
+                    }
+                }, 'json');
+            });
+        }
+    }
+};

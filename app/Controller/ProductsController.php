@@ -26,29 +26,6 @@ class ProductsController extends AppController{
 
     }
 
-//    public function view() {
-//        parent::view();
-//
-//        $afford_for_curr_user = true;
-//        if ($this->current_data_id == ShipPromotion::QUNAR_PROMOTE_ID) {
-//            $ordersModel = ClassRegistry::init('Order');
-//            $order_ids = $ordersModel->find('list', array(
-//                'conditions' => array('brand_id' => ShipPromotion::QUNAR_PROMOTE_BRAND_ID, 'deleted' => 0),
-//                'fields' => array('id', 'id')
-//            ));
-//            if (!empty($order_ids)) {
-//                $cartModel = ClassRegistry::init('Cart');
-//                $c = $cartModel->find('count', array(
-//                    'conditions' => array('order_id' => $order_ids, 'product_id' => $this->current_data_id, 'deleted' => 0)
-//                ));
-//                if ($c > 0) {
-//                    $afford_for_curr_user = false;
-//                }
-//            }
-//        }
-//        $this->set('afford_for_curr_user', $afford_for_curr_user);
-//    }
-
 
     public function add(){
 
@@ -227,31 +204,45 @@ class ProductsController extends AppController{
                 }
             }
         }
-
         if($this->RequestHandler->isMobile()){
             $fields=array('id','user_id','name','coverimg','slug','color','material','manufacturer','price','special','manual','remoteurl','status','deleted','priority','views_count','saled','storage','seotitle',
                 'seodescription','seokeywords', 'created', 'updated', 'published', 'brand_id', 'photo', 'cate_id', 'end_time', 'promote_name', 'comment_nums', 'recommend', 'ship_fee', 'original_price', 'cost_price', 'specs', 'sort_in_store',);
         }
         parent::view($slug,$fields);
         $pid = $this->current_data_id;
-
-        if ($pid == 852) {
-            $this->redirect('/tuans/milk');
+        $tuanProducts = getTuanProducts();
+        $tuan_product_not_show_ids = Hash::combine($tuanProducts, '{n}.TuanProduct.product_id', '{n}.TuanProduct.general_show');
+        if(array_key_exists($pid ,$tuan_product_not_show_ids) && $tuan_product_not_show_ids[$pid] == 0){
+            $this->loadModel('TuanBuying');
+            $big_tuan = $this->TuanBuying->find('first', array(
+                'conditions' => array('pid' => $pid, 'tuan_id'=>34, 'status'=> 0, 'published' => 1)
+            ));
+            if(!empty($big_tuan)){
+                $this->redirect('/tuan_buyings/detail/'.$big_tuan['TuanBuying']['id']);
+            }else{
+                $this->redirect('/tuan_buyings/goods_tuans/'.$pid);
+            }
         }
+        $this->loadModel('Comment');
+        //load shichi comment count
+        $same_pids = get_group_product_ids($pid);
+        $shi_chi_comment_count = $this->Comment->find('count',array(
+            'conditions'=>array(
+                'data_id'=>$same_pids,
+                'status'=>1,
+                'is_shichi_vote'=>1
+            )
+        ));
+        $comment_count = $this->Comment->find('count',array(
+            'conditions'=>array(
+                'data_id'=>$same_pids,
+                'status'=>1
+            )
+        ));
+        $this->set('shi_chi_comment_count',$shi_chi_comment_count);
+        $this->set('comment_count',($comment_count-$shi_chi_comment_count));
 
         if($this->RequestHandler->isMobile()){
-            $this->loadModel('Comment');
-            //load shichi comment count
-            $shi_chi_comment_count = $this->Comment->find('count',array(
-                'conditions'=>array(
-                    'data_id'=>$pid,
-                    'status'=>1,
-                    'is_shichi_vote'=>1
-                )
-            ));
-            $comment_count = intval($this->viewdata['Product']['comment_nums']);
-            $this->set('shi_chi_comment_count',$shi_chi_comment_count);
-            $this->set('comment_count',($comment_count-$shi_chi_comment_count));
             $this->set('limitCommentCount',COMMENT_LIMIT_IN_PRODUCT_VIEW);
         }
         if ($pid == PRODUCT_ID_RICE_10) {
@@ -416,18 +407,6 @@ class ProductsController extends AppController{
         }
         $this->Session->write('BrowsingHistory',$browsing_history);
 
-
-//        $this->loadModel('ProductProductTag');
-//                'conditions' => array(
-//                    'tag_id' => 20,
-//                    'product_id' => $pid
-//                ),
-//            )
-//        );
-//        if (!empty($nianhuo)) {
-//            $this->set('in_nianhuo', true);
-//        }
-
         $consignment_dates = consignment_send_date($pid);
 
         if(!empty($consignment_dates)){
@@ -440,25 +419,6 @@ class ProductsController extends AppController{
         $this->set('category_control_name', 'products');
         if($this->is_weixin()){
             $this->prepare_wx_sharing($currUid, $pid);
-        }
-
-
-        if ($pid == PRODUCT_ID_MANGUO) {
-            $this->loadModel('Cart');
-            $con_cart = array('product_id' => $pid,'status' => 1, 'deleted' => 0);
-            $mang_carts = $this->Cart->find('all',array('conditions' => $con_cart));
-            $mang_orderIds = Hash::extract($mang_carts,'{n}.Cart.order_id');
-
-            $this->loadModel('Order');
-            $con_order = array('id' => $mang_orderIds,'status' => ORDER_STATUS_PAID,'published' => PUBLISH_YES,'deleted' => DELETED_NO);
-            $mang_orders = $this->Order->find('all',array('conditions' => $con_order));
-            $mang_cartIds = Hash::extract($mang_orders,'{n}.Order.id');
-            $sold_num =0;
-            foreach($mang_cartIds as $order_id){
-            $mang_num = $this->Cart->find('first',array('conditions' => array('order_id' => $order_id,'product_id' => $pid),array('fields' => array('num'))));
-            $sold_num =$sold_num + $mang_num['Cart']['num'];
-            }
-            $this->set('sold_num',$sold_num);
         }
     }
 

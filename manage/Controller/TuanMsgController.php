@@ -9,14 +9,14 @@ class TuanMsgController extends AppController{
 
     var $name = "tuan_msg";
 
-    var $uses = array('TemplateMsgLog');
+    var $uses = array('TuanBuyingMessages');
 
     public $components = array('Weixin');
 
-    public function admin_send_tuan_buy_create_msg(){
+    public function admin_send_tuan_buy_create_msg($tuanBuyId=null){
         $this->autoRender = false;
-        $tuan_buy_id = $_REQUEST['tuan_buy_id'];
-        $msg_element = get_tuan_msg_element($tuan_buy_id);
+        $tuan_buy_id = $tuanBuyId?$tuanBuyId:$_REQUEST['tuan_buy_id'];
+        $msg_element = get_tuan_msg_element($tuan_buy_id,false);
         if(empty($msg_element)) {
             echo json_encode(array('success' => false,'msg' => '该团购不存在,亲先创建..'));
             return;
@@ -34,7 +34,7 @@ class TuanMsgController extends AppController{
         $product_name = $msg_element['product_name'];
         $product_name = $product_name.', '.$consign_time.'发货';
         $tuan_leader = $msg_element['tuan_leader'];
-        $deatil_url = WX_HOST.'/tuan_buyings/detail/'.$tuan_buy_id;
+        $deatil_url = WX_HOST.'/tuan_teams/info/'.$msg_element['team_id'];
         $remark = '点击详情，赶快和小伙伴一起团起来！';
         foreach($uids as $uid){
             $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$deatil_url);
@@ -172,6 +172,86 @@ class TuanMsgController extends AppController{
         echo json_encode(array('success' => true,'msg' => '推送模板消息成功'));
     }
 
+    public function admin_send_tuan_buy_start_deliver_msg(){
+        $this->autoRender = false;
+        $tuan_buying_id = $_REQUEST['tuan_buying_id'];
+        $tuan_deliver_msg = $_REQUEST['deliver_msg'];
+        $msg_element = get_tuan_msg_element($tuan_buying_id);
+        if(empty($tuan_deliver_msg)){
+            echo json_encode(array('success' => false,'msg' => '模版消息推送失败'));
+            return;
+        }
+        if(empty($msg_element)){
+            echo json_encode(array('success' => false,'msg' => '该团购不存在,亲先创建..'));
+            return;
+        }
+        if($msg_element['tuan_buy_status']!=1){
+            echo json_encode(array('success' => false,'msg' => '只有已完成的团购才能推送该消息'));
+            return;
+        }
+        $uids = $msg_element['uids'];
+        $product_name = $msg_element['product_name'];
+        $tuan_name = $msg_element['tuan_name'];
+        $title = $tuan_deliver_msg;
+        $tuan_leader = $msg_element['tuan_leader'];
+        $remark = '点击查看团购详情';
+        $detail_url = WX_HOST.'/tuan_buyings/detail/'.$tuan_buying_id;
+        foreach($uids as $uid){
+            $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$detail_url);
+        }
+        $this->save_msg_log(TUAN_STARTDELIVER_MSG,$tuan_buying_id);
+        echo json_encode(array('success' => false,'msg' => '推送模板消息成功'));
+    }
+
+    public function admin_send_tuan_buy_notify_deliver_msg(){
+        $this->autoRender = false;
+        $tuan_buying_id = $_REQUEST['tuan_buying_id'];
+        $tuan_notify_msg = $_REQUEST['deliver_msg'];
+        $msg_element = get_tuan_msg_element($tuan_buying_id);
+        if(empty($tuan_notify_msg)){
+            echo json_encode(array('success' => false,'msg' => '模版消息推送失败'));
+            return;
+        }
+        if(empty($msg_element)){
+            echo json_encode(array('success' => false,'msg' => '该团购不存在,亲先创建..'));
+            return;
+        }
+        if($msg_element['tuan_buy_status']!=1){
+            echo json_encode(array('success' => false,'msg' => '只有已完成的团购才能推送该消息'));
+            return;
+        }
+        $uids = $msg_element['uids'];
+        $product_name = $msg_element['product_name'];
+        $title = $tuan_deliver_msg;
+        $tuan_leader = $msg_element['tuan_leader'];
+        $remark = '点击查看团购详情';
+        $detail_url = WX_HOST.'/tuan_buyings/detail/'.$tuan_buying_id;
+        foreach($uids as $uid){
+            $this->Weixin->send_tuan_tip_msg($uid,$title,$product_name,$tuan_leader,$remark,$detail_url);
+        }
+        $this->save_msg_log(TUAN_NOTIFYDELIVER_MSG,$tuan_buying_id);
+        echo json_encode(array('success' => true,'msg' => '推送模板消息成功'));
+    }
+
+    public function admin_send_message(){
+        $this->autoRender = false;
+        $tuanBuyingId = preg_split('/,/',$_REQUEST['tuanBuyingId']);
+        $tuan_msg = $_REQUEST['msg'];
+        foreach($tuanBuyingId as $tuanBuying_id){
+            $msg_element = get_tuan_msg_element($tuanBuying_id);
+            $product_name = $msg_element['product_name'];
+            $tuan_name = $msg_element['tuan_name'];
+            $tuan_addr = $msg_element['tuan_addr'];
+            $title = '亲，您在'.$tuan_name.'团购的'.$product_name.'已经为您送到'.$tuan_addr.'已经发货啦，请您注意查收';
+            $msg = $tuan_msg?$tuan_msg:$title;
+            $consignee_phones = $msg_element['consignee_mobilephones'];
+            foreach($consignee_phones as $consignee_phone){
+                message_send($msg,$consignee_phone);
+            }
+        }
+        echo json_encode(array('success' => true,'msg' => '短信发送成功'));
+    }
+
 
     /**
      * 给所有团提示
@@ -212,7 +292,7 @@ class TuanMsgController extends AppController{
             'flag' => $tb_id,
             'send_date' => date(FORMAT_DATETIME)
         );
-        $this->TemplateMsgLog->save($msg_log);
+        $this->TuanBuyingMessages->save($msg_log);
     }
 
 }

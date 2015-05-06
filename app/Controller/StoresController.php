@@ -29,6 +29,26 @@ class StoresController extends AppController
             }
         }
 
+        if ($this->is_admin($this->currentUser['id'])) {
+            $brand_id = $_REQUEST['brand_id'];
+            if(empty($brand_id)){
+                $brand_id = $this->Session->read('admin_brand_id');
+            }
+            if(!empty($brand_id)){
+                $this->brand = $this->find_brand_by_id($brand_id);
+                if(empty($this->brand)){
+                    $this->__message('商家ID有误', '/');
+                    return false;
+                }
+                //admin user write admin brand id
+                $this->Session->write('admin_brand_id',$brand_id);
+                return true;
+            }else{
+                $this->__message('商家ID有误', '/');
+                return false;
+            }
+        }
+
         $this->brand = $this->find_my_brand($this->currentUser['id']);
         if (empty($this->brand)) {
             if ($refuse_redirect) {
@@ -105,27 +125,20 @@ class StoresController extends AppController
 
     public function index()
     {
-        $uid = $this->currentUser['id'];
-        if ($uid) {
-            $this->loadModel('Brand');
-            $this->brand = $this->find_my_brand($uid);
-            if (!empty($this->brand)) {
-                //
-                $this->set('brand', $this->brand);
-                if ($uid == $this->brand['Brand']['creator']) {
-                    $this->loadModel('Oauthbind');
-                    $bind = $this->Oauthbind->findWxServiceBindByUid($uid);
-                    if (empty($bind)) {
-                        $this->set('should_bind', true);
-                    }
+        $this->checkAccess();
+        if (!empty($this->brand)) {
+            $this->set('brand', $this->brand);
+            $uid = $this->currentUser['id'];
+            if ($uid == $this->brand['Brand']['creator']) {
+                $this->loadModel('Oauthbind');
+                $bind = $this->Oauthbind->findWxServiceBindByUid($uid);
+                if (empty($bind)) {
+                    $this->set('should_bind', true);
                 }
-            } else {
-                $this->redirect('/');
             }
         } else {
-            $this->redirect('/users/login?referer=/s/index');
+            $this->redirect('/');
         }
-
     }
 
     public function add_product()
@@ -191,6 +204,7 @@ class StoresController extends AppController
                         }
                     }
                     $this->Session->setFlash(__('The Data has been saved'));
+
                     $this->redirect(array('action' => 'products'));
                 } else {
                     setFlashError($this->Session, __('The Data could not be saved. Please, try again.'));
@@ -302,7 +316,13 @@ class StoresController extends AppController
         $this->Product->updateAll(array('deleted' => DELETED_YES), array('id' => $id, 'deleted' => DELETED_NO, 'brand_id' => $brandId));
         $this->Session->setFlash('删除成功');
 
-        $this->redirect(array('action' => 'products'));
+        if($this->is_admin){
+            $this->redirect(array('action' => 'products','?' => array(
+                'brand_id' => $this->admin_brand_id
+            )));
+        }else{
+            $this->redirect(array('action' => 'products'));
+        }
     }
 
     //todo 排期上了之后根据排期加功能
@@ -341,7 +361,7 @@ class StoresController extends AppController
     public function get_order_by_ids(){
         $this->autoRender=false;
         $ids = $_REQUEST['ids'];
-        $ids = explode(',',$ids);
+        $ids = preg_split('/(,|\n)/',$ids);
         $orders = $this->Order->find('all',array(
             'conditions'=>array(
                 'status' => 1,
@@ -413,7 +433,12 @@ class StoresController extends AppController
         ));
         $p_name = $p['Product']['name'];
         $this->send_track_log($trackid,$product_id,$is_first);
-        $this->redirect('/stores/view_track/'.$product_id.'.html?productname='.$p_name);
+        if($this->is_admin){
+            $this->redirect('/stores/view_track/'.$product_id.'.html?productname='.$p_name.'&brand_id='.$this->admin_brand_id);
+        }else{
+            $this->redirect('/stores/view_track/'.$product_id.'.html?productname='.$p_name);
+
+        }
     }
 
     public function delete_track_log($id){
@@ -531,6 +556,7 @@ class StoresController extends AppController
         $this->set('datalist', $datalist);
         $this->set('page_navi', $page_navi);
         $this->set('op_cate', 'products');
+        $this->set('brand_id', $this->brand['Brand']['id']);
     }
 
     /**
@@ -641,11 +667,8 @@ class StoresController extends AppController
     protected function __business_orders($onlyStatus = array())
     {
         $creator = $this->currentUser['id'];
-
-        $this->loadModel('Brand');
-        $brand = $this->find_my_brand($creator);
         $this->checkAccess();
-
+        $brand = $this->brand;
         if (!empty($brand)) {
             $brand_id = $brand['Brand']['id'];
             $this->set('is_business', true);
@@ -654,16 +677,16 @@ class StoresController extends AppController
             return;
         }
         $cond = array('brand_id' => $brand_id,
-            'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN, ORDER_TYPE_MILK),
+            'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC),
             'NOT' => array(
-            'status' => array(ORDER_STATUS_CANCEL)
-        ));
+                'status' => array(ORDER_STATUS_CANCEL)
+            )
+        );
         $cond['status'] = $onlyStatus;
         $total_count = $this->Order->find('count', array('conditions' => $cond));
         $wait_ship_cond = $cond;
         $wait_ship_cond['status'] = array(ORDER_STATUS_PAID);
         $total_wait_ship_count = $this->Order->find('count', array('conditions' => $wait_ship_cond));
-
 
         $tuan_id = $_REQUEST['tuan_id'];
         if($tuan_id!=null&&$tuan_id!='-1'){
@@ -683,6 +706,7 @@ class StoresController extends AppController
             }
             $this->set('tuan_id',$tuan_id);
         }
+
         $mark_date = $_REQUEST['mark_date'];
         $mark_tip = $_REQUEST['mark_tip'];
         if($mark_date!=null&&$mark_date!="all"&&$mark_tip!=null&&$mark_tip!="all"){
@@ -731,23 +755,40 @@ class StoresController extends AppController
 
         $orders = $this->Paginator->paginate('Order');
 
-
         $ids = array();
         foreach ($orders as $o) {
             $ids[] = $o['Order']['id'];
         }
-        $this->loadModel('Cart');
-        $Carts = $this->Cart->find('all', array(
-            'conditions' => array(
-                'order_id' => $ids,
-            )));
+
         $order_carts = array();
-        foreach ($Carts as $c) {
-            $order_id = $c['Cart']['order_id'];
-            if (!isset($order_carts[$order_id])) {
-                $order_carts[$order_id] = array();
+        if(!empty($ids)){
+            $this->loadModel('Cart');
+            $Carts = $this->Cart->find('all', array(
+                'conditions' => array(
+                    'order_id' => $ids,
+                )));
+            foreach ($Carts as $c) {
+                $order_id = $c['Cart']['order_id'];
+                if (!isset($order_carts[$order_id])) {
+                    $order_carts[$order_id] = array();
+                }
+                $order_carts[$order_id][] = $c;
             }
-            $order_carts[$order_id][] = $c;
+
+            $spec_ids = Hash::extract($Carts,'{n}.Cart.specId');
+            $spec_ids = array_unique($spec_ids);
+            if(!empty($spec_ids)){
+                $this->loadModel('ProductSpecGroup');
+                $spec_groups = $this->ProductSpecGroup->find('all',array(
+                    'conditions' => array(
+                        'id' => $spec_ids
+                    )
+                ));
+                if(!empty($spec_groups)){
+                    $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
+                    $this->set('spec_groups', $spec_groups);
+                }
+            }
         }
 
         $this->set('orders', $orders);
@@ -767,10 +808,8 @@ class StoresController extends AppController
     protected function __business_orders_export($onlyStatus = array())
     {
         $creator = $this->currentUser['id'];
-
-        $this->loadModel('Brand');
-        $brand = $this->find_my_brand($creator);
-
+        $this->checkAccess();
+        $brand = $this->brand;
         if (!empty($brand)) {
             $this->set('is_business', true);
         } else {
@@ -778,8 +817,8 @@ class StoresController extends AppController
             return;
         }
 
-        $cond = array('brand_id' => $brand['Brand']['id'],
-            'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN, ORDER_TYPE_MILK),
+        $cond = array('brand_id' => $this->brand['Brand']['id'],
+            'type' => array(ORDER_TYPE_DEF, ORDER_TYPE_GROUP_FILL, ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC),
             'NOT' => array(
             'status' => array(ORDER_STATUS_CANCEL)
         ));
@@ -814,7 +853,48 @@ class StoresController extends AppController
             }
             $order_carts[$order_id][] = $c;
         }
-
+        //查规格
+        $spec_ids = Hash::extract($Carts,'{n}.Cart.specId');
+        $spec_ids = array_unique($spec_ids);
+        if(count($spec_ids)!=1 || !empty($spec_ids[0])){
+            $this->loadModel('ProductSpecGroup');
+            $spec_groups = $this->ProductSpecGroup->find('all',array(
+                'conditions' => array(
+                    'id' => $spec_ids
+                )
+            ));
+            $spec_groups = Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
+            $this->set('spec_groups', $spec_groups);
+        }
+        //查排期
+        $consign_ids = array_unique(Hash::extract($Carts,'{n}.Cart.consignment_date'));
+        if(count($consign_ids)!=1 || !empty($consign_ids[0])){
+            $this->loadModel('ConsignmentDate');
+            $consign_dates = $this->ConsignmentDate->find('all',array(
+                'conditions' => array(
+                    'id' => $consign_ids
+                )
+            ));
+            $consign_dates = Hash::combine($consign_dates,'{n}.ConsignmentDate.id','{n}.ConsignmentDate.send_date');
+            $this->set('consign_dates', $consign_dates);
+        }
+        //团购发货时间
+        $tuan_ids = array();
+        foreach($orders as $order){
+            if($order['Order']['type'] == ORDER_TYPE_TUAN){
+                if(!in_array($order['Order']['member_id'], $tuan_ids)){
+                    $tuan_ids[] = $order['Order']['member_id'];
+                }
+            }
+        }
+        if(!empty($tuan_ids)){
+            $this->loadModel('TuanBuying');
+            $tuan_consign_times =$this->TuanBuying->find('list', array(
+                'conditions' => array('id' => $tuan_ids),
+                'fields' => array('id', 'consign_time')
+            ));
+            $this->set('tuan_consign_times', $tuan_consign_times);
+        }
         $this->set('orders', $orders);
         $this->set('order_carts', $order_carts);
         $this->set('ship_type', ShipAddress::ship_type_list());
@@ -895,6 +975,13 @@ class StoresController extends AppController
             'deleted' => DELETED_NO,
         )));
     }
+
+    private function find_brand_by_id($id){
+        return $this->Brand->find('first', array('conditions' => array(
+            'id' => $id,
+        )));
+    }
+
     /**店内商品排序
     */
     public function product_sort(){
@@ -1319,7 +1406,7 @@ class StoresController extends AppController
                 )
             ));
             $product_name = $product['Product']['name'];
-            $msg = '您在[朋友说]购买的['.$product_name.']最新状态：'.$track_log.'。请关注微信公众号:pyshuo2014查看订单信息。';
+            $msg = $track_log;
             $track_log_msg = '您购买的('.$product_name.')最新状态,'.$track_log;
             foreach($orders as $item){
                 $user_id = $item['Order']['creator'];

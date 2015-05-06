@@ -53,6 +53,7 @@ class CartsController extends AppController{
             $product_id = $this->data['Cart']['product_id'];
             $num = $this->data['Cart']['num'];
             $specId = $this->data['Cart']['spec'];
+            $send_date = $this->data['Cart']['send_date'];
             $type = $buyingCom->convert_cart_type($this->data['Cart']['type']);
             $tryId = intval($_POST['try_id']);
             $uid = $this->currentUser['id'];
@@ -66,9 +67,12 @@ class CartsController extends AppController{
             }
 
             $returnInfo = $buyingCom->check_and_add($cartM, $type, $tryId, $uid, $num, $product_id, $specId, $sessionId);
-            $this->log('check_and_add:specId='.$specId.', type='.$type.', tryId='.$tryId.', uid='.$uid.',num='.$num.', product_id='.$product_id.', customized_price='.$customized_price.', returnInfo='.json_encode($returnInfo));
+            $this->log('check_and_add:specId='.$specId.', type='.$type.', tryId='.$tryId.', uid='.$uid.',num='.$num.', product_id='.$product_id.', customized_price='.$customized_price.', send_date='.$send_date.', returnInfo='.json_encode($returnInfo));
             if (!empty($returnInfo) && $returnInfo['success']) {
                 $cart_id = $returnInfo['id'];
+                if ($send_date && $cart_id) {
+                    $cartM->updateAll(array('send_date' => "'".$send_date."'"), array('id' => $cart_id));
+                }
                 if ($_REQUEST['dating'] && $cart_id && $_REQUEST['dating_text']) {
                     $dating = trim($_REQUEST['dating']);
                     $dating_text = trim($_REQUEST['dating_text']);
@@ -76,8 +80,6 @@ class CartsController extends AppController{
                         $cartM->updateAll(array('consignment_date' => $dating,'name' => 'concat(name, "(' . $dating_text . ')")'), array('id' => $cart_id));
                     }
                 }
-
-
                 if (accept_user_price($product_id, $customized_price)) {
                     if (empty($uid)) {
                         $returnInfo['success']  = false;
@@ -160,8 +162,10 @@ class CartsController extends AppController{
             'conditions' => array(
                 'id' => $product_ids
             ),
-            'fields' => array('id','brand_id')
+            'fields' => array('id','brand_id','published')
         ));
+        $product_published_map = Hash::combine($product_brand_map,'{n}.Product.id','{n}.Product.published');
+        $this->set('product_published_map',$product_published_map);
         $brandM = ClassRegistry::init('Brand');
         $brand_ids = Hash::extract($product_brand_map,'{n}.Product.brand_id');
         $brandInfos = $brandM->find('all', array(

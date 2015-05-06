@@ -1,0 +1,62 @@
+{{$this->Html->css(array('bootstrap.min.css'));}}
+<ol class="breadcrumb">
+  <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+  <li class="active">自提点管理</li>
+</ol>
+
+<form class="form-inline" method="get" action="/manage/admin/offline_stores/index">
+  <div style="padding-bottom: 10px;">
+    <input type="hidden" name="noajax" value="true">
+    <div class="form-group">
+      <select class="form-control area" name="area_id"  data-team-id="{{$area_id}}">
+        <option value="-1">请选择区域</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <select class="form-control type" name="type"  data-team-id="{{$type}}">
+        <option value="-1">请选择类型</option>
+        <option value="0">好邻居</option>
+        <option value="1">自有</option>
+      </select>
+    </div>
+    <button type="submit" style="margin-right:10px;"  class="btn btn-primary">查看自提点</button>
+  </div>
+  <div class="pull-right">
+    <a href="/manage/admin/offline_stores/new" role="button" class="btn btn-primary">新建自提点</a>
+  </div>
+</form>
+
+<table class="table table-striped table-bordered table-condensed table-hover">
+    <thead>
+    <tr>
+        <th>编号</th><th>区域</th><th>类型</th><th>显示地址</th><th>详细地址</th><th>联系人</th><th>美食团</th><th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{loop $offline_stores $index $offline_store}}
+    <?php
+      $location = $locations[$offline_store['OfflineStore']['area_id']];
+    ?>
+    <tr class="offline-store">
+        <td>{{$offline_store['OfflineStore']['id']}}</td>
+        <td>{{$location['Location']['name']}}</td>
+        <td>
+          {{$offline_store['OfflineStore']['type'] == 0 ? '好邻居' : '自有'}}
+          {{$offline_store['OfflineStore']['shop_no'] == 0 ? '' : '('.$offline_store['OfflineStore']['shop_no'].')'}}
+        </td>
+        <td>{{$offline_store['OfflineStore']['alias']}}</td>
+        <td>{{$offline_store['OfflineStore']['name']}}</td>
+        <td>
+            {{$offline_store['OfflineStore']['owner_name']}}({{$offline_store['OfflineStore']['owner_phone']}})
+        </td>
+        <td>
+          {{$offline_store['OfflineStore']['tuan_team_count']}}支
+        </td>
+        <td>
+          <a class="btn btn-primary" href="/manage/admin/offline_stores/edit/{{$offline_store['OfflineStore']['id']}}">编辑</a>
+        </td>
+    </tr>
+    {{/loop}}
+    </tbody>
+</table>
+{{$this->Html->script(array('manage/offline_stores/index.js?v5'));}}

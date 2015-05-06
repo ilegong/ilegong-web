@@ -8,14 +8,17 @@
 
 class ProductTry extends AppModel {
 
-    public function find_trying($limit = 2) {
+    public function find_trying() {
+        $today = date('Y-m-d');
+        $tomorrow = date('Y-m-d',strtotime('+1 day',strtotime($today)));
         $tries = $this->find('all', array(
             'conditions' => array(
+                'deleted' => DELETED_NO,
                 'status' => PRODUCT_TRY_ING,
-                'start_time >= date_format(now(), "%Y-%m-%d 00:00:00")',
+                'start_time >=' => $today,
+                'start_time <' => $tomorrow
             ),
-            'limit' => $limit,
-            'order' => 'start_time asc'
+            'order' => 'start_time DESC'
         ));
 
         foreach($tries as &$trying) {
