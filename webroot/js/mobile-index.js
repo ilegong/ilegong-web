@@ -61,7 +61,7 @@ $(document).ready(function () {
         if(good['limit_area']==1){
             goodHtml+='< p > 仅限 < br / > 北京 < / p > ';
         }
-        goodHtml += '<img src="' + good['coverimg'] + '"/> <div class="title">' + good['name'] + '</div> <div class="price"><strong>' + price + '</strong>';
+        goodHtml += '<img src="' + good['listimg'] + '"/> <div class="title">' + good['name'] + '</div> <div class="price"><strong>' + price + '</strong>';
         if (originPrice > 0) {
             goodHtml += '&nbsp;<label>' + originPrice + '</label>'
         }

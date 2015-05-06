@@ -521,7 +521,7 @@ ul li{ list-style:none;}
 .content{width: 80%;float:right;height: 100%;}
 .content .good{ margin: 5px;}
 .content a.xq{ display: block; text-decoration: none; background-color: #fff; position: relative;}
-.content a.xq p{ display: block; position: absolute; background-color: #ffa200; color: #ffffff; padding: 5px; font-size: 1em; text-align:center; right: 0; top: 0;}
+.content a.xq p{ display: block; position: absolute; background-color: #ffa200; color: #ffffff; padding: 5px; font-size: 1em; text-align:center; left: 0; top: 0;}
 .content a.xq img{max-width: 100%;}
 .content .title{ font-size: 1em; padding:8px 10px 3px 10px; color: #333333; font-weight: bold;}
 .content .price{ font-size:1em; padding: 0 8px 2px 8px;}
