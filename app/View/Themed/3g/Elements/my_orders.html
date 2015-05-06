@@ -52,12 +52,10 @@ $brand = $brands[$order['Order']['brand_id']];
                 {{elseif $order['Order']['status']==1}}
                     <a class="btn_skin_orange" href="javascript:;" name="remind-deliver" data-val="{{$order['Order']['id']}}">提醒发货</a>
                 {{elseif $order['Order']['status']==3}}
-                    {{if $order['Order']['try_id']==0}}
-                        {{if $order['Order']['is_comment'] == ORDER_COMMENTED}}
-                            <a class="btn_skin_gary" href="/comments/add_comment/{{$order['Order']['id']}}.html?history={{urlencode('/orders/mine.html?tab=comment')}}">查看评论</a>
-                        {{else}}
-                            <a class="btn_skin_orange" href="/comments/add_comment/{{$order['Order']['id']}}.html?history={{urlencode('/orders/mine.html?tab=comment')}}">评论赢积分</a>
-                        {{/if}}
+                    {{if $order['Order']['is_comment'] == ORDER_COMMENTED}}
+                        <a class="btn_skin_gary" href="/comments/add_comment/{{$order['Order']['id']}}.html?history={{urlencode('/orders/mine.html?tab=comment')}}">查看评论</a>
+                    {{else}}
+                        <a class="btn_skin_orange" href="/comments/add_comment/{{$order['Order']['id']}}.html?history={{urlencode('/orders/mine.html?tab=comment')}}">评论赢积分</a>
                     {{/if}}
                 {{/if}}
             </p>

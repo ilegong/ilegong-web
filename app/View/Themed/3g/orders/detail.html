@@ -155,7 +155,7 @@
         <li class="fr">
             <a href="#X" id="delete_order" class="order_deletebtn fl">删除订单</a>
         </li>
-        {{elseif $order['Order']['status']== ORDER_STATUS_RECEIVED&&$order['Order']['try_id']==0}}
+        {{elseif $order['Order']['status']== ORDER_STATUS_RECEIVED}}
         <li class="fr">
             {{if $order['Order']['is_comment']==0}}
             <a href="/comments/add_comment/{{$order['Order']['id']}}" class="order_paybtn fl"  value="{{$order['Order']['id']}}">评论赢积分</a>
