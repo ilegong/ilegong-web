@@ -469,6 +469,11 @@ function setCoverImg(model,imgsrc){
 	$('#'+model+'CoverimgPreview').attr('src',imgsrc);
 }
 
+function setListImg(model,imgsrc){
+    $('#'+model+'Listimg').val(imgsrc);
+    $('#'+model+'ListimgPreview').attr('src',imgsrc);
+}
+
 function addNewCrawlRegular()
 {
 	var field = $('.model-schema-list').val();
