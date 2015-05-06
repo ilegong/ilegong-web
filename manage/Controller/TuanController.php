@@ -484,6 +484,7 @@ class TuanController extends AppController
         $this->set('b2c_empty_send_date_count', $this->_query_b2c_empty_send_date());
         $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
+        $this->set('orders_today_count', $this->_query_orders_today_count());
     }
 
     function admin_send_date($type)
