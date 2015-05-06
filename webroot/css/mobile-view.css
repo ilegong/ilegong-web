@@ -532,5 +532,23 @@ ul li{ list-style:none;}
 .content s{ display: block; font-style: normal; background-color: #ffffff; padding-bottom: 8px;}
 .content .txt{ font-size:1em; color: #999999; line-height: 2.1em; padding-left: 3px;}
 .content .btn{ text-decoration:none; background-color: #ffa200; color: #fff; line-height: 30px; padding: 0 10px; font-size: 1em; font-weight: bold; margin-right: 10px;}
+/*秒杀*/
+.tuandetail_seckill{ margin:5px; background-color:#ffffff; position:relative;}
+.tuandetail_seckill span{ display:block;}
+.tuandetail_seckill span img{ width:100%; border:0; margin:0; padding:0;}
+.tuandetail_seckill span h1{ color:#333333; display:block; font-size:1em; font-weight:normal;padding:8px 10px 3px 10px; font-weight: bold;}
+.tuandetail_seckill span em{ font-style:normal; color:#999999; display:block;padding-left:10px;}
+.tuandetail_seckill span em strong{ color:#ff9000;}
+.tuandetail_seckill p{ display: block; position: absolute; background-color:#c73c3c; color: #ffffff; width: 45px; height: 45px; border-radius: 45px; line-height: 45px; font-weight: bold; font-size: 1em; text-align:center; left: 0; top: 0;}
+.tuandetail_seckill_btn{ text-decoration:none; background-color:#c73c3c; color: #fff; line-height: 30px; padding: 0 10px; font-size: 1em; font-weight: bold; margin-right: 10px; display: block;}
+.seckill_disabled{ background-color: #999999; color: #ffffff; width: 76px; padding: 0; text-align: center;}
+/*团购进度条*/
+.tuan_bar{ color: #999999; line-height: 18px; padding:5px 0 5px 10px;}
+.tuan_bar span{ color: #ffa200;}
+.bar{ width: 100%; background-color: #f1f1f1; height: 10px; position: relative; margin:2px 0 3px 0;}
+.bar_buy{ background-color: #29ac0e; height: 10px; position: absolute; top: 0; left: 0;}
+
+
+
 
 
