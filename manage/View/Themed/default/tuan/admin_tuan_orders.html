@@ -282,9 +282,6 @@
                 <button type="submit" class="btn btn-primary text-center">查看订单</button>
             </div>
         </form>
-        {{if $msg_ready}}
-        <button  class="btn btn-success pull-right offline_store_msg">修改状态发到货消息</button>
-        {{/if}}
     </div>
     <div id="emptySendDate" class="tab-pane">
         <strong class="text-danger lead">只能查询团购、秒杀，排期普通商品无法查询</strong>
@@ -313,6 +310,8 @@
         {{/loop}}
     </h1>
     {{/if}}
+    <button  class="btn btn-success pull-right ship-to-pys-stores">朋友说自提点发货</button>
+
 </div>
 <hr/>
 <table class="table table-bordered">
@@ -355,8 +354,12 @@
               $consign_time = empty($date)?'': date('m-d', strtotime($date));
               $brand = $brands[$cart['Cart']['product_id']];
             ?>
-    <tr data-order-id = {{$order['Order']['id']}}>
-        <td><input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids"></td>
+    <tr data-order-id="{{$order[Order][id]}}">
+        <td>
+          {{if ($order['Order']['type'] == 5 || $order['Order']['type'] == 6) && ($offline_store['OfflineStore']['type'] == 1)}}
+            <input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids">
+          {{/if}}
+        </td>
         <td>{{$order['Order']['id']}}</td>
         <td><a href="/manage/admin/tuan/query_by_user?con_creator={{$order['Order']['creator']}}">{{$order['Order']['creator']}}</a>
         </td>
