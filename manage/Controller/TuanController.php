@@ -650,15 +650,26 @@ class TuanController extends AppController
             $tuan_buys = Hash::combine($tuan_buys, '{n}.TuanBuying.id', '{n}.TuanBuying');
         }
 
-        $tuans = array();
+        $tuan_teams = array();
         if (!empty($tuan_buys)) {
             $tuan_ids = Hash::extract($tuan_buys, '{n}.tuan_id');
-            $tuans = $this->TuanTeam->find('all', array(
+            $tuan_teams = $this->TuanTeam->find('all', array(
                 'conditions' => array(
                     'id' => $tuan_ids
                 )
             ));
-            $tuans = Hash::combine($tuans, '{n}.TuanTeam.id', '{n}.TuanTeam');
+            $tuan_teams = Hash::combine($tuan_teams, '{n}.TuanTeam.id', '{n}.TuanTeam');
+        }
+
+        $offline_stores = array();
+        $offline_store_ids = array_filter(array_unique(Hash::extract($tuan_teams, "{n}.TuanTeam.offline_store_id")));
+        if (!empty($offline_store_ids)) {
+            $offline_stores = $this->OfflineStore->find('all', array(
+                'conditions'=> array(
+                    'id' => $offline_store_ids
+                )
+            ));
+            $offline_stores = Hash::combine($offline_stores, "{n}.OfflineStore.id", "{n}");
         }
 
         $p_ids = Hash::extract($carts, '{n}.Cart.product_id');
@@ -738,7 +749,8 @@ class TuanController extends AppController
         $this->set('product_count', $product_count);
         $this->set('orders', $orders);
         $this->set('tuan_buys', $tuan_buys);
-        $this->set('tuans', $tuans);
+        $this->set('tuans', $tuan_teams);
+        $this->set('offline_stores', $offline_stores);
         $this->set('order_carts', $order_carts);
         $this->set('brands', $brands);
         $this->set('consign_dates', $consign_dates);
@@ -758,19 +770,6 @@ class TuanController extends AppController
             }
             if (!empty($send_date)) {
                 $conditions['DATE(Cart.send_date)'] = $send_date;
-            }
-            if ($store_id != -1) {
-                $store_ids = explode(",", $store_id);
-                $conditions['Order.consignee_id'] = $store_ids;
-                $this->loadModel('OfflineStore');
-                $store_info = $this->OfflineStore->find('first', array(
-                    'conditions'=> array('id' => $store_ids[0])
-                ));
-                if($store_info['OfflineStore']['type']==1 && $order_status == 1){
-                    $this->set('msg_ready', true);
-                }elseif($store_info['OfflineStore']['type'] == 0 && $order_status == 1){
-                    $this->set('code_ready',true);
-                }
             }
             $this->_query_orders($conditions, $order_by);
         }

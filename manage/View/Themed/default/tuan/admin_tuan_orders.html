@@ -318,7 +318,7 @@
 <table class="table table-bordered">
     <thead>
     <tr>
-        {{if $msg_ready}}<td><input type="checkbox" value="0" id="check_all_tb"></td>{{/if}}
+        <td><input type="checkbox" value="0" id="check_all_tb"></td>
         <td>订单号</td>
         <td>用户ID</td>
         <td>订单状态</td>
@@ -333,15 +333,13 @@
         <td>配送方式</td>
         <td>发货时间</td>
         <td>收件人</td>
-<td>团队名称</td>
+        <td>团队名称</td>
         <td>收件地址</td>
         <td>电话</td>
-        {{if $code_ready}}
-        <td>提货码</td>
-        {{/if}}
         <td>支付方式</td>
         <td>交易号</td>
         <td>备注</td>
+        <td>操作</td>
     </tr>
     </thead>
     <tbody>
@@ -349,6 +347,8 @@
     <?php
               $tuan_buying = $tuan_buys[$order['Order']['member_id']];
               $tuan = $tuans[$tuan_buying['tuan_id']];
+              $tuan_team = $tuan_teams[$tuan_buying['TuanBuying']['tuan_id']];
+              $offline_store = $offline_stores[$tuan_team['TuanTeam']['offline_store_id']];
           ?>
     {{loop $order_carts[$order['Order']['id']] $index $cart}}
     <?php
@@ -357,7 +357,7 @@
               $brand = $brands[$cart['Cart']['product_id']];
             ?>
     <tr data-order-id = {{$order['Order']['id']}}>
-        {{if $msg_ready}}<td><input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids"></td>{{/if}}
+        <td><input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids"></td>
         <td>{{$order['Order']['id']}}</td>
         <td><a href="/manage/admin/tuan/query_by_user?con_creator={{$order['Order']['creator']}}">{{$order['Order']['creator']}}</a>
         </td>
@@ -422,9 +422,6 @@
         </td>
 
         <td>{{$order['Order']['consignee_mobilephone']}}</td>
-        {{if $code_ready}}
-            <td><input type="text" name="code_{{$order['Order']['id']}}"><button type="button" class="send_code">发提货码</button></td>
-        {{/if}}
         <td>
             {{if $order['Pay']['trade_type']=='JSAPI'}}
             微信支付
@@ -437,6 +434,11 @@
         </td>
         <td>
             {{$order['Order']['remark']}}
+        </td>
+        <td>
+          {{if $offline_store['OfflineStore']['type'] == 0 && $order['Order']['status']== 1}}
+          <input type="text" name="code_{{$order['Order']['id']}}"><button type="button" class="send_code">发提货码</button></td>
+          {{/if}}
         </td>
     </tr>
     {{/loop}}
