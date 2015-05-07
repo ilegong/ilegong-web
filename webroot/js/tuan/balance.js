@@ -80,7 +80,9 @@ $('#confirm_next').on('click',function(e){
     var remarkAddress = $("input[name='consignee_remark_address']").val()||"";
     var address = $("input[name='consignee_address']").val() || choseAddress.text();
     if(address.trim()){
-        address = address + '['+remarkAddress+']';
+        if(remarkAddress){
+            address = address + '['+remarkAddress+']';
+        }
     }else{
         if(remarkAddress.trim()){
             address = remarkAddress;
