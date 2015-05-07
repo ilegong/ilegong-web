@@ -73,7 +73,7 @@ $(document).ready(function () {
         var goodUrl = '/products/' + productDate.yyyymmdd() + '/' + good['slug'] + '.html?history=/&amp;_sl=h5.cate.list';
         var goodHtml = '<div class="good"> <a href="'+goodUrl+'" class="xq">';
         if(good['limit_area']==1){
-            goodHtml+='< p > 仅限 < br / > 北京 < / p > ';
+            goodHtml+='<p>仅限<br/>北京</p>';
         }
         goodHtml+='<img src="'+ good['listimg']+'"/> <div class="title">' + good['name'] + '</div> <ul class="clearfix" style="margin-bottom: 0;"> <li class="price fl"><strong>￥' + price + '</strong>';
         if (originPrice > 0) {
