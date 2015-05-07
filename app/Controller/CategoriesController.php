@@ -299,7 +299,7 @@ class CategoriesController extends AppController {
             $tryings = $trying_result;
         }
         $this->set('tryings',$tryings);
-        $this->set('hideNav',true);
+        $this->set('hideFooter',true);
         $this->set('op_cate', OP_CATE_HOME);
     }
 
