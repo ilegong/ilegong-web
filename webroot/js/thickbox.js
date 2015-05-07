@@ -16,9 +16,10 @@ $(document).ready(function(){
 //add thickbox to href & area elements that have a class of .thickbox
 function tb_init(domChunk){
     $(domChunk).click(function(){
-        var t = this.title || this.name || null;
-        var a = this.href || this.alt;
-        var g = this.rel || false;
+        var me = $(this);
+        var t = me.attr('title') || me.attr('name') || null;
+        var a = me.attr('href') || me.attr('alt');
+        var g = me.attr('rel') || false;
         tb_show(t,a,g);
         this.blur();
         return false;
@@ -243,6 +244,7 @@ function tb_show(caption, url, imageGroup) {//function called when the user clic
 
     } catch(e) {
         //nothing here
+        console.log(e);
     }
 }
 

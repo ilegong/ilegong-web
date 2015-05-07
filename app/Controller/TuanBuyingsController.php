@@ -424,6 +424,7 @@ class TuanBuyingsController extends AppController{
         $shop_name = $_POST['shop_name'];
         $uid = $this->currentUser['id'];
         $way = $_POST['way'];
+        $global_sec = $_POST['global_sec'];
         if (empty($uid)) {
             $this->log("not login for tuan order:".$cart_id);
             echo json_encode(array('success'=> false));
@@ -460,15 +461,17 @@ class TuanBuyingsController extends AppController{
             }
             $pid = $cart_info['Cart']['product_id'];
             $area = '';
-            $tuan_info = $this->TuanTeam->findById($tuan_id);
-            if(empty($tuan_info)){
-                $this->log("can't find tuan".$tuan_id);
-                return;
+            if($global_sec!="true"){
+                $tuan_info = $this->TuanTeam->findById($tuan_id);
+                if(empty($tuan_info)){
+                    $this->log("can't find tuan".$tuan_id);
+                    return;
+                }
             }
             $this->loadModel('OrderConsignees');
             $consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN);
             $p_address = $_POST['address'];
-            if($tuan_info['TuanTeam']['type'] == 1){
+            if($tuan_info['TuanTeam']['type'] == 1||$global_sec=='true'){
                 if($_POST['way'] != 'ziti'){
                     $consignees['address'] = $p_address;
                 }
@@ -501,14 +504,14 @@ class TuanBuyingsController extends AppController{
             }
             $this->OrderConsignees->save($consignees);
             $offline_store_id = empty($tuan_info['TuanTeam']['offline_store_id'])?0:$tuan_info['TuanTeam']['offline_store_id'];
+            $shop_id= $offline_store_id;
+            if(!empty($_POST['shop_id'])){
+                $shop_id= $_POST['shop_id'];
+            }
             if($tuan_sec=='true'){
                 //remark order sec kill
-                $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, '秒杀');
+                $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, '秒杀',$shop_id);
             }else{
-                $shop_id= $offline_store_id;
-                if(!empty($_POST['shop_id'])){
-                   $shop_id= $_POST['shop_id'];
-                }
                 $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, $shop_name, $shop_id);
             }
             $order_id = $order['Order']['id'];
