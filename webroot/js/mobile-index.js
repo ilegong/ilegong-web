@@ -3,6 +3,8 @@ $(document).ready(function () {
     var $productsContent = $('#products-content');
     var $seckill_product = $('#seckill_product');
     var currentTagId = -1;
+    var firstTag = $('div.menue ul li:first div');
+    var oldColor = firstTag.css('background-color');
     //format number
     Number.prototype.format = function (n, x) {
         var re = '(\\d)(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
@@ -25,6 +27,11 @@ $(document).ready(function () {
             currentTagId = tagId;
             $productsContent.html('');
             loadDatas(tagId);
+        }
+        if(tagId!=-1||tagId!='-1'){
+            firstTag.css('background-color','#f9f9f9');
+        }else{
+            firstTag.css('background-color',oldColor);
         }
     });
 
