@@ -55,13 +55,10 @@ class CategoriesController extends AppController {
             );
         }
         $productList = array();
-        $brandIds = array();
         foreach ($list as $val) {
             $productList[] = $val['Product'];
-            $brandIds[] = $val['Product']['brand_id'];
         }
-        $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
-        $result = array('data_list'=>$productList,'mapBrands'=>$mappedBrands);
+        $result = array('data_list'=>$productList);
         $result = json_encode($result);
         Cache::write('tag-products'.$tagId,$result);
         echo $result;
