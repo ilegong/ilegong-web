@@ -35,10 +35,8 @@ $(document).ready(function () {
 
     //draw dom
     function drawToDOM(datas) {
-        //console.log(datas);
         var data_list = datas['data_list'];
         var mapBrands = datas['mapBrands'];
-        console.log(data_list);
         $.each(data_list, function (index, item) {
             var brand = mapBrands[item['brand_id']];
             $productsContent.append(genGoodItemDom(item, brand));

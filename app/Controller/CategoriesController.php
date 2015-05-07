@@ -7,7 +7,7 @@ class CategoriesController extends AppController {
     public function getTagProducts($tagId){
         $this->autoRender=false;
         $result = Cache::read('tag-products'.$tagId);
-        if(!empty($result)){
+        if(!empty($result)&&$result!='1'){
             echo $result;
             return;
         }
@@ -62,7 +62,7 @@ class CategoriesController extends AppController {
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
         $result = array('data_list'=>$productList,'mapBrands'=>$mappedBrands);
         $result = json_encode($result);
-        $result = Cache::write('tag-products'.$tagId,$result);
+        Cache::write('tag-products'.$tagId,$result);
         echo $result;
 
     }
