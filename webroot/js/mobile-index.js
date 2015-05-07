@@ -1,6 +1,7 @@
 $(document).ready(function () {
     var cache = {};
     var $productsContent = $('#products-content');
+    var $seckill_product = $('#seckill_product');
     var currentTagId = -1;
     //format number
     Number.prototype.format = function (n, x) {
@@ -33,6 +34,11 @@ $(document).ready(function () {
 
     //load tag products
     function loadDatas(tagId) {
+        if(tagId!=-1||tagId!='-1'){
+            $seckill_product.hide();
+        }else{
+            $seckill_product.show();
+        }
         if (!cache[tagId]) {
             cache[tagId] = $.getJSON('/categories/getTagProducts/' + tagId).promise();
         }
