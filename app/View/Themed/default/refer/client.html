@@ -2,18 +2,18 @@
 {{if !$reg_done}}
 <div class="tuijian_login">{{$ref_user['nickname']}}向您推荐了【朋友说】{{if !empty($old_refer_name)}} <br/> 【朋友说】-- 朋友间分享健康美食的平台。
     (您已经接受了{{$old_refer_name}}的邀请){{/if}}
-    {{if $referred}}
-    您已经接受过{{$old_refer_name}}的邀请，<a href="/">去看看</a>。
-    {{else}}
-    {{if !$phone_bind}}
-    <a href="javascript:;" class="tuijian_login_a" class="accept_done">接受邀请马上注册</a>
-    {{elseif $receive_cnt <= 0}}
-    <a href="/">完成第一单</a>
-    {{/if}}
-    {{/if}}
-   </div>
+</div>
+{{if $referred}}
+<a href="/">去逛逛</a>
 {{else}}
-<div class="tuijian_bg"><strong>推荐好友下单成功</strong><br/>即可获得价值10元柴鸡蛋或酸奶！<br/><a href="/refer/index/{{$CurrentUser['id']}}.html">去推荐</a ></div>
+{{if !$phone_bind}}
+<a href="javascript:;" class="tuijian_login_a accept_done">接受邀请马上注册</a>
+{{elseif $receive_cnt <= 0}}
+<a href="/">完成第一单</a>
+{{/if}}
+{{/if}}
+{{else}}
+<div class="tuijian_bg"><strong>推荐好友下单成功</strong><br/>即可获得价值10元柴鸡蛋或酸奶！<br/><a href="/refer/index/{{$CurrentUser['id']}}.html">去推荐</a></div>
 {{/if}}
     <div class="tuijian" style="border-bottom: 0; margin-top: 0;">
         <h1>{{$ref_user['nickname']}}买过什么</h1>
@@ -124,16 +124,17 @@
 {{if !$reg_done}}
 <div class="tuijian_login">{{$ref_user['nickname']}}向您推荐了【朋友说】{{if !empty($old_refer_name)}} <br/> 【朋友说】-- 朋友间分享健康美食的平台。
     (您已经接受了{{$old_refer_name}}的邀请){{/if}}
+</div>
     {{if $referred}}
-    您已经接受过{{$old_refer_name}}的邀请，<a href="/">去看看</a>。
+        <a href="/">去逛逛</a>
     {{else}}
         {{if !$phone_bind}}
-        <a href="javascript:;" class="tuijian_login_a" class="accept_done">接受邀请马上注册</a>
+        <a href="javascript:;" class="tuijian_login_a accept_done">接受邀请马上注册</a>
         {{elseif $receive_cnt <= 0}}
         <a href="/">完成第一单</a>
         {{/if}}
     {{/if}}
-    </div>
+
 {{else}}
 <div class="tuijian_bg"><strong>推荐好友下单成功</strong><br/>即可获得价值10元柴鸡蛋或酸奶！<br/><a href="/refer/index/{{$CurrentUser['id']}}.html">去推荐</a></div>
 {{/if}}
