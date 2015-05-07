@@ -43,7 +43,7 @@
 
     </div>
     {{if !empty($tryings)}}
-    <div class="tuandetail_seckill clearfix">
+    <div class="tuandetail_seckill clearfix" id="seckill_product" style="display: none;">
         <?php $i = 0; foreach($tryings as $trying) {
         if ($i++>=2) {break;} ?>
         <p>秒杀</p>
