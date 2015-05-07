@@ -346,9 +346,8 @@
     {{loop $orders $order}}
     <?php
               $tuan_buying = $tuan_buys[$order['Order']['member_id']];
-              $tuan = $tuans[$tuan_buying['tuan_id']];
-              $tuan_team = $tuan_teams[$tuan_buying['TuanBuying']['tuan_id']];
-              $offline_store = $offline_stores[$tuan_team['TuanTeam']['offline_store_id']];
+              $tuan_team = $tuan_teams[$tuan_buying['tuan_id']];
+              $offline_store = $offline_stores[$tuan_team['offline_store_id']];
           ?>
     {{loop $order_carts[$order['Order']['id']] $index $cart}}
     <?php
@@ -415,7 +414,7 @@
         </td>
         <td>{{$order['Order']['consignee_name']}}</td>
         <td>
-            <a href="/manage/admin/tuan_buyings/index?team_id={{$tuan['id']}}">{{$tuan['tuan_name']}}</a>
+            <a href="/manage/admin/tuan_buyings/index?team_id={{$tuan_team['id']}}">{{$tuan_team['tuan_name']}}</a>
         </td>
         <td>
             {{$order['Order']['consignee_address']}}
@@ -435,8 +434,8 @@
         <td>
             {{$order['Order']['remark']}}
         </td>
-        <td>
-          {{if $offline_store['OfflineStore']['type'] == 0 && $order['Order']['status']== 1}}
+        <td data-offline-store-type="{{$offline_store['OfflineStore']['type']}}">
+          {{if !empty($offline_store) && $offline_store['OfflineStore']['type'] == 0 && $order['Order']['status']== 1}}
           <input type="text" name="code_{{$order['Order']['id']}}"><button type="button" class="send_code">发提货码</button></td>
           {{/if}}
         </td>

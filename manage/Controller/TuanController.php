@@ -662,7 +662,7 @@ class TuanController extends AppController
         }
 
         $offline_stores = array();
-        $offline_store_ids = array_filter(array_unique(Hash::extract($tuan_teams, "{n}.TuanTeam.offline_store_id")));
+        $offline_store_ids = array_filter(array_unique(Hash::extract($tuan_teams, "{n}.offline_store_id")));
         if (!empty($offline_store_ids)) {
             $offline_stores = $this->OfflineStore->find('all', array(
                 'conditions'=> array(
@@ -749,7 +749,7 @@ class TuanController extends AppController
         $this->set('product_count', $product_count);
         $this->set('orders', $orders);
         $this->set('tuan_buys', $tuan_buys);
-        $this->set('tuans', $tuan_teams);
+        $this->set('tuan_teams', $tuan_teams);
         $this->set('offline_stores', $offline_stores);
         $this->set('order_carts', $order_carts);
         $this->set('brands', $brands);

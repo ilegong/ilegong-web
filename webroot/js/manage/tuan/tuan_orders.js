@@ -230,6 +230,7 @@ $(document).ready(function(){
         var code = codeDom.val();
         var obj = {};
         obj[orderId]=code;
+        return;
         $.post('/manage/admin/tuan_buyings/send_wx_fetch_msg',obj , function(data){
             var success_ids = (data.res).join(',');
             if(data.success){
