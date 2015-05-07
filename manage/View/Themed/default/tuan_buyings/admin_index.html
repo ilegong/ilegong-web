@@ -103,7 +103,9 @@
             {{/if}}
           </a>)
         </td>
-        <td>{{$tuanProduct['alias']}}/{{$tuanTeam['type']==1?大团:小团}}</td>
+        <td>
+          <a href="">{{$tuanProduct['alias']}}</a>/{{$tuanTeam['type']==1?大团:小团}}
+        </td>
         <td>
           {{if $tuanBuying['consignment_type'] == 0}}
             团满发货

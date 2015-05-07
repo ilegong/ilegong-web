@@ -60,7 +60,7 @@ class ShortmessagesController extends AppController {
             $this->redirect('/users/my_coupons');
         }
     }
-    public function get_hongbao(){
+    public function get_hongbao($type = null){
         if (empty($this->currentUser['id']) && $this->is_weixin()) {
             $ref = Router::url($_SERVER['REQUEST_URI']);
             $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
@@ -71,13 +71,19 @@ class ShortmessagesController extends AppController {
             $this->redirect('/users/login');
             exit();
         }
-        $cond = array('brand_id' => 92,'deleted' => DELETED_NO);
+        if($type == 'pyshuo'){
+            $brand_id = 92;
+        }else{
+            $brand_id = 193;
+        }
+        $cond = array('brand_id' => $brand_id,'deleted' => DELETED_NO);
         $this->loadModel('ShareOffer');
         $store_offer = $this->ShareOffer->find('first',array(
             'conditions' =>$cond,
             'order' =>'created desc',
             'fields' => array('id','name','introduct','deleted','start','end','valid_days','avg_number','is_default'))
         );
+        $this->log('hongbao'. $store_offer['ShareOffer']['id']);
         if(empty($store_offer)){
             $this->redirect('/');
             exit();

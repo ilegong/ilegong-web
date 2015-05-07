@@ -34,4 +34,48 @@ class OfflineStoresController extends AppController{
         $this->set('offline_stores',$offline_stores);
         $this->set('locations',$locations);
     }
+
+    public function admin_new(){
+    }
+
+    public function admin_create(){
+        if($this->data['OfflineStore']['type'] == 0 && $this->data['OfflineStore']['shop_no'] == 0){
+            throw new ForbiddenException(__('好邻居自提点请输入店号!'));
+        }
+        $this->log('shop no: '.$this->data['OfflineStore']['shop_no'].', != 0: '.$this->data['OfflineStore']['shop_no'] != 0);
+        if($this->data['OfflineStore']['type'] == 1){
+            $this->data['OfflineStore']['shop_no'] = 0;
+        }
+        $this->log('create offline store: '.json_encode($this->data));
+
+        if($this->OfflineStore->save($this->data)){
+            $this->redirect(array('controller' => 'offline_stores','action' => 'index'));
+        }
+    }
+
+    public function admin_edit($id){
+        $offline_store = $this->OfflineStore->find('first',array('conditions' => array('id' => $id)));
+
+        if (empty($offline_store)) {
+            throw new ForbiddenException(__('该自提点不存在！'));
+        }
+        $this->set('offline_store',$offline_store);
+    }
+
+    public function admin_update($id){
+        if($this->data['OfflineStore']['type'] == 0 && $this->data['OfflineStore']['shop_no'] == 0){
+            throw new ForbiddenException(__('好邻居自提点请输入店号!'));
+        }
+        $this->log('shop no: '.$this->data['OfflineStore']['shop_no']);
+        if($this->data['OfflineStore']['type'] == 1 && $this->data['OfflineStore']['shop_no'] != 0){
+            $this->data['OfflineStore']['shop_no'] = 0;
+        }
+        $this->log('update offline store '.$id.': '.json_encode($this->data));
+
+        $this->autoRender = false;
+        if($this->OfflineStore->save($this->data)){
+            $this->redirect(array('controller' => 'offline_stores','action' => 'index'));
+        }
+        $this->set('id',$id);
+    }
 }

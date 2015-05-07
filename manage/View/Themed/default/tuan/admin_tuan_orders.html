@@ -30,6 +30,12 @@
             <span {{if $c2c_paid_not_sent_count> 0}}class="text-danger"{{/if}}>({{$c2c_paid_not_sent_count}})</span>
         </a>
     </li>
+    <li role="presentation">
+        <a data-tab="ordersToday" href="/manage/admin/tuan/query_orders_today">
+            !!!今日订单
+            <span {{if $orders_today_count> 0}}class="text-danger"{{/if}}>({{$orders_today_count}})</span>
+        </a>
+    </li>
 </ul>
 <div class="tab-content">
     <div id="general" class="tab-pane active">
@@ -110,7 +116,7 @@
         </form>
     </div>
     <div id="byOrderId" class="tab-pane">
-        <strong class="text-danger">该功能还在试用，发现任何问题及时联系开发</strong>
+        <strong class="text-danger lead">团、秒、普通商品均可</strong>
 
         <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_order_id" data-noajax="true">
             <div style="padding-bottom: 10px;padding-top: 10px;">
@@ -124,7 +130,7 @@
         </form>
     </div>
     <div id="byUser" class="tab-pane">
-        <strong class="text-danger">该功能还在试用，发现任何问题及时联系开发</strong>
+        <strong class="text-danger lead">团、秒、普通商品均可</strong>
 
         <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_user" data-noajax="true">
             <div style="padding-bottom: 10px;padding-top: 10px;">
@@ -156,7 +162,7 @@
         </form>
     </div>
     <div id="byProduct" class="tab-pane">
-        <strong class="text-danger">该功能还在试用，发现任何问题及时联系开发</strong>
+        <strong class="text-danger lead">团、秒、普通商品均可</strong>
 
         <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_product" data-noajax="true">
             <div style="padding-bottom: 10px;padding-top: 10px;">
@@ -203,7 +209,7 @@
         </form>
     </div>
     <div id="byTuanTeam" class="tab-pane">
-        <strong class="text-danger">注意：只能查询团购订单，无法查询秒杀订单</strong>
+        <strong class="text-danger lead">只能查询团购订单，无法查询秒杀订单</strong>
 
         <form class="form-inline form-by-tuan-team" method="post" action="/manage/admin/tuan/query_by_tuan_team"
               data-noajax="true">
@@ -276,15 +282,18 @@
                 <button type="submit" class="btn btn-primary text-center">查看订单</button>
             </div>
         </form>
-        {{if $msg_ready}}
-        <button  class="btn btn-success pull-right offline_store_msg">修改状态发到货消息</button>
-        {{/if}}
     </div>
     <div id="emptySendDate" class="tab-pane">
-        <strong class="text-danger">只能查询团购、秒杀，排期普通商品无法查询</strong>
+        <strong class="text-danger lead">只能查询团购、秒杀，排期普通商品无法查询</strong>
     </div>
-    <div id="paidNotSend" class="tab-pane">
-        <strong class="text-danger">到了发货时间，仍未发货的订单</strong>
+    <div id="b2cPaidNotSend" class="tab-pane">
+        <strong class="text-danger lead">B2C，到了发货时间，仍未发货的订单</strong>
+    </div>
+    <div id="c2cPaidNotSend" class="tab-pane">
+        <strong class="text-danger lead">C2C，昨日以前支付，仍未发货的订单</strong>
+    </div>
+    <div id="ordersToday" class="tab-pane">
+        <strong class="text-danger lead">今日已经支付的订单</strong>
     </div>
 </div>
 
@@ -301,12 +310,14 @@
         {{/loop}}
     </h1>
     {{/if}}
+    <button  class="btn btn-success pull-right ship-to-pys-stores">朋友说自提点发货</button>
+
 </div>
 <hr/>
 <table class="table table-bordered">
     <thead>
     <tr>
-        {{if $msg_ready}}<td><input type="checkbox" value="0" id="check_all_tb"></td>{{/if}}
+        <td><input type="checkbox" value="0" id="check_all_tb"></td>
         <td>订单号</td>
         <td>用户ID</td>
         <td>订单状态</td>
@@ -321,19 +332,21 @@
         <td>配送方式</td>
         <td>发货时间</td>
         <td>收件人</td>
-<td>团队名称</td>
+        <td>团队名称</td>
         <td>收件地址</td>
         <td>电话</td>
         <td>支付方式</td>
         <td>交易号</td>
         <td>备注</td>
+        <td>操作</td>
     </tr>
     </thead>
     <tbody>
     {{loop $orders $order}}
     <?php
               $tuan_buying = $tuan_buys[$order['Order']['member_id']];
-              $tuan = $tuans[$tuan_buying['tuan_id']];
+              $tuan_team = $tuan_teams[$tuan_buying['tuan_id']];
+              $offline_store = $offline_stores[$tuan_team['offline_store_id']];
           ?>
     {{loop $order_carts[$order['Order']['id']] $index $cart}}
     <?php
@@ -341,8 +354,12 @@
               $consign_time = empty($date)?'': date('m-d', strtotime($date));
               $brand = $brands[$cart['Cart']['product_id']];
             ?>
-    <tr>
-        {{if $msg_ready}}<td><input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids"></td>{{/if}}
+    <tr data-order-id="{{$order[Order][id]}}">
+        <td>
+          {{if ($order['Order']['type'] == 5 || $order['Order']['type'] == 6) && ($offline_store['OfflineStore']['type'] == 1)}}
+            <input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids">
+          {{/if}}
+        </td>
         <td>{{$order['Order']['id']}}</td>
         <td><a href="/manage/admin/tuan/query_by_user?con_creator={{$order['Order']['creator']}}">{{$order['Order']['creator']}}</a>
         </td>
@@ -400,14 +417,13 @@
         </td>
         <td>{{$order['Order']['consignee_name']}}</td>
         <td>
-            <a href="/manage/admin/tuan_buyings/index?team_id={{$tuan['id']}}">{{$tuan['tuan_name']}}</a>
+            <a href="/manage/admin/tuan_buyings/index?team_id={{$tuan_team['id']}}">{{$tuan_team['tuan_name']}}</a>
         </td>
         <td>
             {{$order['Order']['consignee_address']}}
         </td>
 
         <td>{{$order['Order']['consignee_mobilephone']}}</td>
-
         <td>
             {{if $order['Pay']['trade_type']=='JSAPI'}}
             微信支付
@@ -421,6 +437,11 @@
         <td>
             {{$order['Order']['remark']}}
         </td>
+        <td data-offline-store-type="{{$offline_store['OfflineStore']['type']}}">
+          {{if !empty($offline_store) && $offline_store['OfflineStore']['type'] == 0 && $order['Order']['status']== 1}}
+          <input type="text" name="code_{{$order['Order']['id']}}"><button type="button" class="send_code">发提货码</button></td>
+          {{/if}}
+        </td>
     </tr>
     {{/loop}}
     {{/loop}}
@@ -428,4 +449,4 @@
 </table>
 
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
-{{$this->Html->script(array('manage/tuan/tuan_orders.js?v4'))}}
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v4.5'))}}

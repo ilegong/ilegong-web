@@ -14,12 +14,14 @@
     </div>
     <P><span>已选自提点：<span id="chose_address" data-shop-id="" style="color:#333333"></span></span></P>
 </div>
-<div class="tuan_balance" data-ship-way="ziti" data-tuanbuy-id="{{$tuan_buy_id}}" data-tuanteam-id="{{$tuan_id}}">
+<div class="tuan_balance" data-ship-way="ziti" data-tuan-sec="true" data-try-id="{{$try_id}}" style="margin-bottom: 50px;">
     <div class="conordertuan_contact">
         <h1>联系信息</h1>
         <label><input type="text" name="consignee_name" placeholder="收货人姓名" value="{{$consignee_info['name']}}" /></label>
         <label><input type="text" name="consignee_mobilephone" placeholder="手机号" value="{{$consignee_info['mobilephone']}}" /></label>
-        <label id="remark_address" style="display: none;"><input type="text" name="consignee_remark_address" placeholder="备注地址" value="" /></label>
+        {{if $can_mark_address}}
+            <label><input type="text" name="consignee_remark_address" placeholder="备注地址" value="" /></label>
+        {{/if}}
     </div>
     <div class="cart" style="margin-top: 0; padding-top: 0;">
         <div>
@@ -27,31 +29,19 @@
                 <dd class="fl">朋友说</dd>
             </dl>
             <ul class="clearfix">
-                <li class="fl"><a href="/tuan_buyings/detail/{{$tuan_buy_id}}"><img src="{{$this->Html->assetUrl(small_thumb_link($cart_info['Cart']['coverimg']))}}" border="0" /></a></li>
+                <li class="fl"><a href=""><img src="{{$this->Html->assetUrl(small_thumb_link($cart_info['Cart']['coverimg']))}}" border="0" /></a></li>
                 <li style="overflow: hidden; display: block; padding-left: 10px;">
                     <a href="#X">
                         <p>{{$cart_info['Cart']['name']}}</p>
                         <s>单价:￥{{$this->Number->precision($cart_info['Cart']['price'],2)}}</s>
                         <div class="clearfix">
-                            {{if $cart_info['Cart']['product_id'] != 962}}
-                            <a  class="cartnumreduce fl"></a>
-                            {{/if}}
                             <input type="text" value="{{$buy_count}}" id="pamount-{{$cart_info['Cart']['id']}}" data-id="{{$cart_info['Cart']['id']}}" disabled="disabled"
                                    data-price="{{$cart_info['Cart']['price']}}" name="shopCart"/>
-                            {{if $cart_info['Cart']['product_id'] != 962}}
-                            <a  class="cartnumadd fl"></a>
-                            {{/if}}
                         </div>
                     </a>
                 </li>
             </ul>
         </div>
-    </div>
-    <div class="shop_jifen" style="margin-bottom: 44px;">
-        <ul class="clearfix" style=" border: 0;">
-            <li class="fl" data-score="{{$score_usable}}">可用<span class="balance_use_score">{{$score_usable}}</span>积分抵用<span>{{$this->Number->precision($score_usable/100, 2)}}</span>元</li>
-            <li class="fr shop_jifen_used radius10"></li>
-        </ul>
     </div>
     <div class="cart_pay">
         <ul class="clearfix">
@@ -70,9 +60,9 @@
             <li><strong>下单</strong></li>
         </ul>
     </div>
-    <div id="area_list" class="tuanadresslist">  </div>
+    <div id="area_list" class="tuanadresslist"></div>
 </div>
-{{$this->Html->script(array('/js/ziti-address.js?v3.2', '/js/tuan/balance.js?v9.2'));}}
+{{$this->Html->script(array('/js/ziti-address.js?v3.1', '/js/tuan/balance.js?v9.1'));}}
 <script>
     $(document).ready(function(){
         var bigBuy = zitiObj(zitiAddress.getBeijingAreas, $(window).height() + 5,$(window).width());

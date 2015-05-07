@@ -5,6 +5,7 @@ var priceDom = $(".conordertuan_total strong");
 var totalPriceDom = $(".cart_pay .fl strong");
 var CartDomName = "input[name='shopCart']";
 var shopName = '';
+var remarkAddress = $('#remark_address');
 function editCartNum(id, num) {
     $('.shop_jifen_used').html("");
     var cartPrice = $('#pamount-' + id).data('price') * num;
@@ -186,7 +187,15 @@ function setData(area_id){
         var that =$(this);
         that.on("click",function(){
             that.css("background-color","#eeeeee");
-            $("#chose_address").html(that.text()).data('shopId', that.data('shopId'));
+            var shopId = that.data('shopId');
+            //should remark address
+            //TODO config it
+            if(shopId==40||shopId==33){
+                remarkAddress.show();
+            }else{
+                remarkAddress.hide();
+            }
+            $("#chose_address").html(that.text()).data('shopId', shopId);
             shopName = that.data('shop-name');
             tb_remove();
         })

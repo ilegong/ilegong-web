@@ -469,6 +469,11 @@ function setCoverImg(model,imgsrc){
 	$('#'+model+'CoverimgPreview').attr('src',imgsrc);
 }
 
+function setListImg(model,imgsrc){
+    $('#'+model+'Listimg').val(imgsrc);
+    $('#'+model+'ListimgPreview').attr('src',imgsrc);
+}
+
 function addNewCrawlRegular()
 {
 	var field = $('.model-schema-list').val();
@@ -499,3 +504,21 @@ function generateSlug(obj,selector){
 		ajaxAction(url,{'word':obj.value},null,'generateSlug',selector);
 	}
 }
+
+var iUtils = function () {
+    var initSelectBox = function (selectBox) {
+        var value = selectBox.data('value');
+        $("option", selectBox).each(function(){
+            if($(this).val() == value){
+                $(this).attr('selected', 'selected');
+            }
+            else{
+                $(this).removeAttr('selected');
+            }
+        });
+    }
+    return {
+        initSelectBox: initSelectBox
+    }
+}();
+

@@ -512,3 +512,67 @@ ul li{ list-style:none;}
 .order_detail_operate ul li a.order_deletebtn{ color: #666666; border-color: #dddddd;}
 .order_detail_operate ul li a.order_paybtn{ color: #ffa200; border-color: #ffa200;}
 
+
+/*首页new*/
+.menue{position:fixed; top:0;left:0;width: 20%; border-right: 1px #eeeeee solid; height: 100%;text-align: center;font-size: 1em;font-weight: normal;color:#666666;background-color: #fff;overflow-x: hidden;}
+.menue ul {
+    margin-bottom: 44px;
+    font-weight: bold;
+}
+.menue li div{ margin:0 auto;border-bottom: 1px solid #eeeeee; padding:12px 0;}
+.menue li.cur div{ border:0; border-bottom:1px solid #ffa200; color:#ffa200;}
+.content{width: 80%;float:right;height: 100%;}
+.content .good{ margin: 5px;}
+.content a.xq{ display: block; text-decoration: none; background-color: #fff; position: relative;}
+.content a.xq p{ display: block; position: absolute; background-color: #ffa200; color: #ffffff; padding: 5px; font-size: 1em; text-align:center; left: 0; top: 0;}
+.content a.xq img{max-width: 100%;}
+.content .title {
+    font-size: 1em;
+    padding: 8px 10px 3px 10px;
+    color: #333333;
+    font-weight: bold;
+    line-height: 18px;
+}
+.content .price{ font-size:1em; padding: 0 8px 2px 8px;}
+.content .price strong{color:#ffa200; font-size: 1.1em;}
+.content .price label {
+    color: #acacac;
+    text-decoration: line-through;
+    font-size: 1em;
+    margin-bottom: 0;
+}
+.content .phead{padding-left:10px;}
+.content .phead img{ width: 2.1em; height: 2.1em; border-radius: 2.1em;}
+.content s{ display: block; font-style: normal; background-color: #ffffff; padding-bottom: 8px;}
+.content .txt{ font-size:1em; color: #999999; line-height: 2.1em; padding-left: 3px;}
+.content .btn {
+    text-decoration: none;
+    background-color: #ffa200;
+    color: #fff;
+    line-height: 30px;
+    height: 30px;
+    padding: 0 10px;
+    font-size: 1em;
+    font-weight: bold;
+    margin-right: 10px;
+}
+/*秒杀*/
+.tuandetail_seckill{ margin:5px; background-color:#ffffff; position:relative;}
+.tuandetail_seckill span{ display:block;}
+.tuandetail_seckill span img{ width:100%; border:0; margin:0; padding:0;}
+.tuandetail_seckill span h1{ color:#333333; display:block; font-size:1em; font-weight:normal;padding:8px 10px 3px 10px; font-weight: bold;margin:0;}
+.tuandetail_seckill span em{ font-style:normal; color:#999999; display:block;padding-left:10px;}
+.tuandetail_seckill span em strong{ color:#ff9000;}
+.tuandetail_seckill p{ display: block; position: absolute; background-color:#c73c3c; color: #ffffff; width: 45px; height: 45px; border-radius: 45px; line-height: 45px; font-weight: bold; font-size: 1em; text-align:center; left: 0; top: 0;}
+.tuandetail_seckill_btn{ text-decoration:none; background-color:#c73c3c; color: #fff; line-height: 30px; padding: 0 10px; font-size: 1em; font-weight: bold; margin-right: 10px; display: block;}
+.seckill_disabled{ background-color: #999999; color: #ffffff; text-decoration:none; line-height: 30px; padding: 0 10px; font-size: 1em; font-weight: bold; margin-right: 10px; display: block;}
+/*团购进度条*/
+.tuan_bar{ color: #999999; line-height: 18px; padding:5px 0 5px 10px;}
+.tuan_bar span{ color: #ffa200;}
+.bar{ width: 100%; background-color: #f1f1f1; height: 10px; position: relative; margin:2px 0 3px 0;}
+.bar_buy{ background-color: #29ac0e; height: 10px; position: absolute; top: 0; left: 0;}
+
+
+
+
+

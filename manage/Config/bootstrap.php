@@ -22,8 +22,13 @@ const WX_OAUTH_USERINFO = 'snsapi_userinfo';
 const WX_OAUTH_BASE = 'snsapi_base';
 
 const ADD_SCORE_TUAN_LEADER=99;
-const ORDER_STATUS_PAID=1;
+const ORDER_STATUS_PAID=1; // 已支付
+const ORDER_STATUS_SHIPPED=2; // 已发货
 const ORDER_TUANGOU=5;
+
+const OFFLINE_STORE_HAOLINJU=0;
+const OFFLINE_STORE_PYS=1;
+
 define('MSG_API_KEY', 'api:key-fdb14217a00065ca1a47b8fcb597de0d'); //发短信密钥
 
 

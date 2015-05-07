@@ -10,7 +10,7 @@ class TuanBuyingsController extends AppController{
 
     var $name = 'TuanBuyings';
 
-    var $uses = array('TuanTeam','TuanBuying','Order','Cart','TuanBuyingMessages','TuanProduct','TuanMsg');
+    var $uses = array('TuanTeam','TuanBuying','Order','Cart','TuanBuyingMessages','TuanProduct','TuanMsg', 'OfflineStore');
     public $components = array('Weixin');
 
     var $msg_uid = array();
@@ -388,15 +388,12 @@ class TuanBuyingsController extends AppController{
         }else{
             $ids = array_keys($data);
         }
-        $orderM = ClassRegistry::init('Order');
-        $tuanBuyM= ClassRegistry::init('TuanBuying');
-        $offlineStoreM = ClassRegistry::init('OfflineStore');
-        $orders = $orderM->find('all', array(
+        $orders = $this->Order->find('all', array(
             'conditions' => array('id'=> $ids, 'type'=>ORDER_TYPE_TUAN),
         ));
         $tuan_buy_ids = array_unique(Hash::extract($orders, '{n}.Order.member_id'));
         $consignee_ids = array_unique(Hash::extract($orders, '{n}.Order.consignee_id'));
-        $products = $tuanBuyM->find('all', array(
+        $products = $this->TuanBuying->find('all', array(
             'conditions' => array('TuanBuying.id'=>$tuan_buy_ids),
             'joins' =>array(
                 array(
@@ -411,7 +408,7 @@ class TuanBuyingsController extends AppController{
             'fields' => array('TuanBuying.id', 'TuanProduct.alias')
         ));
         $alias = Hash::combine($products, '{n}.TuanBuying.id', '{n}.TuanProduct.alias');
-        $offline_stores = $offlineStoreM->find('all', array(
+        $offline_stores = $this->OfflineStore->find('all', array(
             'conditions' => array('id'=>$consignee_ids)
         ));
         $store_info = Hash::combine($offline_stores, '{n}.OfflineStore.id', '{n}.OfflineStore');

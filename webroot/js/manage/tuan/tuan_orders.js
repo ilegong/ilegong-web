@@ -212,17 +212,37 @@ $(document).ready(function(){
         });
         return $tb_ids;
     }
-    $('.offline_store_msg').click(function(){
-        var tb_ids = getAllCheckTbId();
-        $.post('/manage/admin/tuan_buyings/send_wx_fetch_msg/normal', {"ids":tb_ids}, function(data){
+    $('.ship-to-pys-stores').click(function(){
+        if(!confirm("确定要批量修改吗？")){
+            return;
+        }
+        var orderIds = getAllCheckTbId();
+        $.post('/manage/admin/tuan_orders/ship_to_pys_stores', {"ids": orderIds}, function(data){
+            if(data.success){
+                utils.alert('修改成功');
+                location.reload();
+            }
+            else{
+                utils.alert(data.msg);
+            }
+        }, 'json');
+    });
+    $('.send_code').click(function(){
+        var codeDom = $(this).prev('input');
+        var orderId = codeDom.attr('name').split('_')[1];
+        var code = codeDom.val();
+        var obj = {};
+        obj[orderId]=code;
+        return;
+        $.post('/manage/admin/tuan_buyings/send_wx_fetch_msg',obj , function(data){
             var success_ids = (data.res).join(',');
             if(data.success){
                 $.post('/manage/admin/tuan_buyings/set_status', {tuan_orderid: success_ids, order_status:2}, function(edata){
-                    utils.alert(edata.msg)
-                    location.reload();
+                    utils.alert(edata.msg);
+                    $('.table-bordered tbody tr').remove('[data-order-id='+ orderId +']');
                 },'json')
             }
-        }, 'json')
+        },'json')
     })
 
 });

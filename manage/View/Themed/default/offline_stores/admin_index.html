@@ -22,14 +22,14 @@
     <button type="submit" style="margin-right:10px;"  class="btn btn-primary">查看自提点</button>
   </div>
   <div class="pull-right">
-    <a href="/manage/admin/tuan_teams/new" role="button" class="btn btn-primary">创建自提点</a>
+    <a href="/manage/admin/offline_stores/new" role="button" class="btn btn-primary">新建自提点</a>
   </div>
 </form>
 
 <table class="table table-striped table-bordered table-condensed table-hover">
     <thead>
     <tr>
-        <th>编号</th><th>区域</th><th>类型</th><th>显示地址</th><th>详细地址</th><th>联系人</th><th>美食团</th>
+        <th>编号</th><th>区域</th><th>类型</th><th>显示地址</th><th>详细地址</th><th>联系人</th><th>美食团</th><th>操作</th>
     </tr>
     </thead>
     <tbody>
@@ -51,6 +51,9 @@
         </td>
         <td>
           {{$offline_store['OfflineStore']['tuan_team_count']}}支
+        </td>
+        <td>
+          <a class="btn btn-primary" href="/manage/admin/offline_stores/edit/{{$offline_store['OfflineStore']['id']}}">编辑</a>
         </td>
     </tr>
     {{/loop}}

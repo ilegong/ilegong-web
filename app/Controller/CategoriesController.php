@@ -3,6 +3,71 @@ class CategoriesController extends AppController {
 
     var $name = 'Categories';
 
+
+    public function getTagProducts($tagId){
+        $this->autoRender=false;
+        $result = Cache::read('tag-products'.$tagId);
+        if(!empty($result)){
+            echo $result;
+            return;
+        }
+        $this->loadModel('Product');
+        //recommend product
+        if($tagId==RECOMMEND_PRODUCT_TAG){
+            //recommend product ids
+            //TODO manage it
+            $recommendProductIds = array(883,871,940,867,869,961);
+            $list = $this->Product->find('all',array(
+                'conditions' => array(
+                    'id' => $recommendProductIds
+                ),
+                'fields' => Product::PRODUCT_PUBLIC_FIELDS,
+                'order' => 'Product.recommend desc'
+            ));
+        }else{
+            $productTag = $this->ProductTag->find('first', array('conditions' => array(
+                'id' => $tagId,
+                'published' => PUBLISH_YES
+            )));
+            $conditions = array('Product' .'.deleted'=>DELETED_NO, 'Product' .'.published'=>PUBLISH_YES);
+            $conditions['Product' . '.recommend >'] = 0;
+            $join_conditions = array(
+                array(
+                    'table' => 'product_product_tags',
+                    'alias' => 'Tag',
+                    'conditions' => array(
+                        'Tag.product_id = Product.id',
+                        'Tag.tag_id' => $productTag['ProductTag']['id']
+                    ),
+                    'type' => 'RIGHT',
+                )
+            );
+            $orderBy = 'Tag.recommend desc, Product.recommend desc';
+            $page = 1;
+            $pagesize = 60;
+            $list = $this->Product->find('all', array(
+                    'conditions' => $conditions,
+                    'joins' => $join_conditions,
+                    'order' => $orderBy,
+                    'fields' => Product::PRODUCT_PUBLIC_FIELDS,
+                    'limit' => $pagesize,
+                    'page' => $page)
+            );
+        }
+        $productList = array();
+        $brandIds = array();
+        foreach ($list as $val) {
+            $productList[] = $val['Product'];
+            $brandIds[] = $val['Product']['brand_id'];
+        }
+        $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
+        $result = array('data_list'=>$productList,'mapBrands'=>$mappedBrands);
+        $result = json_encode($result);
+        Cache::write('tag-products'.$tagId,$result);
+        echo $result;
+
+    }
+
     public function tag($tagSlug = '') {
 
         if ($tagSlug == '') {
@@ -204,13 +269,50 @@ class CategoriesController extends AppController {
         $this->pageTitle = __('分类');
     }
 
+    public function mobileIndex(){
+        $this->pageTitle='首页';
+        //add sec kill
+        $this->loadModel('ProductTry');
+        $this->loadModel('Product');
+        $tryings = $this->ProductTry->find_global_trying();
+        if (!empty($tryings)) {
+            $trying_result = array();
+            $try_pids = Hash::extract($tryings, '{n}.ProductTry.product_id');
+            $this->loadModel('TuanProduct');
+            $t_products = $this->TuanProduct->find('all',array(
+                'conditions' => array(
+                    'product_id' => $try_pids
+                )
+            ));
+            $t_products = Hash::combine($t_products,'{n}.TuanProduct.product_id','{n}.TuanProduct');
+            $tryProducts = $this->Product->find_products_by_ids($try_pids, array(), false);
+            if (!empty($tryProducts)) {
+                foreach($tryings as &$trying) {
+                    $pid = $trying['ProductTry']['product_id'];
+                    $prod = $tryProducts[$pid];
+                    if (!empty($prod)) {
+                        $trying['Product'] = $prod;
+                        $trying['image'] = $t_products[$pid]['list_img'];
+                        $trying_result[] = $trying;
+                    } else {
+                        unset($trying);
+                    }
+                }
+            }
+            $tryings = $trying_result;
+        }
+        $this->set('tryings',$tryings);
+        $this->set('hideNav',true);
+        $this->set('op_cate', OP_CATE_HOME);
+    }
+
     public function mobileHome() {
         $this->productsHome(true);
 
         $zutuangous = array(
             array('img' => "/img/banner/banner_zutuangou3.jpg", 'url' => "/groupons/view/chengzi.html?from=home1", 'id' => 0),
             array('img' => "/img/banner/banner_zutuangou2.jpg", 'url' => "/groupons/view/chengzi.html?from=home2", 'id' => 0),
-//            array('img' => "/img/banner/banner_zutuangou.jpg", 'url' => "/groupons/view/gonggan.html?from=home", 'id' => 0),
+            array('img' => "/img/banner/banner_zutuangou.jpg", 'url' => "/groupons/view/gonggan.html?from=home", 'id' => 0),
         );
 
         $mobileTagIds = array(3,5,8,12,9,6,4,10,11);
@@ -221,6 +323,7 @@ class CategoriesController extends AppController {
         $specTags = $this->findTagsByIds($specTagIds);
         $specTags = Hash::combine($specTags,'{n}.ProductTag.id','{n}.ProductTag');
         $this->set('spec_tags',$specTags);
+
         $bannerItems = array(
             array('mobile_image' => "/img/banner/spring-weixin.jpg", 'detail_url' => "/categories/spring"),
         );
@@ -391,6 +494,7 @@ class CategoriesController extends AppController {
         }
 
         if ($slug == 'techan' || $conditions['id'] == CATEGORY_ID_TECHAN) {
+            //change mobile index view
             $this->redirect($this->RequestHandler->isMobile() ? '/categories/mobileHome.html' : '/categories/productsHome.html');
             return;
         }

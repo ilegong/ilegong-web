@@ -109,6 +109,10 @@ const COMMENT_LIMIT_IN_PRODUCT_VIEW = 5;
 
 const ORDER_COMMENTED = 1;
 
+const TRY_GLOBAL_SHOW=1;
+
+const RECOMMEND_PRODUCT_TAG=-1;
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');

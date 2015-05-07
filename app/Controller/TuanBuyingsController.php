@@ -219,26 +219,34 @@ class TuanBuyingsController extends AppController{
         $try_id = $_REQUEST['try'];
         $from = $_REQUEST['from'];
         if($from!='tuan_sec'){
-            $this->__message('请求出错', '/tuan_teams/info/'.$tuan_id);
+            if(empty($tuan_id)){
+                $this->__message('请求出错', '/');
+            }else{
+                $this->__message('请求出错', '/tuan_teams/info/'.$tuan_id);
+            }
             return;
         }
-        //TODO check form
         $uid = $this->currentUser['id'];
         if(empty($uid)){
             $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
             return;
         }
-        $this->loadModel('TuanTeam');
-        $team = $this->TuanTeam->find('first',array(
-            'conditions' => array(
-                'id' => $tuan_id
-            )
-        ));
-        //TODO check $team
-        if(empty($team)){
-            $this->__message('该团不存在', '/tuan_teams/mei_shi_tuan');
-            return;
+        if(!empty($tuan_id)){
+            $this->loadModel('TuanTeam');
+            $team = $this->TuanTeam->find('first',array(
+                'conditions' => array(
+                    'id' => $tuan_id
+                )
+            ));
+            if(empty($team)){
+                $this->__message('该团不存在', '/tuan_teams/mei_shi_tuan');
+                return;
+            }
+            $this->set('tuan_id', $tuan_id);
+            $this->set('can_mark_address',$this->can_mark_address($tuan_id));
+            $this->set('tuan_address', $team['TuanTeam']['tuan_addr']);
         }
+
         $this->loadModel('Cart');
         $Carts = $this->Cart->find('first', array(
             'conditions' => array(
@@ -270,9 +278,6 @@ class TuanBuyingsController extends AppController{
         $this->set('buy_count',$Carts['Cart']['num']);
         $this->set('total_price', $total_price);
         $this->set('cart_id', $Carts['Cart']['id']);
-        $this->set('tuan_id', $tuan_id);
-        $this->set('can_mark_address',$this->can_mark_address($tuan_id));
-        $this->set('tuan_address', $team['TuanTeam']['tuan_addr']);
         $this->set('cart_info',$Carts);
         $this->set('brand', $brand['Brand']);
         $this->set('hideNav',true);
@@ -495,11 +500,12 @@ class TuanBuyingsController extends AppController{
                 $consignees['creator'] = $uid;
             }
             $this->OrderConsignees->save($consignees);
+            $offline_store_id = empty($tuan_info['TuanTeam']['offline_store_id'])?0:$tuan_info['TuanTeam']['offline_store_id'];
             if($tuan_sec=='true'){
                 //remark order sec kill
                 $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, '秒杀');
             }else{
-                $shop_id= 0;
+                $shop_id= $offline_store_id;
                 if(!empty($_POST['shop_id'])){
                    $shop_id= $_POST['shop_id'];
                 }
@@ -640,6 +646,11 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_buy_num',$tuan_buy_num[0][0]['sold_number']);
         $this->set('hideNav',true);
     }
+
+    public function balance_global_sec_kill(){
+        $this->balance_tuan_sec_kill();
+    }
+
     public function big_tuan_balance($tuan_buy_id, $cart_id){
         $this->balance($tuan_buy_id, $cart_id);
         $this->set('hideNav',true);
@@ -648,7 +659,7 @@ class TuanBuyingsController extends AppController{
     //可以备注的地址
     //TODO 昌平的的团可以备注地址
     private function can_mark_address($tuan_id){
-        $mark_address_tuan_ids = array(15,25,28,41,43,45,46,47,48,58,60,66);
+        $mark_address_tuan_ids = array(15,25,28,41,43,45,46,47,48,58,60,66,104);
         return in_array($tuan_id,$mark_address_tuan_ids);
     }
     public function get_offline_address(){

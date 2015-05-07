@@ -496,7 +496,7 @@ class OrdersController extends AppController{
         }else{
             $trade_type = '支付';
         }
-        $title = '亲，您有一笔'.$refundMoney.'元的退款已经退至您的'.$trade_type.'账户，预计3-15个工作日到账，请您及时查看"';
+        $title = '亲，您有一笔'.$refundMoney.'元的退款已经退至您的'.$trade_type.'账户，预计3-15个工作日到账，请您及时查看';
         $phone = $userInfo['User']['mobilephone'];
         $msg = $title;
         $detail_url = WX_HOST.'/orders/detail/'.$orderId;

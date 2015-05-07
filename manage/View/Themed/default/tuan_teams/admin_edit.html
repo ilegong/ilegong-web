@@ -79,10 +79,10 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">团队口号</label>
+            <label class="col-sm-2 control-label">自提点</label>
             <div class="col-sm-9 controls">
-                <input type="text" class="form-control" name="data[TuanTeam][tuan_desc]" value="{{$tuanTeam[tuan_desc]}}"/>
-                <div class="text-warning">备注：热爱生活，寻找美味</div>
+                <select name="data[TuanTeam][offline_store_id]" class="form-control offline-store" data-value="{{$tuanTeam[offline_store_id]}}">
+                </select>
             </div>
         </div>
         <div class="form-group">
@@ -100,7 +100,7 @@
         </div>
         <div class="form-group">
             <div class="col-sm-12 col-sm-offset-2">
-                <a href="/manage/admin/tuan_teams/tuan_teams" class="btn btn-default">取消</a>
+                <a href="/manage/admin/tuan_teams/index" class="btn btn-default">取消</a>
                 <input class="btn btn-primary" type="submit" value="提交"></div>
         </div>
         <!--{{$this->Form->end();}}-->
