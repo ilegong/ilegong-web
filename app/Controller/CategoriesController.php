@@ -7,7 +7,7 @@ class CategoriesController extends AppController {
     public function getTagProducts($tagId){
         $this->autoRender=false;
         $result = Cache::read('tag-products'.$tagId);
-        if(!empty($result)&&$result!='1'){
+        if(!empty($result)){
             echo $result;
             return;
         }
@@ -15,7 +15,7 @@ class CategoriesController extends AppController {
         //recommend product
         if($tagId==-1){
             //recommend product ids
-            $recommendProductIds = array();
+            $recommendProductIds = array(883,871,940,867,869,961);
             $list = $this->Product->find('all',array(
                 'conditions' => array(
                     'id' => $recommendProductIds
