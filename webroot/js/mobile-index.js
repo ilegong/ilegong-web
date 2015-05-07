@@ -71,7 +71,7 @@ $(document).ready(function () {
         } else {
             originPrice = 0;
         }
-        var productDate = new Date(good['created']);
+        var productDate = new Date(good['created'].replace(' ','T'));
         var goodUrl = '/products/' + productDate.yyyymmdd() + '/' + good['slug'] + '.html?history=/&amp;_sl=h5.cate.list';
         var goodHtml = '<div class="good"> <a href="'+goodUrl+'" class="xq">';
         if(good['limit_area']==1){
