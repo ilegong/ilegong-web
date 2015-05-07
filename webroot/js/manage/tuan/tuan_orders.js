@@ -261,7 +261,15 @@ $(document).ready(function(){
     setupHaolinjuStoreDialog();
     $('#check_all_tb').click(function(e){
         var table= $(e.target).closest('table');
-        $('td input:checkbox',table).prop('checked',this.checked);
+        var checked = $(this).is(':checked');
+        $('.order input:checkbox', $('.orders')).each(function(){
+            if(checked && !$(this).is(':disabled')){
+                $(this).attr('checked', 'checked');
+            }
+            else{
+                $(this).removeAttr('checked');
+            }
+        })
     });
     function getCheckedOrderIds(){
         var $tb_ids = [];

@@ -356,8 +356,8 @@
             ?>
     <tr data-order-id="{{$order[Order][id]}}" data-offline-store-id="{{$offline_store[OfflineStore][id]}}" class="order">
         <td>
-          {{if ($order['Order']['type'] == 5) && $order['Order']['status']== 1 && ($offline_store['OfflineStore']['type'] == 1)}}
-            <input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids">
+          {{if ($order['Order']['type'] == 5) && $order['Order']['status']== 1}}
+            <input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids" {{$offline_store['OfflineStore']['type'] == 1 ? "" : "disabled='disabled'"}}>
           {{/if}}
         </td>
         <td>{{$order['Order']['id']}}</td>
@@ -448,7 +448,7 @@
     </tbody>
 </table>
 
-<div class="ship-to-haolinju-store-dialog" title="好邻居店铺发货">
+<div class="ship-to-haolinju-store-dialog" title="好邻居店铺发货" class="hidden">
     <p class="text-warning">输入提货码，点击确认发货，会同时发送“到货提醒”</p>
     <p class="text-warning">否则只确认发货，不发送“到货提醒”</p>
 
