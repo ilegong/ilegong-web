@@ -514,11 +514,30 @@ ul li{ list-style:none;}
 
 
 /*首页new*/
-.menue{position:fixed; top:0;left:0;width: 20%; border-right: 1px #eeeeee solid; height: 100%;text-align: center;font-size: 1em;font-weight: normal;color:#666666;background-color: #fff;overflow-x: hidden;}
+.menue {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20%;
+    border-right: 1px #eeeeee solid;
+    height: 100%;
+    text-align: center;
+    font-size: 1em;
+    font-weight: normal;
+    color: #666666;
+    background-color: #fff;
+    overflow-x: hidden;
+    font-weight: bold;
+}
 .menue ul{ margin-bottom: 44px;}
 .menue li div{ margin:0 auto;border-bottom: 1px solid #eeeeee; padding:12px 0;}
 .menue li.cur div{ border:0; border-bottom:1px solid #ffa200; color:#ffa200;}
-.content{width: 80%;float:right;height: 100%;}
+.content {
+    width: 80%;
+    float: right;
+    height: 100%;
+    padding-bottom: 44px;
+}
 .content .good{ margin: 5px;}
 .content a.xq{ display: block; text-decoration: none; background-color: #fff; position: relative;}
 .content a.xq p{ display: block; position: absolute; background-color: #ffa200; color: #ffffff; padding: 5px; font-size: 1em; text-align:center; left: 0; top: 0;}
