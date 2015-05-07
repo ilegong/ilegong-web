@@ -260,7 +260,7 @@ class UploadfilesController extends AppController {
 			        		
 			        		<a class="upload-file-delete" rel="'.$file_id.'" href="#" data-url="' . Router::url ( '/admin/uploadfiles/delete/' . $file_id.'.json') . '">' . __ ( 'Delete') . '</a> 
 			        		<a href="javascript:void(0);" onclick="setCoverImg(\'' . $this->data [$modelname] ['modelclass'] . '\',\'' . $mid_thumb_url . '\');">' . __ ( 'Set as title img') . '</a></p>
-							
+							<a href="javascript:void(0);" onclick="setListImg(\'' . $this->data [$modelname] ['modelclass'] . '\',\'' . $mid_thumb_url . '\');">' . __ ( '设为列表图片') . '</a></p>
 							';
 						}
 						$info ['message'] .= '</li>';

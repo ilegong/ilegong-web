@@ -24,6 +24,7 @@ echo $this->MForm->create($current_model,array(
                 	 
 						 {{$this->MForm->input('id')}}
 						 {{$this->MForm->titleImage('coverimg')}}
+                         {{$this->MForm->titleImage('listimg')}}
 						 <?php
 						 if($current_action=='admin_add'){
 				        	echo $this->MForm->input('name',array('size'=>'80','required'=>'required','onblur'=>"generateSlug(this,'#ProductSlug')"));
@@ -42,6 +43,7 @@ echo $this->MForm->create($current_model,array(
 						echo $this->MForm->input('promote_name');	
 						echo $this->MForm->input('recommend');	
 						echo $this->MForm->input('published');
+                        echo $this->MForm->input('limit_area');
                         ?>
                         <div class="form-group">
                             <label for="search_brand" class="col-sm-2 control-label">搜素商家</label>

@@ -773,8 +773,9 @@ class MFormHelper extends FormHelper {
 	        		<a href="javascript:void(0);" onclick="insertHTML(\'&lt;img id=&#34;file_'.$uploadfile['id'].'&#34; src=&#34;'.($file_url).'&#34; >\')">'.__('Insert').'</a>
 		
 	        		<a class="upload-file-delete" rel="'.$uploadfile['id'].'" href="#" data-url="'.$this->url('/admin/uploadfiles/delete/'.$uploadfile['id'].'.json').'">'.__('Delete').'</a>
-	        		<a href="javascript:void(0);" onclick="setCoverImg(\''.$param['modelClass'].'\',\''.$thumb_url.'\');">' . __ ( 'Set as title img') . '</a></p>
-	        		';
+	        		<a href="javascript:void(0);" onclick="setCoverImg(\''.$param['modelClass'].'\',\''.$thumb_url.'\');">' . __ ( 'Set as title img') . '</a>
+	        		<a href="javascript:void(0);" onclick="setListImg(\''.$param['modelClass'].'\',\''.$thumb_url.'\');">' . __ ( '设为列表图片') . '</a>
+	        		</p>';
 					$listfile.='</li>';
 				}
 			}
