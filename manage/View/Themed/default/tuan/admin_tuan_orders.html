@@ -329,6 +329,7 @@
         <td>创建时间</td>
         <td>付款时间</td>
         <td>类型</td>
+        <td>自提点</td>
         <td>配送方式</td>
         <td>发货时间</td>
         <td>收件人</td>
@@ -398,6 +399,15 @@
             {{elseif $order['Order']['type'] == 1}}
             普通
             {{/if}}
+        </td>
+        <td>
+          {{if $order['Order']['type'] == 5 || $order['Order']['type'] == 6}}
+            {{if empty($offline_store)}}
+              <span class="text-danger">无</span>
+            {{else}}
+              {{$offline_store['OfflineStore']['alias']}}
+            {{/if}}
+          {{/if}}
         </td>
         <td>
             {{if $order['Order']['ship_mark']=='ziti'}}
