@@ -12,48 +12,35 @@ class CategoriesController extends AppController {
             return;
         }
         $this->loadModel('Product');
-        //recommend product
-        if($tagId==RECOMMEND_PRODUCT_TAG){
-            //recommend product ids
-            //TODO manage it
-            $recommendProductIds = array(883,871,940,867,869,961);
-            $list = $this->Product->find('all',array(
+
+        $productTag = $this->ProductTag->find('first', array('conditions' => array(
+            'id' => $tagId,
+            'published' => PUBLISH_YES
+        )));
+        $conditions = array('Product' .'.deleted'=>DELETED_NO, 'Product' .'.published'=>PUBLISH_YES);
+        $conditions['Product' . '.recommend >'] = 0;
+        $join_conditions = array(
+            array(
+                'table' => 'product_product_tags',
+                'alias' => 'Tag',
                 'conditions' => array(
-                    'id' => $recommendProductIds
+                    'Tag.product_id = Product.id',
+                    'Tag.tag_id' => $productTag['ProductTag']['id']
                 ),
+                'type' => 'RIGHT',
+            )
+        );
+        $orderBy = 'Tag.recommend desc, Product.recommend desc';
+        $page = 1;
+        $pagesize = 60;
+        $list = $this->Product->find('all', array(
+                'conditions' => $conditions,
+                'joins' => $join_conditions,
+                'order' => $orderBy,
                 'fields' => Product::PRODUCT_PUBLIC_FIELDS,
-                'order' => 'Product.recommend desc'
-            ));
-        }else{
-            $productTag = $this->ProductTag->find('first', array('conditions' => array(
-                'id' => $tagId,
-                'published' => PUBLISH_YES
-            )));
-            $conditions = array('Product' .'.deleted'=>DELETED_NO, 'Product' .'.published'=>PUBLISH_YES);
-            $conditions['Product' . '.recommend >'] = 0;
-            $join_conditions = array(
-                array(
-                    'table' => 'product_product_tags',
-                    'alias' => 'Tag',
-                    'conditions' => array(
-                        'Tag.product_id = Product.id',
-                        'Tag.tag_id' => $productTag['ProductTag']['id']
-                    ),
-                    'type' => 'RIGHT',
-                )
-            );
-            $orderBy = 'Tag.recommend desc, Product.recommend desc';
-            $page = 1;
-            $pagesize = 60;
-            $list = $this->Product->find('all', array(
-                    'conditions' => $conditions,
-                    'joins' => $join_conditions,
-                    'order' => $orderBy,
-                    'fields' => Product::PRODUCT_PUBLIC_FIELDS,
-                    'limit' => $pagesize,
-                    'page' => $page)
-            );
-        }
+                'limit' => $pagesize,
+                'page' => $page)
+        );
         $productList = array();
         foreach ($list as $val) {
             $productList[] = $val['Product'];

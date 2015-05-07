@@ -4,7 +4,8 @@ $(document).ready(function () {
     var $seckill_product = $('#seckill_product');
     var currentTagId = -1;
     var firstTag = $('div.menue ul li:first div');
-    var oldColor = firstTag.css('background-color');
+    var oldBackColor = firstTag.css('background-color');
+    var oldColor = firstTag.css('color');
     //format number
     Number.prototype.format = function (n, x) {
         var re = '(\\d)(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
@@ -28,20 +29,21 @@ $(document).ready(function () {
             $productsContent.html('');
             loadDatas(tagId);
         }
-        if(tagId!=-1||tagId!='-1'){
-            firstTag.css('background-color','#f9f9f9');
+        if(tagId!=23||tagId!='23'){
+            firstTag.css('background-color','#eeeeee');
+            firstTag.css('color','#333333');
         }else{
-            firstTag.css('background-color',oldColor);
+            firstTag.css('background-color',oldBackColor);
         }
     });
 
     function initView(){
-        loadDatas(-1);
+        loadDatas(23);
     }
 
     //load tag products
     function loadDatas(tagId) {
-        if(tagId!=-1||tagId!='-1'){
+        if(tagId!=23||tagId!='23'){
             $seckill_product.hide();
         }else{
             $seckill_product.show();
