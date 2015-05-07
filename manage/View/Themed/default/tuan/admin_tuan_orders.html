@@ -310,7 +310,7 @@
         {{/loop}}
     </h1>
     {{/if}}
-    <button  class="btn btn-success pull-right ship-to-pys-stores">朋友说自提点发货</button>
+    <button  class="btn btn-primary pull-right ship-to-pys-stores">朋友说自提点发货</button>
 
 </div>
 <hr/>
@@ -356,7 +356,7 @@
             ?>
     <tr data-order-id="{{$order[Order][id]}}" data-offline-store-id="{{$offline_store[OfflineStore][id]}}" class="order">
         <td>
-          {{if ($order['Order']['type'] == 5 || $order['Order']['type'] == 6) && $order['Order']['status']== 1 && ($offline_store['OfflineStore']['type'] == 1)}}
+          {{if ($order['Order']['type'] == 5) && $order['Order']['status']== 1 && ($offline_store['OfflineStore']['type'] == 1)}}
             <input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids">
           {{/if}}
         </td>
@@ -438,8 +438,8 @@
             {{$order['Order']['remark']}}
         </td>
         <td data-offline-store-type="{{$offline_store['OfflineStore']['type']}}">
-          {{if !empty($offline_store) && $offline_store['OfflineStore']['type'] == 0 && $order['Order']['status']== 1}}
-          <input type="text" name="code_{{$order['Order']['id']}}"><button type="button" class="ship-to-haolinju-store">发提货码</button></td>
+          {{if !empty($offline_store) && $offline_store['OfflineStore']['type'] == 0 && $order['Order']['status']== 1 && $order['Order']['type']== 5}}
+              <button type="button" class="ship-to-haolinju-store btn btn-primary">发提货码</button></td>
           {{/if}}
         </td>
     </tr>
