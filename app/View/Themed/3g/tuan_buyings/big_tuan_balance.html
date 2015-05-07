@@ -1,3 +1,4 @@
+{{$this->Html->css(array('thickbox.css?ver1' ));}}
 <div class="classlist_v2" style="z-index:1">
     <ul class="clearfix" onclick="window.history.back();">
         <li><a class="back"></a></li>
@@ -72,7 +73,7 @@
     </div>
     <div id="area_list" class="tuanadresslist">  </div>
 </div>
-{{$this->Html->script(array('/js/ziti-address.js?v3.2', '/js/tuan/balance.js?v9.2'));}}
+{{$this->Html->script(array('/js/ziti-address.js?v3.4', '/js/tuan/balance.js?v9.3'));}}
 <script>
     $(document).ready(function(){
         var bigBuy = zitiObj(zitiAddress.getBeijingAreas, $(window).height() + 5,$(window).width());
@@ -81,5 +82,4 @@
         bigBuy.bindThickbox();
     })
 </script>
-{{$this->Html->script(array('/js/thickbox.js'));}}
-{{$this->Html->css(array('thickbox.css?ver1' ));}}
+{{$this->Html->script(array('/js/thickbox.js?v1'));}}

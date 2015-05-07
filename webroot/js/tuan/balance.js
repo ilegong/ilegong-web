@@ -80,7 +80,9 @@ $('#confirm_next').on('click',function(e){
     var remarkAddress = $("input[name='consignee_remark_address']").val()||"";
     var address = $("input[name='consignee_address']").val() || choseAddress.text();
     if(address.trim()){
-        address = address + '['+remarkAddress+']';
+        if(remarkAddress){
+            address = address + '['+remarkAddress+']';
+        }
     }else{
         if(remarkAddress.trim()){
             address = remarkAddress;
@@ -116,6 +118,7 @@ $('#confirm_next').on('click',function(e){
     var try_id = balanceDom.data('tryId')||false;
     var tuan_id = balanceDom.data("tuanteamId") || false;
     var tuan_sec = balanceDom.data("tuanSec")||false;
+    var global_sec = balanceDom.data('globalSec')||false;
     var member_id = '';
     var shop_id =  choseAddress.data('shopId')||0;
     if(tuan_buy_id){
@@ -125,15 +128,22 @@ $('#confirm_next').on('click',function(e){
         member_id = try_id;
         is_try = true;
     }
-    if(!(cart_id && member_id && tuan_id)){
-        utils.alert('订单有误,请重新下单');
-        return false;
+    if(global_sec){
+        if(!(cart_id && member_id)){
+            utils.alert('订单有误,请重新下单');
+            return false;
+        }
+    }else{
+        if(!(cart_id && member_id && tuan_id)){
+            utils.alert('订单有误,请重新下单');
+            return false;
+        }
     }
     jQuery.ajax({
         type: "POST",
         dataType: "json",
         url: "/tuan_buyings/pre_order",
-        data: {name: name, mobile: mobile, cart_id: cart_id, member_id: member_id, tuan_id: tuan_id, address:address, way:way ,shop_name:shopName, tuan_sec:tuan_sec , shop_id: shop_id},
+        data: {name: name, mobile: mobile, cart_id: cart_id, member_id: member_id, tuan_id: tuan_id, address:address, way:way ,shop_name:shopName, tuan_sec:tuan_sec , shop_id: shop_id,global_sec:true},
         success: function (a) {
             if (a.success) {
                 $("#confirm_next").attr('data-disable', 'true');
