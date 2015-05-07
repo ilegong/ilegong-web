@@ -30,7 +30,7 @@ $(document).ready(function(){
       values.push({'val': teamId, 'name': tuanTeam['tuan_name']});
     });
 
-    setSelectBoxValue(tuanTeamsBox);
+    iUtils.initSelectBox(tuanTeamsBox);
     initSearchBox($('.tuan-team-search'), values);
     tuanTeamsBox.each(function(){
       updateTuanBuyingSelectBox($("option:selected", $(this)));
@@ -44,7 +44,7 @@ $(document).ready(function(){
       values.push({'val': tuan_product['product_id'], 'name': tuan_product['alias']});
     });
 
-    setSelectBoxValue($('.tuan-products'));
+    iUtils.initSelectBox($('.tuan-products'));
     initSearchBox($('.tuan-product-search'), values);
   });
   $.getJSON('/manage/admin/tuanProducts/api_products',function(data){
@@ -65,7 +65,7 @@ $(document).ready(function(){
       values.push({'val': productId, 'name': name});
     });
 
-    setSelectBoxValue(products);
+    iUtils.initSelectBox(products);
     initSearchBox($('.product-search'), values);
   });
     $.getJSON('/manage/admin/tuanBuyings/api_offline_stores', function(data){
@@ -79,7 +79,7 @@ $(document).ready(function(){
                 $('.store_'+ category).val(addressId + ','+val);
             }
         }
-        setSelectBoxValue(offlineStoreBox);
+        iUtils.initSelectBox(offlineStoreBox);
     });
 
   String.prototype.Trim = function() {
@@ -124,17 +124,6 @@ $(document).ready(function(){
     $('#' + tab).addClass('active');
   };
 
-  function setSelectBoxValue(selectBox){
-    var selectBoxValue = selectBox.data('value');
-    $("option", selectBox).each(function(){
-      if($(this).val() == selectBoxValue){
-        $(this).attr('selected', 'selected');
-      }
-      else{
-        $(this).removeAttr('selected');
-      }
-    });
-  }
   function updateTuanBuyingSelectBox(selectedTuanTeam){
     var tuanBuyingsBox = $('.tuan-buyings');
     tuanBuyingsBox.empty();
@@ -161,7 +150,7 @@ $(document).ready(function(){
 
       $('<option value="' + tuanBuying['id'] + '">' + name + '</option>').appendTo(tuanBuyingsBox);
     });
-    setSelectBoxValue(tuanBuyingsBox);
+      iUtils.initSelectBox(tuanBuyingsBox);
   }
 
   function setupByTuanTeamForm(){
@@ -195,10 +184,81 @@ $(document).ready(function(){
       }
     }
   }
-  activateTab($('.nav-tabs').data('query-type'));
-  setSelectBoxValue($('.order-status'));
-  setSelectBoxValue($('.order-types'));
-  setupByTuanTeamForm();
+    function setupHaolinjuStoreDialog(orderId){
+        var sendWeixinMessageCheckBox = $(".send-weixin-message");
+        var haolinjuCodeInput = $(".haolinju-code");
+        var haolinjuOrderIdInput = $(".haolinju-order-id");
+        var shipToHaolinjuStoreForm = $('.ship-to-haolinju-store-form');
+        var confirmShipping = function(){
+            if(!sendWeixinMessageCheckBox.is(':checked')){
+                if(!confirm("修改为发货，但是不发送到货提醒，确认吗?")){
+                    return;
+                }
+                shipToHaolinju(haolinjuOrderIdInput.val(), false, '');
+            }
+            else{
+                if(haolinjuCodeInput.val() == ''){
+                    utils.alert("修改为发货，并发送到货提醒，请输入提货码");
+                    return;
+                }
+                if(!confirm("修改为发货，并发送到货提醒，提货码为" + haolinjuCodeInput.val() + ", 确认吗？")){
+                    return;
+                }
+                shipToHaolinju(haolinjuOrderIdInput.val(), true, haolinjuCodeInput.val());
+            }
+        }
+        var shipToHaolinju = function(orderId, sendWeixinMessage, haolinjuCode){
+            $.post('/manage/admin/tuan_orders/ship_to_haolinju_store', {orderId: orderId, sendWeixinMessage: sendWeixinMessage, haolinjuCode: haolinjuCode}, function(data){
+                if(data.success){
+                    var returnedOrderId = data.res;
+                    if(orderId = returnedOrderId){
+                        utils.alert('订单状态修改成功，并发送了到货提醒');
+                    }
+                    else{
+                        utils.alert('订单状态修改成功，但是没有发送到货提醒');
+                    }
+                }
+                else{
+                    utils.alert('订单修改失败: ' + data.res);
+
+                }
+                $('.table-bordered tbody tr').remove('[data-order-id='+ orderId +']');
+            },'json')
+        }
+        var shipToHaolinjuStoreDialog = $( ".ship-to-haolinju-store-dialog" ).dialog({
+          autoOpen: false,
+          height: 300,
+          width: 350,
+          modal: true,
+          buttons: {
+              "取消": function() {shipToHaolinjuStoreDialog.dialog( "close" );},
+              "确认发货": function(){confirmShipping(orderId);}
+          },
+          close: function() {
+              sendWeixinMessageCheckBox.attr("checked", "checked");
+              haolinjuCodeInput.val("");
+          }
+        });
+        sendWeixinMessageCheckBox.on('click', function(){
+          if($(this).is(":checked")){
+              haolinjuCodeInput.removeAttr('disabled');
+          }
+          else{
+              haolinjuCodeInput.attr('disabled', 'disabled');
+          }
+        })
+        $( ".ship-to-haolinju-store" ).click(function() {
+            var orderId = $(this).parents('tr').data('order-id');
+            haolinjuOrderIdInput.val(orderId);
+            shipToHaolinjuStoreDialog.dialog( "open" );
+        });
+    }
+
+    activateTab($('.nav-tabs').data('query-type'));
+    iUtils.initSelectBox($('.order-status'));
+    iUtils.initSelectBox($('.order-types'));
+    setupByTuanTeamForm();
+    setupHaolinjuStoreDialog();
     $('#check_all_tb').click(function(e){
         var table= $(e.target).closest('table');
         $('td input:checkbox',table).prop('checked',this.checked);
@@ -237,22 +297,4 @@ $(document).ready(function(){
             }
         }, 'json');
     });
-    $('.send_code').click(function(){
-        var codeDom = $(this).prev('input');
-        var orderId = codeDom.attr('name').split('_')[1];
-        var code = codeDom.val();
-        var obj = {};
-        obj[orderId]=code;
-        return;
-        $.post('/manage/admin/tuan_buyings/send_wx_fetch_msg',obj , function(data){
-            var success_ids = (data.res).join(',');
-            if(data.success){
-                $.post('/manage/admin/tuan_buyings/set_status', {tuan_orderid: success_ids, order_status:2}, function(edata){
-                    utils.alert(edata.msg);
-                    $('.table-bordered tbody tr').remove('[data-order-id='+ orderId +']');
-                },'json')
-            }
-        },'json')
-    })
-
 });
