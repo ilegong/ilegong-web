@@ -13,8 +13,9 @@ class CategoriesController extends AppController {
         }
         $this->loadModel('Product');
         //recommend product
-        if($tagId==-1){
+        if($tagId==RECOMMEND_PRODUCT_TAG){
             //recommend product ids
+            //TODO manage it
             $recommendProductIds = array(883,871,940,867,869,961);
             $list = $this->Product->find('all',array(
                 'conditions' => array(
@@ -26,9 +27,9 @@ class CategoriesController extends AppController {
         }else{
             $productTag = $this->ProductTag->find('first', array('conditions' => array(
                 'id' => $tagId,
-                'published' => 1
+                'published' => PUBLISH_YES
             )));
-            $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1);
+            $conditions = array('Product' .'.deleted'=>DELETED_NO, 'Product' .'.published'=>PUBLISH_YES);
             $conditions['Product' . '.recommend >'] = 0;
             $join_conditions = array(
                 array(
@@ -270,6 +271,36 @@ class CategoriesController extends AppController {
 
     public function mobileIndex(){
         $this->pageTitle='首页';
+        //add sec kill
+        $this->loadModel('ProductTry');
+        $tryings = $this->ProductTry->find_global_trying();
+        if (!empty($tryings)) {
+            $trying_result = array();
+            $try_pids = Hash::extract($tryings, '{n}.ProductTry.product_id');
+            $this->loadModel('TuanProduct');
+            $t_products = $this->TuanProduct->find('all',array(
+                'conditions' => array(
+                    'product_id' => $try_pids
+                )
+            ));
+            $t_products = Hash::combine($t_products,'{n}.TuanProduct.product_id','{n}.TuanProduct');
+            $tryProducts = $this->Product->find_products_by_ids($try_pids, array(), false);
+            if (!empty($tryProducts)) {
+                foreach($tryings as &$trying) {
+                    $pid = $trying['ProductTry']['product_id'];
+                    $prod = $tryProducts[$pid];
+                    if (!empty($prod)) {
+                        $trying['Product'] = $prod;
+                        $trying['image'] = $t_products[$pid]['list_img'];
+                        $trying_result[] = $trying;
+                    } else {
+                        unset($trying);
+                    }
+                }
+            }
+            $tryings = $trying_result;
+        }
+        $this->set('tryings',$tryings);
         $this->set('hideFooter',true);
         $this->set('op_cate', OP_CATE_HOME);
     }
