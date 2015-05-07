@@ -631,7 +631,6 @@ class TuanController extends AppController
 
         $carts = array();
         if (!empty($order_ids)) {
-            $this->log('will query carts: ' . json_encode($order_ids));
             $carts = $this->Cart->find('all', array(
                 'conditions' => array(
                     'order_id' => $order_ids
@@ -662,7 +661,7 @@ class TuanController extends AppController
         }
 
         $offline_stores = array();
-        $offline_store_ids = array_filter(array_unique(Hash::extract($tuan_teams, "{n}.offline_store_id")));
+        $offline_store_ids = array_filter(array_unique(Hash::extract($orders, "{n}.Order.consignee_id")));
         if (!empty($offline_store_ids)) {
             $offline_stores = $this->OfflineStore->find('all', array(
                 'conditions'=> array(

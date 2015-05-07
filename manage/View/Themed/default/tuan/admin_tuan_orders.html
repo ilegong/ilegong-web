@@ -314,7 +314,7 @@
 
 </div>
 <hr/>
-<table class="table table-bordered">
+<table class="table table-bordered orders">
     <thead>
     <tr>
         <td><input type="checkbox" value="0" id="check_all_tb"></td>
@@ -346,7 +346,7 @@
     <?php
               $tuan_buying = $tuan_buys[$order['Order']['member_id']];
               $tuan_team = $tuan_teams[$tuan_buying['tuan_id']];
-              $offline_store = $offline_stores[$tuan_team['offline_store_id']];
+              $offline_store = $offline_stores[$order['Order']['consignee_id']];
           ?>
     {{loop $order_carts[$order['Order']['id']] $index $cart}}
     <?php
@@ -354,9 +354,9 @@
               $consign_time = empty($date)?'': date('m-d', strtotime($date));
               $brand = $brands[$cart['Cart']['product_id']];
             ?>
-    <tr data-order-id="{{$order[Order][id]}}">
+    <tr data-order-id="{{$order[Order][member_id]}}" data-offline-store-id="{{$offline_store[OfflineStore][id]}}" class="order">
         <td>
-          {{if ($order['Order']['type'] == 5 || $order['Order']['type'] == 6) && ($offline_store['OfflineStore']['type'] == 1)}}
+          {{if ($order['Order']['type'] == 5 || $order['Order']['type'] == 6) && $order['Order']['status']== 1 && ($offline_store['OfflineStore']['type'] == 1)}}
             <input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids">
           {{/if}}
         </td>

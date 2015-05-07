@@ -203,27 +203,37 @@ $(document).ready(function(){
         var table= $(e.target).closest('table');
         $('td input:checkbox',table).prop('checked',this.checked);
     });
-    function getAllCheckTbId(){
-        var $checkboxes = $('td input:checkbox:checked',$('table tbody'));
+    function getCheckedOrderIds(){
         var $tb_ids = [];
-        $.each($checkboxes,function(index,item){
-            var $item = $(item);
-            $tb_ids.push($item.val());
+        $.each($('.order input:checkbox:checked', $('.orders')), function(index, item){
+            $tb_ids.push($(this).val());
         });
         return $tb_ids;
     }
     $('.ship-to-pys-stores').click(function(){
-        if(!confirm("确定要批量修改吗？")){
+        var orderIds = getCheckedOrderIds();
+        if(orderIds.length == 0){
+            utils.alert('请先选择自有自提点的待发货订单');
             return;
         }
-        var orderIds = getAllCheckTbId();
+
+        if(!confirm("您选择" + orderIds.length + "个订单，会向用户发送到货提醒，是否继续？")){
+            return;
+        }
         $.post('/manage/admin/tuan_orders/ship_to_pys_stores', {"ids": orderIds}, function(data){
             if(data.success){
-                utils.alert('修改成功');
+                var msg;
+                if(orderIds.length == data.res.length){
+                    msg = '订单状态修改成功，并全部发送了到货提醒';
+                }
+                else{
+                    msg = '订单状态修改成功，但有' + (orderIds.length - data.res.length) + '个未发送到货提醒';
+                }
+                utils.alert(msg);
                 location.reload();
             }
             else{
-                utils.alert(data.msg);
+                utils.alert(data.res);
             }
         }, 'json');
     });

@@ -18,7 +18,7 @@ class TuanOrdersController extends AppController{
             return;
         }
 
-        $order_ids = array_keys($data);
+        $order_ids = $data['ids'];
         $orders = $this->Order->find('all', array(
             'conditions' => array(
                 'id'=> $order_ids
@@ -38,16 +38,23 @@ class TuanOrdersController extends AppController{
 
         // validate goods should be shipped to pys stores
         $offline_store_ids = array_unique(Hash::extract($orders, '{n}.Order.consignee_id'));
+        $this->log('will query offline stores: '.json_encode($offline_store_ids));
         if(!empty($offline_store_ids)){
             $offline_stores = $this->OfflineStore->find('all', array(
                 'conditions' => array('id'=>$offline_store_ids)
             ));
-            $offline_stores = Hash::combine($offline_stores, '{n}.OfflineStore', '{n}');
+            $offline_stores = Hash::combine($offline_stores, '{n}.OfflineStore.id', '{n}');
         }
+        $this->log('offline stores: '.json_encode($offline_stores));
+
         foreach($orders as &$order){
             $offline_store = $offline_stores[$order['Order']['consignee_id']];
-            if(!empty($offline_store) && $offline_store['OfflineStore']['type'] == OFFLINE_STORE_HAOLINJU){
-                echo json_encode(array('success' => false, 'res' => 'order '.$order['Order']['id'].' is haolinju'));
+            if(empty($offline_store)){
+                echo json_encode(array('success' => false, 'res' => 'order '.$order['Order']['id'].' has no offline store'));
+                return;
+            }
+            if($offline_store['OfflineStore']['type'] == OFFLINE_STORE_HAOLINJU){
+                echo json_encode(array('success' => false, 'res' => 'order '.$order['Order']['id'].' is sent to haolinju'));
                 return;
             }
         }
@@ -75,6 +82,7 @@ class TuanOrdersController extends AppController{
             'fields' => array('user_id', 'oauth_openid')
         ));
 
+        $this->log('ship to pys stores: set status to shipped for orders: '.json_encode($order_ids));
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids));
 
         foreach($orders as &$order){
@@ -83,19 +91,20 @@ class TuanOrdersController extends AppController{
                 "touser" => $oauth_binds[$order['Order']['creator']],
                 "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
                 "url" => WX_HOST . '/orders/detail/'.$order['Order']['id'],
-                "topcolor" => "#FF0000"
+                "topcolor" => "#FF0000",
+                "data" =>  array(
+                    "first" => array("value" => "亲，您订购的".$tuan_products[$order['Order']['member_id']]['alias']."已经到达自提点，生鲜娇贵，请尽快取货哈。"),
+                    "keyword1" => array("value" => $order['Order']['id']),
+                    "keyword2" => array("value" => $offline_store['OfflineStore']['alias']),
+                    "keyword3" => array("value" => $order['Order']['consignee_address']),
+                    "remark" => array("value" => "感谢您的支持".$offline_store['OfflineStore']['owner_phone'], "color" => "#FF8800")
+                )
             );
-
-            $post_data['data'] =  array(
-                "first" => array("value" => "亲，您订购的".$tuan_products[$order['Order']['member_id']]."已经到达自提点，生鲜娇贵，请尽快取货哈。"),
-                "keyword1" => array("value" => $order['Order']['id']),
-                "keyword2" => array("value" => $offline_store['OfflineStore']['alias']),
-                "keyword3" => array("value" => $order['Order']['consignee_address']),
-                "remark" => array("value" => "感谢您的支持".$offline_store['OfflineStore']['owner_phone'], "color" => "#FF8800")
-            );
+            $this->log('ship to pys stores: send weixin message for order: '.$order['Order']['id']);
             if(send_weixin_message($post_data)){
                 $success[] = $order['Order']['id'];
             }else{
+                $this->log("ship to pys stores: failed to send weixin message for order ".$order['Order']['id']);
                 $fail[] = $order['Order']['id'];
             }
         }
