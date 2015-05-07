@@ -19,9 +19,7 @@
         <h1>联系信息</h1>
         <label><input type="text" name="consignee_name" placeholder="收货人姓名" value="{{$consignee_info['name']}}" /></label>
         <label><input type="text" name="consignee_mobilephone" placeholder="手机号" value="{{$consignee_info['mobilephone']}}" /></label>
-        {{if $can_mark_address}}
-            <label><input type="text" name="consignee_remark_address" placeholder="备注地址" value="" /></label>
-        {{/if}}
+        <label id="remark_address" style="display: none;"><input type="text" name="consignee_remark_address" placeholder="备注地址" value="" /></label>
     </div>
     <div class="cart" style="margin-top: 0; padding-top: 0;">
         <div>
