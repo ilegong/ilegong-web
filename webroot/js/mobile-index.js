@@ -14,6 +14,7 @@ $(document).ready(function () {
         var dd = this.getDate().toString();
         return yyyy + (mm[1] ? mm : "0" + mm[0]) + (dd[1] ? dd : "0" + dd[0]); // padding
     };
+
     $('div.menue ul li').on('click', function () {
         var me = $(this);
         $('div.menue ul li.cur').removeClass('cur');
@@ -25,6 +26,11 @@ $(document).ready(function () {
             loadDatas(tagId);
         }
     });
+
+    function initView(){
+        loadDatas(-1);
+    }
+
     //load tag products
     function loadDatas(tagId) {
         if (!cache[tagId]) {
@@ -67,4 +73,6 @@ $(document).ready(function () {
         goodHtml += '</div> </a> <s class="clearfix"> <a href="' + brandUrl + '" class="fl"><span class="phead fl"><img src="' + brand['Brand']['coverimg'] + '"/></span><span class="txt fl">' + brand['Brand']['name'] + '</span></a> <a href="' + goodUrl + '" class="fr btn radius5">立即购买</a> </s> </div>';
         return goodHtml;
     }
+
+    initView();
 });
