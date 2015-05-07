@@ -115,9 +115,7 @@
         {{$content_for_layout}}
 
         {{template Elements/cart}}
-        {{if !$hideFooter}}
-            {{template Elements/footer}}
-        {{/if}}
+        {{template Elements/footer}}
 {{$this->fetch('scriptBottom')}}
         <script>
             //hide footer bar

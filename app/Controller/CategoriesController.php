@@ -273,6 +273,7 @@ class CategoriesController extends AppController {
         $this->pageTitle='首页';
         //add sec kill
         $this->loadModel('ProductTry');
+        $this->loadModel('Product');
         $tryings = $this->ProductTry->find_global_trying();
         if (!empty($tryings)) {
             $trying_result = array();
@@ -301,7 +302,7 @@ class CategoriesController extends AppController {
             $tryings = $trying_result;
         }
         $this->set('tryings',$tryings);
-        $this->set('hideFooter',true);
+        $this->set('hideNav',true);
         $this->set('op_cate', OP_CATE_HOME);
     }
 
