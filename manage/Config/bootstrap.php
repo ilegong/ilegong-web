@@ -29,6 +29,9 @@ const ORDER_TUANGOU=5;
 const OFFLINE_STORE_HAOLINJU=0;
 const OFFLINE_STORE_PYS=1;
 
+CONST PUBLISH_YES = 1;
+CONST PUBLISH_NO = 0;
+
 define('MSG_API_KEY', 'api:key-fdb14217a00065ca1a47b8fcb597de0d'); //发短信密钥
 
 
