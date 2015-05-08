@@ -12,56 +12,40 @@ class CategoriesController extends AppController {
             return;
         }
         $this->loadModel('Product');
-        //recommend product
-        if($tagId==RECOMMEND_PRODUCT_TAG){
-            //recommend product ids
-            //TODO manage it
-            $recommendProductIds = array(883,871,940,867,869,961);
-            $list = $this->Product->find('all',array(
+
+        $productTag = $this->ProductTag->find('first', array('conditions' => array(
+            'id' => $tagId,
+            'published' => PUBLISH_YES
+        )));
+        $conditions = array('Product' .'.deleted'=>DELETED_NO, 'Product' .'.published'=>PUBLISH_YES);
+        $conditions['Product' . '.recommend >'] = 0;
+        $join_conditions = array(
+            array(
+                'table' => 'product_product_tags',
+                'alias' => 'Tag',
                 'conditions' => array(
-                    'id' => $recommendProductIds
+                    'Tag.product_id = Product.id',
+                    'Tag.tag_id' => $productTag['ProductTag']['id']
                 ),
+                'type' => 'RIGHT',
+            )
+        );
+        $orderBy = 'Tag.recommend desc, Product.recommend desc';
+        $page = 1;
+        $pagesize = 60;
+        $list = $this->Product->find('all', array(
+                'conditions' => $conditions,
+                'joins' => $join_conditions,
+                'order' => $orderBy,
                 'fields' => Product::PRODUCT_PUBLIC_FIELDS,
-                'order' => 'Product.recommend desc'
-            ));
-        }else{
-            $productTag = $this->ProductTag->find('first', array('conditions' => array(
-                'id' => $tagId,
-                'published' => PUBLISH_YES
-            )));
-            $conditions = array('Product' .'.deleted'=>DELETED_NO, 'Product' .'.published'=>PUBLISH_YES);
-            $conditions['Product' . '.recommend >'] = 0;
-            $join_conditions = array(
-                array(
-                    'table' => 'product_product_tags',
-                    'alias' => 'Tag',
-                    'conditions' => array(
-                        'Tag.product_id = Product.id',
-                        'Tag.tag_id' => $productTag['ProductTag']['id']
-                    ),
-                    'type' => 'RIGHT',
-                )
-            );
-            $orderBy = 'Tag.recommend desc, Product.recommend desc';
-            $page = 1;
-            $pagesize = 60;
-            $list = $this->Product->find('all', array(
-                    'conditions' => $conditions,
-                    'joins' => $join_conditions,
-                    'order' => $orderBy,
-                    'fields' => Product::PRODUCT_PUBLIC_FIELDS,
-                    'limit' => $pagesize,
-                    'page' => $page)
-            );
-        }
+                'limit' => $pagesize,
+                'page' => $page)
+        );
         $productList = array();
-        $brandIds = array();
         foreach ($list as $val) {
             $productList[] = $val['Product'];
-            $brandIds[] = $val['Product']['brand_id'];
         }
-        $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
-        $result = array('data_list'=>$productList,'mapBrands'=>$mappedBrands);
+        $result = array('data_list'=>$productList);
         $result = json_encode($result);
         Cache::write('tag-products'.$tagId,$result);
         echo $result;
@@ -301,8 +285,13 @@ class CategoriesController extends AppController {
             }
             $tryings = $trying_result;
         }
+        if($_REQUEST['tagId']){
+            $this->set('tagId',$_REQUEST['tagId']);
+        }else{
+            $this->set('tagId',RECOMMEND_TAG_ID);
+        }
         $this->set('tryings',$tryings);
-        $this->set('hideNav',true);
+        $this->set('hideFooter',true);
         $this->set('op_cate', OP_CATE_HOME);
     }
 
@@ -372,7 +361,11 @@ class CategoriesController extends AppController {
 
         if (!$disableAutoRedirect) {
             if ($this->RequestHandler->isMobile()) {
-                $this->redirect('/categories/mobileHome.html');
+                $tagId = RECOMMEND_TAG_ID;
+                if($_REQUEST['tagId']){
+                    $tagId = $_REQUEST['tagId'];
+                }
+                $this->redirect('/categories/mobileIndex.html?tagId='.$tagId);
                 return;
             }
         }
@@ -495,7 +488,15 @@ class CategoriesController extends AppController {
 
         if ($slug == 'techan' || $conditions['id'] == CATEGORY_ID_TECHAN) {
             //change mobile index view
-            $this->redirect($this->RequestHandler->isMobile() ? '/categories/mobileHome.html' : '/categories/productsHome.html');
+            $redirectUrl = '/categories/productsHome.html';
+            if($this->RequestHandler->isMobile()){
+                $tagId = RECOMMEND_TAG_ID;
+                if($_REQUEST['tagId']){
+                    $tagId = $_REQUEST['tagId'];
+                }
+                $redirectUrl = '/categories/mobileIndex.html?tagId='.$tagId;
+            }
+            $this->redirect($redirectUrl);
             return;
         }
 

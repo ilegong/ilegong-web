@@ -215,13 +215,18 @@ class ProductsController extends AppController{
         if(array_key_exists($pid ,$tuan_product_not_show_ids) && $tuan_product_not_show_ids[$pid] == 0){
             $this->loadModel('TuanBuying');
             $big_tuan = $this->TuanBuying->find('first', array(
-                'conditions' => array('pid' => $pid, 'tuan_id'=>34, 'status'=> 0, 'published' => 1)
+                'conditions' => array('pid' => $pid, 'tuan_id'=>PYS_M_TUAN, 'status'=> 0, 'published' => 1)
             ));
             if(!empty($big_tuan)){
-                $this->redirect('/tuan_buyings/detail/'.$big_tuan['TuanBuying']['id']);
+                $redirect_url = '/tuan_buyings/detail/'.$big_tuan['TuanBuying']['id'];
             }else{
-                $this->redirect('/tuan_buyings/goods_tuans/'.$pid);
+                $redirect_url = '/tuan_buyings/goods_tuans/'.$pid;
             }
+            if($_REQUEST['tagId']){
+                $redirect_url = $redirect_url.'?tagId='.$_REQUEST['tagId'];
+            }
+            $this->redirect($redirect_url);
+            return;
         }
         $this->loadModel('Comment');
         //load shichi comment count
@@ -531,6 +536,11 @@ class ProductsController extends AppController{
         }
         if(!(strpos($history,WX_HOST)>=0)){
             $history='/';
+        }
+        if($history=='/'){
+            if($_REQUEST['tagId']){
+                $history=$history.'?tagId='.$_REQUEST['tagId'];
+            }
         }
         $this->set('history',$history);
     }

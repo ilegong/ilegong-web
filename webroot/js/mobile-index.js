@@ -2,7 +2,11 @@ $(document).ready(function () {
     var cache = {};
     var $productsContent = $('#products-content');
     var $seckill_product = $('#seckill_product');
-    var currentTagId = -1;
+    var menue = $('div.menue ul');
+    var initTagId = menue.data('id');
+    var currentTagId = 0;
+    var recommendTagId = 23;
+    var firstTag = $('div.menue ul li:first div');
     //format number
     Number.prototype.format = function (n, x) {
         var re = '(\\d)(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
@@ -19,22 +23,29 @@ $(document).ready(function () {
     $('div.menue ul li').on('click', function () {
         var me = $(this);
         $('div.menue ul li.cur').removeClass('cur');
-        me.addClass('cur');
         var tagId = me.data('id');
         if (tagId != currentTagId) {
             currentTagId = tagId;
             $productsContent.html('');
             loadDatas(tagId);
         }
+        if(tagId!=recommendTagId||tagId!=recommendTagId.toString()){
+            firstTag.css('background-color','#eeeeee');
+            firstTag.css('color','#333333');
+        }else{
+            firstTag.css('background-color','');
+            firstTag.css('color','');
+        }
+        me.addClass('cur');
     });
 
     function initView(){
-        loadDatas(-1);
+        $('div.menue ul li[name="tag-'+initTagId+'"]').trigger('click');
     }
 
     //load tag products
     function loadDatas(tagId) {
-        if(tagId!=-1||tagId!='-1'){
+        if(tagId!=recommendTagId||tagId!=recommendTagId.toString()){
             $seckill_product.hide();
         }else{
             $seckill_product.show();
@@ -48,14 +59,12 @@ $(document).ready(function () {
     //draw dom
     function drawToDOM(datas) {
         var data_list = datas['data_list'];
-        var mapBrands = datas['mapBrands'];
         $.each(data_list, function (index, item) {
-            var brand = mapBrands[item['brand_id']];
-            $productsContent.append(genGoodItemDom(item, brand));
+            $productsContent.append(genGoodItemDom(item));
         });
     }
 
-    function genGoodItemDom(good, brand) {
+    function genGoodItemDom(good) {
         var price = good['price'];
         price = parseFloat(price).format(2);
         var originPrice = good['original_price'];
@@ -64,19 +73,17 @@ $(document).ready(function () {
         } else {
             originPrice = 0;
         }
-        var productDate = new Date(good['created']);
-        var goodUrl = '/products/' + productDate.yyyymmdd() + '/' + good['slug'] + '.html?history=/&amp;_sl=h5.cate.list';
-        var brandDate = new Date(brand['Brand']['created']);
-        var brandUrl = '/brands/' + brandDate.yyyymmdd() + '/' + brand['Brand']['slug'] + '.html';
-        var goodHtml = '<div class="good"> <a href="' + goodUrl + '" class="xq">';
+        var productDate = new Date(good['created'].replace(' ','T'));
+        var goodUrl = '/products/' + productDate.yyyymmdd() + '/' + good['slug'] + '.html?history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
+        var goodHtml = '<div class="good"> <a href="'+goodUrl+'" class="xq">';
         if(good['limit_area']==1){
-            goodHtml+='< p > 仅限 < br / > 北京 < / p > ';
+            goodHtml+='<p>仅限<br/>北京</p>';
         }
-        goodHtml += '<img src="' + good['listimg'] + '"/> <div class="title">' + good['name'] + '</div> <div class="price"><strong>￥' + price + '</strong>';
+        goodHtml+='<img src="'+ good['listimg']+'"/> <div class="title">' + good['name'] + '</div> <ul class="clearfix" style="margin-bottom: 0;"> <li class="price fl"><strong>￥' + price + '</strong>';
         if (originPrice > 0) {
             goodHtml += '&nbsp;<label>￥' + originPrice + '</label>'
         }
-        goodHtml += '</div> </a> <s class="clearfix"> <a href="' + brandUrl + '" class="fl"><span class="phead fl"><img src="' + brand['Brand']['coverimg'] + '"/></span><span class="txt fl">' + brand['Brand']['name'] + '</span></a> <a href="' + goodUrl + '" class="fr btn radius5">立即购买</a> </s> </div>';
+        goodHtml+='</li> <li class="fr btn radius5">立即购买</li> </ul> </a> </div>';
         return goodHtml;
     }
 

@@ -111,7 +111,11 @@ const ORDER_COMMENTED = 1;
 
 const TRY_GLOBAL_SHOW=1;
 
-const RECOMMEND_PRODUCT_TAG=-1;
+const PYS_M_TUAN=34;
+
+const IS_BIG_TUAN=1;
+
+const RECOMMEND_TAG_ID=23;
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
@@ -1722,4 +1726,27 @@ function search_consignment_date($consign_ids){
         return  Hash::combine($consign_dates,'{n}.ConsignmentDate.id','{n}.ConsignmentDate.send_date');
     }
     return null;
+}
+
+function get_address($tuan_team, $offline_store){
+    if(empty($offline_store)){
+        $tuan_address = $tuan_team['TuanTeam']['tuan_addr'];
+    }
+    else{
+        $tuan_address = $offline_store['OfflineStore']['name'];
+        if(empty($offline_store['OfflineStore']['owner_name'])){
+            if(!empty($offline_store['OfflineStore']['owner_phone'])){
+                $tuan_address .= "(联系电话: ".$offline_store['OfflineStore']['owner_phone'].")";
+            }
+        }
+        else{
+            $tuan_address .= "(联系人: ".$offline_store['OfflineStore']['owner_name'];
+            if(!empty($offline_store['OfflineStore']['owner_phone'])){
+                $tuan_address .= " ".$offline_store['OfflineStore']['owner_phone'];
+            }
+            $tuan_address .= ")";
+        }
+    }
+
+    return $tuan_address;
 }

@@ -473,7 +473,7 @@ class TuanController extends AppController
         $seckill_product_count = $this->ProductTry->query('select count(*) as c from cake_product_tries where deleted = 0');
         $this->set('seckill_product_count', $seckill_product_count[0][0]['c']);
 
-        $tuan_team_count = $this->TuanTeam->query('select count(*) as c from cake_tuan_teams');
+        $tuan_team_count = $this->TuanTeam->query('select count(*) as c from cake_tuan_teams where published = 1');
         $this->set('tuan_team_count', $tuan_team_count[0][0]['c']);
         $offline_stores_count = $this->OfflineStore->query('select count(*) as c from cake_offline_stores where deleted = 0');
         $this->set('offline_stores_count', $offline_stores_count[0][0]['c']);
@@ -631,7 +631,6 @@ class TuanController extends AppController
 
         $carts = array();
         if (!empty($order_ids)) {
-            $this->log('will query carts: ' . json_encode($order_ids));
             $carts = $this->Cart->find('all', array(
                 'conditions' => array(
                     'order_id' => $order_ids
@@ -662,7 +661,7 @@ class TuanController extends AppController
         }
 
         $offline_stores = array();
-        $offline_store_ids = array_filter(array_unique(Hash::extract($tuan_teams, "{n}.offline_store_id")));
+        $offline_store_ids = array_filter(array_unique(Hash::extract($orders, "{n}.Order.consignee_id")));
         if (!empty($offline_store_ids)) {
             $offline_stores = $this->OfflineStore->find('all', array(
                 'conditions'=> array(

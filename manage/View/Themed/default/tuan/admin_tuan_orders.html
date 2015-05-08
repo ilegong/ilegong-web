@@ -310,11 +310,11 @@
         {{/loop}}
     </h1>
     {{/if}}
-    <button  class="btn btn-success pull-right ship-to-pys-stores">朋友说自提点发货</button>
+    <button  class="btn btn-primary pull-right ship-to-pys-stores">朋友说自提点发货</button>
 
 </div>
 <hr/>
-<table class="table table-bordered">
+<table class="table table-bordered orders">
     <thead>
     <tr>
         <td><input type="checkbox" value="0" id="check_all_tb"></td>
@@ -329,6 +329,7 @@
         <td>创建时间</td>
         <td>付款时间</td>
         <td>类型</td>
+        <td>自提点</td>
         <td>配送方式</td>
         <td>发货时间</td>
         <td>收件人</td>
@@ -346,7 +347,7 @@
     <?php
               $tuan_buying = $tuan_buys[$order['Order']['member_id']];
               $tuan_team = $tuan_teams[$tuan_buying['tuan_id']];
-              $offline_store = $offline_stores[$tuan_team['offline_store_id']];
+              $offline_store = $offline_stores[$order['Order']['consignee_id']];
           ?>
     {{loop $order_carts[$order['Order']['id']] $index $cart}}
     <?php
@@ -354,10 +355,12 @@
               $consign_time = empty($date)?'': date('m-d', strtotime($date));
               $brand = $brands[$cart['Cart']['product_id']];
             ?>
-    <tr data-order-id="{{$order[Order][id]}}">
+    <tr data-order-id="{{$order[Order][id]}}" data-offline-store-id="{{$offline_store[OfflineStore][id]}}" class="order">
         <td>
-          {{if ($order['Order']['type'] == 5 || $order['Order']['type'] == 6) && ($offline_store['OfflineStore']['type'] == 1)}}
-            <input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids">
+          {{if ($order['Order']['type'] == 5) && $order['Order']['status']== 1}}
+            <input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids" {{$offline_store['OfflineStore']['type'] == 1 ? "" : "disabled='disabled'"}}>
+          {{else}}
+            <input type="hidden" value="{{$order['Order']['id']}}" name="offline_order_ids" {{$offline_store['OfflineStore']['type'] == 1 ? "" : "disabled='disabled'"}}>
           {{/if}}
         </td>
         <td>{{$order['Order']['id']}}</td>
@@ -400,6 +403,15 @@
             {{/if}}
         </td>
         <td>
+          {{if $order['Order']['type'] == 5 || $order['Order']['type'] == 6}}
+            {{if empty($offline_store)}}
+              <span class="text-danger">无</span>
+            {{else}}
+              {{$offline_store['OfflineStore']['alias']}}
+            {{/if}}
+          {{/if}}
+        </td>
+        <td>
             {{if $order['Order']['ship_mark']=='ziti'}}
             自提
             {{elseif $order['Order']['ship_mark']=='sf'}}
@@ -438,8 +450,8 @@
             {{$order['Order']['remark']}}
         </td>
         <td data-offline-store-type="{{$offline_store['OfflineStore']['type']}}">
-          {{if !empty($offline_store) && $offline_store['OfflineStore']['type'] == 0 && $order['Order']['status']== 1}}
-          <input type="text" name="code_{{$order['Order']['id']}}"><button type="button" class="send_code">发提货码</button></td>
+          {{if !empty($offline_store) && $offline_store['OfflineStore']['type'] == 0 && $order['Order']['status']== 1 && $order['Order']['type']== 5}}
+              <button type="button" class="ship-to-haolinju-store btn btn-primary">发提货码</button></td>
           {{/if}}
         </td>
     </tr>
@@ -447,6 +459,19 @@
     {{/loop}}
     </tbody>
 </table>
+
+<div class="ship-to-haolinju-store-dialog" title="好邻居店铺发货" class="hidden">
+    <p class="text-warning">输入提货码，点击确认发货，会同时发送“到货提醒”</p>
+    <p class="text-warning">否则只确认发货，不发送“到货提醒”</p>
+
+    <form class="ship-to-haolinju-store-form form-inline">
+        <label class="checkbox">
+            <input type="checkbox" class="send-weixin-message" checked="checked">同时发送“到货提醒”
+        </label>
+        <input type="hidden" class="haolinju-order-id" value=""/>
+        <input type="text"class="haolinju-code" value="" placeholder="请输入提货码">
+    </form>
+</div>
 
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
 {{$this->Html->script(array('manage/tuan/tuan_orders.js?v4.5'))}}

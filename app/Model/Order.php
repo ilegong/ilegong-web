@@ -76,6 +76,7 @@ class Order extends AppModel {
                 'type' => $type,
                 'brand_id' => $brand_id,
                 'try_id' => $memberId,
+                'consignee_id' => $shop_id,
                 'consignee_area' => $area,
                 'consignee_name' => $name,
                 'consignee_address' => $address,

@@ -3,7 +3,7 @@ class Product extends AppModel {
 
         const NO_VISIBLE_SIMPLE_FIELDS = 'id, name, created, brand_id, coverimg, promote_name, comment_nums, price, original_price, slug, specs, published';
         const PRODUCT_PUBLIC_FIELDS = 'Product.id, Product.name, Product.created, Product.brand_id, Product.coverimg, Product.promote_name,
-                        Product.comment_nums, Product.price, Product.original_price, Product.slug,Product.published,Product.listimg';
+                        Product.comment_nums, Product.price, Product.original_price, Product.slug,Product.published,Product.listimg,Product.limit_area';
 
        var $name = 'Product';
        

@@ -28,7 +28,7 @@
     <a class="clearfix adress"
        href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
         <span class="fl"><img src="{{$this->Html->assetUrl('/img/tuan/detail/locat_icon.gif')}}" border="0"/></span>
-        <span style="float: none; padding-left: 20px;line-height: 22px;">配送至: {{$tuan_team['TuanTeam']['tuan_addr']}}</span>
+        <span style="float: none; padding-left: 20px;line-height: 22px;">配送至: {{$tuan_address}}</span>
     </a>
 </div>
 {{if !empty($tryings)}}
@@ -161,7 +161,7 @@
     {{/loop}}
 </div>
 <dl class="tuanherf clearfix">
-    <dd class="fl"><a href="/categories/mobileHome.html">朋友说首页</a></dd>
+    <dd class="fl"><a href="/categories/mobileIndex.html">朋友说首页</a></dd>
     {{if empty($is_join)}}
     <dd class="fl"><a href="#X" class="alltuan_addbtn" name="join_tuan" data-tuan-id="{{$tuan_id}}">我要加入团</a ></dd>
     {{else}}
@@ -170,7 +170,7 @@
 </dl>
 <div class="tuandetail_tips">
     <p>Tips:小贴士</p>
-    <span>1、统一配送至：{{$tuan_team['TuanTeam']['tuan_addr']}}</span>
+    <span>1、统一配送至：{{$tuan_address}}</span>
     <em>统一配送是为了保证商品的品质、降低物流成本，让利给您！</em>
     <span>2、贴心小管家</span>
     <em>如您有任何问题可随时招呼【朋友说小妹】，小妹微信二维码如下</em>

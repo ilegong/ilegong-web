@@ -361,7 +361,11 @@ class WeixinComponent extends Component
     public static function get_order_good_info($order_info){
         $good_info ='';$number = 0;
         $send_date='';
-        $ship_info = $order_info['Order']['consignee_name'].','.$order_info['Order']['consignee_address'].','.$order_info['Order']['consignee_mobilephone'];
+        $ship_info = $order_info['Order']['consignee_name'];
+        if(!empty($order_info['Order']['consignee_mobilephone'])){
+            $ship_info .= ' '.$order_info['Order']['consignee_mobilephone'];
+        }
+        $ship_info .= ', '.$order_info['Order']['consignee_address'];
         $cartModel = ClassRegistry::init('Cart');
         $carts = $cartModel->find('all',array(
             'conditions'=>array('order_id' => $order_info['Order']['id'])));
@@ -596,11 +600,11 @@ class WeixinComponent extends Component
         if($ship_way == 'sf'){
             $tail = '，发货时间是'.$send_date.'。';
         }else{
-            $template= ",到货时间是".$send_date."，自提地点是".$order['Order']['address'];
             $offlineStoreM = ClassRegistry::init('OfflineStore');
             $offline_store = $offlineStoreM->find('first', array(
                 'conditions' => array('id' => $order['Order']['consignee_id'])
             ));
+            $template= ",到货时间是".$send_date."，自提地点是".$offline_store['OfflineStore']['alias'];
             if($offline_store['OfflineStore']['type'] == 0){
                 $tail = $template.'，请留意当天到店取货收到的提货码提醒。';
             }else{

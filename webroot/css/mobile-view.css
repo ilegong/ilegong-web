@@ -514,48 +514,43 @@ ul li{ list-style:none;}
 
 
 /*首页new*/
-.menue{position:fixed; top:0;left:0;width: 20%; border-right: 1px #eeeeee solid; height: 100%;text-align: center;font-size: 1em;font-weight: normal;color:#666666;background-color: #fff;overflow-x: hidden;}
-.menue ul {
-    margin-bottom: 44px;
+.menue {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20%;
+    border-right: 1px #eeeeee solid;
+    height: 100%;
+    text-align: center;
+    font-size: 1em;
+    font-weight: normal;
+    color: #666666;
+    background-color: #fff;
+    overflow-x: hidden;
     font-weight: bold;
 }
+.menue ul{ margin-bottom: 44px;}
 .menue li div{ margin:0 auto;border-bottom: 1px solid #eeeeee; padding:12px 0;}
 .menue li.cur div{ border:0; border-bottom:1px solid #ffa200; color:#ffa200;}
-.content{width: 80%;float:right;height: 100%;}
+.content {
+    width: 80%;
+    float: right;
+    height: 100%;
+    padding-bottom: 49px;
+}
 .content .good{ margin: 5px;}
 .content a.xq{ display: block; text-decoration: none; background-color: #fff; position: relative;}
 .content a.xq p{ display: block; position: absolute; background-color: #ffa200; color: #ffffff; padding: 5px; font-size: 1em; text-align:center; left: 0; top: 0;}
 .content a.xq img{max-width: 100%;}
-.content .title {
-    font-size: 1em;
-    padding: 8px 10px 3px 10px;
-    color: #333333;
-    font-weight: bold;
-    line-height: 18px;
-}
-.content .price{ font-size:1em; padding: 0 8px 2px 8px;}
-.content .price strong{color:#ffa200; font-size: 1.1em;}
-.content .price label {
-    color: #acacac;
-    text-decoration: line-through;
-    font-size: 1em;
-    margin-bottom: 0;
-}
+.content .title{ font-size: 1em; padding:8px 10px 3px 10px; line-height: 18px; color: #333333; font-weight: bold;}
+.content .price{ font-size:1em; padding: 0 8px; line-height: 30px;}
 .content .phead{padding-left:10px;}
 .content .phead img{ width: 2.1em; height: 2.1em; border-radius: 2.1em;}
-.content s{ display: block; font-style: normal; background-color: #ffffff; padding-bottom: 8px;}
 .content .txt{ font-size:1em; color: #999999; line-height: 2.1em; padding-left: 3px;}
-.content .btn {
-    text-decoration: none;
-    background-color: #ffa200;
-    color: #fff;
-    line-height: 30px;
-    height: 30px;
-    padding: 0 10px;
-    font-size: 1em;
-    font-weight: bold;
-    margin-right: 10px;
-}
+.good ul{ background-color: #ffffff; padding-bottom: 5px;}
+.good ul li.fl strong{color:#ffa200; font-size: 1.1em;}
+.good ul li.fl label{ color: #acacac; text-decoration: line-through; font-size: 1em; font-weight: normal;}
+.good ul li.btn{ display: block; text-decoration:none; background-color: #ffa200; color: #fff; line-height: 30px; padding: 0 10px; font-size: 1em; font-weight: bold; margin-right: 10px;}
 /*秒杀*/
 .tuandetail_seckill{ margin:5px; background-color:#ffffff; position:relative;}
 .tuandetail_seckill span{ display:block;}

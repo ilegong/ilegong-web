@@ -143,7 +143,7 @@ $('#confirm_next').on('click',function(e){
         type: "POST",
         dataType: "json",
         url: "/tuan_buyings/pre_order",
-        data: {name: name, mobile: mobile, cart_id: cart_id, member_id: member_id, tuan_id: tuan_id, address:address, way:way ,shop_name:shopName, tuan_sec:tuan_sec , shop_id: shop_id,global_sec:true},
+        data: {name: name, mobile: mobile, cart_id: cart_id, member_id: member_id, tuan_id: tuan_id, address:address, way:way ,shop_name:shopName, tuan_sec:tuan_sec , shop_id: shop_id,global_sec:global_sec},
         success: function (a) {
             if (a.success) {
                 $("#confirm_next").attr('data-disable', 'true');
