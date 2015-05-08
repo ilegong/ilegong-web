@@ -22,7 +22,7 @@ class ScheduleProductController extends AppController{
             'fields' => array('id','name')
         ));
         foreach($products as &$product){
-            $product['consign_dates'] = $this->get_consign_dates_by_pid($product['id']);
+            $product['consign_dates'] = $this->get_consign_dates_by_pid($product['Product']['id']);
         }
         $this->set('datas',$products);
     }

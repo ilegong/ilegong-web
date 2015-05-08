@@ -25,19 +25,19 @@
     </thead>
     <tbody>
     {{loop $datas $product}}
-        <tr data-id="{{$product['id']}}">
-            <td>{{$product['id']}}</td>
-            <td>{{$product['name']}}</td>
+        <tr data-id="{{$product['Product']['id']}}">
+            <td>{{$product['Product']['id']}}</td>
+            <td>{{$product['Product']['name']}}</td>
             <td>
                 {{loop $product['consign_dates'] $consign_date}}
-                    {{if time() >= strtotime($consign_date. ' - 2 days')}}
-                        <span class="label label-danger">{{date('m-d',strtotime($consign_date))}}</span>
+                    {{if time() >= strtotime($consign_date['send_date']. ' - 2 days')}}
+                <h4 style="display: inline"><span class="label label-danger">{{date('m-d',strtotime($consign_date['send_date']))}}</span></h4>
                     {{else}}
-                        <span class="label label-warning">{{date('m-d',strtotime($consign_date))}}</span>
+                <h4 style="display: inline"><span class="label label-warning">{{date('m-d',strtotime($consign_date['send_date']))}}</span></h4>
                     {{/if}}
                 {{/loop}}
             </td>
-            <td>修改排期</td>
+            <td><a href="" class="btn btn-info">更新排期</a></td>
         </tr>
     {{/loop}}
     </tbody>
