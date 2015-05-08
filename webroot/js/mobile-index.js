@@ -7,8 +7,6 @@ $(document).ready(function () {
     var currentTagId = 0;
     var recommendTagId = 23;
     var firstTag = $('div.menue ul li:first div');
-    var oldBackColor = firstTag.css('background-color');
-    var oldColor = firstTag.css('color');
     //format number
     Number.prototype.format = function (n, x) {
         var re = '(\\d)(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
@@ -34,6 +32,9 @@ $(document).ready(function () {
         if(tagId!=recommendTagId||tagId!=recommendTagId.toString()){
             firstTag.css('background-color','#eeeeee');
             firstTag.css('color','#333333');
+        }else{
+            firstTag.css('background-color','');
+            firstTag.css('color','');
         }
         me.addClass('cur');
     });
