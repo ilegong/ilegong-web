@@ -82,7 +82,11 @@ class TuanTeamsController extends AppController{
 
     public function admin_api_tuan_teams(){
         $this->autoRender=false;
-        $tuan_teams = $this->TuanTeam->find('all');
+        $tuan_teams = $this->TuanTeam->find('all', array(
+            'conditions' => array(
+                'published' => PUBLISH_YES
+            )
+        ));
         $tuan_teams = Hash::combine($tuan_teams, "{n}.TuanTeam.id", "{n}");
 
         $tuan_buyings = $this->TuanBuying->find('all');

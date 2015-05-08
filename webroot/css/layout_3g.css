@@ -606,8 +606,14 @@ a:hover, a:focus {
 .conordertuan_total strong{ color: #ffa200;}
 /*团购地址列表*/
 .tuanadresslist{ padding-top: 43px;}
-.tuanadresslist p{ line-height: 18px; color: #555555; padding: 15px 10px; border-bottom: 1px #eeeeee solid; background-color: #ffffff;}
-
+.tuanadresslist p {
+    line-height: 18px;
+    color: #333333;
+    padding: 15px 10px;
+    border-bottom: 1px #eeeeee solid;
+    background-color: #ffffff;
+    font-weight: bold;
+}
 /*自提点下单*/
 .conorder_ziti{ margin-bottom: 10px; margin-top: 43px;}
 .conorder_ziti h1{ margin: 0; font-size: 1.15em; color: #333333; padding: 13px 0 7px 10px;}

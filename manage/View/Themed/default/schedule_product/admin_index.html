@@ -1,0 +1,45 @@
+{{$this->Html->css(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css','bootstrap.min.css'))}}
+<ol class="breadcrumb">
+    <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+    <li class="active">排期管理</li>
+</ol>
+
+<form class="form-inline" data-noajax="true" method="get" action="/manage/admin/tuanSecKill/index">
+    <input type="hidden" name="noajax" value="true">
+    <div class="form-group">
+        <input type="text" name="product_id" class="form-control" id="product_id" value="{{$product_id}}" placeholder="产品ID">
+    </div>
+    <button type="submit" class="btn btn-default">查询</button>
+</form>
+<a class="btn btn-default fr" href="">新建商品排期</a>
+<hr/>
+<br/><br/>
+<table class="table table-bordered table-condensed table-responsive" style="table-layout: fixed;">
+    <thead>
+    <tr>
+        <th>产品编号</th>
+        <th>商品名称</th>
+        <th>当前排期</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{loop $datas $product}}
+        <tr data-id="{{$product['Product']['id']}}">
+            <td>{{$product['Product']['id']}}</td>
+            <td>{{$product['Product']['name']}}</td>
+            <td>
+                {{loop $product['consign_dates'] $consign_date}}
+                    {{if time() >= strtotime($consign_date['send_date']. ' - 2 days')}}
+                <h4 style="display: inline"><span class="label label-danger">{{date('m-d',strtotime($consign_date['send_date']))}}</span></h4>
+                    {{else}}
+                <h4 style="display: inline"><span class="label label-warning">{{date('m-d',strtotime($consign_date['send_date']))}}</span></h4>
+                    {{/if}}
+                {{/loop}}
+            </td>
+            <td><a href="" class="btn btn-info">更新排期</a></td>
+        </tr>
+    {{/loop}}
+    </tbody>
+</table>
+{{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}

@@ -78,4 +78,15 @@ class OfflineStoresController extends AppController{
         }
         $this->set('id',$id);
     }
+
+    public function admin_api_offline_stores(){
+        $this->autoRender=false;
+        $offline_stores = $this->OfflineStore->find('all', array(
+            'conditions'=>array('deleted'=>0),
+            'order' => 'name'
+        ));
+        $this->log("offline stores: ".json_encode($offline_stores));
+        $offline_stores= Hash::combine($offline_stores , "{n}.OfflineStore.id", "{n}.OfflineStore", "{n}.OfflineStore.type");
+        echo json_encode($offline_stores);
+    }
 }

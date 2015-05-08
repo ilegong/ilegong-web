@@ -127,7 +127,6 @@ class TuanBuyingsController extends AppController{
             $this->set('product_spec_map', $str);
         }
         $this->set('specs_map', $specs_map);
-        $this->log($specs_map);
 
         $con = array('modelclass' => 'Product','fieldname' =>'photo','data_id' => $pid);
         $Product['Uploadfile']= $this->Uploadfile->find('all',array('conditions' => $con, 'order'=> array('sortorder DESC')));
@@ -181,10 +180,23 @@ class TuanBuyingsController extends AppController{
     public function cart_info(){
         $this->autoRender = false;
         $this->loadModel('Cart');
+        $this->loadModel('ConsignmentDate');
         $tuan_buy_id = intval($_REQUEST['tuan_buy_id']);
         $product_id = intval($_REQUEST['product_id']);
         $product_num = intval($_REQUEST['product_num']);
         $spec_id = intval($_REQUEST['spec_id']);
+        $consignment_date_id = intval($_REQUEST['consignment_date_id']);
+        $send_date = $_REQUEST['send_date'];
+
+        if(empty($consignment_date_id) || $consignment_date_id == 0 || empty($send_date)){
+            echo json_encode(array('success'=> false, 'error' => '对不起，系统错误，请重新点击购买'));
+            return;
+        }
+        $consignment_date = $this->ConsignmentDate->findById($consignment_date_id);
+        if(empty($consignment_date) || $consignment_date['ConsignmentDate']['published'] == 0){
+            echo json_encode(array('success'=> false, 'error' => '发货时间选择有误，请重新点击购买'));
+            return;
+        }
         $uId = $this->currentUser['id'];
         $cart_tuan_param = array(
             'tuan_buy_id' => $tuan_buy_id,
@@ -194,29 +206,23 @@ class TuanBuyingsController extends AppController{
         $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,$spec_id,ORDER_TYPE_TUAN,0,$uId, $sessionId,  null, null,$cart_tuan_param);
         $this->log('cartInfo'.json_encode($cartInfo));
         if($cartInfo){
-            $cart_id = $cartInfo['Cart']['id'];
-            $consignment_date_id = intval($_REQUEST['consignment_date_id']);
-            if ($consignment_date_id!=0 && $cart_id) {
-                if ($consignment_date_id) {
-                    $cartM = ClassRegistry::init('Cart');
-                    $cartM->updateAll(array('consignment_date' => $consignment_date_id), array('id' => $cart_id));
-                }
+            $result = $this->Cart->updateAll(array('consignment_date' => $consignment_date_id, 'send_date' => "'".$send_date."'"), array('id' => $cartInfo['Cart']['id']));
+            if(!$result){
+                echo json_encode(array('success'=> false, 'error' => '发货时间选择有误，请重新点击购买'));
+                $this->log("failed to update consignment_date and send_date for cart ".$cartInfo['Cart']['id'].": consignment_date: ".$consignment_date_id.", send_date: ".$send_date);
+                return;
             }
-            $send_date = $_REQUEST['send_date'];
-            if (!empty($send_date) && $cart_id) {
-                $cartM = ClassRegistry::init('Cart');
-                $cartM->updateAll(array('send_date' => "'".$send_date."'"), array('id' => $cart_id));
-            }
+
             if($_POST['way_type'] == 'ziti'){
                 echo json_encode(array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id']));
             }else{
                 $ship_fee = floatval($_POST['way_fee']);
                 echo json_encode(array('success' => true, 'direct'=>'normal','way_type'=>$_POST['way_type'],'way_fee'=>$ship_fee, 'cart_id'=>$cartInfo['Cart']['id']));
             }
-            $cart_array = array(0 => strval($cart_id));
+            $cart_array = array(0 => strval($cartInfo['Cart']['id']));
             $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
         }else{
-            echo json_encode(array('error' => false));
+            echo json_encode(array('success'=> false, 'error' => '对不起，系统错误，请重新点击购买'));
         }
     }
 
@@ -475,7 +481,7 @@ class TuanBuyingsController extends AppController{
             if($global_sec!="true"){
                 $tuan_info = $this->TuanTeam->findById($tuan_id);
                 if(empty($tuan_info)){
-                    $this->log("can't find tuan".$tuan_id);
+                    $this->log("can't find tuan ".$tuan_id);
                     return;
                 }
                 $offline_store = $this->OfflineStore->findById($tuan_info['TuanTeam']['offline_store_id']);
@@ -490,9 +496,11 @@ class TuanBuyingsController extends AppController{
                 $address = $p_address;
             }else{
                 $address = get_address($tuan_info, $offline_store);
-
                 if(!empty($p_address)){
                     $address = $address.'['.$p_address.']';
+                }
+                if(empty($address)){
+                    $this->log("post address is empty ".$tuan_id);
                 }
             }
             //TODO to set

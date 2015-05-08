@@ -68,7 +68,7 @@ $(document).ready(function(){
     iUtils.initSelectBox(products);
     initSearchBox($('.product-search'), values);
   });
-    $.getJSON('/manage/admin/tuanBuyings/api_offline_stores', function(data){
+    $.getJSON('/manage/admin/offline_stores/api_offline_stores', function(data){
         var menu = {0:'所有好邻居自提点', 1: '所有自有自提点'};
         var offlineStoreBox = $('.offline_store');
         for(var category in data){
