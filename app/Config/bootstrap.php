@@ -111,7 +111,7 @@ const ORDER_COMMENTED = 1;
 
 const TRY_GLOBAL_SHOW=1;
 
-const RECOMMEND_PRODUCT_TAG=-1;
+const PYS_M_TUAN=34;
 
 const IS_BIG_TUAN=1;
 

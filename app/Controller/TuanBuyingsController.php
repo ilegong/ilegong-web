@@ -159,6 +159,9 @@ class TuanBuyingsController extends AppController{
                 'status'=>1
             )
         ));
+        if($_REQUEST['tagId']){
+            $this->set('tagId',$_REQUEST['tagId']);
+        }
         $this->set('shi_chi_comment_count',$shi_chi_comment_count);
         $this->set('comment_count',($comment_count-$shi_chi_comment_count));
         $this->set('limitCommentCount',COMMENT_LIMIT_IN_PRODUCT_VIEW);
@@ -640,6 +643,9 @@ class TuanBuyingsController extends AppController{
         $tuan_product_price = getTuanProductPrice($pid);
         if($tuan_product_price>0){
             $this->set('tuan_product_price',$tuan_product_price);
+        }
+        if($_REQUEST['tagId']){
+            $this->set('tagId',$_REQUEST['tagId']);
         }
         $this->set('detail_img',$tuanProducts[$pid]['detail_img']);
         $this->set('tuan_product', $tuan_product);

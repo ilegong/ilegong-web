@@ -2,7 +2,11 @@
 {{$this->Html->css(array('tuan.css?v6.1'));}}
 <div class="classlist_v2">
     <ul class="clearfix">
+        {{if $tagId}}
+        <li><a href="/?tagId={{$tagId}}" class="back"></a></li>
+        {{else}}
         <li><a href="/tuan_buyings/goods" class="back"></a></li>
+        {{/if}}
         <li class="line"></li>
         <li>返回</li>
     </ul>
