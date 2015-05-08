@@ -49,12 +49,17 @@ class ReferController extends AppController {
         $uid = $_POST['uid'];
         if ($uid) {
 
-            $referred = $this->find_be_referred_for_me($this->currentUser['id']);
+            $cuid = $this->currentUser['id'];
+            $referred = $this->find_be_referred_for_me($cuid);
             if (empty($referred)) {
-                $data = array();
-                $data['Refer']['from'] = $uid;
-                $data['Refer']['to'] = $this->currentUser['id'];
-                $this->Refer->save($data);
+                $this->loadModel('Order');
+                $bought_cnt = $this->Order->count_received_order($cuid);
+                if ($bought_cnt == 0) {
+                    $data = array();
+                    $data['Refer']['from'] = $uid;
+                    $data['Refer']['to'] = $cuid;
+                    $this->Refer->save($data);
+                }
                 $success = true;
             } else {
                 $success = true;
