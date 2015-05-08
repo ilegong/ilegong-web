@@ -1,4 +1,4 @@
-x<?php
+<?php
 
 class OrdersController extends AppController{
 	
