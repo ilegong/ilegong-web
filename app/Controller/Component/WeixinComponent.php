@@ -407,7 +407,7 @@ class WeixinComponent extends Component
         $good_num = $good['good_num'];
         $order_consinessname = $order['Order']['consignee_name'];
         $brandId = $order['Order']['brand_id'];
-        $send_date = $good['send_date'];
+        $send_date = empty($good['send_date']) ? '(无)' : $good['send_date'];
 
         if ($user_weixin != false) {
             $open_id = $user_weixin['oauth_openid'];
@@ -493,12 +493,11 @@ class WeixinComponent extends Component
                     }
                 }
 
-
                 if ($order['Order']['type'] == ORDER_TYPE_GROUP) {
                     $seller_weixin = '';
                 }
 
-            } elseif($order['Order']['type'] == ORDER_TYPE_TUAN){
+            } elseif($order['Order']['type'] == ORDER_TYPE_TUAN || $order['Order']['type'] == ORDER_TYPE_TUAN_SEC){
                 $this->send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_id, $order, $send_date);
             }  else {
                 $this->send_order_paid_message($open_id, $price, $good_info, $ship_info, $order_id, $order);
