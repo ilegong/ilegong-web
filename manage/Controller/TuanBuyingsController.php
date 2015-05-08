@@ -329,9 +329,6 @@ class TuanBuyingsController extends AppController{
             }
         }
     }
-    public function admin_set_order_status(){
-
-    }
 
     public function admin_send_tuan_buy_create_msg($tuanBuyId){
         $this->autoRender = false;
@@ -374,9 +371,7 @@ class TuanBuyingsController extends AppController{
         $this->TuanBuyingMessages->create();
         $this->TuanBuyingMessages->save($msg_log);
     }
-    public function admin_send(){
 
-    }
     public function admin_send_wx_fetch_msg($type = null){
         $this->autoRender = false;
         $data=$_POST;
