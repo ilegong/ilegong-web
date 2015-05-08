@@ -356,7 +356,7 @@ class CategoriesController extends AppController {
 
         if (!$disableAutoRedirect) {
             if ($this->RequestHandler->isMobile()) {
-                $this->redirect('/categories/mobileHome.html');
+                $this->redirect('/categories/mobileIndex.html');
                 return;
             }
         }
@@ -479,7 +479,7 @@ class CategoriesController extends AppController {
 
         if ($slug == 'techan' || $conditions['id'] == CATEGORY_ID_TECHAN) {
             //change mobile index view
-            $this->redirect($this->RequestHandler->isMobile() ? '/categories/mobileHome.html' : '/categories/productsHome.html');
+            $this->redirect($this->RequestHandler->isMobile() ? '/categories/mobileIndex.html' : '/categories/productsHome.html');
             return;
         }
 
