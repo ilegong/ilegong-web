@@ -288,7 +288,7 @@ class CategoriesController extends AppController {
         if($_REQUEST['tagId']){
             $this->set('tagId',$_REQUEST['tagId']);
         }else{
-            $this->set('tagId',RECOMMEND_PRODUCT_TAG);
+            $this->set('tagId',RECOMMEND_TAG_ID);
         }
         $this->set('tryings',$tryings);
         $this->set('hideFooter',true);
