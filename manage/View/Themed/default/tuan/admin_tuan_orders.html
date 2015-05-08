@@ -359,6 +359,8 @@
         <td>
           {{if ($order['Order']['type'] == 5) && $order['Order']['status']== 1}}
             <input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids" {{$offline_store['OfflineStore']['type'] == 1 ? "" : "disabled='disabled'"}}>
+          {{else}}
+            <input type="hidden" value="{{$order['Order']['id']}}" name="offline_order_ids" {{$offline_store['OfflineStore']['type'] == 1 ? "" : "disabled='disabled'"}}>
           {{/if}}
         </td>
         <td>{{$order['Order']['id']}}</td>
