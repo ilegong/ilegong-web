@@ -2,7 +2,8 @@ $(document).ready(function () {
     var cache = {};
     var $productsContent = $('#products-content');
     var $seckill_product = $('#seckill_product');
-    var currentTagId = -1;
+    var currentTagId = 23;
+    var recommendTagId = 23;
     var firstTag = $('div.menue ul li:first div');
     var oldBackColor = firstTag.css('background-color');
     var oldColor = firstTag.css('color');
@@ -29,21 +30,22 @@ $(document).ready(function () {
             $productsContent.html('');
             loadDatas(tagId);
         }
-        if(tagId!=23||tagId!='23'){
+        if(tagId!=recommendTagId||tagId!=recommendTagId.toString()){
             firstTag.css('background-color','#eeeeee');
             firstTag.css('color','#333333');
         }else{
             firstTag.css('background-color',oldBackColor);
+            firstTag.css('color',oldColor);
         }
     });
 
     function initView(){
-        loadDatas(23);
+        loadDatas(currentTagId);
     }
 
     //load tag products
     function loadDatas(tagId) {
-        if(tagId!=23||tagId!='23'){
+        if(tagId!=recommendTagId||tagId!=recommendTagId.toString()){
             $seckill_product.hide();
         }else{
             $seckill_product.show();

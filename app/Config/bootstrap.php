@@ -113,6 +113,8 @@ const TRY_GLOBAL_SHOW=1;
 
 const RECOMMEND_PRODUCT_TAG=-1;
 
+const IS_BIG_TUAN=1;
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');

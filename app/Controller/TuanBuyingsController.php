@@ -471,7 +471,7 @@ class TuanBuyingsController extends AppController{
             $this->loadModel('OrderConsignees');
             $consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN);
             $p_address = $_POST['address'];
-            if($tuan_info['TuanTeam']['type'] == 1||$global_sec=='true'){
+            if($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN||$global_sec=='true'){
                 if($_POST['way'] != 'ziti'){
                     $consignees['address'] = $p_address;
                 }
