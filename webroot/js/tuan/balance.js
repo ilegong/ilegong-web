@@ -188,6 +188,9 @@ var zitiObj = function(area,height, width){
 };
 function setData(area_id){
     var chose_address = zitiAddress.getShipAddress(area_id);
+    chose_address = chose_address.sort(function(item1,item2){
+        return item1['name'].localeCompare(item2['name']);
+    });
     var $chose_item = '';
     $.each(chose_address,function(index,item){
         $chose_item +=' <p data-shop-id="'+ item['id'] +'" data-shop-name="'+item['alias']+'">'+item['name']+'</p>';

@@ -694,7 +694,6 @@ class TuanBuyingsController extends AppController{
         $this->loadModel('OfflineStores');
         $address = $this->OfflineStores->find('all',array(
             'conditions' => array('deleted'=>0),
-            'order' => 'name DESC'
         ));
         $address=Hash::combine($address, '{n}.OfflineStores.id', '{n}.OfflineStores', '{n}.OfflineStores.area_id');
         echo json_encode($address);
