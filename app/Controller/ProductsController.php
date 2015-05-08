@@ -532,6 +532,11 @@ class ProductsController extends AppController{
         if(!(strpos($history,WX_HOST)>=0)){
             $history='/';
         }
+        if($history=='/'){
+            if($_REQUEST['tagId']){
+                $history=$history.'?tagId='.$_REQUEST['tagId'];
+            }
+        }
         $this->set('history',$history);
     }
 

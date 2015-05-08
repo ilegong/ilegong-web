@@ -2,7 +2,9 @@ $(document).ready(function () {
     var cache = {};
     var $productsContent = $('#products-content');
     var $seckill_product = $('#seckill_product');
-    var currentTagId = 23;
+    var menue = $('div.menue ul');
+    var initTagId = menue.data('id');
+    var currentTagId = 0;
     var recommendTagId = 23;
     var firstTag = $('div.menue ul li:first div');
     var oldBackColor = firstTag.css('background-color');
@@ -23,7 +25,6 @@ $(document).ready(function () {
     $('div.menue ul li').on('click', function () {
         var me = $(this);
         $('div.menue ul li.cur').removeClass('cur');
-        me.addClass('cur');
         var tagId = me.data('id');
         if (tagId != currentTagId) {
             currentTagId = tagId;
@@ -33,14 +34,12 @@ $(document).ready(function () {
         if(tagId!=recommendTagId||tagId!=recommendTagId.toString()){
             firstTag.css('background-color','#eeeeee');
             firstTag.css('color','#333333');
-        }else{
-            firstTag.css('background-color',oldBackColor);
-            firstTag.css('color',oldColor);
         }
+        me.addClass('cur');
     });
 
     function initView(){
-        loadDatas(currentTagId);
+        $('div.menue ul li[name="tag-'+initTagId+'"]').trigger('click');
     }
 
     //load tag products
@@ -74,7 +73,7 @@ $(document).ready(function () {
             originPrice = 0;
         }
         var productDate = new Date(good['created'].replace(' ','T'));
-        var goodUrl = '/products/' + productDate.yyyymmdd() + '/' + good['slug'] + '.html?history=/&amp;_sl=h5.cate.list';
+        var goodUrl = '/products/' + productDate.yyyymmdd() + '/' + good['slug'] + '.html?history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
         var goodHtml = '<div class="good"> <a href="'+goodUrl+'" class="xq">';
         if(good['limit_area']==1){
             goodHtml+='<p>仅限<br/>北京</p>';

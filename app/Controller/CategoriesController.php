@@ -285,6 +285,11 @@ class CategoriesController extends AppController {
             }
             $tryings = $trying_result;
         }
+        if($_REQUEST['tagId']){
+            $this->set('tagId',$_REQUEST['tagId']);
+        }else{
+            $this->set('tagId',RECOMMEND_PRODUCT_TAG);
+        }
         $this->set('tryings',$tryings);
         $this->set('hideFooter',true);
         $this->set('op_cate', OP_CATE_HOME);
@@ -356,7 +361,11 @@ class CategoriesController extends AppController {
 
         if (!$disableAutoRedirect) {
             if ($this->RequestHandler->isMobile()) {
-                $this->redirect('/categories/mobileIndex.html');
+                $tagId = RECOMMEND_PRODUCT_TAG;
+                if($_REQUEST['tagId']){
+                    $tagId = $_REQUEST['tagId'];
+                }
+                $this->redirect('/categories/mobileIndex.html?tagId='.$tagId);
                 return;
             }
         }
@@ -479,7 +488,15 @@ class CategoriesController extends AppController {
 
         if ($slug == 'techan' || $conditions['id'] == CATEGORY_ID_TECHAN) {
             //change mobile index view
-            $this->redirect($this->RequestHandler->isMobile() ? '/categories/mobileIndex.html' : '/categories/productsHome.html');
+            $redirectUrl = '/categories/productsHome.html';
+            if($this->RequestHandler->isMobile()){
+                $tagId = RECOMMEND_PRODUCT_TAG;
+                if($_REQUEST['tagId']){
+                    $tagId = $_REQUEST['tagId'];
+                }
+                $redirectUrl = '/categories/mobileIndex.html?tagId='.$tagId;
+            }
+            $this->redirect($redirectUrl);
             return;
         }
 
