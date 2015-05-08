@@ -174,6 +174,7 @@ class TuanBuyingsController extends AppController{
         if($tuan_team['TuanTeam']['type'] == 1){
             $this->set('big_tuan', true);
         }
+        $this->set('tuan_team', $tuan_team);
         $this->set('tuan_address', get_address($tuan_team, $offline_store));
     }
 
