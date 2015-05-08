@@ -56,6 +56,9 @@ class TuanTeamsController extends AppController{
         $this->pageTitle = $tuan_team['TuanTeam']['tuan_name'];
         $this->loadModel('TuanBuying');
 
+        $this->loadModel('OfflineStore');
+        $offline_store = $this->OfflineStore->findById($tuan_team['TuanTeam']['offline_store_id']);
+
         //get buying tuan
         $tuan_buyings = $this->TuanBuying->find('all', array(
             'conditions' => array('tuan_id' => $tuan_id,'status'=>0, 'published'=>1),
@@ -148,6 +151,7 @@ class TuanTeamsController extends AppController{
         $this->set('tryings',$tryings);
         $this->set('tuan_id', $tuan_id);
         $this->set('tuan_team', $tuan_team);
+        $this->set('tuan_address', get_address($tuan_team, $offline_store));
         $this->set('tuan_buyings', $tuan_buyings);
         $this->set('hideNav',true);
     }
