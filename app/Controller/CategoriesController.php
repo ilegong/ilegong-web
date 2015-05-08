@@ -361,7 +361,7 @@ class CategoriesController extends AppController {
 
         if (!$disableAutoRedirect) {
             if ($this->RequestHandler->isMobile()) {
-                $tagId = RECOMMEND_PRODUCT_TAG;
+                $tagId = RECOMMEND_TAG_ID;
                 if($_REQUEST['tagId']){
                     $tagId = $_REQUEST['tagId'];
                 }
@@ -490,7 +490,7 @@ class CategoriesController extends AppController {
             //change mobile index view
             $redirectUrl = '/categories/productsHome.html';
             if($this->RequestHandler->isMobile()){
-                $tagId = RECOMMEND_PRODUCT_TAG;
+                $tagId = RECOMMEND_TAG_ID;
                 if($_REQUEST['tagId']){
                     $tagId = $_REQUEST['tagId'];
                 }
