@@ -473,7 +473,7 @@ class TuanController extends AppController
         $seckill_product_count = $this->ProductTry->query('select count(*) as c from cake_product_tries where deleted = 0');
         $this->set('seckill_product_count', $seckill_product_count[0][0]['c']);
 
-        $tuan_team_count = $this->TuanTeam->query('select count(*) as c from cake_tuan_teams');
+        $tuan_team_count = $this->TuanTeam->query('select count(*) as c from cake_tuan_teams where published = 1');
         $this->set('tuan_team_count', $tuan_team_count[0][0]['c']);
         $offline_stores_count = $this->OfflineStore->query('select count(*) as c from cake_offline_stores where deleted = 0');
         $this->set('offline_stores_count', $offline_stores_count[0][0]['c']);
