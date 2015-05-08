@@ -58,15 +58,7 @@ class TuanBuyingsController extends AppController{
         }
         echo json_encode($tuan_buyings);
     }
-    public function admin_api_offline_stores(){
-        $this->autoRender=false;
-        $offlineStoreM = ClassRegistry::init('OfflineStore');
-        $offline_stores = $offlineStoreM->find('all', array(
-            'conditions'=>array('deleted'=>0)
-        ));
-        $offline_stores= Hash::combine($offline_stores , "{n}.OfflineStore.id", "{n}.OfflineStore", "{n}.OfflineStore.type");
-        echo json_encode($offline_stores);
-    }
+
     /**
      * show all tuan_buyings
      */

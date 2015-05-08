@@ -15,7 +15,7 @@ $(function(){
     $.each(tuanAreas,function(index,item){
         $('<option value="'+item['id']+'">'+item['name']+'</option>').appendTo(getCountyId);
     });
-    $.getJSON('/manage/admin/tuan_buyings/api_offline_stores',function(data){
+    $.getJSON('/manage/admin/offline_stores/api_offline_stores',function(data){
         for(var category in data){
             var categoryName = category == 0 ? '好邻居' : '自有自提点';
             $('<optgroup label="--------' + categoryName + '"></optgroup>').appendTo(offlineStoreBox );
