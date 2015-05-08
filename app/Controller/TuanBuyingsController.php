@@ -208,7 +208,9 @@ class TuanBuyingsController extends AppController{
         if($cartInfo){
             $result = $this->Cart->updateAll(array('consignment_date' => $consignment_date_id, 'send_date' => "'".$send_date."'"), array('id' => $cartInfo['Cart']['id']));
             if(!$result){
+                echo json_encode(array('success'=> false, 'error' => '发货时间选择有误，请重新点击购买'));
                 $this->log("failed to update consignment_date and send_date for cart ".$cartInfo['Cart']['id'].": consignment_date: ".$consignment_date_id.", send_date: ".$send_date);
+                return;
             }
 
             if($_POST['way_type'] == 'ziti'){
