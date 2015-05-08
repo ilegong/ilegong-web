@@ -35,6 +35,9 @@ class TuanBuyingsController extends AppController{
         if(empty($tuan_team)){
             $this->__message('该团不存在', '/tuan_teams/mei_shi_tuan');
         }
+        $this->loadModel('OfflineStore');
+        $offline_store = $this->OfflineStore->findById($tuan_team['TuanTeam']['offline_store_id']);
+
         $current_time = time();
         $exceed_time = false;
         if(strtotime($tuan_b['TuanBuying']['end_time']) < $current_time){
@@ -171,6 +174,7 @@ class TuanBuyingsController extends AppController{
         if($tuan_team['TuanTeam']['type'] == 1){
             $this->set('big_tuan', true);
         }
+        $this->set('tuan_address', get_address($tuan_team, $offline_store));
     }
 
     public function cart_info(){
@@ -341,6 +345,8 @@ class TuanBuyingsController extends AppController{
             $this->__message('该团不存在', '/tuan_teams/mei_shi_tuan');
             return;
         }
+        $this->loadModel('OfflineStore');
+        $offline_store = $this->OfflineStore->findById($tuan_info['TuanTeam']['offline_store_id']);
 
         $ship_fee = floatval($_REQUEST['way_fee']);
         $total_price = $Carts['Cart']['price'] * $Carts['Cart']['num'];
@@ -379,7 +385,7 @@ class TuanBuyingsController extends AppController{
         $this->set('cart_id', $Carts['Cart']['id']);
         $this->set('tuan_id', $tuan_id);
         $this->set('can_mark_address',$this->can_mark_address($tuan_id));
-        $this->set('tuan_address', $tuan_info['TuanTeam']['tuan_addr']);
+        $this->set('tuan_address', get_address($tuan_info, $offline_store));
         $this->set('end_time', date('m-d', $current_time));
         $this->set('tuan_buy_id', $tuan_buy_id);
         $this->set('cart_info',$Carts);
@@ -441,6 +447,7 @@ class TuanBuyingsController extends AppController{
         $this->loadModel('Cart');
         $this->loadModel('Order');
         $this->loadModel('TuanTeam');
+        $this->loadModel('OfflineStore');
         $cart_info = $this->Cart->findById($cart_id);
         $creator = $cart_info['Cart']['creator'];
         $order_type = $cart_info['Cart']['type'];
@@ -470,6 +477,7 @@ class TuanBuyingsController extends AppController{
                     $this->log("can't find tuan".$tuan_id);
                     return;
                 }
+                $offline_store = $this->OfflineStore->findById($tuan_info['TuanTeam']['offline_store_id']);
             }
             $this->loadModel('OrderConsignees');
             $consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN);
@@ -480,7 +488,8 @@ class TuanBuyingsController extends AppController{
                 }
                 $address = $p_address;
             }else{
-                $address = $tuan_info['TuanTeam']['tuan_addr'];
+                $address = get_address($tuan_info, $offline_store);
+
                 if(!empty($p_address)){
                     $address = $address.'['.$p_address.']';
                 }
