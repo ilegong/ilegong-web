@@ -9,7 +9,7 @@
 {{if !$phone_bind}}
 <a href="javascript:;" class="tuijian_login_a accept_done">接受邀请马上注册</a>
 {{elseif $receive_cnt <= 0}}
-<a href="/">完成第一单</a>
+<a href="/" class="tuijian_login_a">完成第一单</a>
 {{/if}}
 {{/if}}
 {{else}}
@@ -131,7 +131,7 @@
         {{if !$phone_bind}}
         <a href="javascript:;" class="tuijian_login_a accept_done">接受邀请马上注册</a>
         {{elseif $receive_cnt <= 0}}
-        <a href="/">完成第一单</a>
+        <a href="/" class="tuijian_login_a">完成第一单</a>
         {{/if}}
     {{/if}}
 
