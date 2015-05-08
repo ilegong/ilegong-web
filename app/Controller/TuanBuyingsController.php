@@ -481,7 +481,7 @@ class TuanBuyingsController extends AppController{
             if($global_sec!="true"){
                 $tuan_info = $this->TuanTeam->findById($tuan_id);
                 if(empty($tuan_info)){
-                    $this->log("can't find tuan".$tuan_id);
+                    $this->log("can't find tuan ".$tuan_id);
                     return;
                 }
                 $offline_store = $this->OfflineStore->findById($tuan_info['TuanTeam']['offline_store_id']);
@@ -496,9 +496,11 @@ class TuanBuyingsController extends AppController{
                 $address = $p_address;
             }else{
                 $address = get_address($tuan_info, $offline_store);
-
                 if(!empty($p_address)){
                     $address = $address.'['.$p_address.']';
+                }
+                if(empty($address)){
+                    $this->log("post address is empty ".$tuan_id);
                 }
             }
             //TODO to set
