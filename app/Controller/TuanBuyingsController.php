@@ -170,7 +170,7 @@ class TuanBuyingsController extends AppController{
         $recommC = $this->Components->load('ProductRecom');
         $recommends = $recommC->recommend($pid);
         $this->set('items', $recommends);
-        if($tuan_team['TuanTeam']['type'] == 1){
+        if($tuan_team['TuanTeam']['type'] == IS_BIG_TUAN){
             $this->set('big_tuan', true);
             //set ship type
             $this->set_product_ship($pid);
@@ -726,11 +726,11 @@ class TuanBuyingsController extends AppController{
                 'deleted' => DELETED_NO
             )
         ));
-        $tuan_ship_types = TuanShipType::get_all_tuan_ships();
+        $tuan_ship_types = TuanShip::get_all_tuan_ships();
         foreach($ship_settings as &$ss){
             $type_id = $ss['ProductShipSetting']['ship_type'];
             $ss['ProductShipSetting']['name'] = $tuan_ship_types[$type_id]['name'];
-            $ss['ProductShipSetting']['code'] = $tuan_ship_types['ProductShipSetting']['code'];
+            $ss['ProductShipSetting']['code'] = $tuan_ship_types[$type_id]['code'];
         }
         if(!empty($ship_settings)){
             $this->set('ship_settings',$ship_settings);

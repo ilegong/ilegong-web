@@ -790,17 +790,17 @@ class ProductSpeciality {
 
 }
 
-class TuanShipType{
+class TuanShip{
     public static function get_all_tuan_ships(){
         $shipTypesJson = Cache::read('_tuanshiptypes');
         if (empty($shipTypesJson)) {
             $tuanShipTypeModel = ClassRegistry::init('TuanShipType');
             $tuanShipTypes = $tuanShipTypeModel->find('all', array(
                 'conditions' => array(
-                    'deleted' => 0
+                    'deleted' => DELETED_NO
                 )
             ));
-            $tuanShipTypes = Hash::combine($tuanShipTypes, '{n}.ShipType.id', '{n}.ShipType');
+            $tuanShipTypes = Hash::combine($tuanShipTypes, '{n}.TuanShipType.id', '{n}.TuanShipType');
             $shipTypesJson = json_encode($tuanShipTypes);
             Cache::write('_tuanshiptypes', $shipTypesJson);
         }
