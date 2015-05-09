@@ -256,12 +256,13 @@
     <div id="byOfflineStore" class="tab-pane">
         <form class="form-inline form-by-offline-store" method="post" action="/manage/admin/tuan/query_by_offline_store"
               data-noajax="true">
+            <div class="form-group">
+                <input type="text" class="form-control offline-store-search" placeholder="搜索自提点"
+                       data-search-for="offline-store">
+            </div>
+            <strong class="text-danger lead">查询团购订单，秒杀订单</strong>
             <div style="padding-bottom: 10px;padding-top: 10px;">
                 <div class="form-group">
-                    <div class="form-group">
-                        <input type="text" class="form-control offline-store-search" placeholder="搜索自提点"
-                               data-search-for="offline-store">
-                    </div>
                     <select class="form-control offline_store" name="store_id" id="offline-store" data-value="{{$store_id}}">
                         <option value="-1">请选择自提点</option>
                     </select>
