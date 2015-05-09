@@ -216,12 +216,12 @@ class TuanBuyingsController extends AppController{
                 $this->log("failed to update consignment_date and send_date for cart ".$cartInfo['Cart']['id'].": consignment_date: ".$consignment_date_id.", send_date: ".$send_date);
                 return;
             }
-
-            if($_POST['way_type'] == 'ziti'){
-                echo json_encode(array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id']));
-            }else{
-                $ship_fee = floatval($_POST['way_fee']);
+            //way type is not ziti
+            $ship_fee = floatval($_POST['way_fee']);
+            if(strpos($_POST['way_type'],'ziti')===false){
                 echo json_encode(array('success' => true, 'direct'=>'normal','way_type'=>$_POST['way_type'],'way_fee'=>$ship_fee, 'cart_id'=>$cartInfo['Cart']['id']));
+            }else{
+                echo json_encode(array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id'],'way_type'=>$_POST['way_type'],'way_fee'=>$ship_fee));
             }
             $cart_array = array(0 => strval($cartInfo['Cart']['id']));
             $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
@@ -362,7 +362,7 @@ class TuanBuyingsController extends AppController{
         $ship_fee = floatval($_REQUEST['way_fee']);
         $total_price = $Carts['Cart']['price'] * $Carts['Cart']['num'];
         $this->set('ship_fee',$ship_fee);
-        $total_price = $total_price+floatval($ship_fee);
+        $total_price = $total_price+$ship_fee;
         $pid = $tuan_b['TuanBuying']['pid'];
         $this->loadModel('Product');
         $this->loadModel('Brand');
@@ -697,7 +697,7 @@ class TuanBuyingsController extends AppController{
         $this->autoRender = false;
         $cond = array('deleted'=>0);
         $type = $_REQUEST['type'];
-        if($type){
+        if($type!=-1){
             $cond['type']=$type;
         }
         $this->loadModel('OfflineStores');
