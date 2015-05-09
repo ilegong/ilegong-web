@@ -516,6 +516,11 @@ class TuanBuyingsController extends AppController{
                     $total_price = $total_price+13;
                 }
             }
+            if($way=='sfby'){
+                if(in_array($pid,array(967,966,965))){
+                    $total_price=$total_price+10;
+                }
+            }
             $tuan_consignees = $this->OrderConsignees->find('first', array(
                 'conditions' => array('status' => STATUS_CONSIGNEES_TUAN, 'creator' => $uid),
                 'fields' => array('id')
@@ -565,14 +570,19 @@ class TuanBuyingsController extends AppController{
             }else{
                 //$consign_time = friendlyDateFromStr($tuanBuy['TuanBuying']['consign_time'], FFDATE_CH_MD);
                 $cart_name = $cart_info['Cart']['name'];
-                if($tuan_info['TuanTeam']['type'] == 1 && $way == 'sf'){
-                    $cart_name = $cart_name.'(顺丰到付)';
-                }
-                if($tuan_info['TuanTeam']['type'] == 1 && $way == 'baoyou'){
-                    $cart_name = $cart_name.'(包邮)';
-                }
-                if($tuan_info['TuanTeam']['type'] == 1 && $way == 'kddj'){
-                    $cart_name = $cart_name.'(快递到家)';
+                if($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN){
+                    if($way=='sf'){
+                        $cart_name = $cart_name.'(顺丰到付)';
+                    }
+                    if($way=='baoyou'){
+                        $cart_name = $cart_name.'(包邮)';
+                    }
+                    if($way=='kddj'){
+                        $cart_name = $cart_name.'(快递到家)';
+                    }
+                    if($way=='sfby'){
+                        $cart_name = $cart_name.'(顺丰包邮)';
+                    }
                 }
                 $this->Cart->update(array('name' => '\'' . $cart_name . '\'' ), array('id' => $cart_id));
                 $res = array('success'=> true, 'order_id'=>$order['Order']['id']);

@@ -7,6 +7,7 @@
         $sold_percent = round(($sold_num / $target_num * 100), 1);
     }
     $products_no_sf = array(963, 962, 959, 958, 957, 956, 954, 952, 951, 950, 948, 947, 946, 945, 944, 943, 942, 941, 940, 939, 911, 862, 960);
+    $product_sf_by = array(967,966,965);
 ?>
 <div class="classlist_v2" style="z-index:999;">
     <ul class="clearfix">
@@ -113,6 +114,8 @@
                                                 <span class="mr12 border" way-label="kddj" way-fee="10">快递到家(10元邮费)</span>
                                             {{elseif $current_data_id==879}}
                                                 <span class="mr12 border" way-label="kddj" way-fee="13">快递到家(13元邮费)</span>
+                                            {{elseif in_array($current_data_id,$product_sf_by)}}
+                                                <span class="mr12 border" way-label="sfby" way-fee="10">顺丰到付(10元邮费)</span>
                                             {{else}}
                                               {{if !in_array($current_data_id, $products_no_sf)}}
                                                 <span class="mr12 border" way-label="sf">顺丰到付</span>
