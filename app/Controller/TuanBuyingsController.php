@@ -68,7 +68,7 @@ class TuanBuyingsController extends AppController{
         $tuan_buy_type = $tuan_b['TuanBuying']['consignment_type'];
         //根据发货类型显示
         $consign_time = $tuan_b['TuanBuying']['consign_time'];
-        $consign_time_text = $tuan_buy_type != 2 ? (empty($consign_time) ? ($tuan_buy_type == 0 ? "成团后发货" : "团满准备发货") : friendlyDateFromStr($consign_time, FFDATE_CH_MD)) : '请选择发货时间';
+        $consign_time_text = $tuan_buy_type != TUAN_CONSIGNMENT_TYPE ? (empty($consign_time) ? ($tuan_buy_type == 0 ? "成团后发货" : "团满准备发货") : friendlyDateFromStr($consign_time, FFDATE_CH_MD)) : '请选择发货时间';
         $this->set(compact('pid', 'consign_time', 'consign_time_text', 'tuan_buy_id', 'tuan_team', 'end_time'));
 
         $sold_num = $tuan_b['TuanBuying']['sold_num'];
@@ -88,7 +88,7 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_id',$tuan_b['TuanBuying']['tuan_id']);
         $target_num = max($tuan_b['TuanBuying']['target_num'], 1);
         $this->set('target_num', $target_num);
-        if($tuan_buy_type==2){
+        if($tuan_buy_type==TUAN_CONSIGNMENT_TYPE){
             //排期
             $consignment_dates = consignment_send_date($pid);
             if(!empty($consignment_dates)){
@@ -172,6 +172,8 @@ class TuanBuyingsController extends AppController{
         $this->set('items', $recommends);
         if($tuan_team['TuanTeam']['type'] == 1){
             $this->set('big_tuan', true);
+            //set ship type
+            $this->set_product_ship($pid);
         }
         $this->set('tuan_team', $tuan_team);
         $this->set('tuan_address', get_address($tuan_team, $offline_store));
@@ -693,12 +695,36 @@ class TuanBuyingsController extends AppController{
     }
     public function get_offline_address(){
         $this->autoRender = false;
+        $cond = array('deleted'=>0);
+        $type = $_REQUEST['type'];
+        if($type){
+            $cond['type']=$type;
+        }
         $this->loadModel('OfflineStores');
         $address = $this->OfflineStores->find('all',array(
-            'conditions' => array('deleted'=>0),
+            'conditions' => $cond,
         ));
         $address=Hash::combine($address, '{n}.OfflineStores.id', '{n}.OfflineStores', '{n}.OfflineStores.area_id');
         echo json_encode($address);
+    }
+
+    private function set_product_ship($pid){
+        $this->loadModel('ProductShipSetting');
+        $ship_settings = $this->ProductShipSetting->find('all',array(
+            'conditions' => array(
+                'product_id' => $pid,
+                'deleted' => DELETED_NO
+            )
+        ));
+        $tuan_ship_types = TuanShipType::get_all_tuan_ships();
+        foreach($ship_settings as &$ss){
+            $type_id = $ss['ProductShipSetting']['ship_type'];
+            $ss['ProductShipSetting']['name'] = $tuan_ship_types[$type_id]['name'];
+            $ss['ProductShipSetting']['code'] = $tuan_ship_types['ProductShipSetting']['code'];
+        }
+        if(!empty($ship_settings)){
+            $this->set('ship_settings',$ship_settings);
+        }
     }
 }
 

@@ -117,6 +117,8 @@ const IS_BIG_TUAN=1;
 
 const RECOMMEND_TAG_ID=23;
 
+const TUAN_CONSIGNMENT_TYPE=2;
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');
@@ -786,6 +788,24 @@ class ProductSpeciality {
         return json_encode($allAttrs);
     }
 
+}
+
+class TuanShipType{
+    public static function get_all_tuan_ships(){
+        $shipTypesJson = Cache::read('_tuanshiptypes');
+        if (empty($shipTypesJson)) {
+            $tuanShipTypeModel = ClassRegistry::init('TuanShipType');
+            $tuanShipTypes = $tuanShipTypeModel->find('all', array(
+                'conditions' => array(
+                    'deleted' => 0
+                )
+            ));
+            $tuanShipTypes = Hash::combine($tuanShipTypes, '{n}.ShipType.id', '{n}.ShipType');
+            $shipTypesJson = json_encode($tuanShipTypes);
+            Cache::write('_tuanshiptypes', $shipTypesJson);
+        }
+        return json_decode($shipTypesJson, true);
+    }
 }
 
 class ShipAddress {
