@@ -775,7 +775,11 @@ class TuanController extends AppController
             if (!empty($send_date)) {
                 $conditions['DATE(Cart.send_date)'] = $send_date;
             }
-            $this->_query_orders($conditions, $order_by);
+            if ($store_id != -1) {
+                $store_ids = explode(",", $store_id);
+                $conditions['Order.consignee_id'] = $store_ids;
+                $this->_query_orders($conditions, $order_by);
+            }
         }
         $this->set('store_id', $store_id);
         $this->set('send_date', $send_date);
