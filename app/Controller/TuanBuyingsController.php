@@ -187,8 +187,8 @@ class TuanBuyingsController extends AppController{
         $spec_id = intval($_REQUEST['spec_id']);
         $consignment_date_id = intval($_REQUEST['consignment_date_id']);
         $send_date = $_REQUEST['send_date'];
-
-        if(empty($consignment_date_id) || $consignment_date_id == 0 || empty($send_date)){
+        
+        if((empty($consignment_date_id) || $consignment_date_id == 0) && empty($send_date)){
             echo json_encode(array('success'=> false, 'error' => '对不起，系统错误，请重新点击购买'));
             return;
         }
@@ -222,7 +222,7 @@ class TuanBuyingsController extends AppController{
             $cart_array = array(0 => strval($cartInfo['Cart']['id']));
             $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
         }else{
-            echo json_encode(array('success'=> false, 'error' => '对不起，系统出错'));
+            echo json_encode(array('success'=> false, 'error' => '对不起，系统出错，请联系客服'));
         }
     }
 
