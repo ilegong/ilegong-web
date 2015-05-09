@@ -187,15 +187,17 @@ class TuanBuyingsController extends AppController{
         $spec_id = intval($_REQUEST['spec_id']);
         $consignment_date_id = intval($_REQUEST['consignment_date_id']);
         $send_date = $_REQUEST['send_date'];
-        
+
         if((empty($consignment_date_id) || $consignment_date_id == 0) && empty($send_date)){
             echo json_encode(array('success'=> false, 'error' => '对不起，系统错误，请重新点击购买'));
             return;
         }
-        $consignment_date = $this->ConsignmentDate->findById($consignment_date_id);
-        if(empty($consignment_date) || $consignment_date['ConsignmentDate']['published'] == 0){
-            echo json_encode(array('success'=> false, 'error' => '发货时间选择有误，请重新点击购买'));
-            return;
+        if(!empty($consignment_date_id) && $consignment_date_id != 0){
+            $consignment_date = $this->ConsignmentDate->findById($consignment_date_id);
+            if(empty($consignment_date) || $consignment_date['ConsignmentDate']['published'] == 0){
+                echo json_encode(array('success'=> false, 'error' => '发货时间选择有误，请重新点击购买'));
+                return;
+            }
         }
         $uId = $this->currentUser['id'];
         $cart_tuan_param = array(
