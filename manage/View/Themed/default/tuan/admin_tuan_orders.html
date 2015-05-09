@@ -15,7 +15,7 @@
     <li role="presentation">
         <a data-tab="emptySendDate" href="/manage/admin/tuan/query_b2c_empty_date_address">
             !!!B2C无时间地址
-            <span {{if $b2c_empty_send_date_count> 0}}class="text-danger"{{/if}}>({{$b2c_empty_date_address_count}})</span>
+            <span {{if $b2c_empty_date_address_count> 0}}class="text-danger"{{/if}}>({{$b2c_empty_date_address_count}})</span>
         </a>
     </li>
     <li role="presentation">
@@ -284,7 +284,7 @@
         </form>
     </div>
     <div id="emptySendDate" class="tab-pane">
-        <strong class="text-danger lead">只能查询团购、秒杀，排期普通商品无法查询</strong>
+        <strong class="text-danger lead">只能查询团购、秒杀，2个月以内，待发货的订单</strong>
     </div>
     <div id="b2cPaidNotSend" class="tab-pane">
         <strong class="text-danger lead">B2C，到了发货时间，仍未发货的订单</strong>
