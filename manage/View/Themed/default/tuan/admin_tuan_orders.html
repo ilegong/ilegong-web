@@ -11,7 +11,7 @@
     <li role="presentation"><a data-tab="byTuanTeam" href="/manage/admin/tuan/query_by_tuan_team">按团队查询</a></li>
     <li role="presentation"><a data-tab="byProduct" href="/manage/admin/tuan/query_by_product">按商品查询</a></li>
     <li role="presentation"><a data-tab="byOfflineStore"
-                               href="/manage/admin/tuan/query_by_offline_store">按自提点查询(尚未上线)</a></li>
+                               href="/manage/admin/tuan/query_by_offline_store">按自提点查询</a></li>
     <li role="presentation">
         <a data-tab="emptySendDate" href="/manage/admin/tuan/query_b2c_empty_date_address">
             !!!B2C无时间地址
@@ -267,6 +267,10 @@
                            value="{{$send_date}}" placeholder="日期(如2015-5-1)" name="send_date">
                 </div>
                 <div class="form-group">
+                    <input type="text" class="form-control" data-date-format="yyyy-mm-dd hh:ii"
+                           value="{{$end_stat_date}}" placeholder="结束日期,单天可不填" name="end_stat_date">
+                </div>
+                <div class="form-group">
                     <select class="form-control order-status" data-value="{{order_status}}" name="order_status">
                         <option value="-1">选择订单状态</option>
                         <option value="0">待支付</option>
@@ -474,4 +478,4 @@
 </div>
 
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
-{{$this->Html->script(array('manage/tuan/tuan_orders.js?v4.5'))}}
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v4.6'))}}
