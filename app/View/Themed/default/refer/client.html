@@ -3,8 +3,8 @@
 <div class="tuijian_login">{{$ref_user['nickname']}}向您推荐了【朋友说】{{if !empty($old_refer_name)}} <br/> 【朋友说】-- 朋友间分享健康美食的平台。
     (您已经接受了{{$old_refer_name}}的邀请){{/if}}
 </div>
-{{if $referred}}
-<a href="/">去逛逛</a>
+{{if !empty($referred) && $referred['User']['from'] != $CurrentUser['id']}}
+<a href="/" class="tuijian_login_a">去逛逛</a>
 {{else}}
 {{if !$phone_bind}}
 <a href="javascript:;" class="tuijian_login_a accept_done">接受邀请马上注册</a>
