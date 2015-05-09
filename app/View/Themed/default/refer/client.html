@@ -9,7 +9,7 @@
 {{if !$phone_bind}}
 <a href="javascript:;" type="bind" class="tuijian_login_a {{empty($refer)?'accept_done':''}}">{{empty($refer)?'接受邀请':''}}马上注册</a>
 {{elseif $receive_cnt <= 0}}
-<a href="/" type="order" class="tuijian_login_a {{empty($refer)?'accept_done':''}}">{{empty($refer)?'接受邀请':''}}完成第一单</a>
+<a href="javascript:;" type="order" class="tuijian_login_a {{empty($refer)?'accept_done':''}}">{{empty($refer)?'接受邀请':''}}完成第一单</a>
 {{/if}}
 {{/if}}
 {{else}}
