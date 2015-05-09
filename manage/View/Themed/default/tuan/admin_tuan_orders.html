@@ -455,7 +455,10 @@
         </td>
         <td data-offline-store-type="{{$offline_store['OfflineStore']['type']}}">
           {{if !empty($offline_store) && $offline_store['OfflineStore']['type'] == 0 && $order['Order']['status']== 1 && $order['Order']['type']== 5}}
-              <button type="button" class="ship-to-haolinju-store btn btn-primary">发提货码</button></td>
+              <button type="button" class="ship-to-haolinju-store btn btn-primary">发提货码</button>
+          {{/if}}
+          {{if in_array($order['Order']['status'],array(1,2,3,9,16,4,14))}}
+              <button type="button" class="btn btn-default refund-button"  data-order_id="{{$order['Order']['id']}}" data-order_creator="{{$order['Order']['creator']}}"  data-total_price = "{{$order['Order']['total_price']}}">退款</button>
           {{/if}}
         </td>
     </tr>
@@ -463,7 +466,6 @@
     {{/loop}}
     </tbody>
 </table>
-
 <div class="ship-to-haolinju-store-dialog" title="好邻居店铺发货" class="hidden">
     <p class="text-warning">输入提货码，点击确认发货，会同时发送“到货提醒”</p>
     <p class="text-warning">否则只确认发货，不发送“到货提醒”</p>
@@ -478,4 +480,4 @@
 </div>
 
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
-{{$this->Html->script(array('manage/tuan/tuan_orders.js?v4.7'))}}
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v5.0'))}}

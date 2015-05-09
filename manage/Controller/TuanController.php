@@ -813,4 +813,14 @@ class TuanController extends AppController
         $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where o.pay_time > CURDATE()');
         return $empty_send_date_count[0][0]['ct'];
     }
+
+    public function admin_update_order_status_to_refunded(){
+        $this->autoRender = false;
+        $order_id = $_REQUEST['orderId'];
+        $order_status = $_REQUEST['orderStatus'];
+        $this->log('status'.json_encode($order_status));
+        if(!empty($order_id)){
+            $this->Order->updateAll(array('status' => $order_status),array('id' => $order_id));
+        }
+    }
 }
