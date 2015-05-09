@@ -86,6 +86,8 @@ class ReferController extends AppController {
         $this->set('received_cnt', $received_cnt);
         $this->set('phone_bind', $phone_binded);
 
+        $this->log("refer client ".$this->currentUser['id'].' from '. $uid .', phone_bind='.$phone_binded.', received_cnt='.$received_cnt);
+
         if (!$phone_binded || $received_cnt <= 0) {
             $referred = $this->find_be_referred_for_me($this->currentUser['id']);
             if (!empty($referred)) {
