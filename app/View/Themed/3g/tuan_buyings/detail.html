@@ -112,7 +112,7 @@
                             </ul>
                         {{else}}
                             <!--default-->
-                             <span class="mr12 border cur tuan_way_selected" way-label="ziti" style="display: none;">自提</span>
+                             <span class="mr12 border cur tuan_way_selected" way-label="ziti" way-fee="0" style="display: none;">自提</span>
                         {{/if}}
                     {{else}}
                     <div class="clearfix tuanxq" style="margin-top: -1px;">
@@ -388,11 +388,11 @@
                     url:'/tuan_buyings/cart_info',
                     success:function(data){
                         if(data.success) {
+                            var way_type=data['way_type'];
+                            var way_fee = data['way_fee'];
                             if(data.direct == 'big_tuan_list'){
-                                window.location.href = '/tuan_buyings/big_tuan_balance/{{$tuan_buy_id}}/' + data.cart_id + '';
+                                window.location.href = '/tuan_buyings/big_tuan_balance/{{$tuan_buy_id}}/' + data.cart_id + '?way_type='+way_type+'&way_fee='+way_fee;
                             }else{
-                                var way_type=data['way_type'];
-                                var way_fee = data['way_fee'];
                                 window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}/' + data.cart_id + '?way_type='+way_type+'&way_fee='+way_fee;
                             }
                         }

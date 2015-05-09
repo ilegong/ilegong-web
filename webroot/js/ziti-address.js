@@ -1,7 +1,7 @@
 /**
  * Created by ldy on 15/3/25.
  */
-var zitiAddress = function(){
+function zitiAddress(type){
     var beijingArea= {
         110101:"东城区",
         110108:"海淀区",
@@ -15,7 +15,14 @@ var zitiAddress = function(){
     //崇文并入东城区， 宣武并入西城区
     var ship_address = {};
     var area = [];
-    $.getJSON('/tuan_buyings/get_offline_address',function(data){
+    var addressType = -1;
+    if(type=='pysziti'){
+        addressType=1;
+    }
+    if(type=='hljziti'){
+        addressType=0;
+    }
+    $.getJSON('/tuan_buyings/get_offline_address?type='+addressType,function(data){
         ship_address = data;
         for(var index in data){
             $("[area-id="+index+"]").show();
@@ -28,4 +35,4 @@ var zitiAddress = function(){
         getBeijingAreas: beijingArea,
         getShipAddress: getShipAddress
     }
-}();
+};
