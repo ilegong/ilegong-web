@@ -222,7 +222,7 @@ class TuanBuyingsController extends AppController{
             $cart_array = array(0 => strval($cartInfo['Cart']['id']));
             $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
         }else{
-            echo json_encode(array('success'=> false, 'error' => '对不起，系统错误，请重新点击购买'));
+            echo json_encode(array('success'=> false, 'error' => '对不起，系统出错'));
         }
     }
 
