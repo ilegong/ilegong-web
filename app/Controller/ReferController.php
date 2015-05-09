@@ -81,7 +81,7 @@ class ReferController extends AppController {
         $phone_binded = !empty($this->currentUser['mobilephone']);
         $mOrder = ClassRegistry::init('Order');
         $received_cnt = $mOrder->count_received_order($this->currentUser['id']);
-        $reg_done = $received_cnt > 0;
+        $reg_done = $received_cnt > 0 && !$phone_binded;
         $this->set('reg_done', $reg_done);
         $this->set('received_cnt', $received_cnt);
         $this->set('phone_bind', $phone_binded);
