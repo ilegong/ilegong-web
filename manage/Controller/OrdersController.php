@@ -512,11 +512,11 @@ class OrdersController extends AppController{
             $flag_2 = false;
         }
         if($flag_1||$flag_2){
-            $data['RefundLog']['order_id'] = $orderId;
-            $data['RefundLog']['refund_fee'] = intval(intval($refundMoney)*1000/10);
-            $data['RefundLog']['trade_type'] = $PayLogInfo['PayLog']['trade_type'];
-            $data['RefundLog']['remark'] = $refundMark;
-            $this->RefundLog->save($data);
+//            $data['RefundLog']['order_id'] = $orderId;
+//            $data['RefundLog']['refund_fee'] = intval(intval($refundMoney)*1000/10);
+//            $data['RefundLog']['trade_type'] = $PayLogInfo['PayLog']['trade_type'];
+//            $data['RefundLog']['remark'] = $refundMark;
+//            $this->RefundLog->save($data);
             $returnInfo  = array('success' => true,'msg' =>'退款通知发送成功');
         }else{
             $returnInfo  = array('success' => false,'msg' =>'退款通知发送失败，请重试');

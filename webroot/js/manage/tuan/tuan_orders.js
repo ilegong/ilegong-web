@@ -316,10 +316,12 @@ $(document).ready(function(){
             }
         }, 'json');
     });
+
     function send_refund_message(order_id,refund_money,creator,refund_mark,total_price,order_status){
             var refundMoney = $('#refund_money');
             $.getJSON('/manage/admin/orders/compute_refund_money',{'orderId':order_id},function(data){
               var res = data;
+                if(order_status ==4){
                 if(refund_money ==''){
                 alert('退款金额不能为空哦');
                 refundMoney.toggleClass('red').focus();
@@ -328,18 +330,32 @@ $(document).ready(function(){
                 refundMoney.toggleClass('red').focus();
                 alert('退款金额在0~'+ Math.round((total_price-res)*100)/100 +'之间');
                 return false;
-            }else{
+            }
+            }
+//            else{
                    $.post('/manage/admin/tuan/update_order_status_to_refunded',{'orderId':order_id,'orderStatus':order_status},function(data){
-                    });
-                   $.post('/manage/admin/orders/send_refund_notify',{'orderId':order_id,'refundMoney':refund_money,'creator':creator,'refundMark':refund_mark},function(data){
-                       var result = JSON.parse(data);
-                       if(result.success){
-                           bootbox.alert(result.msg);
+                       var res = JSON.parse(data);
+                       if(res.success){
+                           if(order_status == 4){
+                           $.post('/manage/admin/orders/send_refund_notify',{'orderId':order_id,'refundMoney':refund_money,'creator':creator,'refundMark':refund_mark},function(data){
+                               var result = JSON.parse(data);
+                               if(result.success){
+                                   bootbox.alert(res.msg +' '+ result.msg);
+                                   location.reload();
+                               }else{
+                                   bootbox.alert(result.msg);
+                               }
+                           });
+                           }else{
+                               bootbox.alert(res.msg);
+                               location.reload();
+                           }
                        }else{
-                           bootbox.alert(result.msg);
+                           bootbox.alert(res.msg);
                        }
-                   });
-               }
+                    });
+//               }
+
             });
         }
         $('.refund-button').on('click',function(){
@@ -351,13 +367,14 @@ $(document).ready(function(){
                     '   <label for="" class="col-sm-2 control-label">订单状态</label>'+
                     '     <div class="col-sm-9">' +
                     '       <label class="radio-inline">' +
-                    '          <input type="radio" id="order_in_refunding" name="status" value="4">退款中'+
+                    '          <input type="radio" id="order_in_refunding" name="status" value="14" data-toggle="collapse" data-target="#refund_order">退款中'+
                     '     </label>'+
                     '     <label class="radio-inline">' +
-                    '          <input type="radio" id="order_refunded" name="status" checked="checked" value="14">已退款'+
+                    '          <input type="radio" id="order_refunded" name="status" checked="checked" value="4" data-toggle="collapse" data-target="#refund_order">已退款'+
                     '     </label>'+
                     '     </div>'+
                     '</div>'+
+                    '<div id="refund_order" class="collapse in">'+
                     '  <div class="form-group">' +
                     '      <label for="refund_money" class="col-sm-2 control-label">退款金额</label>' +
                     '      <div class="col-sm-10">' +
@@ -370,6 +387,7 @@ $(document).ready(function(){
                     '          <textarea id="refund_remark" class="form-control" placeholder="说明退款原因" ' + '></textarea>' +
                     '      </div>' +
                     '  </div>' +
+                    '</div>'+
                     '</div>';
             bootbox.dialog({
                 title:'退款通知'+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href = "/manage/admin/orders/get_refund_log/'+order_id+'?total_price='+total_price+'">查看退款纪录</a>',
@@ -394,4 +412,7 @@ $(document).ready(function(){
 
             })
         });
+
+        $('.collapse').collapse();
+
 });
