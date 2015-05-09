@@ -46,6 +46,7 @@ echo $this->MForm->create($current_model,array(
                     <option value="14" {{if $this->data['Order']['status']==14}}selected = "selected"{{/if}}>订单退款中</option>
                     </select>
                     <a type="button" class="btn btn-warning refund-button hidden" style="margin-right: 10px;" id="refundOrder" data-toggle="collapse" data-target="#refund_order" aria-expanded="false" aria-controls="refund_order" data-order_id="{{$this->data['Order']['id']}}" data-order_creator="{{$this->data['Order']['creator']}}"  data-total_price = "{{$this->data['Order']['total_price']}}">退款通知</a>
+                    {{if $this->data['Order']['status']==4}}<a href = "/manage/admin/orders/get_refund_log/{{$this->data['Order']['id']}}?total_price={{$this->data['Order']['total_price']}}">查看退款纪录</a>{{/if}}
                    </div>
                  </div>
                 <div class="form-group collapse" id="refund_order">
