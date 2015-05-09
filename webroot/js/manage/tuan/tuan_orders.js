@@ -73,10 +73,16 @@ $(document).ready(function(){
         var offlineStoreBox = $('.offline_store');
         for(var category in data){
             $('<optgroup label="--------"><option value="" class="store_'+ category +'">' + menu[category] + '</option>').appendTo(offlineStoreBox );
-            for(var addressId in data[category]){
-                $('<option value="' + addressId + '">' + data[category][addressId].name + '</option>').appendTo(offlineStoreBox);
+            var chose_address = $.map(data[category], function(value) {
+                return [value];
+            });
+            chose_address = chose_address.sort(function(item1,item2){
+                return item1['name'].localeCompare(item2['name']);
+            });
+            for(var i in chose_address){
+                $('<option value="' +  chose_address[i].id + '">' + chose_address[i].name + '</option>').appendTo(offlineStoreBox);
                 var val =  $('.store_'+ category).val();
-                $('.store_'+ category).val(addressId + ','+val);
+                $('.store_'+ category).val(chose_address[i].id + ','+val);
             }
         }
         iUtils.initSelectBox(offlineStoreBox);
