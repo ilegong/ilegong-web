@@ -362,6 +362,61 @@ class TuanController extends AppController
         $this->render("admin_tuan_orders");
     }
 
+    public function admin_query_by_tuan_team()
+    {
+        $team_id = !empty($_REQUEST['team_id']) ? $_REQUEST['team_id'] : -1;
+        $tuan_buying_id = !empty($_REQUEST['tuan_buying_id']) ? $_REQUEST['tuan_buying_id'] : -1;
+        $order_status = !empty($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
+
+        $conditions = array();
+        $order_by = 'Order.created DESC';
+        if ($team_id == -1) {
+            $send_date_start = $_REQUEST['send_date_start'];
+            if (!empty($send_date_start)) {
+                $conditions['Order.type'] = ORDER_TYPE_TUAN;
+                $conditions['DATE(Cart.send_date)'] = $send_date_start;
+                $order_by = "Order.consignee_address ASC";
+            }
+            if ($order_status != -1) {
+                $conditions['Order.status'] = $order_status;
+            }
+        } else {
+            $conditions['Order.type'] = ORDER_TYPE_TUAN;
+            if ($tuan_buying_id != -1) {
+                $conditions['Order.member_id'] = $tuan_buying_id;
+            } else {
+                $tuan_buyings = $this->TuanBuying->find('all', array(
+                    'conditions' => array('tuan_id' => $team_id),
+                    'fields' => array('id')
+                ));
+                $conditions['Order.member_id'] = Hash::extract($tuan_buyings, "{n}.TuanBuying.id");
+                $send_date_start = $_REQUEST['send_date_start'];
+                $send_date_end = $_REQUEST['send_date_end'];
+                if (empty($send_date_start)) {
+                    $send_date_start = date('Y-m-d', strtotime('-2 days'));
+                }
+                if (empty($send_date_end)) {
+                    $send_date_end = date('Y-m-d', strtotime('+5 days'));
+                }
+                $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
+                $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
+            }
+            if ($order_status != -1) {
+                $conditions['Order.status'] = $order_status;
+            }
+        }
+
+        $this->_query_orders($conditions, $order_by);
+
+        $this->set('team_id', $team_id);
+        $this->set('tuan_buying_id', $tuan_buying_id);
+        $this->set('send_date_start', $send_date_start);
+        $this->set('send_date_end', $send_date_end);
+        $this->set('order_status', $order_status);
+        $this->set('query_type', 'byTuanTeam');
+        $this->render("admin_tuan_orders");
+    }
+
     public function admin_query_b2c_empty_date_address()
     {
         $conditions = array(
