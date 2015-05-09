@@ -258,7 +258,11 @@
               data-noajax="true">
             <div style="padding-bottom: 10px;padding-top: 10px;">
                 <div class="form-group">
-                    <select class="form-control offline_store" name="store_id" id="offline_store_id" data-value="{{$store_id}}">
+                    <div class="form-group">
+                        <input type="text" class="form-control offline-store-search" placeholder="搜索自提点"
+                               data-search-for="offline-store">
+                    </div>
+                    <select class="form-control offline_store" name="store_id" id="offline-store" data-value="{{$store_id}}">
                         <option value="-1">请选择自提点</option>
                     </select>
                 </div>
@@ -466,6 +470,7 @@
     {{/loop}}
     </tbody>
 </table>
+
 <div class="ship-to-haolinju-store-dialog" title="好邻居店铺发货" class="hidden">
     <p class="text-warning">输入提货码，点击确认发货，会同时发送“到货提醒”</p>
     <p class="text-warning">否则只确认发货，不发送“到货提醒”</p>
@@ -480,4 +485,4 @@
 </div>
 
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
-{{$this->Html->script(array('manage/tuan/tuan_orders.js?v5.0'))}}
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v5.1'))}}

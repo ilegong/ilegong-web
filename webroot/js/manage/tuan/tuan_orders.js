@@ -69,10 +69,11 @@ $(document).ready(function(){
     initSearchBox($('.product-search'), values);
   });
     $.getJSON('/manage/admin/offline_stores/api_offline_stores', function(data){
+        var values = [{'val': -1, 'name': '请选择自提点'}];
         var menu = {0:'所有好邻居自提点', 1: '所有自有自提点'};
         var offlineStoreBox = $('.offline_store');
         for(var category in data){
-            $('<optgroup label="--------"><option value="" class="store_'+ category +'">' + menu[category] + '</option>').appendTo(offlineStoreBox );
+            $('<option value="" class="store_'+ category +'">' + menu[category] + '</option>').appendTo(offlineStoreBox );
             var chose_address = $.map(data[category], function(value) {
                 return [value];
             });
@@ -81,11 +82,14 @@ $(document).ready(function(){
             });
             for(var i in chose_address){
                 $('<option value="' +  chose_address[i].id + '">' + chose_address[i].name + '</option>').appendTo(offlineStoreBox);
+                values.push({'val':  chose_address[i].id, 'name': chose_address[i].name});
                 var val =  $('.store_'+ category).val();
                 $('.store_'+ category).val(chose_address[i].id + ','+val);
             }
+            values.push({'val':$('.store_'+ category).val(), 'name': menu[category]});
         }
         iUtils.initSelectBox(offlineStoreBox);
+        initSearchBox($('.offline-store-search'), values);
     });
 
   String.prototype.Trim = function() {
