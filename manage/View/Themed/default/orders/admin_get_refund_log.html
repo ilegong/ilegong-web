@@ -1,0 +1,26 @@
+<div class="container">
+    <h3>退款通知纪录</h3>
+</div>
+<table class="table table-bordered table-condensed table-responsive">
+    <thead>
+    <tr>
+        <td>订单ID</td><td>退款金额</td><td>退款时间</td><td>退款方式</td><td>退款原因</td>
+    </tr>
+    </thead>
+    <tbody>
+    {{if empty($RefundInfo)}}
+    该订单暂无退款纪录
+    {{else}}
+    {{loop $RefundInfo $refundinfo}}
+    <tr>
+        <td>{{$refundinfo['RefundLog']['order_id']}}</td>
+        <td>{{$refundinfo['RefundLog']['refund_fee']/100}}元</td>
+        <td>{{date('n.j H:i',strtotime($refundinfo['RefundLog']['created']))}}</td>
+        <td>{{if $refundinfo['RefundLog']['trade_type'] == 'JSAPI'}}微信支付{{elseif $refundinfo['RefundLog']['trade_type'] == 'ZFB'}}支付宝{{/if}}</td>
+        <td>{{empty($refundinfo['RefundLog']['remark'])?'无':$refundinfo['RefundLog']['remark']}}</td>
+    </tr>
+    {{/loop}}
+    <p style="color: red">该订单支付金额总共{{$total_price}}元,已退款{{count($RefundInfo)}}次,还能退款{{$total_price-$refund_money}}元</p>
+    {{/if}}
+    </tbody>
+</table>
