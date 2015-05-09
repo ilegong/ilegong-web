@@ -1,4 +1,4 @@
-    <?php
+<?php
 /**
  * Created by JetBrains PhpStorm.
  * User: 浩
