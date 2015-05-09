@@ -7,7 +7,6 @@
         $sold_percent = round(($sold_num / $target_num * 100), 1);
     }
     $products_no_sf = array(963, 962, 959, 958, 957, 956, 954, 952, 951, 950, 948, 947, 946, 945, 944, 943, 942, 941, 940, 939, 911, 862, 960);
-    $product_sf_by = array(967,966,965, 960);
 ?>
 <div class="classlist_v2" style="z-index:999;">
     <ul class="clearfix">
@@ -100,30 +99,20 @@
                     {{/if}}
                     {{/if}}
                     {{if $big_tuan}}
-                        {{if $current_data_id==868||$current_data_id==897}}
-                            <span class="mr12 border cur tuan_way_selected" style="display: none;"  way-label="baoyou">包邮</span>
-                        {{elseif $current_data_id==873||$current_data_id==883||$current_data_id==900}}
-                            <span class="mr12 border cur tuan_way_selected" way-label="ziti" style="display: none;">好邻居自提</span>
-                        {{else}}
+                        {{if $ship_settings}}
                             <ul class="standard clearfix">
                                 <li>
                                     <span class="gray title mr12" style="float:left;">方式:</span>
                                     <span class="border">
-                                            <span class="mr12 border cur tuan_way_selected" way-label="ziti">自提</span>
-                                            {{if $current_data_id==876}}
-                                                <span class="mr12 border" way-label="kddj" way-fee="10">快递到家(10元邮费)</span>
-                                            {{elseif $current_data_id==879}}
-                                                <span class="mr12 border" way-label="kddj" way-fee="13">快递到家(13元邮费)</span>
-                                            {{elseif in_array($current_data_id,$product_sf_by)}}
-                                                <span class="mr12 border" way-label="sfby" way-fee="10">顺丰到家(10元邮费)</span>
-                                            {{else}}
-                                              {{if !in_array($current_data_id, $products_no_sf)}}
-                                                <span class="mr12 border" way-label="sf">顺丰到付</span>
-                                              {{/if}}
-                                            {{/if}}
+                                        {{loop $ship_settings $index $ship_set}}
+                                            <span class="mr12 border cur {{if $index==0}}tuan_way_selected{{/if}}" way-label="{{$ship_set['ProductShipSetting']['code']}}" way-fee="{{$ship_set['ProductShipSetting']['ship_fee']}}">{{$ship_set['ProductShipSetting']['name']}}</span>
+                                        {{/loop}}
                                     </span>
                                 </li>
                             </ul>
+                        {{else}}
+                            <!--default-->
+                             <span class="mr12 border cur tuan_way_selected" way-label="ziti" style="display: none;">自提</span>
                         {{/if}}
                     {{else}}
                     <div class="clearfix tuanxq" style="margin-top: -1px;">
