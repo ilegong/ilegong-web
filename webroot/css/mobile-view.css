@@ -560,6 +560,8 @@ ul li{ list-style:none;}
 .tuandetail_seckill span em strong{ color:#ff9000;}
 .tuandetail_seckill p{ display: block; position: absolute; background-color:#c73c3c; color: #ffffff; width: 45px; height: 45px; border-radius: 45px; line-height: 45px; font-weight: bold; font-size: 1em; text-align:center; left: 0; top: 0;}
 .tuandetail_seckill_btn{ text-decoration:none; background-color:#c73c3c; color: #fff; line-height: 30px; padding: 0 10px; font-size: 1em; font-weight: bold; margin-right: 10px; display: block;}
+.tuandetail_seckill_btn:hover{background-color:#c73c3c; color: #fff;}
+.tuandetail_seckill_btn:visited{background-color:#c73c3c; color: #fff;}
 .seckill_disabled{ background-color: #999999; color: #ffffff; text-decoration:none; line-height: 30px; padding: 0 10px; font-size: 1em; font-weight: bold; margin-right: 10px; display: block;}
 /*团购进度条*/
 .tuan_bar{ color: #999999; line-height: 18px; padding:5px 0 5px 10px;}

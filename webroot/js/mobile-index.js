@@ -26,7 +26,12 @@ $(document).ready(function () {
         var tagId = me.data('id');
         if (tagId != currentTagId) {
             currentTagId = tagId;
-            $productsContent.html('');
+            if(tagId!=recommendTagId||tagId!=recommendTagId.toString()){
+                $seckill_product.hide();
+            }else{
+                $seckill_product.show();
+            }
+            $('div.good',$productsContent).remove();
             loadDatas(tagId);
         }
         if(tagId!=recommendTagId||tagId!=recommendTagId.toString()){
@@ -45,11 +50,6 @@ $(document).ready(function () {
 
     //load tag products
     function loadDatas(tagId) {
-        if(tagId!=recommendTagId||tagId!=recommendTagId.toString()){
-            $seckill_product.hide();
-        }else{
-            $seckill_product.show();
-        }
         if (!cache[tagId]) {
             cache[tagId] = $.getJSON('/categories/getTagProducts/' + tagId).promise();
         }
