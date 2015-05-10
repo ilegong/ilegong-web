@@ -105,14 +105,14 @@
                                     <span class="gray title mr12" style="float:left;">方式:</span>
                                     <span class="border">
                                         {{loop $ship_settings $index $ship_set}}
-                                            <span class="mr12 border cur {{if $index==0}}tuan_way_selected{{/if}}" way-label="{{$ship_set['ProductShipSetting']['code']}}" way-fee="{{$ship_set['ProductShipSetting']['ship_fee']}}">{{$ship_set['ProductShipSetting']['name']}}</span>
+                                            <span class="mr12 border cur {{if $index==0}}tuan_way_selected{{/if}}" way-id="{{$ship_set['ProductShipSetting']['id']}}"  way-label="{{$ship_set['ProductShipSetting']['code']}}" way-fee="{{$ship_set['ProductShipSetting']['ship_fee']}}">{{$ship_set['ProductShipSetting']['name']}}</span>
                                         {{/loop}}
                                     </span>
                                 </li>
                             </ul>
                         {{else}}
                             <!--default-->
-                             <span class="mr12 border cur tuan_way_selected" way-label="ziti" way-fee="0" style="display: none;">自提</span>
+                             <span class="mr12 border cur tuan_way_selected" way-label="ziti" way-fee="0" way-id="0" style="display: none;">自提</span>
                         {{/if}}
                     {{else}}
                     <div class="clearfix tuanxq" style="margin-top: -1px;">
@@ -380,7 +380,8 @@
                     }
                 {{/if}}
                 var way_fee = $('.cur.tuan_way_selected').attr('way-fee')||0;
-                var postdata = {"product_id":product_id,"product_num":product_num, "way_type": way_type,"spec_id":specId, "send_date": send_date,"consignment_date_id":consignment_date_id,"tuan_buy_id":'{{$tuan_buy_id}}',"way_fee":way_fee};
+                var way_id =  $('.cur.tuan_way_selected').attr('way-id')||0;
+                var postdata = {"product_id":product_id,"product_num":product_num, "way_type": way_type,"spec_id":specId, "send_date": send_date,"consignment_date_id":consignment_date_id,"tuan_buy_id":'{{$tuan_buy_id}}',"way_fee":way_fee,"way_id":way_id};
                 utils.progress_notify('正在更新购物车');
                 $.ajax({
                     type:'post',
@@ -390,10 +391,11 @@
                         if(data.success) {
                             var way_type=data['way_type'];
                             var way_fee = data['way_fee'];
+                            var way_id = data['way_id'];
                             if(data.direct == 'big_tuan_list'){
-                                window.location.href = '/tuan_buyings/big_tuan_balance/{{$tuan_buy_id}}/' + data.cart_id + '?way_type='+way_type+'&way_fee='+way_fee;
+                                window.location.href = '/tuan_buyings/big_tuan_balance/{{$tuan_buy_id}}/' + data.cart_id + '/'+way_id+'/?way_type='+way_type+'&way_fee='+way_fee;
                             }else{
-                                window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}/' + data.cart_id + '?way_type='+way_type+'&way_fee='+way_fee;
+                                window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}/' + data.cart_id + '/'+way_id+'/?way_type='+way_type+'&way_fee='+way_fee;
                             }
                         }
                         else {

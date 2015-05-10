@@ -216,12 +216,13 @@ class TuanBuyingsController extends AppController{
                 $this->log("failed to update consignment_date and send_date for cart ".$cartInfo['Cart']['id'].": consignment_date: ".$consignment_date_id.", send_date: ".$send_date);
                 return;
             }
-            //way type is not ziti
             $ship_fee = floatval($_POST['way_fee']);
+            $way_id = $_POST['way_id'];
+            //way type is not ziti
             if(strpos($_POST['way_type'],'ziti')===false){
-                echo json_encode(array('success' => true, 'direct'=>'normal','way_type'=>$_POST['way_type'],'way_fee'=>$ship_fee, 'cart_id'=>$cartInfo['Cart']['id']));
+                echo json_encode(array('success' => true, 'direct'=>'normal','way_type'=>$_POST['way_type'],'way_fee'=>$ship_fee, 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id));
             }else{
-                echo json_encode(array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id'],'way_type'=>$_POST['way_type'],'way_fee'=>$ship_fee));
+                echo json_encode(array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id'],'way_type'=>$_POST['way_type'],'way_fee'=>$ship_fee,'way_id'=>$way_id));
             }
             $cart_array = array(0 => strval($cartInfo['Cart']['id']));
             $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
@@ -301,7 +302,7 @@ class TuanBuyingsController extends AppController{
         $this->set('hideNav',true);
     }
 
-    public function balance($tuan_buy_id, $cart_id){
+    public function balance($tuan_buy_id, $cart_id,$way_id=0){
         $this->pageTitle = '订单确认';
         if(empty($this->currentUser['id'])){
             $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
@@ -391,6 +392,7 @@ class TuanBuyingsController extends AppController{
         $tuan_id = $tuan_info['TuanTeam']['id'];
         $way_type = $_REQUEST['way_type'];
         $this->set('way_type',$way_type);
+        $this->set('way_id',$way_id);
         $this->set('buy_count',$Carts['Cart']['num']);
         $this->set('total_price', $total_price);
         $this->set('cart_id', $Carts['Cart']['id']);
@@ -692,8 +694,8 @@ class TuanBuyingsController extends AppController{
         $this->balance_tuan_sec_kill();
     }
 
-    public function big_tuan_balance($tuan_buy_id, $cart_id){
-        $this->balance($tuan_buy_id, $cart_id);
+    public function big_tuan_balance($tuan_buy_id, $cart_id,$way_id=0){
+        $this->balance($tuan_buy_id, $cart_id, $way_id);
         $this->set('hideNav',true);
     }
 

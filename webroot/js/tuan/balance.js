@@ -75,6 +75,7 @@ $('#confirm_next').on('click',function(e){
     var balanceDom = $(".tuan_balance");
     var choseAddress = $("#chose_address");
     var way = balanceDom.data("shipWay") || "";
+    var way_id = balanceDom.data('wayId')||0;
     var addressInput = $("input[name='consignee_address']").length || "not";
     var zitiChoice =choseAddress.length ? choseAddress.text(): "not";
     var remarkAddress = $("input[name='consignee_remark_address']").val()||"";
