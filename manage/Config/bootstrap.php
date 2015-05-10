@@ -247,3 +247,31 @@ function get_address($tuan_team, $offline_store){
 
     return $tuan_address;
 }
+
+class TuanShip{
+    public static function get_all_tuan_ships(){
+        $shipTypesJson = Cache::read('_tuanshiptypes');
+        if (empty($shipTypesJson)) {
+            $tuanShipTypeModel = ClassRegistry::init('TuanShipType');
+            $tuanShipTypes = $tuanShipTypeModel->find('all', array(
+                'conditions' => array(
+                    'deleted' => DELETED_NO
+                )
+            ));
+            $tuanShipTypes = Hash::combine($tuanShipTypes, '{n}.TuanShipType.id', '{n}.TuanShipType');
+            $shipTypesJson = json_encode($tuanShipTypes);
+            Cache::write('_tuanshiptypes', $shipTypesJson);
+        }
+        return json_decode($shipTypesJson, true);
+    }
+
+    public static function get_ship_name($id){
+        $ships = TuanShip::get_all_tuan_ships();
+        return $ships[$id]['name'];
+    }
+
+    public static function  get_ship_code($id){
+        $ships = TuanShip::get_all_tuan_ships();
+        return $ships[$id]['code'];
+    }
+}
