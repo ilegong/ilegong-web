@@ -216,13 +216,13 @@ class TuanBuyingsController extends AppController{
                 $this->log("failed to update consignment_date and send_date for cart ".$cartInfo['Cart']['id'].": consignment_date: ".$consignment_date_id.", send_date: ".$send_date);
                 return;
             }
-            $ship_fee = floatval($_POST['way_fee']);
             $way_id = $_POST['way_id'];
             //way type is not ziti
-            if(strpos($_POST['way_type'],'ziti')===false){
-                echo json_encode(array('success' => true, 'direct'=>'normal','way_type'=>$_POST['way_type'],'way_fee'=>$ship_fee, 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id));
+            //TODO
+            if(strpos($_POST['way_type'],ZITI_TAG)===false){
+                echo json_encode(array('success' => true, 'direct'=>'normal', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id));
             }else{
-                echo json_encode(array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id'],'way_type'=>$_POST['way_type'],'way_fee'=>$ship_fee,'way_id'=>$way_id));
+                echo json_encode(array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id));
             }
             $cart_array = array(0 => strval($cartInfo['Cart']['id']));
             $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
@@ -293,7 +293,7 @@ class TuanBuyingsController extends AppController{
             $this->set('consignee_info', $consignee_info['OrderConsignees']);
         }
         $this->set('try_id',$try_id);
-        $this->set('way_type','ziti');
+        $this->set('way_type',ZITI_TAG);
         $this->set('buy_count',$Carts['Cart']['num']);
         $this->set('total_price', $total_price);
         $this->set('cart_id', $Carts['Cart']['id']);
@@ -302,7 +302,7 @@ class TuanBuyingsController extends AppController{
         $this->set('hideNav',true);
     }
 
-    public function balance($tuan_buy_id, $cart_id,$way_id=0){
+    public function balance($tuan_buy_id, $cart_id, $way_id=0){
         $this->pageTitle = '订单确认';
         if(empty($this->currentUser['id'])){
             $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
@@ -359,12 +359,18 @@ class TuanBuyingsController extends AppController{
         }
         $this->loadModel('OfflineStore');
         $offline_store = $this->OfflineStore->findById($tuan_info['TuanTeam']['offline_store_id']);
-
-        $ship_fee = floatval($_REQUEST['way_fee']);
         $total_price = $Carts['Cart']['price'] * $Carts['Cart']['num'];
-        $this->set('ship_fee',$ship_fee);
-        $total_price = $total_price+$ship_fee;
         $pid = $tuan_b['TuanBuying']['pid'];
+        $ship_fee = 0;
+        if($way_id!=0){
+            $shipSetting = $this->get_ship_setting($way_id,$pid);
+            if(empty($shipSetting)){
+                $this->__message('选择物流方式错误', '/tuan_buyings/detail/'.$tuan_buy_id);
+                return;
+            }
+            $ship_fee = floatval($shipSetting['ProductShipSetting']['ship_fee']);
+        }
+        $total_price = $total_price+$ship_fee;
         $this->loadModel('Product');
         $this->loadModel('Brand');
         $product_brand = $this->Product->find('first', array(
@@ -388,10 +394,7 @@ class TuanBuyingsController extends AppController{
         $score = $this->User->get_score($uid, true);
         $could_score_money = cal_score_money($score, $total_price);
         $this->set('score_usable', $could_score_money * 100);
-
         $tuan_id = $tuan_info['TuanTeam']['id'];
-        $way_type = $_REQUEST['way_type'];
-        $this->set('way_type',$way_type);
         $this->set('way_id',$way_id);
         $this->set('buy_count',$Carts['Cart']['num']);
         $this->set('total_price', $total_price);
@@ -445,7 +448,7 @@ class TuanBuyingsController extends AppController{
         $name = $_POST['name'];
         $shop_name = $_POST['shop_name'];
         $uid = $this->currentUser['id'];
-        $way = $_POST['way'];
+        $way_id = $_POST['way_id'];
         $global_sec = $_POST['global_sec'];
         if (empty($uid)) {
             $this->log("not login for tuan order:".$cart_id);
@@ -488,6 +491,8 @@ class TuanBuyingsController extends AppController{
                 $tuan_info = $this->TuanTeam->findById($tuan_id);
                 if(empty($tuan_info)){
                     $this->log("can't find tuan ".$tuan_id);
+                    $res = array('success'=> false, 'info'=> '团购订单没有绑定团队，请重试');
+                    echo json_encode($res);
                     return;
                 }
                 $offline_store = $this->OfflineStore->findById($tuan_info['TuanTeam']['offline_store_id']);
@@ -495,9 +500,25 @@ class TuanBuyingsController extends AppController{
             $this->loadModel('OrderConsignees');
             $consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN);
             $p_address = $_POST['address'];
+            //to set ship fee
+            if($way_id!=0){
+                $shipSetting = $this->get_ship_setting($way_id,$pid);
+                if(empty($shipSetting)){
+                    $res = array('success'=> false, 'info'=> '该订单物流方式设置有误，请重试');
+                    echo json_encode($res);
+                    return;
+                }
+                $shipFee = $shipSetting['ProductShipSetting']['ship_fee'];
+                $total_price = $total_price+floatval($shipFee);
+                $shipTypeId = $shipSetting['ProductShipSetting']['ship_type'];
+            }
             if($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN||$global_sec=='true'){
-                if($_POST['way'] != 'ziti'){
-                    $consignees['address'] = $p_address;
+                //TODO
+                if(!empty($shipSetting)){
+                    $way = TuanShip::get_ship_code($shipTypeId);
+                    if(strpos($way, ZITI_TAG)===false){
+                        $consignees['address'] = $p_address;
+                    }
                 }
                 $address = $p_address;
             }else{
@@ -507,17 +528,6 @@ class TuanBuyingsController extends AppController{
                 }
                 if(empty($address)){
                     $this->log("post address is empty ".$tuan_id);
-                }
-            }
-            //TODO to set
-            if($way == 'kddj'){
-                if($pid==876){
-                    //蔬菜加10元邮费
-                    $total_price = $total_price+10;
-                }
-                if($pid==879){
-                    //蔬菜加10元邮费
-                    $total_price = $total_price+13;
                 }
             }
             $tuan_consignees = $this->OrderConsignees->find('first', array(
@@ -569,14 +579,14 @@ class TuanBuyingsController extends AppController{
             }else{
                 //$consign_time = friendlyDateFromStr($tuanBuy['TuanBuying']['consign_time'], FFDATE_CH_MD);
                 $cart_name = $cart_info['Cart']['name'];
-                if($tuan_info['TuanTeam']['type'] == 1 && $way == 'sf'){
-                    $cart_name = $cart_name.'(顺丰到付)';
-                }
-                if($tuan_info['TuanTeam']['type'] == 1 && $way == 'baoyou'){
-                    $cart_name = $cart_name.'(包邮)';
-                }
-                if($tuan_info['TuanTeam']['type'] == 1 && $way == 'kddj'){
-                    $cart_name = $cart_name.'(快递到家)';
+                //to set mark
+                if($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN ){
+                    if(empty($shipSetting)){
+                        //default
+                        $cart_name = $cart_name.'(自提)';
+                    }else{
+                        $cart_name = $cart_name.'('.TuanShip::get_ship_name($shipTypeId).')';
+                    }
                 }
                 $this->Cart->update(array('name' => '\'' . $cart_name . '\'' ), array('id' => $cart_id));
                 $res = array('success'=> true, 'order_id'=>$order['Order']['id']);
@@ -727,6 +737,18 @@ class TuanBuyingsController extends AppController{
         if(!empty($ship_settings)){
             $this->set('ship_settings',$ship_settings);
         }
+    }
+
+    private function get_ship_setting($way_id,$pid){
+        $this->loadModel('ProductShipSetting');
+        $shipSetting = $this->ProductShipSetting->find('first',array(
+            'conditions' => array(
+                'id' => $way_id,
+                'product_id' => $pid,
+                'deleted' => DELETED_NO
+            )
+        ));
+        return $shipSetting;
     }
 }
 
