@@ -58,6 +58,7 @@ class ReferController extends AppController {
                     $data = array();
                     $data['Refer']['from'] = $uid;
                     $data['Refer']['to'] = $cuid;
+                    $data['Refer']['bind_done'] = !empty($this->currentUser['mobilephone']);
                     $this->Refer->save($data);
                 }
                 $success = true;
@@ -78,16 +79,19 @@ class ReferController extends AppController {
         $this->set('ref_user', $user['User']);
         $this->pageTitle = $user['User']['nickname'].'向您推荐了【朋友说】, 朋友间分享健康美食的平台';
 
-        $phone_binded = !empty($this->currentUser['mobilephone']);
+        $phone_bind = !empty($this->currentUser['mobilephone']);
         $mOrder = ClassRegistry::init('Order');
-        $received_cnt = $mOrder->count_received_order($this->currentUser['id']);
-        $reg_done = $received_cnt > 0;
+        $curr_uid = $this->currentUser['id'];
+        $received_cnt = $mOrder->count_received_order($curr_uid);
+        $reg_done = $received_cnt > 0 && !$phone_bind;
         $this->set('reg_done', $reg_done);
         $this->set('received_cnt', $received_cnt);
-        $this->set('phone_bind', $phone_binded);
+        $this->set('phone_bind', $phone_bind);
 
-        if (!$phone_binded || $received_cnt <= 0) {
-            $referred = $this->find_be_referred_for_me($this->currentUser['id']);
+        $this->log("refer client ". $curr_uid .' from '. $uid .', phone_bind='.$phone_bind.', received_cnt='.$received_cnt);
+
+        if (!$phone_bind || $received_cnt <= 0) {
+            $referred = $this->find_be_referred_for_me($curr_uid);
             if (!empty($referred)) {
                 $this->set('referred', $referred);
                 if ($referred['Refer']['from'] != $uid) {

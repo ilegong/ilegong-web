@@ -217,6 +217,7 @@ $(document).ready(function(){
                     else{
                         utils.alert('订单状态修改成功，但是没有发送到货提醒');
                     }
+                    shipToHaolinjuStoreDialog.dialog( "close" );
                 }
                 else{
                     utils.alert('订单修改失败: ' + data.res);

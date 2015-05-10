@@ -765,6 +765,7 @@ class TuanController extends AppController
         $store_id = !empty($_REQUEST['store_id']) ? $_REQUEST['store_id'] : -1;
         $order_status = !empty($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
         $send_date = $_REQUEST['send_date'];
+        $end_stat_date = $_REQUEST['end_stat_date'];
         if($this->request->is('post')) {
             $conditions = array();
             $order_by = 'Order.consignee_id DESC, Cart.product_id';
@@ -772,13 +773,22 @@ class TuanController extends AppController
             if ($order_status != -1) {
                 $conditions['Order.status'] = $order_status;
             }
-            if (!empty($send_date)) {
+            if (!empty($send_date) && !empty($end_stat_date)) {
+                $conditions['DATE(Cart.send_date) >= '] = $send_date;
+                $conditions['DATE(Cart.send_date) <= '] = $end_stat_date;
+            }elseif(!empty($send_date)){
                 $conditions['DATE(Cart.send_date)'] = $send_date;
+            }else{
+                $conditions['DATE(Cart.send_date) >= '] = date("Y-m-d", time()-60*60*24*30);
             }
-            $this->_query_orders($conditions, $order_by);
+            if ($store_id != -1) {
+                $store_ids = explode(",", $store_id);
+                $conditions['Order.consignee_id'] = $store_ids;
+                $this->_query_orders($conditions, $order_by);
+            }
         }
         $this->set('store_id', $store_id);
-        $this->set('send_date', $send_date);
+        $this->set(compact('send_date', 'end_stat_date'));
         $this->set('order_status', $order_status);
         $this->set('query_type', 'byOfflineStore');
         $this->render("admin_tuan_orders");

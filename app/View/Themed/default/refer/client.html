@@ -3,13 +3,13 @@
 <div class="tuijian_login">{{$ref_user['nickname']}}向您推荐了【朋友说】{{if !empty($old_refer_name)}} <br/> 【朋友说】-- 朋友间分享健康美食的平台。
     (您已经接受了{{$old_refer_name}}的邀请){{/if}}
 </div>
-{{if !empty($referred) && $referred['User']['from'] != $ref_user['id']}}
+{{if !empty($referred) && $referred['Refer']['from'] != $ref_user['id']}}
 <a href="/" class="tuijian_login_a">去逛逛</a>
 {{else}}
 {{if !$phone_bind}}
-<a href="javascript:;" class="tuijian_login_a accept_done">接受邀请马上注册</a>
+<a href="javascript:;" type="bind" class="tuijian_login_a {{empty($refer)?'accept_done':''}}">{{empty($refer)?'接受邀请':''}}马上注册</a>
 {{elseif $receive_cnt <= 0}}
-<a href="/" class="tuijian_login_a">完成第一单</a>
+<a href="javascript:;" type="order" class="tuijian_login_a {{empty($refer)?'accept_done':''}}">{{empty($refer)?'接受邀请':''}}完成第一单</a>
 {{/if}}
 {{/if}}
 {{else}}
@@ -142,10 +142,15 @@
 
     $(document).ready(function(){
         $('.accept_done').click(function(){
+            var $type = $(this).attr('type');
             $.post('/refer/accept.html', {'uid': '{{$ref_user["id"]}}'}, function (data) {
                 var $result = JSON.parse(data);
                 if ($result['success'] === true) {
-                    window.location.href='/users/to_bind_mobile?ref_url='+encodeURIComponent('/refer/client/{{$ref_user["id"]}}.html')+'&reason='+encodeURIComponent('绑定手机号完成注册');
+                    if ($type == 'bind') {
+                        window.location.href = '/users/to_bind_mobile?ref_url=' + encodeURIComponent('/refer/client/{{$ref_user["id"]}}.html') + '&reason=' + encodeURIComponent('绑定手机号完成注册');
+                    } else if ($type == 'order') {
+                        window.location.href = '/';
+                    }
                 }
             });
         });
