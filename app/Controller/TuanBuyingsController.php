@@ -362,6 +362,7 @@ class TuanBuyingsController extends AppController{
         $total_price = $Carts['Cart']['price'] * $Carts['Cart']['num'];
         $pid = $tuan_b['TuanBuying']['pid'];
         $ship_fee = 0;
+        $ship_way = ZITI_TAG;
         if($way_id!=0){
             $shipSetting = $this->get_ship_setting($way_id,$pid);
             if(empty($shipSetting)){
@@ -369,6 +370,7 @@ class TuanBuyingsController extends AppController{
                 return;
             }
             $ship_fee = floatval($shipSetting['ProductShipSetting']['ship_fee']);
+            $ship_way = TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type']);
         }
         $total_price = $total_price+$ship_fee;
         $this->loadModel('Product');
@@ -396,6 +398,7 @@ class TuanBuyingsController extends AppController{
         $this->set('score_usable', $could_score_money * 100);
         $tuan_id = $tuan_info['TuanTeam']['id'];
         $this->set('way_id',$way_id);
+        $this->set('way_type',$ship_way);
         $this->set('buy_count',$Carts['Cart']['num']);
         $this->set('total_price', $total_price);
         $this->set('cart_id', $Carts['Cart']['id']);
