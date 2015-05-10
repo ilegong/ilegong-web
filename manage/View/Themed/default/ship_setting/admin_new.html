@@ -1,16 +1,14 @@
 <div class="container">
     <div class="row">
-        <form class="form-horizontal" method="post" action="/manage/admin/ship_setting/update" data-noajax="1">
-            <input type="hidden" name="data[ProductShipSetting][id]" value="{{$data['ProductShipSetting']['id']}}">
-            <input type="hidden" name="data[ProductShipSetting][data_type]" value="{{$data['ProductShipSetting']['data_type']}}">
-            <input type="hidden" name="data[ProductShipSetting][data_id]" value="{{$data['ProductShipSetting']['data_id']}}">
-            <input type="hidden" name="data[ProductShipSetting][deleted]" value="{{$data['ProductShipSetting']['deleted']}}">
+        <form class="form-horizontal" method="post" action="/manage/admin/ship_setting/create" data-noajax="1">
+            <input type="hidden" name="data[ProductShipSetting][data_type]" value="{{$data_type}}">
+            <input type="hidden" name="data[ProductShipSetting][data_id]" value="{{$data_id}}">
             <div class="form-group">
                 <label for="ship-type" class="col-sm-2 control-label">快递方式</label>
                 <div class="col-sm-9">
                     <select class="form-control" id="ship-type" name="data[ProductShipSetting][ship_type]">
                         {{loop $types $item}}
-                            <option value="{{$item['id']}}" {{if $data['ProductShipSetting']['shi_tyoe'] == $item['id']}}selected="selected"{{/if}}>{{$item['name']}}</option>
+                            <option value="{{$item['id']}}">{{$item['name']}}</option>
                         {{/loop}}
                     </select>
                 </div>
@@ -18,7 +16,7 @@
             <div class="form-group">
                 <label for="ship-fee" class="col-sm-2 control-label">邮费</label>
                 <div class="col-sm-9">
-                    <input type="number" name="data[ProductShipSetting][price]" class="form-control" id="ship-fee" value="{{$data['ProductShipSetting']['ship_fee']}}">
+                    <input type="number" name="data[ProductShipSetting][ship_fee]" class="form-control" id="ship-fee" value="0">
                     <div class="text-warning">邮费默认是0</div>
                 </div>
             </div>
