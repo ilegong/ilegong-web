@@ -119,6 +119,8 @@ const RECOMMEND_TAG_ID=23;
 
 const TUAN_CONSIGNMENT_TYPE=2;
 
+const ZITI_TAG = 'ziti';
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');
@@ -805,6 +807,16 @@ class TuanShip{
             Cache::write('_tuanshiptypes', $shipTypesJson);
         }
         return json_decode($shipTypesJson, true);
+    }
+
+    public static function get_ship_name($id){
+        $ships = TuanShip::get_all_tuan_ships();
+        return $ships[$id]['name'];
+    }
+
+    public static function  get_ship_code($id){
+        $ships = TuanShip::get_all_tuan_ships();
+        return $ships[$id]['code'];
     }
 }
 

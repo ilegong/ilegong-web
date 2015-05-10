@@ -74,7 +74,6 @@ $('#confirm_next').on('click',function(e){
     var is_try = false;
     var balanceDom = $(".tuan_balance");
     var choseAddress = $("#chose_address");
-    var way = balanceDom.data("shipWay") || "";
     var way_id = balanceDom.data('wayId')||0;
     var addressInput = $("input[name='consignee_address']").length || "not";
     var zitiChoice =choseAddress.length ? choseAddress.text(): "not";
@@ -144,7 +143,7 @@ $('#confirm_next').on('click',function(e){
         type: "POST",
         dataType: "json",
         url: "/tuan_buyings/pre_order",
-        data: {name: name, mobile: mobile, cart_id: cart_id, member_id: member_id, tuan_id: tuan_id, address:address, way:way ,shop_name:shopName, tuan_sec:tuan_sec , shop_id: shop_id,global_sec:global_sec},
+        data: {name: name, mobile: mobile, cart_id: cart_id, member_id: member_id, tuan_id: tuan_id, address:address, way_id:way_id ,shop_name:shopName, tuan_sec:tuan_sec , shop_id: shop_id,global_sec:global_sec},
         success: function (a) {
             if (a.success) {
                 $("#confirm_next").attr('data-disable', 'true');
