@@ -64,7 +64,7 @@
             <td><img style="max-height: 90px;" src="{{$tuanProduct['detail_img']}}"/></td>
             <td>
                 <a class="btn btn-primary margin-right-10" href="/manage/admin/tuan_products/edit/{{$tuanProduct['id']}}" role="button">编辑</a>
-                <a class="btn btn-info" href="/manage/admin/ship_setting/list/{{$tuanProduct['product_id']}}/Product" target="_blank" role="button">发货方式</a>
+                <a class="btn btn-info" href="/manage/admin/ship_setting/list/{{$tuanProduct['product_id']}}/Product?name={{$tuanProduct['alias']}}" target="_blank" role="button">发货方式</a>
                 <a class="btn btn-danger" href="/manage/admin/tuan_products/delete/{{$tuanProduct['id']}}" role="button">删除</a>
             </td>
         </tr>

@@ -64,7 +64,7 @@
             <td>
                 {{if $tryProduct['status'] == 1}}
                 <a class="btn btn-primary margin-right-10" href="/manage/admin/tuanSecKill/edit/{{$tryProduct['id']}}" role="button">编辑</a>
-                <a class="btn btn-info" href="/manage/admin/ship_setting/list/{{$tryProduct['id']}}/Try" role="button">发货方式</a>
+                <a class="btn btn-info" href="/manage/admin/ship_setting/list/{{$tryProduct['id']}}/Try?name={{$tryProduct['product_name']}}" role="button">发货方式</a>
                 <a class="btn btn-danger" href="/manage/admin/tuanSecKill/delete/{{$tryProduct['id']}}" role="button">删除</a>
                 {{elseif $tryProduct['status'] == 0}}
                 <a class="btn btn-primary margin-right-10" href="/manage/admin/tuanSecKill/edit/{{$tryProduct['id']}}" role="button">编辑</a>
