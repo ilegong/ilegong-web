@@ -180,7 +180,7 @@ $(document).ready(function(){
             updateSendDateInput();
         });
         function updateSendDateInput() {
-            if (commonBox.val() == -1) {
+            if (commonBox.val() == -1 || commonBox.val().indexOf(',') > 0) {
                 sendDateStart.removeAttr('disabled');
                 sendDateEnd.attr('disabled', 'disabled');
             }
