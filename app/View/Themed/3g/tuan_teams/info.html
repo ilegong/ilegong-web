@@ -12,7 +12,8 @@
         <li class="fr"><a href="/scores/more_score">领积分</a></li>
     </ul>
 </div>
-<?php $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
+<?php
+$location = $offline_store['OfflineStore']['location_long'].','.$offline_store['OfflineStore']['location_lat'];
 ?>
 <div class="tuandetail">
     <div class="tuandetail_name">
@@ -26,7 +27,7 @@
         <li class="fr">{{$tuan_team['TuanTeam']['member_num']-1}}人</li>
     </ul>
     <a class="clearfix adress"
-       href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
+       href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_address}}">
         <span class="fl"><img src="{{$this->Html->assetUrl('/img/tuan/detail/locat_icon.gif')}}" border="0"/></span>
         <span style="float: none; padding-left: 20px;line-height: 22px;">配送至: {{$tuan_address}}</span>
     </a>
