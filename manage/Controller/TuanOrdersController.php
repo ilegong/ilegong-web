@@ -176,25 +176,30 @@ class TuanOrdersController extends AppController{
         $this->log('ship to haolinju store: set status to shipped for order: '.json_encode($order['Order']['id']));
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order['Order']['id']));
 
-        $post_data = array(
-            "touser" => $oauth_bind['Oauthbind']['oauth_openid'],
-            "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
-            "url" => WX_HOST . '/orders/detail/'.$order['Order']['id'],
-            "topcolor" => "#FF0000",
-            "data" =>  array(
-                "first" => array("value" => "亲，您订购的".$tuan_product['TuanProduct']['alias']."已经到达自提点，提货码：".$haolinju_code."，生鲜娇贵，请尽快取货哈。"),
-                "keyword1" => array("value" => $order['Order']['id']),
-                "keyword2" => array("value" => $offline_store['OfflineStore']['alias']),
-                "keyword3" => array("value" => $order['Order']['consignee_address']),
-                "remark" => array("value" => "感谢您的支持，现场提货遇到任何问题请拨打电话：4000-508-528", "color" => "#FF8800")
-            )
-        );
-        $this->log('ship to haolinju store: send weixin message for order: '.$order['Order']['id'].': '.json_encode($post_data));
-        if(send_weixin_message($post_data)){
+        if($send_weixin_message){
+            $post_data = array(
+                "touser" => $oauth_bind['Oauthbind']['oauth_openid'],
+                "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
+                "url" => WX_HOST . '/orders/detail/'.$order['Order']['id'],
+                "topcolor" => "#FF0000",
+                "data" =>  array(
+                    "first" => array("value" => "亲，您订购的".$tuan_product['TuanProduct']['alias']."已经到达自提点，提货码：".$haolinju_code."，生鲜娇贵，请尽快取货哈。"),
+                    "keyword1" => array("value" => $order['Order']['id']),
+                    "keyword2" => array("value" => $offline_store['OfflineStore']['alias']),
+                    "keyword3" => array("value" => $order['Order']['consignee_address']),
+                    "remark" => array("value" => "感谢您的支持，现场提货遇到任何问题请拨打电话：4000-508-528", "color" => "#FF8800")
+                )
+            );
+            $this->log('ship to haolinju store: send weixin message for order: '.$order['Order']['id'].': '.json_encode($post_data));
+            if(send_weixin_message($post_data)){
+                echo json_encode(array('success' => true, 'res' => $order['Order']['id']));
+            }else{
+                $this->log("ship to haolinju store: failed to send weixin message for order ".$order['Order']['id']);
+                echo json_encode(array('success' => true, 'res' => ''));
+            }
+        }
+        else{
             echo json_encode(array('success' => true, 'res' => $order['Order']['id']));
-        }else{
-            $this->log("ship to haolinju store: failed to send weixin message for order ".$order['Order']['id']);
-            echo json_encode(array('success' => true, 'res' => ''));
         }
     }
 }

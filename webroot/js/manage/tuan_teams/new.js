@@ -33,16 +33,16 @@ $(function(){
         leaderName.parents('.form-group').toggleClass('has-error',invalidLeaderName);
         var invalidWX = leaderWX.val()=='';
         leaderWX.parents('.form-group').toggleClass('has-error',invalidWX);
-        var invalidAddress = address.val()=='';
-        address.parents('.form-group').toggleClass('has-error',invalidAddress);
-        var invalidTuanAddress = tuanAddress.val()=='';
-        tuanAddress.parents('.form-group').toggleClass('has-error',invalidTuanAddress);
-        var invalidLongtitud = isNaN(Number(longtitud.val()));
-        longtitud.parents('.form-group').toggleClass('has-error',invalidLongtitud);
-        var invalidLatitud = isNaN(Number(latitud.val()));
-        latitud.parents('.form-group').toggleClass('has-error',invalidLatitud);
+//        var invalidAddress = address.val()=='';
+//        address.parents('.form-group').toggleClass('has-error',invalidAddress);
+//        var invalidTuanAddress = tuanAddress.val()=='';
+//        tuanAddress.parents('.form-group').toggleClass('has-error',invalidTuanAddress);
+//        var invalidLongtitud = isNaN(Number(longtitud.val()));
+//        longtitud.parents('.form-group').toggleClass('has-error',invalidLongtitud);
+//        var invalidLatitud = isNaN(Number(latitud.val()));
+//        latitud.parents('.form-group').toggleClass('has-error',invalidLatitud);
 
-        if(invalidTuanName || invalidLeaderName || invalidWX || invalidAddress || invalidTuanAddress || invalidLongtitud || invalidLatitud){
+        if(invalidTuanName || invalidLeaderName || invalidWX){
             return false;
         }
         return true;

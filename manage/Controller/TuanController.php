@@ -688,6 +688,7 @@ class TuanController extends AppController
         }
 
         $order_carts = array();
+        $product_detail = array();
         foreach ($carts as &$c) {
             $c_order_id = $c['Cart']['order_id'];
             $specId = $c['Cart']['specId'];
@@ -696,6 +697,11 @@ class TuanController extends AppController
                 $order_carts[$c_order_id] = array();
             }
             $order_carts[$c_order_id][] = $c;
+            if(isset($product_detail[$c['Cart']['product_id']])){
+                $product_detail[$c['Cart']['product_id']] +=  $c['Cart']['num'];
+            }else{
+                $product_detail[$c['Cart']['product_id']] =  $c['Cart']['num'];
+            }
         }
 
         //排期
@@ -757,6 +763,7 @@ class TuanController extends AppController
         $this->set('offline_stores', $offline_stores);
         $this->set('order_carts', $order_carts);
         $this->set('brands', $brands);
+        $this->set('product_detail', $product_detail);
         $this->set('consign_dates', $consign_dates);
         return $c;
     }
@@ -766,9 +773,9 @@ class TuanController extends AppController
         $order_status = !empty($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
         $send_date = $_REQUEST['send_date'];
         $end_stat_date = $_REQUEST['end_stat_date'];
+        $conditions = array();
+        $order_by = 'Cart.product_id, Order.consignee_id DESC';
         if($this->request->is('post')) {
-            $conditions = array();
-            $order_by = 'Order.consignee_id DESC, Cart.product_id';
             $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
             if ($order_status != -1) {
                 $conditions['Order.status'] = $order_status;
@@ -779,14 +786,14 @@ class TuanController extends AppController
             }elseif(!empty($send_date)){
                 $conditions['DATE(Cart.send_date)'] = $send_date;
             }else{
-                $conditions['DATE(Cart.send_date) >= '] = date("Y-m-d", time()-60*60*24*30);
+                $conditions['DATE(Cart.send_date) >= '] = date("Y-m-d", time()-60*60*24*7);
             }
             if ($store_id != -1) {
                 $store_ids = explode(",", $store_id);
                 $conditions['Order.consignee_id'] = $store_ids;
-                $this->_query_orders($conditions, $order_by);
             }
         }
+        $this->_query_orders($conditions, $order_by);
         $this->set('store_id', $store_id);
         $this->set(compact('send_date', 'end_stat_date'));
         $this->set('order_status', $order_status);
@@ -812,5 +819,21 @@ class TuanController extends AppController
     public function _query_orders_today_count(){
         $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where o.pay_time > CURDATE()');
         return $empty_send_date_count[0][0]['ct'];
+    }
+
+    public function admin_update_order_status_to_refunded(){
+        $this->autoRender = false;
+        $order_id = $_REQUEST['orderId'];
+        $order_status = $_REQUEST['orderStatus'];
+        $this->log('status'.json_encode($order_status));
+        if(!empty($order_id)){
+            if($this->Order->updateAll(array('status' => $order_status),array('id' => $order_id))){
+                $returnInfo  = array('success' => true,'msg' => '订单状态修改成功');
+            }else{
+                $returnInfo  = array('success' => false,'msg' =>'订单状态修改失败，请重试');
+
+            }
+            echo json_encode($returnInfo);
+        }
     }
 }

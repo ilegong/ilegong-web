@@ -14,7 +14,7 @@
                                href="/manage/admin/tuan/query_by_offline_store">按自提点查询</a></li>
     <li role="presentation">
         <a data-tab="emptySendDate" href="/manage/admin/tuan/query_b2c_empty_date_address">
-            !!!B2C无时间地址
+            !!!B2C异常订单
             <span {{if $b2c_empty_date_address_count> 0}}class="text-danger"{{/if}}>({{$b2c_empty_date_address_count}})</span>
         </a>
     </li>
@@ -256,9 +256,14 @@
     <div id="byOfflineStore" class="tab-pane">
         <form class="form-inline form-by-offline-store" method="post" action="/manage/admin/tuan/query_by_offline_store"
               data-noajax="true">
+            <div class="form-group">
+                <input type="text" class="form-control offline-store-search" placeholder="搜索自提点"
+                       data-search-for="offline-store">
+            </div>
+            <strong class="text-danger lead">查询团购订单，秒杀订单</strong>
             <div style="padding-bottom: 10px;padding-top: 10px;">
                 <div class="form-group">
-                    <select class="form-control offline_store" name="store_id" id="offline_store_id" data-value="{{$store_id}}">
+                    <select class="form-control offline_store" name="store_id" id="offline-store" data-value="{{$store_id}}">
                         <option value="-1">请选择自提点</option>
                     </select>
                 </div>
@@ -284,6 +289,9 @@
                 <br/>
                 <br/>
                 <button type="submit" class="btn btn-primary text-center">查看订单</button>
+                {{loop $brands $index $brand}}
+                <div><span>{{$brand['Product']['name']}}:</span><strong style="color: red; font-size: large">{{$product_detail[$index]}} </strong></div>
+                {{/loop}}
             </div>
         </form>
     </div>
@@ -361,10 +369,10 @@
             ?>
     <tr data-order-id="{{$order[Order][id]}}" data-offline-store-id="{{$offline_store[OfflineStore][id]}}" class="order">
         <td>
-          {{if ($order['Order']['type'] == 5) && $order['Order']['status']== 1}}
+          {{if ($order['Order']['type'] == 5 || $order['Order']['type'] == 6) && $order['Order']['status']== 1}}
             <input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids" {{$offline_store['OfflineStore']['type'] == 1 ? "" : "disabled='disabled'"}}>
           {{else}}
-            <input type="hidden" value="{{$order['Order']['id']}}" name="offline_order_ids" {{$offline_store['OfflineStore']['type'] == 1 ? "" : "disabled='disabled'"}}>
+            <input type="hidden" value="{{$order['Order']['id']}}" name="offline_order_ids" disabled="disabled">
           {{/if}}
         </td>
         <td>{{$order['Order']['id']}}</td>
@@ -455,7 +463,10 @@
         </td>
         <td data-offline-store-type="{{$offline_store['OfflineStore']['type']}}">
           {{if !empty($offline_store) && $offline_store['OfflineStore']['type'] == 0 && $order['Order']['status']== 1 && $order['Order']['type']== 5}}
-              <button type="button" class="ship-to-haolinju-store btn btn-primary">发提货码</button></td>
+              <button type="button" class="ship-to-haolinju-store btn btn-primary">发提货码</button>
+          {{/if}}
+          {{if in_array($order['Order']['status'],array(1,2,3,9,16,4,14))}}
+              <button type="button" class="btn btn-default refund-button"  data-order_id="{{$order['Order']['id']}}" data-order_creator="{{$order['Order']['creator']}}"  data-total_price = "{{$order['Order']['total_price']}}">退款</button>
           {{/if}}
         </td>
     </tr>
@@ -478,4 +489,4 @@
 </div>
 
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
-{{$this->Html->script(array('manage/tuan/tuan_orders.js?v4.6'))}}
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v5.1'))}}

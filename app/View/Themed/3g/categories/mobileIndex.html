@@ -98,7 +98,7 @@
         }, function () {
             var parent = countDiv.parent();
             countDiv.remove();
-            parent.append('<a class="tuandetail_seckill_btn radius5 fr" data-try-id="{{$trying['ProductTry']['id']}}" data-tuan-id="{{$tuan_id}}" data-pid="{{$trying['Product']['id']}}" data-send-date="{{$trying['ProductTry']['consignment_date']}}">正在秒杀</a>');
+            parent.append('<a class="tuandetail_seckill_btn radius5 fr" data-try-id="{{$trying["ProductTry"]["id"]}}" data-tuan-id="{{$tuan_id}}" data-pid="{{$trying["Product"]["id"]}}" data-send-date="{{$trying["ProductTry"]["consignment_date"]}}">正在秒杀</a>');
         });
 
         function buyBtnClicked(buyBtn) {
