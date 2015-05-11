@@ -27,7 +27,7 @@ class ReferController extends AppController {
             $uid = $this->currentUser['id'];
             $this->redirect('/refer/index/'.$this->currentUser['id'].'.html');
         } else if ($uid != $this->currentUser['id']) {
-            $this->redirect('/refer/client/'.$uid.'.html');
+            $this->redirect('/refer/client/'.$uid.'/'.$this->currentUser['id'].'.html');
         }
 
         $userRefers = $this->Refer->find('all', array(
