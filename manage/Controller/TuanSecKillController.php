@@ -138,13 +138,13 @@ class TuanSecKillController extends AppController{
                         $i++;
                     }
                 }
-                if ($i == count($team_ids)) {
-                    $this->ProductTry->updateAll(array('global_show' => 1), array('id' => $id));
-                }
+//                if ($i == count($team_ids)) {
+//                    $this->ProductTry->updateAll(array('global_show' => 1), array('id' => $id));
+//                }
             }
         } else {                      //have no sec_kill,and only have one condition:add a new team
             if (!empty($teamIds)) {
-                $this->ProductTry->updateAll(array('global_show' => 0), array('id' => $id));
+                //$this->ProductTry->updateAll(array('global_show' => 0), array('id' => $id));
                 foreach ($teamIds as $teamId) {
                     $this->ProductTuanTry->create();
                     $this->data['ProductTuanTry']['try_id'] = $id;
