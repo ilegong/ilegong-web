@@ -249,7 +249,7 @@ class TuanBuyingsController extends AppController{
             $this->redirect('/users/login?referer=' . urlencode($_SERVER['REQUEST_URI']));
             return;
         }
-        $way_type = ZITI_TAG;
+        $ship_type = -1;
         if(!empty($tuan_id)){
             $this->loadModel('TuanTeam');
             $team = $this->TuanTeam->find('first',array(
@@ -268,7 +268,7 @@ class TuanBuyingsController extends AppController{
             //is global sec
             $shipSetting = $this->get_ship_setting(null,$try_id,'Try');
             if(!empty($shipSetting)){
-                $way_type = TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type']);
+                $ship_type = $shipSetting['ProductShipSetting']['ship_val'];
             }
         }
         $this->loadModel('Cart');
@@ -298,7 +298,7 @@ class TuanBuyingsController extends AppController{
             $this->set('consignee_info', $consignee_info['OrderConsignees']);
         }
         $this->set('try_id',$try_id);
-        $this->set('way_type',$way_type);
+        $this->set('ship_type',$ship_type);
         $this->set('buy_count',$Carts['Cart']['num']);
         $this->set('total_price', $total_price);
         $this->set('cart_id', $Carts['Cart']['id']);

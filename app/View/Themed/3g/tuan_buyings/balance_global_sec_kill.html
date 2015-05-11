@@ -68,7 +68,7 @@
 {{$this->Html->script(array('/js/ziti-address.js?v3.3', '/js/tuan/balance.js?v9.5'));}}
 <script>
     $(document).ready(function(){
-        zitiAddressData = zitiAddress('{{$way_type}}');
+        zitiAddressData = zitiAddress('{{$ship_type}}');
         var bigBuy = zitiObj(zitiAddressData.getBeijingAreas, $(window).height() + 5,$(window).width());
         var elements = bigBuy.generateZitiArea();
         $(".conordertuan_adress").html(elements);
