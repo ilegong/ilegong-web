@@ -15,14 +15,7 @@ function zitiAddress(type){
     //崇文并入东城区， 宣武并入西城区
     var ship_address = {};
     var area = [];
-    var addressType = -1;
-    if(type=='pysziti'){
-        addressType=1;
-    }
-    if(type=='hljziti'){
-        addressType=0;
-    }
-    $.getJSON('/tuan_buyings/get_offline_address?type='+addressType,function(data){
+    $.getJSON('/tuan_buyings/get_offline_address?type='+type,function(data){
         ship_address = data;
         for(var index in data){
             $("[area-id="+index+"]").show();
