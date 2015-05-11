@@ -2,8 +2,10 @@ $(function(){
 
     var areaId = $('.area');
     var type = $('.type');
-    $.each(tuanAreas, function (index, item) {
-       var ele = $('<option value="' + item['id'] + '">' + item['name'] + '</option>');
+    var areas = zitiAddress.getBeijingAreas;
+    $.each(areas, function (index, item) {
+
+       var ele = $('<option value="' + index + '">' + item + '</option>');
        ele.appendTo(areaId);
     });
     areaId.val(areaId.attr('data-team-id'));
