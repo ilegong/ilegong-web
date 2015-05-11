@@ -742,7 +742,6 @@ class TuanBuyingsController extends AppController{
         $ship_settings = $this->ProductShipSetting->find('all',array(
             'conditions' => array(
                 'data_id' => $pid,
-                'deleted' => DELETED_NO,
                 'data_type' => 'Product'
             )
         ));
@@ -759,7 +758,7 @@ class TuanBuyingsController extends AppController{
 
     private function get_ship_setting($way_id,$data_id,$type){
         $this->loadModel('ProductShipSetting');
-        $cond = array('data_id' => $data_id, 'data_type' => $type, 'deleted' => DELETED_NO);
+        $cond = array('data_id' => $data_id, 'data_type' => $type);
         if($way_id){
             $cond['id'] = $way_id;
         }
