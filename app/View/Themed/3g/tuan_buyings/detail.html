@@ -104,7 +104,7 @@
                                     <span class="gray title mr12" style="float:left;">方式:</span>
                                     <span class="border">
                                         {{loop $ship_settings $index $ship_set}}
-                                            <span class="mr12 border cur {{if $index==0}}tuan_way_selected{{/if}}" way-id="{{$ship_set['ProductShipSetting']['id']}}">{{$ship_set['ProductShipSetting']['name']}}{{if $ship_set['ProductShipSetting']['ship_fee'] > 0}}({{$ship_set['ProductShipSetting']['ship_fee']}}元邮费){{/if}}</span>
+                                            <span class="mr12 border {{if $index==0}}cur tuan_way_selected{{/if}}" way-label="{{$ship_set['ProductShipSetting']['code']}}" way-id="{{$ship_set['ProductShipSetting']['id']}}">{{$ship_set['ProductShipSetting']['name']}}{{if $ship_set['ProductShipSetting']['ship_fee'] > 0}}({{$ship_set['ProductShipSetting']['ship_fee']}}元邮费){{/if}}</span>
                                         {{/loop}}
                                     </span>
                                 </li>
@@ -408,11 +408,7 @@
             that.toggleClass('cur').toggleClass('tuan_way_selected');
             $("[way-label]").not(that).removeClass('cur').removeClass('tuan_way_selected');
             var select_way = $('.cur.tuan_way_selected');
-            if(select_way.attr('way-label') == 'sf'){
-                $('#consign_way').text(select_way.text());
-            }else{
-                $('#consign_way').text(select_way.text());
-            }
+            $('#consign_way').text(select_way.text());
         })
     });
 

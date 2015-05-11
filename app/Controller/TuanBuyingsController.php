@@ -750,6 +750,9 @@ class TuanBuyingsController extends AppController{
             $type_id = $ss['ProductShipSetting']['ship_type'];
             $ss['ProductShipSetting']['name'] = $tuan_ship_types[$type_id]['name'];
             $ss['ProductShipSetting']['code'] = $tuan_ship_types[$type_id]['code'];
+            if(strpos($tuan_ship_types[$type_id]['code'],ZITI_TAG)===false){
+                $ss['ProductShipSetting']['ship_fee'] = intval($ss['ProductShipSetting']['ship_val'])/100;
+            }
         }
         if(!empty($ship_settings)){
             $this->set('ship_settings',$ship_settings);
