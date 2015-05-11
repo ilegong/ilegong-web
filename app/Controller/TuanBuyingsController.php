@@ -366,18 +366,25 @@ class TuanBuyingsController extends AppController{
         $offline_store = $this->OfflineStore->findById($tuan_info['TuanTeam']['offline_store_id']);
         $total_price = $Carts['Cart']['price'] * $Carts['Cart']['num'];
         $pid = $tuan_b['TuanBuying']['pid'];
-        $ship_fee = 0;
         $ship_way = ZITI_TAG;
+        $ship_val = -1;
         if($way_id!=0){
             $shipSetting = $this->get_ship_setting($way_id,$pid,'Product');
             if(empty($shipSetting)){
                 $this->__message('选择物流方式错误', '/tuan_buyings/detail/'.$tuan_buy_id);
                 return;
             }
-            $ship_fee = floatval($shipSetting['ProductShipSetting']['ship_fee']);
             $ship_way = TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type']);
+            $ship_val = $shipSetting['ProductShipSetting']['ship_val'];
         }
-        $total_price = $total_price+$ship_fee;
+        if(strpos($ship_way, ZITI_TAG)===false){
+            $shipFee = intval($ship_val)/100;
+            if($shipFee > 0){
+                $total_price = $total_price+intval($ship_val)/100;
+            }
+        }else{
+            $this->set('ship_val',$ship_val);
+        }
         $this->loadModel('Product');
         $this->loadModel('Brand');
         $product_brand = $this->Product->find('first', array(
@@ -415,7 +422,7 @@ class TuanBuyingsController extends AppController{
         $this->set('cart_info',$Carts);
         $this->set('max_num',$max_num);
         $this->set('brand', $brand['Brand']);
-        if($tuan_info['TuanTeam']['type'] == 1){
+        if($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN){
             $this->set('big_tuan', true);
         }
         $this->set('hideNav',true);
@@ -516,15 +523,18 @@ class TuanBuyingsController extends AppController{
                     echo json_encode($res);
                     return;
                 }
-                $shipFee = $shipSetting['ProductShipSetting']['ship_fee'];
-                $total_price = $total_price+floatval($shipFee);
                 $shipTypeId = $shipSetting['ProductShipSetting']['ship_type'];
+                $way = TuanShip::get_ship_code($shipTypeId);
             }
             if($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN||$global_sec=='true'){
                 if(!empty($shipSetting)){
-                    $way = TuanShip::get_ship_code($shipTypeId);
                     if(strpos($way, ZITI_TAG)===false){
                         $consignees['address'] = $p_address;
+                        //ziti ship fee 0
+                        $shipFee = intval($shipSetting['ProductShipSetting']['ship_val'])/100;
+                        if($shipFee > 0){
+                            $total_price = $total_price+$shipFee;
+                        }
                     }
                 }
                 $address = $p_address;
@@ -731,8 +741,9 @@ class TuanBuyingsController extends AppController{
         $this->loadModel('ProductShipSetting');
         $ship_settings = $this->ProductShipSetting->find('all',array(
             'conditions' => array(
-                'product_id' => $pid,
-                'deleted' => DELETED_NO
+                'data_id' => $pid,
+                'deleted' => DELETED_NO,
+                'data_type' => 'Product'
             )
         ));
         $tuan_ship_types = TuanShip::get_all_tuan_ships();
