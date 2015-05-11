@@ -96,7 +96,7 @@ class ReferController extends AppController {
                 $this->set('referred', $referred);
                 if ($referred['Refer']['from'] != $uid) {
                     $old_ref_user = $this->User->findById($referred['Refer']['from']);
-                    $this->set('$old_refer_name', $old_ref_user['User']['nickname']);
+                    $this->set('old_refer_name', $old_ref_user['User']['nickname']);
                 }
             }
         }
