@@ -39,8 +39,8 @@ class TuanTeamsController extends AppController{
         $tuan_teams = Hash::combine($tuan_teams,'{n}.TuanTeam.id','{n}.TuanTeam');
         foreach ($tuan_teams as &$tuan_team){
             $offline_store_id = $tuan_team['offline_store_id'];
-            $tuan_team['offline_store_location_long'] = $offline_store[$offline_store_id]['OfflineStore']['location_long'];
-            $tuan_team['offline_store_location_lat'] =$offline_store[$offline_store_id]['OfflineStore']['location_lat'];
+            $tuan_team['offline_store_location_long'] = $offline_store[$offline_store_id]['location_long'];
+            $tuan_team['offline_store_location_lat'] =$offline_store[$offline_store_id]['location_lat'];
         }
         unset($tuan_team);
         $this->log('tuan_team'.json_encode($tuan_teams[1]));
