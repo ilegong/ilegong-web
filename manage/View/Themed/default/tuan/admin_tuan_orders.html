@@ -159,7 +159,7 @@
                            placeholder="搜索商品">
                 </div>
                 <div class="form-group">
-                    <select class="form-control products" name="product_id" id="product1" data-value="{{$product_id}}">
+                    <select class="form-control products search-label" name="product_id" id="product1" data-value="{{$product_id}}">
                         <option value="-1">选择商品</option>
                     </select>
                 </div>
@@ -172,11 +172,11 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$send_date_start}}"
+                    <input type="text" class="form-control send-date-start" data-date-format="yyyy-mmm-dd" value="{{$send_date_start}}"
                            placeholder="发货日期(如2015-5-1)" name="send_date_start">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" data-date-format="yyyy-mmm-dd" value="{{$send_date_end}}"
+                    <input type="text" class="form-control send-date-end" data-date-format="yyyy-mmm-dd" value="{{$send_date_end}}"
                            placeholder="发货日期(如2015-5-1)" name="send_date_end">
                 </div>
                 <div class="form-group">
@@ -207,7 +207,7 @@
                            data-search-for="tuanTeam2">
                 </div>
                 <div class="form-group">
-                    <select class="form-control tuan-teams" name="team_id" id="tuanTeam2" data-value="{{$team_id}}">
+                    <select class="form-control tuan-teams search-label" name="team_id" id="tuanTeam2" data-value="{{$team_id}}">
                         <option value="-1">请选择团队</option>
                     </select>
                 </div>
@@ -251,16 +251,16 @@
             <strong class="text-danger lead">查询团购订单，秒杀订单</strong>
             <div style="padding-bottom: 10px;padding-top: 10px;">
                 <div class="form-group">
-                    <select class="form-control offline_store" name="store_id" id="offline-store" data-value="{{$store_id}}">
+                    <select class="form-control offline_store search-label" name="store_id" id="offline-store" data-value="{{$store_id}}">
                         <option value="-1">请选择自提点</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control ziti-date-start" data-date-format="yyyy-mmm-dd"
+                    <input type="text" class="form-control  send-date-start" data-date-format="yyyy-mmm-dd"
                            value="{{$send_date}}" placeholder="日期(如2015-5-1)" name="send_date">
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control" data-date-format="yyyy-mm-dd hh:ii"
+                    <input type="text" class="form-control send-date-end" data-date-format="yyyy-mm-dd hh:ii"
                            value="{{$end_stat_date}}" placeholder="结束日期,单天可不填" name="end_stat_date">
                 </div>
                 <div class="form-group">

@@ -320,8 +320,10 @@ class TuanController extends AppController
         $send_date_end = $_REQUEST['send_date_end'];
 
         $conditions = array();
-        if (!empty($product_id) && $product_id != -1) {
-            $conditions['Cart.product_id'] = $product_id;
+        if ($product_id != -1 || !empty($send_date_start)) {
+            if($product_id != -1){
+                $conditions['Cart.product_id'] = $product_id;
+            }
             if ($order_type == -1) {
                 $conditions['Order.type'] = array(ORDER_TYPE_DEF, ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
             } else {
@@ -330,14 +332,21 @@ class TuanController extends AppController
             if ($order_status != -1) {
                 $conditions['Order.status'] = $order_status;
             }
-            if (empty($send_date_start)) {
-                $send_date_start = date('Y-m-d', strtotime('-2 days'));
+            if (!empty($send_date_start) && !empty($send_date_end)) {
+                $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
+                $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
+            }elseif(!empty($send_date_start)){
+                $conditions['DATE(Cart.send_date)'] = $send_date_start;
+                if($product_id != -1){
+                    $send_date_end = $send_date_start;
+                }
+            }elseif(!empty($send_date_end)){
+                $conditions['DATE(Cart.send_date)'] = $send_date_end;
+                $send_date_start = $send_date_end;
+            }else{
+                $send_date = date("Y-m-d", time());
+                $conditions['DATE(Cart.send_date)'] = $send_date;
             }
-            if (empty($send_date_end)) {
-                $send_date_end = date('Y-m-d', strtotime('+5 days'));
-            }
-            $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
-            $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
         }
 
         $this->_query_orders($conditions, 'Order.created DESC');
@@ -764,22 +773,29 @@ class TuanController extends AppController
         $end_stat_date = $_REQUEST['end_stat_date'];
         $conditions = array();
         $order_by = 'Cart.product_id, Order.consignee_id DESC';
-        if($this->request->is('post')) {
+        if($store_id != -1 || !empty($send_date)){
             $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
             if ($order_status != -1) {
                 $conditions['Order.status'] = $order_status;
+            }
+            if($store_id != -1){
+                $store_ids = explode(",", $store_id);
+                $conditions['Order.consignee_id'] = $store_ids;
             }
             if (!empty($send_date) && !empty($end_stat_date)) {
                 $conditions['DATE(Cart.send_date) >= '] = $send_date;
                 $conditions['DATE(Cart.send_date) <= '] = $end_stat_date;
             }elseif(!empty($send_date)){
                 $conditions['DATE(Cart.send_date)'] = $send_date;
+                if($store_id != -1){
+                    $end_stat_date = $send_date;
+                }
+            }elseif(!empty($end_stat_date)){
+                $conditions['DATE(Cart.send_date)'] = $end_stat_date;
+                $send_date = $end_stat_date;
             }else{
-                $conditions['DATE(Cart.send_date) >= '] = date("Y-m-d", time()-60*60*24*7);
-            }
-            if ($store_id != -1) {
-                $store_ids = explode(",", $store_id);
-                $conditions['Order.consignee_id'] = $store_ids;
+                $send_date = date("Y-m-d", time());
+                $conditions['DATE(Cart.send_date)'] = $send_date;
             }
         }
         $this->_query_orders($conditions, $order_by);
