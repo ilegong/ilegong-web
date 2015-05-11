@@ -289,6 +289,9 @@
                 <br/>
                 <br/>
                 <button type="submit" class="btn btn-primary text-center">查看订单</button>
+                {{loop $brands $index $brand}}
+                <div><span>{{$brand['Product']['name']}}:</span><strong style="color: red; font-size: large">{{$product_detail[$index]}} </strong></div>
+                {{/loop}}
             </div>
         </form>
     </div>
@@ -319,9 +322,6 @@
         {{/loop}}
     </h1>
     {{/if}}
-    {{loop $brands $index $brand}}
-        <span>{{$brand['Product']['name']}}:</span><strong style="color: red; font-size: large">{{$product_detail[$index]}} </strong>
-    {{/loop}}
     <button  class="btn btn-primary pull-right ship-to-pys-stores">朋友说自提点发货</button>
 
 </div>
