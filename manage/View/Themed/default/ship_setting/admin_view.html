@@ -1,0 +1,111 @@
+<h1> </h1>
+<div class="row" id="ship-view">
+    <div class="col-md-8 col-md-offset-2">
+        <div class="form-horizontal">
+            <fieldset>
+                <!-- Form Name -->
+                <legend><h1>{{$name}} <small> {{$type}}</small></h1></legend>
+
+                <div class="form-group ship-setting-item">
+                    <div class="col-sm-4">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="1" name="ship_type">   自提
+                            </label>
+                        </div>
+                    </div>
+                    <label class="col-sm-2 control-label">自提限制</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" name="val">
+                            <option value="-1">所有自提点</option>
+                            <option value="0">好邻居自提点</option>
+                            <option value="1">朋友说自提点</option>
+                        </select>
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-group ship-setting-item">
+                    <div class="col-sm-4">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="9" name="ship_type">   快递到付
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-group ship-setting-item">
+                    <div class="col-sm-4">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="8" name="ship_type">   快递包邮
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-group ship-setting-item">
+                    <div class="col-sm-4">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="6" name="ship_type">   快递到家
+                            </label>
+                        </div>
+                    </div>
+                    <label class="col-sm-2 control-label">费用</label>
+                    <div class="col-sm-4">
+                        <input type="text" value="0" class="form-control" name="val">
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-group ship-setting-item">
+                    <div class="col-sm-4">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="5" name="ship_type">   顺丰到付
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-group ship-setting-item">
+                    <div class="col-sm-4">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="4" name="ship_type">   顺丰包邮
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-group ship-setting-item">
+                    <div class="col-sm-4">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="7" name="ship_type" name="val">   顺丰到家
+                            </label>
+                        </div>
+                    </div>
+                    <label class="col-sm-2 control-label">费用</label>
+                    <div class="col-sm-4">
+                        <input type="text" value="0" class="form-control">
+                    </div>
+                </div>
+                <hr/>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <div class="pull-right">
+                            <button id="save-ship-setting" class="btn btn-primary">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div><!-- /.col-lg-12 -->
+</div><!-- /.row -->
+<script>
+    var ship_setting_data = JSON.parse('{{$datas}}');
+    var dataId = '{{$data_id}}';
+    var dataType = '{{$data_type}}';
+</script>
+{{$this->Html->script(array('/js/manage/ship_setting/view.js'))}}

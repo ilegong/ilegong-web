@@ -10,77 +10,47 @@ class ShipSettingController extends AppController {
 
     var $name = 'ShipSetting';
 
-    var $uses = array('ProductShipSetting', 'TuanProduct', 'ProductTry');
+    var $uses = array('ProductShipSetting');
 
-    public function admin_list($data_id, $data_type) {
+    public function admin_view($data_id, $data_type){
         $shipSettings = $this->ProductShipSetting->find('all', array(
             'conditions' => array(
                 'data_id' => $data_id,
                 'data_type' => $data_type
             )
         ));
+        $shipSettings = Hash::combine($shipSettings,'{n}.ProductShipSetting.id','{n}.ProductShipSetting');
         if ($data_type == 'Product') {
             $this->set('type', '团购');
         }
         if ($data_type == 'Try') {
             $this->set('type', '秒杀');
         }
-        $shipTypes = TuanShip::get_all_tuan_ships();
-        $this->set('types', $shipTypes);
         $this->set('name', $_REQUEST['name']);
-        $this->set('datas', $shipSettings);
+        $this->set('datas', json_encode($shipSettings));
         $this->set('data_id', $data_id);
         $this->set('data_type', $data_type);
     }
 
-    public function admin_new($data_id, $data_type) {
-        $shipTypes = TuanShip::get_all_tuan_ships();
-        $this->set('types', $shipTypes);
-        $this->set('data_id', $data_id);
-        $this->set('data_type', $data_type);
-    }
-
-    public function admin_create() {
-        if ($this->ProductShipSetting->save($this->data)) {
-            $data_id = $this->data['ProductShipSetting']['data_id'];
-            $data_type = $this->data['ProductShipSetting']['data_type'];
-            $this->redirect(array('action' => 'admin_list', $data_id,$data_type));
+    public function admin_save(){
+        $this->autoRender=false;
+        $dataId = $_POST['dataId'];
+        $dataType = $_POST['dataType'];
+        $postData = json_decode($_POST['data'],true);
+        $this->ProductShipSetting->deleteAll(array('data_id'=>$dataId,'data_type'=>$dataType));
+        $saveData = array();
+        foreach($postData as $item){
+            $itemData = array('data_id'=>$dataId,'data_type'=>$dataType,'ship_type'=>$item['shipType']);
+            if($item['shipVal']){
+                $itemData['ship_val'] = $item['shipVal'];
+            }
+            $saveData[] = $itemData;
         }
-    }
-
-    public function admin_edit($id) {
-        $shipTypes = TuanShip::get_all_tuan_ships();
-        $this->set('types', $shipTypes);
-        $data = $this->ProductShipSetting->find('first',array(
-            'conditions' => array(
-                'id' => $id
-            )
-        ));
-        if (empty($data)) {
-            throw new ForbiddenException(__('该团队不存在！'));
+        if($this->ProductShipSetting->saveAll($saveData)){
+            echo json_encode(array('success'=>true));
+        }else{
+            echo json_encode(array('success'=>false));
         }
-        $this->set('data',$data);
-    }
 
-    public function admin_update() {
-        if($this->ProductShipSetting->save($this->data)){
-            $data_id = $this->data['ProductShipSetting']['data_id'];
-            $data_type = $this->data['ProductShipSetting']['data_type'];
-            $this->redirect(array('action' => 'admin_list', $data_id,$data_type));
-        }
     }
-
-    public function admin_delete($id) {
-        if($this->ProductShipSetting->updateAll(array('deleted'=>1),array('id'=>$id))){
-            $data = $this->ProductShipSetting->find('first',array(
-                'conditions' => array(
-                    'id'=>$id
-                )
-            ));
-            $data_id = $data['ProductShipSetting']['data_id'];
-            $data_type = $data['ProductShipSetting']['data_type'];
-            $this->redirect(array('action' => 'admin_list', $data_id,$data_type));
-        }
-    }
-
 }

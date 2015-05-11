@@ -104,7 +104,7 @@
                                     <span class="gray title mr12" style="float:left;">方式:</span>
                                     <span class="border">
                                         {{loop $ship_settings $index $ship_set}}
-                                            <span class="mr12 border cur {{if $index==0}}tuan_way_selected{{/if}}" way-id="{{$ship_set['ProductShipSetting']['id']}}"  way-label="{{$ship_set['ProductShipSetting']['code']}}" way-fee="{{$ship_set['ProductShipSetting']['ship_fee']}}">{{$ship_set['ProductShipSetting']['name']}}{{if $ship_set['ProductShipSetting']['ship_fee'] > 0}}({{$ship_set['ProductShipSetting']['ship_fee']}}元邮费){{/if}}</span>
+                                            <span class="mr12 border cur {{if $index==0}}tuan_way_selected{{/if}}" way-id="{{$ship_set['ProductShipSetting']['id']}}">{{$ship_set['ProductShipSetting']['name']}}{{if $ship_set['ProductShipSetting']['ship_fee'] > 0}}({{$ship_set['ProductShipSetting']['ship_fee']}}元邮费){{/if}}</span>
                                         {{/loop}}
                                     </span>
                                 </li>
@@ -378,9 +378,8 @@
                         return false;
                     }
                 {{/if}}
-                var way_fee = $('.cur.tuan_way_selected').attr('way-fee')||0;
                 var way_id =  $('.cur.tuan_way_selected').attr('way-id')||0;
-                var postdata = {"product_id":product_id,"product_num":product_num, "way_type": way_type,"spec_id":specId, "send_date": send_date,"consignment_date_id":consignment_date_id,"tuan_buy_id":'{{$tuan_buy_id}}',"way_fee":way_fee,"way_id":way_id};
+                var postdata = {"product_id":product_id,"product_num":product_num, "spec_id":specId, "send_date": send_date,"consignment_date_id":consignment_date_id,"tuan_buy_id":'{{$tuan_buy_id}}',"way_id":way_id,"way_type":way_type};
                 utils.progress_notify('正在更新购物车');
                 $.ajax({
                     type:'post',
