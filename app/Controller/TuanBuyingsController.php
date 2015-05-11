@@ -522,7 +522,6 @@ class TuanBuyingsController extends AppController{
                 $shipTypeId = $shipSetting['ProductShipSetting']['ship_type'];
             }
             if($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN||$global_sec=='true'){
-                //TODO
                 if(!empty($shipSetting)){
                     $way = TuanShip::get_ship_code($shipTypeId);
                     if(strpos($way, ZITI_TAG)===false){
