@@ -71,7 +71,16 @@ class ShipSettingController extends AppController {
     }
 
     public function admin_delete($id) {
-
+        if($this->ProductShipSetting->updateAll(array('deleted'=>1),array('id'=>$id))){
+            $data = $this->ProductShipSetting->find('first',array(
+                'conditions' => array(
+                    'id'=>$id
+                )
+            ));
+            $data_id = $data['ProductShipSetting']['data_id'];
+            $data_type = $data['ProductShipSetting']['data_type'];
+            $this->redirect(array('action' => 'admin_list', $data_id,$data_type));
+        }
     }
 
 }

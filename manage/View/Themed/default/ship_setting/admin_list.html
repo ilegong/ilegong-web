@@ -16,12 +16,12 @@
     </thead>
     <tbody>
     {{loop $datas $item}}
-        <tr data-id="$item['ProductShipSetting']['id']">
+        <tr data-id="{{$item['ProductShipSetting']['id']}}">
             <td>{{$item['ProductShipSetting']['id']}}</td>
             <td>{{$types[$item['ProductShipSetting']['ship_type']]['name']}}</td>
             <td>{{$item['ProductShipSetting']['ship_fee']}}</td>
-            <td>{{if $item['ProductShipSetting']['deleted']==1}}是{{else}}否{{/if}}</td>
-            <td><a class="btn btn-info">编辑</a><a class="btn btn-danger">删除</a></td>
+            <td>{{if $item['ProductShipSetting']['deleted']==1}}<span class="label label-warning">是</span>{{else}}否{{/if}}</td>
+            <td><a class="btn btn-info">编辑</a><a class="btn btn-danger" href="/manage/admin/ship_setting/delete/{{$item['ProductShipSetting']['id']}}">删除</a></td>
         </tr>
     {{/loop}}
     </tbody>
