@@ -319,6 +319,9 @@
         {{/loop}}
     </h1>
     {{/if}}
+    {{loop $brands $index $brand}}
+        <span>{{$brand['Product']['name']}}:</span><strong style="color: red; font-size: large">{{$product_detail[$index]}} </strong>
+    {{/loop}}
     <button  class="btn btn-primary pull-right ship-to-pys-stores">朋友说自提点发货</button>
 
 </div>

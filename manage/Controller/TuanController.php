@@ -688,6 +688,7 @@ class TuanController extends AppController
         }
 
         $order_carts = array();
+        $product_detail = array();
         foreach ($carts as &$c) {
             $c_order_id = $c['Cart']['order_id'];
             $specId = $c['Cart']['specId'];
@@ -696,6 +697,11 @@ class TuanController extends AppController
                 $order_carts[$c_order_id] = array();
             }
             $order_carts[$c_order_id][] = $c;
+            if(isset($product_detail[$c['Cart']['product_id']])){
+                $product_detail[$c['Cart']['product_id']] +=  $c['Cart']['num'];
+            }else{
+                $product_detail[$c['Cart']['product_id']] =  $c['Cart']['num'];
+            }
         }
 
         //排期
@@ -757,6 +763,7 @@ class TuanController extends AppController
         $this->set('offline_stores', $offline_stores);
         $this->set('order_carts', $order_carts);
         $this->set('brands', $brands);
+        $this->set('product_detail', $product_detail);
         $this->set('consign_dates', $consign_dates);
         return $c;
     }
