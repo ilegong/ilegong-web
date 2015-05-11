@@ -13,7 +13,8 @@
                 <?php
                     $tuan = $tuan_teams[$id];
                     $tuan_link = '/tuan_teams/info/'. $tuan['id'];
-                    $location = $tuan['location_long'].','. $tuan['location_lat'];
+                    $location_1 = $tuan['location_long'].','. $tuan['location_lat'];
+                    $location = $tuan['offline_store_location_long'].','. $tuan['offline_store_location_lat'];
                 ?>
                 {{if !empty($tuan)}}
                     <div class="alltuan_border tuan-team" data-county-id="{{$tuan['county_id']}}">
