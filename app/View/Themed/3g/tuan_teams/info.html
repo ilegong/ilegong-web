@@ -190,7 +190,7 @@
         }, function () {
             var parent = countDiv.parent();
             countDiv.remove();
-            parent.append('<a data-try-id="{{$trying["ProductTry"]["id"]}}" data-tuan-id="{{$tuan_id}}" class="tuan_bar_btn doing" data-pid="{{$trying["Product"]["id"]}}">正在秒杀</a>');
+            parent.append('<a class="tuan_bar_btn doing" data-try-id="{{$trying[ProductTry][id]}}" data-tuan-id="{{$tuan_id}}" data-pid="{{$trying[Product][id]}}" data-send-date="{{$trying[ProductTry][consignment_date]}}">正在秒杀</a>');
             bindClick();
         });
 
