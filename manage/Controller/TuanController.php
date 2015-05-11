@@ -269,24 +269,9 @@ class TuanController extends AppController
         $this->set('query_type', 'general');
     }
 
-    public function admin_query_by_order_id()
-    {
-        $order_id = $_REQUEST['order_id'];
-
-        $conditions = array();
-        if (!empty($order_id)) {
-            $conditions['Order.id'] = $order_id;
-        }
-
-        $this->_query_orders($conditions, 'Order.consignee_address DESC');
-
-        $this->set('order_id', $order_id);
-        $this->set('query_type', 'byOrderId');
-        $this->render("admin_tuan_orders");
-    }
-
     public function admin_query_by_user()
     {
+        $order_id = $_REQUEST['order_id'];
         $con_name = $_REQUEST['con_name'];
         $con_phone = $_REQUEST['con_phone'];
         $con_creator = $_REQUEST['con_creator'];
@@ -311,10 +296,14 @@ class TuanController extends AppController
                 $conditions['Order.status'] = $order_status;
             }
         }
+        if (!empty($order_id)) {
+            $conditions['Order.id'] = $order_id;
+        }
 
         $this->_query_orders($conditions, 'Order.created DESC');
 
         $this->set('con_name', $con_name);
+        $this->set('order_id', $order_id);
         $this->set('con_phone', $con_phone);
         $this->set('con_creator', $con_creator);
         $this->set('order_status', $order_status);
