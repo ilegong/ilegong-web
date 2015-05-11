@@ -24,7 +24,9 @@
 <table class="table table-bordered table-condensed">
     <thead>
     <tr>
-        <th>编号</th><th>团队</th><th>团长</th><th>显示地址</th><th>详细地址</th><th>自提点</th><th>排序权值</th><th>操作</th>
+        <th>编号</th><th>团队</th><th>团长</th>
+        <!--<th>显示地址</th><th>详细地址</th>-->
+        <th>自提点</th><th>排序权值</th><th>操作</th>
     </tr>
     </thead>
     <tbody>
@@ -48,8 +50,8 @@
         <td>
             {{$tuan_team['TuanTeam']['leader_name']}}({{$tuan_team['TuanTeam']['leader_weixin']}})
         </td>
-        <td>{{$tuan_team['TuanTeam']['address']}}</td>
-        <td>{{$tuan_team['TuanTeam']['tuan_addr']}}</td>
+        <!--<td>{{$tuan_team['TuanTeam']['address']}}</td>-->
+        <!--<td>{{$tuan_team['TuanTeam']['tuan_addr']}}</td>-->
         <td class="{{empty($offline_store) ? 'danger': ''}}">
           {{if empty($offline_store)}}
             等待认领
