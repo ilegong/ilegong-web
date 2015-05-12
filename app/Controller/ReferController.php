@@ -9,7 +9,7 @@
 class ReferController extends AppController {
 
 
-    var $uses = array('Refer', 'Comment');
+    var $uses = array('Refer', 'Comment','Order','OrderComment','ReferAward','ExchangeReferAward');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -23,6 +23,7 @@ class ReferController extends AppController {
     }
 
     public function index($uid = 0) {
+
         if (!$uid) {
             $uid = $this->currentUser['id'];
             $this->redirect('/refer/index/'.$this->currentUser['id'].'.html');
@@ -30,14 +31,27 @@ class ReferController extends AppController {
             $this->redirect('/refer/client/'.$uid.'/'.$this->currentUser['id'].'.html');
         }
 
-        $userRefers = $this->Refer->find('all', array(
-            'conditions' => array('from' => $uid, 'deleted' => DELETED_NO),
+        $cond = array('from' => $uid, 'deleted' => DELETED_NO);
+
+        $userRefers = $this->Refer->find('count', array(
+            'conditions' => $cond,
         ));
 
-        $this->set('total_refers', count($userRefers));
+        $cond['bind_done'] = 1;
+        $cond['first_order_done'] = 1;
+        $userSuccessRefers = $this->Refer->find('count',array(
+            'conditions' => $cond
+        ));
 
-        $product_comments = $this->build_comments($uid);
-        $this->set('product_comments', $product_comments);
+        $this->set('total_refers', $userRefers);
+
+        $this->set('success_refers',$userSuccessRefers);
+
+//        $product_comments = $this->build_comments($uid);
+//        $this->set('product_comments', $product_comments);
+
+        $this->init_award_info($uid);
+        $this->set_user_recommend_condition($uid);
 
         $this->pageTitle = $this->currentUser['nickname']. '向您推荐了【朋友说】, 朋友间分享健康美食的平台';
     }
@@ -132,6 +146,48 @@ class ReferController extends AppController {
         $this->pageTitle = '我推荐的用户';
     }
 
+    public function exchange_award($awardId) {
+        $this->autoRender = false;
+        $result = array();
+        $award = $this->ReferAward->getAwardById($awardId);
+        if (empty($award)) {
+            $result['success'] = false;
+            $result['reason'] = '奖品不存在';
+            echo json_encode($result);
+            return;
+        }
+        $uid = $this->currentUser['id'];
+        $awardLimitCount = $award['limit_num'];
+        if ($awardLimitCount > 0) {
+            $allExchangeCounts = $this->ExchangeReferAward->find('count', array('conditions' => array('award_id' => $awardId, 'deleted' => DELETED_NO)));
+            if ($allExchangeCounts >= $awardLimitCount) {
+                $result['success'] = false;
+                $result['reason'] = '奖品已经兑换完';
+                echo json_encode($result);
+                return;
+            }
+        }
+        $needCount = $award['exchange_condition'];
+        if (!$this->can_exchange($uid, $needCount)) {
+            $result['success'] = false;
+            $result['reason'] = '兑换机会不够,继续推荐人';
+            echo json_encode($result);
+            return;
+        }
+        $exchangeData = array('ExchangeReferAward' => array('uid' => $uid, 'use_count' => $needCount, 'exchange_time' => date('Y-m-d H:i:s'),'award_id' => $awardId));
+        if ($this->ExchangeReferAward->save($exchangeData)) {
+            $result['success'] = true;
+            $result['reason'] = '兑换成功';
+            echo json_encode($result);
+            return;
+        } else {
+            $result['success'] = false;
+            $result['reason'] = '兑换失败,请联系客服';
+            echo json_encode($result);
+            return;
+        }
+    }
+
     /**
      * @param $uid
      * @return array
@@ -191,6 +247,44 @@ class ReferController extends AppController {
             'deleted' => DELETED_NO,
         )));
         return $referred;
+    }
+
+    private function set_user_recommend_condition($uid){
+        //order count >=3
+        //comments >=3
+        $orderStatus = array(ORDER_STATUS_PAID,ORDER_STATUS_CONFIRMED,ORDER_STATUS_COMMENT,ORDER_STATUS_DONE,ORDER_STATUS_RECEIVED,ORDER_STATUS_SHIPPED);
+        $order_count = $this->Order->find('count',array('conditions' => array('creator' => $uid,'status'=> $orderStatus)));
+        $comment_count = $this->OrderComment->find('count',array('conditions'=>array('user_id' => $uid,'status'=>PUBLISH_YES)));
+        if($order_count>=3&&$comment_count>=3){
+            $this->set('can_recommend',true);
+        }else{
+            $this->set('order_count',$order_count);
+            $this->set('comment_count',$comment_count);
+        }
+    }
+
+    private function init_award_info($uid) {
+        $allAwards = $this->ReferAward->getAllAward();
+        $allUseCount = $this->ExchangeReferAward->query('SELECT SUM(use_count) FROM cake_exchange_refer_awards WHERE uid='.$uid.' and deleted='.DELETED_NO);
+        $allUseCount = $allUseCount[0][0]['SUM(use_count)'];
+        if($allUseCount==null){
+            $allUseCount = 0;
+        }
+        $this->set('all_use_count',$allUseCount);
+        $this->set('all_awards',$allAwards);
+    }
+
+    private function can_exchange($uid,$needCount){
+        $allUseCount = $this->ExchangeReferAward->query('SELECT SUM(use_count) FROM cake_exchange_refer_awards WHERE uid='.$uid.' and deleted='.DELETED_NO);
+        $allUseCount = $allUseCount[0][0]['SUM(use_count)'];
+        if($allUseCount==null){
+            $allUseCount = 0;
+        }
+        $cond = array('from' => $uid, 'deleted' => DELETED_NO,'bind_done' => 1,'first_order_done' => 1);
+        $userReferSuccessCount = $this->Refer->find('count',array(
+            'conditions' => $cond
+        ));
+        return ($userReferSuccessCount-$allUseCount) >= $needCount;
     }
 
 }
