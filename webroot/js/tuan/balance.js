@@ -6,6 +6,34 @@ var totalPriceDom = $(".cart_pay .fl strong");
 var CartDomName = "input[name='shopCart']";
 var shopName = '';
 var remarkAddress = $('#remark_address');
+function zitiAddress(type){
+    var beijingArea= {
+        110101:"东城区",
+        110108:"海淀区",
+        110102:"西城区",
+        110105:"朝阳区",
+        110106:"丰台区",
+        110114:"昌平区",
+        110113:"顺义区",
+        110115:"大兴区"
+    };
+    //崇文并入东城区， 宣武并入西城区
+    var ship_address = {};
+    var area = [];
+    $.getJSON('/tuan_buyings/get_offline_address?type='+type,function(data){
+        ship_address = data;
+        $.each(data,function(index,item){
+            $("[area-id="+index+"]").show();
+        });
+    });
+    var getShipAddress = function(areaId){
+        return ship_address[areaId];
+    };
+    return {
+        getBeijingAreas: beijingArea,
+        getShipAddress: getShipAddress
+    }
+};
 function editCartNum(id, num) {
     $('.shop_jifen_used').html("");
     var cartPrice = $('#pamount-' + id).data('price') * num;
