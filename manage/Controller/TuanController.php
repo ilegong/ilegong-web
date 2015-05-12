@@ -349,6 +349,10 @@ class TuanController extends AppController
             }else{
                 $send_date = date("Y-m-d", time());
                 $conditions['DATE(Cart.send_date)'] = $send_date;
+                $send_date_start = $send_date;
+                if($product_id != -1){
+                    $send_date_end = $send_date_start;
+                }
             }
         }
 

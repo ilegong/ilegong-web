@@ -106,7 +106,7 @@ $(document).ready(function(){
   function onSearchBoxChanged(searchBox, values){
     var content= searchBox.val().Trim();
     var selector = $("#" + searchBox.data('search-for'));
-    selector.empty();
+      selector.empty();
     if(content == ''){
       $.each(values,function(index,value){
         selector.append('<option value="'+value['val']+'">'+value['name']+'</option>');
@@ -119,6 +119,7 @@ $(document).ready(function(){
         }
       })
     }
+      selector.fireEvent("onchange");
   }
 
   $(".nav-tabs a").click(function(){
@@ -182,6 +183,7 @@ $(document).ready(function(){
         function updateSendDateInput() {
             if (commonBox.val() == -1 || commonBox.val().indexOf(',') > 0) {
                 sendDateStart.removeAttr('disabled');
+                sendDateEnd.val('');
                 sendDateEnd.attr('disabled', 'disabled');
             }
             else {
