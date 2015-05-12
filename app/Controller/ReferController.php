@@ -146,11 +146,11 @@ class ReferController extends AppController {
         $this->pageTitle = '我推荐的用户';
     }
 
-    public function exchange_award($awardId){
+    public function exchange_award($awardId) {
         $this->autoRender = false;
         $result = array();
         $award = $this->ReferAward->getAwardById($awardId);
-        if(empty($award)){
+        if (empty($award)) {
             $result['success'] = false;
             $result['reason'] = '奖品不存在';
             echo json_encode($result);
@@ -158,9 +158,9 @@ class ReferController extends AppController {
         }
         $uid = $this->currentUser['id'];
         $awardLimitCount = $award['limit_num'];
-        if($awardLimitCount > 0){
-            $allExchangeCounts = $this->ExchangeReferAward->find('count', array('conditions' => array('award_id'=>$awardId,'deleted' => DELETED_NO)));
-            if($allExchangeCounts >= $awardLimitCount){
+        if ($awardLimitCount > 0) {
+            $allExchangeCounts = $this->ExchangeReferAward->find('count', array('conditions' => array('award_id' => $awardId, 'deleted' => DELETED_NO)));
+            if ($allExchangeCounts >= $awardLimitCount) {
                 $result['success'] = false;
                 $result['reason'] = '奖品已经兑换完';
                 echo json_encode($result);
@@ -168,19 +168,19 @@ class ReferController extends AppController {
             }
         }
         $needCount = $award['exchange_condition'];
-        if(!$this->can_exchange($uid,$needCount)){
+        if (!$this->can_exchange($uid, $needCount)) {
             $result['success'] = false;
             $result['reason'] = '兑换机会不够,继续推荐人';
             echo json_encode($result);
             return;
         }
-        $exchangeData = array('ExchangeReferAward'=>array('uid'=>$uid,'use_count'=>$needCount,'exchange_time'=>date('Y-m-d H:i:s')),'award_id'=>$awardId);
-        if($this->ExchangeReferAward->save($exchangeData)){
+        $exchangeData = array('ExchangeReferAward' => array('uid' => $uid, 'use_count' => $needCount, 'exchange_time' => date('Y-m-d H:i:s'),'award_id' => $awardId));
+        if ($this->ExchangeReferAward->save($exchangeData)) {
             $result['success'] = true;
             $result['reason'] = '兑换成功';
             echo json_encode($result);
             return;
-        }else{
+        } else {
             $result['success'] = false;
             $result['reason'] = '兑换失败,请联系客服';
             echo json_encode($result);
@@ -284,7 +284,7 @@ class ReferController extends AppController {
         $userReferSuccessCount = $this->Refer->find('count',array(
             'conditions' => $cond
         ));
-        return ($userReferSuccessCount-$allUseCount) > $needCount;
+        return ($userReferSuccessCount-$allUseCount) >= $needCount;
     }
 
 }

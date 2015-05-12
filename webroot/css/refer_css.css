@@ -83,3 +83,6 @@ input{ outline:none;}
 .tipslayer_bg{ width: 100%; height: 100%; background-attachment: fixed; background-color: #000000;filter:alpha(opacity=25);-moz-opacity:0.25; opacity:0.25; position: fixed; z-index: 4; top: 0; left: 0;}
 .tipslayer_share{ width: 100%; background-color: #ffffff; color:#c73c3c; position: fixed; z-index: 5; left: 0; top: 0; text-align: center; font-weight: bold; padding: 40px 0;}
 
+/**/
+.layer_close{ font-size: 1em; line-height: 36px; text-align:center; color: #ffffff; text-decoration: none; font-weight: bold; border-radius: 36px; width: 36px; height: 36px; background-color: #FFA200; position: absolute; top: -8px; right: -8px;}
+
