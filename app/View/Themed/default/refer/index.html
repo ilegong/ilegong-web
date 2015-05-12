@@ -1,4 +1,7 @@
 {{$this->Html->css('/css/refer_css.css?v1')}}
+<?php
+    $available_count = $success_refers-$all_use_count;
+?>
 <div class="tuijian_banner"><img src="{{$this->Html->assetUrl('/img/refer/banner.gif?v1')}}" ></div>
 <div class="tuijian">
     <h1>推荐流程</h1>
@@ -14,8 +17,16 @@
                 <div class="tuandetail_img"><img src="{{$this->Html->assetUrl($item['image'])}}" /></div>
                 <div class="tuandetail_title">
                     <span>{{$item['name']}}</span>
-                    <em><strong>限{{$item['limit_num']}}份</strong></em>
-                    <a href="#X" class="disabledbtn">暂不满足兑换</a>
+                    {{if $item['limit_num']==0}}
+                        <em><strong>不限份数</strong></em>
+                    {{else}}
+                        <em><strong>限{{$item['limit_num']}}份</strong></em>
+                    {{/if}}
+                    {{if $available_count >= $item['exchange_condition']}}
+                        <a href="#X" class="exchangebtn">立即兑换</a>
+                    {{else}}
+                        <a href="#X" class="disabledbtn">暂不满足兑换</a>
+                    {{/if}}
                     <s>推荐成功{{$item['exchange_condition']}}个好友即可兑换</s>
                 </div>
             </div>
@@ -37,7 +48,7 @@
                     {{/if}}
                     {{if $comment_count<3}}
                         <span style="display: block; float: left;">您还需评价{{3-$comment_count}}个订单，才可以邀请好友喔~~</span><a href="/orders/mine.html?tab=comment">去评价</a>
-                    {{}}
+                    {{/if}}
                 {{/if}}
             </dd>
         </dl>

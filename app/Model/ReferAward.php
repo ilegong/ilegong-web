@@ -117,7 +117,25 @@ class ReferAward extends AppModel{
             'limit_num' => 100,
             'image' => '/img/refer/good4.jpg',
             'url' => ''
-        )
+        ),
+        '13' => array(
+            'id' => 13,
+            'name' => '顺义杨姐家散养北油鸡柴鸡蛋6个',
+            'price' => 9.9,
+            'exchange_condition' => 1,
+            'limit_num' => 0,
+            'image' => '/img/refer/good13.jpg',
+            'url' => ''
+        ),
+        '14' => array(
+            'id' => 14,
+            'name' => '万得妙原味八连杯酸奶 100g*6杯',
+            'price' => 9.9,
+            'exchange_condition' => 1,
+            'limit_num' => 0,
+            'image' => '/img/refer/good14.jpg',
+            'url' => ''
+        ),
     );
 
     public function getAllAward(){

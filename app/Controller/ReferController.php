@@ -210,7 +210,8 @@ class ReferController extends AppController {
     private function set_user_recommend_condition($uid){
         //order count >=3
         //comments >=3
-        $order_count = $this->Order->find('count',array('conditions' => array('creator' => $uid,'status'=> ORDER_STATUS_PAID)));
+        $orderStatus = array(ORDER_STATUS_PAID,ORDER_STATUS_CONFIRMED,ORDER_STATUS_COMMENT,ORDER_STATUS_DONE,ORDER_STATUS_RECEIVED,ORDER_STATUS_SHIPPED);
+        $order_count = $this->Order->find('count',array('conditions' => array('creator' => $uid,'status'=> $orderStatus)));
         $comment_count = $this->OrderComment->find('count',array('conditions'=>array('user_id' => $uid,'status'=>PUBLISH_YES)));
         if($order_count>=3&&$comment_count>=3){
             $this->set('can_recommend',true);
@@ -225,7 +226,12 @@ class ReferController extends AppController {
         $this->loadModel('ExchangeReferAward');
         $allAwards = $this->ReferAward->getAllAward();
         $allExchangeLogs = $this->ExchangeReferAward->find('all', array('conditions' => array('uid' => $uid, 'deleted' => DELETED_NO)));
-        $allUseCount = $this->ExchangeReferAward->query('SELECT SUM(use_count) FROM cake_ exchange_refer_ award WHERE uid='.$uid.' and deleted='.DELETED_NO);
+        $allUseCount = $this->ExchangeReferAward->query('SELECT SUM(use_count) FROM cake_exchange_refer_awards WHERE uid='.$uid.' and deleted='.DELETED_NO);
+        $allUseCount = $allUseCount[0][0]['SUM(use_count)'];
+        if($allUseCount==null){
+            $allUseCount = 0;
+        }
+        $this->set('all_use_count',$allUseCount);
         $this->set('all_awards',$allAwards);
     }
 
