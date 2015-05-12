@@ -119,7 +119,7 @@ $(document).ready(function(){
         }
       })
     }
-      selector.fireEvent("onchange");
+      selector.change();
   }
 
   $(".nav-tabs a").click(function(){
