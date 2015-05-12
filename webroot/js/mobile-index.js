@@ -73,13 +73,13 @@ $(document).ready(function () {
         } else {
             originPrice = 0;
         }
-        var productDate = new Date(good['created'].replace(' ','T'));
-        var goodUrl = '/products/' + productDate.yyyymmdd() + '/' + good['slug'] + '.html?history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
+
+        var goodUrl = good['good_url']+'?history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
         var goodHtml = '<div class="good"> <a href="'+goodUrl+'" class="xq">';
         if(good['limit_area']==1){
             goodHtml+='<p>仅限<br/>北京</p>';
         }
-        goodHtml+='<img src="'+ good['listimg']+'"/> </a> <div class="title clearfix"> <a href="#X" class="phead"><img src="'+good['brand_img']+'" /></a> <a href="#X" class="txt"><b>' + good['name'] + '</b></a> </div> <ul class="clearfix"> <li class="price fl"><strong>￥' + price + '</strong>';
+        goodHtml+='<img src="'+ good['listimg']+'"/> </a> <div class="title clearfix"> <a href="'+good['brand_link']+'" class="phead"><img src="'+good['brand_img']+'" /></a> <a href="'+goodUrl+'" class="txt"><b>' + good['name'] + '</b></a> </div> <ul class="clearfix"> <li class="price fl"><strong>￥' + price + '</strong>';
         if (originPrice > 0) {
             goodHtml += '&nbsp;<label>￥' + originPrice + '</label>'
         }

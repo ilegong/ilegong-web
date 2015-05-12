@@ -49,6 +49,7 @@ class CategoriesController extends AppController {
             $val['Product']['brand_link'] = $this->brand_link($brand);
             $val['Product']['brand_name'] = $brand['Brand']['name'];
             $val['Product']['brand_img'] = $brand['Brand']['coverimg'];
+            $val['Product']['good_url'] = product_link2($val);
             $productList[] = $val['Product'];
         }
         $result = array('data_list'=>$productList);
