@@ -299,6 +299,9 @@ class TuanController extends AppController
         if (!empty($order_id)) {
             $conditions['Order.id'] = $order_id;
         }
+        if(empty($con_name)&&empty($con_creator)&&empty($con_phone)&&$order_status == 14){
+            $conditions['Order.status'] = $order_status;
+        }
 
         $this->_query_orders($conditions, 'Order.created DESC');
 
