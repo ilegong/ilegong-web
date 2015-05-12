@@ -72,7 +72,7 @@ $(document).ready(function () {
         brand = brand['Brand'];
         var price = good['price'];
         var brandName = brand['name'];
-        if(brand['id'],pyshuoBrandIds){
+        if($.inArray(brand['id'],pyshuoBrandIds)){
             brandName+='推荐';
         }else{
             brandName+='分享';
