@@ -30,14 +30,24 @@ class ReferController extends AppController {
             $this->redirect('/refer/client/'.$uid.'.html');
         }
 
-        $userRefers = $this->Refer->find('all', array(
-            'conditions' => array('from' => $uid, 'deleted' => DELETED_NO),
+        $cond = array('from' => $uid, 'deleted' => DELETED_NO);
+
+        $userRefers = $this->Refer->find('count', array(
+            'conditions' => $cond,
         ));
 
-        $this->set('total_refers', count($userRefers));
+        $cond['bind_done'] = 1;
+        $cond['first_order_done'] = 1;
+        $userSuccessRefers = $this->Refer->find('count',array(
+            'conditions' => $cond
+        ));
 
-        $product_comments = $this->build_comments($uid);
-        $this->set('product_comments', $product_comments);
+        $this->set('total_refers', $userRefers);
+
+        $this->set('success_refers',$userSuccessRefers);
+
+//        $product_comments = $this->build_comments($uid);
+//        $this->set('product_comments', $product_comments);
 
         $this->pageTitle = $this->currentUser['nickname']. '向您推荐了【朋友说】, 朋友间分享健康美食的平台';
     }

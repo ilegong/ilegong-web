@@ -29,7 +29,6 @@
 </div>
 <div class="tuijian" style="border-bottom: 0;">
     <h1>您的购买评价</h1>
-
     {{loop $product_comments $key $item}}
     <ul class="clearfix">
         <li class="fl"><img src="{{$this->Html->assetUrl(!empty($CurrentUser['image'])? $CurrentUser['image']:'/img/mine_head.png')}}"/></li>

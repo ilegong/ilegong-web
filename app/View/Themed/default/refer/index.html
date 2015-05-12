@@ -5,7 +5,7 @@
     {{$this->Html->image("/img/refer/process1.gif?v1")}}<br/>
     {{$this->Html->image("/img/refer/process2.gif?v1")}}
 </div>
-<a href="#X" class="mytuijian_a">有<strong>3</strong>位好友接受你的推荐<br/>有<strong>2</strong>位好友推荐成功</a>
+<a href="#X" class="mytuijian_a">有<strong>{{$total_refers}}</strong>位好友接受你的推荐<br/>有<strong>{{$success_refers}}</strong>位好友推荐成功</a>
 <div class="tuijian" style="border-bottom: 0;">
     <h1>奖品兑换</h1>
     <div class="clearfix tuandetail_good">
@@ -119,52 +119,13 @@
         </div>
     </div>
 </div>
-<div class="tuijian" style="border-bottom: 0; display: none;">
-    <h1>您的购买评价</h1>
-    <ul class="clearfix">
-        <li class="fl"><img src="{{$this->Html->assetUrl('/img/refer/tuijian_head.gif?v1')}}" /></li>
-        <li style="padding-left: 40px;">
-            <em>Alice</em>
-            <p>不需要盐水泡，果香浓郁，熟度刚好，水分多，宝宝超级喜欢吃</p>
-            <div class="clearfix tuijian_good_img">
-                <a href="#X"><img src="{{$this->Html->assetUrl('/img/refer/tuijian_good_img.jpg?v1')}}" /></a>
-                <a href="#X"><img src="{{$this->Html->assetUrl('/img/refer/tuijian_good_img.jpg?v1')}}" /></a>
-                <a href="#X"><img src="{{$this->Html->assetUrl('/img/refer/tuijian_good_img.jpg?v1')}}" /></a>
-            </div>
-            <a href="#X" class="clearfix tuijian_good" style="position: relative;">
-                <span class="fl"><img src="images/tuijian_good.jpg" /></span>
-                <div class="tuijian_title">
-                    <div class="tuijian_title_style">海南空运出口级金菠萝  农场直采摘</div>
-                </div>
-            </a>
-        </li>
-    </ul>
-    <ul class="clearfix">
-        <li class="fl"><img src="images/tuijian_head.gif" /></li>
-        <li style="padding-left: 40px;">
-            <em>Alice</em>
-            <p>不需要盐水泡，果香浓郁，熟度刚好，水分多，宝宝超级喜欢吃</p>
-            <div class="clearfix tuijian_good_img">
-                <a href="#X"><img src="{{$this->Html->assetUrl('/img/refer/tuijian_good_img.jpg?v1')}}" /></a>
-                <a href="#X"><img src="{{$this->Html->assetUrl('/img/refer/tuijian_good_img.jpg?v1')}}" /></a>
-                <a href="#X"><img src="{{$this->Html->assetUrl('/img/refer/tuijian_good_img.jpg?v1')}}" /></a>
-            </div>
-            <a href="#X" class="clearfix tuijian_good" style="position: relative;">
-                <span class="fl"><img src="{{$this->Html->assetUrl('/img/refer/tuijian_good.jpg?v1')}}" /></span>
-                <div class="tuijian_title">
-                    <div class="tuijian_title_style">海南空运出口级金菠萝  农场直采摘</div>
-                </div>
-            </a>
-        </li>
-    </ul>
-    <a href="#X" class="tuijian_comment">去评价赢积分</a>
-</div>
+
 <div class="tuijian" style=" margin-bottom: 44px;">
     <h1>推荐规则</h1>
     <div class="tuijian_padding">
         <dl class="clearfix">
             <dd><strong>推荐人满足的条件：</strong><br/>订单数≥3、评论数≥3，才可以推荐好友喔~~</dd>
-            <dd><span style="display: block; float: left;">您还需评价2个订单，才可以邀请好友喔~~</span><span style="display: none; float: left;">您已满足条件，可以分享本页面给好友喽！</span><a href="#X">去评价</a></dd>
+            <dd><span style="display: block; float: left;">您还需评价2个订单，才可以邀请好友喔~~</span><span style="display: none; float: left;">您已满足条件，可以分享本页面给好友喽！</span><a href="/orders/mine.html?tab=comment">去评价</a></dd>
         </dl>
         <dl class="clearfix">
             <dd><strong>被推荐人是首次在【朋友说】下单</strong></dd>
