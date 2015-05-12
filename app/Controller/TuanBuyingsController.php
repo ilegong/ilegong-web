@@ -556,12 +556,16 @@ class TuanBuyingsController extends AppController{
             }else {
                 $consignees['creator'] = $uid;
             }
-            $this->OrderConsignees->save($consignees);
-            $offline_store_id = empty($tuan_info['TuanTeam']['offline_store_id'])?0:$tuan_info['TuanTeam']['offline_store_id'];
-            $shop_id= $offline_store_id;
-            if(!empty($_POST['shop_id'])){
-                $shop_id= $_POST['shop_id'];
+            $shop_id = 0;
+            if(empty($shipSetting)||strpos(TuanShip::get_ship_code($shipTypeId),ZITI_TAG)!==false){
+                //ziti
+                $offline_store_id = empty($tuan_info['TuanTeam']['offline_store_id'])?0:$tuan_info['TuanTeam']['offline_store_id'];
+                $shop_id= $offline_store_id;
+                if(!empty($_POST['shop_id'])){
+                    $shop_id= $_POST['shop_id'];
+                }
             }
+            $this->OrderConsignees->save($consignees);
             if($tuan_sec=='true'){
                 //remark order sec kill
                 $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, '秒杀',$shop_id);

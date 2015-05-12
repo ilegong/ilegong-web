@@ -28,7 +28,7 @@ class ReferController extends AppController {
             $uid = $this->currentUser['id'];
             $this->redirect('/refer/index/'.$this->currentUser['id'].'.html');
         } else if ($uid != $this->currentUser['id']) {
-            $this->redirect('/refer/client/'.$uid.'.html');
+            $this->redirect('/refer/client/'.$uid.'/'.$this->currentUser['id'].'.html');
         }
 
         $cond = array('from' => $uid, 'deleted' => DELETED_NO);
@@ -110,7 +110,7 @@ class ReferController extends AppController {
                 $this->set('referred', $referred);
                 if ($referred['Refer']['from'] != $uid) {
                     $old_ref_user = $this->User->findById($referred['Refer']['from']);
-                    $this->set('$old_refer_name', $old_ref_user['User']['nickname']);
+                    $this->set('old_refer_name', $old_ref_user['User']['nickname']);
                 }
             }
         }

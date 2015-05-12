@@ -1,7 +1,7 @@
 {{$this->Html->css('/css/refer_css.css?v2')}}
 {{if !$reg_done}}
-<div class="tuijian_login">{{$ref_user['nickname']}}向您推荐了【朋友说】{{if !empty($old_refer_name)}} <br/> 【朋友说】-- 朋友间分享健康美食的平台。
-    (您已经接受了{{$old_refer_name}}的邀请){{/if}}
+<div class="tuijian_login">{{$ref_user['nickname']}}向您推荐了【朋友说】 <br/> -- 朋友间分享健康美食的平台。
+    {{if !empty($old_refer_name)}}(您已经接受过{{$old_refer_name}}的邀请){{/if}}
 </div>
 {{if !empty($referred) && $referred['Refer']['from'] != $ref_user['id']}}
 <a href="/" class="tuijian_login_a">去逛逛</a>
@@ -122,18 +122,18 @@
     {{$this->Html->css(array('/js/photoswipe/photoswipe.css?v1','/js/photoswipe/default-skin/default-skin.css?v1'))}}
     {{$this->Html->script(array('/js/photoswipe/photoswipe.js?v2','/js/photoswipe/photoswipe-ui-default.min.js'))}}
 {{if !$reg_done}}
-<div class="tuijian_login">{{$ref_user['nickname']}}向您推荐了【朋友说】{{if !empty($old_refer_name)}} <br/> 【朋友说】-- 朋友间分享健康美食的平台。
-    (您已经接受了{{$old_refer_name}}的邀请){{/if}}
+<div class="tuijian_login">{{$ref_user['nickname']}}向您推荐了【朋友说】 <br/> -- 朋友间分享健康美食的平台。
+    {{if !empty($old_refer_name)}}(您已经接受过{{$old_refer_name}}的邀请){{/if}}
 </div>
-    {{if $referred}}
-        <a href="/">去逛逛</a>
-    {{else}}
-        {{if !$phone_bind}}
-        <a href="javascript:;" class="tuijian_login_a accept_done">接受邀请马上注册</a>
-        {{elseif $receive_cnt <= 0}}
-        <a href="/" class="tuijian_login_a">完成第一单</a>
-        {{/if}}
-    {{/if}}
+{{if !empty($referred) && $referred['Refer']['from'] != $ref_user['id']}}
+<a href="/" class="tuijian_login_a">去逛逛</a>
+{{else}}
+{{if !$phone_bind}}
+<a href="javascript:;" type="bind" class="tuijian_login_a {{empty($refer)?'accept_done':''}}">{{empty($refer)?'接受邀请':''}}马上注册</a>
+{{elseif $receive_cnt <= 0}}
+<a href="javascript:;" type="order" class="tuijian_login_a {{empty($refer)?'accept_done':''}}">{{empty($refer)?'接受邀请':''}}完成第一单</a>
+{{/if}}
+{{/if}}
 
 {{else}}
 <div class="tuijian_bg"><strong>推荐好友下单成功</strong><br/>即可获得价值10元柴鸡蛋或酸奶！<br/><a href="/refer/index/{{$CurrentUser['id']}}.html">去推荐</a></div>

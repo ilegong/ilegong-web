@@ -31,7 +31,19 @@ class TuanTeamsController extends AppController{
             $this->set('my_tuan_ids',$my_tuan_ids);
             $left_tuan_ids = array_diff($left_tuan_ids,$my_tuan_ids);
         }
+
+        $offline_store_ids =  Hash::extract($tuan_teams,'{n}.TuanTeam.offline_store_id');
+        $this->loadModel('OfflineStore');
+        $offline_store = $this->OfflineStore->find('all',array('conditions' => array('id' => $offline_store_ids)));
+        $offline_store = Hash::combine($offline_store,'{n}.OfflineStore.id','{n}.OfflineStore');
         $tuan_teams = Hash::combine($tuan_teams,'{n}.TuanTeam.id','{n}.TuanTeam');
+        foreach ($tuan_teams as &$tuan_team){
+            $offline_store_id = $tuan_team['offline_store_id'];
+            $tuan_team['offline_store_location_long'] = $offline_store[$offline_store_id]['location_long'];
+            $tuan_team['offline_store_location_lat'] =$offline_store[$offline_store_id]['location_lat'];
+        }
+        unset($tuan_team);
+        $this->log('tuan_team'.json_encode($tuan_teams[1]));
         $this->set('left_tuan_ids',$left_tuan_ids);
         $this->set('tuan_teams',$tuan_teams);
         $this->set('op_cate','mei_shi_tuan');
@@ -151,6 +163,7 @@ class TuanTeamsController extends AppController{
         $this->set('tryings',$tryings);
         $this->set('tuan_id', $tuan_id);
         $this->set('tuan_team', $tuan_team);
+        $this->set('offline_store',$offline_store);
         $this->set('tuan_address', get_address($tuan_team, $offline_store));
         $this->set('tuan_buyings', $tuan_buyings);
         $this->set('hideNav',true);
@@ -197,7 +210,12 @@ class TuanTeamsController extends AppController{
         }else{
             $tuan_id = intval($tuan_id);
             $teamInfo = $this->TuanTeam->find('first',array('conditions' => array('id' => $tuan_id, 'published' => PUBLISH_YES)));
-            $location = $teamInfo['TuanTeam']['location_long'] . ',' . $teamInfo['TuanTeam']['location_lat'];
+            $this->loadModel('OfflineStore');
+            $offline_store = $this->OfflineStore->find('first',array(
+                'conditions' => array('id' => $teamInfo['TuanTeam']['offline_store_id'])
+            ));
+//            $location = $teamInfo['TuanTeam']['location_long'] . ',' . $teamInfo['TuanTeam']['location_lat'];
+            $location = $offline_store['OfflineStore']['location_long'] . ',' . $offline_store['OfflineStore']['location_lat'];
             $this->set('tuan_id', $tuan_id);
             $this->set('name', $teamInfo['TuanTeam']['tuan_name']);
             $this->set('location', $location);

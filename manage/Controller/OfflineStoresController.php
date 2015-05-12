@@ -6,12 +6,20 @@ class OfflineStoresController extends AppController{
     var $uses = array('OfflineStore', 'Location', 'TuanTeam');
 
     public function admin_index(){
-        $offline_stores = $this->OfflineStore->find('all', array(
-            'conditions' => array(
-                'deleted' => 0
-            )
-        ));
 
+        $area_id = isset($_REQUEST['area_id'])?$_REQUEST['area_id']:-1;
+        $type = isset($_REQUEST['type'])?$_REQUEST['type']:-1;
+        $con = array();
+        if($area_id != -1){
+            $con['area_id'] = $area_id;
+        }
+        if($type != -1){
+            $con['type'] = $type;
+        }
+        $con['deleted'] = 0;
+        $offline_stores = $this->OfflineStore->find('all', array(
+            'conditions' => $con
+        ));
         $tuan_teams_count = $this->TuanTeam->query('select offline_store_id as id, count(offline_store_id) as c from cake_tuan_teams WHERE published = 1 group by offline_store_id;');
         $tuan_teams_count = Hash::combine($tuan_teams_count, '{n}.cake_tuan_teams.id', '{n}.0.c');
         foreach($offline_stores as &$offline_store){
@@ -33,6 +41,8 @@ class OfflineStoresController extends AppController{
 
         $this->set('offline_stores',$offline_stores);
         $this->set('locations',$locations);
+        $this->set('area_id',$area_id);
+        $this->set('type',$type);
     }
 
     public function admin_new(){

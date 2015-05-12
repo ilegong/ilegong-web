@@ -163,37 +163,40 @@ $(document).ready(function(){
       iUtils.initSelectBox(tuanBuyingsBox);
   }
 
-  function setupByTuanTeamForm(){
-    var form = $('.form-by-tuan-team');
-    var tuanTeamsBox = $('.tuan-teams', form);
-    var tuanBuyingsbox = $('.tuan-buyings', form);
-    var sendDateStart = $('.send-date-start', form);
-    var sendDateEnd = $('.send-date-end', form);
-    sendDateEnd.attr('disabled', 'disabled');
-    tuanTeamsBox.on('change', function(){
-      updateTuanBuyingSelectBox($("option:selected", $(this)));
-      updateSendDateInput();
-    });
-    tuanBuyingsbox.on('change', function(){
-      updateSendDateInput();
-    });
-    function updateSendDateInput(){
-      if(tuanTeamsBox.val() == -1){
-        sendDateStart.removeAttr('disabled');
+    function setupByTuanTeamForm() {
+        var form = $('.tab-pane.active');
+        var commonBox = $('.search-label', form);
+        var tuanBuyingsbox = $('.tuan-buyings', form);
+        var sendDateStart = $('.send-date-start', form);
+        var sendDateEnd = $('.send-date-end', form);
         sendDateEnd.attr('disabled', 'disabled');
-      }
-      else{
-        if(tuanBuyingsbox.val() == -1){
-          sendDateStart.removeAttr('disabled');
-          sendDateEnd.removeAttr('disabled');
+        commonBox.on('change', function () {
+            if (tuanBuyingsbox.length > 0) {
+                updateTuanBuyingSelectBox($("option:selected", $(this)));
+            }
+            updateSendDateInput();
+        });
+        tuanBuyingsbox.on('change', function () {
+            updateSendDateInput();
+        });
+        function updateSendDateInput() {
+            if (commonBox.val() == -1 || commonBox.val().indexOf(',') > 0) {
+                sendDateStart.removeAttr('disabled');
+                sendDateEnd.attr('disabled', 'disabled');
+            }
+            else {
+                if (tuanBuyingsbox.val() == -1 || tuanBuyingsbox.length == 0) {
+                    sendDateStart.removeAttr('disabled');
+                    sendDateEnd.removeAttr('disabled');
+                }
+                else {
+                    sendDateStart.attr('disabled', 'disabled');
+                    sendDateEnd.attr('disabled', 'disabled');
+                }
+            }
         }
-        else{
-          sendDateStart.attr('disabled', 'disabled');
-          sendDateEnd.attr('disabled', 'disabled');
-        }
-      }
+        setTimeout(updateSendDateInput, 3000);
     }
-  }
     function setupHaolinjuStoreDialog(orderId){
         var sendWeixinMessageCheckBox = $(".send-weixin-message");
         var haolinjuCodeInput = $(".haolinju-code");
