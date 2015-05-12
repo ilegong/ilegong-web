@@ -181,7 +181,8 @@ $(document).ready(function(){
             updateSendDateInput();
         });
         function updateSendDateInput() {
-            if (commonBox.val() == -1 || commonBox.val().indexOf(',') > 0) {
+            var commonBoxVal = commonBox.val() || '';
+            if (commonBoxVal == -1 || commonBoxVal.indexOf(',') > 0) {
                 sendDateStart.removeAttr('disabled');
                 sendDateEnd.val('');
                 sendDateEnd.attr('disabled', 'disabled');
