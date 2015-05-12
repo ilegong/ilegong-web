@@ -142,4 +142,8 @@ class ReferAward extends AppModel{
         return $this->allAwards;
     }
 
+    public function getAwardById($id){
+        return $this->allAwards[$id];
+    }
+
 }

@@ -5,4 +5,11 @@ $(document).ready(function(){
             tls.hide();
         });
     });
+    $('div.good a.exchangebtn').on('click',function(){
+        var me = $(this);
+        var awardId = me.data('id');
+        $.post('/refer/exchange_award/'+awardId,function(data){
+
+        },'json')
+    });
 });

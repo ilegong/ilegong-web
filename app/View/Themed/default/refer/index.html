@@ -8,7 +8,7 @@
     {{$this->Html->image("/img/refer/process1.gif?v1")}}<br/>
     {{$this->Html->image("/img/refer/process2.gif?v1")}}
 </div>
-<a href="#X" class="mytuijian_a">有<strong>{{$total_refers}}</strong>位好友接受你的推荐<br/>有<strong>{{$success_refers}}</strong>位好友推荐成功</a>
+<a href="#X" class="mytuijian_a">有<strong>{{$total_refers}}</strong>位好友接受你的推荐<br/>有<strong>{{$success_refers}}</strong>位好友推荐成功<br/>已经使用<strong>{{$all_use_count}}</strong>次机会</a>
 <div class="tuijian" style="border-bottom: 0;">
     <h1>奖品兑换</h1>
     <div class="clearfix tuandetail_good">
@@ -23,7 +23,7 @@
                         <em><strong>限{{$item['limit_num']}}份</strong></em>
                     {{/if}}
                     {{if $available_count >= $item['exchange_condition']}}
-                        <a href="#X" class="exchangebtn">立即兑换</a>
+                        <a href="#X" class="exchangebtn" data-id="{{$item['id']}}">立即兑换</a>
                     {{else}}
                         <a href="#X" class="disabledbtn">暂不满足兑换</a>
                     {{/if}}
