@@ -9,7 +9,7 @@
 class ReferController extends AppController {
 
 
-    var $uses = array('Refer', 'Comment','Order');
+    var $uses = array('Refer', 'Comment','Order','OrderComment');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -51,6 +51,7 @@ class ReferController extends AppController {
 //        $this->set('product_comments', $product_comments);
 
         $this->init_award_info($uid);
+        $this->set_user_recommend_condition($uid);
 
         $this->pageTitle = $this->currentUser['nickname']. '向您推荐了【朋友说】, 朋友间分享健康美食的平台';
     }
@@ -210,7 +211,13 @@ class ReferController extends AppController {
         //order count >=3
         //comments >=3
         $order_count = $this->Order->find('count',array('conditions' => array('creator' => $uid,'status'=> ORDER_STATUS_PAID)));
-        $comment_count = $this->Comment->find('count',array('conditions'=>array()));
+        $comment_count = $this->OrderComment->find('count',array('conditions'=>array('user_id' => $uid,'status'=>PUBLISH_YES)));
+        if($order_count>=3&&$comment_count>=3){
+            $this->set('can_recommend',true);
+        }else{
+            $this->set('order_count',$order_count);
+            $this->set('comment_count',$comment_count);
+        }
     }
 
     private function init_award_info($uid) {
@@ -218,7 +225,7 @@ class ReferController extends AppController {
         $this->loadModel('ExchangeReferAward');
         $allAwards = $this->ReferAward->getAllAward();
         $allExchangeLogs = $this->ExchangeReferAward->find('all', array('conditions' => array('uid' => $uid, 'deleted' => DELETED_NO)));
-        $allUseCount = $this->ExchangeReferAward->query('SELECT SUM(use_count) FROM cake_ exchange_refer_ award WHERE uid='.$uid.' and deleted=0');
+        $allUseCount = $this->ExchangeReferAward->query('SELECT SUM(use_count) FROM cake_ exchange_refer_ award WHERE uid='.$uid.' and deleted='.DELETED_NO);
         $this->set('all_awards',$allAwards);
     }
 
