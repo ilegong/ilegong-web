@@ -411,19 +411,23 @@
             {{/if}}
           {{/if}}
         </td>
-        <td>
-            {{if $order['Order']['ship_mark']=='ziti'}}
-            自提
-            {{elseif $order['Order']['ship_mark']=='sfby'}}
-            顺丰包邮
-            {{elseif $order['Order']['ship_mark']=='sfdf'}}
-            顺丰到付
-            {{elseif $order['Order']['ship_mark']=='kuaidi'}}
-            快递
-            {{else}}
-              <span class="danger">无</span>
-            {{/if}}
+      {{if $order['Order']['type'] == 5 || $order['Order']['type'] == 6}}
+        <td {{if $order['Order']['ship_mark']!='ziti' && $order['Order']['ship_mark']!='sfby' && $order['Order']['ship_mark']=='sfdf' && $order['Order']['ship_mark']=='kuaidi'}}class="danger"{{/if}}>
+          {{if $order['Order']['ship_mark']=='ziti'}}
+          自提
+          {{elseif $order['Order']['ship_mark']=='sfby'}}
+          顺丰包邮
+          {{elseif $order['Order']['ship_mark']=='sfdf'}}
+          顺丰到付
+          {{elseif $order['Order']['ship_mark']=='kuaidi'}}
+          快递
+          {{else}}
+          无标注
+          {{/if}}
         </td>
+      {{else}}
+        <td></td>
+      {{/if}}
         <td>
             {{$consign_time}}({{$cart['Cart']['send_date']}})
         </td>
