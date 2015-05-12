@@ -406,7 +406,7 @@
           <td {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store)) || ($order['Order']['ship_mark']!='ziti' && !empty($offline_store))}}class="danger"{{/if}}>
             {{$offline_store['OfflineStore']['alias']}}
           </td>
-          <td {{if $order['Order']['ship_mark']!='ziti' && $order['Order']['ship_mark']!='sfby' && $order['Order']['ship_mark']=='sfdf' && $order['Order']['ship_mark']=='kuaidi'}}class="danger"{{/if}}>
+          <td {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store)) || ($order['Order']['ship_mark']!='ziti' && !empty($offline_store))}}class="danger"{{/if}}>
             {{if $order['Order']['ship_mark']=='ziti'}}
             自提
             {{elseif $order['Order']['ship_mark']=='sfby'}}
@@ -424,7 +424,7 @@
           </td>
         {{else}}
           <td {{if !empty($offline_store)}}class="danger"{{/if}}>{{$offline_store['OfflineStore']['alias']}}</td>
-          <td {{if !empty($order['Order']['ship_mark'])}}class="danger"{{/if}}>{{$order['Order']['ship_mark']}}</td>
+          <td>{{$order['Order']['ship_mark']}}</td>
           <td>{{$cart['Cart']['send_date']}}</td>
         {{/if}}
         <td>{{$order['Order']['consignee_name']}}</td>
