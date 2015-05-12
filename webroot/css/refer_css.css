@@ -49,6 +49,8 @@ input{ outline:none;}
 .tuijian_login{ font-size: 1em;font-weight: bold; text-align:center; color: #ffffff; line-height: 20px; padding: 20% 5%; background-color: #29ac0e;}
 .tuijian_login_a{ display: block; margin: 10px; line-height: 44px; text-align: center; background-color: #29ac0e; color: #ffffff; border-radius: 3px; text-decoration: none; font-size: 1.1em; font-weight: bold;}
 .mytuijian_a{ color:#c73c3c; line-height: 24px; text-align: center; padding-top: 10px; display: block;}
+.mytuijian_a:hover{color:#c73c3c;}
+.mytuijian_a:visited{color:#c73c3c;}
 .tuijian_bg{ background-color: #c73c3c; color: #ffffff; padding: 5%; font-size: 1em; text-align: center; line-height: 25px; margin-bottom: 10px;}
 .tuijian_bg strong{ font-size: 1.2em;}
 .tuijian_bg a{ display: block; background-color: #ffffff; line-height: 35px; width: 50%; margin: 0 auto; border-radius: 3px; color: #c73c3c; text-decoration: none; margin-top: 10px; font-weight: bold; font-size: 1.1em;}
