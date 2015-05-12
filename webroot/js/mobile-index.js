@@ -79,11 +79,11 @@ $(document).ready(function () {
         if(good['limit_area']==1){
             goodHtml+='<p>仅限<br/>北京</p>';
         }
-        goodHtml+='<img src="'+ good['listimg']+'"/> <div class="title">' + good['name'] + '</div> <ul class="clearfix" style="margin-bottom: 0;"> <li class="price fl"><strong>￥' + price + '</strong>';
+        goodHtml+='<img src="'+ good['listimg']+'"/> </a> <div class="title clearfix"> <a href="#X" class="phead"><img src="'+good['brand_img']+'" /></a> <a href="#X" class="txt"><b>' + good['name'] + '</b></a> </div> <ul class="clearfix"> <li class="price fl"><strong>￥' + price + '</strong>';
         if (originPrice > 0) {
             goodHtml += '&nbsp;<label>￥' + originPrice + '</label>'
         }
-        goodHtml+='</li> <li class="fr btn radius5">立即购买</li> </ul> </a> </div>';
+        goodHtml+='</li> <li class="fr"><a href="'+goodUrl+'" class="btn radius5">立即购买</a></li> </ul> </div>';
         return goodHtml;
     }
 

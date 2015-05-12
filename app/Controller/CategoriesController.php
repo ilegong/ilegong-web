@@ -41,8 +41,14 @@ class CategoriesController extends AppController {
                 'limit' => $pagesize,
                 'page' => $page)
         );
+        $brandIds = Hash::extract($list,'{n}.Product.brand_id');
+        $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
         $productList = array();
-        foreach ($list as $val) {
+        foreach ($list as &$val) {
+            $brand = $mappedBrands[$val['Product']['brand_id']];
+            $val['Product']['brand_link'] = $this->brand_link($brand);
+            $val['Product']['brand_name'] = $brand['Brand']['name'];
+            $val['Product']['brand_img'] = $brand['Brand']['coverimg'];
             $productList[] = $val['Product'];
         }
         $result = array('data_list'=>$productList);
@@ -859,6 +865,11 @@ class CategoriesController extends AppController {
         $this->set('signPackage', $signPackage);
         $this->set('share_string', urlencode($share_code));
         $this->set('jWeixinOn', true);
+    }
+
+    private function brand_link($brand, $params = array()) {
+        $url = (!empty($brand)) ? "/brands/" . date('Ymd', strtotime($brand['Brand']['created'])) . "/" . $brand['Brand']['slug'] . ".html" : '/';
+        return $url;
     }
 
 }  
