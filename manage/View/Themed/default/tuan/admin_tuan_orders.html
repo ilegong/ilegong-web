@@ -479,6 +479,45 @@
         <input type="text"class="haolinju-code" value="" placeholder="请输入提货码">
     </form>
 </div>
+<div id="refund-form" class="form-horizontal refund-order-dialog" title="退款通知">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">订单状态</label>
+
+        <div class="col-sm-9">
+            <label class="radio-inline">
+                <input type="radio" id="order_in_refunding" name="status" value="14" data-toggle="collapse"
+                       data-target="#refund_order">退款中
+            </label>
+            <label class="radio-inline">
+                <input type="radio" id="order_refunded" name="status" checked="checked" value="4" data-toggle="collapse"
+                       data-target="#refund_order">已退款
+            </label>
+
+            <p class="text-warning">选择退款中，只会更改订单状态；选择已退款，需要输入金额，并发送退款模版和短信</p>
+        </div>
+    </div>
+    <div id="refund_order" class="collapse">
+        <div class="form-group">
+            <label for="refund_money" class="col-sm-2 control-label">退款金额</label>
+
+            <div class="col-sm-10">
+                <input id="refund_money" type="number" step="0.01" class="form-control" placeholder="单位为元">
+
+                <p class="error-message"></p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="refund_remark" class="col-sm-2 control-label">退款原因</label>
+
+            <div class="col-sm-10">
+                <textarea id="refund_remark" class="form-control" placeholder="说明退款原因"></textarea>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" value="" id="order-id">
+    <input type="hidden" value="" id="order-creator">
+    <input type="hidden" value="" id="order-totalprice">
+</div>
 
 <div class="ship-to-our-store-dialog" title="自有自提点发货">
     <p class="text-warning">发消息的同时会修改状态，不会重复发送消息</p>
@@ -495,4 +534,5 @@
     </form>
 </div>
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v5.3'))}}
 {{$this->Html->script(array('manage/tuan/tuan_orders.js?v5.5'))}}
