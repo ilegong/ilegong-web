@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    var pyshuoBrandIds = [92,134,179,181];
     var cache = {};
     var $productsContent = $('#products-content');
     var $seckill_product = $('#seckill_product');
@@ -27,26 +26,26 @@ $(document).ready(function () {
         var tagId = me.data('id');
         if (tagId != currentTagId) {
             currentTagId = tagId;
-            if (tagId != recommendTagId || tagId != recommendTagId.toString()) {
+            if(tagId!=recommendTagId||tagId!=recommendTagId.toString()){
                 $seckill_product.hide();
-            } else {
+            }else{
                 $seckill_product.show();
             }
-            $('div.good', $productsContent).remove();
+            $('div.good',$productsContent).remove();
             loadDatas(tagId);
         }
-        if (tagId != recommendTagId || tagId != recommendTagId.toString()) {
-            firstTag.css('background-color', '#eeeeee');
-            firstTag.css('color', '#333333');
-        } else {
-            firstTag.css('background-color', '');
-            firstTag.css('color', '');
+        if(tagId!=recommendTagId||tagId!=recommendTagId.toString()){
+            firstTag.css('background-color','#eeeeee');
+            firstTag.css('color','#333333');
+        }else{
+            firstTag.css('background-color','');
+            firstTag.css('color','');
         }
         me.addClass('cur');
     });
 
-    function initView() {
-        $('div.menue ul li[name="tag-' + initTagId + '"]').trigger('click');
+    function initView(){
+        $('div.menue ul li[name="tag-'+initTagId+'"]').trigger('click');
     }
 
     //load tag products
@@ -60,23 +59,13 @@ $(document).ready(function () {
     //draw dom
     function drawToDOM(datas) {
         var data_list = datas['data_list'];
-        var brands = datas['brands'];
         $.each(data_list, function (index, item) {
-            var brand = brands[item['Product']['brand_id']];
-            $productsContent.append(genGoodItemDom(item, brand));
+            $productsContent.append(genGoodItemDom(item));
         });
     }
 
-    function genGoodItemDom(good, brand) {
-        good = good['Product'];
-        brand = brand['Brand'];
+    function genGoodItemDom(good) {
         var price = good['price'];
-        var brandName = brand['name'];
-        if($.inArray(brand['id'],pyshuoBrandIds)){
-            brandName+='推荐';
-        }else{
-            brandName+='分享';
-        }
         price = parseFloat(price).format(2);
         var originPrice = good['original_price'];
         if (originPrice) {
@@ -84,19 +73,17 @@ $(document).ready(function () {
         } else {
             originPrice = 0;
         }
-        var productDate = new Date(good['created'].replace(' ', 'T'));
-        var brandDate = new Date(brand['created'].replace(' ', 'T'));
-        var goodUrl = '/products/' + productDate.yyyymmdd() + '/' + good['slug'] + '.html?history=/&amp;_sl=h5.cate.list&amp;tagId=' + currentTagId;
-        var brandUrl = '/brands/'+brandDate.yyyymmdd()+'/'+brand['slug']+'.html';
-        var goodHtml = '<div class="good"> <a href="' + goodUrl + '" class="xq">';
-        if (good['limit_area'] == 1) {
-            goodHtml += '<p>仅限<br/>北京</p>';
+        var productDate = new Date(good['created'].replace(' ','T'));
+        var goodUrl = '/products/' + productDate.yyyymmdd() + '/' + good['slug'] + '.html?history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
+        var goodHtml = '<div class="good"> <a href="'+goodUrl+'" class="xq">';
+        if(good['limit_area']==1){
+            goodHtml+='<p>仅限<br/>北京</p>';
         }
-        goodHtml += '<img src="' + good['listimg'] + '"/> <div class="title clearfix"><a href="'+brandUrl+'" class="phead"><img src="' + brand['coverimg'] + '" /></a> <a href="' + goodUrl + '" class="txt"><b>['+brandName+']' + good['name'] + '</b></a></div> <ul class="clearfix" style="margin-bottom: 0;"> <li class="price fl"><strong>￥' + price + '</strong>';
+        goodHtml+='<img src="'+ good['listimg']+'"/> <div class="title">' + good['name'] + '</div> <ul class="clearfix" style="margin-bottom: 0;"> <li class="price fl"><strong>￥' + price + '</strong>';
         if (originPrice > 0) {
             goodHtml += '&nbsp;<label>￥' + originPrice + '</label>'
         }
-        goodHtml += '</li> <li class="fr btn radius5">立即购买</li> </ul> </a> </div>';
+        goodHtml+='</li> <li class="fr btn radius5">立即购买</li> </ul> </a> </div>';
         return goodHtml;
     }
 
