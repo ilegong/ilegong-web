@@ -414,14 +414,14 @@
         <td>
             {{if $order['Order']['ship_mark']=='ziti'}}
             自提
-            {{elseif $order['Order']['ship_mark']=='sf'}}
-            顺风到付
-            {{elseif $order['Order']['ship_mark']=='kddj'}}
-            快递到家
-            {{elseif $order['Order']['ship_mark']=='normal'}}
-            自提
+            {{elseif $order['Order']['ship_mark']=='sfby'}}
+            顺丰包邮
+            {{elseif $order['Order']['ship_mark']=='sfdf'}}
+            顺丰到付
+            {{elseif $order['Order']['ship_mark']=='kuaidi'}}
+            快递
             {{else}}
-            没有标注
+              <span class="danger">无</span>
             {{/if}}
         </td>
         <td>
