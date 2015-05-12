@@ -33,7 +33,7 @@ class CategoriesController extends AppController {
         $orderBy = 'Tag.recommend desc, Product.recommend desc';
         $page = 1;
         $pagesize = 60;
-        $list = $this->Product->find('all', array(
+        $productList = $this->Product->find('all', array(
                 'conditions' => $conditions,
                 'joins' => $join_conditions,
                 'order' => $orderBy,
@@ -41,11 +41,9 @@ class CategoriesController extends AppController {
                 'limit' => $pagesize,
                 'page' => $page)
         );
-        $productList = array();
-        foreach ($list as $val) {
-            $productList[] = $val['Product'];
-        }
-        $result = array('data_list'=>$productList);
+        $brandIds = Hash::extract($productList,'{n}.Product.brand_id');
+        $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
+        $result = array('data_list'=>$productList,'brands' => $mappedBrands);
         $result = json_encode($result);
         Cache::write('tag-products'.$tagId,$result);
         echo $result;
