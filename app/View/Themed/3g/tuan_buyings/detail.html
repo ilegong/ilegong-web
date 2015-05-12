@@ -131,6 +131,23 @@
                     </span>
                     </li>
                     </ul>
+                    <div class="all_line">
+                        <ul class="clearfix title" style="margin-bottom: 0;" onclick="to_detail();">
+                            <li class="xq_xqicon fl" style="padding-left: 0;"></li>
+                            <li class="fl"><strong>图文详情</strong></li>
+                            <li class="fr"><a class="p_more"></a></li>
+                        </ul>
+                    </div>
+                    <div class="all_line" id="comment-div">
+                        <ul class="clearfix title" style="margin-bottom: 0;" {{if $comment_count>5}}onclick="to_comment();"{{/if}}>
+                        <li class="xq_commenticon fl" style="padding-left: 0;"></li>
+                        <li class="fl">口碑评论<span>{{$comment_count}}</span></li>
+                        {{if $comment_count>5}}
+                        <li class="fr"><a class="p_more"></a></li>
+                        {{/if}}
+                        </ul>
+                        {{template products/template_product_comments}}
+                    </div>
                     <ul class="clearfix shop_entrance" style="color: #29AC0E;padding: 4px 0.8em 5px 0.8em;" onclick="to_brand();">
                         <li class="fl"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0"></li>
                         <li class="fl" style="color: #333333;">{{$brand['Brand']['name']}}</li>
@@ -150,24 +167,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="all_line">
-                        <ul class="clearfix title" style="margin-bottom: 0;" onclick="to_detail();">
-                            <li class="xq_xqicon fl" style="padding-left: 0;"></li>
-                            <li class="fl"><strong>图文详情</strong></li>
-                            <li class="fr"><a class="p_more"></a></li>
-                        </ul>
-                    </div>
 
-                    <div class="all_line" id="comment-div">
-                        <ul class="clearfix title" style="margin-bottom: 0;" {{if $comment_count>5}}onclick="to_comment();"{{/if}}>
-                            <li class="xq_commenticon fl" style="padding-left: 0;"></li>
-                            <li class="fl">口碑评论<span>{{$comment_count}}</span></li>
-                            {{if $comment_count>5}}
-                            <li class="fr"><a class="p_more"></a></li>
-                            {{/if}}
-                        </ul>
-                        {{template products/template_product_comments}}
-                    </div>
                     <div class="all_line" style="margin-bottom: 0;">
                         <ul class="clearfix title">
                             <li class="fl">相关推荐</li>
