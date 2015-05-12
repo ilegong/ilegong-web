@@ -9,114 +9,17 @@
 <div class="tuijian" style="border-bottom: 0;">
     <h1>奖品兑换</h1>
     <div class="clearfix tuandetail_good">
-        <div class="good">
-            <div class="tuandetail_img"><img src="{{$this->Html->assetUrl('/img/refer/good12.jpg?v1')}}" /></div>
-            <div class="tuandetail_title">
-                <span>iPad Mini 3  16G</span>
-                <em><strong>限1份</strong></em>
-                <a href="#X" class="disabledbtn">暂不满足兑换</a>
-                <s>推荐成功288个好友即可兑换</s>
+        {{loop $all_awards $index $item}}
+            <div class="good">
+                <div class="tuandetail_img"><img src="{{$this->Html->assetUrl($item['image'])}}" /></div>
+                <div class="tuandetail_title">
+                    <span>{{$item['name']}}</span>
+                    <em><strong>限{{$item['limit_num']}}份</strong></em>
+                    <a href="#X" class="disabledbtn">暂不满足兑换</a>
+                    <s>推荐成功{{$item['exchange_condition']}}个好友即可兑换</s>
+                </div>
             </div>
-        </div>
-        <div class="good">
-            <div class="tuandetail_img"><img src="{{$this->Html->assetUrl('/img/refer/good11.jpg?v1')}}" /></div>
-            <div class="tuandetail_title">
-                <span>小米电视2  40寸</span>
-                <em><strong>限1份</strong></em>
-                <a href="#X" class="exchangebtn">立即兑换</a>
-                <s>推荐成功200个好友即可兑换</s>
-            </div>
-        </div>
-        <div class="good">
-            <div class="tuandetail_img"><img src="{{$this->Html->assetUrl('/img/refer/good10.jpg?v1')}}" /></div>
-            <div class="tuandetail_title">
-                <span>美的（Midea）烤箱</span>
-                <em><strong>限5份</strong></em>
-                <a href="#X" class="disabledbtn">暂不满足兑换</a>
-                <s>推荐成功32个好友即可兑换</s>
-            </div>
-        </div>
-        <div class="good">
-            <div class="tuandetail_img"><img src="{{$this->Html->assetUrl('/img/refer/good9.jpg?v1')}}" /></div>
-            <div class="tuandetail_title">
-                <span>美的（Midea）吸尘器</span>
-                <em><strong>限3份</strong></em>
-                <a href="#X" class="disabledbtn">暂不满足兑换</a>
-                <s>推荐成功22个好友即可兑换</s>
-            </div>
-        </div>
-        <div class="good">
-            <div class="tuandetail_img"><img src="{{$this->Html->assetUrl('/img/refer/good6.jpg?v1')}}" /></div>
-            <div class="tuandetail_title">
-                <span>小米16000毫安移动电源1个</span>
-                <em><strong>限5份</strong></em>
-                <a href="#X" class="disabledbtn">暂不满足兑换</a>
-                <s>推荐成功15个好友即可兑换</s>
-            </div>
-        </div>
-        <div class="good">
-            <div class="tuandetail_img"><img src="{{$this->Html->assetUrl('/img/refer/good5.jpg?v1')}}" /></div>
-            <div class="tuandetail_title">
-                <span>韩国正品Guerisson奇迹马油1瓶</span>
-                <em><strong>限5份</strong></em>
-                <a href="#X" class="disabledbtn">暂不满足兑换</a>
-                <s>推荐成功12个好友即可兑换</s>
-            </div>
-        </div>
-        <div class="good">
-            <div class="tuandetail_img"><img src="{{$this->Html->assetUrl('/img/refer/good7.jpg?v1')}}" /></div>
-            <div class="tuandetail_title">
-                <span>海南空运千层水果蛋糕1个  8寸/个</span>
-                <em><strong>限10份</strong></em>
-                <a href="#X" class="disabledbtn">暂不满足兑换</a>
-                <s>推荐成功16个好友即可兑换</s>
-            </div>
-        </div>
-        <div class="good">
-            <div class="tuandetail_img"><img src="{{$this->Html->assetUrl('/img/refer/good8.jpg?v1')}}" /></div>
-            <div class="tuandetail_title">
-                <span>北京果园散养柴鸡1只</span>
-                <em><strong>限10份</strong></em>
-                <a href="#X" class="disabledbtn">暂不满足兑换</a>
-                <s>推荐成功16个好友即可兑换</s>
-            </div>
-        </div>
-        <div class="good">
-            <div class="tuandetail_img"><img src="{{$this->Html->assetUrl('/img/refer/good1.jpg?v1')}}" /></div>
-            <div class="tuandetail_title">
-                <span>海南空运出口级金菠萝 农场直采摘 新鲜直达 2个</span>
-                <em><strong>限20份</strong></em>
-                <a href="#X" class="disabledbtn">暂不满足兑换</a>
-                <s>推荐成功6个好友即可兑换</s>
-            </div>
-        </div>
-        <div class="good">
-            <div class="tuandetail_img"><img src="{{$this->Html->assetUrl('/img/refer/good2.jpg?v1')}}" /></div>
-            <div class="tuandetail_title">
-                <span>海南海口空运 纯天然 无添加 新鲜椰子冻1个 700g/个</span>
-                <em><strong>限20份</strong></em>
-                <a href="#X" class="disabledbtn">暂不满足兑换</a>
-                <s>推荐成功6个好友即可兑换</s>
-            </div>
-        </div>
-        <div class="good">
-            <div class="tuandetail_img"><img src="{{$this->Html->assetUrl('/img/refer/good3.jpg?v1')}}" /></div>
-            <div class="tuandetail_title">
-                <span>顺义杨姐家散养北油鸡柴鸡蛋24个</span>
-                <em><strong>限20份</strong></em>
-                <a href="#X" class="disabledbtn">暂不满足兑换</a>
-                <s>推荐成功6个好友即可兑换</s>
-            </div>
-        </div>
-        <div class="good">
-            <div class="tuandetail_img"><img src="{{$this->Html->assetUrl('/img/refer/good4.jpg?v1')}}" /></div>
-            <div class="tuandetail_title">
-                <span>山东烟台·栖霞苹果 不打蜡 无农药 绿色健康 5斤</span>
-                <em><strong>限20份</strong></em>
-                <a href="#X" class="disabledbtn">暂不满足兑换</a>
-                <s>推荐成功6个好友即可兑换</s>
-            </div>
-        </div>
+        {{/loop}}
     </div>
 </div>
 

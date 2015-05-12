@@ -120,4 +120,8 @@ class ReferAward extends AppModel{
         )
     );
 
+    public function getAllAward(){
+        return $this->allAwards;
+    }
+
 }
