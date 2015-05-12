@@ -402,35 +402,31 @@
             普通
             {{/if}}
         </td>
-        <td>
-          {{if $order['Order']['type'] == 5 || $order['Order']['type'] == 6}}
-            {{if empty($offline_store)}}
-              <span class="text-danger">无</span>
+        {{if $order['Order']['type'] == 5 || $order['Order']['type'] == 6}}
+          <td {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store)) || ($order['Order']['ship_mark']!='ziti' && !empty($offline_store))}}class="danger"{{/if}}>
+            <span class="text-danger">{{$offline_store['OfflineStore']['alias']}}</span>
+          </td>
+          <td {{if $order['Order']['ship_mark']!='ziti' && $order['Order']['ship_mark']!='sfby' && $order['Order']['ship_mark']=='sfdf' && $order['Order']['ship_mark']=='kuaidi'}}class="danger"{{/if}}>
+            {{if $order['Order']['ship_mark']=='ziti'}}
+            自提
+            {{elseif $order['Order']['ship_mark']=='sfby'}}
+            顺丰包邮
+            {{elseif $order['Order']['ship_mark']=='sfdf'}}
+            顺丰到付
+            {{elseif $order['Order']['ship_mark']=='kuaidi'}}
+            快递
             {{else}}
-              {{$offline_store['OfflineStore']['alias']}}
+            无标注
             {{/if}}
-          {{/if}}
-        </td>
-      {{if $order['Order']['type'] == 5 || $order['Order']['type'] == 6}}
-        <td {{if $order['Order']['ship_mark']!='ziti' && $order['Order']['ship_mark']!='sfby' && $order['Order']['ship_mark']=='sfdf' && $order['Order']['ship_mark']=='kuaidi'}}class="danger"{{/if}}>
-          {{if $order['Order']['ship_mark']=='ziti'}}
-          自提
-          {{elseif $order['Order']['ship_mark']=='sfby'}}
-          顺丰包邮
-          {{elseif $order['Order']['ship_mark']=='sfdf'}}
-          顺丰到付
-          {{elseif $order['Order']['ship_mark']=='kuaidi'}}
-          快递
-          {{else}}
-          无标注
-          {{/if}}
-        </td>
-      {{else}}
-        <td></td>
-      {{/if}}
-        <td>
-            {{$consign_time}}({{$cart['Cart']['send_date']}})
-        </td>
+          </td>
+          <td {{if empty($cart['Cart']['send_date'])}}class="danger"{{/if}}>
+          {{$cart['Cart']['send_date']}}
+          </td>
+        {{else}}
+          <td {{if !empty($offline_store)}}class="danger"{{/if}}>{{$offline_store['OfflineStore']['alias']}}</td>
+          <td {{if $order['Order']['ship_mark']!=''}}class="danger"{{/if}}>$order['Order']['ship_mark']</td>
+          <td>{{$cart['Cart']['send_date']}}</td>
+        {{/if}}
         <td>{{$order['Order']['consignee_name']}}</td>
         <td>
             <a href="/manage/admin/tuan_buyings/index?team_id={{$tuan_team['id']}}">{{$tuan_team['tuan_name']}}</a>
