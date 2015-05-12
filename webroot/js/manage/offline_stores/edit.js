@@ -5,8 +5,10 @@ $(function () {
     var initShopNo = function(){
         shopNo.toggleClass('hidden', type.val() != 0);
     };
-    var areas = zitiAddress.getBeijingAreas;
-    $.each(areas, function (index, item) {
+//    var zitiAddress = zitiAddress('');
+//    var areas = zitiAddress.getBeijingAreas;
+
+    $.each(beijingArea, function (index, item) {
         $('<option value="' + index + '">' + item + '</option>').appendTo(areaId);
     });
     type.on('change', function(){

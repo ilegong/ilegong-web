@@ -2,9 +2,7 @@ $(function(){
 
     var areaId = $('.area');
     var type = $('.type');
-    var areas = zitiAddress.getBeijingAreas;
-    $.each(areas, function (index, item) {
-
+    $.each(beijingArea, function (index, item) {
        var ele = $('<option value="' + index + '">' + item + '</option>');
        ele.appendTo(areaId);
     });
