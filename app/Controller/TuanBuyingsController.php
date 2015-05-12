@@ -557,7 +557,7 @@ class TuanBuyingsController extends AppController{
                 $consignees['creator'] = $uid;
             }
             $shop_id = 0;
-            if(empty($shipSetting)||strpos(TuanShip::get_ship_code($shipTypeId),ZITI_TAG)>=0){
+            if(empty($shipSetting)||strpos(TuanShip::get_ship_code($shipTypeId),ZITI_TAG)!==false){
                 //ziti
                 $offline_store_id = empty($tuan_info['TuanTeam']['offline_store_id'])?0:$tuan_info['TuanTeam']['offline_store_id'];
                 $shop_id= $offline_store_id;
