@@ -292,32 +292,63 @@ $(document).ready(function(){
         });
         return $tb_ids;
     }
+    var ourAddressSend = function(){
+        var orderIds = getCheckedOrderIds();
+        var val=$('input:radio[name="optionsRadios"]:checked').val();
+        if(val == '1'){
+            $.post('/manage/admin/tuan_orders/ship_to_pys_stores', {"ids": orderIds}, function(data){
+                if(data.success){
+                    var msg;
+                    if(orderIds.length == (data.res.length + data.already.length)){
+                        msg = '订单状态修改成功，并全部发送了到达提醒';
+                    }
+                    else{
+                        msg = '订单状态修改成功，但有' + (orderIds.length - data.res.length - data.already.length) + '个未发送到达提醒';
+                    }
+                    utils.alert(msg);
+                    location.reload();
+                }
+                else{
+                    utils.alert(data.res);
+                }
+            }, 'json');
+        }else{
+            $.post('/manage/admin/tuan_orders/send_by_pys_stores', {"ids": orderIds}, function(data){
+                if(data.success){
+                    var msg;
+                    if(orderIds.length == data.res.length){
+                        msg = '订单状态修改成功，并全部发送了发货提醒';
+                    }
+                    else{
+                        msg = '订单状态修改成功，但有' + data.fail.length + '个未发送发货提醒';
+                    }
+                    utils.alert(msg);
+                    location.reload();
+                }
+                else{
+                    utils.alert(data.res);
+                }
+            }, 'json');
+        }
+
+    };
+    var shipToOurStoreDialog = $( ".ship-to-our-store-dialog" ).dialog({
+        autoOpen: false,
+        height: 300,
+        width: 350,
+        modal: true,
+        buttons: {
+            "取消": function() {shipToOurStoreDialog.dialog( "close" );},
+            "确认": function(){ourAddressSend();}
+        }
+    });
     $('.ship-to-pys-stores').click(function(){
         var orderIds = getCheckedOrderIds();
         if(orderIds.length == 0){
             utils.alert('请先选择自有自提点的待发货订单');
             return;
         }
-
-        if(!confirm("您选择" + orderIds.length + "个订单，会向用户发送到货提醒，是否继续？")){
-            return;
-        }
-        $.post('/manage/admin/tuan_orders/ship_to_pys_stores', {"ids": orderIds}, function(data){
-            if(data.success){
-                var msg;
-                if(orderIds.length == data.res.length){
-                    msg = '订单状态修改成功，并全部发送了到货提醒';
-                }
-                else{
-                    msg = '订单状态修改成功，但有' + (orderIds.length - data.res.length) + '个未发送到货提醒';
-                }
-                utils.alert(msg);
-                location.reload();
-            }
-            else{
-                utils.alert(data.res);
-            }
-        }, 'json');
+        shipToOurStoreDialog.dialog( "open" );
     });
 
     function send_refund_message(order_id,refund_money,creator,refund_mark,total_price,order_status){

@@ -357,7 +357,7 @@
             ?>
     <tr data-order-id="{{$order[Order][id]}}" data-offline-store-id="{{$offline_store[OfflineStore][id]}}" class="order">
         <td>
-          {{if ($order['Order']['type'] == 5 || $order['Order']['type'] == 6) && $order['Order']['status']== 1}}
+          {{if ($order['Order']['type'] == 5 || $order['Order']['type'] == 6) && ($order['Order']['status']== 1|| $order['Order']['status'] == 2)}}
             <input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids" {{$offline_store['OfflineStore']['type'] == 1 ? "" : "disabled='disabled'"}}>
           {{else}}
             <input type="hidden" value="{{$order['Order']['id']}}" name="offline_order_ids" disabled="disabled">
@@ -476,5 +476,19 @@
     </form>
 </div>
 
+<div class="ship-to-our-store-dialog" title="自有自提点发货">
+    <p class="text-warning">发消息的同时会修改状态，不会重复发送消息</p>
+    <form class="ship-to-our-store-form form-inline">
+        <div>
+            <input type="radio" name="optionsRadios" id="optionsRadios1" value="0" checked>
+            发送发货提醒
+        </div>
+        <br />
+        <div>
+            <input type="radio" name="optionsRadios" id="optionsRadios2" value="1">
+            发送到货提醒
+        </div>
+    </form>
+</div>
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
-{{$this->Html->script(array('manage/tuan/tuan_orders.js?v5.1'))}}
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v5.2'))}}
