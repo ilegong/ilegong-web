@@ -316,7 +316,7 @@ class TuanController extends AppController
 
     public function admin_query_by_product()
     {
-        $product_id = $_REQUEST['product_id'];
+        $product_id = !empty($_REQUEST['product_id']) ? $_REQUEST['product_id'] : -1;
         $order_status = empty($_REQUEST['order_status']) ? -1 : $_REQUEST['order_status'];
         $order_type = empty($_REQUEST['order_type']) ? -1 : $_REQUEST['order_type'];
         $send_date_start = $_REQUEST['send_date_start'];
