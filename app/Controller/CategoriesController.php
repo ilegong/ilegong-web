@@ -222,9 +222,9 @@ class CategoriesController extends AppController {
             $this->set('tagId',RECOMMEND_TAG_ID);
         }
         if(parent::is_weixin()){
-            $this->wexin_share_datas();
-            $this->set('is_weixin',true);
+            $this->wexin_share_datas($tryings);
         }
+        $this->set('is_weixin',true);
         $this->set('tryings',$tryings);
         $this->set('hideFooter',true);
         $this->set('op_cate', OP_CATE_HOME);
@@ -837,7 +837,7 @@ class CategoriesController extends AppController {
     }
 
     private function wexin_share_datas($tryings=null){
-        if(empty($tryings)){
+        if(!empty($tryings)){
             $trying = $tryings[0];
             $title = ($trying['ProductTry']['price']/100).'元秒杀'.$trying['ProductTry']['spec'].$trying['ProductTry']['product_name'].'赶紧快来枪';
             $to_friend_title = $title;
@@ -847,7 +847,7 @@ class CategoriesController extends AppController {
         }else{
             $to_friend_title = '朋友说-朋友间分享优质美食的平台';
             $to_timeline_title = '朋友说-朋友间分享优质美食的平台';
-            $recommend_products = $this->load_products_by_tagid(RECOMMEND_TAG_ID,'Product.name, Product.coverimg',1,60);
+            $recommend_products = $this->load_products_by_tagid(3,'Product.name, Product.coverimg',1,6);
             $first_p = array_shift($recommend_products);
             $share_imag_url = $first_p['Product']['coverimg'];
             $p_names = Hash::extract($recommend_products,'{n}.Product.name');
