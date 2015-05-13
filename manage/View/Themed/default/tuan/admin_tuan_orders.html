@@ -456,6 +456,9 @@
           {{if !empty($offline_store) && $offline_store['OfflineStore']['type'] == 0 && $order['Order']['status']== 1 && $order['Order']['type']== 5}}
               <button type="button" class="ship-to-haolinju-store btn btn-primary">发提货码</button>
           {{/if}}
+            {{if empty($offline_store) && $order['Order']['status']== 1}}
+            <button type="button" class="input-ship-code btn btn-primary">回填快递单号</button>
+            {{/if}}
           {{if in_array($order['Order']['status'],array(1,2,3,9,16,4,14))}}
               <button type="button" class="btn btn-default refund-button"  data-order_id="{{$order['Order']['id']}}" data-order_creator="{{$order['Order']['creator']}}"  data-total_price = "{{$order['Order']['total_price']}}">退款</button>
           {{/if}}
@@ -532,6 +535,16 @@
         </div>
     </form>
 </div>
+<div class="input-ship-code-dialog" title="回填快递单号">
+        <div class="well">
+            <select class="ship-type-select">
+                <option value="-1">快递类型</option>
+                {{loop $ship_type $id $type}}
+                <option value="{{$id}}">{{$type}}</option>
+                {{/loop}}
+            </select>
+            <input type="text" width="80px;" name="order-ship-code" placeholder="快递单号">
+        </div>
+</div>
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
-{{$this->Html->script(array('manage/tuan/tuan_orders.js?v5.3'))}}
-{{$this->Html->script(array('manage/tuan/tuan_orders.js?v5.5'))}}
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v5.6'))}}

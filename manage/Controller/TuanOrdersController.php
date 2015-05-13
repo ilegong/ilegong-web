@@ -283,4 +283,69 @@ class TuanOrdersController extends AppController{
             echo json_encode(array('success' => true, 'res' => $order['Order']['id']));
         }
     }
+    public function admin_input_ordinary_ship_code(){
+        $this->autoRender = false;
+		$order_id = $_REQUEST['orderId'];
+		$ship_type = $_REQUEST['shipType'];
+        $ship_code = $_REQUEST['shipCode'];
+		if(empty($order_id) || empty($ship_type) || empty($ship_code)){
+			echo json_encode(array('success'=>false,'res'=>'参数错误'));
+			exit;
+		}
+        $order_info = $this->Order->find('first', array(
+            'conditions' => array('id' => $order_id, 'status' => ORDER_STATUS_PAID),
+        ));
+
+		if(empty($order_info)){
+			echo json_encode(array('success'=>false,'res'=>'订单状态不正确'));
+			exit;
+		}
+        $update_status =  $this->Order->updateAll(array('status'=> ORDER_STATUS_SHIPPED,'ship_code'=>"'".addslashes($ship_code)."'",'ship_type'=>$ship_type,
+            'lastupdator'=> 0),array('id'=>$order_id));
+        //add weixin message
+        if($update_status){
+            $oauth_bind = $this->Oauthbind->find('first', array(
+                'conditions' => array( 'user_id' => $order_info['Order']['creator'], 'source' => oauth_wx_source()),
+                'fields' => array('user_id', 'oauth_openid')
+            ));
+            if(!empty($oauth_bind)){
+                $good = $this->get_order_good_info($order_id);
+                $ship_type_list = ShipAddress::ship_type_list();
+                $post_data = array(
+                    "touser" => $oauth_bind['Oauthbind']['oauth_openid'],
+                    "template_id" => '87uu4CmlZT-xlZGO45T_XTHiFYAWHQaLv94iGuH-Ke4',
+                    "url" => WX_HOST . '/orders/detail/' . $order_id,
+                    "topcolor" => "#FF0000",
+                    "data" => array(
+                        "first" => array("value" => "亲，您的特产已经从家乡启程啦。"),
+                        "keyword1" => array("value" => $ship_type_list[$ship_type]),
+                        "keyword2" => array("value" => $ship_code),
+                        "keyword3" => array("value" => $good['good_info']),
+                        "keyword4" => array("value" => $good['good_number']),
+                        "remark" => array("value" => "点击查看订单详情。", "color" => "#FF8800")
+                    )
+                );
+                if(send_weixin_message($post_data)){
+                    echo json_encode(array('success' => true, 'res' => '订单状态已更新，微信模版消息发送成功'));
+                }else{
+                    $this->log("ship code B2C: failed to send weixin message for express".$order_info['Order']['id']);
+                    echo json_encode(array('success' => true, 'res' => '订单状态已更新，模版消息发送失败'));
+                }
+            }else{
+                echo json_encode(array('success' => true, 'res' => '订单状态已更新'));
+            }
+        }
+	}
+    public function get_order_good_info($order_id){
+        $info ='';
+        $number =0;
+        $this->loadModel('Cart');
+        $carts = $this->Cart->find('all',array(
+            'conditions'=>array('order_id' => $order_id)));
+        foreach($carts as $cart){
+            $info = $info.$cart['Cart']['name'].'x'.$cart['Cart']['num'];
+            $number +=$cart['Cart']['num'];
+        }
+        return array("good_info"=>$info,"good_number"=>$number);
+    }
 }

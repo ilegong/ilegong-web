@@ -9,6 +9,11 @@ class TuanController extends AppController
     /**
      * query tuan orders
      */
+    public function beforeFilter(){
+        parent::beforeFilter();
+        $ship_types = $this->_get_ship_types();
+        $this->set('ship_type', $ship_types);
+    }
     public function admin_tuan_orders()
     {
         $team_id = $_REQUEST['team_id'];
@@ -811,6 +816,11 @@ class TuanController extends AppController
         $this->set('order_status', $order_status);
         $this->set('query_type', 'byOfflineStore');
         $this->render("admin_tuan_orders");
+    }
+    public function _get_ship_types(){
+        $shipTypes = ShipAddress::ship_types();
+        $ship_types = Hash::combine($shipTypes, '{n}.id', '{n}.name');
+        return $ship_types;
     }
 
     public function _query_b2c_paid_not_send_count(){

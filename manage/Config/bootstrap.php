@@ -275,3 +275,41 @@ class TuanShip{
         return $ships[$id]['code'];
     }
 }
+class ShipAddress {
+    /**
+     * @return array keyed with ship type id, value is array of fields for the ship type
+     */
+    public static function ship_type_list() {
+        $ship_types = ShipAddress::ship_types();
+        if (is_array($ship_types)) {
+            return Hash::combine($ship_types, '{n}.id', '{n}.name');
+        } else {
+            return false;
+        }
+    }
+
+    public function get_all_ship_info() {
+        $ship_types = ShipAddress::ship_types();
+        $ship_type_list = Hash::combine($ship_types, '{n}.company', '{n}.name', '{n}.id');
+        return $ship_type_list;
+    }
+
+    /**
+     * @return array keyed with ship type id, value is array of fields for the ship type
+     */
+    public static function ship_types() {
+        $shipTypesJson = Cache::read('_shiptypes');
+        if (empty($shipTypesJson)) {
+            $shipTypeModel = ClassRegistry::init('ShipType');
+            $shipTypes = $shipTypeModel->find('all', array(
+                'conditions' => array(
+                    'deleted' => 0
+                )
+            ));
+            $shipTypes = Hash::combine($shipTypes, '{n}.ShipType.id', '{n}.ShipType');
+            $shipTypesJson = json_encode($shipTypes);
+            Cache::write('_shiptypes', $shipTypesJson);
+        }
+        return json_decode($shipTypesJson, true);
+    }
+}

@@ -222,7 +222,7 @@ $(document).ready(function(){
                 }
                 shipToHaolinju(haolinjuOrderIdInput.val(), true, haolinjuCodeInput.val());
             }
-        }
+        };
         var shipToHaolinju = function(orderId, sendWeixinMessage, haolinjuCode){
             $.post('/manage/admin/tuan_orders/ship_to_haolinju_store', {orderId: orderId, sendWeixinMessage: sendWeixinMessage, haolinjuCode: haolinjuCode}, function(data){
                 if(data.success){
@@ -241,7 +241,8 @@ $(document).ready(function(){
                 }
                 $('.table-bordered tbody tr').remove('[data-order-id='+ orderId +']');
             },'json')
-        }
+        };
+
         var shipToHaolinjuStoreDialog = $( ".ship-to-haolinju-store-dialog" ).dialog({
           autoOpen: false,
           height: 300,
@@ -263,14 +264,52 @@ $(document).ready(function(){
           else{
               haolinjuCodeInput.attr('disabled', 'disabled');
           }
-        })
+        });
         $( ".ship-to-haolinju-store" ).click(function() {
             var orderId = $(this).parents('tr').data('order-id');
             haolinjuOrderIdInput.val(orderId);
             shipToHaolinjuStoreDialog.dialog( "open" );
         });
     }
-
+    (function(){
+        var shipTypeSelect = $('.ship-type-select');
+        var shipCodeInput = $("input[name=order-ship-code]");
+        var orderId = 0;
+        var inputshipCode = function(orderId, type, code){
+            $.post('/manage/admin/tuan_orders/input_ordinary_ship_code', {orderId: orderId, shipType: type, shipCode: code}, function(data){
+                if(data.success){
+                    utils.alert(data.res);
+                    inputShipCodeDialog.dialog( "close" );
+                }
+                else{
+                    utils.alert('订单修改失败: ' + data.res);
+                }
+                $('.table-bordered tbody tr').remove('[data-order-id='+ orderId +']');
+            },'json')
+        };
+        var inputShipCodeDialog = $( ".input-ship-code-dialog" ).dialog({
+            autoOpen: false,
+            height: 200,
+            width: 350,
+            modal: true,
+            buttons: {
+                "取消": function() {inputShipCodeDialog.dialog( "close" );},
+                "确认发货": function(){
+                    var shipCode = shipCodeInput.val();
+                    var shipType = shipTypeSelect.val();
+                    if(shipCode.length>0 &&  shipType != -1){
+                        inputshipCode(orderId, shipType, shipCode);
+                    }else{
+                        alert('请检查回填信息');
+                    }
+                }
+            }
+        });
+        $( ".input-ship-code" ).click(function() {
+            orderId = $(this).parents('tr').data('order-id');
+            inputShipCodeDialog.dialog( "open" );
+        });
+    })();
     activateTab($('.nav-tabs').data('query-type'));
     iUtils.initSelectBox($('.order-status'));
     iUtils.initSelectBox($('.order-types'));
