@@ -255,7 +255,7 @@ class ReferController extends AppController {
         $orderStatus = array(ORDER_STATUS_PAID,ORDER_STATUS_CONFIRMED,ORDER_STATUS_COMMENT,ORDER_STATUS_DONE,ORDER_STATUS_RECEIVED,ORDER_STATUS_SHIPPED);
         $order_count = $this->Order->find('count',array('conditions' => array('creator' => $uid,'status'=> $orderStatus)));
         $comment_count = $this->OrderComment->find('count',array('conditions'=>array('user_id' => $uid,'status'=>PUBLISH_YES)));
-        if($order_count>=3&&$comment_count>=3){
+        if($order_count>=1&&$comment_count>=1){
             $this->set('can_recommend',true);
         }else{
             $this->set('order_count',$order_count);
