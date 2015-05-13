@@ -70,9 +70,10 @@
                         <li>
                             <span class="gray title mr12 spec_label" style="float:left;">{{$label}}:</span>
                             <span class="border" style="display: block;overflow: hidden;padding-bottom: 10px;">
-                            <?php foreach($values as $vaLabel){?>
-                                <span class="mr12 border spec_item" item-label="{{$label}}">
+                            <?php foreach($values as $index => $vaLabel){?>
+                                <span class="mr12 border spec_item {{if $index == 0}}spec_item_selected cur{{/if}}" item-label="{{$label}}">
                                     {{$vaLabel}}
+                                    <div class="focus"></div>
                                 </span>
                                 <?php } ?>
                             </span>
@@ -87,9 +88,10 @@
                         <li>
                             <span class="gray title mr12" style="float:left;">送货日期:</span>
                             <span class="border" style="display: block;overflow: hidden;">
-                            <?php foreach($consignment_dates as $date){?>
-                                <span class="mr12 border spec_item" item-label="SD" data-val="{{$date['id']}}" data-send-date="{{$date['send_date']}}">
+                            <?php foreach($consignment_dates as $index => $date){?>
+                                <span class="mr12 border spec_item {{if $index == 0}}spec_item_selected cur{{/if}}" item-label="SD" data-val="{{$date['id']}}" data-send-date="{{$date['send_date']}}">
                                     {{$date['date']}}
+                                    <div class="focus"></div>
                                 </span>
                                 <?php } ?>
                             </span>
@@ -104,7 +106,10 @@
                                     <span class="gray title mr12" style="float:left;">方式:</span>
                                     <span class="border">
                                         {{loop $ship_settings $index $ship_set}}
-                                            <span class="mr12 border {{if $index==0}}cur tuan_way_selected{{/if}}" way-label="{{$ship_set['ProductShipSetting']['code']}}" way-id="{{$ship_set['ProductShipSetting']['id']}}">{{$ship_set['ProductShipSetting']['name']}}{{if $ship_set['ProductShipSetting']['ship_fee'] > 0}}({{$ship_set['ProductShipSetting']['ship_fee']}}元邮费){{/if}}</span>
+                                            <span class="mr12 border {{if $index==0}}cur tuan_way_selected{{/if}}" way-label="{{$ship_set['ProductShipSetting']['code']}}" way-id="{{$ship_set['ProductShipSetting']['id']}}">
+                                                {{$ship_set['ProductShipSetting']['name']}}{{if $ship_set['ProductShipSetting']['ship_fee'] > 0}}({{$ship_set['ProductShipSetting']['ship_fee']}}元邮费){{/if}}
+                                                <div class="focus"></div>
+                                            </span>
                                         {{/loop}}
                                     </span>
                                 </li>
@@ -297,8 +302,6 @@
 
 <script>
     $(document).ready(function(){
-
-        var $sd_date = $('span[item-label="sd"]');
 
         function get_spec_group(){
             var $selected_spec = $('span.spec_item_selected[item-label!="SD"]');

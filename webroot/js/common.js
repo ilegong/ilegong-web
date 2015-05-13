@@ -1265,12 +1265,6 @@ $(document).ready(function () {
 
 	$('span.spec_item').click(function (ev) {
 		var $this = $(this);
-		var $focus = $('div.focus',$this);
-		if($focus.length){
-			$focus.remove();
-		}else{
-			$('<div class="focus"></div>').appendTo($this);
-		}
 		$this.toggleClass('spec_item_selected').toggleClass('cur');
 		$('span.spec_item[item-label="' + $this.attr('item-label') + '"]').not($this).removeClass('spec_item_selected').removeClass('cur');
         //reset product price

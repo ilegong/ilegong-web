@@ -58,9 +58,10 @@
             <li>
                 <span class="gray title mr12 spec_label" style="float:left;">{{$label}}:</span>
                             <span class="border" style="display: block;overflow: hidden;">
-                            <?php foreach($values as $vaLabel){?>
-                                <span class="mr12 border spec_item" item-label="{{$label}}">
+                            <?php foreach($values as $index=>$vaLabel){?>
+                                <span class="mr12 border spec_item {{if $index==0}}spec_item_selected cur{{/if}}" item-label="{{$label}}">
                                     {{$vaLabel}}
+                                    <div class="focus"></div>
                                 </span>
                                 <?php } ?>
                             </span>
@@ -72,8 +73,9 @@
                 <span class="gray title mr12" style="float:left;">送货日期:</span>
                         <span class="border" style="display: block;overflow: hidden;">
                         <?php foreach($consignment_dates as $date){?>
-                            <span class="mr12 border spec_item" item-label="SD" data-val="{{$date['id']}}" data-send-date="{{$date['send_date']}}">
+                            <span class="mr12 border spec_item {{if $index==0}}spec_item_selected cur{{/if}}" item-label="SD" data-val="{{$date['id']}}" data-send-date="{{$date['send_date']}}">
                                 {{$date['date']}}
+                                <div class="focus"></div>
                             </span>
                             <?php } ?>
                         </span>
