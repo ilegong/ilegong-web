@@ -41,6 +41,7 @@ class TuanTeamsController extends AppController{
             $offline_store_id = $tuan_team['offline_store_id'];
             $tuan_team['offline_store_location_long'] = $offline_store[$offline_store_id]['location_long'];
             $tuan_team['offline_store_location_lat'] =$offline_store[$offline_store_id]['location_lat'];
+            $tuan_team['offline_store_name'] = $offline_store[$offline_store_id]['name'];
         }
         unset($tuan_team);
         $this->log('tuan_team'.json_encode($tuan_teams[1]));
