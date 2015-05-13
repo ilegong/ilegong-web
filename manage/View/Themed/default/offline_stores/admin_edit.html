@@ -64,7 +64,17 @@
         <input type="text" class="form-control" name="data[OfflineStore][location_lat]" value="{{$offline_store[OfflineStore][location_lat]}}"/>
       </div>
     </div>
-
+    <div class="form-group">
+        <label class="col-sm-2 control-label">发布</label>
+        <div class="col-sm-9">
+            <label class="radio-inline">
+                <input type="radio" name="data[OfflineStore][deleted]" value="0" {{if $offline_store['OfflineStore']['deleted']==0}}checked="checked"{{/if}}>是
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="data[OfflineStore][deleted]" value="1" {{if $offline_store['OfflineStore']['deleted']==1}}checked="checked"{{/if}}> 否
+            </label>
+        </div>
+    </div>
     <div class="form-group">
       <div class="col-sm-12 col-sm-offset-2">
         <a href="/manage/admin/offline_stores/index" class="btn btn-default">取消</a>

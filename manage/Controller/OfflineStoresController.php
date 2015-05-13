@@ -9,6 +9,7 @@ class OfflineStoresController extends AppController{
 
         $area_id = isset($_REQUEST['area_id'])?$_REQUEST['area_id']:-1;
         $type = isset($_REQUEST['type'])?$_REQUEST['type']:-1;
+        $deleted =  isset($_REQUEST['deleted'])?$_REQUEST['deleted']:false;
         $con = array();
         if($area_id != -1){
             $con['area_id'] = $area_id;
@@ -16,7 +17,7 @@ class OfflineStoresController extends AppController{
         if($type != -1){
             $con['type'] = $type;
         }
-        $con['deleted'] = 0;
+        $con['deleted'] = $deleted == false?0:1;
         $offline_stores = $this->OfflineStore->find('all', array(
             'conditions' => $con
         ));
