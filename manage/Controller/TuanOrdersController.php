@@ -3,7 +3,7 @@ class TuanOrdersController extends AppController{
 
     var $name = 'TuanOrders';
 
-    var $uses = array('Order', 'TuanTeam', 'TuanBuying', 'Location', 'TuanProduct', 'OfflineStore', 'Oauthbind', 'OrderMessage');
+    var $uses = array('Order', 'TuanTeam', 'TuanBuying', 'Location', 'TuanProduct', 'OfflineStore', 'Oauthbind', 'OrderMessage', 'User');
 
     public function admin_ship_to_pys_stores(){
         $this->autoRender = false;
@@ -81,6 +81,8 @@ class TuanOrdersController extends AppController{
             }else{
                 $this->log("ship to pys stores: failed to send weixin message for order ".$order['Order']['id']);
                 $fail[] = $order['Order']['id'];
+                $msg = "亲，您订购的".$tuan_products[$order['Order']['member_id']]['alias']."已经到达".$offline_store['OfflineStore']['alias']."自提点，生鲜娇贵，请尽快取货哈。感谢您的支持";
+                $this->_send_phone_msg($order['Order']['creator'], $order['Order']['consignee_mobilephone'], $msg);
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 1, 'type'=>'py-reach'));
             }
         }
@@ -139,6 +141,8 @@ class TuanOrdersController extends AppController{
                 $success[] = $order['Order']['id'];
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 0, 'type'=>'py-send-out'));
             }else{
+                $msg = "亲，您订购的".$tuan_products[$order['Order']['member_id']]['alias']."已经在路上啦，大概下午五点前后到达，亲不要着急，到达后，我们会第一时间通知你。";
+                $this->_send_phone_msg($order['Order']['creator'], $order['Order']['consignee_mobilephone'], $msg);
                 $this->log("ship to pys stores: failed to send weixin message for order ".$order['Order']['id']);
                 $fail[] = $order['Order']['id'];
             }
@@ -347,5 +351,23 @@ class TuanOrdersController extends AppController{
             $number +=$cart['Cart']['num'];
         }
         return array("good_info"=>$info,"good_number"=>$number);
+    }
+    public function _send_phone_msg($order_creator, $consignee_mobilephone, $msg){
+        $mobilephone = '';
+        if(empty($consignee_mobilephone)){
+            $user_info = $this->User->find('first', array(
+                'conditions' => array('id' => $order_creator),
+                'fields' => array('id','mobilephone')
+            ));
+            $user_mobilephone = $user_info['User']['mobilephone'];
+            if(!empty($user_mobilephone )){
+                $mobilephone = $user_mobilephone;
+            }
+        }else{
+            $mobilephone = $consignee_mobilephone;
+        }
+        if(!empty($mobilephone)){
+            message_send($msg, $mobilephone);
+        }
     }
 }
