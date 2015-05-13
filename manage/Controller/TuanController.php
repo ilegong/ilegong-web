@@ -734,6 +734,18 @@ class TuanController extends AppController
             $product_count = $result[0][0]['sum(num)'];
         }
 
+        //total_money
+        $total_money = 0;
+        if(!empty($orders)){
+            foreach ($orders as $o) {
+                $o_status = $o['Order']['status'];
+                if ($o_status == 1 || $o_status == 2 || $o_status == 3) {
+                    $total_money = $total_money + $o['Order']['total_all_price'];
+                }
+            }
+            $this->set('total_order_money', $total_money);
+        }
+
         // brands
         if (!empty($p_ids)) {
             $join_conditions = array(
