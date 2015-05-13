@@ -347,7 +347,9 @@
     <?php
               $tuan_buying = $tuan_buys[$order['Order']['member_id']];
               $tuan_team = $tuan_teams[$tuan_buying['tuan_id']];
-              $offline_store = $offline_stores[$order['Order']['consignee_id']];
+              if(!empty($order['Order']['ship_mark'])){
+                $offline_store = $offline_stores[$order['Order']['consignee_id']];
+              }
           ?>
     {{loop $order_carts[$order['Order']['id']] $index $cart}}
     <?php
