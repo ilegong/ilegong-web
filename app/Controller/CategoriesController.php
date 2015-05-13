@@ -847,7 +847,7 @@ class CategoriesController extends AppController {
         }else{
             $to_friend_title = '朋友说-朋友间分享优质美食的平台';
             $to_timeline_title = '朋友说-朋友间分享优质美食的平台';
-            $recommend_products = $this->load_products_by_tagid(3,'Product.name, Product.coverimg',1,6);
+            $recommend_products = $this->load_products_by_tagid(RECOMMEND_TAG_ID,'Product.name, Product.coverimg',1,6);
             $first_p = array_shift($recommend_products);
             $share_imag_url = $first_p['Product']['coverimg'];
             $p_names = Hash::extract($recommend_products,'{n}.Product.name');
