@@ -67,11 +67,11 @@
                         <?php foreach($specs_map['choices'] as $label => $values) {
                         if(!empty($label) && !empty($values)){
                         ?>
-                        <li>
+                        <li class="good-spec">
                             <span class="gray title mr12 spec_label" style="float:left;">{{$label}}:</span>
                             <span class="border" style="display: block;overflow: hidden;padding-bottom: 10px;">
                             <?php foreach($values as $index => $vaLabel){?>
-                                <span class="mr12 border spec_item {{if $index == 0}}spec_item_selected cur{{/if}}" item-label="{{$label}}">
+                                <span class="mr12 border spec_item" item-label="{{$label}}">
                                     {{$vaLabel}}
                                     <div class="focus"></div>
                                 </span>
@@ -413,7 +413,7 @@
             $("[way-label]").not(that).removeClass('cur').removeClass('tuan_way_selected');
             var select_way = $('.cur.tuan_way_selected');
             $('#consign_way').text(select_way.text());
-        })
+        });
     });
 
 </script>

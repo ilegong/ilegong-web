@@ -55,11 +55,11 @@
             <?php foreach($specs_map['choices'] as $label => $values) {
             if(!empty($label) && !empty($values)){
             ?>
-            <li>
+            <li class="good-spec">
                 <span class="gray title mr12 spec_label" style="float:left;">{{$label}}:</span>
                             <span class="border" style="display: block;overflow: hidden;">
                             <?php foreach($values as $index=>$vaLabel){?>
-                                <span class="mr12 border spec_item {{if $index==0}}spec_item_selected cur{{/if}}" item-label="{{$label}}">
+                                <span class="mr12 border spec_item" item-label="{{$label}}">
                                     {{$vaLabel}}
                                     <div class="focus"></div>
                                 </span>

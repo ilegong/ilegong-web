@@ -27,5 +27,8 @@
 			effect: "fadeIn",
 			threshold : 100
 		});
+        $('li.good-spec').each(function(index,item){
+            $('span.spec_item',$(item)).first().trigger('click');
+        });
 	});
 </script>
