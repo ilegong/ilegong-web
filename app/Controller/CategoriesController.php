@@ -11,36 +11,7 @@ class CategoriesController extends AppController {
             echo $result;
             return;
         }
-        $this->loadModel('Product');
-
-        $productTag = $this->ProductTag->find('first', array('conditions' => array(
-            'id' => $tagId,
-            'published' => PUBLISH_YES
-        )));
-        $conditions = array('Product' .'.deleted'=>DELETED_NO, 'Product' .'.published'=>PUBLISH_YES);
-        $conditions['Product' . '.recommend >'] = 0;
-        $join_conditions = array(
-            array(
-                'table' => 'product_product_tags',
-                'alias' => 'Tag',
-                'conditions' => array(
-                    'Tag.product_id = Product.id',
-                    'Tag.tag_id' => $productTag['ProductTag']['id']
-                ),
-                'type' => 'RIGHT',
-            )
-        );
-        $orderBy = 'Tag.recommend desc, Product.recommend desc';
-        $page = 1;
-        $pagesize = 60;
-        $list = $this->Product->find('all', array(
-                'conditions' => $conditions,
-                'joins' => $join_conditions,
-                'order' => $orderBy,
-                'fields' => Product::PRODUCT_PUBLIC_FIELDS,
-                'limit' => $pagesize,
-                'page' => $page)
-        );
+        $list = $this->load_products_by_tagid($tagId);
         $brandIds = Hash::extract($list,'{n}.Product.brand_id');
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
         $productList = array();
@@ -60,15 +31,12 @@ class CategoriesController extends AppController {
     }
 
     public function tag($tagSlug = '') {
-
         if ($tagSlug == '') {
             $this->view();
             return;
         }
         $this->set('flagTag',$tagSlug);
         $current_cateid = -1;
-        $page = 1;
-        $pagesize = 60;
         $this->loadModel('ProductTag');
         $productTag = $this->ProductTag->find('first', array('conditions' => array(
             'slug' => $tagSlug,
@@ -79,46 +47,11 @@ class CategoriesController extends AppController {
             return;
         }
         //团购商品列表 不显示在分类页
-        $conditions = array('Product' .'.deleted'=>0, 'Product' .'.published'=>1);
         if(!$this->RequestHandler->isMobile()){
             $tuan_products = getTuanProducts();
             $exclude_pids = Hash::extract($tuan_products,'{n}.TuanProduct.product_id');
-            $conditions['not'] = array(
-              'Product.id' => $exclude_pids
-            );
         }
-        $conditions['Product' . '.recommend >'] = 0;
-        $join_conditions = array(
-            array(
-                'table' => 'product_product_tags',
-                'alias' => 'Tag',
-                'conditions' => array(
-                    'Tag.product_id = Product.id',
-                    'Tag.tag_id' => $productTag['ProductTag']['id']
-                ),
-                'type' => 'RIGHT',
-            )
-        );
-        $orderBy = 'Tag.recommend desc, Product.recommend desc';
-
-        $this->loadModel('Product');
-        $list = $this->Product->find('all', array(
-                'conditions' => $conditions,
-                'joins' => $join_conditions,
-                'order' => $orderBy,
-                'fields' => Product::PRODUCT_PUBLIC_FIELDS,
-                'limit' => $pagesize,
-                'page' => $page)
-        );
-        if ($page == 1 && count($list) < $pagesize) {
-            $total = count($list);
-        } else {
-            $total = $this->{$data_model}->find('count', array(
-                'conditions' => $conditions,
-                'joins' => $join_conditions
-            ));
-        }
-
+        $list = $this->load_products_by_tagid($productTag['ProductTag']['id'],Product::PRODUCT_PUBLIC_FIELDS,1,60,$exclude_pids);
         $productList = array();
         $brandIds = array();
         foreach ($list as $val) {
@@ -137,23 +70,19 @@ class CategoriesController extends AppController {
         $specTags = $this->findTagsByIds($specTagIds);
         $specTags = Hash::combine($specTags,'{n}.ProductTag.id','{n}.ProductTag');
         $this->set('spec_tags',$specTags);
-
         $this->pageTitle = $productTag['ProductTag']['name'];
         $navigation = $this->readOrLoadAndCacheNavigations($current_cateid, $this->Category);
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
         $this->set('sub_title', $productTag['ProductTag']['name']);
         $this->set('tag', $productTag['ProductTag']);
         $this->set('brands', $mappedBrands);
-        $this->set('total', $total);
         $this->set('current_cateid', $current_cateid);
         $this->set('category_control_name', 'products');
         $this->set('navigations', $navigation);
         $this->set('data_list', $productList);
         $this->set('withBrandInfo', true);
         $this->set('page_title',$this->pageTitle);
-
         $this->set('op_cate', OP_CATE_HOME);
-
         $this->set('_serialize', array('brands', 'data_list', 'sub_title'));
         $this->set('history',$_REQUEST['history']);
 
@@ -166,19 +95,15 @@ class CategoriesController extends AppController {
     }
 
     public function special_list($slug) {
-
         $current_cateid = -1;
         $this->loadModel('SpecialList');
         $specialList = $this->SpecialList->find('first', array('conditions' => array(
             'slug' => $slug,
             'published' => 1
         )));
-
         if (!empty($specialList)) {
-
             $limit = $specialList['SpecialList']['showed_count'];
             $limit = $limit ? $limit : 100;
-
             $join_conditions = array(
                 array(
                     'table' => 'product_specials',
@@ -191,7 +116,6 @@ class CategoriesController extends AppController {
             );
             $orderBy = 'Special.recommend desc, Product.recommend desc';
             $conditions = array('Product.deleted'=>0, 'Product.published'=>1, 'Special.published' => 1, 'Special.special_id' => $specialList['SpecialList']['id']);
-
             $this->loadModel('Product');
             $list = $this->Product->find('all', array(
                     'conditions' => $conditions,
@@ -296,6 +220,10 @@ class CategoriesController extends AppController {
             $this->set('tagId',$_REQUEST['tagId']);
         }else{
             $this->set('tagId',RECOMMEND_TAG_ID);
+        }
+        if(parent::is_weixin()){
+            $this->wexin_share_datas();
+            $this->set('is_weixin',true);
         }
         $this->set('tryings',$tryings);
         $this->set('hideFooter',true);
@@ -871,6 +799,64 @@ class CategoriesController extends AppController {
     private function brand_link($brand, $params = array()) {
         $url = (!empty($brand)) ? "/brands/" . date('Ymd', strtotime($brand['Brand']['created'])) . "/" . $brand['Brand']['slug'] . ".html" : '/';
         return $url;
+    }
+
+    private function load_products_by_tagid($tagId,$productFileds=null,$page=1,$pagesize=60,$excludePids = array()){
+        $this->loadModel('Product');
+        if($productFileds==null){
+            $productFileds = Product::PRODUCT_PUBLIC_FIELDS;
+        }
+        $conditions = array('Product' .'.deleted'=>DELETED_NO, 'Product' .'.published'=>PUBLISH_YES);
+        $conditions['Product' . '.recommend >'] = 0;
+        if(!empty($excludePids)){
+            $conditions['not'] = array(
+                'Product.id' => $excludePids
+            );
+        }
+        $join_conditions = array(
+            array(
+                'table' => 'product_product_tags',
+                'alias' => 'Tag',
+                'conditions' => array(
+                    'Tag.product_id = Product.id',
+                    'Tag.tag_id' => $tagId
+                ),
+                'type' => 'RIGHT',
+            )
+        );
+        $orderBy = 'Tag.recommend desc, Product.recommend desc';
+        $list = $this->Product->find('all', array(
+                'conditions' => $conditions,
+                'joins' => $join_conditions,
+                'order' => $orderBy,
+                'fields' => $productFileds,
+                'limit' => $pagesize,
+                'page' => $page)
+        );
+        return $list;
+    }
+
+    private function wexin_share_datas($tryings=null){
+        if(empty($tryings)){
+            $trying = $tryings[0];
+            $title = ($trying['ProductTry']['price']/100).'元秒杀'.$trying['ProductTry']['spec'].$trying['ProductTry']['product_name'].'赶紧快来枪';
+            $to_friend_title = $title;
+            $to_timeline_title = $title;
+            $share_imag_url = $trying['image'];
+            $desc = $trying['Product']['promote_name'];
+        }else{
+            $to_friend_title = '朋友说-朋友间分享优质美食的平台';
+            $to_timeline_title = '朋友说-朋友间分享优质美食的平台';
+            $recommend_products = $this->load_products_by_tagid(RECOMMEND_TAG_ID,'Product.name, Product.coverimg',1,60);
+            $first_p = array_shift($recommend_products);
+            $share_imag_url = $first_p['Product']['coverimg'];
+            $p_names = Hash::extract($recommend_products,'{n}.Product.name');
+            $desc = implode(',',$p_names).'……等你来抢~';
+        }
+        $this->set('to_timeline_title',$to_timeline_title);
+        $this->set('to_friend_title',$to_friend_title);
+        $this->set('share_imag_url',$share_imag_url);
+        $this->set('share_desc',$desc);
     }
 
 }  
