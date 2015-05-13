@@ -516,6 +516,7 @@ class TuanBuyingsController extends AppController{
             $consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN);
             $p_address = $_POST['address'];
             //to set ship fee
+            $way = ZITI_TAG;
             if($way_id!=0){
                 $shipSetting = $this->get_ship_setting($way_id,$pid,'Product');
                 if(empty($shipSetting)){
