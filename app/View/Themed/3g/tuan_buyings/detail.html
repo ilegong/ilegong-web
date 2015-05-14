@@ -286,7 +286,8 @@
             var refer = document.referrer;
             var href_1 = "/tuan_buyings/goods_tuans/";
             var href_2 = "/tuan_teams/info/";
-            if (refer.indexOf(href_1)<0&&refer.indexOf(href_2)<0){
+            var href_3 = "/refer/client/";
+            if (refer.indexOf(href_1)<0&&refer.indexOf(href_2)<0&&refer.indexOf(href_3)<0){
                 //window.location.href = '/tuan_teams/mei_shi_tuan.html';
                 window.location.href = '/';
             }else{
