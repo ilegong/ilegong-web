@@ -65,7 +65,7 @@ class TuanOrdersController extends AppController{
                 $product_name = $tuan_products[$order['Order']['member_id']]['alias'];
             }
             if($order['Order']['type']==6){
-                $product_name = $try_products[$order['Order']['member_id']]['product_name'].$try_products[$order['Order']['member_id']]['spec'];
+                $product_name = $try_products[$order['Order']['try_id']]['product_name'].$try_products[$order['Order']['try_id']]['spec'];
             }
             $offline_store = $offline_stores[$order['Order']['consignee_id']];
             $post_data = array(
@@ -137,7 +137,7 @@ class TuanOrdersController extends AppController{
                 $product_name = $tuan_products[$order['Order']['member_id']]['alias'];
             }
             if($order['Order']['type']==6){
-                $product_name = $try_products[$order['Order']['member_id']]['product_name'].$try_products[$order['Order']['member_id']]['spec'];
+                $product_name = $try_products[$order['Order']['try_id']]['product_name'].$try_products[$order['Order']['try_id']]['spec'];
             }
             $post_data = array(
                 "touser" => $oauth_binds[$order['Order']['creator']],
@@ -200,11 +200,11 @@ class TuanOrdersController extends AppController{
         foreach ($orders as $order) {
             if($order['Order']['type']==5){
                 //tuan buy product
-                $tryids[] = $order['Order']['member_id'];
+                $tuanbuyids[] = $order['Order']['member_id'];
             }
             if($order['Order']['type']==6){
                 //sec kill product
-                $tuanbuyids[] = $order['Order']['member_id'];
+                $tryids[] = $order['Order']['try_id'];
             }
         }
         $tryids = array_unique($tryids);
