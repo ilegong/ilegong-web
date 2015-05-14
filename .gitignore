@@ -5,5 +5,3 @@ webroot/files/*
 .idea
 .svn
 *.iml
-app/Config/database.php
-manage/Config/database.php
