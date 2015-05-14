@@ -193,33 +193,7 @@ class CategoriesController extends AppController {
         //add sec kill
         $this->loadModel('ProductTry');
         $this->loadModel('Product');
-        $tryings = $this->ProductTry->find_global_trying();
-        if (!empty($tryings)) {
-            $trying_result = array();
-            $try_pids = Hash::extract($tryings, '{n}.ProductTry.product_id');
-            $this->loadModel('TuanProduct');
-            $t_products = $this->TuanProduct->find('all',array(
-                'conditions' => array(
-                    'product_id' => $try_pids
-                )
-            ));
-            $t_products = Hash::combine($t_products,'{n}.TuanProduct.product_id','{n}.TuanProduct');
-            $tryProducts = $this->Product->find_products_by_ids($try_pids, array(), false);
-            if (!empty($tryProducts)) {
-                foreach($tryings as &$trying) {
-                    $pid = $trying['ProductTry']['product_id'];
-                    $prod = $tryProducts[$pid];
-                    if (!empty($prod)) {
-                        $trying['Product'] = $prod;
-                        $trying['image'] = $t_products[$pid]['list_img'];
-                        $trying_result[] = $trying;
-                    } else {
-                        unset($trying);
-                    }
-                }
-            }
-            $tryings = $trying_result;
-        }
+        $tryings = $this->_get_seckill_products();
         if($_REQUEST['tagId']){
             $this->set('tagId',$_REQUEST['tagId']);
         }else{
