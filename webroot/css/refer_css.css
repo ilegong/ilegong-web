@@ -48,14 +48,26 @@ input{ outline:none;}
 .tuijian_btn{ height: 44px; line-height: 44px; text-align: center; font-size: 1.1em; font-weight: bold; background-color:#c73c3c; width: 100%; text-decoration: none; color: #ffffff; display: block; position: fixed; bottom: 0; left: 0; z-index: 2;}
 .tuijian_btn:hover{background-color:#c73c3c;color: #ffffff;text-decoration: none;}
 .tuijian_btn:visited{background-color:#c73c3c;color: #ffffff;text-decoration: none;}
-.tuijian_login{ font-size: 1em;font-weight: bold; text-align:center; color: #ffffff; line-height: 20px; padding: 20% 5%; background-color: #29ac0e;}
-.tuijian_login_a{ display: block; margin: 10px; line-height: 44px; text-align: center; background-color: #29ac0e; color: #ffffff; border-radius: 3px; text-decoration: none; font-size: 1.1em; font-weight: bold;}
+.tuijian_login{ font-size: 1em; margin-bottom:10px; font-weight: bold; text-align:center; color: #ffffff; line-height: 20px; padding:15px 10px; background-color: #29ac0e;}
+.tuijian_login_a{ display: block; width: 65%; margin: 0 auto; margin-top: 20px; line-height: 40px; text-align: center; background-color: #ffa200; color: #ffffff; border-radius: 3px; text-decoration: none; font-size: 18px; font-weight: bold;}
+.tuijian_login_a span{ font-size: 14px;}
 .mytuijian_a{ color:#c73c3c; line-height: 24px; text-align: center; padding-top: 10px; display: block;}
-.mytuijian_a:hover{color:#c73c3c;text-decoration: none;}
-.mytuijian_a:visited{color:#c73c3c;text-decoration: none;}
 .tuijian_bg{ background-color: #c73c3c; color: #ffffff; padding: 5%; font-size: 1em; text-align: center; line-height: 25px; margin-bottom: 10px;}
-.tuijian_bg strong{ font-size: 1.2em;}
+.tuijian_bg strong{ font-size: 1.4em;}
 .tuijian_bg a{ display: block; background-color: #ffffff; line-height: 35px; width: 50%; margin: 0 auto; border-radius: 3px; color: #c73c3c; text-decoration: none; margin-top: 10px; font-weight: bold; font-size: 1.1em;}
+.tuijian_hoticon{ display: block; position: absolute; background-color:#c73c3c; color: #ffffff; width: 45px; height: 45px; border-radius: 45px; line-height: 45px; font-weight: bold; font-size: 1em; text-align:center; left: 0; top: 0;}
+
+.tuijian_goodlist{ padding-left: 10px;}
+.tuijian_goodlist a{display: block; color: #333333; text-decoration: none; width: 50%; float: left; font-size: 1em; margin-bottom: 10px;}
+.tuijian_goodlist a s{ display: block; margin-right: 10px;}
+.tuijian_goodlist a s img{ width: 100%;}
+.tuijian_goodlist label{font-weight: normal ;margin-bottom: 0;display: block; background-color: #ffffff; padding: 5px 10px; height: 35px; overflow: hidden; line-height: 16px; margin-right: 10px;}
+.tuijian_goodlist b{ display: block; background-color: #ffffff; padding: 0 10px 10px 10px; color: #ffa200; margin-right: 10px; padding-top: 3px;}
+.good_more{ display: block; color: #CC0000; font-weight: bold; padding: 5px 0 15px 0; text-align: center;}
+.good_more:hover{display: block; color: #CC0000; font-weight: bold; padding: 5px 0 15px 0; text-align: center;}
+.good_more:visited{display: block; color: #CC0000; font-weight: bold; padding: 5px 0 15px 0; text-align: center;}
+
+
 /*推荐商品*/
 .tuandetail_good{ padding:10px 0 0 10px;}
 .tuandetail_good .good{ padding: 0; margin: 0; display:block; text-decoration:none; color:#333333; float:left; width:50%; margin-bottom:10px; position:relative;}
@@ -63,13 +75,13 @@ input{ outline:none;}
 .tuandetail_good .good .tuandetail_img{ margin-right:10px; border:1px #eeeeee solid; border-bottom:0;}
 .tuandetail_good .good .tuandetail_img img{ width:100%;}
 .tuandetail_title{ background-color:#ffffff; color:#333333; padding:5px 8px 10px 8px; margin-right:10px; border:1px #eeeeee solid; border-top:0;}
-.tuandetail_title span{ display:block; line-height:14px; font-size:0.9em; height: 28px;}
+.tuandetail_title span{ display:block; line-height:14px; font-size:0.9em; height: 28px; overflow:hidden; text-overflow:ellipsis;}
 .tuandetail_title em{ display:block; color:#cccccc; font-style:normal;}
 .tuandetail_title em strong{ color:#ff9000;}
 .tuandetail_title em font{ font-size:0.9em; text-decoration:line-through;}
 .tuandetail_title a{ display: block; text-decoration: none; text-align: center; margin-top: 5px; line-height: 30px; border-radius: 3px;}
 .tuandetail_title a.exchangebtn{ background-color: #ffa200; color: #ffffff;}
-.tuandetail_title a.disabledbtn{ background-color:#acacac; color: #ffffff;}
+.tuandetail_title a.disabledbtn{ background-color:#dddddd; color: #ffffff;}
 .tuandetail_title s{ color:#c73c3c; text-decoration: none; display: block; padding-top: 3px;}
 .tuandetail_exchange{ text-align: center; font-size: 1.4em; color: #333333; font-weight: bold; padding: 15px 0; border-bottom: 1px #eeeeee solid; color: #c73c3c; background-color: #ffffff;}
 .tuandetail_usebtn{ display: block; line-height: 35px; text-align: center; background-color: #ffffff; color: #c73c3c; font-size: 1em; font-weight: bold; margin-right: 10px; border: 1px #eeeeee solid; border-top: 0;}

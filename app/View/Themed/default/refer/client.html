@@ -15,6 +15,29 @@
 {{else}}
 <div class="tuijian_bg"><strong>推荐好友下单成功</strong><br/>即可获得价值10元柴鸡蛋或酸奶！<br/><a href="/refer/index/{{$CurrentUser['id']}}.html">去推荐</a></div>
 {{/if}}
+<div class="clearfix tuijian_goodlist">
+    <a href="/products/20150428/yue_nan_jin_kou_hong_xin_huo_long_guo_2ge_zhuang.html">
+        <s><img src="{{$this->Html->assetUrl('/img/refer/good15.jpg')}}" border="0"/></s>
+        <label>越南进口红心火龙果  新鲜水果</label>
+        <b>¥14.90</b>
+    </a>
+    <a href="/products/20150427/Hai_Nan_Kong_Yun_Chu_Kou_Ji_Jin_Bo_Luo_2Tou_Zhuang_Yue_5Jin_Nong_Chang_Zhi_Cai.html">
+        <s><img src="{{$this->Html->assetUrl('/img/refer/good16.jpg')}}" border="0"/></s>
+        <label>海南空运出口级金菠萝 农场直采摘 新鲜直达！</label>
+        <b>¥35.00</b>
+    </a>
+    <a href="/products/20150429/hai_nan_kong_yun_xin_xian_mang_guo_jin_huang_mang_5jin_zhuang.html">
+        <s><img src="{{$this->Html->assetUrl('/img/refer/good17.jpg')}}" border="0"/></s>
+        <label>海南空运新鲜芒果-金煌芒</label>
+        <b>¥15.80</b>
+    </a>
+    <a href="/products/20150407/hai_nan_ye_zi_dong.html">
+        <s><img src="{{$this->Html->assetUrl('/img/refer/good18.jpg')}}" border="0"/></s>
+        <label>海南海口空运 纯天然 无添加 新鲜椰子冻700g/个  [仅限北京] </label>
+        <b>¥29.90</b>
+    </a>
+</div>
+<a href="#X" class="good_more">查看更多商品</a>
     <div class="tuijian" style="border-bottom: 0; margin-top: 0;">
         <h1>{{$ref_user['nickname']}}买过什么</h1>
         {{loop $product_comments $key $item}}

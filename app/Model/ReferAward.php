@@ -17,7 +17,9 @@ class ReferAward extends AppModel{
             'exchange_condition' => 298,
             'limit_num' => 1,
             'image' => '/img/refer/good12.jpg',
-            'url' => ''
+            'url' => '',
+            'order'=>1,
+            'hot'=>false
         ),
         '2' => array(
             'id' => 2,
@@ -26,7 +28,9 @@ class ReferAward extends AppModel{
             'exchange_condition' => 220,
             'limit_num' => 1,
             'image' => '/img/refer/good11.jpg',
-            'url' => ''
+            'url' => '',
+            'order'=>2,
+            'hot'=>false
         ),
         '3' => array(
             'id' => 3,
@@ -35,7 +39,9 @@ class ReferAward extends AppModel{
             'exchange_condition' => 32,
             'limit_num' => 5,
             'image' => '/img/refer/good10.jpg',
-            'url' => ''
+            'url' => '',
+            'order'=>5,
+            'hot'=>false
         ),
         '4' => array(
             'id' => 4,
@@ -44,7 +50,9 @@ class ReferAward extends AppModel{
             'exchange_condition' => 22,
             'limit_num' => 5,
             'image' => '/img/refer/good9.jpg',
-            'url' => ''
+            'url' => '',
+            'order'=>6,
+            'hot'=>false
         ),
         '5' => array(
             'id' => 5,
@@ -53,7 +61,9 @@ class ReferAward extends AppModel{
             'exchange_condition' => 15,
             'limit_num' => 10,
             'image' => '/img/refer/good6.jpg',
-            'url' => ''
+            'url' => '',
+            'order'=>7,
+            'hot'=>false
         ),
         '6' => array(
             'id' => 6,
@@ -62,7 +72,9 @@ class ReferAward extends AppModel{
             'exchange_condition' => 12,
             'limit_num' => 10,
             'image' => '/img/refer/good5.jpg',
-            'url' => ''
+            'url' => '',
+            'order'=>8,
+            'hot'=>false
         ),
         '7' => array(
             'id' => 7,
@@ -71,7 +83,9 @@ class ReferAward extends AppModel{
             'exchange_condition' => 16,
             'limit_num' => 20,
             'image' => '/img/refer/good7.jpg',
-            'url' => ''
+            'url' => '',
+            'order'=>9,
+            'hot'=>false
         ),
         '8' => array(
             'id' => 8,
@@ -80,34 +94,31 @@ class ReferAward extends AppModel{
             'exchange_condition' => 16,
             'limit_num' => 20,
             'image' => '/img/refer/good8.jpg',
-            'url' => ''
+            'url' => '',
+            'order'=>10,
+            'hot'=>false
         ),
         '9' => array(
             'id' => 9,
-            'name' => '海南空运出口级金菠萝 农场直采摘 新鲜直达 2个',
+            'name' => '海南空运出口级金菠萝农场直采摘 2个',
             'price' => 40,
             'exchange_condition' => 6,
             'limit_num' => 100,
             'image' => '/img/refer/good1.jpg',
-            'url' => ''
+            'url' => '',
+            'order'=>11,
+            'hot'=>false
         ),
         '10' => array(
             'id' => 10,
-            'name' => '海南海口空运 纯天然 无添加 新鲜椰子冻1个 700g/个',
+            'name' => '海南空运 无添加 新鲜椰子冻1个 700g/个',
             'price' => 40,
             'exchange_condition' => 6,
             'limit_num' => 100,
             'image' => '/img/refer/good2.jpg',
-            'url' => ''
-        ),
-        '11' => array(
-            'id' => 11,
-            'name' => '顺义杨姐家散养北油鸡柴鸡蛋24个',
-            'price' => 40,
-            'exchange_condition' => 6,
-            'limit_num' => 100,
-            'image' => '/img/refer/good3.jpg',
-            'url' => ''
+            'url' => '',
+            'order'=>12,
+            'hot'=>false
         ),
         '12' => array(
             'id' => 12,
@@ -116,7 +127,9 @@ class ReferAward extends AppModel{
             'exchange_condition' => 6,
             'limit_num' => 100,
             'image' => '/img/refer/good4.jpg',
-            'url' => ''
+            'url' => '',
+            'order'=>13,
+            'hot'=>false
         ),
         '13' => array(
             'id' => 13,
@@ -125,7 +138,9 @@ class ReferAward extends AppModel{
             'exchange_condition' => 1,
             'limit_num' => 0,
             'image' => '/img/refer/good13.jpg',
-            'url' => ''
+            'url' => '',
+            'order'=>4,
+            'hot'=>true
         ),
         '14' => array(
             'id' => 14,
@@ -134,11 +149,14 @@ class ReferAward extends AppModel{
             'exchange_condition' => 1,
             'limit_num' => 0,
             'image' => '/img/refer/good14.jpg',
-            'url' => ''
+            'url' => '',
+            'order'=>3,
+            'hot'=>true
         ),
     );
 
     public function getAllAward(){
+        usort($this->allAwards,'sort_award');
         return $this->allAwards;
     }
 

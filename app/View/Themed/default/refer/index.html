@@ -14,18 +14,16 @@
     <div class="clearfix tuandetail_good">
         {{loop $all_awards $index $item}}
             <div class="good">
+                {{if $item['hot']}}
+                    <p class="tuijian_hoticon">热门</p>
+                {{/if}}
                 <div class="tuandetail_img"><img src="{{$this->Html->assetUrl($item['image'])}}" /></div>
                 <div class="tuandetail_title">
                     <span>{{$item['name']}}</span>
-                    {{if $item['limit_num']==0}}
-                        <em><strong>不限份数</strong></em>
-                    {{else}}
-                        <em><strong>限{{$item['limit_num']}}份</strong></em>
-                    {{/if}}
                     {{if $available_count >= $item['exchange_condition']}}
                         <a href="#X" class="exchangebtn" data-id="{{$item['id']}}">立即兑换</a>
                     {{else}}
-                        <a href="#X" class="disabledbtn">暂不满足兑换</a>
+                        <a href="#X" class="disabledbtn"><em><strong>{{if $item['limit_num']==0}}不限份数{{else}}限{{$item['limit_num']}}份{{/if}}</strong></em></a>
                     {{/if}}
                     <s>推荐成功{{$item['exchange_condition']}}个好友即可兑换</s>
                 </div>
@@ -53,7 +51,7 @@
             <dd>5、奖品数量有限，先到先得，兑完即止</dd>
         </dl>
         <dl class="clearfix">
-            <dd>6、所推荐用户的平均消费金额必须大于15元</dd>
+            <dd>6、所推荐用户的平均消费金额必须大于5元</dd>
         </dl>
         <dl class="clearfix">
             <dd>7、工作人员和自提点、供应链合作伙伴不能参与活动</dd>
@@ -62,7 +60,10 @@
             <dd>8、任何不是由被邀请人正常下单、提货的情况，均视为作弊。 不论何种形式被判断为作弊，一经发现，立即取消邀请人活动资格</dd>
         </dl>
         <dl class="clearfix">
-            <dd>9、活动解释权归朋友说所有</dd>
+            <dd>9、活动解释权归朋友说所有，如有疑问加微信“killman”</dd>
+        </dl>
+        <dl class="clearfix">
+            <dd>10、如有疑问加微信“killman”咨询，回复不及时，请耐心等待！</dd>
         </dl>
     </div>
 </div>

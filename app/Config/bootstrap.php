@@ -1780,3 +1780,8 @@ function get_address($tuan_team, $offline_store){
 
     return $tuan_address;
 }
+
+function sort_award($a, $b) {
+    if ($a['order'] == $b['order']) return 0;
+    return ($a['order'] > $b['order']) ? 1 : -1;
+}
