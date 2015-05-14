@@ -71,6 +71,7 @@ class PlanHelperController extends AppController
 
         $data['Order']['creator'] = $user['User']['id'];
         $data['Order']['status'] = 2;
+        $data['Order']['ship_mark'] = 'ziti';
         $data['Order']['created'] = $date;
         $data['Order']['updated'] = $date;
         $data['Order']['pay_time'] = date('Y-m-d H:i:s', strtotime("+59 seconds"));
