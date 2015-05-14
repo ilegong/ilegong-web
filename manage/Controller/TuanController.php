@@ -207,7 +207,7 @@ class TuanController extends AppController
 
     public function admin_query_c2c_paid_not_send()
     {
-        //$conditions = array("Order.pay_time < CURDATE()");
+        $conditions['OR'] = array('DATE(Order.pay_time) <'=>date('Y-m-d'),'Order.pay_time' => null);
         $conditions['Order.type'] = ORDER_TYPE_DEF;
         $conditions['Order.status'] = ORDER_STATUS_PAID;
         $this->_query_orders($conditions, 'Order.updated');
