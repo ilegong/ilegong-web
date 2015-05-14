@@ -555,10 +555,10 @@ class TuanBuyingsController extends AppController{
                 $shop_id= $offline_store_id;
                 if(!empty($_POST['shop_id'])){
                     $shop_id= $_POST['shop_id'];
-//                    $offline_store = $this->OfflineStore->findById($shop_id);
-//                    if(!empty($offline_store)){
-//                        $address = get_address($tuan_info,$offline_store);
-//                    }
+                    $offline_store = $this->OfflineStore->findById($shop_id);
+                    if(!empty($offline_store)){
+                        $address = get_address($tuan_info,$offline_store);
+                    }
                 }
             }
             $tuan_consignees = $this->OrderConsignees->find('first', array(
