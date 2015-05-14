@@ -39,7 +39,8 @@ class TuanOrdersController extends AppController{
             return $validate_res;
         }
         $order_products = $this->_find_product_alias($orders);
-        $tuan_products = $order_products['$tuan_products'];
+        $this->log('send msg order products'.json_encode($order_products));
+        $tuan_products = $order_products['tuan_products'];
         $try_products = $order_products['try_products'];
         $user_ids = Hash::extract($orders, '{n}.Order.creator');
         $oauth_binds = $this->Oauthbind->find('list', array(
@@ -124,7 +125,7 @@ class TuanOrdersController extends AppController{
             'fields' => array('user_id', 'oauth_openid')
         ));
         $order_products = $this->_find_product_alias($orders);
-        $tuan_products = $order_products['$tuan_products'];
+        $tuan_products = $order_products['tuan_products'];
         $try_products = $order_products['try_products'];
         $this->log('ship to pys stores: set status to shipped for orders: '.json_encode($order_ids));
         $this->Order->updateAll(array('status' => ORDER_STATUS_SHIPPED),array('id' => $order_ids));
