@@ -64,20 +64,6 @@
         </ul>
         {{/loop}}
     </div>
-    <div class="tuijian_friend">
-        <div class="clearfix tuandetail_good">
-            {{loop $recommends $k $recom}}
-            <a href="{{product_link2($recom)}}">
-                <div class="tuandetail_img">{{$this->Html->image(small_thumb_link($recom['coverimg']))}}</div>
-                <div class="tuandetail_title">
-                    <span>{{$recom['name']}}</span>
-                    <em><strong>¥{{$this->Number->precision($recom['price'], 2)}}</strong>&nbsp;<font>¥{{$this->Number->precision($recom['original_price'], 2)}}</font></em>
-                </div>
-                <!--<b>团购</b>-->
-            </a>
-            {{/loop}}
-        </div>
-    </div>
 
     <!-- Root element of PhotoSwipe. Must have class pswp. -->
     <div class="pswp" tabindex="999" role="dialog" aria-hidden="true">

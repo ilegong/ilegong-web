@@ -118,9 +118,9 @@ class ReferController extends AppController {
         $product_comments = $this->build_comments($uid);
         $this->set('product_comments', $product_comments);
 
-        $recommC = $this->Components->load('ProductRecom');
-        $recommends = $recommC->recommend(0);
-        $this->set('recommends', $recommends);
+//        $recommC = $this->Components->load('ProductRecom');
+//        $recommends = $recommC->recommend(0);
+//        $this->set('recommends', $recommends);
     }
 
     public function add_got_notify() {
