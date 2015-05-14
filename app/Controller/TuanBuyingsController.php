@@ -548,6 +548,19 @@ class TuanBuyingsController extends AppController{
                     $this->log("post address is empty ".$tuan_id);
                 }
             }
+            $shop_id = 0;
+            if(empty($shipSetting)||strpos(TuanShip::get_ship_code($shipTypeId),ZITI_TAG)!==false){
+                //ziti
+                $offline_store_id = empty($tuan_info['TuanTeam']['offline_store_id'])?0:$tuan_info['TuanTeam']['offline_store_id'];
+                $shop_id= $offline_store_id;
+                if(!empty($_POST['shop_id'])){
+                    $shop_id= $_POST['shop_id'];
+//                    $offline_store = $this->OfflineStore->findById($shop_id);
+//                    if(!empty($offline_store)){
+//                        $address = get_address($tuan_info,$offline_store);
+//                    }
+                }
+            }
             $tuan_consignees = $this->OrderConsignees->find('first', array(
                 'conditions' => array('status' => STATUS_CONSIGNEES_TUAN, 'creator' => $uid),
                 'fields' => array('id')
@@ -556,15 +569,6 @@ class TuanBuyingsController extends AppController{
                 $consignees['id'] = $tuan_consignees['OrderConsignees']['id'];
             }else {
                 $consignees['creator'] = $uid;
-            }
-            $shop_id = 0;
-            if(empty($shipSetting)||strpos(TuanShip::get_ship_code($shipTypeId),ZITI_TAG)!==false){
-                //ziti
-                $offline_store_id = empty($tuan_info['TuanTeam']['offline_store_id'])?0:$tuan_info['TuanTeam']['offline_store_id'];
-                $shop_id= $offline_store_id;
-                if(!empty($_POST['shop_id'])){
-                    $shop_id= $_POST['shop_id'];
-                }
             }
             $this->OrderConsignees->save($consignees);
             if($tuan_sec=='true'){
