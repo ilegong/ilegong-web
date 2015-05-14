@@ -39,7 +39,6 @@ class TuanOrdersController extends AppController{
             return $validate_res;
         }
         $order_products = $this->_find_product_alias($orders);
-        $this->log('send msg order products'.json_encode($order_products));
         $tuan_products = $order_products['tuan_products'];
         $try_products = $order_products['try_products'];
         $user_ids = Hash::extract($orders, '{n}.Order.creator');
