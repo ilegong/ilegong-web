@@ -48,6 +48,13 @@
               </div>
             </div>
             <div class="form-group">
+                <label for="general_show" class="col-sm-2 control-label">支持普通购买</label>
+                <div class="col-sm-10">
+                    <input type="text" value="{{$tuanProduct['general_show']}}" name="data[TuanProduct][general_show]" class="form-control" id="general_show" placeholder="0">
+                    <div class="text-warning">默认是0不支持普通购买,1支持普通购买(注意只能填写0或1)</div>
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="list_url" class="col-sm-2 control-label">列表图片</label>
                 <div class="col-sm-10">
                     <input type="text" value="{{$tuanProduct['list_img']}}" name="data[TuanProduct][list_img]" class="form-control" id="list_url" placeholder="列表图片">
