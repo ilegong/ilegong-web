@@ -90,7 +90,7 @@ class TuanOrdersController extends AppController{
                 $fail[] = $order['Order']['id'];
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 1, 'type'=>'py-reach'));
             }
-            $msg = "亲，您订购的".$tuan_products[$order['Order']['member_id']]['alias']."已经到达".$offline_store['OfflineStore']['alias']."自提点，生鲜娇贵，请尽快取货哈。感谢您的支持";
+            $msg = "亲，您订购的".$product_name."已经到达".$offline_store['OfflineStore']['alias']."自提点，生鲜娇贵，请尽快取货哈。感谢您的支持";
             $this->_send_phone_msg($order['Order']['creator'], $order['Order']['consignee_mobilephone'], $msg, $wx_send_status);
         }
 
@@ -160,7 +160,7 @@ class TuanOrdersController extends AppController{
                 $this->log("ship to pys stores: failed to send weixin message for order ".$order['Order']['id']);
                 $fail[] = $order['Order']['id'];
             }
-            $msg = "亲，您订购的".$tuan_products[$order['Order']['member_id']]['alias']."已经在路上啦，大概下午五点前后到达，不要着急，到达后，我们会第一时间通知你。";
+            $msg = "亲，您订购的".$product_name."已经在路上啦，大概下午五点前后到达，不要着急，到达后，我们会第一时间通知你。";
             $this->_send_phone_msg($order['Order']['creator'], $order['Order']['consignee_mobilephone'], $msg, $wx_send_status);
         }
         echo json_encode(array('success' => true, 'res' => $success, 'fail' => $fail));
