@@ -38,26 +38,31 @@
     <h1>推荐规则</h1>
     <div class="tuijian_padding">
         <dl class="clearfix">
-            <dd><strong>推荐人满足的条件：</strong><br/>订单数≥1、评论数≥1，才可以推荐好友喔~~</dd>
-            <dd>
-                {{if $can_recommend}}
-                    <span style="display: block; float: left;">您已满足条件，可以分享本页面给好友喽！</span>
-                {{else}}
-                    {{if $order_count<1}}
-                        <span style="display: block; float: left;">您还需{{1-$order_count}}个订单，才可以邀请好友喔~~</span><a href="/">去购物</a>
-                    {{/if}}
-                    {{if $comment_count<3}}
-                        <span style="display: block; float: left;">您还需评价{{1-$comment_count}}个订单，才可以邀请好友喔~~</span><a href="/orders/mine.html?tab=comment">去评价</a>
-                    {{/if}}
-                {{/if}}
-            </dd>
+            <dd>1、活动时间：5月5日至6月30日23:59分</dd>
         </dl>
         <dl class="clearfix">
-            <dd><strong>被推荐人是首次在【朋友说】下单</strong></dd>
+            <dd>2、被邀请人应该尚未注册，且每人只能被邀请一次，收货人、收货人手机或者用户绑定手机号唯一视为同一用户</dd>
         </dl>
         <dl class="clearfix">
-            <dd><strong>被推荐人自提地区：</strong></dd>
-            <dd>回龙观、天通苑、北苑、西三旗、昌平县城、沙河等地区</dd>
+            <dd>3、邀请人应将被邀请人加入到微信美食群中，否则视为无效</dd>
+        </dl>
+        <dl class="clearfix">
+            <dd>4、被邀请人收货地址应在昌平区/顺义区。其他地区的收货人视为无效</dd>
+        </dl>
+        <dl class="clearfix">
+            <dd>5、奖品数量有限，先到先得，兑完即止</dd>
+        </dl>
+        <dl class="clearfix">
+            <dd>6、所推荐用户的平均消费金额必须大于15元</dd>
+        </dl>
+        <dl class="clearfix">
+            <dd>7、工作人员和自提点、供应链合作伙伴不能参与活动</dd>
+        </dl>
+        <dl class="clearfix">
+            <dd>8、任何不是由被邀请人正常下单、提货的情况，均视为作弊。 不论何种形式被判断为作弊，一经发现，立即取消邀请人活动资格</dd>
+        </dl>
+        <dl class="clearfix">
+            <dd>9、活动解释权归朋友说所有</dd>
         </dl>
     </div>
 </div>
