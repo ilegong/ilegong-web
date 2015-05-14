@@ -51,7 +51,7 @@ class CategoriesController extends AppController {
             $tuan_products = getTuanProducts();
             $exclude_pids = Hash::extract($tuan_products,'{n}.TuanProduct.product_id');
         }
-        $list = $this->load_products_by_tagid($productTag['ProductTag']['id'],Product::PRODUCT_PUBLIC_FIELDS,1,60,$exclude_pids);
+        $list = $this->load_products_by_tagid($productTag['ProductTag']['id'],null,1,60,$exclude_pids);
         $productList = array();
         $brandIds = array();
         foreach ($list as $val) {
