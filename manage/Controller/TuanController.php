@@ -220,7 +220,6 @@ class TuanController extends AppController
     {
         //$conditions['OR'] = array('DATE(Order.pay_time) <'=>date('Y-m-d'),'Order.pay_time' => null);
         $conditions = array('DATE(Order.created)'=>date('Y-m-d'));
-        $conditions['status'] = 1;
         $this->_query_orders($conditions, 'Order.updated');
 
         $this->set('query_type', 'ordersToday');
