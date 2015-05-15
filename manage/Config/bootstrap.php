@@ -313,3 +313,19 @@ class ShipAddress {
         return json_decode($shipTypesJson, true);
     }
 }
+
+function ziti_order_filter($var){
+    return $var['Order']['ship_mark'] == 'ziti';
+}
+function sfby_order_filter($var){
+    return $var['Order']['ship_mark'] == 'sfby';
+}
+function sfdf_order_filter($var){
+    return $var['Order']['ship_mark'] == 'sfdf';
+}
+function kuaidi_order_filter($var){
+    return $var['Order']['ship_mark'] == 'kuaidi';
+}
+function none_order_filter($var){
+    return $var['Order']['ship_mark'] == null;
+}
