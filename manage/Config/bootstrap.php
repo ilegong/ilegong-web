@@ -315,21 +315,29 @@ class ShipAddress {
 }
 
 function ziti_order_filter($var){
-    return $var['Order']['ship_mark'] == 'ziti';
+    return ($var['Order']['ship_mark'] == 'ziti')&&($var['Order']['type']==5||$var['Order']['type']==6);
 }
 function sfby_order_filter($var){
-    return $var['Order']['ship_mark'] == 'sfby';
+    return ($var['Order']['ship_mark'] == 'sfby')&&($var['Order']['type']==5||$var['Order']['type']==6);
 }
 function sfdf_order_filter($var){
-    return $var['Order']['ship_mark'] == 'sfdf';
+    return ($var['Order']['ship_mark'] == 'sfdf')&&($var['Order']['type']==5||$var['Order']['type']==6);
 }
 function kuaidi_order_filter($var){
-    return $var['Order']['ship_mark'] == 'kuaidi';
+    return ($var['Order']['ship_mark'] == 'kuaidi')&&($var['Order']['type']==5||$var['Order']['type']==6);
 }
 function none_order_filter($var){
     return ($var['Order']['ship_mark'] == null)&&($var['Order']['type']==5||$var['Order']['type']==6);
 }
 function c2c_order_filter($var){
     return ($var['Order']['type']!=5&&$var['Order']['type']!=6);
+}
+
+function pys_ziti_filter($var){
+    return $var['OfflineStore']['type']==1;
+}
+
+function hlj_ziti_filter($var){
+    return $var['OfflineStore']['type']==0;
 }
 

@@ -519,7 +519,7 @@ class TuanController extends AppController
             $brands = Hash::combine($brands, '{n}.Product.id', '{n}');
         }
 
-        $ship_mark_enum = array('ziti'=>array('name'=>'自提','style'=>'active'),'sfby'=>array('name'=>'顺丰包邮','style'=>'success'),'sfdf'=>array('name'=>'顺丰到付','style'=>'warning'),'kuaidi'=>array('name'=>'快递','style'=>'danger'),'none'=>array('name'=>'没有标注','style'=>'info'),'c2c'=>array('c2c订单','style'=>'info'));
+        $ship_mark_enum = array('ziti'=>array('name'=>'自提','style'=>'active'),'sfby'=>array('name'=>'顺丰包邮','style'=>'success'),'sfdf'=>array('name'=>'顺丰到付','style'=>'warning'),'kuaidi'=>array('name'=>'快递','style'=>'danger'),'none'=>array('name'=>'没有标注','style'=>'info'),'c2c'=>array('name'=>'c2c订单','style'=>'info'));
         $this->set('ship_mark_enum',$ship_mark_enum);
 
         $ziti_orders = array_filter($orders,'ziti_order_filter');
@@ -528,8 +528,9 @@ class TuanController extends AppController
         $kuaidi_orders = array_filter($orders,'kuaidi_order_filter');
         $c2c_orders = array_filter($orders,'c2c_order_filter');
         $none_orders = array_filter($orders,'none_order_filter');
-        $map_other_orders = array('sfby' => $sfby_orders,'sfdf'=>$sfdf_orders,'kuaidi' => $kuaidi_orders,'none'=>$none_orders,'c2c'=>$c2c_orders);
+        $map_other_orders = array('sfby' => $sfby_orders,'sfdf'=> $sfdf_orders,'kuaidi' => $kuaidi_orders,'none'=> $none_orders,'c2c'=> $c2c_orders);
         $map_ziti_orders = array();
+
         foreach($ziti_orders as $item){
            $consignee_id = $item['Order']['consignee_id'];
            if($consignee_id==null){
@@ -540,6 +541,13 @@ class TuanController extends AppController
            }
            $map_ziti_orders[$consignee_id][] = $item;
         }
+
+        $pys_ziti_point = array_filter($offline_stores,'pys_ziti_filter');
+        $hlj_ziti_point = array_filter($offline_stores,'hlj_ziti_filter');
+
+        $this->set('pys_ziti_point',$pys_ziti_point);
+        $this->set('hlj_ziti_point',$hlj_ziti_point);
+
 
         $this->set('map_ziti_orders',$map_ziti_orders);
         $this->set('map_other_orders',$map_other_orders);
