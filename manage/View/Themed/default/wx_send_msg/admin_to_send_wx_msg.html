@@ -1,0 +1,26 @@
+<div class="container">
+    <h1>发送微信图文信息</h1>
+    <hr/>
+    <div class="row">
+        <div class="form-group">
+            <label for="media_id">图文ID</label>
+            <input type="text" class="form-control" id="media_id" name="media_id" value="{{$media_id}}" placeholder="图文ID">
+        </div>
+        <button type="submit" id="post_msg" class="btn btn-default">提交</button>
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        $('#post_msg').on('click',function(e){
+            e.preventDefault();
+            var mediaId = $('#media_id').val();
+            $.post('/manage/admin/WxSendMsg/send_wx_msg',{"media_id":mediaId},function(data){
+                if(data['success']){
+                    alert('发送成功');
+                }else{
+                    alert('发送失败');
+                }
+            },'json');
+        });
+    });
+</script>
