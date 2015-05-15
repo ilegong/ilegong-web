@@ -327,5 +327,9 @@ function kuaidi_order_filter($var){
     return $var['Order']['ship_mark'] == 'kuaidi';
 }
 function none_order_filter($var){
-    return $var['Order']['ship_mark'] == null;
+    return ($var['Order']['ship_mark'] == null)&&($var['Order']['type']==5||$var['Order']['type']==6);
 }
+function c2c_order_filter($var){
+    return ($var['Order']['type']!=5&&$var['Order']['type']!=6);
+}
+

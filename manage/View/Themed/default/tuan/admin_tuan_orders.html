@@ -227,7 +227,7 @@
         {{else}}
             <tr class="{{$item['style']}}"><td colspan="23">{{$item['name']}}</td></tr>
             {{loop $map_ziti_orders $ship_id $current_orders}}
-                <tr>{{if !empty($offline_stores[$ship_id])}}<td class="success" colspan="5">{{$offline_stores[$ship_id]['OfflineStore']['alias']}}</td><td colspan="5">联系人 ：{{$offline_stores[$ship_id]['OfflineStore']['owner_name']}}</td><td colspan="5">联系电话 ：{{$offline_stores[$ship_id]['OfflineStore']['owner_phone']}}</td><td colspan="8">地址 ：{{$offline_stores[$ship_id]['OfflineStore']['name']}}</td>{{else}}<td class="danger" colspan="23">未知自提点</td>{{/if}}</tr>
+                <tr>{{if !empty($offline_stores[$ship_id])}}<td class="success" colspan="23">{{get_address(null,$offline_stores[$ship_id])}}</td>{{else}}<td class="danger" colspan="23">未知自提点</td>{{/if}}</tr>
                 {{template Elements/order_data_template}}
             {{/loop}}
         {{/if}}
