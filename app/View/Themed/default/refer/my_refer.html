@@ -44,18 +44,21 @@
     </li-->
 </ul>
 
-        <script>
-            $(document).ready(function(){
-                $('a[refer_id]').click(function(){
-                    var aBtn = $(this);
-                    if (aBtn.hasClass("disable")) {
-                        return;
-                    }
-                    var $refer_id = aBtn.attr('refer_id');
-                    $.post('/refer/add_got_notify?refer_id=' + $refer_id +'&'+ Math.random(), {}, function(data){
-                        aBtn.addClass("disable").text('待确认配货');
-                    });
-                    window.alert('正在确认中，请等待发货通知');
-                });
+<script>
+    $(document).ready(function(){
+        $('a[refer_id]').click(function(){
+            var aBtn = $(this);
+            if (aBtn.hasClass("disable")) {
+                return;
+            }
+            var $refer_id = aBtn.attr('refer_id');
+            $.post('/refer/add_got_notify?refer_id=' + $refer_id +'&'+ Math.random(), {}, function(data){
+                aBtn.addClass("disable").text('待确认配货');
             });
-        </script>
+            window.alert('正在确认中，请等待发货通知');
+        });
+    });
+</script>
+{{if $jWeixinOn}}
+    {{template Elements/wx_share_template}}
+{{/if}}

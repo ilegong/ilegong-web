@@ -81,3 +81,7 @@
 </div>
 
 {{$this->Html->script(array('/js/refer/refer.js?v3'))}}
+
+{{if $jWeixinOn}}
+    {{template Elements/wx_share_template}}
+{{/if}}
