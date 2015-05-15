@@ -567,6 +567,7 @@ class TuanBuyingsController extends AppController{
                         $ziti_consignees['id'] = $old_ziti_consignees['OrderConsignees']['id'];
                         $ziti_consignees['ziti_id'] = $offline_store['OfflineStore']['id'];
                         $ziti_consignees['ziti_type'] = $offline_store['OfflineStore']['type'];
+                        $ziti_consignees['status'] = STATUS_CONSIGNEES_TUAN_ZITI;
                         $this->OrderConsignees->save($ziti_consignees);
                     }
                 }
