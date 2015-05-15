@@ -3,11 +3,54 @@ class CategoriesController extends AppController {
 
     var $name = 'Categories';
 
-    public function getSeckills(){
+    public function api_seckills(){
         $this->autoRender=false;
 
         return json_encode($this->_get_seckill_products());
     }
+
+    public function api_tag_products($tagId){
+        $this->autoRender=false;
+        $result = Cache::read('api-tag-products-'.$tagId);
+        if(!empty($result)){
+            echo $result;
+            return;
+        }
+
+        $products = $this->load_products_by_tagid($tagId);
+        $products = Hash::combine($products, '{n}.Product.id', '{n}');
+
+        $brand_ids = array_unique(Hash::extract($products,'{n}.Product.brand_id'));
+        $brands = $this->findBrandsKeyedId($brand_ids, $mappedBrands);
+
+        $tuan_products = getTuanProducts();
+        $tuan_products = Hash::combine($tuan_products, '{n}.TuanProduct.product_id', '{n}');
+
+        $temp_products = array();
+        foreach($products as &$product){
+            $product_id = $product['Product']['id'];
+            if(array_key_exists($product_id, $tuan_products) && $tuan_products[$product_id]['TuanProduct']['general_show'] == 0){
+                $this->loadModel('TuanBuying');
+                $tuan_buying = $this->TuanBuying->find('first', array(
+                    'conditions' => array('pid' => $product_id, 'tuan_id'=>PYS_M_TUAN, 'published' => 1)
+                ));
+                if(!empty($tuan_buying)){
+                    $product['TuanBuying'] = $tuan_buying['TuanBuying'];
+                    $temp_products[] = $product;
+                }
+                $this->log('product '.$product_id.' is a tuan product');
+            }
+            else{
+                $this->log('product '.$product_id.' is a product');
+                $temp_products[] = $product;
+            }
+        }
+
+        $result = json_encode(array('products'=>$temp_products, 'brands'=>$brands));
+        Cache::write('api-tag-products-'.$tagId, $result);
+        echo $result;
+    }
+
     public function getTagProducts($tagId){
         $this->autoRender=false;
         $result = Cache::read('tag-products'.$tagId);
@@ -31,7 +74,6 @@ class CategoriesController extends AppController {
         $result = json_encode($result);
         Cache::write('tag-products'.$tagId,$result);
         echo $result;
-
     }
 
     public function tag($tagSlug = '') {
@@ -876,4 +918,4 @@ class CategoriesController extends AppController {
         }
         return $tryings;
     }
-}  
+}
