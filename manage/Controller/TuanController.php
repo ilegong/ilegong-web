@@ -531,7 +531,10 @@ class TuanController extends AppController
         $map_ziti_orders = array();
         foreach($ziti_orders as $item){
            $consignee_id = $item['Order']['consignee_id'];
-           if(!in_array($consignee_id,$map_ziti_orders)){
+           if($consignee_id==null){
+               $consignee_id=0;
+           }
+           if(!array_key_exists($consignee_id,$map_ziti_orders)){
                 $map_ziti_orders[$consignee_id] = array();
            }
            $map_ziti_orders[$consignee_id][] = $item;
