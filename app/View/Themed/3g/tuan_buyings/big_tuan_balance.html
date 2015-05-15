@@ -13,7 +13,7 @@
     <div class="clearfix conordertuan_adress">
 
     </div>
-    <P><span>已选自提点：<span id="chose_address" data-shop-id="" style="color:#333333"></span></span></P>
+    <P><span>已选自提点：<span id="chose_address" data-shop-id="{{$ziti_consignee_info['ziti_id']}}" data-area-id="{{$ziti_consignee_info['area']}}" style="color:#333333">{{$ziti_consignee_info['address']}}</span></span></P>
 </div>
 <div class="tuan_balance" data-tuanbuy-id="{{$tuan_buy_id}}" data-tuanteam-id="{{$tuan_id}}" data-way-id="{{$way_id}}">
     <div class="conordertuan_contact">
@@ -81,6 +81,11 @@
         var elements = bigBuy.generateZitiArea();
         $(".conordertuan_adress").html(elements);
         bigBuy.bindThickbox();
+        var $chose_address = $('#chose_address');
+        var $area_id = $chose_address.data('areaId');
+        if($area_id){
+            $('div.conordertuan_adress ul li a[area-id="'+$area_id+'"]]').addClass('cur');
+        }
     })
 </script>
 {{$this->Html->script(array('/js/thickbox.js?v1'));}}

@@ -289,14 +289,7 @@ class TuanBuyingsController extends AppController{
             'conditions' => array('id' => $product_brand['Product']['brand_id']),
             'fields' => array('name', 'slug')
         ));
-        $this->loadModel('OrderConsignees');
-        $consignee_info = $this->OrderConsignees->find('first', array(
-            'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN),
-            'fields' => array('name', 'address', 'mobilephone')
-        ));
-        if($consignee_info){
-            $this->set('consignee_info', $consignee_info['OrderConsignees']);
-        }
+        $this->set_old_consignees($uid);
         $this->set('try_id',$try_id);
         $this->set('ship_type',$ship_type);
         $this->set('buy_count',$Carts['Cart']['num']);
@@ -395,14 +388,7 @@ class TuanBuyingsController extends AppController{
             'conditions' => array('id' => $product_brand['Product']['brand_id']),
             'fields' => array('name', 'slug')
         ));
-        $this->loadModel('OrderConsignees');
-        $consignee_info = $this->OrderConsignees->find('first', array(
-            'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN),
-            'fields' => array('name', 'address', 'mobilephone')
-        ));
-        if($consignee_info){
-            $this->set('consignee_info', $consignee_info['OrderConsignees']);
-        }
+        $this->set_old_consignees($uid);
         //积分统计
         $this->loadModel('User');
         $score = $this->User->get_score($uid, true);
@@ -536,6 +522,17 @@ class TuanBuyingsController extends AppController{
                         if($shipFee > 0){
                             $total_price = $total_price+$shipFee;
                         }
+                        //save user custom address
+                        $tuan_consignees = $this->OrderConsignees->find('first', array(
+                            'conditions' => array('status' => STATUS_CONSIGNEES_TUAN, 'creator' => $uid),
+                            'fields' => array('id')
+                        ));
+                        if($tuan_consignees){
+                            $consignees['id'] = $tuan_consignees['OrderConsignees']['id'];
+                        }else {
+                            $consignees['creator'] = $uid;
+                        }
+                        $this->OrderConsignees->save($consignees);
                     }
                 }
                 $address = $p_address;
@@ -558,19 +555,23 @@ class TuanBuyingsController extends AppController{
                     $offline_store = $this->OfflineStore->findById($shop_id);
                     if(!empty($offline_store)){
                         $address = get_address($tuan_info,$offline_store);
+                        //save user ziti address
+                        $ziti_consignees = array();
+                        $old_ziti_consignees = $this->OrderConsignees->find('first', array(
+                            'conditions' => array('status' => STATUS_CONSIGNEES_TUAN_ZITI, 'creator' => $uid),
+                            'fields' => array('id')
+                        ));
+                        $ziti_consignees['area'] = $offline_store['OfflineStore']['area_id'];
+                        $ziti_consignees['address'] = $address;
+                        $ziti_consignees['creator'] = $uid;
+                        $ziti_consignees['id'] = $old_ziti_consignees['OrderConsignees']['id'];
+                        $ziti_consignees['ziti_id'] = $offline_store['OfflineStore']['id'];
+                        $ziti_consignees['ziti_type'] = $offline_store['OfflineStore']['type'];
+                        $this->OrderConsignees->save($ziti_consignees);
                     }
                 }
             }
-            $tuan_consignees = $this->OrderConsignees->find('first', array(
-                'conditions' => array('status' => STATUS_CONSIGNEES_TUAN, 'creator' => $uid),
-                'fields' => array('id')
-            ));
-            if($tuan_consignees){
-                $consignees['id'] = $tuan_consignees['OrderConsignees']['id'];
-            }else {
-                $consignees['creator'] = $uid;
-            }
-            $this->OrderConsignees->save($consignees);
+
             if($tuan_sec=='true'){
                 //remark order sec kill
                 $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, '秒杀',$shop_id);
@@ -780,5 +781,26 @@ class TuanBuyingsController extends AppController{
         return $shipSetting;
     }
 
+    private function set_old_consignees($uid,$shipSetting=null){
+        $this->loadModel('OrderConsignees');
+        $consignee_info = $this->OrderConsignees->find('first', array(
+            'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN),
+            'fields' => array('name', 'address', 'mobilephone')
+        ));
+        if(empty($shipSetting)||strpos(TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type']),ZITI_TAG)!==false){
+            $ziti_consignee_info = $this->OrderConsignees->find('first', array(
+                'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN_ZITI),
+                'fields' => array('area', 'ziti_id','address','ziti_type')
+            ));
+            if($ziti_consignee_info){
+                if(empty($shipSetting)||($shipSetting['ProductShipSetting']['val']==-1)||($shipSetting['ProductShipSetting']['val']==$ziti_consignee_info['OrderConsignees']['ziti_type'])){
+                    $this->set('ziti_consignee_info',$ziti_consignee_info);
+                }
+            }
+        }
+        if($consignee_info){
+            $this->set('consignee_info', $consignee_info['OrderConsignees']);
+        }
+    }
 }
 
