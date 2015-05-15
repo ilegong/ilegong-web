@@ -461,7 +461,7 @@ $(document).ready(function () {
                                     bootbox.alert(res.msg + ' ' + result.msg);
                                     //location.reload();
                                     $('td',$currentOperateOrder.closest('tr')).get(3).html('退款中');
-                                    $currentOperateOrder.remove();
+                                    refundOrderDialog.dialog('close');
                                 } else {
                                     bootbox.alert(result.msg);
                                 }

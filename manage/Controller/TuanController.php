@@ -218,7 +218,7 @@ class TuanController extends AppController
 
     public function admin_query_orders_today()
     {
-        $conditions = array("Order.pay_time >= CURDATE()");
+        $conditions = array('DATE(Order.pay_time) <'=>date('Y-m-d'),'Order.pay_time' => null);
         $this->_query_orders($conditions, 'Order.updated');
 
         $this->set('query_type', 'ordersToday');
