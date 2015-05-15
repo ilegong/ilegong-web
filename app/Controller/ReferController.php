@@ -52,7 +52,7 @@ class ReferController extends AppController {
 
         $this->init_award_info($uid);
         $this->set_user_recommend_condition($uid);
-
+        $this->set_wx_share_data();
         $this->pageTitle = $this->currentUser['nickname']. '向您推荐了【朋友说】, 朋友间分享健康美食的平台';
     }
 
@@ -117,7 +117,7 @@ class ReferController extends AppController {
 
         $product_comments = $this->build_comments($uid);
         $this->set('product_comments', $product_comments);
-
+        $this->set_wx_share_data();
 //        $recommC = $this->Components->load('ProductRecom');
 //        $recommends = $recommC->recommend(0);
 //        $this->set('recommends', $recommends);
@@ -142,7 +142,7 @@ class ReferController extends AppController {
             $m_users = Hash::combine($users, '{n}.User.id', '{n}.User');
             $this->set('m_users', $m_users);
         }
-
+        $this->set_wx_share_data();
         $this->pageTitle = '我推荐的用户';
     }
 
@@ -287,8 +287,7 @@ class ReferController extends AppController {
         return ($userReferSuccessCount-$allUseCount) >= $needCount;
     }
 
-    public function afterFilter(){
-        parent::afterFilter();
+    private function set_wx_share_data(){
         if(parent::is_weixin()){
             $title = $this->currentUser['nickname'].'向您推荐了【朋友说】，朋友间分享美食的平台';
             $this->set('to_timeline_title',$title);
@@ -297,6 +296,5 @@ class ReferController extends AppController {
             $this->set('share_imag_url','http://51daifan.sinaapp.com/img/refer/logo.jpg');
         }
     }
-
 
 }
