@@ -1116,6 +1116,7 @@ class UsersController extends AppController {
         $mobile_num = $_POST['mobile'];
         $msgCode = $this->Session->read('messageCode');
         $current_post_num = $this->Session->read('current_register_phone');
+        $bind_from = $_POST['from'];
         $codeLog = json_decode($msgCode, true);
         $user_info= array();
         $res = array();
@@ -1142,7 +1143,11 @@ class UsersController extends AppController {
             } else{
                 if ($this->User->save($user_info)) {
                     $this->Session->write('Auth.User.mobilephone',$mobile_num);
-                    $res = array('success'=> true, 'msg'=>'你的账号和手机号绑定成功');
+                    $result_msg = '你的账号和手机号绑定成功';
+                    if($bind_from=='refer'){
+                        $result_msg = $result_msg.',并获得100积分';
+                    }
+                    $res = array('success'=> true, 'msg'=>$result_msg);
 
                     $urM = ClassRegistry::init('Refer');
                     if($urM->be_referred_and_new($this->currentUser['id'])) {

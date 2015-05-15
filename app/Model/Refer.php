@@ -40,6 +40,7 @@ class Refer extends AppModel {
                 $scoreM = ClassRegistry::init('Score');
                 //默认给100积分
                 $scoreM->add_score_by_refer_bind(100, $uid, $nickname, $ref['Refer']['from']);
+                $scoreM->add_score_by_refer_bind_mobile(100, $uid, $ref['Refer']['from']);
             } else {
                 $this->log('error to update update_referred_bind');
             }

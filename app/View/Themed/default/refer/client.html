@@ -157,7 +157,7 @@
                 var $result = JSON.parse(data);
                 if ($result['success'] === true) {
                     if ($type == 'bind') {
-                        window.location.href = '/users/to_bind_mobile?ref_url=' + encodeURIComponent('/refer/client/{{$ref_user["id"]}}.html') + '&reason=' + encodeURIComponent('绑定手机号完成注册');
+                        window.location.href = '/users/to_bind_mobile?ref_url=' + encodeURIComponent('/refer/client/{{$ref_user["id"]}}.html') + '&reason=' + encodeURIComponent('绑定手机号完成注册')+'&from=refer';
                     } else if ($type == 'order') {
                         window.location.href = '/';
                     }
