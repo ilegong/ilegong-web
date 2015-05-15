@@ -140,7 +140,7 @@
     {{else}}
     {{if !$phone_bind}}
     <a href="javascript:;" type="bind" class="tuijian_login_a {{empty($refer)?'accept_done':''}}">{{empty($refer)?'接受邀请':''}}<span>[注册得100积分]</span></a>
-    {{elseif $receive_cnt <= 0}}
+    {{elseif $received_cnt <= 0}}
     <a href="javascript:;" type="order" class="tuijian_login_a {{empty($refer)?'accept_done':''}}">{{empty($refer)?'接受邀请':''}}<span>完成第一单</span></a>
     {{/if}}
     {{/if}}
