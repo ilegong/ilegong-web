@@ -519,7 +519,7 @@ class TuanController extends AppController
             $brands = Hash::combine($brands, '{n}.Product.id', '{n}');
         }
 
-        $ship_mark_enum = array('ziti'=>array('name'=>'自提','style'=>'active'),'sfby'=>array('name'=>'顺丰包邮','style'=>'success'),'sfdf'=>array('name'=>'顺丰到付','style'=>'warning'),'kuaidi'=>array('name'=>'快递','style'=>'danger'),'none'=>array('name'=>'没有标注','style'=>'info'),'c2c'=>array('name'=>'c2c订单','style'=>'info'));
+        $ship_mark_enum = array('ziti'=>array('name'=>'自提','style'=>'active'),'sfby'=>array('name'=>'顺丰包邮','style'=>'success'),'sfdf'=>array('name'=>'顺丰到付','style'=>'warning'),'kuaidi'=>array('name'=>'快递','style'=>'danger'),'c2c'=>array('name'=>'c2c订单','style'=>'info'),'none'=>array('name'=>'没有标注','style'=>'info'));
         $this->set('ship_mark_enum',$ship_mark_enum);
 
         $ziti_orders = array_filter($orders,'ziti_order_filter');
