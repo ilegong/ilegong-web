@@ -168,90 +168,83 @@ class ApiOrdersController extends AppController {
     }
 
     public function product_detail($pid) {
-
-        if (!empty($pid)) {
-            $this -> loadModel('ConsignmentDate');
-            $is_limit_ship = ClassRegistry::init('ShipPromotion')->is_limit_ship($pid);
-            $productM = ClassRegistry::init('Product');
-            $pro = $productM->findById($pid);
-            //&& $pro['Product']['published'] == PUBLISH_YES
-            if (!empty($pro) && $pro['Product']['deleted'] == DELETED_NO) {
-                unset($pro['Product']['content']);
-                unset($pro['Product']['saled']);
-                unset($pro['Product']['storage']);
-                unset($pro['Product']['views_count']);
-                unset($pro['Product']['cost_price']);
-                $pro['Product']['limit_ship']=$is_limit_ship;
-                //get specs from database
-                $specs_map = $this->ProductSpecGroup->get_product_spec_json($pid);
-                $pro['Product']['specs'] = json_encode($specs_map);
-                $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($pid,'spec_ids');
-                $pro['Product']['specs_group'] = json_encode($product_spec_group);
-                $brandM = ClassRegistry::init('Brand');
-                $brand = $brandM->findById($pro['Product']['brand_id']);
-                $this->set('brand', $brand);
-                $consign_dates = $this->ConsignmentDate->find('all',array(
-                    'conditions' => array(
-                        'product_id' => $pid,
-                        'published' => PUBLISH_YES
-                    ),
-                    'fields' => array(
-                        'id', 'send_date'
-                    )
-                ));
-                if(!empty($consign_dates)){
-                    $consign_dates = Hash::extract($consign_dates,'{n}.ConsignmentDate');
-                    $pro['Product']['consign_dates'] = $consign_dates;
-                }
-                $recommC = $this->Components->load('ProductRecom');
-                $recommends = $recommC->recommend($pid);
-
-                $this->set('product',$pro);
-                $this->set('recommends', $recommends);
-                $this->set('brand', $brand);
-
-
-                $specialListM = ClassRegistry::init('SpecialList');
-                $specialLists = $specialListM->has_special_list($pid);
-                if (!empty($specialLists)) {
-                    foreach ($specialLists as $specialList) {
-                        if ($specialList['type'] == 1) {
-                            $special = $specialList;
-                            break;
-                        }
-                    }
-                }
-                $currUid = $this->currentUser['id'];
-                if (!empty($special) && $special['special']['special_price'] >= 0) {
-                    $special_rg = array('start' => $special['start'], 'end' => $special['end']);
-                    //CHECK time limit!!!!
-                    list($afford_for_curr_user, $left_cur_user, $total_left) =
-                        calculate_afford($pid, $currUid, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
-                    $promo_name = $special['name'];
-                    $special_price = $special['special']['special_price'] / 100;
-                    App::uses('CakeNumber', 'Utility');
-                    $promo_desc = '￥'.CakeNumber::precision($special_price, 2);
-                    if ($special['special']['limit_total'] > 0) {
-                        $promo_desc .= ' 共限'.$special['special']['limit_total'].'件';
-                    }
-                    if ($special['special']['limit_per_user'] > 0) {
-                        $promo_desc .= ' 每人限'.$special['special']['limit_per_user'].'件';
-                    }
-                    if ($afford_for_curr_user) {
-                        ;
-                    } else {
-                        $promo_desc .=  '('. ($left_cur_user == 0 ? '您已买过' : '已售完') . ')';
-                    }
-                    $special = array('special_desc' => $promo_desc, 'special_name'=>$promo_name, 'special_slug'=>$special['slug']);
-                    $this->set('special', $special);
-                }
-            }
+        if (empty($pid)) {
+            $this->set('_serialize', array('product', 'recommends', 'brand','special'));
+            return;
         }
-        $this->set('_serialize', array('product', 'recommends', 'brand','special'));
+
+        $this->loadModel('Product');
+        $pro = $this->Product->findById($pid);
+
+        if (empty($pro) || $pro['Product']['deleted'] == DELETED_YES) {
+            $this->set('_serialize', array());
+            return;
+        }
+
+        foreach(array('content', 'saled', 'storage', 'views_count', 'cost_price') as $value){
+            unset($pro['Product'][$value]);
+        }
+
+        $this->loadModel('ConsignmentDate');
+        $this->loadModel('Brand');
+        $this->loadModel('ShipPromotion');
+        $this->loadModel('TuanProduct');
+
+        $is_limit_ship = $this->ShipPromotion->is_limit_ship($pid);
+        $pro['Product']['limit_ship']=$is_limit_ship;
+
+        //get specs from database
+        $specs_map = $this->ProductSpecGroup->get_product_spec_json($pid);
+        $pro['Product']['specs'] = json_encode($specs_map);
+        $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($pid,'spec_ids');
+        $pro['Product']['specs_group'] = json_encode($product_spec_group);
+
+        $consign_dates = $this->ConsignmentDate->find('all',array(
+            'conditions' => array(
+                'product_id' => $pid,
+                'published' => PUBLISH_YES
+            ),
+            'fields' => array(
+                'id', 'send_date'
+            )
+        ));
+        if(!empty($consign_dates)){
+            $consign_dates = Hash::extract($consign_dates,'{n}.ConsignmentDate');
+            $pro['Product']['consign_dates'] = $consign_dates;
+        }
+
+        // check
+        $tuan_product = $this->TuanProduct->find('first', array(
+            conditions => array(
+                'product_id' => $pid
+            )
+        ));
+        if(!empty($tuan_product) && $tuan_product['TuanProduct']['general_show'] == 0){
+            $this->loadModel('TuanBuying');
+            $this->loadModel('TuanTeam');
+            $this->loadModel('OfflineStore');
+
+            $tuan_buying = $this->TuanBuying->find('first', array(
+                'conditions' => array('pid' => $pid, 'tuan_id'=>PYS_M_TUAN, 'published' => 1)
+            ));
+            $tuan_team = $this->TuanTeam->findById($tuan_buying['TuanBuying']['tuan_id']);
+            $offline_store = $this->OfflineStore->findById($tuan_team['TuanTeam']['offline_store_id']);
+
+            $this->set('tuan_product', $tuan_product);
+            $this->set('tuan_buying', $tuan_buying);
+            $this->set('tuan_team', $tuan_team);
+            $this->set('offline_store', $offline_store);
+        }
+
+        $this->set('product',$pro);
+        $this->set('recommends', $this->Components->load('ProductRecom')->recommend($pid));
+        $this->set('brand', $this->Brand->findById($pro['Product']['brand_id']));
+        $this->set('special', $this->_get_special($pid, $this->currentUser['id']));
+
+        $this->set('_serialize', array('product', 'recommends', 'brand','special', 'tuan_product', 'tuan_buying', 'tuan_team', 'offline_store'));
     }
 
     public function product_content($pid) {
-
         if (!empty($pid)) {
             $productM = ClassRegistry::init('Product');
             $pro = $productM->findById($pid);
@@ -945,6 +938,44 @@ class ApiOrdersController extends AppController {
         ));
         $this->set('info', $article);
         $this->set('_serialize','info');
+    }
+
+    private function _get_special($pid, $current_user_id){
+        $specialListM = ClassRegistry::init('SpecialList');
+        $specialLists = $specialListM->has_special_list($pid);
+        if (!empty($specialLists)) {
+            foreach ($specialLists as $specialList) {
+                if ($specialList['type'] == 1) {
+                    $special = $specialList;
+                    break;
+                }
+            }
+        }
+
+        $special = array();
+        if (!empty($special) && $special['special']['special_price'] >= 0) {
+            $special_rg = array('start' => $special['start'], 'end' => $special['end']);
+            //CHECK time limit!!!!
+            list($afford_for_curr_user, $left_cur_user, $total_left) =
+                calculate_afford($pid, $current_user_id, $special['special']['limit_total'], $special['special']['limit_per_user'], $special_rg);
+            $promo_name = $special['name'];
+            $special_price = $special['special']['special_price'] / 100;
+            App::uses('CakeNumber', 'Utility');
+            $promo_desc = '￥'.CakeNumber::precision($special_price, 2);
+            if ($special['special']['limit_total'] > 0) {
+                $promo_desc .= ' 共限'.$special['special']['limit_total'].'件';
+            }
+            if ($special['special']['limit_per_user'] > 0) {
+                $promo_desc .= ' 每人限'.$special['special']['limit_per_user'].'件';
+            }
+            if ($afford_for_curr_user) {
+                ;
+            } else {
+                $promo_desc .=  '('. ($left_cur_user == 0 ? '您已买过' : '已售完') . ')';
+            }
+            $special = array('special_desc' => $promo_desc, 'special_name'=>$promo_name, 'special_slug'=>$special['slug']);
+        }
+        return $special;
     }
 
 
