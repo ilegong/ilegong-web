@@ -187,6 +187,7 @@ class Order extends AppModel {
                     }
                 }
             }
+            $this->update_refer($orderOwner,$orderId);
         }
         return $sold;
     }
@@ -363,5 +364,28 @@ class Order extends AppModel {
             $affectedRows = 0;
         }
         return array($result, $affectedRows);
+    }
+
+    function update_refer($user_id,$order_id){
+        $referM = ClassRegistry::init('Refer');
+        $refer = $referM->find('first',array(
+            'conditions'=>array(
+                'to'=>$user_id,
+                'first_order_id' => 0,
+                'first_order_done' => 0
+            ),
+            'fields' => array(
+                'id','from'
+            )
+        ));
+        if($refer){
+            if($referM->updateAll(array('first_order_done'=>1,'first_order_id'=>$order_id),array('id'=>$refer['refer']['id']))){
+                //add 900 score
+                $scoreM = ClassRegistry::init('Score');
+                $uM = ClassRegistry::init('User');
+                $user = $uM->find('first',array('conditions' => array('id' => $user_id)));
+                $scoreM->add_score_by_refer_user_first_order(900, $user_id, $user['User']['nickname'], $refer['Refer']['from']);
+            }
+        }
     }
 }

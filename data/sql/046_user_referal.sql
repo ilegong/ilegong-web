@@ -18,3 +18,6 @@ alter table cake_refers add bind_done tinyint default 0;
 alter table cake_refers add first_order_done tinyint default 0;
 alter table cake_refers add first_comment_done tinyint default 0;
 alter table cake_refers add got_notify tinyint default 0;
+
+ALTER TABLE `cake_refers`
+ADD COLUMN `first_order_id` INT NULL DEFAULT 0 AFTER `got_notify`;
