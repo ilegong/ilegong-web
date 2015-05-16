@@ -32,6 +32,12 @@ const OFFLINE_STORE_PYS=1;
 CONST PUBLISH_YES = 1;
 CONST PUBLISH_NO = 0;
 
+
+const PRODUCT_TUAN_TYPE = 0;
+const PRODUCT_TRY_TYPE = 1;
+
+
+
 define('MSG_API_KEY', 'api:key-fdb14217a00065ca1a47b8fcb597de0d'); //发短信密钥
 
 
@@ -312,6 +318,47 @@ class ShipAddress {
         }
         return json_decode($shipTypesJson, true);
     }
+}
+
+/**
+ * @param $open_id
+ * @param $title
+ * @param $product_name
+ * @param $tuan_leader_wx
+ * @param $remark
+ * @param $deatil_url
+ * @return bool
+ * 团购提示信息
+ */
+function send_tuan_tip_msg($open_id,$title,$product_name,$tuan_leader_wx,$remark,$deatil_url){
+    $post_data = array(
+        "touser" => $open_id,
+        "template_id" => 'BYtgM4U84etw2qbOyyZzR4FO8a-ddvjy8sgBiAQy64U',
+        "url" =>$deatil_url,
+        "topcolor" => "#FF0000",
+        "data" => array(
+            "first" => array("value" => $title),
+            "Pingou_ProductName" => array("value" => $product_name),
+            "Weixin_ID" => array("value" => $tuan_leader_wx),
+            "Remark" => array("value" => $remark, "color" => "#FF8800")
+        )
+    );
+    return send_weixin_message($post_data);
+}
+
+/**
+ * @param $pid
+ * @param $defUri
+ * @return string
+ */
+function product_link($pid, $defUri) {
+    $linkInCache = Cache::read('link_pro_' . $pid);
+    if (!empty($linkInCache)) {
+        return $linkInCache;
+    }
+    $pModel = ClassRegistry::init('Product');
+    $p = $pModel->findById($pid);
+    return product_link2($p, $defUri);
 }
 
 function ziti_order_filter($var){

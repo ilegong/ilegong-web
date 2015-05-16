@@ -1679,7 +1679,6 @@ function send_tuan_tip_msg($user_id,$title,$product_name,$tuan_leader_wx,$remark
         return send_weixin_message($post_data);
     }
     return false;
-
 }
 
 //weixin 分享签名
