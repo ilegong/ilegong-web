@@ -41,7 +41,7 @@
     </div>
     <div class="content" id="products-content" style="margin-bottom: 80px;">
         {{if $received_cnt > 0}}
-        <div class="refer_banner"><a href="/refer/index/{{$CurrentUser['id']}}.html"><img src="{{$this->Html->assetUrl('/img/refer/banner.gif?v5')}}" width="100%"/></a></div>
+        <div class="refer_banner"><a href="/refer/index/{{$CurrentUser['id']}}.html?_sl=mobile_index"><img src="{{$this->Html->assetUrl('/img/refer/banner.gif?v5')}}" width="100%"/></a></div>
         {{/if}}
         {{if !empty($tryings)}}
         <div class="tuandetail_seckill clearfix" id="seckill_product">
