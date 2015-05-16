@@ -14,7 +14,7 @@
                 <em class="fl">{{$m_users[$refer['Refer']['to']]['nickname']}}</em>
                 <b>
                     {{if $refer['Refer']['bind_done'] && $refer['Refer']['first_order_done']}}
-                        完成注册，第一单收货完成
+                        完成注册，第一单支付完成
                     {{elseif $refer['Refer']['bind_done']}}
                         完成了注册，等待完成第一单
                     {{elseif $refer['Refer']['first_order_done']}}
