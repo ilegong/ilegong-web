@@ -34,25 +34,21 @@ class Score extends AppModel {
 
     public function add_score_by_refer_user_first_order($score_change, $referral, $referral_name, $from_uid){
         $desc = '您推荐的用户"'.$referral_name.'"首次完成下单获得'.$score_change.'个积分';
-
         $this->save_score_log($from_uid, $score_change, SCORE_REFERRAL_FIRST_ORDER, json_encode(array('referral_id' => $referral)), $desc);
     }
 
     public function add_score_by_refer_bind($score_change, $referral, $referral_name, $from_uid) {
         $desc = '您推荐用户"'.$referral_name.'"完成注册获得'.$score_change.'个积分';
-
         $this->save_score_log($from_uid, $score_change, SCORE_REFERRAL_BIND_OK, json_encode(array('referral_id' => $referral)), $desc);
     }
 
-    public function add_score_by_refer_bind_mobile($score_change, $referral,$uid){
+    public function add_score_by_refer_bind_mobile($score_change, $referral, $uid){
         $desc = '您完成完成绑定手机号码获得'.$score_change.'个积分';
-
         $this->save_score_log($referral, $score_change, SCORE_REFERRAL_BIND_OK_TO, json_encode(array('refer_user_id' => $uid)), $desc);
     }
 
     public function add_score_by_refer_accept_order($score_change, $referral, $referral_name, $from_uid) {
         $desc = '您推荐的用户"'.$referral_name.'"完成第一单，您获得'.$score_change.'个积分，可去"推荐有礼"页面查看最新状态';
-
         $this->save_score_log($from_uid, $score_change, SCORE_REFERRAL_BIND_OK, json_encode(array('referral_id' => $referral)), $desc);
     }
 

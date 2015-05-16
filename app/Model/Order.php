@@ -384,7 +384,13 @@ class Order extends AppModel {
                 $scoreM = ClassRegistry::init('Score');
                 $uM = ClassRegistry::init('User');
                 $user = $uM->find('first',array('conditions' => array('id' => $user_id)));
-                $scoreM->add_score_by_refer_user_first_order(900, $user_id, $user['User']['nickname'], $refer['Refer']['from']);
+                if($scoreM->add_score_by_refer_user_first_order(900, $user_id, $user['User']['nickname'], $refer['Refer']['from'])){
+                    $userM = ClassRegistry::init('User');
+                    $userM->add_score($refer['Refer']['from'], 900);
+                    $this->log("add score: ".$refer['Refer']['from'].", 900, refer id".$refer['Refer']['id']);
+                }else{
+                    $this->log("user first order add score to ".$refer['Refer']['from'].'fail');
+                }
             }
         }
     }

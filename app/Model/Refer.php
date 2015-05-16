@@ -39,8 +39,21 @@ class Refer extends AppModel {
             if ($result)  {
                 $scoreM = ClassRegistry::init('Score');
                 //默认给100积分
-                $scoreM->add_score_by_refer_bind(100, $uid, $nickname, $ref['Refer']['from']);
-                $scoreM->add_score_by_refer_bind_mobile(1000, $uid, $ref['Refer']['from']);
+                if($scoreM->add_score_by_refer_bind(100, $uid, $nickname, $ref['Refer']['from'])) {
+                    $userM = ClassRegistry::init('User');
+                    $userM->add_score($ref['Refer']['from'], 100);
+                    $this->log("add score: ".$ref['Refer']['from'].", 100, refer id".$ref['Refer']['id']);
+                } else {
+                    $this->log("failed to add score for refer bind mobile refer".$ref['Refer']['id']);
+                }
+                if($scoreM->add_score_by_refer_bind_mobile(1000, $uid, $ref['Refer']['from'])){
+                    $userM = ClassRegistry::init('User');
+                    $userM->add_score($uid, 1000);
+                    $this->log("add score: ".$uid.", 100, refer id".$ref['Refer']['id']);
+                }else{
+                    $this->log("failed to add score for refer bind mobile referral".$ref['Refer']['id']);
+                }
+
             } else {
                 $this->log('error to update update_referred_bind');
             }
