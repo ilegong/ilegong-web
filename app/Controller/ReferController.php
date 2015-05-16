@@ -50,7 +50,7 @@ class ReferController extends AppController {
 //        $product_comments = $this->build_comments($uid);
 //        $this->set('product_comments', $product_comments);
 
-        $this->init_award_info($uid);
+        //$this->init_award_info($uid);
         $this->set_user_recommend_condition($uid);
         $this->set_wx_share_data();
         $this->pageTitle = $this->currentUser['nickname']. '向您推荐了【朋友说】, 朋友间分享健康美食的平台';
@@ -118,9 +118,6 @@ class ReferController extends AppController {
         $product_comments = $this->build_comments($uid);
         $this->set('product_comments', $product_comments);
         $this->set_wx_share_data();
-//        $recommC = $this->Components->load('ProductRecom');
-//        $recommends = $recommC->recommend(0);
-//        $this->set('recommends', $recommends);
     }
 
     public function add_got_notify() {

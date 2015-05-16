@@ -2,35 +2,13 @@
 <?php
     $available_count = $success_refers-$all_use_count;
 ?>
-<div class="tuijian_banner"><img src="{{$this->Html->assetUrl('/img/refer/banner.gif?v4')}}" ></div>
+<div class="tuijian_banner"><img src="{{$this->Html->assetUrl('/img/refer/banner.gif?v5')}}" ></div>
 <div class="tuijian">
     <h1>推荐流程</h1>
     {{$this->Html->image("/img/refer/process1.gif?v4")}}<br/>
-    {{$this->Html->image("/img/refer/process2.gif?v4")}}
+    {{$this->Html->image("/img/refer/process2.gif?v5")}}
 </div>
-<a href="/refer/my_refer.html" class="mytuijian_a">有<strong>{{$total_refers}}</strong>人接受了你的推荐，<strong>{{$success_refers}}</strong>人推荐成功<br/>剩余<strong>{{$available_count}}</strong>次兑换机会</a>
-<div class="tuijian" style="border-bottom: 0;">
-    <h1>奖品兑换</h1>
-    <div class="clearfix tuandetail_good">
-        {{loop $all_awards $index $item}}
-            <div class="good">
-                {{if $item['hot']}}
-                    <p class="tuijian_hoticon">热门</p>
-                {{/if}}
-                <div class="tuandetail_img"><img src="{{$this->Html->assetUrl($item['image'])}}" /></div>
-                <div class="tuandetail_title">
-                    <span>{{$item['name']}}</span>
-                    {{if $available_count >= $item['exchange_condition']}}
-                        <a href="#X" class="exchangebtn" data-id="{{$item['id']}}">立即兑换</a>
-                    {{else}}
-                        <a href="#X" class="disabledbtn"><em><strong>{{if $item['limit_num']==0}}不限份数{{else}}限{{$item['limit_num']}}份{{/if}}</strong></em></a>
-                    {{/if}}
-                    <s>推荐成功{{$item['exchange_condition']}}个好友即可兑换</s>
-                </div>
-            </div>
-        {{/loop}}
-    </div>
-</div>
+<a href="/refer/my_refer.html" class="mytuijian_a">有<strong>{{$total_refers}}</strong>人接受了你的推荐，<strong>{{$success_refers}}</strong>人推荐成功<br/></a>
 
 <div class="tuijian" style=" margin-bottom: 44px;">
     <h1>推荐规则</h1>
