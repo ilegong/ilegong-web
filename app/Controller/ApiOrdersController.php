@@ -221,20 +221,20 @@ class ApiOrdersController extends AppController {
         ));
         if(!empty($tuan_product) && $tuan_product['TuanProduct']['general_show'] == 0){
             $this->loadModel('TuanBuying');
-            $this->loadModel('TuanTeam');
-            $this->loadModel('OfflineStore');
 
             $tuan_buying = $this->TuanBuying->find('first', array(
                 'conditions' => array('pid' => $pid, 'tuan_id'=>PYS_M_TUAN, 'published' => 1)
             ));
-            $tuan_buying['TuanBuying']['status'] = $this->_get_tuan_buying_status($tuan_buying);
-            $tuan_team = $this->TuanTeam->findById($tuan_buying['TuanBuying']['tuan_id']);
-            $offline_store = $this->OfflineStore->findById($tuan_team['TuanTeam']['offline_store_id']);
+            if(!empty($tuan_buying)) {
+                $this->loadModel('TuanTeam');
 
-            $this->set('tuan_product', $tuan_product);
-            $this->set('tuan_buying', $tuan_buying);
-            $this->set('tuan_team', $tuan_team);
-            $this->set('offline_store', $offline_store);
+                $tuan_buying['TuanBuying']['status'] = $this->_get_tuan_buying_status($tuan_buying);
+                $tuan_team = $this->TuanTeam->findById($tuan_buying['TuanBuying']['tuan_id']);
+                $ship_settings = $this->_get_ship_settings($pid);
+                $upload_files = $this->_get_upload_files($pid);
+
+                $this->set('tuan', array('tuan_product' => $tuan_product, 'tuan_buying' => $tuan_buying, 'tuan_team' => $tuan_team, 'ship_settings' => $ship_settings, 'upload_files' => $upload_files));
+            }
         }
 
         $this->set('product',$pro);
@@ -242,7 +242,7 @@ class ApiOrdersController extends AppController {
         $this->set('brand', $this->Brand->findById($pro['Product']['brand_id']));
         $this->set('special', $this->_get_special($pid, $this->currentUser['id']));
 
-        $this->set('_serialize', array('product', 'recommends', 'brand','special', 'tuan_product', 'tuan_buying', 'tuan_team', 'offline_store'));
+        $this->set('_serialize', array('product', 'recommends', 'brand','special', 'tuan'));
     }
 
     public function product_content($pid) {
@@ -987,9 +987,42 @@ class ApiOrdersController extends AppController {
         if(strtotime($tuan_buying['TuanBuying']['end_time'] < time())){
             return 'finished';
         }
-        if($tuan_buying['TuanBuying']['max_num'] > 0 && $tuan_buying['TuanBuying']['end_time'] >= $tuan_buying['TuanBuying']['end_time']){
+        if($tuan_buying['TuanBuying']['max_num'] > 0 && $tuan_buying['TuanBuying']['sold_num'] >= $tuan_buying['TuanBuying']['max_num']){
             return 'finished';
         }
         return 'available';
+    }
+
+    private function _get_ship_settings($pid){
+        $this->loadModel('ProductShipSetting');
+        $ship_settings = $this->ProductShipSetting->find('all',array(
+            'conditions' => array(
+                'data_id' => $pid,
+                'data_type' => 'Product'
+            )
+        ));
+
+        $tuan_ship_types = TuanShip::get_all_tuan_ships();
+        foreach($ship_settings as &$ship_setting){
+            $type_id = $ship_setting['ProductShipSetting']['ship_type'];
+            $ship_setting['ProductShipSetting']['name'] = $tuan_ship_types[$type_id]['name'];
+            $ship_setting['ProductShipSetting']['code'] = $tuan_ship_types[$type_id]['code'];
+            if(strpos($tuan_ship_types[$type_id]['code'], ZITI_TAG)===false){
+                $ship_setting['ProductShipSetting']['ship_fee'] = intval($ship_setting['ProductShipSetting']['ship_val'])/100;
+            }
+        }
+        return $ship_settings;
+    }
+
+    private function _get_upload_files($pid){
+        $this->loadModel('Uploadfile');
+        return $this->Uploadfile->find('all', array(
+            'conditions' => array(
+                'modelclass' => 'Product',
+                'fieldname' =>'photo',
+                'data_id' => $pid
+            ),
+            'order'=> array('sortorder DESC')
+        ));
     }
 }
