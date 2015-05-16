@@ -227,6 +227,7 @@ class ApiOrdersController extends AppController {
             $tuan_buying = $this->TuanBuying->find('first', array(
                 'conditions' => array('pid' => $pid, 'tuan_id'=>PYS_M_TUAN, 'published' => 1)
             ));
+            $tuan_buying['TuanBuying']['status'] = $this->_get_tuan_buying_status($tuan_buying);
             $tuan_team = $this->TuanTeam->findById($tuan_buying['TuanBuying']['tuan_id']);
             $offline_store = $this->OfflineStore->findById($tuan_team['TuanTeam']['offline_store_id']);
 
@@ -519,7 +520,6 @@ class ApiOrdersController extends AppController {
     }
 
     public function balance() {
-
         $success = true;
         $postStr = file_get_contents('php://input');
         $data = json_decode(trim($postStr), true);
@@ -528,7 +528,6 @@ class ApiOrdersController extends AppController {
         //$couponCode = $data['coupon_code'];
         $remarks = $data['remarks'];
         if (!empty($pidList) && !empty($addressId)) {
-
             $this->loadModel('Cart');
             $this->loadModel('Product');
             $product_ids = array();
@@ -978,5 +977,19 @@ class ApiOrdersController extends AppController {
         return $special;
     }
 
-
+    private function _get_tuan_buying_status($tuan_buying){
+        if($tuan_buying['TuanBuying']['status'] == 1 || $tuan_buying['TuanBuying']['status'] == 11){
+            return 'finished';
+        }
+        if($tuan_buying['TuanBuying']['status'] == 2 || $tuan_buying['TuanBuying']['status'] == 21){
+            return 'canceled';
+        }
+        if(strtotime($tuan_buying['TuanBuying']['end_time'] < time())){
+            return 'finished';
+        }
+        if($tuan_buying['TuanBuying']['max_num'] > 0 && $tuan_buying['TuanBuying']['end_time'] >= $tuan_buying['TuanBuying']['end_time']){
+            return 'finished';
+        }
+        return 'available';
+    }
 }
