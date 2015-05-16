@@ -1145,7 +1145,7 @@ class UsersController extends AppController {
                     $this->Session->write('Auth.User.mobilephone',$mobile_num);
                     $result_msg = '你的账号和手机号绑定成功';
                     if($bind_from=='refer'){
-                        $result_msg = $result_msg.',并获得100积分';
+                        $result_msg = $result_msg.',并获得1000积分';
                     }
                     $res = array('success'=> true, 'msg'=>$result_msg);
 
