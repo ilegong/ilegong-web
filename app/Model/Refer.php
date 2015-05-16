@@ -46,10 +46,10 @@ class Refer extends AppModel {
                 } else {
                     $this->log("failed to add score for refer bind mobile refer".$ref['Refer']['id']);
                 }
-                $scoreM2 = ClassRegistry::init('Score');
-                if($scoreM2->add_score_by_refer_bind_mobile(1000, $uid, $ref['Refer']['from'])){
-                    $userM2 = ClassRegistry::init('User');
-                    $userM2->add_score($uid, 1000);
+                $scoreM->id=null;
+                if($scoreM->add_score_by_refer_bind_mobile(1000, $uid, $ref['Refer']['from'])){
+                    $userM = ClassRegistry::init('User');
+                    $userM->add_score($uid, 1000);
                     $this->log("add score: ".$uid.", 100, refer id".$ref['Refer']['id']);
                 }else{
                     $this->log("failed to add score for refer bind mobile referral".$ref['Refer']['id']);
