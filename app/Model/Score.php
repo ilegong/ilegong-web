@@ -38,7 +38,7 @@ class Score extends AppModel {
     }
 
     public function add_score_by_refer_bind($score_change, $referral, $referral_name, $from_uid) {
-        $desc = '您推荐用户"'.$referral_name.'"完成注册获得'.$score_change.'个积分';
+        $desc = '您推荐的用户"'.$referral_name.'"完成注册获得'.$score_change.'个积分';
         return $this->save_score_log($from_uid, $score_change, SCORE_REFERRAL_BIND_OK, json_encode(array('referral_id' => $referral)), $desc);
     }
 
