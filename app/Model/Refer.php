@@ -46,6 +46,7 @@ class Refer extends AppModel {
                 } else {
                     $this->log("failed to add score for refer bind mobile refer".$ref['Refer']['id']);
                 }
+                $scoreM = ClassRegistry::init('Score');
                 if($scoreM->add_score_by_refer_bind_mobile(1000, $uid, $ref['Refer']['from'])){
                     $userM = ClassRegistry::init('User');
                     $userM->add_score($uid, 1000);
