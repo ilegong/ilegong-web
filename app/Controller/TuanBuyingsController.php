@@ -784,24 +784,27 @@ class TuanBuyingsController extends AppController{
 
     private function set_old_consignees($uid,$shipSetting=null){
         $this->loadModel('OrderConsignees');
-        $consignee_info = $this->OrderConsignees->find('first', array(
-            'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN),
-            'fields' => array('name', 'address', 'mobilephone')
-        ));
-        if(empty($shipSetting)||strpos(TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type']),ZITI_TAG)!==false){
+        if(empty($shipSetting)||(TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type'])==ZITI_TAG)){
             $ziti_consignee_info = $this->OrderConsignees->find('first', array(
                 'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN_ZITI),
                 'fields' => array('area', 'ziti_id','address','ziti_type')
             ));
             if($ziti_consignee_info){
                 if(empty($shipSetting)||($shipSetting['ProductShipSetting']['val']==-1)||($shipSetting['ProductShipSetting']['val']==$ziti_consignee_info['OrderConsignees']['ziti_type'])){
-                    $this->set('ziti_consignee_info',$ziti_consignee_info);
+                    $this->set('ziti_consignee_info',$ziti_consignee_info['OrderConsignees']);
                 }
             }
         }
-        if($consignee_info){
-            $this->set('consignee_info', $consignee_info['OrderConsignees']);
+        if(TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type'])!=ZITI_TAG){
+            $consignee_info = $this->OrderConsignees->find('first', array(
+                'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN),
+                'fields' => array('name', 'address', 'mobilephone')
+            ));
+            if($consignee_info){
+                $this->set('consignee_info', $consignee_info['OrderConsignees']);
+            }
         }
+
     }
 }
 
