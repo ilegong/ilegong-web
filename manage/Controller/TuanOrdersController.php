@@ -140,14 +140,15 @@ class TuanOrdersController extends AppController{
             }
             $post_data = array(
                 "touser" => $oauth_binds[$order['Order']['creator']],
-                "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
+                "template_id" => 'UJvs1MAnfA7ATAiXVN0w122E53BauMSw8iCt0M2mSBQ',
                 "url" => WX_HOST . '/orders/detail/'.$order['Order']['id'],
                 "topcolor" => "#FF0000",
                 "data" =>  array(
                     "first" => array("value" => "亲，您订购的".$product_name."已经在路上啦，大概下午五点前后到达，亲不要着急，到达后，我们会第一时间通知你。"),
-                    "keyword1" => array("value" => $order['Order']['id']),
-                    "keyword2" => array("value" => $offline_store['OfflineStore']['alias']),
-                    "keyword3" => array("value" => $order['Order']['consignee_address']),
+                    "orderProductPrice" => array("value" => $order['Order']['total_price']),
+                    "orderProductName" => array("value" => $product_name),
+                    "orderAddress" => array("value" => $order['Order']['consignee_address']),
+                    "orderName" => array("value" => $order['Order']['id']),
                     "remark" => array("value" => "感谢您的支持".$offline_store['OfflineStore']['owner_phone'], "color" => "#FF8800")
                 )
             );
