@@ -379,7 +379,7 @@ class Order extends AppModel {
             )
         ));
         if($refer){
-            if($referM->updateAll(array('first_order_done'=>1,'first_order_id'=>$order_id),array('id'=>$refer['refer']['id']))){
+            if($referM->updateAll(array('first_order_done'=>1,'first_order_id'=>$order_id),array('id'=>$refer['Refer']['id']))){
                 //add 900 score
                 $scoreM = ClassRegistry::init('Score');
                 $uM = ClassRegistry::init('User');
