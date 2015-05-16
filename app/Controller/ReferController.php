@@ -284,7 +284,7 @@ class ReferController extends AppController {
 
     private function set_wx_share_data(){
         if(parent::is_weixin()){
-            $title = $this->currentUser['nickname'].'向您推荐了【朋友说】，接受邀请立即获得10元积分优惠';
+            $title = '接受'.$this->currentUser['nickname'].'推荐立即获得 10 元积分优惠';
             $this->set('to_timeline_title',$title);
             $this->set('to_friend_title',$title);
             $this->set('share_desc', '原产地直供、新鲜现摘，找到最初的味道!');
