@@ -404,12 +404,8 @@ $(document).ready(function () {
         width: 350,
         modal: true,
         buttons: {
-            "取消": function () {
-                shipToOurStoreDialog.dialog("close");
-            },
-            "确认": function () {
-                ourAddressSend();
-            }
+            "取消": function() {shipToOurStoreDialog.dialog( "close" );},
+            "确认": function(){ourAddressSend();}
         }
     });
     $('.ship-to-pys-stores').click(function () {
