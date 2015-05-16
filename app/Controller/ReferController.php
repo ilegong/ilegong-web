@@ -62,7 +62,6 @@ class ReferController extends AppController {
         $success = false;
         $uid = $_POST['uid'];
         if ($uid) {
-
             $cuid = $this->currentUser['id'];
             $referred = $this->find_be_referred_for_me($cuid);
             if (empty($referred)) {
@@ -75,6 +74,7 @@ class ReferController extends AppController {
                     $data['Refer']['bind_done'] = !empty($this->currentUser['mobilephone']);
                     $this->Refer->save($data);
                 }
+
                 $success = true;
             } else {
                 $success = true;
@@ -97,7 +97,7 @@ class ReferController extends AppController {
         $mOrder = ClassRegistry::init('Order');
         $curr_uid = $this->currentUser['id'];
         $received_cnt = $mOrder->count_received_order($curr_uid);
-        $reg_done = $received_cnt > 0 && $phone_bind;
+        $reg_done = $received_cnt > 0 && !$phone_bind;
         $this->set('reg_done', $reg_done);
         $this->set('received_cnt', $received_cnt);
         $this->set('phone_bind', $phone_bind);
