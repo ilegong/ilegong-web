@@ -244,6 +244,11 @@ class CategoriesController extends AppController {
         if(parent::is_weixin()){
             $this->wexin_share_datas($tryings);
         }
+
+        $mOrder = ClassRegistry::init('Order');
+        $received_cnt = $mOrder->count_received_order($this->currentUser['id']);
+        $this->set('received_cnt', $received_cnt);
+
         $this->set('is_weixin',true);
         $this->set('tryings',$tryings);
         $this->set('hideFooter',true);
