@@ -32,12 +32,10 @@ class ReferController extends AppController {
         }
 
         $cond = array('from' => $uid, 'deleted' => DELETED_NO);
-
+        $cond['bind_done'] = 1;
         $userRefers = $this->Refer->find('count', array(
             'conditions' => $cond,
         ));
-
-        $cond['bind_done'] = 1;
         $cond['first_order_done'] = 1;
         $userSuccessRefers = $this->Refer->find('count',array(
             'conditions' => $cond
