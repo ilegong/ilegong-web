@@ -43,7 +43,7 @@ class Score extends AppModel {
     }
 
     public function add_score_by_refer_bind_mobile($score_change, $referral, $uid){
-        $desc = '您完成完成绑定手机号码获得'.$score_change.'个积分';
+        $desc = '您完成绑定手机号码获得'.$score_change.'个积分';
         return $this->save_score_log($referral, $score_change, SCORE_REFERRAL_BIND_OK_TO, json_encode(array('refer_user_id' => $uid)), $desc);
     }
 
