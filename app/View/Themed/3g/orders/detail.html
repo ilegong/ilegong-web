@@ -29,22 +29,7 @@
     <s>{{$order['Order']['consignee_area']}} {{$order['Order']['consignee_address']}}</s>
 </div>
 
-<div class="order_detail_address" style="margin-bottom: -1px;">
-    {{if $order['Order']['status']==2 || $order['Order']['status']==3}}
-    <ul class="clearfix order_detail_btn">
-        {{if $order['Order']['ship_type']&&$shipdetail}}
-            <li><a href="/orders/ship_detail/{{$order['Order']['id']}}" class="mr5">查看物流</a></li>
-            <li><a href="tel:{{SERVICE_LINE_PHONE}}" class="ml5">客服热线</a></li>
-        {{else}}
-            <li style="width: 100%"><a href="tel:{{SERVICE_LINE_PHONE}}" class="ml5">客服热线</a></li>
-        {{/if}}
-    </ul>
-    {{else}}
-    <ul class="clearfix order_detail_btn">
-        <li style="width: 100%;"><a href="tel:{{SERVICE_LINE_PHONE}}" class="ml5">客服热线</a></li>
-    </ul>
-    {{/if}}
-</div>
+
 <div class="myorder">
     <dl class="clearfix" style="margin-bottom: 0;">
         <dd class="fl"><a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brand['Brand']['created'])).'/'.$brand['Brand']['slug'].'.html')}}"><img src="{{small_thumb_link($brand['Brand']['coverimg'])}}"></a></dd>
@@ -124,6 +109,23 @@
         </div>
     </div>
 </div>
+
+<div class="order_detail_address">
+    {{if $order['Order']['status']==2 || $order['Order']['status']==3}}
+    <ul class="clearfix order_detail_btn">
+        {{if $order['Order']['ship_type']&&$shipdetail}}
+        <li><a href="/orders/ship_detail/{{$order['Order']['id']}}" class="mr5">查看物流</a></li>
+        <li><a href="tel:{{SERVICE_LINE_PHONE}}" class="ml5">客服热线</a></li>
+        {{else}}
+        <li style="width: 100%"><a href="tel:{{SERVICE_LINE_PHONE}}" class="ml5">客服热线</a></li>
+        {{/if}}
+    </ul>
+    {{else}}
+    <ul class="clearfix order_detail_btn">
+        <li style="width: 100%;"><a href="tel:{{SERVICE_LINE_PHONE}}" class="ml5">客服热线</a></li>
+    </ul>
+    {{/if}}
+</div>
 <div class="order_detail_time">
     <span>下单时间：{{$order['Order']['created']}}</span>
     <br/>
@@ -131,8 +133,7 @@
     <span>支付时间：{{$order['Order']['pay_time']}}</span>
     {{/if}}
 </div>
-<div style="height: 50px;">
-</div>
+
 <div class="order_detail_operate">
     <ul class="clearfix">
         <li class="fl">实付款:<span>￥{{$this->Number->precision($order['Order']['total_price'], 2)}}</span></li>

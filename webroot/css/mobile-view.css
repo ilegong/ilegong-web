@@ -470,7 +470,13 @@ ul li{ list-style:none;}
 .myorder ul li img{ width: 6em;}
 .myorder ul li a{ text-decoration: none;}
 .myorder ul li p{ font-size: 1em; color: #333333; padding-bottom: 5px; line-height: 16px;}
-.myorder ul li s{ text-decoration: none; font-size: 0.9em; color: #666666; padding-bottom: 3px; display: block;}
+.myorder ul li s {
+    text-decoration: none;
+    font-size: 0.9em;
+    color: #CC0000;
+    padding-bottom: 3px;
+    display: block;
+}
 .myorder_delete_a{ color: #999999; position: absolute; top: 15px; right: 10px; text-decoration: none;}
 .myorder ul li input{ float: left; height: 22px; width: 40px; border: 0; border-radius:0; border-top: 1px #dddddd solid; border-bottom: 1px #dddddd solid; text-align: center; font-size: 1em;}
 .myorder ul li.fr{ text-align: right; font-size: 1em; color: #333333; position: absolute; top: 12px; right: 10px;}
@@ -494,10 +500,11 @@ ul li{ list-style:none;}
 .order_detail_state span.fl{ font-size: 1.1em;}
 .order_detail_state span.fr{ font-size: 1em;}
 .order_detail_state span s{ text-decoration: none; color: #ffa200; font-weight: bold;}
-.order_detail_address{ border-bottom: 1px #eeeeee solid; border-top: 1px #eeeeee solid; background-color: #ffffff; padding: 12px 10px; font-size: 1em; line-height: 20px; color: #666666; margin-bottom: 10px;}
+.order_detail_address{ border-bottom: 1px #eeeeee solid; border-top: 1px #eeeeee solid; background-color: #ffffff; padding: 12px 10px; font-size: 1em; line-height: 20px; color: #666666;}
 .order_detail_address span{ color: #333333; font-size: 1.1em; font-weight: bold; display: block; padding-bottom: 5px;}
 .order_detail_address p{ padding: 0; padding-bottom: 3px;}
 .order_detail_address s{ text-decoration: none; line-height: 18px;}
+.order_detail_btn{margin-bottom: 0;}
 .order_detail_btn li{ float: left; width: 50%;}
 .order_detail_btn li a{ display: block; line-height: 36px; text-align: center; color: #333333; font-size: 1em; border-radius: 3px; border: 1px #dddddd solid; text-decoration: none; background-color: #ffffff;}
 .order_detail_btn li a.mr5{ margin-right: 5px;}
@@ -511,7 +518,15 @@ ul li{ list-style:none;}
 .order_detail_operate ul li a{ line-height: 31px; border: 1px solid; margin-top: 5px; display: block; text-decoration: none; border-radius: 3px; width: 80px; text-align: center; margin-left: 7px;}
 .order_detail_operate ul li a.order_deletebtn{ color: #666666; border-color: #dddddd;}
 .order_detail_operate ul li a.order_paybtn{ color: #ffa200; border-color: #ffa200;}
-
+.order_detail_time {
+    background-color: #ffffff;
+    border-bottom: 1px #eeeeee solid;
+    border-top: 1px #eeeeee solid;
+    padding: 10px;
+    line-height: 24px;
+    color: #999999;
+    margin-bottom: 44px;
+}
 
 /*首页new*/
 .menue{position:fixed; top:0;left:0;width: 20%; border-right: 1px #eeeeee solid; height: 100%;text-align: center;font-size: 1em;font-weight: normal;color:#666666;background-color: #fff;overflow-x: hidden;}

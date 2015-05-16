@@ -34,6 +34,9 @@ $brand = $brands[$order['Order']['brand_id']];
                 <li style="overflow: hidden; display: block; padding-left: 10px; padding-right: 5em;">
                     <a href="/orders/detail/{{$order['Order']['id']}}">
                         <p>{{$cart['Cart']['name']}}</p>
+                        {{if !empty($cart['Cart']['send_date'])}}
+                        <s>{{date('m月d日', strtotime($cart['Cart']['send_date']))}}到货</s>
+                        {{/if}}
                     </a>
                 </li>
                 <li class="fr">￥{{$this->Number->precision($cart['Cart']['price'], 2)}}<br/>x{{$cart['Cart']['num']}}</li>
