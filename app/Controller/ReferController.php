@@ -64,7 +64,7 @@ class ReferController extends AppController {
             $referred = $this->find_be_referred_for_me($cuid);
             if (empty($referred)) {
                 $this->loadModel('Order');
-                $bought_cnt = $this->Order->count_received_order($cuid);
+                $bought_cnt = $this->Order->count_paid_order($cuid);
                 if ($bought_cnt == 0) {
                     $data = array();
                     $data['Refer']['from'] = $uid;
@@ -94,7 +94,7 @@ class ReferController extends AppController {
         $phone_bind = !empty($this->currentUser['mobilephone']);
         $mOrder = ClassRegistry::init('Order');
         $curr_uid = $this->currentUser['id'];
-        $received_cnt = $mOrder->count_received_order($curr_uid);
+        $received_cnt = $mOrder->count_paid_order($curr_uid);
         $reg_done = $received_cnt > 0 || $phone_bind;
         $this->set('reg_done', $reg_done);
         $this->set('received_cnt', $received_cnt);
