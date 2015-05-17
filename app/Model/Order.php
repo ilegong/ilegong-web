@@ -273,7 +273,13 @@ class Order extends AppModel {
 
     public function count_received_order($uid) {
         return $this->find('count', array(
-            'conditions' => array('creator' => $uid, 'status' => array(ORDER_STATUS_PAID)),
+            'conditions' => array('creator' => $uid, 'status' => array(ORDER_STATUS_RECEIVED)),
+        ));
+    }
+
+    public function count_paid_order($uid) {
+        return $this->find('count', array(
+            'conditions' => array('creator' => $uid, 'status' => array(ORDER_STATUS_PAID,ORDER_STATUS_RECEIVED,ORDER_STATUS_SHIPPED,ORDER_STATUS_DONE,ORDER_STATUS_COMMENT)),
         ));
     }
 

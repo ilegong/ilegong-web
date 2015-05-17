@@ -14,7 +14,7 @@ class Refer extends AppModel {
 
         if (!empty($ref)) {
             $orderM = ClassRegistry::init('Order');
-            $c = $orderM->count_received_order($uid);
+            $c = $orderM->count_paid_order($uid);
             if ($c <= 0) {
                 //o2o,利用闲置资源
                 return true;

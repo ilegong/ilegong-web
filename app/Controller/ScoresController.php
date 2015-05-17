@@ -57,7 +57,7 @@ class ScoresController extends AppController {
         $this->loadModel('User');
         $this->set('total_score', $this->User->get_score($this->currentUser['id']));
 
-        $count_received = $this->Order->count_received_order($uid);
+        $count_received = $this->Order->count_paid_order($uid);
         $this->set('can_recommend', $count_received);
     }
 
