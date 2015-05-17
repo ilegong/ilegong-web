@@ -231,7 +231,7 @@ function oauth_wx_goto($refer_key, $host3g) {
         case "CLICK_URL_SHICHI_APPLY":
             return "http://$host3g/shichituans/apply.html";
         case "CLICK_URL_REFER":
-            return "http://$host3g/refer/index.html";
+            return "http://$host3g/refer/index.html?_sl=wx.menu.refer";
         default:
     }
     return "$host3g";
