@@ -361,6 +361,17 @@ function product_link($pid, $defUri) {
     return product_link2($p, $defUri);
 }
 
+function product_link2($p, $defUri = '/') {
+    if (!empty($p)) {
+        $pp = empty($p['Product']) ? $p : $p['Product'];
+        $link = WX_HOST."/products/" . date('Ymd', strtotime($pp['created'])) . "/" . $pp['slug'] . ".html";
+        Cache::write('link_pro_' . $pp['id'], $link);
+        return $link;
+    } else {
+        return $defUri;
+    }
+}
+
 function ziti_order_filter($var){
     return ($var['Order']['ship_mark'] == 'ziti')&&($var['Order']['type']==5||$var['Order']['type']==6);
 }

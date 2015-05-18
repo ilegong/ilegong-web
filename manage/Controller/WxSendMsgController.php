@@ -55,21 +55,24 @@ class WxSendMsgController extends AppController{
     }
 
     private function prepareMsgData($data_id, $data_type){
-        if($data_type==0){
+        if($data_type==PRODUCT_TUAN_TYPE){
             $product = $this->TuanProduct->find('first',array('conditions' => array('id' => $data_id)));
             $productName = $product['TuanProduct']['alias'];
             $title = '亲,'.$productName.'开始团购,快来团购吧！';
             $remark = '点击立即购买';
-            $detail_url = product_link($product['TuanProduct']['product_id'],'/');
+            $detail_url = product_link($product['TuanProduct']['product_id'],WX_HOST);
             return array('productName' => $productName,'title' => $title,'remark' => $remark,'detail_url' => $detail_url);
         }
 
-        if($data_type==1){
+        if($data_type==PRODUCT_TRY_TYPE){
             $product = $this->ProductTry->find('first',array('conditions' => array('id' => $data_id)));
+            $pid = $product['ProductTry']['product_id'];
+            $tuanProduct = $this->TuanProduct->find('first',array('conditions' => array('product_id' => $pid)));
+            $price = ($product['ProductTry']['price'])/100;
             $productName = $product['ProductTry']['product_name'].$product['ProductTry']['spec'];
-            $title = '亲,'.$productName.'开始秒杀,快来秒杀吧！';
+            $title = '亲,'.$tuanProduct['TuanProduct']['alias'].','.$price.'元,开始秒杀,快来秒杀吧！';
             $remark = '点击立即秒杀';
-            $detail_url = '/';
+            $detail_url = WX_HOST;
             return array('productName' => $productName,'title' => $title,'remark' => $remark,'detail_url' => $detail_url);
         }
         return null;
