@@ -389,10 +389,10 @@ class TuanController extends AppController
             }
             $this->log('query order conditions: ' . json_encode($params));
             $orders = $this->Order->find('all', $params);
-            $orderIds = Hash::extract($orders,'{n}.Order.id');
-            $orderIds = array_unique($orderIds);
-            $this->log('orderIds'.json_encode($orderIds));
-            $orders = $this->Order->find('all',array('id' => $orderIds));
+//            $orderIds = Hash::extract($orders,'{n}.Order.id');
+//            $orderIds = array_unique($orderIds);
+//            $this->log('orderIds'.json_encode($orderIds));
+//            $orders = $this->Order->find('all',array('id' => $orderIds));
         } else {
             $this->log('order condition is empty: ' . json_encode($conditions));
         }
