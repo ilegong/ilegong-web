@@ -94,15 +94,15 @@ class ReferController extends AppController {
         $phone_bind = !empty($this->currentUser['mobilephone']);
         $mOrder = ClassRegistry::init('Order');
         $curr_uid = $this->currentUser['id'];
-        $received_cnt = $mOrder->count_paid_order($curr_uid);
-        $reg_done = $received_cnt > 0 || $phone_bind;
+        $paid_cnt = $mOrder->count_paid_order($curr_uid);
+        $reg_done = $paid_cnt > 0 || $phone_bind;
         $this->set('reg_done', $reg_done);
-        $this->set('received_cnt', $received_cnt);
+        $this->set('paid_cnt', $paid_cnt);
         $this->set('phone_bind', $phone_bind);
 
-        $this->log("refer client ". $curr_uid .' from '. $uid .', phone_bind='.$phone_bind.', received_cnt='.$received_cnt);
+        $this->log("refer client ". $curr_uid .' from '. $uid .', phone_bind='.$phone_bind.', paid_cnt='.$paid_cnt);
 
-        if (!$phone_bind || $received_cnt <= 0) {
+        if (!$phone_bind || $paid_cnt <= 0) {
             $referred = $this->find_be_referred_for_me($curr_uid);
             if (!empty($referred)) {
                 $this->set('referred', $referred);
@@ -284,9 +284,10 @@ class ReferController extends AppController {
 
     private function set_wx_share_data(){
         if(parent::is_weixin()){
-            $title = '接受'.$this->currentUser['nickname'].'推荐立即获得 10 元积分优惠';
-            $this->set('to_timeline_title',$title);
-            $this->set('to_friend_title',$title);
+            $time_line_title = '接受'.$this->currentUser['nickname'].'推荐立即获得10元,[朋友说]分享产地直供、新鲜现摘食品的平台';
+            $firend_title = '接受'.$this->currentUser['nickname'].'推荐立即获得10元';
+            $this->set('to_timeline_title',$time_line_title);
+            $this->set('to_friend_title',$firend_title);
             $this->set('share_desc', '原产地直供、新鲜现摘，找到最初的味道!');
             $this->set('share_imag_url','http://51daifan.sinaapp.com/img/refer/logo.jpg');
         }

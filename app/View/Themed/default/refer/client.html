@@ -8,13 +8,13 @@
         {{else}}
             {{if !$phone_bind}}
                 <a href="javascript:;" type="bind" class="tuijian_login_a {{empty($refer)?'accept_done':''}}">{{empty($refer)?'接受邀请':''}}<span>[注册得1000积分]</span></a>
-            {{elseif $received_cnt <= 0}}
+            {{elseif $paid_cnt <= 0}}
                 <a href="javascript:;" type="order" class="tuijian_login_a {{empty($refer)?'accept_done':''}}">{{empty($refer)?'接受邀请':''}}<span>完成第一单</span></a>
             {{/if}}
         {{/if}}
     </div>
 {{else}}
-    <div class="tuijian_bg"><strong>推荐好友</strong><br/>送10元积分！<br/><a href="/refer/index/{{$CurrentUser['id']}}.html">去推荐</a></div>
+    <div class="tuijian_bg"><strong>赠送好友10元积分</strong><br/>新用户下单后，您也将获得10元积分！<br/><a href="/refer/index/{{$CurrentUser['id']}}.html">立即赠送好友</a></div>
 {{/if}}
 <div class="clearfix tuijian_goodlist">
     <a href="/products/20150428/yue_nan_jin_kou_hong_xin_huo_long_guo_2ge_zhuang.html">
@@ -139,14 +139,14 @@
     <a href="/" class="tuijian_login_a">去逛逛</a>
     {{else}}
     {{if !$phone_bind}}
-    <a href="javascript:;" type="bind" class="tuijian_login_a {{empty($refer)?'accept_done':''}}">{{empty($refer)?'接受邀请':''}}<span>[注册得100积分]</span></a>
-    {{elseif $received_cnt <= 0}}
+    <a href="javascript:;" type="bind" class="tuijian_login_a {{empty($refer)?'accept_done':''}}">{{empty($refer)?'接受邀请':''}}<span>[注册得1000积分]</span></a>
+    {{elseif $paid_cnt <= 0}}
     <a href="javascript:;" type="order" class="tuijian_login_a {{empty($refer)?'accept_done':''}}">{{empty($refer)?'接受邀请':''}}<span>完成第一单</span></a>
     {{/if}}
     {{/if}}
 </div>
 {{else}}
-<div class="tuijian_bg"><strong>推荐好友下单成功</strong><br/>ipad、小米电视等你抢！<br/><a href="/refer/index/{{$CurrentUser['id']}}.html">去推荐</a></div>
+<div class="tuijian_bg"><strong>赠送好友10元积分</strong><br/>新用户下单后，您也将获得10元积分！<br/><a href="/refer/index/{{$CurrentUser['id']}}.html">立即赠送好友</a></div>
 {{/if}}
 <script type="text/javascript">
 

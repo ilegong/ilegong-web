@@ -20,6 +20,10 @@ class TuanBuyingComponent extends Component{
      * @param $cart_tuan_param
      * @param $consignment_date_id
      * @param $send_date
+     * @param $way_id
+     * @param $way_type
+     *
+     * @return array|void
      */
     public function add_cart($product_id,$product_num,$spec_id,$type,$uId,$sessionId,$cart_tuan_param,$consignment_date_id,$send_date,$way_id,$way_type){
         $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,$spec_id,$type,0,$uId, $sessionId,  null, null,$cart_tuan_param);
@@ -31,15 +35,17 @@ class TuanBuyingComponent extends Component{
                 $this->log("failed to update consignment_date and send_date for cart ".$cartInfo['Cart']['id'].": consignment_date: ".$consignment_date_id.", send_date: ".$send_date);
                 return;
             }
-            if(strpos($way_type,ZITI_TAG)===false){
-                echo json_encode(array('success' => true, 'direct'=>'normal', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id));
-            }else{
-                echo json_encode(array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id));
-            }
             $cart_array = array(0 => strval($cartInfo['Cart']['id']));
-            $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
+            if(strpos($way_type,ZITI_TAG)===false){
+                return array('success' => true, 'direct'=>'normal', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id,'cart_array'=>$cart_array);
+            }else{
+                return array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id,'cart_array'=>$cart_array);
+            }
+            //Todo
+            //$this->Session->write(self::key_balance_pids(), json_encode($cart_array));
         }else{
-            echo json_encode(array('success'=> false, 'error' => '对不起，系统出错，请联系客服'));
+            return array('success' => false,'error' => '对不起，系统出错，请联系客服');
+            //echo json_encode(array('success'=> false, 'error' => '对不起，系统出错，请联系客服'));
         }
 
     }
