@@ -447,7 +447,6 @@ class TuanBuyingsController extends AppController{
         $member_id = $_POST['member_id'];
         $mobile = $_POST['mobile'];
         $name = $_POST['name'];
-        $shop_name = $_POST['shop_name'];
         $uid = $this->currentUser['id'];
         $way_id = $_POST['way_id'];
         $global_sec = $_POST['global_sec'];
