@@ -6,7 +6,7 @@ $(document).ready(function(){
 
     $('a.send-wx-msg').on('click',function(e){
         e.preventDefault();
-        var confirm = confirm('确定要推送消息吗？');
+        var confirm = window.confirm('确定要推送消息吗？');
         if(confirm){
             var me = $(this);
             var dataId = me.data('id');
