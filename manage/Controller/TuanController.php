@@ -218,12 +218,19 @@ class TuanController extends AppController
 
     public function admin_query_orders_today()
     {
-        //$conditions['OR'] = array('DATE(Order.pay_time) <'=>date('Y-m-d'),'Order.pay_time' => null);
-        $conditions = array('DATE(Order.created)'=>date('Y-m-d'));
-        $conditions['Order.status'] = 1;
+        $pay_date = !empty($_REQUEST['pay_date']) ? $_REQUEST['pay_date'] : date('Y-m-d');
+        $order_status = isset($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
+
+        $conditions = array('DATE(Order.pay_time)'=>$pay_date);
+        if($order_status != -1){
+            $conditions['Order.status'] = $order_status;
+        }
+
         $this->_query_orders($conditions, 'Order.updated');
 
         $this->set('query_type', 'ordersToday');
+        $this->set('order_status', $order_status);
+        $this->set('pay_date', $pay_date);
         $this->render("admin_tuan_orders");
     }
 
@@ -635,7 +642,7 @@ class TuanController extends AppController
     }
 
     public function _query_orders_today_count(){
-        $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where o.pay_time > CURDATE()');
+        $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where o.created > CURDATE() and o.status > 0');
         return $empty_send_date_count[0][0]['ct'];
     }
 

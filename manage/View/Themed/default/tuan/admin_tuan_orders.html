@@ -169,7 +169,30 @@
         <strong class="text-danger lead">C2C，昨日以前支付，仍未发货的订单</strong>
     </div>
     <div id="ordersToday" class="tab-pane">
-        <strong class="text-danger lead">今日已经支付的订单</strong>
+        <strong class="text-danger lead">查看每天的支付订单（团、秒、普通），默认今天</strong>
+
+      <form class="form-inline" method="post" action="/manage/admin/tuan/query_orders_today" data-noajax="true">
+        <div style="padding-bottom: 10px;padding-top: 10px;">
+          <div class="form-group">
+            <input type="text" class="form-control pay-date" data-date-format="yyyy-mmm-dd" value="{{$pay_date}}"
+                   placeholder="支付日期(如2015-5-1)" name="pay_date">
+          </div>
+          <div class="form-group">
+            <select class="form-control order-status" data-value="{{$order_status}}" name="order_status">
+              <option value="-1">选择订单状态</option>
+              <option value="0">待支付</option>
+              <option value="1">待发货</option>
+              <option value="2">已发货</option>
+              <option value="4">已退款</option>
+              <option value="10">已作废</option>
+              <option value="14">退款中</option>
+            </select>
+          </div>
+          <br/>
+          <br/>
+          <button type="submit" class="btn btn-primary text-center">查看订单</button>
+        </div>
+      </form>
     </div>
 </div>
 
