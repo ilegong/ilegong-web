@@ -48,7 +48,7 @@ class WxSendMsgController extends AppController{
         //loop send template msg
         foreach($openIds as $uid => $openId){
             //$leader_name = $tuanTeams[$userConigneeMap[$uid]]['leader_name'].' 微信号:'.$tuanTeams[$userConigneeMap[$uid]]['leader_weixin'];
-            $leader_name = '朋友说 微信号:pyshuo2015';
+            $leader_name = '朋友说小妹 微信号:pyshuo2015';
             send_tuan_tip_msg($openId,$msgData['title'],$msgData['productName'],$leader_name,$msgData['remark'],$msgData['detail_url']);
         }
         return array('success' => true);
@@ -70,7 +70,7 @@ class WxSendMsgController extends AppController{
             $tuanProduct = $this->TuanProduct->find('first',array('conditions' => array('product_id' => $pid)));
             $price = ($product['ProductTry']['price'])/100;
             $productName = $product['ProductTry']['product_name'].$product['ProductTry']['spec'];
-            $title = '参加'.$tuanProduct['TuanProduct']['alias'].','.$price.'元秒杀的';
+            $title = '参加'.$tuanProduct['TuanProduct']['alias'].$price.'元秒杀的';
             $remark = '点击立即秒杀';
             $detail_url = WX_HOST;
             return array('productName' => $productName,'title' => $title,'remark' => $remark,'detail_url' => $detail_url);
