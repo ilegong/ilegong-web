@@ -36,7 +36,9 @@ CONST PUBLISH_NO = 0;
 const PRODUCT_TUAN_TYPE = 0;
 const PRODUCT_TRY_TYPE = 1;
 
+const PYS_M_TUAN=34;
 
+const ZITI_TAG = 'ziti';
 
 define('MSG_API_KEY', 'api:key-fdb14217a00065ca1a47b8fcb597de0d'); //发短信密钥
 
