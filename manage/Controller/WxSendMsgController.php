@@ -58,7 +58,7 @@ class WxSendMsgController extends AppController{
         if($data_type==PRODUCT_TUAN_TYPE){
             $product = $this->TuanProduct->find('first',array('conditions' => array('id' => $data_id)));
             $productName = $product['TuanProduct']['alias'];
-            $title = '亲,'.$productName.'开始团购,快来团购吧！';
+            $title = '参加'.$productName.'的';
             $remark = '点击立即购买';
             $detail_url = product_link($product['TuanProduct']['product_id'],WX_HOST);
             return array('productName' => $productName,'title' => $title,'remark' => $remark,'detail_url' => $detail_url);
@@ -70,7 +70,7 @@ class WxSendMsgController extends AppController{
             $tuanProduct = $this->TuanProduct->find('first',array('conditions' => array('product_id' => $pid)));
             $price = ($product['ProductTry']['price'])/100;
             $productName = $product['ProductTry']['product_name'].$product['ProductTry']['spec'];
-            $title = '亲,'.$tuanProduct['TuanProduct']['alias'].','.$price.'元,开始秒杀,快来秒杀吧！';
+            $title = '参加'.$tuanProduct['TuanProduct']['alias'].','.$price.'元秒杀的';
             $remark = '点击立即秒杀';
             $detail_url = WX_HOST;
             return array('productName' => $productName,'title' => $title,'remark' => $remark,'detail_url' => $detail_url);

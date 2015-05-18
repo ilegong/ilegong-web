@@ -333,11 +333,11 @@ class ShipAddress {
 function send_tuan_tip_msg($open_id,$title,$product_name,$tuan_leader_wx,$remark,$deatil_url){
     $post_data = array(
         "touser" => $open_id,
-        "template_id" => 'BYtgM4U84etw2qbOyyZzR4FO8a-ddvjy8sgBiAQy64U',
+        "template_id" => 'P4iCqkiG7_s0SVwCSKyEuJ0NnLDgVNVCm2VQgSGdl-U',
         "url" =>$deatil_url,
         "topcolor" => "#FF0000",
         "data" => array(
-            "first" => array("value" => $title),
+            "Pingou_Action" => array("value" => $title),
             "Pingou_ProductName" => array("value" => $product_name),
             "Weixin_ID" => array("value" => $tuan_leader_wx),
             "Remark" => array("value" => $remark, "color" => "#FF8800")
