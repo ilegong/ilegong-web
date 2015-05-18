@@ -30,11 +30,11 @@ class WxSendMsgController extends AppController{
         if(empty($msgData)){
             return array('success'=>false,'reason'=>'商品数据有问题');
         }
-//        $now = date('Y-m-d');
-//        $startDate = date('Y-m-d',strtotime('-7 day'.$now));
-//        $users = $this->Order->query('SELECT DISTINCT creator,consignee_id FROM cake_orders WHERE ship_mark = "ziti" AND created > \''.$startDate.'\' AND created < \''.$now.'\'');
-//        $userIds = Hash::extract($users,'{n}.cake_orders.creator');
-        $userIds = array(559795,5081,633345,1370,1820,819,544307);
+        $now = date('Y-m-d');
+        $startDate = date('Y-m-d',strtotime('-14 day'.$now));
+        $users = $this->Order->query('SELECT DISTINCT creator,consignee_id FROM cake_orders WHERE ship_mark = "ziti" AND created > \''.$startDate.'\' AND created < \''.$now.'\'');
+        $userIds = Hash::extract($users,'{n}.cake_orders.creator');
+        //$userIds = array(559795,5081,633345,1370,1820,819,544307);
         $openIds = $this->Oauthbind->find('all',array(
             'conditions' => array(
                 'user_id' => $userIds,

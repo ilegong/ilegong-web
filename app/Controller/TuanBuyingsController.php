@@ -217,7 +217,6 @@ class TuanBuyingsController extends AppController{
                 return;
             }
             $way_id = $_POST['way_id'];
-            //way type is not ziti
             if(strpos($_POST['way_type'],ZITI_TAG)===false){
                 echo json_encode(array('success' => true, 'direct'=>'normal', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id));
             }else{
