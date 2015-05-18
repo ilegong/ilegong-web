@@ -47,7 +47,74 @@ class TuanBuyingComponent extends Component{
             return array('success' => false,'error' => '对不起，系统出错，请联系客服');
             //echo json_encode(array('success'=> false, 'error' => '对不起，系统出错，请联系客服'));
         }
+    }
 
+    public function balance_sec_kill($tuan_id,$cart_id,$try_id){
+        $ship_type=-1;
+        $result_data = array();
+        if(!empty($tuan_id)){
+            $this->loadModel('TuanTeam');
+            $team = $this->TuanTeam->find('first',array(
+                'conditions' => array(
+                    'id' => $tuan_id
+                )
+            ));
+            if(empty($team)){
+                //$this->__message('该团不存在', '/tuan_teams/mei_shi_tuan');
+                return;
+            }
+            $offline_store = $this->get_offline_store($team['TuanTeam']['offline_store_id']);
+            $result_data['tuan_id'] = $tuan_id;
+            $result_data['can_mark_address'] = $this->can_mark_address($tuan_id);
+            $result_data['tuan_address'] = get_address($team,$offline_store);
+        }else{
+            //is global sec
+            $shipSetting = $this->get_ship_setting(null,$try_id,'Try');
+            if(!empty($shipSetting)){
+                $ship_type = $shipSetting['ProductShipSetting']['ship_val'];
+            }
+        }
+        $this->loadModel('Cart');
+        $Carts = $this->Cart->find('first', array(
+            'conditions' => array(
+                'id' => $cart_id
+            ),
+        ));
+        $pid = $Carts['Cart']['product_id'];
+        $total_price = $Carts['Cart']['price'] * $Carts['Cart']['num'];
+        $this->loadModel('Product');
+        $this->loadModel('Brand');
+        $product_brand = $this->Product->find('first', array(
+            'conditions' => array('id' => $pid),
+            'fields' => array('brand_id')
+        ));
+        $brand = $this->Brand->find('first', array(
+            'conditions' => array('id' => $product_brand['Product']['brand_id']),
+            'fields' => array('name', 'slug')
+        ));
+        $result_data['try_id'] = $try_id;
+        $result_data['ship_type'] = $ship_type;
+        $result_data['buy_count'] = $Carts['Cart']['num'];
+        $result_data['total_price'] = $total_price;
+        $result_data['cart_id'] = $Carts['Cart']['id'];
+        $result_data['cart_info'] = $Carts;
+        $result_data['brand'] = $brand['Brand'];
+        return $result_data;
+    }
+
+
+    //可以备注的地址
+    //TODO 昌平的的团可以备注地址
+    private function can_mark_address($tuan_id){
+        $mark_address_tuan_ids = array(15,25,28,41,43,45,46,47,48,58,60,66,104);
+        return in_array($tuan_id,$mark_address_tuan_ids);
+    }
+
+    private function get_offline_store($id){
+        $offline_store = $this->OfflineStores->find('first',array(
+            'conditions' => array('id' => $id)
+        ));
+        return $offline_store;
     }
 
 }
