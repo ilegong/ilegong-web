@@ -87,6 +87,7 @@ input{ outline:none;}
 .tuandetail_usebtn{ display: block; line-height: 35px; text-align: center; background-color: #ffffff; color: #c73c3c; font-size: 1em; font-weight: bold; margin-right: 10px; border: 1px #eeeeee solid; border-top: 0;}
 
 /*我的推荐列表*/
+.tuijianlist{ padding-top:10px;}
 .tuijianlist_banner{ background-color: #c73c3c; color: #ffffff; padding: 15px 0;}
 .tuijianlist_banner h1{ padding:0; margin: 0; text-align: center; font-size: 1.4em; line-height: 30px;}
 .tuijianlist_banner h1 span{ font-style: italic; font-size: 1.3em;}
