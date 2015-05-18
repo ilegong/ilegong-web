@@ -52,8 +52,12 @@ class PlanHelperController extends AppController
                 'pid' => $product_id
             )
         ));
+
+        $member_id = 0;
+        $ship_mark = null;
         if (!empty($tuan_buying)) {
             $member_id = $tuan_buying['TuanBuying']['id'];
+            $ship_mark = 'ziti';
             $send_date = $tuan_buying['TuanBuying']['consign_time'];
             if (empty($send_date)) {
                 $consignment_dates = $this->ConsignmentDates->find('first', array(
@@ -73,22 +77,23 @@ class PlanHelperController extends AppController
 
         $this->log("plan helper is to create order for " . $user_id . " and product " .$product_id. " with num " . $num);
 
-        $order_id = $this->_insert_order($user, $product, $num, $member_id, $offline_store);
+        $order_id = $this->_insert_order($user, $product, $num, $member_id, $ship_mark, $offline_store);
         $cart_id = $this->_insert_cart($user, $product, $num, $send_date, $order_id);
         $this->log("plan helper create order successfully: " . $order_id . ", " . $cart_id);
 
         echo json_encode(array("order_id" => $order_id, "cart_id" => $cart_id));
     }
 
-    function _insert_order($user, $product, $num, $tuan_buying, $offline_store)
+    function _insert_order($user, $product, $num, $member_id, $ship_mark, $offline_store)
     {
         $date = date('Y-m-d H:i:s', strtotime("+17 seconds"));
 
         $data = array();
-
         $data['Order']['creator'] = $user['User']['id'];
         $data['Order']['status'] = 0;
-        $data['Order']['ship_mark'] = 'ziti';
+        if(!empty($ship_mark)){
+            $data['Order']['ship_mark'] = $ship_mark;
+        }
         $data['Order']['created'] = $date;
         $data['Order']['updated'] = $date;
         $data['Order']['pay_time'] = date('Y-m-d H:i:s', strtotime("+59 seconds"));
@@ -100,7 +105,7 @@ class PlanHelperController extends AppController
         $data['Order']['total_price'] = $product['Product']['price'] * $num;
         $data['Order']['total_all_price'] = $product['Product']['price'] * $num;
         $data['Order']['brand_id'] = $product['Product']['brand_id'];
-        $data['Order']['member_id'] = empty($tuan_buying['TuanBuying']['id']) ? 0 : $tuan_buying['TuanBuying']['id'];
+        $data['Order']['member_id'] = $member_id;
         $data['Order']['type'] = 5;
 
         if ($this->Order->save($data)) {
