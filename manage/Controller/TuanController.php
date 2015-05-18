@@ -194,6 +194,24 @@ class TuanController extends AppController
         $this->render("admin_tuan_orders");
     }
 
+    public function admin_query_abnormal_order(){
+        $conditions = array(
+            'OR' => array(
+                array('Cart.send_date is null','Order.type in (5,6)'),
+                array("Order.consignee_id = 0", "Order.consignee_address = ''"),
+                array("Order.type = 1", "Order.ship_mark !=''"),
+                'Order.pay_time  is null',
+                array('Order.ship_mark = "ziti"','Order.consignee_id = 0','Order.type in (5,6)'),
+                array('Order.ship_mark = "kuaidi"','Order.consignee_id !=0','Order.type in (5,6)'),
+            )
+        );
+        $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC,ORDER_TYPE_DEF);
+        $conditions['Order.status'] = array(ORDER_STATUS_PAID,ORDER_STATUS_SHIPPED);
+        $conditions['DATE(Order.created) > '] = date('Y-m-d', strtotime('-62 days'));
+        $this->_query_orders($conditions, 'Order.created DESC');
+        $this->set('query_type', 'abnormalOrder');
+        $this->render("admin_tuan_orders");
+    }
     public function admin_query_b2c_paid_not_send()
     {
         $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
@@ -395,7 +413,7 @@ class TuanController extends AppController
                 $params['limit'] = $limit;
             }
             $this->log('query order conditions: ' . json_encode($params));
-            $orders = $this->Order->find('all', $params);
+            $orders = $this->Order->find('all', $params);$this->log('orders'.json_encode($orders));
         } else {
             $this->log('order condition is empty: ' . json_encode($conditions));
         }
@@ -567,6 +585,7 @@ class TuanController extends AppController
         $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
         $this->set('orders_today_count', $this->_query_orders_today_count());
+        $this->set('abnormal_order_count',$this->_query_abnormal_order());
 
         $this->set('should_count_nums', true);
         $this->set('product_count', $product_count);
@@ -646,6 +665,11 @@ class TuanController extends AppController
         return $empty_send_date_count[0][0]['ct'];
     }
 
+    public function _query_abnormal_order(){
+        $abnormal_order_count = $this->Order->query('select count(o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where ((c.send_date is null and o.type in (5,6)) or (o.consignee_id = 0 and o.consignee_address = "") or (o.type = 1 and o.ship_mark != "") or o.pay_time is null or (o.ship_mark = "ziti" and o.consignee_id = 0 and o.type in (5,6)) or (o.ship_mark = "kuaidi" and o.consignee_id !=0 and o.type in (5,6))) and o.type in (1,5,6) and o.status in (1,2) and DATE(o.created) > "'.date('Y-m-d', strtotime('-62 days')).'"');
+       $this->log('count'.json_encode($abnormal_order_count));
+        return $abnormal_order_count[0][0]['ct'];
+    }
     public function admin_update_order_status_to_refunded(){
         $this->autoRender = false;
         $order_id = $_REQUEST['orderId'];

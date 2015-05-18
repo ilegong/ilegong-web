@@ -16,6 +16,12 @@
         </a>
     </li>
     <li role="presentation">
+        <a data-tab="abnormalOrder" href="/manage/admin/tuan/query_abnormal_order">
+            !!!异常订单
+            <span {{if $abnormal_order_count> 0}}class="text-danger"{{/if}}>({{$abnormal_order_count}})</span>
+        </a>
+    </li>
+    <li role="presentation">
         <a data-tab="b2cPaidNotSend" href="/manage/admin/tuan/query_b2c_paid_not_send">
             !!!B2C未发货
             <span {{if $b2c_paid_not_sent_count> 0}}class="text-danger"{{/if}}>({{$b2c_paid_not_sent_count}})</span>
