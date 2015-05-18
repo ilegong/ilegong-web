@@ -27,7 +27,7 @@ class WxSendMsgController extends AppController{
 
     private function sendBuyTipMsg($data_id,$data_type){
         $msgData = $this->prepareMsgData($data_id,$data_type);
-        if($msgData!=null){
+        if(empty($msgData)){
             return array('success'=>false,'reason'=>'商品数据有问题');
         }
 //        $now = date('Y-m-d');
