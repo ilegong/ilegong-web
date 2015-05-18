@@ -120,7 +120,7 @@ class PlanHelperController extends AppController
         $data['Cart']['order_id'] = $order_id;
         $data['Cart']['creator'] = $user['User']['id'];
         $data['Cart']['type'] = 5;
-        $data['Cart']['status'] = 2;
+        $data['Cart']['status'] = 0;
         $data['Cart']['product_id'] = $product['Product']['id'];
         $data['Cart']['coverimg'] = $product['Product']['coverimg'];
         $data['Cart']['price'] = $product['Product']['price'] * $num;
