@@ -4,7 +4,7 @@ class PlanHelperController extends AppController
 
     var $name = 'PlanHelper';
 
-    var $uses = array('User', 'TuanTeam', 'TuanBuying', 'Order', 'Cart', 'Product', 'OfflineStore', 'ConsignmentDates');
+    var $uses = array('User', 'TuanTeam', 'TuanBuying', 'Order', 'Cart', 'Product', 'OfflineStore', 'ConsignmentDate');
 
     public function admin_order()
     {
@@ -49,13 +49,14 @@ class PlanHelperController extends AppController
             $send_date = $tuan_buying['TuanBuying']['consign_time'];
         }
         if (empty($send_date) && !empty($tuan_buying)) {
-            $consignment_dates = $this->ConsignmentDates->find('first', array(
+            $consignment_dates = $this->ConsignmentDate->find('first', array(
                 'conditions' => array(
-                    'product_id' => $product['Product']['id'],
+                    'product_id' => $product_id,
                     'published' => 1
                 ),
                 'order' => 'send_date DESC'
             ));
+
             if (!empty($consignment_dates)) {
                 $send_date = $consignment_dates['ConsignmentDate']['send_date'];
             }
