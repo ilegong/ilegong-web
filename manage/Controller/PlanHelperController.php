@@ -4,19 +4,19 @@ class PlanHelperController extends AppController
 
     var $name = 'PlanHelper';
 
-    var $uses = array('User', 'TuanTeam', 'TuanBuying', 'Order', 'Cart', 'Product', 'OfflineStore');
+    var $uses = array('User', 'TuanTeam', 'TuanBuying', 'Order', 'Cart', 'Product', 'OfflineStore', 'ConsignmentDates');
 
     public function admin_order()
     {
         $this->autoRender = false;
 
         $user_id = $_REQUEST['user_id'];
-        $tuan_buying_id = $_REQUEST['tuan_buying_id'];
+        $product_id = $_REQUEST['product_id'];
+        $offline_store_id = $_REQUEST['offline_store_id'];
         $num = isset($_REQUEST['num']) ? $_REQUEST['num'] : 1;
 
-        $this->log("plan helper is to create order for ".$user_id." and tuan buying ".$tuan_buying_id." with num ".$num);
-        if(!($user_id >= 810163 || $user_id <= 810223) && !($user_id >= 810096 || $user_id <= 810158)){
-            throw new Exception("invalid user id ".$user_id);
+        if (!($user_id >= 810163 || $user_id <= 810223) && !($user_id >= 810096 || $user_id <= 810158)) {
+            throw new Exception("invalid user id " . $user_id);
         }
         $user = $this->User->find('first', array(
             conditions => array(
@@ -24,47 +24,64 @@ class PlanHelperController extends AppController
             )
         ));
 
-        $tuan_buying = $this->TuanBuying->find('first', array(
-            conditions => array(
-                'id' => $tuan_buying_id
-            )
-        ));
-        if(empty($tuan_buying)){
-            throw new Exception('tuan buying does not exist: '. $tuan_buying_id);
-        }
-
-        $tuan_team = $this->TuanTeam->find('first', array(
-            conditions => array(
-                'id' => $tuan_buying['TuanBuying']['tuan_id']
-            )
-        ));
-        if($tuan_team['TuanTeam']['id'] != 109 && $tuan_team['TuanTeam']['id'] != 110){
-            throw new Exception('Invalid tuan team: '.$tuan_team['TuanTeam']['id']);
-        }
-
         $product = $this->Product->find('first', array(
             conditions => array(
-                'id' => $tuan_buying['TuanBuying']['pid']
+                'id' => $product_id
             )
         ));
+        if ($product['Product']['brand_id'] != 92) {
+            throw new Exception('only pyshuo products are supported');
+        }
 
         $offline_store = $this->OfflineStore->find('first', array(
             conditions => array(
-                'id' => $tuan_team['TuanTeam']['offline_store_id']
+                'id' => $offline_store_id
             )
         ));
-        if(empty($offline_store)){
-            throw new Exception('offline store does not exist: '. $tuan_buying_id);
+        if (empty($offline_store)) {
+            throw new Exception('offline store does not exist: ' . $offline_store_id);
+        }
+        if ($offline_store['OfflineStore']['id'] != 54 && $offline_store['OfflineStore']['id'] != 55) {
+            throw new Exception('only offline store 54 or 55 is supported');
         }
 
-        $order_id = $this->_insert_order($user, $product, $num, $tuan_buying, $offline_store);
-        $cart_id = $this->_insert_cart($user, $product, $num, $tuan_buying, $offline_store, $order_id);
-        $this->log("plan helper create order successfully: ".$order_id.", ".$cart_id);
+
+        $tuan_buying = $this->TuanBuying->find('first', array(
+            conditions => array(
+                'tuan_id' => PYS_M_TUAN,
+                'pid' => $product_id
+            )
+        ));
+        if (!empty($tuan_buying)) {
+            $member_id = $tuan_buying['TuanBuying']['id'];
+            $send_date = $tuan_buying['TuanBuying']['consign_time'];
+            if (empty($send_date)) {
+                $consignment_dates = $this->ConsignmentDates->find('first', array(
+                    'conditions' => array(
+                        'product_id' => $product['Product']['id'],
+                        'published' => 1
+                    ),
+                    'order' => 'send_date DESC'
+                ));
+                if (!empty($consignment_dates)) {
+                    $send_date = $consignment_dates['ConsignmentDate']['send_date'];
+                } else {
+                    $send_date = date('Y-m-d', strtotime('+5 days'));
+                }
+            }
+        }
+
+        $this->log("plan helper is to create order for " . $user_id . " and product " .$product_id. " with num " . $num);
+
+        $order_id = $this->_insert_order($user, $product, $num, $member_id, $offline_store);
+        $cart_id = $this->_insert_cart($user, $product, $num, $send_date, $order_id);
+        $this->log("plan helper create order successfully: " . $order_id . ", " . $cart_id);
 
         echo json_encode(array("order_id" => $order_id, "cart_id" => $cart_id));
     }
 
-    function _insert_order($user, $product, $num, $tuan_buying, $offline_store){
+    function _insert_order($user, $product, $num, $tuan_buying, $offline_store)
+    {
         $date = date('Y-m-d H:i:s', strtotime("+17 seconds"));
 
         $data = array();
@@ -83,20 +100,20 @@ class PlanHelperController extends AppController
         $data['Order']['total_price'] = $product['Product']['price'] * $num;
         $data['Order']['total_all_price'] = $product['Product']['price'] * $num;
         $data['Order']['brand_id'] = $product['Product']['brand_id'];
-        $data['Order']['member_id'] = $tuan_buying['TuanBuying']['id'];
+        $data['Order']['member_id'] = empty($tuan_buying['TuanBuying']['id']) ? 0 : $tuan_buying['TuanBuying']['id'];
         $data['Order']['type'] = 5;
 
-        if($this->Order->save($data)){
+        if ($this->Order->save($data)) {
             return $this->Order->getLastInsertID();
-        }
-        else{
+        } else {
             $this->log($this->Order->validationErrors); //show validationErrors
 
             throw new Exception("plan helper create order failed");
         }
     }
 
-    function _insert_cart($user, $product, $num, $tuan_buying, $offline_store, $order_id){
+    function _insert_cart($user, $product, $num, $send_date, $order_id)
+    {
         $date = date('Y-m-d H:i:s');
         $data = array();
         $data['Cart']['name'] = $product['Product']['name'];
@@ -112,12 +129,11 @@ class PlanHelperController extends AppController
         $data['Cart']['created'] = $date;
         $data['Cart']['updated'] = $date;
         $data['Cart']['modified'] = $date;
-        $data['Cart']['send_date'] = $tuan_buying['TuanBuying']['consign_time'];
+        $data['Cart']['send_date'] = $send_date;
 
-        if($this->Cart->save($data)){
+        if ($this->Cart->save($data)) {
             return $this->Cart->getLastInsertID();
-        }
-        else{
+        } else {
             $this->log($this->Cart->validationErrors); //show validationErrors
             throw new Exception("plan helper create cart failed");
         }
