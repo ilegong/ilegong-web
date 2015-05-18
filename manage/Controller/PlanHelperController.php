@@ -34,10 +34,11 @@ class PlanHelperController extends AppController
         }
 
         $tuan_buying = $this->TuanBuying->find('first', array(
-            conditions => array(
+            'conditions' => array(
                 'tuan_id' => PYS_M_TUAN,
                 'pid' => $product_id
-            )
+            ),
+            'order' => 'id DESC'
         ));
 
         $member_id = 0;
