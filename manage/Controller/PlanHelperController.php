@@ -83,7 +83,7 @@ class PlanHelperController extends AppController
         }
         $data['Order']['created'] = $date;
         $data['Order']['updated'] = $date;
-        $data['Order']['pay_time'] = date('Y-m-d H:i:s', strtotime("+59 seconds"));
+//        $data['Order']['pay_time'] = date('Y-m-d H:i:s', strtotime("+59 seconds"));
         $data['Order']['consignee_name'] = empty($user['User']['nickname']) ? '李嘉' : $user['User']['nickname'];
         $data['Order']['consignee_mobilephone'] = empty($user['User']['mobilephone']) ? '17910808972' : $user['User']['mobilephone'];
         $data['Order']['consignee_id'] = $offline_store['OfflineStore']['id'];
