@@ -13,6 +13,8 @@ class PlanHelperController extends AppController
         $user_id = $_REQUEST['user_id'];
         $product_id = $_REQUEST['product_id'];
         $offline_store_id = $_REQUEST['offline_store_id'];
+        $send_date = $_REQUEST['send_date'];
+        $spec_id = isset($_REQUEST['spec_id']) ? $_REQUEST['spec_id'] : 0;
         $num = isset($_REQUEST['num']) ? $_REQUEST['num'] : 1;
 
         if (!($user_id >= 810163 || $user_id <= 810223) && !($user_id >= 810096 || $user_id <= 810158)) {
@@ -46,26 +48,11 @@ class PlanHelperController extends AppController
         if (!empty($tuan_buying)) {
             $ship_mark = 'ziti';
             $member_id = $tuan_buying['TuanBuying']['id'];
-            $send_date = $tuan_buying['TuanBuying']['consign_time'];
         }
-        if (empty($send_date) && !empty($tuan_buying)) {
-            $consignment_dates = $this->ConsignmentDate->find('first', array(
-                'conditions' => array(
-                    'product_id' => $product_id,
-                    'published' => 1
-                ),
-                'order' => 'send_date DESC'
-            ));
-
-            if (!empty($consignment_dates)) {
-                $send_date = $consignment_dates['ConsignmentDate']['send_date'];
-            }
-        }
-
         $this->log("plan helper is to create order for " . $user_id . " and product " .$product_id. " with num " . $num);
 
         $order_id = $this->_insert_order($user, $product, $num, $member_id, $ship_mark, $offline_store);
-        $cart_id = $this->_insert_cart($user, $product, $num, $send_date, $order_id);
+        $cart_id = $this->_insert_cart($user, $product, $num, $spec_id, $send_date, $order_id);
         $this->log("plan helper create order successfully: " . $order_id . ", " . $cart_id);
 
         echo json_encode(array("order_id" => $order_id, "cart_id" => $cart_id));
@@ -105,7 +92,7 @@ class PlanHelperController extends AppController
         }
     }
 
-    function _insert_cart($user, $product, $num, $send_date, $order_id)
+    function _insert_cart($user, $product, $num, $spec_id, $send_date, $order_id)
     {
         $date = date('Y-m-d H:i:s');
         $data = array();
@@ -115,6 +102,7 @@ class PlanHelperController extends AppController
         $data['Cart']['type'] = 5;
         $data['Cart']['status'] = 0;
         $data['Cart']['product_id'] = $product['Product']['id'];
+        $data['Cart']['spec_id'] = $spec_id;
         $data['Cart']['coverimg'] = $product['Product']['coverimg'];
         $data['Cart']['price'] = $product['Product']['price'] * $num;
         $data['Cart']['num'] = 1;
