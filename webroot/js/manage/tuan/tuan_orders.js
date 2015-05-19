@@ -16,7 +16,7 @@ $(document).ready(function () {
         var $dataTr = $('tr.'+tag);
         var $exportTable = $('<table></table>').append($dataHead.clone()).append('<tbody></tbody>');
         $('tbody',$exportTable).append($dataTr.clone());
-        $exportTable.tableExport({type:'excel',escape:'false',tableName:tag,ignoreColumn:[0,20,21,22]});
+        $exportTable.tableExport({type:'excel',escape:'false',tableName:tag});
     });
     start_stat_date.datetimepicker({
         format: 'yyyy-mm-dd hh:ii'
