@@ -416,26 +416,23 @@ class ApiOrdersController extends AppController {
         $buyingCom = $this->Components->load('Buying');
         $postStr = file_get_contents('php://input');;
         $data = json_decode(trim($postStr), true);
+        $this->log('add cart: '.json_encode($data));
 
         if (!empty($data)) {
             $product_id = $data['product_id'];
             $num = $data['num'];
-            $specId = $data['spec'];
-            $consign_date_id = $data['consign_date_id'];
-            $consign_date = $data['consign_date'];
-            $type = $buyingCom->convert_cart_type($data['type']);
+            $specId = $data['spec_id'];
+            $consignment_date_id = $data['consignment_date_id'];
+            $send_date = $data['send_date'];
+            $type = CART_ITEM_TYPE_NORMAL;
             $tryId = intval($data['try_id']);
             $uid = $this->currentUser['id'];
             $cartM = ClassRegistry::init('Cart');
 
-            if (!$type) {
-                $type = CART_ITEM_TYPE_NORMAL;
-            }
-
             $info = $buyingCom->check_and_add($cartM, $type, $tryId, $uid, $num, $product_id, $specId, null);
             $cartId = $info['id'];
-            if (!empty($consign_date_id) && !empty($cartId) && !empty($consign_date)) {
-                $cartM->updateAll(array('consignment_date' => $consign_date_id,'name' => 'concat(name, "(' . $consign_date . ')")'), array('id' => $cartId));
+            if (!empty($consignment_date_id) && !empty($cartId) && !empty($send_date)) {
+                $cartM->updateAll(array('consignment_date' => $consignment_date_id, 'send_date' => "'".$send_date."'"), array('id' => $cartId));
             }
         } else {
             $info = array('success' => false, 'reason' => 'invalid_parameter');
