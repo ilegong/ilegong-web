@@ -407,26 +407,29 @@ class TuanController extends AppController
                 'conditions' => $conditions,
                 'joins' => $join_conditions,
                 'fields' => array('Order.*', 'Pay.trade_type', 'Pay.out_trade_no', 'Cart.product_id', 'Cart.try_id', 'Cart.send_date'),
+                'group' => 'Order.id',
                 'order' => $order_by
             );
             if (!empty($limit)) {
                 $params['limit'] = $limit;
             }
             $this->log('query order conditions: ' . json_encode($params));
-            $all_orders = $this->Order->find('all', $params);$this->log('orders'.json_encode($all_orders));
+            $all_orders = $this->Order->find('all', $params);
+            //$this->log('orders'.json_encode($all_orders));
         } else {
             $this->log('order condition is empty: ' . json_encode($conditions));
         }
-        $orders = array();
-        $order_ids = Hash::extract($all_orders, "{n}.Order.id");
-        $orderIds = array_unique($order_ids);
-        foreach($orderIds as $val){
-            $key = array_search($val,$order_ids);
-            if($key!==false){
-                $orders[] = $all_orders[$key];
-            }
-        }
-
+//        $orders = array();
+//        $order_ids = Hash::extract($all_orders, "{n}.Order.id");
+//        $orderIds = array_unique($order_ids);
+//        foreach($orderIds as $val){
+//            $key = array_search($val,$order_ids);
+//            if($key!=null){
+//                $orders[] = $all_orders[$key];
+//            }
+//        }
+        $order_ids = array_unique(Hash::extract($all_orders, "{n}.Order.id"));
+        $orders = $all_orders;
         $carts = array();
         if (!empty($order_ids)) {
             $carts = $this->Cart->find('all', array(
