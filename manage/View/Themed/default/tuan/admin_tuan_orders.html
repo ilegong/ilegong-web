@@ -191,7 +191,7 @@
 </div>
 <hr/>
 <table class="table table-bordered orders">
-    <thead>
+    <thead class="data-head">
     <tr>
         <td><input type="checkbox" value="0" id="check_all_tb"></td>
         <td>订单号</td>
@@ -221,27 +221,37 @@
     <tbody>
     {{loop $ship_mark_enum $code $item}}
         {{if $code!='ziti'}}
-            <tr class="{{$item['style']}}"><td colspan="23">{{$item['name']}}</td></tr>
-            <?php $current_orders=$map_other_orders[$code]; ?>
+            <?php
+                $current_orders=$map_other_orders[$code];
+                $data_tag = $code;
+            ?>
+            <tr class="{{$item['style']}}"><td colspan="22">{{$item['name']}}</td><td><button class="btn btn-primary btn-sm export-excel" data-tag="{{$data_tag}}">导出EXCEL</button></td></tr>
             {{template Elements/order_data_template}}
         {{else}}
             <tr class="{{$item['style']}}"><td colspan="23">{{$item['name']}}</td></tr>
             <tr><td class="warn" colspan="23">朋友说自提</td></tr>
             {{loop $pys_ziti_point $point}}
-                <tr><td class="success" colspan="23">{{get_address(null,$point)}}</td></tr>
-                <?php $current_orders=$map_ziti_orders[$point['OfflineStore']['id']]; ?>
+                <?php
+                    $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
+                    $data_tag = 'ziti-'.$point['OfflineStore']['id'];
+                ?>
+                <tr><td class="success" colspan="22">{{get_address(null,$point)}}</td><td><button class="btn btn-primary btn-sm export-excel" data-tag="{{$data_tag}}">导出EXCEL</button></td></tr>
                 {{template Elements/order_data_template}}
                 <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
             {{/loop}}
             <tr><td class="warn" colspan="23">好邻居自提</td></tr>
             {{loop $hlj_ziti_point $point}}
-                <tr><td class="success" colspan="23">{{get_address(null,$point)}}</td></tr>
-                <?php $current_orders=$map_ziti_orders[$point['OfflineStore']['id']]; ?>
+                <?php
+                    $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
+                    $data_tag = 'ziti-'.$point['OfflineStore']['id'];
+                ?>
+                <tr><td class="success" colspan="22">{{get_address(null,$point)}}</td><td><button class="btn btn-primary btn-sm export-excel" data-tag="{{$data_tag}}">导出EXCEL</button></td></tr>
                 {{template Elements/order_data_template}}
                 <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
             {{/loop}}
             {{loop $map_ziti_orders $current_orders}}
-                <tr><td class="danger" colspan="23">未知自提点</td></tr>
+                <?php $data_tag='none-tag'; ?>
+                <tr><td class="danger" colspan="23">未知自提点</td><td><button class="btn btn-primary btn-sm export-excel" data-tag="{{$data_tag}}">导出EXCEL</button></td></tr>
                 {{template Elements/order_data_template}}
             {{/loop}}
         {{/if}}
@@ -327,5 +337,8 @@
             <input type="text" width="80px;" name="order-ship-code" placeholder="快递单号">
         </div>
 </div>
-{{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
-{{$this->Html->script(array('manage/tuan/tuan_orders.js?v5.7'))}}
+{{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js',
+'/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js',
+'/js/manage-lib/tableExport.jquery.plugin/tableExport.js',
+'/js/manage-lib/tableExport.jquery.plugin/jquery.base64.js'))}}
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v5.8'))}}
