@@ -287,7 +287,7 @@ class Order extends AppModel {
     }
 
     public function count_by_status($uid) {
-        $rtn = $this->query('select count(1) as cnt, status from cake_orders where creator='.$uid.' and deleted='.DELETED_NO.' and published='.PUBLISH_YES.' group by status');
+        $rtn = $this->query('select count(1) as cnt, status from cake_orders where consignee_name is not null and creator='.$uid.' and deleted='.DELETED_NO.' and published='.PUBLISH_YES.' group by status');
         $count = array();
         foreach($rtn as $row) {
             $count[$row['cake_orders']['status']] = $row[0]['cnt'];

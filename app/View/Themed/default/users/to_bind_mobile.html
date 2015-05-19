@@ -201,7 +201,11 @@
 
         function showTip(msg,callback) {
             callback = callback?callback:function(){};
-            $tipInfo.text(msg).fadeIn(1000).fadeOut(2000,callback);
+            //$tipInfo.text(msg).fadeIn(1000).fadeOut(2000,callback);
+            $tipInfo.text(msg).show();
+            setTimeout(function(){
+                $tipInfo.hide();
+            },5000);
         }
 
         function isPhone(aPhone) {
