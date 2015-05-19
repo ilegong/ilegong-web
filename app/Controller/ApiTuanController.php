@@ -32,33 +32,33 @@ class ApiTuanController extends AppController{
      * post data
      *          {
      *              "product_id" : 购买产品ID,
-     *              "product_num" : 购买数量,
+     *              "num" : 购买数量,
      *              "spec_id" :  选择的规格,
      *              "tuan_buy_id" : 团购的ID,
      *              "consignment_date_id" : 排期ID,
      *              "send_date" : 排期,
-     *              "way_id" : 商品发货方式ID,
-     *              "way_type" : 发货方式代码
+     *              "ship_id" : 商品发货方式ID,
+     *              "ship_mark" : 发货方式代码
      *          }
      */
     public function add_cart(){
         $postStr = file_get_contents('php://input');
         $postdata = json_decode(trim($postStr), true);
         $product_id = $postdata['product_id'];
-        $product_num = $postdata['product_num'];
+        $num = $postdata['num'];
         $spec_id = $postdata['spec_id'];
         $type = ORDER_TYPE_TUAN;
         $uId = $this->currentUser['id'];
         $tuan_buy_id = $postdata['tuan_buy_id'];
         $consignment_date_id = $postdata['consignment_date_id'];
         $send_date = $postdata['send_date'];
-        $way_id = $postdata['way_id'];
-        $way_type = $postdata['way_type'];
+        $ship_id = $postdata['ship_id'];
+        $ship_mark = $postdata['ship_mark'];
         $cart_tuan_param = array(
             'tuan_buy_id' => $tuan_buy_id,
             'product_id' => $product_id
         );
-        $result = $this->TuanBuying->add_cart($product_id,$product_num,$spec_id,$type,$uId,$cart_tuan_param,$consignment_date_id,$send_date,$way_id,$way_type);
+        $result = $this->TuanBuying->add_cart($product_id,$num,$spec_id,$type,$uId,$cart_tuan_param,$consignment_date_id,$send_date,$ship_id,$ship_mark);
         echo json_encode($result);
         return;
     }
