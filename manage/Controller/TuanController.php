@@ -422,7 +422,7 @@ class TuanController extends AppController
         $orderIds = array_unique($order_ids);
         foreach($orderIds as $val){
             $key = array_search($val,$order_ids);
-            if($key!=null){
+            if($key!==false){
                 $orders[] = $all_orders[$key];
             }
         }
