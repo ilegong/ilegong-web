@@ -10,6 +10,8 @@ class TuanBuyingComponent extends Component{
 
     var $name = 'TuanBuyingComponent';
 
+    public $components = array('Session');
+
     /**
      * @param $product_id
      * @param $product_num
@@ -42,8 +44,7 @@ class TuanBuyingComponent extends Component{
             }else{
                 return array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id,'cart_array'=>$cart_array);
             }
-            //Todo
-            //$this->Session->write(self::key_balance_pids(), json_encode($cart_array));
+            $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
         }else{
             return array('success' => false,'error' => '对不起，系统出错，请联系客服');
         }
@@ -310,7 +311,7 @@ class TuanBuyingComponent extends Component{
         }
         $order_id = $order['Order']['id'];
         $score_consumed = 0;
-        //$spent_on_order = intval($this->Session->read(self::key_balanced_scores()));
+        $spent_on_order = intval($this->Session->read(self::key_balanced_scores()));
         $order_id_spents = array();
         if ($spent_on_order > 0) {
             $reduced = $spent_on_order / 100;
@@ -326,8 +327,7 @@ class TuanBuyingComponent extends Component{
             $this->spend_score($uid,$score_consumed,$order_id_spents);
         }
         // 注意必须清除key_balanced_scores
-        //TODO
-        //$this->Session->write(self::key_balanced_scores(), '');
+        $this->Session->write(self::key_balanced_scores(), '');
         if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
             $result_data['success'] = false;
             $result_data['fail_reason'] = "你已经支付过了";
