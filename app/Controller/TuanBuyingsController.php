@@ -288,7 +288,7 @@ class TuanBuyingsController extends AppController{
             'conditions' => array('id' => $product_brand['Product']['brand_id']),
             'fields' => array('name', 'slug')
         ));
-        $this->set_old_consignees($uid);
+        $this->set_old_consignees($uid,$shipSetting);
         $this->set('try_id',$try_id);
         $this->set('ship_type',$ship_type);
         $this->set('buy_count',$Carts['Cart']['num']);
@@ -387,7 +387,7 @@ class TuanBuyingsController extends AppController{
             'conditions' => array('id' => $product_brand['Product']['brand_id']),
             'fields' => array('name', 'slug')
         ));
-        $this->set_old_consignees($uid);
+        $this->set_old_consignees($uid,$shipSetting);
         //积分统计
         $this->loadModel('User');
         $score = $this->User->get_score($uid, true);

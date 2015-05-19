@@ -27,8 +27,9 @@ class TuanBuyingComponent extends Component{
      *
      * @return array|void
      */
-    public function add_cart($product_id,$product_num,$spec_id,$type,$uId,$sessionId,$cart_tuan_param,$consignment_date_id,$send_date,$way_id,$way_type){
+    public function add_cart($product_id,$product_num,$spec_id,$type,$uId,$cart_tuan_param,$consignment_date_id,$send_date,$way_id,$way_type){
         $this->Cart = ClassRegistry::init('Cart');
+        $sessionId = $this->Session->id();
         $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,$spec_id,$type,0,$uId, $sessionId,  null, null,$cart_tuan_param);
         $this->log('cartInfo'.json_encode($cartInfo));
         if($cartInfo){
@@ -57,7 +58,7 @@ class TuanBuyingComponent extends Component{
      *
      * @return array
      */
-    public function balance_sec_kill($tuan_id,$cart_id,$try_id){
+    public function balance_sec_kill($uid,$tuan_id,$cart_id,$try_id){
         $ship_type=-1;
         $result_data = array();
         if(!empty($tuan_id)){
@@ -96,6 +97,7 @@ class TuanBuyingComponent extends Component{
         $result_data['cart_id'] = $Carts['Cart']['id'];
         $result_data['cart_info'] = $Carts;
         $result_data['brand'] = $brand['Brand'];
+        $result_data['consignee_info'] = $this->get_old_consignees($uid,$shipSetting);
         $result_data['success'] = true;
         return $result_data;
     }
@@ -169,6 +171,7 @@ class TuanBuyingComponent extends Component{
         }
         $brand = $this->get_brand($pid);
         $could_score_money = $this->get_score_usable($uid, $total_price);
+        $result_data['consignee_info'] = $this->get_old_consignees($uid,$shipSetting);
         $tuan_id = $tuan_info['TuanTeam']['id'];
         $result_data['score_usable'] = $could_score_money * 100;
         $result_data['way_id'] = $way_id;
@@ -458,6 +461,32 @@ class TuanBuyingComponent extends Component{
             'conditions' => $cond
         ));
         return $shipSetting;
+    }
+
+    private function get_old_consignees($uid,$shipSetting=null){
+        $this->OrderConsignees = ClassRegistry::init('OrderConsignees');
+        if(empty($shipSetting)||(TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type'])==ZITI_TAG)){
+            $ziti_consignee_info = $this->OrderConsignees->find('first', array(
+                'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN_ZITI),
+                'fields' => array('area', 'ziti_id','address','ziti_type')
+            ));
+            if($ziti_consignee_info){
+                if(empty($shipSetting)||($shipSetting['ProductShipSetting']['val']==-1)||($shipSetting['ProductShipSetting']['val']==$ziti_consignee_info['OrderConsignees']['ziti_type'])){
+                    //$this->set('ziti_consignee_info',$ziti_consignee_info['OrderConsignees']);
+                    return $ziti_consignee_info['OrderConsignees'];
+                }
+            }
+        }
+        if(TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type'])!=ZITI_TAG){
+            $consignee_info = $this->OrderConsignees->find('first', array(
+                'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN),
+                'fields' => array('name', 'address', 'mobilephone')
+            ));
+            if($consignee_info){
+                return $consignee_info['OrderConsignees'];
+            }
+        }
+
     }
 
 }
