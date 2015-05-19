@@ -456,7 +456,7 @@ $(document).ready(function () {
                                 if (result.success) {
                                     bootbox.alert(res.msg + ' ' + result.msg);
                                     //location.reload();
-                                    $('td',$currentOperateOrder.closest('tr')).get(3).html('退款中');
+                                    $currentOperateOrder.parents('tr').children('td').eq(3).html('已退款');
                                     refundOrderDialog.dialog('close');
                                 } else {
                                     bootbox.alert(result.msg);
@@ -464,7 +464,9 @@ $(document).ready(function () {
                             });
                         } else {
                             bootbox.alert(res.msg);
-                            location.reload();
+                            $currentOperateOrder.parents('tr').children('td').eq(3).html('退款中');
+//                            location.reload();
+                            refundOrderDialog.dialog('close');
                         }
                     } else {
                         bootbox.alert(res.msg);
@@ -492,6 +494,8 @@ $(document).ready(function () {
                 }
             },
             close: function () {
+                $('#refund_money').val('');
+                $('#refund_remark').val('');
             }
         });
         $(".refund-button").click(function () {
