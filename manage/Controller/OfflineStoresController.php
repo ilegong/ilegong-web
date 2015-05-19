@@ -96,7 +96,7 @@ class OfflineStoresController extends AppController{
             'conditions'=>array('deleted'=>0),
             'order' => 'name'
         ));
-        $this->log("offline stores: ".json_encode($offline_stores));
+//        $this->log("offline stores: ".json_encode($offline_stores));
         $offline_stores= Hash::combine($offline_stores , "{n}.OfflineStore.id", "{n}.OfflineStore", "{n}.OfflineStore.type");
         echo json_encode($offline_stores);
     }

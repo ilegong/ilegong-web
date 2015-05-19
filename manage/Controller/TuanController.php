@@ -401,7 +401,7 @@ class TuanController extends AppController
             )
         );
 
-        $orders = array();
+        $all_orders = array();
         if (!empty($conditions)) {
             $params = array(
                 'conditions' => $conditions,
@@ -413,12 +413,19 @@ class TuanController extends AppController
                 $params['limit'] = $limit;
             }
             $this->log('query order conditions: ' . json_encode($params));
-            $orders = $this->Order->find('all', $params);$this->log('orders'.json_encode($orders));
+            $all_orders = $this->Order->find('all', $params);$this->log('orders'.json_encode($all_orders));
         } else {
             $this->log('order condition is empty: ' . json_encode($conditions));
         }
-
-        $order_ids = Hash::extract($orders, "{n}.Order.id");
+        $orders = array();
+        $order_ids = Hash::extract($all_orders, "{n}.Order.id");
+        $orderIds = array_unique($order_ids);
+        foreach($orderIds as $val){
+            $key = array_search($val,$order_ids);
+            if($key!=null){
+                $orders[] = $all_orders[$key];
+            }
+        }
 
         $carts = array();
         if (!empty($order_ids)) {
