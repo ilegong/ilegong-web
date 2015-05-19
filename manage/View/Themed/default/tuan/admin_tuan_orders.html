@@ -256,27 +256,27 @@
                 $current_orders=$map_other_orders[$code];
                 $data_tag = $code;
             ?>
-            <tr class="{{$item['style']}}"><td colspan="22">{{$item['name']}}</td><td><button class="btn btn-primary btn-sm export-excel" data-tag="{{$data_tag}}">导出EXCEL</button></td></tr>
+            <tr class="{{$item['style']}}"><td colspan="23">{{$item['name']}}</td><td><button class="btn btn-primary btn-sm export-excel" data-tag="{{$data_tag}}">导出EXCEL</button></td></tr>
             {{template Elements/order_data_template}}
         {{else}}
-            <tr class="{{$item['style']}}"><td colspan="23">{{$item['name']}}</td></tr>
-            <tr><td class="warn" colspan="23">朋友说自提</td></tr>
+            <tr class="{{$item['style']}}"><td colspan="24">{{$item['name']}}</td></tr>
+            <tr><td class="warn" colspan="24">朋友说自提</td></tr>
             {{loop $pys_ziti_point $point}}
                     <?php
                         $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
                         $data_tag = 'ziti-'.$point['OfflineStore']['id'];
                     ?>
-                <tr class="success"><td colspan="22">{{get_address(null,$point)}}</td><td><button class="btn btn-primary btn-sm export-excel" data-tag="{{$data_tag}}">导出EXCEL</button></td></tr>
+                <tr class="success"><td colspan="23">{{get_address(null,$point)}}</td><td><button class="btn btn-primary btn-sm export-excel" data-tag="{{$data_tag}}">导出EXCEL</button></td></tr>
                 {{template Elements/order_data_template}}
                 <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
             {{/loop}}
-            <tr><td class="warn" colspan="23">好邻居自提</td></tr>
+            <tr><td class="warn" colspan="24">好邻居自提</td></tr>
                 {{loop $hlj_ziti_point $point}}
                     <?php
                         $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
                         $data_tag = 'ziti-'.$point['OfflineStore']['id'];
                     ?>
-                     <tr class="success"><td colspan="22">{{get_address(null,$point)}}</td><td><button class="btn btn-primary btn-sm export-excel" data-tag="{{$data_tag}}">导出EXCEL</button></td></tr>
+                     <tr class="success"><td colspan="23">{{get_address(null,$point)}}</td><td><button class="btn btn-primary btn-sm export-excel" data-tag="{{$data_tag}}">导出EXCEL</button></td></tr>
                     {{template Elements/order_data_template}}
                     <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
             {{/loop}}
