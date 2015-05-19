@@ -284,6 +284,9 @@ class ReferController extends AppController {
 
     private function set_wx_share_data(){
         if(parent::is_weixin()){
+            $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
+            $weixinJs = prepare_wx_share_log($currUid, 'rid', $currUid);
+            $this->set($weixinJs);
             $time_line_title = '接受'.$this->currentUser['nickname'].'推荐立即获得10元,[朋友说]分享产地直供、新鲜现摘食品的平台';
             $firend_title = '接受'.$this->currentUser['nickname'].'推荐立即获得10元';
             $this->set('to_timeline_title',$time_line_title);
