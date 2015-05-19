@@ -717,6 +717,6 @@ class TuanController extends AppController
             $offline_store_id = $tuan_offline_store_map[$tuan_buy_tuan_map[$order_tuan_buy_map[$id]]];
             $this->Order->updateAll(array(consignee_id=>$offline_store_id),array('id'=>$id));
         }
-        $this->redirect('/manage/admin/tuan/query_abnormal_order');
+        $this->redirect('/admin/tuan/query_abnormal_order');
     }
 }
