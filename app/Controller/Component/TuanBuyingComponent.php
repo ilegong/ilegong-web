@@ -14,22 +14,23 @@ class TuanBuyingComponent extends Component{
 
     /**
      * @param $product_id
-     * @param $num
+     * @param $product_num
      * @param $spec_id
      * @param $type
      * @param $uId
+     * @param $sessionId
      * @param $cart_tuan_param
      * @param $consignment_date_id
      * @param $send_date
-     * @param $ship_id
-     * @param $ship_mark
+     * @param $way_id
+     * @param $way_type
      *
      * @return array|void
      */
-    public function add_cart($product_id,$num,$spec_id,$type,$uId,$cart_tuan_param,$consignment_date_id,$send_date,$ship_id,$ship_mark){
+    public function add_cart($product_id,$product_num,$spec_id,$type,$uId,$cart_tuan_param,$consignment_date_id,$send_date,$way_id,$way_type){
         $this->Cart = ClassRegistry::init('Cart');
         $sessionId = $this->Session->id();
-        $cartInfo = $this->Cart->add_to_cart($product_id,$num,$spec_id,$type,0,$uId, $sessionId,  null, null,$cart_tuan_param);
+        $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,$spec_id,$type,0,$uId, $sessionId,  null, null,$cart_tuan_param);
         $this->log('cartInfo'.json_encode($cartInfo));
         if($cartInfo){
             $result = $this->Cart->updateAll(array('consignment_date' => $consignment_date_id, 'send_date' => "'".$send_date."'"), array('id' => $cartInfo['Cart']['id']));
@@ -39,10 +40,10 @@ class TuanBuyingComponent extends Component{
                 return;
             }
             $cart_array = array(0 => strval($cartInfo['Cart']['id']));
-            if(strpos($ship_mark,ZITI_TAG)===false){
-                return array('success' => true, 'direct'=>'normal', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$ship_id,'cart_array'=>$cart_array);
+            if(strpos($way_type,ZITI_TAG)===false){
+                return array('success' => true, 'direct'=>'normal', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id,'cart_array'=>$cart_array);
             }else{
-                return array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$ship_id,'cart_array'=>$cart_array);
+                return array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id,'cart_array'=>$cart_array);
             }
             $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
         }else{
@@ -105,10 +106,10 @@ class TuanBuyingComponent extends Component{
      * @param $uid
      * @param $tuan_buy_id
      * @param $cart_id
-     * @param int $ship_id
+     * @param int $way_id
      * @return array
      */
-    public function balance_tuan($uid,$tuan_buy_id, $cart_id, $ship_id=0){
+    public function balance_tuan($uid,$tuan_buy_id, $cart_id, $way_id=0){
         $result_data = array();
         $Carts = $this->get_cart($cart_id);
         $this->TuanBuying = ClassRegistry::init('TuanBuying');
@@ -145,9 +146,9 @@ class TuanBuyingComponent extends Component{
         $ship_way = ZITI_TAG;
         $ship_val = -1;
         //way_id 代表设置商品的发货方式
-        if ($ship_id != 0) {
+        if ($way_id != 0) {
             //发货方式不为0要计算邮费
-            $shipSetting = $this->get_ship_setting($ship_id, $pid, 'Product');
+            $shipSetting = $this->get_ship_setting($way_id, $pid, 'Product');
             if (empty($shipSetting)) {
                 $result_data['success'] = false;
                 $result_data['fail_reason'] = '选择物流方式错误';
@@ -173,7 +174,7 @@ class TuanBuyingComponent extends Component{
         $result_data['consignee_info'] = $this->get_old_consignees($uid,$shipSetting);
         $tuan_id = $tuan_info['TuanTeam']['id'];
         $result_data['score_usable'] = $could_score_money * 100;
-        $result_data['way_id'] = $ship_id;
+        $result_data['way_id'] = $way_id;
         $result_data['way_type'] = $ship_way;
         $result_data['buy_count'] = $Carts['Cart']['num'];
         $result_data['total_price'] = $total_price;
@@ -206,7 +207,7 @@ class TuanBuyingComponent extends Component{
      * @param $p_address
      * @return array
      */
-    public function make_order($cart_id,$tuan_id,$member_id,$mobile,$name,$uid,$ship_id,$tuan_sec,$global_sec,$shop_id,$p_address){
+    public function make_order($cart_id,$tuan_id,$member_id,$mobile,$name,$uid,$way_id,$tuan_sec,$global_sec,$shop_id,$p_address){
         $result_data = array();
         if (empty($uid)) {
             $result_data['success'] = false;
@@ -269,8 +270,8 @@ class TuanBuyingComponent extends Component{
         }
         $way = ZITI_TAG;
         //设置了发货方式
-        if ($ship_id != 0) {
-            $shipSetting = $this->get_ship_setting($ship_id, $pid, 'Product');
+        if ($way_id != 0) {
+            $shipSetting = $this->get_ship_setting($way_id, $pid, 'Product');
             if (empty($shipSetting)) {
                 $result_data['success'] = false;
                 $result_data['fail_reason'] = "该订单物流方式设置有误，请重试";

@@ -13,7 +13,7 @@
           $consign_time = empty($date)?'': date('m-d', strtotime($date));
           $brand = $brands[$cart['Cart']['product_id']];
         ?>
-        <tr data-order-id="{{$order[Order][id]}}" data-offline-store-id="{{$offline_store[OfflineStore][id]}}" class="order">
+        <tr data-order-id="{{$order[Order][id]}}" data-offline-store-id="{{$offline_store[OfflineStore][id]}}" class="order {{$data_tag}}">
             <td>
                 {{if ($order['Order']['type'] == 5 || $order['Order']['type'] == 6) && ($order['Order']['status']== 1|| $order['Order']['status'] == 2)}}
                 <input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids" {{$offline_store['OfflineStore']['type'] == 1 ? "" : "disabled='disabled'"}}>
