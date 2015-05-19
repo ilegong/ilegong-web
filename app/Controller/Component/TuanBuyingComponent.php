@@ -190,9 +190,21 @@ class TuanBuyingComponent extends Component{
         $result_data['success'] = false;
     }
 
-
-
-    public function make_order($cart_id,$tuan_id,$member_id,$mobile,$name,$uid,$way_id,$tuan_sec,$global_sec,$shop_id,$spent_on_order,$p_address){
+    /**
+     * @param $cart_id
+     * @param $tuan_id
+     * @param $member_id
+     * @param $mobile
+     * @param $name
+     * @param $uid
+     * @param $way_id
+     * @param $tuan_sec
+     * @param $global_sec
+     * @param $shop_id
+     * @param $p_address
+     * @return array
+     */
+    public function make_order($cart_id,$tuan_id,$member_id,$mobile,$name,$uid,$way_id,$tuan_sec,$global_sec,$shop_id,$p_address){
         $result_data = array();
         if (empty($uid)) {
             $result_data['success'] = false;
@@ -295,6 +307,7 @@ class TuanBuyingComponent extends Component{
             }
             $address = $p_address;
         } else {
+            //小团购买 获取自提点地址
             $offline_store = $this->get_offline_store($tuan_info['TuanTeam']['offline_store_id']);
             $address = get_address($tuan_info, $offline_store);
             if (!empty($p_address)) {
