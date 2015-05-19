@@ -685,4 +685,38 @@ class TuanController extends AppController
             echo json_encode($returnInfo);
         }
     }
+
+    public function admin_to_fix_error_order(){
+        $this->log('test');
+    }
+
+    public function admin_fix_ziti_error_order(){
+        $ids = $_POST['order_ids'];
+        $ids = explode(',', $ids);
+        $orders = $this->Order->find('all',array(
+            'conditions' => array(
+                'id' => $ids
+            )
+        ));
+        $tuan_buy_ids = Hash::extract($orders,'{n}.Order.member_id');
+        $order_tuan_buy_map = Hash::combine($orders,'{n}.Order.id','{n}.Order.member_id');
+        $tuan_buyings = $this->TuanBuying->find('all',array(
+            'conditions' => array(
+                'id' => $tuan_buy_ids
+            )
+        ));
+        $tuan_buy_tuan_map = Hash::combine($tuan_buyings,'{n}.TuanBuying.id','{n}.TuanBuying.tuan_id');
+        $tuan_ids = Hash::extract($tuan_buyings,'{n}.TuanBuying.tuan_id');
+        $tuans = $this->TuanTeam->find('all',array(
+            'conditions' => array(
+                'id' => $tuan_ids
+            )
+        ));
+        $tuan_offline_store_map = Hash::combine($tuans,'{n}.TuanTeam.id','{n}.TuanTeam.offline_store_id');
+        foreach($ids as $id){
+            $offline_store_id = $tuan_offline_store_map[$tuan_buy_tuan_map[$order_tuan_buy_map[$id]]];
+            $this->Order->updateAll(array(consignee_id=>$offline_store_id),array('id'=>$id));
+        }
+        $this->redirect('/manage/admin/tuan/query_abnormal_order');
+    }
 }
