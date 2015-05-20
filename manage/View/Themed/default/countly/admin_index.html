@@ -1,0 +1,107 @@
+<style>
+    @import url(http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css);
+    body{margin-top:20px;}
+    .fa-fw {width: 2em;}
+</style>
+{{$this->Html->css(array('/css/manage/countly/countly.css'))}}
+<div class="container" id="pys_order_countly">
+    <div class="row">
+        <div class="col-md-2">
+            <ul class="nav nav-pills nav-stacked admin-menu">
+                <li class="active"><a href="javascript:void(0)" data-target-id="gen-data"><i class="fa fa-pencil fa-fw"></i>生成数据</a></li>
+                <li><a href="javascript:void(0)" data-target-id="week-order"><i class="fa fa-file-o fa-fw"></i>订单统计</a></li>
+                <li><a href="javascript:void(0)" data-target-id="widgets"><i class="fa fa-list-alt fa-fw"></i>区域统计</a></li>
+                <li><a href="#" data-target-id="home"><i class="fa fa-home fa-fw"></i>自提点统计</a></li>
+                <li><a href="javascript:void(0)" data-target-id="charts"><i class="fa fa-bar-chart-o fa-fw"></i>Charts</a></li>
+                <li><a href="javascript:void(0)" data-target-id="table"><i class="fa fa-table fa-fw"></i>Table</a></li>
+                <li><a href="javascript:void(0)" data-target-id="forms"><i class="fa fa-tasks fa-fw"></i>Forms</a></li>
+                <li><a href="javascript:void(0)" data-target-id="calender"><i class="fa fa-calendar fa-fw"></i>Calender</a></li>
+                <li><a href="javascript:void(0)" data-target-id="library"><i class="fa fa-book fa-fw"></i>Library</a></li>
+                <li><a href="javascript:void(0)" data-target-id="settings"><i class="fa fa-cogs fa-fw"></i>Settings</a></li>
+            </ul>
+        </div>
+        <div class="col-md-10 well admin-content" id="gen-data">
+            <div class="omb_login">
+                <h3 class="omb_authTitle">生成数据</h3>
+                <div class="row omb_row-sm-offset-3 omb_socialButtons">
+                    <div class="col-xs-2 col-sm-6">
+                        <a href="#" id="gen_last_week_data" class="btn btn-lg btn-block omb_btn-facebook">
+                            <i class="fa fa-facebook visible-xs"></i>
+                            <span class="hidden-xs">生成上周数据</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="row omb_row-sm-offset-3 omb_loginOr">
+                    <div class="col-xs-12 col-sm-6">
+                        <hr class="omb_hrOr">
+                        <span class="omb_spanOr">或者</span>
+                    </div>
+                </div>
+
+                <div class="row omb_row-sm-offset-3">
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="omb_loginForm">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-calendar-o"></i></span>
+                                <input type="text" id="gen_start_date" class="form-control" name="start_date" placeholder="开始日期">
+                            </div>
+                            <span class="help-block"></span>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-calendar-o"></i></span>
+                                <input type="text" id="gen_end_date" class="form-control" name="end_date" placeholder="结束日期">
+                            </div>
+                            <br/>
+                            <button id="custom_gen_data" class="btn btn-lg btn-primary btn-block">生成数据</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10 well admin-content" id="week-order">
+            <table class="table table-hover" id="week-order-data">
+                <thead>
+                    <th>时间段</th>
+                    <th>新下单用户</th>
+                    <th>下单用户数</th>
+                    <th>重复购买用户</th>
+                    <th>复购率</th>
+                    <th>峰值订单</th>
+                    <th>峰值订单日期</th>
+                    <th>平均订单数</th>
+                    <th>全部订单数</th>
+                    <th>团购订单数</th>
+                    <th>团购自提订单数</th>
+                    <th>普通订单数</th>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-10 well admin-content" id="widgets">
+
+        </div>
+        <div class="col-md-10 well admin-content" id="home">
+            
+        </div>
+        <div class="col-md-10 well admin-content" id="charts">
+
+        </div>
+        <div class="col-md-10 well admin-content" id="table">
+
+        </div>
+        <div class="col-md-10 well admin-content" id="forms">
+
+        </div>
+        <div class="col-md-10 well admin-content" id="calender">
+
+        </div>
+        <div class="col-md-10 well admin-content" id="library">
+
+        </div>
+        <div class="col-md-10 well admin-content" id="settings">
+
+        </div>
+    </div>
+</div>
+{{$this->Html->script(array('/js/manage/countly/countly.js'))}}
