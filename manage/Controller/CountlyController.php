@@ -52,6 +52,7 @@ class CountlyController extends AppController{
         ));
         $offline_store_ids = Hash::extract($orders,'{n}.Order.consignee_id');
         $offline_store_ids = array_unique($offline_store_ids);
+        $this->log('$offline_store_ids'.json_encode($offline_store_ids));
         foreach($offline_store_ids as $store_id){
             $this->gen_week_store_data($store_id,$start_date,$end_date);
         }
