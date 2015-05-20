@@ -107,7 +107,14 @@
                                     <span class="border">
                                         {{loop $ship_settings $index $ship_set}}
                                             <span class="mr12 border {{if $index==0}}cur tuan_way_selected{{/if}}" way-label="{{$ship_set['ProductShipSetting']['code']}}" way-id="{{$ship_set['ProductShipSetting']['id']}}">
-                                                {{$ship_set['ProductShipSetting']['name']}}{{if $ship_set['ProductShipSetting']['ship_fee'] > 0}}({{$ship_set['ProductShipSetting']['ship_fee']}}元邮费){{/if}}
+                                                {{$ship_set['ProductShipSetting']['name']}}
+                                                {{if $ship_set['ProductShipSetting']['ship_type']!=1}}
+                                                    {{if $ship_set['ProductShipSetting']['ship_fee'] > 0}}
+                                                        ({{$ship_set['ProductShipSetting']['ship_fee']}}元)
+                                                    {{elseif $ship_set['ProductShipSetting']['ship_fee'] == 0}}
+                                                        (包邮)
+                                                    {{/if}}
+                                                {{/if}}
                                                 <div class="focus"></div>
                                             </span>
                                         {{/loop}}

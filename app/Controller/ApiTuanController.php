@@ -41,26 +41,34 @@ class ApiTuanController extends AppController{
      *              "way_type" : 发货方式代码
      *          }
      */
-    public function add_cart(){
+    public function cart_add(){
         $postStr = file_get_contents('php://input');
         $postdata = json_decode(trim($postStr), true);
-        $product_id = $postdata['product_id'];
-        $product_num = $postdata['product_num'];
-        $spec_id = $postdata['spec_id'];
-        $type = ORDER_TYPE_TUAN;
-        $uId = $this->currentUser['id'];
-        $tuan_buy_id = $postdata['tuan_buy_id'];
-        $consignment_date_id = $postdata['consignment_date_id'];
-        $send_date = $postdata['send_date'];
-        $way_id = $postdata['way_id'];
-        $way_type = $postdata['way_type'];
-        $cart_tuan_param = array(
-            'tuan_buy_id' => $tuan_buy_id,
-            'product_id' => $product_id
-        );
-        $result = $this->TuanBuying->add_cart($product_id,$product_num,$spec_id,$type,$uId,$cart_tuan_param,$consignment_date_id,$send_date,$way_id,$way_type);
-        echo json_encode($result);
-        return;
+        $this->log('add tuan cart: '.$postStr);
+
+        if (!empty($data)) {
+            $product_id = $postdata['product_id'];
+            $num = $postdata['num'];
+            $spec_id = $postdata['spec_id'];
+            $type = ORDER_TYPE_TUAN;
+            $uId = $this->currentUser['id'];
+            $tuan_buying_id = $postdata['tuan_buying_id'];
+            $consignment_date_id = $postdata['consignment_date_id'];
+            $send_date = $postdata['send_date'];
+            $ship_id = $postdata['ship_id'];
+            $ship_mark = $postdata['ship_mark'];
+            $cart_tuan_param = array(
+                'tuan_buy_id' => $tuan_buying_id,
+                'product_id' => $product_id
+            );
+            $info = $this->TuanBuying->add_cart($product_id,$num,$spec_id,$type,$uId,$cart_tuan_param, $consignment_date_id, $send_date, $ship_id,$ship_mark);
+        } else {
+            $this->log('add tuan cart: data is empty');
+            $info = array('success' => false, 'reason' => 'invalid_parameter');
+        }
+
+        $this->set('info', $info);
+        $this->set('_serialize', 'info');
     }
 
     /**
