@@ -1,7 +1,10 @@
 {{$this->Html->css(array('tuan.css?v6.1'));}}
 <?php
-    $current_model = 'Product';
-    $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
+    if($tuan_team){
+        $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
+    }
+    $sold_num = $product_try['ProductTry']['sold_num'];
+    $target_num = $product_try['ProductTry']['limit_num'];
     if($sold_num >= $target_num){
         $sold_percent = 100;
     }else{
@@ -24,11 +27,8 @@
                 {{template Elements/product_img_sild}}
                     <div class="p_details_title">{{$Product['Product']['name']}}</div>
                     <ul class="p_details_price clearfix">
-                        <li class="fl price"><span>{{if $current_data_id==874}}尝鲜价 {{/if}}￥<font {{if !$tuan_price}}id="product_price"{{/if}}>{{if $tuan_price}}{{$this->Number->precision($tuan_price,2)}}{{elseif $tuan_product_price}}{{$this->Number->precision($tuan_product_price,2)}}{{else}}{{$this->Number->precision($Product['Product']['price'],2)}}{{/if}}</font></span></li>
-                        <li class="fl original-price"><s style="margin-top: 7px;display: block;">{{if $original_price>0}}￥{{$this->Number->precision($original_price,2)}}{{/if}}</s></li>
-                        {{if $tuan_buy_type!=2}}
-                          <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{$consign_time_text}}</b></span></a></li>
-                        {{/if}}
+                        <li class="fl price"><span>秒杀价￥<font>{{$this->Number->precision(($product_try['ProductTry']['price'])/100,2)}}</font></span></li>
+                        <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{friendlyDateFromStr($product_try['ProductTry']['consignment_date'])}}</b></span></a></li>
                     </ul>
                     <ul class="sales clearfix">
                         <li>
@@ -37,111 +37,76 @@
                             </span>
                         </li>
                     </ul>
-                    {{if $tuan_buy_type!=2}}
                     <div class="tuan_bar">
-                        <div>已团购<span  value="{{$sold_num}}">{{$sold_num}}</span>份</div>
+                        <div>已秒杀<span  value="{{$sold_num}}">{{$sold_num}}</span>份</div>
                         <div class="bar">
                             <div class="bar_buy" id = "bar_buy" style={{"width:".$sold_percent."%;"}}></div>
                         </div>
                         <ul class="clearfix">
                             <li class="fl"><span id="bar_percent">{{$sold_percent}}%</span></li>
-                            <li class="fr">目标{{$target_num}}份</li>
+                            <li class="fr">仅限{{$target_num}}份</li>
                         </ul>
                     </div>
-                    {{/if}}
-                    {{if !$big_tuan}}
+                    {{if $tuan_team}}
                         <div class="clearfix tuanxq">
                             <a href="/tuan_teams/info/{{$tuan_id}}" style="color: #666666">
                                 {{$tuan_team['TuanTeam']['tuan_name']}}
                                 &nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_team['TuanTeam']['leader_name']}}<br/>参团请加团长微信，微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}
                             </a>
-                            {{if $tuan_buy_type!=2}}
-                            <span>截止日期：<b>{{$end_time}}</b></span>
-                            {{/if}}
+                            <span>开秒时间：<b>{{friendlyDateFromStr($product_try['ProductTry']['start_time'],FORMAT_TIME)}}</b></span>
                         </div>
                     {{/if}}
 
-                    {{if $product_spec_map}}
-                    {{$product_spec_map}}
                     <ul class="standard clearfix">
-                        {{if $specs_map && !empty($specs_map['choices'])}}
-                        <?php foreach($specs_map['choices'] as $label => $values) {
-                        if(!empty($label) && !empty($values)){
-                        ?>
                         <li class="good-spec">
-                            <span class="gray title mr12 spec_label" style="float:left;">{{$label}}:</span>
+                            <span class="gray title mr12 spec_label" style="float:left;">秒杀规格:</span>
                             <span class="border" style="display: block;overflow: hidden;padding-bottom: 10px;">
-                            <?php foreach($values as $index => $vaLabel){?>
-                                <span class="mr12 border spec_item" item-label="{{$label}}">
-                                    {{$vaLabel}}
+                                <span class="mr12 border spec_item spec_item_selected cur" item-label="try_spec">
+                                    {{$product_try['ProductTry']['spec']}}
                                     <div class="focus"></div>
                                 </span>
-                                <?php } ?>
                             </span>
                         </li>
-                        <?php } } ?>
-                        {{/if}}
                     </ul>
-                    {{/if}}
-                    {{if $tuan_buy_type==2}}
-                    {{if !empty($consignment_dates)}}
                     <ul class="standard clearfix">
                         <li>
                             <span class="gray title mr12" style="float:left;">送货日期:</span>
                             <span class="border" style="display: block;overflow: hidden;">
-                            <?php foreach($consignment_dates as $index => $date){?>
-                                <span class="mr12 border spec_item {{if $index == 0}}spec_item_selected cur{{/if}}" item-label="SD" data-val="{{$date['id']}}" data-send-date="{{$date['send_date']}}">
-                                    {{$date['date']}}
+                                <span class="mr12 border spec_item spec_item_selected cur" item-label="SD">
+                                    {{friendlyDateFromStr($product_try['ProductTry']['consignment_date'])}}
                                     <div class="focus"></div>
                                 </span>
-                                <?php } ?>
                             </span>
                         </li>
                     </ul>
-                    {{/if}}
-                    {{/if}}
-                    {{if $big_tuan}}
-                        {{if $ship_settings}}
-                            <ul class="standard clearfix">
-                                <li>
-                                    <span class="gray title mr12" style="float:left;">方式:</span>
-                                    <span class="border">
-                                        {{loop $ship_settings $index $ship_set}}
-                                            <span class="mr12 border {{if $index==0}}cur tuan_way_selected{{/if}}" way-label="{{$ship_set['ProductShipSetting']['code']}}" way-id="{{$ship_set['ProductShipSetting']['id']}}">
-                                                {{$ship_set['ProductShipSetting']['name']}}
-                                                {{if $ship_set['ProductShipSetting']['ship_type']!=1}}
-                                                    {{if $ship_set['ProductShipSetting']['ship_fee'] > 0}}
-                                                        ({{$ship_set['ProductShipSetting']['ship_fee']}}元邮费)
-                                                    {{elseif $ship_set['ProductShipSetting']['ship_fee'] == 0}}
-                                                        (包邮)
-                                                    {{/if}}
-                                                {{/if}}
-                                                <div class="focus"></div>
-                                            </span>
-                                        {{/loop}}
-                                    </span>
-                                </li>
-                            </ul>
-                        {{else}}
-                            <!--default-->
-                             <span class="mr12 border cur tuan_way_selected" way-label="ziti" way-fee="0" way-id="0" style="display: none;">自提</span>
-                        {{/if}}
+                    {{if $tuan_team}}
+                        <ul class="standard clearfix">
+                            <li>
+                                <span class="gray title mr12" style="float:left;">快递方式:</span>
+                                <span class="border">
+                                    <span class="mr12 border cur tuan_way_selected">
+                                            自提
+                                            <div class="focus"></div>
+                                        </span>
+                                </span>
+                            </li>
+                        </ul>
                     {{else}}
-                    <div class="clearfix tuanxq" style="margin-top: -1px;">
-                        <span class="fl">详细地址：{{$tuan_address}}</span>
-                        <a class="fr" href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
-                            <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
-                        </a>
-                    </div>
+                        <div class="clearfix tuanxq" style="margin-top: -1px;">
+                            <span class="fl">详细地址：{{$tuan_address}}</span>
+                            <a class="fr" href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
+                                <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
+                            </a>
+                        </div>
                     {{/if}}
                     <ul class="numbers clearfix b_line">
                     <li class="fl">
-                            <span class="gray title mr12" style="float:left;">数量:</span>
+                        <span class="gray title mr12" style="float:left;">数量:</span>
                         <span class="clearfix" style="display: block;overflow: hidden;">
-                    <div {{if $is_limit_num}}id="pamount_not_r"{{else}}id="pamount_reduce"{{/if}} class="grew"  item-id="{{$pid}}">-</div>
-                    <input id="input_pamount"  item-id="{{$pid}}" size="3" value="1" class="num" name="shoppingnum" type="text" {{if $is_limit_num}}readonly{{/if}}/>
-                    <div {{if $is_limit_num}}id="pamount_not_a"{{else}}id="pamount_add"{{/if}} class="grew" item-id="{{$pid}}">+</div>
-                    </span>
+                            <div id="pamount_not_r" class="grew">-</div>
+                            <input id="input_pamount"  item-id="{{$current_data_id}}" size="3" value="1" class="num" name="shoppingnum" type="text" readonly/>
+                            <div id="pamount_not_a" class="grew">+</div>
+                        </span>
                     </li>
                     </ul>
                     <div class="all_line">
@@ -156,7 +121,7 @@
                         <li class="xq_commenticon fl" style="padding-left: 0;"></li>
                         <li class="fl">口碑评论<span>{{$comment_count}}</span></li>
                         {{if $comment_count>5}}
-                        <li class="fr"><a class="p_more"></a></li>
+                            <li class="fr"><a class="p_more"></a></li>
                         {{/if}}
                         </ul>
                         {{template products/template_product_comments}}
@@ -170,7 +135,7 @@
                         <ul class="clearfix b_line">
                             <li>
                                 <span class="gray mr12" style="float:left;">快递:</span>
-                                <span style="display: block;overflow: hidden;"><span id="consign_way">{{if $current_data_id==897}}包邮{{else}}自提{{/if}}</span>	</span>
+                                <span style="display: block;overflow: hidden;"><span id="consign_way">自提</span>	</span>
                             </li>
                         </ul>
                         <ul class="clearfix">
@@ -248,22 +213,15 @@
         </li>
         <li class="fl" style="width:78%;">
             <div>
-                {{if $is_limit}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
+                {{if $sold_num>=$target_num}}
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">秒杀结束</a>
+                {{elseif before_than($product_try['ProductTry']['start_time'])}}
+                    <a id="sec_buy" data-tuan-id="{{$tuan_id}}" data-global-show="{{$trying['ProductTry']['global_show']}}" data-tryid="{{$trying['ProductTry']['id']}}" data-pid="{{$trying['Product']['id']}}" href="javascript:void(0);" class="btn_b pay_bg radius10">立即秒杀</a>
                 {{else}}
-                    {{if $tuan_buy_status == 2 || $tuan_buy_status == 21}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已取消</a>
-                    {{elseif $tuan_buy_status == 1 || $tuan_buy_status == 11}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已完成</a>
-                    {{elseif $exceed_time}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
-                    {{elseif $tuan_buy_status == 0}}
-                    <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg radius10" data-send-date="{{$consign_time}}">立即购买</a>
-                    {{/if}}
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">即将开秒</a>
                 {{/if}}
             </div>
         </li>
-
         <li class="shopping fr">
             <a href="/carts/listcart.html" style="position:relative; margin-top: 0.2em;" class="shopping_icon" id="cart_link"><div id="item-count" class="shopping_count"></div></a>
             <p>购物车</p>
@@ -286,78 +244,43 @@
     });
 
     function goBack(){
-        {{if $tagId}}
-            window.location.href = '/?tagId={{$tagId}}';
-        {{else}}
-            var refer = document.referrer;
-            var href_1 = "/tuan_buyings/goods_tuans/";
-            var href_2 = "/tuan_teams/info/";
-            var href_3 = "/refer/client/";
-            if (refer.indexOf(href_1)<0&&refer.indexOf(href_2)<0&&refer.indexOf(href_3)<0){
-                //window.location.href = '/tuan_teams/mei_shi_tuan.html';
-                window.location.href = '/';
-            }else{
-                window.history.back();
-            }
-        {{/if}}
+        var refer = document.referrer;
+        var href_1 = "/tuan_buyings/goods_tuans/";
+        var href_2 = "/tuan_teams/info/";
+        var href_3 = "/refer/client/";
+        if (refer.indexOf(href_1)<0&&refer.indexOf(href_2)<0&&refer.indexOf(href_3)<0){
+            window.location.href = '/';
+        }else{
+            window.history.back();
+        }
     }
 </script>
 
 <script>
-    var product_spec_group = JSON.parse('{{$product_spec_group}}');
-</script>
-
-<script>
     $(document).ready(function(){
-
-        function get_spec_group(){
-            var $selected_spec = $('span.spec_item_selected[item-label!="SD"]');
-            var all_spec = [];
-            $.each($selected_spec,function(index,item){
-                all_spec.push(($(item).text()).trim());
-            });
-            var spec_group_data = null;
-            $.each(product_spec_group,function(key,val){
-                var keyArray = key.split(',');
-                //规格组合是否一样
-                if($(keyArray).not(all_spec).length === 0 && $(all_spec).not(keyArray).length === 0){
-                    spec_group_data = val;
-                    return false;
-                }
-            });
-            return spec_group_data;
-        }
-
         $('#tuan_buy').click(function(){
+            var me = $(this);
             var href = window.location.href;
             if(!sso.check_userlogin({'referer':href})){
                 return false;
             }else{
-                var specId = '';
-                if (typeof(_p_spec_m) != 'undefined') {
-                    if (_p_spec_m) {
-                        var spec_labels = $('span.spec_label');
-                        if(spec_labels.length===0){
-                            spec_labels = $('li.spec_label');
+                if (me.hasClass('cart_btn_soldout')) {
+                    return false;
+                }
+
+                var spec_labels = $('span.spec_label');
+                if(spec_labels.length===0){
+                    spec_labels = $('li.spec_label');
+                }
+                if (spec_labels.size() > 0) {
+                    $.each(spec_labels, function (idx, val) {
+                        var itemLabel = $(val).text().replace(":","");
+                        var spec_item_selected = $('span.spec_item_selected[item-label="' + itemLabel + '"]');
+                        if (spec_item_selected.size() < 1) {
+                            utils.alert("请选择" + itemLabel);
+                            return false;
                         }
-                        if (spec_labels.size() > 0) {
-                            $.each(spec_labels, function (idx, val) {
-                                var itemLabel = $(val).text().replace(":","");
-                                var spec_item_selected = $('span.spec_item_selected[item-label="' + itemLabel + '"]');
-                                if (spec_item_selected.size() < 1) {
-                                    utils.alert("请选择" + itemLabel);
-                                    return false;
-                                }
-                            });
-                        }
-                    }
-                    var spec_group_data = get_spec_group();
-                    if(spec_group_data){
-                        specId = spec_group_data['id']||0;
-                    }
-                    if (!specId) {
-                        return false;
-                    }
+                    });
                 }
                 if ($('span.spec_item[item-label="SD"]').size()>0) {
                     var cake_date_selected = $('span.spec_item_selected[item-label="SD"]');
@@ -366,54 +289,33 @@
                         return false;
                     }
                 }
-
-                var send_date = $(this).data('send-date');
-                var consignment_date_id = 0;
-                if ($('span.spec_item[item-label="SD"]').size()>0) {
-                    var cake_date_selected = $('span.spec_item_selected[item-label="SD"]');
-                    if (cake_date_selected.size() >= 1) {
-                        consignment_date_id = cake_date_selected.data('val');
-                        send_date = cake_date_selected.data('send-date');
-                    }
+                if($('.cur.tuan_way_selected').length<0){
+                    utils.alert('请选择送货方式');
+                    return false;
                 }
-
-                var product_id = $('#tuan_buy').attr('item-id');
-                var product_num = $('#input_pamount').val();
-                var way_type = 'normal';
-                {{if $big_tuan}}
-                    var select_way = $('.cur.tuan_way_selected');
-                    if(select_way.length>0){
-                        way_type = $('.cur.tuan_way_selected').attr('way-label');
-                    }else{
-                        utils.alert('请选择送货方式');
-                        return false;
+                var $pid = me.attr('data-pid');
+                var tryId = me.attr('data-try-id');
+                var sendDate = me.attr('data-send-date');
+                var globalShow = me.attr('data-global-show');
+                var tuanId = me.attr('data-tuan-id');
+                var cartType = 'tuan_sec';
+                quick_buy_try($pid, 1, 0, tryId, cartType, sendDate, function () {
+                    me.removeClass('pay_bg').addClass('cart_btn_soldout');
+                }, function () {
+                    if(tuanId){
+                        window.location.href = '/tuan_buyings/balance_tuan_sec_kill?from=tuan_sec&pid_list='+data.id+'&try='+tryId+'&tuan_id={{$tuan_id}}';
+                        return;
                     }
-                {{/if}}
-                var way_id =  $('.cur.tuan_way_selected').attr('way-id')||0;
-                var postdata = {"product_id":product_id,"product_num":product_num, "spec_id":specId, "send_date": send_date,"consignment_date_id":consignment_date_id,"tuan_buy_id":'{{$tuan_buy_id}}',"way_id":way_id,"way_type":way_type};
-                utils.progress_notify('正在更新购物车');
-                $.ajax({
-                    type:'post',
-                    data: postdata,
-                    url:'/tuan_buyings/cart_info',
-                    success:function(data){
-                        if(data.success) {
-                            var way_id = data['way_id'];
-                            if(data.direct == 'big_tuan_list'){
-                                window.location.href = '/tuan_buyings/big_tuan_balance/{{$tuan_buy_id}}/' + data.cart_id + '/'+way_id;
-                            }else{
-                                window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}/' + data.cart_id + '/'+way_id;
-                            }
-                        }
-                        else {
-                            showErrorMessage(data.error);
-                            window.location.reload();
-                        }
-                    },
-                    dataType:'json'
+                    if(globalShow){
+                        window.location.href = '/tuan_buyings/balance_global_sec_kill?from=tuan_sec&pid_list=' + data.id + '&try=' + tryId;
+                        return;
+                    }
+                    window.location.href = '/orders/info?from=try&pid_list='+data.id+'&try='+tryId;
+                    return;
                 });
             }
         });
+
         $("[way-label]").click(function(){
             var that = $(this);
             that.toggleClass('cur').toggleClass('tuan_way_selected');
@@ -429,8 +331,8 @@
 <script>
     wx.ready(function () {
         var share_string = '{{$share_string ? $share_string :"0"}}';
-        var to_timeline_title = "{{$Product['Product']['name']}}"+"--{{$tuan_team['TuanTeam']['tuan_name']}}"+"@朋友说";
-        var to_friend_title = "{{$Product['Product']['name']}}"+"--{{$tuan_team['TuanTeam']['tuan_name']}}"+"@朋友说";
+        var to_timeline_title = "{{$Product['Product']['name']}}"+"@朋友说";
+        var to_friend_title = "{{$Product['Product']['name']}}"+"@朋友说";
         var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
         var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
         var imgUrl = "{{$Product['Product']['coverimg']}}";

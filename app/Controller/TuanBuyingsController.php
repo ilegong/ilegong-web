@@ -56,8 +56,6 @@ class TuanBuyingsController extends AppController{
         $this->set_product_base_detail($pid);
         $this->set_product_comment_recommed($pid);
         $this->set_weixin_share_data($tryId,'tryid');
-
-
     }
 
     public function detail($tuan_buy_id){
@@ -77,16 +75,17 @@ class TuanBuyingsController extends AppController{
         $tuan_team = $this->TuanTeam->find('first',array('conditions' => array('id' => $tuan_b['TuanBuying']['tuan_id'])));
         if(empty($tuan_team)){
             $this->__message('该团不存在', '/tuan_teams/mei_shi_tuan');
+            return;
         }
         $pid=$tuan_b['TuanBuying']['pid'];
         $this->set_tuan_buying_detail($tuan_team,$tuan_b,$pid);
-        $this->set('hideNav',true);
         $this->set_product_base_detail($pid);
         $this->set_product_specs($pid);
         $this->set_product_comment_recommed($pid);
         if($_REQUEST['tagId']){
             $this->set('tagId',$_REQUEST['tagId']);
         }
+        $this->set('hideNav',true);
         $this->set_weixin_share_data($pid);
     }
 

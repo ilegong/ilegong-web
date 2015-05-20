@@ -46,7 +46,7 @@
                 <label>({{$trying['ProductTry']['spec']}})</label>
             </div>
             <div class="clearfix buy_div {{if $trying['status'] == 'sec_unstarted' }} hide {{/if}}">
-                <a href="javascript:;" data-tryid="{{$trying['ProductTry']['id']}}" data-pid="{{$trying['Product']['id']}}" class="clearfix {{if $trying['status'] == 'sec_kill'}}seckill_btn{{elseif $trying['status'] =='sec_end'}}end_btn{{/if}} radius10">
+                <a href="javascript:;" data-tuan-id="{{$tuan_id}}" data-global-show="{{$trying['ProductTry']['global_show']}}" data-tryid="{{$trying['ProductTry']['id']}}" data-pid="{{$trying['Product']['id']}}" class="clearfix {{if $trying['status'] == 'sec_kill'}}seckill_btn{{elseif $trying['status'] =='sec_end'}}end_btn{{/if}} radius10">
                     {{if $trying['status'] =='sec_end'}}
                     <span>抢完了</span>
                     {{else}}
@@ -78,10 +78,6 @@
     $(document).ready(function(){
 
         var cartType = 'try';
-
-        {{if !empty($tuan_id)}}
-            cartType = 'tuan_sec';
-        {{/if}}
 
         var timerParentStyle = {'margin-left': '1em'};
         var toTimer = $('.sec_start').first();
@@ -117,61 +113,28 @@
             if (buyBtn.hasClass('sec_end')){
                 return false;
             }
-            var $pid = buyBtn.attr('data-pid');
+            var pid = buyBtn.attr('data-pid');
             var tryId = buyBtn.attr('data-tryId');
-            quick_buy_try($pid, 1, 0, tryId, cartType, function(){
+            var globalShow = buyBtn.attr('data-global-show');
+            var tuanId = buyBtn.attr('data-tuan-id');
+            quick_buy_try(pid, 1, 0, tryId, cartType, function(){
                 buyBtn.removeClass('seckill_btn').addClass('sec_end');
             }, function(){
-                //
+                if(tuanId){
+                    window.location.href = '/tuan_buyings/balance_tuan_sec_kill?from=tuan_sec&pid_list='+data.id+'&try='+tryId+'&tuan_id={{$tuan_id}}';
+                    return;
+                }
+                if(globalShow){
+                    window.location.href = '/tuan_buyings/balance_global_sec_kill?from=tuan_sec&pid_list=' + data.id + '&try=' + tryId;
+                    return;
+                }
+                window.location.href = '/orders/info?from=try&pid_list='+data.id+'&try='+tryId;
+                return;
             });
         }
 
         $('.seckill_btn').click(function(){
             buyBtnClicked($(this));
         });
-
-
-        /**
-         * 添加到快速购买试吃秒杀
-         * @param id 产品编号
-         * @param num 产品数量
-         * @param spec 产品规格
-         * @param tryId 试吃id
-         * @param type
-         * @param soldOutCallback
-         * @param addedCallback
-         * @return
-         */
-        function quick_buy_try(id, num, spec, tryId, type, soldOutCallback, addedCallback)
-        {
-            type = type || 'normal';
-            var url = BASEURL + '/carts/add';
-            var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec, 'data[Cart][type]': type, 'try_id': tryId};
-            ajaxAction(url, postdata, null, function(data){
-                if (data.success == false) {
-                    if (data.reason == 'not_login') {
-                        window.location.href = '/users/login.html?referer='+ encodeURIComponent('/shichi/list_pai.html');
-                        return false;
-                    } else if (data.reason == 'sold_out') {
-                        utils.alert_one('抱歉：已经被秒完', '知道了', function(){ if (typeof(soldOutCallback) == 'function'){ soldOutCallback()} });
-                    } else if (data.reason == 'already_buy') {
-                        utils.alert_one('抱歉：您已经秒过啦', '关闭', function(){});
-                    } else if (data.reason = 'not_comment') {
-                        utils.alert_one('抱歉：您有' + data.not_comment_cnt + '个试吃商品还没有反馈，请先完成反馈再秒杀');
-                    }
-                } else {
-                    utils.alert_one('您好，下单支付完成才算秒杀完成, 立即跳转结算', '去结算', function(){
-                        addedCallback();
-                        if(cartType=='try'){
-                            window.location.href = '/orders/info?from=try&pid_list='+data.id+'&try='+tryId;
-                        }
-                        if(cartType=='tuan_sec'){
-                            window.location.href = '/tuan_buyings/balance_tuan_sec_kill?from=tuan_sec&pid_list='+data.id+'&try='+tryId+'&tuan_id={{$tuan_id}}';
-                        }
-                    });
-                }
-            });
-            return false;
-        }
     });
 </script>

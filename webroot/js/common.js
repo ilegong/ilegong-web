@@ -1187,6 +1187,8 @@ var utils = {
 	}
 };
 
+
+
 //js for cart
 $(document).ready(function () {
 	var numInput = $('#input_pamount');
@@ -1344,3 +1346,40 @@ $(document).ready(function () {
 		}
 	});
 });
+
+/**
+ * 添加到快速购买试吃秒杀
+ * @param id 产品编号
+ * @param num 产品数量
+ * @param spec 产品规格
+ * @param tryId 试吃id
+ * @param type
+ * @param soldOutCallback
+ * @param addedCallback
+ * @return
+ */
+function quick_buy_try(id, num, spec, tryId, type, soldOutCallback, addedCallback)
+{
+    type = type || 'normal';
+    var url = BASEURL + '/carts/add';
+    var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec, 'data[Cart][type]': type, 'try_id': tryId};
+    ajaxAction(url, postdata, null, function(data){
+        if (data.success == false) {
+            if (data.reason == 'not_login') {
+                window.location.href = '/users/login.html?referer='+ encodeURIComponent('/shichi/list_pai.html');
+                return false;
+            } else if (data.reason == 'sold_out') {
+                utils.alert_one('抱歉：已经被秒完', '知道了', function(){ if (typeof(soldOutCallback) == 'function'){ soldOutCallback()} });
+            } else if (data.reason == 'already_buy') {
+                utils.alert_one('抱歉：您已经秒过啦', '关闭', function(){});
+            } else if (data.reason = 'not_comment') {
+                utils.alert_one('抱歉：您有' + data.not_comment_cnt + '个试吃商品还没有反馈，请先完成反馈再秒杀');
+            }
+        } else {
+            utils.alert_one('您好，下单支付完成才算秒杀完成, 立即跳转结算', '去结算', function(){
+                addedCallback();
+            });
+        }
+    });
+    return false;
+}
