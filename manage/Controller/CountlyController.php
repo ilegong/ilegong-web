@@ -152,7 +152,7 @@ class CountlyController extends AppController{
             'created' => date('Y-m-d h:i:s'),
             'all_new_user_count' => $all_new_user_count
         );
-        return $this->StatisticsOrderData->save($weekData);
+        $this->StatisticsOrderData->save($weekData);
     }
 
     private function repeat_ziti_user_count($store_id,$start_date,$end_date){

@@ -177,6 +177,7 @@ class TuanBuyingsController extends AppController{
             //set ship type
             $this->set_product_ship($pid);
         }
+        $this->set('tuan_buy_id',$tuan_b['TuanBuying']['id']);
         $this->set('tuan_team', $tuan_team);
         $this->set('tuan_address', get_address($tuan_team, $offline_store));
     }
