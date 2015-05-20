@@ -52,7 +52,6 @@ class CountlyController extends AppController{
         ));
         $offline_store_ids = Hash::extract($orders,'{n}.Order.consignee_id');
         $offline_store_ids = array_unique($offline_store_ids);
-
         foreach($offline_store_ids as $store_id){
             $this->gen_week_store_data($store_id,$start_date,$end_date);
         }
@@ -80,10 +79,15 @@ class CountlyController extends AppController{
         ));
         $uids = Hash::extract($orders,'{n}.Order.creator');
         $uids = array_unique($uids);
+        $this->log('uids '.$uids);
         $new_user_buy_count = $this->ziti_new_buy_user_count($store_id,$uids,$start_date);
+        $this->log('new_user_buy_count '.$new_user_buy_count);
         $weekMaxOrderCount = $this->Order->query('select MAX(order_count),created from (select count(id) as order_count, date(created) as created from cake_orders where ship_mark=\'ziti\' and consignee_id='.$store_id.' and status in (1,2,3) and created BETWEEN \''.$start_date.'\' and \''.$end_date.'\' group by date(created)) as orders');
+        $this->log('$weekMaxOrderCount '.json_encode($weekMaxOrderCount));
         $repeat_buy_user_count = $this->repeat_ziti_user_count($store_id,$start_date,$end_date);
+        $this->log('$repeat_buy_user_count'.$repeat_buy_user_count);
         $all_new_user_count = $this->load_new_user_count($start_date,$end_date);
+        $this->log('$all_new_user_count'.$all_new_user_count);
         $weekData = array(
             'new_user_buy_count' => $new_user_buy_count,
             'repeat_buy_user' => $repeat_buy_user_count,
@@ -98,7 +102,6 @@ class CountlyController extends AppController{
             'end_date' => $end_date,
             'max_order_date' => $weekMaxOrderCount[0]['orders']['created']
         );
-
         $this->StatisticsZitiData->save($weekData);
     }
 
