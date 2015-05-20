@@ -35,6 +35,8 @@ class WxSharesController extends AppController{
                 $data_type = 'tuan';
             }elseif($data_str[0] == 'rid'){
                 $data_type = 'refer';
+            }elseif($data_str[0] == 'tryid'){
+                $data_type = 'try';
             } else{
                 $data_type= substr(trim($data_str[0]), 0, 12);
             }
