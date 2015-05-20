@@ -181,9 +181,10 @@ class CountlyController extends AppController{
     private function load_new_user_count($start_date,$end_date){
         $all_user_count = $this->User->find('count',array(
             'conditions' => array(
-                'created >='=>$start_date,
+                'created >=' => $start_date,
                 'created <=' => $end_date
-            )
+            ),
+            'limit' => 2000
         ));
         return $all_user_count;
     }
