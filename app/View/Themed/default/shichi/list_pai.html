@@ -46,7 +46,7 @@
                 <label>({{$trying['ProductTry']['spec']}})</label>
             </div>
             <div class="clearfix buy_div {{if $trying['status'] == 'sec_unstarted' }} hide {{/if}}">
-                <a href="javascript:;" data-tuan-id="{{$tuan_id}}" data-global-show="{{$trying['ProductTry']['global_show']}}" data-tryid="{{$trying['ProductTry']['id']}}" data-pid="{{$trying['Product']['id']}}" class="clearfix {{if $trying['status'] == 'sec_kill'}}seckill_btn{{elseif $trying['status'] =='sec_end'}}end_btn{{/if}} radius10">
+                <a href="javascript:;" data-send-date="{{$trying['ProductTry']['consignment_date']}}" data-tuan-id="{{$tuan_id}}" data-global-show="{{$trying['ProductTry']['global_show']}}" data-tryid="{{$trying['ProductTry']['id']}}" data-pid="{{$trying['Product']['id']}}" class="clearfix {{if $trying['status'] == 'sec_kill'}}seckill_btn{{elseif $trying['status'] =='sec_end'}}end_btn{{/if}} radius10">
                     {{if $trying['status'] =='sec_end'}}
                     <span>抢完了</span>
                     {{else}}
@@ -117,9 +117,10 @@
             var tryId = buyBtn.attr('data-tryId');
             var globalShow = buyBtn.attr('data-global-show');
             var tuanId = buyBtn.attr('data-tuan-id');
-            quick_buy_try(pid, 1, 0, tryId, cartType, function(){
+            var sendDate = buyBtn.attr('data-send-date');
+            quick_buy_try(pid, 1, 0, tryId, cartType,sendDate, function(){
                 buyBtn.removeClass('seckill_btn').addClass('sec_end');
-            }, function(){
+            }, function(data){
                 if(tuanId){
                     window.location.href = '/tuan_buyings/balance_tuan_sec_kill?from=tuan_sec&pid_list='+data.id+'&try='+tryId+'&tuan_id={{$tuan_id}}';
                     return;
