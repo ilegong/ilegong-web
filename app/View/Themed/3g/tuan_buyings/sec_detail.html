@@ -1,5 +1,6 @@
 {{$this->Html->css(array('tuan.css?v6.1'));}}
-<?php   $current_model = 'Product';
+<?php
+    $current_model = 'Product';
     $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
     if($sold_num >= $target_num){
         $sold_percent = 100;
@@ -11,7 +12,7 @@
     <ul class="clearfix">
         <li><a class="back" onclick="goBack()"></a></li>
         <li class="line"></li>
-        <li style="text-overflow: ellipsis;"><strong>团购详情</strong></li>
+        <li style="text-overflow: ellipsis;"><strong>秒杀详情</strong></li>
     </ul>
 </div>
 
@@ -107,7 +108,14 @@
                                     <span class="border">
                                         {{loop $ship_settings $index $ship_set}}
                                             <span class="mr12 border {{if $index==0}}cur tuan_way_selected{{/if}}" way-label="{{$ship_set['ProductShipSetting']['code']}}" way-id="{{$ship_set['ProductShipSetting']['id']}}">
-                                                {{$ship_set['ProductShipSetting']['name']}}{{if $ship_set['ProductShipSetting']['ship_fee'] > 0}}({{$ship_set['ProductShipSetting']['ship_fee']}}元邮费){{/if}}
+                                                {{$ship_set['ProductShipSetting']['name']}}
+                                                {{if $ship_set['ProductShipSetting']['ship_type']!=1}}
+                                                    {{if $ship_set['ProductShipSetting']['ship_fee'] > 0}}
+                                                        ({{$ship_set['ProductShipSetting']['ship_fee']}}元邮费)
+                                                    {{elseif $ship_set['ProductShipSetting']['ship_fee'] == 0}}
+                                                        (包邮)
+                                                    {{/if}}
+                                                {{/if}}
                                                 <div class="focus"></div>
                                             </span>
                                         {{/loop}}

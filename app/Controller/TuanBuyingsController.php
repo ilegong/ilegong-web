@@ -16,17 +16,55 @@ class TuanBuyingsController extends AppController{
     public static function key_balanced_scores() {
         return "Balance.apply_scores";
     }
+
+    public function sec_detail($tryId){
+        $this->pageTitle = '秒杀详情';
+        $this->loadModel('ProductTry');
+        if($tryId==null){
+            $this->redirect('/');
+            return;
+        }
+        $productTry = $this->ProductTry->find('first',array(
+            'conditions' => array(
+                'id' => $tryId,
+                'deleted' => DELETED_NO
+            )
+        ));
+        $tuan_id = $_POST['tuan_id'];
+        if($tuan_id){
+            $this->loadModel('TuanTeam');
+            $tuanTeam = $this->TuanTeam->find('first',array(
+                'conditions' => array(
+                    'id' => $tuan_id
+                )
+            ));
+        }
+        if(empty($productTry)){
+            if($tuanTeam){
+                $this->__message('秒杀已经停止', '/tuan_teams/info/'.$tuan_id);
+                return;
+            }
+            $this->__message('秒杀已经停止', '/');
+            return;
+        }
+        if($tuanTeam){
+            $this->set('tuan_team',$tuanTeam);
+        }
+        $this->set('product_try',$productTry);
+
+
+    }
+
     public function detail($tuan_buy_id){
         $this->pageTitle = '团购详情';
         $this->loadModel('TuanTeam');
         if($tuan_buy_id == null){
             $this->redirect('/tuan_teams/mei_shi_tuan');
             return;
-        }else{
-            $tuan_b = $this->TuanBuying->find('first',array(
-                'conditions' => array('id' => $tuan_buy_id)
-            ));
         }
+        $tuan_b = $this->TuanBuying->find('first',array(
+            'conditions' => array('id' => $tuan_buy_id)
+        ));
         if(empty($tuan_b)){
             $this->__message('该团购不存在', '/tuan_teams/mei_shi_tuan');
             return;
@@ -35,9 +73,26 @@ class TuanBuyingsController extends AppController{
         if(empty($tuan_team)){
             $this->__message('该团不存在', '/tuan_teams/mei_shi_tuan');
         }
+        $pid=$tuan_b['TuanBuying']['pid'];
+        $this->set_tuan_buying_detail($tuan_team,$tuan_b);
+        $this->set('hideNav',true);
+        $this->set_product_base_detail($pid);
+        $this->set_product_specs($pid);
+        $this->set_product_comment_recommed($pid);
+        if($_REQUEST['tagId']){
+            $this->set('tagId',$_REQUEST['tagId']);
+        }
+        if($this->is_weixin()){
+            $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
+            $weixinJs = prepare_wx_share_log($currUid, 'pid', $pid);
+            $this->set($weixinJs);
+            $this->set('jWeixinOn', true);
+        }
+    }
+
+    private function set_tuan_buying_detail($tuan_team,$tuan_b,$pid){
         $this->loadModel('OfflineStore');
         $offline_store = $this->OfflineStore->findById($tuan_team['TuanTeam']['offline_store_id']);
-
         $current_time = time();
         $exceed_time = false;
         if(strtotime($tuan_b['TuanBuying']['end_time']) < $current_time){
@@ -63,7 +118,6 @@ class TuanBuyingsController extends AppController{
                 $this->redirect('/tuan_buyings/detail/'.$available_tuan_id);
             }
         }
-        $pid=$tuan_b['TuanBuying']['pid'];
         $end_time = $tuan_b['TuanBuying']['end_time'];
         $tuan_buy_type = $tuan_b['TuanBuying']['consignment_type'];
         //根据发货类型显示
@@ -96,13 +150,25 @@ class TuanBuyingsController extends AppController{
             }
         }
         $this->set('tuan_buy_type',$tuan_buy_type);
-        $this->set('hideNav',true);
-        if($this->is_weixin()){
-            $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
-            $weixinJs = prepare_wx_share_log($currUid, 'pid', $pid);
-            $this->set($weixinJs);
-            $this->set('jWeixinOn', true);
+        $tuan_price = $tuan_b['TuanBuying']['tuan_price'];
+        if($tuan_price > 0){
+            $this->set('tuan_price',$tuan_price);
+        }else{
+            $tuan_product_price = getTuanProductPrice($pid);
+            if($tuan_product_price>0){
+                $this->set('tuan_product_price',$tuan_product_price);
+            }
         }
+        if($tuan_team['TuanTeam']['type'] == IS_BIG_TUAN){
+            $this->set('big_tuan', true);
+            //set ship type
+            $this->set_product_ship($pid);
+        }
+        $this->set('tuan_team', $tuan_team);
+        $this->set('tuan_address', get_address($tuan_team, $offline_store));
+    }
+
+    private function set_product_base_detail($pid){
         $this->loadModel('Product');
         $this->loadModel('Uploadfile');
         $this->loadModel('Brand');
@@ -111,7 +177,17 @@ class TuanBuyingsController extends AppController{
             'conditions' => array('id' => $Product['Product']['brand_id']),
             'fields' => array('name', 'slug','coverimg')
         ));
+        $con = array('modelclass' => 'Product','fieldname' =>'photo','data_id' => $pid);
+        $Product['Uploadfile']= $this->Uploadfile->find('all',array('conditions' => $con, 'order'=> array('sortorder DESC')));
+        $original_price = $Product['Product']['original_price'];
         $this->set('brand',$brand);
+        $this->set('original_price',$original_price);
+        $this->set('Product', $Product);
+        $this->set('category_control_name', 'products');
+        $this->set('current_data_id', $pid);
+    }
+
+    private function set_product_specs($pid){
         //get specs from database
         $product_spec_group = $this->ProductSpecGroup->extract_spec_group_map($pid,'spec_names');
         $this->set('product_spec_group',json_encode($product_spec_group));
@@ -127,24 +203,9 @@ class TuanBuyingsController extends AppController{
             $this->set('product_spec_map', $str);
         }
         $this->set('specs_map', $specs_map);
+    }
 
-        $con = array('modelclass' => 'Product','fieldname' =>'photo','data_id' => $pid);
-        $Product['Uploadfile']= $this->Uploadfile->find('all',array('conditions' => $con, 'order'=> array('sortorder DESC')));
-        $original_price = $Product['Product']['original_price'];
-        $tuan_price = $tuan_b['TuanBuying']['tuan_price'];
-        if($tuan_price > 0){
-            $this->set('tuan_price',$tuan_price);
-        }else{
-            $tuan_product_price = getTuanProductPrice($pid);
-            if($tuan_product_price>0){
-                $this->set('tuan_product_price',$tuan_product_price);
-            }
-        }
-        $this->set('original_price',$original_price);
-        $this->set('Product', $Product);
-        $this->set('category_control_name', 'products');
-        $this->set('current_data_id', $pid);
-
+    private function set_product_comment_recommed($pid){
         $this->loadModel('Comment');
         //load shichi comment count
         $same_pids = get_group_product_ids($pid);
@@ -161,22 +222,12 @@ class TuanBuyingsController extends AppController{
                 'status'=>1
             )
         ));
-        if($_REQUEST['tagId']){
-            $this->set('tagId',$_REQUEST['tagId']);
-        }
         $this->set('shi_chi_comment_count',$shi_chi_comment_count);
         $this->set('comment_count',($comment_count-$shi_chi_comment_count));
         $this->set('limitCommentCount',COMMENT_LIMIT_IN_PRODUCT_VIEW);
         $recommC = $this->Components->load('ProductRecom');
         $recommends = $recommC->recommend($pid);
         $this->set('items', $recommends);
-        if($tuan_team['TuanTeam']['type'] == IS_BIG_TUAN){
-            $this->set('big_tuan', true);
-            //set ship type
-            $this->set_product_ship($pid);
-        }
-        $this->set('tuan_team', $tuan_team);
-        $this->set('tuan_address', get_address($tuan_team, $offline_store));
     }
 
     public function cart_info(){
