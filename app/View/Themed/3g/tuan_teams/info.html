@@ -44,7 +44,7 @@ $location = $offline_store['OfflineStore']['location_long'].','.$offline_store['
             <div class="tuan_bar clearfix" style="padding:5px 10px 12px 10px;">
                 <div>
                     {{if $trying['status'] == 'sec_kill'}}
-                    <a class="tuan_bar_btn doing" href="/tuan_buyings/sec_detail/{{$trying['ProductTry']['id']}}">正在秒杀</a>
+                    <a class="tuan_bar_btn doing" href="/tuan_buyings/sec_detail/{{$trying['ProductTry']['id']}}?tuan_id={{$tuan_team['TuanTeam']['id']}}">正在秒杀</a>
                     {{elseif $trying['status'] == 'sec_end'}}
                     <a class="tuan_bar_btn done" style="background-color: #cccccc;" href="/tuan_buyings/sec_detail/{{$trying['ProductTry']['id']}}">已秒完</a>
                     {{else}}
@@ -188,7 +188,7 @@ $location = $offline_store['OfflineStore']['location_long'].','.$offline_store['
         }, function () {
             var parent = countDiv.parent();
             countDiv.remove();
-            parent.append('<a class="tuan_bar_btn doing" href="/tuan_buyings/sec_detail/{{$trying["ProductTry"]["id"]}}">正在秒杀</a>');
+            parent.append('<a class="tuan_bar_btn doing" href="/tuan_buyings/sec_detail/{{$trying["ProductTry"]["id"]}}?tuan_id={{$tuan_team["TuanTeam"]["id"]}}">正在秒杀</a>');
         });
     });
 </script>

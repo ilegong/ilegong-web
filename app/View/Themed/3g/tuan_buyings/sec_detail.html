@@ -25,18 +25,20 @@
             <div class="row voffset1" style="margin-left: 0;margin-right: 0;">
                 <div class="col-xs-12 col-md-6" style="padding: 0;">
                 {{template Elements/product_img_sild}}
-                    <div class="p_details_title">{{$Product['Product']['name']}}</div>
+                    <div class="p_details_title">{{$product_try['ProductTry']['product_name']}}</div>
                     <ul class="p_details_price clearfix">
                         <li class="fl price"><span>秒杀价￥<font>{{$this->Number->precision(($product_try['ProductTry']['price'])/100,2)}}</font></span></li>
-                        <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{friendlyDateFromStr($product_try['ProductTry']['consignment_date'])}}</b></span></a></li>
+                        <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{$product_try['ProductTry']['consignment_date']}}</b></span></a></li>
                     </ul>
-                    <ul class="sales clearfix">
-                        <li>
-                            <span style="display: block;overflow: hidden;">
-                                <span>{{$Product['Product']['promote_name']}}<br></span>
-                            </span>
-                        </li>
-                    </ul>
+                    {{if $Product['Product']['promote_name']}}
+                        <ul class="sales clearfix">
+                            <li>
+                                <span style="display: block;overflow: hidden;">
+                                    <span>{{$Product['Product']['promote_name']}}<br></span>
+                                </span>
+                            </li>
+                        </ul>
+                    {{/if}}
                     <div class="tuan_bar">
                         <div>已秒杀<span  value="{{$sold_num}}">{{$sold_num}}</span>份</div>
                         <div class="bar">
@@ -53,51 +55,50 @@
                                 {{$tuan_team['TuanTeam']['tuan_name']}}
                                 &nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_team['TuanTeam']['leader_name']}}<br/>参团请加团长微信，微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}
                             </a>
-                            <span>开秒时间：<b>{{friendlyDateFromStr($product_try['ProductTry']['start_time'],FORMAT_TIME)}}</b></span>
                         </div>
                     {{/if}}
-
                     <ul class="standard clearfix">
                         <li class="good-spec">
-                            <span class="gray title mr12 spec_label" style="float:left;">秒杀规格:</span>
+                            <span class="gray title mr12" style="float:left;">秒杀规格:</span>
                             <span class="border" style="display: block;overflow: hidden;padding-bottom: 10px;">
-                                <span class="mr12 border spec_item spec_item_selected cur" item-label="try_spec">
+                                <span try-spec-label="" class="mr12 border spec_item_selected cur">
                                     {{$product_try['ProductTry']['spec']}}
                                     <div class="focus"></div>
                                 </span>
                             </span>
                         </li>
                     </ul>
+
                     <ul class="standard clearfix">
                         <li>
                             <span class="gray title mr12" style="float:left;">送货日期:</span>
                             <span class="border" style="display: block;overflow: hidden;">
-                                <span class="mr12 border spec_item spec_item_selected cur" item-label="SD">
-                                    {{friendlyDateFromStr($product_try['ProductTry']['consignment_date'])}}
+                                <span class="mr12 border spec_item_selected cur" item-label="SD">
+                                    {{$product_try['ProductTry']['consignment_date']}}
                                     <div class="focus"></div>
                                 </span>
                             </span>
                         </li>
                     </ul>
                     {{if $tuan_team}}
-                        <ul class="standard clearfix">
-                            <li>
-                                <span class="gray title mr12" style="float:left;">快递方式:</span>
-                                <span class="border">
-                                    <span class="mr12 border cur tuan_way_selected">
-                                            自提
-                                            <div class="focus"></div>
-                                        </span>
-                                </span>
-                            </li>
-                        </ul>
-                    {{else}}
                         <div class="clearfix tuanxq" style="margin-top: -1px;">
                             <span class="fl">详细地址：{{$tuan_address}}</span>
                             <a class="fr" href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
                                 <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
                             </a>
                         </div>
+                    {{else}}
+                        <ul class="standard clearfix">
+                            <li>
+                                <span class="gray title mr12" style="float:left;">快递方式:</span>
+                                    <span class="border">
+                                        <span way-label="" class="mr12 border cur tuan_way_selected">
+                                            自提
+                                            <div class="focus"></div>
+                                        </span>
+                                    </span>
+                            </li>
+                        </ul>
                     {{/if}}
                     <ul class="numbers clearfix b_line">
                     <li class="fl">
@@ -209,14 +210,13 @@
     <ul class="clearfix">
         <li class="love fl">
             <a href="#X" class="love_icon"></a>
-            <!--<p>关注</p>-->
         </li>
         <li class="fl" style="width:78%;">
             <div>
                 {{if $sold_num>=$target_num}}
                     <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">秒杀结束</a>
                 {{elseif before_than($product_try['ProductTry']['start_time'])}}
-                    <a id="sec_buy" data-tuan-id="{{$tuan_id}}" data-global-show="{{$trying['ProductTry']['global_show']}}" data-tryid="{{$trying['ProductTry']['id']}}" data-pid="{{$trying['Product']['id']}}" href="javascript:void(0);" class="btn_b pay_bg radius10">立即秒杀</a>
+                    <a id="sec_buy" data-send-date="{{$product_try['ProductTry']['consignment_date']}}" data-tuan-id="{{$tuan_team['TuanTeam']['id']}}" data-global-show="{{$product_try['ProductTry']['global_show']}}" data-tryid="{{$product_try['ProductTry']['id']}}" data-pid="{{$current_data_id}}" href="javascript:void(0);" class="btn_b pay_bg radius10">立即秒杀</a>
                 {{else}}
                     <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">即将开秒</a>
                 {{/if}}
@@ -258,8 +258,8 @@
 
 <script>
     $(document).ready(function(){
-        $('#tuan_buy').click(function(){
-            var me = $(this);
+        function handleQuickBuy($dom){
+            var me = $dom;
             var href = window.location.href;
             if(!sso.check_userlogin({'referer':href})){
                 return false;
@@ -267,7 +267,6 @@
                 if (me.hasClass('cart_btn_soldout')) {
                     return false;
                 }
-
                 var spec_labels = $('span.spec_label');
                 if(spec_labels.length===0){
                     spec_labels = $('li.spec_label');
@@ -293,17 +292,17 @@
                     utils.alert('请选择送货方式');
                     return false;
                 }
-                var $pid = me.attr('data-pid');
-                var tryId = me.attr('data-try-id');
+                var pid = me.attr('data-pid');
+                var tryId = me.attr('data-tryid');
                 var sendDate = me.attr('data-send-date');
                 var globalShow = me.attr('data-global-show');
                 var tuanId = me.attr('data-tuan-id');
                 var cartType = 'tuan_sec';
-                quick_buy_try($pid, 1, 0, tryId, cartType, sendDate, function () {
+                quick_buy_try(pid, 1, 0, tryId, cartType, sendDate, function () {
                     me.removeClass('pay_bg').addClass('cart_btn_soldout');
-                }, function () {
+                }, function (data) {
                     if(tuanId){
-                        window.location.href = '/tuan_buyings/balance_tuan_sec_kill?from=tuan_sec&pid_list='+data.id+'&try='+tryId+'&tuan_id={{$tuan_id}}';
+                        window.location.href = '/tuan_buyings/balance_tuan_sec_kill?from=tuan_sec&pid_list='+data.id+'&try='+tryId+'&tuan_id={{$tuan_team['TuanTeam']['id']}}';
                         return;
                     }
                     if(globalShow){
@@ -314,25 +313,22 @@
                     return;
                 });
             }
-        });
-
-        $("[way-label]").click(function(){
-            var that = $(this);
-            that.toggleClass('cur').toggleClass('tuan_way_selected');
-            $("[way-label]").not(that).removeClass('cur').removeClass('tuan_way_selected');
-            var select_way = $('.cur.tuan_way_selected');
-            $('#consign_way').text(select_way.text());
-        });
+        }
+        function bind_click(){
+            $('#sec_buy').on('click',function(){
+                handleQuickBuy($(this));
+            });
+        }
+        bind_click();
     });
-
 </script>
 
 {{if $jWeixinOn}}
 <script>
     wx.ready(function () {
         var share_string = '{{$share_string ? $share_string :"0"}}';
-        var to_timeline_title = "{{$Product['Product']['name']}}"+"@朋友说";
-        var to_friend_title = "{{$Product['Product']['name']}}"+"@朋友说";
+        var to_timeline_title = "{{$Product['Product']['name']}}秒杀";
+        var to_friend_title = "{{$Product['Product']['name']}}秒杀";
         var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
         var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
         var imgUrl = "{{$Product['Product']['coverimg']}}";

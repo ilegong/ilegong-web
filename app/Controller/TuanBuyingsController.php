@@ -30,7 +30,7 @@ class TuanBuyingsController extends AppController{
                 'deleted' => DELETED_NO
             )
         ));
-        $tuan_id = $_POST['tuan_id'];
+        $tuan_id = $_GET['tuan_id'];
         if($tuan_id){
             $this->loadModel('TuanTeam');
             $tuanTeam = $this->TuanTeam->find('first',array(
@@ -48,7 +48,11 @@ class TuanBuyingsController extends AppController{
             return;
         }
         if($tuanTeam){
+            $this->loadModel('OfflineStore');
+            $offline_store = $this->OfflineStore->findById($tuanTeam['TuanTeam']['offline_store_id']);
             $this->set('tuan_team',$tuanTeam);
+            $this->set('offline_store',$offline_store);
+            $this->set('tuan_address',get_address($tuanTeam,$offline_store));
         }
         $pid = $productTry['ProductTry']['product_id'];
         $tryId= $productTry['ProductTry']['id'];
@@ -56,6 +60,7 @@ class TuanBuyingsController extends AppController{
         $this->set_product_base_detail($pid);
         $this->set_product_comment_recommed($pid);
         $this->set_weixin_share_data($tryId,'tryid');
+        $this->set('hideNav',true);
     }
 
     public function detail($tuan_buy_id){
