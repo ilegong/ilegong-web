@@ -50,7 +50,12 @@ class TuanBuyingsController extends AppController{
         if($tuanTeam){
             $this->set('tuan_team',$tuanTeam);
         }
+        $pid = $productTry['ProductTry']['product_id'];
+        $tryId= $productTry['ProductTry']['id'];
         $this->set('product_try',$productTry);
+        $this->set_product_base_detail($pid);
+        $this->set_product_comment_recommed($pid);
+        $this->set_weixin_share_data($tryId,'tryid');
 
 
     }
@@ -74,7 +79,7 @@ class TuanBuyingsController extends AppController{
             $this->__message('该团不存在', '/tuan_teams/mei_shi_tuan');
         }
         $pid=$tuan_b['TuanBuying']['pid'];
-        $this->set_tuan_buying_detail($tuan_team,$tuan_b);
+        $this->set_tuan_buying_detail($tuan_team,$tuan_b,$pid);
         $this->set('hideNav',true);
         $this->set_product_base_detail($pid);
         $this->set_product_specs($pid);
@@ -82,9 +87,13 @@ class TuanBuyingsController extends AppController{
         if($_REQUEST['tagId']){
             $this->set('tagId',$_REQUEST['tagId']);
         }
+        $this->set_weixin_share_data($pid);
+    }
+
+    private function set_weixin_share_data($data_id,$data_type='pid'){
         if($this->is_weixin()){
             $currUid = empty($this->currentUser) ? 0 : $this->currentUser['id'];
-            $weixinJs = prepare_wx_share_log($currUid, 'pid', $pid);
+            $weixinJs = prepare_wx_share_log($currUid, $data_type, $data_id);
             $this->set($weixinJs);
             $this->set('jWeixinOn', true);
         }
