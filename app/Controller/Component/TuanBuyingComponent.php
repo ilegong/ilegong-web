@@ -31,7 +31,7 @@ class TuanBuyingComponent extends Component{
         $this->Cart = ClassRegistry::init('Cart');
         $sessionId = $this->Session->id();
         $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,$spec_id,$type,0,$uId, $sessionId,  null, null,$cart_tuan_param);
-        $this->log('cartInfo'.json_encode($cartInfo));
+        $this->log('cartInfo: '.json_encode($cartInfo));
         if($cartInfo){
             $result = $this->Cart->updateAll(array('consignment_date' => $consignment_date_id, 'send_date' => "'".$send_date."'"), array('id' => $cartInfo['Cart']['id']));
             if(!$result){

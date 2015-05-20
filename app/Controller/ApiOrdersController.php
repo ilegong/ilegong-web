@@ -58,7 +58,6 @@ class ApiOrdersController extends AppController {
                 'deleted' => DELETED_NO,
                 'status' => 0,
                 'order_id' => NULL,
-                'type' => CART_ITEM_TYPE_NORMAL,
                 'creator'=> $this->currentUser['id'],
             ),
             'fields' => array('id', 'name', 'product_id', 'num', 'name', 'price', 'coverimg', 'used_coupons','specId'),
@@ -415,17 +414,17 @@ class ApiOrdersController extends AppController {
     public function cart_add() {
         $buyingCom = $this->Components->load('Buying');
         $postStr = file_get_contents('php://input');;
-        $data = json_decode(trim($postStr), true);
-        $this->log('add cart: '.json_encode($data));
+        $postdata = json_decode(trim($postStr), true);
+        $this->log('add cart: '.json_encode($postdata));
 
-        if (!empty($data)) {
-            $product_id = $data['product_id'];
-            $num = $data['num'];
-            $specId = $data['spec_id'];
-            $consignment_date_id = $data['consignment_date_id'];
-            $send_date = $data['send_date'];
+        if (!empty($postdata)) {
+            $product_id = $postdata['product_id'];
+            $num = $postdata['num'];
+            $specId = $postdata['spec_id'];
+            $consignment_date_id = $postdata['consignment_date_id'];
+            $send_date = $postdata['send_date'];
             $type = CART_ITEM_TYPE_NORMAL;
-            $tryId = intval($data['try_id']);
+            $tryId = intval($postdata['try_id']);
             $uid = $this->currentUser['id'];
             $cartM = ClassRegistry::init('Cart');
 

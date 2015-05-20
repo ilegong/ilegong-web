@@ -46,7 +46,7 @@ class ApiTuanController extends AppController{
         $postdata = json_decode(trim($postStr), true);
         $this->log('add tuan cart: '.$postStr);
 
-        if (!empty($data)) {
+        if (!empty($postdata)) {
             $product_id = $postdata['product_id'];
             $num = $postdata['num'];
             $spec_id = $postdata['spec_id'];
@@ -63,7 +63,6 @@ class ApiTuanController extends AppController{
             );
             $info = $this->TuanBuying->add_cart($product_id,$num,$spec_id,$type,$uId,$cart_tuan_param, $consignment_date_id, $send_date, $ship_id,$ship_mark);
         } else {
-            $this->log('add tuan cart: data is empty');
             $info = array('success' => false, 'reason' => 'invalid_parameter');
         }
 
