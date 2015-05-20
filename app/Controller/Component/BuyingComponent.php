@@ -44,7 +44,6 @@ class BuyingComponent extends Component {
         if ($type == CART_ITEM_TYPE_TRY||$type==CART_ITEM_TYPE_TUAN_SEC) {
             $success = true;
             $reason = '';
-
             if (!$tryId) {
                 $success = false;
                 $reason = 'no_try_id';

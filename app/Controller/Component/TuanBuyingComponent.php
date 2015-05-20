@@ -18,7 +18,6 @@ class TuanBuyingComponent extends Component{
      * @param $spec_id
      * @param $type
      * @param $uId
-     * @param $sessionId
      * @param $cart_tuan_param
      * @param $consignment_date_id
      * @param $send_date

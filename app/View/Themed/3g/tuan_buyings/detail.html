@@ -31,9 +31,9 @@
                     </ul>
                     <ul class="sales clearfix">
                         <li>
-                        <span style="display: block;overflow: hidden;">
-                        <span>{{$Product['Product']['promote_name']}}<br></span>
-                        </span>
+                            <span style="display: block;overflow: hidden;">
+                                <span>{{$Product['Product']['promote_name']}}<br></span>
+                            </span>
                         </li>
                     </ul>
                     {{if $tuan_buy_type!=2}}
@@ -217,24 +217,22 @@
                     </div>
                 </div>
             </div>
-
-<script>
-
-    function to_brand(){
-        window.location.href="/b/{{$brand['Brand']['slug']}}";
-    }
-    function to_detail(){
-        window.location.href="/tuan_buyings/product_detail/{{$pid}}?tuan_id={{$tuan_id}}&tuan_buy_id={{$tuan_buy_id}}";
-    }
-    function to_comment(){
-        window.location.href="/products/product_comments/{{$Product['Product']['slug']}}.html?from=tuan&tuan_buy_id={{$tuan_buy_id}}";
-    }
-    $(document).ready(function(){
-        $('#view_all_comments').on('click',function(){
-            to_comment();
-        });
-    });
-</script>
+            <script>
+                function to_brand(){
+                    window.location.href="/b/{{$brand['Brand']['slug']}}";
+                }
+                function to_detail(){
+                    window.location.href="/tuan_buyings/product_detail/{{$pid}}?tuan_id={{$tuan_id}}&tuan_buy_id={{$tuan_buy_id}}";
+                }
+                function to_comment(){
+                    window.location.href="/products/product_comments/{{$Product['Product']['slug']}}.html?from=tuan&tuan_buy_id={{$tuan_buy_id}}";
+                }
+                $(document).ready(function(){
+                    $('#view_all_comments').on('click',function(){
+                        to_comment();
+                    });
+                });
+            </script>
         </div>
         <hr>
     </div>

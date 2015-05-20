@@ -258,11 +258,11 @@ class CategoriesController extends AppController {
     public function mobileHome() {
         $this->productsHome(true);
 
-        $zutuangous = array(
-            array('img' => "/img/banner/banner_zutuangou3.jpg", 'url' => "/groupons/view/chengzi.html?from=home1", 'id' => 0),
-            array('img' => "/img/banner/banner_zutuangou2.jpg", 'url' => "/groupons/view/chengzi.html?from=home2", 'id' => 0),
-            array('img' => "/img/banner/banner_zutuangou.jpg", 'url' => "/groupons/view/gonggan.html?from=home", 'id' => 0),
-        );
+//        $zutuangous = array(
+//            array('img' => "/img/banner/banner_zutuangou3.jpg", 'url' => "/groupons/view/chengzi.html?from=home1", 'id' => 0),
+//            array('img' => "/img/banner/banner_zutuangou2.jpg", 'url' => "/groupons/view/chengzi.html?from=home2", 'id' => 0),
+//            array('img' => "/img/banner/banner_zutuangou.jpg", 'url' => "/groupons/view/gonggan.html?from=home", 'id' => 0),
+//        );
 
         $mobileTagIds = array(3,5,8,12,9,6,4,10,11);
         $mobileTags = $this->findTagsByIds($mobileTagIds);

@@ -76,10 +76,9 @@
                 </div>
                 <div>
                     {{if $trying['status'] == 'sec_kill'}}
-                    <a class="tuandetail_seckill_btn radius5 fr" data-try-id="{{$trying['ProductTry']['id']}}" data-tuan-id="{{$tuan_id}}"
-                       data-pid="{{$trying['Product']['id']}}" data-send-date="{{$trying['ProductTry']['consignment_date']}}">正在秒杀</a>
+                    <a class="tuandetail_seckill_btn radius5 fr" href="/tuan_buyings/sec_detail/{{$trying['ProductTry']['id']}}">正在秒杀</a>
                     {{elseif $trying['status'] == 'sec_end'}}
-                    <a class="seckill_disabled radius5 fr">已秒完</a>
+                    <a class="seckill_disabled radius5 fr" href="/tuan_buyings/sec_detail/{{$trying['ProductTry']['id']}}">已秒完</a>
                     {{else}}
                     <a data-start="{{strtotime($trying['ProductTry']['start_time']) - ($shichi_mem? 30 * 60 : 0)}}"
                        data-pid="{{$trying['Product']['id']}}" href="#X" class="sec_start">{{friendlyDateFromStr($trying['ProductTry']['start_time'])}}开秒</a>
@@ -96,89 +95,12 @@
     $(document).ready(function(){
         var toTimer = $('.sec_start').first();
         var countDiv = toTimer.parent();
-        var cartType = 'tuan_sec';
         utils.countDown(toTimer, function () {
         }, function () {
             var parent = countDiv.parent();
             countDiv.remove();
-            parent.append('<a class="tuandetail_seckill_btn radius5 fr" data-try-id="{{$trying["ProductTry"]["id"]}}" data-tuan-id="{{$tuan_id}}" data-pid="{{$trying["Product"]["id"]}}" data-send-date="{{$trying["ProductTry"]["consignment_date"]}}">正在秒杀</a>');
+            parent.append('<a class="tuandetail_seckill_btn radius5 fr" href="/tuan_buyings/sec_detail/{{$trying["ProductTry"]["id"]}}">正在秒杀</a>');
         });
-
-        function buyBtnClicked(buyBtn) {
-            if (buyBtn.hasClass('seckill_disabled')) {
-                return false;
-            }
-            var $pid = buyBtn.attr('data-pid');
-            var tryId = buyBtn.attr('data-try-id');
-            var sendDate = buyBtn.attr('data-send-date');
-            quick_buy_try($pid, 1, 0, tryId, cartType, sendDate, function () {
-                buyBtn.removeClass('doing').addClass('done');
-            }, function () {
-                //
-            });
-        }
-        function bindClick(){
-            //秒杀事件
-            $('a.tuandetail_seckill_btn').click(function () {
-                buyBtnClicked($(this));
-            });
-        }
-
-        bindClick();
-
-        /**
-         * 添加到快速购买试吃秒杀
-         * @param id 产品编号
-         * @param num 产品数量
-         * @param spec 产品规格
-         * @param tryId 试吃id
-         * @param type
-         * @param soldOutCallback
-         * @param addedCallback
-         * @return
-         */
-        function quick_buy_try(id, num, spec, tryId, type, sendDate, soldOutCallback, addedCallback) {
-            type = type || 'normal';
-            var url = BASEURL + '/carts/add';
-            var postdata = {
-                'data[Cart][num]': num,
-                'data[Cart][product_id]': id,
-                'data[Cart][spec]': spec,
-                'data[Cart][type]': type,
-                'data[Cart][send_date]': sendDate,
-                'try_id': tryId
-            };
-            ajaxAction(url, postdata, null, function (data) {
-                if (data.success == false) {
-                    if (data.reason == 'not_login') {
-                        window.location.href = '/users/login.html?referer=' + encodeURIComponent("/");
-                        return false;
-                    } else if (data.reason == 'already_seckill_nopaid') {
-                        utils.alert_one('抱歉：您还未支付哦,请前去支付', '去支付', function () {
-                            window.location.href = '/orders/mine';
-                        });
-                    }else if (data.reason == 'already_seckill_paid'){
-                        utils.alert_one('抱歉：限购一份哦，您已经秒过啦', '知道啦', function () {
-                        });
-                    }else if (data.reason == 'sold_out') {
-                        utils.alert_one('抱歉：已经被秒完', '知道了', function () {
-                            if (typeof(soldOutCallback) == 'function') {
-                                soldOutCallback();
-                            }
-                        });
-                    } else if (data.reason == 'already_buy') {
-                        utils.alert_one('抱歉：您已经秒过啦', '关闭', function () {});
-                    } else if (data.reason = 'not_comment') {
-                        utils.alert_one('抱歉：您有' + data.not_comment_cnt + '个试吃商品还没有反馈，请先完成反馈再秒杀');
-                    }
-                } else {
-                    addedCallback();
-                    window.location.href = '/tuan_buyings/balance_global_sec_kill?from=tuan_sec&pid_list=' + data.id + '&try=' + tryId;
-                }
-            });
-            return false;
-        }
-
     });
 </script>
 {{$this->Html->script(array('/js/mobile-index.js?v3.4'), array('block' => 'scriptBottom'));}}
