@@ -104,7 +104,7 @@
     });
 </script>
 {{$this->Html->script(array('/js/mobile-index.js?v3.4'), array('block' => 'scriptBottom'));}}
-{{if $jWeixinOn}}
+{{if $is_weixin}}
  <script>
      wx.ready(function () {
          var share_string = '{{$share_string ? $share_string :"0"}}';

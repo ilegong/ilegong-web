@@ -242,6 +242,7 @@ class CategoriesController extends AppController {
             $this->set('tagId',RECOMMEND_TAG_ID);
         }
         if(parent::is_weixin()){
+            $this->set('is_weixin',true);
             $this->wexin_share_datas($tryings);
         }
 
