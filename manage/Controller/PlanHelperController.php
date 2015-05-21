@@ -17,7 +17,7 @@ class PlanHelperController extends AppController
         $spec_id = isset($_REQUEST['spec_id']) ? $_REQUEST['spec_id'] : 0;
         $num = isset($_REQUEST['num']) ? $_REQUEST['num'] : 1;
 
-        if (!($user_id >= 810163 && $user_id <= 810223) || !($user_id >= 810096 && $user_id <= 810158)) {
+        if (!($user_id >= 810163 && $user_id <= 810223) && !($user_id >= 810096 && $user_id <= 810158)) {
             echo json_encode(array('result'=>false, 'reason' => "invalid user id ".$user_id));
             return;
         }
