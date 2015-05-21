@@ -846,15 +846,13 @@ class TuanBuyingsController extends AppController{
 
     private function set_old_consignees($uid,$shipSetting=null){
         $this->loadModel('OrderConsignees');
-        $this->log('$shipSetting'.json_encode($shipSetting));
         if(empty($shipSetting)||(TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type'])==ZITI_TAG)){
             $ziti_consignee_info = $this->OrderConsignees->find('first', array(
                 'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN_ZITI),
                 'fields' => array('area', 'ziti_id','address','ziti_type','name', 'mobilephone')
             ));
-            $this->log('$ziti_consignee_info'.json_encode($ziti_consignee_info));
             if($ziti_consignee_info){
-                if(empty($shipSetting)||($shipSetting['ProductShipSetting']['val']==-1)||($shipSetting['ProductShipSetting']['val']==$ziti_consignee_info['OrderConsignees']['ziti_type'])){
+                if(empty($shipSetting)||($shipSetting['ProductShipSetting']['ship_val']==-1)||($shipSetting['ProductShipSetting']['ship_val']==$ziti_consignee_info['OrderConsignees']['ziti_type'])){
                     $this->set('ziti_consignee_info',$ziti_consignee_info['OrderConsignees']);
                 }
             }
