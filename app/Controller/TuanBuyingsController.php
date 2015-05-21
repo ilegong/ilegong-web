@@ -851,6 +851,8 @@ class TuanBuyingsController extends AppController{
                 'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN_ZITI),
                 'fields' => array('area', 'ziti_id','address','ziti_type','name', 'mobilephone')
             ));
+            $this->log('$shipSetting'.json_encode($shipSetting));
+            $this->log('$ziti_consignee_info'.json_encode($ziti_consignee_info));
             if($ziti_consignee_info){
                 if(empty($shipSetting)||($shipSetting['ProductShipSetting']['val']==-1)||($shipSetting['ProductShipSetting']['val']==$ziti_consignee_info['OrderConsignees']['ziti_type'])){
                     $this->set('ziti_consignee_info',$ziti_consignee_info['OrderConsignees']);
