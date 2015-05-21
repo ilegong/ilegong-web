@@ -5,19 +5,14 @@
 </style>
 {{$this->Html->css(array('/css/manage/countly/countly.css'))}}
 <div class="container" id="pys_order_countly">
+    <input type="hidden" value="{{$active}}" id="active-tab-val">
     <div class="row">
         <div class="col-md-2">
             <ul class="nav nav-pills nav-stacked admin-menu">
-                <li class="active"><a href="javascript:void(0)" data-target-id="gen-data"><i class="fa fa-pencil fa-fw"></i>生成数据</a></li>
-                <li><a href="javascript:void(0)" data-target-id="week-order"><i class="fa fa-file-o fa-fw"></i>订单统计</a></li>
-                <li><a href="javascript:void(0)" data-target-id="widgets"><i class="fa fa-list-alt fa-fw"></i>区域统计</a></li>
-                <li><a href="#" data-target-id="home"><i class="fa fa-home fa-fw"></i>自提点统计</a></li>
-                <li><a href="javascript:void(0)" data-target-id="charts"><i class="fa fa-bar-chart-o fa-fw"></i>Charts</a></li>
-                <li><a href="javascript:void(0)" data-target-id="table"><i class="fa fa-table fa-fw"></i>Table</a></li>
-                <li><a href="javascript:void(0)" data-target-id="forms"><i class="fa fa-tasks fa-fw"></i>Forms</a></li>
-                <li><a href="javascript:void(0)" data-target-id="calender"><i class="fa fa-calendar fa-fw"></i>Calender</a></li>
-                <li><a href="javascript:void(0)" data-target-id="library"><i class="fa fa-book fa-fw"></i>Library</a></li>
-                <li><a href="javascript:void(0)" data-target-id="settings"><i class="fa fa-cogs fa-fw"></i>Settings</a></li>
+                <li name="gen-data"><a href="/manage/admin/countly/index" data-target-id="gen-data"><i class="fa fa-pencil fa-fw"></i>生成数据</a></li>
+                <li name="week-order"><a href="/" data-target-id="week-order"><i class="fa fa-file-o fa-fw"></i>订单统计</a></li>
+                <li name="week-store-order"><a href="javascript:void(0)" data-target-id="week-store-order"><i class="fa fa-list-alt fa-fw"></i>区域统计</a></li>
+                <li name="week-area-order"><a href="#" data-target-id="week-area-order"><i class="fa fa-home fa-fw"></i>自提点统计</a></li>
             </ul>
         </div>
         <div class="col-md-10 well admin-content" id="gen-data">
@@ -78,29 +73,9 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-10 well admin-content" id="widgets">
-
+        <div class="col-md-10 well admin-content" id="week-store-order">
         </div>
-        <div class="col-md-10 well admin-content" id="home">
-            
-        </div>
-        <div class="col-md-10 well admin-content" id="charts">
-
-        </div>
-        <div class="col-md-10 well admin-content" id="table">
-
-        </div>
-        <div class="col-md-10 well admin-content" id="forms">
-
-        </div>
-        <div class="col-md-10 well admin-content" id="calender">
-
-        </div>
-        <div class="col-md-10 well admin-content" id="library">
-
-        </div>
-        <div class="col-md-10 well admin-content" id="settings">
-
+        <div class="col-md-10 well admin-content" id="week-area-order">
         </div>
     </div>
 </div>

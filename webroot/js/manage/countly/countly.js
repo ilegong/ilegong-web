@@ -8,17 +8,17 @@ $(document).ready(function () {
     var navListItems = $('.admin-menu li');
     var allWells = $('.admin-content');
     var allWellsExceptFirst = $('.admin-content:not(:first)');
-
+    var activeTabVal = $('#active-tab-val',$el).val();
     allWellsExceptFirst.hide();
     navItems.click(function (e) {
         e.preventDefault();
         navListItems.removeClass('active');
         $(this).closest('li').addClass('active');
-
         allWells.hide();
         var target = $(this).attr('data-target-id');
         $('#' + target).show();
     });
+    $('a[data-target-id="'+activeTabVal+'"]').trigger('click');
     var $gen_last_week_data = $('#gen_last_week_data',$el);
     var $custom_gen_data = $('#custom_gen_data',$el);
     $gen_last_week_data.on('click',function(){

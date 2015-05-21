@@ -1,0 +1,114 @@
+<ol class="breadcrumb">
+    <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+    <li class="active">自提点周订单统计</li>
+</ol>
+
+<form class="form-inline form-by-offline-store" method="post" action="/manage/admin/countly/get_store_week_order"
+      data-noajax="true">
+    <div class="form-group">
+        <input type="text" class="form-control offline-store-search" placeholder="搜索自提点"
+               data-search-for="offline-store">
+    </div>
+    <div style="padding-bottom: 10px;padding-top: 10px;">
+        <div class="form-group">
+            <select class="form-control offline_store search-label" name="store_id" id="offline-store" data-value="{{$store_id}}">
+                <option value="-1">请选择自提点</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary text-center">查看</button>
+    </div>
+</form>
+
+<table class="table table-striped table-bordered table-condensed table-hover table-clickable">
+    <thead>
+        <th>时间段</th>
+        <th>新下单用户</th>
+        <th>下单用户数</th>
+        <th>重复购买用户</th>
+        <th>复购率</th>
+        <th>峰值订单</th>
+        <th>峰值订单日期</th>
+        <th>平均订单数</th>
+        <th>全部订单数</th>
+    </thead>
+    <tbody>
+    {{loop $datas $item}}
+    <tr>
+        <td>{{$item['StatisticsZitiData']['start_date']}}--{{$item['StatisticsZitiData']['end_date']}}</td>
+        <td>{{$item['StatisticsZitiData']['new_user_buy_count']}}</td>
+        <td>{{$item['StatisticsZitiData']['all_buy_user_count']}}</td>
+        <td>{{$item['StatisticsZitiData']['repeat_buy_count']}}</td>
+        <td>{{($item['StatisticsZitiData']['repeat_buy_count'])/($item['StatisticsZitiData']['all_buy_user_count'])}}</td>
+        <td>{{$item['StatisticsZitiData']['max_order_count']}}</td>
+        <td>{{$item['StatisticsZitiData']['max_order_date']}}</td>
+        <td>{{($item['StatisticsZitiData']['all_order_count'])/6}}</td>
+        <td>{{$item['StatisticsZitiData']['all_order_count']}}</td>
+    </tr>
+    {{/loop}}
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+
+        $.getJSON('/manage/admin/offline_stores/api_offline_stores', function (data) {
+            var values = [{'val': -1, 'name': '请选择自提点'}];
+            var menu = {0: '所有好邻居自提点', 1: '所有自有自提点'};
+            var offlineStoreBox = $('.offline_store');
+            for (var category in data) {
+                $('<option value="" class="store_' + category + '">' + menu[category] + '</option>').appendTo(offlineStoreBox);
+                var chose_address = $.map(data[category], function (value) {
+                    return [value];
+                });
+                chose_address = chose_address.sort(function (item1, item2) {
+                    return item1['name'].localeCompare(item2['name']);
+                });
+                for (var i in chose_address) {
+                    $('<option value="' + chose_address[i].id + '">' + chose_address[i].name + '</option>').appendTo(offlineStoreBox);
+                    values.push({'val': chose_address[i].id, 'name': chose_address[i].name});
+                    var val = $('.store_' + category).val();
+                    $('.store_' + category).val(chose_address[i].id + ',' + val);
+                }
+                values.push({'val': $('.store_' + category).val(), 'name': menu[category]});
+            }
+            iUtils.initSelectBox(offlineStoreBox);
+            initSearchBox($('.offline-store-search'), values);
+        });
+
+        String.prototype.Trim = function () {
+            return this.replace(/(^\s*)|(\s*$)/g, "");
+        };
+
+        function initSearchBox(searchBox, values) {
+            if (navigator.userAgent.indexOf("MSIE") > 0) {
+                searchBox.on('onpropertychange', function () {
+                    onSearchBoxChanged($(this), values)
+                });
+            } else {
+                searchBox.on('input', function () {
+                    onSearchBoxChanged($(this), values)
+                });
+            }
+        }
+
+        function onSearchBoxChanged(searchBox, values) {
+            var content = searchBox.val().Trim();
+            var selector = $("#" + searchBox.data('search-for'));
+            selector.empty();
+            if (content == '') {
+                $.each(values, function (index, value) {
+                    selector.append('<option value="' + value['val'] + '">' + value['name'] + '</option>');
+                });
+            } else {
+                var reg = new RegExp(content, 'i');
+                $.each(values, function (index, val) {
+                    if (reg.test(val['name'])) {
+                        selector.append('<option selected="selected" value="' + val['val'] + '">' + val['name'] + '</option>');
+                    }
+                })
+            }
+            selector.change();
+        }
+
+    });
+
+</script>

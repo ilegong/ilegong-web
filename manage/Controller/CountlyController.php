@@ -13,7 +13,30 @@ class CountlyController extends AppController{
     var $uses = array('User','OfflineStore','Order','StatisticsZitiData','StatisticsOrderData');
 
     public function admin_index(){
+        $this->set('active','gen-data');
+    }
 
+    public function admin_get_week_order(){
+        $statisticsOrderDatas = $this->StatisticsOrderData->find('all',array(
+            'limit'=>100,
+            'order' => array('id DESC')
+        ));
+        $this->set('datas',$statisticsOrderDatas);
+    }
+
+    public function admin_get_store_week_order(){
+        $storeId= $_REQUEST['store_id'];
+        if($storeId){
+            $statisticsZitiDatas = $this->StatisticsZitiData->find('all',array(
+                'conditions' => array(
+                    'offline_store_id' => $storeId
+                ),
+                'limit' => 100,
+                'order' => array('id DESC')
+            ));
+            $this->set('datas',$statisticsZitiDatas);
+            $this->set('store_id',$storeId);
+        }
     }
 
     /**
@@ -93,9 +116,9 @@ class CountlyController extends AppController{
         //$this->log('$all_new_user_count'.$all_new_user_count);
         $weekData = array(
             'new_user_buy_count' => $new_user_buy_count,
-            'repeat_buy_user' => $repeat_buy_user_count,
+            'repeat_buy_count' => $repeat_buy_user_count,
             'all_buy_user_count' => count($uids),
-            'order_max_count' => $weekMaxOrderCount[0][0]['MAX(order_count)'],
+            'max_order_count' => $weekMaxOrderCount[0][0]['MAX(order_count)'],
             'all_order_count' => $weekAllOrderCount,
             'area_id' => $store['OfflineStore']['area_id'],
             'offline_store_id' => $store_id,
