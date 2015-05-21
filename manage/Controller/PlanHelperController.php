@@ -17,22 +17,26 @@ class PlanHelperController extends AppController
         $spec_id = isset($_REQUEST['spec_id']) ? $_REQUEST['spec_id'] : 0;
         $num = isset($_REQUEST['num']) ? $_REQUEST['num'] : 1;
 
-        if (!($user_id >= 810163 || $user_id <= 810223) && !($user_id >= 810096 || $user_id <= 810158)) {
-            throw new Exception("invalid user id " . $user_id);
+        if (!($user_id >= 810163 && $user_id <= 810223) || !($user_id >= 810096 && $user_id <= 810158)) {
+            echo json_encode(array('result'=>false, 'reason' => "invalid user id ".$user_id));
+            return;
         }
         $user = $this->User->findById($user_id);
 
         $product = $this->Product->findById($product_id);
-        if ($product['Product']['brand_id'] != 92) {
-            throw new Exception('only pyshuo products are supported');
+        if ($product['Product']['brand_id'] != 92 && $product['Product']['brand_id'] != 180) {
+            echo json_encode(array('result'=>false, 'reason' => 'only pyshuo/tage products are supported'));
+            return;
         }
 
         if ($offline_store_id != 54 && $offline_store_id != 55) {
-            throw new Exception('only offline store 54 or 55 is supported');
+            echo json_encode(array('result'=>false, 'reason' => 'only offline store 54 or 55 is supported'));
+            return;
         }
         $offline_store = $this->OfflineStore->findById($offline_store_id);
         if (empty($offline_store)) {
-            throw new Exception('offline store does not exist: ' . $offline_store_id);
+            echo json_encode(array('result'=>false, 'reason' => 'offline store does not exist: ' . $offline_store_id));
+            return;
         }
 
         $tuan_buying = $this->TuanBuying->find('first', array(
