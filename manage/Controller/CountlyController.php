@@ -61,7 +61,9 @@ class CountlyController extends AppController{
     private function gen_week_store_data($store_id,$start_date,$end_date){
 
         $store = $this->OfflineStore->find('first',array(
-            'id' => $store_id
+            'conditions' => array(
+                'id' => $store_id
+            )
         ));
 
         $orderCond = array(
