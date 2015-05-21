@@ -107,7 +107,7 @@
 {{if $jWeixinOn}}
  <script>
      wx.ready(function () {
-         var share_string = '{{$share_string ? $share_string :"0"}}';
+         var share_string = '{{$share_string ? $share_string :"1"}}';
          var to_timeline_title = "{{$to_timeline_title}}";
          var to_friend_title = "{{$to_friend_title}}";
          var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
