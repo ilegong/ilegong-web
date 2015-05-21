@@ -24,6 +24,13 @@ class CountlyController extends AppController{
         $this->set('datas',$statisticsOrderDatas);
     }
 
+    public function admin_get_area_week_order(){
+        $areaId = $_REQUEST['area_id'];
+        if($areaId){
+            $this->set('area_id',$areaId);
+        }
+    }
+
     public function admin_get_store_week_order(){
         $storeId= $_REQUEST['store_id'];
         if($storeId){
@@ -44,8 +51,8 @@ class CountlyController extends AppController{
      */
     public function admin_gen_data(){
         $this->autoRender = false;
-        $start_date = $_REQUEST['start_time'];
-        $end_date = $_REQUEST['end_time'];
+        $start_date = $_REQUEST['start_date'];
+        $end_date = $_REQUEST['end_date'];
         if(!$start_date||!$end_date){
             $previous_week = strtotime("-1 week +1 day");
             $start_week = strtotime("last sunday midnight",$previous_week);

@@ -1,0 +1,55 @@
+<ol class="breadcrumb">
+    <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
+    <li class="active">区域周订单统计</li>
+</ol>
+
+<form class="form-inline form-by-offline-store" method="post" action="/manage/admin/countly/get_area_week_order"
+      data-noajax="true">
+    <div style="padding-bottom: 10px;padding-top: 10px;">
+        <div class="form-group">
+            <select class="form-control area search-label" name="area_id" id="area" data-value="{{$area_id}}">
+                <option value="-1">请选择区域</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary text-center">查看</button>
+    </div>
+</form>
+
+<table class="table table-striped table-bordered table-condensed table-hover table-clickable">
+    <thead>
+        <th>时间段</th>
+        <th>新下单用户</th>
+        <th>下单用户数</th>
+        <th>重复购买用户</th>
+        <th>复购率</th>
+        <th>峰值订单</th>
+        <th>峰值订单日期</th>
+        <th>平均订单数</th>
+        <th>全部订单数</th>
+    </thead>
+    <tbody>
+    {{loop $datas $item}}
+    <tr>
+        <td>{{$item['StatisticsZitiData']['start_date']}}--{{$item['StatisticsZitiData']['end_date']}}</td>
+        <td>{{$item['StatisticsZitiData']['new_user_buy_count']}}</td>
+        <td>{{$item['StatisticsZitiData']['all_buy_user_count']}}</td>
+        <td>{{$item['StatisticsZitiData']['repeat_buy_count']}}</td>
+        <td>{{($item['StatisticsZitiData']['repeat_buy_count'])/($item['StatisticsZitiData']['all_buy_user_count'])}}</td>
+        <td>{{$item['StatisticsZitiData']['max_order_count']}}</td>
+        <td>{{$item['StatisticsZitiData']['max_order_date']}}</td>
+        <td>{{($item['StatisticsZitiData']['all_order_count'])/6}}</td>
+        <td>{{$item['StatisticsZitiData']['all_order_count']}}</td>
+    </tr>
+    {{/loop}}
+    </tbody>
+</table>
+{{$this->Html->script(array('/js/tuan-area.js?v4.2'));}}
+<script>
+    $(document).ready(function () {
+        var areaBox = $('select.area');
+        $.each(beijingArea,function(index,item){
+            $('<option value="'+index+'">' +item + '</option>').appendTo(areaBox);
+        });
+        iUtils.initSelectBox(areaBox);
+    });
+</script>

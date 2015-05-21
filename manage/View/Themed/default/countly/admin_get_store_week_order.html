@@ -65,10 +65,8 @@
                 for (var i in chose_address) {
                     $('<option value="' + chose_address[i].id + '">' + chose_address[i].name + '</option>').appendTo(offlineStoreBox);
                     values.push({'val': chose_address[i].id, 'name': chose_address[i].name});
-                    var val = $('.store_' + category).val();
-                    $('.store_' + category).val(chose_address[i].id + ',' + val);
                 }
-                values.push({'val': $('.store_' + category).val(), 'name': menu[category]});
+                values.push({'val': 0, 'name': menu[category]});
             }
             iUtils.initSelectBox(offlineStoreBox);
             initSearchBox($('.offline-store-search'), values);
