@@ -105,6 +105,7 @@ class CountlyController extends AppController{
             'end_date' => $end_date,
             'max_order_date' => $weekMaxOrderCount[0]['orders']['created']
         );
+        $this->StatisticsZitiData->id = null;
         $this->StatisticsZitiData->save($weekData);
     }
 
