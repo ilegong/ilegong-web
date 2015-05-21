@@ -7,7 +7,7 @@ var table = document.getElementsByName("order-data-table");
 if(table.length>1){
     var i;
     for (i = 0; i < table.length; i++) {
-        if (table[i].type == "checkbox") {
+        if (table[i].type == "table") {
             new Tablesort(table[i]);
         }
     }
