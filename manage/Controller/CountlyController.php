@@ -137,7 +137,7 @@ class CountlyController extends AppController{
         //$this->log('uids '.$uids);
         $new_user_buy_count = $this->ziti_new_buy_user_count($store_id,$uids,$start_date);
         //$this->log('new_user_buy_count '.$new_user_buy_count);
-        $weekMaxOrderCount = $this->Order->query('select MAX(order_count),created from (select count(id) as order_count, date(created) as created from cake_orders where ship_mark=\'ziti\' and consignee_id='.$store_id.' and status in (1,2,3) and created BETWEEN \''.$start_date.'\' and \''.$end_date.'\' group by date(created)) as orders');
+        $weekMaxOrderCount = $this->Order->query('select * from (select count(id) as order_count, date(created) as created from cake_orders where ship_mark=\'ziti\' and consignee_id='.$store_id.' and status in (1,2,3) and created BETWEEN \''.$start_date.'\' and \''.$end_date.'\' group by date(created)) as orders order by order_count DESC limit 1');
         //$this->log('$weekMaxOrderCount '.json_encode($weekMaxOrderCount));
         $repeat_buy_user_count = $this->repeat_ziti_user_count($store_id,$start_date,$end_date);
         //$this->log('$repeat_buy_user_count'.$repeat_buy_user_count);
@@ -147,7 +147,7 @@ class CountlyController extends AppController{
             'new_user_buy_count' => $new_user_buy_count,
             'repeat_buy_count' => $repeat_buy_user_count,
             'all_buy_user_count' => count($uids),
-            'max_order_count' => $weekMaxOrderCount[0][0]['MAX(order_count)'],
+            'max_order_count' => $weekMaxOrderCount[0]['orders']['order_count'],
             'all_order_count' => $weekAllOrderCount,
             'area_id' => $store['OfflineStore']['area_id']||0,
             'offline_store_id' => $store_id,
@@ -178,7 +178,7 @@ class CountlyController extends AppController{
 
         $uids = Hash::extract($orders,'{n}.Order.creator');
         $uids = array_unique($uids);
-        $weekMaxOrderCount = $this->Order->query('select MAX(order_count),created from (select count(id) as order_count, date(created) as created from cake_orders where status in (1,2,3) and created BETWEEN \''.$start_date.'\' and \''.$end_date.'\' group by date(created)) as orders');
+        $weekMaxOrderCount = $this->Order->query('select * from (select count(id) as order_count, date(created) as created from cake_orders where status in (1,2,3) and created BETWEEN \''.$start_date.'\' and \''.$end_date.'\' group by date(created)) as orders  order by order_count DESC limit 1');
         $orderCond['type']=array(5,6);
         $tuanOrderCount = $this->Order->find('count',array(
             'conditions' => $orderCond
@@ -195,7 +195,7 @@ class CountlyController extends AppController{
             'all_order_count' => $weekAllOrderCount,
             'ziti_order_count' => $zitiOrderCount,
             'tuan_order_count' => $tuanOrderCount,
-            'max_order_count' => $weekMaxOrderCount[0][0]['MAX(order_count)'],
+            'max_order_count' => $weekMaxOrderCount[0]['orders']['order_count'],
             'all_new_user_count' => $new_user_buy_count,
             'max_order_date' => $weekMaxOrderCount[0]['orders']['created'],
             'start_date' => $start_date,
