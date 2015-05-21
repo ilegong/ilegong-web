@@ -19,7 +19,44 @@
     </div>
 </form>
 {{if $store_list}}
-    {{template countly/store_data_template  }}
+    <h3>朋友说自有自提点</h3>
+    <table name="order-data-table" class="table table-striped table-bordered table-condensed table-hover table-clickable">
+        <thead>
+            <th>自提点</th>
+            <th>新下单用户</th>
+            <th>下单用户数</th>
+            <th>重复购买用户</th>
+            <th>复购率</th>
+            <th>峰值订单</th>
+            <th>峰值订单日期</th>
+            <th>平均订单数</th>
+            <th>全部订单数</th>
+        </thead>
+        <tbody>
+            {{loop $pys_ziti $point}}
+                {{template countly/store_data_template}}
+            {{/loop}}
+        </tbody>
+    </table>
+    <h3>好邻居自提点</h3>
+    <table name="order-data-table" class="table table-striped table-bordered table-condensed table-hover table-clickable">
+        <thead>
+            <th>自提点</th>
+            <th>新下单用户</th>
+            <th>下单用户数</th>
+            <th>重复购买用户</th>
+            <th>复购率</th>
+            <th>峰值订单</th>
+            <th>峰值订单日期</th>
+            <th>平均订单数</th>
+            <th>全部订单数</th>
+        </thead>
+        <tbody>
+        {{loop $hlj_ziti $point}}
+            {{template countly/store_data_template}}
+        {{/loop}}
+        </tbody>
+    </table>
 {{else}}
 <table name="order-data-table" class="table table-striped table-bordered table-condensed table-hover table-clickable">
     <thead>
