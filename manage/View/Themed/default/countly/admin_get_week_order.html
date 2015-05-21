@@ -27,10 +27,10 @@
             <td>{{$item['StatisticsOrderData']['new_user_buy_count']}}</td>
             <td>{{$item['StatisticsOrderData']['all_buy_user_count']}}</td>
             <td>{{$item['StatisticsOrderData']['repeat_buy_count']}}</td>
-            <td>{{number_format(($item['StatisticsOrderData']['repeat_buy_count'])/($item['StatisticsOrderData']['all_buy_user_count']),2)}}</td>
+            <td>{{number_format(($item['StatisticsOrderData']['repeat_buy_count'])/($item['StatisticsOrderData']['all_buy_user_count']),2,'.','')}}</td>
             <td>{{$item['StatisticsOrderData']['max_order_count']}}</td>
             <td>{{$item['StatisticsOrderData']['max_order_date']}}</td>
-            <td>{{number_format(($item['StatisticsOrderData']['all_order_count'])/6,2)}}</td>
+            <td>{{number_format(($item['StatisticsOrderData']['all_order_count'])/6,2,'.','')}}</td>
             <td>{{$item['StatisticsOrderData']['all_order_count']}}</td>
             <td>{{$item['StatisticsOrderData']['tuan_order_count']}}</td>
             <td>{{$item['StatisticsOrderData']['ziti_order_count']}}</td>
