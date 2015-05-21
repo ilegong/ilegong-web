@@ -401,7 +401,7 @@ class OrdersController extends AppController {
         }
 
         $consignees = $this->OrderConsignee->find('all',array(
-            'conditions'=>array('creator'=> $uid, 'status !=' => STATUS_CONSIGNEES_TUAN),
+            'conditions'=>array('creator'=> $uid, 'status !=' => array(STATUS_CONSIGNEES_TUAN,STATUS_CONSIGNEES_TUAN_ZITI)),
             'order' => 'status desc',
         ));
         $total_consignee = count($consignees);
