@@ -1,15 +1,15 @@
 <?php
-            $store = $point['OfflineStore'];
-            $item = $datas[$store['id']];
-        ?>
-        <tr>
-            <td>{{$store['alias']}}</td>
-            <td>{{$item['StatisticsZitiData']['new_user_buy_count']}}</td>
-            <td>{{$item['StatisticsZitiData']['all_buy_user_count']}}</td>
-            <td>{{$item['StatisticsZitiData']['repeat_buy_count']}}</td>
-            <td>{{($item['StatisticsZitiData']['repeat_buy_count'])/($item['StatisticsZitiData']['all_buy_user_count'])}}</td>
-            <td>{{$item['StatisticsZitiData']['max_order_count']}}</td>
-            <td>{{$item['StatisticsZitiData']['max_order_date']}}</td>
-            <td>{{($item['StatisticsZitiData']['all_order_count'])/6}}</td>
-            <td>{{$item['StatisticsZitiData']['all_order_count']}}</td>
-        </tr>
+    $store = $point['OfflineStore'];
+    $item = $datas[$store['id']];
+?>
+<tr>
+    <td>{{$store['alias']}}</td>
+    <td>{{$item['StatisticsZitiData']['new_user_buy_count']}}</td>
+    <td>{{$item['StatisticsZitiData']['all_buy_user_count']}}</td>
+    <td>{{$item['StatisticsZitiData']['repeat_buy_count']}}</td>
+    <td>{{number_format(($item['StatisticsZitiData']['repeat_buy_count'])/($item['StatisticsZitiData']['all_buy_user_count']))}}</td>
+    <td>{{$item['StatisticsZitiData']['max_order_count']}}</td>
+    <td>{{$item['StatisticsZitiData']['max_order_date']}}</td>
+    <td>{{number_format(($item['StatisticsZitiData']['all_order_count'])/6,2)}}</td>
+    <td>{{$item['StatisticsZitiData']['all_order_count']}}</td>
+</tr>
