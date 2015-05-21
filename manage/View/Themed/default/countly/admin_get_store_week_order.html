@@ -19,14 +19,7 @@
     </div>
 </form>
 {{if $store_list}}
-    <h3>朋友说自有自提点</h3>
-    {{loop $pys_ziti $point}}
-        {{template countly/store_data_template}}
-    {{/loop}}
-    <h3>好邻居自提点</h3>
-    {{loop $hlj_ziti $point}}
-        {{template countly/store_data_template}}
-    {{/loop}}
+    {{template countly/store_data_template  }}
 {{else}}
 <table name="order-data-table" class="table table-striped table-bordered table-condensed table-hover table-clickable">
     <thead>

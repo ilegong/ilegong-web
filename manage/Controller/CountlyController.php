@@ -55,16 +55,13 @@ class CountlyController extends AppController{
                 'order' => array('id DESC')
             ));
             $offlineStoreIds = Hash::extract($statisticsZitiDatas,'{n}.StatisticsZitiData.offline_store_id');
-            $statisticsZitiDatas = Hash::combine($statisticsZitiDatas,'{n}.StatisticsZitiData.offline_store_id','{n}');
             $offlineStores = $this->OfflineStore->find('all',array(
                 'conditions' => array(
                     'id' => $offlineStoreIds
                 )
             ));
-            $pys_ziti_point = array_filter($offlineStores,'pys_ziti_filter');
-            $hlj_ziti_point = array_filter($offlineStores,'hlj_ziti_filter');
-            $this->set('pys_ziti',$pys_ziti_point);
-            $this->set('hlj_ziti',$hlj_ziti_point);
+            $offlineStores = Hash::combine($offlineStores,'{n}.OfflineStore.id','{n}.OfflineStore');
+            $this->set('stores',$offlineStores);
             $this->set('datas',$statisticsZitiDatas);
             $this->set('store_list',true);
         }
