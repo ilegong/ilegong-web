@@ -33,6 +33,8 @@ class CountlyController extends AppController{
 
     public function admin_get_store_week_order(){
         $storeId= $_REQUEST['store_id'];
+        $start_date = $_REQUEST['start_date'];
+        $end_date = $_REQUEST['end_date'];
         if($storeId){
             $statisticsZitiDatas = $this->StatisticsZitiData->find('all',array(
                 'conditions' => array(
@@ -43,6 +45,28 @@ class CountlyController extends AppController{
             ));
             $this->set('datas',$statisticsZitiDatas);
             $this->set('store_id',$storeId);
+        }elseif($start_date&&$end_date){
+            $statisticsZitiDatas = $this->StatisticsZitiData->find('all',array(
+                'conditions' => array(
+                    'start_date' => $start_date,
+                    'end_date' => $end_date
+                ),
+                'limit' => 400,
+                'order' => array('id DESC')
+            ));
+            $offlineStoreIds = Hash::extract($statisticsZitiDatas,'{n}.StatisticsZitiData.offline_store_id');
+            $statisticsZitiDatas = Hash::combine($statisticsZitiDatas,'{n}.StatisticsZitiData.offline_store_id','{n}');
+            $offlineStores = $this->OfflineStore->find('all',array(
+                'conditions' => array(
+                    'id' => $offlineStoreIds
+                )
+            ));
+            $pys_ziti_point = array_filter($offlineStores,'pys_ziti_filter');
+            $hlj_ziti_point = array_filter($offlineStores,'hlj_ziti_filter');
+            $this->set('pys_ziti',$pys_ziti_point);
+            $this->set('hlj_ziti',$hlj_ziti_point);
+            $this->set('datas',$statisticsZitiDatas);
+            $this->set('store_list',true);
         }
     }
 

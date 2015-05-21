@@ -18,8 +18,17 @@
         <button type="submit" class="btn btn-primary text-center">查看</button>
     </div>
 </form>
-
-<table class="table table-striped table-bordered table-condensed table-hover table-clickable">
+{{if $store_list}}
+    <h3>朋友说自有自提点</h3>
+    {{loop $pys_ziti $point}}
+        {{template countly/store_data_template}}
+    {{/loop}}
+    <h3>好邻居自提点</h3>
+    {{loop $hlj_ziti $point}}
+        {{template countly/store_data_template}}
+    {{/loop}}
+{{else}}
+<table name="order-data-table" class="table table-striped table-bordered table-condensed table-hover table-clickable">
     <thead>
         <th>时间段</th>
         <th>新下单用户</th>
@@ -33,23 +42,24 @@
     </thead>
     <tbody>
     {{loop $datas $item}}
-    <tr>
-        <td>{{$item['StatisticsZitiData']['start_date']}}--{{$item['StatisticsZitiData']['end_date']}}</td>
-        <td>{{$item['StatisticsZitiData']['new_user_buy_count']}}</td>
-        <td>{{$item['StatisticsZitiData']['all_buy_user_count']}}</td>
-        <td>{{$item['StatisticsZitiData']['repeat_buy_count']}}</td>
-        <td>{{($item['StatisticsZitiData']['repeat_buy_count'])/($item['StatisticsZitiData']['all_buy_user_count'])}}</td>
-        <td>{{$item['StatisticsZitiData']['max_order_count']}}</td>
-        <td>{{$item['StatisticsZitiData']['max_order_date']}}</td>
-        <td>{{($item['StatisticsZitiData']['all_order_count'])/6}}</td>
-        <td>{{$item['StatisticsZitiData']['all_order_count']}}</td>
-    </tr>
+        <tr>
+            <td>{{$item['StatisticsZitiData']['start_date']}}--{{$item['StatisticsZitiData']['end_date']}}</td>
+            <td>{{$item['StatisticsZitiData']['new_user_buy_count']}}</td>
+            <td>{{$item['StatisticsZitiData']['all_buy_user_count']}}</td>
+            <td>{{$item['StatisticsZitiData']['repeat_buy_count']}}</td>
+            <td>{{($item['StatisticsZitiData']['repeat_buy_count'])/($item['StatisticsZitiData']['all_buy_user_count'])}}</td>
+            <td>{{$item['StatisticsZitiData']['max_order_count']}}</td>
+            <td>{{$item['StatisticsZitiData']['max_order_date']}}</td>
+            <td>{{($item['StatisticsZitiData']['all_order_count'])/6}}</td>
+            <td>{{$item['StatisticsZitiData']['all_order_count']}}</td>
+        </tr>
     {{/loop}}
     </tbody>
 </table>
+{{/if}}
+
 <script>
     $(document).ready(function () {
-
         $.getJSON('/manage/admin/offline_stores/api_offline_stores', function (data) {
             var values = [{'val': -1, 'name': '请选择自提点'}];
             var menu = {0: '所有好邻居自提点', 1: '所有自有自提点'};
@@ -87,7 +97,6 @@
                 });
             }
         }
-
         function onSearchBoxChanged(searchBox, values) {
             var content = searchBox.val().Trim();
             var selector = $("#" + searchBox.data('search-for'));
@@ -106,7 +115,7 @@
             }
             selector.change();
         }
-
     });
-
 </script>
+
+{{$this->Html->script(array('/js/manage-lib/tablesort/tablesort.min.js','/js/manage-lib/tablesort/src/sorts/tablesort.date.js','/js/manage-lib/tablesort/src/sorts/tablesort.dotsep.js','/js/manage-lib/tablesort/src/sorts/tablesort.numeric.js','/js/manage/countly/table_sort.js'));}}

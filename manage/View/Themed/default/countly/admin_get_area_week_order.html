@@ -43,7 +43,9 @@
     {{/loop}}
     </tbody>
 </table>
+{{$this->Html->script(array('/js/manage-lib/tablesort/tablesort.min.js','/js/manage-lib/tablesort/src/sorts/tablesort.date.js','/js/manage-lib/tablesort/src/sorts/tablesort.dotsep.js','/js/manage-lib/tablesort/src/sorts/tablesort.numeric.js'));}}
 {{$this->Html->script(array('/js/tuan-area.js?v4.2'));}}
+{{$this->Html->script(array('/js/manage/countly/table_sort.js'))}}
 <script>
     $(document).ready(function () {
         var areaBox = $('select.area');

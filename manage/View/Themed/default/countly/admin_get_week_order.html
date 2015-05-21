@@ -3,7 +3,7 @@
     <li class="active">周订单统计</li>
 </ol>
 
-<table class="table table-striped table-bordered table-condensed table-hover table-clickable">
+<table name="order-data-table" class="table table-striped table-bordered table-condensed table-hover table-clickable">
     <thead>
         <th>时间段</th>
         <th>新下单用户</th>
@@ -18,6 +18,7 @@
         <th>团购自提订单数</th>
         <th>普通订单数</th>
         <th>新增用户</th>
+        <th>操作</th>
     </thead>
     <tbody>
     {{loop $datas $item}}
@@ -35,7 +36,10 @@
             <td>{{$item['StatisticsOrderData']['ziti_order_count']}}</td>
             <td>{{($item['StatisticsOrderData']['all_order_count'])-($item['StatisticsOrderData']['tuan_order_count'])}}</td>
             <td>{{$item['StatisticsOrderData']['all_new_user_count']}}</td>
+            <td><a href="/manage/admin/countly/get_store_week_order?start_date={{$item['StatisticsOrderData']['start_date']}}&end_date={{$item['StatisticsOrderData']['end_date']}}" class="btn btn-info">查看自提点明细</a></td>
         </tr>
     {{/loop}}
     </tbody>
 </table>
+{{$this->Html->script(array('/js/manage-lib/tablesort/tablesort.min.js','/js/manage-lib/tablesort/src/sorts/tablesort.date.js','/js/manage-lib/tablesort/src/sorts/tablesort.dotsep.js','/js/manage-lib/tablesort/src/sorts/tablesort.numeric.js'));}}
+{{$this->Html->script(array('/js/manage/countly/table_sort.js'))}}
