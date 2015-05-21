@@ -31,9 +31,9 @@ $(document).ready(function () {
     });
 
     $custom_gen_data.on('click',function(){
-        var startDate = $('gen_start_date').val();
-        var endDate = $('gen_end_date').val();
-        $.post('/manage/admin/countly/gen_data',{'start_date':startDate,'end_date':endDate},function(data){
+        var startDate = $('#gen_start_date').val();
+        var endDate = $('#gen_end_date').val();
+        $.post('/manage/admin/countly/gen_data',{"start_date":startDate,"end_date":endDate},function(data){
             console.log(data);
             if(data['success']){
                 alert('数据生成成功');

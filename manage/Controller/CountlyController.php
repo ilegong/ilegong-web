@@ -51,8 +51,8 @@ class CountlyController extends AppController{
      */
     public function admin_gen_data(){
         $this->autoRender = false;
-        $start_date = $_REQUEST['start_date'];
-        $end_date = $_REQUEST['end_date'];
+        $start_date = $_POST['start_date'];
+        $end_date = $_POST['end_date'];
         if(!$start_date||!$end_date){
             $previous_week = strtotime("-1 week +1 day");
             $start_week = strtotime("last sunday midnight",$previous_week);
@@ -125,7 +125,7 @@ class CountlyController extends AppController{
             'all_buy_user_count' => count($uids),
             'max_order_count' => $weekMaxOrderCount[0][0]['MAX(order_count)'],
             'all_order_count' => $weekAllOrderCount,
-            'area_id' => $store['OfflineStore']['area_id'],
+            'area_id' => $store['OfflineStore']['area_id']||0,
             'offline_store_id' => $store_id,
             'created' => date('Y-m-d h:i:s'),
             'all_new_user_count' => $all_new_user_count,
@@ -154,9 +154,7 @@ class CountlyController extends AppController{
 
         $uids = Hash::extract($orders,'{n}.Order.creator');
         $uids = array_unique($uids);
-
         $weekMaxOrderCount = $this->Order->query('select MAX(order_count),created from (select count(id) as order_count, date(created) as created from cake_orders where status in (1,2,3) and created BETWEEN \''.$start_date.'\' and \''.$end_date.'\' group by date(created)) as orders');
-
         $orderCond['type']=array(5,6);
         $tuanOrderCount = $this->Order->find('count',array(
             'conditions' => $orderCond
