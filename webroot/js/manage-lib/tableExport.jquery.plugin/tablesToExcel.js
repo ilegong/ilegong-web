@@ -1,7 +1,7 @@
 var tablesToExcel = (function() {
     var uri = 'data:application/vnd.ms-excel;base64,'
         , tmplWorkbookXML = '<?xml version="1.0"?><?mso-application progid="Excel.Sheet"?><Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">'
-            + '<DocumentProperties xmlns="urn:schemas-microsoft-com:office:office"><Author>Axel Richter</Author><Created>{created}</Created></DocumentProperties>'
+            + '<DocumentProperties xmlns="urn:schemas-microsoft-com:office:office"><Author>pys</Author><Created>{created}</Created></DocumentProperties>'
             + '<Styles>'
             + '<Style ss:ID="Currency"><NumberFormat ss:Format="Currency"></NumberFormat></Style>'
             + '<Style ss:ID="Date"><NumberFormat ss:Format="Medium Date"></NumberFormat></Style>'
@@ -11,7 +11,7 @@ var tablesToExcel = (function() {
         , tmplCellXML = '<Cell{attributeStyleID}{attributeFormula}><Data ss:Type="{nameType}">{data}</Data></Cell>'
         , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
         , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
-    return function(tables, wsnames, wbname, appname) {
+    return function(tables, wsnames, wbname, appname,ignoreRows) {
         var ctx = "";
         var workbookXML = "";
         var worksheetsXML = "";
@@ -22,6 +22,9 @@ var tablesToExcel = (function() {
             for (var j = 0; j < tables[i].rows.length; j++) {
                 rowsXML += '<Row>'
                 for (var k = 0; k < tables[i].rows[j].cells.length; k++) {
+                    if(ignoreRows.indexOf(k)>=0){
+                        continue;
+                    }
                     var dataType = tables[i].rows[j].cells[k].getAttribute("data-type");
                     var dataStyle = tables[i].rows[j].cells[k].getAttribute("data-style");
                     var dataValue = tables[i].rows[j].cells[k].getAttribute("data-value");
