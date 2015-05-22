@@ -49,7 +49,7 @@ var tablesToExcel = (function() {
         ctx = {created: (new Date()).getTime(), worksheets: worksheetsXML};
         workbookXML = format(tmplWorkbookXML, ctx);
 
-        console.log(workbookXML);
+        //console.log(workbookXML);
 
         var link = document.createElement("A");
         link.href = uri + base64(workbookXML);
