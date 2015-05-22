@@ -1,18 +1,18 @@
 {{if !empty($current_orders)}}
-<table class="table table-bordered orders" name="order-data-table">
+<table class="table table-bordered orders" name="order-data-table" id="{{$data_tag}}" data-table-name="{{$data_tag_name}}">
     <thead class="data-head">
         <tr>
             <th class="not-excel"><input type="checkbox" value="0" id="check_all_tb"></th>
             <th>订单号</th>
             <th>用户ID</th>
             <th>订单状态</th>
-            <th class="not-excel">店家</th>
+            <th class="ignore-excel">店家</th>
             <th>商品</th>
             <th>规格</th>
             <th>份数</th>
             <th>总价</th>
             <th>积分</th>
-            <th class="not-excel">创建时间</th>
+            <th class="ignore-excel">创建时间</th>
             <th>付款时间</th>
             <th>类型</th>
             <th>自提点</th>
@@ -25,7 +25,7 @@
             <th>支付方式</th>
             <th>交易号</th>
             <th>备注</th>
-            <th class="not-excel">操作</th>
+            <th class="ignore-excel">操作</th>
         </tr>
     </thead>
     <!--comment-->
@@ -70,7 +70,7 @@
                         {{elseif $order['Order']['status']==14}}退款中
                         {{/if}}
                     </td>
-                    <td class="not-excel">{{$brand['Brand']['name']}}</td>
+                    <td class="ignore-excel">{{$brand['Brand']['name']}}</td>
                     <td>
                         <a href="/manage/admin/tuan/query_by_product?product_id={{$cart['Cart']['product_id']}}">{{$cart['Cart']['name']}}</a>
                     </td>
@@ -82,7 +82,7 @@
                     </td>
                     <td>{{if $index == 0}}{{$order['Order']['total_all_price']}}{{else}}'同上'{{/if}}</td>
                   <td>{{$order['Order']['applied_score'] / 100}}</td>
-                  <td class="not-excel">{{$order['Order']['created']}}</td>
+                  <td class="ignore-excel">{{$order['Order']['created']}}</td>
                     <td {{if $order['Order']['status']!=0 && $order['Order']['pay_time']==null}}class="danger"{{/if}}>{{$order['Order']['pay_time']}}</td>
                     <td>
                         {{if $order['Order']['type'] == 5}}
@@ -140,7 +140,7 @@
                     <td>
                         {{$order['Order']['remark']}}
                     </td>
-                    <td class="not-excel" data-offline-store-type="{{$offline_store['OfflineStore']['type']}}">
+                    <td class="ignore-excel" data-offline-store-type="{{$offline_store['OfflineStore']['type']}}">
                         {{if !empty($offline_store) && $offline_store['OfflineStore']['type'] == 0 && $order['Order']['status']== 1 && ($order['Order']['type']== 5||$order['Order']['type']== 6)}}
                         <button type="button" class="ship-to-haolinju-store btn btn-primary">发提货码</button>
                         {{/if}}

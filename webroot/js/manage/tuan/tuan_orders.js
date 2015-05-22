@@ -518,12 +518,12 @@ $(document).ready(function () {
 
     $exportBtn.on('click',function(e){
         e.preventDefault();
-        var me = $(this);
-        var tag = me.data('tag');
-        var $dataTr = $('tr.'+tag);
-        var $exportTable = $('<table></table>').append($dataHead.clone()).append('<tbody></tbody>');
-        $('tbody',$exportTable).append($dataTr.clone());
-        $exportTable.tableExport({type:'excel',escape:'false',consoleLog:'true'});
+        var tableIds = [];
+        var tableNames = [];
+        $('table.orders').each(function (index,item) {
+            tableIds.push($(item).attr('id'));
+            tableNames.push($(item).data('table-name'));
+        });
+        tablesToExcel(tableIds, tableNames, 'order-export.xls')
     });
-
 });
