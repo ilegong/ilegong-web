@@ -661,8 +661,8 @@ class TuanController extends AppController
     }
 
     public function _query_orders_today_count(){
-        $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where o.created > CURDATE() and o.status > 0');
-        return $empty_send_date_count[0][0]['ct'];
+        $count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where DATE(o.pay_time) >= CURDATE() and o.status > 0');
+        return $count[0][0]['ct'];
     }
 
     public function _query_abnormal_order(){
