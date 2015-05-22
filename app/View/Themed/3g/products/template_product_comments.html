@@ -76,7 +76,7 @@
                     imgBindClick();
                     //$commentItems.children().slice(0,5).show();
                 },
-                url:"{{$this->Html->url(array('controller'=>'comments','action'=>'getlist',$current_model,$current_data_id,'ext'=>'json','?'=>array('pagesize'=>$limitCommentCount)))}}",
+                url:"{{$this->Html->url(array('controller'=>'comments','action'=>'getlist','Product',$current_data_id,'ext'=>'json','?'=>array('pagesize'=>$limitCommentCount)))}}",
                 dataType:'json'
             });
         }
