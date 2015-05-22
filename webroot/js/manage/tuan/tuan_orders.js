@@ -524,6 +524,6 @@ $(document).ready(function () {
             tableIds.push($(item).attr('id'));
             tableNames.push($(item).data('table-name'));
         });
-        tablesToExcel(tableIds, tableNames, 'order-export.xls')
+        tablesToExcel(tableIds, tableNames, 'order-export.xls','Excel')
     });
 });
