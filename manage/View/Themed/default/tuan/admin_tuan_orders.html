@@ -219,76 +219,52 @@
 
 </div>
 <hr/>
-<table class="table table-bordered orders">
-    <thead class="data-head">
-    <tr>
-        <th><input type="checkbox" value="0" id="check_all_tb"></th>
-        <th>订单号</th>
-        <th>用户ID</th>
-        <th>订单状态</th>
-        <th>店家</th>
-        <th>商品</th>
-        <th>规格</th>
-        <th>份数</th>
-        <th>总价</th>
-        <th>积分</th>
-        <th>创建时间</th>
-        <th>付款时间</th>
-        <th>类型</th>
-        <th>自提点</th>
-        <th>配送方式</th>
-        <th>发货时间</th>
-        <th>收件人</th>
-        <th>团队名称</th>
-        <th>收件地址</th>
-        <th>电话</th>
-        <th>支付方式</th>
-        <th>交易号</th>
-        <th>备注</th>
-        <th>操作</th>
-    </tr>
-    </thead>
-    <!--comment-->
-    <tbody>
+
     {{loop $ship_mark_enum $code $item}}
         {{if $code!='ziti'}}
             <?php
                 $current_orders=$map_other_orders[$code];
                 $data_tag = $code;
             ?>
-            <tr class="{{$item['style']}}"><td colspan="23">{{$item['name']}}</td><td><button class="btn btn-primary btn-sm export-excel" data-tag="{{$data_tag}}">导出EXCEL</button></td></tr>
+            <h1><span class="label label-{{$item['style']}}">{{$item['name']}}</span></h1>
+            <hr/>
             {{template Elements/order_data_template}}
         {{else}}
-            <tr class="{{$item['style']}}"><td colspan="24">{{$item['name']}}</td></tr>
-            <tr><td class="warn" colspan="24">朋友说自提</td></tr>
+            <h2><span class="label label-primary">{{$item['name']}}</span></h2>
+            <hr/>
+            <h2><span class="label label-warning">朋友说自提</span></h2>
+            <hr/>
             {{loop $pys_ziti_point $point}}
                     <?php
                         $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
                         $data_tag = 'ziti-'.$point['OfflineStore']['id'];
                     ?>
-                <tr class="success"><td colspan="23">{{get_address(null,$point)}}</td><td><button class="btn btn-primary btn-sm export-excel" data-tag="{{$data_tag}}">导出EXCEL</button></td></tr>
+                <h3><span class="label label-success">{{get_address(null,$point)}}</span></h3>
+                <hr/>
                 {{template Elements/order_data_template}}
                 <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
             {{/loop}}
-            <tr><td class="warn" colspan="24">好邻居自提</td></tr>
+            <h2><span class="label label-warning">好邻居自提</span></h2>
+                <hr/>
                 {{loop $hlj_ziti_point $point}}
                     <?php
                         $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
                         $data_tag = 'ziti-'.$point['OfflineStore']['id'];
                     ?>
-                     <tr class="success"><td colspan="23">{{get_address(null,$point)}}</td><td><button class="btn btn-primary btn-sm export-excel" data-tag="{{$data_tag}}">导出EXCEL</button></td></tr>
+                     <h3><span class="label label-success">{{get_address(null,$point)}}</span></h3>
+                    <hr/>
                     {{template Elements/order_data_template}}
                     <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
             {{/loop}}
             {{loop $map_ziti_orders $current_orders}}
                 <?php $data_tag='none-tag'; ?>
-                <tr class="danger"><td colspan="23">未知自提点</td><td><button class="btn btn-primary btn-sm export-excel" data-tag="{{$data_tag}}">导出EXCEL</button></td></tr>
+                <h2><span class="label label-danger">未知自提点</span></h2>
+                <hr/>
                 {{template Elements/order_data_template}}
             {{/loop}}
         {{/if}}
     {{/loop}}
-    </tbody>
-</table>
+
 
 <div class="ship-to-haolinju-store-dialog" title="好邻居店铺发货" class="hidden">
     <p class="text-warning">输入提货码，点击确认发货，会同时发送“到货提醒”</p>
