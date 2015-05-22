@@ -201,7 +201,6 @@
       </form>
     </div>
 </div>
-
 <hr/>
 <div>
     <h1>订单总计<span style="color: red">{{count($orders)}}</span>个，金额<span style="color: red">{{$total_order_money}}</span></h1>
@@ -215,8 +214,8 @@
         {{/loop}}
     </h1>
     {{/if}}
+    <button class="btn btn-success export-excel">导出订单</button>
     <button  class="btn btn-primary pull-right ship-to-pys-stores">朋友说自提点发货</button>
-
 </div>
 <hr/>
 
@@ -225,6 +224,7 @@
             <?php
                 $current_orders=$map_other_orders[$code];
                 $data_tag = $code;
+                $data_tag_name = $item['name'];
             ?>
             <h1><span class="label label-{{$item['style']}}">{{$item['name']}}</span></h1>
             <hr/>
@@ -238,6 +238,7 @@
                     <?php
                         $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
                         $data_tag = 'ziti-'.$point['OfflineStore']['id'];
+                        $data_tag_name = $point['OfflineStore']['alias'];
                     ?>
                 <h3><span class="label label-success">{{get_address(null,$point)}}</span></h3>
                 <hr/>
@@ -250,6 +251,7 @@
                     <?php
                         $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
                         $data_tag = 'ziti-'.$point['OfflineStore']['id'];
+                        $data_tag_name = $point['OfflineStore']['alias'];
                     ?>
                      <h3><span class="label label-success">{{get_address(null,$point)}}</span></h3>
                     <hr/>
@@ -257,7 +259,10 @@
                     <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
             {{/loop}}
             {{loop $map_ziti_orders $current_orders}}
-                <?php $data_tag='none-tag'; ?>
+                <?php
+                    $data_tag='none-tag';
+                    $data_tag_name = '未知自提点';
+                ?>
                 <h2><span class="label label-danger">未知自提点</span></h2>
                 <hr/>
                 {{template Elements/order_data_template}}
@@ -344,6 +349,7 @@
             <input type="text" width="80px;" name="order-ship-code" placeholder="快递单号">
         </div>
 </div>
+{{$this->Html->script(array('/js/manage-lib/tablesort/tablesort.min.js','/js/manage-lib/tablesort/src/sorts/tablesort.date.js','/js/manage-lib/tablesort/src/sorts/tablesort.dotsep.js','/js/manage-lib/tablesort/src/sorts/tablesort.numeric.js','/js/manage/table_sort.js'));}}
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js',
 '/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js',
 '/js/manage-lib/tableExport.jquery.plugin/tableExport.js'))}}
