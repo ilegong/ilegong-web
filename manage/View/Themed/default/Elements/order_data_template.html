@@ -50,8 +50,7 @@
                         {{/if}}
                     </td>
                     <td>{{$order['Order']['id']}}</td>
-                    <td data-type="Number" data-value="{{$order['Order']['creator']}}"><a href="/manage/admin/tuan/query_by_user?con_creator={{$order['Order']['creator']}}">{{$order['Order']['creator']}}</a>
-                    </td>
+                    <td><a href="/manage/admin/tuan/query_by_user?con_creator={{$order['Order']['creator']}}">{{$order['Order']['creator']}}</a></td>
                     <td>
                         {{if $order['Order']['status']==0}}
                         待支付
@@ -67,7 +66,7 @@
                         {{/if}}
                     </td>
                     <td>{{$brand['Brand']['name']}}</td>
-                    <td data-type="String" data-value="{{$cart['Cart']['name']}}">
+                    <td>
                         <a href="/manage/admin/tuan/query_by_product?product_id={{$cart['Cart']['product_id']}}">{{$cart['Cart']['name']}}</a>
                     </td>
                     <td>
