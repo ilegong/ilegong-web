@@ -199,6 +199,11 @@ class TuanBuyingsController extends AppController{
         $this->set('Product', $Product);
         $this->set('category_control_name', 'products');
         $this->set('current_data_id', $pid);
+        //update view count
+        $this->Product->updateAll(
+            array('views_count' => 'views_count+1'),
+            array('id'=>$pid)
+        );
     }
 
     private function set_product_specs($pid){
