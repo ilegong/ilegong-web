@@ -245,12 +245,9 @@ class CategoriesController extends AppController {
             $this->set('is_weixin',true);
             $this->wexin_share_datas($tryings);
         }
-
         $mOrder = ClassRegistry::init('Order');
         $received_cnt = $mOrder->count_received_order($this->currentUser['id']);
         $this->set('received_cnt', $received_cnt);
-
-        $this->set('is_weixin',true);
         $this->set('tryings',$tryings);
         $this->set('hideFooter',true);
         $this->set('op_cate', OP_CATE_HOME);
@@ -873,14 +870,13 @@ class CategoriesController extends AppController {
             $desc = $trying['Product']['promote_name'];
             $weixinJs = prepare_wx_share_log($uid, 'indextry', $trying['ProductTry']['id']);
         }else{
-            $recommend_products = $this->load_products_by_tagid(RECOMMEND_TAG_ID,'Product.name, Product.coverimg',1,6);
+            $recommend_products = $this->load_products_by_tagid(RECOMMEND_TAG_ID,'Product.id, Product.name, Product.coverimg',1,6);
             $first_p = array_shift($recommend_products);
             $to_friend_title = $first_p['Product']['name'];
             $to_timeline_title = $first_p['Product']['name'];
             $share_imag_url = $first_p['Product']['coverimg'];
             $p_names = Hash::extract($recommend_products,'{n}.Product.name');
             $desc = implode(',',$p_names).'……等你来抢~';
-            $this->log('index view share product id'.$first_p['Product']['id']);
             $weixinJs = prepare_wx_share_log($uid, 'indexproduct', $first_p['Product']['id']);
         }
         $this->set($weixinJs);
