@@ -145,7 +145,7 @@ class AppController extends Controller {
             $this->set('signPackage', $signPackage);
         }
         //log weixin share
-        if($_GET['share_type'] && $_GET['trstr'] && !empty($this->currentUser)){
+        if($_GET['share_type'] && $_GET['trstr']){
             $share_type = $_GET['share_type'];
             $trstr = $_GET['trstr'];
             if($share_type != 'timeline' && $share_type != 'appMsg'){
@@ -164,6 +164,7 @@ class AppController extends Controller {
             $sharer = intval($str[0]);
             $created = intval($str[1]);
             $clicker = $this->currentUser['id'];
+            $clicker = $clicker == null ? 0 : $clicker;
             if($clicker != $sharer){
                 $this->loadModel('ShareTrackLog');
                 $data =array('sharer' => $sharer, 'clicker' => $clicker, 'share_time' => $created, 'click_time'=>time(), 'data_type' => $data_type, 'data_id' => intval($data_str[1]) , 'share_type' => $type);
