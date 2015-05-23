@@ -12,7 +12,6 @@ class WxSharesController extends AppController{
         $this->autoRender = false;
         if ($this->is_weixin()) {
             $share_string = urldecode($_POST['trstr']);
-            $this->log('share log str'.$share_string);
             $share_type = $_POST['share_type'];
             if ($share_type != 'timeline' && $share_type != 'appMsg') {
                 $this->log("WxShare: type wrong");
@@ -26,10 +25,9 @@ class WxSharesController extends AppController{
             $decode_string = authcode($share_string, 'DECODE', 'SHARE_TID');
             $str = explode('-', $decode_string);
             $data_str = explode('_', $str[3]);
-            if ($str[2] != 'rebate') {
-                $this->log("WxShare: PRODUCT_KEY WRONG");
-                exit();
-            }
+            $uid = intval($str[0]);
+            $created = intval($str[1]);
+
             if ($data_str[0] == 'pid') {
                 $data_type = 'product';
             } elseif ($data_str[0] == 'tid') {
@@ -45,8 +43,12 @@ class WxSharesController extends AppController{
             } else {
                 $data_type = substr(trim($data_str[0]), 0, 12);
             }
-            $uid = intval($str[0]);
-            $created = intval($str[1]);
+            if ($str[2] != 'rebate') {
+                $this->log("WxShare: PRODUCT_KEY WRONG");
+                $data = array('sharer' => 0, 'created' => $created, 'data_type' => $data_type, 'data_id' => $data_str[1], 'share_type' => $type);
+                $this->WxShare->save($data);
+                exit();
+            }
             $data = array('sharer' => $uid, 'created' => $created, 'data_type' => $data_type, 'data_id' => $data_str[1], 'share_type' => $type);
             $this->WxShare->save($data);
         }
