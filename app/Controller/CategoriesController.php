@@ -880,6 +880,7 @@ class CategoriesController extends AppController {
             $share_imag_url = $first_p['Product']['coverimg'];
             $p_names = Hash::extract($recommend_products,'{n}.Product.name');
             $desc = implode(',',$p_names).'……等你来抢~';
+            $this->log('index view share product id'.$first_p['Product']['id']);
             $weixinJs = prepare_wx_share_log($uid, 'indexproduct', $first_p['Product']['id']);
         }
         $this->set($weixinJs);
