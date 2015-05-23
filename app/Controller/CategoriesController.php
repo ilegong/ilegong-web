@@ -863,6 +863,7 @@ class CategoriesController extends AppController {
     }
 
     private function wexin_share_datas($tryings=null){
+        $uid = $this->currentUser['id'];
         if(!empty($tryings)){
             $trying = $tryings[0];
             $title = ($trying['ProductTry']['price']/100).'元秒杀'.$trying['ProductTry']['spec'].$trying['ProductTry']['product_name'].'赶紧快来枪';
@@ -870,15 +871,18 @@ class CategoriesController extends AppController {
             $to_timeline_title = $title;
             $share_imag_url = $trying['image'];
             $desc = $trying['Product']['promote_name'];
+            $weixinJs = prepare_wx_share_log($uid, 'indextry', $trying['ProductTry']['id']);
         }else{
-            $to_friend_title = '朋友说-朋友间分享优质美食的平台';
-            $to_timeline_title = '朋友说-朋友间分享优质美食的平台';
             $recommend_products = $this->load_products_by_tagid(RECOMMEND_TAG_ID,'Product.name, Product.coverimg',1,6);
             $first_p = array_shift($recommend_products);
+            $to_friend_title = $first_p['Product']['name'];
+            $to_timeline_title = $first_p['Product']['name'];
             $share_imag_url = $first_p['Product']['coverimg'];
             $p_names = Hash::extract($recommend_products,'{n}.Product.name');
             $desc = implode(',',$p_names).'……等你来抢~';
+            $weixinJs = prepare_wx_share_log($uid, 'indexproduct', $first_p['Product']['id']);
         }
+        $this->set($weixinJs);
         $this->set('to_timeline_title',$to_timeline_title);
         $this->set('to_friend_title',$to_friend_title);
         $this->set('share_imag_url',$share_imag_url);

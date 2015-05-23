@@ -9,40 +9,44 @@
 class WxSharesController extends AppController{
     var $name = 'WxShares';
     public function log_share(){
-        $this->autoRender =false;
-        if($this->is_weixin()&& $this->currentUser['id']){
+        $this->autoRender = false;
+        if ($this->is_weixin()) {
             $share_string = urldecode($_POST['trstr']);
             $share_type = $_POST['share_type'];
-            if($share_type != 'timeline' && $share_type != 'appMsg'){
+            if ($share_type != 'timeline' && $share_type != 'appMsg') {
                 $this->log("WxShare: type wrong");
                 exit();
             }
-            $type = $share_type == 'timeline' ? 1:0;
-            if($share_string == '0'){
+            $type = $share_type == 'timeline' ? 1 : 0;
+            if ($share_string == '0') {
                 $this->log("WxShare: not login");
                 exit();
             }
             $decode_string = authcode($share_string, 'DECODE', 'SHARE_TID');
-            $str = explode('-',$decode_string);
-            $data_str = explode('_',$str[3]);
-            if($str[2] != 'rebate'){
+            $str = explode('-', $decode_string);
+            $data_str = explode('_', $str[3]);
+            if ($str[2] != 'rebate') {
                 $this->log("WxShare: PRODUCT_KEY WRONG");
                 exit();
             }
-            if($data_str[0] == 'pid'){
+            if ($data_str[0] == 'pid') {
                 $data_type = 'product';
-            }elseif ($data_str[0] == 'tid'){
+            } elseif ($data_str[0] == 'tid') {
                 $data_type = 'tuan';
-            }elseif($data_str[0] == 'rid'){
+            } elseif ($data_str[0] == 'rid') {
                 $data_type = 'refer';
-            }elseif($data_str[0] == 'tryid'){
+            } elseif ($data_str[0] == 'tryid') {
                 $data_type = 'try';
-            } else{
-                $data_type= substr(trim($data_str[0]), 0, 12);
+            } elseif ($data_str[0] == 'indextry') {
+                $data_type = 'indexTry';
+            } elseif ($data_str[0] == 'indexproduct') {
+                $data_type = 'indexProduct';
+            } else {
+                $data_type = substr(trim($data_str[0]), 0, 12);
             }
             $uid = intval($str[0]);
             $created = intval($str[1]);
-            $data = array('sharer' => $uid, 'created' => $created, 'data_type' =>$data_type , 'data_id' => $data_str[1],'share_type'=>$type);
+            $data = array('sharer' => $uid, 'created' => $created, 'data_type' => $data_type, 'data_id' => $data_str[1], 'share_type' => $type);
             $this->WxShare->save($data);
         }
     }

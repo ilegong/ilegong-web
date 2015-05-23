@@ -107,17 +107,12 @@
 {{if $is_weixin}}
  <script>
      wx.ready(function () {
-         var share_string = '{{$share_string ? $share_string :"1"}}';
+         var share_string = '{{$share_string ? $share_string :"index"}}';
          var to_timeline_title = "{{$to_timeline_title}}";
          var to_friend_title = "{{$to_friend_title}}";
-         var to_friend_link = document.URL.split('?')[0];
-         if(share_string!="0"){
-             to_friend_link=to_friend_link+'?trstr='+ share_string + '&share_type=appMsg'
-         }
+         var to_friend_link = document.URL.split('?')[0]+'?trstr='+ share_string + '&share_type=appMsg';
+
          var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
-         if(share_string!="0"){
-              to_timeline_link = to_timeline_link+'?trstr='+ share_string + '&share_type=timeline';
-         }
          var imgUrl = "{{$this->Html->assetUrl($share_imag_url)}}";
          var desc = "{{$share_desc}}！";
          wx.onMenuShareAppMessage({
