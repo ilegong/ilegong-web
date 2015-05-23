@@ -589,6 +589,8 @@ class TuanBuyingsController extends AppController{
                         if($shipFee > 0){
                             $total_price = $total_price+$shipFee;
                         }
+                        $address = get_address($tuan_info, $offline_store);
+                        $this->update_tuan_consignees_address($uid,$name,$mobile,$p_address,$address);
                     }
                 }
                 //update ziti address
