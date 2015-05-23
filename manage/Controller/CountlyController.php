@@ -86,6 +86,9 @@ class CountlyController extends AppController{
         }
         $this->gen_week_order_data($start_date,$end_date);
         $this->gen_week_ziti_data($start_date,$end_date);
+        //delete old data
+        $this->StatisticsZitiData->deleteAll(array('start_date' => $start_date));
+        $this->StatisticsOrderData->deleteAll(array('start_date' => $start_date));
         echo json_encode(array('success'=>true));
         return;
 

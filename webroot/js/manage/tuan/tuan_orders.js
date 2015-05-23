@@ -5,7 +5,6 @@ $(document).ready(function () {
     var tuan_con_date = $('input[name="tuan_con_date"]');
     var product_con_date = $('input[name="product_con_date"]');
     var $exportBtn = $('button.export-excel');
-    var $dataHead = $('thead.data-head');
     var mainContent = $('#mainContent');
     var $currentOperateOrder = null;
     mainContent.height(250);
@@ -518,12 +517,13 @@ $(document).ready(function () {
 
     $exportBtn.on('click',function(e){
         e.preventDefault();
-        var me = $(this);
-        var tag = me.data('tag');
-        var $dataTr = $('tr.'+tag);
-        var $exportTable = $('<table></table>').append($dataHead.clone()).append('<tbody></tbody>');
-        $('tbody',$exportTable).append($dataTr.clone());
-        $exportTable.tableExport({type:'excel',escape:'false',consoleLog:'true'});
+        var tableIds = [];
+        var tableNames = [];
+        var ignoreRows = [0,3,4,10,11,12,17,23];
+        $('table.orders').each(function (index,item) {
+            tableIds.push($(item).attr('id'));
+            tableNames.push($(item).data('table-name'));
+        });
+        tablesToExcel(tableIds, tableNames, 'order-export.xls','Excel',ignoreRows);
     });
-
 });
