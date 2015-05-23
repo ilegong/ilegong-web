@@ -235,6 +235,22 @@ class CountlyController extends AppController{
         return $allUserCount-(count($result));
     }
 
+    private function get_all_user_count(){
+        $allUserCount = $this->User->find('count');
+        return $allUserCount;
+    }
+
+    private function get_week_login_user($start_date,$end_date){
+        $allLoginUserCount = $this->User->find('count',array(
+            'conditions' => array(
+                'last_login >=' => $start_date,
+                'last_login >=' => $end_date,
+            ),
+            'limit' => 5000
+        ));
+        return $allLoginUserCount;
+    }
+
     private function load_new_user_count($start_date,$end_date){
         $all_user_count = $this->User->find('count',array(
             'conditions' => array(
