@@ -333,7 +333,7 @@ class TuanBuyingsController extends AppController{
             $this->set('tuan_id', $tuan_id);
             $offline_store = $this->OfflineStore->findById($team['TuanTeam']['offline_store_id']);
             $this->set('can_mark_address',$this->can_mark_address($offline_store));
-            $this->set('tuan_address', $team['TuanTeam']['tuan_addr']);
+            $this->set('tuan_address', get_address($team,$offline_store));
         }else{
             //is global sec
             $shipSetting = $this->get_ship_setting(null,$try_id,'Try');
@@ -591,6 +591,20 @@ class TuanBuyingsController extends AppController{
                         }
                     }
                 }
+                //update ziti address
+                $shop_id = 0;
+                if(strpos($way,ZITI_TAG)!==false){
+                    //ziti
+                    $shop_id = empty($tuan_info['TuanTeam']['offline_store_id']) ? 0 : $tuan_info['TuanTeam']['offline_store_id'];
+                    if (!empty($_POST['shop_id'])) {
+                        $shop_id = $_POST['shop_id'];
+                    }
+                    $offline_store = $this->OfflineStore->findById($shop_id);
+                    if (!empty($offline_store)) {
+                        $address = get_address($tuan_info, $offline_store);
+                        $this->update_ziti_consigness_address($offline_store, $name, $mobile, $uid, $address, $p_address);
+                    }
+                }
             }else{
                 //small tuan
                 $address = get_address($tuan_info, $offline_store);
@@ -602,19 +616,7 @@ class TuanBuyingsController extends AppController{
                     $this->log("post address is empty ".$tuan_id);
                 }
             }
-            $shop_id = 0;
-            if(strpos($way,ZITI_TAG)!==false){
-                //ziti
-                $shop_id = empty($tuan_info['TuanTeam']['offline_store_id']) ? 0 : $tuan_info['TuanTeam']['offline_store_id'];
-                if (!empty($_POST['shop_id'])) {
-                    $shop_id = $_POST['shop_id'];
-                }
-                $offline_store = $this->OfflineStore->findById($shop_id);
-                if (!empty($offline_store)) {
-                    $address = get_address($tuan_info, $offline_store);
-                    $this->update_ziti_consigness_address($offline_store, $name, $mobile, $uid, $address, $p_address);
-                }
-            }
+
             if($tuan_sec=='true'){
                 //remark order sec kill
                 $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way,$shop_id);
