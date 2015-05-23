@@ -833,7 +833,7 @@ class TuanBuyingsController extends AppController{
     }
 
     private function update_ziti_consigness_address($offline_store,$name,$mobile,$uid,$address,$p_address){
-
+        $this->loadModel('OrderConsignees');
         //save user ziti address
         $ziti_consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN_ZITI);
         $old_ziti_consignees = $this->OrderConsignees->find('first', array(
