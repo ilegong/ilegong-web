@@ -224,7 +224,7 @@ function setData(area_id){
     });
     var $chose_item = '';
     $.each(chose_address,function(index,item){
-        $chose_item +=' <p data-shop-id="'+ item['id'] +'" data-shop-name="'+item['alias']+'">'+item['name']+'<br/>';
+        $chose_item +=' <p data-shop-id="'+ item['id'] +'" data-can-remark-address="'+item['can_remark_address']+'" data-shop-name="'+item['alias']+'">'+item['name']+'<br/>';
         if(item['owner_phone']){
             $chose_item+='联系电话:'+item['owner_phone'];
         }

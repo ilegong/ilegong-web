@@ -13,14 +13,14 @@
     <div class="clearfix conordertuan_adress">
 
     </div>
-    <P><span>已选自提点：<span id="chose_address" data-shop-id="{{$ziti_consignee_info['ziti_id']}}" data-area-id="{{$ziti_consignee_info['area']}}" style="color:#333333">{{$ziti_consignee_info['address']}}</span></span></P>
+    <P><span>已选自提点：<span id="chose_address" data-can-remark-address="{{$ziti_consignee_info['can_remark_address']}}" data-shop-id="{{$ziti_consignee_info['ziti_id']}}" data-area-id="{{$ziti_consignee_info['area']}}" style="color:#333333">{{$ziti_consignee_info['address']}}</span></span></P>
 </div>
 <div class="tuan_balance" data-tuanbuy-id="{{$tuan_buy_id}}" data-tuanteam-id="{{$tuan_id}}" data-way-id="{{$way_id}}">
     <div class="conordertuan_contact">
         <h1>联系信息</h1>
         <label><input type="text" name="consignee_name" placeholder="收货人姓名" value="{{$ziti_consignee_info['name']}}" /></label>
         <label><input type="text" name="consignee_mobilephone" placeholder="手机号" value="{{$ziti_consignee_info['mobilephone']}}" /></label>
-        <label id="remark_address" style="display: none;"><input type="text" name="consignee_remark_address" placeholder="小区-楼号-门牌(送货上门)" value="" /></label>
+        <label id="remark_address" style="display: none;"><input type="text" name="consignee_remark_address" placeholder="小区-楼号-门牌(送货上门)" value="{{$ziti_consignee_info['remark_address']}}" /></label>
     </div>
     <div class="cart" style="margin-top: 0; padding-top: 0;">
         <div>
