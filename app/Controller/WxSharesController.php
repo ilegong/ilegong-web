@@ -22,6 +22,12 @@ class WxSharesController extends AppController{
                 $this->log("WxShare: not login");
                 exit();
             }
+            //save share index data log
+            if($share_string=='index'){
+                $data = array('sharer' => 0, 'created' => 0, 'data_type' => 'index', 'data_id' => 0, 'share_type' => $type);
+                $this->WxShare->save($data);
+                exit();
+            }
             $decode_string = authcode($share_string, 'DECODE', 'SHARE_TID');
             $str = explode('-', $decode_string);
             $data_str = explode('_', $str[3]);
@@ -45,8 +51,6 @@ class WxSharesController extends AppController{
             }
             if ($str[2] != 'rebate') {
                 $this->log("WxShare: PRODUCT_KEY WRONG");
-                $data = array('sharer' => 0, 'created' => $created, 'data_type' => $data_type, 'data_id' => $data_str[1], 'share_type' => $type);
-                $this->WxShare->save($data);
                 exit();
             }
             $data = array('sharer' => $uid, 'created' => $created, 'data_type' => $data_type, 'data_id' => $data_str[1], 'share_type' => $type);
