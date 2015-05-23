@@ -238,10 +238,10 @@ function setData(area_id){
         var that =$(this);
         that.on("click",function(){
             that.css("background-color","#eeeeee");
-            var shopId = that.data('shopId');
+            var canRemarkAddress = that.data('can-remark-address');
+            shopId = that.data('shop-id');
             //should remark address
-            //TODO config it
-            if(shopId==40||shopId==33){
+            if(canRemarkAddress==1){
                 remarkAddress.show();
             }else{
                 remarkAddress.hide();

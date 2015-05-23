@@ -65,6 +65,17 @@
       </div>
     </div>
     <div class="form-group">
+        <label class="col-sm-2 control-label">是否支持备注地址</label>
+        <label class="col-sm-9">
+            <label class="radio-inline">
+                <input type="radio" name="data[OfflineStore][can_remark_address]" value="0" {{if $offline_store['OfflineStore']['can_remark_address']==0}}checked="checked"{{/if}}>否
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="data[OfflineStore][can_remark_address]" value="1" {{if $offline_store['OfflineStore']['can_remark_address']==1}}checked="checked"{{/if}}>是
+            </label>
+        </label>
+    </div>
+    <div class="form-group">
         <label class="col-sm-2 control-label">发布</label>
         <div class="col-sm-9">
             <label class="radio-inline">
