@@ -84,11 +84,11 @@ class CountlyController extends AppController{
             $start_date = date("Y-m-d",$start_week);
             $end_date = date("Y-m-d",$end_week);
         }
-        $this->gen_week_order_data($start_date,$end_date);
-        $this->gen_week_ziti_data($start_date,$end_date);
         //delete old data
         $this->StatisticsZitiData->deleteAll(array('start_date' => $start_date));
         $this->StatisticsOrderData->deleteAll(array('start_date' => $start_date));
+        $this->gen_week_order_data($start_date,$end_date);
+        $this->gen_week_ziti_data($start_date,$end_date);
         echo json_encode(array('success'=>true));
         return;
 
