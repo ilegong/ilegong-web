@@ -5,13 +5,60 @@
         <li style="text-overflow: ellipsis;"><strong>结算</strong></li>
     </ul>
 </div>
-<div class="address clearfix" style="position:relative;" data-address-choice="{{$has_chosen_consignee}}">
-    <span style="display:block;" class="fl">送至&nbsp;&nbsp;<a class="moreicon" href="#X"></a></span>
-    <span style="display:block;" class="fl"><a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
-    <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}<br />
-        {{$this->Session->read('OrderConsignee.name')}} &nbsp; {{$this->Session->read('OrderConsignee.mobilephone')}}</span>
-    <a href="/orders/edit_consignee?modal=true" class="address_addbtn new_address thickbox" {{if $total_consignee > 0}}style=" display: none;"{{/if}}>添加收货地址</a>
-</div>
+{{if $specialShipPromotionId}}
+    <div class="address clearfix" style="position:relative;" data-address-choice="{{$has_chosen_consignee}}">
+        <span style="display:block;" class="fl">送至&nbsp;&nbsp;<a class="moreicon" href="#X"></a></span>
+        <span style="display:block;" class="fl"><a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
+            <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}<br />
+                {{$this->Session->read('OrderConsignee.name')}} &nbsp; {{$this->Session->read('OrderConsignee.mobilephone')}}</span>
+        {{if !$limit_ship}}<a id="link_use_promotion" href="{{$this->Html->url('/orders/info?ship_promotion=0')}}" class="address_addbtn new_address thickbox">不使用特惠</a>{{/if}}
+    </div>
+{{elseif $specialShipPromotion && !$limit_ship}}
+    <div class="address clearfix" style="position:relative;">
+        <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">您购买的商品中有可以运送到特定地址的优惠。</span>
+        <a href="#TB_inline?height=155&width=300&inlineId=specialShipPromotion&modal=true" class="address_addbtn new_address thickbox">使用优惠</a>
+    </div>
+{{/if}}
+{{if $specialShipPromotion }}
+    {{if (!$specialShipPromotionId)}}
+        {{if $limit_ship}}
+            <div class="address clearfix" style="position:relative;">
+                <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">您购买的商品有特殊限制。</span>
+                {{if $limit_ship}}<a href="#TB_inline?height=155&width=300&inlineId=specialShipPromotion&modal=true" class="address_addbtn new_address thickbox">请选择收货信息</a>{{/if}}
+            </div>
+        {{/if}}
+    {{/if}}
+    <div id="specialShipPromotion" style="display: none">
+        <form method="post" action="{{$this->Html->url(array('action' => 'info', '?' => array('action' => 'savePromo')))}}">
+            <ul id="ul_special_promotion" class="list-group">
+                {{loop $specialShipPromotion $key $item}}
+                <li item-id="{{$item['id']}}" item-addr-mark="{{!empty($item['need_address_remark'])}}" class="list-group-item {{$specialShipPromotionId == $item['id']? 'active':''}}">
+                    {{if isset($item['price'])}}
+                    <span class="text-price-small pull-right">{{$this->Number->precision($item['price'], 2)}}</span>{{/if}}
+                    <small>{{if $item['time']}}{{$item['time']}}派送到{{/if}}{{$item['address']}}</small></li>
+                {{/loop}}
+            </ul>
+            <input type="text" class="form-control" placeholder="收货人姓名" id="p_consignee_name" name="consignee_name" value="{{$this->Session->read('OrderConsignee.name')}}">
+            <br/>
+            <input type="text" class="form-control" placeholder="手机号" id="p_consignee_mobile" name="consignee_mobilephone" value="{{$this->Session->read('OrderConsignee.mobilephone')}}" >
+            <br/>
+            <input type="text" class="form-control" placeholder="详细地址" id="p_consignee_address" style="display: none" name="consignee_address" value="">
+            <br/>
+            <input type="hidden" id="special_ship_promotion" name="ship_promotion" value="{{$specialShipPromotionId}}">
+            <button id="specialShipPromotion_submit" type="submit" class="btn btn-warning">保存</button>
+        </form>
+    </div>
+{{/if}}
+{{if !$limit_ship}}
+    <div class="address clearfix" id="part_consignee" style="position:relative;display:{{$specialShipPromotionId ? 'none':''}};" data-address-choice="{{$has_chosen_consignee}}">
+        <span style="display:block;" class="fl">送至&nbsp;&nbsp;<a class="moreicon" href="#X"></a></span>
+        <span style="display:block;" class="fl"><a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
+        <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}<br />
+            {{$this->Session->read('OrderConsignee.name')}} &nbsp; {{$this->Session->read('OrderConsignee.mobilephone')}}</span>
+        <a href="/orders/edit_consignee?modal=true" class="address_addbtn new_address thickbox" {{if $total_consignee > 0}}style=" display: none;"{{/if}}>添加收货地址</a>
+    </div>
+{{/if}}
+{{if $flash_msg}}<div class="alert alert-danger" role="alert">{{$flash_msg}}</div>{{/if}}
 <div class="cart" style="margin-top: 0; padding-top: 0;">
     <div>
         <?php $total_num = 0;?>
@@ -123,7 +170,54 @@
                 e.preventDefault();
                 return false;
             }
-        })
+        });
+        var $btnSubmit = $('#specialShipPromotion_submit');
+        var $specShipPromotionUl = $('#ul_special_promotion');
+        var lists = $specShipPromotionUl.find('li');
+        $btnSubmit.click(function (e) {
+            var activeLi = $specShipPromotionUl.find('li.active');
+            if (activeLi.length == 1) {
+                if(activeLi.attr('item-addr-mark') == '1') {
+                    var $pConsigneeAddress = $('#p_consignee_address');
+                    if ($pConsigneeAddress.val() == '') {
+                        utils.alert('请输入详细地址');
+                        $pConsigneeAddress.focus();
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+
+                var $itemId = activeLi.attr('item-id');
+                $('#special_ship_promotion').val($itemId);
+            } else {
+                utils.alert('请选择特惠信息运送的时间地点');
+                e.preventDefault();
+                return false;
+            }
+
+            if ($('#p_consignee_name').val() == '') {
+                utils.alert('请输入收货人姓名');
+                e.preventDefault();
+                return false;
+            }
+
+            if ($('#p_consignee_mobile').val() == '') {
+                utils.alert('请输入收货人手机号码');
+                e.preventDefault();
+                return false;
+            }
+        });
+        lists.click(function (e) {
+            lists.filter('.active').removeClass('active');
+            var $this = $(this);
+            $this.toggleClass('active');
+            var $pConsigneeAddress = $('#p_consignee_address');
+            if($this.attr('item-addr-mark') == '1') {
+                $pConsigneeAddress.show();
+            }  else {
+                $pConsigneeAddress.hide();
+            }
+        });
     })
 </script>
 {{$this->Html->script(array('/js/thickbox.js'));}}
