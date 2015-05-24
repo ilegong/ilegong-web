@@ -546,13 +546,17 @@ class TuanBuyingsController extends AppController{
         }elseif($order_type != CART_ITEM_TYPE_TUAN&&$order_type != CART_ITEM_TYPE_TUAN_SEC){
             $res = array('success'=> false, 'info'=> '该订单不属于团购订单，请重试');
         }else{
-            if(!empty($cart_info['Cart']['order_id'])){
-                $this->log("cart order id error,cart id".$cart_id);
+            if (!empty($cart_info['Cart']['order_id'])) {
+                $this->log("cart order id error,cart id" . $cart_id);
+                $res = array('success' => false, 'info' => '该订单已经生成,请去我的订单支付', 'url' => '/orders/mine.html?tab=waiting_pay');
+                echo json_encode($res);
                 return;
             }
             $total_price = $cart_info['Cart']['num'] * $cart_info['Cart']['price'];
-            if($total_price < 0 ){
-                $this->log("error tuan price, cart id".$cart_id);
+            if ($total_price < 0) {
+                $this->log("error tuan price, cart id" . $cart_id);
+                $res = array('success' => false, 'info' => '该订单价格有误,请重新下单', 'url' => '/');
+                echo json_encode($res);
                 return;
             }
             $pid = $cart_info['Cart']['product_id'];

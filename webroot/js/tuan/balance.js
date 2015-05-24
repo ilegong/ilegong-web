@@ -182,7 +182,13 @@ $('#confirm_next').on('click',function(e){
                 }
             } else {
                 if(a.info){
-                    utils.alert(a.info);
+                    if(a.url){
+                        utils.alert(a.info,function(){
+                            window.location.href = a.url;
+                        });
+                    }else{
+                        utils.alert(a.info);
+                    }
                 }else{
                     utils.alert("结算出错，请刷新重试");
                 }
