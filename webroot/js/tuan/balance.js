@@ -107,15 +107,10 @@ $('#confirm_next').on('click',function(e){
     var zitiChoice =choseAddress.length ? choseAddress.text(): "not";
     var remarkAddress = $("input[name='consignee_remark_address']").val()||"";
     var address = $("input[name='consignee_address']").val() || choseAddress.text();
+    var $remark_address = $('#remark_address');
     if(address.trim()){
         if(remarkAddress){
             address = address + '['+remarkAddress+']';
-        }
-    }else{
-        if(remarkAddress.trim()){
-            address = remarkAddress;
-        }else{
-            address = '';
         }
     }
     var name = $("input[name='consignee_name']").val();
@@ -139,6 +134,14 @@ $('#confirm_next').on('click',function(e){
         utils.alert("联系电话格式不正确");
         e.preventDefault();
         return false;
+    }
+
+    if($remark_address.css('display') != 'none'){
+        if(!remarkAddress.trim()){
+            utils.alert("请填写备注地址");
+            e.preventDefault();
+            return false;
+        }
     }
 
     var cart_id = $("input[name='shopCart']").data("id") || false;
@@ -171,7 +174,7 @@ $('#confirm_next').on('click',function(e){
         type: "POST",
         dataType: "json",
         url: "/tuan_buyings/pre_order",
-        data: {name: name, mobile: mobile, cart_id: cart_id, member_id: member_id, tuan_id: tuan_id, address:address, way_id:way_id , tuan_sec:tuan_sec , shop_id: shop_id,global_sec:global_sec},
+        data: {name: name, mobile: mobile, cart_id: cart_id, member_id: member_id, tuan_id: tuan_id, address:address,remark_address:remarkAddress, way_id:way_id , tuan_sec:tuan_sec , shop_id: shop_id,global_sec:global_sec},
         success: function (a) {
             if (a.success) {
                 $("#confirm_next").attr('data-disable', 'true');

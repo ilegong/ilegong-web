@@ -12,6 +12,7 @@
             <label><input type="text" name="consignee_address" placeholder="收货地址" value="{{$consignee_info['address']}}"></label>
             <label><input type="text" name="consignee_name" placeholder="收货人姓名"  value="{{$consignee_info['name']}}"/></label>
             <label><input type="text" name="consignee_mobilephone" placeholder="手机号" value="{{$consignee_info['mobilephone']}}"/></label>
+            <label id="remark_address"><input type="text" name="consignee_remark_address" placeholder="小区-楼号-门牌(送货上门)" value="{{$consignee_info['remark_address']}}" /></label>
         </div>
     {{else}}
         <div class="conorder_ziti">
@@ -25,7 +26,7 @@
             <label><input type="text" name="consignee_name" placeholder="收货人姓名" value="{{$consignee_info['name']}}" /></label>
             <label><input type="text" name="consignee_mobilephone" placeholder="手机号" value="{{$consignee_info['mobilephone']}}" /></label>
             {{if $can_mark_address}}
-                <label><input type="text" name="consignee_remark_address" placeholder="小区-楼号-门牌(送货上门)" value="{{$consignee_info['remark_address']}}" /></label>
+                <label id="remark_address"><input type="text" name="consignee_remark_address" placeholder="小区-楼号-门牌(送货上门)" value="{{$consignee_info['remark_address']}}" /></label>
             {{/if}}
         </div>
     {{/if}}
@@ -71,7 +72,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/js/tuan/balance.js?v11" async="async"></script>
+<script type="text/javascript" src="/js/tuan/balance.js?v11.1" async="async"></script>
 
 
 

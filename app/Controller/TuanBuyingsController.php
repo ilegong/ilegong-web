@@ -572,6 +572,7 @@ class TuanBuyingsController extends AppController{
                 $offline_store = $this->OfflineStore->findById($tuan_info['TuanTeam']['offline_store_id']);
             }
             $p_address = $_POST['address'];
+            $remark_address = $_POST['remark_address'];
             //to set ship fee
             $way = ZITI_TAG;
             if($way_id!=0){
@@ -593,8 +594,8 @@ class TuanBuyingsController extends AppController{
                         if($shipFee > 0){
                             $total_price = $total_price+$shipFee;
                         }
-                        $address = get_address($tuan_info, $offline_store);
-                        $this->update_tuan_consignees_address($uid,$name,$mobile,$p_address,$address);
+                        //user custom address
+                        $this->update_tuan_consignees_address($uid,$name,$mobile,$remark_address,$p_address);
                     }
                 }
                 //update ziti address
@@ -608,16 +609,19 @@ class TuanBuyingsController extends AppController{
                     $offline_store = $this->OfflineStore->findById($shop_id);
                     if (!empty($offline_store)) {
                         $address = get_address($tuan_info, $offline_store);
-                        $this->update_ziti_consigness_address($offline_store, $name, $mobile, $uid, $address, $p_address);
+                        if(!empty($remark_address)){
+                            $address = $address.'['.$remark_address.']';
+                        }
+                        $this->update_ziti_consigness_address($offline_store, $name, $mobile, $uid, $address, $remark_address);
                     }
                 }
             }else{
                 //small tuan
                 $address = get_address($tuan_info, $offline_store);
-                if(!empty($p_address)){
-                    $address = $address.'['.$p_address.']';
+                if(!empty($remark_address)){
+                    $address = $address.'['.$remark_address.']';
                 }
-                $this->update_tuan_consignees_address($uid,$name,$mobile,$p_address,$address);
+                $this->update_tuan_consignees_address($uid,$name,$mobile,$remark_address,$address);
                 if(empty($address)){
                     $this->log("post address is empty ".$tuan_id);
                 }
@@ -819,7 +823,7 @@ class TuanBuyingsController extends AppController{
         }
     }
 
-    private function update_tuan_consignees_address($uid,$name,$mobile,$p_address,$address){
+    private function update_tuan_consignees_address($uid,$name,$mobile,$remark_address,$address){
         $this->loadModel('OrderConsignees');
         //save user custom address
         $tuan_consignees = $this->OrderConsignees->find('first', array(
@@ -828,7 +832,7 @@ class TuanBuyingsController extends AppController{
         ));
         $consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN);
         //remark address
-        $consignees['remark_address'] = $p_address;
+        $consignees['remark_address'] = $remark_address;
         $consignees['address'] = $address;
         if($tuan_consignees){
             $consignees['id'] = $tuan_consignees['OrderConsignees']['id'];
@@ -838,7 +842,7 @@ class TuanBuyingsController extends AppController{
         $this->OrderConsignees->save($consignees);
     }
 
-    private function update_ziti_consigness_address($offline_store,$name,$mobile,$uid,$address,$p_address){
+    private function update_ziti_consigness_address($offline_store,$name,$mobile,$uid,$address,$remark_address){
         $this->loadModel('OrderConsignees');
         //save user ziti address
         $ziti_consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN_ZITI);
@@ -848,7 +852,7 @@ class TuanBuyingsController extends AppController{
         ));
         $ziti_consignees['area'] = $offline_store['OfflineStore']['area_id'];
         $ziti_consignees['address'] = $address;
-        $ziti_consignees['remark_address'] = $p_address;
+        $ziti_consignees['remark_address'] = $remark_address;
         $ziti_consignees['creator'] = $uid;
         $ziti_consignees['id'] = $old_ziti_consignees['OrderConsignees']['id'];
         $ziti_consignees['ziti_id'] = $offline_store['OfflineStore']['id'];
