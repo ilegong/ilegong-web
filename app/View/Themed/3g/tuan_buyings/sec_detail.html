@@ -212,7 +212,7 @@
             <a href="#X" class="love_icon"></a>
         </li>
         <li class="fl" style="width:78%;">
-            <div>
+            <div id="buy_btns">
                 {{if $sold_num>=$target_num}}
                     <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">秒杀结束</a>
                 {{elseif before_than($product_try['ProductTry']['start_time'])}}
@@ -241,6 +241,9 @@
             e.preventDefault();
             utils.alert('每人限购一份。');
         });
+        function countDown(){
+
+        }
     });
 
     function goBack(){
