@@ -194,6 +194,7 @@
         <a href="#X" class="sure_btn">确定</a>
     </div>
     <div class="tipslayer_bg" style="display: none;"></div>
+    <div id="button-status" type="hidden" data-status="1"></div>
     </div>
 <script>
     var product_spec_group = JSON.parse('{{$product_spec_group}}');
@@ -266,9 +267,14 @@
         $('.sure_btn').on('click',function(){
             $(this).attr('value','true');
             set_dialog_hide();
+            var button_status = $('#button-status').attr('data-status');
+            if (button_status == 2){
+                $('#btn_add_cart').trigger('click');
+            }else if(button_status == 3){
+                $('#btn_quick_buy').trigger('click');
+            }else{
+                return false;
+            }
         });
-    });
-    $('#product-content').bind('swipeone',function(){
-        alert('test');
     });
 </script>

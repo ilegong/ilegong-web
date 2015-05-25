@@ -1291,10 +1291,13 @@ $(document).ready(function () {
 
 	});
 	$("#btn_add_cart").click(function(e){
+        var button_status = $('#button-status');
         if (!$('.sure_btn').attr('value')){
             $('.xq_standard_layer,.tipslayer_bg').show();
+            button_status.attr('data-status','2');
             return;
         }
+        button_status.attr('data-status','1');
 		var $this = $(this);
 		if ($this.hasClass('cart_btn_soldout')) {
             var $reason = $this.attr("reason");
@@ -1303,7 +1306,8 @@ $(document).ready(function () {
 			return false;
 		}
 		cart_edit_amount.save($this.attr('item-id'));
-		e.preventDefault();
+
+        e.preventDefault();
 		return false;
 	});
 	$('#pamount_reduce').click(function(e){
@@ -1317,6 +1321,7 @@ $(document).ready(function () {
 	$('#btn_quick_buy').click(function(){
         if (!$('.sure_btn').attr('value')){
             $('.xq_standard_layer,.tipslayer_bg').show();
+            $('#button-status').attr('data-status','3');
             return;
         }
 		var $this = $(this);

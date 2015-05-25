@@ -218,6 +218,7 @@
                         <a href="#X" class="sure_btn">确定</a>
                     </div>
                 <div class="tipslayer_bg" style=" display: none;"></div>
+                <div class="hidden" id="button-status" data-status="1"></div>
                 </div>
             </div>
             <script>
@@ -277,6 +278,11 @@
                     $('.sure_btn').on('click',function(){
                         $(this).attr('value','true');
                        set_dialog_hide();
+                        var button_status = $('#button-status').attr('data-status');
+                        alert(button_status);
+                        if(button_status == 2){
+                            $('#tuan_buy').trigger('click');
+                        }
                     });
                 });
             </script>
@@ -379,8 +385,10 @@
             if(!sso.check_userlogin({'referer':href})){
                 return false;
             }else{
+                var button_status = $('#button-status');
                 if (!$('.sure_btn').attr('value')){
                     $('.xq_standard_layer,.tipslayer_bg').show();
+                    button_status.attr('data-status','2');
                     return;
                 }
                 var specId = '';
