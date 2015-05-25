@@ -15,18 +15,18 @@ class ProductRecomComponent extends Component {
 
     public function recommend($pid) {
         $MAX_SAME_KIND = 2;
-        $MAX_RECOMMEND = 6;
+        $MAX_RECOMMEND = 4;
 
         $items = array();
         $productModel = ClassRegistry::init('Product');
         if ($pid == 0) {
-            $recomm_hottest = $this->rand_recommend_pids(PRO_TAG_HOTTEST, $MAX_RECOMMEND * 2, $productModel, 0);
+            $recomm_hottest = $this->rand_recommend_pids(RECOMMEND_TAG_ID, $MAX_RECOMMEND * 2, $productModel, 0);
             $this->fill_recomm_items($recomm_hottest, $items, $MAX_RECOMMEND, $productModel);
         } else {
 
             $tag = $productModel->query("select tag_id from cake_product_product_tags where product_id = $pid limit 1");
             $recomm_same_kind = empty($tag) ? array() : $this->rand_recommend_pids($tag[0]['cake_product_product_tags']['tag_id'], $MAX_SAME_KIND * 2, $productModel, $pid);
-            $recomm_hottest = $this->rand_recommend_pids(PRO_TAG_HOTTEST, ($MAX_RECOMMEND - $MAX_SAME_KIND) * 2, $productModel, $pid);
+            $recomm_hottest = $this->rand_recommend_pids(RECOMMEND_TAG_ID, ($MAX_RECOMMEND - $MAX_SAME_KIND) * 2, $productModel, $pid);
 
             $this->fill_recomm_items($recomm_same_kind, $items, $MAX_SAME_KIND, $productModel);
             $this->fill_recomm_items($recomm_hottest, $items, $MAX_RECOMMEND, $productModel);
