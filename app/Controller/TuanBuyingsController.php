@@ -443,6 +443,7 @@ class TuanBuyingsController extends AppController{
         $pid = $tuan_b['TuanBuying']['pid'];
         $ship_way = ZITI_TAG;
         $ship_val = -1;
+        $ship_leastnum = 0;
         if($way_id!=0){
             $shipSetting = $this->get_ship_setting($way_id,$pid,'Product');
             if(empty($shipSetting)){
@@ -451,6 +452,7 @@ class TuanBuyingsController extends AppController{
             }
             $ship_way = TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type']);
             $ship_val = $shipSetting['ProductShipSetting']['ship_val'];
+            $ship_leastnum = $shipSetting['ProductShipSetting']['least_num'];
         }
         if(strpos($ship_way, ZITI_TAG)===false){
             $shipFee = intval($ship_val)/100;
@@ -489,6 +491,7 @@ class TuanBuyingsController extends AppController{
         $this->set('tuan_buy_id', $tuan_buy_id);
         $this->set('cart_info',$Carts);
         $this->set('max_num',$max_num);
+        $this->set('least_num',$ship_leastnum);
         $this->set('brand', $brand['Brand']);
         if($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN){
             $this->set('big_tuan', true);

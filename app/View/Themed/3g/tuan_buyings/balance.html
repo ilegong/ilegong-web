@@ -39,6 +39,7 @@
                     <a href="#X">
                         <p>{{$cart_info['Cart']['name']}}</p>
                         <s>单价:￥{{$this->Number->precision($cart_info['Cart']['price'],2)}}</s>
+                        <input type="hidden" value="{{$least_num}}" id="ship_least_num">
                         <div class="clearfix">
                             <a  class="cartnumreduce fl"></a>
                             <input type="text" value="{{$buy_count}}" id="pamount-{{$cart_info['Cart']['id']}}" data-id="{{$cart_info['Cart']['id']}}" disabled="disabled"
