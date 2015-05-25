@@ -253,6 +253,7 @@ class TuanBuyingsController extends AppController{
         $this->autoRender = false;
         $this->loadModel('Cart');
         $this->loadModel('ConsignmentDate');
+        $this->loadModel('ProductShipSetting');
         $tuan_buy_id = intval($_REQUEST['tuan_buy_id']);
         $product_id = intval($_REQUEST['product_id']);
         $product_num = intval($_REQUEST['product_num']);
@@ -276,6 +277,18 @@ class TuanBuyingsController extends AppController{
             'tuan_buy_id' => $tuan_buy_id,
             'product_id' => $product_id
         );
+        $way_id = $_POST['way_id'];
+        $productShipSetting = $this->ProductShipSetting->find('first',array(
+            'conditions' => array(
+                'id' => $way_id
+            )
+        ));
+        if(!empty($productShipSetting)){
+            if($product_num<$productShipSetting['ProductShipSetting']['least_num']){
+                echo json_encode(array('success'=> false, 'error' => '对不起，你选择的物流方式起送数量是'.$productShipSetting['ProductShipSetting']['least_num'].'，请重新下单。'));
+                return;
+            }
+        }
         $sessionId = $this->Session->id();
         $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,$spec_id,ORDER_TYPE_TUAN,0,$uId, $sessionId,  null, null,$cart_tuan_param);
         $this->log('cartInfo'.json_encode($cartInfo));
@@ -286,14 +299,13 @@ class TuanBuyingsController extends AppController{
                 $this->log("failed to update consignment_date and send_date for cart ".$cartInfo['Cart']['id'].": consignment_date: ".$consignment_date_id.", send_date: ".$send_date);
                 return;
             }
-            $way_id = $_POST['way_id'];
+            $cart_array = array(0 => strval($cartInfo['Cart']['id']));
+            $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
             if(strpos($_POST['way_type'],ZITI_TAG)===false){
                 echo json_encode(array('success' => true, 'direct'=>'normal', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id));
             }else{
                 echo json_encode(array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id));
             }
-            $cart_array = array(0 => strval($cartInfo['Cart']['id']));
-            $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
         }else{
             echo json_encode(array('success'=> false, 'error' => '对不起，系统出错，请联系客服'));
         }

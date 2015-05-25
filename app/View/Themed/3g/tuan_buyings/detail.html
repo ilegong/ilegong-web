@@ -176,10 +176,14 @@
                                        <span class="mr12 border {{if $index==0}}cur tuan_way_selected{{/if}}" way-label="{{$ship_set['ProductShipSetting']['code']}}" way-id="{{$ship_set['ProductShipSetting']['id']}}">
                                            {{$ship_set['ProductShipSetting']['name']}}
                                                 {{if $ship_set['ProductShipSetting']['ship_type']!=1}}
-                                                    {{if $ship_set['ProductShipSetting']['ship_fee'] > 0}}
-                                                        ({{$ship_set['ProductShipSetting']['ship_fee']}}元)
-                                                    {{elseif $ship_set['ProductShipSetting']['ship_fee'] == 0}}
-                                                        (包邮)
+                                                    {{if $ship_set['ProductShipSetting']['ship_val'] > 0}}
+                                                        ({{$ship_set['ProductShipSetting']['ship_val']}}元)
+                                                    {{elseif $ship_set['ProductShipSetting']['ship_val'] == 0}}
+                                                        {{if $ship_set['ProductShipSetting']['least_num']>0}}
+                                                            ({{$ship_set['ProductShipSetting']['least_num']}}份起送)
+                                                        {{else}}
+                                                            (包邮)
+                                                        {{/if}}
                                                     {{/if}}
                                                 {{/if}}
                                                 <div class="focus"></div>
@@ -446,6 +450,7 @@
                     data: postdata,
                     url:'/tuan_buyings/cart_info',
                     success:function(data){
+                        utils.close_notify();
                         if(data.success) {
                             var way_id = data['way_id'];
                             if(data.direct == 'big_tuan_list'){
@@ -453,10 +458,10 @@
                             }else{
                                 window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}/' + data.cart_id + '/'+way_id;
                             }
-                        }
-                        else {
-                            showErrorMessage(data.error);
-                            window.location.reload();
+                        } else {
+                            utils.alert(data.error,function(){
+                                window.location.reload();
+                            });
                         }
                     },
                     dataType:'json'

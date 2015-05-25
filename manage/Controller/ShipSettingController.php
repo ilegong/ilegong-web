@@ -44,6 +44,9 @@ class ShipSettingController extends AppController {
             if($item['shipVal']){
                 $itemData['ship_val'] = $item['shipVal'];
             }
+            if($item['shipLeastNum']){
+                $itemData['least_num'] = $item['shipLeastNum'];
+            }
             $saveData[] = $itemData;
         }
         if($this->ProductShipSetting->saveAll($saveData)){
