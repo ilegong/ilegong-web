@@ -44,10 +44,10 @@
                 {{if $order['Order']['type'] == 5 || $order['Order']['type'] == 6}}
                     {{if $order['Order']['status']==1}}
                         {{if empty($cart['Cart']['send_date'])}}
-                            $trClass="danger";
+                            <?php $trClass='danger'; ?>
                         {{else}}
                             {{if strtotime($cart['Cart']['send_date']) < strtotime("-1 day")}}
-                                $trClass="danger";
+                                <?php $trClass='danger'; ?>
                             {{/if}}
                         {{/if}}
                     {{/if}}
