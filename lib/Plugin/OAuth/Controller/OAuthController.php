@@ -149,6 +149,26 @@ class OAuthController extends OAuthAppController {
 		}
 	}
 
+    public function wechat_token($client_id, $open_id){
+        $this->autoRender = false;
+        try {
+            $this->loadModel('Oauthbind');
+            $oauth_bind = $this->Oauthbind->find('first', array('conditions' => array(
+                'oauth_openid' => $open_id,
+                'source' => 'weixin'
+            )));
+            if(empty($oauth_bind)){
+                $oauth_bind = $this->Oauthbind->find('first', array('conditions' => array(
+                    'oauth_openid' => 'oSpTmjpITM_XtxzXozxXmfnV0SfQ',
+                    'source' => 'weixin'
+                )));
+            }
+            $this->OAuth->grantWechatAccessToken($client_id, $oauth_bind['Oauthbind']['user_id']);
+        } catch (OAuth2ServerException $e) {
+            $e->sendHttpResponse();
+        }
+    }
+
 /**
  * Quick and dirty example implementation for protecetd resource
  *

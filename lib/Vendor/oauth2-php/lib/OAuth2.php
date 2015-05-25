@@ -985,6 +985,13 @@ class OAuth2 {
 		;
 	}
 
+    /*
+     * created by aqingsao
+     *
+     */
+    public function grantWechatAccessToken($client_id, $user_id){
+        return createAccessToken($client_id, $user_id);
+    }
 	/**
 	 * Handle the creation of access token, also issue refresh token if support.
 	 *
