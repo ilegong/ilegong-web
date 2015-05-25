@@ -16,9 +16,9 @@
           content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}"/>
     <link rel="apple-touch-icon" href="{{$this->Html->assetUrl('/img/logo_mini.png')}}" />
     <title>{{$pageTitle}}-{{$site['title']}}</title>
-    {{$this->Html->css(array('http://'.WX_HOST.'/css/bootstrap_2.css?v1.1', 'layout_3g.css?ver50',));}}
+    {{$this->Html->css(array('http://'.WX_HOST.'/css/mobile-lib/bootstrap_2.css?v1.1', '/css/mobile/common/layout_3g.css?ver50',));}}
+    {{$this->Html->css(array('/css/mobile/common/mobile-view.css?v11.5','/css/mobile/common/tuan.css?v6.1'))}}
     <!--<script type="text/javascript" name="baidu-tc-cerfication" data-appid="5181580" src="http://apps.bdimg.com/cloudaapi/lightapp.js"></script>-->
-
     <style>
         body.modal-open {
             margin-right: 0;
@@ -26,11 +26,9 @@
         .shopping_icon{ width:3em; height:1.9em; background:url('{{$this->Html->assetUrl("/img/mobilev1/pyshuo_icon.png?xx")}}') -5em -15em no-repeat; background-size:25em 25em; display:block; margin:0 auto; text-decoration:none;}
         .shopping_count{ position:absolute; right:3px; top:2px; width:14px; text-align:center; color:#ffffff; font-size:1em;display: none;}
     </style>
-    {{$this->Html->css(array('mobile-view.css?v11.5',))}}
     {{$this->Html->script(array(
     'http://libs.baidu.com/jquery/1.9.1/jquery.min.js',
     'jquery/jquery.cookie.js','i18n/language-zh-CN.js'));}}
-    {{$this->Html->script(array('jquery.wookmark.js'));}}
     <script type="text/javascript">
         var BASEURL = "{{APP_SUB_DIR}}";
         var ADMIN_BASEURL = BASEURL+"/manage";
