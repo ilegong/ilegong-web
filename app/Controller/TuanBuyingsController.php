@@ -596,6 +596,10 @@ class TuanBuyingsController extends AppController{
                         }
                         //user custom address
                         $this->update_tuan_consignees_address($uid,$name,$mobile,$remark_address,$p_address);
+                        $address = $p_address;
+                        if(!empty($remark_address)){
+                            $address = $address.'['.$remark_address.']';
+                        }
                     }
                 }
                 //update ziti address
@@ -609,19 +613,19 @@ class TuanBuyingsController extends AppController{
                     $offline_store = $this->OfflineStore->findById($shop_id);
                     if (!empty($offline_store)) {
                         $address = get_address($tuan_info, $offline_store);
+                        $this->update_ziti_consigness_address($offline_store, $name, $mobile, $uid, $address, $remark_address);
                         if(!empty($remark_address)){
                             $address = $address.'['.$remark_address.']';
                         }
-                        $this->update_ziti_consigness_address($offline_store, $name, $mobile, $uid, $address, $remark_address);
                     }
                 }
             }else{
                 //small tuan
                 $address = get_address($tuan_info, $offline_store);
+                $this->update_tuan_consignees_address($uid,$name,$mobile,$remark_address,$address);
                 if(!empty($remark_address)){
                     $address = $address.'['.$remark_address.']';
                 }
-                $this->update_tuan_consignees_address($uid,$name,$mobile,$remark_address,$address);
                 if(empty($address)){
                     $this->log("post address is empty ".$tuan_id);
                 }

@@ -206,7 +206,7 @@ class TuanBuyingComponent extends Component{
      * @param $p_address
      * @return array
      */
-    public function make_order($cart_id,$tuan_id,$member_id,$mobile,$name,$uid,$way_id,$tuan_sec,$global_sec,$shop_id,$p_address){
+    public function make_order($cart_id,$tuan_id,$member_id,$mobile,$name,$uid,$way_id,$tuan_sec,$global_sec,$shop_id,$p_address,$remark_address){
         $result_data = array();
         if (empty($uid)) {
             $result_data['success'] = false;
@@ -289,9 +289,14 @@ class TuanBuyingComponent extends Component{
                     if ($shipFee > 0) {
                         $total_price = $total_price + $shipFee;
                     }
-                    $consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN,'address'=>$p_address);
+                    $address = $p_address;
+                    //更新用户收货地址
+                    $consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN,'address'=>$p_address,'remark_address' => $remark_address);
                     //update consignes address
                     $this->merge_order_consignes($uid,$consignees);
+                    if(!empty($remark_address)){
+                        $address = $address.'['.$remark_address.']';
+                    }
                 }else{
                     //rember last ziti address
                     if (empty($shipSetting) || strpos(TuanShip::get_ship_code($shipTypeId), ZITI_TAG) !== false) {
@@ -301,23 +306,24 @@ class TuanBuyingComponent extends Component{
                             if (!empty($offline_store)) {
                                 $address = get_address($tuan_info, $offline_store);
                                 //save user ziti address
-                                $this->merge_ziti_order_consignes($uid,$offline_store,$address);
+                                $this->merge_ziti_order_consignes($uid,$offline_store,$address,$remark_address);
+                                if(!empty($remark_address)){
+                                    $address = $address.'['.$remark_address.']';
+                                }
                             }
                         }
                     }
                 }
             }
-            $address = $p_address;
         } else {
             //小团购买 获取自提点地址
             $offline_store = $this->get_offline_store($tuan_info['TuanTeam']['offline_store_id']);
             $address = get_address($tuan_info, $offline_store);
-            if (!empty($p_address)) {
+            if (!empty($remark_address)) {
                 //has a remark address
-                $address = $address . '[' . $p_address . ']';
+                $address = $address . '[' . $remark_address . ']';
             }
         }
-
         if ($tuan_sec == 'true') {
             //remark order sec kill
             $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, $shop_id);
@@ -372,7 +378,7 @@ class TuanBuyingComponent extends Component{
        $this->User->add_score($uid, -$score_consumed);
    }
 
-   private function merge_ziti_order_consignes($uid,$offline_store,$address){
+   private function merge_ziti_order_consignes($uid,$offline_store,$address,$remark_address){
        $ziti_consignees = array();
        $this->OrderConsignees = ClassRegistry::init('OrderConsignees');
        $old_ziti_consignees = $this->OrderConsignees->find('first', array(
@@ -386,6 +392,7 @@ class TuanBuyingComponent extends Component{
        $ziti_consignees['ziti_id'] = $offline_store['OfflineStore']['id'];
        $ziti_consignees['ziti_type'] = $offline_store['OfflineStore']['type'];
        $ziti_consignees['status'] = STATUS_CONSIGNEES_TUAN_ZITI;
+       $ziti_consignees['remark_address'] = $remark_address;
        $this->OrderConsignees->save($ziti_consignees);
    }
 
