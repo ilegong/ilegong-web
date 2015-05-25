@@ -1219,6 +1219,7 @@ $(document).ready(function () {
 						var spec_item_selected = $('span.spec_item_selected[item-label="' + itemLabel + '"]');
 						if (spec_item_selected.size() < 1) {
 							utils.alert("请选择" + itemLabel);
+                            $('.xq_standard_layer').show();
 							return false;
 						}
 					});
@@ -1238,6 +1239,7 @@ $(document).ready(function () {
 			var cake_date_selected = $('span.spec_item_selected[item-label="SD"]');
 			if (cake_date_selected.size() < 1) {
 				utils.alert("请选择送货日期");
+                $('.xq_standard_layer').show();
 				return false;
 			}
 		}
@@ -1275,13 +1277,13 @@ $(document).ready(function () {
             var price = spec_group_data['price'];
             price = parseFloat(price);
             if(price&&price!=0&&price!='0'){
-                var $price_element = $('#product_price');
+                var $price_element = $('#product_price,#product_price_dialog');
                 price = price.toFixed(2);
                 if($price_element.length>0){
                     if($price_element.prop('tagName').toUpperCase()=='FONT'){
-                        $('#product_price').text(price);
+                        $('#product_price,#product_price_dialog').text(price);
                     }else{
-                        $('#product_price').text('¥ '+price);
+                        $('#product_price,#product_price_dialog').text('¥ '+price);
                     }
                 }
             }
@@ -1289,6 +1291,10 @@ $(document).ready(function () {
 
 	});
 	$("#btn_add_cart").click(function(e){
+        if (!$('.sure_btn').attr('value')){
+            $('.xq_standard_layer,.tipslayer_bg').show();
+            return;
+        }
 		var $this = $(this);
 		if ($this.hasClass('cart_btn_soldout')) {
             var $reason = $this.attr("reason");
@@ -1309,6 +1315,10 @@ $(document).ready(function () {
 		return false;
 	});
 	$('#btn_quick_buy').click(function(){
+        if (!$('.sure_btn').attr('value')){
+            $('.xq_standard_layer,.tipslayer_bg').show();
+            return;
+        }
 		var $this = $(this);
 		if ($this.hasClass('cart_btn_soldout')) {
 			utils.alert('已售完');

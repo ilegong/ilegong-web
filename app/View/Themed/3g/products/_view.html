@@ -48,114 +48,29 @@
             </li>
         </ul>
         {{/if}}
-        {{if $product_spec_map||!empty($consignment_dates)}}
-        {{$product_spec_map}}
-        <ul class="standard clearfix">
-            {{if $specs_map && !empty($specs_map['choices'])}}
-            <?php foreach($specs_map['choices'] as $label => $values) {
-            if(!empty($label) && !empty($values)){
-            ?>
-            <li class="good-spec">
-                <span class="gray title mr12 spec_label" style="float:left;">{{$label}}:</span>
-                            <span class="border" style="display: block;overflow: hidden;">
-                            <?php foreach($values as $index=>$vaLabel){?>
-                                <span class="mr12 border spec_item" item-label="{{$label}}">
-                                    {{$vaLabel}}
-                                    <div class="focus"></div>
-                                </span>
-                                <?php } ?>
-                            </span>
-            </li>
-            <?php } } ?>
-            {{/if}}
-            {{if !empty($consignment_dates)}}
-            <li>
-                <span class="gray title mr12" style="float:left;">送货日期:</span>
-                        <span class="border" style="display: block;overflow: hidden;">
-                        <?php foreach($consignment_dates as $date){?>
-                            <span class="mr12 border spec_item {{if $index==0}}spec_item_selected cur{{/if}}" item-label="SD" data-val="{{$date['id']}}" data-send-date="{{$date['send_date']}}">
-                                {{$date['date']}}
-                                <div class="focus"></div>
-                            </span>
-                            <?php } ?>
-                        </span>
-            </li>
-            {{/if}}
-        </ul>
-        {{/if}}
-        {{if ($total_left > 0 || $total_left == -1) && $afford_for_curr_user }}
-        <ul class="numbers clearfix b_line">
-            <li class="fl">
-                <span class="gray title mr12" style="float:left;">数量:{{if $limit_per_user == 1}}每人限购一份{{/if}}</span>
-                {{if $limit_per_user == 1}}
-                <input id="input_pamount"  item-id="{{$Product['Product']['id']}}" size="3" value="1" class="num" name="shoppingnum" type="hidden" readonly="readonly">
-                {{else}}
-                <span class="clearfix" style="display: block;overflow: hidden;">
-                    <div id="pamount_reduce" class="grew"  item-id="{{$Product['Product']['id']}}">-</div>
-                    <input id="input_pamount"  item-id="{{$Product['Product']['id']}}" size="3" value="1" class="num" name="shoppingnum" type="text"/>
-                    <div id="pamount_add" class="grew" item-id="{{$Product['Product']['id']}}">+</div>
-                </span>
-                {{/if}}
-            </li>
-        </ul>
-        {{/if}}
+        <a href="#X" class="standard_bg clearfix">
+            <span class="fl"><strong>选择口味、规格</strong></span>
+            <span class="fr p_more"></span>
+        </a>
         <div class="all_line">
-            <ul class="clearfix title" style="margin-bottom: 0;" onclick="to_detail();">
-                <li class="xq_xqicon fl" style="padding-left: 0;"></li>
-                <li class="fl">图文详情</li>
-                <li class="fr"><a class="p_more"></a></li>
+            <ul class="clearfix title">
+                <li class="fl cur_border" style="width: 50%;" id="product-detail">图文详情</li>
+                <!--{{if $is_product_has_shichi}}-->
+                <!--<li class="fl cur_border" style="width: 50%;" id="product-try">试吃报告</li>-->
+                <!--{{/if}}-->
+                <li class="fl" style="width: 50%;" id="product-comment"{{if $comment_count>5}}{{/if}}>口碑评论<span>{{$Product['Product']['comment_nums']}}</span></li>
             </ul>
+            <div id="product-content" style="height: 300px; overflow:scroll; border-bottom: 1px #eeeeee solid;"></div>
+            <div class="more"><a href="#">查看更多详情</a></div>
         </div>
-        {{if $is_product_has_shichi}}
-        <div class="all_line">
-            <ul class="clearfix title" onclick="to_shichi();">
-                <li class="fl">试吃报告</li>
-                <li class="fr"><a style="color:#29AC0E;" class="p_more"></a></li>
+        <div class="shop_entrance_bg" style="margin-bottom: 0px;">
+            <ul class="clearfix shop_entrance" onclick="to_brand();">
+                <li class="fl head"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0"></li>
+                <li class="fl name">{{$brand['Brand']['name']}}</li>
+                <li class="fr"><a href="#X" class="p_more"></a></li>
             </ul>
+            <div class="shop_service">本商品由[<strong>{{$brand['Brand']['name']}}</strong>]发货并提供售后服务。</div>
         </div>
-        {{/if}}
-
-        <div class="all_line" id="comment-div">
-            <ul class="clearfix title" style="margin-bottom: 0;" {{if $comment_count>5}}onclick="to_comment();"{{/if}}>
-            <li class="xq_commenticon fl" style="padding-left: 0;"></li>
-            <li class="fl">口碑评论<span> {{$Product['Product']['comment_nums']}}</span></li>
-            {{if $comment_count>5}}
-            <li class="fr"><a class="p_more"></a></li>
-            {{/if}}
-            </ul>
-            {{template products/template_product_comments}}
-        </div>
-        <ul class="clearfix shop_entrance" style="color: #29AC0E;" onclick="to_brand();">
-            <li class="fl"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0"/></li>
-            <li class="fl">{{$brand['Brand']['name']}}</li>
-            <li class="fr" style="margin-top: 0.3em;height: 1.634em;"><a class="p_more"></a></li>
-        </ul>
-        <div class="service">
-            <ul class="clearfix b_line">
-                <li>
-                    <span class="gray mr12" style="float:left;">快递:</span>
-			<span style="display: block;overflow: hidden;">
-                {{if $ship_by_item_num && $Product['Product']['ship_fee']> 0}}
-                    <span>每件{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}元</span>
-                {{else}}
-                    {{if $Product['Product']['ship_fee']}} {{if $Product['Product']['ship_fee']==-1}}到付{{elseif $Product['Product']['ship_fee']==-2}}自提{{else}}￥{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}{{/if}} {{else}}<span>包邮</span>{{/if}}
-                {{/if}}
-			</span>
-                </li>
-            </ul>
-            <ul class="clearfix">
-                <li>
-                    <span class="gray mr12" style="float:left;">服务:</span>
-			<span style="display: block;overflow: hidden;">
-				<span>本商品由 {{$brand['Brand']['name']}} 发货并提供售后服务。</span>
-                {{if !empty($brand['Brand']['weixin_id'])}}
-                <span>联系商家:微信号 {{$brand['Brand']['weixin_id']}}。</span>
-                {{/if}}
-			</span>
-                </li>
-            </ul>
-        </div>
-
         <div class="all_line" style="margin-bottom: 0;">
             <ul class="clearfix title">
                 <li class="fl">相关推荐</li>
@@ -192,7 +107,94 @@
             </div>
         </div>
     </div>
-</div>
+    <div class="xq_standard_layer" style="display:none;">
+        <a href="#X" class="close_btn">x</a>
+        <dl class="clearfix">
+            <dt class="fl"><img src="{{small_thumb_link($Product['Product']['coverimg'])}}"></dt>
+            <dt class="good_title">
+                <span><strong></strong>{{$Product['Product']['name']}}</span>
+                <label><strong>{{if $Product['Product']['id']==871}}预售价{{/if}}￥<font id="product_price_dialog">{{$this->Number->precision($price, 2)}}</font>{{if $product_price_range}}<em>{{$product_price_range}}</em>{{/if}}</strong></label>
+            </dt>
+        </dl>
+        {{if $product_spec_map||!empty($consignment_date)}}
+        {{$product_spec_map}}
+        <div class="p_bg">
+            {{if $specs_map && !empty($specs_map['choices'])}}
+            {{loop $specs_map['choices'] $label $values}}
+            {{if !empty($label) && !empty($values)}}
+            <ul class="standard clearfix">
+                <li>
+                    <span class="fl title mr12 spec_label">{{$label}}:</span>
+            <span class="border" style="display: block;overflow: hidden;">
+                {{loop $values $index $vaLabel}}
+                <span class="border mr12 spec_item {{if $index == 0}}spec_item_selected cur{{/if}}"" item-label="{{$label}}">{{$vaLabel}}
+                    <div class="focus"></div>
+                </span>
+                {{/loop}}
+            </span>
+                </li>
+            </ul>
+            {{/if}}
+            {{/loop}}
+        </div>
+        {{/if}}
+        {{if !empty($consignment_dates)}}
+        <div class="p_bg">
+            <ul class="standard clearfix">
+                <li>
+                    <span class="fl title mr12">送货：</span>
+            <span class="border" style="display: block;overflow: hidden;">
+                {{loop $consignment_dates $index $date}}
+                <span class="mr12 border spec_item {{if $index == 0}}spec_item_selected cur{{/if}}" item-label="SD" data-val="{{$date['id']}}" data-send-date="{{$date['send_date']}}">
+                    {{$date['date']}}
+                    <div class="focus"></div>
+                </span>
+                {{/loop}}
+            </span>
+                </li>
+            </ul>
+        </div>
+        {{/if}}
+        {{/if}}
+        <div class="p_bg">
+            <ul class="standard clearfix">
+                <li>
+                    <span class="fl title mr12">物流:</span>
+            <span class="border" style="display:block;overflow: hidden;">
+               {{if $ship_by_item_num && $Product['Product']['ship_fee']> 0}}
+                    <span>每件{{$this->Number->precision($Product['Product']['ship_fee'], 0)}}元</span>
+               {{else}}
+                <span class="mr12 border cur">
+               {{if $Product['Product']['ship_fee']}} {{if $Product['Product']['ship_fee']==-1}}到付{{elseif $Product['Product']['ship_fee']==-2}}自提{{else}}快递{{$this->Number->precision($Product['Product']['ship_fee'], 0)}}元{{/if}} {{else}}包邮{{/if}}
+               {{/if}}
+                   <div class="focus"></div>
+                </span>
+            </span>
+                </li>
+            </ul>
+        </div>
+        {{if ($total_left > 0 || $total_left == -1) && $afford_for_curr_user}}
+        <div class="p_bg">
+            <ul class="numbers clearfix b_line">
+                <li class="fl">
+                    <span class="fl title mr12">数量:{{if $limit_per_user == 1}}每人限购一份{{/if}}</span>
+                    {{if $limit_per_user == 1}}
+                    <input id="input_pamount" item-id="{{$Product['Product']['id']}}" size="3" value="1" class="num" name="shoppingnum" type="hidden" readonly="readonly">
+                    {{else}}
+            <span class="clearfix" style="display: block; overflow: hidden;">
+                <a class="grew" id="pamount_reduce" item-id="{{$Product['Product']['id']}}">-</a>
+                <input id="input_pamount"  item-id="{{$Product['Product']['id']}}" size="3" value="1" class="num" name="shoppingnum" type="text"/>
+                <a id="pamount_add" class="grew" item-id="{{$Product['Product']['id']}}">+</a>
+            </span>
+                    {{/if}}
+                </li>
+            </ul>
+        </div>
+        {{/if}}
+        <a href="#X" class="sure_btn">确定</a>
+    </div>
+    <div class="tipslayer_bg" style="display: none;"></div>
+    </div>
 <script>
     var product_spec_group = JSON.parse('{{$product_spec_group}}');
 </script>
@@ -213,5 +215,60 @@
         $('#view_all_comments').on('click',function(){
             to_comment();
         });
+        var product_content =  $('#product-content');
+        var try_href = '/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}';
+        var comment_href = '/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}';
+        var detail_href = '/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}';
+        var try_html = $.ajax({url:try_href,async:false}).responseText;
+        var comment_html = $.ajax({url:comment_href,async:false}).responseText;
+        var detail_html = $.ajax({url:detail_href,async:false}).responseText;
+        product_content.append(detail_html);
+        $('.more a').attr('href',detail_href);
+        set_container();
+        $('#product-detail').on('click',function(){
+           set_cur_border($(this));
+           set_content_href(detail_html,detail_href,'查看更多详情');
+           set_container();
+        });
+        $('#product-try').on('click',function(){
+            set_cur_border($(this));
+            set_content_href(try_html,try_href,'查看更多评论');
+            set_container();
+        });
+        $('#product-comment').on('click',function(){
+            set_cur_border($(this));
+            set_content_href(comment_html,comment_href,'查看更多评论');
+            set_container();
+        });
+        function set_cur_border(element){
+            $('li').removeClass('cur_border');
+            element.addClass('cur_border');
+        }
+        function set_content_href(element,href,string){
+            $('#product-content').empty().append(element);
+            $('.more a').attr('href',href).empty().append(string)
+        }
+        function set_container(){
+            $('.container-detail,.container-comment').css('margin-top',0);
+        }
+        function set_dialog_show(){
+            $('.xq_standard_layer,.tipslayer_bg').show();
+        }
+        function set_dialog_hide(){
+            $('.xq_standard_layer,.tipslayer_bg').hide();
+        }
+        $('.standard_bg').on('click',function(){
+           set_dialog_show();
+        });
+        $('.close_btn').on('click',function(){
+           set_dialog_hide();
+        });
+        $('.sure_btn').on('click',function(){
+            $(this).attr('value','true');
+            set_dialog_hide();
+        });
+    });
+    $('#product-content').bind('swipeone',function(){
+        alert('test');
     });
 </script>
