@@ -920,7 +920,7 @@ var editAmount = {
 			}
 		}else{
 			alert("请输入正确的数量！");
-			$(obj).val(1);
+			$(obj).val($this.min);
 			$(obj).focus();
 		}
 		return x;
@@ -931,7 +931,7 @@ var editAmount = {
 			$(obj).val(x);
 		}else{
 			alert("商品数量最少为"+this.min);
-			$(obj).val(1);
+			$(obj).val(this.min);
 			$(obj).focus();
 		}
 		if (typeof callback == 'function') {
@@ -955,7 +955,7 @@ var editAmount = {
 		var x=$(obj).val();
 		if (x<this.min||x>this.max||!this.reg(x)){
 			alert("请输入正确的数量！");
-			$(obj).val(1);
+			$(obj).val(this.min);
 			$(obj).focus();
 		}
 	}
