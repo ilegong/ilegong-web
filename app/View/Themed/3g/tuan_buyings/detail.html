@@ -242,6 +242,8 @@
                     $('#product-content').append(detail_html);
                     $('.more a').attr('href',detail_href);
                     set_container();
+                    $('span.spec_item:not(.spec_item_selected)').children('div').toggleClass('hidden');
+                    $('[way-label]:not(.tuan_way_selected)').children('div').toggleClass('hidden');
                     $('#product-detail').on('click',function(){
                         set_cur_border($(this));
                         set_content_href(detail_html,detail_href,'查看更多详情');
@@ -476,9 +478,11 @@
             }
         });
         $("[way-label]").click(function(){
+            $('[way-label]:not(.tuan_way_selected)').children('div').removeClass('hidden');
             var that = $(this);
             that.toggleClass('cur').toggleClass('tuan_way_selected');
             $("[way-label]").not(that).removeClass('cur').removeClass('tuan_way_selected');
+            $('[way-label]:not(.tuan_way_selected)').children('div').toggleClass('hidden');
             var select_way = $('.cur.tuan_way_selected');
             $('#consign_way').text(select_way.text());
         });

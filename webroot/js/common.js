@@ -1268,10 +1268,13 @@ $(document).ready(function () {
 
 
 	$('span.spec_item').click(function (ev) {
+        $('span.spec_item:not(.spec_item_selected)').children('div').removeClass('hidden');
 		var $this = $(this);
 		$this.toggleClass('spec_item_selected').toggleClass('cur');
+
 		$('span.spec_item[item-label="' + $this.attr('item-label') + '"]').not($this).removeClass('spec_item_selected').removeClass('cur');
         //reset product price
+        $('span.spec_item:not(.spec_item_selected)').children('div').toggleClass('hidden');
         var spec_group_data = get_spec_group();
         if(spec_group_data){
             var price = spec_group_data['price'];
