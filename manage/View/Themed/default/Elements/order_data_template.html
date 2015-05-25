@@ -78,7 +78,7 @@
                     <td data-value="{{$order['Order']['total_all_price']}}">{{if $index == 0}}{{$order['Order']['total_all_price']}}{{else}}'同上'{{/if}}</td>
                     <td>{{$order['Order']['applied_score'] / 100}}</td>
                     <td>{{$order['Order']['created']}}</td>
-                    <td> {{if $order['Order']['status']!=0 && $order['Order']['pay_time']==null}}class="danger"{{/if}}>{{$order['Order']['pay_time']}}</td>
+                    <td {{if $order['Order']['status']!=0 && $order['Order']['pay_time']==null}}class="danger"{{/if}}>{{$order['Order']['pay_time']}}</td>
                     <td>
                         {{if $order['Order']['type'] == 5}}
                         团购
