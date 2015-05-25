@@ -67,6 +67,10 @@ class TuanOrdersController extends AppController{
                 $product_name = $try_products[$order['Order']['try_id']]['product_name'].$try_products[$order['Order']['try_id']]['spec'];
             }
             $offline_store = $offline_stores[$order['Order']['consignee_id']];
+            if($offline_store['OfflineStore']['can_remark_address']==1){
+                //这个自提点支持送货上门,不发送取货消息
+                continue;
+            }
             $post_data = array(
                 "touser" => $oauth_binds[$order['Order']['creator']],
                 "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
