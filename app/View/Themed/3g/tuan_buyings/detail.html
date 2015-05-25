@@ -29,13 +29,7 @@
                           <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{$consign_time_text}}</b></span></a></li>
                         {{/if}}
                     </ul>
-                    <ul class="sales clearfix">
-                        <li>
-                            <span style="display: block;overflow: hidden;">
-                                <span>{{$Product['Product']['promote_name']}}<br></span>
-                            </span>
-                        </li>
-                    </ul>
+
                     {{if $tuan_buy_type!=2}}
                     <div class="tuan_bar">
                         <div>已团购<span  value="{{$sold_num}}">{{$sold_num}}</span>份</div>
@@ -177,7 +171,7 @@
                                            {{$ship_set['ProductShipSetting']['name']}}
                                                 {{if $ship_set['ProductShipSetting']['ship_type']!=1}}
                                                     {{if $ship_set['ProductShipSetting']['ship_val'] > 0}}
-                                                        ({{$ship_set['ProductShipSetting']['ship_val']}}元)
+                                                        ({{$ship_set['ProductShipSetting']['ship_val']/100}}元)
                                                     {{elseif $ship_set['ProductShipSetting']['ship_val'] == 0}}
                                                         {{if $ship_set['ProductShipSetting']['least_num']>0}}
                                                             ({{$ship_set['ProductShipSetting']['least_num']}}份起送)

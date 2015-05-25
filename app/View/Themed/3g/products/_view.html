@@ -2,33 +2,20 @@
     <div class="col-xs-12 col-md-6" style="padding: 0;">
         {{template Elements/product_img_sild}}
         <div class="p_details_title">{{$Product['Product']['name']}}</div>
-        <ul class="p_details_price clearfix">
-            <li class="fl price"><span>￥<font id="product_price">{{$this->Number->precision($price, 2)}}</font></span>{{if $product_price_range}}<em>{{$product_price_range}}</em>{{/if}}</li>
-            <li class="fr stat"><a {{if $comment_count>0}}href="#comment-div"{{/if}} style="color: #333333">评价<span>({{$comment_count}})</span></a></li>
-        </ul>
-        {{if $hasOfferBrandIds && array_key_exists($Product['Product']['brand_id'], $hasOfferBrandIds)}}
-        <ul class="sales clearfix">
-            <li>
-                <span class="gray title mr12" style="float:left;">红包:</span>
+            {{if $hasOfferBrandIds && array_key_exists($Product['Product']['brand_id'], $hasOfferBrandIds)}}
+            <ul class="sales">
+                <li>
+                    <span class="gray title mr12" style="float:left;">红包:</span>
                 <span class="sales_c" style="display: block;overflow: hidden;">
                     <div class="quota_btn radius10 fl">有红包</div>
                 </span>
-            </li>
-        </ul>
-        {{/if}}
-        {{if $Product['Product']['promote_name']}}
-        <ul class="sales clearfix">
-            <li>
-                <span style="display: block;overflow: hidden;">
-                    <span><?php echo $Product['Product']['promote_name']; ?><br/></span>
-                </span>
-            </li>
-        </ul>
-        {{/if}}
-        {{if $ship_fixed||$ship_promo_nums||$ship_promo_amount||!empty($special_name)||$in_nianhuo||$total_left>0}}
-        <ul class="sales clearfix">
-            <li>
-                <span class="gray mr12" style="float:left;">促销:</span>
+                </li>
+            </ul>
+            {{/if}}
+            {{if $ship_fixed||$ship_promo_nums||$ship_promo_amount||!empty($special_name)||$in_nianhuo||$total_left>0}}
+            <ul class="sales">
+                <li>
+                    <span class="gray mr12" style="float:left;">促销:</span>
                 <span style="display: block;overflow: hidden;">
                     {{if $ship_fixed}}<span>参与本店每单{{$this->Number->precision($Product['Product']['ship_fee'], 2)}}元快递优惠</span></br>{{/if}}
                     {{if $ship_promo_nums}}<span>{{$ship_promo_nums}}</span><br/>{{/if}}
@@ -45,9 +32,14 @@
                         <div class="quota_btn radius10 fl">限购</div><span>仅剩{{$total_left}}件</span>
                     {{/if}}
                 </span>
-            </li>
+                </li>
+            </ul>
+            {{/if}}
+        <ul class="p_details_price clearfix">
+            <li class="fl price"><span>￥<font id="product_price">{{$this->Number->precision($price, 2)}}</font></span>{{if $product_price_range}}<em>{{$product_price_range}}</em>{{/if}}</li>
+            <li class="fr stat"><a {{if $comment_count>0}}href="#comment-div"{{/if}} style="color: #333333">评价<span>({{$comment_count}})</span></a></li>
         </ul>
-        {{/if}}
+
         <a href="#X" class="standard_bg clearfix">
             <span class="fl"><strong>选择口味、规格</strong></span>
             <span class="fr p_more"></span>

@@ -124,26 +124,20 @@ ul li{ list-style:none;}
     margin-right: 10px;
 }
 
-.p_details_price {
-    font-size: 1em;
-    padding: 0 10px 5px 10px;
-    color: #c0c0c0;
-    border-bottom: 1px #eeeeee solid;
-    background-color: #ffffff;
-}
-
-.p_details_price .price span{ color:#ffa200;}
-.p_details_price .price span font{ font-size:1.667em;}
-.p_details_price .stat{ padding-top:0.5em;}
+.p_details_price { font-size: 1em; padding: 0 10px 8px 10px; color: #c0c0c0; border-bottom: 1px #eeeeee solid; background-color: #ffffff; }
+.p_details_price .price span { color: #ffa200; }
+.p_details_price .price span font { font-size: 24px; }
+.p_details_price .price em { color: #999999; text-decoration: line-through; font-style: normal; }
 .sales {
     padding: 10px 0.833em;
     background-color: #ffffff;
     border-bottom: 1px #eeeeee solid;
     color: #999999;
 }
-.sales li.quota span{ display:block; float:left; font-size:1em; color:#29ac0e;}
-.sales li span .quota_btn{ padding:0.12em 0.375em; color:#ffffff; background-color:#29ac0e; font-size:0.833em; margin-right:0.5em;}
-.sales_c{ color:#29ac0e;}
+.sales { padding:0 10px 5px 10px; background-color: #ffffff; color: #ff483a; font-size: 12px; line-height: 14px;}
+/*.sales li.quota span { display: block; float: left; font-size: 1em; color: #29ac0e; }
+.sales li span .quota_btn { padding: 0.12em 0.375em; color: #ffffff; background-color: #29ac0e; font-size: 0.833em; margin-right: 0.5em; }
+.sales_c { color: #29ac0e; }*/
 .standard{ font-size: 1em; padding-top: 5px;}
 .standard .title { line-height: 33px; color: #333333; display: block;}
 .standard li span.border .cur { border: 1px #29ac0e solid; background-color: #29ac0e; position: relative; display: block; float: left; color: #ffffff; }
