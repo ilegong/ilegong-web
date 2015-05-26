@@ -1345,6 +1345,11 @@ $(document).ready(function () {
 	});
 	$('a[name="btn_quick_buy"]').on('click',function(e){
 		e.preventDefault();
+        if (!$('.sure_btn').attr('value')){
+            $('.xq_standard_layer,.tipslayer_bg').show();
+            $('#button-status').attr('data-status','3');
+            return;
+        }
 		var $this = $(this);
 		if ($this.hasClass('cart_btn_soldout')) {
 			utils.alert('已售完');

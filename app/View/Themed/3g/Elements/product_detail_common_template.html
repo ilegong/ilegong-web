@@ -76,7 +76,10 @@
             }else if(button_status == 3){
                 $('#btn_quick_buy').trigger('click');
             }else{
-                return false;
+                if($('#btn_add_cart').length>0){
+                    return false;
+                }
+                $('#btn_quick_buy').trigger('click');
             }
         });
     });
