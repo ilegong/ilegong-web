@@ -30,15 +30,7 @@
                         <li class="fl price"><span>秒杀价￥<font>{{$this->Number->precision(($product_try['ProductTry']['price'])/100,2)}}</font></span></li>
                         <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{$product_try['ProductTry']['consignment_date']}}</b></span></a></li>
                     </ul>
-                    {{if $Product['Product']['promote_name']}}
-                        <ul class="sales clearfix">
-                            <li>
-                                <span style="display: block;overflow: hidden;">
-                                    <span>{{$Product['Product']['promote_name']}}<br></span>
-                                </span>
-                            </li>
-                        </ul>
-                    {{/if}}
+                    
                     <div class="tuan_bar">
                         <div>已秒杀<span  value="{{$sold_num}}">{{$sold_num}}</span>份</div>
                         <div class="bar">
@@ -127,11 +119,6 @@
                         </ul>
                         <div class="shop_service">本商品由[<strong>{{$brand['Brand']['name']}}</strong>]发货并提供售后服务。</div>
                     </div>
-                    <ul class="clearfix shop_entrance" style="color: #29AC0E;padding: 4px 0.8em 5px 0.8em;" onclick="to_brand();">
-                        <li class="fl"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0"></li>
-                        <li class="fl" style="color: #333333;">{{$brand['Brand']['name']}}</li>
-                        <li class="fr" style="margin-top: 0.3em;height: 1.634em;"><a class="p_more"></a></li>
-                    </ul>
 
                     <div class="all_line" style="margin-bottom: 0;">
                         <ul class="clearfix title">
