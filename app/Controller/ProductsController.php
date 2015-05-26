@@ -136,7 +136,7 @@ class ProductsController extends AppController{
         parent::view($slug,$fields);
         $pid = $this->current_data_id;
         $currUid = $this->currentUser['id'];
-        $this->calculate_price_limitation($pid, $currUid);
+        //$this->calculate_price_limitation($pid, $currUid);
         if ($this->is_weixin()) {
             $this->prepare_wx_sharing($currUid, $pid);
         }
@@ -188,7 +188,7 @@ class ProductsController extends AppController{
         $this->set('back_flag',$back_flag);
         $pid = $this->current_data_id;
         $currUid = $this->currentUser['id'];
-        $this->calculate_price_limitation($pid, $currUid);
+        //$this->calculate_price_limitation($pid, $currUid);
         if ($this->is_weixin()) {
             $this->prepare_wx_sharing($currUid, $pid);
         }
