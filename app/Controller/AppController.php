@@ -736,5 +736,10 @@ class AppController extends Controller {
         }
         $this->set('history',$history);
     }
+
+    protected function setTraceFromData($type,$data_id){
+        $this->set('from',$type);
+        $this->set('data_id',$data_id);
+    }
 }
 ?>

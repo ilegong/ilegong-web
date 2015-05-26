@@ -61,6 +61,7 @@ class TuanBuyingsController extends AppController{
         $this->set_product_comment_recommed($pid);
         $this->set_weixin_share_data($tryId,'tryid');
         $this->set('hideNav',true);
+        $this->setTraceFromData('sec',$tryId);
     }
 
     public function detail($tuan_buy_id){
@@ -92,6 +93,7 @@ class TuanBuyingsController extends AppController{
         }
         $this->set('hideNav',true);
         $this->set_weixin_share_data($pid);
+        $this->setTraceFromData('tuan_buy',$tuan_buy_id);
     }
 
     private function set_weixin_share_data($data_id,$data_type='pid'){
@@ -699,23 +701,7 @@ class TuanBuyingsController extends AppController{
         echo json_encode($res);
     }
 
-    function product_detail($pid){
-        if(empty($pid)){
-            return;
-        }
-        $tuan_buy_id = $_REQUEST['tuan_buy_id'];
-        $fields = array('id','slug','name','content','created');
-        $this->loadModel('Product');
-        $Product =$this->Product->find('first', array(
-            'conditions' => array('id' => $pid),
-            'fields' => $fields
-        ));
-        $this->pageTitle = mb_substr($Product['Product']['name'],0,13);
-        $this->set('pid',$pid);
-        $this->set('tuan_buy_id',$tuan_buy_id);
-        $this->set('Product',$Product);
-        $this->set('hideNav',true);
-    }
+
     public function goods(){
         $this->pageTitle = '团购商品';
         $currentDate = date(FORMAT_DATETIME);

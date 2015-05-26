@@ -414,7 +414,7 @@ class ProductsController extends AppController{
         if($this->is_weixin()){
             $this->prepare_wx_sharing($currUid, $pid);
         }
-
+        $this->setTraceFromData('product',$pid);
     }
 
     /**
@@ -517,10 +517,6 @@ class ProductsController extends AppController{
     function guess_product_detail(){
         $this->pageTitle = '商品详情';
         $this->set('hideNav',true);
-    }
-
-    function setTraceFromData($type,$data_id){
-
     }
 
     function setFrom(){
