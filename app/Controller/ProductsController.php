@@ -185,6 +185,9 @@ class ProductsController extends AppController{
                 $back_flag = 'tuan';
             }
         }
+        if(!empty($_REQUEST['init_count'])){
+            $this->set('limitCommentCount',$_REQUEST['init_count']);
+        }
         $this->set('back_flag',$back_flag);
         $pid = $this->current_data_id;
         $currUid = $this->currentUser['id'];

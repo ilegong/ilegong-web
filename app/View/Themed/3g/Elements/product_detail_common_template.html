@@ -1,0 +1,83 @@
+<script>
+    function to_brand(){
+        window.location.href="{{$this->Html->url('/b/'.$brand['Brand']['slug'])}}";
+    }
+    function to_shichi(){
+        window.location.href="/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}";
+    }
+    function to_comment(){
+        window.location.href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}&tuan_id={{$tuan_id}}&tuan_buy_id={{$tuan_buy_id}}";
+    }
+    function to_detail(){
+        window.location.href="/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}&from=tuan&tuan_buy_id={{$tuan_buy_id}}";
+    }
+    $(document).ready(function(){
+        $('#view_all_comments').on('click',function(){
+            to_comment();
+        });
+        var product_content =  $('#product-content');
+        var try_href = "/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}";
+        var comment_href = "/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}&init_count=5";
+        var detail_href = "/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}";
+        var try_html = $.ajax({url:try_href,async:false}).responseText;
+        var comment_html = $.ajax({url:comment_href,async:false}).responseText;
+        var detail_html = $.ajax({url:detail_href,async:false}).responseText;
+        product_content.append(detail_html);
+        var all_comment_count = $('#all_comment_count');
+        var comment_count = parseInt(all_comment_count.text());
+        $('.more a').attr('href',detail_href);
+        set_container();
+        $('#product-detail').on('click',function(){
+            set_cur_border($(this));
+            set_content_href(detail_html,detail_href,'查看更多详情');
+            set_container();
+        });
+        $('#product-try').on('click',function(){
+            set_cur_border($(this));
+            set_content_href(try_html,try_href,'查看更多评论');
+            set_container();
+        });
+        $('#product-comment').on('click',function(){
+            if(comment_count>0){
+                set_cur_border($(this));
+                set_content_href(comment_html,comment_href,'查看更多评论');
+                set_container();
+            }
+        });
+        function set_cur_border(element){
+            $('li').removeClass('cur_border');
+            element.addClass('cur_border');
+        }
+        function set_content_href(element,href,string){
+            $('#product-content').empty().append(element);
+            $('.more a').attr('href',href).empty().append(string)
+        }
+        function set_container(){
+            $('.container-detail,.container-comment').css('margin-top',0);
+        }
+        function set_dialog_show(){
+            $('.xq_standard_layer,.tipslayer_bg').show();
+        }
+        function set_dialog_hide(){
+            $('.xq_standard_layer,.tipslayer_bg').hide();
+        }
+        $('.standard_bg').on('click',function(){
+            set_dialog_show();
+        });
+        $('.close_btn').on('click',function(){
+            set_dialog_hide();
+        });
+        $('.sure_btn').on('click',function(){
+            $(this).attr('value','true');
+            set_dialog_hide();
+            var button_status = $('#button-status').attr('data-status');
+            if (button_status == 2){
+                $('#btn_add_cart').trigger('click');
+            }else if(button_status == 3){
+                $('#btn_quick_buy').trigger('click');
+            }else{
+                return false;
+            }
+        });
+    });
+</script>

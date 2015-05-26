@@ -157,57 +157,7 @@
                     </div>
                 </div>
             </div>
-            <script>
-                function to_brand(){
-                    window.location.href="/b/{{$brand['Brand']['slug']}}";
-                }
-                function to_detail(){
-                    window.location.href="/tuan_buyings/product_detail/{{$current_data_id}}?tuan_id={{$tuan_id}}&tuan_buy_id={{$tuan_buy_id}}";
-                }
-                function to_comment(){
-                    window.location.href="/products/product_comments/{{$Product['Product']['slug']}}.html?from=tuan&tuan_buy_id={{$tuan_buy_id}}";
-                }
-
-                $(document).ready(function(){
-                    $('#view_all_comments').on('click',function(){
-                        to_comment();
-                    });
-                    var comment_href ="/products/product_comments/{{$Product['Product']['slug']}}.html?from=tuan&tuan_buy_id={{$tuan_buy_id}}";
-                    var detail_href = "/tuan_buyings/product_detail/{{$current_data_id}}?tuan_id={{$tuan_id}}&tuan_buy_id={{$tuan_buy_id}}";
-                    var comment_html = $.ajax({url:comment_href,async:false}).responseText;
-                    var detail_html = $.ajax({url:detail_href,async:false}).responseText;
-                    $('#product-content').append(detail_html);
-                    $('.more a').attr('href',detail_href);
-                    var all_comment_count = $('#all_comment_count');
-                    var comment_count = parseInt(all_comment_count.text());
-                    set_container();
-                    $('span.spec_item:not(.spec_item_selected)').children('div').toggleClass('hidden');
-                    $('[way-label]:not(.tuan_way_selected)').children('div').toggleClass('hidden');
-                    $('#product-detail').on('click',function(){
-                        set_cur_border($(this));
-                        set_content_href(detail_html,detail_href,'查看更多详情');
-                        set_container();
-                    });
-                    $('#product-comment').on('click',function(){
-                        if(comment_count>0){
-                            set_cur_border($(this));
-                            set_content_href(comment_html,comment_href,'查看更多评论');
-                            set_container();
-                        }
-                    });
-                    function set_cur_border(element){
-                        $('li').removeClass('cur_border');
-                        element.addClass('cur_border');
-                    }
-                    function set_content_href(element,href,string){
-                        $('#product-content').empty().append(element);
-                        $('.more a').attr('href',href).empty().append(string)
-                    }
-                    function set_container(){
-                        $('.container-detail,.container-comment').css('margin-top',0);
-                    }
-                });
-            </script>
+            {{template Elements/product_detail_common_template}}
         </div>
         <hr>
     </div>
