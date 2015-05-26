@@ -720,5 +720,21 @@ class AppController extends Controller {
         }
         $this->set('hasOfferBrandIds', $hasOfferBrandIds);
     }
+
+    protected function setHistory(){
+        $history = $_REQUEST['history'];
+        if(!$history){
+            $history ='/';
+        }
+        if(!(strpos($history,WX_HOST)>=0)){
+            $history='/';
+        }
+        if($history=='/'){
+            if($_REQUEST['tagId']){
+                $history=$history.'?tagId='.$_REQUEST['tagId'];
+            }
+        }
+        $this->set('history',$history);
+    }
 }
 ?>

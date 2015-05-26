@@ -1,5 +1,5 @@
 <div class="classlist_v2" style="z-index:1">
-    <ul class="clearfix" onclick="back({{if $from_tuan_list}}'tuan_list'{{else}}'back'{{/if}})">
+    <ul class="clearfix" onclick="back('{{$from}}')">
         <li><a class="back"></a></li>
         <li class="line"></li>
         <li style="text-overflow: ellipsis;"><strong><?php echo mb_substr($Product['Product']['name'],0,13); ?></strong></li>
@@ -31,17 +31,9 @@
     </ul>
 </div>
 {{/if}}
-<script>
-    function back(flag){
-        if (flag == 'buy') {
-            window.location.href = "{{url_colored(url_append(product_link2($Product), 'history', $history), 'h5.product_de.buy')}}";
-        } else if (flag == 'back') {
-            window.location.href = "{{url_colored(url_append(product_link2($Product), 'history', $history), 'h5.product_de.back')}}";
-        }else if(flag =='tuan_list'){
-            window.location.href = "{{url_colored(url_append(product_tuan_list_link($Product), 'history', $history), 'h5.product_de.back')}}";
-        }
-    }
-</script>
+
+{{template Elements/product_detail_comment_template}}
+
 {{if $jWeixinOn}}
 {{$this->element('wx_share_product', array(
 'share_string' => $share_string,

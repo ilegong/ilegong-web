@@ -1,0 +1,37 @@
+<div class="bottom_bg">
+    <ul class="clearfix">
+        <li class="love fl">
+            <a href="#X" class="love_icon"></a>
+            <!--<p>关注</p>-->
+        </li>
+        <li class="fl" style="width:80%;">
+            <div style="margin-left:20%;">
+                <a onclick="back('{{$from}}')" class="btn_b pay_bg radius10">
+                    {{if $from=='sec'}}
+                        去秒杀
+                    {{elseif $from=='product'}}
+                        去购买
+                    {{elseif $from=='tuan_buy'}}
+                        去购买
+                    {{else}}
+                        返回
+                    {{/if}}
+                </a>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<script>
+    function back(flag){
+        if (flag == 'product') {
+            window.location.href = "{{url_colored(url_append(product_link($data_id), 'history', $history), 'h5.product_de.buy')}}";
+        } else if (flag == 'tuan_buy') {
+            window.location.href = "{{url_colored(url_append('/tuan_buyings/detail/'.$data_id, 'history', $history), 'h5.product_de.buy')}}";
+        }else if(flag =='sec'){
+            window.location.href = "{{url_colored(url_append('/tuan_buyings/sec_detail/'.$data_id, 'history', $history), 'h5.product_de.buy')}}";
+        }else{
+            window.history.back();
+        }
+    }
+</script>

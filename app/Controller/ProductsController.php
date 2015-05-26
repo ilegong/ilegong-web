@@ -82,7 +82,7 @@ class ProductsController extends AppController{
             'fields'=>array('id','name','price','published','coverimg'),
         ));
 
-            $page_navi = getPageLinks($total, $pagesize, '/products/mine', $page);
+        $page_navi = getPageLinks($total, $pagesize, '/products/mine', $page);
         $this->set('datalist',$datalist);
         $this->set('page_navi', $page_navi);
     }
@@ -140,12 +140,7 @@ class ProductsController extends AppController{
         if ($this->is_weixin()) {
             $this->prepare_wx_sharing($currUid, $pid);
         }
-        $from = $_REQUEST['from'];
-        if(!empty($from)){
-            if($from=='tuan_list'){
-                $this->set('from_tuan_list',true);
-            }
-        }
+        $this->setFrom();
     }
 
     function view_shichi_comment($slug){
@@ -176,19 +171,10 @@ class ProductsController extends AppController{
         $fields = array('id','slug','name','content','created');
         $this->set('hideNav',true);
         parent::view($slug,$fields);
-        $from = $_REQUEST['from'];
-        $back_flag = 'back';
-        if(!empty($from)){
-            if($from=='tuan'){
-                $tb_id = $_REQUEST['tuan_buy_id'];
-                $this->set('tuan_buy_id',$tb_id);
-                $back_flag = 'tuan';
-            }
-        }
+        $this->setFrom();
         if(!empty($_REQUEST['init_count'])){
             $this->set('limitCommentCount',$_REQUEST['init_count']);
         }
-        $this->set('back_flag',$back_flag);
         $pid = $this->current_data_id;
         $currUid = $this->currentUser['id'];
         //$this->calculate_price_limitation($pid, $currUid);
@@ -428,6 +414,7 @@ class ProductsController extends AppController{
         if($this->is_weixin()){
             $this->prepare_wx_sharing($currUid, $pid);
         }
+
     }
 
     /**
@@ -532,21 +519,21 @@ class ProductsController extends AppController{
         $this->set('hideNav',true);
     }
 
-    function setHistory(){
-        $history = $_REQUEST['history'];
-        if(!$history){
-            $history ='/';
-        }
-        if(!(strpos($history,WX_HOST)>=0)){
-            $history='/';
-        }
-        if($history=='/'){
-            if($_REQUEST['tagId']){
-                $history=$history.'?tagId='.$_REQUEST['tagId'];
-            }
-        }
-        $this->set('history',$history);
+    function setTraceFromData($type,$data_id){
+
     }
+
+    function setFrom(){
+        $from = $_REQUEST['from'];
+        if(!empty($from)){
+            $this->set('from',$from);
+        }
+        $data_id = $_REQUEST['data_id'];
+        if(!empty($data_id)){
+            $this->set('data_id',$data_id);
+        }
+    }
+
 
     /**
      * @param $currUid

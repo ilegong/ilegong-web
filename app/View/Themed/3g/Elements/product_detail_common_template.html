@@ -6,10 +6,10 @@
         window.location.href="/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}";
     }
     function to_comment(){
-        window.location.href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}&tuan_id={{$tuan_id}}&tuan_buy_id={{$tuan_buy_id}}";
+        window.location.href="/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}&from={{from}}&data_id={{$data_id}}";
     }
     function to_detail(){
-        window.location.href="/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}&from=tuan&tuan_buy_id={{$tuan_buy_id}}";
+        window.location.href="/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}&from={{from}}&data_id={{$data_id}}";
     }
     $(document).ready(function(){
         $('#view_all_comments').on('click',function(){
@@ -17,7 +17,7 @@
         });
         var product_content =  $('#product-content');
         var try_href = "/{{$category_control_name}}/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}";
-        var comment_href = "/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}&init_count=5";
+        var comment_href = "/{{$category_control_name}}/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}&init_count=3";
         var detail_href = "/{{$category_control_name}}/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}";
         var try_html = $.ajax({url:try_href,async:false}).responseText;
         var comment_html = $.ajax({url:comment_href,async:false}).responseText;
