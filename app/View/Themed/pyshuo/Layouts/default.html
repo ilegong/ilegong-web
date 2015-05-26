@@ -16,7 +16,7 @@
     {{$this->Html->script(array('html5.js', 'respond.js/1.4.2/respond.min.js'))}}
     <![endif]-->
     {{$this->Html->meta('icon', '/favicon.ico?v2')}}
-    {{$this->Html->css(array('http://'.WX_HOST.'/css/bootstrap_2.css',));}}
+    {{$this->Html->css(array('http://'.WX_HOST.'/css/common-lib/bootstrap_2.css',));}}
     <style>
         @media (min-width: 1200px) {
             .container {
@@ -97,10 +97,6 @@
     <![endif]-->
     <!--[if lte IE 8]>
         {{$this->Html->css(array('ie-patch/ie78.css'))}}
-    <![endif]-->
-    <!--[if lt IE 7]>
-    {{$this->Html->script(array('js/iealert/iealert.js'))}}
-    {{$this->Html->css(array('js/iealert/style.css',));}}
     <![endif]-->
     <script type="text/javascript">
         var BASEURL = "{{APP_SUB_DIR}}";
