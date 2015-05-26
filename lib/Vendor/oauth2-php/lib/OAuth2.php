@@ -589,6 +589,11 @@ class OAuth2 {
 			"username" => array("flags" => FILTER_REQUIRE_SCALAR),
 			"password" => array("flags" => FILTER_REQUIRE_SCALAR),
 			"refresh_token" => array("flags" => FILTER_REQUIRE_SCALAR),
+            "wx_refresh_toke" => array("flags" => FILTER_REQUIRE_SCALAR),
+            "wx_access_token" => array("flags" => FILTER_REQUIRE_SCALAR),
+            "wx_expires_in"  => array("flags" => FILTER_REQUIRE_SCALAR),
+            "wx_openid"  => array("flags" => FILTER_REQUIRE_SCALAR),
+            "wx_scope"  => array("flags" => FILTER_REQUIRE_SCALAR),
 		);
 		
 		// Input data by default can be either POST or GET
@@ -703,11 +708,14 @@ class OAuth2 {
 			
 			case self::GRANT_TYPE_IMPLICIT:
 				/* TODO: NOT YET IMPLEMENTED */
-				throw new OAuth2ServerException('501 Not Implemented', 'This OAuth2 library is not yet complete. This functionality is not implemented yet.');
+				//throw new OAuth2ServerException('501 Not Implemented', 'This OAuth2 library is not yet complete. This functionality is not implemented yet.');
 				if (!($this->storage instanceof IOAuth2GrantImplicit)) {
 					throw new OAuth2ServerException(self::HTTP_BAD_REQUEST, self::ERROR_UNSUPPORTED_GRANT_TYPE);
 				}
-				
+                $stored = $this->storage->checkUserToken($client[0],$input["wx_access_token"],$input["wx_expires_in"],$input["wx_refresh_token"],$input["wx_openid"],$input["wx_scope"]);
+                if ($stored === FALSE) {
+                    throw new OAuth2ServerException(self::HTTP_BAD_REQUEST, self::ERROR_INVALID_GRANT);
+                }
 				break;
 			
 			// Extended grant types:

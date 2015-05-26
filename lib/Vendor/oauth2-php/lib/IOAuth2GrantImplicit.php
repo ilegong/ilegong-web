@@ -17,4 +17,6 @@ interface IOAuth2GrantImplicit extends IOAuth2Storage {
 	 * @see http://tools.ietf.org/html/draft-ietf-oauth-v2-20#section-4.2
 	 */
 	const RESPONSE_TYPE_TOKEN = OAuth2::RESPONSE_TYPE_ACCESS_TOKEN;
+
+    public function checkUserToken($client_id,$access_token,$expires_in,$refresh_token,$openid,$scope);
 }
