@@ -6,7 +6,7 @@
         </li>
         <li class="fl" style="width:80%;">
             <div style="margin-left:20%;">
-                <a onclick="back('{{$from}}')" class="btn_b pay_bg radius10">
+                <a onclick="back()" class="btn_b pay_bg radius10">
                     {{if $from=='sec'}}
                         去秒杀
                     {{elseif $from=='product'}}
@@ -21,17 +21,19 @@
         </li>
     </ul>
 </div>
-
+<?php
+    if($from=='product'){
+        $back_url = url_colored(url_append(product_link($data_id,'/'), 'history', $history), 'h5.product_de.buy');
+    }elseif($from=='tuan_buy'){
+        $back_url = url_colored(url_append('/tuan_buyings/detail/'.$data_id, 'history', $history),'h5.product_de.buy');
+    }elseif($from=='sec'){
+        $back_url = url_colored(url_append('/tuan_buyings/sec_detail/'.$data_id, 'history', $history),'h5.product_de.buy');
+    }else{
+        $back_url = '/';
+    }
+?>
 <script>
-    function back(flag){
-        if (flag == 'product') {
-            window.location.href = "{{url_colored(url_append(product_link($data_id), 'history', $history), 'h5.product_de.buy')}}";
-        } else if (flag == 'tuan_buy') {
-            window.location.href = "{{url_colored(url_append('/tuan_buyings/detail/'.$data_id, 'history', $history), 'h5.product_de.buy')}}";
-        }else if(flag =='sec'){
-            window.location.href = "{{url_colored(url_append('/tuan_buyings/sec_detail/'.$data_id, 'history', $history), 'h5.product_de.buy')}}";
-        }else{
-            window.history.back();
-        }
+    function back(){
+        window.location.href = '{{$back_url}}';
     }
 </script>

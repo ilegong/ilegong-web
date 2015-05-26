@@ -1,5 +1,5 @@
 <div class="classlist_v2" style="z-index:1">
-    <ul class="clearfix" onclick="back('{{$from}}')">
+    <ul class="clearfix" onclick="back()">
         <li><a class="back"></a></li>
         <li class="line"></li>
         <li style="text-overflow: ellipsis;"><strong><?php echo mb_substr($Product['Product']['name'],0,13); ?></strong></li>
@@ -12,25 +12,6 @@
     </div>
 </div>
 
-{{if !$from_tuan_list}}
-<div class="bottom_bg">
-    <ul class="clearfix">
-        <li class="love fl">
-            <a href="#X" class="love_icon"></a>
-            <!--<p>关注</p>-->
-        </li>
-        <li class="fl" style="width:78%;">
-            <div>
-                <a onclick="back('buy')" class="btn_b pay_bg radius10">去购买</a>
-            </div>
-        </li>
-        <li class="shopping fr">
-            <a href="/carts/listcart.html" style="position:relative; margin-top: 0.3em;" class="shopping_icon"><div id="item-count" class="shopping_count"></div></a>
-            <p>购物车</p>
-        </li>
-    </ul>
-</div>
-{{/if}}
 
 {{template Elements/product_detail_comment_template}}
 

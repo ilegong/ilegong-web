@@ -62,6 +62,7 @@ class TuanBuyingsController extends AppController{
         $this->set_weixin_share_data($tryId,'tryid');
         $this->set('hideNav',true);
         $this->setTraceFromData('sec',$tryId);
+        $this->setHistory();
     }
 
     public function detail($tuan_buy_id){
@@ -94,6 +95,7 @@ class TuanBuyingsController extends AppController{
         $this->set('hideNav',true);
         $this->set_weixin_share_data($pid);
         $this->setTraceFromData('tuan_buy',$tuan_buy_id);
+        $this->setHistory();
     }
 
     private function set_weixin_share_data($data_id,$data_type='pid'){
