@@ -61,9 +61,9 @@
                     <div class="all_line">
                         <ul class="clearfix title">
                             <li class="fl cur_border" style="width: 50%;" id="product-detail">图文详情</li>
-                            <li class="fl" style="width: 50%;" id="product-comment"{{if $comment_count>5}}{{/if}}>口碑评论<span>{{$comment_count}}</span></li>
+                            <li class="fl" style="width: 50%;" id="product-comment"{{if $comment_count>5}}{{/if}}>口碑评论<span id="all_comment_count">{{$comment_count}}</span></li>
                         </ul>
-                        <div id="product-content" style="height: 300px; overflow:scroll; border-bottom: 1px #eeeeee solid;"></div>
+                        <div id="product-content" style="height: 300px; overflow:hidden; border-bottom: 1px #eeeeee solid;"></div>
                         <div class="more"><a href="#">查看更多详情</a></div>
                     </div>
                     <div class="shop_entrance_bg" style="margin-bottom: 0px;">
@@ -236,6 +236,8 @@
                     $('#product-content').append(detail_html);
                     $('.more a').attr('href',detail_href);
                     set_container();
+                    var all_comment_count = $('#all_comment_count');
+                    var comment_count = parseInt(all_comment_count.text());
                     $('span.spec_item:not(.spec_item_selected)').children('div').toggleClass('hidden');
                     $('[way-label]:not(.tuan_way_selected)').children('div').toggleClass('hidden');
                     $('#product-detail').on('click',function(){
@@ -244,9 +246,11 @@
                         set_container();
                     });
                     $('#product-comment').on('click',function(){
-                        set_cur_border($(this));
-                        set_content_href(comment_html,comment_href,'查看更多评论');
-                        set_container();
+                        if(comment_count>0){
+                            set_cur_border($(this));
+                            set_content_href(comment_html,comment_href,'查看更多评论');
+                            set_container();
+                        }
                     });
                     function set_cur_border(element){
                         $('li').removeClass('cur_border');

@@ -50,7 +50,7 @@
                 <!--{{if $is_product_has_shichi}}-->
                 <!--<li class="fl cur_border" style="width: 50%;" id="product-try">试吃报告</li>-->
                 <!--{{/if}}-->
-                <li class="fl" style="width: 50%;" id="product-comment"{{if $comment_count>5}}{{/if}}>口碑评论<span>{{$Product['Product']['comment_nums']}}</span></li>
+                <li class="fl" style="width: 50%;" id="product-comment"{{if $comment_count>5}}{{/if}}>口碑评论<span id="all_comment_count">{{$Product['Product']['comment_nums']}}</span></li>
             </ul>
             <div id="product-content" style="height: 300px; overflow:hidden; border-bottom: 1px #eeeeee solid;"></div>
             <div class="more"><a href="#">查看更多详情</a></div>
@@ -216,6 +216,8 @@
         var comment_html = $.ajax({url:comment_href,async:false}).responseText;
         var detail_html = $.ajax({url:detail_href,async:false}).responseText;
         product_content.append(detail_html);
+        var all_comment_count = $('#all_comment_count');
+        var comment_count = parseInt(all_comment_count.text());
         $('.more a').attr('href',detail_href);
         set_container();
         $('#product-detail').on('click',function(){
@@ -229,9 +231,11 @@
             set_container();
         });
         $('#product-comment').on('click',function(){
-            set_cur_border($(this));
-            set_content_href(comment_html,comment_href,'查看更多评论');
-            set_container();
+            if(comment_count>0){
+                set_cur_border($(this));
+                set_content_href(comment_html,comment_href,'查看更多评论');
+                set_container();
+            }
         });
         function set_cur_border(element){
             $('li').removeClass('cur_border');
