@@ -343,6 +343,7 @@ class TuanBuyingsController extends AppController{
                 return;
             }
             $this->set('tuan_id', $tuan_id);
+            $this->loadModel('OfflineStore');
             $offline_store = $this->OfflineStore->findById($team['TuanTeam']['offline_store_id']);
             $this->set('can_mark_address',$this->can_mark_address($offline_store));
             $this->set('tuan_address', get_address($team,$offline_store));
