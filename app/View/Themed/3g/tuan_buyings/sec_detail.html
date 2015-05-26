@@ -49,29 +49,21 @@
                             </a>
                         </div>
                     {{/if}}
-                    <ul class="standard clearfix">
-                        <li class="good-spec">
-                            <span class="gray title mr12" style="float:left;">秒杀规格:</span>
-                            <span class="border" style="display: block;overflow: hidden;padding-bottom: 10px;">
-                                <span try-spec-label="" class="mr12 border spec_item_selected cur">
-                                    {{$product_try['ProductTry']['spec']}}
-                                    <div class="focus"></div>
+                    <a class="standard_bg clearfix">
+                        <strong class="red">规格: {{$product_try['ProductTry']['spec']}}，送货: {{$product_try['ProductTry']['consignment_date']}}</strong>
+                        <ul class="clearfix standard">
+                            <li>
+                                <span class="gray title mr12" style="float:left;">物流:</span>
+                                <span class="border">
+                                    <span way-label="" class="mr12 border cur tuan_way_selected">
+                                        自提
+                                        <div class="focus"></div>
+                                    </span>
                                 </span>
-                            </span>
-                        </li>
-                    </ul>
+                            </li>
+                        </ul>
+                    </a>
 
-                    <ul class="standard clearfix">
-                        <li>
-                            <span class="gray title mr12" style="float:left;">送货日期:</span>
-                            <span class="border" style="display: block;overflow: hidden;">
-                                <span class="mr12 border spec_item_selected cur" item-label="SD">
-                                    {{$product_try['ProductTry']['consignment_date']}}
-                                    <div class="focus"></div>
-                                </span>
-                            </span>
-                        </li>
-                    </ul>
                     {{if $tuan_team}}
                         <div class="clearfix tuanxq" style="margin-top: -1px;">
                             <span class="fl">详细地址：{{$tuan_address}}</span>
@@ -79,29 +71,7 @@
                                 <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
                             </a>
                         </div>
-                    {{else}}
-                        <ul class="standard clearfix">
-                            <li>
-                                <span class="gray title mr12" style="float:left;">快递方式:</span>
-                                    <span class="border">
-                                        <span way-label="" class="mr12 border cur tuan_way_selected">
-                                            自提
-                                            <div class="focus"></div>
-                                        </span>
-                                    </span>
-                            </li>
-                        </ul>
                     {{/if}}
-                    <ul class="numbers clearfix b_line">
-                        <li class="fl">
-                            <span class="gray title mr12" style="float:left;">数量:</span>
-                            <span class="clearfix" style="display: block;overflow: hidden;">
-                                <div id="pamount_not_r" class="grew">-</div>
-                                <input id="input_pamount"  item-id="{{$current_data_id}}" size="3" value="1" class="num" name="shoppingnum" type="text" readonly/>
-                                <div id="pamount_not_a" class="grew">+</div>
-                            </span>
-                        </li>
-                    </ul>
 
                     <div class="all_line">
                         <ul class="clearfix title">

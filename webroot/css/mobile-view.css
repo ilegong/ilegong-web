@@ -150,6 +150,10 @@ ul li{ list-style:none;}
 .numbers li span .num { border: 0; border-top: 1px #dddddd solid; border-bottom: 1px #dddddd solid; position: relative; display: block; float: left; color: #333333; width: 3em; text-align: center; padding: 0 12px; line-height: 38px;}
 .numbers li span .grew { display: block; font-size: 16px; text-decoration: none; color: #333333; background-color: #eee; display: block; float: left; border: 1px #dddddd solid; color: #333333;text-align: center; padding: 0 12px; line-height: 38px;}
 
+.red{ color: #CC0000; line-height: 30px; font-size: 16px; display: block;}
+.standard_bg .cur { display: block; border: 1px #29ac0e solid; background-color: #29ac0e; position: relative; display: block; float: left; color: #ffffff; }
+
+
 .service {
     font-size: 1em;
     background-color: #ffffff;
