@@ -43,8 +43,9 @@ class AppController extends Controller {
             header('location:' . substr($_SERVER['REQUEST_URI'], 10));
             exit;
         }
-        $request->webroot = '/';  // webroot目录直接放在根目录
-        
+        if($request){
+            $request->webroot = '/';  // webroot目录直接放在根目录
+        }
         parent::__construct($request, $response);
         $this->_international();
         if (!empty($this->uses) && !in_array($this->modelClass, $this->uses)) {
