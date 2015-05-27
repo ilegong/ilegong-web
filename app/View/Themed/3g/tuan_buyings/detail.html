@@ -397,7 +397,9 @@
                             }
                         } else {
                             utils.alert(data.error,function(){
-                                window.location.reload();
+                                //window.location.reload();
+                                $('.xq_standard_layer,.tipslayer_bg').show();
+                                return false;
                             });
                         }
                     },
