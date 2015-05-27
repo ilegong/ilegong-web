@@ -20,6 +20,7 @@
             </div><!-- /input-group -->
         </div><!-- /.col-lg-6 -->
     </div><!-- /.row -->
+    <br/>
     <table class="table table-striped table-bordered table-condensed table-hover table-clickable">
         <thead>
         <tr>
@@ -42,7 +43,7 @@
         ?>
         <tr class="tuan-product" data-product-id="{{$tuanProduct['product_id']}}">
             <td class="id">{{$tuanProduct['id']}}</td>
-            <td class="name">
+            <td class="alias">
                 {{$tuanProduct['alias']}}(
                 {{if $tuan_buyings_count[$tuanProduct['product_id']] > 0}}
               <span class="text-success">
@@ -53,7 +54,7 @@
                 {{/if}}
                 )
             </td>
-            <td>{{$tuanProduct['product_id']}}({{$product['name']}},
+            <td class="name">{{$tuanProduct['product_id']}}({{$product['name']}},
                 {{if $product['published'] == 1}}已下架{{else}}<strong class="text-danger">未下架</strong>{{/if}}
                 {{if $product['deleted'] == 1}}, <strong class="text-danger">已删除</strong>{{/if}})
             </td>
