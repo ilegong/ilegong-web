@@ -8,8 +8,20 @@
       <a class="btn btn-primary" href="/manage/admin/tuan_products/new">添加团购商品</a>
     </li>
 </ul>
-<table class="table table-striped table-bordered table-condensed table-hover table-clickable">
-    <thead>
+
+<div id="tuan_products">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                <input type="text" class="form-control search" placeholder="查询商品">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">查询</button>
+      </span>
+            </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+    </div><!-- /.row -->
+    <table class="table table-striped table-bordered table-condensed table-hover table-clickable">
+        <thead>
         <tr>
             <th>id</th>
             <th>团购别名</th>
@@ -21,29 +33,29 @@
             <th>详情图片</th>
             <th>操作</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody class="list">
         {{loop $tuan_products $item}}
         <?php
           $tuanProduct = $item['TuanProduct'];
           $product = $products[$tuanProduct['product_id']];
         ?>
         <tr class="tuan-product" data-product-id="{{$tuanProduct['product_id']}}">
-            <td>{{$tuanProduct['id']}}</td>
-            <td>
-              {{$tuanProduct['alias']}}(
-              {{if $tuan_buyings_count[$tuanProduct['product_id']] > 0}}
+            <td class="id">{{$tuanProduct['id']}}</td>
+            <td class="name">
+                {{$tuanProduct['alias']}}(
+                {{if $tuan_buyings_count[$tuanProduct['product_id']] > 0}}
               <span class="text-success">
                 <a href="/manage/admin/tuan_buyings/index?product_id={{$tuanProduct['product_id']}}">{{$tuan_buyings_count[$tuanProduct['product_id']]}}个团购</a>
               </span>
-              {{else}}
+                {{else}}
                 <a href="/manage/admin/tuan_buyings/index?product_id={{$tuanProduct['product_id']}}">无进行中的团购</a>
-              {{/if}}
-              )
+                {{/if}}
+                )
             </td>
             <td>{{$tuanProduct['product_id']}}({{$product['name']}},
-              {{if $product['published'] == 1}}已下架{{else}}<strong class="text-danger">未下架</strong>{{/if}}
-              {{if $product['deleted'] == 1}}, <strong class="text-danger">已删除</strong>{{/if}})
+                {{if $product['published'] == 1}}已下架{{else}}<strong class="text-danger">未下架</strong>{{/if}}
+                {{if $product['deleted'] == 1}}, <strong class="text-danger">已删除</strong>{{/if}})
             </td>
             <td>
                 <strong class="text-warning">{{$tuanProduct['tuan_price']}}</strong>
@@ -51,11 +63,11 @@
             </td>
             <td>
                 {{if $tuanProduct['consignment_type'] == 0}}
-                  团满发货
+                团满发货
                 {{elseif $tuanProduct['consignment_type'] == 1}}
-                  团满准备发货
+                团满准备发货
                 {{elseif $tuanProduct['consignment_type'] == 2}}
-                  排期
+                排期
                 {{else}}
                 {{/if}}
             </td>
@@ -70,7 +82,7 @@
             </td>
         </tr>
         {{/loop}}
-    </tbody>
-</table>
-
-{{$this->Html->script(array('manage/tuan_products/index.js','/js/manage/wx_msg/push_wx_msg.js'));}}
+        </tbody>
+    </table>
+</div>
+{{$this->Html->script(array('/js/manage-lib/list.min.js','manage/tuan_products/index.js','/js/manage/wx_msg/push_wx_msg.js'));}}
