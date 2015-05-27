@@ -113,11 +113,6 @@ $('#confirm_next').on('click',function(e){
     var remarkAddress = $("input[name='consignee_remark_address']").val()||"";
     var address = $("input[name='consignee_address']").val() || choseAddress.text();
     var $remark_address = $('#remark_address');
-    if(address.trim()){
-        if(remarkAddress){
-            address = address + '['+remarkAddress+']';
-        }
-    }
     var name = $("input[name='consignee_name']").val();
     var mobile = $("input[name='consignee_mobilephone']").val().replace(/\s+$/,"");
     if (addressInput != "not" && address == "") {
@@ -147,6 +142,8 @@ $('#confirm_next').on('click',function(e){
             e.preventDefault();
             return false;
         }
+    }else{
+        $remark_address = null;
     }
 
     var cart_id = $("input[name='shopCart']").data("id") || false;
