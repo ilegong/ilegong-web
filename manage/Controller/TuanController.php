@@ -200,7 +200,7 @@ class TuanController extends AppController
                 array('Cart.send_date is null','Order.type in (5,6)'),
                 array("Order.consignee_id = 0", "Order.consignee_address = ''"),
                 array("Order.type = 1", "Order.ship_mark !=''"),
-                'Order.pay_time  is null',
+                array('Order.pay_time  is null','Order.ship_mark != "sfdf"'),
                 array('Order.ship_mark = "ziti"','Order.consignee_id = 0','Order.type in (5,6)'),
                 array('Order.ship_mark = "kuaidi"','Order.consignee_id !=0','Order.type in (5,6)'),
             )
@@ -666,7 +666,7 @@ class TuanController extends AppController
     }
 
     public function _query_abnormal_order(){
-        $abnormal_order_count = $this->Order->query('select count(o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where ((c.send_date is null and o.type in (5,6)) or (o.consignee_id = 0 and o.consignee_address = "") or (o.type = 1 and o.ship_mark != "") or o.pay_time is null or (o.ship_mark = "ziti" and o.consignee_id = 0 and o.type in (5,6)) or (o.ship_mark = "kuaidi" and o.consignee_id !=0 and o.type in (5,6))) and o.type in (1,5,6) and o.status in (1,2) and DATE(o.created) > "'.date('Y-m-d', strtotime('-62 days')).'"');
+        $abnormal_order_count = $this->Order->query('select count(o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where ((c.send_date is null and o.type in (5,6)) or (o.consignee_id = 0 and o.consignee_address = "") or (o.type = 1 and o.ship_mark != "") or (o.pay_time is null and o.ship_mark != "sfdf") or (o.ship_mark = "ziti" and o.consignee_id = 0 and o.type in (5,6)) or (o.ship_mark = "kuaidi" and o.consignee_id !=0 and o.type in (5,6))) and o.type in (1,5,6) and o.status in (1,2) and DATE(o.created) > "'.date('Y-m-d', strtotime('-62 days')).'"');
        $this->log('count'.json_encode($abnormal_order_count));
         return $abnormal_order_count[0][0]['ct'];
     }
