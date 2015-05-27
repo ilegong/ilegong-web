@@ -99,9 +99,9 @@ class SharingController extends AppController{
                         $updated = $this->SharedSlice->updateAll(array('accept_user' => $uid, 'accept_time' => '\'' . addslashes($now) . '\''),
                             array('id' => $slice['SharedSlice']['id'], 'accept_user' => 0));
                         if($updated && $this->SharedSlice->getAffectedRows() == 1) {
-                            if($sharedOffer['SharedOffer']['share_offer_id'] == 41){ //朋友说指定商品优惠券
+                            if($sharedOffer['SharedOffer']['share_offer_id'] == 44){ //朋友说指定商品优惠券
                                 $couponId = $this->CouponItem->add_coupon_type($brandNames[$brandId], 0, $now, $valid_end, $slice['SharedSlice']['number'], PUBLISH_YES,
-                                    COUPON_TYPE_TYPE_SHARE_OFFER, $uid, COUPON_STATUS_VALID, 862);//指定商品id
+                                    COUPON_TYPE_TYPE_SHARE_OFFER, $uid, COUPON_STATUS_VALID, 883);//指定商品id
                             }else{
                                 $couponId = $this->CouponItem->add_coupon_type($brandNames[$brandId], $brandId, $now, $valid_end, $slice['SharedSlice']['number'], PUBLISH_YES,
                                     COUPON_TYPE_TYPE_SHARE_OFFER, $uid, COUPON_STATUS_VALID);
