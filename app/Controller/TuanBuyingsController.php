@@ -611,13 +611,13 @@ class TuanBuyingsController extends AppController{
             if($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN||$global_sec=='true'){
                 if(!empty($shipSetting)){
                     if(strpos($way, ZITI_TAG)===false){
-                        //ziti ship fee 0
+                        //not ziti product
                         $shipFee = intval($shipSetting['ProductShipSetting']['ship_val'])/100;
                         if($shipFee > 0){
                             $total_price = $total_price+$shipFee;
                         }
                         //user custom address
-                        $this->update_tuan_consignees_address($uid,$name,$mobile,$remark_address,$p_address);
+                        $shop_id = $this->update_tuan_consignees_address($uid,$name,$mobile,$remark_address,$p_address);
                         $address = $p_address;
                         if(!empty($remark_address)){
                             $address = $address.'['.$remark_address.']';
@@ -642,7 +642,8 @@ class TuanBuyingsController extends AppController{
             }else{
                 //small tuan
                 $address = get_address($tuan_info, $offline_store);
-                $this->update_tuan_consignees_address($uid,$name,$mobile,$remark_address,$address);
+                $this->update_ziti_consigness_address($offline_store, $name, $mobile, $uid, $address, $remark_address);
+                //$this->update_tuan_consignees_address($uid,$name,$mobile,$remark_address,$address);
                 if(!empty($remark_address)){
                     $address = $address.'['.$remark_address.']';
                 }
@@ -868,7 +869,11 @@ class TuanBuyingsController extends AppController{
         $ziti_consignees['id'] = $old_ziti_consignees['OrderConsignees']['id'];
         $ziti_consignees['ziti_id'] = $offline_store['OfflineStore']['id'];
         $ziti_consignees['ziti_type'] = $offline_store['OfflineStore']['type'];
-        $this->OrderConsignees->save($ziti_consignees);
+
+        if($this->OrderConsignees->save($ziti_consignees)){
+            return $this->OrderConsignees->id;
+        }
+
     }
 
     private function get_ship_setting($way_id,$data_id,$type){
