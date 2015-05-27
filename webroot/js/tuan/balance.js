@@ -143,7 +143,7 @@ $('#confirm_next').on('click',function(e){
             return false;
         }
     }else{
-        $remark_address = null;
+        remarkAddress = '';
     }
 
     var cart_id = $("input[name='shopCart']").data("id") || false;
