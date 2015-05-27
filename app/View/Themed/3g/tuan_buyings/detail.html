@@ -426,8 +426,8 @@
         var share_string = '{{$share_string ? $share_string :"0"}}';
         var to_timeline_title = "{{$Product['Product']['name']}}"+"--{{$tuan_team['TuanTeam']['tuan_name']}}"+"@朋友说";
         var to_friend_title = "{{$Product['Product']['name']}}"+"--{{$tuan_team['TuanTeam']['tuan_name']}}"+"@朋友说";
-        var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
-        var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
+        var to_friend_link = 'http://51daifan.sinaapp.com/tuan_buyings/detail/{{$tuan_buy_id}}?trstr='+ share_string + '&share_type=appMsg';
+        var to_timeline_link ='http://51daifan.sinaapp.com/tuan_buyings/detail/{{$tuan_buy_id}}?trstr='+ share_string + '&share_type=timeline';
         var imgUrl = "{{$Product['Product']['coverimg']}}";
         var desc = "{{$Product['Product']['promote_name']}}！";
         wx.onMenuShareAppMessage({
