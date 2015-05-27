@@ -887,11 +887,22 @@ class TuanBuyingsController extends AppController{
         if(empty($shipSetting)||(TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type'])==ZITI_TAG)){
             $ziti_consignee_info = $this->OrderConsignees->find('first', array(
                 'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN_ZITI),
-                'fields' => array('area', 'ziti_id','address','ziti_type','name', 'mobilephone','remark_address')
+                'fields' => array('area', 'ziti_id','address','ziti_type','name', 'mobilephone','remark_address','id')
             ));
             if($ziti_consignee_info){
                 if(empty($shipSetting)||($shipSetting['ProductShipSetting']['ship_val']==-1)||($shipSetting['ProductShipSetting']['ship_val']==$ziti_consignee_info['OrderConsignees']['ziti_type'])){
-                    $this->set('ziti_consignee_info',$ziti_consignee_info['OrderConsignees']);
+                    $this->loadModel('OfflineStore');
+                    $offlineStore = $this->OfflineStore->find('first',array(
+                        'conditions' => array(
+                            'id' => $ziti_consignee_info['OrderConsignees']['ziti_id'],
+                            'deleted' => DELETED_NO
+                        )
+                    ));
+                    if(!empty($offlineStore)){
+                        $this->set('ziti_consignee_info',$ziti_consignee_info['OrderConsignees']);
+                    }else{
+                        $this->OrderConsignees->delete($ziti_consignee_info['OrderConsignees']['id']);
+                    }
                 }
             }
         }
