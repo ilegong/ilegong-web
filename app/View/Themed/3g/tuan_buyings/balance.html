@@ -25,7 +25,6 @@
             <h1>收货人信息</h1>
             <label><input type="text" name="consignee_name" placeholder="收货人姓名" value="{{$consignee_info['name']}}" /></label>
             <label><input type="text" name="consignee_mobilephone" placeholder="手机号" value="{{$consignee_info['mobilephone']}}" /></label>
-            <label id="remark_address" {{if !$can_mark_address}}style="display: none;"{{/if}}><input type="text" name="consignee_remark_address" placeholder="小区-楼号-门牌(送货上门)" {{if $can_mark_address}}value="{{$consignee_info['remark_address']}}"{{/if}} /></label>
         </div>
     {{/if}}
     <div class="cart" style="margin-top: 0; padding-top: 0;">
@@ -71,7 +70,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="/js/tuan/balance.js?v11.4" async="async"></script>
+<script type="text/javascript" src="/js/tuan/balance.js?v11.5" async="async"></script>
 
 
 

@@ -136,13 +136,13 @@ $('#confirm_next').on('click',function(e){
         return false;
     }
 
-    if($remark_address.css('display') != 'none'){
-        if(!remarkAddress.trim()){
+    if ($remark_address.length > 0 && ($remark_address.css('display') != 'none')) {
+        if (!remarkAddress.trim()) {
             utils.alert("请填写备注地址");
             e.preventDefault();
             return false;
         }
-    }else{
+    } else {
         remarkAddress = '';
     }
 
