@@ -36,7 +36,7 @@ $location = $offline_store['OfflineStore']['location_long'].','.$offline_store['
 <div class="tuandetail_seckill clearfix">
     <?php $i = 0; foreach($tryings as $trying) {
         if ($i++>=2) {break;} ?>
-        <span><img src="{{$this->Html->assetUrl(small_thumb_link($trying['image']))}}"/></span>
+        <span><img src="{{$this->Html->assetUrl(small_thumb_link($trying['Product']['listimg']))}}"/></span>
         <span>
             <h1>{{$trying['ProductTry']['product_name']}} {{$trying['ProductTry']['spec']}}</h1>
             <em>秒杀价：<strong>¥{{$this->Number->precision(calculate_try_price($trying['ProductTry']['price']),

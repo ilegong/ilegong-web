@@ -889,22 +889,12 @@ class CategoriesController extends AppController {
     private function _get_seckill_products(){
         $this->loadModel('Product');
         $this->loadModel('ProductTry');
-        $this->loadModel('TuanProduct');
         $tryings = $this->ProductTry->find_global_trying();
         $this->log('tryings: '.json_encode($tryings));
         if (!empty($tryings)) {
             $trying_result = array();
             $try_pids = Hash::extract($tryings, '{n}.ProductTry.product_id');
-            $t_products = $this->TuanProduct->find('all',array(
-                'conditions' => array(
-                    'product_id' => $try_pids
-                )
-            ));
-            $this->log('tuan products: '.json_encode($t_products));
-
-            $t_products = Hash::combine($t_products,'{n}.TuanProduct.product_id','{n}.TuanProduct');
             $this->log('try pids: '.json_encode($try_pids));
-
             $tryProducts = $this->Product->find_products_by_ids($try_pids, array(), false);
             $this->log('try products: '.json_encode($tryProducts));
 
@@ -914,7 +904,6 @@ class CategoriesController extends AppController {
                     $prod = $tryProducts[$pid];
                     if (!empty($prod)) {
                         $trying['Product'] = $prod;
-                        $trying['image'] = $t_products[$pid]['list_img'];
                         $trying_result[] = $trying;
                     } else {
                         unset($trying);
