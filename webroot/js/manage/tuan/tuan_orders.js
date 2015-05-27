@@ -519,7 +519,7 @@ $(document).ready(function () {
         e.preventDefault();
         var tableIds = [];
         var tableNames = [];
-        var ignoreRows = [0,3,4,10,11,12,17,23];
+        var ignoreRows = [0,3,4,10,11,12,17,26];
         $('table.orders').each(function (index,item) {
             tableIds.push($(item).attr('id'));
             tableNames.push($(item).data('table-name'));

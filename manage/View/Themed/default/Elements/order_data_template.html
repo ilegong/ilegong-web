@@ -22,6 +22,7 @@
         <td>收件人</td>
         <td>团队名称</td>
         <td>收件地址</td>
+        <td>备注地址</td>
         <td>电话</td>
         <td>支付方式</td>
         <td>交易号</td>
@@ -136,6 +137,9 @@
                     </td>
                     <td>
                         {{if $order['Order']['consignee_area']}}{{$order['Order']['consignee_area']}},{{$order['Order']['consignee_address']}}{{else}}{{$order['Order']['consignee_address']}}{{/if}}
+                    </td>
+                    <td>
+                        {{$order['Order']['remark_address']}}
                     </td>
                     <td>{{$order['Order']['consignee_mobilephone']}}</td>
                     <td>
