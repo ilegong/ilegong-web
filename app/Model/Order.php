@@ -58,7 +58,7 @@ class Order extends AppModel {
 
         }
     }
-    public function createTuanOrder($memberId, $uid, $fee, $product_id, $type = ORDER_TYPE_TUAN, $area='', $address='', $mobile='', $name='', $cart_id, $ship_mark, $shop_id=0) {
+    public function createTuanOrder($memberId, $uid, $fee, $product_id, $type = ORDER_TYPE_TUAN, $area='', $address='',$remark_address='', $mobile='', $name='', $cart_id, $ship_mark, $shop_id=0) {
         if ($type != ORDER_TYPE_TUAN && $type != ORDER_TYPE_TUAN_SEC) {
             throw new CakeException("error order type:".$type);
         }
@@ -80,6 +80,7 @@ class Order extends AppModel {
                 'consignee_area' => $area,
                 'consignee_name' => $name,
                 'consignee_address' => $address,
+                'remark_address' => $remark_address,
                 'consignee_mobilephone' => $mobile,
                 'ship_mark' => $ship_mark,
                 'status' => ORDER_STATUS_WAITING_PAY
@@ -98,6 +99,7 @@ class Order extends AppModel {
                 'consignee_area' => $area,
                 'consignee_name' => $name,
                 'consignee_address' => $address,
+                'remark_address' => $remark_address,
                 'consignee_mobilephone' => $mobile,
                 'ship_mark' => $ship_mark,
                 'status' => ORDER_STATUS_WAITING_PAY

@@ -657,9 +657,9 @@ class TuanBuyingsController extends AppController{
 
             if($tuan_sec=='true'){
                 //remark order sec kill
-                $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way,$shop_id);
+                $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $remark_address, $mobile, $name, $cart_id, $way,$shop_id);
             }else{
-                $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, $shop_id);
+                $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $remark_address, $mobile, $name, $cart_id, $way, $shop_id);
             }
             $order_id = $order['Order']['id'];
             $score_consumed = 0;
