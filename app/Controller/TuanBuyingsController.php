@@ -649,10 +649,11 @@ class TuanBuyingsController extends AppController{
                 if(empty($address)){
                     $this->log("post address is empty ".$tuan_id);
                 }
+                if(!empty($offline_store)){
+                    $shop_id = $offline_store['OfflineStore']['id'];
+                }
             }
-            if(!empty($offline_store)){
-                $shop_id = $offline_store['OfflineStore']['id'];
-            }
+
             if($tuan_sec=='true'){
                 //remark order sec kill
                 $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way,$shop_id);
