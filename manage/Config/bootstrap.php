@@ -22,9 +22,21 @@ const WX_OAUTH_USERINFO = 'snsapi_userinfo';
 const WX_OAUTH_BASE = 'snsapi_base';
 
 const ADD_SCORE_TUAN_LEADER=99;
+
+const ORDER_STATUS_WAITING_PAY=0; //待支付
 const ORDER_STATUS_PAID=1; // 已支付
 const ORDER_STATUS_SHIPPED=2; // 已发货
+const ORDER_STATUS_RECEIVED=3; //已确认收货
+const ORDER_STATUS_RETURN_MONEY=4; //已退款
+const ORDER_STATUS_DONE=9; //已完成
+const ORDER_STATUS_CANCEL=10; //已取消
+const ORDER_STATUS_CONFIRMED=11; //已确认有效，不要再用
+const ORDER_STATUS_TOUSU=12; //已投诉， 不要再用，投诉走其他流程
+const ORDER_STATUS_COMMENT=16; //待评价
+const ORDER_STATUS_RETURNING_MONEY=14;//退款中
+
 const ORDER_TUANGOU=5;
+
 
 const OFFLINE_STORE_HAOLINJU=0;
 const OFFLINE_STORE_PYS=1;
