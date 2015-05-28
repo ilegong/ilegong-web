@@ -54,8 +54,8 @@ var tablesToExcel = (function() {
                 }
                 rowsXML += '</Row>'
             }
-            rowsXML +='<Row>';
             for(row_tag in statisticsData){
+                rowsXML +='<Row>';
                 var item_data = statisticsData[row_tag];
                 ctx = {  attributeStyleID: ''
                     , nameType: 'String'
@@ -63,8 +63,8 @@ var tablesToExcel = (function() {
                     , attributeFormula: ''
                 };
                 rowsXML += format(tmplCellXML, ctx);
+                rowsXML +='</Row>';
             }
-            rowsXML +='</Row>';
             ctx = {rows: rowsXML, nameWS: wsnames[i] || 'Sheet' + i};
             worksheetsXML += format(tmplWorksheetXML, ctx);
             rowsXML = "";
