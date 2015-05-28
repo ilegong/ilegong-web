@@ -76,11 +76,12 @@
 {{$this->Html->script(array('/js/tuan/balance.js?v11.6'));}}
 <script>
     var zitiAddressData = zitiAddress('{{$ship_val}}');
-    $(document).ready(function(){
-        var bigBuy = zitiObj(zitiAddressData.getBeijingAreas, $(window).height() + 5,$(window).width());
+        $(document).ready(function(){
+        var bigBuy = zitiObj(zitiAddressData.getBeijingAreas,zitiAddressData.getChangpingAreas,$(window).height() + 5,$(window).width());
         var elements = bigBuy.generateZitiArea();
         $(".conordertuan_adress").html(elements);
         bigBuy.bindThickbox();
+        bigBuy.bindChildAddress();
         var $chose_address = $('#chose_address');
         var $area_id = $chose_address.data('areaId');
         if($area_id){
