@@ -138,7 +138,7 @@ $('#confirm_next').on('click',function(e){
 
     if ($remark_address.length > 0 && ($remark_address.css('display') != 'none')) {
         if (!remarkAddress.trim()) {
-            utils.alert("请填写备注地址");
+            utils.alert("请填写详细地址");
             e.preventDefault();
             return false;
         }

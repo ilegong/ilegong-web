@@ -91,6 +91,7 @@ class ShortmessagesController extends AppController {
         $shareOfferId = $store_offer['ShareOffer']['id'];
         $toShareNum = $store_offer['ShareOffer']['avg_number'] * 8;
         $this->loadModel('SharedOffer');
+        //separate red packet
         if(!$this->SharedOffer->hasAny(array('uid' => $uid, 'share_offer_id'=>$shareOfferId))){
             $this->ShareOffer->add_shared_slices($uid,$shareOfferId,$toShareNum);
             $this->Weixin->send_packet_received_message($uid, 100, $store_offer['ShareOffer']['name']);
