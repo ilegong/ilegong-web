@@ -77,7 +77,7 @@
         </form>
     </div>
     <div id="byProduct" class="tab-pane">
-        <strong class="text-danger lead">团、秒、普通商品均可</strong>
+        <strong class="text-danger lead">按商品（团、秒）、发货时间查询</strong>
 
         <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_product" data-noajax="true">
             <div style="padding-bottom: 10px;padding-top: 10px;">
@@ -130,7 +130,7 @@
                 <input type="text" class="form-control offline-store-search" placeholder="搜索自提点"
                        data-search-for="offline-store">
             </div>
-            <strong class="text-danger lead">查询团购订单，秒杀订单</strong>
+            <strong class="text-danger lead">按自提点、发货时间查询</strong>
             <div style="padding-bottom: 10px;padding-top: 10px;">
                 <div class="form-group">
                     <select class="form-control offline_store search-label" name="store_id" id="offline-store" data-value="{{$store_id}}">
@@ -166,16 +166,16 @@
         </form>
     </div>
     <div id="emptySendDate" class="tab-pane">
-        <strong class="text-danger lead">只能查询团购、秒杀，2个月以内，待发货的订单</strong>
+        <strong class="text-danger lead">2个月以内的异常订单，请及时清零</strong>
     </div>
     <div id="b2cPaidNotSend" class="tab-pane">
-        <strong class="text-danger lead">B2C，到了发货时间，仍未发货的订单</strong>
+        <strong class="text-danger lead">B2C未发货的订单，请及时清零</strong>
     </div>
     <div id="c2cPaidNotSend" class="tab-pane">
-        <strong class="text-danger lead">C2C，昨日以前支付，仍未发货的订单</strong>
+        <strong class="text-danger lead">C2C未发货的订单，请及时清零</strong>
     </div>
     <div id="ordersToday" class="tab-pane">
-        <strong class="text-danger lead">查看每天的支付订单（团、秒、普通），默认今天</strong>
+        <strong class="text-danger lead">按支付时间，查看某天的订单（团、秒、普通）</strong>
 
       <form class="form-inline" method="post" action="/manage/admin/tuan/query_orders_today" data-noajax="true">
         <div style="padding-bottom: 10px;padding-top: 10px;">
