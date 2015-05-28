@@ -16,11 +16,24 @@ var tablesToExcel = (function() {
         var workbookXML = "";
         var worksheetsXML = "";
         var rowsXML = "";
-
         for (var i = 0; i < tables.length; i++) {
+            var statisticsData = {};
             if (!tables[i].nodeType) tables[i] = document.getElementById(tables[i]);
             for (var j = 0; j < tables[i].rows.length; j++) {
-                rowsXML += '<Row>'
+                if(j!=0){
+                    var p_s_id = tables[i].rows[j].getAttribute('data-mark-tag');
+                    var p_s_name = tables[i].rows[j].getAttribute('data-mark-tag-name');
+                    var p_s_num = tables[i].rows[j].getAttribute('data-mark-tag-num');
+                    if (statisticsData[p_s_id]) {
+                        statisticsData[p_s_id]['num'] =parseInt(statisticsData[p_s_id]['num'])+parseInt(p_s_num);
+                    } else {
+                        statisticsData[p_s_id] = {
+                            'name': p_s_name,
+                            'num': p_s_num
+                        };
+                    }
+                }
+                rowsXML += '<Row>';
                 for (var k = 0; k < tables[i].rows[j].cells.length; k++) {
                     if(ignoreRows.indexOf(k)>=0){
                         continue;
@@ -41,9 +54,21 @@ var tablesToExcel = (function() {
                 }
                 rowsXML += '</Row>'
             }
+            rowsXML +='<Row>';
+            for(row_tag in statisticsData){
+                var item_data = statisticsData[row_tag];
+                ctx = {  attributeStyleID: ''
+                    , nameType: 'String'
+                    , data: item_data['name']+':'+item_data['num']
+                    , attributeFormula: ''
+                };
+                rowsXML += format(tmplCellXML, ctx);
+            }
+            rowsXML +='</Row>';
             ctx = {rows: rowsXML, nameWS: wsnames[i] || 'Sheet' + i};
             worksheetsXML += format(tmplWorksheetXML, ctx);
             rowsXML = "";
+
         }
 
         ctx = {created: (new Date()).getTime(), worksheets: worksheetsXML};
