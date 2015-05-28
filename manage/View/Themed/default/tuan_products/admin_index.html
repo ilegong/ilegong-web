@@ -78,7 +78,7 @@
             <td>
                 <a class="btn btn-primary margin-right-10" href="/manage/admin/tuan_products/edit/{{$tuanProduct['id']}}" role="button">编辑</a>
                 <a class="btn btn-info" href="/manage/admin/ship_setting/view/{{$tuanProduct['product_id']}}/Product?name={{$tuanProduct['alias']}}" target="_blank" role="button">发货方式</a>
-                <a class="btn btn-warning send-wx-msg" data-id="{{$tuanProduct['id']}}" data-type="1">推送消息</a>
+                <a class="btn btn-warning send-wx-msg" data-id="{{$tuanProduct['id']}}" data-type="0">推送消息</a>
                 <a class="btn btn-danger" href="/manage/admin/tuan_products/delete/{{$tuanProduct['id']}}" role="button">删除</a>
             </td>
         </tr>
