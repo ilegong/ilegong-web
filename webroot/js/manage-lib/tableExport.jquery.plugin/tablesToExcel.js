@@ -24,12 +24,15 @@ var tablesToExcel = (function() {
                     var p_s_id = tables[i].rows[j].getAttribute('data-mark-tag');
                     var p_s_name = tables[i].rows[j].getAttribute('data-mark-tag-name');
                     var p_s_num = tables[i].rows[j].getAttribute('data-mark-tag-num');
+                    //data-mark-tag-spec
+                    var s_name = tables[i].rows[j].getAttribute('data-mark-tag-spec');
                     if (statisticsData[p_s_id]) {
                         statisticsData[p_s_id]['num'] =parseInt(statisticsData[p_s_id]['num'])+parseInt(p_s_num);
                     } else {
                         statisticsData[p_s_id] = {
                             'name': p_s_name,
-                            'num': p_s_num
+                            'num': p_s_num,
+                            'specName':s_name
                         };
                     }
                 }
@@ -59,7 +62,20 @@ var tablesToExcel = (function() {
                 var item_data = statisticsData[row_tag];
                 ctx = {  attributeStyleID: ''
                     , nameType: 'String'
-                    , data: item_data['name']+':'+item_data['num']
+                    , data: item_data['name']
+                    , attributeFormula: ''
+                };
+                rowsXML += format(tmplCellXML, ctx);
+                //item_data['num']
+                ctx = {  attributeStyleID: ''
+                    , nameType: 'String'
+                    , data: item_data['specName']
+                    , attributeFormula: ''
+                };
+                rowsXML += format(tmplCellXML, ctx);
+                ctx = {  attributeStyleID: ''
+                    , nameType: 'String'
+                    , data: item_data['num']
                     , attributeFormula: ''
                 };
                 rowsXML += format(tmplCellXML, ctx);
