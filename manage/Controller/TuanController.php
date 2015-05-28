@@ -197,16 +197,17 @@ class TuanController extends AppController
     public function admin_query_abnormal_order(){
         $conditions = array(
             'OR' => array(
-                array('Cart.send_date is null','Order.type in (5,6)'),
-                array("Order.consignee_id = 0", "Order.consignee_address = ''"),
-                array("Order.type = 1", "Order.ship_mark !=''"),
-                array('Order.pay_time  is null','Order.ship_mark != "sfdf"'),
-                array('Order.ship_mark = "ziti"','Order.consignee_id = 0','Order.type in (5,6)'),
-                array('Order.ship_mark = "kuaidi"','Order.consignee_id !=0','Order.type in (5,6)'),
+                array('Cart.send_date is null','Order.type in (5,6)'),    // 无发货时间
+                array("Order.consignee_id = 0", "Order.consignee_address = ''"), // 无自提点，送货地址为空
+                array("Order.type = 1", "Order.ship_mark !=''"),  // C2C，但是有配送方式
+                array('Order.pay_time  is null', 'Order.ship_mark != "sfdf"'), // 非顺丰到付，但无付款时间
+                array('Order.ship_mark = ""', 'Order.type in (5,6)'), // 团、秒，无配送方式
+                array('Order.ship_mark = "ziti"','Order.consignee_id = 0'), // 自提，无自提点
+                // 自提点不支持送货上门，但是有备注地址
             )
         );
         $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC,ORDER_TYPE_DEF);
-        $conditions['Order.status'] = array(ORDER_STATUS_PAID,ORDER_STATUS_SHIPPED);
+        $conditions['Order.status'] = array(ORDER_STATUS_PAID,ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
         $conditions['DATE(Order.created) > '] = date('Y-m-d', strtotime('-62 days'));
         $this->_query_orders($conditions, 'Order.created DESC');
         $this->set('query_type', 'abnormalOrder');
@@ -666,7 +667,15 @@ class TuanController extends AppController
     }
 
     public function _query_abnormal_order(){
-        $abnormal_order_count = $this->Order->query('select count(o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where ((c.send_date is null and o.type in (5,6)) or (o.consignee_id = 0 and o.consignee_address = "") or (o.type = 1 and o.ship_mark != "") or (o.pay_time is null and o.ship_mark != "sfdf") or (o.ship_mark = "ziti" and o.consignee_id = 0 and o.type in (5,6)) or (o.ship_mark = "kuaidi" and o.consignee_id !=0 and o.type in (5,6))) and o.type in (1,5,6) and o.status in (1,2) and DATE(o.created) > "'.date('Y-m-d', strtotime('-62 days')).'"');
+        $abnormal_order_count = $this->Order->query('select count(o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where
+            (
+                (c.send_date is null and o.type in (5,6))
+                or (o.consignee_id = 0 and o.consignee_address = "")
+                or (o.type = 1 and o.ship_mark != "")
+                or (o.pay_time is null and o.ship_mark != "sfdf")
+                or (o.ship_mark = "" and o.type in (5,6))
+                or (o.ship_mark = "ziti" and o.consignee_id = 0)
+            ) and o.type in (1,5,6) and o.status in (1,2,3,4,14) and DATE(o.created) > "'.date('Y-m-d', strtotime('-62 days')).'"');
        $this->log('count'.json_encode($abnormal_order_count));
         return $abnormal_order_count[0][0]['ct'];
     }

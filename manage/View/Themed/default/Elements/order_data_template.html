@@ -31,10 +31,11 @@
     </tr>
         {{loop $current_orders $order}}
             <?php
+              $has_paid = $order['Order']['status']!=0 && $order['Order']['status']!=10;
               $tuan_buying = $tuan_buys[$order['Order']['member_id']];
               $tuan_team = $tuan_teams[$tuan_buying['tuan_id']];
               $offline_store = array();
-              if($order['Order']['type'] == 5 || $order['Order']['type'] == 6 || !empty($order['Order']['ship_mark'])){
+              if($order['Order']['type'] == 5 || $order['Order']['type'] == 6 || $order['Order']['ship_mark'] == 'ziti'){
                 $offline_store = $offline_stores[$order['Order']['consignee_id']];
               }
             ?>
@@ -92,7 +93,7 @@
                     <td data-value="{{$order['Order']['total_all_price']}}">{{if $index == 0}}{{$order['Order']['total_all_price']}}{{else}}'同上'{{/if}}</td>
                     <td>{{$order['Order']['applied_score'] / 100}}</td>
                     <td>{{$order['Order']['created']}}</td>
-                    <td {{if $order['Order']['status']!=0 && $order['Order']['pay_time']==null}}class="danger"{{/if}}>{{$order['Order']['pay_time']}}</td>
+                    <td {{if $has_paid && $order['Order']['pay_time']==null}}class="danger"{{/if}}>{{$order['Order']['pay_time']}}</td>
                     <td>
                         {{if $order['Order']['type'] == 5}}
                         团购
@@ -103,10 +104,10 @@
                         {{/if}}
                     </td>
                     {{if $order['Order']['type'] == 5 || $order['Order']['type'] == 6}}
-                        <td {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store)) || ($order['Order']['ship_mark']!='ziti' && !empty($offline_store))}}class="danger"{{/if}}>
+                        <td {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store))}}class="danger"{{/if}}>
                         {{$offline_store['OfflineStore']['alias']}}
                         </td>
-                        <td {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store)) || ($order['Order']['ship_mark']!='ziti' && !empty($offline_store))}}class="danger"{{/if}}>
+                        <td {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store))}}class="danger"{{/if}}>
                         {{if $order['Order']['ship_mark']=='ziti'}}
                         自提
                         {{elseif $order['Order']['ship_mark']=='sfby'}}
@@ -125,7 +126,7 @@
                         {{$cart['Cart']['send_date']}}
                         </td>
                     {{else}}
-                        <td {{if !empty($offline_store)}}class="danger"{{/if}}>{{$offline_store['OfflineStore']['alias']}}</td>
+                        <td>{{$offline_store['OfflineStore']['alias']}}</td>
                         <td>{{$order['Order']['ship_mark']}}</td>
                         <td>{{if $order['Order']['ship_type']}}{{$ship_type[$order['Order']['ship_type']]}}{{/if}}</td>
                         <td>{{$order['Order']['ship_code']}}</td>
@@ -138,18 +139,18 @@
                     <td>
                         {{if $order['Order']['consignee_area']}}{{$order['Order']['consignee_area']}},{{$order['Order']['consignee_address']}}{{else}}{{$order['Order']['consignee_address']}}{{/if}}
                     </td>
-                    <td>
+                    <td {{if !empty($order['Order']['remark_address']) && (empty($offline_store) || ( !empty($offline_store) && !$offline_store['OfflineStore']['can_remark_address']))}} class="danger"{{/if}}>
                         {{$order['Order']['remark_address']}}
                     </td>
                     <td>{{$order['Order']['consignee_mobilephone']}}</td>
-                    <td>
+                    <td {{if $has_paid && $order['Order']['trade_type']==null}}class="danger"{{/if}}>
                         {{if $order['Pay']['trade_type']=='JSAPI'}}
                         微信支付
                         {{elseif $order['Pay']['trade_type']=='ZFB'}}
                         支付宝
                         {{/if}}
                     </td>
-                    <td>
+                    <td {{if $has_paid && $order['Pay']['out_trade_no']==null}}class="danger"{{/if}}>
                         {{$order['Pay']['out_trade_no']}}
                     </td>
                     <td>
