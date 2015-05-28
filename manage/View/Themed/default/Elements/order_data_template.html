@@ -143,7 +143,7 @@
                         {{$order['Order']['remark_address']}}
                     </td>
                     <td>{{$order['Order']['consignee_mobilephone']}}</td>
-                    <td {{if $has_paid && $order['Order']['trade_type']==null}}class="danger"{{/if}}>
+                    <td {{if $has_paid && $order['Pay']['trade_type']==null}}class="danger"{{/if}}>
                         {{if $order['Pay']['trade_type']=='JSAPI'}}
                         微信支付
                         {{elseif $order['Pay']['trade_type']=='ZFB'}}
