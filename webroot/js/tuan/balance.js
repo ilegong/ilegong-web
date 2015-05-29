@@ -22,40 +22,21 @@ function zitiAddress(type){
         110115:"大兴区",
         110112:"通州区"
     };
-    var changpingArea = {
-        900001:"昌平县城",
-        900002:"天通苑",
-        900003:"回龙观",
-        900004:"北七家镇",
-        900005:"沙河镇",
-        900006:"立水桥",
-        900007:"霍营"
-    };
     //崇文并入东城区， 宣武并入西城区
     var ship_address = {};
     var area = [];
-    var child_address = {};
     $.getJSON('/tuan_buyings/get_offline_address?type='+type,function(data){
-        ship_address = data.address;
-        child_address = data.child_address;
-        $.each(ship_address,function(index,item){
-            $("[area-id="+index+"]").show().addClass('parent_area');
-        });
-        $.each(child_address,function(index,item){
-           $("[area-id="+index+"]").addClass('children_area');
+        ship_address = data;
+        $.each(data,function(index,item){
+            $("[area-id="+index+"]").show();
         });
     });
     var getShipAddress = function(areaId){
         return ship_address[areaId];
     };
-    var getShipChildAddress = function(areaId){
-        return child_address[areaId];
-    };
     return {
         getBeijingAreas: beijingArea,
-        getShipAddress: getShipAddress,
-        getShipChildAddress:getShipChildAddress,
-        getChangpingAreas:changpingArea
+        getShipAddress: getShipAddress
     }
 };
 function editCartNum(id, num) {
@@ -221,20 +202,13 @@ $('#confirm_next').on('click',function(e){
     });
 });
 
-var zitiObj = function(area,child_area,height, width){
+var zitiObj = function(area,height, width){
     var conorder_url = '#TB_inline?inlineId=hiddenModalContent&modal=true&height=' + height + '&width=' + width;
     var choose_area='';
     return {
         generateZitiArea: function(){
             for(var addr in area){
-                if (addr == 110114){
-                choose_area += '<ul><li><a style="display: none" href="#" class="child_area" area-id="' +addr + '">' + area[addr] + '</a></li> </ul>';
-                }else{
                 choose_area += '<ul><li><a style="display: none" href="'+ conorder_url +'" class="thickbox" area-id="' +addr + '">' + area[addr] + '</a></li> </ul>';
-                }
-            }
-            for(var add in child_area){
-                choose_area += '<ul><li><a style="display: none" href="'+ conorder_url +'" class="thickbox" parent-id ="110114" area-id="' +add + '">' + child_area[add] + '</a></li> </ul>';
             }
             return choose_area;
         },
@@ -242,39 +216,17 @@ var zitiObj = function(area,child_area,height, width){
             $(".thickbox").each(function(){
                 var that = $(this);
                 that.on("click", function(e){
-                    $('.thickbox,.child_area,.parent_area').not(that).removeClass("cur");
+                    $('.thickbox').not(that).removeClass("cur");
                     var area_id = $(this).attr("area-id");
-                    var parent_id = $(this).attr('parent-id');
-                    setData(area_id,parent_id);
+                    setData(area_id);
                     that.addClass("cur");
                 })
             });
-        },
-        initChildAddress : function(){
-            var self = this;
-            $('.child_area').each(function () {
-                var that = $(this);
-                that.on('click', function () {
-                    $('.child_area,.thickbox').not(that).removeClass('cur').hide();
-                    $('.children_area').show();
-                    that.html('其他市区').removeClass('child_area').addClass('cur').bind('click', function () {
-                        $('.child_area,.thickbox,.children_area').not(that).removeClass('cur').hide();
-                        that.html('昌平区').addClass('child_area');
-                        $('.parent_area').show();
-                        self.initChildAddress();
-
-                    });
-                });
-            });
-        },
-        bindChildAddress:function(){
-            this.initChildAddress();
         }
     }
-
 };
-function setData(area_id,parent_id){
-    var chose_address = parent_id?zitiAddressData.getShipChildAddress(area_id):zitiAddressData.getShipAddress(area_id);
+function setData(area_id){
+    var chose_address = zitiAddressData.getShipAddress(area_id);
     chose_address = $.map(chose_address, function(value, index) {
         return [value];
     });

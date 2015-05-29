@@ -809,13 +809,8 @@ class TuanBuyingsController extends AppController{
         $address = $this->OfflineStores->find('all',array(
             'conditions' => $cond,
         ));
-        $areaAddress = array();
-        $Address = $address;
         $address=Hash::combine($address, '{n}.OfflineStores.id', '{n}.OfflineStores', '{n}.OfflineStores.area_id');
-        $child_address = Hash::combine($Address,'{n}.OfflineStores.id','{n}.OfflineStores','{n}.OfflineStores.child_area_id');
-        $areaAddress['address'] = $address;
-        $areaAddress['child_address'] = $child_address;
-        echo json_encode($areaAddress);
+        echo json_encode($address);
     }
 
     private function set_product_ship($pid){
