@@ -22,7 +22,7 @@ class ProductTry extends AppModel {
         ));
 
         foreach($tries as &$trying) {
-            $trying['status'] = self::cal_op($trying['ProductTry']['limit_num'], $trying['ProductTry']['sold_num'], $trying['ProductTry']['start_time'], $trying['ProductTry']['status']);
+            $trying['status'] = $trying->get_status();
         }
 
         return $tries;
@@ -43,10 +43,24 @@ class ProductTry extends AppModel {
         ));
 
         foreach($tries as &$trying) {
-            $trying['status'] = self::cal_op($trying['ProductTry']['limit_num'], $trying['ProductTry']['sold_num'], $trying['ProductTry']['start_time'], $trying['ProductTry']['status']);
+            $trying['status'] = $trying->get_status();
         }
 
         return $tries;
+    }
+
+    function get_status(){
+        if ($this->status == PRODUCT_TRY_ING) {
+            if ($this->limit_num <= $this->sold_num ) {
+                return 'sec_end';
+            } else if (before_than($this->start_time)) {
+                return 'sec_kill';
+            } else {
+                return 'sec_unstarted';
+            }
+        } else {
+            return 'sec_end';
+        }
     }
 
     static function cal_op($limit_num, $sold_num, $start_time, $status) {

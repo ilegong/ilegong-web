@@ -166,7 +166,7 @@ class ApiOrdersController extends AppController {
         $buyingCom->confirm_remove($this->currentUser['id'], $order_id);
     }
 
-    public function product_detail($pid) {
+    public function product_detail($pid, $type, $extra_id) {
         if (empty($pid)) {
             $this->set('_serialize', array('product', 'recommends', 'brand','special'));
             return;
@@ -187,7 +187,6 @@ class ApiOrdersController extends AppController {
         $this->loadModel('ConsignmentDate');
         $this->loadModel('Brand');
         $this->loadModel('ShipPromotion');
-        $this->loadModel('TuanProduct');
 
         $is_limit_ship = $this->ShipPromotion->is_limit_ship($pid);
         $pro['Product']['limit_ship']=$is_limit_ship;
@@ -212,28 +211,34 @@ class ApiOrdersController extends AppController {
             $pro['Product']['consign_dates'] = $consign_dates;
         }
 
-        // check
-        $tuan_product = $this->TuanProduct->find('first', array(
-            conditions => array(
-                'product_id' => $pid
-            )
-        ));
-        if(!empty($tuan_product) && $tuan_product['TuanProduct']['general_show'] == 0){
+        if($type == 'tuan'){
             $this->loadModel('TuanBuying');
+            $this->loadModel('TuanProduct');
+            $this->loadModel('TuanTeam');
 
-            $tuan_buying = $this->TuanBuying->find('first', array(
-                'conditions' => array('pid' => $pid, 'tuan_id'=>PYS_M_TUAN, 'published' => 1)
+            $tuan_buying = $this->TuanBuying->findById($extra_id);
+            $tuan_buying['TuanBuying']['status'] = $this->_get_tuan_buying_status($tuan_buying);
+
+            $product_id = $tuan_buying['TuanBuying']['pid'];
+            $tuan_product = $this->TuanProduct->find('first', array(
+                conditions => array(
+                    'product_id' => $product_id
+                )
             ));
-            if(!empty($tuan_buying)) {
-                $this->loadModel('TuanTeam');
 
-                $tuan_buying['TuanBuying']['status'] = $this->_get_tuan_buying_status($tuan_buying);
-                $tuan_team = $this->TuanTeam->findById($tuan_buying['TuanBuying']['tuan_id']);
-                $ship_settings = $this->_get_ship_settings($pid);
-                $upload_files = $this->_get_upload_files($pid);
+            $tuan_team = $this->TuanTeam->findById($tuan_buying['TuanBuying']['tuan_id']);
 
-                $this->set('tuan', array('tuan_product' => $tuan_product, 'tuan_buying' => $tuan_buying, 'tuan_team' => $tuan_team, 'ship_settings' => $ship_settings, 'upload_files' => $upload_files));
-            }
+            $ship_settings = $this->_get_ship_settings($product_id);
+            $upload_files = $this->_get_upload_files($product_id);
+
+            $this->set('tuan', array('tuan_product' => $tuan_product, 'tuan_buying' => $tuan_buying, 'tuan_team' => $tuan_team, 'ship_settings' => $ship_settings, 'upload_files' => $upload_files));
+        }
+        else if($type == 'seckill'){
+            $this->loadModel('ProductTry');
+            $product_try = $this->ProductTry->findById($extra_id);
+            $product_try['status'] = $product_try->get_status();
+
+            $this->set('product_try', $product_try);
         }
 
         $this->set('product',$pro);
@@ -241,7 +246,7 @@ class ApiOrdersController extends AppController {
         $this->set('brand', $this->Brand->findById($pro['Product']['brand_id']));
         $this->set('special', $this->_get_special($pid, $this->currentUser['id']));
 
-        $this->set('_serialize', array('product', 'recommends', 'brand','special', 'tuan'));
+        $this->set('_serialize', array('product', 'recommends', 'brand','special', 'tuan', 'seckill', 'product_try'));
     }
 
     public function product_content($pid) {
