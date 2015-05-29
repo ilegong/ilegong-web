@@ -49,7 +49,7 @@ class ProductTry extends AppModel {
         return $tries;
     }
 
-    function get_status(){
+    public function get_status(){
         if ($this->status == PRODUCT_TRY_ING) {
             if ($this->limit_num <= $this->sold_num ) {
                 return 'sec_end';
