@@ -36,7 +36,7 @@ class OrdersController extends AppController {
         return "Balance.promotion.id";
     }
 
-    private static function key_balance_pids() {
+    public static function key_balance_pids() {
         return "Balance.balance.pids";
     }
 

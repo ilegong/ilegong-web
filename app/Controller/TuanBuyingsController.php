@@ -10,13 +10,6 @@ class TuanBuyingsController extends AppController{
 
     public $components = array('ProductSpecGroup','Buying');
 
-    private static function key_balance_pids() {
-        return "Balance.balance.pids";
-    }
-    public static function key_balanced_scores() {
-        return "Balance.apply_scores";
-    }
-
     public function sec_detail($tryId){
         $this->pageTitle = '秒杀详情';
         $this->loadModel('ProductTry');
@@ -255,6 +248,7 @@ class TuanBuyingsController extends AppController{
 
     public function cart_info(){
         $this->autoRender = false;
+        App::uses('OrdersController', 'Controller');
         $this->loadModel('Cart');
         $this->loadModel('ConsignmentDate');
         $this->loadModel('ProductShipSetting');
@@ -304,7 +298,7 @@ class TuanBuyingsController extends AppController{
                 return;
             }
             $cart_array = array(0 => strval($cartInfo['Cart']['id']));
-            $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
+            $this->Session->write(OrdersController::key_balance_pids(), json_encode($cart_array));
             if(strpos($_POST['way_type'],ZITI_TAG)===false){
                 echo json_encode(array('success' => true, 'direct'=>'normal', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id));
             }else{
@@ -499,6 +493,7 @@ class TuanBuyingsController extends AppController{
         $this->set('least_num',$ship_leastnum);
         $this->set('brand', $brand['Brand']);
         $this->set_coupons($uid,$Carts);
+        $this->set_balance_cart_ids($cart_id);
         if($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN){
             $this->set('big_tuan', true);
         }
@@ -531,6 +526,7 @@ class TuanBuyingsController extends AppController{
 
     public function pre_order() {
         $this->autoRender = false;
+        App::uses('OrdersController', 'Controller');
         $cart_id = $_POST['cart_id'];
         $tuan_id = $_POST['tuan_id'];
         //tuan sec
@@ -664,7 +660,7 @@ class TuanBuyingsController extends AppController{
             }
             $order_id = $order['Order']['id'];
             $score_consumed = 0;
-            $spent_on_order = intval($this->Session->read(self::key_balanced_scores()));
+            $spent_on_order = intval($this->Session->read(OrdersController::key_balanced_scores()));
             $order_id_spents = array();
             if($spent_on_order > 0 ) {
                 $reduced = $spent_on_order / 100;
@@ -683,7 +679,7 @@ class TuanBuyingsController extends AppController{
                 $this->User->add_score($uid, -$score_consumed);
             }
             // 注意必须清除key_balanced_scores
-            $this->Session->write(self::key_balanced_scores(), '');
+            $this->Session->write(OrdersController::key_balanced_scores(), '');
 
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
                 $res = array('success'=> false, 'info'=> '你已经支付过了');
@@ -937,6 +933,11 @@ class TuanBuyingsController extends AppController{
         $coupons_of_products = $couponItem->find_user_coupons_for_cart($uid, $cart);
         $this->set('coupons_of_products',$coupons_of_products);
         $this->set('brandItem',array_shift(array_values($cart->brandItems)));
+    }
+
+    private function set_balance_cart_ids($cartId){
+        App::uses('OrdersController', 'Controller');
+        $this->Session->write(OrdersController::key_balance_pids(), json_encode(array($cartId)));
     }
 }
 

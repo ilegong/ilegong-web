@@ -10,7 +10,7 @@
     </div>
     <ul style="padding-top: 60px;">
         {{loop $coupons $coupon}}
-        <li style="padding-bottom: 10px;"><a data-coupon_item_id="{{$coupon['CouponItem']['id']}}" data-brandId="{{$brandItem->id}}" class="coupon" href="javascript:"><input type="checkbox" readonly>
+        <li><a data-coupon_item_id="{{$coupon['CouponItem']['id']}}" data-brandId="{{$brandItem->id}}" class="coupon" href="javascript:"><input type="checkbox" readonly>
             {{$coupon['Coupon']['name']}} <span style="color: red">{{$this->Number->precision($coupon['Coupon']['reduced_price']/100, 2)}}</span> {{if $coupon['Coupon']['type'] == COUPON_TYPE_TYPE_SHARE_OFFER}}(红包券，每件商品可使一张，本单本店共{{$brandItem->total_num()}}件){{/if}}
             <span class="glyphicon glyphicon-ok" style="display: none"></span></a><span class="applied_result"></span>
         </li>
