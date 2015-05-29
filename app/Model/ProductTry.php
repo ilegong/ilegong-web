@@ -22,7 +22,7 @@ class ProductTry extends AppModel {
         ));
 
         foreach($tries as &$trying) {
-            $trying['status'] = $trying->get_status();
+            $trying['status'] = self::cal_op($trying['ProductTry']['limit_num'], $trying['ProductTry']['sold_num'], $trying['ProductTry']['start_time'], $trying['ProductTry']['status']);
         }
 
         return $tries;
@@ -43,7 +43,7 @@ class ProductTry extends AppModel {
         ));
 
         foreach($tries as &$trying) {
-            $trying['status'] = $trying->get_status();
+            $trying['status'] = self::cal_op($trying['ProductTry']['limit_num'], $trying['ProductTry']['sold_num'], $trying['ProductTry']['start_time'], $trying['ProductTry']['status']);
         }
 
         return $tries;
