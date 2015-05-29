@@ -866,7 +866,7 @@ class CategoriesController extends AppController {
             $title = ($trying['ProductTry']['price']/100).'元秒杀'.$trying['ProductTry']['spec'].$trying['ProductTry']['product_name'].'赶紧快来枪';
             $to_friend_title = $title;
             $to_timeline_title = $title;
-            $share_imag_url = $trying['image'];
+            $share_imag_url = $trying['Product']['listimg'];
             $desc = $trying['Product']['promote_name'];
             $weixinJs = prepare_wx_share_log($uid, 'indextry', $trying['ProductTry']['id']);
         }else{
