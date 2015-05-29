@@ -49,20 +49,6 @@ class ProductTry extends AppModel {
         return $tries;
     }
 
-    public function get_status(){
-        if ($this->status == PRODUCT_TRY_ING) {
-            if ($this->limit_num <= $this->sold_num ) {
-                return 'sec_end';
-            } else if (before_than($this->start_time)) {
-                return 'sec_kill';
-            } else {
-                return 'sec_unstarted';
-            }
-        } else {
-            return 'sec_end';
-        }
-    }
-
     static function cal_op($limit_num, $sold_num, $start_time, $status) {
         if ($status == PRODUCT_TRY_ING) {
             if ($limit_num <= $sold_num ) {

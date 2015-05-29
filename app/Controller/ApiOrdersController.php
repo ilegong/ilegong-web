@@ -235,9 +235,9 @@ class ApiOrdersController extends AppController {
         }
         else if($type == 'seckill'){
             $this->loadModel('ProductTry');
+            App::uses('ProductTry','Model');
             $product_try = $this->ProductTry->findById($extra_id);
-            $product_try['status'] = $product_try->get_status();
-
+            $product_try['ProductTry']['status'] = ProductTry::cal_op($product_try['ProductTry']['limit_num'], $product_try['ProductTry']['sold_num'], $product_try['ProductTry']['start_time'], $product_try['ProductTry']['status']);;
             $this->set('product_try', $product_try);
         }
 
@@ -246,7 +246,7 @@ class ApiOrdersController extends AppController {
         $this->set('brand', $this->Brand->findById($pro['Product']['brand_id']));
         $this->set('special', $this->_get_special($pid, $this->currentUser['id']));
 
-        $this->set('_serialize', array('product', 'recommends', 'brand','special', 'tuan', 'seckill', 'product_try'));
+        $this->set('_serialize', array('product', 'recommends', 'brand','special', 'tuan', 'product_try'));
     }
 
     public function product_content($pid) {
