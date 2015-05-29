@@ -527,7 +527,6 @@ class TuanBuyingsController extends AppController{
 
     public function pre_order() {
         $this->autoRender = false;
-        App::uses('OrdersController', 'Controller');
         $cart_id = $_POST['cart_id'];
         $tuan_id = $_POST['tuan_id'];
         //tuan sec
@@ -938,6 +937,7 @@ class TuanBuyingsController extends AppController{
         //use coupon
         App::uses('OrdersController','Controller');
         $ordersController = new OrdersController();
+        $ordersController->Session = $this->Session;
         $order_results = array();
         $order_results[$brand_id] = array($order_id, $total_all_price);
         foreach($order_results as $brand_id => $order_val) {
