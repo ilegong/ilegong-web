@@ -660,26 +660,12 @@ class TuanBuyingsController extends AppController{
                 $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $remark_address, $mobile, $name, $cart_id, $way, $shop_id);
             }
             $order_id = $order['Order']['id'];
-            $score_consumed = 0;
-            $spent_on_order = intval($this->Session->read(OrdersController::key_balanced_scores()));
-            $order_id_spents = array();
-            if($spent_on_order > 0 ) {
-                $reduced = $spent_on_order / 100;
-                $toUpdate = array('applied_score' => $spent_on_order,
-                    'total_all_price' => 'if(total_all_price - ' . $reduced .' < 0, 0, total_all_price - ' . $reduced .')');
-                if($this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY))){
-                    $this->log('apply user score=' . $spent_on_order . ' to order-id=' . $order_id . ' successfully');
-                    $score_consumed += $spent_on_order;
-                    $order_id_spents[$order_id] = $spent_on_order;
-                }
-            }
-            if ($score_consumed > 0) {
-                $scoreM = ClassRegistry::init('Score');
-                $scoreM->spent_score_by_order($uid, $score_consumed, $order_id_spents);
-                $this->loadModel('User');
-                $this->User->add_score($uid, -$score_consumed);
-            }
-            $this->clean_score_and_coupon();
+            $this->loadModel('Product');
+            $productBrand = $this->Product->find('first',array(
+                'conditions' => array('id' => $cart_info['Cart']['product_id']),
+                'fields' => array('brand_id')
+            ));
+            $this->order_use_score_and_coupon($order_id,$uid,$productBrand['Product']['brand_id'],$total_price);
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
                 $res = array('success'=> false, 'info'=> '你已经支付过了');
             }else{
@@ -946,6 +932,41 @@ class TuanBuyingsController extends AppController{
         $this->Session->write(OrdersController::key_balanced_conpon_global(), '[]');
         $this->Session->write(OrdersController::key_balanced_conpons(), '[]');
 
+    }
+
+    private function order_use_score_and_coupon($order_id,$uid,$brand_id,$total_all_price){
+        //use coupon
+        App::uses('OrdersController','Controller');
+        $ordersController = new OrdersController();
+        $order_results = array();
+        $order_results[$brand_id] = array($order_id, $total_all_price);
+        foreach($order_results as $brand_id => $order_val) {
+            $order_id = $order_val[0];
+            $ordersController->apply_coupons_to_order($brand_id, $uid, $order_id, $order_results);
+            $ordersController->apply_coupon_code_to_order($uid, $order_id);
+        }
+
+        //use score
+        $score_consumed = 0;
+        $spent_on_order = intval($this->Session->read(OrdersController::key_balanced_scores()));
+        $order_id_spents = array();
+        if($spent_on_order > 0 ) {
+            $reduced = $spent_on_order / 100;
+            $toUpdate = array('applied_score' => $spent_on_order,
+                'total_all_price' => 'if(total_all_price - ' . $reduced .' < 0, 0, total_all_price - ' . $reduced .')');
+            if($this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY))){
+                $this->log('apply user score=' . $spent_on_order . ' to order-id=' . $order_id . ' successfully');
+                $score_consumed += $spent_on_order;
+                $order_id_spents[$order_id] = $spent_on_order;
+            }
+        }
+        if ($score_consumed > 0) {
+            $scoreM = ClassRegistry::init('Score');
+            $scoreM->spent_score_by_order($uid, $score_consumed, $order_id_spents);
+            $this->loadModel('User');
+            $this->User->add_score($uid, -$score_consumed);
+        }
+        $this->clean_score_and_coupon();
     }
 }
 

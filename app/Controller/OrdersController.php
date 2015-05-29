@@ -1335,7 +1335,7 @@ class OrdersController extends AppController {
      * @param $order_results
      * @throws MissingModelException
      */
-    protected function apply_coupons_to_order($brand_id, $uid, $order_id, $order_results) {
+    public function apply_coupons_to_order($brand_id, $uid, $order_id, $order_results) {
         //TODO：检查是否可以应用这些券的合法性
         $used_coupons_str = $this->Session->read(self::key_balanced_conpons());
         $total_reduced_cent = 0;
@@ -1402,7 +1402,7 @@ class OrdersController extends AppController {
      * @param $uid
      * @param $order_id
      */
-    protected function apply_coupon_code_to_order($uid, $order_id) {
+    public function apply_coupon_code_to_order($uid, $order_id) {
         //TODO: 检查是否可以应用这些券码的合法性
         //TODO: 防止重复用券
         $code = $this->_applied_couon_code();
