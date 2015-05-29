@@ -47,12 +47,12 @@
                     </a>
                 </li>
             </ul>
-
             <p class="conordertuan_total">共<span data-count="{{$buy_count}}">{{$buy_count}}</span>件商品，合计:
                 <strong data-goods-price="{{$cart_info['Cart']['price']*$buy_count}}">￥{{$this->Number->precision($cart_info['Cart']['price']*$buy_count, 2)}}</strong>
                 {{if $ship_fee != 0}}，运费：￥<span class="ship_fee" data-ship-fee="{{$ship_fee}}">{{$this->Number->precision($ship_fee, 2)}}</span>{{/if}}</p>
         </div>
     </div>
+    {{template Elements/tuan_coupon_template}}
     <div class="shop_jifen" style="margin-bottom: 44px;">
         <ul class="clearfix" style=" border: 0;">
             <li class="fl" data-score="{{$score_usable}}">可用<span class="balance_use_score">{{$score_usable}}</span>积分抵用<span>{{$this->Number->precision($score_usable/100, 2)}}</span>元</li>

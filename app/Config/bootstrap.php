@@ -55,8 +55,9 @@ const SHARED_OFFER_STATUS_NEW = 0;
 const SHARED_OFFER_STATUS_GOING = 3;
 const SHARED_OFFER_STATUS_EXPIRED = 1;
 const SHARED_OFFER_STATUS_OUT = 2;
-
+//red packet same carts num
 const COUPON_TYPE_TYPE_SHARE_OFFER = 2;
+//least price global can use all
 const COUPON_TYPE_TYPE_MAN_JIAN = 3;
 
 const ERROR_CODE_USER_DUP_MOBILE = 801;

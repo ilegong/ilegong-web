@@ -8,7 +8,7 @@
 class TuanBuyingsController extends AppController{
 
 
-    public $components = array('ProductSpecGroup');
+    public $components = array('ProductSpecGroup','Buying');
 
     private static function key_balance_pids() {
         return "Balance.balance.pids";
@@ -475,7 +475,7 @@ class TuanBuyingsController extends AppController{
         ));
         $brand = $this->Brand->find('first', array(
             'conditions' => array('id' => $product_brand['Product']['brand_id']),
-            'fields' => array('name', 'slug')
+            'fields' => array('name', 'slug', 'id')
         ));
         $this->set_old_consignees($uid,$shipSetting);
         //积分统计
@@ -498,6 +498,7 @@ class TuanBuyingsController extends AppController{
         $this->set('max_num',$max_num);
         $this->set('least_num',$ship_leastnum);
         $this->set('brand', $brand['Brand']);
+        $this->set_coupons($uid,$Carts);
         if($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN){
             $this->set('big_tuan', true);
         }
@@ -927,6 +928,15 @@ class TuanBuyingsController extends AppController{
             }
         }
 
+    }
+
+    private function set_coupons($uid, $cart){
+        $balance_cids = Hash::extract($cart,'Cart.id');
+        list(, $cart, , , ,) = $this->Buying->createTmpCarts(0, $balance_cids, $uid, null, false);
+        $couponItem = ClassRegistry::init('CouponItem');
+        $coupons_of_products = $couponItem->find_user_coupons_for_cart($uid, $cart);
+        $this->set('coupons_of_products',$coupons_of_products);
+        $this->set('brandItem',array_shift(array_values($cart->brandItems)));
     }
 }
 

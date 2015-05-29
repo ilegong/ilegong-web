@@ -143,13 +143,14 @@ class BuyingComponent extends Component {
      * @param $balanceCartIds (cart ids usually, but can put a 'try'=>$pid to identity a trying product)
      * @param $uid
      * @param null $sessionId
+     * @param $isTryCart (mark is try or $balanceCartIds['try'])
      * @throws CakeException
      * @throws Exception
      * @return array
      */
-    public function createTmpCarts($shipPromotionId, $balanceCartIds, $uid, $sessionId = null) {
+    public function createTmpCarts($shipPromotionId, $balanceCartIds, $uid, $sessionId = null,$isTryCart = false) {
         $isTry = !empty($balanceCartIds) && $balanceCartIds['try'];
-        if ($isTry) {
+        if ($isTry||$isTryCart) {
 
             $pids = $balanceCartIds;
             unset($pids['try']);
