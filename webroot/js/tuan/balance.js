@@ -76,6 +76,9 @@ function editCartNum(id, num) {
         if (data && data.success) {
             if (typeof(updateCartItemCount) === 'function') {
                 updateCartItemCount();
+                $('li > a.coupon > input[type=checkbox]').each(function(index,item){
+                    $(item).prop("checked", false);
+                });
             }
         }
     }, {'id': id, 'num': num});
@@ -107,8 +110,8 @@ $('.shop_jifen_used').click(function(){
             if(data.score_used){
                 scoreMoney = - data.score_money;
             }
-            var goodsPrice = priceDom.data("goodsPrice");
-            var totalPrice = totalPriceDom.data("totalPrice");
+            var goodsPrice = parseFloat(priceDom.data("goodsPrice"));
+            var totalPrice = parseFloat(totalPriceDom.data("totalPrice"));
             priceDom.data("goodsPrice", goodsPrice + scoreMoney);
             totalPriceDom.data("totalPrice", totalPrice + scoreMoney);
             priceDom.text("￥"+ utils.toFixed(priceDom.data("goodsPrice"), 2));
@@ -121,7 +124,13 @@ $('.shop_jifen_used').click(function(){
     }, 'json');
 });
 //use coupon
-$('li > a.coupon').click(function () {
+$('li > a.coupon > input[type=checkbox]').on('click',function(e){
+    e.preventDefault();
+    var me = $(this);
+    me.parent().trigger('click');
+});
+$('li > a.coupon').on('click',function (e) {
+    e.preventDefault();
     var that = $(this);
     var brandId = that.attr('data-brandId');
     var coupon_item_id = that.attr('data-coupon_item_id');
@@ -130,9 +139,11 @@ $('li > a.coupon').click(function () {
     var action = (checkbox.prop("checked") == false )? 'unapply' : 'apply';
     $.post('/orders/apply_coupon.json', {'brand_id': brandId, 'coupon_item_id': coupon_item_id, 'action': action}, function (data) {
         if (data) {
-            //console.log(data);
+            console.log(data);
             if (data.changed) {
-                totalPriceDom.text(utils.toFixed(data.total_price, 2));
+                var totalPrice = utils.toFixed(parseFloat(data.total_price), 2);
+                totalPriceDom.text("￥"+totalPrice);
+                totalPriceDom.data("totalPrice", totalPrice);
             } else {
                 if (data.reason == 'not_login') {
                     utils.alert('您长时间未操作，请重新登录', function () {

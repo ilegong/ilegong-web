@@ -40,6 +40,10 @@ class OrdersController extends AppController {
         return "Balance.balance.pids";
     }
 
+    public static function key_balance_total_price(){
+        return "Balance.balance.totalprice";
+    }
+
     function beforeFilter() {
         parent::beforeFilter();
         if (empty($this->currentUser['id']) && array_search($this->request->params['action'], $this->customized_not_logged) === false) {
@@ -730,7 +734,6 @@ class OrdersController extends AppController {
         $resp['total_price'] = $cart->total_price() - $total_reduced / 100 + $shipFee;
         $resp['success'] = $success;
         $resp['error'] = $error;
-
         echo json_encode($resp);
     }
 
@@ -743,7 +746,6 @@ class OrdersController extends AppController {
             echo json_encode(array('changed' => false, 'reason' => 'not_login'));
             return;
         }
-
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
         $coupon_item_id = $_POST['coupon_item_id'];
         $brand_id = $_POST['brand_id'];
@@ -1757,7 +1759,5 @@ class OrdersController extends AppController {
                 }
             }
         }
-
-
     }
 }

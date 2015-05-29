@@ -494,6 +494,7 @@ class TuanBuyingsController extends AppController{
         $this->set('brand', $brand['Brand']);
         $this->set_coupons($uid,$Carts);
         $this->set_balance_cart_ids($cart_id);
+        $this->clean_score_and_coupon();
         if($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN){
             $this->set('big_tuan', true);
         }
@@ -678,9 +679,7 @@ class TuanBuyingsController extends AppController{
                 $this->loadModel('User');
                 $this->User->add_score($uid, -$score_consumed);
             }
-            // 注意必须清除key_balanced_scores
-            $this->Session->write(OrdersController::key_balanced_scores(), '');
-
+            $this->clean_score_and_coupon();
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
                 $res = array('success'=> false, 'info'=> '你已经支付过了');
             }else{
@@ -938,6 +937,15 @@ class TuanBuyingsController extends AppController{
     private function set_balance_cart_ids($cartId){
         App::uses('OrdersController', 'Controller');
         $this->Session->write(OrdersController::key_balance_pids(), json_encode(array($cartId)));
+    }
+
+    private function clean_score_and_coupon(){
+        // 注意必须清除key_balanced_scores
+        App::uses('OrdersController', 'Controller');
+        $this->Session->write(OrdersController::key_balanced_scores(), '');
+        $this->Session->write(OrdersController::key_balanced_conpon_global(), '[]');
+        $this->Session->write(OrdersController::key_balanced_conpons(), '[]');
+
     }
 }
 

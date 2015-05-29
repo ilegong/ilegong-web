@@ -109,6 +109,11 @@ class CartsController extends AppController{
     //FIXME: authorized
 	function editCartNum($id, $num){
         if($this->Cart->edit_num($id, $num, $this->currentUser['id'], $this->Session->id())) {
+            //clear score info
+            App::uses('OrdersController', 'Controller');
+            $this->Session->write(OrdersController::key_balanced_scores(), '0');
+            $this->Session->write(OrdersController::key_balanced_conpon_global(), '[]');
+            $this->Session->write(OrdersController::key_balanced_conpons(), '[]');
             $info = array('success' => true, 'msg' => __('Success edit nums.'));
         } else {
             $info = array('success' => false);
