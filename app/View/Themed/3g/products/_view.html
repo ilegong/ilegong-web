@@ -105,7 +105,7 @@
             <dt class="fl"><img src="{{small_thumb_link($Product['Product']['coverimg'])}}"></dt>
             <dt class="good_title">
                 <span><strong></strong>{{$Product['Product']['name']}}</span>
-                <label><strong>{{if $Product['Product']['id']==871}}预售价{{/if}}￥<font id="product_price_dialog">{{$this->Number->precision($price, 2)}}</font>{{if $product_price_range}}<em>{{$product_price_range}}</em>{{/if}}</strong></label>
+                <label><strong>{{if $Product['Product']['id']==871}}预售价{{/if}}￥<font id="product_price_dialog">{{$this->Number->precision($price, 2)}}</font></strong></label>
             </dt>
         </dl>
         {{if $product_spec_map||!empty($consignment_date)}}
