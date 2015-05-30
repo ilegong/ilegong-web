@@ -360,6 +360,12 @@ $(document).ready(function () {
         return $tb_ids;
     }
 
+    function setCheckedOrderStatus(){
+        $.each($('.order input:checkbox:checked', $('.orders')), function (index, item) {
+           var that = $(this);
+            that.parents('tr').children('td').eq(3).html('已发货');
+        });
+    }
     var ourAddressSend = function () {
         var orderIds = getCheckedOrderIds();
         var val = $('input:radio[name="optionsRadios"]:checked').val();
@@ -374,7 +380,9 @@ $(document).ready(function () {
                         msg = '订单状态修改成功，但有' + (orderIds.length - data.res.length - data.already.length) + '个未发送到达提醒';
                     }
                     utils.alert(msg);
-                    location.reload();
+//                    location.reload();
+                    setCheckedOrderStatus();
+                    shipToOurStoreDialog.dialog('close');
                 }
                 else {
                     utils.alert(data.res);
@@ -391,7 +399,9 @@ $(document).ready(function () {
                         msg = '订单状态修改成功，但有' + data.fail.length + '个未发送发货提醒';
                     }
                     utils.alert(msg);
-                    location.reload();
+//                    location.reload();
+                    setCheckedOrderStatus();
+                    shipToOurStoreDialog.dialog('close');
                 }
                 else {
                     utils.alert(data.res);
@@ -408,7 +418,8 @@ $(document).ready(function () {
         buttons: {
             "取消": function() {shipToOurStoreDialog.dialog( "close" );},
             "确认": function(){ourAddressSend();}
-        }
+        },
+        close:function(){}
     });
     $('.ship-to-pys-stores').click(function () {
         var orderIds = getCheckedOrderIds();
