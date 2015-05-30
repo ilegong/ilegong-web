@@ -180,6 +180,7 @@
                                                         {{/if}}
                                                     {{/if}}
                                                 {{/if}}
+                                             <div class="focus"></div>
                                        </span>
                                        {{/loop}}
                                        {{else}}
@@ -290,7 +291,8 @@
 
 <script>
     $(document).ready(function(){
-
+        $('span.spec_item:not(.spec_item_selected)').children('div').toggleClass('hidden');
+        $('[way-label]:not(.tuan_way_selected)').children('div').toggleClass('hidden');
         function get_spec_group(){
             var $selected_spec = $('span.spec_item_selected[item-label!="SD"]');
             var all_spec = [];

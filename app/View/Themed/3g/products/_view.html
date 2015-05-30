@@ -190,5 +190,8 @@
     </div>
 <script>
     var product_spec_group = JSON.parse('{{$product_spec_group}}');
+    $(document).ready(function(){
+        $('span.spec_item:not(.spec_item_selected)').children('div').toggleClass('hidden');
+    })
 </script>
 {{template Elements/product_detail_common_template}}
