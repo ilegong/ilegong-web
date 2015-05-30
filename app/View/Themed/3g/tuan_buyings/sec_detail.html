@@ -49,7 +49,7 @@
                         </div>
                     {{/if}}
                     <a class="standard_bg clearfix">
-                        <strong class="red">规格: {{$product_try['ProductTry']['spec']}}，送货: {{$product_try['ProductTry']['consignment_date']}}</strong>
+                        <strong class="red">规格: {{$product_try['ProductTry']['spec']}}，送货: {{date('m月d日',strtotime($product_try['ProductTry']['consignment_date']))}}</strong>
                         <ul class="clearfix standard">
                             <li>
                                 <span class="gray title mr12" style="float:left;">物流:</span>
