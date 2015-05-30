@@ -91,6 +91,7 @@ class TuanOrdersController extends AppController{
             );
             $this->log('ship to pys stores: send weixin message for order: '.$order['Order']['id'].': '.json_encode($post_data));
             $wx_send_status = send_weixin_message($post_data);
+            $this->OrderMessage->create();
             if($wx_send_status){
                 $success[] = $order['Order']['id'];
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 0, 'type'=>'py-reach'));
@@ -167,6 +168,7 @@ class TuanOrdersController extends AppController{
             );
             $this->log('ship to pys stores: send weixin message for order: '.$order['Order']['id'].': '.json_encode($post_data));
             $wx_send_status = send_weixin_message($post_data);
+            $this->OrderMessage->create();
             if($wx_send_status){
                 $success[] = $order['Order']['id'];
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 0, 'type'=>'py-send-out'));
@@ -331,6 +333,7 @@ class TuanOrdersController extends AppController{
                 )
             );
             $this->log('ship to haolinju store: send weixin message for order: '.$order['Order']['id'].': '.json_encode($post_data));
+            $this->OrderMessage->create();
             if(send_weixin_message($post_data)){
                 echo json_encode(array('success' => true, 'res' => $order['Order']['id']));
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 0, 'type'=>'hlj-reach', 'data'=>$haolinju_code));
