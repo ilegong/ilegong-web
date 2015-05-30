@@ -310,7 +310,7 @@ class TuanBuyingsController extends AppController{
         $this->autoRender = false;
         $tuan_orderIds = preg_split('/(,|\n)/',trim($_REQUEST['tuan_orderid']));
         $tuan_orderstatus = $_REQUEST['order_status'];
-        $order_info = $this->Order->find('all',array('conditions' => array('id' => $tuan_orderIds,'status !='=> 2)));
+        $order_info = $this->Order->find('all',array('conditions' => array('id' => $tuan_orderIds,'status'=> 1)));
         $this->log('order_info'.json_encode($order_info));
         if(!empty($tuan_orderstatus)){
             if(!empty($order_info)){
@@ -448,5 +448,8 @@ class TuanBuyingsController extends AppController{
         }else{
             echo json_encode(array('success' => false, 'res' => $fail));
         }
+    }
+    public function admin_set_order_status(){
+
     }
 }
