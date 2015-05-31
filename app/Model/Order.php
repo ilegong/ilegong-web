@@ -173,7 +173,13 @@ class Order extends AppModel {
                     $pTry = $tryM->findById($isTry);
                     if (!empty($pTry)) {
                         //FIXME: do retry if failed
-                        $tryM->updateAll(array('sold_num' => 'sold_num + 1'), array('id' => $isTry, 'modified' => $pTry['ProductTry']['modified']));
+                        $buy_multiple = $pTry['ProductTry']['buy_multiple'];
+                        if($buy_multiple==1||$buy_multiple<=0){
+                            $add_num = 1;
+                        }else{
+                            $add_num = rand(1,$buy_multiple);
+                        }
+                        $tryM->updateAll(array('sold_num' => 'sold_num + '.$add_num), array('id' => $isTry, 'modified' => $pTry['ProductTry']['modified']));
                     }
                 } else if ($type == ORDER_TYPE_GROUP || $type == ORDER_TYPE_GROUP_FILL) {
                     $gmM = ClassRegistry::init('GrouponMember');
