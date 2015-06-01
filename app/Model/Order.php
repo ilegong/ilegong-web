@@ -174,7 +174,7 @@ class Order extends AppModel {
                     if (!empty($pTry)) {
                         //FIXME: do retry if failed
                         $buy_multiple = $pTry['ProductTry']['buy_multiple'];
-                        if($buy_multiple==1||$buy_multiple<=0){
+                        if($buy_multiple<=1){
                             $add_num = 1;
                         }else{
                             $add_num = rand(1,$buy_multiple);
