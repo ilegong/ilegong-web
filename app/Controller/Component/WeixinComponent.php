@@ -606,10 +606,7 @@ class WeixinComponent extends Component
                 'id'=>$order_id
             )
         ));
-        $this->log('send packet received message with order id '.$orderInfo['Order']['id']);
         $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator']);
-        $this->log('offer order info'.json_encode($orderInfo));
-        $this->log('offer info '.json_encode($offer));
         $number = 0;
         $name = '';
         if(!empty($offer)) {
