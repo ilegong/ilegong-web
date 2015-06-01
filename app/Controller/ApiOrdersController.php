@@ -228,10 +228,7 @@ class ApiOrdersController extends AppController {
 
             $tuan_team = $this->TuanTeam->findById($tuan_buying['TuanBuying']['tuan_id']);
 
-            $ship_settings = $this->_get_ship_settings($product_id);
-            $upload_files = $this->_get_upload_files($product_id);
-
-            $this->set('tuan', array('tuan_product' => $tuan_product, 'tuan_buying' => $tuan_buying, 'tuan_team' => $tuan_team, 'ship_settings' => $ship_settings, 'upload_files' => $upload_files));
+            $this->set('tuan', array('tuan_product' => $tuan_product, 'tuan_buying' => $tuan_buying, 'tuan_team' => $tuan_team));
         }
         else if($type == 6){
             $this->loadModel('ProductTry');
@@ -242,12 +239,17 @@ class ApiOrdersController extends AppController {
             $this->set('product_try', $product_try);
         }
 
+        $upload_files = $this->_get_upload_files($product_id);
+        $ship_settings = $this->_get_ship_settings($product_id);
+
         $this->set('product',$pro);
         $this->set('recommends', $this->Components->load('ProductRecom')->recommend($pid));
         $this->set('brand', $this->Brand->findById($pro['Product']['brand_id']));
         $this->set('special', $this->_get_special($pid, $this->currentUser['id']));
+        $this->set('ship_settings', $ship_settings);
+        $this->set('upload_files', $upload_files);
 
-        $this->set('_serialize', array('product', 'recommends', 'brand','special', 'tuan', 'product_try'));
+        $this->set('_serialize', array('product', 'recommends', 'brand','special', 'ship_settings', 'upload_files', 'tuan', 'product_try'));
     }
 
     public function product_content($pid) {
