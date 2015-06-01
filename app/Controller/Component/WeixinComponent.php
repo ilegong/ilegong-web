@@ -604,6 +604,7 @@ class WeixinComponent extends Component
             $name = $offer['name'];
         }
         if($number>0){
+           $this->log('send packet received message with order id '.$order['Order']['id']);
            return $this->send_packet_received_message($order['Order']['creator'], $number/100, $name);
         }
         return false;
