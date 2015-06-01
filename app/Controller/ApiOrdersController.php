@@ -211,7 +211,7 @@ class ApiOrdersController extends AppController {
             $pro['Product']['consign_dates'] = $consign_dates;
         }
 
-        if($type == 'tuan'){
+        if($type == 5){
             $this->loadModel('TuanBuying');
             $this->loadModel('TuanProduct');
             $this->loadModel('TuanTeam');
@@ -233,7 +233,7 @@ class ApiOrdersController extends AppController {
 
             $this->set('tuan', array('tuan_product' => $tuan_product, 'tuan_buying' => $tuan_buying, 'tuan_team' => $tuan_team, 'ship_settings' => $ship_settings, 'upload_files' => $upload_files));
         }
-        else if($type == 'seckill'){
+        else if($type == 6){
             $this->loadModel('ProductTry');
             App::uses('ProductTry','Model');
             $product_try = $this->ProductTry->findById($extra_id);
