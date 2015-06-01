@@ -660,6 +660,7 @@ class OrdersController extends AppController {
         //TODO: Handle product try orders!
         $shareOffer = ClassRegistry::init('ShareOffer');
         $toShare = $shareOffer->query_gen_offer($orderinfo, $this->currentUser['id']);
+        
         $canComment = $this->can_comment($status);
         $this->set(compact('toShare', 'canComment', 'no_more_money', 'order_id', 'order', 'has_expired_product_type', 'expired_pids'));
         $this->set('ship_type', ShipAddress::ship_type_list());

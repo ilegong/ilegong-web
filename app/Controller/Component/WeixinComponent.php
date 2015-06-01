@@ -195,7 +195,7 @@ class WeixinComponent extends Component
                 "remark" => array("value" => "点击查看订单详情".($number > 0 ? "/领取红包":"")."。", "color" => "#FF8800")
             )
         );
-        return $this->send_weixin_message($post_data) && $this->send_red_packet_msg($open_id, $order);
+        return $this->send_weixin_message($post_data) && $this->send_red_packet_msg($open_id, $order_no);
     }
 
     public function send_groupon_paid_message($open_id, $price, $url, $order_no, $good_info, $isDone, $isSelf, $isOrganizer, $organizerName, $newMemberName, $leftPeople, $ship_info)
@@ -598,11 +598,17 @@ class WeixinComponent extends Component
         return false;
     }
 
-    private function send_red_packet_msg($open_id,$order){
+    private function send_red_packet_msg($open_id,$order_id){
         $so = ClassRegistry::init('ShareOffer');
-        $this->log('send packet received message with order id '.$order['Order']['id']);
-        $offer = $so->query_gen_offer($order, $order['Order']['creator']);
-        $this->log('offer order info'.json_encode($order));
+        $orderM = ClassRegistry::init('Order');
+        $orderInfo = $orderM->find('first',array(
+            'conditions'=>array(
+                'id'=>$order_id
+            )
+        ));
+        $this->log('send packet received message with order id '.$orderInfo['Order']['id']);
+        $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator']);
+        $this->log('offer order info'.json_encode($orderInfo));
         $this->log('offer info '.json_encode($offer));
         $number = 0;
         $name = '';
@@ -646,6 +652,6 @@ class WeixinComponent extends Component
                 "remark" => array("value" => "点击查看订单详情", "color" => "#FF8800")
             )
         );
-        return $this->send_weixin_message($post_data) && $this->send_red_packet_msg($open_id, $order);
+        return $this->send_weixin_message($post_data) && $this->send_red_packet_msg($open_id, $order_no);
     }
 }
