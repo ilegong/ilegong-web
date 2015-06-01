@@ -531,15 +531,15 @@ $(document).ready(function () {
     sendRefundOrderDialog();
     $('.collapse').collapse();
 
-    $exportBtn.on('click',function(e){
+    $exportBtn.on('click', function (e) {
         e.preventDefault();
         var tableIds = [];
         var tableNames = [];
-        var ignoreRows = [0,3,4,10,11,12,17,26];
-        $('table.orders').each(function (index,item) {
+        var ignoreRows = [0, 2, 3, 4, 9, 10, 11, 12, 13, 15, 16, 17, 19, 21, 22, 23, 25, 26];
+        $('table.orders').each(function (index, item) {
             tableIds.push($(item).attr('id'));
             tableNames.push($(item).data('table-name'));
         });
-        tablesToExcel(tableIds, tableNames, 'order-export.xls','Excel',ignoreRows);
+        tablesToExcel(tableIds, tableNames, 'order-export.xls', 'Excel', ignoreRows);
     });
 });

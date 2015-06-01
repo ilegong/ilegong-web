@@ -57,30 +57,41 @@ var tablesToExcel = (function() {
                 }
                 rowsXML += '</Row>'
             }
+
+            var statics_data = '';
+            statics_data +='<Row>';
+            ctx = {  attributeStyleID: ''
+                , nameType: 'String'
+                , data: '合计'
+                , attributeFormula: ''
+            };
+            statics_data += format(tmplCellXML, ctx);
+            statics_data +='</Row>';
             for(row_tag in statisticsData){
-                rowsXML +='<Row>';
+                statics_data +='<Row>';
                 var item_data = statisticsData[row_tag];
                 ctx = {  attributeStyleID: ''
                     , nameType: 'String'
                     , data: item_data['name']
                     , attributeFormula: ''
                 };
-                rowsXML += format(tmplCellXML, ctx);
+                statics_data += format(tmplCellXML, ctx);
                 //item_data['num']
                 ctx = {  attributeStyleID: ''
                     , nameType: 'String'
                     , data: item_data['specName']
                     , attributeFormula: ''
                 };
-                rowsXML += format(tmplCellXML, ctx);
+                statics_data += format(tmplCellXML, ctx);
                 ctx = {  attributeStyleID: ''
                     , nameType: 'String'
                     , data: item_data['num']
                     , attributeFormula: ''
                 };
-                rowsXML += format(tmplCellXML, ctx);
-                rowsXML +='</Row>';
+                statics_data += format(tmplCellXML, ctx);
+                statics_data +='</Row>';
             }
+            rowsXML = statics_data+rowsXML;
             ctx = {rows: rowsXML, nameWS: wsnames[i] || 'Sheet' + i};
             worksheetsXML += format(tmplWorksheetXML, ctx);
             rowsXML = "";
