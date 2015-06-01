@@ -594,7 +594,22 @@ class WeixinComponent extends Component
         return false;
     }
 
+    private function gen_offer($order){
+        $so = ClassRegistry::init('ShareOffer');
+        $offer = $so->query_gen_offer($order, $order['Order']['creator']);
+        $number = 0;
+        $name = '';
+        if(!empty($offer)) {
+            $number = $offer['number'];
+            $name = $offer['name'];
+        }
+        return array('name'=>$name,'number'=>$number);
+    }
+
     public function send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_no, $order = null, $send_date) {
+        $offer_result = $this->gen_offer($order);
+        $offer_name = $offer_result['name'];
+        $offer_num = $offer_result['number'];
         $ship_way = $order['Order']['ship_mark'];
         if($ship_way == 'sf'){
             $tail = '，发货时间是'.$send_date.'。';
@@ -616,12 +631,12 @@ class WeixinComponent extends Component
             "url" => $this->get_order_query_url($order_no),
             "topcolor" => "#FF0000",
             "data" => array(
-                "first" => array("value" => "亲，您的订单已完成付".$tail),
+                "first" => array("value" => "亲，您的订单已完成付款".(($offer_num > 0 && !empty($offer_name)) ? "同时恭喜您获得".$offer_name."红包，点击领取。" : "").$tail),
                 "orderProductPrice" => array("value" => $price),
                 "orderProductName" => array("value" => $good_info),
                 "orderAddress" => array("value" => empty($ship_info)?'':$ship_info),
                 "orderName" => array("value" => $order_no),
-                "remark" => array("value" => "点击查看订单详情", "color" => "#FF8800")
+                "remark" => array("value" => "点击查看订单详情".($offer_num > 0 ? "/领取红包":""), "color" => "#FF8800")
             )
         );
         return $this->send_weixin_message($post_data);
