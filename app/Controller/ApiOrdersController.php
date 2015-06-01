@@ -237,7 +237,8 @@ class ApiOrdersController extends AppController {
             $this->loadModel('ProductTry');
             App::uses('ProductTry','Model');
             $product_try = $this->ProductTry->findById($extra_id);
-            $product_try['ProductTry']['status'] = ProductTry::cal_op($product_try['ProductTry']['limit_num'], $product_try['ProductTry']['sold_num'], $product_try['ProductTry']['start_time'], $product_try['ProductTry']['status']);;
+            $product_try['ProductTry']['status'] = ProductTry::cal_op($product_try['ProductTry']['limit_num'], $product_try['ProductTry']['sold_num'], $product_try['ProductTry']['start_time'], $product_try['ProductTry']['status']);
+            $product_try['ProductTry']['remaining_time'] = strtotime($product_try['ProductTry']['start_time']) - time();
             $this->set('product_try', $product_try);
         }
 

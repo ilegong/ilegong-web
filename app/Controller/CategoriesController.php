@@ -6,7 +6,12 @@ class CategoriesController extends AppController {
     public function api_seckills(){
         $this->autoRender=false;
 
-        return json_encode($this->_get_seckill_products());
+        $seckills = $this->_get_seckill_products();
+        foreach($seckills as &$seckill){
+            $seckill['ProductTry']['status'] = ProductTry::cal_op($seckill['ProductTry']['limit_num'], $seckill['ProductTry']['sold_num'], $seckill['ProductTry']['start_time'], $seckill['ProductTry']['status']);
+        }
+
+        return json_encode($seckills);
     }
 
     public function api_tag_products($tagId){
