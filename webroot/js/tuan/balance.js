@@ -161,6 +161,7 @@ $('li > a.coupon').on('click',function (e) {
                 var totalPrice = utils.toFixed(parseFloat(data.total_price), 2);
                 totalPriceDom.text("￥"+totalPrice);
                 totalPriceDom.data("totalPrice", totalPrice);
+                tb_remove();
             } else {
                 if (data.reason == 'not_login') {
                     utils.alert('您长时间未操作，请重新登录', function () {
