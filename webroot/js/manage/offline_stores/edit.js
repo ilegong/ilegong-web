@@ -13,10 +13,12 @@ $(function () {
 //    var areas = zitiAddress.getBeijingAreas;
 
     $.each(beijingArea, function (index, item) {
-        $('<option value="' + index + '">' + item + '</option>').appendTo(areaId);
-    });
-    $.each(changpingArea, function (index, item) {
-        $('<option value="' + index + '">' + item + '</option>').appendTo(childArea);
+        $('<option value="' + index + '">' + item.name + '</option>').appendTo(areaId);
+        if(item.children_area){
+            $.each(item.children_area,function(ind,itm){
+                $('<option value="' + ind + '">' + itm.name + '</option>').appendTo(childArea);
+            });
+        }
     });
     type.on('change', function(){
         initShopNo();

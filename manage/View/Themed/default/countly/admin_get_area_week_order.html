@@ -49,7 +49,7 @@
     $(document).ready(function () {
         var areaBox = $('select.area');
         $.each(beijingArea,function(index,item){
-            $('<option value="'+index+'">' +item + '</option>').appendTo(areaBox);
+            $('<option value="'+index+'">' +item.name + '</option>').appendTo(areaBox);
         });
         iUtils.initSelectBox(areaBox);
     });
