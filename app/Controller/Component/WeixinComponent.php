@@ -195,7 +195,8 @@ class WeixinComponent extends Component
                 "remark" => array("value" => "点击查看订单详情".($number > 0 ? "/领取红包":"")."。", "color" => "#FF8800")
             )
         );
-        return $this->send_weixin_message($post_data)&&$this->send_red_packet_msg($order);
+        $this->send_red_packet_msg($order);
+        return $this->send_weixin_message($post_data);
     }
 
     public function send_groupon_paid_message($open_id, $price, $url, $order_no, $good_info, $isDone, $isSelf, $isOrganizer, $organizerName, $newMemberName, $leftPeople, $ship_info)
@@ -319,7 +320,7 @@ class WeixinComponent extends Component
                 "topcolor" => "#FF0000",
                 "data" => array(
                     "first" => array("value" => "亲，恭喜您获得朋友说红包！"),
-                    "keyword1" => array("value" => $packet_name."（1个）"),
+                    "keyword1" => array("value" => $packet_name."红包"),
                     "keyword2" => array("value" => $packet_money."元"),
                     "remark" => array("value" => "红包可以发送给朋友一起抢，点击详情，分享红包。", "color" => "#FF8800")
                 )
@@ -596,6 +597,7 @@ class WeixinComponent extends Component
 
     private function send_red_packet_msg($order){
         $so = ClassRegistry::init('ShareOffer');
+        $this->log('send packet received message with order id '.$order['Order']['id']);
         $offer = $so->query_gen_offer($order, $order['Order']['creator']);
         $number = 0;
         $name = '';
@@ -604,7 +606,6 @@ class WeixinComponent extends Component
             $name = $offer['name'];
         }
         if($number>0){
-           $this->log('send packet received message with order id '.$order['Order']['id']);
            return $this->send_packet_received_message($order['Order']['creator'], $number/100, $name);
         }
         return false;
@@ -640,6 +641,7 @@ class WeixinComponent extends Component
                 "remark" => array("value" => "点击查看订单详情", "color" => "#FF8800")
             )
         );
-        return $this->send_weixin_message($post_data)&&$this->send_red_packet_msg($order);
+        $this->send_red_packet_msg($order);
+        return $this->send_weixin_message($post_data);
     }
 }

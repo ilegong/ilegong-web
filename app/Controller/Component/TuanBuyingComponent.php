@@ -39,12 +39,12 @@ class TuanBuyingComponent extends Component{
                 return;
             }
             $cart_array = array(0 => strval($cartInfo['Cart']['id']));
+            $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
             if(strpos($way_type,ZITI_TAG)===false){
                 return array('success' => true, 'direct'=>'normal', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id,'cart_array'=>$cart_array);
             }else{
                 return array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id,'cart_array'=>$cart_array);
             }
-            $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
         }else{
             return array('success' => false,'error' => '对不起，系统出错，请联系客服');
         }
@@ -331,24 +331,10 @@ class TuanBuyingComponent extends Component{
             $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, $shop_id);
         }
         $order_id = $order['Order']['id'];
-        $score_consumed = 0;
-        $spent_on_order = intval($this->Session->read(self::key_balanced_scores()));
-        $order_id_spents = array();
-        if ($spent_on_order > 0) {
-            $reduced = $spent_on_order / 100;
-            $toUpdate = array('applied_score' => $spent_on_order,
-                'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, 0, total_all_price - ' . $reduced . ')');
-            if ($this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY))) {
-                $this->log('apply user score=' . $spent_on_order . ' to order-id=' . $order_id . ' successfully');
-                $score_consumed += $spent_on_order;
-                $order_id_spents[$order_id] = $spent_on_order;
-            }
-        }
-        if ($score_consumed > 0) {
-            $this->spend_score($uid,$score_consumed,$order_id_spents);
-        }
-        // 注意必须清除key_balanced_scores
-        $this->Session->write(self::key_balanced_scores(), '');
+        $this->use_score($uid,$order_id);
+        $this->use_coupon($uid,$order_id,$pid,$total_price);
+        $this->clean_socre_coupon_info();
+
         if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
             $result_data['success'] = false;
             $result_data['fail_reason'] = "你已经支付过了";
@@ -368,6 +354,45 @@ class TuanBuyingComponent extends Component{
             $result_data['success'] = true;
             $result_data['order_id'] = $order['Order']['id'];
             return $result_data;
+        }
+    }
+
+    private function use_coupon($uid,$order_id,$pid,$total_all_price){
+        //use coupon
+        $productM = ClassRegistry::init('Product');
+        $productBrand = $productM->find('first',array(
+            'conditions' => array('id' => $pid),
+            'fields' => array('brand_id')
+        ));
+        App::uses('OrdersController','Controller');
+        $ordersController = new OrdersController();
+        $ordersController->Session = $this->Session;
+        $order_results = array();
+        $brand_id = $productBrand['Product']['brand_id'];
+        $order_results[$brand_id] = array($order_id, $total_all_price);
+        foreach($order_results as $brand_id => $order_val) {
+            $order_id = $order_val[0];
+            $ordersController->apply_coupons_to_order($brand_id, $uid, $order_id, $order_results);
+            $ordersController->apply_coupon_code_to_order($uid, $order_id);
+        }
+    }
+
+    private function use_score($uid,$order_id){
+        $score_consumed = 0;
+        $spent_on_order = intval($this->Session->read(self::key_balanced_scores()));
+        $order_id_spents = array();
+        if ($spent_on_order > 0) {
+            $reduced = $spent_on_order / 100;
+            $toUpdate = array('applied_score' => $spent_on_order,
+                'total_all_price' => 'if(total_all_price - ' . $reduced . ' < 0, 0, total_all_price - ' . $reduced . ')');
+            if ($this->Order->updateAll($toUpdate, array('id' => $order_id, 'status' => ORDER_STATUS_WAITING_PAY))) {
+                $this->log('apply user score=' . $spent_on_order . ' to order-id=' . $order_id . ' successfully');
+                $score_consumed += $spent_on_order;
+                $order_id_spents[$order_id] = $spent_on_order;
+            }
+        }
+        if ($score_consumed > 0) {
+            $this->spend_score($uid,$score_consumed,$order_id_spents);
         }
     }
 
@@ -493,6 +518,14 @@ class TuanBuyingComponent extends Component{
             }
         }
 
+    }
+
+    private function clean_socre_coupon_info(){
+        // 注意必须清除key_balanced_scores
+        App::uses('OrdersController', 'Controller');
+        $this->Session->write(OrdersController::key_balanced_scores(), '');
+        $this->Session->write(OrdersController::key_balanced_conpon_global(), '[]');
+        $this->Session->write(OrdersController::key_balanced_conpons(), '[]');
     }
 
 }
