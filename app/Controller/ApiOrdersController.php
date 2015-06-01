@@ -219,10 +219,12 @@ class ApiOrdersController extends AppController {
             $tuan_buying = $this->TuanBuying->findById($extra_id);
             $tuan_buying['TuanBuying']['status'] = $this->_get_tuan_buying_status($tuan_buying);
 
-            $product_id = $tuan_buying['TuanBuying']['pid'];
+            if($pid != $tuan_buying['TuanBuying']['pid']){
+                throw new Exception('invalid parameters with product id '.$pid.', tuan buying product id: '.$tuan_buying['TuanBuying']['pid']);
+            }
             $tuan_product = $this->TuanProduct->find('first', array(
                 conditions => array(
-                    'product_id' => $product_id
+                    'product_id' => $pid
                 )
             ));
 
@@ -234,13 +236,17 @@ class ApiOrdersController extends AppController {
             $this->loadModel('ProductTry');
             App::uses('ProductTry','Model');
             $product_try = $this->ProductTry->findById($extra_id);
+            if($pid != $product_try['ProductTry']['product_id']){
+                throw new Exception('invalid parameters with product id '.$pid.', seckill product id: '.$product_try['ProductTry']['product_id']);
+            }
+
             $product_try['ProductTry']['status'] = ProductTry::cal_op($product_try['ProductTry']['limit_num'], $product_try['ProductTry']['sold_num'], $product_try['ProductTry']['start_time'], $product_try['ProductTry']['status']);
             $product_try['ProductTry']['remaining_time'] = strtotime($product_try['ProductTry']['start_time']) - time();
             $this->set('product_try', $product_try);
         }
 
-        $upload_files = $this->_get_upload_files($product_id);
-        $ship_settings = $this->_get_ship_settings($product_id);
+        $upload_files = $this->_get_upload_files($pid);
+        $ship_settings = $this->_get_ship_settings($pid);
 
         $this->set('product',$pro);
         $this->set('recommends', $this->Components->load('ProductRecom')->recommend($pid));
