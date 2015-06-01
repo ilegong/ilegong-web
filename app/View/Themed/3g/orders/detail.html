@@ -139,10 +139,16 @@
         <li class="fl">实付款:<span>￥{{$this->Number->precision($order['Order']['total_price'], 2)}}</span></li>
         {{if $order['Order']['status']== ORDER_STATUS_PAID}}
         <li class="fr">
+            {{if $toShare}}
+                <a href="/users/my_offers" class="order_paybtn fl">领取红包</a>
+            {{/if}}
             <a href="#X" class="order_paybtn fl" id="remind-deliver"  value="{{$order['Order']['id']}}">提醒发货</a>
         </li>
         {{elseif $order['Order']['status']== ORDER_STATUS_SHIPPED}}
         <li class="fr" id="order_shipped_panel">
+            {{if $toShare}}
+                <a href="/users/my_offers" class="order_paybtn fl">领取红包</a>
+            {{/if}}
             <a href="#X" class="order_paybtn fl" id="btn_confirm_receive"  value="{{$order['Order']['id']}}">确认收货</a>
         </li>
         {{elseif $order['Order']['status']== ORDER_STATUS_WAITING_PAY}}
@@ -158,6 +164,9 @@
         </li>
         {{elseif $order['Order']['status']== ORDER_STATUS_RECEIVED}}
         <li class="fr">
+            {{if $toShare}}
+                <a href="/users/my_offers" class="order_paybtn fl">领取红包</a>
+            {{/if}}
             {{if $order['Order']['is_comment']==0}}
                 <a href="/comments/add_comment/{{$order['Order']['id']}}" class="order_paybtn fl"  value="{{$order['Order']['id']}}">评论赢积分</a>
             {{else}}
