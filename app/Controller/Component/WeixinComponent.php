@@ -602,6 +602,7 @@ class WeixinComponent extends Component
         $so = ClassRegistry::init('ShareOffer');
         $this->log('send packet received message with order id '.$order['Order']['id']);
         $offer = $so->query_gen_offer($order, $order['Order']['creator']);
+        $this->log('offer info '.json_encode($offer));
         $number = 0;
         $name = '';
         if(!empty($offer)) {
