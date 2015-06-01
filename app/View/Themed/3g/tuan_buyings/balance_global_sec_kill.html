@@ -58,7 +58,7 @@
 <script>
     var zitiAddressData = zitiAddress('{{$ship_type}}');
     $(document).ready(function () {
-        var bigBuy = zitiObj(zitiAddressData.getBeijingAreas, zitiAddressData.getChangpingAreas, $(window).height() + 5, $(window).width());
+        var bigBuy = zitiObj(zitiAddressData.getBeijingAreas,$(window).height() + 5, $(window).width());
         var elements = bigBuy.generateZitiArea();
         $(".conordertuan_adress").html(elements);
         bigBuy.bindThickbox();

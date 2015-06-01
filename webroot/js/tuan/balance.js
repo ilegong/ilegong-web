@@ -12,24 +12,42 @@ if(leastNum>0){
 }
 function zitiAddress(type){
     var beijingArea= {
-        110101:"东城区",
-        110108:"海淀区",
-        110102:"西城区",
-        110105:"朝阳区",
-        110106:"丰台区",
-        110114:"昌平区",
-        110113:"顺义区",
-        110115:"大兴区",
-        110112:"通州区"
-    };
-    var changpingArea = {
-        900001:"昌平县城",
-        900002:"天通苑",
-        900003:"回龙观",
-        900004:"北七家镇",
-        900005:"沙河镇",
-        900006:"立水桥",
-        900007:"霍营"
+        110101:{
+            'name':"东城区"
+        },
+        110108:{
+            'name':"海淀区"
+        },
+        110102:{
+            'name':"西城区"
+        },
+        110105:{
+            'name':"朝阳区"
+        },
+        110106:{
+            'name':"丰台区"
+        },
+        110114:{
+            'name':"昌平区",
+            'children_area':{
+                900001:{'name':'昌平县城'},
+                900002:{'name':'天通苑'},
+                900003:{'name':'回龙观'},
+                900004:{'name':'北七家镇'},
+                900005:{'name':'沙河镇'},
+                900006:{'name':'立水桥'},
+                900007:{'name':'霍营'}
+            }
+        },
+        110113:{
+            'name':"顺义区"
+        },
+        110115:{
+            'name':"大兴区"
+        },
+        110112:{
+            'name':"通州区",
+        }
     };
     //崇文并入东城区， 宣武并入西城区
     var ship_address = {};
@@ -54,8 +72,7 @@ function zitiAddress(type){
     return {
         getBeijingAreas: beijingArea,
         getShipAddress: getShipAddress,
-        getShipChildAddress:getShipChildAddress,
-        getChangpingAreas:changpingArea
+        getShipChildAddress:getShipChildAddress
     }
 };
 function editCartNum(id, num) {
@@ -260,20 +277,20 @@ $('#confirm_next').on('click',function(e){
     });
 });
 
-var zitiObj = function(area,child_area,height, width){
+var zitiObj = function(area,height, width){
     var conorder_url = '#TB_inline?inlineId=hiddenModalContent&modal=true&height=' + height + '&width=' + width;
     var choose_area='';
     return {
         generateZitiArea: function(){
             for(var addr in area){
-                if (addr == 110114){
-                choose_area += '<ul><li><a style="display: none" href="#" class="child_area" area-id="' +addr + '">' + area[addr] + '</a></li> </ul>';
+                if (area[addr].children_area){
+                   choose_area += '<ul><li><a style="displOay: none" href="#" class="child_area" area-id="' +addr + '">' + area[addr].name + '</a></li> </ul>';
+                    $.each(area[addr].children_area,function(index,item){
+                     choose_area += '<ul><li><a style="display: none" href="'+ conorder_url +'" class="thickbox" parent-id ="'+addr+'" area-id="' +index + '">' + item.name + '</a></li> </ul>';
+                    });
                 }else{
-                choose_area += '<ul><li><a style="display: none" href="'+ conorder_url +'" class="thickbox" area-id="' +addr + '">' + area[addr] + '</a></li> </ul>';
+                     choose_area += '<ul><li><a style="display: none" href="'+ conorder_url +'" class="thickbox" area-id="' +addr + '">' + area[addr].name + '</a></li> </ul>';
                 }
-            }
-            for(var add in child_area){
-                choose_area += '<ul><li><a style="display: none" href="'+ conorder_url +'" class="thickbox" parent-id ="110114" area-id="' +add + '">' + child_area[add] + '</a></li> </ul>';
             }
             return choose_area;
         },

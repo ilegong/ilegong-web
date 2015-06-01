@@ -69,11 +69,11 @@
     </div>
     <div id="area_list" class="tuanadresslist">  </div>
 </div>
-{{$this->Html->script(array('/js/tuan/balance.js?v12'));}}
+{{$this->Html->script(array('/js/tuan/balance.js?v13'));}}
 <script>
     var zitiAddressData = zitiAddress('{{$ship_val}}');
     $(document).ready(function () {
-        var bigBuy = zitiObj(zitiAddressData.getBeijingAreas, zitiAddressData.getChangpingAreas, $(window).height() + 5, $(window).width());
+        var bigBuy = zitiObj(zitiAddressData.getBeijingAreas,$(window).height() + 5, $(window).width());
         var elements = bigBuy.generateZitiArea();
         $(".conordertuan_adress").html(elements);
         bigBuy.bindThickbox();
