@@ -195,8 +195,7 @@ class WeixinComponent extends Component
                 "remark" => array("value" => "点击查看订单详情".($number > 0 ? "/领取红包":"")."。", "color" => "#FF8800")
             )
         );
-        $this->send_red_packet_msg($open_id,$order);
-        return $this->send_weixin_message($post_data);
+        return $this->send_weixin_message($post_data) && $this->send_red_packet_msg($open_id, $order);
     }
 
     public function send_groupon_paid_message($open_id, $price, $url, $order_no, $good_info, $isDone, $isSelf, $isOrganizer, $organizerName, $newMemberName, $leftPeople, $ship_info)
@@ -645,7 +644,6 @@ class WeixinComponent extends Component
                 "remark" => array("value" => "点击查看订单详情", "color" => "#FF8800")
             )
         );
-        $this->send_red_packet_msg($open_id,$order);
-        return $this->send_weixin_message($post_data);
+        return $this->send_weixin_message($post_data) && $this->send_red_packet_msg($open_id, $order);
     }
 }
