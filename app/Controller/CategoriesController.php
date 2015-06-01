@@ -9,6 +9,7 @@ class CategoriesController extends AppController {
         $seckills = $this->_get_seckill_products();
         foreach($seckills as &$seckill){
             $seckill['ProductTry']['status'] = ProductTry::cal_op($seckill['ProductTry']['limit_num'], $seckill['ProductTry']['sold_num'], $seckill['ProductTry']['start_time'], $seckill['ProductTry']['status']);
+            $seckill['ProductTry']['remaining_time'] = strtotime($seckill['ProductTry']['start_time']) - time();
         }
 
         return json_encode($seckills);
