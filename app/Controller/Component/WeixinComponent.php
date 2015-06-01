@@ -631,7 +631,7 @@ class WeixinComponent extends Component
             "url" => $this->get_order_query_url($order_no),
             "topcolor" => "#FF0000",
             "data" => array(
-                "first" => array("value" => "亲，您的订单已完成付款".(($offer_num > 0 && !empty($offer_name)) ? "同时恭喜您获得".$offer_name."红包，点击领取。" : "").$tail),
+                "first" => array("value" => "亲，您的订单已完成付款，".(($offer_num > 0 && !empty($offer_name)) ? "同时恭喜您获得".$offer_name."红包，点击领取。" : "").$tail),
                 "orderProductPrice" => array("value" => $price),
                 "orderProductName" => array("value" => $good_info),
                 "orderAddress" => array("value" => empty($ship_info)?'':$ship_info),

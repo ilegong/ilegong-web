@@ -99,6 +99,7 @@ class ShareOffer extends AppModel {
                 }
             }
         }
+
         return null;
     }
 
