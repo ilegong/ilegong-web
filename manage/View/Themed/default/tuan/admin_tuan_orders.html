@@ -283,15 +283,15 @@
 
         <div class="col-sm-9">
             <label class="radio-inline">
-                <input type="radio" id="order_in_refunding" name="status" value="14" data-toggle="collapse"
+                <input type="radio" id="order_in_refunding" name="status" value="14"
                        data-target="#refund_order">退款中
             </label>
             <label class="radio-inline">
-                <input type="radio" id="order_refunded" name="status" checked="checked" value="4" data-toggle="collapse"
+                <input type="radio" id="order_refunded" name="status" checked="checked" value="4"
                        data-target="#refund_order">已退款
             </label>
 
-            <p class="text-warning">选择退款中，只会更改订单状态；选择已退款，需要输入金额，并发送退款模版和短信</p>
+            <p class="text-warning">选择退款中，会更改订单状态,并记录日志，但不会发送消息；选择已退款，需要输入金额，并发送退款模版消息和短信</p>
         </div>
     </div>
     <div id="refund_order" class="collapse">
@@ -347,4 +347,4 @@
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js',
 '/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js',
 '/js/manage-lib/tableExport.jquery.plugin/tablesToExcel.js?v2.4'))}}
-{{$this->Html->script(array('manage/tuan/tuan_orders.js?v6.5'))}}
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v6.7'))}}

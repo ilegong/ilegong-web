@@ -475,6 +475,7 @@ class OrdersController extends AppController{
         $refundMoney = $_REQUEST['refundMoney'];
         $refundMark = $_REQUEST['refundMark'];
         $creator = $_REQUEST['creator'];
+        $orderStatus = $_REQUEST['OrderStatus'];
         $userInfo = $this->User->find('first',array('conditions' => array('id' => $creator)));
         $cartInfo = $this->Cart->find('all',array('conditions' => array('order_id' => $orderId)));
         $this->loadModel('RefundLog');
@@ -501,6 +502,7 @@ class OrdersController extends AppController{
         $msg = $title;
         $detail_url = WX_HOST.'/orders/detail/'.$orderId;
         $remark = '点击查看订单，如有问题，请联系客服!';
+        if ($orderStatus == 4){
         if (message_send($msg,$phone)){
             $flag_1 = true;
         }else{
@@ -515,13 +517,25 @@ class OrdersController extends AppController{
             $data['RefundLog']['order_id'] = $orderId;
             $data['RefundLog']['refund_fee'] = intval(intval($refundMoney)*1000/10);
             $data['RefundLog']['trade_type'] = $PayLogInfo['PayLog']['trade_type'];
-            $data['RefundLog']['remark'] = $refundMark;
+            $data['RefundLog']['remark'] = '已退款:'.$refundMark;
             $this->RefundLog->save($data);
             $returnInfo  = array('success' => true,'msg' =>'退款通知发送成功');
         }else{
             $returnInfo  = array('success' => false,'msg' =>'退款通知发送失败，请重试');
         }
         echo json_encode($returnInfo);
+        }else{
+            $data['RefundLog']['order_id'] = $orderId;
+            $data['RefundLog']['refund_fee'] = intval(intval($refundMoney)*1000/10);
+            $data['RefundLog']['trade_type'] = $PayLogInfo['PayLog']['trade_type'];
+            $data['RefundLog']['remark'] = '退款中:'.$refundMark;
+            if($this->RefundLog->save($data)){
+                $returnInfo = array('success' => true,'msg' => '退款记录保存成功');
+            }else{
+                $returnInfo = array('success' => false,'msg' => '退款记录保存失败');
+            }
+            echo json_encode($returnInfo);
+        }
     }
     public function  admin_compute_refund_money(){
         $this->autoRender = false;

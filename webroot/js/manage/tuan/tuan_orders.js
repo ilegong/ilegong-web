@@ -441,13 +441,14 @@ $(document).ready(function () {
                 var res = data;
                 if (order_status == 4) {
                     if (refund_money == '') {
-//                        utils.alert('退款金额不能为空哦');
                         refundMoney.focus().val('');
                         refundOrder.find('p.error-message').empty().append('退款金额不能为空哦');
                         return false;
-                    } else if (refund_money > Math.round((total_price - res) * 100) / 100 || parseInt(refund_money) <= 0) {
+                    } else if(total_price <res){
+                        refundOrder.find('p.error-message').empty().append('已退款金额超过订单金额！');
+                        return false;
+                    }else if (refund_money > Math.round((total_price - res) * 100) / 100 || parseInt(refund_money) <= 0) {
                         refundMoney.focus().val('').val(refund_money);
-//                        utils.alert('退款金额在0~'+ Math.round((total_price-res)*100)/100 +'之间');
                         refundOrder.find('p.error-message').empty().append('退款金额在0~' + Math.round((total_price - res) * 100) / 100 + '之间');
                         return false;
                     }
@@ -458,29 +459,33 @@ $(document).ready(function () {
                 }, function (data) {
                     var res = JSON.parse(data);
                     if (res.success) {
-                        if (order_status == 4) {
+//                        if (order_status == 4) {
                             $.post('/manage/admin/orders/send_refund_notify', {
                                 'orderId': order_id,
                                 'refundMoney': refund_money,
                                 'creator': creator,
-                                'refundMark': refund_mark
+                                'refundMark': refund_mark,
+                                'OrderStatus':order_status
                             }, function (data) {
                                 var result = JSON.parse(data);
                                 if (result.success) {
                                     bootbox.alert(res.msg + ' ' + result.msg);
                                     //location.reload();
-                                    $currentOperateOrder.parents('tr').children('td').eq(3).html('已退款');
+                                    if(order_status == 4){
+                                        $currentOperateOrder.parents('tr').children('td').eq(3).html('已退款');
+                                    }else{
+                                        $currentOperateOrder.parents('tr').children('td').eq(3).html('退款中');
+                                    }
                                     refundOrderDialog.dialog('close');
                                 } else {
                                     bootbox.alert(result.msg);
                                 }
                             });
-                        } else {
-                            bootbox.alert(res.msg);
-                            $currentOperateOrder.parents('tr').children('td').eq(3).html('退款中');
-//                            location.reload();
-                            refundOrderDialog.dialog('close');
-                        }
+//                        } else {
+//                            bootbox.alert(res.msg);
+////                            location.reload();
+//                            refundOrderDialog.dialog('close');
+//                        }
                     } else {
                         bootbox.alert(res.msg);
                     }
