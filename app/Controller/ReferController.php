@@ -324,7 +324,7 @@ class ReferController extends AppController {
             $friend_refer_total[$index]['user_info'] = $user_info;
 
         }
-        $date_start = date("m月d日", mktime(24, 0, 0, date("m"), 0, date("Y")));
+        $date_start = date("m月d日", mktime(24, 0, 0, date("m")-1, 0, date("Y")));
         $date_end = date('m月d日');
         $this->set('my_total_refer_money',round($my_total_refer_money,2));
         $this->set('my_total_refer',$my_total_refer);
@@ -345,7 +345,7 @@ class ReferController extends AppController {
     private function count_refer($uid = 0){
         $condition = array('from' => $uid,'deleted' => DELETED_NO,'bind_done' => 1,'first_order_done' => 1);
 //        $date_start = '2015-05-01';
-        $date_start = date("Y-m-d", mktime(24, 0, 0, date("m"), 0, date("Y")));
+        $date_start = date("Y-m-d", mktime(24, 0, 0, date("m")-1, 0, date("Y")));
         $date_end = date('Y-m-d');
         $condition['Date(created) >='] = $date_start;
         $condition['Date(created) <='] = $date_end;
