@@ -96,7 +96,7 @@
                         {{/if}}
                     </td>
                     {{if $order['Order']['type'] == 5 || $order['Order']['type'] == 6}}
-                        <td {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store))}}class="danger"{{/if}}>
+                        <td {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store)) || ($order['Order']['ship_mark'] == 'kuaidi' && empty($order['Order']['consignee_address']))}}class="danger"{{/if}}>
                         {{$offline_store['OfflineStore']['alias']}}
                         </td>
                         <td {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store)) || empty($order['Order']['ship_mark'])}}class="danger"{{/if}}>
@@ -129,7 +129,8 @@
                         <a href="/manage/admin/tuan_buyings/index?team_id={{$tuan_team['id']}}">{{$tuan_team['tuan_name']}}</a>
                     </td>
                     <td {{if $order['Order']['ship_mark'] == 'kuaidi' && empty($order['Order']['consignee_address'])}}class="danger"{{/if}}>
-                        {{if $order['Order']['consignee_area']}}{{$order['Order']['consignee_area']}},{{$order['Order']['consignee_address']}}{{else}}{{$order['Order']['consignee_address']}}{{/if}}
+                        {{if $order['Order']['consignee_area']}}{{$order['Order']['consignee_area']}},{{/if}}
+                        {{$order['Order']['consignee_address']}}
                     </td>
                     <td {{if !empty($order['Order']['remark_address']) && (empty($offline_store) || ( !empty($offline_store) && !$offline_store['OfflineStore']['can_remark_address']))}} class="danger"{{/if}}>
                         {{$order['Order']['remark_address']}}
