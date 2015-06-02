@@ -46,7 +46,11 @@
             <a href="/tuan_buyings/detail/{{$tuan_buy_id}}">
                 <p>{{$cart['Cart']['name']}}</p>
                 {{if !empty($cart['Cart']['send_date'])}}
-                    <s>{{date('m月d日', strtotime($cart['Cart']['send_date']))}}到货</s>
+                    {{if $consignment_date_not_available}}
+                        <label class="order_detail_soldout">(您订单中待支付的商品排期已过)<br>(请您重新下单)</label>
+                    {{else}}
+                        <s>{{date('m月d日', strtotime($cart['Cart']['send_date']))}}到货</s>
+                    {{/if}}
                 {{/if}}
                 {{if $tuan_expired&&$order['Order']['status']== ORDER_STATUS_WAITING_PAY}}
                     <label class="order_detail_soldout">(您的团购结束)<br>(订单不能支付)</label>
@@ -64,7 +68,11 @@
             <a href="{{product_link2($p)}}">
                 <p>{{$cart['Cart']['name']}}</p>
                 {{if !empty($cart['Cart']['send_date'])}}
-                    <s>{{date('m月d日', strtotime($cart['Cart']['send_date']))}}到货</s>
+                    {{if $consignment_date_not_available}}
+                        <label class="order_detail_soldout">(您订单中待支付的商品排期已过)<br>(请您重新下单)</label>
+                    {{else}}
+                        <s>{{date('m月d日', strtotime($cart['Cart']['send_date']))}}到货</s>
+                    {{/if}}
                 {{/if}}
                 {{if in_array($cart['Cart']['product_id'], $expired_pids)}}
                     <label class="order_detail_soldout">(该商品已下架)<br>(订单已经失效)</label>
