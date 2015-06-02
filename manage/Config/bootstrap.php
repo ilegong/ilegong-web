@@ -366,7 +366,7 @@ function send_tuan_tip_msg($open_id,$title,$product_name,$tuan_leader_wx,$remark
  * @return string
  */
 function product_link($pid, $defUri) {
-    $linkInCache = Cache::read('link_pro_' . $pid);
+    $linkInCache = Cache::read('link_pro_manage_' . $pid);
     if (!empty($linkInCache)) {
         return $linkInCache;
     }
@@ -379,7 +379,7 @@ function product_link2($p, $defUri = '/') {
     if (!empty($p)) {
         $pp = empty($p['Product']) ? $p : $p['Product'];
         $link = WX_HOST."/products/" . date('Ymd', strtotime($pp['created'])) . "/" . $pp['slug'] . ".html";
-        Cache::write('link_pro_' . $pp['id'], $link);
+        Cache::write('link_pro_manage_' . $pp['id'], $link);
         return $link;
     } else {
         return $defUri;
