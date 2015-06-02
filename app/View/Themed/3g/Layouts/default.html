@@ -16,7 +16,7 @@
           content="{{if $seodescription}}{{$seodescription}}{{else}}{{$site[seodescription]}}{{/if}}"/>
     <link rel="apple-touch-icon" href="{{$this->Html->assetUrl('/img/logo_mini.png')}}" />
     <title>{{$pageTitle}}-{{$site['title']}}</title>
-    {{$this->Html->css(array('http://'.WX_HOST.'/css/bootstrap_2.css?v1.1', 'layout_3g.css?ver51',));}}
+    {{$this->Html->css(array('http://'.WX_HOST.'/css/bootstrap_2.css?v1.1', 'layout_3g.css?ver51','thickbox.css?ver1'));}}
     <!--<script type="text/javascript" name="baidu-tc-cerfication" data-appid="5181580" src="http://apps.bdimg.com/cloudaapi/lightapp.js"></script>-->
 
     <style>
@@ -29,8 +29,9 @@
     {{$this->Html->css(array('mobile-view.css?v12.7',))}}
     {{$this->Html->script(array(
     'http://libs.baidu.com/jquery/1.9.1/jquery.min.js',
-    'jquery/jquery.cookie.js','i18n/language-zh-CN.js'));}}
-    {{$this->Html->script(array('jquery.wookmark.js'));}}
+    'jquery/jquery.cookie.js',
+    'i18n/language-zh-CN.js',
+    '/js/thickbox.js?v1'));}}
     <script type="text/javascript">
         var BASEURL = "{{APP_SUB_DIR}}";
         var ADMIN_BASEURL = BASEURL+"/manage";
