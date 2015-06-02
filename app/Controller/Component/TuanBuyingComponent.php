@@ -12,9 +12,6 @@ class TuanBuyingComponent extends Component {
 
     public $components = array('Session');
 
-    public static function key_balance_pids() {
-        return "Balance.balance.pids";
-    }
     /**
      * @param $product_id
      * @param $product_num
@@ -30,6 +27,21 @@ class TuanBuyingComponent extends Component {
      * @return array|void
      */
     public function add_cart($product_id, $product_num, $spec_id, $type, $uId, $cart_tuan_param, $consignment_date_id, $send_date, $way_id, $way_type) {
+
+        //check date
+        if((empty($consignment_date_id) || $consignment_date_id == 0) && empty($send_date)){
+            echo json_encode(array('success'=> false, 'error' => '对不起，系统错误，请重新点击购买'));
+            return;
+        }
+        if(!empty($consignment_date_id) && $consignment_date_id != 0){
+            $consignment_date = $this->ConsignmentDate->findById($consignment_date_id);
+            if(empty($consignment_date) || $consignment_date['ConsignmentDate']['published'] == 0){
+                echo json_encode(array('success'=> false, 'error' => '发货时间选择有误，请重新点击购买'));
+                return;
+            }
+        }
+
+        //check ship setting
         $this->ProductShipSetting = ClassRegistry::init('ProductShipSetting');
         $productShipSetting = $this->ProductShipSetting->find('first', array(
             'conditions' => array(
@@ -201,6 +213,8 @@ class TuanBuyingComponent extends Component {
         $result_data['cart_info'] = $Carts;
         $result_data['max_num'] = $max_num;
         $result_data['brand'] = $brand['Brand'];
+        $this->set_balance_cart_ids($cart_id);
+        $this->clean_score_and_coupon();
         if ($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN) {
             $result_data['big_tuan'] = true;
         }
@@ -335,6 +349,9 @@ class TuanBuyingComponent extends Component {
             if (!empty($remark_address)) {
                 //has a remark address
                 $address = $address . '[' . $remark_address . ']';
+            }
+            if(!empty($offline_store)){
+                $shop_id = $offline_store['OfflineStore']['id'];
             }
         }
         if ($tuan_sec == 'true') {
@@ -540,6 +557,11 @@ class TuanBuyingComponent extends Component {
             return $this->OrderConsignees->id;
         }
 
+    }
+
+    private function set_balance_cart_ids($cartId){
+        App::uses('OrdersController', 'Controller');
+        $this->Session->write(OrdersController::key_balance_pids(), json_encode(array($cartId)));
     }
 
     private function clean_socre_coupon_info() {
