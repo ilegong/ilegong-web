@@ -388,7 +388,7 @@ class ApiOrdersController extends AppController {
         $orderM = ClassRegistry::init('OrderConsignees');
         $info = $orderM->find('all', array(
             'conditions' => array('creator' => $creator, 'deleted' => 0 ),
-            'fields' => array('id', 'name', 'status', 'area', 'address', 'mobilephone', 'telephone', 'email', 'postcode', 'province_id', 'city_id', 'county_id')
+            'fields' => array('id', 'name', 'status', 'area', 'address', 'mobilephone', 'telephone', 'email', 'postcode', 'province_id', 'city_id', 'county_id', 'ziti_id', 'ziti_type','remark_address')
         ));
         $this->set('order_consigness', $info);
         $this->set('_serialize', 'order_consigness');
