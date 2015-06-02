@@ -12,6 +12,9 @@ class TuanBuyingComponent extends Component {
 
     public $components = array('Session');
 
+    public static function key_balance_pids() {
+        return "Balance.balance.pids";
+    }
     /**
      * @param $product_id
      * @param $product_num
@@ -27,6 +30,7 @@ class TuanBuyingComponent extends Component {
      * @return array|void
      */
     public function add_cart($product_id, $product_num, $spec_id, $type, $uId, $cart_tuan_param, $consignment_date_id, $send_date, $way_id, $way_type) {
+        $this->ProductShipSetting = ClassRegistry::init('ProductShipSetting');
         $productShipSetting = $this->ProductShipSetting->find('first', array(
             'conditions' => array(
                 'id' => $way_id
