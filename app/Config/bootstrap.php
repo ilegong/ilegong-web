@@ -952,7 +952,7 @@ function add_coupon_for_new($uid, $weixinC, $coupons = array(18483, 18482), $des
  * @return string
  */
 function product_link($pid, $defUri) {
-    $linkInCache = Cache::read('link_pro_' . $pid);
+    $linkInCache = Cache::read('link_pro_manage' . $pid);
     if (!empty($linkInCache)) {
         return $linkInCache;
     }
@@ -970,7 +970,7 @@ function product_link2($p, $defUri = '/') {
     if (!empty($p)) {
         $pp = empty($p['Product']) ? $p : $p['Product'];
         $link = "/products/" . date('Ymd', strtotime($pp['created'])) . "/" . $pp['slug'] . ".html";
-        Cache::write('link_pro_' . $pp['id'], $link);
+        Cache::write('link_pro_manage' . $pp['id'], $link);
         return $link;
     } else {
         return $defUri;

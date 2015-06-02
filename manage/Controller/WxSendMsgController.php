@@ -34,7 +34,6 @@ class WxSendMsgController extends AppController{
         $startDate = date('Y-m-d',strtotime('-14 day'.$now));
         $users = $this->Order->query('SELECT DISTINCT creator,consignee_id FROM cake_orders WHERE ship_mark = "ziti" AND created > \''.$startDate.'\' AND created < \''.$now.'\'');
         $userIds = Hash::extract($users,'{n}.cake_orders.creator');
-        //$userIds = array(559795,5081,633345,1370,1820,819,544307);
         $openIds = $this->Oauthbind->find('all',array(
             'conditions' => array(
                 'user_id' => $userIds,
@@ -43,11 +42,8 @@ class WxSendMsgController extends AppController{
                 'oauth_openid','user_id'
             )
         ));
-        //$userConigneeMap = Hash::combine($users, '{n}.cake_orders.creator', '{n}.cake_orders.consignee_id');
         $openIds = Hash::combine($openIds,'{n}.Oauthbind.user_id','{n}.Oauthbind.oauth_openid');
-        //loop send template msg
         foreach($openIds as $uid => $openId){
-            //$leader_name = $tuanTeams[$userConigneeMap[$uid]]['leader_name'].' 微信号:'.$tuanTeams[$userConigneeMap[$uid]]['leader_weixin'];
             $leader_name = '朋友说小妹 微信号:pyshuo2015';
             send_tuan_tip_msg($openId,$msgData['title'],$msgData['productName'],$leader_name,$msgData['remark'],$msgData['detail_url']);
         }
