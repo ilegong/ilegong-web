@@ -5,3 +5,4 @@ webroot/files/*
 .idea
 .svn
 *.iml
+ZendDebugger.so
