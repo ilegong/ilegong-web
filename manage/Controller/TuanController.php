@@ -16,7 +16,7 @@ class TuanController extends AppController
     }
     public function admin_tuan_orders()
     {
-        $this->set('b2c_empty_date_address_count', $this->_query_b2c_empty_date_address());
+        $this->set('abnormal_order_count', $this->_query_abnormal_order());
         $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
         $this->set('orders_today_count', $this->_query_orders_today_count());
@@ -176,24 +176,6 @@ class TuanController extends AppController
         $this->render("admin_tuan_orders");
     }
 
-    public function admin_query_b2c_empty_date_address()
-    {
-        $conditions = array(
-            'OR' => array(
-                'Cart.send_date is null',
-                array("Order.consignee_id = 0", "Order.consignee_address = ''")
-            )
-        );
-        $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
-        $conditions['Order.status'] = 1;
-        $conditions['DATE(Order.created) > '] = date('Y-m-d', strtotime('-62 days'));
-
-        $this->_query_orders($conditions, 'Order.created DESC');
-
-        $this->set('query_type', 'emptySendDate');
-        $this->render("admin_tuan_orders");
-    }
-
     public function admin_query_abnormal_order(){
         $conditions = array(
             'OR' => array(
@@ -274,7 +256,7 @@ class TuanController extends AppController
         $expired_tuan_buying_count = $this->TuanBuying->query('select count(*) as c from cake_tuan_buyings where end_time < now() and status = 0');
         $this->set('expired_tuan_buying_count', $expired_tuan_buying_count[0][0]['c']);
 
-        $this->set('b2c_empty_date_address_count', $this->_query_b2c_empty_date_address());
+        $this->set('abnormal_order_count', $this->_query_abnormal_order());
         $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
         $this->set('orders_today_count', $this->_query_orders_today_count());
@@ -583,11 +565,10 @@ class TuanController extends AppController
         $conditions['Order.status'] = ORDER_STATUS_PAID;
         $conditions['DATE(Order.updated) <'] = date('Y-m-d H:i:s');
 
-        $this->set('b2c_empty_date_address_count', $this->_query_b2c_empty_date_address());
+        $this->set('abnormal_order_count',$this->_query_abnormal_order());
         $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
         $this->set('orders_today_count', $this->_query_orders_today_count());
-        $this->set('abnormal_order_count',$this->_query_abnormal_order());
 
         $this->set('should_count_nums', true);
         $this->set('product_count', $product_count);
@@ -655,11 +636,6 @@ class TuanController extends AppController
     public function _query_c2c_paid_not_send_count(){
         $c2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on o.id = c.order_id where o.type = 1 and o.status = 1 and o.pay_time < CURDATE()');
         return $c2c_paid_not_sent_count[0][0]['ct'];
-    }
-
-    public function _query_b2c_empty_date_address(){
-        $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where (c.send_date is null or (o.consignee_id = 0 and o.consignee_address = "")) and o.type in (5, 6) and o.status = 1 and DATE(o.created) > '.date('Y-m-d', strtotime('-62 days')));
-        return $empty_send_date_count[0][0]['ct'];
     }
 
     public function _query_orders_today_count(){
