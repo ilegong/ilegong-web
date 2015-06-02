@@ -66,7 +66,7 @@ class TuanBuyingComponent extends Component {
                 return;
             }
             $cart_array = array(0 => strval($cartInfo['Cart']['id']));
-            $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
+            $this->set_balance_cart_ids($cart_array);
             if (strpos($way_type, ZITI_TAG) === false) {
                 return array('success' => true, 'direct' => 'normal', 'cart_id' => $cartInfo['Cart']['id'], 'way_id' => $way_id, 'cart_array' => $cart_array);
             } else {
