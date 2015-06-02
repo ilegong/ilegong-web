@@ -9,7 +9,7 @@
 class ReferController extends AppController {
 
 
-    var $uses = array('Refer', 'Comment','Order','OrderComment','ReferAward','ExchangeReferAward');
+    var $uses = array('Refer', 'Comment','Order','OrderComment','ReferAward','ExchangeReferAward','User');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -40,7 +40,12 @@ class ReferController extends AppController {
         $userSuccessRefers = $this->Refer->find('count',array(
             'conditions' => $cond
         ));
-
+        $agency_uid = array(411402,633345,146);
+        if(in_array($uid,$agency_uid)){
+            $this->set('is_agency',true);
+        }else{
+            $this->set('is_agency',false);
+        }
         $this->set('total_refers', $userRefers);
 
         $this->set('success_refers',$userSuccessRefers);
@@ -52,6 +57,7 @@ class ReferController extends AppController {
         $this->set_user_recommend_condition($uid);
         $this->set_wx_share_data();
         $this->pageTitle = $this->currentUser['nickname']. '向您推荐了【朋友说】, 朋友间分享健康美食的平台';
+        $this->set('uid',$uid);
     }
 
     public function accept() {
@@ -294,6 +300,73 @@ class ReferController extends AppController {
             $this->set('share_desc', '原产地直供、新鲜现摘，找到最初的味道!');
             $this->set('share_imag_url','http://51daifan.sinaapp.com/img/refer/logo.jpg');
         }
+    }
+
+    public function agency_refer_count($uid = 0){
+
+        $this->pageTitle = '代理人';
+        if (!$uid) {
+            $uid = $this->currentUser['id'];
+            $this->redirect('/refer/index/'.$this->currentUser['id'].'.html');
+        } else if ($uid != $this->currentUser['id']) {
+            $this->redirect('/refer/client/'.$uid.'/'.$this->currentUser['id'].'.html');
+        }
+        list($my_total_refer_money,$my_total_refer,$refer_accept_uid,) = $this->count_refer($uid);
+        $friend_total_refer = 0;
+        $friend_total_refer_money = 0;
+        $friend_refer_total = array();
+        foreach($refer_accept_uid as $index=>$uid){
+            list($friend_refer_money,$friend_refer_num,,$user_info) = $this->count_refer($uid);
+            $friend_total_refer = $friend_total_refer + $friend_refer_num;
+            $friend_total_refer_money = $friend_total_refer_money + $friend_refer_money;
+            $friend_refer_total[$index]['friend_refer'] = $friend_refer_num;
+            $friend_refer_total[$index]['friend_refer_money'] = $friend_refer_money;
+            $friend_refer_total[$index]['user_info'] = $user_info;
+
+        }
+        $date_start = date("m月d日", mktime(24, 0, 0, date("m"), 0, date("Y")));
+        $date_end = date('m月d日');
+        $this->set('my_total_refer_money',round($my_total_refer_money,2));
+        $this->set('my_total_refer',$my_total_refer);
+        $this->set('friend_total_refer_money',round($friend_total_refer_money,2));
+        $this->set('friend_total_refer',$friend_total_refer);
+        $this->set('friend_refer_total',$friend_refer_total);
+        $this->set('date_start',$date_start);
+        $this->set('date_end',$date_end);
+        $this->set('uid',$uid);
+
+    }
+    /*
+     * return num of new customers referred by uid
+     * return total orders' price of new customers referred by uid
+     * return all new customers referred by uid
+     * return user info of uid
+     */
+    private function count_refer($uid = 0){
+        $condition = array('from' => $uid,'deleted' => DELETED_NO,'bind_done' => 1,'first_order_done' => 1);
+//        $date_start = '2015-05-01';
+        $date_start = date("Y-m-d", mktime(24, 0, 0, date("m"), 0, date("Y")));
+        $date_end = date('Y-m-d');
+        $condition['Date(created) >='] = $date_start;
+        $condition['Date(created) <='] = $date_end;
+        $refer_info = $this->Refer->find('all',array(
+            'conditions' =>$condition
+        ));
+        $user_info = $this->User->find('first',array('conditions' => array('id' => $uid)));
+        $refer_accept_uid = Hash::extract($refer_info,'{n}.Refer.to');
+        $total_refer_money = 0;
+        $total_refer_num = 0;
+        foreach($refer_accept_uid as $uid){
+            $count_order_money = $this->Order->query('select sum(o.total_all_price) as ct from cake_orders o where
+                                 o.status in (1,2,3,9)
+                                 and o.creator = '.$uid.'
+                                 and Date(o.pay_time) >= "'.$date_start.'"
+                                 and Date(o.pay_time) <= "'.$date_end.'"
+            ');
+            $total_refer_money = $total_refer_money + $count_order_money[0][0]['ct'];
+            $total_refer_num = $total_refer_num + 1;
+        }
+        return array($total_refer_money,$total_refer_num,$refer_accept_uid,$user_info);
     }
 
 }

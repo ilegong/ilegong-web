@@ -103,3 +103,6 @@ input{ outline:none;}
 /**/
 .layer_close{ font-size: 1em; line-height: 36px; text-align:center; color: #ffffff; text-decoration: none; font-weight: bold; border-radius: 36px; width: 36px; height: 36px; background-color: #FFA200; position: absolute; top: -8px; right: -8px;}
 
+/*代理人样式*/
+.agency{ padding: 15px 10px 0 10px; line-height: 20px; color: #333333;}
+.agency_red{color: #CC0000;}
