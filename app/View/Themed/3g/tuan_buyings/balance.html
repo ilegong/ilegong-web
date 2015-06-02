@@ -6,11 +6,7 @@
     </ul>
 </div>
 <div class="tuan_balance" data-ship-way="{{$way_type}}" data-tuanbuy-id="{{$tuan_buy_id}}" data-tuanteam-id="{{$tuan_id}}" data-way-id="{{$way_id}}" data-way-type="{{$way_type}}" data-way-fee="{{$ship_fee}}">
-    {{if $big_tuan}}
-        {{template tuan_buyings/ziti_contact_info_template}}
-    {{else}}
-        {{template tuan_buyings/contact_info_template}}
-    {{/if}}
+    {{template tuan_buyings/contact_info_template}}
     <div class="cart" style="margin-top: 0; padding-top: 0;">
         <div style="margin-bottom: 10px;">
             <dl class="clearfix">

@@ -1,12 +1,12 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: shichaopeng
  * Date: 5/18/15
  * Time: 12:29
  */
-
-class TuanBuyingComponent extends Component{
+class TuanBuyingComponent extends Component {
 
     var $name = 'TuanBuyingComponent';
 
@@ -26,27 +26,38 @@ class TuanBuyingComponent extends Component{
      *
      * @return array|void
      */
-    public function add_cart($product_id,$product_num,$spec_id,$type,$uId,$cart_tuan_param,$consignment_date_id,$send_date,$way_id,$way_type){
+    public function add_cart($product_id, $product_num, $spec_id, $type, $uId, $cart_tuan_param, $consignment_date_id, $send_date, $way_id, $way_type) {
+        $productShipSetting = $this->ProductShipSetting->find('first', array(
+            'conditions' => array(
+                'id' => $way_id
+            )
+        ));
+        if (!empty($productShipSetting)) {
+            if ($product_num < $productShipSetting['ProductShipSetting']['least_num']) {
+                return array('success' => false, 'error' => '对不起，你选择的物流方式起送数量是' . $productShipSetting['ProductShipSetting']['least_num'] . '，请重新下单。');
+
+            }
+        }
         $this->Cart = ClassRegistry::init('Cart');
         $sessionId = $this->Session->id();
-        $cartInfo = $this->Cart->add_to_cart($product_id,$product_num,$spec_id,$type,0,$uId, $sessionId,  null, null,$cart_tuan_param);
-        $this->log('cartInfo: '.json_encode($cartInfo));
-        if($cartInfo){
-            $result = $this->Cart->updateAll(array('consignment_date' => $consignment_date_id, 'send_date' => "'".$send_date."'"), array('id' => $cartInfo['Cart']['id']));
-            if(!$result){
-                echo json_encode(array('success'=> false, 'error' => '发货时间选择有误，请重新点击购买'));
-                $this->log("failed to update consignment_date and send_date for cart ".$cartInfo['Cart']['id'].": consignment_date: ".$consignment_date_id.", send_date: ".$send_date);
+        $cartInfo = $this->Cart->add_to_cart($product_id, $product_num, $spec_id, $type, 0, $uId, $sessionId, null, null, $cart_tuan_param);
+        $this->log('cartInfo: ' . json_encode($cartInfo));
+        if ($cartInfo) {
+            $result = $this->Cart->updateAll(array('consignment_date' => $consignment_date_id, 'send_date' => "'" . $send_date . "'"), array('id' => $cartInfo['Cart']['id']));
+            if (!$result) {
+                echo json_encode(array('success' => false, 'error' => '发货时间选择有误，请重新点击购买'));
+                $this->log("failed to update consignment_date and send_date for cart " . $cartInfo['Cart']['id'] . ": consignment_date: " . $consignment_date_id . ", send_date: " . $send_date);
                 return;
             }
             $cart_array = array(0 => strval($cartInfo['Cart']['id']));
             $this->Session->write(self::key_balance_pids(), json_encode($cart_array));
-            if(strpos($way_type,ZITI_TAG)===false){
-                return array('success' => true, 'direct'=>'normal', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id,'cart_array'=>$cart_array);
-            }else{
-                return array('success' => true, 'direct'=>'big_tuan_list', 'cart_id'=>$cartInfo['Cart']['id'],'way_id'=>$way_id,'cart_array'=>$cart_array);
+            if (strpos($way_type, ZITI_TAG) === false) {
+                return array('success' => true, 'direct' => 'normal', 'cart_id' => $cartInfo['Cart']['id'], 'way_id' => $way_id, 'cart_array' => $cart_array);
+            } else {
+                return array('success' => true, 'direct' => 'big_tuan_list', 'cart_id' => $cartInfo['Cart']['id'], 'way_id' => $way_id, 'cart_array' => $cart_array);
             }
-        }else{
-            return array('success' => false,'error' => '对不起，系统出错，请联系客服');
+        } else {
+            return array('success' => false, 'error' => '对不起，系统出错，请联系客服');
         }
     }
 
@@ -57,17 +68,17 @@ class TuanBuyingComponent extends Component{
      *
      * @return array
      */
-    public function balance_sec_kill($uid,$tuan_id,$cart_id,$try_id){
-        $ship_type=-1;
+    public function balance_sec_kill($uid, $tuan_id, $cart_id, $try_id) {
+        $ship_type = -1;
         $result_data = array();
-        if(!empty($tuan_id)){
+        if (!empty($tuan_id)) {
             $this->TuanTeam = ClassRegistry::init('TuanTeam');
-            $team = $this->TuanTeam->find('first',array(
+            $team = $this->TuanTeam->find('first', array(
                 'conditions' => array(
                     'id' => $tuan_id
                 )
             ));
-            if(empty($team)){
+            if (empty($team)) {
                 //$this->__message('该团不存在', '/tuan_teams/mei_shi_tuan');
                 $result_data['success'] = false;
                 $result_data['fail_reason'] = '该团不存在';
@@ -76,11 +87,11 @@ class TuanBuyingComponent extends Component{
             $offline_store = $this->get_offline_store($team['TuanTeam']['offline_store_id']);
             $result_data['tuan_id'] = $tuan_id;
             $result_data['can_mark_address'] = $this->can_mark_address($tuan_id);
-            $result_data['tuan_address'] = get_address($team,$offline_store);
-        }else{
+            $result_data['tuan_address'] = get_address($team, $offline_store);
+        } else {
             //is global sec
-            $shipSetting = $this->get_ship_setting(null,$try_id,'Try');
-            if(!empty($shipSetting)){
+            $shipSetting = $this->get_ship_setting(null, $try_id, 'Try');
+            if (!empty($shipSetting)) {
                 //ziti address type
                 $ship_type = $shipSetting['ProductShipSetting']['ship_val'];
             }
@@ -96,7 +107,7 @@ class TuanBuyingComponent extends Component{
         $result_data['cart_id'] = $Carts['Cart']['id'];
         $result_data['cart_info'] = $Carts;
         $result_data['brand'] = $brand['Brand'];
-        $result_data['consignee_info'] = $this->get_old_consignees($uid,$shipSetting);
+        $result_data['consignee_info'] = $this->get_old_consignees($uid, $shipSetting);
         $result_data['success'] = true;
         return $result_data;
     }
@@ -108,7 +119,7 @@ class TuanBuyingComponent extends Component{
      * @param int $way_id
      * @return array
      */
-    public function balance_tuan($uid,$tuan_buy_id, $cart_id, $way_id=0){
+    public function balance_tuan($uid, $tuan_buy_id, $cart_id, $way_id = 0) {
         $result_data = array();
         $Carts = $this->get_cart($cart_id);
         $this->TuanBuying = ClassRegistry::init('TuanBuying');
@@ -170,7 +181,7 @@ class TuanBuyingComponent extends Component{
         }
         $brand = $this->get_brand($pid);
         $could_score_money = $this->get_score_usable($uid, $total_price);
-        $result_data['consignee_info'] = $this->get_old_consignees($uid,$shipSetting);
+        $result_data['consignee_info'] = $this->get_old_consignees($uid, $shipSetting);
         $tuan_id = $tuan_info['TuanTeam']['id'];
         $result_data['score_usable'] = $could_score_money * 100;
         $result_data['way_id'] = $way_id;
@@ -206,14 +217,14 @@ class TuanBuyingComponent extends Component{
      * @param $p_address
      * @return array
      */
-    public function make_order($cart_id,$tuan_id,$member_id,$mobile,$name,$uid,$way_id,$tuan_sec,$global_sec,$shop_id,$p_address,$remark_address){
+    public function make_order($cart_id, $tuan_id, $member_id, $mobile, $name, $uid, $way_id, $tuan_sec, $global_sec, $shop_id, $p_address, $remark_address) {
         $result_data = array();
         if (empty($uid)) {
             $result_data['success'] = false;
             $result_data['fail_reason'] = "没有登录,请先登录";
             return $result_data;
         }
-        if(empty($cart_id)){
+        if (empty($cart_id)) {
             $result_data['success'] = false;
             $result_data['fail_reason'] = "下单失败,请重新下单";
             return $result_data;
@@ -227,17 +238,17 @@ class TuanBuyingComponent extends Component{
         $cart_info = $this->Cart->findById($cart_id);
         $creator = $cart_info['Cart']['creator'];
         $order_type = $cart_info['Cart']['type'];
-        if(empty($cart_info)){
+        if (empty($cart_info)) {
             $result_data['success'] = false;
             $result_data['fail_reason'] = "购物车记录为空";
             return $result_data;
         }
-        if($creator != $uid){
+        if ($creator != $uid) {
             $result_data['success'] = false;
             $result_data['fail_reason'] = "团购订单不属于你，请刷新重试";
             return $result_data;
         }
-        if($order_type != CART_ITEM_TYPE_TUAN&&$order_type != CART_ITEM_TYPE_TUAN_SEC){
+        if ($order_type != CART_ITEM_TYPE_TUAN && $order_type != CART_ITEM_TYPE_TUAN_SEC) {
             $result_data['success'] = false;
             $result_data['fail_reason'] = "该订单不属于团购订单，请重试";
             return $result_data;
@@ -289,15 +300,12 @@ class TuanBuyingComponent extends Component{
                     if ($shipFee > 0) {
                         $total_price = $total_price + $shipFee;
                     }
+                    $shop_id = $this->update_tuan_consignees_address($uid, $name, $mobile, $remark_address, $p_address);
                     $address = $p_address;
-                    //更新用户收货地址
-                    $consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN,'address'=>$p_address,'remark_address' => $remark_address);
-                    //update consignes address
-                    $this->merge_order_consignes($uid,$consignees);
-                    if(!empty($remark_address)){
-                        $address = $address.'['.$remark_address.']';
+                    if (!empty($remark_address)) {
+                        $address = $address . '[' . $remark_address . ']';
                     }
-                }else{
+                } else {
                     //rember last ziti address
                     if (empty($shipSetting) || strpos(TuanShip::get_ship_code($shipTypeId), ZITI_TAG) !== false) {
                         //ziti
@@ -306,9 +314,9 @@ class TuanBuyingComponent extends Component{
                             if (!empty($offline_store)) {
                                 $address = get_address($tuan_info, $offline_store);
                                 //save user ziti address
-                                $this->merge_ziti_order_consignes($uid,$offline_store,$address,$remark_address);
-                                if(!empty($remark_address)){
-                                    $address = $address.'['.$remark_address.']';
+                                $this->update_ziti_consigness_address($offline_store, $name, $mobile, $uid, $address, $remark_address);
+                                if (!empty($remark_address)) {
+                                    $address = $address . '[' . $remark_address . ']';
                                 }
                             }
                         }
@@ -319,6 +327,7 @@ class TuanBuyingComponent extends Component{
             //小团购买 获取自提点地址
             $offline_store = $this->get_offline_store($tuan_info['TuanTeam']['offline_store_id']);
             $address = get_address($tuan_info, $offline_store);
+            $this->update_ziti_consigness_address($offline_store, $name, $mobile, $uid, $address, $remark_address);
             if (!empty($remark_address)) {
                 //has a remark address
                 $address = $address . '[' . $remark_address . ']';
@@ -331,8 +340,8 @@ class TuanBuyingComponent extends Component{
             $order = $this->Order->createTuanOrder($member_id, $uid, $total_price, $pid, $order_type, $area, $address, $mobile, $name, $cart_id, $way, $shop_id);
         }
         $order_id = $order['Order']['id'];
-        $this->use_score($uid,$order_id);
-        $this->use_coupon($uid,$order_id,$pid,$total_price);
+        $this->use_score($uid, $order_id);
+        $this->use_coupon($uid, $order_id, $pid, $total_price);
         $this->clean_socre_coupon_info();
 
         if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
@@ -357,27 +366,27 @@ class TuanBuyingComponent extends Component{
         }
     }
 
-    private function use_coupon($uid,$order_id,$pid,$total_all_price){
+    private function use_coupon($uid, $order_id, $pid, $total_all_price) {
         //use coupon
         $productM = ClassRegistry::init('Product');
-        $productBrand = $productM->find('first',array(
+        $productBrand = $productM->find('first', array(
             'conditions' => array('id' => $pid),
             'fields' => array('brand_id')
         ));
-        App::uses('OrdersController','Controller');
+        App::uses('OrdersController', 'Controller');
         $ordersController = new OrdersController();
         $ordersController->Session = $this->Session;
         $order_results = array();
         $brand_id = $productBrand['Product']['brand_id'];
         $order_results[$brand_id] = array($order_id, $total_all_price);
-        foreach($order_results as $brand_id => $order_val) {
+        foreach ($order_results as $brand_id => $order_val) {
             $order_id = $order_val[0];
             $ordersController->apply_coupons_to_order($brand_id, $uid, $order_id, $order_results);
             $ordersController->apply_coupon_code_to_order($uid, $order_id);
         }
     }
 
-    private function use_score($uid,$order_id){
+    private function use_score($uid, $order_id) {
         $score_consumed = 0;
         $spent_on_order = intval($this->Session->read(self::key_balanced_scores()));
         $order_id_spents = array();
@@ -392,50 +401,18 @@ class TuanBuyingComponent extends Component{
             }
         }
         if ($score_consumed > 0) {
-            $this->spend_score($uid,$score_consumed,$order_id_spents);
+            $this->spend_score($uid, $score_consumed, $order_id_spents);
         }
     }
 
-   private function spend_score($uid, $score_consumed, $order_id_spents){
-       $scoreM = ClassRegistry::init('Score');
-       $scoreM->spent_score_by_order($uid, $score_consumed, $order_id_spents);
-       $this->User = ClassRegistry::init('User');
-       $this->User->add_score($uid, -$score_consumed);
-   }
-
-   private function merge_ziti_order_consignes($uid,$offline_store,$address,$remark_address){
-       $ziti_consignees = array();
-       $this->OrderConsignees = ClassRegistry::init('OrderConsignees');
-       $old_ziti_consignees = $this->OrderConsignees->find('first', array(
-           'conditions' => array('status' => STATUS_CONSIGNEES_TUAN_ZITI, 'creator' => $uid),
-           'fields' => array('id')
-       ));
-       $ziti_consignees['area'] = $offline_store['OfflineStore']['area_id'];
-       $ziti_consignees['address'] = $address;
-       $ziti_consignees['creator'] = $uid;
-       $ziti_consignees['id'] = $old_ziti_consignees['OrderConsignees']['id'];
-       $ziti_consignees['ziti_id'] = $offline_store['OfflineStore']['id'];
-       $ziti_consignees['ziti_type'] = $offline_store['OfflineStore']['type'];
-       $ziti_consignees['status'] = STATUS_CONSIGNEES_TUAN_ZITI;
-       $ziti_consignees['remark_address'] = $remark_address;
-       $this->OrderConsignees->save($ziti_consignees);
-   }
-
-    private function merge_order_consignes($uid,$new_consignes){
-        $this->OrderConsignees = ClassRegistry::init('OrderConsignees');
-        $tuan_consignees = $this->OrderConsignees->find('first', array(
-            'conditions' => array('status' => STATUS_CONSIGNEES_TUAN, 'creator' => $uid),
-            'fields' => array('id')
-        ));
-        if ($tuan_consignees) {
-            $new_consignes['id'] = $tuan_consignees['OrderConsignees']['id'];
-        } else {
-            $new_consignes['creator'] = $uid;
-        }
-        $this->OrderConsignees->save($new_consignes);
+    private function spend_score($uid, $score_consumed, $order_id_spents) {
+        $scoreM = ClassRegistry::init('Score');
+        $scoreM->spent_score_by_order($uid, $score_consumed, $order_id_spents);
+        $this->User = ClassRegistry::init('User');
+        $this->User->add_score($uid, -$score_consumed);
     }
 
-    private function get_cart($cart_id){
+    private function get_cart($cart_id) {
         $this->Cart = ClassRegistry::init('Cart');
         $Carts = $this->Cart->find('first', array(
             'conditions' => array(
@@ -445,7 +422,7 @@ class TuanBuyingComponent extends Component{
         return $Carts;
     }
 
-    private function get_brand($pid){
+    private function get_brand($pid) {
         $this->Product = ClassRegistry::init('Product');
         $this->Brand = ClassRegistry::init('Brand');
         $product_brand = $this->Product->find('first', array(
@@ -461,7 +438,7 @@ class TuanBuyingComponent extends Component{
     }
 
 
-    private function get_score_usable($uid,$total_price){
+    private function get_score_usable($uid, $total_price) {
         //积分统计
         $this->User = ClassRegistry::init('User');
         $score = $this->User->get_score($uid, true);
@@ -470,57 +447,98 @@ class TuanBuyingComponent extends Component{
     }
 
     //可以备注的地址
-    private function can_mark_address($tuan_id){
+    private function can_mark_address($tuan_id) {
         //昌平的的团可以备注地址
-        $mark_address_tuan_ids = array(15,25,28,41,43,45,46,47,48,58,60,66,104);
-        return in_array($tuan_id,$mark_address_tuan_ids);
+        $mark_address_tuan_ids = array(15, 25, 28, 41, 43, 45, 46, 47, 48, 58, 60, 66, 104);
+        return in_array($tuan_id, $mark_address_tuan_ids);
     }
 
-    private function get_offline_store($id){
+    private function get_offline_store($id) {
         $this->OfflineStore = ClassRegistry::init('OfflineStore');
         $offline_store = $this->OfflineStore->findById($id);
         return $offline_store;
     }
 
-    private function get_ship_setting($way_id,$data_id,$type){
+    private function get_ship_setting($way_id, $data_id, $type) {
         $this->ProductShipSetting = ClassRegistry::init('ProductShipSetting');
         $cond = array('data_id' => $data_id, 'data_type' => $type);
-        if($way_id){
+        if ($way_id) {
             $cond['id'] = $way_id;
         }
-        $shipSetting = $this->ProductShipSetting->find('first',array(
+        $shipSetting = $this->ProductShipSetting->find('first', array(
             'conditions' => $cond
         ));
         return $shipSetting;
     }
 
-    private function get_old_consignees($uid,$shipSetting=null){
+    private function get_old_consignees($uid, $shipSetting = null) {
         $this->OrderConsignees = ClassRegistry::init('OrderConsignees');
-        if(empty($shipSetting)||(TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type'])==ZITI_TAG)){
+        if (empty($shipSetting) || (TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type']) == ZITI_TAG)) {
             $ziti_consignee_info = $this->OrderConsignees->find('first', array(
                 'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN_ZITI),
-                'fields' => array('area', 'ziti_id','address','ziti_type')
+                'fields' => array('area', 'ziti_id', 'address', 'ziti_type')
             ));
-            if($ziti_consignee_info){
-                if(empty($shipSetting)||($shipSetting['ProductShipSetting']['val']==-1)||($shipSetting['ProductShipSetting']['val']==$ziti_consignee_info['OrderConsignees']['ziti_type'])){
+            if ($ziti_consignee_info) {
+                if (empty($shipSetting) || ($shipSetting['ProductShipSetting']['val'] == -1) || ($shipSetting['ProductShipSetting']['val'] == $ziti_consignee_info['OrderConsignees']['ziti_type'])) {
                     //$this->set('ziti_consignee_info',$ziti_consignee_info['OrderConsignees']);
                     return $ziti_consignee_info['OrderConsignees'];
                 }
             }
         }
-        if(TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type'])!=ZITI_TAG){
+        if (TuanShip::get_ship_code($shipSetting['ProductShipSetting']['ship_type']) != ZITI_TAG) {
             $consignee_info = $this->OrderConsignees->find('first', array(
                 'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN),
                 'fields' => array('name', 'address', 'mobilephone')
             ));
-            if($consignee_info){
+            if ($consignee_info) {
                 return $consignee_info['OrderConsignees'];
             }
         }
 
     }
 
-    private function clean_socre_coupon_info(){
+    private function update_tuan_consignees_address($uid, $name, $mobile, $remark_address, $address) {
+        $this->loadModel('OrderConsignees');
+        //save user custom address
+        $tuan_consignees = $this->OrderConsignees->find('first', array(
+            'conditions' => array('status' => STATUS_CONSIGNEES_TUAN, 'creator' => $uid),
+            'fields' => array('id')
+        ));
+        $consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN);
+        //remark address
+        $consignees['remark_address'] = $remark_address;
+        $consignees['address'] = $address;
+        if ($tuan_consignees) {
+            $consignees['id'] = $tuan_consignees['OrderConsignees']['id'];
+        } else {
+            $consignees['creator'] = $uid;
+        }
+        $this->OrderConsignees->save($consignees);
+    }
+
+    private function update_ziti_consigness_address($offline_store, $name, $mobile, $uid, $address, $remark_address) {
+        $this->loadModel('OrderConsignees');
+        //save user ziti address
+        $ziti_consignees = array('name' => $name, 'mobilephone' => $mobile, 'status' => STATUS_CONSIGNEES_TUAN_ZITI);
+        $old_ziti_consignees = $this->OrderConsignees->find('first', array(
+            'conditions' => array('status' => STATUS_CONSIGNEES_TUAN_ZITI, 'creator' => $uid),
+            'fields' => array('id')
+        ));
+        $ziti_consignees['area'] = $offline_store['OfflineStore']['area_id'];
+        $ziti_consignees['address'] = $address;
+        $ziti_consignees['remark_address'] = $remark_address;
+        $ziti_consignees['creator'] = $uid;
+        $ziti_consignees['id'] = $old_ziti_consignees['OrderConsignees']['id'];
+        $ziti_consignees['ziti_id'] = $offline_store['OfflineStore']['id'];
+        $ziti_consignees['ziti_type'] = $offline_store['OfflineStore']['type'];
+
+        if ($this->OrderConsignees->save($ziti_consignees)) {
+            return $this->OrderConsignees->id;
+        }
+
+    }
+
+    private function clean_socre_coupon_info() {
         // 注意必须清除key_balanced_scores
         App::uses('OrdersController', 'Controller');
         $this->Session->write(OrdersController::key_balanced_scores(), '');

@@ -1,3 +1,11 @@
+{{if $big_tuan}}
+<div class="conordertuan_contact" style="padding-top: 50px;">
+    <h1>收货人信息</h1>
+    <label><input type="text" name="consignee_address" placeholder="收货地址" value="{{$consignee_info['address']}}"></label>
+    <label><input type="text" name="consignee_name" placeholder="收货人姓名"  value="{{$consignee_info['name']}}"/></label>
+    <label><input type="text" name="consignee_mobilephone" placeholder="手机号" value="{{$consignee_info['mobilephone']}}"/></label>
+</div>
+{{else}}
 <div class="conorder_ziti">
     <h1>自提点详细地址如下：</h1>
     <dl>
@@ -10,3 +18,4 @@
     <label><input type="text" name="consignee_mobilephone" placeholder="手机号" value="{{$consignee_info['mobilephone']}}" /></label>
     <label id="remark_address" {{if !$can_mark_address}}style="display: none;"{{/if}}><input type="text" name="consignee_remark_address" placeholder="小区-楼号-门牌(送货上门)" {{if $can_mark_address}}value="{{$consignee_info['remark_address']}}"{{/if}} /></label>
 </div>
+{{/if}}
