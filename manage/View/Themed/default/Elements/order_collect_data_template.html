@@ -1,0 +1,27 @@
+<?php
+    $collect_result = array();
+    foreach($current_orders as $order){
+        foreach($order_carts[$order['Order']['id']] as $cart){
+            $collect_key = $cart['Cart']['product_id'].'_'.$cart['Cart']['specId'];
+            if(in_array($collect_key,$collect_result)){
+                $collect_result[$collect_key]['num'] = $collect_result[$collect_key]['num']+$cart['Cart']['num'];
+            }else{
+                $collect_result[$collect_key] = array('name'=>$cart['Cart']['name'],'spec_name'=>$cart['Cart']['spec_name'],'num'=>$cart['Cart']['num']);
+            }
+        }
+    }
+?>
+<table class="table-bordered col-md-3 col-md-offset-3 table-collect-data" style="margin-bottom: 20px;width: 50%;">
+    <tr>
+        <td width="50">名称</td>
+        <td width="20">规格</td>
+        <td width="10">数量</td>
+    </tr>
+    {{loop $collect_result  $collect_data}}
+        <tr>
+            <td width="50">{{$collect_data['name']}}</td>
+            <td width="20">{{$collect_data['spec_name']}}</td>
+            <td width="10">{{$collect_data['num']}}</td>
+        </tr>
+    {{/loop}}
+</table>

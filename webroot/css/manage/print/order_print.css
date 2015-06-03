@@ -10,6 +10,11 @@
  */
 
 /* use a media query to limit the CSS to only print devices, like a printer */
+
+table.table-collect-data{
+    display: none;
+}
+
 @media only print
 {
     /* hide every element within the body */
@@ -24,4 +29,9 @@
         content: none !important;
     }
     a:link:after, a:visited:after { content:" [" attr(href) "] "; }
+
+    table.table-collect-data{
+        display: inline-table;
+    }
+
 }
