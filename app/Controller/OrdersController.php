@@ -1195,7 +1195,7 @@ class OrdersController extends AppController {
 		// 常用地址列表，及收件人信息编辑表单
 		$this->loadModel('OrderConsignee');
 		$consignees = $this->OrderConsignee->find('all',array(
-			'conditions'=>array('creator'=>$this->currentUser['id'], 'status !=' => STATUS_CONSIGNEES_TUAN),
+			'conditions'=>array('creator'=>$this->currentUser['id'], 'not' => array('status' => array(STATUS_CONSIGNEES_TUAN,STATUS_CONSIGNEES_TUAN_ZITI))),
             'order' => 'status desc',
 		));
 		$total_consignee = count($consignees);
