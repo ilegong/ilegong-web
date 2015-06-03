@@ -243,7 +243,7 @@
             {{template Elements/order_data_template}}
             <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
         {{/loop}}
-        <h2><span class="label label-warning no-print">好邻居自提</span></h2>
+        <h2 class="no-print"><span class="label label-warning">好邻居自提</span></h2>
             <hr/>
             {{loop $hlj_ziti_point $point}}
                 <?php
@@ -261,7 +261,7 @@
                 $data_tag='none-tag';
                 $data_tag_name = '未知自提点';
             ?>
-            <h2><span class="label label-danger no-print">未知自提点</span></h2>
+            <h2 class="no-print"><span class="label label-danger">未知自提点</span></h2>
             <hr/>
             <h3 {{if !empty($current_orders)}}class="new_page"{{/if}}><span class="label label-warning">没有自提点</span></h3>
             <hr/>
