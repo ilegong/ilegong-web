@@ -467,6 +467,7 @@ class TuanBuyingsController extends AppController{
         if(strpos($ship_way, ZITI_TAG)===false){
             $shipFee = intval($ship_val)/100;
             if($shipFee > 0){
+                $this->set('ship_fee',$shipFee);
                 $total_price = $total_price+intval($ship_val)/100;
             }
         }else{
