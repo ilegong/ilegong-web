@@ -56,6 +56,7 @@ class TuanBuyingsController extends AppController{
         $this->set('hideNav',true);
         $this->setTraceFromData('sec',$tryId);
         $this->setHistory();
+        $this->set_product_ship($tryId,'Try');
     }
 
     public function detail($tuan_buy_id){
@@ -310,6 +311,16 @@ class TuanBuyingsController extends AppController{
     }
 
     public function balance_tuan_sec_kill(){
+        $ship_fee = 0;
+        if($_REQUEST['ship_type']=='kuaidi'){
+            $this->set('big_tuan',true);
+            $this->set('ship_setting_id', $_REQUEST['ship_setting_id']);
+            $this->loadModel('ProductShipSetting');
+            $ship_info = $this->ProductShipSetting->find('first', array(
+                'conditions'=>array('id' => $_REQUEST['ship_setting_id'])
+            ));
+            $ship_fee =$ship_info['ProductShipSetting']['ship_val']/100;
+        }
         $this->pageTitle='订单确认';
         $tuan_id = $_REQUEST['tuan_id'];
         $cart_id = $_REQUEST['pid_list'];
@@ -374,7 +385,7 @@ class TuanBuyingsController extends AppController{
         $this->set('try_id',$try_id);
         $this->set('ship_type',$ship_type);
         $this->set('buy_count',$Carts['Cart']['num']);
-        $this->set('total_price', $total_price);
+        $this->set('total_price', $total_price+$ship_fee);
         $this->set('cart_id', $Carts['Cart']['id']);
         $this->set('cart_info',$Carts);
         $this->set('brand', $brand['Brand']);
@@ -595,7 +606,11 @@ class TuanBuyingsController extends AppController{
             //to set ship fee
             $way = ZITI_TAG;
             if($way_id!=0){
-                $shipSetting = $this->get_ship_setting($way_id,$pid,'Product');
+                if($order_type == ORDER_TYPE_TUAN_SEC){
+                    $shipSetting = $this->get_ship_setting($way_id,$member_id,'Try');
+                }else{
+                    $shipSetting = $this->get_ship_setting($way_id,$pid,'Product');
+                }
                 if(empty($shipSetting)){
                     $res = array('success'=> false, 'info'=> '该订单物流方式设置有误，请重试');
                     echo json_encode($res);
@@ -799,12 +814,12 @@ class TuanBuyingsController extends AppController{
         echo json_encode($areaAddress);
     }
 
-    private function set_product_ship($pid){
+    private function set_product_ship($pid,$data_type='Product'){
         $this->loadModel('ProductShipSetting');
         $ship_settings = $this->ProductShipSetting->find('all',array(
             'conditions' => array(
                 'data_id' => $pid,
-                'data_type' => 'Product'
+                'data_type' => $data_type
             )
         ));
         $tuan_ship_types = TuanShip::get_all_tuan_ships();

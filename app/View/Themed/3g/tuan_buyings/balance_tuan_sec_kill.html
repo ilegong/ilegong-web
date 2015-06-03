@@ -5,7 +5,7 @@
         <li style="text-overflow: ellipsis;"><strong>订单确认</strong></li>
     </ul>
 </div>
-<div class="tuan_balance" data-ship-way="{{$way_type}}" data-tuanteam-id="{{$tuan_id}}" data-try-id="{{$try_id}}" data-tuan-sec="true">
+<div class="tuan_balance" data-ship-way="{{$way_type}}" data-tuanteam-id="{{$tuan_id}}" data-try-id="{{$try_id}}" {{if empty($ship_setting_id)}}data-tuan-sec="true"{{else}}data-global-sec="true" {{/if}} data-way-id="{{$ship_setting_id}}">
     {{template tuan_buyings/contact_info_template}}
     <div class="cart" style="margin-top: 0; padding-top: 0;">
         <div>

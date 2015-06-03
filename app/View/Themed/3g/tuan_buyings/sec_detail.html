@@ -52,12 +52,27 @@
                         <strong class="red">规格: {{$product_try['ProductTry']['spec']}}，送货: {{date('m月d日',strtotime($product_try['ProductTry']['consignment_date']))}}</strong>
                         <ul class="clearfix standard">
                             <li>
-                                <span class="gray title mr12" style="float:left;">物流:</span>
-                                <span class="border">
-                                    <span way-label="" class="mr12 border cur tuan_way_selected">
-                                        自提
-                                        <div class="focus"></div>
-                                    </span>
+                                <span class="fl title mr12">物流:</span>
+                                <span class="border" style="display:block;overflow: hidden;">
+                                    {{if $ship_settings}}
+                                       {{loop $ship_settings $index $ship_set}}
+                                       <span class="mr12 border {{if $index==0}}cur {{/if}}tuan_way_selected" way-label="{{$ship_set['ProductShipSetting']['code']}}" way-id="{{$ship_set['ProductShipSetting']['id']}}">
+                                            {{if $ship_set['ProductShipSetting']['ship_type']==10}}
+                                              满{{$ship_set['ProductShipSetting']['least_num']}}份包邮
+                                            {{else}}
+                                              {{$ship_set['ProductShipSetting']['name']}}
+                                              {{if $ship_set['ProductShipSetting']['ship_type']==6}}
+                                                ({{$ship_set['ProductShipSetting']['ship_val']/100}}元)
+                                              {{/if}}
+                                            {{/if}}
+                                            <div class="focus"></div>
+                                       </span>
+                                       {{/loop}}
+                                    {{else}}
+                                        <span class="mr12 border cur tuan_way_selected" way-label="ziti" way-fee="0" way-id="0">自提
+                                         <div class="focus"></div>
+                                        </span>
+                                    {{/if}}
                                 </span>
                             </li>
                         </ul>
@@ -230,6 +245,8 @@
                 var globalShow = me.attr('data-global-show');
                 var tuanId = me.attr('data-tuan-id');
                 var cartType = 'tuan_sec';
+                var $shipSelect = $('.cur.tuan_way_selected');
+                var shipTyp = $shipSelect.attr('way-label');
                 quick_buy_try(pid, 1, 0, tryId, cartType, sendDate, function () {
                     me.removeClass('pay_bg').addClass('cart_btn_soldout');
                 }, function (data) {
@@ -238,7 +255,12 @@
                         return;
                     }
                     if(globalShow){
-                        window.location.href = '/tuan_buyings/balance_global_sec_kill?from=tuan_sec&pid_list=' + data.id + '&try=' + tryId;
+                        if(shipTyp == "kuaidi"){
+                            window.location.href = '/tuan_buyings/balance_tuan_sec_kill?from=tuan_sec&pid_list=' + data.id + '&try=' + tryId +'&ship_setting_id=' +
+                            $shipSelect.attr('way-id') + '&ship_type=kuaidi';
+                        }else{
+                            window.location.href = '/tuan_buyings/balance_global_sec_kill?from=tuan_sec&pid_list=' + data.id + '&try=' + tryId;
+                        }
                         return;
                     }
                     window.location.href = '/orders/info?from=try&pid_list='+data.id+'&try='+tryId;
@@ -252,6 +274,10 @@
             });
         }
         bind_click();
+        $('.tuan_way_selected').click(function(){
+            $('.tuan_way_selected').removeClass('cur');
+            $(this).addClass('cur');
+        })
     });
 </script>
 
