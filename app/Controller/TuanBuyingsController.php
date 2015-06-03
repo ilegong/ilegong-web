@@ -320,6 +320,7 @@ class TuanBuyingsController extends AppController{
                 'conditions'=>array('id' => $_REQUEST['ship_setting_id'])
             ));
             $ship_fee =$ship_info['ProductShipSetting']['ship_val']/100;
+            $this->set('ship_fee',$ship_fee);
         }
         $this->pageTitle='订单确认';
         $tuan_id = $_REQUEST['tuan_id'];
