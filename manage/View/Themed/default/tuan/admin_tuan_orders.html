@@ -225,7 +225,7 @@
         <h1 class="no-print"><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h1>
         <hr class="no-print" />
         <h3 {{if !empty($current_orders)}}class="new_page"{{else}}class="no-print"{{/if}}><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h3>
-        <hr/>
+        <hr class="no-print"/>
         {{template Elements/order_data_template}}
     {{else}}
         <h2 class="no-print"><span class="label label-primary no-print">{{$item['name']}}</span></h2>
@@ -239,12 +239,12 @@
                     $data_tag_name = $point['OfflineStore']['alias'];
                 ?>
             <h3 {{if !empty($current_orders)}}class="new_page"{{else}}class="no-print"{{/if}}><span class="label label-success">{{get_address(null,$point)}}</span></h3>
-            <hr/>
+            <hr class="no-print"/>
             {{template Elements/order_data_template}}
             <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
         {{/loop}}
         <h2 class="no-print"><span class="label label-warning">好邻居自提</span></h2>
-            <hr/>
+            <hr class="no-print"/>
             {{loop $hlj_ziti_point $point}}
                 <?php
                     $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
@@ -252,7 +252,7 @@
                     $data_tag_name = $point['OfflineStore']['alias'];
                 ?>
                  <h3 {{if !empty($current_orders)}}class="new_page"{{else}}class="no-print"{{/if}}><span class="label label-success">{{get_address(null,$point)}}</span></h3>
-                <hr/>
+                <hr class="no-print"/>
                 {{template Elements/order_data_template}}
                 <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
         {{/loop}}
@@ -262,9 +262,9 @@
                 $data_tag_name = '未知自提点';
             ?>
             <h2 class="no-print"><span class="label label-danger">未知自提点</span></h2>
-            <hr/>
+            <hr class="no-print"/>
             <h3 {{if !empty($current_orders)}}class="new_page"{{else}}class="no-print"{{/if}}><span class="label label-warning">没有自提点</span></h3>
-            <hr/>
+            <hr class="no-print"/>
             {{template Elements/order_data_template}}
         {{/loop}}
     {{/if}}
