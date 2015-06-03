@@ -30,8 +30,13 @@ table.table-collect-data{
     }
     a:link:after, a:visited:after { content:" [" attr(href) "] "; }
 
+    table{
+        border: 2px solid black;
+    }
+
     table.table-collect-data{
         display: inline-table;
     }
+
 
 }
