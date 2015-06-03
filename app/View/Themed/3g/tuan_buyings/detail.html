@@ -126,15 +126,15 @@
                             {{loop $specs_map['choices'] $label $values}}
                             {{if !empty($label) && !empty($values)}}
                             <ul class="standard clearfix">
-                                <li>
-                                <span class="fl title mr12 spec_label">{{$label}}:</span>
-                            <span class="border" style="display: block;overflow: hidden;">
-                                {{loop $values $index $vaLabel}}
-                                <span class="border mr12 spec_item {{if $index == 0}}spec_item_selected cur{{/if}}"" item-label="{{$label}}">{{$vaLabel}}
-                                    <div class="focus"></div>
-                                </span>
-                                {{/loop}}
-                            </span>
+                                <li class="good-spec">
+                                    <span class="fl title mr12 spec_label">{{$label}}:</span>
+                                    <span class="border" style="display: block;overflow: hidden;">
+                                        {{loop $values $index $vaLabel}}
+                                        <span class="border mr12 spec_item {{if $index == 0}}spec_item_selected cur{{/if}}"" item-label="{{$label}}">{{$vaLabel}}
+                                            <div class="focus"></div>
+                                        </span>
+                                        {{/loop}}
+                                    </span>
                                 </li>
                             </ul>
                             {{/if}}
