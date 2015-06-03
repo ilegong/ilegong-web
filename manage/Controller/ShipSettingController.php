@@ -36,24 +36,13 @@ class ShipSettingController extends AppController {
         $this->autoRender=false;
         $dataId = $_POST['dataId'];
         $dataType = $_POST['dataType'];
-        $postData = json_decode($_POST['data'],true);
+        $postData = $_POST['data'];
         $this->ProductShipSetting->deleteAll(array('data_id'=>$dataId,'data_type'=>$dataType));
-        $saveData = array();
-        foreach($postData as $item){
-            $itemData = array('data_id'=>$dataId,'data_type'=>$dataType,'ship_type'=>$item['shipType']);
-            if($item['shipVal']){
-                $itemData['ship_val'] = $item['shipVal'];
-            }
-            if($item['shipLeastNum']){
-                $itemData['least_num'] = $item['shipLeastNum'];
-            }
-            $saveData[] = $itemData;
-        }
-        if($this->ProductShipSetting->saveAll($saveData)){
+
+        if($this->ProductShipSetting->saveAll($postData)){
             echo json_encode(array('success'=>true));
         }else{
             echo json_encode(array('success'=>false));
         }
-
     }
 }

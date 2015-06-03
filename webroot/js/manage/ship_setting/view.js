@@ -3,34 +3,30 @@ $(function () {
     //history data
     console.log(ship_setting_data);
     var $saveBtn = $('#save-ship-setting',$container);
-    var $shipSettingItems = $('div.ship-setting-item',$container);
+    var dataId = $container.data('product-id');
+    var dataType = $container.data('type');
 
     $.each(ship_setting_data,function(id,item){
-        var shipType = item['ship_type'];
-        var shipVal = item['ship_val'];
-        var shipLeastNum = item['least_num'];
-        var $checkBox = $('[value="'+shipType+'"]:checkbox');
+        var $checkBox = $('.ship-type[value="'+item['ship_type']+'"]');
+        $item = $checkBox.parents('.ship-setting-item');
+
         $checkBox.prop('checked','checked');
-        var $shipVal = $('[name="val"]',$checkBox.closest('div.ship-setting-item'));
-        $shipVal.val(shipVal);
-        var $shipLeastNum = $('[name="least_num"]',$checkBox.closest('div.ship-setting-item'));
-        $shipLeastNum.val(shipLeastNum);
+        $('.ship-val', $item).val(item['ship_val']);
+        $('.least-num', $item).val(item['least_num']);
     });
 
     $saveBtn.on('click',function(){
         var postData = [];
-        $shipSettingItems.each(function(index,item){
-            var $item = $(item);
-            var $shipType = $('input[name="ship_type"]',$item);
-            var $shipVal = $('[name="val"]',$item);
-            var $shipLeastNum = $('[name="least_num"]',$item);
-            if($shipType.prop('checked')){
-                postData.push({"shipType":$shipType.val(),"shipVal":$shipVal.val(),'shipLeastNum':$shipLeastNum.val()});
-            }
+        $('input[name="ship_type"]:checked').each(function(){
+            var $item = $(this).parents('.ship-setting-item');
+            postData.push({"data_id": dataId, "data_type": dataType, "ship_type":$(".ship-type", $item).val(),"ship_val":$(".ship-val", $item).val(),'least_num':$(".least-num", $item).val()});
         });
-        $.post('/manage/admin/ship_setting/save',{"data":JSON.stringify(postData),"dataId":dataId,"dataType":dataType},function(data){
+        $.post('/manage/admin/ship_setting/save', {data: postData, dataId: dataId, dataType: dataType},function(data){
             if(data['success']){
                 alert('保存成功');
+            }
+            else{
+                alert('对不起，保存失败');
             }
         },'json');
     });
