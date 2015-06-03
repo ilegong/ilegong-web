@@ -224,7 +224,7 @@
         ?>
         <h1 class="no-print"><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h1>
         <hr class="no-print" />
-        <h3 class="new_page"><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h3>
+        <h3 {{if !empty($current_orders)}}class="new_page"{{/if}}><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h3>
         <hr/>
         {{template Elements/order_data_template}}
     {{else}}
@@ -238,7 +238,7 @@
                     $data_tag = 'ziti-'.$point['OfflineStore']['id'];
                     $data_tag_name = $point['OfflineStore']['alias'];
                 ?>
-            <h3 class="new_page"><span class="label label-success">{{get_address(null,$point)}}</span></h3>
+            <h3 {{if !empty($current_orders)}}class="new_page"{{/if}}><span class="label label-success">{{get_address(null,$point)}}</span></h3>
             <hr/>
             {{template Elements/order_data_template}}
             <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
@@ -251,7 +251,7 @@
                     $data_tag = 'ziti-'.$point['OfflineStore']['id'];
                     $data_tag_name = $point['OfflineStore']['alias'];
                 ?>
-                 <h3 class="new_page"><span class="label label-success">{{get_address(null,$point)}}</span></h3>
+                 <h3 {{if !empty($current_orders)}}class="new_page"{{/if}}><span class="label label-success">{{get_address(null,$point)}}</span></h3>
                 <hr/>
                 {{template Elements/order_data_template}}
                 <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
@@ -263,7 +263,7 @@
             ?>
             <h2><span class="label label-danger no-print">未知自提点</span></h2>
             <hr/>
-            <h3 class="new_page"><span class="label label-warning">没有自提点</span></h3>
+            <h3 {{if !empty($current_orders)}}class="new_page"{{/if}}><span class="label label-warning">没有自提点</span></h3>
             <hr/>
             {{template Elements/order_data_template}}
         {{/loop}}
