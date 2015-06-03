@@ -14,5 +14,14 @@
 {
     /* hide every element within the body */
     .no-print, .no-print * {display: none !important; }
+    td[mark-print="no-print"] {
+        display: none !important;
+    }
+    h3.new_page{
+        page-break-before: always;
+    }
+    a[href]:after {
+        content: none !important;
+    }
     a:link:after, a:visited:after { content:" [" attr(href) "] "; }
 }
