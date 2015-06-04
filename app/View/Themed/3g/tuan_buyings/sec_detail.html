@@ -57,13 +57,18 @@
                                     {{if $ship_settings}}
                                        {{loop $ship_settings $index $ship_set}}
                                        <span class="mr12 border {{if $index==0}}cur {{/if}}tuan_way_selected" way-label="{{$ship_set['ProductShipSetting']['code']}}" way-id="{{$ship_set['ProductShipSetting']['id']}}">
-                                            {{if $ship_set['ProductShipSetting']['ship_type']==10}}
-                                              满{{$ship_set['ProductShipSetting']['least_num']}}份包邮
+                                            {{if $ship_set['ProductShipSetting']['ship_type']==10 || $ship_set['ProductShipSetting']['ship_type']==6}}
+                                              {{if $ship_set['ProductShipSetting']['ship_val']==0}}
+                                                {{if $ship_set['ProductShipSetting']['least_num'] <= 1}}
+                                                  包邮
+                                                {{else}}
+                                                  满{{$ship_set['ProductShipSetting']['least_num']}}份包邮
+                                                {{/if}}
+                                              {{else}}
+                                                快递({{$ship_set['ProductShipSetting']['ship_val']/100}}元)
+                                              {{/if}}
                                             {{else}}
                                               {{$ship_set['ProductShipSetting']['name']}}
-                                              {{if $ship_set['ProductShipSetting']['ship_type']==6}}
-                                                ({{$ship_set['ProductShipSetting']['ship_val']/100}}元)
-                                              {{/if}}
                                             {{/if}}
                                             <div class="focus"></div>
                                        </span>
