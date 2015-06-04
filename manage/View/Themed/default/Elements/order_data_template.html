@@ -18,6 +18,7 @@
             <td mark-print="no-print">自提/快递</td>
             <td mark-print="no-print">发货时间</td>
             <td>收件人</td>
+            <td>手机号</td>
             <td>收件地址</td>
             <td>备注地址</td>
             <td mark-print="no-print">支付</td>
@@ -117,7 +118,8 @@
                     <td mark-print="no-print" {{if $order['Order']['type'] != 1 && empty($cart['Cart']['send_date'])}}class="danger"{{/if}}>
                     {{$cart['Cart']['send_date']}}
                     </td>
-                    <td>{{$order['Order']['consignee_name']}}({{$order['Order']['consignee_mobilephone']}})</td>
+                    <td>{{$order['Order']['consignee_name']}}</td>
+                    <td>{{$order['Order']['consignee_mobilephone']}}</td>
                     <td {{if $order['Order']['ship_mark'] == 'kuaidi' && empty($order['Order']['consignee_address'])}}class="danger"{{/if}}>
                         {{if $order['Order']['consignee_area']}}{{$order['Order']['consignee_area']}},{{/if}}
                         {{$order['Order']['consignee_address']}}
