@@ -1,106 +1,108 @@
-<h1> </h1>
-<div class="row" id="ship-view" data-product-id="{{$data_id}}" data-type='{{$data_type}}'>
-    <div class="col-md-8 col-md-offset-2">
-        <div class="form-horizontal">
-            <fieldset>
-                <!-- Form Name -->
-                <legend><h1>{{$name}} <small> {{$type}}</small></h1></legend>
+<h1>{{$name}}
+    <small> {{$type}}</small>
+</h1>
 
-                <div class="form-group ship-setting-item">
-                    <div class="col-sm-4">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="1" name="ship_type" class='ship-type'>   自提
-                            </label>
-                        </div>
-                    </div>
-                    <label class="col-sm-2 control-label">自提限制</label>
-                    <div class="col-sm-4">
-                        <select class="form-control ship-val" name="ship_val">
-                            <option value="-1">所有自提点</option>
-                            <option value="0">好邻居自提点</option>
-                            <option value="1">朋友说自提点</option>
-                        </select>
-                    </div>
-                    <input type="hidden" value="0" name="least_num" class='least-num'>
-                </div>
-                <hr/>
-                <div class="form-group ship-setting-item">
-                    <div class="col-sm-2">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="6" name="ship_type" class='ship-type'>   快递
-                            </label>
-                        </div>
-                    </div>
-                    <label class="col-sm-2 control-label">费用</label>
-                    <div class="col-sm-3">
-                        <input type="text" value="1500" class="form-control ship-val" name="ship_val">
-                        <span class="text-danger">默认1500，单位分</span>
-                    </div>
-                    <label class="col-sm-2 control-label">起送份数</label>
-                    <div class="col-sm-3">
-                        <input type="text" value="1" class="form-control least-num" name="least_num">
-                        <span class="text-danger">默认1份</span>
-                    </div>
-                </div>
-                <hr/>
-                <div class="form-group ship-setting-item">
-                    <div class="col-sm-2">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="10" name="ship_type" class='ship-type'>   满包邮
-                            </label>
-                        </div>
-                    </div>
-                    <label class="col-sm-2 control-label">费用</label>
-                    <div class="col-sm-3">
-                        <input type="text" value="0" class="form-control ship-val" name="ship_val">
-                        <span class="text-danger">包邮，价格为0</span>
-                    </div>
-                    <label class="col-sm-2 control-label">起送份数</label>
-                    <div class="col-sm-3">
-                        <input type="text" value="10" class="form-control least-num" name="least_num">
-                        <span class="text-danger">默认10份</span>
-                    </div>
-                </div>
-                <hr/>
-                <div class="form-group ship-setting-item">
-                    <div class="col-sm-4">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="5" name="ship_type" class='ship-type'>   顺丰到付
-                            </label>
-                        </div>
-                    </div>
-                    <input type="hidden" value="0" name="ship_val" class='ship-val'>
-                    <input type="hidden" value="0" name="least_num" class='least-num'>
-                </div>
-                <hr/>
-                <div class="form-group ship-setting-item">
-                    <div class="col-sm-4">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" value="4" name="ship_type" class='ship-type'>   顺丰包邮
-                            </label>
-                        </div>
-                    </div>
-                    <input type="hidden" value="0" name="ship_val" class='ship-val'>
-                    <input type="hidden" value="0" name="least_num" class='least-num'>
-                </div>
-                <hr/>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <div class="pull-right">
-                            <button id="save-ship-setting" class="btn btn-primary">保存</button>
-                        </div>
-                    </div>
-                </div>
-            </fieldset>
+<div class="row">
+    <button class="btn btn-primary ship-setting-add-btn fr" type="button">添加快递</button>
+</div>
+
+<table class="table table-bordered ship-settings" data-product-id="{{$data_id}}" data-type='{{$data_type}}'>
+    <thead>
+    <td>方式</td>
+    <td>费用/自提限制</td>
+    <td>起送份数</td>
+    <td>显示名称</td>
+    </thead>
+    <tr class="form-group ship-setting ship-setting-ziti">
+        <td class="col-sm-4">
+            <div class="checkbox">
+                <input type="checkbox" value="1" name="ship_type" class='ship-type' {{if
+                !empty($ship_setting_ziti)}}checked='checked'{{/if}}> 自提
+            </div>
+        </td>
+        <td>
+            <select class="form-control ship-val" name="ship_val">
+                <option value="-1">所有自提点</option>
+                <option value="0"
+                {{if $ship_setting_ziti['ProductShipSetting']['ship_val'] ==
+                0}}selected='selected'{{/if}}>好邻居自提点</option>
+                <option value="1"
+                {{if $ship_setting_ziti['ProductShipSetting']['ship_val'] ==
+                1}}selected='selected'{{/if}}>朋友说自提点</option>
+            </select>
+        </td>
+        <td>
+            <input type="text" value="1" name="least_num" class='form-control least-num' disabled='disabled'>
+        </td>
+        <td class="display-name"></td>
+    </tr>
+
+    {{loop $ship_setting_kuaidi $ship_setting}}
+    <tr class="form-group ship-setting ship-setting-kuaidi">
+        <td>
+            <div class="checkbox">
+                <input type="checkbox" value="6" name="ship_type" class='ship-type'
+                       checked='checked'> 快递
+            </div>
+        </td>
+        <td>
+            <input type="text" value="{{$ship_setting['ProductShipSetting']['ship_val']}}"
+                   class="form-control ship-val" name="ship_val">
+            <span class="text-danger">单位分，0表示包邮</span>
+        </td>
+
+        <td>
+            <input type="text" value="{{$ship_setting['ProductShipSetting']['least_num']}}"
+                   class="form-control least-num" name="least_num">
+            <span class="text-danger">默认1份</span>
+        </td>
+        <td class="display-name"></td>
+    </tr>
+    {{/loop}}
+
+    <tr class="form-group ship-setting ship-setting-sfdf">
+        <td>
+            <div class="checkbox">
+                <input type="checkbox" value="5" name="ship_type" class='ship-type' {{if
+                !empty($ship_setting_sfdf)}}checked='checked'{{/if}}> 顺丰到付
+            </div>
+        </td>
+        <td>
+            <input type="text" value="0" name="ship_val" class='form-control ship-val' disabled='disabled'>
+        </td>
+        <td>
+            <input type="text" value="1" name="least_num" class='form-control least-num' disabled='disabled'>
+        </td>
+        <td class="display-name"></td>
+    </tr>
+</table>
+
+<div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+        <div class="pull-right">
+            <button id="save-ship-setting" class="btn btn-primary">保存</button>
         </div>
-    </div><!-- /.col-lg-12 -->
-</div><!-- /.row -->
-<script>
-    var ship_setting_data = JSON.parse('{{$datas}}');
+    </div>
+</div>
+
+<script id="ship-setting-ziti-template" type="text/template">
+    <tr class="form-group ship-setting ship-setting-kuaidi">
+        <td>
+            <div class="checkbox">
+                <input type="checkbox" value="6" name="ship_type" class='ship-type'> 快递
+            </div>
+        </td>
+        <td>
+            <input type="text" value="0" class="form-control ship-val" name="ship_val">
+            <span class="text-danger">单位分，0表示包邮</span>
+        </td>
+
+        <td>
+            <input type="text" value="10" class="form-control least-num" name="least_num">
+            <span class="text-danger">默认1份</span>
+        </td>
+        <td class="display-name"></td>
+    </tr>
 </script>
+
 {{$this->Html->script(array('/js/manage/ship_setting/view.js?v1'))}}

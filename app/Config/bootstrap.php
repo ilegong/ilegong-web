@@ -120,6 +120,9 @@ const RECOMMEND_TAG_ID=23;
 
 const TUAN_CONSIGNMENT_TYPE=2;
 
+const SHIP_TYPE_ZITI = 1;
+const SHIP_TYPE_SFDF = 5;
+const SHIP_TYPE_KUAIDI = 6;
 const ZITI_TAG = 'ziti';
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');

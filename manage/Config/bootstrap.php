@@ -50,6 +50,9 @@ const PRODUCT_TRY_TYPE = 1;
 
 const PYS_M_TUAN=34;
 
+const SHIP_TYPE_ZITI = 1;
+const SHIP_TYPE_SFDF = 5;
+const SHIP_TYPE_KUAIDI = 6;
 const ZITI_TAG = 'ziti';
 
 define('MSG_API_KEY', 'api:key-fdb14217a00065ca1a47b8fcb597de0d'); //发短信密钥

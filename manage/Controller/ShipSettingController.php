@@ -13,6 +13,28 @@ class ShipSettingController extends AppController {
     var $uses = array('ProductShipSetting');
 
     public function admin_view($data_id, $data_type){
+        $ship_setting_ziti =  $this->ProductShipSetting->find('first', array(
+            'conditions' => array(
+                'data_id' => $data_id,
+                'data_type' => $data_type,
+                'ship_type' => SHIP_TYPE_ZITI
+            )
+        ));
+        $ship_setting_sfdf =  $this->ProductShipSetting->find('first', array(
+            'conditions' => array(
+                'data_id' => $data_id,
+                'data_type' => $data_type,
+                'ship_type' => SHIP_TYPE_SFDF
+            )
+        ));
+        $ship_setting_kuaidi =  $this->ProductShipSetting->find('all', array(
+            'conditions' => array(
+                'data_id' => $data_id,
+                'data_type' => $data_type,
+                'ship_type' => SHIP_TYPE_KUAIDI
+            )
+        ));
+
         $shipSettings = $this->ProductShipSetting->find('all', array(
             'conditions' => array(
                 'data_id' => $data_id,
@@ -27,6 +49,9 @@ class ShipSettingController extends AppController {
             $this->set('type', '秒杀');
         }
         $this->set('name', $_REQUEST['name']);
+        $this->set('ship_setting_ziti', $ship_setting_ziti);
+        $this->set('ship_setting_sfdf', $ship_setting_sfdf);
+        $this->set('ship_setting_kuaidi', $ship_setting_kuaidi);
         $this->set('datas', json_encode($shipSettings));
         $this->set('data_id', $data_id);
         $this->set('data_type', $data_type);
