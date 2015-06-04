@@ -530,7 +530,7 @@ class TuanController extends AppController
             $brands = Hash::combine($brands, '{n}.Product.id', '{n}');
         }
 
-        $ship_mark_enum = array('ziti'=>array('name'=>'自提','style'=>'active'),'sfby'=>array('name'=>'顺丰包邮','style'=>'success'),'sfdf'=>array('name'=>'顺丰到付','style'=>'warning'),'kuaidi'=>array('name'=>'快递','style'=>'danger'),'c2c'=>array('name'=>'c2c订单','style'=>'info'),'none'=>array('name'=>'没有标注','style'=>'info'));
+        $ship_mark_enum = array('ziti'=>array('name'=>'自提','style'=>'active'),'sfby'=>array('name'=>'顺丰包邮','style'=>'success'),'sfdf'=>array('name'=>'顺丰到付','style'=>'warning'),'kuaidi'=>array('name'=>'快递','style'=>'danger'),'c2c'=>array('name'=>'c2c订单','style'=>'info'),'none'=>array('name'=>'没有标注','style'=>'info'),'manbaoyou' => array('name'=>'满包邮订单','style'=>'success'));
         $this->set('ship_mark_enum',$ship_mark_enum);
 
         $ziti_orders = array_filter($orders,'ziti_order_filter');
@@ -539,7 +539,8 @@ class TuanController extends AppController
         $kuaidi_orders = array_filter($orders,'kuaidi_order_filter');
         $c2c_orders = array_filter($orders,'c2c_order_filter');
         $none_orders = array_filter($orders,'none_order_filter');
-        $map_other_orders = array('sfby' => $sfby_orders,'sfdf'=> $sfdf_orders,'kuaidi' => $kuaidi_orders,'none'=> $none_orders,'c2c'=> $c2c_orders);
+        $manby_orders = array_filter($orders,'man_bao_you_filter');
+        $map_other_orders = array('sfby' => $sfby_orders,'sfdf'=> $sfdf_orders,'kuaidi' => $kuaidi_orders,'none'=> $none_orders,'c2c'=> $c2c_orders,'manbaoyou'=>$manby_orders);
         $map_ziti_orders = array();
 
         foreach($ziti_orders as $item){
