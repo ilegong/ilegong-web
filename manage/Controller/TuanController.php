@@ -437,16 +437,6 @@ class TuanController extends AppController
             $tuan_teams = Hash::combine($tuan_teams, '{n}.TuanTeam.id', '{n}.TuanTeam');
         }
 
-        $offline_stores = array();
-        $offline_store_ids = array_filter(array_unique(Hash::extract($orders, "{n}.Order.consignee_id")));
-        if (!empty($offline_store_ids)) {
-            $offline_stores = $this->OfflineStore->find('all', array(
-                'conditions'=> array(
-                    'id' => $offline_store_ids
-                )
-            ));
-            $offline_stores = Hash::combine($offline_stores, "{n}.OfflineStore.id", "{n}");
-        }
 
         $p_ids = Hash::extract($carts, '{n}.Cart.product_id');
         $spec_groups = array();
@@ -552,6 +542,17 @@ class TuanController extends AppController
                 $map_ziti_orders[$consignee_id] = array();
            }
            $map_ziti_orders[$consignee_id][] = $item;
+        }
+
+        $offline_stores = array();
+        $offline_store_ids = array_filter(array_unique(Hash::extract($ziti_orders, "{n}.Order.consignee_id")));
+        if (!empty($offline_store_ids)) {
+            $offline_stores = $this->OfflineStore->find('all', array(
+                'conditions'=> array(
+                    'id' => $offline_store_ids
+                )
+            ));
+            $offline_stores = Hash::combine($offline_stores, "{n}.OfflineStore.id", "{n}");
         }
 
         $pys_ziti_point = array_filter($offline_stores,'pys_ziti_filter');
