@@ -151,7 +151,7 @@
                                     <span class="border" style="display:block;overflow: hidden;">
                                         {{loop $consignment_dates $index $date}}
                                         <span class="mr12 border spec_item {{if $index == 0}}spec_item_selected cur{{/if}}" item-label="SD" data-val="{{$date['id']}}" data-send-date="{{$date['send_date']}}">
-                                           {{$date['date']}}
+                                           {{$date['date']}}({{day_of_week($date['send_date'])}})
                                             <div class="focus"></div>
                                         </span>
                                         {{/loop}}

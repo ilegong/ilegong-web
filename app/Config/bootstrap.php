@@ -1792,3 +1792,32 @@ function sort_award($a, $b) {
     if ($a['order'] == $b['order']) return 0;
     return ($a['order'] > $b['order']) ? 1 : -1;
 }
+
+function day_of_week($date_string){
+    $day = date_format(date_create($date_string), 'N');
+    $ret = '';
+    switch($day){
+        case 1:
+            $ret = '一';
+            break;
+        case 2:
+            $ret = '二';
+            break;
+        case 1:
+            $ret = '三';
+            break;
+        case 1:
+            $ret = '四';
+            break;
+        case 1:
+            $ret = '五';
+            break;
+        case 1:
+            $ret = '六';
+            break;
+        default:
+            $ret = '日';
+            break;
+    }
+    return '周'.$ret;
+}
