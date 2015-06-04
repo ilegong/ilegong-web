@@ -1803,20 +1803,20 @@ function day_of_week($date_string){
         case 2:
             $ret = '二';
             break;
-        case 1:
+        case 3:
             $ret = '三';
             break;
-        case 1:
+        case 4:
             $ret = '四';
             break;
-        case 1:
+        case 5:
             $ret = '五';
             break;
-        case 1:
+        case 6:
             $ret = '六';
             break;
-        default:
-            $ret = '日';
+        case 7:
+            $ret = '六';
             break;
     }
     return '周'.$ret;
