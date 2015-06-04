@@ -19,18 +19,18 @@
         //var try_href = "/products/view_shichi_comment/{{$Product['Product']['slug']}}.html?history={{$history}}";
         var comment_href = "/products/piece_product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}&init_count=3&from={{$from}}&data_id={{$data_id}}";
         var all_comment_href = "/products/product_comments/{{$Product['Product']['slug']}}.html?history={{$history}}&from={{$from}}&data_id={{$data_id}}";
-        var detail_href = "/products/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}&from={{$from}}&data_id={{$data_id}}";
-        //var try_html = $.ajax({url:try_href,async:false}).responseText;
+        var all_detail_href = "/products/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}&from={{$from}}&data_id={{$data_id}}";
+        var detail_href = "/products/piece_product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}&from={{$from}}&data_id={{$data_id}}";
         var comment_html = $.ajax({url:comment_href,async:false}).responseText;
         var detail_html = $.ajax({url:detail_href,async:false}).responseText;
         product_content.append(detail_html);
         var all_comment_count = $('#all_comment_count');
         var comment_count = parseInt(all_comment_count.text());
-        $('.more a').attr('href',detail_href);
+        $('.more a').attr('href',all_detail_href);
         set_container();
         $('#product-detail').on('click',function(){
             set_cur_border($(this));
-            set_content_href(detail_html,detail_href,'查看更多详情');
+            set_content_href(detail_html,all_detail_href,'查看更多详情');
             set_container();
         });
 //        $('#product-try').on('click',function(){

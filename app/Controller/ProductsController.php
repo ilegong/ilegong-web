@@ -175,6 +175,12 @@ class ProductsController extends AppController{
         }
     }
 
+    function piece_product_detail($slug){
+        $fields = array('content');
+        $this->set('hideNav',true);
+        parent::view($slug,$fields);
+    }
+
     function product_comments($slug){
         $this->setHistory();
         $fields = array('id','slug','name','content','created');
