@@ -215,6 +215,7 @@ class CronController extends AppController
 
 
     function gen_user_refer_data(){
+        $this->autoRender = false;
         if($_REQUEST['date']){
             $date = $_REQUEST['date'];
         }else{
@@ -228,6 +229,7 @@ class CronController extends AppController
             var_dump($queue->errno(), $queue->errmsg());
             $this->log('queue error '.$queue->errno().' queue error msg '.$queue->errmsg());
         }
+        echo json_encode(array('success' => true,'date' => $date));
     }
 
     function process_gen_refer_data(){
