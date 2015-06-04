@@ -166,6 +166,15 @@ class ProductsController extends AppController{
 
     }
 
+    function piece_product_comments($slug){
+        $fields = array('id','slug','name', 'created');
+        parent::view($slug,$fields);
+        $this->set('hideNav',true);
+        if(!empty($_REQUEST['init_count'])){
+            $this->set('limitCommentCount',$_REQUEST['init_count']);
+        }
+    }
+
     function product_comments($slug){
         $this->setHistory();
         $fields = array('id','slug','name','content','created');
