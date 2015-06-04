@@ -6,38 +6,44 @@ $(function () {
     var $shipSettingAddBtn = $('.ship-setting-add-btn');
     var shipSettingZitiTemplate = $('#ship-setting-ziti-template').html();
     var getDisplayName = function($shipSetting){
-        var shipType = $('.ship-type', $shipSetting).val();
-        var shipVal = $('.ship-val', $shipSetting).val();
-        var leastNum = $('.least-num', $shipSetting).val();
-        if(shipType == 1){
-            return '自提';
-        } else if(shipType == 5){
-            return '顺丰到付';
+        var $shipType = $('.ship-type', $shipSetting);
+        if(!$shipType.is(':checked')){
+            return "<span class='text-danger'>未选择</span>";
         }
 
         var displayName = '';
-        if(shipVal <= 0){
-            $('.ship-val', $shipSetting).val(0);
-            if(leastNum <= 1){
-                displayName = '包邮';
-            }
-            else{
-                displayName = '满' + leastNum + '份包邮';
-            }
+        if($shipType.val() == 1){
+            displayName =  '自提';
+        } else if($shipType.val() == 5){
+            displayName = '顺丰到付';
         }
         else{
-            if(leastNum <= 1){
-                displayName = '快递(' + (shipVal / 100) + '元)';
+            var shipVal = $('.ship-val', $shipSetting).val();
+            var leastNum = $('.least-num', $shipSetting).val();
+            if(shipVal <= 0){
+                $('.ship-val', $shipSetting).val(0);
+                if(leastNum <= 1){
+                    displayName = '包邮';
+                }
+                else{
+                    displayName = '满' + leastNum + '份包邮';
+                }
             }
             else{
-                displayName = '满' + leastNum + '份' + (shipVal / 100) + '元';
+                if(leastNum <= 1){
+                    displayName = '快递(' + (shipVal / 100) + '元)';
+                }
+                else{
+                    displayName = '满' + leastNum + '份' + (shipVal / 100) + '元';
+                }
             }
         }
-        return displayName;
+
+        return "<span>" + displayName + '</span>';
     }
     var showDisplayName = function($shipSetting){
         var displayName = getDisplayName($shipSetting);
-        $('.display-name', $shipSetting).text(displayName);
+        $('.display-name', $shipSetting).html(displayName);
     }
 
     $saveBtn.on('click',function(){
@@ -60,7 +66,7 @@ $(function () {
         $(".ship-setting-sfdf").before(shipSettingZitiTemplate);
     });
 
-    $('.ship-setting input').on('change', function(){
+    $('.ship-setting input').live('change', function(){
         showDisplayName($(this).parents('.ship-setting'));
     });
     $('.ship-setting').each(function(){
