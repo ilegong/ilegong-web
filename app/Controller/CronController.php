@@ -222,7 +222,7 @@ class CronController extends AppController
             $date = date('Y-m-d');
         }
         $queue = new SaeTaskQueue('chaopeng');
-        $queue->addTask("/cron/process_gen_refer_data","date=".$date,true);
+        $queue->addTask("/cron/process_gen_refer_data/".$date);
         $ret = $queue->push();
         //任务添加失败时输出错误码和错误信息
         if ($ret === false){
@@ -232,8 +232,8 @@ class CronController extends AppController
         echo json_encode(array('success' => true,'date' => $date));
     }
 
-    function process_gen_refer_data(){
-        $date = $_REQUEST['date'];
+    function process_gen_refer_data($date){
+        $this->log('gen refer data date '.$date);
         $agency_uid = get_agency_uid();
         $this->gen_agency_refer_data($agency_uid,$date);
     }
