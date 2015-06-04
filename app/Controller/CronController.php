@@ -284,8 +284,11 @@ class CronController extends AppController
 
     private function gen_agency_refer_data($uids,$date){
         $this->loadModel('StatisticsReferData');
-        $start_date = (new DateTime($date))->modify('first day of this month')->format('Y-m-d');
-        $end_date = (new DateTime($date))->modify('last day of this month')->format('Y-m-d');
+        $date = new DateTime($date);
+        $start_date = $date->modify('first day of this month');
+        $start_date = $start_date->format('Y-m-d');
+        $end_date = $date->modify('last day of this month');
+        $end_date = $end_date->format('Y-m-d');
         if (strtotime(date('Y-m-d')) < strtotime($end_date)) {
             $end_date = date('Y-m-d');
         }
