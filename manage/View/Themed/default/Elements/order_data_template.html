@@ -15,11 +15,9 @@
             <td mark-print="no-print">积分</td>
             <td mark-print="no-print">创建时间</td>
             <td mark-print="no-print">类型</td>
-            <td mark-print="no-print">配送方式</td>
             <td mark-print="no-print">自提/快递</td>
             <td mark-print="no-print">发货时间</td>
             <td>收件人</td>
-            <td mark-print="no-print">团队名称</td>
             <td>收件地址</td>
             <td>备注地址</td>
             <td mark-print="no-print">支付</td>
@@ -81,18 +79,19 @@
                     </td>
                     <td data-value="{{$order['Order']['total_all_price']}}">{{if $index == 0}}{{$order['Order']['total_all_price']}}{{else}}'同上'{{/if}}</td>
                     <td mark-print="no-print">{{$order['Order']['applied_score'] / 100}}</td>
-                    <td mark-print="no-print">{{$order['Order']['created']}}</td>
-                    <td mark-print="no-print">
-                        {{if $order['Order']['type'] == 5}}
-                        团购
-                        {{elseif $order['Order']['type'] == 6}}
-                        秒杀
-                        {{elseif $order['Order']['type'] == 1}}
-                        普通
-                        {{/if}}
-                    </td>
+                    <td mark-print="no-print">{{date_format(date_create($order['Order']['created']), 'n月d H:i')}}</td>
                     {{if $order['Order']['type'] == 5 || $order['Order']['type'] == 6}}
-                        <td mark-print="no-print" {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store)) || empty($order['Order']['ship_mark'])}}class="danger"{{/if}}>
+                        <td mark-print="no-print" {{if empty($order['Order']['ship_mark']) || ($order['Order']['ship_mark']=='ziti' && empty($offline_store))}}class="danger"{{/if}}>
+                        {{if $order['Order']['type'] == 5}}
+                            团购
+                            {{if $tuan_team['type'] == 1}}
+                            (大)
+                            {{else}}
+                            (<a href="/manage/admin/tuan_buyings/index?team_id={{$tuan_team['id']}}">{{$tuan_team['tuan_name']}}</a>)
+                            {{/if}}
+                        {{elseif $order['Order']['type'] == 6}}
+                            秒杀
+                        {{/if}}(
                         {{if $order['Order']['ship_mark']=='ziti'}}
                         自提
                         {{elseif $order['Order']['ship_mark']=='sfby'}}
@@ -102,23 +101,22 @@
                         {{elseif $order['Order']['ship_mark']=='kuaidi'}}
                         快递
                         {{else}}
-                        无标注
-                        {{/if}}
+                        <span class="text-danger">无标注</span>
+                        {{/if}})
                         </td>
                         <td mark-print="no-print" {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store)) || ($order['Order']['ship_mark'] != 'ziti' && empty($order['Order']['consignee_address']))}}class="danger"{{/if}}>
                         {{$offline_store['OfflineStore']['alias']}}
                         </td>
                     {{else}}
-                        <td mark-print="no-print">{{$order['Order']['ship_mark']}}</td>
+                        <td mark-print="no-print" {{if !empty($order['Order']['ship_mark'])}}class='danger'{{/if}}>
+                            普通{{if !empty($order['Order']['ship_mark'])}}({{$order['Order']['ship_mark']}}){{/if}}
+                        </td>
                         <td mark-print="no-print">{{if $order['Order']['ship_type']}}{{$ship_type[$order['Order']['ship_type']]}}({{$order['Order']['ship_code']}}){{/if}}</td>
                     {{/if}}
                     <td mark-print="no-print" {{if $order['Order']['type'] != 1 && empty($cart['Cart']['send_date'])}}class="danger"{{/if}}>
                     {{$cart['Cart']['send_date']}}
                     </td>
                     <td>{{$order['Order']['consignee_name']}}({{$order['Order']['consignee_mobilephone']}})</td>
-                    <td mark-print="no-print" data-value="{{$tuan_team['tuan_name']}}">
-                        <a href="/manage/admin/tuan_buyings/index?team_id={{$tuan_team['id']}}">{{$tuan_team['tuan_name']}}</a>
-                    </td>
                     <td {{if $order['Order']['ship_mark'] == 'kuaidi' && empty($order['Order']['consignee_address'])}}class="danger"{{/if}}>
                         {{if $order['Order']['consignee_area']}}{{$order['Order']['consignee_area']}},{{/if}}
                         {{$order['Order']['consignee_address']}}
@@ -133,8 +131,10 @@
                         支付宝
                         {{elseif $order['Pay']['trade_type']=='OFFLINE'}}
                         线下交易
+                        {{else}}
+                        <span class="text-danger">未知</span>
                         {{/if}}
-                        {{$order['Order']['pay_time']}}
+                        {{date_format(date_create($order['Order']['pay_time']), 'n月d H:i')}}
                     </td>
                     <td mark-print="no-print" {{if $has_paid && $order['Pay']['out_trade_no']==null}}class="danger"{{/if}}>
                         {{$order['Pay']['out_trade_no']}}
