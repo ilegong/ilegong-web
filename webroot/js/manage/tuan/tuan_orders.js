@@ -517,13 +517,10 @@ $(document).ready(function () {
             }
         });
         $(".refund-button").click(function () {
-            var total_price = $(this).data('total_price');
-            var order_id = $(this).data('order_id');
-            var creator = $(this).data('order_creator');
-            $currentOperateOrder = $(this);
-            orderId.val(order_id);
-            orderTotalPrice.val(total_price);
-            orderCreator.val(creator);
+            var $order = $(this).parents('tr.order');
+            orderId.val($order.data('order-id'));
+            orderTotalPrice.val($order.data('total-price'));
+            orderCreator.val($order.data('order-creator'));
             refundOrderDialog.dialog("open");
         });
     }

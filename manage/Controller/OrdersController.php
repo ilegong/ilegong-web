@@ -26,6 +26,25 @@ class OrdersController extends AppController{
         $this->log('admin user edit order'.$id.' admin user is '.$username.' request ip '.$user_ip.' user_agent '.$user_agent);
     }
 
+    public function admin_edit2($id = null,$copy = NULL){
+        $username = $this->currentUser['username'];
+        $user_agent = $this->request->header('User-Agent');
+        $user_ip = $this->request->clientIp(true);
+        $this->log('admin user edit order'.$id.' admin user is '.$username.' request ip '.$user_ip.' user_agent '.$user_agent);
+
+        $this->loadModel('Order');
+        $this->loadModel('Cart');
+
+        $order = $this->Order->findById($id);
+        $carts = $this->Cart->find('all', array(
+           'conditions' => array(
+                'order_id' => $id
+            )
+        ));
+        $this->set('order', $order);
+        $this->set('carts', $carts);
+    }
+
 	public function admin_trash($ids){		
 		if(is_array($_POST['ids'])&& !empty($_POST['ids'])){
 			$ids = $_POST['ids'];
