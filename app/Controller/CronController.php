@@ -286,6 +286,7 @@ class CronController extends AppController
         $this->loadModel('StatisticsReferData');
         $date = new DateTime($date);
         $start_date = $date->modify('first day of this month');
+        $this->StatisticsReferData->deleteAll(array('start_date' => $start_date,'user_id' => $uids));
         $start_date = $start_date->format('Y-m-d');
         $end_date = $date->modify('last day of this month');
         $end_date = $end_date->format('Y-m-d');
@@ -321,6 +322,7 @@ class CronController extends AppController
         $itemData['sum_money'] = floatval($all_money)*100;
         $itemData['start_date'] = $start_date;
         $itemData['end_date'] = $end_date;
+        $itemData['user_id'] = $uid;
         $saveData[] = $itemData;
         if($call_back){
             foreach($refer_uids as $uid){
