@@ -399,7 +399,7 @@ function kuaidi_order_filter($var){
     return ($var['Order']['ship_mark'] == 'kuaidi')&&($var['Order']['type']==5||$var['Order']['type']==6);
 }
 function none_order_filter($var){
-    return ($var['Order']['ship_mark'] == null)&&($var['Order']['type']==5||$var['Order']['type']==6);
+    return (($var['Order']['ship_mark'] == null)||(trim($var['Order']['ship_mark']) == ''))&&($var['Order']['type']==5||$var['Order']['type']==6);
 }
 function man_bao_you_filter($var){
     return ($var['Order']['ship_mark'] == 'manbaoyou')&&($var['Order']['type']==5||$var['Order']['type']==6);
