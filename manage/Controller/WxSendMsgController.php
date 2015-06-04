@@ -58,6 +58,7 @@ class WxSendMsgController extends AppController{
             $title = '参加'.$productName.'的';
             $remark = '点击立即购买';
             $detail_url = product_link($product['TuanProduct']['product_id'],WX_HOST);
+            $detail_url = $detail_url.'?_sl=wx_tpl';
             return array('productName' => $productName,'title' => $title,'remark' => $remark,'detail_url' => $detail_url);
         }
 
