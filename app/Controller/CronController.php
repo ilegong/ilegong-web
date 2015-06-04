@@ -213,6 +213,29 @@ class CronController extends AppController
         echo 'success';
     }
 
+
+    function gen_user_refer_data(){
+        if($_REQUEST['date']){
+            $date = $_REQUEST['date'];
+        }else{
+            $date = date('Y-m-d');
+        }
+        $queue = new SaeTaskQueue('chaopeng');
+        $queue->addTask("/cron/process_gen_refer_data","date=".$date,true);
+        $ret = $queue->push();
+        //任务添加失败时输出错误码和错误信息
+        if ($ret === false){
+            var_dump($queue->errno(), $queue->errmsg());
+            $this->log('queue error '.$queue->errno().' queue error msg '.$queue->errmsg());
+        }
+    }
+
+    function process_gen_refer_data(){
+        $date = $_REQUEST['date'];
+        $agency_uid = get_agency_uid();
+        $this->gen_agency_refer_data($agency_uid,$date);
+    }
+
     function process_download_wx_photo($oathBinds) {
         $this->log('download avatar length : '.(count($oathBinds)));
         $resultCount = 0;
@@ -255,5 +278,47 @@ class CronController extends AppController
             }
         }
         return $resultCount;
+    }
+
+    private function gen_agency_refer_data($uids,$date){
+        $this->loadModel('StatisticsReferData');
+        $start_date = (new DateTime($date))->modify('first day of this month')->format('Y-m-d');
+        $end_date = (new DateTime($date))->modify('last day of previous month')->format('Y-m-d');
+        if (strtotime(date('Y-m-d')) < strtotime($end_date)) {
+            $end_date = date('Y-m-d');
+        }
+        $end_date = date('Y-m-d',strtotime($end_date.' + 1 day'));
+        $saveData = array();
+        foreach($uids as $uid){
+            $saveData = array_merge($saveData,$this->gen_refer_statics_data($uid,$start_date,$end_date,true));
+        }
+        $this->StatisticsReferData->saveAll($saveData);
+    }
+
+    private function gen_refer_statics_data($uid,$start_date,$end_date,$call_back=false){
+        $this->loadModel('Refer');
+        $this->loadModel('Order');
+        $saveData = array();
+        $refers = $this->Refer->find('all',array('conditions' => array(
+            'created >= ' => $start_date,
+            'created < ' => $end_date,
+            'first_order_done' => 1,
+            'from' => $uid
+        )));
+        $refer_uids = Hash::extract($refers,'{n}.Refer.to');
+        $itemData = array();
+        $itemData['recommend_user_count'] = count($refer_uids);
+        $count_order_money = $this->Order->query('select sum(o.total_all_price) as ct from cake_orders o where o.status in (1,2,3,9) and o.creator in ('.implode(',',$refer_uids).') and Date(o.pay_time) >= "'.$start_date.'" and Date(o.pay_time) < "'.$end_date.'"');
+        $all_money =  $count_order_money[0][0]['ct'];
+        $itemData['sum_money'] = floatval($all_money)*100;
+        $itemData['start_date'] = $start_date;
+        $itemData['end_date'] = $end_date;
+        $saveData[] = $itemData;
+        if($call_back){
+            foreach($refer_uids as $uid){
+                $saveData =array_merge($saveData,$this->gen_refer_statics_data($uid,$start_date,$end_date,false));
+            }
+        }
+        return $saveData;
     }
 }

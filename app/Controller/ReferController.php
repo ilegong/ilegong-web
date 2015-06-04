@@ -40,8 +40,8 @@ class ReferController extends AppController {
         $userSuccessRefers = $this->Refer->find('count',array(
             'conditions' => $cond
         ));
-        $agency_uid = array(411402,633345,146,6799,805934,660240,810892);
-        if(in_array($uid,$agency_uid)){
+
+        if(in_array($uid,get_agency_uid())){
             $this->set('is_agency',true);
         }else{
             $this->set('is_agency',false);

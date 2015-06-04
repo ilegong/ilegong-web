@@ -216,6 +216,10 @@ $source_appid_map = array();
 $order_after_paid_status = array(ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED);
 
 
+function get_agency_uid(){
+    return array(411402,633345,146,6799,805934,660240,810892);
+}
+
 function oauth_wx_source() {
     return 'wx-' . WX_APPID_SOURCE;
 }
