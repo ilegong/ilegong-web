@@ -458,6 +458,7 @@ ul li{ list-style:none;}
 .content .good{ margin: 5px;}
 .content a.xq{ display: block; text-decoration: none; background-color: #fff; position: relative;}
 .content a.xq p{ display: block; position: absolute; background-color: #ffa200; color: #ffffff; padding: 5px; font-size: 1em; text-align:center; left: 0; top: 0;}
+.content a.xq p.spec_tag{ display: block; position: absolute; background-color:#c73c3c; color: #ffffff; width: 45px; height: 45px; border-radius: 45px; line-height: 45px; font-weight: bold; font-size: 1em; text-align:center; left: 0; top: 0;padding: 0;}
 .content a.xq img{max-width: 100%;}
 .content .title{ font-size: 1em; padding:8px 10px 3px 10px; line-height: 18px; color: #333333; font-weight: bold; background-color: #ffffff;}
 .content .price{ font-size:1em; padding: 0 8px; line-height: 30px;}
