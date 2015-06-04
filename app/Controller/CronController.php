@@ -285,7 +285,7 @@ class CronController extends AppController
     private function gen_agency_refer_data($uids,$date){
         $this->loadModel('StatisticsReferData');
         $start_date = (new DateTime($date))->modify('first day of this month')->format('Y-m-d');
-        $end_date = (new DateTime($date))->modify('last day of previous month')->format('Y-m-d');
+        $end_date = (new DateTime($date))->modify('last day of this month')->format('Y-m-d');
         if (strtotime(date('Y-m-d')) < strtotime($end_date)) {
             $end_date = date('Y-m-d');
         }
@@ -308,6 +308,9 @@ class CronController extends AppController
             'from' => $uid
         )));
         $refer_uids = Hash::extract($refers,'{n}.Refer.to');
+        if(empty($refer_uids)){
+            return $saveData;
+        }
         $itemData = array();
         $itemData['recommend_user_count'] = count($refer_uids);
         $count_order_money = $this->Order->query('select sum(o.total_all_price) as ct from cake_orders o where o.status in (1,2,3,9) and o.creator in ('.implode(',',$refer_uids).') and Date(o.pay_time) >= "'.$start_date.'" and Date(o.pay_time) < "'.$end_date.'"');
