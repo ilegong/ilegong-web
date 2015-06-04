@@ -286,8 +286,8 @@ class CronController extends AppController
         $this->loadModel('StatisticsReferData');
         $date = new DateTime($date);
         $start_date = $date->modify('first day of this month');
-        $this->StatisticsReferData->deleteAll(array('start_date' => $start_date,'user_id' => $uids));
         $start_date = $start_date->format('Y-m-d');
+        $this->StatisticsReferData->deleteAll(array('StatisticsReferData.start_date' => $start_date),false);
         $end_date = $date->modify('last day of this month');
         $end_date = $end_date->format('Y-m-d');
         if (strtotime(date('Y-m-d')) < strtotime($end_date)) {
