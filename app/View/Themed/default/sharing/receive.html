@@ -95,12 +95,13 @@
 <div class="packet1">
     {{if empty($my_hongbao)}}
         <h2>已抢完</h2>
+    <p><a class="radius10" href="/">去秒杀</a></p>
     {{elseif !$expired}}
     <h2>{{$this->Number->precision($my_hongbao['number']/100, 2)}}元</h2>
     <p><a class="radius10" href="/users/my_coupons.html">马上使用</a ></p >
     {{elseif $noMore}}
     <h2>已抢完</h2>
-    <p><a class="radius10" href="/">去秒杀</a ></p >
+    <p><a class="radius10" href="/">去秒杀</a ></p>
     {{else}}
     <p>已过期</p>
     {{/if}}
