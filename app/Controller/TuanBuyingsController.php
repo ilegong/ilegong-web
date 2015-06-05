@@ -908,6 +908,7 @@ class TuanBuyingsController extends AppController{
                         )
                     ));
                     if(!empty($offlineStore)){
+                        $ziti_consignee_info['OrderConsignees']['can_remark_address'] = $offlineStore['OfflineStore']['can_remark_address'];
                         $this->set('ziti_consignee_info',$ziti_consignee_info['OrderConsignees']);
                     }else{
                         $this->OrderConsignees->delete($ziti_consignee_info['OrderConsignees']['id']);
