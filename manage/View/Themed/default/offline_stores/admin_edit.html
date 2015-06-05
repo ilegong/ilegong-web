@@ -16,6 +16,7 @@
       </div>
       <div class="col-sm-2">
            <select class="form-control child-area-id" name="data[OfflineStore][child_area_id]" data-value="{{$offline_store[OfflineStore][child_area_id]}}">
+               <option value="0">选择子区域</option>
            </select>
       </div>
     </div>
@@ -97,4 +98,4 @@
     </div>
   </form>
 </div>
-{{$this->Html->script(array('/js/tuan-area.js?v4.3', 'manage/offline_stores/edit.js'))}}
+{{$this->Html->script(array('/js/tuan-area.js?v4.3', 'manage/offline_stores/edit.js?v1'))}}
