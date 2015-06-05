@@ -75,7 +75,7 @@ $(document).ready(function () {
         var user_info_datas = data['user_infos'];
         $.each(refer_user_data, function (key, item) {
             var user_info = user_info_datas[key];
-            var dataDom = '<li class="clearfix"> <span class="fl"><img src="' + user_info['image'] + '"></span> <div class="tuijian_title"> <div class="tuijian_title_style clearfix"> <em class="fl"></em> <b>推荐了' + item['user_count'] + '个新用户，新用户购买总金额：' + ((item['total_money']) || 0) + '元</b> </div> </div> </li>';
+            var dataDom = '<li class="clearfix"> <span class="fl"><img src="' + user_info['image'] + '"></span> <div class="tuijian_title"> <div class="tuijian_title_style clearfix"> <em class="fl">'+user_info['nickname']+'</em> <b>推荐了' + item['user_count'] + '个新用户，新用户购买总金额：' + ((item['total_money']) || 0) + '元</b> </div> </div> </li>';
             $my_refer_user_data.prepend($(dataDom));
         });
     }
