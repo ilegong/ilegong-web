@@ -71,6 +71,7 @@
         <th>收件人</th>
         <th>电话</th>
         <th>收件地址</th>
+        <th>备注地址</th>
         <th>支付方式</th>
         <th>快递公司</th>
         <th>快递单号</th>
@@ -141,6 +142,7 @@
         <td>{{$order['Order']['consignee_name']}}</td>
         <td>{{$order['Order']['consignee_mobilephone']}}</td>
         <td>{{$order['Order']['consignee_area']}}{{$order['Order']['consignee_address']}}</td>
+        <td>{{$order['Order']['remark_address']}}</td>
         <td>
         {{if $order['Pay']['trade_type']=='JSAPI'}}
         <font color="red">微信支付</font>
