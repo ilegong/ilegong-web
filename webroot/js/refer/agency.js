@@ -12,6 +12,8 @@ $(document).ready(function () {
     var $my_refer_data = $('#my_refer_data');
     var $my_refer_user_data = $('#my_refer_user_data');
     var $my_refer_user_all_data = $('#my_refer_user_all_data');
+    var $my_refer_id = $('#my_refer_id');
+    var user_id = $my_refer_id.val();
 
     $preMonth.on('click', function () {
         var me = $(this);
@@ -65,7 +67,14 @@ $(document).ready(function () {
         }, 'json');
     }
 
+    function cleanData(){
+        $my_refer_data.html('');
+        $my_refer_user_all_data.html('');
+        $my_refer_user_data.html('<li class="clearfix" id="to_refer_data"><a href="/refer/index/'+user_id+'" class="mytuijian_a">点击链接推荐好友</a></li>');
+    }
+
     function parseReferData(data) {
+        cleanData();
         var myData = data['my_data'];
         var secondReferData = data['second_refer_data'];
         $my_refer_data.html(myData['user_count'] + '人<br>' + (myData['total_money'] || 0) + '元');
