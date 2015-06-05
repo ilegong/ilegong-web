@@ -303,39 +303,71 @@ class ReferController extends AppController {
     }
 
     public function agency_refer_count($uid = 0){
-
         $this->pageTitle = '代理人';
         if (!$uid) {
-            $uid = $this->currentUser['id'];
             $this->redirect('/refer/index/'.$this->currentUser['id'].'.html');
         } else if ($uid != $this->currentUser['id']) {
             $this->redirect('/refer/client/'.$uid.'/'.$this->currentUser['id'].'.html');
         }
-        list($my_total_refer_money,$my_total_refer,$refer_accept_uid,) = $this->count_refer($uid);
-        $friend_total_refer = 0;
-        $friend_total_refer_money = 0;
-        $friend_refer_total = array();
-        foreach($refer_accept_uid as $index=>$uid){
-            list($friend_refer_money,$friend_refer_num,,$user_info) = $this->count_refer($uid);
-            $friend_total_refer = $friend_total_refer + $friend_refer_num;
-            $friend_total_refer_money = $friend_total_refer_money + $friend_refer_money;
-            $friend_refer_total[$index]['friend_refer'] = $friend_refer_num;
-            $friend_refer_total[$index]['friend_refer_money'] = $friend_refer_money;
-            $friend_refer_total[$index]['user_info'] = $user_info;
-
-        }
-        $date_start = date("m月d日", mktime(24, 0, 0, date("m")-1, 0, date("Y")));
-        $date_end = date('m月d日');
-        $this->set('my_total_refer_money',round($my_total_refer_money,2));
-        $this->set('my_total_refer',$my_total_refer);
-        $this->set('friend_total_refer_money',round($friend_total_refer_money,2));
-        $this->set('friend_total_refer',$friend_total_refer);
-        $this->set('friend_refer_total',$friend_refer_total);
-        $this->set('date_start',$date_start);
-        $this->set('date_end',$date_end);
-        $this->set('uid',$uid);
-
     }
+
+    public function get_refer_statics_data($date){
+        $this->autoRender=false;
+        $uid = $this->currentUser['id'];
+        $this->loadModel('User');
+        $condition['Date(created) >='] = $date;
+        $condition['Date(created) <'] = date('Y-m-d', strtotime("+1 months", strtotime($date)));
+        $condition['from'] = $uid;
+        $refer_info = $this->Refer->find('all',array(
+            'conditions' =>$condition
+        ));
+        $refer_accept_uid = Hash::extract($refer_info,'{n}.Refer.to');
+        $my_statics_data = $this->gen_refer_statics_data($uid,$date);
+        $my_refer_user_data = array();
+        foreach($refer_accept_uid as $user_id){
+            $my_refer_user_data[$user_id] = $this->gen_refer_statics_data($user_id,$date);
+        }
+        $user_infos = $this->User->find('all',array(
+            'conditions' => array(
+                'id' => $refer_accept_uid
+            ),
+            'fields' => array('id','nickname','image')
+        ));
+        $user_infos = Hash::combine($user_infos,'{n}.User.id','{n}.User');
+        $all_second_user_refer_count = 0;
+        $all_second_user_money = 0;
+        foreach($my_refer_user_data as $item){
+            if($item['user_count']){
+                $all_second_user_refer_count+=$item['user_count'];
+            }
+            if($item['total_money']){
+                $all_second_user_money+=$item['total_money'];
+            }
+        }
+        echo json_encode(array('my_data' => $my_statics_data,'refer_user_data' => $my_refer_user_data, 'user_infos' => $user_infos,'second_refer_data'=>array('user_count'=>$all_second_user_refer_count,'total_money'=>$all_second_user_money)));
+    }
+
+    private function gen_refer_statics_data($uid,$date){
+        $this->loadModel('StatisticsReferData');
+        $condition['Date(created) >='] = $date;
+        $condition['Date(created) <'] = date('Y-m-d', strtotime("+1 months", strtotime($date)));
+        $condition['from'] = $uid;
+        $refer_info = $this->Refer->find('all',array(
+            'conditions' =>$condition
+        ));
+        $refer_accept_uids = Hash::extract($refer_info,'{n}.Refer.to');
+        $totalMoney = $this->StatisticsReferData->find('all',array(
+            'conditions' => array(
+                'user_id' => $refer_accept_uids
+            ),
+            'fields' => array(
+                'SUM(sum_money) AS total_money'
+            )
+        ));
+        $totalMoney = $totalMoney['StatisticsReferData']['total_money'];
+        return array($uid=>array('total_money' => $totalMoney,'user_count' => count($refer_accept_uids)));
+    }
+
     /*
      * return num of new customers referred by uid
      * return total orders' price of new customers referred by uid

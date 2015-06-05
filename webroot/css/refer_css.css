@@ -106,3 +106,6 @@ input{ outline:none;}
 /*代理人样式*/
 .agency{ padding: 15px 10px 0 10px; line-height: 20px; color: #333333;}
 .agency_red{color: #CC0000;}
+
+.tuijianlist_banner em a{ color: #cccccc; text-decoration: none;}
+.tuijianlist_banner em a.cur{ color: #ffffff; text-decoration: underline;}

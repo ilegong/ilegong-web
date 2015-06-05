@@ -1,33 +1,17 @@
 {{$this->Html->css('/css/refer_css.css?v6')}}
 <div class="tuijianlist_banner">
     <h1>推荐好友人数和金额统计</h1>
-    <em>时间：{{$date_start}}—-{{$date_end}}</em>
+    <em><a href="#x" class="cur pre-month">上个月</a >&nbsp;&nbsp;&nbsp;&nbsp;<a href="#X" class="data-date">{{date('Y-m')}}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#X" class="nex-month">下个月</a >&nbsp;&nbsp;&nbsp;&nbsp;<a href="#X" class="cur cur-month">本月</a></em>
 </div>
 <dl class="clearfix agency">
     <dt class="fl">您推荐的好友总数：<br>您推荐的好友购买总金额：</dt>
-    <dt class="fl agency_red">{{$my_total_refer}}人<br>{{$my_total_refer_money}}元</dt>
+    <dt class="fl agency_red" id="my_refer_data"></dt>
 </dl>
 <dl class="clearfix agency">
     <dt class="fl">您的好友推荐的新用户总数：<br>您的好友推荐的新用户购买总金额：</dt>
-    <dt class="fl agency_red">{{$friend_total_refer}}人<br>{{$friend_total_refer_money}}元</dt>
+    <dt class="fl agency_red" id="my_refer_user_all_data"></dt>
 </dl>
-<ul class="tuijianlist" style="padding-top: 10px;">
-    {{if $friend_refer_total}}
-    {{loop $friend_refer_total $friend_refer}}
-    <?php
-    $user_info = $friend_refer['user_info'];
-    ?>
-    <li class="clearfix">
-        <span class="fl"><img src="{{$this->Html->assetUrl(small_thumb_link($user_info['User']['image']))}}"></span>
-        <div class="tuijian_title">
-            <div class="tuijian_title_style clearfix">
-                <em class="fl">{{$user_info['User']['nickname']}}</em>
-                <b>推荐了{{$friend_refer['friend_refer']}}个新用户，新用户购买总金额：{{round($friend_refer['friend_refer_money'],2)}}元</b>
-            </div>
-        </div>
-    </li>
-    {{/loop}}
-    {{else}}
-    <li class="clearfix"><a href="/refer/index/{{$uid}}" class="mytuijian_a">您还没有推荐过好友，点击链接推荐</a></li>
-    {{/if}}
+<ul class="tuijianlist" style="padding-top: 10px;" id="my_refer_user_data">
+    <li class="clearfix"><a href="/refer/index/{{$uid}}" class="mytuijian_a">点击链接推荐好友</a></li>
 </ul>
+{{$this->Html->script(array('/js/moment.min.js?v3','/js/refer/agency.js'))}}
