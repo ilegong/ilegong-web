@@ -365,7 +365,7 @@ class ReferController extends AppController {
             )
         ));
         $totalMoney = $totalMoney['StatisticsReferData']['total_money'];
-        return array($uid=>array('total_money' => $totalMoney,'user_count' => count($refer_accept_uids)));
+        return array('total_money' => $totalMoney,'user_count' => count($refer_accept_uids));
     }
 
     /*

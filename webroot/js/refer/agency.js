@@ -68,7 +68,6 @@ $(document).ready(function () {
     function parseReferData(data) {
         var myData = data['my_data'];
         var secondReferData = data['second_refer_data'];
-        myData = myData[Object.keys(myData)[0]];
         $my_refer_data.html(myData['user_count'] + '人<br>' + (myData['total_money'] || 0) + '元');
         $my_refer_user_all_data.html(secondReferData['user_count'] + '人<br>' + (secondReferData['total_money'] || 0) + '元');
         var refer_user_data = data['refer_user_data'];
