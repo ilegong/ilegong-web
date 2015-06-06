@@ -55,7 +55,7 @@ $(function () {
             }]
         },
         tooltip: {
-            valueSuffix: '°C'
+            valueSuffix: '份'
         },
         legend: {
             layout: 'vertical',
