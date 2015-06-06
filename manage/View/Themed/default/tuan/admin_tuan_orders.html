@@ -241,37 +241,6 @@
             <h3 {{if !empty($current_orders)}}class="new_page"{{else}}class="no-print"{{/if}}><span class="label label-success">{{get_address(null,$point)}}</span></h3>
             <hr class="no-print"/>
             {{template Elements/order_data_template}}
-        {{else}}
-            <h2><span class="label label-primary">{{$item['name']}}</span></h2>
-            <hr/>
-            <h2><span class="label label-warning">朋友说自提</span></h2>
-            <hr/>
-        <div class="hidden" id="send_order_msg" data-reach="{{$reach_order}}" data-send_out="{{$send_out_order}}"></div>
-         {{loop $pys_ziti_point $point}}
-                    <?php
-                        $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
-                        $data_tag = 'ziti-'.$point['OfflineStore']['id'];
-                        $data_tag_name = $point['OfflineStore']['alias'];
-                    ?>
-                <h3><span class="label label-success">{{get_address(null,$point)}}</span></h3>
-                <hr/>
-                {{template Elements/order_data_template}}
-                <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
-            {{/loop}}
-            <h2><span class="label label-warning">好邻居自提</span></h2>
-                <hr/>
-                {{loop $hlj_ziti_point $point}}
-                    <?php
-                        $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
-                        $data_tag = 'ziti-'.$point['OfflineStore']['id'];
-                        $data_tag_name = $point['OfflineStore']['alias'];
-                    ?>
-                     <h3><span class="label label-success">{{get_address(null,$point)}}</span></h3>
-                    <hr/>
-                    {{template Elements/order_data_template}}
-                    <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
-            {{/loop}}
-            {{loop $map_ziti_orders $current_orders}}
             <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
         {{/loop}}
         <h2 class="no-print"><span class="label label-warning">好邻居自提</span></h2>
