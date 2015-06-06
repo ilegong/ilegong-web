@@ -46,7 +46,7 @@ $(function () {
         },
         yAxis: {
             title: {
-                text: '份'
+                text: ''
             },
             plotLines: [{
                 value: 0,
@@ -55,7 +55,7 @@ $(function () {
             }]
         },
         tooltip: {
-            valueSuffix: '份'
+            valueSuffix: ''
         },
         legend: {
             layout: 'vertical',
