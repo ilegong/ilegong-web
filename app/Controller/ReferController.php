@@ -308,7 +308,7 @@ class ReferController extends AppController {
             $this->redirect('/refer/index/'.$this->currentUser['id'].'.html');
             return;
         }
-        if ($uid != $this->currentUser['id']||in_array($uid,get_agency_uid())) {
+        if ($uid != $this->currentUser['id']||!(in_array($uid,get_agency_uid()))) {
             $this->redirect('/refer/client/'.$uid.'/'.$this->currentUser['id'].'.html');
             return;
         }
