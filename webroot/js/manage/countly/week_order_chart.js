@@ -42,11 +42,11 @@ $(function () {
             x: -20
         },
         xAxis: {
-            categories: categories
+            categories: categories.reverse()
         },
         yAxis: {
             title: {
-                text: 'Temperature (°C)'
+                text: '份'
             },
             plotLines: [{
                 value: 0,
@@ -65,31 +65,31 @@ $(function () {
         },
         series: [{
             name: '新下单用户',
-            data: new_order_user
+            data: new_order_user.reverse()
         }, {
             name: '下单用户',
-            data: order_user
+            data: order_user.reverse()
         }, {
             name: '重复购买用户',
-            data: repeat_buy_user
+            data: repeat_buy_user.reverse()
         }, {
             name: '复购率',
-            data: repeat_buy_ratio
+            data: repeat_buy_ratio.reverse()
         },{
             name: '峰值订单',
-            data: max_order
+            data: max_order.reverse()
         },{
             name: '平均订单',
-            data: avg_order
+            data: avg_order.reverse()
         },{
             name: '所有订单',
-            data: all_order
+            data: all_order.reverse()
         },{
             name: '团购订单',
-            data: tuan_order
+            data: tuan_order.reverse()
         },{
             name: '新增用户',
-            data: new_user
+            data: new_user.reverse()
         },]
     });
 });
