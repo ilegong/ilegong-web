@@ -21,21 +21,19 @@ mainContent_width = $("#mainContent").width();
  */
 $(".chzn-select").chosen({search_contains:true,width:'200px'});
 </script>
-{{$this->Html->script(array(
-	'bootstrap.min.js','bootstrap-affix.js',
- ))}}
 
 {{$this->Html->script(array(
-			'ckeditor/ckeditor.js',
-			'editor.js',
-        ))}}
-{{$this->Html->script(array(
+    'bootstrap.min.js',
+    'bootstrap-affix.js',
+    'ckeditor/ckeditor.js',
+    'editor.js',
 	'swfupload/swfupload.js',
 	'swfupload/swfupload.queue.js',
 	'swfupload/swfupload.cookies.js',
 	'swfupload/fileprogress.js',
-	'swfupload/handlers.js'
-))}}        
+	'swfupload/handlers.js',
+    'manage-lib/lodash.js'
+))}}
 <!-- helper中追加的底部脚本 $this->_View->append('bottomscript',$script);Combinator-->
 {{$this->fetch('bottomscript')}}
 </body>
