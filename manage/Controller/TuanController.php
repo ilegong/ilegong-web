@@ -4,7 +4,7 @@ class TuanController extends AppController
 
     var $name = 'Tuan';
 
-    var $uses = array('TuanTeam', 'TuanBuying', 'Order', 'Cart', 'TuanBuyingMessages', 'TuanProduct', 'ConsignmentDate', 'ProductTry', 'Brand', 'ProductSpecGroup', 'PayNotify', 'OfflineStore');
+    var $uses = array('TuanTeam', 'TuanBuying', 'Order', 'Cart', 'TuanBuyingMessages', 'TuanProduct', 'ConsignmentDate', 'ProductTry', 'Brand', 'ProductSpecGroup', 'PayNotify', 'OfflineStore','OrderMessage');
 
     /**
      * query tuan orders
@@ -13,9 +13,13 @@ class TuanController extends AppController
         parent::beforeFilter();
         $ship_types = $this->_get_ship_types();
         $this->set('ship_type', $ship_types);
+        list($reach_order,$send_out_order) = $this->_get_orderMsg();
+        $this->set('reach_order',implode(',',$reach_order));
+        $this->set('send_out_order',implode(',',$send_out_order));
     }
     public function admin_tuan_orders()
     {
+
         $this->set('abnormal_order_count', $this->_query_abnormal_order());
         $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
@@ -708,5 +712,13 @@ class TuanController extends AppController
             $this->Order->updateAll(array(consignee_id=>$offline_store_id),array('id'=>$id));
         }
         $this->redirect('/admin/tuan/query_abnormal_order');
+    }
+
+    public function _get_orderMsg(){
+        $reachOrders = $this->OrderMessage->find('all',array('conditions' => array('status' => 0,'type' => 'py-reach')));
+        $send_outOrders = $this->OrderMessage->find('all',array('conditions' => array('status' => 0,'type' => 'py-send-out')));
+        $reachOrderIds = Hash::extract($reachOrders,'{n}.OrderMessage.order_id');
+        $send_outOrderIds = Hash::extract($send_outOrders,'{n}.OrderMessage.order_id');
+        return array($reachOrderIds,$send_outOrderIds);
     }
 }

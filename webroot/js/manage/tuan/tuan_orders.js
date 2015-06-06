@@ -7,6 +7,7 @@ $(document).ready(function () {
     var $exportBtn = $('button.export-excel');
     var mainContent = $('#mainContent');
     var $currentOperateOrder = null;
+    var sendOrderMsg = $('#send_order_msg');
     mainContent.height(250);
 
     start_stat_date.datetimepicker({
@@ -366,6 +367,25 @@ $(document).ready(function () {
             that.parents('tr').children('td').eq(3).html('已发货');
         });
     }
+    function setSuccessArrivedOrder(orderIds,type){
+        $.each(orderIds,function(index,item){
+           var that = $('.order input:checkbox[value='+item+']');
+            console.log(that);
+            that.parents('tr').children('td').eq(17).children('span').eq(type).removeClass('hidden');
+        });
+    }
+    function initSetOrder(){
+        var sendOutIds = sendOrderMsg.data('send_out').split(',');
+        var reachIds = sendOrderMsg.data('reach').split(',');
+        $.each(sendOutIds,function(index,item){
+            var that = $('.order input:checkbox[value='+item+']');
+            that.parents('tr').children('td').eq(17).children('span').eq(0).removeClass('hidden');
+        });
+        $.each(reachIds,function(index,item){
+            var that = $('.order input:checkbox[value='+item+']');
+            that.parents('tr').children('td').eq(17).children('span').eq(1).removeClass('hidden');
+        });
+    }
     var ourAddressSend = function () {
         var orderIds = getCheckedOrderIds();
         var val = $('input:radio[name="optionsRadios"]:checked').val();
@@ -375,9 +395,12 @@ $(document).ready(function () {
                     var msg;
                     if (orderIds.length == (data.res.length + data.already.length)) {
                         msg = '订单状态修改成功，并全部发送了到达提醒';
+                        setSuccessArrivedOrder(orderIds,1);
                     }
                     else {
                         msg = '订单状态修改成功，但有' + (orderIds.length - data.res.length - data.already.length) + '个未发送到达提醒';
+                        var orderId = $.merge(data.res,data.already);
+                        setSuccessArrivedOrder($.unique(orderId),1);
                     }
                     utils.alert(msg);
 //                    location.reload();
@@ -394,9 +417,11 @@ $(document).ready(function () {
                     var msg;
                     if (orderIds.length == data.res.length) {
                         msg = '订单状态修改成功，并全部发送了发货提醒';
+                        setSuccessArrivedOrder(orderIds,0);
                     }
                     else {
                         msg = '订单状态修改成功，但有' + data.fail.length + '个未发送发货提醒';
+                        setSuccessArrivedOrder(data.res,0);
                     }
                     utils.alert(msg);
 //                    location.reload();
@@ -539,4 +564,5 @@ $(document).ready(function () {
         });
         tablesToExcel(tableIds, tableNames, 'order-export.xls', 'Excel', ignoreRows);
     });
+    initSetOrder();
 });
