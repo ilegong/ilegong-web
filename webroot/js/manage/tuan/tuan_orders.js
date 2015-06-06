@@ -371,7 +371,7 @@ $(document).ready(function () {
         $.each(orderIds,function(index,item){
            var that = $('.order input:checkbox[value='+item+']');
             console.log(that);
-            that.parents('tr').children('td').eq(17).children('span').eq(type).removeClass('hidden');
+            that.parents('tr').children('td').eq(13).children('span').eq(type).removeClass('hidden');
         });
     }
     function initSetOrder(){
@@ -379,11 +379,11 @@ $(document).ready(function () {
         var reachIds = sendOrderMsg.data('reach').split(',');
         $.each(sendOutIds,function(index,item){
             var that = $('.order input:checkbox[value='+item+']');
-            that.parents('tr').children('td').eq(17).children('span').eq(0).removeClass('hidden');
+            that.parents('tr').children('td').eq(13).children('span').eq(0).removeClass('hidden');
         });
         $.each(reachIds,function(index,item){
             var that = $('.order input:checkbox[value='+item+']');
-            that.parents('tr').children('td').eq(17).children('span').eq(1).removeClass('hidden');
+            that.parents('tr').children('td').eq(13).children('span').eq(1).removeClass('hidden');
         });
     }
     var ourAddressSend = function () {
@@ -546,6 +546,7 @@ $(document).ready(function () {
             orderId.val($order.data('order-id'));
             orderTotalPrice.val($order.data('total-price'));
             orderCreator.val($order.data('order-creator'));
+            $currentOperateOrder = $(this);
             refundOrderDialog.dialog("open");
         });
     }

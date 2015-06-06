@@ -117,6 +117,8 @@
                     {{/if}}
                     <td mark-print="no-print" {{if $order['Order']['type'] != 1 && empty($cart['Cart']['send_date'])}}class="danger"{{/if}}>
                     {{$cart['Cart']['send_date']}}
+                    <span class="badge hidden" data-id="order-send-out">已发发货提醒</span>
+                    <span class="badge hidden" data-id="order-reach">已发到货提醒</span>
                     </td>
                     <td>{{$order['Order']['consignee_name']}}</td>
                     <td>{{$order['Order']['consignee_mobilephone']}}</td>
@@ -153,7 +155,7 @@
                         <button type="button" class="input-ship-code btn btn-primary">回填快递单号</button>
                         {{/if}}
                         {{if in_array($order['Order']['status'],array(1,2,3,9,16,4,14))}}
-                        <button type="button" class="btn btn-default refund-button">退款</button>
+                        <button type="button" class="btn btn-default refund-button"  data-order_id="{{$order['Order']['id']}}" data-order_creator="{{$order['Order']['creator']}}"  data-total_price = "{{$order['Order']['total_all_price']}}">退款</button>
                         {{/if}}
                         <button type="button" class="btn btn-default modify-button">修改订单</button>
                     </td>

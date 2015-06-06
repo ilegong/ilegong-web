@@ -232,7 +232,8 @@
         <hr class="no-print" />
         <h2 class="no-print"><span class="label label-warning no-print">朋友说自提</span></h2>
         <hr class="no-print" />
-        {{loop $pys_ziti_point $point}}
+       <div class="hidden" id="send_order_msg" data-reach="{{$reach_order}}" data-send_out="{{$send_out_order}}"></div>
+       {{loop $pys_ziti_point $point}}
                 <?php
                     $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
                     $data_tag = 'ziti-'.$point['OfflineStore']['id'];

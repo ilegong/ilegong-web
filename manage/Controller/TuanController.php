@@ -19,7 +19,6 @@ class TuanController extends AppController
     }
     public function admin_tuan_orders()
     {
-
         $this->set('abnormal_order_count', $this->_query_abnormal_order());
         $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
@@ -719,6 +718,6 @@ class TuanController extends AppController
         $send_outOrders = $this->OrderMessage->find('all',array('conditions' => array('status' => 0,'type' => 'py-send-out')));
         $reachOrderIds = Hash::extract($reachOrders,'{n}.OrderMessage.order_id');
         $send_outOrderIds = Hash::extract($send_outOrders,'{n}.OrderMessage.order_id');
-        return array($reachOrderIds,$send_outOrderIds);
+        return array(array_unique($reachOrderIds),array_unique($send_outOrderIds));
     }
 }
