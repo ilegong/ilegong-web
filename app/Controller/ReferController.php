@@ -303,11 +303,14 @@ class ReferController extends AppController {
     }
 
     public function agency_refer_count($uid = 0){
-        $this->pageTitle = '代理人';
+        $this->pageTitle = '我推荐的人';
         if (!$uid) {
             $this->redirect('/refer/index/'.$this->currentUser['id'].'.html');
-        } else if ($uid != $this->currentUser['id']) {
+            return;
+        }
+        if ($uid != $this->currentUser['id']||in_array($uid,get_agency_uid())) {
             $this->redirect('/refer/client/'.$uid.'/'.$this->currentUser['id'].'.html');
+            return;
         }
     }
 
