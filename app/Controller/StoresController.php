@@ -536,7 +536,7 @@ class StoresController extends AppController
         $datalist = $this->Product->find('all', array(
             'conditions' => $cond,
             'fields' => array('id', 'name', 'price', 'published', 'coverimg', 'deleted', 'saled', 'storage', 'updated', 'slug','sort_in_store'),
-            'order' => array('updated desc','published desc')
+            'order' => array('published desc','updated desc')
         ));
 
         $p_ids = Hash::extract($datalist,'{n}.Product.id');
