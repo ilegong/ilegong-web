@@ -149,7 +149,7 @@
                         {{if !empty($offline_store) && $offline_store['OfflineStore']['type'] == 0 && $order['Order']['status']== 1 && ($order['Order']['type']== 5||$order['Order']['type']== 6)}}
                         <button type="button" class="ship-to-haolinju-store btn btn-primary">发提货码</button>
                         {{/if}}
-                        {{if empty($offline_store) && $order['Order']['status']== 1 && $order['Order']['type'] != 1}}
+                        {{if empty($offline_store) && ($order['Order']['status']== 1||$order['Order']['status']== 2) && $order['Order']['type'] != 1}}
                         <button type="button" class="input-ship-code btn btn-primary">回填快递单号</button>
                         {{/if}}
                         {{if in_array($order['Order']['status'],array(1,2,3,9,16,4,14))}}
