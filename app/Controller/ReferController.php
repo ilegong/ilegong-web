@@ -321,6 +321,7 @@ class ReferController extends AppController {
         $condition['Date(created) >='] = $date;
         $condition['Date(created) <'] = date('Y-m-d', strtotime("+1 months", strtotime($date)));
         $condition['from'] = $uid;
+        $condition['first_order_done'] = 1;
         $refer_info = $this->Refer->find('all',array(
             'conditions' =>$condition
         ));
@@ -352,23 +353,18 @@ class ReferController extends AppController {
 
     private function gen_refer_statics_data($uid,$date){
         $this->loadModel('StatisticsReferData');
-        $condition['Date(created) >='] = $date;
-        $condition['Date(created) <'] = date('Y-m-d', strtotime("+1 months", strtotime($date)));
-        $condition['from'] = $uid;
-        $refer_info = $this->Refer->find('all',array(
-            'conditions' =>$condition
-        ));
-        $refer_accept_uids = Hash::extract($refer_info,'{n}.Refer.to');
-        $totalMoney = $this->StatisticsReferData->find('all',array(
+        $staticUserReferData = $this->StatisticsReferData->find('first',array(
             'conditions' => array(
-                'user_id' => $refer_accept_uids
-            ),
-            'fields' => array(
-                'SUM(sum_money) AS total_money'
+                'start_date' => $date,
+                'end_date' => date('Y-m-d', strtotime("+1 months", strtotime($date))),
+                'user_id' => $uid
             )
         ));
-        $totalMoney = $totalMoney['StatisticsReferData']['total_money'];
-        return array('total_money' => $totalMoney,'user_count' => count($refer_accept_uids));
+        if($staticUserReferData){
+            return array('total_money' => $staticUserReferData['StatisticsReferData']['sum_money']/100,'user_count' => $staticUserReferData['StatisticsReferData']['recommend_user_count']);
+        }else{
+            return array('total_money' => 0,'user_count' => 0);
+        }
     }
 
     /*
