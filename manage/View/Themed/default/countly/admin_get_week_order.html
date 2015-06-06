@@ -20,7 +20,7 @@
         <th>新增用户</th>
         <th>操作</th>
     </thead>
-    <tbody>
+    <tbody id="week_order_table">
     {{loop $datas $item}}
         <tr>
             <td>{{$item['StatisticsOrderData']['start_date']}}--{{$item['StatisticsOrderData']['end_date']}}</td>
@@ -41,4 +41,15 @@
     {{/loop}}
     </tbody>
 </table>
-{{$this->Html->script(array('/js/manage-lib/tablesort/tablesort.min.js','/js/manage-lib/tablesort/src/sorts/tablesort.date.js','/js/manage-lib/tablesort/src/sorts/tablesort.dotsep.js','/js/manage-lib/tablesort/src/sorts/tablesort.numeric.js','/js/manage/table_sort.js'));}}
+
+<div id="chart-container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+{{$this->Html->script(array('/js/manage-lib/tablesort/tablesort.min.js',
+'/js/manage-lib/tablesort/src/sorts/tablesort.date.js',
+'/js/manage-lib/tablesort/src/sorts/tablesort.dotsep.js',
+'/js/manage-lib/tablesort/src/sorts/tablesort.numeric.js',
+'/js/manage/table_sort.js',
+'/js/manage-lib/highchart/highcharts.js',
+'/js/manage-lib/highchart/exporting.js',
+'/js/manage-lib/highchart/dark-unica.js',
+'/js/manage/countly/week_order_chart.js'));}}
