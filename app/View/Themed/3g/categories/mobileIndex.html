@@ -93,14 +93,17 @@
 </div>
 <script>
     $(document).ready(function(){
-        var toTimer = $('.sec_start');
-        var countDiv = toTimer.parent();
-        utils.countDown(toTimer, function () {
-        }, function () {
-            var parent = countDiv.parent();
-            var tryId = countDiv.data('try-id');
-            countDiv.remove();
-            parent.append('<a class="tuandetail_seckill_btn radius5 fr" href="/tuan_buyings/sec_detail/'+tryId+'">正在秒杀</a>');
+        //var toTimer = $('.sec_start');
+        $('.sec_start').each(function(index,item){
+            var toTimer = $(item);
+            var countDiv = toTimer.parent();
+            utils.countDown(toTimer, function () {
+            }, function () {
+                var parent = countDiv.parent();
+                var tryId = countDiv.data('try-id');
+                countDiv.remove();
+                parent.append('<a class="tuandetail_seckill_btn radius5 fr" href="/tuan_buyings/sec_detail/'+tryId+'">正在秒杀</a>');
+            });
         });
     });
 </script>
