@@ -49,7 +49,7 @@
                 <?php $i = 0; foreach($tryings as $trying) {
                     if ($i++>=2) {break;} ?>
                     <div class="tuandetail_seckill clearfix">
-                            <p>特价</p>
+                            <p>秒杀</p>
                             <span><a href="/tuan_buyings/sec_detail/{{$trying['ProductTry']['id']}}"><img src="{{$this->Html->assetUrl(medium_thumb_link($trying['Product']['listimg']))}}" /></a></span>
                         <span>
                         <h1>{{$trying['ProductTry']['product_name']}} {{$trying['ProductTry']['spec']}}</h1>
