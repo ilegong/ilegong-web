@@ -74,7 +74,7 @@
                         <li class="fr">共{{$limit_num}}份</li>
                     </ul>
                 </div>
-                <div>
+                <div data-try-id="{{$trying['ProductTry']['id']}}">
                     {{if $trying['status'] == 'sec_kill'}}
                     <a class="tuandetail_seckill_btn radius5 fr" href="/tuan_buyings/sec_detail/{{$trying['ProductTry']['id']}}">正在秒杀</a>
                     {{elseif $trying['status'] == 'sec_end'}}
@@ -93,13 +93,14 @@
 </div>
 <script>
     $(document).ready(function(){
-        var toTimer = $('.sec_start').first();
+        var toTimer = $('.sec_start');
         var countDiv = toTimer.parent();
         utils.countDown(toTimer, function () {
         }, function () {
             var parent = countDiv.parent();
+            var tryId = countDiv.data('try-id');
             countDiv.remove();
-            parent.append('<a class="tuandetail_seckill_btn radius5 fr" href="/tuan_buyings/sec_detail/{{$trying["ProductTry"]["id"]}}">正在秒杀</a>');
+            parent.append('<a class="tuandetail_seckill_btn radius5 fr" href="/tuan_buyings/sec_detail/'+tryId+'">正在秒杀</a>');
         });
     });
 </script>
