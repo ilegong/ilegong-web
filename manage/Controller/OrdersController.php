@@ -91,7 +91,6 @@ class OrdersController extends AppController
             }
         }
 
-        $this->data['remark'] = "'".$remark."'";
         if(!empty($this->data['ship_mark'])){
             if($this->data['ship_mark'] == 'ziti'){
                 if(empty($this->data['consignee_id']) || $this->data['consignee_id'] == 0){
@@ -102,7 +101,10 @@ class OrdersController extends AppController
             else{
                 $this->data['consignee_id'] = 0;
             }
-            $this->data['ship_mark'] = "'".$this->data['ship_mark']."'";
+        }
+
+        foreach($this->data as $key => $value){
+            $this->data[$key] = "'".$value."'";
         }
 
         $this->log('update order ' . $id . ': '.json_encode($this->data));
