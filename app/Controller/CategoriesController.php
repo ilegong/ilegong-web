@@ -60,7 +60,8 @@ class CategoriesController extends AppController {
     public function getTagProducts($tagId){
         $this->autoRender=false;
         $result = Cache::read('tag-products'.$tagId);
-        if(!empty($result)){
+        $result_json = json_decode($result,true);
+        if(!empty($result_json)){
             echo $result;
             return;
         }

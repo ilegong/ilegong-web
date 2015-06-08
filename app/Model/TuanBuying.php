@@ -23,7 +23,6 @@ class TuanBuying extends AppModel {
         $uid = $cart_info['Cart']['creator'];
         $TuanMemberM = ClassRegistry::init('TuanMember');
         $TuanTeamM = ClassRegistry::init('TuanTeam');
-        $productM = ClassRegistry::init('Product');
         $has_joined_tuan = $TuanMemberM->hasAny(array('tuan_id' => $tuan_id, 'uid' => $uid));
         if(!$has_joined_tuan){
             $data['tuan_id'] = $tuan_id;
