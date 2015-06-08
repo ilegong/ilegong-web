@@ -494,11 +494,20 @@ class OrdersController extends AppController{
         $refundMoney = $_REQUEST['refundMoney'];
         $refundMark = $_REQUEST['refundMark'];
         $creator = $_REQUEST['creator'];
-        $orderStatus = $_REQUEST['OrderStatus'];
+        $orderStatus = $_REQUEST['orderStatus'];
+        $orderScores = $_REQUEST['orderScores'];
+        $orderTotalALlPrice = $_REQUEST['orderTotalAllPrice'];
         $userInfo = $this->User->find('first',array('conditions' => array('id' => $creator)));
         $cartInfo = $this->Cart->find('all',array('conditions' => array('order_id' => $orderId)));
         $this->loadModel('RefundLog');
         $this->loadModel('PayLog');
+        if($refundMoney == $orderTotalALlPrice){
+            if($this->_send_refund_scores($userInfo['User']['id'],$orderScores,$orderId)){
+                $score_msg = '积分变动通知已发出';
+            }else{
+                $score_msg = '积分变动通知发送失败';
+            }
+        }
         $PayLogInfo = $this->PayLog->find('first',array(
             'conditions' => array(
                 'order_id' => $orderId,
@@ -538,9 +547,9 @@ class OrdersController extends AppController{
             $data['RefundLog']['trade_type'] = $PayLogInfo['PayLog']['trade_type'];
             $data['RefundLog']['remark'] = '已退款:'.$refundMark;
             $this->RefundLog->save($data);
-            $returnInfo  = array('success' => true,'msg' =>'退款通知发送成功');
+            $returnInfo  = array('success' => true,'msg' =>'退款通知发送成功  '.$score_msg);
         }else{
-            $returnInfo  = array('success' => false,'msg' =>'退款通知发送失败，请重试');
+            $returnInfo  = array('success' => false,'msg' =>'退款通知发送失败，请重试  '.$score_msg);
         }
         echo json_encode($returnInfo);
         }else{
@@ -578,4 +587,19 @@ class OrdersController extends AppController{
         $this->set('RefundInfo',$RefundLogInfo);
         $this->set('total_price',$total_price);
     }
+
+    /*
+     * refund scores and send_message
+     */
+    private function _send_refund_scores($userId,$scores,$orderId){
+            $this->loadModel('Score');
+            $rtn = $this->Score->refund_user_scores($userId,$scores,$orderId);
+            if(!empty($rtn)){
+                $userM = ClassRegistry::init('User');
+                $userM->add_score($userId, $rtn['Score']['score']);
+                return true;
+            }else return false;
+    }
+
+
 }

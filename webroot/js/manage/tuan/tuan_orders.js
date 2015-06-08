@@ -461,7 +461,8 @@ $(document).ready(function () {
         var orderId = $('#order-id');
         var orderTotalPrice = $('#order-totalprice');
         var orderCreator = $('#order-creator');
-        var send_refund_message = function (order_id, refund_money, creator, refund_mark, total_price, order_status) {
+        var orderScores = $('#refund_scores');
+        var send_refund_message = function (order_id, refund_money, creator, refund_mark, total_price, order_status,order_scores) {
             $.getJSON('/manage/admin/orders/compute_refund_money', {'orderId': order_id}, function (data) {
                 var res = data;
                 if (order_status == 4) {
@@ -490,7 +491,9 @@ $(document).ready(function () {
                                 'refundMoney': refund_money,
                                 'creator': creator,
                                 'refundMark': refund_mark,
-                                'OrderStatus':order_status
+                                'orderStatus':order_status,
+                                'orderScores':order_scores,
+                                'orderTotalAllPrice':total_price
                             }, function (data) {
                                 var result = JSON.parse(data);
                                 if (result.success) {
@@ -533,7 +536,8 @@ $(document).ready(function () {
                     var refund_money = $('#refund_money').val();
                     var refund_remark = $('#refund_remark').val();
                     var order_status = $('input[name=status]:checked', '#refund-form').val();
-                    send_refund_message(orderId.val(), refund_money, orderCreator.val(), refund_remark, orderTotalPrice.val(), order_status);
+                    var order_scores = $('#refund_scores').val();
+                    send_refund_message(orderId.val(), refund_money, orderCreator.val(), refund_remark, orderTotalPrice.val(), order_status,order_scores);
                 }
             },
             close: function () {
@@ -546,6 +550,7 @@ $(document).ready(function () {
             orderId.val($order.data('order-id'));
             orderTotalPrice.val($order.data('total-price'));
             orderCreator.val($order.data('order-creator'));
+            orderScores.val($order.data('order-scores'));
             $currentOperateOrder = $(this);
             refundOrderDialog.dialog("open");
         });
