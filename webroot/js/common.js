@@ -1381,7 +1381,7 @@ $(document).ready(function () {
  * @param addedCallback
  * @return
  */
-function quick_buy_try(id, num, spec, tryId, type, sendDate, soldOutCallback, addedCallback) {
+function quick_buy_try(id, num, spec, tryId, type, sendDate, ship_set_id, soldOutCallback, addedCallback) {
     type = type || 'normal';
     var url = BASEURL + '/carts/add';
     var postdata = {
@@ -1390,6 +1390,7 @@ function quick_buy_try(id, num, spec, tryId, type, sendDate, soldOutCallback, ad
         'data[Cart][spec]': spec,
         'data[Cart][type]': type,
         'data[Cart][send_date]': sendDate,
+        'data[Cart][ship_set_id]' : ship_set_id,
         'try_id': tryId
     };
     ajaxAction(url, postdata, null, function (data) {
@@ -1417,6 +1418,8 @@ function quick_buy_try(id, num, spec, tryId, type, sendDate, soldOutCallback, ad
                 utils.alert_one('抱歉：您有' + data.not_comment_cnt + '个试吃商品还没有反馈，请先完成反馈再秒杀');
             }else if(data.reason == 'no_try_id'){
                 utils.alert_one('该商品不是秒杀商品');
+            }else if(data.reason == 'ship_num_not_correct'){
+                utils.alert_one('选择的快递方式数量不对');
             }
         } else {
             addedCallback(data);
