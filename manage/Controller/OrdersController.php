@@ -501,13 +501,7 @@ class OrdersController extends AppController{
         $cartInfo = $this->Cart->find('all',array('conditions' => array('order_id' => $orderId)));
         $this->loadModel('RefundLog');
         $this->loadModel('PayLog');
-        if($refundMoney == $orderTotalALlPrice){
-            if($this->_send_refund_scores($userInfo['User']['id'],$orderScores,$orderId)){
-                $score_msg = '积分变动通知已发出';
-            }else{
-                $score_msg = '积分变动通知发送失败';
-            }
-        }
+
         $PayLogInfo = $this->PayLog->find('first',array(
             'conditions' => array(
                 'order_id' => $orderId,
@@ -531,6 +525,15 @@ class OrdersController extends AppController{
         $detail_url = WX_HOST.'/orders/detail/'.$orderId;
         $remark = '点击查看订单，如有问题，请联系客服!';
         if ($orderStatus == 4){
+            if($refundMoney == $orderTotalALlPrice){
+                if($this->_send_refund_scores($userInfo['User']['id'],$orderScores,$orderId)){
+                    $score_msg = '积分变动通知已发出';
+                }else{
+                    $score_msg = '积分变动通知发送失败';
+                }
+            }else{
+                $score_msg = '不发送积分变动通知';
+            }
         if (message_send($msg,$phone)){
             $flag_1 = true;
         }else{
