@@ -33,17 +33,19 @@
         {{/if}}, {{$order['Pay']['out_trade_no']}})
         {{/if}}
     </li>
+    <li>备注：{{$order['Order']['remark']}}</li>
     {{loop $carts $index $cart}}
-    <li>商品{{$index + 1}}：{{$cart['Cart']['name']}} * {{$cart['Cart']['num']}}, 发货：{{$cart['Cart']['send_date']}}</li>
+    <li>商品{{$index + 1}}：{{$cart['Cart']['name']}} * {{$cart['Cart']['num']}}</li>
     {{/loop}}
 </ul>
 
 <form action="" class="form-horizontal order-form">
-    <div class="form-group order-status">
+    <input type="hidden" name="order_id" class="order-id" value="{{$order['Order']['id']}}"/>
+    <div class="form-group">
         <label class="col-sm-2 control-label">状态</label>
 
         <div class="col-sm-10">
-            <select name="order_status" data-value="{{$order['Order']['status']}}" class="form-control">
+            <select name="order_status" data-value="{{$order['Order']['status']}}" class="form-control order-status">
                 <option value="0"
                 {{if $order['Order']['status']==0}}selected='selected'{{/if}}>待支付</option>
                 <option value="1"
@@ -62,15 +64,24 @@
                 {{if $order['Order']['status']==14}}selected='selected'{{/if}}>退款中</option>
             </select>
 
-            <div class='help-block with-errors'>仅支持从待支付修改为待发货，请在备注中填写理由</div>
+            <div class='help-block with-errors'>请谨慎修改订单状态</div>
         </div>
     </div>
 
-    <div class="form-group ship-mark">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">发货时间</label>
+
+        <div class="col-sm-10">
+            <input type="text" name="send_date" class="form-control send-date"
+                   value="{{$carts[0]['Cart']['send_date']}}" data-value="{{$carts[0]['Cart']['send_date']}}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
         <label class="col-sm-2 control-label">快递方式</label>
 
         <div class="col-sm-10">
-            <select name="ship_mark" data-value="{{$order['Order']['ship_mark']}}">
+            <select name="ship_mark" data-value="{{$order['Order']['ship_mark']}}" class="ship-mark">
                 <option value=""
                 {{if $order['Order']['ship_mark']==''}}selected='selected'{{/if}}>请选择</option>
                 <option value="ziti"
@@ -84,60 +95,70 @@
             <div class='help-block with-errors'></div>
         </div>
     </div>
-    <div class="form-group consignee-id hidden">
+    <div class="form-group hidden">
         <label class="col-sm-2 control-label">自提点</label>
 
         <div class="col-sm-8">
-            <input type="text" name="consignee_id" class="form-control"
+            <input type="text" name="consignee_id" class="form-control  consignee-id"
                    value="{{$order['Order']['consignee_id']}}" data-value="{{$order['Order']['consignee_id']}}"/>
         </div>
         <div class="col-sm-2">
             <a href="/manage/admin/offline_stores/index" target="_blank">查看自提点</a>
         </div>
     </div>
-    <div class="form-group consignee-name">
+    <div class="form-group hidden">
+        <label class="col-sm-2 control-label">备注地址</label>
+
+        <div class="col-sm-10">
+            <input type="text" name="remark_address" class="form-control remark-address"
+                   value="{{$order['Order']['remark_address']}}" data-value="{{$order['Order']['remark_address']}}" placeholder="如果填备注地址，请确保自提点支持送货上门"/>
+        </div>
+    </div>
+
+    <div class="form-group">
         <label class="col-sm-2 control-label">收货人姓名</label>
 
         <div class="col-sm-10">
-            <input type="text" name="consignee_name" class="form-control"
+            <input type="text" name="consignee_name" class="form-control consignee-name"
                    value="{{$order['Order']['consignee_name']}}" data-value="{{$order['Order']['consignee_name']}}"/>
         </div>
     </div>
-    <div class="form-group consignee-mobilephone">
+    <div class="form-group">
         <label class="col-sm-2 control-label">收货人手机</label>
 
         <div class="col-sm-10">
-            <input type="text" name="consignee_mobilephone" class="form-control"
+            <input type="text" name="consignee_mobilephone" class="form-control consignee-mobilephone"
                    value="{{$order['Order']['consignee_mobilephone']}}"
                    data-value="{{$order['Order']['consignee_mobilephone']}}"/>
         </div>
     </div>
-    <div class="form-group consignee-address">
+    <div class="form-group">
         <label class="col-sm-2 control-label">收货人地址</label>
 
         <div class="col-sm-10">
-            <input type="text" name="consignee_address" class="form-control"
+            <input type="text" name="consignee_address" class="form-control consignee-address""
                    value="{{$order['Order']['consignee_address']}}"
                    data-value="{{$order['Order']['consignee_address']}}"/>
         </div>
     </div>
-    <div class="form-group remark-address">
-        <label class="col-sm-2 control-label">备注地址</label>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">修改原因</label>
 
         <div class="col-sm-10">
-            <input type="text" name="remark_address" class="form-control"
-                   value="{{$order['Order']['remark_address']}}" data-value="{{$order['Order']['remark_address']}}"/>
+            <input type="text" name="modify_reason" class="form-control modify-reason"
+                   value="" data-value="{{$order['Order']['remark_address']}}" placeholder="请描述修改原因"/>
+
+            <div class='help-block with-errors'>请简单描述修改原因，如"商品缺货", "发货错误", "自提点超时未取"</div>
         </div>
     </div>
-    <div class="form-group remark">
-        <label class="col-sm-2 control-label">备注</label>
+    <div class="form-group">
+        <label class="col-sm-2 control-label">修改人员</label>
 
         <div class="col-sm-10">
-            {{$order['Order']['remark']}}
-            <input type="text" name="remark" class="form-control"
-                   value="" placeholder="原因(姓名)" data-value=""/>
+            <input type="text" name="modify_user" class="form-control modify-user"
+                   value="" data-value="{{$order['Order']['remark_address']}}" placeholder="请输入修改人"/>
 
-            <div class='help-block with-errors'>修改状态、送货时间，请填备注，如“漏发（xiaoguang）”</div>
+            <div class='help-block with-errors'>请输入修改人员，如"xiaoguang", "miaoyue", "xinyu"</div>
         </div>
     </div>
 
