@@ -102,7 +102,7 @@ $(document).ready(function () {
             if(sold_percent>100){
                 sold_percent=100;
             }
-            goodUrl = '/tuan_buyings/detail/'+tuanBuying['id']+'history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
+            goodUrl = '/tuan_buyings/detail/'+tuanBuying['id']+'?history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
             goodHtml+='<div class="tuandetail_seckill clearfix"> <p>秒杀</p> <span><a href="'+goodUrl+'">' +
             '<img src="'+good['listimg']+'" /></a></span> ' +
             '<span> <h1>'+good['name']+'</h1> ' +
