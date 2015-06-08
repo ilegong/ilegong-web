@@ -27,7 +27,7 @@
                     </a>
                 </li>
             </ul>
-            <p class="conordertuan_total">{{if $ship_fee != 0}}，运费：￥<span class="ship_fee" data-ship-fee="{{$ship_fee}}">{{$this->Number->precision($ship_fee, 2)}}</span>，{{/if}}共<span data-count="{{$buy_count}}">{{$buy_count}}</span>件商品，合计:
+            <p class="conordertuan_total">{{if $ship_fee != 0}}运费：￥<span class="ship_fee" data-ship-fee="{{$ship_fee}}">{{$this->Number->precision($ship_fee, 2)}}</span>，{{/if}}共<span data-count="{{$buy_count}}">{{$buy_count}}</span>件商品，合计:
                 <strong data-goods-price="{{$cart_info['Cart']['price']*$buy_count}}">￥{{$this->Number->precision($cart_info['Cart']['price']*$buy_count, 2)}}</strong>
             </p>
         </div>
