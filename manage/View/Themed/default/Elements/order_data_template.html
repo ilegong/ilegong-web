@@ -157,7 +157,7 @@
                         {{if in_array($order['Order']['status'],array(1,2,3,9,16,4,14))}}
                         <button type="button" class="btn btn-default refund-button"  data-order_id="{{$order['Order']['id']}}" data-order_creator="{{$order['Order']['creator']}}"  data-total_price = "{{$order['Order']['total_all_price']}}">退款</button>
                         {{/if}}
-                        <button type="button" class="btn btn-default modify-button">修改订单</button>
+                        <a href="/manage/admin/orders/edit2/{{$order['Order']['id']}}.html" class="btn btn-default modify-button">修改订单</a>
                     </td>
                 </tr>
             {{/loop}}

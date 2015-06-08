@@ -81,7 +81,7 @@
         <label class="col-sm-2 control-label">快递方式</label>
 
         <div class="col-sm-10">
-            <select name="ship_mark" data-value="{{$order['Order']['ship_mark']}}" class="ship-mark">
+            <select name="ship_mark" data-value="{{$order['Order']['ship_mark']}}" class="form-control ship-mark">
                 <option value=""
                 {{if $order['Order']['ship_mark']==''}}selected='selected'{{/if}}>请选择</option>
                 <option value="ziti"
@@ -99,7 +99,7 @@
         <label class="col-sm-2 control-label">自提点</label>
 
         <div class="col-sm-8">
-            <input type="text" name="consignee_id" class="form-control  consignee-id"
+            <input type="text" name="consignee_id" class="form-control consignee-id"
                    value="{{$order['Order']['consignee_id']}}" data-value="{{$order['Order']['consignee_id']}}"/>
         </div>
         <div class="col-sm-2">

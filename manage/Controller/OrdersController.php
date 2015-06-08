@@ -87,6 +87,19 @@ class OrdersController extends AppController
         }
 
         $this->data['remark'] = "'".$remark."'";
+        if(!empty($this->data['ship_mark'])){
+            if($this->data['ship_mark'] == 'ziti'){
+                if(empty($this->data['consignee_id']) || $this->data['consignee_id'] == 0){
+                    echo json_encode(array('success' => false, 'reason' => '修改为自提，请输入自提点'));
+                    return;
+                }
+            }
+            else{
+                $this->data['consignee_id'] = 0;
+            }
+            $this->data['ship_mark'] = "'".$this->data['ship_mark']."'";
+        }
+
         $this->log('update order ' . $id . ': '.json_encode($this->data));
         if (!$this->Order->updateAll($this->data, array('id' => $id))) {
             echo json_encode(array('success' => false, 'reason' => '保存订单失败'));
