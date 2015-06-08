@@ -82,18 +82,18 @@
                             </li>
                         </ul>
                     </a>
-                    <div class="standard_bg clearfix">
-                        <ul class="numbers clearfix">
-                            <li class="fl">
-                                <span class="fl title mr12">数量:</span>
-                                    <span class="clearfix" style="display: block;overflow: hidden;">
-                                    <a {{if $is_limit_num}} id="pamount_not_r"{{else}}id="pamount_reduce"{{/if}} class="grew" item-id="{{$pid}}">-</a>
-                                        <input id="input_pamount"  item-id="{{$pid}}" size="3" value="1" class="num" name="shoppingnum" type="text" {{if $is_limit_num}}readonly{{/if}}/>
-                                    <a {{if $is_limit_num}}id="pamount_not_a"{{else}}id="pamount_add"{{/if}} class="grew" item-id="{{$pid}}">+</a>
-                                   </span>
-                            </li>
-                        </ul>
-                    </div>
+                    <!--<div class="standard_bg clearfix">-->
+                        <!--<ul class="numbers clearfix">-->
+                            <!--<li class="fl">-->
+                                <!--<span class="fl title mr12">数量:</span>-->
+                                    <!--<span class="clearfix" style="display: block;overflow: hidden;">-->
+                                    <!--<a id="pamount_not_r" class="grew">-</a>-->
+                                        <!--<input id="input_pamount"  size="3" value="1" class="num" name="shoppingnum" type="text"/>-->
+                                    <!--<a id="pamount_not_a" class="grew">+</a>-->
+                                   <!--</span>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                    <!--</div>-->
                     {{if $tuan_team}}
                         <div class="clearfix tuanxq" style="margin-top: -1px;">
                             <span class="fl">详细地址：{{$tuan_address}}</span>
@@ -261,7 +261,8 @@
                 var cartType = 'tuan_sec';
                 var $shipSelect = $('.cur.tuan_way_selected');
                 var shipTyp = $shipSelect.attr('way-label');
-                var buy_num = $('input[name="shoppingnum"]').val();
+                //var buy_num = $('input[name="shoppingnum"]').val();
+                var buy_num = 1;
                 var ship_set_id = $shipSelect.attr('way-id');
                 quick_buy_try(pid, buy_num, 0, tryId, cartType, sendDate, ship_set_id, function () {
                     me.removeClass('pay_bg').addClass('cart_btn_soldout');

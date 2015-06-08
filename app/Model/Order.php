@@ -180,10 +180,10 @@ class Order extends AppModel {
                             $add_num = rand(1,$buy_multiple);
                         }
                         //sec buy many
-                        $sec_num = $cartItems[0]['Cart']['num'];
-                        if($sec_num>1){
-                            $add_num = $sec_num;
-                        }
+//                        $sec_num = $cartItems[0]['Cart']['num'];
+//                        if($sec_num>1){
+//                            $add_num = $sec_num;
+//                        }
                         $tryM->updateAll(array('sold_num' => 'sold_num + '.$add_num), array('id' => $isTry, 'modified' => $pTry['ProductTry']['modified']));
                     }
                 } else if ($type == ORDER_TYPE_GROUP || $type == ORDER_TYPE_GROUP_FILL) {
