@@ -56,7 +56,7 @@ class OrdersController extends AppController
 
         $order = $this->Order->findById($id);
         if (empty($order)) {
-            echo json_encode(array('success' => false, 'reason' => '订单不存在'));
+            echo json_encode(array('success' => false, 'reason' => 'order_not_exists'));
             return;
         }
 
@@ -68,25 +68,25 @@ class OrdersController extends AppController
         unset($this->data['modify_user']);
 
         if(empty($send_date) && empty($this->data)){
-            echo json_encode(array('success' => true, 'reason' => '然而你并没有修改任何字段'));
+            echo json_encode(array('success' => false, 'reason' => 'fields_are_empty'));
             return;
         }
 
         if(!in_array($this->data['modify_user'], array('miaoyue', 'xiaoguang', 'xiaoqing', 'xinyu', 'jingge'))){
-            echo json_encode(array('success' => false, 'reason' => '您没有权限修改订单'));
+            echo json_encode(array('success' => false, 'reason' => 'no_permission'));
             return;
         }
 
         if (!empty($send_date)) {
             if(strtotime($send_date) <= strtotime('yesterday')){
-                echo json_encode(array('success' => false, 'reason' => '发货时间不能早于今天'));
+                echo json_encode(array('success' => false, 'reason' => 'invalid_send_date'));
                 return;
             }
 
             $this->loadModel('Cart');
             $this->log('update order ' . $id . ' send_date: '.$send_date);
             if (!$this->Cart->updateAll(array('send_date' => "'" . $send_date . "'"), array('order_id' => $id))) {
-                echo json_encode(array('success' => false, 'reason' => '保存发货时间失败'));
+                echo json_encode(array('success' => false, 'reason' => 'failed_to_save_send_date'));
                 return;
             }
         }
@@ -95,7 +95,7 @@ class OrdersController extends AppController
         if(!empty($this->data['ship_mark'])){
             if($this->data['ship_mark'] == 'ziti'){
                 if(empty($this->data['consignee_id']) || $this->data['consignee_id'] == 0){
-                    echo json_encode(array('success' => false, 'reason' => '修改为自提，请输入自提点'));
+                    echo json_encode(array('success' => false, 'reason' => 'missed_consignee_id'));
                     return;
                 }
             }
@@ -107,10 +107,10 @@ class OrdersController extends AppController
 
         $this->log('update order ' . $id . ': '.json_encode($this->data));
         if (!$this->Order->updateAll($this->data, array('id' => $id))) {
-            echo json_encode(array('success' => false, 'reason' => '保存订单失败'));
+            echo json_encode(array('success' => false, 'reason' => 'failed_to_save_order'));
         }
         else{
-            echo json_encode(array('success' => true, 'reason' => '订单号'.$id));
+            echo json_encode(array('success' => true));
         }
     }
 

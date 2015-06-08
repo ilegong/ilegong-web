@@ -64,12 +64,22 @@ $(document).ready(function () {
             }
         });
 
-        $.post('/manage/admin/orders/update2/' + $('.order-id').val() + ".json", json, function(data){
+        var reasons = {
+            'order_not_exists': '订单不存在',
+            'fields_are_empty': '然而你并没有修改任何订单',
+            'no_permission': '您没有权限',
+            'invalid_send_date': '发货时间有误',
+            'failed_to_save_send_date': '保存发货时间失败',
+            'missed_consignee_id': '请输入自提点',
+            'failed_to_save_order': '保存订单失败'
+        }
+        var orderId = $('.order-id').val();
+        $.post('/manage/admin/orders/update2/' + orderId + ".json", json, function(data){
             if(data.success){
-                alert('修改成功: ' + data.reason);
+                alert('修改成功: 订单号' + orderId);
             }
             else{
-                alert('修改失败: ' + data.reason);
+                alert('修改失败: ' + reasons[data.reason]);
             }
         });
     });
