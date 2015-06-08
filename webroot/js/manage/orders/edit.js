@@ -81,7 +81,7 @@ $(document).ready(function () {
             else{
                 alert('修改失败: ' + reasons[data.reason]);
             }
-        });
+        }, 'json');
     });
 
     $consigneeId.parents('.form-group').toggleClass('hidden', $shipMark.val() != 'ziti');
