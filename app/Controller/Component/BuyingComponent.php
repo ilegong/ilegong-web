@@ -61,25 +61,25 @@ class BuyingComponent extends Component {
                         ))
                     );
                     $orderM = ClassRegistry::init('Order');
-                    if(!empty($cart_info)){
-                        $order_info = $orderM->find('first',array(
-                            'conditions' => array(
-                                'id' => $cart_info['Cart']['order_id'],
-                                'not' => array(
-                                'status' => array(
-                                    ORDER_STATUS_SHIPPED,ORDER_STATUS_RECEIVED,ORDER_STATUS_RETURN_MONEY,ORDER_STATUS_DONE,ORDER_STATUS_CANCEL,
-                                    ORDER_STATUS_CANCEL,ORDER_STATUS_CONFIRMED,ORDER_STATUS_TOUSU,ORDER_STATUS_COMMENT,ORDER_STATUS_RETURNING_MONEY)))
-                        ));
-                        if(!empty($order_info)){
-                            if($order_info['Order']['status']==0){
-                                $success = false;
-                                $reason = 'already_seckill_nopaid';
-                            }else if($order_info['Order']['status']==1){
-                                $success = false;
-                                $reason = 'already_seckill_paid';
-                            }
-                        }
-                    }
+//                    if(!empty($cart_info)){
+//                        $order_info = $orderM->find('first',array(
+//                            'conditions' => array(
+//                                'id' => $cart_info['Cart']['order_id'],
+//                                'not' => array(
+//                                'status' => array(
+//                                    ORDER_STATUS_SHIPPED,ORDER_STATUS_RECEIVED,ORDER_STATUS_RETURN_MONEY,ORDER_STATUS_DONE,ORDER_STATUS_CANCEL,
+//                                    ORDER_STATUS_CANCEL,ORDER_STATUS_CONFIRMED,ORDER_STATUS_TOUSU,ORDER_STATUS_COMMENT,ORDER_STATUS_RETURNING_MONEY)))
+//                        ));
+//                        if(!empty($order_info)){
+//                            if($order_info['Order']['status']==0){
+//                                $success = false;
+//                                $reason = 'already_seckill_nopaid';
+//                            }else if($order_info['Order']['status']==1){
+//                                $success = false;
+//                                $reason = 'already_seckill_paid';
+//                            }
+//                        }
+//                    }
                     $tryM = ClassRegistry::init('ProductTry');
                     $prodTry = $tryM->findById($tryId);
                     list($afford, $my_limit, $total_left) = afford_product_try($tryId, $uid, $prodTry);
