@@ -77,6 +77,38 @@ class CountlyController extends AppController{
         $this->autoRender = false;
         $start_date = $_POST['start_date'];
         $end_date = $_POST['end_date'];
+        $this->_gen_data($start_date,$end_date);
+        echo json_encode(array('success'=>true));
+        return;
+
+    }
+
+    public function admin_cron_gen_data(){
+        $this->autoRender = false;
+        $dateTime = new DateTime();
+        $start_date = clone $dateTime->modify(('Sunday' == $dateTime->format('l')) ? 'Sunday this week' : 'Sunday last week');
+        $start_date = $start_date->format('Y-m-d');
+        $end_date = date('Y-m-d');
+        if($start_date!=$end_date){
+            $queue = new SaeTaskQueue('chaopeng');
+            //添加单个任务
+            $queue->addTask("/manage/admin/countly/process_gen_data/".$start_date."/".$end_date);
+            //将任务推入队列
+            $ret = $queue->push();
+            //任务添加失败时输出错误码和错误信息
+            if ($ret === false){
+                $this->log('gen statics data queue errno '.($queue->errno()).' err msg '.($queue->errmsg()));
+            }
+        }
+        echo json_encode(array('success'=>true));
+        return;
+    }
+
+    public function admin_process_gen_data($start_date,$end_date){
+        $this->_gen_data($start_date,$end_date);
+    }
+
+    private function _gen_data($start_date=null,$end_date=null){
         if(!$start_date||!$end_date){
             $previous_week = strtotime("-1 week +1 day");
             $start_week = strtotime("last sunday midnight",$previous_week);
@@ -89,9 +121,6 @@ class CountlyController extends AppController{
         $this->StatisticsOrderData->deleteAll(array('start_date' => $start_date));
         $this->gen_week_order_data($start_date,$end_date);
         $this->gen_week_ziti_data($start_date,$end_date);
-        echo json_encode(array('success'=>true));
-        return;
-
     }
 
     private function gen_week_ziti_data($start_date,$end_date){
@@ -230,6 +259,9 @@ class CountlyController extends AppController{
 
     private function new_buy_user_count($uids,$start_date){
         $allUserCount = count($uids);
+        if($allUserCount==0){
+            return $allUserCount;
+        }
         $uids = '('.implode(',',$uids).')';
         $result = $this->Order->query('select count(id) from cake_orders where creator in '.$uids.' and created < \''.$start_date.'\' group by creator');
         return $allUserCount-(count($result));

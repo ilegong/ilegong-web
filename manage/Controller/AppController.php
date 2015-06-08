@@ -113,7 +113,12 @@ class AppController extends Controller {
 			'action' => 'login',
 			'plugin' => null
 		);
-            
+
+        if (!in_array('*', $this->Auth->allowedActions)) {
+            $this->Auth->allowedActions[] = 'admin_login';
+            $this->Auth->allowedActions[] = 'admin_cron_gen_data';
+            $this->Auth->allowedActions[] = 'admin_process_gen_data';
+        }
         
         if (defined('IN_CLI')) {
         	$methods = get_class_methods($this);
@@ -128,17 +133,19 @@ class AppController extends Controller {
                 $this->AclFilter->authAdmin();
             }
             else{
-                if ($this->action != 'admin_login') {// 若没有登录且不在登录页面，则跳转到登录页面进行登录
+                if(!in_array($this->action, $this->Auth->allowedActions)){
                     $this->Session->setFlash(__('Your need to login.'));
                     $this->Auth->redirect($this->request->url);// 设置Auth.redirect，登录后跳转回来。
                     $this->redirect('/admin/staffs/login');
                 }
+//                if ($this->action != 'admin_login') {// 若没有登录且不在登录页面，则跳转到登录页面进行登录
+//                    $this->Session->setFlash(__('Your need to login.'));
+//                    $this->Auth->redirect($this->request->url);// 设置Auth.redirect，登录后跳转回来。
+//                    $this->redirect('/admin/staffs/login');
+//                }
             }
         }
-        
-        if (!in_array('*', $this->Auth->allowedActions)) {
-            $this->Auth->allowedActions[] = 'admin_login';
-        }
+
 //         print_r($this->Auth->allowedActions);
 //         print_r($this->action);
         if (!in_array($this->action, $this->Auth->allowedActions) && !in_array('*', $this->Auth->allowedActions)) {

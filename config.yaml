@@ -17,3 +17,7 @@ cron:
 	  url: /cron/send_coupon_timeout_message
       schedule: */30 8-22 * * *
       timezone: Beijing
+    - description: gen statics order data
+      url: /manage/admin/countly/cron_gen_data
+      schedule: 0 3 * * *
+      timezone: Beijing
