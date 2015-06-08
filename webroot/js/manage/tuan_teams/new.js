@@ -12,6 +12,7 @@ $(function(){
     var getPoint = $('#getPoint');
     var getCountyId = $('.tuan-teams');
     var offlineStoreBox = $('.offline-store');
+    var submitCount = 0
     $.each(tuanAreas,function(index,item){
         $('<option value="'+item['id']+'">'+item['name']+'</option>').appendTo(getCountyId);
     });
@@ -27,6 +28,11 @@ $(function(){
     });
 
     $(".tuanTeam-form").submit(function(e){
+        if(submitCount!=0){
+            alert("正在操作，请不要重复提交，谢谢！");
+            return false;
+        }
+        submitCount = submitCount+1;
         var invalidTuanName = tuanName.val()=='';
         tuanName.parents('.form-group').toggleClass('has-error',invalidTuanName);
         var invalidLeaderName = leaderName.val()=='';
