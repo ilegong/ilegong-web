@@ -629,12 +629,18 @@ class OrdersController extends AppController {
             }
 
             $this->set('show_pay', ($orderinfo['Order']['type'] == ORDER_TYPE_DEF || $orderinfo['Order']['type']==ORDER_TYPE_TUAN || $orderinfo['Order']['type']==ORDER_TYPE_TUAN_SEC)
-                && $afford
                 && $has_expired_product_type == 0
                 && (empty($tuan_expired)||$tuan_expired ==0)
                 && $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
                 && ($display_status != PAID_DISPLAY_PENDING && $display_status != PAID_DISPLAY_SUCCESS)
                 && $consignment_date_available);
+//            $this->set('show_pay', ($orderinfo['Order']['type'] == ORDER_TYPE_DEF || $orderinfo['Order']['type']==ORDER_TYPE_TUAN || $orderinfo['Order']['type']==ORDER_TYPE_TUAN_SEC)
+//                && $afford
+//                && $has_expired_product_type == 0
+//                && (empty($tuan_expired)||$tuan_expired ==0)
+//                && $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
+//                && ($display_status != PAID_DISPLAY_PENDING && $display_status != PAID_DISPLAY_SUCCESS)
+//                && $consignment_date_available);
         }
         if ($action == 'paid') {
             $this->log("paid done: $orderId, msg:". $_GET['msg']);
