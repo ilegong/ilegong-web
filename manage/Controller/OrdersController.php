@@ -63,6 +63,20 @@ class OrdersController extends AppController
         $send_date = $this->data['send_date'];
         unset($this->data['send_date']);
 
+        $remark = (empty($order['Order']['remark']) ? '' : $order['Order']['remark'] . ', ') . $this->data['modify_reason'] . '(' . $this->data['modify_user'] . ')';
+        unset($this->data['modify_reason']);
+        unset($this->data['modify_user']);
+
+        if(empty($send_date) && empty($this->data)){
+            echo json_encode(array('success' => true, 'reason' => '然而你并没有修改任何字段'));
+            return;
+        }
+
+        if(!in_array($this->data['modify_user'], array('miaoyue', 'xiaoguang', 'xiaoqing', 'xinyu', 'jingge'))){
+            echo json_encode(array('success' => false, 'reason' => '您没有权限修改订单'));
+            return;
+        }
+
         if (!empty($send_date)) {
             if(strtotime($send_date) <= strtotime('yesterday')){
                 echo json_encode(array('success' => false, 'reason' => '发货时间不能早于今天'));
@@ -75,15 +89,6 @@ class OrdersController extends AppController
                 echo json_encode(array('success' => false, 'reason' => '保存发货时间失败'));
                 return;
             }
-        }
-
-
-        $remark = (empty($order['Order']['remark']) ? '' : $order['Order']['remark'] . ', ') . $this->data['modify_reason'] . '(' . $this->data['modify_user'] . ')';
-        unset($this->data['modify_reason']);
-        unset($this->data['modify_user']);
-        if(empty($send_date) && empty($this->data)){
-            echo json_encode(array('success' => true, 'reason' => '然而你并没有修改任何字段'));
-            return;
         }
 
         $this->data['remark'] = "'".$remark."'";
