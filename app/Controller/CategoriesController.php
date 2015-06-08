@@ -68,12 +68,24 @@ class CategoriesController extends AppController {
         $brandIds = Hash::extract($list,'{n}.Product.brand_id');
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
         $productList = array();
+        $tuan_products = getTuanProducts();
+        $tuan_products = Hash::combine($tuan_products, '{n}.TuanProduct.product_id', '{n}');
         foreach ($list as &$val) {
+            $product_id = $val['Product']['id'];
             $brand = $mappedBrands[$val['Product']['brand_id']];
             $val['Product']['brand_link'] = $this->brand_link($brand);
             $val['Product']['brand_name'] = $brand['Brand']['name'];
             $val['Product']['brand_img'] = $brand['Brand']['coverimg'];
             $val['Product']['good_url'] = product_link2($val);
+            if(array_key_exists($product_id, $tuan_products) && $tuan_products[$product_id]['TuanProduct']['general_show'] == 0){
+                $this->loadModel('TuanBuying');
+                $tuan_buying = $this->TuanBuying->find('first', array(
+                    'conditions' => array('pid' => $product_id, 'tuan_id'=>PYS_M_TUAN, 'published' => PUBLISH_YES, 'type'=>0)
+                ));
+                if(!empty($tuan_buying)){
+                    $val['Product']['TuanBuying'] = $tuan_buying['TuanBuying'];
+                }
+            }
             $productList[] = $val['Product'];
         }
         $result = array('data_list'=>$productList);

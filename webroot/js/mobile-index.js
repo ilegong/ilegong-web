@@ -66,6 +66,7 @@ $(document).ready(function () {
 
     function genGoodItemDom(good) {
         var price = good['price'];
+        var tuanBuying = good['TuanBuying'];
         price = parseFloat(price).format(2);
         var originPrice = good['original_price'];
         if (originPrice) {
@@ -73,21 +74,42 @@ $(document).ready(function () {
         } else {
             originPrice = 0;
         }
-
-        var goodUrl = good['good_url']+'?history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
-        var goodHtml = '<div class="good"> <a href="'+goodUrl+'" class="xq">';
-        if(good['limit_area']==1&&good['id']!=72){
-            goodHtml+='<p>仅限<br/>北京</p>';
-        }else{
-            if(good['id']==72){
-                goodHtml += '<p class="spec_tag">新品</p>'
+        var goodHtml = '';
+        var goodUrl = '';
+        if(!tuanBuying){
+            goodUrl = good['good_url']+'?history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
+            goodHtml = '<div class="good"> <a href="'+goodUrl+'" class="xq">';
+            if(good['limit_area']==1){
+                goodHtml+='<p>仅限<br/>北京</p>';
+            }else{
+                //if(good['id']==72){
+                //    goodHtml += '<p class="spec_tag">新品</p>'
+                //}
             }
+            goodHtml+='<img src="'+ good['listimg']+'"/> </a> <div class="title clearfix"> <a href="'+good['brand_link']+'" class="phead"><img src="'+good['brand_img']+'" /></a> <a href="'+goodUrl+'" class="txt"><b>' + good['name'] + '</b></a> </div> <ul class="clearfix"> ';
+            if(!tuanBuying){
+                goodHtml+='<li class="price fl"><strong>￥' + price + '</strong>';
+                if (originPrice > 0) {
+                    goodHtml += '&nbsp;<label>￥' + originPrice + '</label>'
+                }
+                goodHtml+='</li>';
+            }
+            goodHtml +='<li class="fr"><a href="'+goodUrl+'" class="btn radius5">立即购买</a></li> </ul> </div>';
+        }else{
+            var sold_num = tuanBuying['sold_num'];
+            var target_num = tuanBuying['target_num'];
+            var sold_percent = (sold_num/target_num)*100;
+            goodUrl = '/tuan_buyings/detail/'+tuanBuying['id']+'history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
+            goodHtml+='<div class="tuandetail_seckill clearfix"> <p>秒杀</p> <span><a href="'+goodUrl+'">' +
+            '<img src="'+good['listimg']+'" /></a></span> ' +
+            '<span> <h1>'+good['name']+'</h1> ' +
+            '<em>秒杀价：<strong>¥'+price+'</strong></em>' +
+            ' <div class="tuan_bar clearfix"> <div class="fl" style="width: 50%;margin-right: 5px;"> <div class="bar">' +
+            '<div class="bar_buy" style="width:'+sold_percent+'%;"></div> </div> <ul class="clearfix"> <li class="fl">已秒<span style=" display:inline;">'+sold_num+'</span>份</li> ' +
+            '<li class="fr">共'+target_num+'份</li> </ul> </div>' +
+            ' <div> <a class="tuandetail_seckill_btn radius5 fr" href="'+goodUrl+'">去秒杀</a> ' +
+            ' </div> </div> </span> </div>';
         }
-        goodHtml+='<img src="'+ good['listimg']+'"/> </a> <div class="title clearfix"> <a href="'+good['brand_link']+'" class="phead"><img src="'+good['brand_img']+'" /></a> <a href="'+goodUrl+'" class="txt"><b>' + good['name'] + '</b></a> </div> <ul class="clearfix"> <li class="price fl"><strong>￥' + price + '</strong>';
-        if (originPrice > 0) {
-            goodHtml += '&nbsp;<label>￥' + originPrice + '</label>'
-        }
-        goodHtml+='</li> <li class="fr"><a href="'+goodUrl+'" class="btn radius5">立即购买</a></li> </ul> </div>';
         return goodHtml;
     }
 
