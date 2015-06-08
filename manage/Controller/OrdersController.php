@@ -60,6 +60,11 @@ class OrdersController extends AppController
             return;
         }
 
+        if(!in_array($this->data['modify_user'], array('miaoyue', 'xiaoguang', 'xiaoqing', 'xinyu', 'jingge'))){
+            echo json_encode(array('success' => false, 'reason' => 'no_permission'));
+            return;
+        }
+
         $send_date = $this->data['send_date'];
         unset($this->data['send_date']);
 
@@ -69,11 +74,6 @@ class OrdersController extends AppController
 
         if(empty($send_date) && empty($this->data)){
             echo json_encode(array('success' => false, 'reason' => 'fields_are_empty'));
-            return;
-        }
-
-        if(!in_array($this->data['modify_user'], array('miaoyue', 'xiaoguang', 'xiaoqing', 'xinyu', 'jingge'))){
-            echo json_encode(array('success' => false, 'reason' => 'no_permission'));
             return;
         }
 
