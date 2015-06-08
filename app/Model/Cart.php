@@ -107,7 +107,8 @@ class Cart extends AppModel {
 
         if (!empty($prodTry)) {
             $price = calculate_try_price($prodTry['ProductTry']['price'], $uid, $shichituan);
-            $cart_name = $p['Product']['name'].'(试吃: '.$prodTry['ProductTry']['spec'].')';
+            //$cart_name = $p['Product']['name'].'(试吃: '.$prodTry['ProductTry']['spec'].')';
+            $cart_name = $p['Product']['name'].'(规格: '.$prodTry['ProductTry']['spec'].')';
         } else {
             $result = get_spec_by_pid_and_sid(array(
                     array('pid' => $product_id, 'specId' => $specId, 'defaultPrice' => $p['Product']['price']),
