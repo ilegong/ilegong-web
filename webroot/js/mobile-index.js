@@ -12,7 +12,7 @@ $(document).ready(function () {
         var re = '(\\d)(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
         return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$1,');
     };
-    
+
     $('div.menue ul li').on('click', function () {
         var me = $(this);
         $('div.menue ul li.cur').removeClass('cur');
