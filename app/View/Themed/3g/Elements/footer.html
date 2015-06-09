@@ -28,17 +28,19 @@
 			effect: "fadeIn",
 			threshold : 100
 		});
-      
+
         function set_default_spec(){
             var that = $('.standard_bg');
             var spec_item = $('.spec_item_selected.cur');
+            var pamount = $('#input_pamount').val();
             if(spec_item.length){
                 var string = '<label>已选</label>';
                 $.each(spec_item,function(index,item){
                     string = string +' '+'<strong>"'+ $.trim(spec_item.eq(index).text())+'"</strong>'+' ';
                 });
-                that.children('span').eq(0).html(string);
             }
+            string = string + ' '+'<strong>"'+ pamount+'份"</strong>'+'';
+            that.children('span').eq(0).html(string);
         }
         $('li.good-spec').each(function(index,item){
             $('span.spec_item',$(item)).first().trigger('click');
