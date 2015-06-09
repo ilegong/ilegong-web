@@ -581,7 +581,7 @@ $(document).ready(function () {
 
 function print_collect_data(){
     $('table.orders').addClass('no-print');
-    $('h3.order-tag').removeClass('new_page');
+    $('h3.order-tag').removeClass('new_page ');
     print();
 }
 
