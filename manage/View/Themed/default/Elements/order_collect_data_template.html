@@ -11,17 +11,17 @@
         }
     }
 ?>
-<table class="table-bordered table-collect-data hidden" style="margin-bottom: 20px;width: 50%;">
+<table class="table table-bordered table-collect-data" style="margin-bottom: 20px;width: 50%;">
     <tr>
-        <td width="50">名称</td>
-        <td width="20">规格</td>
-        <td width="10">数量</td>
+        <td>名称</td>
+        <td>规格</td>
+        <td>数量</td>
     </tr>
     {{loop $collect_result  $collect_data}}
         <tr>
-            <td width="50">{{$collect_data['name']}}</td>
-            <td width="20">{{$collect_data['spec_name']}}</td>
-            <td width="10">{{$collect_data['num']}}</td>
+            <td>{{$collect_data['name']}}</td>
+            <td>{{$collect_data['spec_name']}}</td>
+            <td>{{$collect_data['num']}}</td>
         </tr>
     {{/loop}}
 </table>

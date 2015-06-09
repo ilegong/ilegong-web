@@ -572,9 +572,21 @@ $(document).ready(function () {
     });
 
     $('.print-statistics').on('click', function(e){
-        $('.orders').toggleClass("hidden");
-        $('h3.ship-type').toggleClass("new-page");
-        $('.table-collect-data').toggleClass('hidden');
+        var showAll = $(this).data('show-all');
+        if(showAll == 1){
+            $(this).data('show-all', 0);
+            $(this).text('只显示统计');
+            $('.orders').removeClass("hidden");
+            $('h3.ship-type').addClass("new-page");
+            $('.table-collect-data').css('display', '');
+        }
+        else{
+            $(this).data('show-all', 1);
+            $(this).text('显示全部');
+            $('.orders').addClass("hidden");
+            $('h3.ship-type').removeClass("new-page");
+            $('.table-collect-data').css('display', 'block');
+        }
     });
     initSetOrder();
 });

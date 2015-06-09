@@ -250,7 +250,11 @@ div.breadcrumb { margin: 0px 0px 20px 0px; }
 }
 /*end of tuan management*/
 
-
+/* tuan orders
+*/
+table.table-collect-data{
+    display: none;
+}
 @media only print
 {
     /* hide every element within the body */
@@ -269,5 +273,8 @@ div.breadcrumb { margin: 0px 0px 20px 0px; }
 
     table{
         border: 2px solid black;
+    }
+    table.table-collect-data{
+        display: block;
     }
 }
