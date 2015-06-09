@@ -72,6 +72,10 @@
     </thead>
     <tbody>
     {{loop $datas $item}}
+        <?php
+            $datediff = strtotime($item['StatisticsOrderData']['end_date'])-strtotime($item['StatisticsOrderData']['start_date']);
+            $days = floor($datediff/(60*60*24));
+        ?>
         <tr>
             <td>{{$item['StatisticsZitiData']['start_date']}}--{{$item['StatisticsZitiData']['end_date']}}</td>
             <td>{{$item['StatisticsZitiData']['new_user_buy_count']}}</td>
@@ -80,7 +84,7 @@
             <td>{{number_format(($item['StatisticsZitiData']['repeat_buy_count'])/($item['StatisticsZitiData']['all_buy_user_count']),2,'.','')}}</td>
             <td>{{$item['StatisticsZitiData']['max_order_count']}}</td>
             <td>{{$item['StatisticsZitiData']['max_order_date']}}</td>
-            <td>{{number_format(($item['StatisticsZitiData']['all_order_count'])/6,2,'.','')}}</td>
+            <td>{{number_format(($item['StatisticsZitiData']['all_order_count'])/days,2,'.','')}}</td>
             <td>{{$item['StatisticsZitiData']['all_order_count']}}</td>
         </tr>
     {{/loop}}
