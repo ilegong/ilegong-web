@@ -69,6 +69,15 @@
             set_dialog_hide();
         });
         $('.sure_btn').on('click',function(){
+            var that = $('.standard_bg');
+            var spec_item = $('.spec_item_selected.cur');
+            if(spec_item.length){
+                var string = '<label>已选</label>';
+                $.each(spec_item,function(index,item){
+                    string = string +' '+'<strong>"'+ $.trim(spec_item.eq(index).text())+'"</strong>'+' ';
+                });
+                that.children('span').eq(0).html(string);
+            }
             $(this).attr('value','true');
             set_dialog_hide();
             var button_status = $('#button-status').attr('data-status');
