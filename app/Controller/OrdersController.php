@@ -65,6 +65,7 @@ class OrdersController extends AppController {
         $this->loadModel('Product');
         $product_ids = array();
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
+        $ship_type = $_REQUEST['ship_type'];
         if (!$shipPromotionId) {
             $shipPromotionId = intval($this->Session->read(self::key_balanced_ship_promotion_id()));
         }
@@ -174,7 +175,11 @@ class OrdersController extends AppController {
         $pids = Hash::extract($allP, '{n}.Product.id');
 
         $this->loadModel('OrderConsignee');
-        $addressId = $this->Session->read('OrderConsignee.id');
+        if($ship_type == 'pickup'){
+            $addressId = $this->Session->read('pickupConsignee.id');
+        }else{
+            $addressId = $this->Session->read('OrderConsignee.id');
+        }
         $address = $this->OrderConsignee->find('first', array(
             'conditions' => array('id' => $addressId, 'creator' => $uid)
         ));
@@ -262,15 +267,17 @@ class OrdersController extends AppController {
             $data['remark'] = empty($remark) ? "" : $remark;
 
             $data['consignee_id'] = $addressId;
-			$data['consignee_name'] = $this->Session->read('OrderConsignee.name');
-			$data['consignee_area'] = $this->Session->read('OrderConsignee.area');
-			$data['consignee_address'] = $this->Session->read('OrderConsignee.address');
-			$data['consignee_mobilephone'] = $this->Session->read('OrderConsignee.mobilephone');
-			$data['consignee_telephone'] = $this->Session->read('OrderConsignee.telephone');
-			$data['consignee_email'] = $this->Session->read('OrderConsignee.email');
-			$data['consignee_postcode'] = $this->Session->read('OrderConsignee.postcode');
+			$data['consignee_name'] = $address['OrderConsignee']['name'];
+			$data['consignee_area'] = $address['OrderConsignee']['area'];
+			$data['consignee_address'] = $address['OrderConsignee']['address'];
+			$data['consignee_mobilephone'] = $address['OrderConsignee']['mobilephone'];
             $data['ship_mark'] = KUAIDI_TAG;
-			
+            if($ship_type == 'pickup'){
+                $data['consignee_id'] = $address['OrderConsignee']['ziti_id'];
+                $data['ship_mark'] = 'ziti';
+                $data['consignee_area'] = '';
+                $data['ship_mark'] = ZITI_TAG;
+            }
 			if(empty($data['consignee_name']) || empty($data['consignee_address']) || empty($data['consignee_mobilephone']) ){
 				$this->__message('请填写收货人信息','/orders/info');
 			}
@@ -405,12 +412,12 @@ class OrdersController extends AppController {
             $this->Session->write(self::key_balance_pids(), json_encode($balance_cids));
         }
 
-        $consignees = $this->OrderConsignee->find('all',array(
-            'conditions'=>array('creator'=> $uid, 'status !=' => array(STATUS_CONSIGNEES_TUAN,STATUS_CONSIGNEES_TUAN_ZITI)),
+        $all_consignees = $this->OrderConsignee->find('all',array(
+            'conditions'=>array('creator'=> $uid, 'status !=' => STATUS_CONSIGNEES_TUAN),
             'order' => 'status desc',
         ));
+        $consignees  = array_filter($all_consignees, function($v) { return $v['OrderConsignee']['status'] != STATUS_CONSIGNEES_TUAN_ZITI;});
         $total_consignee = count($consignees);
-
         if ($_REQUEST['action'] == 'savePromo') {
             list($specialPid, $specialAddress) = $this->ShipPromotion->find_special_address_by_id($shipPromotionId);
             if (!empty($specialAddress)) {
@@ -498,6 +505,8 @@ class OrdersController extends AppController {
         if($this->RequestHandler->isMobile()){
             $this->set('is_mobile',true);
         }
+        $pickup_consignees = array_filter($all_consignees, function($v) { return $v['OrderConsignee']['status'] == STATUS_CONSIGNEES_TUAN_ZITI; });
+        $this->set('ziti_consignee_info', $pickup_consignees[0]['OrderConsignee']);
         $this->pageTitle = __('订单确认');
         $this->set('op_cate', OP_CATE_CATEGORIES);
         $this->set('hideNav', true);
@@ -1772,5 +1781,54 @@ class OrdersController extends AppController {
                 }
             }
         }
+    }
+    public function chose_pickup(){
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        $res = array('status' => false);
+        if(empty($uid)){
+            $res['reason'] = 'not login';
+        }else{
+            $name = trim($_POST['name']);
+            $mobile = $_POST['mobile'];
+            $shop_id = intval($_POST['shop_id']);
+            if($name && $mobile && $shop_id){
+                $this->loadModel('OfflineStore');
+                $this->loadModel('OrderConsignee');
+                $pickup = $this->OfflineStore->find('first', array(
+                    'conditions' => array('id' => $shop_id, 'deleted' => 0)
+                ));
+                if(empty($pickup)){
+                    $res['reason'] = 'not find shop';
+                }else{
+                    $old_pickup = $this->OrderConsignee->find('first', array(
+                        'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN_ZITI, 'deleted' => 0)
+                    ));
+                    $address = $pickup['OfflineStore']['name'].'(联系人：'. $pickup['OfflineStore']['owner_name'].$pickup['OfflineStore']['owner_phone'].')';
+                    $data = array();
+                    $data['OrderConsignee'] = array(
+                        'name' => $name,
+                        'address' => $address,
+                        'creator' => $uid,
+                        'status' => STATUS_CONSIGNEES_TUAN_ZITI,
+                        'mobilephone' => $mobile,
+                        'area' => $pickup['OfflineStore']['area_id'],
+                        'ziti_id' => $shop_id,
+                        'ziti_type' => $pickup['OfflineStore']['type']
+                    );
+                    if(empty($old_pickup)){
+                        $this->OrderConsignee->save($data);
+                    }else{
+                        $data['OrderConsignee']['id'] = $old_pickup['OrderConsignee']['id'];
+                        $this->OrderConsignee->save($data);
+                    }
+                    $this->Session->write('pickupConsignee',$data['OrderConsignee']);
+                    $res = array('status' => true, 'data'=>$data['OrderConsignee']);
+                }
+            }else{
+                $res['reason'] = 'data error';
+            }
+        }
+        echo json_encode($res);
     }
 }

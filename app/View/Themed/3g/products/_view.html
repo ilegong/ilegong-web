@@ -115,23 +115,6 @@
         </div>
         {{/if}}
         {{/if}}
-        <div class="p_bg">
-            <ul class="standard clearfix">
-                <li>
-                    <span class="fl title mr12">物流:</span>
-            <span class="border" style="display:block;overflow: hidden;">
-               {{if $ship_by_item_num && $Product['Product']['ship_fee']> 0}}
-                    <span>每件{{$this->Number->precision($Product['Product']['ship_fee'], 0)}}元</span>
-               {{else}}
-                <span class="mr12 border cur">
-               {{if $Product['Product']['ship_fee']}} {{if $Product['Product']['ship_fee']==-1}}到付{{elseif $Product['Product']['ship_fee']==-2}}自提{{else}}快递{{$this->Number->precision($Product['Product']['ship_fee'], 0)}}元{{/if}} {{else}}包邮{{/if}}
-               {{/if}}
-                   <div class="focus"></div>
-                </span>
-            </span>
-                </li>
-            </ul>
-        </div>
         {{if ($total_left > 0 || $total_left == -1) && $afford_for_curr_user}}
         <div class="p_bg">
             <ul class="numbers clearfix b_line">

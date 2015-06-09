@@ -312,7 +312,7 @@ var zitiObj = function(area,height, width){
             $('.child_area').each(function () {
                 var that = $(this);
                 that.on('click', function () {
-                    $('.child_area,.thickbox').not(that).removeClass('cur').hide();
+                    $('.parent_area.thickbox').not(that).removeClass('cur').hide();
                     $('.children_area').show();
                     that.html('其他市区').removeClass('child_area').addClass('cur').bind('click', function () {
                         $('.child_area,.thickbox,.children_area').not(that).removeClass('cur').hide();
@@ -355,7 +355,7 @@ function setData(area_id,parent_id){
         that.on("click",function(){
             that.css("background-color","#eeeeee");
             var canRemarkAddress = that.data('can-remark-address');
-            shopId = that.data('shop-id');
+            var shopId = that.data('shop-id');
             //should remark address
             if(canRemarkAddress==1){
                 remarkAddress.show();
