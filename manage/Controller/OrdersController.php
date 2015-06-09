@@ -103,6 +103,7 @@ class OrdersController extends AppController
             }
         }
 
+        $this->data['remark'] = $remark;
         foreach($this->data as $key => $value){
             $this->data[$key] = "'".$value."'";
         }

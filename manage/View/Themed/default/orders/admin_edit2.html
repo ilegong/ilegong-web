@@ -51,7 +51,7 @@
         <label class="col-sm-2 control-label">状态</label>
 
         <div class="col-sm-10">
-            <select name="order_status" data-value="{{$order['Order']['status']}}" class="form-control order-status">
+            <select name="status" data-value="{{$order['Order']['status']}}" class="form-control status">
                 <option value="0"
                 {{if $order['Order']['status']==0}}selected='selected'{{/if}}>待支付</option>
                 <option value="1"

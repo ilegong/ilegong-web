@@ -1,7 +1,7 @@
 $(document).ready(function () {
     var $form = $('.order-form');
     var $saveBtn = $('.save-btn');
-    var $orderStatus = $('.order-status');
+    var $status = $('.status');
     var $shipMark = $('.ship-mark');
     var $consigneeId = $('.consignee-id');
     var $consigneeName = $('.consignee-name');
