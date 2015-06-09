@@ -39,19 +39,18 @@
             </li>
         </ul>
     </div>
-    <div class="content" id="products-content" style="margin-bottom: 80px;">
+    <div class="content" style="margin-bottom: 80px;">
         {{if $received_cnt > 0}}
         <div class="refer_banner"><a href="/refer/index{{$CurrentUser['id']?'/'.$CurrentUser['id']:''}}.html?_sl=mobile_index"><img src="{{$this->Html->assetUrl('/img/refer/banner.gif?v6')}}" width="100%"/></a></div>
         {{/if}}
         {{if !empty($tryings)}}
-        <div id="seckill_product">
-
+            <div id="tuandetail_seckill">
                 <?php $i = 0; foreach($tryings as $trying) {
-                    if ($i++>=2) {break;} ?>
-                    <div class="tuandetail_seckill clearfix">
-                            <p>秒杀</p>
-                            <span><a href="/tuan_buyings/sec_detail/{{$trying['ProductTry']['id']}}"><img src="{{$this->Html->assetUrl(medium_thumb_link($trying['Product']['listimg']))}}" /></a></span>
-                        <span>
+                        if ($i++>=2) {break;} ?>
+                <div class="tuandetail_seckill clearfix">
+                    <p>秒杀</p>
+                    <span><a href="/tuan_buyings/sec_detail/{{$trying['ProductTry']['id']}}"><img src="{{$this->Html->assetUrl(medium_thumb_link($trying['Product']['listimg']))}}" /></a></span>
+                    <span>
                         <h1>{{$trying['ProductTry']['product_name']}} {{$trying['ProductTry']['spec']}}</h1>
                         <em>秒杀价：<strong>¥{{$this->Number->precision(calculate_try_price($trying['ProductTry']['price']),
                             2)}}</strong></em>
@@ -87,11 +86,14 @@
                                 {{/if}}
                             </div>
                         </div>
-                        </span>
-                    </div>
+                    </span>
+                </div>
                 <?php } ?>
-        </div>
+            </div>
         {{/if}}
+        <div id="products-content">
+
+        </div>
     </div>
 </div>
 <script>
@@ -110,7 +112,7 @@
         });
     });
 </script>
-{{$this->Html->script(array('/js/mobile-index.js?v4.4'), array('block' => 'scriptBottom'));}}
+{{$this->Html->script(array('/js/mobile-index.js?v4.5'), array('block' => 'scriptBottom'));}}
 {{if $is_weixin}}
  <script>
      wx.ready(function () {

@@ -1,7 +1,7 @@
 $(document).ready(function () {
     var cache = {};
     var $productsContent = $('#products-content');
-    var $seckill_product = $('#seckill_product');
+    var $seckill_product = $('#tuandetail_seckill');
     var menue = $('div.menue ul');
     var initTagId = menue.data('id');
     var currentTagId = 0;
@@ -24,7 +24,8 @@ $(document).ready(function () {
             }else{
                 $seckill_product.show();
             }
-            $('div.good',$productsContent).remove();
+            $productsContent.empty();
+            //$('div.good',$productsContent).remove();
             loadDatas(tagId);
         }
         if(tagId!=recommendTagId||tagId!=recommendTagId.toString()){
