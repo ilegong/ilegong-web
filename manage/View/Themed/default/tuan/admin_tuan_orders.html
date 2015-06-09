@@ -1,5 +1,5 @@
 {{$this->Html->css(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css','/css/manage/print/order_print.css?v4'))}}
-<div class="no-print">
+<div class="header">
     <ol class="breadcrumb">
         <li><a href="/manage/admin/tuan/tuan_func_list">团购后台</a></li>
         <li class="active orders-modify">团购订单</li>
@@ -210,6 +210,7 @@
         </h1>
         {{/if}}
         <button class="btn btn-success export-excel">导出订单</button>
+        <button class="btn btn-primary print-statistics">只显示统计</button>
         <button class="btn btn-primary" onclick="javascript:print();">打印订单</button>
         <button  class="btn btn-primary pull-right ship-to-pys-stores">朋友说自提点发货</button>
     </div>
@@ -224,7 +225,7 @@
         ?>
         <h1 class="no-print"><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h1>
         <hr class="no-print" />
-        <h3 {{if !empty($current_orders)}}class="new_page"{{else}}class="no-print"{{/if}}><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h3>
+        <h3 {{if !empty($current_orders)}}class="ship-type new-page"{{else}}class="no-print"{{/if}}><span class="label no-print label-{{$item['style']}}">{{$item['name']}}</span></h3>
         <hr class="no-print"/>
         {{template Elements/order_data_template}}
     {{else}}
@@ -232,14 +233,14 @@
         <hr class="no-print" />
         <h2 class="no-print"><span class="label label-warning no-print">朋友说自提</span></h2>
         <hr class="no-print" />
-       <div class="hidden" id="send_order_msg" data-reach="{{$reach_order}}" data-send_out="{{$send_out_order}}"></div>
-       {{loop $pys_ziti_point $point}}
+        <div class="hidden" id="send_order_msg" data-reach="{{$reach_order}}" data-send_out="{{$send_out_order}}"></div>
+        {{loop $pys_ziti_point $point}}
                 <?php
                     $current_orders=$map_ziti_orders[$point['OfflineStore']['id']];
                     $data_tag = 'ziti-'.$point['OfflineStore']['id'];
                     $data_tag_name = $point['OfflineStore']['alias'];
                 ?>
-            <h3 {{if !empty($current_orders)}}class="new_page"{{else}}class="no-print"{{/if}}><span class="label label-success">{{get_address(null,$point)}}</span></h3>
+            <h3 {{if !empty($current_orders)}}class="ship-type new-page"{{else}}class="no-print"{{/if}}><span class="label label-success">{{get_address(null,$point)}}</span></h3>
             <hr class="no-print"/>
             {{template Elements/order_data_template}}
             <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
@@ -252,7 +253,7 @@
                     $data_tag = 'ziti-'.$point['OfflineStore']['id'];
                     $data_tag_name = $point['OfflineStore']['alias'];
                 ?>
-                 <h3 {{if !empty($current_orders)}}class="new_page"{{else}}class="no-print"{{/if}}><span class="label label-success">{{get_address(null,$point)}}</span></h3>
+                 <h3 {{if !empty($current_orders)}}class="ship-type new-page"{{else}}class="no-print"{{/if}}><span class="label label-success">{{get_address(null,$point)}}</span></h3>
                 <hr class="no-print"/>
                 {{template Elements/order_data_template}}
                 <?php unset($map_ziti_orders[$point['OfflineStore']['id']]); ?>
@@ -264,97 +265,94 @@
             ?>
             <h2 class="no-print"><span class="label label-danger">未知自提点</span></h2>
             <hr class="no-print"/>
-            <h3 {{if !empty($current_orders)}}class="new_page"{{else}}class="no-print"{{/if}}><span class="label label-warning">没有自提点</span></h3>
+            <h3 {{if !empty($current_orders)}}class="ship-type new-page"{{else}}class="no-print"{{/if}}><span class="label label-warning">没有自提点</span></h3>
             <hr class="no-print"/>
             {{template Elements/order_data_template}}
         {{/loop}}
     {{/if}}
 {{/loop}}
 
-<div class="no-print">
-    <div class="ship-to-haolinju-store-dialog" title="好邻居店铺发货" class="hidden">
-        <p class="text-warning">输入提货码，点击确认发货，会同时发送“到货提醒”</p>
-        <p class="text-warning">否则只确认发货，不发送“到货提醒”</p>
+<div class="dialog ship-to-haolinju-store-dialog" title="好邻居店铺发货" class="hidden">
+    <p class="text-warning">输入提货码，点击确认发货，会同时发送“到货提醒”</p>
+    <p class="text-warning">否则只确认发货，不发送“到货提醒”</p>
 
-        <form class="ship-to-haolinju-store-form form-inline">
-            <label class="checkbox">
-                <input type="checkbox" class="send-weixin-message" checked="checked">同时发送“到货提醒”
+    <form class="ship-to-haolinju-store-form form-inline">
+        <label class="checkbox">
+            <input type="checkbox" class="send-weixin-message" checked="checked">同时发送“到货提醒”
+        </label>
+        <input type="hidden" class="haolinju-order-id" value=""/>
+        <input type="text"class="haolinju-code" value="" placeholder="请输入提货码">
+    </form>
+</div>
+<div id="refund-form" class="dialog form-horizontal refund-order-dialog" title="退款通知">
+    <div class="form-group">
+        <label class="col-sm-2 control-label">订单状态</label>
+
+        <div class="col-sm-9">
+            <label class="radio-inline">
+                <input type="radio" id="order_in_refunding" name="status" value="14"
+                       data-target="#refund_order">退款中
             </label>
-            <input type="hidden" class="haolinju-order-id" value=""/>
-            <input type="text"class="haolinju-code" value="" placeholder="请输入提货码">
-        </form>
+            <label class="radio-inline">
+                <input type="radio" id="order_refunded" name="status" checked="checked" value="4"
+                       data-target="#refund_order">已退款
+            </label>
+
+            <p class="text-warning">选择退款中，会更改订单状态,并记录日志，但不会发送消息；选择已退款，需要输入金额，并发送退款模版消息和短信，若退全款，需退还使用的积分</p>
+        </div>
     </div>
-    <div id="refund-form" class="form-horizontal refund-order-dialog" title="退款通知">
+    <div id="refund_order" class="collapse">
         <div class="form-group">
-            <label class="col-sm-2 control-label">订单状态</label>
+            <label for="refund_money" class="col-sm-2 control-label">退款金额</label>
 
-            <div class="col-sm-9">
-                <label class="radio-inline">
-                    <input type="radio" id="order_in_refunding" name="status" value="14"
-                           data-target="#refund_order">退款中
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" id="order_refunded" name="status" checked="checked" value="4"
-                           data-target="#refund_order">已退款
-                </label>
+            <div class="col-sm-10">
+                <input id="refund_money" type="number" step="0.01" class="form-control" placeholder="单位为元">
 
-                <p class="text-warning">选择退款中，会更改订单状态,并记录日志，但不会发送消息；选择已退款，需要输入金额，并发送退款模版消息和短信，若退全款，需退还使用的积分</p>
+                <p class="error-message"></p>
             </div>
         </div>
-        <div id="refund_order" class="collapse">
-            <div class="form-group">
-                <label for="refund_money" class="col-sm-2 control-label">退款金额</label>
+        <div class="form-group">
+            <label for="refund_remark" class="col-sm-2 control-label">退款原因</label>
 
-                <div class="col-sm-10">
-                    <input id="refund_money" type="number" step="0.01" class="form-control" placeholder="单位为元">
-
-                    <p class="error-message"></p>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="refund_remark" class="col-sm-2 control-label">退款原因</label>
-
-                <div class="col-sm-10">
-                    <textarea id="refund_remark" class="form-control" placeholder="说明退款原因"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="refund_scores" class="col-sm-2 control-label">积分</label>
-                <div class="col-sm-10">
-                    <input id="refund_scores" type="number" step="0.01" class="form-control" readonly="readonly" value="">
-                </div>
+            <div class="col-sm-10">
+                <textarea id="refund_remark" class="form-control" placeholder="说明退款原因"></textarea>
             </div>
         </div>
-        <input type="hidden" value="" id="order-id">
-        <input type="hidden" value="" id="order-creator">
-        <input type="hidden" value="" id="order-totalprice">
+        <div class="form-group">
+            <label for="refund_scores" class="col-sm-2 control-label">积分</label>
+            <div class="col-sm-10">
+                <input id="refund_scores" type="number" step="0.01" class="form-control" readonly="readonly" value="">
+            </div>
+        </div>
     </div>
-
-    <div class="ship-to-our-store-dialog" title="自有自提点发货">
-        <p class="text-warning">发消息的同时会修改状态，不会重复发送消息</p>
-        <form class="ship-to-our-store-form form-inline">
-            <div>
-                <input type="radio" name="optionsRadios" id="optionsRadios1" value="0" checked>
-                发送发货提醒
-            </div>
-            <br />
-            <div>
-                <input type="radio" name="optionsRadios" id="optionsRadios2" value="1">
-                发送到货提醒
-            </div>
-        </form>
-    </div>
-    <div class="input-ship-code-dialog" title="回填快递单号">
-        <p class="text-warning">回填单号会发送模版消息</p>
-        <div class="well">
-            <select class="ship-type-select">
-                <option value="-1">快递类型</option>
-                {{loop $ship_type $id $type}}
-                <option value="{{$id}}">{{$type}}</option>
-                {{/loop}}
-            </select>
-            <input type="text" width="80px;" name="order-ship-code" placeholder="快递单号">
+    <input type="hidden" value="" id="order-id">
+    <input type="hidden" value="" id="order-creator">
+    <input type="hidden" value="" id="order-totalprice">
+</div>
+<div class="dialog ship-to-our-store-dialog" title="自有自提点发货">
+    <p class="text-warning">发消息的同时会修改状态，不会重复发送消息</p>
+    <form class="ship-to-our-store-form form-inline">
+        <div>
+            <input type="radio" name="optionsRadios" id="optionsRadios1" value="0" checked>
+            发送发货提醒
         </div>
+        <br />
+        <div>
+            <input type="radio" name="optionsRadios" id="optionsRadios2" value="1">
+            发送到货提醒
+        </div>
+    </form>
+</div>
+<div class="dialog input-ship-code-dialog" title="回填快递单号">
+    <p class="text-warning">回填单号会发送模版消息</p>
+    <div class="well">
+        <select class="ship-type-select">
+            <option value="-1">快递类型</option>
+            {{loop $ship_type $id $type}}
+            <option value="{{$id}}">{{$type}}</option>
+            {{/loop}}
+        </select>
+        <input type="text" width="80px;" name="order-ship-code" placeholder="快递单号">
     </div>
 </div>
 {{$this->Html->script(array('/js/manage-lib/tablesort/tablesort.min.js','/js/manage-lib/tablesort/src/sorts/tablesort.date.js','/js/manage-lib/tablesort/src/sorts/tablesort.dotsep.js','/js/manage-lib/tablesort/src/sorts/tablesort.numeric.js','/js/manage/table_sort.js'));}}

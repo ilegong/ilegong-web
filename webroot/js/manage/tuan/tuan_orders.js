@@ -570,5 +570,11 @@ $(document).ready(function () {
         });
         tablesToExcel(tableIds, tableNames, 'order-export.xls', 'Excel', ignoreRows);
     });
+
+    $('.print-statistics').on('click', function(e){
+        $('.orders').toggleClass("hidden");
+        $('h3.ship-type').toggleClass("new-page");
+        $('.table-collect-data').toggleClass('hidden');
+    });
     initSetOrder();
 });

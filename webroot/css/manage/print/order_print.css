@@ -11,18 +11,15 @@
 
 /* use a media query to limit the CSS to only print devices, like a printer */
 
-table.table-collect-data{
-    display: none;
-}
-
 @media only print
 {
     /* hide every element within the body */
+    .header, .dialog{display: none !important;}
     .no-print, .no-print * {display: none !important; }
     td[mark-print="no-print"] {
         display: none !important;
     }
-    h3.new_page{
+    h3.new-page{
         page-break-before: always;
     }
     a[href]:after {
@@ -33,10 +30,4 @@ table.table-collect-data{
     table{
         border: 2px solid black;
     }
-
-    table.table-collect-data{
-        display: inline-table;
-    }
-
-
 }
