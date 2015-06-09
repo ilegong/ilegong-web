@@ -33,8 +33,8 @@
             var that = $('.standard_bg');
             var spec_item = $('.spec_item_selected.cur');
             var pamount = $('#input_pamount').val();
+            var string = '<label>已选</label>';
             if(spec_item.length){
-                var string = '<label>已选</label>';
                 $.each(spec_item,function(index,item){
                     string = string +' '+'<strong>"'+ $.trim(spec_item.eq(index).text())+'"</strong>'+' ';
                 });
