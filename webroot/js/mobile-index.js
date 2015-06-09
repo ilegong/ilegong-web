@@ -12,14 +12,7 @@ $(document).ready(function () {
         var re = '(\\d)(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
         return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$1,');
     };
-    //date
-    Date.prototype.yyyymmdd = function () {
-        var yyyy = this.getFullYear().toString();
-        var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
-        var dd = this.getDate().toString();
-        return yyyy + (mm[1] ? mm : "0" + mm[0]) + (dd[1] ? dd : "0" + dd[0]); // padding
-    };
-
+    
     $('div.menue ul li').on('click', function () {
         var me = $(this);
         $('div.menue ul li.cur').removeClass('cur');
@@ -56,6 +49,8 @@ $(document).ready(function () {
         cache[tagId].done(drawToDOM);
     }
 
+    var secKillTemplate = '<div class="tuandetail_seckill clearfix"> <p>秒杀</p> <span><a href="<%this.good_url%>"><img src="<%this.listimg%>"></a></span> <span> <h1><%this.name%></h1> <em>秒杀价：<strong>¥<%this.price%></strong></em> <div class="tuan_bar clearfix"> <div class="fl" style="width: 50%;margin-right: 5px;"> <div class="bar"><div class="bar_buy" style="width:<%this.sold_percent%>%;"></div> </div> <ul class="clearfix"> <li class="fl">已秒<span style=" display:inline;"><%this.TuanBuying.sold_num%></span>份</li> <li class="fr">共<%this.TuanBuying.target_num%>份</li> </ul> </div> <div> <a class="tuandetail_seckill_btn radius5 fr" href="<%this.good_url%>">去秒杀</a>  </div> </div> </span> </div>'
+    var goodTemplate = '<div class="good"> <a href="<%this.good_url%>" class="xq"><%if(this.limit_area==1) {%><p>仅限<br>北京</p><%}%><img src="<%this.listimg%>"> </a> <div class="title clearfix"> <a href="<%this.brand_link%>" class="phead"><img src="<%this.brand_img%>"></a> <a href="<%this.good_url%>" class="txt"><b><%this.name%></b></a> </div> <ul class="clearfix"> <li class="price fl"><strong>￥<%this.price%></strong><%if(this.original_price>0) {%>&nbsp;<label>￥<%this.original_price%></label><%}%></li><li class="fr"><a href="<%this.good_url%>" class="btn radius5">立即购买</a></li> </ul> </div>';
     //draw dom
     function drawToDOM(datas) {
         var data_list = datas['data_list'];
@@ -69,55 +64,35 @@ $(document).ready(function () {
         var tuanBuying = good['TuanBuying'];
         price = parseFloat(price).format(2);
         var originPrice = good['original_price'];
+        var goodUrl = '';
         if (originPrice) {
             originPrice = parseFloat(originPrice).format(2);
         } else {
             originPrice = 0;
         }
-        var goodHtml = '';
-        var goodUrl = '';
         if(!tuanBuying){
             goodUrl = good['good_url']+'?history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
-            goodHtml = '<div class="good"> <a href="'+goodUrl+'" class="xq">';
-            if(good['limit_area']==1){
-                goodHtml+='<p>仅限<br/>北京</p >';
-            }else{
-                //if(good['id']==72){
-                //    goodHtml += '<p class="spec_tag">新品</p >'
-                //}
-            }
-            goodHtml+='< img src="'+ good['listimg']+'"/> </a > <div class="title clearfix"> <a href="'+good['brand_link']+'" class="phead">< img src="'+good['brand_img']+'" /></a > <a href="'+goodUrl+'" class="txt"><b>' + good['name'] + '</b></a > </div> <ul class="clearfix"> ';
-            if(!tuanBuying){
-                goodHtml+='<li class="price fl"><strong>￥' + price + '</strong>';
-                if (originPrice > 0) {
-                    goodHtml += '&nbsp;<label>￥' + originPrice + '</label>'
-                }
-                goodHtml+='</li>';
-            }
-            goodHtml +='<li class="fr"><a href="'+goodUrl+'" class="btn radius5">立即购买</a ></li> </ul> </div>';
+            good['good_url'] = goodUrl;
+            good['price'] = price;
+            good['original_price'] = originPrice;
+            return TemplateEngine(goodTemplate,good);
         }else{
+            goodUrl = '/tuan_buyings/detail/'+tuanBuying['id']+'?history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
             var sold_num = tuanBuying['sold_num'];
             var target_num = tuanBuying['target_num'];
             var sold_percent = (sold_num/target_num)*100;
             if(sold_percent>100){
                 sold_percent=100;
             }
+            good['sold_percent'] = sold_percent;
             if(tuanBuying['tuan_price']!=-1){
                 price = tuanBuying['tuan_price'];
             }
-            goodUrl = '/tuan_buyings/detail/'+tuanBuying['id']+'?history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
-            goodHtml+='<div class="tuandetail_seckill clearfix"> <p>秒杀</p > <span><a href="'+goodUrl+'">' +
-            '< img src="'+good['listimg']+'" /></a ></span> ' +
-            '<span> <h1>'+good['name']+'</h1> ' +
-            '<em>秒杀价：<strong>¥'+price+'</strong></em>' +
-            ' <div class="tuan_bar clearfix"> <div class="fl" style="width: 50%;margin-right: 5px;"> <div class="bar">' +
-            '<div class="bar_buy" style="width:'+sold_percent+'%;"></div> </div> <ul class="clearfix"> <li class="fl">已秒<span style=" display:inline;">'+sold_num+'</span>份</li> ' +
-            '<li class="fr">共'+target_num+'份</li> </ul> </div>' +
-            ' <div> <a class="tuandetail_seckill_btn radius5 fr" href="'+goodUrl+'">去秒杀</a > ' +
-            ' </div> </div> </span> </div>';
+            good['good_url'] = goodUrl;
+            good['price'] = price;
+            good['original_price'] = originPrice;
+            return TemplateEngine(secKillTemplate,good);
         }
-        return goodHtml;
     }
-
     initView();
 });
