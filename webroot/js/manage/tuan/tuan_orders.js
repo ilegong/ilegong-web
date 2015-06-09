@@ -578,3 +578,15 @@ $(document).ready(function () {
     });
     initSetOrder();
 });
+
+function print_collect_data(){
+    $('table.orders').addClass('no-print');
+    $('h3.order-tag').removeClass('new_page');
+    print();
+}
+
+function print_all_data(){
+    $('table.orders').removeClass('no-print');
+    $('h3.order-tag').addClass('new_page');
+    print();
+}
