@@ -11,6 +11,17 @@
     function to_detail(){
         window.location.href="/products/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}&from={{$from}}&data_id={{$data_id}}";
     }
+    function set_default_spec(){
+        var that = $('.standard_bg');
+        var spec_item = $('.spec_item_selected.cur');
+        if(spec_item.length){
+            var string = '<label>已选</label>';
+            $.each(spec_item,function(index,item){
+                string = string +' '+'<strong>"'+ $.trim(spec_item.eq(index).text())+'"</strong>'+' ';
+            });
+            that.children('span').eq(0).html(string);
+        }
+    }
     $(document).ready(function(){
         $('#view_all_comments').on('click',function(){
             to_comment();
@@ -62,6 +73,7 @@
         function set_dialog_hide(){
             $('.xq_standard_layer,.tipslayer_bg').hide();
         }
+
         $('.standard_bg').on('click',function(){
             set_dialog_show();
         });
@@ -69,15 +81,7 @@
             set_dialog_hide();
         });
         $('.sure_btn').on('click',function(){
-            var that = $('.standard_bg');
-            var spec_item = $('.spec_item_selected.cur');
-            if(spec_item.length){
-                var string = '<label>已选</label>';
-                $.each(spec_item,function(index,item){
-                    string = string +' '+'<strong>"'+ $.trim(spec_item.eq(index).text())+'"</strong>'+' ';
-                });
-                that.children('span').eq(0).html(string);
-            }
+            set_default_spec();
             $(this).attr('value','true');
             set_dialog_hide();
             var button_status = $('#button-status').attr('data-status');
@@ -93,5 +97,7 @@
                 $('#btn_quick_buy').trigger('click');
             }
         });
+        set_default_spec();
     });
+
 </script>
