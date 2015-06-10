@@ -598,7 +598,7 @@ class WeixinComponent extends Component
         return false;
     }
 
-    private function send_share_offer_msg($open_id,$order_id){
+    private function gen_offer($order_id){
         $so = ClassRegistry::init('ShareOffer');
         $orderM = ClassRegistry::init('Order');
         $orderInfo = $orderM->find('first',array(
@@ -606,7 +606,28 @@ class WeixinComponent extends Component
                 'id'=>$order_id
             )
         ));
+        //TODO set offer id
+        //check is spec product pengyoushuo brand
+        if($orderInfo['Order']['brand_id']==92){
+            $cartM = ClassRegistry::init('Cart');
+            $coconutCartInfo = $cartM->find('first',array('conditions' => array('order_id' => $order_id,'product_id' => 883)));
+            if(!empty($coconutCartInfo)){
+                $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator'],44);
+                return $offer;
+            }
+            $cherryCartInfo = $cartM->find('first',array('conditions' => array('order_id'=>$order_id,'product_id'=>1020)));
+            if(!empty($cherryCartInfo)){
+                $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator'],45);
+                return $offer;
+            }
+        }
+
         $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator']);
+        return $offer;
+    }
+
+    private function send_share_offer_msg($open_id,$order_id){
+        $offer = $this->gen_offer($order_id);
         $number = 0;
         $name = '';
         if(!empty($offer)) {

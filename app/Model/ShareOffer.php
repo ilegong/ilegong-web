@@ -11,8 +11,8 @@
  */
 class ShareOffer extends AppModel {
 
-    public function findByBrandId($brandId, $limitDef = true) {
-        return $this->_find_by_brandId($brandId, false, null, $limitDef);
+    public function findByBrandId($brandId, $limitDef = true, $shareOfferId=null) {
+        return $this->_find_by_brandId($brandId, false, null, $limitDef, $shareOfferId);
     }
 
     /**
@@ -60,9 +60,10 @@ class ShareOffer extends AppModel {
      * Get a share offer to sharing for current order && user
      * @param $order
      * @param $uid
+     * @param $shareOfferId 指定优惠券
      * @return object ShareOffer object (name, number, id)
      */
-    public function query_gen_offer($order, $uid) {
+    public function query_gen_offer($order, $uid, $shareOfferId=null) {
         $status = $order['Order']['status'];
         $brandId = $order['Order']['brand_id'];
         $payTime = $order['Order']['pay_time'];
@@ -77,7 +78,7 @@ class ShareOffer extends AppModel {
         ) {
             $orderCreator = $order['Order']['creator'];
             $soModel = ClassRegistry::init('ShareOffer');
-            $so = $soModel->findByBrandId($brandId, true, $payTime);
+            $so = $soModel->findByBrandId($brandId, true, $shareOfferId);
             if (!empty($so)) {
                 $usModel = ClassRegistry::init('SharedOffer');
                 $orderId = $order['Order']['id'];
@@ -103,14 +104,17 @@ class ShareOffer extends AppModel {
         return null;
     }
 
-    private function _find_by_brandId($brandId, $onlyValid , $actionTime, $limitDef = null) {
+    private function _find_by_brandId($brandId, $onlyValid , $actionTime, $limitDef = null,$shareOfferId=null) {
 
         $cond = array(
             'brand_id' => $brandId,
             'published' => 1,
             'deleted' => 0,
         );
-
+        //指定发放红包
+        if($shareOfferId!==null){
+            $cond['id'] = $shareOfferId;
+        }
         if ($limitDef !== null) {
             $cond['is_default'] = $limitDef;
         }
