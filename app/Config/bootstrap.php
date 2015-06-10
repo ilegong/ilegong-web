@@ -125,6 +125,8 @@ const SHIP_TYPE_SFDF = 5;
 const SHIP_TYPE_KUAIDI = 6;
 const ZITI_TAG = 'ziti';
 
+const PYS_BRAND_ID = 92;
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');
@@ -1820,8 +1822,12 @@ function day_of_week($date_string){
             $ret = '六';
             break;
         case 7:
-            $ret = '六';
+            $ret = '日';
             break;
     }
     return '周'.$ret;
+}
+
+function is_pys_product($brandId){
+    return $brandId==PYS_BRAND_ID;
 }

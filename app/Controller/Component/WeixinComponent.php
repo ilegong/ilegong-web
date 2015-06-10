@@ -608,7 +608,7 @@ class WeixinComponent extends Component
         ));
         //TODO set offer id
         //check is spec product pengyoushuo brand
-        if($orderInfo['Order']['brand_id']==92){
+        if($orderInfo['Order']['brand_id']==PYS_BRAND_ID){
             $cartM = ClassRegistry::init('Cart');
             $coconutCartInfo = $cartM->find('first',array('conditions' => array('order_id' => $order_id,'product_id' => 883)));
             if(!empty($coconutCartInfo)){

@@ -1,7 +1,7 @@
 <div class="row voffset1" style="margin-left: 0;margin-right: 0;">
     <div class="col-xs-12 col-md-6" style="padding: 0;">
         {{template Elements/product_img_sild}}
-        <div class="p_details_title">{{$Product['Product']['name']}}</div>
+        <div class="p_details_title">{{$Product['Product']['name']}}{{if is_pys_product($brand['Brand']['id'])}}<img src="{{$this->Html->assetUrl('/img/mobile/zy.png')}}" border="0" width="10%" />{{/if}}</div>
             {{if $hasOfferBrandIds && array_key_exists($Product['Product']['brand_id'], $hasOfferBrandIds)}}
             <ul class="sales">
                 <li>

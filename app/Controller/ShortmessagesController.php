@@ -76,7 +76,7 @@ class ShortmessagesController extends AppController {
     public function get_hongbao($type = null){
         $this->check_login();
         if($type == 'pyshuo'){
-            $brand_id = 92;
+            $brand_id = PYS_BRAND_ID;
         }else{
             $brand_id = 193;
         }

@@ -187,7 +187,7 @@ class TuanBuyingsController extends AppController{
         $Product = $this->Product->find('first',array('conditions' => array('id' => $pid,'deleted' => DELETED_NO)));
         $brand = $this->Brand->find('first', array(
             'conditions' => array('id' => $Product['Product']['brand_id']),
-            'fields' => array('name', 'slug','coverimg')
+            'fields' => array('name', 'slug','coverimg','id')
         ));
         $con = array('modelclass' => 'Product','fieldname' =>'photo','data_id' => $pid);
         $Product['Uploadfile']= $this->Uploadfile->find('all',array('conditions' => $con, 'order'=> array('sortorder DESC')));

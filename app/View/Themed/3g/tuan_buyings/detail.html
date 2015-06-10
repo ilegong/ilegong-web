@@ -21,7 +21,7 @@
             <div class="row voffset1" style="margin-left: 0;margin-right: 0;">
                 <div class="col-xs-12 col-md-6" style="padding: 0;">
                 {{template Elements/product_img_sild}}
-                    <div class="p_details_title">{{$Product['Product']['name']}}</div>
+                    <div class="p_details_title">{{$Product['Product']['name']}}{{if is_pys_product($brand['Brand']['id'])}}<img src="{{$this->Html->assetUrl('/img/mobile/zy.png')}}" border="0" width="10%" />{{/if}}</div>
                     <ul class="p_details_price clearfix">
                         <li class="fl price"><span>{{if $current_data_id==874}}尝鲜价 {{/if}}￥<font {{if !$tuan_price}}id="product_price"{{/if}}>{{if $tuan_price}}{{$this->Number->precision($tuan_price,2)}}{{elseif $tuan_product_price}}{{$this->Number->precision($tuan_product_price,2)}}{{else}}{{$this->Number->precision($Product['Product']['price'],2)}}{{/if}}</font></span></li>
                         <li class="fl original-price"><s style="margin-top: 7px;display: block;">{{if $original_price>0}}￥{{$this->Number->precision($original_price,2)}}{{/if}}</s></li>
