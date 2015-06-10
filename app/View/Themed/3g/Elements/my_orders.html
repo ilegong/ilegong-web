@@ -35,7 +35,7 @@ $brand = $brands[$order['Order']['brand_id']];
                     <a href="/orders/detail/{{$order['Order']['id']}}">
                         <p>{{$cart['Cart']['name']}}</p>
                         {{if !empty($cart['Cart']['send_date'])}}
-                        <s>{{date('m月d日', strtotime($cart['Cart']['send_date']))}}到货</s>
+                        <s>预计{{date('n月d日', strtotime($cart['Cart']['send_date']))}}({{day_of_week($cart['Cart']['send_date'])}})到货</s>
                         {{/if}}
                     </a>
                 </li>
