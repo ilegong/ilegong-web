@@ -184,7 +184,6 @@ class TuanController extends AppController
             'OR' => array(
                 array('Cart.send_date is null','Order.type in (5,6)'),    // 无发货时间
                 array("Order.consignee_id = 0", "Order.consignee_address = ''"), // 无自提点，送货地址为空
-                array("Order.type = 1", "Order.ship_mark !=''"),  // C2C，但是有配送方式
                 array('Order.pay_time  is null', 'Order.ship_mark != "sfdf"'), // 非顺丰到付，但无付款时间
                 array('Order.ship_mark = ""', 'Order.type in (5,6)'), // 团、秒，无配送方式
                 array('Order.ship_mark = "kuaidi"', "Order.consignee_address = '' or Order.consignee_address is null"), // 快递，收货地址为空
@@ -655,7 +654,6 @@ class TuanController extends AppController
             (
                 (c.send_date is null and o.type in (5,6))
                 or (o.consignee_id = 0 and o.consignee_address = "")
-                or (o.type = 1 and o.ship_mark != "")
                 or (o.pay_time is null and o.ship_mark != "sfdf")
                 or (o.ship_mark = "" and o.type in (5,6))
                 or (o.ship_mark = "kuaidi" and (o.consignee_address = "" or o.consignee_address is NULL))
