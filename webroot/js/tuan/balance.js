@@ -4,7 +4,6 @@
 var priceDom = $(".conordertuan_total strong");
 var totalPriceDom = $(".cart_pay .fl strong");
 var CartDomName = "input[name='shopCart']";
-var remarkAddress = $('#remark_address');
 var shipLeastNum = $('#ship_least_num');
 var leastNum = shipLeastNum.val();
 if(leastNum>0){

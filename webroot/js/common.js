@@ -1567,6 +1567,7 @@ var zitiObj = function(area,height, width){
 
 };
 function setData(area_id,parent_id){
+    var remarkAddress = $('#remark_address');
     var chose_address = parent_id?zitiAddressData.getShipChildAddress(area_id):zitiAddressData.getShipAddress(area_id);
     chose_address = $.map(chose_address, function(value, index) {
         return [value];
