@@ -43,7 +43,7 @@
         </ul>
     </div>
 </div>
-<div id="hiddenModalContent" style="display:none">
+<div id="hiddenModalContent" style="display:none" data-ziti-type="{{$ship_type}}">
     <div class="classlist_v2">
         <ul class="clearfix">
             <li><a onclick="tb_remove()" class="back"></a></li>
@@ -56,7 +56,6 @@
 
 {{$this->Html->script(array('/js/tuan/balance.js?v13'));}}
 <script>
-    var zitiAddressData = zitiAddress('{{$ship_type}}');
     $(document).ready(function () {
         var bigBuy = zitiObj(zitiAddressData.getBeijingAreas,$(window).height() + 5, $(window).width());
         var elements = bigBuy.generateZitiArea();

@@ -1448,4 +1448,160 @@ var TemplateEngine = function(html, options) {
     try { result = new Function('obj', code).apply(options, [options]); }
     catch(err) { console.error("'" + err.message + "'", " in \n\nCode:\n", code, "\n"); }
     return result;
+};
+function zitiAddress(type){
+    var beijingArea= {
+        110101:{
+            'name':"东城区"
+        },
+        110108:{
+            'name':"海淀区"
+        },
+        110102:{
+            'name':"西城区"
+        },
+        110105:{
+            'name':"朝阳区"
+        },
+        110106:{
+            'name':"丰台区"
+        },
+        110114:{
+            'name':"昌平区",
+            'children_area':{
+                900001:{'name':'昌平县城'},
+                900002:{'name':'天通苑'},
+                900003:{'name':'回龙观'},
+                900004:{'name':'北七家镇'},
+                900005:{'name':'沙河镇'},
+                900006:{'name':'立水桥'},
+                900007:{'name':'霍营'}
+            }
+        },
+        110113:{
+            'name':"顺义区"
+        },
+        110115:{
+            'name':"大兴区"
+        },
+        110112:{
+            'name':"通州区",
+        }
+    };
+    //崇文并入东城区， 宣武并入西城区
+    var ship_address = {};
+    var area = [];
+    var child_address = {};
+    $.getJSON('/tuan_buyings/get_offline_address?type='+type,function(data){
+        ship_address = data.address;
+        child_address = data.child_address;
+        $.each(ship_address,function(index,item){
+            $("[area-id="+index+"]").show().addClass('parent_area');
+        });
+        $.each(child_address,function(index,item){
+            $("[area-id="+index+"]").addClass('children_area');
+        });
+    });
+    var getShipAddress = function(areaId){
+        return ship_address[areaId];
+    };
+    var getShipChildAddress = function(areaId){
+        return child_address[areaId];
+    };
+    return {
+        getBeijingAreas: beijingArea,
+        getShipAddress: getShipAddress,
+        getShipChildAddress:getShipChildAddress
+    }
 }
+var zitiObj = function(area,height, width){
+    var conorder_url = '#TB_inline?inlineId=hiddenModalContent&modal=true&height=' + height + '&width=' + width;
+    var choose_area='';
+    return {
+        generateZitiArea: function(){
+            for(var addr in area){
+                if (area[addr].children_area){
+                    choose_area += '<ul><li><a style="displOay: none" href="#" class="child_area" area-id="' +addr + '">' + area[addr].name + '</a></li> </ul>';
+                    $.each(area[addr].children_area,function(index,item){
+                        choose_area += '<ul><li><a style="display: none" href="'+ conorder_url +'" class="thickbox" parent-id ="'+addr+'" area-id="' +index + '">' + item.name + '</a></li> </ul>';
+                    });
+                }else{
+                    choose_area += '<ul><li><a style="display: none" href="'+ conorder_url +'" class="thickbox" area-id="' +addr + '">' + area[addr].name + '</a></li> </ul>';
+                }
+            }
+            return choose_area;
+        },
+        bindThickbox: function(){
+            $("li a.thickbox").each(function(){
+                var that = $(this);
+                that.on("click", function(e){
+                    $('.thickbox,.child_area,.parent_area').not(that).removeClass("cur");
+                    var area_id = $(this).attr("area-id");
+                    var parent_id = $(this).attr('parent-id');
+                    setData(area_id,parent_id);
+                    that.addClass("cur");
+                })
+            });
+        },
+        initChildAddress : function(){
+            var self = this;
+            $('.child_area').each(function () {
+                var that = $(this);
+                that.on('click', function () {
+                    $('.parent_area.thickbox').not(that).removeClass('cur').hide();
+                    $('.children_area').show();
+                    that.html('其他市区').removeClass('child_area').addClass('cur').bind('click', function () {
+                        $('.child_area,.thickbox,.children_area').not(that).removeClass('cur').hide();
+                        that.html('昌平区').addClass('child_area');
+                        $('.parent_area').show();
+                        self.initChildAddress();
+
+                    });
+                });
+            });
+        },
+        bindChildAddress:function(){
+            this.initChildAddress();
+        }
+    }
+
+};
+function setData(area_id,parent_id){
+    var chose_address = parent_id?zitiAddressData.getShipChildAddress(area_id):zitiAddressData.getShipAddress(area_id);
+    chose_address = $.map(chose_address, function(value, index) {
+        return [value];
+    });
+    chose_address = chose_address.sort(function(item1,item2){
+        return item1['name'].localeCompare(item2['name']);
+    });
+    var $chose_item = '';
+    $.each(chose_address,function(index,item){
+        $chose_item +=' <p data-shop-id="'+ item['id'] +'" data-can-remark-address="'+item['can_remark_address']+'" data-shop-name="'+item['alias']+'">'+item['name']+'<br/>';
+        if(item['owner_phone']){
+            $chose_item+='联系电话:'+item['owner_phone'];
+        }
+        if(item['owner_name']){
+            $chose_item+=' 联系人: '+item['owner_name'];
+        }
+        $chose_item+='</p>';
+    });
+    $("#area_list").html($chose_item);
+    $("#area_list p").each(function(){
+        var that =$(this);
+        that.on("click",function(){
+            that.css("background-color","#eeeeee");
+            var canRemarkAddress = that.data('can-remark-address');
+            var shopId = that.data('shop-id');
+            //should remark address
+            if(canRemarkAddress==1){
+                remarkAddress.show();
+            }else{
+                remarkAddress.hide();
+            }
+            $("#chose_address").html(that.text()).data('shopId', shopId);
+            tb_remove();
+        })
+    });
+}
+var zitiAddressData = zitiAddress($('#hiddenModalContent').data('zitiType'));
+

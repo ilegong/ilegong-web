@@ -209,10 +209,9 @@
     </div>
 </div>
 <div class="tipslayer_bg" style="display: none"></div>
-{{$this->Html->script(array('/js/tuan/balance.js?v15'));}}
 <script>
-    var zitiAddressData = zitiAddress(1);
     $(document).ready(function(){
+        var zitiAddressData = zitiAddress(1);
         var bigBuy = zitiObj(zitiAddressData.getBeijingAreas,$(window).height() + 5, $(window).width());
         var elements = bigBuy.generateZitiArea();
         var boxSize = $(window).height() + 5+ "&width=" + $(window).width();
