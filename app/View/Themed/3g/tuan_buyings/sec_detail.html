@@ -173,7 +173,7 @@
             {{if $sold_num>=$target_num||($start_date < $date)}}
                 <a href="javascript:void(0)" class="btn_b cart_btn_soldout">秒杀结束</a>
             {{elseif before_than($product_try['ProductTry']['start_time'])}}
-                <a id="sec_buy" data-send-date="{{$product_try['ProductTry']['consignment_date']}}" data-tuan-id="{{$tuan_team['TuanTeam']['id']}}" data-global-show="{{$product_try['ProductTry']['global_show']}}" data-tryid="{{$product_try['ProductTry']['id']}}" data-pid="{{$current_data_id}}" href="javascript:void(0);" class="btn_b pay_bg">立即秒杀</a>
+                <a id="sec_buy" data-send-date="{{$product_try['ProductTry']['consignment_date']}}" data-tuan-id="{{$tuan_team['TuanTeam']['id']}}" data-global-show="{{$product_try['ProductTry']['global_show']}}" data-tryid="{{$product_try['ProductTry']['id']}}" data-pid="{{$current_data_id}}" href="javascript:void(0);" class="btn_b pay_bg">立即购买</a>
             {{else}}
                 <a href="javascript:void(0)" class="btn_b cart_btn_soldout">即将开秒</a>
             {{/if}}
