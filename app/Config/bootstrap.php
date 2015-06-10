@@ -124,6 +124,7 @@ const SHIP_TYPE_ZITI = 1;
 const SHIP_TYPE_SFDF = 5;
 const SHIP_TYPE_KUAIDI = 6;
 const ZITI_TAG = 'ziti';
+const KUAIDI_TAG = 'kuaidi';
 
 const PYS_BRAND_ID = 92;
 

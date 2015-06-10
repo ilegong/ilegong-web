@@ -269,6 +269,7 @@ class OrdersController extends AppController {
 			$data['consignee_telephone'] = $this->Session->read('OrderConsignee.telephone');
 			$data['consignee_email'] = $this->Session->read('OrderConsignee.email');
 			$data['consignee_postcode'] = $this->Session->read('OrderConsignee.postcode');
+            $data['ship_mark'] = KUAIDI_TAG;
 			
 			if(empty($data['consignee_name']) || empty($data['consignee_address']) || empty($data['consignee_mobilephone']) ){
 				$this->__message('请填写收货人信息','/orders/info');
