@@ -16,13 +16,12 @@
 
 <!--底部购买-->
 <div class="bottom_bg">
-
-        <a href ="/carts/listcart.html" class="shopping fl">
-            <div style="position:relative;" class="shopping_icon" id="cart_link">
-                <div id="item-count" class="shopping_count">
-                </div>
+    <a href ="/carts/listcart.html" class="shopping fl">
+        <div style="position:relative;" class="shopping_icon" id="cart_link">
+            <div id="item-count" class="shopping_count">
             </div>
-        </a>
+        </div>
+    </a>
    <ul class="clearfix fr">
        <li class="fl" style="width:50%;">
                <a id="btn_add_cart"  item-id="{{$Product['Product']['id']}}" href="javascript:;" class="btn_b {{ (($total_left > 0 || $total_left == -1) && $afford_for_curr_user && $Product['Product']['published']) ? 'shopping_bg' : 'cart_btn_soldout'}}">加入购物车</a>

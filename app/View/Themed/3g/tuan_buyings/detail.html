@@ -1,4 +1,4 @@
-{{$this->Html->css(array('tuan.css?v6.5'));}}
+{{$this->Html->css(array('tuan.css?v6.6'));}}
 <?php   $current_model = 'Product';
     $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
     if($sold_num >= $target_num){
@@ -68,7 +68,7 @@
                         <div id="product-content" style="height: 300px; overflow:hidden; border-bottom: 1px #eeeeee solid;"></div>
                         <div class="more"><a href="#">查看更多详情</a></div>
                     </div>
-                    <div class="shop_entrance_bg" style="margin-bottom: 54px;">
+                    <div class="shop_entrance_bg" style="margin-bottom: 10px;">
                         <ul class="clearfix shop_entrance" onclick="to_brand();">
                             <li class="fl head"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0"></li>
                             <li class="fl name">{{$brand['Brand']['name']}}</li>
@@ -190,35 +190,31 @@
 
 <!--底部购买-->
 <div class="bottom_bg">
-    <ul class="clearfix">
-        <li class="love fl">
-            <a href="#X" class="love_icon"></a>
-            <!--<p>关注</p>-->
-        </li>
-        <li class="fl" style="width:78%;">
-            <div>
-                {{if $is_limit}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
-                {{else}}
-                    {{if $tuan_buy_status == 2 || $tuan_buy_status == 21}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已取消</a>
-                    {{elseif $tuan_buy_status == 1 || $tuan_buy_status == 11}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已完成</a>
-                    {{elseif $exceed_time}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
-                    {{elseif $tuan_buy_status == 0}}
-                    <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg radius10" data-send-date="{{$consign_time}}">立即购买</a>
-                    {{/if}}
-                {{/if}}
+    <a href ="/carts/listcart.html" class="shopping fl">
+        <div style="position:relative;" class="shopping_icon" id="cart_link">
+            <div id="item-count" class="shopping_count">
             </div>
-        </li>
-
-        <li class="shopping fr">
-            <a href="/carts/listcart.html" style="position:relative; margin-top: 0.2em;" class="detail_shopping_icon" id="cart_link"><div id="item-count" class="detail_shopping_count"></div></a>
-            <p>购物车</p>
+        </div>
+    </a>
+    <ul class="clearfix fr">
+        <li class="fr" style="width:100%;">
+            {{if $is_limit}}
+            <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已截止</a>
+            {{else}}
+                {{if $tuan_buy_status == 2 || $tuan_buy_status == 21}}
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已取消</a>
+                {{elseif $tuan_buy_status == 1 || $tuan_buy_status == 11}}
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已完成</a>
+                {{elseif $exceed_time}}
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已截止</a>
+                {{elseif $tuan_buy_status == 0}}
+                    <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg" data-send-date="{{$consign_time}}">立即购买</a>
+                {{/if}}
+            {{/if}}
         </li>
     </ul>
 </div>
+
 
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'));}}
 
