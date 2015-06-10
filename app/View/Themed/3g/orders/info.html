@@ -183,7 +183,7 @@
     {{template tuan_buyings/ziti_contact_info_template}}
     <button class="btn btn-primary pickup_save">保存</button>
 </div>
-<div id="hiddenModalContent" style="display:none">
+<div id="hiddenModalContent" style="display:none" data-ziti-type="1">
     <div class="classlist_v2">
         <ul class="clearfix">
             <li><a onclick="tb_remove()" class="back"></a></li>
@@ -211,7 +211,6 @@
 <div class="tipslayer_bg" style="display: none"></div>
 <script>
     $(document).ready(function(){
-        var zitiAddressData = zitiAddress(1);
         var bigBuy = zitiObj(zitiAddressData.getBeijingAreas,$(window).height() + 5, $(window).width());
         var elements = bigBuy.generateZitiArea();
         var boxSize = $(window).height() + 5+ "&width=" + $(window).width();
