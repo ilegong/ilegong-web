@@ -197,7 +197,7 @@
 {{/if}}
 {{if $order['Order']['status']==0}}
 <div class="tipslayer" id="pay_tip_layer" style="display: none;">
-    <a href="#X" class="tipslayer_close" id="close_pay_tip_layer">x</a>
+    <a href="#X" class="tipslayer_close" id="close_pay_tip_layer"></a>
     <div class="conorderprice">￥{{$this->Number->precision($order['Order']['total_all_price'], 2)}}</div>
     <div class="conorder_btn clearfix">
         <a href="/wxPay/jsApiPay/{{$order['Order']['id']}}.html?showwxpaytitle=1" class="fl weixin">微信支付</a>
