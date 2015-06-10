@@ -650,15 +650,17 @@ a:hover, a:focus {
     list-style: none;
     padding-top: 8px;
 }
-
 .list-inline > li {
     display: block;
     padding-left: 5px;
     float: left;
     padding-right: 5px;
 }
-
 .navbar-v1 a {
     color: #666666;
     display: block;
+}
+label {
+    display: inline-block;
+    font-weight: bold;
 }
