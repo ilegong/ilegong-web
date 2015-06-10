@@ -51,7 +51,7 @@
 {{/if}}
 
 {{if !$limit_ship}}
-    {{if !$kuaidi_consignee_exist && empty($ziti_consignee_info && $ziti_support)}}
+    {{if !$kuaidi_consignee_exist && empty($ziti_consignee_info) && $ziti_support}}
 <!--未选择配送方式-->
     <div class="address clearfix" style="position:relative;">
         <a class="moreicon" href="javascript:$('.tipslayer,.tipslayer_bg').show();"></a>
