@@ -179,10 +179,9 @@ footer img{ width:4.625em; height:1.583em;}
     height: 3.8em;
 }
 .navbar-v1 a .op-icon { background: url('/img/mobilev1/pyshuo_icon.png?xx') 0 0 no-repeat; width:1.9167em; height:1.5em; background-size:25em 25em; display: inline-block; vertical-align: text-bottom; }
-.navbar-v1 ul { text-align: center; margin-top: 10px;}
+.navbar-v1 ul { text-align: center; }
 .navbar-v1 li {
     width: 19.0%;
-    margin-top: -3px;
     padding: 0;
 }
 .navbar-v1 a span { display: block;}
@@ -645,3 +644,21 @@ a:hover, a:focus {
 .shop_jifen_unused { border: 1px #999999 solid; width: 1.8em; height: 1.8em; border-radius: 5px;}
 .shop_jifen_used { border: 1px #29ac0e solid; width: 1.8em; height: 1.8em; position: relative; border-radius: 5px;}
 .shop_jifen_used i { display: block; width: 1.067em; height: 0.734em; position: absolute; top: 7px; left: 6px; background: url(/img/mobile/pyshuo_icon.png) -2.666em -14.333em no-repeat; background-size: 20em 20em; }
+
+.list-inline {
+    padding-left: 0;
+    list-style: none;
+    padding-top: 9px;
+}
+
+.list-inline > li {
+    display: block;
+    padding-left: 5px;
+    float: left;
+    padding-right: 5px;
+}
+
+.navbar-v1 a {
+    color: #666666;
+    display: block;
+}

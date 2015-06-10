@@ -215,8 +215,8 @@ ul,ol {
 .love_icon{ width:1.72em; height:1.5em; background-size:25em 25em; display:block; margin:0 auto; margin-top:1.2em;}
 .love_visited{ width:1.708em; height:1.5em; background:url(/img/mobile/pyshuo_icon.png) -2.25 -15em no-repeat; background-size:25em 25em;}
 .p_visited{ color:#29ac0e;}
-.shopping_icon{ width:3em; height:1.917em; background:url(/img/mobile/pyshuo_icon.png) -5em -15em no-repeat; background-size:25em 25em; display:block; margin:0 auto; margin-top:0.5em; text-decoration:none;}
-.shopping_count {
+.detail_shopping_icon{ width:3em; height:1.917em; background:url(/img/mobile/pyshuo_icon.png) -5em -15em no-repeat; background-size:25em 25em; display:block; margin:0 auto; margin-top:0.5em; text-decoration:none;}
+.detail_shopping_count {
     position: absolute;
     right: 2px;
     top: 0px;
