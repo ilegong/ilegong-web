@@ -198,7 +198,10 @@ ul li{ list-style:none;}
 .standard_bg span{ display: block; line-height: 30px;}
 /*.standard_bg:visited{color: #333333; background-color: #ffffff;text-decoration: none;}*/
 .standard_bg:hover{color: #333333; background-color: #ffffff;text-decoration: none;}
-.standard_bg span strong{ color: #ffa200; font-weight: bold;}
+.standard_bg span strong {
+    color: #ffa200;
+    font-weight: normal;
+}
 .red{ color: #CC0000; line-height: 30px; font-size: 16px; display: block;}
 .standard_bg .cur { display: block; border: 1px #29ac0e solid; background-color: #29ac0e; position: relative; display: block; float: left; color: #ffffff; }
 .detail_tuan_bg{ padding: 10px; line-height: 20px; color: #666666; border-bottom: 1px #eeeeee solid; border-top: 1px #eeeeee solid; margin: 10px 0; background-color: #ffffff;}

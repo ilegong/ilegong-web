@@ -65,41 +65,6 @@
             </ul>
             <div class="shop_service">本商品由[<strong>{{$brand['Brand']['name']}}</strong>]发货并提供售后服务。</div>
         </div>
-        <div class="all_line" style="margin-bottom: 0;">
-            <ul class="clearfix title">
-                <li class="fl">相关推荐</li>
-            </ul>
-            <div class="classlist_good" style="margin-top: 0;">
-                <ul class="clearfix list-unstyled" style="padding-left:10px;">
-                    <?PHP foreach($items as $index=>$item) {
-                    $item['slug'] = $item['slug']?$item['slug']:$item['id'];
-                    ?>
-                    <li class="{{if $index%2 !=0}}last{{/if}}">
-                        <a href="{{product_link2($item)}}" style="display:block; background-color:#ffffff; margin-right:10px;">
-                            <img  src="{{$this->Html->assetUrl(small_thumb_link($item['coverimg']))}}" border="0" style="display:block; background-color:#ffffff; padding-bottom:0.5em; height: 136px"/>
-                            <div class="item_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;">{{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}{{$item['name']}}<span>有红包</span>
-                                {{else}}
-                                {{$item['name']}}
-                                {{/if}}
-                            </div>
-                        </a>
-                        <dl class="clearfix" style="margin-right: 10px;margin-bottom: 0;">
-                            <dt style="float: none;">
-                                <a href="{{product_link2($item)}}">
-                                    <span class="listprice" style="padding-left: 0;">
-                                        <span>¥{{$this->Number->precision($item['price'], 2)}}</span>
-                                    </span>
-                                </a>
-                            </dt>
-                        </dl>
-                    </li>
-                    <?php } ?>
-                    {{if count($data_list) % 2 == 1}}
-                    <li style="height: 12.4285em"></li>
-                    {{/if}}
-                </ul>
-            </div>
-        </div>
     </div>
     <div class="xq_standard_layer" style="display:none;">
         <a href="#X" class="close_btn">x</a>
