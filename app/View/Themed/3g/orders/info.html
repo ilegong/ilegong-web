@@ -1,10 +1,10 @@
-<div class="classlist_v2" style="z-index:1">
-    <ul class="clearfix" onclick="window.history.back();">
-        <li><a class="back"></a></li>
-        <li class="line"></li>
-        <li style="text-overflow: ellipsis;"><strong>结算</strong></li>
-    </ul>
+<div class="classlist">
+    <a href="javascript:window.history.back();" class="back"></a>
+    结算
+    <a href="/"  class="home"></a>
 </div>
+
+<!--未使用的固定自提点功能-->
 {{if $specialShipPromotionId}}
     <div class="address clearfix" style="position:relative;" data-address-choice="{{$has_chosen_consignee}}">
         <span style="display:block;" class="fl">送至&nbsp;&nbsp;<a class="moreicon" href="#X"></a></span>
@@ -49,34 +49,34 @@
         </form>
     </div>
 {{/if}}
+
 {{if !$limit_ship}}
-    <div style="margin-top: 45px;padding: 2px 5px 0 5px">
-        <ul class="standard clearfix"> <li>
-            <span class="fl title mr12">物流:</span>
-            <span class="border" style="display:block;overflow: hidden;">
-                <?php $pickup_support = false; $current_chose_origin = true;
-                     if(array_key_exists(130,$brands)){ $pickup_support = true;}
-                ?>
-                <span class="mr12 border shipWay {{if $current_chose_origin }}cur{{/if}}" data-ship-type="express" >快递<div class="focus"></div> </span>
-                {{if $pickup_support}}<span class="mr12 border shipWay  {{if !$current_chose_origin}}cur {{/if}}" data-ship-type="pickup">自提<div class="focus"></div> </span>{{/if}}
-            </span>
-        </li> </ul>
-    </div>
-    <div class="address clearfix" id="part_consignee" style="position:relative;display:{{!$current_chose_origin? 'none':''}};" data-address-choice="{{$has_chosen_consignee}}">
-        <span style="display:block;" class="fl">送至&nbsp;&nbsp;<a class="new_address moreicon thickbox" href="/orders/edit_consignee?modal=true"></a></span>
-        <a class="new_address thickbox" href="/orders/edit_consignee?modal=true">
-            <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}<br />
-                {{$this->Session->read('OrderConsignee.name')}} &nbsp; {{$this->Session->read('OrderConsignee.mobilephone')}}</span>
-        </a>
-        <a href="/orders/edit_consignee?modal=true" class="address_addbtn new_address thickbox" {{if $total_consignee > 0}}style=" display: none;"{{/if}}>添加收货地址</a>
-    </div>
-    {{if $pickup_support}}
-    <div class="address clearfix" id="pickup_consignee" style="position:relative;display:{{$current_chose_origin? 'none':''}};" data-pickup-choice="{{!empty($ziti_consignee_info)}}">
-        <span style="display:block;" class="fl">送至&nbsp;&nbsp;<a class="pickupinto moreicon" ></a></span>
-        <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;" class="pickup_address"> {{$ziti_consignee_info['address']}}<br />
-           {{$ziti_consignee_info['name']}} &nbsp; {{$ziti_consignee_info['mobilephone']}}</span>
+    {{if !$kuaidi_consignee_exist && empty($ziti_consignee_info && $ziti_support)}}
+<!--未选择配送方式-->
+    <div class="address clearfix" style="position:relative;">
+        <a class="moreicon" href="javascript:$('.tipslayer,.tipslayer_bg').show();"></a>
+        <a href="javascript:$('.tipslayer,.tipslayer_bg').show();" class="order_selectbtn">选择配送方式</a>
     </div>
     {{/if}}
+    <?php  ?>
+    {{if $ziti_support}}
+<!--自提配送-->
+    <div class="address clearfix ziti_choose" style="position:relative; display: none;" data-on="{{!empty($ziti_consignees_info)}}" data-ship="ziti">
+        <span style="display:block;" class="fl">自提&nbsp;&nbsp;<a class="moreicon pickupinto"></a></span>
+        <a href="#X" style="overflow:hidden; display:block; margin-right:1em; color:#666666;" class="pickup_address">
+            <strong>{{$ziti_consignee_info['consignee']['name']}} {{$ziti_consignee_info['consignee']['mobilephone']}}</strong><br />
+            <strong>自提点信息：</strong><br />{{$ziti_consignee_info['ziti']['name']}}<br />联系人：{{$ziti_consignee_info['ziti']['owner_name']}}{{$ziti_consignee_info['ziti']['owner_phone']}}
+        </a>
+        <a href="javascript:$('.ziti_choose').hide();$('.kuaidi_choose').show()" class="address_addbtn">选择快递配送到家</a>
+    </div>
+    {{/if}}
+<!--快递配送-->
+    <div class="address clearfix kuaidi_choose" style="position:relative;" data-on="{{$kuaidi_consignee_exist}}" data-ship="kuaidi">
+        <span style="display:block;" class="fl">快递&nbsp;&nbsp;<a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
+        <a href="#X" style="overflow:hidden; display:block; margin-right:1em; color:#666666;"><strong>{{$this->Session->read('OrderConsignee.name')}} {{$this->Session->read('OrderConsignee.mobilephone')}}
+        </strong><br />{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}</a>
+        {{if $ziti_support}}<a href="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide()" class="address_addbtn">选择自提省邮费</a>{{/if}}
+    </div>
 {{/if}}
 {{if $flash_msg}}<div class="alert alert-danger" role="alert">{{$flash_msg}}</div>{{/if}}
 <div class="cart" style="margin-top: 0; padding-top: 0;">
@@ -193,7 +193,23 @@
     </div>
     <div id="area_list" class="tuanadresslist">  </div>
 </div>
-{{$this->Html->script(array('/js/tuan/balance.js?v14'));}}
+<!--配送方式选择弹出层-->
+<div class="tipslayer" style="display: none">
+    <a href="javascript:$('.tipslayer,.tipslayer_bg').hide();" class="tipslayer_close"></a>
+    <div class="conorderprice">选择配送方式</div>
+    <div class="conorder_btn clearfix">
+        <div class="fl" style="width: 47%;">
+            <a href="#X" class="weixin">自提</a>
+            <label>自提可省邮费</label>
+        </div>
+        <div class="fr" style="width: 47%;">
+            <a href="#X" class="alipay">快递</a>
+            <label>自营商品满98包邮</label>
+        </div>
+    </div>
+</div>
+<div class="tipslayer_bg" style="display: none"></div>
+{{$this->Html->script(array('/js/tuan/balance.js?v15'));}}
 <script>
     var zitiAddressData = zitiAddress(1);
     $(document).ready(function(){
@@ -274,19 +290,6 @@
                 $pConsigneeAddress.hide();
             }
         });
-        $('.shipWay').click(function(){
-            $('.shipWay.cur').removeClass('cur');
-            var shipType = $(this).data('shipType');
-            if(shipType == 'pickup'){
-                $('#part_consignee').hide();
-                $('#pickup_consignee').show();
-            }else{
-                $('#pickup_consignee').hide();
-                $('#part_consignee').show();
-            }
-            $(this).addClass('cur');
-            $(this).data('shipType');
-        });
         $('.pickupinto').click(function(){
             $('.pickup_layer').show();
         });
@@ -307,7 +310,9 @@
             $.post('/orders/chose_pickup',{"name": name, "mobile":mobile,"shop_id": shopId},function(res){
                 if(res.status){
                     $('.pickup_layer').hide();
-                    $('.pickup_address').html(res.data.address+ '<br/>' + res.data.name+'&nbsp;'+res.data.mobilephone )
+                    $('.pickup_address').html("<strong>"+ res.data.name + res.data.mobilephone+ "</strong><br /><strong>自提点信息：</strong><br />"+
+                    res.data.address);
+                    $('.ziti_choose').data('on', 1);
                 }else{
                     utils.alert("请选择自提点");
                 }

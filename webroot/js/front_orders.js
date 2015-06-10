@@ -519,22 +519,15 @@ var infoToBalance = function(){
                 params = params+input_name+"="+input_value+"&";
             }
         });
-        params += 'ship_type=' + $('.shipWay.cur').data('shipType');
+        params += 'ship_type=' + $('.address:visible').data('ship');
         //params=params.substring(0,params.length-1);
         self.attr("href",link+params);
     };
     var checkAddress = function(){
-        var shipType = $('.shipWay.cur').data("shipType");
-        if(shipType == 'pickup'){
-            if($(".address").data("pickupChoice")!=1){
-                utils.alert("请编辑收货信息");
-                return false;
-            }
-        }else{
-            if($(".address").data("addressChoice")!=1){
-                utils.alert("请编辑收货信息");
-                return false;
-            }
+        var $addressDom = $('.address:visible');
+        if($addressDom.data("on")!=1){
+            utils.alert("请编辑收货信息");
+            return false;
         }
         return true;
     };

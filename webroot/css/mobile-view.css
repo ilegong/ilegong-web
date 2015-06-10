@@ -95,13 +95,22 @@ ul li{ list-style:none;}
 .tipslayer ul li { width: 50%; float: left; text-align: center; line-height: 44px; border-top: 1px #dddddd solid; }
 .tipslayer ul li a { display: block; text-decoration: none; color: #29ac0e; text-align: center; font-size: 1.1em; }
 .tipslayer_bg{ width: 100%; height: 100%; background-attachment: fixed; background-color: #000000;filter:alpha(opacity=25);-moz-opacity:0.25; opacity:0.25; position: fixed; z-index: 4; top: 0; left: 0;}
+/*确定取消提示层样式*/
+.tipslayer { position: fixed; top: 40%; width: 80%; left: 50%; margin-left: -40%; background-color: #ffffff; z-index: 5; border-radius: 5px;}
+.tipslayer_word { font-size: 1em; color: #333333; padding: 20px 10px; text-align: center; line-height: 24px;}
+.tipslayer_word strong{ color: #555555; line-height: 35px;}
+.tipslayer ul li { width: 50%; float: left; text-align: center; line-height: 44px; border-top: 1px #dddddd solid; }
+.tipslayer ul li a { display: block; text-decoration: none; color: #29ac0e; text-align: center; font-size: 1.1em; }
+.tipslayer_bg{ width: 100%; height: 100%; background-attachment: fixed; background-color: #000000;filter:alpha(opacity=25);-moz-opacity:0.25; opacity:0.25; position: fixed; z-index: 4; top: 0; left: 0;}
 /*支付提示层*/
-.tipslayer_close{ font-size: 20px; line-height: 28px; text-align:center; color: #666666; text-decoration: none; border-radius: 30px; width: 30px; height: 30px; background-color: #ffffff; border: 1px #999999 solid; position: absolute; top: -10px; right: -10px;}
-.conorderprice{ text-align: center; padding:15px 0 5px 0; font-size: 1.5em; color: #333333; font-weight: bold;}
-.conorder_btn{ width: 80%; margin: 0 auto; padding: 15px 0;}
-.conorder_btn a{ display: block; line-height: 35px; width: 45%; text-align: center; font-size: 1em; border: 1px solid; font-weight: bold; border-radius: 3px; text-decoration: none;}
-.conorder_btn a.weixin{ border-color: #29ac0e; color: #29ac0e;}
-.conorder_btn a.alipay{ border-color: #ffa200; color: #ffa200;}
+/*alice change css 0609*/
+.tipslayer_close{ position: absolute; top: 10px; right: 10px; width: 1.5em; height: 1.5em; background: url(/img/mobile/pyshuo_icon.png?v3) -23.5em -14.5em no-repeat; background-size: 30em 30em; text-decoration: none;}
+.conorderprice{ text-align: center; padding:25px 0 5px 0; font-size: 1.5em; color: #333333;}
+.conorder_btn{ width: 85%; margin: 0 auto; padding: 15px 0;}
+.conorder_btn a{ display: block; line-height: 40px; text-align: center; font-size: 1.15em; border-radius: 3px; text-decoration: none;}
+.conorder_btn a.weixin{ background-color: #29ac0e; color: #ffffff;}
+.conorder_btn a.alipay{ background-color: #ffa200; color: #ffffff;}
+.conorder_btn label{ font-size: 12px; color:#CC0000; text-align: center; text-align: center;display: block; line-height: 24px;}
 
 /*商品详情*/
 .p_details_pic{ position:relative;}

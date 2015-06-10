@@ -101,12 +101,12 @@ function editCartNum(id, num) {
     }, {'id': id, 'num': num});
     return false;
 }
-$(".cartnumreduce").on('click', function(){
+($(CartDomName).prev("a")).on('click', function(){
     editAmount.reduce(CartDomName, function (CartDomName) {
         editCartNum($(CartDomName).data('id'), $(CartDomName).val());
     });
 });
-$(".cartnumadd").on('click', function(){
+($(CartDomName).next("a")).on('click', function(){
     editAmount.add(CartDomName, function (CartDomName) {
         editCartNum($(CartDomName).data('id'), $(CartDomName).val());
     });

@@ -534,8 +534,13 @@ a:hover, a:focus {
 }
 
 /*确认订单*/
-.address { border-bottom: 1px #eeeeee solid; background-color: #ffffff; padding: 10px; margin-top: 10px; margin-bottom: 10px; line-height: 1.5em; color: #29ac0e; font-size: 1em; }
-.address_addbtn{ display: block; border: 1px #29ac0e solid; border-radius: 3px; width: 110px; height: 30px; line-height: 30px; color: #29ac0e; font-size: 1em; text-decoration: none; font-weight: bold; text-align: center;}
+.address { border-bottom: 1px #eeeeee solid; background-color: #ffffff; padding: 10px; margin-top: 44px; margin-bottom: 10px; line-height: 1.5em; color: #29ac0e; font-size: 1em; }
+/*alice add css 0608*/
+.address strong{ color: #333333;}
+.address a{ text-decoration: none;}
+/*alice change css 0608*/
+.address a.address_addbtn{ line-height: 30px; color: #29ac0e; font-size: 1em; text-decoration: underline; padding-left: 36px;}
+
 .moreicon { position: absolute; top: 50%; margin-top: -0.7em; right: 0.6em; display: block; width: 0.667em; height: 1.334em; background: url(/img/mobile/pyshuo_icon.png) 0 -16.875em no-repeat; background-size: 25em 25em; }
 .order_shop_head{ line-height: 24px; text-decoration: none; padding: 9px 10px; background-color: #ffffff; border-top: 1px #eeeeee solid; border-bottom: 1px #eeeeee solid;}
 .order_shop_head img{ width: 1.7em; height: 1.7em; margin-right: 5px; border-radius: 3px;}
@@ -665,3 +670,11 @@ label {
     display: inline-block;
     margin-bottom: 0;
 }
+
+.order_submit{ height: 44px; line-height: 44px; font-size: 1em; background-color: #f5f5f5; width: 100%; position: fixed; bottom: 0; left: 0;}
+.order_submit label{ color: #ffa200; font-weight: bold;}
+.order_submit a{ width: 120px; font-size: 1.15em; text-align: center; color: #ffffff; text-decoration: none; display: block; background-color: #29AC0E; margin-left: 10px;}
+.order_selectbtn{ display: block; line-height: 40px; border-radius: 3px; width: 120px; text-align: center; font-size: 1em; background-color: #29AC0E; color: #ffffff;}
+.classlist { height: 44px; line-height: 44px; width: 100%; text-align: center; color: #ffffff; font-size: 20px; background-color: #29ac0e; position: fixed; top: 0; z-index: 99; overflow: hidden;}
+.classlist a.back { display: block; position: absolute; top: 10px; left: 10px; width: 1.167em; height: 1.133em; background: url(/img/mobile/pyshuo_icon.png?v3) no-repeat -15.667em -5.333em; background-size: 20em 20em;}
+.classlist a.home{ display: block; position: absolute; top: 10px; right: 10px; width: 1.2em; height: 1.133em; background: url(/img/mobile/pyshuo_icon.png?v3) no-repeat -17.667em -5.333em; background-size: 20em 20em;}
