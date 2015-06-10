@@ -526,7 +526,10 @@ var infoToBalance = function(){
     var checkAddress = function(){
         var shipType = $('.shipWay.cur').data("shipType");
         if(shipType == 'pickup'){
-
+            if($(".address").data("pickupChoice")!=1){
+                utils.alert("请编辑收货信息");
+                return false;
+            }
         }else{
             if($(".address").data("addressChoice")!=1){
                 utils.alert("请编辑收货信息");

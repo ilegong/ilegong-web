@@ -71,7 +71,7 @@
         <a href="/orders/edit_consignee?modal=true" class="address_addbtn new_address thickbox" {{if $total_consignee > 0}}style=" display: none;"{{/if}}>添加收货地址</a>
     </div>
     {{if $pickup_support}}
-    <div class="address clearfix" id="pickup_consignee" style="position:relative;display:{{$current_chose_origin? 'none':''}};">
+    <div class="address clearfix" id="pickup_consignee" style="position:relative;display:{{$current_chose_origin? 'none':''}};" data-pickup-choice="{{!empty($ziti_consignee_info)}}">
         <span style="display:block;" class="fl">送至&nbsp;&nbsp;<a class="pickupinto moreicon" ></a></span>
         <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;" class="pickup_address"> {{$ziti_consignee_info['address']}}<br />
            {{$ziti_consignee_info['name']}} &nbsp; {{$ziti_consignee_info['mobilephone']}}</span>
