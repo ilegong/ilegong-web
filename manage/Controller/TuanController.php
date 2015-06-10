@@ -185,7 +185,8 @@ class TuanController extends AppController
                 array('Cart.send_date is null','Order.type in (5,6)'),    // 无发货时间
                 array("Order.consignee_id = 0", "Order.consignee_address = ''"), // 无自提点，送货地址为空
                 array('Order.pay_time  is null', 'Order.ship_mark != "sfdf"'), // 非顺丰到付，但无付款时间
-                array('Order.ship_mark = ""', 'Order.type in (5,6)'), // 团、秒，无配送方式
+                array('Order.ship_mark = ""'), // 无配送方式
+                array('Order.ship_mark is NULL'), // 无配送方式
                 array('Order.ship_mark = "kuaidi"', "Order.consignee_address = '' or Order.consignee_address is null"), // 快递，收货地址为空
                 array('Order.ship_mark = "ziti"','(Order.consignee_id = 0 or Order.consignee_id is null)'), // 自提，无自提点
                 // 自提点不支持送货上门，但是有备注地址
@@ -655,7 +656,8 @@ class TuanController extends AppController
                 (c.send_date is null and o.type in (5,6))
                 or (o.consignee_id = 0 and o.consignee_address = "")
                 or (o.pay_time is null and o.ship_mark != "sfdf")
-                or (o.ship_mark = "" and o.type in (5,6))
+                or (o.ship_mark = "")
+                or (o.ship_mark is NULL)
                 or (o.ship_mark = "kuaidi" and (o.consignee_address = "" or o.consignee_address is NULL))
                 or (o.ship_mark = "ziti" and (o.consignee_id = 0 or o.consignee_id is null))
             ) and o.type in (1,5,6) and o.status in (1,2,3,4,14) and DATE(o.created) > "'.date('Y-m-d', strtotime('-62 days')).'"');
