@@ -16,11 +16,11 @@
         var pamount = $('#input_pamount').val();
         var string = $('.spec_item_selected.cur').map(function(){
             if ($(this).attr('item-label') == 'SD'){
-                return '<strong>'+ $.trim($(this).text())+'送货</strong>'+' ';
+                return ' <strong>'+ $.trim($(this).text())+'送货</strong>'+'';
             }else
-                return '<strong>'+ $.trim($(this).text())+'</strong>'+' ';
+                return ' <strong>'+ $.trim($(this).text())+'</strong>'+'';
         });
-        string.push('<strong>'+ pamount+'份</strong>');
+        string.push(' <strong>'+ pamount+'份</strong>');
         spec.html(string.toArray().join());
         spec.prepend('<label>已选</label> ');
     }
