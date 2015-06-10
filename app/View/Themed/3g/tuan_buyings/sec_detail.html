@@ -163,31 +163,20 @@
         <hr>
     </div>
 </div>
-
-<!--底部购买-->
 <div class="bottom_bg">
-    <ul class="clearfix">
-        <li class="love fl">
-            <a href="#X" class="love_icon"></a>
-        </li>
-        <li class="fl" style="width:78%;">
-            <div id="buy_btns">
-                <?php
+    <ul class="clearfix" style="width: 100%">
+        <li style="width:100%;">
+            <?php
                 $date = time()-24*3600;
                 $start_date = strtotime($product_try['ProductTry']['start_time']);
-                ?>
-                {{if $sold_num>=$target_num||($start_date < $date)}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">秒杀结束</a>
-                {{elseif before_than($product_try['ProductTry']['start_time'])}}
-                    <a id="sec_buy" data-send-date="{{$product_try['ProductTry']['consignment_date']}}" data-tuan-id="{{$tuan_team['TuanTeam']['id']}}" data-global-show="{{$product_try['ProductTry']['global_show']}}" data-tryid="{{$product_try['ProductTry']['id']}}" data-pid="{{$current_data_id}}" href="javascript:void(0);" class="btn_b pay_bg radius10">立即秒杀</a>
-                {{else}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">即将开秒</a>
-                {{/if}}
-            </div>
-        </li>
-        <li class="shopping fr">
-            <a href="/carts/listcart.html" style="position:relative; margin-top: 0.2em;" class="detail_shopping_icon" id="cart_link"><div id="item-count" class="detail_shopping_count"></div></a>
-            <p>购物车</p>
+            ?>
+            {{if $sold_num>=$target_num||($start_date < $date)}}
+                <a href="javascript:void(0)" class="btn_b cart_btn_soldout">秒杀结束</a>
+            {{elseif before_than($product_try['ProductTry']['start_time'])}}
+                <a id="sec_buy" data-send-date="{{$product_try['ProductTry']['consignment_date']}}" data-tuan-id="{{$tuan_team['TuanTeam']['id']}}" data-global-show="{{$product_try['ProductTry']['global_show']}}" data-tryid="{{$product_try['ProductTry']['id']}}" data-pid="{{$current_data_id}}" href="javascript:void(0);" class="btn_b pay_bg">立即秒杀</a>
+            {{else}}
+                <a href="javascript:void(0)" class="btn_b cart_btn_soldout">即将开秒</a>
+            {{/if}}
         </li>
     </ul>
 </div>

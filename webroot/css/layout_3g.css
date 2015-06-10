@@ -660,6 +660,8 @@ a:hover, a:focus {
     color: #666666;
     display: block;
 }
+
 label {
     display: inline-block;
+    margin-bottom: 0;
 }
