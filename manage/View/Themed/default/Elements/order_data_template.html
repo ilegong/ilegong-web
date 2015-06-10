@@ -82,39 +82,39 @@
                     <td data-value="{{$order['Order']['total_all_price']}}">{{if $index == 0}}{{$order['Order']['total_all_price']}}{{else}}'同上'{{/if}}</td>
                     <td mark-print="no-print">{{$order['Order']['applied_score'] / 100}}</td>
                     <td mark-print="no-print">{{date_format(date_create($order['Order']['created']), 'n月d H:i')}}</td>
-                    {{if $order['Order']['type'] == 5 || $order['Order']['type'] == 6}}
-                        <td mark-print="no-print" {{if empty($order['Order']['ship_mark']) || ($order['Order']['ship_mark']=='ziti' && empty($offline_store))}}class="danger"{{/if}}>
-                        {{if $order['Order']['type'] == 5}}
-                            团购
-                            {{if $tuan_team['type'] == 1}}
-                            (大)
-                            {{else}}
-                            (<a href="/manage/admin/tuan_buyings/index?team_id={{$tuan_team['id']}}">{{$tuan_team['tuan_name']}}</a>)
-                            {{/if}}
-                        {{elseif $order['Order']['type'] == 6}}
-                            秒杀
-                        {{/if}}(
-                        {{if $order['Order']['ship_mark']=='ziti'}}
-                        自提
-                        {{elseif $order['Order']['ship_mark']=='sfby'}}
-                        顺丰包邮
-                        {{elseif $order['Order']['ship_mark']=='sfdf'}}
-                        顺丰到付
-                        {{elseif $order['Order']['ship_mark']=='kuaidi'}}
-                        快递
+
+
+                    <td mark-print="no-print" {{if empty($order['Order']['ship_mark']) || ($order['Order']['ship_mark']=='ziti' && empty($offline_store))}}class="danger"{{/if}}>
+                    {{if $order['Order']['type'] == 5}}
+                    团购
+                        {{if $tuan_team['type'] == 1}}
+                        (大)
                         {{else}}
-                        <span class="text-danger">无标注</span>
-                        {{/if}})
-                        </td>
-                        <td mark-print="no-print" {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store)) || ($order['Order']['ship_mark'] != 'ziti' && empty($order['Order']['consignee_address']))}}class="danger"{{/if}}>
-                        {{$offline_store['OfflineStore']['alias']}}
-                        </td>
+                        (<a href="/manage/admin/tuan_buyings/index?team_id={{$tuan_team['id']}}">{{$tuan_team['tuan_name']}}</a>)
+                        {{/if}}
+                    {{elseif $order['Order']['type'] == 6}}
+                    秒杀
+                    {{elseif $order['Order']['type'] == 1}}
+                    普通
+                    {{/if}}(
+                    {{if $order['Order']['ship_mark']=='ziti'}}
+                        自提
+                    {{elseif $order['Order']['ship_mark']=='sfby'}}
+                        顺丰包邮
+                    {{elseif $order['Order']['ship_mark']=='sfdf'}}
+                        顺丰到付
+                    {{elseif $order['Order']['ship_mark']=='kuaidi'}}
+                        快递
                     {{else}}
-                        <td mark-print="no-print" {{if !empty($order['Order']['ship_mark'])}}class='danger'{{/if}}>
-                            普通{{if !empty($order['Order']['ship_mark'])}}({{$order['Order']['ship_mark']}}){{/if}}
-                        </td>
-                        <td mark-print="no-print">{{if $order['Order']['ship_type']}}{{$ship_type[$order['Order']['ship_type']]}}({{$order['Order']['ship_code']}}){{/if}}</td>
-                    {{/if}}
+                        <span class="text-danger">无标注</span>
+                    {{/if}})
+                    </td>
+                    <td mark-print="no-print" {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store)) || ($order['Order']['ship_mark'] != 'ziti' && empty($order['Order']['consignee_address']))}}class="danger"{{/if}}>
+                        {{$offline_store['OfflineStore']['alias']}}<br/>
+                        {{if $order['Order']['ship_type']}}{{$ship_type[$order['Order']['ship_type']]}}({{$order['Order']['ship_code']}}){{/if}}
+                    </td>
+
+
                     <td mark-print="no-print" {{if $order['Order']['type'] != 1 && empty($cart['Cart']['send_date'])}}class="danger"{{/if}}>
                     {{$cart['Cart']['send_date']}}
                     <span class="badge hidden" data-id="order-send-out">已发发货提醒</span>
