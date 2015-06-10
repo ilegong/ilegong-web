@@ -648,7 +648,7 @@ a:hover, a:focus {
 .list-inline {
     padding-left: 0;
     list-style: none;
-    padding-top: 9px;
+    padding-top: 8px;
 }
 
 .list-inline > li {
