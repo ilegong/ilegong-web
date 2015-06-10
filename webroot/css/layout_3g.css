@@ -181,7 +181,7 @@ footer img{ width:4.625em; height:1.583em;}
 .navbar-v1 a .op-icon { background: url('/img/mobilev1/pyshuo_icon.png?xx') 0 0 no-repeat; width:1.9167em; height:1.5em; background-size:25em 25em; display: inline-block; vertical-align: text-bottom; }
 .navbar-v1 ul { text-align: center; }
 .navbar-v1 li {
-    width: 19.0%;
+    width: 20%;
     padding: 0;
 }
 .navbar-v1 a span { display: block;}
