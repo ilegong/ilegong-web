@@ -839,6 +839,7 @@ class OrdersController extends AppController {
             if(!empty($promotion_code)){
                 $price = $promotion_code['PromotionCode']['price'];
                 $reducePrice = $reducePrice + ($cart_price-$price);
+                break;
             }
         }
         if($reducePrice>0){

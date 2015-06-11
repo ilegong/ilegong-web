@@ -692,6 +692,7 @@ class TuanBuyingsController extends AppController{
                 'fields' => array('brand_id')
             ));
             $this->order_use_score_and_coupon($order_id,$uid,$productBrand['Product']['brand_id'],$total_price);
+            $this->order_use_promotion_code($cart_info,$order_id);
             if ($order['Order']['status'] != ORDER_STATUS_WAITING_PAY) {
                 $res = array('success'=> false, 'info'=> '你已经支付过了');
             }else{
@@ -959,7 +960,33 @@ class TuanBuyingsController extends AppController{
         $this->Session->write(OrdersController::key_balanced_scores(), '');
         $this->Session->write(OrdersController::key_balanced_conpon_global(), '[]');
         $this->Session->write(OrdersController::key_balanced_conpons(), '[]');
+    }
 
+    private function order_use_promotion_code($cart,$orderId){
+        //use coupon
+        App::uses('OrdersController','Controller');
+        $code = $this->Session->read(OrdersController::key_balanced_promotion_code());
+        if(empty($code)){
+            return;
+        }
+        $reducePrice = 0;
+        $this->loadModel('PromotionCode');
+        $productId = 0;
+        $pid = $cart['Cart']['product_id'];
+        $cartPrice = $cart['Cart']['price'];
+        $promotion_code = $this->PromotionCode->find('first',array('conditions' => array('available'=>1,'code'=>$code,'product_id'=>$pid)));
+        if(!empty($promotion_code)){
+            $price = $promotion_code['PromotionCode']['price'];
+            $reducePrice = $reducePrice + ($cartPrice-$price);
+            $productId = $pid;
+        }
+        if($reducePrice>0){
+            $toUpdate = array('total_all_price' => 'if(total_all_price - ' . $reducePrice .' < 0, 0, total_all_price - ' . $reducePrice .')');
+            if($this->Order->updateAll($toUpdate, array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY))){
+                $this->PromotionCode->updateAll(array('available' => 1, 'use_time' => date('Y-m-d H:i:s')),array('code' => $code,'product_id' => $productId));
+            }
+        }
+        $this->Session->write(OrdersController::key_balanced_promotion_code(), '');
     }
 
     private function order_use_score_and_coupon($order_id,$uid,$brand_id,$total_all_price){
