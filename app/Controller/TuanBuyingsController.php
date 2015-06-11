@@ -60,7 +60,7 @@ class TuanBuyingsController extends AppController{
     }
 
     public function detail($tuan_buy_id){
-        $this->pageTitle = '团购详情';
+        $this->pageTitle = '产品详情';
         $this->loadModel('TuanTeam');
         if($tuan_buy_id == null){
             $this->redirect('/tuan_teams/mei_shi_tuan');
