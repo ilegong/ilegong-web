@@ -55,10 +55,9 @@
 <!--未选择配送方式-->
     <div class="address clearfix" style="position:relative;">
         <a class="moreicon" href="javascript:$('.tipslayer,.tipslayer_bg').show();"></a>
-        <a href="javascript:$('.tipslayer,.tipslayer_bg').show();" class="order_selectbtn">选择配送方式</a>
+        <a href="javascript:$('.tipslayer,.tipslayer_bg').show();" class="order_selectbtn">选择发货地址</a>
     </div>
     {{/if}}
-    <?php  ?>
     {{if $ziti_support}}
 <!--自提配送-->
     <div class="address clearfix ziti_choose" style="position:relative; display: none;" data-on="{{!empty($ziti_consignees_info)}}" data-ship="ziti">
@@ -98,14 +97,16 @@
                         <li style="overflow: hidden; display: block; padding-left: 10px;">
                             <p>{{$item->name}}{{if !$item->published}} 该商品已经下架{{/if}}</p>
                             <s>单价:￥{{$this->Number->precision($item->price, 2)}}</s>
-                            <s>
-                              <span>{{if $item->specId}}口味：{{$spec_group[$item->specId]}}{{/if}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                              <span>
-                                {{if $item->consignment_date}}
-                                    {{empty($consign_dates[$item->consignment_date])?'': date('m月d日', strtotime($consign_dates[$item->consignment_date])).'到货';}}
-                                {{/if}}
-                              </span>
-                            </s>
+                            {{if ($item->specId)||($item->consignment_date)}}
+                                <s>
+                                  <span>{{if $item->specId}}规格：{{$spec_group[$item->specId]}}{{/if}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                  <span>
+                                    {{if $item->consignment_date}}
+                                        {{empty($consign_dates[$item->consignment_date])?'': date('m月d日', strtotime($consign_dates[$item->consignment_date])).'到货';}}
+                                    {{/if}}
+                                  </span>
+                                </s>
+                            {{/if}}
                             <div class="clearfix">
                                 <a href="#X" class="cartnumreduce fl"></a>
                                 <input type="text" class="cart-num-input" data-id="{{$item->cartId}}" data-price="{{$item->price}}" data-brand-id="{{$brandItem->id}}"
@@ -156,7 +157,7 @@
         {{/if}}
     </div>
 </div>
-<div class="shop_jifen" style="margin-bottom: 35px;">
+<div class="shop_jifen" style="margin-bottom: 35px;margin-top: 10px;">
     <ul class="clearfix" style=" border: 0;">
         <li class="fl">可用<span class="balance_use_score">{{$score_usable}}</span>积分抵用<span>{{$this->Number->precision($score_usable/100, 2)}}</span>元</li>
         <li class="fr shop_jifen_used radius10"></li>
