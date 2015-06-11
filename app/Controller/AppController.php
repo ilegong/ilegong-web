@@ -752,9 +752,9 @@ class AppController extends Controller {
         if(empty($rule)){
             return null;
         }
-        $before_day = $rule['before_days'];
-        $week_days = $rule['week_days'];
-        $time = $rule['cut_time'];
+        $before_day = $rule['ConsignmentDateRule']['before_days'];
+        $week_days = $rule['ConsignmentDateRule']['week_days'];
+        $time = $rule['ConsignmentDateRule']['cut_time'];
         $consignment_date = get_consignment_date($before_day,$week_days,$time);
         if($consignment_date==null){
             return null;

@@ -41,10 +41,11 @@
         </ul>
         {{if $product_consignment_date}}
             <a href="#X" class="standard_bg clearfix">
-                <span class="fl spec_selected">
-                    <strong>预计发货日</strong>
+                <span class="fl">
+                    <label>预计发货日</label>
+                    <strong>{{$product_consignment_date}}</strong>
                 </span>
-                <span class="fr p_more">{{$product_consignment_date}}</span>
+                <!--<span class="fr p_more"></span>-->
             </a>
         {{/if}}
         <a href="#X" class="standard_bg clearfix">

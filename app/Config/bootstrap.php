@@ -1849,7 +1849,7 @@ function get_consignment_date($before_day,$week_days,$time){
     foreach($optionDates as $item){
         $optionDate = date('Y-m-d H:i:s',$item);
         $dateTime = new DateTime($optionDate);
-        $dateTime->setTime($time[0],$time[1]);
+        $dateTime->setTime(intval($time[0]),intval($time[1]));
         if($limitDateTime<$dateTime){
             $consignment_date = date('Y-m-d',$item);
             return $consignment_date;
