@@ -1832,3 +1832,61 @@ function day_of_week($date_string){
 function is_pys_product($brandId){
     return $brandId==PYS_BRAND_ID;
 }
+
+/**
+ * @param $before_day
+ * @param $week_days
+ * @param $time
+ * @return bool|string
+ */
+function get_consignment_date($before_day,$week_days,$time){
+    $days = get_weekday_by_int($week_days);
+    $optionDates = get_optional_date($days);
+    $time = explode(',',$time);
+    $limitDate =date('Y-m-d H:i:s',strtotime('+'.$before_day.' days',time()));
+    $limitDateTime = new DateTime($limitDate);
+    foreach($optionDates as $item){
+        $optionDate = date('Y-m-d H:i:s',$item);
+        $dateTime = new DateTime($optionDate);
+        $dateTime->setTime($time[0],$time[1]);
+        if($limitDateTime<$dateTime){
+            $consignment_date = date('Y-m-d',$item);
+            return $consignment_date;
+        }
+    }
+    return null;
+}
+
+/**
+ * @param $week_days
+ * @return array
+ */
+function get_optional_date($week_days){
+    $result = array();
+    foreach($week_days as $day){
+        $result[] = strtotime('next '.$day);
+    }
+    asort($result);
+    return $result;
+}
+
+/**
+ * @param $days
+ * @return array
+ */
+function get_weekday_by_int($days){
+    $weekdays = array(
+        '1' => 'monday',
+        '2' => 'tuesday',
+        '3' => 'wednesday',
+        '4' => 'thursday',
+        '5' => 'friday',
+        '6' => 'saturday',
+        '7' => 'sunday'
+    );
+    $result = array();
+    foreach($days as $item){
+        $result[] = $weekdays[$item];
+    }
+    return $result;
+}
