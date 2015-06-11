@@ -744,18 +744,18 @@ class AppController extends Controller {
     }
 
     protected function get_pure_product_consignment_date($pid){
-        $this->loadModel('ConsignmentDateRule');
-        $rule = $this->ConsignmentDateRule->find('first',array('conditions' => array(
+        $this->loadModel('ProductConsignmentDate');
+        $rule = $this->ProductConsignmentDate->find('first',array('conditions' => array(
             'deleted' => DELETED_NO,
             'product_id' => $pid
         )));
         if(empty($rule)){
             return null;
         }
-        $before_day = $rule['ConsignmentDateRule']['before_days'];
-        $week_days = $rule['ConsignmentDateRule']['week_days'];
-        $time = $rule['ConsignmentDateRule']['cut_time'];
-        $consignment_date = get_consignment_date($before_day,$week_days,$time);
+        $before_day = $rule['ProductConsignmentDate']['deadline_day'];
+        $week_days = $rule['ProductConsignmentDate']['week_days'];
+        $time = $rule['ProductConsignmentDate']['deadline_time'];
+        $consignment_date = get_send_date($before_day,$time,$week_days);
         if($consignment_date==null){
             return null;
         }
