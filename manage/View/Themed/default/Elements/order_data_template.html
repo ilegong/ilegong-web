@@ -34,7 +34,7 @@
               $tuan_buying = $tuan_buys[$order['Order']['member_id']];
               $tuan_team = $tuan_teams[$tuan_buying['tuan_id']];
               $offline_store = array();
-              if($order['Order']['type'] == 5 || $order['Order']['type'] == 6 || $order['Order']['ship_mark'] == 'ziti'){
+              if($order['Order']['ship_mark'] == 'ziti'){
                 $offline_store = $offline_stores[$order['Order']['consignee_id']];
               }
             ?>
