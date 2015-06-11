@@ -43,9 +43,17 @@
                     </div>
                     {{/if}}
 
+                    {{if $product_consignment_date}}
+                        <a href="#X" class="standard_bg clearfix">
+                            <span class="fl spec_selected">
+                                <strong>预计发货日</strong>
+                            </span>
+                            <span class="fr p_more">{{$product_consignment_date}}</span>
+                        </a>
+                    {{/if}}
+
                     <a href="#X" class="standard_bg clearfix">
                         <span class="fl spec_selected">
-                            <!--<strong>选择口味、规格</strong>-->
                         </span>
                         <span class="fr p_more"></span>
                     </a>

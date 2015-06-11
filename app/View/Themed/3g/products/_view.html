@@ -39,7 +39,14 @@
             <li class="fl price"><span>￥<font id="product_price">{{$this->Number->precision($price, 2)}}</font></span>{{if $product_price_range}}<em>{{$product_price_range}}</em>{{/if}}</li>
             <li class="fr stat"><a {{if $comment_count>0}}href="#comment-div"{{/if}} style="color: #333333">评价<span>({{$comment_count}})</span></a></li>
         </ul>
-
+        {{if $product_consignment_date}}
+            <a href="#X" class="standard_bg clearfix">
+                <span class="fl spec_selected">
+                    <strong>预计发货日</strong>
+                </span>
+                <span class="fr p_more">{{$product_consignment_date}}</span>
+            </a>
+        {{/if}}
         <a href="#X" class="standard_bg clearfix">
             <span class="fl spec_selected">
                 <!--<strong>选择口味、规格</strong>-->

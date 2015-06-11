@@ -416,10 +416,14 @@ class ProductsController extends AppController{
         }
         $this->Session->write('BrowsingHistory',$browsing_history);
 
-        $consignment_dates = consignment_send_date($pid);
-
-        if(!empty($consignment_dates)){
-            $this->set('consignment_dates', $consignment_dates);
+        $product_consignment_date = $this->get_product_consignment_date($pid);
+        if(empty($product_consignment_date)){
+            $consignment_dates = consignment_send_date($pid);
+            if(!empty($consignment_dates)){
+                $this->set('consignment_dates', $consignment_dates);
+            }
+        }else{
+            $this->set('product_consignment_date',$product_consignment_date);
         }
 
         $is_limit_ship = ClassRegistry::init('ShipPromotion')->is_limit_ship($pid);
@@ -430,6 +434,7 @@ class ProductsController extends AppController{
             $this->prepare_wx_sharing($currUid, $pid);
         }
         $this->setTraceFromData('product',$pid);
+
     }
 
     /**

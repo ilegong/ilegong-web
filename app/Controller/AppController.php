@@ -742,5 +742,26 @@ class AppController extends Controller {
         $this->set('from',$type);
         $this->set('data_id',$data_id);
     }
+
+    protected function get_product_consignment_date($pid){
+        $this->loadModel('ConsignmentDateRule');
+        $rule = $this->ConsignmentDateRule->find('first',array('conditions' => array(
+            'deleted' => DELETED_NO,
+            'product_id' => $pid
+        )));
+        if(empty($rule)){
+            return null;
+        }
+        $before_day = $rule['before_days'];
+        $week_days = $rule['week_days'];
+        $time = $rule['cut_time'];
+        $consignment_date = get_consignment_date($before_day,$week_days,$time);
+        if($consignment_date==null){
+            return null;
+        }
+        $product_consignment_date = date('m月d日',strtotime($consignment_date));
+        $product_consignment_date = $product_consignment_date.'('.day_of_week($consignment_date).')';
+        return $product_consignment_date;
+    }
 }
 ?>
