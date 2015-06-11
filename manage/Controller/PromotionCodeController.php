@@ -15,10 +15,12 @@ class PromotionCodeController extends AppController{
         $this->autoRender = false;
         $type = $_REQUEST['code_type'];
         $num = $_REQUEST['num'];
+        $product_id= $_REQUEST['pid'];
+        $price = $_REQUEST['price'];
         $saveData = array();
         for($i=0; $i<$num; $i++){
             $code = $this->getToken(8);
-            $saveData[] = array('code_type' => $type, 'code' => $code, 'gen_datetime' => date('Y-m-d H:i:s'));
+            $saveData[] = array('code_type' => $type, 'code' => $code, 'gen_datetime' => date('Y-m-d H:i:s'),'product_id' => $product_id,'price'=>$price);
         }
         $this->PromotionCode->saveAll($saveData);
         echo json_encode(array('success'=>true));
