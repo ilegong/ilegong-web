@@ -389,28 +389,32 @@ function product_link2($p, $defUri = '/') {
     }
 }
 
-function is_sent_by_pys($brand_id){
+function b2c_brands(){
+    return array(18, 92, 180, 206);
+}
+
+function is_b2c($brand_id){
     // 18：老杨；92：朋友说；206：樱花；180：踏歌
-    return in_array($brand_id, array(18, 92, 180, 206));
+    return in_array($brand_id, b2c_brands());
 }
 
 function ziti_order_filter($var){
-    return $var['Order']['ship_mark'] == 'ziti' && is_sent_by_pys($var['Order']['brand_id']);
+    return $var['Order']['ship_mark'] == 'ziti' && is_b2c($var['Order']['brand_id']);
 }
 function sfby_order_filter($var){
-    return $var['Order']['ship_mark'] == 'sfby' && is_sent_by_pys($var['Order']['brand_id']);
+    return $var['Order']['ship_mark'] == 'sfby' && is_b2c($var['Order']['brand_id']);
 }
 function sfdf_order_filter($var){
-    return $var['Order']['ship_mark'] == 'sfdf' && is_sent_by_pys($var['Order']['brand_id']);
+    return $var['Order']['ship_mark'] == 'sfdf' && is_b2c($var['Order']['brand_id']);
 }
 function kuaidi_order_filter($var){
-    return $var['Order']['ship_mark'] == 'kuaidi' && is_sent_by_pys($var['Order']['brand_id']);
+    return $var['Order']['ship_mark'] == 'kuaidi' && is_b2c($var['Order']['brand_id']);
 }
 function none_order_filter($var){
-    return (($var['Order']['ship_mark'] == null)||(trim($var['Order']['ship_mark']) == '')) && is_sent_by_pys($var['Order']['brand_id']);
+    return (($var['Order']['ship_mark'] == null)||(trim($var['Order']['ship_mark']) == '')) && is_b2c($var['Order']['brand_id']);
 }
 function c2c_order_filter($var){
-    return  !is_sent_by_pys($var['Order']['brand_id']);
+    return  !is_b2c($var['Order']['brand_id']);
 }
 
 function pys_ziti_filter($var){

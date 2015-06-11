@@ -201,7 +201,7 @@ class TuanController extends AppController
     }
     public function admin_query_b2c_paid_not_send()
     {
-        $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
+        $conditions['Order.brand_id'] = b2c_brands();
         $conditions['Order.status'] = ORDER_STATUS_PAID;
         $conditions['DATE(Cart.send_date) <'] = date('Y-m-d');
         $this->_query_orders($conditions, 'Order.created DESC');
@@ -213,7 +213,7 @@ class TuanController extends AppController
     public function admin_query_c2c_paid_not_send()
     {
         $conditions['OR'] = array('DATE(Order.pay_time) <'=>date('Y-m-d'),'Order.pay_time' => null);
-        $conditions['Order.type'] = ORDER_TYPE_DEF;
+        $conditions['Order.brand_id !='] = b2c_brands();
         $conditions['Order.status'] = ORDER_STATUS_PAID;
         $this->_query_orders($conditions, 'Order.updated');
 
@@ -635,12 +635,14 @@ class TuanController extends AppController
     }
 
     public function _query_b2c_paid_not_send_count(){
-        $b2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where o.type in (5, 6) and o.status = 1 and c.send_date < CURDATE()');
+        $b2c_brand_ids = implode(",", b2c_brands());
+        $b2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where o.brand_id in ('.$b2c_brand_ids.') and o.status = 1 and c.send_date < CURDATE()');
         return $b2c_paid_not_sent_count[0][0]['ct'];
     }
 
     public function _query_c2c_paid_not_send_count(){
-        $c2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on o.id = c.order_id where o.type = 1 and o.status = 1 and o.pay_time < CURDATE()');
+        $b2c_brand_ids = implode(",", b2c_brands());
+        $c2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on o.id = c.order_id where o.brand_id not in ('.$b2c_brand_ids.') and o.status = 1 and (o.pay_time < CURDATE() or o.pay_time is null)');
         return $c2c_paid_not_sent_count[0][0]['ct'];
     }
 
