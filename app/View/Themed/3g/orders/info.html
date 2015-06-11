@@ -70,7 +70,8 @@
     </div>
     {{/if}}
 <!--快递配送-->
-    {{if empty($this->Session->read('OrderConsignee.name'))||empty($this->Session->read('OrderConsignee.mobilephone'))||empty($this->Session->read('OrderConsignee.area'))||empty($this->Session->read('OrderConsignee.address'))}}
+
+    {{if !$kuaidi_consignee_exist}}
         <div class="address clearfix" style="position:relative;">
             <a class="moreicon" href="javascript:$('.tipslayer,.tipslayer_bg').show();"></a>
             <a href="javascript:$('.tipslayer,.tipslayer_bg').show();" class="order_selectbtn">选择发货地址</a>
