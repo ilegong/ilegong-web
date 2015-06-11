@@ -6,7 +6,6 @@ var totalPriceDom = $(".cart_pay .fl strong");
 var CartDomName = "input[name='shopCart']";
 var shipLeastNum = $('#ship_least_num');
 var leastNum = shipLeastNum.val();
-var orginTotalPrice = totalPriceDom.data('totalPrice');
 if(leastNum>0){
     editAmount.min = leastNum;
 }
@@ -51,16 +50,22 @@ $('#use_promotion_code').on('click',function(){
     var $promotionCode = $('#promotion_code');
     var promotionCode = $promotionCode.val();
     if(promotionCode){
-        $.post('/orders/apply_promotion_code/'+promotionCode,function(data){
-            if(data&&data['success']){
-                var totalPrice = parseFloat(orginTotalPrice)-parseFloat(data['reducePrice']);
-                priceDom.data("goodsPrice", totalPrice);
-                totalPriceDom.data("totalPrice", totalPrice);
-                priceDom.text("￥"+ utils.toFixed(priceDom.data("goodsPrice"), 2));
-                totalPriceDom.text("￥"+ utils.toFixed(totalPriceDom.data("totalPrice"), 2));
-                $('.shop_jifen_used').html('');
-                var checkbox = $("[data-coupon_item_id='" + coupon_item_id + "'] > input[type=checkbox]");
-                checkbox.prop("checked", false);
+        $.post('/orders/apply_promotion_code/'+promotionCode,{},function(data){
+            console.log(data);
+            if(data && data['success']){
+                if(data['reducePrice']>0){
+                    var orginTotalPrice = totalPriceDom.data('totalPrice');
+                    var totalPrice = parseFloat(orginTotalPrice)-parseFloat(data['reducePrice']);
+                    priceDom.data("goodsPrice", totalPrice);
+                    totalPriceDom.data("totalPrice", totalPrice);
+                    priceDom.text("￥"+ utils.toFixed(priceDom.data("goodsPrice"), 2));
+                    totalPriceDom.text("￥"+ utils.toFixed(totalPriceDom.data("totalPrice"), 2));
+                    $('.shop_jifen_used').html('');
+                    var checkbox = $("[data-coupon_item_id] > input[type=checkbox]");
+                    checkbox.prop("checked", false);
+                }else{
+                    utils.alert('优惠码使用失败');
+                }
             }else{
                 if(data['reason']=='code_error'){
                     utils.alert('优惠码有误,请重新输入');
@@ -72,7 +77,7 @@ $('#use_promotion_code').on('click',function(){
                     utils.alert('优惠码使用失败');
                 }
             }
-        });
+        },'json');
     }else{
         utils.alert('请输入优惠码');
     }

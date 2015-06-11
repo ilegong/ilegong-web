@@ -983,7 +983,8 @@ class TuanBuyingsController extends AppController{
         if($reducePrice>0){
             $toUpdate = array('total_all_price' => 'if(total_all_price - ' . $reducePrice .' < 0, 0, total_all_price - ' . $reducePrice .')');
             if($this->Order->updateAll($toUpdate, array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY))){
-                $this->PromotionCode->updateAll(array('available' => 1, 'use_time' => date('Y-m-d H:i:s')),array('code' => $code,'product_id' => $productId));
+                $useTime = date('Y-m-d H:i:s',time());
+                $this->PromotionCode->updateAll(array('available' => 0, 'use_time' => "'".$useTime."'"), array('code' => $code,'product_id' => $productId,'id'=>$promotion_code['PromotionCode']['id']));
             }
         }
         $this->Session->write(OrdersController::key_balanced_promotion_code(), '');

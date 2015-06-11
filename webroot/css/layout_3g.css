@@ -176,7 +176,7 @@ footer img{ width:4.625em; height:1.583em;}
     font-size: 0.9em;
     background-color: #f1f1f1;
     border-top: 1px #dddddd solid;
-    height: 3.8em;
+    height: 50px;
 }
 .navbar-v1 a .op-icon { background: url('/img/mobilev1/pyshuo_icon.png?xx') 0 0 no-repeat; width:1.9167em; height:1.5em; background-size:25em 25em; display: inline-block; vertical-align: text-bottom; }
 .navbar-v1 ul { text-align: center; }
@@ -568,7 +568,8 @@ a:hover, a:focus {
 .leave_words input{ outline: none; width: 100%; line-height: 20px; padding: 7px 0; border: 0; background: #eeeeee; font-size: 1em; font-weight: normal; color: #666666; text-indent: 5px; vertical-align: middle; -webkit-appearance: none; border: 1px #dddddd solid;}
 /*alice add css 0611*/
 .order_code{ height: 36px; line-height: 36px; width: 80px; text-align: center; background-color: #ffa200; color: #ffffff; text-decoration: none; display: block;}
-
+.order_code:hover{background-color: #ffa200; color: #ffffff; text-decoration: none;}
+.order_code:visited{background-color: #ffa200; color: #ffffff; text-decoration: none;}
 
 /*积分明细*/
 .jifen_detail{ margin-top: 43px;}
