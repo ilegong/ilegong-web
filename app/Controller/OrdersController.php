@@ -514,7 +514,7 @@ class OrdersController extends AppController {
 
             $this->loadModel('OfflineStore');
             $ziti_info = $this->OfflineStore->find('first', array(
-                'conditions' => array('id' => $ziti_id)
+                'conditions' => array('id' => $ziti_id,'deleted' => DELETED_NO)
             ));
             if(!empty($ziti_info)){
                 $ziti_consignees_info = array('consignee' => $ziti_consignees[0]['OrderConsignee'], 'ziti' => $ziti_info['OfflineStore']);
@@ -1817,7 +1817,7 @@ class OrdersController extends AppController {
         $this->loadModel('OfflineStore');
         $this->loadModel('OrderConsignee');
         $pickup = $this->OfflineStore->find('first', array(
-            'conditions' => array('id' => $shop_id, 'deleted' => 0)
+            'conditions' => array('id' => $shop_id, 'deleted' => DELETED_NO)
         ));
         if(empty($pickup)){
             $res['reason'] = 'invalid_shop';

@@ -34,7 +34,7 @@ class TuanTeamsController extends AppController{
 
         $offline_store_ids =  Hash::extract($tuan_teams,'{n}.TuanTeam.offline_store_id');
         $this->loadModel('OfflineStore');
-        $offline_store = $this->OfflineStore->find('all',array('conditions' => array('id' => $offline_store_ids)));
+        $offline_store = $this->OfflineStore->find('all',array('conditions' => array('id' => $offline_store_ids,'deleted' => DELETED_NO)));
         $offline_store = Hash::combine($offline_store,'{n}.OfflineStore.id','{n}.OfflineStore');
         $tuan_teams = Hash::combine($tuan_teams,'{n}.TuanTeam.id','{n}.TuanTeam');
         foreach ($tuan_teams as &$tuan_team){
