@@ -12,3 +12,7 @@ ADD UNIQUE INDEX `code_UNIQUE` (`code` ASC);
 
 ALTER TABLE `cake_promotion_codes`
 ADD COLUMN `price` INT NOT NULL DEFAULT 0 AFTER `use_time`;
+
+ALTER TABLE `cake_promotion_codes`
+ADD COLUMN `product_id` INT NOT NULL AFTER `price`;
+

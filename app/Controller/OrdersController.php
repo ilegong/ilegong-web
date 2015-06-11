@@ -44,6 +44,10 @@ class OrdersController extends AppController {
         return "Balance.balance.totalprice";
     }
 
+    public static function key_balanced_promotion_code(){
+        return "Balance.apply_promotion_codes";
+    }
+
     function beforeFilter() {
         parent::beforeFilter();
         if (empty($this->currentUser['id']) && array_search($this->request->params['action'], $this->customized_not_logged) === false) {
@@ -787,7 +791,7 @@ class OrdersController extends AppController {
         $coupon_item_id = $_POST['coupon_item_id'];
         $brand_id = $_POST['brand_id'];
         $applying = $_POST['action'] == 'apply';
-
+        $this->Session->write(self::key_balanced_promotion_code(),'');
         $specifiedCartIds = $this->specified_balance_pids();
         $cartsByIds = $this->Buying->cartsByIds($specifiedCartIds, $uid, $this->Session->id());
         list($cart, $shipFee) = $this->Buying->applyPromoToCart($cartsByIds, $shipPromotionId, $uid);
@@ -810,6 +814,44 @@ class OrdersController extends AppController {
         echo json_encode($resp);
     }
 
+    public function apply_promotion_code($code){
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if(empty($code)){
+            echo json_encode(array('success' => false,'reason' => 'code_error'));
+        }
+        if (empty($uid)) {
+            echo json_encode(array('changed' => false, 'reason' => 'not_login'));
+            return;
+        }
+        $specifiedCartIds = $this->specified_balance_pids();
+        $cartsByIds = $this->Buying->cartsByIds($specifiedCartIds, $uid, $this->Session->id());
+        if(empty($cartsByIds)){
+            echo json_encode(array('success' => false,'reason' => 'cart_empty'));
+            return;
+        }
+        $this->loadModel('PromotionCode');
+        $reducePrice = 0;
+        foreach($cartsByIds as $cartId=>$cart){
+            $pid = $cart['product_id'];
+            $cart_price = $cart['price'];
+            $promotion_code = $this->PromotionCode->find('first',array('conditions' => array('available'=>1,'code'=>$code,'product_id'=>$pid)));
+            if(!empty($promotion_code)){
+                $price = $promotion_code['PromotionCode']['price'];
+                $reducePrice = $reducePrice + ($cart_price-$price);
+            }
+        }
+        if($reducePrice>0){
+            //clear score and coupon
+            $this->Session->write(self::key_balanced_scores(), '');
+            $this->Session->write(self::key_balanced_conpon_global(), '[]');
+            $this->Session->write(self::key_balanced_conpons(), '[]');
+            $this->Session->write(self::key_balanced_promotion_code(),$code);
+        }
+        echo json_encode(array('success' => true,'reducePrice' => $reducePrice));
+        return;
+    }
+
     public function apply_score() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
@@ -826,6 +868,7 @@ class OrdersController extends AppController {
         $cartsByIds = $this->Buying->cartsByIds($specifiedCartIds, $uid, $this->Session->id());
         list($cart, $shipFee) = $this->Buying->applyPromoToCart($cartsByIds, $shipPromotionId, $uid);
 
+        $this->Session->write(self::key_balanced_promotion_code(),'');
         $this->Session->write(self::key_balanced_scores(), '');
         $total_reduced = $this->_cal_total_reduced($uid);
         $total_price = $cart->total_price() - $total_reduced / 100 + $shipFee;

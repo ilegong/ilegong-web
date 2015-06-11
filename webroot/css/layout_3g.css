@@ -564,7 +564,11 @@ a:hover, a:focus {
     background-color: #ffffff;
 }
 .leave_words{ padding: 9px 10px; background-color: #ffffff; border-bottom: 1px #eeeeee solid;}
-.leave_words input{ width: 100%;  line-height: 20px; padding: 5px 0; border: 0; border-radius: 3px; background: #eeeeee; font-size: 1em; font-weight: normal; color: #666666; text-indent: 5px; vertical-align: middle; -webkit-appearance: none; border: 1px #dddddd solid;}
+/*alice change css 0611*/
+.leave_words input{ outline: none; width: 100%; line-height: 20px; padding: 7px 0; border: 0; background: #eeeeee; font-size: 1em; font-weight: normal; color: #666666; text-indent: 5px; vertical-align: middle; -webkit-appearance: none; border: 1px #dddddd solid;}
+/*alice add css 0611*/
+.order_code{ height: 36px; line-height: 36px; width: 80px; text-align: center; background-color: #ffa200; color: #ffffff; text-decoration: none; display: block;}
+
 
 /*积分明细*/
 .jifen_detail{ margin-top: 43px;}

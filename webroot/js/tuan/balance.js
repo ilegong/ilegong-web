@@ -6,6 +6,7 @@ var totalPriceDom = $(".cart_pay .fl strong");
 var CartDomName = "input[name='shopCart']";
 var shipLeastNum = $('#ship_least_num');
 var leastNum = shipLeastNum.val();
+var orginTotalPrice = totalPriceDom.data('totalPrice');
 if(leastNum>0){
     editAmount.min = leastNum;
 }
@@ -45,6 +46,37 @@ function editCartNum(id, num) {
         editCartNum($(CartDomName).data('id'), $(CartDomName).val());
     });
 });
+
+$('#use_promotion_code').on('click',function(){
+    var $promotionCode = $('#promotion_code');
+    var promotionCode = $promotionCode.val();
+    if(promotionCode){
+        $.post('/orders/apply_promotion_code/'+promotionCode,function(data){
+            if(data&&data['success']){
+                var totalPrice = parseFloat(orginTotalPrice)-parseFloat(data['reducePrice']);
+                priceDom.data("goodsPrice", totalPrice);
+                totalPriceDom.data("totalPrice", totalPrice);
+                priceDom.text("￥"+ utils.toFixed(priceDom.data("goodsPrice"), 2));
+                totalPriceDom.text("￥"+ utils.toFixed(totalPriceDom.data("totalPrice"), 2));
+                $('.shop_jifen_used').html('');
+                var checkbox = $("[data-coupon_item_id='" + coupon_item_id + "'] > input[type=checkbox]");
+                checkbox.prop("checked", false);
+            }else{
+                if(data['reason']=='code_error'){
+                    utils.alert('优惠码有误,请重新输入');
+                }else if(data['reason']=='not_login'){
+                    utils.alert('请登录',function(){window.location.href = '/users/login.html?referer=' + encodeURIComponent("/");},1000);
+                }else if(data['reason']=='cart_empty'){
+                    utils.alert('优惠码使用失败,请重新购买');
+                }else{
+                    utils.alert('优惠码使用失败');
+                }
+            }
+        });
+    }else{
+        utils.alert('请输入优惠码');
+    }
+});
 //use score
 $('.shop_jifen_used').click(function(){
     var that = $(this);
@@ -57,6 +89,7 @@ $('.shop_jifen_used').click(function(){
     $.post('/orders/apply_score.json', {'use' : that.html()=="<i></i>", 'score':totalPriceDom.data("totalPrice")*100/2}, function(data){
         if (data && data.success) {
             console.log(data);
+            $('#promotion_code').val();
             var scoreMoney = data.score_money;
             if(data.score_used){
                 scoreMoney = - data.score_money;
@@ -91,6 +124,7 @@ $('li > a.coupon').on('click',function (e) {
     $.post('/orders/apply_coupon.json', {'brand_id': brandId, 'coupon_item_id': coupon_item_id, 'action': action}, function (data) {
         if (data) {
             console.log(data);
+            $('#promotion_code').val();
             if (data.changed) {
                 var totalPrice = utils.toFixed(parseFloat(data.total_price), 2);
                 totalPriceDom.text("￥"+totalPrice);
