@@ -532,8 +532,7 @@ class TuanController extends AppController
         $kuaidi_orders = array_filter($orders,'kuaidi_order_filter');
         $c2c_orders = array_filter($orders,'c2c_order_filter');
         $none_orders = array_filter($orders,'none_order_filter');
-        $manby_orders = array_filter($orders,'man_bao_you_filter');
-        $map_other_orders = array('sfby' => $sfby_orders,'sfdf'=> $sfdf_orders,'kuaidi' => $kuaidi_orders,'none'=> $none_orders,'c2c'=> $c2c_orders,'manbaoyou'=>$manby_orders);
+        $map_other_orders = array('sfby' => $sfby_orders,'sfdf'=> $sfdf_orders,'kuaidi' => $kuaidi_orders,'none'=> $none_orders,'c2c'=> $c2c_orders);
         $map_ziti_orders = array();
 
         foreach($ziti_orders as $item){
