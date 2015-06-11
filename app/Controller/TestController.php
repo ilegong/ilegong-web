@@ -18,7 +18,7 @@ class TestController extends AppController{
 
     public function test_get_option_date(){
         $this->autoRender = false;
-        $date = get_consignment_date('1','2,4,6','17,30');
+        $date = get_consignment_date('3','2,4,6','17,30');
         echo json_encode(array('success' => true,'date' => $date));
         return;
     }

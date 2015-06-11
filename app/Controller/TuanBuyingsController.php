@@ -812,6 +812,7 @@ class TuanBuyingsController extends AppController{
         $type = $_REQUEST['type'];
         if($type!=-1){
             $cond['type']=$type;
+            $cond['deleted'] = DELETED_NO;
         }
         $this->loadModel('OfflineStores');
         $address = $this->OfflineStores->find('all',array(
