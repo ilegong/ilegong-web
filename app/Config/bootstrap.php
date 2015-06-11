@@ -1840,6 +1840,7 @@ function is_pys_product($brandId){
  * @return bool|string
  */
 function get_consignment_date($before_day,$week_days,$time){
+    $week_days = explode(',',$week_days);
     $days = get_weekday_by_int($week_days);
     $optionDates = get_optional_date($days);
     $time = explode(',',$time);
