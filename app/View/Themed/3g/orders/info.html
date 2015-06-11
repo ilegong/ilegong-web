@@ -209,16 +209,16 @@
     <div class="conorder_btn clearfix">
         {{if $ziti_support}}
             <div class="fl" style="width: 47%;">
-                <a href="#X" class="weixin" onclick="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide();">自提</a>
+                <a href="#X" class="weixin" onclick="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide();$('.tipslayer,.tipslayer_bg').hide();">自提</a>
                 <label>自提可省邮费</label>
             </div>
             <div class="fr" style="width: 47%;">
-                <a href="#X" class="alipay" onclick="javascript:$('.ziti_choose').hide();$('.kuaidi_choose').show();">快递</a>
+                <a href="#X" class="alipay" onclick="javascript:$('.ziti_choose').hide();$('.kuaidi_choose').show();$('.tipslayer,.tipslayer_bg').hide();">快递</a>
                 <label>自营商品满98包邮</label>
             </div>
         {{else}}
             <div class="fr" style="width: 94%;">
-                <a href="#X" class="alipay" onclick="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide();">快递</a>
+                <a href="#X" class="alipay" onclick="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide();$('.tipslayer,.tipslayer_bg').hide();">快递</a>
                 <label>自营商品满98包邮</label>
             </div>
         {{/if}}
