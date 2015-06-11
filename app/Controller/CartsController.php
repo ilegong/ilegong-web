@@ -60,22 +60,9 @@ class CartsController extends AppController{
             $sessionId = $this->Session->id();
             $cartM = $this->Cart;
             $customized_price = $this->data['Cart']['customized_price'];
-//            $ship_setting_id = $this->data['Cart']['ship_set_id'];
-//            if($ship_setting_id){
-//                $this->loadModel('ProductShipSetting');
-//                $productShipSetting = $this->ProductShipSetting->find('first',array(
-//                    'conditions' => array(
-//                        'id' => $ship_setting_id
-//                    )
-//                ));
-//                if(!empty($productShipSetting)){
-//                    if($num<$productShipSetting['ProductShipSetting']['least_num']){
-//                        echo json_encode(array('success'=> false, 'reason' => 'ship_num_not_correct'));
-//                        return;
-//                    }
-//                }
-//            }
-
+            if(empty($send_date)){
+                $send_date = $this->get_pure_product_consignment_date($product_id);
+            }
             if (!$type) {
                 //FIXME:should give an error to client
                 $type = CART_ITEM_TYPE_NORMAL;

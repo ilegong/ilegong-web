@@ -266,8 +266,13 @@ class TuanBuyingsController extends AppController{
         $send_date = $_REQUEST['send_date'];
 
         if((empty($consignment_date_id) || $consignment_date_id == 0) && empty($send_date)){
-            echo json_encode(array('success'=> false, 'error' => '对不起，系统错误，请重新点击购买'));
-            return;
+            $product_consignment_date = $this->get_pure_product_consignment_date($product_id);
+            //商品没有设置时间
+            if(empty($product_consignment_date)){
+                echo json_encode(array('success'=> false, 'error' => '对不起，系统错误，请重新点击购买'));
+                return;
+            }
+            $this->set('product_consignment_date',$product_consignment_date);
         }
         if(!empty($consignment_date_id) && $consignment_date_id != 0){
             $consignment_date = $this->ConsignmentDate->findById($consignment_date_id);

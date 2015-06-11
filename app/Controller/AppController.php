@@ -743,7 +743,7 @@ class AppController extends Controller {
         $this->set('data_id',$data_id);
     }
 
-    protected function get_product_consignment_date($pid){
+    protected function get_pure_product_consignment_date($pid){
         $this->loadModel('ConsignmentDateRule');
         $rule = $this->ConsignmentDateRule->find('first',array('conditions' => array(
             'deleted' => DELETED_NO,
@@ -757,6 +757,14 @@ class AppController extends Controller {
         $time = $rule['cut_time'];
         $consignment_date = get_consignment_date($before_day,$week_days,$time);
         if($consignment_date==null){
+            return null;
+        }
+        return $consignment_date;
+    }
+
+    protected function get_product_consignment_date($pid){
+        $consignment_date = $this->get_pure_product_consignment_date($pid);
+        if(empty($consignment_date)){
             return null;
         }
         $product_consignment_date = date('m月d日',strtotime($consignment_date));
