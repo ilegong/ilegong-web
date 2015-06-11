@@ -129,7 +129,7 @@
                     <td {{if !empty($order['Order']['remark_address']) && (empty($offline_store) || ( !empty($offline_store) && !$offline_store['OfflineStore']['can_remark_address']))}} class="danger"{{/if}}>
                         {{$order['Order']['remark_address']}}
                     </td>
-                    <td mark-print="no-print" {{if $has_paid && $order['Order']['pay_time']==null}}class="danger"{{/if}}>
+                    <td mark-print="no-print" {{if $has_paid && $order['Order']['pay_time']==null}}class="danger"{{/if}} data-pay-time="{{$order['Order']['pay_time']}}">
                         {{if $order['Pay']['trade_type']=='JSAPI'}}
                         微信支付
                         {{elseif $order['Pay']['trade_type']=='ZFB'}}
@@ -139,7 +139,7 @@
                         {{else}}
                         <span class="text-danger">未知</span>
                         {{/if}}
-                        {{date_format(date_create($order['Order']['pay_time']), 'n月d H:i')}}
+                        {{if !empty($order['Order']['pay_time'])}}{{date_format(date_create($order['Order']['pay_time']), 'n月d H:i')}}{{/if}}
                     </td>
                     <td mark-print="no-print" {{if $has_paid && $order['Pay']['out_trade_no']==null}}class="danger"{{/if}}>
                         {{$order['Pay']['out_trade_no']}}

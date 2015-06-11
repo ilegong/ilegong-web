@@ -103,6 +103,10 @@ class OrdersController extends AppController
             }
         }
 
+        if(($order['Order']['status'] == 0) && ($this->data['status'] == 1)){
+            $this->data['pay_time'] = date("Y-m-d H:i:s");
+        }
+
         $this->data['remark'] = $remark;
         foreach($this->data as $key => $value){
             $this->data[$key] = "'".$value."'";
