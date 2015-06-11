@@ -680,6 +680,8 @@ label {
 .order_submit label{ color: #ffa200; font-weight: bold;}
 .order_submit a{ width: 120px; font-size: 1.15em; text-align: center; color: #ffffff; text-decoration: none; display: block; background-color: #29AC0E; margin-left: 10px;}
 .order_selectbtn{ display: block; line-height: 40px; border-radius: 3px; width: 120px; text-align: center; font-size: 1em; background-color: #29AC0E; color: #ffffff;}
+.order_selectbtn:hover{background-color: #29AC0E; color: #ffffff; text-decoration: none;}
+.order_selectbtn:visited{background-color: #29AC0E; color: #ffffff; text-decoration: none;}
 .classlist { height: 44px; line-height: 44px; width: 100%; text-align: center; color: #ffffff; font-size: 20px; background-color: #29ac0e; position: fixed; top: 0; z-index: 99; overflow: hidden;}
 .classlist a.back { display: block; position: absolute; top: 10px; left: 10px; width: 1.167em; height: 1.133em; background: url(/img/mobile/pyshuo_icon.png?v3) no-repeat -15.667em -5.333em; background-size: 20em 20em;}
 .classlist a.home{ display: block; position: absolute; top: 10px; right: 10px; width: 1.2em; height: 1.133em; background: url(/img/mobile/pyshuo_icon.png?v3) no-repeat -17.667em -5.333em; background-size: 20em 20em;}
