@@ -66,8 +66,7 @@
             <strong>{{$ziti_consignee_info['consignee']['name']}} {{$ziti_consignee_info['consignee']['mobilephone']}}</strong><br />
             <strong>自提点信息：</strong><br />{{$ziti_consignee_info['ziti']['name']}}<br />联系人：{{$ziti_consignee_info['ziti']['owner_name']}}{{$ziti_consignee_info['ziti']['owner_phone']}}
         </a>
-        <a href="/orders/edit_consignee?modal=true" class="address_addbtn">选择快递配送到家</a>
-        <!--<a href="javascript:$('.ziti_choose').hide();$('.kuaidi_choose').show()" class="address_addbtn">选择快递配送到家</a>-->
+        <a href="javascript:$('.ziti_choose').hide();$('.kuaidi_choose').show()" class="address_addbtn">选择快递配送到家</a>
     </div>
     {{/if}}
 <!--快递配送-->
@@ -214,12 +213,12 @@
                 <label>自提可省邮费</label>
             </div>
             <div class="fr" style="width: 47%;">
-                <a class="alipay thickbox" href="/orders/edit_consignee?modal=true">快递</a>
+                <a class="alipay new_address thickbox" href="/orders/edit_consignee?modal=true">快递</a>
                 <label>自营商品满98包邮</label>
             </div>
         {{else}}
             <div class="fr" style="width: 94%;">
-                <a class="alipay thickbox" href="/orders/edit_consignee?modal=true">快递</a>
+                <a class="alipay new_address thickbox" href="/orders/edit_consignee?modal=true">快递</a>
                 <label>自营商品满98包邮</label>
             </div>
         {{/if}}
