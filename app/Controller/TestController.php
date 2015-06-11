@@ -23,4 +23,10 @@ class TestController extends AppController{
         return;
     }
 
+    public function test_get_send_date(){
+        $this->autoRender = false;
+        $date = get_send_date('2', '19:00:00', '2,4,6');
+        echo json_encode(array('success' => true,'data' => $date));
+        return;
+    }
 }
