@@ -32,32 +32,25 @@ class TuanController extends AppController
         $con_name = $_REQUEST['con_name'];
         $con_phone = $_REQUEST['con_phone'];
         $con_creator = $_REQUEST['con_creator'];
-        $order_status = empty($_REQUEST['order_status']) ? -1 : $_REQUEST['order_status'];
+        $order_status = !isset($_REQUEST['order_status']) ? -1 : $_REQUEST['order_status'];
 
         $conditions = array();
         if (!empty($con_name)) {
             $conditions['Order.consignee_name'] = $con_name;
-            if ($order_status != -1) {
-                $conditions['Order.status'] = $order_status;
-            }
         }
         if (!empty($con_phone)) {
             $conditions['Order.consignee_mobilephone'] = $con_phone;
-            if ($order_status != -1) {
-                $conditions['Order.status'] = $order_status;
-            }
         }
         if (!empty($con_creator)) {
             $conditions['Order.creator'] = $con_creator;
-            if ($order_status != -1) {
-                $conditions['Order.status'] = $order_status;
-            }
         }
         if (!empty($order_id)) {
             $conditions['Order.id'] = $order_id;
         }
-        if(empty($con_name)&&empty($con_creator)&&empty($con_phone)&&$order_status == 14){
-            $conditions['Order.status'] = $order_status;
+        if (!empty($con_name)|| !empty($con_phone)|| !empty($con_creator)|| !empty($order_id)|| $order_status == 14){
+            if ($order_status != -1) {
+                $conditions['Order.status'] = $order_status;
+            }
         }
 
         $this->_query_orders($conditions, 'Order.created DESC');

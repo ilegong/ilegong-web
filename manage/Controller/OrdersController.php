@@ -105,6 +105,7 @@ class OrdersController extends AppController
 
         if(($order['Order']['status'] == 0) && ($this->data['status'] == 1)){
             $this->data['pay_time'] = date("Y-m-d H:i:s");
+            $this->_insert_pay_notifies($order);
         }
 
         $this->data['remark'] = $remark;
@@ -687,5 +688,26 @@ class OrdersController extends AppController
             }else return false;
     }
 
+    private function _insert_pay_notifies($order){
+        $data = array();
+
+        $time = date('YmdHis');
+        $data['PayNotify']['out_trade_no'] = 'OFFLINE-'.$time;
+        $data['PayNotify']['transaction_id'] = -1;
+        $data['PayNotify']['trade_type'] = 'OFFLINE';
+        $data['PayNotify']['bank_type'] = '';
+        $data['PayNotify']['total_fee'] = $order['Order']['total_all_price'];
+        $data['PayNotify']['openid'] = '';
+        $data['PayNotify']['time_end'] = $time;
+        $data['PayNotify']['status'] = 6;
+        $data['PayNotify']['order_id'] = $order['Order']['id'];
+
+        $this->loadModel('PayNotify');
+        if ($this->PayNotify->save($data)) {
+            return $this->Order->getLastInsertID();
+        } else {
+            $this->log($this->Order->validationErrors);
+        }
+    }
 
 }
