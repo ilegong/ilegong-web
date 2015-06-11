@@ -27,12 +27,11 @@
                 {{if $_GET['login_error']}}
                     <p class="bg-warning" style="color: orangered">{{$_GET['login_error']}}</p>
                 {{else}}
-                <p>授权我们使用您的微信账号登录朋友说。</p>
                 {{/if}}
                 <a id="wx_login_a1" href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" style="vertical-align: bottom">
                     <img src="{{$this->Html->url('/img/Wechat-logo-315_315.png');}}" style="width:90px;height:90px">
                 </a>
-                <a id="wx_login_a2" href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" class="btn btn-success" style="vertical-align: bottom">使用微信登录</a>
+                <a id="wx_login_a2" href="{{$this->Html->url('/users/wx_login.html?')}}{{$referer_link}}" class="btn btn-success" style="vertical-align: bottom">微信登录</a>
         </div>
         {{/if}}
         <div class="tab-pane fade {{if !$supportWeixin || $login_by_account}} in active{{/if}}" id="formLogin">
