@@ -81,7 +81,7 @@
             <span style="display:block;" class="fl">快递&nbsp;&nbsp;<a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
             <a href="#X" style="overflow:hidden; display:block; margin-right:1em; color:#666666;"><strong>{{$this->Session->read('OrderConsignee.name')}} {{$this->Session->read('OrderConsignee.mobilephone')}}
             </strong><br />{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}</a>
-            {{if $ziti_support}}<a href="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide()" class="address_addbtn">选择自提省邮费</a>{{/if}}
+            {{if $ziti_support}}<a href="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide();" class="address_addbtn">选择自提省邮费</a>{{/if}}
         </div>
     {{/if}}
 {{/if}}
@@ -209,16 +209,16 @@
     <div class="conorder_btn clearfix">
         {{if $ziti_support}}
             <div class="fl" style="width: 47%;">
-                <a href="#X" class="weixin">自提</a>
+                <a href="#X" class="weixin" onclick="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide();">自提</a>
                 <label>自提可省邮费</label>
             </div>
             <div class="fr" style="width: 47%;">
-                <a href="#X" class="alipay">快递</a>
+                <a href="#X" class="alipay" onclick="javascript:$('.ziti_choose').hide();$('.kuaidi_choose').show();">快递</a>
                 <label>自营商品满98包邮</label>
             </div>
         {{else}}
             <div class="fr" style="width: 94%;">
-                <a href="#X" class="alipay">快递</a>
+                <a href="#X" class="alipay" onclick="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide();">快递</a>
                 <label>自营商品满98包邮</label>
             </div>
         {{/if}}
