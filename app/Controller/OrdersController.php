@@ -274,7 +274,6 @@ class OrdersController extends AppController {
             $data['ship_mark'] = KUAIDI_TAG;
             if($ship_type == 'ziti'){
                 $data['consignee_id'] = $address['OrderConsignee']['ziti_id'];
-                $data['ship_mark'] = 'ziti';
                 $data['consignee_area'] = '';
                 $data['ship_mark'] = ZITI_TAG;
             }
