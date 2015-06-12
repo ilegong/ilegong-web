@@ -61,6 +61,17 @@ echo $this->MForm->create($current_model,array(
 echo $this->MForm->input('storage');
 echo $this->MForm->input('end_time');
 				        echo $this->MForm->input('material');
+
+                        echo $this->Form->label('productConsignmentDate.ProductConsignmentDate.published', '启用排期', array('id' => 'user-label', 'checked'=>productConsignmentDate.ProductConsignmentDate.published));
+                        echo $this->MForm->checkbox('productConsignmentDate.ProductConsignmentDate.published',
+                            array('label' => '启用排期', 'name' => 'data[ProductConsignmentDate][published]'));
+                        echo $this->MForm->input('productConsignmentDate.ProductConsignmentDate.week_days',
+                            array('label' => '发货排期', 'name' => 'data[ProductConsignmentDate][week_days]', 'type' => 'text', 'placeholder'=>"不排期留空，每周二四六发货输入'2,4,6'"));
+                        echo $this->MForm->input('productConsignmentDate.ProductConsignmentDate.deadline_day',
+                            array('label' => '截单日期', 'name' => 'data[ProductConsignmentDate][deadline_day]', 'placeholder'=>"不排期留空，提前3天截单输入'3'"));
+                        echo $this->MForm->input('productConsignmentDate.ProductConsignmentDate.deadline_time',
+                            array('label' => '截单时间', 'name' => 'data[ProductConsignmentDate][deadline_time]', 'type' => 'text', 'placeholder'=>"不排期留空，下午7点截单输入'19:00:00'"));
+
 						echo $this->MForm->keyword();
 				?>
 				<div class="clearfix"></div>

@@ -57,6 +57,33 @@ class ProductsController extends AppController{
 
         $this->loadModel('ProductTag');
         $this->set('productTags', $this->ProductTag->find('list'));
+
+        $this->loadModel('ProductConsignmentDate');
+
+        $productConsignmentDate = $this->ProductConsignmentDate->find('first', array(
+            'conditions' => array('product_id' => $id)
+        ));
+        $this->log('productConsignmentDate: '.json_encode($productConsignmentDate));
+        if(empty($productConsignmentDate)){
+            if(!empty($this->data['ProductConsignmentDate']) && $this->data['ProductConsignmentDate']['published'] != 0){
+                if(empty($this->data['ProductConsignmentDate']['week_days']) || empty($this->data['ProductConsignmentDate']['deadline_day']) || empty($this->data['ProductConsignmentDate']['deadline_time'])){
+                    throw new Exception('invalid_params');
+                }
+                $this->data['ProductConsignmentDate']['id'] = $productConsignmentDate['ProductConsignmentDate']['id '];
+                $this->data['ProductConsignmentDate']['product_id'] = $id;
+                $this->ProductConsignmentDate->save($this->data['ProductConsignmentDate']);
+            }
+        }
+        else {
+            if(!empty($this->data['ProductConsignmentDate'])){
+                $this->log('post data: '.json_encode($this->data['ProductConsignmentDate']));
+                $this->data['ProductConsignmentDate']['deadline_time'] = "'".$this->data['ProductConsignmentDate']['deadline_time']."'";
+                $this->data['ProductConsignmentDate']['week_days'] = "'".$this->data['ProductConsignmentDate']['week_days']."'";
+                $this->ProductConsignmentDate->updateAll($this->data['ProductConsignmentDate'], array('id'=>$productConsignmentDate['ProductConsignmentDate']['id']));
+            }
+        }
+        $this->data['productConsignmentDate'] = $productConsignmentDate;
+
         $this->__viewFileName = 'admin_add';
     }
 
