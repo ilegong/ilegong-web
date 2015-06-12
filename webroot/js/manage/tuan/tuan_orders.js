@@ -571,7 +571,7 @@ $(document).ready(function () {
         tablesToExcel(tableIds, tableNames, 'order-export.xls', 'Excel', ignoreRows);
     });
 
-    $('.print-statistics').on('click', function(e){
+    $('.toggle-orders').on('click', function(e){
         var showAll = $(this).data('show-all');
         if(showAll == 1){
             $(this).data('show-all', 0);
@@ -587,6 +587,10 @@ $(document).ready(function () {
             $('h3.ship-type').removeClass("new-page");
             $('.table-collect-data').css('display', 'block');
         }
+    });
+    $('.print-orders').on('click', function(e){
+        $('.orders .consignee-name').trigger('click');
+        window.print();
     });
     initSetOrder();
 });
