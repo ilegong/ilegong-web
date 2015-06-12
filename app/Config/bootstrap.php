@@ -1840,6 +1840,8 @@ function get_group_product_ids($pid)
     $egg_product = array(896, 818, 161);
     $cake_product = array(877, 869, 862);
     $comosus_product = array(925, 905, 851);
+    $rice_product = array(231,1045,229);
+    $cherry_product = array(897,1020);
     if (in_array($pid, $egg_product)) {
         return $egg_product;
     }
@@ -1848,6 +1850,12 @@ function get_group_product_ids($pid)
     }
     if (in_array($pid, $comosus_product)) {
         return $comosus_product;
+    }
+    if(in_array($pid,$rice_product)){
+        return $rice_product;
+    }
+    if(in_array($pid,$cherry_product)){
+        return $cherry_product;
     }
     return $pid;
 }
