@@ -57,7 +57,7 @@ class TuanTeamsController extends AppController{
         $tuan_team = $this->TuanTeam->find('first', array(
             'conditions' =>array(
                 'id'=> $tuan_id,
-                'published' => PUBLISH_YES
+                //'published' => PUBLISH_YES
             ),
         ));
         if(empty($tuan_team)){
