@@ -1975,3 +1975,23 @@ function _is_after_deadline_time($now, $deadline_time)
 
     return $now > $limit_time;
 }
+
+
+function get_pure_product_consignment_date($pid){
+    $ConsignmentDate = ClassRegistry::init('ProductConsignmentDate');
+    $rule = $ConsignmentDate->find('first',array('conditions' => array(
+        'deleted' => DELETED_NO,
+        'product_id' => $pid
+    )));
+    if(empty($rule)){
+        return null;
+    }
+    $before_day = $rule['ProductConsignmentDate']['deadline_day'];
+    $week_days = $rule['ProductConsignmentDate']['week_days'];
+    $time = $rule['ProductConsignmentDate']['deadline_time'];
+    $consignment_date = get_send_date($before_day,$time,$week_days);
+    if($consignment_date==null){
+        return null;
+    }
+    return $consignment_date;
+}

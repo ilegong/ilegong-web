@@ -159,6 +159,7 @@ class Order extends AppModel {
                 $pid_list = Hash::extract($cartItems, '{n}.Cart.product_id');
             }
             if (!empty($pid_list)) {
+                $this->set_cart_send_date($cartItems);
                 if ($isTry) {
                     $shichiM = ClassRegistry::init('OrderShichi');
                     foreach ($pid_list as $pid) {
@@ -179,11 +180,6 @@ class Order extends AppModel {
                         }else{
                             $add_num = rand(1,$buy_multiple);
                         }
-                        //sec buy many
-//                        $sec_num = $cartItems[0]['Cart']['num'];
-//                        if($sec_num>1){
-//                            $add_num = $sec_num;
-//                        }
                         $tryM->updateAll(array('sold_num' => 'sold_num + '.$add_num), array('id' => $isTry, 'modified' => $pTry['ProductTry']['modified']));
                     }
                 } else if ($type == ORDER_TYPE_GROUP || $type == ORDER_TYPE_GROUP_FILL) {
@@ -407,6 +403,20 @@ class Order extends AppModel {
                     $this->log("add score: ".$refer['Refer']['from'].", 900, refer id".$refer['Refer']['id']);
                 }else{
                     $this->log("user first order add score to ".$refer['Refer']['from'].'fail');
+                }
+            }
+        }
+    }
+
+    function set_cart_send_date($carts){
+        $cartM = ClassRegistry::init('Cart');
+        foreach($carts as $item){
+            $pid = $item['Cart']['product_id'];
+            $cartId = $item['Cart']['id'];
+            if($cartId){
+                $sendDate = get_pure_product_consignment_date($pid);
+                if($sendDate!=null){
+                    $cartM->updateAll(array('send_date' => $sendDate),array('id' => $cartId));
                 }
             }
         }

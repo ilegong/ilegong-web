@@ -57,7 +57,7 @@ class Cart extends AppModel {
         if (empty($cache)) {
             $carts = $this->find('all', array(
                 'conditions' => array('order_id' => $order_id, 'status' => CART_ITEM_STATUS_BALANCED),
-                'fields' => array('num', 'product_id', 'name', 'creator', 'coverimg'),
+                'fields' => array('id','num', 'product_id', 'name', 'creator', 'coverimg'),
             ));
             $jsonStr = json_encode($carts);
             Cache::write($balanced_order_key, $jsonStr);

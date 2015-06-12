@@ -61,7 +61,7 @@ class CartsController extends AppController{
             $cartM = $this->Cart;
             $customized_price = $this->data['Cart']['customized_price'];
             if(empty($send_date)){
-                $send_date = $this->get_pure_product_consignment_date($product_id);
+                $send_date = get_pure_product_consignment_date($product_id);
             }
             if (!$type) {
                 //FIXME:should give an error to client

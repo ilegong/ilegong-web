@@ -16,6 +16,14 @@ class TestController extends AppController{
         $this->Weixin->notifyPaidDone($order);
     }
 
+    public function test_order_paid_done($orderId){
+        $this->autoRender = false;
+        $this->loadModel('Order');
+        $this->Order->set_order_to_paid($orderId, 0, 633345, 5, $memberId=0);
+        echo json_encode(array('success' => true));
+        return;
+    }
+
     public function test_get_option_date(){
         $this->autoRender = false;
         $date = get_consignment_date('3','2,4,6','17,30');

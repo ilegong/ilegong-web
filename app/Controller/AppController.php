@@ -743,27 +743,8 @@ class AppController extends Controller {
         $this->set('data_id',$data_id);
     }
 
-    protected function get_pure_product_consignment_date($pid){
-        $this->loadModel('ProductConsignmentDate');
-        $rule = $this->ProductConsignmentDate->find('first',array('conditions' => array(
-            'deleted' => DELETED_NO,
-            'product_id' => $pid
-        )));
-        if(empty($rule)){
-            return null;
-        }
-        $before_day = $rule['ProductConsignmentDate']['deadline_day'];
-        $week_days = $rule['ProductConsignmentDate']['week_days'];
-        $time = $rule['ProductConsignmentDate']['deadline_time'];
-        $consignment_date = get_send_date($before_day,$time,$week_days);
-        if($consignment_date==null){
-            return null;
-        }
-        return $consignment_date;
-    }
-
     protected function get_product_consignment_date($pid){
-        $consignment_date = $this->get_pure_product_consignment_date($pid);
+        $consignment_date = get_pure_product_consignment_date($pid);
         if(empty($consignment_date)){
             return null;
         }
