@@ -116,6 +116,7 @@ class CartsController extends AppController{
             $this->Session->write(OrdersController::key_balanced_scores(), '0');
             $this->Session->write(OrdersController::key_balanced_conpon_global(), '[]');
             $this->Session->write(OrdersController::key_balanced_conpons(), '[]');
+            $this->Session->write(OrdersController::key_balanced_promotion_code(),'');
             $info = array('success' => true, 'msg' => __('Success edit nums.'));
         } else {
             $info = array('success' => false);

@@ -1993,5 +1993,6 @@ function get_pure_product_consignment_date($pid){
     if($consignment_date==null){
         return null;
     }
-    return $consignment_date;
+    return date_format($consignment_date,'Y-m-d');
+    //return $consignment_date->format('Y-m-d');
 }

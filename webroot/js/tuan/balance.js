@@ -6,11 +6,13 @@ var totalPriceDom = $(".cart_pay .fl strong");
 var CartDomName = "input[name='shopCart']";
 var shipLeastNum = $('#ship_least_num');
 var leastNum = shipLeastNum.val();
+var orginTotalPrice = totalPriceDom.data('totalPrice');
 if(leastNum>0){
     editAmount.min = leastNum;
 }
 function editCartNum(id, num) {
     $('.shop_jifen_used').html("");
+    $('#promotion_code').val("");
     var cartPrice = $('#pamount-' + id).data('price') * num;
     priceDom.data("goodsPrice", cartPrice);
     var ship_fee = $(".ship_fee").data("shipFee") || 0;
@@ -20,6 +22,7 @@ function editCartNum(id, num) {
     $("[data-count]").text(num);
     priceDom.text("￥"+ utils.toFixed(goodsPrice, 2));
     totalPriceDom.text("￥"+ utils.toFixed(totalPrice, 2));
+    orginTotalPrice = totalPriceDom.data('totalPrice');
     var url = BASEURL + '/carts/editCartNum/' + id + '/' + num;
     if (!sso.check_userlogin({"callback": editCartNum, "callback_args": arguments}))
         return false;
@@ -54,7 +57,6 @@ $('#use_promotion_code').on('click',function(){
             console.log(data);
             if(data && data['success']){
                 if(data['reducePrice']>0){
-                    var orginTotalPrice = totalPriceDom.data('totalPrice');
                     var totalPrice = parseFloat(orginTotalPrice)-parseFloat(data['reducePrice']);
                     priceDom.data("goodsPrice", totalPrice);
                     totalPriceDom.data("totalPrice", totalPrice);
@@ -91,6 +93,7 @@ $('.shop_jifen_used').click(function(){
         that.html("<i></i>");
     }
     var balance_use_score = $(".balance_use_score");
+    $('#promotion_code').val("");
     $.post('/orders/apply_score.json', {'use' : that.html()=="<i></i>", 'score':totalPriceDom.data("totalPrice")*100/2}, function(data){
         if (data && data.success) {
             console.log(data);
@@ -120,6 +123,7 @@ $('li > a.coupon > input[type=checkbox]').on('click',function(e){
 });
 $('li > a.coupon').on('click',function (e) {
     e.preventDefault();
+    $('#promotion_code').val("");
     var that = $(this);
     var brandId = that.attr('data-brandId');
     var coupon_item_id = that.attr('data-coupon_item_id');
