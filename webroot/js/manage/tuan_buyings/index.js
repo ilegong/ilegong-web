@@ -7,6 +7,10 @@ $(function(){
     var leftSelectData = [];
     var tuan_name = $('#tuan_name');
 
+    var product_name = $('#product_name');
+    var productLeftSelectData = [];
+
+
     var $check_all_tb = $('#check_all_tb');
 
     var $batch_complete = $('#batch_complete');
@@ -124,6 +128,7 @@ $(function(){
             var tuan_product = item['TuanProduct'];
             $('<option value="' + tuan_product['product_id'] + '">' + tuan_product['alias'] + '</option>').appendTo(tuanProducts);
         });
+        search_product();
         tuanProducts.val(tuanProducts.attr('data-product-id'));
     });
     setTuanStatus();
@@ -436,6 +441,38 @@ $(function(){
         );
     });
 
+
+
+    function search_product(){
+        String.prototype.Trim = function() {
+            return this.replace(/(^\s*)|(\s*$)/g, "");
+        };
+        $("select[name='product_id'] option").each(function(){
+            productLeftSelectData.push({'val':$(this).val(),'name':$(this).text()});
+        });
+        if(navigator.userAgent.indexOf("MSIE")>0){
+            product_name.on('onpropertychange',producttxChange);
+        }else{
+            product_name.on('input',producttxChange);
+        }
+    }
+    function producttxChange(){
+        var content= product_name.val().Trim();
+        tuanProducts.empty();
+        if(content == ''){
+            $.each(productLeftSelectData,function(index,value){
+                tuanProducts.append('<option value="'+value['val']+'">'+value['name']+'</option>');
+            });
+        }else{
+            var reg = new RegExp(content,'i');
+            $.each(productLeftSelectData,function(index,val){
+                if(reg.test(val['name'])){
+                    tuanProducts.append('<option selected="selected" value="'+val['val']+'">'+val['name']+'</option>');
+                }
+            })
+        }
+    }
+
     function search_tuanteam(){
         String.prototype.Trim = function() {
             return this.replace(/(^\s*)|(\s*$)/g, "");
@@ -444,12 +481,12 @@ $(function(){
             leftSelectData.push({'val':$(this).val(),'name':$(this).text()});
         });
         if(navigator.userAgent.indexOf("MSIE")>0){
-            tuan_name.on('onpropertychange',txChange);
+            tuan_name.on('onpropertychange',tuantxChange);
         }else{
-            tuan_name.on('input',txChange);
+            tuan_name.on('input',tuantxChange);
         }
     }
-    function txChange(){
+    function tuantxChange(){
         var content= tuan_name.val().Trim();
         tuanTeams.empty();
         if(content == ''){
