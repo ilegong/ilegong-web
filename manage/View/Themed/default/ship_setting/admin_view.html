@@ -21,12 +21,12 @@
             </div>
         </td>
         <td>
-            <select class="form-control ship-val" name="ship_val">
+            <select class="form-control ship-val" name="ship_val" readonly='readonly'>
                 <option value="-1">所有自提点</option>
                 <option value="0"
                 {{if $ship_setting_ziti['ProductShipSetting']['ship_val'] ==
                 0}}selected='selected'{{/if}}>好邻居自提点</option>
-                <option value="1"
+                <option value="1" selected='selected'
                 {{if $ship_setting_ziti['ProductShipSetting']['ship_val'] ==
                 1}}selected='selected'{{/if}}>朋友说自提点</option>
             </select>

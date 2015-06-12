@@ -1449,7 +1449,7 @@ var TemplateEngine = function(html, options) {
     catch(err) { console.error("'" + err.message + "'", " in \n\nCode:\n", code, "\n"); }
     return result;
 };
-function zitiAddress(type){
+function zitiAddress(){
     var beijingArea= {
         110101:{
             'name':"东城区"
@@ -1492,7 +1492,7 @@ function zitiAddress(type){
     var ship_address = {};
     var area = [];
     var child_address = {};
-    $.getJSON('/tuan_buyings/get_offline_address?type='+type,function(data){
+    $.getJSON('/tuan_buyings/get_offline_address?type=1',function(data){
         ship_address = data.address;
         child_address = data.child_address;
         $.each(ship_address,function(index,item){
