@@ -1986,21 +1986,20 @@ function _is_after_deadline_time($now, $deadline_time)
 
 
 function get_pure_product_consignment_date($pid){
-    $ConsignmentDate = ClassRegistry::init('ProductConsignmentDate');
-    $rule = $ConsignmentDate->find('first',array('conditions' => array(
-        'deleted' => DELETED_NO,
+    $ProductConsignmentDate = ClassRegistry::init('ProductConsignmentDate');
+    $product_consignment_date = $ProductConsignmentDate->find('first',array('conditions' => array(
+        'published' => 1,
         'product_id' => $pid
     )));
-    if(empty($rule)){
+    if(empty($product_consignment_date)){
         return null;
     }
-    $before_day = $rule['ProductConsignmentDate']['deadline_day'];
-    $week_days = $rule['ProductConsignmentDate']['week_days'];
-    $time = $rule['ProductConsignmentDate']['deadline_time'];
-    $consignment_date = get_send_date($before_day,$time,$week_days);
+    $week_days = $product_consignment_date['ProductConsignmentDate']['week_days'];
+    $deadline_day = $product_consignment_date['ProductConsignmentDate']['deadline_day'];
+    $deadline_time = $product_consignment_date['ProductConsignmentDate']['deadline_time'];
+    $consignment_date = get_send_date($deadline_day,$deadline_time,$week_days);
     if($consignment_date==null){
         return null;
     }
     return date_format($consignment_date,'Y-m-d');
-    //return $consignment_date->format('Y-m-d');
 }
