@@ -49,9 +49,9 @@
         </form>
     </div>
 {{/if}}
-
+<?php $ziti_consignee_info = $ziti_info['consignee'] ?>
 {{if !$limit_ship}}
-    {{if !$kuaidi_consignee_exist && empty($ziti_consignee_info)}}
+    {{if !$kuaidi_consignee_exist && empty($ziti_info)}}
 <!--未选择配送方式-->
     <div class="address clearfix" style="position:relative;">
         <a class="moreicon" href="javascript:void(0)"></a>
@@ -60,17 +60,17 @@
     {{/if}}
     {{if $ziti_support}}
 <!--自提配送-->
-    <div class="address clearfix ziti_choose" style="position:relative; display: none;" data-on="{{!empty($ziti_consignee_info)}}" data-ship="ziti">
+    <div class="address clearfix ziti_choose" style="position:relative; display: none;" data-on="{{!empty($ziti_info)}}" data-ship="ziti">
         <span style="display:block;" class="fl">自提&nbsp;&nbsp;<a class="moreicon pickupinto"></a></span>
         <a href="#X" style="overflow:hidden; display:block; margin-right:1em; color:#666666;" class="pickup_address pickupinto">
-            <strong>{{$ziti_consignee_info['consignee']['name']}} {{$ziti_consignee_info['consignee']['mobilephone']}}</strong><br />
-            <strong>自提点信息：</strong><br />{{$ziti_consignee_info['ziti']['name']}}<br />联系人：{{$ziti_consignee_info['ziti']['owner_name']}}{{$ziti_consignee_info['ziti']['owner_phone']}}
+            <strong>{{$ziti_consignee_info['name']}} {{$ziti_consignee_info['mobilephone']}}</strong><br />
+            <strong>自提点信息：</strong><br />{{$ziti_info['ziti']['name']}}<br />联系人：{{$ziti_info['ziti']['owner_name']}}{{$ziti_info['ziti']['owner_phone']}}
         </a>
         <a href="javascript:$('.ziti_choose').hide();$('.kuaidi_choose').show()" class="address_addbtn">选择快递配送到家</a>
     </div>
     {{/if}}
     <!--快递配送-->
-    <div class="address clearfix kuaidi_choose" style="position:relative;{{if !$kuaidi_consignee_exist && empty($ziti_consignee_info)}}display: none;{{/if}}"  data-on="{{$kuaidi_consignee_exist}}" data-ship="kuaidi">
+    <div class="address clearfix kuaidi_choose" style="position:relative;{{if !$kuaidi_consignee_exist && empty($ziti_info)}}display: none;{{/if}}"  data-on="{{$kuaidi_consignee_exist}}" data-ship="kuaidi">
         <span style="display:block;" class="fl">快递&nbsp;&nbsp;<a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
         <a href="/orders/edit_consignee?modal=true" class="new_address thickbox" style="overflow:hidden; display:block; margin-right:1em; color:#666666;"><strong>{{$this->Session->read('OrderConsignee.name')}} {{$this->Session->read('OrderConsignee.mobilephone')}}
         </strong><br />{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}</a>
@@ -179,7 +179,7 @@
     </div>
     <div class="conordertuan" style="margin-top: 48px">
         <div class="clearfix conordertuan_adress">  </div>
-        <P><span>已选自提点：<span id="chose_address"  data-shop-id="{{$ziti_consignee_info['ziti_id']}}" data-area-id="{{$ziti_consignee_info['area']}}" style="color:#333333">{{$ziti_consignee_info['address']}}</span></span></P>
+        <P><span>已选自提点：<span id="chose_address"  data-shop-id="{{$ziti_info['ziti']['id']}}" data-area-id="{{$ziti_info['ziti']['area_id']}}" style="color:#333333">{{$ziti_info['ziti']['name']}}</span></span></P>
     </div>
     {{template tuan_buyings/ziti_contact_info_template}}
     <button class="btn btn-primary pickup_save">保存</button>

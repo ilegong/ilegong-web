@@ -282,7 +282,7 @@ class OrdersController extends AppController {
                 $data['ship_mark'] = ZITI_TAG;
             }
 			if(empty($data['consignee_name']) || empty($data['consignee_address']) || empty($data['consignee_mobilephone']) ){
-				$this->__message('请填写收货人信息','/orders/info');
+				$this->__message('请填写收货人信息','/orders/mine');
 			}
 			$this->Order->create();
 
@@ -521,8 +521,9 @@ class OrdersController extends AppController {
                 'conditions' => array('id' => $ziti_id,'deleted' => DELETED_NO)
             ));
             if(!empty($ziti_info)){
-                $ziti_consignees_info = array('consignee' => $ziti_consignees[0]['OrderConsignee'], 'ziti' => $ziti_info['OfflineStore']);
-                $this->set('ziti_consignee_info', $ziti_consignees_info);
+                $ziti_info = array('consignee' => $ziti_consignees[0]['OrderConsignee'], 'ziti' => $ziti_info['OfflineStore']);
+                $this->set('ziti_info', $ziti_info);
+                $this->Session->write('pickupConsignee',$ziti_consignees[0]['OrderConsignee']);
             }
         }
         $this->set('ziti_support',$ziti_support);
