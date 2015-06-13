@@ -107,7 +107,15 @@ ul li{ list-style:none;}
 .tipslayer_close{ position: absolute; top: 10px; right: 10px; width: 1.5em; height: 1.5em; background: url(/img/mobile/pyshuo_icon.png?v3) -23.5em -14.5em no-repeat; background-size: 30em 30em; text-decoration: none;}
 .conorderprice{ text-align: center; padding:25px 0 5px 0; font-size: 1.5em; color: #333333;}
 .conorder_btn{ width: 85%; margin: 0 auto; padding: 15px 0;}
-.conorder_btn a{ display: block; line-height: 40px; text-align: center; font-size: 1.15em; border-radius: 3px; text-decoration: none;}
+.conorder_btn a {
+    width: 47%;
+    display: block;
+    line-height: 40px;
+    text-align: center;
+    font-size: 1.15em;
+    border-radius: 3px;
+    text-decoration: none;
+}
 .conorder_btn a.weixin{ background-color: #29ac0e; color: #ffffff;}
 .conorder_btn a.alipay{ background-color: #ffa200; color: #ffffff;}
 .conorder_btn label{ font-size: 12px; color:#CC0000; text-align: center; text-align: center;display: block; line-height: 24px;}
