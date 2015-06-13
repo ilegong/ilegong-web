@@ -37,66 +37,46 @@
         <dd class="fr"><a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brand['Brand']['created'])).'/'.$brand['Brand']['slug'].'.html')}}"><img src="{{$this->Html->assetUrl('/img/mobile/more.png')}}"></a></dd>
     </dl>
     {{if $order['Order']['type'] == ORDER_TYPE_TUAN || $order['Order']['type'] == ORDER_TYPE_TUAN_SEC}}
-    <?php $cart = $Carts[0]; $p = $products[$cart['Cart']['product_id']];
+        <?php $cart = $Carts[0]; $p = $products[$cart['Cart']['product_id']];
             $tuan_buy_id = $order['Order']['member_id'];
          ?>
-    <ul class="clearfix" style="margin-bottom: 0;">
-        <li class="fl"><a href="/tuan_buyings/detail/{{$tuan_buy_id}}"><img src="{{small_thumb_link($cart['Cart']['coverimg'])}}" border="0"></a></li>
-        <li style="overflow: hidden; display: block; padding-left: 10px; padding-right: 65px;">
-            <a href="/tuan_buyings/detail/{{$tuan_buy_id}}">
-                <p>{{$cart['Cart']['name']}}</p>
-                {{if $order['Order']['ship_mark']}}
-                    <s>{{get_ship_mark_name($order['Order']['ship_mark'])}}</s>
-                {{/if}}
-                {{if $order['Order']['try_id']}}
-                    <s>{{get_spec_name_try($order['Order']['try_id'])}}</s>
-                {{else}}
-                    <s>{{get_spec_name_by_pid_and_sid($cart['Cart']['product_id'],$cart['Cart']['specId'])}}</s>
-                {{/if}}
-                {{if !empty($cart['Cart']['send_date'])}}
-                    {{if $consignment_date_not_available}}
-                        <label class="order_detail_soldout">(您订单中待支付的商品排期已过)</label>
-                    {{else}}
-                        <s>{{date('m月d日', strtotime($cart['Cart']['send_date']))}}到货</s>
-                    {{/if}}
-                {{/if}}
-                {{if $tuan_expired&&$order['Order']['status']== ORDER_STATUS_WAITING_PAY}}
-                    <label class="order_detail_soldout">(您的团购结束)</label>
-                {{/if}}
-            </a>
-        </li>
-        <li class="fr">￥{{$this->Number->precision($cart['Cart']['price'], 2)}}<br>x{{$cart['Cart']['num']}}</li>
-    </ul>
+        <div class="cart" style="padding-top: 0;">
+            <ul class="clearfix">
+                <li class="fl"><a href="#X" style="display: block;"><img src="{{small_thumb_link($cart['Cart']['coverimg'])}}" border="0" /></a></li>
+                <li style="overflow: hidden; display: block; padding-left: 10px;">
+                    <a href="/orders/detail/{{$order['Order']['id']}}">
+                        <p>{{$cart['Cart']['name']}}</p>
+                        <s>单价:￥{{$this->Number->precision($cart['Cart']['price'], 2)}} x {{$cart['Cart']['num']}}&nbsp;&nbsp;&nbsp;{{if $order['Order']['try_id']}}{{get_spec_name_try($order['Order']['try_id'])}}{{else}}{{get_spec_name_by_pid_and_sid($cart['Cart']['product_id'],$cart['Cart']['specId'])}}{{/if}}</s>
+                        <s><span>{{if $order['Order']['ship_mark']}}{{get_ship_mark_name($order['Order']['ship_mark'])}}{{/if}}</span>&nbsp;&nbsp;&nbsp;&nbsp;{{if !empty($cart['Cart']['send_date'])}}<span class="redcolor">预计{{date('n月d日', strtotime($cart['Cart']['send_date']))}}({{day_of_week($cart['Cart']['send_date'])}})到货</span>{{/if}}</s>
+                    </a>
+                </li>
+            </ul>
+        </div>
     {{elseif !empty($Carts)}}
-    {{loop $Carts $cart}}
-    <?php $p = $products[$cart['Cart']['product_id']]; ?>
-    <ul class="clearfix" style="margin-bottom: 0;">
-        <li class="fl"><a href="{{product_link2($p)}}"><img src="{{small_thumb_link($cart['Cart']['coverimg'])}}" border="0"></a></li>
-        <li style="overflow: hidden; display: block; padding-left: 10px; padding-right: 65px;">
-            <a href="{{product_link2($p)}}">
-                <p>{{$cart['Cart']['name']}}</p>
-                {{if !empty($cart['Cart']['send_date'])}}
-                    {{if $consignment_date_not_available}}
-                        <label class="order_detail_soldout">(您订单中待支付的商品排期已过)<br>(请您重新下单)</label>
-                    {{else}}
-                        <s>{{date('m月d日', strtotime($cart['Cart']['send_date']))}}到货</s>
-                    {{/if}}
-                {{/if}}
-                {{if in_array($cart['Cart']['product_id'], $expired_pids)}}
-                    <label class="order_detail_soldout">(该商品已下架)<br>(订单已经失效)</label>
-                {{/if}}
-                {{if $order['Order']['try_id']>0}}
-                    {{if $has_sold_out}}
-                    <label class="order_detail_soldout">(您订单中待支付的商品已经售完)<br>(订单不能支付)</label>
-                    {{elseif $has_reach_limit}}
-                    <label class="order_detail_soldout">(您订单中待支付的商品已经超限)<br>(订单不能支付)</label>
-                    {{/if}}
-                {{/if}}
-            </a>
-        </li>
-        <li class="fr">￥{{$this->Number->precision($cart['Cart']['price'], 2)}}<br>x{{$cart['Cart']['num']}}</li>
-    </ul>
-    {{/loop}}
+        {{loop $Carts $cart}}
+            <?php $p = $products[$cart['Cart']['product_id']]; ?>
+            <div class="cart" style="padding-top: 0;">
+                <ul class="clearfix">
+                    <li class="fl"><a href="#X" style="display: block;"><img src="{{small_thumb_link($cart['Cart']['coverimg'])}}" border="0" /></a></li>
+                    <li style="overflow: hidden; display: block; padding-left: 10px;">
+                        <a href="/orders/detail/{{$order['Order']['id']}}">
+                            <p>{{$cart['Cart']['name']}}</p>
+                            <s>单价:￥{{$this->Number->precision($cart['Cart']['price'], 2)}} x {{$cart['Cart']['num']}}&nbsp;&nbsp;&nbsp;{{if $order['Order']['try_id']}}{{get_spec_name_try($order['Order']['try_id'])}}{{else}}{{get_spec_name_by_pid_and_sid($cart['Cart']['product_id'],$cart['Cart']['specId'])}}{{/if}}</s>
+                            <s><span>{{if $order['Order']['ship_mark']}}{{get_ship_mark_name($order['Order']['ship_mark'])}}{{/if}}</span>&nbsp;&nbsp;&nbsp;&nbsp;{{if !empty($cart['Cart']['send_date'])}}<span class="redcolor">预计{{date('n月d日', strtotime($cart['Cart']['send_date']))}}({{day_of_week($cart['Cart']['send_date'])}})到货</span>{{/if}}</s>
+                            {{if !empty($cart['Cart']['send_date'])}}{{if $consignment_date_not_available}}<s><span class="redcolor">(商品排期已过,请您重新下单)</span></s>{{/if}}{{/if}}
+                            {{if in_array($cart['Cart']['product_id'], $expired_pids)}}<s><span class="redcolor">(该商品已下架)</span></s>{{/if}}
+                            {{if $order['Order']['try_id']>0}}
+                            {{if $has_sold_out}}
+                                <s><span class="redcolor">(商品已经售完)</span></s>
+                            {{elseif $has_reach_limit}}
+                                <s><span class="redcolor">(商品已经超限)</span></s>
+                            {{/if}}
+                            {{/if}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        {{/loop}}
     {{else}}
     <span>订单中没有商品</span>
     {{/if}}

@@ -29,26 +29,18 @@ $brand = $brands[$order['Order']['brand_id']];
             </dl>
 
             {{loop $order_carts[$order['Order']['id']] $cart}}
-            <ul class="clearfix">
-                <li class="fl"><a href="/orders/detail/{{$order['Order']['id']}}"><img src="{{small_thumb_link($cart['Cart']['coverimg'])}}" border="0" /></a></li>
-                <li style="overflow: hidden; display: block; padding-left: 10px; padding-right: 5em;">
-                    <a href="/orders/detail/{{$order['Order']['id']}}">
-                        <p>{{$cart['Cart']['name']}}</p>
-                        {{if $order['Order']['ship_mark']}}
-                            <s>{{get_ship_mark_name($order['Order']['ship_mark'])}}</s>
-                        {{/if}}
-                        {{if $order['Order']['try_id']}}
-                            <s>{{get_spec_name_try($order['Order']['try_id'])}}</s>
-                        {{else}}
-                            <s>{{get_spec_name_by_pid_and_sid($cart['Cart']['product_id'],$cart['Cart']['specId'])}}</s>
-                        {{/if}}
-                        {{if !empty($cart['Cart']['send_date'])}}
-                            <s>预计{{date('n月d日', strtotime($cart['Cart']['send_date']))}}({{day_of_week($cart['Cart']['send_date'])}})到货</s>
-                        {{/if}}
-                    </a>
-                </li>
-                <li class="fr">￥{{$this->Number->precision($cart['Cart']['price'], 2)}}<br/>x{{$cart['Cart']['num']}}</li>
-            </ul>
+            <div class="cart" style="padding-top: 0;">
+                <ul class="clearfix">
+                    <li class="fl"><a href="#X" style="display: block;"><img src="{{small_thumb_link($cart['Cart']['coverimg'])}}" border="0" /></a></li>
+                    <li style="overflow: hidden; display: block; padding-left: 10px;">
+                        <a href="/orders/detail/{{$order['Order']['id']}}">
+                            <p>{{$cart['Cart']['name']}}</p>
+                            <s>单价:￥{{$this->Number->precision($cart['Cart']['price'], 2)}} x {{$cart['Cart']['num']}}&nbsp;&nbsp;&nbsp;{{if $order['Order']['try_id']}}{{get_spec_name_try($order['Order']['try_id'])}}{{else}}{{get_spec_name_by_pid_and_sid($cart['Cart']['product_id'],$cart['Cart']['specId'])}}{{/if}}</s>
+                            <s><span>{{if $order['Order']['ship_mark']}}{{get_ship_mark_name($order['Order']['ship_mark'])}}{{/if}}</span>&nbsp;&nbsp;&nbsp;&nbsp;{{if !empty($cart['Cart']['send_date'])}}<span class="redcolor">预计{{date('n月d日', strtotime($cart['Cart']['send_date']))}}({{day_of_week($cart['Cart']['send_date'])}})到货</span>{{/if}}</s>
+                        </a>
+                    </li>
+                </ul>
+            </div>
             {{/loop}}
             <p class="myorder_total">共{{$counts[$order['Order']['id']]}}件商品，合计:<strong>￥{{$this->Number->precision($order['Order']['total_all_price'], 2)}}</strong></p>
             <p class="myorder_operate clearfix order_item_action_{{$order['Order']['id']}}">
