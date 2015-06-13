@@ -33,7 +33,8 @@ echo $this->MForm->create($current_model,array(
 							echo $this->MForm->input('name',array('size'=>'80','required'=>'required'));
 						}
 						?>
-				         {{$this->MForm->input('cate_id',array('required'=>'required'))}} 
+                         {{$this->MForm->input('product_alias',array('size' => '20','required'=>'required','placeholder' => '商品别名，方便快速查询'))}};
+				         {{$this->MForm->input('cate_id',array('required'=>'required'))}};
 <!-- 				         
 {{$this->MForm->input('Modelcate.id',array('type'=> 'select','label'=>__('产品类型'),'options'=>$modelcates,'selected'=>$selected_modelcates,))}}
 -->
