@@ -1669,6 +1669,32 @@ function get_spec_by_pid_and_sid($pidSidMap)
     return $result;
 }
 
+function get_spec_name_by_pid_and_sid($pid,$sid){
+    $spec_name = Cache::read('product-'.$pid.'-'.$sid.'-spec');
+    if(!empty($spec_name)){
+        return $spec_name;
+    }
+    $result = get_spec_by_pid_and_sid(array(
+        array('pid' => $pid, 'specId' => $sid, 'defaultPrice' => 0),
+    ));
+    $spec_detail_arr = $result[cart_dict_key($pid, $sid)];
+    $spec_name = empty($spec_detail_arr[1]) ? '' : $spec_detail_arr[1];
+    Cache::write('product-'.$pid.'-'.$sid.'-spec',$spec_name);
+    return $spec_name;
+}
+
+function get_spec_name_try($tryId){
+    $spec_name = Cache::read('try-'.$tryId.'-spec');
+    if(!empty($spec_name)){
+        return $spec_name;
+    }
+    $ProductTryM = ClassRegistry::init('ProductTry');
+    $try = $ProductTryM->find('first',array('conditions' => array('id' => $tryId)));
+    $spec_name = $try['ProductTry']['spec'];
+    Cache::write('try-'.$tryId.'-spec',$spec_name);
+    return $spec_name;
+}
+
 function get_tuan_msg_element($tuan_buy_id)
 {
     $tuanBuyingM = ClassRegistry::init('TuanBuying');
@@ -2002,4 +2028,23 @@ function get_pure_product_consignment_date($pid){
         return null;
     }
     return date_format($consignment_date,'Y-m-d');
+}
+
+function get_ship_mark_name($shipType){
+    if($shipType == 'ziti'){
+        return '自提';
+    }
+    if($shipType == 'sfby'){
+        return '顺丰包邮';
+    }
+    if($shipType == 'sfdf'){
+        return '顺丰到付';
+    }
+    if($shipType == 'kuaidi'){
+        return '快递';
+    }
+    if($shipType == 'manbaoyou'){
+        return '快递';
+    }
+    return null;
 }

@@ -34,8 +34,16 @@ $brand = $brands[$order['Order']['brand_id']];
                 <li style="overflow: hidden; display: block; padding-left: 10px; padding-right: 5em;">
                     <a href="/orders/detail/{{$order['Order']['id']}}">
                         <p>{{$cart['Cart']['name']}}</p>
+                        {{if $order['Order']['ship_mark']}}
+                            <s>{{get_ship_mark_name($order['Order']['ship_mark'])}}</s>
+                        {{/if}}
+                        {{if $order['Order']['try_id']}}
+                            <s>{{get_spec_name_try($order['Order']['try_id'])}}</s>
+                        {{else}}
+                            <s>{{get_spec_name_by_pid_and_sid($cart['Cart']['product_id'],$cart['Cart']['specId'])}}</s>
+                        {{/if}}
                         {{if !empty($cart['Cart']['send_date'])}}
-                        <s>预计{{date('n月d日', strtotime($cart['Cart']['send_date']))}}({{day_of_week($cart['Cart']['send_date'])}})到货</s>
+                            <s>预计{{date('n月d日', strtotime($cart['Cart']['send_date']))}}({{day_of_week($cart['Cart']['send_date'])}})到货</s>
                         {{/if}}
                     </a>
                 </li>

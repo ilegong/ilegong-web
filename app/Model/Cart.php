@@ -108,13 +108,15 @@ class Cart extends AppModel {
         if (!empty($prodTry)) {
             $price = calculate_try_price($prodTry['ProductTry']['price'], $uid, $shichituan);
             //$cart_name = $p['Product']['name'].'(试吃: '.$prodTry['ProductTry']['spec'].')';
-            $cart_name = $p['Product']['name'].'(规格: '.$prodTry['ProductTry']['spec'].')';
+            //$cart_name = $p['Product']['name'].'(规格: '.$prodTry['ProductTry']['spec'].')';
+            $cart_name = $p['Product']['name'];
         } else {
             $result = get_spec_by_pid_and_sid(array(
                     array('pid' => $product_id, 'specId' => $specId, 'defaultPrice' => $p['Product']['price']),
             ));
             $spec_detail_arr = $result[cart_dict_key($product_id, $specId)];
-            $cart_name =  $p['Product']['name'] . (empty($spec_detail_arr[1])?'':'('.$spec_detail_arr[1].')');
+            //$cart_name =  $p['Product']['name'] . (empty($spec_detail_arr[1])?'':'('.$spec_detail_arr[1].')');
+            $cart_name = $p['Product']['name'];
             list($price, $special_id) = calculate_price($p['Product']['id'], $spec_detail_arr[0], $uid, $num,0,null,$tuan_param);
         }
 

@@ -2,30 +2,7 @@
 <div class="tuan_balance" data-ship-way="{{$way_type}}" data-tuanbuy-id="{{$tuan_buy_id}}" data-tuanteam-id="{{$tuan_id}}" data-way-id="{{$way_id}}" data-way-type="{{$way_type}}" data-way-fee="{{$ship_fee}}">
     {{template tuan_buyings/contact_info_template}}
     <div class="cart" style="margin-top: 0; padding-top: 0;">
-        <div style="margin-bottom: 10px;">
-            <dl class="clearfix">
-                <dd class="fl">{{$brand['name']}}</dd>
-            </dl>
-            <ul class="clearfix">
-                <li class="fl"><a href="/tuan_buyings/detail/{{$tuan_buy_id}}"><img src="{{$this->Html->assetUrl(small_thumb_link($cart_info['Cart']['coverimg']))}}" border="0" /></a></li>
-                <li style="overflow: hidden; display: block; padding-left: 10px;">
-                    <a href="#X">
-                        <p>{{$cart_info['Cart']['name']}}</p>
-                        <s>单价:￥{{$this->Number->precision($cart_info['Cart']['price'],2)}}</s>
-                        <input type="hidden" value="{{$least_num}}" id="ship_least_num">
-                        <div class="clearfix">
-                            <a  class="cartnumreduce fl"></a>
-                            <input type="text" value="{{$buy_count}}" id="pamount-{{$cart_info['Cart']['id']}}" data-id="{{$cart_info['Cart']['id']}}" disabled="disabled"
-                                   data-price="{{$cart_info['Cart']['price']}}" name="shopCart"/>
-                            <a  class="cartnumadd fl"></a>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-            <p class="conordertuan_total">{{if $ship_fee != 0}}运费：￥<span class="ship_fee" data-ship-fee="{{$ship_fee}}">{{$this->Number->precision($ship_fee, 2)}}</span>，{{/if}}共<span data-count="{{$buy_count}}">{{$buy_count}}</span>件商品，合计:
-                <strong data-goods-price="{{$cart_info['Cart']['price']*$buy_count}}">￥{{$this->Number->precision($cart_info['Cart']['price']*$buy_count, 2)}}</strong>
-            </p>
-        </div>
+        {{template Elements/order_cart_template}}
     </div>
     {{template Elements/tuan_coupon_template}}
     <!--pid=229-->

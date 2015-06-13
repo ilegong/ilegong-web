@@ -697,17 +697,17 @@ class TuanBuyingsController extends AppController{
                 $res = array('success'=> false, 'info'=> '你已经支付过了');
             }else{
                 //$consign_time = friendlyDateFromStr($tuanBuy['TuanBuying']['consign_time'], FFDATE_CH_MD);
-                $cart_name = $cart_info['Cart']['name'];
-                //to set mark
-                if($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN ){
-                    if(empty($shipSetting)){
-                        //default
-                        $cart_name = $cart_name.'(自提)';
-                    }else{
-                        $cart_name = $cart_name.'('.TuanShip::get_ship_name($shipTypeId).')';
-                    }
-                }
-                $this->Cart->update(array('name' => '\'' . $cart_name . '\'' ), array('id' => $cart_id));
+//                $cart_name = $cart_info['Cart']['name'];
+//                //to set mark
+//                if($tuan_info['TuanTeam']['type'] == IS_BIG_TUAN ){
+//                    if(empty($shipSetting)){
+//                        //default
+//                        $cart_name = $cart_name.'(自提)';
+//                    }else{
+//                        $cart_name = $cart_name.'('.TuanShip::get_ship_name($shipTypeId).')';
+//                    }
+//                }
+//                $this->Cart->update(array('name' => '\'' . $cart_name . '\'' ), array('id' => $cart_id));
                 $res = array('success'=> true, 'order_id'=>$order['Order']['id']);
             }
         }

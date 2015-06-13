@@ -8,24 +8,7 @@
 <div class="tuan_balance" data-ship-way="ziti" data-tuan-sec="true" data-try-id="{{$try_id}}" data-global-sec="true" style="margin-bottom: 50px;">
     {{template tuan_buyings/ziti_contact_info_template}}
     <div class="cart" style="margin-top: 0; padding-top: 0;">
-        <div>
-            <dl class="clearfix" style="margin-bottom: 0;border-top: 0">
-                <dd class="fl">朋友说</dd>
-            </dl>
-            <ul class="clearfix">
-                <li class="fl"><a href=""><img src="{{$this->Html->assetUrl(small_thumb_link($cart_info['Cart']['coverimg']))}}" border="0" /></a></li>
-                <li style="overflow: hidden; display: block; padding-left: 10px;">
-                    <a href="#X">
-                        <p>{{$cart_info['Cart']['name']}}</p>
-                        <s>单价:￥{{$this->Number->precision($cart_info['Cart']['price'],2)}}</s>
-                        <div class="clearfix">
-                            <input type="text" value="{{$buy_count}}" id="pamount-{{$cart_info['Cart']['id']}}" data-id="{{$cart_info['Cart']['id']}}" disabled="disabled"
-                                   data-price="{{$cart_info['Cart']['price']}}" name="shopCart"/>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-        </div>
+        {{template Elements/sec_order_cart_template}}
     </div>
     <div class="cart_pay">
         <ul class="clearfix">
