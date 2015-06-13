@@ -324,6 +324,12 @@
                 <input id="refund_scores" type="number" step="0.01" class="form-control" readonly="readonly" value="">
             </div>
         </div>
+        <div class="form-group">
+            <label for="refund_logs" class="col-sm-2 control-label">退款纪录</label>
+            <div class="col-sm-10">
+                <a id="refund_logs" href="#X" target="_blank">点击查看退款纪录</a>
+            </div>
+        </div>
     </div>
     <input type="hidden" value="" id="order-id">
     <input type="hidden" value="" id="order-creator">
@@ -359,4 +365,4 @@
 {{$this->Html->script(array('/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js',
 '/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js',
 '/js/manage-lib/tableExport.jquery.plugin/tablesToExcel.js?v2.5'))}}
-{{$this->Html->script(array('manage/tuan/tuan_orders.js?v6.9'))}}
+{{$this->Html->script(array('manage/tuan/tuan_orders.js?v7.0'))}}

@@ -8,6 +8,7 @@ $(document).ready(function () {
     var mainContent = $('#mainContent');
     var $currentOperateOrder = null;
     var sendOrderMsg = $('#send_order_msg');
+    var refundLog = $('#refund_logs');
     mainContent.height(250);
 
     start_stat_date.datetimepicker({
@@ -547,11 +548,15 @@ $(document).ready(function () {
         });
         $(".refund-button").click(function () {
             var $order = $(this).parents('tr.order');
-            orderId.val($order.data('order-id'));
-            orderTotalPrice.val($order.data('total-price'));
+            var refundOrderId = $order.data('order-id');
+            var refundOrderPrice = $order.data('total-price');
+            var href = '/manage/admin/orders/get_refund_log/'+ refundOrderId+'/'+refundOrderPrice;
+            orderId.val(refundOrderId);
+            orderTotalPrice.val(refundOrderPrice);
             orderCreator.val($order.data('order-creator'));
             orderScores.val($order.data('order-scores'));
             $currentOperateOrder = $(this);
+            refundLog.attr('href',href);
             refundOrderDialog.dialog("open");
         });
     }

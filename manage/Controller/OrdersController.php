@@ -655,15 +655,15 @@ class OrdersController extends AppController
         $this->autoRender = false;
         $orderId = $_REQUEST['orderId'];
         $this->loadModel('RefundLog');
-        $refund_money = $this->RefundLog->query('select sum(refund_fee) as refund_money from cake_refund_logs where order_id =' . $orderId . '');
+        $refund_money = $this->RefundLog->query('select sum(refund_fee) as refund_money from cake_refund_logs where order_id =' . $orderId .' and remark like "%已退款%"');
         $refund_money = $refund_money[0][0]['refund_money'];
         echo json_encode($refund_money / 100);
     }
 
-    public function admin_get_refund_log($order_id)
+    public function admin_get_refund_log($order_id,$total_price)
     {
 
-        $total_price = $_REQUEST['total_price'];
+//        $total_price = $_REQUEST['total_price'];
         $this->loadModel('RefundLog');
         $RefundLogInfo = $this->RefundLog->find('all', array(
             'conditions' => array('order_id' => $order_id)
