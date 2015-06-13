@@ -492,7 +492,7 @@ class TuanBuyingsController extends AppController{
         ));
         $brand = $this->Brand->find('first', array(
             'conditions' => array('id' => $product_brand['Product']['brand_id']),
-            'fields' => array('name', 'slug', 'id')
+            'fields' => array('name', 'slug', 'id', 'coverimg')
         ));
         $this->set_old_consignees($uid,$shipSetting);
         //积分统计

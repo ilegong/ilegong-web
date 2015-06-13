@@ -469,7 +469,7 @@ ul li{ list-style:none;}
 .order_detail_num label{ color: #999999; line-height: 26px; display: block; float: left;}
 .order_detail_add{ display: block; width: 1.9em; height: 1.867em; background: url(/img/mobile/pyshuo_icon.png?v1) -15.667em -7.333em no-repeat; background-size: 20em 20em;}
 .order_detail_reduce{ display: block; width: 1.9em; height: 1.867em; background: url(/img/mobile/pyshuo_icon.png?v1) -18em -7.333em no-repeat; background-size: 20em 20em;}
-.order_detail_input{ border-radius: 0; outline: none; padding: 6px 0; text-align:center; border: 0; width: 40px; font-size: 1em;}
+.order_detail_input{ border-radius: 0; outline: none; padding: 4px 0; text-align:center; border: 0; width: 40px; font-size: 1em;}
 
 
 /*首页new*/
