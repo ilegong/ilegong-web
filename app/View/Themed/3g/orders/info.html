@@ -51,39 +51,31 @@
 {{/if}}
 
 {{if !$limit_ship}}
-    {{if !$kuaidi_consignee_exist && empty($ziti_consignee_info) && $ziti_support}}
+    {{if !$kuaidi_consignee_exist && empty($ziti_consignee_info)}}
 <!--未选择配送方式-->
     <div class="address clearfix" style="position:relative;">
-        <a class="moreicon" href="javascript:$('.tipslayer,.tipslayer_bg').show();"></a>
+        <a class="moreicon" href="javascript:void(0)"></a>
         <a href="javascript:$('.tipslayer,.tipslayer_bg').show();" class="order_selectbtn">选择发货地址</a>
     </div>
     {{/if}}
     {{if $ziti_support}}
 <!--自提配送-->
-    <div class="address clearfix ziti_choose" style="position:relative; display: none;" data-on="{{!empty($ziti_consignees_info)}}" data-ship="ziti">
+    <div class="address clearfix ziti_choose" style="position:relative; display: none;" data-on="{{!empty($ziti_consignee_info)}}" data-ship="ziti">
         <span style="display:block;" class="fl">自提&nbsp;&nbsp;<a class="moreicon pickupinto"></a></span>
-        <a href="#X" style="overflow:hidden; display:block; margin-right:1em; color:#666666;" class="pickup_address">
+        <a href="#X" style="overflow:hidden; display:block; margin-right:1em; color:#666666;" class="pickup_address pickupinto">
             <strong>{{$ziti_consignee_info['consignee']['name']}} {{$ziti_consignee_info['consignee']['mobilephone']}}</strong><br />
             <strong>自提点信息：</strong><br />{{$ziti_consignee_info['ziti']['name']}}<br />联系人：{{$ziti_consignee_info['ziti']['owner_name']}}{{$ziti_consignee_info['ziti']['owner_phone']}}
         </a>
         <a href="javascript:$('.ziti_choose').hide();$('.kuaidi_choose').show()" class="address_addbtn">选择快递配送到家</a>
     </div>
     {{/if}}
-<!--快递配送-->
-
-    {{if !$kuaidi_consignee_exist}}
-        <div class="address clearfix kuaidi_choose" style="position:relative;">
-            <a class="moreicon" href="javascript:$('.tipslayer,.tipslayer_bg').show();"></a>
-            <a href="javascript:$('.tipslayer,.tipslayer_bg').show();" class="order_selectbtn">选择发货地址</a>
-        </div>
-    {{else}}
-        <div class="address clearfix kuaidi_choose" style="position:relative;" data-on="{{$kuaidi_consignee_exist}}" data-ship="kuaidi">
-            <span style="display:block;" class="fl">快递&nbsp;&nbsp;<a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
-            <a href="#X" style="overflow:hidden; display:block; margin-right:1em; color:#666666;"><strong>{{$this->Session->read('OrderConsignee.name')}} {{$this->Session->read('OrderConsignee.mobilephone')}}
-            </strong><br />{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}</a>
-            {{if $ziti_support}}<a href="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide();" class="address_addbtn">选择自提省邮费</a>{{/if}}
-        </div>
-    {{/if}}
+    <!--快递配送-->
+    <div class="address clearfix kuaidi_choose" style="position:relative;{{if !$kuaidi_consignee_exist && empty($ziti_consignee_info)}}display: none;{{/if}}"  data-on="{{$kuaidi_consignee_exist}}" data-ship="kuaidi">
+        <span style="display:block;" class="fl">快递&nbsp;&nbsp;<a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
+        <a href="/orders/edit_consignee?modal=true" class="new_address thickbox" style="overflow:hidden; display:block; margin-right:1em; color:#666666;"><strong>{{$this->Session->read('OrderConsignee.name')}} {{$this->Session->read('OrderConsignee.mobilephone')}}
+        </strong><br />{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}</a>
+        {{if $ziti_support}}<a href="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide();" class="address_addbtn">选择自提省邮费</a>{{/if}}
+    </div>
 {{/if}}
 {{if $flash_msg}}<div class="alert alert-danger" role="alert">{{$flash_msg}}</div>{{/if}}
 <div class="cart" style="margin-top: 0; padding-top: 0;">
@@ -209,7 +201,7 @@
     <div class="conorder_btn clearfix">
         {{if $ziti_support}}
             <div class="fl" style="width: 47%;">
-                <a href="#X" class="weixin" onclick="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide();$('.tipslayer,.tipslayer_bg').hide();">自提</a>
+                <a href="#X" class="weixin" onclick="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide();$('.tipslayer,.tipslayer_bg').hide();$('.order_selectbtn').parent().hide();">自提</a>
                 <label>自提可省邮费</label>
             </div>
             <div class="fr" style="width: 47%;">

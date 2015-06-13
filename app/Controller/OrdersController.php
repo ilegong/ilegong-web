@@ -1884,7 +1884,7 @@ class OrdersController extends AppController {
             'ziti_type' => $pickup['OfflineStore']['type']
         );
         if(empty($old_pickup)){
-            $this->OrderConsignee->save($data);
+            $data = $this->OrderConsignee->save($data);
         }else{
             $data['OrderConsignee']['id'] = $old_pickup['OrderConsignee']['id'];
             $this->OrderConsignee->save($data);
