@@ -4,7 +4,10 @@ class PromotorsController extends AppController
 {
     var $name = 'Promotors';
 
-    public function summary($tuan_id)
+    public function summary($tuan_id){
+
+    }
+    public function api_summary($tuan_id)
     {
         $this->autoRender = false;
 
