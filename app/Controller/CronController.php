@@ -25,6 +25,9 @@ class CronController extends AppController
             $id = $couponItem['CouponItem']['id'];
             $user_id = $couponItem['CouponItem']['bind_user'];
             $coupon_name = $couponItem['Coupon']['name'];
+            if($couponItem['Coupon']['brand_id'] > 0 && $couponItem['Coupon']['product_list'] == 0){
+                $coupon_name = $coupon_name."的优惠券";
+            }
             $timeout_time = $couponItem['Coupon']['valid_end'];
             $this->Weixin->send_coupon_timeout_message($user_id, $coupon_name, $timeout_time);
             $this->CouponItem->change_coupons_message_status_to_sent($id);
