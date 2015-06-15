@@ -189,6 +189,28 @@ ul,ol {
 .tuandetail_none a{ color: #e01d0e; text-align: none;}
 
 
+.p_visited{ color:#29ac0e;}
+.detail_shopping_icon{ width:3em; height:1.917em; background:url(/img/mobile/pyshuo_icon.png) -5em -15em no-repeat; background-size:25em 25em; display:block; margin:0 auto; margin-top:0.5em; text-decoration:none;}
+.detail_shopping_count {
+    position: absolute;
+    right: 2px;
+    top: 0px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 1em;
+    border-radius: 10px;
+    background-color: #29ac0e;
+}
+.pay_bg{ background-color:#ffa531;}
+.pay_bg:active{ background-color:#ed8600;}
+.shopping_bg{ background-color:#ff483a;}
+.shopping_bg:active{ background-color:#e01d0e;}
+.bottom_bg a:hover{ color:#ffffff;}
+
+
 
 
 

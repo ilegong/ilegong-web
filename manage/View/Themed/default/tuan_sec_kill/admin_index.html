@@ -23,8 +23,20 @@
 <a class="btn btn-default fr" href="/manage/admin/tuanSecKill/new">创建秒杀</a>
 <hr/>
 <br/><br/>
-<table class="table table-bordered table-condensed table-responsive" style="table-layout: fixed;">
-    <thead>
+<div id="tuan_secs">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="input-group">
+                <input type="text" class="form-control search" placeholder="查询秒杀">
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">查询</button>
+                      </span>
+            </div><!-- /input-group -->
+        </div><!-- /.col-lg-6 -->
+    </div><!-- /.row -->
+    <br/>
+    <table class="table table-bordered table-condensed table-responsive" style="table-layout: fixed;">
+        <thead>
         <tr>
             <th>id</th>
             <th>商品</th>
@@ -38,15 +50,15 @@
             <th>发货时间</th>
             <th>操作</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody class="list">
         {{loop $datas $item}}
         <?php
           $tryProduct = $item['ProductTry'];
         ?>
         <tr data-id="{{$tryProduct['id']}}">
-            <td>{{$tryProduct['id']}}</td>
-            <td>{{$tryProduct['product_id']}}/{{$tryProduct['product_name']}}</td>
+            <td class="id">{{$tryProduct['id']}}</td>
+            <td class="name">{{$tryProduct['product_id']}}/{{$tryProduct['product_name']}}</td>
             <td>{{$tryProduct['start_time']}}</td>
             <td>{{$tryProduct['spec']}}</td>
             <td>{{$tryProduct['limit_num']}}</td>
@@ -54,9 +66,9 @@
             <td>{{$tryProduct['price']}}</td>
             <td>
                 {{if $tryProduct['status'] == 1}}
-                  可用
+                可用
                 {{else}}
-                  不可用
+                不可用
                 {{/if}}
             </td>
             <td style="word-wrap: break-word;">{{if !empty($item['team_ids'])}}{{$item['team_ids']}}{{else}}全部团队{{/if}}</td>
@@ -73,6 +85,8 @@
             </td>
         </tr>
         {{/loop}}
-    </tbody>
-</table>
-{{$this->Html->script(array('/js/manage/wx_msg/push_wx_msg.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'))}}
+        </tbody>
+    </table>
+</div>
+
+{{$this->Html->script(array('/js/manage-lib/list.min.js','/js/manage/wx_msg/push_wx_msg.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js','/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js','/js/manage/tuan_sec_kill/index.js'))}}

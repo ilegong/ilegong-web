@@ -22,9 +22,21 @@ const WX_OAUTH_USERINFO = 'snsapi_userinfo';
 const WX_OAUTH_BASE = 'snsapi_base';
 
 const ADD_SCORE_TUAN_LEADER=99;
+
+const ORDER_STATUS_WAITING_PAY=0; //待支付
 const ORDER_STATUS_PAID=1; // 已支付
 const ORDER_STATUS_SHIPPED=2; // 已发货
+const ORDER_STATUS_RECEIVED=3; //已确认收货
+const ORDER_STATUS_RETURN_MONEY=4; //已退款
+const ORDER_STATUS_DONE=9; //已完成
+const ORDER_STATUS_CANCEL=10; //已取消
+const ORDER_STATUS_CONFIRMED=11; //已确认有效，不要再用
+const ORDER_STATUS_TOUSU=12; //已投诉， 不要再用，投诉走其他流程
+const ORDER_STATUS_COMMENT=16; //待评价
+const ORDER_STATUS_RETURNING_MONEY=14;//退款中
+
 const ORDER_TUANGOU=5;
+
 
 const OFFLINE_STORE_HAOLINJU=0;
 const OFFLINE_STORE_PYS=1;
@@ -38,6 +50,9 @@ const PRODUCT_TRY_TYPE = 1;
 
 const PYS_M_TUAN=34;
 
+const SHIP_TYPE_ZITI = 1;
+const SHIP_TYPE_SFDF = 5;
+const SHIP_TYPE_KUAIDI = 6;
 const ZITI_TAG = 'ziti';
 
 define('MSG_API_KEY', 'api:key-fdb14217a00065ca1a47b8fcb597de0d'); //发短信密钥
@@ -354,7 +369,7 @@ function send_tuan_tip_msg($open_id,$title,$product_name,$tuan_leader_wx,$remark
  * @return string
  */
 function product_link($pid, $defUri) {
-    $linkInCache = Cache::read('link_pro_' . $pid);
+    $linkInCache = Cache::read('link_pro_manage_' . $pid);
     if (!empty($linkInCache)) {
         return $linkInCache;
     }
@@ -367,30 +382,39 @@ function product_link2($p, $defUri = '/') {
     if (!empty($p)) {
         $pp = empty($p['Product']) ? $p : $p['Product'];
         $link = WX_HOST."/products/" . date('Ymd', strtotime($pp['created'])) . "/" . $pp['slug'] . ".html";
-        Cache::write('link_pro_' . $pp['id'], $link);
+        Cache::write('link_pro_manage_' . $pp['id'], $link);
         return $link;
     } else {
         return $defUri;
     }
 }
 
+function b2c_brands(){
+    return array(18, 92, 180, 206);
+}
+
+function is_b2c($brand_id){
+    // 18：老杨；92：朋友说；206：樱花；180：踏歌
+    return in_array($brand_id, b2c_brands());
+}
+
 function ziti_order_filter($var){
-    return ($var['Order']['ship_mark'] == 'ziti')&&($var['Order']['type']==5||$var['Order']['type']==6);
+    return $var['Order']['ship_mark'] == 'ziti' && is_b2c($var['Order']['brand_id']);
 }
 function sfby_order_filter($var){
-    return ($var['Order']['ship_mark'] == 'sfby')&&($var['Order']['type']==5||$var['Order']['type']==6);
+    return $var['Order']['ship_mark'] == 'sfby' && is_b2c($var['Order']['brand_id']);
 }
 function sfdf_order_filter($var){
-    return ($var['Order']['ship_mark'] == 'sfdf')&&($var['Order']['type']==5||$var['Order']['type']==6);
+    return $var['Order']['ship_mark'] == 'sfdf' && is_b2c($var['Order']['brand_id']);
 }
 function kuaidi_order_filter($var){
-    return ($var['Order']['ship_mark'] == 'kuaidi')&&($var['Order']['type']==5||$var['Order']['type']==6);
+    return $var['Order']['ship_mark'] == 'kuaidi' && is_b2c($var['Order']['brand_id']);
 }
 function none_order_filter($var){
-    return ($var['Order']['ship_mark'] == null)&&($var['Order']['type']==5||$var['Order']['type']==6);
+    return (($var['Order']['ship_mark'] == null)||(trim($var['Order']['ship_mark']) == '')) && is_b2c($var['Order']['brand_id']);
 }
 function c2c_order_filter($var){
-    return ($var['Order']['type']!=5&&$var['Order']['type']!=6);
+    return  !is_b2c($var['Order']['brand_id']);
 }
 
 function pys_ziti_filter($var){

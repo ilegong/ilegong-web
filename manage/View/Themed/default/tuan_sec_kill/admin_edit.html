@@ -57,6 +57,12 @@
                     <input type="number" name="data[ProductTry][sold_num]" value="{{$productTry['sold_num']}}" class="form-control" id="sold_num" placeholder="售出份数" readonly="readonly">
                 </div>
             </div>
+            <div class="form-group">
+                <label for="buy_multiple" class="col-sm-2 control-label">购买倍数</label>
+                <div class="col-sm-9">
+                    <input type="number" name="data[ProductTry][buy_multiple]" value="{{$productTry['buy_multiple']}}" class="form-control" id="buy_multiple" placeholder="购买倍数">
+                </div>
+            </div>
             <!--<div class="form-group">-->
                 <!--<label for="tuan_id" class="col-sm-2 control-label">团队ID</label>-->
                 <!--<div class="col-sm-9">-->
@@ -100,6 +106,7 @@
                     </label>
                 </div>
             </div>
+
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-9">
                     <a href="/manage/admin/tuanSecKill/index" class="btn btn-default">取消</a>

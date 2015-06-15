@@ -4,7 +4,7 @@ class TuanController extends AppController
 
     var $name = 'Tuan';
 
-    var $uses = array('TuanTeam', 'TuanBuying', 'Order', 'Cart', 'TuanBuyingMessages', 'TuanProduct', 'ConsignmentDate', 'ProductTry', 'Brand', 'ProductSpecGroup', 'PayNotify', 'OfflineStore');
+    var $uses = array('TuanTeam', 'TuanBuying', 'Order', 'Cart', 'TuanBuyingMessages', 'TuanProduct', 'ConsignmentDate', 'ProductTry', 'Brand', 'ProductSpecGroup', 'PayNotify', 'OfflineStore','OrderMessage');
 
     /**
      * query tuan orders
@@ -13,10 +13,13 @@ class TuanController extends AppController
         parent::beforeFilter();
         $ship_types = $this->_get_ship_types();
         $this->set('ship_type', $ship_types);
+        list($reach_order,$send_out_order) = $this->_get_orderMsg();
+        $this->set('reach_order',implode(',',$reach_order));
+        $this->set('send_out_order',implode(',',$send_out_order));
     }
     public function admin_tuan_orders()
     {
-        $this->set('b2c_empty_date_address_count', $this->_query_b2c_empty_date_address());
+        $this->set('abnormal_order_count', $this->_query_abnormal_order());
         $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
         $this->set('orders_today_count', $this->_query_orders_today_count());
@@ -29,32 +32,25 @@ class TuanController extends AppController
         $con_name = $_REQUEST['con_name'];
         $con_phone = $_REQUEST['con_phone'];
         $con_creator = $_REQUEST['con_creator'];
-        $order_status = empty($_REQUEST['order_status']) ? -1 : $_REQUEST['order_status'];
+        $order_status = !isset($_REQUEST['order_status']) ? -1 : $_REQUEST['order_status'];
 
         $conditions = array();
         if (!empty($con_name)) {
             $conditions['Order.consignee_name'] = $con_name;
-            if ($order_status != -1) {
-                $conditions['Order.status'] = $order_status;
-            }
         }
         if (!empty($con_phone)) {
             $conditions['Order.consignee_mobilephone'] = $con_phone;
-            if ($order_status != -1) {
-                $conditions['Order.status'] = $order_status;
-            }
         }
         if (!empty($con_creator)) {
             $conditions['Order.creator'] = $con_creator;
-            if ($order_status != -1) {
-                $conditions['Order.status'] = $order_status;
-            }
         }
         if (!empty($order_id)) {
             $conditions['Order.id'] = $order_id;
         }
-        if(empty($con_name)&&empty($con_creator)&&empty($con_phone)&&$order_status == 14){
-            $conditions['Order.status'] = $order_status;
+        if (!empty($con_name)|| !empty($con_phone)|| !empty($con_creator)|| !empty($order_id)|| $order_status == 14){
+            if ($order_status != -1) {
+                $conditions['Order.status'] = $order_status;
+            }
         }
 
         $this->_query_orders($conditions, 'Order.created DESC');
@@ -176,37 +172,21 @@ class TuanController extends AppController
         $this->render("admin_tuan_orders");
     }
 
-    public function admin_query_b2c_empty_date_address()
-    {
-        $conditions = array(
-            'OR' => array(
-                'Cart.send_date is null',
-                array("Order.consignee_id = 0", "Order.consignee_address = ''")
-            )
-        );
-        $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
-        $conditions['Order.status'] = 1;
-        $conditions['DATE(Order.created) > '] = date('Y-m-d', strtotime('-62 days'));
-
-        $this->_query_orders($conditions, 'Order.created DESC');
-
-        $this->set('query_type', 'emptySendDate');
-        $this->render("admin_tuan_orders");
-    }
-
     public function admin_query_abnormal_order(){
         $conditions = array(
             'OR' => array(
-                array('Cart.send_date is null','Order.type in (5,6)'),
-                array("Order.consignee_id = 0", "Order.consignee_address = ''"),
-                array("Order.type = 1", "Order.ship_mark !=''"),
-                'Order.pay_time  is null',
-                array('Order.ship_mark = "ziti"','Order.consignee_id = 0','Order.type in (5,6)'),
-                array('Order.ship_mark = "kuaidi"','Order.consignee_id !=0','Order.type in (5,6)'),
+                array('Cart.send_date is null','Order.type in (5,6)'),    // 无发货时间
+                array("Order.consignee_id = 0", "Order.consignee_address = ''"), // 无自提点，送货地址为空
+                array('Order.pay_time  is null', 'Order.ship_mark != "sfdf"'), // 非顺丰到付，但无付款时间
+                array('Order.ship_mark = ""'), // 无配送方式
+                array('Order.ship_mark is NULL'), // 无配送方式
+                array('Order.ship_mark = "kuaidi"', "Order.consignee_address = '' or Order.consignee_address is null"), // 快递，收货地址为空
+                array('Order.ship_mark = "ziti"','(Order.consignee_id = 0 or Order.consignee_id is null)'), // 自提，无自提点
+                // 自提点不支持送货上门，但是有备注地址
             )
         );
         $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC,ORDER_TYPE_DEF);
-        $conditions['Order.status'] = array(ORDER_STATUS_PAID,ORDER_STATUS_SHIPPED);
+        $conditions['Order.status'] = array(ORDER_STATUS_PAID,ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
         $conditions['DATE(Order.created) > '] = date('Y-m-d', strtotime('-62 days'));
         $this->_query_orders($conditions, 'Order.created DESC');
         $this->set('query_type', 'abnormalOrder');
@@ -214,7 +194,7 @@ class TuanController extends AppController
     }
     public function admin_query_b2c_paid_not_send()
     {
-        $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
+        $conditions['Order.brand_id'] = b2c_brands();
         $conditions['Order.status'] = ORDER_STATUS_PAID;
         $conditions['DATE(Cart.send_date) <'] = date('Y-m-d');
         $this->_query_orders($conditions, 'Order.created DESC');
@@ -226,7 +206,7 @@ class TuanController extends AppController
     public function admin_query_c2c_paid_not_send()
     {
         $conditions['OR'] = array('DATE(Order.pay_time) <'=>date('Y-m-d'),'Order.pay_time' => null);
-        $conditions['Order.type'] = ORDER_TYPE_DEF;
+        $conditions['Order.brand_id !='] = b2c_brands();
         $conditions['Order.status'] = ORDER_STATUS_PAID;
         $this->_query_orders($conditions, 'Order.updated');
 
@@ -272,10 +252,12 @@ class TuanController extends AppController
         $expired_tuan_buying_count = $this->TuanBuying->query('select count(*) as c from cake_tuan_buyings where end_time < now() and status = 0');
         $this->set('expired_tuan_buying_count', $expired_tuan_buying_count[0][0]['c']);
 
-        $this->set('b2c_empty_date_address_count', $this->_query_b2c_empty_date_address());
+        $this->set('abnormal_order_count', $this->_query_abnormal_order());
         $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
         $this->set('orders_today_count', $this->_query_orders_today_count());
+        $this->set('abnormal_order_count',$this->_query_abnormal_order());
+
     }
 
     function admin_send_date($type)
@@ -451,16 +433,6 @@ class TuanController extends AppController
             $tuan_teams = Hash::combine($tuan_teams, '{n}.TuanTeam.id', '{n}.TuanTeam');
         }
 
-        $offline_stores = array();
-        $offline_store_ids = array_filter(array_unique(Hash::extract($orders, "{n}.Order.consignee_id")));
-        if (!empty($offline_store_ids)) {
-            $offline_stores = $this->OfflineStore->find('all', array(
-                'conditions'=> array(
-                    'id' => $offline_store_ids
-                )
-            ));
-            $offline_stores = Hash::combine($offline_stores, "{n}.OfflineStore.id", "{n}");
-        }
 
         $p_ids = Hash::extract($carts, '{n}.Cart.product_id');
         $spec_groups = array();
@@ -544,7 +516,7 @@ class TuanController extends AppController
             $brands = Hash::combine($brands, '{n}.Product.id', '{n}');
         }
 
-        $ship_mark_enum = array('ziti'=>array('name'=>'自提','style'=>'active'),'sfby'=>array('name'=>'顺丰包邮','style'=>'success'),'sfdf'=>array('name'=>'顺丰到付','style'=>'warning'),'kuaidi'=>array('name'=>'快递','style'=>'danger'),'c2c'=>array('name'=>'c2c订单','style'=>'info'),'none'=>array('name'=>'没有标注','style'=>'info'));
+        $ship_mark_enum = array('ziti'=>array('name'=>'自提','style'=>'active'),'sfby'=>array('name'=>'顺丰包邮','style'=>'success'),'sfdf'=>array('name'=>'顺丰到付','style'=>'warning'),'kuaidi'=>array('name'=>'快递','style'=>'danger'),'c2c'=>array('name'=>'c2c订单','style'=>'info'),'none'=>array('name'=>'没有标注','style'=>'info'),'manbaoyou' => array('name'=>'满包邮订单','style'=>'success'));
         $this->set('ship_mark_enum',$ship_mark_enum);
 
         $ziti_orders = array_filter($orders,'ziti_order_filter');
@@ -567,6 +539,17 @@ class TuanController extends AppController
            $map_ziti_orders[$consignee_id][] = $item;
         }
 
+        $offline_stores = array();
+        $offline_store_ids = array_filter(array_unique(Hash::extract($ziti_orders, "{n}.Order.consignee_id")));
+        if (!empty($offline_store_ids)) {
+            $offline_stores = $this->OfflineStore->find('all', array(
+                'conditions'=> array(
+                    'id' => $offline_store_ids
+                )
+            ));
+            $offline_stores = Hash::combine($offline_stores, "{n}.OfflineStore.id", "{n}");
+        }
+
         $pys_ziti_point = array_filter($offline_stores,'pys_ziti_filter');
         $hlj_ziti_point = array_filter($offline_stores,'hlj_ziti_filter');
 
@@ -581,11 +564,10 @@ class TuanController extends AppController
         $conditions['Order.status'] = ORDER_STATUS_PAID;
         $conditions['DATE(Order.updated) <'] = date('Y-m-d H:i:s');
 
-        $this->set('b2c_empty_date_address_count', $this->_query_b2c_empty_date_address());
+        $this->set('abnormal_order_count',$this->_query_abnormal_order());
         $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
         $this->set('orders_today_count', $this->_query_orders_today_count());
-        $this->set('abnormal_order_count',$this->_query_abnormal_order());
 
         $this->set('should_count_nums', true);
         $this->set('product_count', $product_count);
@@ -646,18 +628,15 @@ class TuanController extends AppController
     }
 
     public function _query_b2c_paid_not_send_count(){
-        $b2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where o.type in (5, 6) and o.status = 1 and c.send_date < CURDATE()');
+        $b2c_brand_ids = implode(",", b2c_brands());
+        $b2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where o.brand_id in ('.$b2c_brand_ids.') and o.status = 1 and c.send_date < CURDATE()');
         return $b2c_paid_not_sent_count[0][0]['ct'];
     }
 
     public function _query_c2c_paid_not_send_count(){
-        $c2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on o.id = c.order_id where o.type = 1 and o.status = 1 and o.pay_time < CURDATE()');
+        $b2c_brand_ids = implode(",", b2c_brands());
+        $c2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on o.id = c.order_id where o.brand_id not in ('.$b2c_brand_ids.') and o.status = 1 and (o.pay_time < CURDATE() or o.pay_time is null)');
         return $c2c_paid_not_sent_count[0][0]['ct'];
-    }
-
-    public function _query_b2c_empty_date_address(){
-        $empty_send_date_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where (c.send_date is null or (o.consignee_id = 0 and o.consignee_address = "")) and o.type in (5, 6) and o.status = 1 and DATE(o.created) > '.date('Y-m-d', strtotime('-62 days')));
-        return $empty_send_date_count[0][0]['ct'];
     }
 
     public function _query_orders_today_count(){
@@ -666,8 +645,16 @@ class TuanController extends AppController
     }
 
     public function _query_abnormal_order(){
-        $abnormal_order_count = $this->Order->query('select count(o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where ((c.send_date is null and o.type in (5,6)) or (o.consignee_id = 0 and o.consignee_address = "") or (o.type = 1 and o.ship_mark != "") or o.pay_time is null or (o.ship_mark = "ziti" and o.consignee_id = 0 and o.type in (5,6)) or (o.ship_mark = "kuaidi" and o.consignee_id !=0 and o.type in (5,6))) and o.type in (1,5,6) and o.status in (1,2) and DATE(o.created) > "'.date('Y-m-d', strtotime('-62 days')).'"');
-       $this->log('count'.json_encode($abnormal_order_count));
+        $abnormal_order_count = $this->Order->query('select count(o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where
+            (
+                (c.send_date is null and o.type in (5,6))
+                or (o.consignee_id = 0 and o.consignee_address = "")
+                or (o.pay_time is null and o.ship_mark != "sfdf")
+                or (o.ship_mark = "")
+                or (o.ship_mark is NULL)
+                or (o.ship_mark = "kuaidi" and (o.consignee_address = "" or o.consignee_address is NULL))
+                or (o.ship_mark = "ziti" and (o.consignee_id = 0 or o.consignee_id is null))
+            ) and o.type in (1,5,6) and o.status in (1,2,3,4,14) and DATE(o.created) > "'.date('Y-m-d', strtotime('-62 days')).'"');
         return $abnormal_order_count[0][0]['ct'];
     }
     public function admin_update_order_status_to_refunded(){
@@ -718,5 +705,13 @@ class TuanController extends AppController
             $this->Order->updateAll(array(consignee_id=>$offline_store_id),array('id'=>$id));
         }
         $this->redirect('/admin/tuan/query_abnormal_order');
+    }
+
+    public function _get_orderMsg(){
+        $reachOrders = $this->OrderMessage->find('all',array('conditions' => array('status' => 0,'type' => 'py-reach')));
+        $send_outOrders = $this->OrderMessage->find('all',array('conditions' => array('status' => 0,'type' => 'py-send-out')));
+        $reachOrderIds = Hash::extract($reachOrders,'{n}.OrderMessage.order_id');
+        $send_outOrderIds = Hash::extract($send_outOrders,'{n}.OrderMessage.order_id');
+        return array(array_unique($reachOrderIds),array_unique($send_outOrderIds));
     }
 }

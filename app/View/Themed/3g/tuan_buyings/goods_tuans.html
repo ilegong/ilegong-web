@@ -1,3 +1,5 @@
+
+{{$this->Html->css(array('tuan.css?v6.7'));}}
 <div class="classlist_v2">
     <ul class="clearfix">
         {{if $tagId}}
@@ -56,7 +58,7 @@
                 <ul class="clearfix">
                     <li><a href="{{$lbs_url}}"><img src="http://api.map.baidu.com/staticimage?width=200&height=150&center={{$location}}&zoom=18&markers={{$location}}&&markerStyles=l" border="0" /></a></li>
                     <li style="float: none; padding-left: 8em;">
-                        <a href="{{$tuan_buy_link}}">
+                        <a href="{{$tuan_buy_link}}" target="_blank">
                             <p>{{$tuan['tuan_name']}}&nbsp;</p>
                             <s>团长:{{$tuan['leader_name']}}</s><br/>
                             <s>团购截止{{friendlyDateFromStr($tuan_buying['TuanBuying']['end_time'], FFDATE_CH_MD)}}</s><br/>

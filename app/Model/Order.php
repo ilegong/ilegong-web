@@ -58,7 +58,7 @@ class Order extends AppModel {
 
         }
     }
-    public function createTuanOrder($memberId, $uid, $fee, $product_id, $type = ORDER_TYPE_TUAN, $area='', $address='', $mobile='', $name='', $cart_id, $ship_mark, $shop_id=0) {
+    public function createTuanOrder($memberId, $uid, $fee, $product_id, $type = ORDER_TYPE_TUAN, $area='', $address='',$remark_address='', $mobile='', $name='', $cart_id, $ship_mark, $shop_id=0) {
         if ($type != ORDER_TYPE_TUAN && $type != ORDER_TYPE_TUAN_SEC) {
             throw new CakeException("error order type:".$type);
         }
@@ -80,6 +80,7 @@ class Order extends AppModel {
                 'consignee_area' => $area,
                 'consignee_name' => $name,
                 'consignee_address' => $address,
+                'remark_address' => $remark_address,
                 'consignee_mobilephone' => $mobile,
                 'ship_mark' => $ship_mark,
                 'status' => ORDER_STATUS_WAITING_PAY
@@ -98,6 +99,7 @@ class Order extends AppModel {
                 'consignee_area' => $area,
                 'consignee_name' => $name,
                 'consignee_address' => $address,
+                'remark_address' => $remark_address,
                 'consignee_mobilephone' => $mobile,
                 'ship_mark' => $ship_mark,
                 'status' => ORDER_STATUS_WAITING_PAY
@@ -157,6 +159,7 @@ class Order extends AppModel {
                 $pid_list = Hash::extract($cartItems, '{n}.Cart.product_id');
             }
             if (!empty($pid_list)) {
+                $this->set_cart_send_date($cartItems);
                 if ($isTry) {
                     $shichiM = ClassRegistry::init('OrderShichi');
                     foreach ($pid_list as $pid) {
@@ -171,7 +174,13 @@ class Order extends AppModel {
                     $pTry = $tryM->findById($isTry);
                     if (!empty($pTry)) {
                         //FIXME: do retry if failed
-                        $tryM->updateAll(array('sold_num' => 'sold_num + 1'), array('id' => $isTry, 'modified' => $pTry['ProductTry']['modified']));
+                        $buy_multiple = $pTry['ProductTry']['buy_multiple'];
+                        if($buy_multiple<=1){
+                            $add_num = 1;
+                        }else{
+                            $add_num = rand(1,$buy_multiple);
+                        }
+                        $tryM->updateAll(array('sold_num' => 'sold_num + '.$add_num), array('id' => $isTry, 'modified' => $pTry['ProductTry']['modified']));
                     }
                 } else if ($type == ORDER_TYPE_GROUP || $type == ORDER_TYPE_GROUP_FILL) {
                     $gmM = ClassRegistry::init('GrouponMember');
@@ -394,6 +403,20 @@ class Order extends AppModel {
                     $this->log("add score: ".$refer['Refer']['from'].", 900, refer id".$refer['Refer']['id']);
                 }else{
                     $this->log("user first order add score to ".$refer['Refer']['from'].'fail');
+                }
+            }
+        }
+    }
+
+    function set_cart_send_date($carts){
+        $cartM = ClassRegistry::init('Cart');
+        foreach($carts as $item){
+            $pid = $item['Cart']['product_id'];
+            $cartId = $item['Cart']['id'];
+            if($cartId){
+                $sendDate = get_pure_product_consignment_date($pid);
+                if($sendDate!=null){
+                    $cartM->updateAll(array('send_date' => $sendDate),array('id' => $cartId));
                 }
             }
         }

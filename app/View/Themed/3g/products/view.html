@@ -1,4 +1,4 @@
-<div class="classlist_v2" style="z-index:999">
+<div class="classlist_v2" style="z-index:4">
     <ul class="clearfix">
         <li><a href="{{$history}}" id="return_label" class="back"></a></li>
         <li class="line"></li>
@@ -16,24 +16,18 @@
 
 <!--底部购买-->
 <div class="bottom_bg">
-    <ul class="clearfix">
-        <li class="love fl">
-            <a href="#X" class="love_icon"></a>
-            <!--<p>关注</p>-->
-        </li>
-        <li class="fl" style="width:39%;">
-            <div style="margin-right:3%;">
-                <a id="btn_quick_buy" item-id="{{$Product['Product']['id']}}" href="javascript:;" class="btn_b {{ (($total_left > 0 || $total_left == -1) && $afford_for_curr_user && $Product['Product']['published']) ? 'pay_bg' : 'cart_btn_soldout'}} radius10">立即购买</a>
+    <a href ="/carts/listcart.html" class="shopping fl">
+        <div style="position:relative;" class="shopping_icon" id="cart_link">
+            <div id="item-count" class="shopping_count">
             </div>
-        </li>
-        <li class="fl" style="width:39%;">
-            <div style="margin-left:3%;">
-                <a id="btn_add_cart"  item-id="{{$Product['Product']['id']}}" href="javascript:;" class="btn_b {{ (($total_left > 0 || $total_left == -1) && $afford_for_curr_user && $Product['Product']['published']) ? 'shopping_bg' : 'cart_btn_soldout'}} radius10">加入购物车</a>
-            </div>
-        </li>
-        <li class="shopping fr">
-            <a href="/carts/listcart.html" style="position:relative; margin-top: 0.2em;" class="shopping_icon" id="cart_link"><div id="item-count" class="shopping_count"></div></a>
-            <p>购物车</p>
+        </div>
+    </a>
+   <ul class="clearfix fr">
+       <li class="fl" style="width:50%;">
+               <a id="btn_add_cart"  item-id="{{$Product['Product']['id']}}" href="javascript:;" class="btn_b {{ (($total_left > 0 || $total_left == -1) && $afford_for_curr_user && $Product['Product']['published']) ? 'shopping_bg' : 'cart_btn_soldout'}}">加入购物车</a>
+       </li>
+        <li class="fr" style="width:50%;">
+                <a id="btn_quick_buy" item-id="{{$Product['Product']['id']}}" href="javascript:;" class="btn_b {{ (($total_left > 0 || $total_left == -1) && $afford_for_curr_user && $Product['Product']['published']) ? 'pay_bg' : 'cart_btn_soldout'}}" >立即购买</a>
         </li>
     </ul>
 </div>

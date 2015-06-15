@@ -16,11 +16,27 @@ var tablesToExcel = (function() {
         var workbookXML = "";
         var worksheetsXML = "";
         var rowsXML = "";
-
         for (var i = 0; i < tables.length; i++) {
+            var statisticsData = {};
             if (!tables[i].nodeType) tables[i] = document.getElementById(tables[i]);
             for (var j = 0; j < tables[i].rows.length; j++) {
-                rowsXML += '<Row>'
+                if(j!=0){
+                    var p_s_id = tables[i].rows[j].getAttribute('data-mark-tag');
+                    var p_s_name = tables[i].rows[j].getAttribute('data-mark-tag-name');
+                    var p_s_num = tables[i].rows[j].getAttribute('data-mark-tag-num');
+                    //data-mark-tag-spec
+                    var s_name = tables[i].rows[j].getAttribute('data-mark-tag-spec');
+                    if (statisticsData[p_s_id]) {
+                        statisticsData[p_s_id]['num'] =parseInt(statisticsData[p_s_id]['num'])+parseInt(p_s_num);
+                    } else {
+                        statisticsData[p_s_id] = {
+                            'name': p_s_name,
+                            'num': p_s_num,
+                            'specName':s_name
+                        };
+                    }
+                }
+                rowsXML += '<Row>';
                 for (var k = 0; k < tables[i].rows[j].cells.length; k++) {
                     if(ignoreRows.indexOf(k)>=0){
                         continue;
@@ -41,9 +57,45 @@ var tablesToExcel = (function() {
                 }
                 rowsXML += '</Row>'
             }
+
+            var statics_data = '';
+            statics_data +='<Row>';
+            ctx = {  attributeStyleID: ''
+                , nameType: 'String'
+                , data: '合计'
+                , attributeFormula: ''
+            };
+            statics_data += format(tmplCellXML, ctx);
+            statics_data +='</Row>';
+            for(row_tag in statisticsData){
+                statics_data +='<Row>';
+                var item_data = statisticsData[row_tag];
+                ctx = {  attributeStyleID: ''
+                    , nameType: 'String'
+                    , data: item_data['name']
+                    , attributeFormula: ''
+                };
+                statics_data += format(tmplCellXML, ctx);
+                //item_data['num']
+                ctx = {  attributeStyleID: ''
+                    , nameType: 'String'
+                    , data: item_data['specName']
+                    , attributeFormula: ''
+                };
+                statics_data += format(tmplCellXML, ctx);
+                ctx = {  attributeStyleID: ''
+                    , nameType: 'String'
+                    , data: item_data['num']
+                    , attributeFormula: ''
+                };
+                statics_data += format(tmplCellXML, ctx);
+                statics_data +='</Row>';
+            }
+            rowsXML = statics_data+rowsXML;
             ctx = {rows: rowsXML, nameWS: wsnames[i] || 'Sheet' + i};
             worksheetsXML += format(tmplWorksheetXML, ctx);
             rowsXML = "";
+
         }
 
         ctx = {created: (new Date()).getTime(), worksheets: worksheetsXML};

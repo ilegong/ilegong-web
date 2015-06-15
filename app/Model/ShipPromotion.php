@@ -300,7 +300,12 @@ class ShipPromotion extends AppModel {
             )
         ),
 
-
+        1012 => array(
+            'limit_ship' => true,
+            'items' => array(
+                array('id' => 200,  'time' => '', 'least_num' => 10,  'address' => '购满10份（含），送到指定地点', 'need_address_remark' => true),
+            )
+        ),
     );
 
     private  $pro_num_limit = array(

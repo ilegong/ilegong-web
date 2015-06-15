@@ -195,7 +195,7 @@ class WeixinComponent extends Component
                 "remark" => array("value" => "点击查看订单详情".($number > 0 ? "/领取红包":"")."。", "color" => "#FF8800")
             )
         );
-        return $this->send_weixin_message($post_data);
+        return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order_no);
     }
 
     public function send_groupon_paid_message($open_id, $price, $url, $order_no, $good_info, $isDone, $isSelf, $isOrganizer, $organizerName, $newMemberName, $leftPeople, $ship_info)
@@ -312,21 +312,25 @@ class WeixinComponent extends Component
         $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
         if ($user_weixin != false) {
             $open_id = $user_weixin['oauth_openid'];
-            $post_data = array(
-                "touser" => $open_id,
-                "template_id" => $this->wx_message_template_ids["PACKET_RECEIVED"],
-                "url" => $this->get_packet_url(),
-                "topcolor" => "#FF0000",
-                "data" => array(
-                    "first" => array("value" => "亲，恭喜您获得朋友说红包！"),
-                    "keyword1" => array("value" => $packet_name."（1个）"),
-                    "keyword2" => array("value" => $packet_money."元"),
-                    "remark" => array("value" => "红包可以发送给朋友一起抢，点击详情，分享红包。", "color" => "#FF8800")
-                )
-            );
-            return $this->send_weixin_message($post_data);
+            return $this->send_packet_received_message_by_openid($open_id,$packet_money,$packet_name);
         }
         return false;
+    }
+
+    public function send_packet_received_message_by_openid($open_id, $packet_money, $packet_name) {
+        $post_data = array(
+            "touser" => $open_id,
+            "template_id" => $this->wx_message_template_ids["PACKET_RECEIVED"],
+            "url" => $this->get_packet_url(),
+            "topcolor" => "#FF0000",
+            "data" => array(
+                "first" => array("value" => "亲，恭喜您获得朋友说红包！"),
+                "keyword1" => array("value" => $packet_name . "红包"),
+                "keyword2" => array("value" => $packet_money . "元"),
+                "remark" => array("value" => "红包可以发送给朋友一起抢，点击详情，分享红包。", "color" => "#FF8800")
+            )
+        );
+        return $this->send_weixin_message($post_data);
     }
 
 
@@ -594,6 +598,48 @@ class WeixinComponent extends Component
         return false;
     }
 
+    private function gen_offer($order_id){
+        $so = ClassRegistry::init('ShareOffer');
+        $orderM = ClassRegistry::init('Order');
+        $orderInfo = $orderM->find('first',array(
+            'conditions'=>array(
+                'id'=>$order_id
+            )
+        ));
+        //TODO set offer id
+        //check is spec product pengyoushuo brand
+        if($orderInfo['Order']['brand_id']==PYS_BRAND_ID){
+            $cartM = ClassRegistry::init('Cart');
+            $coconutCartInfo = $cartM->find('first',array('conditions' => array('order_id' => $order_id,'product_id' => 883)));
+            if(!empty($coconutCartInfo)){
+                $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator'],44);
+                return $offer;
+            }
+            $cherryCartInfo = $cartM->find('first',array('conditions' => array('order_id'=>$order_id,'product_id'=>1020)));
+            if(!empty($cherryCartInfo)){
+                $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator'],45);
+                return $offer;
+            }
+        }
+
+        $offer = $so->query_gen_offer($orderInfo, $orderInfo['Order']['creator']);
+        return $offer;
+    }
+
+    private function send_share_offer_msg($open_id,$order_id){
+        $offer = $this->gen_offer($order_id);
+        $number = 0;
+        $name = '';
+        if(!empty($offer)) {
+            $number = $offer['number'];
+            $name = $offer['name'];
+        }
+        if($number>0){
+           return $this->send_packet_received_message_by_openid($open_id, $number/100, $name);
+        }
+        return false;
+    }
+
     public function send_tuan_paid_msg($open_id, $price, $good_info, $ship_info, $order_no, $order = null, $send_date) {
         $ship_way = $order['Order']['ship_mark'];
         if($ship_way == 'sf'){
@@ -616,7 +662,7 @@ class WeixinComponent extends Component
             "url" => $this->get_order_query_url($order_no),
             "topcolor" => "#FF0000",
             "data" => array(
-                "first" => array("value" => "亲，您的订单已完成付".$tail),
+                "first" => array("value" => "亲，您的订单已完成付款，".$tail),
                 "orderProductPrice" => array("value" => $price),
                 "orderProductName" => array("value" => $good_info),
                 "orderAddress" => array("value" => empty($ship_info)?'':$ship_info),
@@ -624,6 +670,6 @@ class WeixinComponent extends Component
                 "remark" => array("value" => "点击查看订单详情", "color" => "#FF8800")
             )
         );
-        return $this->send_weixin_message($post_data);
+        return $this->send_weixin_message($post_data) && $this->send_share_offer_msg($open_id, $order_no);
     }
 }

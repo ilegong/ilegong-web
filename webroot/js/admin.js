@@ -517,8 +517,13 @@ var iUtils = function () {
             }
         });
     }
+    var isMobileValid = function(mobile){
+        return /^1\d{10}$/.test(mobile);
+    }
+
     return {
-        initSelectBox: initSelectBox
+        initSelectBox: initSelectBox,
+        isMobileValid: isMobileValid
     }
 }();
 

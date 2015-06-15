@@ -60,19 +60,23 @@ class ShortmessagesController extends AppController {
             $this->redirect('/users/my_coupons');
         }
     }
+
+    public function get_hongbao_by_id($id){
+        $this->check_login();
+        $cond = array('id' => $id,'deleted' => DELETED_NO);
+        $this->loadModel('ShareOffer');
+        $store_offer = $this->ShareOffer->find('first',array(
+                'conditions' =>$cond,
+                'order' =>'created desc',
+                'fields' => array('id','name','introduct','deleted','start','end','valid_days','avg_number','is_default'))
+        );
+        $this->get_shared_offer($store_offer,8,400);
+    }
+
     public function get_hongbao($type = null){
-        if (empty($this->currentUser['id']) && $this->is_weixin()) {
-            $ref = Router::url($_SERVER['REQUEST_URI']);
-            $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
-            exit();
-        }
-        $uid = $this->currentUser['id'];
-        if(empty($uid)){
-            $this->redirect('/users/login');
-            exit();
-        }
+        $this->check_login();
         if($type == 'pyshuo'){
-            $brand_id = 92;
+            $brand_id = PYS_BRAND_ID;
         }else{
             $brand_id = 193;
         }
@@ -84,16 +88,35 @@ class ShortmessagesController extends AppController {
             'fields' => array('id','name','introduct','deleted','start','end','valid_days','avg_number','is_default'))
         );
         $this->log('hongbao'. $store_offer['ShareOffer']['id']);
+        $this->get_shared_offer($store_offer,8,100);
+    }
+
+    private function check_login(){
+        if (empty($this->currentUser['id']) && $this->is_weixin()) {
+            $ref = Router::url($_SERVER['REQUEST_URI']);
+            $this->redirect('/users/login.html?force_login=1&auto_weixin=' . $this->is_weixin() . '&referer=' . urlencode($ref));
+            exit();
+        }
+        $uid = $this->currentUser['id'];
+        if(empty($uid)){
+            $this->redirect('/users/login');
+            exit();
+        }
+    }
+
+    private function get_shared_offer($store_offer,$split_num,$money){
         if(empty($store_offer)){
             $this->redirect('/');
             exit();
         }
         $shareOfferId = $store_offer['ShareOffer']['id'];
-        $toShareNum = $store_offer['ShareOffer']['avg_number'] * 8;
+        $toShareNum = $store_offer['ShareOffer']['avg_number'] * $split_num;
         $this->loadModel('SharedOffer');
+        //separate red packet
+        $uid = $this->currentUser['id'];
         if(!$this->SharedOffer->hasAny(array('uid' => $uid, 'share_offer_id'=>$shareOfferId))){
             $this->ShareOffer->add_shared_slices($uid,$shareOfferId,$toShareNum);
-            $this->Weixin->send_packet_received_message($uid, 100, $store_offer['ShareOffer']['name']);
+            $this->Weixin->send_packet_received_message($uid, $money, $store_offer['ShareOffer']['name']);
         }
         $this->redirect('/users/my_offers');
     }

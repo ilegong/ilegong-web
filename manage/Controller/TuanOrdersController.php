@@ -67,13 +67,22 @@ class TuanOrdersController extends AppController{
                 $product_name = $try_products[$order['Order']['try_id']]['product_name'].$try_products[$order['Order']['try_id']]['spec'];
             }
             $offline_store = $offline_stores[$order['Order']['consignee_id']];
+            $tipMsg = '已经到达自提点，生鲜娇贵，请尽快取货哈。';
+            if($offline_store['OfflineStore']['can_remark_address']==1){
+                //这个自提点支持送货上门,不发送取货消息
+                //continue;
+                $tipMsg = '已经到达自提点，自提点将尽快为您配货。';
+            }
+            if($offline_store['OfflineStore']['owner_phone']){
+                $tipMsg = $tipMsg.'自提点联系电话：'.$offline_store['OfflineStore']['owner_phone'];
+            }
             $post_data = array(
                 "touser" => $oauth_binds[$order['Order']['creator']],
                 "template_id" => '3uA5ShDuM6amaaorl6899yMj9QvBmIiIAl7T9_JfR54',
                 "url" => WX_HOST . '/orders/detail/'.$order['Order']['id'],
                 "topcolor" => "#FF0000",
                 "data" =>  array(
-                    "first" => array("value" => "亲，您订购的".$product_name."已经到达自提点，生鲜娇贵，请尽快取货哈。"),
+                    "first" => array("value" => "亲，您订购的".$product_name.$tipMsg),
                     "keyword1" => array("value" => $order['Order']['id']),
                     "keyword2" => array("value" => $offline_store['OfflineStore']['alias']),
                     "keyword3" => array("value" => $order['Order']['consignee_address']),
@@ -82,6 +91,7 @@ class TuanOrdersController extends AppController{
             );
             $this->log('ship to pys stores: send weixin message for order: '.$order['Order']['id'].': '.json_encode($post_data));
             $wx_send_status = send_weixin_message($post_data);
+            $this->OrderMessage->create();
             if($wx_send_status){
                 $success[] = $order['Order']['id'];
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 0, 'type'=>'py-reach'));
@@ -90,7 +100,11 @@ class TuanOrdersController extends AppController{
                 $fail[] = $order['Order']['id'];
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 1, 'type'=>'py-reach'));
             }
-            $msg = "亲，您订购的".$product_name."已经到达".$offline_store['OfflineStore']['alias']."自提点(".$offline_store['OfflineStore']['owner_phone'].")，生鲜娇贵，请尽快取货。确认收货可得积分。";
+            if($offline_store['OfflineStore']['can_remark_address']==1){
+                $msg = "亲，您订购的".$product_name."已经到达".$offline_store['OfflineStore']['alias']."自提点(".$offline_store['OfflineStore']['owner_phone'].")，自提点将尽快为您配货。确认收货可得积分。";
+            }else{
+                $msg = "亲，您订购的".$product_name."已经到达".$offline_store['OfflineStore']['alias']."自提点(".$offline_store['OfflineStore']['owner_phone'].")，生鲜娇贵，请尽快取货。确认收货可得积分。";
+            }
             $this->_send_phone_msg($order['Order']['creator'], $order['Order']['consignee_mobilephone'], $msg, false);
         }
 
@@ -154,6 +168,7 @@ class TuanOrdersController extends AppController{
             );
             $this->log('ship to pys stores: send weixin message for order: '.$order['Order']['id'].': '.json_encode($post_data));
             $wx_send_status = send_weixin_message($post_data);
+            $this->OrderMessage->create();
             if($wx_send_status){
                 $success[] = $order['Order']['id'];
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 0, 'type'=>'py-send-out'));
@@ -318,6 +333,7 @@ class TuanOrdersController extends AppController{
                 )
             );
             $this->log('ship to haolinju store: send weixin message for order: '.$order['Order']['id'].': '.json_encode($post_data));
+            $this->OrderMessage->create();
             if(send_weixin_message($post_data)){
                 echo json_encode(array('success' => true, 'res' => $order['Order']['id']));
                 $this->OrderMessage->save(array('order_id' => $order['Order']['id'], 'status' => 0, 'type'=>'hlj-reach', 'data'=>$haolinju_code));

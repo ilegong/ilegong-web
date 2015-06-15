@@ -1,0 +1,6 @@
+<div class="conordertuan_contact">
+    <h1>联系信息</h1>
+    <label><input type="text" name="consignee_name" placeholder="收货人姓名" value="{{$ziti_consignee_info['name']}}" /></label>
+    <label><input type="text" name="consignee_mobilephone" placeholder="手机号" value="{{$ziti_consignee_info['mobilephone']}}" /></label>
+    <label id="remark_address" {{if $ziti_consignee_info["can_remark_address"]!=1}}style="display: none;"{{/if}}><input type="text" name="consignee_remark_address" placeholder="小区-楼号-门牌(送货上门)" value="{{$ziti_consignee_info['remark_address']}}" /></label>
+</div>

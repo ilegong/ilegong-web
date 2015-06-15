@@ -1,17 +1,83 @@
-<div class="classlist_v2" style="z-index:1">
-    <ul class="clearfix" onclick="window.history.back();">
-        <li><a class="back"></a></li>
-        <li class="line"></li>
-        <li style="text-overflow: ellipsis;"><strong>结算</strong></li>
-    </ul>
+<div class="classlist">
+    <a href="javascript:window.history.back();" class="back"></a>
+    结算
+    <a href="/"  class="home"></a>
 </div>
-<div class="address clearfix" style="position:relative;" data-address-choice="{{$has_chosen_consignee}}">
-    <span style="display:block;" class="fl">送至&nbsp;&nbsp;<a class="moreicon" href="#X"></a></span>
-    <span style="display:block;" class="fl"><a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
-    <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}<br />
-        {{$this->Session->read('OrderConsignee.name')}} &nbsp; {{$this->Session->read('OrderConsignee.mobilephone')}}</span>
-    <a href="/orders/edit_consignee?modal=true" class="address_addbtn new_address thickbox" {{if $total_consignee > 0}}style=" display: none;"{{/if}}>添加收货地址</a>
-</div>
+
+<!--未使用的固定自提点功能-->
+{{if $specialShipPromotionId}}
+    <div class="address clearfix" style="position:relative;" data-address-choice="{{$has_chosen_consignee}}">
+        <span style="display:block;" class="fl">送至&nbsp;&nbsp;<a class="moreicon" href="#X"></a></span>
+        <span style="display:block;" class="fl"><a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
+            <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}<br />
+                {{$this->Session->read('OrderConsignee.name')}} &nbsp; {{$this->Session->read('OrderConsignee.mobilephone')}}</span>
+        {{if !$limit_ship}}<a id="link_use_promotion" href="{{$this->Html->url('/orders/info?ship_promotion=0')}}" class="address_addbtn new_address thickbox">不使用特惠</a>{{/if}}
+    </div>
+{{elseif $specialShipPromotion && !$limit_ship}}
+    <div class="address clearfix" style="position:relative;">
+        <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">您购买的商品中有可以运送到特定地址的优惠。</span>
+        <a href="#TB_inline?height=155&width=300&inlineId=specialShipPromotion&modal=true" class="address_addbtn new_address thickbox">使用优惠</a>
+    </div>
+{{/if}}
+{{if $specialShipPromotion }}
+    {{if (!$specialShipPromotionId)}}
+        {{if $limit_ship}}
+            <div class="address clearfix" style="position:relative;">
+                <span style="overflow:hidden; display:block; margin-right:1em; color:#666666;">您购买的商品有特殊限制。</span>
+                {{if $limit_ship}}<a href="#TB_inline?height=155&width=300&inlineId=specialShipPromotion&modal=true" class="address_addbtn new_address thickbox">请选择收货信息</a>{{/if}}
+            </div>
+        {{/if}}
+    {{/if}}
+    <div id="specialShipPromotion" style="display: none">
+        <form method="post" action="{{$this->Html->url(array('action' => 'info', '?' => array('action' => 'savePromo')))}}">
+            <ul id="ul_special_promotion" class="list-group">
+                {{loop $specialShipPromotion $key $item}}
+                <li item-id="{{$item['id']}}" item-addr-mark="{{!empty($item['need_address_remark'])}}" class="list-group-item {{$specialShipPromotionId == $item['id']? 'active':''}}">
+                    {{if isset($item['price'])}}
+                    <span class="text-price-small pull-right">{{$this->Number->precision($item['price'], 2)}}</span>{{/if}}
+                    <small>{{if $item['time']}}{{$item['time']}}派送到{{/if}}{{$item['address']}}</small></li>
+                {{/loop}}
+            </ul>
+            <input type="text" class="form-control" placeholder="收货人姓名" id="p_consignee_name" name="consignee_name" value="{{$this->Session->read('OrderConsignee.name')}}">
+            <br/>
+            <input type="text" class="form-control" placeholder="手机号" id="p_consignee_mobile" name="consignee_mobilephone" value="{{$this->Session->read('OrderConsignee.mobilephone')}}" >
+            <br/>
+            <input type="text" class="form-control" placeholder="详细地址" id="p_consignee_address" style="display: none" name="consignee_address" value="">
+            <br/>
+            <input type="hidden" id="special_ship_promotion" name="ship_promotion" value="{{$specialShipPromotionId}}">
+            <button id="specialShipPromotion_submit" type="submit" class="btn btn-warning">保存</button>
+        </form>
+    </div>
+{{/if}}
+<?php $ziti_consignee_info = $ziti_info['consignee'] ?>
+{{if !$limit_ship}}
+    {{if !$kuaidi_consignee_exist && empty($ziti_info)}}
+<!--未选择配送方式-->
+    <div class="address clearfix" style="position:relative;">
+        <a class="moreicon" href="javascript:void(0)"></a>
+        <a href="javascript:$('.tipslayer,.tipslayer_bg').show();" class="order_selectbtn">选择发货地址</a>
+    </div>
+    {{/if}}
+    {{if $ziti_support}}
+<!--自提配送-->
+    <div class="address clearfix ziti_choose" style="position:relative; display: none;" data-on="{{!empty($ziti_info)}}" data-ship="ziti">
+        <span style="display:block;" class="fl">自提&nbsp;&nbsp;<a class="moreicon pickupinto"></a></span>
+        <a href="#X" style="overflow:hidden; display:block; margin-right:1em; color:#666666;" class="pickup_address pickupinto">
+            <strong>{{$ziti_consignee_info['name']}} {{$ziti_consignee_info['mobilephone']}}</strong><br />
+            <strong>自提点信息：</strong><br />{{$ziti_info['ziti']['name']}}<br />联系人：{{$ziti_info['ziti']['owner_name']}}{{$ziti_info['ziti']['owner_phone']}}
+        </a>
+        <a href="javascript:$('.ziti_choose').hide();$('.kuaidi_choose').show()" class="address_addbtn">选择快递配送到家</a>
+    </div>
+    {{/if}}
+    <!--快递配送-->
+    <div class="address clearfix kuaidi_choose" style="position:relative;{{if !$kuaidi_consignee_exist && empty($ziti_info)}}display: none;{{/if}}"  data-on="{{$kuaidi_consignee_exist}}" data-ship="kuaidi">
+        <span style="display:block;" class="fl">快递&nbsp;&nbsp;<a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
+        <a href="/orders/edit_consignee?modal=true" class="new_address thickbox" style="overflow:hidden; display:block; margin-right:1em; color:#666666;"><strong>{{$this->Session->read('OrderConsignee.name')}} {{$this->Session->read('OrderConsignee.mobilephone')}}
+        </strong><br />{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}</a>
+        {{if $ziti_support}}<a href="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide();" class="address_addbtn">选择自提省邮费</a>{{/if}}
+    </div>
+{{/if}}
+{{if $flash_msg}}<div class="alert alert-danger" role="alert">{{$flash_msg}}</div>{{/if}}
 <div class="cart" style="margin-top: 0; padding-top: 0;">
     <div>
         <?php $total_num = 0;?>
@@ -31,14 +97,16 @@
                         <li style="overflow: hidden; display: block; padding-left: 10px;">
                             <p>{{$item->name}}{{if !$item->published}} 该商品已经下架{{/if}}</p>
                             <s>单价:￥{{$this->Number->precision($item->price, 2)}}</s>
-                            <s>
-                              <span>{{if $item->specId}}口味：{{$spec_group[$item->specId]}}{{/if}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                              <span>
-                                {{if $item->consignment_date}}
-                                    {{empty($consign_dates[$item->consignment_date])?'': date('m月d日', strtotime($consign_dates[$item->consignment_date])).'到货';}}
-                                {{/if}}
-                              </span>
-                            </s>
+                            {{if ($item->specId)||($item->consignment_date)}}
+                                <s>
+                                  <span>{{if $item->specId}}规格：{{$spec_group[$item->specId]}}{{/if}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                                  <span>
+                                    {{if $item->consignment_date}}
+                                        {{empty($consign_dates[$item->consignment_date])?'': date('m月d日', strtotime($consign_dates[$item->consignment_date])).'到货';}}
+                                    {{/if}}
+                                  </span>
+                                </s>
+                            {{/if}}
                             <div class="clearfix">
                                 <a href="#X" class="cartnumreduce fl"></a>
                                 <input type="text" class="cart-num-input" data-id="{{$item->cartId}}" data-price="{{$item->price}}" data-brand-id="{{$brandItem->id}}"
@@ -89,7 +157,7 @@
         {{/if}}
     </div>
 </div>
-<div class="shop_jifen" style="margin-bottom: 35px;">
+<div class="shop_jifen" style="margin-bottom: 35px;margin-top: 10px;">
     <ul class="clearfix" style=" border: 0;">
         <li class="fl">可用<span class="balance_use_score">{{$score_usable}}</span>积分抵用<span>{{$this->Number->precision($score_usable/100, 2)}}</span>元</li>
         <li class="fr shop_jifen_used radius10"></li>
@@ -101,13 +169,71 @@
         <li class="fr"><a href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a></li>
     </ul>
 </div>
+<div class="xq_standard_layer pickup_layer" style="top:0;display: none; z-index: 102">
+    <div class="classlist_v2">
+        <ul class="clearfix">
+            <li><a onclick="javascript:$('.pickup_layer').hide()" class="back"></a></li>
+            <li class="line"></li>
+            <li><strong>地址</strong></li>
+        </ul>
+    </div>
+    <div class="conordertuan" style="margin-top: 48px">
+        <div class="clearfix conordertuan_adress">  </div>
+        <P><span>已选自提点：<span id="chose_address"  data-shop-id="{{$ziti_info['ziti']['id']}}" data-area-id="{{$ziti_info['ziti']['area_id']}}" style="color:#333333">{{$ziti_info['ziti']['name']}}</span></span></P>
+    </div>
+    {{template tuan_buyings/ziti_contact_info_template}}
+    <button class="btn btn-primary pickup_save">保存</button>
+</div>
+<div id="hiddenModalContent" style="display:none" data-ziti-type="1">
+    <div class="classlist_v2">
+        <ul class="clearfix">
+            <li><a onclick="tb_remove()" class="back"></a></li>
+            <li class="line"></li>
+            <li><strong>下单</strong></li>
+        </ul>
+    </div>
+    <div id="area_list" class="tuanadresslist">  </div>
+</div>
+<!--配送方式选择弹出层-->
+<div class="tipslayer" style="display: none">
+    <a href="javascript:$('.tipslayer,.tipslayer_bg').hide();" class="tipslayer_close"></a>
+    <div class="conorderprice">选择配送方式</div>
+    <div class="conorder_btn clearfix">
+        {{if $ziti_support}}
+            <div class="fl" style="width: 47%;">
+                <a href="#X" class="weixin" onclick="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide();$('.tipslayer,.tipslayer_bg').hide();$('.order_selectbtn').parent().hide();">自提</a>
+                <label>自提可省邮费</label>
+            </div>
+            <div class="fr" style="width: 47%;">
+                <a class="alipay new_address thickbox" href="/orders/edit_consignee?modal=true">快递</a>
+                <label>自营商品满98包邮</label>
+            </div>
+        {{else}}
+            <div class="fr" style="width: 94%;">
+                <a class="alipay new_address thickbox" style="width: 94%;" href="/orders/edit_consignee?modal=true">快递</a>
+                <label>自营商品满98包邮</label>
+            </div>
+        {{/if}}
+
+    </div>
+</div>
+<div class="tipslayer_bg" style="display: none"></div>
 <script>
     $(document).ready(function(){
+        var bigBuy = zitiObj(zitiAddressData.getBeijingAreas,$(window).height() + 5, $(window).width());
+        var elements = bigBuy.generateZitiArea();
+        var boxSize = $(window).height() + 5+ "&width=" + $(window).width();
+        $(".conordertuan_adress").html(elements);
+        bigBuy.bindThickbox();
+        bigBuy.bindChildAddress();
+
         var cartInfo = infoToBalance();
         var height =  $(window).height() + 5;
         var width = $(window).width();
-        var addressUrl = $(".new_address.thickbox").attr("href") + "&height=" + height + "&width=" + width;;
-        $(".new_address.thickbox").attr("href", addressUrl);
+        $('.new_address.thickbox').each(function(){
+            var addressUrl = $(this).attr("href") + "&height=" + height + "&width=" + width;
+            $(this).attr("href", addressUrl);
+        });
         $(".favor.thickbox").each(function(){
             var url = $(this).attr("href");
             url = url + "&height=" + (height-44) + "&width=" + width;
@@ -123,8 +249,81 @@
                 e.preventDefault();
                 return false;
             }
-        })
+        });
+        var $btnSubmit = $('#specialShipPromotion_submit');
+        var $specShipPromotionUl = $('#ul_special_promotion');
+        var lists = $specShipPromotionUl.find('li');
+        $btnSubmit.click(function (e) {
+            var activeLi = $specShipPromotionUl.find('li.active');
+            if (activeLi.length == 1) {
+                if(activeLi.attr('item-addr-mark') == '1') {
+                    var $pConsigneeAddress = $('#p_consignee_address');
+                    if ($pConsigneeAddress.val() == '') {
+                        utils.alert('请输入详细地址');
+                        $pConsigneeAddress.focus();
+                        e.preventDefault();
+                        return false;
+                    }
+                }
+
+                var $itemId = activeLi.attr('item-id');
+                $('#special_ship_promotion').val($itemId);
+            } else {
+                utils.alert('请选择特惠信息运送的时间地点');
+                e.preventDefault();
+                return false;
+            }
+
+            if ($('#p_consignee_name').val() == '') {
+                utils.alert('请输入收货人姓名');
+                e.preventDefault();
+                return false;
+            }
+
+            if ($('#p_consignee_mobile').val() == '') {
+                utils.alert('请输入收货人手机号码');
+                e.preventDefault();
+                return false;
+            }
+        });
+        lists.click(function (e) {
+            lists.filter('.active').removeClass('active');
+            var $this = $(this);
+            $this.toggleClass('active');
+            var $pConsigneeAddress = $('#p_consignee_address');
+            if($this.attr('item-addr-mark') == '1') {
+                $pConsigneeAddress.show();
+            }  else {
+                $pConsigneeAddress.hide();
+            }
+        });
+        $('.pickupinto').click(function(){
+            $('.pickup_layer').show();
+        });
+        $('.pickup_save').click(function(){
+            var shopId = $('#chose_address').data('shopId');
+            var name = $("input[name='consignee_name']").val();
+            var mobile = $("input[name='consignee_mobilephone']").val().replace(/\s+$/,"");
+            if(shopId.length <= 0){
+                utils.alert("请选择自提点");
+                return false
+            }else if(name.length <= 0){
+                utils.alert("请填写收货人");
+                return false
+            }else if(mobile.length != 11){
+                utils.alert("请填写手机号码");
+                return false
+            }
+            $.post('/orders/chose_pickup',{"name": name, "mobile":mobile,"shop_id": shopId},function(res){
+                if(res.status){
+                    $('.pickup_layer').hide();
+                    $('.pickup_address').html("<strong>"+ res.data.name + res.data.mobilephone+ "</strong><br /><strong>自提点信息：</strong><br />"+
+                    res.data.address);
+                    $('.ziti_choose').data('on', 1);
+                }else{
+                    utils.alert("请选择自提点");
+                }
+            },'json')
+        });
     })
 </script>
-{{$this->Html->script(array('/js/thickbox.js'));}}
-{{$this->Html->css(array('thickbox.css?ver1' ));}}

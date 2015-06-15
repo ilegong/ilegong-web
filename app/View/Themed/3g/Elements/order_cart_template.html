@@ -1,0 +1,28 @@
+<div>
+    <input type="hidden" value="{{$least_num}}" id="ship_least_num">
+    <div class="clearfix order_shop_head">
+        <span><img class="radius5" src="{{$this->Html->assetUrl(small_thumb_link($brand['coverimg']))}}" /></span>
+        <span>{{$brand['name']}}</span>
+    </div>
+    <div style="background: #ffffff;">
+        <ul class="clearfix" style="margin-bottom: 0;">
+            <li class="fl"><a href="#X" style="display: block;"><img src="{{$this->Html->assetUrl(small_thumb_link($cart_info['Cart']['coverimg']))}}" border="0" /></a></li>
+            <li style="overflow: hidden; display: block; padding-left: 10px;">
+                <p>{{$cart_info['Cart']['name']}}</p>
+                <s>单价:￥{{$this->Number->precision($cart_info['Cart']['price'],2)}}&nbsp;&nbsp;&nbsp;{{if $try_id}}{{get_spec_name_try($try_id)}}{{else}}{{get_spec_name_by_pid_and_sid($cart_info['Cart']['product_id'],$cart_info['Cart']['specId'])}}{{/if}}</s>
+                <s>&nbsp;&nbsp;&nbsp;&nbsp;<span class="redcolor">预计{{date('m月d日',strtotime($cart_info['Cart']['send_date']))}}送货</span></s>
+            </li>
+        </ul>
+        <div class="order_detail_num clearfix">
+            <label>数量</label>
+            <div class="clearfix fr">
+                <a href="#X" class="cartnumreduce order_detail_reduce fl"></a>
+                <input class="order_detail_input fl" type="text" value="{{$buy_count}}" id="pamount-{{$cart_info['Cart']['id']}}" data-id="{{$cart_info['Cart']['id']}}" disabled="disabled" data-price="{{$cart_info['Cart']['price']}}" name="shopCart"/>
+                <a href="#X" class="cartnumadd order_detail_add fl"></a>
+            </div>
+        </div>
+    </div>
+    <p class="conordertuan_total">{{if $ship_fee != 0}}运费：￥<span class="ship_fee" data-ship-fee="{{$ship_fee}}">{{$this->Number->precision($ship_fee, 2)}}</span>，{{/if}}共<span data-count="{{$buy_count}}">{{$buy_count}}</span>件商品，合计:
+        <strong data-goods-price="{{$cart_info['Cart']['price']*$buy_count}}">￥{{$this->Number->precision($cart_info['Cart']['price']*$buy_count, 2)}}</strong>
+    </p>
+</div>

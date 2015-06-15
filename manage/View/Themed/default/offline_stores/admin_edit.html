@@ -10,9 +10,14 @@
 
     <div class="form-group">
       <label class="col-sm-2 control-label">区域</label>
-      <div class="col-sm-9">
+      <div class="col-sm-7">
         <select class="form-control area-id" name="data[OfflineStore][area_id]" data-value="{{$offline_store[OfflineStore][area_id]}}">
         </select>
+      </div>
+      <div class="col-sm-2">
+           <select class="form-control child-area-id" name="data[OfflineStore][child_area_id]" data-value="{{$offline_store[OfflineStore][child_area_id]}}">
+               <option value="0">选择子区域</option>
+           </select>
       </div>
     </div>
 
@@ -93,4 +98,4 @@
     </div>
   </form>
 </div>
-{{$this->Html->script(array('/js/tuan-area.js?v4.2', 'manage/offline_stores/edit.js'))}}
+{{$this->Html->script(array('/js/tuan-area.js?v4.3', 'manage/offline_stores/edit.js?v1'))}}

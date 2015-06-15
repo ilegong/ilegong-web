@@ -43,8 +43,9 @@ class AppController extends Controller {
             header('location:' . substr($_SERVER['REQUEST_URI'], 10));
             exit;
         }
-        $request->webroot = '/';  // webroot目录直接放在根目录
-        
+        if($request){
+            $request->webroot = '/';  // webroot目录直接放在根目录
+        }
         parent::__construct($request, $response);
         $this->_international();
         if (!empty($this->uses) && !in_array($this->modelClass, $this->uses)) {
@@ -145,7 +146,7 @@ class AppController extends Controller {
             $this->set('signPackage', $signPackage);
         }
         //log weixin share
-        if($_GET['share_type'] && $_GET['trstr'] && !empty($this->currentUser)){
+        if($_GET['share_type'] && $_GET['trstr']){
             $share_type = $_GET['share_type'];
             $trstr = $_GET['trstr'];
             if($share_type != 'timeline' && $share_type != 'appMsg'){
@@ -164,6 +165,7 @@ class AppController extends Controller {
             $sharer = intval($str[0]);
             $created = intval($str[1]);
             $clicker = $this->currentUser['id'];
+            $clicker = $clicker == null ? 0 : $clicker;
             if($clicker != $sharer){
                 $this->loadModel('ShareTrackLog');
                 $data =array('sharer' => $sharer, 'clicker' => $clicker, 'share_time' => $created, 'click_time'=>time(), 'data_type' => $data_type, 'data_id' => intval($data_str[1]) , 'share_type' => $type);
@@ -718,6 +720,37 @@ class AppController extends Controller {
             $hasOfferBrandIds = Hash::combine($allValidOffer, '{n}.ShareOffer.brand_id');
         }
         $this->set('hasOfferBrandIds', $hasOfferBrandIds);
+    }
+
+    protected function setHistory(){
+        $history = $_REQUEST['history'];
+        if(!$history){
+            $history ='/';
+        }
+        if(!(strpos($history,WX_HOST)>=0)){
+            $history='/';
+        }
+        if($history=='/'){
+            if($_REQUEST['tagId']){
+                $history=$history.'?tagId='.$_REQUEST['tagId'];
+            }
+        }
+        $this->set('history',$history);
+    }
+
+    protected function setTraceFromData($type,$data_id){
+        $this->set('from',$type);
+        $this->set('data_id',$data_id);
+    }
+
+    protected function get_product_consignment_date($pid){
+        $consignment_date = get_pure_product_consignment_date($pid);
+        if(empty($consignment_date)){
+            return null;
+        }
+        $product_consignment_date = date('m月d日',strtotime($consignment_date));
+        $product_consignment_date = $product_consignment_date.'('.day_of_week($consignment_date).')';
+        return $product_consignment_date;
     }
 }
 ?>

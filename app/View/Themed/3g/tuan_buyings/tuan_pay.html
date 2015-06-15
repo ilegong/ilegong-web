@@ -1,6 +1,15 @@
 {{$this->Html->css(array(
 'groupon.css',
 ))}}
+<div class="classlist_v2" style="z-index:999;">
+    <ul class="clearfix" onclick="go_my_order();">
+        <li><a class="back" href="/orders/mine.html?tab=waiting_pay"></a></li>
+        <li class="line"></li>
+        <li style="text-overflow: ellipsis;"><strong>我的订单</strong></li>
+    </ul>
+</div>
+<br/>
+<br/>
 <p class="total_title">{{$order['Order']['consignee_address']}} 团购{{if $order['Order']['type']==ORDER_TYPE_TUAN_SEC}}秒杀{{/if}}</p>
 <div class="total_price">支付金额:
     <span>￥{{$order['Order']['total_all_price']}}</span>
@@ -18,7 +27,9 @@
             location.href  = "/ali_pay/{{$isMobile?'wap_to_alipay':'goto_to_alipay'}}/{{$orderId}}";
         }
     }
-
+    function go_my_order(){
+        window.location.href = '/orders/mine.html?tab=waiting_pay';
+    }
     $(document).ready(function(){
         $('#pay_zhifubao').click(function(){
             go_to_pay_zhifubao();

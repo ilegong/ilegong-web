@@ -55,8 +55,9 @@ const SHARED_OFFER_STATUS_NEW = 0;
 const SHARED_OFFER_STATUS_GOING = 3;
 const SHARED_OFFER_STATUS_EXPIRED = 1;
 const SHARED_OFFER_STATUS_OUT = 2;
-
+//red packet same carts num
 const COUPON_TYPE_TYPE_SHARE_OFFER = 2;
+//least price global can use all
 const COUPON_TYPE_TYPE_MAN_JIAN = 3;
 
 const ERROR_CODE_USER_DUP_MOBILE = 801;
@@ -85,7 +86,7 @@ const CART_ITEM_TYPE_NORMAL = 1;
 const CART_ITEM_TYPE_QUICK_ORDER = 2;
 const CART_ITEM_TYPE_TRY = 3;
 const CART_ITEM_TYPE_GROUPON_PROM = 4;
-const CART_ITEM_TYPE_TUAN = 5;//团购加入购物车类型
+const CART_ITEM_TYPE_TUAN = 5; //团购加入购物车类型
 const CART_ITEM_TYPE_TUAN_SEC = 6;
 
 const SHICHI_STATUS_OK = 1;
@@ -109,17 +110,23 @@ const COMMENT_LIMIT_IN_PRODUCT_VIEW = 5;
 
 const ORDER_COMMENTED = 1;
 
-const TRY_GLOBAL_SHOW=1;
+const TRY_GLOBAL_SHOW = 1;
 
-const PYS_M_TUAN=34;
+const PYS_M_TUAN = 34;
 
-const IS_BIG_TUAN=1;
+const IS_BIG_TUAN = 1;
 
-const RECOMMEND_TAG_ID=23;
+const RECOMMEND_TAG_ID = 23;
 
-const TUAN_CONSIGNMENT_TYPE=2;
+const TUAN_CONSIGNMENT_TYPE = 2;
 
+const SHIP_TYPE_ZITI = 1;
+const SHIP_TYPE_SFDF = 5;
+const SHIP_TYPE_KUAIDI = 6;
 const ZITI_TAG = 'ziti';
+const KUAIDI_TAG = 'kuaidi';
+
+const PYS_BRAND_ID = 92;
 
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
@@ -138,7 +145,7 @@ define('ORDER_STATUS_CONFIRMED', 11); //已确认有效，不要再用
 define('ORDER_STATUS_TOUSU', 12); //已投诉， 不要再用，投诉走其他流程
 
 define('ORDER_STATUS_COMMENT', 16); //待评价
-define('ORDER_STATUS_RETURNING_MONEY',14);//退款中
+define('ORDER_STATUS_RETURNING_MONEY', 14); //退款中
 
 define('ON_SHELVE', PUBLISH_YES); //已上架
 define('OFF_SHELVE', PUBLISH_NO); //下架
@@ -186,7 +193,7 @@ define('PROFILE_NICK_LEN', 16);
 define('PROFILE_NICK_MIN_LEN', 2);
 define('MSG_API_KEY', 'api:key-fdb14217a00065ca1a47b8fcb597de0d'); //发短信密钥
 define('APP_REGISTER_MARK', 11); //APP注册用户标示
-define('SERVICE_LINE_PHONE','010-56245991');
+define('SERVICE_LINE_PHONE', '010-56245991');
 define('SERVICE_LINE', '<a href="tel:01056245991">010-56245991</a>');
 
 global $page_style;
@@ -212,14 +219,22 @@ $source_appid_map = array();
 $order_after_paid_status = array(ORDER_STATUS_PAID, ORDER_STATUS_DONE, ORDER_STATUS_RECEIVED, ORDER_STATUS_SHIPPED);
 
 
-function oauth_wx_source() {
+function get_agency_uid()
+{
+    return array(411402, 633345, 146, 6799, 805934, 660240, 810892);
+}
+
+function oauth_wx_source()
+{
     return 'wx-' . WX_APPID_SOURCE;
 }
 
-function oauth_wx_goto($refer_key, $host3g) {
+function oauth_wx_goto($refer_key, $host3g)
+{
     switch ($refer_key) {
         case "CLICK_URL_TECHAN":
-            return "http://$host3g/techan.html";
+            return "http://$host3g/categories/mobileIndex.html?tagId=23&_sl=wx.menu.h_redirect";
+//            return "http://$host3g/techan.html";
         case "CLICK_URL_MINE":
             return "http://$host3g/orders/mine.html";
         case "CLICK_URL_SALE_AFTER_SAIL":
@@ -244,7 +259,8 @@ function oauth_wx_goto($refer_key, $host3g) {
  * @param bool $not_require_info
  * @return string url to Weixin oauth
  */
-function redirect_to_wx_oauth($ref, $scope = WX_OAUTH_BASE, $not_require_info = false) {
+function redirect_to_wx_oauth($ref, $scope = WX_OAUTH_BASE, $not_require_info = false)
+{
     $return_uri = 'http://' . WX_HOST . '/users/wx_auth?';
     if (!empty($ref)) {
         $return_uri .= '&referer=' . urlencode($ref);
@@ -258,7 +274,8 @@ function redirect_to_wx_oauth($ref, $scope = WX_OAUTH_BASE, $not_require_info = 
 }
 
 
-function same_day($time1, $time2) {
+function same_day($time1, $time2)
+{
     $dt = new DateTime;
     $dt->setTimestamp($time1);
     $day1 = $dt->format(FORMAT_DATE);
@@ -267,7 +284,8 @@ function same_day($time1, $time2) {
     return ($day1 == $day2);
 }
 
-function before_than($timeStr1, $timeStr2 = null) {
+function before_than($timeStr1, $timeStr2 = null)
+{
     if (!$timeStr1) {
         return false;
     }
@@ -289,7 +307,8 @@ function before_than($timeStr1, $timeStr2 = null) {
     return ($ts1 < $ts2);
 }
 
-function filter_invalid_name($name, $def = '神秘人') {
+function filter_invalid_name($name, $def = '神秘人')
+{
     if (!$name || $name == 'null') {
         $name = $def;
     } else if (strpos($name, '微信用户') === 0) {
@@ -298,7 +317,8 @@ function filter_invalid_name($name, $def = '神秘人') {
     return $name;
 }
 
-function calculate_try_price($priceInCent, $uid = 0, $shichituan = null) {
+function calculate_try_price($priceInCent, $uid = 0, $shichituan = null)
+{
     if ($shichituan == null && $uid) {
         $sctM = ClassRegistry::init('Shichituan');
         $shichituan = $sctM->find_in_period($uid, get_shichituan_period());
@@ -307,14 +327,17 @@ function calculate_try_price($priceInCent, $uid = 0, $shichituan = null) {
     return ($isShichituan ? 99 : $priceInCent) / 100;
 }
 
-function special_cake_users($uid) {
+function special_cake_users($uid)
+{
     return /*$uid == 699919
-    ||*/ $uid == 708029/*|| $uid == 632*/
+    ||*/
+        $uid == 708029 /*|| $uid == 632*/
         ; //Special user provided by Agnes(Li Hainan)
 }
 
 
-function promo_code_new_user($pids) {
+function promo_code_new_user($pids)
+{
     return ((is_array($pids) && count($pids) == 1 && $pids[0] == PRODUCT_ID_CAKE) || ($pids == PRODUCT_ID_CAKE));
 }
 
@@ -327,7 +350,8 @@ function promo_code_new_user($pids) {
  * @param null $pp special price by ShipPromotion
  * @return array array of price && specialId
  */
-function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null,$tuan_param=array()) {
+function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null, $tuan_param = array())
+{
 
     if (accept_user_price_pid($pid) && accept_user_price_pid_num($pid, $num) && !empty($cart_id)) {
         $userPrice = ClassRegistry::init('UserPrice');
@@ -344,24 +368,24 @@ function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null,
 
     $tuan_buy_id = $tuan_param['tuan_buy_id'];
     //优先级 first
-    if(!empty($tuan_buy_id)){
+    if (!empty($tuan_buy_id)) {
         $tuanBuyM = ClassRegistry::init('TuanBuying');
-        $tuanBuy = $tuanBuyM->find('first',array(
+        $tuanBuy = $tuanBuyM->find('first', array(
             'conditions' => array(
                 'id' => $tuan_buy_id
             )
         ));
         $tuan_price = $tuanBuy['TuanBuying']['tuan_price'];
         $tuan_price = floatval($tuan_price);
-        if($tuan_price>=0){
+        if ($tuan_price >= 0) {
             return array($tuan_price,);
         }
     }
     //优先级 second
     $tuan_product_id = $tuan_param['product_id'];
-    if(!empty($tuan_product_id)){
+    if (!empty($tuan_product_id)) {
         $tuan_product_price = getTuanProductPrice($tuan_product_id);
-        if($tuan_product_price>=0){
+        if ($tuan_product_price >= 0) {
             return array($tuan_product_price,);
         }
     }
@@ -414,7 +438,8 @@ function calculate_price($pid, $price, $currUid, $num, $cart_id = 0, $pp = null,
 }
 
 
-class ProductCartItem extends Object {
+class ProductCartItem extends Object
+{
     public $cartId;
     public $pid;
     public $num;
@@ -422,7 +447,8 @@ class ProductCartItem extends Object {
     public $name;
     public $img;
 
-    public function __construct($cartItem, $itemPrice, $num, $used_coupons, $pid, $published=true) {
+    public function __construct($cartItem, $itemPrice, $num, $used_coupons, $pid, $published = true)
+    {
         $this->cartId = $cartItem['id'];
         $this->pid = $cartItem['product_id'];
         $this->price = $itemPrice;
@@ -435,14 +461,16 @@ class ProductCartItem extends Object {
         $this->consignment_date = $cartItem['consignment_date'];
     }
 
-    public function total_price() {
+    public function total_price()
+    {
         return $this->num * $this->price;
     }
 
     /**
      * @param ProductCartItem $other
      */
-    public function merge($other) {
+    public function merge($other)
+    {
         if ($this->cartId != $other->cartId) {
             $msg = "not equals product id to merge a ProductCartItem:";
             $this->log($msg . ", src=" . json_encode($this) . ", other=" . json_encode($other));
@@ -453,7 +481,8 @@ class ProductCartItem extends Object {
     }
 }
 
-class BrandCartItem {
+class BrandCartItem
+{
     public $id;
 
     /**
@@ -462,11 +491,13 @@ class BrandCartItem {
     public $items = array();
     public $used_coupons;
 
-    public function __construct($brandId) {
+    public function __construct($brandId)
+    {
         $this->id = $brandId;
     }
 
-    public function add_product_item($item) {
+    public function add_product_item($item)
+    {
         $proItem = $this->items[$item->cartId];
         if (empty($proItem)) {
             $this->items[$item->cartId] = $item;
@@ -475,7 +506,8 @@ class BrandCartItem {
         }
     }
 
-    public function total_price() {
+    public function total_price()
+    {
         $total = 0;
         foreach ($this->items as $item) {
             $total += $item->total_price();
@@ -483,7 +515,8 @@ class BrandCartItem {
         return $total;
     }
 
-    public function total_num() {
+    public function total_num()
+    {
         $total = 0;
         foreach ($this->items as $item) {
             $total += $item->num;
@@ -491,18 +524,21 @@ class BrandCartItem {
         return $total;
     }
 
-    public function coupon_applied($couponItemId) {
+    public function coupon_applied($couponItemId)
+    {
         return !empty($this->used_coupons) && array_search($couponItemId, $this->used_coupons) !== false;
     }
 
-    public function apply_coupon($couponItemId, $reduce_price, $applying) {
+    public function apply_coupon($couponItemId, $reduce_price, $applying)
+    {
         foreach ($this->items as $brandItem) {
             //TODO:
         }
     }
 }
 
-class OrderCartItem {
+class OrderCartItem
+{
     public $order_id;
     public $user_id;
     public $is_try = false;
@@ -512,16 +548,18 @@ class OrderCartItem {
      */
     public $brandItems = array();
 
-    public function add_product_item($brand_id, $cartItem, $itemPrice, $num, $used_coupons,$published=true) {
+    public function add_product_item($brand_id, $cartItem, $itemPrice, $num, $used_coupons, $published = true)
+    {
         $brandItem = $this->brandItems[$brand_id];
         if (empty($brandItem)) {
             $brandItem = new BrandCartItem($brand_id);
             $this->brandItems[$brand_id] = $brandItem;
         }
-        $brandItem->add_product_item(new ProductCartItem($cartItem, $itemPrice, $num, $used_coupons,$published));
+        $brandItem->add_product_item(new ProductCartItem($cartItem, $itemPrice, $num, $used_coupons, $published));
     }
 
-    public function find_product_item($cartId) {
+    public function find_product_item($cartId)
+    {
         foreach ($this->brandItems as $bid => $brandItem) {
             foreach ($brandItem->items as $productItem) {
                 if ($productItem->cartId == $cartId) {
@@ -532,7 +570,8 @@ class OrderCartItem {
         return null;
     }
 
-    public function count_total_num($pid) {
+    public function count_total_num($pid)
+    {
         $num = 0;
         foreach ($this->brandItems as $bid => $brandItem) {
             foreach ($brandItem->items as $productItem) {
@@ -544,7 +583,8 @@ class OrderCartItem {
         return $num;
     }
 
-    public function list_cart_id() {
+    public function list_cart_id()
+    {
         $cart_ids = array();
         foreach ($this->brandItems as $bid => $brandItem) {
             foreach ($brandItem->items as $productItem) {
@@ -555,7 +595,8 @@ class OrderCartItem {
     }
 
 
-    public function total_price() {
+    public function total_price()
+    {
         $total = 0.0;
         foreach ($this->brandItems as $brandItem) {
             $total += $brandItem->total_price();
@@ -563,7 +604,8 @@ class OrderCartItem {
         return $total;
     }
 
-    public function apply_coupon($brandId, $coupon) {
+    public function apply_coupon($brandId, $coupon)
+    {
 
         if (empty($coupon)) {
             return false;
@@ -587,7 +629,8 @@ class OrderCartItem {
     }
 }
 
-function product_name_with_spec($prodName, $specId, $specs) {
+function product_name_with_spec($prodName, $specId, $specs)
+{
     if (!$specId || empty($specs)) {
         return $prodName;
     }
@@ -605,7 +648,8 @@ function product_name_with_spec($prodName, $specId, $specs) {
  * @param $specs
  * @return bool|mixed
  */
-function product_spec_map($specs) {
+function product_spec_map($specs)
+{
     try {
         $specsMap = !empty($specs) ? json_decode($specs, true) : false;
         //if (!$specsMap) {
@@ -627,7 +671,8 @@ function product_spec_map($specs) {
  * @param $session_id
  * @return array cartItemsByPid
  */
-function mergeCartWithDb($uid, $cookieItems, &$cartsDict, $poductModel, $cartModel, $session_id = null) {
+function mergeCartWithDb($uid, $cookieItems, &$cartsDict, $poductModel, $cartModel, $session_id = null)
+{
     $product_ids = array();
     $nums = array();
     foreach ($cookieItems as $item) {
@@ -690,7 +735,8 @@ function mergeCartWithDb($uid, $cookieItems, &$cartsDict, $poductModel, $cartMod
  * @param $newSpecId
  * @return string
  */
-function cart_dict_key($pid, $newSpecId) {
+function cart_dict_key($pid, $newSpecId)
+{
     return $pid . '-' . $newSpecId;
 }
 
@@ -698,7 +744,8 @@ function cart_dict_key($pid, $newSpecId) {
  * @param $dbCartItems
  * @return array
  */
-function dict_db_carts($dbCartItems) {
+function dict_db_carts($dbCartItems)
+{
     $cartsDicts = array();
     if (!empty($dbCartItems)) {
         foreach ($dbCartItems as $ci) {
@@ -708,7 +755,8 @@ function dict_db_carts($dbCartItems) {
     }
 }
 
-function find_latest_clicked_from($buyerId, $pid) {
+function find_latest_clicked_from($buyerId, $pid)
+{
     //CANNOT same with $newUserId
     if ($pid == PRODUCT_ID_RICE_10) {
         $trackLogModel = ClassRegistry::init('TrackLog');
@@ -724,9 +772,11 @@ function find_latest_clicked_from($buyerId, $pid) {
 }
 
 
-class ProductCategory {
+class ProductCategory
+{
 
-    public static function product_category_list() {
+    public static function product_category_list()
+    {
         $productCategoryListJson = Cache::read('_productcategorylist');
         if (empty($productCategoryListJson)) {
             $productCategoryModel = ClassRegistry::init('ProductTag');
@@ -734,7 +784,7 @@ class ProductCategory {
             $productCategoryList = $productCategoryModel->find('all', array('conditions' => array(
                 'show_in_home' => 1,
                 'published' => 1
-                ),
+            ),
                 'order' => 'priority desc'
             ));
             $conditions = array('Product' . '.deleted' => 0, 'Product' . '.published' => 1);
@@ -770,10 +820,12 @@ class ProductCategory {
 
 }
 
-class ProductSpeciality {
+class ProductSpeciality
+{
 
     //获取产品属性指标
-    public static function get_product_attrs() {
+    public static function get_product_attrs()
+    {
         $allAttrs = Cache::read('all_product_attributes');
         if (!empty($allAttrs)) {
             $allAttrs = json_decode($allAttrs, true);
@@ -795,8 +847,10 @@ class ProductSpeciality {
 
 }
 
-class TuanShip{
-    public static function get_all_tuan_ships(){
+class TuanShip
+{
+    public static function get_all_tuan_ships()
+    {
         $shipTypesJson = Cache::read('_tuanshiptypes');
         if (empty($shipTypesJson)) {
             $tuanShipTypeModel = ClassRegistry::init('TuanShipType');
@@ -812,18 +866,21 @@ class TuanShip{
         return json_decode($shipTypesJson, true);
     }
 
-    public static function get_ship_name($id){
+    public static function get_ship_name($id)
+    {
         $ships = TuanShip::get_all_tuan_ships();
         return $ships[$id]['name'];
     }
 
-    public static function  get_ship_code($id){
+    public static function  get_ship_code($id)
+    {
         $ships = TuanShip::get_all_tuan_ships();
         return $ships[$id]['code'];
     }
 }
 
-class ShipAddress {
+class ShipAddress
+{
 //    public static $ship_type = array(
 //        101 => '申通',
 //        102 => '圆通',
@@ -843,7 +900,8 @@ class ShipAddress {
     /**
      * @return array keyed with ship type id, value is array of fields for the ship type
      */
-    public static function ship_type_list() {
+    public static function ship_type_list()
+    {
         $ship_types = ShipAddress::ship_types();
         if (is_array($ship_types)) {
             return Hash::combine($ship_types, '{n}.id', '{n}.name');
@@ -852,7 +910,8 @@ class ShipAddress {
         }
     }
 
-    public function get_all_ship_info() {
+    public function get_all_ship_info()
+    {
         $ship_types = ShipAddress::ship_types();
         $ship_type_list = Hash::combine($ship_types, '{n}.company', '{n}.name', '{n}.id');
         return $ship_type_list;
@@ -862,7 +921,8 @@ class ShipAddress {
      * @param $orderInfo 快递公司
      * @return mixed
      */
-    public static function get_ship_detail($orderInfo) {
+    public static function get_ship_detail($orderInfo)
+    {
         $ship_types = ShipAddress::ship_types();
         $ship_type_list = Hash::combine($ship_types, '{n}.company', '{n}.name', '{n}.id');
         $ship_type = $ship_type_list[$orderInfo['Order']['ship_type']];
@@ -902,7 +962,8 @@ class ShipAddress {
     /**
      * @return array keyed with ship type id, value is array of fields for the ship type
      */
-    public static function ship_types() {
+    public static function ship_types()
+    {
         $shipTypesJson = Cache::read('_shiptypes');
         if (empty($shipTypesJson)) {
             $shipTypeModel = ClassRegistry::init('ShipType');
@@ -920,7 +981,8 @@ class ShipAddress {
 }
 
 
-function game_uri($gameType, $defUri = '/') {
+function game_uri($gameType, $defUri = '/')
+{
 
     if (TRACK_TYPE_PRODUCT_RICE == $gameType) {
         return product_link(PRODUCT_ID_RICE_10, $defUri);
@@ -930,7 +992,8 @@ function game_uri($gameType, $defUri = '/') {
 }
 
 
-function add_coupon_for_new($uid, $weixinC, $coupons = array(18483, 18482), $descs = "满100元减20， 满50元减10元") {
+function add_coupon_for_new($uid, $weixinC, $coupons = array(18483, 18482), $descs = "满100元减20， 满50元减10元")
+{
     $ci = ClassRegistry::init('CouponItem');
     $new_user_coupons = $coupons;
     $found = $ci->find_coupon_item_by_type_no_join($uid, $new_user_coupons);
@@ -949,7 +1012,8 @@ function add_coupon_for_new($uid, $weixinC, $coupons = array(18483, 18482), $des
  * @param $defUri
  * @return string
  */
-function product_link($pid, $defUri) {
+function product_link($pid, $defUri)
+{
     $linkInCache = Cache::read('link_pro_' . $pid);
     if (!empty($linkInCache)) {
         return $linkInCache;
@@ -964,7 +1028,8 @@ function product_link($pid, $defUri) {
  * @param $defUri
  * @return string
  */
-function product_link2($p, $defUri = '/') {
+function product_link2($p, $defUri = '/')
+{
     if (!empty($p)) {
         $pp = empty($p['Product']) ? $p : $p['Product'];
         $link = "/products/" . date('Ymd', strtotime($pp['created'])) . "/" . $pp['slug'] . ".html";
@@ -975,18 +1040,20 @@ function product_link2($p, $defUri = '/') {
     }
 }
 
-function product_tuan_list_link($p,$defUri = '/'){
+function product_tuan_list_link($p, $defUri = '/')
+{
     if (!empty($p)) {
         $pp = empty($p['Product']) ? $p : $p['Product'];
-        $link = "/tuans/lists/" .$pp['id'] . "/". ".html";
-        Cache::write('link_pro_tuan_'.$pp['id'], $link);
+        $link = "/tuans/lists/" . $pp['id'] . "/" . ".html";
+        Cache::write('link_pro_tuan_' . $pp['id'], $link);
         return $link;
     } else {
         return $defUri;
     }
 }
 
-function url_append($url, $name, $value) {
+function url_append($url, $name, $value)
+{
     if (strpos($url, '?') !== false) {
         return $url . '&' . urlencode($name) . '=' . urlencode($value);
     } else {
@@ -994,23 +1061,28 @@ function url_append($url, $name, $value) {
     }
 }
 
-function url_colored($url, $value) {
+function url_colored($url, $value)
+{
     return url_append($url, '_sl', $value);
 }
 
-function wxDefaultName($name) {
+function wxDefaultName($name)
+{
     return notWeixinAuthUserInfo(0, $name);
 }
 
-function notWeixinAuthUserInfo($uid, $userName) {
+function notWeixinAuthUserInfo($uid, $userName)
+{
     return strpos($userName, '微信用户') === 0;
 }
 
-function filter_weixin_username($name) {
+function filter_weixin_username($name)
+{
     return notWeixinAuthUserInfo(0, $name) ? mb_substr($name, 4) : $name;
 }
 
-function date_days($timeStr, $addDays = 0) {
+function date_days($timeStr, $addDays = 0)
+{
     $end = DateTime::createFromFormat(FORMAT_DATETIME, $timeStr);
     if ($addDays) {
         $end->add(new DateInterval('P' . $addDays . 'D'));
@@ -1018,7 +1090,8 @@ function date_days($timeStr, $addDays = 0) {
     return $end;
 }
 
-function is_past($timeStr, $addDays = 0) {
+function is_past($timeStr, $addDays = 0)
+{
     $end = DateTime::createFromFormat(FORMAT_DATETIME, $timeStr);
     if ($addDays) {
         $end->add(new DateInterval('P' . $addDays . 'D'));
@@ -1026,7 +1099,8 @@ function is_past($timeStr, $addDays = 0) {
     return ($end->getTimestamp() < mktime());
 }
 
-function coupon_expired($coupon) {
+function coupon_expired($coupon)
+{
     if (empty($coupon)) {
         return true;
     }
@@ -1043,11 +1117,13 @@ function coupon_expired($coupon) {
     return false;
 }
 
-function special_link($slug) {
+function special_link($slug)
+{
     return '/categories/special_list/' . $slug . '.html';
 }
 
-function brand_link($brand_id, $params = array()) {
+function brand_link($brand_id, $params = array())
+{
     $brandM = ClassRegistry::init('Brand');
     $brand = $brandM->findById($brand_id);
     $url = (!empty($brand)) ? "/brands/" . date('Ymd', strtotime($brand['Brand']['created'])) . "/" . $brand['Brand']['slug'] . ".html" : '/';
@@ -1062,7 +1138,8 @@ function brand_link($brand_id, $params = array()) {
     return $url;
 }
 
-function category_link($category_id) {
+function category_link($category_id)
+{
     $productTagM = ClassRegistry::init('ProductTag');
     $tag = $productTagM->find('first', array(
         'conditions' => array($category_id),
@@ -1072,15 +1149,18 @@ function category_link($category_id) {
     return $url;
 }
 
-function small_thumb_link($imgUrl) {
+function small_thumb_link($imgUrl)
+{
     return thumb_link($imgUrl, 'thumb_s');
 }
 
-function medium_thumb_link($imgUrl) {
+function medium_thumb_link($imgUrl)
+{
     return thumb_link($imgUrl, 'thumb_m');
 }
 
-function thumb_link($imgUrl, $type = 'thumb_s') {
+function thumb_link($imgUrl, $type = 'thumb_s')
+{
     if ($imgUrl && strpos($imgUrl, "/$type/") === false) {
         $r = preg_replace('/(.*files\/20\d+\/)(thumb_[ms]\/)?(\s*)/i', '${1}' . $type . '/${3}', $imgUrl);
         return ($r != null) ? $r : $imgUrl;
@@ -1093,7 +1173,8 @@ function thumb_link($imgUrl, $type = 'thumb_s') {
  * @param $session SessionComponent
  * @param $error
  */
-function setFlashError($session, $error) {
+function setFlashError($session, $error)
+{
     $session->setFlash($error, 'default', array('class' => 'alert alert-danger'));
 }
 
@@ -1108,7 +1189,8 @@ function setFlashError($session, $error) {
  *  $limit_cur_user, -1 means no limit; 0 means no more; >1 means limit for curr user
  *  $total_left (-1 means no limit, 0 means sold out, more means left)
  */
-function afford_product_try($tryId, $currUid, $prodTry = null) {
+function afford_product_try($tryId, $currUid, $prodTry = null)
+{
     if (!$prodTry) {
         $tryM = ClassRegistry::init('ProductTry');
         $prodTry = $tryM->findById($tryId);
@@ -1128,7 +1210,8 @@ function afford_product_try($tryId, $currUid, $prodTry = null) {
  * @param $currUid
  * @return mixed
  */
-function bought_try_by_user($tryId, $currUid) {
+function bought_try_by_user($tryId, $currUid)
+{
     $shichiM = ClassRegistry::init('OrderShichi');
     return $shichiM->bought_by_curr_user($tryId, $currUid);
 }
@@ -1147,7 +1230,8 @@ function bought_try_by_user($tryId, $currUid) {
  *  $limit_cur_user, -1 means no limit; 0 means no more; >1 means limit for curr user
  *  $total_left (-1 means no limit, 0 means sold out, more means left)
  */
-function calculate_afford($pid, $currUid, $total_limit, $limit_per_user, $range = array()) {
+function calculate_afford($pid, $currUid, $total_limit, $limit_per_user, $range = array())
+{
     $afford_for_curr_user = true;
     $total_left = -1;
     $left_curr_user = -1;
@@ -1207,7 +1291,8 @@ function calculate_afford($pid, $currUid, $total_limit, $limit_per_user, $range 
     return array($afford_for_curr_user, $left_curr_user, $total_left);
 }
 
-function clean_total_sold($pid) {
+function clean_total_sold($pid)
+{
     $cache_sold_key = total_sold_cache_key($pid);
     Cache::delete($cache_sold_key);
 }
@@ -1216,7 +1301,8 @@ function clean_total_sold($pid) {
  * @param $pid
  * @return string
  */
-function total_sold_cache_key($pid) {
+function total_sold_cache_key($pid)
+{
     $cache_sold_key = 'total_sold_pid_' . $pid;
     return $cache_sold_key;
 }
@@ -1228,7 +1314,8 @@ function total_sold_cache_key($pid) {
  * @param $cartModel Object , default is null
  * @return array
  */
-function total_sold($pid, $range, $cartModel = null) {
+function total_sold($pid, $range, $cartModel = null)
+{
 
     $start = str2date($range['start']);
     $end = str2date($range['end']);
@@ -1287,7 +1374,8 @@ CakePlugin::load(array(
 ));
 
 
-function message_send($msg = null, $mobilephone = null) {
+function message_send($msg = null, $mobilephone = null)
+{
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, "http://sms-api.luosimao.com/v1/send.json");
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
@@ -1303,10 +1391,11 @@ function message_send($msg = null, $mobilephone = null) {
     return $res;
 }
 
-function consignment_send_date($p_id) {
+function consignment_send_date($p_id)
+{
     $consignmentDateM = ClassRegistry::init('ConsignmentDate');
     $send_dates = $consignmentDateM->find('all', array(
-        'conditions' => array('published' => PUBLISH_YES,'product_id' => $p_id),
+        'conditions' => array('published' => PUBLISH_YES, 'product_id' => $p_id),
         'order' => 'send_date',
         'field' => 'send_date',
         'limit' => 5,
@@ -1322,7 +1411,8 @@ function consignment_send_date($p_id) {
     return $rtn;
 }
 
-function remove_emoji($text) {
+function remove_emoji($text)
+{
     if (empty($text)) {
         return "";
     }
@@ -1334,7 +1424,8 @@ function remove_emoji($text) {
  * @param $text
  * @return mixed|string
  */
-function convertWxName($text) {
+function convertWxName($text)
+{
     $nickname = remove_emoji($text);
     return ($nickname == '' ? '用户_' . mt_rand(10, 1000) : $nickname);
 }
@@ -1344,10 +1435,11 @@ function convertWxName($text) {
  * @param $userModel
  * @return int if created failed return 0
  */
-function createNewUserByWeixin($userInfo, $userModel) {
+function createNewUserByWeixin($userInfo, $userModel)
+{
     $download_url = download_photo_from_wx($userInfo['headimgurl']);
-    if(empty($download_url)){
-        $download_url=$userInfo['headimgurl'];
+    if (empty($download_url)) {
+        $download_url = $userInfo['headimgurl'];
     }
     if (!$userModel->save(array(
         'nickname' => convertWxName($userInfo['nickname']),
@@ -1372,7 +1464,8 @@ function createNewUserByWeixin($userInfo, $userModel) {
  * @param $range
  * @return bool
  */
-function in_range($range) {
+function in_range($range)
+{
     return (empty($range['start']) || before_than($range['start']))
     && (empty($range['end']) || !before_than($range['end']));
 }
@@ -1381,7 +1474,8 @@ function in_range($range) {
  * @param $special
  * @return array
  */
-function range_by_special($special) {
+function range_by_special($special)
+{
     if ($special['special']['show_day'] != '0000-00-00') {
         $day_start = $special['special']['show_day'] . ' 00:00:00';
         $day_end = $special['special']['show_day'] . ' 23:59:59';
@@ -1393,19 +1487,23 @@ function range_by_special($special) {
     }
 }
 
-function accept_user_price_pid_num($pid, $num) {
+function accept_user_price_pid_num($pid, $num)
+{
     return false; // $pid == PRODUCT_ID_JD_HS_NZT && $num == 1;
 }
 
-function accept_user_price_pid($product_id) {
+function accept_user_price_pid($product_id)
+{
     return false; //$product_id == PRODUCT_ID_JD_HS_NZT;
 }
 
-function accept_user_price($product_id, $user_price) {
+function accept_user_price($product_id, $user_price)
+{
     return false; //($product_id == PRODUCT_ID_JD_HS_NZT) && !empty($user_price) && $user_price >= 1;
 }
 
-function cal_score_money($score, $total_price) {
+function cal_score_money($score, $total_price)
+{
     $score_money = $score / 100;
     if ($score_money > $total_price / 2) {
         return $total_price / 2;
@@ -1418,7 +1516,8 @@ function cal_score_money($score, $total_price) {
  * @param $uid
  * @return int|mixed
  */
-function user_subscribed_pys($uid) {
+function user_subscribed_pys($uid)
+{
     $key = key_cache_sub($uid);
     $subscribe_status = Cache::read($key);
     if (empty($subscribe_status) || $subscribe_status == WX_STATUS_UNKNOWN) {
@@ -1439,7 +1538,8 @@ function user_subscribed_pys($uid) {
     return $subscribe_status;
 }
 
-function send_weixin_message($post_data, $logObj = null) {
+function send_weixin_message($post_data, $logObj = null)
+{
     $tries = 2;
     $wxOauthM = ClassRegistry::init('WxOauth');
 
@@ -1481,48 +1581,51 @@ function send_weixin_message($post_data, $logObj = null) {
     return false;
 }
 
-function gethtml($from_url,$url){
+function gethtml($from_url, $url)
+{
     $ch = curl_init();
     //设置 来路，这个很重要 ，表示这个访问 是从 $form_url 这个链接点过去的。
-    curl_setopt($ch,CURLOPT_REFERER,$from_url);
+    curl_setopt($ch, CURLOPT_REFERER, $from_url);
     //获取 的url地址
-    curl_setopt ($ch,CURLOPT_URL,$url);
+    curl_setopt($ch, CURLOPT_URL, $url);
     //设置  返回原生的（Raw）输出
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     //发送POST请求 CURLOPT_CUSTOMREQUEST
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
     //模拟浏览器发送报文 ，这里模拟 IE6 浏览器访问
-    curl_setopt($ch,CURLOPT_USERAGENT,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)");
+    curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)");
     $res = curl_exec($ch);
-    curl_close ($ch);
+    curl_close($ch);
     return $res;
 }
 
-function get_user_info_from_wx($open_id){
+function get_user_info_from_wx($open_id)
+{
     $wxOauthM = ClassRegistry::init('WxOauth');
     $access_token = $wxOauthM->get_base_access_token();
-    $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token='.$access_token.'&openid='.$open_id;
-    $content = gethtml(WX_HOST,$url);
-    return json_decode($content,$content);
+    $url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=' . $access_token . '&openid=' . $open_id;
+    $content = gethtml(WX_HOST, $url);
+    return json_decode($content, $content);
 }
 
-function download_photo_from_wx($url){
-    App::uses('CurlDownloader','Lib');
+function download_photo_from_wx($url)
+{
+    App::uses('CurlDownloader', 'Lib');
     $dl = new CurlDownloader($url);
     $dl->isDownloadHeadImg(true);
     $dl->download();
     $download_url = '';
-    if($dl->getFileName()!='remote.out'){
-        if(defined('SAE_MYSQL_DB')){
+    if ($dl->getFileName() != 'remote.out') {
+        if (defined('SAE_MYSQL_DB')) {
             $stor = new SaeStorage();
-            $download_url = $stor->upload(SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME , $dl->getUploadFileName(), $dl->getFileName());
-            if(!$download_url){
+            $download_url = $stor->upload(SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME, $dl->getUploadFileName(), $dl->getFileName());
+            if (!$download_url) {
                 //retry
-                $download_url = $stor->upload(SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME , $dl->getUploadFileName(), $dl->getFileName());
+                $download_url = $stor->upload(SAE_STORAGE_UPLOAD_AVATAR_DOMAIN_NAME, $dl->getUploadFileName(), $dl->getFileName());
             }
         } else {
-            copy($dl->getFileName(),WWW_ROOT.'files/wx-download/'.$dl->getFileName());
-            $download_url = '/files/wx-download/'.$dl->getFileName();
+            copy($dl->getFileName(), WWW_ROOT . 'files/wx-download/' . $dl->getFileName());
+            $download_url = '/files/wx-download/' . $dl->getFileName();
             //delete temp file
             unlink($dl->getFileName());
         }
@@ -1539,7 +1642,8 @@ function download_photo_from_wx($url){
  * @param $pidSidMap
  * @return array
  */
-function get_spec_by_pid_and_sid($pidSidMap) {
+function get_spec_by_pid_and_sid($pidSidMap)
+{
     $productSpecGroup = ClassRegistry::init('ProductSpecGroup');
     //有特惠价格或者商品没有specId 使用默认价格
     $result = array();
@@ -1565,17 +1669,44 @@ function get_spec_by_pid_and_sid($pidSidMap) {
     return $result;
 }
 
-function get_tuan_msg_element($tuan_buy_id){
+function get_spec_name_by_pid_and_sid($pid,$sid){
+    $spec_name = Cache::read('product-'.$pid.'-'.$sid.'-spec');
+    if(!empty($spec_name)){
+        return $spec_name;
+    }
+    $result = get_spec_by_pid_and_sid(array(
+        array('pid' => $pid, 'specId' => $sid, 'defaultPrice' => 0),
+    ));
+    $spec_detail_arr = $result[cart_dict_key($pid, $sid)];
+    $spec_name = empty($spec_detail_arr[1]) ? '' : $spec_detail_arr[1];
+    Cache::write('product-'.$pid.'-'.$sid.'-spec',$spec_name);
+    return $spec_name;
+}
+
+function get_spec_name_try($tryId){
+    $spec_name = Cache::read('try-'.$tryId.'-spec');
+    if(!empty($spec_name)){
+        return $spec_name;
+    }
+    $ProductTryM = ClassRegistry::init('ProductTry');
+    $try = $ProductTryM->find('first',array('conditions' => array('id' => $tryId)));
+    $spec_name = $try['ProductTry']['spec'];
+    Cache::write('try-'.$tryId.'-spec',$spec_name);
+    return $spec_name;
+}
+
+function get_tuan_msg_element($tuan_buy_id)
+{
     $tuanBuyingM = ClassRegistry::init('TuanBuying');
     $tuanTeamM = ClassRegistry::init('TuanTeam');
     $productM = ClassRegistry::init('Product');
     $tuanMemberM = ClassRegistry::init('TuanMember');
-    $tb = $tuanBuyingM->find('first',array(
+    $tb = $tuanBuyingM->find('first', array(
         'conditions' => array(
             'id' => $tuan_buy_id,
         )
     ));
-    if(!empty($tb)) {
+    if (!empty($tb)) {
         $tuan_id = $tb['TuanBuying']['tuan_id'];
         $product_id = $tb['TuanBuying']['pid'];
         $tt = $tuanTeamM->find('first', array(
@@ -1594,8 +1725,8 @@ function get_tuan_msg_element($tuan_buy_id){
             )
         ));
         $consign_time = $tb['TuanBuying']['consign_time'];
-        $consign_time = friendlyDateFromStr($consign_time,FFDATE_CH_MD);
-        $uids = Hash::extract($tuan_members,'{n}.TuanMember.uid');
+        $consign_time = friendlyDateFromStr($consign_time, FFDATE_CH_MD);
+        $uids = Hash::extract($tuan_members, '{n}.TuanMember.uid');
         $tuan_name = $tt['TuanTeam']['tuan_name'];
         $product_name = $p['Product']['name'];
         $tuan_leader = $tt['TuanTeam']['leader_name'];
@@ -1606,13 +1737,13 @@ function get_tuan_msg_element($tuan_buy_id){
             'consign_time' => $consign_time,
             'target_num' => $target_num,
             'sold_num' => $sold_num,
-            'uids'=>$uids,
+            'uids' => $uids,
             'tuan_name' => $tuan_name,
             'product_name' => $product_name,
             'tuan_leader' => $tuan_leader,
             'tuan_buy_status' => $tb_status
         );
-    }else{
+    } else {
         return null;
     }
 }
@@ -1627,7 +1758,8 @@ function get_tuan_msg_element($tuan_buy_id){
  * @return bool
  * 加入一个团购
  */
-function send_join_tuan_buy_msg($user_id,$title,$product_name,$tuan_leader_wx,$remark,$deatil_url){
+function send_join_tuan_buy_msg($user_id, $title, $product_name, $tuan_leader_wx, $remark, $deatil_url)
+{
     $oauthBindModel = ClassRegistry::init('Oauthbind');
     $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
     if ($user_weixin != false) {
@@ -1635,7 +1767,7 @@ function send_join_tuan_buy_msg($user_id,$title,$product_name,$tuan_leader_wx,$r
         $post_data = array(
             "touser" => $open_id,
             "template_id" => 'P4iCqkiG7_s0SVwCSKyEuJ0NnLDgVNVCm2VQgSGdl-U',
-            "url" =>$deatil_url,
+            "url" => $deatil_url,
             "topcolor" => "#FF0000",
             "data" => array(
                 "first" => array("value" => $title),
@@ -1659,7 +1791,8 @@ function send_join_tuan_buy_msg($user_id,$title,$product_name,$tuan_leader_wx,$r
  * @return bool
  * 团购提示信息
  */
-function send_tuan_tip_msg($user_id,$title,$product_name,$tuan_leader_wx,$remark,$deatil_url){
+function send_tuan_tip_msg($user_id, $title, $product_name, $tuan_leader_wx, $remark, $deatil_url)
+{
     $oauthBindModel = ClassRegistry::init('Oauthbind');
     $user_weixin = $oauthBindModel->findWxServiceBindByUid($user_id);
     if ($user_weixin != false) {
@@ -1667,7 +1800,7 @@ function send_tuan_tip_msg($user_id,$title,$product_name,$tuan_leader_wx,$remark
         $post_data = array(
             "touser" => $open_id,
             "template_id" => 'BYtgM4U84etw2qbOyyZzR4FO8a-ddvjy8sgBiAQy64U',
-            "url" =>$deatil_url,
+            "url" => $deatil_url,
             "topcolor" => "#FF0000",
             "data" => array(
                 "first" => array("value" => $title),
@@ -1682,13 +1815,16 @@ function send_tuan_tip_msg($user_id,$title,$product_name,$tuan_leader_wx,$remark
 }
 
 //weixin 分享签名
-function prepare_wx_share() {
+function prepare_wx_share()
+{
     $oauthM = ClassRegistry::init('WxOauth');
     $signPackage = $oauthM->getSignPackage();
     return $signPackage;
 }
+
 //weixin 分享签名，记录用户分享信息
-function prepare_wx_share_log($currUid, $date_type, $data_id){
+function prepare_wx_share_log($currUid, $date_type, $data_id)
+{
     $currUid = empty($currUid) ? 0 : $currUid;
     $share_string = $currUid . '-' . time() . '-rebate-' . $date_type . '_' . $data_id;
     $share_code = authcode($share_string, 'ENCODE', 'SHARE_TID');
@@ -1696,85 +1832,102 @@ function prepare_wx_share_log($currUid, $date_type, $data_id){
     return array('signPackage' => $signPackage, 'share_string' => urlencode($share_code));
 }
 
-function getTuanProductsAsJson(){
+function getTuanProductsAsJson()
+{
 //    $tuanProducts = Cache::read('tuan_products');
 //    if(empty($tuanProducts)){
-        $tuanProductM = ClassRegistry::init('TuanProduct');
-        $tuanProducts = $tuanProductM->find('all',array(
-            'conditions' => array(
-                'deleted' => DELETED_NO
-            ),
-            'order' => 'priority desc'
-        ));
-        $tuanProducts = json_encode($tuanProducts);
+    $tuanProductM = ClassRegistry::init('TuanProduct');
+    $tuanProducts = $tuanProductM->find('all', array(
+        'conditions' => array(
+            'deleted' => DELETED_NO
+        ),
+        'order' => 'priority desc'
+    ));
+    $tuanProducts = json_encode($tuanProducts);
 //        Cache::write('tuan_products',$tuanProducts);
 //    }
     return $tuanProducts;
 }
 
-function getTuanProducts(){
-    return json_decode(getTuanProductsAsJson(),true);
+function getTuanProducts()
+{
+    return json_decode(getTuanProductsAsJson(), true);
 }
 
-function getTuanProductPrice($pid){
-    $product_price_map = Hash::combine(getTuanProducts(),'{n}.TuanProduct.product_id','{n}.TuanProduct.tuan_price');
+function getTuanProductPrice($pid)
+{
+    $product_price_map = Hash::combine(getTuanProducts(), '{n}.TuanProduct.product_id', '{n}.TuanProduct.tuan_price');
     return floatval($product_price_map[$pid]);
 }
+
 //同类商品评论共享
-function get_group_product_ids($pid){
+function get_group_product_ids($pid)
+{
     $egg_product = array(896, 818, 161);
     $cake_product = array(877, 869, 862);
-    $comosus_product = array(925,905,851);
-    if(in_array($pid,$egg_product)){
+    $comosus_product = array(925, 905, 851);
+    $rice_product = array(231,1045,229);
+    $cherry_product = array(897,1020);
+    if (in_array($pid, $egg_product)) {
         return $egg_product;
     }
-    if(in_array($pid,$cake_product)){
+    if (in_array($pid, $cake_product)) {
         return $cake_product;
     }
-    if(in_array($pid,$comosus_product)){
+    if (in_array($pid, $comosus_product)) {
         return $comosus_product;
+    }
+    if(in_array($pid,$rice_product)){
+        return $rice_product;
+    }
+    if(in_array($pid,$cherry_product)){
+        return $cherry_product;
     }
     return $pid;
 }
 
-function search_spec($spec_ids){
-    if(count($spec_ids)!=1 || !empty($spec_ids[0])){
+function search_spec($spec_ids)
+{
+    if (count($spec_ids) != 1 || !empty($spec_ids[0])) {
         $specM = ClassRegistry::init('ProductSpecGroup');
-        $spec_groups = $specM->find('all',array(
+        $spec_groups = $specM->find('all', array(
             'conditions' => array(
                 'id' => $spec_ids
             )
         ));
-        return Hash::combine($spec_groups,'{n}.ProductSpecGroup.id','{n}.ProductSpecGroup.spec_names');
-    }
-    return null;
-}
-function search_consignment_date($consign_ids){
-    if(count($consign_ids)!=1 || !empty($consign_ids[0])){
-        $consignM =ClassRegistry::init('ConsignmentDate');
-        $consign_dates = $consignM->find('all',array(
-            'conditions' => array(
-                'id' => $consign_ids
-            )
-        ));
-        return  Hash::combine($consign_dates,'{n}.ConsignmentDate.id','{n}.ConsignmentDate.send_date');
+        return Hash::combine($spec_groups, '{n}.ProductSpecGroup.id', '{n}.ProductSpecGroup.spec_names');
     }
     return null;
 }
 
-function get_address($tuan_team, $offline_store){
-    if(empty($offline_store)){
+function search_consignment_date($consign_ids)
+{
+    if (count($consign_ids) != 1 || !empty($consign_ids[0])) {
+        $consignM = ClassRegistry::init('ConsignmentDate');
+        $consign_dates = $consignM->find('all', array(
+            'conditions' => array(
+                'id' => $consign_ids
+            )
+        ));
+        return Hash::combine($consign_dates, '{n}.ConsignmentDate.id', '{n}.ConsignmentDate.send_date');
+    }
+    return null;
+}
+
+function get_address($tuan_team, $offline_store)
+{
+    if (empty($offline_store)) {
         $tuan_address = $tuan_team['TuanTeam']['tuan_addr'];
-    }else{
+    } else {
         $tuan_address = $offline_store['OfflineStore']['name'];
-        if(empty($offline_store['OfflineStore']['owner_name'])){
-            if(!empty($offline_store['OfflineStore']['owner_phone'])){
-                $tuan_address .= "(联系电话: ".$offline_store['OfflineStore']['owner_phone'].")";
+        if (empty($offline_store['OfflineStore']['owner_name'])) {
+            if (!empty($offline_store['OfflineStore']['owner_phone'])) {
+                $tuan_address .= "(联系电话: " . $offline_store['OfflineStore']['owner_phone'] . ")";
             }
-        }else{
-            $tuan_address .= "(联系人: ".$offline_store['OfflineStore']['owner_name'];
-            if(!empty($offline_store['OfflineStore']['owner_phone'])){
-                $tuan_address .= " ".$offline_store['OfflineStore']['owner_phone'];
+        } else {
+            $tuan_address .= "(联系人: " . $offline_store['OfflineStore']['owner_name'];
+            if (!empty($offline_store['OfflineStore']['owner_phone'])) {
+                $tuan_address .= " " . $offline_store['OfflineStore']['owner_phone'];
             }
             $tuan_address .= ")";
         }
@@ -1783,7 +1936,115 @@ function get_address($tuan_team, $offline_store){
     return $tuan_address;
 }
 
-function sort_award($a, $b) {
+function sort_award($a, $b)
+{
     if ($a['order'] == $b['order']) return 0;
     return ($a['order'] > $b['order']) ? 1 : -1;
+}
+
+function day_of_week($date_string)
+{
+    $day = date_format(date_create($date_string), 'N');
+    $ret = '';
+    switch ($day) {
+        case 1:
+            $ret = '一';
+            break;
+        case 2:
+            $ret = '二';
+            break;
+        case 3:
+            $ret = '三';
+            break;
+        case 4:
+            $ret = '四';
+            break;
+        case 5:
+            $ret = '五';
+            break;
+        case 6:
+            $ret = '六';
+            break;
+        case 7:
+            $ret = '日';
+            break;
+    }
+    return '周' . $ret;
+}
+
+function is_pys_product($brandId)
+{
+    return $brandId == PYS_BRAND_ID;
+}
+
+/**
+ * @param $before_day
+ * @param $week_days
+ * @param $time
+ * @return bool|string
+ */
+function get_send_date($deadline_day, $deadline_time, $week_days)
+{
+    $week_days = explode(',', $week_days);
+    $interval_one_day = new DateInterval('P1D');
+
+    $send_date = new DateTime();
+    if(_is_after_deadline_time($send_date, $deadline_time)){
+        $deadline_day = $deadline_day + 1;
+    }
+    $send_date->add(new DateInterval('P'.$deadline_day.'D'));
+
+    while (!in_array($send_date->format('N'), $week_days)) {
+        $send_date->add($interval_one_day);
+    }
+
+    return $send_date;
+}
+
+function _is_after_deadline_time($now, $deadline_time)
+{
+    $deadline_time = explode(':', $deadline_time);
+    $limit_time = new DateTime('now');
+    $limit_time->setTime($deadline_time[0], $deadline_time[1], $deadline_time[2]);
+
+    return $now > $limit_time;
+}
+
+
+function get_pure_product_consignment_date($pid){
+    $ProductConsignmentDate = ClassRegistry::init('ProductConsignmentDate');
+    $product_consignment_date = $ProductConsignmentDate->find('first',array('conditions' => array(
+        'published' => 1,
+        'product_id' => $pid
+    )));
+    if(empty($product_consignment_date)){
+        return null;
+    }
+    $week_days = $product_consignment_date['ProductConsignmentDate']['week_days'];
+    $deadline_day = $product_consignment_date['ProductConsignmentDate']['deadline_day'];
+    $deadline_time = $product_consignment_date['ProductConsignmentDate']['deadline_time'];
+    $consignment_date = get_send_date($deadline_day,$deadline_time,$week_days);
+    if($consignment_date==null){
+        return null;
+    }
+    return date_format($consignment_date,'Y-m-d');
+}
+
+function get_ship_mark_name($shipType){
+    if($shipType == 'ziti'){
+        return '自提';
+    }
+    if($shipType == 'sfby'){
+        return '顺丰包邮';
+    }
+    if($shipType == 'sfdf'){
+        return '顺丰到付';
+    }
+    if($shipType == 'kuaidi'){
+        return '快递';
+    }
+    if($shipType == 'manbaoyou'){
+        return '快递';
+    }
+    return null;
 }

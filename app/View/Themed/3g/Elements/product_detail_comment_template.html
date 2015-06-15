@@ -1,0 +1,34 @@
+<!--底部购买-->
+<div class="bottom_bg">
+    <ul class="clearfix" style="width: 100%">
+        <li style="width:100%;">
+            <a id="btn_quick_buy" item-id="{{$Product['Product']['id']}}" href="javascript:;" onclick="back()" class="btn_b pay_bg" >
+                {{if $from=='sec'}}
+                去秒杀
+                {{elseif $from=='product'}}
+                去购买
+                {{elseif $from=='tuan_buy'}}
+                去购买
+                {{else}}
+                返回
+                {{/if}}
+            </a>
+        </li>
+    </ul>
+</div>
+<?php
+    if($from=='product'){
+        $back_url = url_colored(url_append(product_link($data_id,'/'), 'history', $history), 'h5.product_de.buy');
+    }elseif($from=='tuan_buy'){
+        $back_url = url_colored(url_append('/tuan_buyings/detail/'.$data_id, 'history', $history),'h5.product_de.buy');
+    }elseif($from=='sec'){
+        $back_url = url_colored(url_append('/tuan_buyings/sec_detail/'.$data_id, 'history', $history),'h5.product_de.buy');
+    }else{
+        $back_url = '/';
+    }
+?>
+<script>
+    function back(){
+        window.location.href = '{{$back_url}}';
+    }
+</script>

@@ -62,23 +62,23 @@ class BuyingComponent extends Component {
                     );
                     $orderM = ClassRegistry::init('Order');
                     if(!empty($cart_info)){
-                    $order_info = $orderM->find('first',array(
-                        'conditions' => array(
-                            'id' => $cart_info['Cart']['order_id'],
-                            'not' => array(
-                            'status' => array(
-                                ORDER_STATUS_SHIPPED,ORDER_STATUS_RECEIVED,ORDER_STATUS_RETURN_MONEY,ORDER_STATUS_DONE,ORDER_STATUS_CANCEL,
-                                ORDER_STATUS_CANCEL,ORDER_STATUS_CONFIRMED,ORDER_STATUS_TOUSU,ORDER_STATUS_COMMENT,ORDER_STATUS_RETURNING_MONEY)))
-                    ));
-                    if(!empty($order_info)){
-                    if($order_info['Order']['status']==0){
-                        $success = false;
-                        $reason = 'already_seckill_nopaid';
-                    }else if($order_info['Order']['status']==1){
-                        $success = false;
-                        $reason = 'already_seckill_paid';
-                    }
-                    }
+                        $order_info = $orderM->find('first',array(
+                            'conditions' => array(
+                                'id' => $cart_info['Cart']['order_id'],
+                                'not' => array(
+                                'status' => array(
+                                    ORDER_STATUS_SHIPPED,ORDER_STATUS_RECEIVED,ORDER_STATUS_RETURN_MONEY,ORDER_STATUS_DONE,ORDER_STATUS_CANCEL,
+                                    ORDER_STATUS_CANCEL,ORDER_STATUS_CONFIRMED,ORDER_STATUS_TOUSU,ORDER_STATUS_COMMENT,ORDER_STATUS_RETURNING_MONEY)))
+                        ));
+                        if(!empty($order_info)){
+                            if($order_info['Order']['status']==0){
+                                $success = false;
+                                $reason = 'already_seckill_nopaid';
+                            }else if($order_info['Order']['status']==1){
+                                $success = false;
+                                $reason = 'already_seckill_paid';
+                            }
+                        }
                     }
                     $tryM = ClassRegistry::init('ProductTry');
                     $prodTry = $tryM->findById($tryId);
@@ -88,6 +88,7 @@ class BuyingComponent extends Component {
                         $success = false;
                     }
                     if (!$afford || ($my_limit >= 0 && $my_limit < $num)) {
+                    //if (!$afford) {
                         $success = false;
                         $reason = 'already_buy';
                     }
@@ -143,13 +144,14 @@ class BuyingComponent extends Component {
      * @param $balanceCartIds (cart ids usually, but can put a 'try'=>$pid to identity a trying product)
      * @param $uid
      * @param null $sessionId
+     * @param $isTryCart (mark is try or $balanceCartIds['try'])
      * @throws CakeException
      * @throws Exception
      * @return array
      */
-    public function createTmpCarts($shipPromotionId, $balanceCartIds, $uid, $sessionId = null) {
+    public function createTmpCarts($shipPromotionId, $balanceCartIds, $uid, $sessionId = null,$isTryCart = false) {
         $isTry = !empty($balanceCartIds) && $balanceCartIds['try'];
-        if ($isTry) {
+        if ($isTry||$isTryCart) {
 
             $pids = $balanceCartIds;
             unset($pids['try']);

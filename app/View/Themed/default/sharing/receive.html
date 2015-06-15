@@ -17,6 +17,26 @@
     .packet1{ text-align:center; position:relative; background-color:#fea501;}
     .packet1 img,.record_title img{ width:100%;}
     .packet1 h2 { width: 100%; text-align: center; font-size: 300%; color: #ffffff; position: absolute; top: 40%; font-weight: normal; }
+    .packet1 p {
+        position: absolute;
+        text-align: center;
+        top: 68%;
+        width: 100%;
+    }
+    .packet1 a {
+        display: block;
+        width: 7em;
+        height: 2em;
+        text-decoration: none;
+        font-size: 1em;
+        color: #ffffff;
+        display: block;
+        margin: 0 auto;
+        border: 1px #ffffff solid;
+        line-height: 2em;
+    }
+    .packet1 a:visited{text-decoration: none;  font-size: 1em;  color: #ffffff;  display: block;}
+    .packet1 a:hover{text-decoration: none;  font-size: 1em;  color: #ffffff;  display: block;}
     .title_owner{ padding-top:0.8em; text-align:center; background-color:#fea501;}
     .title_owner h2{ font-size:1.25em; color:#ffffff; font-weight:normal; padding-bottom:0.5em; text-align:center;}
     .title_owner p{ font-size:0.833em; color:#feff87; line-height:1.3em; padding:0 1em 1.5em 1em;}
@@ -75,10 +95,13 @@
 <div class="packet1">
     {{if empty($my_hongbao)}}
         <h2>已抢完</h2>
+    <p><a class="radius10" href="/">去秒杀</a></p>
     {{elseif !$expired}}
     <h2>{{$this->Number->precision($my_hongbao['number']/100, 2)}}元</h2>
+    <p><a class="radius10" href="/users/my_coupons.html">马上使用</a ></p >
     {{elseif $noMore}}
     <h2>已抢完</h2>
+    <p><a class="radius10" href="/">去秒杀</a ></p>
     {{else}}
     <p>已过期</p>
     {{/if}}

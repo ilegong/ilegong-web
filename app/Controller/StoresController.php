@@ -526,17 +526,22 @@ class StoresController extends AppController
         $this->checkAccess();
 
         $page = 1;
+        if($_REQUEST['page']){
+            $page = intval($_REQUEST['page']);
+        }
         $pagesize = intval(Configure::read('Product.pagesize'));
         if (!$pagesize) {
             $pagesize = 15;
         }
 
-        $total = $this->Product->find('count', array('conditions' => array('brand_id' => $this->brand['Brand']['id'])));
         $cond = array('brand_id' => $this->brand['Brand']['id'], 'deleted' => DELETED_NO);
+        $total = $this->Product->find('count', array('conditions' => $cond));
         $datalist = $this->Product->find('all', array(
             'conditions' => $cond,
             'fields' => array('id', 'name', 'price', 'published', 'coverimg', 'deleted', 'saled', 'storage', 'updated', 'slug','sort_in_store'),
-            'order' => 'updated desc'
+            'order' => array('published desc','updated desc'),
+            'limit' => $pagesize,
+            'offset' => ($page-1)*$pagesize
         ));
 
         $p_ids = Hash::extract($datalist,'{n}.Product.id');
@@ -552,7 +557,7 @@ class StoresController extends AppController
         $dates = Hash::combine($dates,'{n}.ConsignmentDate.product_id','{n}.ConsignmentDate');
         $this->set('dates', $dates);
 
-        $page_navi = getPageLinks($total, $pagesize, '/products/mine', $page);
+        $page_navi = getPageLinks($total, $pagesize, '/stores/products', $page);
         $this->set('datalist', $datalist);
         $this->set('page_navi', $page_navi);
         $this->set('op_cate', 'products');

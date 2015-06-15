@@ -6,7 +6,13 @@ class CategoriesController extends AppController {
     public function api_seckills(){
         $this->autoRender=false;
 
-        return json_encode($this->_get_seckill_products());
+        $seckills = $this->_get_seckill_products();
+        foreach($seckills as &$seckill){
+            $seckill['ProductTry']['status'] = ProductTry::cal_op($seckill['ProductTry']['limit_num'], $seckill['ProductTry']['sold_num'], $seckill['ProductTry']['start_time'], $seckill['ProductTry']['status']);
+            $seckill['ProductTry']['remaining_time'] = strtotime($seckill['ProductTry']['start_time']) - time();
+        }
+
+        return json_encode($seckills);
     }
 
     public function api_tag_products($tagId){
@@ -54,7 +60,8 @@ class CategoriesController extends AppController {
     public function getTagProducts($tagId){
         $this->autoRender=false;
         $result = Cache::read('tag-products'.$tagId);
-        if(!empty($result)){
+        $result_json = json_decode($result,true);
+        if(!empty($result_json)){
             echo $result;
             return;
         }
@@ -62,12 +69,24 @@ class CategoriesController extends AppController {
         $brandIds = Hash::extract($list,'{n}.Product.brand_id');
         $mappedBrands = $this->findBrandsKeyedId($brandIds, $mappedBrands);
         $productList = array();
+        $tuan_products = getTuanProducts();
+        $tuan_products = Hash::combine($tuan_products, '{n}.TuanProduct.product_id', '{n}');
         foreach ($list as &$val) {
+            $product_id = $val['Product']['id'];
             $brand = $mappedBrands[$val['Product']['brand_id']];
             $val['Product']['brand_link'] = $this->brand_link($brand);
             $val['Product']['brand_name'] = $brand['Brand']['name'];
             $val['Product']['brand_img'] = $brand['Brand']['coverimg'];
             $val['Product']['good_url'] = product_link2($val);
+            if(array_key_exists($product_id, $tuan_products) && $tuan_products[$product_id]['TuanProduct']['general_show'] == 0){
+                $this->loadModel('TuanBuying');
+                $tuan_buying = $this->TuanBuying->find('first', array(
+                    'conditions' => array('pid' => $product_id, 'tuan_id'=>PYS_M_TUAN, 'published' => PUBLISH_YES, 'consignment_type'=>0, 'status'=>0)
+                ));
+                if(!empty($tuan_buying)){
+                    $val['Product']['TuanBuying'] = $tuan_buying['TuanBuying'];
+                }
+            }
             $productList[] = $val['Product'];
         }
         $result = array('data_list'=>$productList);
@@ -245,12 +264,9 @@ class CategoriesController extends AppController {
             $this->set('is_weixin',true);
             $this->wexin_share_datas($tryings);
         }
-
         $mOrder = ClassRegistry::init('Order');
         $received_cnt = $mOrder->count_received_order($this->currentUser['id']);
         $this->set('received_cnt', $received_cnt);
-
-        $this->set('is_weixin',true);
         $this->set('tryings',$tryings);
         $this->set('hideFooter',true);
         $this->set('op_cate', OP_CATE_HOME);
@@ -863,22 +879,26 @@ class CategoriesController extends AppController {
     }
 
     private function wexin_share_datas($tryings=null){
+        $uid = $this->currentUser['id'];
         if(!empty($tryings)){
             $trying = $tryings[0];
             $title = ($trying['ProductTry']['price']/100).'元秒杀'.$trying['ProductTry']['spec'].$trying['ProductTry']['product_name'].'赶紧快来枪';
             $to_friend_title = $title;
             $to_timeline_title = $title;
-            $share_imag_url = $trying['image'];
+            $share_imag_url = $trying['Product']['listimg'];
             $desc = $trying['Product']['promote_name'];
+            $weixinJs = prepare_wx_share_log($uid, 'indextry', $trying['ProductTry']['id']);
         }else{
-            $to_friend_title = '朋友说-朋友间分享优质美食的平台';
-            $to_timeline_title = '朋友说-朋友间分享优质美食的平台';
-            $recommend_products = $this->load_products_by_tagid(RECOMMEND_TAG_ID,'Product.name, Product.coverimg',1,6);
+            $recommend_products = $this->load_products_by_tagid(RECOMMEND_TAG_ID,'Product.id, Product.name, Product.coverimg',1,6);
             $first_p = array_shift($recommend_products);
+            $to_friend_title = $first_p['Product']['name'];
+            $to_timeline_title = $first_p['Product']['name'];
             $share_imag_url = $first_p['Product']['coverimg'];
             $p_names = Hash::extract($recommend_products,'{n}.Product.name');
             $desc = implode(',',$p_names).'……等你来抢~';
+            $weixinJs = prepare_wx_share_log($uid, 'indexproduct', $first_p['Product']['id']);
         }
+        $this->set($weixinJs);
         $this->set('to_timeline_title',$to_timeline_title);
         $this->set('to_friend_title',$to_friend_title);
         $this->set('share_imag_url',$share_imag_url);
@@ -888,22 +908,12 @@ class CategoriesController extends AppController {
     private function _get_seckill_products(){
         $this->loadModel('Product');
         $this->loadModel('ProductTry');
-        $this->loadModel('TuanProduct');
         $tryings = $this->ProductTry->find_global_trying();
         $this->log('tryings: '.json_encode($tryings));
         if (!empty($tryings)) {
             $trying_result = array();
             $try_pids = Hash::extract($tryings, '{n}.ProductTry.product_id');
-            $t_products = $this->TuanProduct->find('all',array(
-                'conditions' => array(
-                    'product_id' => $try_pids
-                )
-            ));
-            $this->log('tuan products: '.json_encode($t_products));
-
-            $t_products = Hash::combine($t_products,'{n}.TuanProduct.product_id','{n}.TuanProduct');
             $this->log('try pids: '.json_encode($try_pids));
-
             $tryProducts = $this->Product->find_products_by_ids($try_pids, array(), false);
             $this->log('try products: '.json_encode($tryProducts));
 
@@ -913,7 +923,6 @@ class CategoriesController extends AppController {
                     $prod = $tryProducts[$pid];
                     if (!empty($prod)) {
                         $trying['Product'] = $prod;
-                        $trying['image'] = $t_products[$pid]['list_img'];
                         $trying_result[] = $trying;
                     } else {
                         unset($trying);

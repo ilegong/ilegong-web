@@ -16,6 +16,9 @@
                 <option value="-1">请选择团队</option>
             </select>
         </div>
+        <div class="form-group">
+            <input type="text" name="product_name" id="product_name" class="form-control" placeholder="搜索产品">
+        </div>
         <div class="form-group" name="product_id">
             <select class="form-control tuan-products" name="product_id" data-product-id="{{$product_id}}">
                 <option value="-1">选择商品</option>
@@ -125,7 +128,7 @@
         </td>
         <td>{{$tuanBuying['published'] == 0 ? '否' : ''}}</td>
         <td>{{$tuanBuying['join_num']}}</td>
-        <td class="{{if $tuanBuying['sold_num']<$tuanBuying['target_num']}} text-danger {{else}} text-success    {{/if}}">{{$tuanBuying['sold_num']}}/{{$tuanBuying['target_num']}}</td>
+        <td class="{{if $tuanBuying['sold_num']<$tuanBuying['target_num']}} text-danger {{else}} text-success    {{/if}}">{{$tuanBuying['sold_num']}}/{{empty($tuanBuying['target_num']) ? 0 : $tuanBuying['target_num']}}</td>
         <td>{{$tuanBuying['created'] == ''?date('n.j H:i',strtotime($tuanBuying['end_time'])-2*24*60*60):date('n.j H:i',strtotime($tuanBuying['created']))}}
             {{if $tuanBuying['status'] == 0}}
             {{if $tuan_buying['create_msg_status'] == 'true'}}
@@ -213,7 +216,7 @@
         '//blueimp.github.io/JavaScript-Load-Image/js/load-image.all.min.js',
         '//blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js',
         'jquery.iframe-transport.js',
-        'manage/tuan_buyings/index.js?v5',
+        'manage/tuan_buyings/index.js?v6',
        '/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js',
        '/js/bootstrap-datetimepicker/bootstrap-datetimepicker.zh-CN.js'
 

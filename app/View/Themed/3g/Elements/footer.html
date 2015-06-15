@@ -8,7 +8,7 @@
 {{/if}}
 {{$this->Html->script(array(
 			'jquery/jquery.lazyload.min.js',
-            'bootstrap.min.js','bootbox/bootbox.min.js', 'common.js?v31','front.js?v8','front_orders.js?v14'
+            'bootstrap.min.js','bootbox/bootbox.min.js', 'common.js?v42','front.js?v8','front_orders.js?v15'
         ));
 }}
 {{$this->Html->scriptStart(array('block' => 'scriptBottom'));}}
@@ -18,6 +18,7 @@
     });
     }
 {{$this->Html->scriptEnd()}}
+{{$this->Html->script(array('/js/thickbox.js?v1'));}}
 <!-- helper中追加的底部脚本 $this->_View->append('bottomscript',$script);-->
 {{$this->fetch('bottomscript')}}
 <script type="text/javascript">
@@ -27,8 +28,33 @@
 			effect: "fadeIn",
 			threshold : 100
 		});
+        function set_ship_least_num(){
+            var shipLeastNum = $('#ship_least_num');
+            if(shipLeastNum.length==0){
+                return;
+            }
+            var leastNum = parseInt(shipLeastNum.val());
+            if(leastNum>1){
+                editAmount.min = leastNum;
+            }
+        }
+        function set_default_spec(){
+            var spec = $('.spec_selected');
+            var pamount = $('#input_pamount').val();
+            var string = $('.spec_item_selected.cur').map(function(){
+                if ($(this).attr('item-label') == 'SD'){
+                    return ' <strong>'+ $.trim($(this).text())+'送货</strong>'+'';
+                }else
+                   return ' <strong>'+ $.trim($(this).text())+'</strong>'+'';
+            });
+            string.push(' <strong>'+ pamount+'份</strong>');
+            spec.html(string.toArray().join());
+            spec.prepend('<label>已选</label> ');
+        }
         $('li.good-spec').each(function(index,item){
             $('span.spec_item',$(item)).first().trigger('click');
         });
+        set_default_spec();
+        set_ship_least_num();
 	});
 </script>

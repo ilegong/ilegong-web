@@ -1,0 +1,18 @@
+<div class="container orders-summary" data-tuan-team-id="{{$tuan_team['TuanTeam']['id']}}">
+    <div class="row orders-total">
+        {{$tuan_team['TuanTeam']['tuan_name']}}, 合计新用户订单<strong class="text-warning">{{$orders_count}}个</strong>
+    </div>
+    {{loop $date_orders $date $orders}}
+    <div class="row date-total">
+        <span>{{date_format(date_create($date), 'n月d日')}}</span>
+        <span class="fr">当天新用户订单<strong class="text-warning">{{count($orders)}}个</strong></span>
+    </div>
+    {{loop $orders $order}}
+    <div class="row order">
+        <div class="col-xs-4">{{$order['Order']['consignee_name']}}</div>
+        <div class="col-xs-6">{{substr_replace($order['Order']['consignee_mobilephone'], '****', 3, 4)}}</div>
+        <div class="col-xs-2">{{$order['Order']['total_all_price']}}元</div>
+    </div>
+    {{/loop}}
+    {{/loop}}
+</div>

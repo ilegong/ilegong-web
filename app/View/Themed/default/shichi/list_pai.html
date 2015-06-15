@@ -118,7 +118,7 @@
             var globalShow = buyBtn.attr('data-global-show');
             var tuanId = buyBtn.attr('data-tuan-id');
             var sendDate = buyBtn.attr('data-send-date');
-            quick_buy_try(pid, 1, 0, tryId, cartType,sendDate, function(){
+            quick_buy_try(pid, 1, 0, tryId, cartType,sendDate,0, function(){
                 buyBtn.removeClass('seckill_btn').addClass('sec_end');
             }, function(data){
                 if(tuanId){

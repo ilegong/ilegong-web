@@ -1,47 +1,20 @@
 <div class="classlist_v2" style="z-index:1">
-    <ul class="clearfix" onclick="back({{if $from_tuan_list}}'tuan_list'{{else}}'back'{{/if}})">
+    <ul class="clearfix" onclick="back()">
         <li><a class="back"></a></li>
         <li class="line"></li>
         <li style="text-overflow: ellipsis;"><strong><?php echo mb_substr($Product['Product']['name'],0,13); ?></strong></li>
     </ul>
 </div>
-<div class="container" style="margin-top: 50px;padding-bottom:5em;padding-left: 10px;padding-right: 10px;">
+<div class="container-detail" style="margin-top: 50px;padding-bottom:5em;padding-left: 10px;padding-right: 10px;">
     <div class="Content-body">
         <div class="clear"></div>
         <?php echo $Product['Product']['content']; ?>
     </div>
 </div>
 
-{{if !$from_tuan_list}}
-<div class="bottom_bg">
-    <ul class="clearfix">
-        <li class="love fl">
-            <a href="#X" class="love_icon"></a>
-            <!--<p>关注</p>-->
-        </li>
-        <li class="fl" style="width:78%;">
-            <div>
-                <a onclick="back('buy')" class="btn_b pay_bg radius10">去购买</a>
-            </div>
-        </li>
-        <li class="shopping fr">
-            <a href="/carts/listcart.html" style="position:relative; margin-top: 0.3em;" class="shopping_icon"><div id="item-count" class="shopping_count"></div></a>
-            <p>购物车</p>
-        </li>
-    </ul>
-</div>
-{{/if}}
-<script>
-    function back(flag){
-        if (flag == 'buy') {
-            window.location.href = "{{url_colored(url_append(product_link2($Product), 'history', $history), 'h5.product_de.buy')}}";
-        } else if (flag == 'back') {
-            window.location.href = "{{url_colored(url_append(product_link2($Product), 'history', $history), 'h5.product_de.back')}}";
-        }else if(flag =='tuan_list'){
-            window.location.href = "{{url_colored(url_append(product_tuan_list_link($Product), 'history', $history), 'h5.product_de.back')}}";
-        }
-    }
-</script>
+
+{{template Elements/product_detail_comment_template}}
+
 {{if $jWeixinOn}}
 {{$this->element('wx_share_product', array(
 'share_string' => $share_string,

@@ -9,7 +9,7 @@
 class ReferController extends AppController {
 
 
-    var $uses = array('Refer', 'Comment','Order','OrderComment','ReferAward','ExchangeReferAward');
+    var $uses = array('Refer', 'Comment','Order','OrderComment','ReferAward','ExchangeReferAward','User');
 
     public function beforeFilter() {
         parent::beforeFilter();
@@ -41,6 +41,11 @@ class ReferController extends AppController {
             'conditions' => $cond
         ));
 
+        if(in_array($uid,get_agency_uid())){
+            $this->set('is_agency',true);
+        }else{
+            $this->set('is_agency',false);
+        }
         $this->set('total_refers', $userRefers);
 
         $this->set('success_refers',$userSuccessRefers);
@@ -52,6 +57,7 @@ class ReferController extends AppController {
         $this->set_user_recommend_condition($uid);
         $this->set_wx_share_data();
         $this->pageTitle = $this->currentUser['nickname']. '向您推荐了【朋友说】, 朋友间分享健康美食的平台';
+        $this->set('uid',$uid);
     }
 
     public function accept() {
@@ -294,6 +300,104 @@ class ReferController extends AppController {
             $this->set('share_desc', '原产地直供、新鲜现摘，找到最初的味道!');
             $this->set('share_imag_url','http://51daifan.sinaapp.com/img/refer/logo.jpg');
         }
+    }
+
+    public function agency_refer_count($uid = 0){
+        $this->pageTitle = '我推荐的人';
+        if (!$uid) {
+            $this->redirect('/refer/index/'.$this->currentUser['id'].'.html');
+            return;
+        }
+        if ($uid != $this->currentUser['id']||!(in_array($uid,get_agency_uid()))) {
+            $this->redirect('/refer/client/'.$uid.'/'.$this->currentUser['id'].'.html');
+            return;
+        }
+    }
+
+    public function get_refer_statics_data($date){
+        $this->autoRender=false;
+        $uid = $this->currentUser['id'];
+        $this->loadModel('User');
+        $condition['Date(created) >='] = $date;
+        $condition['Date(created) <'] = date('Y-m-d', strtotime("+1 months", strtotime($date)));
+        $condition['from'] = $uid;
+        $condition['first_order_done'] = 1;
+        $refer_info = $this->Refer->find('all',array(
+            'conditions' =>$condition
+        ));
+        $refer_accept_uid = Hash::extract($refer_info,'{n}.Refer.to');
+        $my_statics_data = $this->gen_refer_statics_data($uid,$date);
+        $my_refer_user_data = array();
+        foreach($refer_accept_uid as $user_id){
+            $my_refer_user_data[$user_id] = $this->gen_refer_statics_data($user_id,$date);
+        }
+        $user_infos = $this->User->find('all',array(
+            'conditions' => array(
+                'id' => $refer_accept_uid
+            ),
+            'fields' => array('id','nickname','image')
+        ));
+        $user_infos = Hash::combine($user_infos,'{n}.User.id','{n}.User');
+        $all_second_user_refer_count = 0;
+        $all_second_user_money = 0;
+        foreach($my_refer_user_data as $item){
+            if($item['user_count']){
+                $all_second_user_refer_count+=$item['user_count'];
+            }
+            if($item['total_money']){
+                $all_second_user_money+=$item['total_money'];
+            }
+        }
+        echo json_encode(array('my_data' => $my_statics_data,'refer_user_data' => $my_refer_user_data, 'user_infos' => $user_infos,'second_refer_data'=>array('user_count'=>$all_second_user_refer_count,'total_money'=>$all_second_user_money)));
+    }
+
+    private function gen_refer_statics_data($uid,$date){
+        $this->loadModel('StatisticsReferData');
+        $staticUserReferData = $this->StatisticsReferData->find('first',array(
+            'conditions' => array(
+                'start_date' => $date,
+                'end_date' => date('Y-m-d', strtotime("+1 months", strtotime($date))),
+                'user_id' => $uid
+            )
+        ));
+        if($staticUserReferData){
+            return array('total_money' => $staticUserReferData['StatisticsReferData']['sum_money']/100,'user_count' => $staticUserReferData['StatisticsReferData']['recommend_user_count']);
+        }else{
+            return array('total_money' => 0,'user_count' => 0);
+        }
+    }
+
+    /*
+     * return num of new customers referred by uid
+     * return total orders' price of new customers referred by uid
+     * return all new customers referred by uid
+     * return user info of uid
+     */
+    private function count_refer($uid = 0){
+        $condition = array('from' => $uid,'deleted' => DELETED_NO,'bind_done' => 1,'first_order_done' => 1);
+//        $date_start = '2015-05-01';
+        $date_start = date("Y-m-d", mktime(24, 0, 0, date("m")-1, 0, date("Y")));
+        $date_end = date('Y-m-d');
+        $condition['Date(created) >='] = $date_start;
+        $condition['Date(created) <='] = $date_end;
+        $refer_info = $this->Refer->find('all',array(
+            'conditions' =>$condition
+        ));
+        $user_info = $this->User->find('first',array('conditions' => array('id' => $uid)));
+        $refer_accept_uid = Hash::extract($refer_info,'{n}.Refer.to');
+        $total_refer_money = 0;
+        $total_refer_num = 0;
+        foreach($refer_accept_uid as $uid){
+            $count_order_money = $this->Order->query('select sum(o.total_all_price) as ct from cake_orders o where
+                                 o.status in (1,2,3,9)
+                                 and o.creator = '.$uid.'
+                                 and Date(o.pay_time) >= "'.$date_start.'"
+                                 and Date(o.pay_time) <= "'.$date_end.'"
+            ');
+            $total_refer_money = $total_refer_money + $count_order_money[0][0]['ct'];
+            $total_refer_num = $total_refer_num + 1;
+        }
+        return array($total_refer_money,$total_refer_num,$refer_accept_uid,$user_info);
     }
 
 }

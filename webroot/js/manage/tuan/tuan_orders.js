@@ -7,6 +7,8 @@ $(document).ready(function () {
     var $exportBtn = $('button.export-excel');
     var mainContent = $('#mainContent');
     var $currentOperateOrder = null;
+    var sendOrderMsg = $('#send_order_msg');
+    var refundLog = $('#refund_logs');
     mainContent.height(250);
 
     start_stat_date.datetimepicker({
@@ -360,6 +362,31 @@ $(document).ready(function () {
         return $tb_ids;
     }
 
+    function setCheckedOrderStatus(){
+        $.each($('.order input:checkbox:checked', $('.orders')), function (index, item) {
+           var that = $(this);
+            that.parents('tr').children('td').eq(3).html('已发货');
+        });
+    }
+    function setSuccessArrivedOrder(orderIds,type){
+        $.each(orderIds,function(index,item){
+           var that = $('.order input:checkbox[value='+item+']');
+            console.log(that);
+            that.parents('tr').children('td').eq(13).children('span').eq(type).removeClass('hidden');
+        });
+    }
+    function initSetOrder(){
+        var sendOutIds = sendOrderMsg.data('send_out').split(',');
+        var reachIds = sendOrderMsg.data('reach').split(',');
+        $.each(sendOutIds,function(index,item){
+            var that = $('.order input:checkbox[value='+item+']');
+            that.parents('tr').children('td').eq(13).children('span').eq(0).removeClass('hidden');
+        });
+        $.each(reachIds,function(index,item){
+            var that = $('.order input:checkbox[value='+item+']');
+            that.parents('tr').children('td').eq(13).children('span').eq(1).removeClass('hidden');
+        });
+    }
     var ourAddressSend = function () {
         var orderIds = getCheckedOrderIds();
         var val = $('input:radio[name="optionsRadios"]:checked').val();
@@ -369,12 +396,17 @@ $(document).ready(function () {
                     var msg;
                     if (orderIds.length == (data.res.length + data.already.length)) {
                         msg = '订单状态修改成功，并全部发送了到达提醒';
+                        setSuccessArrivedOrder(orderIds,1);
                     }
                     else {
                         msg = '订单状态修改成功，但有' + (orderIds.length - data.res.length - data.already.length) + '个未发送到达提醒';
+                        var orderId = $.merge(data.res,data.already);
+                        setSuccessArrivedOrder($.unique(orderId),1);
                     }
                     utils.alert(msg);
-                    location.reload();
+//                    location.reload();
+                    setCheckedOrderStatus();
+                    shipToOurStoreDialog.dialog('close');
                 }
                 else {
                     utils.alert(data.res);
@@ -386,12 +418,16 @@ $(document).ready(function () {
                     var msg;
                     if (orderIds.length == data.res.length) {
                         msg = '订单状态修改成功，并全部发送了发货提醒';
+                        setSuccessArrivedOrder(orderIds,0);
                     }
                     else {
                         msg = '订单状态修改成功，但有' + data.fail.length + '个未发送发货提醒';
+                        setSuccessArrivedOrder(data.res,0);
                     }
                     utils.alert(msg);
-                    location.reload();
+//                    location.reload();
+                    setCheckedOrderStatus();
+                    shipToOurStoreDialog.dialog('close');
                 }
                 else {
                     utils.alert(data.res);
@@ -408,7 +444,8 @@ $(document).ready(function () {
         buttons: {
             "取消": function() {shipToOurStoreDialog.dialog( "close" );},
             "确认": function(){ourAddressSend();}
-        }
+        },
+        close:function(){}
     });
     $('.ship-to-pys-stores').click(function () {
         var orderIds = getCheckedOrderIds();
@@ -425,18 +462,20 @@ $(document).ready(function () {
         var orderId = $('#order-id');
         var orderTotalPrice = $('#order-totalprice');
         var orderCreator = $('#order-creator');
-        var send_refund_message = function (order_id, refund_money, creator, refund_mark, total_price, order_status) {
+        var orderScores = $('#refund_scores');
+        var send_refund_message = function (order_id, refund_money, creator, refund_mark, total_price, order_status,order_scores) {
             $.getJSON('/manage/admin/orders/compute_refund_money', {'orderId': order_id}, function (data) {
                 var res = data;
                 if (order_status == 4) {
                     if (refund_money == '') {
-//                        utils.alert('退款金额不能为空哦');
                         refundMoney.focus().val('');
                         refundOrder.find('p.error-message').empty().append('退款金额不能为空哦');
                         return false;
-                    } else if (refund_money > Math.round((total_price - res) * 100) / 100 || parseInt(refund_money) <= 0) {
+                    } else if(total_price <res){
+                        refundOrder.find('p.error-message').empty().append('已退款金额超过订单金额！');
+                        return false;
+                    }else if (refund_money > Math.round((total_price - res) * 100) / 100 || parseInt(refund_money) <= 0) {
                         refundMoney.focus().val('').val(refund_money);
-//                        utils.alert('退款金额在0~'+ Math.round((total_price-res)*100)/100 +'之间');
                         refundOrder.find('p.error-message').empty().append('退款金额在0~' + Math.round((total_price - res) * 100) / 100 + '之间');
                         return false;
                     }
@@ -447,29 +486,35 @@ $(document).ready(function () {
                 }, function (data) {
                     var res = JSON.parse(data);
                     if (res.success) {
-                        if (order_status == 4) {
+//                        if (order_status == 4) {
                             $.post('/manage/admin/orders/send_refund_notify', {
                                 'orderId': order_id,
                                 'refundMoney': refund_money,
                                 'creator': creator,
-                                'refundMark': refund_mark
+                                'refundMark': refund_mark,
+                                'orderStatus':order_status,
+                                'orderScores':order_scores,
+                                'orderTotalAllPrice':total_price
                             }, function (data) {
                                 var result = JSON.parse(data);
                                 if (result.success) {
                                     bootbox.alert(res.msg + ' ' + result.msg);
                                     //location.reload();
-                                    $currentOperateOrder.parents('tr').children('td').eq(3).html('已退款');
+                                    if(order_status == 4){
+                                        $currentOperateOrder.parents('tr').children('td').eq(3).html('已退款');
+                                    }else{
+                                        $currentOperateOrder.parents('tr').children('td').eq(3).html('退款中');
+                                    }
                                     refundOrderDialog.dialog('close');
                                 } else {
                                     bootbox.alert(result.msg);
                                 }
                             });
-                        } else {
-                            bootbox.alert(res.msg);
-                            $currentOperateOrder.parents('tr').children('td').eq(3).html('退款中');
-//                            location.reload();
-                            refundOrderDialog.dialog('close');
-                        }
+//                        } else {
+//                            bootbox.alert(res.msg);
+////                            location.reload();
+//                            refundOrderDialog.dialog('close');
+//                        }
                     } else {
                         bootbox.alert(res.msg);
                     }
@@ -492,7 +537,8 @@ $(document).ready(function () {
                     var refund_money = $('#refund_money').val();
                     var refund_remark = $('#refund_remark').val();
                     var order_status = $('input[name=status]:checked', '#refund-form').val();
-                    send_refund_message(orderId.val(), refund_money, orderCreator.val(), refund_remark, orderTotalPrice.val(), order_status);
+                    var order_scores = $('#refund_scores').val();
+                    send_refund_message(orderId.val(), refund_money, orderCreator.val(), refund_remark, orderTotalPrice.val(), order_status,order_scores);
                 }
             },
             close: function () {
@@ -501,13 +547,16 @@ $(document).ready(function () {
             }
         });
         $(".refund-button").click(function () {
-            var total_price = $(this).data('total_price');
-            var order_id = $(this).data('order_id');
-            var creator = $(this).data('order_creator');
+            var $order = $(this).parents('tr.order');
+            var refundOrderId = $order.data('order-id');
+            var refundOrderPrice = $order.data('total-price');
+            var href = '/manage/admin/orders/get_refund_log/'+ refundOrderId+'/'+refundOrderPrice;
+            orderId.val(refundOrderId);
+            orderTotalPrice.val(refundOrderPrice);
+            orderCreator.val($order.data('order-creator'));
+            orderScores.val($order.data('order-scores'));
             $currentOperateOrder = $(this);
-            orderId.val(order_id);
-            orderTotalPrice.val(total_price);
-            orderCreator.val(creator);
+            refundLog.attr('href',href);
             refundOrderDialog.dialog("open");
         });
     }
@@ -515,15 +564,38 @@ $(document).ready(function () {
     sendRefundOrderDialog();
     $('.collapse').collapse();
 
-    $exportBtn.on('click',function(e){
+    $exportBtn.on('click', function (e) {
         e.preventDefault();
         var tableIds = [];
         var tableNames = [];
-        var ignoreRows = [0,3,4,10,11,12,17,23];
-        $('table.orders').each(function (index,item) {
+        var ignoreRows = [0, 2, 3, 4, 9, 10, 11, 12, 13, 15, 16, 17, 19, 23, 25, 26];
+        $('table.orders').each(function (index, item) {
             tableIds.push($(item).attr('id'));
             tableNames.push($(item).data('table-name'));
         });
-        tablesToExcel(tableIds, tableNames, 'order-export.xls','Excel',ignoreRows);
+        tablesToExcel(tableIds, tableNames, 'order-export.xls', 'Excel', ignoreRows);
     });
+
+    $('.toggle-orders').on('click', function(e){
+        var showAll = $(this).data('show-all');
+        if(showAll == 1){
+            $(this).data('show-all', 0);
+            $(this).text('只显示统计');
+            $('.orders').removeClass("hidden");
+            $('h3.ship-type').addClass("new-page");
+            $('.table-collect-data').css('display', '');
+        }
+        else{
+            $(this).data('show-all', 1);
+            $(this).text('显示全部');
+            $('.orders').addClass("hidden");
+            $('h3.ship-type').removeClass("new-page");
+            $('.table-collect-data').css('display', 'block');
+        }
+    });
+    $('.print-orders').on('click', function(e){
+        $('.orders .consignee-name').trigger('click');
+        window.print();
+    });
+    initSetOrder();
 });

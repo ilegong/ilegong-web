@@ -37,50 +37,46 @@
         <dd class="fr"><a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brand['Brand']['created'])).'/'.$brand['Brand']['slug'].'.html')}}"><img src="{{$this->Html->assetUrl('/img/mobile/more.png')}}"></a></dd>
     </dl>
     {{if $order['Order']['type'] == ORDER_TYPE_TUAN || $order['Order']['type'] == ORDER_TYPE_TUAN_SEC}}
-    <?php $cart = $Carts[0]; $p = $products[$cart['Cart']['product_id']];
+        <?php $cart = $Carts[0]; $p = $products[$cart['Cart']['product_id']];
             $tuan_buy_id = $order['Order']['member_id'];
          ?>
-    <ul class="clearfix" style="margin-bottom: 0;">
-        <li class="fl"><a href="/tuan_buyings/detail/{{$tuan_buy_id}}"><img src="{{small_thumb_link($cart['Cart']['coverimg'])}}" border="0"></a></li>
-        <li style="overflow: hidden; display: block; padding-left: 10px; padding-right: 65px;">
-            <a href="/tuan_buyings/detail/{{$tuan_buy_id}}">
-                <p>{{$cart['Cart']['name']}}</p>
-                {{if !empty($cart['Cart']['send_date'])}}
-                    <s>{{date('m月d日', strtotime($cart['Cart']['send_date']))}}到货</s>
-                {{/if}}
-                {{if $tuan_expired&&$order['Order']['status']== ORDER_STATUS_WAITING_PAY}}
-                    <label class="order_detail_soldout">(您的团购结束)<br>(订单不能支付)</label>
-                {{/if}}
-            </a>
-        </li>
-        <li class="fr">￥{{$this->Number->precision($cart['Cart']['price'], 2)}}<br>x{{$cart['Cart']['num']}}</li>
-    </ul>
+        <div class="cart" style="padding-top: 0;">
+            <ul class="clearfix">
+                <li class="fl"><a href="#X" style="display: block;"><img src="{{small_thumb_link($cart['Cart']['coverimg'])}}" border="0" /></a></li>
+                <li style="overflow: hidden; display: block; padding-left: 10px;">
+                    <a href="/orders/detail/{{$order['Order']['id']}}">
+                        <p>{{$cart['Cart']['name']}}</p>
+                        <s>单价:￥{{$this->Number->precision($cart['Cart']['price'], 2)}} x {{$cart['Cart']['num']}}&nbsp;&nbsp;&nbsp;{{if $order['Order']['try_id']}}{{get_spec_name_try($order['Order']['try_id'])}}{{else}}{{get_spec_name_by_pid_and_sid($cart['Cart']['product_id'],$cart['Cart']['specId'])}}{{/if}}</s>
+                        <s><span>{{if $order['Order']['ship_mark']}}{{get_ship_mark_name($order['Order']['ship_mark'])}}{{/if}}</span>&nbsp;&nbsp;&nbsp;&nbsp;{{if !empty($cart['Cart']['send_date'])}}<span class="redcolor">预计{{date('n月d日', strtotime($cart['Cart']['send_date']))}}({{day_of_week($cart['Cart']['send_date'])}})到货</span>{{/if}}</s>
+                    </a>
+                </li>
+            </ul>
+        </div>
     {{elseif !empty($Carts)}}
-    {{loop $Carts $cart}}
-    <?php $p = $products[$cart['Cart']['product_id']]; ?>
-    <ul class="clearfix" style="margin-bottom: 0;">
-        <li class="fl"><a href="{{product_link2($p)}}"><img src="{{small_thumb_link($cart['Cart']['coverimg'])}}" border="0"></a></li>
-        <li style="overflow: hidden; display: block; padding-left: 10px; padding-right: 65px;">
-            <a href="{{product_link2($p)}}">
-                <p>{{$cart['Cart']['name']}}</p>
-                {{if !empty($cart['Cart']['send_date'])}}
-                    <s>{{date('m月d日', strtotime($cart['Cart']['send_date']))}}到货</s>
-                {{/if}}
-                {{if in_array($cart['Cart']['product_id'], $expired_pids)}}
-                    <label class="order_detail_soldout">(该商品已下架)<br>(订单已经失效)</label>
-                {{/if}}
-                {{if $order['Order']['try_id']>0}}
-                    {{if $has_sold_out}}
-                    <label class="order_detail_soldout">(您订单中待支付的商品已经售完)<br>(订单不能支付)</label>
-                    {{elseif $has_reach_limit}}
-                    <label class="order_detail_soldout">(您订单中待支付的商品已经超限)<br>(订单不能支付)</label>
-                    {{/if}}
-                {{/if}}
-            </a>
-        </li>
-        <li class="fr">￥{{$this->Number->precision($cart['Cart']['price'], 2)}}<br>x{{$cart['Cart']['num']}}</li>
-    </ul>
-    {{/loop}}
+        {{loop $Carts $cart}}
+            <?php $p = $products[$cart['Cart']['product_id']]; ?>
+            <div class="cart" style="padding-top: 0;">
+                <ul class="clearfix">
+                    <li class="fl"><a href="#X" style="display: block;"><img src="{{small_thumb_link($cart['Cart']['coverimg'])}}" border="0" /></a></li>
+                    <li style="overflow: hidden; display: block; padding-left: 10px;">
+                        <a href="/orders/detail/{{$order['Order']['id']}}">
+                            <p>{{$cart['Cart']['name']}}</p>
+                            <s>单价:￥{{$this->Number->precision($cart['Cart']['price'], 2)}} x {{$cart['Cart']['num']}}&nbsp;&nbsp;&nbsp;{{if $order['Order']['try_id']}}{{get_spec_name_try($order['Order']['try_id'])}}{{else}}{{get_spec_name_by_pid_and_sid($cart['Cart']['product_id'],$cart['Cart']['specId'])}}{{/if}}</s>
+                            <s><span>{{if $order['Order']['ship_mark']}}{{get_ship_mark_name($order['Order']['ship_mark'])}}{{/if}}</span>&nbsp;&nbsp;&nbsp;&nbsp;{{if !empty($cart['Cart']['send_date'])}}<span class="redcolor">预计{{date('n月d日', strtotime($cart['Cart']['send_date']))}}({{day_of_week($cart['Cart']['send_date'])}})到货</span>{{/if}}</s>
+                            {{if !empty($cart['Cart']['send_date'])}}{{if $consignment_date_not_available}}<s><span class="redcolor">(商品排期已过,请您重新下单)</span></s>{{/if}}{{/if}}
+                            {{if in_array($cart['Cart']['product_id'], $expired_pids)}}<s><span class="redcolor">(该商品已下架)</span></s>{{/if}}
+                            {{if $order['Order']['try_id']>0}}
+                            {{if $has_sold_out}}
+                                <s><span class="redcolor">(商品已经售完)</span></s>
+                            {{elseif $has_reach_limit}}
+                                <s><span class="redcolor">(商品已经超限)</span></s>
+                            {{/if}}
+                            {{/if}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        {{/loop}}
     {{else}}
     <span>订单中没有商品</span>
     {{/if}}
@@ -139,10 +135,16 @@
         <li class="fl">实付款:<span>￥{{$this->Number->precision($order['Order']['total_price'], 2)}}</span></li>
         {{if $order['Order']['status']== ORDER_STATUS_PAID}}
         <li class="fr">
+            {{if $toShare}}
+                <a href="/users/my_offers" class="order_paybtn fl">领取红包</a>
+            {{/if}}
             <a href="#X" class="order_paybtn fl" id="remind-deliver"  value="{{$order['Order']['id']}}">提醒发货</a>
         </li>
         {{elseif $order['Order']['status']== ORDER_STATUS_SHIPPED}}
         <li class="fr" id="order_shipped_panel">
+            {{if $toShare}}
+                <a href="/users/my_offers" class="order_paybtn fl">领取红包</a>
+            {{/if}}
             <a href="#X" class="order_paybtn fl" id="btn_confirm_receive"  value="{{$order['Order']['id']}}">确认收货</a>
         </li>
         {{elseif $order['Order']['status']== ORDER_STATUS_WAITING_PAY}}
@@ -158,6 +160,9 @@
         </li>
         {{elseif $order['Order']['status']== ORDER_STATUS_RECEIVED}}
         <li class="fr">
+            {{if $toShare}}
+                <a href="/users/my_offers" class="order_paybtn fl">领取红包</a>
+            {{/if}}
             {{if $order['Order']['is_comment']==0}}
                 <a href="/comments/add_comment/{{$order['Order']['id']}}" class="order_paybtn fl"  value="{{$order['Order']['id']}}">评论赢积分</a>
             {{else}}
@@ -180,7 +185,7 @@
 {{/if}}
 {{if $order['Order']['status']==0}}
 <div class="tipslayer" id="pay_tip_layer" style="display: none;">
-    <a href="#X" class="tipslayer_close" id="close_pay_tip_layer">x</a>
+    <a href="#X" class="tipslayer_close" id="close_pay_tip_layer"></a>
     <div class="conorderprice">￥{{$this->Number->precision($order['Order']['total_all_price'], 2)}}</div>
     <div class="conorder_btn clearfix">
         <a href="/wxPay/jsApiPay/{{$order['Order']['id']}}.html?showwxpaytitle=1" class="fl weixin">微信支付</a>

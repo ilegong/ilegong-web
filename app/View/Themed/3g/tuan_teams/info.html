@@ -36,7 +36,7 @@ $location = $offline_store['OfflineStore']['location_long'].','.$offline_store['
 <div class="tuandetail_seckill clearfix">
     <?php $i = 0; foreach($tryings as $trying) {
         if ($i++>=2) {break;} ?>
-        <span><img src="{{$this->Html->assetUrl(small_thumb_link($trying['image']))}}"/></span>
+        <span><img src="{{$this->Html->assetUrl(small_thumb_link($trying['Product']['listimg']))}}"/></span>
         <span>
             <h1>{{$trying['ProductTry']['product_name']}} {{$trying['ProductTry']['spec']}}</h1>
             <em>秒杀价：<strong>¥{{$this->Number->precision(calculate_try_price($trying['ProductTry']['price']),
@@ -96,7 +96,7 @@ $location = $offline_store['OfflineStore']['location_long'].','.$offline_store['
       $exceed_time = strtotime($t_buying['end_time']) < time();
   ?>
 <div class="tuandetail_seckill clearfix">
-    <span><a href="/tuan_buyings/detail/{{$t_buying['id']}}"><img class="profile" src="{{$this->Html->assetUrl(small_thumb_link($t_product['list_img']))}}"/></a></span>
+    <span><a href="/tuan_buyings/detail/{{$t_buying['id']}}"><img class="profile" src="{{$this->Html->assetUrl(medium_thumb_link($t_product['list_img']))}}"/></a></span>
     <span>
         <h1>{{$product['name']}}</h1>
         <em>团购价：<strong>¥{{$price}}</strong>{{if !empty($product['original_price'])}}<s>¥{{$product['original_price']}}</s>{{/if}}</em>

@@ -1020,7 +1020,7 @@ class UsersController extends AppController {
      * @param $new_serviceAccount_binded_uid
      * @param $userInfo
      */
-    protected function updateUserProfileByWeixin($new_serviceAccount_binded_uid, $userInfo) {
+    public function updateUserProfileByWeixin($new_serviceAccount_binded_uid, $userInfo) {
         if (empty($userInfo)) { return; }
         $user = $this->User->findById($new_serviceAccount_binded_uid);
         if (!empty($user)) {
@@ -1072,7 +1072,7 @@ class UsersController extends AppController {
      * @param $userInfo
      * @return int new created user id
      */
-    protected function createNewUserByWeixin($userInfo) {
+    public function createNewUserByWeixin($userInfo) {
         $uid = createNewUserByWeixin($userInfo, $this->User);
         if (empty($uid)) {
             $this->log("error to save createNewUserByWeixin: with ". json_encode($userInfo));
@@ -1087,7 +1087,7 @@ class UsersController extends AppController {
      * @param $access_token
      * @return mixed
      */
-    protected function getWxUserInfo($openid, $access_token) {
+    public function getWxUserInfo($openid, $access_token) {
         $userInfo = $this->WxOauth->getUserInfo($openid, $access_token);
         if (!empty($userInfo)) {
             $userInfo = $userInfo['WxOauth'];

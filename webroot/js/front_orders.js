@@ -519,11 +519,13 @@ var infoToBalance = function(){
                 params = params+input_name+"="+input_value+"&";
             }
         });
-        params=params.substring(0,params.length-1);
+        params += 'ship_type=' + $('.address:visible').data('ship');
+        //params=params.substring(0,params.length-1);
         self.attr("href",link+params);
     };
     var checkAddress = function(){
-        if($(".address").data("addressChoice")!=1){
+        var $addressDom = $('.address:visible');
+        if($addressDom.data("on")!=1){
             utils.alert("请编辑收货信息");
             return false;
         }

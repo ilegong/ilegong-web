@@ -1,3 +1,4 @@
+{{$this->Html->css(array('tuan.css?v6.7'));}}
 <?php   $current_model = 'Product';
     $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
     if($sold_num >= $target_num){
@@ -6,11 +7,11 @@
         $sold_percent = round(($sold_num / $target_num * 100), 1);
     }
 ?>
-<div class="classlist_v2" style="z-index:999;">
+<div class="classlist_v2" style="z-index:4;">
     <ul class="clearfix">
         <li><a class="back" onclick="goBack()"></a></li>
         <li class="line"></li>
-        <li style="text-overflow: ellipsis;"><strong>团购详情</strong></li>
+        <li style="text-overflow: ellipsis;"><strong>产品详情</strong></li>
     </ul>
 </div>
 
@@ -20,7 +21,7 @@
             <div class="row voffset1" style="margin-left: 0;margin-right: 0;">
                 <div class="col-xs-12 col-md-6" style="padding: 0;">
                 {{template Elements/product_img_sild}}
-                    <div class="p_details_title">{{$Product['Product']['name']}}</div>
+                    <div class="p_details_title">{{$Product['Product']['name']}}{{if is_pys_product($brand['Brand']['id'])}}<img src="{{$this->Html->assetUrl('/img/mobile/zy.png')}}" border="0" width="10%" />{{/if}}</div>
                     <ul class="p_details_price clearfix">
                         <li class="fl price"><span>{{if $current_data_id==874}}尝鲜价 {{/if}}￥<font {{if !$tuan_price}}id="product_price"{{/if}}>{{if $tuan_price}}{{$this->Number->precision($tuan_price,2)}}{{elseif $tuan_product_price}}{{$this->Number->precision($tuan_product_price,2)}}{{else}}{{$this->Number->precision($Product['Product']['price'],2)}}{{/if}}</font></span></li>
                         <li class="fl original-price"><s style="margin-top: 7px;display: block;">{{if $original_price>0}}￥{{$this->Number->precision($original_price,2)}}{{/if}}</s></li>
@@ -28,13 +29,7 @@
                           <li class="fr stat"><a style="color: #666666"><span>送货日期：<b>{{$consign_time_text}}</b></span></a></li>
                         {{/if}}
                     </ul>
-                    <ul class="sales clearfix">
-                        <li>
-                            <span style="display: block;overflow: hidden;">
-                                <span>{{$Product['Product']['promote_name']}}<br></span>
-                            </span>
-                        </li>
-                    </ul>
+
                     {{if $tuan_buy_type!=2}}
                     <div class="tuan_bar">
                         <div>已团购<span  value="{{$sold_num}}">{{$sold_num}}</span>份</div>
@@ -47,191 +42,156 @@
                         </ul>
                     </div>
                     {{/if}}
-                    {{if !$big_tuan}}
-                        <div class="clearfix tuanxq">
-                            <a href="/tuan_teams/info/{{$tuan_id}}" style="color: #666666">
-                                {{$tuan_team['TuanTeam']['tuan_name']}}
-                                &nbsp;&nbsp;&nbsp;&nbsp;团长:{{$tuan_team['TuanTeam']['leader_name']}}<br/>参团请加团长微信，微信号:{{$tuan_team['TuanTeam']['leader_weixin']}}
-                            </a>
-                            {{if $tuan_buy_type!=2}}
-                            <span>截止日期：<b>{{$end_time}}</b></span>
-                            {{/if}}
-                        </div>
+
+                    {{if $product_consignment_date}}
+                        <a href="#X" class="standard_bg clearfix">
+                            <span class="fl">
+                                <label>预计发货日</label>
+                                <strong>{{$product_consignment_date}}</strong>
+                            </span>
+                            <!--<span class="fr p_more"></span>-->
+                        </a>
                     {{/if}}
 
-                    {{if $product_spec_map}}
-                    {{$product_spec_map}}
-                    <ul class="standard clearfix">
-                        {{if $specs_map && !empty($specs_map['choices'])}}
-                        <?php foreach($specs_map['choices'] as $label => $values) {
-                        if(!empty($label) && !empty($values)){
-                        ?>
-                        <li class="good-spec">
-                            <span class="gray title mr12 spec_label" style="float:left;">{{$label}}:</span>
-                            <span class="border" style="display: block;overflow: hidden;padding-bottom: 10px;">
-                            <?php foreach($values as $index => $vaLabel){?>
-                                <span class="mr12 border spec_item" item-label="{{$label}}">
-                                    {{$vaLabel}}
-                                    <div class="focus"></div>
-                                </span>
-                                <?php } ?>
-                            </span>
-                        </li>
-                        <?php } } ?>
+                    <a href="#X" class="standard_bg clearfix">
+                        <span class="fl spec_selected">
+                        </span>
+                        <span class="fr p_more"></span>
+                    </a>
+                    {{if !$big_tuan}}
+                    <div class="detail_tuan_bg">
+                        <strong>{{$tuan_team['TuanTeam']['tuan_name']}}</strong><br>
+                        <strong>团长: </strong>{{$tuan_team['TuanTeam']['leader_name']}}，
+                        <strong>微信号: </strong>{{$tuan_team['TuanTeam']['leader_weixin']}}<br>
+                        {{if $tuan_buy_type!=2}}
+                        <strong>截止日期：<b>{{$end_time}}</b></strong><br>
                         {{/if}}
-                    </ul>
+                        <strong>自提地址：</strong>{{$tuan_address}}<a href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">查看地图</a>
+                    </div>
                     {{/if}}
-                    {{if $tuan_buy_type==2}}
-                    {{if !empty($consignment_dates)}}
-                    <ul class="standard clearfix">
-                        <li>
-                            <span class="gray title mr12" style="float:left;">送货日期:</span>
-                            <span class="border" style="display: block;overflow: hidden;">
-                            <?php foreach($consignment_dates as $index => $date){?>
-                                <span class="mr12 border spec_item {{if $index == 0}}spec_item_selected cur{{/if}}" item-label="SD" data-val="{{$date['id']}}" data-send-date="{{$date['send_date']}}">
-                                    {{$date['date']}}
-                                    <div class="focus"></div>
-                                </span>
-                                <?php } ?>
-                            </span>
-                        </li>
-                    </ul>
-                    {{/if}}
-                    {{/if}}
-                    {{if $big_tuan}}
-                        {{if $ship_settings}}
+                    <div class="all_line">
+                        <ul class="clearfix title">
+                            <li class="fl cur_border" style="width: 50%;" id="product-detail">图文详情</li>
+                            <li class="fl" style="width: 50%;" id="product-comment"{{if $comment_count>5}}{{/if}}>口碑评论<span id="all_comment_count">{{$comment_count}}</span></li>
+                        </ul>
+                        <div id="product-content" style="height: 300px; overflow:hidden; border-bottom: 1px #eeeeee solid;"></div>
+                        <div class="more"><a href="#">查看更多详情</a></div>
+                    </div>
+                    <div class="shop_entrance_bg" style="margin-bottom: 10px;">
+                        <ul class="clearfix shop_entrance" onclick="to_brand();">
+                            <li class="fl head"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0"></li>
+                            <li class="fl name">{{$brand['Brand']['name']}}</li>
+                            <li class="fr"><a href="#X" class="p_more"></a></li>
+                        </ul>
+                        <div class="shop_service">本商品由[<strong>{{$brand['Brand']['name']}}</strong>]发货并提供售后服务。</div>
+                    </div>
+                    <div class="xq_standard_layer" style="display: none">
+                        <a href="#X" class="close_btn">x</a>
+                        <dl class="clearfix">
+                            <dt class="fl"><img src="{{small_thumb_link($Product['Product']['coverimg'])}}"></dt>
+                            <dt class="good_title">
+                                <span><strong></strong>{{$Product['Product']['name']}}</span>
+                                <label><strong>{{if $current_data_id==874}}尝鲜价 {{/if}}￥<font{{if !$tuan_price}} id="product_price_dialog"{{/if}}>{{if $tuan_price}}{{$this->Number->precision($tuan_price,2)}}{{elseif $tuan_product_price}}{{$this->Number->precision($tuan_product_price,2)}}{{else}}{{$this->Number->precision($Product['Product']['price'],2)}}{{/if}}</font><s>{{if $original_price>0}}￥{{$this->Number->precision($original_price,2)}}{{/if}}</s></strong></label>
+                            </dt>
+                        </dl>
+                        {{if $product_spec_map}}
+                        {{$product_spec_map}}
+                        <div class="p_bg">
+                            {{if $specs_map && !empty($specs_map['choices'])}}
+                            {{loop $specs_map['choices'] $label $values}}
+                            {{if !empty($label) && !empty($values)}}
                             <ul class="standard clearfix">
-                                <li>
-                                    <span class="gray title mr12" style="float:left;">方式:</span>
-                                    <span class="border">
-                                        {{loop $ship_settings $index $ship_set}}
-                                            <span class="mr12 border {{if $index==0}}cur tuan_way_selected{{/if}}" way-label="{{$ship_set['ProductShipSetting']['code']}}" way-id="{{$ship_set['ProductShipSetting']['id']}}">
-                                                {{$ship_set['ProductShipSetting']['name']}}
-                                                {{if $ship_set['ProductShipSetting']['ship_type']!=1}}
-                                                    {{if $ship_set['ProductShipSetting']['ship_fee'] > 0}}
-                                                        ({{$ship_set['ProductShipSetting']['ship_fee']}}元)
-                                                    {{elseif $ship_set['ProductShipSetting']['ship_fee'] == 0}}
-                                                        (包邮)
-                                                    {{/if}}
-                                                {{/if}}
-                                                <div class="focus"></div>
-                                            </span>
+                                <li class="good-spec">
+                                    <span class="fl title mr12 spec_label">{{$label}}:</span>
+                                    <span class="border" style="display: block;overflow: hidden;">
+                                        {{loop $values $index $vaLabel}}
+                                        <span class="border mr12 spec_item" item-label="{{$label}}">{{$vaLabel}}
+                                            <div class="focus"></div>
+                                        </span>
                                         {{/loop}}
                                     </span>
                                 </li>
                             </ul>
-                        {{else}}
-                            <!--default-->
-                             <span class="mr12 border cur tuan_way_selected" way-label="ziti" way-fee="0" way-id="0" style="display: none;">自提</span>
+                            {{/if}}
+                            {{/loop}}
+                        </div>
                         {{/if}}
-                    {{else}}
-                    <div class="clearfix tuanxq" style="margin-top: -1px;">
-                        <span class="fl">详细地址：{{$tuan_address}}</span>
-                        <a class="fr" href="/tuan_teams/lbs_map?location={{$location}}&name={{$tuan_team['TuanTeam']['tuan_name']}}&addr={{$tuan_team['TuanTeam']['tuan_addr']}}">
-                            <img src="/img/tuan/locat_icon_xq.gif" border="0" /><s>查看地图</s>
-                        </a>
-                    </div>
-                    {{/if}}
-                    <ul class="numbers clearfix b_line">
-                    <li class="fl">
-                            <span class="gray title mr12" style="float:left;">数量:</span>
-                        <span class="clearfix" style="display: block;overflow: hidden;">
-                    <div {{if $is_limit_num}}id="pamount_not_r"{{else}}id="pamount_reduce"{{/if}} class="grew"  item-id="{{$pid}}">-</div>
-                    <input id="input_pamount"  item-id="{{$pid}}" size="3" value="1" class="num" name="shoppingnum" type="text" {{if $is_limit_num}}readonly{{/if}}/>
-                    <div {{if $is_limit_num}}id="pamount_not_a"{{else}}id="pamount_add"{{/if}} class="grew" item-id="{{$pid}}">+</div>
-                    </span>
-                    </li>
-                    </ul>
-                    <div class="all_line">
-                        <ul class="clearfix title" style="margin-bottom: 0;" onclick="to_detail();">
-                            <li class="xq_xqicon fl" style="padding-left: 0;"></li>
-                            <li class="fl"><strong>图文详情</strong></li>
-                            <li class="fr"><a class="p_more"></a></li>
-                        </ul>
-                    </div>
-                    <div class="all_line" id="comment-div">
-                        <ul class="clearfix title" style="margin-bottom: 0;" {{if $comment_count>5}}onclick="to_comment();"{{/if}}>
-                        <li class="xq_commenticon fl" style="padding-left: 0;"></li>
-                        <li class="fl">口碑评论<span>{{$comment_count}}</span></li>
-                        {{if $comment_count>5}}
-                        <li class="fr"><a class="p_more"></a></li>
                         {{/if}}
-                        </ul>
-                        {{template products/template_product_comments}}
-                    </div>
-                    <ul class="clearfix shop_entrance" style="color: #29AC0E;padding: 4px 0.8em 5px 0.8em;" onclick="to_brand();">
-                        <li class="fl"><img src="{{$this->Html->assetUrl(small_thumb_link($brand['Brand']['coverimg']))}}" border="0"></li>
-                        <li class="fl" style="color: #333333;">{{$brand['Brand']['name']}}</li>
-                        <li class="fr" style="margin-top: 0.3em;height: 1.634em;"><a class="p_more"></a></li>
-                    </ul>
-                    <div class="service">
-                        <ul class="clearfix b_line">
-                            <li>
-                                <span class="gray mr12" style="float:left;">快递:</span>
-                                <span style="display: block;overflow: hidden;"><span id="consign_way">{{if $current_data_id==897}}包邮{{else}}自提{{/if}}</span>	</span>
-                            </li>
-                        </ul>
-                        <ul class="clearfix">
-                            <li>
-                                <span class="gray mr12" style="float:left;">服务:</span>
-                                <span style="display: block;overflow: hidden;"><span>本商品由 {{$brand['Brand']['name']}} 发货并提供售后服务。</span></span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="all_line" style="margin-bottom: 0;">
-                        <ul class="clearfix title">
-                            <li class="fl">相关推荐</li>
-                        </ul>
-                        <div class="classlist_good" style="margin-top: 0;">
-                            <ul class="clearfix list-unstyled" style="padding-left:10px;">
-                                <?PHP foreach($items as $index=>$item) {
-                                $item['slug'] = $item['slug']?$item['slug']:$item['id'];
-                                ?>
-                                <li class="{{if $index%2 !=0}}last{{/if}}">
-                                    <a href="{{product_link2($item)}}" style="display:block; background-color:#ffffff; margin-right:10px;">
-                                        <img  src="{{$this->Html->assetUrl(small_thumb_link($item['coverimg']))}}" border="0" style="display:block; background-color:#ffffff; padding-bottom:0.5em; height: 136px"/>
-                                        <div class="item_name" style="text-overflow:ellipsis; display: block;white-space: nowrap;overflow: hidden;">{{if $hasOfferBrandIds && array_key_exists($item['brand_id'], $hasOfferBrandIds)}}{{$item['name']}}<span>有红包</span>
-                                            {{else}}
-                                            {{$item['name']}}
-                                            {{/if}}
-                                        </div>
-                                    </a>
-                                    <dl class="clearfix" style="margin-right: 10px;margin-bottom: 0;">
-                                        <dt style="float: none;">
-                                            <a href="{{product_link2($item)}}">
-                                    <span class="listprice" style="padding-left: 0;">
-                                        <span>¥{{$this->Number->precision($item['price'], 2)}}</span>
+                        <div class="p_bg">
+                        {{if $tuan_buy_type == 2}}
+                        {{if !empty($consignment_dates)}}
+                            <ul class="standard clearfix">
+                                <li>
+                                    <span class="fl title mr12">送货:</span>
+                                    <span class="border" style="display:block;overflow: hidden;">
+                                        {{loop $consignment_dates $index $date}}
+                                        <span class="mr12 border spec_item {{if $index == 0}}spec_item_selected cur{{/if}}" item-label="SD" data-val="{{$date['id']}}" data-send-date="{{$date['send_date']}}">
+                                           {{$date['date']}}({{day_of_week($date['send_date'])}})
+                                            <div class="focus"></div>
+                                        </span>
+                                        {{/loop}}
                                     </span>
-                                            </a>
-                                        </dt>
-                                    </dl>
                                 </li>
-                                <?php } ?>
-                                {{if count($data_list) % 2 == 1}}
-                                <li style="height: 12.4285em"></li>
-                                {{/if}}
+                            </ul>
+                        {{/if}}
+                        {{/if}}
+                           <ul class="standard clearfix">
+                               <li>
+                                   <span class="fl title mr12">物流:</span>
+                                   <span class="border" style="display:block;overflow: hidden;">
+                                      {{if $big_tuan}}
+                                        {{if $ship_settings}}
+                                           {{loop $ship_settings $index $ship_set}}
+                                           <span class="mr12 border {{if $index==0}}cur tuan_way_selected{{/if}}" way-label="{{$ship_set['ProductShipSetting']['code']}}" way-id="{{$ship_set['ProductShipSetting']['id']}}">
+                                                {{if $ship_set['ProductShipSetting']['ship_type']==10 || $ship_set['ProductShipSetting']['ship_type']==6}}
+                                                  {{if $ship_set['ProductShipSetting']['ship_val']==0}}
+                                                    {{if $ship_set['ProductShipSetting']['least_num'] <= 1}}
+                                                      包邮
+                                                    {{else}}
+                                                      满{{$ship_set['ProductShipSetting']['least_num']}}份包邮
+                                                    {{/if}}
+                                                  {{else}}
+                                                    快递({{$ship_set['ProductShipSetting']['ship_val']/100}}元)
+                                                  {{/if}}
+                                                {{else}}
+                                                  {{$ship_set['ProductShipSetting']['name']}}
+                                                {{/if}}
+                                                <div class="focus"></div>
+                                           </span>
+                                           {{/loop}}
+                                        {{else}}
+                                            <span class="mr12 border cur tuan_way_selected" way-label="ziti" way-fee="0" way-id="0">自提
+                                             <div class="focus"></div>
+                                            </span>
+                                        {{/if}}
+                                      {{else}}
+                                        <span class="mr12 border cur tuan_way_selected" way-label="ziti" way-fee="0" way-id="0">自提
+                                           <div class="focus"></div>
+                                        </span>
+                                      {{/if}}
+                                   </span>
+                               </li>
+                           </ul>
+                        </div>
+                        <div class="p_bg">
+                            <ul class="numbers clearfix">
+                                <li class="fl">
+                                    <span class="fl title mr12">数量:</span>
+                                    <span class="clearfix" style="display: block;overflow: hidden;">
+                                    <a {{if $is_limit_num}} id="pamount_not_r"{{else}}id="pamount_reduce"{{/if}} class="grew" item-id="{{$pid}}">-</a>
+                                    <input id="input_pamount"  item-id="{{$pid}}" size="3" value="1" class="num" name="shoppingnum" type="text" {{if $is_limit_num}}readonly{{/if}}/>
+                                    <a {{if $is_limit_num}}id="pamount_not_a"{{else}}id="pamount_add"{{/if}} class="grew" item-id="{{$pid}}">+</a>
+                                   </span>
+                                </li>
                             </ul>
                         </div>
+                        <a href="#X" class="sure_btn">确定</a>
                     </div>
+                <div class="tipslayer_bg" style=" display: none;"></div>
+                <div class="hidden" id="button-status" data-status="1"></div>
                 </div>
             </div>
-            <script>
-                function to_brand(){
-                    window.location.href="/b/{{$brand['Brand']['slug']}}";
-                }
-                function to_detail(){
-                    window.location.href="/tuan_buyings/product_detail/{{$pid}}?tuan_id={{$tuan_id}}&tuan_buy_id={{$tuan_buy_id}}";
-                }
-                function to_comment(){
-                    window.location.href="/products/product_comments/{{$Product['Product']['slug']}}.html?from=tuan&tuan_buy_id={{$tuan_buy_id}}";
-                }
-                $(document).ready(function(){
-                    $('#view_all_comments').on('click',function(){
-                        to_comment();
-                    });
-                });
-            </script>
+            {{template Elements/product_detail_common_template}}
         </div>
         <hr>
     </div>
@@ -239,35 +199,31 @@
 
 <!--底部购买-->
 <div class="bottom_bg">
-    <ul class="clearfix">
-        <li class="love fl">
-            <a href="#X" class="love_icon"></a>
-            <!--<p>关注</p>-->
-        </li>
-        <li class="fl" style="width:78%;">
-            <div>
-                {{if $is_limit}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
-                {{else}}
-                    {{if $tuan_buy_status == 2 || $tuan_buy_status == 21}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已取消</a>
-                    {{elseif $tuan_buy_status == 1 || $tuan_buy_status == 11}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已完成</a>
-                    {{elseif $exceed_time}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout radius10">该团已截止</a>
-                    {{elseif $tuan_buy_status == 0}}
-                    <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg radius10" data-send-date="{{$consign_time}}">立即购买</a>
-                    {{/if}}
-                {{/if}}
+    <a href ="/carts/listcart.html" class="shopping fl">
+        <div style="position:relative;" class="shopping_icon" id="cart_link">
+            <div id="item-count" class="shopping_count">
             </div>
-        </li>
-
-        <li class="shopping fr">
-            <a href="/carts/listcart.html" style="position:relative; margin-top: 0.2em;" class="shopping_icon" id="cart_link"><div id="item-count" class="shopping_count"></div></a>
-            <p>购物车</p>
+        </div>
+    </a>
+    <ul class="clearfix fr">
+        <li class="fr" style="width:100%;">
+            {{if $is_limit}}
+            <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已截止</a>
+            {{else}}
+                {{if $tuan_buy_status == 2 || $tuan_buy_status == 21}}
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已取消</a>
+                {{elseif $tuan_buy_status == 1 || $tuan_buy_status == 11}}
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已完成</a>
+                {{elseif $exceed_time}}
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已截止</a>
+                {{elseif $tuan_buy_status == 0}}
+                    <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg" data-send-date="{{$consign_time}}">立即购买</a>
+                {{/if}}
+            {{/if}}
         </li>
     </ul>
 </div>
+
 
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'));}}
 
@@ -307,7 +263,8 @@
 
 <script>
     $(document).ready(function(){
-
+        $('span.spec_item:not(.spec_item_selected)').children('div').toggleClass('hidden');
+        $('[way-label]:not(.tuan_way_selected)').children('div').toggleClass('hidden');
         function get_spec_group(){
             var $selected_spec = $('span.spec_item_selected[item-label!="SD"]');
             var all_spec = [];
@@ -331,6 +288,12 @@
             if(!sso.check_userlogin({'referer':href})){
                 return false;
             }else{
+                var button_status = $('#button-status');
+                if (!$('.sure_btn').attr('value')){
+                    $('.xq_standard_layer,.tipslayer_bg').show();
+                    button_status.attr('data-status','3');
+                    return;
+                }
                 var specId = '';
                 if (typeof(_p_spec_m) != 'undefined') {
                     if (_p_spec_m) {
@@ -344,6 +307,7 @@
                                 var spec_item_selected = $('span.spec_item_selected[item-label="' + itemLabel + '"]');
                                 if (spec_item_selected.size() < 1) {
                                     utils.alert("请选择" + itemLabel);
+                                    $('.xq_standard_layer,.tipslayer_bg').show();
                                     return false;
                                 }
                             });
@@ -361,6 +325,7 @@
                     var cake_date_selected = $('span.spec_item_selected[item-label="SD"]');
                     if (cake_date_selected.size() < 1) {
                         utils.alert("请选择送货日期");
+                        $('.xq_standard_layer,.tipslayer_bg').show();
                         return false;
                     }
                 }
@@ -384,6 +349,7 @@
                         way_type = $('.cur.tuan_way_selected').attr('way-label');
                     }else{
                         utils.alert('请选择送货方式');
+                        $('.xq_standard_layer,.tipslayer_bg').show();
                         return false;
                     }
                 {{/if}}
@@ -395,6 +361,7 @@
                     data: postdata,
                     url:'/tuan_buyings/cart_info',
                     success:function(data){
+                        utils.close_notify();
                         if(data.success) {
                             var way_id = data['way_id'];
                             if(data.direct == 'big_tuan_list'){
@@ -402,10 +369,12 @@
                             }else{
                                 window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}/' + data.cart_id + '/'+way_id;
                             }
-                        }
-                        else {
-                            showErrorMessage(data.error);
-                            window.location.reload();
+                        } else {
+                            utils.alert(data.error,function(){
+                                //window.location.reload();
+                                $('.xq_standard_layer,.tipslayer_bg').show();
+                                //return false;
+                            });
                         }
                     },
                     dataType:'json'
@@ -413,9 +382,11 @@
             }
         });
         $("[way-label]").click(function(){
+            $('[way-label]:not(.tuan_way_selected)').children('div').removeClass('hidden');
             var that = $(this);
             that.toggleClass('cur').toggleClass('tuan_way_selected');
             $("[way-label]").not(that).removeClass('cur').removeClass('tuan_way_selected');
+            $('[way-label]:not(.tuan_way_selected)').children('div').toggleClass('hidden');
             var select_way = $('.cur.tuan_way_selected');
             $('#consign_way').text(select_way.text());
         });
@@ -429,8 +400,8 @@
         var share_string = '{{$share_string ? $share_string :"0"}}';
         var to_timeline_title = "{{$Product['Product']['name']}}"+"--{{$tuan_team['TuanTeam']['tuan_name']}}"+"@朋友说";
         var to_friend_title = "{{$Product['Product']['name']}}"+"--{{$tuan_team['TuanTeam']['tuan_name']}}"+"@朋友说";
-        var to_friend_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=appMsg';
-        var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
+        var to_friend_link = 'http://51daifan.sinaapp.com/tuan_buyings/detail/{{$tuan_buy_id}}?trstr='+ share_string + '&share_type=appMsg';
+        var to_timeline_link ='http://51daifan.sinaapp.com/tuan_buyings/detail/{{$tuan_buy_id}}?trstr='+ share_string + '&share_type=timeline';
         var imgUrl = "{{$Product['Product']['coverimg']}}";
         var desc = "{{$Product['Product']['promote_name']}}！";
         wx.onMenuShareAppMessage({

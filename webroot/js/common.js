@@ -920,7 +920,7 @@ var editAmount = {
 			}
 		}else{
 			alert("请输入正确的数量！");
-			$(obj).val(1);
+			$(obj).val($this.min);
 			$(obj).focus();
 		}
 		return x;
@@ -931,7 +931,7 @@ var editAmount = {
 			$(obj).val(x);
 		}else{
 			alert("商品数量最少为"+this.min);
-			$(obj).val(1);
+			$(obj).val(this.min);
 			$(obj).focus();
 		}
 		if (typeof callback == 'function') {
@@ -955,7 +955,7 @@ var editAmount = {
 		var x=$(obj).val();
 		if (x<this.min||x>this.max||!this.reg(x)){
 			alert("请输入正确的数量！");
-			$(obj).val(1);
+			$(obj).val(this.min);
 			$(obj).focus();
 		}
 	}
@@ -1219,6 +1219,7 @@ $(document).ready(function () {
 						var spec_item_selected = $('span.spec_item_selected[item-label="' + itemLabel + '"]');
 						if (spec_item_selected.size() < 1) {
 							utils.alert("请选择" + itemLabel);
+                            $('.xq_standard_layer').show();
 							return false;
 						}
 					});
@@ -1238,6 +1239,7 @@ $(document).ready(function () {
 			var cake_date_selected = $('span.spec_item_selected[item-label="SD"]');
 			if (cake_date_selected.size() < 1) {
 				utils.alert("请选择送货日期");
+                $('.xq_standard_layer').show();
 				return false;
 			}
 		}
@@ -1266,22 +1268,25 @@ $(document).ready(function () {
 
 
 	$('span.spec_item').click(function (ev) {
+        $('span.spec_item:not(.spec_item_selected)').children('div').removeClass('hidden');
 		var $this = $(this);
 		$this.toggleClass('spec_item_selected').toggleClass('cur');
+
 		$('span.spec_item[item-label="' + $this.attr('item-label') + '"]').not($this).removeClass('spec_item_selected').removeClass('cur');
         //reset product price
+        $('span.spec_item:not(.spec_item_selected)').children('div').toggleClass('hidden');
         var spec_group_data = get_spec_group();
         if(spec_group_data){
             var price = spec_group_data['price'];
             price = parseFloat(price);
             if(price&&price!=0&&price!='0'){
-                var $price_element = $('#product_price');
+                var $price_element = $('#product_price,#product_price_dialog');
                 price = price.toFixed(2);
                 if($price_element.length>0){
                     if($price_element.prop('tagName').toUpperCase()=='FONT'){
-                        $('#product_price').text(price);
+                        $('#product_price,#product_price_dialog').text(price);
                     }else{
-                        $('#product_price').text('¥ '+price);
+                        $('#product_price,#product_price_dialog').text('¥ '+price);
                     }
                 }
             }
@@ -1289,6 +1294,13 @@ $(document).ready(function () {
 
 	});
 	$("#btn_add_cart").click(function(e){
+        var button_status = $('#button-status');
+        if (!$('.sure_btn').attr('value')){
+            $('.xq_standard_layer,.tipslayer_bg').show();
+            button_status.attr('data-status','2');
+            return;
+        }
+        button_status.attr('data-status','1');
 		var $this = $(this);
 		if ($this.hasClass('cart_btn_soldout')) {
             var $reason = $this.attr("reason");
@@ -1297,7 +1309,8 @@ $(document).ready(function () {
 			return false;
 		}
 		cart_edit_amount.save($this.attr('item-id'));
-		e.preventDefault();
+
+        e.preventDefault();
 		return false;
 	});
 	$('#pamount_reduce').click(function(e){
@@ -1309,6 +1322,11 @@ $(document).ready(function () {
 		return false;
 	});
 	$('#btn_quick_buy').click(function(){
+        if (!$('.sure_btn').attr('value')){
+            $('.xq_standard_layer,.tipslayer_bg').show();
+            $('#button-status').attr('data-status','3');
+            return;
+        }
 		var $this = $(this);
 		if ($this.hasClass('cart_btn_soldout')) {
 			utils.alert('已售完');
@@ -1327,6 +1345,11 @@ $(document).ready(function () {
 	});
 	$('a[name="btn_quick_buy"]').on('click',function(e){
 		e.preventDefault();
+        if (!$('.sure_btn').attr('value')){
+            $('.xq_standard_layer,.tipslayer_bg').show();
+            $('#button-status').attr('data-status','3');
+            return;
+        }
 		var $this = $(this);
 		if ($this.hasClass('cart_btn_soldout')) {
 			utils.alert('已售完');
@@ -1358,7 +1381,7 @@ $(document).ready(function () {
  * @param addedCallback
  * @return
  */
-function quick_buy_try(id, num, spec, tryId, type, sendDate, soldOutCallback, addedCallback) {
+function quick_buy_try(id, num, spec, tryId, type, sendDate, ship_set_id, soldOutCallback, addedCallback) {
     type = type || 'normal';
     var url = BASEURL + '/carts/add';
     var postdata = {
@@ -1367,6 +1390,7 @@ function quick_buy_try(id, num, spec, tryId, type, sendDate, soldOutCallback, ad
         'data[Cart][spec]': spec,
         'data[Cart][type]': type,
         'data[Cart][send_date]': sendDate,
+        'data[Cart][ship_set_id]' : ship_set_id,
         'try_id': tryId
     };
     ajaxAction(url, postdata, null, function (data) {
@@ -1394,6 +1418,8 @@ function quick_buy_try(id, num, spec, tryId, type, sendDate, soldOutCallback, ad
                 utils.alert_one('抱歉：您有' + data.not_comment_cnt + '个试吃商品还没有反馈，请先完成反馈再秒杀');
             }else if(data.reason == 'no_try_id'){
                 utils.alert_one('该商品不是秒杀商品');
+            }else if(data.reason == 'ship_num_not_correct'){
+                utils.alert_one('选择的快递方式数量不对');
             }
         } else {
             addedCallback(data);
@@ -1401,3 +1427,182 @@ function quick_buy_try(id, num, spec, tryId, type, sendDate, soldOutCallback, ad
     });
     return false;
 }
+
+var TemplateEngine = function(html, options) {
+    var re = /<%(.+?)%>/g,
+        reExp = /(^( )?(var|if|for|else|switch|case|break|{|}|;))(.*)?/g,
+        code = 'with(obj) { var r=[];\n',
+        cursor = 0,
+        result;
+    var add = function(line, js) {
+        js? (code += line.match(reExp) ? line + '\n' : 'r.push(' + line + ');\n') :
+            (code += line != '' ? 'r.push("' + line.replace(/"/g, '\\"') + '");\n' : '');
+        return add;
+    }
+    while(match = re.exec(html)) {
+        add(html.slice(cursor, match.index))(match[1], true);
+        cursor = match.index + match[0].length;
+    }
+    add(html.substr(cursor, html.length - cursor));
+    code = (code + 'return r.join(""); }').replace(/[\r\t\n]/g, '');
+    try { result = new Function('obj', code).apply(options, [options]); }
+    catch(err) { console.error("'" + err.message + "'", " in \n\nCode:\n", code, "\n"); }
+    return result;
+};
+function zitiAddress(){
+    var beijingArea= {
+        110101:{
+            'name':"东城区"
+        },
+        110108:{
+            'name':"海淀区"
+        },
+        110102:{
+            'name':"西城区"
+        },
+        110105:{
+            'name':"朝阳区"
+        },
+        110106:{
+            'name':"丰台区"
+        },
+        110114:{
+            'name':"昌平区",
+            'children_area':{
+                900001:{'name':'昌平县城'},
+                900002:{'name':'天通苑'},
+                900003:{'name':'回龙观'},
+                900004:{'name':'北七家镇'},
+                900005:{'name':'沙河镇'},
+                900006:{'name':'立水桥'},
+                900007:{'name':'霍营'}
+            }
+        },
+        110113:{
+            'name':"顺义区"
+        },
+        110115:{
+            'name':"大兴区"
+        },
+        110112:{
+            'name':"通州区",
+        }
+    };
+    //崇文并入东城区， 宣武并入西城区
+    var ship_address = {};
+    var area = [];
+    var child_address = {};
+    $.getJSON('/tuan_buyings/get_offline_address?type=1',function(data){
+        ship_address = data.address;
+        child_address = data.child_address;
+        $.each(ship_address,function(index,item){
+            $("[area-id="+index+"]").show().addClass('parent_area');
+        });
+        $.each(child_address,function(index,item){
+            $("[area-id="+index+"]").addClass('children_area');
+        });
+    });
+    var getShipAddress = function(areaId){
+        return ship_address[areaId];
+    };
+    var getShipChildAddress = function(areaId){
+        return child_address[areaId];
+    };
+    return {
+        getBeijingAreas: beijingArea,
+        getShipAddress: getShipAddress,
+        getShipChildAddress:getShipChildAddress
+    }
+}
+var zitiObj = function(area,height, width){
+    var conorder_url = '#TB_inline?inlineId=hiddenModalContent&modal=true&height=' + height + '&width=' + width;
+    var choose_area='';
+    return {
+        generateZitiArea: function(){
+            for(var addr in area){
+                if (area[addr].children_area){
+                    choose_area += '<ul><li><a style="displOay: none" href="#" class="child_area" area-id="' +addr + '">' + area[addr].name + '</a></li> </ul>';
+                    $.each(area[addr].children_area,function(index,item){
+                        choose_area += '<ul><li><a style="display: none" href="'+ conorder_url +'" class="thickbox" parent-id ="'+addr+'" area-id="' +index + '">' + item.name + '</a></li> </ul>';
+                    });
+                }else{
+                    choose_area += '<ul><li><a style="display: none" href="'+ conorder_url +'" class="thickbox" area-id="' +addr + '">' + area[addr].name + '</a></li> </ul>';
+                }
+            }
+            return choose_area;
+        },
+        bindThickbox: function(){
+            $("li a.thickbox").each(function(){
+                var that = $(this);
+                that.on("click", function(e){
+                    $('.thickbox,.child_area,.parent_area').not(that).removeClass("cur");
+                    var area_id = $(this).attr("area-id");
+                    var parent_id = $(this).attr('parent-id');
+                    setData(area_id,parent_id);
+                    that.addClass("cur");
+                })
+            });
+        },
+        initChildAddress : function(){
+            var self = this;
+            $('.child_area').each(function () {
+                var that = $(this);
+                that.on('click', function () {
+                    $('.parent_area.thickbox').not(that).removeClass('cur').hide();
+                    $('.children_area').show();
+                    that.html('其他市区').removeClass('child_area').addClass('cur').bind('click', function () {
+                        $('.child_area,.thickbox,.children_area').not(that).removeClass('cur').hide();
+                        that.html('昌平区').addClass('child_area');
+                        $('.parent_area').show();
+                        self.initChildAddress();
+
+                    });
+                });
+            });
+        },
+        bindChildAddress:function(){
+            this.initChildAddress();
+        }
+    }
+
+};
+function setData(area_id,parent_id){
+    var remarkAddress = $('#remark_address');
+    var chose_address = parent_id?zitiAddressData.getShipChildAddress(area_id):zitiAddressData.getShipAddress(area_id);
+    chose_address = $.map(chose_address, function(value, index) {
+        return [value];
+    });
+    chose_address = chose_address.sort(function(item1,item2){
+        return item1['name'].localeCompare(item2['name']);
+    });
+    var $chose_item = '';
+    $.each(chose_address,function(index,item){
+        $chose_item +=' <p data-shop-id="'+ item['id'] +'" data-can-remark-address="'+item['can_remark_address']+'" data-shop-name="'+item['alias']+'">'+item['name']+'<br/>';
+        if(item['owner_phone']){
+            $chose_item+='联系电话:'+item['owner_phone'];
+        }
+        if(item['owner_name']){
+            $chose_item+=' 联系人: '+item['owner_name'];
+        }
+        $chose_item+='</p>';
+    });
+    $("#area_list").html($chose_item);
+    $("#area_list p").each(function(){
+        var that =$(this);
+        that.on("click",function(){
+            that.css("background-color","#eeeeee");
+            var canRemarkAddress = that.data('can-remark-address');
+            var shopId = that.data('shop-id');
+            //should remark address
+            if(canRemarkAddress==1){
+                remarkAddress.show();
+            }else{
+                remarkAddress.hide();
+            }
+            $("#chose_address").html(that.text()).data('shopId', shopId);
+            tb_remove();
+        })
+    });
+}
+var zitiAddressData = zitiAddress($('#hiddenModalContent').data('zitiType'));
+

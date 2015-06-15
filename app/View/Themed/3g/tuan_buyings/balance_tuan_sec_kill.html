@@ -1,61 +1,20 @@
-<div class="classlist_v2" style="z-index:1">
-    <ul class="clearfix" onclick="window.history.back();">
-        <li><a class="back"></a></li>
-        <li class="line"></li>
-        <li style="text-overflow: ellipsis;"><strong>订单确认</strong></li>
-    </ul>
-</div>
-<div class="tuan_balance" data-ship-way="{{$way_type}}" data-tuanteam-id="{{$tuan_id}}" data-try-id="{{$try_id}}" data-tuan-sec="true">
-    <div class="conorder_ziti">
-        <h1>自提点详细地址如下：</h1>
-        <dl>
-            <dd>{{$tuan_address}}</dd>
-        </dl>
-    </div>
-    <div class="conordertuan_contact">
-        <h1>收货人信息</h1>
-        <label><input type="text" name="consignee_name" placeholder="收货人姓名" value="{{$consignee_info['name']}}" /></label>
-        <label><input type="text" name="consignee_mobilephone" placeholder="手机号" value="{{$consignee_info['mobilephone']}}" /></label>
-        {{if $can_mark_address}}
-            <label><input type="text" name="consignee_remark_address" placeholder="小区-楼号-门牌(送货上门)" value="{{$consignee_info['remark_address']}}" /></label>
-        {{/if}}
-    </div>
+{{template Elements/bar_header_template}}
+<div class="tuan_balance" data-ship-way="{{$way_type}}" data-tuanteam-id="{{$tuan_id}}" data-try-id="{{$try_id}}" {{if empty($ship_setting_id)}}data-tuan-sec="true"{{else}}data-global-sec="true" {{/if}} data-way-id="{{$ship_setting_id}}">
+    {{template tuan_buyings/contact_info_template}}
     <div class="cart" style="margin-top: 0; padding-top: 0;">
-        <div>
-            <dl class="clearfix">
-                <dd class="fl">{{$brand['name']}}</dd>
-            </dl>
-            <ul class="clearfix">
-                <li class="fl"><a href="/shichi/list_pai.html?tuan_id={{$tuan_id}}"><img src="{{$this->Html->assetUrl(small_thumb_link($cart_info['Cart']['coverimg']))}}" border="0" /></a></li>
-                <li style="overflow: hidden; display: block; padding-left: 10px;">
-                    <a href="#X">
-                        <p>{{$cart_info['Cart']['name']}}</p>
-                        <s>单价:￥{{$this->Number->precision($cart_info['Cart']['price'],2)}}</s>
-                        <div class="clearfix">
-                            <!--<a  class="cartnumreduce fl"></a>-->
-                            <input type="text" value="{{$buy_count}}" id="pamount-{{$cart_info['Cart']['id']}}" data-id="{{$cart_info['Cart']['id']}}" disabled="disabled"
-                                   data-price="{{$cart_info['Cart']['price']}}" name="shopCart" readonly/>
-                            <!--<a  class="cartnumadd fl"></a>-->
-                        </div>
-                    </a>
-                </li>
-            </ul>
-            <p class="conordertuan_total">共<span data-count="{{$buy_count}}">{{$buy_count}}</span>件商品，合计:
-                <strong data-goods-price="{{$cart_info['Cart']['price']*$buy_count}}">￥{{$this->Number->precision($cart_info['Cart']['price']*$buy_count, 2)}}</strong>
-                {{if $ship_fee != 0}}，运费：￥<span class="ship_fee" data-ship-fee="{{$ship_fee}}">{{$this->Number->precision($ship_fee, 2)}}</span>{{/if}}</p>
-        </div>
+        {{template Elements/sec_order_cart_template}}
     </div>
 
     <div class="cart_pay">
         <ul class="clearfix">
-            <li class="fl">共<span data-count="{{$buy_count}}">{{$buy_count}}</span>件商品，总金额
+            <li class="fl">总金额
                 <strong data-total-price="{{$total_price}}">￥{{$this->Number->precision($total_price, 2)}}</strong>
             </li>
             <li class="fr"><a id="confirm_next"  href="javascript:void(0)" data-disable="false">提交订单</a></li>
         </ul>
     </div>
 </div>
-<script type="text/javascript" src="/js/tuan/balance.js?v9" async="async"></script>
+<script type="text/javascript" src="/js/tuan/balance.js?v16.4" async="async"></script>
 
 
 

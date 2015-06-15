@@ -12,7 +12,7 @@ class ApiTuanController extends AppController{
 
     public function beforeFilter() {
         parent::beforeFilter();
-        $allow_action = array('ping');
+        $allow_action = array('ping','get_offline_stores');
         $this->OAuth->allow($allow_action);
         if (array_search($this->request->params['action'], $allow_action)  == false) {
             $this->currentUser = $this->OAuth->user();
@@ -142,4 +142,41 @@ class ApiTuanController extends AppController{
         return;
     }
 
+    public function get_offline_stores(){
+        $cond = array('deleted'=>0);
+        $this->loadModel('OfflineStores');
+        $pickups = $this->OfflineStores->find('all',array(
+            'conditions' => $cond,
+        ));
+        $pickups=Hash::extract($pickups, '{n}.OfflineStores');
+        $this->set('pickups', $pickups);
+        $this->set('_serialize','pickups');
+    }
+    public function set_default_pickup(){
+        $postStr = file_get_contents('php://input');;
+        if(empty($postStr)){
+            exit;
+        }
+        $allow_receive = array('name','area_id','address','ziti_id','ziti_type','remark_address','mobilephone');
+        $obj = json_decode(trim($postStr), true);
+        $allow_data = array_intersect_key($obj, array_flip($allow_receive));
+        if(empty($allow_data['name']) && empty($allow_data['ziti_id']) && empty($allow_data['ziti_type'])){
+            exit;
+        }
+        $consigneeM = ClassRegistry::init('OrderConsignees');
+        $allow_data['creator'] = $this->currentUser['id'];
+        $allow_data['address'] = '\''.trim($allow_data['address']) . '\'';
+        $allow_data['name'] = '\''.trim($allow_data['name']) . '\'';
+        $allow_data['mobilephone'] = '\''.trim($allow_data['mobilephone']) . '\'';
+        $allow_data['ziti_id']= intval($allow_data['ziti_id']);
+        $allow_data['status'] = STATUS_CONSIGNEES_TUAN_ZITI;
+        $first = $consigneeM->find('first',array(
+            'conditions' =>array('creator' => $allow_data['creator'], 'status'=>STATUS_CONSIGNEES_TUAN_ZITI)
+        ));
+        if(empty($first)){
+            $consigneeM->save($allow_data);
+        }else{
+            $consigneeM->update($allow_data ,array('id' => $first['OrderConsignees']['id']));
+        }
+    }
 }

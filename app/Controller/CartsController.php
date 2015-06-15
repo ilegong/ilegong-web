@@ -60,7 +60,9 @@ class CartsController extends AppController{
             $sessionId = $this->Session->id();
             $cartM = $this->Cart;
             $customized_price = $this->data['Cart']['customized_price'];
-
+            if(empty($send_date)){
+                $send_date = get_pure_product_consignment_date($product_id);
+            }
             if (!$type) {
                 //FIXME:should give an error to client
                 $type = CART_ITEM_TYPE_NORMAL;
@@ -109,6 +111,12 @@ class CartsController extends AppController{
     //FIXME: authorized
 	function editCartNum($id, $num){
         if($this->Cart->edit_num($id, $num, $this->currentUser['id'], $this->Session->id())) {
+            //clear score info
+            App::uses('OrdersController', 'Controller');
+            $this->Session->write(OrdersController::key_balanced_scores(), '0');
+            $this->Session->write(OrdersController::key_balanced_conpon_global(), '[]');
+            $this->Session->write(OrdersController::key_balanced_conpons(), '[]');
+            $this->Session->write(OrdersController::key_balanced_promotion_code(),'');
             $info = array('success' => true, 'msg' => __('Success edit nums.'));
         } else {
             $info = array('success' => false);

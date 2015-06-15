@@ -34,7 +34,7 @@ class TuanTeamsController extends AppController{
 
         $offline_store_ids =  Hash::extract($tuan_teams,'{n}.TuanTeam.offline_store_id');
         $this->loadModel('OfflineStore');
-        $offline_store = $this->OfflineStore->find('all',array('conditions' => array('id' => $offline_store_ids)));
+        $offline_store = $this->OfflineStore->find('all',array('conditions' => array('id' => $offline_store_ids,'deleted' => DELETED_NO)));
         $offline_store = Hash::combine($offline_store,'{n}.OfflineStore.id','{n}.OfflineStore');
         $tuan_teams = Hash::combine($tuan_teams,'{n}.TuanTeam.id','{n}.TuanTeam');
         foreach ($tuan_teams as &$tuan_team){
@@ -57,7 +57,7 @@ class TuanTeamsController extends AppController{
         $tuan_team = $this->TuanTeam->find('first', array(
             'conditions' =>array(
                 'id'=> $tuan_id,
-                'published' => PUBLISH_YES
+                //'published' => PUBLISH_YES
             ),
         ));
         if(empty($tuan_team)){
@@ -109,13 +109,6 @@ class TuanTeamsController extends AppController{
         if (!empty($tryings)) {
             $trying_result = array();
             $try_pids = Hash::extract($tryings, '{n}.ProductTry.product_id');
-            $this->loadModel('TuanProduct');
-            $t_products = $this->TuanProduct->find('all',array(
-                'conditions' => array(
-                    'product_id' => $try_pids
-                )
-            ));
-            $t_products = Hash::combine($t_products,'{n}.TuanProduct.product_id','{n}.TuanProduct');
             $tryProducts = $this->Product->find_products_by_ids($try_pids, array(), false);
             if (!empty($tryProducts)) {
                 foreach($tryings as &$trying) {
@@ -125,7 +118,6 @@ class TuanTeamsController extends AppController{
                     $prod = $tryProducts[$pid];
                     if (!empty($prod)) {
                         $trying['Product'] = $prod;
-                        $trying['image'] = $t_products[$pid]['list_img'];
                         if($global_show== '0'){
                             $product_tuan_try = $ProductTuanTryM->find('all',array('conditions' => array('try_id' => $try_id)));
                             $product_tuan_tryIds = Hash::extract($product_tuan_try,'{n}.ProductTuanTry.team_id');

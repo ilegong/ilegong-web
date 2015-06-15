@@ -20,8 +20,12 @@
         <th>新增用户</th>
         <th>操作</th>
     </thead>
-    <tbody>
+    <tbody id="week_order_table">
     {{loop $datas $item}}
+        <?php
+            $datediff = strtotime($item['StatisticsOrderData']['end_date'])-strtotime($item['StatisticsOrderData']['start_date']);
+            $days = floor($datediff/(60*60*24));
+        ?>
         <tr>
             <td>{{$item['StatisticsOrderData']['start_date']}}--{{$item['StatisticsOrderData']['end_date']}}</td>
             <td>{{$item['StatisticsOrderData']['new_user_buy_count']}}</td>
@@ -30,7 +34,7 @@
             <td>{{number_format(($item['StatisticsOrderData']['repeat_buy_count'])/($item['StatisticsOrderData']['all_buy_user_count']),2,'.','')}}</td>
             <td>{{$item['StatisticsOrderData']['max_order_count']}}</td>
             <td>{{$item['StatisticsOrderData']['max_order_date']}}</td>
-            <td>{{number_format(($item['StatisticsOrderData']['all_order_count'])/6,2,'.','')}}</td>
+            <td>{{number_format(($item['StatisticsOrderData']['all_order_count'])/$days,2,'.','')}}</td>
             <td>{{$item['StatisticsOrderData']['all_order_count']}}</td>
             <td>{{$item['StatisticsOrderData']['tuan_order_count']}}</td>
             <td>{{$item['StatisticsOrderData']['ziti_order_count']}}</td>
@@ -41,4 +45,15 @@
     {{/loop}}
     </tbody>
 </table>
-{{$this->Html->script(array('/js/manage-lib/tablesort/tablesort.min.js','/js/manage-lib/tablesort/src/sorts/tablesort.date.js','/js/manage-lib/tablesort/src/sorts/tablesort.dotsep.js','/js/manage-lib/tablesort/src/sorts/tablesort.numeric.js','/js/manage/table_sort.js'));}}
+
+<div id="chart-container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+{{$this->Html->script(array('/js/manage-lib/tablesort/tablesort.min.js',
+'/js/manage-lib/tablesort/src/sorts/tablesort.date.js',
+'/js/manage-lib/tablesort/src/sorts/tablesort.dotsep.js',
+'/js/manage-lib/tablesort/src/sorts/tablesort.numeric.js',
+'/js/manage/table_sort.js',
+'/js/manage-lib/highchart/highcharts.js',
+'/js/manage-lib/highchart/exporting.js',
+'/js/manage-lib/highchart/dark-unica.js',
+'/js/manage/countly/week_order_chart.js?v2'));}}

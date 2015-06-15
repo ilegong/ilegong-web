@@ -36,8 +36,16 @@ class OrdersController extends AppController {
         return "Balance.promotion.id";
     }
 
-    private static function key_balance_pids() {
+    public static function key_balance_pids() {
         return "Balance.balance.pids";
+    }
+
+    public static function key_balance_total_price(){
+        return "Balance.balance.totalprice";
+    }
+
+    public static function key_balanced_promotion_code(){
+        return "Balance.apply_promotion_codes";
     }
 
     function beforeFilter() {
@@ -61,6 +69,7 @@ class OrdersController extends AppController {
         $this->loadModel('Product');
         $product_ids = array();
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
+        $ship_type = $_REQUEST['ship_type'];
         if (!$shipPromotionId) {
             $shipPromotionId = intval($this->Session->read(self::key_balanced_ship_promotion_id()));
         }
@@ -170,7 +179,11 @@ class OrdersController extends AppController {
         $pids = Hash::extract($allP, '{n}.Product.id');
 
         $this->loadModel('OrderConsignee');
-        $addressId = $this->Session->read('OrderConsignee.id');
+        if($ship_type == 'ziti'){
+            $addressId = $this->Session->read('pickupConsignee.id');
+        }else{
+            $addressId = $this->Session->read('OrderConsignee.id');
+        }
         $address = $this->OrderConsignee->find('first', array(
             'conditions' => array('id' => $addressId, 'creator' => $uid)
         ));
@@ -236,13 +249,13 @@ class OrdersController extends AppController {
                 }
                 $ship_fee += $ship_fees[$pid];
             }
-
-
 			$data = array();
-
-            if (!$tryId) {
+//            if (!$tryId) {
 //                $ship_fee = ShipPromotion::calculateShipFeeByOrder($ship_fee, $brand_id, $total_price);
-            } else {
+//            } else {
+//                $data['try_id'] = $tryId;
+//            }
+            if($tryId){
                 $data['try_id'] = $tryId;
             }
 
@@ -258,19 +271,21 @@ class OrdersController extends AppController {
             $data['remark'] = empty($remark) ? "" : $remark;
 
             $data['consignee_id'] = $addressId;
-			$data['consignee_name'] = $this->Session->read('OrderConsignee.name');
-			$data['consignee_area'] = $this->Session->read('OrderConsignee.area');
-			$data['consignee_address'] = $this->Session->read('OrderConsignee.address');
-			$data['consignee_mobilephone'] = $this->Session->read('OrderConsignee.mobilephone');
-			$data['consignee_telephone'] = $this->Session->read('OrderConsignee.telephone');
-			$data['consignee_email'] = $this->Session->read('OrderConsignee.email');
-			$data['consignee_postcode'] = $this->Session->read('OrderConsignee.postcode');
-			
+			$data['consignee_name'] = $address['OrderConsignee']['name'];
+			$data['consignee_area'] = $address['OrderConsignee']['area'];
+			$data['consignee_address'] = $address['OrderConsignee']['address'];
+			$data['consignee_mobilephone'] = $address['OrderConsignee']['mobilephone'];
+            $data['ship_mark'] = KUAIDI_TAG;
+            if($ship_type == 'ziti'){
+                $data['consignee_id'] = $address['OrderConsignee']['ziti_id'];
+                $data['consignee_area'] = '';
+                $data['ship_mark'] = ZITI_TAG;
+            }
 			if(empty($data['consignee_name']) || empty($data['consignee_address']) || empty($data['consignee_mobilephone']) ){
-				$this->__message('请填写收货人信息','/orders/info');
+				$this->__message('请填写收货人信息','/orders/mine');
 			}
 			$this->Order->create();
-			
+
 			if($this->Order->save($data)){
 				$order_id = $this->Order->getLastInsertID();
                 if ($order_id) {
@@ -369,7 +384,7 @@ class OrdersController extends AppController {
 
         $this->Session->write(self::key_balanced_ship_promotion_id(), '');
 
-		$has_chosen_consignee = false;
+        $kuaidi_consignee_exist = false;
 		$this->loadModel('OrderConsignee');
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
 		$this->loadModel('Cart');
@@ -400,12 +415,12 @@ class OrdersController extends AppController {
             $this->Session->write(self::key_balance_pids(), json_encode($balance_cids));
         }
 
-        $consignees = $this->OrderConsignee->find('all',array(
-            'conditions'=>array('creator'=> $uid, 'status !=' => array(STATUS_CONSIGNEES_TUAN,STATUS_CONSIGNEES_TUAN_ZITI)),
+        $all_consignees = $this->OrderConsignee->find('all',array(
+            'conditions'=>array('creator'=> $uid, 'status !=' => STATUS_CONSIGNEES_TUAN),
             'order' => 'status desc',
         ));
+        $consignees  = array_filter($all_consignees, function($v) { return $v['OrderConsignee']['status'] != STATUS_CONSIGNEES_TUAN_ZITI;});
         $total_consignee = count($consignees);
-
         if ($_REQUEST['action'] == 'savePromo') {
             list($specialPid, $specialAddress) = $this->ShipPromotion->find_special_address_by_id($shipPromotionId);
             if (!empty($specialAddress)) {
@@ -421,7 +436,7 @@ class OrdersController extends AppController {
                     $consignee['mobilephone'] = trim($_REQUEST['consignee_mobilephone']);
                     $consignee['address'] = trim($specialAddress['address']).($specialAddress['need_address_remark']? trim($_REQUEST['consignee_address']):'');
                     $this->Session->write('OrderConsignee', $consignee);
-                    $has_chosen_consignee = true;
+                    $kuaidi_consignee_exist = true;
                     $this->Session->write(self::key_balanced_ship_promotion_id(), $shipPromotionId);
                 }
             } else {
@@ -437,11 +452,11 @@ class OrdersController extends AppController {
                 // empty 不能检测函数，只能检测变量
                 if (!empty($first_consignees)) {
                     $current_consignee = $first_consignees['OrderConsignee'];
-                    $has_chosen_consignee = true;
+                    $kuaidi_consignee_exist = true;
                 }
                 $this->Session->write('OrderConsignee', $current_consignee);
             } elseif (!empty($current_consignee['id'])) {
-                $has_chosen_consignee = true;
+                $kuaidi_consignee_exist = true;
             }
         }
 
@@ -465,7 +480,7 @@ class OrdersController extends AppController {
 
 		$total_price = $cart->total_price();
         $this->set(compact('total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'flash_msg', 'total_reduced', 'product_info'));
-		$this->set('has_chosen_consignee', $has_chosen_consignee);
+		$this->set('kuaidi_consignee_exist', $kuaidi_consignee_exist);
 		$this->set('total_consignee', $total_consignee);
 		$this->set('consignees', $consignees);
 
@@ -493,6 +508,25 @@ class OrdersController extends AppController {
         if($this->RequestHandler->isMobile()){
             $this->set('is_mobile',true);
         }
+        $ziti_support = false;
+        if(array_key_exists(92,$brands)){
+            $ziti_support = true;
+        }
+        $ziti_consignees = array_filter($all_consignees, function($v) { return $v['OrderConsignee']['status'] == STATUS_CONSIGNEES_TUAN_ZITI; });
+        if(!empty($ziti_consignees) && $ziti_support){
+            $ziti_id = $ziti_consignees[0]['OrderConsignee']['ziti_id'];
+
+            $this->loadModel('OfflineStore');
+            $ziti_info = $this->OfflineStore->find('first', array(
+                'conditions' => array('id' => $ziti_id,'deleted' => DELETED_NO)
+            ));
+            if(!empty($ziti_info)){
+                $ziti_info = array('consignee' => $ziti_consignees[0]['OrderConsignee'], 'ziti' => $ziti_info['OfflineStore']);
+                $this->set('ziti_info', $ziti_info);
+                $this->Session->write('pickupConsignee',$ziti_consignees[0]['OrderConsignee']);
+            }
+        }
+        $this->set('ziti_support',$ziti_support);
         $this->pageTitle = __('订单确认');
         $this->set('op_cate', OP_CATE_CATEGORIES);
         $this->set('hideNav', true);
@@ -594,6 +628,7 @@ class OrdersController extends AppController {
                     $afford = false;
                 }
             }
+
             if ($afford && $has_expired_product_type == 0 && $no_more_money && $action == 'pay_direct') {
                 if ($orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY) {
                     $this->Order->id = $orderinfo['Order']['id'];
@@ -607,25 +642,35 @@ class OrdersController extends AppController {
                 }
             }
 
+            $this->loadModel('ConsignmentDate');
+            $consignment_date_available = true;
+            foreach($Carts as $cart){
+                $consignment_id = $cart['Cart']['consignment_date'];
+                if($consignment_id){
+                    $consignment_date = $this->ConsignmentDate->find('first', array(
+                        'conditions' => array('id'=>$consignment_id )
+                    ));
+                    if($consignment_date['ConsignmentDate']['published'] == PUBLISH_NO){
+                        $consignment_date_available = false;
+                        $this->set('consignment_date_not_available',true);
+                        break;
+                    }
+                }
+            }
+
+//            $this->set('show_pay', ($orderinfo['Order']['type'] == ORDER_TYPE_DEF || $orderinfo['Order']['type']==ORDER_TYPE_TUAN || $orderinfo['Order']['type']==ORDER_TYPE_TUAN_SEC)
+//                && $has_expired_product_type == 0
+//                && (empty($tuan_expired)||$tuan_expired ==0)
+//                && $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
+//                && ($display_status != PAID_DISPLAY_PENDING && $display_status != PAID_DISPLAY_SUCCESS)
+//                && $consignment_date_available);
             $this->set('show_pay', ($orderinfo['Order']['type'] == ORDER_TYPE_DEF || $orderinfo['Order']['type']==ORDER_TYPE_TUAN || $orderinfo['Order']['type']==ORDER_TYPE_TUAN_SEC)
                 && $afford
                 && $has_expired_product_type == 0
                 && (empty($tuan_expired)||$tuan_expired ==0)
                 && $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
-                && ($display_status != PAID_DISPLAY_PENDING && $display_status != PAID_DISPLAY_SUCCESS));
-        }
-        $this->loadModel('ConsignmentDate');
-        foreach($Carts as $cart){
-            $consignment_id = $cart['Cart']['consignment_date'];
-            if($consignment_id){
-                $consignment_date = $this->ConsignmentDate->find('first', array(
-                    'conditions' => array('id'=>$consignment_id )
-                ));
-                if($consignment_date['ConsignmentDate']['published'] == 0){
-                    $this->set('show_pay', false);
-                    break;
-                }
-            }
+                && ($display_status != PAID_DISPLAY_PENDING && $display_status != PAID_DISPLAY_SUCCESS)
+                && $consignment_date_available);
         }
         if ($action == 'paid') {
             $this->log("paid done: $orderId, msg:". $_GET['msg']);
@@ -656,6 +701,7 @@ class OrdersController extends AppController {
         //TODO: Handle product try orders!
         $shareOffer = ClassRegistry::init('ShareOffer');
         $toShare = $shareOffer->query_gen_offer($orderinfo, $this->currentUser['id']);
+
         $canComment = $this->can_comment($status);
         $this->set(compact('toShare', 'canComment', 'no_more_money', 'order_id', 'order', 'has_expired_product_type', 'expired_pids'));
         $this->set('ship_type', ShipAddress::ship_type_list());
@@ -730,7 +776,6 @@ class OrdersController extends AppController {
         $resp['total_price'] = $cart->total_price() - $total_reduced / 100 + $shipFee;
         $resp['success'] = $success;
         $resp['error'] = $error;
-
         echo json_encode($resp);
     }
 
@@ -743,12 +788,11 @@ class OrdersController extends AppController {
             echo json_encode(array('changed' => false, 'reason' => 'not_login'));
             return;
         }
-
         $shipPromotionId = intval($_REQUEST['ship_promotion']);
         $coupon_item_id = $_POST['coupon_item_id'];
         $brand_id = $_POST['brand_id'];
         $applying = $_POST['action'] == 'apply';
-
+        $this->Session->write(self::key_balanced_promotion_code(),'');
         $specifiedCartIds = $this->specified_balance_pids();
         $cartsByIds = $this->Buying->cartsByIds($specifiedCartIds, $uid, $this->Session->id());
         list($cart, $shipFee) = $this->Buying->applyPromoToCart($cartsByIds, $shipPromotionId, $uid);
@@ -770,7 +814,46 @@ class OrdersController extends AppController {
 
         echo json_encode($resp);
     }
-	
+
+    public function apply_promotion_code($code){
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        if(empty($code)){
+            echo json_encode(array('success' => false,'reason' => 'code_error'));
+        }
+        if (empty($uid)) {
+            echo json_encode(array('changed' => false, 'reason' => 'not_login'));
+            return;
+        }
+        $specifiedCartIds = $this->specified_balance_pids();
+        $cartsByIds = $this->Buying->cartsByIds($specifiedCartIds, $uid, $this->Session->id());
+        if(empty($cartsByIds)){
+            echo json_encode(array('success' => false,'reason' => 'cart_empty'));
+            return;
+        }
+        $this->loadModel('PromotionCode');
+        $reducePrice = 0;
+        foreach($cartsByIds as $cartId=>$cart){
+            $pid = $cart['product_id'];
+            $cart_price = $cart['price'];
+            $promotion_code = $this->PromotionCode->find('first',array('conditions' => array('available'=>1,'code'=>$code,'product_id'=>$pid)));
+            if(!empty($promotion_code)){
+                $price = $promotion_code['PromotionCode']['price'];
+                $reducePrice = $reducePrice + ($cart_price-$price);
+                break;
+            }
+        }
+        if($reducePrice>0){
+            //clear score and coupon
+            $this->Session->write(self::key_balanced_scores(), '');
+            $this->Session->write(self::key_balanced_conpon_global(), '[]');
+            $this->Session->write(self::key_balanced_conpons(), '[]');
+            $this->Session->write(self::key_balanced_promotion_code(),$code);
+        }
+        echo json_encode(array('success' => true,'reducePrice' => $reducePrice));
+        return;
+    }
+
     public function apply_score() {
         $this->autoRender = false;
         $uid = $this->currentUser['id'];
@@ -787,6 +870,7 @@ class OrdersController extends AppController {
         $cartsByIds = $this->Buying->cartsByIds($specifiedCartIds, $uid, $this->Session->id());
         list($cart, $shipFee) = $this->Buying->applyPromoToCart($cartsByIds, $shipPromotionId, $uid);
 
+        $this->Session->write(self::key_balanced_promotion_code(),'');
         $this->Session->write(self::key_balanced_scores(), '');
         $total_reduced = $this->_cal_total_reduced($uid);
         $total_price = $cart->total_price() - $total_reduced / 100 + $shipFee;
@@ -1116,7 +1200,7 @@ class OrdersController extends AppController {
        $info = substr($info,0,strlen($info)-2);
         return array("good_info"=>$info,"good_number"=>$number);
     }
-	
+
 	function _calculateTotalPrice($carts = array()){
 		$total_price = 0.0;
 		foreach($carts as $cart){
@@ -1124,14 +1208,14 @@ class OrdersController extends AppController {
 		}
 		return $total_price;
 	}
-	
+
 	/**
 	 * 编辑表单的保存，获取收件人信息文本内容（非表单形式）
 	 */
 	function info_consignee(){
 		//$this->autoRender = false;
 		if(!empty($this->data)){
-			$this->loadModel('OrderConsignee');			
+			$this->loadModel('OrderConsignee');
 			$this->data['OrderConsignee']['creator'] = $this->currentUser['id'];
 			$consignee = $this->OrderConsignee->find('first',array(
 				'conditions'=>array(
@@ -1150,7 +1234,7 @@ class OrdersController extends AppController {
 				);
 				$this->Session->write('OrderConsignee',$consignee['OrderConsignee']);
 			}
-			elseif(empty($consignee)){				
+			elseif(empty($consignee)){
 				if(!$this->OrderConsignee->save($this->data)){
 					echo json_encode($this->{$this->modelClass}->validationErrors);
 	                return;
@@ -1165,9 +1249,9 @@ class OrdersController extends AppController {
 				//echo json_encode(array('error' => __('Already have this address. If your still want to update this to Commonly used address,please delete it in Commonly used address at first.')));
                 //return;
 			}
-						
+
 			$successinfo = array(
-				'success' => __('Add success'), 
+				'success' => __('Add success'),
 				'tasks'=>array(array(
 					'dotype'=> 'html',
 					'selector'=> '#part_consignee',
@@ -1182,17 +1266,17 @@ class OrdersController extends AppController {
 			exit;
 		}
 	}
-	
+
 	function edit_consignee(){
 		// 常用地址列表，及收件人信息编辑表单
 		$this->loadModel('OrderConsignee');
 		$consignees = $this->OrderConsignee->find('all',array(
-			'conditions'=>array('creator'=>$this->currentUser['id'], 'status !=' => STATUS_CONSIGNEES_TUAN),
+			'conditions'=>array('creator'=>$this->currentUser['id'], 'not' => array('status' => array(STATUS_CONSIGNEES_TUAN,STATUS_CONSIGNEES_TUAN_ZITI))),
             'order' => 'status desc',
 		));
 		$total_consignee = count($consignees);
 		$this->set('total_consignee',$total_consignee);
-		$this->set('consignees',$consignees);	
+		$this->set('consignees',$consignees);
 		if(count($consignees)<10){
 			$this->Session->write('OrderConsignee.save_address',1);
 		}
@@ -1205,7 +1289,7 @@ class OrdersController extends AppController {
 		$this->autoRender = false;
 		$this->loadModel('OrderConsignee');
 		$consignees = $this->OrderConsignee->updateAll(array('status'=>0),array('creator'=>$this->currentUser['id']));
-		
+
 		$consignees = $this->OrderConsignee->updateAll(array('status'=>1),array('creator'=>$this->currentUser['id'],'id'=> $id));
 		$successinfo = array('id' => $id);
 		echo json_encode($successinfo);
@@ -1239,16 +1323,16 @@ class OrdersController extends AppController {
         exit;
 	}
 	/*××××××××××××××××××收件人信息结束××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××*/
-	
-	
+
+
 	/*××××××××××××××××××发票信息开始××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××××*/
 	function edit_invoice(){
 		// 常用地址列表，及收件人信息编辑表单
 		$this->loadModel('OrderInvoice');
 		$invoices = $this->OrderInvoice->find('all',array('conditions'=>array('creator'=>$this->currentUser['id'])));
-		$this->set('invoices',$invoices);	
+		$this->set('invoices',$invoices);
 	}
-	
+
 	function load_invoice($id){
 		$this->autoRender = false;
 		$this->loadModel('OrderInvoice');
@@ -1259,7 +1343,7 @@ class OrdersController extends AppController {
 		echo json_encode($consignee['OrderInvoice']);
         exit;
 	}
-	
+
 /**
 	 * 编辑表单的保存，获取收件人信息文本内容（非表单形式）
 	 */
@@ -1268,8 +1352,8 @@ class OrdersController extends AppController {
 		if(!empty($this->data)){
 			$this->loadModel('OrderInvoice');
 			$this->data['OrderInvoice']['creator'] = $this->currentUser['id'];
-			$this->Session->write('OrderInvoice',$this->data['OrderInvoice']);			
-			if($this->data['OrderInvoice']['save_invoice']){				
+			$this->Session->write('OrderInvoice',$this->data['OrderInvoice']);
+			if($this->data['OrderInvoice']['save_invoice']){
 				$invoice = $this->OrderInvoice->find('first',array(
 					'conditions'=>array(
 						'creator' => $this->currentUser['id'],
@@ -1277,15 +1361,15 @@ class OrdersController extends AppController {
 						'content'=> $this->data['OrderInvoice']['content'],
 					))
 				);
-				if(!empty($invoice)){					
+				if(!empty($invoice)){
 	                $this->data['OrderInvoice']['id'] = $invoice['OrderInvoice']['id'];
-				}				
+				}
 				if(!$this->OrderInvoice->save($this->data)){
 					echo json_encode($this->{$this->modelClass}->validationErrors);
 	                return;
 				}
 			}
-			$successinfo = array('success' => __('Add success'), 
+			$successinfo = array('success' => __('Add success'),
 				'tasks'=>array(array(
 					'dotype'=>'html',
 					'selector'=>'#part_invoice',
@@ -1333,7 +1417,7 @@ class OrdersController extends AppController {
      * @param $order_results
      * @throws MissingModelException
      */
-    protected function apply_coupons_to_order($brand_id, $uid, $order_id, $order_results) {
+    public function apply_coupons_to_order($brand_id, $uid, $order_id, $order_results) {
         //TODO：检查是否可以应用这些券的合法性
         $used_coupons_str = $this->Session->read(self::key_balanced_conpons());
         $total_reduced_cent = 0;
@@ -1400,7 +1484,7 @@ class OrdersController extends AppController {
      * @param $uid
      * @param $order_id
      */
-    protected function apply_coupon_code_to_order($uid, $order_id) {
+    public function apply_coupon_code_to_order($uid, $order_id) {
         //TODO: 检查是否可以应用这些券码的合法性
         //TODO: 防止重复用券
         $code = $this->_applied_couon_code();
@@ -1704,16 +1788,16 @@ class OrdersController extends AppController {
     /*
      * remind the sellers to deliver goods
      */
-    function remind_deliver($order_id){
+    function remind_deliver($order_id) {
 
         $this->autoRender = false;
         $this->loadModel('RemindDeliver');
         $this->loadModel('Brand');
         $this->loadModel('User');
-        $order_info = $this->Order->find('first',array('conditions' => array('id' => $order_id),'user_id' => $this->currentUser['id']));
-        $remind_info = $this->RemindDeliver->find('first',array('conditions' => array('order_id' => $order_id,'user_id' => $this->currentUser['id']),'order' => 'times desc'));
-        $brand_info = $this->Brand->find('first',array('conditions' => array('id' => $order_info['Order']['brand_id'])));
-        $seller_info = $this->User->find('first',array('conditions' => array('id' => $brand_info['Brand']['creator'])));
+        $order_info = $this->Order->find('first', array('conditions' => array('id' => $order_id), 'user_id' => $this->currentUser['id']));
+        $remind_info = $this->RemindDeliver->find('first', array('conditions' => array('order_id' => $order_id, 'user_id' => $this->currentUser['id']), 'order' => 'times desc'));
+        $brand_info = $this->Brand->find('first', array('conditions' => array('id' => $order_info['Order']['brand_id'])));
+        $seller_info = $this->User->find('first', array('conditions' => array('id' => $brand_info['Brand']['creator'])));
 
         $cTime = time();
         $nTime = $remind_info['RemindDeliver']['remind_time'];
@@ -1723,41 +1807,91 @@ class OrdersController extends AppController {
         $data['user_id'] = $this->currentUser['id'];
         $data['remind_time'] = date('Y-m-d H:i:s');
         $paid_time_past = strtotime($data['remind_time']) - strtotime($order_info['Order']['pay_time']);
-        $dDay =  intval(date("d",strtotime($data['remind_time']))) - intval(date("d",strtotime($order_info['Order']['pay_time'])));
-        $dHour = intval(($paid_time_past/3600)%24);
-        $dDay = $dDay>0?$dDay.'天':'';
-        $dHour = $dHour>0?$dHour.'小时':'';
-        $dMin = ($dDay==''&&$dHour=='')?intval(($paid_time_past/60)%60+1).'分钟':'';
-        $this->log('$paid_time_past'.json_encode($dHour));
+        $dDay = intval(date("d", strtotime($data['remind_time']))) - intval(date("d", strtotime($order_info['Order']['pay_time'])));
+        $dHour = intval(($paid_time_past / 3600) % 24);
+        $dDay = $dDay > 0 ? $dDay . '天' : '';
+        $dHour = $dHour > 0 ? $dHour . '小时' : '';
+        $dMin = ($dDay == '' && $dHour == '') ? intval(($paid_time_past / 60) % 60 + 1) . '分钟' : '';
+        $this->log('$paid_time_past' . json_encode($dHour));
 
-        if(empty($remind_info)){
+        if (empty($remind_info)) {
             $data['times'] = 1;
-            if($this->RemindDeliver->save($data)){
-            $msg = '用户'.$order_info['Order']['consignee_name']. '催促您发货。订单号'.$order_id.'，离用户支付成功已过去'.$dDay.$dHour.$dMin;
-            $tel = $seller_info['User']['mobilephone'];
-            message_send($msg,$tel);
-            $return_Info = 1;
-            echo  json_encode($return_Info);
-            exit;
+            if ($this->RemindDeliver->save($data)) {
+                $msg = '用户' . $order_info['Order']['consignee_name'] . '催促您发货。订单号' . $order_id . '，离用户支付成功已过去' . $dDay . $dHour . $dMin;
+                $tel = $seller_info['User']['mobilephone'];
+                message_send($msg, $tel);
+                $return_Info = 1;
+                echo json_encode($return_Info);
+                exit;
 
             }
-        }else {
-            if(intval($dTime/60)<=15){
+        } else {
+            if (intval($dTime / 60) <= 15) {
                 $return_Info = 2;
-                echo  json_encode($return_Info);
+                echo json_encode($return_Info);
                 exit;
-            }else{
-                $data['times'] = $remind_info['RemindDeliver']['times']+1;
-                if($this->RemindDeliver->save($data)){
-                    $msg = '用户'.$order_info['Order']['consignee_name']. '第'.$data['times'].'次催促您发货。订单号'.$order_id.'，离用户支付成功已过去'.$dDay.$dHour.$dMin;
+            } else {
+                $data['times'] = $remind_info['RemindDeliver']['times'] + 1;
+                if ($this->RemindDeliver->save($data)) {
+                    $msg = '用户' . $order_info['Order']['consignee_name'] . '第' . $data['times'] . '次催促您发货。订单号' . $order_id . '，离用户支付成功已过去' . $dDay . $dHour . $dMin;
                     $tel = $seller_info['User']['mobilephone'];
-                     message_send($msg,$tel);
+                    message_send($msg, $tel);
                     $return_Info = 3;
-                    echo  json_encode($return_Info);
+                    echo json_encode($return_Info);
                 }
             }
         }
-
-
+    }
+    public function chose_pickup(){
+        $this->autoRender = false;
+        $uid = $this->currentUser['id'];
+        $res = array('status' => false);
+        if(empty($uid)){
+            $res['reason'] = 'not_login';
+            echo json_encode($res);
+            return;
+        }
+        $name = trim($_POST['name']);
+        $mobile = $_POST['mobile'];
+        $shop_id = intval($_POST['shop_id']);
+        if(!$name || !$mobile || !$shop_id){
+            $res['reason'] = 'invalid_data';
+            echo json_encode($res);
+            return;
+        }
+        $this->loadModel('OfflineStore');
+        $this->loadModel('OrderConsignee');
+        $pickup = $this->OfflineStore->find('first', array(
+            'conditions' => array('id' => $shop_id, 'deleted' => DELETED_NO)
+        ));
+        if(empty($pickup)){
+            $res['reason'] = 'invalid_shop';
+            echo json_encode($res);
+            return;
+        }
+        $old_pickup = $this->OrderConsignee->find('first', array(
+            'conditions' => array('creator' => $uid, 'status' => STATUS_CONSIGNEES_TUAN_ZITI, 'deleted' => 0)
+        ));
+        $address = $pickup['OfflineStore']['name'].'(联系人：'. $pickup['OfflineStore']['owner_name'].$pickup['OfflineStore']['owner_phone'].')';
+        $data = array();
+        $data['OrderConsignee'] = array(
+            'name' => $name,
+            'address' => $address,
+            'creator' => $uid,
+            'status' => STATUS_CONSIGNEES_TUAN_ZITI,
+            'mobilephone' => $mobile,
+            'area' => $pickup['OfflineStore']['area_id'],
+            'ziti_id' => $shop_id,
+            'ziti_type' => $pickup['OfflineStore']['type']
+        );
+        if(empty($old_pickup)){
+            $data = $this->OrderConsignee->save($data);
+        }else{
+            $data['OrderConsignee']['id'] = $old_pickup['OrderConsignee']['id'];
+            $this->OrderConsignee->save($data);
+        }
+        $this->Session->write('pickupConsignee',$data['OrderConsignee']);
+        $res = array('status' => true, 'data'=>$data['OrderConsignee']);
+        echo json_encode($res);
     }
 }

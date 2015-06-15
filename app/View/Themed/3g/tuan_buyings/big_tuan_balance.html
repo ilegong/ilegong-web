@@ -1,12 +1,11 @@
-{{$this->Html->css(array('thickbox.css?ver1' ));}}
+{{template Elements/bar_header_template}}
 <div class="classlist_v2" style="z-index:1">
     <ul class="clearfix" onclick="window.history.back();">
         <li><a class="back"></a></li>
         <li class="line"></li>
-        <li style="text-overflow: ellipsis;"><strong>下单</strong></li>
+        <li style="text-overflow: ellipsis;"><strong>订单确认</strong></li>
     </ul>
 </div>
-
 <a href="#X" class="conordertuan_tel">客服热线：010-56245991</a>
 <div class="conordertuan">
     <h1>请选择自提点地址</h1>
@@ -16,39 +15,19 @@
     <P><span>已选自提点：<span id="chose_address" data-can-remark-address="{{$ziti_consignee_info['can_remark_address']}}" data-shop-id="{{$ziti_consignee_info['ziti_id']}}" data-area-id="{{$ziti_consignee_info['area']}}" style="color:#333333">{{$ziti_consignee_info['address']}}</span></span></P>
 </div>
 <div class="tuan_balance" data-tuanbuy-id="{{$tuan_buy_id}}" data-tuanteam-id="{{$tuan_id}}" data-way-id="{{$way_id}}">
-    <div class="conordertuan_contact">
-        <h1>联系信息</h1>
-        <label><input type="text" name="consignee_name" placeholder="收货人姓名" value="{{$ziti_consignee_info['name']}}" /></label>
-        <label><input type="text" name="consignee_mobilephone" placeholder="手机号" value="{{$ziti_consignee_info['mobilephone']}}" /></label>
-        <label id="remark_address" style="display: none;"><input type="text" name="consignee_remark_address" placeholder="小区-楼号-门牌(送货上门)" value="{{$ziti_consignee_info['remark_address']}}" /></label>
-    </div>
+    {{template tuan_buyings/ziti_contact_info_template}}
     <div class="cart" style="margin-top: 0; padding-top: 0;">
-        <div>
-            <dl class="clearfix" style="margin-bottom: 0;border-top: 0">
-                <dd class="fl">朋友说</dd>
-            </dl>
-            <ul class="clearfix">
-                <li class="fl"><a href="/tuan_buyings/detail/{{$tuan_buy_id}}"><img src="{{$this->Html->assetUrl(small_thumb_link($cart_info['Cart']['coverimg']))}}" border="0" /></a></li>
-                <li style="overflow: hidden; display: block; padding-left: 10px;">
-                    <a href="#X">
-                        <p>{{$cart_info['Cart']['name']}}</p>
-                        <s>单价:￥{{$this->Number->precision($cart_info['Cart']['price'],2)}}</s>
-                        <div class="clearfix">
-                            {{if $cart_info['Cart']['product_id'] != 962}}
-                            <a  class="cartnumreduce fl"></a>
-                            {{/if}}
-                            <input type="text" value="{{$buy_count}}" id="pamount-{{$cart_info['Cart']['id']}}" data-id="{{$cart_info['Cart']['id']}}" disabled="disabled"
-                                   data-price="{{$cart_info['Cart']['price']}}" name="shopCart"/>
-                            {{if $cart_info['Cart']['product_id'] != 962}}
-                            <a  class="cartnumadd fl"></a>
-                            {{/if}}
-                        </div>
-                    </a>
-                </li>
-            </ul>
-        </div>
+        {{template Elements/order_cart_template}}
     </div>
-    <div class="shop_jifen" style="margin-bottom: 44px;">
+    {{template Elements/tuan_coupon_template}}
+    <!--pid=229-->
+    {{if $cart_info['Cart']['product_id'] == 229}}
+        <div class="shop_jifen leave_words clearfix">
+            <input class="fl" id="promotion_code" style="width: 40%;" name="" type="text" placeholder="请输入优惠码" />
+            <a href="javascript:void(0);" id="use_promotion_code" class="order_code fl">使用</a>
+        </div>
+    {{/if}}
+    <div class="shop_jifen" style="margin-bottom: 44px; margin-top: 10px;">
         <ul class="clearfix" style=" border: 0;">
             <li class="fl" data-score="{{$score_usable}}">可用<span class="balance_use_score">{{$score_usable}}</span>积分抵用<span>{{$this->Number->precision($score_usable/100, 2)}}</span>元</li>
             <li class="fr shop_jifen_used radius10"></li>
@@ -56,14 +35,14 @@
     </div>
     <div class="cart_pay">
         <ul class="clearfix">
-            <li class="fl" style="font-size: 90%">共<span data-count="{{$buy_count}}">{{$buy_count}}</span>件，总金额(含运费)
+            <li class="fl" style="font-size: 90%">总金额
                 <strong data-total-price="{{$total_price}}">￥{{$this->Number->precision($total_price, 2)}}</strong>
             </li>
             <li class="fr"><a id="confirm_next" href="#X" data-disable="false">提交订单</a></li>
         </ul>
     </div>
 </div>
-<div id="hiddenModalContent" style="display:none">
+<div id="hiddenModalContent" style="display:none" data-ziti-type="{{$ship_val}}">
     <div class="classlist_v2">
         <ul class="clearfix">
             <li><a onclick="tb_remove()" class="back"></a></li>
@@ -73,19 +52,18 @@
     </div>
     <div id="area_list" class="tuanadresslist">  </div>
 </div>
-{{$this->Html->script(array('/js/tuan/balance.js?v10.0'));}}
+{{$this->Html->script(array('/js/tuan/balance.js?v16.4'));}}
 <script>
-    var zitiAddressData = zitiAddress('{{$ship_val}}');
-    $(document).ready(function(){
-        var bigBuy = zitiObj(zitiAddressData.getBeijingAreas, $(window).height() + 5,$(window).width());
+    $(document).ready(function () {
+        var bigBuy = zitiObj(zitiAddressData.getBeijingAreas,$(window).height() + 5, $(window).width());
         var elements = bigBuy.generateZitiArea();
         $(".conordertuan_adress").html(elements);
         bigBuy.bindThickbox();
+        bigBuy.bindChildAddress();
         var $chose_address = $('#chose_address');
         var $area_id = $chose_address.data('areaId');
-        if($area_id){
-            $('div.conordertuan_adress ul li a[area-id="'+$area_id+'"]').addClass('cur');
+        if ($area_id) {
+            $('div.conordertuan_adress ul li a[area-id="' + $area_id + '"]').addClass('cur');
         }
-    })
+    });
 </script>
-{{$this->Html->script(array('/js/thickbox.js?v1'));}}

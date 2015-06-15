@@ -27,8 +27,10 @@ App::import('Vendor', 'oauth2-php/lib/IOAuth2Storage');
 App::import('Vendor', 'oauth2-php/lib/IOAuth2RefreshTokens');
 App::import('Vendor', 'oauth2-php/lib/IOAuth2GrantUser');
 App::import('Vendor', 'oauth2-php/lib/IOAuth2GrantCode');
+APP::import('Vendor', 'oauth2-php/lib/IOAuth2GrantImplicit');
+APP::import('Controller','Users');
 
-class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2RefreshTokens, IOAuth2GrantUser, IOAuth2GrantCode {
+class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2RefreshTokens, IOAuth2GrantUser, IOAuth2GrantCode, IOAuth2GrantImplicit {
 
 /**
  * AccessToken object.
@@ -104,7 +106,7 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
  *
  * @var array
  */
-	public $grantTypes = array('authorization_code', 'refresh_token', 'password');
+	public $grantTypes = array('authorization_code', 'refresh_token', 'password','token');
 
 /**
  * OAuth2 Object
@@ -575,6 +577,69 @@ class OAuthComponent extends Component implements IOAuth2Storage, IOAuth2Refresh
         }
 		return false;
 	}
+
+    /**
+     * Grant type: weixin token
+     * @see IOAuth2GrantImplicit::checkUserToken()
+     * @param $client_id
+     * @param $access_token
+     * @param $expires_in
+     * @param $refresh_token
+     * @param $openid
+     * @param $scope
+     */
+    public function checkUserToken($client_id,$access_token,$expires_in,$refresh_token,$openid,$scope){
+        $oauth_wx_source = oauth_wx_source();
+        $usersController = new UsersController();
+        $this->Oauthbinds = ClassRegistry::init('Oauthbinds');
+        $oauth = $this->Oauthbinds->find('first', array('conditions' => array('source' => $oauth_wx_source,
+            'oauth_openid' => $openid
+        )));
+        if (empty($oauth)) {
+            $oauth['Oauthbinds']['oauth_openid'] = $openid;
+            $oauth['Oauthbinds']['created'] = date(FORMAT_DATETIME);
+            $oauth['Oauthbinds']['source'] = $oauth_wx_source;
+            $oauth['Oauthbinds']['domain'] = $oauth_wx_source;
+        }
+        $oauth['Oauthbinds']['oauth_token'] = $access_token;
+        $oauth['Oauthbinds']['oauth_token_secret'] = empty($refresh_token) ? '' : $refresh_token;
+        $oauth['Oauthbinds']['updated'] = date(FORMAT_DATETIME);
+        $oauth['Oauthbinds']['extra_param'] = json_encode(array('scope' => $scope, 'expires_in' => $expires_in));
+        $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
+        //Update User profile with WX profile
+        $wxUserInfo = $usersController->getWxUserInfo($openid, $access_token);
+        if (!empty($wxUserInfo['unionid'])) {
+            $oauth['Oauthbinds']['unionId'] = $wxUserInfo['unionid'];
+        }
+        if ($new_serviceAccount_binded_uid > 0) {
+            $usersController->updateUserProfileByWeixin($new_serviceAccount_binded_uid, $wxUserInfo);
+        } else {
+            $this->User->create();
+            if (!empty($wxUserInfo)) {
+                $oauth['Oauthbinds']['user_id'] = $usersController->createNewUserByWeixin($wxUserInfo);
+            } else {
+                $uu = array(
+                    'username' => $oauth['Oauthbinds']['oauth_openid'],
+                    'nickname' => '微信用户' . mb_substr($oauth['Oauthbinds']['oauth_openid'], 0, PROFILE_NICK_LEN - 4, 'UTF-8'),
+                    'password' => '',
+                    'uc_id' => 0
+                );
+                if (!$this->User->save($uu)){
+                    $this->log('errot to save new user:'.$uu);
+                }
+                $oauth['Oauthbinds']['user_id'] = $this->User->getLastInsertID();
+            }
+            $new_serviceAccount_binded_uid = $oauth['Oauthbinds']['user_id'];
+            if (!$new_serviceAccount_binded_uid){
+                $this->log("login failed for cannot got create new user with the current WX info: res=".json_encode($access_token).", wxUserInfo=".json_encode($wxUserInfo));
+                return false;
+            }
+        }
+        $this->Oauthbinds->save($oauth['Oauthbinds']);
+
+        return array('user_id' => $oauth['Oauthbinds']['user_id']);
+    }
+
 
 /**
  * Grant type: authorization_code
