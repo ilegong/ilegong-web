@@ -4,12 +4,7 @@
 var priceDom = $(".conordertuan_total strong");
 var totalPriceDom = $(".cart_pay .fl strong");
 var CartDomName = "input[name='shopCart']";
-var shipLeastNum = $('#ship_least_num');
-var leastNum = parseInt(shipLeastNum.val());
 var orginTotalPrice = totalPriceDom.data('totalPrice');
-if(leastNum>1){
-    editAmount.min = leastNum;
-}
 function editCartNum(id, num) {
     $('.shop_jifen_used').html("");
     $('#promotion_code').val("");

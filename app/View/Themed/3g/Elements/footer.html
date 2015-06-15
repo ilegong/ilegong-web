@@ -28,6 +28,16 @@
 			effect: "fadeIn",
 			threshold : 100
 		});
+        function set_ship_least_num(){
+            var shipLeastNum = $('#ship_least_num');
+            if(shipLeastNum.length==0){
+                return;
+            }
+            var leastNum = parseInt(shipLeastNum.val());
+            if(leastNum>1){
+                editAmount.min = leastNum;
+            }
+        }
         function set_default_spec(){
             var spec = $('.spec_selected');
             var pamount = $('#input_pamount').val();
@@ -45,5 +55,6 @@
             $('span.spec_item',$(item)).first().trigger('click');
         });
         set_default_spec();
+        set_ship_least_num();
 	});
 </script>
