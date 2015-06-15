@@ -232,12 +232,14 @@ class OrdersController extends AppController {
             foreach($products as $pro) {
                 $pid = $pro['id'];
                 $pidShipSettings = array();
-                foreach($shipSettings as $val){
-                    if($val['ShipSetting']['product_id'] == $pid){
-                        $pidShipSettings[] = $val;
+                //TODO: 自提运费设置动态化
+                if($ship_type != 'ziti'){
+                    foreach($shipSettings as $val){
+                        if($val['ShipSetting']['product_id'] == $pid){
+                            $pidShipSettings[] = $val;
+                        }
                     }
                 }
-
                 $num = $nums[$pid];
 
                 if ($tryId) {
