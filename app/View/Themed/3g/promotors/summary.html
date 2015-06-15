@@ -1,9 +1,9 @@
-<div class="container order-summary" data-tuan-team-id="{{$tuan_team['TuanTeam']['id']}}">
-    <div class="row date-summary">
+<div class="container orders-summary" data-tuan-team-id="{{$tuan_team['TuanTeam']['id']}}">
+    <div class="row orders-total">
         {{$tuan_team['TuanTeam']['tuan_name']}}, 合计新用户订单<strong class="text-warning">{{$orders_count}}个</strong>
     </div>
     {{loop $date_orders $date $orders}}
-    <div class="row">
+    <div class="row date-total">
         <span>{{date_format(date_create($date), 'n月d日')}}</span>
         <span class="fr">当天新用户订单<strong class="text-warning">{{count($orders)}}个</strong></span>
     </div>
