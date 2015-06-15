@@ -151,6 +151,8 @@ define('ORDER_STATUS_TOUSU', 12); //已投诉， 不要再用，投诉走其他�
 define('ORDER_STATUS_COMMENT', 16); //待评价
 define('ORDER_STATUS_RETURNING_MONEY', 14); //退款中
 
+define('ORDER_STATUS_SPLIT',20);
+
 define('ON_SHELVE', PUBLISH_YES); //已上架
 define('OFF_SHELVE', PUBLISH_NO); //下架
 define('IN_CHECK', 2); //审查中
@@ -2066,4 +2068,49 @@ function get_ship_mark_name($shipType){
         return '快递';
     }
     return null;
+}
+
+/**
+ * @param $orderId
+ * split pys order cart split
+ */
+function split_pys_order($orderId) {
+    $orderM = ClassRegistry::init('Order');
+    $cartM = ClassRegistry::init('Cart');
+    $order = $orderM->find('first', array('conditions' => array('id' => $orderId)));
+    if($order['Order']['brand_id']!=PYS_BRAND_ID){
+        return;
+    }
+    if ($order['Order']['status'] != ORDER_STATUS_PAID) {
+        return;
+    }
+    $carts = $cartM->find('all', array('conditions' => array('order_id' => $orderId)));
+    $cartCount = count($carts);
+    if ($cartCount <= 1) {
+        return;
+    }
+    $score = $order['Order']['applied_score'];
+    $all_order_total = $order['Order']['total_price'];
+    $all_ship_fee = $order['Order']['ship_fee'];
+    $avg_ship_fee = 0;
+    if ($all_ship_fee > 0) {
+        $avg_ship_fee = $all_ship_fee / $cartCount;
+    }
+    foreach ($carts as $item) {
+        $tempOrder = clone $order;
+        $total_price = $item['Cart']['num'] * $item['Cart']['price'];
+        $tempOrder['Order']['id'] = null;
+        $tempOrder['Order']['ship_fee'] = $avg_ship_fee;
+        $tempOrder['Order']['total_price'] = $total_price;
+        $tempOrder['Order']['total_all_price'] = $total_price + $avg_ship_fee;
+        $spent_on_order = round($score * ($total_price / $all_order_total));
+        $tempOrder['Order']['applied_score'] = $spent_on_order;
+        $tempOrder['Order']['parent_order_id'] = $orderId;
+        if ($orderM->save($tempOrder['Order'])) {
+            $order_id = $orderM->getLastInsertID();
+            $cartM->updateAll(array('order_id' => $order_id), array('id' => $item['Cart']['id']));
+        }
+    }
+    $order['Order']['status'] = ORDER_STATUS_SPLIT;
+    $orderM->save($order['Order']);
 }

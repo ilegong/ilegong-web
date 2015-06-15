@@ -134,15 +134,11 @@ class OrdersController extends AppController {
 			$this->__message('您没有选择结算商品，请返回购物车检查', $error_back_url);
             return;
 		}
-
         $uid = $this->currentUser['id'];
-
         $allP = $this->Product->find('all', array('conditions' => array(
             'id' => $product_ids,
             'published' => PUBLISH_YES
         )));
-
-
         $params = array();
         foreach ($allP as $p) {
             $pid = $p['Product']['id'];
@@ -155,7 +151,6 @@ class OrdersController extends AppController {
                 }
             }
         }
-
         $business = array();
         foreach($allP as $p) {
             if(!is_array($business[$p['Product']['brand_id']])) {
@@ -201,12 +196,11 @@ class OrdersController extends AppController {
 		$saveFailed = false;
 
         $result = get_spec_by_pid_and_sid($params);
-
+        //split order by brand
         foreach ($business as $brand_id => $products) {
 			$total_price = 0.0;
             foreach($products as $pro){
                 $pid = $pro['id'];
-
                 $pps = $cart_by_pids[$pid];
                 if (!empty($pps)) {
                     foreach ($pps as $carts_of_p) {
