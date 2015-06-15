@@ -4,12 +4,13 @@ class PromotorsController extends AppController
 {
     var $name = 'Promotors';
 
-    public function summary($tuan_id){
+    public function summary($tuan_team_id){
 
-    }
-    public function api_summary($tuan_id)
-    {
-        $this->autoRender = false;
+        $this->loadModel('TuanTeam');
+        $tuan_team = $this->TuanTeam->findById($tuan_team_id);
+        if(empty($tuan_team)){
+            throw new Exception('tuan team does not exist');
+        }
 
         $this->loadModel('Order');
         $orders = $this->Order->find('all', array(
@@ -22,7 +23,7 @@ class PromotorsController extends AppController
                     'table' => 'tuan_buyings',
                     'alias' => 'TuanBuying',
                     'conditions' => array(
-                        'TuanBuying.tuan_id = ' . $tuan_id
+                        'TuanBuying.tuan_id = ' . $tuan_team_id
                     ),
                     'type' => 'LEFT',
                 )
@@ -49,6 +50,8 @@ class PromotorsController extends AppController
             $date_orders[$pay_date][] = $order;
         }
 
-        echo json_encode($date_orders);
+        $this->set('tuan_team', $tuan_team);
+        $this->set('date_orders', $date_orders);
+        $this->set('orders_count', count($distinct_orders));
     }
 }

@@ -516,5 +516,9 @@ ul li{ list-style:none;}
 .bar_buy{ background-color: #29ac0e; height: 10px; position: absolute; top: 0; left: 0;}
 
 .refer_banner img{ width:100%;}
+.order-summary{padding: 45px 15px 15px; }
+.order-summary .row{padding: 8px; }
+.order-summary .row.date-summary{padding-top: 15px; }
+.order-summary .row.order{border-bottom: 1px solid gray;}
 
 
