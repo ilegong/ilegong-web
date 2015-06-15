@@ -249,13 +249,13 @@ class OrdersController extends AppController {
                 }
                 $ship_fee += $ship_fees[$pid];
             }
-
-
 			$data = array();
-
-            if (!$tryId) {
+//            if (!$tryId) {
 //                $ship_fee = ShipPromotion::calculateShipFeeByOrder($ship_fee, $brand_id, $total_price);
-            } else {
+//            } else {
+//                $data['try_id'] = $tryId;
+//            }
+            if($tryId){
                 $data['try_id'] = $tryId;
             }
 
