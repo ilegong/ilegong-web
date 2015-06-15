@@ -35,10 +35,10 @@ class PromotorsController extends AppController
 
         $distinct_orders = array();
         foreach ($orders as &$order) {
-            if (!empty($distinct_orders[$order['Order']['id']])) {
+            if (!empty($distinct_orders[$order['Order']['creator']])) {
                 continue;
             }
-            $distinct_orders[$order['Order']['id']] = $order;
+            $distinct_orders[$order['Order']['creator']] = $order;
         }
 
         $date_orders = array();
