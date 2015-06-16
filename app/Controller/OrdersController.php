@@ -579,8 +579,9 @@ class OrdersController extends AppController {
 
         $this->set('expired_pids',$expired_pids);
 
+        $this->loadModel('TuanBuying');
+
         if($orderinfo['Order']['type']==ORDER_TYPE_TUAN){
-            $this->loadModel('TuanBuying');
             $tuan_buy = $this->TuanBuying->find('first',array(
                 'conditions' => array(
                     'id' => $orderinfo['Order']['member_id']
@@ -634,8 +635,20 @@ class OrdersController extends AppController {
 
             $this->loadModel('ConsignmentDate');
             $consignment_date_available = true;
+            $tuan_buy_available = true;
             foreach($Carts as $cart){
                 $consignment_id = $cart['Cart']['consignment_date'];
+                $tuan_buy_id = $cart['Cart']['tuan_buy_id'];
+                if($tuan_buy_id){
+                    $tuan_buying_item = $this->TuanBuying->find('first',array('conditions' => array('id' => $tuan_buy_id)));
+                    //tuan can't buy
+                    $tuan_expired = $tuan_buying_item['TuanBuying']['status'];
+                    if($tuan_expired!=0){
+                        $this->set('tuan_expired',true);
+                    }
+                    $tuan_buy_available = false;
+                    break;
+                }
                 if($consignment_id){
                     $consignment_date = $this->ConsignmentDate->find('first', array(
                         'conditions' => array('id'=>$consignment_id )
@@ -656,6 +669,7 @@ class OrdersController extends AppController {
 //                && $consignment_date_available);
             $this->set('show_pay', ($orderinfo['Order']['type'] == ORDER_TYPE_DEF || $orderinfo['Order']['type']==ORDER_TYPE_TUAN || $orderinfo['Order']['type']==ORDER_TYPE_TUAN_SEC)
                 && $afford
+                && $tuan_buy_available
                 && $has_expired_product_type == 0
                 && (empty($tuan_expired)||$tuan_expired ==0)
                 && $orderinfo['Order']['status'] == ORDER_STATUS_WAITING_PAY
