@@ -19,12 +19,12 @@
             <td>收件地址</td>
             <td>备注地址</td>
 
-            <td mark-print="no-print">订单状态</td>
             <td mark-print="no-print">店家</td>
             <td>商品</td>
             <td>规格</td>
             <td>份数</td>
             <td mark-print="no-print">发货时间</td>
+            <td mark-print="no-print">状态</td>
             <td mark-print="no-print">备注</td>
             <td mark-print="no-print">操作</td>
         </tr>
@@ -134,20 +134,6 @@
                         {{$order['Order']['remark_address']}}
                     </td>
 
-                    <td mark-print="no-print">
-                        {{if $order['Order']['status']==0}}
-                        待支付
-                        {{elseif $order['Order']['status']==1}}
-                        待发货
-                        {{elseif $order['Order']['status']==2}}已发货
-                        {{elseif $order['Order']['status']==3}}已收货
-                        {{elseif $order['Order']['status']==4}}已退款
-                        {{elseif $order['Order']['status']==9}}已完成
-                        {{elseif $order['Order']['status']==10}}已作废
-                        {{elseif $order['Order']['status']==11}}待支付
-                        {{elseif $order['Order']['status']==14}}退款中
-                        {{/if}}
-                    </td>
                     <td mark-print="no-print">{{$brand['Brand']['name']}}</td>
                     <td>
                         <a href="/manage/admin/tuan/query_by_product?product_id={{$cart['Cart']['product_id']}}">{{$cart['Cart']['name']}}</a>
@@ -162,6 +148,20 @@
                         {{$cart['Cart']['send_date']}}
                         <span class="badge hidden" data-id="order-send-out">已发发货提醒</span>
                         <span class="badge hidden" data-id="order-reach">已发到货提醒</span>
+                    </td>
+                    <td mark-print="no-print">
+                        {{if $cart['Cart']['status']==0}}
+                        待支付
+                        {{elseif $cart['Cart']['status']==1}}
+                        待发货
+                        {{elseif $cart['Cart']['status']==2}}已发货
+                        {{elseif $cart['Cart']['status']==3}}已收货
+                        {{elseif $cart['Cart']['status']==4}}已退款
+                        {{elseif $cart['Cart']['status']==9}}已完成
+                        {{elseif $cart['Cart']['status']==10}}已作废
+                        {{elseif $cart['Cart']['status']==11}}待支付
+                        {{elseif $cart['Cart']['status']==14}}退款中
+                        {{/if}}
                     </td>
                     <td mark-print="no-print">
                         {{$order['Order']['remark']}}
