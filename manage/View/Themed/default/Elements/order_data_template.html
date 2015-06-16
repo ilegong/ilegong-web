@@ -6,23 +6,24 @@
             <td mark-print="no-print"><input type="checkbox" value="0" id="check_all_tb"></td>
             <td>订单号</td>
             <td mark-print="no-print">用户ID</td>
-            <td mark-print="no-print">订单状态</td>
-            <td mark-print="no-print">店家</td>
-            <td>商品</td>
-            <td>规格</td>
-            <td>份数</td>
             <td>总价</td>
             <td mark-print="no-print">积分</td>
             <td mark-print="no-print">创建时间</td>
             <td mark-print="no-print">类型</td>
             <td mark-print="no-print">自提/快递</td>
-            <td mark-print="no-print">发货时间</td>
             <td class="consignee-name">收件人</td>
             <td>手机号</td>
             <td>收件地址</td>
             <td>备注地址</td>
             <td mark-print="no-print">支付</td>
             <td mark-print="no-print">交易号</td>
+
+            <td mark-print="no-print">订单状态</td>
+            <td mark-print="no-print">店家</td>
+            <td>商品</td>
+            <td>规格</td>
+            <td>份数</td>
+            <td mark-print="no-print">发货时间</td>
             <td mark-print="no-print">备注</td>
             <td mark-print="no-print">操作</td>
         </tr>
@@ -45,7 +46,7 @@
                   $brand = $brands[$cart['Cart']['product_id']];
                 ?>
 
-                <tr data-order-id="{{$order[Order][id]}}" data-order-creator="{{$order['Order']['creator']}}" data-total-price = "{{$order['Order']['total_all_price']}}" data-offline-store-id="{{$offline_store[OfflineStore][id]}}" class="order" data-mark-tag="{{$cart['Cart']['product_id']}}-{{$cart['Cart']['specId']}}" data-mark-tag-name="{{$cart['Cart']['name']}}" data-mark-tag-spec="{{$cart['Cart']['spec_name']}}" data-mark-tag-num="{{$cart['Cart']['num']}}" data-order-scores="{{$order['Order']['applied_score']}}">
+                <tr data-order-id="{{$order[Order][id]}}" data-cart-id="{{$cart[Cart][id]}}" data-order-creator="{{$order['Order']['creator']}}" data-total-price = "{{$order['Order']['total_all_price']}}" data-offline-store-id="{{$offline_store[OfflineStore][id]}}" class="order" data-mark-tag="{{$cart['Cart']['product_id']}}-{{$cart['Cart']['specId']}}" data-mark-tag-name="{{$cart['Cart']['name']}}" data-mark-tag-spec="{{$cart['Cart']['spec_name']}}" data-mark-tag-num="{{$cart['Cart']['num']}}" data-order-scores="{{$order['Order']['applied_score']}}">
                     <td mark-print="no-print">
                         {{if ($order['Order']['type'] == 5 || $order['Order']['type'] == 6) && ($order['Order']['status']== 1|| $order['Order']['status'] == 2)}}
                         <input type="checkbox" value="{{$order['Order']['id']}}" name="offline_order_ids" {{$offline_store['OfflineStore']['type'] == 1 ? "" : "disabled='disabled'"}}>
@@ -54,7 +55,91 @@
                         {{/if}}
                     </td>
                     <td>{{$order['Order']['id']}}</td>
-                    <td mark-print="no-print"><a href="/manage/admin/tuan/query_by_user?con_creator={{$order['Order']['creator']}}">{{$order['Order']['creator']}}</a></td>
+                    {{if $index == 0}}
+                        <td mark-print="no-print"><a href="/manage/admin/tuan/query_by_user?con_creator={{$order['Order']['creator']}}">{{$order['Order']['creator']}}</a></td>
+                        <td data-value="{{$order['Order']['total_all_price']}}">{{$order['Order']['total_all_price']}}</td>
+                        <td mark-print="no-print">{{$order['Order']['applied_score'] / 100}}</td>
+                        <td mark-print="no-print">{{date_format(date_create($order['Order']['created']), 'n月d H:i')}}</td>
+                        <td mark-print="no-print" {{if empty($order['Order']['ship_mark']) || ($order['Order']['ship_mark']=='ziti' && empty($offline_store))}}class="danger"{{/if}}>
+                            {{if $order['Order']['type'] == 5}}
+                            团购
+                            {{if $tuan_team['type'] == 1}}
+                            (大)
+                            {{else}}
+                            (<a href="/manage/admin/tuan_buyings/index?team_id={{$tuan_team['id']}}">{{$tuan_team['tuan_name']}}</a>)
+                            {{/if}}
+                            {{elseif $order['Order']['type'] == 6}}
+                            秒杀
+                            {{elseif $order['Order']['type'] == 1}}
+                            普通
+                            {{/if}}(
+                            {{if $order['Order']['ship_mark']=='ziti'}}
+                            自提
+                            {{elseif $order['Order']['ship_mark']=='sfby'}}
+                            顺丰包邮
+                            {{elseif $order['Order']['ship_mark']=='sfdf'}}
+                            顺丰到付
+                            {{elseif $order['Order']['ship_mark']=='kuaidi'}}
+                            快递
+                            {{else}}
+                                <span class="text-danger">无标注</span>
+                            {{/if}})
+                        </td>
+                        <td mark-print="no-print" {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store)) || ($order['Order']['ship_mark'] != 'ziti' && empty($order['Order']['consignee_address']))}}class="danger"{{/if}}>
+                        {{$offline_store['OfflineStore']['alias']}}<br/>
+                        {{if $order['Order']['ship_type']}}{{$ship_type[$order['Order']['ship_type']]}}({{$order['Order']['ship_code']}}){{/if}}
+                        </td>
+                        <td>{{$order['Order']['consignee_name']}}</td>
+                        <td>{{$order['Order']['consignee_mobilephone']}}</td>
+                        <td {{if $order['Order']['ship_mark'] == 'kuaidi' && empty($order['Order']['consignee_address'])}}class="danger"{{/if}}>
+                            {{if $order['Order']['consignee_area']}}{{$order['Order']['consignee_area']}},{{/if}}
+                            {{$order['Order']['consignee_address']}}
+                        </td>
+                        <td {{if !empty($order['Order']['remark_address']) && (empty($offline_store) || ( !empty($offline_store) && !$offline_store['OfflineStore']['can_remark_address']))}} class="danger"{{/if}}>
+                            {{$order['Order']['remark_address']}}
+                        </td>
+                        <td mark-print="no-print" {{if $has_paid && $order['Order']['pay_time']==null}}class="danger"{{/if}} data-pay-time="{{$order['Order']['pay_time']}}">
+                            {{if $order['Pay']['trade_type']=='JSAPI'}}
+                            微信支付
+                            {{elseif $order['Pay']['trade_type']=='ZFB'}}
+                            支付宝
+                            {{elseif $order['Pay']['trade_type']=='OFFLINE'}}
+                            线下交易
+                            {{else}}
+                            <span class="text-danger">未知</span>
+                            {{/if}}
+                            {{if !empty($order['Order']['pay_time'])}}{{date_format(date_create($order['Order']['pay_time']), 'n月d H:i')}}{{/if}}
+                        </td>
+                        <td mark-print="no-print" {{if $has_paid && $order['Pay']['out_trade_no']==null}}class="danger"{{/if}}>
+                            {{$order['Pay']['out_trade_no']}}
+                        </td>
+                    {{else}}
+                        <td>同上</td>
+                        <td>同上</td>
+                        <td>同上</td>
+                        <td>同上</td>
+                        <td mark-print="no-print" {{if empty($order['Order']['ship_mark']) || ($order['Order']['ship_mark']=='ziti' && empty($offline_store))}}class="danger"{{/if}}>
+                            同上
+                        </td>
+                        <td mark-print="no-print" {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store)) || ($order['Order']['ship_mark'] != 'ziti' && empty($order['Order']['consignee_address']))}}class="danger"{{/if}}>
+                            同上
+                        </td>
+                        <td>同上</td>
+                        <td>同上</td>
+                        <td {{if $order['Order']['ship_mark'] == 'kuaidi' && empty($order['Order']['consignee_address'])}}class="danger"{{/if}}>
+                            同上
+                        </td>
+                        <td {{if !empty($order['Order']['remark_address']) && (empty($offline_store) || ( !empty($offline_store) && !$offline_store['OfflineStore']['can_remark_address']))}} class="danger"{{/if}}>
+                            同上
+                        </td>
+                        <td mark-print="no-print" {{if $has_paid && $order['Order']['pay_time']==null}}class="danger"{{/if}} data-pay-time="{{$order['Order']['pay_time']}}">
+                            同上
+                        </td>
+                        <td mark-print="no-print" {{if $has_paid && $order['Pay']['out_trade_no']==null}}class="danger"{{/if}}>
+                            同上
+                        </td>
+                    {{/if}}
+
                     <td mark-print="no-print">
                         {{if $order['Order']['status']==0}}
                         待支付
@@ -79,85 +164,26 @@
                     <td>
                         {{$cart['Cart']['num']}}
                     </td>
-                    <td data-value="{{$order['Order']['total_all_price']}}">{{if $index == 0}}{{$order['Order']['total_all_price']}}{{else}}'同上'{{/if}}</td>
-                    <td mark-print="no-print">{{$order['Order']['applied_score'] / 100}}</td>
-                    <td mark-print="no-print">{{date_format(date_create($order['Order']['created']), 'n月d H:i')}}</td>
-
-
-                    <td mark-print="no-print" {{if empty($order['Order']['ship_mark']) || ($order['Order']['ship_mark']=='ziti' && empty($offline_store))}}class="danger"{{/if}}>
-                    {{if $order['Order']['type'] == 5}}
-                    团购
-                        {{if $tuan_team['type'] == 1}}
-                        (大)
-                        {{else}}
-                        (<a href="/manage/admin/tuan_buyings/index?team_id={{$tuan_team['id']}}">{{$tuan_team['tuan_name']}}</a>)
-                        {{/if}}
-                    {{elseif $order['Order']['type'] == 6}}
-                    秒杀
-                    {{elseif $order['Order']['type'] == 1}}
-                    普通
-                    {{/if}}(
-                    {{if $order['Order']['ship_mark']=='ziti'}}
-                        自提
-                    {{elseif $order['Order']['ship_mark']=='sfby'}}
-                        顺丰包邮
-                    {{elseif $order['Order']['ship_mark']=='sfdf'}}
-                        顺丰到付
-                    {{elseif $order['Order']['ship_mark']=='kuaidi'}}
-                        快递
-                    {{else}}
-                        <span class="text-danger">无标注</span>
-                    {{/if}})
-                    </td>
-                    <td mark-print="no-print" {{if ($order['Order']['ship_mark']=='ziti' && empty($offline_store)) || ($order['Order']['ship_mark'] != 'ziti' && empty($order['Order']['consignee_address']))}}class="danger"{{/if}}>
-                        {{$offline_store['OfflineStore']['alias']}}<br/>
-                        {{if $order['Order']['ship_type']}}{{$ship_type[$order['Order']['ship_type']]}}({{$order['Order']['ship_code']}}){{/if}}
-                    </td>
-
-
                     <td mark-print="no-print" {{if $order['Order']['type'] != 1 && empty($cart['Cart']['send_date'])}}class="danger"{{/if}}>
-                    {{$cart['Cart']['send_date']}}
-                    <span class="badge hidden" data-id="order-send-out">已发发货提醒</span>
-                    <span class="badge hidden" data-id="order-reach">已发到货提醒</span>
-                    </td>
-                    <td>{{$order['Order']['consignee_name']}}</td>
-                    <td>{{$order['Order']['consignee_mobilephone']}}</td>
-                    <td {{if $order['Order']['ship_mark'] == 'kuaidi' && empty($order['Order']['consignee_address'])}}class="danger"{{/if}}>
-                        {{if $order['Order']['consignee_area']}}{{$order['Order']['consignee_area']}},{{/if}}
-                        {{$order['Order']['consignee_address']}}
-                    </td>
-                    <td {{if !empty($order['Order']['remark_address']) && (empty($offline_store) || ( !empty($offline_store) && !$offline_store['OfflineStore']['can_remark_address']))}} class="danger"{{/if}}>
-                        {{$order['Order']['remark_address']}}
-                    </td>
-                    <td mark-print="no-print" {{if $has_paid && $order['Order']['pay_time']==null}}class="danger"{{/if}} data-pay-time="{{$order['Order']['pay_time']}}">
-                        {{if $order['Pay']['trade_type']=='JSAPI'}}
-                        微信支付
-                        {{elseif $order['Pay']['trade_type']=='ZFB'}}
-                        支付宝
-                        {{elseif $order['Pay']['trade_type']=='OFFLINE'}}
-                        线下交易
-                        {{else}}
-                        <span class="text-danger">未知</span>
-                        {{/if}}
-                        {{if !empty($order['Order']['pay_time'])}}{{date_format(date_create($order['Order']['pay_time']), 'n月d H:i')}}{{/if}}
-                    </td>
-                    <td mark-print="no-print" {{if $has_paid && $order['Pay']['out_trade_no']==null}}class="danger"{{/if}}>
-                        {{$order['Pay']['out_trade_no']}}
+                        {{$cart['Cart']['send_date']}}
+                        <span class="badge hidden" data-id="order-send-out">已发发货提醒</span>
+                        <span class="badge hidden" data-id="order-reach">已发到货提醒</span>
                     </td>
                     <td mark-print="no-print">
-                        {{$order['Order']['remark']}}
+                        {{if $index == 0}}{{$order['Order']['remark']}}{{else}}同上{{/if}}
                     </td>
                     <td mark-print="no-print" data-offline-store-type="{{$offline_store['OfflineStore']['type']}}">
-                        {{if !empty($offline_store) && $offline_store['OfflineStore']['type'] == 0 && $order['Order']['status']== 1 && ($order['Order']['type']== 5||$order['Order']['type']== 6)}}
-                        <button type="button" class="ship-to-haolinju-store btn btn-primary">发提货码</button>
+                        {{if $index == 0}}
+                            {{if empty($offline_store) && ($order['Order']['status']== 1||$order['Order']['status']== 2) && $order['Order']['type'] != 1}}
+                            <button type="button" class="input-ship-code btn btn-primary">回填快递单号</button>
+                            {{/if}}
+                            {{if in_array($order['Order']['status'],array(1,2,3,9,16,4,14))}}
+                            <button type="button" class="btn btn-default refund-button"  data-order_id="{{$order['Order']['id']}}" data-order_creator="{{$order['Order']['creator']}}"  data-total_price = "{{$order['Order']['total_all_price']}}">退款</button>
+                            {{/if}}
+                            <a href="/manage/admin/orders/edit2/{{$order['Order']['id']}}.html" class="btn btn-default modify-button">修改订单</a>
+                        {{else}}
+                            同上
                         {{/if}}
-                        {{if empty($offline_store) && ($order['Order']['status']== 1||$order['Order']['status']== 2) && $order['Order']['type'] != 1}}
-                        <button type="button" class="input-ship-code btn btn-primary">回填快递单号</button>
-                        {{/if}}
-                        {{if in_array($order['Order']['status'],array(1,2,3,9,16,4,14))}}
-                        <button type="button" class="btn btn-default refund-button"  data-order_id="{{$order['Order']['id']}}" data-order_creator="{{$order['Order']['creator']}}"  data-total_price = "{{$order['Order']['total_all_price']}}">退款</button>
-                        {{/if}}
-                        <a href="/manage/admin/orders/edit2/{{$order['Order']['id']}}.html" class="btn btn-default modify-button">修改订单</a>
                     </td>
                 </tr>
             {{/loop}}
