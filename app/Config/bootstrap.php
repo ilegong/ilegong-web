@@ -465,6 +465,7 @@ class ProductCartItem extends Object
         $this->img = $cartItem['coverimg'];
         $this->specId = $cartItem['specId'];
         $this->consignment_date = $cartItem['consignment_date'];
+        $this->send_date = $cartItem['send_date'];
     }
 
     public function total_price()
