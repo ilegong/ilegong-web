@@ -240,7 +240,7 @@ class BuyingComponent extends Component {
     public function cartsByIds($limitCartIds = array(), $uid, $session_id = null) {
         $cartM = ClassRegistry::init('Cart');
         $cond = array(
-            'status' => 0,
+            'status' => CART_ITEM_STATUS_NEW,
             'order_id' => null,
             'OR' => create_user_cond($uid, $session_id)
         );
