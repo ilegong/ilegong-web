@@ -51,10 +51,29 @@
             spec.html(string.toArray().join());
             spec.prepend('<label>已选</label> ');
         }
+        function prevent_event_trigger(){
+            var send_date = $('.spec_item[item-label="SD"]');
+            var spec_item = $('span.spec_item[item-label !="SD"]').parents('ul');
+            var way_label = $("[way-label]");
+            $.each(spec_item,function(index){
+               var spec_item_label = $(this).children('li').children('span').eq(1).children('.spec_item');
+               if(spec_item_label.length == 1){
+                   spec_item_label.off('click');
+               }
+            });
+            if(way_label.length == 1){
+                way_label.off('click');
+            }
+            if (send_date.length ==1){
+                send_date.off('click');
+            }
+        }
         $('li.good-spec').each(function(index,item){
             $('span.spec_item',$(item)).first().trigger('click');
         });
         set_default_spec();
+        prevent_event_trigger();
+
         set_ship_least_num();
 	});
 </script>
