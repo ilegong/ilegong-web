@@ -144,7 +144,7 @@ class Cart extends AppModel {
         $cond = $this->create_user_cond($uid, $sessionId);
 
         return $this->deleteAll(array(
-            'status' => 0,
+            'status' => CART_ITEM_STATUS_NEW,
             'id' => $id,
             'order_id' => NULL,
             'OR' => $cond
@@ -154,10 +154,10 @@ class Cart extends AppModel {
     function edit_num($id, $num, $uid, $sessionId = null) {
         $user_cond = $this->create_user_cond($uid, $sessionId);
         if ($num <= 0) {
-            $op_flag = $this->deleteAll(array('id' => $id, 'status' => 0, 'order_id' => NULL, 'OR' => $user_cond), true, true);
+            $op_flag = $this->deleteAll(array('id' => $id, 'status' => CART_ITEM_STATUS_NEW, 'order_id' => NULL, 'OR' => $user_cond), true, true);
         }
         else{
-            $op_flag = $this->updateAll(array('num' => $num), array('id' => $id, 'status' => 0, 'order_id' => NULL, 'OR' => $user_cond));
+            $op_flag = $this->updateAll(array('num' => $num), array('id' => $id, 'status' => CART_ITEM_STATUS_NEW, 'order_id' => NULL, 'OR' => $user_cond));
         }
         return $op_flag;
     }

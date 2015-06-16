@@ -121,11 +121,37 @@ class ShortmessagesController extends AppController {
         $this->redirect('/users/my_offers');
     }
 
+
+    public function update_618_coupon_pids(){
+        $this->autoRender=false;
+        $this->loadModel('Coupon');
+        $this->loadModel('ProductSpecial');
+        $specialProduct = $this->ProductSpecial->find('all',array('conditions' => array('special_id' => 7,'published' => PUBLISH_YES)));
+        $specialPids = Hash::extract($specialProduct,'{n}.ProductSpecial.product_id');
+        $specialPidsStr = json_encode($specialPids);
+        $specialPidsStr = str_replace('"','',$specialPidsStr);
+        $this->Coupon->updateAll(array('product_list' => "'".$specialPidsStr."'"),array('id' => array(24245,24246)));
+        echo json_encode(array('success' => true));
+    }
+
+    //24245 50-20
+    //24246 30-10
     public function get_618_coupons($couponid){
         $this->check_login();
+        if($couponid!=24245&&$couponid!=24246){
+            //error
+            $this->redirect('/');
+        }
+        if($couponid==24245){
+            $descs = "满50元减20";
+        }
+        if($couponid==24246){
+            $descs = " 满30元减10元";
+        }
         $weixinC = $this->Components->load('Weixin');
         $uid = $this->currentUser['id'];
-        add_coupon_for_618_one($uid, $weixinC, $couponid);
+        add_coupon_for_618($uid, $weixinC, $couponid,$descs);
+        $this->redirect('/users/my_coupons');
     }
 }
 ?>
