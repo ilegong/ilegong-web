@@ -132,7 +132,7 @@
 
 <div class="order_detail_operate">
     <ul class="clearfix">
-        <li class="fl">实付款:<span>￥{{$this->Number->precision($order['Order']['total_price'], 2)}}</span></li>
+        <li class="fl">实付款:<span>￥{{$this->Number->precision($order['Order']['total_all_price'], 2)}}</span></li>
         {{if $order['Order']['status']== ORDER_STATUS_PAID}}
         <li class="fr">
             {{if $toShare}}
