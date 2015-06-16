@@ -1293,26 +1293,28 @@ $(document).ready(function () {
         }
 
 	});
-	$("#btn_add_cart").click(function(e){
+    $("#btn_add_cart").click(function (e) {
         var button_status = $('#button-status');
-        if (!$('.sure_btn').attr('value')){
+        if (!$('.sure_btn').attr('value')) {
+            $('.tuan_buy_ship_list').hide();
             $('.xq_standard_layer,.tipslayer_bg').show();
-            button_status.attr('data-status','2');
+            button_status.attr('data-status', '2');
             return;
         }
-        button_status.attr('data-status','1');
-		var $this = $(this);
-		if ($this.hasClass('cart_btn_soldout')) {
+        $('.tuan_buy_ship_list').hide();
+        $('.sure_btn').attr('value','');
+        button_status.attr('data-status', '1');
+        var $this = $(this);
+        if ($this.hasClass('cart_btn_soldout')) {
             var $reason = $this.attr("reason");
-			utils.alert($reason == 'limit_ship' ? '不支持加入购物车请选择立即购买' : '已售完');
-			e.preventDefault();
-			return false;
-		}
-		cart_edit_amount.save($this.attr('item-id'));
-
+            utils.alert($reason == 'limit_ship' ? '不支持加入购物车请选择立即购买' : '已售完');
+            e.preventDefault();
+            return false;
+        }
+        cart_edit_amount.save($this.attr('item-id'));
         e.preventDefault();
-		return false;
-	});
+        return false;
+    });
 	$('#pamount_reduce').click(function(e){
 		cart_edit_amount.reduce();
 		return false;

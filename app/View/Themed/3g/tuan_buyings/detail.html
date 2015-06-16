@@ -117,27 +117,31 @@
                         </div>
                         {{/if}}
                         {{/if}}
-                        <div class="p_bg">
                         {{if $tuan_buy_type == 2}}
-                        {{if !empty($consignment_dates)}}
+                            {{if !empty($consignment_dates)}}
+                                <div class="p_bg">
+                                    <ul class="standard clearfix">
+                                        <li>
+                                            <span class="fl title mr12">送货:</span>
+                                            <span class="border" style="display:block;overflow: hidden;">
+                                                {{loop $consignment_dates $index $date}}
+                                                <span class="mr12 border spec_item {{if $index == 0}}spec_item_selected cur{{/if}}"
+                                                      item-label="SD" data-val="{{$date['id']}}"
+                                                      data-send-date="{{$date['send_date']}}">
+                                                   {{$date['date']}}({{day_of_week($date['send_date'])}})
+                                                    <div class="focus"></div>
+                                                </span>
+                                                {{/loop}}
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            {{/if}}
+                        {{/if}}
+                        <div class="p_bg tuan_buy_ship_list">
                             <ul class="standard clearfix">
                                 <li>
-                                    <span class="fl title mr12">送货:</span>
-                                    <span class="border" style="display:block;overflow: hidden;">
-                                        {{loop $consignment_dates $index $date}}
-                                        <span class="mr12 border spec_item {{if $index == 0}}spec_item_selected cur{{/if}}" item-label="SD" data-val="{{$date['id']}}" data-send-date="{{$date['send_date']}}">
-                                           {{$date['date']}}({{day_of_week($date['send_date'])}})
-                                            <div class="focus"></div>
-                                        </span>
-                                        {{/loop}}
-                                    </span>
-                                </li>
-                            </ul>
-                        {{/if}}
-                        {{/if}}
-                           <ul class="standard clearfix">
-                               <li>
-                                   <span class="fl title mr12">物流:</span>
+                                    <span class="fl title mr12">物流:</span>
                                    <span class="border" style="display:block;overflow: hidden;">
                                       {{if $big_tuan}}
                                         {{if $ship_settings}}
@@ -170,8 +174,8 @@
                                         </span>
                                       {{/if}}
                                    </span>
-                               </li>
-                           </ul>
+                                </li>
+                            </ul>
                         </div>
                         <div class="p_bg">
                             <ul class="numbers clearfix">
@@ -206,27 +210,41 @@
         </div>
     </a>
     <ul class="clearfix fr">
+        {{if $is_limit}}
         <li class="fr" style="width:100%;">
-            {{if $is_limit}}
             <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已截止</a>
-            {{else}}
-                {{if $tuan_buy_status == 2 || $tuan_buy_status == 21}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已取消</a>
-                {{elseif $tuan_buy_status == 1 || $tuan_buy_status == 11}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已完成</a>
-                {{elseif $exceed_time}}
-                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已截止</a>
-                {{elseif $tuan_buy_status == 0}}
-                    <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg" data-send-date="{{$consign_time}}">立即购买</a>
-                {{/if}}
-            {{/if}}
         </li>
+        {{else}}
+            {{if $tuan_buy_status == 2 || $tuan_buy_status == 21}}
+                <li class="fr" style="width:100%;">
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已取消</a>
+                </li>
+            {{elseif $tuan_buy_status == 1 || $tuan_buy_status == 11}}
+                <li class="fr" style="width:100%;">
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已完成</a>
+                </li>
+            {{elseif $exceed_time}}
+                <li class="fr" style="width:100%;">
+                    <a href="javascript:void(0)" class="btn_b cart_btn_soldout">该团已截止</a>
+                </li>
+            {{elseif $tuan_buy_status == 0}}
+                <li class="fl" style="width:50%;">
+                    <a id="btn_add_cart"  item-id="{{$pid}}" href="javascript:;" class="btn_b shopping_bg" data-send-date="{{$consign_time}}">加入购物车</a>
+                </li>
+                <li class="fr" style="width:50%;">
+                    <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg" data-send-date="{{$consign_time}}">立即购买</a>
+                </li>
+            {{/if}}
+        {{/if}}
     </ul>
 </div>
-
-
+{{if $big_tuan}}
+    <input type="hidden" id="mark_is_big_tuan" value="1"/>
+{{/if}}
+{{if $tagId}}
+    <input type="hidden" id="history_tag_id" value="{{$tagId}}">
+{{/if}}
 {{$this->Html->script(array('swiper/idangerous.swiper-2.0.min.js'));}}
-
 <script>
     $(document).ready(function(){
         $('#pamount_not_r').on('click',function(e){
@@ -240,9 +258,11 @@
     });
 
     function goBack(){
-        {{if $tagId}}
-            window.location.href = '/?tagId={{$tagId}}';
-        {{else}}
+        var $tagId= $('#history_tag_id');
+        if($tagId.length>0){
+            var tagId= $tagId.val();
+            window.location.href = '/?tagId='+tagId;
+        }else{
             var refer = document.referrer;
             var href_1 = "/tuan_buyings/goods_tuans/";
             var href_2 = "/tuan_teams/info/";
@@ -253,7 +273,7 @@
             }else{
                 window.history.back();
             }
-        {{/if}}
+        }
     }
 </script>
 
@@ -283,7 +303,7 @@
             return spec_group_data;
         }
 
-        $('#tuan_buy').click(function(){
+        function tuan_buy_add_cart(quickBuy){
             var href = window.location.href;
             if(!sso.check_userlogin({'referer':href})){
                 return false;
@@ -343,7 +363,8 @@
                 var product_id = $('#tuan_buy').attr('item-id');
                 var product_num = $('#input_pamount').val();
                 var way_type = 'normal';
-                {{if $big_tuan}}
+                var $markIsBigTuan = $('#mark_is_big_tuan');
+                if($markIsBigTuan.length>0&&quickBuy){
                     var select_way = $('.cur.tuan_way_selected');
                     if(select_way.length>0){
                         way_type = $('.cur.tuan_way_selected').attr('way-label');
@@ -352,7 +373,7 @@
                         $('.xq_standard_layer,.tipslayer_bg').show();
                         return false;
                     }
-                {{/if}}
+                }
                 var way_id =  $('.cur.tuan_way_selected').attr('way-id')||0;
                 var postdata = {"product_id":product_id,"product_num":product_num, "spec_id":specId, "send_date": send_date,"consignment_date_id":consignment_date_id,"tuan_buy_id":'{{$tuan_buy_id}}',"way_id":way_id,"way_type":way_type};
                 utils.progress_notify('正在更新购物车');
@@ -363,23 +384,30 @@
                     success:function(data){
                         utils.close_notify();
                         if(data.success) {
-                            var way_id = data['way_id'];
-                            if(data.direct == 'big_tuan_list'){
-                                window.location.href = '/tuan_buyings/big_tuan_balance/{{$tuan_buy_id}}/' + data.cart_id + '/'+way_id;
+                            if(quickBuy){
+                                var way_id = data['way_id'];
+                                if(data.direct == 'big_tuan_list'){
+                                    window.location.href = '/tuan_buyings/big_tuan_balance/{{$tuan_buy_id}}/' + data.cart_id + '/'+way_id;
+                                }else{
+                                    window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}/' + data.cart_id + '/'+way_id;
+                                }
                             }else{
-                                window.location.href = '/tuan_buyings/balance/{{$tuan_buy_id}}/' + data.cart_id + '/'+way_id;
+
                             }
                         } else {
                             utils.alert(data.error,function(){
-                                //window.location.reload();
                                 $('.xq_standard_layer,.tipslayer_bg').show();
-                                //return false;
                             });
                         }
                     },
                     dataType:'json'
                 });
             }
+        }
+
+        $('#tuan_buy').click(function(){
+            $('.tuan_buy_ship_list').show();
+            tuan_buy_add_cart(true);
         });
         $("[way-label]").click(function(){
             $('[way-label]:not(.tuan_way_selected)').children('div').removeClass('hidden');

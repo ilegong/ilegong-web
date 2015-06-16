@@ -129,6 +129,9 @@ class Cart extends AppModel {
         $data['Cart']['specId'] = $specId;
         $data['Cart']['type'] = $type;
         $data['Cart']['try_id'] = $try_id;
+        if(!empty($tuan_param)){
+            $data['Cart']['tuan_buy_id'] = $tuan_param['tuan_buy_id'];
+        }
         if (!empty($special_id)) {
             $data['Cart']['applied_special'] = $special_id;
         }
