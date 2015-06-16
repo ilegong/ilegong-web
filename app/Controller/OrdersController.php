@@ -426,7 +426,6 @@ class OrdersController extends AppController {
                     $flash_msg = __('错误：使用您选定的优惠地址需要购买'.$specialAddress['least_num'].'件');
                     unset($shipPromotionId);
                 } else {
-
                     $consignee = array();
                     $consignee['name'] = trim($_REQUEST['consignee_name']);
                     $consignee['mobilephone'] = trim($_REQUEST['consignee_mobilephone']);
