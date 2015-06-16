@@ -101,8 +101,8 @@
                                 <s>
                                   <span>{{if $item->specId}}规格：{{$spec_group[$item->specId]}}{{/if}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
                                   <span>
-                                    {{if $item->consignment_date}}
-                                        {{empty($consign_dates[$item->consignment_date])?'': date('m月d日', strtotime($consign_dates[$item->consignment_date])).'到货';}}
+                                    {{if $item->send_date}}
+                                        {{empty($item->send_date)?'': date('m月d日', strtotime($consign_dates[$item->consignment_date])).'到货';}}
                                     {{/if}}
                                   </span>
                                 </s>
