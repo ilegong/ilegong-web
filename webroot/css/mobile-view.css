@@ -203,8 +203,10 @@ ul li{ list-style:none;}
 .all_line .more { font-size: 1em; font-weight: bold; text-align: center; line-height: 44px;}
 .all_line .more a { color:#29ac0e; text-decoration: none; }
 
-.standard_bg{ display: block; color: #999999; background-color: #ffffff; border-bottom: 1px #eeeeee solid; border-top: 1px #eeeeee solid; margin-top: 10px; padding:6px 0 6px 10px;}
-.standard_bg span{ display: block; line-height: 30px;}
+/*.standard_bg{ display: block; color: #999999; background-color: #ffffff; border-bottom: 1px #eeeeee solid; border-top: 1px #eeeeee solid; margin-top: 10px; padding:6px 0 6px 10px;}*/
+/*.standard_bg span{ display: block; line-height: 30px;}*/
+.standard_bg{ display: block; text-decoration: none; color: #999999; background-color: #ffffff; border-bottom: 1px #eeeeee solid; border-top: 1px #eeeeee solid; margin-top: 10px; padding:8px 0 8px 10px;}
+.standard_bg span{ display: block; line-height: 20px;}
 /*.standard_bg:visited{color: #333333; background-color: #ffffff;text-decoration: none;}*/
 .standard_bg:hover{color: #333333; background-color: #ffffff;text-decoration: none;}
 .standard_bg span strong {

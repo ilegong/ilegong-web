@@ -12,17 +12,22 @@
         window.location.href="/products/product_detail/{{$Product['Product']['slug']}}.html?history={{$history}}&from={{$from}}&data_id={{$data_id}}";
     }
     function set_default_spec(){
-        var spec = $('.spec_selected');
+        var spec = $('.spec-item');
+        var sendDate = $('.send-date');
         var pamount = $('#input_pamount').val();
-        var string = $('.spec_item_selected.cur').map(function(){
-            if ($(this).attr('item-label') == 'SD'){
-                return ' <strong>'+ $.trim($(this).text())+'送货</strong>'+'';
-            }else
-                return ' <strong>'+ $.trim($(this).text())+'</strong>'+'';
+        var specString = $('.spec_item_selected.cur[item-label!="SD"]').map(function(){
+            return '<strong>'+ $.trim($(this).text())+'</strong>'+'';
         });
-        string.push(' <strong>'+ pamount+'份</strong>');
-        spec.html(string.toArray().join());
-        spec.prepend('<label>已选</label> ');
+        var sendDateString = $('.spec_item_selected.cur[item-label="SD"]').map(function(){
+            return '<strong>'+ $.trim($(this).text())+'送货</strong>'+'';
+        });
+        specString.push(' <strong>'+ pamount+'份</strong>');
+        spec.html(specString.toArray().join());
+        if(sendDateString.length){
+            sendDate.html(sendDateString.toArray().join());
+        }else{
+            sendDate.remove();
+        }
     }
     $(document).ready(function(){
         $('#view_all_comments').on('click',function(){

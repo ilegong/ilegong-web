@@ -43,21 +43,17 @@
                         </ul>
                     </div>
                     {{/if}}
-
-                    {{if $product_consignment_date}}
-                        <a href="#X" class="standard_bg clearfix">
-                            <span class="fl">
-                                <label>预计发货日</label>
-                                <strong>{{$product_consignment_date}}</strong>
-                            </span>
-                            <!--<span class="fr p_more"></span>-->
-                        </a>
-                    {{/if}}
-
                     <a href="#X" class="standard_bg clearfix">
-                        <span class="fl spec_selected">
+                        <span class="fl"><label>已选</label>&nbsp;&nbsp;&nbsp;</span>
+                        <span class="fl">
+                            <div class="spec-item"></div>
+                            {{if $product_consignment_date}}
+                            <div class="send-consignee-date"><strong>{{$product_consignment_date}}发货</strong></div>
+                            {{else}}
+                             <div class="send-date"></div>
+                            {{/if}}
                         </span>
-                        <span class="fr p_more"></span>
+                        <span class="fr p_more" style="margin-top:10px;"></span>
                     </a>
                     {{if !$big_tuan}}
                     <div class="detail_tuan_bg">
