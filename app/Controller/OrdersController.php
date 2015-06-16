@@ -239,17 +239,17 @@ class OrdersController extends AppController {
                             $pidShipSettings[] = $val;
                         }
                     }
-                }
-                $num = $nums[$pid];
+                    $num = $nums[$pid];
 
-                if ($tryId) {
-                    $ship_fees[$pid] = 0;
-                } else {
-                    $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
-                    $singleShipFee = empty($pp) ? $pro['ship_fee'] : $pp['ship_price'];
-                    $ship_fees[$pid] = ShipPromotion::calculateShipFee($total_price, $singleShipFee, $num, $pidShipSettings, $shipFeeContext);
+                    if ($tryId) {
+                        $ship_fees[$pid] = 0;
+                    } else {
+                        $pp = $shipPromotionId ? $this->ShipPromotion->find_ship_promotion($pid, $shipPromotionId) : array();
+                        $singleShipFee = empty($pp) ? $pro['ship_fee'] : $pp['ship_price'];
+                        $ship_fees[$pid] = ShipPromotion::calculateShipFee($total_price, $singleShipFee, $num, $pidShipSettings, $shipFeeContext);
+                    }
+                    $ship_fee += $ship_fees[$pid];
                 }
-                $ship_fee += $ship_fees[$pid];
             }
 			$data = array();
 //            if (!$tryId) {
