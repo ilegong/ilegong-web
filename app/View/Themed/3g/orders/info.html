@@ -66,7 +66,7 @@
             <strong>{{$ziti_consignee_info['name']}} {{$ziti_consignee_info['mobilephone']}}</strong><br />
             <strong>自提点信息：</strong><br />{{$ziti_info['ziti']['name']}}<br />联系人：{{$ziti_info['ziti']['owner_name']}}{{$ziti_info['ziti']['owner_phone']}}
         </a>
-        <a href="javascript:$('.ziti_choose').hide();$('.kuaidi_choose').show()" class="address_addbtn">选择快递配送到家</a>
+        <a class="address_addbtn">选择快递配送到家</a>
     </div>
     {{/if}}
     <!--快递配送-->
@@ -74,7 +74,7 @@
         <span style="display:block;" class="fl">快递&nbsp;&nbsp;<a class="moreicon new_address thickbox" href="/orders/edit_consignee?modal=true"></a></span>
         <a href="/orders/edit_consignee?modal=true" class="new_address thickbox" style="overflow:hidden; display:block; margin-right:1em; color:#666666;"><strong>{{$this->Session->read('OrderConsignee.name')}} {{$this->Session->read('OrderConsignee.mobilephone')}}
         </strong><br />{{$this->Session->read('OrderConsignee.area')}}{{$this->Session->read('OrderConsignee.address')}}</a>
-        {{if $ziti_support}}<a href="javascript:$('.ziti_choose').show();$('.kuaidi_choose').hide();" class="address_addbtn">选择自提省邮费</a>{{/if}}
+        {{if $ziti_support}}<a class="address_addbtn">选择自提省邮费</a>{{/if}}
     </div>
 {{/if}}
 {{if $flash_msg}}<div class="alert alert-danger" role="alert">{{$flash_msg}}</div>{{/if}}
@@ -152,7 +152,7 @@
         {{if $shipFee>0}}
         <a href="#X" class="favor" style="position:relative;">
             <span style="display:block;" class="fl">运费&nbsp;&nbsp;<span class="moreicon" style="right:10px;" href="#X"></span></span>
-            <span style="overflow:hidden; display:block; color:#999999;">{{$this->Number->precision($shipFee, 2)}}元</span>
+            <span style="overflow:hidden; display:block; color:#999999;" class="ship_fee_re" data-ship-fee="{{$this->Number->precision($shipFee, 2)}}">{{$this->Number->precision($shipFee, 2)}}元</span>
         </a>
         {{/if}}
     </div>
@@ -165,7 +165,7 @@
 </div>
 <div class="cart_pay" style="z-index: 101;">
     <ul class="clearfix">
-        <li class="fl">共<span class="total_num_info">{{$total_num}}</span>件商品，总金额<strong class="total_price_info">{{$this->Number->precision($cart->total_price() + ($shipFee > 0?$shipFee:0), 2)}}</strong></li>
+        <li class="fl">共<span class="total_num_info">{{$total_num}}</span>件商品，总金额<strong class="total_price_info" data-total-price="{{$this->Number->precision($cart->total_price(),2)}}">{{$this->Number->precision($cart->total_price() + ($shipFee > 0?$shipFee:0), 2)}}</strong></li>
         <li class="fr"><a href="{{$this->Html->url('/orders/balance/'.($specialShipPromotionId?'?ship_promotion='.$specialShipPromotionId:''))}}">提交订单</a></li>
     </ul>
 </div>
@@ -323,7 +323,23 @@
                 }else{
                     utils.alert("请选择自提点");
                 }
-            },'json')
+            },'json');
         });
+        $('.address_addbtn').click(function(){
+            var $addressDom = $('.address:visible');
+            var $shipFeeDom = $('.ship_fee_re');
+            var $totalPriceDom = $('.total_price_info');
+            var totalPrice = $totalPriceDom.data('totalPrice');
+            if($addressDom.hasClass('kuaidi_choose')){
+                $('.ziti_choose').show();$('.kuaidi_choose').hide();
+                $shipFeeDom.text('0.00元');
+                $totalPriceDom.text(totalPrice);
+            }else{
+                $('.ziti_choose').hide();$('.kuaidi_choose').show();
+                var shipFee = $shipFeeDom.data('shipFee');
+                $shipFeeDom.text(shipFee + '元');
+                $totalPriceDom.text(totalPrice+shipFee);
+            }
+        })
     })
 </script>
