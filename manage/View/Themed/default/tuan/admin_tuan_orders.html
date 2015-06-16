@@ -28,10 +28,9 @@
                 <span {{if $c2c_paid_not_sent_count> 0}}class="text-danger"{{/if}}>({{$c2c_paid_not_sent_count}})</span>
             </a>
         </li>
-        <li role="presentation">
-            <a data-tab="ordersToday" href="/manage/admin/tuan/query_orders_today">
-                !!!今日订单
-                <span {{if $orders_today_count> 0}}class="text-danger"{{/if}}>({{$orders_today_count}})</span>
+        <li role="presentation" {{if $query_type != 'dailyOrders'}}class="hide"{{/if}}>
+            <a data-tab="dailyOrders" href="/manage/admin/tuan/query_orders_today">
+                !!!每日订单
             </a>
         </li>
     </ul>
@@ -169,7 +168,7 @@
         <div id="c2cPaidNotSend" class="tab-pane">
             <strong class="text-danger lead">C2C未发货的订单，请及时清零</strong>
         </div>
-        <div id="ordersToday" class="tab-pane">
+        <div id="dailyOrders" class="tab-pane">
             <strong class="text-danger lead">按支付时间，查看某天的订单（团、秒、普通）</strong>
 
             <form class="form-inline" method="post" action="/manage/admin/tuan/query_orders_today" data-noajax="true">
