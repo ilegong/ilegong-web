@@ -194,7 +194,7 @@ class Order extends AppModel {
                     }
                 }
             }
-            split_pys_order($orderId);
+            //split_pys_order($orderId);
             $this->update_refer($orderOwner,$orderId);
         }
         return $sold;
