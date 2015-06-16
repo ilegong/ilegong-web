@@ -1005,7 +1005,7 @@ function game_uri($gameType, $defUri = '/')
  * @param string $descs
  * @return bool
  */
-function add_coupon_for_618_one($uid, $weixinC, $coupon, $descs = "满50元减20， 满30元减10元"){
+function add_coupon_for_618($uid, $weixinC, $coupon, $descs = "满50元减20， 满30元减10元"){
     $ci = ClassRegistry::init('CouponItem');
     //TODO limit get coupon times
     $ci->addCoupon($uid, $coupon, $uid, '618');
