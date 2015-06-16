@@ -2,6 +2,7 @@
 <?php   $current_model = 'Product';
     $location = $tuan_team['TuanTeam']['location_long'].','.$tuan_team['TuanTeam']['location_lat'];
     if($sold_num >= $target_num){
+        $sold_num = $target_num;
         $sold_percent = 100;
     }else{
         $sold_percent = round(($sold_num / $target_num * 100), 1);
