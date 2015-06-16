@@ -254,16 +254,7 @@ class OrdersController extends AppController {
             if($tryId){
                 $data['try_id'] = $tryId;
             }
-
-            //set pys product ship fee
-            if($brand_id==PYS_BRAND_ID){
-                if($ship_fee>0&&$total_price<99){
-                    $ship_fee = 15;
-                }else{
-                    $ship_fee = 0;
-                }
-            }
-
+            $ship_fee = $this->set_pys_ship_fee($brand_id,$ship_fee,$total_price);
 			$data['total_price'] = $total_price;
             $total_all_price = $total_price + $ship_fee;
             $all_order_total += $total_all_price;
@@ -484,6 +475,7 @@ class OrdersController extends AppController {
         }
 
 		$total_price = $cart->total_price();
+
         $this->set(compact('total_price', 'shipFee', 'coupons_of_products', 'cart', 'brands', 'flash_msg', 'total_reduced', 'product_info'));
 		$this->set('kuaidi_consignee_exist', $kuaidi_consignee_exist);
 		$this->set('total_consignee', $total_consignee);
@@ -1904,5 +1896,16 @@ class OrdersController extends AppController {
         $this->Session->write('pickupConsignee',$data['OrderConsignee']);
         $res = array('status' => true, 'data'=>$data['OrderConsignee']);
         echo json_encode($res);
+    }
+
+    private function set_pys_ship_fee($brand_id,$ship_fee,$total_price){
+        //set pys product ship fee
+        $fee = 0;
+        if($brand_id==PYS_BRAND_ID){
+            if($ship_fee>0&&$total_price<99){
+                $fee = 15;
+            }
+        }
+        return $fee;
     }
 }
