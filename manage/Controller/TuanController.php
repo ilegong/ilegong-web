@@ -26,7 +26,7 @@ class TuanController extends AppController
         $this->set('query_type', 'byUser');
     }
 
-    public function admin_query_by_user()
+    public function admin_quick_query()
     {
         $order_id = $_REQUEST['order_id'];
         $con_name = $_REQUEST['con_name'];
@@ -60,7 +60,7 @@ class TuanController extends AppController
         $this->set('con_phone', $con_phone);
         $this->set('con_creator', $con_creator);
         $this->set('order_status', $order_status);
-        $this->set('query_type', 'byUser');
+        $this->set('query_type', 'quickQuery');
         $this->render("admin_tuan_orders");
     }
 
@@ -432,7 +432,6 @@ class TuanController extends AppController
             $tuan_teams = Hash::combine($tuan_teams, '{n}.TuanTeam.id', '{n}.TuanTeam');
         }
 
-
         $p_ids = Hash::extract($carts, '{n}.Cart.product_id');
         $spec_groups = array();
         if (!empty($p_ids)) {
@@ -580,17 +579,21 @@ class TuanController extends AppController
         return $c;
     }
 
-    public function admin_query_by_offline_store(){
+    public function admin_advanced_query(){
+        $product_id = !empty($_REQUEST['product_id']) ? $_REQUEST['product_id'] : -1;
         $store_id = !empty($_REQUEST['store_id']) ? $_REQUEST['store_id'] : -1;
         $order_status = !empty($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
         $send_date = $_REQUEST['send_date'];
         $end_stat_date = $_REQUEST['end_stat_date'];
         $conditions = array();
         $order_by = 'Cart.product_id, Order.consignee_id DESC';
-        if($store_id != -1 || !empty($send_date)){
+        if($product_id != -1 || $store_id != -1 || !empty($send_date)){
             $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
             if ($order_status != -1) {
                 $conditions['Order.status'] = $order_status;
+            }
+            if($product_id != -1){
+                $conditions['Cart.product_id'] = $product_id;
             }
             if($store_id != -1){
                 $store_ids = explode(",", $store_id);
@@ -616,7 +619,7 @@ class TuanController extends AppController
         $this->set('store_id', $store_id);
         $this->set(compact('send_date', 'end_stat_date'));
         $this->set('order_status', $order_status);
-        $this->set('query_type', 'byOfflineStore');
+        $this->set('query_type', 'advancedQuery');
         $this->render("admin_tuan_orders");
     }
     public function _get_ship_types(){
