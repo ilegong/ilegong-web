@@ -240,7 +240,6 @@ class OrdersController extends AppController {
                         }
                     }
                     $num = $nums[$pid];
-
                     if ($tryId) {
                         $ship_fees[$pid] = 0;
                     } else {
@@ -252,13 +251,17 @@ class OrdersController extends AppController {
                 }
             }
 			$data = array();
-//            if (!$tryId) {
-//                $ship_fee = ShipPromotion::calculateShipFeeByOrder($ship_fee, $brand_id, $total_price);
-//            } else {
-//                $data['try_id'] = $tryId;
-//            }
             if($tryId){
                 $data['try_id'] = $tryId;
+            }
+
+            //set pys product ship fee
+            if($brand_id==PYS_BRAND_ID){
+                if($ship_fee>0&&$total_price<99){
+                    $ship_fee = 15;
+                }else{
+                    $ship_fee = 0;
+                }
             }
 
 			$data['total_price'] = $total_price;
