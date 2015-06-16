@@ -594,7 +594,6 @@ $(document).ready(function () {
         }
     });
     $('.print-orders').on('click', function(e){
-        $('.orders .consignee-name').trigger('click');
         window.print();
     });
     initSetOrder();
