@@ -450,17 +450,15 @@ function addtofavor(model,id)
  * @param customized_price user given price for a special product
  * @return
  */
-function addtoCart(id, num, spec, quick_buy_pid, type, customized_price)
+function addtoCart(id, num, spec, quick_buy_pid, type, customized_price,tuanBuyId)
 {
 	type = type || 'normal';
 	var url = BASEURL + '/carts/add';
-  var sendDate = $('span.spec_item_selected[item-label="SD"]').data('send-date');
-	var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec, 'data[Cart][type]': type, 'data[Cart][send_date]': sendDate};
-
+    var sendDate = $('span.spec_item_selected[item-label="SD"]').data('send-date');
+	var postdata = {'data[Cart][num]': num, 'data[Cart][product_id]': id, 'data[Cart][spec]': spec, 'data[Cart][type]': type, 'data[Cart][send_date]': sendDate,'data[Cart][tuan_buy_id]':tuanBuyId};
 	if (customized_price) {
 		postdata['data[Cart][customized_price]'] = customized_price;
 	}
-
 	//special for products that has consignment dates
 	if ($('span.spec_item[item-label="SD"]').size()>0) {
 		var cake_date_selected = $('span.spec_item_selected[item-label="SD"]');
@@ -1199,13 +1197,13 @@ $(document).ready(function () {
 		add : function() {
 			editAmount.add(numInput);
 		},
-		save: function(pid) {
-			addToCartWithSpec(pid, $(numInput).val());
+		save: function(pid,tuanBuyId) {
+			addToCartWithSpec(pid, $(numInput).val(),null,null,null,tuanBuyId);
 			return false;
-		}
+		},
 	};
 
-	function addToCartWithSpec(pid, itemNum, quick_buy_pid, type, $price) {
+	function addToCartWithSpec(pid, itemNum, quick_buy_pid, type, price,tuanBuyId) {
 		var specId = '';
 		if (typeof(_p_spec_m) != 'undefined') {
 			if (_p_spec_m) {
@@ -1243,7 +1241,7 @@ $(document).ready(function () {
 				return false;
 			}
 		}
-		addtoCart(pid, itemNum, specId || 0, quick_buy_pid, type, $price);
+		addtoCart(pid, itemNum, specId || 0, quick_buy_pid, type, price,tuanBuyId||0);
 		return true;
 	}
 
@@ -1311,7 +1309,7 @@ $(document).ready(function () {
             e.preventDefault();
             return false;
         }
-        cart_edit_amount.save($this.attr('item-id'));
+        cart_edit_amount.save($this.attr('item-id'),$this.attr('data-tuanbuy-id'));
         e.preventDefault();
         return false;
     });
@@ -1487,7 +1485,7 @@ function zitiAddress(){
             'name':"大兴区"
         },
         110112:{
-            'name':"通州区",
+            'name':"通州区"
         }
     };
     //崇文并入东城区， 宣武并入西城区

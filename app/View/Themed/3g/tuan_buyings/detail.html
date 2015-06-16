@@ -226,7 +226,7 @@
                 </li>
             {{elseif $tuan_buy_status == 0}}
                 <li class="fl" style="width:50%;">
-                    <a id="btn_add_cart"  item-id="{{$pid}}" href="javascript:;" class="btn_b shopping_bg" data-send-date="{{$consign_time}}">加入购物车</a>
+                    <a id="btn_add_cart"  item-id="{{$pid}}" href="javascript:;" class="btn_b shopping_bg" data-send-date="{{$consign_time}}" data-tuanbuy-id="{{$tuan_buy_id}}">加入购物车</a>
                 </li>
                 <li class="fr" style="width:50%;">
                     <a id="tuan_buy" item-id="{{$pid}}" href="javascript:;" class="btn_b pay_bg" data-send-date="{{$consign_time}}">立即购买</a>
