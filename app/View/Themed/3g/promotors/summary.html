@@ -8,7 +8,7 @@
         <span class="fr">当天新用户订单<strong class="text-warning">{{count($orders)}}个</strong></span>
     </div>
     {{loop $orders $order}}
-    <div class="row order">
+    <div class="row order" data-order-id="{{$order['Order']['id']}}" data-creator="{{$order['Order']['creator']}}" data-pay-time="{{$order['Order']['pay_time']}}">
         <div class="col-xs-4">{{$order['Order']['consignee_name']}}</div>
         <div class="col-xs-6">{{substr_replace($order['Order']['consignee_mobilephone'], '****', 3, 4)}}</div>
         <div class="col-xs-2">{{$order['Order']['total_all_price']}}元</div>
