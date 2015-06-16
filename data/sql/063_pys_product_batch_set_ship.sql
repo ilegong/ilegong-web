@@ -25,7 +25,7 @@ INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `leas
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('3', '1500', '0', '0', 911);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('3', '1500', '0', '0', 910);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('3', '1500', '0', '0', 948);
-INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('3', '1500', '0', '0', 947);
+INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('3', '800', '0', '0', 947);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('3', '1500', '0', '0', 946);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('3', '1500', '0', '0', 944);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('3', '1500', '0', '0', 943);
@@ -35,7 +35,7 @@ INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `leas
 
 --满10包邮
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 990);
-INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 1029);
+INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '5', 1029);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 954);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 1057);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 1020);
@@ -57,16 +57,16 @@ INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `leas
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 1005);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 908);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 909);
-INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 911);
+INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '5', 911);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 910);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 948);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 947);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 946);
-INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 944);
-INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 943);
-INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 945);
-INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 941);
-INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '10', 942);
+INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '5', 944);
+INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '5', 943);
+INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '5', 945);
+INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '5', 941);
+INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('2', '0', '0', '5', 942);
 
 --满99元包邮
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('1', '0', '9900', '0', 990);
@@ -102,3 +102,39 @@ INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `leas
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('1', '0', '9900', '0', 945);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('1', '0', '9900', '0', 941);
 INSERT INTO `cake_ship_settings` (`type`, `ship_fee`, `least_total_price`, `least_num`, `product_id`) VALUES ('1', '0', '9900', '0', 942);
+
+
+update cake_products set ship_fee=15 where id=990;
+update cake_products set ship_fee=15 where id=1029;
+update cake_products set ship_fee=15 where id=954;
+update cake_products set ship_fee=15 where id=1057;
+update cake_products set ship_fee=15 where id=1020;
+update cake_products set ship_fee=15 where id=971;
+update cake_products set ship_fee=15 where id=883;
+update cake_products set ship_fee=15 where id=952;
+update cake_products set ship_fee=15 where id=940;
+update cake_products set ship_fee=15 where id=973;
+update cake_products set ship_fee=15 where id=1003;
+update cake_products set ship_fee=15 where id=1004;
+update cake_products set ship_fee=15 where id=972;
+update cake_products set ship_fee=15 where id=787;
+update cake_products set ship_fee=15 where id=950;
+update cake_products set ship_fee=15 where id=957;
+update cake_products set ship_fee=15 where id=969;
+update cake_products set ship_fee=15 where id=1007;
+update cake_products set ship_fee=15 where id=1008;
+update cake_products set ship_fee=15 where id=1013;
+update cake_products set ship_fee=15 where id=1005;
+update cake_products set ship_fee=15 where id=908;
+update cake_products set ship_fee=15 where id=909;
+update cake_products set ship_fee=15 where id=911;
+update cake_products set ship_fee=15 where id=910;
+update cake_products set ship_fee=15 where id=948;
+update cake_products set ship_fee=8 where id=947;
+update cake_products set ship_fee=15 where id=946;
+update cake_products set ship_fee=15 where id=944;
+update cake_products set ship_fee=15 where id=943;
+update cake_products set ship_fee=15 where id=945;
+update cake_products set ship_fee=15 where id=941;
+update cake_products set ship_fee=15 where id=942;
+
