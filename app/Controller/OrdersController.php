@@ -248,7 +248,7 @@ class OrdersController extends AppController {
             if($tryId){
                 $data['try_id'] = $tryId;
             }
-            $ship_fee = $this->set_pys_ship_fee($brand_id,$ship_fee,$total_price);
+            $ship_fee = ShipPromotion::calculateBrandShipFee($brand_id,$ship_fee,$total_price);
 			$data['total_price'] = $total_price;
             $total_all_price = $total_price + $ship_fee;
             $all_order_total += $total_all_price;
@@ -1894,10 +1894,10 @@ class OrdersController extends AppController {
 
     private function set_pys_ship_fee($brand_id,$ship_fee,$total_price){
         //set pys product ship fee
-        $fee = 0;
+        $fee = $ship_fee;
         if($brand_id==PYS_BRAND_ID){
-            if($ship_fee>0&&$total_price<99){
-                $fee = 15;
+            if($ship_fee>0&&$total_price<PYS_BY_PRICE){
+                $fee = PYS_SHIP_FEE;
             }
         }
         return $fee;
