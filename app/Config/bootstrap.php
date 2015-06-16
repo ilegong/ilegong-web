@@ -128,6 +128,10 @@ const KUAIDI_TAG = 'kuaidi';
 
 const PYS_BRAND_ID = 92;
 
+const PYS_BY_PRICE = 99;
+
+const PYS_SHIP_FEE = 15;
+
 define('FORMAT_DATETIME', 'Y-m-d H:i:s');
 define('FORMAT_DATE', 'Y-m-d');
 define('FORMAT_DATE_YUE_RI_HAN', 'n月j日');

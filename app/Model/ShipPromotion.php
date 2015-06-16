@@ -367,6 +367,18 @@ class ShipPromotion extends AppModel {
         return $singleShipFee<0 ? 0:$singleShipFee;
     }
 
+    public static function calculateBrandShipFee($brandId,$ship_fee,$total_price){
+        //set pys product ship fee
+        $fee = 0;
+        if($brandId==PYS_BRAND_ID){
+            if($ship_fee>0&&$total_price<PYS_BY_PRICE){
+                $fee = PYS_SHIP_FEE;
+            }
+            return $fee;
+        }
+        return $ship_fee;
+    }
+
     public static function calculate_ship_fee($pss, $total_price, $singleShipFee, $num, &$context) {
         if (!empty($pss)) {
             $pss = Hash::combine($pss, '{n}.ShipSetting.type', '{n}.ShipSetting');

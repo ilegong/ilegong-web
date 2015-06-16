@@ -347,7 +347,8 @@ class BuyingComponent extends Component {
         }
 
         $shipFee = 0;
-        foreach($shipFees as $ship) {
+        foreach($shipFees as $bId => $ship) {
+            $ship = ShipPromotion::calculateBrandShipFee($bId,$ship,$totalPrices[$bId]);
             $shipFee += $ship;
         }
 
