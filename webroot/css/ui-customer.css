@@ -73,7 +73,7 @@ textarea {height: auto;width:auto;}
 
 
 .portlet-title-list li a {
-    background: url("../../img/bg/list-bg-icon.png") repeat scroll 0 -31px transparent;
+    background: url("../img/bg/list-bg-icon.png") repeat scroll 0 -31px transparent;
     display: block;
     line-height: 31px;
     overflow: hidden;
@@ -128,7 +128,7 @@ ul.title-list li{
 }
 
 
-.ui-progressbar-value { background-image: url(../../img/pbar-ani.gif); }
+.ui-progressbar-value { background-image: url(../img/pbar-ani.gif); }
 
 
 .ui-buttonset {
@@ -160,7 +160,7 @@ ul.title-list li{
 
 .ui-pop-tips .ico{
 	float:left;width:29px;height:29px;margin-right:10px;
-	background:url(../../img/icons/gb_icon.png) no-repeat 0 -700px
+	background:url(../img/icons/gb_icon.png) no-repeat 0 -700px
 }
 .ui-pop-tips .ico-error{background-position:0 -740px}
 .ui-pop-tips .ico-success{background-position:0 -560px}
@@ -216,7 +216,7 @@ ul.title-list li{
 	width:122px;
 	height:24px;
 	overflow:hidden;
-	background:url(../../img/oauth/bg_loginways.png) no-repeat scroll 0 0  #FFFFFF;
+	background:url(../img/oauth/bg_loginways.png) no-repeat scroll 0 0  #FFFFFF;
 }
 .ui-oauth-login-list li img{
 	width:100px;height:24px;
@@ -324,12 +324,12 @@ width:170px;
 .flb em a{text-decoration:none;}
 .flb .needverify{float:left;margin-left:8px;padding-left:13px;width:45px;height:21px;line-height:21px;background:url(../../static/image/common/re_unsolved.gif) no-repeat 0 0;font-size:12px;color:#999;font-weight:400;}
 .flb .onerror,.flb .onright{padding-left:20px;height:auto;line-height:140%;white-space:nowrap;font-size:12px;font-weight:400;}
-.flb .onerror{background:url(../../img/common/check_error.gif) no-repeat 0 50%;}
-.flb .onright{background:url(../../img/common/check_right.gif) no-repeat 0 50%;color:#666;}
+.flb .onerror{background:url(../img/common/check_error.gif) no-repeat 0 50%;}
+.flb .onright{background:url(../img/common/check_right.gif) no-repeat 0 50%;color:#666;}
 .flb span{float:right;color:#999;}
 .flb span a,.flb strong{float:left;text-decoration:none;margin-left:8px;font-weight:400;color:#333;}
 .flb span a:hover{color:#999;}
-.flbc{float:left;width:20px;height:20px;overflow:hidden;text-indent:-9999px;background:url(../../img/common/cls.gif) no-repeat 0 0;}
+.flbc{float:left;width:20px;height:20px;overflow:hidden;text-indent:-9999px;background:url(../img/common/cls.gif) no-repeat 0 0;}
 .flbc:hover{background-position:0 -20px;}
 
 
@@ -356,7 +356,7 @@ width:170px;
 .sltp{float:none;margin:10px 0;clear:both;}
 .sltp a,.sltp a:hover,.sltp a:focus{background-color:transparent;border-color:#EEE;color:#069 !important;}
 .lpsw label{float:left;padding-left:4px;width:61px;line-height:150%;}
-.clck,.sipt .clck{background:#FFF url(../../img/common/clck.gif) no-repeat 98% 50%;}
+.clck,.sipt .clck{background:#FFF url(../img/common/clck.gif) no-repeat 98% 50%;}
 .lgf{float:left;overflow:visible;}
 .lgf h4{margin-bottom:10px;font-weight:400;font-size:14px;}
 .lgf a{color:#369;}
@@ -387,7 +387,7 @@ width:170px;
     text-align: left;
 }
 .waitInfo {
-    background: url("../../img/ajax/circle_ball.gif") no-repeat scroll 3px 3px #FFFFFF;
+    background: url("../img/ajax/circle_ball.gif") no-repeat scroll 3px 3px #FFFFFF;
     border: 1px solid #C0C0C0;
     color: #666666;
     font-size: 12px;

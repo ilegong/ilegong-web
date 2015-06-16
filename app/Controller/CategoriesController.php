@@ -81,7 +81,8 @@ class CategoriesController extends AppController {
             if(array_key_exists($product_id, $tuan_products) && $tuan_products[$product_id]['TuanProduct']['general_show'] == 0){
                 $this->loadModel('TuanBuying');
                 $tuan_buying = $this->TuanBuying->find('first', array(
-                    'conditions' => array('pid' => $product_id, 'tuan_id'=>PYS_M_TUAN, 'published' => PUBLISH_YES, 'consignment_type'=>0, 'status'=>0)
+                    'conditions' => array('pid' => $product_id, 'tuan_id'=>PYS_M_TUAN, 'published' => PUBLISH_YES, 'consignment_type'=>0, 'status'=>0),
+                    'order' => array('id DESC')
                 ));
                 if(!empty($tuan_buying)){
                     $val['Product']['TuanBuying'] = $tuan_buying['TuanBuying'];
