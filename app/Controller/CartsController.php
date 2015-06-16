@@ -54,6 +54,7 @@ class CartsController extends AppController{
             $num = $this->data['Cart']['num'];
             $specId = $this->data['Cart']['spec'];
             $send_date = $this->data['Cart']['send_date'];
+            $tuan_buy_id = $this->data['Cart']['tuan_buy_id'];
             $type = $buyingCom->convert_cart_type($this->data['Cart']['type']);
             $tryId = intval($_POST['try_id']);
             $uid = $this->currentUser['id'];
@@ -67,11 +68,20 @@ class CartsController extends AppController{
                 //FIXME:should give an error to client
                 $type = CART_ITEM_TYPE_NORMAL;
             }
-
             $returnInfo = $buyingCom->check_and_add($cartM, $type, $tryId, $uid, $num, $product_id, $specId, $sessionId);
             $this->log('check_and_add:specId='.$specId.', type='.$type.', tryId='.$tryId.', uid='.$uid.',num='.$num.', product_id='.$product_id.', customized_price='.$customized_price.', send_date='.$send_date.', returnInfo='.json_encode($returnInfo));
             if (!empty($returnInfo) && $returnInfo['success']) {
                 $cart_id = $returnInfo['id'];
+                if($tuan_buy_id){
+                    $TuanBuyM = ClassRegistry::init('TuanBuying');
+                    $tuanBuy = $TuanBuyM->find('first',array('conditions' => array('id' => $tuan_buy_id)));
+                    if(!empty($tuanBuy)){
+                        $tuanBuyPrice = $tuanBuy['TuanBuying']['tuan_price'];
+                        if($tuanBuyPrice>0){
+                            $cartM->updateAll(array('price' => $tuanBuyPrice), array('id' => $cart_id));
+                        }
+                    }
+                }
                 if ($send_date && $cart_id) {
                     $cartM->updateAll(array('send_date' => "'".$send_date."'"), array('id' => $cart_id));
                 }

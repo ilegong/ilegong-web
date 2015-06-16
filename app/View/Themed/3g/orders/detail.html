@@ -63,7 +63,7 @@
                             <p>{{$cart['Cart']['name']}}</p>
                             <s>单价:￥{{$this->Number->precision($cart['Cart']['price'], 2)}} x {{$cart['Cart']['num']}}&nbsp;&nbsp;&nbsp;{{if $order['Order']['try_id']}}{{get_spec_name_try($order['Order']['try_id'])}}{{else}}{{get_spec_name_by_pid_and_sid($cart['Cart']['product_id'],$cart['Cart']['specId'])}}{{/if}}</s>
                             <s><span>{{if $order['Order']['ship_mark']}}{{get_ship_mark_name($order['Order']['ship_mark'])}}{{/if}}</span>&nbsp;&nbsp;&nbsp;&nbsp;{{if !empty($cart['Cart']['send_date'])}}<span class="redcolor">预计{{date('n月d日', strtotime($cart['Cart']['send_date']))}}({{day_of_week($cart['Cart']['send_date'])}})到货</span>{{/if}}</s>
-                            {{if !empty($cart['Cart']['send_date'])}}{{if $consignment_date_not_available}}<s><span class="redcolor">(商品排期已过,请您重新下单)</span></s>{{/if}}{{/if}}
+                            {{if !empty($cart['Cart']['send_date'])}}{{if $consignment_date_not_available}}<s><span class="redcolor">(商品排期已过)</span></s>{{/if}}{{/if}}
                             {{if in_array($cart['Cart']['product_id'], $expired_pids)}}<s><span class="redcolor">(该商品已下架)</span></s>{{/if}}
                             {{if $tuan_expired}}<s><span class="redcolor">(商品已经售完)</span></s>{{/if}}
                             {{if $order['Order']['try_id']>0}}
