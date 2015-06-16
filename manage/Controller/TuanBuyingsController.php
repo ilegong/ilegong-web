@@ -306,22 +306,6 @@ class TuanBuyingsController extends AppController{
         $this->redirect(array('controller' => 'tuan_buyings','action' => 'index'));
     }
 
-    public function admin_set_status(){
-        $this->autoRender = false;
-        $tuan_orderIds = preg_split('/(,|\n)/',trim($_REQUEST['tuan_orderid']));
-        $tuan_orderstatus = $_REQUEST['order_status'];
-        $order_info = $this->Order->find('all',array('conditions' => array('id' => $tuan_orderIds,'status'=> 1)));
-        $this->log('order_info'.json_encode($order_info));
-        if(!empty($tuan_orderstatus)){
-            if(!empty($order_info)){
-                $this->Order->updateAll(array('status' => $tuan_orderstatus),array('id' => $tuan_orderIds));
-                echo json_encode(array('success' => true,'msg' => '状态修改成功'));
-            }else{
-                echo json_encode(array('success' => false,'msg' => '订单不存在或订单状态已修改'));
-            }
-        }
-    }
-
     public function admin_send_tuan_buy_create_msg($tuanBuyId){
         $this->autoRender = false;
         $msg_element = get_tuan_msg_element($tuanBuyId,false);

@@ -1104,6 +1104,9 @@ class OrdersController extends AppController {
             }
 
             $this->Order->updateAll(array('status'=>$status, 'lastupdator'=> $currentUid),array('id'=>$order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+            $this->loadModel('Cart');
+            $this->Cart->updateAll(array('status'=>$status), array('order_id'=>$order_id, 'status' => ORDER_STATUS_WAITING_PAY));
+
             echo json_encode(array('order_id'=>$order_id,'msg'=>'订单已支付'));
             exit;
         } else if ($status == ORDER_STATUS_CANCEL) {
@@ -1136,6 +1139,9 @@ class OrdersController extends AppController {
             $ship_type = $_REQUEST['ship_type'];
             $this->Order->updateAll(array('status'=>$status,'ship_code'=>"'".addslashes($ship_code)."'",'ship_type'=>$ship_type,
                 'lastupdator'=>$currentUid),array('id'=>$order_id, 'status' => $orig_status));
+            $this->loadModel('Cart');
+            $this->Cart->updateAll(array('status'=>$status), array('order_id'=>$order_id, 'status' => $orig_status));
+
             //add weixin message
             $this->loadModel('Oauthbind');
             $user_weixin = $this->Oauthbind->findWxServiceBindByUid($order_info['Order']['creator']);
