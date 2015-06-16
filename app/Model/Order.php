@@ -151,9 +151,12 @@ class Order extends AppModel {
     public function set_order_to_paid($orderId, $isTry, $orderOwner, $type, $memberId=0) {
         $rtn = $this->updateAll(array('status' => ORDER_STATUS_PAID, 'pay_time' => "'" . date(FORMAT_DATETIME) . "'")
             , array('id' => $orderId, 'status' => ORDER_STATUS_WAITING_PAY));
+
+        $cartM = ClassRegistry::init('Cart');
+        $cartM->updateAll(array('status'=>ORDER_STATUS_PAID), array('order_id'=>$orderId, 'status' => ORDER_STATUS_WAITING_PAY));
+
         $sold = $rtn && $this->getAffectedRows() >= 1;
         if ($sold) {
-            $cartM = ClassRegistry::init('Cart');
             $cartItems = $cartM->find_balanced_items($orderId);
             if (!empty($cartItems)) {
                 $pid_list = Hash::extract($cartItems, '{n}.Cart.product_id');
@@ -337,6 +340,9 @@ class Order extends AppModel {
         $result = $this->updateAll(array('status' => $toStatus, 'lastupdator' => $operator), array('id' => $order_id, 'status' => $origStatus));
 
         if ($result) {
+            $this->loadModel('Cart');
+            $this->Cart->updateAll(array('status'=>$toStatus), array('order_id'=>$order_id, 'status' => $origStatus));
+
             $affectedRows = $this->getAffectedRows();
             if ($origStatus == ORDER_STATUS_SHIPPED && $toStatus == ORDER_STATUS_RECEIVED) {
                 $this->log('change order '.$order_id.' status from '.$toStatus.' to '.$origStatus);

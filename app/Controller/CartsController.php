@@ -128,7 +128,7 @@ class CartsController extends AppController{
 	function cart_total(){
         $count = $this->Cart->find('count', array(
             'conditions' => array(
-                'status' => 0,
+                'status' => CART_ITEM_STATUS_NEW,
                 'type' => CART_ITEM_TYPE_NORMAL,
                 'order_id' => NULL,
                 'OR' => $this->user_condition
@@ -142,7 +142,7 @@ class CartsController extends AppController{
 	function listcart(){
         $dbCartItems = $this->Cart->find('all',array(
 				'conditions'=>array(
-					'status' => 0,
+					'status' => CART_ITEM_STATUS_NEW,
                     'type' => CART_ITEM_TYPE_NORMAL,
 					'order_id' => NULL,
 					'OR'=> $this->user_condition)));
@@ -157,7 +157,7 @@ class CartsController extends AppController{
 
         $Carts = $this->Cart->find('all',array(
             'conditions'=>array(
-                'status' => 0,
+                'status' => CART_ITEM_STATUS_NEW,
                 'type' => CART_ITEM_TYPE_NORMAL,
                 'order_id' => NULL,
                 'OR'=> $this->user_condition

@@ -101,6 +101,7 @@ class Cart extends AppModel {
 
         $data['Cart']['num'] = $num;
         $data['Cart']['product_id'] = $product_id;
+        $data['Cart']['status'] = CART_ITEM_STATUS_NEW;
 
         $proM = ClassRegistry::init('Product');
         $p = $proM->findById($product_id);
