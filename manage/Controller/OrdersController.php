@@ -77,19 +77,7 @@ class OrdersController extends AppController
             return;
         }
 
-        if (!empty($send_date)) {
-            if(strtotime($send_date) <= strtotime('yesterday')){
-                echo json_encode(array('success' => false, 'reason' => 'invalid_send_date'));
-                return;
-            }
-
-            $this->loadModel('Cart');
-            $this->log('update order ' . $id . ' send_date: '.$send_date);
-            if (!$this->Cart->updateAll(array('send_date' => "'" . $send_date . "'"), array('order_id' => $id))) {
-                echo json_encode(array('success' => false, 'reason' => 'failed_to_save_send_date'));
-                return;
-            }
-        }
+        $this->_save_order_carts($id, $this->data, $send_date);
 
         if(!empty($this->data['ship_mark'])){
             if($this->data['ship_mark'] == 'ziti'){
@@ -662,7 +650,6 @@ class OrdersController extends AppController
 
     public function admin_get_refund_log($order_id,$total_price)
     {
-
 //        $total_price = $_REQUEST['total_price'];
         $this->loadModel('RefundLog');
         $RefundLogInfo = $this->RefundLog->find('all', array(
@@ -710,4 +697,29 @@ class OrdersController extends AppController
         }
     }
 
+    private function _save_order_carts($order_id, $data, $send_date){
+        $cart_data = array();
+
+        if (isset($data['status'])) {
+            $cart_data['status'] = "'" . $data['status'] . "'";
+        }
+
+        if (!empty($send_date)) {
+            if(strtotime($send_date) <= strtotime('yesterday')){
+                echo json_encode(array('success' => false, 'reason' => 'invalid_send_date'));
+                return;
+            }
+
+            $cart_data['send_date'] = "'" . $send_date . "'";
+        }
+
+        if(!empty($cart_data)){
+            $this->loadModel('Cart');
+            $this->log('update order ' . $order_id . ': '.json_encode($cart_data));
+            if (!$this->Cart->updateAll($cart_data, array('order_id' => $order_id))) {
+                echo json_encode(array('success' => false, 'reason' => 'failed_to_save_send_date'));
+                return;
+            }
+        }
+    }
 }
