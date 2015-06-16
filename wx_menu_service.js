@@ -25,8 +25,8 @@
             },
             {
                 "type":"view",
-                "name":"我的红包",
-                "url":"http://www.pyshuo.com/users/wx_menu_point?referer_key=CLICK_URL_OFFER&do_wx_auth_if_not_log_in=1&from=service&_sl=wx.sv.offer"
+                "name":"我的优惠券",
+                "url":"http://www.pyshuo.com/users/wx_menu_point?referer_key=CLICK_URL_COUPON&do_wx_auth_if_not_log_in=1&from=service&_sl=wx.sv.coupon"
             },
             {
                 "type":"view",

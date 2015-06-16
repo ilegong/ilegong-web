@@ -243,8 +243,8 @@ function oauth_wx_goto($refer_key, $host3g)
             return "http://$host3g/articles/view/377.html";
         case "CLICK_URL_SHICHITUAN":
             return "http://$host3g/shichituan.html";
-        case "CLICK_URL_OFFER":
-            return "http://$host3g/users/my_offers.html";
+        case "CLICK_URL_COUPON":
+            return "http://$host3g/users/my_coupons.html?_sl=wx.menu.coupon";
         case "CLICK_URL_SHICHI_APPLY":
             return "http://$host3g/shichituans/apply.html";
         case "CLICK_URL_REFER":
