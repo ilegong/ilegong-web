@@ -214,7 +214,7 @@ class TuanController extends AppController
         $this->render("admin_tuan_orders");
     }
 
-    public function admin_query_orders_today()
+    public function admin_query_daily_orders()
     {
         $pay_date = !empty($_REQUEST['pay_date']) ? $_REQUEST['pay_date'] : date('Y-m-d');
         $order_status = isset($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
@@ -226,7 +226,7 @@ class TuanController extends AppController
 
         $this->_query_orders($conditions, 'Order.updated');
 
-        $this->set('query_type', 'ordersToday');
+        $this->set('query_type', 'dailyOrders');
         $this->set('order_status', $order_status);
         $this->set('pay_date', $pay_date);
         $this->render("admin_tuan_orders");
@@ -255,7 +255,6 @@ class TuanController extends AppController
         $this->set('abnormal_order_count', $this->_query_abnormal_order());
         $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
-        $this->set('orders_today_count', $this->_query_orders_today_count());
         $this->set('abnormal_order_count',$this->_query_abnormal_order());
 
     }
@@ -567,7 +566,6 @@ class TuanController extends AppController
         $this->set('abnormal_order_count',$this->_query_abnormal_order());
         $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
-        $this->set('orders_today_count', $this->_query_orders_today_count());
 
         $this->set('should_count_nums', true);
         $this->set('product_count', $product_count);
