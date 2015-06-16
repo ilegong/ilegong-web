@@ -993,6 +993,20 @@ function game_uri($gameType, $defUri = '/')
     return "/t/ag/$gameType.html";
 }
 
+/**
+ * @param $uid
+ * @param $weixinC
+ * @param $coupon
+ * @param string $descs
+ * @return bool
+ */
+function add_coupon_for_618_one($uid, $weixinC, $coupon, $descs = "满50元减20， 满30元减10元"){
+    $ci = ClassRegistry::init('CouponItem');
+    //TODO limit get coupon times
+    $ci->addCoupon($uid, $coupon, $uid, '618');
+    $weixinC->send_coupon_received_message($uid, 1, "可购买满减商品", $descs);
+    return true;
+}
 
 function add_coupon_for_new($uid, $weixinC, $coupons = array(18483, 18482), $descs = "满100元减20， 满50元减10元")
 {

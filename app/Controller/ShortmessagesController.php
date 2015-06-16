@@ -120,5 +120,12 @@ class ShortmessagesController extends AppController {
         }
         $this->redirect('/users/my_offers');
     }
+
+    public function get_618_coupons($couponid){
+        $this->check_login();
+        $weixinC = $this->Components->load('Weixin');
+        $uid = $this->currentUser['id'];
+        add_coupon_for_618_one($uid, $weixinC, $couponid);
+    }
 }
 ?>
