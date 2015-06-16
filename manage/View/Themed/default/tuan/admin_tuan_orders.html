@@ -6,10 +6,8 @@
     </ol>
 
     <ul class="nav nav-tabs" data-query-type="{{$query_type}}">
-        <li role="presentation"><a data-tab="byUser" href="/manage/admin/tuan/query_by_user">快速查询</a></li>
-        <li role="presentation"><a data-tab="byProduct" href="/manage/admin/tuan/query_by_product">按商品查询</a></li>
-        <li role="presentation"><a data-tab="byOfflineStore"
-                                   href="/manage/admin/tuan/query_by_offline_store">按自提点查询</a></li>
+        <li role="presentation"><a data-tab="quickQuery" href="/manage/admin/tuan/quick_query">快速查询</a></li>
+        <li role="presentation"><a data-tab="advancedQuery" href="/manage/admin/tuan/advanced_query">高级查询</a></li>
         <li role="presentation">
             <a data-tab="abnormalOrder" href="/manage/admin/tuan/query_abnormal_order">
                 !!!异常订单
@@ -35,10 +33,10 @@
         </li>
     </ul>
     <div class="tab-content">
-        <div id="byUser" class="tab-pane">
+        <div id="quickQuery" class="tab-pane">
             <strong class="text-danger lead">团、秒、普通商品均可</strong>
 
-            <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_user" data-noajax="true">
+            <form class="form-inline" method="post" action="/manage/admin/tuan/quick_query" data-noajax="true">
                 <div style="padding-bottom: 10px;padding-top: 10px;">
                     <div class="form-group">
                         <input type="text" name="order_id" class="form-control" value="{{$order_id}}" placeholder="订单ID">
@@ -70,11 +68,20 @@
                 </div>
             </form>
         </div>
-        <div id="byProduct" class="tab-pane">
-            <strong class="text-danger lead">按商品（团、秒）、发货时间查询</strong>
-
-            <form class="form-inline" method="post" action="/manage/admin/tuan/query_by_product" data-noajax="true">
+        <div id="advancedQuery" class="tab-pane">
+            <form class="form-inline form-by-offline-store" method="post" action="/manage/admin/tuan/advanced_query"
+                  data-noajax="true">
                 <div style="padding-bottom: 10px;padding-top: 10px;">
+                    <div class="form-group">
+                        <input type="text" class="form-control offline-store-search" placeholder="搜索自提点"
+                               data-search-for="offline-store">
+                    </div>
+                    <div class="form-group">
+                        <select class="form-control offline_store search-label" name="store_id" id="offline-store" data-value="{{$store_id}}">
+                            <option value="-1">请选择自提点</option>
+                        </select>
+                    </div>
+                    <br/>
                     <div class="form-group">
                         <input type="text" class="form-control product-search" data-search-for="product1"
                                placeholder="搜索商品">
@@ -84,53 +91,7 @@
                             <option value="-1">选择商品</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <select class="form-control order-types" data-value="{{$order_type}}" name="order_type">
-                            <option value="-1">选择订单类型</option>
-                            <option value="1">只查普通</option>
-                            <option value="5">只查团购</option>
-                            <option value="6">只查秒杀</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control send-date-start" data-date-format="yyyy-mmm-dd" value="{{$send_date_start}}"
-                               placeholder="发货日期(如2015-5-1)" name="send_date_start">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control send-date-end" data-date-format="yyyy-mmm-dd" value="{{$send_date_end}}"
-                               placeholder="发货日期(如2015-5-1)" name="send_date_end">
-                    </div>
-                    <div class="form-group">
-                        <select class="form-control order-status" data-value="{{$order_status}}" name="order_status">
-                            <option value="-1">选择订单状态</option>
-                            <option value="0">待支付</option>
-                            <option value="1">待发货</option>
-                            <option value="2">已发货</option>
-                            <option value="4">已退款</option>
-                            <option value="10">已作废</option>
-                            <option value="14">退款中</option>
-                        </select>
-                    </div>
                     <br/>
-                    <br/>
-                    <button type="submit" class="btn btn-primary text-center">查看订单</button>
-                </div>
-            </form>
-        </div>
-        <div id="byOfflineStore" class="tab-pane">
-            <form class="form-inline form-by-offline-store" method="post" action="/manage/admin/tuan/query_by_offline_store"
-                  data-noajax="true">
-                <div class="form-group">
-                    <input type="text" class="form-control offline-store-search" placeholder="搜索自提点"
-                           data-search-for="offline-store">
-                </div>
-                <strong class="text-danger lead">按自提点、发货时间查询</strong>
-                <div style="padding-bottom: 10px;padding-top: 10px;">
-                    <div class="form-group">
-                        <select class="form-control offline_store search-label" name="store_id" id="offline-store" data-value="{{$store_id}}">
-                            <option value="-1">请选择自提点</option>
-                        </select>
-                    </div>
                     <div class="form-group">
                         <input type="text" class="form-control  send-date-start" data-date-format="yyyy-mmm-dd"
                                value="{{$send_date}}" placeholder="日期(如2015-5-1)" name="send_date">
