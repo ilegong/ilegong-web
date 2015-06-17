@@ -74,6 +74,9 @@
                             <br/>
                             <a href="/manage/admin/orders/edit2/{{$order['Order']['id']}}.html" class="btn btn-default modify-button">修改订单</a>
                         {{/if}}
+                        {{if ($order['Order']['status']== 1||$order['Order']['status']== 2) && $order['Order']['ship_mark'] == 'kuaidi'}}
+                        <button type="button" class="input-ship-code btn btn-primary">回填快递单号</button>
+                        {{/if}}
                     </td>
                     {{if $index == 0}}
                         <td mark-print="no-print"><a href="/manage/admin/tuan/query_by_user?con_creator={{$order['Order']['creator']}}">{{$order['Order']['creator']}}</a></td>
@@ -186,9 +189,6 @@
                         {{$order['Order']['remark']}}
                     </td>
                     <td mark-print="no-print" data-offline-store-type="{{$offline_store['OfflineStore']['type']}}">
-                        {{if empty($offline_store) && ($order['Order']['status']== 1||$order['Order']['status']== 2) && $order['Order']['type'] != 1}}
-                        <button type="button" class="input-ship-code btn btn-primary">回填快递单号</button>
-                        {{/if}}
                         {{if in_array($order['Order']['status'],array(1,2,3,9,16,4,14))}}
                         <button type="button" class="btn btn-default refund-button"  data-order_id="{{$order['Order']['id']}}" data-order_creator="{{$order['Order']['creator']}}"  data-total_price = "{{$order['Order']['total_all_price']}}">退款</button>
                         {{/if}}
