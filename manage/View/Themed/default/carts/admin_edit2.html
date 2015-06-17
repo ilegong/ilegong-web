@@ -13,21 +13,21 @@
 ?>
 
 <ul>
-    <li>订单：{{$cart['Cart']['id']}}</li>
-    <li>用户：{{$cart['Cart']['creator']}}</li>
-    <li>总价：{{$cart['Cart']['total_all_price']}}</li>
-    <li>创建：{{$cart['Cart']['created']}}</li>
-    <li>类型：{{if $cart['Cart']['type'] == 5}}
+    <li>订单：{{$order['Order']['id']}}</li>
+    <li>用户：{{$order['Order']['creator']}}</li>
+    <li>总价：{{$order['Order']['total_all_price']}}</li>
+    <li>创建：{{$order['Order']['created']}}</li>
+    <li>类型：{{if $order['Order']['type'] == 5}}
         团购
-        {{elseif $cart['Cart']['type'] == 6}}
+        {{elseif $order['Order']['type'] == 6}}
         秒杀
         {{else}}
         普通
         {{/if}}
     </li>
     <li>
-        付款：{{$cart['Cart']['pay_time']}}
-        {{if $cart['Cart']['status'] != 0 && $cart['Cart']['status'] != 1}}
+        付款：{{$order['Order']['pay_time']}}
+        {{if $order['Order']['status'] != 0 && $order['Order']['status'] != 1}}
         ({{if $order['Pay']['trade_type']=='JSAPI'}}
         微信支付
         {{elseif $order['Pay']['trade_type']=='ZFB'}}
@@ -39,7 +39,8 @@
         {{/if}}, {{$order['Pay']['out_trade_no']}})
         {{/if}}
     </li>
-    <li>备注：{{$cart['Cart']['remark']}}</li>
+    <li>备注：{{$order['Order']['remark']}}</li>
+    <li>发货单：{{$cart['Cart']['id']}}</li>
     <li>商品：{{$cart['Cart']['name']}} * {{$cart['Cart']['num']}}</li>
 </ul>
 
@@ -68,7 +69,7 @@
                 {{if $cart['Cart']['status']==14}}selected='selected'{{/if}}>退款中</option>
             </select>
 
-            <div class='help-block with-errors'>请谨慎修改发货单状态</div>
+            <div class='help-block with-errors'>仅支持已发货、退款中、已退款（暂不能发送消息）</div>
         </div>
     </div>
 
@@ -78,6 +79,17 @@
         <div class="col-sm-10">
             <input type="text" name="send_date" class="form-control send-date"
                    value="{{$carts[0]['Cart']['send_date']}}" data-value="{{$carts[0]['Cart']['send_date']}}"/>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">修改原因</label>
+
+        <div class="col-sm-10">
+            <input type="text" name="modify_reason" class="form-control modify-reason"
+                   value="" data-value="{{$order['Order']['remark_address']}}" placeholder="请描述修改原因"/>
+
+            <div class='help-block with-errors'>请简单描述修改原因，如"商品缺货", "发货错误", "自提点超时未取"</div>
         </div>
     </div>
 
