@@ -512,4 +512,13 @@ ul li{ list-style:none;}
 .orders-summary .row.date-total{padding-top: 15px; background-color: #eee}
 .orders-summary .row.order{border-bottom: 1px solid #ddd;}
 
+/*alice change css 0617*/
+.good ul li.fl strong{color:#ffa200; font-size: 1.2em;}
+.good ul{ background-color: #ffffff;}
+
+/*alice add css 0617*/
+.ziying_icon,.manjian_icon{ font-size: 12px; color: #ffffff; background-color: #29AC0E; border-radius: 3px; font-style: normal; padding: 0 3px;}
+.coupon10_icon{ position: absolute; top: 5px; right: 10px; z-index: 3; width: 32%;}
+.coupon20_icon{ position: absolute; bottom: 5px; right: 10px; z-index: 3; width: 32%;}
+
 
