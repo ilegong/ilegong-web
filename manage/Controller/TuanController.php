@@ -32,7 +32,7 @@ class TuanController extends AppController
         $con_name = $_REQUEST['con_name'];
         $con_phone = $_REQUEST['con_phone'];
         $con_creator = $_REQUEST['con_creator'];
-        $order_status = !isset($_REQUEST['order_status']) ? -1 : $_REQUEST['order_status'];
+        $cart_status = !isset($_REQUEST['cart_status']) ? -1 : $_REQUEST['cart_status'];
 
         $conditions = array();
         if (!empty($con_name)) {
@@ -47,9 +47,9 @@ class TuanController extends AppController
         if (!empty($order_id)) {
             $conditions['Order.id'] = $order_id;
         }
-        if (!empty($con_name)|| !empty($con_phone)|| !empty($con_creator)|| !empty($order_id)|| $order_status == 14){
-            if ($order_status != -1) {
-                $conditions['Order.status'] = $order_status;
+        if (!empty($con_name)|| !empty($con_phone)|| !empty($con_creator)|| !empty($order_id)|| $cart_status == 14){
+            if ($cart_status != -1) {
+                $conditions['Cart.status'] = $cart_status;
             }
         }
 
@@ -59,7 +59,7 @@ class TuanController extends AppController
         $this->set('order_id', $order_id);
         $this->set('con_phone', $con_phone);
         $this->set('con_creator', $con_creator);
-        $this->set('order_status', $order_status);
+        $this->set('cart_status', $cart_status);
         $this->set('query_type', 'quickQuery');
         $this->render("admin_tuan_orders");
     }
@@ -67,7 +67,7 @@ class TuanController extends AppController
     public function admin_query_by_product()
     {
         $product_id = !empty($_REQUEST['product_id']) ? $_REQUEST['product_id'] : -1;
-        $order_status = empty($_REQUEST['order_status']) ? -1 : $_REQUEST['order_status'];
+        $cart_status = empty($_REQUEST['cart_status']) ? -1 : $_REQUEST['cart_status'];
         $order_type = empty($_REQUEST['order_type']) ? -1 : $_REQUEST['order_type'];
         $send_date_start = $_REQUEST['send_date_start'];
         $send_date_end = $_REQUEST['send_date_end'];
@@ -82,8 +82,8 @@ class TuanController extends AppController
             } else {
                 $conditions['Order.type'] = $order_type;
             }
-            if ($order_status != -1) {
-                $conditions['Order.status'] = $order_status;
+            if ($cart_status != -1) {
+                $conditions['Cart.status'] = $cart_status;
             }
             if (!empty($send_date_start) && !empty($send_date_end)) {
                 $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
@@ -111,7 +111,7 @@ class TuanController extends AppController
         $this->set('product_id', $product_id);
         $this->set('send_date_start', $send_date_start);
         $this->set('send_date_end', $send_date_end);
-        $this->set('order_status', $order_status);
+        $this->set('cart_status', $cart_status);
         $this->set('order_type', $order_type);
         $this->set('query_type', 'byProduct');
         $this->render("admin_tuan_orders");
@@ -121,7 +121,7 @@ class TuanController extends AppController
     {
         $team_id = !empty($_REQUEST['team_id']) ? $_REQUEST['team_id'] : -1;
         $tuan_buying_id = !empty($_REQUEST['tuan_buying_id']) ? $_REQUEST['tuan_buying_id'] : -1;
-        $order_status = !empty($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
+        $cart_status = !empty($_REQUEST['cart_status']) ? $_REQUEST['cart_status'] : -1;
 
         $conditions = array();
         $order_by = 'Order.created DESC';
@@ -132,8 +132,8 @@ class TuanController extends AppController
                 $conditions['DATE(Cart.send_date)'] = $send_date_start;
                 $order_by = "Order.consignee_address ASC";
             }
-            if ($order_status != -1) {
-                $conditions['Order.status'] = $order_status;
+            if ($cart_status != -1) {
+                $conditions['Cart.status'] = $cart_status;
             }
         } else {
             $conditions['Order.type'] = ORDER_TYPE_TUAN;
@@ -156,8 +156,8 @@ class TuanController extends AppController
                 $conditions['DATE(Cart.send_date) >= '] = $send_date_start;
                 $conditions['DATE(Cart.send_date) <= '] = $send_date_end;
             }
-            if ($order_status != -1) {
-                $conditions['Order.status'] = $order_status;
+            if ($cart_status != -1) {
+                $conditions['Cart.status'] = $cart_status;
             }
         }
 
@@ -167,14 +167,14 @@ class TuanController extends AppController
         $this->set('tuan_buying_id', $tuan_buying_id);
         $this->set('send_date_start', $send_date_start);
         $this->set('send_date_end', $send_date_end);
-        $this->set('order_status', $order_status);
+        $this->set('cart_status', $cart_status);
         $this->set('query_type', 'byTuanTeam');
         $this->render("admin_tuan_orders");
     }
 
     public function admin_query_abnormal_order(){
         $conditions = array(
-            'OR' => array(
+            'OR' => array (
                 array('Cart.send_date is null','Order.type in (5,6)'),    // 无发货时间
                 array("Order.consignee_id = 0", "Order.consignee_address = ''"), // 无自提点，送货地址为空
                 array('Order.pay_time  is null', 'Order.ship_mark != "sfdf"'), // 非顺丰到付，但无付款时间
@@ -186,7 +186,7 @@ class TuanController extends AppController
             )
         );
         $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC,ORDER_TYPE_DEF);
-        $conditions['Order.status'] = array(ORDER_STATUS_PAID,ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
+        $conditions['Cart.status'] = array(ORDER_STATUS_PAID,ORDER_STATUS_SHIPPED, ORDER_STATUS_RECEIVED, ORDER_STATUS_RETURNING_MONEY, ORDER_STATUS_RETURN_MONEY);
         $conditions['DATE(Order.created) > '] = date('Y-m-d', strtotime('-62 days'));
         $this->_query_orders($conditions, 'Order.created DESC');
         $this->set('query_type', 'abnormalOrder');
@@ -195,7 +195,7 @@ class TuanController extends AppController
     public function admin_query_b2c_paid_not_send()
     {
         $conditions['Order.brand_id'] = b2c_brands();
-        $conditions['Order.status'] = ORDER_STATUS_PAID;
+        $conditions['Cart.status'] = ORDER_STATUS_PAID;
         $conditions['DATE(Cart.send_date) <'] = date('Y-m-d');
         $this->_query_orders($conditions, 'Order.created DESC');
 
@@ -207,7 +207,7 @@ class TuanController extends AppController
     {
         $conditions['OR'] = array('DATE(Order.pay_time) <'=>date('Y-m-d'),'Order.pay_time' => null);
         $conditions['Order.brand_id !='] = b2c_brands();
-        $conditions['Order.status'] = ORDER_STATUS_PAID;
+        $conditions['Cart.status'] = ORDER_STATUS_PAID;
         $this->_query_orders($conditions, 'Order.updated');
 
         $this->set('query_type', 'c2cPaidNotSend');
@@ -217,17 +217,17 @@ class TuanController extends AppController
     public function admin_query_daily_orders()
     {
         $pay_date = !empty($_REQUEST['pay_date']) ? $_REQUEST['pay_date'] : date('Y-m-d');
-        $order_status = isset($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
+        $cart_status = isset($_REQUEST['cart_status']) ? $_REQUEST['cart_status'] : -1;
 
         $conditions = array('DATE(Order.pay_time)'=>$pay_date);
-        if($order_status != -1){
-            $conditions['Order.status'] = $order_status;
+        if($cart_status != -1){
+            $conditions['Cart.status'] = $cart_status;
         }
 
         $this->_query_orders($conditions, 'Order.updated');
 
         $this->set('query_type', 'dailyOrders');
-        $this->set('order_status', $order_status);
+        $this->set('cart_status', $cart_status);
         $this->set('pay_date', $pay_date);
         $this->render("admin_tuan_orders");
     }
@@ -257,107 +257,6 @@ class TuanController extends AppController
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
         $this->set('abnormal_order_count',$this->_query_abnormal_order());
 
-    }
-
-    function admin_send_date($type)
-    {
-        $tuan_buyings = $this->TuanBuying->find('all', array(
-            'conditions' => array(
-                'consignment_type' => $type
-            ),
-            'fields' => array("id", "consignment_type", "consign_time")
-        ));
-        $tb_ids = Hash::extract($tuan_buyings, "{n}.TuanBuying.id");
-        $tuan_buyings = Hash::combine($tuan_buyings, "{n}.TuanBuying.id", "{n}.TuanBuying");
-        $this->log('tuan buyings: ' . json_encode($tuan_buyings));
-
-        $orders = $this->Order->find('all', array(
-            'conditions' => array(
-                'type' => 5,
-                'member_id' => $tb_ids
-            ),
-            'fields' => array("id", "member_id")
-        ));
-        $order_ids = Hash::extract($orders, "{n}.Order.id");
-        $orders = Hash::combine($orders, "{n}.Order.id", "{n}.Order");
-        $this->log('orders: ' . json_encode($orders));
-
-        $carts = $this->Cart->find('all', array(
-            'conditions' => array("order_id" => $order_ids),
-            'fields' => array("id", "consignment_date", "send_date", "order_id")
-        ));
-        $cart_ids = Hash::extract($carts, "{n}.Cart.id");
-        $this->log('carts: ' . json_encode($carts));
-
-        $noConsignmentDatesOfCart = array();
-        $noOrdersOfCart = array();
-        $noTuanBuyingsOfOrder = array();
-        $unmatched = array();
-        $toBeUpdated = array();
-        $alreadyUpdated = array();
-        foreach ($carts as &$cart) {
-            if (empty($cart['Cart']['consignment_date'])) {
-                // find consignment_date by member_id(tuan_buying)
-                $order = $orders[$cart['Cart']['order_id']];
-                if (empty($order)) {
-                    $noOrdersOfCart[] = $cart['Cart']['id'];
-                } else {
-                    $tuan_buying = $tuan_buyings[$order['member_id']];
-                    if (empty($tuan_buying)) {
-                        $noTuanBuyingsOfOrder[] = $cart['Cart']['id'] . ", " . json_encode($order);
-                    } else {
-                        $send_date = $tuan_buying['consign_time'];
-                        if (empty($send_date)) {
-                            $noSendDateOfTuanBuying[] = $cart['Cart']['id'] . ", " . $order['id'] . ", " . $tuan_buying['id'];
-                        } else {
-                            if (!empty($cart['Cart']['send_date'])) {
-                                if ($cart['Cart']['send_date'] == $send_date) {
-                                    $alreadyUpdated[] = $cart['Cart']['id'];
-                                } else {
-                                    $unmatched[] = $cart['Cart']['id'];
-                                    $unmatched[$cart['Cart']['id']] = "cart " . $cart['Cart']['id'] . ", send_date: " . $cart['Cart']['send_date'] . ", TuanBuying.consign_time: " . $send_date;
-                                }
-                            } else {
-                                $this->Cart->updateAll(array("send_date" => "'" . $send_date . "'"), array('id' => $cart['Cart']['id']));
-                                $toBeUpdated[] = $cart['Cart']['id'];
-                            }
-                        }
-                    }
-                }
-            } else {
-                // find by table consignmentDate
-                $consignmentDate = $this->ConsignmentDate->find("first", array(
-                    "conditions" => array(
-                        "id" => $cart['Cart']['consignment_date']
-                    )
-                ));
-                if (empty($consignmentDate)) {
-                    $noConsignmentDatesOfCart[] = $cart['Cart']['id'];
-                } else {
-                    if (!empty($cart['Cart']['send_date'])) {
-                        if ($cart['Cart']['send_date'] == $consignmentDate['ConsignmentDate']['send_date']) {
-                            $alreadyUpdated[] = $cart['Cart']['id'];
-                        } else {
-                            $unmatched[$cart['Cart']['id']] = "cart " . $cart['Cart']['id'] . ", send_date: " . $cart['Cart']['send_date'] . ", Cart.consignment_date: " . $cart['Cart']['consignment_date'] . ", ConsignmentDate.consignment_date: " . $consignmentDate['ConsignmentDate']['send_date'];
-                        }
-                    } else {
-                        $this->Cart->updateAll(array('send_date' => "'" . $consignmentDate['ConsignmentDate']['send_date'] . "'"), array('id' => $cart['Cart']['id']));
-                        $toBeUpdated[] = $cart['Cart']['id'];
-                    }
-                }
-            }
-        }
-
-        $this->set('tb_ids', $tb_ids);
-        $this->set('order_ids', $order_ids);
-        $this->set('cart_ids', $cart_ids);
-
-        $this->set('noConsignmentDatesOfCart', $noConsignmentDatesOfCart);
-        $this->set('noOrdersOfCart', $noOrdersOfCart);
-        $this->set('noTuanBuyingsOfOrder', $noTuanBuyingsOfOrder);
-        $this->set('unmatched', $unmatched);
-        $this->set('toBeUpdated', $toBeUpdated);
-        $this->set('alreadyUpdated', $alreadyUpdated);
     }
 
     public function _query_orders($conditions, $order_by, $limit = null)
@@ -558,10 +457,6 @@ class TuanController extends AppController
         $this->set('map_ziti_orders',$map_ziti_orders);
         $this->set('map_other_orders',$map_other_orders);
 
-        $conditions['Order.type'] = ORDER_TYPE_DEF;
-        $conditions['Order.status'] = ORDER_STATUS_PAID;
-        $conditions['DATE(Order.updated) <'] = date('Y-m-d H:i:s');
-
         $this->set('abnormal_order_count',$this->_query_abnormal_order());
         $this->set('b2c_paid_not_sent_count', $this->_query_b2c_paid_not_send_count());
         $this->set('c2c_paid_not_sent_count', $this->_query_c2c_paid_not_send_count());
@@ -582,15 +477,15 @@ class TuanController extends AppController
     public function admin_advanced_query(){
         $product_id = !empty($_REQUEST['product_id']) ? $_REQUEST['product_id'] : -1;
         $store_id = !empty($_REQUEST['store_id']) ? $_REQUEST['store_id'] : -1;
-        $order_status = !empty($_REQUEST['order_status']) ? $_REQUEST['order_status'] : -1;
+        $cart_status = !empty($_REQUEST['cart_status']) ? $_REQUEST['cart_status'] : -1;
         $send_date = $_REQUEST['send_date'];
         $end_stat_date = $_REQUEST['end_stat_date'];
         $conditions = array();
         $order_by = 'Cart.product_id, Order.consignee_id DESC';
         if($product_id != -1 || $store_id != -1 || !empty($send_date)){
             $conditions['Order.type'] = array(ORDER_TYPE_TUAN, ORDER_TYPE_TUAN_SEC);
-            if ($order_status != -1) {
-                $conditions['Order.status'] = $order_status;
+            if ($cart_status != -1) {
+                $conditions['Cart.status'] = $cart_status;
             }
             if($product_id != -1){
                 $conditions['Cart.product_id'] = $product_id;
@@ -618,7 +513,7 @@ class TuanController extends AppController
         $this->_query_orders($conditions, $order_by);
         $this->set('store_id', $store_id);
         $this->set(compact('send_date', 'end_stat_date'));
-        $this->set('order_status', $order_status);
+        $this->set('cart_status', $cart_status);
         $this->set('query_type', 'advancedQuery');
         $this->render("admin_tuan_orders");
     }
@@ -630,23 +525,23 @@ class TuanController extends AppController
 
     public function _query_b2c_paid_not_send_count(){
         $b2c_brand_ids = implode(",", b2c_brands());
-        $b2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where o.brand_id in ('.$b2c_brand_ids.') and o.status = 1 and c.send_date < CURDATE()');
+        $b2c_paid_not_sent_count = $this->Order->query('select count(distinct c.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where o.brand_id in ('.$b2c_brand_ids.') and c.status = 1 and c.send_date < CURDATE()');
         return $b2c_paid_not_sent_count[0][0]['ct'];
     }
 
     public function _query_c2c_paid_not_send_count(){
         $b2c_brand_ids = implode(",", b2c_brands());
-        $c2c_paid_not_sent_count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on o.id = c.order_id where o.brand_id not in ('.$b2c_brand_ids.') and o.status = 1 and (o.pay_time < CURDATE() or o.pay_time is null)');
+        $c2c_paid_not_sent_count = $this->Order->query('select count(distinct c.id) as ct from cake_orders o inner join cake_carts c on o.id = c.order_id where o.brand_id not in ('.$b2c_brand_ids.') and c.status = 1 and (o.pay_time < CURDATE() or o.pay_time is null)');
         return $c2c_paid_not_sent_count[0][0]['ct'];
     }
 
     public function _query_orders_today_count(){
-        $count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where DATE(o.pay_time) >= CURDATE() and o.status > 0');
+        $count = $this->Order->query('select count(distinct o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where DATE(o.pay_time) >= CURDATE() and c.status > 0');
         return $count[0][0]['ct'];
     }
 
     public function _query_abnormal_order(){
-        $abnormal_order_count = $this->Order->query('select count(o.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where
+        $abnormal_order_count = $this->Order->query('select count(distinct c.id) as ct from cake_orders o inner join cake_carts c on c.order_id = o.id where
             (
                 (c.send_date is null and o.type in (5,6))
                 or (o.consignee_id = 0 and o.consignee_address = "")
@@ -655,7 +550,7 @@ class TuanController extends AppController
                 or (o.ship_mark is NULL)
                 or (o.ship_mark = "kuaidi" and (o.consignee_address = "" or o.consignee_address is NULL))
                 or (o.ship_mark = "ziti" and (o.consignee_id = 0 or o.consignee_id is null))
-            ) and o.type in (1,5,6) and o.status in (1,2,3,4,14) and DATE(o.created) > "'.date('Y-m-d', strtotime('-62 days')).'"');
+            ) and o.type in (1,5,6) and c.status in (1,2,3,4,14) and DATE(o.created) > "'.date('Y-m-d', strtotime('-62 days')).'"');
         return $abnormal_order_count[0][0]['ct'];
     }
     public function admin_update_order_status_to_refunded(){

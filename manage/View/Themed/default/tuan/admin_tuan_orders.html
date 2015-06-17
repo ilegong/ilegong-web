@@ -52,14 +52,14 @@
                                value="{{$con_creator}}">
                     </div>
                     <div class="form-group">
-                        <select class="form-control order-status" data-value="{{$order_status}}" name="order_status">
-                            <option value="-1">选择订单状态</option>
+                        <select class="form-control cart-status" data-value="{{$cart_status}}" name="cart_status">
+                            <option value="-1">发货单状态</option>
                             <option value="0">待支付</option>
                             <option value="1">待发货</option>
                             <option value="2">已发货</option>
-                            <option value="4">已退款</option>
-                            <option value="10">已作废</option>
                             <option value="14">退款中</option>
+                            <option value="4">已退款</option>
+                            <option value="10">已取消</option>
                         </select>
                     </div>
                     <br/>
@@ -101,14 +101,14 @@
                                value="{{$end_stat_date}}" placeholder="结束日期,单天可不填" name="end_stat_date">
                     </div>
                     <div class="form-group">
-                        <select class="form-control order-status" data-value="{{order_status}}" name="order_status">
-                            <option value="-1">选择订单状态</option>
+                        <select class="form-control cart-status" data-value="{{cart_status}}" name="cart_status">
+                            <option value="-1">发货单状态</option>
                             <option value="0">待支付</option>
                             <option value="1">待发货</option>
                             <option value="2">已发货</option>
-                            <option value="4">已退款</option>
-                            <option value="10">已作废</option>
                             <option value="14">退款中</option>
+                            <option value="4">已退款</option>
+                            <option value="10">已取消</option>
                         </select>
                     </div>
                     <br/>
@@ -139,14 +139,14 @@
                                placeholder="支付日期(如2015-5-1)" name="pay_date">
                     </div>
                     <div class="form-group">
-                        <select class="form-control order-status" data-value="{{$order_status}}" name="order_status">
-                            <option value="-1">选择订单状态</option>
+                        <select class="form-control cart-status" data-value="{{$cart_status}}" name="cart_status">
+                            <option value="-1">发货单状态</option>
                             <option value="0">待支付</option>
                             <option value="1">待发货</option>
                             <option value="2">已发货</option>
-                            <option value="4">已退款</option>
-                            <option value="10">已作废</option>
                             <option value="14">退款中</option>
+                            <option value="4">已退款</option>
+                            <option value="10">已取消</option>
                         </select>
                     </div>
                     <br/>

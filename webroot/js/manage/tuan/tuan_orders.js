@@ -336,7 +336,7 @@ $(document).ready(function () {
         });
     })();
     activateTab($('.nav-tabs').data('query-type'));
-    iUtils.initSelectBox($('.order-status'));
+    iUtils.initSelectBox($('.cart-status'));
     iUtils.initSelectBox($('.order-types'));
     setupByTuanTeamForm();
     setupHaolinjuStoreDialog();

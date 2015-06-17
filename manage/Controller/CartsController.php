@@ -15,6 +15,20 @@ class CartsController extends AppController{
 		);
 		//print_r($searchoptions);
 		return $searchoptions;
-	}	
-	
+	}
+
+    public function admin_edit2($id = null)
+    {
+        $this->loadModel('Order');
+        $this->loadModel('Cart');
+
+        $cart = $this->Cart->findById($id);
+        $order = $this->Order->find('first', array(
+            'conditions' => array(
+                'id' => $cart['Cart']['order_id']
+            )
+        ));
+        $this->set('order', $order);
+        $this->set('cart', $cart);
+    }
 }
