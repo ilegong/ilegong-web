@@ -2072,7 +2072,7 @@ function get_ship_mark_name($shipType){
 
 /**
  * @param $orderId
- * split pys order cart split
+ * split pys order by cart
  */
 function split_pys_order($orderId) {
     $orderM = ClassRegistry::init('Order');
@@ -2113,4 +2113,21 @@ function split_pys_order($orderId) {
     }
     $order['Order']['status'] = ORDER_STATUS_SPLIT;
     $orderM->save($order['Order']);
+}
+
+function get_special_pid_list($specialId){
+    $pids_str = Cache::read('special_'.$specialId.'_pids');
+    if(!empty($pids_str)){
+        return json_decode($pids_str,true);
+    }
+    $ProductSpecial = ClassRegistry::init('ProductSpecial');
+    $special_product = $ProductSpecial->find('all',array('conditions' => array('special_id' => $specialId,'published' => PUBLISH_YES),'fields' => array('product_id')));
+    $pids = Hash::extract($special_product,'{n}.ProductSpecial.product_id');
+    Cache::write('special_'.$specialId.'_pids',json_encode($pids));
+    return $pids;
+}
+
+function pid_in_special($pid,$specialId){
+    $pids = get_special_pid_list($specialId);
+    return in_array($pid,$pids);
 }
