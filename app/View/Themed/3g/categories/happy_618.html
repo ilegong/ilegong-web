@@ -1,0 +1,78 @@
+<div class="content618" style="background-color:#d74d4d; margin-bottom: 50px;">
+    <div class="good" style="margin: 0;">
+        <a class="xq" style="position: relative; width: 100%;">
+            <div href="/shortmessages/get_618_coupons/24246" class="coupon10_icon"><img src="{{$this->Html->assetUrl('/img/618/10.png?v1')}}" ></div>
+            <div href="/shortmessages/get_618_coupons/24245" class="coupon20_icon"><img src="{{$this->Html->assetUrl('/img/618/20.png?v1')}}" ></div>
+            <img src="{{$this->Html->assetUrl('/img/618/banner618-2.png?v1')}}">
+        </a>
+    </div>
+    <?PHP if($total>0){ ?>
+    <?PHP foreach($data_list as $item) {
+	    $full = true;
+	    $numbers_per_col = 2;
+	    $i++;
+		$item['Product']['slug'] = $item['Product']['slug']?$item['Product']['slug']:$item['Product']['id'];
+	    ?>
+            <div class="good">
+                <a href="{{product_link2($item['Product'])}}" class="xq">
+                    {{if $item['Product']['limit_area']}}
+                    <p>仅限<br/>北京</p>
+                    {{/if}}
+                    <img src="{{$this->Html->assetUrl($item['Product']['listimg'])}}"/>
+                    <div class="title clearfix">
+                        <a href="{{$this->Html->url('/brands/'.date('Ymd',strtotime($brands[$item['Product']['brand_id']]['Brand']['created'])).'/'.$brands[$item['brand_id']]['Brand']['slug'].'.html')}}" class="phead"><img src="{{$this->Html->assetUrl(small_thumb_link($brands[$item['Product']['brand_id']]['Brand']['coverimg']))}}" /></a>
+                        <a href="{{product_link2($item['Product'])}}" class="txt"><b>{{usubstr($item['Product']['name'],0, 9,'')}}<i class="manjian_icon">满减</i></b></a>
+                    </div>
+                </a>
+                <ul class="clearfix">
+                    <li class="price fl"><strong>￥{{$this->Number->precision($item['Special']['special_price']>=0? $item['Special']['special_price']/100 : $item['Product']['price'], 2)}}</strong>&nbsp;
+                        {{if !empty($item['Product']['original_price'])}}
+                            <label>¥ {{$this->Number->precision( !empty($item['Product']['original_price']) ? $item['Product']['original_price'] : $item['Product']['price'], 2)}}</label>
+                        {{/if}}
+                    </li>
+                    <li class="fr"><a href="{{product_link2($item['Product'])}}" class="btn radius5">立即购买</a></li>
+                </ul>
+            </div>
+    <?php } ?>
+    <?php } ?>
+</div>
+
+{{if $is_weixin}}
+<script>
+    wx.ready(function () {
+        var share_string = '{{$share_string ? $share_string :"happy_618"}}';
+        var to_timeline_title = "朋友说-618年中大促";
+        var to_friend_title = "朋友说-618年中大促";
+        var to_friend_link = document.URL.split('?')[0]+'?trstr='+ share_string + '&share_type=appMsg';
+        var to_timeline_link = document.URL.split('?')[0] + '?trstr='+ share_string + '&share_type=timeline';
+        var imgUrl = "";
+        var desc = "满30立减10元，满50立减20元";
+        wx.onMenuShareAppMessage({
+            title: to_friend_title,
+            desc: desc,
+            link: to_friend_link,
+            imgUrl: imgUrl,
+            success: function () {
+                // 用户确认分享后执行的回调函数
+                if(share_string != '0'){
+                    setTimeout(function(){
+                        $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "appMsg" });
+                    }, 500);
+                }
+            }
+        });
+        wx.onMenuShareTimeline({
+            title: to_timeline_title,
+            link: to_timeline_link,
+            imgUrl: imgUrl,
+            success: function () {
+                if(share_string != '0'){
+                    setTimeout(function(){
+                        $.post('/wx_shares/log_share',{ trstr: share_string, share_type: "timeline" });
+                    }, 500);
+                }
+            }
+        });
+    });
+</script>
+{{/if}}

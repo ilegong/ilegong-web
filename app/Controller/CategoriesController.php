@@ -158,7 +158,11 @@ class CategoriesController extends AppController {
             $tag_id = $productTag['ProductTag']['id'];
             $this->prepare_wx_sharing($currUid, $tag_id);
         }
+    }
 
+    public function happy_618(){
+        $this->special_list('618_mid_year_happy');
+        $this->set('hideFooter',true);
     }
 
     public function special_list($slug) {
@@ -188,7 +192,7 @@ class CategoriesController extends AppController {
                     'conditions' => $conditions,
                     'joins' => $join_conditions,
                     'order' => $orderBy,
-                    'fields' => array('Product.id', 'Product.name','Product.brand_id','Product.price','Product.original_price', 'Product.created', 'Product.coverimg', 'Product.slug', 'Special.*'),
+                    'fields' => array('Product.id', 'Product.name','Product.brand_id','Product.price','Product.original_price', 'Product.created', 'Product.coverimg', 'Product.slug', 'Special.*','Product.listimg'),
                     'limit' => $limit)
             );
             if (count($list) < $limit) {

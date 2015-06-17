@@ -522,3 +522,11 @@ ul li{ list-style:none;}
 .coupon20_icon{ position: absolute; bottom: 5px; right: 10px; z-index: 3; width: 32%;}
 
 
+/*618活动专题页*/
+.content618{float:right;height: 100%;}
+.content618 .good{ margin: 5px;}
+.content618 a.xq{ display: block; text-decoration: none; background-color: #fff; position: relative;}
+.content618 a.xq p{ display: block; position: absolute; background-color: #ffa200; color: #ffffff; padding: 5px; font-size: 1em; text-align:center; left: 0; top: 0;}
+.content618 a.xq img{max-width: 100%;}
+.content618 .title{ font-size: 1em; padding:8px 10px 3px 10px; line-height: 18px; color: #333333; font-weight: bold; background-color: #ffffff;}
+.content618 .price{ font-size:1em; padding: 0 8px; line-height: 30px;}
