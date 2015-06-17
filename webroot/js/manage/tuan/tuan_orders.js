@@ -566,7 +566,7 @@ $(document).ready(function () {
         e.preventDefault();
         var tableIds = [];
         var tableNames = [];
-        var ignoreRows = [0, 2, 3, 4, 5, 6, 7, 8, 9, 14, 19, 20, 21, 22];
+        var ignoreRows = [0, 2, 3, 4, 5, 6, 7, 8, 9, 14, 18, 19, 20, 21, 22];
         $('table.orders').each(function (index, item) {
             tableIds.push($(item).attr('id'));
             tableNames.push($(item).data('table-name'));
