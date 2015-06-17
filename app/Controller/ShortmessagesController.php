@@ -156,5 +156,9 @@ class ShortmessagesController extends AppController {
         add_coupon_for_618($uid, $weixinC, $couponid,$descs);
         $this->redirect('/users/my_coupons');
     }
+
+    public function get_618_coupon_json($couponid){
+
+    }
 }
 ?>
