@@ -16,6 +16,10 @@ class TestController extends AppController{
         $this->Weixin->notifyPaidDone($order);
     }
 
+    public function test_set_order_paid_done($orderId){
+        $this->Order->set_order_to_paid($orderId, 0, 633345, 1, $memberId=0);
+    }
+
     public function test_order_paid_done($orderId){
         $this->autoRender = false;
         $this->loadModel('Order');

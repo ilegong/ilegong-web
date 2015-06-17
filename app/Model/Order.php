@@ -162,12 +162,14 @@ class Order extends AppModel {
                 $pid_list = Hash::extract($cartItems, '{n}.Cart.product_id');
             }
             $TuanBuyingM = ClassRegistry::init('TuanBuying');
+            $sgouldClearCache = false;
             foreach($cartItems as $item){
                 $tuan_buy_id = $item['Cart']['tuan_buy_id'];
                 $cartNum = $item['Cart']['num'];
                 if($tuan_buy_id){
                     //update tuan buying sold num
                     $TuanBuyingM->updateAll(array('sold_num' => 'sold_num + '.$cartNum),array('id' => $tuan_buy_id));
+                    $sgouldClearCache = true;
                 }
             }
             if (!empty($pid_list)) {
@@ -208,7 +210,11 @@ class Order extends AppModel {
             }
             //split_pys_order($orderId);
             $this->update_refer($orderOwner,$orderId);
+            if($sgouldClearCache){
+                clear_tag_cache(23);
+            }
         }
+
         return $sold;
     }
 

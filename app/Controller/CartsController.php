@@ -73,6 +73,7 @@ class CartsController extends AppController{
             if (!empty($returnInfo) && $returnInfo['success']) {
                 $cart_id = $returnInfo['id'];
                 if($tuan_buy_id){
+                    $cartM->updateAll(array('tuan_buy_id' => $tuan_buy_id), array('id' => $cart_id));
                     $TuanBuyM = ClassRegistry::init('TuanBuying');
                     $tuanBuy = $TuanBuyM->find('first',array('conditions' => array('id' => $tuan_buy_id)));
                     if(!empty($tuanBuy)){
