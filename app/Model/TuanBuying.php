@@ -31,6 +31,6 @@ class TuanBuying extends AppModel {
             $TuanMemberM->save($data);
             $TuanTeamM->update(array('member_num' => 'member_num + 1'), array('id' => $tuan_id));
         }
-        Cache::write('tag-products23','[]');
+        clear_tag_cache(23);
     }
 }
