@@ -158,7 +158,19 @@ class ShortmessagesController extends AppController {
     }
 
     public function get_618_coupon_json($couponid){
-
+        if (empty($this->currentUser['id']) && $this->is_weixin()) {
+            echo json_encode(array('success' => false,'reason' => 'no_login'));
+            return;
+        }
+        if($couponid==self::coupon_50_20){
+            $descs = "满50元减20";
+        }
+        if($couponid==self::coupon_30_10){
+            $descs = " 满30元减10元";
+        }
+        $weixinC = $this->Components->load('Weixin');
+        $uid = $this->currentUser['id'];
+        $result = add_coupon_for_618($uid, $weixinC, $couponid,$descs);
     }
 }
 ?>
