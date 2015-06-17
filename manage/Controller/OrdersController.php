@@ -77,7 +77,10 @@ class OrdersController extends AppController
             return;
         }
 
-        $this->_save_order_carts($id, $this->data, $send_date);
+        if(isset($this->data['status']) && ($order['Order']['status'] != 0 || $this->data['status'] == 1)){
+            echo json_encode(array('success' => false, 'reason' => 'invalid_order_status'));
+            return;
+        }
 
         if(!empty($this->data['ship_mark'])){
             if($this->data['ship_mark'] == 'ziti'){
@@ -91,9 +94,19 @@ class OrdersController extends AppController
             }
         }
 
+        $cart_data = array();
         if(($order['Order']['status'] == 0) && ($this->data['status'] == 1)){
             $this->data['pay_time'] = date("Y-m-d H:i:s");
             $this->_insert_pay_notifies($order);
+            $cart_data['status'] = "'" . $this->data['status'] . "'";
+        }
+        if (!empty($send_date)) {
+            if(strtotime($send_date) <= strtotime('yesterday')){
+                echo json_encode(array('success' => false, 'reason' => 'invalid_send_date'));
+                return;
+            }
+
+            $cart_data['send_date'] = "'" . $send_date . "'";
         }
 
         $this->data['remark'] = $remark;
@@ -104,10 +117,16 @@ class OrdersController extends AppController
         $this->log('update order ' . $id . ': '.json_encode($this->data));
         if (!$this->Order->updateAll($this->data, array('id' => $id))) {
             echo json_encode(array('success' => false, 'reason' => 'failed_to_save_order'));
+            return;
         }
-        else{
-            echo json_encode(array('success' => true));
+
+        if(!empty($cart_data)){
+            $this->loadModel('Cart');
+            $this->log('update carts of order ' . $id . ': '.json_encode($cart_data));
+            $this->Cart->updateAll($cart_data, array('order_id' => $id));
         }
+
+        echo json_encode(array('success' => true));
     }
 
     public function admin_trash($ids)

@@ -1,5 +1,6 @@
 $(document).ready(function () {
     var $saveBtn = $('.save-btn');
+    var $orderStatus = $('.order-status');
     var $shipMark = $('.ship-mark');
     var $consigneeId = $('.consignee-id');
     var $consigneeName = $('.consignee-name');
@@ -22,6 +23,11 @@ $(document).ready(function () {
 
     $saveBtn.on('click', function(){
         var invalidFields = [];
+        if($orderStatus.data('value') != $orderStatus.val()){
+            if($orderStatus.data('value') != 0 && $orderStatus.val() != 1){
+                invalidFields.push($orderStatus);
+            }
+        }
         if($sendDate.data('value') != $sendDate.val() && new Date($sendDate.val()) <= yesterday()){
             invalidFields.push($sendDate);
         }
@@ -66,6 +72,7 @@ $(document).ready(function () {
             'order_not_exists': '订单不存在',
             'fields_are_empty': '然而你并没有修改任何订单',
             'no_permission': '您没有权限',
+            'invalid_order_status': '仅支持从待支付修改为待发货',
             'invalid_send_date': '发货时间有误',
             'failed_to_save_send_date': '保存发货时间失败',
             'missed_consignee_id': '请输入自提点',
