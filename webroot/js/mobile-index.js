@@ -79,8 +79,8 @@ $(document).ready(function () {
             return TemplateEngine(goodTemplate,good);
         }else{
             goodUrl = '/tuan_buyings/detail/'+tuanBuying['id']+'?history=/&amp;_sl=h5.cate.list&amp;tagId='+currentTagId;
-            var sold_num = tuanBuying['sold_num'];
-            var target_num = tuanBuying['target_num'];
+            var sold_num = parseInt(tuanBuying['sold_num']);
+            var target_num = parseInt(tuanBuying['target_num']);
             if(sold_num > target_num){
                 sold_num = target_num;
                 tuanBuying['sold_num'] = sold_num;
